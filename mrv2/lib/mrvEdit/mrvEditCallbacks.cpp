@@ -297,7 +297,7 @@ namespace mrv
             savedAudioPath = audioPath;
         }
 
-        std::string toOtioFilename()
+        std::string otioFilename()
         {
             char buf[256];
             snprintf(buf, 256, "EDL.%zu.otio", otioIndex++);
@@ -326,7 +326,7 @@ namespace mrv
             }
             else
             {
-                otioFile = toOtioFilename();
+                otioFile = otioFilename();
             }
 
             timeline->to_json_file(otioFile);
@@ -385,13 +385,16 @@ namespace mrv
                         auto clip = otio::dynamic_retainer_cast<Item>(child);
                         if (!clip)
                             continue;
-                        auto range = clip->trimmed_range();
-                        auto start = time::round(
-                            range.start_time().rescaled_to(videoRate));
-                        auto duration = time::round(
-                            range.duration().rescaled_to(videoRate));
-                        range = TimeRange(start, duration);
-                        clip->set_source_range(range);
+                        if (videoRate > 0)
+                        {
+                            auto range = clip->trimmed_range();
+                            auto start = time::round(
+                                range.start_time().rescaled_to(videoRate));
+                            auto duration = time::round(
+                                range.duration().rescaled_to(videoRate));
+                            range = TimeRange(start, duration);
+                            clip->set_source_range(range);
+                        }
                     }
                     const TimeRange range = track->trimmed_range();
                     if (range.duration() >= timeRange.duration())
@@ -406,20 +409,18 @@ namespace mrv
                         auto clip = otio::dynamic_retainer_cast<Item>(child);
                         if (!clip)
                             continue;
-                        auto range = clip->trimmed_range();
-                        auto start = time::round(
-                            range.start_time().rescaled_to(sampleRate));
-                        auto duration = time::round(
-                            range.duration().rescaled_to(sampleRate));
-                        range = TimeRange(start, duration);
-                        clip->set_source_range(range);
+                        if (sampleRate > 0)
+                        {
+                            auto range = clip->trimmed_range();
+                            auto start = time::round(
+                                range.start_time().rescaled_to(sampleRate));
+                            auto duration = time::round(
+                                range.duration().rescaled_to(sampleRate));
+                            range = TimeRange(start, duration);
+                            clip->set_source_range(range);
+                        }
                     }
                 }
-            }
-
-            if (!time::isValid(timeRange) || videoRate < 0 || sampleRate < 0)
-            {
-                LOG_ERROR("Invalid timeRange " << timeRange);
             }
         }
 
@@ -692,13 +693,24 @@ namespace mrv
         {
             otio::algo::remove(track, time, false);
         }
+        auto stack = timeline->tracks();
+        TimeRange timeRange;
+        double videoRate, sampleRate;
+        sanitizeVideoAndAudioRates(stack, timeRange, videoRate, sampleRate);
+
+        if (videoRate > 0 && time::isValid(timeRange))
+        {
+            player->setInOutRange(timeRange);
+            player->setSpeed(videoRate);
+            setEndTime(timeline, videoRate, ui);
+        }
         player->setTimeline(timeline);
+
         auto endTime = player->timeRange().end_time_exclusive();
         if (time > endTime)
             player->seek(endTime);
         ui->uiTimeline->setTimelinePlayer(player);
 
-        setEndTime(timeline, time.rate(), ui);
         toOtioFile(timeline, ui);
     }
 
@@ -748,10 +760,13 @@ namespace mrv
         double videoRate, sampleRate;
         sanitizeVideoAndAudioRates(stack, timeRange, videoRate, sampleRate);
 
-        player->setInOutRange(timeRange);
-        player->setSpeed(videoRate);
+        if (videoRate > 0 && time::isValid(timeRange))
+        {
+            player->setInOutRange(timeRange);
+            player->setSpeed(videoRate);
+            setEndTime(timeline, videoRate, ui);
+        }
         player->setTimeline(timeline);
-        setEndTime(timeline, videoRate, ui);
 
         toOtioFile(timeline, ui);
         ui->uiTimeline->frameView();
@@ -781,8 +796,14 @@ namespace mrv
         auto stack = timeline->tracks();
         sanitizeVideoAndAudioRates(stack, timeRange, videoRate, sampleRate);
 
+        if (videoRate > 0 && time::isValid(timeRange))
+        {
+            player->setInOutRange(timeRange);
+            player->setSpeed(videoRate);
+            setEndTime(timeline, videoRate, ui);
+        }
+
         player->setTimeline(timeline);
-        setEndTime(timeline, videoRate, ui);
 
         toOtioFile(timeline, ui);
         ui->uiTimeline->frameView();
@@ -793,17 +814,10 @@ namespace mrv
     {
         otio::SerializableObject::Retainer<otio::Timeline> otioTimeline =
             new otio::Timeline("EDL");
-
-        auto timeRange =
-            TimeRange(RationalTime(0.0, 30.0), RationalTime(30.0, 30.0));
-        auto videoGap = new otio::Gap(timeRange);
         auto videoTrack =
             new otio::Track("Video", otio::nullopt, otio::Track::Kind::video);
-        videoTrack->append_child(videoGap);
-        auto audioGap = new otio::Gap(timeRange);
         auto audioTrack =
             new otio::Track("Audio", otio::nullopt, otio::Track::Kind::audio);
-        audioTrack->append_child(audioGap);
         auto stack = new otio::Stack;
         stack->append_child(videoTrack);
         stack->append_child(audioTrack);
@@ -814,8 +828,7 @@ namespace mrv
 
     void create_empty_timeline_cb(Fl_Menu_*, ViewerUI* ui)
     {
-        std::string tempDir = tmppath();
-        std::string file = tempDir + "/edl.otio";
+        const std::string file = otioFilename();
 
         otio::ErrorStatus errorStatus;
         auto timeline = create_empty_timeline(ui);
@@ -881,6 +894,16 @@ namespace mrv
         {
             throw std::runtime_error(
                 _("Neither video nor audio tracks found."));
+        }
+
+        bool wasEmptyTracks = true;
+        for (int i = 0; i < tracks.size(); ++i)
+        {
+            auto track = otio::dynamic_retainer_cast<Track>(tracks[i]);
+            if (!track)
+                continue;
+            if (track->children().size() > 0)
+                wasEmptyTracks = false;
         }
 
         const auto& context = ui->app->getContext();
@@ -1004,6 +1027,9 @@ namespace mrv
         destItem->timeRange = timeRange;
         destItem->inOutRange = timeRange;
         destItem->speed = videoRate;
+
+        if (wasEmptyTracks)
+            refresh_file_cache_cb(nullptr, ui);
 
         player = ui->uiView->getTimelinePlayer();
         if (!player)
