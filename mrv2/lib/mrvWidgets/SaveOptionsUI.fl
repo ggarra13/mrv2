@@ -27,8 +27,8 @@ class SaveOptionsUI {open
   Function {SaveOptionsUI(const std::string ext, const bool exr_valid)} {open
   } {
     Fl_Window uiMain {
-      label {Saving Options} open selected
-      xywh {635 296 529 515} type Double align 5 modal visible
+      label {Saving Options} open
+      xywh {635 296 529 515} type Double align 5 hide modal
     } {
       Fl_Group {} {
         label {Common Settings} open
@@ -100,7 +100,7 @@ else
         }
       }
       Fl_Group OpenEXROptions {
-        label {OpenEXR Options}
+        label {OpenEXR Options} open
         xywh {71 237 374 212} box ROUNDED_FRAME color 56
       } {
         Fl_Choice Compression {
@@ -189,7 +189,7 @@ v->redraw();}
             xywh {278 346 104 26} type {Horz Knob} minimum 1 maximum 9 step 1 value 4 slider_size 0.1
           }
         }
-        Fl_Group DWACompressionGroup {
+        Fl_Group DWACompressionGroup {open
           xywh {214 384 168 26} deactivate
         } {
           Fl_Value_Input DWACompressionLevel {
