@@ -211,6 +211,8 @@ namespace mrv
 
         image::Size size(128, 64);
 
+        size_t numValidFiles = 0;
+
         for (size_t i = 0; i < numFiles; ++i)
         {
             const auto& media = files->getItem(i);
@@ -223,6 +225,8 @@ namespace mrv
             if (extension == ".otio" && base == "EDL." &&
                 (dir == tmppath() + '/' || dir == tmppath() + '\\'))
                 continue;
+
+            ++numValidFiles;
 
             const std::string file =
                 path.getBaseName() + path.getNumber() + path.getExtension();
@@ -310,7 +314,7 @@ namespace mrv
             }
         }
 
-        int Y = g->y() + 20 + numFiles * 64;
+        int Y = g->y() + 20 + numValidFiles * 64;
 
         Pack* bg = new Pack(g->x(), Y, g->w(), 30);
         bg->type(Pack::HORIZONTAL);
@@ -377,15 +381,6 @@ namespace mrv
                 p.ui->app->filesModel()->next();
                 redraw();
             });
-
-        bW = new Widget< Button >(g->x() + 150, Y, 30, 30);
-        b = bW;
-        svg = load_svg("Tracks.svg");
-        b->image(svg);
-        _r->buttons.push_back(b);
-        b->tooltip(_("Create an empty timeline with a video and audio track."));
-        bW->callback([=](auto w) { create_empty_timeline_cb(nullptr, p.ui); });
-
         bg->end();
         g->layout();
 

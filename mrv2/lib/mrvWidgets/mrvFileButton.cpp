@@ -88,6 +88,33 @@ namespace mrv
                 int Y = Fl::event_y_root();
                 math::Vector2i pos(X, Y);
 
+                if (playlistPanel)
+                {
+                    ViewerUI* ui = App::ui;
+
+                    math::Box2i box = playlistPanel->box();
+                    if (playlistPanel->is_panel())
+                    {
+                        auto w = window();
+                        pos.x -= w->x();
+                        pos.y -= w->y();
+                    }
+
+                    delete p.drag;
+                    p.drag = nullptr;
+
+                    if (box.contains(pos))
+                    {
+                        const std::string text = label();
+                        stringArray lines;
+                        split_string(lines, text, "\n");
+                        std::string filename = lines[0] + lines[1];
+                        playlistPanel->add(pos, filename, p.index, ui);
+                        // add_clip_to_timeline(filename, p.index, ui);
+                        return 1;
+                    }
+                }
+
                 ViewerUI* ui = App::ui;
                 math::Box2i box(
                     ui->uiTimeline->x() + ui->uiMain->x(),

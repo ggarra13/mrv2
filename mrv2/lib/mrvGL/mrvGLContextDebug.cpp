@@ -6,9 +6,8 @@
 #include "mrvGL/mrvGLContextDebug.h"
 
 #ifdef _WIN32
+#    include <glad/gl.h>
 #    include <windows.h>
-#    include <GL/gl.h>
-#    include <GL/glext.h>
 #endif
 
 #ifdef __APPLE__

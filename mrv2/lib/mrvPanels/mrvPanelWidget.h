@@ -48,7 +48,7 @@ namespace mrv
         void clear_controls();
         void refresh();
 
-        tl::math::Box2i box() const;
+        math::Box2i box() const;
 
         bool is_panel() const { return g->docked(); };
         virtual void save();

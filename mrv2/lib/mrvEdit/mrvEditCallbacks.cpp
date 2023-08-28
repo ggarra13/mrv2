@@ -110,6 +110,7 @@ namespace mrv
             return time;
         }
 
+        // @todo: darby needs to provide this from timelineUI
         std::vector<Item*> getSelectedItems()
         {
             std::vector<Item*> out;

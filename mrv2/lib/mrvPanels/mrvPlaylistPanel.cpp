@@ -6,8 +6,6 @@
 #include <vector>
 #include <map>
 
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Choice.H>
 #include <FL/Fl_Pack.H>
 #include <FL/Fl_RGB_Image.H>
 
@@ -15,12 +13,14 @@
 
 #include "mrvWidgets/mrvPack.h"
 #include "mrvWidgets/mrvFunctional.h"
-#include "mrvWidgets/mrvFileButton.h"
+#include "mrvWidgets/mrvPlaylistButton.h"
 #include "mrvWidgets/mrvButton.h"
 
 #include "mrvPanels/mrvPlaylistPanel.h"
 #include "mrvPanels/mrvPanelsAux.h"
 #include "mrvPanels/mrvPanelsCallbacks.h"
+
+#include "mrvEdit/mrvEditCallbacks.h"
 
 #include "mrvUI/mrvAsk.h" // for fl_input
 
@@ -35,16 +35,16 @@
 namespace mrv
 {
 
-    typedef std::map< ClipButton*, int64_t > WidgetIds;
-    typedef std::map< ClipButton*, size_t > WidgetIndices;
+    typedef std::map< PlaylistButton*, int64_t > WidgetIds;
+    typedef std::map< PlaylistButton*, size_t > WidgetIndices;
 
     struct PlaylistPanel::Private
     {
         std::weak_ptr<system::Context> context;
         mrv::ThumbnailCreator* thumbnailCreator;
 
-        std::map< size_t, ClipButton* > map;
-        std::vector< ClipButton* > clipButtons;
+        std::map< size_t, PlaylistButton* > map;
+        std::vector< PlaylistButton* > clipButtons;
 
         WidgetIds ids;
         WidgetIndices indices;
@@ -57,7 +57,7 @@ namespace mrv
 
     struct ThumbnailData
     {
-        ClipButton* widget;
+        PlaylistButton* widget;
     };
 
     void playlistThumbnail_cb(
@@ -67,7 +67,7 @@ namespace mrv
         void* opaque)
     {
         ThumbnailData* data = static_cast< ThumbnailData* >(opaque);
-        ClipButton* w = data->widget;
+        PlaylistButton* w = data->widget;
         if (playlistPanel)
             playlistPanel->playlistThumbnail(id, thumbnails, w);
         delete data;
@@ -77,7 +77,7 @@ namespace mrv
         const int64_t id,
         const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&
             thumbnails,
-        ClipButton* w)
+        PlaylistButton* w)
     {
         WidgetIds::const_iterator it = _r->ids.find(w);
         if (it == _r->ids.end())
@@ -145,6 +145,7 @@ namespace mrv
 
     void PlaylistPanel::clear_controls()
     {
+        _r->map.clear();
         _r->clipButtons.clear();
         _r->indices.clear();
     }
@@ -169,12 +170,30 @@ namespace mrv
 
         _r->thumbnailCreator = p.ui->uiTimeline->thumbnailCreator();
 
+        int Y = g->y() + 22;
+
+        Fl_Group* bg = new Fl_Group(g->x(), Y, g->w(), 30);
+        bg->begin();
+
+        Button* b;
+        auto bW = new Widget< Button >(g->x() + 10, Y, 30, 30);
+        b = bW;
+        Fl_Image* svg = load_svg("Tracks.svg");
+        b->image(svg);
+        b->tooltip(_("Create an empty timeline with a video and audio track."));
+        bW->callback([=](auto w) { create_empty_timeline_cb(nullptr, p.ui); });
+
+        bg->end();
+
+        Y += 30;
+
         const auto& model = p.ui->app->filesModel();
         const auto& files = model->observeFiles().get()->get();
         const auto& aIndex = model->observeAIndex()->get();
         const size_t numFiles = files.size();
         const image::Size size(128, 64);
 
+        size_t counter = 0;
         for (size_t i = 0; i < numFiles; ++i)
         {
             const auto& media = files[i];
@@ -188,9 +207,9 @@ namespace mrv
 
             const std::string& fullfile = path.get();
 
-            auto cbW = new Widget<ClipButton>(
-                g->x(), g->y() + 20 + i * 68, g->w(), 68);
-            ClipButton* b = cbW;
+            auto cbW = new Widget<PlaylistButton>(
+                g->x(), Y + counter * 68, g->w(), 68);
+            PlaylistButton* b = cbW;
             _r->clipButtons.push_back(b);
             _r->indices[b] = i;
             cbW->callback(
@@ -203,6 +222,8 @@ namespace mrv
                     auto model = _p->ui->app->filesModel();
                     model->setA(index);
                 });
+
+            ++counter;
 
             _r->map[i] = b;
 
@@ -264,7 +285,7 @@ namespace mrv
             const auto& path = media->path;
 
             const std::string fullfile = path.get();
-            ClipButton* b = m.second;
+            PlaylistButton* b = m.second;
 
             b->labelcolor(FL_WHITE);
             WidgetIndices::iterator it = _r->indices.find(b);
@@ -337,4 +358,29 @@ namespace mrv
         end_group();
     }
 
+    void PlaylistPanel::add(
+        const math::Vector2i& pos, const std::string& filename,
+        const size_t index, ViewerUI* ui)
+    {
+        int aIndex = -1;
+        bool validDrop = false;
+        for (auto& m : _r->map)
+        {
+            PlaylistButton* b = m.second;
+            math::Box2i box(b->x(), b->y(), b->w(), b->h());
+            if (box.contains(pos))
+            {
+                aIndex = static_cast<int>(m.first);
+                validDrop = true;
+                break;
+            }
+        }
+
+        if (validDrop && aIndex > 0)
+        {
+            auto model = ui->app->filesModel();
+            model->setA(aIndex);
+            add_clip_to_timeline(filename, index, ui);
+        }
+    }
 } // namespace mrv
