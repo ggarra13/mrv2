@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <iostream>
+
 #include <glad/gl.h>
 
 #include "mrvGL/mrvGLDefines.h"
