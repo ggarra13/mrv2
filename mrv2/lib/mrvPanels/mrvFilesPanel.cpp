@@ -6,6 +6,8 @@
 #include <vector>
 #include <map>
 
+#include "mrvCore/mrvHome.h"
+
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvPack.h"
 #include "mrvWidgets/mrvFileButton.h"
@@ -214,7 +216,14 @@ namespace mrv
             const auto& media = files->getItem(i);
             const auto& path = media->path;
 
+            // We skip EDLs created in tmp dir here.
             const std::string& dir = path.getDirectory();
+            const std::string& base = path.getBaseName();
+            const std::string& extension = path.getExtension();
+            if (extension == ".otio" && base == "EDL." &&
+                (dir == tmppath() + '/' || dir == tmppath() + '\\'))
+                continue;
+
             const std::string file =
                 path.getBaseName() + path.getNumber() + path.getExtension();
             const std::string fullfile = dir + file;

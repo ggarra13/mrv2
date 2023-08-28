@@ -18,6 +18,7 @@ namespace mrv
     using namespace tl;
 
     class ClipButton;
+    class FileButton;
 
     class PlaylistPanel : public PanelWidget
     {
@@ -28,8 +29,7 @@ namespace mrv
         void clear_controls();
         void add_controls() override;
 
-        void add();
-
+        void redraw();
         void refresh();
         void playlistThumbnail(
             const int64_t id,

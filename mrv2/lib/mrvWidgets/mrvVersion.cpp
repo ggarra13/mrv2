@@ -407,7 +407,7 @@ namespace mrv
 #else
           << "With msvc " << _MSC_VER << endl
 #endif
-          << "(C) 2022-present Film Aura, LLC." << endl
+          << "(C) 2022-Present Film Aura, LLC." << endl
           << "Gonzalo Garramuño & others" << endl
           << endl
           << "mrv2 depends on:" << endl
@@ -420,7 +420,7 @@ namespace mrv
         unsigned int boost_patch = BOOST_VERSION % 100;
         o << "Boost v" << boost_major << "." << boost_minor << "."
           << boost_patch << endl
-          << "Copyright (c) 2016-present Contributors to the Boost Project"
+          << "Copyright (c) 2016-Present Contributors to the Boost Project"
           << endl
           << endl;
 #endif
@@ -440,12 +440,12 @@ namespace mrv
           << "libswscale       v" << AV_STRINGIFY(LIBSWSCALE_VERSION) << endl
           << "http://ffmpeg.mplayerhq.hu/" << endl
           << "License: " << avcodec_license() << endl
-          << "Copyright (c) 2000-present Fabrice Bellard, et al." << endl
+          << "Copyright (c) 2000-Present Fabrice Bellard, et al." << endl
           << "Configuration: " << avcodec_configuration() << endl
           << endl
           << "FLTK v1.4" << endl
           << "http://www.fltk.org/" << endl
-          << "Copyright (c) 2000-present Bill Spitzak & others" << endl
+          << "Copyright (c) 2000-Present Bill Spitzak & others" << endl
           << endl
           << "Modified FLU - FLTK Utility Widgets" << endl
           << "Copyright (c) 2002 Ohio Supercomputer Center, Ohio State "
@@ -512,7 +512,7 @@ namespace mrv
           << "nlohmann_json v" << NLOHMANN_JSON_VERSION_MAJOR << "."
           << NLOHMANN_JSON_VERSION_MINOR << "." << NLOHMANN_JSON_VERSION_PATCH
           << endl
-          << "Copyright (c) 2013-present Niels Lohmann" << endl
+          << "Copyright (c) 2013-Present Niels Lohmann" << endl
           << endl
           << "OFL" << endl
           << "Copyright (c) 26 February 2007" << endl
@@ -523,7 +523,7 @@ namespace mrv
           << endl
           << "OpenEXR v" << OPENEXR_VERSION_STRING << endl
           << "http://www.openexr.org/" << endl
-          << "(C) 2005-2023 Industrial Light & Magic" << endl
+          << "(C) 2005-Present Industrial Light & Magic" << endl
           << endl
           << "OpenTimelineIO" << endl
           << "opentime " << AV_STRINGIFY(OPENTIME_VERSION) << endl
@@ -548,7 +548,7 @@ namespace mrv
           << endl
           << endl
           << "pystring" << endl
-          << "Copyright (c) 2008-present Contributors to the Pystring project."
+          << "Copyright (c) 2008-Present Contributors to the Pystring project."
           << endl
           << "All Rights Reserved." << endl
           << endl
@@ -571,11 +571,11 @@ namespace mrv
         if (PY_RELEASE_SERIAL)
             o << PY_RELEASE_SERIAL;
         o << endl
-          << "Copyright (c) 2001-present Python Software Foundation." << endl
+          << "Copyright (c) 2001-Present Python Software Foundation." << endl
           << "All Rights Reserved." << endl
           << endl
           << "RtAudio v" << RTAUDIO_VERSION << endl
-          << "Copyright (c) 2001-2019 Gary P. Scavone" << endl
+          << "Copyright (c) 2001-Present Gary P. Scavone" << endl
           << endl
           << "stb v" << STBI_VERSION << endl
           << "Copyright (c) 2017 Sean Barrett" << endl
@@ -588,18 +588,18 @@ namespace mrv
           << "tlRender v" << TLRENDER_VERSION << " (modified)." << endl
           << "Original at: " << endl
           << "https://www.github.com/darbyjohnston/tlRender" << endl
-          << "(C) 2021-2023 Darby Johnston." << endl
+          << "(C) 2021-Present Darby Johnston." << endl
           << endl
 #ifdef TLRENDER_USD
           << "USD v" << MaterialX::getVersionString() << endl
-          << "(C) 2016-present Pixar" << endl
+          << "(C) 2016-Present Pixar" << endl
           << endl
 #endif
           << "yaml-cpp" << endl
           << "Copyright (c) 2008-2015 Jesse Beder." << endl
           << endl
           << "zlib v" << ZLIB_VERSION << endl
-          << "(C) 2008-2023 Jean-loup Gailly and Mark Adler" << endl
+          << "(C) 2008-Present Jean-loup Gailly and Mark Adler" << endl
           << endl
           << endl
           << "A big thank you goes to Greg Ercolano who helped with" << endl

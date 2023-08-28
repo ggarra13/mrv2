@@ -62,27 +62,21 @@ namespace mrv
         {
         case FL_FOCUS:
         case FL_UNFOCUS:
-            return 1;
         case FL_ENTER:
-            take_focus();
-            break;
         case FL_LEAVE:
-            Fl::focus(0);
-            break;
+            return 1;
         case FL_KEYDOWN:
         case FL_KEYUP:
         {
             if (value())
             {
                 unsigned rawkey = Fl::event_key();
-                if (Fl::focus() == this &&
-                    (rawkey == FL_Delete || rawkey == FL_BackSpace))
+                if (rawkey == FL_Delete || rawkey == FL_BackSpace)
                 {
                     close_current_cb(this, App::ui);
                     return 1;
                 }
                 return 0;
-                break;
             }
             return 0;
         }
@@ -110,7 +104,9 @@ namespace mrv
                     split_string(lines, text, "\n");
                     std::string filename = lines[0] + lines[1];
                     add_clip_to_timeline(filename, p.index, ui);
+                    return 1;
                 }
+                return 0;
             }
             break;
         }
@@ -138,7 +134,9 @@ namespace mrv
                     int Y = Fl::event_y_root();
                     auto window = p.drag->window();
                     window->position(X, Y);
+                    return 1;
                 }
+                return 0;
             }
             break;
         }
@@ -164,6 +162,6 @@ namespace mrv
             }
             break;
         }
-        return Fl_Button::handle(event);
+        return ClipButton::handle(event);
     }
 } // namespace mrv

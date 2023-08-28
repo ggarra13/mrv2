@@ -18,6 +18,8 @@
 
 #include "mrvNetwork/mrvTCP.h"
 
+#include "mrvPanels/mrvPanelsCallbacks.h"
+
 #include "mrvEdit/mrvEditCallbacks.h"
 
 #include "mrvCore/mrvI8N.h"
@@ -1055,6 +1057,8 @@ namespace mrv
         if (refreshCache)
             refresh_file_cache_cb(nullptr, ui);
         ui->uiTimeline->frameView();
+
+        refreshPanelThumbnails();
     }
 
     EditMode editMode = EditMode::kTimeline;

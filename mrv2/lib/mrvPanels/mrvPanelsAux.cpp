@@ -2,6 +2,8 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <limits>
+
 #include <tlCore/StringFormat.h>
 
 #include "mrvPanelsAux.h"
@@ -14,6 +16,8 @@ namespace mrv
     std::string getLayerName(uint16_t layerId, ViewerUI* ui)
     {
         std::string layer;
+        if (layerId == std::numeric_limits<uint16_t>::max())
+            layerId = 0;
         if (layerId < ui->uiColorChannel->children())
         {
             layer = "\n";

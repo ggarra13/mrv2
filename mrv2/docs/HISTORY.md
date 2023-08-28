@@ -26,6 +26,7 @@ v0.7.2
 - Fixed Undo/Redo of annotations, which was incorrect.
 - Added Drag and Drop functionalit to the File Panel into the Timeline Window.
   This effectively replaces the Playlist Panel, which is no longer avaiable.
+- Fixed keyboard (menu) shortcuts not working in the Files Panel.
 
 
 v0.7.1

@@ -11,9 +11,11 @@
 #include <FL/Fl_Pack.H>
 #include <FL/Fl_RGB_Image.H>
 
+#include "mrvCore/mrvHome.h"
+
 #include "mrvWidgets/mrvPack.h"
 #include "mrvWidgets/mrvFunctional.h"
-#include "mrvWidgets/mrvClipButton.h"
+#include "mrvWidgets/mrvFileButton.h"
 #include "mrvWidgets/mrvButton.h"
 
 #include "mrvPanels/mrvPlaylistPanel.h"
@@ -34,29 +36,23 @@ namespace mrv
 {
 
     typedef std::map< ClipButton*, int64_t > WidgetIds;
+    typedef std::map< ClipButton*, size_t > WidgetIndices;
 
     struct PlaylistPanel::Private
     {
         std::weak_ptr<system::Context> context;
         mrv::ThumbnailCreator* thumbnailCreator;
 
+        std::map< size_t, ClipButton* > map;
         std::vector< ClipButton* > clipButtons;
 
         WidgetIds ids;
-        std::vector< Fl_Button* > buttons;
-
-        Fl_Choice* playlistId;
-
-        Button* addButton;
+        WidgetIndices indices;
 
         std::shared_ptr<
             observer::ListObserver<std::shared_ptr<FilesModelItem> > >
             filesObserver;
-
-        std::shared_ptr< observer::ListObserver<std::shared_ptr<Playlist> > >
-            playlistsObserver;
-
-        std::shared_ptr<observer::ValueObserver<int> > indexObserver;
+        std::shared_ptr<observer::ValueObserver<int> > aIndexObserver;
     };
 
     struct ThumbnailData
@@ -136,15 +132,9 @@ namespace mrv
                     const std::vector< std::shared_ptr<FilesModelItem> >& value)
                 { refresh(); });
 
-        _r->playlistsObserver =
-            observer::ListObserver<std::shared_ptr<Playlist> >::create(
-                ui->app->playlistsModel()->observePlaylists(),
-                [this](const std::vector< std::shared_ptr<Playlist> >& value)
-                { refresh(); });
-
-        _r->indexObserver = observer::ValueObserver<int>::create(
-            ui->app->playlistsModel()->observeIndex(),
-            [this](int value) { refresh(); });
+        _r->aIndexObserver = observer::ValueObserver<int>::create(
+            ui->app->filesModel()->observeAIndex(),
+            [this](int value) { redraw(); });
     }
 
     PlaylistPanel::~PlaylistPanel()
@@ -156,6 +146,7 @@ namespace mrv
     void PlaylistPanel::clear_controls()
     {
         _r->clipButtons.clear();
+        _r->indices.clear();
     }
 
     void PlaylistPanel::cancel_thumbnails()
@@ -172,141 +163,59 @@ namespace mrv
     {
         TLRENDER_P();
 
-        const auto& model = p.ui->app->filesModel();
-        const auto& files = model->observeFiles().get()->get();
+        g->clear();
 
-        const auto& pmodel = p.ui->app->playlistsModel();
-        const auto& playlists = pmodel->observePlaylists().get()->get();
-
-        // If playlists is empty, create a new dummy playlist
-        if (playlists.empty())
-        {
-            std::shared_ptr<Playlist> playlist = std::make_shared<Playlist>();
-            playlist->name = _("Playlist");
-            pmodel->add(playlist);
-        }
+        g->begin();
 
         _r->thumbnailCreator = p.ui->uiTimeline->thumbnailCreator();
 
-        g->clear();
-        g->begin();
-
-        //
-        // Make sure all playlists do not have an item that no longer exists
-        //
-        for (auto& playlist : playlists)
-        {
-            std::vector< std::shared_ptr<FilesModelItem> > newclips;
-            for (size_t i = 0; i < playlist->clips.size(); ++i)
-            {
-                auto clip = playlist->clips[i];
-                if (std::find(files.begin(), files.end(), clip) != files.end())
-                    newclips.push_back(clip);
-            }
-            playlist->clips = newclips;
-        }
-
-        int index = pmodel->observeIndex()->get();
-        if (index < 0)
-            index = 0;
-        int Y = g->y() + 20;
-        int W = g->w();
-
-        Pack* pack = new Pack(g->x(), Y, W, 30);
-        pack->type(Pack::HORIZONTAL);
-        pack->begin();
-        auto cW =
-            new Widget< Fl_Choice >(g->x() + W - 60, Y, W - 60, 30, _("Name"));
-        Fl_Choice* c = _r->playlistId = cW;
-        for (auto playlist : playlists)
-        {
-            c->add(playlist->name.c_str());
-        }
-        c->value(index);
-        cW->callback([=](auto b) { pmodel->set(b->value()); });
-
-        auto bW = new Widget< Button >(g->x() + W - 60, Y, 20, 30, "+");
-        Button* b = bW;
-        bW->callback(
-            [=](auto b)
-            {
-                // This char* does not need to be freed.
-                const char* input =
-                    fl_input("%s", _("Playlist"), _("Playlist"));
-                if (!input || strlen(input) == 0)
-                    return;
-
-                std::string name = input;
-                const auto& pmodel = p.ui->app->playlistsModel();
-                const auto& playlists = pmodel->observePlaylists().get()->get();
-                for (auto& playlist : playlists)
-                {
-                    if (playlist->name == name)
-                    {
-                        size_t pos = name.rfind('_');
-                        if (pos != std::string::npos)
-                        {
-                            std::string number =
-                                name.substr(pos + 1, name.size());
-                            int index = atoi(number.c_str());
-                            ++index;
-                            char buf[64];
-                            snprintf(buf, 64, "%d", index);
-                            name = name.substr(0, pos + 1) + buf;
-                        }
-                        else
-                        {
-                            name += "_1";
-                        }
-                    }
-                }
-                std::shared_ptr< Playlist > newPlaylist =
-                    std::make_shared<Playlist>();
-                newPlaylist->name = name;
-                pmodel->add(newPlaylist);
-            });
-
-        bW = new Widget< Button >(g->x() + W - 40, Y, 20, 30, "-");
-        b = bW;
-        bW->callback(
-            [=](auto b)
-            {
-                const auto& pmodel = p.ui->app->playlistsModel();
-                pmodel->close();
-            });
-
-        pack->end();
-        pack->layout();
-
-        size_t numFiles;
-        if (index < 0)
-            numFiles = 0;
-        else
-            numFiles = playlists[index]->clips.size();
-
-        image::Size size(128, 64);
+        const auto& model = p.ui->app->filesModel();
+        const auto& files = model->observeFiles().get()->get();
+        const auto& aIndex = model->observeAIndex()->get();
+        const size_t numFiles = files.size();
+        const image::Size size(128, 64);
 
         for (size_t i = 0; i < numFiles; ++i)
         {
-            const auto& media = playlists[index]->clips[i];
+            const auto& media = files[i];
             const auto& path = media->path;
+            const std::string& dir = path.getDirectory();
+            const std::string& base = path.getBaseName();
+            const std::string& extension = path.getExtension();
+            if (extension != ".otio" || base != "EDL." ||
+                (dir != tmppath() + '/' && dir != tmppath() + '\\'))
+                continue;
 
             const std::string& fullfile = path.get();
 
             auto cbW = new Widget<ClipButton>(
                 g->x(), g->y() + 20 + i * 68, g->w(), 68);
             ClipButton* b = cbW;
-            b->tooltip(_("Select playlist image for removal."));
             _r->clipButtons.push_back(b);
-            cbW->callback([=](auto b) { b->value(!b->value()); });
+            _r->indices[b] = i;
+            cbW->callback(
+                [=](auto b)
+                {
+                    WidgetIndices::const_iterator it = _r->indices.find(b);
+                    if (it == _r->indices.end())
+                        return;
+                    int index = (*it).second;
+                    auto model = _p->ui->app->filesModel();
+                    model->setA(index);
+                });
 
-            const std::string& dir = path.getDirectory();
+            _r->map[i] = b;
+
             const std::string file =
                 path.getBaseName() + path.getNumber() + path.getExtension();
 
             const std::string& layer = getLayerName(0, p.ui);
             std::string text = dir + "\n" + file + layer;
             b->copy_label(text.c_str());
+            if (i == aIndex)
+                b->value(1);
+            else
+                b->value(0);
 
             if (auto context = _r->context.lock())
             {
@@ -330,94 +239,94 @@ namespace mrv
             }
         }
 
-        Y += 30 + numFiles * 64;
+        // Y += 30 + numFiles * 64;
+    }
 
-        Fl_Pack* bg = new Fl_Pack(g->x(), Y, g->w(), 30);
+    void PlaylistPanel::redraw()
+    {
 
-        bg->type(Fl_Pack::HORIZONTAL);
-        bg->begin();
+        TLRENDER_P();
 
-        bW = new Widget< Button >(g->x() + 150, Y, 50, 30, "Add");
-        b = _r->addButton = bW;
-        b->tooltip(_("Add current file to Playlist"));
-        bW->callback(
-            [=](auto w)
+        otio::RationalTime time = otio::RationalTime(0.0, 1.0);
+
+        const auto player = p.ui->uiView->getTimelinePlayer();
+
+        image::Size size(128, 64);
+
+        const auto& model = p.ui->app->filesModel();
+        auto Aindex = model->observeAIndex()->get();
+        const auto files = model->observeFiles();
+
+        for (auto& m : _r->map)
+        {
+            size_t i = m.first;
+            const auto& media = files->getItem(i);
+            const auto& path = media->path;
+
+            const std::string fullfile = path.get();
+            ClipButton* b = m.second;
+
+            b->labelcolor(FL_WHITE);
+            WidgetIndices::iterator it = _r->indices.find(b);
+            time = media->currentTime;
+            uint16_t layerId = media->videoLayer;
+            if (Aindex != i)
             {
-                const auto& model = p.ui->app->filesModel();
-                const auto& files = model->observeFiles();
-                if (files->getSize() == 0)
-                    return;
-                const auto Aindex = model->observeAIndex()->get();
-                const auto& item = files->getItem(Aindex);
-                auto clip = std::make_shared<FilesModelItem>();
-                clip = item;
-                const auto& player = p.ui->uiView->getTimelinePlayer();
-                clip->inOutRange = player->inOutRange();
-
-                const auto& pmodel = p.ui->app->playlistsModel();
-                const auto& playlists = pmodel->observePlaylists()->get();
-                int index = _r->playlistId->value();
-                auto playlist = playlists[index];
-                playlist->clips.push_back(clip);
-                refresh();
-            });
-
-        bW = new Widget< Button >(g->x() + 150, Y, 70, 30, "Remove");
-        b = bW;
-        b->tooltip(_("Remove selected files from Playlist"));
-        bW->callback(
-            [=](auto w)
+                b->value(0);
+                if (b->image())
+                    continue;
+            }
+            else
             {
-                // Create a new list of new clips not taking into account
-                // those selected (to remove)
-                int index = _r->playlistId->value();
-                const auto& pmodel = p.ui->app->playlistsModel();
-                const auto& playlists = pmodel->observePlaylists()->get();
-                auto playlist = playlists[index];
-                std::vector< std::shared_ptr<FilesModelItem> > newclips;
-                for (size_t i = 0; i < playlist->clips.size(); ++i)
+                b->value(1);
+                if (player)
                 {
-                    if (!_r->clipButtons[i]->value())
-                        newclips.push_back(playlist->clips[i]);
+                    time = player->currentTime();
+                    layerId = p.ui->uiColorChannel->value();
                 }
-                playlist->clips = newclips;
-                refresh();
-            });
+            }
 
-        bW = new Widget< Button >(g->x() + 150, Y, 70, 30, _("Create"));
-        b = bW;
-        b->tooltip(
-            _("Create .otio Playlist in temp directory with absolue paths."));
-        bW->callback(
-            [=](auto w)
+            if (auto context = _r->context.lock())
             {
-                int index = _r->playlistId->value();
-                const auto& pmodel = p.ui->app->playlistsModel();
-                const auto& playlists = pmodel->observePlaylists()->get();
-                auto& playlist = playlists[index];
-                if (playlist->clips.size() < 1)
-                    return;
-                create_playlist(p.ui, playlist, true);
-            });
+                ThumbnailData* data = new ThumbnailData;
+                data->widget = b;
 
-        bW = new Widget< Button >(g->x() + 150, Y, 70, 30, _("Save"));
-        b = bW;
-        b->tooltip(_("Create and save an .otio Playlist with relative paths."));
-        bW->callback(
-            [=](auto w)
-            {
-                int index = _r->playlistId->value();
-                const auto& pmodel = p.ui->app->playlistsModel();
-                const auto& playlists = pmodel->observePlaylists()->get();
-                auto& playlist = playlists[index];
-                if (playlist->clips.size() < 1)
-                    return;
-                create_playlist(p.ui, playlist, false);
-            });
+                WidgetIds::const_iterator it = _r->ids.find(b);
+                if (it != _r->ids.end())
+                {
+                    _r->thumbnailCreator->cancelRequests(it->second);
+                    _r->ids.erase(it);
+                }
 
-        bg->end();
+                try
+                {
+                    auto timeline =
+                        timeline::Timeline::create(fullfile, context);
+                    auto timeRange = timeline->getTimeRange();
 
-        g->end();
+                    if (time::isValid(timeRange))
+                    {
+                        auto startTime = timeRange.start_time();
+                        auto endTime = timeRange.end_time_inclusive();
+
+                        if (time < startTime)
+                            time = startTime;
+                        else if (time > endTime)
+                            time = endTime;
+                    }
+
+                    _r->thumbnailCreator->initThread();
+
+                    int64_t id = _r->thumbnailCreator->request(
+                        fullfile, time, size, playlistThumbnail_cb, (void*)data,
+                        layerId);
+                    _r->ids[b] = id;
+                }
+                catch (const std::exception& e)
+                {
+                }
+            }
+        }
     }
 
     void PlaylistPanel::refresh()
@@ -426,12 +335,6 @@ namespace mrv
         clear_controls();
         add_controls();
         end_group();
-    }
-
-    void PlaylistPanel::add()
-    {
-        _r->addButton->do_callback();
-        refresh();
     }
 
 } // namespace mrv

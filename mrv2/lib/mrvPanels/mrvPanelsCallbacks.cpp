@@ -56,6 +56,8 @@ namespace mrv
             comparePanel->redraw();
         if (stereo3DPanel)
             stereo3DPanel->redraw();
+        if (playlistPanel)
+            playlistPanel->redraw();
         bool send = App::ui->uiPrefs->SendTimeline->value();
         if (send)
             tcp->pushMessage("Redraw Panel Thumbnails", 0);
@@ -69,6 +71,8 @@ namespace mrv
             comparePanel->refresh();
         if (stereo3DPanel)
             stereo3DPanel->refresh();
+        if (playlistPanel)
+            playlistPanel->refresh();
     }
 
     void removePanels(ViewerUI* ui)

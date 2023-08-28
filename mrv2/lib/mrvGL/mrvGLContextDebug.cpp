@@ -8,7 +8,7 @@
 #ifdef _WIN32
 #    include <windows.h>
 #    include <GL/gl.h>
-#    include <GL/wglext.h>
+#    include <GL/glext.h>
 #endif
 
 #ifdef __APPLE__
@@ -16,18 +16,20 @@
 #    include <OpenGL/OpenGL.h>
 #endif
 
-#if defined(FLTK_USE_WAYLAND)
-#    define USE_SIMPLE_CONFIG 1
-#    include <wayland-client.h>
-#    include <wayland-server.h>
-#    include <wayland-client-protocol.h>
-#    include <wayland-egl.h> // Wayland EGL MUST be included before EGL headers
-#    include <EGL/egl.h>
-#    include <EGL/eglplatform.h>
-#endif
+#ifdef __linux__
+#    if defined(FLTK_USE_WAYLAND)
+#        define USE_SIMPLE_CONFIG 1
+#        include <wayland-client.h>
+#        include <wayland-server.h>
+#        include <wayland-client-protocol.h>
+#        include <wayland-egl.h> // Wayland EGL MUST be included before EGL headers
+#        include <EGL/egl.h>
+#        include <EGL/eglplatform.h>
+#    endif
 
-#if defined(FLTK_USE_X11)
-#    include <GL/glx.h>
+#    if defined(FLTK_USE_X11)
+#        include <GL/glx.h>
+#    endif
 #endif
 
 namespace mrv
@@ -47,7 +49,7 @@ namespace mrv
             return (void*)eglGetCurrentContext();
 #endif
 #ifdef __APPLE__
-        return (void*)aglGetCurrentContext();
+        return (void*)CGLGetCurrentContext();
 #endif
         throw std::runtime_error("No Window API known");
     }
