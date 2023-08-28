@@ -36,6 +36,7 @@ namespace mrv
     {
         TLRENDER_P();
 
+        p.window->hide();
         delete p.window;
         p.window = nullptr;
     }

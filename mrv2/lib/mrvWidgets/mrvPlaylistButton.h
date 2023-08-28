@@ -7,23 +7,30 @@
 #include <memory>
 
 #include <tlCore/Util.h>
+#include <tlCore/Context.h>
 
 #include "mrvWidgets/mrvClipButton.h"
 
 namespace mrv
 {
-    class FileDragger;
+    using namespace tl;
 
     class PlaylistButton : public ClipButton
     {
     public:
         PlaylistButton(int X, int Y, int W, int H, const char* L = 0);
         ~PlaylistButton();
+
         int handle(int event) override;
+        void draw() override;
 
         void setIndex(size_t value);
 
+        void createTimeline(const std::shared_ptr<system::Context>&);
+
     protected:
+        void _countVideoAndAudioClips();
+
         TLRENDER_PRIVATE();
     };
 } // namespace mrv

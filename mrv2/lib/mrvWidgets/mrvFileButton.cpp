@@ -82,6 +82,7 @@ namespace mrv
         }
         case FL_RELEASE:
         {
+            std::cerr << "FL_RELEASE" << std::endl;
             if (p.drag)
             {
                 int X = Fl::event_x_root();
@@ -110,7 +111,6 @@ namespace mrv
                         split_string(lines, text, "\n");
                         std::string filename = lines[0] + lines[1];
                         playlistPanel->add(pos, filename, p.index, ui);
-                        // add_clip_to_timeline(filename, p.index, ui);
                         return 1;
                     }
                 }
@@ -133,12 +133,13 @@ namespace mrv
                     add_clip_to_timeline(filename, p.index, ui);
                     return 1;
                 }
-                return 0;
+                return 1;
             }
             break;
         }
         case FL_DRAG:
         {
+            std::cerr << "FL_DRAG button1" << std::endl;
             if (Fl::event_button1())
             {
                 const std::string text = label();
@@ -161,13 +162,14 @@ namespace mrv
                     int Y = Fl::event_y_root();
                     auto window = p.drag->window();
                     window->position(X, Y);
-                    return 1;
                 }
-                return 0;
+                if (p.drag)
+                    return 1;
             }
             break;
         }
         case FL_PUSH:
+            std::cerr << "FL_PUSH button3" << std::endl;
             if (value() && Fl::event_button3() && !p.drag)
             {
                 Fl_Menu_Button menu(x(), y(), w(), h());
@@ -187,6 +189,8 @@ namespace mrv
                 menu.popup();
                 return 1;
             }
+            if (p.drag)
+                return 1;
             break;
         }
         return ClipButton::handle(event);

@@ -16,6 +16,8 @@
 
 #include <tlTimeline/Util.h>
 
+#include "mrvDraw/Annotation.h"
+
 #include "mrvNetwork/mrvTCP.h"
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
@@ -57,8 +59,14 @@ namespace mrv
 
         static std::vector<FrameInfo> copiedFrames;
 
-        static std::vector<std::string> undoBuffer;
-        static std::vector<std::string> redoBuffer;
+        struct UndoRedo
+        {
+            std::string json;
+            std::vector<std::shared_ptr<tl::draw::Annotation>> annotations;
+        };
+
+        static std::vector<UndoRedo> undoBuffer;
+        static std::vector<UndoRedo> redoBuffer;
 
         std::vector<Composition*>
         getTracks(TimelinePlayer* player, const RationalTime& time)
@@ -458,13 +466,16 @@ namespace mrv
         if (!undoBuffer.empty())
         {
             // Don't store anything if no change.
-            if (undoBuffer.back() == state)
+            if (undoBuffer.back().json == state)
             {
                 return;
             }
         }
 
-        undoBuffer.push_back(state);
+        UndoRedo buffer;
+        buffer.json = state;
+        buffer.annotations = player->getAllAnnotations();
+        undoBuffer.push_back(buffer);
     }
 
     void edit_clear_redo()
@@ -479,12 +490,16 @@ namespace mrv
         if (!redoBuffer.empty())
         {
             // Don't store anything if no change.
-            if (redoBuffer.back() == state)
+            if (redoBuffer.back().json == state)
             {
                 return;
             }
         }
-        redoBuffer.push_back(state);
+
+        UndoRedo buffer;
+        buffer.json = state;
+        buffer.annotations = player->getAllAnnotations();
+        redoBuffer.push_back(buffer);
     }
 
     void edit_remove_undo()
@@ -768,13 +783,13 @@ namespace mrv
 
         const auto& time = getTime(player);
 
-        auto json = undoBuffer.back();
+        auto buffer = undoBuffer.back();
         undoBuffer.pop_back();
         edit_store_redo(player);
 
         otio::SerializableObject::Retainer<otio::Timeline> timeline(
             dynamic_cast<otio::Timeline*>(
-                otio::Timeline::from_json_string(json)));
+                otio::Timeline::from_json_string(buffer.json)));
 
         auto stack = timeline->tracks();
         TimeRange timeRange;
@@ -804,7 +819,7 @@ namespace mrv
 
         auto time = getTime(player);
 
-        auto json = redoBuffer.back();
+        auto buffer = redoBuffer.back();
         redoBuffer.pop_back();
         edit_store_undo(player, ui);
 
@@ -813,7 +828,7 @@ namespace mrv
 
         otio::SerializableObject::Retainer<otio::Timeline> timeline(
             dynamic_cast<otio::Timeline*>(
-                otio::Timeline::from_json_string(json)));
+                otio::Timeline::from_json_string(buffer.json)));
 
         TimeRange timeRange;
         double videoRate, sampleRate;
@@ -828,6 +843,7 @@ namespace mrv
             setEndTime(timeline, videoRate, ui);
         }
 
+        player->setAllAnnotations(buffer.annotations);
         player->setTimeline(timeline);
 
         toOtioFile(timeline, ui);

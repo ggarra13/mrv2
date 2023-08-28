@@ -16,15 +16,19 @@ namespace mrv
     std::string getLayerName(uint16_t layerId, ViewerUI* ui)
     {
         std::string layer;
+        unsigned numLayers = ui->uiColorChannel->children();
         if (layerId == std::numeric_limits<uint16_t>::max())
             layerId = 0;
-        if (layerId < ui->uiColorChannel->children())
+        if (layerId < numLayers)
         {
             layer = "\n";
             layer += ui->uiColorChannel->child(layerId)->label();
         }
-
-        if (layerId >= ui->uiColorChannel->children())
+        else if (layerId == 0 && numLayers == 0)
+        {
+            layer = "\nColor";
+        }
+        else if (layerId >= ui->uiColorChannel->children())
         {
             layer = tl::string::Format("\nLayer Number={0}").arg(layerId);
         }

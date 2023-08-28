@@ -230,8 +230,7 @@ namespace mrv
             const std::string file =
                 path.getBaseName() + path.getNumber() + path.getExtension();
 
-            const std::string& layer = getLayerName(0, p.ui);
-            std::string text = dir + "\n" + file + layer;
+            std::string text = dir + "\n" + file + "\nColor";
             b->copy_label(text.c_str());
             if (i == aIndex)
                 b->value(1);
@@ -240,6 +239,8 @@ namespace mrv
 
             if (auto context = _r->context.lock())
             {
+                b->createTimeline(context);
+
                 ThumbnailData* data = new ThumbnailData;
                 data->widget = b;
 
