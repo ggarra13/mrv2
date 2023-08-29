@@ -139,7 +139,6 @@ namespace mrv
         }
         case FL_DRAG:
         {
-            std::cerr << "FL_DRAG button1" << std::endl;
             if (Fl::event_button1())
             {
                 const std::string text = label();
@@ -169,7 +168,6 @@ namespace mrv
             break;
         }
         case FL_PUSH:
-            std::cerr << "FL_PUSH button3" << std::endl;
             if (value() && Fl::event_button3() && !p.drag)
             {
                 Fl_Menu_Button menu(x(), y(), w(), h());

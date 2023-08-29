@@ -875,8 +875,31 @@ namespace mrv
     {
         const std::string file = otioFilename();
 
-        otio::ErrorStatus errorStatus;
         auto timeline = create_empty_timeline(ui);
+
+        otio::ErrorStatus errorStatus;
+        timeline->to_json_file(file, &errorStatus);
+        if (otio::is_error(errorStatus))
+        {
+            std::string error =
+                string::Format(_("Could not save .otio file: {0}"))
+                    .arg(errorStatus.full_description);
+        }
+
+        ui->app->open(file);
+    }
+
+    void create_new_timeline_cb(Fl_Menu_*, ViewerUI* ui)
+    {
+        const std::string file = otioFilename();
+
+        otio::ErrorStatus errorStatus;
+        otio::SerializableObject::Retainer<otio::Timeline> timeline(
+            new otio::Timeline("EDL"));
+
+        auto model = ui->app->filesModel();
+        int Aindex = model->observeAIndex()->get();
+
         timeline->to_json_file(file, &errorStatus);
         if (otio::is_error(errorStatus))
         {
@@ -887,6 +910,7 @@ namespace mrv
         }
 
         ui->app->open(file);
+        add_clip_to_timeline(file, Aindex, ui);
     }
 
     void add_clip_to_timeline(

@@ -24,8 +24,9 @@ v0.7.2
   Edit/Frame/Insert to cut, copy, paste and insert one frame (video and audio)
   of any media.  Currently, it does not support transitions, that are removed.
 - Fixed Undo/Redo of annotations, which was incorrect.
-- Added Drag and Drop functionalit to the File Panel into the Timeline Window.
-  This effectively replaces the Playlist Panel, which is no longer avaiable.
+- Added Drag and Drop functionality to the File Panel into the Timeline Window.
+- The Playlist panel's functionality is there only to create an empty track
+  and list all user created EDL clips.
 - Fixed keyboard (menu) shortcuts not working in the Files Panel.
 
 

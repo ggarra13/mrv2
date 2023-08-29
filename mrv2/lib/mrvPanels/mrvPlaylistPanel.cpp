@@ -183,6 +183,13 @@ namespace mrv
         b->tooltip(_("Create an empty timeline with a video and audio track."));
         bW->callback([=](auto w) { create_empty_timeline_cb(nullptr, p.ui); });
 
+        bW = new Widget< Button >(g->x() + 40, Y, 30, 30);
+        b = bW;
+        svg = load_svg("Tracks.svg");
+        b->image(svg);
+        b->tooltip(_("Create a timeline from the selected clip."));
+        bW->callback([=](auto w) { create_new_timeline_cb(nullptr, p.ui); });
+
         bg->end();
 
         Y += 30;

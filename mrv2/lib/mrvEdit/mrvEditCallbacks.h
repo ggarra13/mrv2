@@ -55,6 +55,12 @@ namespace mrv
     //! Add clip to otio timeline.
     void add_clip_to_timeline(const std::string&, const size_t, ViewerUI* ui);
 
+    //! Create new timeline from a clip.
+    void create_new_timeline(ViewerUI* ui);
+
+    //! Create new timeline from selected clip.
+    void create_new_timeline_cb(Fl_Menu_* m, ViewerUI* ui);
+
     //
     // Set the edit mode height.
     //
