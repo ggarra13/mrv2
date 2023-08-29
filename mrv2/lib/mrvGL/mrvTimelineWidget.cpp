@@ -114,7 +114,7 @@ namespace mrv
         std::shared_ptr<gl::VAO> vao;
         std::chrono::steady_clock::time_point mouseWheelTimer;
 
-        std::vector< int64_t > annotationFrames;
+        std::vector< otime::RationalTime > annotationTimes;
 
         bool dragging = false;
 
@@ -498,11 +498,11 @@ namespace mrv
         const auto player = p.ui->uiView->getTimelinePlayer();
         if (player)
         {
-            const auto& frames = player->getAnnotationFrames();
-            if (frames != p.annotationFrames)
+            const auto times = player->getAnnotationTimes();
+            if (times != p.annotationTimes)
             {
                 annotationMarks = true;
-                p.annotationFrames = frames;
+                p.annotationTimes = times;
             }
         }
 
@@ -1212,9 +1212,8 @@ namespace mrv
         const auto& color = image::Color4f(1, 1, 0, 0.25);
         TimelineWidget* self = const_cast<TimelineWidget*>(this);
         const float devicePixelRatio = self->pixels_per_unit();
-        for (const auto frame : p.annotationFrames)
+        for (const auto time : p.annotationTimes)
         {
-            otime::RationalTime time(frame, duration.rate());
             double X = _timeToPos(time);
             math::Box2i bbox(X - 0.5, 0, 2, 20 * devicePixelRatio);
             p.render->drawRect(bbox, color);

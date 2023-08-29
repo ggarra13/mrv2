@@ -301,8 +301,7 @@ namespace mrv
 
         for (const auto& annotation : annotations)
         {
-            int64_t frame = annotation->frame;
-            time = otio::RationalTime(frame, c->uiFPS->value());
+            auto time = annotation->time;
             player->seek(time);
 
             view->centerView();

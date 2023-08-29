@@ -11,6 +11,7 @@
 #include "mrvCore/mrvI8N.h"
 
 #include "mrvFl/mrvCallbacks.h"
+#include "mrvFl/mrvIO.h"
 
 #include "mrvWidgets/mrvFileButton.h"
 #include "mrvWidgets/mrvFileDragger.h"
@@ -26,6 +27,7 @@
 
 namespace
 {
+    const char* kModule = "filebutton";
 } // namespace
 
 namespace mrv
@@ -82,17 +84,33 @@ namespace mrv
         }
         case FL_RELEASE:
         {
-            std::cerr << "FL_RELEASE" << std::endl;
             if (p.drag)
             {
                 int X = Fl::event_x_root();
                 int Y = Fl::event_y_root();
                 math::Vector2i pos(X, Y);
 
+                ViewerUI* ui = App::ui;
+                math::Box2i box(
+                    ui->uiTimeline->x() + ui->uiMain->x(),
+                    ui->uiTimeline->y() + ui->uiMain->y(), ui->uiTimeline->w(),
+                    ui->uiTimeline->h());
+
+                delete p.drag;
+                p.drag = nullptr;
+
+                if (box.contains(pos))
+                {
+                    const std::string text = label();
+                    stringArray lines;
+                    split_string(lines, text, "\n");
+                    std::string filename = lines[0] + lines[1];
+                    add_clip_to_timeline(filename, p.index, ui);
+                    return 1;
+                }
+
                 if (playlistPanel)
                 {
-                    ViewerUI* ui = App::ui;
-
                     math::Box2i box = playlistPanel->box();
                     if (playlistPanel->is_panel())
                     {
@@ -114,25 +132,6 @@ namespace mrv
                         return 1;
                     }
                 }
-
-                ViewerUI* ui = App::ui;
-                math::Box2i box(
-                    ui->uiTimeline->x() + ui->uiMain->x(),
-                    ui->uiTimeline->y() + ui->uiMain->y(), ui->uiTimeline->w(),
-                    ui->uiTimeline->h());
-
-                delete p.drag;
-                p.drag = nullptr;
-
-                if (box.contains(pos))
-                {
-                    const std::string text = label();
-                    stringArray lines;
-                    split_string(lines, text, "\n");
-                    std::string filename = lines[0] + lines[1];
-                    add_clip_to_timeline(filename, p.index, ui);
-                    return 1;
-                }
                 return 1;
             }
             break;
@@ -147,21 +146,24 @@ namespace mrv
                 std::string filename = lines[0] + lines[1];
                 file::Path path(filename);
                 auto extension = string::toLower(path.getExtension());
-
-                if (extension != ".otio")
+                if (extension == ".otio")
                 {
-                    if (!p.drag)
-                    {
-                        p.drag = FileDragger::create();
-                        p.drag->image(image());
-                        auto window = p.drag->window();
-                        window->always_on_top(true);
-                    }
-                    int X = Fl::event_x_root();
-                    int Y = Fl::event_y_root();
-                    auto window = p.drag->window();
-                    window->position(X, Y);
+                    LOG_ERROR(
+                        _("Currently you cannot concatenate two .otio files."));
+                    return 0;
                 }
+
+                if (!p.drag)
+                {
+                    p.drag = FileDragger::create();
+                    p.drag->image(image());
+                    auto window = p.drag->window();
+                    window->always_on_top(true);
+                }
+                int X = Fl::event_x_root();
+                int Y = Fl::event_y_root();
+                auto window = p.drag->window();
+                window->position(X, Y);
                 if (p.drag)
                     return 1;
             }

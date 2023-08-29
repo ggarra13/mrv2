@@ -318,8 +318,8 @@ namespace mrv
 
         ///@}
 
-        //! Return a list of annotation frames
-        const std::vector< int64_t > getAnnotationFrames() const;
+        //! Return a list of annotation times
+        const std::vector< otime::RationalTime > getAnnotationTimes() const;
 
         //! Get annotation for current time
         std::shared_ptr< draw::Annotation > getAnnotation();

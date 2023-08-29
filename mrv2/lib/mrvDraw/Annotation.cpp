@@ -16,9 +16,10 @@ namespace tl
     {
         using namespace mrv;
 
-        Annotation::Annotation(const int64_t inFrame, const bool inAllFrames)
+        Annotation::Annotation(
+            const otime::RationalTime& inTime, const bool inAllFrames)
         {
-            frame = inFrame;
+            time = inTime;
             allFrames = inAllFrames;
         }
 
@@ -80,7 +81,7 @@ namespace tl
             }
             json = nlohmann::json{
                 {"all_frames", value.allFrames},
-                {"frame", value.frame},
+                {"time", value.time},
                 {"shapes", shapes},
             };
         }
@@ -88,7 +89,7 @@ namespace tl
         void from_json(const nlohmann::json& json, Annotation& value)
         {
             json.at("all_frames").get_to(value.allFrames);
-            json.at("frame").get_to(value.frame);
+            json.at("time").get_to(value.time);
             const nlohmann::json& shapes = json["shapes"];
             for (auto& shape : shapes)
             {

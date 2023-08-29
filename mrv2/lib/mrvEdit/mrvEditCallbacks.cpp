@@ -453,6 +453,27 @@ namespace mrv
             }
         }
 
+        std::vector<std::shared_ptr<draw::Annotation>> moveAnnotations(
+            const RationalTime& duration,
+            const std::vector<std::shared_ptr<draw::Annotation>>&
+                srcAnnotations,
+            const std::vector<std::shared_ptr<draw::Annotation>>& annotations)
+        {
+            std::vector<std::shared_ptr<draw::Annotation>> out;
+            for (auto a : srcAnnotations)
+            {
+                out.push_back(a);
+            }
+            for (auto a : annotations)
+            {
+                out.push_back(a);
+                if (!a->allFrames)
+                {
+                    out.back()->time += duration;
+                }
+            }
+            return out;
+        }
     } // namespace
 
     void edit_store_undo(TimelinePlayer* player, ViewerUI* ui)
@@ -581,14 +602,7 @@ namespace mrv
             cut_item = otio::dynamic_retainer_cast<Item>(
                 track->child_at_time(time, &errorStatus));
             if (!cut_item)
-            {
-                LOG_ERROR(
-                    "No cut frame found at "
-                    << time << " "
-                    << otio::ErrorStatus::outcome_to_string(
-                           errorStatus.outcome));
                 continue;
-            }
 
             item_range = cut_item->trimmed_range();
             int index = track->index_of_child(cut_item);
@@ -734,14 +748,15 @@ namespace mrv
         double videoRate, sampleRate;
         sanitizeVideoAndAudioRates(stack, timeRange, videoRate, sampleRate);
 
+        player->setTimeline(timeline);
         if (videoRate > 0 && time::isValid(timeRange))
         {
             player->setInOutRange(timeRange);
             player->setSpeed(videoRate);
             setEndTime(timeline, videoRate, ui);
         }
-        player->setTimeline(timeline);
 
+        /* Is this needed ? */
         auto endTime = player->timeRange().end_time_exclusive();
         if (time > endTime)
             player->seek(endTime);
@@ -796,15 +811,18 @@ namespace mrv
         double videoRate, sampleRate;
         sanitizeVideoAndAudioRates(stack, timeRange, videoRate, sampleRate);
 
+        player->setAllAnnotations(buffer.annotations);
+        player->setTimeline(timeline);
         if (videoRate > 0 && time::isValid(timeRange))
         {
             player->setInOutRange(timeRange);
             player->setSpeed(videoRate);
             setEndTime(timeline, videoRate, ui);
         }
-        player->setTimeline(timeline);
 
         toOtioFile(timeline, ui);
+        if (playlistPanel)
+            playlistPanel->redraw();
         ui->uiTimeline->frameView();
     }
 
@@ -836,6 +854,8 @@ namespace mrv
 
         sanitizeVideoAndAudioRates(stack, timeRange, videoRate, sampleRate);
 
+        player->setAllAnnotations(buffer.annotations);
+        player->setTimeline(timeline);
         if (videoRate > 0 && time::isValid(timeRange))
         {
             player->setInOutRange(timeRange);
@@ -843,10 +863,10 @@ namespace mrv
             setEndTime(timeline, videoRate, ui);
         }
 
-        player->setAllAnnotations(buffer.annotations);
-        player->setTimeline(timeline);
-
         toOtioFile(timeline, ui);
+
+        if (playlistPanel)
+            playlistPanel->redraw();
 
         if (refreshCache)
             refresh_file_cache_cb(nullptr, ui);
@@ -894,12 +914,12 @@ namespace mrv
         const std::string file = otioFilename();
 
         otio::ErrorStatus errorStatus;
-        otio::SerializableObject::Retainer<otio::Timeline> timeline(
-            new otio::Timeline("EDL"));
-
         auto model = ui->app->filesModel();
         int Aindex = model->observeAIndex()->get();
+        auto Aitem = model->observeA()->get();
+        std::string Afile = Aitem->path.get();
 
+        auto timeline = create_empty_timeline(ui);
         timeline->to_json_file(file, &errorStatus);
         if (otio::is_error(errorStatus))
         {
@@ -908,9 +928,8 @@ namespace mrv
                     .arg(errorStatus.full_description);
             throw std::runtime_error(error);
         }
-
         ui->app->open(file);
-        add_clip_to_timeline(file, Aindex, ui);
+        add_clip_to_timeline(Afile, Aindex, ui);
     }
 
     void add_clip_to_timeline(
@@ -934,12 +953,13 @@ namespace mrv
         if (sourceItem->path.getExtension() == ".otio")
             throw std::runtime_error(
                 _("Cannot add an otio file to another timeline."));
+
+        auto timelineDuration = timeline->duration();
+        auto annotations = moveAnnotations(
+            timelineDuration, player->getAllAnnotations(),
+            sourceItem->annotations);
         auto destItem = model->observeA()->get();
         auto Aindex = model->observeAIndex()->get();
-        if (index == Aindex)
-        {
-            LOG_WARNING(_("Adding clip to itself."));
-        }
         const file::Path path(file);
         auto stack = timeline->tracks();
         const bool refreshCache = hasEmptyTracks(stack);
@@ -1088,15 +1108,17 @@ namespace mrv
         destItem->inOutRange = timeRange;
         destItem->speed = videoRate;
 
+        if (refreshCache)
+            refresh_file_cache_cb(nullptr, ui);
+
         player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
         player->setInOutRange(timeRange);
         player->setSpeed(videoRate);
         player->setTimeline(timeline);
+        player->setAllAnnotations(annotations);
         setEndTime(timeline, videoRate, ui);
-        if (refreshCache)
-            refresh_file_cache_cb(nullptr, ui);
         ui->uiTimeline->frameView();
 
         refreshPanelThumbnails();

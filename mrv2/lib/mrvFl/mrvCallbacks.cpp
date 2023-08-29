@@ -1163,16 +1163,15 @@ namespace mrv
         if (!player)
             return;
         auto currentTime = player->currentTime();
-        int64_t currentFrame = currentTime.to_frames();
-        std::vector< int64_t > frames = player->getAnnotationFrames();
-        std::sort(frames.begin(), frames.end(), std::greater<int64_t>());
+        std::vector< otime::RationalTime > times = player->getAnnotationTimes();
+        std::sort(
+            times.begin(), times.end(), std::greater<otime::RationalTime>());
         const auto& range = player->timeRange();
         const auto& duration = range.end_time_inclusive() - range.start_time();
-        for (auto frame : frames)
+        for (auto time : times)
         {
-            if (frame < currentFrame)
+            if (time < currentTime)
             {
-                otio::RationalTime time(frame, duration.rate());
                 player->seek(time);
                 return;
             }
@@ -1185,16 +1184,14 @@ namespace mrv
         if (!player)
             return;
         auto currentTime = player->currentTime();
-        int64_t currentFrame = currentTime.to_frames();
-        std::vector< int64_t > frames = player->getAnnotationFrames();
-        std::sort(frames.begin(), frames.end());
+        std::vector< otime::RationalTime > times = player->getAnnotationTimes();
+        std::sort(times.begin(), times.end());
         const auto& range = player->timeRange();
         const auto& duration = range.end_time_inclusive() - range.start_time();
-        for (auto frame : frames)
+        for (auto time : times)
         {
-            if (frame > currentFrame)
+            if (time > currentTime)
             {
-                otio::RationalTime time(frame, duration.rate());
                 player->seek(time);
                 return;
             }

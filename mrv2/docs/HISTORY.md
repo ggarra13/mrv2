@@ -28,6 +28,9 @@ v0.7.2
 - The Playlist panel's functionality is there only to create an empty track
   and list all user created EDL clips.
 - Fixed keyboard (menu) shortcuts not working in the Files Panel.
+- Annotations are now kept with RationalTime instead of frames to be more
+  precise.  Note, however, that old session files that use annotations will be
+  incompatible.
 
 
 v0.7.1

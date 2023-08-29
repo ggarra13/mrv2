@@ -72,7 +72,7 @@ namespace mrv
         std::chrono::time_point<std::chrono::steady_clock> start_time;
 #endif
 
-        //! List of annotations ( drawings/text per frame )
+        //! List of annotations ( drawings/text per time )
         std::vector<std::shared_ptr<draw::Annotation> > annotations;
 
         //! Last annotation undone
@@ -323,7 +323,7 @@ namespace mrv
 
         if (value == timeline::Playback::Stop)
         {
-            // Send a seek request to make sure we are in the right frame
+            // Send a seek request to make sure we are at the right time
             pushMessage("seek", currentTime());
             redrawPanelThumbnails();
         }
@@ -546,16 +546,17 @@ namespace mrv
 
     ///@}
 
-    const std::vector< int64_t > TimelinePlayer::getAnnotationFrames() const
+    const std::vector< otime::RationalTime >
+    TimelinePlayer::getAnnotationTimes() const
     {
         TLRENDER_P();
 
-        std::vector< int64_t > frames;
+        std::vector< otime::RationalTime > times;
         for (auto annotation : p.annotations)
         {
-            frames.push_back(annotation->frame);
+            times.push_back(annotation->time);
         }
-        return frames;
+        return times;
     }
 
     std::vector< std::shared_ptr< tl::draw::Annotation > >
@@ -564,7 +565,10 @@ namespace mrv
         TLRENDER_P();
 
         auto time = currentTime();
-        int64_t frame = time.to_frames();
+
+        otime::RationalTime previousTime(
+            static_cast<double>(previous), time.rate());
+        otime::RationalTime nextTime(static_cast<double>(next), time.rate());
 
         std::vector< std::shared_ptr< tl::draw::Annotation > > annotations;
 
@@ -574,13 +578,13 @@ namespace mrv
         {
             found = std::find_if(
                 found, p.annotations.end(),
-                [frame, previous, next](const auto& a)
+                [time, previousTime, nextTime](const auto& a)
                 {
                     if (a->allFrames)
                         return true;
-                    int start = a->frame - previous;
-                    int end = a->frame + next;
-                    return (frame > start && frame < end);
+                    otime::RationalTime start = a->time - previousTime;
+                    otime::RationalTime end = a->time + nextTime;
+                    return (time > start && time < end);
                 });
 
             if (found != p.annotations.end())
@@ -601,11 +605,10 @@ namespace mrv
             return nullptr;
 
         auto time = currentTime();
-        int64_t frame = time.to_frames();
 
         auto found = std::find_if(
             p.annotations.begin(), p.annotations.end(),
-            [frame](const auto& a) { return a->frame == frame; });
+            [time](const auto& a) { return a->time == time; });
 
         if (found == p.annotations.end())
         {
@@ -629,16 +632,15 @@ namespace mrv
         }
 
         auto time = currentTime();
-        int64_t frame = time.to_frames();
 
         auto found = std::find_if(
             p.annotations.begin(), p.annotations.end(),
-            [frame](const auto& a) { return a->frame == frame; });
+            [time](const auto& a) { return a->time == time; });
 
         if (found == p.annotations.end())
         {
             auto annotation =
-                std::make_shared< draw::Annotation >(frame, all_frames);
+                std::make_shared< draw::Annotation >(time, all_frames);
             p.annotations.push_back(annotation);
             bool send = App::ui->uiPrefs->SendAnnotations->value();
             if (send)
@@ -650,9 +652,8 @@ namespace mrv
             auto annotation = *found;
             if (!annotation->allFrames && !all_frames)
             {
-                abort();
-                // throw std::runtime_error(
-                //     _("Annotation already existed at this time"));
+                throw std::runtime_error(
+                    _("Annotation already existed at this time"));
             }
             return annotation;
         }
@@ -675,12 +676,11 @@ namespace mrv
     {
         TLRENDER_P();
 
-        auto time = currentTime();
-        int64_t frame = time.to_frames();
+        const auto& time = currentTime();
 
         auto found = std::find_if(
             p.annotations.begin(), p.annotations.end(),
-            [frame](const auto& a) { return a->frame == frame; });
+            [time](const auto& a) { return a->time == time; });
 
         if (found != p.annotations.end())
         {

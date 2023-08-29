@@ -52,6 +52,9 @@ namespace mrv
         std::shared_ptr<
             observer::ListObserver<std::shared_ptr<FilesModelItem> > >
             filesObserver;
+        std::shared_ptr<
+            observer::ListObserver<std::shared_ptr<FilesModelItem> > >
+            activeObserver;
         std::shared_ptr<observer::ValueObserver<int> > aIndexObserver;
     };
 
@@ -132,6 +135,13 @@ namespace mrv
                     const std::vector< std::shared_ptr<FilesModelItem> >& value)
                 { refresh(); });
 
+        _r->activeObserver =
+            observer::ListObserver<std::shared_ptr<FilesModelItem> >::create(
+                ui->app->filesModel()->observeActive(),
+                [this](
+                    const std::vector< std::shared_ptr<FilesModelItem> >& value)
+                { redraw(); });
+
         _r->aIndexObserver = observer::ValueObserver<int>::create(
             ui->app->filesModel()->observeAIndex(),
             [this](int value) { redraw(); });
@@ -185,7 +195,7 @@ namespace mrv
 
         bW = new Widget< Button >(g->x() + 40, Y, 30, 30);
         b = bW;
-        svg = load_svg("Tracks.svg");
+        svg = load_svg("TracksFromA.svg");
         b->image(svg);
         b->tooltip(_("Create a timeline from the selected clip."));
         bW->callback([=](auto w) { create_new_timeline_cb(nullptr, p.ui); });
@@ -317,6 +327,8 @@ namespace mrv
 
             if (auto context = _r->context.lock())
             {
+                b->createTimeline(context);
+
                 ThumbnailData* data = new ThumbnailData;
                 data->widget = b;
 

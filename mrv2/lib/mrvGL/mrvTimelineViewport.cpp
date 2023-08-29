@@ -993,8 +993,8 @@ namespace mrv
         }
         else
         {
-            posX = minx;
-            posY = miny;
+            posX = mw->x();
+            posY = mw->y();
         }
 
         int decW = mw->decorated_w();
@@ -1073,6 +1073,11 @@ namespace mrv
         {
             p.frameView = true;
         }
+
+        if (posX + W > maxW)
+            posX = minx;
+        if (posY + W > maxH)
+            posY = miny;
 
         mw->resize(posX, posY, W, H);
 
