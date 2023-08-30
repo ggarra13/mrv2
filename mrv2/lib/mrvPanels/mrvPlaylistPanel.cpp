@@ -210,7 +210,7 @@ namespace mrv
         const size_t numFiles = files.size();
         const image::Size size(128, 64);
 
-        size_t counter = 0;
+        size_t numValidFiles = 0;
         for (size_t i = 0; i < numFiles; ++i)
         {
             const auto& media = files[i];
@@ -225,7 +225,7 @@ namespace mrv
             const std::string& fullfile = path.get();
 
             auto cbW = new Widget<PlaylistButton>(
-                g->x(), Y + counter * 68, g->w(), 68);
+                g->x(), Y + numValidFiles * 68, g->w(), 68);
             PlaylistButton* b = cbW;
             _r->clipButtons.push_back(b);
             _r->indices[b] = i;
@@ -240,7 +240,7 @@ namespace mrv
                     model->setA(index);
                 });
 
-            ++counter;
+            ++numValidFiles;
 
             _r->map[i] = b;
 
@@ -276,6 +276,13 @@ namespace mrv
                 {
                 }
             }
+        }
+
+        if (numValidFiles == 0)
+        {
+            Fl_Group* rect = new Fl_Group(g->x(), Y, g->w(), 68);
+            rect->end();
+            rect->box(FL_ENGRAVED_BOX);
         }
 
         // Y += 30 + numFiles * 64;
@@ -401,6 +408,18 @@ namespace mrv
             auto model = ui->app->filesModel();
             model->setA(aIndex);
             add_clip_to_timeline(filename, index, ui);
+        }
+        else if (_r->map.empty())
+        {
+            math::Box2i box(g->x(), g->y() + 50, g->w(), 68);
+            if (box.contains(pos))
+            {
+                validDrop = true;
+            }
+            if (validDrop)
+            {
+                create_new_timeline_cb(nullptr, ui);
+            }
         }
     }
 } // namespace mrv

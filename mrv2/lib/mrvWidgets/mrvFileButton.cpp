@@ -64,13 +64,17 @@ namespace mrv
         {
         case FL_FOCUS:
         case FL_UNFOCUS:
+            return 1;
         case FL_ENTER:
+            take_focus();
+            return 1;
         case FL_LEAVE:
+            Fl::focus(App::ui->uiView);
             return 1;
         case FL_KEYDOWN:
         case FL_KEYUP:
         {
-            if (value())
+            if (value() && Fl::focus() == this)
             {
                 unsigned rawkey = Fl::event_key();
                 if (rawkey == FL_Delete || rawkey == FL_BackSpace)

@@ -453,6 +453,52 @@ namespace mrv
             }
         }
 
+        std::vector<std::shared_ptr<draw::Annotation>> offsetAnnotations(
+            const RationalTime& time, const RationalTime& offset,
+            const std::vector<std::shared_ptr<draw::Annotation>>& annotations)
+        {
+            std::vector<std::shared_ptr<draw::Annotation>> out;
+            if (offset.value() > 0)
+            {
+                // Append annotations that come before.
+                for (auto a : annotations)
+                {
+                    if (a->allFrames || a->time < time)
+                        out.push_back(a);
+                }
+                // Append annotations that come after.
+                for (auto a : annotations)
+                {
+                    if (a->time > time + offset)
+                    {
+                        out.push_back(a);
+                        out.back()->time -= offset;
+                    }
+                }
+            }
+            else
+            {
+                // Append annotations that come before.
+                for (auto a : annotations)
+                {
+                    if (a->allFrames || time < a->time)
+                    {
+                        out.push_back(a);
+                    }
+                }
+                // Append annotations that come after.
+                for (auto a : annotations)
+                {
+                    if (a->time > time + offset)
+                    {
+                        out.push_back(a);
+                        out.back()->time -= offset;
+                    }
+                }
+            }
+            return out;
+        }
+
         std::vector<std::shared_ptr<draw::Annotation>> moveAnnotations(
             const RationalTime& duration,
             const std::vector<std::shared_ptr<draw::Annotation>>&
@@ -568,6 +614,7 @@ namespace mrv
         const auto startTime = player->timeRange().start_time();
         const auto time = player->currentTime() - startTime;
         const auto one_frame = RationalTime(1.0, time.rate());
+        const RationalTime out_time = time + one_frame;
 
         edit_store_undo(player, ui);
 
@@ -583,19 +630,12 @@ namespace mrv
             auto cut_item = otio::dynamic_retainer_cast<Item>(
                 track->child_at_time(time, &errorStatus));
             if (!cut_item)
-            {
-                LOG_ERROR(
-                    "No item found at " << time << " "
-                                        << otio::ErrorStatus::outcome_to_string(
-                                               errorStatus.outcome));
                 continue;
-            }
             auto item_range = cut_item->trimmed_range();
             auto track_range =
                 cut_item->trimmed_range_in_parent(&errorStatus).value();
 
             otio::algo::slice(track, time);
-            const RationalTime out_time = time + one_frame;
             otio::algo::slice(track, out_time);
 
             // Get the cut item
@@ -611,6 +651,9 @@ namespace mrv
                 continue;
             track->remove_child(index);
         }
+        auto annotations =
+            offsetAnnotations(time, one_frame, player->getAllAnnotations());
+        player->setAllAnnotations(annotations);
         player->setTimeline(timeline);
         edit_clear_redo();
 
