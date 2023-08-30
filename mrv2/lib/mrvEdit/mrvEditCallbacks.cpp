@@ -493,8 +493,9 @@ namespace mrv
             for (auto a : clipAnnotations)
             {
                 out.push_back(a);
-                auto time = out.back()->time.rescaled_to(videoRate);
+                auto time = out.back()->time;
                 time += duration;
+                time = time::round(time.rescaled_to(videoRate));
                 out.back()->time = time;
             }
             return out;
