@@ -480,7 +480,7 @@ namespace mrv
         //! Routine used to add annotations to the end of the timeline,
         //! once a clip is added.
         std::vector<std::shared_ptr<draw::Annotation>> addAnnotations(
-            const RationalTime& duration,
+            const RationalTime& duration, const double videoRate,
             const std::vector<std::shared_ptr<draw::Annotation>>& annotations,
             const std::vector<std::shared_ptr<draw::Annotation>>&
                 clipAnnotations)
@@ -493,7 +493,9 @@ namespace mrv
             for (auto a : clipAnnotations)
             {
                 out.push_back(a);
-                out.back()->time += duration;
+                auto time = out.back()->time.rescaled_to(videoRate);
+                time += duration;
+                out.back()->time = time;
             }
             return out;
         }
@@ -981,8 +983,8 @@ namespace mrv
 
         auto timelineDuration = timeline->duration();
         auto annotations = addAnnotations(
-            timelineDuration, player->getAllAnnotations(),
-            sourceItem->annotations);
+            timelineDuration, player->defaultSpeed(),
+            player->getAllAnnotations(), sourceItem->annotations);
         auto destItem = model->observeA()->get();
         auto Aindex = model->observeAIndex()->get();
         const file::Path path(file);
