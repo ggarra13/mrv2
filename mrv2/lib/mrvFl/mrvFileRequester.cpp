@@ -8,7 +8,7 @@
 namespace fs = std::filesystem;
 
 #include <tlCore/StringFormat.h>
-#include <tlIO/IOSystem.h>
+#include <tlIO/System.h>
 
 #include <FL/Fl_Progress.H>
 #include <FL/Fl_Output.H>

@@ -10,7 +10,7 @@
 #include <pybind11/embed.h>
 namespace py = pybind11;
 
-#include <tlIO/IOSystem.h>
+#include <tlIO/System.h>
 #if defined(TLRENDER_USD)
 #    include <tlIO/USD.h>
 #endif // TLRENDER_USD

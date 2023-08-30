@@ -12,7 +12,7 @@
 #include <tlCore/Path.h>
 #include <tlCore/StringFormat.h>
 
-#include <tlIO/IOSystem.h>
+#include <tlIO/System.h>
 
 #include <tlTimeline/Util.h>
 
@@ -458,42 +458,19 @@ namespace mrv
             const std::vector<std::shared_ptr<draw::Annotation>>& annotations)
         {
             std::vector<std::shared_ptr<draw::Annotation>> out;
-            if (offset.value() > 0)
+            // Append annotations that come before.
+            for (auto a : annotations)
             {
-                // Append annotations that come before.
-                for (auto a : annotations)
-                {
-                    if (a->allFrames || a->time < time)
-                        out.push_back(a);
-                }
-                // Append annotations that come after.
-                for (auto a : annotations)
-                {
-                    if (a->time > time + offset)
-                    {
-                        out.push_back(a);
-                        out.back()->time -= offset;
-                    }
-                }
+                if (a->allFrames || a->time < time)
+                    out.push_back(a);
             }
-            else
+            // Append annotations that come after.
+            for (auto a : annotations)
             {
-                // Append annotations that come before.
-                for (auto a : annotations)
+                if (a->time > time + offset)
                 {
-                    if (a->allFrames || time < a->time)
-                    {
-                        out.push_back(a);
-                    }
-                }
-                // Append annotations that come after.
-                for (auto a : annotations)
-                {
-                    if (a->time > time + offset)
-                    {
-                        out.push_back(a);
-                        out.back()->time -= offset;
-                    }
+                    out.push_back(a);
+                    out.back()->time += offset;
                 }
             }
             return out;
@@ -652,7 +629,7 @@ namespace mrv
             track->remove_child(index);
         }
         auto annotations =
-            offsetAnnotations(time, one_frame, player->getAllAnnotations());
+            offsetAnnotations(time, -one_frame, player->getAllAnnotations());
         player->setAllAnnotations(annotations);
         player->setTimeline(timeline);
         edit_clear_redo();
@@ -722,6 +699,11 @@ namespace mrv
             otio::algo::insert(item, track, time);
             frame.item = item;
         }
+
+        const RationalTime one_frame(1.0, time.rate());
+        auto annotations =
+            offsetAnnotations(time, one_frame, player->getAllAnnotations());
+        player->setAllAnnotations(annotations);
 
         player->setTimeline(timeline);
 

@@ -6,7 +6,7 @@
 #include <sstream>
 #include <algorithm>
 
-#include <tlIO/IOSystem.h>
+#include <tlIO/System.h>
 #include <tlIO/FFmpeg.h>
 
 #include <tlCore/String.h>
