@@ -446,6 +446,7 @@ namespace mrv
                             auto duration = time::round(
                                 range.duration().rescaled_to(sampleRate));
                             range = TimeRange(start, duration);
+                            duration = duration.rescaled_to(videoRate);
                             clip->set_source_range(range);
                         }
                     }
@@ -476,24 +477,23 @@ namespace mrv
             return out;
         }
 
-        std::vector<std::shared_ptr<draw::Annotation>> moveAnnotations(
+        //! Routine used to add annotations to the end of the timeline,
+        //! once a clip is added.
+        std::vector<std::shared_ptr<draw::Annotation>> addAnnotations(
             const RationalTime& duration,
+            const std::vector<std::shared_ptr<draw::Annotation>>& annotations,
             const std::vector<std::shared_ptr<draw::Annotation>>&
-                srcAnnotations,
-            const std::vector<std::shared_ptr<draw::Annotation>>& annotations)
+                clipAnnotations)
         {
             std::vector<std::shared_ptr<draw::Annotation>> out;
-            for (auto a : srcAnnotations)
-            {
-                out.push_back(a);
-            }
             for (auto a : annotations)
             {
                 out.push_back(a);
-                if (!a->allFrames)
-                {
-                    out.back()->time += duration;
-                }
+            }
+            for (auto a : clipAnnotations)
+            {
+                out.push_back(a);
+                out.back()->time += duration;
             }
             return out;
         }
@@ -980,7 +980,7 @@ namespace mrv
                 _("Cannot add an otio file to another timeline."));
 
         auto timelineDuration = timeline->duration();
-        auto annotations = moveAnnotations(
+        auto annotations = addAnnotations(
             timelineDuration, player->getAllAnnotations(),
             sourceItem->annotations);
         auto destItem = model->observeA()->get();
@@ -1053,6 +1053,7 @@ namespace mrv
 
             if (info.audio.isValid())
             {
+                const auto rate = info.audioTime.duration().rate();
                 // If no audio track, create one and fill it with a gap until
                 // new clip.
                 if (audioTrackIndex == -1)
@@ -1081,7 +1082,6 @@ namespace mrv
                         videoClip->trimmed_range_in_parent(&errorStatus)
                             .value();
 
-                    auto rate = info.audioTime.duration().rate();
                     auto gapRange = TimeRange(
                         RationalTime(0.0, rate),
                         RationalTime(
@@ -1106,15 +1106,32 @@ namespace mrv
                 auto media =
                     new otio::ExternalReference(path.get(), info.audioTime);
                 clip->set_media_reference(media);
-                auto rate = info.audioTime.duration().rate();
-                TimeRange sourceRange(
-                    sourceItem->inOutRange.start_time().rescaled_to(rate),
-                    sourceItem->inOutRange.duration().rescaled_to(rate));
+                auto inOutRange = sourceItem->inOutRange;
+                auto start = inOutRange.start_time().rescaled_to(rate);
+                auto duration = inOutRange.duration().rescaled_to(rate);
+                auto gap_duration = RationalTime(0.0, rate);
+                if (duration > info.audioTime.duration())
+                {
+                    gap_duration = duration - info.audioTime.duration();
+                    duration = info.audioTime.duration();
+                }
+                TimeRange sourceRange(start, duration);
                 clip->set_source_range(sourceRange);
                 track->append_child(clip, &errorStatus);
                 if (otio::is_error(errorStatus))
                 {
                     throw std::runtime_error(_("Cannot append audio clip"));
+                }
+                if (gap_duration.value() > 0.0)
+                {
+                    const auto gapRange =
+                        TimeRange(RationalTime(0.0, rate), gap_duration);
+                    auto gap = new otio::Gap(gapRange);
+                    track->append_child(gap, &errorStatus);
+                    if (otio::is_error(errorStatus))
+                    {
+                        throw std::runtime_error(_("Cannot append audio gap"));
+                    }
                 }
             }
         }
