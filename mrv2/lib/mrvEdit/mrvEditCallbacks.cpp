@@ -1049,6 +1049,25 @@ namespace mrv
                 {
                     throw std::runtime_error("Cannot append child");
                 }
+                if (info.audio.isValid())
+                {
+                    const auto duration =
+                        info.audioTime.duration().rescaled_to(rate);
+                    const auto clip_duration = sourceRange.duration();
+                    if (clip_duration < duration)
+                    {
+                        const auto gap_duration = clip_duration - duration;
+                        const auto gapRange =
+                            TimeRange(RationalTime(0.0, rate), gap_duration);
+                        auto gap = new otio::Gap(gapRange);
+                        track->append_child(gap, &errorStatus);
+                        if (otio::is_error(errorStatus))
+                        {
+                            throw std::runtime_error(
+                                _("Cannot append video gap"));
+                        }
+                    }
+                }
             }
 
             if (info.audio.isValid())
