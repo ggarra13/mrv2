@@ -1169,8 +1169,8 @@ namespace mrv
                 auto media =
                     new otio::ExternalReference(path.get(), info.audioTime);
                 clip->set_media_reference(media);
-                auto inOutRange = sourceItem->inOutRange;
-                auto start = inOutRange.start_time().rescaled_to(rate);
+                const auto inOutRange = sourceItem->inOutRange;
+                const auto start = inOutRange.start_time().rescaled_to(rate);
                 auto duration = inOutRange.duration().rescaled_to(rate);
                 auto gap_duration = RationalTime(0.0, rate);
                 if (duration > info.audioTime.duration())
@@ -1178,13 +1178,14 @@ namespace mrv
                     gap_duration = duration - info.audioTime.duration();
                     duration = info.audioTime.duration();
                 }
-                TimeRange sourceRange(start, duration);
+                const TimeRange sourceRange(start, duration);
                 clip->set_source_range(sourceRange);
                 track->append_child(clip, &errorStatus);
                 if (otio::is_error(errorStatus))
                 {
                     throw std::runtime_error(_("Cannot append audio clip"));
                 }
+                // Append a gap if audio is too short.
                 if (gap_duration.value() > 0.0)
                 {
                     const auto gapRange =
