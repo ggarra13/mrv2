@@ -609,9 +609,9 @@ namespace mrv
         if (playback() != timeline::Playback::Stop)
             return nullptr;
 
-        auto time = currentTime();
+        const auto& time = currentTime();
 
-        auto found = std::find_if(
+        const auto found = std::find_if(
             p.annotations.begin(), p.annotations.end(),
             [time](const auto& a) { return a->time == time; });
 

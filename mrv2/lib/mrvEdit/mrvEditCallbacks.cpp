@@ -505,6 +505,8 @@ namespace mrv
     void edit_store_undo(TimelinePlayer* player, ViewerUI* ui)
     {
         auto timeline = player->getTimeline();
+        auto view = ui->uiView;
+        view->storeNewUndo(UndoType::Edit);
 
         auto stack = timeline->tracks();
         sanitizeMediaPaths(stack, ui);
@@ -527,6 +529,8 @@ namespace mrv
 
     void edit_clear_redo(ViewerUI* ui)
     {
+        auto view = ui->uiView;
+        view->clearRedo();
         redoBuffer.clear();
     }
 
@@ -543,7 +547,8 @@ namespace mrv
     void edit_store_redo(TimelinePlayer* player, ViewerUI* ui)
     {
         auto timeline = player->getTimeline();
-
+        auto view = ui->uiView;
+        view->storeNewRedo(UndoType::Edit);
         std::string state = timeline->to_json_string();
         if (!redoBuffer.empty())
         {
