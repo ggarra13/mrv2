@@ -600,7 +600,8 @@ namespace mrv
         return annotations;
     }
 
-    std::shared_ptr< tl::draw::Annotation > TimelinePlayer::getAnnotation()
+    std::shared_ptr< tl::draw::Annotation >
+    TimelinePlayer::getAnnotation() const
     {
         TLRENDER_P();
 
@@ -740,6 +741,20 @@ namespace mrv
     TimelinePlayer::setCacheOptions(const timeline::PlayerCacheOptions& value)
     {
         _p->timelinePlayer->setCacheOptions(value);
+    }
+
+    bool TimelinePlayer::hasUndo() const
+    {
+        TLRENDER_P();
+        return static_cast<bool>(getAnnotation());
+    }
+
+    bool TimelinePlayer::hasRedo() const
+    {
+        TLRENDER_P();
+        return (
+            static_cast<bool>(getAnnotation()) ||
+            static_cast<bool>(p.undoAnnotation));
     }
 
     void TimelinePlayer::timerEvent()

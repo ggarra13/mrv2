@@ -530,6 +530,16 @@ namespace mrv
         redoBuffer.clear();
     }
 
+    bool edit_has_undo()
+    {
+        return !undoBuffer.empty();
+    }
+
+    bool edit_has_redo()
+    {
+        return !redoBuffer.empty();
+    }
+
     void edit_store_redo(TimelinePlayer* player, ViewerUI* ui)
     {
         auto timeline = player->getTimeline();

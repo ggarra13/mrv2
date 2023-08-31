@@ -322,39 +322,45 @@ namespace mrv
         const std::vector< otime::RationalTime > getAnnotationTimes() const;
 
         //! Get annotation for current time
-        std::shared_ptr< draw::Annotation > getAnnotation();
+        std::shared_ptr< draw::Annotation > getAnnotation() const;
 
         //! Create annotation for current time
         std::shared_ptr< draw::Annotation >
         createAnnotation(const bool all_frames = false);
 
         //! Get list of annotations for between previous ghosting and
-        //! next ghosting from current time
+        //! next ghosting from current time.
         std::vector< std::shared_ptr< draw::Annotation >>
         getAnnotations(const int, const int) const;
 
-        //! Get all annotations in timeline player
+        //! Get all annotations in timeline player.
         std::vector< std::shared_ptr< draw::Annotation >>
         getAllAnnotations() const;
 
-        //! Set frame annotations in timeline player
+        //! Set frame annotations in timeline player for current frame (time).
         void setFrameAnnotation(const std::shared_ptr< draw::Annotation >&);
 
-        //! Set all annotations in timeline player
+        //! Set all annotations in timeline player.
         void setAllAnnotations(
             const std::vector< std::shared_ptr< draw::Annotation >>&);
 
-        //! Clear all annotations in timeline player for current frame (time)
+        //! Clear all annotations in timeline player for current frame (time).
         void clearFrameAnnotation();
 
-        //! Clear all annotations in timeline player
+        //! Clear all annotations in timeline player.
         void clearAllAnnotations();
 
-        //! Undo the last annotation
+        //! Undo the last annotation.
         void undoAnnotation();
 
-        //! Redo the last annotation
+        //! Redo the last annotation.
         void redoAnnotation();
+
+        //! Returns whether annotation at current time can be undone.
+        bool hasUndo() const;
+
+        //! Returns whtehr annotation at current time can be redone.
+        bool hasRedo() const;
 
     protected:
         template < typename T >

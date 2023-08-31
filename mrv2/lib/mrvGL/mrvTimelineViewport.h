@@ -411,6 +411,8 @@ namespace mrv
 
         bool _hasSecondaryViewport() const noexcept;
 
+        void _updateUndoRedoButtons() const noexcept;
+
         TLRENDER_PRIVATE();
     };
 } // namespace mrv

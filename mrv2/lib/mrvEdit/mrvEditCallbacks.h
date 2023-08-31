@@ -16,6 +16,9 @@ namespace mrv
     void edit_store_undo(TimelinePlayer*, ViewerUI* ui);
     void edit_clear_redo(ViewerUI* ui);
 
+    bool edit_has_undo();
+    bool edit_has_redo();
+
     //@}
 
     //! Menu function to copy one frame to the buffer.

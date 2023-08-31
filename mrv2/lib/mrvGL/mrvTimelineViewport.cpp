@@ -144,21 +144,7 @@ namespace mrv
         player->undoAnnotation();
         tcp->pushMessage("undo", 0);
 
-        auto annotation = player->getAnnotation();
-        if (!annotation)
-        {
-            p.ui->uiUndoDraw->deactivate();
-            p.ui->uiRedoDraw->deactivate();
-            redrawWindows();
-            return;
-        }
-
-        auto numShapes = annotation->shapes.size();
-        if (numShapes == 0)
-        {
-            p.ui->uiUndoDraw->deactivate();
-        }
-
+        _updateUndoRedoButtons();
         redrawWindows();
     }
 
@@ -173,21 +159,7 @@ namespace mrv
         player->redoAnnotation();
         tcp->pushMessage("redo", 0);
 
-        auto annotation = player->getAnnotation();
-        if (!annotation)
-        {
-            p.ui->uiUndoDraw->deactivate();
-            p.ui->uiRedoDraw->deactivate();
-            redrawWindows();
-            return;
-        }
-
-        auto numShapes = annotation->undo_shapes.size();
-        if (numShapes == 0)
-        {
-            p.ui->uiRedoDraw->deactivate();
-        }
-
+        _updateUndoRedoButtons();
         redrawWindows();
     }
 
@@ -2552,4 +2524,31 @@ namespace mrv
             tcp->pushMessage(msg);
         }
     }
+
+    void TimelineViewport::_updateUndoRedoButtons() const noexcept
+    {
+        TLRENDER_P();
+
+        bool hasUndo = false, hasRedo = false;
+        auto player = getTimelinePlayer();
+        if (player)
+        {
+            hasUndo |= player->hasUndo();
+            hasRedo |= player->hasRedo();
+        }
+
+        hasUndo |= edit_has_undo();
+        hasRedo |= edit_has_redo();
+
+        if (hasUndo)
+            p.ui->uiUndoDraw->activate();
+        else
+            p.ui->uiUndoDraw->deactivate();
+
+        if (hasRedo)
+            p.ui->uiRedoDraw->activate();
+        else
+            p.ui->uiRedoDraw->deactivate();
+    }
+
 } // namespace mrv
