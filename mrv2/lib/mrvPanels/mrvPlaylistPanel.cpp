@@ -6,6 +6,7 @@
 #include <vector>
 #include <map>
 
+#include <FL/Fl_Box.H>
 #include <FL/Fl_Pack.H>
 #include <FL/Fl_RGB_Image.H>
 
@@ -280,9 +281,10 @@ namespace mrv
 
         if (numValidFiles == 0)
         {
-            Fl_Group* rect = new Fl_Group(g->x(), Y, g->w(), 68);
-            rect->end();
-            rect->box(FL_ENGRAVED_BOX);
+            Fl_Group* bg = new Fl_Group(g->x(), Y, g->w(), 68);
+            Fl_Box* box = new Fl_Box(g->x(), Y, g->w() - 5, 68);
+            box->box(FL_ENGRAVED_BOX);
+            bg->end();
         }
 
         // Y += 30 + numFiles * 64;

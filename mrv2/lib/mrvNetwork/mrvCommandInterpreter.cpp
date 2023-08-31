@@ -102,8 +102,8 @@ namespace mrv
         if (view)
             player = view->getTimelinePlayer();
 
-#ifdef DEBUG
-        std::cerr << "Command: " << c << std::endl;
+#ifndef NDEBUG
+        std::cerr << "Command: " << message << std::endl;
 #endif
 
         tcp->lock();
@@ -117,8 +117,7 @@ namespace mrv
                 return;
             }
 
-            int v = message["value"];
-            timeline::Playback value = static_cast<timeline::Playback>(v);
+            timeline::Playback value = message["value"];
 
             switch (value)
             {
@@ -394,7 +393,6 @@ namespace mrv
                 tcp->unlock();
                 return;
             }
-            ui->uiRedoDraw->activate();
             view->undo();
         }
         else if (c == "redo")
@@ -405,7 +403,6 @@ namespace mrv
                 tcp->unlock();
                 return;
             }
-            ui->uiUndoDraw->activate();
             view->redo();
         }
         else if (c == "setEnvironmentMapOptions")
@@ -1103,6 +1100,17 @@ namespace mrv
         else if (c == "Clear All Annotations")
         {
             annotation_clear_all_cb(nullptr, ui);
+        }
+        else if (c == "Create Empty Timeline")
+        {
+            create_empty_timeline_cb(nullptr, ui);
+        }
+        else if (c == "Create New Timeline")
+        {
+            int Aindex = message["value"];
+            auto model = app->filesModel();
+            model->setA(Aindex);
+            create_new_timeline_cb(nullptr, ui);
         }
         else if (c == "Protocol Version")
         {

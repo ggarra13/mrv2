@@ -499,30 +499,6 @@ namespace mrv
             static_cast<int>(p.options.usdDiskCache * memory::gigabyte));
 #endif // TLRENDER_USD
 
-        if (p.options.server)
-        {
-            try
-            {
-                tcp = new Server(p.options.port);
-                store_port(p.options.port);
-            }
-            catch (const Poco::Exception& e)
-            {
-                LOG_ERROR(e.displayText());
-            }
-        }
-        else if (!p.options.client.empty())
-        {
-            std::string port;
-            parse_hostname(p.options.client, port);
-            if (!port.empty())
-            {
-                p.options.port = atoi(port.c_str());
-            }
-            tcp = new Client(p.options.client, p.options.port);
-            store_port(p.options.port);
-        }
-
         value = p.settingsObject->value("Audio/Volume");
         p.volume = std_any_cast<float>(value);
 
@@ -691,6 +667,30 @@ namespace mrv
                 // if (p.options.playback != timeline::Playback::Count)
                 //     p.timelinePlayers[0]->setPlayback(p.options.playback);
             }
+        }
+
+        if (p.options.server)
+        {
+            try
+            {
+                tcp = new Server(p.options.port);
+                store_port(p.options.port);
+            }
+            catch (const Poco::Exception& e)
+            {
+                LOG_ERROR(e.displayText());
+            }
+        }
+        else if (!p.options.client.empty())
+        {
+            std::string port;
+            parse_hostname(p.options.client, port);
+            if (!port.empty())
+            {
+                p.options.port = atoi(port.c_str());
+            }
+            tcp = new Client(p.options.client, p.options.port);
+            store_port(p.options.port);
         }
 
         ui->uiMain->show();

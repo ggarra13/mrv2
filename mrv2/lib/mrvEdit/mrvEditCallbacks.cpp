@@ -505,6 +505,8 @@ namespace mrv
     void edit_store_undo(TimelinePlayer* player, ViewerUI* ui)
     {
         auto timeline = player->getTimeline();
+        auto view = ui->uiView;
+        view->storeNewUndo(UndoType::Edit);
 
         auto stack = timeline->tracks();
         sanitizeMediaPaths(stack, ui);
@@ -525,14 +527,18 @@ namespace mrv
         undoBuffer.push_back(buffer);
     }
 
-    void edit_clear_redo()
+    void edit_clear_redo(ViewerUI* ui)
     {
+        auto view = ui->uiView;
+        view->clearRedo();
         redoBuffer.clear();
     }
 
-    void edit_store_redo(TimelinePlayer* player)
+    void edit_store_redo(TimelinePlayer* player, ViewerUI* ui)
     {
         auto timeline = player->getTimeline();
+        auto view = ui->uiView;
+        view->storeNewRedo(UndoType::Edit);
         std::string state = timeline->to_json_string();
         if (!redoBuffer.empty())
         {
@@ -635,7 +641,7 @@ namespace mrv
             offsetAnnotations(time, -one_frame, player->getAllAnnotations());
         player->setAllAnnotations(annotations);
         player->setTimeline(timeline);
-        edit_clear_redo();
+        edit_clear_redo(ui);
 
         setEndTime(timeline, time.rate(), ui);
         toOtioFile(timeline, ui);
@@ -672,7 +678,7 @@ namespace mrv
         }
 
         player->setTimeline(timeline);
-        edit_clear_redo();
+        edit_clear_redo(ui);
         toOtioFile(timeline, ui);
     }
 
@@ -710,7 +716,7 @@ namespace mrv
 
         player->setTimeline(timeline);
 
-        edit_clear_redo();
+        edit_clear_redo(ui);
 
         setEndTime(timeline, time.rate(), ui);
         toOtioFile(timeline, ui);
@@ -749,7 +755,7 @@ namespace mrv
         if (remove_undo)
             undoBuffer.pop_back();
 
-        edit_clear_redo();
+        edit_clear_redo(ui);
 
         player->setTimeline(timeline);
         toOtioFile(timeline, ui);
@@ -828,7 +834,7 @@ namespace mrv
 
         auto buffer = undoBuffer.back();
         undoBuffer.pop_back();
-        edit_store_redo(player);
+        edit_store_redo(player, ui);
 
         otio::SerializableObject::Retainer<otio::Timeline> timeline(
             dynamic_cast<otio::Timeline*>(
@@ -921,6 +927,8 @@ namespace mrv
 
     void create_empty_timeline_cb(Fl_Menu_*, ViewerUI* ui)
     {
+        tcp->pushMessage("Create Empty Timeline");
+        tcp->lock();
         const std::string file = otioFilename();
 
         auto timeline = create_empty_timeline(ui);
@@ -932,21 +940,30 @@ namespace mrv
             std::string error =
                 string::Format(_("Could not save .otio file: {0}"))
                     .arg(errorStatus.full_description);
+            tcp->unlock();
+            throw std::runtime_error(error);
         }
 
         ui->app->open(file);
+        tcp->unlock();
     }
 
     void create_new_timeline_cb(Fl_Menu_*, ViewerUI* ui)
     {
-        const std::string file = otioFilename();
-
-        otio::ErrorStatus errorStatus;
         auto model = ui->app->filesModel();
         int Aindex = model->observeAIndex()->get();
+        if (Aindex < 0)
+            return;
+
+        tcp->pushMessage("Create New Timeline", Aindex);
+        tcp->lock();
+
         auto Aitem = model->observeA()->get();
         std::string Afile = Aitem->path.get();
 
+        const std::string file = otioFilename();
+
+        otio::ErrorStatus errorStatus;
         auto timeline = create_empty_timeline(ui);
         timeline->to_json_file(file, &errorStatus);
         if (otio::is_error(errorStatus))
@@ -954,10 +971,12 @@ namespace mrv
             std::string error =
                 string::Format(_("Could not save .otio file: {0}"))
                     .arg(errorStatus.full_description);
+            tcp->unlock();
             throw std::runtime_error(error);
         }
         ui->app->open(file);
         add_clip_to_timeline(Afile, Aindex, ui);
+        tcp->unlock();
     }
 
     void add_clip_to_timeline(

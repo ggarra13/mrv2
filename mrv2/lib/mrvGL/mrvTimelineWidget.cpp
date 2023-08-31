@@ -696,7 +696,7 @@ namespace mrv
         if (p.dragging)
         {
             edit_store_undo(p.player, p.ui);
-            edit_clear_redo();
+            edit_clear_redo(p.ui);
         }
         int button = 0;
         if (Fl::event_button1())

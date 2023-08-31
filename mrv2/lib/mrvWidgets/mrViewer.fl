@@ -722,7 +722,7 @@ auto new_range =
 player->setInOutRange( new_range );
 ui->uiTimeline->setTimelinePlayer(player);
 ui->uiTimeline->redraw();
-ui->uiView->take_focus();} selected
+ui->uiView->take_focus();}
           tooltip {Allows you to set the ending frame for timeline.} xywh {620 3 70 24} color -1733777408 selection_color 0 when 8
           code1 {o->textcolor( FL_BLACK );}
           class {mrv::Timecode}
@@ -834,7 +834,7 @@ mrv::set_edit_mode_cb(mode, v);}
           }
           Fl_Button {} {
             user_data this user_data_type {ViewerUI*}
-            callback {uiView->resizeWindow();}
+            callback {uiView->resizeWindow();} selected
             tooltip {Fit Window to Image} image {../../icons/WindowFullScreen.svg} compress_image 1 xywh {660 0 30 25}
             class {mrv::Button}
           }
@@ -976,7 +976,7 @@ Value is:  pow( 2, 1/x );} xywh {632 28 54 22} type {Horz Knob} maximum 4 step 0
           Fl_Group {} {
             xywh {0 80 690 408} labeltype NO_LABEL hide resizable
           } {}
-          Fl_Pack uiViewGroup {
+          Fl_Pack uiViewGroup {open
             xywh {0 53 690 433} type HORIZONTAL
             code0 {o->fixed( uiToolsGroup, uiToolsGroup->w() );}
             code1 {uiMain->workspace = uiViewGroup;}
@@ -1087,18 +1087,18 @@ int a = o->value() * 255;
 settingsObject->setValue( mrv::kPenColorA, a);}
                 tooltip {Opacity of pen stroke} xywh {7 373 34 19} type {Horz Knob} step 0.01 value 1
               }
-              Fl_Group {} {
+              Fl_Group {} {open
                 xywh {0 396 42 71}
               } {
                 Fl_Button uiUndoDraw {
                   user_data this user_data_type {ViewerUI*}
-                  callback {uiView->undo(); uiRedoDraw->activate();}
+                  callback {uiView->undo();}
                   tooltip {Undo Last Shape Drawn} image {../../icons/Undo.svg} compress_image 0 xywh {0 396 40 35} deactivate
                   class {mrv::Button}
                 }
                 Fl_Button uiRedoDraw {
                   user_data this user_data_type {ViewerUI*}
-                  callback {uiView->redo(); uiUndoDraw->activate();}
+                  callback {uiView->redo();}
                   tooltip {Redo Previous Shape Drawn} image {../../icons/Redo.svg} compress_image 0 xywh {0 431 40 36} deactivate
                   class {mrv::Button}
                 }

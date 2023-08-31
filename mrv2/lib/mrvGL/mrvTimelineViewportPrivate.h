@@ -127,7 +127,12 @@ namespace mrv
         //! Whether the current frame represengs a missing frame in a sequence.
         bool missingFrame = false;
 
+        //! Default missing frame type.  Should be static.
         MissingFrameType missingFrameType = kBlackFrame;
+
+        //! List of undo types.
+        static std::vector< UndoType > undoTypes;
+        static std::vector< UndoType > redoTypes;
     };
 
 } // namespace mrv

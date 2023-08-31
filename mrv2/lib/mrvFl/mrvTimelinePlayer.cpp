@@ -301,11 +301,14 @@ namespace mrv
     }
 
     template < typename T >
-    void TimelinePlayer::pushMessage(const std::string& command, T value)
+    void TimelinePlayer::pushMessage(const std::string& command, const T& value)
     {
         bool send = App::ui->uiPrefs->SendTimeline->value();
         if (send)
-            tcp->pushMessage(command, value);
+        {
+            Message message = {{"command", command}, {"value", value}};
+            tcp->pushMessage(message);
+        }
     }
 
     void TimelinePlayer::setSpeed(double value)
@@ -318,7 +321,7 @@ namespace mrv
     void TimelinePlayer::setPlayback(timeline::Playback value)
     {
         pushMessage("seek", currentTime());
-        pushMessage("setPlayback", (int)value);
+        pushMessage("setPlayback", value);
         _p->timelinePlayer->setPlayback(value);
 
         if (value == timeline::Playback::Stop)
@@ -336,13 +339,13 @@ namespace mrv
 
     void TimelinePlayer::forward()
     {
-        pushMessage("setPlayback", (int)timeline::Playback::Forward);
+        pushMessage("setPlayback", timeline::Playback::Forward);
         _p->timelinePlayer->setPlayback(timeline::Playback::Forward);
     }
 
     void TimelinePlayer::reverse()
     {
-        pushMessage("setPlayback", (int)timeline::Playback::Reverse);
+        pushMessage("setPlayback", timeline::Playback::Reverse);
         _p->timelinePlayer->setPlayback(timeline::Playback::Reverse);
     }
 
@@ -357,7 +360,8 @@ namespace mrv
 
     void TimelinePlayer::setLoop(timeline::Loop value)
     {
-        pushMessage("setLoop", (int)value);
+        Message m = value;
+        pushMessage("setLoop", m);
         _p->timelinePlayer->setLoop(value);
     }
 

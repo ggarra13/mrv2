@@ -14,7 +14,7 @@ namespace mrv
     //! Store timeline in undo queue.
 
     void edit_store_undo(TimelinePlayer*, ViewerUI* ui);
-    void edit_clear_redo();
+    void edit_clear_redo(ViewerUI* ui);
 
     //@}
 

@@ -358,7 +358,7 @@ namespace mrv
 
     protected:
         template < typename T >
-        void pushMessage(const std::string& command, T value);
+        void pushMessage(const std::string& command, const T& value);
 
         void timerEvent();
 

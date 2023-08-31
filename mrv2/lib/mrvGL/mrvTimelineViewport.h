@@ -6,6 +6,7 @@
 
 #include <tlTimeline/IRender.h>
 
+#include "mrvCore/mrvUndoType.h"
 #include "mrvCore/mrvStereo3DOptions.h"
 #include "mrvCore/mrvEnvironmentMapOptions.h"
 
@@ -84,7 +85,7 @@ namespace mrv
         //! Redo last shape.
         void redo();
 
-        //!  Change cursor to another.
+        //! Change cursor to another.
         void cursor(Fl_Cursor x) const noexcept;
 
         //! Set the action mode.
@@ -272,7 +273,15 @@ namespace mrv
         //! Update the video layer from the GUI.
         void updateVideoLayers(int idx = 0) noexcept;
 
-        // Q_SIGNALS:
+        //! Store a new Undo type to the undo queue.
+        void storeNewUndo(const UndoType) noexcept;
+
+        //! Store a new Undo type to the undo queue.
+        void storeNewRedo(const UndoType) noexcept;
+
+        //! Clear Redo Queue.
+        void clearRedo() noexcept;
+
         //! This signal is emitted when the position and zoom change.
         void viewPosAndZoomChanged(const tl::math::Vector2i&, float) noexcept;
 
@@ -353,6 +362,9 @@ namespace mrv
         void _refresh() noexcept;
 
         virtual void _pushAnnotationShape(const std::string& cmd) const = 0;
+
+        void _redrawUndoRedoButtons() const;
+
         void _createAnnotationShape() const;
         void _updateAnnotationShape() const;
         void _addAnnotationShapePoint() const;

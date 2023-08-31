@@ -25,6 +25,7 @@ set(HEADERS
   mrvStereo3DOptions.h
   mrvStereo3DOptionsInline.h
   mrvString.h
+  mrvUndoType.h
   mrvUtil.h
   )
 
@@ -42,6 +43,7 @@ set(SOURCES
   mrvSequence.cpp
   mrvStereo3DOptions.cpp
   mrvString.cpp
+  mrvUndoType.cpp
   mrvUtil.cpp
   )
 

@@ -31,6 +31,9 @@ v0.7.2
 - Annotations are now kept with RationalTime instead of frames to be more
   precise.  Note, however, that old session files that use annotations will be
   incompatible.
+- Fixed Network connections which had gotten broken on v0.7.1.
+- Fixed Network connections on client startup, leading it to change the
+  selected file on the server.
 
 
 v0.7.1
