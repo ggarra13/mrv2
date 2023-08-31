@@ -64,6 +64,9 @@ namespace mrv
     bool TimelineViewport::Private::hudActive = true;
     HudDisplay TimelineViewport::Private::hud = HudDisplay::kNone;
 
+    std::vector< UndoType > TimelineViewport::Private::undoTypes;
+    std::vector< UndoType > TimelineViewport::Private::redoTypes;
+
     static void drawTimeoutText_cb(TimelineViewport* view)
     {
         view->clearHelpText();
@@ -141,11 +144,33 @@ namespace mrv
         if (!player)
             return;
 
-        player->undoAnnotation();
-        tcp->pushMessage("undo", 0);
+        auto undoType = UndoType::Draw;
+        if (!p.undoTypes.empty())
+        {
+            undoType = p.undoTypes.back();
+            p.undoTypes.pop_back();
+            p.redoTypes.push_back(undoType);
+        }
+
+        switch (undoType)
+        {
+        default:
+        case UndoType::Draw:
+        {
+            player->undoAnnotation();
+            tcp->pushMessage("undo", 0);
+            redrawWindows();
+            break;
+        }
+        case UndoType::Edit:
+        {
+            edit_undo_cb(nullptr, p.ui);
+            tcp->pushMessage("undo", 0);
+            break;
+        }
+        }
 
         _updateUndoRedoButtons();
-        redrawWindows();
     }
 
     void TimelineViewport::redo()
@@ -156,11 +181,53 @@ namespace mrv
         if (!player)
             return;
 
-        player->redoAnnotation();
-        tcp->pushMessage("redo", 0);
+        auto redoType = UndoType::Draw;
+        if (!p.redoTypes.empty())
+        {
+            redoType = p.redoTypes.back();
+            p.redoTypes.pop_back();
+            p.undoTypes.push_back(redoType);
+        }
+
+        switch (redoType)
+        {
+        default:
+        case UndoType::Draw:
+        {
+            player->redoAnnotation();
+            tcp->pushMessage("redo", 0);
+            redrawWindows();
+            break;
+        }
+        case UndoType::Edit:
+        {
+            edit_redo_cb(nullptr, p.ui);
+            tcp->pushMessage("redo", 0);
+            break;
+        }
+        }
 
         _updateUndoRedoButtons();
-        redrawWindows();
+    }
+
+    void TimelineViewport::storeNewUndo(const UndoType value) noexcept
+    {
+        TLRENDER_P();
+        p.undoTypes.push_back(value);
+        _updateUndoRedoButtons();
+    }
+
+    void TimelineViewport::storeNewRedo(const UndoType value) noexcept
+    {
+        TLRENDER_P();
+        p.redoTypes.push_back(value);
+        _updateUndoRedoButtons();
+    }
+
+    void TimelineViewport::clearRedo() noexcept
+    {
+        _p->redoTypes.clear();
+        _updateUndoRedoButtons();
     }
 
     void TimelineViewport::setActionMode(const ActionMode& mode) noexcept
@@ -965,8 +1032,8 @@ namespace mrv
         }
         else
         {
-            posX = minx;
-            posY = miny;
+            posX = mw->x();
+            posY = mw->y();
         }
 
         int decW = mw->decorated_w();
@@ -1045,6 +1112,11 @@ namespace mrv
         {
             p.frameView = true;
         }
+
+        if (posX + W > maxW)
+            posX = minx;
+        if (posY + W > maxH)
+            posY = miny;
 
         mw->resize(posX, posY, W, H);
 
@@ -2470,11 +2542,22 @@ namespace mrv
 
     void TimelineViewport::_endAnnotationShape() const
     {
+        TLRENDER_P();
+        p.undoTypes.push_back(UndoType::Draw);
+        p.redoTypes.clear();
+        edit_clear_redo(p.ui);
+        _updateUndoRedoButtons();
+        // This is used for text shapes only.
         _pushAnnotationShape("End Shape");
     }
 
     void TimelineViewport::_createAnnotationShape() const
     {
+        TLRENDER_P();
+        p.undoTypes.push_back(UndoType::Draw);
+        edit_clear_redo(p.ui);
+        p.redoTypes.clear();
+        _updateUndoRedoButtons();
         _pushAnnotationShape("Create Shape");
     }
 

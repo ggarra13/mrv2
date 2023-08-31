@@ -82,8 +82,17 @@ namespace mrv
         //! Undo last shape and annotations if no more shapes.
         void undo();
 
+        //! Store a undo type in queu.
+        void storeNewUndo(const UndoType value) noexcept;
+
         //! Redo last shape.
         void redo();
+
+        //! Store a redo type in queu.
+        void storeNewRedo(const UndoType value) noexcept;
+
+        //! Clear all redo queues.
+        void clearRedo() noexcept;
 
         //! Change cursor to another.
         void cursor(Fl_Cursor x) const noexcept;
