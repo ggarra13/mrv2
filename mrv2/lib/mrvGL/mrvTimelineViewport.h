@@ -349,6 +349,9 @@ namespace mrv
         //! Laser fading annotation
         void laserFade(LaserFadeData*);
 
+        //! Update the undo/redo buttons to be active or not.
+        void updateUndoRedoButtons() const noexcept;
+
     protected:
         virtual void _readPixel(image::Color4f& rgba) const noexcept = 0;
         math::Vector2i _getViewportCenter() const noexcept;
@@ -419,8 +422,6 @@ namespace mrv
         void _scrub(float change) noexcept;
 
         bool _hasSecondaryViewport() const noexcept;
-
-        void _updateUndoRedoButtons() const noexcept;
 
         TLRENDER_PRIVATE();
     };

@@ -15,11 +15,13 @@ namespace mrv
 
     void edit_store_undo(TimelinePlayer*, ViewerUI* ui);
     void edit_clear_redo(ViewerUI* ui);
-
-    bool edit_has_undo();
-    bool edit_has_redo();
-
     //@}
+
+    //! Return whether edit has undo.
+    bool edit_has_undo();
+
+    //! Return whether edit has redo.
+    bool edit_has_redo();
 
     //! Menu function to copy one frame to the buffer.
     void edit_copy_frame_cb(Fl_Menu_* m, ViewerUI* ui);

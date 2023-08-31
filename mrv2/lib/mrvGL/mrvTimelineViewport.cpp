@@ -170,7 +170,7 @@ namespace mrv
         }
         }
 
-        _updateUndoRedoButtons();
+        updateUndoRedoButtons();
     }
 
     void TimelineViewport::redo()
@@ -207,27 +207,27 @@ namespace mrv
         }
         }
 
-        _updateUndoRedoButtons();
+        updateUndoRedoButtons();
     }
 
     void TimelineViewport::storeNewUndo(const UndoType value) noexcept
     {
         TLRENDER_P();
         p.undoTypes.push_back(value);
-        _updateUndoRedoButtons();
+        updateUndoRedoButtons();
     }
 
     void TimelineViewport::storeNewRedo(const UndoType value) noexcept
     {
         TLRENDER_P();
         p.redoTypes.push_back(value);
-        _updateUndoRedoButtons();
+        updateUndoRedoButtons();
     }
 
     void TimelineViewport::clearRedo() noexcept
     {
         _p->redoTypes.clear();
-        _updateUndoRedoButtons();
+        updateUndoRedoButtons();
     }
 
     void TimelineViewport::setActionMode(const ActionMode& mode) noexcept
@@ -2546,7 +2546,7 @@ namespace mrv
         p.undoTypes.push_back(UndoType::Draw);
         p.redoTypes.clear();
         edit_clear_redo(p.ui);
-        _updateUndoRedoButtons();
+        updateUndoRedoButtons();
         // This is used for text shapes only.
         _pushAnnotationShape("End Shape");
     }
@@ -2557,7 +2557,7 @@ namespace mrv
         p.undoTypes.push_back(UndoType::Draw);
         edit_clear_redo(p.ui);
         p.redoTypes.clear();
-        _updateUndoRedoButtons();
+        updateUndoRedoButtons();
         _pushAnnotationShape("Create Shape");
     }
 
@@ -2608,7 +2608,7 @@ namespace mrv
         }
     }
 
-    void TimelineViewport::_updateUndoRedoButtons() const noexcept
+    void TimelineViewport::updateUndoRedoButtons() const noexcept
     {
         TLRENDER_P();
 

@@ -369,6 +369,8 @@ namespace mrv
     {
         pushMessage("seek", value);
         _p->timelinePlayer->seek(value);
+        if (timelineViewport)
+            timelineViewport->updateUndoRedoButtons();
     }
 
     void TimelinePlayer::timeAction(timeline::TimeAction value)
@@ -381,6 +383,8 @@ namespace mrv
         pushMessage("start", 0);
         _p->timelinePlayer->start();
         redrawPanelThumbnails();
+        if (timelineViewport)
+            timelineViewport->updateUndoRedoButtons();
     }
 
     void TimelinePlayer::end()
@@ -388,6 +392,8 @@ namespace mrv
         pushMessage("end", 0);
         _p->timelinePlayer->end();
         redrawPanelThumbnails();
+        if (timelineViewport)
+            timelineViewport->updateUndoRedoButtons();
     }
 
     void TimelinePlayer::framePrev()
@@ -395,6 +401,8 @@ namespace mrv
         pushMessage("framePrev", 0);
         _p->timelinePlayer->framePrev();
         redrawPanelThumbnails();
+        if (timelineViewport)
+            timelineViewport->updateUndoRedoButtons();
     }
 
     void TimelinePlayer::frameNext()
@@ -402,6 +410,8 @@ namespace mrv
         pushMessage("frameNext", 0);
         _p->timelinePlayer->frameNext();
         redrawPanelThumbnails();
+        if (timelineViewport)
+            timelineViewport->updateUndoRedoButtons();
     }
 
     void TimelinePlayer::setInOutRange(const otime::TimeRange& value)
@@ -746,15 +756,28 @@ namespace mrv
     bool TimelinePlayer::hasUndo() const
     {
         TLRENDER_P();
-        return static_cast<bool>(getAnnotation());
+        auto annotation = getAnnotation();
+        if (!annotation)
+            return false;
+        return true;
     }
 
     bool TimelinePlayer::hasRedo() const
     {
         TLRENDER_P();
-        return (
-            static_cast<bool>(getAnnotation()) ||
-            static_cast<bool>(p.undoAnnotation));
+
+        auto annotation = getAnnotation();
+        if (!annotation)
+        {
+            if (p.undoAnnotation)
+            {
+                annotation = p.undoAnnotation;
+            }
+        }
+        if (!annotation)
+            return false;
+
+        return !annotation->undo_shapes.empty();
     }
 
     void TimelinePlayer::timerEvent()
