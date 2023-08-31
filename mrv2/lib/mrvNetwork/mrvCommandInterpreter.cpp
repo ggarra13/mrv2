@@ -1005,8 +1005,8 @@ namespace mrv
                 tcp->unlock();
                 return;
             }
-            int value = message["value"];
-            set_edit_mode_cb(static_cast<EditMode>(value), ui);
+            EditMode value = message["value"];
+            set_edit_mode_cb(value, ui);
         }
         else if (c == "Network Panel")
         {

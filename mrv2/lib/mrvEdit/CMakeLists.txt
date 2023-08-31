@@ -9,6 +9,7 @@ set(HEADERS
 
 set(SOURCES
     mrvEditCallbacks.cpp
+    mrvEditMode.cpp
 )
 
 

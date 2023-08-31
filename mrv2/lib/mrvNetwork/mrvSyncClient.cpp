@@ -6,6 +6,8 @@
 
 #include "mrViewer.h"
 
+#include "mrvEdit/mrvEditCallbacks.h"
+
 #include "mrvNetwork/mrvCompareOptions.h"
 #include "mrvNetwork/mrvFilesModelItem.h"
 #include "mrvNetwork/mrvProtocolVersion.h"
@@ -94,6 +96,13 @@ namespace mrv
             // Send Stereo 3D Options
             msg["command"] = "setStereo3DOptions";
             msg["value"] = model->observeStereo3DOptions()->get();
+            pushMessage(msg);
+
+            // Set Edit mode
+            msg["command"] = "setEditMode";
+            EditMode mode = editMode == EditMode::kSaved ? EditMode::kFull
+                                                         : EditMode::kTimeline;
+            msg["value"] = mode;
             pushMessage(msg);
 
             // Seek to current time in player

@@ -18,6 +18,8 @@
 #include "mrvFl/mrvCallbacks.h"
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
+#include "mrvEdit/mrvEditCallbacks.h"
+
 #include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/mrvSettingsObject.h"
 #include "mrvApp/App.h"
@@ -66,7 +68,7 @@ namespace mrv
         enable_cypher(false);
 
         Message session;
-        session["version"] = 5;
+        session["version"] = 6;
 
         std::vector< FilesModelItem > files;
         for (const auto& file : files_ptrs)
@@ -260,6 +262,7 @@ namespace mrv
         session["stereoIndex"] = stereoIndex;
         session["environmentMapOptions"] = environmentMap;
         session["displayOptions"] = display;
+        session["editMode"] = editMode;
 
         std::ofstream ofs(fileName);
         if (!ofs.is_open())
@@ -545,6 +548,12 @@ namespace mrv
         {
             timeline::DisplayOptions display = session["displayOptions"];
             app->setDisplayOptions(display);
+        }
+
+        if (version >= 6)
+        {
+            EditMode editMode = session["editMode"];
+            set_edit_mode_cb(editMode, ui);
         }
 
         // std::cout << session << std::endl;

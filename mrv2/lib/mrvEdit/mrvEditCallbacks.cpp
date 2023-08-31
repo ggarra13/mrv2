@@ -1371,9 +1371,8 @@ namespace mrv
 
         if (mode != EditMode::kNone)
         {
-            assert(view->h() + timeline->h() == tile->h());
-            assert(timeline->y() == view->y() + view->h());
-            tcp->pushMessage("setEditMode", (int)mode);
+            Message msg = {{"command", "setEditMode"}, {"value", mode}};
+            tcp->pushMessage(msg);
         }
 
         view->layout();

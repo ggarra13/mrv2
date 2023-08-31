@@ -1,5 +1,6 @@
-
 #pragma once
+
+#include <tlCore/Util.h>
 
 namespace mrv
 {

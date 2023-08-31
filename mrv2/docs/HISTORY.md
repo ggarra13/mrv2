@@ -34,6 +34,8 @@ v0.7.2
 - Fixed Network connections which had gotten broken on v0.7.1.
 - Fixed Network connections on client startup, leading it to change the
   selected file on the server.
+- Added Edit mode to the sessions file.
+- Added Edit mode to the network connection (it will load as timeline or full).
 
 
 v0.7.1
