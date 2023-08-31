@@ -138,11 +138,11 @@ namespace mrv
     Hotkey kPenSizeLess(false, false, false, false, 0, "-");
 
 #ifdef __APPLE__
-    Hotkey kUndoDraw(false, true, false, false, 'z');
-    Hotkey kRedoDraw(false, true, false, true, 'z');
+    Hotkey kUndo(false, true, false, false, 'z');
+    Hotkey kRedo(false, true, false, true, 'z');
 #else
-    Hotkey kUndoDraw(true, false, false, false, 'z');
-    Hotkey kRedoDraw(true, false, false, true, 'z');
+    Hotkey kUndo(true, false, false, false, 'z');
+    Hotkey kRedo(true, false, false, true, 'z');
 #endif
 
     Hotkey kResetChanges(true, false, false, false, 'r');
@@ -200,9 +200,6 @@ namespace mrv
     Hotkey kEditSliceClip(false, false, false, false, 0);
     Hotkey kEditRemoveClip(false, false, false, false, 0);
     Hotkey kEditRemoveClipWithGap(false, false, false, false, 0);
-
-    Hotkey kEditUndo(false, false, false, false, ';');
-    Hotkey kEditRedo(false, false, false, false, ':');
 
     Hotkey kRotatePlus90;  //( false, false, false, false, '+' );
     Hotkey kRotateMinus90; //( false, false, false, false, '-' );
@@ -391,8 +388,6 @@ namespace mrv
         HotkeyEntry(_("Slice Clip"), kEditSliceClip, true),
         HotkeyEntry(_("Remove Clip"), kEditRemoveClip, true),
         HotkeyEntry(_("Remove Clip With Gap"), kEditRemoveClipWithGap, true),
-        HotkeyEntry(_("Undo Edit"), kEditUndo, true),
-        HotkeyEntry(_("Redo Edit"), kEditRedo, true),
         HotkeyEntry(_("Toggle Menu Bar"), kToggleMenuBar),
         HotkeyEntry(_("Toggle Top Bar"), kToggleTopBar),
         HotkeyEntry(_("Toggle Pixel Bar"), kTogglePixelBar),
@@ -428,8 +423,8 @@ namespace mrv
         HotkeyEntry(_("Text Mode"), kTextMode),
         HotkeyEntry(_("Pen Size More"), kPenSizeMore),
         HotkeyEntry(_("Pen Size Less"), kPenSizeLess),
-        HotkeyEntry(_("Undo Draw"), kUndoDraw),
-        HotkeyEntry(_("Redo Draw"), kRedoDraw),
+        HotkeyEntry(_("Undo"), kUndo, true),
+        HotkeyEntry(_("Redo"), kRedo, true),
         HotkeyEntry(_("Gamma More"), kGammaMore),
         HotkeyEntry(_("Gamma Less"), kGammaLess),
         HotkeyEntry(_("Set In Point"), kSetInPoint),

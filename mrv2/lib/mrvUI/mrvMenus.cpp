@@ -919,12 +919,12 @@ namespace mrv
             menu->add(
                 _("Edit/Remove With Gap"), kEditRemoveClipWithGap.hotkey(),
                 (Fl_Callback*)edit_remove_clip_with_gap_cb, ui);
-            menu->add(
-                _("Edit/Undo"), kEditUndo.hotkey(), (Fl_Callback*)edit_undo_cb,
-                ui);
-            menu->add(
-                _("Edit/Redo"), kEditRedo.hotkey(), (Fl_Callback*)edit_redo_cb,
-                ui);
+            // menu->add(
+            //     _("Edit/Undo"), kUndo.hotkey(), (Fl_Callback*)edit_undo_cb,
+            //     ui);
+            // menu->add(
+            //     _("Edit/Redo"), kRedo.hotkey(), (Fl_Callback*)edit_redo_cb,
+            //     ui);
         }
 
         // if ( num > 0 )

@@ -831,7 +831,7 @@ namespace mrv
         toOtioFile(timeline, ui);
     }
 
-    void edit_undo_cb(Fl_Menu_* m, ViewerUI* ui)
+    void edit_undo(ViewerUI* ui)
     {
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
@@ -870,7 +870,7 @@ namespace mrv
         ui->uiTimeline->frameView();
     }
 
-    void edit_redo_cb(Fl_Menu_* m, ViewerUI* ui)
+    void edit_redo(ViewerUI* ui)
     {
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
@@ -916,6 +916,16 @@ namespace mrv
             refresh_file_cache_cb(nullptr, ui);
 
         ui->uiTimeline->frameView();
+    }
+
+    void edit_undo_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        ui->uiView->undo();
+    }
+
+    void edit_redo_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        ui->uiView->redo();
     }
 
     otio::SerializableObject::Retainer<otio::Timeline>
@@ -1074,21 +1084,23 @@ namespace mrv
                     clip->set_media_reference(media);
                 }
                 auto sourceRange = sourceItem->inOutRange;
-                double rate = sourceRange.duration().rate();
+                const double rate = sourceRange.duration().rate();
                 clip->set_source_range(sourceRange);
                 track->append_child(clip, &errorStatus);
                 if (otio::is_error(errorStatus))
                 {
                     throw std::runtime_error("Cannot append child");
                 }
+
+                // If audio is longer than video, append a video gap.
                 if (info.audio.isValid())
                 {
-                    const auto duration =
+                    const auto audio_duration =
                         info.audioTime.duration().rescaled_to(rate);
-                    const auto clip_duration = sourceRange.duration();
-                    if (clip_duration < duration)
+                    const auto clip_duration = mediaRange.duration();
+                    const auto gap_duration = audio_duration - clip_duration;
+                    if (time::round(gap_duration).value() > 0.0)
                     {
-                        const auto gap_duration = clip_duration - duration;
                         const auto gapRange =
                             TimeRange(RationalTime(0.0, rate), gap_duration);
                         auto gap = new otio::Gap(gapRange);

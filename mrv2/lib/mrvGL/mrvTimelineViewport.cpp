@@ -164,7 +164,7 @@ namespace mrv
         }
         case UndoType::Edit:
         {
-            edit_undo_cb(nullptr, p.ui);
+            edit_undo(p.ui);
             tcp->pushMessage("undo", 0);
             break;
         }
@@ -201,7 +201,7 @@ namespace mrv
         }
         case UndoType::Edit:
         {
-            edit_redo_cb(nullptr, p.ui);
+            edit_redo(p.ui);
             tcp->pushMessage("redo", 0);
             break;
         }
