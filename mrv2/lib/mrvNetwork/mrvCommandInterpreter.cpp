@@ -393,6 +393,7 @@ namespace mrv
                 tcp->unlock();
                 return;
             }
+            ui->uiRedoDraw->activate();
             view->undo();
         }
         else if (c == "redo")
@@ -403,6 +404,7 @@ namespace mrv
                 tcp->unlock();
                 return;
             }
+            ui->uiUndoDraw->activate();
             view->redo();
         }
         else if (c == "setEnvironmentMapOptions")
