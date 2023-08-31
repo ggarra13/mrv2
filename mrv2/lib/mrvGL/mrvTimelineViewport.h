@@ -273,15 +273,6 @@ namespace mrv
         //! Update the video layer from the GUI.
         void updateVideoLayers(int idx = 0) noexcept;
 
-        //! Store a new Undo type to the undo queue.
-        void storeNewUndo(const UndoType) noexcept;
-
-        //! Store a new Undo type to the undo queue.
-        void storeNewRedo(const UndoType) noexcept;
-
-        //! Clear Redo Queue.
-        void clearRedo() noexcept;
-
         //! This signal is emitted when the position and zoom change.
         void viewPosAndZoomChanged(const tl::math::Vector2i&, float) noexcept;
 

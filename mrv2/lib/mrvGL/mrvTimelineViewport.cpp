@@ -64,9 +64,6 @@ namespace mrv
     bool TimelineViewport::Private::hudActive = true;
     HudDisplay TimelineViewport::Private::hud = HudDisplay::kNone;
 
-    std::vector< UndoType > TimelineViewport::Private::undoTypes;
-    std::vector< UndoType > TimelineViewport::Private::redoTypes;
-
     static void drawTimeoutText_cb(TimelineViewport* view)
     {
         view->clearHelpText();
@@ -136,23 +133,6 @@ namespace mrv
         redrawWindows();
     }
 
-    void TimelineViewport::_redrawUndoRedoButtons() const
-    {
-        TLRENDER_P();
-
-        p.ui->uiUndoDraw->deactivate();
-        p.ui->uiRedoDraw->deactivate();
-
-        if (!p.undoTypes.empty())
-        {
-            p.ui->uiUndoDraw->activate();
-        }
-        if (!p.redoTypes.empty())
-        {
-            p.ui->uiRedoDraw->activate();
-        }
-    }
-
     void TimelineViewport::undo()
     {
         TLRENDER_P();
@@ -161,33 +141,25 @@ namespace mrv
         if (!player)
             return;
 
-        auto undoType = UndoType::Draw;
-        if (!p.undoTypes.empty())
-        {
-            undoType = p.undoTypes.back();
-            p.undoTypes.pop_back();
-            p.redoTypes.push_back(undoType);
-        }
+        player->undoAnnotation();
+        tcp->pushMessage("undo", 0);
 
-        switch (undoType)
+        auto annotation = player->getAnnotation();
+        if (!annotation)
         {
-        default:
-        case UndoType::Draw:
-        {
-            player->undoAnnotation();
-            tcp->pushMessage("undo", 0);
+            p.ui->uiUndoDraw->deactivate();
+            p.ui->uiRedoDraw->deactivate();
             redrawWindows();
-            break;
-        }
-        case UndoType::Edit:
-        {
-            edit_undo_cb(nullptr, p.ui);
-            tcp->pushMessage("undo", 0);
-            break;
-        }
+            return;
         }
 
-        _redrawUndoRedoButtons();
+        auto numShapes = annotation->shapes.size();
+        if (numShapes == 0)
+        {
+            p.ui->uiUndoDraw->deactivate();
+        }
+
+        redrawWindows();
     }
 
     void TimelineViewport::redo()
@@ -198,53 +170,25 @@ namespace mrv
         if (!player)
             return;
 
-        auto redoType = UndoType::Draw;
-        if (!p.redoTypes.empty())
-        {
-            redoType = p.redoTypes.back();
-            p.redoTypes.pop_back();
-            p.undoTypes.push_back(redoType);
-        }
+        player->redoAnnotation();
+        tcp->pushMessage("redo", 0);
 
-        switch (redoType)
+        auto annotation = player->getAnnotation();
+        if (!annotation)
         {
-        default:
-        case UndoType::Draw:
-        {
-            player->redoAnnotation();
-            tcp->pushMessage("redo", 0);
+            p.ui->uiUndoDraw->deactivate();
+            p.ui->uiRedoDraw->deactivate();
             redrawWindows();
-            break;
+            return;
         }
-        case UndoType::Edit:
+
+        auto numShapes = annotation->undo_shapes.size();
+        if (numShapes == 0)
         {
-            edit_redo_cb(nullptr, p.ui);
-            tcp->pushMessage("redo", 0);
-            break;
-        }
+            p.ui->uiRedoDraw->deactivate();
         }
 
-        _redrawUndoRedoButtons();
-    }
-
-    void TimelineViewport::storeNewUndo(const UndoType value) noexcept
-    {
-        TLRENDER_P();
-        p.undoTypes.push_back(value);
-        _redrawUndoRedoButtons();
-    }
-
-    void TimelineViewport::storeNewRedo(const UndoType value) noexcept
-    {
-        TLRENDER_P();
-        p.redoTypes.push_back(value);
-        _redrawUndoRedoButtons();
-    }
-
-    void TimelineViewport::clearRedo() noexcept
-    {
-        _p->redoTypes.clear();
-        _redrawUndoRedoButtons();
+        redrawWindows();
     }
 
     void TimelineViewport::setActionMode(const ActionMode& mode) noexcept
@@ -1049,8 +993,8 @@ namespace mrv
         }
         else
         {
-            posX = mw->x();
-            posY = mw->y();
+            posX = minx;
+            posY = miny;
         }
 
         int decW = mw->decorated_w();
@@ -1129,11 +1073,6 @@ namespace mrv
         {
             p.frameView = true;
         }
-
-        if (posX + W > maxW)
-            posX = minx;
-        if (posY + W > maxH)
-            posY = miny;
 
         mw->resize(posX, posY, W, H);
 
@@ -2559,23 +2498,11 @@ namespace mrv
 
     void TimelineViewport::_endAnnotationShape() const
     {
-        TLRENDER_P();
-        std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
-        p.undoTypes.push_back(UndoType::Draw);
-        p.redoTypes.clear();
-        edit_clear_redo(p.ui);
-        _redrawUndoRedoButtons();
-        // This is used for text shapes only.
         _pushAnnotationShape("End Shape");
     }
 
     void TimelineViewport::_createAnnotationShape() const
     {
-        TLRENDER_P();
-        p.undoTypes.push_back(UndoType::Draw);
-        edit_clear_redo(p.ui);
-        p.redoTypes.clear();
-        _redrawUndoRedoButtons();
         _pushAnnotationShape("Create Shape");
     }
 
