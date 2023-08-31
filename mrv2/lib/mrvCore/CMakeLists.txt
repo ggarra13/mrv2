@@ -25,6 +25,7 @@ set(HEADERS
   mrvStereo3DOptions.h
   mrvStereo3DOptionsInline.h
   mrvString.h
+  mrvUndoElement.h
   mrvUndoType.h
   mrvUtil.h
   )
