@@ -350,6 +350,9 @@ namespace mrv
         //! Clear all annotations in timeline player.
         void clearAllAnnotations();
 
+        //! Remove an annotation from list.
+        void removeAnnotation(const std::shared_ptr< draw::Annotation >&);
+
         //! Undo the last annotation.
         void undoAnnotation();
 

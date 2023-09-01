@@ -64,8 +64,8 @@ namespace mrv
     bool TimelineViewport::Private::hudActive = true;
     HudDisplay TimelineViewport::Private::hud = HudDisplay::kNone;
 
-    std::vector< UndoType > TimelineViewport::Private::undoTypes;
-    std::vector< UndoType > TimelineViewport::Private::redoTypes;
+    std::vector< UndoElement > TimelineViewport::Private::undoElements;
+    std::vector< UndoElement > TimelineViewport::Private::redoElements;
 
     static void drawTimeoutText_cb(TimelineViewport* view)
     {
@@ -144,19 +144,20 @@ namespace mrv
         if (!player)
             return;
 
-        auto undoType = UndoType::Draw;
-        if (!p.undoTypes.empty())
+        UndoElement undoElement;
+        if (!p.undoElements.empty())
         {
-            undoType = p.undoTypes.back();
-            p.undoTypes.pop_back();
-            p.redoTypes.push_back(undoType);
+            undoElement = p.undoElements.back();
+            p.undoElements.pop_back();
+            p.redoElements.push_back(undoElement);
         }
 
-        switch (undoType)
+        switch (undoElement.type)
         {
         default:
         case UndoType::Draw:
         {
+            player->seek(undoElement.time);
             player->undoAnnotation();
             tcp->pushMessage("undo", 0);
             redrawWindows();
@@ -181,19 +182,20 @@ namespace mrv
         if (!player)
             return;
 
-        auto redoType = UndoType::Draw;
-        if (!p.redoTypes.empty())
+        UndoElement redoElement;
+        if (!p.redoElements.empty())
         {
-            redoType = p.redoTypes.back();
-            p.redoTypes.pop_back();
-            p.undoTypes.push_back(redoType);
+            redoElement = p.redoElements.back();
+            p.redoElements.pop_back();
+            p.undoElements.push_back(redoElement);
         }
 
-        switch (redoType)
+        switch (redoElement.type)
         {
         default:
         case UndoType::Draw:
         {
+            player->seek(redoElement.time);
             player->redoAnnotation();
             tcp->pushMessage("redo", 0);
             redrawWindows();
@@ -213,20 +215,24 @@ namespace mrv
     void TimelineViewport::storeNewUndo(const UndoType value) noexcept
     {
         TLRENDER_P();
-        p.undoTypes.push_back(value);
+        UndoElement element;
+        element.type = value;
+        p.undoElements.push_back(element);
         updateUndoRedoButtons();
     }
 
     void TimelineViewport::storeNewRedo(const UndoType value) noexcept
     {
         TLRENDER_P();
-        p.redoTypes.push_back(value);
+        UndoElement element;
+        element.type = value;
+        p.redoElements.push_back(element);
         updateUndoRedoButtons();
     }
 
     void TimelineViewport::clearRedo() noexcept
     {
-        _p->redoTypes.clear();
+        _p->redoElements.clear();
         updateUndoRedoButtons();
     }
 
@@ -2543,21 +2549,38 @@ namespace mrv
     void TimelineViewport::_endAnnotationShape() const
     {
         TLRENDER_P();
-        p.undoTypes.push_back(UndoType::Draw);
-        p.redoTypes.clear();
+        auto player = getTimelinePlayer();
+        if (!player)
+            return;
+
+        UndoElement undoElement;
+        undoElement.type = UndoType::Draw;
+        undoElement.time = player->currentTime();
+        p.undoElements.push_back(undoElement);
+        p.redoElements.clear();
         edit_clear_redo(p.ui);
         updateUndoRedoButtons();
         // This is used for text shapes only.
         _pushAnnotationShape("End Shape");
     }
 
-    void TimelineViewport::_createAnnotationShape() const
+    void TimelineViewport::_createAnnotationShape(const bool laser) const
     {
         TLRENDER_P();
-        p.undoTypes.push_back(UndoType::Draw);
-        edit_clear_redo(p.ui);
-        p.redoTypes.clear();
-        updateUndoRedoButtons();
+        if (!laser)
+        {
+            auto player = getTimelinePlayer();
+            if (!player)
+                return;
+
+            UndoElement undoElement;
+            undoElement.type = UndoType::Draw;
+            undoElement.time = player->currentTime();
+            p.undoElements.push_back(undoElement);
+            edit_clear_redo(p.ui);
+            p.redoElements.clear();
+            updateUndoRedoButtons();
+        }
         _pushAnnotationShape("Create Shape");
     }
 

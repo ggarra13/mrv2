@@ -36,6 +36,7 @@ v0.7.2
   selected file on the server.
 - Added Edit mode to the sessions file.
 - Added Edit mode to the network connection (it will load as timeline or full).
+- Laser annotations are no longer added to the draw undo/redo queue.
 
 
 v0.7.1

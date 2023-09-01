@@ -708,6 +708,16 @@ namespace mrv
         _p->annotations.clear();
     }
 
+    void TimelinePlayer::removeAnnotation(
+        const std::shared_ptr< draw::Annotation >& annotation)
+    {
+        TLRENDER_P();
+
+        p.annotations.erase(
+            std::remove(p.annotations.begin(), p.annotations.end(), annotation),
+            p.annotations.end());
+    }
+
     void TimelinePlayer::undoAnnotation()
     {
         TLRENDER_P();
@@ -721,10 +731,7 @@ namespace mrv
         {
             p.undoAnnotation = annotation;
             // If no shapes we remove the annotation too
-            p.annotations.erase(
-                std::remove(
-                    p.annotations.begin(), p.annotations.end(), annotation),
-                p.annotations.end());
+            removeAnnotation(annotation);
         }
     }
 

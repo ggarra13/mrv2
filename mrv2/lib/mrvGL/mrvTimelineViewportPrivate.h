@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include "mrvCore/mrvUndoElement.h"
+
 #include "mrvDraw/Annotation.h"
 
 class ViewerUI;
@@ -131,8 +133,8 @@ namespace mrv
         MissingFrameType missingFrameType = kBlackFrame;
 
         //! List of undo types.
-        static std::vector< UndoType > undoTypes;
-        static std::vector< UndoType > redoTypes;
+        static std::vector< UndoElement > undoElements;
+        static std::vector< UndoElement > redoElements;
     };
 
 } // namespace mrv

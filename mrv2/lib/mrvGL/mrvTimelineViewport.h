@@ -368,7 +368,7 @@ namespace mrv
 
         void _redrawUndoRedoButtons() const;
 
-        void _createAnnotationShape() const;
+        void _createAnnotationShape(const bool laser) const;
         void _updateAnnotationShape() const;
         void _addAnnotationShapePoint() const;
         void _endAnnotationShape() const;
