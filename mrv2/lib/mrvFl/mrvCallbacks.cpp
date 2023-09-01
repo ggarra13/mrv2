@@ -197,8 +197,30 @@ namespace mrv
             return;
 
         std::string extension = tl::file::Path(file).getExtension();
+        extension = string::toLower(extension);
 
-        SaveOptionsUI saveOptions(extension);
+        bool valid_for_exr = false;
+        // Sanity check - make sure the video pixel for the current
+        // layerId type is float/half
+        if (extension == ".exr")
+        {
+            auto info = player->ioInfo();
+            unsigned layerId = ui->uiColorChannel->value();
+            auto video = info.video[layerId];
+            if (video.pixelType == image::PixelType::RGBA_F16 ||
+                video.pixelType == image::PixelType::RGBA_F32 ||
+                video.pixelType == image::PixelType::RGB_F16 ||
+                video.pixelType == image::PixelType::RGB_F32 ||
+                video.pixelType == image::PixelType::LA_F16 ||
+                video.pixelType == image::PixelType::LA_F32 ||
+                video.pixelType == image::PixelType::L_F16 ||
+                video.pixelType == image::PixelType::L_F32)
+            {
+                valid_for_exr = true;
+            }
+        }
+
+        SaveOptionsUI saveOptions(extension, valid_for_exr);
 
         mrv::SaveOptions options;
         options.annotations =
@@ -208,6 +230,12 @@ namespace mrv
 
         value = saveOptions.Profile->value();
         options.ffmpegProfile = static_cast<tl::ffmpeg::Profile>(value);
+
+        value = saveOptions.PixelType->value();
+        if (value == 0)
+            options.exrPixelType = tl::image::PixelType::RGBA_F16;
+        if (value == 1)
+            options.exrPixelType = tl::image::PixelType::RGBA_F32;
 
         value = saveOptions.Compression->value();
         options.exrCompression = static_cast<tl::exr::Compression>(value);
@@ -1846,7 +1874,8 @@ namespace mrv
                                 break;
                             }
                         }
-                        H += 20;
+                        if (found)
+                            H += 20;
                     }
                 }
             }
@@ -1886,16 +1915,10 @@ namespace mrv
 
         int newY = tileY + tileH - H;
 
-#if 1
         view->resize(view->x(), view->y(), view->w(), tileH - viewH);
         if (timeline->visible())
             timeline->resize(timeline->x(), newY, timeline->w(), H);
-#else
-        // this does not work properly when going to presentation mode.
-        tile->move_intersection(0, oldY, 0, newY);
-        // std::cerr << "oldY=" << oldY << std::endl;
-        // std::cerr << "newY=" << newY << std::endl;
-#endif
+
         if (mode != EditMode::kNone)
         {
             assert(view->h() + timeline->h() == tile->h());

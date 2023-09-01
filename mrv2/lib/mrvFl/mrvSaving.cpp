@@ -53,6 +53,8 @@ namespace mrv
 
             ioOptions["OpenEXR/Compression"] = getLabel(options.exrCompression);
 
+            ioOptions["OpenEXR/PixelType"] = getLabel(options.exrPixelType);
+
             snprintf(buf, 256, "%d", options.zipCompressionLevel);
             ioOptions["OpenEXR/ZipCompressionLevel"] = buf;
 
@@ -87,7 +89,15 @@ namespace mrv
                 throw std::runtime_error("No video information");
             }
 
-            auto renderSize = info.video[0].size;
+            int layerId = 0;
+            bool annotations = false;
+            if (options.annotations)
+            {
+                annotations = true;
+                layerId = ui->uiColorChannel->value();
+            }
+
+            auto renderSize = info.video[layerId].size;
 
             const std::string& originalFile = player->path().get();
             if (originalFile == file)
@@ -115,12 +125,6 @@ namespace mrv
             {
                 throw std::runtime_error(
                     string::Format("{0}: Cannot open").arg(file));
-            }
-
-            bool annotations = false;
-            if (options.annotations)
-            {
-                annotations = true;
             }
 
             writerPlugin->setOptions(ioOptions);
@@ -175,7 +179,7 @@ namespace mrv
 
             image::Info outputInfo;
             outputInfo.size = renderSize;
-            outputInfo.pixelType = info.video[0].pixelType;
+            outputInfo.pixelType = info.video[layerId].pixelType;
 
             {
                 std::string msg = tl::string::Format(_("Image info: {0} {1}"))
@@ -188,12 +192,12 @@ namespace mrv
             if (image::PixelType::None == outputInfo.pixelType)
             {
                 outputInfo.pixelType = image::PixelType::RGB_U8;
-                if (annotations &&
-                    string::compare(
-                        extension, ".exr", string::Compare::CaseInsensitive))
-                {
-                    outputInfo.pixelType = image::PixelType::RGBA_F16;
-                }
+            }
+            if (annotations &&
+                string::compare(
+                    extension, ".exr", string::Compare::CaseInsensitive))
+            {
+                outputInfo.pixelType = options.exrPixelType;
             }
             std::string msg = tl::string::Format(_("Output info: {0} {1}"))
                                   .arg(outputInfo.size)
@@ -305,8 +309,8 @@ namespace mrv
                         std::setlocale(LC_NUMERIC, savedLocale.c_str());
 
                         // back to conventional pixel operation
-                        glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
-                        CHECK_GL;
+                        // glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
+                        // CHECK_GL;
                         glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
                         CHECK_GL;
 

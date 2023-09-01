@@ -425,6 +425,12 @@ namespace mrv
         gui.get("timeline_edit_mode", tmp, 0);
         uiPrefs->uiPrefsEditMode->value(tmp);
 
+        gui.get("timeline_edit_thumbnails", tmp, 1);
+        uiPrefs->uiPrefsEditThumbnails->value(tmp);
+
+        gui.get("timeline_edit_transitions", tmp, 1);
+        uiPrefs->uiPrefsShowTransitions->value(tmp);
+
 #ifdef __APPLE__
         {
             auto itemOptions = ui->uiTimeline->getItemOptions();
@@ -1186,6 +1192,12 @@ namespace mrv
         gui.set(
             "timeline_thumbnails", uiPrefs->uiPrefsTimelineThumbnails->value());
         gui.set("timeline_edit_mode", uiPrefs->uiPrefsEditMode->value());
+        gui.set(
+            "timeline_edit_thumbnails",
+            uiPrefs->uiPrefsEditThumbnails->value());
+        gui.set(
+            "timeline_edit_transitions",
+            uiPrefs->uiPrefsShowTransitions->value());
 
         //
         // ui/view prefs
@@ -1463,7 +1475,6 @@ namespace mrv
         }
         else
         {
-            std::cerr << "hide top bar" << std::endl;
             ui->uiTopBar->hide();
         }
 
@@ -1677,6 +1688,34 @@ namespace mrv
                 window->always_on_top(value);
             }
         }
+
+        //
+        // Edit mode options
+        //
+        auto options = ui->uiTimeline->getItemOptions();
+        options.showTransitions = uiPrefs->uiPrefsShowTransitions->value();
+
+        int thumbnails = uiPrefs->uiPrefsEditThumbnails->value();
+        options.thumbnails = true;
+        switch (thumbnails)
+        {
+        case 0:
+            options.thumbnails = false;
+            break;
+        case 1: // Small
+            options.thumbnailHeight = 100;
+            break;
+        case 2: // Medium
+            options.thumbnailHeight = 200;
+            break;
+        case 3: // Large
+            options.thumbnailHeight = 300;
+            break;
+        }
+        options.waveformHeight = options.thumbnailHeight / 2;
+        ui->uiTimeline->setItemOptions(options);
+        if (ui->uiEdit->value())
+            set_edit_mode_cb(EditMode::kFull, ui);
 
         ui->uiMain->fill_menu(ui->uiMenuBar);
 

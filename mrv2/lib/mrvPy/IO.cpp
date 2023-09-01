@@ -24,7 +24,10 @@ void mrv2_io(py::module& m)
             _("FFmpeg Profile."))
         .def_readwrite(
             "exrCompression", &mrv::SaveOptions::exrCompression,
-            _("OpenEXR Compression."))
+            _("OpenEXR's Compression."))
+        .def_readwrite(
+            "exrPixelType", &mrv::SaveOptions::exrPixelType,
+            _("OpenEXR's Pixel Type."))
         .def_readwrite(
             "zipCompressionLevel", &mrv::SaveOptions::zipCompressionLevel,
             _("OpenEXR's Zip Compression Level."))

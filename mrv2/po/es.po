@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.3.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-08-11 04:10-0300\n"
+"POT-Creation-Date: 2023-08-18 09:25-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -1942,6 +1942,9 @@ msgstr "Voltear imagen en X."
 msgid "Flip image on Y."
 msgstr "Voltear imagen en Y."
 
+msgid "Float"
+msgstr "Coma flotante"
+
 msgid "Float Values"
 msgstr "Valores Coma Flotante"
 
@@ -2141,6 +2144,9 @@ msgstr "HUD"
 msgid "HW"
 msgstr "HW"
 
+msgid "Half"
+msgstr "Half"
+
 msgid "Height"
 msgstr "Altura"
 
@@ -2246,6 +2252,9 @@ msgstr "Coordenade del pixel bajo el ratón."
 
 msgid "Image filters."
 msgstr "Filtros de imagen."
+
+msgid "Image info: {0} {1}"
+msgstr "Información de Imagen: {0} {1}"
 
 msgid "Image mirroring."
 msgstr "Espejado de la imagen."
@@ -2803,14 +2812,17 @@ msgstr "Abrir un archivo con audio opcional."
 msgid "Open with Audio"
 msgstr "Abrir con Audio"
 
-msgid "OpenEXR Compression."
-msgstr "Compresión de OpenEXR"
-
 msgid "OpenEXR Options"
 msgstr "Opciones de OpenEXR"
 
+msgid "OpenEXR's Compression."
+msgstr "Compresión de OpenEXR"
+
 msgid "OpenEXR's DWA Compression Level."
 msgstr "Nivel de compresión DWA de OpenEXR."
+
+msgid "OpenEXR's Pixel Type."
+msgstr "Tipo de Pixel de OpenEXR."
 
 msgid "OpenEXR's Zip Compression Level."
 msgstr "Nivel de compresión Zip de OpenEXR."
@@ -2944,6 +2956,9 @@ msgstr "Radio de Pixel"
 
 msgid "Pixel Toolbar"
 msgstr "Barra de Pixel"
+
+msgid "Pixel Type"
+msgstr "Tipo de Pixel"
 
 msgid "Pixel Values"
 msgstr "Valores de Pixel"
@@ -3551,8 +3566,12 @@ msgstr "Grabar"
 msgid "Save Annotations"
 msgstr "Grabar Anotaciones"
 
-msgid "Save Annotations burned into the movie or sequence"
-msgstr "Grabar anotatciones fijes en la película o secuencia."
+msgid ""
+"Save Annotations burned into the movie or sequence.  It also allows saving "
+"OpenEXRs from an 8-bit movie and changing OpenEXR's pixel type."
+msgstr ""
+"Grabar Anotaciones en una película o secuencia.  Tambien permite grabar "
+"OpenEXRs de una película de 8-bits y cambiar el tipo de pixel de OpenEXR."
 
 msgid "Save Annotations to PDF"
 msgstr "Grabar Anotaciones a PDF"
@@ -3639,6 +3658,9 @@ msgstr "Segunda línea de tiempo, película, secuencias de imágenes o carpeta."
 
 msgid "Secondary Display"
 msgstr "Display Secundario"
+
+msgid "Secondary on Top"
+msgstr "Flotar Vista Secundaria"
 
 msgid "Seconds"
 msgstr "Segundos"
@@ -4918,11 +4940,11 @@ msgstr "Sí"
 msgid "ZIP"
 msgstr "ZIP"
 
+msgid "ZIP Compression"
+msgstr "Compresión Zip"
+
 msgid "ZIPS"
 msgstr "ZIPS"
-
-msgid "Zip Compression"
-msgstr "Compresión Zip del Clip"
 
 msgid "Zoom Speed"
 msgstr "Velocidad de Zoom"
@@ -5052,6 +5074,9 @@ msgstr "x9"
 
 msgid "xyY CIE xyY"
 msgstr "xyY CIE xyY"
+
+#~ msgid "Save Annotations burned into the movie or sequence"
+#~ msgstr "Grabar anotatciones fijes en la película o secuencia."
 
 #~ msgid "Enable color transforms."
 #~ msgstr "Active transformaciones de color."

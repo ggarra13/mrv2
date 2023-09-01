@@ -4,6 +4,20 @@ v0.7.2
 - Fixed DWA compression on non English locales (with commas as decimal
   separators)
 - Allowed saving movies as EXR frames if Annotations is turned on.
+- Added dragging of clips from the Files Panel to the Playlist Panel, instead
+  of relying on the "Add" button of the Playlist Panel.
+- Fixed Media Information Depth display for floating point lumma and lumma with
+  alpha images.
+- Added pixel type saving to OpenEXR saving.  It can be Half or Float when
+  Annotations is on.
+- Added all libraries and their versions (when possible) to the About window.
+- Fixed tlRender's version macro.
+- Changed OpenEXR saving to use multipart api to allow future support to save
+  all layers of an exr.
+- Fixed edit viewport leaving room when show transitions was active but there
+  were no transitions in the timeline.
+- Added Timeline Preferences to show thumbnails, transitions and markers.
+- Fixed pixel aspect ratio of saved OpenEXR images when they were not 1.
 
 v0.7.1
 ------

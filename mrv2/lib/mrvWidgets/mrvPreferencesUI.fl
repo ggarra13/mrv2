@@ -78,7 +78,7 @@ class PreferencesUI {open
       callback {// reload original preferences
 mrv::Preferences prefs(v, ViewerUI::app->settingsObject() );
 uiMain->hide();} open
-      xywh {606 89 847 469} type Double resizable
+      xywh {609 87 847 469} type Double resizable
       code0 {main = m;} modal visible
     } {
       Fl_Group {} {open
@@ -89,8 +89,8 @@ uiMain->hide();} open
           xywh {283 26 564 380} box PLASTIC_UP_BOX labelcolor 32
         } {
           Fl_Group {} {
-            label {User Interface} open
-            xywh {288 49 554 349} box EMBOSSED_BOX align 5
+            label {User Interface}
+            xywh {288 49 554 349} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {
               label {Window Behavior} open
@@ -102,7 +102,7 @@ uiMain->hide();} open
                 class {mrv::CheckButton}
               }
               Fl_Check_Button uiPrefsSecondaryOnTop {
-                label {Secondary on Top} selected
+                label {Secondary on Top}
                 tooltip {When selected, mrv2's window will always show up on top of other windows on the desktop.} xywh {317 97 25 25} box UP_BOX down_box DOWN_BOX align 8
                 class {mrv::CheckButton}
               }
@@ -180,7 +180,7 @@ If you try to open several mrv2s with different images, all these images will be
             }
           }
           Fl_Group {} {
-            label {View Window} open
+            label {View Window}
             xywh {288 35 555 349} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {
@@ -360,7 +360,7 @@ If you try to open several mrv2s with different images, all these images will be
             }
           }
           Fl_Group {} {
-            label {Language and Colors} open
+            label {Language and Colors}
             xywh {288 35 555 349} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {
@@ -657,8 +657,8 @@ v->uiPrefsFPS->value( g );}
             }
           }
           Fl_Group {} {
-            label Timeline
-            xywh {305 34 530 362} box EMBOSSED_BOX align 5 hide
+            label Timeline open
+            xywh {305 34 530 362} box EMBOSSED_BOX align 5
           } {
             Fl_Choice uiPrefsTimelineDisplay {
               label Display
@@ -683,10 +683,42 @@ v->uiPrefsFPS->value( g );}
               tooltip {Thumbnails above timeline (does not work on Wayland)} xywh {403 163 63 20} down_box DOWN_BOX value 1
               class {mrv::CheckButton}
             }
-            Fl_Check_Button uiPrefsEditMode {
-              label {Start in Edit mode}
-              xywh {403 200 63 20} down_box DOWN_BOX value 1
-              class {mrv::CheckButton}
+            Fl_Group {} {
+              label {Edit Viewport} open selected
+              xywh {328 219 480 152} box ROUNDED_BOX
+            } {
+              Fl_Choice uiPrefsEditThumbnails {
+                label Thumbnails
+                tooltip {How to display timeline by default.} xywh {565 280 216 26} box THIN_DOWN_BOX down_box BORDER_BOX
+                code0 {o->value(1);}
+              } {
+                MenuItem {} {
+                  label None
+                  xywh {25 25 100 20}
+                }
+                MenuItem {} {
+                  label Small
+                  xywh {25 25 100 20}
+                }
+                MenuItem {} {
+                  label Medium
+                  xywh {25 25 100 20}
+                }
+                MenuItem {} {
+                  label Large
+                  xywh {35 35 100 20}
+                }
+              }
+              Fl_Check_Button uiPrefsShowTransitions {
+                label {Show Transitions}
+                xywh {565 319 21 20} down_box DOWN_BOX value 1 align 4
+                class {mrv::CheckButton}
+              }
+              Fl_Check_Button uiPrefsEditMode {
+                label {Start in Edit mode}
+                xywh {565 240 63 24} down_box DOWN_BOX value 1 align 4
+                class {mrv::CheckButton}
+              }
             }
           }
           Fl_Group {} {
