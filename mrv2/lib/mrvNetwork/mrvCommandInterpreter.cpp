@@ -577,8 +577,42 @@ namespace mrv
 
             // Create annotation menus if not there already
             ui->uiMain->fill_menu(ui->uiMenuBar);
-            ui->uiUndoDraw->activate();
-            ui->uiRedoDraw->deactivate();
+            view->updateUndoRedoButtons();
+            view->redrawWindows();
+        }
+        else if (c == "Laser Fade")
+        {
+            bool receive = prefs->ReceiveAnnotations->value();
+            if (!receive || !player)
+            {
+                tcp->unlock();
+                return;
+            }
+            auto annotation = player->getAnnotation();
+            if (!annotation)
+            {
+                tcp->unlock();
+                return;
+            }
+            auto shape = annotation->lastShape();
+            if (!shape)
+            {
+                tcp->unlock();
+                return;
+            }
+
+            // Start laser fading
+            LaserFadeData* laserData = new LaserFadeData;
+            laserData->view = view;
+            laserData->annotation = annotation;
+            laserData->shape = shape;
+
+            Fl::add_timeout(
+                0.0, (Fl_Timeout_Handler)TimelineViewport::laserFade_cb,
+                laserData);
+
+            // Create annotation menus if not there already
+            ui->uiMain->fill_menu(ui->uiMenuBar);
             view->redrawWindows();
         }
         else if (c == "Add Shape Point")
@@ -628,7 +662,7 @@ namespace mrv
             auto shape = messageToShape(message["value"]);
             annotation->shapes.pop_back();
             annotation->shapes.push_back(shape);
-            ui->uiUndoDraw->activate();
+            view->updateUndoRedoButtons();
             view->redrawWindows();
         }
         else if (c == "End Shape")
@@ -649,7 +683,7 @@ namespace mrv
             annotation->shapes.push_back(shape);
             // Create annotation menus if not there already
             ui->uiMain->fill_menu(ui->uiMenuBar);
-            ui->uiUndoDraw->activate();
+            view->updateUndoRedoButtons();
             view->redrawWindows();
         }
         else if (c == "Create Annotation")

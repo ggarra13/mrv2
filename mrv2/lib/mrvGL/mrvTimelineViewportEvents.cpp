@@ -52,7 +52,7 @@ namespace
 namespace mrv
 {
 
-    static void laserFade_cb(LaserFadeData* data)
+    void TimelineViewport::laserFade_cb(LaserFadeData* data)
     {
         TimelineViewport* view = data->view;
         view->laserFade(data);
@@ -982,6 +982,8 @@ namespace mrv
 
                 if (!s->laser)
                     return 0;
+
+                tcp->pushMessage("Laser Fade", 0);
 
                 LaserFadeData* laserData = new LaserFadeData;
                 laserData->view = this;

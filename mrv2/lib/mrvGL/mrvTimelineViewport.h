@@ -349,6 +349,9 @@ namespace mrv
         //! Laser fading annotation
         void laserFade(LaserFadeData*);
 
+        //! Main FLTK callback for laser shapes.
+        static void laserFade_cb(LaserFadeData*);
+
         //! Update the undo/redo buttons to be active or not.
         void updateUndoRedoButtons() const noexcept;
 
