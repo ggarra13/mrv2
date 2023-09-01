@@ -13,11 +13,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>@SHORTVERSION@</string>
+	<string>@mrv2_VERSION@</string>
 	<key>CFBundleVersion</key>
-	<string>@VERSION@</string>
+	<string>@mrv2_VERSION@</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright (c) 2022-2023 Film Aura, LLC.</string>
+	<string>Copyright (c) 2022-Present Film Aura, LLC.</string>
 	<key>NSHighResolutionCapable</key>
 	<true/>
     <key>CFBundleDocumentTypes</key>
@@ -129,8 +129,7 @@
 	  <string>Editor</string>
 	    <key>CFBundleTypeExtensions</key>
 	    <array>
-		<string>reel</string>
-		<string>session</string>
+		<string>mrv2s</string>
 	    </array>
 	</dict>
 	<dict>
