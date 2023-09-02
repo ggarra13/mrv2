@@ -207,8 +207,8 @@ namespace mrv
     extern Hotkey kPenSizeMore;
     extern Hotkey kPenSizeLess;
 
-    extern Hotkey kUndo;
-    extern Hotkey kRedo;
+    extern Hotkey kUndoDraw;
+    extern Hotkey kRedoDraw;
 
     extern Hotkey kResetChanges;
     extern Hotkey kExposureMore;
@@ -272,6 +272,9 @@ namespace mrv
     extern Hotkey kEditSliceClip;
     extern Hotkey kEditRemoveClip;
     extern Hotkey kEditRemoveClipWithGap;
+
+    extern Hotkey kEditUndo;
+    extern Hotkey kEditRedo;
 
     // @todo:
     extern Hotkey kRotatePlus90;

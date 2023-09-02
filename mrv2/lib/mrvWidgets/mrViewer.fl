@@ -799,8 +799,8 @@ uiSecondary = nullptr;} {}
       label mrv2
       user_data this user_data_type {ViewerUI*}
       callback {exit_cb( o, v );} open
-      xywh {998 185 690 602} type Double align 80 resizable
-      class {mrv::MainWindow} size_range {690 602 0 0} visible
+      xywh {998 185 690 602} type Double align 80 hide resizable
+      class {mrv::MainWindow} size_range {690 602 0 0}
     } {
       Fl_Pack uiRegion {open
         xywh {0 0 690 602} box FLAT_BOX resizable
@@ -1092,14 +1092,14 @@ settingsObject->setValue( mrv::kPenColorA, a);}
               } {
                 Fl_Button uiUndoDraw {
                   user_data this user_data_type {ViewerUI*}
-                  callback {uiView->undo();} selected
-                  tooltip {Undo Last Shape Drawn or Edit Done.} image {../../icons/Undo.svg} compress_image 0 xywh {0 396 40 35} deactivate
+                  callback {uiView->undo();}
+                  tooltip {Undo Last Shape Drawn in Current Frame.} image {../../icons/Undo.svg} compress_image 0 xywh {0 396 40 35} deactivate
                   class {mrv::Button}
                 }
                 Fl_Button uiRedoDraw {
                   user_data this user_data_type {ViewerUI*}
-                  callback {uiView->redo();}
-                  tooltip {Redo Previous Shape Drawn or Edit Done.} image {../../icons/Redo.svg} compress_image 0 xywh {0 431 40 36} deactivate
+                  callback {uiView->redo();} selected
+                  tooltip {Redo Previous Shape Drawn in Current Frame.} image {../../icons/Redo.svg} compress_image 0 xywh {0 431 40 36} deactivate
                   class {mrv::Button}
                 }
               }

@@ -1258,12 +1258,12 @@ namespace mrv
                 endFrame();
                 return 1;
             }
-            else if (kRedo.match(rawkey))
+            else if (kRedoDraw.match(rawkey))
             {
                 redo();
                 return 1;
             }
-            else if (kUndo.match(rawkey))
+            else if (kUndoDraw.match(rawkey))
             {
                 undo();
                 return 1;

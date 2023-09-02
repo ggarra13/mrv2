@@ -64,9 +64,6 @@ namespace mrv
     bool TimelineViewport::Private::hudActive = true;
     HudDisplay TimelineViewport::Private::hud = HudDisplay::kNone;
 
-    std::vector< UndoElement > TimelineViewport::Private::undoElements;
-    std::vector< UndoElement > TimelineViewport::Private::redoElements;
-
     static void drawTimeoutText_cb(TimelineViewport* view)
     {
         view->clearHelpText();
@@ -144,32 +141,9 @@ namespace mrv
         if (!player)
             return;
 
-        UndoElement undoElement;
-        if (!p.undoElements.empty())
-        {
-            undoElement = p.undoElements.back();
-            p.undoElements.pop_back();
-            p.redoElements.push_back(undoElement);
-        }
-
-        switch (undoElement.type)
-        {
-        default:
-        case UndoType::Draw:
-        {
-            player->seek(undoElement.time);
-            player->undoAnnotation();
-            tcp->pushMessage("undo", 0);
-            redrawWindows();
-            break;
-        }
-        case UndoType::Edit:
-        {
-            edit_undo(p.ui);
-            tcp->pushMessage("undo", 0);
-            break;
-        }
-        }
+        player->undoAnnotation();
+        tcp->pushMessage("undo", 0);
+        redrawWindows();
 
         updateUndoRedoButtons();
     }
@@ -182,57 +156,10 @@ namespace mrv
         if (!player)
             return;
 
-        UndoElement redoElement;
-        if (!p.redoElements.empty())
-        {
-            redoElement = p.redoElements.back();
-            p.redoElements.pop_back();
-            p.undoElements.push_back(redoElement);
-        }
+        player->redoAnnotation();
+        tcp->pushMessage("redo", 0);
+        redrawWindows();
 
-        switch (redoElement.type)
-        {
-        default:
-        case UndoType::Draw:
-        {
-            player->seek(redoElement.time);
-            player->redoAnnotation();
-            tcp->pushMessage("redo", 0);
-            redrawWindows();
-            break;
-        }
-        case UndoType::Edit:
-        {
-            edit_redo(p.ui);
-            tcp->pushMessage("redo", 0);
-            break;
-        }
-        }
-
-        updateUndoRedoButtons();
-    }
-
-    void TimelineViewport::storeNewUndo(const UndoType value) noexcept
-    {
-        TLRENDER_P();
-        UndoElement element;
-        element.type = value;
-        p.undoElements.push_back(element);
-        updateUndoRedoButtons();
-    }
-
-    void TimelineViewport::storeNewRedo(const UndoType value) noexcept
-    {
-        TLRENDER_P();
-        UndoElement element;
-        element.type = value;
-        p.redoElements.push_back(element);
-        updateUndoRedoButtons();
-    }
-
-    void TimelineViewport::clearRedo() noexcept
-    {
-        _p->redoElements.clear();
         updateUndoRedoButtons();
     }
 
@@ -2546,21 +2473,11 @@ namespace mrv
         _pushAnnotationShape("Update Shape");
     }
 
+    // This routine is used for text shapes only.
     void TimelineViewport::_endAnnotationShape() const
     {
         TLRENDER_P();
-        auto player = getTimelinePlayer();
-        if (!player)
-            return;
-
-        UndoElement undoElement;
-        undoElement.type = UndoType::Draw;
-        undoElement.time = player->currentTime();
-        p.undoElements.push_back(undoElement);
-        p.redoElements.clear();
-        edit_clear_redo(p.ui);
         updateUndoRedoButtons();
-        // This is used for text shapes only.
         _pushAnnotationShape("End Shape");
     }
 
@@ -2568,19 +2485,7 @@ namespace mrv
     {
         TLRENDER_P();
         if (!laser)
-        {
-            auto player = getTimelinePlayer();
-            if (!player)
-                return;
-
-            UndoElement undoElement;
-            undoElement.type = UndoType::Draw;
-            undoElement.time = player->currentTime();
-            p.undoElements.push_back(undoElement);
-            edit_clear_redo(p.ui);
-            p.redoElements.clear();
             updateUndoRedoButtons();
-        }
         _pushAnnotationShape("Create Shape");
     }
 
@@ -2642,9 +2547,6 @@ namespace mrv
             hasUndo |= player->hasUndo();
             hasRedo |= player->hasRedo();
         }
-
-        hasUndo |= edit_has_undo();
-        hasRedo |= edit_has_redo();
 
         if (hasUndo)
             p.ui->uiUndoDraw->activate();

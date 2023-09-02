@@ -131,10 +131,6 @@ namespace mrv
 
         //! Default missing frame type.  Should be static.
         MissingFrameType missingFrameType = kBlackFrame;
-
-        //! List of undo types.
-        static std::vector< UndoElement > undoElements;
-        static std::vector< UndoElement > redoElements;
     };
 
 } // namespace mrv
