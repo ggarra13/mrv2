@@ -979,7 +979,7 @@ namespace mrv
         maxH -= dH;
         posX += dW / 2;
 #ifdef _WIN32
-        posY += dH - dW / 2;
+        miny += dH - dW / 2;
 #else
         posY += dH;
 #endif

@@ -40,6 +40,7 @@ v0.7.2
 - Laser annotations now work properly on Network connections.
 - Fixed Recent Files with entries with backslashes (ie. '\').
 - Added new controls to Playlist panel.  Added a new Save icon.
+- Fixed an annoying repositioning of window when loading new clips.
 
 
 v0.7.1
