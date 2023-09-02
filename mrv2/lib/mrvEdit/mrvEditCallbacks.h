@@ -1,6 +1,10 @@
 
 #pragma once
 
+#include <string>
+
+#include <tlTimeline/Util.h>
+
 #include "mrvEdit/mrvEditMode.h"
 
 class Fl_Menu_;
@@ -8,7 +12,10 @@ class ViewerUI;
 
 namespace mrv
 {
+    using namespace tl;
+
     class TimelinePlayer;
+    using otio::Timeline;
 
     //@{
     //! Store timeline in undo queue.
@@ -74,6 +81,12 @@ namespace mrv
 
     //! Save current OTIO timeline (EDL) to a permanent place on disk.
     void save_timeline_to_disk_cb(Fl_Menu_* m, ViewerUI* ui);
+
+    //! Verify current OTIO timeline (EDL).
+
+    //! Save current OTIO timeline (EDL) to a filename.  Timeline and EDL
+    //! must be verified first.
+    void save_timeline_to_disk(otio::Timeline*, const std::string& fileName);
 
     //
     // Set the edit mode height.

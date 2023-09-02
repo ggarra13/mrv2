@@ -174,15 +174,6 @@ namespace mrv
     void next_image_version_cb(Fl_Menu_*, ViewerUI* ui);
     void last_image_version_cb(Fl_Menu_*, ViewerUI* ui);
 
-    //! .otio EDL creation from loaded files
-    void create_playlist(
-        ViewerUI* ui, const std::shared_ptr<Playlist>& playlist,
-        const bool temp = true);
-
-    void create_playlist(
-        ViewerUI* ui, const std::shared_ptr<Playlist>& playlist,
-        const std::string& fileName, const bool relative);
-
     //! Call the browser with documentation.
     void help_documentation_cb(Fl_Menu_*, ViewerUI* ui);
 

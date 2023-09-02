@@ -24,7 +24,6 @@ namespace fs = std::filesystem;
 #include "mrvFl/mrvSaveOptions.h"
 #include "mrvFl/mrvVersioning.h"
 #include "mrvFl/mrvFileRequester.h"
-#include "mrvFl/mrvTimelineCreate.h"
 #include "mrvFl/mrvSaving.h"
 #include "mrvFl/mrvSession.h"
 #include "mrvFl/mrvStereo3DAux.h"
@@ -1377,66 +1376,6 @@ namespace mrv
         image_version_cb(ui, 1, true);
     }
 
-    void create_playlist(
-        ViewerUI* ui, const std::shared_ptr<Playlist>& playlist,
-        const std::string& otioFileName, const bool relative)
-    {
-        try
-        {
-
-            std::string file = otioFileName;
-            if (file.substr(file.size() - 5, file.size()) != ".otio")
-                file += ".otio";
-
-            const auto& timeline = timeline::create(
-                playlist->clips, ui->app->getContext(), relative, file);
-            otio::ErrorStatus errorStatus;
-            bool ok = timeline->to_json_file(file, &errorStatus);
-            if (!ok || otio::is_error(errorStatus))
-            {
-                std::string error =
-                    string::Format(_("Could not save .otio file: {0}"))
-                        .arg(errorStatus.full_description);
-                throw std::runtime_error(error);
-            }
-
-            ui->app->open(file);
-        }
-        catch (const std::exception& e)
-        {
-            LOG_ERROR(e.what());
-        }
-    }
-
-    void create_playlist(
-        ViewerUI* ui, const std::shared_ptr<Playlist>& playlist,
-        const bool temp)
-    {
-        static unsigned playlist_number = 1;
-
-        std::string otioFileName;
-
-        if (temp)
-        {
-            std::string tempDir = tmppath() + "/";
-            char buf[256];
-            snprintf(
-                buf, 256, "%s.%d.otio", playlist->name.c_str(),
-                playlist_number++);
-            otioFileName = tempDir + buf;
-        }
-        else
-        {
-            otioFileName = save_otio("", ui);
-            if (otioFileName.empty())
-                return;
-        }
-        bool relative = !temp;
-
-        create_playlist(ui, playlist, otioFileName, relative);
-    }
-
-    //! Callback function to open the python API docs
     void help_documentation_cb(Fl_Menu_*, ViewerUI* ui)
     {
         const char* language = getenv("LANGUAGE");

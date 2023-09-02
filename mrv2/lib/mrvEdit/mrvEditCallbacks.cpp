@@ -1047,7 +1047,25 @@ namespace mrv
         tcp->unlock();
     }
 
-    //! Save current OTIO timeline (EDL) to a permanent place on disk.
+    void
+    save_timeline_to_disk(otio::Timeline* timeline, const std::string& otioFile)
+    {
+        const std::string s = timeline->to_json_string();
+        otio::SerializableObject::Retainer<otio::Timeline> out(
+            dynamic_cast<otio::Timeline*>(otio::Timeline::from_json_string(s)));
+        auto stack = out->tracks();
+        makePathsRelative(stack, otioFile);
+        otio::ErrorStatus errorStatus;
+        out->to_json_file(otioFile, &errorStatus);
+        if (otio::is_error(errorStatus))
+        {
+            std::string err = string::Format(_("Error saving {0}. {1}"))
+                                  .arg(otioFile)
+                                  .arg(errorStatus.full_description);
+            LOG_ERROR(err);
+        }
+    }
+
     void save_timeline_to_disk_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         auto player = ui->uiView->getTimelinePlayer();
@@ -1068,20 +1086,7 @@ namespace mrv
         if (otioFile.empty())
             return;
 
-        const std::string s = timeline->to_json_string();
-        otio::SerializableObject::Retainer<otio::Timeline> out(
-            dynamic_cast<otio::Timeline*>(otio::Timeline::from_json_string(s)));
-        auto stack = out->tracks();
-        makePathsRelative(stack, otioFile);
-        otio::ErrorStatus errorStatus;
-        out->to_json_file(otioFile, &errorStatus);
-        if (otio::is_error(errorStatus))
-        {
-            std::string err = string::Format(_("Error saving {0}. {1}"))
-                                  .arg(otioFile),
-                        arg(errorStatus.full_description);
-            LOG_ERROR(err);
-        }
+        save_timeline_to_disk(timeline, otioFile);
     }
 
     void add_clip_to_timeline(

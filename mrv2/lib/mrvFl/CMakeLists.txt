@@ -38,7 +38,6 @@ set(SOURCES
     mrvSaving.cpp
     mrvSession.cpp
     mrvStereo3DAux.cpp
-    mrvTimelineCreate.cpp
     mrvTimelinePlayer.cpp
     mrvTimeObject.cpp
     mrvVersioning.cpp
