@@ -289,9 +289,7 @@ namespace mrv
         }
         catch (const std::exception& e)
         {
-            // LOG_ERROR(e.what());  // @bug: sometimes texture creation would
-            //        fail as there would not be an
-            //        OpenGL context in place.
+            LOG_ERROR(e.what());
             gl.buffer.reset();
             gl.stereoBuffer.reset();
         }
