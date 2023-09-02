@@ -1136,8 +1136,17 @@ namespace mrv
                     item->inOutRange = mrvTimelinePlayer->inOutRange();
                     item->videoLayer = mrvTimelinePlayer->videoLayer();
                     item->audioOffset = mrvTimelinePlayer->audioOffset();
-                    const std::string& file = item->path.get();
-                    p.settingsObject->addRecentFile(file);
+
+                    const std::string tmpdir = tmppath() + "/";
+                    const std::string directory = item->path.getDirectory();
+                    const std::string baseName = item->path.getBaseName();
+                    const std::string extension = item->path.getExtension();
+                    if (directory != tmpdir || baseName != "EDL." ||
+                        extension != ".otio")
+                    {
+                        const std::string& file = item->path.get();
+                        p.settingsObject->addRecentFile(file);
+                    }
                 }
                 else if (0 == i)
                 {

@@ -183,36 +183,6 @@ namespace mrv
 
         int Y = g->y() + 22;
 
-        Fl_Group* bg = new Fl_Group(g->x(), Y, g->w(), 30);
-        bg->begin();
-
-        Button* b;
-        auto bW = new Widget< Button >(g->x() + 10, Y, 30, 30);
-        b = bW;
-        Fl_Image* svg = load_svg("Tracks.svg");
-        b->image(svg);
-        b->tooltip(_("Create an empty timeline with a video and audio track."));
-        bW->callback([=](auto w) { create_empty_timeline_cb(nullptr, p.ui); });
-
-        bW = new Widget< Button >(g->x() + 40, Y, 30, 30);
-        b = bW;
-        svg = load_svg("TracksFromA.svg");
-        b->image(svg);
-        b->tooltip(_("Create a timeline from the selected clip."));
-        bW->callback([=](auto w) { create_new_timeline_cb(nullptr, p.ui); });
-
-        bW = new Widget< Button >(g->x() + 70, Y, 30, 30);
-        b = bW;
-        svg = load_svg("Save.svg");
-        b->image(svg);
-        b->tooltip(_("Save current EDL to a permanent location, making paths "
-                     "relative if possible."));
-        bW->callback([=](auto w) { save_timeline_to_disk_cb(nullptr, p.ui); });
-
-        bg->end();
-
-        Y += 30;
-
         const auto& model = p.ui->app->filesModel();
         const auto& files = model->observeFiles().get()->get();
         const auto& aIndex = model->observeAIndex()->get();
@@ -292,9 +262,59 @@ namespace mrv
             Fl_Group* bg = new Fl_Group(g->x(), Y, g->w(), 68);
             Fl_Box* box = new Fl_Box(g->x(), Y, g->w() - 5, 68);
             box->box(FL_ENGRAVED_BOX);
+            box->copy_label(_("Drop a clip here to create a playlist."));
+            box->labelsize(12);
+            box->align(FL_ALIGN_INSIDE | FL_ALIGN_CENTER | FL_ALIGN_WRAP);
             bg->end();
+
+            Y += 70;
         }
 
+        Fl_Group* bg = new Fl_Group(g->x(), Y, g->w(), 30);
+        bg->begin();
+
+        Button* b;
+        auto bW = new Widget< Button >(g->x() + 10, Y, 30, 30);
+        b = bW;
+        Fl_Image* svg = load_svg("Tracks.svg");
+        b->image(svg);
+        b->tooltip(_("Create an empty timeline with a video and audio track."));
+        bW->callback([=](auto w) { create_empty_timeline_cb(nullptr, p.ui); });
+
+        bW = new Widget< Button >(g->x() + 40, Y, 30, 30);
+        b = bW;
+        svg = load_svg("TracksFromA.svg");
+        b->image(svg);
+        b->tooltip(_("Create a timeline from the selected clip."));
+        bW->callback([=](auto w) { create_new_timeline_cb(nullptr, p.ui); });
+
+        bW = new Widget< Button >(g->x() + 70, Y, 30, 30);
+        b = bW;
+        svg = load_svg("Save.svg");
+        b->image(svg);
+        b->tooltip(_("Save current EDL to a permanent location, making paths "
+                     "relative if possible."));
+        bW->callback([=](auto w) { save_timeline_to_disk_cb(nullptr, p.ui); });
+
+        bW = new Widget< Button >(g->x() + 100, Y, 30, 30);
+        b = bW;
+        svg = load_svg("FileClose.svg");
+        b->image(svg);
+        b->tooltip(_("Close current EDL."));
+        bW->callback(
+            [=](auto w)
+            {
+                const auto& model = p.ui->app->filesModel();
+                const auto& Aitem = model->observeA()->get();
+                std::string extension = Aitem->path.getExtension();
+                if (extension != ".otio")
+                    return;
+                close_current_cb(w, p.ui);
+            });
+
+        bg->end();
+
+        Y += 30;
         // Y += 30 + numFiles * 64;
     }
 

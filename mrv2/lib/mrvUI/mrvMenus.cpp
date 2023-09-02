@@ -113,6 +113,13 @@ namespace mrv
         for (auto file : recentFiles)
         {
             size_t pos = 0;
+            while ((pos = file.find('\\', pos)) != std::string::npos)
+            {
+                file =
+                    file.substr(0, pos) + "\\" + file.substr(pos, file.size());
+                pos += 2;
+            }
+            pos = 0;
             while ((pos = file.find('/', pos)) != std::string::npos)
             {
                 file =

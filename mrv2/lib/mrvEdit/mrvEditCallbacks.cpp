@@ -1072,11 +1072,17 @@ namespace mrv
         auto Aitem = model->observeA()->get();
         file::Path path = Aitem->path;
         if (path.getBaseName() != "EDL." || path.getExtension() != ".otio")
-            throw std::runtime_error(_("Not an EDL file to save."));
+        {
+            LOG_ERROR(_("Not an EDL file to save."));
+            return;
+        }
 
         auto timeline = player->getTimeline();
         if (timeline->duration().value() <= 0.0)
-            throw std::runtime_error(_("Empty EDL file.  Not saving."));
+        {
+            LOG_ERROR(_("Empty EDL file.  Not saving."));
+            return;
+        }
 
         auto otioFile = save_otio(nullptr, ui);
         if (otioFile.empty())
@@ -1104,8 +1110,10 @@ namespace mrv
                 _("Invalid index for add clip to timeline."));
         auto sourceItem = sourceItems[index];
         if (sourceItem->path.getExtension() == ".otio")
-            throw std::runtime_error(
-                _("Cannot add an otio file to another timeline."));
+        {
+            LOG_ERROR(_("Cannot add an otio file to another timeline."));
+            return;
+        }
 
         auto timelineDuration = timeline->duration();
         auto annotations = addAnnotations(
