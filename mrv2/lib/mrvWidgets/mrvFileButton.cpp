@@ -36,6 +36,7 @@ namespace mrv
     {
         size_t index = 0;
         FileDragger* drag = nullptr;
+        math::Vector2i push;
     };
 
     FileButton::FileButton(int X, int Y, int W, int H, const char* L) :
@@ -70,6 +71,13 @@ namespace mrv
             return 1;
         case FL_LEAVE:
             Fl::focus(App::ui->uiView);
+            // If user pressed button3 while dragging, the window would freeze.
+            // This should avoid that.
+            if (Fl::event_button3())
+            {
+                delete p.drag;
+                p.drag = nullptr;
+            }
             return 1;
         case FL_KEYDOWN:
         case FL_KEYUP:
@@ -164,12 +172,17 @@ namespace mrv
                     auto window = p.drag->window();
                     window->always_on_top(true);
                 }
-                int X = Fl::event_x_root();
-                int Y = Fl::event_y_root();
-                auto window = p.drag->window();
-                window->position(X, Y);
+
                 if (p.drag)
+                {
+                    value(0);
+                    redraw();
+                    int X = Fl::event_x_root();
+                    int Y = Fl::event_y_root();
+                    auto window = p.drag->window();
+                    window->position(X, Y);
                     return 1;
+                }
             }
             break;
         }

@@ -8,7 +8,7 @@
    version="1.1"
    id="svg8"
    inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
-   sodipodi:docname="Tracks.svg"
+   sodipodi:docname="TracksFromA.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -26,8 +26,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="36"
-     inkscape:cx="9.4861111"
-     inkscape:cy="9.8472222"
+     inkscape:cx="9.5694444"
+     inkscape:cy="9.5416667"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -61,39 +61,27 @@
      id="layer1"
      transform="translate(0,-291.70831)">
     <rect
-       style="fill:#f3f3f3;fill-opacity:1;stroke:#ffffff;stroke-width:0.223614;stroke-opacity:1;-inkscape-stroke:none;stop-color:#000000"
-       id="rect1320"
-       width="0.52916664"
-       height="2.645839"
-       x="1.0583491"
-       y="293.03122" />
-    <rect
-       style="fill:#f3f3f3;fill-opacity:1;stroke:#ffffff;stroke-width:0.223613;stroke-opacity:1;-inkscape-stroke:none;stop-color:#000000"
-       id="rect1320-35"
-       width="0.52916664"
-       height="2.6458383"
-       x="2.1166666"
-       y="293.03122" />
-    <rect
-       style="fill:#f3f3f3;fill-opacity:1;stroke:#ffffff;stroke-width:0.223613;stroke-opacity:1;-inkscape-stroke:none;stop-color:#000000"
-       id="rect1320-6"
-       width="0.52916664"
-       height="2.6458323"
-       x="3.4395833"
-       y="293.03122" />
-    <rect
-       style="fill:#f3f3f3;fill-opacity:1;stroke:#ffffff;stroke-width:0.264583;stroke-opacity:1;-inkscape-stroke:none;stop-color:#000000"
+       style="fill:#f2f2f2;fill-opacity:1;stroke:#ffffff;stroke-width:0.264583;stroke-opacity:1;-inkscape-stroke:none;stop-color:#000000"
        id="rect2131"
        width="3.96875"
        height="0.52916664"
        x="0.52916664"
        y="292.23746" />
     <rect
-       style="fill:#f3f3f3;fill-opacity:1;stroke:#ffffff;stroke-width:0.264583;stroke-opacity:1;-inkscape-stroke:none;stop-color:#000000"
+       style="fill:#f2f2f2;fill-opacity:1;stroke:#ffffff;stroke-width:0.264583;stroke-opacity:1;-inkscape-stroke:none;stop-color:#000000"
        id="rect2133"
        width="3.96875"
        height="0.52916664"
        x="0.52916664"
        y="295.94165" />
+    <g
+       aria-label="A"
+       transform="scale(0.97746102,1.0230587)"
+       id="text1328"
+       style="font-size:3.51415px;line-height:1.25;fill:#f2f2f2;stroke-width:0.0878417">
+      <path
+         d="m 2.6277719,286.78717 -0.4701548,1.27491 h 0.9420255 z m -0.1956118,-0.34146 h 0.3929396 l 0.9763434,2.56183 H 3.4411054 L 3.2077439,288.35035 H 2.0529476 l -0.2333615,0.65719 H 1.4541008 Z"
+         id="path5529" />
+    </g>
   </g>
 </svg>

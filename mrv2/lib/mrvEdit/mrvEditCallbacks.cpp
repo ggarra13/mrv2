@@ -1,5 +1,8 @@
 
 #include <fstream>
+#include <filesystem>
+
+namespace fs = std::filesystem;
 
 #include <opentimelineio/clip.h>
 #include <opentimelineio/editAlgorithm.h>
@@ -129,6 +132,16 @@ namespace mrv
         {
             auto parent = composable->parent();
             return parent->index_of_child(composable);
+        }
+
+        file::Path
+        getRelativePath(const file::Path& path, fs::path otioFilename)
+        {
+            fs::path filePath = path.get();
+            otioFilename = otioFilename.parent_path(); // Remove .otio file.
+            fs::path relative = fs::relative(filePath, otioFilename);
+            std::string file = relative.generic_string();
+            return file::Path(file);
         }
 
         void setEndTime(
@@ -320,6 +333,41 @@ namespace mrv
             }
             savedPath = path;
             savedAudioPath = audioPath;
+        }
+
+        void makePathsRelative(otio::Stack* stack, const std::string& otioFile)
+        {
+            auto tracks = stack->children();
+            fs::path otioFilePath(otioFile);
+            file::PathOptions options;
+            for (int i = 0; i < tracks.size(); ++i)
+            {
+                auto track = otio::dynamic_retainer_cast<Track>(tracks[i]);
+                if (!track)
+                    continue;
+                for (auto child : track->children())
+                {
+                    auto clip = otio::dynamic_retainer_cast<Clip>(child);
+                    if (!clip)
+                        continue;
+                    auto media = clip->media_reference();
+                    if (auto ref =
+                            dynamic_cast<otio::ExternalReference*>(media))
+                    {
+                        file::Path urlPath(ref->target_url());
+                        urlPath = getRelativePath(urlPath, otioFilePath);
+                        ref->set_target_url(urlPath.get());
+                    }
+                    else if (
+                        auto ref =
+                            dynamic_cast<otio::ImageSequenceReference*>(media))
+                    {
+                        file::Path urlPath(ref->target_url_base());
+                        urlPath = getRelativePath(urlPath, otioFilePath);
+                        ref->set_target_url_base(urlPath.getDirectory());
+                    }
+                }
+            }
         }
 
         std::string otioFilename()
@@ -997,6 +1045,43 @@ namespace mrv
         ui->app->open(file);
         add_clip_to_timeline(Afile, Aindex, ui);
         tcp->unlock();
+    }
+
+    //! Save current OTIO timeline (EDL) to a permanent place on disk.
+    void save_timeline_to_disk_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
+            return;
+
+        auto model = ui->app->filesModel();
+        auto Aitem = model->observeA()->get();
+        file::Path path = Aitem->path;
+        if (path.getBaseName() != "EDL." || path.getExtension() != ".otio")
+            throw std::runtime_error(_("Not an EDL file to save."));
+
+        auto timeline = player->getTimeline();
+        if (timeline->duration().value() <= 0.0)
+            throw std::runtime_error(_("Empty EDL file.  Not saving."));
+
+        auto otioFile = save_otio(nullptr, ui);
+        if (otioFile.empty())
+            return;
+
+        const std::string s = timeline->to_json_string();
+        otio::SerializableObject::Retainer<otio::Timeline> out(
+            dynamic_cast<otio::Timeline*>(otio::Timeline::from_json_string(s)));
+        auto stack = out->tracks();
+        makePathsRelative(stack, otioFile);
+        otio::ErrorStatus errorStatus;
+        out->to_json_file(otioFile, &errorStatus);
+        if (otio::is_error(errorStatus))
+        {
+            std::string err = string::Format(_("Error saving {0}. {1}"))
+                                  .arg(otioFile),
+                        arg(errorStatus.full_description);
+            LOG_ERROR(err);
+        }
     }
 
     void add_clip_to_timeline(

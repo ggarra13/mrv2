@@ -183,8 +183,10 @@ namespace mrv
         ViewerUI* ui, const std::shared_ptr<Playlist>& playlist,
         const std::string& fileName, const bool relative);
 
+    //! Call the browser with documentation.
     void help_documentation_cb(Fl_Menu_*, ViewerUI* ui);
 
+    //! Make background black or default gray.
     void toggle_black_background_cb(Fl_Menu_* m, ViewerUI* ui);
 
     // Netowrk toggles

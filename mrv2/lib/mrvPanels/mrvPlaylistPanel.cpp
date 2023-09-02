@@ -201,6 +201,14 @@ namespace mrv
         b->tooltip(_("Create a timeline from the selected clip."));
         bW->callback([=](auto w) { create_new_timeline_cb(nullptr, p.ui); });
 
+        bW = new Widget< Button >(g->x() + 70, Y, 30, 30);
+        b = bW;
+        svg = load_svg("Save.svg");
+        b->image(svg);
+        b->tooltip(_("Save current EDL to a permanent location, making paths "
+                     "relative if possible."));
+        bW->callback([=](auto w) { save_timeline_to_disk_cb(nullptr, p.ui); });
+
         bg->end();
 
         Y += 30;

@@ -72,6 +72,9 @@ namespace mrv
     //! Create new timeline from selected clip.
     void create_new_timeline_cb(Fl_Menu_* m, ViewerUI* ui);
 
+    //! Save current OTIO timeline (EDL) to a permanent place on disk.
+    void save_timeline_to_disk_cb(Fl_Menu_* m, ViewerUI* ui);
+
     //
     // Set the edit mode height.
     //
