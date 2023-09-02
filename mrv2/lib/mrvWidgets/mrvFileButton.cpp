@@ -134,8 +134,6 @@ namespace mrv
                     delete p.drag;
                     p.drag = nullptr;
 
-                    LOG_ERROR("pos=" << pos << " box=" << box);
-
                     if (box.contains(pos))
                     {
                         const std::string text = label();
