@@ -441,7 +441,7 @@ namespace mrv
         }
         else if (_r->map.empty())
         {
-            math::Box2i box(g->x(), g->y() + 50, g->w(), 68);
+            math::Box2i box(g->x(), g->y(), g->w(), 68);
             if (box.contains(pos))
             {
                 validDrop = true;
