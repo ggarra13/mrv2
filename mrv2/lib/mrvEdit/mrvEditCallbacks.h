@@ -52,12 +52,6 @@ namespace mrv
     //! with gaps.
     void edit_remove_clip_with_gap_cb(Fl_Menu_* m, ViewerUI* ui);
 
-    //! Function to undo last edit.
-    void edit_undo(ViewerUI* ui);
-
-    //! Function to redo last edit.
-    void edit_redo(ViewerUI* ui);
-
     //! Menu function to undo an edit or annotation.
     void edit_undo_cb(Fl_Menu_* m, ViewerUI* ui);
 

@@ -875,7 +875,7 @@ namespace mrv
         toOtioFile(timeline, ui);
     }
 
-    void edit_undo(ViewerUI* ui)
+    void edit_undo_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
@@ -914,7 +914,7 @@ namespace mrv
         ui->uiTimeline->frameView();
     }
 
-    void edit_redo(ViewerUI* ui)
+    void edit_redo_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
@@ -960,16 +960,6 @@ namespace mrv
             refresh_file_cache_cb(nullptr, ui);
 
         ui->uiTimeline->frameView();
-    }
-
-    void edit_undo_cb(Fl_Menu_* m, ViewerUI* ui)
-    {
-        ui->uiView->undo();
-    }
-
-    void edit_redo_cb(Fl_Menu_* m, ViewerUI* ui)
-    {
-        ui->uiView->redo();
     }
 
     otio::SerializableObject::Retainer<otio::Timeline>
@@ -1100,8 +1090,6 @@ namespace mrv
 
         auto timeline = player->getTimeline();
 
-        edit_store_undo(player, ui);
-
         auto time = getTime(player);
         auto model = ui->app->filesModel();
         auto& sourceItems = model->observeFiles()->get();
@@ -1120,6 +1108,15 @@ namespace mrv
             timelineDuration, player->defaultSpeed(),
             player->getAllAnnotations(), sourceItem->annotations);
         auto destItem = model->observeA()->get();
+        if (destItem->path.getExtension() != ".otio")
+        {
+            LOG_ERROR(_(
+                "To avoid confusion, you can only add clips to an .otio EDL."));
+            return;
+        }
+
+        edit_store_undo(player, ui);
+
         auto Aindex = model->observeAIndex()->get();
         const file::Path path(file);
         auto stack = timeline->tracks();
