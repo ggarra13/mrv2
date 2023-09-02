@@ -38,6 +38,8 @@ v0.7.2
 - Added Edit mode to the network connection (it will load as timeline or full).
 - Laser annotations are no longer added to the draw undo/redo queue.
 - Laser annotations now work properly on Network connections.
+- Fixed Recent Files with entries with backslashes (ie. '\').
+- Added new controls to Playlist panel.  Added a new Save icon.
 
 
 v0.7.1
