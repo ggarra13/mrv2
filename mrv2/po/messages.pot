@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.2\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-08-18 09:25-0300\n"
+"POT-Creation-Date: 2023-09-02 07:48-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -694,12 +694,6 @@ msgstr ""
 msgid "Add a new remote mapping."
 msgstr ""
 
-msgid "Add a playlist."
-msgstr ""
-
-msgid "Add current file to Playlist"
-msgstr ""
-
 msgid "Add notes annotations to current clip at a certain frame."
 msgstr ""
 
@@ -785,6 +779,9 @@ msgid "Annotation Frame Step Backwards"
 msgstr ""
 
 msgid "Annotation Frame Step Forwards"
+msgstr ""
+
+msgid "Annotation already existed at this time"
 msgstr ""
 
 msgid "Annotations"
@@ -953,6 +950,21 @@ msgid ""
 "Cannnot parse enironment variable \"{0}\" as an integer value; using {1}."
 msgstr ""
 
+msgid "Cannot add an otio file to another timeline."
+msgstr ""
+
+msgid "Cannot append audio clip"
+msgstr ""
+
+msgid "Cannot append audio gap"
+msgstr ""
+
+msgid "Cannot append audio track."
+msgstr ""
+
+msgid "Cannot append video gap"
+msgstr ""
+
 msgid ""
 "Cannot create an annotation here for all frames.  A current frame annotation "
 "already exists."
@@ -1017,9 +1029,6 @@ msgstr ""
 msgid "Class used to hold a media item."
 msgstr ""
 
-msgid "Class used to hold a playlist"
-msgstr ""
-
 msgid "Clear the B indexes."
 msgstr ""
 
@@ -1060,9 +1069,6 @@ msgid "Close current filename"
 msgstr ""
 
 msgid "Close the current A file."
-msgstr ""
-
-msgid "Close the current playlist."
 msgstr ""
 
 msgid "Close the file item."
@@ -1197,6 +1203,9 @@ msgstr ""
 msgid "Convert to timecode (``HH:MM:SS;FRAME``)"
 msgstr ""
 
+msgid "Copy Frame"
+msgstr ""
+
 msgid "Copy/Color"
 msgstr ""
 
@@ -1206,6 +1215,9 @@ msgid ""
 msgstr ""
 
 msgid "Could not convert message to shape: "
+msgstr ""
+
+msgid "Could not find video clip."
 msgstr ""
 
 msgid "Could not match "
@@ -1223,13 +1235,10 @@ msgstr ""
 msgid "Create"
 msgstr ""
 
-msgid "Create .otio Playlist in temp directory with absolue paths."
+msgid "Create a timeline from the selected clip."
 msgstr ""
 
-msgid "Create a temporary .otio file with absolute paths."
-msgstr ""
-
-msgid "Create and save an .otio Playlist with relative paths."
+msgid "Create an empty timeline with a video and audio track."
 msgstr ""
 
 msgid "Creation Date"
@@ -1269,6 +1278,12 @@ msgid "Current time in timeline."
 msgstr ""
 
 msgid "Current tool being used."
+msgstr ""
+
+msgid "Currently you cannot concatenate two .otio files."
+msgstr ""
+
+msgid "Cut Frame"
 msgstr ""
 
 msgid "DIVX Movie"
@@ -1412,9 +1427,6 @@ msgstr ""
 msgid "ERROR: "
 msgstr ""
 
-msgid "ERROR: {0}"
-msgstr ""
-
 msgid "EXR Picture"
 msgstr ""
 
@@ -1422,6 +1434,15 @@ msgid "Early 35mm"
 msgstr ""
 
 msgid "Edit"
+msgstr ""
+
+msgid "Edit Redo"
+msgstr ""
+
+msgid "Edit Undo"
+msgstr ""
+
+msgid "Edit Viewport"
 msgstr ""
 
 msgid "Edit/&Copy"
@@ -1433,6 +1454,36 @@ msgstr ""
 msgid "Edit/Cu&t"
 msgstr ""
 
+msgid "Edit/Frame/Copy"
+msgstr ""
+
+msgid "Edit/Frame/Cut"
+msgstr ""
+
+msgid "Edit/Frame/Insert"
+msgstr ""
+
+msgid "Edit/Frame/Paste"
+msgstr ""
+
+msgid "Edit/Redo"
+msgstr ""
+
+msgid "Edit/Remove"
+msgstr ""
+
+msgid "Edit/Remove With Gap"
+msgstr ""
+
+msgid "Edit/Slice"
+msgstr ""
+
+msgid "Edit/Undo"
+msgstr ""
+
+msgid "Editing viewport will be visible at start up."
+msgstr ""
+
 msgid "Editor/&Run Code"
 msgstr ""
 
@@ -1440,6 +1491,9 @@ msgid "Editor/Toggle &Line Numbers"
 msgstr ""
 
 msgid "Elapsed"
+msgstr ""
+
+msgid "Empty EDL file.  Not saving."
 msgstr ""
 
 msgid "Enable Lighting"
@@ -1485,6 +1539,9 @@ msgid "Erase Mode"
 msgstr ""
 
 msgid "Eraser Tool"
+msgstr ""
+
+msgid "Error saving {0}. {1}"
 msgstr ""
 
 msgid "Errors"
@@ -2003,9 +2060,6 @@ msgstr ""
 msgid "Increase gain 1/2 stop (multiply by sqrt(2))."
 msgstr ""
 
-msgid "Index is invalid"
-msgstr ""
-
 msgid "Input"
 msgstr ""
 
@@ -2018,7 +2072,13 @@ msgstr ""
 msgid "Insert"
 msgstr ""
 
+msgid "Insert Frame"
+msgstr ""
+
 msgid "Invalid font for text drawing"
+msgstr ""
+
+msgid "Invalid index for add clip to timeline."
 msgstr ""
 
 msgid "Invert"
@@ -2093,6 +2153,9 @@ msgstr ""
 msgid "Language if known"
 msgstr ""
 
+msgid "Large"
+msgstr ""
+
 msgid "Laser"
 msgstr ""
 
@@ -2136,9 +2199,6 @@ msgid "Line order in file"
 msgstr ""
 
 msgid "Linear"
-msgstr ""
-
-msgid "List of clips :class:`mrv2.FileMedia` in the Playlist."
 msgstr ""
 
 msgid "Load"
@@ -2351,11 +2411,11 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
-msgid "Name of the Playlist."
-msgstr ""
-
 msgid ""
 "Need to reboot mrv2 to change language.  Are you sure you want to continue?"
+msgstr ""
+
+msgid "Neither video nor audio tracks found."
 msgstr ""
 
 msgid "Network"
@@ -2393,10 +2453,19 @@ msgid ""
 "a versioning string."
 msgstr ""
 
+msgid "No video children found."
+msgstr ""
+
+msgid "No video track found."
+msgstr ""
+
 msgid "None"
 msgstr ""
 
 msgid "Normal"
+msgstr ""
+
+msgid "Not an EDL file to save."
 msgstr ""
 
 msgid "Notes"
@@ -2607,6 +2676,9 @@ msgstr ""
 msgid "Panel/One Panel Only"
 msgstr ""
 
+msgid "Paste Frame"
+msgstr ""
+
 msgid "Path :class:`mrv2.Path` to the File Media."
 msgstr ""
 
@@ -2787,12 +2859,6 @@ msgstr ""
 msgid "Playlist"
 msgstr ""
 
-msgid "Playlist has less than 2 elements"
-msgstr ""
-
-msgid "Playlist name not found."
-msgstr ""
-
 msgid ""
 "Please override the menus method by returning a valid dict of key menus, "
 "values methods."
@@ -2948,7 +3014,7 @@ msgstr ""
 msgid "Redo Draw"
 msgstr ""
 
-msgid "Redo Previous Shape Drawn"
+msgid "Redo Previous Shape Drawn in Current Frame."
 msgstr ""
 
 msgid "Reduce gain 1/2 stop (divide by sqrt(2))."
@@ -3001,10 +3067,13 @@ msgstr ""
 msgid "Remote to Local Path Mapping"
 msgstr ""
 
-msgid "Remove Paths"
+msgid "Remove Clip"
 msgstr ""
 
-msgid "Remove selected files from Playlist"
+msgid "Remove Clip With Gap"
+msgstr ""
+
+msgid "Remove Paths"
 msgstr ""
 
 msgid "Remove the currently selected path mapping."
@@ -3125,9 +3194,6 @@ msgid "Return the A file item."
 msgstr ""
 
 msgid "Return the LUT options."
-msgstr ""
-
-msgid "Return the current playlist."
 msgstr ""
 
 msgid "Return the display options."
@@ -3277,10 +3343,14 @@ msgstr ""
 msgid "Save a session file."
 msgstr ""
 
-msgid "Save an .otio file with relative paths."
+msgid "Save annotations."
 msgstr ""
 
-msgid "Save annotations."
+msgid "Save current .otio file with relative paths."
+msgstr ""
+
+msgid ""
+"Save current EDL to a permanent location, making paths relative if possible."
 msgstr ""
 
 #, c-format
@@ -3348,12 +3418,6 @@ msgstr ""
 msgid "Seek to the given time."
 msgstr ""
 
-msgid "Select a playlist with the given index."
-msgstr ""
-
-msgid "Select a playlist with the given name."
-msgstr ""
-
 msgid "Select default looping mode in timeline."
 msgstr ""
 
@@ -3361,9 +3425,6 @@ msgid "Select main A image."
 msgstr ""
 
 msgid "Select one or more B images."
-msgstr ""
-
-msgid "Select playlist image for removal."
 msgstr ""
 
 msgid "Selected time range of the timeline."
@@ -3608,6 +3669,12 @@ msgstr ""
 msgid "Show Thumbnails for USD files (can be slow if they are big)"
 msgstr ""
 
+msgid "Show Transitions"
+msgstr ""
+
+msgid "Show Transitions in Edit Viewport"
+msgstr ""
+
 msgid "Show the A file above the B file"
 msgstr ""
 
@@ -3629,7 +3696,13 @@ msgstr ""
 msgid "Size:"
 msgstr ""
 
+msgid "Slice Clip"
+msgstr ""
+
 msgid "Slow"
+msgstr ""
+
+msgid "Small"
 msgstr ""
 
 msgid "Soft Clip"
@@ -3910,6 +3983,9 @@ msgid ""
 "higher values does the opposite."
 msgstr ""
 
+msgid "Thumbnails"
+msgstr ""
+
 msgid "Thumbnails Active"
 msgstr ""
 
@@ -4113,7 +4189,7 @@ msgstr ""
 msgid "Undo Draw"
 msgstr ""
 
-msgid "Undo Last Shape Drawn"
+msgid "Undo Last Shape Drawn in Current Frame."
 msgstr ""
 
 msgid "Undock"
