@@ -421,10 +421,17 @@ namespace mrv
     {
         int aIndex = -1;
         bool validDrop = false;
+        math::Vector2i win;
+        if (!is_panel())
+        {
+            auto window = g->get_window();
+            win.x = window->x();
+            win.y = window->y();
+        }
         for (auto& m : _r->map)
         {
             PlaylistButton* b = m.second;
-            math::Box2i box(b->x(), b->y(), b->w(), b->h());
+            math::Box2i box(b->x() + win.x, b->y() + win.y, b->w(), b->h());
             if (box.contains(pos))
             {
                 aIndex = static_cast<int>(m.first);
@@ -441,7 +448,7 @@ namespace mrv
         }
         else if (_r->map.empty())
         {
-            math::Box2i box(g->x(), g->y(), g->w(), 68);
+            math::Box2i box(g->x() + win.x, g->y() + win.y, g->w(), 68);
             if (box.contains(pos))
             {
                 validDrop = true;

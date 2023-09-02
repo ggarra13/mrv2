@@ -136,6 +136,7 @@ namespace mrv
 
                     if (box.contains(pos))
                     {
+                        LOG_INFO("In Playlist");
                         const std::string text = label();
                         stringArray lines;
                         split_string(lines, text, "\n");
