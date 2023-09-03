@@ -18,10 +18,10 @@ decl {\#include <FL/Fl_Color_Chooser.H>} {public global
 decl {\#include "mrViewer.h"} {public global
 }
 
-decl {\#include "mrvCore/mrvEnv.h"} {public global
+decl {\#include "mrvCore/mrvEnv.h"} {selected public global
 }
 
-decl {\#include "mrvCore/mrvI8N.h"} {public global
+decl {\#include "mrvCore/mrvI8N.h"} {selected public global
 }
 
 decl {\#include "mrvCore/mrvMedia.h"} {public global
@@ -715,8 +715,8 @@ v->uiPrefsFPS->value( g );}
                 class {mrv::CheckButton}
               }
               Fl_Check_Button uiPrefsShowMarkers {
-                label {Show Markers} selected
-                tooltip {Show Markers  in Edit Viewport} xywh {565 341 21 20} down_box DOWN_BOX value 1 align 4
+                label {Show Markers}
+                tooltip {Show Markers in Edit Viewport} xywh {565 341 21 20} down_box DOWN_BOX value 1 align 4
                 class {mrv::CheckButton}
               }
               Fl_Check_Button uiPrefsEditMode {
