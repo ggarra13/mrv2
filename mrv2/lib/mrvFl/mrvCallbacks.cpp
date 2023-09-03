@@ -1230,6 +1230,17 @@ namespace mrv
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
+    void toggle_timeline_markers_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
+        auto options = ui->uiTimeline->getItemOptions();
+        options.showMarkers = item->checked();
+        ui->uiTimeline->setItemOptions(options);
+        if (editMode != EditMode::kTimeline)
+            set_edit_mode_cb(EditMode::kFull, ui);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
     void toggle_timeline_transitions_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());

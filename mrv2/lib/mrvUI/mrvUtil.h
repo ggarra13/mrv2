@@ -5,11 +5,8 @@
 #pragma once
 
 #include <string>
-#include <memory>
 
 #include <FL/Fl_SVG_Image.H>
-
-#include <tlCore/Context.h>
 
 namespace mrv
 {

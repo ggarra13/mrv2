@@ -191,6 +191,7 @@ namespace mrv
     Hotkey kToggleEditMode(false, false, false, false, 'e');
     Hotkey kToggleTimelineThumbnails(false, false, false, false, 0);
     Hotkey kToggleTimelineTransitions(false, false, false, false, 0);
+    Hotkey kToggleTimelineMarkers(false, false, false, false, 0);
 
     Hotkey kEditCutFrame(true, false, false, false, 'x');
     Hotkey kEditCopyFrame(true, false, false, false, 'c');
@@ -412,6 +413,7 @@ namespace mrv
         HotkeyEntry(_("Toggle Timeline Thumbnails"), kToggleTimelineThumbnails),
         HotkeyEntry(
             _("Toggle Timeline Transitions"), kToggleTimelineTransitions),
+        HotkeyEntry(_("Toggle Timeline Markers"), kToggleTimelineMarkers),
         HotkeyEntry(_("Reset Gain/Gamma"), kResetChanges),
         HotkeyEntry(_("Exposure More"), kExposureMore),
         HotkeyEntry(_("Exposure Less"), kExposureLess),

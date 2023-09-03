@@ -41,6 +41,7 @@ v0.7.2
 - Fixed Recent Files with entries with backslashes (ie. '\').
 - Added new controls to Playlist panel.  Added a new Save icon.
 - Fixed an annoying repositioning of window when loading new clips.
+- Added support for Markers in timeline viewport.
 
 
 v0.7.1

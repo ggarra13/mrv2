@@ -188,6 +188,9 @@ namespace mrv
         const auto& aIndex = model->observeAIndex()->get();
         const size_t numFiles = files.size();
         const image::Size size(128, 64);
+        const std::string tmpdir = tmppath() + '/';
+
+        file::Path lastPath;
 
         size_t numValidFiles = 0;
         for (size_t i = 0; i < numFiles; ++i)
@@ -197,9 +200,14 @@ namespace mrv
             const std::string& dir = path.getDirectory();
             const std::string& base = path.getBaseName();
             const std::string& extension = path.getExtension();
-            if (extension != ".otio" || base != "EDL." ||
-                (dir != tmppath() + '/' && dir != tmppath() + '\\'))
+            if (extension != ".otio" || base != "EDL." || dir != tmpdir)
                 continue;
+
+            // When we refresh the .otio for EDL, we get two clips with the
+            // same name, we avoid displaying both with this check.
+            if (path == lastPath)
+                continue;
+            lastPath = path;
 
             const std::string& fullfile = path.get();
 

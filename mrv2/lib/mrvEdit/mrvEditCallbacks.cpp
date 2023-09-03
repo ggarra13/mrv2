@@ -19,6 +19,9 @@ namespace fs = std::filesystem;
 
 #include <tlTimeline/Util.h>
 
+#include "mrvCore/mrvI8N.h"
+#include "mrvCore/mrvHome.h"
+
 #include "mrvDraw/Annotation.h"
 
 #include "mrvNetwork/mrvTCP.h"
@@ -27,8 +30,6 @@ namespace fs = std::filesystem;
 
 #include "mrvEdit/mrvEditCallbacks.h"
 
-#include "mrvCore/mrvI8N.h"
-#include "mrvCore/mrvHome.h"
 #include "mrvFl/mrvIO.h"
 
 #include "mrViewer.h"
@@ -60,6 +61,8 @@ namespace mrv
             otio::SerializableObject::Retainer<Item> item;
         };
 
+        //! Frames copied.  We store in a vector to copy from multiple tracks,
+        //! (Audio and Video for example).
         static std::vector<FrameInfo> copiedFrames;
 
         struct UndoRedo
@@ -86,29 +89,6 @@ namespace mrv
                 if (!composition)
                     continue;
                 out.push_back(composition);
-            }
-            return out;
-        }
-
-        std::vector<Item*>
-        getItems(TimelinePlayer* player, const RationalTime& time)
-        {
-            std::vector<Item*> out;
-            auto timeline = player->getTimeline();
-
-            otio::ErrorStatus errorStatus;
-            auto tracks = timeline->tracks()->children();
-            for (auto child : tracks)
-            {
-                auto composition =
-                    otio::dynamic_retainer_cast<Composition>(child);
-                if (!composition)
-                    continue;
-                auto item = otio::dynamic_retainer_cast<Item>(
-                    composition->child_at_time(time, &errorStatus));
-                if (!item || otio::is_error(errorStatus))
-                    continue;
-                out.push_back(item);
             }
             return out;
         }
@@ -195,7 +175,9 @@ namespace mrv
 
             otio::ErrorStatus errorStatus;
             FrameInfo frame;
-            frame.trackIndex = getIndex(composition);
+
+            auto parent = composition->parent();
+            frame.trackIndex = parent->index_of_child(composition);
             frame.kind = track->kind();
 
             auto clonedItem = dynamic_cast<Item*>(item->clone());
@@ -232,6 +214,8 @@ namespace mrv
 
         static size_t otioIndex = 1;
         file::Path savedPath, savedAudioPath;
+
+        //! This routine makes paths absolute if possible.
         void sanitizeMediaPaths(otio::Stack* stack, ViewerUI* ui)
         {
             auto model = ui->app->filesModel();
@@ -241,7 +225,8 @@ namespace mrv
                 return;
             auto path = item->path;
             auto audioPath = item->audioPath.isEmpty() ? path : item->audioPath;
-            std::string directory;
+            std::string directory, audioDirectory;
+
             if (string::toLower(path.getExtension()) == ".otio")
             {
                 int videoClips = 0;
@@ -276,11 +261,13 @@ namespace mrv
                 }
                 if (videoClips == 1)
                     path = savedPath;
-                if (videoClips == 1)
+                if (audioClips == 1)
                     audioPath = savedAudioPath;
             }
 
             directory = path.getDirectory();
+            audioDirectory = audioPath.getDirectory();
+
             file::PathOptions options;
             for (int i = 0; i < tracks.size(); ++i)
             {
@@ -298,18 +285,27 @@ namespace mrv
                         if (auto ref =
                                 dynamic_cast<otio::ExternalReference*>(media))
                         {
-                            file::Path urlPath =
-                                timeline::getPath(media, directory, options);
-                            ref->set_target_url(urlPath.get());
+                            file::Path urlPath(ref->target_url());
+                            if (!urlPath.isAbsolute())
+                            {
+                                urlPath = timeline::getPath(
+                                    media, directory, options);
+                                ref->set_target_url(urlPath.get());
+                            }
                         }
                         else if (
                             auto ref =
                                 dynamic_cast<otio::ImageSequenceReference*>(
                                     media))
                         {
-                            file::Path urlPath =
-                                timeline::getPath(media, directory, options);
-                            ref->set_target_url_base(urlPath.getDirectory());
+                            file::Path urlPath(ref->target_url_base());
+                            if (!urlPath.isAbsolute())
+                            {
+                                urlPath = timeline::getPath(
+                                    media, directory, options);
+                                ref->set_target_url_base(
+                                    urlPath.getDirectory());
+                            }
                         }
                     }
                 }
@@ -324,9 +320,13 @@ namespace mrv
                         if (auto ref =
                                 dynamic_cast<otio::ExternalReference*>(media))
                         {
-                            file::Path urlPath =
-                                timeline::getPath(media, directory, options);
-                            ref->set_target_url(urlPath.get());
+                            file::Path urlPath(ref->target_url());
+                            if (!urlPath.isAbsolute())
+                            {
+                                urlPath = timeline::getPath(
+                                    media, audioDirectory, options);
+                                ref->set_target_url(urlPath.get());
+                            }
                         }
                     }
                 }
@@ -335,6 +335,8 @@ namespace mrv
             savedAudioPath = audioPath;
         }
 
+        //! This routine tries to change all paths of a timeline, to make them
+        //! relative to the otioFile location.
         void makePathsRelative(otio::Stack* stack, const std::string& otioFile)
         {
             auto tracks = stack->children();
@@ -370,15 +372,17 @@ namespace mrv
             }
         }
 
-        std::string otioFilename()
+        std::string otioFilename(const char* prefix)
         {
             char buf[256];
-            snprintf(buf, 256, "EDL.%zu.otio", otioIndex++);
+            snprintf(buf, 256, "%s.%zu.otio", prefix, otioIndex++);
             auto out = tmppath() + "/" + buf;
             return out;
         }
 
-        void toOtioFile(const otio::Timeline* timeline, ViewerUI* ui)
+        void toOtioFile(
+            const otio::Timeline* timeline, ViewerUI* ui,
+            const char* prefix = "EDL")
         {
             auto model = ui->app->filesModel();
             int index = model->observeAIndex()->get();
@@ -399,7 +403,7 @@ namespace mrv
             }
             else
             {
-                otioFile = otioFilename();
+                otioFile = otioFilename(prefix);
             }
 
             bool refreshCache = hasEmptyTracks(stack);
@@ -621,6 +625,10 @@ namespace mrv
             return;
 
         auto timeline = player->getTimeline();
+
+        auto stack = timeline->tracks();
+        sanitizeMediaPaths(stack, ui);
+
         const auto time = getTime(player);
 
         copiedFrames.clear();
@@ -711,7 +719,8 @@ namespace mrv
         const auto time = getTime(player);
 
         auto timeline = player->getTimeline();
-        auto tracks = timeline->tracks()->children();
+        auto stack = timeline->tracks();
+        auto tracks = stack->children();
 
         edit_store_undo(player, ui);
 
@@ -983,7 +992,7 @@ namespace mrv
     {
         tcp->pushMessage("Create Empty Timeline");
         tcp->lock();
-        const std::string file = otioFilename();
+        const std::string file = otioFilename("EDL");
 
         auto timeline = create_empty_timeline(ui);
 
@@ -1015,7 +1024,7 @@ namespace mrv
         auto Aitem = model->observeA()->get();
         std::string Afile = Aitem->path.get();
 
-        const std::string file = otioFilename();
+        const std::string file = otioFilename("EDL");
 
         otio::ErrorStatus errorStatus;
         auto timeline = create_empty_timeline(ui);
@@ -1299,7 +1308,7 @@ namespace mrv
         double sampleRate;
         sanitizeVideoAndAudioRates(stack, timeRange, videoRate, sampleRate);
 
-        toOtioFile(timeline, ui);
+        toOtioFile(timeline, ui, "EDL");
 
         destItem->timeRange = timeRange;
         destItem->inOutRange = timeRange;
@@ -1379,6 +1388,26 @@ namespace mrv
                     if (options.thumbnails)
                         H += options.waveformHeight / pixelRatio;
                     H += 24; // bottom bar
+                }
+                // Handle Markers
+                if (options.showMarkers)
+                {
+                    int markerSizeForTrack = 0;
+                    for (const auto& child : track->children())
+                    {
+                        auto item = otio::dynamic_retainer_cast<Item>(child);
+                        if (!item)
+                            continue;
+
+                        int markerSizeForItem = 0;
+                        for (const auto& marker : item->markers())
+                        {
+                            markerSizeForItem += 20;
+                        }
+                        if (markerSizeForItem > markerSizeForTrack)
+                            markerSizeForTrack = markerSizeForItem;
+                    }
+                    H += markerSizeForTrack;
                 }
                 // Handle transitions
                 if (options.showTransitions)

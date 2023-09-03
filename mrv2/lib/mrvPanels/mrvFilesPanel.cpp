@@ -219,11 +219,11 @@ namespace mrv
             const auto& path = media->path;
 
             // We skip EDLs created in tmp dir here.
+            const std::string tmpdir = tmppath() + '/';
             const std::string& dir = path.getDirectory();
             const std::string& base = path.getBaseName();
             const std::string& extension = path.getExtension();
-            if (extension == ".otio" && base == "EDL." &&
-                (dir == tmppath() + '/' || dir == tmppath() + '\\'))
+            if (extension == ".otio" && base == "EDL." && dir == tmpdir)
                 continue;
 
             ++numValidFiles;
