@@ -642,10 +642,11 @@ auto player = ui->uiView->getTimelinePlayer();
 		o->redraw();
 	}
 	player->setSpeed( speed );
-ui->uiView->take_focus();}
+ui->uiView->take_focus();} selected
             tooltip {Allows you to adjust frame rate playback.} xywh {386 3 42 24} color -1733777408 selection_color 0
             code0 {o->textcolor( FL_BLACK );
 o->value(24);}
+            code1 {o->step(0.01);}
             class Fl_Value_Input
           }
         }
@@ -1098,7 +1099,7 @@ settingsObject->setValue( mrv::kPenColorA, a);}
                 }
                 Fl_Button uiRedoDraw {
                   user_data this user_data_type {ViewerUI*}
-                  callback {uiView->redo();} selected
+                  callback {uiView->redo();}
                   tooltip {Redo Previous Shape Drawn in Current Frame.} image {../../icons/Redo.svg} compress_image 0 xywh {0 431 40 36} deactivate
                   class {mrv::Button}
                 }

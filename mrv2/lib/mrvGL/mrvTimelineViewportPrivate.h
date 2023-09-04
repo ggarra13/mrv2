@@ -4,8 +4,6 @@
 
 #pragma once
 
-#include "mrvCore/mrvUndoElement.h"
-
 #include "mrvDraw/Annotation.h"
 
 class ViewerUI;
@@ -48,9 +46,6 @@ namespace mrv
 
         short ghostPrevious = 5;
         short ghostNext = 5;
-
-        //! Last annotation undones
-        std::shared_ptr< draw::Annotation > undoAnnotation = nullptr;
 
         //! Main ui pointer
         ViewerUI* ui = nullptr;

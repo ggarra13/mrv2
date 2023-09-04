@@ -42,6 +42,7 @@ v0.7.2
 - Added new controls to Playlist panel.  Added a new Save icon.
 - Fixed an annoying repositioning of window when loading new clips.
 - Added support for Markers in timeline viewport.
+- Made FPS display show only two decimal digits to simplify.
 
 
 v0.7.1

@@ -931,6 +931,7 @@ namespace mrv
             menu->add(
                 _("Edit/Remove With Gap"), kEditRemoveClipWithGap.hotkey(),
                 (Fl_Callback*)edit_remove_clip_with_gap_cb, ui);
+            menu->add(_("Edit/Roll"), 't', (Fl_Callback*)edit_roll_cb, ui);
             menu->add(
                 _("Edit/Undo"), kEditUndo.hotkey(), (Fl_Callback*)edit_undo_cb,
                 ui);

@@ -208,12 +208,6 @@ namespace mrv
                 if (!player)
                     return;
 
-                // auto renderSize = getRenderSize();
-
-                // if (pnt.x < 0 || pnt.y < 0 || pnt.x >= renderSize.w ||
-                //     pnt.y >= renderSize.h)
-                //     return;
-
                 auto annotation = player->getAnnotation();
                 if (p.actionMode != kScrub && !annotation)
                     return;

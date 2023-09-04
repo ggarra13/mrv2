@@ -196,6 +196,7 @@ namespace mrv
 
         switch (mode)
         {
+        default:
         case kScrub:
             p.ui->uiScrub->value(1);
             p.ui->uiStatus->copy_label(_("Scrub"));
@@ -230,6 +231,21 @@ namespace mrv
             break;
         case kRotate:
             p.ui->uiStatus->copy_label(_("Rotate"));
+            break;
+        case kEditTrim:
+            p.ui->uiStatus->copy_label(_("Trim"));
+            break;
+        case kEditSlip:
+            p.ui->uiStatus->copy_label(_("Slip"));
+            break;
+        case kEditSlide:
+            p.ui->uiStatus->copy_label(_("Slide"));
+            break;
+        case kEditRipple:
+            p.ui->uiStatus->copy_label(_("Ripple"));
+            break;
+        case kEditRoll:
+            p.ui->uiStatus->copy_label(_("Roll"));
             break;
         }
 

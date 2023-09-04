@@ -239,8 +239,6 @@ namespace mrv
 
         const std::string& msg = setLanguageLocale();
 
-        DBG;
-
         IApp::_init(
             argc, argv, context, "mrv2",
             _("Play timelines, movies, and image sequences."),
@@ -370,11 +368,9 @@ namespace mrv
                         _("Return the version and exit."))
             });
 
-        DBG;
         const int exitCode = getExit();
         if (exitCode != 0)
         {
-            DBG;
             return;
         }
 
@@ -604,10 +600,8 @@ namespace mrv
             });
 #endif
 
-        DBG;
         _cacheUpdate();
         _audioUpdate();
-        DBG;
 
         // Create the main control.
         p.mainControl = new MainControl(ui);
@@ -1027,16 +1021,13 @@ namespace mrv
                         std_any_cast<int>(p.settingsObject->value(
                             "Performance/SequenceThreadCount")));
 
-                DBG;
                 options.ioOptions["FFmpeg/YUVToRGBConversion"] =
                     string::Format("{0}").arg(
                         std_any_cast< int>(p.settingsObject->value(
                             "Performance/FFmpegYUVToRGBConversion")));
 
-                DBG;
                 const audio::Info audioInfo =
                     audioSystem->getDefaultOutputInfo();
-                DBG;
                 options.ioOptions["FFmpeg/AudioChannelCount"] =
                     string::Format("{0}").arg(audioInfo.channelCount);
                 options.ioOptions["FFmpeg/AudioDataType"] =
@@ -1048,7 +1039,6 @@ namespace mrv
                     string::Format("{0}").arg(
                         std_any_cast<int>(p.settingsObject->value(
                             "Performance/FFmpegThreadCount")));
-                DBG;
 
 #if defined(TLRENDER_USD)
                 options.ioOptions["usd/renderWidth"] =
@@ -1137,6 +1127,7 @@ namespace mrv
                     item->videoLayer = mrvTimelinePlayer->videoLayer();
                     item->audioOffset = mrvTimelinePlayer->audioOffset();
 
+                    // Add the new file to recent files, unless it is an EDL.
                     const std::string tmpdir = tmppath() + "/";
                     const std::string directory = item->path.getDirectory();
                     const std::string baseName = item->path.getBaseName();

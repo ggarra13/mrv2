@@ -162,8 +162,7 @@ namespace mrv
         // Don't allow scaling the window beyond the bottom of the screen
         if (Y + H > maxY)
             H = maxY - Y;
-        assert(X >= 0);
-        assert(Y >= 0);
+
         assert(W > 0);
         assert(H > 0);
 

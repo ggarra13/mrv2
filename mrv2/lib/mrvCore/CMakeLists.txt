@@ -3,7 +3,7 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 set(HEADERS
-  mrvActions.h
+  mrvActionMode.h
   mrvColorSpaces.h
   mrvCPU.h
   mrvEnv.h
@@ -25,8 +25,6 @@ set(HEADERS
   mrvStereo3DOptions.h
   mrvStereo3DOptionsInline.h
   mrvString.h
-  mrvUndoElement.h
-  mrvUndoType.h
   mrvUtil.h
   )
 
@@ -44,7 +42,6 @@ set(SOURCES
   mrvSequence.cpp
   mrvStereo3DOptions.cpp
   mrvString.cpp
-  mrvUndoType.cpp
   mrvUtil.cpp
   )
 

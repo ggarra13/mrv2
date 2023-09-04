@@ -905,19 +905,6 @@ namespace mrv
 
         std_any value;
 
-        float complexity;
-        try
-        {
-            complexity =
-                std_any_cast<float>(settingsObject->value("usd/complexity"));
-        }
-        catch (const std::bad_any_cast& e)
-        {
-            complexity =
-                std_any_cast<int>(settingsObject->value("usd/complexity"));
-            settingsObject->setValue("usd/complexity", complexity);
-        }
-
         value = settingsObject->value("Performance/AudioBufferFrameCount");
         int v = std_any_cast<int>(value);
         if (v < 1024)
@@ -1042,7 +1029,7 @@ namespace mrv
             std_any value = settingsObject->value(key);
             try
             {
-                double tmpD = std_any_cast< double >(value);
+                double tmpD = std::any_cast<double>(value);
                 key = "d#" + key;
                 fltk_settings.set(key.c_str(), tmpD);
                 continue;
@@ -1052,7 +1039,7 @@ namespace mrv
             }
             try
             {
-                float tmpF = std_any_cast< float >(value);
+                float tmpF = std::any_cast<float>(value);
                 key = "f#" + key;
                 fltk_settings.set(key.c_str(), tmpF);
                 continue;
@@ -1062,7 +1049,7 @@ namespace mrv
             }
             try
             {
-                int tmp = std_any_cast< int >(value);
+                int tmp = std::any_cast<int>(value);
                 key = "i#" + key;
                 fltk_settings.set(key.c_str(), tmp);
                 continue;
@@ -1072,7 +1059,7 @@ namespace mrv
             }
             try
             {
-                int tmp = std_any_cast< bool >(value);
+                int tmp = std::any_cast<bool>(value);
                 key = "b#" + key;
                 fltk_settings.set(key.c_str(), tmp);
                 continue;
@@ -1082,7 +1069,7 @@ namespace mrv
             }
             try
             {
-                const std::string& tmpS = std_any_cast< std::string >(value);
+                const std::string& tmpS = std::any_cast<std::string>(value);
                 key = "s#" + key;
                 fltk_settings.set(key.c_str(), tmpS.c_str());
                 continue;
@@ -1092,7 +1079,7 @@ namespace mrv
             }
             try
             {
-                const std::string tmpS = std_any_cast< char* >(value);
+                const std::string tmpS = std::any_cast<char*>(value);
                 key = "s#" + key;
                 fltk_settings.set(key.c_str(), tmpS.c_str());
                 continue;
