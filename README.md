@@ -1,4 +1,5 @@
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
+[![Build Status](https://github.com/ggarra13/mrv2/actions/workflows/ci-workflow.yml/badge.svg)](https://github.com/ggarra13/mrv2/actions/workflows/ci-workflow.yml)
 
 mrv2
 ====
