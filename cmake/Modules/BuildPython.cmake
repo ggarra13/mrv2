@@ -5,8 +5,8 @@
 include( ExternalProject )
 
 set( PYTHON_VERSION 3.10 )
-set( PYTHON_PATCH   9 )
-set( PYTHON_URL https://www.python.org/ftp/python/${PYTHON_VERSION}.${PYTHON_PATCH}/Python-${PYTHON_VERSION}.${PYTHON_PATCH}.tar.xz )
+set( PYTHON_TINY   9 )
+set( PYTHON_URL https://www.python.org/ftp/python/${PYTHON_VERSION}.${PYTHON_TINY}/Python-${PYTHON_VERSION}.${PYTHON_TINY}.tar.xz )
 
 set( PYTHON_PATCH )
 if(APPLE)
