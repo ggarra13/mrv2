@@ -26,7 +26,6 @@ namespace mrv
     Hotkey kOpenAMF(false, false, false, true, 'o');
     Hotkey kOpenClipXMLMetadata(true, false, false, false, 'x');
     Hotkey kOpenSession(false, true, false, false, 'o');
-    Hotkey kSaveReel(true, false, false, false, 0);
     Hotkey kSaveImage(false, false, false, false, 0);
     Hotkey kSaveSequence(true, false, false, true, 's');
     Hotkey kSavePDF(false, false, false, false, 0);
@@ -319,8 +318,8 @@ namespace mrv
         HotkeyEntry(_("Open Directory"), kOpenDirectory),
         HotkeyEntry(_("Open Movie or Sequence"), kOpenImage),
         // HotkeyEntry(_("Open Single Image"), kOpenSingleImage),
-        // HotkeyEntry( _("Open Session"), kOpenSession, true),
-        // HotkeyEntry(_("Save Image"), kSaveImage),
+        HotkeyEntry(_("Open Session"), kOpenSession, true),
+        HotkeyEntry(_("Save Image"), kSaveImage),
         HotkeyEntry(_("Save Movie or Sequence"), kSaveSequence),
         HotkeyEntry(_("Save PDF Document"), kSavePDF, true),
         HotkeyEntry(_("Save Session"), kSaveSession, true),

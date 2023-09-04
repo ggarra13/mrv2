@@ -41,6 +41,7 @@ namespace mrv
     void open_separate_audio_cb(Fl_Widget* w, ViewerUI* ui);
     void open_recent_cb(Fl_Menu_* w, ViewerUI* ui);
 
+    void save_single_frame_cb(Fl_Menu_* w, ViewerUI* ui);
     void save_movie_cb(Fl_Menu_* w, ViewerUI* ui);
     void save_pdf_cb(Fl_Menu_* w, ViewerUI* ui);
 

@@ -72,6 +72,9 @@ namespace mrv
     std::string open_audio_file(const char* startfile, ViewerUI* main);
 
     std::string
+    save_single_image(ViewerUI* ui, const char* startfile = nullptr);
+
+    std::string
     save_movie_or_sequence_file(ViewerUI* ui, const char* startfile = nullptr);
 
     std::string save_pdf(ViewerUI* ui, const char* startdir = nullptr);

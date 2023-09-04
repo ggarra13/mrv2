@@ -223,6 +223,68 @@ namespace mrv
         model->next();
     }
 
+    void save_single_frame_cb(Fl_Menu_* w, ViewerUI* ui)
+    {
+        const std::string& file = save_single_image(ui);
+        if (file.empty())
+            return;
+
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
+            return;
+
+        std::string extension = tl::file::Path(file).getExtension();
+        extension = string::toLower(extension);
+        if (extension.empty())
+        {
+            LOG_ERROR(_("File extension cannot be empty."));
+            return;
+        }
+
+        bool valid_for_exr = false;
+        // Sanity check - make sure the video pixel for the current
+        // layerId type is float/half
+        if (extension == ".exr")
+        {
+            auto info = player->ioInfo();
+            unsigned layerId = ui->uiColorChannel->value();
+            auto video = info.video[layerId];
+            if (video.pixelType == image::PixelType::RGBA_F16 ||
+                video.pixelType == image::PixelType::RGBA_F32 ||
+                video.pixelType == image::PixelType::RGB_F16 ||
+                video.pixelType == image::PixelType::RGB_F32 ||
+                video.pixelType == image::PixelType::LA_F16 ||
+                video.pixelType == image::PixelType::LA_F32 ||
+                video.pixelType == image::PixelType::L_F16 ||
+                video.pixelType == image::PixelType::L_F32)
+            {
+                valid_for_exr = true;
+            }
+        }
+
+        SaveOptionsUI saveOptions(extension, valid_for_exr);
+
+        mrv::SaveOptions options;
+        options.annotations =
+            static_cast<bool>(saveOptions.Annotations->value());
+
+        int value;
+        value = saveOptions.PixelType->value();
+        if (value == 0)
+            options.exrPixelType = tl::image::PixelType::RGBA_F16;
+        if (value == 1)
+            options.exrPixelType = tl::image::PixelType::RGBA_F32;
+
+        value = saveOptions.Compression->value();
+        options.exrCompression = static_cast<tl::exr::Compression>(value);
+
+        options.zipCompressionLevel =
+            static_cast<int>(saveOptions.ZipCompressionLevel->value());
+        options.dwaCompressionLevel = saveOptions.DWACompressionLevel->value();
+
+        save_single_frame(file, ui, options);
+    }
+
     void save_movie_cb(Fl_Menu_* w, ViewerUI* ui)
     {
         const std::string& file = save_movie_or_sequence_file(ui);
@@ -235,6 +297,11 @@ namespace mrv
 
         std::string extension = tl::file::Path(file).getExtension();
         extension = string::toLower(extension);
+        if (extension.empty())
+        {
+            LOG_ERROR(_("File extension cannot be empty."));
+            return;
+        }
 
         bool valid_for_exr = false;
         // Sanity check - make sure the video pixel for the current

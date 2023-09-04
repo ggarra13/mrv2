@@ -10,8 +10,13 @@ class ViewerUI;
 
 namespace mrv
 {
+
+    void save_single_frame(
+        const std::string& file, const ViewerUI* ui,
+        SaveOptions options = SaveOptions());
+
     void save_movie(
         const std::string& file, const ViewerUI* ui,
         SaveOptions options = SaveOptions());
 
-}
+} // namespace mrv

@@ -492,6 +492,23 @@ namespace mrv
             context, title.c_str(), kAUDIO_PATTERN.c_str(), startfile, true);
     }
 
+    std::string save_single_image(ViewerUI* ui, const char* startdir)
+    {
+        const auto& context = ui->app->getContext();
+        const std::string kIMAGE_PATTERN =
+            _("Images (*.{") + getImagePattern(context) + "})";
+        const std::string kALL_PATTERN = kIMAGE_PATTERN;
+
+        std::string title = _("Save Single Frame");
+
+        if (!startdir)
+            startdir = "";
+
+        const std::string& file = file_save_single_requester(
+            context, title.c_str(), kALL_PATTERN.c_str(), startdir, true);
+
+        return file;
+    }
     std::string save_movie_or_sequence_file(ViewerUI* ui, const char* startdir)
     {
         const auto& context = ui->app->getContext();
