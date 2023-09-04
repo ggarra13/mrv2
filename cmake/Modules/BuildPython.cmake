@@ -5,8 +5,8 @@
 include( ExternalProject )
 
 set( PYTHON_VERSION 3.10 )
-set( PYTHON_PATCH   9 )
-set( PYTHON_URL https://www.python.org/ftp/python/${PYTHON_VERSION}.${PYTHON_PATCH}/Python-${PYTHON_VERSION}.${PYTHON_PATCH}.tar.xz )
+set( PYTHON_TINY   9 )
+set( PYTHON_URL https://www.python.org/ftp/python/${PYTHON_VERSION}.${PYTHON_TINY}/Python-${PYTHON_VERSION}.${PYTHON_TINY}.tar.xz )
 
 set( PYTHON_PATCH )
 if(APPLE)
@@ -32,7 +32,7 @@ else()
     if( "$ENV{ARCH}" STREQUAL "i386" )
     	set( platform Win32 )
     endif()
-    set( PYTHON_CONFIGURE PCbuild/build.bat -e -q -p ${platform} )
+    set( PYTHON_CONFIGURE )
     set( PYTHON_BUILD  PCbuild/build.bat -e -q -p ${platform} )
     set( PYTHON_INSTALL python.bat PC/layout --precompile --preset-default  --copy "${CMAKE_INSTALL_PREFIX}/bin/" )
 endif()
@@ -41,21 +41,21 @@ ExternalProject_Add(
     Python
     URL ${PYTHON_URL}
     PATCH_COMMAND     ${PYTHON_PATCH}
-    CONFIGURE_COMMAND ${PYTHON_CONFIGURE}
+    CONFIGURE_COMMAND "${PYTHON_CONFIGURE}"
     BUILD_COMMAND     ${PYTHON_BUILD}
     INSTALL_COMMAND   ${PYTHON_INSTALL}
     BUILD_IN_SOURCE 1
 )
 
-if(WIN32)
-  set(PYTHON_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/python.exe)
-endif()
 
 set( PYTHON_DEP Python )
 
-# if(UNIX)
-#     set( PYTHON_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/python3.10 )
-# else()
-#     set( PYTHON_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/python )
-# endif()
+#
+# This is needed for our own tlRender's USD building
+#
+if(UNIX)
+    set( PYTHON_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/python3.10 )
+else()
+    set( PYTHON_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/python.exe )
+endif()
 
