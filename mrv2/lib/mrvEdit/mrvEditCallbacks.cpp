@@ -71,6 +71,7 @@ namespace mrv
         struct UndoRedo
         {
             std::string json;
+            std::string fileName;
             std::vector<std::shared_ptr<tl::draw::Annotation>> annotations;
         };
 
@@ -375,17 +376,22 @@ namespace mrv
             }
         }
 
-        std::string otioFilename(const char* prefix)
+        std::string _otioFilename()
         {
             char buf[256];
-            snprintf(buf, 256, "%s.%zu.otio", prefix, otioIndex++);
-            auto out = tmppath() + "/" + buf;
+            snprintf(buf, 256, "EDL.%zu.otio", otioIndex);
+            auto out = tmppath() + '/' + buf;
             return out;
         }
 
-        void toOtioFile(
-            const otio::Timeline* timeline, ViewerUI* ui,
-            const char* prefix = "EDL")
+        std::string otioFilename()
+        {
+            auto out = _otioFilename();
+            ++otioIndex;
+            return out;
+        }
+
+        void toOtioFile(const otio::Timeline* timeline, ViewerUI* ui)
         {
             auto model = ui->app->filesModel();
             int index = model->observeAIndex()->get();
@@ -406,7 +412,7 @@ namespace mrv
             }
             else
             {
-                otioFile = otioFilename(prefix);
+                otioFile = otioFilename();
             }
 
             bool refreshCache = hasEmptyTracks(stack);
@@ -555,6 +561,55 @@ namespace mrv
             }
             return out;
         }
+
+        std::string getEDLName(ViewerUI* ui)
+        {
+            auto model = ui->app->filesModel();
+            auto Aitem = model->observeA()->get();
+
+            file::Path path = Aitem->path;
+            if (path.getExtension() != ".otio")
+                return _otioFilename();
+
+            return path.get();
+        }
+
+        bool switchToEDL(const std::string& fileName, ViewerUI* ui)
+        {
+            auto model = ui->app->filesModel();
+            auto Aindex = model->observeAIndex()->get();
+            auto Aitem = model->observeA()->get();
+            if (Aitem->path.get() == fileName)
+                return true;
+
+            // Not on undo/redo EDL item, look for it.
+            int idx = -1;
+            auto items = model->observeFiles()->get();
+            for (int i = 0; i < items.size(); ++i)
+            {
+                if (items[i]->path.get() == fileName)
+                {
+                    idx = i;
+                    break;
+                }
+            }
+
+            if (idx == -1)
+            {
+                std::string err =
+                    string::Format(_("EDL item '{0}' no longer loaded.  "
+                                     "Cannot undo or redo."))
+                        .arg(fileName);
+                LOG_ERROR(err);
+                return false;
+            }
+            else
+            {
+                model->setA(idx);
+                return true;
+            }
+        }
+
     } // namespace
 
     void edit_store_undo(TimelinePlayer* player, ViewerUI* ui)
@@ -577,6 +632,7 @@ namespace mrv
 
         UndoRedo buffer;
         buffer.json = state;
+        buffer.fileName = getEDLName(ui);
         buffer.annotations = player->getAllAnnotations();
         undoBuffer.push_back(buffer);
     }
@@ -612,6 +668,7 @@ namespace mrv
 
         UndoRedo buffer;
         buffer.json = state;
+        buffer.fileName = getEDLName(ui);
         buffer.annotations = player->getAllAnnotations();
         redoBuffer.push_back(buffer);
     }
@@ -938,10 +995,13 @@ namespace mrv
         if (undoBuffer.empty())
             return;
 
-        const auto& time = getTime(player);
-
         auto buffer = undoBuffer.back();
         undoBuffer.pop_back();
+
+        if (!switchToEDL(buffer.fileName, ui))
+            return;
+
+        player = ui->uiView->getTimelinePlayer();
         edit_store_redo(player, ui);
 
         otio::SerializableObject::Retainer<otio::Timeline> timeline(
@@ -977,10 +1037,13 @@ namespace mrv
         if (redoBuffer.empty())
             return;
 
-        auto time = getTime(player);
-
         auto buffer = redoBuffer.back();
         redoBuffer.pop_back();
+
+        if (!switchToEDL(buffer.fileName, ui))
+            return;
+
+        player = ui->uiView->getTimelinePlayer();
         edit_store_undo(player, ui);
 
         auto stack = player->getTimeline()->tracks();
@@ -1037,7 +1100,7 @@ namespace mrv
     {
         tcp->pushMessage("Create Empty Timeline");
         tcp->lock();
-        const std::string file = otioFilename("EDL");
+        const std::string file = otioFilename();
 
         auto timeline = create_empty_timeline(ui);
 
@@ -1069,7 +1132,7 @@ namespace mrv
         auto Aitem = model->observeA()->get();
         std::string Afile = Aitem->path.get();
 
-        const std::string file = otioFilename("EDL");
+        const std::string file = otioFilename();
 
         otio::ErrorStatus errorStatus;
         auto timeline = create_empty_timeline(ui);
@@ -1353,7 +1416,7 @@ namespace mrv
         double sampleRate;
         sanitizeVideoAndAudioRates(stack, timeRange, videoRate, sampleRate);
 
-        toOtioFile(timeline, ui, "EDL");
+        toOtioFile(timeline, ui);
 
         destItem->timeRange = timeRange;
         destItem->inOutRange = timeRange;

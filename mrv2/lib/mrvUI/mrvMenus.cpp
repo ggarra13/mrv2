@@ -2,6 +2,16 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <FL/platform.H>
+#include <FL/fl_utf8.h>
+#include <FL/Fl_Sys_Menu_Bar.H>
+#include <FL/Fl_Widget.H>
+#include <FL/Fl.H>
+
+#ifdef __linux__
+#    undef None // X11 defines None as a macro
+#endif
+
 #include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvHotkey.h"
 #include "mrvCore/mrvMath.h"
@@ -24,24 +34,12 @@
 
 #include "mrvPreferencesUI.h"
 
-#include <FL/platform.H>
-#include <FL/fl_utf8.h>
-#include <FL/Fl_Sys_Menu_Bar.H>
-#include <FL/Fl_Widget.H>
-#include <FL/Fl.H>
-
 #include "mrvFl/mrvIO.h"
-
-#ifdef __linux__
-#    undef None // X11 defines None as a macro
-#endif
 
 namespace
 {
     const char* kModule = "menus";
 }
-
-// #define OCIO_MENU     1
 
 namespace mrv
 {

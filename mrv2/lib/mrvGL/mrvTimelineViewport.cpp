@@ -996,8 +996,6 @@ namespace mrv
         posX += dW / 2;
 #ifdef _WIN32
         miny += dH - dW / 2;
-#else
-        posY += dH;
 #endif
 
         // Take into account the different UI bars

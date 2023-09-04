@@ -211,25 +211,17 @@ namespace mrv
 
         image::Size size(128, 64);
 
-        size_t numValidFiles = 0;
-
         for (size_t i = 0; i < numFiles; ++i)
         {
             const auto& media = files->getItem(i);
             const auto& path = media->path;
 
             // We skip EDLs created in tmp dir here.
-            const std::string tmpdir = tmppath() + '/';
             const std::string& dir = path.getDirectory();
             const std::string& base = path.getBaseName();
             const std::string& extension = path.getExtension();
-            if (extension == ".otio" && base == "EDL." && dir == tmpdir)
-                continue;
 
-            ++numValidFiles;
-
-            const std::string file =
-                path.getBaseName() + path.getNumber() + path.getExtension();
+            const std::string file = base + path.getNumber() + extension;
             const std::string fullfile = dir + file;
 
             auto bW = new Widget<FileButton>(
@@ -314,7 +306,7 @@ namespace mrv
             }
         }
 
-        int Y = g->y() + 20 + numValidFiles * 64;
+        int Y = g->y() + 20 + numFiles * 64;
 
         Pack* bg = new Pack(g->x(), Y, g->w(), 30);
         bg->type(Pack::HORIZONTAL);
