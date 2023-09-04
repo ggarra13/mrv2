@@ -47,9 +47,6 @@ ExternalProject_Add(
     BUILD_IN_SOURCE 1
 )
 
-if(WIN32)
-  set(PYTHON_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/python.exe)
-endif()
 
 set( PYTHON_DEP Python )
 
@@ -59,6 +56,6 @@ set( PYTHON_DEP Python )
 if(UNIX)
     set( PYTHON_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/python3.10 )
 else()
-    set( PYTHON_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/python )
+    set( PYTHON_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/python.exe )
 endif()
 
