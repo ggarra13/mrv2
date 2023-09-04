@@ -54,7 +54,7 @@ set( PYTHON_DEP Python )
 # This is needed for our own tlRender's USD building
 #
 if(UNIX)
-    set( PYTHON_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/python3.10 )
+    set( PYTHON_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/python${PYTHON_VERSION} )
 else()
     set( PYTHON_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/python.exe )
 endif()
