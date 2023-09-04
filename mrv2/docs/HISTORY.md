@@ -43,6 +43,8 @@ v0.7.2
 - Fixed an annoying repositioning of window when loading new clips.
 - Added support for Markers in timeline viewport.
 - Made FPS display show only two decimal digits to simplify.
+- Added File->Save->Single Frame to save a single frame only.
+- Sped up Python compilation on Windows.
 
 
 v0.7.1
