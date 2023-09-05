@@ -296,6 +296,7 @@ namespace mrv
         }
         catch (const std::exception& e)
         {
+            LOG_ERROR(e.what());
         }
 
         glViewport(0, 0, GLsizei(viewportSize.w), GLsizei(viewportSize.h));

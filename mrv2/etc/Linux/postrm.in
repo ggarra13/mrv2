@@ -1,6 +1,15 @@
-#!/bin/sh
+#!/bin/bash
 
-rm -f /usr/bin/mrv2
+if [[ -L /usr/bin/mrv2 ]]; then
+    fullpath=`readlink /usr/bin/mrv2`
+    installpath="@CPACK_INSTALL_PREFIX@/bin/mrv2.sh"
+    if [ "$fullpath" == "$installpath" ]; then
+	echo "Removing symlink from /usr/bin/mrv2"
+	rm -f /usr/bin/mrv2
+    fi
+fi
+
+echo "Removing symlink from /usr/bin/mrv2-v@mrv2_VERSION@"
 rm -f /usr/bin/mrv2-v@mrv2_VERSION@
 
 full_dir=$(xdg-user-dir DESKTOP)
