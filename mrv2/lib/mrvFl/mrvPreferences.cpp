@@ -1838,8 +1838,6 @@ namespace mrv
                 OCIO_Display = config->getDefaultDisplay();
                 OCIO_View = config->getDefaultView(OCIO_Display.c_str());
 
-                int numDisplays = config->getNumDisplays();
-
                 stringArray active_displays;
                 const char* displaylist = config->getActiveDisplays();
                 if (displaylist && strlen(displaylist) > 0)
@@ -1856,6 +1854,7 @@ namespace mrv
                 }
                 else
                 {
+                    int numDisplays = config->getNumDisplays();
                     for (int i = 0; i < numDisplays; ++i)
                     {
                         active_displays.push_back(config->getDisplay(i));
