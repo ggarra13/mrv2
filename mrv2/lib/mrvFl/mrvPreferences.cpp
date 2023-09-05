@@ -1836,14 +1836,13 @@ namespace mrv
                 uiPrefs->uiPrefsOCIOConfig->tooltip(config->getDescription());
 
                 OCIO_Display = config->getDefaultDisplay();
-
                 OCIO_View = config->getDefaultView(OCIO_Display.c_str());
 
                 int numDisplays = config->getNumDisplays();
 
                 stringArray active_displays;
                 const char* displaylist = config->getActiveDisplays();
-                if (displaylist)
+                if (displaylist && strlen(displaylist) > 0)
                 {
                     mrv::split(active_displays, displaylist, ',');
 
@@ -1857,8 +1856,7 @@ namespace mrv
                 }
                 else
                 {
-                    int num = config->getNumDisplays();
-                    for (int i = 0; i < num; ++i)
+                    for (int i = 0; i < numDisplays; ++i)
                     {
                         active_displays.push_back(config->getDisplay(i));
                     }
@@ -1866,7 +1864,7 @@ namespace mrv
 
                 stringArray active_views;
                 const char* viewlist = config->getActiveViews();
-                if (viewlist)
+                if (viewlist && strlen(viewlist) > 0)
                 {
                     mrv::split(active_views, viewlist, ',');
 
