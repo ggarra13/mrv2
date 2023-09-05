@@ -1078,9 +1078,7 @@ namespace mrv
     {
         TLRENDER_P();
         p.eventLoop->tick();
-#ifndef __APPLE__
         if (p.eventLoop->hasDrawUpdate())
-#endif
         {
             redraw();
         }

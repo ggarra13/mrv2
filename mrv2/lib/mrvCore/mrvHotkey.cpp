@@ -23,9 +23,8 @@ namespace mrv
     Hotkey kOpenSeparateAudio(false, false, false, false, 0);
     Hotkey kOpenSingleImage(true, true, false, false, 'o');
     Hotkey kOpenStereoImage(false, false, true, false, 'o');
-    Hotkey kOpenAMF(false, false, false, true, 'o');
-    Hotkey kOpenClipXMLMetadata(true, false, false, false, 'x');
     Hotkey kOpenSession(false, true, false, false, 'o');
+
     Hotkey kSaveImage(false, false, false, false, 0);
     Hotkey kSaveSequence(true, false, false, true, 's');
     Hotkey kSavePDF(false, false, false, false, 0);
