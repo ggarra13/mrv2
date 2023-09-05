@@ -131,9 +131,6 @@ namespace mrv
                         pos.y -= w->y();
                     }
 
-                    delete p.drag;
-                    p.drag = nullptr;
-
                     if (box.contains(pos))
                     {
                         const std::string text = label();
@@ -156,14 +153,6 @@ namespace mrv
                 stringArray lines;
                 split_string(lines, text, "\n");
                 std::string filename = lines[0] + lines[1];
-                file::Path path(filename);
-                auto extension = string::toLower(path.getExtension());
-                if (extension == ".otio")
-                {
-                    LOG_ERROR(
-                        _("Currently you cannot concatenate two .otio files."));
-                    return 0;
-                }
 
                 if (!p.drag)
                 {
@@ -171,6 +160,15 @@ namespace mrv
                     p.drag->image(image());
                     auto window = p.drag->window();
                     window->always_on_top(true);
+
+                    file::Path path(filename);
+                    auto extension = string::toLower(path.getExtension());
+                    if (extension == ".otio")
+                    {
+                        LOG_ERROR(_("Currently you cannot concatenate two "
+                                    ".otio files."));
+                        return 0;
+                    }
                 }
 
                 if (p.drag)

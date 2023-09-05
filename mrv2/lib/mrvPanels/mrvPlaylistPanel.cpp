@@ -21,6 +21,8 @@
 #include "mrvPanels/mrvPanelsAux.h"
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
+#include "mrvFl/mrvIO.h"
+
 #include "mrvEdit/mrvEditCallbacks.h"
 
 #include "mrvUI/mrvAsk.h" // for fl_input
@@ -436,25 +438,7 @@ namespace mrv
             win.x = window->x();
             win.y = window->y();
         }
-        for (auto& m : _r->map)
-        {
-            PlaylistButton* b = m.second;
-            math::Box2i box(b->x() + win.x, b->y() + win.y, b->w(), b->h());
-            if (box.contains(pos))
-            {
-                aIndex = static_cast<int>(m.first);
-                validDrop = true;
-                break;
-            }
-        }
-
-        if (validDrop && aIndex > 0)
-        {
-            auto model = ui->app->filesModel();
-            model->setA(aIndex);
-            add_clip_to_timeline(filename, index, ui);
-        }
-        else if (_r->map.empty())
+        if (_r->map.empty())
         {
             math::Box2i box(g->x() + win.x, g->y() + win.y, g->w(), 68);
             if (box.contains(pos))
@@ -464,6 +448,27 @@ namespace mrv
             if (validDrop)
             {
                 create_new_timeline_cb(nullptr, ui);
+            }
+        }
+        else
+        {
+            for (auto& m : _r->map)
+            {
+                PlaylistButton* b = m.second;
+                math::Box2i box(b->x() + win.x, b->y() + win.y, b->w(), b->h());
+                if (box.contains(pos))
+                {
+                    aIndex = static_cast<int>(m.first);
+                    validDrop = true;
+                    break;
+                }
+            }
+
+            if (validDrop && aIndex >= 0)
+            {
+                auto model = ui->app->filesModel();
+                model->setA(aIndex);
+                add_clip_to_timeline(filename, index, ui);
             }
         }
     }
