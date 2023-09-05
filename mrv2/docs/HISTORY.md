@@ -45,6 +45,8 @@ v0.7.2
 - Made FPS display show only two decimal digits to simplify.
 - Added File->Save->Single Frame to save a single frame only.
 - Sped up Python compilation on Windows.
+- Fixed OpenColorIO Active Displays and Active Views when they were set to an
+  empty string which would turn off the View menu.
 
 
 v0.7.1
