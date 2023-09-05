@@ -3,20 +3,33 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #include <regex>
+#include <filesystem>
+namespace fs = std::filesystem;
 
-#include "FL/Enumerations.H"
+#include <FL/Enumerations.H>
+
+#include <tlCore/StringFormat.h>
 
 #include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvHotkey.h"
+#include "mrvCore/mrvHome.h"
 
 #include "mrvWidgets/mrvBrowser.h"
 
 #include "mrvUI/mrvAsk.h"
 
+#include "mrvFl/mrvIO.h"
 #include "mrvFl/mrvHotkey.h"
+#include "mrvFl/mrvFileRequester.h"
 
 #include "keyboard_ui.h"
 #include "mrvHotkeyUI.h"
+#include "mrViewer.h"
+
+namespace
+{
+    const char* kModule = "keys";
+}
 
 namespace mrv
 {
@@ -152,6 +165,219 @@ namespace mrv
                 return;
             }
         }
+    }
+
+    void save_hotkeys(Fl_Preferences& keys)
+    {
+        keys.set("version", 11);
+        for (int i = 0; hotkeys[i].name != "END"; ++i)
+        {
+            keys.set(
+                (hotkeys[i].name + " ctrl").c_str(), hotkeys[i].hotkey.ctrl);
+            keys.set((hotkeys[i].name + " alt").c_str(), hotkeys[i].hotkey.alt);
+            keys.set(
+                (hotkeys[i].name + " meta").c_str(), hotkeys[i].hotkey.meta);
+            keys.set(
+                (hotkeys[i].name + " shift").c_str(), hotkeys[i].hotkey.shift);
+            keys.set(
+                (hotkeys[i].name + " key").c_str(), (int)hotkeys[i].hotkey.key);
+            keys.set(
+                (hotkeys[i].name + " text").c_str(),
+                hotkeys[i].hotkey.text.c_str());
+        }
+    }
+
+    void save_hotkeys(ViewerUI* ui, std::string filename)
+    {
+        //
+        // Hotkeys
+        //
+        size_t pos = filename.rfind(".prefs");
+        if (pos != std::string::npos)
+            filename = filename.replace(pos, filename.size(), "");
+
+        pos = filename.rfind(".keys");
+        if (pos != std::string::npos)
+            filename = filename.replace(pos, filename.size(), "");
+
+        std::string path = prefspath() + filename + ".keys.prefs";
+        std::string title = _("Save Hotkeys");
+        filename = file_save_single_requester(
+            ui, title.c_str(), _("Hotkeys (*.{keys.prefs})"), path.c_str());
+        if (filename.empty())
+            return;
+
+        size_t start = filename.rfind('/');
+        if (start == std::string::npos)
+            start = filename.rfind('\\');
+        ;
+        if (start != std::string::npos)
+            filename = filename.substr(start + 1, filename.size());
+
+        pos = filename.rfind(".prefs");
+        if (pos != std::string::npos)
+            filename = filename.replace(pos, filename.size(), "");
+
+        pos = filename.rfind(".keys");
+        if (pos == std::string::npos)
+            filename += ".keys";
+
+        Preferences::hotkeys_file = filename;
+        Fl_Preferences keys(prefspath().c_str(), "filmaura", filename.c_str());
+        save_hotkeys(keys);
+
+        HotkeyUI* h = ui->uiHotkey;
+        h->uiHotkeyFile->value(mrv::Preferences::hotkeys_file.c_str());
+
+        // Update menubar in case some hotkey shortcut changed
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
+    void load_hotkeys(ViewerUI* ui, std::string filename)
+    {
+        size_t pos = filename.rfind(".prefs");
+        if (pos != std::string::npos)
+            filename = filename.replace(pos, filename.size(), "");
+
+        pos = filename.rfind(".keys");
+        if (pos != std::string::npos)
+            filename = filename.replace(pos, filename.size(), "");
+
+        std::string path = prefspath() + filename + ".keys.prefs";
+        std::string title = _("Load Hotkeys Preferences");
+        filename = file_single_requester(
+            ui, title.c_str(), _("Hotkeys (*.{keys.prefs})"), path.c_str(),
+            false);
+        if (filename.empty())
+            return;
+
+        size_t start = filename.rfind('/');
+        if (start == std::string::npos)
+            start = filename.rfind('\\');
+        if (start != std::string::npos)
+            filename = filename.substr(start + 1, filename.size());
+
+        if (!fs::exists(prefspath() + '/' + filename))
+        {
+            std::string err =
+                tl::string::Format(_("Hotkeys file {0}/{1} does not exist!"))
+                    .arg(prefspath())
+                    .arg(filename);
+            LOG_ERROR(err);
+            return;
+        }
+
+        pos = filename.rfind(".prefs");
+        if (pos != std::string::npos)
+            filename = filename.replace(pos, filename.size(), "");
+
+        Preferences::hotkeys_file = filename;
+
+        Fl_Preferences* keys = new Fl_Preferences(
+            prefspath().c_str(), "filmaura", filename.c_str());
+        load_hotkeys(ui, keys);
+    }
+
+    void load_hotkeys(ViewerUI* ui, Fl_Preferences* keys)
+    {
+        int version = 0;
+        keys->get("version", version, 11);
+        int tmp = 0;
+        char tmpS[2048];
+
+        if (fs::exists(prefspath() + Preferences::hotkeys_file + ".prefs"))
+        {
+            for (int i = 0; hotkeys[i].name != "END"; ++i)
+            {
+                if (hotkeys[i].force == true)
+                    continue;
+                hotkeys[i].hotkey.shift = hotkeys[i].hotkey.ctrl =
+                    hotkeys[i].hotkey.alt = hotkeys[i].hotkey.meta = false;
+                hotkeys[i].hotkey.key = 0;
+                hotkeys[i].hotkey.text.clear();
+            }
+        }
+
+        for (int i = 0; hotkeys[i].name != "END"; ++i)
+        {
+            Hotkey saved = hotkeys[i].hotkey;
+
+            keys->get(
+                (hotkeys[i].name + " key").c_str(), tmp,
+                (int)hotkeys[i].hotkey.key);
+            if (tmp)
+                hotkeys[i].force = false;
+            hotkeys[i].hotkey.key = unsigned(tmp);
+
+            keys->get(
+                (hotkeys[i].name + " text").c_str(), tmpS,
+                hotkeys[i].hotkey.text.c_str(), 16);
+            if (strlen(tmpS) > 0)
+            {
+                hotkeys[i].force = false;
+                hotkeys[i].hotkey.text = tmpS;
+            }
+            else
+                hotkeys[i].hotkey.text.clear();
+
+            if (hotkeys[i].force)
+            {
+                hotkeys[i].hotkey = saved;
+                continue;
+            }
+            keys->get(
+                (hotkeys[i].name + " ctrl").c_str(), tmp,
+                (int)hotkeys[i].hotkey.ctrl);
+            if (tmp)
+                hotkeys[i].hotkey.ctrl = true;
+            else
+                hotkeys[i].hotkey.ctrl = false;
+            keys->get(
+                (hotkeys[i].name + " alt").c_str(), tmp,
+                (int)hotkeys[i].hotkey.alt);
+            if (tmp)
+                hotkeys[i].hotkey.alt = true;
+            else
+                hotkeys[i].hotkey.alt = false;
+
+            keys->get(
+                (hotkeys[i].name + " meta").c_str(), tmp,
+                (int)hotkeys[i].hotkey.meta);
+            if (tmp)
+                hotkeys[i].hotkey.meta = true;
+            else
+                hotkeys[i].hotkey.meta = false;
+
+            keys->get(
+                (hotkeys[i].name + " shift").c_str(), tmp,
+                (int)hotkeys[i].hotkey.shift);
+            if (tmp)
+                hotkeys[i].hotkey.shift = true;
+            else
+                hotkeys[i].hotkey.shift = false;
+
+            for (int j = 0; hotkeys[j].name != "END"; ++j)
+            {
+                if (j != i && hotkeys[j].hotkey == hotkeys[i].hotkey)
+                {
+                    std::string err =
+                        tl::string::Format(
+                            _("Corruption in hotkeys preferences. "
+                              "Hotkey {0} for {1} will not be "
+                              "available.  "
+                              "Already used in {2}"))
+                            .arg(hotkeys[j].hotkey.to_s())
+                            .arg(_(hotkeys[j].name.c_str()))
+                            .arg(_(hotkeys[i].name.c_str()));
+                    LOG_ERROR(err);
+                    hotkeys[j].hotkey = Hotkey();
+                }
+            }
+        }
+
+        HotkeyUI* h = ui->uiHotkey;
+        h->uiHotkeyFile->value(mrv::Preferences::hotkeys_file.c_str());
+        fill_ui_hotkeys(h->uiFunction);
     }
 
 } // namespace mrv

@@ -19,7 +19,6 @@ namespace fs = std::filesystem;
 
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvString.h"
-#include "mrvCore/mrvHotkey.h"
 
 #include "mrvFl/mrvHotkey.h"
 #include "mrvFl/mrvSaving.h"
@@ -28,7 +27,6 @@ namespace fs = std::filesystem;
 
 #include "mrvApp/App.h"
 
-#include "mrvHotkeyUI.h"
 #include "mrViewer.h"
 
 #include "mrvFl/mrvIO.h"
@@ -144,9 +142,8 @@ namespace mrv
     }
 
     const std::string file_save_single_requester(
-        const std::shared_ptr<tl::system::Context>& context, const char* title,
-        const char* pattern, const char* startfile,
-        const bool compact_images = true)
+        const ViewerUI* ui, const char* title, const char* pattern,
+        const char* startfile, const bool compact_images)
     {
         std::string file;
         try
@@ -176,6 +173,7 @@ namespace mrv
             }
             else
             {
+                const auto context = ui->app->getContext();
                 const char* f = flu_save_chooser(
                     context, title, pattern, startfile, compact_images);
                 if (!f)
@@ -193,8 +191,8 @@ namespace mrv
     }
 
     stringArray file_multi_requester(
-        const std::shared_ptr<tl::system::Context>& context, const char* title,
-        const char* pattern, const char* startfile, const bool compact_images)
+        const ViewerUI* ui, const char* title, const char* pattern,
+        const char* startfile, const bool compact_images)
     {
         stringArray filelist;
 
@@ -230,6 +228,7 @@ namespace mrv
             }
             else
             {
+                const auto context = ui->app->getContext();
                 flu_multi_file_chooser(
                     context, title, pattern, startfile, filelist,
                     compact_images);
@@ -245,8 +244,8 @@ namespace mrv
     }
 
     std::string file_single_requester(
-        const std::shared_ptr<tl::system::Context>& context, const char* title,
-        const char* pattern, const char* startfile, const bool compact_files)
+        const ViewerUI* ui, const char* title, const char* pattern,
+        const char* startfile, const bool compact_files)
     {
         std::string file;
         try
@@ -278,6 +277,7 @@ namespace mrv
             }
             else
             {
+                const auto context = ui->app->getContext();
                 const char* f = flu_file_chooser(
                     context, title, pattern, startfile, compact_files);
                 if (f)
@@ -329,7 +329,7 @@ namespace mrv
         }
         else
         {
-            const auto& context = ui->app->getContext();
+            const auto context = ui->app->getContext();
             const char* d = flu_dir_chooser(context, title.c_str(), startfile);
             if (d)
                 dir = d;
@@ -348,7 +348,7 @@ namespace mrv
     stringArray open_image_file(
         const char* startfile, const bool compact_images, ViewerUI* ui)
     {
-        const auto& context = ui->app->getContext();
+        auto context = ui->app->getContext();
         const std::string kREEL_PATTERN =
             _("Reels (*.{") + kReelPattern + "})\t";
         const std::string kAUDIO_PATTERN =
@@ -371,7 +371,7 @@ namespace mrv
         }
 
         return file_multi_requester(
-            context, title.c_str(), pattern.c_str(), startfile, compact_images);
+            ui, title.c_str(), pattern.c_str(), startfile, compact_images);
     }
 
     std::string save_otio(const char* startfile, ViewerUI* ui)
@@ -380,9 +380,8 @@ namespace mrv
 
         std::string title = _("Save OTIO timeline");
 
-        const auto& context = ui->app->getContext();
         std::string file = file_save_single_requester(
-            context, title.c_str(), kOTIO_PATTERN.c_str(), startfile, false);
+            ui, title.c_str(), kOTIO_PATTERN.c_str(), startfile, false);
         if (file.empty())
             return file;
 
@@ -405,9 +404,8 @@ namespace mrv
 
         std::string title = _("Save Python Script");
 
-        const auto& context = ui->app->getContext();
         return file_save_single_requester(
-            context, title.c_str(), kPYTHON_PATTERN.c_str(), startfile, false);
+            ui, title.c_str(), kPYTHON_PATTERN.c_str(), startfile, false);
     }
 
     /**
@@ -423,9 +421,8 @@ namespace mrv
 
         std::string title = _("Load Python Script");
 
-        const auto& context = ui->app->getContext();
         return file_single_requester(
-            context, title.c_str(), kPYTHON_PATTERN.c_str(), startfile, false);
+            ui, title.c_str(), kPYTHON_PATTERN.c_str(), startfile, false);
     }
 
     /**
@@ -448,9 +445,8 @@ namespace mrv
 
         std::string title = _("Load LUT");
 
-        const auto& context = ui->app->getContext();
         return file_single_requester(
-            context, title.c_str(), kLUT_PATTERN.c_str(), startfile, false);
+            ui, title.c_str(), kLUT_PATTERN.c_str(), startfile, false);
     }
 
     /**
@@ -467,10 +463,8 @@ namespace mrv
 
         std::string title = _("Load Subtitle");
 
-        const auto& context = ui->app->getContext();
         return file_single_requester(
-            context, title.c_str(), kSUBTITLE_PATTERN.c_str(), startfile,
-            false);
+            ui, title.c_str(), kSUBTITLE_PATTERN.c_str(), startfile, false);
     }
 
     /**
@@ -482,19 +476,19 @@ namespace mrv
      */
     std::string open_audio_file(const char* startfile, ViewerUI* ui)
     {
-        const auto& context = ui->app->getContext();
+        auto context = ui->app->getContext();
         std::string kAUDIO_PATTERN =
             _("Audios (*.{") + getAudioPattern(context) + "})";
 
         std::string title = _("Load Audio");
 
         return file_single_requester(
-            context, title.c_str(), kAUDIO_PATTERN.c_str(), startfile, true);
+            ui, title.c_str(), kAUDIO_PATTERN.c_str(), startfile, true);
     }
 
     std::string save_single_image(ViewerUI* ui, const char* startdir)
     {
-        const auto& context = ui->app->getContext();
+        auto context = ui->app->getContext();
         const std::string kIMAGE_PATTERN =
             _("Images (*.{") + getImagePattern(context) + "})";
         const std::string kALL_PATTERN = kIMAGE_PATTERN;
@@ -505,13 +499,13 @@ namespace mrv
             startdir = "";
 
         const std::string& file = file_save_single_requester(
-            context, title.c_str(), kALL_PATTERN.c_str(), startdir, true);
+            ui, title.c_str(), kALL_PATTERN.c_str(), startdir, true);
 
         return file;
     }
     std::string save_movie_or_sequence_file(ViewerUI* ui, const char* startdir)
     {
-        const auto& context = ui->app->getContext();
+        auto context = ui->app->getContext();
         // const std::string kAUDIO_PATTERN =
         //     ("Audios (*.{") + getAudioPattern(context) + "})\t";
         const std::string kIMAGE_PATTERN =
@@ -528,14 +522,13 @@ namespace mrv
             startdir = "";
 
         const std::string& file = file_save_single_requester(
-            context, title.c_str(), kALL_PATTERN.c_str(), startdir, true);
+            ui, title.c_str(), kALL_PATTERN.c_str(), startdir, true);
 
         return file;
     }
 
     std::string save_pdf(ViewerUI* ui, const char* startdir)
     {
-        const auto& context = ui->app->getContext();
         const std::string kPDF_PATTERN = _("Acrobat PDF (*.{pdf})");
         const std::string kALL_PATTERN = kPDF_PATTERN;
 
@@ -545,7 +538,7 @@ namespace mrv
             startdir = "";
 
         std::string file = file_save_single_requester(
-            context, title.c_str(), kALL_PATTERN.c_str(), startdir, true);
+            ui, title.c_str(), kALL_PATTERN.c_str(), startdir, true);
 
         if (file.empty())
             return file;
@@ -560,7 +553,6 @@ namespace mrv
 
     std::string open_session_file(ViewerUI* ui, const char* startdir)
     {
-        const auto& context = ui->app->getContext();
         const std::string kSESSION = _("Session");
         const std::string kSESSION_PATTERN = kSESSION + " (*.{mrv2s})";
         const std::string kALL_PATTERN = kSESSION_PATTERN;
@@ -571,14 +563,13 @@ namespace mrv
             startdir = "";
 
         const std::string& file = file_single_requester(
-            context, title.c_str(), kALL_PATTERN.c_str(), startdir, true);
+            ui, title.c_str(), kALL_PATTERN.c_str(), startdir, true);
 
         return file;
     }
 
     std::string save_session_file(ViewerUI* ui, const char* startdir)
     {
-        const auto& context = ui->app->getContext();
         const std::string kSESSION = _("Session");
         const std::string kSESSION_PATTERN = kSESSION + " (*.{mrv2s})";
         const std::string kALL_PATTERN = kSESSION_PATTERN;
@@ -589,7 +580,7 @@ namespace mrv
             startdir = "";
 
         std::string file = file_save_single_requester(
-            context, title.c_str(), kALL_PATTERN.c_str(), startdir, true);
+            ui, title.c_str(), kALL_PATTERN.c_str(), startdir, true);
         if (file.empty())
             return file;
 
@@ -606,226 +597,9 @@ namespace mrv
         std::string kOCIO_PATTERN = _("OCIO config (*.{") + kOCIOPattern + "})";
         std::string title = _("Load OCIO Config");
 
-        const auto& context = ui->app->getContext();
         std::string file = file_single_requester(
-            context, title.c_str(), kOCIO_PATTERN.c_str(), startfile, false);
+            ui, title.c_str(), kOCIO_PATTERN.c_str(), startfile, false);
         return file;
     }
 
-    void save_hotkeys(Fl_Preferences& keys)
-    {
-        keys.set("version", 11);
-        for (int i = 0; hotkeys[i].name != "END"; ++i)
-        {
-            keys.set(
-                (hotkeys[i].name + " ctrl").c_str(), hotkeys[i].hotkey.ctrl);
-            keys.set((hotkeys[i].name + " alt").c_str(), hotkeys[i].hotkey.alt);
-            keys.set(
-                (hotkeys[i].name + " meta").c_str(), hotkeys[i].hotkey.meta);
-            keys.set(
-                (hotkeys[i].name + " shift").c_str(), hotkeys[i].hotkey.shift);
-            keys.set(
-                (hotkeys[i].name + " key").c_str(), (int)hotkeys[i].hotkey.key);
-            keys.set(
-                (hotkeys[i].name + " text").c_str(),
-                hotkeys[i].hotkey.text.c_str());
-        }
-    }
-
-    void save_hotkeys(ViewerUI* ui, std::string filename)
-    {
-
-        const auto& context = ui->app->getContext();
-        //
-        // Hotkeys
-        //
-        size_t pos = filename.rfind(".prefs");
-        if (pos != std::string::npos)
-            filename = filename.replace(pos, filename.size(), "");
-
-        pos = filename.rfind(".keys");
-        if (pos != std::string::npos)
-            filename = filename.replace(pos, filename.size(), "");
-
-        std::string path = prefspath() + filename + ".keys.prefs";
-        std::string title = _("Save Hotkeys");
-        filename = file_save_single_requester(
-            context, title.c_str(), _("Hotkeys (*.{keys.prefs})"),
-            path.c_str());
-        if (filename.empty())
-            return;
-
-        size_t start = filename.rfind('/');
-        if (start == std::string::npos)
-            start = filename.rfind('\\');
-        ;
-        if (start != std::string::npos)
-            filename = filename.substr(start + 1, filename.size());
-
-        pos = filename.rfind(".prefs");
-        if (pos != std::string::npos)
-            filename = filename.replace(pos, filename.size(), "");
-
-        pos = filename.rfind(".keys");
-        if (pos == std::string::npos)
-            filename += ".keys";
-
-        Preferences::hotkeys_file = filename;
-        Fl_Preferences keys(prefspath().c_str(), "filmaura", filename.c_str());
-        save_hotkeys(keys);
-
-        HotkeyUI* h = ui->uiHotkey;
-        h->uiHotkeyFile->value(mrv::Preferences::hotkeys_file.c_str());
-
-        // Update menubar in case some hotkey shortcut changed
-        ui->uiMain->fill_menu(ui->uiMenuBar);
-    }
-
-    void load_hotkeys(ViewerUI* ui, std::string filename)
-    {
-        const auto& context = ui->app->getContext();
-        size_t pos = filename.rfind(".prefs");
-        if (pos != std::string::npos)
-            filename = filename.replace(pos, filename.size(), "");
-
-        pos = filename.rfind(".keys");
-        if (pos != std::string::npos)
-            filename = filename.replace(pos, filename.size(), "");
-
-        std::string path = prefspath() + filename + ".keys.prefs";
-        std::string title = _("Load Hotkeys Preferences");
-        filename = file_single_requester(
-            context, title.c_str(), _("Hotkeys (*.{keys.prefs})"), path.c_str(),
-            false);
-        if (filename.empty())
-            return;
-
-        size_t start = filename.rfind('/');
-        if (start == std::string::npos)
-            start = filename.rfind('\\');
-        if (start != std::string::npos)
-            filename = filename.substr(start + 1, filename.size());
-
-        if (!fs::exists(prefspath() + '/' + filename))
-        {
-            std::string err =
-                tl::string::Format(_("Hotkeys file {0}/{1} does not exist!"))
-                    .arg(prefspath())
-                    .arg(filename);
-            LOG_ERROR(err);
-            return;
-        }
-
-        pos = filename.rfind(".prefs");
-        if (pos != std::string::npos)
-            filename = filename.replace(pos, filename.size(), "");
-
-        Preferences::hotkeys_file = filename;
-
-        Fl_Preferences* keys = new Fl_Preferences(
-            prefspath().c_str(), "filmaura", filename.c_str());
-        load_hotkeys(ui, keys);
-    }
-
-    void load_hotkeys(ViewerUI* ui, Fl_Preferences* keys)
-    {
-        int version = 0;
-        keys->get("version", version, 11);
-        int tmp = 0;
-        char tmpS[2048];
-
-        if (fs::exists(prefspath() + Preferences::hotkeys_file + ".prefs"))
-        {
-            for (int i = 0; hotkeys[i].name != "END"; ++i)
-            {
-                if (hotkeys[i].force == true)
-                    continue;
-                hotkeys[i].hotkey.shift = hotkeys[i].hotkey.ctrl =
-                    hotkeys[i].hotkey.alt = hotkeys[i].hotkey.meta = false;
-                hotkeys[i].hotkey.key = 0;
-                hotkeys[i].hotkey.text.clear();
-            }
-        }
-
-        for (int i = 0; hotkeys[i].name != "END"; ++i)
-        {
-            Hotkey saved = hotkeys[i].hotkey;
-
-            keys->get(
-                (hotkeys[i].name + " key").c_str(), tmp,
-                (int)hotkeys[i].hotkey.key);
-            if (tmp)
-                hotkeys[i].force = false;
-            hotkeys[i].hotkey.key = unsigned(tmp);
-
-            keys->get(
-                (hotkeys[i].name + " text").c_str(), tmpS,
-                hotkeys[i].hotkey.text.c_str(), 16);
-            if (strlen(tmpS) > 0)
-            {
-                hotkeys[i].force = false;
-                hotkeys[i].hotkey.text = tmpS;
-            }
-            else
-                hotkeys[i].hotkey.text.clear();
-
-            if (hotkeys[i].force)
-            {
-                hotkeys[i].hotkey = saved;
-                continue;
-            }
-            keys->get(
-                (hotkeys[i].name + " ctrl").c_str(), tmp,
-                (int)hotkeys[i].hotkey.ctrl);
-            if (tmp)
-                hotkeys[i].hotkey.ctrl = true;
-            else
-                hotkeys[i].hotkey.ctrl = false;
-            keys->get(
-                (hotkeys[i].name + " alt").c_str(), tmp,
-                (int)hotkeys[i].hotkey.alt);
-            if (tmp)
-                hotkeys[i].hotkey.alt = true;
-            else
-                hotkeys[i].hotkey.alt = false;
-
-            keys->get(
-                (hotkeys[i].name + " meta").c_str(), tmp,
-                (int)hotkeys[i].hotkey.meta);
-            if (tmp)
-                hotkeys[i].hotkey.meta = true;
-            else
-                hotkeys[i].hotkey.meta = false;
-
-            keys->get(
-                (hotkeys[i].name + " shift").c_str(), tmp,
-                (int)hotkeys[i].hotkey.shift);
-            if (tmp)
-                hotkeys[i].hotkey.shift = true;
-            else
-                hotkeys[i].hotkey.shift = false;
-
-            for (int j = 0; hotkeys[j].name != "END"; ++j)
-            {
-                if (j != i && hotkeys[j].hotkey == hotkeys[i].hotkey)
-                {
-                    std::string err =
-                        tl::string::Format(
-                            _("Corruption in hotkeys preferences. "
-                              "Hotkey {0} for {1} will not be "
-                              "available.  "
-                              "Already used in {2}"))
-                            .arg(hotkeys[j].hotkey.to_s())
-                            .arg(_(hotkeys[j].name.c_str()))
-                            .arg(_(hotkeys[i].name.c_str()));
-                    LOG_ERROR(err);
-                    hotkeys[j].hotkey = Hotkey();
-                }
-            }
-        }
-
-        HotkeyUI* h = ui->uiHotkey;
-        h->uiHotkeyFile->value(mrv::Preferences::hotkeys_file.c_str());
-        fill_ui_hotkeys(h->uiFunction);
-    }
 } // namespace mrv

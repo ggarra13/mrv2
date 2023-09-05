@@ -24,6 +24,7 @@ namespace fs = std::filesystem;
 #include "mrvWidgets/mrvLogDisplay.h"
 
 #include "mrvFl/mrvPreferences.h"
+#include "mrvFl/mrvHotkey.h"
 #include "mrvFl/mrvLanguages.h"
 
 #include "mrvUI/mrvAsk.h"
