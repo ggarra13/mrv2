@@ -134,7 +134,7 @@ if ( NOT WIN32 )
     
     install( FILES
 	${CMAKE_SOURCE_DIR}/bin/mrv2.sh
-	${CMAKE_SOURCE_DIR}/bin/environment.sh
+	${CMAKE_INSTALL_PREFIX}/bin/environment.sh
 	DESTINATION bin
         PERMISSIONS 
         OWNER_READ OWNER_WRITE OWNER_EXECUTE
