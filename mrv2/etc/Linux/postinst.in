@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Remove old symlinks just in case
 rm -f /usr/bin/mrv2
@@ -23,7 +23,7 @@ chmod a+x "$startup"
 #
 
 name=`logname`
-if [ -z "$name" ]; then
+if [[ -z "$name" ]]; then
     name=$LOGNAME
 fi
 
@@ -33,7 +33,7 @@ desktop_dir=/home/${name}/.config/
 file=${desktop_dir}/user-dirs.dirs
 
 # if it does, copy it to root .config directory
-if [ -e $file ]; then
+if [[ -e $file ]]; then
     if [ ! -d /root/.config ]; then
        mkdir /root/.config
     fi
@@ -45,12 +45,12 @@ fulldir=$(xdg-user-dir DESKTOP)
 desktop_dir=${fulldir#/root/}
 
 # If fulldir had /root/ in it, then rearrange to copy to /home/user directory
-if [ $fulldir != $desktop_dir ]; then
+if [[ $fulldir != $desktop_dir ]]; then
     desktop_dir=/home/${name}/${desktop_dir}
 fi
 
 # Just in case.  If /home/user/DESKTOP directory is missing, create it.
-if [ ! -d $desktop_dir ]; then
+if [[ ! -d $desktop_dir ]]; then
     mkdir $desktop_dir
 fi
 
