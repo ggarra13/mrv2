@@ -1,6 +1,13 @@
 #!/bin/sh
 
-rm -f /usr/bin/mrv2
+if [[ -e /usr/bin/mrv2 ]]; then
+    fullpath=`readlink /usr/bin/mrv2`
+    installpath="/usr/local/mrv2-v@mrv2_VERSION@-Linux-64"
+    if [[ $fullpath == "$installpath/bin/mrv2.sh" ]]; then
+	rm -f /usr/bin/mrv2
+    fi
+fi
+
 rm -f /usr/bin/mrv2-v@mrv2_VERSION@
 
 full_dir=$(xdg-user-dir DESKTOP)
