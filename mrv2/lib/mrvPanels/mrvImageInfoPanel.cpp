@@ -758,7 +758,7 @@ namespace mrv
         m_audio->end();
         m_subtitle->end();
 
-        if (g->docked() && player)
+        if (player)
             end_group();
 
         DBG3;

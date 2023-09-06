@@ -151,7 +151,7 @@ namespace mrv
         Fl::screen_work_area(minX, minY, maxW, maxH, screen);
 
         // Don't allow taking the window beyond the titlebar
-        // -20 for the siz of the dragger in the group.
+        // -20 for the size of the dragger in the group.
         const int DH = 20;
         int maxY = minY + maxH - DH;
         if (Y < minY)

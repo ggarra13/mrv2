@@ -52,6 +52,8 @@ v0.8.0
   as it was suggested using them in production was usually not the hassle.
 - Fixed a tlRender bug which would make a clip with source range start_time
   different than 0 continue its audio beyond the end.
+- Fixed Image Information Panel issues when it was saved as a window with the
+  tabs open.
 
 
 v0.7.1
