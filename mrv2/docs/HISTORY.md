@@ -1,5 +1,27 @@
-v0.8.0
+v0.7.5
 ------
+
+Playlist and Editing:
+
+This is the first version that supports some basic editing and improves upon
+the playlist panel by making it interactive.
+
+- The Playlist panel's functionality has been simplified. It is there only to create
+  an empty track or start a new EDL with one clip from the Files Panel.
+- Added an Edit/Frame/Cut, Edit/Frame/Copy, Edit/Frame/Paste and
+  Edit/Frame/Insert to cut, copy, paste and insert one frame (video and audio)
+  of any media.  Currently, it does not support transitions, that are removed.
+  As soon as one of these commands is used, a new EDL is created.
+- Added an Edit/Slice to cut a clip in half at the current time location.
+- Added an Edit/Remove to remove the clips that intersect the current time location.
+  In the future, more control will be provided to select the clips instead of using
+  the current time.
+- Darby Johnston provided with rearranging of clips in the timeline viewport
+  for some basic editing.
+- Added Drag and Drop functionality to the Files Panel into the Timeline Window as
+  well as to the Plalist window to add clips and create an EDL.
+- Currently, there's still no support for trimming the Timeline clips yet.
+  
 - Documented Python USD module.
 - Fixed DWA compression on non English locales (with commas as decimal
   separators)
@@ -20,13 +42,7 @@ v0.8.0
 - Fixed Log Panel when an error was shown to resize to the size of the window
   and not smaller.
 - Log Panel will no longer open when the file requester is open. 
-- Added an Edit/Frame/Cut, Edit/Frame/Copy, Edit/Frame/Paste and
-  Edit/Frame/Insert to cut, copy, paste and insert one frame (video and audio)
-  of any media.  Currently, it does not support transitions, that are removed.
 - Fixed Undo/Redo of annotations, which was incorrect.
-- Added Drag and Drop functionality to the File Panel into the Timeline Window.
-- The Playlist panel's functionality is there only to create an empty track
-  and list all user created EDL clips.
 - Fixed keyboard (menu) shortcuts not working in the Files Panel.
 - Annotations are now kept with RationalTime instead of frames to be more
   precise.  Note, however, that old session files that use annotations will be
@@ -55,7 +71,7 @@ v0.8.0
 - Fixed Image Information Panel size when it was saved as a window with the
   tabs open.
 - Made Network connections more solid.  In case of wrong data sent through the
-  network, it will no longer crash the viewer, but discard it.
+  network, it will discard it.
 
 
 v0.7.1
