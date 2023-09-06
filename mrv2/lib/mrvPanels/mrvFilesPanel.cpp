@@ -19,6 +19,8 @@
 
 #include "mrvGL/mrvThumbnailCreator.h"
 
+#include "mrvNetwork/mrvTCP.h"
+
 #include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/App.h"
 
@@ -46,11 +48,12 @@ namespace mrv
         WidgetIndices indices;
         std::vector< Fl_Button* > buttons;
 
-        bool filterEDL = false;
-
         std::shared_ptr<
             observer::ListObserver<std::shared_ptr<FilesModelItem> > >
             filesObserver;
+
+        std::shared_ptr< observer::ValueObserver<FilesPanelOptions> >
+            filesPanelOptionsObserver;
 
         std::shared_ptr<observer::ValueObserver<int> > aIndexObserver;
         std::shared_ptr<observer::ListObserver<int> > layerObserver;
@@ -135,6 +138,11 @@ namespace mrv
                     const std::vector< std::shared_ptr<FilesModelItem> >& value)
                 { refresh(); });
 
+        _r->filesPanelOptionsObserver =
+            observer::ValueObserver<FilesPanelOptions>::create(
+                ui->app->filesModel()->observeFilesPanelOptions(),
+                [this](const FilesPanelOptions& value) { refresh(); });
+
         _r->aIndexObserver = observer::ValueObserver<int>::create(
             ui->app->filesModel()->observeAIndex(),
             [this](int value) { redraw(); });
@@ -201,6 +209,8 @@ namespace mrv
 
         const auto files = model->observeFiles();
 
+        const auto o = model->observeFilesPanelOptions()->get();
+
         size_t numFiles = files->getSize();
 
         auto Aindex = model->observeAIndex()->get();
@@ -234,7 +244,7 @@ namespace mrv
                 continue;
             lastPath = path;
 
-            if (_r->filterEDL && dir == tmpdir && base == "EDL." &&
+            if (o.filterEDL && dir == tmpdir && base == "EDL." &&
                 extension == ".otio")
                 continue;
 
@@ -396,14 +406,16 @@ namespace mrv
         svg = load_svg("Filter.svg");
         b->image(svg);
         b->selection_color(FL_YELLOW);
-        b->value(_r->filterEDL);
+        b->value(o.filterEDL);
         _r->buttons.push_back(b);
         b->tooltip(_("Filter EDLs"));
         btW->callback(
             [=](auto w)
             {
-                _r->filterEDL ^= true;
-                refresh();
+                auto model = p.ui->app->filesModel();
+                FilesPanelOptions o = model->observeFilesPanelOptions()->get();
+                o.filterEDL ^= true;
+                model->setFilesPanelOptions(o);
             });
         bg->end();
         g->layout();
@@ -503,6 +515,11 @@ namespace mrv
                 }
             }
         }
+    }
+
+    void FilesPanel::setFilesPanelOptions(const FilesPanelOptions& value)
+    {
+        refresh();
     }
 
     void FilesPanel::refresh()

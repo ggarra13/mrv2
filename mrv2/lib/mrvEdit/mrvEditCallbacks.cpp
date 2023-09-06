@@ -149,6 +149,7 @@ namespace mrv
             ui->uiTimeline->redraw();
         }
 
+        //! Return whether a timeline has all empty tracks.
         bool hasEmptyTracks(otio::Stack* stack)
         {
             auto tracks = stack->children();
@@ -163,6 +164,27 @@ namespace mrv
             return true;
         }
 
+        bool verifySourceItem(int index, ViewerUI* ui)
+        {
+            auto model = ui->app->filesModel();
+            const auto& sourceItems = model->observeFiles()->get();
+            if (index < 0 || index >= sourceItems.size())
+            {
+                LOG_ERROR(_("Invalid index for add clip to timeline."));
+                return false;
+            }
+
+            auto sourceItem = sourceItems[index];
+            if (sourceItem->path.getExtension() == ".otio")
+            {
+                LOG_ERROR(_("Currently, you cannot add an .otio file to an "
+                            "EDL playlist."));
+                return false;
+            }
+            return true;
+        }
+
+        //! Auxiliary function to copy a frame from a track and item.
         void copy_frame_from_track(
             Composition* composition, Item* item, const RationalTime& time)
         {
@@ -572,6 +594,7 @@ namespace mrv
             return out;
         }
 
+        //! Return the EDL name for the Undo/Redo queue.
         std::string getEDLName(ViewerUI* ui)
         {
             auto model = ui->app->filesModel();
@@ -584,6 +607,7 @@ namespace mrv
             return path.get();
         }
 
+        //! Switches to EDL clip for timeline processing during an Undo/Redo.
         bool switchToEDL(const std::string& fileName, ViewerUI* ui)
         {
             auto model = ui->app->filesModel();
@@ -1138,6 +1162,9 @@ namespace mrv
         if (Aindex < 0)
             return;
 
+        if (!verifySourceItem(Aindex, ui))
+            return;
+
         tcp->pushMessage("Create New Timeline", Aindex);
         tcp->lock();
 
@@ -1210,8 +1237,8 @@ namespace mrv
         save_timeline_to_disk(timeline, otioFile);
     }
 
-    void add_clip_to_timeline(
-        const std::string& file, const size_t index, ViewerUI* ui)
+    void
+    add_clip_to_timeline(const std::string& file, const int index, ViewerUI* ui)
     {
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
@@ -1220,20 +1247,17 @@ namespace mrv
         auto timeline = player->getTimeline();
 
         auto time = getTime(player);
-        auto model = ui->app->filesModel();
-        auto& sourceItems = model->observeFiles()->get();
-        if (index >= sourceItems.size())
-            throw std::runtime_error(
-                _("Invalid index for add clip to timeline."));
-        auto sourceItem = sourceItems[index];
-        if (sourceItem->path.getExtension() == ".otio")
-        {
-            LOG_ERROR(_("Currently, you cannot add an .otio file to an "
-                        "EDL playlist."));
+
+        if (!verifySourceItem(index, ui))
             return;
-        }
+
+        auto model = ui->app->filesModel();
+
+        const auto& sourceItems = model->observeFiles()->get();
+        auto sourceItem = sourceItems[index];
 
         auto destItem = model->observeA()->get();
+
         const std::string tmpdir = tmppath() + '/';
         auto dir = destItem->path.getDirectory();
         auto base = destItem->path.getBaseName();
@@ -1243,6 +1267,12 @@ namespace mrv
             LOG_ERROR(_("You can only add clips to an .otio EDL playlist."));
             return;
         }
+
+        Message msg;
+        msg["command"] = "Add Clip to Timeline";
+        msg["fileName"] = file;
+        msg["sourceIndex"] = index;
+        tcp->pushMessage(msg);
 
         auto timelineDuration = timeline->duration();
         auto annotations = addAnnotations(

@@ -83,7 +83,7 @@ namespace mrv
     void refresh_file_cache_cb(Fl_Menu_* m, void* d);
 
     //! Add clip to otio timeline.
-    void add_clip_to_timeline(const std::string&, const size_t, ViewerUI* ui);
+    void add_clip_to_timeline(const std::string&, const int, ViewerUI* ui);
 
     //! Create new timeline from a clip.
     void create_new_timeline(ViewerUI* ui);

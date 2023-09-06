@@ -44,6 +44,7 @@ namespace mrv
         timeline::DisplayOptions displayOptions;
         timeline::CompareOptions compareOptions;
         Stereo3DOptions stereo3DOptions;
+        FilesPanelOptions filesPanelOptions;
         image::VideoLevels outputVideoLevels;
         float volume = 1.F;
         bool mute = false;
@@ -62,6 +63,8 @@ namespace mrv
             devicesModelObserver;
         std::shared_ptr<observer::ValueObserver<Stereo3DOptions> >
             stereo3DOptionsObserver;
+        std::shared_ptr<observer::ValueObserver<FilesPanelOptions> >
+            filesPanelOptionsObserver;
     };
 
     MainControl::MainControl(ViewerUI* ui) :
@@ -165,6 +168,22 @@ namespace mrv
                     tcp->pushMessage(msg);
 
                     _widgetUpdate();
+                });
+
+        p.filesPanelOptionsObserver =
+            observer::ValueObserver<FilesPanelOptions>::create(
+                app->filesModel()->observeFilesPanelOptions(),
+                [this](const FilesPanelOptions& value)
+                {
+                    _p->filesPanelOptions = value;
+
+                    Message msg;
+                    Message opts(value);
+                    msg["command"] = "setFilesPanelOptions";
+                    msg["value"] = opts;
+                    tcp->pushMessage(msg);
+
+                    _widgetUpdate(); // not needed
                 });
     }
 
@@ -361,8 +380,14 @@ namespace mrv
         p.ui->uiTimeline->setLUTOptions(p.lutOptions);
         p.ui->uiTimeline->redraw();
 
+        if (filesPanel)
+        {
+            filesPanel->setFilesPanelOptions(p.filesPanelOptions);
+        }
         if (comparePanel)
+        {
             comparePanel->setCompareOptions(p.compareOptions);
+        }
         if (colorPanel)
         {
             colorPanel->setLUTOptions(p.lutOptions);

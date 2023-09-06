@@ -54,6 +54,8 @@ v0.8.0
   different than 0 continue its audio beyond the end.
 - Fixed Image Information Panel size when it was saved as a window with the
   tabs open.
+- Made Network connections more solid.  In case of wrong data sent through the
+  network, it will no longer crash the viewer, but discard it.
 
 
 v0.7.1
