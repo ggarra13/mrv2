@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.3.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-09-06 06:04-0300\n"
+"POT-Creation-Date: 2023-09-06 14:51-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -761,6 +761,9 @@ msgstr "1/8"
 msgid "1/9"
 msgstr "1/9"
 
+msgid "11.988"
+msgstr "11,988"
+
 msgid "12"
 msgstr "12"
 
@@ -769,6 +772,9 @@ msgstr "12,5"
 
 msgid "14.985"
 msgstr "14,985"
+
+msgid "14.988"
+msgstr "14,988"
 
 msgid "15"
 msgstr "15"
@@ -1223,9 +1229,6 @@ msgid ""
 msgstr ""
 "No pude leer la variable de entorno \"{0}\" como valor de entero; usando {1}."
 
-msgid "Cannot add an otio file to another timeline."
-msgstr "No puedo agregar un archivo otio a otra línea de tiempo."
-
 msgid "Cannot append audio clip"
 msgstr "No puedo agragar clip de audio"
 
@@ -1567,6 +1570,9 @@ msgstr "Tiempo actual en la línea de tiempo."
 
 msgid "Current tool being used."
 msgstr "Herramienta siendo usada."
+
+msgid "Currently, you cannot add an .otio file to an EDL playlist."
+msgstr "Actualmente no se puede concatenar dos archivos .otio."
 
 msgid "Cut Frame"
 msgstr "Cortar Cuadro"
@@ -1974,6 +1980,9 @@ msgstr "Nombre del archivo del clip"
 
 msgid "Files"
 msgstr "Archivos"
+
+msgid "Filter EDLs"
+msgstr "Filtrar EDLs"
 
 msgid "First Frame"
 msgstr "Primer Cuadro"
@@ -4444,9 +4453,6 @@ msgstr "Modo de Timer"
 msgid "Tint"
 msgstr "Tinte"
 
-msgid "To avoid confusion, you can only add clips to an .otio EDL."
-msgstr "Para evitar confusión, puede agregar clips sólo a un EDL de .otio."
-
 msgid "Toggle About Panel"
 msgstr "Alternar Ventana de Acerca de mrv2"
 
@@ -5076,6 +5082,9 @@ msgstr "Coefficients de YUV usados para conversion de vídeo"
 msgid "Yes"
 msgstr "Sí"
 
+msgid "You can only add clips to an .otio EDL playlist."
+msgstr "Sólo puede agregar clips a una lista de reproduccion (EDL) de .otio."
+
 msgid "ZIP"
 msgstr "ZIP"
 
@@ -5214,8 +5223,8 @@ msgstr "x9"
 msgid "xyY CIE xyY"
 msgstr "xyY CIE xyY"
 
-#~ msgid "Currently you cannot concatenate two .otio files."
-#~ msgstr "Actualmente no se puede concatenar dos archivos .otio."
+#~ msgid "Cannot add an otio file to another timeline."
+#~ msgstr "No puedo agregar un archivo otio a otra línea de tiempo."
 
 #~ msgid "Add a playlist."
 #~ msgstr "Agregar una lista de reproducción."

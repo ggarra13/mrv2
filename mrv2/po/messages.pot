@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v0.8.0\n"
+"Project-Id-Version: mrv2 v0.7.5\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-09-06 06:04-0300\n"
+"POT-Creation-Date: 2023-09-06 14:51-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -503,6 +503,9 @@ msgstr ""
 msgid "1/9"
 msgstr ""
 
+msgid "11.988"
+msgstr ""
+
 msgid "12"
 msgstr ""
 
@@ -510,6 +513,9 @@ msgid "12.5"
 msgstr ""
 
 msgid "14.985"
+msgstr ""
+
+msgid "14.988"
 msgstr ""
 
 msgid "15"
@@ -953,9 +959,6 @@ msgid ""
 "Cannnot parse enironment variable \"{0}\" as an integer value; using {1}."
 msgstr ""
 
-msgid "Cannot add an otio file to another timeline."
-msgstr ""
-
 msgid "Cannot append audio clip"
 msgstr ""
 
@@ -1284,6 +1287,9 @@ msgid "Current time in timeline."
 msgstr ""
 
 msgid "Current tool being used."
+msgstr ""
+
+msgid "Currently, you cannot add an .otio file to an EDL playlist."
 msgstr ""
 
 msgid "Cut Frame"
@@ -1687,6 +1693,9 @@ msgid "Filename of the clip"
 msgstr ""
 
 msgid "Files"
+msgstr ""
+
+msgid "Filter EDLs"
 msgstr ""
 
 msgid "First Frame"
@@ -4061,9 +4070,6 @@ msgstr ""
 msgid "Tint"
 msgstr ""
 
-msgid "To avoid confusion, you can only add clips to an .otio EDL."
-msgstr ""
-
 msgid "Toggle About Panel"
 msgstr ""
 
@@ -4631,6 +4637,9 @@ msgid "YUV Coefficients used for video conversion"
 msgstr ""
 
 msgid "Yes"
+msgstr ""
+
+msgid "You can only add clips to an .otio EDL playlist."
 msgstr ""
 
 msgid "ZIP"

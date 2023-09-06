@@ -1003,39 +1003,7 @@ namespace mrv
 
     void edit_ripple_cb(Fl_Menu_* m, ViewerUI* ui) {}
 
-    void edit_roll_cb(Fl_Menu_* m, ViewerUI* ui)
-    {
-        auto player = ui->uiView->getTimelinePlayer();
-        if (!player)
-            return;
-
-        edit_store_undo(player, ui);
-
-        const auto& time = getTime(player);
-
-        auto timeline = player->getTimeline();
-        auto rate = player->defaultSpeed();
-        auto tracks = timeline->tracks()->children();
-
-        otio::ErrorStatus errorStatus;
-        for (auto child : tracks)
-        {
-            auto track = otio::dynamic_retainer_cast<Composition>(child);
-            if (!track)
-                continue;
-            auto item = otio::dynamic_retainer_cast<Item>(
-                track->child_at_time(time, &errorStatus));
-            if (!item)
-                continue;
-
-            const auto range = item->trimmed_range();
-            RationalTime delta_in(-1.0, rate);
-            RationalTime delta_out(0.0, rate);
-            otio::algo::roll(item, delta_in, delta_out);
-        }
-
-        player->setTimeline(timeline);
-    }
+    void edit_roll_cb(Fl_Menu_* m, ViewerUI* ui) {}
 
     void edit_remove_clip_with_gap_cb(Fl_Menu_* m, ViewerUI* ui)
     {
