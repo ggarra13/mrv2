@@ -407,6 +407,7 @@ namespace mrv
             if (tracks.size() < 1)
                 return;
 
+            bool create = false;
             std::string otioFile;
             if (string::toLower(path.getExtension()) == ".otio")
             {
@@ -414,6 +415,7 @@ namespace mrv
             }
             else
             {
+                create = true;
                 otioFile = otioFilename();
             }
 
@@ -424,8 +426,14 @@ namespace mrv
 
             if (refreshCache)
                 refresh_file_cache_cb(nullptr, ui);
+            else if (create)
+            {
+                refreshPanelThumbnails();
+            }
         }
 
+        //! Change clips' source range to use the highest video and audio
+        //! sample rate.  Also returns the largest time range for the timeline.
         void sanitizeVideoAndAudioRates(
             otio::Stack* stack, TimeRange& timeRange, double& videoRate,
             double& sampleRate)
@@ -686,6 +694,8 @@ namespace mrv
         if (!player)
             return;
 
+        player->stop();
+
         auto timeline = player->getTimeline();
 
         auto stack = timeline->tracks();
@@ -893,7 +903,7 @@ namespace mrv
             return;
 
         const auto& time = getTime(player);
-        auto tracks = getTracks(player, time);
+        const auto& tracks = getTracks(player, time);
 
         auto timeline = player->getTimeline();
         edit_store_undo(player, ui);

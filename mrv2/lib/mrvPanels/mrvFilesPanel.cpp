@@ -46,6 +46,8 @@ namespace mrv
         WidgetIndices indices;
         std::vector< Fl_Button* > buttons;
 
+        bool filterEDL = false;
+
         std::shared_ptr<
             observer::ListObserver<std::shared_ptr<FilesModelItem> > >
             filesObserver;
@@ -232,6 +234,10 @@ namespace mrv
                 continue;
             lastPath = path;
 
+            if (_r->filterEDL && dir == tmpdir && base == "EDL." &&
+                extension == ".otio")
+                continue;
+
             const std::string file = base + path.getNumber() + extension;
             const std::string fullfile = dir + file;
 
@@ -383,6 +389,21 @@ namespace mrv
             {
                 p.ui->app->filesModel()->next();
                 redraw();
+            });
+
+        auto btW = new Widget< Fl_Button >(g->x() + 150, Y, 30, 30);
+        b = btW;
+        svg = load_svg("Filter.svg");
+        b->image(svg);
+        b->selection_color(FL_YELLOW);
+        b->value(_r->filterEDL);
+        _r->buttons.push_back(b);
+        b->tooltip(_("Filter EDLs"));
+        btW->callback(
+            [=](auto w)
+            {
+                _r->filterEDL ^= true;
+                refresh();
             });
         bg->end();
         g->layout();
