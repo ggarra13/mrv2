@@ -1228,7 +1228,19 @@ namespace mrv
         auto sourceItem = sourceItems[index];
         if (sourceItem->path.getExtension() == ".otio")
         {
-            LOG_ERROR(_("Cannot add an otio file to another timeline."));
+            LOG_ERROR(_("Currently, you cannot add an .otio file to an "
+                        "EDL playlist."));
+            return;
+        }
+
+        auto destItem = model->observeA()->get();
+        const std::string tmpdir = tmppath() + '/';
+        auto dir = destItem->path.getDirectory();
+        auto base = destItem->path.getBaseName();
+        auto extension = destItem->path.getExtension();
+        if (dir != tmpdir || base != "EDL." || extension != ".otio")
+        {
+            LOG_ERROR(_("You can only add clips to an .otio EDL playlist."));
             return;
         }
 
@@ -1236,13 +1248,6 @@ namespace mrv
         auto annotations = addAnnotations(
             timelineDuration, player->defaultSpeed(),
             player->getAllAnnotations(), sourceItem->annotations);
-        auto destItem = model->observeA()->get();
-        if (destItem->path.getExtension() != ".otio")
-        {
-            LOG_ERROR(_(
-                "To avoid confusion, you can only add clips to an .otio EDL."));
-            return;
-        }
 
         edit_store_undo(player, ui);
 
