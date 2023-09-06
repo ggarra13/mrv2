@@ -294,8 +294,31 @@ namespace mrv
                     audioPath = savedAudioPath;
             }
 
-            directory = path.getDirectory();
-            audioDirectory = audioPath.getDirectory();
+            char currentDir[4096];
+            if (getcwd(currentDir, 4096) == nullptr)
+            {
+                LOG_ERROR(_("Could not get current path."));
+            }
+
+            if (path.isAbsolute())
+            {
+                directory = path.getDirectory();
+            }
+            else
+            {
+                directory = currentDir;
+                directory += '/' + path.getDirectory();
+            }
+
+            if (audioPath.isAbsolute())
+            {
+                audioDirectory = audioPath.getDirectory();
+            }
+            else
+            {
+                audioDirectory = currentDir;
+                audioDirectory += '/' + audioPath.getDirectory();
+            }
 
             file::PathOptions options;
             for (int i = 0; i < tracks.size(); ++i)
