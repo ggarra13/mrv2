@@ -5,11 +5,13 @@
 set(HEADERS
     mrvEditCallbacks.h
     mrvEditMode.h
+    mrvEditUtil.h
 )
 
 set(SOURCES
     mrvEditCallbacks.cpp
     mrvEditMode.cpp
+    mrvEditUtil.cpp
 )
 
 

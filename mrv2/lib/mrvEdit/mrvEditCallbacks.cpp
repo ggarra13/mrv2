@@ -33,6 +33,7 @@ namespace fs = std::filesystem;
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrvEdit/mrvEditCallbacks.h"
+#include "mrvEdit/mrvEditUtil.h"
 
 #include "mrvFl/mrvIO.h"
 
@@ -255,7 +256,7 @@ namespace mrv
             auto audioPath = item->audioPath.isEmpty() ? path : item->audioPath;
             std::string directory, audioDirectory;
 
-            if (string::toLower(path.getExtension()) == ".otio")
+            if (isTemporaryEDL(path))
             {
                 int videoClips = 0;
                 int audioClips = 0;
@@ -431,7 +432,7 @@ namespace mrv
 
             bool create = false;
             std::string otioFile;
-            if (string::toLower(path.getExtension()) == ".otio")
+            if (isTemporaryEDL(path))
             {
                 otioFile = path.get();
             }
@@ -547,6 +548,30 @@ namespace mrv
             }
         }
 
+        //! Remove annotations that are not in the time range.
+        std::vector<std::shared_ptr<draw::Annotation>> removeAnnotations(
+            const TimeRange& range,
+            const std::vector<std::shared_ptr<draw::Annotation>>& annotations)
+        {
+            std::vector<std::shared_ptr<draw::Annotation>> out;
+            // Add annotations that are for all frames.
+            for (auto a : annotations)
+            {
+                if (a->allFrames)
+                    out.push_back(a);
+            }
+            // Append annotations that intersect the range.
+            for (auto a : annotations)
+            {
+                if (range.contains(a->time))
+                {
+                    out.push_back(a);
+                }
+            }
+            return out;
+        }
+
+        //! Offset annotations by offset time.  Used in cut/insert frame.
         std::vector<std::shared_ptr<draw::Annotation>> offsetAnnotations(
             const RationalTime& time, const RationalTime& offset,
             const std::vector<std::shared_ptr<draw::Annotation>>& annotations)
@@ -750,10 +775,10 @@ namespace mrv
         if (!player)
             return;
 
+        edit_copy_frame_cb(m, ui);
+
         auto timeline = player->getTimeline();
         auto tracks = timeline->tracks()->children();
-
-        edit_copy_frame_cb(m, ui);
 
         const auto startTime = player->timeRange().start_time();
         const auto time = player->currentTime() - startTime;
@@ -771,30 +796,30 @@ namespace mrv
                 continue;
 
             auto track = otio::dynamic_retainer_cast<Track>(tracks[trackIndex]);
-            auto cut_item = otio::dynamic_retainer_cast<Item>(
+            auto item = otio::dynamic_retainer_cast<Item>(
                 track->child_at_time(time, &errorStatus));
-            if (!cut_item)
+            if (!item)
                 continue;
-            auto item_range = cut_item->trimmed_range();
-            auto track_range =
-                cut_item->trimmed_range_in_parent(&errorStatus).value();
 
+            // Cut first at current time
             otio::algo::slice(track, time);
+
+            // Cut again at current time + 1 frame
             otio::algo::slice(track, out_time);
 
             // Get the cut item
-            cut_item = otio::dynamic_retainer_cast<Item>(
+            item = otio::dynamic_retainer_cast<Item>(
                 track->child_at_time(time, &errorStatus));
-            if (!cut_item)
+            if (!item)
                 continue;
 
-            item_range = cut_item->trimmed_range();
-            int index = track->index_of_child(cut_item);
+            int index = track->index_of_child(item);
             auto children_size = track->children().size();
             if (index < 0 || static_cast<size_t>(index) >= children_size)
                 continue;
             track->remove_child(index);
         }
+
         auto annotations =
             offsetAnnotations(time, -one_frame, player->getAllAnnotations());
         player->setAllAnnotations(annotations);
@@ -811,6 +836,8 @@ namespace mrv
         auto player = ui->uiView->getTimelinePlayer();
         if (!player || copiedFrames.empty())
             return;
+
+        player->stop();
 
         const auto time = getTime(player);
 
@@ -846,6 +873,8 @@ namespace mrv
         auto player = ui->uiView->getTimelinePlayer();
         if (!player || copiedFrames.empty())
             return;
+
+        player->stop();
 
         auto timeline = player->getTimeline();
         const auto time = getTime(player);
@@ -888,20 +917,28 @@ namespace mrv
         if (!player)
             return;
 
+        player->stop();
+
+        edit_store_undo(player, ui);
+
         const auto& time = getTime(player);
         const auto& tracks = getTracks(player, time);
 
         auto timeline = player->getTimeline();
-        edit_store_undo(player, ui);
 
         bool remove_undo = true;
         otio::ErrorStatus errorStatus;
         for (auto track : tracks)
         {
-            auto cut_item = otio::dynamic_retainer_cast<Item>(
+            auto item = otio::dynamic_retainer_cast<Item>(
                 track->child_at_time(time, &errorStatus));
+            if (!item)
+                continue;
             auto cut_range =
-                cut_item->trimmed_range_in_parent(&errorStatus).value();
+                item->trimmed_range_in_parent(&errorStatus).value();
+
+            // For slicing, if we slice at the same point of another slice,
+            // we may get an useless undo.  We avoid it.
             if (cut_range.start_time() == time ||
                 cut_range.end_time_exclusive() == time)
                 continue;
@@ -909,8 +946,8 @@ namespace mrv
             otio::algo::slice(track, time);
         }
 
-        // For slicing, if we slice at the same point of another slice,
-        // we may get two different timelines.  We avoid it first.
+        // If we sliced on the start or end of all clips, we don't need to
+        // store the undo.
         if (remove_undo)
             undoBuffer.pop_back();
 
@@ -930,29 +967,29 @@ namespace mrv
         const auto& tracks = getTracks(player, time);
 
         auto timeline = player->getTimeline();
+        auto stack = timeline->tracks();
+
         edit_store_undo(player, ui);
 
         for (auto track : tracks)
         {
             otio::algo::remove(track, time, false);
         }
-        auto stack = timeline->tracks();
+
         TimeRange timeRange;
         double videoRate, sampleRate;
         sanitizeVideoAndAudioRates(stack, timeRange, videoRate, sampleRate);
 
+        auto annotations =
+            removeAnnotations(timeRange, player->getAllAnnotations());
+
+        player->setAllAnnotations(annotations);
         player->setTimeline(timeline);
         if (videoRate > 0 && time::isValid(timeRange))
         {
-            player->setInOutRange(timeRange);
-            player->setSpeed(videoRate);
             setEndTime(timeline, videoRate, ui);
         }
 
-        /* Is this needed ? */
-        auto endTime = player->timeRange().end_time_exclusive();
-        if (time > endTime)
-            player->seek(endTime);
         ui->uiTimeline->setTimelinePlayer(player);
 
         toOtioFile(timeline, ui);
@@ -1258,11 +1295,7 @@ namespace mrv
 
         auto destItem = model->observeA()->get();
 
-        const std::string tmpdir = tmppath() + '/';
-        auto dir = destItem->path.getDirectory();
-        auto base = destItem->path.getBaseName();
-        auto extension = destItem->path.getExtension();
-        if (dir != tmpdir || base != "EDL." || extension != ".otio")
+        if (!isTemporaryEDL(destItem->path))
         {
             LOG_ERROR(_("You can only add clips to an .otio EDL playlist."));
             return;
@@ -1511,6 +1544,12 @@ namespace mrv
 
     int calculate_edit_viewport_size(ViewerUI* ui)
     {
+        // Some constants, as Darby does not expose this in tlRender.
+        const int kTrackTitleHeight = 24;
+        const int kTrackBottomHeight = 24;
+        const int kTransitionsHeight = 20;
+        const int kMarkerHeight = 20;
+
         const Fl_Tile* tile = ui->uiTileGroup;
         const int tileH = tile->h(); // Tile Height (ie. View and Edit viewport)
 
@@ -1525,24 +1564,24 @@ namespace mrv
         if (!player)
             return H;
 
-        auto otioTimeline = player->getTimeline();
-        for (const auto& child : otioTimeline->tracks()->children())
+        auto timeline = player->getTimeline();
+        for (const auto& child : timeline->tracks()->children())
         {
             if (const auto* track = dynamic_cast<otio::Track*>(child.value))
             {
                 if (otio::Track::Kind::video == track->kind())
                 {
-                    H += 24; // title bar
+                    H += kTrackTitleHeight;
                     if (options.thumbnails)
                         H += options.thumbnailHeight / pixelRatio;
-                    H += 24; // bottom bar
+                    H += kTrackBottomHeight;
                 }
                 else if (otio::Track::Kind::audio == track->kind())
                 {
-                    H += 24; // title bar
+                    H += kTrackTitleHeight;
                     if (options.thumbnails)
                         H += options.waveformHeight / pixelRatio;
-                    H += 24; // bottom bar
+                    H += kTrackBottomHeight;
                 }
                 // Handle Markers
                 if (options.showMarkers)
@@ -1557,7 +1596,7 @@ namespace mrv
                         int markerSizeForItem = 0;
                         for (const auto& marker : item->markers())
                         {
-                            markerSizeForItem += 20;
+                            markerSizeForItem += kMarkerHeight;
                         }
                         if (markerSizeForItem > markerSizeForTrack)
                             markerSizeForTrack = markerSizeForItem;
@@ -1578,7 +1617,7 @@ namespace mrv
                         }
                     }
                     if (found)
-                        H += 20;
+                        H += kTransitionsHeight;
                 }
             }
         }
