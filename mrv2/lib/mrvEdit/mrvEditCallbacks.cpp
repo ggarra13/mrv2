@@ -8,6 +8,8 @@
 
 namespace fs = std::filesystem;
 
+#include <FL/fl_utf8.h>
+
 #include <opentimelineio/clip.h>
 #include <opentimelineio/editAlgorithm.h>
 #include <opentimelineio/externalReference.h>
@@ -295,7 +297,7 @@ namespace mrv
             }
 
             char currentDir[4096];
-            if (getcwd(currentDir, 4096) == nullptr)
+            if (fl_getcwd(currentDir, 4096) == nullptr)
             {
                 LOG_ERROR(_("Could not get current path."));
             }
