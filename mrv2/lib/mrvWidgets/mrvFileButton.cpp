@@ -160,15 +160,6 @@ namespace mrv
                     p.drag->image(image());
                     auto window = p.drag->window();
                     window->always_on_top(true);
-
-                    file::Path path(filename);
-                    auto extension = string::toLower(path.getExtension());
-                    if (extension == ".otio")
-                    {
-                        LOG_ERROR(_("Currently you cannot concatenate two "
-                                    ".otio files."));
-                        return 0;
-                    }
                 }
 
                 if (p.drag)

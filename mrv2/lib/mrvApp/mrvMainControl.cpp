@@ -242,6 +242,7 @@ namespace mrv
             c->uiStartFrame->activate();
             c->uiEndFrame->activate();
             c->uiFPS->activate();
+            c->fpsDefaults->activate();
             c->uiStartButton->activate();
             c->uiEndButton->activate();
             c->uiLoopMode->activate();
@@ -256,6 +257,7 @@ namespace mrv
             c->uiVolume->deactivate();
             c->uiAudioTracks->deactivate();
             c->uiFPS->deactivate();
+            c->fpsDefaults->deactivate();
             c->uiStartButton->deactivate();
             c->uiEndButton->deactivate();
             c->uiLoopMode->deactivate();

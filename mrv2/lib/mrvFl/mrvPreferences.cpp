@@ -666,6 +666,9 @@ namespace mrv
             uiPrefs->uiPrefsOCIOConfig->value(ocioDefault.c_str());
         }
 
+        ocio.get("use_active_views", tmp, 0);
+        uiPrefs->uiOCIOUseActiveViews->value(tmp);
+
         Fl_Preferences ics(ocio, "ICS");
         {
 #define OCIO_ICS(x, d)                                                         \
@@ -1221,6 +1224,8 @@ namespace mrv
             Fl_Preferences ocio(view, "ocio");
 
             ocio.set("config", uiPrefs->uiPrefsOCIOConfig->value());
+            ocio.set(
+                "use_active_views", uiPrefs->uiOCIOUseActiveViews->value());
 
             Fl_Preferences ics(ocio, "ICS");
             {
@@ -1839,9 +1844,11 @@ namespace mrv
                 OCIO_Display = config->getDefaultDisplay();
                 OCIO_View = config->getDefaultView(OCIO_Display.c_str());
 
+                bool use_active = uiPrefs->uiOCIOUseActiveViews->value();
+
                 stringArray active_displays;
                 const char* displaylist = config->getActiveDisplays();
-                if (displaylist && strlen(displaylist) > 0)
+                if (use_active && displaylist && strlen(displaylist) > 0)
                 {
                     mrv::split(active_displays, displaylist, ',');
 
@@ -1864,7 +1871,7 @@ namespace mrv
 
                 stringArray active_views;
                 const char* viewlist = config->getActiveViews();
-                if (viewlist && strlen(viewlist) > 0)
+                if (use_active && viewlist && strlen(viewlist) > 0)
                 {
                     mrv::split(active_views, viewlist, ',');
 

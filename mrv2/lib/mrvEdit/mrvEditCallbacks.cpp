@@ -221,7 +221,8 @@ namespace mrv
         file::Path savedPath, savedAudioPath;
 
         //! This routine makes paths absolute if possible.
-        void sanitizeMediaPaths(otio::Stack* stack, ViewerUI* ui)
+        //! It uses the information from the current media item.
+        void makePathsAbsolute(otio::Stack* stack, ViewerUI* ui)
         {
             auto model = ui->app->filesModel();
             auto tracks = stack->children();
@@ -619,7 +620,7 @@ namespace mrv
         auto view = ui->uiView;
 
         auto stack = timeline->tracks();
-        sanitizeMediaPaths(stack, ui);
+        makePathsAbsolute(stack, ui);
 
         std::string state = timeline->to_json_string();
         if (!undoBuffer.empty())
@@ -688,7 +689,7 @@ namespace mrv
         auto timeline = player->getTimeline();
 
         auto stack = timeline->tracks();
-        sanitizeMediaPaths(stack, ui);
+        makePathsAbsolute(stack, ui);
 
         const auto time = getTime(player);
 

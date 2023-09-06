@@ -18,10 +18,10 @@ decl {\#include <FL/Fl_Color_Chooser.H>} {public global
 decl {\#include "mrViewer.h"} {public global
 }
 
-decl {\#include "mrvCore/mrvEnv.h"} {selected public global
+decl {\#include "mrvCore/mrvEnv.h"} {public global
 }
 
-decl {\#include "mrvCore/mrvI8N.h"} {selected public global
+decl {\#include "mrvCore/mrvI8N.h"} {public global
 }
 
 decl {\#include "mrvCore/mrvMedia.h"} {public global
@@ -657,8 +657,8 @@ v->uiPrefsFPS->value( g );}
             }
           }
           Fl_Group {} {
-            label Timeline open
-            xywh {305 34 530 362} box EMBOSSED_BOX align 5
+            label Timeline
+            xywh {305 34 530 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Choice uiPrefsTimelineDisplay {
               label Display
@@ -838,7 +838,7 @@ v->uiPrefsFPS->value( g );}
             xywh {293 34 542 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {open
-              xywh {298 113 528 158}
+              xywh {303 113 523 204}
             } {
               Fl_Input uiPrefsOCIOConfig {
                 label {OCIO Config File}
@@ -859,12 +859,16 @@ uiPrefs->uiPrefsOCIOConfig->value( r.c_str() );}
             }
           }
           Fl_Group {} {
-            label {OCIO Defaults}
-            xywh {303 34 532 362} align 5 hide
+            label {OCIO Defaults} open
+            xywh {303 34 532 362} align 5
           } {
+            Fl_Light_Button uiOCIOUseActiveViews {
+              label {Use Active Views and Active Displays} selected
+              tooltip {When this option is off, OCIO files with active_views: and active_displays: are not taken into account.} xywh {417 51 288 24}
+            }
             Fl_Group uiOCIO_ICS {
-              label {Input Color Space} open
-              xywh {317 69 500 297} box ROUNDED_BOX
+              label {Input Color Space}
+              xywh {317 114 500 252} box ROUNDED_BOX
             } {
               Fl_Group {} {open
                 xywh {365 122 411 34}

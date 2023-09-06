@@ -1,4 +1,4 @@
-v0.7.2
+v0.8.0
 ------
 - Documented Python USD module.
 - Fixed DWA compression on non English locales (with commas as decimal
@@ -42,11 +42,16 @@ v0.7.2
 - Added new controls to Playlist panel.  Added a new Save icon.
 - Fixed an annoying repositioning of window when loading new clips.
 - Added support for Markers in timeline viewport.
-- Made FPS display show only two decimal digits to simplify.
+- Made FPS display show only three decimal digits to simplify.
 - Added File->Save->Single Frame to save a single frame only.
 - Sped up Python compilation on Windows.
 - Fixed OpenColorIO Active Displays and Active Views when they were set to an
   empty string which would turn off the View menu.
+- The OCIO Defaults now has an option to use or ignore active_views and
+  active_displays on the OCIO .config file.  The default is now to ignore them,
+  as it was suggested using them in production was usually not the hassle.
+- Fixed a tlRender bug which would make a clip with source range start_time
+  different than 0 continue its audio beyond the end.
 
 
 v0.7.1

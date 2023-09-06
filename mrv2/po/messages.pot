@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v0.7.2\n"
+"Project-Id-Version: mrv2 v0.8.0\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-09-03 18:41-0300\n"
+"POT-Creation-Date: 2023-09-06 06:04-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -551,7 +551,7 @@ msgstr ""
 msgid "2.39 Panavision (new 2.35)"
 msgstr ""
 
-msgid "23.97"
+msgid "23.976"
 msgstr ""
 
 msgid "24"
@@ -561,6 +561,9 @@ msgid "25"
 msgstr ""
 
 msgid "29.97"
+msgstr ""
+
+msgid "29.976"
 msgstr ""
 
 msgid "30"
@@ -1283,9 +1286,6 @@ msgstr ""
 msgid "Current tool being used."
 msgstr ""
 
-msgid "Currently you cannot concatenate two .otio files."
-msgstr ""
-
 msgid "Cut Frame"
 msgstr ""
 
@@ -1430,6 +1430,9 @@ msgstr ""
 msgid "E"
 msgstr ""
 
+msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
+msgstr ""
+
 msgid "ERROR: "
 msgstr ""
 
@@ -1479,6 +1482,9 @@ msgid "Edit/Remove"
 msgstr ""
 
 msgid "Edit/Remove With Gap"
+msgstr ""
+
+msgid "Edit/Roll"
 msgstr ""
 
 msgid "Edit/Slice"
@@ -1628,6 +1634,9 @@ msgstr ""
 msgid "File Sequences"
 msgstr ""
 
+msgid "File extension cannot be empty."
+msgstr ""
+
 msgid "File/Close All"
 msgstr ""
 
@@ -1663,6 +1672,9 @@ msgid "File/Save/Session"
 msgstr ""
 
 msgid "File/Save/Session As"
+msgstr ""
+
+msgid "File/Save/Single Frame"
 msgstr ""
 
 msgid "Filename"
@@ -3255,6 +3267,12 @@ msgstr ""
 msgid "RightShift"
 msgstr ""
 
+msgid "Ripple"
+msgstr ""
+
+msgid "Roll"
+msgstr ""
+
 msgid "Rotate"
 msgstr ""
 
@@ -3307,6 +3325,9 @@ msgstr ""
 msgid "Save Hotkeys"
 msgstr ""
 
+msgid "Save Image"
+msgstr ""
+
 msgid "Save Movie or Sequence"
 msgstr ""
 
@@ -3323,6 +3344,9 @@ msgid "Save Session"
 msgstr ""
 
 msgid "Save Session As"
+msgstr ""
+
+msgid "Save Single Frame"
 msgstr ""
 
 msgid "Save a PDF document with all annotations and notes."
@@ -3694,6 +3718,12 @@ msgid "Size:"
 msgstr ""
 
 msgid "Slice Clip"
+msgstr ""
+
+msgid "Slide"
+msgstr ""
+
+msgid "Slip"
 msgstr ""
 
 msgid "Slow"
@@ -4175,6 +4205,9 @@ msgstr ""
 msgid "Topbar"
 msgstr ""
 
+msgid "Trim"
+msgstr ""
+
 msgid "Turn a frame number and rate into a :class:`~RationalTime` object."
 msgstr ""
 
@@ -4232,6 +4265,9 @@ msgid "Unknown type for mrvOCIOBrowser"
 msgstr ""
 
 msgid "Up"
+msgstr ""
+
+msgid "Use Active Views and Active Displays"
 msgstr ""
 
 msgid "Use Native File Chooser"
@@ -4463,6 +4499,11 @@ msgid ""
 "When selected, only a single mrv2 instance is allowed.\n"
 "If you try to open several mrv2s with different images, all these images "
 "will be sent to the already open mrv2."
+msgstr ""
+
+msgid ""
+"When this option is off, OCIO files with active_views: and active_displays: "
+"are not taken into account."
 msgstr ""
 
 msgid ""
