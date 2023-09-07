@@ -700,19 +700,19 @@ namespace mrv
     //! Dump undo queue to tmpdir.
     void dump_undo_queue_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        const std::string path = tmppath() + "/UndoQueue";
-        mode_t mode = 0777;
-        fl_mkdir(path.c_str(), mode);
-        unsigned int idx = 1;
-        char buf[4096];
-        for (auto& undo : undoBuffer)
-        {
-            snprintf(buf, 4096, "%s/undo.%d.otio", path.c_str(), idx);
-            std::ofstream f(buf);
-            f << undo.json << std::endl;
-            f.close();
-            ++idx;
-        }
+        // const std::string path = tmppath() + "/UndoQueue";
+        // int mode = 0777;
+        // fl_mkdir(path.c_str(), mode);
+        // unsigned int idx = 1;
+        // char buf[4096];
+        // for (auto& undo : undoBuffer)
+        // {
+        //     snprintf(buf, 4096, "%s/undo.%d.otio", path.c_str(), idx);
+        //     std::ofstream f(buf);
+        //     f << undo.json << std::endl;
+        //     f.close();
+        //     ++idx;
+        // }
     }
 
     void edit_store_undo(TimelinePlayer* player, ViewerUI* ui)
@@ -1107,6 +1107,7 @@ namespace mrv
         if (!switchToEDL(buffer.fileName, ui))
             return;
 
+        // We must get player again, as we might have changed clips.
         player = ui->uiView->getTimelinePlayer();
         edit_store_redo(player, ui);
 
@@ -1126,11 +1127,6 @@ namespace mrv
             player->setInOutRange(timeRange);
             player->setSpeed(videoRate);
             setEndTime(timeline, videoRate, ui);
-        }
-
-        if (undoBuffer.empty())
-        {
-            std::cout << timeline->to_json_string() << std::endl;
         }
 
         toOtioFile(timeline, ui);
@@ -1153,6 +1149,7 @@ namespace mrv
         if (!switchToEDL(buffer.fileName, ui))
             return;
 
+        // We must get player again, as we might have changed clips.
         player = ui->uiView->getTimelinePlayer();
         edit_store_undo(player, ui);
 
