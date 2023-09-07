@@ -447,6 +447,8 @@ namespace mrv
             }
             if (validDrop)
             {
+                auto model = ui->app->filesModel();
+                model->setA(index);
                 create_new_timeline_cb(nullptr, ui);
             }
         }

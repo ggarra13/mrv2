@@ -42,6 +42,10 @@ namespace mrv
         std::shared_ptr<tl::gl::Outline> outline;
 #endif
         std::shared_ptr<tl::gl::Lines> lines;
+
+#ifdef TLRENDER_API_GL_4_1_Debug
+        bool init_debug = false;
+#endif
     };
 
 //! Define a variable, "gl", that references the private implementation.

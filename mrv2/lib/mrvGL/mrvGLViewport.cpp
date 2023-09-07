@@ -27,7 +27,6 @@
 #include "mrvGL/mrvGLViewportPrivate.h"
 #include "mrvGL/mrvGLDefines.h"
 #include "mrvGL/mrvGLErrors.h"
-#include "mrvGL/mrvGLContextDebug.h"
 #include "mrvGL/mrvGLUtil.h"
 #include "mrvGL/mrvGLShaders.h"
 #include "mrvGL/mrvGLShape.h"
@@ -57,13 +56,7 @@ namespace mrv
         int stereo = 0;
         // if (can_do(FL_STEREO))
         //     stereo = FL_STEREO;
-        int fl_double = FL_DOUBLE;
-#ifdef __APPLE__
-        // fl_double = 0; // @bug:  FL_DOUBLE in Tile suffers from flicker and
-        //         red screen.
-#endif
-
-        mode(FL_RGB | fl_double | FL_ALPHA | FL_STENCIL | FL_OPENGL3 | stereo);
+        mode(FL_RGB | FL_DOUBLE | FL_ALPHA | FL_STENCIL | FL_OPENGL3 | stereo);
     }
 
     Viewport::~Viewport() {}
@@ -144,7 +137,22 @@ namespace mrv
 
     void Viewport::_initializeGL()
     {
+        MRV2_GL();
         gl::initGLAD();
+
+#ifdef TLRENDER_API_GL_4_1_Debug
+        if (!gl.init_debug)
+        {
+            gl.init_debug = true;
+            glEnable(GL_DEBUG_OUTPUT);
+            glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+            glDebugMessageCallback(glDebugOutput, nullptr);
+            glDebugMessageControl(
+                static_cast<GLenum>(GL_DONT_CARE),
+                static_cast<GLenum>(GL_DONT_CARE),
+                static_cast<GLenum>(GL_DONT_CARE), 0, nullptr, GL_TRUE);
+        }
+#endif
 
         refresh();
 
@@ -159,16 +167,6 @@ namespace mrv
         if (!valid())
         {
             _initializeGL();
-
-#ifdef TLRENDER_API_GL_4_1_Debug
-            glEnable(GL_DEBUG_OUTPUT);
-            glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-            glDebugMessageCallback(glDebugOutput, nullptr);
-            glDebugMessageControl(
-                static_cast<GLenum>(GL_DONT_CARE),
-                static_cast<GLenum>(GL_DONT_CARE),
-                static_cast<GLenum>(GL_DONT_CARE), 0, nullptr, GL_TRUE);
-#endif
 
             CHECK_GL;
             valid(1);
@@ -830,7 +828,7 @@ namespace mrv
         {
             // This is needed as the FL_MOVE of fltk wouuld get called
             // before the draw routine
-            if (!gl.buffer)
+            if (!gl.buffer || !valid())
             {
                 return;
             }
@@ -890,11 +888,6 @@ namespace mrv
         }
 
         _unmapBuffer();
-    }
-
-    int Viewport::handle(int event)
-    {
-        return TimelineViewport::handle(event);
     }
 
     void Viewport::_pushAnnotationShape(const std::string& command) const
