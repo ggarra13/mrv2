@@ -10,8 +10,6 @@
 #include "mrvGLUtil.h"
 #include "mrvGLShape.h"
 
-#include <glm/gtc/matrix_transform.hpp>
-
 namespace mrv
 {
 
