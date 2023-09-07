@@ -7,6 +7,8 @@
 #include <tlGL/Mesh.h>
 #include <tlGL/Util.h>
 
+#include <Imath/ImathMatrix.h>
+
 #include "mrvCore/mrvMesh.h"
 
 #include "mrvGL/mrvTimelineViewport.h"
@@ -14,8 +16,6 @@
 #include "mrvGL/mrvGLViewportPrivate.h"
 #include "mrvGL/mrvGLErrors.h"
 #include "mrvGL/mrvGLUtil.h"
-
-#include <glm/gtc/matrix_transform.hpp>
 
 namespace mrv
 {
@@ -29,17 +29,17 @@ namespace mrv
         {
             gl.vbo =
                 gl::VBO::create(numTriangles * 3, gl::VBOType::Pos3_F32_UV_U16);
+            gl.vao.reset();
             CHECK_GL;
         }
         if (gl.vbo)
         {
-            gl.vbo->copy(convert(mesh, gl::VBOType::Pos3_F32_UV_U16));
+            gl.vbo->copy(convert(mesh, gl.vbo->getType()));
             CHECK_GL;
         }
         if (!gl.vao && gl.vbo)
         {
-            gl.vao =
-                gl::VAO::create(gl::VBOType::Pos3_F32_UV_U16, gl.vbo->getID());
+            gl.vao = gl::VAO::create(gl.vbo->getType(), gl.vbo->getID());
             CHECK_GL;
         }
     }
@@ -48,7 +48,7 @@ namespace mrv
     {
         TLRENDER_P();
         MRV2_GL();
-        const auto& mesh = geom::createSphere(
+        const auto mesh = geom::createSphere(
             2.0F, p.environmentMapOptions.subdivisionX,
             p.environmentMapOptions.subdivisionY);
         const size_t numTriangles = mesh.triangles.size();
@@ -56,17 +56,17 @@ namespace mrv
         {
             gl.vbo =
                 gl::VBO::create(numTriangles * 3, gl::VBOType::Pos3_F32_UV_U16);
+            gl.vao.reset();
             CHECK_GL;
         }
         if (gl.vbo)
         {
-            gl.vbo->copy(convert(mesh, gl::VBOType::Pos3_F32_UV_U16));
+            gl.vbo->copy(convert(mesh, gl.vbo->getType()));
             CHECK_GL;
         }
         if (!gl.vao && gl.vbo)
         {
-            gl.vao =
-                gl::VAO::create(gl::VBOType::Pos3_F32_UV_U16, gl.vbo->getID());
+            gl.vao = gl::VAO::create(gl.vbo->getType(), gl.vbo->getID());
             CHECK_GL;
         }
     }
@@ -81,7 +81,9 @@ namespace mrv
         const float PI = 3.141592654;
         const float DEG_TO_RAD = PI / 180.0;
 
-        glm::mat4x4 vm(1.F);
+        Imath::M44f vm;
+        vm.makeIdentity();
+
         float rotX = p.environmentMapOptions.rotateX;
         float rotY = p.environmentMapOptions.rotateY;
         float fov = p.environmentMapOptions.focalLength;
@@ -90,27 +92,56 @@ namespace mrv
         const float vAperture = p.environmentMapOptions.verticalAperture;
         if (p.environmentMapOptions.type == EnvironmentMapOptions::kCubic)
         {
-            vm = glm::scale(vm, glm::vec3(1, -1, 1));
+            vm = vm.scale(Imath::V3f(1, -1, 1));
             rotY += 90;
         }
         rotX *= DEG_TO_RAD;
         rotY *= DEG_TO_RAD;
-        vm = glm::rotate(vm, rotX, glm::vec3(1, 0, 0));
-        vm = glm::rotate(vm, rotY, glm::vec3(0, 1, 0));
+
+        Imath::V3f rotation(rotX, rotY, 0.F);
+        vm = vm.rotate(rotation);
 
         float aspect = viewportSize.w / (float)viewportSize.h;
-        float remderSspect = renderSize.w / (float)renderSize.h;
 
         float vAper = vAperture;
         if (vAper == 0.0F)
             vAper = hAperture * aspect;
         aspect = vAper / hAperture;
 
-        glm::mat4x4 pm = glm::perspective(fov, aspect, 0.1F, 3.F);
-        pm = pm *
-             glm::lookAt(
-                 glm::vec3(0, 0, 1), glm::vec3(0, 0, -1), glm::vec3(0, 1, 0));
-        glm::mat4x4 vpm = pm * vm;
+        float nearClip = 0.1F;
+        float farClip = 3.F;
+
+        // Create the perspective matrix
+        Imath::M44f pm;
+        memset(&pm, 0, sizeof(Imath::M44f));
+        float tanHalfFov = tan(fov / 2.0f);
+        pm[0][0] = 1.0f / (aspect * tanHalfFov);
+        pm[1][1] = 1.0f / tanHalfFov;
+        pm[2][2] = -(farClip + nearClip) / (farClip - nearClip);
+        pm[2][3] = -1.0f;
+        pm[3][2] = -(2.0f * farClip * nearClip) / (farClip - nearClip);
+        pm[3][3] = 0.0f;
+
+        // Define your camera parameters
+        Imath::V3f eye(0, 0, 1);
+        Imath::V3f center(0, 0, -1);
+        Imath::V3f up(0, 1, 0);
+
+        // Create the lookAt matrix manually
+        Imath::V3f f = (center - eye).normalized();
+        Imath::V3f s = f.cross(up).normalized();
+        Imath::V3f u = s.cross(f);
+
+        Imath::M44f lookAtMatrix(
+            s.x, s.y, s.z, 0.0f, u.x, u.y, u.z, 0.0f, -f.x, -f.y, -f.z, 0.0f,
+            s.dot(eye), u.dot(eye), f.dot(eye), 1.0f);
+
+        // Combine the perspective and look at matrices
+        pm = lookAtMatrix * pm;
+
+        // Add the rotation and scaling to the matrix
+        const Imath::M44f vpm = vm * pm;
+
         auto mvp = math::Matrix4x4f(
             vpm[0][0], vpm[0][1], vpm[0][2], vpm[0][3], vpm[1][0], vpm[1][1],
             vpm[1][2], vpm[1][3], vpm[2][0], vpm[2][1], vpm[2][2], vpm[2][3],
@@ -144,6 +175,7 @@ namespace mrv
         {
             gl.vbo =
                 gl::VBO::create(numTriangles * 3, gl::VBOType::Pos2_F32_UV_U16);
+            gl.vao.reset();
             CHECK_GL;
         }
         if (gl.vbo)
@@ -154,8 +186,7 @@ namespace mrv
 
         if (!gl.vao && gl.vbo)
         {
-            gl.vao =
-                gl::VAO::create(gl::VBOType::Pos2_F32_UV_U16, gl.vbo->getID());
+            gl.vao = gl::VAO::create(gl.vbo->getType(), gl.vbo->getID());
             CHECK_GL;
         }
 
