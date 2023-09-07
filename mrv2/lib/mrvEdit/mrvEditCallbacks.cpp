@@ -806,6 +806,7 @@ namespace mrv
         const auto startTime = player->timeRange().start_time();
         const auto time = player->currentTime() - startTime;
         const auto one_frame = RationalTime(1.0, time.rate());
+        const auto half_frame = RationalTime(0.4, time.rate());
         const RationalTime out_time = time + one_frame;
 
         edit_store_undo(player, ui);
@@ -819,6 +820,8 @@ namespace mrv
                 continue;
 
             auto track = otio::dynamic_retainer_cast<Track>(tracks[trackIndex]);
+            if (!track)
+                continue;
             auto item = otio::dynamic_retainer_cast<Item>(
                 track->child_at_time(time, &errorStatus));
             if (!item)
@@ -830,9 +833,13 @@ namespace mrv
             // Cut again at current time + 1 frame
             otio::algo::slice(track, out_time);
 
+            // Adjust time by almsot half a frame to avoid rounding issues in
+            // the audio tracks.
+            auto trackTime = time + half_frame;
+
             // Get the cut item
             item = otio::dynamic_retainer_cast<Item>(
-                track->child_at_time(time, &errorStatus));
+                track->child_at_time(trackTime, &errorStatus));
             if (!item)
                 continue;
 
@@ -840,6 +847,7 @@ namespace mrv
             auto children_size = track->children().size();
             if (index < 0 || static_cast<size_t>(index) >= children_size)
                 continue;
+
             track->remove_child(index);
         }
 
@@ -994,9 +1002,15 @@ namespace mrv
 
         edit_store_undo(player, ui);
 
+        const auto half_frame = RationalTime(0.4, time.rate());
+
         for (auto track : tracks)
         {
-            otio::algo::remove(track, time, false);
+            // Adjust time by almsot half a frame to avoid rounding issues in
+            // the audio tracks.
+            auto trackTime = time + half_frame;
+
+            otio::algo::remove(track, trackTime, false);
         }
 
         TimeRange timeRange;
