@@ -76,7 +76,8 @@ the playlist panel by making it interactive.
   network, it will discard it.
 - Fixed Environment Mapping editing of the subdivisions no longer changing the
   sphere.
-
+- Fixed menus still showing the panels open when they were closed from the
+  Close button in network connections.
 
 v0.7.1
 ------
