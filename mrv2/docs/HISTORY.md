@@ -1,25 +1,27 @@
 v0.7.5
-------
+======
 
-Playlist and Editing:
+Playlist and Editing
+--------------------
 
 This is the first version that supports some basic editing and improves upon
 the playlist panel by making it interactive.
 
-- The Playlist panel's functionality has been simplified. It is there only to create
-  an empty track or start a new EDL with one clip from the Files Panel.
+- The Playlist panel's functionality has been simplified. It is there only to
+  create an empty track or start a new EDL with one clip from the Files Panel.
 - Added an Edit/Frame/Cut, Edit/Frame/Copy, Edit/Frame/Paste and
   Edit/Frame/Insert to cut, copy, paste and insert one frame (video and audio)
   of any media.  Currently, it does not support transitions, that are removed.
   As soon as one of these commands is used, a new EDL is created.
 - Added an Edit/Slice to cut a clip in half at the current time location.
-- Added an Edit/Remove to remove the clips that intersect the current time location.
-  In the future, more control will be provided to select the clips instead of using
-  the current time.
+- Added an Edit/Remove to remove the clips that intersect the current time
+  location.
+  In the future, more control will be provided to select the clips instead of
+  using the current time.
 - Darby Johnston provided with rearranging of clips in the timeline viewport
   for some basic editing.
-- Added Drag and Drop functionality to the Files Panel into the Timeline Window as
-  well as to the Plalist window to add clips and create an EDL.
+- Added Drag and Drop functionality to the Files Panel into the Timeline
+  Window as well as to the Plalist window to add clips and create an EDL.
 - Currently, there's still no support for trimming the Timeline clips yet.
   
 - Documented Python USD module.
@@ -72,6 +74,8 @@ the playlist panel by making it interactive.
   tabs open.
 - Made Network connections more solid.  In case of wrong data sent through the
   network, it will discard it.
+- Fixed Environment Mapping editing of the subdivisions no longer changing the
+  sphere.
 
 
 v0.7.1

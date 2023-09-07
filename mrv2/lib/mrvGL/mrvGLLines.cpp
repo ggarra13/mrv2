@@ -279,14 +279,10 @@ namespace tl
             const math::Vector2i& center, const float radius,
             const image::Color4f& color)
         {
-#if 0
-            drawFilledCircle(render, center, radius, color, false);
-#else
             drawCircle(render, center, radius, 2.0, color, false);
             image::Color4f black(0.F, 0.F, 0.F, 1.F);
             if (radius > 2.0F)
                 drawCircle(render, center, radius - 2.0F, 2.0, black, false);
-#endif
         }
 
     } // namespace gl
