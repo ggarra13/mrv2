@@ -100,6 +100,9 @@ namespace mrv
     //! must be verified first.
     void save_timeline_to_disk(otio::Timeline*, const std::string& fileName);
 
+    //! Dump undo queue to tmpdir.
+    void dump_undo_queue_cb(Fl_Menu_* m, ViewerUI* ui);
+
     //
     // Set the edit mode height.
     //

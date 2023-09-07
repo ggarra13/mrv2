@@ -931,6 +931,10 @@ namespace mrv
                 _("Edit/Remove"), kEditRemoveClip.hotkey(),
                 (Fl_Callback*)edit_remove_clip_cb, ui);
 
+            menu->add(
+                "Edit/Dump Undo Queue", 0, (Fl_Callback*)dump_undo_queue_cb,
+                ui);
+
 #if 0            
             menu->add(
                 _("Edit/Remove With Gap"), kEditRemoveClipWithGap.hotkey(),

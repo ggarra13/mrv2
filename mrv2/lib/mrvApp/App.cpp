@@ -847,8 +847,9 @@ namespace mrv
         file::PathOptions pathOptions;
         pathOptions.maxNumberDigits = std_any_cast<int>(
             p.settingsObject->value("Misc/MaxFileSequenceDigits"));
+        file::Path filePath(fileName);
         for (const auto& path :
-             timeline::getPaths(fileName, pathOptions, _context))
+             timeline::getPaths(filePath, pathOptions, _context))
         {
             auto item = std::make_shared<FilesModelItem>();
             item->path = path;
@@ -1078,10 +1079,9 @@ namespace mrv
                 DBG;
                 auto otioTimeline =
                     item->audioPath.isEmpty()
-                        ? timeline::create(item->path.get(), _context, options)
+                        ? timeline::create(item->path, _context, options)
                         : timeline::create(
-                              item->path.get(), item->audioPath.get(), _context,
-                              options);
+                              item->path, item->audioPath, _context, options);
 
                 DBG;
 

@@ -62,15 +62,10 @@ namespace mrv
         stringArray lines;
         split_string(lines, text, "\n");
         std::string filename = lines[0] + lines[1];
-        p.timeline = timeline::create(filename, context);
+        file::Path path(filename);
+        p.timeline = timeline::create(path, context);
         redraw();
     }
-
-    // void PlaylistButton::setTimeline(otio::Timeline* value)
-    // {
-    //     _p->timeline = value;
-    //     redraw();
-    // }
 
     int PlaylistButton::handle(int event)
     {

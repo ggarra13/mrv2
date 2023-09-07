@@ -388,8 +388,8 @@ namespace mrv
 
                 try
                 {
-                    auto timeline =
-                        timeline::Timeline::create(fullfile, context);
+                    file::Path path(fullfile);
+                    auto timeline = timeline::Timeline::create(path, context);
                     auto timeRange = timeline->getTimeRange();
 
                     if (time::isValid(timeRange))

@@ -1161,6 +1161,34 @@ namespace mrv
                 size_t srcIndex = message["sourceIndex"];
                 add_clip_to_timeline(filename, srcIndex, ui);
             }
+            else if (c == "Edit/Cut")
+            {
+                edit_cut_frame_cb(nullptr, ui);
+            }
+            else if (c == "Edit/Copy")
+            {
+                edit_copy_frame_cb(nullptr, ui);
+            }
+            else if (c == "Edit/Paste")
+            {
+                edit_paste_frame_cb(nullptr, ui);
+            }
+            else if (c == "Edit/Insert")
+            {
+                edit_insert_frame_cb(nullptr, ui);
+            }
+            else if (c == "Edit/Remove")
+            {
+                edit_remove_clip_cb(nullptr, ui);
+            }
+            else if (c == "Edit/Undo")
+            {
+                edit_undo_cb(nullptr, ui);
+            }
+            else if (c == "Edit/Redo")
+            {
+                edit_redo_cb(nullptr, ui);
+            }
             else if (c == "setFilesPanelOptions")
             {
                 bool receive = prefs->ReceiveUI->value();

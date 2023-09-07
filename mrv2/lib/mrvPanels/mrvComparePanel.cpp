@@ -293,8 +293,7 @@ namespace mrv
 
                 try
                 {
-                    auto timeline =
-                        timeline::Timeline::create(path.get(), context);
+                    auto timeline = timeline::Timeline::create(path, context);
                     auto timeRange = timeline->getTimeRange();
 
                     if (time::isValid(timeRange))
@@ -717,8 +716,7 @@ namespace mrv
 
                 try
                 {
-                    auto timeline =
-                        timeline::Timeline::create(path.get(), context);
+                    auto timeline = timeline::Timeline::create(path, context);
                     auto timeRange = timeline->getTimeRange();
 
                     if (time::isValid(timeRange))

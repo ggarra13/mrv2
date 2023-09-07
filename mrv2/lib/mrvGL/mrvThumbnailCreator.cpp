@@ -328,8 +328,9 @@ namespace mrv
                         string::Format("{0}").arg(1);
                     try
                     {
-                        request.timeline = timeline::Timeline::create(
-                            request.fileName, context, options);
+                        file::Path path(request.fileName);
+                        request.timeline =
+                            timeline::Timeline::create(path, context, options);
                         for (const auto& i : request.times)
                         {
                             request.futures.push_back(
@@ -344,7 +345,7 @@ namespace mrv
                     }
                     catch (const std::exception& e)
                     {
-                        LOG_ERROR(e.what());
+                        // LOG_ERROR(e.what());
                         p.running = false;
                         continue;
                     }
@@ -421,7 +422,6 @@ namespace mrv
                             }
                             catch (const std::exception& e)
                             {
-                                LOG_ERROR(e.what());
                             }
 
                             const auto rgbImage = new Fl_RGB_Image(

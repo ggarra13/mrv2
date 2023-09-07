@@ -697,6 +697,24 @@ namespace mrv
 
     } // namespace
 
+    //! Dump undo queue to tmpdir.
+    void dump_undo_queue_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        const std::string path = tmppath() + "/UndoQueue";
+        mode_t mode = 0777;
+        fl_mkdir(path.c_str(), mode);
+        unsigned int idx = 1;
+        char buf[4096];
+        for (auto& undo : undoBuffer)
+        {
+            snprintf(buf, 4096, "%s/undo.%d.otio", path.c_str(), idx);
+            std::ofstream f(buf);
+            f << undo.json << std::endl;
+            f.close();
+            ++idx;
+        }
+    }
+
     void edit_store_undo(TimelinePlayer* player, ViewerUI* ui)
     {
         auto timeline = player->getTimeline();
@@ -704,7 +722,7 @@ namespace mrv
 
         makePathsAbsolute(timeline, ui);
 
-        std::string state = timeline->to_json_string();
+        const std::string state = timeline->to_json_string();
         if (!undoBuffer.empty())
         {
             // Don't store anything if no change.
@@ -740,7 +758,7 @@ namespace mrv
     {
         auto timeline = player->getTimeline();
         auto view = ui->uiView;
-        std::string state = timeline->to_json_string();
+        const std::string state = timeline->to_json_string();
         if (!redoBuffer.empty())
         {
             // Don't store anything if no change.
@@ -848,6 +866,7 @@ namespace mrv
             if (index < 0 || static_cast<size_t>(index) >= children_size)
                 continue;
 
+            // Remove the cut item (ie. one frame).
             track->remove_child(index);
         }
 
@@ -859,7 +878,8 @@ namespace mrv
 
         setEndTime(timeline, time.rate(), ui);
         toOtioFile(timeline, ui);
-        ui->uiTimeline->frameView();
+
+        tcp->pushMessage("Edit/Cut", time);
     }
 
     void edit_paste_frame_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -874,6 +894,9 @@ namespace mrv
 
         auto timeline = player->getTimeline();
         auto stack = timeline->tracks();
+        if (!stack)
+            return;
+
         auto tracks = stack->children();
 
         edit_store_undo(player, ui);
@@ -890,6 +913,12 @@ namespace mrv
                 continue;
 
             auto track = otio::dynamic_retainer_cast<Track>(tracks[trackIndex]);
+            if (!track)
+                continue;
+
+            if (track->kind() != frame.kind)
+                continue;
+
             otio::algo::overwrite(item, track, range);
             frame.item = item;
         }
@@ -939,7 +968,6 @@ namespace mrv
 
         setEndTime(timeline, time.rate(), ui);
         toOtioFile(timeline, ui);
-        ui->uiTimeline->frameView();
     }
 
     void edit_slice_clip_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -1100,10 +1128,14 @@ namespace mrv
             setEndTime(timeline, videoRate, ui);
         }
 
+        if (undoBuffer.empty())
+        {
+            std::cout << timeline->to_json_string() << std::endl;
+        }
+
         toOtioFile(timeline, ui);
         if (playlistPanel)
             playlistPanel->redraw();
-        ui->uiTimeline->frameView();
     }
 
     void edit_redo_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -1153,8 +1185,6 @@ namespace mrv
 
         if (refreshCache)
             refresh_file_cache_cb(nullptr, ui);
-
-        ui->uiTimeline->frameView();
     }
 
     otio::SerializableObject::Retainer<otio::Timeline>
@@ -1518,7 +1548,6 @@ namespace mrv
         player->setTimeline(timeline);
         player->setAllAnnotations(annotations);
         setEndTime(timeline, videoRate, ui);
-        ui->uiTimeline->frameView();
 
         refreshPanelThumbnails();
     }
