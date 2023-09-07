@@ -34,6 +34,16 @@ set( FLTK_INCLUDE_DIR ${CMAKE_PREFIX_PATH}/include )
 find_package( FLTK REQUIRED CONFIG )
 message( STATUS "Found FLTK: ${FLTK_INCLUDE_DIR}" )
 
+#
+# Make sure we use our own recently compiled fluid executable
+#
+if( WIN32 )
+    set( FLTK_FLUID_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/fluid-cmd)
+else()
+    set( FLTK_FLUID_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/fluid)
+endif()
+
+
 find_package(Intl)
 find_package(tlRender REQUIRED)
 find_package(nlohmann_json REQUIRED)
@@ -58,19 +68,6 @@ if(TLRENDER_USD)
     if(pxr_FOUND)
         add_definitions(-DTLRENDER_USD)
     endif()
-endif()
-
-#
-# Make sure we use our own recently compiled fluid executable
-#
-if( WIN32 )
-    set( FLTK_FLUID_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/fluid-cmd)
-else()
-    set( FLTK_FLUID_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/fluid)
-endif()
-
-if(TLRENDER_USD)
-    add_definitions(-DTLRENDER_USD)
 endif()
 
 if(TLRENDER_BMD)
@@ -118,7 +115,7 @@ else()
    set(tlRender_glad "${CMAKE_CURRENT_SOURCE_DIR}/../tlRender/deps/glad_GL_4_1")
 endif()
 
-set( MRV_INCLUDE_DIRS
+set( mrv2_INCLUDE_DIRS
     ${CMAKE_CURRENT_SOURCE_DIR}/lib   # for mrv2 includes (search here first)
     ${mrv2_FLUID_INCLUDE_DIR}         # for mrv2 .fl converted files next
     ${tlRender_glad}
@@ -139,7 +136,7 @@ set( MRV_INCLUDE_DIRS
     ${Intl_INCLUDE_DIRS}
 )
 
-include_directories( ${MRV_INCLUDE_DIRS} )
+include_directories( ${mrv2_INCLUDE_DIRS} )
 
 #
 # Install mrv2's auxiliary directories

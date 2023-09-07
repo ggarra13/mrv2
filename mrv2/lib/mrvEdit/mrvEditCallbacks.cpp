@@ -651,8 +651,8 @@ namespace mrv
             auto model = ui->app->filesModel();
             auto Aitem = model->observeA()->get();
 
-            file::Path path = Aitem->path;
-            if (path.getExtension() != ".otio")
+            const file::Path path = Aitem->path;
+            if (!isTemporaryEDL(path))
                 return _otioFilename();
 
             return path.get();
