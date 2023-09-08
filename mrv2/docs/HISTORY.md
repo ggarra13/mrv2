@@ -16,12 +16,8 @@ the playlist panel by making it interactive.
 - Added an Edit/Slice to cut a clip in half at the current time location.
 - Added an Edit/Remove to remove the clips that intersect the current time
   location.
-  In the future, more control will be provided to select the clips instead of
-  using the current time.
-- Darby Johnston provided with rearranging of clips in the timeline viewport
-  for some basic editing.
 - Added Drag and Drop functionality to the Files Panel into the Timeline
-  Window as well as to the Plalist window to add clips and create an EDL.
+  Window as well as to the Playlist panel to add clips and create an EDL.
 - Currently, there's still no support for trimming the Timeline clips yet.
   
 - Documented Python USD module.
