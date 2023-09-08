@@ -2,10 +2,6 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <mrvGL/mrvThumbnailCreator.h>
-
-#include <tlGlad/gl.h>
-
 #include <tlGL/Mesh.h>
 #include <tlGL/OffscreenBuffer.h>
 #include <tlTimeline/GLRender.h>
@@ -24,6 +20,9 @@
 
 // mrViewer includes
 #include <mrvFl/mrvIO.h>
+
+#include "mrvGL/mrvGLErrors.h"
+#include "mrvGL/mrvThumbnailCreator.h"
 
 // For main fltk event loop
 #include <FL/Fl_RGB_Image.H>
@@ -329,8 +328,9 @@ namespace mrv
                         string::Format("{0}").arg(1);
                     try
                     {
-                        request.timeline = timeline::Timeline::create(
-                            request.fileName, context, options);
+                        file::Path path(request.fileName);
+                        request.timeline =
+                            timeline::Timeline::create(path, context, options);
                         for (const auto& i : request.times)
                         {
                             request.futures.push_back(
@@ -345,6 +345,9 @@ namespace mrv
                     }
                     catch (const std::exception& e)
                     {
+                        // LOG_ERROR(e.what());
+                        p.running = false;
+                        continue;
                     }
                 }
 
@@ -371,6 +374,8 @@ namespace mrv
 
                             try
                             {
+                                math::Size2i offscreenBufferSize(
+                                    info.size.w, info.size.h);
                                 gl::OffscreenBufferOptions
                                     offscreenBufferOptions;
 
@@ -378,12 +383,13 @@ namespace mrv
                                     image::PixelType::RGBA_U8;
 
                                 if (gl::doCreate(
-                                        offscreenBuffer, info.size,
+                                        offscreenBuffer, offscreenBufferSize,
                                         offscreenBufferOptions))
                                 {
                                     offscreenBuffer =
                                         gl::OffscreenBuffer::create(
-                                            info.size, offscreenBufferOptions);
+                                            offscreenBufferSize,
+                                            offscreenBufferOptions);
                                 }
 
                                 timeline::ImageOptions i;
@@ -397,7 +403,8 @@ namespace mrv
                                     strdup(setlocale(LC_NUMERIC, NULL));
                                 setlocale(LC_NUMERIC, "C");
                                 render->begin(
-                                    info.size, requestIt->colorConfigOptions,
+                                    offscreenBufferSize,
+                                    requestIt->colorConfigOptions,
                                     requestIt->lutOptions);
                                 render->drawVideo(
                                     {videoData},
@@ -415,10 +422,6 @@ namespace mrv
                             }
                             catch (const std::exception& e)
                             {
-
-                                std::cerr << e.what() << std::endl;
-                                context->log(
-                                    kModule, e.what(), log::Type::Error);
                             }
 
                             const auto rgbImage = new Fl_RGB_Image(

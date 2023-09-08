@@ -11,8 +11,8 @@
 #include <tlTimeline/GLRender.h>
 #include <tlGL/Shader.h>
 
-#include <tlGlad/gl.h>
-
+#include "mrvGL/mrvGLDefines.h"
+#include "mrvGL/mrvGLErrors.h"
 #include "mrvGL/mrvGLLines.h"
 #include "mrvGL/mrvGLViewport.h"
 #include "mrvGL/mrvGLOutline.h"
@@ -42,6 +42,10 @@ namespace mrv
         std::shared_ptr<tl::gl::Outline> outline;
 #endif
         std::shared_ptr<tl::gl::Lines> lines;
+
+#ifdef TLRENDER_API_GL_4_1_Debug
+        bool init_debug = false;
+#endif
     };
 
 //! Define a variable, "gl", that references the private implementation.

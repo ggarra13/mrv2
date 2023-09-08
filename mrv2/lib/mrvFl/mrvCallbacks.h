@@ -8,9 +8,9 @@
 #include <string>
 #include <memory>
 
-#include <FL/Fl_Widget.H>
+#include <FL/Fl_Widget.H> // For Fl_Callback
 
-#include "mrvFl/mrvEditMode.h"
+#include "mrvEdit/mrvEditCallbacks.h"
 
 #include "mrvApp/mrvPlaylistsModel.h"
 
@@ -41,6 +41,7 @@ namespace mrv
     void open_separate_audio_cb(Fl_Widget* w, ViewerUI* ui);
     void open_recent_cb(Fl_Menu_* w, ViewerUI* ui);
 
+    void save_single_frame_cb(Fl_Menu_* w, ViewerUI* ui);
     void save_movie_cb(Fl_Menu_* w, ViewerUI* ui);
     void save_pdf_cb(Fl_Menu_* w, ViewerUI* ui);
 
@@ -143,6 +144,7 @@ namespace mrv
     void annotation_clear_all_cb(Fl_Menu_*, ViewerUI* ui);
 
     // Timeline view
+    void toggle_timeline_markers_cb(Fl_Menu_*, ViewerUI* ui);
     void toggle_timeline_transitions_cb(Fl_Menu_*, ViewerUI* ui);
     void timeline_thumbnails_none_cb(Fl_Menu_*, ViewerUI* ui);
     void timeline_thumbnails_small_cb(Fl_Menu_*, ViewerUI* ui);
@@ -174,17 +176,10 @@ namespace mrv
     void next_image_version_cb(Fl_Menu_*, ViewerUI* ui);
     void last_image_version_cb(Fl_Menu_*, ViewerUI* ui);
 
-    //! .otio EDL creation from loaded files
-    void create_playlist(
-        ViewerUI* ui, const std::shared_ptr<Playlist>& playlist,
-        const bool temp = true);
-
-    void create_playlist(
-        ViewerUI* ui, const std::shared_ptr<Playlist>& playlist,
-        const std::string& fileName, const bool relative);
-
+    //! Call the browser with documentation.
     void help_documentation_cb(Fl_Menu_*, ViewerUI* ui);
 
+    //! Make background black or default gray.
     void toggle_black_background_cb(Fl_Menu_* m, ViewerUI* ui);
 
     // Netowrk toggles
@@ -203,17 +198,8 @@ namespace mrv
     // Panel callbacks
     void clone_file_cb(Fl_Menu_* m, void* d);
     void set_stereo_cb(Fl_Menu_* m, void* d);
-    void refresh_file_cache_cb(Fl_Menu_* m, void* d);
     void copy_filename_cb(Fl_Menu_* m, void* d);
     void file_manager_cb(Fl_Menu_* m, void* d);
-
-    // Editing
-
-    //
-    // Set the edit mode height.
-    //
-    void save_edit_mode_state(ViewerUI* ui);
-    void set_edit_mode_cb(EditMode mode, ViewerUI* ui);
 
     // Python
     void run_python_method_cb(Fl_Menu_* m, void* d);

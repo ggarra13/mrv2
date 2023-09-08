@@ -14,6 +14,8 @@
 
 #include <tlCore/Vector.h>
 
+#include <tlTimeline/Player.h>
+
 #include <opentime/rationalTime.h>
 #include <opentime/timeRange.h>
 namespace otime = opentime::OPENTIME_VERSION;
@@ -61,6 +63,7 @@ namespace mrv
 
         void lock() { m_lock = true; }
         void unlock() { m_lock = false; }
+        bool isLocked() { return m_lock == true; }
 
         virtual Message popMessage();
 
@@ -76,7 +79,7 @@ namespace mrv
 
     protected:
         Poco::Net::StreamSocket m_socket;
-        Poco::Net::SocketAddress m_address; // Example server address
+        Poco::Net::SocketAddress m_address; // Example server/client address
         volatile bool m_running = false;
 
         bool m_lock = false;

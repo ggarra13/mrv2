@@ -23,6 +23,7 @@ set( LIBRARIES
     mrvApp
     mrvPanels
     mrvWidgets
+    mrvUI
     mrvFl
     mrvFLU
     mrvNetwork
@@ -131,7 +132,8 @@ if ( NOT WIN32 )
     configure_file(${CMAKE_SOURCE_DIR}/bin/environment.sh.in
 	${CMAKE_INSTALL_PREFIX}/bin/environment.sh @ONLY)
     
-    install( FILES ${CMAKE_SOURCE_DIR}/bin/mrv2.sh
+    install( FILES
+	${CMAKE_SOURCE_DIR}/bin/mrv2.sh
 	${CMAKE_INSTALL_PREFIX}/bin/environment.sh
 	DESTINATION bin
         PERMISSIONS 

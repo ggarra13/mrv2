@@ -5,14 +5,10 @@
 #include <errno.h> // errno
 #include <cstring> // strerror
 
-#include <FL/fl_utf8.h>
-
-#include <tlTimeline/Util.h>
-
-#include "mrvCore/mrvUtil.h"
 #include "mrvCore/mrvHome.h"
 
-#include "mrvFl/mrvUtil.h"
+#include "mrvUI/mrvUtil.h"
+
 #include "mrvFl/mrvIO.h"
 
 namespace
@@ -25,7 +21,6 @@ namespace mrv
     Fl_SVG_Image* load_svg(const std::string& svg_name)
     {
         std::string svg_root = rootpath();
-        ;
         svg_root += "/icons/";
 
         std::string file = svg_root + svg_name;

@@ -17,7 +17,7 @@ namespace mrv
 {
     using namespace tl;
 
-    class ClipButton;
+    class PlaylistButton;
 
     class PlaylistPanel : public PanelWidget
     {
@@ -28,14 +28,17 @@ namespace mrv
         void clear_controls();
         void add_controls() override;
 
-        void add();
+        void
+        add(const math::Vector2i& pos, const std::string& filename,
+            const size_t index, ViewerUI* ui);
 
+        void redraw();
         void refresh();
         void playlistThumbnail(
             const int64_t id,
             const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&
                 thumbnails,
-            ClipButton* w);
+            PlaylistButton* w);
 
     protected:
         void cancel_thumbnails();

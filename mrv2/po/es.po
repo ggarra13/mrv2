@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.3.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-08-18 09:25-0300\n"
+"POT-Creation-Date: 2023-09-06 14:51-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -761,6 +761,9 @@ msgstr "1/8"
 msgid "1/9"
 msgstr "1/9"
 
+msgid "11.988"
+msgstr "11,988"
+
 msgid "12"
 msgstr "12"
 
@@ -769,6 +772,9 @@ msgstr "12,5"
 
 msgid "14.985"
 msgstr "14,985"
+
+msgid "14.988"
+msgstr "14,988"
 
 msgid "15"
 msgstr "15"
@@ -809,8 +815,8 @@ msgstr "2,35 CinemaScope (viejo 2,35)"
 msgid "2.39 Panavision (new 2.35)"
 msgstr "2,39 Panavision (nuevo 2,35)"
 
-msgid "23.97"
-msgstr "23,97"
+msgid "23.976"
+msgstr "23,976"
 
 msgid "24"
 msgstr "24"
@@ -820,6 +826,9 @@ msgstr "25"
 
 msgid "29.97"
 msgstr "29,97"
+
+msgid "29.976"
+msgstr "29,976"
 
 msgid "30"
 msgstr "30"
@@ -954,12 +963,6 @@ msgstr "Agregar un :class:`mrv2.math.Vector3f` a la imagen."
 msgid "Add a new remote mapping."
 msgstr "Agregar un nuevo mapeo de carpeta remota."
 
-msgid "Add a playlist."
-msgstr "Agregar una lista de reproducción."
-
-msgid "Add current file to Playlist"
-msgstr "Agregar archivo actual a la lista de reproducción."
-
 msgid "Add notes annotations to current clip at a certain frame."
 msgstr "Agregue anotaciones de notas al clip actual en cierto cuadro."
 
@@ -1049,6 +1052,9 @@ msgstr "Retroceder a la Anotación Previa"
 
 msgid "Annotation Frame Step Forwards"
 msgstr "Avanzar a la Anotación Siguiente"
+
+msgid "Annotation already existed at this time"
+msgstr "Anotación ya existía en este tiempo"
 
 msgid "Annotations"
 msgstr "Anotaciones"
@@ -1223,6 +1229,18 @@ msgid ""
 msgstr ""
 "No pude leer la variable de entorno \"{0}\" como valor de entero; usando {1}."
 
+msgid "Cannot append audio clip"
+msgstr "No puedo agragar clip de audio"
+
+msgid "Cannot append audio gap"
+msgstr "No puedo agregar brecha de audio"
+
+msgid "Cannot append audio track."
+msgstr "No puedo agregar pista de audio."
+
+msgid "Cannot append video gap"
+msgstr "No puedo agregar brecha de vídeo"
+
 msgid ""
 "Cannot create an annotation here for all frames.  A current frame annotation "
 "already exists."
@@ -1291,9 +1309,6 @@ msgstr "Herramienta de Círculo"
 msgid "Class used to hold a media item."
 msgstr "Clase para un archivo de medios."
 
-msgid "Class used to hold a playlist"
-msgstr "Clase para una lista de reproducción."
-
 msgid "Clear the B indexes."
 msgstr "Borrar los indices B."
 
@@ -1330,14 +1345,14 @@ msgstr "Cerrar todos los archivos"
 msgid "Close all files."
 msgstr "Cerrar todos los archivos."
 
+msgid "Close current EDL."
+msgstr "Cerrar EDL Actual."
+
 msgid "Close current filename"
 msgstr "Cerrar archivo actual"
 
 msgid "Close the current A file."
 msgstr "Cerrar archivo actual A."
-
-msgid "Close the current playlist."
-msgstr "Cerrar la lista de reproducción actual."
 
 msgid "Close the file item."
 msgstr "Cerrar archivo actual"
@@ -1477,6 +1492,9 @@ msgstr ""
 msgid "Convert to timecode (``HH:MM:SS;FRAME``)"
 msgstr "Convierta a timecode (``HH:MM:SS;FRAME``)"
 
+msgid "Copy Frame"
+msgstr "Copiar Cuadro"
+
 msgid "Copy/Color"
 msgstr "Copiar/Color"
 
@@ -1489,6 +1507,9 @@ msgstr ""
 
 msgid "Could not convert message to shape: "
 msgstr "No pude convertir el mensaje a figura: "
+
+msgid "Could not find video clip."
+msgstr "No pude encontrar video clip."
 
 msgid "Could not match "
 msgstr "No pude empatar "
@@ -1505,17 +1526,11 @@ msgstr "No pude grabar el archivo .otio: {0}"
 msgid "Create"
 msgstr "Crear"
 
-msgid "Create .otio Playlist in temp directory with absolue paths."
-msgstr ""
-"Crear una lista de reproducción .otio en una carpeta temporaria, con caminos "
-"absolutos."
+msgid "Create a timeline from the selected clip."
+msgstr "Crear una línea de tiempo desde el clip seleccionado."
 
-msgid "Create a temporary .otio file with absolute paths."
-msgstr "Cree una list de reproducción .otio temporaria con caminos absolutos."
-
-msgid "Create and save an .otio Playlist with relative paths."
-msgstr ""
-"Cree y grabe una list de reproducción .otio con caminos relativos a ella."
+msgid "Create an empty timeline with a video and audio track."
+msgstr "Crear una línear de tiempo vacía con una pista de vídeo y de audio."
 
 msgid "Creation Date"
 msgstr "Fecha de Creación"
@@ -1555,6 +1570,12 @@ msgstr "Tiempo actual en la línea de tiempo."
 
 msgid "Current tool being used."
 msgstr "Herramienta siendo usada."
+
+msgid "Currently, you cannot add an .otio file to an EDL playlist."
+msgstr "Actualmente no se puede concatenar dos archivos .otio."
+
+msgid "Cut Frame"
+msgstr "Cortar Cuadro"
 
 msgid "DIVX Movie"
 msgstr "Película DIVX"
@@ -1682,6 +1703,9 @@ msgstr "Modo de Dibujar"
 msgid "Draw mode  :class:`mrv2.usd.DrawMode`."
 msgstr "Modo de dibujo :class:`mrv2.usd.DrawMode`."
 
+msgid "Drop a clip here to create a playlist."
+msgstr "LLeve un clip aquí para crear una lista de reproducción."
+
 msgid "Duplicated Python plugin {0} in {1} and {2}."
 msgstr "Plugin de Python duplicado {0} en {1} y {2}."
 
@@ -1697,11 +1721,11 @@ msgstr "Duración del Subtítulo"
 msgid "E"
 msgstr "E"
 
+msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
+msgstr "Item de EDL '{0}' ya no está cargado.  No puedo deshacer ni rehacer."
+
 msgid "ERROR: "
 msgstr "ERROR: "
-
-msgid "ERROR: {0}"
-msgstr "ERROR: {0}"
 
 msgid "EXR Picture"
 msgstr "Dibujo EXR"
@@ -1712,6 +1736,15 @@ msgstr "35mm Temprano"
 msgid "Edit"
 msgstr "Edición"
 
+msgid "Edit Redo"
+msgstr "Rehacer Edición"
+
+msgid "Edit Undo"
+msgstr "Deshacer Edición"
+
+msgid "Edit Viewport"
+msgstr "Ventana de Edición"
+
 msgid "Edit/&Copy"
 msgstr "Editar/&Copiar"
 
@@ -1721,6 +1754,39 @@ msgstr "Editar/&Pegar"
 msgid "Edit/Cu&t"
 msgstr "Editar/Cor&tar"
 
+msgid "Edit/Frame/Copy"
+msgstr "Editar/Cuadro/&Copiar"
+
+msgid "Edit/Frame/Cut"
+msgstr "Editar/Cuadro/Cor&tar"
+
+msgid "Edit/Frame/Insert"
+msgstr "Editar/Cuadro/Insertar"
+
+msgid "Edit/Frame/Paste"
+msgstr "Editar/Cuadro/&Pegar"
+
+msgid "Edit/Redo"
+msgstr "Editar/&Rehacer"
+
+msgid "Edit/Remove"
+msgstr "Editar/Remover"
+
+msgid "Edit/Remove With Gap"
+msgstr "Editar/Remover con Brecha"
+
+msgid "Edit/Roll"
+msgstr "Editar/&Rehacer"
+
+msgid "Edit/Slice"
+msgstr "Editar/Rebanar"
+
+msgid "Edit/Undo"
+msgstr "Editar/&Deshacer"
+
+msgid "Editing viewport will be visible at start up."
+msgstr "Ventana de Edición será visible al comenzar."
+
 msgid "Editor/&Run Code"
 msgstr "Editor/&Ejecutar Código"
 
@@ -1729,6 +1795,9 @@ msgstr "Editor/Alternar Número de &Líneas"
 
 msgid "Elapsed"
 msgstr "Transcurrido"
+
+msgid "Empty EDL file.  Not saving."
+msgstr "Archivo EDL vacío.  No grabando."
 
 msgid "Enable Lighting"
 msgstr "Activar Iluminación"
@@ -1775,6 +1844,9 @@ msgstr "Modo de Borrar"
 
 msgid "Eraser Tool"
 msgstr "Herramienta de Borrar"
+
+msgid "Error saving {0}. {1}"
+msgstr "Error grabando {0}. {1}"
 
 msgid "Errors"
 msgstr "Errores"
@@ -1854,6 +1926,9 @@ msgstr "Buscador de Archivos"
 msgid "File Sequences"
 msgstr "Secuencias de Archivos"
 
+msgid "File extension cannot be empty."
+msgstr "Extensión del archivo no puede estar vacía."
+
 msgid "File/Close All"
 msgstr "Archivo/Cerrar Todos"
 
@@ -1891,6 +1966,9 @@ msgstr "&Archivo/&Grabar/&Sesión"
 msgid "File/Save/Session As"
 msgstr "&Archivo/&Grabar/Sesión Como"
 
+msgid "File/Save/Single Frame"
+msgstr "&Archivo/&Grabar/Un &Cuadro"
+
 msgid "Filename"
 msgstr "Nombre"
 
@@ -1902,6 +1980,9 @@ msgstr "Nombre del archivo del clip"
 
 msgid "Files"
 msgstr "Archivos"
+
+msgid "Filter EDLs"
+msgstr "Filtrar EDLs"
 
 msgid "First Frame"
 msgstr "Primer Cuadro"
@@ -2301,9 +2382,6 @@ msgstr "Rango de tiempo :class:`mrv2.TimeRange` de la File Media."
 msgid "Increase gain 1/2 stop (multiply by sqrt(2))."
 msgstr "Incrementar la ganancia 1/2 stop (multiplicar por raiz cuadrada de 2)."
 
-msgid "Index is invalid"
-msgstr "Índice es invalido"
-
 msgid "Input"
 msgstr "Entrada"
 
@@ -2316,8 +2394,14 @@ msgstr "Espacio de Entrada de Color"
 msgid "Insert"
 msgstr "Insertar"
 
+msgid "Insert Frame"
+msgstr "Insertar Cuadro"
+
 msgid "Invalid font for text drawing"
 msgstr "Fuente inválida para dibujar texto"
+
+msgid "Invalid index for add clip to timeline."
+msgstr "Índice inválido para agregar clip a la linea de tiempo."
 
 msgid "Invert"
 msgstr "Invertir"
@@ -2391,6 +2475,9 @@ msgstr "Lenguaje y Colores"
 msgid "Language if known"
 msgstr "Lenguaje si se sabe"
 
+msgid "Large"
+msgstr "Grande"
+
 msgid "Laser"
 msgstr "Laser"
 
@@ -2435,9 +2522,6 @@ msgstr "Orden de Líneas en archivo"
 
 msgid "Linear"
 msgstr "Lineal"
-
-msgid "List of clips :class:`mrv2.FileMedia` in the Playlist."
-msgstr "Lista de clips :class:`mrv2.FileMedia` en la lista de reproducción."
 
 msgid "Load"
 msgstr "Cargar"
@@ -2649,14 +2733,14 @@ msgstr "Video NTSC"
 msgid "Name"
 msgstr "Nombre"
 
-msgid "Name of the Playlist."
-msgstr "Nombre de la lista de reproducción."
-
 msgid ""
 "Need to reboot mrv2 to change language.  Are you sure you want to continue?"
 msgstr ""
 "Necesito rebootear mrv2 para cambiar lenguaje.  ¿Está seguro que quiere "
 "continuar?"
+
+msgid "Neither video nor audio tracks found."
+msgstr "No se encontró pista de vídeo ni de audio."
 
 msgid "Network"
 msgstr "Red"
@@ -2695,11 +2779,20 @@ msgstr ""
 "Sin versión en este clip.  Por favor crée una imagen o carpeta con un nombre "
 "con versión."
 
+msgid "No video children found."
+msgstr "No se encontró elementos de vídeox"
+
+msgid "No video track found."
+msgstr "No se encontró pista de vídeo."
+
 msgid "None"
 msgstr "Ninguno"
 
 msgid "Normal"
 msgstr "Normal"
+
+msgid "Not an EDL file to save."
+msgstr "No es un archivo EDL para grabar."
 
 msgid "Notes"
 msgstr "Notas"
@@ -2909,6 +3002,9 @@ msgstr "Panel/"
 msgid "Panel/One Panel Only"
 msgstr "Panel/Un Solo Panel"
 
+msgid "Paste Frame"
+msgstr "Pegar Cuadro"
+
 msgid "Path :class:`mrv2.Path` to the File Media."
 msgstr "Archivo :class:`mrv2.Path` de la File Media."
 
@@ -3063,21 +3159,6 @@ msgstr "Reproducción/Ping Pong"
 msgid "Playback/Stop"
 msgstr "Reproducción/Parar"
 
-msgid "Playback/Timeline/Thumbnails/Large"
-msgstr "Reproducción/Línea de Tiempo/Miniaturas/Grandes"
-
-msgid "Playback/Timeline/Thumbnails/Medium"
-msgstr "Reproducción/Línea de Tiempo/Miniaturas/Medianas"
-
-msgid "Playback/Timeline/Thumbnails/None"
-msgstr "Reproducción/Línea de Tiempo/Miniaturas/Ninguna"
-
-msgid "Playback/Timeline/Thumbnails/Small"
-msgstr "Reproducción/Línea de Tiempo/Miniaturas/Pequeñas"
-
-msgid "Playback/Timeline/Transitions"
-msgstr "Reproducción/Línea de Tiempo/Transiciones"
-
 msgid "Playback/Toggle In Point"
 msgstr "Reproducción/Alternar Punto de Entrada"
 
@@ -3089,12 +3170,6 @@ msgstr "Reproducción/Alternar Reproduccón"
 
 msgid "Playlist"
 msgstr "Lista de Reproducción"
-
-msgid "Playlist has less than 2 elements"
-msgstr "La lista de reproducción tiene menos de 2 elementos."
-
-msgid "Playlist name not found."
-msgstr "Nombre de la lista de reproduccón no encontrado."
 
 msgid ""
 "Please override the menus method by returning a valid dict of key menus, "
@@ -3257,8 +3332,8 @@ msgstr "Valor Rojo del pixel de imagen bajo el ratón-"
 msgid "Redo Draw"
 msgstr "Rehacer Dibujo"
 
-msgid "Redo Previous Shape Drawn"
-msgstr "Rehacer la Última Figura Dibujada"
+msgid "Redo Previous Shape Drawn in Current Frame."
+msgstr "Rehacer la Última Figura Dibujada en Cuadro Actual."
 
 msgid "Reduce gain 1/2 stop (divide by sqrt(2))."
 msgstr "Reducir ganancia 1/2 stop (dividir por raiz cuadrada de 2)."
@@ -3319,11 +3394,14 @@ msgstr "Archivos remotos son menos que los archivos locales."
 msgid "Remote to Local Path Mapping"
 msgstr "Remota a Local Mapeo de Carpetas"
 
+msgid "Remove Clip"
+msgstr "Eliminar Clip"
+
+msgid "Remove Clip With Gap"
+msgstr "Eliminar Clip con Brecha."
+
 msgid "Remove Paths"
 msgstr "Eliminar Carpetas"
-
-msgid "Remove selected files from Playlist"
-msgstr "Remover archivcos seleccionados de la Lista de Reproducción."
 
 msgid "Remove the currently selected path mapping."
 msgstr "Eliminar el mapeo de carpeta actualmente seleccionado."
@@ -3445,9 +3523,6 @@ msgstr "Retorna el archivo A."
 msgid "Return the LUT options."
 msgstr "Retorna las opciones de LUT."
 
-msgid "Return the current playlist."
-msgstr "Retorna la lista de reproducción."
-
 msgid "Return the display options."
 msgstr "Retorna las opciones de display."
 
@@ -3521,6 +3596,12 @@ msgstr "Meta Der."
 msgid "RightShift"
 msgstr "Mayús. Der."
 
+msgid "Ripple"
+msgstr "Ondulación"
+
+msgid "Roll"
+msgstr "Rodar"
+
 msgid "Rotate"
 msgstr "Rotar"
 
@@ -3579,6 +3660,9 @@ msgstr "Grabar Anotaciones a PDF"
 msgid "Save Hotkeys"
 msgstr "Grabar Teclas de Manejo"
 
+msgid "Save Image"
+msgstr "Grabar Imagen"
+
 msgid "Save Movie or Sequence"
 msgstr "Grabar Película o Secuencia"
 
@@ -3597,6 +3681,9 @@ msgstr "Grabar Sesión"
 msgid "Save Session As"
 msgstr "Grabar Sesión Como"
 
+msgid "Save Single Frame"
+msgstr "Grabar un Solo Cuadro"
+
 msgid "Save a PDF document with all annotations and notes."
 msgstr "Grabar un dcoumento PDF con todas las anotaciones y notas."
 
@@ -3606,11 +3693,17 @@ msgstr "Grabar una película o secuencia de la capa de frente."
 msgid "Save a session file."
 msgstr "Grabar Sesión."
 
-msgid "Save an .otio file with relative paths."
-msgstr "Grabe una list de reproducción .otio con caminos relativos a ella."
-
 msgid "Save annotations."
 msgstr "Grabar Anotaciones."
+
+msgid "Save current .otio file with relative paths."
+msgstr "Grabe una list de reproducción .otio con caminos relativos a ella."
+
+msgid ""
+"Save current EDL to a permanent location, making paths relative if possible."
+msgstr ""
+"Grabar el EDL actual a un lugar permanente, haciendo las rutas relativas si "
+"es posible."
 
 #, c-format
 msgid "Saving Movie %<PRId64> - %<PRId64>"
@@ -3677,12 +3770,6 @@ msgstr "Saltar al tiempo dado en la línea de tiempo."
 msgid "Seek to the given time."
 msgstr "Saltar al tiempo dado."
 
-msgid "Select a playlist with the given index."
-msgstr "Seleccionar una lista de reproducción con el índice dado."
-
-msgid "Select a playlist with the given name."
-msgstr "Seleccionar una lista de reproducción con el nombre dado."
-
 msgid "Select default looping mode in timeline."
 msgstr "Selecionar modo de bucle por defecto en la línea de tiempo."
 
@@ -3691,9 +3778,6 @@ msgstr "Seleccione la imagen A principal."
 
 msgid "Select one or more B images."
 msgstr "Seleccione una o más imágenes B."
-
-msgid "Select playlist image for removal."
-msgstr "Seleccionar una imagen de la lista de reproducción para remover."
 
 msgid "Selected time range of the timeline."
 msgstr "Rango de tiempo seleccionado en la línea de tiempo."
@@ -3951,8 +4035,20 @@ msgstr "Shift"
 msgid "Show All"
 msgstr "Mostrar Todos"
 
+msgid "Show Markers"
+msgstr "Mostrar Marcadores"
+
+msgid "Show Markers in Edit Viewport"
+msgstr "Mostrar Marcadores en la Ventana de Edición"
+
 msgid "Show Thumbnails for USD files (can be slow if they are big)"
 msgstr "Mostrar miniaturas para archivos USD (puede ser lento si son grandes)"
+
+msgid "Show Transitions"
+msgstr "Alternar Transiciones de la Línea de Tiempo"
+
+msgid "Show Transitions in Edit Viewport"
+msgstr "Mostrar Transiciones en la Ventana de Edición"
 
 msgid "Show the A file above the B file"
 msgstr "Mueste el archivo A sobre el B"
@@ -3975,8 +4071,20 @@ msgstr "Tamaño"
 msgid "Size:"
 msgstr "Tamaño:"
 
+msgid "Slice Clip"
+msgstr "Cortar Clip"
+
+msgid "Slide"
+msgstr "Deslizar"
+
+msgid "Slip"
+msgstr "Resbalar"
+
 msgid "Slow"
 msgstr "Lento"
+
+msgid "Small"
+msgstr "Pequeño"
 
 msgid "Soft Clip"
 msgstr "Soft Clip"
@@ -4294,6 +4402,9 @@ msgstr ""
 "left).  Valores menores hacen que el ratón salte más cuadros mientras que "
 "valores más altos hacen lo opuesto."
 
+msgid "Thumbnails"
+msgstr "Vista Previa de Miniaturas"
+
 msgid "Thumbnails Active"
 msgstr "Miniaturas Activas"
 
@@ -4317,6 +4428,24 @@ msgstr "Línea de Tiempo"
 
 msgid "Timeline, movie, image sequence, or folder."
 msgstr "Línea de tiempo, película, secuencia de imágenes o carpeta."
+
+msgid "Timeline/Markers"
+msgstr "Línea de Tiempo/Marcadores"
+
+msgid "Timeline/Thumbnails/Large"
+msgstr "Línea de Tiempo/Miniaturas/Grandes"
+
+msgid "Timeline/Thumbnails/Medium"
+msgstr "Línea de Tiempo/Miniaturas/Medianas"
+
+msgid "Timeline/Thumbnails/None"
+msgstr "Línea de Tiempo/Miniaturas/Ninguna"
+
+msgid "Timeline/Thumbnails/Small"
+msgstr "Línea de Tiempo/Miniaturas/Pequeñas"
+
+msgid "Timeline/Transitions"
+msgstr "Línea de Tiempo/Transiciones"
 
 msgid "Timer mode"
 msgstr "Modo de Timer"
@@ -4420,6 +4549,9 @@ msgstr "Alternar Estéreo 3D"
 msgid "Toggle Timeline"
 msgstr "Alternar Línea de Tiempo"
 
+msgid "Toggle Timeline Markers"
+msgstr "Alternar Marcadores en la Línea de Tiempo"
+
 msgid "Toggle Timeline Thumbnails"
 msgstr "Alternar Miniaturas de la Línea de Tiempo"
 
@@ -4462,6 +4594,9 @@ msgstr "Herramientas"
 msgid "Topbar"
 msgstr "Barra Superior"
 
+msgid "Trim"
+msgstr "Recortar"
+
 msgid "Turn a frame number and rate into a :class:`~RationalTime` object."
 msgstr ""
 "Convertir un número de cuadro y una razón a un objeto :class:`~RationalTime`."
@@ -4500,8 +4635,8 @@ msgstr "Vista Previa de Miniaturas de USD"
 msgid "Undo Draw"
 msgstr "Deshacer Dibujo"
 
-msgid "Undo Last Shape Drawn"
-msgstr "Deshacer la Última Figura Dibujada"
+msgid "Undo Last Shape Drawn in Current Frame."
+msgstr "Deshacer la Última Figura Dibujada en Cuadro Actual."
 
 msgid "Undock"
 msgstr "Desacoplar"
@@ -4523,6 +4658,9 @@ msgstr "Tipo desconocido para OCIO Browser"
 
 msgid "Up"
 msgstr "Arriba"
+
+msgid "Use Active Views and Active Displays"
+msgstr "Use Vistas Activas y Displays Activos"
 
 msgid "Use Native File Chooser"
 msgstr "Usar el Buscador de Archivos Nativo"
@@ -4790,6 +4928,13 @@ msgstr ""
 "serán enviadas al ya abierto mrv2."
 
 msgid ""
+"When this option is off, OCIO files with active_views: and active_displays: "
+"are not taken into account."
+msgstr ""
+"Cuando esta opción esta apagada, archivos OCIO con active_views: y "
+"active_displays: no son tomados en consideración."
+
+msgid ""
 "When this option is on, mrv2 will always open to the size you set in W and "
 "H.  If Always Save on Exit is on, the values are recalculated upon exiting "
 "the program."
@@ -4937,6 +5082,9 @@ msgstr "Coefficients de YUV usados para conversion de vídeo"
 msgid "Yes"
 msgstr "Sí"
 
+msgid "You can only add clips to an .otio EDL playlist."
+msgstr "Sólo puede agregar clips a una lista de reproduccion (EDL) de .otio."
+
 msgid "ZIP"
 msgstr "ZIP"
 
@@ -5075,6 +5223,67 @@ msgstr "x9"
 msgid "xyY CIE xyY"
 msgstr "xyY CIE xyY"
 
+#~ msgid "Cannot add an otio file to another timeline."
+#~ msgstr "No puedo agregar un archivo otio a otra línea de tiempo."
+
+#~ msgid "Add a playlist."
+#~ msgstr "Agregar una lista de reproducción."
+
+#~ msgid "Add current file to Playlist"
+#~ msgstr "Agregar archivo actual a la lista de reproducción."
+
+#~ msgid "Class used to hold a playlist"
+#~ msgstr "Clase para una lista de reproducción."
+
+#~ msgid "Close the current playlist."
+#~ msgstr "Cerrar la lista de reproducción actual."
+
+#~ msgid "Create .otio Playlist in temp directory with absolue paths."
+#~ msgstr ""
+#~ "Crear una lista de reproducción .otio en una carpeta temporaria, con "
+#~ "caminos absolutos."
+
+#~ msgid "Create a temporary .otio file with absolute paths."
+#~ msgstr ""
+#~ "Cree una list de reproducción .otio temporaria con caminos absolutos."
+
+#~ msgid "Create and save an .otio Playlist with relative paths."
+#~ msgstr ""
+#~ "Cree y grabe una list de reproducción .otio con caminos relativos a ella."
+
+#~ msgid "ERROR: {0}"
+#~ msgstr "ERROR: {0}"
+
+#~ msgid "Index is invalid"
+#~ msgstr "Índice es invalido"
+
+#~ msgid "List of clips :class:`mrv2.FileMedia` in the Playlist."
+#~ msgstr "Lista de clips :class:`mrv2.FileMedia` en la lista de reproducción."
+
+#~ msgid "Name of the Playlist."
+#~ msgstr "Nombre de la lista de reproducción."
+
+#~ msgid "Playlist has less than 2 elements"
+#~ msgstr "La lista de reproducción tiene menos de 2 elementos."
+
+#~ msgid "Playlist name not found."
+#~ msgstr "Nombre de la lista de reproduccón no encontrado."
+
+#~ msgid "Remove selected files from Playlist"
+#~ msgstr "Remover archivcos seleccionados de la Lista de Reproducción."
+
+#~ msgid "Return the current playlist."
+#~ msgstr "Retorna la lista de reproducción."
+
+#~ msgid "Select a playlist with the given index."
+#~ msgstr "Seleccionar una lista de reproducción con el índice dado."
+
+#~ msgid "Select a playlist with the given name."
+#~ msgstr "Seleccionar una lista de reproducción con el nombre dado."
+
+#~ msgid "Select playlist image for removal."
+#~ msgstr "Seleccionar una imagen de la lista de reproducción para remover."
+
 #~ msgid "Save Annotations burned into the movie or sequence"
 #~ msgstr "Grabar anotatciones fijes en la película o secuencia."
 
@@ -5119,12 +5328,6 @@ msgstr "xyY CIE xyY"
 
 #~ msgid "Toggle Show Annotations"
 #~ msgstr "Alternar Mostrar Anotaciones"
-
-#~ msgid "Open Single Image"
-#~ msgstr "Abrir Una Imagem"
-
-#~ msgid "Save Image"
-#~ msgstr "Grabar Imagen"
 
 #~ msgid "Default Volume"
 #~ msgstr "Volúmen por Defecto"

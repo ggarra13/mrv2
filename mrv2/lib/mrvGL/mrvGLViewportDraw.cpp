@@ -219,7 +219,7 @@ namespace mrv
         glDisable(GL_STENCIL_TEST);
     }
 
-    void Viewport::_drawStereoOpenGL() const noexcept
+    void Viewport::_drawStereoOpenGL() noexcept
     {
         TLRENDER_P();
         MRV2_GL();
@@ -319,7 +319,7 @@ namespace mrv
     }
 
     void
-    Viewport::_drawMissingFrame(const image::Size& renderSize) const noexcept
+    Viewport::_drawMissingFrame(const math::Size2i& renderSize) const noexcept
     {
         TLRENDER_P();
         MRV2_GL();
@@ -392,7 +392,6 @@ namespace mrv
             return;
 
         const otime::RationalTime& time = p.videoData[0].time;
-        int64_t frame = time.to_frames();
 
         const auto& annotations =
             player->getAnnotations(p.ghostPrevious, p.ghostNext);
@@ -405,9 +404,9 @@ namespace mrv
 
         for (const auto& annotation : annotations)
         {
-            int64_t annotationFrame = annotation->frame;
+            const auto& annotationTime = annotation->time;
             float alphamult = 0.F;
-            if (frame == annotationFrame || annotation->allFrames)
+            if (time == annotationTime || annotation->allFrames)
                 alphamult = 1.F;
             else
             {
@@ -415,7 +414,8 @@ namespace mrv
                 {
                     for (short i = p.ghostPrevious - 1; i > 0; --i)
                     {
-                        if (frame - i == annotationFrame)
+                        otime::RationalTime offset(i, time.rate());
+                        if (time - offset == annotationTime)
                         {
                             alphamult = 1.F - (float)i / p.ghostPrevious;
                             break;
@@ -426,7 +426,8 @@ namespace mrv
                 {
                     for (short i = 1; i < p.ghostNext; ++i)
                     {
-                        if (frame + i == annotationFrame)
+                        otime::RationalTime offset(i, time.rate());
+                        if (time + offset == annotationTime)
                         {
                             alphamult = 1.F - (float)i / p.ghostNext;
                             break;
@@ -528,7 +529,6 @@ namespace mrv
             return;
 
         const otime::RationalTime& time = p.videoData[0].time;
-        int64_t frame = time.to_frames();
 
         if (annotationsPanel)
         {
@@ -548,9 +548,9 @@ namespace mrv
 
         for (const auto& annotation : annotations)
         {
-            int64_t annotationFrame = annotation->frame;
+            const auto& annotationTime = annotation->time;
             float alphamult = 0.F;
-            if (frame == annotationFrame || annotation->allFrames)
+            if (time == annotationTime || annotation->allFrames)
                 alphamult = 1.F;
             else
             {
@@ -558,7 +558,8 @@ namespace mrv
                 {
                     for (short i = p.ghostPrevious - 1; i > 0; --i)
                     {
-                        if (frame - i == annotationFrame)
+                        otime::RationalTime offset(i, time.rate());
+                        if (time - offset == annotationTime)
                         {
                             alphamult = 1.F - (float)i / p.ghostPrevious;
                             break;
@@ -569,7 +570,8 @@ namespace mrv
                 {
                     for (short i = 1; i < p.ghostNext; ++i)
                     {
-                        if (frame + i == annotationFrame)
+                        otime::RationalTime offset(i, time.rate());
+                        if (time + offset == annotationTime)
                         {
                             alphamult = 1.F - (float)i / p.ghostNext;
                             break;
@@ -622,7 +624,7 @@ namespace mrv
         }
     }
 
-    void Viewport::_drawCropMask(const image::Size& renderSize) const noexcept
+    void Viewport::_drawCropMask(const math::Size2i& renderSize) const noexcept
     {
         MRV2_GL();
 
@@ -1096,7 +1098,7 @@ namespace mrv
         _drawWindowArea(dw);
     }
 
-    void Viewport::_drawOverlays(const image::Size& renderSize) const noexcept
+    void Viewport::_drawOverlays(const math::Size2i& renderSize) const noexcept
     {
         TLRENDER_P();
         if (p.masking > 0.0001F)
@@ -1125,7 +1127,7 @@ namespace mrv
             p.fontSystem->getMetrics(fontInfo);
         const int labelSpacing = fontInfo.size / 2;
         auto lineHeight = fontMetrics.lineHeight;
-        const math::Vector2i labelSize =
+        const math::Size2i labelSize =
             p.fontSystem->getSize(p.helpText, fontInfo);
 
         const auto& viewportSize = getViewportSize();
@@ -1135,10 +1137,10 @@ namespace mrv
 
         const math::Box2i labelBox(0, 20, viewportSize.w - 20, viewportSize.h);
         math::Box2i box = math::Box2i(
-            labelBox.max.x + 1 - labelSpacing * 2 - labelSize.x, labelBox.min.y,
-            labelSize.x + labelSpacing * 2, fontMetrics.lineHeight);
+            labelBox.max.x + 1 - labelSpacing * 2 - labelSize.w, labelBox.min.y,
+            labelSize.w + labelSpacing * 2, fontMetrics.lineHeight);
         auto pos = math::Vector2i(
-            labelBox.max.x + 1 - labelSpacing - labelSize.x,
+            labelBox.max.x + 1 - labelSpacing - labelSize.w,
             labelBox.min.y + fontMetrics.ascender);
 
         gl.render->begin(

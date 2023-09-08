@@ -10,6 +10,7 @@ set(HEADERS
     mrvOpenSeparateAudioDialog.h
     mrvPlaylistsModel.h
     mrvSettingsObject.h
+    mrvStdAnyHelper.h
     mrvUSD.h
   )
   set(SOURCES

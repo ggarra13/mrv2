@@ -56,6 +56,8 @@ namespace mrv
             comparePanel->redraw();
         if (stereo3DPanel)
             stereo3DPanel->redraw();
+        if (playlistPanel)
+            playlistPanel->redraw();
         bool send = App::ui->uiPrefs->SendTimeline->value();
         if (send)
             tcp->pushMessage("Redraw Panel Thumbnails", 0);
@@ -69,6 +71,8 @@ namespace mrv
             comparePanel->refresh();
         if (stereo3DPanel)
             stereo3DPanel->refresh();
+        if (playlistPanel)
+            playlistPanel->refresh();
     }
 
     void removePanels(ViewerUI* ui)
@@ -163,6 +167,7 @@ namespace mrv
         {
             delete colorPanel;
             colorPanel = nullptr;
+            ui->uiMain->fill_menu(ui->uiMenuBar);
             return;
         }
         colorPanel = new ColorPanel(ui);
@@ -181,6 +186,7 @@ namespace mrv
         {
             delete filesPanel;
             filesPanel = nullptr;
+            ui->uiMain->fill_menu(ui->uiMenuBar);
             return;
         }
         filesPanel = new FilesPanel(ui);
@@ -218,6 +224,7 @@ namespace mrv
         {
             delete playlistPanel;
             playlistPanel = nullptr;
+            ui->uiMain->fill_menu(ui->uiMenuBar);
             return;
         }
         playlistPanel = new PlaylistPanel(ui);
@@ -237,6 +244,7 @@ namespace mrv
         {
             delete settingsPanel;
             settingsPanel = nullptr;
+            ui->uiMain->fill_menu(ui->uiMenuBar);
             return;
         }
         settingsPanel = new SettingsPanel(ui);
@@ -255,6 +263,7 @@ namespace mrv
         {
             delete pythonPanel;
             pythonPanel = nullptr;
+            ui->uiMain->fill_menu(ui->uiMenuBar);
             return;
         }
         pythonPanel = new PythonPanel(ui);
@@ -271,6 +280,7 @@ namespace mrv
         {
             delete logsPanel;
             logsPanel = nullptr;
+            ui->uiMain->fill_menu(ui->uiMenuBar);
             return;
         }
         logsPanel = new LogsPanel(ui);
@@ -289,6 +299,7 @@ namespace mrv
         {
             delete devicesPanel;
             devicesPanel = nullptr;
+            ui->uiMain->fill_menu(ui->uiMenuBar);
             return;
         }
         devicesPanel = new DevicesPanel(ui);
@@ -308,6 +319,7 @@ namespace mrv
         {
             delete colorAreaPanel;
             colorAreaPanel = nullptr;
+            ui->uiMain->fill_menu(ui->uiMenuBar);
             return;
         }
         colorAreaPanel = new ColorAreaPanel(ui);
@@ -327,6 +339,7 @@ namespace mrv
         {
             delete annotationsPanel;
             annotationsPanel = nullptr;
+            ui->uiMain->fill_menu(ui->uiMenuBar);
             return;
         }
         annotationsPanel = new AnnotationsPanel(ui);
@@ -346,6 +359,7 @@ namespace mrv
         {
             delete imageInfoPanel;
             imageInfoPanel = nullptr;
+            ui->uiMain->fill_menu(ui->uiMenuBar);
             return;
         }
         imageInfoPanel = new ImageInfoPanel(ui);
@@ -365,6 +379,7 @@ namespace mrv
         {
             delete histogramPanel;
             histogramPanel = nullptr;
+            ui->uiMain->fill_menu(ui->uiMenuBar);
             return;
         }
         histogramPanel = new HistogramPanel(ui);
@@ -384,6 +399,7 @@ namespace mrv
         {
             delete vectorscopePanel;
             vectorscopePanel = nullptr;
+            ui->uiMain->fill_menu(ui->uiMenuBar);
             return;
         }
         vectorscopePanel = new VectorscopePanel(ui);
@@ -403,6 +419,7 @@ namespace mrv
         {
             delete environmentMapPanel;
             environmentMapPanel = nullptr;
+            ui->uiMain->fill_menu(ui->uiMenuBar);
             return;
         }
         environmentMapPanel = new EnvironmentMapPanel(ui);
@@ -421,6 +438,7 @@ namespace mrv
         {
             delete networkPanel;
             networkPanel = nullptr;
+            ui->uiMain->fill_menu(ui->uiMenuBar);
             return;
         }
         networkPanel = new NetworkPanel(ui);
@@ -440,6 +458,7 @@ namespace mrv
         {
             delete usdPanel;
             usdPanel = nullptr;
+            ui->uiMain->fill_menu(ui->uiMenuBar);
             return;
         }
         usdPanel = new USDPanel(ui);
@@ -459,6 +478,7 @@ namespace mrv
         {
             delete stereo3DPanel;
             stereo3DPanel = nullptr;
+            ui->uiMain->fill_menu(ui->uiMenuBar);
             return;
         }
         stereo3DPanel = new Stereo3DPanel(ui);

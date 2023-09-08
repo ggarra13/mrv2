@@ -72,7 +72,7 @@ namespace mrv
         std::chrono::time_point<std::chrono::steady_clock> start_time;
 #endif
 
-        //! List of annotations ( drawings/text per frame )
+        //! List of annotations ( drawings/text per time )
         std::vector<std::shared_ptr<draw::Annotation> > annotations;
 
         //! Last annotation undone
@@ -188,6 +188,18 @@ namespace mrv
         return _p->timelinePlayer->getTimeline();
     }
 
+    const otio::SerializableObject::Retainer<otio::Timeline>&
+    TimelinePlayer::getTimeline() const
+    {
+        return _p->timelinePlayer->getTimeline()->getTimeline();
+    }
+
+    void TimelinePlayer::setTimeline(
+        const otio::SerializableObject::Retainer<otio::Timeline>& timeline)
+    {
+        _p->timelinePlayer->getTimeline()->setTimeline(timeline);
+    }
+
     const file::Path& TimelinePlayer::path() const
     {
         return _p->timelinePlayer->getPath();
@@ -289,11 +301,14 @@ namespace mrv
     }
 
     template < typename T >
-    void TimelinePlayer::pushMessage(const std::string& command, T value)
+    void TimelinePlayer::pushMessage(const std::string& command, const T& value)
     {
         bool send = App::ui->uiPrefs->SendTimeline->value();
         if (send)
-            tcp->pushMessage(command, value);
+        {
+            Message message = {{"command", command}, {"value", value}};
+            tcp->pushMessage(message);
+        }
     }
 
     void TimelinePlayer::setSpeed(double value)
@@ -306,12 +321,12 @@ namespace mrv
     void TimelinePlayer::setPlayback(timeline::Playback value)
     {
         pushMessage("seek", currentTime());
-        pushMessage("setPlayback", (int)value);
+        pushMessage("setPlayback", value);
         _p->timelinePlayer->setPlayback(value);
 
         if (value == timeline::Playback::Stop)
         {
-            // Send a seek request to make sure we are in the right frame
+            // Send a seek request to make sure we are at the right time
             pushMessage("seek", currentTime());
             redrawPanelThumbnails();
         }
@@ -324,13 +339,13 @@ namespace mrv
 
     void TimelinePlayer::forward()
     {
-        pushMessage("setPlayback", (int)timeline::Playback::Forward);
+        pushMessage("setPlayback", timeline::Playback::Forward);
         _p->timelinePlayer->setPlayback(timeline::Playback::Forward);
     }
 
     void TimelinePlayer::reverse()
     {
-        pushMessage("setPlayback", (int)timeline::Playback::Reverse);
+        pushMessage("setPlayback", timeline::Playback::Reverse);
         _p->timelinePlayer->setPlayback(timeline::Playback::Reverse);
     }
 
@@ -345,7 +360,8 @@ namespace mrv
 
     void TimelinePlayer::setLoop(timeline::Loop value)
     {
-        pushMessage("setLoop", (int)value);
+        Message m = value;
+        pushMessage("setLoop", m);
         _p->timelinePlayer->setLoop(value);
     }
 
@@ -353,6 +369,8 @@ namespace mrv
     {
         pushMessage("seek", value);
         _p->timelinePlayer->seek(value);
+        if (timelineViewport)
+            timelineViewport->updateUndoRedoButtons();
     }
 
     void TimelinePlayer::timeAction(timeline::TimeAction value)
@@ -365,6 +383,8 @@ namespace mrv
         pushMessage("start", 0);
         _p->timelinePlayer->start();
         redrawPanelThumbnails();
+        if (timelineViewport)
+            timelineViewport->updateUndoRedoButtons();
     }
 
     void TimelinePlayer::end()
@@ -372,6 +392,8 @@ namespace mrv
         pushMessage("end", 0);
         _p->timelinePlayer->end();
         redrawPanelThumbnails();
+        if (timelineViewport)
+            timelineViewport->updateUndoRedoButtons();
     }
 
     void TimelinePlayer::framePrev()
@@ -379,6 +401,8 @@ namespace mrv
         pushMessage("framePrev", 0);
         _p->timelinePlayer->framePrev();
         redrawPanelThumbnails();
+        if (timelineViewport)
+            timelineViewport->updateUndoRedoButtons();
     }
 
     void TimelinePlayer::frameNext()
@@ -386,6 +410,8 @@ namespace mrv
         pushMessage("frameNext", 0);
         _p->timelinePlayer->frameNext();
         redrawPanelThumbnails();
+        if (timelineViewport)
+            timelineViewport->updateUndoRedoButtons();
     }
 
     void TimelinePlayer::setInOutRange(const otime::TimeRange& value)
@@ -534,16 +560,17 @@ namespace mrv
 
     ///@}
 
-    const std::vector< int64_t > TimelinePlayer::getAnnotationFrames() const
+    const std::vector< otime::RationalTime >
+    TimelinePlayer::getAnnotationTimes() const
     {
         TLRENDER_P();
 
-        std::vector< int64_t > frames;
+        std::vector< otime::RationalTime > times;
         for (auto annotation : p.annotations)
         {
-            frames.push_back(annotation->frame);
+            times.push_back(annotation->time);
         }
-        return frames;
+        return times;
     }
 
     std::vector< std::shared_ptr< tl::draw::Annotation > >
@@ -552,7 +579,10 @@ namespace mrv
         TLRENDER_P();
 
         auto time = currentTime();
-        int64_t frame = time.to_frames();
+
+        otime::RationalTime previousTime(
+            static_cast<double>(previous), time.rate());
+        otime::RationalTime nextTime(static_cast<double>(next), time.rate());
 
         std::vector< std::shared_ptr< tl::draw::Annotation > > annotations;
 
@@ -562,13 +592,13 @@ namespace mrv
         {
             found = std::find_if(
                 found, p.annotations.end(),
-                [frame, previous, next](const auto& a)
+                [time, previousTime, nextTime](const auto& a)
                 {
                     if (a->allFrames)
                         return true;
-                    int start = a->frame - previous;
-                    int end = a->frame + next;
-                    return (frame > start && frame < end);
+                    otime::RationalTime start = a->time - previousTime;
+                    otime::RationalTime end = a->time + nextTime;
+                    return (time > start && time < end);
                 });
 
             if (found != p.annotations.end())
@@ -580,7 +610,8 @@ namespace mrv
         return annotations;
     }
 
-    std::shared_ptr< tl::draw::Annotation > TimelinePlayer::getAnnotation()
+    std::shared_ptr< tl::draw::Annotation >
+    TimelinePlayer::getAnnotation() const
     {
         TLRENDER_P();
 
@@ -588,12 +619,11 @@ namespace mrv
         if (playback() != timeline::Playback::Stop)
             return nullptr;
 
-        auto time = currentTime();
-        int64_t frame = time.to_frames();
+        const auto& time = currentTime();
 
-        auto found = std::find_if(
+        const auto found = std::find_if(
             p.annotations.begin(), p.annotations.end(),
-            [frame](const auto& a) { return a->frame == frame; });
+            [time](const auto& a) { return a->time == time; });
 
         if (found == p.annotations.end())
         {
@@ -617,16 +647,15 @@ namespace mrv
         }
 
         auto time = currentTime();
-        int64_t frame = time.to_frames();
 
         auto found = std::find_if(
             p.annotations.begin(), p.annotations.end(),
-            [frame](const auto& a) { return a->frame == frame; });
+            [time](const auto& a) { return a->time == time; });
 
         if (found == p.annotations.end())
         {
             auto annotation =
-                std::make_shared< draw::Annotation >(frame, all_frames);
+                std::make_shared< draw::Annotation >(time, all_frames);
             p.annotations.push_back(annotation);
             bool send = App::ui->uiPrefs->SendAnnotations->value();
             if (send)
@@ -638,9 +667,8 @@ namespace mrv
             auto annotation = *found;
             if (!annotation->allFrames && !all_frames)
             {
-                abort();
-                // throw std::runtime_error(
-                //     _("Annotation already existed at this time"));
+                throw std::runtime_error(
+                    _("Annotation already existed at this time"));
             }
             return annotation;
         }
@@ -663,12 +691,11 @@ namespace mrv
     {
         TLRENDER_P();
 
-        auto time = currentTime();
-        int64_t frame = time.to_frames();
+        const auto& time = currentTime();
 
         auto found = std::find_if(
             p.annotations.begin(), p.annotations.end(),
-            [frame](const auto& a) { return a->frame == frame; });
+            [time](const auto& a) { return a->time == time; });
 
         if (found != p.annotations.end())
         {
@@ -679,6 +706,16 @@ namespace mrv
     void TimelinePlayer::clearAllAnnotations()
     {
         _p->annotations.clear();
+    }
+
+    void TimelinePlayer::removeAnnotation(
+        const std::shared_ptr< draw::Annotation >& annotation)
+    {
+        TLRENDER_P();
+
+        p.annotations.erase(
+            std::remove(p.annotations.begin(), p.annotations.end(), annotation),
+            p.annotations.end());
     }
 
     void TimelinePlayer::undoAnnotation()
@@ -694,10 +731,7 @@ namespace mrv
         {
             p.undoAnnotation = annotation;
             // If no shapes we remove the annotation too
-            p.annotations.erase(
-                std::remove(
-                    p.annotations.begin(), p.annotations.end(), annotation),
-                p.annotations.end());
+            removeAnnotation(annotation);
         }
     }
 
@@ -724,6 +758,33 @@ namespace mrv
     TimelinePlayer::setCacheOptions(const timeline::PlayerCacheOptions& value)
     {
         _p->timelinePlayer->setCacheOptions(value);
+    }
+
+    bool TimelinePlayer::hasUndo() const
+    {
+        TLRENDER_P();
+        auto annotation = getAnnotation();
+        if (!annotation)
+            return false;
+        return true;
+    }
+
+    bool TimelinePlayer::hasRedo() const
+    {
+        TLRENDER_P();
+
+        auto annotation = getAnnotation();
+        if (!annotation)
+        {
+            if (p.undoAnnotation)
+            {
+                annotation = p.undoAnnotation;
+            }
+        }
+        if (!annotation)
+            return false;
+
+        return !annotation->undo_shapes.empty();
     }
 
     void TimelinePlayer::timerEvent()

@@ -136,58 +136,12 @@ namespace mrv
 
         Pack* pack = g->get_pack();
         pack->position(pack->x(), Y);
+        pack->layout();
 
         uiLogDisplay->resize(g->x(), Y, g->w(), g->h());
 
-        // uiLogDisplay->resize(g->x(), Y, g->w(), uiLogDisplay->h() + Y);
-
-        // g->resizable(uiLogDisplay);  // this oollapses the log display
+        g->resizable(uiLogDisplay);
         g->end();
-
-        _r->logObserver = observer::ListObserver<log::Item>::create(
-            p.ui->app->getContext()->getLogSystem()->observeLog(),
-            [this](const std::vector<log::Item>& value)
-            {
-                for (const auto& i : value)
-                {
-                    switch (i.type)
-                    {
-                    case log::Type::Message:
-                    {
-                        if (Preferences::debug)
-                        {
-                            const std::string& msg =
-                                string::Format("{0} {1}: {2}\n")
-                                    .arg(i.time)
-                                    .arg(i.prefix)
-                                    .arg(i.message);
-                            uiLogDisplay->info(msg.c_str());
-                        }
-                        break;
-                    }
-                    case log::Type::Warning:
-                    {
-                        const std::string& msg =
-                            string::Format("{0} Warning {1}: {2}\n")
-                                .arg(i.time)
-                                .arg(i.prefix)
-                                .arg(i.message);
-                        uiLogDisplay->warning(msg.c_str());
-                        break;
-                    }
-                    case log::Type::Error:
-                    {
-                        const std::string& msg =
-                            string::Format("{0} ERROR {1}: {2}\n")
-                                .arg(i.time)
-                                .arg(i.prefix)
-                                .arg(i.message);
-                        uiLogDisplay->error(msg.c_str());
-                        break;
-                    }
-                    }
-                }
-            });
     }
 
     void LogsPanel::info(const std::string& msg) const

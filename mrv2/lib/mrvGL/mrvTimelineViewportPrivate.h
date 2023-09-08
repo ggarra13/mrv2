@@ -47,9 +47,6 @@ namespace mrv
         short ghostPrevious = 5;
         short ghostNext = 5;
 
-        //! Last annotation undones
-        std::shared_ptr< draw::Annotation > undoAnnotation = nullptr;
-
         //! Main ui pointer
         ViewerUI* ui = nullptr;
 
@@ -127,6 +124,7 @@ namespace mrv
         //! Whether the current frame represengs a missing frame in a sequence.
         bool missingFrame = false;
 
+        //! Default missing frame type.  Should be static.
         MissingFrameType missingFrameType = kBlackFrame;
     };
 

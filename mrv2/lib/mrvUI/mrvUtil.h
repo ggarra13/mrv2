@@ -5,14 +5,10 @@
 #pragma once
 
 #include <string>
-#include <memory>
 
 #include <FL/Fl_SVG_Image.H>
 
-#include <tlCore/Context.h>
-
 namespace mrv
 {
-    void init(const std::shared_ptr<tl::system::Context>& context);
     Fl_SVG_Image* load_svg(const std::string& file);
 } // namespace mrv

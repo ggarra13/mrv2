@@ -2,17 +2,13 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include "mrvGLUtil.h"
-#include "mrvGLShape.h"
-
 #include "mrvCore/mrvI8N.h"
-
-#include <tlGlad/gl.h>
 
 #include <tlGL/Shader.h>
 #include <tlGL/Util.h>
 
-#include <glm/gtc/matrix_transform.hpp>
+#include "mrvGLUtil.h"
+#include "mrvGLShape.h"
 
 namespace mrv
 {

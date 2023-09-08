@@ -4,6 +4,10 @@
 
 #pragma once
 
+#include <memory>
+
+#include <tlCore/Util.h>
+
 #include "mrvWidgets/mrvClipButton.h"
 
 namespace mrv
@@ -14,9 +18,12 @@ namespace mrv
     {
     public:
         FileButton(int X, int Y, int W, int H, const char* L = 0);
+        ~FileButton();
         int handle(int event) override;
 
+        void setIndex(size_t value);
+
     protected:
-        FileDragger* drag = nullptr;
+        TLRENDER_PRIVATE();
     };
 } // namespace mrv

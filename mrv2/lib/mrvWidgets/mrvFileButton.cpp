@@ -7,12 +7,16 @@
 
 #include <tlCore/Vector.h>
 
+#include "mrvCore/mrvString.h"
 #include "mrvCore/mrvI8N.h"
 
 #include "mrvFl/mrvCallbacks.h"
+#include "mrvFl/mrvIO.h"
 
 #include "mrvWidgets/mrvFileButton.h"
 #include "mrvWidgets/mrvFileDragger.h"
+
+#include "mrvEdit/mrvEditCallbacks.h"
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
@@ -23,17 +27,40 @@
 
 namespace
 {
+    const char* kModule = "filebutton";
 } // namespace
 
 namespace mrv
 {
+    struct FileButton::Private
+    {
+        size_t index = 0;
+        FileDragger* drag = nullptr;
+        math::Vector2i push;
+    };
+
     FileButton::FileButton(int X, int Y, int W, int H, const char* L) :
+        _p(new Private),
         ClipButton(X, Y, W, H, L)
     {
     }
 
+    FileButton::~FileButton()
+    {
+        TLRENDER_P();
+        delete p.drag;
+        p.drag = nullptr;
+    }
+
+    void FileButton::setIndex(size_t value)
+    {
+        _p->index = value;
+    }
+
     int FileButton::handle(int event)
     {
+        TLRENDER_P();
+
         switch (event)
         {
         case FL_FOCUS:
@@ -41,38 +68,62 @@ namespace mrv
             return 1;
         case FL_ENTER:
             take_focus();
-            break;
+            return 1;
         case FL_LEAVE:
-            Fl::focus(0);
-            break;
+            Fl::focus(App::ui->uiView);
+            // If user pressed button3 while dragging, the window would freeze.
+            // This should avoid that.
+            if (Fl::event_button3())
+            {
+                delete p.drag;
+                p.drag = nullptr;
+            }
+            return 1;
         case FL_KEYDOWN:
         case FL_KEYUP:
         {
-            if (value())
+            if (value() && Fl::focus() == this)
             {
                 unsigned rawkey = Fl::event_key();
-                if (Fl::focus() == this &&
-                    (rawkey == FL_Delete || rawkey == FL_BackSpace))
+                if (rawkey == FL_Delete || rawkey == FL_BackSpace)
                 {
                     close_current_cb(this, App::ui);
                     return 1;
                 }
                 return 0;
-                break;
             }
+            return 0;
         }
         case FL_RELEASE:
         {
-            if (drag)
+            if (p.drag)
             {
+                int X = Fl::event_x_root();
+                int Y = Fl::event_y_root();
+                math::Vector2i pos(X, Y);
+
+                ViewerUI* ui = App::ui;
+                math::Box2i box(
+                    ui->uiTimeline->x() + ui->uiMain->x(),
+                    ui->uiTimeline->y() + ui->uiMain->y(), ui->uiTimeline->w(),
+                    ui->uiTimeline->h());
+
+                delete p.drag;
+                p.drag = nullptr;
+
+                if (box.contains(pos))
+                {
+                    const std::string text = label();
+                    stringArray lines;
+                    split_string(lines, text, "\n");
+                    std::string filename = lines[0] + lines[1];
+                    add_clip_to_timeline(filename, p.index, ui);
+                    return 1;
+                }
+
                 if (playlistPanel)
                 {
                     math::Box2i box = playlistPanel->box();
-
-                    int X = Fl::event_x_root();
-                    int Y = Fl::event_y_root();
-
-                    math::Vector2i pos(X, Y);
                     if (playlistPanel->is_panel())
                     {
                         auto w = window();
@@ -82,12 +133,15 @@ namespace mrv
 
                     if (box.contains(pos))
                     {
-                        playlistPanel->add();
+                        const std::string text = label();
+                        stringArray lines;
+                        split_string(lines, text, "\n");
+                        std::string filename = lines[0] + lines[1];
+                        playlistPanel->add(pos, filename, p.index, ui);
+                        return 1;
                     }
                 }
-
-                delete drag;
-                drag = nullptr;
+                return 1;
             }
             break;
         }
@@ -95,22 +149,34 @@ namespace mrv
         {
             if (Fl::event_button1())
             {
-                if (!drag)
+                const std::string text = label();
+                stringArray lines;
+                split_string(lines, text, "\n");
+                std::string filename = lines[0] + lines[1];
+
+                if (!p.drag)
                 {
-                    drag = FileDragger::create();
-                    drag->image(image());
-                    auto window = drag->window();
+                    p.drag = FileDragger::create();
+                    p.drag->image(image());
+                    auto window = p.drag->window();
                     window->always_on_top(true);
                 }
-                int X = Fl::event_x_root();
-                int Y = Fl::event_y_root();
-                auto window = drag->window();
-                window->position(X, Y);
+
+                if (p.drag)
+                {
+                    value(0);
+                    redraw();
+                    int X = Fl::event_x_root();
+                    int Y = Fl::event_y_root();
+                    auto window = p.drag->window();
+                    window->position(X, Y);
+                    return 1;
+                }
             }
             break;
         }
         case FL_PUSH:
-            if (value() && Fl::event_button3())
+            if (value() && Fl::event_button3() && !p.drag)
             {
                 Fl_Menu_Button menu(x(), y(), w(), h());
                 menu.type(Fl_Menu_Button::POPUP3);
@@ -129,8 +195,10 @@ namespace mrv
                 menu.popup();
                 return 1;
             }
+            if (p.drag)
+                return 1;
             break;
         }
-        return Fl_Button::handle(event);
+        return ClipButton::handle(event);
     }
 } // namespace mrv

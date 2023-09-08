@@ -23,10 +23,8 @@ namespace mrv
     Hotkey kOpenSeparateAudio(false, false, false, false, 0);
     Hotkey kOpenSingleImage(true, true, false, false, 'o');
     Hotkey kOpenStereoImage(false, false, true, false, 'o');
-    Hotkey kOpenAMF(false, false, false, true, 'o');
-    Hotkey kOpenClipXMLMetadata(true, false, false, false, 'x');
     Hotkey kOpenSession(false, true, false, false, 'o');
-    Hotkey kSaveReel(true, false, false, false, 0);
+
     Hotkey kSaveImage(false, false, false, false, 0);
     Hotkey kSaveSequence(true, false, false, true, 's');
     Hotkey kSavePDF(false, false, false, false, 0);
@@ -154,7 +152,7 @@ namespace mrv
     Hotkey kSOPSatNodes(false, false, false, false, 0);
 
     Hotkey kCopyFrameXYValues(true, false, false, true, 'c');
-    Hotkey kCopyRGBAValues(true, false, false, false, 'c');
+    Hotkey kCopyRGBAValues(true, false, true, false, 'c');
 
     Hotkey kSetInPoint(false, false, false, false, 'i');
     Hotkey kSetOutPoint(false, false, false, false, 'o');
@@ -191,6 +189,19 @@ namespace mrv
     Hotkey kToggleEditMode(false, false, false, false, 'e');
     Hotkey kToggleTimelineThumbnails(false, false, false, false, 0);
     Hotkey kToggleTimelineTransitions(false, false, false, false, 0);
+    Hotkey kToggleTimelineMarkers(false, false, false, false, 0);
+
+    Hotkey kEditCutFrame(true, false, false, false, 'x');
+    Hotkey kEditCopyFrame(true, false, false, false, 'c');
+    Hotkey kEditPasteFrame(true, false, false, false, 'v');
+    Hotkey kEditInsertFrame(true, false, false, false, 'i');
+
+    Hotkey kEditSliceClip(false, false, false, false, 0);
+    Hotkey kEditRemoveClip(false, false, false, false, 0);
+    Hotkey kEditRemoveClipWithGap(false, false, false, false, 0);
+
+    Hotkey kEditUndo(false, false, false, false, ';');
+    Hotkey kEditRedo(false, false, false, false, ':');
 
     Hotkey kRotatePlus90;  //( false, false, false, false, '+' );
     Hotkey kRotateMinus90; //( false, false, false, false, '-' );
@@ -306,8 +317,8 @@ namespace mrv
         HotkeyEntry(_("Open Directory"), kOpenDirectory),
         HotkeyEntry(_("Open Movie or Sequence"), kOpenImage),
         // HotkeyEntry(_("Open Single Image"), kOpenSingleImage),
-        // HotkeyEntry( _("Open Session"), kOpenSession, true),
-        // HotkeyEntry(_("Save Image"), kSaveImage),
+        HotkeyEntry(_("Open Session"), kOpenSession, true),
+        HotkeyEntry(_("Save Image"), kSaveImage),
         HotkeyEntry(_("Save Movie or Sequence"), kSaveSequence),
         HotkeyEntry(_("Save PDF Document"), kSavePDF, true),
         HotkeyEntry(_("Save Session"), kSaveSession, true),
@@ -372,6 +383,15 @@ namespace mrv
         HotkeyEntry(_("Next Channel"), kNextChannel),
         HotkeyEntry(_("First Frame"), kFirstFrame),
         HotkeyEntry(_("Last Frame"), kLastFrame),
+        HotkeyEntry(_("Cut Frame"), kEditCutFrame, true),
+        HotkeyEntry(_("Copy Frame"), kEditCopyFrame, true),
+        HotkeyEntry(_("Paste Frame"), kEditPasteFrame, true),
+        HotkeyEntry(_("Insert Frame"), kEditInsertFrame, true),
+        HotkeyEntry(_("Slice Clip"), kEditSliceClip, true),
+        HotkeyEntry(_("Remove Clip"), kEditRemoveClip, true),
+        HotkeyEntry(_("Remove Clip With Gap"), kEditRemoveClipWithGap, true),
+        HotkeyEntry(_("Edit Undo"), kEditUndo, true),
+        HotkeyEntry(_("Edit Redo"), kEditRedo, true),
         HotkeyEntry(_("Toggle Menu Bar"), kToggleMenuBar),
         HotkeyEntry(_("Toggle Top Bar"), kToggleTopBar),
         HotkeyEntry(_("Toggle Pixel Bar"), kTogglePixelBar),
@@ -391,6 +411,7 @@ namespace mrv
         HotkeyEntry(_("Toggle Timeline Thumbnails"), kToggleTimelineThumbnails),
         HotkeyEntry(
             _("Toggle Timeline Transitions"), kToggleTimelineTransitions),
+        HotkeyEntry(_("Toggle Timeline Markers"), kToggleTimelineMarkers),
         HotkeyEntry(_("Reset Gain/Gamma"), kResetChanges),
         HotkeyEntry(_("Exposure More"), kExposureMore),
         HotkeyEntry(_("Exposure Less"), kExposureLess),
@@ -407,8 +428,8 @@ namespace mrv
         HotkeyEntry(_("Text Mode"), kTextMode),
         HotkeyEntry(_("Pen Size More"), kPenSizeMore),
         HotkeyEntry(_("Pen Size Less"), kPenSizeLess),
-        HotkeyEntry(_("Undo Draw"), kUndoDraw),
-        HotkeyEntry(_("Redo Draw"), kRedoDraw),
+        HotkeyEntry(_("Undo Draw"), kUndoDraw, true),
+        HotkeyEntry(_("Redo Draw"), kRedoDraw, true),
         HotkeyEntry(_("Gamma More"), kGammaMore),
         HotkeyEntry(_("Gamma Less"), kGammaLess),
         HotkeyEntry(_("Set In Point"), kSetInPoint),

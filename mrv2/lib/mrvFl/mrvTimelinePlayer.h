@@ -302,51 +302,72 @@ namespace mrv
 
         ///@}
 
+        const otio::SerializableObject::Retainer<otio::Timeline>&
+        getTimeline() const;
+
+        //! Set the timeline.
+        void
+        setTimeline(const otio::SerializableObject::Retainer<otio::Timeline>&);
+
+        //! \name Viewports
+        ///@{
+
         void setTimelineViewport(TimelineViewport*);
 
         void setSecondaryViewport(TimelineViewport*);
 
-        //! Return a list of annotation frames
-        const std::vector< int64_t > getAnnotationFrames() const;
+        ///@}
+
+        //! Return a list of annotation times
+        const std::vector< otime::RationalTime > getAnnotationTimes() const;
 
         //! Get annotation for current time
-        std::shared_ptr< draw::Annotation > getAnnotation();
+        std::shared_ptr< draw::Annotation > getAnnotation() const;
 
         //! Create annotation for current time
         std::shared_ptr< draw::Annotation >
         createAnnotation(const bool all_frames = false);
 
         //! Get list of annotations for between previous ghosting and
-        //! next ghosting from current time
+        //! next ghosting from current time.
         std::vector< std::shared_ptr< draw::Annotation >>
         getAnnotations(const int, const int) const;
 
-        //! Get all annotations in timeline player
+        //! Get all annotations in timeline player.
         std::vector< std::shared_ptr< draw::Annotation >>
         getAllAnnotations() const;
 
-        //! Set frame annotations in timeline player
+        //! Set frame annotations in timeline player for current frame (time).
         void setFrameAnnotation(const std::shared_ptr< draw::Annotation >&);
 
-        //! Set all annotations in timeline player
+        //! Set all annotations in timeline player.
         void setAllAnnotations(
             const std::vector< std::shared_ptr< draw::Annotation >>&);
 
-        //! Clear all annotations in timeline player for current frame (time)
+        //! Clear all annotations in timeline player for current frame (time).
         void clearFrameAnnotation();
 
-        //! Clear all annotations in timeline player
+        //! Clear all annotations in timeline player.
         void clearAllAnnotations();
 
-        //! Undo the last annotation
+        //! Remove an annotation from list.
+        void removeAnnotation(const std::shared_ptr< draw::Annotation >&);
+
+        //! Undo the last annotation.
         void undoAnnotation();
 
-        //! Redo the last annotation
+        //! Redo the last annotation.
         void redoAnnotation();
+
+        //! Returns whether annotation at current time can be undone.
+        bool hasUndo() const;
+
+        //! Returns whtehr annotation at current time can be redone.
+        bool hasRedo() const;
 
     protected:
         template < typename T >
-        void pushMessage(const std::string& command, T value);
+        void pushMessage(const std::string& command, const T& value);
 
         void timerEvent();
 

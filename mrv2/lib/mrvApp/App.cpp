@@ -10,7 +10,7 @@
 #include <pybind11/embed.h>
 namespace py = pybind11;
 
-#include <tlIO/IOSystem.h>
+#include <tlIO/System.h>
 #if defined(TLRENDER_USD)
 #    include <tlIO/USD.h>
 #endif // TLRENDER_USD
@@ -27,12 +27,10 @@ namespace py = pybind11;
 #include "mrvCore/mrvSignalHandler.h"
 
 #include "mrvFl/mrvSession.h"
-#include "mrvFl/mrvTimelineCreate.h"
 #include "mrvFl/mrvContextObject.h"
 #include "mrvFl/mrvTimelinePlayer.h"
 #include "mrvFl/mrvPreferences.h"
 #include "mrvFl/mrvLanguages.h"
-#include "mrvFl/mrvMenus.h"
 
 #include "mrvWidgets/mrvLogDisplay.h"
 
@@ -49,6 +47,8 @@ namespace py = pybind11;
 #include "mrvNetwork/mrvDisplayOptions.h"
 #include "mrvNetwork/mrvLUTOptions.h"
 #include "mrvNetwork/mrvParseHost.h"
+
+#include "mrvEdit/mrvEditUtil.h"
 
 #include "mrvApp/mrvDevicesModel.h"
 #include "mrvApp/mrvPlaylistsModel.h"
@@ -241,8 +241,6 @@ namespace mrv
 
         const std::string& msg = setLanguageLocale();
 
-        DBG;
-
         IApp::_init(
             argc, argv, context, "mrv2",
             _("Play timelines, movies, and image sequences."),
@@ -372,11 +370,9 @@ namespace mrv
                         _("Return the version and exit."))
             });
 
-        DBG;
         const int exitCode = getExit();
         if (exitCode != 0)
         {
-            DBG;
             return;
         }
 
@@ -500,30 +496,6 @@ namespace mrv
             static_cast<int>(p.options.usdDiskCache * memory::gigabyte));
 #endif // TLRENDER_USD
 
-        if (p.options.server)
-        {
-            try
-            {
-                tcp = new Server(p.options.port);
-                store_port(p.options.port);
-            }
-            catch (const Poco::Exception& e)
-            {
-                LOG_ERROR(e.displayText());
-            }
-        }
-        else if (!p.options.client.empty())
-        {
-            std::string port;
-            parse_hostname(p.options.client, port);
-            if (!port.empty())
-            {
-                p.options.port = atoi(port.c_str());
-            }
-            tcp = new Client(p.options.client, p.options.port);
-            store_port(p.options.port);
-        }
-
         value = p.settingsObject->value("Audio/Volume");
         p.volume = std_any_cast<float>(value);
 
@@ -589,28 +561,20 @@ namespace mrv
             ui->app->getContext()->getLogSystem()->observeLog(),
             [this](const std::vector<log::Item>& value)
             {
+                const char* kModule = "";
                 for (const auto& i : value)
                 {
                     switch (i.type)
                     {
                     case log::Type::Error:
                     {
-                        std::string msg =
-                            string::Format(_("ERROR: {0}")).arg(i.message);
+                        const std::string& msg = string::Format("{0} {1}: {2}")
+                                                     .arg(i.time)
+                                                     .arg(i.prefix)
+                                                     .arg(i.message);
                         ui->uiStatusBar->timeout(errorTimeout);
                         ui->uiStatusBar->copy_label(msg.c_str());
-                        if (LogDisplay::prefs == LogDisplay::kWindowOnError)
-                        {
-                            if (!logsPanel)
-                                logs_panel_cb(NULL, ui);
-                            logsPanel->undock();
-                        }
-                        else if (LogDisplay::prefs == LogDisplay::kDockOnError)
-                        {
-                            if (!logsPanel)
-                                logs_panel_cb(NULL, ui);
-                            logsPanel->dock();
-                        }
+                        LOG_ERROR(msg);
                         break;
                     }
                     default:
@@ -638,10 +602,8 @@ namespace mrv
             });
 #endif
 
-        DBG;
         _cacheUpdate();
         _audioUpdate();
-        DBG;
 
         // Create the main control.
         p.mainControl = new MainControl(ui);
@@ -700,6 +662,30 @@ namespace mrv
                 // if (p.options.playback != timeline::Playback::Count)
                 //     p.timelinePlayers[0]->setPlayback(p.options.playback);
             }
+        }
+
+        if (p.options.server)
+        {
+            try
+            {
+                tcp = new Server(p.options.port);
+                store_port(p.options.port);
+            }
+            catch (const Poco::Exception& e)
+            {
+                LOG_ERROR(e.displayText());
+            }
+        }
+        else if (!p.options.client.empty())
+        {
+            std::string port;
+            parse_hostname(p.options.client, port);
+            if (!port.empty())
+            {
+                p.options.port = atoi(port.c_str());
+            }
+            tcp = new Client(p.options.client, p.options.port);
+            store_port(p.options.port);
         }
 
         ui->uiMain->show();
@@ -863,8 +849,9 @@ namespace mrv
         file::PathOptions pathOptions;
         pathOptions.maxNumberDigits = std_any_cast<int>(
             p.settingsObject->value("Misc/MaxFileSequenceDigits"));
+        file::Path filePath(fileName);
         for (const auto& path :
-             timeline::getPaths(fileName, pathOptions, _context))
+             timeline::getPaths(filePath, pathOptions, _context))
         {
             auto item = std::make_shared<FilesModelItem>();
             item->path = path;
@@ -1037,16 +1024,13 @@ namespace mrv
                         std_any_cast<int>(p.settingsObject->value(
                             "Performance/SequenceThreadCount")));
 
-                DBG;
                 options.ioOptions["FFmpeg/YUVToRGBConversion"] =
                     string::Format("{0}").arg(
                         std_any_cast< int>(p.settingsObject->value(
                             "Performance/FFmpegYUVToRGBConversion")));
 
-                DBG;
                 const audio::Info audioInfo =
                     audioSystem->getDefaultOutputInfo();
-                DBG;
                 options.ioOptions["FFmpeg/AudioChannelCount"] =
                     string::Format("{0}").arg(audioInfo.channelCount);
                 options.ioOptions["FFmpeg/AudioDataType"] =
@@ -1058,7 +1042,6 @@ namespace mrv
                     string::Format("{0}").arg(
                         std_any_cast<int>(p.settingsObject->value(
                             "Performance/FFmpegThreadCount")));
-                DBG;
 
 #if defined(TLRENDER_USD)
                 options.ioOptions["usd/renderWidth"] =
@@ -1098,18 +1081,12 @@ namespace mrv
                 DBG;
                 auto otioTimeline =
                     item->audioPath.isEmpty()
-                        ? timeline::create(item->path.get(), _context, options)
+                        ? timeline::create(item->path, _context, options)
                         : timeline::create(
-                              item->path.get(), item->audioPath.get(), _context,
-                              options);
+                              item->path, item->audioPath, _context, options);
 
                 DBG;
 
-                if (0)
-                {
-                    // createMemoryTimeline(otioTimeline,
-                    // item->path.getDirectory(), options.pathOptions);
-                }
                 auto timeline =
                     timeline::Timeline::create(otioTimeline, _context, options);
 
@@ -1151,10 +1128,13 @@ namespace mrv
                     item->inOutRange = mrvTimelinePlayer->inOutRange();
                     item->videoLayer = mrvTimelinePlayer->videoLayer();
                     item->audioOffset = mrvTimelinePlayer->audioOffset();
-                    std::string file = item->path.get();
-                    char buf[2048];
-                    fl_filename_absolute(buf, 2048, file.c_str());
-                    p.settingsObject->addRecentFile(buf);
+
+                    // Add the new file to recent files, unless it is an EDL.
+                    if (!isTemporaryEDL(item->path))
+                    {
+                        const std::string& file = item->path.get();
+                        p.settingsObject->addRecentFile(file);
+                    }
                 }
                 else if (0 == i)
                 {
@@ -1224,10 +1204,12 @@ namespace mrv
                         ui->uiView->frameView();
                     }
                     else
+                    {
                         ui->uiView->resizeWindow();
-                    if (p.options.otioEditMode ||
-                        ui->uiPrefs->uiPrefsEditMode->value())
-                        set_edit_mode_cb(EditMode::kFull, ui);
+                        if (p.options.otioEditMode ||
+                            ui->uiPrefs->uiPrefsEditMode->value())
+                            set_edit_mode_cb(EditMode::kFull, ui);
+                    }
                     ui->uiView->take_focus();
                 }
 

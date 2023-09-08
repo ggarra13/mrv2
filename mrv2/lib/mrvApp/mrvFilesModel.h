@@ -12,6 +12,7 @@
 #include <tlTimeline/Player.h>
 
 #include "mrvCore/mrvStereo3DOptions.h"
+#include "mrvCore/mrvFilesPanelOptions.h"
 
 #include "mrvDraw/Annotation.h"
 
@@ -165,11 +166,18 @@ namespace mrv
         void setCompareOptions(const timeline::CompareOptions&);
 
         //! Observe the stereo3d options.
-        std::shared_ptr<observer::IValue<mrv::Stereo3DOptions> >
+        std::shared_ptr<observer::IValue<Stereo3DOptions> >
         observeStereo3DOptions() const;
 
         //! Set the stereo 3d options.
-        void setStereo3DOptions(const mrv::Stereo3DOptions&);
+        void setStereo3DOptions(const Stereo3DOptions&);
+
+        //! Observe the stereo3d options.
+        std::shared_ptr<observer::IValue<FilesPanelOptions> >
+        observeFilesPanelOptions() const;
+
+        //! Set the FilesPanel Options.
+        void setFilesPanelOptions(const FilesPanelOptions&);
 
     private:
         int _index(const std::shared_ptr<FilesModelItem>&) const;

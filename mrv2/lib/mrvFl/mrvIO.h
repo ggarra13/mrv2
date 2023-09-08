@@ -180,7 +180,8 @@ namespace mrv
         do                                                                     \
         {                                                                      \
             if (mrv::Preferences::debug > 0)                                   \
-                LOG_DEBUG("");                                                 \
+                std::cerr << __FUNCTION__ << " (" << __LINE__ << ")"           \
+                          << std::endl;                                        \
         } while (0)
 
 #endif

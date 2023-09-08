@@ -16,9 +16,10 @@ namespace tl
     {
         using namespace mrv;
 
-        Annotation::Annotation(const int64_t inFrame, const bool inAllFrames)
+        Annotation::Annotation(
+            const otime::RationalTime& inTime, const bool inAllFrames)
         {
-            frame = inFrame;
+            time = inTime;
             allFrames = inAllFrames;
         }
 
@@ -32,6 +33,7 @@ namespace tl
         void Annotation::push_back(const std::shared_ptr< Shape >& shape)
         {
             shapes.push_back(shape);
+            undo_shapes.clear();
         }
 
         void Annotation::remove(const std::shared_ptr< Shape >& shape)
@@ -79,7 +81,7 @@ namespace tl
             }
             json = nlohmann::json{
                 {"all_frames", value.allFrames},
-                {"frame", value.frame},
+                {"time", value.time},
                 {"shapes", shapes},
             };
         }
@@ -87,7 +89,16 @@ namespace tl
         void from_json(const nlohmann::json& json, Annotation& value)
         {
             json.at("all_frames").get_to(value.allFrames);
-            json.at("frame").get_to(value.frame);
+            if (json.contains("time"))
+            {
+                json.at("time").get_to(value.time);
+            }
+            else
+            {
+                int64_t frame;
+                json.at("frame").get_to(frame);
+                value.time = otime::RationalTime(frame, 24.0);
+            }
             const nlohmann::json& shapes = json["shapes"];
             for (auto& shape : shapes)
             {

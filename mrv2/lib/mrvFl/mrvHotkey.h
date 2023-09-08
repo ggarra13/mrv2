@@ -4,7 +4,11 @@
 
 #pragma once
 
+#include <string>
+
+class ViewerUI;
 class HotkeyUI;
+class Fl_Preferences;
 
 namespace mrv
 {
@@ -14,5 +18,10 @@ namespace mrv
     void searchHotkey(const std::string& text, mrv::Browser* o);
     void fill_ui_hotkeys(mrv::Browser* o);
     void select_hotkey(HotkeyUI* m);
+
+    void load_hotkeys(ViewerUI* uiMain, std::string filename = "");
+    void load_hotkeys(ViewerUI* uiMain, Fl_Preferences* prefs);
+    void save_hotkeys(ViewerUI* uiMain, std::string filename = "");
+    void save_hotkeys(Fl_Preferences& keys);
 
 } // namespace mrv

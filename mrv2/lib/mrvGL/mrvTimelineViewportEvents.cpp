@@ -52,7 +52,7 @@ namespace
 namespace mrv
 {
 
-    static void laserFade_cb(LaserFadeData* data)
+    void TimelineViewport::laserFade_cb(LaserFadeData* data)
     {
         TimelineViewport* view = data->view;
         view->laserFade(data);
@@ -67,6 +67,14 @@ namespace mrv
             Fl::remove_timeout((Fl_Timeout_Handler)laserFade_cb, data);
             // Remove shape from list
             data->annotation->remove(s);
+            if (data->annotation->empty())
+            {
+                auto player = getTimelinePlayer();
+                if (!player)
+                    return;
+                player->removeAnnotation(data->annotation);
+                updateUndoRedoButtons();
+            }
             // Remove callback data
             delete data;
         }
@@ -199,12 +207,6 @@ namespace mrv
                 auto player = getTimelinePlayer();
                 if (!player)
                     return;
-
-                // auto renderSize = getRenderSize();
-
-                // if (pnt.x < 0 || pnt.y < 0 || pnt.x >= renderSize.w ||
-                //     pnt.y >= renderSize.h)
-                //     return;
 
                 auto annotation = player->getAnnotation();
                 if (p.actionMode != kScrub && !annotation)
@@ -532,7 +534,7 @@ namespace mrv
                     shape->laser = laser;
                     shape->pts.push_back(pnt);
                     annotation->push_back(shape);
-                    _createAnnotationShape();
+                    _createAnnotationShape(laser);
                     break;
                 }
                 case ActionMode::kErase:
@@ -543,7 +545,7 @@ namespace mrv
                     shape->soft = softBrush;
                     shape->pts.push_back(pnt);
                     annotation->push_back(shape);
-                    _createAnnotationShape();
+                    _createAnnotationShape(false);
                     break;
                 }
                 case ActionMode::kArrow:
@@ -559,7 +561,7 @@ namespace mrv
                     shape->pts.push_back(pnt);
                     shape->pts.push_back(pnt);
                     annotation->push_back(shape);
-                    _createAnnotationShape();
+                    _createAnnotationShape(laser);
                     break;
                 }
                 case ActionMode::kCircle:
@@ -573,7 +575,7 @@ namespace mrv
                     shape->radius = 0;
 
                     annotation->push_back(shape);
-                    _createAnnotationShape();
+                    _createAnnotationShape(laser);
                     break;
                 }
                 case ActionMode::kRectangle:
@@ -589,7 +591,7 @@ namespace mrv
                     shape->pts.push_back(pnt);
                     shape->pts.push_back(pnt);
                     annotation->push_back(shape);
-                    _createAnnotationShape();
+                    _createAnnotationShape(laser);
                     break;
                 }
                 case ActionMode::kText:
@@ -975,6 +977,8 @@ namespace mrv
                 if (!s->laser)
                     return 0;
 
+                tcp->pushMessage("Laser Fade", 0);
+
                 LaserFadeData* laserData = new LaserFadeData;
                 laserData->view = this;
                 laserData->annotation = annotation;
@@ -1250,14 +1254,12 @@ namespace mrv
             }
             else if (kRedoDraw.match(rawkey))
             {
-                p.ui->uiRedoDraw->do_callback();
-                redrawWindows();
+                redo();
                 return 1;
             }
             else if (kUndoDraw.match(rawkey))
             {
-                p.ui->uiUndoDraw->do_callback();
-                redrawWindows();
+                undo();
                 return 1;
             }
             else if (kZoomIn.match(rawkey))
