@@ -48,10 +48,6 @@ namespace mrv
             localViewport.h / static_cast<double>(remoteViewport.h);
 
         localZoom = remoteZoom * std::min(aspectW, aspectH);
-        // std::cerr << "remoteZoon = " << remoteZoom << std::endl;
-        // std::cerr << " localZoon = " << localZoom << std::endl;
-        // std::cerr << "   aspectW = " << aspectW << std::endl;
-        // std::cerr << "   aspectH = " << aspectH << std::endl;
 
         if (aspectW < aspectH)
         {
@@ -103,7 +99,7 @@ namespace mrv
             player = view->getTimelinePlayer();
 
 #ifndef NDEBUG
-        std::cerr << "Command: " << message << std::endl;
+            // std::cerr << "Command: " << message << std::endl;
 #endif
 
         try
@@ -319,6 +315,9 @@ namespace mrv
                 float value = message["value"];
 
                 player->setVolume(value);
+                TimelineClass* c = ui->uiTimeWindow;
+                c->uiVolume->value(value);
+                c->uiVolume->redraw();
             }
             else if (c == "setMute")
             {
@@ -331,6 +330,9 @@ namespace mrv
                 bool value = message["value"];
 
                 player->setMute(value);
+                TimelineClass* c = ui->uiTimeWindow;
+                c->uiAudioTracks->value(value);
+                c->uiAudioTracks->do_callback();
             }
             else if (c == "setAudioOffset")
             {
@@ -1161,21 +1163,25 @@ namespace mrv
                 size_t srcIndex = message["sourceIndex"];
                 add_clip_to_timeline(filename, srcIndex, ui);
             }
-            else if (c == "Edit/Cut")
+            else if (c == "Edit/Frame/Cut")
             {
                 edit_cut_frame_cb(nullptr, ui);
             }
-            else if (c == "Edit/Copy")
+            else if (c == "Edit/Frame/Copy")
             {
                 edit_copy_frame_cb(nullptr, ui);
             }
-            else if (c == "Edit/Paste")
+            else if (c == "Edit/Frame/Paste")
             {
                 edit_paste_frame_cb(nullptr, ui);
             }
-            else if (c == "Edit/Insert")
+            else if (c == "Edit/Frame/Insert")
             {
                 edit_insert_frame_cb(nullptr, ui);
+            }
+            else if (c == "Edit/Slice")
+            {
+                edit_slice_clip_cb(nullptr, ui);
             }
             else if (c == "Edit/Remove")
             {
@@ -1225,7 +1231,7 @@ namespace mrv
         }
         catch (const std::exception& e)
         {
-            LOG_ERROR(e.what());
+            LOG_ERROR(e.what() << " message=" << message);
         }
         tcp->unlock();
     }

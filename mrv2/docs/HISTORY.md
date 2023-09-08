@@ -78,6 +78,10 @@ the playlist panel by making it interactive.
   sphere.
 - Fixed menus still showing the panels open when they were closed from the
   Close button in network connections.
+- Fixed a crash when selecting a new clip with the <- or -> arrows in the
+  Files Panel.
+- Fixed changing of volume and muting on network connections not showing the
+  change on the remote client's interface.
 
 v0.7.1
 ------

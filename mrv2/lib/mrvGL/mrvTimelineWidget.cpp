@@ -1037,6 +1037,11 @@ namespace mrv
     {
         TLRENDER_P();
         unsigned key = _changeKey(kFitScreen.hotkey());
+        if (p.player)
+        {
+            auto innerPlayer = p.player->player();
+            p.timeRange = innerPlayer->getTimeRange();
+        }
         p.eventLoop->key(fromFLTKKey(key), true, 0);
     }
 

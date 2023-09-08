@@ -36,6 +36,9 @@ namespace mrv
     //! Menu function to copy one frame to the buffer.
     void edit_copy_frame_cb(Fl_Menu_* m, ViewerUI* ui);
 
+    //! Actual function to cut a frame from the timeline.
+    void edit_cut_frame(ViewerUI* ui, bool saveOtio = true);
+
     //! Menu function to cut one frame from the timeline.
     void edit_cut_frame_cb(Fl_Menu_* m, ViewerUI* ui);
 

@@ -17,6 +17,8 @@
 #include "mrvWidgets/mrvPlaylistButton.h"
 #include "mrvWidgets/mrvButton.h"
 
+#include "mrvEdit/mrvEditUtil.h"
+
 #include "mrvPanels/mrvPlaylistPanel.h"
 #include "mrvPanels/mrvPanelsAux.h"
 #include "mrvPanels/mrvPanelsCallbacks.h"
@@ -199,15 +201,14 @@ namespace mrv
         {
             const auto& media = files[i];
             const auto& path = media->path;
-            const std::string& dir = path.getDirectory();
-            const std::string& base = path.getBaseName();
-            const std::string& extension = path.getExtension();
-            if (extension != ".otio" || base != "EDL." || dir != tmpdir)
+
+            const bool isEDL = isTemporaryEDL(path);
+            if (!isEDL)
                 continue;
 
             // When we refresh the .otio for EDL, we get two clips with the
             // same name, we avoid displaying both with this check.
-            if (path == lastPath)
+            if (path == lastPath && isEDL)
                 continue;
             lastPath = path;
 
@@ -233,8 +234,10 @@ namespace mrv
 
             _r->map[i] = b;
 
-            const std::string file =
-                path.getBaseName() + path.getNumber() + path.getExtension();
+            const std::string dir = path.getDirectory();
+            const std::string base = path.getBaseName();
+            const std::string extension = path.getExtension();
+            const std::string file = base + path.getNumber() + extension;
 
             std::string text = dir + "\n" + file + "\nColor";
             b->copy_label(text.c_str());

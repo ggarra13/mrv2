@@ -48,6 +48,8 @@ namespace py = pybind11;
 #include "mrvNetwork/mrvLUTOptions.h"
 #include "mrvNetwork/mrvParseHost.h"
 
+#include "mrvEdit/mrvEditUtil.h"
+
 #include "mrvApp/mrvDevicesModel.h"
 #include "mrvApp/mrvPlaylistsModel.h"
 #include "mrvApp/mrvFilesModel.h"
@@ -1128,12 +1130,7 @@ namespace mrv
                     item->audioOffset = mrvTimelinePlayer->audioOffset();
 
                     // Add the new file to recent files, unless it is an EDL.
-                    const std::string tmpdir = tmppath() + "/";
-                    const std::string directory = item->path.getDirectory();
-                    const std::string baseName = item->path.getBaseName();
-                    const std::string extension = item->path.getExtension();
-                    if (directory != tmpdir || baseName != "EDL." ||
-                        extension != ".otio")
+                    if (!isTemporaryEDL(item->path))
                     {
                         const std::string& file = item->path.get();
                         p.settingsObject->addRecentFile(file);

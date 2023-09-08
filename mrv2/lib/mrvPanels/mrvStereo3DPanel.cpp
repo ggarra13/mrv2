@@ -13,6 +13,8 @@
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvPopupMenu.h"
 
+#include "mrvEdit/mrvEditUtil.h"
+
 #include "mrvPanels/mrvPanelsAux.h"
 #include "mrvPanels/mrvPanelsCallbacks.h"
 #include "mrvPanels/mrvStereo3DPanel.h"
@@ -198,17 +200,17 @@ namespace mrv
             const auto& path = media->path;
 
             // We skip EDLs created in tmp dir here.
-            const std::string& dir = path.getDirectory();
-            const std::string& base = path.getBaseName();
-            const std::string& extension = path.getExtension();
+            const bool isEDL = isTemporaryEDL(path);
 
             // When we refresh the .otio for EDL, we get two clips with the
             // same name, we avoid displaying both with this check.
-            if (path == lastPath && extension == ".otio" && base == "EDL." &&
-                dir == tmpdir)
+            if (path == lastPath && isEDL)
                 continue;
             lastPath = path;
 
+            const std::string dir = path.getDirectory();
+            const std::string base = path.getBaseName();
+            const std::string extension = path.getExtension();
             const std::string file = base + path.getNumber() + extension;
             const std::string fullfile = dir + file;
 
