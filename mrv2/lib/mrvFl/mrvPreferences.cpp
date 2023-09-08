@@ -666,7 +666,7 @@ namespace mrv
             uiPrefs->uiPrefsOCIOConfig->value(ocioDefault.c_str());
         }
 
-        ocio.get("use_active_views", tmp, 0);
+        ocio.get("use_active_views", tmp, 1);
         uiPrefs->uiOCIOUseActiveViews->value(tmp);
 
         Fl_Preferences ics(ocio, "ICS");
