@@ -22,6 +22,7 @@ set(HEADERS
 
 set(SOURCES
     mrvGL2TextShape.cpp
+    mrvGLErrors.cpp
     mrvGLOffscreenContext.cpp
     mrvGLLines.cpp
     mrvGLOutline.cpp
@@ -41,7 +42,7 @@ add_definitions( -DGL_SILENCE_DEPRECATION )
 
 set(LIBRARIES tlGL tlTimeline tlTimelineUI tlUI GLFW)
 set(LIBRARIES_PRIVATE )
-list( APPEND LIBRARIES mrvWidgets mrvDraw mrvCore fltk_gl )
+list( APPEND LIBRARIES mrvEdit mrvWidgets mrvDraw mrvCore fltk_gl )
 
 add_library(mrvGL ${SOURCES} ${HEADERS})
 files_to_absolute_paths()

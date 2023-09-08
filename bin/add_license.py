@@ -18,16 +18,18 @@ import stat
 
 CPP_DIRS = [
     "mrv2/src",
+    "mrv2/lib/mrvApp",
     "mrv2/lib/mrvCore",
     "mrv2/lib/mrvWidgets",
     "mrv2/lib/mrvDraw",
+    "mrv2/lib/mrvEdit",
+    "mrv2/lib/mrvFl",
+    "mrv2/lib/mrvFlU",
     "mrv2/lib/mrvGL",
     "mrv2/lib/mrvNetwork",
     "mrv2/lib/mrvPanels",
-    "mrv2/lib/mrvFl",
-    "mrv2/lib/mrvFlU",
-    "mrv2/lib/mrvApp",
     "mrv2/lib/mrvPy",
+    "mrv2/lib/mrvUI",
 ]
 
 CMAKE_DIRS = CPP_DIRS + [
@@ -35,15 +37,7 @@ CMAKE_DIRS = CPP_DIRS + [
     "cmake/nsis",
     "cmake/Modules",
     "mrv2/src",
-    "mrv2/lib/mrvApp",
-    "mrv2/lib/mrvCore",
-    "mrv2/lib/mrvDraw",
-    "mrv2/lib/mrvFl",
-    "mrv2/lib/mrvNetwork",
-    "mrv2/lib/mrvPanels",
-    "mrv2/lib/mrvFlU",
-    "mrv2/lib/mrvGL",
-    "mrv2/lib/mrvWidgets",
+    "mrv2/lib",
     "mrv2/python/demos",
     "mrv2/python/plug-ins",
     "mrv2/bin",

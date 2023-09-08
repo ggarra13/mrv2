@@ -11,7 +11,6 @@
 
 #include <tlUI/EventLoop.h>
 #include <tlUI/IClipboard.h>
-#include <tlUI/RowLayout.h>
 
 #include <tlTimeline/GLRender.h>
 
@@ -19,8 +18,11 @@
 #include <tlGL/Mesh.h>
 #include <tlGL/OffscreenBuffer.h>
 #include <tlGL/Shader.h>
+#include <tlGL/Util.h>
 
 #include "mrvCore/mrvHotkey.h"
+
+#include "mrvEdit/mrvEditCallbacks.h"
 
 #include "mrvFl/mrvIO.h"
 
@@ -84,7 +86,7 @@ namespace mrv
     {
         std::weak_ptr<system::Context> context;
 
-        const ViewerUI* ui = nullptr;
+        ViewerUI* ui = nullptr;
 
         TimelinePlayer* player = nullptr;
 
@@ -112,11 +114,11 @@ namespace mrv
         std::shared_ptr<gl::VAO> vao;
         std::chrono::steady_clock::time_point mouseWheelTimer;
 
-        std::vector< int64_t > annotationFrames;
+        std::vector< otime::RationalTime > annotationTimes;
+
+        bool dragging = false;
 
         otime::TimeRange timeRange = time::invalidTimeRange;
-
-        int button = 0;
     };
 
     TimelineWidget::TimelineWidget(int X, int Y, int W, int H, const char* L) :
@@ -133,7 +135,7 @@ namespace mrv
     void TimelineWidget::setContext(
         const std::shared_ptr<system::Context>& context,
         const std::shared_ptr<timeline::TimeUnitsModel>& timeUnitsModel,
-        const ViewerUI* ui)
+        ViewerUI* ui)
     {
         TLRENDER_P();
 
@@ -147,13 +149,18 @@ namespace mrv
         p.clipboard = Clipboard::create(context);
         p.eventLoop =
             ui::EventLoop::create(p.style, p.iconLibrary, p.clipboard, context);
+
         p.timelineWidget =
             timelineui::TimelineWidget::create(timeUnitsModel, context);
-        // p.timelineWidget->setScrollBarsVisible(false);
+        p.timelineWidget->setEditable(false);
+        p.timelineWidget->setFrameView(true);
+        p.timelineWidget->setScrollBarsVisible(false);
+        p.timelineWidget->setStopOnScrub(false);
+
         p.eventLoop->addWidget(p.timelineWidget);
         const float devicePixelRatio = pixels_per_unit();
         p.eventLoop->setDisplayScale(devicePixelRatio);
-        p.eventLoop->setDisplaySize(image::Size(_toUI(w()), _toUI(h())));
+        p.eventLoop->setDisplaySize(math::Size2i(_toUI(w()), _toUI(h())));
 
         p.thumbnailCreator = new ThumbnailCreator(context);
 
@@ -196,6 +203,23 @@ namespace mrv
         {
             delete p.box->image();
             p.box->image(nullptr);
+        }
+    }
+
+    void TimelineWidget::_seek()
+    {
+        TLRENDER_P();
+        const int maxY = 48;
+        const int Y = _toUI(Fl::event_y());
+        const int X = _toUI(Fl::event_x());
+        if (Y < maxY && !p.timelineWidget->isDragging())
+        {
+            auto time = _posToTime(X);
+            p.player->seek(time);
+        }
+        else
+        {
+            p.dragging = true;
         }
     }
 
@@ -377,6 +401,7 @@ namespace mrv
             try
             {
                 p.render = timeline::GLRender::create(context);
+                CHECK_GL;
                 const std::string vertexSource =
                     "#version 410\n"
                     "\n"
@@ -407,6 +432,7 @@ namespace mrv
                     "    fColor = texture(textureSampler, fTexture);\n"
                     "}\n";
                 p.shader = gl::Shader::create(vertexSource, fragmentSource);
+                CHECK_GL;
             }
             catch (const std::exception& e)
             {
@@ -424,9 +450,12 @@ namespace mrv
     {
         gl::initGLAD();
 
+        CHECK_GL;
         refresh();
+        CHECK_GL;
 
         _initializeGLResources();
+        CHECK_GL;
     }
 
     void TimelineWidget::resize(int X, int Y, int W, int H)
@@ -439,17 +468,15 @@ namespace mrv
         {
             const float devicePixelRatio = pixels_per_unit();
             p.eventLoop->setDisplayScale(devicePixelRatio);
-            p.eventLoop->setDisplaySize(image::Size(_toUI(W), _toUI(H)));
+            p.eventLoop->setDisplaySize(math::Size2i(_toUI(W), _toUI(H)));
             p.eventLoop->tick();
         }
-        valid(0);
     }
 
     void TimelineWidget::draw()
     {
         TLRENDER_P();
-        const image::Size renderSize(pixel_w(), pixel_h());
-
+        const math::Size2i renderSize(pixel_w(), pixel_h());
         if (!valid())
         {
             _initializeGL();
@@ -465,16 +492,17 @@ namespace mrv
 
             valid(1);
         }
+        CHECK_GL;
 
         bool annotationMarks = false;
         const auto player = p.ui->uiView->getTimelinePlayer();
         if (player)
         {
-            const auto& frames = player->getAnnotationFrames();
-            if (frames != p.annotationFrames)
+            const auto times = player->getAnnotationTimes();
+            if (times != p.annotationTimes)
             {
                 annotationMarks = true;
-                p.annotationFrames = frames;
+                p.annotationTimes = times;
             }
         }
 
@@ -487,11 +515,14 @@ namespace mrv
                     gl::OffscreenBufferOptions offscreenBufferOptions;
                     offscreenBufferOptions.colorType =
                         image::PixelType::RGBA_F32;
+                    CHECK_GL;
                     if (gl::doCreate(
                             p.buffer, renderSize, offscreenBufferOptions))
                     {
+                        CHECK_GL;
                         p.buffer = gl::OffscreenBuffer::create(
                             renderSize, offscreenBufferOptions);
+                        CHECK_GL;
                     }
                 }
                 else
@@ -502,6 +533,7 @@ namespace mrv
                 if (p.render && p.buffer)
                 {
                     gl::OffscreenBufferBinding binding(p.buffer);
+                    CHECK_GL;
                     timeline::RenderOptions renderOptions;
                     renderOptions.clearColor =
                         p.style->getColorRole(ui::ColorRole::Window);
@@ -519,17 +551,14 @@ namespace mrv
             }
             catch (const std::exception& e)
             {
-                if (auto context = p.context.lock())
-                {
-                    context->log(
-                        "mrv::mrvTimelineWidget", e.what(), log::Type::Error);
-                }
+                LOG_ERROR(e.what());
             }
         }
 
         glViewport(0, 0, renderSize.w, renderSize.h);
         glClearColor(0.F, 0.F, 0.F, 0.F);
         glClear(GL_COLOR_BUFFER_BIT);
+        CHECK_GL;
 
         if (p.buffer)
         {
@@ -576,11 +605,7 @@ namespace mrv
         }
         else
         {
-            if (auto context = p.context.lock())
-            {
-                context->log(
-                    "mrv::mrvTimelineWidget", "No p.buffer", log::Type::Error);
-            }
+            LOG_ERROR("No p.buffer");
         }
     }
 
@@ -629,13 +654,12 @@ namespace mrv
         int modifiers = fromFLTKModifiers();
         if (Fl::event_button1())
         {
-            button = 1;
-            auto time = _posToTime(_toUI(Fl::event_x()));
-            p.player->seek(time);
+            button = 0;
+            _seek();
         }
         else if (Fl::event_button2())
         {
-            button = 1;
+            button = 0;
             modifiers = static_cast<int>(ui::KeyModifier::Control);
         }
         else
@@ -651,8 +675,7 @@ namespace mrv
         TLRENDER_P();
         if (Fl::event_button1())
         {
-            auto time = _posToTime(_toUI(Fl::event_x()));
-            p.player->seek(time);
+            _seek();
         }
         else if (Fl::event_button2())
         {
@@ -670,16 +693,22 @@ namespace mrv
     int TimelineWidget::mouseReleaseEvent()
     {
         TLRENDER_P();
+        if (p.dragging)
+        {
+            edit_store_undo(p.player, p.ui);
+            edit_clear_redo(p.ui);
+        }
         int button = 0;
         if (Fl::event_button1())
         {
-            button = 1;
-            auto time = _posToTime(_toUI(Fl::event_x()));
-            p.player->seek(time);
+            button = 0;
+            _seek();
+            redraw();
         }
         p.eventLoop->cursorPos(
             math::Vector2i(_toUI(Fl::event_x()), _toUI(Fl::event_y())));
         p.eventLoop->mouseButton(button, false, fromFLTKModifiers());
+        p.dragging = false;
         return 1;
     }
 
@@ -709,7 +738,8 @@ namespace mrv
     TimelineWidget::scrollEvent(const float X, const float Y, int modifiers)
     {
         TLRENDER_P();
-        p.eventLoop->scroll(X, Y, modifiers);
+        math::Vector2f pos(X, Y);
+        p.eventLoop->scroll(pos, modifiers);
 
         Message message;
         message["command"] = "timelineWidgetScroll";
@@ -1003,6 +1033,18 @@ namespace mrv
         }
     } // namespace
 
+    void TimelineWidget::frameView()
+    {
+        TLRENDER_P();
+        unsigned key = _changeKey(kFitScreen.hotkey());
+        if (p.player)
+        {
+            auto innerPlayer = p.player->player();
+            p.timeRange = innerPlayer->getTimeRange();
+        }
+        p.eventLoop->key(fromFLTKKey(key), true, 0);
+    }
+
     int TimelineWidget::keyPressEvent()
     {
         TLRENDER_P();
@@ -1041,9 +1083,7 @@ namespace mrv
     {
         TLRENDER_P();
         p.eventLoop->tick();
-#ifndef __APPLE__
         if (p.eventLoop->hasDrawUpdate())
-#endif
         {
             redraw();
         }
@@ -1053,9 +1093,6 @@ namespace mrv
     int TimelineWidget::handle(int event)
     {
         TLRENDER_P();
-        // if (event != FL_NO_EVENT && event != FL_MOVE)
-        //     std::cerr << fl_eventnames[event] << " active=" << active()
-        //               << std::endl;
         switch (event)
         {
         case FL_FOCUS:
@@ -1118,6 +1155,7 @@ namespace mrv
                         0.005, (Fl_Timeout_Handler)hideThumbnail_cb, this);
                 }
             }
+            refresh();
             return Fl_Gl_Window::handle(event);
         }
         }
@@ -1161,9 +1199,9 @@ namespace mrv
     //! Routine to turn mrv2's hotkeys into Darby's shortcuts
     unsigned TimelineWidget::_changeKey(unsigned key)
     {
-        if (key == 'f')
+        if (key == kFitScreen.hotkey())
             key = '0'; // Darby uses 0 to frame view
-        else if (key == 'a')
+        else if (key == kFitAll.hotkey())
             key = '0'; // Darby uses 0 to frame view
         return key;
     }
@@ -1177,9 +1215,8 @@ namespace mrv
         const auto& color = image::Color4f(1, 1, 0, 0.25);
         TimelineWidget* self = const_cast<TimelineWidget*>(this);
         const float devicePixelRatio = self->pixels_per_unit();
-        for (const auto frame : p.annotationFrames)
+        for (const auto time : p.annotationTimes)
         {
-            otime::RationalTime time(frame, duration.rate());
             double X = _timeToPos(time);
             math::Box2i bbox(X - 0.5, 0, 2, 20 * devicePixelRatio);
             p.render->drawRect(bbox, color);
@@ -1301,8 +1338,4 @@ namespace mrv
         self->single_thumbnail(id, thumbnails);
     }
 
-    void TimelineWidget::main(ViewerUI* ui)
-    {
-        _p->ui = ui;
-    }
 } // namespace mrv

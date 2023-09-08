@@ -69,13 +69,13 @@ decl {\#include "mrvWidgets/mrvMenuBar.h"} {public global
 decl {\#include "mrvFl/mrvLanguages.h"} {public global
 }
 
-decl {\#include "mrvFl/mrvUtil.h"} {public global
-}
-
 decl {\#include "mrvFl/mrvCallbacks.h"} {public global
 }
 
 decl {\#include "mrvFl/mrvPreferences.h"} {public global
+}
+
+decl {\#include "mrvUI/mrvUtil.h"} {public global
 }
 
 decl {\#include "mrvGL/mrvGLViewport.h"} {public global
@@ -415,7 +415,7 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
   }
 }
 
-widget_class TimelineClass {
+widget_class TimelineClass {open
   xywh {117 263 690 29} resizable
   class Fl_Double_Window visible
 } {
@@ -471,7 +471,7 @@ ui->uiView->take_focus();}
         }
       }
       Fl_Group {} {open
-        xywh {99 3 411 26}
+        xywh {99 1 411 28}
       } {
         Fl_Group {} {open
           xywh {99 3 240 26}
@@ -564,7 +564,7 @@ player->setLoop( loop );}
           }
         }
         Fl_Group {} {open
-          xywh {341 3 87 26}
+          xywh {341 1 87 28}
         } {
           Fl_Menu_Button fpsDefaults {
             label FPS
@@ -572,8 +572,8 @@ player->setLoop( loop );}
             callback {int idx = o->value();
 double speed = atof( o->text( idx ) );
 uiFPS->value( speed );
-uiFPS->do_callback();}
-            tooltip {Some default frame rate settings.} xywh {341 3 40 24} labelsize 10 align 16
+uiFPS->do_callback();} open selected
+            tooltip {Some default frame rate settings.} xywh {341 1 40 24} labelsize 10 align 16
             code0 {o->disable_label();}
             class {mrv::PopupMenu}
           } {
@@ -598,7 +598,7 @@ uiFPS->do_callback();}
               xywh {5 3 100 20}
             }
             MenuItem {} {
-              label {29.97}
+              label {29.976}
               xywh {5 3 100 20}
             }
             MenuItem {} {
@@ -610,7 +610,7 @@ uiFPS->do_callback();}
               xywh {5 3 100 20}
             }
             MenuItem {} {
-              label {23.97}
+              label {23.976}
               xywh {5 3 100 20}
             }
             MenuItem {} {
@@ -618,7 +618,7 @@ uiFPS->do_callback();}
               xywh {5 3 100 20}
             }
             MenuItem {} {
-              label {14.985}
+              label {14.988}
               xywh {5 3 100 20}
             }
             MenuItem {} {
@@ -628,6 +628,10 @@ uiFPS->do_callback();}
             MenuItem {} {
               label 12
               xywh {5 3 100 20}
+            }
+            MenuItem {} {
+              label {11.988}
+              xywh {15 13 100 20}
             }
           }
           Fl_Input uiFPS {
@@ -646,6 +650,7 @@ ui->uiView->take_focus();}
             tooltip {Allows you to adjust frame rate playback.} xywh {386 3 42 24} color -1733777408 selection_color 0
             code0 {o->textcolor( FL_BLACK );
 o->value(24);}
+            code1 {o->step(0.001);}
             class Fl_Value_Input
           }
         }
@@ -773,8 +778,7 @@ ui->uiTimeline->redraw();}
   }
   Function {setUI( ViewerUI* x )} {open
   } {
-    code {ui = x;
-ui->uiTimeline->main( x );} {}
+    code {ui = x;} {}
   }
 }
 
@@ -800,8 +804,8 @@ uiSecondary = nullptr;} {}
       label mrv2
       user_data this user_data_type {ViewerUI*}
       callback {exit_cb( o, v );} open
-      xywh {575 174 690 602} type Double align 80 resizable
-      class {mrv::MainWindow} size_range {690 602 0 0} visible
+      xywh {998 185 690 602} type Double align 80 hide resizable
+      class {mrv::MainWindow} size_range {690 602 0 0}
     } {
       Fl_Pack uiRegion {open
         xywh {0 0 690 602} box FLAT_BOX resizable
@@ -829,7 +833,7 @@ mrv::EditMode mode = mrv::EditMode::kTimeline;
 if (value) mode = mrv::EditMode::kFull;
 else if (v->uiView->getPresentationMode())
    mode = mrv::EditMode::kNone;
-mrv::set_edit_mode_cb(mode, v);} selected
+mrv::set_edit_mode_cb(mode, v);}
               tooltip {Toggle Edit Mode} xywh {602 0 58 25} down_box DOWN_BOX selection_color 95 labelsize 12
             }
           }
@@ -1088,19 +1092,19 @@ int a = o->value() * 255;
 settingsObject->setValue( mrv::kPenColorA, a);}
                 tooltip {Opacity of pen stroke} xywh {7 373 34 19} type {Horz Knob} step 0.01 value 1
               }
-              Fl_Group {} {
+              Fl_Group {} {open
                 xywh {0 396 42 71}
               } {
                 Fl_Button uiUndoDraw {
                   user_data this user_data_type {ViewerUI*}
-                  callback {uiView->undo(); uiRedoDraw->activate();}
-                  tooltip {Undo Last Shape Drawn} image {../../icons/Undo.svg} compress_image 0 xywh {0 396 40 35} deactivate
+                  callback {uiView->undo();}
+                  tooltip {Undo Last Shape Drawn in Current Frame.} image {../../icons/Undo.svg} compress_image 0 xywh {0 396 40 35} deactivate
                   class {mrv::Button}
                 }
                 Fl_Button uiRedoDraw {
                   user_data this user_data_type {ViewerUI*}
-                  callback {uiView->redo(); uiUndoDraw->activate();}
-                  tooltip {Redo Previous Shape Drawn} image {../../icons/Redo.svg} compress_image 0 xywh {0 431 40 36} deactivate
+                  callback {uiView->redo();}
+                  tooltip {Redo Previous Shape Drawn in Current Frame.} image {../../icons/Redo.svg} compress_image 0 xywh {0 431 40 36} deactivate
                   class {mrv::Button}
                 }
               }

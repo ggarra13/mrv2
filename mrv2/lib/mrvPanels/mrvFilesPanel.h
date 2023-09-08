@@ -10,6 +10,8 @@
 
 #include <tlCore/Time.h>
 
+#include "mrvCore/mrvFilesPanelOptions.h"
+
 #include "mrvPanelWidget.h"
 
 class ViewerUI;
@@ -19,6 +21,7 @@ namespace mrv
     using namespace tl;
 
     class FileButton;
+    class FilesPanelOptions;
 
     class FilesPanel : public PanelWidget
     {
@@ -28,6 +31,8 @@ namespace mrv
 
         void clear_controls();
         void add_controls() override;
+
+        void setFilesPanelOptions(const FilesPanelOptions&);
 
         void redraw();
 

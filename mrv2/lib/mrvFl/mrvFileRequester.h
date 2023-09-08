@@ -4,14 +4,23 @@
 
 #pragma once
 
-#include <mrvCore/mrvString.h>
+#include <string>
 
-#include <FL/Fl_Preferences.H>
+#include <tlCore/Context.h>
+
+#include <mrvCore/mrvString.h>
 
 class ViewerUI;
 
 namespace mrv
 {
+    std::string file_single_requester(
+        const ViewerUI* ui, const char* title, const char* pattern,
+        const char* startfile, const bool compact_files);
+
+    const std::string file_save_single_requester(
+        const ViewerUI* ui, const char* title, const char* pattern,
+        const char* startfile, const bool compact_images = true);
 
     std::string open_directory(const char* startfile, ViewerUI* main);
 
@@ -72,6 +81,9 @@ namespace mrv
     std::string open_audio_file(const char* startfile, ViewerUI* main);
 
     std::string
+    save_single_image(ViewerUI* ui, const char* startfile = nullptr);
+
+    std::string
     save_movie_or_sequence_file(ViewerUI* ui, const char* startfile = nullptr);
 
     std::string save_pdf(ViewerUI* ui, const char* startdir = nullptr);
@@ -83,10 +95,5 @@ namespace mrv
     save_session_file(ViewerUI* ui, const char* startfile = nullptr);
 
     std::string open_ocio_config(const char* startfile, ViewerUI* main);
-
-    void load_hotkeys(ViewerUI* uiMain, std::string filename = "");
-    void load_hotkeys(ViewerUI* uiMain, Fl_Preferences* prefs);
-    void save_hotkeys(ViewerUI* uiMain, std::string filename = "");
-    void save_hotkeys(Fl_Preferences& keys);
 
 } // namespace mrv

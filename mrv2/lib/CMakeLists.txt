@@ -1,8 +1,14 @@
+# SPDX-License-Identifier: BSD-3-Clause
+# mrv2
+# Copyright Contributors to the mrv2 Project. All rights reserved.
+
 add_subdirectory(mrvCore)
 add_subdirectory(mrvDraw)
 add_subdirectory(mrvFLU)
 add_subdirectory(mrvFlmm)
 add_subdirectory(mrvWidgets)
+add_subdirectory(mrvUI)
+add_subdirectory(mrvEdit)
 if(TLRENDER_GL)
     add_subdirectory(mrvGL)
 endif()

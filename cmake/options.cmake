@@ -21,7 +21,7 @@ endif()
 
 set(BUILD_ZLIB ${build_zlib} CACHE BOOL "Enable ZLIB building")
 set(BUILD_GETTEXT ${build_gettext} CACHE BOOL "Enable GETTEXT building")
-set(BUILD_FLTK TRUE CACHE BOOL "Enable FLTK building")
+set(BUILD_FLTK TRUE CACHE BOOL "Enable FLTK building (needed)")
 set(BUILD_PYTHON TRUE CACHE BOOL "Enable building Python" )
 set(MRV2_PYBIND11 TRUE CACHE BOOL "Enable pybind11 building" )
 set(MRV2_NETWORK ON CACHE BOOL "Enable Networking in mrv2" )

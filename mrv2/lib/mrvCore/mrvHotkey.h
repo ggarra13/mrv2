@@ -89,7 +89,6 @@ namespace mrv
     extern Hotkey kOpenSingleImage;
     extern Hotkey kOpenStereoImage;
     extern Hotkey kOpenSession;
-    extern Hotkey kSaveReel;
     extern Hotkey kSaveImage;
     extern Hotkey kSaveSequence;
     extern Hotkey kSavePDF;
@@ -262,6 +261,20 @@ namespace mrv
     extern Hotkey kToggleEditMode;
     extern Hotkey kToggleTimelineThumbnails;
     extern Hotkey kToggleTimelineTransitions;
+    extern Hotkey kToggleTimelineMarkers;
+
+    // Editing hotkeys
+    extern Hotkey kEditCutFrame;
+    extern Hotkey kEditCopyFrame;
+    extern Hotkey kEditPasteFrame;
+    extern Hotkey kEditInsertFrame;
+
+    extern Hotkey kEditSliceClip;
+    extern Hotkey kEditRemoveClip;
+    extern Hotkey kEditRemoveClipWithGap;
+
+    extern Hotkey kEditUndo;
+    extern Hotkey kEditRedo;
 
     // @todo:
     extern Hotkey kRotatePlus90;

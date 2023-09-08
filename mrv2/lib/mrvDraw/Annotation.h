@@ -7,6 +7,8 @@
 #include <memory>
 #include <vector>
 
+#include <tlCore/Time.h>
+
 #include "mrvDraw/Shape.h"
 #include "mrvNetwork/mrvMessage.h"
 
@@ -19,7 +21,7 @@ namespace tl
         {
         public:
             Annotation(){};
-            Annotation(const int64_t frame, const bool allFrames);
+            Annotation(const otime::RationalTime& frame, const bool allFrames);
             ~Annotation();
 
             bool empty() const;
@@ -35,7 +37,7 @@ namespace tl
             void redo();
 
         public:
-            int64_t frame = std::numeric_limits<int64_t>::max();
+            otime::RationalTime time = time::invalidTime;
             std::vector< std::shared_ptr< Shape > > shapes;
             std::vector< std::shared_ptr< Shape > > undo_shapes;
             bool allFrames = false;

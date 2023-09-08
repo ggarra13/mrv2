@@ -1,11 +1,29 @@
-v0.7.2
-------
+v0.7.5
+======
+
+Playlist and Editing
+--------------------
+
+This is the first version that supports some basic editing and improves upon
+the playlist panel by making it interactive.
+
+- The Playlist panel's functionality has been simplified. It is there only to
+  create an empty track or start a new EDL with one clip from the Files Panel.
+- Added an Edit/Frame/Cut, Edit/Frame/Copy, Edit/Frame/Paste and
+  Edit/Frame/Insert to cut, copy, paste and insert one frame (video and audio)
+  of any media.  Currently, it does not support transitions, that are removed.
+  As soon as one of these commands is used, a new EDL is created.
+- Added an Edit/Slice to cut a clip in half at the current time location.
+- Added an Edit/Remove to remove the clips that intersect the current time
+  location.
+- Added Drag and Drop functionality to the Files Panel into the Timeline
+  Window as well as to the Playlist panel to add clips and create an EDL.
+- Currently, there's still no support for trimming the Timeline clips yet.
+  
 - Documented Python USD module.
 - Fixed DWA compression on non English locales (with commas as decimal
   separators)
 - Allowed saving movies as EXR frames if Annotations is turned on.
-- Added dragging of clips from the Files Panel to the Playlist Panel, instead
-  of relying on the "Add" button of the Playlist Panel.
 - Fixed Media Information Depth display for floating point lumma and lumma with
   alpha images.
 - Added pixel type saving to OpenEXR saving.  It can be Half or Float when
@@ -18,6 +36,48 @@ v0.7.2
   were no transitions in the timeline.
 - Added Timeline Preferences to show thumbnails, transitions and markers.
 - Fixed pixel aspect ratio of saved OpenEXR images when they were not 1.
+- Made Window resizing take into account Editing Viewport at start up.
+- Fixed Log Panel when an error was shown to resize to the size of the window
+  and not smaller.
+- Log Panel will no longer open when the file requester is open. 
+- Fixed Undo/Redo of annotations, which was incorrect.
+- Fixed keyboard (menu) shortcuts not working in the Files Panel.
+- Annotations are now kept with RationalTime instead of frames to be more
+  precise.  Note, however, that old session files that use annotations will be
+  incompatible.
+- Fixed Network connections which had gotten broken on v0.7.1.
+- Fixed Network connections on client startup, leading it to change the
+  selected file on the server.
+- Added Edit mode to the sessions file.
+- Added Edit mode to the network connection (it will load as timeline or full).
+- Laser annotations are no longer added to the draw undo/redo queue.
+- Laser annotations now work properly on Network connections.
+- Fixed Recent Files with entries with backslashes (ie. '\').
+- Added new controls to Playlist panel.  Added a new Save icon.
+- Fixed an annoying repositioning of window when loading new clips.
+- Added support for Markers in timeline viewport.
+- Made FPS display show only three decimal digits to simplify.
+- Added File->Save->Single Frame to save a single frame only.
+- Sped up Python compilation on Windows.
+- Fixed OpenColorIO Active Displays and Active Views when they were set to an
+  empty string which would turn off the View menu.
+- The OCIO Defaults now has an option to use or ignore active_views and
+  active_displays on the OCIO .config file.  The default is now to ignore them,
+  as it was suggested using them in production was usually not the hassle.
+- Fixed a tlRender bug which would make a clip with source range start_time
+  different than 0 continue its audio beyond the end.
+- Fixed Image Information Panel size when it was saved as a window with the
+  tabs open.
+- Made Network connections more solid.  In case of wrong data sent through the
+  network, it will discard it.
+- Fixed Environment Mapping editing of the subdivisions no longer changing the
+  sphere.
+- Fixed menus still showing the panels open when they were closed from the
+  Close button in network connections.
+- Fixed a crash when selecting a new clip with the <- or -> arrows in the
+  Files Panel.
+- Fixed changing of volume and muting on network connections not showing the
+  change on the remote client's interface.
 
 v0.7.1
 ------

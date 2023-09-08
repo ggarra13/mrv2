@@ -27,7 +27,6 @@ namespace mrv
 
         //! Virual draw method
         void draw() override;
-        int handle(int event) override;
 
         //! Set the internal system context for the widget.
         void setContext(const std::weak_ptr<system::Context>& context);
@@ -57,7 +56,7 @@ namespace mrv
 
         void _drawScanlines(int, int) const noexcept;
 
-        void _drawStereoOpenGL() const noexcept;
+        void _drawStereoOpenGL() noexcept;
 
         void _drawStereo3D() const noexcept;
 
@@ -65,12 +64,12 @@ namespace mrv
 
         void _drawDisplayWindow() const noexcept;
 
-        void _drawMissingFrame(const image::Size& renderSize) const noexcept;
+        void _drawMissingFrame(const math::Size2i& renderSize) const noexcept;
 
         //! Crop mask, data window and display window
-        void _drawOverlays(const image::Size& renderSize) const noexcept;
+        void _drawOverlays(const math::Size2i& renderSize) const noexcept;
 
-        void _drawCropMask(const image::Size& renderSize) const noexcept;
+        void _drawCropMask(const math::Size2i& renderSize) const noexcept;
 
         void _drawHUD() const noexcept;
 

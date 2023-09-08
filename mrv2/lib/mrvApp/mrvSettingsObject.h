@@ -10,8 +10,9 @@
 
 #include "mrvFl/mrvTimeObject.h"
 
+#include "mrvApp/mrvStdAnyHelper.h"
+
 #define std_any std::any
-#define std_any_cast std::any_cast
 #define std_any_empty(x) !x.has_value()
 
 namespace mrv

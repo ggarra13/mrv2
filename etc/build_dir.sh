@@ -56,6 +56,7 @@ for i in $@; do
 	    ;;
 	debug|Debug)		
 	    export CMAKE_BUILD_TYPE="Debug"
+	    export CMAKE_FLAGS=" -DTLRENDER_API=GL_4_1_Debug"
 	    shift
 	    ;;
 	dist)

@@ -8,8 +8,6 @@
 #include <tlGL/Util.h>
 #include <tlGL/Shader.h>
 
-#include <tlGlad/gl.h>
-
 #include "mrvGL/mrvGLErrors.h"
 #include "mrvGL/mrvGLOutline.h"
 

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+
+<svg
+   version="1.1"
+   id="Layer_1"
+   viewBox="0 0 617.66296 654.65615"
+   sodipodi:docname="Save.svg"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   width="24.924971"
+   height="26.417782"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs25" />
+  <sodipodi:namedview
+     id="namedview23"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="true"
+     showgrid="false"
+     inkscape:zoom="16"
+     inkscape:cx="4.4375"
+     inkscape:cy="10.90625"
+     inkscape:window-width="1920"
+     inkscape:window-height="958"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="Layer_1"
+     viewbox-height="512"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     viewbox-width="512"
+     width="24.92497px"
+     scale-x="24.78089" />
+  <polygon
+     style="fill:#515262"
+     points="136.28,0 14.466,0 14.466,510.817 497.534,510.817 497.534,37.531 450.564,0 398.209,0 241.811,167.75 "
+     id="polygon2"
+     transform="translate(55.973555,67.19487)" />
+  <rect
+     x="192.40569"
+     y="67.746872"
+     style="fill:#dce5fa"
+     width="262.16901"
+     height="167.17"
+     id="rect4" />
+  <rect
+     x="341.61469"
+     y="99.987877"
+     style="fill:#b4bbcc"
+     width="71.892998"
+     height="102.163"
+     id="rect6" />
+  <path
+     style="fill:#ffffff"
+     d="m 500.53455,298.66386 c 0,-10.812 -8.765,-19.575 -19.575,-19.575 H 154.33956 c -10.81201,0 -19.57501,8.765 -19.57501,19.575 v 216.889 c 0,10.812 8.765,19.575 19.57501,19.575 h 326.61899 c 10.812,0 19.575,-8.765 19.575,-19.575 v -216.889 z"
+     id="path8" />
+  <g
+     id="g16"
+     transform="translate(55.973555,67.19487)">
+    <path
+       style="fill:#515262"
+       d="M 408.93,273.697 H 120.097 c -5.224,0 -9.46,-4.234 -9.46,-9.46 0,-5.226 4.235,-9.46 9.46,-9.46 H 408.93 c 5.224,0 9.46,4.234 9.46,9.46 0,5.226 -4.236,9.46 -9.46,9.46 z"
+       id="path10" />
+    <path
+       style="fill:#515262"
+       d="M 408.93,319.103 H 120.097 c -5.224,0 -9.46,-4.234 -9.46,-9.46 0,-5.225 4.235,-9.46 9.46,-9.46 H 408.93 c 5.224,0 9.46,4.234 9.46,9.46 -10e-4,5.226 -4.236,9.46 -9.46,9.46 z"
+       id="path12" />
+    <path
+       style="fill:#515262"
+       d="M 408.93,364.509 H 120.097 c -5.224,0 -9.46,-4.234 -9.46,-9.46 0,-5.225 4.235,-9.46 9.46,-9.46 H 408.93 c 5.224,0 9.46,4.234 9.46,9.46 -10e-4,5.226 -4.236,9.46 -9.46,9.46 z"
+       id="path14" />
+  </g>
+  <g
+     style="opacity:0.1"
+     id="g20"
+     transform="translate(55.973555,67.19487)">
+    <rect
+       x="16.83"
+       y="1.183"
+       width="81.983002"
+       height="510.81699"
+       id="rect18" />
+  </g>
+</svg>

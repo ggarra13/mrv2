@@ -697,5 +697,7 @@ public:
     Fl_Callback* _callback;
     void* _userdata;
 
+    static Flu_File_Chooser* window;
+
     TLRENDER_PRIVATE();
 };

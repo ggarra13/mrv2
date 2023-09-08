@@ -9,7 +9,8 @@
 
 #include "mrvFl/mrvCallbacks.h"
 #include "mrvFl/mrvVersioning.h"
-#include "mrvFl/mrvMenus.h"
+
+#include "mrvUI/mrvMenus.h"
 
 #include "mrvWidgets/mrvMainWindow.h"
 
@@ -23,13 +24,14 @@
 
 #include "mrvPreferencesUI.h"
 
+#include "mrvFl/mrvIO.h"
+
+// The FLTK includes have to come last as they conflict with Windows' includes
 #include <FL/platform.H>
 #include <FL/fl_utf8.h>
 #include <FL/Fl_Sys_Menu_Bar.H>
 #include <FL/Fl_Widget.H>
 #include <FL/Fl.H>
-
-#include "mrvFl/mrvIO.h"
 
 #ifdef __linux__
 #    undef None // X11 defines None as a macro
@@ -39,8 +41,6 @@ namespace
 {
     const char* kModule = "menus";
 }
-
-// #define OCIO_MENU     1
 
 namespace mrv
 {
@@ -88,6 +88,9 @@ namespace mrv
             _("File/Save/Movie or Sequence"), kSaveSequence.hotkey(),
             (Fl_Callback*)save_movie_cb, ui, mode);
         menu->add(
+            _("File/Save/Single Frame"), kSaveImage.hotkey(),
+            (Fl_Callback*)save_single_frame_cb, ui, mode);
+        menu->add(
             _("File/Save/PDF Document"), kSavePDF.hotkey(),
             (Fl_Callback*)save_pdf_cb, ui, FL_MENU_DIVIDER | mode);
         menu->add(
@@ -112,6 +115,13 @@ namespace mrv
         for (auto file : recentFiles)
         {
             size_t pos = 0;
+            while ((pos = file.find('\\', pos)) != std::string::npos)
+            {
+                file =
+                    file.substr(0, pos) + "\\" + file.substr(pos, file.size());
+                pos += 2;
+            }
+            pos = 0;
             while ((pos = file.find('/', pos)) != std::string::npos)
             {
                 file =
@@ -762,55 +772,6 @@ namespace mrv
             _("Playback/Go to/Next Frame"), kFrameStepFwd.hotkey(),
             (Fl_Callback*)next_frame_cb, ui, FL_MENU_DIVIDER | mode);
 
-        const auto& options = ui->uiTimeline->getItemOptions();
-
-        mode = FL_MENU_RADIO;
-        if (numFiles == 0)
-            mode |= FL_MENU_INACTIVE;
-
-        int thumbnails_none = 0;
-        int thumbnails_small = 0;
-        if (options.thumbnails)
-            thumbnails_none = kToggleTimelineThumbnails.hotkey();
-        else
-            thumbnails_small = kToggleTimelineThumbnails.hotkey();
-
-        idx = menu->add(
-            _("Playback/Timeline/Thumbnails/None"), thumbnails_none,
-            (Fl_Callback*)timeline_thumbnails_none_cb, ui, mode);
-        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (!options.thumbnails)
-            item->set();
-        idx = menu->add(
-            _("Playback/Timeline/Thumbnails/Small"), thumbnails_small,
-            (Fl_Callback*)timeline_thumbnails_small_cb, ui, mode);
-        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (options.thumbnails && options.thumbnailHeight == 100)
-            item->set();
-        idx = menu->add(
-            _("Playback/Timeline/Thumbnails/Medium"), 0,
-            (Fl_Callback*)timeline_thumbnails_medium_cb, ui, mode);
-        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (options.thumbnails && options.thumbnailHeight == 200)
-            item->set();
-        idx = menu->add(
-            _("Playback/Timeline/Thumbnails/Large"), 0,
-            (Fl_Callback*)timeline_thumbnails_large_cb, ui, mode);
-        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (options.thumbnails && options.thumbnailHeight == 300)
-            item->set();
-
-        mode = FL_MENU_TOGGLE;
-        if (numFiles == 0)
-            mode |= FL_MENU_INACTIVE;
-        idx = menu->add(
-            _("Playback/Timeline/Transitions"),
-            kToggleTimelineTransitions.hotkey(),
-            (Fl_Callback*)toggle_timeline_transitions_cb, ui, mode);
-        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (options.showTransitions)
-            item->set();
-
         if (player)
         {
             mode = 0;
@@ -870,6 +831,60 @@ namespace mrv
         if (hud)
             item->set();
 
+        const auto& options = ui->uiTimeline->getItemOptions();
+
+        mode = FL_MENU_RADIO;
+        if (numFiles == 0)
+            mode |= FL_MENU_INACTIVE;
+
+        int thumbnails_none = 0;
+        int thumbnails_small = 0;
+        if (options.thumbnails)
+            thumbnails_none = kToggleTimelineThumbnails.hotkey();
+        else
+            thumbnails_small = kToggleTimelineThumbnails.hotkey();
+
+        idx = menu->add(
+            _("Timeline/Thumbnails/None"), thumbnails_none,
+            (Fl_Callback*)timeline_thumbnails_none_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (!options.thumbnails)
+            item->set();
+        idx = menu->add(
+            _("Timeline/Thumbnails/Small"), thumbnails_small,
+            (Fl_Callback*)timeline_thumbnails_small_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (options.thumbnails && options.thumbnailHeight == 100)
+            item->set();
+        idx = menu->add(
+            _("Timeline/Thumbnails/Medium"), 0,
+            (Fl_Callback*)timeline_thumbnails_medium_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (options.thumbnails && options.thumbnailHeight == 200)
+            item->set();
+        idx = menu->add(
+            _("Timeline/Thumbnails/Large"), 0,
+            (Fl_Callback*)timeline_thumbnails_large_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (options.thumbnails && options.thumbnailHeight == 300)
+            item->set();
+
+        mode = FL_MENU_TOGGLE;
+        if (numFiles == 0)
+            mode |= FL_MENU_INACTIVE;
+        idx = menu->add(
+            _("Timeline/Transitions"), kToggleTimelineTransitions.hotkey(),
+            (Fl_Callback*)toggle_timeline_transitions_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (options.showTransitions)
+            item->set();
+        idx = menu->add(
+            _("Timeline/Markers"), kToggleTimelineMarkers.hotkey(),
+            (Fl_Callback*)toggle_timeline_markers_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (options.showMarkers)
+            item->set();
+
         if (numFiles > 0)
         {
 
@@ -895,40 +910,48 @@ namespace mrv
                     _("Image/Version/Next"), kNextVersionImage.hotkey(),
                     (Fl_Callback*)next_image_version_cb, ui);
             }
-        }
+
+            menu->add(
+                _("Edit/Frame/Cut"), kEditCutFrame.hotkey(),
+                (Fl_Callback*)edit_cut_frame_cb, ui);
+            menu->add(
+                _("Edit/Frame/Copy"), kEditCopyFrame.hotkey(),
+                (Fl_Callback*)edit_copy_frame_cb, ui);
+            menu->add(
+                _("Edit/Frame/Paste"), kEditPasteFrame.hotkey(),
+                (Fl_Callback*)edit_paste_frame_cb, ui);
+            menu->add(
+                _("Edit/Frame/Insert"), kEditInsertFrame.hotkey(),
+                (Fl_Callback*)edit_insert_frame_cb, ui);
+
+            menu->add(
+                _("Edit/Slice"), kEditSliceClip.hotkey(),
+                (Fl_Callback*)edit_slice_clip_cb, ui);
+            menu->add(
+                _("Edit/Remove"), kEditRemoveClip.hotkey(),
+                (Fl_Callback*)edit_remove_clip_cb, ui);
 
 #if 0
+            menu->add(
+                "Edit/Dump Undo Queue", 0, (Fl_Callback*)dump_undo_queue_cb,
+                ui);
 
+            menu->add(
+                _("Edit/Remove With Gap"), kEditRemoveClipWithGap.hotkey(),
+                (Fl_Callback*)edit_remove_clip_with_gap_cb, ui);
 
-        // size_t num = image->number_of_video_streams();
-        // if ( num > 1 )
-        // {
+            menu->add(
+                _("Edit/Roll"), kEditRoll.hotkey(), (Fl_Callback*)edit_roll_cb,
+                ui);
+#endif
 
-
-        //     for ( unsigned i = 0; i < num; ++i )
-        //     {
-        //         char buf[256];
-        //         snprintf( buf, 256, _("Video/Track #%d - %s"), i,
-        //                  image->video_info(i).language.c_str() );
-
-        //         idx = menu->add( buf, 0,
-        //                          (Fl_Callback*)change_video_cb, ui,
-        //                          FL_MENU_RADIO );
-        //         item = (Fl_Menu_Item*) &(menu->menu()[idx]);
-        //         if ( image->video_stream() == (int) i )
-        //             item->set();
-        //     }
-        // }
-
-        // num = image->number_of_subtitle_streams();
-
-        // if ( dynamic_cast< aviImage* >( image ) != NULL )
-        // {
-        //     menu->add( _("Subtitle/Load"), 0,
-        //                (Fl_Callback*)load_subtitle_cb, ui );
-        // }
-
-
+            menu->add(
+                _("Edit/Undo"), kEditUndo.hotkey(), (Fl_Callback*)edit_undo_cb,
+                ui);
+            menu->add(
+                _("Edit/Redo"), kEditRedo.hotkey(), (Fl_Callback*)edit_redo_cb,
+                ui);
+        }
 
         // if ( num > 0 )
         // {
@@ -945,13 +968,13 @@ namespace mrv
         //                  image->subtitle_info(i).language.c_str() );
 
         //         idx = menu->add( buf, 0,
-        //                          (Fl_Callback*)change_subtitle_cb, ui, FL_MENU_RADIO );
+        //                          (Fl_Callback*)change_subtitle_cb, ui,
+        //                          FL_MENU_RADIO );
         //         item = (Fl_Menu_Item*) &(menu->menu()[idx]);
         //         if ( image->subtitle_stream() == (int)i )
         //             item->set();
         //     }
         // }
-
 
         // if ( dynamic_cast< Fl_Menu_Button* >( menu ) )
         // {
@@ -959,8 +982,6 @@ namespace mrv
         //                kCopyRGBAValues.hotkey(),
         //                (Fl_Callback*)copy_pixel_rgba_cb, (void*)ui->uiView);
         // }
-
-#endif
 
         if (dynamic_cast< DummyClient* >(tcp) == nullptr)
         {

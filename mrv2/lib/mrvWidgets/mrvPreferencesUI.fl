@@ -78,7 +78,7 @@ class PreferencesUI {open
       callback {// reload original preferences
 mrv::Preferences prefs(v, ViewerUI::app->settingsObject() );
 uiMain->hide();} open
-      xywh {609 87 847 469} type Double resizable
+      xywh {843 147 847 466} type Double resizable
       code0 {main = m;} modal visible
     } {
       Fl_Group {} {open
@@ -657,8 +657,8 @@ v->uiPrefsFPS->value( g );}
             }
           }
           Fl_Group {} {
-            label Timeline open
-            xywh {305 34 530 362} box EMBOSSED_BOX align 5
+            label Timeline
+            xywh {305 34 530 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Choice uiPrefsTimelineDisplay {
               label Display
@@ -684,12 +684,12 @@ v->uiPrefsFPS->value( g );}
               class {mrv::CheckButton}
             }
             Fl_Group {} {
-              label {Edit Viewport} open selected
+              label {Edit Viewport} open
               xywh {328 219 480 152} box ROUNDED_BOX
             } {
               Fl_Choice uiPrefsEditThumbnails {
                 label Thumbnails
-                tooltip {How to display timeline by default.} xywh {565 280 216 26} box THIN_DOWN_BOX down_box BORDER_BOX
+                tooltip {How to display timeline by default.} xywh {565 274 216 26} box THIN_DOWN_BOX down_box BORDER_BOX
                 code0 {o->value(1);}
               } {
                 MenuItem {} {
@@ -711,12 +711,17 @@ v->uiPrefsFPS->value( g );}
               }
               Fl_Check_Button uiPrefsShowTransitions {
                 label {Show Transitions}
-                xywh {565 319 21 20} down_box DOWN_BOX value 1 align 4
+                tooltip {Show Transitions in Edit Viewport} xywh {565 312 21 20} down_box DOWN_BOX value 1 align 4
+                class {mrv::CheckButton}
+              }
+              Fl_Check_Button uiPrefsShowMarkers {
+                label {Show Markers}
+                tooltip {Show Markers in Edit Viewport} xywh {565 341 21 20} down_box DOWN_BOX value 1 align 4
                 class {mrv::CheckButton}
               }
               Fl_Check_Button uiPrefsEditMode {
                 label {Start in Edit mode}
-                xywh {565 240 63 24} down_box DOWN_BOX value 1 align 4
+                tooltip {Editing viewport will be visible at start up.} xywh {565 238 63 24} down_box DOWN_BOX value 1 align 4
                 class {mrv::CheckButton}
               }
             }
@@ -833,7 +838,7 @@ v->uiPrefsFPS->value( g );}
             xywh {293 34 542 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {open
-              xywh {298 113 528 158}
+              xywh {303 113 523 204}
             } {
               Fl_Input uiPrefsOCIOConfig {
                 label {OCIO Config File}
@@ -854,12 +859,16 @@ uiPrefs->uiPrefsOCIOConfig->value( r.c_str() );}
             }
           }
           Fl_Group {} {
-            label {OCIO Defaults}
-            xywh {303 34 532 362} align 5 hide
+            label {OCIO Defaults} open
+            xywh {303 34 532 362} align 5
           } {
+            Fl_Light_Button uiOCIOUseActiveViews {
+              label {Use Active Views and Active Displays} selected
+              tooltip {When this option is off, OCIO files with active_views: and active_displays: are not taken into account.} xywh {417 51 288 24}
+            }
             Fl_Group uiOCIO_ICS {
-              label {Input Color Space} open
-              xywh {317 69 500 297} box ROUNDED_BOX
+              label {Input Color Space}
+              xywh {317 114 500 252} box ROUNDED_BOX
             } {
               Fl_Group {} {open
                 xywh {365 122 411 34}

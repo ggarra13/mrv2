@@ -10,11 +10,15 @@
 #include <FL/Fl_Pack.H>
 #include <FL/Fl_RGB_Image.H>
 
+#include "mrvCore/mrvHome.h"
+
 #include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvClipButton.h"
 #include "mrvWidgets/mrvButton.h"
 #include "mrvWidgets/mrvCollapsibleGroup.h"
+
+#include "mrvEdit/mrvEditUtil.h"
 
 #include "mrvPanels/mrvPanelsAux.h"
 #include "mrvPanels/mrvComparePanel.h"
@@ -208,14 +212,25 @@ namespace mrv
 
         const image::Size size(128, 64);
 
+        file::Path lastPath;
+
         for (size_t i = 0; i < numFiles; ++i)
         {
             const auto& media = files->getItem(i);
             const auto& path = media->path;
 
-            const std::string& dir = path.getDirectory();
-            const std::string file =
-                path.getBaseName() + path.getNumber() + path.getExtension();
+            const bool isEDL = isTemporaryEDL(path);
+
+            // When we refresh the .otio for EDL, we get two clips with the
+            // same name, we avoid displaying both with this check.
+            if (path == lastPath && isEDL)
+                continue;
+            lastPath = path;
+
+            const std::string dir = path.getDirectory();
+            const std::string base = path.getBaseName();
+            const std::string extension = path.getExtension();
+            const std::string file = base + path.getNumber() + extension;
             const std::string fullfile = dir + file;
 
             auto bW = new Widget<ClipButton>(
@@ -277,8 +292,7 @@ namespace mrv
 
                 try
                 {
-                    auto timeline =
-                        timeline::Timeline::create(path.get(), context);
+                    auto timeline = timeline::Timeline::create(path, context);
                     auto timeRange = timeline->getTimeRange();
 
                     if (time::isValid(timeRange))
@@ -701,8 +715,7 @@ namespace mrv
 
                 try
                 {
-                    auto timeline =
-                        timeline::Timeline::create(path.get(), context);
+                    auto timeline = timeline::Timeline::create(path, context);
                     auto timeRange = timeline->getTimeRange();
 
                     if (time::isValid(timeRange))

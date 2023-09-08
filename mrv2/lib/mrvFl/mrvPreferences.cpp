@@ -23,11 +23,12 @@ namespace fs = std::filesystem;
 
 #include "mrvWidgets/mrvLogDisplay.h"
 
-#include "mrvFl/mrvMenus.h"
 #include "mrvFl/mrvPreferences.h"
+#include "mrvFl/mrvHotkey.h"
 #include "mrvFl/mrvLanguages.h"
 
-#include "mrvFl/mrvAsk.h"
+#include "mrvUI/mrvAsk.h"
+#include "mrvUI/mrvMenus.h"
 
 #include "mrvFLU/Flu_File_Chooser.h"
 
@@ -431,6 +432,9 @@ namespace mrv
         gui.get("timeline_edit_transitions", tmp, 1);
         uiPrefs->uiPrefsShowTransitions->value(tmp);
 
+        gui.get("timeline_edit_markers", tmp, 0);
+        uiPrefs->uiPrefsShowMarkers->value(tmp);
+
 #ifdef __APPLE__
         {
             auto itemOptions = ui->uiTimeline->getItemOptions();
@@ -661,6 +665,9 @@ namespace mrv
                 "ocio", _("Setting OCIO config to default.") << std::endl);
             uiPrefs->uiPrefsOCIOConfig->value(ocioDefault.c_str());
         }
+
+        ocio.get("use_active_views", tmp, 1);
+        uiPrefs->uiOCIOUseActiveViews->value(tmp);
 
         Fl_Preferences ics(ocio, "ICS");
         {
@@ -902,19 +909,6 @@ namespace mrv
 
         std_any value;
 
-        float complexity;
-        try
-        {
-            complexity =
-                std_any_cast<float>(settingsObject->value("usd/complexity"));
-        }
-        catch (const std::bad_any_cast& e)
-        {
-            complexity =
-                std_any_cast<int>(settingsObject->value("usd/complexity"));
-            settingsObject->setValue("usd/complexity", complexity);
-        }
-
         value = settingsObject->value("Performance/AudioBufferFrameCount");
         int v = std_any_cast<int>(value);
         if (v < 1024)
@@ -1039,7 +1033,7 @@ namespace mrv
             std_any value = settingsObject->value(key);
             try
             {
-                double tmpD = std_any_cast< double >(value);
+                double tmpD = std::any_cast<double>(value);
                 key = "d#" + key;
                 fltk_settings.set(key.c_str(), tmpD);
                 continue;
@@ -1049,7 +1043,7 @@ namespace mrv
             }
             try
             {
-                float tmpF = std_any_cast< float >(value);
+                float tmpF = std::any_cast<float>(value);
                 key = "f#" + key;
                 fltk_settings.set(key.c_str(), tmpF);
                 continue;
@@ -1059,7 +1053,7 @@ namespace mrv
             }
             try
             {
-                int tmp = std_any_cast< int >(value);
+                int tmp = std::any_cast<int>(value);
                 key = "i#" + key;
                 fltk_settings.set(key.c_str(), tmp);
                 continue;
@@ -1069,7 +1063,7 @@ namespace mrv
             }
             try
             {
-                int tmp = std_any_cast< bool >(value);
+                int tmp = std::any_cast<bool>(value);
                 key = "b#" + key;
                 fltk_settings.set(key.c_str(), tmp);
                 continue;
@@ -1079,7 +1073,7 @@ namespace mrv
             }
             try
             {
-                const std::string& tmpS = std_any_cast< std::string >(value);
+                const std::string& tmpS = std::any_cast<std::string>(value);
                 key = "s#" + key;
                 fltk_settings.set(key.c_str(), tmpS.c_str());
                 continue;
@@ -1089,7 +1083,7 @@ namespace mrv
             }
             try
             {
-                const std::string tmpS = std_any_cast< char* >(value);
+                const std::string tmpS = std::any_cast<char*>(value);
                 key = "s#" + key;
                 fltk_settings.set(key.c_str(), tmpS.c_str());
                 continue;
@@ -1198,6 +1192,7 @@ namespace mrv
         gui.set(
             "timeline_edit_transitions",
             uiPrefs->uiPrefsShowTransitions->value());
+        gui.set("timeline_edit_markers", uiPrefs->uiPrefsShowMarkers->value());
 
         //
         // ui/view prefs
@@ -1229,6 +1224,8 @@ namespace mrv
             Fl_Preferences ocio(view, "ocio");
 
             ocio.set("config", uiPrefs->uiPrefsOCIOConfig->value());
+            ocio.set(
+                "use_active_views", uiPrefs->uiOCIOUseActiveViews->value());
 
             Fl_Preferences ics(ocio, "ICS");
             {
@@ -1487,10 +1484,40 @@ namespace mrv
             ui->uiPixelBar->hide();
         }
 
+        //
+        // Edit mode options
+        //
+        auto options = ui->uiTimeline->getItemOptions();
+        options.showTransitions = uiPrefs->uiPrefsShowTransitions->value();
+        options.showMarkers = uiPrefs->uiPrefsShowMarkers->value();
+
+        int thumbnails = uiPrefs->uiPrefsEditThumbnails->value();
+        options.thumbnails = true;
+        switch (thumbnails)
+        {
+        case 0:
+            options.thumbnails = false;
+            break;
+        case 1: // Small
+            options.thumbnailHeight = 100;
+            break;
+        case 2: // Medium
+            options.thumbnailHeight = 200;
+            break;
+        case 3: // Large
+            options.thumbnailHeight = 300;
+            break;
+        }
+        options.waveformHeight = options.thumbnailHeight / 2;
+        ui->uiTimeline->setItemOptions(options);
+
         if (uiPrefs->uiPrefsTimeline->value())
         {
             ui->uiBottomBar->show();
-            set_edit_mode_cb(EditMode::kSaved, ui);
+            if (ui->uiEdit->value())
+                set_edit_mode_cb(EditMode::kFull, ui);
+            else
+                set_edit_mode_cb(EditMode::kSaved, ui);
         }
         else
         {
@@ -1689,34 +1716,6 @@ namespace mrv
             }
         }
 
-        //
-        // Edit mode options
-        //
-        auto options = ui->uiTimeline->getItemOptions();
-        options.showTransitions = uiPrefs->uiPrefsShowTransitions->value();
-
-        int thumbnails = uiPrefs->uiPrefsEditThumbnails->value();
-        options.thumbnails = true;
-        switch (thumbnails)
-        {
-        case 0:
-            options.thumbnails = false;
-            break;
-        case 1: // Small
-            options.thumbnailHeight = 100;
-            break;
-        case 2: // Medium
-            options.thumbnailHeight = 200;
-            break;
-        case 3: // Large
-            options.thumbnailHeight = 300;
-            break;
-        }
-        options.waveformHeight = options.thumbnailHeight / 2;
-        ui->uiTimeline->setItemOptions(options);
-        if (ui->uiEdit->value())
-            set_edit_mode_cb(EditMode::kFull, ui);
-
         ui->uiMain->fill_menu(ui->uiMenuBar);
 
         if (debug > 1)
@@ -1843,12 +1842,13 @@ namespace mrv
                 uiPrefs->uiPrefsOCIOConfig->tooltip(config->getDescription());
 
                 OCIO_Display = config->getDefaultDisplay();
-
                 OCIO_View = config->getDefaultView(OCIO_Display.c_str());
+
+                bool use_active = uiPrefs->uiOCIOUseActiveViews->value();
 
                 stringArray active_displays;
                 const char* displaylist = config->getActiveDisplays();
-                if (displaylist && strlen(displaylist) > 0)
+                if (use_active && displaylist && strlen(displaylist) > 0)
                 {
                     mrv::split(active_displays, displaylist, ',');
 
@@ -1871,7 +1871,7 @@ namespace mrv
 
                 stringArray active_views;
                 const char* viewlist = config->getActiveViews();
-                if (viewlist && strlen(viewlist) > 0)
+                if (use_active && viewlist && strlen(viewlist) > 0)
                 {
                     mrv::split(active_views, viewlist, ',');
 

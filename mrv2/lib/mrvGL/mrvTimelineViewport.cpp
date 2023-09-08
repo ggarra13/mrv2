@@ -143,23 +143,9 @@ namespace mrv
 
         player->undoAnnotation();
         tcp->pushMessage("undo", 0);
-
-        auto annotation = player->getAnnotation();
-        if (!annotation)
-        {
-            p.ui->uiUndoDraw->deactivate();
-            p.ui->uiRedoDraw->deactivate();
-            redrawWindows();
-            return;
-        }
-
-        auto numShapes = annotation->shapes.size();
-        if (numShapes == 0)
-        {
-            p.ui->uiUndoDraw->deactivate();
-        }
-
         redrawWindows();
+
+        updateUndoRedoButtons();
     }
 
     void TimelineViewport::redo()
@@ -172,23 +158,9 @@ namespace mrv
 
         player->redoAnnotation();
         tcp->pushMessage("redo", 0);
-
-        auto annotation = player->getAnnotation();
-        if (!annotation)
-        {
-            p.ui->uiUndoDraw->deactivate();
-            p.ui->uiRedoDraw->deactivate();
-            redrawWindows();
-            return;
-        }
-
-        auto numShapes = annotation->undo_shapes.size();
-        if (numShapes == 0)
-        {
-            p.ui->uiRedoDraw->deactivate();
-        }
-
         redrawWindows();
+
+        updateUndoRedoButtons();
     }
 
     void TimelineViewport::setActionMode(const ActionMode& mode) noexcept
@@ -224,6 +196,7 @@ namespace mrv
 
         switch (mode)
         {
+        default:
         case kScrub:
             p.ui->uiScrub->value(1);
             p.ui->uiStatus->copy_label(_("Scrub"));
@@ -258,6 +231,21 @@ namespace mrv
             break;
         case kRotate:
             p.ui->uiStatus->copy_label(_("Rotate"));
+            break;
+        case kEditTrim:
+            p.ui->uiStatus->copy_label(_("Trim"));
+            break;
+        case kEditSlip:
+            p.ui->uiStatus->copy_label(_("Slip"));
+            break;
+        case kEditSlide:
+            p.ui->uiStatus->copy_label(_("Slide"));
+            break;
+        case kEditRipple:
+            p.ui->uiStatus->copy_label(_("Ripple"));
+            break;
+        case kEditRoll:
+            p.ui->uiStatus->copy_label(_("Roll"));
             break;
         }
 
@@ -309,7 +297,6 @@ namespace mrv
         {
             _frameView();
         }
-        valid(0);
     }
 
     void TimelineViewport::startFrame() noexcept
@@ -504,6 +491,7 @@ namespace mrv
         {
             p.ui->uiTimeline->setTimelinePlayer(value[0]);
         }
+
         updateVideoLayers();
         p.timelineSizes.clear();
         p.videoData.resize(value.size());
@@ -544,6 +532,8 @@ namespace mrv
         }
 
         p.ui->uiColorChannel->redraw();
+
+        // refreshWindows();
     }
 
     mrv::TimelinePlayer* TimelineViewport::getTimelinePlayer() const noexcept
@@ -896,13 +886,13 @@ namespace mrv
         }
     }
 
-    image::Size TimelineViewport::getViewportSize() const noexcept
+    math::Size2i TimelineViewport::getViewportSize() const noexcept
     {
         TimelineViewport* t = const_cast< TimelineViewport* >(this);
-        return image::Size(t->pixel_w(), t->pixel_h());
+        return math::Size2i(t->pixel_w(), t->pixel_h());
     }
 
-    image::Size TimelineViewport::getRenderSize() const noexcept
+    math::Size2i TimelineViewport::getRenderSize() const noexcept
     {
         return timeline::getRenderSize(
             _p->compareOptions.mode, _p->timelineSizes);
@@ -991,8 +981,8 @@ namespace mrv
         }
         else
         {
-            posX = minx;
-            posY = miny;
+            posX = mw->x();
+            posY = mw->y();
         }
 
         int decW = mw->decorated_w();
@@ -1005,9 +995,7 @@ namespace mrv
         maxH -= dH;
         posX += dW / 2;
 #ifdef _WIN32
-        posY += dH - dW / 2;
-#else
-        posY += dH;
+        miny += dH - dW / 2;
 #endif
 
         // Take into account the different UI bars
@@ -1023,7 +1011,6 @@ namespace mrv
         if (p.ui->uiBottomBar->visible())
         {
             H += p.ui->uiBottomBar->h();
-            H += p.ui->uiTimelineGroup->h();
         }
 
         if (p.ui->uiStatusGroup->visible())
@@ -1073,7 +1060,24 @@ namespace mrv
             p.frameView = true;
         }
 
+        if (posX + W > maxW)
+            posX = minx;
+        if (posY + W > maxH)
+            posY = miny;
+
         mw->resize(posX, posY, W, H);
+
+        if (p.ui->uiBottomBar->visible())
+        {
+            if (p.ui->uiEdit->value())
+            {
+                H += calculate_edit_viewport_size(p.ui);
+                if (H > maxH)
+                    H = maxH;
+                if (mw->w() != W || mw->h() != H)
+                    mw->size(W, H);
+            }
+        }
 
         if (p.frameView)
         {
@@ -1291,7 +1295,7 @@ namespace mrv
         if (!p.ui->uiPixelBar->visible() || !visible_r() || belowmouse != this)
             return;
 
-        const image::Size& r = getRenderSize();
+        const math::Size2i& r = getRenderSize();
 
         p.mousePos = _getFocus();
 
@@ -1356,12 +1360,12 @@ namespace mrv
 
     void TimelineViewport::refreshWindows()
     {
-        _p->ui->uiView->refresh();
+        _p->ui->uiView->valid(0);
         _p->ui->uiView->redraw();
         if (_hasSecondaryViewport())
         {
             Viewport* view = _p->ui->uiSecondary->viewport();
-            view->refresh();
+            view->valid(0);
             view->redraw();
         }
     }
@@ -1969,7 +1973,7 @@ namespace mrv
         image::VideoLevels videoLevels = info.videoLevels;
         const math::Vector4f& yuvCoefficients =
             getYUVCoefficients(info.yuvCoefficients);
-        image::Size size = image->getSize();
+        auto size = image->getSize();
         const uint8_t* data = image->getData();
         int X = pos.x / pixelAspectRatio;
         int Y = size.h - pos.y - 1;
@@ -2358,7 +2362,7 @@ namespace mrv
         TLRENDER_P();
 
         p.rawImage = true;
-        const image::Size& renderSize = getRenderSize();
+        const math::Size2i& renderSize = getRenderSize();
         unsigned dataSize = renderSize.w * renderSize.h * 4 * sizeof(float);
 
         if (dataSize != p.rawImageSize || !p.image)
@@ -2377,7 +2381,7 @@ namespace mrv
         if (!p.image)
             return;
 
-        const image::Size& renderSize = getRenderSize();
+        const math::Size2i& renderSize = getRenderSize();
         unsigned maxY = renderSize.h;
         unsigned maxX = renderSize.w;
         for (int Y = 0; Y < maxY; ++Y)
@@ -2483,13 +2487,19 @@ namespace mrv
         _pushAnnotationShape("Update Shape");
     }
 
+    // This routine is used for text shapes only.
     void TimelineViewport::_endAnnotationShape() const
     {
+        TLRENDER_P();
+        updateUndoRedoButtons();
         _pushAnnotationShape("End Shape");
     }
 
-    void TimelineViewport::_createAnnotationShape() const
+    void TimelineViewport::_createAnnotationShape(const bool laser) const
     {
+        TLRENDER_P();
+        if (!laser)
+            updateUndoRedoButtons();
         _pushAnnotationShape("Create Shape");
     }
 
@@ -2539,4 +2549,28 @@ namespace mrv
             tcp->pushMessage(msg);
         }
     }
+
+    void TimelineViewport::updateUndoRedoButtons() const noexcept
+    {
+        TLRENDER_P();
+
+        bool hasUndo = false, hasRedo = false;
+        auto player = getTimelinePlayer();
+        if (player)
+        {
+            hasUndo |= player->hasUndo();
+            hasRedo |= player->hasRedo();
+        }
+
+        if (hasUndo)
+            p.ui->uiUndoDraw->activate();
+        else
+            p.ui->uiUndoDraw->deactivate();
+
+        if (hasRedo)
+            p.ui->uiRedoDraw->activate();
+        else
+            p.ui->uiRedoDraw->deactivate();
+    }
+
 } // namespace mrv

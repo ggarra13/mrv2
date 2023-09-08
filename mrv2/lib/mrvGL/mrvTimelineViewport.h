@@ -8,6 +8,7 @@
 
 #include "mrvCore/mrvStereo3DOptions.h"
 #include "mrvCore/mrvEnvironmentMapOptions.h"
+#include "mrvCore/mrvActionMode.h"
 
 #include "mrvFl/mrvColorAreaInfo.h"
 #include "mrvFl/mrvLaserFadeData.h"
@@ -43,18 +44,6 @@ namespace mrv
         kAttributes = 1 << 10,
     };
 
-    enum ActionMode {
-        kScrub,
-        kSelection,
-        kDraw,
-        kErase,
-        kCircle,
-        kRectangle,
-        kArrow,
-        kText,
-        kRotate,
-    };
-
     enum MissingFrameType { kBlackFrame, kRepeatFrame, kScratchedFrame };
 
     class TimelinePlayer;
@@ -84,7 +73,7 @@ namespace mrv
         //! Redo last shape.
         void redo();
 
-        //!  Change cursor to another.
+        //! Change cursor to another.
         void cursor(Fl_Cursor x) const noexcept;
 
         //! Set the action mode.
@@ -272,7 +261,6 @@ namespace mrv
         //! Update the video layer from the GUI.
         void updateVideoLayers(int idx = 0) noexcept;
 
-        // Q_SIGNALS:
         //! This signal is emitted when the position and zoom change.
         void viewPosAndZoomChanged(const tl::math::Vector2i&, float) noexcept;
 
@@ -307,10 +295,10 @@ namespace mrv
         MultilineInput* getMultilineInput() const noexcept;
 
         //! Get the viewportSize
-        image::Size getViewportSize() const noexcept;
+        math::Size2i getViewportSize() const noexcept;
 
         //! Get the render image size
-        image::Size getRenderSize() const noexcept;
+        math::Size2i getRenderSize() const noexcept;
 
         //! Redraw both the primary and secondary windows.
         void redrawWindows() const;
@@ -340,6 +328,12 @@ namespace mrv
         //! Laser fading annotation
         void laserFade(LaserFadeData*);
 
+        //! Main FLTK callback for laser shapes.
+        static void laserFade_cb(LaserFadeData*);
+
+        //! Update the undo/redo buttons to be active or not.
+        void updateUndoRedoButtons() const noexcept;
+
     protected:
         virtual void _readPixel(image::Color4f& rgba) const noexcept = 0;
         math::Vector2i _getViewportCenter() const noexcept;
@@ -353,7 +347,10 @@ namespace mrv
         void _refresh() noexcept;
 
         virtual void _pushAnnotationShape(const std::string& cmd) const = 0;
-        void _createAnnotationShape() const;
+
+        void _redrawUndoRedoButtons() const;
+
+        void _createAnnotationShape(const bool laser) const;
         void _updateAnnotationShape() const;
         void _addAnnotationShapePoint() const;
         void _endAnnotationShape() const;

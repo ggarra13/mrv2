@@ -6,8 +6,6 @@
 
 #include <tlCore/StringFormat.h>
 
-#include <tlGlad/gl.h>
-
 #include <tlGL/Shader.h>
 #include <tlGL/Mesh.h>
 #include <tlTimeline/GLRenderPrivate.h>
@@ -17,6 +15,7 @@
 
 #include "mrvFl/mrvIO.h"
 
+#include "mrvGL/mrvGLErrors.h"
 #include "mrvGL/mrvGLShaders.h"
 #include "mrvGL/mrvGLShape.h"
 #include "mrvGL/mrvGLUtil.h"

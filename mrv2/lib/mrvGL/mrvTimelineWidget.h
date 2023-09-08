@@ -4,6 +4,10 @@
 
 #pragma once
 
+#include <vector>
+
+#include <opentimelineio/clip.h>
+
 #include <tlTimelineUI/IItem.h>
 
 #include <FL/Fl_Gl_Window.H>
@@ -38,7 +42,7 @@ namespace mrv
         //! Set tlRender's context
         void setContext(
             const std::shared_ptr<system::Context>&,
-            const std::shared_ptr<timeline::TimeUnitsModel>&, const ViewerUI*);
+            const std::shared_ptr<timeline::TimeUnitsModel>&, ViewerUI*);
 
         void setStyle(const std::shared_ptr<ui::Style>& = nullptr);
 
@@ -75,6 +79,9 @@ namespace mrv
         //! Set the item options.
         void setItemOptions(const timelineui::ItemOptions&);
 
+        //! Frame the view.
+        void frameView();
+
         // Q_SIGNALS:
         //! This signal is emitted when the frame view is changed.
         void frameViewChanged(bool);
@@ -100,9 +107,6 @@ namespace mrv
         //! @bug: A static one time timeout callback used to avoid a bug
         //! FLTK when hiding a window from an event of another widget.
         static void hideThumbnail_cb(TimelineWidget* t);
-
-        //! Set the viewer handle
-        void main(ViewerUI* m);
 
         //! Get the thumbnail creator
         ThumbnailCreator* thumbnailCreator();
@@ -147,6 +151,9 @@ namespace mrv
 
         otime::RationalTime _posToTime(float) const noexcept;
         int _timeToPos(const otime::RationalTime&) const noexcept;
+
+        //! Function used to send a seek to the network.
+        void _seek();
 
         void _styleUpdate();
 

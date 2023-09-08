@@ -6,16 +6,22 @@
 #include <vector>
 #include <map>
 
+#include "mrvCore/mrvHome.h"
+
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvPack.h"
 #include "mrvWidgets/mrvFileButton.h"
 #include "mrvWidgets/mrvButton.h"
+
+#include "mrvEdit/mrvEditUtil.h"
 
 #include "mrvPanels/mrvPanelsAux.h"
 #include "mrvPanels/mrvPanelsCallbacks.h"
 #include "mrvPanels/mrvFilesPanel.h"
 
 #include "mrvGL/mrvThumbnailCreator.h"
+
+#include "mrvNetwork/mrvTCP.h"
 
 #include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/App.h"
@@ -47,6 +53,9 @@ namespace mrv
         std::shared_ptr<
             observer::ListObserver<std::shared_ptr<FilesModelItem> > >
             filesObserver;
+
+        std::shared_ptr< observer::ValueObserver<FilesPanelOptions> >
+            filesPanelOptionsObserver;
 
         std::shared_ptr<observer::ValueObserver<int> > aIndexObserver;
         std::shared_ptr<observer::ListObserver<int> > layerObserver;
@@ -131,6 +140,11 @@ namespace mrv
                     const std::vector< std::shared_ptr<FilesModelItem> >& value)
                 { refresh(); });
 
+        _r->filesPanelOptionsObserver =
+            observer::ValueObserver<FilesPanelOptions>::create(
+                ui->app->filesModel()->observeFilesPanelOptions(),
+                [this](const FilesPanelOptions& value) { refresh(); });
+
         _r->aIndexObserver = observer::ValueObserver<int>::create(
             ui->app->filesModel()->observeAIndex(),
             [this](int value) { redraw(); });
@@ -197,6 +211,8 @@ namespace mrv
 
         const auto files = model->observeFiles();
 
+        const auto o = model->observeFilesPanelOptions()->get();
+
         size_t numFiles = files->getSize();
 
         auto Aindex = model->observeAIndex()->get();
@@ -209,19 +225,37 @@ namespace mrv
 
         image::Size size(128, 64);
 
+        file::Path lastPath;
+
+        const std::string tmpdir = tmppath() + "/";
+
         for (size_t i = 0; i < numFiles; ++i)
         {
             const auto& media = files->getItem(i);
             const auto& path = media->path;
 
-            const std::string& dir = path.getDirectory();
-            const std::string file =
-                path.getBaseName() + path.getNumber() + path.getExtension();
+            const bool isEDL = isTemporaryEDL(path);
+
+            // When we refresh the .otio for EDL, we get two clips with the
+            // same name, we avoid displaying both with this check.
+            if (path == lastPath && isEDL)
+                continue;
+            lastPath = path;
+
+            // We skip EDLs created in tmp dir here.
+            if (o.filterEDL && isEDL)
+                continue;
+
+            const std::string dir = path.getDirectory();
+            const std::string base = path.getBaseName();
+            const std::string extension = path.getExtension();
+            const std::string file = base + path.getNumber() + extension;
             const std::string fullfile = dir + file;
 
             auto bW = new Widget<FileButton>(
                 g->x(), g->y() + 22 + i * 68, g->w(), 68);
             FileButton* b = bW;
+            b->setIndex(i);
             _r->indices[b] = i;
             b->tooltip(_("Select main A image."));
             bW->callback(
@@ -272,8 +306,7 @@ namespace mrv
 
                 try
                 {
-                    auto timeline =
-                        timeline::Timeline::create(path.get(), context);
+                    auto timeline = timeline::Timeline::create(path, context);
                     auto timeRange = timeline->getTimeRange();
 
                     if (time::isValid(timeRange))
@@ -348,12 +381,7 @@ namespace mrv
         b->image(svg);
         _r->buttons.push_back(b);
         b->tooltip(_("Previous filename"));
-        bW->callback(
-            [=](auto w)
-            {
-                p.ui->app->filesModel()->prev();
-                redraw();
-            });
+        bW->callback([=](auto w) { p.ui->app->filesModel()->prev(); });
 
         bW = new Widget< Button >(g->x() + 150, Y, 30, 30);
         b = bW;
@@ -361,13 +389,24 @@ namespace mrv
         b->image(svg);
         _r->buttons.push_back(b);
         b->tooltip(_("Next filename"));
-        bW->callback(
+        bW->callback([=](auto w) { p.ui->app->filesModel()->next(); });
+
+        auto btW = new Widget< Fl_Button >(g->x() + 150, Y, 30, 30);
+        b = btW;
+        svg = load_svg("Filter.svg");
+        b->image(svg);
+        b->selection_color(FL_YELLOW);
+        b->value(o.filterEDL);
+        _r->buttons.push_back(b);
+        b->tooltip(_("Filter EDLs"));
+        btW->callback(
             [=](auto w)
             {
-                p.ui->app->filesModel()->next();
-                redraw();
+                auto model = p.ui->app->filesModel();
+                FilesPanelOptions o = model->observeFilesPanelOptions()->get();
+                o.filterEDL ^= true;
+                model->setFilesPanelOptions(o);
             });
-
         bg->end();
         g->layout();
 
@@ -439,8 +478,7 @@ namespace mrv
 
                 try
                 {
-                    auto timeline =
-                        timeline::Timeline::create(fullfile, context);
+                    auto timeline = timeline::Timeline::create(path, context);
                     auto timeRange = timeline->getTimeRange();
 
                     if (time::isValid(timeRange))
@@ -466,6 +504,11 @@ namespace mrv
                 }
             }
         }
+    }
+
+    void FilesPanel::setFilesPanelOptions(const FilesPanelOptions& value)
+    {
+        refresh();
     }
 
     void FilesPanel::refresh()

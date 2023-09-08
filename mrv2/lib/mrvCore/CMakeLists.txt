@@ -3,11 +3,14 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 set(HEADERS
+  mrvActionMode.h
   mrvColorSpaces.h
   mrvCPU.h
   mrvEnv.h
   mrvEnvironmentMapOptions.h
   mrvEnvironmentMapOptionsInline.h
+  mrvFilesPanelOptions.h
+  mrvFilesPanelOptionsInline.h
   mrvHelpers.h
   mrvHome.h
   mrvHotkey.h
@@ -31,6 +34,7 @@ set(SOURCES
   mrvColorSpaces.cpp
   mrvCPU.cpp
   mrvEnvironmentMapOptions.cpp
+  mrvFilesPanelOptions.cpp
   mrvHome.cpp
   mrvHotkey.cpp
   mrvMedia.cpp

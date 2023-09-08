@@ -25,7 +25,9 @@ namespace mrv
         std::shared_ptr<observer::List<int> > layers;
         std::shared_ptr<observer::Value<timeline::CompareOptions> >
             compareOptions;
-        std::shared_ptr<observer::Value<mrv::Stereo3DOptions> > stereo3DOptions;
+        std::shared_ptr<observer::Value<Stereo3DOptions> > stereo3DOptions;
+
+        std::shared_ptr<observer::Value<FilesPanelOptions> > filesPanelOptions;
     };
 
     void FilesModel::_init(const std::shared_ptr<system::Context>& context)
@@ -45,7 +47,8 @@ namespace mrv
         p.active = observer::List<std::shared_ptr<FilesModelItem> >::create();
         p.layers = observer::List<int>::create();
         p.compareOptions = observer::Value<timeline::CompareOptions>::create();
-        p.stereo3DOptions = observer::Value<mrv::Stereo3DOptions>::create();
+        p.stereo3DOptions = observer::Value<Stereo3DOptions>::create();
+        p.filesPanelOptions = observer::Value<FilesPanelOptions>::create();
     }
 
     FilesModel::FilesModel() :
@@ -548,13 +551,13 @@ namespace mrv
         }
     }
 
-    std::shared_ptr<observer::IValue<mrv::Stereo3DOptions> >
+    std::shared_ptr<observer::IValue<Stereo3DOptions> >
     FilesModel::observeStereo3DOptions() const
     {
         return _p->stereo3DOptions;
     }
 
-    void FilesModel::setStereo3DOptions(const mrv::Stereo3DOptions& value)
+    void FilesModel::setStereo3DOptions(const Stereo3DOptions& value)
     {
         TLRENDER_P();
         if (p.stereo3DOptions->setIfChanged(value))
@@ -562,6 +565,19 @@ namespace mrv
             p.active->setIfChanged(_getActive());
             p.layers->setIfChanged(_getLayers());
         }
+    }
+
+    std::shared_ptr<observer::IValue<FilesPanelOptions> >
+    FilesModel::observeFilesPanelOptions() const
+    {
+        return _p->filesPanelOptions;
+    }
+
+    void FilesModel::setFilesPanelOptions(const FilesPanelOptions& value)
+    {
+        TLRENDER_P();
+
+        p.filesPanelOptions->setIfChanged(value);
     }
 
     int FilesModel::_index(const std::shared_ptr<FilesModelItem>& item) const

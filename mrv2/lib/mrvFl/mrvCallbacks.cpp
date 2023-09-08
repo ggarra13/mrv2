@@ -9,8 +9,6 @@ namespace fs = std::filesystem;
 #include <fstream>
 #include <iomanip>
 
-#include <opentimelineio/transition.h>
-
 #include <tlCore/StringFormat.h>
 
 #include <FL/filename.H> // for fl_open_uri()
@@ -24,14 +22,14 @@ namespace fs = std::filesystem;
 #include "mrvWidgets/mrvMultilineInput.h"
 
 #include "mrvFl/mrvSaveOptions.h"
-#include "mrvFl/mrvMenus.h"
 #include "mrvFl/mrvVersioning.h"
 #include "mrvFl/mrvFileRequester.h"
-#include "mrvFl/mrvTimelineCreate.h"
 #include "mrvFl/mrvSaving.h"
 #include "mrvFl/mrvSession.h"
 #include "mrvFl/mrvStereo3DAux.h"
 #include "mrvFl/mrvCallbacks.h"
+
+#include "mrvUI/mrvMenus.h"
 
 #include "mrvFlmm/Flmm_ColorA_Chooser.h"
 
@@ -60,6 +58,23 @@ namespace
 {
     const char* kModule = "cback";
 }
+
+namespace
+{
+    using namespace tl;
+
+    void debug_composition_children(otio::Composition* composition)
+    {
+        for (auto child : composition->children())
+        {
+            auto clip = otio::dynamic_retainer_cast<otio::Clip>(child);
+            if (!clip)
+                continue;
+            std::cout << clip->name() << " " << clip->trimmed_range()
+                      << std::endl;
+        }
+    }
+} // namespace
 
 namespace mrv
 {
@@ -95,24 +110,46 @@ namespace mrv
         {_("About"), (Fl_Callback*)nullptr},
         {nullptr, nullptr}};
 
-    static void reset_timeline(ViewerUI* ui)
+    namespace
     {
-        if (imageInfoPanel)
-            imageInfoPanel->setTimelinePlayer(nullptr);
-        ui->uiTimeline->setTimelinePlayer(nullptr);
-        ui->uiTimeline->redraw();
-        otio::RationalTime start = otio::RationalTime(1, 24);
-        otio::RationalTime end = otio::RationalTime(50, 24);
-        TimelineClass* c = ui->uiTimeWindow;
-        c->uiFrame->setTime(start);
-        c->uiStartFrame->setTime(start);
-        c->uiEndFrame->setTime(end);
-
-        if (annotationsPanel)
+        void reset_timeline(ViewerUI* ui)
         {
-            annotationsPanel->notes->value("");
+            if (imageInfoPanel)
+                imageInfoPanel->setTimelinePlayer(nullptr);
+            ui->uiTimeline->setTimelinePlayer(nullptr);
+            ui->uiTimeline->redraw();
+            otio::RationalTime start = otio::RationalTime(1, 24);
+            otio::RationalTime end = otio::RationalTime(50, 24);
+            TimelineClass* c = ui->uiTimeWindow;
+            c->uiFrame->setTime(start);
+            c->uiStartFrame->setTime(start);
+            c->uiEndFrame->setTime(end);
+
+            if (annotationsPanel)
+            {
+                annotationsPanel->notes->value("");
+            }
         }
-    }
+
+        void clear_timeline_player(ViewerUI* ui, TimelinePlayer* player)
+        {
+            std::vector<TimelinePlayer*> players;
+            ui->uiView->setTimelinePlayers(players);
+            if (ui->uiSecondary && ui->uiSecondary->window()->visible())
+                ui->uiSecondary->viewport()->setTimelinePlayers(players, false);
+            player->setTimeline(nullptr);
+        }
+
+        void set_timeline_players(
+            const ViewerUI* ui, const std::vector<TimelinePlayer*>& players,
+            const otio::SerializableObject::Retainer<otio::Timeline>& timeline)
+        {
+            players[0]->setTimeline(timeline);
+            ui->uiView->setTimelinePlayers(players);
+            if (ui->uiSecondary && ui->uiSecondary->window()->visible())
+                ui->uiSecondary->viewport()->setTimelinePlayers(players, false);
+        }
+    } // namespace
 
     void open_files_cb(const std::vector< std::string >& files, ViewerUI* ui)
     {
@@ -186,6 +223,68 @@ namespace mrv
         model->next();
     }
 
+    void save_single_frame_cb(Fl_Menu_* w, ViewerUI* ui)
+    {
+        const std::string& file = save_single_image(ui);
+        if (file.empty())
+            return;
+
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
+            return;
+
+        std::string extension = tl::file::Path(file).getExtension();
+        extension = string::toLower(extension);
+        if (extension.empty())
+        {
+            LOG_ERROR(_("File extension cannot be empty."));
+            return;
+        }
+
+        bool valid_for_exr = false;
+        // Sanity check - make sure the video pixel for the current
+        // layerId type is float/half
+        if (extension == ".exr")
+        {
+            auto info = player->ioInfo();
+            unsigned layerId = ui->uiColorChannel->value();
+            auto video = info.video[layerId];
+            if (video.pixelType == image::PixelType::RGBA_F16 ||
+                video.pixelType == image::PixelType::RGBA_F32 ||
+                video.pixelType == image::PixelType::RGB_F16 ||
+                video.pixelType == image::PixelType::RGB_F32 ||
+                video.pixelType == image::PixelType::LA_F16 ||
+                video.pixelType == image::PixelType::LA_F32 ||
+                video.pixelType == image::PixelType::L_F16 ||
+                video.pixelType == image::PixelType::L_F32)
+            {
+                valid_for_exr = true;
+            }
+        }
+
+        SaveOptionsUI saveOptions(extension, valid_for_exr);
+
+        mrv::SaveOptions options;
+        options.annotations =
+            static_cast<bool>(saveOptions.Annotations->value());
+
+        int value;
+        value = saveOptions.PixelType->value();
+        if (value == 0)
+            options.exrPixelType = tl::image::PixelType::RGBA_F16;
+        if (value == 1)
+            options.exrPixelType = tl::image::PixelType::RGBA_F32;
+
+        value = saveOptions.Compression->value();
+        options.exrCompression = static_cast<tl::exr::Compression>(value);
+
+        options.zipCompressionLevel =
+            static_cast<int>(saveOptions.ZipCompressionLevel->value());
+        options.dwaCompressionLevel = saveOptions.DWACompressionLevel->value();
+
+        save_single_frame(file, ui, options);
+    }
+
     void save_movie_cb(Fl_Menu_* w, ViewerUI* ui)
     {
         const std::string& file = save_movie_or_sequence_file(ui);
@@ -198,6 +297,11 @@ namespace mrv
 
         std::string extension = tl::file::Path(file).getExtension();
         extension = string::toLower(extension);
+        if (extension.empty())
+        {
+            LOG_ERROR(_("File extension cannot be empty."));
+            return;
+        }
 
         bool valid_for_exr = false;
         // Sanity check - make sure the video pixel for the current
@@ -644,29 +748,6 @@ namespace mrv
          has_bottom_bar = true, has_pixel_bar = true, has_status_bar = true,
          has_dock_grp = false, has_preferences_window = false,
          has_hotkeys_window = false, has_about_window = false;
-    EditMode editMode = EditMode::kTimeline;
-    int editModeH = 30;
-    int kMinEditModeH = 30;
-
-    void save_edit_mode_state(ViewerUI* ui)
-    {
-        int H = ui->uiTimelineGroup->h();
-
-        if (H == 0)
-        {
-            editMode = EditMode::kNone;
-        }
-        else if (H > kMinEditModeH)
-        {
-            editMode = EditMode::kSaved;
-            editModeH = H;
-        }
-        else
-        {
-            editMode = EditMode::kTimeline;
-            editModeH = kMinEditModeH;
-        }
-    }
 
     void save_ui_state(ViewerUI* ui, Fl_Group* bar)
     {
@@ -1147,17 +1228,16 @@ namespace mrv
         const auto& player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
-        otio::RationalTime currentTime = player->currentTime();
-        int64_t currentFrame = currentTime.to_frames();
-        std::vector< int64_t > frames = player->getAnnotationFrames();
-        std::sort(frames.begin(), frames.end(), std::greater<int64_t>());
+        auto currentTime = player->currentTime();
+        std::vector< otime::RationalTime > times = player->getAnnotationTimes();
+        std::sort(
+            times.begin(), times.end(), std::greater<otime::RationalTime>());
         const auto& range = player->timeRange();
         const auto& duration = range.end_time_inclusive() - range.start_time();
-        for (auto frame : frames)
+        for (auto time : times)
         {
-            if (frame < currentFrame)
+            if (time < currentTime)
             {
-                otio::RationalTime time(frame, duration.rate());
                 player->seek(time);
                 return;
             }
@@ -1169,17 +1249,15 @@ namespace mrv
         const auto& player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
-        otio::RationalTime currentTime = player->currentTime();
-        int64_t currentFrame = currentTime.to_frames();
-        std::vector< int64_t > frames = player->getAnnotationFrames();
-        std::sort(frames.begin(), frames.end());
+        auto currentTime = player->currentTime();
+        std::vector< otime::RationalTime > times = player->getAnnotationTimes();
+        std::sort(times.begin(), times.end());
         const auto& range = player->timeRange();
         const auto& duration = range.end_time_inclusive() - range.start_time();
-        for (auto frame : frames)
+        for (auto time : times)
         {
-            if (frame > currentFrame)
+            if (time > currentTime)
             {
-                otio::RationalTime time(frame, duration.rate());
                 player->seek(time);
                 return;
             }
@@ -1191,7 +1269,8 @@ namespace mrv
         const auto& player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
-        tcp->pushMessage("Clear Frame Annotations", 0);
+        if (ui->uiPrefs->SendAnnotations->value())
+            tcp->pushMessage("Clear Frame Annotations", 0);
         player->clearFrameAnnotation();
         ui->uiTimeline->redraw();
         ui->uiView->redrawWindows();
@@ -1202,7 +1281,8 @@ namespace mrv
         const auto& player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
-        tcp->pushMessage("Clear All Annotations", 0);
+        if (ui->uiPrefs->SendAnnotations->value())
+            tcp->pushMessage("Clear All Annotations", 0);
         player->clearAllAnnotations();
         ui->uiTimeline->redraw();
         ui->uiView->redrawWindows();
@@ -1213,6 +1293,17 @@ namespace mrv
     {
         auto options = ui->uiTimeline->getItemOptions();
         options.thumbnails = false;
+        ui->uiTimeline->setItemOptions(options);
+        if (editMode != EditMode::kTimeline)
+            set_edit_mode_cb(EditMode::kFull, ui);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
+    void toggle_timeline_markers_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
+        auto options = ui->uiTimeline->getItemOptions();
+        options.showMarkers = item->checked();
         ui->uiTimeline->setItemOptions(options);
         if (editMode != EditMode::kTimeline)
             set_edit_mode_cb(EditMode::kFull, ui);
@@ -1365,66 +1456,6 @@ namespace mrv
         image_version_cb(ui, 1, true);
     }
 
-    void create_playlist(
-        ViewerUI* ui, const std::shared_ptr<Playlist>& playlist,
-        const std::string& otioFileName, const bool relative)
-    {
-        try
-        {
-
-            std::string file = otioFileName;
-            if (file.substr(file.size() - 5, file.size()) != ".otio")
-                file += ".otio";
-
-            const auto& timeline = timeline::create(
-                playlist->clips, ui->app->getContext(), relative, file);
-            otio::ErrorStatus errorStatus;
-            bool ok = timeline->to_json_file(file, &errorStatus);
-            if (!ok || otio::is_error(errorStatus))
-            {
-                std::string error =
-                    string::Format(_("Could not save .otio file: {0}"))
-                        .arg(errorStatus.full_description);
-                throw std::runtime_error(error);
-            }
-
-            ui->app->open(file);
-        }
-        catch (const std::exception& e)
-        {
-            LOG_ERROR(e.what());
-        }
-    }
-
-    void create_playlist(
-        ViewerUI* ui, const std::shared_ptr<Playlist>& playlist,
-        const bool temp)
-    {
-        static unsigned playlist_number = 1;
-
-        std::string otioFileName;
-
-        if (temp)
-        {
-            std::string tempDir = tmppath() + "/";
-            char buf[256];
-            snprintf(
-                buf, 256, "%s.%d.otio", playlist->name.c_str(),
-                playlist_number++);
-            otioFileName = tempDir + buf;
-        }
-        else
-        {
-            otioFileName = save_otio("", ui);
-            if (otioFileName.empty())
-                return;
-        }
-        bool relative = !temp;
-
-        create_playlist(ui, playlist, otioFileName, relative);
-    }
-
-    //! Callback function to open the python API docs
     void help_documentation_cb(Fl_Menu_*, ViewerUI* ui)
     {
         const char* language = getenv("LANGUAGE");
@@ -1760,8 +1791,15 @@ namespace mrv
         newItem->playback = playback;
         newItem->currentTime = currentTime;
         newItem->annotations = item->annotations;
-        ui->uiColorChannel->value(layer);
-        ui->uiColorChannel->do_callback();
+        if (layer < ui->uiColorChannel->children())
+        {
+            ui->uiColorChannel->value(layer);
+            ui->uiColorChannel->do_callback();
+        }
+        else
+        {
+            ui->uiColorChannel->label(_("(no image)"));
+        }
 
         // Close the old item
         model->setA(AIndex);
@@ -1803,176 +1841,6 @@ namespace mrv
         auto path = item->path.get();
 
         file_manager_show_uri(path);
-    }
-
-    void set_edit_mode_cb(EditMode mode, ViewerUI* ui)
-    {
-        Fl_Button* b = ui->uiEdit;
-
-        bool active = (mode == EditMode::kFull || mode == EditMode::kSaved);
-        if (mode == EditMode::kSaved && editModeH == kMinEditModeH)
-            active = false;
-
-        b->value(active);
-        if (b->value())
-        {
-            b->labelcolor(fl_rgb_color(255, 255, 255));
-        }
-        else
-        {
-            b->labelcolor(FL_FOREGROUND_COLOR);
-        }
-        b->redraw();
-
-        Fl_Tile* tile = ui->uiTileGroup;
-        Fl_Group* timeline = ui->uiTimelineGroup;
-        Fl_Flex* view = ui->uiViewGroup;
-        int tileY = tile->y();
-        int oldY = timeline->y();
-        int timelineH = timeline->h();
-        int tileH = tile->h();
-        int H = kMinEditModeH; // timeline height
-        int viewH = H;
-        auto player = ui->uiView->getTimelinePlayer();
-        if (mode == EditMode::kFull && player)
-        {
-            // Shift the view up to see the video thumbnails and audio waveforms
-            const double pixelRatio = ui->uiTimeline->pixels_per_unit();
-            const int maxTileHeight = tileH - 20;
-            const timelineui::ItemOptions options =
-                ui->uiTimeline->getItemOptions();
-            auto otioTimeline = player->timeline()->getTimeline();
-            for (const auto& child : otioTimeline->tracks()->children())
-            {
-                if (const auto* track = dynamic_cast<otio::Track*>(child.value))
-                {
-                    if (otio::Track::Kind::video == track->kind())
-                    {
-                        H += 24; // title bar
-                        if (options.thumbnails)
-                            H += options.thumbnailHeight / pixelRatio;
-                        H += 24; // bottom bar
-                    }
-                    else if (otio::Track::Kind::audio == track->kind())
-                    {
-                        H += 24; // title bar
-                        if (options.thumbnails)
-                            H += options.waveformHeight / pixelRatio;
-                        H += 24; // bottom bar
-                    }
-                    // Handle transitions
-                    if (options.showTransitions)
-                    {
-                        bool found = false;
-                        for (const auto& child : track->children())
-                        {
-                            if (const auto& transition =
-                                    dynamic_cast<otio::Transition*>(
-                                        child.value))
-                            {
-                                found = true;
-                                break;
-                            }
-                        }
-                        if (found)
-                            H += 20;
-                    }
-                }
-            }
-
-            if (H >= maxTileHeight)
-                H = maxTileHeight;
-
-            editMode = EditMode::kSaved;
-            editModeH = viewH = H;
-            timeline->show();
-            if (ui->uiMain->visible())
-                ui->uiTimeline->show();
-        }
-        else if (mode == EditMode::kSaved)
-        {
-            H = viewH = editModeH;
-            timeline->show();
-            if (ui->uiMain->visible())
-                ui->uiTimeline->show();
-        }
-        else if (mode == EditMode::kNone)
-        {
-            viewH = 0;
-            ui->uiTimeline->hide();
-            timeline->hide();
-        }
-        else
-        {
-            H = kMinEditModeH; // timeline height
-            viewH = editModeH = H;
-
-            // EditMode::kTimeline
-            timeline->show();
-            if (ui->uiMain->visible())
-                ui->uiTimeline->show();
-        }
-
-        int newY = tileY + tileH - H;
-
-        view->resize(view->x(), view->y(), view->w(), tileH - viewH);
-        if (timeline->visible())
-            timeline->resize(timeline->x(), newY, timeline->w(), H);
-
-        if (mode != EditMode::kNone)
-        {
-            assert(view->h() + timeline->h() == tile->h());
-            assert(timeline->y() == view->y() + view->h());
-            tcp->pushMessage("setEditMode", (int)mode);
-        }
-
-        view->layout();
-        tile->init_sizes();
-
-        if (timeline->visible())
-            timeline->redraw(); // needed
-
-        // std::cerr << "editModeH=" << editModeH << std::endl;
-        // std::cerr << "tileY=" << tileY << std::endl;
-        // std::cerr << "tileH=" << tileH << " tileMY=" << tileY + tileH
-        //           << std::endl
-        //           << std::endl;
-        // std::cerr << "viewgroupX=" << view->x() << std::endl;
-        // std::cerr << "viewgroupW=" << view->w()
-        //           << " viewgroupMX=" << view->x() + view->w() << std::endl;
-        // std::cerr << "uiToolGroupX=" << ui->uiToolsGroup->x() << std::endl;
-        // std::cerr << "uiToolGroupW=" << ui->uiToolsGroup->w()
-        //           << " uiToolsGroupMX="
-        //           << (ui->uiToolsGroup->x() + ui->uiToolsGroup->w())
-        //           << std::endl;
-        // std::cerr << "uiViewX=" << ui->uiView->x() << std::endl;
-        // std::cerr << "uiViewW=" << ui->uiView->w()
-        //           << " uiViewMX=" << (ui->uiView->x() + ui->uiView->w())
-        //           << std::endl;
-        // std::cerr << "uiDockGroupX=" << ui->uiDockGroup->x() << std::endl;
-        // std::cerr << "uiDockGroupW=" << ui->uiDockGroup->w()
-        //           << " uiDockGroupMX="
-        //           << (ui->uiDockGroup->x() + ui->uiDockGroup->w())
-        //           << std::endl
-        //           << std::endl;
-        // std::cerr << "viewgroupY=" << view->y() << std::endl;
-        // std::cerr << "viewgroupH=" << view->h()
-        //           << " viewgroupMY=" << view->y() + view->h() << std::endl;
-        // std::cerr << "uiViewY=" << ui->uiView->y() << std::endl;
-        // std::cerr << "uiViewH=" << ui->uiView->h()
-        //           << " uiViewMY=" << (ui->uiView->y() + ui->uiView->h())
-        //           << std::endl;
-        // std::cerr << "timelineGroupY=" << timeline->y() << std::endl;
-        // std::cerr << "timelineGroupH=" << timeline->h()
-        //           << " timelineGroupMY=" << (timeline->y() + timeline->h())
-        //           << std::endl;
-        // std::cerr << "uiTimelineX=" << ui->uiTimeline->x() << std::endl;
-        // std::cerr << "uiTimelineY=" << ui->uiTimeline->y() << std::endl;
-        // std::cerr << "uiTimelineH=" << ui->uiTimeline->h()
-        //           << " uiTimelineMY="
-        //           << (ui->uiTimeline->y() + ui->uiTimeline->h())
-        //           << std::endl;
-        // std::cerr << std::endl;
     }
 
 } // namespace mrv
