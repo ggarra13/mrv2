@@ -147,6 +147,11 @@ namespace mrv
         }
         case FL_DRAG:
         {
+            math::Vector2i cursorPos(Fl::event_x_root(), Fl::event_y_root());
+            if (std::abs(cursorPos.y - p.push.y) < 2)
+            {
+                return 1;
+            }
             if (Fl::event_button1())
             {
                 const std::string text = label();
@@ -194,6 +199,10 @@ namespace mrv
 
                 menu.popup();
                 return 1;
+            }
+            if (Fl::event_button1())
+            {
+                p.push = math::Vector2i(Fl::event_x_root(), Fl::event_y_root());
             }
             if (p.drag)
                 return 1;
