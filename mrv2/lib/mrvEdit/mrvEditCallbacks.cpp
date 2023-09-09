@@ -964,6 +964,9 @@ namespace mrv
                 continue;
 
             auto track = otio::dynamic_retainer_cast<Track>(tracks[trackIndex]);
+            if (track->kind() != frame.kind)
+                continue;
+
             otio::algo::insert(item, track, time);
             frame.item = item;
         }
