@@ -64,8 +64,6 @@ the playlist panel by making it interactive.
 - The OCIO Defaults now has an option to use or ignore active_views and
   active_displays on the OCIO .config file.  The default is now to ignore them,
   as it was suggested using them in production was usually not the hassle.
-- Fixed a tlRender bug which would make a clip with source range start_time
-  different than 0 continue its audio beyond the end.
 - Fixed Image Information Panel size when it was saved as a window with the
   tabs open.
 - Made Network connections more solid.  In case of wrong data sent through the
@@ -78,6 +76,7 @@ the playlist panel by making it interactive.
   Files Panel.
 - Fixed changing of volume and muting on network connections not showing the
   change on the remote client's interface.
+- Added "Save/Single Frame" to save the current frame as an image.
 
 v0.7.1
 ------
