@@ -159,6 +159,21 @@ namespace mrv
         _initializeGLResources();
     }
 
+    int Viewport::handle(int event)
+    {
+        switch (event)
+        {
+        case FL_HIDE:
+            refresh();
+            valid(0);
+            break;
+        default:
+            break;
+        }
+
+        return TimelineViewport::handle(event);
+    }
+
     void Viewport::draw()
     {
         TLRENDER_P();

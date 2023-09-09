@@ -182,8 +182,6 @@ namespace mrv
                     msg["command"] = "setFilesPanelOptions";
                     msg["value"] = opts;
                     tcp->pushMessage(msg);
-
-                    _widgetUpdate(); // not needed
                 });
     }
 
@@ -380,10 +378,6 @@ namespace mrv
         p.ui->uiTimeline->setLUTOptions(p.lutOptions);
         p.ui->uiTimeline->redraw();
 
-        if (filesPanel)
-        {
-            filesPanel->setFilesPanelOptions(p.filesPanelOptions);
-        }
         if (comparePanel)
         {
             comparePanel->setCompareOptions(p.compareOptions);

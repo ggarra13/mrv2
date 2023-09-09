@@ -1156,6 +1156,7 @@ namespace mrv
                 }
             }
             refresh();
+            valid(0);
             return Fl_Gl_Window::handle(event);
         }
         }
