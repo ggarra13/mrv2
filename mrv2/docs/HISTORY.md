@@ -77,6 +77,7 @@ the playlist panel by making it interactive.
 - Fixed changing of volume and muting on network connections not showing the
   change on the remote client's interface.
 - Added "Save/Single Frame" to save the current frame as an image.
+- Fixed Timeline redraw issues on Windows.
 
 v0.7.1
 ------
