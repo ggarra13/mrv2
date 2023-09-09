@@ -485,12 +485,13 @@ namespace mrv
         //! Change clips' source range to use the highest video and audio
         //! sample rate.  Also returns the largest time range for the timeline.
         void sanitizeVideoAndAudioRates(
-            otio::Stack* stack, TimeRange& timeRange, double& videoRate,
+            otio::Timeline* timeline, TimeRange& timeRange, double& videoRate,
             double& sampleRate)
         {
             videoRate = 0.0;
             sampleRate = 0.0;
             timeRange = time::invalidTimeRange;
+            auto stack = timeline->tracks();
             auto tracks = stack->children();
             for (int i = 0; i < tracks.size(); ++i)
             {
@@ -980,6 +981,10 @@ namespace mrv
 
         edit_clear_redo(ui);
 
+        TimeRange timeRange;
+        double videoRate, sampleRate;
+        sanitizeVideoAndAudioRates(timeline, timeRange, videoRate, sampleRate);
+
         updateTimeline(timeline, time.rate(), ui);
         toOtioFile(timeline, ui);
 
@@ -1063,7 +1068,7 @@ namespace mrv
 
         TimeRange timeRange;
         double videoRate, sampleRate;
-        sanitizeVideoAndAudioRates(stack, timeRange, videoRate, sampleRate);
+        sanitizeVideoAndAudioRates(timeline, timeRange, videoRate, sampleRate);
 
         auto annotations =
             removeAnnotations(timeRange, player->getAllAnnotations());
@@ -1138,7 +1143,7 @@ namespace mrv
         auto stack = timeline->tracks();
         TimeRange timeRange;
         double videoRate, sampleRate;
-        sanitizeVideoAndAudioRates(stack, timeRange, videoRate, sampleRate);
+        sanitizeVideoAndAudioRates(timeline, timeRange, videoRate, sampleRate);
 
         player->setAllAnnotations(buffer.annotations);
         player->setTimeline(timeline);
@@ -1181,7 +1186,7 @@ namespace mrv
         double videoRate, sampleRate;
         stack = timeline->tracks();
 
-        sanitizeVideoAndAudioRates(stack, timeRange, videoRate, sampleRate);
+        sanitizeVideoAndAudioRates(timeline, timeRange, videoRate, sampleRate);
 
         player->setAllAnnotations(buffer.annotations);
         player->setTimeline(timeline);
@@ -1548,7 +1553,8 @@ namespace mrv
             TimeRange timeRange;
             double videoRate;
             double sampleRate;
-            sanitizeVideoAndAudioRates(stack, timeRange, videoRate, sampleRate);
+            sanitizeVideoAndAudioRates(
+                timeline, timeRange, videoRate, sampleRate);
 
             toOtioFile(timeline, ui);
 
