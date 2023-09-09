@@ -903,9 +903,9 @@ namespace mrv
 
         edit_store_undo(player, ui);
 
+        const TimeRange range(time, RationalTime(1.0, time.rate()));
         for (auto& frame : copiedFrames)
         {
-            TimeRange range(time, RationalTime(1.0, time.rate()));
             auto item = dynamic_cast<Item*>(frame.item->clone());
             if (!item)
                 continue;
@@ -921,7 +921,14 @@ namespace mrv
             if (track->kind() != frame.kind)
                 continue;
 
-            otio::algo::overwrite(item, track, range);
+            auto track_range = track->trimmed_range();
+            auto rate = track_range.duration().rate();
+
+            const TimeRange rescaledRange(
+                range.start_time().rescaled_to(rate),
+                range.duration().rescaled_to(rate));
+
+            otio::algo::overwrite(item, track, rescaledRange);
             frame.item = item;
         }
 
