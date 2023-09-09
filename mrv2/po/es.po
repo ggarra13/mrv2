@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.3.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-09-06 14:51-0300\n"
+"POT-Creation-Date: 2023-09-09 12:18-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -1510,6 +1510,9 @@ msgstr "No pude convertir el mensaje a figura: "
 
 msgid "Could not find video clip."
 msgstr "No pude encontrar video clip."
+
+msgid "Could not get current path."
+msgstr "No pude obtener el camino actual."
 
 msgid "Could not match "
 msgstr "No pude empatar "
@@ -5234,9 +5237,6 @@ msgstr "xyY CIE xyY"
 
 #~ msgid "Class used to hold a playlist"
 #~ msgstr "Clase para una lista de reproducción."
-
-#~ msgid "Close the current playlist."
-#~ msgstr "Cerrar la lista de reproducción actual."
 
 #~ msgid "Create .otio Playlist in temp directory with absolue paths."
 #~ msgstr ""
