@@ -14,7 +14,7 @@ namespace mrv
         auto dir = path.getDirectory();
         auto base = path.getBaseName();
         auto extension = path.getExtension();
-        if (dir != tmpdir || base.substr(0, 5) != "EDL0x" ||
+        if (dir != tmpdir || base.substr(0, 4) != "EDL0" ||
             extension != ".otio")
         {
             return false;
