@@ -1303,7 +1303,7 @@ namespace mrv
         auto model = ui->app->filesModel();
         auto Aitem = model->observeA()->get();
         file::Path path = Aitem->path;
-        if (path.getBaseName() != "EDL." || path.getExtension() != ".otio")
+        if (!isTemporaryEDL(path))
         {
             LOG_ERROR(_("Not an EDL file to save."));
             return;
