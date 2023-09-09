@@ -936,6 +936,8 @@ namespace mrv
         edit_clear_redo(ui);
         toOtioFile(timeline, ui);
 
+        redrawPanelThumbnails();
+
         tcp->pushMessage("Edit/Frame/Paste", time);
     }
 
@@ -980,6 +982,8 @@ namespace mrv
 
         updateTimeline(timeline, time.rate(), ui);
         toOtioFile(timeline, ui);
+
+        redrawPanelThumbnails();
 
         tcp->pushMessage("Edit/Frame/Insert", time);
     }
