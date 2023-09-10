@@ -86,12 +86,8 @@ namespace mrv
 
         for (int i = 0; hotkeys[i].name != "END"; ++i)
         {
-            bool view3d = false;
-            if (i < 4)
-                view3d = true;
-
             if (h->hk == hotkeys[i].hotkey && idx != i &&
-                (idx > 4 && !view3d) && hotkeys[i].hotkey.to_s() != "[" &&
+                hotkeys[i].hotkey.to_s() != "[" &&
                 hotkeys[i].hotkey.to_s() != "]")
             {
                 int ok = fl_choice(
@@ -127,19 +123,25 @@ namespace mrv
             o->topline(0);
             return;
         }
-        std::regex regex{text, std::regex_constants::icase};
-        int start = o->value() + 1;
-        for (int i = start; i <= o->size(); ++i)
+        try
         {
-            std::string function = o->text(i);
-            std::size_t pos = function.find('\t');
-            function = function.substr(0, pos);
-            if (std::regex_search(function, regex))
+            std::regex regex{text, std::regex_constants::icase};
+            int start = o->value() + 1;
+            for (int i = start; i <= o->size(); ++i)
             {
-                o->topline(i);
-                o->select(i);
-                return;
+                std::string function = o->text(i);
+                std::size_t pos = function.find('\t');
+                function = function.substr(0, pos);
+                if (std::regex_search(function, regex))
+                {
+                    o->topline(i);
+                    o->select(i);
+                    return;
+                }
             }
+        }
+        catch (const std::exception& e)
+        {
         }
     }
 
@@ -151,19 +153,25 @@ namespace mrv
             o->topline(0);
             return;
         }
-        std::regex regex{text, std::regex_constants::icase};
-        int start = o->value() + 1;
-        for (int i = start; i <= o->size(); ++i)
+        try
         {
-            std::string hotkey = o->text(i);
-            std::size_t pos = hotkey.find('\t');
-            hotkey = hotkey.substr(pos + 1, hotkey.size());
-            if (std::regex_search(hotkey, regex))
+            std::regex regex{text, std::regex_constants::icase};
+            int start = o->value() + 1;
+            for (int i = start; i <= o->size(); ++i)
             {
-                o->topline(i);
-                o->select(i);
-                return;
+                std::string hotkey = o->text(i);
+                std::size_t pos = hotkey.find('\t');
+                hotkey = hotkey.substr(pos + 1, hotkey.size());
+                if (std::regex_search(hotkey, regex))
+                {
+                    o->topline(i);
+                    o->select(i);
+                    return;
+                }
             }
+        }
+        catch (const std::exception& e)
+        {
         }
     }
 
@@ -365,11 +373,16 @@ namespace mrv
                             _("Corruption in hotkeys preferences. "
                               "Hotkey {0} for {1} will not be "
                               "available.  "
-                              "Already used in {2}"))
+                              "Already used in {2}."))
                             .arg(hotkeys[j].hotkey.to_s())
                             .arg(_(hotkeys[j].name.c_str()))
                             .arg(_(hotkeys[i].name.c_str()));
                     LOG_ERROR(err);
+                    err = tl::string::Format(
+                        _("If you want to confirm this change, "
+                          "go to Windows->Hotkeys and click on Save with the "
+                          "same filename."));
+                    LOG_INFO(err);
                     hotkeys[j].hotkey = Hotkey();
                 }
             }
