@@ -211,11 +211,15 @@ namespace mrv
 
         for (const auto& str : p.recentFiles)
         {
-            auto path = fs::canonical(fs::path(str));
-            if (set.find(path.generic_string()) == set.end())
+            fs::path filePath(str);
+            if (fs::exists(filePath))
             {
-                set.insert(path.generic_string());
-                result.push_back(str);
+                auto path = fs::canonical(filePath);
+                if (set.find(path.generic_string()) == set.end())
+                {
+                    set.insert(path.generic_string());
+                    result.push_back(str);
+                }
             }
         }
 
