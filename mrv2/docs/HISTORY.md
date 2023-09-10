@@ -1,3 +1,11 @@
+v0.7.6
+======
+
+- Fixed hotkey check when entering a hotkey of the first 5 entries (a legacy
+  from mrViewer).
+- Added instructions on what to do when Hotkey corruption happens.
+
+
 v0.7.5
 ======
 
