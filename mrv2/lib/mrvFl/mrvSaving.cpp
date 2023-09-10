@@ -15,6 +15,7 @@ namespace fs = std::filesystem;
 #include <tlCore/StringFormat.h>
 #include <tlCore/Time.h>
 
+#include <tlGL/Init.h>
 #include <tlGL/Util.h>
 #include <tlTimeline/GLRender.h>
 
@@ -224,6 +225,10 @@ namespace mrv
             view->setHudActive(false);
 
             math::Size2i offscreenBufferSize(renderSize.w, renderSize.h);
+
+            view->make_current();
+            gl::initGLAD();
+
             auto buffer = gl::OffscreenBuffer::create(
                 offscreenBufferSize, offscreenBufferOptions);
 
@@ -248,6 +253,9 @@ namespace mrv
                     // Get the videoData
                     const auto& videoData =
                         timeline->getVideo(currentTime).get();
+
+                    view->make_current();
+                    gl::initGLAD();
 
                     // Render the video.
                     gl::OffscreenBufferBinding binding(buffer);
@@ -519,6 +527,8 @@ namespace mrv
             view->setHudActive(false);
 
             math::Size2i offscreenBufferSize(renderSize.w, renderSize.h);
+            view->make_current();
+            gl::initGLAD();
             auto buffer = gl::OffscreenBuffer::create(
                 offscreenBufferSize, offscreenBufferOptions);
             CHECK_GL;
