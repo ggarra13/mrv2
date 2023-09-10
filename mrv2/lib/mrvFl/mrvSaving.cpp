@@ -74,8 +74,9 @@ namespace mrv
             player->stop();
 
             // Time range.
-            auto timeRange = player->inOutRange();
             auto currentTime = player->currentTime();
+            otime::TimeRange timeRange(
+                currentTime, otime::RationalTime(1, currentTime.rate()));
 
             auto context = ui->app->getContext();
             auto timeline = player->timeline();
@@ -217,9 +218,6 @@ namespace mrv
                 throw std::runtime_error(
                     string::Format("{0}: Cannot open").arg(file));
             }
-
-            // Use inner player
-            auto innerPlayer = player->player();
 
             // Turn off hud so it does not get captured by glReadPixels.
             bool hud = view->getHudActive();
@@ -515,9 +513,6 @@ namespace mrv
             }
 
             player->start();
-
-            // Use inner player
-            auto innerPlayer = player->player();
 
             // Turn off hud so it does not get captured by glReadPixels.
             bool hud = view->getHudActive();
