@@ -4,11 +4,11 @@
 
 #include "mrvGL/mrvGLErrors.h"
 
-#ifdef TLRENDER_API_GL_4_1_Debug
 void glDebugOutput(
     GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length,
     const GLchar* message, const void* userParam)
 {
+#ifdef TLRENDER_API_GL_4_1_Debug
     //! \todo Send output to the log instead of cerr?
     switch (severity)
     {
@@ -27,5 +27,5 @@ void glDebugOutput(
     default:
         break;
     }
-}
 #endif
+}
