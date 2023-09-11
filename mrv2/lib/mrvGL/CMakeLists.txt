@@ -40,7 +40,7 @@ set(SOURCES
 
 add_definitions( -DGL_SILENCE_DEPRECATION )
 
-set(LIBRARIES tlGL tlTimeline tlTimelineUI tlUI ) #${glfw3_LIBRARIES})
+set(LIBRARIES tlGL tlTimeline tlTimelineUI tlUI ${glfw3_LIBRARIES})
 set(LIBRARIES_PRIVATE )
 list( APPEND LIBRARIES mrvEdit mrvWidgets mrvDraw mrvCore fltk_gl )
 
