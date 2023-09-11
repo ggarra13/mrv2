@@ -423,6 +423,9 @@ namespace mrv
 #endif
         uiPrefs->uiPrefsTimelineThumbnails->value(tmp);
 
+        gui.get("remove_edls", tmp, 1);
+        uiPrefs->uiPrefsRemoveEDLs->value(tmp);
+
         gui.get("timeline_edit_mode", tmp, 0);
         uiPrefs->uiPrefsEditMode->value(tmp);
 
@@ -1185,6 +1188,7 @@ namespace mrv
         gui.set("timeline_display", uiPrefs->uiPrefsTimelineDisplay->value());
         gui.set(
             "timeline_thumbnails", uiPrefs->uiPrefsTimelineThumbnails->value());
+        gui.set("remove_edls", uiPrefs->uiPrefsRemoveEDLs->value());
         gui.set("timeline_edit_mode", uiPrefs->uiPrefsEditMode->value());
         gui.set(
             "timeline_edit_thumbnails",

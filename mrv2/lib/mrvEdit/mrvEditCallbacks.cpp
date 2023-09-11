@@ -431,7 +431,11 @@ namespace mrv
         std::string _otioFilename(ViewerUI* ui)
         {
             char buf[256];
+#ifdef _WIN32
+            snprintf(buf, 256, "EDL0x%p.%zu.otio", ui, otioIndex);
+#else
             snprintf(buf, 256, "EDL%p.%zu.otio", ui, otioIndex);
+#endif
             auto out = tmppath() + '/' + buf;
             return out;
         }

@@ -1,4 +1,6 @@
 
+#include <filesystem>
+namespace fs = std::filesystem;
 
 #include "mrvCore/mrvHome.h"
 #include "mrvEdit/mrvEditUtil.h"
@@ -14,7 +16,7 @@ namespace mrv
         auto dir = path.getDirectory();
         auto base = path.getBaseName();
         auto extension = path.getExtension();
-        if (dir != tmpdir || base.substr(0, 4) != "EDL0" ||
+        if (dir != tmpdir || base.substr(0, 5) != "EDL0x" ||
             extension != ".otio")
         {
             return false;
@@ -26,5 +28,32 @@ namespace mrv
     {
         file::Path path(filename);
         return isTemporaryEDL(path);
+    }
+
+    void removeTemporaryEDLs(ViewerUI* ui)
+    {
+        const std::string directory = tmppath();
+        const char* pointer = "";
+#ifdef _WIN32
+        pointer = "0x";
+#endif
+        char prefix[256];
+        snprintf(prefix, 256, "EDL%s%p", pointer, ui);
+
+        try
+        {
+            for (const auto& entry : fs::directory_iterator(directory))
+            {
+                if (entry.is_regular_file() &&
+                    entry.path().filename().string().find(prefix) == 0)
+                {
+                    // Remove the matching file
+                    fs::remove(entry.path());
+                }
+            }
+        }
+        catch (const fs::filesystem_error& ex)
+        {
+        }
     }
 } // namespace mrv
