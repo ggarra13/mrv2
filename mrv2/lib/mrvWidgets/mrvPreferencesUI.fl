@@ -657,12 +657,12 @@ v->uiPrefsFPS->value( g );}
             }
           }
           Fl_Group {} {
-            label Timeline
-            xywh {305 34 530 362} box EMBOSSED_BOX align 5 hide
+            label Timeline open
+            xywh {305 34 530 362} box EMBOSSED_BOX align 5
           } {
             Fl_Choice uiPrefsTimelineDisplay {
               label Display
-              tooltip {How to display timeline by default.} xywh {403 119 405 27} box THIN_DOWN_BOX down_box BORDER_BOX
+              tooltip {How to display timeline by default.} xywh {403 79 405 27} box THIN_DOWN_BOX down_box BORDER_BOX
               code0 {o->value(0);}
             } {
               MenuItem {} {
@@ -680,7 +680,12 @@ v->uiPrefsFPS->value( g );}
             }
             Fl_Check_Button uiPrefsTimelineThumbnails {
               label {Preview Thumbnails}
-              tooltip {Thumbnails above timeline (does not work on Wayland)} xywh {403 163 63 20} down_box DOWN_BOX value 1
+              tooltip {Thumbnails above timeline (does not work on Wayland)} xywh {403 123 63 20} down_box DOWN_BOX value 1
+              class {mrv::CheckButton}
+            }
+            Fl_Check_Button uiPrefsRemoveEDLs {
+              label {Remove EDLs in Temporary Folder on Exit} selected
+              tooltip {When selected, temporary EDLs (Playlists) will be removed from the temporary folder.} xywh {403 155 73 20} down_box DOWN_BOX value 1
               class {mrv::CheckButton}
             }
             Fl_Group {} {
@@ -859,11 +864,11 @@ uiPrefs->uiPrefsOCIOConfig->value( r.c_str() );}
             }
           }
           Fl_Group {} {
-            label {OCIO Defaults} open
-            xywh {303 34 532 362} align 5
+            label {OCIO Defaults}
+            xywh {303 34 532 362} align 5 hide
           } {
             Fl_Light_Button uiOCIOUseActiveViews {
-              label {Use Active Views and Active Displays} selected
+              label {Use Active Views and Active Displays}
               tooltip {When this option is off, OCIO files with active_views: and active_displays: are not taken into account.} xywh {417 51 288 24}
             }
             Fl_Group uiOCIO_ICS {

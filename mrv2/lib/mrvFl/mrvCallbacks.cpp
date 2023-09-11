@@ -35,6 +35,8 @@ namespace fs = std::filesystem;
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
+#include "mrvEdit/mrvEditUtil.h"
+
 #include "mrvPDF/mrvSavePDF.h"
 
 #include "mrvNetwork/mrvTCP.h"
@@ -469,7 +471,7 @@ namespace mrv
         networkPanel = nullptr;
 #endif
 
-        //! Close all files
+        // Close all files
         close_all_cb(w, ui);
 
         // Hide any GL Window (needed in Windows)
@@ -479,6 +481,9 @@ namespace mrv
             pw->hide();
             pw = Fl::first_window();
         }
+
+        // Remove any temporary EDLS in tmppath
+        removeTemporaryEDLs(ui);
 
         tcp->unlock();
     }
