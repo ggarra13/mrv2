@@ -4,6 +4,11 @@ v0.7.6
 - Fixed hotkey check when entering a hotkey of the first 5 entries (a legacy
   from mrViewer).
 - Added instructions on what to do when Hotkey corruption happens.
+- Fixed Load/Save hotkey file requester on Windows that would redraw
+  incorrectly.
+- Fixed message about corruption in hotkeys, when the reason was a new
+  forced hotkey.
+  
 
 
 v0.7.5

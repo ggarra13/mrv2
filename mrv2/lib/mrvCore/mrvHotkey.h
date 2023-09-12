@@ -271,7 +271,6 @@ namespace mrv
 
     extern Hotkey kEditSliceClip;
     extern Hotkey kEditRemoveClip;
-    extern Hotkey kEditRemoveClipWithGap;
 
     extern Hotkey kEditUndo;
     extern Hotkey kEditRedo;

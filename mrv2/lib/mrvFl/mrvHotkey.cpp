@@ -13,6 +13,7 @@ namespace fs = std::filesystem;
 #include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvHotkey.h"
 #include "mrvCore/mrvHome.h"
+#include "mrvCore/mrvUtil.h"
 
 #include "mrvWidgets/mrvBrowser.h"
 
@@ -155,6 +156,7 @@ namespace mrv
         }
         try
         {
+            std::string prepareForRegEx = commentCharacter(text, '+');
             std::regex regex{text, std::regex_constants::icase};
             int start = o->value() + 1;
             for (int i = start; i <= o->size(); ++i)
@@ -368,21 +370,19 @@ namespace mrv
             {
                 if (j != i && hotkeys[j].hotkey == hotkeys[i].hotkey)
                 {
-                    std::string err =
-                        tl::string::Format(
-                            _("Corruption in hotkeys preferences. "
-                              "Hotkey {0} for {1} will not be "
-                              "available.  "
-                              "Already used in {2}."))
-                            .arg(hotkeys[j].hotkey.to_s())
-                            .arg(_(hotkeys[j].name.c_str()))
-                            .arg(_(hotkeys[i].name.c_str()));
-                    LOG_ERROR(err);
-                    err = tl::string::Format(
-                        _("If you want to confirm this change, "
-                          "go to Windows->Hotkeys and click on Save with the "
-                          "same filename."));
-                    LOG_INFO(err);
+                    if (hotkeys[j].force != true)
+                    {
+                        std::string err =
+                            tl::string::Format(
+                                _("Corruption in hotkeys preferences. "
+                                  "Hotkey {0} for {1} will not be "
+                                  "available.  "
+                                  "Already used in {2}."))
+                                .arg(hotkeys[j].hotkey.to_s())
+                                .arg(_(hotkeys[j].name.c_str()))
+                                .arg(_(hotkeys[i].name.c_str()));
+                        LOG_ERROR(err);
+                    }
                     hotkeys[j].hotkey = Hotkey();
                 }
             }

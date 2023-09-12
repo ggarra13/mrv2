@@ -124,4 +124,24 @@ namespace mrv
         return 1;
     }
 
+    std::string commentCharacter(const std::string& input, const char match)
+    {
+        std::string result;
+
+        for (char c : input)
+        {
+            if (c == match)
+            {
+                result += "\\";
+                result += match;
+            }
+            else
+            {
+                result += c;
+            }
+        }
+
+        return result;
+    }
+
 } // namespace mrv

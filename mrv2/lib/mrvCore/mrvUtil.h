@@ -200,6 +200,12 @@ namespace mrv
     }
 
     /**
+     * Return a string with all the 'match' characters commented out with
+     * with backslashes.
+     */
+    std::string commentCharacter(const std::string& input, const char match);
+
+    /**
      * Return true if the file exists and is readable
      *
      * @param p std::filesystem path (or std::string).
