@@ -1894,7 +1894,7 @@ namespace mrv
                 for (size_t j = 0; j < num_active_displays; ++j)
                 {
                     std::string display = active_displays[j];
-                    std::string quoted_display = quoteSlashes(display);
+                    std::string quoted_display = commentCharacter(display, '/');
 
                     int numViews = config->getNumViews(display.c_str());
 
@@ -2009,7 +2009,7 @@ namespace mrv
                         menu = family;
                         menu += "/";
                     }
-                    menu += quoteSlashes(space);
+                    menu += commentCharacter(space, '/');
                     w->add(menu.c_str());
                 }
             }

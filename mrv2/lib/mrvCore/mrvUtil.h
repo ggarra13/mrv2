@@ -184,21 +184,6 @@ namespace mrv
         return name + buf + extension;
     }
 
-    //! Quote slashes (/) with backslaches (\/).
-    inline std::string quoteSlashes(const std::string& in)
-    {
-        std::string out;
-
-        for (char c : in)
-        {
-            if (c == '/')
-                out += "\\/";
-            else
-                out += c;
-        }
-        return out;
-    }
-
     /**
      * Return a string with all the 'match' characters commented out with
      * with backslashes.
