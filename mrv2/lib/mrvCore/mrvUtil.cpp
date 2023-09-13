@@ -74,37 +74,16 @@ namespace mrv
         return false;
     }
 
-    // Given a frame extension, return true if a possible picture file.
-    bool is_valid_picture(const char* ext)
+    bool is_valid_sequence(const std::string& filename)
     {
-        std::string tmp = ext;
-        std::transform(
-            tmp.begin(), tmp.end(), tmp.begin(), (int (*)(int))tolower);
-
-        if (tmp == ".iff" || tmp == ".pic" || tmp == ".tif" || tmp == ".tiff" ||
-            tmp == ".png" || tmp == ".jpg" || tmp == ".jpeg" || tmp == ".tga" ||
-            tmp == ".exr" || tmp == ".dpx" || tmp == ".cin" || tmp == ".bmp" ||
-            tmp == ".bit" || tmp == ".sxr" || tmp == ".ct" || tmp == ".sgi" ||
-            tmp == ".st" || tmp == ".map" || tmp == ".sxr" || tmp == ".nt" ||
-            tmp == ".mt" || tmp == ".psd" || tmp == ".rgb" || tmp == ".rpf" ||
-            tmp == ".zt")
-            return true;
-
-        return false;
-    }
-
-    bool is_valid_sequence(const char* filename)
-    {
-        if (strlen(filename) == 0)
-            return true;
         std::string root, frame, view, ext;
         bool ok = split_sequence(root, frame, view, ext, filename);
-        if (ext == "reel" || ext == "otio")
+        if (ext == "mrv2s" || ext == "otio" || ext == "prefs")
             return false;
         return ok;
     }
 
-    bool is_directory(const char* dir)
+    bool is_directory(const std::string& dir)
     {
         return fs::is_directory(dir);
     }

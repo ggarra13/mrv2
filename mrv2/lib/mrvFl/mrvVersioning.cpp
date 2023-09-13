@@ -165,7 +165,7 @@ namespace mrv
 
             newfile += suffix;
 
-            if (mrv::is_valid_sequence(newfile.c_str()))
+            if (mrv::is_valid_sequence(newfile))
             {
                 mrv::get_sequence_limits(start, end, newfile, false);
                 if (start != std::numeric_limits<int64_t>::min())

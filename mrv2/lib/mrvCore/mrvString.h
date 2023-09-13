@@ -14,6 +14,14 @@ typedef std::set< std::string > stringSet;
 
 namespace mrv
 {
+    /**
+     * Given a source string, see if it matches all characters in charlist
+     *
+     * @param src source string to see if there are matches
+     * @param charlist list of characters to match
+     *
+     * @return true if all characters in src are in charlist.
+     */
     bool matches_chars(const char* src, const char* charlist);
 
     /**
