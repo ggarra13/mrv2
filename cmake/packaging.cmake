@@ -117,10 +117,11 @@ else()
     # sure there is at least one set of four (4) backlasshes.
     set(CPACK_NSIS_MODIFY_PATH ON)
 
-    set(CPACK_GENERATOR ZIP NSIS)
+    set(CPACK_GENERATOR NSIS ) #ZIP)
 
-    set(CPACK_NSIS_MUI_ICON ${ROOT_DIR}/icons/viewer.ico)
-    set(CPACK_NSIS_MUI_UNICON ${ROOT_DIR}/icons/viewer.ico)
+    set(CPACK_NSIS_INSTALLED_ICON_NAME "bin/mrv2.exe")
+    set(CPACK_NSIS_MUI_ICON "${ROOT_DIR}/src/mrv2.ico")
+    set(CPACK_NSIS_MUI_UNICON "${ROOT_DIR}/src/mrv2.ico")
 
     if (MRV2_OS_BITS EQUAL 32)
 	set( CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES" )
