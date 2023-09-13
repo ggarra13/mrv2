@@ -4,6 +4,7 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #include <fstream>
+#include <set>
 #include <filesystem>
 
 namespace fs = std::filesystem;
@@ -908,7 +909,14 @@ namespace mrv
 
         edit_store_undo(player, ui);
 
+        std::set<size_t> freeTracks;
+        for (size_t i = 0; i < tracks.size(); ++i)
+        {
+            freeTracks.insert(i);
+        }
+
         const TimeRange range(time, RationalTime(1.0, time.rate()));
+
         for (auto& frame : copiedFrames)
         {
             auto item = dynamic_cast<Item*>(frame.item->clone());
@@ -926,6 +934,8 @@ namespace mrv
             if (track->kind() != frame.kind)
                 continue;
 
+            freeTracks.erase(trackIndex);
+
             auto track_range = track->trimmed_range();
             auto rate = track_range.duration().rate();
 
@@ -937,8 +947,32 @@ namespace mrv
             frame.item = item;
         }
 
-        player->setTimeline(timeline);
+        for (const auto trackIndex : freeTracks)
+        {
+            auto track = otio::dynamic_retainer_cast<Track>(tracks[trackIndex]);
+            if (!track)
+                continue;
+
+            auto track_range = track->trimmed_range();
+            auto rate = track_range.duration().rate();
+
+            const TimeRange rescaledRange(
+                range.start_time().rescaled_to(rate),
+                range.duration().rescaled_to(rate));
+
+            otio::SerializableObject::Retainer<Gap> gap = new Gap;
+            gap->set_source_range(rescaledRange);
+
+            auto item = dynamic_cast<Item*>(gap->clone());
+            if (!item)
+                continue;
+
+            otio::algo::overwrite(item, track, rescaledRange);
+        }
+
         edit_clear_redo(ui);
+
+        player->setTimeline(timeline);
         toOtioFile(timeline, ui);
 
         redrawPanelThumbnails();

@@ -480,7 +480,8 @@ namespace mrv
         }
 
         // Remove any temporary EDLS in tmppath
-        removeTemporaryEDLs(ui);
+        if (ui->uiPrefs->uiPrefsRemoveEDLs->value())
+            removeTemporaryEDLs(ui);
 
         tcp->unlock();
     }
