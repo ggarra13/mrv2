@@ -32,13 +32,7 @@ namespace fs = std::filesystem;
 
 #include "mrvFLU/Flu_File_Chooser.h"
 
-#include "mrvGL/mrvTimelineViewport.h"
-#include "mrvGL/mrvTimelineViewportPrivate.h"
-
-#include "mrvPanels/mrvPanelsCallbacks.h"
-
 #include "mrvApp/mrvSettingsObject.h"
-#include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/App.h"
 
 #include "mrvPreferencesUI.h"

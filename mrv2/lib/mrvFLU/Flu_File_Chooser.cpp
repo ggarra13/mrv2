@@ -59,6 +59,7 @@
 
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvSequence.h"
+#include "mrvCore/mrvUtil.h"
 
 #include "mrvFl/mrvPreferences.h"
 
@@ -141,33 +142,32 @@ std::string Flu_File_Chooser::renameErrTxt = "Unable to rename '%s' to '%s'";
 
 #define DEFAULT_ENTRY_WIDTH 235
 
-Fl_Pixmap up_folder_img((char* const*)big_folder_up_xpm),
-    trash((char* const*)trash_xpm),
-    new_folder((char* const*)big_folder_new_xpm),
-    reload((char* const*)reload_xpm), preview_img((char* const*)monalisa_xpm),
-    file_list_img((char* const*)filelist_xpm),
-    file_listwide_img((char* const*)filelistwide_xpm),
-    fileDetails((char* const*)filedetails_xpm),
-    add_to_favorite_folder((char* const*)folder_favorite_xpm),
-    home((char* const*)bighome_xpm), favorites((char* const*)bigfavorites_xpm),
-    desktop((char* const*)desktop_xpm),
-    folder_closed((char* const*)folder_closed_xpm),
-    default_file((char* const*)textdoc_xpm),
-    my_computer((char* const*)my_computer_xpm),
-    computer((char* const*)computer_xpm),
-    disk_drive((char* const*)disk_drive_xpm),
-    cd_drive((char* const*)cd_drive_xpm),
-    floppy_drive((char* const*)floppy_drive_xpm),
-    removable_drive((char* const*)removable_drive_xpm),
-    ram_drive((char* const*)ram_drive_xpm),
-    network_drive((char* const*)network_drive_xpm),
-    documents((char* const*)filled_folder_xpm),
-    littlehome((char* const*)home_xpm),
-    little_favorites((char* const*)mini_folder_favorites_xpm),
-    little_desktop((char* const*)mini_desktop_xpm),
-    bigdocuments((char* const*)bigdocuments_xpm),
-    bigtemporary((char* const*)bigtemporary_xpm), reel((char* const*)reel_xpm),
-    picture((char* const*)image_xpm), music((char* const*)music_xpm);
+Fl_Pixmap up_folder_img((char*const*)big_folder_up_xpm),
+    trash((char*const*)trash_xpm), new_folder((char*const*)big_folder_new_xpm),
+    reload((char*const*)reload_xpm), preview_img((char*const*)monalisa_xpm),
+    file_list_img((char*const*)filelist_xpm),
+    file_listwide_img((char*const*)filelistwide_xpm),
+    fileDetails((char*const*)filedetails_xpm),
+    add_to_favorite_folder((char*const*)folder_favorite_xpm),
+    home((char*const*)bighome_xpm), favorites((char*const*)bigfavorites_xpm),
+    desktop((char*const*)desktop_xpm),
+    folder_closed((char*const*)folder_closed_xpm),
+    default_file((char*const*)textdoc_xpm),
+    my_computer((char*const*)my_computer_xpm),
+    computer((char*const*)computer_xpm),
+    disk_drive((char*const*)disk_drive_xpm),
+    cd_drive((char*const*)cd_drive_xpm),
+    floppy_drive((char*const*)floppy_drive_xpm),
+    removable_drive((char*const*)removable_drive_xpm),
+    ram_drive((char*const*)ram_drive_xpm),
+    network_drive((char*const*)network_drive_xpm),
+    documents((char*const*)filled_folder_xpm),
+    littlehome((char*const*)home_xpm),
+    little_favorites((char*const*)mini_folder_favorites_xpm),
+    little_desktop((char*const*)mini_desktop_xpm),
+    bigdocuments((char*const*)bigdocuments_xpm),
+    bigtemporary((char*const*)bigtemporary_xpm), reel((char*const*)reel_xpm),
+    picture((char*const*)image_xpm), music((char*const*)music_xpm);
 
 #define streq(a, b) (strcmp(a, b) == 0)
 
@@ -949,7 +949,7 @@ Flu_File_Chooser::Flu_File_Chooser(
                         std::string favs = "/";
                         favs += _(favoritesTxt.c_str());
                         favs += "/";
-                        favs += comment_slashes(buf);
+                        favs += mrv::commentCharacter(buf);
                         location->tree.add(favs.c_str());
                     }
                 }
@@ -3421,7 +3421,7 @@ void Flu_File_Chooser::addToFavoritesCB()
     if (!duplicate)
     {
         favoritesList->add(currentDir.c_str());
-        location->tree.add(comment_slashes(currentDir).c_str());
+        location->tree.add(mrv::commentCharacter(currentDir).c_str());
     }
 
     // save the favorites
@@ -3669,15 +3669,15 @@ void Flu_File_Chooser::buildLocationCombo()
 #ifdef _WIN32
     std::string s;
     char volumeName[1024];
-    s = comment_slashes("/" + desktopTxt + "/");
+    s = mrv::commentCharacter("/" + desktopTxt + "/");
     n = location->tree.add(_(s.c_str()));
     if (n)
         n->usericon(&little_desktop);
-    s = comment_slashes("/" + desktopTxt + "/" + myDocumentsTxt + "/");
+    s = mrv::commentCharacter("/" + desktopTxt + "/" + myDocumentsTxt + "/");
     n = location->tree.add(_(s.c_str()));
     if (n)
         n->usericon(&documents);
-    s = comment_slashes("/" + desktopTxt + "/" + myComputerTxt + "/");
+    s = mrv::commentCharacter("/" + desktopTxt + "/" + myComputerTxt + "/");
     n = location->tree.add(_(s.c_str()));
     if (n)
         n->usericon(&computer);
@@ -3752,7 +3752,7 @@ void Flu_File_Chooser::buildLocationCombo()
                 }
                 drives[i] =
                     std::string(disk) + " (" + std::string(drive) + ")/";
-                s += comment_slashes(drives[i]);
+                s += mrv::commentCharacter(drives[i]);
                 n = location->tree.add(s.c_str());
                 if (n)
                     n->usericon(driveIcons[i]);
@@ -3800,7 +3800,7 @@ void Flu_File_Chooser::buildLocationCombo()
             std::string fullpath = "/Volumes/";
             fullpath += name;
             fullpath += "/";
-            location->tree.add(comment_slashes(fullpath).c_str());
+            location->tree.add(mrv::commentCharacter(fullpath).c_str());
         }
     }
 
@@ -3837,7 +3837,7 @@ void Flu_File_Chooser::buildLocationCombo()
 
             // now add the mount point
             mount += "/";
-            location->tree.add(comment_slashes(mount).c_str());
+            location->tree.add(mrv::commentCharacter(mount).c_str());
         }
 
         fclose(fstab);
@@ -4412,7 +4412,8 @@ void Flu_File_Chooser::cd(const char* path)
 #ifdef _WIN32
         std::string treePath =
             "/" + desktopTxt + "/" + myComputerTxt + "/" + currentDir;
-        Fl_Tree_Item* n = location->tree.add(comment_slashes(treePath).c_str());
+        Fl_Tree_Item* n =
+            location->tree.add(mrv::commentCharacter(treePath).c_str());
         std::string userDesk = userHome + desktopTxt + "/";
         if (currentDir == userDesk)
             if (n)

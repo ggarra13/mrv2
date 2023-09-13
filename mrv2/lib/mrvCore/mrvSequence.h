@@ -9,31 +9,6 @@
 
 #include <mrvCore/mrvString.h>
 
-inline std::string uncomment_slashes(std::string path)
-{
-    size_t found = 0;
-    while ((found = path.find("\\/", found)) != std::string::npos)
-    {
-        std::string part2 = path.substr(found + 2, path.size());
-        path = path.substr(0, found) + part2;
-        found += 2;
-    }
-
-    return path;
-}
-
-inline std::string comment_slashes(std::string path)
-{
-    size_t found = 0, next = 0;
-    while ((found = path.find('/', next)) != std::string::npos)
-    {
-        path.insert(found, "\\");
-        next = found + 3;
-    }
-
-    return path;
-}
-
 namespace mrv
 {
 
@@ -85,20 +60,6 @@ namespace mrv
      * Given a filename with %hex characters, return string in ascii.
      */
     std::string hex_to_char_filename(std::string& f);
-
-    /**
-     * Given a file, return root filename in %d format, and frame passed if
-     * sequence.  If not sequence fileroot, return file as is.
-     *
-     * @param fileroot    fileroot in %*d format or file
-     * @param file        original file
-     * @param change_view whether to replace views with %V or %v
-     *
-     * @return true if potential sequence, false if not
-     */
-    bool fileroot(
-        std::string& fileroot, const std::string& file,
-        const bool change_view = true, const bool change_frame = true);
 
     /**
      * Given a filename of a possible sequence, split it into
@@ -163,47 +124,6 @@ namespace mrv
      */
     bool is_valid_subtitle(const char* ext);
 
-    /**
-     * Given a filename extension, return whether the extension is
-     * from a picture format.
-     *
-     * @param ext Filename extension
-     *
-     * @return true if a possible picture, false if not.
-     */
-    bool is_valid_picture(const char* ext);
-
-    /**
-     * Given a single image filename, return whether the image is
-     * a sequence on disk (ie. there are several images named with a
-     * similar convention)
-     *
-     * @param file Filename of image
-     *
-     * @return true if a possible sequence, false if not.
-     */
-    bool is_valid_sequence(const char* file);
-
-    /**
-     * Given a single filename, return whether the file is
-     * a directory on disk
-     *
-     * @param file Filename or Directory
-     *
-     * @return true if a directory, false if not.
-     */
-    bool is_directory(const char* file);
-
-    /**
-     * Given a frame string like "0020", return the number of
-     * padded digits
-     *
-     * @param frame a string like "0020" or "14".
-     *
-     * @return number of padded digits (4 for 0020, 1 for 14 ).
-     */
-    int padded_digits(const std::string& frame);
-
     std::string get_short_view(bool left);
     std::string get_long_view(bool left);
 
@@ -215,11 +135,5 @@ namespace mrv
 
     //! Parse a %v or %V fileroot and return the appropiate view name.
     std::string parse_view(const std::string& fileroot, bool left = true);
-
-    //! Parse a path and parent path and try to return a relative path if
-    //! possible.
-    std::string relative_path(
-        const std::string& path, const std::string& parent,
-        const bool use_relative_paths = true);
 
 } // namespace mrv

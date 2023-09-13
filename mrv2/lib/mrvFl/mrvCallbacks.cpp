@@ -2,9 +2,6 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <filesystem>
-namespace fs = std::filesystem;
-
 #include <iostream>
 #include <fstream>
 #include <iomanip>
@@ -15,7 +12,7 @@ namespace fs = std::filesystem;
 
 #include "mrvCore/mrvHelpers.h"
 #include "mrvCore/mrvHome.h"
-#include "mrvCore/mrvSequence.h"
+#include "mrvCore/mrvUtil.h"
 
 #include "mrvWidgets/mrvPanelGroup.h"
 #include "mrvWidgets/mrvSecondaryWindow.h"
@@ -191,7 +188,7 @@ namespace mrv
         if (dir.empty())
             return;
 
-        if (!fs::is_directory(dir))
+        if (!is_directory(dir))
             return;
 
         stringArray movies, sequences, audios;

@@ -1352,7 +1352,7 @@ namespace mrv
             file = decode;
             free(decode);
 #endif
-            if (mrv::is_directory(file.c_str()))
+            if (is_directory(file))
             {
                 stringArray movies, sequences, audios;
                 parse_directory(file, movies, sequences, audios);

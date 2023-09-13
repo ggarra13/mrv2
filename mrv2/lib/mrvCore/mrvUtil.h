@@ -51,16 +51,6 @@ namespace mrv
     bool is_valid_subtitle(const char* ext);
 
     /**
-     * Given a filename extension, return whether the extension is
-     * from a picture format.
-     *
-     * @param ext Filename extension
-     *
-     * @return true if a possible picture, false if not.
-     */
-    bool is_valid_picture(const char* ext);
-
-    /**
      * Given a single image filename, return whether the image is
      * a sequence on disk (ie. there are several images named with a
      * similar convention)
@@ -69,17 +59,17 @@ namespace mrv
      *
      * @return true if a possible sequence, false if not.
      */
-    bool is_valid_sequence(const char* file);
+    bool is_valid_sequence(const std::string& file);
 
     /**
      * Given a single filename, return whether the file is
      * a directory on disk
      *
-     * @param file Filename or Directory
+     * @param directory possible path to a directory
      *
      * @return true if a directory, false if not.
      */
-    bool is_directory(const char* file);
+    bool is_directory(const std::string& directory);
 
     /**
      * Given a frame string like "0020", return the number of
@@ -188,7 +178,8 @@ namespace mrv
      * Return a string with all the 'match' characters commented out with
      * with backslashes.
      */
-    std::string commentCharacter(const std::string& input, const char match);
+    std::string
+    commentCharacter(const std::string& input, const char match = '/');
 
     /**
      * Return true if the file exists and is readable

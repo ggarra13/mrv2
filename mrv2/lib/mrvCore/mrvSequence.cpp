@@ -637,55 +637,6 @@ namespace mrv
         return true;
     }
 
-    bool fileroot(
-        std::string& fileroot, const std::string& file, const bool change_view,
-        const bool change_frame)
-    {
-        std::string root, frame, view, ext;
-
-        bool ok = split_sequence(
-            root, frame, view, ext, file, change_view, change_frame);
-        if (!ok || frame == "" || is_valid_movie(ext.c_str()) ||
-            mrv::is_valid_audio(ext.c_str()))
-        {
-            fileroot = file;
-            return false;
-        }
-
-        if (!change_frame)
-        {
-            root += view;
-            root += frame;
-            root += ext;
-            fileroot = root;
-            return true;
-        }
-
-        const char* digits = PRId64;
-        int pad = padded_digits(frame);
-        if (pad < 10)
-        {
-            digits = "d";
-        }
-
-        char full[1024];
-        if (pad == 0)
-        {
-            snprintf(
-                full, 1024, "%s%s%%%s%s", root.c_str(), view.c_str(), digits,
-                ext.c_str());
-        }
-        else
-        {
-            snprintf(
-                full, 1024, "%s%s%%0%d%s%s", root.c_str(), view.c_str(), pad,
-                digits, ext.c_str());
-        }
-
-        fileroot = full;
-        return true;
-    }
-
     void parse_directory(
         const std::string& dir, stringArray& movies, stringArray& sequences,
         stringArray& audios)
@@ -765,31 +716,6 @@ namespace mrv
                 number = i.number;
             }
         }
-    }
-
-    // Preferences::uiMain->uiPrefs->uiPrefsRelativePaths->value()
-
-    std::string relative_path(
-        const std::string& root, const std::string& parent,
-        const bool use_relative_paths)
-    {
-
-        std::string path = root;
-
-        if (use_relative_paths)
-        {
-            fs::path parentPath = parent;
-            parentPath = parentPath.parent_path();
-            fs::path childPath = root;
-            fs::path relativePath = fs::relative(childPath, parentPath);
-            path = relativePath.string();
-            if (path.empty())
-                path = root;
-        }
-
-        std::replace(path.begin(), path.end(), '\\', '/');
-
-        return path;
     }
 
     std::string parse_view(const std::string& root, bool left)
