@@ -242,7 +242,7 @@ namespace mrv
         const std::string& msg = setLanguageLocale();
 
         IApp::_init(
-            argc, argv, context, "mrv2",
+            app::convert(argc, argv), context, "mrv2",
             _("Play timelines, movies, and image sequences."),
             {app::CmdLineValueArg<std::string>::create(
                  p.options.fileName[0], "input",
