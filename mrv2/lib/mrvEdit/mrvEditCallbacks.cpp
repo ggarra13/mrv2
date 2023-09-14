@@ -134,26 +134,27 @@ namespace mrv
             return file::Path(file);
         }
 
-        void updateTimeline(const otio::Timeline* timeline, ViewerUI* ui)
+        void updateTimeline(
+            otio::Timeline* timeline, const RationalTime& time, ViewerUI* ui)
         {
             auto player = ui->uiView->getTimelinePlayer();
+            timeline->set_global_start_time(std::nullopt);
             player->setTimeline(timeline);
-            double rate = player->defaultSpeed();
+            const double rate = player->defaultSpeed();
             player->setSpeed(rate);
             player->setInOutRange(player->timeRange());
             ui->uiTimeline->frameView();
             ui->uiTimeline->redraw();
 
             // Set the start and end frame
-            auto one_frame = RationalTime(1.0, rate);
-            auto startTime = RationalTime(0.0, rate);
-            if (timeline->global_start_time().has_value())
-                startTime = timeline->global_start_time().value();
+            const auto one_frame = RationalTime(1.0, rate);
+            const auto startTime = RationalTime(0.0, rate);
             auto endTime = startTime + timeline->duration() - one_frame;
             endTime = endTime.rescaled_to(rate);
             TimelineClass* c = ui->uiTimeWindow;
             c->uiStartFrame->setTime(startTime);
             c->uiEndFrame->setTime(endTime);
+            player->seek(time);
         }
 
         //! Return whether a timeline has all empty tracks.
@@ -481,107 +482,6 @@ namespace mrv
             }
         }
 
-        //! Change clips' source range to use the highest video and audio
-        //! sample rate.  Also returns the largest time range for the timeline.
-        void sanitizeVideoAndAudioRates(
-            otio::Timeline* timeline, TimeRange& timeRange, double& videoRate,
-            double& sampleRate)
-        {
-            videoRate = 0.0;
-            sampleRate = 0.0;
-            timeRange = time::invalidTimeRange;
-            auto stack = timeline->tracks();
-            auto tracks = stack->children();
-            for (int i = 0; i < tracks.size(); ++i)
-            {
-                auto track = otio::dynamic_retainer_cast<Track>(tracks[i]);
-                if (!track)
-                    continue;
-                if (track->kind() == otio::Track::Kind::video)
-                {
-                    for (auto child : track->children())
-                    {
-                        auto clip = otio::dynamic_retainer_cast<Item>(child);
-                        if (!clip)
-                            continue;
-                        auto range = clip->trimmed_range();
-                        if (range.duration().rate() > videoRate)
-                            videoRate = range.duration().rate();
-                    }
-                }
-                else if (track->kind() == otio::Track::Kind::audio)
-                {
-                    for (auto child : track->children())
-                    {
-                        auto clip = otio::dynamic_retainer_cast<Item>(child);
-                        if (!clip)
-                            continue;
-                        auto range = clip->trimmed_range();
-                        if (range.duration().rate() > sampleRate)
-                            sampleRate = range.duration().rate();
-                    }
-                }
-            }
-
-            for (int i = 0; i < tracks.size(); ++i)
-            {
-                auto track = otio::dynamic_retainer_cast<Track>(tracks[i]);
-                if (!track)
-                    continue;
-                if (track->kind() == otio::Track::Kind::video)
-                {
-                    for (auto child : track->children())
-                    {
-                        auto clip = otio::dynamic_retainer_cast<Item>(child);
-                        if (!clip)
-                            continue;
-                        if (videoRate > 0)
-                        {
-                            auto range = clip->trimmed_range();
-                            auto start = time::round(
-                                range.start_time().rescaled_to(videoRate));
-                            auto duration = time::round(
-                                range.duration().rescaled_to(videoRate));
-                            range = TimeRange(start, duration);
-                            clip->set_source_range(range);
-                        }
-                    }
-                    const TimeRange range = track->trimmed_range();
-                    if (range.duration() >= timeRange.duration())
-                    {
-                        timeRange = range;
-                    }
-                }
-                else if (track->kind() == otio::Track::Kind::audio)
-                {
-                    for (auto child : track->children())
-                    {
-                        auto clip = otio::dynamic_retainer_cast<Item>(child);
-                        if (!clip)
-                            continue;
-                        if (sampleRate > 0)
-                        {
-                            auto range = clip->trimmed_range();
-                            auto start = time::round(
-                                range.start_time().rescaled_to(sampleRate));
-                            auto duration = time::round(
-                                range.duration().rescaled_to(sampleRate));
-                            // Make sure audio is at least one video frame long
-                            auto videoDuration =
-                                duration.rescaled_to(videoRate);
-                            if (videoDuration.value() < 1.0)
-                            {
-                                duration = RationalTime(1.0, videoRate);
-                                duration = duration.rescaled_to(sampleRate);
-                            }
-                            range = TimeRange(start, duration);
-                            clip->set_source_range(range);
-                        }
-                    }
-                }
-            }
-        }
-
         //! Remove annotations that are not in the time range.
         std::vector<std::shared_ptr<draw::Annotation>> removeAnnotations(
             const TimeRange& range,
@@ -885,7 +785,7 @@ namespace mrv
         player->setAllAnnotations(annotations);
         edit_clear_redo(ui);
 
-        updateTimeline(timeline, ui);
+        updateTimeline(timeline, time, ui);
         toOtioFile(timeline, ui);
 
         tcp->pushMessage("Edit/Frame/Cut", time);
@@ -955,7 +855,7 @@ namespace mrv
 
         edit_clear_redo(ui);
 
-        updateTimeline(timeline, ui);
+        updateTimeline(timeline, time, ui);
 
         toOtioFile(timeline, ui);
 
@@ -1003,7 +903,7 @@ namespace mrv
 
         edit_clear_redo(ui);
 
-        updateTimeline(timeline, ui);
+        updateTimeline(timeline, time, ui);
         toOtioFile(timeline, ui);
 
         redrawPanelThumbnails();
@@ -1084,7 +984,7 @@ namespace mrv
             otio::algo::remove(track, trackTime, false);
         }
 
-        updateTimeline(timeline, ui);
+        updateTimeline(timeline, time, ui);
 
         player = ui->uiView->getTimelinePlayer();
 
@@ -1127,7 +1027,7 @@ namespace mrv
             otio::algo::remove(track, time);
         }
         player->setTimeline(timeline);
-        updateTimeline(timeline, ui);
+        updateTimeline(timeline, time, ui);
 
         toOtioFile(timeline, ui);
     }
@@ -1158,7 +1058,7 @@ namespace mrv
                 otio::Timeline::from_json_string(buffer.json)));
 
         player->setAllAnnotations(buffer.annotations);
-        updateTimeline(timeline, ui);
+        updateTimeline(timeline, player->currentTime(), ui);
 
         toOtioFile(timeline, ui);
         if (playlistPanel)
@@ -1198,7 +1098,7 @@ namespace mrv
         stack = timeline->tracks();
 
         player->setAllAnnotations(buffer.annotations);
-        updateTimeline(timeline, ui);
+        updateTimeline(timeline, player->currentTime(), ui);
 
         toOtioFile(timeline, ui);
 
@@ -1555,20 +1455,14 @@ namespace mrv
                 }
             }
 
-            //
-            // Sanity check on video and sample rate.
-            //
-            TimeRange timeRange;
-            double videoRate;
-            double sampleRate;
-            sanitizeVideoAndAudioRates(
-                timeline, timeRange, videoRate, sampleRate);
-
             toOtioFile(timeline, ui);
+
+            const auto rate = timeline->duration().rate();
+            TimeRange timeRange(RationalTime(0.0, rate), timeline->duration());
 
             destItem->timeRange = timeRange;
             destItem->inOutRange = timeRange;
-            destItem->speed = videoRate;
+            destItem->speed = rate;
 
             if (refreshCache)
                 refresh_file_cache_cb(nullptr, ui);
@@ -1577,7 +1471,7 @@ namespace mrv
             if (!player)
                 return;
             player->setAllAnnotations(annotations);
-            updateTimeline(timeline, ui);
+            updateTimeline(timeline, player->currentTime(), ui);
 
             refreshPanelThumbnails();
         }

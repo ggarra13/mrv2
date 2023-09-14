@@ -152,7 +152,7 @@ namespace mrv
 
         p.timelineWidget =
             timelineui::TimelineWidget::create(timeUnitsModel, context);
-        p.timelineWidget->setEditable(true);
+        p.timelineWidget->setEditable(false);
         p.timelineWidget->setFrameView(true);
         p.timelineWidget->setScrollBarsVisible(false);
         p.timelineWidget->setStopOnScrub(false);
