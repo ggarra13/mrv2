@@ -134,10 +134,17 @@ namespace mrv
             return file::Path(file);
         }
 
-        void updateTimeline(
-            const otio::Timeline* timeline, const double rate, ViewerUI* ui)
+        void updateTimeline(const otio::Timeline* timeline, ViewerUI* ui)
         {
-            // Set the end frame in the
+            auto player = ui->uiView->getTimelinePlayer();
+            player->setTimeline(timeline);
+            double rate = player->defaultSpeed();
+            player->setSpeed(rate);
+            player->setInOutRange(player->timeRange());
+            ui->uiTimeline->frameView();
+            ui->uiTimeline->redraw();
+
+            // Set the start and end frame
             auto one_frame = RationalTime(1.0, rate);
             auto startTime = RationalTime(0.0, rate);
             if (timeline->global_start_time().has_value())
@@ -145,13 +152,8 @@ namespace mrv
             auto endTime = startTime + timeline->duration() - one_frame;
             endTime = endTime.rescaled_to(rate);
             TimelineClass* c = ui->uiTimeWindow;
+            c->uiStartFrame->setTime(startTime);
             c->uiEndFrame->setTime(endTime);
-            auto player = ui->uiView->getTimelinePlayer();
-            player->setTimeline(timeline);
-            player->setSpeed(rate);
-            player->setInOutRange(player->timeRange());
-            ui->uiTimeline->frameView();
-            ui->uiTimeline->redraw();
         }
 
         //! Return whether a timeline has all empty tracks.
@@ -894,7 +896,7 @@ namespace mrv
         player->setAllAnnotations(annotations);
         edit_clear_redo(ui);
 
-        updateTimeline(timeline, time.rate(), ui);
+        updateTimeline(timeline, ui);
         toOtioFile(timeline, ui);
 
         tcp->pushMessage("Edit/Frame/Cut", time);
@@ -964,10 +966,7 @@ namespace mrv
 
         edit_clear_redo(ui);
 
-        TimeRange timeRange;
-        double videoRate, sampleRate;
-        sanitizeVideoAndAudioRates(timeline, timeRange, videoRate, sampleRate);
-        updateTimeline(timeline, videoRate, ui);
+        updateTimeline(timeline, ui);
 
         toOtioFile(timeline, ui);
 
@@ -1015,11 +1014,7 @@ namespace mrv
 
         edit_clear_redo(ui);
 
-        TimeRange timeRange;
-        double videoRate, sampleRate;
-        sanitizeVideoAndAudioRates(timeline, timeRange, videoRate, sampleRate);
-
-        updateTimeline(timeline, videoRate, ui);
+        updateTimeline(timeline, ui);
         toOtioFile(timeline, ui);
 
         redrawPanelThumbnails();
@@ -1100,15 +1095,14 @@ namespace mrv
             otio::algo::remove(track, trackTime, false);
         }
 
-        TimeRange timeRange;
-        double videoRate, sampleRate;
-        sanitizeVideoAndAudioRates(timeline, timeRange, videoRate, sampleRate);
+        updateTimeline(timeline, ui);
+
+        player = ui->uiView->getTimelinePlayer();
 
         auto annotations =
-            removeAnnotations(timeRange, player->getAllAnnotations());
+            removeAnnotations(player->timeRange(), player->getAllAnnotations());
 
         player->setAllAnnotations(annotations);
-        updateTimeline(timeline, videoRate, ui);
 
         ui->uiTimeline->setTimelinePlayer(player);
 
@@ -1144,7 +1138,7 @@ namespace mrv
             otio::algo::remove(track, time);
         }
         player->setTimeline(timeline);
-        updateTimeline(timeline, time.rate(), ui);
+        updateTimeline(timeline, ui);
 
         toOtioFile(timeline, ui);
     }
@@ -1174,14 +1168,8 @@ namespace mrv
             dynamic_cast<otio::Timeline*>(
                 otio::Timeline::from_json_string(buffer.json)));
 
-        auto stack = timeline->tracks();
-        TimeRange timeRange;
-        double videoRate, sampleRate;
-        sanitizeVideoAndAudioRates(timeline, timeRange, videoRate, sampleRate);
-
         player->setAllAnnotations(buffer.annotations);
-        player->setTimeline(timeline);
-        updateTimeline(timeline, videoRate, ui);
+        updateTimeline(timeline, ui);
 
         toOtioFile(timeline, ui);
         if (playlistPanel)
@@ -1220,11 +1208,8 @@ namespace mrv
         double videoRate, sampleRate;
         stack = timeline->tracks();
 
-        sanitizeVideoAndAudioRates(timeline, timeRange, videoRate, sampleRate);
-
         player->setAllAnnotations(buffer.annotations);
-        player->setTimeline(timeline);
-        updateTimeline(timeline, videoRate, ui);
+        updateTimeline(timeline, ui);
 
         toOtioFile(timeline, ui);
 
@@ -1603,7 +1588,7 @@ namespace mrv
             if (!player)
                 return;
             player->setAllAnnotations(annotations);
-            updateTimeline(timeline, videoRate, ui);
+            updateTimeline(timeline, ui);
 
             refreshPanelThumbnails();
         }

@@ -877,6 +877,7 @@ namespace mrv
         errors.get("log_display", tmp, 2);
 
         uiPrefs->uiPrefsRaiseLogWindowOnError->value(tmp);
+        LogDisplay::prefs = (LogDisplay::ShowPreferences)tmp;
 
         //
         // Hotkeys
