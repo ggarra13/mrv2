@@ -15,6 +15,8 @@ v0.7.6
   the Preferences->Errors->Do Nothing was set.
 - Fixed copying frames from one video to another even when they have different
   frame rates.
+- Added an option in Preferences->Timeline to remove the EDLs from the
+  temporary directory once the application exits.
   
 
 
