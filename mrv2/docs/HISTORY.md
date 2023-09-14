@@ -12,7 +12,9 @@ v0.7.6
 - Fixed a memory corruption when pasting or inserting one frame of audio and
   playing back in reverse.
 - Fixed log window showing up when there was a corruption on hotkeys even when
-  the Preferences->Errors->Do Nothing was set. 
+  the Preferences->Errors->Do Nothing was set.
+- Fixed copying frames from one video to another even when they have different
+  frame rates.
   
 
 
