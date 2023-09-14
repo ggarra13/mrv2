@@ -11,6 +11,8 @@ v0.7.6
   Apps->Installed Apps.
 - Fixed a memory corruption when pasting or inserting one frame of audio and
   playing back in reverse.
+- Fixed log window showing up when there was a corruption on hotkeys even when
+  the Preferences->Errors->Do Nothing was set. 
   
 
 
