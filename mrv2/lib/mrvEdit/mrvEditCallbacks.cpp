@@ -4,7 +4,6 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #include <fstream>
-#include <set>
 #include <filesystem>
 
 namespace fs = std::filesystem;
@@ -65,6 +64,7 @@ namespace mrv
         struct FrameInfo
         {
             int trackIndex;
+            double rate;
             std::string kind;
             otio::SerializableObject::Retainer<Item> item;
         };
@@ -211,6 +211,9 @@ namespace mrv
             auto parent = composition->parent();
             frame.trackIndex = parent->index_of_child(composition);
             frame.kind = track->kind();
+            auto trackRange = track->trimmed_range();
+            double rate = trackRange.duration().rate();
+            frame.rate = rate;
 
             auto clonedItem = dynamic_cast<Item*>(item->clone());
             if (!clonedItem)
@@ -572,8 +575,15 @@ namespace mrv
                                 range.start_time().rescaled_to(sampleRate));
                             auto duration = time::round(
                                 range.duration().rescaled_to(sampleRate));
+                            // Make sure audio is at least one video frame long
+                            auto videoDuration =
+                                duration.rescaled_to(videoRate);
+                            if (videoDuration.value() < 1.0)
+                            {
+                                duration = RationalTime(1.0, videoRate);
+                                duration = duration.rescaled_to(sampleRate);
+                            }
                             range = TimeRange(start, duration);
-                            duration = duration.rescaled_to(videoRate);
                             clip->set_source_range(range);
                         }
                     }
@@ -909,12 +919,6 @@ namespace mrv
 
         edit_store_undo(player, ui);
 
-        std::set<size_t> freeTracks;
-        for (size_t i = 0; i < tracks.size(); ++i)
-        {
-            freeTracks.insert(i);
-        }
-
         const TimeRange range(time, RationalTime(1.0, time.rate()));
 
         for (auto& frame : copiedFrames)
@@ -934,45 +938,37 @@ namespace mrv
             if (track->kind() != frame.kind)
                 continue;
 
-            freeTracks.erase(trackIndex);
-
             auto track_range = track->trimmed_range();
             auto rate = track_range.duration().rate();
+            TimeRange rescaledRange = range;
+            if (rate > range.duration().rate())
+            {
+                rescaledRange = TimeRange(
+                    range.start_time().rescaled_to(rate),
+                    range.duration().rescaled_to(rate));
+            }
 
-            const TimeRange rescaledRange(
-                range.start_time().rescaled_to(rate),
-                range.duration().rescaled_to(rate));
-
-            otio::algo::overwrite(item, track, rescaledRange);
+            otio::ErrorStatus errorStatus;
+            otio::algo::overwrite(
+                item, track, rescaledRange, true, nullptr, &errorStatus);
+            if (otio::is_error(errorStatus))
+            {
+                std::string err =
+                    string::Format(_("Could not paste {0}.  Error {1}."))
+                        .arg(track->kind())
+                        .arg(errorStatus.full_description);
+                LOG_ERROR(err);
+            }
             frame.item = item;
-        }
-
-        for (const auto trackIndex : freeTracks)
-        {
-            auto track = otio::dynamic_retainer_cast<Track>(tracks[trackIndex]);
-            if (!track)
-                continue;
-
-            auto track_range = track->trimmed_range();
-            auto rate = track_range.duration().rate();
-
-            const TimeRange rescaledRange(
-                range.start_time().rescaled_to(rate),
-                range.duration().rescaled_to(rate));
-
-            otio::SerializableObject::Retainer<Gap> gap = new Gap;
-            gap->set_source_range(rescaledRange);
-
-            auto item = dynamic_cast<Item*>(gap->clone());
-            if (!item)
-                continue;
-
-            otio::algo::overwrite(item, track, rescaledRange);
         }
 
         edit_clear_redo(ui);
 
-        player->setTimeline(timeline);
+        TimeRange timeRange;
+        double videoRate, sampleRate;
+        sanitizeVideoAndAudioRates(timeline, timeRange, videoRate, sampleRate);
+        updateTimeline(timeline, videoRate, ui);
+
         toOtioFile(timeline, ui);
 
         redrawPanelThumbnails();
@@ -1023,7 +1019,7 @@ namespace mrv
         double videoRate, sampleRate;
         sanitizeVideoAndAudioRates(timeline, timeRange, videoRate, sampleRate);
 
-        updateTimeline(timeline, time.rate(), ui);
+        updateTimeline(timeline, videoRate, ui);
         toOtioFile(timeline, ui);
 
         redrawPanelThumbnails();

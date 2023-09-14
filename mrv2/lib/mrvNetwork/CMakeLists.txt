@@ -47,7 +47,7 @@ set(SOURCES
 add_library(mrvNetwork ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
-set( LIBRARIES Poco::Net Poco::Foundation )
+set( LIBRARIES mrvCore Poco::Net Poco::Foundation )
 
 target_link_libraries(mrvNetwork PUBLIC ${LIBRARIES} )
 set_target_properties(mrvNetwork PROPERTIES FOLDER lib)
