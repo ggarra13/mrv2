@@ -1,6 +1,9 @@
 v0.7.6
 ======
 
+This is mainly a bug fix release to Edit features and general issues found
+with v0.7.5.
+
 - Fixed hotkey check when entering a hotkey of the first 5 entries (a legacy
   from mrViewer).
 - Fixed Load/Save hotkey file requester on Windows that would redraw
@@ -18,7 +21,7 @@ v0.7.6
 - Added an option in Preferences->Timeline to remove the EDLs from the
   temporary directory once the application exits.
 - Improved focus handling of current frame, start frame and end frame widgets,
-  which would loose once the cursor was moved to the timeline.
+  which would loose it once the cursor was moved to the timeline.
 
 
 v0.7.5
