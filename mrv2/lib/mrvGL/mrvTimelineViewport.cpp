@@ -1717,6 +1717,7 @@ namespace mrv
             if (!w->fullscreen_active())
             {
                 w->fullscreen();
+                view->take_focus();
 
                 if (!secondary)
                 {
@@ -1736,7 +1737,6 @@ namespace mrv
             }
         }
 
-        view->take_focus();
         w->fill_menu(p.ui->uiMenuBar);
     }
 

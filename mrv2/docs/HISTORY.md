@@ -17,7 +17,8 @@ v0.7.6
   frame rates.
 - Added an option in Preferences->Timeline to remove the EDLs from the
   temporary directory once the application exits.
-  
+- Improved focus handling of current frame, start frame and end frame widgets,
+  which would loose once the cursor was moved to the timeline.
 
 
 v0.7.5

@@ -837,8 +837,14 @@ namespace mrv
             return 1;
         case FL_ENTER:
         {
-            // if (Fl::focus() == nullptr)
-            if (!children())
+            bool takeFocus = true;
+            Fl_Widget* focusWidget = Fl::focus();
+            TimelineClass* c = p.ui->uiTimeWindow;
+            if (this == p.ui->uiView &&
+                (focusWidget == c->uiFrame || focusWidget == c->uiStartFrame ||
+                 focusWidget == c->uiEndFrame))
+                takeFocus = false;
+            if (!children() && takeFocus)
                 take_focus();
 #ifdef __APPLE__
             if (p.ui->uiMenuBar && p.ui->uiPrefs->uiPrefsMacOSMenus->value())
