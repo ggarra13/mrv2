@@ -9,6 +9,8 @@ v0.7.6
   forced hotkey.
 - Fixed Windows installer not installing the icon on Windows 11's Settings->
   Apps->Installed Apps.
+- Fixed a memory corruption when pasting or inserting one frame of audio and
+  playing back in reverse.
   
 
 

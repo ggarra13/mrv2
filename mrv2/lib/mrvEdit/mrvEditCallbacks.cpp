@@ -64,7 +64,7 @@ namespace mrv
         struct FrameInfo
         {
             int trackIndex;
-            RationalTime time;
+            double rate;
             std::string kind;
             otio::SerializableObject::Retainer<Item> item;
         };
@@ -213,8 +213,7 @@ namespace mrv
             frame.kind = track->kind();
             auto trackRange = track->trimmed_range();
             double rate = trackRange.duration().rate();
-            RationalTime timeInTrack(time.rescaled_to(rate));
-            frame.time = timeInTrack;
+            frame.rate = rate;
 
             auto clonedItem = dynamic_cast<Item*>(item->clone());
             if (!clonedItem)
