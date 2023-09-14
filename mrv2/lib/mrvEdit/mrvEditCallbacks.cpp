@@ -233,18 +233,7 @@ namespace mrv
                 time - track_range.value().start_time() +
                     clip_range.start_time(),
                 one_frame);
-            Clip* clip = dynamic_cast<Clip*>(clonedItem);
-            if (clip)
-            {
-                clip->set_source_range(range);
-            }
-            else
-            {
-                Gap* gap = dynamic_cast<Gap*>(clonedItem);
-                if (!gap)
-                    return;
-                gap->set_source_range(range);
-            }
+            clonedItem->set_source_range(range);
             frame.item = clonedItem;
             copiedFrames.push_back(frame);
         }
