@@ -22,6 +22,8 @@ with v0.7.5.
   temporary directory once the application exits.
 - Improved focus handling of current frame, start frame and end frame widgets,
   which would loose it once the cursor was moved to the timeline.
+- Fixed Edit/Frame/Insert when the movie had timecode in it and did not start
+  at 0.
 
 
 v0.7.5
