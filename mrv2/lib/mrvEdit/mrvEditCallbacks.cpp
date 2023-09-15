@@ -1051,7 +1051,6 @@ namespace mrv
             if (track->kind() != frame.kind)
                 continue;
 
-            std::cerr << "insert " << scaledTime << std::endl;
             otio::algo::insert(item, track, scaledTime);
             frame.item = item;
         }
