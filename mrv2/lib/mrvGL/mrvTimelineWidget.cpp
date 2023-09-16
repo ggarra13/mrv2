@@ -471,6 +471,9 @@ namespace mrv
             p.eventLoop->setDisplaySize(math::Size2i(_toUI(W), _toUI(H)));
             p.eventLoop->tick();
         }
+
+        p.vbo.reset();
+        p.vao.reset();
     }
 
     void TimelineWidget::draw()
