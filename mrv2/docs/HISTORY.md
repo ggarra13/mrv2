@@ -24,6 +24,7 @@ with v0.7.5.
   which would loose it once the cursor was moved to the timeline.
 - Fixed Edit/Frame/Insert when the movie had timecode in it and did not start
   at 0.
+- Improved quality of Windows' icon.
 
 
 v0.7.5
