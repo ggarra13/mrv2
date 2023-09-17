@@ -12,7 +12,6 @@ TODO
 
 - Add Mute Audio to preferences.
 - Remove unused icons from icons/ directory.
-- Fix TLRENDER_VERSION macro which is set to "".
 - Added HUD message display, like when playback starts/stops.
 
 
@@ -28,4 +27,3 @@ TODO
 - Verify the build scripts work for a macOS M1 machine
   (how? I only have an intel machine and I would need to reinstall all
    brew packages for arm64)
-- Add Remote syncing/connections.

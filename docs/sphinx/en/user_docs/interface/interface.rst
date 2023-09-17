@@ -61,6 +61,8 @@ A three buttoned mouse can be used for closer image inspection. Hold the middle 
 
 .. note::
     To 'reset' the viewer so that the image is auto-fitted, you can select "Fit" from the Zoom display pulldown in the Pixel Toolbar or use the 'f' hotkey.
+
+.. note::
     To 'center' the view, without changing the zoom factor, you can use the 'c'
     hotkey.
 
