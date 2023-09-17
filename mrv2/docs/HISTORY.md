@@ -1,3 +1,11 @@
+v0.7.7
+======
+
+- Fixed adding a file to playlist when the path was empty (ie. the file was
+  loaded from the current directory).
+- Fixed adding audio to a playlist when there was an empty audio track and a
+  video clip (ie. a sequence of images and then a video clip).
+
 v0.7.6
 ======
 

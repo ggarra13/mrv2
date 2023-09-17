@@ -1549,7 +1549,20 @@ namespace mrv
                     const auto rate = info.audioTime.duration().rate();
                     // If no audio track, create one and fill it with a gap
                     // until new clip.
-                    if (audioTrackIndex == -1)
+
+                    bool emptyAudioTrack = false;
+                    if (audioTrackIndex > 0)
+                    {
+                        auto audioTrack = otio::dynamic_retainer_cast<Track>(
+                            tracks[audioTrackIndex]);
+                        auto audioChildren = audioTrack->children();
+                        if (audioChildren.size() <= 0)
+                        {
+                            emptyAudioTrack = true;
+                        }
+                    }
+
+                    if (audioTrackIndex == -1 || emptyAudioTrack)
                     {
                         auto videoTrack = otio::dynamic_retainer_cast<Track>(
                             tracks[videoTrackIndex]);
@@ -1582,10 +1595,21 @@ namespace mrv
                             RationalTime(
                                 videoRange.start_time().rescaled_to(rate)));
                         auto gap = new otio::Gap(gapRange);
-                        auto audioTrack = new otio::Track(
-                            "Audio", otio::nullopt, otio::Track::Kind::audio);
+                        otio::Track* audioTrack;
+                        if (audioTrackIndex < 0)
+                        {
+                            audioTrack = new otio::Track(
+                                "Audio", otio::nullopt,
+                                otio::Track::Kind::audio);
+                        }
+                        else
+                        {
+                            audioTrack = otio::dynamic_retainer_cast<Track>(
+                                tracks[audioTrackIndex]);
+                        }
                         audioTrack->append_child(gap);
-                        stack->append_child(audioTrack, &errorStatus);
+                        if (audioTrackIndex < 0)
+                            stack->append_child(audioTrack, &errorStatus);
                         if (otio::is_error(errorStatus))
                         {
                             throw std::runtime_error(
