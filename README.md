@@ -96,7 +96,9 @@ mrv2 binaries run on Windows 8.1+, RedHat 8+ or Ubuntu 20.04+ and macOS 10.15+.
   Once you install it, you can run mrv2 by just typing mrv2 in the shell, as
   a symlink to the executable is placed in /usr/bin.  The installers will also
   associate file extensions and install an icon for easy starting up in the
-  Desktop icon of the user that installed it.
+  Desktop icon of the user that installed it.  For running mrv2 with the icon,
+  you need to select it and use the right mouse button to open the menu and
+  choose Allow Launch.
   
   If you lack sudo permissions in your organization, you should download the
   .tar.gz file and you can uncompress it with:

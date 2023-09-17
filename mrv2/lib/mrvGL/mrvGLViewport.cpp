@@ -144,6 +144,8 @@ namespace mrv
         if (!gl.init_debug)
         {
             gl.init_debug = true;
+#    ifndef __APPLE__
+            // Apple's OpenGL 4.1 does not support glDebugMessageCallback.
             glEnable(GL_DEBUG_OUTPUT);
             glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
             glDebugMessageCallback(glDebugOutput, nullptr);
@@ -151,6 +153,7 @@ namespace mrv
                 static_cast<GLenum>(GL_DONT_CARE),
                 static_cast<GLenum>(GL_DONT_CARE),
                 static_cast<GLenum>(GL_DONT_CARE), 0, nullptr, GL_TRUE);
+#    endif
         }
 #endif
 
