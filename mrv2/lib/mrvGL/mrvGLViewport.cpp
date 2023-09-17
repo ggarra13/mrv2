@@ -552,10 +552,10 @@ namespace mrv
             w->Fl_Widget::position(pos.x, pos.y);
         }
 
-#if 0 // def USE_OPENGL2
+#ifdef USE_OPENGL2
         Fl_Gl_Window::draw_begin(); // Set up 1:1 projectionç
         CHECK_GL;
-        Fl_Window::draw();          // Draw FLTK children
+        Fl_Window::draw(); // Draw FLTK children
         CHECK_GL;
         glViewport(0, 0, viewportSize.w, viewportSize.h);
         CHECK_GL;

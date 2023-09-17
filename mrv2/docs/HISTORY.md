@@ -5,6 +5,7 @@ v0.7.7
   loaded from the current directory).
 - Fixed adding audio to a playlist when there was an empty audio track and a
   video clip (ie. a sequence of images and then a video clip).
+- Fixed Text annotations having turned off by mistake.
 
 v0.7.6
 ======

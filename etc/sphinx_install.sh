@@ -8,5 +8,7 @@
 #
 
 export PYTHON=`ls $BUILD_DIR/install/bin/python* | grep -o 'python.*' | head -1 `
-run_cmd $BUILD_DIR/install/bin/$PYTHON -m pip install --upgrade pip
-run_cmd $BUILD_DIR/install/bin/$PYTHON -m pip install sphinx sphinx_rtd_theme requests urllib3
+if [[ ! -d $BUILD_DIR/install/lib/$PYTHON/site-packages/sphinx ]]; then
+    run_cmd $BUILD_DIR/install/bin/$PYTHON -m pip install --upgrade pip
+    run_cmd $BUILD_DIR/install/bin/$PYTHON -m pip install sphinx sphinx_rtd_theme requests urllib3
+fi

@@ -3,7 +3,7 @@ mrv2 module
 
 .. automodule:: mrv2
     :members:
-    :exclude-members: FileMedia, Playlist
+    :exclude-members: FileMedia
     
 .. autoclass:: mrv2.FileMedia
 
@@ -39,11 +39,3 @@ mrv2 module
 		   
    .. autoattribute:: audioOffset
       :annotation: = float
-
-.. autoclass:: mrv2.Playlist
-	       
-   .. autoattribute:: name
-      :annotation: = str
-
-   .. autoattribute:: clips
-      :annotation: = List[mrv2.FileMedia]

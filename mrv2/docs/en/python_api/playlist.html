@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>playlist module &mdash; mrv2 v0.7.2 documentation</title>
+  <title>playlist module &mdash; mrv2 v0.7.6 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
@@ -56,12 +56,7 @@
 <li class="toctree-l2"><a class="reference internal" href="media.html">media module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mrv2.html">mrv2 module</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">playlist module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#mrv2.playlist.add"><code class="docutils literal notranslate"><span class="pre">add()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#mrv2.playlist.close"><code class="docutils literal notranslate"><span class="pre">close()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#mrv2.playlist.create"><code class="docutils literal notranslate"><span class="pre">create()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#mrv2.playlist.current"><code class="docutils literal notranslate"><span class="pre">current()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.playlist.save"><code class="docutils literal notranslate"><span class="pre">save()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#mrv2.playlist.set"><code class="docutils literal notranslate"><span class="pre">set()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="plug-ins.html">plugin module</a></li>
@@ -103,47 +98,9 @@
 <p>Playlist module.</p>
 <p>Contains all functions and classes related to the playlists.</p>
 <dl class="py function">
-<dt class="sig sig-object py" id="mrv2.playlist.add">
-<span class="sig-prename descclassname"><span class="pre">mrv2.playlist.</span></span><span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">playlist</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="mrv2.html#mrv2.Playlist" title="mrv2.Playlist"><span class="pre">mrv2.Playlist</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.playlist.add" title="Permalink to this definition"></a></dt>
-<dd><p>Add a playlist.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="mrv2.playlist.close">
-<span class="sig-prename descclassname"><span class="pre">mrv2.playlist.</span></span><span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.playlist.close" title="Permalink to this definition"></a></dt>
-<dd><p>Close the current playlist.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="mrv2.playlist.create">
-<span class="sig-prename descclassname"><span class="pre">mrv2.playlist.</span></span><span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.playlist.create" title="Permalink to this definition"></a></dt>
-<dd><p>Create a temporary .otio file with absolute paths.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="mrv2.playlist.current">
-<span class="sig-prename descclassname"><span class="pre">mrv2.playlist.</span></span><span class="sig-name descname"><span class="pre">current</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="mrv2.html#mrv2.Playlist" title="mrv2.Playlist"><span class="pre">mrv2.Playlist</span></a></span></span><a class="headerlink" href="#mrv2.playlist.current" title="Permalink to this definition"></a></dt>
-<dd><p>Return the current playlist.</p>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="mrv2.playlist.save">
 <span class="sig-prename descclassname"><span class="pre">mrv2.playlist.</span></span><span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fileName</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.playlist.save" title="Permalink to this definition"></a></dt>
-<dd><p>Save an .otio file with relative paths.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="mrv2.playlist.set">
-<span class="sig-prename descclassname"><span class="pre">mrv2.playlist.</span></span><span class="sig-name descname"><span class="pre">set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mrv2.playlist.set" title="Permalink to this definition"></a></dt>
-<dd><p>Overloaded function.</p>
-<ol class="arabic simple">
-<li><p>set(index: int) -&gt; None</p></li>
-</ol>
-<p>Select a playlist with the given index.</p>
-<ol class="arabic simple" start="2">
-<li><p>set(name: str) -&gt; None</p></li>
-</ol>
-<p>Select a playlist with the given name.</p>
+<dd><p>Save current .otio file with relative paths.</p>
 </dd></dl>
 
 </section>
