@@ -23,7 +23,7 @@ Here are some key features:
 **Loading Media**
 
   - Display virtually any image format in common use today (EXR, TIF, TGA, JPG, PSD, MOV, MP4, WEBM, etc).
-  - Drag and drop media from the desktop file system browser directly into the xSTUDIO interface.
+  - Drag and drop media from the desktop file system browser directly into the mrv2 interface.
   - Use the Python API to build playlists with your own custom scripts, control
     the player, save movies, compare clips and control your pipeline
     integration.
@@ -37,7 +37,6 @@ Here are some key features:
 
   - Create any number of playlists, save them into an .otio file, and edit them
     with the built-in editing tools.
-  - Drag and drop to reorder and organise media and playlists.
 
 **Annotations and Notes**
 
