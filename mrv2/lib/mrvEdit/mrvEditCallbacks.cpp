@@ -1421,9 +1421,25 @@ namespace mrv
             return;
         }
 
+        file::Path path(file);
+
+        if (!path.isAbsolute())
+        {
+            char currentDir[4096];
+            if (fl_getcwd(currentDir, 4096) == nullptr)
+            {
+                LOG_ERROR(_("Could not get current path."));
+                return;
+            }
+
+            std::string fullpath = currentDir;
+            fullpath += '/' + path.get();
+            path = file::Path(fullpath);
+        }
+
         Message msg;
         msg["command"] = "Add Clip to Timeline";
-        msg["fileName"] = file;
+        msg["fileName"] = path.get();
         msg["sourceIndex"] = index;
         tcp->pushMessage(msg);
         tcp->lock();
@@ -1438,7 +1454,7 @@ namespace mrv
             edit_store_undo(player, ui);
 
             auto Aindex = model->observeAIndex()->get();
-            const file::Path path(file);
+
             auto stack = timeline->tracks();
             const bool refreshCache = hasEmptyTracks(stack);
             auto tracks = stack->children();
