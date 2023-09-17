@@ -64,7 +64,8 @@ Here are some key features:
   - Adjust exposure and playback rate.
   - Color correction tools to control gain, gamma, tint, saturation, etc.
   - Zoom/pan image tools, RGBA channel display.
-  - A/B, Overlay, Horizontal, Vertical and Tile 'Compare Modes'.
+  - A/B, Wipe, Overlay, Difference, Horizontal, Vertical and
+    Tile 'Compare Modes'.
   - Predefined masking overlay and safe areas guide-lines.
   - 'Pop-out' 2nd viewer for dual display set-ups.
 
