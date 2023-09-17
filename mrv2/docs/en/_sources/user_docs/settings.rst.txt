@@ -2,7 +2,7 @@
 Settings
 ########
 
-.. image:: ./images/settings-01.png
+.. image:: ./images/settings-panel-01.png
    :align: center
 
 

@@ -172,7 +172,7 @@ namespace mrv
     Hotkey kTogglePlaylist(false, false, false, false, 0);
     Hotkey kToggleCompare(false, false, false, false, FL_F + 8);
     Hotkey kToggleDevices(false, false, false, false, 0);
-    Hotkey kToggleAnnotation(false, false, false, false, 0);
+    Hotkey kToggleAnnotation(true, false, false, false, 'a');
     Hotkey kToggleSettings(false, false, false, false, FL_F + 9);
     Hotkey kTogglePreferences(false, false, false, false, FL_F + 10);
     Hotkey kToggleHistogram(false, false, false, false, 0);
@@ -437,7 +437,7 @@ namespace mrv
         HotkeyEntry(_("Toggle Playlist Panel"), kTogglePlaylist),
         HotkeyEntry(_("Toggle Compare Panel"), kToggleCompare),
         HotkeyEntry(_("Toggle Devices Panel"), kToggleDevices),
-        HotkeyEntry(_("Toggle Annotation Panel"), kToggleAnnotation),
+        HotkeyEntry(_("Toggle Annotation Panel"), kToggleAnnotation, true),
         HotkeyEntry(_("Toggle Settings Panel"), kToggleSettings),
         HotkeyEntry(_("Toggle Histogram Panel"), kToggleHistogram),
         HotkeyEntry(_("Toggle Vectorscope Panel"), kToggleVectorscope),

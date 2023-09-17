@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The mrv2 Interface &mdash; mrv2 v0.7.6 documentation</title>
+  <title>The mrv2 Interface &mdash; mrv2 v0.7.7 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
@@ -20,7 +20,9 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" /> 
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Panels" href="../panels/panels.html" />
+    <link rel="prev" title="Getting Started" href="../getting_started/getting_started.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -42,9 +44,37 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul>
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Welcome to mrv2’s documentation!</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../index.html">mrv2 User Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">mrv2 User Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../overview.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/getting_started.html">Getting Started</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">The mrv2 Interface</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#customising-the-interface">Customising the Interface</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#the-timeline">The Timeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hiding-showing-ui-elements">Hiding/Showing UI elements</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#mouse-interaction-in-the-viewer">Mouse interaction in the Viewer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#view-menu">View Menu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#timeline">Timeline</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#frame-indicator">Frame Indicator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#transport-controls">Transport Controls</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fps">FPS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#start-and-end-frame-indicator">Start and End Frame Indicator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#player-viewer-controls">Player/Viewer Controls</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#the-panels">The Panels</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#divider">Divider</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../panels/panels.html">Panels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notes.html">Notes and Annotations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playback.html">Video Playback</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../settings.html">Settings</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../../python_api/index.html">Python API</a></li>
 </ul>
 
@@ -62,6 +92,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">mrv2 User Guide</a></li>
       <li class="breadcrumb-item active">The mrv2 Interface</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/user_docs/interface/interface.rst.txt" rel="nofollow"> View page source</a>
@@ -73,7 +104,7 @@
            <div itemprop="articleBody">
              
   <section id="the-mrv2-interface">
-<h1>The mrv2 Interface<a class="headerlink" href="#the-mrv2-interface" title="Permalink to this heading"></a></h1>
+<span id="interface"></span><h1>The mrv2 Interface<a class="headerlink" href="#the-mrv2-interface" title="Permalink to this heading"></a></h1>
 <img alt="../../_images/interface-02.png" class="align-center" src="../../_images/interface-02.png" />
 <p>mrv2’s main window provides 6 different toolbars that can be hidden or shown.</p>
 <p>The first toolbar is the menu toolbar.  It can be toggled with Shift + F1. The menus are also available from the Right Mouse Button on the View window.  The menu toolbar also has the Edit button to toggle the editing mode and the Fit Window to image button.</p>
@@ -87,6 +118,7 @@
 <p>mrv2 can be customized to show any of the toolbars and set up how the main window behaves from Window-&gt;Preferences-&gt;User Interface.  These settings are saved when you exit mrv2 and will allow you to always start mrv2 in a certain configuration.</p>
 <section id="the-timeline">
 <h3>The Timeline<a class="headerlink" href="#the-timeline" title="Permalink to this heading"></a></h3>
+<img alt="../../_images/timeline-01.png" class="align-center" src="../../_images/timeline-01.png" />
 <p>The Timeline Viewport allows you to scale the Editing’s Thumbnails and Audio waveforms by dragging the viewport up and down.  For a quick display of all the tracks, you can click on the Edit button in the Menu toolbar.
 When showing the pictures, you can zoom in and out with the mousewheel.</p>
 </section>
@@ -199,42 +231,16 @@ hotkey.</p>
 <h3>Divider<a class="headerlink" href="#divider" title="Permalink to this heading"></a></h3>
 <p>The Panels have a divided, just like the Timeline Viewport, and can be dragged to make the panel bigger or smaller (and change the size of the main viewport).</p>
 </section>
-<section id="files-panel">
-<h3>Files Panel<a class="headerlink" href="#files-panel" title="Permalink to this heading"></a></h3>
-<p>The Files Panel (F4 by default) show all elements loaded.  It has seven buttons at the bottom to Add a new File, Load a new File with Audio, Close the currently selected file, Close All the selected files, switch to the Previous or to the Next media file and filter Temporary EDL Playlists from the Files Panel.</p>
-</section>
-<section id="files-panel-context-menu-right-mouse-button">
-<h3>Files Panel Context Menu (right mouse button)<a class="headerlink" href="#files-panel-context-menu-right-mouse-button" title="Permalink to this heading"></a></h3>
-<p>A right mouse button click in the Files panel will show a pop-up menu giving access to the following features:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p><strong>File/Clone:</strong> It will load the file item again and clone its settings.</p></li>
-<li><p><strong>File/Refresh Cache</strong> It will re-load the file and reset its cache.</p></li>
-<li><p><strong>Copy/Filename</strong> Use options in this sub-menu to copy the full paths or the file names of the selected media to the desktop clipboard. This can be useful to gather a list of media that you want to copy into an email, for example.</p></li>
-<li><p><strong>Show/In Filemanager</strong> Open your desktop file browser with the folder of the selected media.</p></li>
-</ul>
-</div></blockquote>
-</section>
-<section id="color-panel">
-<h3>Color Panel<a class="headerlink" href="#color-panel" title="Permalink to this heading"></a></h3>
-<p>The Color Panel allows controlling the color display of the viewport.  It allows you to control the Add, Contrast, Saturation and Tint.   You can Invert the image and set the In/Out Levels and gamma.  You can also add a LUT.</p>
-</section>
-<section id="media-information-panel">
-<h3>Media Information Panel<a class="headerlink" href="#media-information-panel" title="Permalink to this heading"></a></h3>
-<p>The Media Information Panel is the work horse for displaying all data about the selected media.  It shows all layers, codecs, levels, frame ranges, etc.</p>
-</section>
-<section id="compare-panel">
-<h3>Compare Panel<a class="headerlink" href="#compare-panel" title="Permalink to this heading"></a></h3>
-<p>The Compare Panel is similar to the Files Panel, but allows selecting multiple clips for comparison.  You can show the A (Files Panel) image, the B (Compare Panel) image, Wipe, Overlay (using an alpha channel if present), Difference,
-Horizontal, Vertical and Tile.  The Tile comparison allows multiple images to be tiled.</p>
-</section>
 </section>
 </section>
 
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../getting_started/getting_started.html" class="btn btn-neutral float-left" title="Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../panels/panels.html" class="btn btn-neutral float-right" title="Panels" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 

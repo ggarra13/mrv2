@@ -9,6 +9,8 @@ mrv2 User Guide
 
    overview
    ./getting_started/getting_started
+   ./interface/interface
+   ./panels/panels
    notes
    playback
    settings

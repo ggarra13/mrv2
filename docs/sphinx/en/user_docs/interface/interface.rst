@@ -1,4 +1,4 @@
-.. _interface
+.. _interface:
 
 ##################
 The mrv2 Interface
@@ -31,6 +31,9 @@ mrv2 can be customized to show any of the toolbars and set up how the main windo
 
 The Timeline
 ++++++++++++
+
+.. image:: ../images/timeline-01.png
+   :align: center
 
 The Timeline Viewport allows you to scale the Editing's Thumbnails and Audio waveforms by dragging the viewport up and down.  For a quick display of all the tracks, you can click on the Edit button in the Menu toolbar.
 When showing the pictures, you can zoom in and out with the mousewheel.
@@ -114,7 +117,6 @@ Start and End Frame Indicator
 
 To the right of the timeline, the Start frame and End Frame indicators are shown.  The S and E buttons can be clicked to set the In and Out points at the current frame.  It is equivalent to pressing the 'I' or 'O' hotkeys.
 
-
 Player/Viewer Controls
 ++++++++++++++++++++++
 
@@ -132,33 +134,5 @@ Divider
 
 The Panels have a divided, just like the Timeline Viewport, and can be dragged to make the panel bigger or smaller (and change the size of the main viewport).
 
-Files Panel
-+++++++++++
 
-The Files Panel (F4 by default) show all elements loaded.  It has seven buttons at the bottom to Add a new File, Load a new File with Audio, Close the currently selected file, Close All the selected files, switch to the Previous or to the Next media file and filter Temporary EDL Playlists from the Files Panel.
 
-Files Panel Context Menu (right mouse button)
-+++++++++++++++++++++++++++++++++++++++++++++
-
-A right mouse button click in the Files panel will show a pop-up menu giving access to the following features:
-
-    - **File/Clone:** It will load the file item again and clone its settings.
-    - **File/Refresh Cache** It will re-load the file and reset its cache.
-    - **Copy/Filename** Use options in this sub-menu to copy the full paths or the file names of the selected media to the desktop clipboard. This can be useful to gather a list of media that you want to copy into an email, for example.
-    - **Show/In Filemanager** Open your desktop file browser with the folder of the selected media.
-
-Color Panel
-+++++++++++
-
-The Color Panel allows controlling the color display of the viewport.  It allows you to control the Add, Contrast, Saturation and Tint.   You can Invert the image and set the In/Out Levels and gamma.  You can also add a LUT. 
-
-Media Information Panel
-+++++++++++++++++++++++
-
-The Media Information Panel is the work horse for displaying all data about the selected media.  It shows all layers, codecs, levels, frame ranges, etc.
-
-Compare Panel
-+++++++++++++
-
-The Compare Panel is similar to the Files Panel, but allows selecting multiple clips for comparison.  You can show the A (Files Panel) image, the B (Compare Panel) image, Wipe, Overlay (using an alpha channel if present), Difference,
-Horizontal, Vertical and Tile.  The Tile comparison allows multiple images to be tiled.

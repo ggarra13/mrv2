@@ -1,0 +1,1 @@
+.. _color_area_panel:
