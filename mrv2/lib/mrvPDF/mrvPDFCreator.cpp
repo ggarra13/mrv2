@@ -301,14 +301,16 @@ namespace mrv
 
         for (const auto& annotation : annotations)
         {
-            auto time = annotation->time;
+            time = annotation->time;
             player->seek(time);
 
+            view->make_current();
             view->centerView();
             view->redraw();
             view->flush();
             Fl::check();
 
+            view->make_current();
             glReadBuffer(GL_FRONT);
             glReadPixels(
                 X, Y, renderSize.w, renderSize.h, format, type, buffer);
