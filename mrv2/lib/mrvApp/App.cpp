@@ -1078,25 +1078,18 @@ namespace mrv
                         p.settingsObject->value("Misc/MaxFileSequenceDigits")),
                     255);
 
-                DBG;
                 auto otioTimeline =
                     item->audioPath.isEmpty()
                         ? timeline::create(item->path, _context, options)
                         : timeline::create(
                               item->path, item->audioPath, _context, options);
 
-                DBG;
-
                 auto timeline =
                     timeline::Timeline::create(otioTimeline, _context, options);
-
-                DBG;
 
                 timeline::PlayerOptions playerOptions;
                 playerOptions.cache.readAhead = _cacheReadAhead();
                 playerOptions.cache.readBehind = _cacheReadBehind();
-
-                DBG;
 
                 value = std_any_cast<int>(
                     p.settingsObject->value("Performance/TimerMode"));
