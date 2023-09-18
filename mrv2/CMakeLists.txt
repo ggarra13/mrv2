@@ -48,6 +48,7 @@ find_package(Intl)
 find_package(tlRender REQUIRED)
 find_package(nlohmann_json REQUIRED)
 find_package(glfw3 REQUIRED)
+find_package(minizip REQUIRED)
 
 if( MRV2_NETWORK )
     find_package(Poco REQUIRED Net Foundation)
