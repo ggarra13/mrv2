@@ -118,7 +118,7 @@ endif()
 
 add_library(mrvWidgets ${SOURCES} ${HEADERS})
 
-list( APPEND LIBRARIES mrvFlmm mrvFLU mrvCore fltk_images pybind11::embed )
+list( APPEND LIBRARIES mrvFlmm mrvFLU mrvCore fltk_images MINIZIP::minizip pybind11::embed )
 
 if ( UNIX)
     if ( NOT APPLE )
