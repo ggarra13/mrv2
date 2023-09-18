@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.3.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-09-09 12:18-0300\n"
+"POT-Creation-Date: 2023-09-18 18:23-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -697,12 +697,6 @@ msgstr "(Campos PAL)"
 
 msgid "(no image)"
 msgstr "(sin imagen)"
-
-msgid ".ocio"
-msgstr ".ocio"
-
-msgid ".prefs"
-msgstr ".prefs"
 
 msgid "0.00 None"
 msgstr "0,00 Ninguno"
@@ -1500,10 +1494,10 @@ msgstr "Copiar/Color"
 
 msgid ""
 "Corruption in hotkeys preferences. Hotkey {0} for {1} will not be "
-"available.  Already used in {2}"
+"available.  Already used in {2}."
 msgstr ""
-"Corrupción e hotkeys preferences. Hotkey {0} for {1} will not be available.  "
-"Already used in {2}"
+"Corrupción de hotkeys en preferencias. Hotkey {0} para {1} no estará "
+"disponible.  Ya usada en {2}."
 
 msgid "Could not convert message to shape: "
 msgstr "No pude convertir el mensaje a figura: "
@@ -1519,6 +1513,9 @@ msgstr "No pude empatar "
 
 msgid "Could not open color theme from \"{0}\"."
 msgstr "No pude abrir tema de color desde \"{0}\"."
+
+msgid "Could not paste {0}.  Error {1}."
+msgstr "No pude pegar {0}.  Error {1}."
 
 msgid "Could not read python script '{0}'"
 msgstr "No pude leer script de python '{0}'"
@@ -3400,8 +3397,8 @@ msgstr "Remota a Local Mapeo de Carpetas"
 msgid "Remove Clip"
 msgstr "Eliminar Clip"
 
-msgid "Remove Clip With Gap"
-msgstr "Eliminar Clip con Brecha."
+msgid "Remove EDLs in Temporary Folder on Exit"
+msgstr "Remover EDLs en Carpeta Temporaria al Salir"
 
 msgid "Remove Paths"
 msgstr "Eliminar Carpetas"
@@ -4931,6 +4928,13 @@ msgstr ""
 "serán enviadas al ya abierto mrv2."
 
 msgid ""
+"When selected, temporary EDLs (Playlists) will be removed from the temporary "
+"folder."
+msgstr ""
+"Cuando esta seleccionado, EDLs temporarios (Listas de Reproducción) seran "
+"removidas de la carpeta termporaria."
+
+msgid ""
 "When this option is off, OCIO files with active_views: and active_displays: "
 "are not taken into account."
 msgstr ""
@@ -5225,6 +5229,15 @@ msgstr "x9"
 
 msgid "xyY CIE xyY"
 msgstr "xyY CIE xyY"
+
+#~ msgid ".ocio"
+#~ msgstr ".ocio"
+
+#~ msgid ".prefs"
+#~ msgstr ".prefs"
+
+#~ msgid "Remove Clip With Gap"
+#~ msgstr "Eliminar Clip con Brecha."
 
 #~ msgid "Cannot add an otio file to another timeline."
 #~ msgstr "No puedo agregar un archivo otio a otra línea de tiempo."
