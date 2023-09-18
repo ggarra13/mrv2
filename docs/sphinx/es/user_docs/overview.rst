@@ -1,5 +1,5 @@
 ============
-Introduction
+Introducción
 ============
 
 
@@ -11,8 +11,8 @@ mrv2 es un flipbook profesional y herramienta de revisión de código abierto pa
 mrv2 puede manejar colecciones de medios rápidamente, carga una multitud de formatos de imagen y video especializados y muestra la imágenes con manejo de color. Los usuarios pueden importar, organizar y agrupar medios en listas de reproducción de OTIO, reproduciendo items y agregando notas de revisiones y anotaciones dibujadas, permitiendo visualizar el contenido en forma interactiva y colaborativa.  Esto permite el flujo que es esencial para los equipos de efectos visuales, animación y otras actividades de post-production que necesitan ver, en demanda, el arte que ellos y sus colegas están creando.  Por ejemplo, uno puede cambiar de fuente de medios instantáneamente, inspeccionar pixels de cerca, hacer comparaciones cuadro a cuadro a través de multiple fuentes de medios, anotar los medios con dibujos y texto o agregar notas para compartir con otros.
 
 
-Current Version: v0.8.0 - Overview
-**********************************
+Versión Actual: v0.8.0 - Descripción General
+********************************************
 
 Esta versión de la aplicación es una solución de revisión sólida y robusta. mrv2 ha sido desplegado en múltiples estudios y es usado por múltiples individuos diariamente desde Augosto del 2022.
 
@@ -33,46 +33,55 @@ Aquí está un resumen de ellas:
 
   - Cree cualquier número de listas de reproducción, grabándolas en un archivo .otio y editandolo con las herramientas de edición provistas.
 
-**Annotations and Notes**
+**Annotaciones y Notas**
 
-  - Add notes and annotations to media on individual frames or range of frames.
-  - On screen annotations can be created with easy to use, highly responsive sketching tools. Annotations features currently include:
+  - Agregue notas y annotaciones a los medios en cuadros individuales frames o en todos los cuadros.
+  - Annotaciones en la pantalla pueden ser creadas con herramientas simples de dibujo.  Las características de las anotaciones actualmente incluyen:
       
-    1. Adjustable colour, opacity and size of brush strokes. 
-    2. Shapes tool for boxes, circles, lines and arrows etc. 
-    3. Eraser pen for even more sketching flexibility.
-    4. Editable text captions with adjustable fonts, position, scale, color
-       and opacity.
-    5. Save annotations to disk as a movie file or any of the supported image
-       saving formats.
+    1. Color ajustable, opacidad, suavizado y tamaño de los pinceles. 
+    2. Herramientas para rectángulos, círculos, líneas y flechas. 
+    3. Goma de borrar para más flexibilidad de dibujo..
+    4. Texto editable con tipografías ajustables, posición, tamaño, color y
+       opacidad.  El texto soporta UTF-8 para texto internacional
+       (Japonés, etc).
+    5. Grabe las anotaciones a disco como una película o con cualquiera de los
+       formatos soportados.
        
-  - Navigate your media collection through the notes interface by jumping directly to bookmarked frames.
-  - Annotations and Notes can be saved as a PDF document for easily sharing with the production staff.
+  - Navegue su colección de archivos a con notas saltando directamente de un
+    cuadro a otro.
+  - Exporte las notas y anotaciones a un documento PDF para compartir con
+    productores.
 
 .. image:: images/interface-01.png
 
-**The Viewer**
+**El Visor**
 
-  - Color accurate display (OCIO v2 colour management).
-  - Hotkey driven interaction.
-  - Adjust exposure and playback rate.
-  - Color correction tools to control gain, gamma, tint, saturation, etc.
-  - Zoom/pan image tools, RGBA channel display.
-  - A/B, Wipe, Overlay, Difference, Horizontal, Vertical and
-    Tile 'Compare Modes'.
-  - Predefined masking overlay and safe areas guide-lines.
-  - 'Pop-out' 2nd viewer for dual display set-ups.
+  - Display preciso de color (OCIO v2 colour management).
+  - Interacción con teclas.
+  - Ajuste la exposición y la velocidad de reproducción.
+  - Herramientas de correción de color para controlar ganancia, gama, tinte,
+    saturación, etc.
+  - Zoom/pan, y display individuales de canales RGBA.
+  - Modos de Comparación: A/B, Wipe, Overlay, Difference, Horizontal, Vertical
+    y Mosaico.
+  - Sobreposición de máscaras predefinidas y guías de áreas seguras.
+  - Segundo visor desplegable para uso con multiples monitores.
 
-**Sessions**
+**Sesiones**
 
-  - Session syncing is provided to synchronize one or more viewers in a review session across a LAN.  You can have a server and multiple clients and they can all control all aspects of mrv2 (user selectable).
-  - Session files can be saved to disk to save the state of the UI and loaded media.
+  - Sincronismo de sesiones está provisto para sincronizar uno o más visores en una sesión de revision en una LAN (Red de Área Local).  Puede tener un servidor y múltiples clientes y pueden controlar todos los aspectos de mrv2 (seleccionable por el usuario).
+  - Archivos de Sesiones (.mrv2s) pueden ser grabados a disco para grabar el estado de la interfaz y los clips cargados.
     
-**API features for pipeline developers**
+**Teclas de manejo**
 
-*Python API*
+  - Teclas de manejo definidas por el usuario grabadas en un archivo separado
+    (mrv2.keys.prefs) permite cambiar todos los seteos de los menúes y algunos
+    controles del visor.
+    
+**Características de la API para desarrolladores de pipelines**
 
-  - An embedded Python interpreter is available to execute scripts within mrv2, add or create new menu entries.
-  - Create and build media playlists through straightforward API methods.
-  - Control playback (start, stop, step frame, seek, etc).
+*API de Python*
+
+  - Un intérprete empotrable de Python está disponible para ejecutar scripts dentro de mrv2, agregar o crear nuevas entradas en los menúes.
+  - Controle todos los paneles y la línea de tiempo.
 

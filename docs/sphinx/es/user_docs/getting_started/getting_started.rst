@@ -1,23 +1,23 @@
-.. _getting_started:
+.. _comenzando:
 
-#####################
-Getting Started
-#####################
+##########
+Comenzando
+##########
 
-Building mrv2
--------------
+Compilando mrv2
+---------------
 
-Please refer to the github documentation at:
+Por favor refiérase a la documentación de github en:
 
 http::https://github.com/ggarra13/mrv2
 
 
-Installing mrv2
+Instalando mrv2
 ---------------
 
-- On macOS you install it by opening the .dmg file, and dragging the mrv2 icon to the Applications directory. If there's already an mrv2 version, we recommend you overwrite it. The macOS application is currently not notarized, so when you launch it you will not be able to run it as macOS will warn you that the file is not secure as it was downloaded from internet. To avoid that, you need to open the Finder, go to the Applications directory and CTRL + Left mouse click on the mrv2 application. That will bring up the same warning, but this time it will have a button that will allow you to open it. You only need to do this once.
+- En macOS usted lo instala abriendo el archivo .dmg, y llevando el ícono de mrv2 icon al directorio de Aplicaciones. Si ya hay una versión de mrv2, le recomendamos que la sobreescriba. La aplicación de macOS actualmente no está notarizada, por lo que cuando la ejecute macOS le avisará que el archivo no es seguro porque fue bajado de la internet. Para evitar eso, necesita abrir el Finder, ir al directorio de Aplicaciones y presionar CTRL + boton izquierdo del ratón sobre la aplicación mrv2. Esta acción traerá la misma advertencia, pero esta vez tendrá un botón que le permitirá abrirlo. Necesitará hacer esto sólo una vez.
 
-- Windows and Chrome, like macOS, also protect you from installing files from the Internet. When you first download it with Chrome it may warn you that it is not an usual archive to be downloaded. Make sure to click on the right up arrow menu to Save it anyway. You cannot open the .exe from Chrome directly. You will need to open Windows Explorer and go to the Downloads directory. You should then run it from there. Then Windows will popup a Blue box telling you Windows SmartScreen prevented the start of an unknown aplication and that you can place your PC at risk. Click on the More Information text and a Button that says Run anyway or similar should appear. Click on it and follow the standard instructions to any Windows installer.
+- Windows y Chrome, como macOS, también te protejen de instalar archivos de Internet. Cuando lo baja con Chrome puede que le avise que no es un archivo usual para ser bajado. Asegúrese de cliquear en el menu de la flecha derecha arriba para seleccionar "Grabar de todas formas". No puede ejecutar un .exe directo de Chrome. Tendra que abrir la carpeta contenedora o usar Windows Explorer e ir al directorio de Descargas. Luego deberá correrlo desde ahí. Windows le abrirá un mensaje Azul avisándole que SmartScreen previno el arranque de una aplicación desconocidas y que puede poner a su PC en peligro. Cliquée en Más Informacion y un botón que dice Correr de todas formas o similar aparecerá. Cliquee en él y siga las intruciones usuales del instalador de Windows.
 
 - On Linux, in order to install the .rpm or .deb packages requires your user to have sudo permissions.
 

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="es" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The mrv2 Interface &mdash; documentación de mrv2 - v0.7.7</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/translations.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Índice" href="../../genindex.html" />
+    <link rel="search" title="Búsqueda" href="../../search.html" />
+    <link rel="next" title="Panels" href="../panels/panels.html" />
+    <link rel="prev" title="Comenzando" href="../getting_started/getting_started.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            mrv2
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Buscar documentos" aria-label="Buscar documentos" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Bienvenido a la documentación de mrv2!</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Guía del Usuario de mrv2</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../overview.html">Introducción</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/getting_started.html">Comenzando</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">The mrv2 Interface</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#customising-the-interface">Customising the Interface</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#the-timeline">The Timeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hiding-showing-ui-elements">Hiding/Showing UI elements</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#mouse-interaction-in-the-viewer">Mouse interaction in the Viewer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#view-menu">View Menu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#timeline">Timeline</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#frame-indicator">Frame Indicator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#transport-controls">Transport Controls</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fps">FPS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#start-and-end-frame-indicator">Start and End Frame Indicator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#player-viewer-controls">Player/Viewer Controls</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#the-panels">The Panels</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#divider">Divider</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../panels/panels.html">Panels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notes.html">Notas y Anotaciones</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playback.html">Video Playback</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../settings.html">Settings</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../python_api/index.html">Python API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">mrv2</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Guía del Usuario de mrv2</a></li>
+      <li class="breadcrumb-item active">The mrv2 Interface</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/user_docs/interface/interface.rst.txt" rel="nofollow"> Ver código fuente de la página</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="the-mrv2-interface">
+<span id="interface"></span><h1>The mrv2 Interface<a class="headerlink" href="#the-mrv2-interface" title="Enlace permanente a este encabezado"></a></h1>
+<img alt="../../_images/interface-02.png" class="align-center" src="../../_images/interface-02.png" />
+<p>mrv2’s main window provides 6 different toolbars that can be hidden or shown.</p>
+<p>The first toolbar is the menu toolbar.  It can be toggled with Shift + F1. The menus are also available from the Right Mouse Button on the View window.  The menu toolbar also has the Edit button to toggle the editing mode and the Fit Window to image button.</p>
+<p>The second toolbar is the main layer, exposure, OCIO and gamma controls.  It can be toggled with F1.</p>
+<p>The third toolbar is the Timeline Viewport and controls.  You can toggle it with F3.</p>
+<p>The fourth toolbar is the Pixel Toolbar, which shows the current pixel under the cursor.  You can toggle it with F2.</p>
+<p>Finally, the last toolbar is the Status toolbar.  It will print out errors and let you know in what action mode you are in (Default is Scrubbing).</p>
+<section id="customising-the-interface">
+<h2>Customising the Interface<a class="headerlink" href="#customising-the-interface" title="Enlace permanente a este encabezado"></a></h2>
+<img alt="../../_images/interface-03.png" class="align-center" src="../../_images/interface-03.png" />
+<p>mrv2 can be customized to show any of the toolbars and set up how the main window behaves from Window-&gt;Preferences-&gt;User Interface.  These settings are saved when you exit mrv2 and will allow you to always start mrv2 in a certain configuration.</p>
+<section id="the-timeline">
+<h3>The Timeline<a class="headerlink" href="#the-timeline" title="Enlace permanente a este encabezado"></a></h3>
+<img alt="../../_images/timeline-01.png" class="align-center" src="../../_images/timeline-01.png" />
+<p>The Timeline Viewport allows you to scale the Editing’s Thumbnails and Audio waveforms by dragging the viewport up and down.  For a quick display of all the tracks, you can click on the Edit button in the Menu toolbar.
+When showing the pictures, you can zoom in and out with the mousewheel.</p>
+</section>
+<section id="hiding-showing-ui-elements">
+<h3>Hiding/Showing UI elements<a class="headerlink" href="#hiding-showing-ui-elements" title="Enlace permanente a este encabezado"></a></h3>
+<p>Some useful (default) shortcuts are as follows</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Shortcut</p></th>
+<th class="head"><p>Action</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Shift + F1</p></td>
+<td><p>Toggle Menu Toolbar.</p></td>
+</tr>
+<tr class="row-odd"><td><p>F1</p></td>
+<td><p>Toggle Topbar.</p></td>
+</tr>
+<tr class="row-even"><td><p>F2</p></td>
+<td><p>Toggle Pixel Toolbar.</p></td>
+</tr>
+<tr class="row-odd"><td><p>F3</p></td>
+<td><p>Toggle Timeline Viewport and controls.</p></td>
+</tr>
+<tr class="row-even"><td><p>F11</p></td>
+<td><p>Toggle Fullscreen mode.</p></td>
+</tr>
+<tr class="row-odd"><td><p>F12</p></td>
+<td><p>Toggle Presentation mode (no toolbars, fullscreen).</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="mouse-interaction-in-the-viewer">
+<h2>Mouse interaction in the Viewer<a class="headerlink" href="#mouse-interaction-in-the-viewer" title="Enlace permanente a este encabezado"></a></h2>
+<p>A three buttoned mouse can be used for closer image inspection. Hold the middle button and drag to pan the image within the viewport. Hold down the Alt key on your keyboard and drag left/right with the right mouse button to perform a centred zoom in/out on the image.  You can also use the mousewheel which is more confortable.</p>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>To “reset” the viewer so that the image is auto-fitted, you can select «Fit» from the Zoom display pulldown in the Pixel Toolbar or use the “f” hotkey.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>To “center” the view, without changing the zoom factor, you can use the “c”
+hotkey.</p>
+</div>
+</section>
+<section id="view-menu">
+<h2>View Menu<a class="headerlink" href="#view-menu" title="Enlace permanente a este encabezado"></a></h2>
+<p>The view menu provides controls for modifying the appearance and behaviour of the viewer:</p>
+<aside class="topic">
+<p class="topic-title">Safe Areas</p>
+<p>The Safe Areas toggle allows you to display the film and video safe areas.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Data Window</p>
+<p>Toggling this on will show or hide the OpenEXR’s Data Window.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Display Window</p>
+<p>Toggling this on will show or hide the OpenEXR’s Display Window.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Mask</p>
+<p>The mask allows drawing a black mask cropping your picture to a certain film aspect.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">HUD</p>
+<p>Click this to enter the HUD (heads up display) settings. The HUD allows displaying of a lot of metadata of your media.</p>
+</aside>
+</section>
+<section id="timeline">
+<h2>Timeline<a class="headerlink" href="#timeline" title="Enlace permanente a este encabezado"></a></h2>
+<section id="frame-indicator">
+<h3>Frame Indicator<a class="headerlink" href="#frame-indicator" title="Enlace permanente a este encabezado"></a></h3>
+<dl class="simple">
+<dt>Immediately to the left of the timeline is the “current frame” indicator. Click on this to get a list of options as to how the current time is displayed:</dt><dd><ul class="simple">
+<li><p><em>Frames:</em> absolute frame, i.e. the first frame of the media is always frame 1.</p></li>
+<li><p><em>Seconds:</em> the playhead position from the start of the media in seconds</p></li>
+<li><p><em>Timecode:</em> the 8 digit timecode. If the media has timecode metadata this will be used</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="transport-controls">
+<h3>Transport Controls<a class="headerlink" href="#transport-controls" title="Enlace permanente a este encabezado"></a></h3>
+<p>These are pretty universal and don’t need much explanation. There’s a play/pause button, step forwards/backwards buttons and fast forard/fast rewind buttons.</p>
+</section>
+<section id="fps">
+<h3>FPS<a class="headerlink" href="#fps" title="Enlace permanente a este encabezado"></a></h3>
+<p>The frames-per-second (FPS) indicator showing the desired FPS.  The FPS button is a popup that allows you to quickly switch to a new frame rate.</p>
+</section>
+<section id="start-and-end-frame-indicator">
+<h3>Start and End Frame Indicator<a class="headerlink" href="#start-and-end-frame-indicator" title="Enlace permanente a este encabezado"></a></h3>
+<p>To the right of the timeline, the Start frame and End Frame indicators are shown.  The S and E buttons can be clicked to set the In and Out points at the current frame.  It is equivalent to pressing the “I” or “O” hotkeys.</p>
+</section>
+<section id="player-viewer-controls">
+<h3>Player/Viewer Controls<a class="headerlink" href="#player-viewer-controls" title="Enlace permanente a este encabezado"></a></h3>
+<dl class="simple">
+<dt>Two buttons to the bottom of the timeline viewport provide the following interactions</dt><dd><ul class="simple">
+<li><p><em>Volume/mute control:</em> click once to get a pop-up volume control. Double click to toggle muting of audio.</p></li>
+<li><p><em>Loop mode:</em> set whether the playhead will loop a source in playback, play it once and stop on the final frame or “ping-pong” loop.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="the-panels">
+<h3>The Panels<a class="headerlink" href="#the-panels" title="Enlace permanente a este encabezado"></a></h3>
+<p>mrv2 supports Panels to organize the information logically.  These panels can be docked to the right of the main viewport or can be made floating windows if dragged from their main drag bar.</p>
+</section>
+<section id="divider">
+<h3>Divider<a class="headerlink" href="#divider" title="Enlace permanente a este encabezado"></a></h3>
+<p>The Panels have a divided, just like the Timeline Viewport, and can be dragged to make the panel bigger or smaller (and change the size of the main viewport).</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pie de página">
+        <a href="../getting_started/getting_started.html" class="btn btn-neutral float-left" title="Comenzando" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Anterior</a>
+        <a href="../panels/panels.html" class="btn btn-neutral float-right" title="Panels" accesskey="n" rel="next">Siguiente <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Derechos de autor 2023, Contribuidores del Proyecto mrv2.</p>
+  </div>
+
+  Compilado con <a href="https://www.sphinx-doc.org/">Sphinx</a> usando un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">tema</a>
+    proporcionado por <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

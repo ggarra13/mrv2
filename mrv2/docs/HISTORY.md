@@ -13,6 +13,8 @@ v0.7.7
 - Fixed Frame/Timecode/Seconds display in the PDF Exporter which was showing
   always 0.
 - Fixed PDF export to save out annotations in increasing time order.
+- Added User Documentation in English and Spanish, roughly based on xStudio
+  documentation.
 
 v0.7.6
 ======

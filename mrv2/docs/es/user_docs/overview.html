@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="es" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Introducción &mdash; documentación de mrv2 - v0.7.7</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/translations.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Índice" href="../genindex.html" />
+    <link rel="search" title="Búsqueda" href="../search.html" />
+    <link rel="next" title="Comenzando" href="getting_started/getting_started.html" />
+    <link rel="prev" title="Guía del Usuario de mrv2" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            mrv2
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Buscar documentos" aria-label="Buscar documentos" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Bienvenido a la documentación de mrv2!</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Guía del Usuario de mrv2</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Introducción</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#what-is-mrv2">What is mrv2 ?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#version-actual-v0-8-0-descripcion-general">Versión Actual: v0.8.0 - Descripción General</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/getting_started.html">Comenzando</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interface/interface.html">The mrv2 Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="panels/panels.html">Panels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notes.html">Notas y Anotaciones</a></li>
+<li class="toctree-l2"><a class="reference internal" href="playback.html">Video Playback</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html">Settings</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../python_api/index.html">Python API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">mrv2</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Guía del Usuario de mrv2</a></li>
+      <li class="breadcrumb-item active">Introducción</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/user_docs/overview.rst.txt" rel="nofollow"> Ver código fuente de la página</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="introduccion">
+<h1>Introducción<a class="headerlink" href="#introduccion" title="Enlace permanente a este encabezado"></a></h1>
+<section id="what-is-mrv2">
+<h2>What is mrv2 ?<a class="headerlink" href="#what-is-mrv2" title="Enlace permanente a este encabezado"></a></h2>
+<p>mrv2 es un flipbook profesional y herramienta de revisión de código abierto para la industria de Efectos Visuales, Animación e Imágenes de Computación Gráfica.  mrv2 esta focalizado en proveer una interfaz fácil de usar e intuitiva con el motor de reproducción de mayor performance disponible y una API de Python para integración en los Pipelines de los estudios y para customizarlo con total facilidad.</p>
+<p>mrv2 puede manejar colecciones de medios rápidamente, carga una multitud de formatos de imagen y video especializados y muestra la imágenes con manejo de color. Los usuarios pueden importar, organizar y agrupar medios en listas de reproducción de OTIO, reproduciendo items y agregando notas de revisiones y anotaciones dibujadas, permitiendo visualizar el contenido en forma interactiva y colaborativa.  Esto permite el flujo que es esencial para los equipos de efectos visuales, animación y otras actividades de post-production que necesitan ver, en demanda, el arte que ellos y sus colegas están creando.  Por ejemplo, uno puede cambiar de fuente de medios instantáneamente, inspeccionar pixels de cerca, hacer comparaciones cuadro a cuadro a través de multiple fuentes de medios, anotar los medios con dibujos y texto o agregar notas para compartir con otros.</p>
+</section>
+<section id="version-actual-v0-8-0-descripcion-general">
+<h2>Versión Actual: v0.8.0 - Descripción General<a class="headerlink" href="#version-actual-v0-8-0-descripcion-general" title="Enlace permanente a este encabezado"></a></h2>
+<p>Esta versión de la aplicación es una solución de revisión sólida y robusta. mrv2 ha sido desplegado en múltiples estudios y es usado por múltiples individuos diariamente desde Augosto del 2022.</p>
+<p>La fase de desarrollo está todavía en pleno funcionamiento mientras el trabajo continua en algunas características mayores.</p>
+<p>Aquí está un resumen de ellas:</p>
+<p><strong>Cargar Medios</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Muestre virtualmente cualquier formato de imágen en uso hoy (EXR, TIF, TGA, JPG, PSD, MOV, MP4, WEBM, etc).</p></li>
+<li><p>Use Drag and drop de los medios del sistema de archivos del escritorio directo a la interfaz de mrv2.</p></li>
+<li><p>Use la API de Python para construir listas de reproducción con sus propios scripts, controle el reproductor, grabe películas, compare clips y control su integración de su pipeline.</p></li>
+<li><p>Reproducción de audio para fuentes con una pista de audio es provista con fregado y playback en reverso.</p></li>
+<li><p>Soporte nativo de .otio permite reproducir líneas de tiempo de OpenTimelineIO con fundidos.</p></li>
+<li><p>Soporte de USD (Universal Scene Description) de Pixar en OpenGL.</p></li>
+</ul>
+</div></blockquote>
+<p><strong>Listas de reproducción</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Cree cualquier número de listas de reproducción, grabándolas en un archivo .otio y editandolo con las herramientas de edición provistas.</p></li>
+</ul>
+</div></blockquote>
+<p><strong>Annotaciones y Notas</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Agregue notas y annotaciones a los medios en cuadros individuales frames o en todos los cuadros.</p></li>
+<li><p>Annotaciones en la pantalla pueden ser creadas con herramientas simples de dibujo.  Las características de las anotaciones actualmente incluyen:</p>
+<ol class="arabic simple">
+<li><p>Color ajustable, opacidad, suavizado y tamaño de los pinceles.</p></li>
+<li><p>Herramientas para rectángulos, círculos, líneas y flechas.</p></li>
+<li><p>Goma de borrar para más flexibilidad de dibujo..</p></li>
+<li><p>Texto editable con tipografías ajustables, posición, tamaño, color y
+opacidad.  El texto soporta UTF-8 para texto internacional
+(Japonés, etc).</p></li>
+<li><p>Grabe las anotaciones a disco como una película o con cualquiera de los
+formatos soportados.</p></li>
+</ol>
+</li>
+<li><p>Navegue su colección de archivos a con notas saltando directamente de un
+cuadro a otro.</p></li>
+<li><p>Exporte las notas y anotaciones a un documento PDF para compartir con
+productores.</p></li>
+</ul>
+</div></blockquote>
+<img alt="../_images/interface-01.png" src="../_images/interface-01.png" />
+<p><strong>El Visor</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Display preciso de color (OCIO v2 colour management).</p></li>
+<li><p>Interacción con teclas.</p></li>
+<li><p>Ajuste la exposición y la velocidad de reproducción.</p></li>
+<li><p>Herramientas de correción de color para controlar ganancia, gama, tinte,
+saturación, etc.</p></li>
+<li><p>Zoom/pan, y display individuales de canales RGBA.</p></li>
+<li><p>Modos de Comparación: A/B, Wipe, Overlay, Difference, Horizontal, Vertical
+y Mosaico.</p></li>
+<li><p>Sobreposición de máscaras predefinidas y guías de áreas seguras.</p></li>
+<li><p>Segundo visor desplegable para uso con multiples monitores.</p></li>
+</ul>
+</div></blockquote>
+<p><strong>Sesiones</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Sincronismo de sesiones está provisto para sincronizar uno o más visores en una sesión de revision en una LAN (Red de Área Local).  Puede tener un servidor y múltiples clientes y pueden controlar todos los aspectos de mrv2 (seleccionable por el usuario).</p></li>
+<li><p>Archivos de Sesiones (.mrv2s) pueden ser grabados a disco para grabar el estado de la interfaz y los clips cargados.</p></li>
+</ul>
+</div></blockquote>
+<p><strong>Teclas de manejo</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Teclas de manejo definidas por el usuario grabadas en un archivo separado
+(mrv2.keys.prefs) permite cambiar todos los seteos de los menúes y algunos
+controles del visor.</p></li>
+</ul>
+</div></blockquote>
+<p><strong>Características de la API para desarrolladores de pipelines</strong></p>
+<p><em>API de Python</em></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Un intérprete empotrable de Python está disponible para ejecutar scripts dentro de mrv2, agregar o crear nuevas entradas en los menúes.</p></li>
+<li><p>Controle todos los paneles y la línea de tiempo.</p></li>
+</ul>
+</div></blockquote>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pie de página">
+        <a href="index.html" class="btn btn-neutral float-left" title="Guía del Usuario de mrv2" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Anterior</a>
+        <a href="getting_started/getting_started.html" class="btn btn-neutral float-right" title="Comenzando" accesskey="n" rel="next">Siguiente <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Derechos de autor 2023, Contribuidores del Proyecto mrv2.</p>
+  </div>
+
+  Compilado con <a href="https://www.sphinx-doc.org/">Sphinx</a> usando un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">tema</a>
+    proporcionado por <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

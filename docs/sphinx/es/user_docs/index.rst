@@ -6,3 +6,11 @@ Guía del Usuario de mrv2
 
 .. toctree::
    :maxdepth: 2
+
+   overview
+   ./getting_started/getting_started
+   ./interface/interface
+   ./panels/panels
+   notes
+   playback
+   settings
