@@ -8,6 +8,7 @@ v0.7.7
 - Fixed Text annotations having turned off by mistake.
 - Fixed drag and drop on Windows only allowing to load 4 clips before not
   allowing drag and drop to work anymore.
+- Fixed file requester hanging when reading .py files in a directory.
 
 v0.7.6
 ======
