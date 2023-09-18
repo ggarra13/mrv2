@@ -461,9 +461,6 @@ namespace mrv
           << "glad v" << GLAD_GENERATOR_VERSION << endl
           << "Copyright (c) 2013-2020 David Herberth" << endl
           << endl
-          << "GLM" << endl
-          << "Copyright (c) 2005 - G-Truc Creation" << endl
-          << endl
           << "Imath v" << IMATH_VERSION_STRING << endl
           << "Copyright Contributors to the OpenEXR Project" << endl
           << endl
