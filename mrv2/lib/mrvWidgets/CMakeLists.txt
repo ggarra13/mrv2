@@ -127,6 +127,10 @@ if ( UNIX)
     endif()
 endif()
 
+if( WIN32 )
+    list(APPEND LIBRARIES Crypt32.lib)
+endif()
+
 target_link_libraries(mrvWidgets PUBLIC ${LIBRARIES} )
 set_target_properties(mrvWidgets PROPERTIES FOLDER lib)
 set_target_properties(mrvWidgets PROPERTIES PUBLIC_HEADER "${HEADERS}")
