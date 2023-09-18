@@ -1217,7 +1217,10 @@ namespace mrv
 
                 if (p.running)
                 {
-                    refreshPanelThumbnails();
+                    if (loaded)
+                        refreshPanelThumbnails();
+                    else
+                        redrawPanelThumbnails();
                     if (ui->uiPrefs->uiPrefsAutoPlayback->value() && loaded)
                     {
                         player->setPlayback(timeline::Playback::Forward);

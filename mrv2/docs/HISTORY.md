@@ -6,6 +6,8 @@ v0.7.7
 - Fixed adding audio to a playlist when there was an empty audio track and a
   video clip (ie. a sequence of images and then a video clip).
 - Fixed Text annotations having turned off by mistake.
+- Fixed drag and drop on Windows only allowing to load 4 clips before not
+  allowing drag and drop to work anymore.
 
 v0.7.6
 ======
