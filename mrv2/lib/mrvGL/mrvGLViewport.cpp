@@ -144,6 +144,8 @@ namespace mrv
         if (!gl.init_debug)
         {
             gl.init_debug = true;
+#    ifndef __APPLE__
+            // Apple's OpenGL 4.1 does not support glDebugMessageCallback.
             glEnable(GL_DEBUG_OUTPUT);
             glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
             glDebugMessageCallback(glDebugOutput, nullptr);
@@ -151,6 +153,7 @@ namespace mrv
                 static_cast<GLenum>(GL_DONT_CARE),
                 static_cast<GLenum>(GL_DONT_CARE),
                 static_cast<GLenum>(GL_DONT_CARE), 0, nullptr, GL_TRUE);
+#    endif
         }
 #endif
 
@@ -549,10 +552,10 @@ namespace mrv
             w->Fl_Widget::position(pos.x, pos.y);
         }
 
-#if 0 // def USE_OPENGL2
+#ifdef USE_OPENGL2
         Fl_Gl_Window::draw_begin(); // Set up 1:1 projectionç
         CHECK_GL;
-        Fl_Window::draw();          // Draw FLTK children
+        Fl_Window::draw(); // Draw FLTK children
         CHECK_GL;
         glViewport(0, 0, viewportSize.w, viewportSize.h);
         CHECK_GL;

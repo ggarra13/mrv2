@@ -11,6 +11,7 @@
 namespace fs = std::filesystem;
 
 #include <tlCore/Path.h>
+#include <tlCore/Context.h>
 
 #include <opentime/rationalTime.h>
 namespace otime = opentime::OPENTIME_VERSION;
@@ -21,30 +22,54 @@ namespace mrv
 {
 
     /**
-     * Given a filename extension, return whether the extension is
+     * Given a tlRender's path, return whether the file can be loaded by
+     * tlRender.
+     *
+     * @param ext Filename extension with period.
+     *
+     * @return true if a possible movie, false if not.
+     */
+    bool is_valid_file_type(
+        const tl::file::Path& path,
+        const std::shared_ptr<tl::system::Context>& context);
+
+    /**
+     * Given a lowercase filename extension, return whether the extension can
+     * be loaded by tlRender.
+     *
+     * @param ext Filename extension with period.
+     *
+     * @return true if a possible movie, false if not.
+     */
+    bool is_valid_file_type(
+        const std::string extension,
+        const std::shared_ptr<tl::system::Context>& context);
+
+    /**
+     * Given a lowercase filename extension, return whether the extension is
      * from a movie format.
      *
-     * @param ext Filename extension
+     * @param ext Filename extension with period.
      *
      * @return true if a possible movie, false if not.
      */
     bool is_valid_movie(const char* ext);
 
     /**
-     * Given a filename extension, return whether the extension is
+     * Given a lowercase filename extension, return whether the extension is
      * from an audio format.
      *
-     * @param ext Filename extension
+     * @param ext Filename extension with period.
      *
      * @return true if a possible audio file, false if not.
      */
     bool is_valid_audio(const char* ext);
 
     /**
-     * Given a filename extension, return whether the extension is
+     * Given a lowercase filename extension, return whether the extension is
      * from a subtitle format.
      *
-     * @param ext Filename extension
+     * @param ext Filename extension with period.
      *
      * @return true if a possible subtitle file, false if not.
      */

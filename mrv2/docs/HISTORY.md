@@ -1,5 +1,20 @@
+v0.7.7
+======
+
+- Fixed adding a file to playlist when the path was empty (ie. the file was
+  loaded from the current directory).
+- Fixed adding audio to a playlist when there was an empty audio track and a
+  video clip (ie. a sequence of images and then a video clip).
+- Fixed Text annotations having turned off by mistake.
+- Fixed drag and drop on Windows only allowing to load 4 clips before not
+  allowing drag and drop to work anymore.
+- Fixed file requester hanging when reading .py files in a directory.
+
 v0.7.6
 ======
+
+This is mainly a bug fix release to Edit features and general issues found
+with v0.7.5.
 
 - Fixed hotkey check when entering a hotkey of the first 5 entries (a legacy
   from mrViewer).
@@ -18,7 +33,10 @@ v0.7.6
 - Added an option in Preferences->Timeline to remove the EDLs from the
   temporary directory once the application exits.
 - Improved focus handling of current frame, start frame and end frame widgets,
-  which would loose once the cursor was moved to the timeline.
+  which would loose it once the cursor was moved to the timeline.
+- Fixed Edit/Frame/Insert when the movie had timecode in it and did not start
+  at 0.
+- Improved quality of Windows' icon.
 
 
 v0.7.5

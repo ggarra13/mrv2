@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panels &mdash; mrv2 v0.7.7 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Notes and Annotations" href="../notes.html" />
+    <link rel="prev" title="The mrv2 Interface" href="../interface/interface.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            mrv2
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Welcome to mrv2’s documentation!</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">mrv2 User Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../overview.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/getting_started.html">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interface/interface.html">The mrv2 Interface</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Panels</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#annotations-panel">Annotations Panel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#color-area-panel">Color Area Panel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#color-panel">Color Panel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#compare-panel">Compare Panel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#environment-map-panel">Environment Map Panel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#files-panel">Files Panel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#files-panel-context-menu-right-mouse-button">Files Panel Context Menu (right mouse button)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#histogram-panel">Histogram Panel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#logs-panel">Logs Panel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#media-information-panel">Media Information Panel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#network-panel">Network Panel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#playlist-panel">Playlist Panel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#python-panel">Python Panel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#settings-panel">Settings Panel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#stereo-3d-panel">Stereo 3D Panel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#usd-panel">USD Panel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vectorscope-panel">Vectorscope Panel</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../notes.html">Notes and Annotations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playback.html">Video Playback</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../settings.html">Settings</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../python_api/index.html">Python API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">mrv2</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">mrv2 User Guide</a></li>
+      <li class="breadcrumb-item active">Panels</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/user_docs/panels/panels.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="panels">
+<span id="id1"></span><h1>Panels<a class="headerlink" href="#panels" title="Permalink to this heading"></a></h1>
+<section id="annotations-panel">
+<h2>Annotations Panel<a class="headerlink" href="#annotations-panel" title="Permalink to this heading"></a></h2>
+<img alt="../../_images/annotations-panel-01.png" class="align-center" src="../../_images/annotations-panel-01.png" />
+<p>The Annotations Panel allows you to control the Text, Sketch and Notes.  You can select a Font to use for the Text tool.  You can select a hard or soft brush for the draw tools.  And you can draw Laser sketches, so they are not permanent and instead vanish in time.</p>
+<p>You can also control the ghosting behavior of all annotations and select whether the annotation to be drawn will be attached to the current frame or to all the frames.</p>
+<p>Finally, you can type in Notes that will be printed out next to the image if saving a PDF file.</p>
+</section>
+<section id="color-area-panel">
+<h2>Color Area Panel<a class="headerlink" href="#color-area-panel" title="Permalink to this heading"></a></h2>
+<img alt="../../_images/color-area-panel-01.png" class="align-center" src="../../_images/color-area-panel-01.png" />
+<p>The Color Area Panel allows you to compare a rectangular selection of the image to show its color values, minimum, maximum and mean average.</p>
+</section>
+<section id="color-panel">
+<h2>Color Panel<a class="headerlink" href="#color-panel" title="Permalink to this heading"></a></h2>
+<img alt="../../_images/color-panel-01.png" class="align-center" src="../../_images/color-panel-01.png" />
+<p>The Color Panel allows controlling the color display of the viewport.  It allows you to control the Add, Contrast, Saturation and Tint.   You can Invert the image and set the In/Out Levels and gamma.  You can also add a LUT.</p>
+</section>
+<section id="compare-panel">
+<h2>Compare Panel<a class="headerlink" href="#compare-panel" title="Permalink to this heading"></a></h2>
+<img alt="../../_images/compare-panel-01.png" class="align-center" src="../../_images/compare-panel-01.png" />
+<p>The Compare Panel is similar to the Files Panel, but allows selecting multiple clips for comparison.  You can show the A (Files Panel) image, the B (Compare Panel) image, Wipe, Overlay (using an alpha channel if present), Difference,
+Horizontal, Vertical and Tile.  The Tile comparison allows multiple images to be tiled.</p>
+</section>
+<section id="environment-map-panel">
+<h2>Environment Map Panel<a class="headerlink" href="#environment-map-panel" title="Permalink to this heading"></a></h2>
+<img alt="../../_images/environment-map-panel-01.png" class="align-center" src="../../_images/environment-map-panel-01.png" />
+<p>The Environment Map Panel allows you to display an image in the viewport as an environment map (Spherical or Cubical).  It also allows you to rotate the view around with the middle mouse button in the view window and change the field of view with the mousewheel.</p>
+</section>
+<section id="files-panel">
+<h2>Files Panel<a class="headerlink" href="#files-panel" title="Permalink to this heading"></a></h2>
+<img alt="../../_images/files-panel-01.png" class="align-center" src="../../_images/files-panel-01.png" />
+<p>The Files Panel (F4 by default) show all elements loaded.  It has seven buttons at the bottom to Add a new File, Load a new File with Audio, Close the currently selected file, Close All the selected files, switch to the Previous or to the Next media file and filter Temporary EDL Playlists from the Files Panel.</p>
+</section>
+<section id="files-panel-context-menu-right-mouse-button">
+<h2>Files Panel Context Menu (right mouse button)<a class="headerlink" href="#files-panel-context-menu-right-mouse-button" title="Permalink to this heading"></a></h2>
+<p>A right mouse button click in the Files panel will show a pop-up menu giving access to the following features:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>File/Clone:</strong> It will load the file item again and clone its settings.</p></li>
+<li><p><strong>File/Refresh Cache</strong> It will re-load the file and reset its cache.</p></li>
+<li><p><strong>Copy/Filename</strong> Use options in this sub-menu to copy the full paths or the file names of the selected media to the desktop clipboard. This can be useful to gather a list of media that you want to copy into an email, for example.</p></li>
+<li><p><strong>Show/In Filemanager</strong> Open your desktop file browser with the folder of the selected media.</p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="histogram-panel">
+<h2>Histogram Panel<a class="headerlink" href="#histogram-panel" title="Permalink to this heading"></a></h2>
+<img alt="../../_images/histogram-panel-01.png" class="align-center" src="../../_images/histogram-panel-01.png" />
+<p>The Histogram Panel allows you to show a histogram of the selected area of the image.  You select the area with the select tool in the Tool Dock where the drawing tools are located.</p>
+</section>
+<section id="logs-panel">
+<h2>Logs Panel<a class="headerlink" href="#logs-panel" title="Permalink to this heading"></a></h2>
+<img alt="../../_images/logs-panel-01.png" class="align-center" src="../../_images/logs-panel-01.png" />
+<p>The Logs Panel registers all the important messages that mrv2 emits.  It will show the start-up message to show where all the files come from (preferences, hotkeys, path mappings, OCIO config, etc).  It will also any errors that may happen during the operation of mrv2.</p>
+<p>In Window-&gt;Preferences-&gt;Errors the behavior of the Log Panel can be changed when an error occurs.  The default behavior is to bring up the Log Panel in a Window, but you can also bring up the log panel docked, or you can ignore the error and not popup the log panel.</p>
+</section>
+<section id="media-information-panel">
+<h2>Media Information Panel<a class="headerlink" href="#media-information-panel" title="Permalink to this heading"></a></h2>
+<img alt="../../_images/media-info-panel-01.png" class="align-center" src="../../_images/media-info-panel-01.png" />
+<p>The Media Information Panel is the work horse for displaying all data about the selected media.  It shows all layers, codecs, levels, frame ranges, etc.</p>
+</section>
+<section id="network-panel">
+<h2>Network Panel<a class="headerlink" href="#network-panel" title="Permalink to this heading"></a></h2>
+<img alt="../../_images/network-panel-01.png" class="align-center" src="../../_images/network-panel-01.png" />
+<p>The Network Panel allows you to start a sync session between two or more machines.  For it to work, you must set one of the machine as a server and the other machines as clients that connect to that machine.  The machines are distinguised by their IPv4 or IPv6 address or their host alias names if you use a hosts file on your OS.  In addition to the machine, you need to specify a port number to connect to, but the default port number should be fine.</p>
+<p>For the connection to take place, you need to make sure your firewall allows incoming and outgoing connections to the port you set up.</p>
+</section>
+<section id="playlist-panel">
+<h2>Playlist Panel<a class="headerlink" href="#playlist-panel" title="Permalink to this heading"></a></h2>
+<img alt="../../_images/playlist-panel-01.png" class="align-center" src="../../_images/playlist-panel-01.png" />
+<p>The Playlist panel allows you to quickly create OpenTimelineIO playlists (aka EDLs) by appending several clips from the Files Panel together.  This is done by dragging a file from the Files Panel to the Playlist Panel or to the Timeline Viewport when the EDL playlist is selected.  Note that you need to select the Playlist EDL in either the Files or Playlist panels and when dragging the File to the playlist, you should not click and release the mouse button on the file on the File panel, but instead click and drag it.</p>
+<p>The media files don’t have to have the same resolutiono or FPS, but they should match in video and audio tracks.  Currently only one video and one audio track is allowed.</p>
+<p>The EDLs can be created even when a network connection is in place, assuming all clips exist or can be accessed on all the machines.</p>
+<p>Each media that is added to a playlist can have an In and Out point to select just a portion of the clip and the same clip can appear multiple times with different In and Out points.</p>
+</section>
+<section id="python-panel">
+<h2>Python Panel<a class="headerlink" href="#python-panel" title="Permalink to this heading"></a></h2>
+<img alt="../../_images/python-panel-01.png" class="align-center" src="../../_images/python-panel-01.png" />
+<p>The Python panel allows you to run python code and use mrv2’s Python API to control the viewer.  The Panel is divided into two sections.  The section above records the python output, while the section below is where you type your code.  In order to run the code, you can use the Menus or click on the Keypad Enter key.</p>
+<p>You can also select a portion of the code in the editor to run just that instead of all the code typed in the editor.</p>
+</section>
+<section id="settings-panel">
+<h2>Settings Panel<a class="headerlink" href="#settings-panel" title="Permalink to this heading"></a></h2>
+<img alt="../../_images/settings-panel-01.png" class="align-center" src="../../_images/settings-panel-01.png" />
+<p>The Settings Panel (Default Hotkey: F9) allows you mainly to configure the Cache behavior of mrv2.  In it you can control how much memory in Gb does the cache use or, if you set the Gigabytes control to 0, instead of using Gigabytes, the Read Ahead and Read Behind settings will control the caching based on seconds.</p>
+<p>The default Gigabytes setting is to use half of your available RAM.</p>
+</section>
+<section id="stereo-3d-panel">
+<h2>Stereo 3D Panel<a class="headerlink" href="#stereo-3d-panel" title="Permalink to this heading"></a></h2>
+<img alt="../../_images/stereo-3d-panel-01.png" class="align-center" src="../../_images/stereo-3d-panel-01.png" />
+<p>The Stereo 3D Panel allows you to show 3D stereo images.  You select one clip on the Files Panel and one clip on the Stereo Panel and select the type of Input and Output you want.  If you use EXR images with left/right layers, you can select Image as Input and the Files and Stereo clips will be selected automatically.  The Output for the Stereo 3D currently can be:  Anaglyph, Checkerboard, Scanline or Horizontal.</p>
+</section>
+<section id="usd-panel">
+<h2>USD Panel<a class="headerlink" href="#usd-panel" title="Permalink to this heading"></a></h2>
+<img alt="../../_images/usd-panel-01.png" class="align-center" src="../../_images/usd-panel-01.png" />
+<p>The USD Panel allows you to control the quality and display of the next USD asset(s) loaded.</p>
+</section>
+<section id="vectorscope-panel">
+<h2>Vectorscope Panel<a class="headerlink" href="#vectorscope-panel" title="Permalink to this heading"></a></h2>
+<img alt="../../_images/vectorscope-panel-01.png" class="align-center" src="../../_images/vectorscope-panel-01.png" />
+<p>The Vectorscope Panel allows you to show a vectorscope of the selected area of the image.  You select the area with the select tool in the Tool Dock where the drawing tools are located.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../interface/interface.html" class="btn btn-neutral float-left" title="The mrv2 Interface" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../notes.html" class="btn btn-neutral float-right" title="Notes and Annotations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, mrv2 Contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

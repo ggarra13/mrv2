@@ -1,0 +1,1 @@
+.. _histogram_panel:

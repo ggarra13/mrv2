@@ -4,14 +4,47 @@
 
 #include <algorithm>
 #include <filesystem>
-
 namespace fs = std::filesystem;
+
+#include <tlIO/System.h>
 
 #include "mrvUtil.h"
 #include "mrvSequence.h"
 
 namespace mrv
 {
+    bool is_valid_file_type(
+        const std::string extension,
+        const std::shared_ptr<tl::system::Context>& context)
+    {
+        auto ioSystem = context->getSystem<tl::io::System>();
+
+        bool validFile = false;
+        switch (ioSystem->getFileType(extension))
+        {
+        case tl::io::FileType::Sequence:
+        case tl::io::FileType::Movie:
+        case tl::io::FileType::Audio:
+            validFile = true;
+            break;
+        default:
+            if (".otio" == extension || ".otioz" == extension)
+            {
+                validFile = true;
+            }
+            break;
+        }
+        return validFile;
+    }
+
+    bool is_valid_file_type(
+        const tl::file::Path& path,
+        const std::shared_ptr<tl::system::Context>& context)
+    {
+        std::string extension = tl::string::toLower(path.getExtension());
+        return is_valid_file_type(extension, context);
+    }
+
     // Given a frame extension, return true if a possible movie file.
     bool is_valid_movie(const char* ext)
     {

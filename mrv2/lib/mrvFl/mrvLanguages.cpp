@@ -333,7 +333,7 @@ namespace mrv
         path += "/share/locale/";
 
         char buf[256];
-        sprintf(buf, "mrv2-v%s", mrv::version());
+        snprintf(buf, 256, "mrv2-v%s", mrv::version());
         bindtextdomain(buf, path.c_str());
         bind_textdomain_codeset(buf, "UTF-8");
         textdomain(buf);

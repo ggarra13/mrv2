@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>mrv2 User Guide &mdash; mrv2 v0.7.2 documentation</title>
+  <title>mrv2 User Guide &mdash; mrv2 v0.7.7 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
@@ -21,7 +21,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Python API" href="../python_api/index.html" />
+    <link rel="next" title="Introduction" href="overview.html" />
     <link rel="prev" title="Welcome to mrv2’s documentation!" href="../index.html" /> 
 </head>
 
@@ -46,7 +46,14 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../index.html">Welcome to mrv2’s documentation!</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">mrv2 User Guide</a><ul class="simple">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">mrv2 User Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="overview.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/getting_started.html">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interface/interface.html">The mrv2 Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="panels/panels.html">Panels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notes.html">Notes and Annotations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="playback.html">Video Playback</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html">Settings</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../python_api/index.html">Python API</a></li>
@@ -79,6 +86,67 @@
   <section id="mrv2-user-guide">
 <span id="user-docs"></span><h1>mrv2 User Guide<a class="headerlink" href="#mrv2-user-guide" title="Permalink to this heading"></a></h1>
 <div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#what-is-mrv2">What is mrv2 ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#current-version-v0-8-0-overview">Current Version: v0.8.0 - Overview</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started/getting_started.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/getting_started.html#building-mrv2">Building mrv2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/getting_started.html#installing-mrv2">Installing mrv2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/getting_started.html#launching-mrv2">Launching mrv2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/getting_started.html#loading-media-drag-and-drop">Loading Media (Drag and Drop)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/getting_started.html#loading-media-filesystem-browser">Loading Media (filesystem browser)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/getting_started.html#loading-media-recent-menu">Loading Media (Recent menu)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/getting_started.html#loading-media-command-line">Loading Media (command line)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/getting_started.html#viewing-media">Viewing Media</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="interface/interface.html">The mrv2 Interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="interface/interface.html#customising-the-interface">Customising the Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interface/interface.html#mouse-interaction-in-the-viewer">Mouse interaction in the Viewer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interface/interface.html#view-menu">View Menu</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interface/interface.html#timeline">Timeline</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="panels/panels.html">Panels</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="panels/panels.html#annotations-panel">Annotations Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="panels/panels.html#color-area-panel">Color Area Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="panels/panels.html#color-panel">Color Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="panels/panels.html#compare-panel">Compare Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="panels/panels.html#environment-map-panel">Environment Map Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="panels/panels.html#files-panel">Files Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="panels/panels.html#files-panel-context-menu-right-mouse-button">Files Panel Context Menu (right mouse button)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="panels/panels.html#histogram-panel">Histogram Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="panels/panels.html#logs-panel">Logs Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="panels/panels.html#media-information-panel">Media Information Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="panels/panels.html#network-panel">Network Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="panels/panels.html#playlist-panel">Playlist Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="panels/panels.html#python-panel">Python Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="panels/panels.html#settings-panel">Settings Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="panels/panels.html#stereo-3d-panel">Stereo 3D Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="panels/panels.html#usd-panel">USD Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="panels/panels.html#vectorscope-panel">Vectorscope Panel</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="notes.html">Notes and Annotations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="notes.html#adding-a-note-or-sketch">Adding a Note or Sketch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notes.html#modifying-a-note">Modifying a Note</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notes.html#navigating-notes">Navigating Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notes.html#drawing-annotations">Drawing Annotations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="playback.html">Video Playback</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="playback.html#current-frame">Current Frame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="playback.html#loop-modes">Loop Modes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="playback.html#fps-rate">FPS Rate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="playback.html#playback-specific-hotkeys">Playback Specific Hotkeys</a></li>
+<li class="toctree-l2"><a class="reference internal" href="playback.html#playhead-cache-behaviour">Playhead Cache Behaviour</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="settings.html">Settings</a></li>
+</ul>
 </div>
 </section>
 
@@ -87,7 +155,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../index.html" class="btn btn-neutral float-left" title="Welcome to mrv2’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../python_api/index.html" class="btn btn-neutral float-right" title="Python API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="overview.html" class="btn btn-neutral float-right" title="Introduction" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
