@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Contributors\ to\ the\ mrv2\ Project
+# Copyright (C) YEAR Contributors to the mrv2 Project
 # This file is distributed under the same license as the mrv2 package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v0.7.5\n"
+"Project-Id-Version: mrv2 v0.7.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-09-09 12:18-0300\n"
+"POT-Creation-Date: 2023-09-18 18:23-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -438,12 +438,6 @@ msgid "(PAL Fields)"
 msgstr ""
 
 msgid "(no image)"
-msgstr ""
-
-msgid ".ocio"
-msgstr ""
-
-msgid ".prefs"
 msgstr ""
 
 msgid "0.00 None"
@@ -1220,7 +1214,7 @@ msgstr ""
 
 msgid ""
 "Corruption in hotkeys preferences. Hotkey {0} for {1} will not be "
-"available.  Already used in {2}"
+"available.  Already used in {2}."
 msgstr ""
 
 msgid "Could not convert message to shape: "
@@ -1236,6 +1230,9 @@ msgid "Could not match "
 msgstr ""
 
 msgid "Could not open color theme from \"{0}\"."
+msgstr ""
+
+msgid "Could not paste {0}.  Error {1}."
 msgstr ""
 
 msgid "Could not read python script '{0}'"
@@ -3085,7 +3082,7 @@ msgstr ""
 msgid "Remove Clip"
 msgstr ""
 
-msgid "Remove Clip With Gap"
+msgid "Remove EDLs in Temporary Folder on Exit"
 msgstr ""
 
 msgid "Remove Paths"
@@ -4508,6 +4505,11 @@ msgid ""
 "When selected, only a single mrv2 instance is allowed.\n"
 "If you try to open several mrv2s with different images, all these images "
 "will be sent to the already open mrv2."
+msgstr ""
+
+msgid ""
+"When selected, temporary EDLs (Playlists) will be removed from the temporary "
+"folder."
 msgstr ""
 
 msgid ""
