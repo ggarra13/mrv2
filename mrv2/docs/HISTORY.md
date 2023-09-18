@@ -9,6 +9,7 @@ v0.7.7
 - Fixed drag and drop on Windows only allowing to load 4 clips before not
   allowing drag and drop to work anymore.
 - Fixed file requester hanging when reading .py files in a directory.
+- Updated to OpenEXR 3.2, OpenColorIO 2.3.0, etc.
 
 v0.7.6
 ======
