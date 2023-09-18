@@ -10,6 +10,9 @@ v0.7.7
   allowing drag and drop to work anymore.
 - Fixed file requester hanging when reading .py files in a directory.
 - Updated to OpenEXR 3.2, OpenColorIO 2.3.0, etc.
+- Fixed Frame/Timecode/Seconds display in the PDF Exporter which was showing
+  always 0.
+- Fixed PDF export to save out annotations in increasing time order.
 
 v0.7.6
 ======

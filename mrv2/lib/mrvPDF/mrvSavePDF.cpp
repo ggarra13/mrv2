@@ -1,4 +1,6 @@
 
+#include <algorithm>
+
 #include "mrvFl/mrvIO.h"
 
 #include "mrvPDF/mrvPDFCreator.h"
@@ -19,7 +21,7 @@ namespace mrv
         if (!player)
             return false;
 
-        const auto& annotations = player->getAllAnnotations();
+        auto annotations = player->getAllAnnotations();
         if (annotations.empty())
             return false;
 
@@ -28,6 +30,12 @@ namespace mrv
         {
             pdfFile += ".pdf";
         }
+
+        std::sort(
+            annotations.begin(), annotations.end(),
+            [](const std::shared_ptr<tl::draw::Annotation>& a,
+               const std::shared_ptr<tl::draw::Annotation>& b)
+            { return a->time < b->time; });
 
         PDFCreator pdf(pdfFile, annotations, ui);
         try

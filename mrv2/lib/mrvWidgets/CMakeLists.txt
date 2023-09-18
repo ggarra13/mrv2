@@ -118,13 +118,17 @@ endif()
 
 add_library(mrvWidgets ${SOURCES} ${HEADERS})
 
-list( APPEND LIBRARIES mrvFlmm mrvFLU mrvCore fltk_images pybind11::embed )
+list( APPEND LIBRARIES mrvFlmm mrvFLU mrvCore fltk_images MINIZIP::minizip pybind11::embed )
 
 if ( UNIX)
     if ( NOT APPLE )
 	add_definitions( -DFLTK_USE_X11 )
 	list(APPEND LIBRARIES Xss )
     endif()
+endif()
+
+if( WIN32 )
+    list(APPEND LIBRARIES Crypt32.lib)
 endif()
 
 target_link_libraries(mrvWidgets PUBLIC ${LIBRARIES} )
