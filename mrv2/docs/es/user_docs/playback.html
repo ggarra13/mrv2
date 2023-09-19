@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Video Playback &mdash; documentación de mrv2 - v0.7.7</title>
+  <title>Reproducción de Vídeo &mdash; documentación de mrv2 - v0.7.7</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
@@ -22,7 +22,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Índice" href="../genindex.html" />
     <link rel="search" title="Búsqueda" href="../search.html" />
-    <link rel="next" title="Settings" href="settings.html" />
+    <link rel="next" title="Seteos" href="settings.html" />
     <link rel="prev" title="Notas y Anotaciones" href="notes.html" /> 
 </head>
 
@@ -50,18 +50,18 @@
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Guía del Usuario de mrv2</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="overview.html">Introducción</a></li>
 <li class="toctree-l2"><a class="reference internal" href="getting_started/getting_started.html">Comenzando</a></li>
-<li class="toctree-l2"><a class="reference internal" href="interface/interface.html">The mrv2 Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interface/interface.html">La interfaz de mrv2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="panels/panels.html">Panels</a></li>
 <li class="toctree-l2"><a class="reference internal" href="notes.html">Notas y Anotaciones</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Video Playback</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#current-frame">Current Frame</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#loop-modes">Loop Modes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#fps-rate">FPS Rate</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#playback-specific-hotkeys">Playback Specific Hotkeys</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#playhead-cache-behaviour">Playhead Cache Behaviour</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Reproducción de Vídeo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cuadro-actual">Cuadro Actual</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#modos-de-bucle">Modos de Bucle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#velocidad-de-fps">Velocidad de FPS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#teclas-especificas-de-reproduccion">Teclas Específicas de Reproducción</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#comportamiento-del-cache">Comportamiento del Cache</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="settings.html">Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html">Seteos</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../python_api/index.html">Python API</a></li>
@@ -82,7 +82,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="index.html">Guía del Usuario de mrv2</a></li>
-      <li class="breadcrumb-item active">Video Playback</li>
+      <li class="breadcrumb-item active">Reproducción de Vídeo</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/user_docs/playback.rst.txt" rel="nofollow"> Ver código fuente de la página</a>
       </li>
@@ -92,68 +92,29 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="video-playback">
-<h1>Video Playback<a class="headerlink" href="#video-playback" title="Enlace permanente a este encabezado"></a></h1>
-<section id="current-frame">
-<h2>Current Frame<a class="headerlink" href="#current-frame" title="Enlace permanente a este encabezado"></a></h2>
-<p>In mrv2, each clip and playlist has its own current frame meaning that if you switch between them things such as playback rate, loop mode, compare mode and so-on are remembered <em>per playlist</em> or clip.</p>
+  <section id="reproduccion-de-video">
+<h1>Reproducción de Vídeo<a class="headerlink" href="#reproduccion-de-video" title="Enlace permanente a este encabezado"></a></h1>
+<section id="cuadro-actual">
+<h2>Cuadro Actual<a class="headerlink" href="#cuadro-actual" title="Enlace permanente a este encabezado"></a></h2>
+<p>En mrv2, cada clip y lista de reproducción tiene su propio cuadro actual lo que significa que si cambia de uno a otro, cosas como la velocidad de reproducción, el modo de bucle, etc. son recordados <em>por lista de reproducción</em> o clip.</p>
 </section>
-<section id="loop-modes">
-<h2>Loop Modes<a class="headerlink" href="#loop-modes" title="Enlace permanente a este encabezado"></a></h2>
-<p>Use the loop mode button to switch between “play once”, “loop” and “ping-pong” when playing through media.</p>
+<section id="modos-de-bucle">
+<h2>Modos de Bucle<a class="headerlink" href="#modos-de-bucle" title="Enlace permanente a este encabezado"></a></h2>
+<p>Use botón de modo de bucle para cambiar entre “reproducir una vez”, “reproducir en bucle” y “ping-pong” cuando se reproduce el medio.</p>
 </section>
-<section id="fps-rate">
-<h2>FPS Rate<a class="headerlink" href="#fps-rate" title="Enlace permanente a este encabezado"></a></h2>
-<p>The FPS (Frames per Second) rate can be adjusted by selecting one from the “FPS” button in the playback toolbar.  You can also type in a random speed in the FPS widget.</p>
+<section id="velocidad-de-fps">
+<h2>Velocidad de FPS<a class="headerlink" href="#velocidad-de-fps" title="Enlace permanente a este encabezado"></a></h2>
+<p>La velocidad de FPS (Frames per Second o Cuadros por Segundo) puede ser ajustada desde el botón de “FPS” en la barra de playback.  También puede escribir una velocidad al azar en el widget de FPS.</p>
 </section>
-<section id="playback-specific-hotkeys">
-<h2>Playback Specific Hotkeys<a class="headerlink" href="#playback-specific-hotkeys" title="Enlace permanente a este encabezado"></a></h2>
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Shortcut</p></th>
-<th class="head"><p>Action</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>Spacebar</p></td>
-<td><p>Start/stop playback.</p></td>
-</tr>
-<tr class="row-odd"><td><p>I</p></td>
-<td><p>Toggle the “in” loop point.</p></td>
-</tr>
-<tr class="row-even"><td><p>O</p></td>
-<td><p>Toggle the “out” loop point.</p></td>
-</tr>
-<tr class="row-odd"><td><p>Up Arrow</p></td>
-<td><p>Play backwards.</p></td>
-</tr>
-<tr class="row-even"><td><p>Enter</p></td>
-<td><p>Stop playback.</p></td>
-</tr>
-<tr class="row-odd"><td><p>Down Arrow</p></td>
-<td><p>Play forwards.</p></td>
-</tr>
-<tr class="row-even"><td><p>Right Arrow</p></td>
-<td><p>Step forwards one frame.</p></td>
-</tr>
-<tr class="row-odd"><td><p>Left Arrow</p></td>
-<td><p>Step backwards one frame.</p></td>
-</tr>
-<tr class="row-even"><td><p>Shift+Left Arrow</p></td>
-<td><p>Go to the previous annotation.</p></td>
-</tr>
-<tr class="row-odd"><td><p>Shift+Right Arrow</p></td>
-<td><p>Go to the next annotation.</p></td>
-</tr>
-</tbody>
-</table>
+<section id="teclas-especificas-de-reproduccion">
+<h2>Teclas Específicas de Reproducción<a class="headerlink" href="#teclas-especificas-de-reproduccion" title="Enlace permanente a este encabezado"></a></h2>
 </section>
-<section id="playhead-cache-behaviour">
-<h2>Playhead Cache Behaviour<a class="headerlink" href="#playhead-cache-behaviour" title="Enlace permanente a este encabezado"></a></h2>
-<p>mrv2 will always try to read and decode video data before it is needed for display. The image data is stored in the image cache ready for drawing to screen. mrv2 needs to be efficient in how it does this and it is useful if a user understands the behaviour.</p>
-<p>The cache status is indicated in the timeline with a horizontal coloured bar - this should be obvious as you can see it growing as mrv2 loads frames in the background. Thus if you want to view media that is slow to read off disk, like high resolution EXR images, the workflow is to wait for mrv2 to cache the frames before starting playback/looping. The size of the cache (set via the Settings Panel) will limit the maximum number of frames that can be loaded.</p>
-<p>In most cases mrv2 should be able to play back through cached frames at the required frame rate of the media. Although the Viewer has been optimised to get the most out of your graphics card, slow playback can result if you are trying to view very high resolution images and your computer’s video hardware can’t match the required data transfer rates.</p>
-<p>For media that can be decoded faster than the playback rate, like many common compressed video stream codecs or EXRs compressed with the DWA/DWB, you should be able to largely ignore mrv2’s caching activity as it will be able to stream data off the disk for playback on demand.</p>
+<section id="comportamiento-del-cache">
+<h2>Comportamiento del Cache<a class="headerlink" href="#comportamiento-del-cache" title="Enlace permanente a este encabezado"></a></h2>
+<p>mrv2 tratará siempre de leer y decodificar datos de vídeo antes de que sea necesitado para el display. Los datos de la imagen son guardados en el cache listo para dibujar en la pantalla. mrv2 necesita ser eficiente en cómo hace esto y es útil si el usuario entiende su comportamiento.</p>
+<p>El estatus del cache está indicado en la línear de tiempo por una delgada línea de color horizontal - esto debe ser obvio ya que puede verla crecer mientra mrv2 carga cuadros del disco en el fondo. Por ello, si quiere ver un clip que es lento de leer del disco, como unas imágenes de EXR de alta resolución, el comportamiento es esperar que mrv2 cache los cuadros antes de arrancar la reproducción/bucle. El tamaño del cache (seteado via el Panel de Seteos) limitará el máximo número de cuadros que pueden ser cargados.</p>
+<p>En la mayoría de los casos, mrv2 debería ser capaz de reproducir los cuadros en el cache a la velocidad de FPS del medio. A pesar que el Visor ha sido optimizado para obtener lo mejor de su tarjeta gráfica, la reproducción lenta puede resultar si esta tratando de ver imágenes de muy alta resolución y el hardware de video de su computadora no puede empatar el ratio de transferencia.</p>
+<p>Para medios que pueden ser decodificados más rápido que el ratio de reproducción, como muchos codecs de video o EXRs comprimidos con DWA/DWB, debería poder ignorar la actividad de caching ya que éste será capaz de correr los datos del disco para reproducción en demanda.</p>
 </section>
 </section>
 
@@ -162,7 +123,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pie de página">
         <a href="notes.html" class="btn btn-neutral float-left" title="Notas y Anotaciones" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Anterior</a>
-        <a href="settings.html" class="btn btn-neutral float-right" title="Settings" accesskey="n" rel="next">Siguiente <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="settings.html" class="btn btn-neutral float-right" title="Seteos" accesskey="n" rel="next">Siguiente <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

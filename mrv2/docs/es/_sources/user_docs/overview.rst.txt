@@ -3,8 +3,8 @@ Introducción
 ============
 
 
-What is mrv2 ?
-**************
+¿Qué es mrv2?
+*************
 
 mrv2 es un flipbook profesional y herramienta de revisión de código abierto para la industria de Efectos Visuales, Animación e Imágenes de Computación Gráfica.  mrv2 esta focalizado en proveer una interfaz fácil de usar e intuitiva con el motor de reproducción de mayor performance disponible y una API de Python para integración en los Pipelines de los estudios y para customizarlo con total facilidad.
 

@@ -1,71 +1,76 @@
 .. _interface:
 
-##################
-The mrv2 Interface
-##################
+###################
+La interfaz de mrv2
+###################
 
 .. image:: ../images/interface-02.png
    :align: center
 
-mrv2's main window provides 6 different toolbars that can be hidden or shown.
+La ventana principal de mrv2 provee de 6 barras diferentes que pueden ser ocultadas o mostradas.
 
-The first toolbar is the menu toolbar.  It can be toggled with Shift + F1. The menus are also available from the Right Mouse Button on the View window.  The menu toolbar also has the Edit button to toggle the editing mode and the Fit Window to image button.
+La primer barra es la de los menúes.  Puede alternarse con Shift + F1. Los menus están tambien disponibles con el Botón Derecho del Mouse en la vista principal de mrv2.  La barra de menú tiene también el botón de Edición para alternar el modo de edición y el botón de Ajustar Ventana a la Imagen.
 
-The second toolbar is the main layer, exposure, OCIO and gamma controls.  It can be toggled with F1.
+La segunda barra es la de capas o canales, exposición, OCIO y controles de gama.  Puede ser alternada con F1.
 
-The third toolbar is the Timeline Viewport and controls.  You can toggle it with F3.
+La tercera barra es la ventana de la línea de tiempo y sus controles.  Puede alternarla con F3.
 
-The fourth toolbar is the Pixel Toolbar, which shows the current pixel under the cursor.  You can toggle it with F2.
+La cuarta barra es la de Información de Pixel, que muestra el pixel actual bajo el cursor.  Puede activar y desactivarla con F2.
 
-Finally, the last toolbar is the Status toolbar.  It will print out errors and let you know in what action mode you are in (Default is Scrubbing).
+Finalmente, la últime barra es la de Estatus.  Imprimirá errores y te dejará saber en que modo estás (Por defecto es Scrubbing).
 
 
-Customising the Interface
--------------------------
+Personalizando la Interfaz
+--------------------------
 
 .. image:: ../images/interface-03.png
    :align: center
 
-mrv2 can be customized to show any of the toolbars and set up how the main window behaves from Window->Preferences->User Interface.  These settings are saved when you exit mrv2 and will allow you to always start mrv2 in a certain configuration.
+mrv2 puede ser personalizado para mostrar cualquiera de las barras desde Ventana->Preferencias->Interfaz del Usuario.  Estos seteos son grabados cuando salis de mrv2 y te permitirán arrancar siempre mrv2 con cierta configuración.
 
 
-The Timeline
-++++++++++++
+La Línea de Tiempo
+++++++++++++++++++
 
 .. image:: ../images/timeline-01.png
    :align: center
 
-The Timeline Viewport allows you to scale the Editing's Thumbnails and Audio waveforms by dragging the viewport up and down.  For a quick display of all the tracks, you can click on the Edit button in the Menu toolbar.
-When showing the pictures, you can zoom in and out with the mousewheel.
+La Ventana Gráfica de la Línea de Tiempo permite escalar las miniaturas de Edición y las ondas de Audio arrastrando la ventana arriba y abajo.  Para una rápida vista de todas las pistas, puede cliquear en el boton de Edición en la barra de Men.
+Cuando se muestran las miniaturas, puedes acercarte o alejarte con la rueda del ratón.
 
-Hiding/Showing UI elements 
-++++++++++++++++++++++++++
+Ocultando/Mostrando Elementos de la GUI 
++++++++++++++++++++++++++++++++++++++++
 
-Some useful (default) shortcuts are as follows
+Algunas teclas útiles por defecto:
 
-============  ==============================
-Shortcut      Action
-============  ============================== 
-Shift + F1    Toggle Menu Toolbar.
-F1            Toggle Topbar.
-F2            Toggle Pixel Toolbar.
-F3            Toggle Timeline Viewport and controls.
-F11           Toggle Fullscreen mode.
-F12           Toggle Presentation mode (no toolbars, fullscreen).
-============  ============================== 
+============  =============================================
+Tecla         Acción
+============  =============================================
+Shift + F1    Alternar la barra de Menú.
+F1            Alternar la barra Superior.
+F2            Alternar la barra de Pixel.
+F3            Alternar la barra de Línea de Tiempo.
+Shift + F7    Alternar las Herramientas de Dibujo y Acción.
+F11           Alternar el modo Pantalla Completa.
+F12           Alternar el modo Presentación (sin barras).
+============  =============================================
 
-Mouse interaction in the Viewer
--------------------------------
+Interacción del Ratón en el Visor
+---------------------------------
 
-A three buttoned mouse can be used for closer image inspection. Hold the middle button and drag to pan the image within the viewport. Hold down the Alt key on your keyboard and drag left/right with the right mouse button to perform a centred zoom in/out on the image.  You can also use the mousewheel which is more confortable.
+Un ratón de tres botones es recomendado y puede ser usado para inspección de la imagen. Sosteniendo el botón del medio del ratón y moviendo el ratón para panear la imagen en la ventana gráfica. Sostenga la tecla Alt y el botón derecho del ratón y moviendo el ratón de derecha a izquierda para hacer un acercamiento o alejamiento de la imagen.  También puede usar la rueda del mouse que es más confortable.
+El factor de zoom actual es mostrado en la barra de pixel a la izquierda.
 
 .. note::
-    To 'reset' the viewer so that the image is auto-fitted, you can select "Fit" from the Zoom display pulldown in the Pixel Toolbar or use the 'f' hotkey.
+    Para 'resetear' el visor para que la imagen se ajuste a la ventana gráfica, puede seleccionar "Fit" del display de Zoom en la barra de Pixel o usar la tecla 'f'.
 
 .. note::
-    To 'center' the view, without changing the zoom factor, you can use the 'c'
-    hotkey.
+    Para 'centrar' la vista, sin cambiar el factor de zoom, puede usar la tecla
+    'c' hotkey.
 
+.. note::
+   Si quiere acercase o alejarse un porcentaje particular (digamos 2x), puede
+   elegirlo desde el menu de zoom en la barra de Pixel.
 
 View Menu
 ---------

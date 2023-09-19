@@ -53,7 +53,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#installing-mrv2">Installing mrv2</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#launching-mrv2">Launching mrv2</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#loading-media-drag-and-drop">Loading Media (Drag and Drop)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#loading-media-filesystem-browser">Loading Media (filesystem browser)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#loading-media-mrv2-browser">Loading Media (mrv2 Browser)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#loading-media-recent-menu">Loading Media (Recent menu)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#loading-media-command-line">Loading Media (command line)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#viewing-media">Viewing Media</a></li>
@@ -62,7 +62,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../interface/interface.html">The mrv2 Interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../panels/panels.html">Panels</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../notes.html">Notes and Annotations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../playback.html">Video Playback</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playback.html">Reproducción de Vídeo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../settings.html">Settings</a></li>
 </ul>
 </li>
@@ -99,7 +99,7 @@
 <section id="building-mrv2">
 <h2>Building mrv2<a class="headerlink" href="#building-mrv2" title="Permalink to this heading"></a></h2>
 <p>Please refer to the github documentation at:</p>
-<p><a class="reference external" href="http::https://github.com/ggarra13/mrv2">http::https://github.com/ggarra13/mrv2</a></p>
+<p><a class="reference external" href="https://github.com/ggarra13/mrv2">https://github.com/ggarra13/mrv2</a></p>
 </section>
 <section id="installing-mrv2">
 <h2>Installing mrv2<a class="headerlink" href="#installing-mrv2" title="Permalink to this heading"></a></h2>
@@ -125,18 +125,24 @@
 </section>
 <section id="launching-mrv2">
 <h2>Launching mrv2<a class="headerlink" href="#launching-mrv2" title="Permalink to this heading"></a></h2>
-<p>To launch an empty mrv2 “Session” type <code class="docutils literal notranslate"><span class="pre">mrv2</span></code> on the Linux command line and press enter.</p>
-<p>You can drag-and-drop files into the main window from Ivy Browser or the file system, or use the “Load” layout to add Shotgun playlists.</p>
-<p>You can also launch mrv2 with one or more media files on the command line.</p>
+<p>While on Linux, you can start mrv2 from the terminal or from the icon, on Windows and macOS by default you use the icon provided in the installed location of the executable.</p>
 <img alt="../../_images/interface-01.png" src="../../_images/interface-01.png" />
 </section>
 <section id="loading-media-drag-and-drop">
 <h2>Loading Media (Drag and Drop)<a class="headerlink" href="#loading-media-drag-and-drop" title="Permalink to this heading"></a></h2>
 <p>An easy way to load media is to drag-and-drop files or folders into the main window from the file system. If you drop a folder, the directory will be recursively searched for media files and they will all be added.</p>
 </section>
-<section id="loading-media-filesystem-browser">
-<h2>Loading Media (filesystem browser)<a class="headerlink" href="#loading-media-filesystem-browser" title="Permalink to this heading"></a></h2>
+<section id="loading-media-mrv2-browser">
+<h2>Loading Media (mrv2 Browser)<a class="headerlink" href="#loading-media-mrv2-browser" title="Permalink to this heading"></a></h2>
 <p>Using File-&gt;Open Movie or Sequence, a File requester will be opened.  By default the file requester is mrv2’s custom file requester.  However, in the Window-&gt;Preferences-&gt;File Requester you can select Use Native File Chooser which will use the native file chooser for your platform.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>On macOS, mrv2’s file requester might not be able to open the
+protected folders of the OS like Desktop, Downloads or Documents as
+the OS won’t allow it due to mrv2 not being registered with Apple.
+You won’t use the Finder either with the right mouse button and the option
+Open with mrv2.</p>
+</div>
 </section>
 <section id="loading-media-recent-menu">
 <h2>Loading Media (Recent menu)<a class="headerlink" href="#loading-media-recent-menu" title="Permalink to this heading"></a></h2>
@@ -144,9 +150,9 @@
 </section>
 <section id="loading-media-command-line">
 <h2>Loading Media (command line)<a class="headerlink" href="#loading-media-command-line" title="Permalink to this heading"></a></h2>
-<p>Media can be loaded using the mrv2 command line from a terminal window which will be convenient and powerful for users familiar with shell syntax. By default, if mrv2 is already running, files will be added to the existing session instead of starting a new session. If you want to launch a new session, use the -n flag.</p>
-<p>mrv2 supports various modes for loading sequences and movies.  You can mix different modes as required:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mrv2</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">test</span><span class="o">.</span><span class="n">mov</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span>\<span class="o">*.</span><span class="n">jpg</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">frames</span><span class="mf">.0001</span><span class="o">.</span><span class="n">exr</span>
+<p>Media can be loaded using the mrv2 command line from a terminal window which will be convenient and powerful for users familiar with shell syntax.</p>
+<p>mrv2 supports various modes for loading sequences and movies.  You can mix different modes as required up to three clips:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mrv2</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">test</span><span class="o">.</span><span class="n">mov</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">frames</span><span class="mf">.0001</span><span class="o">.</span><span class="n">exr</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">edit</span><span class="o">.</span><span class="n">otio</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -155,7 +161,7 @@
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Image sequences (e.g. a series of JPEG or EXR files) default to 24fps (you can adjust this in Window-&gt;Preferences).</p>
+<p>Image sequences (e.g. a series of JPEG or TGA) default to 24fps (you can adjust this in Window-&gt;Preferences-&gt;Playback).  DPX and EXRs speed is taken from the metadata if available.</p>
 </div>
 </section>
 <section id="viewing-media">

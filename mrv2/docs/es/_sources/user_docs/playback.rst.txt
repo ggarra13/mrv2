@@ -1,48 +1,48 @@
-##############
-Video Playback
-##############
+#####################
+Reproducción de Vídeo
+#####################
 
-Current Frame
+Cuadro Actual
 -------------
 
-In mrv2, each clip and playlist has its own current frame meaning that if you switch between them things such as playback rate, loop mode, compare mode and so-on are remembered *per playlist* or clip. 
+En mrv2, cada clip y lista de reproducción tiene su propio cuadro actual lo que significa que si cambia de uno a otro, cosas como la velocidad de reproducción, el modo de bucle, etc. son recordados *por lista de reproducción* o clip. 
 
-Loop Modes
-----------
+Modos de Bucle
+--------------
 
-Use the loop mode button to switch between 'play once', 'loop' and 'ping-pong' when playing through media.
+Use botón de modo de bucle para cambiar entre 'reproducir una vez', 'reproducir en bucle' y 'ping-pong' cuando se reproduce el medio.
 
-FPS Rate
---------
+Velocidad de FPS
+----------------
 
-The FPS (Frames per Second) rate can be adjusted by selecting one from the 'FPS' button in the playback toolbar.  You can also type in a random speed in the FPS widget.
+La velocidad de FPS (Frames per Second o Cuadros por Segundo) puede ser ajustada desde el botón de 'FPS' en la barra de playback.  También puede escribir una velocidad al azar en el widget de FPS.
 
-Playback Specific Hotkeys
--------------------------
+Teclas Específicas de Reproducción
+----------------------------------
 
-=================  ==============================
-Shortcut           Action
-=================  ============================== 
-Spacebar           Start/stop playback.
-I                  Toggle the 'in' loop point.
-O                  Toggle the 'out' loop point.
-Up Arrow           Play backwards.
-Enter              Stop playback.
-Down Arrow         Play forwards.
-Right Arrow        Step forwards one frame.
-Left Arrow         Step backwards one frame.
-Shift+Left Arrow   Go to the previous annotation.
-Shift+Right Arrow  Go to the next annotation.
-=================  ============================== 
+=======================  =====================================
+Teclas                   Acción
+=======================  =====================================
+Barra Espaciadora        Comienza o detiene la reproducción.
+I                        Alterna el punto de entrada de bucle.
+O                        Alterna el punto de salida de bucle.
+Flecha Arriba            Reproducir hacia atrás.
+Entrar                   Detener reproducción.
+Flecha Abajo             Reproducir hacia delante.
+Flecha Derecha           Caminar hacia delante un cuadro.
+Flecha Izquierda         Caminar hacia atrás un cuadro.
+Shift+Flecha Izquierda   Ir a la anotación previa.
+Shift+Flecha Derecha     Ir a la próxima anotación.
+=======================  ==================================== 
 
-Playhead Cache Behaviour
+Comportamiento del Cache
 ------------------------
 
-mrv2 will always try to read and decode video data before it is needed for display. The image data is stored in the image cache ready for drawing to screen. mrv2 needs to be efficient in how it does this and it is useful if a user understands the behaviour.
+mrv2 tratará siempre de leer y decodificar datos de vídeo antes de que sea necesitado para el display. Los datos de la imagen son guardados en el cache listo para dibujar en la pantalla. mrv2 necesita ser eficiente en cómo hace esto y es útil si el usuario entiende su comportamiento.
 
-The cache status is indicated in the timeline with a horizontal coloured bar - this should be obvious as you can see it growing as mrv2 loads frames in the background. Thus if you want to view media that is slow to read off disk, like high resolution EXR images, the workflow is to wait for mrv2 to cache the frames before starting playback/looping. The size of the cache (set via the Settings Panel) will limit the maximum number of frames that can be loaded. 
+El estatus del cache está indicado en la línear de tiempo por una delgada línea de color horizontal - esto debe ser obvio ya que puede verla crecer mientra mrv2 carga cuadros del disco en el fondo. Por ello, si quiere ver un clip que es lento de leer del disco, como unas imágenes de EXR de alta resolución, el comportamiento es esperar que mrv2 cache los cuadros antes de arrancar la reproducción/bucle. El tamaño del cache (seteado via el Panel de Seteos) limitará el máximo número de cuadros que pueden ser cargados. 
 
-In most cases mrv2 should be able to play back through cached frames at the required frame rate of the media. Although the Viewer has been optimised to get the most out of your graphics card, slow playback can result if you are trying to view very high resolution images and your computer's video hardware can't match the required data transfer rates.
+En la mayoría de los casos, mrv2 debería ser capaz de reproducir los cuadros en el cache a la velocidad de FPS del medio. A pesar que el Visor ha sido optimizado para obtener lo mejor de su tarjeta gráfica, la reproducción lenta puede resultar si esta tratando de ver imágenes de muy alta resolución y el hardware de video de su computadora no puede empatar el ratio de transferencia.
 
-For media that can be decoded faster than the playback rate, like many common compressed video stream codecs or EXRs compressed with the DWA/DWB, you should be able to largely ignore mrv2's caching activity as it will be able to stream data off the disk for playback on demand.
+Para medios que pueden ser decodificados más rápido que el ratio de reproducción, como muchos codecs de video o EXRs comprimidos con DWA/DWB, debería poder ignorar la actividad de caching ya que éste será capaz de correr los datos del disco para reproducción en demanda.
 

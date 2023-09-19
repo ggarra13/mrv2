@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The mrv2 Interface &mdash; documentación de mrv2 - v0.7.7</title>
+  <title>La interfaz de mrv2 &mdash; documentación de mrv2 - v0.7.7</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
@@ -50,13 +50,13 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Guía del Usuario de mrv2</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../overview.html">Introducción</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../getting_started/getting_started.html">Comenzando</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">The mrv2 Interface</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#customising-the-interface">Customising the Interface</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#the-timeline">The Timeline</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#hiding-showing-ui-elements">Hiding/Showing UI elements</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">La interfaz de mrv2</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#personalizando-la-interfaz">Personalizando la Interfaz</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#la-linea-de-tiempo">La Línea de Tiempo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ocultando-mostrando-elementos-de-la-gui">Ocultando/Mostrando Elementos de la GUI</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#mouse-interaction-in-the-viewer">Mouse interaction in the Viewer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#interaccion-del-raton-en-el-visor">Interacción del Ratón en el Visor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#view-menu">View Menu</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#timeline">Timeline</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#frame-indicator">Frame Indicator</a></li>
@@ -72,8 +72,8 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../panels/panels.html">Panels</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../notes.html">Notas y Anotaciones</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../playback.html">Video Playback</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../settings.html">Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playback.html">Reproducción de Vídeo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../settings.html">Seteos</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../python_api/index.html">Python API</a></li>
@@ -94,7 +94,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../index.html">Guía del Usuario de mrv2</a></li>
-      <li class="breadcrumb-item active">The mrv2 Interface</li>
+      <li class="breadcrumb-item active">La interfaz de mrv2</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/user_docs/interface/interface.rst.txt" rel="nofollow"> Ver código fuente de la página</a>
       </li>
@@ -104,68 +104,77 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="the-mrv2-interface">
-<span id="interface"></span><h1>The mrv2 Interface<a class="headerlink" href="#the-mrv2-interface" title="Enlace permanente a este encabezado"></a></h1>
+  <section id="la-interfaz-de-mrv2">
+<span id="interface"></span><h1>La interfaz de mrv2<a class="headerlink" href="#la-interfaz-de-mrv2" title="Enlace permanente a este encabezado"></a></h1>
 <img alt="../../_images/interface-02.png" class="align-center" src="../../_images/interface-02.png" />
-<p>mrv2’s main window provides 6 different toolbars that can be hidden or shown.</p>
-<p>The first toolbar is the menu toolbar.  It can be toggled with Shift + F1. The menus are also available from the Right Mouse Button on the View window.  The menu toolbar also has the Edit button to toggle the editing mode and the Fit Window to image button.</p>
-<p>The second toolbar is the main layer, exposure, OCIO and gamma controls.  It can be toggled with F1.</p>
-<p>The third toolbar is the Timeline Viewport and controls.  You can toggle it with F3.</p>
-<p>The fourth toolbar is the Pixel Toolbar, which shows the current pixel under the cursor.  You can toggle it with F2.</p>
-<p>Finally, the last toolbar is the Status toolbar.  It will print out errors and let you know in what action mode you are in (Default is Scrubbing).</p>
-<section id="customising-the-interface">
-<h2>Customising the Interface<a class="headerlink" href="#customising-the-interface" title="Enlace permanente a este encabezado"></a></h2>
+<p>La ventana principal de mrv2 provee de 6 barras diferentes que pueden ser ocultadas o mostradas.</p>
+<p>La primer barra es la de los menúes.  Puede alternarse con Shift + F1. Los menus están tambien disponibles con el Botón Derecho del Mouse en la vista principal de mrv2.  La barra de menú tiene también el botón de Edición para alternar el modo de edición y el botón de Ajustar Ventana a la Imagen.</p>
+<p>La segunda barra es la de capas o canales, exposición, OCIO y controles de gama.  Puede ser alternada con F1.</p>
+<p>La tercera barra es la ventana de la línea de tiempo y sus controles.  Puede alternarla con F3.</p>
+<p>La cuarta barra es la de Información de Pixel, que muestra el pixel actual bajo el cursor.  Puede activar y desactivarla con F2.</p>
+<p>Finalmente, la últime barra es la de Estatus.  Imprimirá errores y te dejará saber en que modo estás (Por defecto es Scrubbing).</p>
+<section id="personalizando-la-interfaz">
+<h2>Personalizando la Interfaz<a class="headerlink" href="#personalizando-la-interfaz" title="Enlace permanente a este encabezado"></a></h2>
 <img alt="../../_images/interface-03.png" class="align-center" src="../../_images/interface-03.png" />
-<p>mrv2 can be customized to show any of the toolbars and set up how the main window behaves from Window-&gt;Preferences-&gt;User Interface.  These settings are saved when you exit mrv2 and will allow you to always start mrv2 in a certain configuration.</p>
-<section id="the-timeline">
-<h3>The Timeline<a class="headerlink" href="#the-timeline" title="Enlace permanente a este encabezado"></a></h3>
+<p>mrv2 puede ser personalizado para mostrar cualquiera de las barras desde Ventana-&gt;Preferencias-&gt;Interfaz del Usuario.  Estos seteos son grabados cuando salis de mrv2 y te permitirán arrancar siempre mrv2 con cierta configuración.</p>
+<section id="la-linea-de-tiempo">
+<h3>La Línea de Tiempo<a class="headerlink" href="#la-linea-de-tiempo" title="Enlace permanente a este encabezado"></a></h3>
 <img alt="../../_images/timeline-01.png" class="align-center" src="../../_images/timeline-01.png" />
-<p>The Timeline Viewport allows you to scale the Editing’s Thumbnails and Audio waveforms by dragging the viewport up and down.  For a quick display of all the tracks, you can click on the Edit button in the Menu toolbar.
-When showing the pictures, you can zoom in and out with the mousewheel.</p>
+<p>La Ventana Gráfica de la Línea de Tiempo permite escalar las miniaturas de Edición y las ondas de Audio arrastrando la ventana arriba y abajo.  Para una rápida vista de todas las pistas, puede cliquear en el boton de Edición en la barra de Men.
+Cuando se muestran las miniaturas, puedes acercarte o alejarte con la rueda del ratón.</p>
 </section>
-<section id="hiding-showing-ui-elements">
-<h3>Hiding/Showing UI elements<a class="headerlink" href="#hiding-showing-ui-elements" title="Enlace permanente a este encabezado"></a></h3>
-<p>Some useful (default) shortcuts are as follows</p>
+<section id="ocultando-mostrando-elementos-de-la-gui">
+<h3>Ocultando/Mostrando Elementos de la GUI<a class="headerlink" href="#ocultando-mostrando-elementos-de-la-gui" title="Enlace permanente a este encabezado"></a></h3>
+<p>Algunas teclas útiles por defecto:</p>
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>Shortcut</p></th>
-<th class="head"><p>Action</p></th>
+<tr class="row-odd"><th class="head"><p>Tecla</p></th>
+<th class="head"><p>Acción</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>Shift + F1</p></td>
-<td><p>Toggle Menu Toolbar.</p></td>
+<td><p>Alternar la barra de Menú.</p></td>
 </tr>
 <tr class="row-odd"><td><p>F1</p></td>
-<td><p>Toggle Topbar.</p></td>
+<td><p>Alternar la barra Superior.</p></td>
 </tr>
 <tr class="row-even"><td><p>F2</p></td>
-<td><p>Toggle Pixel Toolbar.</p></td>
+<td><p>Alternar la barra de Pixel.</p></td>
 </tr>
 <tr class="row-odd"><td><p>F3</p></td>
-<td><p>Toggle Timeline Viewport and controls.</p></td>
+<td><p>Alternar la barra de Línea de Tiempo.</p></td>
 </tr>
-<tr class="row-even"><td><p>F11</p></td>
-<td><p>Toggle Fullscreen mode.</p></td>
+<tr class="row-even"><td><p>Shift + F7</p></td>
+<td><p>Alternar las Herramientas de Dibujo y Acción.</p></td>
 </tr>
-<tr class="row-odd"><td><p>F12</p></td>
-<td><p>Toggle Presentation mode (no toolbars, fullscreen).</p></td>
+<tr class="row-odd"><td><p>F11</p></td>
+<td><p>Alternar el modo Pantalla Completa.</p></td>
+</tr>
+<tr class="row-even"><td><p>F12</p></td>
+<td><p>Alternar el modo Presentación (sin barras).</p></td>
 </tr>
 </tbody>
 </table>
 </section>
 </section>
-<section id="mouse-interaction-in-the-viewer">
-<h2>Mouse interaction in the Viewer<a class="headerlink" href="#mouse-interaction-in-the-viewer" title="Enlace permanente a este encabezado"></a></h2>
-<p>A three buttoned mouse can be used for closer image inspection. Hold the middle button and drag to pan the image within the viewport. Hold down the Alt key on your keyboard and drag left/right with the right mouse button to perform a centred zoom in/out on the image.  You can also use the mousewheel which is more confortable.</p>
+<section id="interaccion-del-raton-en-el-visor">
+<h2>Interacción del Ratón en el Visor<a class="headerlink" href="#interaccion-del-raton-en-el-visor" title="Enlace permanente a este encabezado"></a></h2>
+<p>Un ratón de tres botones es recomendado y puede ser usado para inspección de la imagen. Sosteniendo el botón del medio del ratón y moviendo el ratón para panear la imagen en la ventana gráfica. Sostenga la tecla Alt y el botón derecho del ratón y moviendo el ratón de derecha a izquierda para hacer un acercamiento o alejamiento de la imagen.  También puede usar la rueda del mouse que es más confortable.
+El factor de zoom actual es mostrado en la barra de pixel a la izquierda.</p>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
-<p>To “reset” the viewer so that the image is auto-fitted, you can select «Fit» from the Zoom display pulldown in the Pixel Toolbar or use the “f” hotkey.</p>
+<p>Para “resetear” el visor para que la imagen se ajuste a la ventana gráfica, puede seleccionar «Fit» del display de Zoom en la barra de Pixel o usar la tecla “f”.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
-<p>To “center” the view, without changing the zoom factor, you can use the “c”
-hotkey.</p>
+<p>Para “centrar” la vista, sin cambiar el factor de zoom, puede usar la tecla
+“c” hotkey.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>Si quiere acercase o alejarse un porcentaje particular (digamos 2x), puede
+elegirlo desde el menu de zoom en la barra de Pixel.</p>
 </div>
 </section>
 <section id="view-menu">
