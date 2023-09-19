@@ -22,7 +22,7 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Índice" href="../../genindex.html" />
     <link rel="search" title="Búsqueda" href="../../search.html" />
-    <link rel="next" title="Panels" href="../panels/panels.html" />
+    <link rel="next" title="Paneles" href="../panels/panels.html" />
     <link rel="prev" title="Comenzando" href="../getting_started/getting_started.html" /> 
 </head>
 
@@ -57,20 +57,20 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#interaccion-del-raton-en-el-visor">Interacción del Ratón en el Visor</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#view-menu">View Menu</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#timeline">Timeline</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#frame-indicator">Frame Indicator</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#transport-controls">Transport Controls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#menu-de-vista">Menu de Vista</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#linea-de-tiempo">Línea de Tiempo</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#indicador-de-cuadro">Indicador de Cuadro</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#controles-de-transporte">Controles de Transporte</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fps">FPS</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#start-and-end-frame-indicator">Start and End Frame Indicator</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#player-viewer-controls">Player/Viewer Controls</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#the-panels">The Panels</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#divider">Divider</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#los-paneles">Los Paneles</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#divisor">Divisor</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../panels/panels.html">Panels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../panels/panels.html">Paneles</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../notes.html">Notas y Anotaciones</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../playback.html">Reproducción de Vídeo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../settings.html">Seteos</a></li>
@@ -177,72 +177,78 @@ El factor de zoom actual es mostrado en la barra de pixel a la izquierda.</p>
 elegirlo desde el menu de zoom en la barra de Pixel.</p>
 </div>
 </section>
-<section id="view-menu">
-<h2>View Menu<a class="headerlink" href="#view-menu" title="Enlace permanente a este encabezado"></a></h2>
-<p>The view menu provides controls for modifying the appearance and behaviour of the viewer:</p>
+<section id="menu-de-vista">
+<h2>Menu de Vista<a class="headerlink" href="#menu-de-vista" title="Enlace permanente a este encabezado"></a></h2>
+<p>El menú de Vista provee controles para modificar la apariencia y comportamiento del visor:</p>
 <aside class="topic">
 <p class="topic-title">Safe Areas</p>
-<p>The Safe Areas toggle allows you to display the film and video safe areas.</p>
+<p>Alternar Áreas Seguras permite mostrar las áreas seguras de film y video.</p>
 </aside>
 <aside class="topic">
 <p class="topic-title">Data Window</p>
-<p>Toggling this on will show or hide the OpenEXR’s Data Window.</p>
+<p>Seleccionar esto mostrará o ocultará la Ventana de Datos de OpenEXR.</p>
 </aside>
 <aside class="topic">
 <p class="topic-title">Display Window</p>
-<p>Toggling this on will show or hide the OpenEXR’s Display Window.</p>
+<p>Seleccionar esto mostrará o ocultará la Ventana de Display de OpenEXR.</p>
 </aside>
 <aside class="topic">
 <p class="topic-title">Mask</p>
-<p>The mask allows drawing a black mask cropping your picture to a certain film aspect.</p>
+<p>La máscara permite dibujar una máscara negra que recorta la imágen hasta darle un aspecto cinematográfico determinado.</p>
 </aside>
 <aside class="topic">
 <p class="topic-title">HUD</p>
-<p>Click this to enter the HUD (heads up display) settings. The HUD allows displaying of a lot of metadata of your media.</p>
+<p>Seleccione esto para entrar a los seteos del HUD (heads up display). El HUD permite mostrar muchos metadatos de tu clip directamente en la ventana gráfica.</p>
 </aside>
 </section>
-<section id="timeline">
-<h2>Timeline<a class="headerlink" href="#timeline" title="Enlace permanente a este encabezado"></a></h2>
-<section id="frame-indicator">
-<h3>Frame Indicator<a class="headerlink" href="#frame-indicator" title="Enlace permanente a este encabezado"></a></h3>
-<dl class="simple">
-<dt>Immediately to the left of the timeline is the “current frame” indicator. Click on this to get a list of options as to how the current time is displayed:</dt><dd><ul class="simple">
-<li><p><em>Frames:</em> absolute frame, i.e. the first frame of the media is always frame 1.</p></li>
-<li><p><em>Seconds:</em> the playhead position from the start of the media in seconds</p></li>
-<li><p><em>Timecode:</em> the 8 digit timecode. If the media has timecode metadata this will be used</p></li>
-</ul>
+<section id="linea-de-tiempo">
+<h2>Línea de Tiempo<a class="headerlink" href="#linea-de-tiempo" title="Enlace permanente a este encabezado"></a></h2>
+<section id="indicador-de-cuadro">
+<h3>Indicador de Cuadro<a class="headerlink" href="#indicador-de-cuadro" title="Enlace permanente a este encabezado"></a></h3>
+<p>Inmediatamente a la izquierda y abajo de la línea de tiempo está el “cuadro actual”.
+Junto a él esta un menu de opciones para establecer como el tiempo se muestra:</p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="simple">
+<dt><em>Cuadros:</em> cuadros, empezando en 0 para películas o uno normalmente para</dt><dd><p>secuencias.</p>
 </dd>
 </dl>
+</li>
+<li><p><em>Segundos:</em> La posición en segundos del medio.</p></li>
+<li><p><em>Timecode:</em> el timecode de 8 digitos. Si el medio tiene metadatos de timecode estos serán usados.</p></li>
+</ul>
+</div></blockquote>
 </section>
-<section id="transport-controls">
-<h3>Transport Controls<a class="headerlink" href="#transport-controls" title="Enlace permanente a este encabezado"></a></h3>
-<p>These are pretty universal and don’t need much explanation. There’s a play/pause button, step forwards/backwards buttons and fast forard/fast rewind buttons.</p>
+<section id="controles-de-transporte">
+<h3>Controles de Transporte<a class="headerlink" href="#controles-de-transporte" title="Enlace permanente a este encabezado"></a></h3>
+<p>Estos son bastante universales y no necesitan mucha explicación.
+Hay un boton de Play para atrás, Pausa y Play para adelante, paso hacia delante o hacia atrás y saltar al comienzo o al final del clip.</p>
 </section>
 <section id="fps">
 <h3>FPS<a class="headerlink" href="#fps" title="Enlace permanente a este encabezado"></a></h3>
-<p>The frames-per-second (FPS) indicator showing the desired FPS.  The FPS button is a popup that allows you to quickly switch to a new frame rate.</p>
+<p>El indicador de cuadros por segundo o frames-per-second (FPS) muestra la velocidad de reproducción deseada.  El botónd de FPS es un menú que permite seleccionar rápidamente el cambio a una nueva velocidad.</p>
 </section>
 <section id="start-and-end-frame-indicator">
 <h3>Start and End Frame Indicator<a class="headerlink" href="#start-and-end-frame-indicator" title="Enlace permanente a este encabezado"></a></h3>
-<p>To the right of the timeline, the Start frame and End Frame indicators are shown.  The S and E buttons can be clicked to set the In and Out points at the current frame.  It is equivalent to pressing the “I” or “O” hotkeys.</p>
+<p>A la derecha y abajo de la línea de tiempo, se muestran el cuadro de Comienzo y Final.  Los botones S and E pueden ser cliqueados para establecer el punto de Entrada y Salida en el cuadro actual.  Esto es equivalente a presionar las teclas “I” o “O”.</p>
 </section>
 <section id="player-viewer-controls">
 <h3>Player/Viewer Controls<a class="headerlink" href="#player-viewer-controls" title="Enlace permanente a este encabezado"></a></h3>
 <dl class="simple">
-<dt>Two buttons to the bottom of the timeline viewport provide the following interactions</dt><dd><ul class="simple">
-<li><p><em>Volume/mute control:</em> click once to get a pop-up volume control. Double click to toggle muting of audio.</p></li>
-<li><p><em>Loop mode:</em> set whether the playhead will loop a source in playback, play it once and stop on the final frame or “ping-pong” loop.</p></li>
+<dt>Dos botones en la parte inferior de los controles de la línea de tiempo proveen las siguientes interacciones:</dt><dd><ul class="simple">
+<li><p><em>Volumen/Control mudo:</em> cliquée en la bocina para alternar el control de mudo. Arrastre el deslizador a su lado para controlar el volumen.</p></li>
+<li><p><em>Mode de Bucle:</em> Estableza si la reproducción se hará una vez y dentendrá en el cuadro final, si se reproducirá en bucle o en “ping-pong”.</p></li>
 </ul>
 </dd>
 </dl>
 </section>
-<section id="the-panels">
-<h3>The Panels<a class="headerlink" href="#the-panels" title="Enlace permanente a este encabezado"></a></h3>
-<p>mrv2 supports Panels to organize the information logically.  These panels can be docked to the right of the main viewport or can be made floating windows if dragged from their main drag bar.</p>
+<section id="los-paneles">
+<h3>Los Paneles<a class="headerlink" href="#los-paneles" title="Enlace permanente a este encabezado"></a></h3>
+<p>mrv2 soporta Paneles para organizar la información lógicamente.  Estos paneles pueden ser empotrados a la derecha de la ventana gráfica o ser ventanas flotatantes si se las arrstra de su barra superior o se presiona en el pequeño botón amarillo.</p>
 </section>
-<section id="divider">
-<h3>Divider<a class="headerlink" href="#divider" title="Enlace permanente a este encabezado"></a></h3>
-<p>The Panels have a divided, just like the Timeline Viewport, and can be dragged to make the panel bigger or smaller (and change the size of the main viewport).</p>
+<section id="divisor">
+<h3>Divisor<a class="headerlink" href="#divisor" title="Enlace permanente a este encabezado"></a></h3>
+<p>Los Paneles tienen un divisor, tal como la Ventana Gráfica de la Línea de Tiempo, que puede ser arrastrado para hacer el panel mas grande o pequeño (y así también cambiar el tamaño de la ventana gráfica principal).</p>
 </section>
 </section>
 </section>
@@ -252,7 +258,7 @@ elegirlo desde el menu de zoom en la barra de Pixel.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pie de página">
         <a href="../getting_started/getting_started.html" class="btn btn-neutral float-left" title="Comenzando" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Anterior</a>
-        <a href="../panels/panels.html" class="btn btn-neutral float-right" title="Panels" accesskey="n" rel="next">Siguiente <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../panels/panels.html" class="btn btn-neutral float-right" title="Paneles" accesskey="n" rel="next">Siguiente <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Panels &mdash; documentación de mrv2 - v0.7.7</title>
+  <title>Paneles &mdash; documentación de mrv2 - v0.7.7</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
@@ -51,24 +51,24 @@
 <li class="toctree-l2"><a class="reference internal" href="../overview.html">Introducción</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../getting_started/getting_started.html">Comenzando</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../interface/interface.html">La interfaz de mrv2</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Panels</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#annotations-panel">Annotations Panel</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#color-area-panel">Color Area Panel</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#color-panel">Color Panel</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#compare-panel">Compare Panel</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#environment-map-panel">Environment Map Panel</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#files-panel">Files Panel</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#files-panel-context-menu-right-mouse-button">Files Panel Context Menu (right mouse button)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#histogram-panel">Histogram Panel</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#logs-panel">Logs Panel</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#media-information-panel">Media Information Panel</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#network-panel">Network Panel</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#playlist-panel">Playlist Panel</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#python-panel">Python Panel</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#settings-panel">Settings Panel</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#stereo-3d-panel">Stereo 3D Panel</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#usd-panel">USD Panel</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#vectorscope-panel">Vectorscope Panel</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Paneles</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#panel-de-anotaciones">Panel de Anotaciones</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#panel-de-area-de-color">Panel de Área de Color</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#panel-de-color">Panel de Color</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#panel-de-comparar">Panel de Comparar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#panel-de-mapa-de-entorno">Panel de Mapa de Entorno</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#panel-de-archivos">Panel de Archivos</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#menu-de-contexto-del-panel-de-archivos-boton-derecho-del-raton">Menú de Contexto del Panel de Archivos (Botón derecho del ratón)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#panel-de-histograma">Panel de Histograma</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#panel-de-bitacora">Panel de Bitácora</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#panel-de-informacion-del-medio">Panel de Información del Medio</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#panel-de-red">Panel de Red</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#panel-de-lista-de-reproduccion">Panel de Lista de Reproducción</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#panel-de-python">Panel de Python</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#panel-de-seteos">Panel de Seteos</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#panel-de-estereo-3d">Panel de Estéreo 3D</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#panel-de-usd">Panel de USD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#panel-de-vectorscopio">Panel de Vectorscopio</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../notes.html">Notas y Anotaciones</a></li>
@@ -94,7 +94,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../index.html">Guía del Usuario de mrv2</a></li>
-      <li class="breadcrumb-item active">Panels</li>
+      <li class="breadcrumb-item active">Paneles</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/user_docs/panels/panels.rst.txt" rel="nofollow"> Ver código fuente de la página</a>
       </li>
@@ -104,109 +104,111 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="panels">
-<span id="id1"></span><h1>Panels<a class="headerlink" href="#panels" title="Enlace permanente a este encabezado"></a></h1>
-<section id="annotations-panel">
-<h2>Annotations Panel<a class="headerlink" href="#annotations-panel" title="Enlace permanente a este encabezado"></a></h2>
+  <section id="paneles">
+<span id="panels"></span><h1>Paneles<a class="headerlink" href="#paneles" title="Enlace permanente a este encabezado"></a></h1>
+<section id="panel-de-anotaciones">
+<h2>Panel de Anotaciones<a class="headerlink" href="#panel-de-anotaciones" title="Enlace permanente a este encabezado"></a></h2>
 <img alt="../../_images/annotations-panel-01.png" class="align-center" src="../../_images/annotations-panel-01.png" />
-<p>The Annotations Panel allows you to control the Text, Sketch and Notes.  You can select a Font to use for the Text tool.  You can select a hard or soft brush for the draw tools.  And you can draw Laser sketches, so they are not permanent and instead vanish in time.</p>
-<p>You can also control the ghosting behavior of all annotations and select whether the annotation to be drawn will be attached to the current frame or to all the frames.</p>
-<p>Finally, you can type in Notes that will be printed out next to the image if saving a PDF file.</p>
+<p>El Panel de Anotaciones te permite controlar el Texto, Bocetos y Notas.  Podés seleccionar una Tipografía para usar con la herrameinta de Texto.  Podes elegir un pincel duro o suave para las herramientas de dibujo.  Y podes dibujar bocetos Laser, de forma que no son permanentes y en cambio se desvanecen en segundos.</p>
+<p>Podrás controlar también el comportamiento del fantasma de todas las anotaciones y seleccionar si la anotación será dibujada en cuadro actual o en todos los cuadros.</p>
+<p>Finalmente, podés escribir en la sección de Notas que serán impresas junto a la imagen si grabás un archivo PDF.</p>
 </section>
-<section id="color-area-panel">
-<h2>Color Area Panel<a class="headerlink" href="#color-area-panel" title="Enlace permanente a este encabezado"></a></h2>
+<section id="panel-de-area-de-color">
+<h2>Panel de Área de Color<a class="headerlink" href="#panel-de-area-de-color" title="Enlace permanente a este encabezado"></a></h2>
 <img alt="../../_images/color-area-panel-01.png" class="align-center" src="../../_images/color-area-panel-01.png" />
-<p>The Color Area Panel allows you to compare a rectangular selection of the image to show its color values, minimum, maximum and mean average.</p>
+<p>El Panel de Área de Color permite comparar una selección rectangular de la imagen para mostrar sus valores de color, mínimo, máximo y promedio.
+La Selección del área se realiza con la Herramienta de Seleccion en la Barra de Herramientas de Dibujo y Acción (segundo ícono desde arriba).</p>
 </section>
-<section id="color-panel">
-<h2>Color Panel<a class="headerlink" href="#color-panel" title="Enlace permanente a este encabezado"></a></h2>
+<section id="panel-de-color">
+<h2>Panel de Color<a class="headerlink" href="#panel-de-color" title="Enlace permanente a este encabezado"></a></h2>
 <img alt="../../_images/color-panel-01.png" class="align-center" src="../../_images/color-panel-01.png" />
-<p>The Color Panel allows controlling the color display of the viewport.  It allows you to control the Add, Contrast, Saturation and Tint.   You can Invert the image and set the In/Out Levels and gamma.  You can also add a LUT.</p>
+<p>El Panel de Color (F6 por defecto) permite controlar el display de color de la ventana gráfica.  Permite modificar la Suma, Contraste, Saturación y Tinte.   Podés Invertir la imagen y setear los Niveles de In/Out (Entrada y Salida) y Gama.  Podés agregar también un LUT predefinido a ejecutarse antes o después de los cambios de color.</p>
 </section>
-<section id="compare-panel">
-<h2>Compare Panel<a class="headerlink" href="#compare-panel" title="Enlace permanente a este encabezado"></a></h2>
+<section id="panel-de-comparar">
+<h2>Panel de Comparar<a class="headerlink" href="#panel-de-comparar" title="Enlace permanente a este encabezado"></a></h2>
 <img alt="../../_images/compare-panel-01.png" class="align-center" src="../../_images/compare-panel-01.png" />
-<p>The Compare Panel is similar to the Files Panel, but allows selecting multiple clips for comparison.  You can show the A (Files Panel) image, the B (Compare Panel) image, Wipe, Overlay (using an alpha channel if present), Difference,
-Horizontal, Vertical and Tile.  The Tile comparison allows multiple images to be tiled.</p>
+<p>El Panel de Comparar es similar al Panel de Archivos, pero permite seleccionar multiples clips para comparar.  Podes mostrar la imagen A (Panel de Archivos), la imagen B (La primer imagen del Panel de Comparar), Limpiaparabrisas (Wipe), Superponer (usando un canal de alfa si está presente), Diferencia,
+Horizontal, Vertical y Mosaicos.  La comparación de Mosaicos permite que muchas imágenes se muestren en mosaico.</p>
 </section>
-<section id="environment-map-panel">
-<h2>Environment Map Panel<a class="headerlink" href="#environment-map-panel" title="Enlace permanente a este encabezado"></a></h2>
+<section id="panel-de-mapa-de-entorno">
+<h2>Panel de Mapa de Entorno<a class="headerlink" href="#panel-de-mapa-de-entorno" title="Enlace permanente a este encabezado"></a></h2>
 <img alt="../../_images/environment-map-panel-01.png" class="align-center" src="../../_images/environment-map-panel-01.png" />
-<p>The Environment Map Panel allows you to display an image in the viewport as an environment map (Spherical or Cubical).  It also allows you to rotate the view around with the middle mouse button in the view window and change the field of view with the mousewheel.</p>
+<p>El Panel de Mapa de Entorno te permite mostrar la imagen el la ventana gráfica como un mapa de entorno (Esférico o Cúbico).  Te permite rotar la vista con el botón del medio del ratón en la ventana gráfica y cambiar la Distancia focal con el botón izquierdo del ratón.</p>
 </section>
-<section id="files-panel">
-<h2>Files Panel<a class="headerlink" href="#files-panel" title="Enlace permanente a este encabezado"></a></h2>
+<section id="panel-de-archivos">
+<h2>Panel de Archivos<a class="headerlink" href="#panel-de-archivos" title="Enlace permanente a este encabezado"></a></h2>
 <img alt="../../_images/files-panel-01.png" class="align-center" src="../../_images/files-panel-01.png" />
-<p>The Files Panel (F4 by default) show all elements loaded.  It has seven buttons at the bottom to Add a new File, Load a new File with Audio, Close the currently selected file, Close All the selected files, switch to the Previous or to the Next media file and filter Temporary EDL Playlists from the Files Panel.</p>
+<p>El Panel de Archivos (F4 by default) muestra todos los clips cargados.  Tiene siete botones abajo para Agregar un Nuevo Archivo, Cargar un Nuevo Archivo con Audio, Cerrar el Archivo Seleccionado, Cerrar Todos los Archivos, Cambiar al clip Previos o Siguiente y filtrar las Listas de Reproducción (EDL) del Panel de Archivos.</p>
 </section>
-<section id="files-panel-context-menu-right-mouse-button">
-<h2>Files Panel Context Menu (right mouse button)<a class="headerlink" href="#files-panel-context-menu-right-mouse-button" title="Enlace permanente a este encabezado"></a></h2>
-<p>A right mouse button click in the Files panel will show a pop-up menu giving access to the following features:</p>
+<section id="menu-de-contexto-del-panel-de-archivos-boton-derecho-del-raton">
+<h2>Menú de Contexto del Panel de Archivos (Botón derecho del ratón)<a class="headerlink" href="#menu-de-contexto-del-panel-de-archivos-boton-derecho-del-raton" title="Enlace permanente a este encabezado"></a></h2>
+<p>Un click del boton derecho del ratón sobre un clip mostrará un menu emergente dando acceso a las siguientes característica:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><strong>File/Clone:</strong> It will load the file item again and clone its settings.</p></li>
-<li><p><strong>File/Refresh Cache</strong> It will re-load the file and reset its cache.</p></li>
-<li><p><strong>Copy/Filename</strong> Use options in this sub-menu to copy the full paths or the file names of the selected media to the desktop clipboard. This can be useful to gather a list of media that you want to copy into an email, for example.</p></li>
-<li><p><strong>Show/In Filemanager</strong> Open your desktop file browser with the folder of the selected media.</p></li>
+<li><p><strong>Archivo/Clonar</strong> Cargará el clip nuevamente y copiará sus datos.</p></li>
+<li><p><strong>Archivo/Refrescar Cache</strong> Cargará el clip nuevamente y refrescará el Cache.</p></li>
+<li><p><strong>Copiar/Nombre del Archivo</strong> Use la opción en este sub-menú para copiar el camino completo del medio seleccionado al portapapeles del Escritorio. Esto puede ser util para recolectar una lista de media que querés copiar a un email, por ejemplo.</p></li>
+<li><p><strong>Mostrar/En Buscador de Archivosr</strong> Abre tu Buscador de Archivos de Escritorio (Explorer, Finder, Nautilus, etc) con el camino del clip seleccionado.</p></li>
 </ul>
 </div></blockquote>
 </section>
-<section id="histogram-panel">
-<h2>Histogram Panel<a class="headerlink" href="#histogram-panel" title="Enlace permanente a este encabezado"></a></h2>
+<section id="panel-de-histograma">
+<h2>Panel de Histograma<a class="headerlink" href="#panel-de-histograma" title="Enlace permanente a este encabezado"></a></h2>
 <img alt="../../_images/histogram-panel-01.png" class="align-center" src="../../_images/histogram-panel-01.png" />
-<p>The Histogram Panel allows you to show a histogram of the selected area of the image.  You select the area with the select tool in the Tool Dock where the drawing tools are located.</p>
+<p>El Panel de Histograma permite mostrar un histograma del área seleccionada de la imagen.  Podés seleccionar el área con la Herramienta de Selección en la Barra de Herramientas donde las herramientas de dibujo están localizadas.</p>
 </section>
-<section id="logs-panel">
-<h2>Logs Panel<a class="headerlink" href="#logs-panel" title="Enlace permanente a este encabezado"></a></h2>
+<section id="panel-de-bitacora">
+<h2>Panel de Bitácora<a class="headerlink" href="#panel-de-bitacora" title="Enlace permanente a este encabezado"></a></h2>
 <img alt="../../_images/logs-panel-01.png" class="align-center" src="../../_images/logs-panel-01.png" />
-<p>The Logs Panel registers all the important messages that mrv2 emits.  It will show the start-up message to show where all the files come from (preferences, hotkeys, path mappings, OCIO config, etc).  It will also any errors that may happen during the operation of mrv2.</p>
-<p>In Window-&gt;Preferences-&gt;Errors the behavior of the Log Panel can be changed when an error occurs.  The default behavior is to bring up the Log Panel in a Window, but you can also bring up the log panel docked, or you can ignore the error and not popup the log panel.</p>
+<p>El Panel de Bitácora registra todos los mensajes importantes que mrv2 emite.  Al comienzo, mostrará un mensaje de arranque para mostrar de donde todos los archivos de configuración provienen (Preferencias, Teclas de Manejo, Mapeo de Carpetas, Configuración OCIO, etc).  Mostrará tembién cualquier error que ocurra durante la operación de mrv2.</p>
+<p>El comportamiento de la Ventana-&gt;Preferencias-&gt;Errores de la Bitácora puede ser cambiado cuando un error ocurre.  El comportamiento por defecto es abrir la bitácora en una ventana, pero podés también abrirla en un panel empotrado o podés ignore los errores y nunca abrir la bitácora automaticamente.</p>
 </section>
-<section id="media-information-panel">
-<h2>Media Information Panel<a class="headerlink" href="#media-information-panel" title="Enlace permanente a este encabezado"></a></h2>
+<section id="panel-de-informacion-del-medio">
+<h2>Panel de Información del Medio<a class="headerlink" href="#panel-de-informacion-del-medio" title="Enlace permanente a este encabezado"></a></h2>
 <img alt="../../_images/media-info-panel-01.png" class="align-center" src="../../_images/media-info-panel-01.png" />
-<p>The Media Information Panel is the work horse for displaying all data about the selected media.  It shows all layers, codecs, levels, frame ranges, etc.</p>
+<p>El Panel de Información del Meida  Media Information Panel es el caballo de batalla para mostrar todos los datos del clip seleccionado.  Muestra todas las capas, pistas de audio, codecs, niveles, rango de cuadros, etc. asi como toda la metadata.</p>
 </section>
-<section id="network-panel">
-<h2>Network Panel<a class="headerlink" href="#network-panel" title="Enlace permanente a este encabezado"></a></h2>
+<section id="panel-de-red">
+<h2>Panel de Red<a class="headerlink" href="#panel-de-red" title="Enlace permanente a este encabezado"></a></h2>
 <img alt="../../_images/network-panel-01.png" class="align-center" src="../../_images/network-panel-01.png" />
-<p>The Network Panel allows you to start a sync session between two or more machines.  For it to work, you must set one of the machine as a server and the other machines as clients that connect to that machine.  The machines are distinguised by their IPv4 or IPv6 address or their host alias names if you use a hosts file on your OS.  In addition to the machine, you need to specify a port number to connect to, but the default port number should be fine.</p>
-<p>For the connection to take place, you need to make sure your firewall allows incoming and outgoing connections to the port you set up.</p>
+<p>El Panel de Red permite comenzar una session en sincronismo entre dos o más maquinas.  Para que funcione, debe setear una máquina como el servidor y las otras como clientes que se conectan a dicha máquina.  Las máquinas son distinguidas por su dirección IPv4 o IPv6 o por su nombre de alias si utiliza un archivo «hosts» en su sistema operativo.  Además de la máquina, tiene que especificar un número de puerto para conectarse, pero el puerto por defecto (55150) debería estar bien.</p>
+<p>Para que la conección se lleve a cabo, deberá asegurarse que su cortafuegos permte conecciones entrantes y salientes en el port establecido.</p>
 </section>
-<section id="playlist-panel">
-<h2>Playlist Panel<a class="headerlink" href="#playlist-panel" title="Enlace permanente a este encabezado"></a></h2>
+<section id="panel-de-lista-de-reproduccion">
+<h2>Panel de Lista de Reproducción<a class="headerlink" href="#panel-de-lista-de-reproduccion" title="Enlace permanente a este encabezado"></a></h2>
 <img alt="../../_images/playlist-panel-01.png" class="align-center" src="../../_images/playlist-panel-01.png" />
-<p>The Playlist panel allows you to quickly create OpenTimelineIO playlists (aka EDLs) by appending several clips from the Files Panel together.  This is done by dragging a file from the Files Panel to the Playlist Panel or to the Timeline Viewport when the EDL playlist is selected.  Note that you need to select the Playlist EDL in either the Files or Playlist panels and when dragging the File to the playlist, you should not click and release the mouse button on the file on the File panel, but instead click and drag it.</p>
-<p>The media files don’t have to have the same resolutiono or FPS, but they should match in video and audio tracks.  Currently only one video and one audio track is allowed.</p>
-<p>The EDLs can be created even when a network connection is in place, assuming all clips exist or can be accessed on all the machines.</p>
-<p>Each media that is added to a playlist can have an In and Out point to select just a portion of the clip and the same clip can appear multiple times with different In and Out points.</p>
+<p>El panel de Lista de Reproducción permite crear rápidamente Listas de Reproducción de OpenTimelineIO (tambien conocido como EDLs) agregando varios clips del Panel de Archivos.  Esto se hace llevando sin soltar el botón izquierdo del ratón en el archivo del Panel de Archivos y moviendo el raton al Panel de Lista de Reproducción o a la ventana gráfica de la Línea de Tiempo, cuando la lista de reproducción del EDL está seleccionado.  Note que tiene que seleccionar el EDL en el Panel de Archivos o en el Panel de Lista de Reproducción.</p>
+<p>Los clips no tienen que tener la misma resolución o FPS, pero deben tener la misma cantidad de pistas de video y audio.  Actualmente sólo una pista de video y audio es permitida.</p>
+<p>Los EDLs pueden ser creados incluso en una conección de red, asumiendo que todos los clips existen y pueden ser accedidos por todas las máquinas.</p>
+<p>Cada medio que es agregado a la lista de reproducción puede tener un punto de Entrada y Salida para seleccionar solo una porción del clip y el clip puede aparecer multiples veces con differentes puntos de Entrada y Salida.</p>
 </section>
-<section id="python-panel">
-<h2>Python Panel<a class="headerlink" href="#python-panel" title="Enlace permanente a este encabezado"></a></h2>
+<section id="panel-de-python">
+<h2>Panel de Python<a class="headerlink" href="#panel-de-python" title="Enlace permanente a este encabezado"></a></h2>
 <img alt="../../_images/python-panel-01.png" class="align-center" src="../../_images/python-panel-01.png" />
-<p>The Python panel allows you to run python code and use mrv2’s Python API to control the viewer.  The Panel is divided into two sections.  The section above records the python output, while the section below is where you type your code.  In order to run the code, you can use the Menus or click on the Keypad Enter key.</p>
-<p>You can also select a portion of the code in the editor to run just that instead of all the code typed in the editor.</p>
+<p>El Panel de Python permite correr código de Python con la API Python de mrv2 para controlar el reproductor.  El Panel está dividido en dos secciones.  La sección de arriba graba el output de python, mientras que la sección de abajo es donde tipea su código.  Para correr el código puede ejecutarlo de los menúes o bien con Entrar en el teclado numérico.</p>
+<p>Puede también seleccionar una porción del codigo en el editor para correrla en vez de todo el código presente en el editor.</p>
+<p>Puede grabar el código o cargarlo en disco, para una facil interacción con el mismo.</p>
 </section>
-<section id="settings-panel">
-<h2>Settings Panel<a class="headerlink" href="#settings-panel" title="Enlace permanente a este encabezado"></a></h2>
+<section id="panel-de-seteos">
+<h2>Panel de Seteos<a class="headerlink" href="#panel-de-seteos" title="Enlace permanente a este encabezado"></a></h2>
 <img alt="../../_images/settings-panel-01.png" class="align-center" src="../../_images/settings-panel-01.png" />
-<p>The Settings Panel (Default Hotkey: F9) allows you mainly to configure the Cache behavior of mrv2.  In it you can control how much memory in Gb does the cache use or, if you set the Gigabytes control to 0, instead of using Gigabytes, the Read Ahead and Read Behind settings will control the caching based on seconds.</p>
-<p>The default Gigabytes setting is to use half of your available RAM.</p>
+<p>El Panel de Seteos (Tecla por defecto: F9) permite principalmente configurar el comportamiento del Cache de mrv2.  En él puede controlar cuanta memoria en Gigabytes usa el cache, o, si setea el control de Gigabytes a 0, en vez de Gigabytes, los seteos de Adelante y Atrás controlaran el cacheo basado en segundos.</p>
+<p>El seteo por defecto de Gigabytes es usar como máximo la mitad de tu RAM disponible.</p>
 </section>
-<section id="stereo-3d-panel">
-<h2>Stereo 3D Panel<a class="headerlink" href="#stereo-3d-panel" title="Enlace permanente a este encabezado"></a></h2>
+<section id="panel-de-estereo-3d">
+<h2>Panel de Estéreo 3D<a class="headerlink" href="#panel-de-estereo-3d" title="Enlace permanente a este encabezado"></a></h2>
 <img alt="../../_images/stereo-3d-panel-01.png" class="align-center" src="../../_images/stereo-3d-panel-01.png" />
-<p>The Stereo 3D Panel allows you to show 3D stereo images.  You select one clip on the Files Panel and one clip on the Stereo Panel and select the type of Input and Output you want.  If you use EXR images with left/right layers, you can select Image as Input and the Files and Stereo clips will be selected automatically.  The Output for the Stereo 3D currently can be:  Anaglyph, Checkerboard, Scanline or Horizontal.</p>
+<p>El Panel de Estéreo 3D permite mostrar imágenes 3D.  Podés seleccionar un clip en Panel de Archivos y un clip en el Panel de Stereo y seleccionar el tipo de Entrada y Salida que quiere.  Si usa imágenes EXR con capas left/right, puede seleccionar la imagen como Entrada y la imagen del Panel de Archivo y el de Esteror serán seleccionadas automáticamente.  La Salida para Estereo 3D actualemente puede ser:  Anáglifo, Cuadriculado, Líneas o Columnas.</p>
 </section>
-<section id="usd-panel">
-<h2>USD Panel<a class="headerlink" href="#usd-panel" title="Enlace permanente a este encabezado"></a></h2>
+<section id="panel-de-usd">
+<h2>Panel de USD<a class="headerlink" href="#panel-de-usd" title="Enlace permanente a este encabezado"></a></h2>
 <img alt="../../_images/usd-panel-01.png" class="align-center" src="../../_images/usd-panel-01.png" />
-<p>The USD Panel allows you to control the quality and display of the next USD asset(s) loaded.</p>
+<p>El Panel de USD permite control la calidad y display de los activos de USD que se van a cargar.</p>
 </section>
-<section id="vectorscope-panel">
-<h2>Vectorscope Panel<a class="headerlink" href="#vectorscope-panel" title="Enlace permanente a este encabezado"></a></h2>
+<section id="panel-de-vectorscopio">
+<h2>Panel de Vectorscopio<a class="headerlink" href="#panel-de-vectorscopio" title="Enlace permanente a este encabezado"></a></h2>
 <img alt="../../_images/vectorscope-panel-01.png" class="align-center" src="../../_images/vectorscope-panel-01.png" />
-<p>The Vectorscope Panel allows you to show a vectorscope of the selected area of the image.  You select the area with the select tool in the Tool Dock where the drawing tools are located.</p>
+<p>El Panel de Vectorscopio permite mostrar un vectorscopio del area seleccionada de la imagen. Podés seleccionar el área con la Herramienta de Selección en la Barra de Herramientas donde las herramientas de dibujo están localizadas.</p>
 </section>
 </section>
 

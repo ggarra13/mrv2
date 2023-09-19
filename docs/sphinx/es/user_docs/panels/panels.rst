@@ -1,169 +1,171 @@
 .. _panels:
 
-######
-Panels
-######
+#######
+Paneles
+#######
 
 
-Annotations Panel
-+++++++++++++++++
+Panel de Anotaciones
+++++++++++++++++++++
 
 .. image:: ../images/annotations-panel-01.png
    :align: center
 
 	   
-The Annotations Panel allows you to control the Text, Sketch and Notes.  You can select a Font to use for the Text tool.  You can select a hard or soft brush for the draw tools.  And you can draw Laser sketches, so they are not permanent and instead vanish in time.
+El Panel de Anotaciones te permite controlar el Texto, Bocetos y Notas.  Podés seleccionar una Tipografía para usar con la herrameinta de Texto.  Podes elegir un pincel duro o suave para las herramientas de dibujo.  Y podes dibujar bocetos Laser, de forma que no son permanentes y en cambio se desvanecen en segundos.
 
-You can also control the ghosting behavior of all annotations and select whether the annotation to be drawn will be attached to the current frame or to all the frames.
+Podrás controlar también el comportamiento del fantasma de todas las anotaciones y seleccionar si la anotación será dibujada en cuadro actual o en todos los cuadros.
 
-Finally, you can type in Notes that will be printed out next to the image if saving a PDF file.
+Finalmente, podés escribir en la sección de Notas que serán impresas junto a la imagen si grabás un archivo PDF.
 
-Color Area Panel
-++++++++++++++++
+Panel de Área de Color
+++++++++++++++++++++++
 
 .. image:: ../images/color-area-panel-01.png
    :align: center
 	   
-The Color Area Panel allows you to compare a rectangular selection of the image to show its color values, minimum, maximum and mean average.
+El Panel de Área de Color permite comparar una selección rectangular de la imagen para mostrar sus valores de color, mínimo, máximo y promedio.
+La Selección del área se realiza con la Herramienta de Seleccion en la Barra de Herramientas de Dibujo y Acción (segundo ícono desde arriba).
 
-Color Panel
-+++++++++++
+Panel de Color
+++++++++++++++
 
 .. image:: ../images/color-panel-01.png
    :align: center
 
-The Color Panel allows controlling the color display of the viewport.  It allows you to control the Add, Contrast, Saturation and Tint.   You can Invert the image and set the In/Out Levels and gamma.  You can also add a LUT. 
+El Panel de Color (F6 por defecto) permite controlar el display de color de la ventana gráfica.  Permite modificar la Suma, Contraste, Saturación y Tinte.   Podés Invertir la imagen y setear los Niveles de In/Out (Entrada y Salida) y Gama.  Podés agregar también un LUT predefinido a ejecutarse antes o después de los cambios de color. 
 
-Compare Panel
-+++++++++++++
+Panel de Comparar
++++++++++++++++++
 
 .. image:: ../images/compare-panel-01.png
    :align: center
 	   
-The Compare Panel is similar to the Files Panel, but allows selecting multiple clips for comparison.  You can show the A (Files Panel) image, the B (Compare Panel) image, Wipe, Overlay (using an alpha channel if present), Difference,
-Horizontal, Vertical and Tile.  The Tile comparison allows multiple images to be tiled.
+El Panel de Comparar es similar al Panel de Archivos, pero permite seleccionar multiples clips para comparar.  Podes mostrar la imagen A (Panel de Archivos), la imagen B (La primer imagen del Panel de Comparar), Limpiaparabrisas (Wipe), Superponer (usando un canal de alfa si está presente), Diferencia,
+Horizontal, Vertical y Mosaicos.  La comparación de Mosaicos permite que muchas imágenes se muestren en mosaico.
 
-Environment Map Panel
-+++++++++++++++++++++
+Panel de Mapa de Entorno
+++++++++++++++++++++++++
 
 .. image:: ../images/environment-map-panel-01.png
    :align: center
 	   
-The Environment Map Panel allows you to display an image in the viewport as an environment map (Spherical or Cubical).  It also allows you to rotate the view around with the middle mouse button in the view window and change the field of view with the mousewheel.
+El Panel de Mapa de Entorno te permite mostrar la imagen el la ventana gráfica como un mapa de entorno (Esférico o Cúbico).  Te permite rotar la vista con el botón del medio del ratón en la ventana gráfica y cambiar la Distancia focal con el botón izquierdo del ratón.
 
-Files Panel
-+++++++++++
+Panel de Archivos
++++++++++++++++++
 
 .. image:: ../images/files-panel-01.png
    :align: center
 
-The Files Panel (F4 by default) show all elements loaded.  It has seven buttons at the bottom to Add a new File, Load a new File with Audio, Close the currently selected file, Close All the selected files, switch to the Previous or to the Next media file and filter Temporary EDL Playlists from the Files Panel.
+El Panel de Archivos (F4 by default) muestra todos los clips cargados.  Tiene siete botones abajo para Agregar un Nuevo Archivo, Cargar un Nuevo Archivo con Audio, Cerrar el Archivo Seleccionado, Cerrar Todos los Archivos, Cambiar al clip Previos o Siguiente y filtrar las Listas de Reproducción (EDL) del Panel de Archivos.
 
-Files Panel Context Menu (right mouse button)
-+++++++++++++++++++++++++++++++++++++++++++++
+Menú de Contexto del Panel de Archivos (Botón derecho del ratón)
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-A right mouse button click in the Files panel will show a pop-up menu giving access to the following features:
+Un click del boton derecho del ratón sobre un clip mostrará un menu emergente dando acceso a las siguientes característica:
 
-    - **File/Clone:** It will load the file item again and clone its settings.
-    - **File/Refresh Cache** It will re-load the file and reset its cache.
-    - **Copy/Filename** Use options in this sub-menu to copy the full paths or the file names of the selected media to the desktop clipboard. This can be useful to gather a list of media that you want to copy into an email, for example.
-    - **Show/In Filemanager** Open your desktop file browser with the folder of the selected media.
+    - **Archivo/Clonar** Cargará el clip nuevamente y copiará sus datos.
+    - **Archivo/Refrescar Cache** Cargará el clip nuevamente y refrescará el Cache.
+    - **Copiar/Nombre del Archivo** Use la opción en este sub-menú para copiar el camino completo del medio seleccionado al portapapeles del Escritorio. Esto puede ser util para recolectar una lista de media que querés copiar a un email, por ejemplo.
+    - **Mostrar/En Buscador de Archivosr** Abre tu Buscador de Archivos de Escritorio (Explorer, Finder, Nautilus, etc) con el camino del clip seleccionado.
 
-Histogram Panel
-+++++++++++++++
+Panel de Histograma
++++++++++++++++++++
 
 .. image:: ../images/histogram-panel-01.png
    :align: center
 
-The Histogram Panel allows you to show a histogram of the selected area of the image.  You select the area with the select tool in the Tool Dock where the drawing tools are located.
+El Panel de Histograma permite mostrar un histograma del área seleccionada de la imagen.  Podés seleccionar el área con la Herramienta de Selección en la Barra de Herramientas donde las herramientas de dibujo están localizadas.
 
-Logs Panel
-++++++++++
+Panel de Bitácora
++++++++++++++++++
 
 .. image:: ../images/logs-panel-01.png
    :align: center
 
+El Panel de Bitácora registra todos los mensajes importantes que mrv2 emite.  Al comienzo, mostrará un mensaje de arranque para mostrar de donde todos los archivos de configuración provienen (Preferencias, Teclas de Manejo, Mapeo de Carpetas, Configuración OCIO, etc).  Mostrará tembién cualquier error que ocurra durante la operación de mrv2.
 
-The Logs Panel registers all the important messages that mrv2 emits.  It will show the start-up message to show where all the files come from (preferences, hotkeys, path mappings, OCIO config, etc).  It will also any errors that may happen during the operation of mrv2.
+El comportamiento de la Ventana->Preferencias->Errores de la Bitácora puede ser cambiado cuando un error ocurre.  El comportamiento por defecto es abrir la bitácora en una ventana, pero podés también abrirla en un panel empotrado o podés ignore los errores y nunca abrir la bitácora automaticamente.
 
-In Window->Preferences->Errors the behavior of the Log Panel can be changed when an error occurs.  The default behavior is to bring up the Log Panel in a Window, but you can also bring up the log panel docked, or you can ignore the error and not popup the log panel.
-
-Media Information Panel
-+++++++++++++++++++++++
+Panel de Información del Medio
+++++++++++++++++++++++++++++++
 
 .. image:: ../images/media-info-panel-01.png
    :align: center
 
-The Media Information Panel is the work horse for displaying all data about the selected media.  It shows all layers, codecs, levels, frame ranges, etc.
+El Panel de Información del Meida  Media Information Panel es el caballo de batalla para mostrar todos los datos del clip seleccionado.  Muestra todas las capas, pistas de audio, codecs, niveles, rango de cuadros, etc. asi como toda la metadata.
 
-Network Panel
-+++++++++++++
+Panel de Red
+++++++++++++
 
 .. image:: ../images/network-panel-01.png
    :align: center
 
 
-The Network Panel allows you to start a sync session between two or more machines.  For it to work, you must set one of the machine as a server and the other machines as clients that connect to that machine.  The machines are distinguised by their IPv4 or IPv6 address or their host alias names if you use a hosts file on your OS.  In addition to the machine, you need to specify a port number to connect to, but the default port number should be fine.
+El Panel de Red permite comenzar una session en sincronismo entre dos o más maquinas.  Para que funcione, debe setear una máquina como el servidor y las otras como clientes que se conectan a dicha máquina.  Las máquinas son distinguidas por su dirección IPv4 o IPv6 o por su nombre de alias si utiliza un archivo "hosts" en su sistema operativo.  Además de la máquina, tiene que especificar un número de puerto para conectarse, pero el puerto por defecto (55150) debería estar bien.
 
-For the connection to take place, you need to make sure your firewall allows incoming and outgoing connections to the port you set up.
+Para que la conección se lleve a cabo, deberá asegurarse que su cortafuegos permte conecciones entrantes y salientes en el port establecido.
 
-Playlist Panel
-++++++++++++++
+Panel de Lista de Reproducción
+++++++++++++++++++++++++++++++
 
 .. image:: ../images/playlist-panel-01.png
    :align: center
 
 
-The Playlist panel allows you to quickly create OpenTimelineIO playlists (aka EDLs) by appending several clips from the Files Panel together.  This is done by dragging a file from the Files Panel to the Playlist Panel or to the Timeline Viewport when the EDL playlist is selected.  Note that you need to select the Playlist EDL in either the Files or Playlist panels and when dragging the File to the playlist, you should not click and release the mouse button on the file on the File panel, but instead click and drag it.
+El panel de Lista de Reproducción permite crear rápidamente Listas de Reproducción de OpenTimelineIO (tambien conocido como EDLs) agregando varios clips del Panel de Archivos.  Esto se hace llevando sin soltar el botón izquierdo del ratón en el archivo del Panel de Archivos y moviendo el raton al Panel de Lista de Reproducción o a la ventana gráfica de la Línea de Tiempo, cuando la lista de reproducción del EDL está seleccionado.  Note que tiene que seleccionar el EDL en el Panel de Archivos o en el Panel de Lista de Reproducción.
 
-The media files don't have to have the same resolutiono or FPS, but they should match in video and audio tracks.  Currently only one video and one audio track is allowed.
+Los clips no tienen que tener la misma resolución o FPS, pero deben tener la misma cantidad de pistas de video y audio.  Actualmente sólo una pista de video y audio es permitida.
 
-The EDLs can be created even when a network connection is in place, assuming all clips exist or can be accessed on all the machines.
+Los EDLs pueden ser creados incluso en una conección de red, asumiendo que todos los clips existen y pueden ser accedidos por todas las máquinas.
 
-Each media that is added to a playlist can have an In and Out point to select just a portion of the clip and the same clip can appear multiple times with different In and Out points.
+Cada medio que es agregado a la lista de reproducción puede tener un punto de Entrada y Salida para seleccionar solo una porción del clip y el clip puede aparecer multiples veces con differentes puntos de Entrada y Salida.
 
-Python Panel
-++++++++++++
+Panel de Python
++++++++++++++++
 
 .. image:: ../images/python-panel-01.png
    :align: center
 
 	   
-The Python panel allows you to run python code and use mrv2's Python API to control the viewer.  The Panel is divided into two sections.  The section above records the python output, while the section below is where you type your code.  In order to run the code, you can use the Menus or click on the Keypad Enter key.
+El Panel de Python permite correr código de Python con la API Python de mrv2 para controlar el reproductor.  El Panel está dividido en dos secciones.  La sección de arriba graba el output de python, mientras que la sección de abajo es donde tipea su código.  Para correr el código puede ejecutarlo de los menúes o bien con Entrar en el teclado numérico.
 
-You can also select a portion of the code in the editor to run just that instead of all the code typed in the editor.
+Puede también seleccionar una porción del codigo en el editor para correrla en vez de todo el código presente en el editor.
 
-Settings Panel
-++++++++++++++
+Puede grabar el código o cargarlo en disco, para una facil interacción con el mismo.
+
+Panel de Seteos
++++++++++++++++
 
 .. image:: ../images/settings-panel-01.png
    :align: center
 
 
-The Settings Panel (Default Hotkey: F9) allows you mainly to configure the Cache behavior of mrv2.  In it you can control how much memory in Gb does the cache use or, if you set the Gigabytes control to 0, instead of using Gigabytes, the Read Ahead and Read Behind settings will control the caching based on seconds.
+El Panel de Seteos (Tecla por defecto: F9) permite principalmente configurar el comportamiento del Cache de mrv2.  En él puede controlar cuanta memoria en Gigabytes usa el cache, o, si setea el control de Gigabytes a 0, en vez de Gigabytes, los seteos de Adelante y Atrás controlaran el cacheo basado en segundos.
 
-The default Gigabytes setting is to use half of your available RAM.
+El seteo por defecto de Gigabytes es usar como máximo la mitad de tu RAM disponible.
 
-Stereo 3D Panel
-+++++++++++++++
+Panel de Estéreo 3D
++++++++++++++++++++
 
 .. image:: ../images/stereo-3d-panel-01.png
    :align: center
 
-The Stereo 3D Panel allows you to show 3D stereo images.  You select one clip on the Files Panel and one clip on the Stereo Panel and select the type of Input and Output you want.  If you use EXR images with left/right layers, you can select Image as Input and the Files and Stereo clips will be selected automatically.  The Output for the Stereo 3D currently can be:  Anaglyph, Checkerboard, Scanline or Horizontal.
+El Panel de Estéreo 3D permite mostrar imágenes 3D.  Podés seleccionar un clip en Panel de Archivos y un clip en el Panel de Stereo y seleccionar el tipo de Entrada y Salida que quiere.  Si usa imágenes EXR con capas left/right, puede seleccionar la imagen como Entrada y la imagen del Panel de Archivo y el de Esteror serán seleccionadas automáticamente.  La Salida para Estereo 3D actualemente puede ser:  Anáglifo, Cuadriculado, Líneas o Columnas.
 
-USD Panel
-+++++++++
+Panel de USD
+++++++++++++
 
 .. image:: ../images/usd-panel-01.png
    :align: center
 
-The USD Panel allows you to control the quality and display of the next USD asset(s) loaded.
+El Panel de USD permite control la calidad y display de los activos de USD que se van a cargar.
 
-Vectorscope Panel
-+++++++++++++++++
+Panel de Vectorscopio
++++++++++++++++++++++
 
 .. image:: ../images/vectorscope-panel-01.png
    :align: center
 
-The Vectorscope Panel allows you to show a vectorscope of the selected area of the image.  You select the area with the select tool in the Tool Dock where the drawing tools are located.
+El Panel de Vectorscopio permite mostrar un vectorscopio del area seleccionada de la imagen. Podés seleccionar el área con la Herramienta de Selección en la Barra de Herramientas donde las herramientas de dibujo están localizadas.

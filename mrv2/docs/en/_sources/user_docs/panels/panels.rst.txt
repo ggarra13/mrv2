@@ -32,7 +32,7 @@ Color Panel
 .. image:: ../images/color-panel-01.png
    :align: center
 
-The Color Panel allows controlling the color display of the viewport.  It allows you to control the Add, Contrast, Saturation and Tint.   You can Invert the image and set the In/Out Levels and gamma.  You can also add a LUT. 
+The Color Panel (F6 by default) allows controlling the color display of the viewport.  It allows you to control the Add, Contrast, Saturation and Tint.   You can Invert the image and set the In/Out Levels and gamma.  You can also add a LUT to be executed before or after all the color changes. 
 
 Compare Panel
 +++++++++++++
@@ -84,7 +84,7 @@ Logs Panel
    :align: center
 
 
-The Logs Panel registers all the important messages that mrv2 emits.  It will show the start-up message to show where all the files come from (preferences, hotkeys, path mappings, OCIO config, etc).  It will also any errors that may happen during the operation of mrv2.
+The Logs Panel registers all the important messages that mrv2 emits.  It will show the start-up message to show where all the files come from (preferences, hotkeys, path mappings, OCIO config, etc).  It will also show any errors that may happen during the operation of mrv2.
 
 In Window->Preferences->Errors the behavior of the Log Panel can be changed when an error occurs.  The default behavior is to bring up the Log Panel in a Window, but you can also bring up the log panel docked, or you can ignore the error and not popup the log panel.
 
@@ -158,7 +158,7 @@ USD Panel
 .. image:: ../images/usd-panel-01.png
    :align: center
 
-The USD Panel allows you to control the quality and display of the next USD asset(s) loaded.
+The USD Panel allows you to control the quality and display of the next USD asset(s) to be loaded.
 
 Vectorscope Panel
 +++++++++++++++++

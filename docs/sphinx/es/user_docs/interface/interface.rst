@@ -72,74 +72,77 @@ El factor de zoom actual es mostrado en la barra de pixel a la izquierda.
    Si quiere acercase o alejarse un porcentaje particular (digamos 2x), puede
    elegirlo desde el menu de zoom en la barra de Pixel.
 
-View Menu
----------
+Menu de Vista
+-------------
 
-The view menu provides controls for modifying the appearance and behaviour of the viewer:
+El menú de Vista provee controles para modificar la apariencia y comportamiento del visor:
 
 .. topic:: Safe Areas
 
-   The Safe Areas toggle allows you to display the film and video safe areas.
+   Alternar Áreas Seguras permite mostrar las áreas seguras de film y video.
     
 .. topic:: Data Window
 
-   Toggling this on will show or hide the OpenEXR's Data Window.
+   Seleccionar esto mostrará o ocultará la Ventana de Datos de OpenEXR.
    
 .. topic:: Display Window
 
-   Toggling this on will show or hide the OpenEXR's Display Window.	
+   Seleccionar esto mostrará o ocultará la Ventana de Display de OpenEXR.
 	   
 .. topic:: Mask
 
-    The mask allows drawing a black mask cropping your picture to a certain film aspect.
+   La máscara permite dibujar una máscara negra que recorta la imágen hasta darle un aspecto cinematográfico determinado.
 
 .. topic:: HUD
 
-    Click this to enter the HUD (heads up display) settings. The HUD allows displaying of a lot of metadata of your media.
-      
+   Seleccione esto para entrar a los seteos del HUD (heads up display). El HUD permite mostrar muchos metadatos de tu clip directamente en la ventana gráfica.
+   
 
-Timeline
---------
+Línea de Tiempo
+---------------
 
-Frame Indicator
-+++++++++++++++
+Indicador de Cuadro
++++++++++++++++++++
 
-Immediately to the left of the timeline is the 'current frame' indicator. Click on this to get a list of options as to how the current time is displayed:
-    - *Frames:* absolute frame, i.e. the first frame of the media is always frame 1. 
-    - *Seconds:* the playhead position from the start of the media in seconds
-    - *Timecode:* the 8 digit timecode. If the media has timecode metadata this will be used
+Inmediatamente a la izquierda y abajo de la línea de tiempo está el 'cuadro actual'.
+Junto a él esta un menu de opciones para establecer como el tiempo se muestra:
+    - *Cuadros:* cuadros, empezando en 0 para películas o uno normalmente para
+                 secuencias.
+    - *Segundos:* La posición en segundos del medio.
+    - *Timecode:* el timecode de 8 digitos. Si el medio tiene metadatos de timecode estos serán usados.
 
-Transport Controls
-++++++++++++++++++
+Controles de Transporte
++++++++++++++++++++++++
 
-These are pretty universal and don't need much explanation. There's a play/pause button, step forwards/backwards buttons and fast forard/fast rewind buttons.
+Estos son bastante universales y no necesitan mucha explicación.
+Hay un boton de Play para atrás, Pausa y Play para adelante, paso hacia delante o hacia atrás y saltar al comienzo o al final del clip.
 
 FPS
 +++
 
-The frames-per-second (FPS) indicator showing the desired FPS.  The FPS button is a popup that allows you to quickly switch to a new frame rate.
+El indicador de cuadros por segundo o frames-per-second (FPS) muestra la velocidad de reproducción deseada.  El botónd de FPS es un menú que permite seleccionar rápidamente el cambio a una nueva velocidad.
 
 Start and End Frame Indicator
 +++++++++++++++++++++++++++++
 
-To the right of the timeline, the Start frame and End Frame indicators are shown.  The S and E buttons can be clicked to set the In and Out points at the current frame.  It is equivalent to pressing the 'I' or 'O' hotkeys.
+A la derecha y abajo de la línea de tiempo, se muestran el cuadro de Comienzo y Final.  Los botones S and E pueden ser cliqueados para establecer el punto de Entrada y Salida en el cuadro actual.  Esto es equivalente a presionar las teclas 'I' o 'O'.
 
 Player/Viewer Controls
 ++++++++++++++++++++++
 
-Two buttons to the bottom of the timeline viewport provide the following interactions
-    - *Volume/mute control:* click once to get a pop-up volume control. Double click to toggle muting of audio.
-    - *Loop mode:* set whether the playhead will loop a source in playback, play it once and stop on the final frame or 'ping-pong' loop.
+Dos botones en la parte inferior de los controles de la línea de tiempo proveen las siguientes interacciones:
+    - *Volumen/Control mudo:* cliquée en la bocina para alternar el control de mudo. Arrastre el deslizador a su lado para controlar el volumen.
+    - *Mode de Bucle:* Estableza si la reproducción se hará una vez y dentendrá en el cuadro final, si se reproducirá en bucle o en 'ping-pong'.
 
-The Panels
-++++++++++
+Los Paneles
++++++++++++
 
-mrv2 supports Panels to organize the information logically.  These panels can be docked to the right of the main viewport or can be made floating windows if dragged from their main drag bar.
+mrv2 soporta Paneles para organizar la información lógicamente.  Estos paneles pueden ser empotrados a la derecha de la ventana gráfica o ser ventanas flotatantes si se las arrstra de su barra superior o se presiona en el pequeño botón amarillo.
 
-Divider
+Divisor
 +++++++
 
-The Panels have a divided, just like the Timeline Viewport, and can be dragged to make the panel bigger or smaller (and change the size of the main viewport).
+Los Paneles tienen un divisor, tal como la Ventana Gráfica de la Línea de Tiempo, que puede ser arrastrado para hacer el panel mas grande o pequeño (y así también cambiar el tamaño de la ventana gráfica principal).
 
 
 
