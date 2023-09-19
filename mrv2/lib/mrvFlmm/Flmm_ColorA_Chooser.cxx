@@ -657,6 +657,7 @@ int flmm_color_a_chooser(const char* name, double& r, double& g, double& b, doub
   Fl_Button cancel_button(135, 195, 120, 25, fl_cancel);
   ok_color.chip_color((float)r, (float)g, (float)b, (float)a);
   cancel_color.chip_color((float)r, (float)g, (float)b, (float)a);
+  window.size_range(265,230);
   window.resizable(chooser);
   chooser.rgb(r,g,b,a);
   chooser.callback(chooser_cb, &ok_color);

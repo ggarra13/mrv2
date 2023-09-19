@@ -191,6 +191,9 @@ namespace mrv
     Hotkey kToggleTimelineTransitions(false, false, false, false, 0);
     Hotkey kToggleTimelineMarkers(false, false, false, false, 0);
 
+    Hotkey kToggleTimelineEditable(false, false, false, false, 0);
+    Hotkey kToggleEditAssociatedClips(false, false, false, false, 0);
+
     Hotkey kEditCutFrame(true, false, false, false, 'x');
     Hotkey kEditCopyFrame(true, false, false, false, 'c');
     Hotkey kEditPasteFrame(true, false, false, false, 'v');
@@ -378,6 +381,9 @@ namespace mrv
         HotkeyEntry(_("Next Channel"), kNextChannel),
         HotkeyEntry(_("First Frame"), kFirstFrame),
         HotkeyEntry(_("Last Frame"), kLastFrame),
+        HotkeyEntry(_("Toggle Timeline Editable"), kToggleTimelineEditable),
+        HotkeyEntry(
+            _("Toggle Edit Associated Clips"), kToggleEditAssociatedClips),
         HotkeyEntry(_("Cut Frame"), kEditCutFrame),
         HotkeyEntry(_("Copy Frame"), kEditCopyFrame),
         HotkeyEntry(_("Paste Frame"), kEditPasteFrame),

@@ -57,7 +57,7 @@ namespace mrv
             physMemUsed, physMemUsedByMe);
         totalPhysMem /= 1024;
 
-        p.defaultValues["Timeline/Thumbnails"] = 1;
+        p.defaultValues["Timeline/Editable"] = true;
         p.defaultValues["Timeline/StopOnScrub"] = 0;
         p.defaultValues["Audio/Volume"] = 1.0F;
         p.defaultValues["Audio/Mute"] = false;

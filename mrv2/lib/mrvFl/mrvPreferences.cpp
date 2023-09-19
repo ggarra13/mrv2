@@ -432,6 +432,12 @@ namespace mrv
         gui.get("timeline_edit_markers", tmp, 0);
         uiPrefs->uiPrefsShowMarkers->value(tmp);
 
+        gui.get("timeline_editable", tmp, 1);
+        uiPrefs->uiPrefsTimelineEditable->value(tmp);
+
+        gui.get("timeline_edit_associated_clips", tmp, 1);
+        uiPrefs->uiPrefsEditAssociatedClips->value(tmp);
+
 #ifdef __APPLE__
         {
             auto itemOptions = ui->uiTimeline->getItemOptions();
@@ -1192,6 +1198,10 @@ namespace mrv
             "timeline_edit_transitions",
             uiPrefs->uiPrefsShowTransitions->value());
         gui.set("timeline_edit_markers", uiPrefs->uiPrefsShowMarkers->value());
+        gui.set("timeline_editable", uiPrefs->uiPrefsTimelineEditable->value());
+        gui.set(
+            "timeline_edit_associated_clips",
+            uiPrefs->uiPrefsEditAssociatedClips->value());
 
         //
         // ui/view prefs
@@ -1489,7 +1499,7 @@ namespace mrv
         auto options = ui->uiTimeline->getItemOptions();
         options.showTransitions = uiPrefs->uiPrefsShowTransitions->value();
         options.showMarkers = uiPrefs->uiPrefsShowMarkers->value();
-
+        ui->uiTimeline->setEditable(uiPrefs->uiPrefsTimelineEditable->value());
         int thumbnails = uiPrefs->uiPrefsEditThumbnails->value();
         options.thumbnails = true;
         switch (thumbnails)

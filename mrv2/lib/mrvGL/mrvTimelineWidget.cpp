@@ -206,13 +206,24 @@ namespace mrv
         }
     }
 
+    bool TimelineWidget::isEditable() const
+    {
+        return _p->timelineWidget->isEditable();
+    }
+
+    void TimelineWidget::setEditable(bool value)
+    {
+        _p->timelineWidget->setEditable(value);
+    }
+
     void TimelineWidget::_seek()
     {
         TLRENDER_P();
         const int maxY = 48;
         const int Y = _toUI(Fl::event_y());
         const int X = _toUI(Fl::event_x());
-        if (Y < maxY && !p.timelineWidget->isDragging())
+        if ((Y < maxY && !p.timelineWidget->isDragging()) ||
+            !p.timelineWidget->isEditable())
         {
             auto time = _posToTime(X);
             p.player->seek(time);

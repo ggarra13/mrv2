@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Contributors to the mrv2 Project
+# Copyright (C) YEAR Contributors\ to\ the\ mrv2\ Project
 # This file is distributed under the same license as the mrv2 package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-09-18 18:23-0300\n"
+"POT-Creation-Date: 2023-09-19 09:15-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1451,6 +1451,12 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
+msgid "Edit Associated Clips"
+msgstr ""
+
+msgid "Edit Associated Clips."
+msgstr ""
+
 msgid "Edit Redo"
 msgstr ""
 
@@ -1497,6 +1503,12 @@ msgid "Edit/Slice"
 msgstr ""
 
 msgid "Edit/Undo"
+msgstr ""
+
+msgid "Editable"
+msgstr ""
+
+msgid "Editable Timeline Viewport."
 msgstr ""
 
 msgid "Editing viewport will be visible at start up."
@@ -4046,6 +4058,12 @@ msgstr ""
 msgid "Timeline, movie, image sequence, or folder."
 msgstr ""
 
+msgid "Timeline/Edit Associated Clips"
+msgstr ""
+
+msgid "Timeline/Editable"
+msgstr ""
+
 msgid "Timeline/Markers"
 msgstr ""
 
@@ -4089,6 +4107,9 @@ msgid "Toggle Compare Panel"
 msgstr ""
 
 msgid "Toggle Devices Panel"
+msgstr ""
+
+msgid "Toggle Edit Associated Clips"
 msgstr ""
 
 msgid "Toggle Edit Mode"
@@ -4164,6 +4185,9 @@ msgid "Toggle Stereo 3D"
 msgstr ""
 
 msgid "Toggle Timeline"
+msgstr ""
+
+msgid "Toggle Timeline Editable"
 msgstr ""
 
 msgid "Toggle Timeline Markers"

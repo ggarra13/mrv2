@@ -78,7 +78,7 @@ class PreferencesUI {open
       callback {// reload original preferences
 mrv::Preferences prefs(v, ViewerUI::app->settingsObject() );
 uiMain->hide();} open
-      xywh {843 147 847 466} type Double resizable
+      xywh {554 374 847 466} type Double resizable
       code0 {main = m;} modal visible
     } {
       Fl_Group {} {open
@@ -662,7 +662,7 @@ v->uiPrefsFPS->value( g );}
           } {
             Fl_Choice uiPrefsTimelineDisplay {
               label Display
-              tooltip {How to display timeline by default.} xywh {403 79 405 27} box THIN_DOWN_BOX down_box BORDER_BOX
+              tooltip {How to display timeline by default.} xywh {397 44 405 27} box THIN_DOWN_BOX down_box BORDER_BOX
               code0 {o->value(0);}
             } {
               MenuItem {} {
@@ -680,21 +680,21 @@ v->uiPrefsFPS->value( g );}
             }
             Fl_Check_Button uiPrefsTimelineThumbnails {
               label {Preview Thumbnails}
-              tooltip {Thumbnails above timeline (does not work on Wayland)} xywh {403 123 63 20} down_box DOWN_BOX value 1
+              tooltip {Thumbnails above timeline (does not work on Wayland)} xywh {397 88 63 20} down_box DOWN_BOX value 1
               class {mrv::CheckButton}
             }
             Fl_Check_Button uiPrefsRemoveEDLs {
-              label {Remove EDLs in Temporary Folder on Exit} selected
-              tooltip {When selected, temporary EDLs (Playlists) will be removed from the temporary folder.} xywh {403 155 73 20} down_box DOWN_BOX value 1
+              label {Remove EDLs in Temporary Folder on Exit}
+              tooltip {When selected, temporary EDLs (Playlists) will be removed from the temporary folder.} xywh {397 120 73 20} down_box DOWN_BOX value 1
               class {mrv::CheckButton}
             }
             Fl_Group {} {
               label {Edit Viewport} open
-              xywh {328 219 480 152} box ROUNDED_BOX
+              xywh {328 171 480 200} box ROUNDED_BOX
             } {
               Fl_Choice uiPrefsEditThumbnails {
                 label Thumbnails
-                tooltip {How to display timeline by default.} xywh {565 274 216 26} box THIN_DOWN_BOX down_box BORDER_BOX
+                tooltip {How to display timeline by default.} xywh {565 271 210 26} box THIN_DOWN_BOX down_box BORDER_BOX
                 code0 {o->value(1);}
               } {
                 MenuItem {} {
@@ -716,17 +716,27 @@ v->uiPrefsFPS->value( g );}
               }
               Fl_Check_Button uiPrefsShowTransitions {
                 label {Show Transitions}
-                tooltip {Show Transitions in Edit Viewport} xywh {565 312 21 20} down_box DOWN_BOX value 1 align 4
+                tooltip {Show Transitions in Edit Viewport} xywh {565 309 15 20} down_box DOWN_BOX value 1 align 4
                 class {mrv::CheckButton}
               }
               Fl_Check_Button uiPrefsShowMarkers {
                 label {Show Markers}
-                tooltip {Show Markers in Edit Viewport} xywh {565 341 21 20} down_box DOWN_BOX value 1 align 4
+                tooltip {Show Markers in Edit Viewport} xywh {565 338 15 20} down_box DOWN_BOX value 1 align 4
+                class {mrv::CheckButton}
+              }
+              Fl_Check_Button uiPrefsTimelineEditable {
+                label Editable
+                tooltip {Editable Timeline Viewport.} xywh {565 213 15 20} down_box DOWN_BOX value 1 align 4
+                class {mrv::CheckButton}
+              }
+              Fl_Check_Button uiPrefsEditAssociatedClips {
+                label {Edit Associated Clips}
+                tooltip {Edit Associated Clips.} xywh {565 243 15 20} down_box DOWN_BOX value 1 align 4
                 class {mrv::CheckButton}
               }
               Fl_Check_Button uiPrefsEditMode {
                 label {Start in Edit mode}
-                tooltip {Editing viewport will be visible at start up.} xywh {565 238 63 24} down_box DOWN_BOX value 1 align 4
+                tooltip {Editing viewport will be visible at start up.} xywh {565 181 63 24} down_box DOWN_BOX value 1 align 4
                 class {mrv::CheckButton}
               }
             }
@@ -1216,7 +1226,7 @@ if (!found)
     
     std::cerr << w->label() << std::endl;
  }
-}}
+}} selected
             xywh {9 21 270 423} color 20
             code0 {fill_tree(o);}
             code1 {o->showroot(false);}

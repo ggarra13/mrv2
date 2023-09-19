@@ -1302,6 +1302,23 @@ namespace mrv
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
+    void toggle_timeline_editable_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
+        bool editable = (bool)item->checked();
+        ui->uiTimeline->setEditable(editable);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
+    void toggle_timeline_edit_associated_clips_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
+        auto options = ui->uiTimeline->getItemOptions();
+        options.editAssociatedClips = item->checked();
+        ui->uiTimeline->setItemOptions(options);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
     void toggle_timeline_markers_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
