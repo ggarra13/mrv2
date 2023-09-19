@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-09-18 18:23-0300\n"
+"POT-Creation-Date: 2023-09-19 20:31-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -3874,6 +3874,9 @@ msgstr ""
 msgid "Swap left and right eyes."
 msgstr ""
 
+msgid "Switch Colors"
+msgstr ""
+
 msgid ""
 "Switch RGBA display between floating point, hexadecimal (0..0xff) and "
 "decimal (0..255)."
@@ -4203,9 +4206,6 @@ msgid "Toggle the B file index."
 msgstr ""
 
 msgid "Tool Dock"
-msgstr ""
-
-msgid "ToolsGroup"
 msgstr ""
 
 msgid "Topbar"

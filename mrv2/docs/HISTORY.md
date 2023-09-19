@@ -17,6 +17,8 @@ v0.7.7
   documentation.
 - Added 7 saved color presets to the color picker, like Krita, so you can
   easily choose from them.
+- Added two colors to drawing tooldock.  You can switch between them with the
+  arrows that point to them.
 - Wipe Comparison is now fixed which had gotten broken in v0.7.5.  Thanks to
   Darby Johnston.
 - Fixed Fullscreen Mode (F11 hotkey) on Windows which got broken in v0.7.5.
