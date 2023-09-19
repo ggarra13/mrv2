@@ -147,6 +147,8 @@ void Flmm_ColorA_Button::generate_achip(void* vv, int X, int Y, int W, uchar* bu
   }
 }
 
-//
-// End of "$Id:$".
-//
+void Flmm_ColorA_Button::rgba(double& ro, double& go, double& bo, double& ao)
+{
+    ro = r; go = g; bo = b; ao = a;
+}
+

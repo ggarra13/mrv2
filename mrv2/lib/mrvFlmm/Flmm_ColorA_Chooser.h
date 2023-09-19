@@ -24,11 +24,11 @@
 // Please report all bugs and problems to "flmm@matthiasm.com".
 //
 
-#ifndef Flmm_ColorA_Chooser_H
-#    define Flmm_ColorA_Chooser_H
+#pragma once
 
-#    include <FL/Fl_Color_Chooser.H>
-#    include "Flmm_ColorA_Button.h"
+#include <FL/Fl_Color_Chooser.H>
+#include <FL/Fl_Double_Window.H>
+#include "Flmm_ColorA_Button.h"
 
 class FL_EXPORT Flmm_HueBox : public Fl_Widget
 {
@@ -101,6 +101,7 @@ class FL_EXPORT Flmm_ColorA_Chooser : public Fl_Group
     Flcc_Value_Input gvalue;
     Flcc_Value_Input bvalue;
     Flcc_Value_Input avalue;
+
     Fl_Box resize_box;
     double hue_, saturation_, value_;
     double r_, g_, b_, a_;
@@ -124,15 +125,46 @@ public:
     Flmm_ColorA_Chooser(int, int, int, int, const char* = 0);
 };
 
+class ColorAChip : public Flmm_ColorA_Button
+{
+    int handle(int event) { return Fl_Widget::handle(event); }
+
+public:
+    ColorAChip(int X, int Y, int W, int H) :
+        Flmm_ColorA_Button(X, Y, W, H)
+    {
+        box(FL_ENGRAVED_FRAME);
+    }
+};
+
+class SavedAChip : public Flmm_ColorA_Button
+{
+public:
+    SavedAChip(int X, int Y, int W, int H) :
+        Flmm_ColorA_Button(X, Y, W, H)
+    {
+        box(FL_ENGRAVED_FRAME);
+    }
+};
+
+class FL_EXPORT Flmm_ColorA_Window : public Fl_Double_Window
+{
+    Flmm_ColorA_Chooser chooser;
+    ColorAChip ok_color;
+    Fl_Return_Button ok_button;
+    ColorAChip cancel_color;
+    Fl_Button cancel_button;
+    SavedAChip* saved[7];
+    int savedIndex = 0;
+
+public:
+    Flmm_ColorA_Window(int, int, const char* L = 0);
+    int run(double& r, double& g, double& b, double& a);
+};
+
 FL_EXPORT int flmm_color_a_chooser(
     const char* name, double& r, double& g, double& b, double& a);
 FL_EXPORT int
 flmm_color_a_chooser(const char* name, float& r, float& g, float& b, float& a);
 FL_EXPORT int
 flmm_color_a_chooser(const char* name, uchar& r, uchar& g, uchar& b, uchar& a);
-
-#endif
-
-//
-// End of "$Id".
-//
