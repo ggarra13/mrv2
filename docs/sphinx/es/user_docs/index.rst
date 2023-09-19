@@ -14,3 +14,4 @@ Guía del Usuario de mrv2
    notes
    playback
    settings
+   videos
