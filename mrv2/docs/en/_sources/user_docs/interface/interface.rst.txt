@@ -26,7 +26,7 @@ Customising the Interface
 .. image:: ../images/interface-03.png
    :align: center
 
-mrv2 can be customized to show any of the toolbars and set up how the main window behaves from Window->Preferences->User Interface.  These settings are saved when you exit mrv2 and will allow you to always start mrv2 in a certain configuration.
+mrv2 can be customized to show any of the toolbars from Window->Preferences->User Interface.  These settings are saved when you exit mrv2 and will allow you to always start mrv2 in a certain configuration.
 
 
 The Timeline
@@ -41,23 +41,25 @@ When showing the pictures, you can zoom in and out with the mousewheel.
 Hiding/Showing UI elements 
 ++++++++++++++++++++++++++
 
-Some useful (default) shortcuts are as follows
+Some useful (default) shortcuts are as follows:
 
-============  ==============================
+============  =======================================
 Shortcut      Action
-============  ============================== 
+============  =======================================
 Shift + F1    Toggle Menu Toolbar.
 F1            Toggle Topbar.
 F2            Toggle Pixel Toolbar.
 F3            Toggle Timeline Viewport and controls.
+Shift + F7    Toggle Drawing and Action Tools.
 F11           Toggle Fullscreen mode.
-F12           Toggle Presentation mode (no toolbars, fullscreen).
-============  ============================== 
+F12           Toggle Presentation mode (no toolbars).
+============  =======================================
 
 Mouse interaction in the Viewer
 -------------------------------
 
 A three buttoned mouse can be used for closer image inspection. Hold the middle button and drag to pan the image within the viewport. Hold down the Alt key on your keyboard and drag left/right with the right mouse button to perform a centred zoom in/out on the image.  You can also use the mousewheel which is more confortable.
+The current zoom factor is shown on the pixel toolbar to the left.
 
 .. note::
     To 'reset' the viewer so that the image is auto-fitted, you can select "Fit" from the Zoom display pulldown in the Pixel Toolbar or use the 'f' hotkey.
@@ -65,6 +67,10 @@ A three buttoned mouse can be used for closer image inspection. Hold the middle 
 .. note::
     To 'center' the view, without changing the zoom factor, you can use the 'c'
     hotkey.
+    
+.. note::
+   If you want to zoom in or out at a particular percentage (say 2x), you can
+   choose it from the pull-down menu on the pixel toolbar.
 
 
 View Menu
@@ -86,11 +92,11 @@ The view menu provides controls for modifying the appearance and behaviour of th
 	   
 .. topic:: Mask
 
-    The mask allows drawing a black mask cropping your picture to a certain film aspect.
+   The mask allows drawing a black mask cropping your picture to a certain film aspect.
 
 .. topic:: HUD
 
-    Click this to enter the HUD (heads up display) settings. The HUD allows displaying of a lot of metadata of your media.
+   Click this to enter the HUD (heads up display) settings. The HUD allows displaying of a lot of metadata of your media directly on the viewport.
       
 
 Timeline
@@ -99,15 +105,15 @@ Timeline
 Frame Indicator
 +++++++++++++++
 
-Immediately to the left of the timeline is the 'current frame' indicator. Click on this to get a list of options as to how the current time is displayed:
-    - *Frames:* absolute frame, i.e. the first frame of the media is always frame 1. 
-    - *Seconds:* the playhead position from the start of the media in seconds
-    - *Timecode:* the 8 digit timecode. If the media has timecode metadata this will be used
+Immediately to the left of the timeline is the 'current frame' indicator. Click on the button next to it to get a list of options as to how the current time is displayed:
+    - *Frames:* absolute frame, starting at 0 for movies, and, usually at 1 for sequences.
+    - *Seconds:* the current time from the start of the media in seconds.
+    - *Timecode:* the 8 digit timecode. If the media has timecode metadata this will be used.
 
 Transport Controls
 ++++++++++++++++++
 
-These are pretty universal and don't need much explanation. There's a play/pause button, step forwards/backwards buttons and fast forard/fast rewind buttons.
+These are pretty universal and don't need much explanation. There's a play backwards/forwards/pause button, step forwards/backwards buttons and jump to start and end.
 
 FPS
 +++
@@ -123,8 +129,8 @@ Player/Viewer Controls
 ++++++++++++++++++++++
 
 Two buttons to the bottom of the timeline viewport provide the following interactions
-    - *Volume/mute control:* click once to get a pop-up volume control. Double click to toggle muting of audio.
-    - *Loop mode:* set whether the playhead will loop a source in playback, play it once and stop on the final frame or 'ping-pong' loop.
+    - *Volume/mute control:* click on the speaker icon to toggle the mute control. Drag on the slider next to it to control the volume.
+    - *Loop mode:* set whether the clip will loop, play it once and stop on the final frame or 'ping-pong' loop.
 
 The Panels
 ++++++++++

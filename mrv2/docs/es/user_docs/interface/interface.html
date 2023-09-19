@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="es" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>La interfaz de mrv2 &mdash; documentación de mrv2 - v0.7.7</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/translations.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Índice" href="../../genindex.html" />
+    <link rel="search" title="Búsqueda" href="../../search.html" />
+    <link rel="next" title="Paneles" href="../panels/panels.html" />
+    <link rel="prev" title="Comenzando" href="../getting_started/getting_started.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            mrv2
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Buscar documentos" aria-label="Buscar documentos" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Bienvenido a la documentación de mrv2!</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Guía del Usuario de mrv2</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../overview.html">Introducción</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/getting_started.html">Comenzando</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">La interfaz de mrv2</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#personalizando-la-interfaz">Personalizando la Interfaz</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#la-linea-de-tiempo">La Línea de Tiempo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ocultando-mostrando-elementos-de-la-gui">Ocultando/Mostrando Elementos de la GUI</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#interaccion-del-raton-en-el-visor">Interacción del Ratón en el Visor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#menu-de-vista">Menu de Vista</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#linea-de-tiempo">Línea de Tiempo</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#indicador-de-cuadro">Indicador de Cuadro</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#controles-de-transporte">Controles de Transporte</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fps">FPS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#start-and-end-frame-indicator">Start and End Frame Indicator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#player-viewer-controls">Player/Viewer Controls</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#los-paneles">Los Paneles</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#divisor">Divisor</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../panels/panels.html">Paneles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notes.html">Notas y Anotaciones</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playback.html">Reproducción de Vídeo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../settings.html">Seteos</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../python_api/index.html">Python API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">mrv2</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Guía del Usuario de mrv2</a></li>
+      <li class="breadcrumb-item active">La interfaz de mrv2</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/user_docs/interface/interface.rst.txt" rel="nofollow"> Ver código fuente de la página</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="la-interfaz-de-mrv2">
+<span id="interface"></span><h1>La interfaz de mrv2<a class="headerlink" href="#la-interfaz-de-mrv2" title="Enlace permanente a este encabezado"></a></h1>
+<img alt="../../_images/interface-02.png" class="align-center" src="../../_images/interface-02.png" />
+<p>La ventana principal de mrv2 provee de 6 barras diferentes que pueden ser ocultadas o mostradas.</p>
+<p>La primer barra es la de los menúes.  Puede alternarse con Shift + F1. Los menus están tambien disponibles con el Botón Derecho del Mouse en la vista principal de mrv2.  La barra de menú tiene también el botón de Edición para alternar el modo de edición y el botón de Ajustar Ventana a la Imagen.</p>
+<p>La segunda barra es la de capas o canales, exposición, OCIO y controles de gama.  Puede ser alternada con F1.</p>
+<p>La tercera barra es la ventana de la línea de tiempo y sus controles.  Puede alternarla con F3.</p>
+<p>La cuarta barra es la de Información de Pixel, que muestra el pixel actual bajo el cursor.  Puede activar y desactivarla con F2.</p>
+<p>Finalmente, la últime barra es la de Estatus.  Imprimirá errores y te dejará saber en que modo estás (Por defecto es Scrubbing).</p>
+<section id="personalizando-la-interfaz">
+<h2>Personalizando la Interfaz<a class="headerlink" href="#personalizando-la-interfaz" title="Enlace permanente a este encabezado"></a></h2>
+<img alt="../../_images/interface-03.png" class="align-center" src="../../_images/interface-03.png" />
+<p>mrv2 puede ser personalizado para mostrar cualquiera de las barras desde Ventana-&gt;Preferencias-&gt;Interfaz del Usuario.  Estos seteos son grabados cuando salis de mrv2 y te permitirán arrancar siempre mrv2 con cierta configuración.</p>
+<section id="la-linea-de-tiempo">
+<h3>La Línea de Tiempo<a class="headerlink" href="#la-linea-de-tiempo" title="Enlace permanente a este encabezado"></a></h3>
+<img alt="../../_images/timeline-01.png" class="align-center" src="../../_images/timeline-01.png" />
+<p>La Ventana Gráfica de la Línea de Tiempo permite escalar las miniaturas de Edición y las ondas de Audio arrastrando la ventana arriba y abajo.  Para una rápida vista de todas las pistas, puede cliquear en el boton de Edición en la barra de Men.
+Cuando se muestran las miniaturas, puedes acercarte o alejarte con la rueda del ratón.</p>
+</section>
+<section id="ocultando-mostrando-elementos-de-la-gui">
+<h3>Ocultando/Mostrando Elementos de la GUI<a class="headerlink" href="#ocultando-mostrando-elementos-de-la-gui" title="Enlace permanente a este encabezado"></a></h3>
+<p>Algunas teclas útiles por defecto:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Tecla</p></th>
+<th class="head"><p>Acción</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Shift + F1</p></td>
+<td><p>Alternar la barra de Menú.</p></td>
+</tr>
+<tr class="row-odd"><td><p>F1</p></td>
+<td><p>Alternar la barra Superior.</p></td>
+</tr>
+<tr class="row-even"><td><p>F2</p></td>
+<td><p>Alternar la barra de Pixel.</p></td>
+</tr>
+<tr class="row-odd"><td><p>F3</p></td>
+<td><p>Alternar la barra de Línea de Tiempo.</p></td>
+</tr>
+<tr class="row-even"><td><p>Shift + F7</p></td>
+<td><p>Alternar las Herramientas de Dibujo y Acción.</p></td>
+</tr>
+<tr class="row-odd"><td><p>F11</p></td>
+<td><p>Alternar el modo Pantalla Completa.</p></td>
+</tr>
+<tr class="row-even"><td><p>F12</p></td>
+<td><p>Alternar el modo Presentación (sin barras).</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="interaccion-del-raton-en-el-visor">
+<h2>Interacción del Ratón en el Visor<a class="headerlink" href="#interaccion-del-raton-en-el-visor" title="Enlace permanente a este encabezado"></a></h2>
+<p>Un ratón de tres botones es recomendado y puede ser usado para inspección de la imagen. Sosteniendo el botón del medio del ratón y moviendo el ratón para panear la imagen en la ventana gráfica. Sostenga la tecla Alt y el botón derecho del ratón y moviendo el ratón de derecha a izquierda para hacer un acercamiento o alejamiento de la imagen.  También puede usar la rueda del mouse que es más confortable.
+El factor de zoom actual es mostrado en la barra de pixel a la izquierda.</p>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>Para “resetear” el visor para que la imagen se ajuste a la ventana gráfica, puede seleccionar «Fit» del display de Zoom en la barra de Pixel o usar la tecla “f”.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>Para “centrar” la vista, sin cambiar el factor de zoom, puede usar la tecla
+“c” hotkey.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>Si quiere acercase o alejarse un porcentaje particular (digamos 2x), puede
+elegirlo desde el menu de zoom en la barra de Pixel.</p>
+</div>
+</section>
+<section id="menu-de-vista">
+<h2>Menu de Vista<a class="headerlink" href="#menu-de-vista" title="Enlace permanente a este encabezado"></a></h2>
+<p>El menú de Vista provee controles para modificar la apariencia y comportamiento del visor:</p>
+<aside class="topic">
+<p class="topic-title">Safe Areas</p>
+<p>Alternar Áreas Seguras permite mostrar las áreas seguras de film y video.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Data Window</p>
+<p>Seleccionar esto mostrará o ocultará la Ventana de Datos de OpenEXR.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Display Window</p>
+<p>Seleccionar esto mostrará o ocultará la Ventana de Display de OpenEXR.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Mask</p>
+<p>La máscara permite dibujar una máscara negra que recorta la imágen hasta darle un aspecto cinematográfico determinado.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">HUD</p>
+<p>Seleccione esto para entrar a los seteos del HUD (heads up display). El HUD permite mostrar muchos metadatos de tu clip directamente en la ventana gráfica.</p>
+</aside>
+</section>
+<section id="linea-de-tiempo">
+<h2>Línea de Tiempo<a class="headerlink" href="#linea-de-tiempo" title="Enlace permanente a este encabezado"></a></h2>
+<section id="indicador-de-cuadro">
+<h3>Indicador de Cuadro<a class="headerlink" href="#indicador-de-cuadro" title="Enlace permanente a este encabezado"></a></h3>
+<p>Inmediatamente a la izquierda y abajo de la línea de tiempo está el “cuadro actual”.
+Junto a él esta un menu de opciones para establecer como el tiempo se muestra:</p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="simple">
+<dt><em>Cuadros:</em> cuadros, empezando en 0 para películas o uno normalmente para</dt><dd><p>secuencias.</p>
+</dd>
+</dl>
+</li>
+<li><p><em>Segundos:</em> La posición en segundos del medio.</p></li>
+<li><p><em>Timecode:</em> el timecode de 8 digitos. Si el medio tiene metadatos de timecode estos serán usados.</p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="controles-de-transporte">
+<h3>Controles de Transporte<a class="headerlink" href="#controles-de-transporte" title="Enlace permanente a este encabezado"></a></h3>
+<p>Estos son bastante universales y no necesitan mucha explicación.
+Hay un boton de Play para atrás, Pausa y Play para adelante, paso hacia delante o hacia atrás y saltar al comienzo o al final del clip.</p>
+</section>
+<section id="fps">
+<h3>FPS<a class="headerlink" href="#fps" title="Enlace permanente a este encabezado"></a></h3>
+<p>El indicador de cuadros por segundo o frames-per-second (FPS) muestra la velocidad de reproducción deseada.  El botónd de FPS es un menú que permite seleccionar rápidamente el cambio a una nueva velocidad.</p>
+</section>
+<section id="start-and-end-frame-indicator">
+<h3>Start and End Frame Indicator<a class="headerlink" href="#start-and-end-frame-indicator" title="Enlace permanente a este encabezado"></a></h3>
+<p>A la derecha y abajo de la línea de tiempo, se muestran el cuadro de Comienzo y Final.  Los botones S and E pueden ser cliqueados para establecer el punto de Entrada y Salida en el cuadro actual.  Esto es equivalente a presionar las teclas “I” o “O”.</p>
+</section>
+<section id="player-viewer-controls">
+<h3>Player/Viewer Controls<a class="headerlink" href="#player-viewer-controls" title="Enlace permanente a este encabezado"></a></h3>
+<dl class="simple">
+<dt>Dos botones en la parte inferior de los controles de la línea de tiempo proveen las siguientes interacciones:</dt><dd><ul class="simple">
+<li><p><em>Volumen/Control mudo:</em> cliquée en la bocina para alternar el control de mudo. Arrastre el deslizador a su lado para controlar el volumen.</p></li>
+<li><p><em>Mode de Bucle:</em> Estableza si la reproducción se hará una vez y dentendrá en el cuadro final, si se reproducirá en bucle o en “ping-pong”.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="los-paneles">
+<h3>Los Paneles<a class="headerlink" href="#los-paneles" title="Enlace permanente a este encabezado"></a></h3>
+<p>mrv2 soporta Paneles para organizar la información lógicamente.  Estos paneles pueden ser empotrados a la derecha de la ventana gráfica o ser ventanas flotatantes si se las arrstra de su barra superior o se presiona en el pequeño botón amarillo.</p>
+</section>
+<section id="divisor">
+<h3>Divisor<a class="headerlink" href="#divisor" title="Enlace permanente a este encabezado"></a></h3>
+<p>Los Paneles tienen un divisor, tal como la Ventana Gráfica de la Línea de Tiempo, que puede ser arrastrado para hacer el panel mas grande o pequeño (y así también cambiar el tamaño de la ventana gráfica principal).</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pie de página">
+        <a href="../getting_started/getting_started.html" class="btn btn-neutral float-left" title="Comenzando" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Anterior</a>
+        <a href="../panels/panels.html" class="btn btn-neutral float-right" title="Paneles" accesskey="n" rel="next">Siguiente <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Derechos de autor 2023, Contribuidores del Proyecto mrv2.</p>
+  </div>
+
+  Compilado con <a href="https://www.sphinx-doc.org/">Sphinx</a> usando un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">tema</a>
+    proporcionado por <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

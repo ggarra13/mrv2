@@ -9,7 +9,7 @@ Building mrv2
 
 Please refer to the github documentation at:
 
-http::https://github.com/ggarra13/mrv2
+https://github.com/ggarra13/mrv2
 
 
 Installing mrv2
@@ -41,11 +41,7 @@ That will create a folder in the direcory you uncompress it from. You can then r
 Launching mrv2
 --------------
 
-To launch an empty mrv2 "Session" type ``mrv2`` on the Linux command line and press enter.
-
-You can drag-and-drop files into the main window from Ivy Browser or the file system, or use the "Load" layout to add Shotgun playlists.
-
-You can also launch mrv2 with one or more media files on the command line.
+While on Linux, you can start mrv2 from the terminal or from the icon, on Windows and macOS by default you use the icon provided in the installed location of the executable.
 
 .. image:: ../images/interface-01.png
 
@@ -54,11 +50,18 @@ Loading Media (Drag and Drop)
 
 An easy way to load media is to drag-and-drop files or folders into the main window from the file system. If you drop a folder, the directory will be recursively searched for media files and they will all be added.
 
-Loading Media (filesystem browser)
-----------------------------------
+Loading Media (mrv2 Browser)
+-----------------------------
 
 Using File->Open Movie or Sequence, a File requester will be opened.  By default the file requester is mrv2's custom file requester.  However, in the Window->Preferences->File Requester you can select Use Native File Chooser which will use the native file chooser for your platform.
 
+.. note::
+   On macOS, mrv2's file requester might not be able to open the
+   protected folders of the OS like Desktop, Downloads or Documents as
+   the OS won't allow it due to mrv2 not being registered with Apple.
+   You won't use the Finder either with the right mouse button and the option
+   Open with mrv2.
+   
 Loading Media (Recent menu)
 ---------------------------
 
@@ -68,17 +71,17 @@ If you want to load up to 10 clips that you recently closed or previously loaded
 Loading Media (command line)
 ----------------------------
 
-Media can be loaded using the mrv2 command line from a terminal window which will be convenient and powerful for users familiar with shell syntax. By default, if mrv2 is already running, files will be added to the existing session instead of starting a new session. If you want to launch a new session, use the -n flag.
+Media can be loaded using the mrv2 command line from a terminal window which will be convenient and powerful for users familiar with shell syntax.
 
-mrv2 supports various modes for loading sequences and movies.  You can mix different modes as required::
+mrv2 supports various modes for loading sequences and movies.  You can mix different modes as required up to three clips::
 
-    mrv2 /path/to/test.mov /path/to/\*.jpg /path/to/frames.0001.exr
+    mrv2 /path/to/test.mov /path/to/frames.0001.exr /path/to/edit.otio
 
 .. note::
      Movie files will be played back at their 'natural' frame rate, in other words mrv2 respects the encoded frame rate of the given file.
+     
 .. note::
-
-    Image sequences (e.g. a series of JPEG or EXR files) default to 24fps (you can adjust this in Window->Preferences).
+    Image sequences (e.g. a series of JPEG or TGA) default to 24fps (you can adjust this in Window->Preferences->Playback).  DPX and EXRs speed is taken from the metadata if available.
 
 Viewing Media
 -------------

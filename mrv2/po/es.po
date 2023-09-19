@@ -669,7 +669,7 @@ msgid "%s - Page %d"
 msgstr "%s - Página %d"
 
 msgid "&Copy/&Filename"
-msgstr "&Copiear/&Nombre del Archivo"
+msgstr "&Copiar/&Nombre del Archivo"
 
 msgid "&File/&Clone"
 msgstr "&Archivo/&Clonar"
@@ -1033,7 +1033,7 @@ msgid "Always on Top"
 msgstr "Siempre Arriba"
 
 msgid "Anaglyph"
-msgstr "Lentes Rojo/Cian"
+msgstr "Anáglifo"
 
 msgid "Annotation Clear All Frames"
 msgstr "Borrar Todos los Cuadros de la Anotación"

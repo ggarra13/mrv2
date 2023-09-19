@@ -18,14 +18,33 @@
 extract_version
 
 #
-# Prepare the git repository for release
-#
-
-#
 # SOME DEFINES
 #
 export GIT_EXECUTABLE=git
 
+
+add_local_tag()
+{
+    tag=$1
+    export has_tag=`${GIT_EXECUTABLE} tag -l | grep "${tag}"`
+    if [[ $has_tag != "" ]]; then
+	#
+	# Delete local tag if available
+	#
+	echo "Remove local tag '${tag}'"
+	${GIT_EXECUTABLE} tag -d "${tag}"
+    fi
+    
+    #
+    # Mark current repository with a new tag
+    #
+    echo "Create local tag ${tag} in tlRender"
+    ${GIT_EXECUTABLE} tag "${tag}"
+}
+
+#
+# Prepare the git repository for release
+#
 
 #
 # Pull last changes
@@ -42,21 +61,14 @@ echo "--------------------------------"
 echo "  Will release ${tag}"
 echo "--------------------------------"
 
+add_local_tag $tag
 
-export has_tag=`${GIT_EXECUTABLE} tag -l | grep "${tag}"`
-if [[ $has_tag != "" ]]; then
-    #
-    # Delete local tag if available
-    #
-    echo "Remove local tag '${tag}'"
-    ${GIT_EXECUTABLE} tag -d "${tag}"
-fi
+cd tlRender
 
-#
-# Mark current repository with a new tag
-#
-echo "Create local tag ${tag}"
-${GIT_EXECUTABLE} tag "${tag}"
+add_local_tag $tag
+
+cd ..
+
 
 input='y'
 export has_tag=`${GIT_EXECUTABLE} ls-remote --tags origin | grep "${tag}"`

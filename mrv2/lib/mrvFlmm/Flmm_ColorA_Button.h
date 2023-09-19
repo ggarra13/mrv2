@@ -23,10 +23,9 @@
 // Please report all bugs and problems to "flmm@matthiasm.com".
 //
 
-#ifndef Flmm_ColorA_Button_H
-#    define Flmm_ColorA_Button_H
+#pragma once
 
-#    include <FL/Fl_Button.H>
+#include <FL/Fl_Button.H>
 
 class Flmm_ColorA_Button : public Fl_Button
 {
@@ -41,10 +40,5 @@ public:
     void chip_color(uchar, uchar, uchar, uchar a = 255);
     void chip_color(float, float, float, float a = 1.0f);
     void chip_color(Fl_Color);
+    void rgba(double& ro, double& go, double& bo, double& ao);
 };
-
-#endif
-
-//
-// End of "$Id$".
-//

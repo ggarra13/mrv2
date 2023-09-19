@@ -43,7 +43,7 @@ namespace
     const int kCrossSize = 10;
     const float kSpinTimeout = 0.025;
     const float kLaserFadeTimeout = 0.01;
-    const float kLaserFade = 0.05;
+    const float kLaserFade = 0.025;
     const float kSpinMaxY = 0.25;
     const float kSpinMaxX = 0.25;
 

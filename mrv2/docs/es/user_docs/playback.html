@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="es" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reproducción de Vídeo &mdash; documentación de mrv2 - v0.7.7</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/translations.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Índice" href="../genindex.html" />
+    <link rel="search" title="Búsqueda" href="../search.html" />
+    <link rel="next" title="Seteos" href="settings.html" />
+    <link rel="prev" title="Notas y Anotaciones" href="notes.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            mrv2
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Buscar documentos" aria-label="Buscar documentos" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Bienvenido a la documentación de mrv2!</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Guía del Usuario de mrv2</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">Introducción</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/getting_started.html">Comenzando</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interface/interface.html">La interfaz de mrv2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="panels/panels.html">Paneles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notes.html">Notas y Anotaciones</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Reproducción de Vídeo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cuadro-actual">Cuadro Actual</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#modos-de-bucle">Modos de Bucle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#velocidad-de-fps">Velocidad de FPS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#teclas-especificas-de-reproduccion">Teclas Específicas de Reproducción</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#comportamiento-del-cache">Comportamiento del Cache</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html">Seteos</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../python_api/index.html">Python API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">mrv2</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Guía del Usuario de mrv2</a></li>
+      <li class="breadcrumb-item active">Reproducción de Vídeo</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/user_docs/playback.rst.txt" rel="nofollow"> Ver código fuente de la página</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="reproduccion-de-video">
+<h1>Reproducción de Vídeo<a class="headerlink" href="#reproduccion-de-video" title="Enlace permanente a este encabezado"></a></h1>
+<section id="cuadro-actual">
+<h2>Cuadro Actual<a class="headerlink" href="#cuadro-actual" title="Enlace permanente a este encabezado"></a></h2>
+<p>En mrv2, cada clip y lista de reproducción tiene su propio cuadro actual lo que significa que si cambia de uno a otro, cosas como la velocidad de reproducción, el modo de bucle, etc. son recordados <em>por lista de reproducción</em> o clip.</p>
+</section>
+<section id="modos-de-bucle">
+<h2>Modos de Bucle<a class="headerlink" href="#modos-de-bucle" title="Enlace permanente a este encabezado"></a></h2>
+<p>Use botón de modo de bucle para cambiar entre “reproducir una vez”, “reproducir en bucle” y “ping-pong” cuando se reproduce el medio.</p>
+</section>
+<section id="velocidad-de-fps">
+<h2>Velocidad de FPS<a class="headerlink" href="#velocidad-de-fps" title="Enlace permanente a este encabezado"></a></h2>
+<p>La velocidad de FPS (Frames per Second o Cuadros por Segundo) puede ser ajustada desde el botón de “FPS” en la barra de playback.  También puede escribir una velocidad al azar en el widget de FPS.</p>
+</section>
+<section id="teclas-especificas-de-reproduccion">
+<h2>Teclas Específicas de Reproducción<a class="headerlink" href="#teclas-especificas-de-reproduccion" title="Enlace permanente a este encabezado"></a></h2>
+</section>
+<section id="comportamiento-del-cache">
+<h2>Comportamiento del Cache<a class="headerlink" href="#comportamiento-del-cache" title="Enlace permanente a este encabezado"></a></h2>
+<p>mrv2 tratará siempre de leer y decodificar datos de vídeo antes de que sea necesitado para el display. Los datos de la imagen son guardados en el cache listo para dibujar en la pantalla. mrv2 necesita ser eficiente en cómo hace esto y es útil si el usuario entiende su comportamiento.</p>
+<p>El estatus del cache está indicado en la línear de tiempo por una delgada línea de color horizontal - esto debe ser obvio ya que puede verla crecer mientra mrv2 carga cuadros del disco en el fondo. Por ello, si quiere ver un clip que es lento de leer del disco, como unas imágenes de EXR de alta resolución, el comportamiento es esperar que mrv2 cache los cuadros antes de arrancar la reproducción/bucle. El tamaño del cache (seteado via el Panel de Seteos) limitará el máximo número de cuadros que pueden ser cargados.</p>
+<p>En la mayoría de los casos, mrv2 debería ser capaz de reproducir los cuadros en el cache a la velocidad de FPS del medio. A pesar que el Visor ha sido optimizado para obtener lo mejor de su tarjeta gráfica, la reproducción lenta puede resultar si esta tratando de ver imágenes de muy alta resolución y el hardware de video de su computadora no puede empatar el ratio de transferencia.</p>
+<p>Para medios que pueden ser decodificados más rápido que el ratio de reproducción, como muchos codecs de video o EXRs comprimidos con DWA/DWB, debería poder ignorar la actividad de caching ya que éste será capaz de correr los datos del disco para reproducción en demanda.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pie de página">
+        <a href="notes.html" class="btn btn-neutral float-left" title="Notas y Anotaciones" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Anterior</a>
+        <a href="settings.html" class="btn btn-neutral float-right" title="Seteos" accesskey="n" rel="next">Siguiente <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Derechos de autor 2023, Contribuidores del Proyecto mrv2.</p>
+  </div>
+
+  Compilado con <a href="https://www.sphinx-doc.org/">Sphinx</a> usando un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">tema</a>
+    proporcionado por <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

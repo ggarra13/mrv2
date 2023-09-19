@@ -40,10 +40,10 @@ Here are some key features:
 
 **Annotations and Notes**
 
-  - Add notes and annotations to media on individual frames or range of frames.
+  - Add notes and annotations to media on individual frames o todos los cuadros.
   - On screen annotations can be created with easy to use, highly responsive sketching tools. Annotations features currently include:
       
-    1. Adjustable colour, opacity and size of brush strokes. 
+    1. Adjustable color, opacity and size of brush strokes. 
     2. Shapes tool for boxes, circles, lines and arrows etc. 
     3. Eraser pen for even more sketching flexibility.
     4. Editable text captions with adjustable fonts, position, scale, color
@@ -73,11 +73,17 @@ Here are some key features:
   - Session syncing is provided to synchronize one or more viewers in a review session across a LAN.  You can have a server and multiple clients and they can all control all aspects of mrv2 (user selectable).
   - Session files can be saved to disk to save the state of the UI and loaded media.
     
+**Hotkeys**
+
+  - User defined hotkeys saved in a separate file (mrv2.keys.prefs) allows
+    changing the settings of all the menus and some viewer controls.
+
 **API features for pipeline developers**
 
 *Python API*
 
   - An embedded Python interpreter is available to execute scripts within mrv2, add or create new menu entries.
   - Create and build media playlists through straightforward API methods.
-  - Control playback (start, stop, step frame, seek, etc).
+  - Control all the panel settings and the timeline (start, stop, step frame,
+    seek, etc).
 

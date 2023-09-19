@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Video Playback &mdash; mrv2 v0.7.7 documentation</title>
+  <title>Reproducción de Vídeo &mdash; mrv2 v0.7.7 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
@@ -52,12 +52,12 @@
 <li class="toctree-l2"><a class="reference internal" href="interface/interface.html">The mrv2 Interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="panels/panels.html">Panels</a></li>
 <li class="toctree-l2"><a class="reference internal" href="notes.html">Notes and Annotations</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Video Playback</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#current-frame">Current Frame</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Reproducción de Vídeo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cuadro-actual">Cuadro Actual</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#loop-modes">Loop Modes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fps-rate">FPS Rate</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#playback-specific-hotkeys">Playback Specific Hotkeys</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#playhead-cache-behaviour">Playhead Cache Behaviour</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cache-behaviour">Cache Behaviour</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="settings.html">Settings</a></li>
@@ -81,7 +81,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="index.html">mrv2 User Guide</a></li>
-      <li class="breadcrumb-item active">Video Playback</li>
+      <li class="breadcrumb-item active">Reproducción de Vídeo</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/user_docs/playback.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -91,11 +91,11 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="video-playback">
-<h1>Video Playback<a class="headerlink" href="#video-playback" title="Permalink to this heading"></a></h1>
-<section id="current-frame">
-<h2>Current Frame<a class="headerlink" href="#current-frame" title="Permalink to this heading"></a></h2>
-<p>In mrv2, each clip and playlist has its own current frame meaning that if you switch between them things such as playback rate, loop mode, compare mode and so-on are remembered <em>per playlist</em> or clip.</p>
+  <section id="reproduccion-de-video">
+<h1>Reproducción de Vídeo<a class="headerlink" href="#reproduccion-de-video" title="Permalink to this heading"></a></h1>
+<section id="cuadro-actual">
+<h2>Cuadro Actual<a class="headerlink" href="#cuadro-actual" title="Permalink to this heading"></a></h2>
+<p>En mrv2, cada clip y lista de reproducción tiene su cuadro acutal lo que significa que si cambia de uno a otro, cosas como la velocidad de reproducción, el modo de bucle, etc. son recordadas <em>por lista de reproducción</em> o clip.</p>
 </section>
 <section id="loop-modes">
 <h2>Loop Modes<a class="headerlink" href="#loop-modes" title="Permalink to this heading"></a></h2>
@@ -147,10 +147,10 @@
 </tbody>
 </table>
 </section>
-<section id="playhead-cache-behaviour">
-<h2>Playhead Cache Behaviour<a class="headerlink" href="#playhead-cache-behaviour" title="Permalink to this heading"></a></h2>
+<section id="cache-behaviour">
+<h2>Cache Behaviour<a class="headerlink" href="#cache-behaviour" title="Permalink to this heading"></a></h2>
 <p>mrv2 will always try to read and decode video data before it is needed for display. The image data is stored in the image cache ready for drawing to screen. mrv2 needs to be efficient in how it does this and it is useful if a user understands the behaviour.</p>
-<p>The cache status is indicated in the timeline with a horizontal coloured bar - this should be obvious as you can see it growing as mrv2 loads frames in the background. Thus if you want to view media that is slow to read off disk, like high resolution EXR images, the workflow is to wait for mrv2 to cache the frames before starting playback/looping. The size of the cache (set via the Settings Panel) will limit the maximum number of frames that can be loaded.</p>
+<p>The cache status is indicated in the timeline with a horizontal colored bar - this should be obvious as you can see it growing as mrv2 loads frames in the background. Thus if you want to view media that is slow to read off disk, like high resolution EXR images, the workflow is to wait for mrv2 to cache the frames before starting playback/looping. The size of the cache (set via the Settings Panel) will limit the maximum number of frames that can be loaded.</p>
 <p>In most cases mrv2 should be able to play back through cached frames at the required frame rate of the media. Although the Viewer has been optimised to get the most out of your graphics card, slow playback can result if you are trying to view very high resolution images and your computer’s video hardware can’t match the required data transfer rates.</p>
 <p>For media that can be decoded faster than the playback rate, like many common compressed video stream codecs or EXRs compressed with the DWA/DWB, you should be able to largely ignore mrv2’s caching activity as it will be able to stream data off the disk for playback on demand.</p>
 </section>

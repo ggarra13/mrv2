@@ -5,7 +5,7 @@ v0.7.7
   loaded from the current directory).
 - Fixed adding audio to a playlist when there was an empty audio track and a
   video clip (ie. a sequence of images and then a video clip).
-- Fixed Text annotations having turned off by mistake.
+- Fixed Text annotations having been turned off by mistake in v0.7.5.
 - Fixed drag and drop on Windows only allowing to load 4 clips before not
   allowing drag and drop to work anymore.
 - Fixed file requester hanging when reading .py files in a directory.
@@ -13,6 +13,12 @@ v0.7.7
 - Fixed Frame/Timecode/Seconds display in the PDF Exporter which was showing
   always 0.
 - Fixed PDF export to save out annotations in increasing time order.
+- Added User Documentation in English and Spanish, roughly based on xStudio
+  documentation.
+- Added 7 saved color presets to the color picker, like Krita, so you can
+  easily choose from them.
+- Wipe Comparison is now fixed which had gotten broken in v0.7.5.  Thanks to
+  Darby Johnston.
 
 v0.7.6
 ======

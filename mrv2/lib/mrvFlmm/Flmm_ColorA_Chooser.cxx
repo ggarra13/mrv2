@@ -79,8 +79,12 @@
 
 #include <stdio.h>
 
+#include <iostream>
+
 #define CIRCLE 1
 #define UPDATE_HUE_BOX 1
+
+static Flmm_ColorA_Window* chooserWindow = nullptr;
 
 /**
  * Convert hsv color components to rgb.
@@ -578,7 +582,7 @@ void Flmm_ColorA_Chooser::mode_cb(Fl_Widget* o, void*) {
  * \param L optional label text
  */
 Flmm_ColorA_Chooser::Flmm_ColorA_Chooser(int X, int Y, int W, int H, const char* L)
-  : Fl_Group(0,0,245,145,L),
+  : Fl_Group(0,0,265,145,L),
     huebox(0,0,145,145),
     valuebox(145,0,20,145),
     alphabox(165,0,20,145),
@@ -613,18 +617,8 @@ Flmm_ColorA_Chooser::Flmm_ColorA_Chooser(int X, int Y, int W, int H, const char*
 ////////////////////////////////////////////////////////////////
 // Flmm_ColorA_Chooser():
 
-#include <FL/Fl_Window.H>
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Return_Button.H>
-
-class ColorAChip : public Flmm_ColorA_Button {
-  int handle(int event) {
-    return Fl_Widget::handle(event);
-  }
-public:
-  ColorAChip(int X, int Y, int W, int H) : Flmm_ColorA_Button(X,Y,W,H) {
-    box(FL_ENGRAVED_FRAME);}
-};
 
 static void chooser_cb(Fl_Object* o, void* vv) {
   Flmm_ColorA_Chooser* c = (Flmm_ColorA_Chooser*)o;
@@ -633,9 +627,69 @@ static void chooser_cb(Fl_Object* o, void* vv) {
   v->damage(FL_DAMAGE_EXPOSE);
 }
 
+static void change_color_cb(ColorAChip* o, void* v)
+{
+  Flmm_ColorA_Chooser* c = (Flmm_ColorA_Chooser*)v;
+  double r, g, b, a;
+  o->rgba(r, g, b, a);
+  c->rgb(r, g, b, a);
+  c->redraw();
+  c->do_callback();
+}
+
 extern const char* fl_ok;
 extern const char* fl_cancel;
 
+Flmm_ColorA_Window::Flmm_ColorA_Window(int W, int H, const char* L) :
+    Fl_Double_Window(W, H, L),
+    chooser(10, 10, 265, 145),
+    ok_color(10, 160, 120, 25),
+    ok_button(10, 195, 120, 25, fl_ok),
+    cancel_color(135, 160, 120, 25),
+    cancel_button(135, 195, 120, 25, fl_cancel)
+{
+    for (int i = 0; i < 7; ++i)
+    {
+        saved[i] = new SavedAChip(265, 10 + i * 30, 30, 30);
+        saved[i]->callback((Fl_Callback*)change_color_cb, &chooser);
+        saved[i]->chip_color(0.F, 0.F, 0.F, 1.F);
+    }
+  resizable(chooser);
+  size_range(W,H);
+  chooser.callback(chooser_cb, &ok_color);
+}
+
+int Flmm_ColorA_Window::run(double& r, double& g, double& b, double& a)
+{
+    ok_color.chip_color((float)r, (float)g, (float)b, (float)a);
+    cancel_color.chip_color((float)r, (float)g, (float)b, (float)a);
+    chooser.rgb(r,g,b,a);
+    show();
+    while (shown()) {
+        Fl::wait();
+        for (;;) {
+            Fl_Widget* o = Fl::readqueue();
+            if (!o) break;
+            if (o == &ok_button) {
+                chooserWindow->hide();
+                r = chooser.r();
+                g = chooser.g();
+                b = chooser.b();
+                a = chooser.a();
+                saved[savedIndex++]->chip_color(
+                    (float)r, (float)g, (float)b, (float)a);
+                if (savedIndex > 6) savedIndex = 0;
+                return 1;
+            }
+            if (o == this || o == &cancel_button)
+            {
+                chooserWindow->hide();
+                return 0;
+            }
+        }
+    }
+    return 0;
+}
 /**
  * A dialog that lets the user choose a color and an alpha componenet.
  *
@@ -648,38 +702,15 @@ extern const char* fl_cancel;
  * \param r, g, b set and return color components
  * \param a set and return alpha component
  */
-int flmm_color_a_chooser(const char* name, double& r, double& g, double& b, double& a) {
-  Fl_Window window(265,230,name);
-  Flmm_ColorA_Chooser chooser(10, 10, 245, 145);
-  ColorAChip ok_color(10, 160, 120, 25);
-  Fl_Return_Button ok_button(10, 195, 120, 25, fl_ok);
-  ColorAChip cancel_color(135, 160, 120, 25);
-  Fl_Button cancel_button(135, 195, 120, 25, fl_cancel);
-  ok_color.chip_color((float)r, (float)g, (float)b, (float)a);
-  cancel_color.chip_color((float)r, (float)g, (float)b, (float)a);
-  window.resizable(chooser);
-  chooser.rgb(r,g,b,a);
-  chooser.callback(chooser_cb, &ok_color);
-  window.end();
-  window.set_modal();
-  window.hotspot(window);
-  window.show();
-  while (window.shown()) {
-    Fl::wait();
-    for (;;) {
-      Fl_Widget* o = Fl::readqueue();
-      if (!o) break;
-      if (o == &ok_button) {
-	r = chooser.r();
-	g = chooser.g();
-	b = chooser.b();
-	a = chooser.a();
-	return 1;
-      }
-      if (o == &window || o == &cancel_button) return 0;
-    }
-  }
-  return 0;
+int flmm_color_a_chooser(
+    const char* name, double& r, double& g, double& b, double& a)
+{
+    if (!chooserWindow)
+        chooserWindow = new Flmm_ColorA_Window(305,230,name);
+    chooserWindow->end();
+    chooserWindow->set_modal();
+    chooserWindow->hotspot(chooserWindow);
+    return chooserWindow->run(r, g, b, a);
 }
 
 /**
