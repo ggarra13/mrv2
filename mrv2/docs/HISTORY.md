@@ -19,6 +19,8 @@ v0.7.7
   easily choose from them.
 - Wipe Comparison is now fixed which had gotten broken in v0.7.5.  Thanks to
   Darby Johnston.
+- Fixed Fullscreen Mode (F11 hotkey) on Windows which got broken in v0.7.5.
+
 
 v0.7.6
 ======

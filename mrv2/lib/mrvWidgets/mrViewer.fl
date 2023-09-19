@@ -415,7 +415,7 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
   }
 }
 
-widget_class TimelineClass {open
+widget_class TimelineClass {
   xywh {117 263 690 29} resizable
   class Fl_Double_Window visible
 } {
@@ -572,7 +572,7 @@ player->setLoop( loop );}
             callback {int idx = o->value();
 double speed = atof( o->text( idx ) );
 uiFPS->value( speed );
-uiFPS->do_callback();} open selected
+uiFPS->do_callback();} open
             tooltip {Some default frame rate settings.} xywh {341 1 40 24} labelsize 10 align 16
             code0 {o->disable_label();}
             class {mrv::PopupMenu}
@@ -822,7 +822,7 @@ uiSecondary = nullptr;} {}
             xywh {0 0 660 25}
           } {
             Fl_Menu_Bar uiMenuBar {open
-              xywh {0 0 602 25} textsize 12
+              xywh {0 0 602 25} labeltype NO_LABEL textsize 12
               class {mrv::MenuBar}
             } {}
             Fl_Button uiEdit {
@@ -1081,10 +1081,18 @@ if (Fl::event_clicks() >= 1)
                 class {mrv::Button}
               }
               Fl_Button uiPenColor {
-                label ToolsGroup
                 user_data this user_data_type {ViewerUI*}
                 callback {mrv::set_pen_color_cb( o, v );}
-                tooltip {Pick Draw Color and Alpha} xywh {8 340 30 29} box ENGRAVED_BOX color 2 selection_color 63 labeltype NO_LABEL labelfont 8 labelsize 24 align 32
+                tooltip {Pick Draw Color and Alpha} xywh {5 337 20 20} box ENGRAVED_BOX color 3 selection_color 3 labeltype NO_LABEL labelfont 8 labelsize 24 align 32
+              }
+              Fl_Button uiOldPenColor {
+                user_data this user_data_type {ViewerUI*}
+                tooltip {Pick Draw Color and Alpha} xywh {25 357 15 16} box ENGRAVED_BOX color 1 selection_color 1 labeltype NO_LABEL labelfont 8 labelsize 24 align 32
+              }
+              Fl_Button uiFlipPenColor {
+                user_data this user_data_type {ViewerUI*}
+                callback {mrv::flip_pen_color_cb( o, v );} selected
+                tooltip {Switch Colors} image {../../icons/Flip.svg} compress_image 1 xywh {25 337 16 20} box NO_BOX color 1 selection_color 1 labelfont 8 labelsize 24 align 16
               }
               Fl_Slider uiPenOpacity {
                 callback {auto settingsObject = app->settingsObject();

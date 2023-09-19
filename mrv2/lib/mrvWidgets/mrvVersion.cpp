@@ -443,6 +443,9 @@ namespace mrv
           << "Copyright (c) 2000-Present Fabrice Bellard, et al." << endl
           << "Configuration: " << avcodec_configuration() << endl
           << endl
+          << "Flmm Color Picker" << endl
+          << "Copyright (c) 2002 - 2004 Matthias Melcher" << endl
+          << endl
           << "FLTK v1.4" << endl
           << "http://www.fltk.org/" << endl
           << "Copyright (c) 2000-Present Bill Spitzak & others" << endl

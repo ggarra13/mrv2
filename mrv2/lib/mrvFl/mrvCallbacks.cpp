@@ -1360,6 +1360,25 @@ namespace mrv
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
+    void update_pen_color(
+        Fl_Color c, uint8_t r, uint8_t g, uint8_t b, uint8_t a, ViewerUI* ui)
+    {
+        SettingsObject* settingsObject = ui->app->settingsObject();
+        settingsObject->setValue(kPenColorR, (int)r);
+        settingsObject->setValue(kPenColorG, (int)g);
+        settingsObject->setValue(kPenColorB, (int)b);
+        settingsObject->setValue(kPenColorA, (int)a);
+
+        if (annotationsPanel)
+            annotationsPanel->redraw();
+
+        auto w = ui->uiView->getMultilineInput();
+        if (!w)
+            return;
+        w->textcolor(c);
+        w->redraw();
+    }
+
     void set_pen_color_cb(Fl_Button* o, ViewerUI* ui)
     {
         uint8_t r, g, b;
@@ -1375,20 +1394,23 @@ namespace mrv
         ui->uiPenColor->redraw();
         ui->uiPenOpacity->redraw();
 
-        SettingsObject* settingsObject = ui->app->settingsObject();
-        settingsObject->setValue(kPenColorR, (int)r);
-        settingsObject->setValue(kPenColorG, (int)g);
-        settingsObject->setValue(kPenColorB, (int)b);
-        settingsObject->setValue(kPenColorA, (int)a);
+        update_pen_color(c, r, g, b, a, ui);
+    }
 
-        if (annotationsPanel)
-            annotationsPanel->redraw();
+    void flip_pen_color_cb(Fl_Button* o, ViewerUI* ui)
+    {
+        uint8_t r, g, b;
+        Fl_Color c = ui->uiOldPenColor->color();
+        Fl::get_color(c, r, g, b);
+        Fl_Color saved = ui->uiPenColor->color();
+        ui->uiPenColor->color(c);
+        ui->uiPenColor->redraw();
+        ui->uiOldPenColor->color(saved);
+        ui->uiOldPenColor->redraw();
 
-        auto w = ui->uiView->getMultilineInput();
-        if (!w)
-            return;
-        w->textcolor(c);
-        w->redraw();
+        float opacity = ui->uiPenOpacity->value();
+        uchar a = 255 * opacity;
+        update_pen_color(c, r, g, b, a, ui);
     }
 
     static void image_version_cb(

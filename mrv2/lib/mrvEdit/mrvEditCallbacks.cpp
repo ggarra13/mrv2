@@ -1809,7 +1809,7 @@ namespace mrv
             active = false;
 
         b->value(active);
-        if (!(mode == EditMode::kSaved))
+        if (!(mode == EditMode::kSaved) && !(ui->uiView->getFullScreenMode()))
             ui->uiView->resizeWindow();
         if (b->value())
         {
@@ -1830,7 +1830,8 @@ namespace mrv
         int tileH = tile->h();
         int H = kMinEditModeH; // timeline height
         int viewH = H;
-        if (mode == EditMode::kFull)
+        auto player = ui->uiView->getTimelinePlayer();
+        if (mode == EditMode::kFull && player)
         {
             timeline->show();
             if (ui->uiMain->visible())
