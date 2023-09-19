@@ -15,6 +15,9 @@ v0.7.7
 - Fixed PDF export to save out annotations in increasing time order.
 - Added User Documentation in English and Spanish, roughly based on xStudio
   documentation.
+- Added 7 saved color presets to the color picker, like Krita, so you can
+  easily choose from them.
+- Fixed Wipe Comparisons which had gotten broken in v0.7.5.
 
 v0.7.6
 ======
