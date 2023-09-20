@@ -16,6 +16,7 @@ v0.7.8
   select a playlist based on its index, its name or its item
   and save the selected playlist.
 - Made FileItem paths read-only in the Python API.
+- Fixed the beginning of English playback documentation which was in Spanish.
 - Improved the User Documentation.
 
 v0.7.7
