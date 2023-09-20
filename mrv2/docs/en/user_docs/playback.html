@@ -57,7 +57,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#loop-modes">Loop Modes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fps-rate">FPS Rate</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#playback-specific-hotkeys">Playback Specific Hotkeys</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#cache-behaviour">Cache Behaviour</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cache-behavior">Cache Behavior</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="settings.html">Settings</a></li>
@@ -148,8 +148,8 @@
 </tbody>
 </table>
 </section>
-<section id="cache-behaviour">
-<h2>Cache Behaviour<a class="headerlink" href="#cache-behaviour" title="Permalink to this heading"></a></h2>
+<section id="cache-behavior">
+<h2>Cache Behavior<a class="headerlink" href="#cache-behavior" title="Permalink to this heading"></a></h2>
 <p>mrv2 will always try to read and decode video data before it is needed for display. The image data is stored in the image cache ready for drawing to screen. mrv2 needs to be efficient in how it does this and it is useful if a user understands the behaviour.</p>
 <p>The cache status is indicated in the timeline with a horizontal colored bar - this should be obvious as you can see it growing as mrv2 loads frames in the background. Thus if you want to view media that is slow to read off disk, like high resolution EXR images, the workflow is to wait for mrv2 to cache the frames before starting playback/looping. The size of the cache (set via the Settings Panel) will limit the maximum number of frames that can be loaded.</p>
 <p>In most cases mrv2 should be able to play back through cached frames at the required frame rate of the media. Although the Viewer has been optimised to get the most out of your graphics card, slow playback can result if you are trying to view very high resolution images and your computer’s video hardware can’t match the required data transfer rates.</p>

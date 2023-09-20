@@ -35,8 +35,8 @@ Shift+Left Arrow   Go to the previous annotation.
 Shift+Right Arrow  Go to the next annotation.
 =================  ============================== 
 
-Cache Behaviour
----------------
+Cache Behavior
+--------------
 
 mrv2 will always try to read and decode video data before it is needed for display. The image data is stored in the image cache ready for drawing to screen. mrv2 needs to be efficient in how it does this and it is useful if a user understands the behaviour.
 
