@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-09-19 21:25-0300\n"
+"POT-Creation-Date: 2023-09-20 08:11-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -954,6 +954,9 @@ msgstr "Agregar Carpetas"
 msgid "Add a :class:`mrv2.math.Vector3f` to image."
 msgstr "Agregar un :class:`mrv2.math.Vector3f` a la imagen."
 
+msgid "Add a clip to currently selected Playlist EDL."
+msgstr "Agregar clip a la lista de reproducción (EDL) seleccionada."
+
 msgid "Add a new remote mapping."
 msgstr "Agregar un nuevo mapeo de carpeta remota."
 
@@ -1501,6 +1504,9 @@ msgstr ""
 
 msgid "Could not convert message to shape: "
 msgstr "No pude convertir el mensaje a figura: "
+
+msgid "Could not find clip in loaded clips."
+msgstr "No pude encontrar clip en items cargados."
 
 msgid "Could not find video clip."
 msgstr "No pude encontrar video clip."
@@ -2523,6 +2529,9 @@ msgstr "Orden de Líneas en archivo"
 msgid "Linear"
 msgstr "Lineal"
 
+msgid "List playlist items."
+msgstr "Lista de items de lista de reproducción."
+
 msgid "Load"
 msgstr "Cargar"
 
@@ -2769,6 +2778,18 @@ msgstr "No"
 msgid "No item selected"
 msgstr "Ningún item seleccionado"
 
+msgid "No playlist loaded."
+msgstr "No hay ninguna lista de reproducción cargada."
+
+msgid "No playlist matched file name."
+msgstr "Ninguna lista de reproducción es igual al nombre dado."
+
+msgid "No playlist matched item."
+msgstr "Ninguna lista de reproducción es igual al item"
+
+msgid "No playlist selected."
+msgstr "Ninguna lista de reproducción seleccionada."
+
 msgid "No session name established, cannot save."
 msgstr "Ningúng nombre de sesión establecido, no puedo grabar."
 
@@ -2793,6 +2814,9 @@ msgstr "Normal"
 
 msgid "Not an EDL file to save."
 msgstr "No es un archivo EDL para grabar."
+
+msgid "Not an EDL playlist to add clips to."
+msgstr "No es un archivo EDL para agregar clips."
 
 msgid "Notes"
 msgstr "Notas"
@@ -3484,6 +3508,9 @@ msgstr "Resetear"
 msgid "Reset Gain/Gamma"
 msgstr "Resetear Gain y Gama"
 
+msgid "Reset hotkeys to defaults."
+msgstr "Resetar teclas a su valor por defecto."
+
 msgid "Reset settings to defaults."
 msgstr "Resetar seteos a su valor por defecto."
 
@@ -3772,6 +3799,15 @@ msgstr "Saltar al tiempo dado en la línea de tiempo."
 
 msgid "Seek to the given time."
 msgstr "Saltar al tiempo dado."
+
+msgid "Select a playlist by FileModelItem."
+msgstr "Seleccionar una lista de reproducción con FileModelItem."
+
+msgid "Select a playlist by fileName."
+msgstr "Seleccionar una lista de reproducción con el nombre de archivo dado."
+
+msgid "Select a playlist by index."
+msgstr "Seleccionar una lista de reproducción con el índice dado."
 
 msgid "Select default looping mode in timeline."
 msgstr "Selecionar modo de bucle por defecto en la línea de tiempo."
@@ -4225,6 +4261,9 @@ msgstr "Intercambiar ojos izquierdo por derecho."
 msgid "Switch Colors"
 msgstr "Intercambiar Colores"
 
+msgid "Switch Pen Color"
+msgstr "Intercambiar Color del Lápiz"
+
 msgid ""
 "Switch RGBA display between floating point, hexadecimal (0..0xff) and "
 "decimal (0..255)."
@@ -4459,7 +4498,7 @@ msgstr "Modo de Timer"
 msgid "Tint"
 msgstr "Tinte"
 
-msgid "Toggle About Panel"
+msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
 
 msgid "Toggle Annotation Panel"
@@ -4498,7 +4537,7 @@ msgstr "Alternar Pantalla Completa"
 msgid "Toggle Histogram Panel"
 msgstr "Alternar Panel de Histograma"
 
-msgid "Toggle Hotkeys Panel"
+msgid "Toggle Hotkeys Window"
 msgstr "Alternar Ventana de Teclas de Manejo"
 
 msgid "Toggle Log Panel"
@@ -5251,9 +5290,6 @@ msgstr "xyY CIE xyY"
 #~ msgid "Add a playlist."
 #~ msgstr "Agregar una lista de reproducción."
 
-#~ msgid "Add current file to Playlist"
-#~ msgstr "Agregar archivo actual a la lista de reproducción."
-
 #~ msgid "Class used to hold a playlist"
 #~ msgstr "Clase para una lista de reproducción."
 
@@ -5293,12 +5329,6 @@ msgstr "xyY CIE xyY"
 
 #~ msgid "Return the current playlist."
 #~ msgstr "Retorna la lista de reproducción."
-
-#~ msgid "Select a playlist with the given index."
-#~ msgstr "Seleccionar una lista de reproducción con el índice dado."
-
-#~ msgid "Select a playlist with the given name."
-#~ msgstr "Seleccionar una lista de reproducción con el nombre dado."
 
 #~ msgid "Select playlist image for removal."
 #~ msgstr "Seleccionar una imagen de la lista de reproducción para remover."

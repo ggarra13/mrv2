@@ -9,6 +9,13 @@ v0.7.8
 - Made saved color presets in the color picker be sorted from top to bottom,
   where the top color is the last one used.
 - Added saving the old color to the preferences.
+- Fixed saving current EDL through Python API.
+- Added a command-line switch (-resetHotkeys) to reset hotkeys to their default.
+- Python API now supports Playlists again with a new API.
+  You can add new clips to an EDL playlist, list all playlists,
+  select a playlist based on its index, its name or its item
+  and save the selected playlist.
+- Made FileItem paths read-only in the Python API.
 
 v0.7.7
 ======

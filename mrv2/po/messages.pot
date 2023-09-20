@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-09-19 21:25-0300\n"
+"POT-Creation-Date: 2023-09-20 08:11-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -694,6 +694,9 @@ msgstr ""
 msgid "Add a :class:`mrv2.math.Vector3f` to image."
 msgstr ""
 
+msgid "Add a clip to currently selected Playlist EDL."
+msgstr ""
+
 msgid "Add a new remote mapping."
 msgstr ""
 
@@ -1218,6 +1221,9 @@ msgid ""
 msgstr ""
 
 msgid "Could not convert message to shape: "
+msgstr ""
+
+msgid "Could not find clip in loaded clips."
 msgstr ""
 
 msgid "Could not find video clip."
@@ -2228,6 +2234,9 @@ msgstr ""
 msgid "Linear"
 msgstr ""
 
+msgid "List playlist items."
+msgstr ""
+
 msgid "Load"
 msgstr ""
 
@@ -2472,6 +2481,18 @@ msgstr ""
 msgid "No item selected"
 msgstr ""
 
+msgid "No playlist loaded."
+msgstr ""
+
+msgid "No playlist matched file name."
+msgstr ""
+
+msgid "No playlist matched item."
+msgstr ""
+
+msgid "No playlist selected."
+msgstr ""
+
 msgid "No session name established, cannot save."
 msgstr ""
 
@@ -2493,6 +2514,9 @@ msgid "Normal"
 msgstr ""
 
 msgid "Not an EDL file to save."
+msgstr ""
+
+msgid "Not an EDL playlist to add clips to."
 msgstr ""
 
 msgid "Notes"
@@ -3169,6 +3193,9 @@ msgstr ""
 msgid "Reset Gain/Gamma"
 msgstr ""
 
+msgid "Reset hotkeys to defaults."
+msgstr ""
+
 msgid "Reset settings to defaults."
 msgstr ""
 
@@ -3443,6 +3470,15 @@ msgid "Seek to a time in timeline."
 msgstr ""
 
 msgid "Seek to the given time."
+msgstr ""
+
+msgid "Select a playlist by FileModelItem."
+msgstr ""
+
+msgid "Select a playlist by fileName."
+msgstr ""
+
+msgid "Select a playlist by index."
 msgstr ""
 
 msgid "Select default looping mode in timeline."
@@ -3880,6 +3916,9 @@ msgstr ""
 msgid "Switch Colors"
 msgstr ""
 
+msgid "Switch Pen Color"
+msgstr ""
+
 msgid ""
 "Switch RGBA display between floating point, hexadecimal (0..0xff) and "
 "decimal (0..255)."
@@ -4076,7 +4115,7 @@ msgstr ""
 msgid "Tint"
 msgstr ""
 
-msgid "Toggle About Panel"
+msgid "Toggle About Window"
 msgstr ""
 
 msgid "Toggle Annotation Panel"
@@ -4115,7 +4154,7 @@ msgstr ""
 msgid "Toggle Histogram Panel"
 msgstr ""
 
-msgid "Toggle Hotkeys Panel"
+msgid "Toggle Hotkeys Window"
 msgstr ""
 
 msgid "Toggle Log Panel"

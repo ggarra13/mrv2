@@ -19,10 +19,10 @@ void mrv2_fileitem(py::module& m)
 
     py::class_<FilesModelItem, std::shared_ptr<FilesModelItem> >(m, "FileMedia")
         .def(py::init<>())
-        .def_readwrite(
+        .def_readonly(
             "path", &FilesModelItem::path,
             _("Path :class:`mrv2.Path` to the File Media."))
-        .def_readwrite(
+        .def_readonly(
             "audioPath", &FilesModelItem::path,
             _("Audio path :class:`mrv2.Path` to the File Media if any."))
         .def_readwrite(
