@@ -17,6 +17,7 @@ v0.7.8
   and save the selected playlist.
 - Made FileItem paths read-only in the Python API.
 - Fixed the beginning of English playback documentation which was in Spanish.
+- Improved the User Documentation.
 
 v0.7.7
 ======
