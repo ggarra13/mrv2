@@ -4084,7 +4084,7 @@ msgid "Show Thumbnails for USD files (can be slow if they are big)"
 msgstr "Mostrar miniaturas para archivos USD (puede ser lento si son grandes)"
 
 msgid "Show Transitions"
-msgstr "Alternar Transiciones de la Línea de Tiempo"
+msgstr "Mostrar Transiciones"
 
 msgid "Show Transitions in Edit Viewport"
 msgstr "Mostrar Transiciones en la Ventana de Edición"
