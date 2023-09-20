@@ -191,6 +191,9 @@ namespace mrv
     Hotkey kToggleTimelineTransitions(false, false, false, false, 0);
     Hotkey kToggleTimelineMarkers(false, false, false, false, 0);
 
+    Hotkey kToggleTimelineEditable(false, false, false, false, 0);
+    Hotkey kToggleEditAssociatedClips(false, false, false, false, 0);
+
     Hotkey kEditCutFrame(true, false, false, false, 'x');
     Hotkey kEditCopyFrame(true, false, false, false, 'c');
     Hotkey kEditPasteFrame(true, false, false, false, 'v');
@@ -465,7 +468,7 @@ namespace mrv
         HotkeyEntry(_("Toggle Vectorscope Panel"), kToggleVectorscope),
         HotkeyEntry(_("Toggle Waveform Panel"), kToggleWaveform),
         HotkeyEntry(_("Toggle Environment Map Panel"), kToggleEnvironmentMap),
-        HotkeyEntry(_("Toggle Preferences Panel"), kTogglePreferences),
+        HotkeyEntry(_("Toggle Preferences Window"), kTogglePreferences),
         HotkeyEntry(_("Toggle Python Panel"), kTogglePythonConsole),
         HotkeyEntry(_("Toggle Log Panel"), kToggleLogs),
 
@@ -553,7 +556,7 @@ namespace mrv
         {
             if (k == table[j].n)
             {
-                r += table[j].text;
+                r += _(table[j].text);
                 special = true;
                 break;
             }

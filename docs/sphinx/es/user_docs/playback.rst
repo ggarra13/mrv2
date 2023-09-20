@@ -31,6 +31,8 @@ Entrar                   Detener reproducción.
 Flecha Abajo             Reproducir hacia delante.
 Flecha Derecha           Caminar hacia delante un cuadro.
 Flecha Izquierda         Caminar hacia atrás un cuadro.
+Inicio                   Ir al primer cuadro.
+Fin                      Ir al último cuadro.
 Shift+Flecha Izquierda   Ir a la anotación previa.
 Shift+Flecha Derecha     Ir a la próxima anotación.
 =======================  ===================================== 

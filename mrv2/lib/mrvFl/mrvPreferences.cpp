@@ -47,142 +47,6 @@ namespace
 
 extern float kCrops[];
 
-namespace
-{
-
-    /**
-     * This function allows the user to override a preference setting by
-     * using an environment variable.
-     *
-     * @param variable        environment variable to look for
-     * @param defaultValue    default value to use if variable is not set
-     * @param inPrefs         boolean specifying whether the value came from
-     *                        saved preferences or not.  It is used to print
-     *                        a warning if some setting is as of yet undefined.
-     *
-     * @return a float corresponding to the value set in the environment or to
-     *         to the default value.
-     */
-    int environmentSetting(
-        const char* variable, const int defaultValue, const bool inPrefs)
-    {
-        int r = defaultValue;
-        const char* env = fl_getenv(variable);
-        if (!env)
-        {
-            if (!inPrefs)
-            {
-                std::string msg =
-                    tl::string::Format(
-                        _("Environment variable \"{0}\" is not set; "
-                          "using default value ({1})."))
-                        .arg(variable)
-                        .arg(defaultValue);
-                LOG_WARNING(msg);
-            }
-        }
-        else
-        {
-            int n = sscanf(env, " %d", &r);
-            if (n != 1)
-            {
-                std::string msg =
-                    tl::string::Format(
-                        _("Cannnot parse enironment variable \"{0}\" "
-                          "as an integer value; using {1}."))
-                        .arg(variable)
-                        .arg(defaultValue);
-                LOG_ERROR(msg);
-            }
-        }
-        return r;
-    }
-
-    /**
-     * This function allows the user to override a preference setting by
-     * using an environment variable.
-     *
-     * @param variable        environment variable to look for
-     * @param defaultValue    default value to use if variable is not set
-     * @param inPrefs         boolean specifying whether the value came from
-     *                        saved preferences or not.  It is used to print
-     *                        a warning if some setting is as of yet undefined.
-     *
-     * @return a float corresponding to the value set in the environment or to
-     *         to the default value.
-     */
-    float environmentSetting(
-        const char* variable, const float defaultValue, const bool inPrefs)
-    {
-        float r = defaultValue;
-        const char* env = fl_getenv(variable);
-        if (!env)
-        {
-            if (!inPrefs)
-            {
-                std::string msg =
-                    tl::string::Format(
-                        _("Environment variable \"{0}\" is not set; "
-                          "using default value ({1})."))
-                        .arg(variable)
-                        .arg(defaultValue);
-                LOG_WARNING(msg);
-            }
-        }
-        else
-        {
-            int n = sscanf(env, " %f", &r);
-            if (n != 1)
-            {
-                std::string msg =
-                    tl::string::Format(
-                        _("Cannnot parse enironment variable \"{0}\" "
-                          "as a float value; using {1}."))
-                        .arg(variable)
-                        .arg(defaultValue);
-                LOG_ERROR(msg);
-            }
-        }
-        return r;
-    }
-
-    /**
-     * This function allows the user to override a preference setting by
-     * using an environment variable.
-     *
-     * @param variable        environment variable to look for
-     * @param defaultValue    default value to use if variable is not set
-     * @param inPrefs         boolean specifying whether the value came from
-     *                        saved preferences or not.  It is used to print
-     *                        a warning if some setting is as of yet undefined.
-     *
-     * @return a string corresponding to the value set in the environment or to
-     *         to the default value.
-     */
-    const char* environmentSetting(
-        const char* variable, const char* defaultValue, const bool inPrefs)
-    {
-
-        const char* env = fl_getenv(variable);
-        if (!env || strlen(env) == 0)
-        {
-            env = defaultValue;
-            if (!inPrefs)
-            {
-                std::string msg =
-                    tl::string::Format(
-                        _("Environment variable \"{0}\" is not set; "
-                          "using default value ({1})."))
-                        .arg(variable)
-                        .arg(defaultValue);
-                LOG_WARNING(msg);
-            }
-        }
-        return env;
-    }
-
-} // anonymous namespace
-
 mrv::App* ViewerUI::app = nullptr;
 AboutUI* ViewerUI::uiAbout = nullptr;
 PreferencesUI* ViewerUI::uiPrefs = nullptr;
@@ -433,6 +297,12 @@ namespace mrv
         gui.get("timeline_edit_markers", tmp, 0);
         uiPrefs->uiPrefsShowMarkers->value(tmp);
 
+        gui.get("timeline_editable", tmp, 0);
+        uiPrefs->uiPrefsTimelineEditable->value(tmp);
+
+        gui.get("timeline_edit_associated_clips", tmp, 1);
+        uiPrefs->uiPrefsEditAssociatedClips->value(tmp);
+
 #ifdef __APPLE__
         {
             auto itemOptions = ui->uiTimeline->getItemOptions();
@@ -671,7 +541,6 @@ namespace mrv
         {
 #define OCIO_ICS(x, d)                                                         \
     ok = ics.get(#x, tmpS, d, 2048);                                           \
-    environmentSetting("MRV_OCIO_" #x "_ICS", tmpS, ok);                       \
     uiPrefs->uiOCIO_##x##_ics->value(tmpS);
 
             OCIO_ICS(8bits, "");
@@ -1226,6 +1095,10 @@ namespace mrv
             "timeline_edit_transitions",
             uiPrefs->uiPrefsShowTransitions->value());
         gui.set("timeline_edit_markers", uiPrefs->uiPrefsShowMarkers->value());
+        gui.set("timeline_editable", uiPrefs->uiPrefsTimelineEditable->value());
+        gui.set(
+            "timeline_edit_associated_clips",
+            uiPrefs->uiPrefsEditAssociatedClips->value());
 
         //
         // ui/view prefs
@@ -1523,7 +1396,7 @@ namespace mrv
         auto options = ui->uiTimeline->getItemOptions();
         options.showTransitions = uiPrefs->uiPrefsShowTransitions->value();
         options.showMarkers = uiPrefs->uiPrefsShowMarkers->value();
-
+        ui->uiTimeline->setEditable(uiPrefs->uiPrefsTimelineEditable->value());
         int thumbnails = uiPrefs->uiPrefsEditThumbnails->value();
         options.thumbnails = true;
         switch (thumbnails)

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-09-20 08:29-0300\n"
+"POT-Creation-Date: 2023-09-20 18:24-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -1154,7 +1154,7 @@ msgid "B44A"
 msgstr "B44A"
 
 msgid "BackSpace"
-msgstr "BackSpace"
+msgstr "Retroceso"
 
 msgid "Background"
 msgstr "Fondo"
@@ -1742,6 +1742,12 @@ msgstr "35mm Temprano"
 msgid "Edit"
 msgstr "Edición"
 
+msgid "Edit Associated Clips"
+msgstr "Editar Clips Asociados"
+
+msgid "Edit Associated Clips."
+msgstr "Editar Clips Asociados."
+
 msgid "Edit Redo"
 msgstr "Rehacer Edición"
 
@@ -1789,6 +1795,12 @@ msgstr "Editar/Rebanar"
 
 msgid "Edit/Undo"
 msgstr "Editar/&Deshacer"
+
+msgid "Editable"
+msgstr "Editable"
+
+msgid "Editable Timeline Viewport."
+msgstr "Ventana de Edición Editable."
 
 msgid "Editing viewport will be visible at start up."
 msgstr "Ventana de Edición será visible al comenzar."
@@ -3012,10 +3024,10 @@ msgid "PXR24"
 msgstr "PXR24"
 
 msgid "PageDown"
-msgstr "Av.Pag."
+msgstr "Av.Pág."
 
 msgid "PageUp"
-msgstr "Re.Pag."
+msgstr "Re.Pág."
 
 msgid "Pan And Zoom"
 msgstr "Paneo y Zoom"
@@ -3518,7 +3530,7 @@ msgid "Reset to default value"
 msgstr "Resetar a su valor por defecto."
 
 msgid "Resize Main Window to Fit"
-msgstr "Redimensionar Ventana Principal para que se Ajuste"
+msgstr "Ajustar Ventana a la Imagen"
 
 msgid "Resolution"
 msgstr "Resolución"
@@ -4069,7 +4081,7 @@ msgid "Settings"
 msgstr "Seteos"
 
 msgid "Shift"
-msgstr "Shift"
+msgstr "Mayús"
 
 msgid "Show All"
 msgstr "Mostrar Todos"
@@ -4084,7 +4096,7 @@ msgid "Show Thumbnails for USD files (can be slow if they are big)"
 msgstr "Mostrar miniaturas para archivos USD (puede ser lento si son grandes)"
 
 msgid "Show Transitions"
-msgstr "Alternar Transiciones de la Línea de Tiempo"
+msgstr "Mostrar Transiciones"
 
 msgid "Show Transitions in Edit Viewport"
 msgstr "Mostrar Transiciones en la Ventana de Edición"
@@ -4474,6 +4486,12 @@ msgstr "Línea de Tiempo"
 msgid "Timeline, movie, image sequence, or folder."
 msgstr "Línea de tiempo, película, secuencia de imágenes o carpeta."
 
+msgid "Timeline/Edit Associated Clips"
+msgstr "Línea de Tiempo/Editar Clips Asociados"
+
+msgid "Timeline/Editable"
+msgstr "Línea de Tiempo/Editable"
+
 msgid "Timeline/Markers"
 msgstr "Línea de Tiempo/Marcadores"
 
@@ -4580,7 +4598,7 @@ msgid "Toggle Secondary"
 msgstr "Alternar la Vista Secundaria"
 
 msgid "Toggle Secondary Float On Top"
-msgstr "Alternar Flotar sobre Todos para la Vista Secundaria"
+msgstr "Alternar Flotar para la Vista Secundaria"
 
 msgid "Toggle Settings Panel"
 msgstr "Alternar Panel de Seteos"

@@ -43,7 +43,7 @@ Customising the Interface
 .. image:: ../images/interface-03.png
    :align: center
 
-mrv2 can be customized to show any of the toolbars from Window->Preferences->User Interface.  These settings are saved when you exit mrv2 and will allow you to always start mrv2 in a certain configuration.
+mrv2 can be customized to show any of the toolbars from **Window->Preferences->User Interface**.  These settings are saved when you exit mrv2 and will allow you to always start mrv2 in a certain configuration.
 
 Mouse interaction in the Viewer
 -------------------------------
@@ -55,8 +55,8 @@ The current zoom factor is shown on the pixel toolbar to the left.
     To 'reset' the viewer so that the image is auto-fitted, you can select "Fit" from the Zoom display pulldown in the Pixel Toolbar or use the 'f' hotkey.
 
 .. note::
-    To 'center' the view, without changing the zoom factor, you can use the 'c'
-    hotkey.
+    To 'center' or 'home' the view, without changing the zoom factor, you can
+    use the 'h' hotkey.
     
 .. note::
    If you want to zoom in or out at a particular percentage (say 2x), you can
@@ -77,7 +77,7 @@ Finally, the last control is the gama one which is driven by the slider and is t
 
 .. note::
 
-   The OpenColorIO (OCIO) controls are derived from your configuration file, which is specified in Window->Preferences->OCIO.  By default, the OCIO configuration file used is the cg-config one.  mrv2 ships also with the nuke-default and with the studio-config ones.
+   The OpenColorIO (OCIO) controls are derived from your configuration file, which is specified in **Window->Preferences->OCIO**.  By default, the OCIO configuration file used is the cg-config one.  mrv2 ships also with the nuke-default and with the studio-config ones.
    If you set the OCIO environment variable, it will take precedence over the one saved in mrv2's Preferences file.
 
 The Timeline

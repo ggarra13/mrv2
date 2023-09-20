@@ -108,6 +108,7 @@ namespace mrv
             _("File/Close All"), kCloseAll.hotkey(), (Fl_Callback*)close_all_cb,
             ui, mode);
 
+        std_any value;
         SettingsObject* settings = ui->app->settingsObject();
         const std::vector< std::string >& recentFiles = settings->recentFiles();
 
@@ -820,6 +821,30 @@ namespace mrv
             item->set();
 
         const auto& options = ui->uiTimeline->getItemOptions();
+
+        mode = FL_MENU_TOGGLE;
+        if (numFiles == 0)
+            mode |= FL_MENU_INACTIVE;
+
+        if (ui->uiPrefs->uiPrefsTimelineEditable->value())
+        {
+            idx = menu->add(
+                _("Timeline/Editable"), kToggleTimelineEditable.hotkey(),
+                (Fl_Callback*)toggle_timeline_editable_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            bool editable = ui->uiTimeline->isEditable();
+            if (editable)
+                item->set();
+
+            idx = menu->add(
+                _("Timeline/Edit Associated Clips"),
+                kToggleEditAssociatedClips.hotkey(),
+                (Fl_Callback*)toggle_timeline_edit_associated_clips_cb, ui,
+                mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (options.editAssociatedClips)
+                item->set();
+        }
 
         mode = FL_MENU_RADIO;
         if (numFiles == 0)

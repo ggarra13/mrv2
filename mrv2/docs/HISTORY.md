@@ -18,6 +18,7 @@ v0.7.8
 - Made FileItem paths read-only in the Python API.
 - Fixed the beginning of English playback documentation which was in Spanish.
 - Improved the User Documentation.
+- Fixed name of some hotkeys in Spanish locale.
 
 v0.7.7
 ======

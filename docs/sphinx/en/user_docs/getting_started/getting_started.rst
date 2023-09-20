@@ -53,7 +53,7 @@ An easy way to load media is to drag-and-drop files or folders into the main win
 Loading Media (mrv2 Browser)
 -----------------------------
 
-Using File->Open Movie or Sequence, a File requester will be opened.  By default the file requester is mrv2's custom file requester.  However, in the Window->Preferences->File Requester you can select Use Native File Chooser which will use the native file chooser for your platform.
+Using **File->Open Movie or Sequence**, a File requester will be opened.  By default the file requester is mrv2's custom file requester.  However, in the **Window->Preferences->File Requester** you can select "Use Native File Chooser" which will use the native file chooser for your platform.
 
 .. note::
    On macOS, mrv2's file requester might not be able to open the
@@ -65,7 +65,7 @@ Using File->Open Movie or Sequence, a File requester will be opened.  By default
 Loading Media (Recent menu)
 ---------------------------
 
-If you want to load up to 10 clips that you recently closed or previously loaded, you can do so from File->Recent.
+If you want to load up to 10 clips that you recently closed or previously loaded, you can do so from **File->Recent**.
 
 
 Loading Media (command line)
@@ -81,11 +81,11 @@ mrv2 supports various modes for loading sequences and movies.  You can mix diffe
      Movie files will be played back at their 'natural' frame rate, in other words mrv2 respects the encoded frame rate of the given file.
      
 .. note::
-    Image sequences (e.g. a series of JPEG or TGA) default to 24fps (you can adjust this in Window->Preferences->Playback).  DPX and EXRs speed is taken from the metadata if available.
+    Image sequences (e.g. a series of JPEG or TGA) default to 24fps (you can adjust this in **Window->Preferences->Playback**).  DPX and EXRs speed is taken from the metadata if available.
 
 Viewing Media
 -------------
 
 The first media item that is added to mrv2 will be made visible and you can start playing through / looping. To look at other media you can bring the Files Panel (F4 by default).  With it you can click on the file you want to see.  
 
-When loading a clip, the default behavior of playback can be set in the Window->Preferences->Playback and clicking on Auto-Playback.
+When loading a clip, the default behavior of playback can be set in the **Window->Preferences->Playback** and clicking on Auto-Playback.
