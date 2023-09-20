@@ -826,23 +826,25 @@ namespace mrv
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
 
-#if 0
-        idx = menu->add(
-            _("Timeline/Editable"), kToggleTimelineEditable.hotkey(),
-            (Fl_Callback*)toggle_timeline_editable_cb, ui, mode);
-        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        bool editable = ui->uiTimeline->isEditable();
-        if (editable)
-            item->set();
+        if (ui->uiPrefs->uiPrefsTimelineEditable->value())
+        {
+            idx = menu->add(
+                _("Timeline/Editable"), kToggleTimelineEditable.hotkey(),
+                (Fl_Callback*)toggle_timeline_editable_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            bool editable = ui->uiTimeline->isEditable();
+            if (editable)
+                item->set();
 
-        idx = menu->add(
-            _("Timeline/Edit Associated Clips"),
-            kToggleEditAssociatedClips.hotkey(),
-            (Fl_Callback*)toggle_timeline_edit_associated_clips_cb, ui, mode);
-        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (options.editAssociatedClips)
-            item->set();
-#endif
+            idx = menu->add(
+                _("Timeline/Edit Associated Clips"),
+                kToggleEditAssociatedClips.hotkey(),
+                (Fl_Callback*)toggle_timeline_edit_associated_clips_cb, ui,
+                mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (options.editAssociatedClips)
+                item->set();
+        }
 
         mode = FL_MENU_RADIO;
         if (numFiles == 0)
