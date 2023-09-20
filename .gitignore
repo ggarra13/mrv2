@@ -41,6 +41,9 @@ Release
 RelWithDebInfo
 doc/doxygen
 examples/mrv2
+docs/Doxygen
+mrv2/python/plug-ins/__pycache__
+mrv2/bin/environment.sh
 mrv2/share/locale
 docs/sphinx/doctrees
 docs/sphinx/*/_sources
