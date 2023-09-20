@@ -19,25 +19,6 @@ La cuarta barra es la de Información de Pixel, que muestra el pixel actual bajo
 
 Finalmente, la últime barra es la de Estatus.  Imprimirá errores y te dejará saber en que modo estás (Por defecto es Scrubbing).
 
-
-Personalizando la Interfaz
---------------------------
-
-.. image:: ../images/interface-03.png
-   :align: center
-
-mrv2 puede ser personalizado para mostrar cualquiera de las barras desde Ventana->Preferencias->Interfaz del Usuario.  Estos seteos son grabados cuando salis de mrv2 y te permitirán arrancar siempre mrv2 con cierta configuración.
-
-
-La Línea de Tiempo
-++++++++++++++++++
-
-.. image:: ../images/timeline-01.png
-   :align: center
-
-La Ventana Gráfica de la Línea de Tiempo permite escalar las miniaturas de Edición y las ondas de Audio arrastrando la ventana arriba y abajo.  Para una rápida vista de todas las pistas, puede cliquear en el boton de Edición en la barra de Men.
-Cuando se muestran las miniaturas, puedes acercarte o alejarte con la rueda del ratón.
-
 Ocultando/Mostrando Elementos de la GUI 
 +++++++++++++++++++++++++++++++++++++++
 
@@ -54,6 +35,15 @@ Shift + F7    Alternar las Herramientas de Dibujo y Acción.
 F11           Alternar el modo Pantalla Completa.
 F12           Alternar el modo Presentación (sin barras).
 ============  =============================================
+
+
+Personalizando la Interfaz
+--------------------------
+
+.. image:: ../images/interface-03.png
+   :align: center
+
+mrv2 puede ser personalizado para mostrar cualquiera de las barras desde Ventana->Preferencias->Interfaz del Usuario.  Estos seteos son grabados cuando salis de mrv2 y te permitirán arrancar siempre mrv2 con cierta configuración.
 
 Interacción del Ratón en el Visor
 ---------------------------------
@@ -72,8 +62,66 @@ El factor de zoom actual es mostrado en la barra de pixel a la izquierda.
    Si quiere acercase o alejarse un porcentaje particular (digamos 2x), puede
    elegirlo desde el menu de zoom en la barra de Pixel.
 
+La Barra Superior
++++++++++++++++++
+
+La Barra Superior de mrv2, contiene los controles de capas o canales de la imágen (usualmente OpenEXR).
+
+La ganancia (controlada con el deslizador) y/o exposición, manejada con las flechas y alternada con el botón que muestra el F-stop (f/8 por defecto).
+
+El Espacio de Entrada de Color está a su lado.  Este es el Control de OpenColorIO (OCIO) de la imágen.
+
+Junto a él, está el control de OpenColorIO (OCIO) del display y de la vista.
+
+Finalmente, el último control es el de gama que se controla con el deslizador y se alterna entre dos valores con el botón marcado con "Y".
+
+.. note::
+
+   Los controles de OpenColorIO (OCIO) son derivados de tu archivo de configuración, que es especificado en Ventana->Preferencias->OCIO.  Por defecto, el archivo de configuración de OCIO usado es el de cg-config.  mrv2 incluye también el de nuke-default y el de studio-config.
+   Si setea la variable de entorno OCIO, esta tendrá precedencia sobre el seteo grabado en el archivo de preferencias de mrv2.
+
+La Línea de Tiempo
+++++++++++++++++++
+
+.. image:: ../images/timeline-01.png
+   :align: center
+
+La Ventana Gráfica de la Línea de Tiempo permite escalar las miniaturas de Edición y las ondas de Audio arrastrando la ventana arriba y abajo.  Para una rápida vista de todas las pistas, puede cliquear en el boton de Edición en la barra de Men.
+Cuando se muestran las miniaturas, puedes acercarte o alejarte con la rueda del ratón.
+
+Indicador de Cuadro
+-------------------
+
+Inmediatamente a la izquierda y abajo de la línea de tiempo está el 'cuadro actual'. Junto a él esta un menu de opciones para establecer como el tiempo se muestra:
+    - *Cuadros:* cuadros, empezando en 0 para películas o uno normalmente para xsecuencias.
+    - *Segundos:* La posición en segundos del medio.
+    - *Timecode:* el timecode de 8 digitos. Si el medio tiene metadatos de timecode estos serán usados.
+
+Controles de Transporte
+-----------------------
+
+Estos son bastante universales y no necesitan mucha explicación.
+Hay un boton de Play para atrás, Pausa y Play para adelante, paso hacia delante o hacia atrás y saltar al comienzo o al final del clip.
+
+FPS
+---
+
+El indicador de cuadros por segundo o frames-per-second (FPS) muestra la velocidad de reproducción deseada.  El botónd de FPS es un menú que permite seleccionar rápidamente el cambio a una nueva velocidad.
+
+Start and End Frame Indicator
+-----------------------------
+
+A la derecha y abajo de la línea de tiempo, se muestran el cuadro de Comienzo y Final.  Los botones S and E pueden ser cliqueados para establecer el punto de Entrada y Salida en el cuadro actual.  Esto es equivalente a presionar las teclas 'I' o 'O'.
+
+Player/Viewer Controls
+----------------------
+
+Dos botones en la parte inferior de los controles de la línea de tiempo proveen las siguientes interacciones:
+    - *Volumen/Control mudo:* cliquée en la bocina para alternar el control de mudo. Arrastre el deslizador a su lado para controlar el volumen.
+    - *Mode de Bucle:* Estableza si la reproducción se hará una vez y dentendrá en el cuadro final, si se reproducirá en bucle o en 'ping-pong'.
+
 Menu de Vista
--------------
++++++++++++++
 
 El menú de Vista provee controles para modificar la apariencia y comportamiento del visor:
 
@@ -97,40 +145,35 @@ El menú de Vista provee controles para modificar la apariencia y comportamiento
 
    Seleccione esto para entrar a los seteos del HUD (heads up display). El HUD permite mostrar muchos metadatos de tu clip directamente en la ventana gráfica.
    
+      
+Menú de Render
+++++++++++++++
 
-Línea de Tiempo
----------------
+El menú de Render provee controles para modificar la representación de la imagen en el visor:
 
-Indicador de Cuadro
-+++++++++++++++++++
+.. topic:: Canales
 
-Inmediatamente a la izquierda y abajo de la línea de tiempo está el 'cuadro actual'. Junto a él esta un menu de opciones para establecer como el tiempo se muestra:
-    - *Cuadros:* cuadros, empezando en 0 para películas o uno normalmente para xsecuencias.
-    - *Segundos:* La posición en segundos del medio.
-    - *Timecode:* el timecode de 8 digitos. Si el medio tiene metadatos de timecode estos serán usados.
+   Puede elegir mostrar los canales de Color, Rojo, Verde, Azul o Alfa independientemente.  Por defecto, puede alternar los canales con las teclas "R", "G", "B" y "A".
+    
+.. topic:: Voltear
 
-Controles de Transporte
-+++++++++++++++++++++++
+   Con estos dos controles, puede voltear la imagen verticalmente o horizontalmente.
+   
+.. topic:: Fondo
 
-Estos son bastante universales y no necesitan mucha explicación.
-Hay un boton de Play para atrás, Pausa y Play para adelante, paso hacia delante o hacia atrás y saltar al comienzo o al final del clip.
+   Por defecto, mrv2 usa un fondo gris oscuro para mostrar las áreas vacías de la ventana gráfica.  Con esto, puede alternar a mostrar un fondo negro.	
+	   
+.. topic:: Niveles de Vídeo
 
-FPS
-+++
+   Con este control, puede elegir si los niveles de video del archivo de la película son usados, o si usa el Rango Legal o Completo.
 
-El indicador de cuadros por segundo o frames-per-second (FPS) muestra la velocidad de reproducción deseada.  El botónd de FPS es un menú que permite seleccionar rápidamente el cambio a una nueva velocidad.
+.. topic:: Mezcla Alfa
 
-Start and End Frame Indicator
-+++++++++++++++++++++++++++++
+   Puede seleccionar como se maneja el canal alfa cuando la imagen o vídeo tiene uno.  Puede elegir entre Ninguna, Derecha o Premultiplicada.
+      
+.. topic:: Filtros de Minificación y Magnificación
 
-A la derecha y abajo de la línea de tiempo, se muestran el cuadro de Comienzo y Final.  Los botones S and E pueden ser cliqueados para establecer el punto de Entrada y Salida en el cuadro actual.  Esto es equivalente a presionar las teclas 'I' o 'O'.
-
-Player/Viewer Controls
-++++++++++++++++++++++
-
-Dos botones en la parte inferior de los controles de la línea de tiempo proveen las siguientes interacciones:
-    - *Volumen/Control mudo:* cliquée en la bocina para alternar el control de mudo. Arrastre el deslizador a su lado para controlar el volumen.
-    - *Mode de Bucle:* Estableza si la reproducción se hará una vez y dentendrá en el cuadro final, si se reproducirá en bucle o en 'ping-pong'.
+   Con estos dos controles, puede seleccionar cómo mrv2 muestra las imágenes cuando está de cerca o de lejos.  Puede elegir en usar un Filtro de Cercanía (Pixelado) o uno Lineal.  El Filtro de Magnificación puede ser alternado con Shift + F.
 
 Los Paneles
 +++++++++++
