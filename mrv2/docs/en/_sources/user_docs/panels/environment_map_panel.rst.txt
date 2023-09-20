@@ -1,1 +1,0 @@
-.. _environment_map_panel:

@@ -1,1 +1,0 @@
-.. _playlist_panel:
