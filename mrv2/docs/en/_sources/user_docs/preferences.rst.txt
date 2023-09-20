@@ -270,6 +270,11 @@ OCIO
 .. topic:: OCIO Config File
 
 	   Configuration Setting for OCIO.
+
+.. note::
+
+   If the environment variable OCIO is set, this setting will be ignored.
+
 	   
 OCIO Defaults
 =============
