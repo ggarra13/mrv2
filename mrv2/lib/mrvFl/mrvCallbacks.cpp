@@ -479,6 +479,9 @@ namespace mrv
             pw = Fl::first_window();
         }
 
+        // Delete Color Chooser
+        delete colorChooser;
+
         // Remove any temporary EDLS in tmppath
         if (ui->uiPrefs->uiPrefsRemoveEDLs->value())
             removeTemporaryEDLs(ui);

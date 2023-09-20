@@ -86,7 +86,7 @@
 #define CIRCLE 1
 #define UPDATE_HUE_BOX 1
 
-static Flmm_ColorA_Window* chooserWindow = nullptr;
+Flmm_ColorA_Window* colorChooser = nullptr;
 
 /**
  * Convert hsv color components to rgb.
@@ -673,7 +673,7 @@ int Flmm_ColorA_Window::run(double& r, double& g, double& b, double& a)
             Fl_Widget* o = Fl::readqueue();
             if (!o) break;
             if (o == &ok_button) {
-                chooserWindow->hide();
+                colorChooser->hide();
                 r = chooser.r();
                 g = chooser.g();
                 b = chooser.b();
@@ -710,7 +710,7 @@ int Flmm_ColorA_Window::run(double& r, double& g, double& b, double& a)
             }
             if (o == this || o == &cancel_button)
             {
-                chooserWindow->hide();
+                colorChooser->hide();
                 return 0;
             }
         }
@@ -732,12 +732,12 @@ int Flmm_ColorA_Window::run(double& r, double& g, double& b, double& a)
 int flmm_color_a_chooser(
     const char* name, double& r, double& g, double& b, double& a)
 {
-    if (!chooserWindow)
-        chooserWindow = new Flmm_ColorA_Window(305,230,name);
-    chooserWindow->end();
-    chooserWindow->set_modal();
-    chooserWindow->hotspot(chooserWindow);
-    return chooserWindow->run(r, g, b, a);
+    if (!colorChooser)
+        colorChooser = new Flmm_ColorA_Window(305, 230, name);
+    colorChooser->end();
+    colorChooser->set_modal();
+    colorChooser->hotspot(colorChooser);
+    return colorChooser->run(r, g, b, a);
 }
 
 /**

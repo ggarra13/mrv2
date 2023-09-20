@@ -161,6 +161,8 @@ public:
     int run(double& r, double& g, double& b, double& a);
 };
 
+extern Flmm_ColorA_Window* colorChooser;
+
 FL_EXPORT int flmm_color_a_chooser(
     const char* name, double& r, double& g, double& b, double& a);
 FL_EXPORT int
