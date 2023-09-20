@@ -1086,12 +1086,12 @@ if (Fl::event_clicks() >= 1)
                 tooltip {Pick Draw Color and Alpha} xywh {5 337 20 20} box ENGRAVED_BOX color 3 selection_color 3 labeltype NO_LABEL labelfont 8 labelsize 24 align 32
               }
               Fl_Button uiOldPenColor {
-                user_data this user_data_type {ViewerUI*}
-                tooltip {Pick Draw Color and Alpha} xywh {25 357 15 16} box ENGRAVED_BOX color 1 selection_color 1 labeltype NO_LABEL labelfont 8 labelsize 24 align 32
+                user_data this user_data_type {ViewerUI*} selected
+                tooltip {Old Color Used.  Click on the Arrow to alternate.} xywh {25 357 15 16} box ENGRAVED_BOX color 1 selection_color 1 labeltype NO_LABEL labelfont 8 labelsize 24 align 32
               }
               Fl_Button uiFlipPenColor {
                 user_data this user_data_type {ViewerUI*}
-                callback {mrv::flip_pen_color_cb( o, v );} selected
+                callback {mrv::flip_pen_color_cb( o, v );}
                 tooltip {Switch Colors} image {../../icons/Flip.svg} compress_image 1 xywh {25 337 16 20} box NO_BOX color 1 selection_color 1 labelfont 8 labelsize 24 align 16
               }
               Fl_Slider uiPenOpacity {
