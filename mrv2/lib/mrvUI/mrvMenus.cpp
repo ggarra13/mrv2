@@ -826,6 +826,7 @@ namespace mrv
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
 
+#if 0
         idx = menu->add(
             _("Timeline/Editable"), kToggleTimelineEditable.hotkey(),
             (Fl_Callback*)toggle_timeline_editable_cb, ui, mode);
@@ -841,6 +842,7 @@ namespace mrv
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (options.editAssociatedClips)
             item->set();
+#endif
 
         mode = FL_MENU_RADIO;
         if (numFiles == 0)

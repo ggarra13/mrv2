@@ -432,7 +432,7 @@ namespace mrv
         gui.get("timeline_edit_markers", tmp, 0);
         uiPrefs->uiPrefsShowMarkers->value(tmp);
 
-        gui.get("timeline_editable", tmp, 1);
+        gui.get("timeline_editable", tmp, 0);
         uiPrefs->uiPrefsTimelineEditable->value(tmp);
 
         gui.get("timeline_edit_associated_clips", tmp, 1);

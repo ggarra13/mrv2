@@ -85,7 +85,7 @@ uiMain->hide();} open
         xywh {0 0 847 469} box FLAT_BOX
       } {
         Fl_Wizard uiWizard {
-          label Settings open
+          label Settings open selected
           xywh {283 26 564 380} box PLASTIC_UP_BOX labelcolor 32
         } {
           Fl_Group {} {
@@ -726,12 +726,12 @@ v->uiPrefsFPS->value( g );}
               }
               Fl_Check_Button uiPrefsTimelineEditable {
                 label Editable
-                tooltip {Editable Timeline Viewport.} xywh {565 213 15 20} down_box DOWN_BOX value 1 align 4
+                tooltip {Editable Timeline Viewport.} xywh {565 213 15 20} down_box DOWN_BOX value 1 align 4 hide
                 class {mrv::CheckButton}
               }
               Fl_Check_Button uiPrefsEditAssociatedClips {
                 label {Edit Associated Clips}
-                tooltip {Edit Associated Clips.} xywh {565 243 15 20} down_box DOWN_BOX value 1 align 4
+                tooltip {Edit Associated Clips.} xywh {565 243 15 20} down_box DOWN_BOX value 1 align 4 hide
                 class {mrv::CheckButton}
               }
               Fl_Check_Button uiPrefsEditMode {
@@ -1226,7 +1226,7 @@ if (!found)
     
     std::cerr << w->label() << std::endl;
  }
-}} selected
+}}
             xywh {9 21 270 423} color 20
             code0 {fill_tree(o);}
             code1 {o->showroot(false);}
