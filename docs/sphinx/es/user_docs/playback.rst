@@ -33,7 +33,7 @@ Flecha Derecha           Caminar hacia delante un cuadro.
 Flecha Izquierda         Caminar hacia atrás un cuadro.
 Shift+Flecha Izquierda   Ir a la anotación previa.
 Shift+Flecha Derecha     Ir a la próxima anotación.
-=======================  ==================================== 
+=======================  ===================================== 
 
 Comportamiento del Cache
 ------------------------

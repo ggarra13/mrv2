@@ -104,10 +104,8 @@ Línea de Tiempo
 Indicador de Cuadro
 +++++++++++++++++++
 
-Inmediatamente a la izquierda y abajo de la línea de tiempo está el 'cuadro actual'.
-Junto a él esta un menu de opciones para establecer como el tiempo se muestra:
-    - *Cuadros:* cuadros, empezando en 0 para películas o uno normalmente para
-                 secuencias.
+Inmediatamente a la izquierda y abajo de la línea de tiempo está el 'cuadro actual'. Junto a él esta un menu de opciones para establecer como el tiempo se muestra:
+    - *Cuadros:* cuadros, empezando en 0 para películas o uno normalmente para xsecuencias.
     - *Segundos:* La posición en segundos del medio.
     - *Timecode:* el timecode de 8 digitos. Si el medio tiene metadatos de timecode estos serán usados.
 
