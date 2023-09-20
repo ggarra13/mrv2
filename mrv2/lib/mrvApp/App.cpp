@@ -125,6 +125,7 @@ namespace mrv
 
         bool hud = true;
         bool resetSettings = false;
+        bool resetHotkeys = false;
         bool displayVersion = false;
         bool otioEditMode = false;
 
@@ -323,6 +324,9 @@ namespace mrv
                     app::CmdLineFlagOption::create(
                         p.options.resetSettings, {"-resetSettings"},
                         _("Reset settings to defaults.")),
+                    app::CmdLineFlagOption::create(
+                        p.options.resetHotkeys, {"-resetHotkeys"},
+                        _("Reset hotkeys to defaults.")),
 #if defined(TLRENDER_USD)
                     app::CmdLineValueOption<size_t>::create(
                         p.options.usdRenderWidth, {"-usdRenderWidth"},
@@ -476,7 +480,8 @@ namespace mrv
 
         std_any value;
 
-        Preferences prefs(ui->uiPrefs, p.options.resetSettings);
+        Preferences prefs(
+            ui->uiPrefs, p.options.resetSettings, p.options.resetHotkeys);
         Preferences::run(ui);
 
 #if defined(TLRENDER_USD)

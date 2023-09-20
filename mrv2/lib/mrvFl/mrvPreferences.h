@@ -26,7 +26,8 @@ namespace mrv
     class Preferences
     {
     public:
-        Preferences(PreferencesUI* uiPrefs, bool reset);
+        Preferences(
+            PreferencesUI* uiPrefs, bool resetSettings, bool resetHotkeys);
         ~Preferences();
 
         static void run(ViewerUI* ui);

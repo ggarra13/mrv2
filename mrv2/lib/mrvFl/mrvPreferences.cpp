@@ -239,7 +239,8 @@ namespace mrv
             pre + value + post, START_VARIABLE, END_VARIABLE);
     }
 
-    Preferences::Preferences(PreferencesUI* uiPrefs, bool reset)
+    Preferences::Preferences(
+        PreferencesUI* uiPrefs, bool resetSettings, bool resetHotkeys)
     {
         ViewerUI* ui = App::ui;
 
@@ -367,7 +368,7 @@ namespace mrv
             }
         }
 
-        if (reset)
+        if (resetSettings)
         {
             settingsObject->reset();
         }
@@ -656,7 +657,7 @@ namespace mrv
             uiPrefs->uiPrefsOCIOConfig->value(var);
         }
 
-        if (!var || strlen(var) == 0 || reset)
+        if (!var || strlen(var) == 0 || resetSettings)
         {
             mrvLOG_INFO(
                 "ocio", _("Setting OCIO config to default.") << std::endl);
@@ -892,9 +893,21 @@ namespace mrv
         if (hotkeys_file.empty())
             hotkeys_file = "mrv2.keys";
 
-        msg = tl::string::Format(_("Loading hotkeys from \"{0}{1}.prefs\"."))
-                  .arg(prefspath())
-                  .arg(hotkeys_file);
+        std::string fullhotkeysPath = prefspath() + hotkeys_file + ".prefs";
+        if (resetHotkeys)
+        {
+            if (is_readable(fullhotkeysPath))
+            {
+                fs::remove(fullhotkeysPath);
+            }
+        }
+        else
+        {
+            msg =
+                tl::string::Format(_("Loading hotkeys from \"{0}{1}.prefs\"."))
+                    .arg(prefspath())
+                    .arg(hotkeys_file);
+        }
 
         LOG_INFO(msg);
 

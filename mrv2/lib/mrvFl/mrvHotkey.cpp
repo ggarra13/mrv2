@@ -56,7 +56,8 @@ namespace mrv
         {
             HotkeyEntry& h = hotkeys[i];
             std::string row(_(h.name.c_str()));
-            row += "\t" + h.hotkey.to_s();
+            const std::string hotkey = h.hotkey.to_s();
+            row += "\t" + hotkey;
 
             b->add(row.c_str());
         }
@@ -116,17 +117,18 @@ namespace mrv
         fill_ui_hotkeys(b->uiFunction);
     }
 
-    void searchFunction(const std::string& text, mrv::Browser* o)
+    void searchFunction(const std::string& searchText, mrv::Browser* o)
     {
-        if (text.empty())
+        if (searchText.empty())
         {
             o->select(o->value(), 0);
             o->topline(0);
+            o->redraw();
             return;
         }
         try
         {
-            std::regex regex{text, std::regex_constants::icase};
+            std::regex regex{searchText, std::regex_constants::icase};
             int start = o->value() + 1;
             for (int i = start; i <= o->size(); ++i)
             {
@@ -137,6 +139,7 @@ namespace mrv
                 {
                     o->topline(i);
                     o->select(i);
+                    o->redraw();
                     return;
                 }
             }
@@ -152,6 +155,7 @@ namespace mrv
         {
             o->select(o->value(), 0);
             o->topline(0);
+            o->redraw();
             return;
         }
         try
@@ -168,6 +172,7 @@ namespace mrv
                 {
                     o->topline(i);
                     o->select(i);
+                    o->redraw();
                     return;
                 }
             }

@@ -1,3 +1,9 @@
+v0.7.8
+======
+
+- Added a hotkey selection to switch pen colors.
+- Fixed hotkey search highlight redraw showing the wrong hotkey.
+
 v0.7.7
 ======
 

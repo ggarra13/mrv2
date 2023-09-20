@@ -1278,6 +1278,11 @@ namespace mrv
                 setViewZoom(viewZoom() * 0.5, _getFocus());
                 return 1;
             }
+            else if (kSwitchPenColor.match(rawkey))
+            {
+                flip_pen_color_cb(nullptr, p.ui);
+                return 1;
+            }
             else if (rawkey >= kZoomMin.key && rawkey <= kZoomMax.key)
             {
                 if (rawkey == kZoomMin.key)

@@ -194,6 +194,8 @@ namespace mrv
 
     extern Hotkey kToggleOnePanelOnly;
 
+    // Drawing hotkeys
+
     extern Hotkey kDrawMode;
     extern Hotkey kEraseMode;
     extern Hotkey kCircleMode;
@@ -208,6 +210,8 @@ namespace mrv
 
     extern Hotkey kUndoDraw;
     extern Hotkey kRedoDraw;
+
+    extern Hotkey kSwitchPenColor;
 
     extern Hotkey kResetChanges;
     extern Hotkey kExposureMore;

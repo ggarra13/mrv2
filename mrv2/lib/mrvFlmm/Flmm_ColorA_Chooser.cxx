@@ -679,6 +679,7 @@ int Flmm_ColorA_Window::run(double& r, double& g, double& b, double& a)
                 b = chooser.b();
                 a = chooser.a();
 
+                // Check  if color is already on the list
                 const double fuzzFactor = 0.005F;
                 double sr = 0, sg = 0, sb = 0, sa = 0;
                 for (int i = 0; i < 7; ++i)
@@ -692,9 +693,19 @@ int Flmm_ColorA_Window::run(double& r, double& g, double& b, double& a)
                         return 1;
                     }
                 }
-                saved[savedIndex++]->chip_color(
+
+
+                // Move the colors down.
+                for (int i = 5; i >= 0; --i)
+                {
+                    saved[i]->rgba(sr, sg, sb, sa);
+                    saved[i+1]->chip_color(
+                        (float)sr, (float)sg, (float)sb, (float)sa);
+                }
+
+                // Add lates color at the top.
+                saved[0]->chip_color(
                     (float)r, (float)g, (float)b, (float)a);
-                if (savedIndex > 6) savedIndex = 0;
                 return 1;
             }
             if (o == this || o == &cancel_button)

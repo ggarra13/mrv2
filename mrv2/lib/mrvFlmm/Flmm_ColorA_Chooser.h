@@ -155,7 +155,6 @@ class FL_EXPORT Flmm_ColorA_Window : public Fl_Double_Window
     ColorAChip cancel_color;
     Fl_Button cancel_button;
     SavedAChip* saved[7];
-    int savedIndex = 0;
 
 public:
     Flmm_ColorA_Window(int, int, const char* L = 0);

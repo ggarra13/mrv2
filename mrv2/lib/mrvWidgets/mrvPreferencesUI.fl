@@ -76,7 +76,7 @@ class PreferencesUI {open
       label Preferences
       user_data this user_data_type {PreferencesUI*}
       callback {// reload original preferences
-mrv::Preferences prefs(v, ViewerUI::app->settingsObject() );
+mrv::Preferences prefs(v, false, false);
 uiMain->hide();} open
       xywh {843 147 847 466} type Double resizable
       code0 {main = m;} modal visible
@@ -1230,7 +1230,7 @@ if (!found)
             label Revert
             user_data this user_data_type {PreferencesUI*}
             callback {// reload preferences
-mrv::Preferences prefs(v, ViewerUI::app->settingsObject());}
+mrv::Preferences prefs(v, false, false);}
             tooltip {Revert settings to last saved preferences.} xywh {431 416 132 31}
           }
           Fl_Button {} {
