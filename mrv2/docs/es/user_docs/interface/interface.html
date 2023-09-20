@@ -51,23 +51,24 @@
 <li class="toctree-l2"><a class="reference internal" href="../overview.html">Introducción</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../getting_started/getting_started.html">Comenzando</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">La interfaz de mrv2</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#personalizando-la-interfaz">Personalizando la Interfaz</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#la-linea-de-tiempo">La Línea de Tiempo</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#ocultando-mostrando-elementos-de-la-gui">Ocultando/Mostrando Elementos de la GUI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ocultando-mostrando-elementos-de-la-gui">Ocultando/Mostrando Elementos de la GUI</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#personalizando-la-interfaz">Personalizando la Interfaz</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#interaccion-del-raton-en-el-visor">Interacción del Ratón en el Visor</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#interaccion-del-raton-en-el-visor">Interacción del Ratón en el Visor</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#menu-de-vista">Menu de Vista</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#linea-de-tiempo">Línea de Tiempo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#la-barra-superior">La Barra Superior</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#la-linea-de-tiempo">La Línea de Tiempo</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#indicador-de-cuadro">Indicador de Cuadro</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#controles-de-transporte">Controles de Transporte</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fps">FPS</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#start-and-end-frame-indicator">Start and End Frame Indicator</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#player-viewer-controls">Player/Viewer Controls</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#los-paneles">Los Paneles</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#divisor">Divisor</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#menu-de-vista">Menu de Vista</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#menu-de-render">Menú de Render</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#los-paneles">Los Paneles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#divisor">Divisor</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../panels/panels.html">Paneles</a></li>
@@ -114,18 +115,8 @@
 <p>La tercera barra es la ventana de la línea de tiempo y sus controles.  Puede alternarla con F3.</p>
 <p>La cuarta barra es la de Información de Pixel, que muestra el pixel actual bajo el cursor.  Puede activar y desactivarla con F2.</p>
 <p>Finalmente, la últime barra es la de Estatus.  Imprimirá errores y te dejará saber en que modo estás (Por defecto es Scrubbing).</p>
-<section id="personalizando-la-interfaz">
-<h2>Personalizando la Interfaz<a class="headerlink" href="#personalizando-la-interfaz" title="Enlace permanente a este encabezado"></a></h2>
-<img alt="../../_images/interface-03.png" class="align-center" src="../../_images/interface-03.png" />
-<p>mrv2 puede ser personalizado para mostrar cualquiera de las barras desde Ventana-&gt;Preferencias-&gt;Interfaz del Usuario.  Estos seteos son grabados cuando salis de mrv2 y te permitirán arrancar siempre mrv2 con cierta configuración.</p>
-<section id="la-linea-de-tiempo">
-<h3>La Línea de Tiempo<a class="headerlink" href="#la-linea-de-tiempo" title="Enlace permanente a este encabezado"></a></h3>
-<img alt="../../_images/timeline-01.png" class="align-center" src="../../_images/timeline-01.png" />
-<p>La Ventana Gráfica de la Línea de Tiempo permite escalar las miniaturas de Edición y las ondas de Audio arrastrando la ventana arriba y abajo.  Para una rápida vista de todas las pistas, puede cliquear en el boton de Edición en la barra de Men.
-Cuando se muestran las miniaturas, puedes acercarte o alejarte con la rueda del ratón.</p>
-</section>
 <section id="ocultando-mostrando-elementos-de-la-gui">
-<h3>Ocultando/Mostrando Elementos de la GUI<a class="headerlink" href="#ocultando-mostrando-elementos-de-la-gui" title="Enlace permanente a este encabezado"></a></h3>
+<h2>Ocultando/Mostrando Elementos de la GUI<a class="headerlink" href="#ocultando-mostrando-elementos-de-la-gui" title="Enlace permanente a este encabezado"></a></h2>
 <p>Algunas teclas útiles por defecto:</p>
 <table class="docutils align-default">
 <thead>
@@ -157,10 +148,13 @@ Cuando se muestran las miniaturas, puedes acercarte o alejarte con la rueda del 
 </tr>
 </tbody>
 </table>
-</section>
+<section id="personalizando-la-interfaz">
+<h3>Personalizando la Interfaz<a class="headerlink" href="#personalizando-la-interfaz" title="Enlace permanente a este encabezado"></a></h3>
+<img alt="../../_images/interface-03.png" class="align-center" src="../../_images/interface-03.png" />
+<p>mrv2 puede ser personalizado para mostrar cualquiera de las barras desde Ventana-&gt;Preferencias-&gt;Interfaz del Usuario.  Estos seteos son grabados cuando salis de mrv2 y te permitirán arrancar siempre mrv2 con cierta configuración.</p>
 </section>
 <section id="interaccion-del-raton-en-el-visor">
-<h2>Interacción del Ratón en el Visor<a class="headerlink" href="#interaccion-del-raton-en-el-visor" title="Enlace permanente a este encabezado"></a></h2>
+<h3>Interacción del Ratón en el Visor<a class="headerlink" href="#interaccion-del-raton-en-el-visor" title="Enlace permanente a este encabezado"></a></h3>
 <p>Un ratón de tres botones es recomendado y puede ser usado para inspección de la imagen. Sosteniendo el botón del medio del ratón y moviendo el ratón para panear la imagen en la ventana gráfica. Sostenga la tecla Alt y el botón derecho del ratón y moviendo el ratón de derecha a izquierda para hacer un acercamiento o alejamiento de la imagen.  También puede usar la rueda del mouse que es más confortable.
 El factor de zoom actual es mostrado en la barra de pixel a la izquierda.</p>
 <div class="admonition note">
@@ -178,32 +172,25 @@ El factor de zoom actual es mostrado en la barra de pixel a la izquierda.</p>
 elegirlo desde el menu de zoom en la barra de Pixel.</p>
 </div>
 </section>
-<section id="menu-de-vista">
-<h2>Menu de Vista<a class="headerlink" href="#menu-de-vista" title="Enlace permanente a este encabezado"></a></h2>
-<p>El menú de Vista provee controles para modificar la apariencia y comportamiento del visor:</p>
-<aside class="topic">
-<p class="topic-title">Safe Areas</p>
-<p>Alternar Áreas Seguras permite mostrar las áreas seguras de film y video.</p>
-</aside>
-<aside class="topic">
-<p class="topic-title">Data Window</p>
-<p>Seleccionar esto mostrará o ocultará la Ventana de Datos de OpenEXR.</p>
-</aside>
-<aside class="topic">
-<p class="topic-title">Display Window</p>
-<p>Seleccionar esto mostrará o ocultará la Ventana de Display de OpenEXR.</p>
-</aside>
-<aside class="topic">
-<p class="topic-title">Mask</p>
-<p>La máscara permite dibujar una máscara negra que recorta la imágen hasta darle un aspecto cinematográfico determinado.</p>
-</aside>
-<aside class="topic">
-<p class="topic-title">HUD</p>
-<p>Seleccione esto para entrar a los seteos del HUD (heads up display). El HUD permite mostrar muchos metadatos de tu clip directamente en la ventana gráfica.</p>
-</aside>
 </section>
-<section id="linea-de-tiempo">
-<h2>Línea de Tiempo<a class="headerlink" href="#linea-de-tiempo" title="Enlace permanente a este encabezado"></a></h2>
+<section id="la-barra-superior">
+<h2>La Barra Superior<a class="headerlink" href="#la-barra-superior" title="Enlace permanente a este encabezado"></a></h2>
+<p>La Barra Superior de mrv2, contiene los controles de capas o canales de la imágen (usualmente OpenEXR).</p>
+<p>La ganancia (controlada con el deslizador) y/o exposición, manejada con las flechas y alternada con el botón que muestra el F-stop (f/8 por defecto).</p>
+<p>El Espacio de Entrada de Color está a su lado.  Este es el Control de OpenColorIO (OCIO) de la imágen.</p>
+<p>Junto a él, está el control de OpenColorIO (OCIO) del display y de la vista.</p>
+<p>Finalmente, el último control es el de gama que se controla con el deslizador y se alterna entre dos valores con el botón marcado con «Y».</p>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>Los controles de OpenColorIO (OCIO) son derivados de tu archivo de configuración, que es especificado en Ventana-&gt;Preferencias-&gt;OCIO.  Por defecto, el archivo de configuración de OCIO usado es el de cg-config.  mrv2 incluye también el de nuke-default y el de studio-config.
+Si setea la variable de entorno OCIO, esta tendrá precedencia sobre el seteo grabado en el archivo de preferencias de mrv2.</p>
+</div>
+</section>
+<section id="la-linea-de-tiempo">
+<h2>La Línea de Tiempo<a class="headerlink" href="#la-linea-de-tiempo" title="Enlace permanente a este encabezado"></a></h2>
+<img alt="../../_images/timeline-01.png" class="align-center" src="../../_images/timeline-01.png" />
+<p>La Ventana Gráfica de la Línea de Tiempo permite escalar las miniaturas de Edición y las ondas de Audio arrastrando la ventana arriba y abajo.  Para una rápida vista de todas las pistas, puede cliquear en el boton de Edición en la barra de Men.
+Cuando se muestran las miniaturas, puedes acercarte o alejarte con la rueda del ratón.</p>
 <section id="indicador-de-cuadro">
 <h3>Indicador de Cuadro<a class="headerlink" href="#indicador-de-cuadro" title="Enlace permanente a este encabezado"></a></h3>
 <dl class="simple">
@@ -238,14 +225,66 @@ Hay un boton de Play para atrás, Pausa y Play para adelante, paso hacia delante
 </dd>
 </dl>
 </section>
+</section>
+<section id="menu-de-vista">
+<h2>Menu de Vista<a class="headerlink" href="#menu-de-vista" title="Enlace permanente a este encabezado"></a></h2>
+<p>El menú de Vista provee controles para modificar la apariencia y comportamiento del visor:</p>
+<aside class="topic">
+<p class="topic-title">Safe Areas</p>
+<p>Alternar Áreas Seguras permite mostrar las áreas seguras de film y video.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Data Window</p>
+<p>Seleccionar esto mostrará o ocultará la Ventana de Datos de OpenEXR.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Display Window</p>
+<p>Seleccionar esto mostrará o ocultará la Ventana de Display de OpenEXR.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Mask</p>
+<p>La máscara permite dibujar una máscara negra que recorta la imágen hasta darle un aspecto cinematográfico determinado.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">HUD</p>
+<p>Seleccione esto para entrar a los seteos del HUD (heads up display). El HUD permite mostrar muchos metadatos de tu clip directamente en la ventana gráfica.</p>
+</aside>
+</section>
+<section id="menu-de-render">
+<h2>Menú de Render<a class="headerlink" href="#menu-de-render" title="Enlace permanente a este encabezado"></a></h2>
+<p>El menú de Render provee controles para modificar la representación de la imagen en el visor:</p>
+<aside class="topic">
+<p class="topic-title">Canales</p>
+<p>Puede elegir mostrar los canales de Color, Rojo, Verde, Azul o Alfa independientemente.  Por defecto, puede alternar los canales con las teclas «R», «G», «B» y «A».</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Voltear</p>
+<p>Con estos dos controles, puede voltear la imagen verticalmente o horizontalmente.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Fondo</p>
+<p>Por defecto, mrv2 usa un fondo gris oscuro para mostrar las áreas vacías de la ventana gráfica.  Con esto, puede alternar a mostrar un fondo negro.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Niveles de Vídeo</p>
+<p>Con este control, puede elegir si los niveles de video del archivo de la película son usados, o si usa el Rango Legal o Completo.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Mezcla Alfa</p>
+<p>Puede seleccionar como se maneja el canal alfa cuando la imagen o vídeo tiene uno.  Puede elegir entre Ninguna, Derecha o Premultiplicada.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Filtros de Minificación y Magnificación</p>
+<p>Con estos dos controles, puede seleccionar cómo mrv2 muestra las imágenes cuando está de cerca o de lejos.  Puede elegir en usar un Filtro de Cercanía (Pixelado) o uno Lineal.  El Filtro de Magnificación puede ser alternado con Shift + F.</p>
+</aside>
+</section>
 <section id="los-paneles">
-<h3>Los Paneles<a class="headerlink" href="#los-paneles" title="Enlace permanente a este encabezado"></a></h3>
+<h2>Los Paneles<a class="headerlink" href="#los-paneles" title="Enlace permanente a este encabezado"></a></h2>
 <p>mrv2 soporta Paneles para organizar la información lógicamente.  Estos paneles pueden ser empotrados a la derecha de la ventana gráfica o ser ventanas flotatantes si se las arrstra de su barra superior o se presiona en el pequeño botón amarillo.</p>
 </section>
 <section id="divisor">
-<h3>Divisor<a class="headerlink" href="#divisor" title="Enlace permanente a este encabezado"></a></h3>
+<h2>Divisor<a class="headerlink" href="#divisor" title="Enlace permanente a este encabezado"></a></h2>
 <p>Los Paneles tienen un divisor, tal como la Ventana Gráfica de la Línea de Tiempo, que puede ser arrastrado para hacer el panel mas grande o pequeño (y así también cambiar el tamaño de la ventana gráfica principal).</p>
-</section>
 </section>
 </section>
 
