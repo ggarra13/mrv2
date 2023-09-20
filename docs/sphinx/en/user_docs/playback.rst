@@ -1,11 +1,11 @@
-#####################
-Reproducción de Vídeo
-#####################
+##############
+Vídeo Playback
+##############
 
-Cuadro Actual
+Current Frame
 -------------
 
-En mrv2, cada clip y lista de reproducción tiene su cuadro acutal lo que significa que si cambia de uno a otro, cosas como la velocidad de reproducción, el modo de bucle, etc. son recordadas *por lista de reproducción* o clip. 
+In mrv2, each clip and playlist has its current frame, which means that if you switch from one to the other, things like FPS, loop mode, etc. are remembered *per playlist* or clip. 
 
 Loop Modes
 ----------
