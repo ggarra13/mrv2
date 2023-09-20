@@ -343,8 +343,12 @@ namespace mrv
         math::Vector2i _getRaster() const noexcept;
         math::Vector2f _getRasterf(int X, int Y) const noexcept;
         math::Vector2f _getRasterf() const noexcept;
-        //! Call redraw and a flush to force a redraw
+
+        //! Call redraw and a flush to force a redraw.
         void _refresh() noexcept;
+
+        //! Get the annotation pen size taking renderSize into account.
+        float _getPenSize() const noexcept;
 
         virtual void _pushAnnotationShape(const std::string& cmd) const = 0;
 

@@ -351,9 +351,9 @@ namespace mrv
             p.actionMode != ActionMode::kRotate && Fl::belowmouse() == this)
         {
             const image::Color4f color(1.F, 1.F, 1.F, 1.0F);
-            std_any value;
-            value = p.ui->app->settingsObject()->value(kPenSize);
-            const float pen_size = std_any_cast<int>(value);
+            const float multiplier =
+                1.0F + (2.5F * (p.actionMode == ActionMode::kErase));
+            const float pen_size = _getPenSize() * multiplier;
             p.mousePos = _getFocus();
             const auto& pos = _getRaster();
             gl.render->setTransform(mvp);

@@ -25,6 +25,10 @@ namespace mrv
         const char* kPenColorG = "Annotations/Pen Color G";
         const char* kPenColorB = "Annotations/Pen Color B";
         const char* kPenColorA = "Annotations/Pen Color A";
+        const char* kOldPenColorR = "Annotations/Old Pen Color R";
+        const char* kOldPenColorG = "Annotations/Old Pen Color G";
+        const char* kOldPenColorB = "Annotations/Old Pen Color B";
+        const char* kOldPenColorA = "Annotations/Old Pen Color A";
         const char* kLaser = "Annotations/Laser";
         const char* kPenSize = "Annotations/Pen Size";
         const char* kSoftBrush = "Annotations/Soft Brush";

@@ -2573,4 +2573,18 @@ namespace mrv
             p.ui->uiRedoDraw->deactivate();
     }
 
+    float TimelineViewport::_getPenSize() const noexcept
+    {
+        const float kPenSizeMultiplier = 800.F;
+        const auto settingsObject = _p->ui->app->settingsObject();
+        std_any value;
+        value = settingsObject->value(kPenSize);
+        float pen_size = static_cast<float>(std_any_cast<int>(value));
+        auto renderSize = getRenderSize();
+        pen_size *= renderSize.h / kPenSizeMultiplier;
+        if (pen_size < 2.0F)
+            pen_size = 2.0F;
+        return pen_size;
+    }
+
 } // namespace mrv

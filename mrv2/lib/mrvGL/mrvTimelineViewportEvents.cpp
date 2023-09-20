@@ -468,10 +468,9 @@ namespace mrv
                 float alpha = p.ui->uiPenOpacity->value();
                 const image::Color4f color(
                     r / 255.F, g / 255.F, b / 255.F, alpha);
-                std_any value;
-                value = settingsObject->value(kPenSize);
-                int pen_size = std_any_cast<int>(value);
+                const float pen_size = _getPenSize();
 
+                std_any value;
                 value = settingsObject->value(kLaser);
                 int laser = std_any_cast<int>(value);
 
@@ -540,7 +539,7 @@ namespace mrv
                 case ActionMode::kErase:
                 {
                     auto shape = std::make_shared< GLErasePathShape >();
-                    shape->pen_size = pen_size;
+                    shape->pen_size = pen_size * 3.5F;
                     shape->color = color;
                     shape->soft = softBrush;
                     shape->pts.push_back(pnt);

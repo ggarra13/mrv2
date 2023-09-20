@@ -1411,6 +1411,13 @@ namespace mrv
         float opacity = ui->uiPenOpacity->value();
         uchar a = 255 * opacity;
         update_pen_color(c, r, g, b, a, ui);
+
+        Fl::get_color(saved, r, g, b);
+        SettingsObject* settingsObject = ui->app->settingsObject();
+        settingsObject->setValue(kOldPenColorR, (int)r);
+        settingsObject->setValue(kOldPenColorG, (int)g);
+        settingsObject->setValue(kOldPenColorB, (int)b);
+        settingsObject->setValue(kOldPenColorA, (int)a);
     }
 
     static void image_version_cb(

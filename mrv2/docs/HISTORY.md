@@ -3,6 +3,12 @@ v0.7.8
 
 - Added a hotkey selection to switch pen colors.
 - Fixed hotkey search highlight redraw showing the wrong hotkey.
+- Made pen size be adjusted to match the resolution of the image.
+- Made eraser pen size be twice and a half the pen size by default for easier
+  drawing and erasing without having to bring the annotation panel.
+- Made saved color presets in the color picker be sorted from top to bottom,
+  where the top color is the last one used.
+- Added saving the old color to the preferences.
 
 v0.7.7
 ======

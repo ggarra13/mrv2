@@ -945,12 +945,33 @@ namespace mrv
         Fl_Color c = (Fl_Color)ui->uiPenColor->color();
         Fl::set_color(c, r, g, b);
 
-        ui->uiPenOpacity->value(a / 255.0F);
-
         settingsObject->setValue(kPenColorR, (int)r);
         settingsObject->setValue(kPenColorG, (int)g);
         settingsObject->setValue(kPenColorB, (int)b);
         settingsObject->setValue(kPenColorA, (int)a);
+
+        value = settingsObject->value(kOldPenColorR);
+        r = std_any_cast<int>(value);
+
+        value = settingsObject->value(kOldPenColorG);
+        g = std_any_cast<int>(value);
+
+        value = settingsObject->value(kOldPenColorB);
+        b = std_any_cast<int>(value);
+
+        value = settingsObject->value(kOldPenColorA);
+        a = std_any_cast<int>(value);
+
+        ui->uiOldPenColor->color((Fl_Color)62);
+        c = (Fl_Color)ui->uiOldPenColor->color();
+        Fl::set_color(c, r, g, b);
+
+        settingsObject->setValue(kOldPenColorR, (int)r);
+        settingsObject->setValue(kOldPenColorG, (int)g);
+        settingsObject->setValue(kOldPenColorB, (int)b);
+        settingsObject->setValue(kOldPenColorA, (int)a);
+
+        ui->uiPenOpacity->value(a / 255.0F);
 
         // Handle Dockgroup size (based on percentage)
         value = settingsObject->value("gui/DockGroup/Width");
