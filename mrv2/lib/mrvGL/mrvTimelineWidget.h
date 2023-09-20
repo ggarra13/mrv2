@@ -117,6 +117,12 @@ namespace mrv
         //! Refresh the GL objects
         void refresh();
 
+        //! Get whether the timeline is editable.
+        bool isEditable() const;
+
+        //! Toggle timeline editable
+        void setEditable(bool);
+
         void mouseMoveEvent(const int X, const int Y);
         void scrollEvent(const float X, const float Y, const int modifiers);
 
