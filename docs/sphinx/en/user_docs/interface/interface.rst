@@ -43,7 +43,7 @@ Customising the Interface
 .. image:: ../images/interface-03.png
    :align: center
 
-mrv2 can be customized to show any of the toolbars from Window->Preferences->User Interface.  These settings are saved when you exit mrv2 and will allow you to always start mrv2 in a certain configuration.
+mrv2 can be customized to show any of the toolbars from **Window->Preferences->User Interface**.  These settings are saved when you exit mrv2 and will allow you to always start mrv2 in a certain configuration.
 
 Mouse interaction in the Viewer
 -------------------------------
@@ -77,7 +77,7 @@ Finally, the last control is the gama one which is driven by the slider and is t
 
 .. note::
 
-   The OpenColorIO (OCIO) controls are derived from your configuration file, which is specified in Window->Preferences->OCIO.  By default, the OCIO configuration file used is the cg-config one.  mrv2 ships also with the nuke-default and with the studio-config ones.
+   The OpenColorIO (OCIO) controls are derived from your configuration file, which is specified in **Window->Preferences->OCIO**.  By default, the OCIO configuration file used is the cg-config one.  mrv2 ships also with the nuke-default and with the studio-config ones.
    If you set the OCIO environment variable, it will take precedence over the one saved in mrv2's Preferences file.
 
 The Timeline

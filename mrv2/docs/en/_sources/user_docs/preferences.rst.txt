@@ -2,6 +2,40 @@
 Preferences
 ###########
 
+Preferences are changed by going to **Window->Preferences** (F10 by default).
+The preferences of mrv2 are stored in your home directory, inside the .filmaura directory.  That is:
+
+Linux::
+
+  /home/<username>/.filmaura
+
+macOS::
+
+  /Users/<username>/.filmaura
+
+Windows::
+
+  C:/Users/<username>/.filmaura
+
+There are several files.  The main preferences file that holds all the windows settings and user preferences is called::
+
+  mrv2.prefs
+
+The mrv2.prefs for the windows settings can usually be reset if you start mrv2 with -resetSettings or go to **Panel->Settings->Default** Settings.
+  
+The hotkeys file that holds all your keyboard shortcuts is called::
+
+  mrv2.keys.prefs
+  
+The paths preferences file that holds old the path mappings is callled::
+
+  mrv2.paths.prefs
+
+The mrv2 file browser favorite directories is called::
+
+  mrv2.favorites
+
+It's important to know each file in case something does not work right or you wan to share the preferences between several different machines or users (you can usually copy each file or the whole .filmaura folder).
 
 User Interface
 ==============

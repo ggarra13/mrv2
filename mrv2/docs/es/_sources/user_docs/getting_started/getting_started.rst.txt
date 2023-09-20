@@ -63,7 +63,7 @@ Una forma facil de cargar media es usar archivos o carpetas drag-and-drop en la 
 Cargando Medios (Buscador de mrv2)
 ----------------------------------
 
-Usando Archivo->Abrir Película o Sequencia, un buscador de archivos se abrirá.  Por defecto, el buscador de archivos es el propio de mrv2.  Sin embargo, en Ventana->Preferencias->Buscador de Archivos puede seleccionar "Usar Buscador de Archivo Nativo" que usará el buscador de archivo nativo a su plataforma.
+Usando **Archivo->Abrir Película o Sequencia**, un buscador de archivos se abrirá.  Por defecto, el buscador de archivos es el propio de mrv2.  Sin embargo, en **Ventana->Preferencias->Buscador de Archivos** puede seleccionar "Usar Buscador de Archivo Nativo" que usará el buscador de archivo nativo a su plataforma.
 
 .. note::
    En macOS, el buscador propio de mrv2 puede que no pueda abrir los directorios
@@ -75,7 +75,7 @@ Usando Archivo->Abrir Película o Sequencia, un buscador de archivos se abrirá.
 Cargando Medios (Menu Reciente)
 -------------------------------
 
-Si quiere cargar hasta 10 clips que recientemente los cerró o los cargó previamente, puede hacerlo desde Archivo->Reciente.
+Si quiere cargar hasta 10 clips que recientemente los cerró o los cargó previamente, puede hacerlo desde **Archivo->Reciente**.
 
 
 Cargando Medios (Línea de comandos)
@@ -91,11 +91,11 @@ mrv2 supporta varios modos para cargar secuencias y películas.  Puede mezclar v
      Archivos de películas serán reproducidos a su velocidad 'natural'.  En otras palabras, mrv2 respeta la velocidad codificada de FPS del archivo dado.
      
 .. note::
-    Secuencias de imágenes (una serie de archivos JPEG o TGA) por defecto usan 24 FPS (puede ajustarlo en Window->Preferences->Playback). La velocidad de DPX and EXRs es tomada de los metadatos si está disponible.
+    Secuencias de imágenes (una serie de archivos JPEG o TGA) por defecto usan 24 FPS (puede ajustarlo en **Window->Preferencias->Reproducir**). La velocidad de DPX and EXRs es tomada de los metadatos si está disponible.
 
 Mirando Medios
 --------------
 
 El primer item de medios que es agregado a mrv2 será visible y podrá empezar a verlo entero o en bucle.  Para mirar a otros clips, puede mostrar el Panel de Archivos (F4 por defecto).  Con él podrá cliquear en la película que quiera ver.  
 
-Cuando se carga un clip, el comportamiento por defecto del playback puede ser seteado en Ventana->Preferencias->Reproducir y cliquear en Auto Reproducir.
+Cuando se carga un clip, el comportamiento por defecto del playback puede ser seteado en **Ventana->Preferencias->Reproducir** y cliquear en Auto Reproducir.

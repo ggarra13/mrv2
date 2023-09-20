@@ -2,6 +2,40 @@
 Preferencias
 ############
 
+Las preferencias de mrv2 son modificadas llendo a **Ventana->Preferencias** (F10 por defecto). Las preferencias de mrv2 están guardadas en tu carpeta personal, dentro de la carpeta .filmaura.  Esto es:
+
+Linux::
+
+  /home/<usuario>/.filmaura
+
+macOS::
+
+  /Users/<usuario>/.filmaura
+
+Windows::
+
+  C:/Users/<usuario>/.filmaura
+
+Hay varias preferencias.  El archivo principal de preferencias que tiene todos los seteos de tus ventanas, así como las preferencias de comportamiento es llamado::
+
+  mrv2.prefs
+
+Los seteos de mrv2.prefs para las ventanas pueden ser reseteados si arranca mrv2 con -resetSettings o va a **Panel->Settings->Default Settings**.
+  
+El archivo de teclas que contiene todos tus atajos es llamado::
+
+  mrv2.keys.prefs
+  
+El archivo que tiene todos sus mapeos de carpetas es llamado::
+
+  mrv2.paths.prefs
+
+Las carpetas de favoritos del buscador de mrv2 es llamado::
+
+  mrv2.favorites
+
+Es importante conocer cada archivo en caso de que algo no funcione bien o quiera compartir las preferencias entre varias máquinas (puede copiar cada archivo o el directorio de .filmaura completo).
+
 
 Interfaz del Usuario
 ====================

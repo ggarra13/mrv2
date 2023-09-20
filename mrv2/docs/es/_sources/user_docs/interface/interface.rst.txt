@@ -43,7 +43,7 @@ Personalizando la Interfaz
 .. image:: ../images/interface-03.png
    :align: center
 
-mrv2 puede ser personalizado para mostrar cualquiera de las barras desde Ventana->Preferencias->Interfaz del Usuario.  Estos seteos son grabados cuando salis de mrv2 y te permitirán arrancar siempre mrv2 con cierta configuración.
+mrv2 puede ser personalizado para mostrar cualquiera de las barras desde **Ventana->Preferencias->Interfaz del Usuario**.  Estos seteos son grabados cuando salis de mrv2 y te permitirán arrancar siempre mrv2 con cierta configuración.
 
 Interacción del Ratón en el Visor
 ---------------------------------
@@ -77,7 +77,7 @@ Finalmente, el último control es el de gama que se controla con el deslizador y
 
 .. note::
 
-   Los controles de OpenColorIO (OCIO) son derivados de tu archivo de configuración, que es especificado en Ventana->Preferencias->OCIO.  Por defecto, el archivo de configuración de OCIO usado es el de cg-config.  mrv2 incluye también el de nuke-default y el de studio-config.
+   Los controles de OpenColorIO (OCIO) son derivados de tu archivo de configuración, que es especificado en **Ventana->Preferencias->OCIO**.  Por defecto, el archivo de configuración de OCIO usado es el de cg-config.  mrv2 incluye también el de nuke-default y el de studio-config.
    Si setea la variable de entorno OCIO, esta tendrá precedencia sobre el seteo grabado en el archivo de preferencias de mrv2.
 
 La Línea de Tiempo
