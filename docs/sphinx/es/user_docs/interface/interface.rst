@@ -56,7 +56,7 @@ El factor de zoom actual es mostrado en la barra de pixel a la izquierda.
 
 .. note::
     Para 'centrar' la vista, sin cambiar el factor de zoom, puede usar la tecla
-    'c' hotkey.
+    'h' hotkey.
 
 .. note::
    Si quiere acercase o alejarse un porcentaje particular (digamos 2x), puede

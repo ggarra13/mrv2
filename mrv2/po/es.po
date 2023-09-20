@@ -1154,7 +1154,7 @@ msgid "B44A"
 msgstr "B44A"
 
 msgid "BackSpace"
-msgstr "BackSpace"
+msgstr "Retroceso"
 
 msgid "Background"
 msgstr "Fondo"
@@ -3024,10 +3024,10 @@ msgid "PXR24"
 msgstr "PXR24"
 
 msgid "PageDown"
-msgstr "Av.Pag."
+msgstr "Av.Pág."
 
 msgid "PageUp"
-msgstr "Re.Pag."
+msgstr "Re.Pág."
 
 msgid "Pan And Zoom"
 msgstr "Paneo y Zoom"
@@ -3530,7 +3530,7 @@ msgid "Reset to default value"
 msgstr "Resetar a su valor por defecto."
 
 msgid "Resize Main Window to Fit"
-msgstr "Redimensionar Ventana Principal para que se Ajuste"
+msgstr "Ajustar Ventana a la Imagen"
 
 msgid "Resolution"
 msgstr "Resolución"
@@ -4081,7 +4081,7 @@ msgid "Settings"
 msgstr "Seteos"
 
 msgid "Shift"
-msgstr "Shift"
+msgstr "Mayús"
 
 msgid "Show All"
 msgstr "Mostrar Todos"
@@ -4598,7 +4598,7 @@ msgid "Toggle Secondary"
 msgstr "Alternar la Vista Secundaria"
 
 msgid "Toggle Secondary Float On Top"
-msgstr "Alternar Flotar sobre Todos para la Vista Secundaria"
+msgstr "Alternar Flotar para la Vista Secundaria"
 
 msgid "Toggle Settings Panel"
 msgstr "Alternar Panel de Seteos"

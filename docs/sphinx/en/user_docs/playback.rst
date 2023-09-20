@@ -31,6 +31,8 @@ Enter              Stop playback.
 Down Arrow         Play forwards.
 Right Arrow        Step forwards one frame.
 Left Arrow         Step backwards one frame.
+Home               Go to the first frame.
+End                Go to the last frame.
 Shift+Left Arrow   Go to the previous annotation.
 Shift+Right Arrow  Go to the next annotation.
 =================  ============================== 

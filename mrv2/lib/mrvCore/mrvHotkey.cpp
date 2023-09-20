@@ -468,7 +468,7 @@ namespace mrv
         HotkeyEntry(_("Toggle Vectorscope Panel"), kToggleVectorscope),
         HotkeyEntry(_("Toggle Waveform Panel"), kToggleWaveform),
         HotkeyEntry(_("Toggle Environment Map Panel"), kToggleEnvironmentMap),
-        HotkeyEntry(_("Toggle Preferences Panel"), kTogglePreferences),
+        HotkeyEntry(_("Toggle Preferences Window"), kTogglePreferences),
         HotkeyEntry(_("Toggle Python Panel"), kTogglePythonConsole),
         HotkeyEntry(_("Toggle Log Panel"), kToggleLogs),
 
@@ -556,7 +556,7 @@ namespace mrv
         {
             if (k == table[j].n)
             {
-                r += table[j].text;
+                r += _(table[j].text);
                 special = true;
                 break;
             }

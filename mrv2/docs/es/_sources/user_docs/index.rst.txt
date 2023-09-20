@@ -14,5 +14,6 @@ Guía del Usuario de mrv2
    notes
    playback
    settings
+   hotkeys
    preferences
    videos

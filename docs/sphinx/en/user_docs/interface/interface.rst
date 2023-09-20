@@ -55,8 +55,8 @@ The current zoom factor is shown on the pixel toolbar to the left.
     To 'reset' the viewer so that the image is auto-fitted, you can select "Fit" from the Zoom display pulldown in the Pixel Toolbar or use the 'f' hotkey.
 
 .. note::
-    To 'center' the view, without changing the zoom factor, you can use the 'c'
-    hotkey.
+    To 'center' or 'home' the view, without changing the zoom factor, you can
+    use the 'h' hotkey.
     
 .. note::
    If you want to zoom in or out at a particular percentage (say 2x), you can
