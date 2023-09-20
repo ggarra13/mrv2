@@ -56,7 +56,7 @@ Mientras que en Linux, puede lanzar mrv2 de la terminal o del ícono, en Windows
 .. image:: ../images/interface-01.png
 
 Cargando Medios (Drag and Drop)
------------------------------
+-------------------------------
 
 Una forma facil de cargar media es usar archivos o carpetas drag-and-drop en la ventana principal desde el buscador del sistema (Finder, Explorer, Nautilus, etc). Si usted deja una carpeta, el directorio será recursivamente escaneado y todos los clips serán agregados.
 
