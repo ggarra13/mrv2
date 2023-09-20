@@ -19,26 +19,7 @@ The fourth toolbar is the Pixel Toolbar, which shows the current pixel under the
 
 Finally, the last toolbar is the Status toolbar.  It will print out errors and let you know in what action mode you are in (Default is Scrubbing).
 
-
-Customising the Interface
--------------------------
-
-.. image:: ../images/interface-03.png
-   :align: center
-
-mrv2 can be customized to show any of the toolbars from Window->Preferences->User Interface.  These settings are saved when you exit mrv2 and will allow you to always start mrv2 in a certain configuration.
-
-
-The Timeline
-++++++++++++
-
-.. image:: ../images/timeline-01.png
-   :align: center
-
-The Timeline Viewport allows you to scale the Editing's Thumbnails and Audio waveforms by dragging the viewport up and down.  For a quick display of all the tracks, you can click on the Edit button in the Menu toolbar.
-When showing the pictures, you can zoom in and out with the mousewheel.
-
-Hiding/Showing UI elements 
+Hiding/Showing UI elements
 ++++++++++++++++++++++++++
 
 Some useful (default) shortcuts are as follows:
@@ -54,6 +35,15 @@ Shift + F7    Toggle Drawing and Action Tools.
 F11           Toggle Fullscreen mode.
 F12           Toggle Presentation mode (no toolbars).
 ============  =======================================
+
+
+Customising the Interface
+-------------------------
+
+.. image:: ../images/interface-03.png
+   :align: center
+
+mrv2 can be customized to show any of the toolbars from Window->Preferences->User Interface.  These settings are saved when you exit mrv2 and will allow you to always start mrv2 in a certain configuration.
 
 Mouse interaction in the Viewer
 -------------------------------
@@ -72,9 +62,65 @@ The current zoom factor is shown on the pixel toolbar to the left.
    If you want to zoom in or out at a particular percentage (say 2x), you can
    choose it from the pull-down menu on the pixel toolbar.
 
+The Top Bar
++++++++++++
+
+mrv2's Top Bar contains the controls of layers or image channels (usually from an OpenEXR).
+
+The gain (controlled by the slider) and/or exposure, driven by the arrows and toggled by the button that shows the F-stop (f/8 by default).
+
+The Input Color Space is right next to it.  This is the OpenColorIO (OCIO) control of the image.
+
+Coming next, is the view and display control of OpenColorIO (OCIO).
+
+Finally, the last control is the gama one which is driven by the slider and is toggled between two previous values with the "Y" button.
+
+.. note::
+
+   The OpenColorIO (OCIO) controls are derived from your configuration file, which is specified in Window->Preferences->OCIO.  By default, the OCIO configuration file used is the cg-config one.  mrv2 ships also with the nuke-default and with the studio-config ones.
+   If you set the OCIO environment variable, it will take precedence over the one saved in mrv2's Preferences file.
+
+The Timeline
+++++++++++++
+
+.. image:: ../images/timeline-01.png
+   :align: center
+
+The Timeline Viewport allows you to scale the Editing's Thumbnails and Audio waveforms by dragging the viewport up and down.  For a quick display of all the tracks, you can click on the Edit button in the Menu toolbar.
+When showing the pictures, you can zoom in and out with the mousewheel.
+
+Frame Indicator
+---------------
+
+Immediately to the left of the timeline is the 'current frame' indicator. Click on the button next to it to get a list of options as to how the current time is displayed:
+    - *Frames:* absolute frame, starting at 0 for movies, and, usually at 1 for sequences.
+    - *Seconds:* the current time from the start of the media in seconds.
+    - *Timecode:* the 8 digit timecode. If the media has timecode metadata this will be used.
+
+Transport Controls
+------------------
+
+These are pretty universal and don't need much explanation. There's a play backwards/forwards/pause button, step forwards/backwards buttons and jump to start and end.
+
+FPS
+---
+
+The frames-per-second (FPS) indicator showing the desired FPS.  The FPS button is a popup that allows you to quickly switch to a new frame rate.
+
+Start and End Frame Indicator
+-----------------------------
+
+To the right of the timeline, the Start frame and End Frame indicators are shown.  The S and E buttons can be clicked to set the In and Out points at the current frame.  It is equivalent to pressing the 'I' or 'O' hotkeys.
+
+Player/Viewer Controls
+----------------------
+
+Two buttons to the bottom of the timeline viewport provide the following interactions
+    - *Volume/mute control:* click on the speaker icon to toggle the mute control. Drag on the slider next to it to control the volume.
+    - *Loop mode:* set whether the clip will loop, play it once and stop on the final frame or 'ping-pong' loop.
 
 View Menu
----------
++++++++++
 
 The view menu provides controls for modifying the appearance and behaviour of the viewer:
 
@@ -98,39 +144,34 @@ The view menu provides controls for modifying the appearance and behaviour of th
 
    Click this to enter the HUD (heads up display) settings. The HUD allows displaying of a lot of metadata of your media directly on the viewport.
       
+Render Menu
++++++++++++
 
-Timeline
---------
+The Render menu provides controls for modifying the rendering of the image on the viewer:
 
-Frame Indicator
-+++++++++++++++
+.. topic:: Channels
 
-Immediately to the left of the timeline is the 'current frame' indicator. Click on the button next to it to get a list of options as to how the current time is displayed:
-    - *Frames:* absolute frame, starting at 0 for movies, and, usually at 1 for sequences.
-    - *Seconds:* the current time from the start of the media in seconds.
-    - *Timecode:* the 8 digit timecode. If the media has timecode metadata this will be used.
+   You can choose to display the Color, Red, Green, Blue or Alpha channels independently.  By default, you can toggle the channels with the "R", "G", "B" and "A" keys.
+    
+.. topic:: Mirror
 
-Transport Controls
-++++++++++++++++++
+   With these two controls, you can mirror the image vertically or horizontally.
+   
+.. topic:: Background
 
-These are pretty universal and don't need much explanation. There's a play backwards/forwards/pause button, step forwards/backwards buttons and jump to start and end.
+   By default, mrv2 uses a dark gray background to display the empty areas of the viewport.  With this, you can toggle it to show a black background instead.	
+	   
+.. topic:: Video Levels
 
-FPS
-+++
+   With this control, you can choose whether the video levels of the movie file are used, or whether you use the Legal or Full Range.
 
-The frames-per-second (FPS) indicator showing the desired FPS.  The FPS button is a popup that allows you to quickly switch to a new frame rate.
+.. topic:: Alpha Blend
 
-Start and End Frame Indicator
-+++++++++++++++++++++++++++++
+   You can select how the alpha channel is handled when the image or video has one.  You can choose between None, Straight or Premultiplied.
+      
+.. topic:: Minify and Magnify Filters
 
-To the right of the timeline, the Start frame and End Frame indicators are shown.  The S and E buttons can be clicked to set the In and Out points at the current frame.  It is equivalent to pressing the 'I' or 'O' hotkeys.
-
-Player/Viewer Controls
-++++++++++++++++++++++
-
-Two buttons to the bottom of the timeline viewport provide the following interactions
-    - *Volume/mute control:* click on the speaker icon to toggle the mute control. Drag on the slider next to it to control the volume.
-    - *Loop mode:* set whether the clip will loop, play it once and stop on the final frame or 'ping-pong' loop.
+   With these two controls, you can select how mrv2 displays the images when zoomed in or zoomed out.  You can choose whether to use a Nearest (Pixelated) Filter or a Linear one.  The Magnify Filter can be toggled with Shift + F.
 
 The Panels
 ++++++++++
