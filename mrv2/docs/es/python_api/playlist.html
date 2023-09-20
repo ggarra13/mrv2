@@ -56,7 +56,10 @@
 <li class="toctree-l2"><a class="reference internal" href="media.html">Módulo media</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mrv2.html">Módulo mrv2</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Módulo playlist</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.playlist.add_clip"><code class="docutils literal notranslate"><span class="pre">add_clip()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.playlist.list"><code class="docutils literal notranslate"><span class="pre">list()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.playlist.save"><code class="docutils literal notranslate"><span class="pre">save()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.playlist.select"><code class="docutils literal notranslate"><span class="pre">select()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="plug-ins.html">Módulo de plugin</a></li>
@@ -98,9 +101,39 @@
 <p>Mòdulo de lista de reproducción.</p>
 <p>Contiene todas las clases y enums relacionados con las listas dereproducción.</p>
 <dl class="py function">
+<dt class="sig sig-object py" id="mrv2.playlist.add_clip">
+<span class="sig-prename descclassname"><span class="pre">mrv2.playlist.</span></span><span class="sig-name descname"><span class="pre">add_clip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clip</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="mrv2.html#mrv2.FileMedia" title="mrv2.FileMedia"><span class="pre">mrv2.FileMedia</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.playlist.add_clip" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Agregar clip a la lista de reproducción (EDL) seleccionada.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mrv2.playlist.list">
+<span class="sig-prename descclassname"><span class="pre">mrv2.playlist.</span></span><span class="sig-name descname"><span class="pre">list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="mrv2.html#mrv2.FileMedia" title="mrv2.FileMedia"><span class="pre">mrv2.FileMedia</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#mrv2.playlist.list" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Lista de items de lista de reproducción.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="mrv2.playlist.save">
 <span class="sig-prename descclassname"><span class="pre">mrv2.playlist.</span></span><span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fileName</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.playlist.save" title="Enlazar permanentemente con esta definición"></a></dt>
 <dd><p>Grabe una list de reproducción .otio con caminos relativos a ella.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mrv2.playlist.select">
+<span class="sig-prename descclassname"><span class="pre">mrv2.playlist.</span></span><span class="sig-name descname"><span class="pre">select</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mrv2.playlist.select" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>select(fileItem: mrv2.FileMedia) -&gt; None</p></li>
+</ol>
+<p>Seleccionar una lista de reproducción con FileModelItem.</p>
+<ol class="arabic simple" start="2">
+<li><p>select(fileName: str) -&gt; None</p></li>
+</ol>
+<p>Seleccionar una lista de reproducción con el nombre de archivo dado.</p>
+<ol class="arabic simple" start="3">
+<li><p>select(playlistIndex: int) -&gt; None</p></li>
+</ol>
+<p>Seleccionar una lista de reproducción con el índice dado.</p>
 </dd></dl>
 
 </section>

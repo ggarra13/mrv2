@@ -200,7 +200,7 @@ Contains all functions and classes related to the playlists.
         "select",
         py::overload_cast<const std::shared_ptr<FilesModelItem>&>(
             &mrv2::playlist::select),
-        _("Select a playlist by FileModelItem."), py::arg("item"));
+        _("Select a playlist by FileModelItem."), py::arg("fileItem"));
 
     playlist.def(
         "select",
