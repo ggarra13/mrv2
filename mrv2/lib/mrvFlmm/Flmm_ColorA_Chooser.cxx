@@ -77,9 +77,11 @@
 #include <FL/fl_draw.H>
 #include <FL/math.h>
 
-#include <stdio.h>
-
 #include <iostream>
+
+#include "mrvCore/mrvMath.h"
+
+#include <stdio.h>
 
 #define CIRCLE 1
 #define UPDATE_HUE_BOX 1
@@ -676,6 +678,20 @@ int Flmm_ColorA_Window::run(double& r, double& g, double& b, double& a)
                 g = chooser.g();
                 b = chooser.b();
                 a = chooser.a();
+
+                const double fuzzFactor = 0.005F;
+                double sr = 0, sg = 0, sb = 0, sa = 0;
+                for (int i = 0; i < 7; ++i)
+                {
+                    saved[i]->rgba(sr, sg, sb, sa);
+                    if (mrv::is_equal(sr, r, fuzzFactor) &&
+                        mrv::is_equal(sg, g, fuzzFactor) &&
+                        mrv::is_equal(sb, b, fuzzFactor) &&
+                        mrv::is_equal(sa, a, fuzzFactor))
+                    {
+                        return 1;
+                    }
+                }
                 saved[savedIndex++]->chip_color(
                     (float)r, (float)g, (float)b, (float)a);
                 if (savedIndex > 6) savedIndex = 0;
