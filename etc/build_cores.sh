@@ -14,4 +14,6 @@ if [[ $KERNEL == *Linux* ]]; then
     export CPU_CORES=$(awk '/^processor/ {++n} END {print n+1}' /proc/cpuinfo)
 elif [[ $KERNEL == *Darwin* ]]; then
     export CPU_CORES=$(sysctl -n hw.ncpu)
+elif [[ $KERNEL == *Msys* ]]; then
+    export CPU_CORES=$(wmic cpu get NumberOfCores | awk 'NR==2')
 fi
