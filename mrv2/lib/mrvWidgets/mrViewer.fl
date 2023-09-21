@@ -57,7 +57,7 @@ decl {\#include "mrvWidgets/mrvSecondaryWindow.h"} {public global
 decl {\#include "mrvWidgets/mrvTile.h"} {public global
 }
 
-decl {\#include "mrvWidgets/mrvTimecode.h"} {public global
+decl {\#include "mrvWidgets/mrvTimecode.h"} {selected public global
 }
 
 decl {\#include "mrvWidgets/mrvTimelineGroup.h"} {public global
@@ -415,7 +415,7 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
   }
 }
 
-widget_class TimelineClass {
+widget_class TimelineClass {open
   xywh {117 263 690 29} resizable
   class Fl_Double_Window visible
 } {
@@ -500,7 +500,7 @@ ui->uiView->take_focus();}
             tooltip {Go back one frame.} xywh {158 3 28 24} labelcolor 28
             class {mrv::Button}
           }
-          Fl_Button {} {
+          Fl_Button uiStop {
             label {@||}
             user_data this user_data_type {ViewerUI*}
             callback {ui->uiView->stop();}
@@ -1086,7 +1086,7 @@ if (Fl::event_clicks() >= 1)
                 tooltip {Pick Draw Color and Alpha} xywh {5 337 20 20} box ENGRAVED_BOX color 3 selection_color 3 labeltype NO_LABEL labelfont 8 labelsize 24 align 32
               }
               Fl_Button uiOldPenColor {
-                user_data this user_data_type {ViewerUI*} selected
+                user_data this user_data_type {ViewerUI*}
                 tooltip {Old Color Used.  Click on the Arrow to alternate.} xywh {25 357 15 16} box ENGRAVED_BOX color 1 selection_color 1 labeltype NO_LABEL labelfont 8 labelsize 24 align 32
               }
               Fl_Button uiFlipPenColor {

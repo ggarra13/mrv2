@@ -19,6 +19,7 @@ v0.7.8
 - Fixed the beginning of English playback documentation which was in Spanish.
 - Improved the User Documentation.
 - Fixed name of some hotkeys in Spanish locale.
+- Made playback buttons change background color when playing or stopping.
 
 v0.7.7
 ======
