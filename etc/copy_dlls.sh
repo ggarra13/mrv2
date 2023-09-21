@@ -58,7 +58,9 @@ fi
 
 echo "Copying header durectories from ${FFMPEG_ROOT}/include to $$PWD/$BUILD_DIR/install/include"
 echo "Copying ${LIBINTL_ROOT}/include/libintl.h $PWD/$BUILD_DIR/install/include/"
-cp -f ${LIBINTL_ROOT}/include/libintl.h  $PWD/$BUILD_DIR/install/include
+cp -f ${LIBINTL_ROOT}/include/libintl.h  $PWD/$BUILD_DIR/install/inc
+echo "Copying ${LIBINTL_ROOT}/include/lcms2* $PWD/$BUILD_DIR/install/include/"
+cp -f ${LIBINTL_ROOT}/include/lcms2*  $PWD/$BUILD_DIR/install/includelude
 cp -r ${FFMPEG_ROOT}/include/lib* $PWD/$BUILD_DIR/install/include
 ls -l $PWD/$BUILD_DIR/install/include
 
@@ -69,6 +71,10 @@ echo "Copying ${LIBINTL_ROOT}/bin/libintl-*.dll $PWD/$BUILD_DIR/install/bin/"
 cp -f ${LIBINTL_ROOT}/bin/libintl-*.dll $PWD/$BUILD_DIR/install/bin/
 echo "Copying ${LIBINTL_ROOT}/bin/libiconv-2.dll $PWD/$BUILD_DIR/install/bin/"
 cp -f ${LIBINTL_ROOT}/bin/libiconv-*.dll $PWD/$BUILD_DIR/install/bin/
+echo "Copying ${LIBINTL_ROOT}/lib/liblcms2.lib $PWD/$BUILD_DIR/install/lib/"
+cp -f ${LIBINTL_ROOT}/lib/liblcms2.lib   $PWD/$BUILD_DIR/install/lib/
+echo "Copying ${LIBINTL_ROOT}/bin/liblcms2-*.dll $PWD/$BUILD_DIR/install/bin/"
+cp -f ${LIBINTL_ROOT}/bin/liblcms2-*.dll $PWD/$BUILD_DIR/install/bin/
 
 #
 # Let's sleep for 5 seconds so the developer can verify the settings.
