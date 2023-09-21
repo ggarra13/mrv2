@@ -60,11 +60,12 @@
 #    include <tlGL/Init.h>
 #endif
 
+#include <libraw/libraw_version.h>
 #include <nlohmann/json.hpp>
-#include <Poco/Version.h>
-#include <pybind11/pybind11.h>
 #include <opentime/version.h>
 #include <opentimelineio/version.h>
+#include <Poco/Version.h>
+#include <pybind11/pybind11.h>
 
 #include <OpenColorIO/OpenColorIO.h>
 namespace OCIO = OCIO_NAMESPACE;
@@ -449,6 +450,13 @@ namespace mrv
           << "FLTK v1.4" << endl
           << "http://www.fltk.org/" << endl
           << "Copyright (c) 2000-Present Bill Spitzak & others" << endl
+          << endl
+          << "LibRaw " << LIBRAW_VERSION_STR << endl
+          << "Copyright (C) 2008-2021 LibRaw LLC (info@libraw.org)" << endl
+          << "The library includes source code from" << endl
+          << "dcraw.c, Dave Coffin's raw photo decoder" << endl
+          << "Copyright 1997-2016 by Dave Coffin, dcoffin a cybercom o net"
+          << endl
           << endl
           << "Modified FLU - FLTK Utility Widgets" << endl
           << "Copyright (c) 2002 Ohio Supercomputer Center, Ohio State "
