@@ -44,8 +44,12 @@ void mrv2_io(py::module& m)
                 std::stringstream s;
                 s << "<mrv2.io.SaveOptions "
                   << " annotations=" << (o.annotations ? "True" : "False")
+#ifdef TLRENDER_FFMPEG
                   << " ffmpegProfile=" << getLabel(o.ffmpegProfile)
+#endif
+#ifdef TLRENDER_EXR
                   << " exrCompression=" << getLabel(o.exrCompression)
+#endif
                   << " zipCompressionLevel=" << o.zipCompressionLevel
                   << " dwaCompressionLevel=" << o.dwaCompressionLevel << ">";
                 return s.str();

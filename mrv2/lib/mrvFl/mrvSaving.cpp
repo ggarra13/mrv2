@@ -50,11 +50,14 @@ namespace mrv
 
             char buf[256];
 
+#ifdef TLRENDER_FFMPEG
             ioOptions["FFmpeg/WriteProfile"] = getLabel(options.ffmpegProfile);
+#endif
 
+#ifdef TLRENDER_EXR
             ioOptions["OpenEXR/Compression"] = getLabel(options.exrCompression);
-
             ioOptions["OpenEXR/PixelType"] = getLabel(options.exrPixelType);
+#endif
 
             snprintf(buf, 256, "%d", options.zipCompressionLevel);
             ioOptions["OpenEXR/ZipCompressionLevel"] = buf;
@@ -333,11 +336,15 @@ namespace mrv
 
             char buf[256];
 
+#ifdef TLRENDER_FFMPEG
             ioOptions["FFmpeg/WriteProfile"] = getLabel(options.ffmpegProfile);
+#endif
 
+#ifdef TLRENDER_EXR
             ioOptions["OpenEXR/Compression"] = getLabel(options.exrCompression);
 
             ioOptions["OpenEXR/PixelType"] = getLabel(options.exrPixelType);
+#endif
 
             snprintf(buf, 256, "%d", options.zipCompressionLevel);
             ioOptions["OpenEXR/ZipCompressionLevel"] = buf;
