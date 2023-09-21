@@ -20,6 +20,7 @@ v0.7.8
 - Improved the User Documentation.
 - Fixed name of some hotkeys in Spanish locale.
 - Made playback buttons change background color when playing or stopping.
+- Added support for RAW formats through LibRaw.
 
 v0.7.7
 ======
