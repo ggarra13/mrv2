@@ -44,7 +44,11 @@
 
 #include <expat.h>
 #include <Imath/ImathConfig.h>
-#include <hpdf_version.h>
+
+#ifdef MRV2_PDF
+#    include <hpdf_version.h>
+#endif
+
 #include <jconfig.h>
 #include <libpng16/png.h>
 #include <mz.h>
@@ -60,12 +64,16 @@
 #    include <tlGL/Init.h>
 #endif
 
+#include <lcms2.h>
 #include <libraw/libraw_version.h>
 #include <nlohmann/json.hpp>
 #include <opentime/version.h>
 #include <opentimelineio/version.h>
 #include <Poco/Version.h>
-#include <pybind11/pybind11.h>
+
+#ifdef MRV2_PYBIND11
+#    include <pybind11/pybind11.h>
+#endif
 
 #include <OpenColorIO/OpenColorIO.h>
 namespace OCIO = OCIO_NAMESPACE;
@@ -74,14 +82,16 @@ namespace OCIO = OCIO_NAMESPACE;
 #include <tiffvers.h>
 #include <zlib.h>
 
+#ifdef TLRENDER_FFMPEG
 extern "C"
 {
-#include <libavcodec/avcodec.h>
-#include <libavformat/avformat.h>
-#include <libavfilter/version.h>
-#include <libswscale/version.h>
-#include <libswresample/version.h>
+#    include <libavcodec/avcodec.h>
+#    include <libavformat/avformat.h>
+#    include <libavfilter/version.h>
+#    include <libswscale/version.h>
+#    include <libswresample/version.h>
 }
+#endif
 
 #ifdef _WIN32
 #    pragma warning(disable : 4275)
@@ -432,6 +442,7 @@ namespace mrv
           << endl
           << "Copyright (c) 2001-2022 Expat maintainers" << endl
           << endl
+#ifdef TLRENDER_FFMPEG
           << "FFmpeg" << endl
           << "libavutil          v" << AV_STRINGIFY(LIBAVUTIL_VERSION) << endl
           << "libavcodec      v" << AV_STRINGIFY(LIBAVCODEC_VERSION) << endl
@@ -444,12 +455,16 @@ namespace mrv
           << "Copyright (c) 2000-Present Fabrice Bellard, et al." << endl
           << "Configuration: " << avcodec_configuration() << endl
           << endl
-          << "Flmm Color Picker" << endl
+#endif
+          << "Flmm Color Picker (modified)" << endl
           << "Copyright (c) 2002 - 2004 Matthias Melcher" << endl
           << endl
           << "FLTK v1.4" << endl
           << "http://www.fltk.org/" << endl
           << "Copyright (c) 2000-Present Bill Spitzak & others" << endl
+          << endl
+          << "Little Color Management System " << (LCMS_VERSION / 1000.0)
+          << "Copyright (c) 1998-Present Marti Maria Saguer" << endl
           << endl
           << "LibRaw " << LIBRAW_VERSION_STR << endl
           << "Copyright (C) 2008-2021 LibRaw LLC (info@libraw.org)" << endl
@@ -475,10 +490,12 @@ namespace mrv
           << "Imath v" << IMATH_VERSION_STRING << endl
           << "Copyright Contributors to the OpenEXR Project" << endl
           << endl
+#ifdef MRV2_PDF
           << "libharu v" << HPDF_VERSION_TEXT << endl
           << "Copyright (c) 1999-2006 Takeshi Kanno" << endl
           << "Copyright (c) 2007-2009 Antony Dovgal" << endl
           << endl
+#endif
           << "libjpeg-turbo v" << AV_STRINGIFY(LIBJPEG_TURBO_VERSION) << endl
           << "Copyright (c) 2009-2020 D. R. Commander.  All Rights Reserved."
           << "Copyright (c) 2015 Viktor Szathmáry.  All Rights Reserved."
@@ -539,9 +556,11 @@ namespace mrv
           << "Copyright Contributors to the OpenTimelineIO project" << endl
           << endl;
 
+#ifdef MRV2_NETWORK
         o << "Poco v";
         semantic_versioning(o, POCO_VERSION);
         o << endl
+#endif
           << "Copyright (c) 2012, Applied Informatics Software Engineering "
              "GmbH. and Contributors."
           << endl
@@ -549,17 +568,20 @@ namespace mrv
           << "Polyline2D (modified)" << endl
           << "Copyright © 2019 Marius Metzger (CrushedPixel)" << endl
           << endl
+#ifdef MRV2_PYBIND11
           << "pybind11 v" << PYBIND11_VERSION_MAJOR << "."
           << PYBIND11_VERSION_MINOR << "." << PYBIND11_VERSION_PATCH << endl
           << "Copyright (c) 2016 Wenzel Jakob <wenzel.jakob@epfl.ch>, All "
              "rights reserved"
           << endl
           << endl
+#endif
           << "pystring" << endl
           << "Copyright (c) 2008-Present Contributors to the Pystring project."
           << endl
           << "All Rights Reserved." << endl
           << endl
+#ifdef MRV2_PYBIND11
           << "Python v" << PY_VERSION << " - ";
         switch (PY_RELEASE_LEVEL)
         {
@@ -582,6 +604,7 @@ namespace mrv
           << "Copyright (c) 2001-Present Python Software Foundation." << endl
           << "All Rights Reserved." << endl
           << endl
+#endif
           << "RtAudio v" << RTAUDIO_VERSION << endl
           << "Copyright (c) 2001-Present Gary P. Scavone" << endl
           << endl

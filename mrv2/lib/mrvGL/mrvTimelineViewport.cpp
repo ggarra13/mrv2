@@ -1782,6 +1782,9 @@ namespace mrv
     {
         TLRENDER_P();
 
+        if (p.presentation == active)
+            return;
+
 #if 0
         std::cerr << std::endl
                   << __FUNCTION__ << " active=" << active << std::endl
@@ -1800,9 +1803,9 @@ namespace mrv
         }
         else
         {
+            save_ui_state(p.ui);
             if (!_hasSecondaryViewport())
             {
-                save_ui_state(p.ui);
                 hide_ui_state(p.ui);
             }
             _setFullScreen(active);
@@ -1850,7 +1853,6 @@ namespace mrv
                 restore_ui_state(p.ui);
             save_ui_state(p.ui);
             _setFullScreen(true);
-            // So we restore the EDL
             if (!p.presentation)
                 Fl::add_timeout(
                     0.0, (Fl_Timeout_Handler)restore_ui_state, p.ui);
