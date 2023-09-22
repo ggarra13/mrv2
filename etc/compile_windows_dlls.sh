@@ -4,13 +4,27 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 if [[ -e $PWD/$BUILD_DIR/install/lib/avformat.lib ]]; then
-    #bin/compile_ffmpeg_windows.sh --gpl
-    bin/compile_ffmpeg_windows.sh
+    if [[ ! -e $FFMPEG_ROOT/lib/avformat.lib ]]; then
+	bin/compile_ffmpeg_windows.sh --gpl  # enable libx264 if compile ffmpeg
+    else
+	cp -f $FFMPEG_ROOT/bin/av*.dll $BUILD_DIR/install/bin
+	cp -f $FFMPEG_ROOT/bin/sw*.dll $BUILD_DIR/install/bin
+	cp -f $FFMPEG_ROOT/lib/av*.lib $BUILD_DIR/install/lib
+	cp -f $FFMPEG_ROOT/lib/sw*.lib $BUILD_DIR/install/lib
+	cp -rf $FFMPEG_ROOT/include/libav* $BUILD_DIR/install/include
+	cp -rf $FFMPEG_ROOT/include/libsw* $BUILD_DIR/install/include
+    fi
 fi
 
 
 if [[ -e $PWD/$BUILD_DIR/install/lib/liblcms2.lib ]]; then
-    bin/compile_liblcms2_windows.sh
+    if [[ ! -e $FFMPEG_ROOT/lib/liblcms2.lib ]]; then
+	bin/compile_liblcms2_windows.sh
+    else
+	cp -f $FFMPEG_ROOT/bin/liblcms2*.dll  $BUILD_DIR/install/bin
+	cp -f $FFMPEG_ROOT/lib/liblcms2.lib   $BUILD_DIR/install/lib
+	cp -f $FFMPEG_ROOT/include/lcms2.h   $BUILD_DIR/install/include
+    fi
 fi
 
 

@@ -149,11 +149,13 @@ if [[ $CLEAN_DIR == 1 ]]; then
     fi
 fi
 
-echo "Version to build is v${mrv2_VERSION}"
-echo "Architecture is ${ARCH}"
-echo "CMake flags are ${CMAKE_FLAGS}"
-echo "Compiler flags are ${FLAGS}"
-cmake --version
+if [[ $0 == *runme.sh* ]]; then
+    echo "Version to build is v${mrv2_VERSION}"
+    echo "Architecture is ${ARCH}"
+    echo "CMake flags are ${CMAKE_FLAGS}"
+    echo "Compiler flags are ${FLAGS}"
+    cmake --version
+fi
 
 if [[ $KERNEL == *Msys* ]]; then
     . $PWD/etc/windows_prepare.sh
