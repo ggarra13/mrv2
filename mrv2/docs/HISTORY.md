@@ -11,6 +11,7 @@ v0.7.8
 - Added saving the old color to the preferences.
 - Fixed saving current EDL through Python API.
 - Added a command-line switch (-resetHotkeys) to reset hotkeys to their default.
+- Added a button in Settings to reset hotkeys to their defaults.
 - Python API now supports Playlists again with a new API.
   You can add new clips to an EDL playlist, list all playlists,
   select a playlist based on its index, its name or its item
