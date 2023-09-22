@@ -24,13 +24,5 @@ fi
 #
 export VSLANG=1033
 
-#
-# Set bits based on ARCH
-#
-export bits=64
-if [[ "$ARCH" != "amd64" ]]; then
-    export bits=32
-fi
-
 . windows/envvars/envvars.sh
 

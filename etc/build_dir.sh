@@ -160,13 +160,7 @@ if [[ $KERNEL == *Msys* ]]; then
 fi
 
 if [[ $0 == *runme.sh* ]]; then
-    #
-    # First run, create the standard directories.
-    #
-    mkdir -p $BUILD_DIR/install/bin $BUILD_DIR/install/lib
-    mkdir -p $BUILD_DIR/install/include
-
     if [[ $KERNEL == *Msys* ]]; then
-	. $PWD/etc/copy_dlls.sh
+	. $PWD/etc/compile_windows_dlls.sh
     fi
 fi
