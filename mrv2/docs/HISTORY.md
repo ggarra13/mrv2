@@ -21,6 +21,7 @@ v0.7.8
 - Fixed name of some hotkeys in Spanish locale.
 - Made playback buttons change background color when playing or stopping.
 - Added support for RAW formats through LibRaw.
+- Fixed File->Save Image and File->Save Movie resetting the UI.
 
 v0.7.7
 ======
