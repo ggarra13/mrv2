@@ -114,6 +114,8 @@ extern "C"
 #    include <psapi.h>
 #endif
 
+#include "mrvCore/mrvI8N.h"
+
 #include "mrvFl/mrvIO.h"
 
 namespace mrv
@@ -412,16 +414,16 @@ namespace mrv
         o << "mrv2 " << kArch << " bits - v" << kVersion << " " << kBuild
           << endl
 #ifdef __GLIBCXX__
-          << "With gcc " << __GLIBCXX__ << endl
+          << _("With gcc ") << __GLIBCXX__ << endl
 #elif __clang__
-          << "With clang " << __clang__ << " " << __llvm__ << endl
+          << _("With clang ") << __clang__ << " " << __llvm__ << endl
 #else
-          << "With msvc " << _MSC_VER << endl
+          << _("With msvc ") << _MSC_VER << endl
 #endif
           << "(C) 2022-Present Film Aura, LLC." << endl
           << "Gonzalo Garramuño & others" << endl
           << endl
-          << "mrv2 depends on:" << endl
+          << _("mrv2 depends on:") << endl
           << endl;
 
         const auto expat = XML_ExpatVersionInfo();
