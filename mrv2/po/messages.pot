@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v0.7.7\n"
+"Project-Id-Version: mrv2 v0.7.8\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-09-20 18:24-0300\n"
+"POT-Creation-Date: 2023-09-22 17:32-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -949,13 +949,6 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-msgid "Cannnot parse enironment variable \"{0}\" as a float value; using {1}."
-msgstr ""
-
-msgid ""
-"Cannnot parse enironment variable \"{0}\" as an integer value; using {1}."
-msgstr ""
-
 msgid "Cannot append audio clip"
 msgstr ""
 
@@ -1328,6 +1321,9 @@ msgstr ""
 msgid "Default"
 msgstr ""
 
+msgid "Default Hotkeys"
+msgstr ""
+
 msgid "Default Settings"
 msgstr ""
 
@@ -1560,9 +1556,6 @@ msgid "Environment Map"
 msgstr ""
 
 msgid "Environment Map type."
-msgstr ""
-
-msgid "Environment variable \"{0}\" is not set; using default value ({1})."
 msgstr ""
 
 msgid "EnvironmentMap options."
@@ -4202,7 +4195,7 @@ msgstr ""
 msgid "Toggle Playlist Panel"
 msgstr ""
 
-msgid "Toggle Preferences Panel"
+msgid "Toggle Preferences Window"
 msgstr ""
 
 msgid "Toggle Presentation"
@@ -4656,6 +4649,15 @@ msgstr ""
 msgid "Wipe center in X and Y :class:`mrv2.math.Vector2f`."
 msgstr ""
 
+msgid "With clang "
+msgstr ""
+
+msgid "With gcc "
+msgstr ""
+
+msgid "With msvc "
+msgstr ""
+
 msgid "Wizard labels are:"
 msgstr ""
 
@@ -4750,6 +4752,9 @@ msgid "macOS Menus"
 msgstr ""
 
 msgid "mrv2"
+msgstr ""
+
+msgid "mrv2 depends on:"
 msgstr ""
 
 msgid "oxy"

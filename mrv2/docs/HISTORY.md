@@ -11,6 +11,7 @@ v0.7.8
 - Added saving the old color to the preferences.
 - Fixed saving current EDL through Python API.
 - Added a command-line switch (-resetHotkeys) to reset hotkeys to their default.
+- Added a button in Settings to reset hotkeys to their defaults.
 - Python API now supports Playlists again with a new API.
   You can add new clips to an EDL playlist, list all playlists,
   select a playlist based on its index, its name or its item
@@ -19,6 +20,9 @@ v0.7.8
 - Fixed the beginning of English playback documentation which was in Spanish.
 - Improved the User Documentation.
 - Fixed name of some hotkeys in Spanish locale.
+- Made playback buttons change background color when playing or stopping.
+- Added support for RAW formats through LibRaw.
+- Fixed File->Save Image and File->Save Movie resetting the UI.
 
 v0.7.7
 ======

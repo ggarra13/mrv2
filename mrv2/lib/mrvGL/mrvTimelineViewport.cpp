@@ -299,6 +299,36 @@ namespace mrv
         }
     }
 
+    void TimelineViewport::_updatePlaybackButtons() const noexcept
+    {
+        TLRENDER_P();
+        if (p.timelinePlayers.empty())
+            return;
+
+        TimelineClass* c = p.ui->uiTimeWindow;
+
+        c->uiPlayForwards->color(FL_BACKGROUND_COLOR);
+        c->uiPlayBackwards->color(FL_BACKGROUND_COLOR);
+        c->uiStop->color(FL_BACKGROUND_COLOR);
+        Fl_Color color = FL_YELLOW;
+        switch (p.timelinePlayers[0]->playback())
+        {
+        case timeline::Playback::Forward:
+            c->uiPlayForwards->color(color);
+            break;
+        case timeline::Playback::Reverse:
+            c->uiPlayBackwards->color(color);
+            break;
+        case timeline::Playback::Stop:
+            c->uiStop->color(color);
+            break;
+        }
+
+        c->uiPlayForwards->redraw();
+        c->uiPlayBackwards->redraw();
+        c->uiStop->redraw();
+    }
+
     void TimelineViewport::startFrame() noexcept
     {
         TLRENDER_P();
@@ -306,6 +336,7 @@ namespace mrv
         {
             i->start();
         }
+        _updatePlaybackButtons();
         p.skippedFrames = 0;
     }
 
@@ -316,6 +347,7 @@ namespace mrv
         {
             i->framePrev();
         }
+        _updatePlaybackButtons();
         p.skippedFrames = 0;
     }
 
@@ -326,6 +358,7 @@ namespace mrv
         {
             i->frameNext();
         }
+        _updatePlaybackButtons();
     }
 
     void TimelineViewport::endFrame() noexcept
@@ -345,6 +378,7 @@ namespace mrv
         {
             i->setPlayback(timeline::Playback::Reverse);
         }
+        _updatePlaybackButtons();
         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
     }
 
@@ -356,6 +390,7 @@ namespace mrv
         {
             i->setPlayback(timeline::Playback::Stop);
         }
+        _updatePlaybackButtons();
         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
     }
 
@@ -367,6 +402,7 @@ namespace mrv
         {
             i->setPlayback(timeline::Playback::Forward);
         }
+        _updatePlaybackButtons();
         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
     }
 
@@ -378,6 +414,7 @@ namespace mrv
         {
             i->togglePlayback();
         }
+        _updatePlaybackButtons();
         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
     }
 
@@ -1745,6 +1782,9 @@ namespace mrv
     {
         TLRENDER_P();
 
+        if (p.presentation == active)
+            return;
+
 #if 0
         std::cerr << std::endl
                   << __FUNCTION__ << " active=" << active << std::endl
@@ -1763,9 +1803,9 @@ namespace mrv
         }
         else
         {
+            save_ui_state(p.ui);
             if (!_hasSecondaryViewport())
             {
-                save_ui_state(p.ui);
                 hide_ui_state(p.ui);
             }
             _setFullScreen(active);
@@ -1813,7 +1853,6 @@ namespace mrv
                 restore_ui_state(p.ui);
             save_ui_state(p.ui);
             _setFullScreen(true);
-            // So we restore the EDL
             if (!p.presentation)
                 Fl::add_timeout(
                     0.0, (Fl_Timeout_Handler)restore_ui_state, p.ui);

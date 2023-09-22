@@ -75,6 +75,14 @@ if(TLRENDER_BMD)
     add_definitions(-DTLRENDER_BMD)
 endif()
 
+if(TLRENDER_EXR)
+    add_definitions(-DTLRENDER_EXR)
+endif()
+
+if(TLRENDER_FFMPEG)
+    add_definitions(-DTLRENDER_FFMPEG)
+endif()
+
 if(TLRENDER_GL)
     add_definitions(-DTLRENDER_GL)
 endif()

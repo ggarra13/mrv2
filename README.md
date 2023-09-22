@@ -265,12 +265,12 @@ The script is a superbuild script that will download all needed dependencies
 required.  It will create a build and a BUILD-KERNEL-ARCH/BUILDTYPE/install
 directory where all files shall reside.
 
-The default is to build it with 4 cores on Windows and with all cores in
-Linux or macOS.  If you want more or less cores pass another number to any of
-the runme*.sh scripts.  For example, to build with 8 cores, you can do:
+The default is to build with all cores in all the Operating Systems.
+If you want more or less cores pass another number to any of
+the runme*.sh scripts.  For example, to build with 4 cores, you can do:
 
 ```
-./runme.sh -j 8
+./runme.sh -j 4
 ```
 
 

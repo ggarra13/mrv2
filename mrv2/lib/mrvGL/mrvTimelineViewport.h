@@ -409,6 +409,8 @@ namespace mrv
 
         bool _hasSecondaryViewport() const noexcept;
 
+        void _updatePlaybackButtons() const noexcept;
+
         TLRENDER_PRIVATE();
     };
 } // namespace mrv

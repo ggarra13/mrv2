@@ -11,10 +11,14 @@ set( PYTHON_URL https://www.python.org/ftp/python/${PYTHON_VERSION}.${PYTHON_TIN
 set( PYTHON_PATCH )
 if(APPLE)
     set( PYTHON_PATCH cmake -E copy ${PROJECT_SOURCE_DIR}/etc/configure-macos-python.sh ${CMAKE_CURRENT_BINARY_DIR}/ )
+    
+    set( PYTHON_CXX_FLAGS "-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}")
+    set( PYTHON_C_FLAGS "-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET} ${CMAKE_C_FLAGS}")
+    
     set( PYTHON_CONFIGURE ${CMAKE_CURRENT_BINARY_DIR}/configure-macos-python.sh --prefix=${CMAKE_INSTALL_PREFIX}
-        "CFLAGS=${CMAKE_C_FLAGS}"
-        "CPPFLAGS=${CMAKE_C_FLAGS}"
-        "CXXFLAGS=${CMAKE_CXX_FLAGS}"
+        "CFLAGS=${PYTHON_C_FLAGS}"
+        "CPPFLAGS=${PYTHON_C_FLAGS}"
+        "CXXFLAGS=${PYTHON_CXX_FLAGS}"
     )
     set( PYTHON_BUILD    make -j 4)
     set( PYTHON_INSTALL  make altinstall )
