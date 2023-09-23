@@ -3,7 +3,17 @@
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#!/bin/bash
+#
+# This script compiles a GPL or LGPL version of ffmpeg. The GPL version has
+# libx264 encoding and libvpx support.  The LGPL version does not have libx264.
+#
+if [[ ! -e etc/build_dir.sh ]]; then
+    echo "You must run this script from the root of mrv2 directory like:"
+    echo
+    script=`basename $0`
+    echo "> bin/$script"
+    exit 1
+fi
 
 . etc/build_dir.sh
 

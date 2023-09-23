@@ -7,8 +7,13 @@
 #
 # This script adds the licensing information to all source files.
 #
-# You must run it from the root of the mrv2 project.
-#
+if [[ ! -e etc/build_dir.sh ]]; then
+    echo "You must run this script from the root of mrv2 directory like:"
+    echo
+    script=`basename $0`
+    echo "> bin/$script"
+    exit 1
+fi
 
 . etc/build_dir.sh
 
