@@ -526,7 +526,7 @@ namespace mrv
             value = p.ui->app->settingsObject()->value(kFontSize);
             int font_size = std_any_cast<int>(value);
             double pixels_unit = pixels_per_unit();
-            double pct = 1.0; // viewportSize.w / 1024.F;
+            double pct = renderSize.h / 1024.F;
             double fontSize = font_size * pct * p.viewZoom / pixels_unit;
             w->textsize(fontSize);
             math::Vector2i pos(w->pos.x, w->pos.y);

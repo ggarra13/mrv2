@@ -1074,7 +1074,7 @@ if (Fl::event_clicks() >= 1)
 
 if (Fl::event_button() == FL_RIGHT_MOUSE)
 {
-    mrv::clear_text_shape_cb(v);
+    mrv::edit_text_shape_cb(v);
     return;
 }
 

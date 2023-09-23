@@ -35,6 +35,7 @@ v0.7.8
   current frame.  Selecting one, and clicking on Edit Text will take you to
   the Text widget where you will be able to reposition it, re-edit it, etc.
   This also works in network connections.
+- Made text widget font size be dependant on the render size of the image.
 
 
 v0.7.7

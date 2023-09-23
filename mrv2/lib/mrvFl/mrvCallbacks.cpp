@@ -1730,12 +1730,16 @@ namespace mrv
             tcp->pushMessage("Create Note Annotation", text);
     }
 
-    void clear_text_shape_cb(ViewerUI* ui)
+    void edit_text_shape_cb(ViewerUI* ui)
     {
         TextEdit window(400, 400, _("Edit Text Annotation"));
 
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
+            return;
+
+        if (ui->uiView->children() > 0 ||
+            ui->uiSecondary && ui->uiSecondary->viewport()->children() > 0)
             return;
 
         auto annotation = player->getAnnotation();

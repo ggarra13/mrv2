@@ -595,8 +595,8 @@ namespace mrv
                 }
                 case ActionMode::kText:
                 {
-                    const auto& viewportSize = getViewportSize();
-                    float pct = 1.0; // viewportSize.w / 1024.F;
+                    const auto& renderSize = getRenderSize();
+                    float pct = renderSize.h / 1024.F;
                     auto w = getMultilineInput();
 
                     value = settingsObject->value(kFontSize);
@@ -1395,6 +1395,9 @@ namespace mrv
         if (!annotation)
             return;
 
+        const auto& renderSize = getRenderSize();
+        float pct = renderSize.h / 1024.F;
+
 #ifdef USE_OPENGL2
         auto shape = dynamic_cast<GL2TextShape*>(s.get());
         if (!shape)
@@ -1413,7 +1416,7 @@ namespace mrv
         pos.x -= offset.x;
         pos.y -= offset.y;
 
-        auto w = new MultilineInput(pos.x, pos.y, 20, 30 * p.viewZoom);
+        auto w = new MultilineInput(pos.x, pos.y, 20, 30 * pct * p.viewZoom);
         w->take_focus();
         w->textfont(shape->font);
         w->textsize(shape->fontSize);
