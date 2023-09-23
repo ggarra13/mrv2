@@ -13,17 +13,19 @@
 . etc/build_dir.sh
 
 
-export requests=""
 if [[ $KERNEL == *Msys* ]]; then
     requests=$BUILD_DIR/install/bin/Lib/site-packages/requests
+    if [[ ! -e $requests ]]; then
+	python -m pip install requests
+    fi
 else    
     extract_python_version
     requests=$BUILD_DIR/install/lib/python$PYTHON_VERSION/site-packages/requests
+    if [[ ! -e $requests ]]; then
+	python$PYTHON_VERSION -m pip install requests
+    fi
 fi
 
-if [[ ! -e $requests ]]; then
-    python -m pip install requests
-fi
 
 export TAG=$1
 
