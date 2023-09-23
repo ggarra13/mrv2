@@ -35,11 +35,11 @@ pacman -Sy base-devel --noconfirm
 cd $superbuild
 git clone --depth 1 --branch $LCMS_BRANCH https://github.com/mm2/Little-CMS.git LCMS2 2> /dev/null
 
-#
-# Set the path to point to gcc and ld
-#
-export SAVED_PATH=$PATH
-export PATH="/mingw64/bin:$PATH"
+# #
+# # Set the path to point to gcc and ld
+# #
+# export SAVED_PATH=$PATH
+# export PATH="/mingw64/bin:$PATH"
 
 #
 # Run configure
@@ -52,9 +52,9 @@ cd $lcms2dir
 #
 make -j ${CPU_CORES} install
 
-mv $installdir/lib/liblcms2.a $installdir/lib/liblcms2.lib
+# mv $installdir/lib/liblcms2.a $installdir/lib/liblcms2.lib
 
-#
-# Restore path
-# 
-export PATH="$SAVED_PATH"
+# #
+# # Restore path
+# # 
+# export PATH="$SAVED_PATH"
