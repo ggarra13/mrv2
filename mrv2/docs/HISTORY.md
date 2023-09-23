@@ -24,7 +24,8 @@ v0.7.8
 - Added support for RAW formats through LibRaw.
 - Fixed File->Save Image and File->Save Movie resetting the UI.
 - Improved Windows build system dramatically.  Now there are bash scripts to
-  compile all the GNU-like dependencies.
+  compile all the GNU-like dependencies (FFmpeg, libx264, libvpx and liblcms2).
+- Added x264 to the Linux and macOS builds but it is turned OFF by default.
 
 v0.7.7
 ======
