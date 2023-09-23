@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The mrv2 Interface &mdash; mrv2 v0.7.7 documentation</title>
+  <title>The mrv2 Interface &mdash; mrv2 v0.7.8 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
@@ -12,11 +12,11 @@
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=265a2590"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -108,7 +108,7 @@
            <div itemprop="articleBody">
              
   <section id="the-mrv2-interface">
-<span id="interface"></span><h1>The mrv2 Interface<a class="headerlink" href="#the-mrv2-interface" title="Permalink to this heading"></a></h1>
+<span id="interface"></span><h1>The mrv2 Interface<a class="headerlink" href="#the-mrv2-interface" title="Link to this heading"></a></h1>
 <img alt="../../_images/interface-02.png" class="align-center" src="../../_images/interface-02.png" />
 <p>mrv2’s main window provides 6 different toolbars that can be hidden or shown.</p>
 <p>The first toolbar is the menu toolbar.  It can be toggled with Shift + F1. The menus are also available from the Right Mouse Button on the View window.  The menu toolbar also has the Edit button to toggle the editing mode and the Fit Window to image button.</p>
@@ -117,7 +117,7 @@
 <p>The fourth toolbar is the Pixel Toolbar, which shows the current pixel under the cursor.  You can toggle it with F2.</p>
 <p>Finally, the last toolbar is the Status toolbar.  It will print out errors and let you know in what action mode you are in (Default is Scrubbing).</p>
 <section id="hiding-showing-ui-elements">
-<h2>Hiding/Showing UI elements<a class="headerlink" href="#hiding-showing-ui-elements" title="Permalink to this heading"></a></h2>
+<h2>Hiding/Showing UI elements<a class="headerlink" href="#hiding-showing-ui-elements" title="Link to this heading"></a></h2>
 <p>Some useful (default) shortcuts are as follows:</p>
 <table class="docutils align-default">
 <thead>
@@ -150,12 +150,12 @@
 </tbody>
 </table>
 <section id="customising-the-interface">
-<h3>Customising the Interface<a class="headerlink" href="#customising-the-interface" title="Permalink to this heading"></a></h3>
+<h3>Customising the Interface<a class="headerlink" href="#customising-the-interface" title="Link to this heading"></a></h3>
 <img alt="../../_images/interface-03.png" class="align-center" src="../../_images/interface-03.png" />
 <p>mrv2 can be customized to show any of the toolbars from <strong>Window-&gt;Preferences-&gt;User Interface</strong>.  These settings are saved when you exit mrv2 and will allow you to always start mrv2 in a certain configuration.</p>
 </section>
 <section id="mouse-interaction-in-the-viewer">
-<h3>Mouse interaction in the Viewer<a class="headerlink" href="#mouse-interaction-in-the-viewer" title="Permalink to this heading"></a></h3>
+<h3>Mouse interaction in the Viewer<a class="headerlink" href="#mouse-interaction-in-the-viewer" title="Link to this heading"></a></h3>
 <p>A three buttoned mouse can be used for closer image inspection. Hold the middle button and drag to pan the image within the viewport. Hold down the Alt key on your keyboard and drag left/right with the right mouse button to perform a centred zoom in/out on the image.  You can also use the mousewheel which is more confortable.
 The current zoom factor is shown on the pixel toolbar to the left.</p>
 <div class="admonition note">
@@ -175,7 +175,7 @@ choose it from the pull-down menu on the pixel toolbar.</p>
 </section>
 </section>
 <section id="the-top-bar">
-<h2>The Top Bar<a class="headerlink" href="#the-top-bar" title="Permalink to this heading"></a></h2>
+<h2>The Top Bar<a class="headerlink" href="#the-top-bar" title="Link to this heading"></a></h2>
 <p>mrv2’s Top Bar contains the controls of layers or image channels (usually from an OpenEXR).</p>
 <p>The gain (controlled by the slider) and/or exposure, driven by the arrows and toggled by the button that shows the F-stop (f/8 by default).</p>
 <p>The Input Color Space is right next to it.  This is the OpenColorIO (OCIO) control of the image.</p>
@@ -188,12 +188,12 @@ If you set the OCIO environment variable, it will take precedence over the one s
 </div>
 </section>
 <section id="the-timeline">
-<h2>The Timeline<a class="headerlink" href="#the-timeline" title="Permalink to this heading"></a></h2>
+<h2>The Timeline<a class="headerlink" href="#the-timeline" title="Link to this heading"></a></h2>
 <img alt="../../_images/timeline-01.png" class="align-center" src="../../_images/timeline-01.png" />
 <p>The Timeline Viewport allows you to scale the Editing’s Thumbnails and Audio waveforms by dragging the viewport up and down.  For a quick display of all the tracks, you can click on the Edit button in the Menu toolbar.
 When showing the pictures, you can zoom in and out with the mousewheel.</p>
 <section id="frame-indicator">
-<h3>Frame Indicator<a class="headerlink" href="#frame-indicator" title="Permalink to this heading"></a></h3>
+<h3>Frame Indicator<a class="headerlink" href="#frame-indicator" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>Immediately to the left of the timeline is the ‘current frame’ indicator. Click on the button next to it to get a list of options as to how the current time is displayed:</dt><dd><ul class="simple">
 <li><p><em>Frames:</em> absolute frame, starting at 0 for movies, and, usually at 1 for sequences.</p></li>
@@ -204,19 +204,19 @@ When showing the pictures, you can zoom in and out with the mousewheel.</p>
 </dl>
 </section>
 <section id="transport-controls">
-<h3>Transport Controls<a class="headerlink" href="#transport-controls" title="Permalink to this heading"></a></h3>
+<h3>Transport Controls<a class="headerlink" href="#transport-controls" title="Link to this heading"></a></h3>
 <p>These are pretty universal and don’t need much explanation. There’s a play backwards/forwards/pause button, step forwards/backwards buttons and jump to start and end.</p>
 </section>
 <section id="fps">
-<h3>FPS<a class="headerlink" href="#fps" title="Permalink to this heading"></a></h3>
+<h3>FPS<a class="headerlink" href="#fps" title="Link to this heading"></a></h3>
 <p>The frames-per-second (FPS) indicator showing the desired FPS.  The FPS button is a popup that allows you to quickly switch to a new frame rate.</p>
 </section>
 <section id="start-and-end-frame-indicator">
-<h3>Start and End Frame Indicator<a class="headerlink" href="#start-and-end-frame-indicator" title="Permalink to this heading"></a></h3>
+<h3>Start and End Frame Indicator<a class="headerlink" href="#start-and-end-frame-indicator" title="Link to this heading"></a></h3>
 <p>To the right of the timeline, the Start frame and End Frame indicators are shown.  The S and E buttons can be clicked to set the In and Out points at the current frame.  It is equivalent to pressing the ‘I’ or ‘O’ hotkeys.</p>
 </section>
 <section id="player-viewer-controls">
-<h3>Player/Viewer Controls<a class="headerlink" href="#player-viewer-controls" title="Permalink to this heading"></a></h3>
+<h3>Player/Viewer Controls<a class="headerlink" href="#player-viewer-controls" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>Two buttons to the bottom of the timeline viewport provide the following interactions</dt><dd><ul class="simple">
 <li><p><em>Volume/mute control:</em> click on the speaker icon to toggle the mute control. Drag on the slider next to it to control the volume.</p></li>
@@ -227,7 +227,7 @@ When showing the pictures, you can zoom in and out with the mousewheel.</p>
 </section>
 </section>
 <section id="view-menu">
-<h2>View Menu<a class="headerlink" href="#view-menu" title="Permalink to this heading"></a></h2>
+<h2>View Menu<a class="headerlink" href="#view-menu" title="Link to this heading"></a></h2>
 <p>The view menu provides controls for modifying the appearance and behaviour of the viewer:</p>
 <aside class="topic">
 <p class="topic-title">Safe Areas</p>
@@ -251,7 +251,7 @@ When showing the pictures, you can zoom in and out with the mousewheel.</p>
 </aside>
 </section>
 <section id="render-menu">
-<h2>Render Menu<a class="headerlink" href="#render-menu" title="Permalink to this heading"></a></h2>
+<h2>Render Menu<a class="headerlink" href="#render-menu" title="Link to this heading"></a></h2>
 <p>The Render menu provides controls for modifying the rendering of the image on the viewer:</p>
 <aside class="topic">
 <p class="topic-title">Channels</p>
@@ -279,11 +279,11 @@ When showing the pictures, you can zoom in and out with the mousewheel.</p>
 </aside>
 </section>
 <section id="the-panels">
-<h2>The Panels<a class="headerlink" href="#the-panels" title="Permalink to this heading"></a></h2>
+<h2>The Panels<a class="headerlink" href="#the-panels" title="Link to this heading"></a></h2>
 <p>mrv2 supports Panels to organize the information logically.  These panels can be docked to the right of the main viewport or can be made floating windows if dragged from their main drag bar.</p>
 </section>
 <section id="divider">
-<h2>Divider<a class="headerlink" href="#divider" title="Permalink to this heading"></a></h2>
+<h2>Divider<a class="headerlink" href="#divider" title="Link to this heading"></a></h2>
 <p>The Panels have a divided, just like the Timeline Viewport, and can be dragged to make the panel bigger or smaller (and change the size of the main viewport).</p>
 </section>
 </section>

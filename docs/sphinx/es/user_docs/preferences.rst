@@ -208,6 +208,10 @@ Reproducir
 .. topic:: Auto Reproducir
 
 	   Con este seteo, mrv2 comenzará a reproducir la película o secuencia tan pronto como se cargue.
+	   
+.. topic:: FPS (Frames per Second o Cuadros por Segundo)
+
+	   Puede controlar aquí los cuadros por segundo de las secuencias de archivos que no tienen tal seteo guardado en la imagen.
 
 .. topic:: Modo de Bucle
 

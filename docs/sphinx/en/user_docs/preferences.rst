@@ -209,6 +209,10 @@ Playback
 
 	   With this setting, mrv2 will start playing the movie or file sequence as soon as it is loaded.
 
+.. topic:: FPS
+
+	   With this setting, you can control the frames per second of file sequences that don't have one embedded in the image.
+	   
 .. topic:: Looping Mode
 
 	   Default looping mode.
