@@ -15,6 +15,7 @@ import glob
 import re
 import sys
 import stat
+import shutil
 
 CPP_DIRS = [
     "mrv2/src",
@@ -77,7 +78,7 @@ def process_cpp_files():
 
                 out.write( text )
 
-            os.rename( f + ".new", f )
+            shutil.move( f + ".new", f )
 
 
 def process_cmake_files():
@@ -105,7 +106,7 @@ def process_cmake_files():
 
                 out.write( text )
 
-            os.rename( f + ".new", f )
+            shutil.move( f + ".new", f )
  
 
 
@@ -133,7 +134,7 @@ def process_bash_files():
 
                 out.write( text )
 
-            os.rename( f + ".new", f )
+            shutil.move( f + ".new", f )
             os.chmod(f, 0o755)
 
 
