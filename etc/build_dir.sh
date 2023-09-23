@@ -154,6 +154,7 @@ if [[ $0 == *runme.sh* ]]; then
     echo "CMake flags are ${CMAKE_FLAGS}"
     echo "Compiler flags are ${FLAGS}"
     cmake --version
+    mkdir -p $BUILD_DIR/install
 fi
 
 if [[ $0 == *runme.sh* ]]; then

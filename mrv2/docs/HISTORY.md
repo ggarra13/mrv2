@@ -21,11 +21,13 @@ v0.7.8
 - Improved the User Documentation.
 - Fixed name of some hotkeys in Spanish locale.
 - Made playback buttons change background color when playing or stopping.
-- Added support for RAW formats through LibRaw.
+- Added support for Camera RAW formats through LibRaw.
 - Fixed File->Save Image and File->Save Movie resetting the UI.
 - Improved Windows build system dramatically.  Now there are bash scripts to
   compile all the GNU-like dependencies (FFmpeg, libx264, libvpx and liblcms2).
 - Added x264 to the Linux and macOS builds but it is turned OFF by default.
+- Fixed a problem with the FontSystem when displaying the HUD on Windows.
+  (**TODO**)
 
 v0.7.7
 ======
