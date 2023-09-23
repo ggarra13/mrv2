@@ -27,7 +27,12 @@ v0.7.8
   compile all the GNU-like dependencies (FFmpeg, libx264, libvpx and liblcms2).
 - Added x264 to the Linux and macOS builds but it is turned OFF by default.
 - Made right mouse button text size match that of the main menu bar.
-- Fixed Preferences->Playback->FPS not doing anything.  Removed Preferences->Playback->Override FPS.
+- Fixed Preferences->Playback->FPS not doing anything.  Removed
+  Preferences->Playback->Override FPS.
+- Added a way to erase Text Annotations from a frame.
+  If you click with the Right Mouse Button on the Text tool, a pop up Window
+  will appear displaying a pull down with all your text shapes for the
+  current frame.
 - Fixed a problem with the FontSystem when displaying the HUD on Windows.
   (**TODO**)
 

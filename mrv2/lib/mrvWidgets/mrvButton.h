@@ -5,9 +5,6 @@
 #pragma once
 
 #include <FL/Fl_Button.H>
-#include <FL/Fl_Radio_Button.H>
-#include <FL/Fl_Check_Button.H>
-#include <FL/Fl_Toggle_Button.H>
 
 namespace mrv
 {
@@ -18,8 +15,8 @@ namespace mrv
     public:
         Button(int X, int Y, int W, int H, const char* L = 0);
 
-        virtual int handle(int e);
-        virtual void draw();
+        int handle(int e) FL_OVERRIDE;
+        void draw() FL_OVERRIDE;
 
         void color(Fl_Color c);
         Fl_Color color() { return Fl_Button::color(); }

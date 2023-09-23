@@ -14,9 +14,10 @@
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvUtil.h"
 
+#include "mrvWidgets/mrvMultilineInput.h"
 #include "mrvWidgets/mrvPanelGroup.h"
 #include "mrvWidgets/mrvSecondaryWindow.h"
-#include "mrvWidgets/mrvMultilineInput.h"
+#include "mrvWidgets/mrvTextErase.h"
 
 #include "mrvFl/mrvSaveOptions.h"
 #include "mrvFl/mrvVersioning.h"
@@ -25,6 +26,8 @@
 #include "mrvFl/mrvSession.h"
 #include "mrvFl/mrvStereo3DAux.h"
 #include "mrvFl/mrvCallbacks.h"
+
+#include "mrvGL/mrvGLShape.h"
 
 #include "mrvUI/mrvMenus.h"
 
@@ -1725,6 +1728,44 @@ namespace mrv
 
         if (ui->uiPrefs->SendAnnotations->value())
             tcp->pushMessage("Create Note Annotation", text);
+    }
+
+    void clear_text_shape_cb(ViewerUI* ui)
+    {
+        TextErase window(400, 100, _("Clear Text Annotation"));
+
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
+            return;
+
+        auto annotation = player->getAnnotation();
+        if (!annotation)
+            return;
+
+        for (const auto& shape : annotation->shapes)
+        {
+#ifdef USE_OPENGL2
+            if (auto s = dynamic_cast<GL2TextShape*>(shape.get()))
+            {
+                window.add(s->text);
+            }
+#endif
+            if (auto s = dynamic_cast<GLTextShape*>(shape.get()))
+            {
+                window.add(s->text);
+            }
+        }
+        window.textAnnotations.menu_end();
+
+        if (window.textAnnotations.size() <= 1)
+            return;
+
+        window.set_modal();
+        window.show();
+        while (window.shown())
+        {
+            Fl::check();
+        }
     }
 
     void clone_file_cb(Fl_Menu_* m, void* d)

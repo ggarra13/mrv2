@@ -56,6 +56,7 @@ set(HEADERS
     mrvTable.h
     mrvTile.h
     mrvTextDisplay.h
+    mrvTextErase.h
     mrvTimecode.h
     mrvTimelineGroup.h
     mrvVectorscope.h
@@ -101,6 +102,7 @@ set(SOURCES
     mrvStatusBar.cpp
     mrvTable.cpp
     mrvTextDisplay.cpp
+    mrvTextErase.cpp
     mrvTimecode.cpp
     mrvTimelineGroup.cpp
     mrvTile.cpp

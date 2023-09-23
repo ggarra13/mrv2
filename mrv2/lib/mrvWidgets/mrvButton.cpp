@@ -2,11 +2,7 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <iostream>
 #include "mrvButton.h"
-
-#include <FL/fl_draw.H>
-#include <FL/names.h>
 
 namespace mrv
 {
