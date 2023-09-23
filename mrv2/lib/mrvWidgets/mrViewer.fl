@@ -415,7 +415,7 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
   }
 }
 
-widget_class TimelineClass {open
+widget_class TimelineClass {
   xywh {130 292 690 29} resizable
   class Fl_Double_Window visible
 } {
@@ -804,8 +804,8 @@ uiSecondary = nullptr;} {}
       label mrv2
       user_data this user_data_type {ViewerUI*}
       callback {exit_cb( o, v );} open
-      xywh {998 185 690 602} type Double align 80 hide resizable
-      class {mrv::MainWindow} size_range {690 602 0 0}
+      xywh {998 185 690 602} type Double align 80 resizable
+      class {mrv::MainWindow} size_range {690 602 0 0} visible
     } {
       Fl_Pack uiRegion {open
         xywh {0 0 690 602} box FLAT_BOX resizable
@@ -1070,20 +1070,21 @@ if (Fl::event_clicks() >= 1)
               }
               Fl_Button uiText {
                 user_data this user_data_type {ViewerUI*}
-                callback {if (Fl::event_button() == FL_RIGHT_MOUSE)
+                callback {uiView->setActionMode( mrv::ActionMode::kText );
+
+if (Fl::event_button() == FL_RIGHT_MOUSE)
 {
     mrv::clear_text_shape_cb(v);
     return;
 }
 
-uiView->setActionMode( mrv::ActionMode::kText );
 
 if (Fl::event_clicks() >= 1)
 {
    mrv::annotations_panel_cb( nullptr, v);
    Fl::event_clicks(0);
 }} selected
-                tooltip {Text Tool} image {../../icons/Text.svg} compress_image 1 xywh {1 298 40 35} down_box DOWN_BOX selection_color 95 labelfont 8 labelsize 24 labelcolor 7
+                tooltip {Text Tool.   Right click to edit previously stamped text.} image {../../icons/Text.svg} compress_image 1 xywh {1 298 40 35} down_box DOWN_BOX selection_color 95 labelfont 8 labelsize 24 labelcolor 7
                 class {mrv::Button}
               }
               Fl_Button uiPenColor {

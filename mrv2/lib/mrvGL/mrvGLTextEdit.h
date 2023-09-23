@@ -4,18 +4,20 @@
 #include <FL/Fl_Double_Window.H>
 #include <FL/Fl_Choice.H>
 #include <FL/Fl_Button.H>
+#include <FL/Fl_Multiline_Output.H>
 
 namespace mrv
 {
-    class TextErase : public Fl_Double_Window
+    class TextEdit : public Fl_Double_Window
     {
-        Fl_Button deleteButton;
+        Fl_Button editButton;
 
     public:
-        TextErase(int W, int H, const char* L = 0);
+        TextEdit(int W, int H, const char* L = 0);
 
         void add(const std::string&);
 
+        Fl_Multiline_Output textOutput;
         Fl_Choice textAnnotations;
     };
 } // namespace mrv

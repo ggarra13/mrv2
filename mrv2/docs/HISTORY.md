@@ -29,12 +29,13 @@ v0.7.8
 - Made right mouse button text size match that of the main menu bar.
 - Fixed Preferences->Playback->FPS not doing anything.  Removed
   Preferences->Playback->Override FPS.
-- Added a way to erase Text Annotations from a frame.
+- Added a way to edit baked Text Annotations from a frame.
   If you click with the Right Mouse Button on the Text tool, a pop up Window
   will appear displaying a pull down with all your text shapes for the
-  current frame.
-- Fixed a problem with the FontSystem when displaying the HUD on Windows.
-  (**TODO**)
+  current frame.  Selecting one, and clicking on Edit Text will take you to
+  the Text widget where you will be able to reposition it, re-edit it, etc.
+  This also works in network connections.
+
 
 v0.7.7
 ======

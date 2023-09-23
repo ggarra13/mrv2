@@ -17,7 +17,6 @@
 #include "mrvWidgets/mrvMultilineInput.h"
 #include "mrvWidgets/mrvPanelGroup.h"
 #include "mrvWidgets/mrvSecondaryWindow.h"
-#include "mrvWidgets/mrvTextErase.h"
 
 #include "mrvFl/mrvSaveOptions.h"
 #include "mrvFl/mrvVersioning.h"
@@ -28,6 +27,7 @@
 #include "mrvFl/mrvCallbacks.h"
 
 #include "mrvGL/mrvGLShape.h"
+#include "mrvGL/mrvGLTextEdit.h"
 
 #include "mrvUI/mrvMenus.h"
 
@@ -1732,7 +1732,7 @@ namespace mrv
 
     void clear_text_shape_cb(ViewerUI* ui)
     {
-        TextErase window(400, 100, _("Clear Text Annotation"));
+        TextEdit window(400, 400, _("Edit Text Annotation"));
 
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
