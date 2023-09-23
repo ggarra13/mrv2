@@ -140,8 +140,6 @@ fi
 export FLAGS="${FLAGS} $*"
 export FLAGS="-j ${CPU_CORES} ${FLAGS}"
 
-echo "Build directory is ${BUILD_DIR}"
-
 if [[ $CLEAN_DIR == 1 ]]; then
     if [[ -d ${BUILD_DIR} ]]; then
 	echo "Cleaning ${BUILD_DIR}.  Please wait..."
@@ -150,15 +148,12 @@ if [[ $CLEAN_DIR == 1 ]]; then
 fi
 
 if [[ $0 == *runme.sh* ]]; then
+    echo "Build directory is ${BUILD_DIR}"
     echo "Version to build is v${mrv2_VERSION}"
     echo "Architecture is ${ARCH}"
     echo "CMake flags are ${CMAKE_FLAGS}"
     echo "Compiler flags are ${FLAGS}"
     cmake --version
-fi
-
-if [[ $KERNEL == *Msys* ]]; then
-    . $PWD/etc/windows_prepare.sh
 fi
 
 if [[ $0 == *runme.sh* ]]; then

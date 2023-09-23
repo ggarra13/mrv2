@@ -322,46 +322,10 @@ the libiconv libraries.
 As a convernience for Windows users, DLLs, includes and .lib files
 for those libraries are provided in mrv2's windows/win64 directory.
 
-libintl and libiconv are not updated often.
+If you unset FFMPEG_ROOT and/or LCMS2_ROOT in windows/envvars/envvars.sh, the
+libraries will be compiled.  In the case of FFMpeg, you will compile a GPL
+version of it with libx264 (H264 saving) support.
 
-However ffmpeg is, so it is suggested you learn how to compile it.
-
-At the root of the mrv2 directory, there's a:
-
-```
-./bin/compile_ffmpeg_windows.sh
-```
-
-script which will compile ffmpeg as a BSD or GPL licensed.  libx264 will only
-get compiled if compiling with a GPL license.
-
-You can use that script first and then run the mrv2 compilarion as usual.
-
-If you need more codecs than those two, a very good way is to use the media
-autobuild suite, which runs on a separate and fresh MSys (yes, you need to
-keep two Msys copies) and downloads and compiles all dependencies based on
-simple questions.
-
-The media autobuild suite can be obtained with:
-
-```
-cd some_dir
-git clone https://github.com/m-ab-s/media-autobuild_suite
-```
-
-Modify the MABS_ROOT variable in windows/envvars/envvars.sh
-to pointo your MABS_ROOT installation.
-
-For example, if your some_dir was E: you should set the variable to:
-
-```
-export MABS_ROOT="/E/media-autobuild_suite/"
-```
-
-Then from Windows' Explorer (not from Msys as it won't run .bat files)
-go to some_dir/media-autobuild_suite and run:
-
-media-autobuild_suite.bat
 
 # Running mrv2
 

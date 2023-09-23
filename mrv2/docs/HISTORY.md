@@ -23,6 +23,8 @@ v0.7.8
 - Made playback buttons change background color when playing or stopping.
 - Added support for RAW formats through LibRaw.
 - Fixed File->Save Image and File->Save Movie resetting the UI.
+- Improved Windows build system dramatically.  Now there are bash scripts to
+  compile all the GNU-like dependencies.
 
 v0.7.7
 ======

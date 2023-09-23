@@ -11,13 +11,17 @@
 
 
 #
-# Set the location of libintl on windows 32 and 64 bits.
-# On Linux and macOS this is picked from /usr/local
+# Set the location of liblcms2 on Windows.
+# If not set, it will compile it.
 #
-export LCMS2_ROOT=$PWD/windows/win64/
+# On Linux and macOS this is always compiled by cmake.
+#
+
+# export LCMS2_ROOT=$PWD/windows/win64/
 
 #
 # Set the location of precompiled FFmpeg on Windows.
-# We copy the contents of this directory to the build directory.
+# If not set, it will compile a GPL version of FFmpeg.
 #
-export FFMPEG_ROOT=$PWD/windows/win64/
+
+# export FFMPEG_ROOT=$PWD/windows/win64/

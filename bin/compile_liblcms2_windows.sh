@@ -7,6 +7,12 @@
 #
 export LCMS_BRANCH=lcms2.15
 
+if [[ $KERNEL != *Msys* ]]; then
+    echo
+    echo "This script is for Windows MSys2-64 only."
+    echo
+    exit 1
+fi
 
 superbuild=$PWD/$BUILD_DIR/tlRender/etc/SuperBuild
 installdir=$PWD/$BUILD_DIR/install
@@ -18,6 +24,12 @@ mkdir -p $installdir
 rm -rf $lcms2dir
 
 #
+# Install development tools
+#
+pacman -Sy --noconfirm
+pacman -Sy base-devel --noconfirm
+
+#
 # Clone the repository
 #
 cd $superbuild
@@ -26,6 +38,7 @@ git clone --depth 1 --branch $LCMS_BRANCH https://github.com/mm2/Little-CMS.git 
 #
 # Set the path to point to gcc and ld
 #
+export SAVED_PATH=$PATH
 export PATH="/mingw64/bin:$PATH"
 
 #
@@ -40,3 +53,8 @@ cd $lcms2dir
 make -j ${CPU_CORES} install
 
 mv $installdir/lib/liblcms2.a $installdir/lib/liblcms2.lib
+
+#
+# Restore path
+# 
+export PATH="$SAVED_PATH"

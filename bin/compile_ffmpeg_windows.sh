@@ -19,6 +19,10 @@ if [[ $KERNEL != *Msys* ]]; then
     exit 1
 fi
 
+export LIBVPX_TAG=v1.12.0
+export X264_TAG=master
+export FFMPEG_TAG=n6.0
+
 export GPL=""
 for i in $@; do
     case $i in
@@ -26,8 +30,8 @@ for i in $@; do
 	    export GPL=GPL
 	    shift
 	    ;;
-	-b|--bsd)
-	    export GPL=BSD
+	-b|--bsd|-l|--lgpl)
+	    export GPL=LGPL
 	    shift
 	    ;;
 	-j)
@@ -48,15 +52,16 @@ for i in $@; do
     esac
 done
 
-ROOT_DIR=$PWD/$BUILD_DIR/FFmpeg
+ROOT_DIR=$PWD/$BUILD_DIR/tlRender/etc/SuperBuild/FFmpeg
+export INSTALL_DIR=$PWD/$BUILD_DIR/install
 
 if [[ $GPL == GPL ]]; then
     echo
     echo "GPL ffmpeg will be built in $ROOT_DIR"
     echo
-elif [[ $GPL == BSD ]]; then
+elif [[ $GPL == LGPL ]]; then
     echo
-    echo "BSD ffmpeg will be built in $ROOT_DIR"
+    echo "LGPL ffmpeg will be built in $ROOT_DIR"
     echo
 else
     echo
@@ -78,7 +83,7 @@ export BUILD_LIBVPX=1
 # Build wiht h264 encoding.
 #
 export BUILD_LIBX264=1
-if [[ $GPL == BSD ]]; then
+if [[ $GPL == LGPL ]]; then
     export BUILD_LIBX264=0
 fi
 
@@ -87,27 +92,26 @@ fi
 #
 export BUILD_FFMPEG=1
 
+
+#
+# Fix CMake/Ninja include list when compiling on non-English locale
+#
+export VSLANG=1033  # @bug: does not work
+
+
 if [[ $MSYS_LIBS == 1 ]]; then
 
-    echo ""
-    echo "If you are asked to close the terminal, you should do so and"
-    echo "run this script again."
-    echo ""
-    pacman -Syu --noconfirm
+    #echo ""
+    #echo "If you are asked to close the terminal, you should do so and"
+    #echo "run this script again."
+    #echo ""
+    pacman -Sy --noconfirm
 
     #
     # This is for libx264 and ffmpeg
     #
     echo "Installing packages needed to build libx264 and ffmpeg..."
     pacman -S make diffutils yasm nasm pkg-config --noconfirm
-
-    if [[ -e /usr/bin/link.exe ]]; then
-	echo "Renaming /usr/bin/link.exe as /usr/bin/link_msys.exe"
-	mv /usr/bin/link.exe /usr/bin/link_msys.exe
-    fi
-
-    echo "Cleaning $ROOT_DIR...."
-    rm -rf $ROOT_DIR
 
 fi
 
@@ -118,7 +122,7 @@ cd    $ROOT_DIR
 
 mkdir -p sources
 mkdir -p build
-mkdir -p install
+
 
 
 #############
@@ -134,15 +138,16 @@ if [[ $BUILD_LIBVPX == 1 ]]; then
 	git clone --depth 1 https://chromium.googlesource.com/webm/libvpx
     fi
     
-    if [[ ! -e $ROOT_DIR/install/lib/vpx.lib ]]; then
+    if [[ ! -e $INSTALL_DIR/lib/vpx.lib ]]; then
 	cd $ROOT_DIR/build
 	mkdir -p libvpx
 	cd libvpx
     
-	./../../sources/libvpx/configure --prefix=./../../install --target=x86_64-win64-vs16 --disable-examples --disable-docs 
+	./../../sources/libvpx/configure --prefix=$INSTALL_DIR --target=x86_64-win64-vs16 --disable-examples --disable-docs 
 	make -j ${CPU_CORES}
 	make install
-	mv $ROOT_DIR/install/lib/x64/vpxmd.lib $ROOT_DIR/install/lib/vpx.lib 
+	mv $INSTALL_DIR/lib/x64/vpxmd.lib $INSTALL_DIR/lib/vpx.lib
+	rm -rf $INSTALL_DIR/lib/x64/
     fi
     
     export ENABLE_LIBVPX='--enable-libvpx --extra-libs=vpx.lib --extra-libs=kernel32.lib --extra-libs=user32.lib --extra-libs=gdi32.lib --extra-libs=winspool.lib --extra-libs=shell32.lib --extra-libs=ole32.lib --extra-libs=oleaut32.lib --extra-libs=uuid.lib --extra-libs=comdlg32.lib --extra-libs=advapi32.lib --extra-libs=msvcrt.lib'
@@ -157,23 +162,26 @@ if [[ $BUILD_LIBX264 == 1 ]]; then
     cd $ROOT_DIR/sources
 
     if [[ ! -d x264 ]]; then
-	git clone --depth 1 https://code.videolan.org/videolan/x264.git
+	git clone --depth 1 https://code.videolan.org/videolan/x264.git --branch ${X264_TAG}
+	#
+	# Fix x264 build scripts
+	#
+	cd x264
+	curl "http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD" > config.guess
+	sed -i 's/host_os = mingw/host_os = msys/' configure
     fi
     
-    #
-    # Fix x264 build scripts
-    #
-    cd x264
-    curl "http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD" > config.guess
-    sed -i 's/host_os = mingw/host_os = msys/' configure
+
+    if [[ ! -e $INSTALL_DIR/lib/libx264.lib ]]; then
+	cd $ROOT_DIR/build
+	mkdir -p x264
+	cd x264
+	CC=cl ./../../sources/x264/configure --prefix=$INSTALL_DIR --enable-shared
+	make -j ${CPU_CORES}
+	make install
+	mv $INSTALL_DIR/lib/libx264.dll.lib $INSTALL_DIR/lib/libx264.lib
+    fi
     
-    cd $ROOT_DIR/build
-    mkdir -p x264
-    cd x264
-    CC=cl ./../../sources/x264/configure --prefix=./../../install --enable-shared
-    make -j ${CPU_CORES}
-    make install
-    mv ./../../install/lib/libx264.dll.lib ./../../install/lib/libx264.lib
     export ENABLE_LIBX264="--enable-libx264"
 fi
 
@@ -185,37 +193,42 @@ if [[ $BUILD_FFMPEG == 1 ]]; then
     cd $ROOT_DIR/sources
 
     if [[ ! -d ffmpeg ]]; then
-	git clone --depth 1 git://source.ffmpeg.org/ffmpeg.git --branch n6.0
+	git clone --depth 1 git://source.ffmpeg.org/ffmpeg.git --branch ${FFMPEG_TAG}
     fi
-    
-    cd $ROOT_DIR/build
-    mkdir -p ffmpeg
-    cd ffmpeg
 
-    export CC=cl
-    export PKG_CONFIG_PATH=$ROOT_DIR/install/lib/pkgconfig
+    if [[ ! -d $INSTALL_DIR/lib/avformat.lib ]]; then
+	cd $ROOT_DIR/build
+	mkdir -p ffmpeg
+	cd ffmpeg
 
-    echo "ENABLE_LIBVPX=${ENABLE_LIBVPX}"
-    
-    ./../../sources/ffmpeg/configure \
-        --prefix=./../../install \
-        --toolchain=msvc \
-	--target-os=win64 \
-        --arch=x86_64 \
-        --enable-x86asm \
-        --enable-asm \
-        --enable-shared \
-        --disable-static \
-        --disable-programs \
-        --enable-swresample \
-        $ENABLE_LIBX264 \
-	$ENABLE_LIBVPX \
-        --enable-gpl \
-        --extra-ldflags="-LIBPATH:./../../install/lib/" \
-        --extra-cflags="-I./../../install/include/"
+	export CC=cl
+	export PKG_CONFIG_PATH=$INSTALL_DIR/lib/pkgconfig
+	
+	./../../sources/ffmpeg/configure \
+            --prefix=$INSTALL_DIR \
+            --toolchain=msvc \
+	    --target-os=win64 \
+            --arch=x86_64 \
+            --enable-x86asm \
+            --enable-asm \
+            --enable-shared \
+            --disable-static \
+            --disable-programs \
+            --enable-swresample \
+            $ENABLE_LIBX264 \
+	    $ENABLE_LIBVPX \
+            --enable-gpl \
+            --extra-ldflags="-LIBPATH:$INSTALL_DIR/lib/" \
+            --extra-cflags="-I$INSTALL_DIR/include/"
 
-    make -j ${CPU_CORES}
-    make install
+	# @bug: MSVC creates bad characters on MSVC with different languages but
+	# we can't fix it
+	make -j ${CPU_CORES}
+	make install
+
+	# @bug: FFmpeg places .lib in bin/
+	mv $INSTALL_DIR/bin/*.lib $INSTALL_DIR/lib/
+    fi
 fi
 
 
@@ -223,15 +236,6 @@ if [[ $MSYS_LIBS == 1 ]]; then
     #
     # Remove the libx264 and ffmpeg libs we downloaded
     #
-    pacman -R make diffutils yasm nasm pkg-config msys2-runtime-devel libxml2-devel  zlib-devel --noconfirm
+    echo "Removing packages used to build libx264 and ffmpeg..."
+    pacman -R make diffutils yasm nasm pkg-config --noconfirm
 fi
-
-#
-# Built done
-#
-echo "${GPL} ffmpeg built done."
-echo ""
-echo "Run the mrv2 compilation again with:"
-echo ""
-echo "runme.sh"
-echo ""
