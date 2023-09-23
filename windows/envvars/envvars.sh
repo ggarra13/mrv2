@@ -17,11 +17,11 @@
 # On Linux and macOS this is always compiled by cmake.
 #
 
-# export LCMS2_ROOT=$PWD/windows/win64/
+export LCMS2_ROOT=$PWD/windows/win64/
 
 #
 # Set the location of precompiled FFmpeg on Windows.
 # If not set, it will compile a GPL version of FFmpeg.
 #
 
-# export FFMPEG_ROOT=$PWD/windows/win64/
+export FFMPEG_ROOT=$PWD/windows/win64/
