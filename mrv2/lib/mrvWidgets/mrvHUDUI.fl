@@ -43,7 +43,7 @@ ui->uiMain->fill_menu( ui->uiMenuBar );} open selected
         callback {v->setHudActive(!v->getHudActive());}
         xywh {274 14 20 20} box UP_BOX down_box DOWN_BOX align 8
         code0 {o->value( view->getHudActive() );}
-        class {mrv::CheckButton}
+        
       }
       Fl_Group uiHUD {
         user_data this user_data_type {} open
@@ -55,7 +55,7 @@ ui->uiMain->fill_menu( ui->uiMenuBar );} open selected
           callback {v->toggleHudDisplay(mrv::HudDisplay::kFilename);}
           xywh {63 128 20 20} box UP_BOX down_box DOWN_BOX align 8
           code0 {o->value( view->getHudDisplay() & mrv::HudDisplay::kFilename);}
-          class {mrv::CheckButton}
+          
         }
         Fl_Check_Button uiHudDirectory {
           label Directory
@@ -63,7 +63,7 @@ ui->uiMain->fill_menu( ui->uiMenuBar );} open selected
           callback {v->toggleHudDisplay(mrv::HudDisplay::kDirectory);}
           xywh {63 79 20 20} box UP_BOX down_box DOWN_BOX align 8
           code0 {o->value( view->getHudDisplay() & mrv::HudDisplay::kDirectory);}
-          class {mrv::CheckButton}
+          
         }
         Fl_Check_Button uiHudFrame {
           label Frame
@@ -71,7 +71,7 @@ ui->uiMain->fill_menu( ui->uiMenuBar );} open selected
           callback {v->toggleHudDisplay(mrv::HudDisplay::kFrame);}
           xywh {63 178 20 20} box UP_BOX down_box DOWN_BOX align 8
           code0 {o->value( view->getHudDisplay() & mrv::HudDisplay::kFrame);}
-          class {mrv::CheckButton}
+          
         }
         Fl_Check_Button uiHudFrameRange {
           label {Frame Range}
@@ -79,7 +79,7 @@ ui->uiMain->fill_menu( ui->uiMenuBar );} open selected
           callback {v->toggleHudDisplay(mrv::HudDisplay::kFrameRange);}
           xywh {238 179 20 20} box UP_BOX down_box DOWN_BOX align 8
           code0 {o->value( view->getHudDisplay() & mrv::HudDisplay::kFrameRange);}
-          class {mrv::CheckButton}
+          
         }
         Fl_Check_Button uiHudFrameCount {
           label {Frame Count}
@@ -87,7 +87,7 @@ ui->uiMain->fill_menu( ui->uiMenuBar );} open selected
           callback {v->toggleHudDisplay(mrv::HudDisplay::kFrameCount);}
           xywh {408 129 20 20} box UP_BOX down_box DOWN_BOX align 8
           code0 {o->value( view->getHudDisplay() & mrv::HudDisplay::kFrameCount);}
-          class {mrv::CheckButton}
+          
         }
         Fl_Check_Button uiHudResolution {
           label Resolution
@@ -95,7 +95,7 @@ ui->uiMain->fill_menu( ui->uiMenuBar );} open selected
           callback {v->toggleHudDisplay(mrv::HudDisplay::kResolution);}
           xywh {238 80 20 20} box UP_BOX down_box DOWN_BOX align 8
           code0 {o->value( view->getHudDisplay() & mrv::HudDisplay::kResolution);}
-          class {mrv::CheckButton}
+          
         }
         Fl_Check_Button uiHudTimecode {
           label Timecode
@@ -103,7 +103,7 @@ ui->uiMain->fill_menu( ui->uiMenuBar );} open selected
           callback {v->toggleHudDisplay(mrv::HudDisplay::kTimecode);}
           xywh {408 181 20 18} box UP_BOX down_box DOWN_BOX align 8
           code0 {o->value( view->getHudDisplay() & mrv::HudDisplay::kTimecode);}
-          class {mrv::CheckButton}
+          
         }
         Fl_Check_Button uiHudFPS {
           label FPS
@@ -111,7 +111,7 @@ ui->uiMain->fill_menu( ui->uiMenuBar );} open selected
           callback {v->toggleHudDisplay(mrv::HudDisplay::kFPS);}
           xywh {238 129 20 20} box UP_BOX down_box DOWN_BOX align 8
           code0 {o->value( view->getHudDisplay() & mrv::HudDisplay::kFPS);}
-          class {mrv::CheckButton}
+          
         }
         Fl_Check_Button uiHudMemory {
           label Memory
@@ -119,7 +119,7 @@ ui->uiMain->fill_menu( ui->uiMenuBar );} open selected
           callback {v->toggleHudDisplay(mrv::HudDisplay::kMemory);}
           xywh {62 233 20 20} box UP_BOX down_box DOWN_BOX align 8
           code0 {o->value( view->getHudDisplay() & mrv::HudDisplay::kMemory);}
-          class {mrv::CheckButton}
+          
         }
         Fl_Check_Button uiHudCache {
           label Cache
@@ -127,7 +127,7 @@ ui->uiMain->fill_menu( ui->uiMenuBar );} open selected
           callback {v->toggleHudDisplay(mrv::HudDisplay::kCache);}
           xywh {237 235 20 20} box UP_BOX down_box DOWN_BOX align 8
           code0 {o->value( view->getHudDisplay() & mrv::HudDisplay::kCache);}
-          class {mrv::CheckButton}
+          
         }
         Fl_Check_Button uiHudAttributes {
           label Attributes
@@ -135,7 +135,7 @@ ui->uiMain->fill_menu( ui->uiMenuBar );} open selected
           callback {v->toggleHudDisplay(mrv::HudDisplay::kAttributes);}
           xywh {408 80 20 20} box UP_BOX down_box DOWN_BOX align 8
           code0 {o->value( view->getHudDisplay() & mrv::HudDisplay::kAttributes);}
-          class {mrv::CheckButton}
+          
         }
       }
     }

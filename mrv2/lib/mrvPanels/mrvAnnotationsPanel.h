@@ -12,13 +12,13 @@ class Fl_Multiline_Input;
 
 namespace mrv
 {
-    class Toggle_Button;
+    class Button;
 
     class AnnotationsPanel : public PanelWidget
     {
         Fl_Button* penColor = nullptr;
-        Toggle_Button* hardBrush = nullptr;
-        Toggle_Button* softBrush = nullptr;
+        Button* hardBrush = nullptr;
+        Button* softBrush = nullptr;
 
     public:
         Fl_Multiline_Input* notes = nullptr;
