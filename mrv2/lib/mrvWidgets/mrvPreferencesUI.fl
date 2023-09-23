@@ -85,7 +85,7 @@ uiMain->hide();} open
         xywh {0 0 847 469} box FLAT_BOX
       } {
         Fl_Wizard uiWizard {
-          label Settings open selected
+          label Settings open
           xywh {283 26 564 380} box PLASTIC_UP_BOX labelcolor 32
         } {
           Fl_Group {} {
@@ -546,11 +546,11 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
             }
           }
           Fl_Group {} {
-            label Playback
-            xywh {300 34 530 362} box EMBOSSED_BOX align 5 hide
+            label Playback open
+            xywh {300 34 530 362} box EMBOSSED_BOX align 5
           } {
             Fl_Group {} {
-              label Defaults
+              label Defaults open
               xywh {310 69 501 278} box ROUNDED_BOX align 5
             } {
               Fl_Check_Button uiPrefsAutoPlayback {
@@ -558,24 +558,19 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                 tooltip {Start Playback when opening files.} xywh {498 111 25 25} box UP_BOX down_box DOWN_BOX align 4
                 class {mrv::CheckButton}
               }
-              Fl_Group {} {
+              Fl_Group {} {open
                 xywh {333 157 450 152} box ROUNDED_BOX
               } {
                 Fl_Group {} {
                   label Sequences open
                   xywh {348 180 415 92} box ROUNDED_FRAME color 35
                 } {
-                  Fl_Check_Button uiPrefsOverrideFPS {
-                    label {Override FPS}
-                    tooltip {Override playback fps when loading sequences.} xywh {588 186 25 25} box UP_BOX down_box DOWN_BOX align 4
-                    class {mrv::CheckButton}
-                  }
                   Fl_Group {} {open
                     xywh {373 215 390 57}
                   } {
                     Fl_Value_Input uiPrefsFPS {
-                      label Speed
-                      xywh {463 222 80 25} color 20 selection_color 0 maximum 120 value 24 textcolor 56
+                      label Speed selected
+                      tooltip {Frames Per Second value for sequences that don't have embedded speed.} xywh {463 222 80 25} color 20 selection_color 0 maximum 120 value 24 textcolor 56
                     }
                     Fl_Menu_Button {} {
                       label FPS
@@ -657,8 +652,8 @@ v->uiPrefsFPS->value( g );}
             }
           }
           Fl_Group {} {
-            label Timeline open
-            xywh {305 34 530 362} box EMBOSSED_BOX align 5
+            label Timeline
+            xywh {305 34 530 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Choice uiPrefsTimelineDisplay {
               label Display

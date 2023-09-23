@@ -1059,6 +1059,9 @@ namespace mrv
                         std_any_cast<int>(p.settingsObject->value(
                             "Performance/FFmpegThreadCount")));
 
+                options.ioOptions["SequenceIO/DefaultSpeed"] =
+                    string::Format("{0}").arg(ui->uiPrefs->uiPrefsFPS->value());
+
 #if defined(TLRENDER_USD)
                 options.ioOptions["usd/renderWidth"] =
                     string::Format("{0}").arg(std_any_cast<int>(

@@ -903,6 +903,7 @@ namespace mrv
                 Fl_Group::current(0);
                 p.popupMenu = new Fl_Menu_Button(0, 0, 0, 0);
 
+                p.popupMenu->textsize(12);
                 p.popupMenu->type(Fl_Menu_Button::POPUP3);
 
                 p.ui->uiMain->fill_menu(p.popupMenu);

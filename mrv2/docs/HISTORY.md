@@ -26,6 +26,8 @@ v0.7.8
 - Improved Windows build system dramatically.  Now there are bash scripts to
   compile all the GNU-like dependencies (FFmpeg, libx264, libvpx and liblcms2).
 - Added x264 to the Linux and macOS builds but it is turned OFF by default.
+- Made right mouse button text size match that of the main menu bar.
+- Fixed Preferences->Playback->FPS not doing anything.  Removed Preferences->Playback->Override FPS.
 - Fixed a problem with the FontSystem when displaying the HUD on Windows.
   (**TODO**)
 
