@@ -31,6 +31,16 @@ extract_version()
 }
 
 #
+# Extract python version from cmake/Modules/BuildPython.cmake
+#
+extract_python_version()
+{
+    local major=`cat cmake/Modules/BuildPython.cmake | grep -o 'set.[ \t]*PYTHON_VERSION\s*[0-9]*' | sed -e 's/set.[ \t]*PYTHON_VERSION[ \t]*//'`
+    local minor=`cat cmake/Modules/BuildPython.cmake | grep -o 'set.[ \t]*PYTHON_VERSION\s*[0-9]*\.[0-9]*' | sed -e 's/set.[ \t]*PYTHON_VERSION[ \t]*[0-9]*\.//'`
+    export PYTHON_VERSION="${major}.${minor}"
+}
+
+#
 # Auxiliary function to send from the staging location to the packages/
 #
 send_to_packages()

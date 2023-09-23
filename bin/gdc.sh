@@ -12,8 +12,16 @@
 
 . etc/build_dir.sh
 
+
+export requests=""
 if [[ $KERNEL == *Msys* ]]; then
-    export PATH=$BUILD_DIR/install/bin:$PATH
+    requests=$BUILD_DIR/install/bin/Lib/site-packages/requests
+else    
+    extract_python_version
+    requests=$BUILD_DIR/install/lib/python$PYTHON_VERSION/site-packages/requests
+fi
+
+if [[ ! -e $requests ]]; then
     python -m pip install requests
 fi
 
@@ -23,4 +31,4 @@ if [[ "$TAG" == "" ]]; then
     export TAG=`git ls-remote --tags --refs | tail -n1 | cut -d/ -f3`
 fi
 
-bin/github-download-count.py ggarra13 mrv2 $TAG
+bin/python/github-download-count.py ggarra13 mrv2 $TAG
