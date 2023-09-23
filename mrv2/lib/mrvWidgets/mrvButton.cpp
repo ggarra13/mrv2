@@ -40,6 +40,13 @@ namespace mrv
         return ret;
     }
 
+    void Button::color(Fl_Color c)
+    {
+        if (c != FL_BACKGROUND_COLOR && c != fl_lighter(default_color))
+            default_color = c;
+        Fl_Button::color(c);
+    }
+
     void Button::draw()
     {
         if (type() == FL_HIDDEN_BUTTON)

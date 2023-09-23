@@ -20,6 +20,9 @@ namespace mrv
 
         virtual int handle(int e);
         virtual void draw();
+
+        void color(Fl_Color c);
+        Fl_Color color() { return Fl_Button::color(); }
     };
 
     class CheckButton : public Fl_Check_Button
