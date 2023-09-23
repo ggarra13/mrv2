@@ -99,6 +99,7 @@ namespace mrv
         textAnnotations(60, 110, W - 70, 30, _("Text")),
         editButton(60, 150, W - 70, 30, _("Edit Text"))
     {
+        resizable(textOutput);
         end();
         textAnnotations.callback((Fl_Callback*)updateText_cb, this);
         editButton.callback((Fl_Callback*)editText_cb, this);

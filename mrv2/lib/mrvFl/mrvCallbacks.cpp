@@ -1732,7 +1732,7 @@ namespace mrv
 
     void edit_text_shape_cb(ViewerUI* ui)
     {
-        TextEdit window(400, 400, _("Edit Text Annotation"));
+        TextEdit window(400, 190, _("Edit Text Annotation"));
 
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
