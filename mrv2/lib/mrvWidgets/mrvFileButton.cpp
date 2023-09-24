@@ -185,6 +185,7 @@ namespace mrv
             {
                 Fl_Menu_Button menu(x(), y(), w(), h());
                 menu.type(Fl_Menu_Button::POPUP3);
+                menu.textsize(12);
                 menu.add(
                     _("&File/&Clone"), 0, (Fl_Callback*)clone_file_cb, 0, 0);
                 menu.add(

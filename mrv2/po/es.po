@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-09-20 18:24-0300\n"
+"POT-Creation-Date: 2023-09-22 17:32-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -1216,16 +1216,6 @@ msgstr ""
 msgid "Cancel"
 msgstr "Cancelar"
 
-msgid "Cannnot parse enironment variable \"{0}\" as a float value; using {1}."
-msgstr ""
-"No pude leer la variable de entorno \"{0}\" como valor de coma flotante; "
-"usando {1}."
-
-msgid ""
-"Cannnot parse enironment variable \"{0}\" as an integer value; using {1}."
-msgstr ""
-"No pude leer la variable de entorno \"{0}\" como valor de entero; usando {1}."
-
 msgid "Cannot append audio clip"
 msgstr "No puedo agragar clip de audio"
 
@@ -1610,6 +1600,9 @@ msgstr "Decimal"
 msgid "Default"
 msgstr "Defecto"
 
+msgid "Default Hotkeys"
+msgstr "Teclas por Defecto"
+
 msgid "Default Settings"
 msgstr "Seteos por Defecto"
 
@@ -1846,10 +1839,6 @@ msgstr "Mapa del Entorno"
 
 msgid "Environment Map type."
 msgstr "Tipo de Mapa del Entorno"
-
-msgid "Environment variable \"{0}\" is not set; using default value ({1})."
-msgstr ""
-"Variable de Entorno \"{0}\" no seteada; usando valor por defecto ({1})."
 
 msgid "EnvironmentMap options."
 msgstr "Opciones de mapa de entorno."
@@ -4585,7 +4574,7 @@ msgstr "Alternar Barra de Píxel"
 msgid "Toggle Playlist Panel"
 msgstr "Alternar Panel de Lista de Reproducción"
 
-msgid "Toggle Preferences Panel"
+msgid "Toggle Preferences Window"
 msgstr "Alternar Ventana de Preferencias"
 
 msgid "Toggle Presentation"
@@ -5101,6 +5090,15 @@ msgstr ""
 msgid "Wipe center in X and Y :class:`mrv2.math.Vector2f`."
 msgstr "Centro del limpiaparabrisas en X o Y :class:`mrv2.math.Vector2f`."
 
+msgid "With clang "
+msgstr "Con clang "
+
+msgid "With gcc "
+msgstr "Con gcc "
+
+msgid "With msvc "
+msgstr "Con msvc "
+
 msgid "Wizard labels are:"
 msgstr "Las etiquetas del wizard son:"
 
@@ -5197,6 +5195,9 @@ msgstr "Menus macOS"
 msgid "mrv2"
 msgstr "mrv2"
 
+msgid "mrv2 depends on:"
+msgstr "mrv2 depende de:"
+
 msgid "oxy"
 msgstr "oxy"
 
@@ -5289,6 +5290,22 @@ msgstr "x9"
 
 msgid "xyY CIE xyY"
 msgstr "xyY CIE xyY"
+
+#~ msgid ""
+#~ "Cannnot parse enironment variable \"{0}\" as a float value; using {1}."
+#~ msgstr ""
+#~ "No pude leer la variable de entorno \"{0}\" como valor de coma flotante; "
+#~ "usando {1}."
+
+#~ msgid ""
+#~ "Cannnot parse enironment variable \"{0}\" as an integer value; using {1}."
+#~ msgstr ""
+#~ "No pude leer la variable de entorno \"{0}\" como valor de entero; usando "
+#~ "{1}."
+
+#~ msgid "Environment variable \"{0}\" is not set; using default value ({1})."
+#~ msgstr ""
+#~ "Variable de Entorno \"{0}\" no seteada; usando valor por defecto ({1})."
 
 #~ msgid "ToolsGroup"
 #~ msgstr "Herramientas"

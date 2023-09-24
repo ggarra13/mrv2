@@ -10,6 +10,7 @@ set(HEADERS
     mrvGLOutline.h
     mrvGLShaders.h
     mrvGLShape.h
+    mrvGLTextEdit.h
     mrvGLUtil.h
     mrvGLViewport.h
     mrvGLViewportPrivate.h
@@ -28,6 +29,7 @@ set(SOURCES
     mrvGLOutline.cpp
     mrvGLShaders.cpp
     mrvGLShape.cpp
+    mrvGLTextEdit.cpp
     mrvGLUtil.cpp
     mrvGLViewport.cpp
     mrvGLViewportDraw.cpp

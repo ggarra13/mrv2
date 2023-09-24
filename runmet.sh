@@ -36,8 +36,6 @@ cd -
 
 dir=$BUILD_DIR/mrv2/src/mrv2-build
 
-rm -f $dir/src/mrv2*
-
 if [[ "$CMAKE_TARGET" == "" ]]; then
     CMAKE_TARGET=install
 fi

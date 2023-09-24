@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Reproducción de Vídeo &mdash; documentación de mrv2 - v0.7.7</title>
+  <title>Reproducción de Vídeo &mdash; documentación de mrv2 - v0.7.8</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
@@ -12,12 +12,12 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
-        <script src="../_static/translations.js"></script>
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=9dc8b9dc"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../_static/translations.js?v=efdbd0b9"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Índice" href="../genindex.html" />
@@ -96,21 +96,21 @@
            <div itemprop="articleBody">
              
   <section id="reproduccion-de-video">
-<h1>Reproducción de Vídeo<a class="headerlink" href="#reproduccion-de-video" title="Enlace permanente a este encabezado"></a></h1>
+<h1>Reproducción de Vídeo<a class="headerlink" href="#reproduccion-de-video" title="Link to this heading"></a></h1>
 <section id="cuadro-actual">
-<h2>Cuadro Actual<a class="headerlink" href="#cuadro-actual" title="Enlace permanente a este encabezado"></a></h2>
+<h2>Cuadro Actual<a class="headerlink" href="#cuadro-actual" title="Link to this heading"></a></h2>
 <p>En mrv2, cada clip y lista de reproducción tiene su propio cuadro actual lo que significa que si cambia de uno a otro, cosas como la velocidad de reproducción, el modo de bucle, etc. son recordados <em>por lista de reproducción</em> o clip.</p>
 </section>
 <section id="modos-de-bucle">
-<h2>Modos de Bucle<a class="headerlink" href="#modos-de-bucle" title="Enlace permanente a este encabezado"></a></h2>
+<h2>Modos de Bucle<a class="headerlink" href="#modos-de-bucle" title="Link to this heading"></a></h2>
 <p>Use botón de modo de bucle para cambiar entre “reproducir una vez”, “reproducir en bucle” y “ping-pong” cuando se reproduce el medio.</p>
 </section>
 <section id="velocidad-de-fps">
-<h2>Velocidad de FPS<a class="headerlink" href="#velocidad-de-fps" title="Enlace permanente a este encabezado"></a></h2>
+<h2>Velocidad de FPS<a class="headerlink" href="#velocidad-de-fps" title="Link to this heading"></a></h2>
 <p>La velocidad de FPS (Frames per Second o Cuadros por Segundo) puede ser ajustada desde el botón de “FPS” en la barra de playback.  También puede escribir una velocidad al azar en el widget de FPS.</p>
 </section>
 <section id="teclas-especificas-de-reproduccion">
-<h2>Teclas Específicas de Reproducción<a class="headerlink" href="#teclas-especificas-de-reproduccion" title="Enlace permanente a este encabezado"></a></h2>
+<h2>Teclas Específicas de Reproducción<a class="headerlink" href="#teclas-especificas-de-reproduccion" title="Link to this heading"></a></h2>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Teclas</p></th>
@@ -158,7 +158,7 @@
 </table>
 </section>
 <section id="comportamiento-del-cache">
-<h2>Comportamiento del Cache<a class="headerlink" href="#comportamiento-del-cache" title="Enlace permanente a este encabezado"></a></h2>
+<h2>Comportamiento del Cache<a class="headerlink" href="#comportamiento-del-cache" title="Link to this heading"></a></h2>
 <p>mrv2 tratará siempre de leer y decodificar datos de vídeo antes de que sea necesitado para el display. Los datos de la imagen son guardados en el cache listo para dibujar en la pantalla. mrv2 necesita ser eficiente en cómo hace esto y es útil si el usuario entiende su comportamiento.</p>
 <p>El estatus del cache está indicado en la línear de tiempo por una delgada línea de color horizontal - esto debe ser obvio ya que puede verla crecer mientra mrv2 carga cuadros del disco en el fondo. Por ello, si quiere ver un clip que es lento de leer del disco, como unas imágenes de EXR de alta resolución, el comportamiento es esperar que mrv2 cache los cuadros antes de arrancar la reproducción/bucle. El tamaño del cache (seteado via el Panel de Seteos) limitará el máximo número de cuadros que pueden ser cargados.</p>
 <p>En la mayoría de los casos, mrv2 debería ser capaz de reproducir los cuadros en el cache a la velocidad de FPS del medio. A pesar que el Visor ha sido optimizado para obtener lo mejor de su tarjeta gráfica, la reproducción lenta puede resultar si esta tratando de ver imágenes de muy alta resolución y el hardware de video de su computadora no puede empatar el ratio de transferencia.</p>

@@ -59,7 +59,7 @@ namespace mrv
         Fl_Round_Button* r;
         DoubleSpinner* d;
         Fl_Button* b;
-        Toggle_Button* bt;
+        Button* bt;
         HorSlider* s;
         Fl_Choice* c;
         Fl_Check_Button* cb;
@@ -239,7 +239,7 @@ namespace mrv
         value = settingsObject->value(kSoftBrush);
         int soft = std_any_cast<int>(value);
 
-        auto bW = new Widget< Toggle_Button >(X + 150, Y, 25, 25);
+        auto bW = new Widget< Button >(X + 150, Y, 25, 25);
         bt = hardBrush = bW;
         bt->selection_color(FL_YELLOW);
         bt->down_box(FL_EMBOSSED_BOX);
@@ -259,7 +259,7 @@ namespace mrv
                 redraw();
             });
 
-        bt = softBrush = bW = new Widget< Toggle_Button >(X + 200, Y, 25, 25);
+        bt = softBrush = bW = new Widget< Button >(X + 200, Y, 25, 25);
         bt->tooltip(_("Selects a soft brush."));
         bt->selection_color(FL_YELLOW);
         bt->down_box(FL_EMBOSSED_BOX);

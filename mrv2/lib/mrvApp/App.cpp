@@ -803,15 +803,26 @@ namespace mrv
 
     struct PlaybackData
     {
-        TimelinePlayer* player;
+        TimelineViewport* view;
         timeline::Playback playback;
     };
 
     static void start_playback(void* data)
     {
         PlaybackData* p = (PlaybackData*)data;
-        auto player = p->player;
-        player->setPlayback(p->playback);
+        auto view = p->view;
+        switch (p->playback)
+        {
+        case timeline::Playback::Forward:
+            view->playForwards();
+            break;
+        case timeline::Playback::Reverse:
+            view->playBackwards();
+            break;
+        default:
+            view->stop();
+            break;
+        }
         delete p;
     }
 
@@ -830,7 +841,7 @@ namespace mrv
             // We use a timeout to start playback of the loaded video to
             // make sure to show all frames
             PlaybackData* data = new PlaybackData;
-            data->player = p.timelinePlayers[0];
+            data->view = ui->uiView;
             data->playback = p.options.playback;
             Fl::add_timeout(0.005, (Fl_Timeout_Handler)start_playback, data);
         }
@@ -1048,6 +1059,9 @@ namespace mrv
                         std_any_cast<int>(p.settingsObject->value(
                             "Performance/FFmpegThreadCount")));
 
+                options.ioOptions["SequenceIO/DefaultSpeed"] =
+                    string::Format("{0}").arg(ui->uiPrefs->uiPrefsFPS->value());
+
 #if defined(TLRENDER_USD)
                 options.ioOptions["usd/renderWidth"] =
                     string::Format("{0}").arg(std_any_cast<int>(
@@ -1221,7 +1235,7 @@ namespace mrv
                         redrawPanelThumbnails();
                     if (ui->uiPrefs->uiPrefsAutoPlayback->value() && loaded)
                     {
-                        player->setPlayback(timeline::Playback::Forward);
+                        ui->uiView->playForwards();
                     }
                     ui->uiMain->fill_menu(ui->uiMenuBar);
                 }

@@ -22,7 +22,7 @@ Contents:
     * [Building mrv2](#building-mrv2)
     * [Debug builds](#debug-builds)
     * [Building on Windows](#building-on-windows)
-    * [Building FFmpeg on Windows](#building-ffmpeg-on-windows)
+    * [Building FFmpeg as GPL or LGPL](#building-ffmpeg-as-gpl-or-lgpl)
 * [Running mrv2](#running-mrv2)
     * [macOS and Linux](#macos-and-linux)
     * [Windows](#windows)
@@ -140,7 +140,7 @@ On Linux, if you have Docker installed with your user as part of the docker
 group, you can just build mrv2 with:
 
 ```
-runme_docker.sh
+./runme_docker.sh
 ```
 The resulting installers will be placed in a new packages/ directory of the
 root of mrv2.
@@ -313,55 +313,22 @@ There is a .bat file included in the distribution (in windows/bat),
 which needs to be modified to the path of Visual Studio (2019 by default),
 the optional Windows SDK (none by default) and your copy of Msys.
 
-
-## Building FFmpeg on Windows
-
-The windows compilation does not compile the ffmpeg, libintl nor
-the libiconv libraries.
-
 As a convernience for Windows users, DLLs, includes and .lib files
-for those libraries are provided in mrv2's windows/win64 directory.
+for FFmpeg, libintl, libiconv, and liblcms2 libraries are provided in mrv2's windows/win64 directory.
 
-libintl and libiconv are not updated often.
+If you unset LCMS2_ROOT in windows/envvars/envvars.sh, the library will be compiled. 
 
-However ffmpeg is, so it is suggested you learn how to compile it.
+## Building FFmpeg as GPL or LGPL
 
-At the root of the mrv2 directory, there's a:
-
-```
-./bin/compile_ffmpeg_windows.sh
-```
-
-script which will compile ffmpeg as a BSD or GPL licensed.  libx264 will only
-get compiled if compiling with a GPL license.
-
-You can use that script first and then run the mrv2 compilarion as usual.
-
-If you need more codecs than those two, a very good way is to use the media
-autobuild suite, which runs on a separate and fresh MSys (yes, you need to
-keep two Msys copies) and downloads and compiles all dependencies based on
-simple questions.
-
-The media autobuild suite can be obtained with:
+If you pass -gpl or -lpgl to the runme.sh script, like:
 
 ```
-cd some_dir
-git clone https://github.com/m-ab-s/media-autobuild_suite
+./runme.sh -gpl
 ```
 
-Modify the MABS_ROOT variable in windows/envvars/envvars.sh
-to pointo your MABS_ROOT installation.
+The build system will compile FFmpeg as GPL or LGPL.  The default is to build a LGPL version of FFmpeg as that complies with the BSD binary distribution license.  The LGPL version of FFmpeg, however, does not come with libx264, which means you cannot save movie files with the H264 codec.  On Windows, if you don't specify neither -gpl nor -lgpl, the pre-compiled LGPL binaries are used.
 
-For example, if your some_dir was E: you should set the variable to:
-
-```
-export MABS_ROOT="/E/media-autobuild_suite/"
-```
-
-Then from Windows' Explorer (not from Msys as it won't run .bat files)
-go to some_dir/media-autobuild_suite and run:
-
-media-autobuild_suite.bat
+The GPL version of FFmpeg does not have that restriction and it will compile libx264 on all platforms.
 
 # Running mrv2
 
@@ -432,7 +399,7 @@ Currently, the documentation is generated automatically from the translations.
 To do so, you must run:
 
 ```
-runmeq.sh -t doc
+./runmeq.sh -t doc
 ```
 
 # Translating
@@ -454,7 +421,7 @@ set( LANGUAGES es ) # add a new language code inside the parenthesis, like "de".
 Then, run:
 
 ```
-runmeq.sh -t po
+./runmeq.sh -t po
 ```
 
 If there's no .po file for that language yet, gettext's msginit command
@@ -477,7 +444,7 @@ too.  Refer to the gettext manual for further information.
 Once you are ready to test your translation, run:
 
 ```
-runmeq.sh -t mo
+./runmeq.sh -t mo
 ```
 
 That will create the .mo files for your language. 
@@ -487,13 +454,13 @@ That will create the .mo files for your language.
 To test the translation, you can just run:
 
 ```
-runmeq.sh -t install
+./runmeq.sh -t install
 ```
 
 or just:
 
 ```
-runmeq.sh
+./runmeq.sh
 ```
 
 and that will place the .mo files in the:
@@ -503,7 +470,7 @@ If you add or remove strings as part of your code changes, you may want to
 regenerate the .pot files after a while, before calling -t mo.  To do so:
 
 ```
-runmeq.sh -t pot
+./runmeq.sh -t pot
 ```
 
 Note that this change is dramatic as your commits of the code changes will
@@ -536,7 +503,7 @@ TGZ file.  On Windows it is a ZIP or an NSIS EXE installer.
 To do so, from the main dir of mrv2, you have to do:
 
 ```
-runmeq.sh -t package
+./runmeq.sh -t package
 ```
 For all architectures, the installers will be stored in:
 

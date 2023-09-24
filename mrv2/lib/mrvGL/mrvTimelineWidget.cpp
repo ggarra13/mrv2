@@ -38,7 +38,7 @@ namespace mrv
 {
     namespace
     {
-        const double kTimeout = 0.005;
+        const double kTimeout = 0.0; // 05;
         const char* kModule = "timelineui";
     } // namespace
 
@@ -114,8 +114,6 @@ namespace mrv
         std::shared_ptr<gl::VAO> vao;
         std::chrono::steady_clock::time_point mouseWheelTimer;
 
-        std::vector< otime::RationalTime > annotationTimes;
-
         bool dragging = false;
 
         otime::TimeRange timeRange = time::invalidTimeRange;
@@ -125,11 +123,7 @@ namespace mrv
         Fl_Gl_Window(X, Y, W, H, L),
         _p(new Private)
     {
-        int fl_double = FL_DOUBLE;
-#ifdef __APPLE__
-        fl_double = 0; // @bug: macOS flickers when window is double.
-#endif
-        mode(FL_RGB | FL_ALPHA | fl_double | FL_STENCIL | FL_OPENGL3);
+        mode(FL_RGB | FL_ALPHA | FL_STENCIL | FL_OPENGL3);
     }
 
     void TimelineWidget::setContext(
@@ -509,15 +503,9 @@ namespace mrv
         CHECK_GL;
 
         bool annotationMarks = false;
-        const auto player = p.ui->uiView->getTimelinePlayer();
-        if (player)
+        if (p.player)
         {
-            const auto times = player->getAnnotationTimes();
-            if (times != p.annotationTimes)
-            {
-                annotationMarks = true;
-                p.annotationTimes = times;
-            }
+            annotationMarks = p.player->hasAnnotations();
         }
 
         if (p.eventLoop->hasDrawUpdate() || annotationMarks || !p.buffer)
@@ -529,14 +517,11 @@ namespace mrv
                     gl::OffscreenBufferOptions offscreenBufferOptions;
                     offscreenBufferOptions.colorType =
                         image::PixelType::RGBA_F32;
-                    CHECK_GL;
                     if (gl::doCreate(
                             p.buffer, renderSize, offscreenBufferOptions))
                     {
-                        CHECK_GL;
                         p.buffer = gl::OffscreenBuffer::create(
                             renderSize, offscreenBufferOptions);
-                        CHECK_GL;
                     }
                 }
                 else
@@ -547,20 +532,16 @@ namespace mrv
                 if (p.render && p.buffer)
                 {
                     gl::OffscreenBufferBinding binding(p.buffer);
-                    CHECK_GL;
                     timeline::RenderOptions renderOptions;
                     renderOptions.clearColor =
                         p.style->getColorRole(ui::ColorRole::Window);
                     p.render->begin(
                         renderSize, timeline::ColorConfigOptions(),
                         timeline::LUTOptions(), renderOptions);
-                    CHECK_GL;
                     p.eventLoop->draw(p.render);
-                    CHECK_GL;
-                    _drawAnnotationMarks();
-                    CHECK_GL;
+                    if (annotationMarks)
+                        _drawAnnotationMarks();
                     p.render->end();
-                    CHECK_GL;
                 }
             }
             catch (const std::exception& e)
@@ -577,17 +558,13 @@ namespace mrv
         if (p.buffer)
         {
             p.shader->bind();
-            CHECK_GL;
             const auto pm = math::ortho(
                 0.F, static_cast<float>(renderSize.w), 0.F,
                 static_cast<float>(renderSize.h), -1.F, 1.F);
             p.shader->setUniform("transform.mvp", pm);
-            CHECK_GL;
 
             glActiveTexture(GL_TEXTURE0);
-            CHECK_GL;
             glBindTexture(GL_TEXTURE_2D, p.buffer->getColorID());
-            CHECK_GL;
 
             const auto mesh =
                 geom::box(math::Box2i(0, 0, renderSize.w, renderSize.h));
@@ -595,31 +572,22 @@ namespace mrv
             {
                 p.vbo = gl::VBO::create(
                     mesh.triangles.size() * 3, gl::VBOType::Pos2_F32_UV_U16);
-                CHECK_GL;
             }
             if (p.vbo)
             {
                 p.vbo->copy(convert(mesh, gl::VBOType::Pos2_F32_UV_U16));
-                CHECK_GL;
             }
 
             if (!p.vao && p.vbo)
             {
                 p.vao = gl::VAO::create(
                     gl::VBOType::Pos2_F32_UV_U16, p.vbo->getID());
-                CHECK_GL;
             }
             if (p.vao && p.vbo)
             {
                 p.vao->bind();
-                CHECK_GL;
                 p.vao->draw(GL_TRIANGLES, 0, p.vbo->getSize());
-                CHECK_GL;
             }
-        }
-        else
-        {
-            LOG_ERROR("No p.buffer");
         }
     }
 
@@ -1239,7 +1207,8 @@ namespace mrv
         const auto& color = image::Color4f(1, 1, 0, 0.25);
         TimelineWidget* self = const_cast<TimelineWidget*>(this);
         const float devicePixelRatio = self->pixels_per_unit();
-        for (const auto time : p.annotationTimes)
+        const auto& times = p.player->getAnnotationTimes();
+        for (const auto time : times)
         {
             double X = _timeToPos(time);
             math::Box2i bbox(X - 0.5, 0, 2, 20 * devicePixelRatio);

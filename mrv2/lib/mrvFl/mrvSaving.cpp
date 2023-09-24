@@ -580,6 +580,10 @@ namespace mrv
                         view->flush();
                         CHECK_GL;
 
+                        view->make_current();
+                        CHECK_GL;
+                        gl::initGLAD();
+
                         // Render the video.
                         gl::OffscreenBufferBinding binding(buffer);
                         CHECK_GL;
@@ -640,6 +644,8 @@ namespace mrv
             view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());
             view->setHudActive(hud);
             view->setPresentationMode(presentation);
+            ui->uiTimeline->valid(0); // needed
+            ui->uiTimeline->redraw();
             tcp->unlock();
         }
         catch (std::exception& e)

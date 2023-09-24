@@ -198,6 +198,9 @@ namespace mrv
     void clear_note_annotation_cb(ViewerUI* ui);
     void add_note_annotation_cb(ViewerUI* ui, const std::string& text);
 
+    // Text shapes
+    void edit_text_shape_cb(ViewerUI* ui);
+
     // Panel callbacks
     void clone_file_cb(Fl_Menu_* m, void* d);
     void set_stereo_cb(Fl_Menu_* m, void* d);

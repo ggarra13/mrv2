@@ -85,7 +85,7 @@ uiMain->hide();} open
         xywh {0 0 847 469} box FLAT_BOX
       } {
         Fl_Wizard uiWizard {
-          label Settings open selected
+          label Settings open
           xywh {283 26 564 380} box PLASTIC_UP_BOX labelcolor 32
         } {
           Fl_Group {} {
@@ -99,23 +99,19 @@ uiMain->hide();} open
               Fl_Check_Button uiPrefsAlwaysOnTop {
                 label {Always on Top}
                 tooltip {When selected, mrv2's window will always show up on top of other windows on the desktop.} xywh {317 67 25 25} box UP_BOX down_box DOWN_BOX align 8
-                class {mrv::CheckButton}
               }
               Fl_Check_Button uiPrefsSecondaryOnTop {
                 label {Secondary on Top}
                 tooltip {When selected, mrv2's window will always show up on top of other windows on the desktop.} xywh {317 97 25 25} box UP_BOX down_box DOWN_BOX align 8
-                class {mrv::CheckButton}
               }
               Fl_Check_Button uiPrefsSingleInstance {
                 label {Single Instance}
                 tooltip {When selected, only a single mrv2 instance is allowed.
 If you try to open several mrv2s with different images, all these images will be sent to the already open mrv2.} xywh {317 127 25 25} box UP_BOX down_box DOWN_BOX align 8
-                class {mrv::CheckButton}
               }
               Fl_Check_Button uiPrefsAutoFitImage {
                 label {Auto Refit Image}
                 tooltip {When selected, mrv2 will apply a fit image operation on each video played.  This effectly means the video will be resized automatically based on the size of the window.} xywh {317 157 25 25} box UP_BOX down_box DOWN_BOX value 1 align 8
-                class {mrv::CheckButton}
               }
               Fl_Group uiPrefsOpenMode {open
                 xywh {608 66 195 95} box UP_BOX
@@ -141,12 +137,10 @@ If you try to open several mrv2s with different images, all these images will be
               Fl_Check_Button uiPrefsMenuBar {
                 label {Menu Bar}
                 tooltip {When selected, mrv2 will start with the menu bar already shown.} xywh {418 242 25 25} box UP_BOX down_box DOWN_BOX value 1 align 8
-                class {mrv::CheckButton}
               }
               Fl_Check_Button uiPrefsTopbar {
                 label Topbar
                 tooltip {When selected, mrv2 will start with its channel, gain, gamma toolbar visible.} xywh {419 270 25 25} box UP_BOX down_box DOWN_BOX value 1 align 8
-                class {mrv::CheckButton}
               }
               Fl_Check_Button uiPrefsPixelToolbar {
                 label {Pixel Toolbar}
@@ -155,27 +149,22 @@ If you try to open several mrv2s with different images, all these images will be
               Fl_Check_Button uiPrefsTimeline {
                 label Timeline
                 tooltip {When selected, mrv2 will start with the timeline shown.} xywh {419 328 25 25} box UP_BOX down_box DOWN_BOX value 1 align 136
-                class {mrv::CheckButton}
               }
               Fl_Check_Button uiPrefsStatusBar {
                 label {Status Bar}
                 tooltip {When selected, mrv2 will start with the status bar visible.} xywh {418 356 25 25} box UP_BOX down_box DOWN_BOX value 1 align 136
-                class {mrv::CheckButton}
               }
               Fl_Check_Button uiPrefsMacOSMenus {
                 label {macOS Menus}
                 tooltip {This is a macOS setting only.  When selected the menus will appear on the system toolbar instead of the mrv2 toolbar.} xywh {593 241 25 25} box UP_BOX down_box DOWN_BOX align 8
-                class {mrv::CheckButton}
               }
               Fl_Check_Button uiPrefsToolBar {
                 label {Tool Dock}
                 tooltip {When selected, mrv2 will start with the action tool dock already open.} xywh {593 272 25 25} box UP_BOX down_box DOWN_BOX align 136
-                class {mrv::CheckButton}
               }
               Fl_Check_Button uiPrefsOnePanelOnly {
                 label {Only One Panel}
                 tooltip {When selected, mrv2 will start with the only one panel option selected.} xywh {594 328 25 25} box UP_BOX down_box DOWN_BOX align 136
-                class {mrv::CheckButton}
               }
             }
           }
@@ -266,7 +255,6 @@ If you try to open several mrv2s with different images, all these images will be
                 label {Safe Areas}
                 user_data this user_data_type {PreferencesUI*}
                 tooltip {When mrv2 starts, the safe area display will be active by default.} xywh {653 131 20 20} box UP_BOX down_box DOWN_BOX align 8
-                class {mrv::CheckButton}
               }
               Fl_Choice uiPrefsZoomSpeed {
                 label {Zoom Speed} open
@@ -295,67 +283,60 @@ If you try to open several mrv2s with different images, all these images will be
                 label Filename
                 user_data this user_data_type {PreferencesUI*}
                 xywh {338 287 20 20} box UP_BOX down_box DOWN_BOX align 8
-                class {mrv::CheckButton}
               }
               Fl_Check_Button uiPrefsHudDirectory {
                 label Directory
                 user_data this user_data_type {PreferencesUI*}
                 xywh {338 257 20 20} box UP_BOX down_box DOWN_BOX align 8
-                class {mrv::CheckButton}
               }
               Fl_Check_Button uiPrefsHudFrame {
                 label Frame
                 user_data this user_data_type {PreferencesUI*}
                 xywh {338 317 20 20} box UP_BOX down_box DOWN_BOX align 8
-                class {mrv::CheckButton}
               }
               Fl_Check_Button uiPrefsHudFrameRange {
                 label {Frame Range}
                 user_data this user_data_type {PreferencesUI*}
                 xywh {483 317 20 20} box UP_BOX down_box DOWN_BOX align 8
-                class {mrv::CheckButton}
               }
               Fl_Check_Button uiPrefsHudFrameCount {
                 label {Frame Count}
                 user_data this user_data_type {PreferencesUI*}
                 xywh {653 287 20 20} box UP_BOX down_box DOWN_BOX align 8
-                class {mrv::CheckButton}
               }
               Fl_Check_Button uiPrefsHudResolution {
                 label Resolution
                 user_data this user_data_type {PreferencesUI*}
                 xywh {483 257 20 20} box UP_BOX down_box DOWN_BOX align 8
-                class {mrv::CheckButton}
               }
               Fl_Check_Button uiPrefsHudTimecode {
                 label Timecode
                 user_data this user_data_type {PreferencesUI*}
                 xywh {653 319 20 18} box UP_BOX down_box DOWN_BOX align 8
-                class {mrv::CheckButton}
               }
               Fl_Check_Button uiPrefsHudFPS {
                 label FPS
                 user_data this user_data_type {PreferencesUI*}
                 xywh {483 287 20 20} box UP_BOX down_box DOWN_BOX align 8
-                class {mrv::CheckButton}
+                
               }
               Fl_Check_Button uiPrefsHudMemory {
                 label Memory
                 user_data this user_data_type {PreferencesUI*}
                 xywh {337 345 20 20} box UP_BOX down_box DOWN_BOX align 8
-                class {mrv::CheckButton}
+                
               }
               Fl_Check_Button uiPrefsHudCache {
                 label Cache
                 user_data this user_data_type {PreferencesUI*}
                 xywh {483 346 20 20} box UP_BOX down_box DOWN_BOX align 8
-                class {mrv::CheckButton}
+                
               }
               Fl_Check_Button uiPrefsHudAttributes {
                 label Attributes
                 user_data this user_data_type {PreferencesUI*}
                 xywh {653 257 20 20} box UP_BOX down_box DOWN_BOX align 8
-                class {mrv::CheckButton}
+                
               }
             }
           }
@@ -475,7 +456,7 @@ o->redraw();}
             Fl_Check_Button uiAlwaysSaveOnExit {
               label {Always Save on Exit}
               tooltip {When this option is set, mrv2 will save its position and size upon exiting the program.} xywh {458 73 215 25} box UP_BOX down_box DOWN_BOX align 16
-              class {mrv::CheckButton}
+              
             }
             Fl_Group {} {open
               xywh {337 115 451 48} box ROUNDED_BOX
@@ -483,7 +464,7 @@ o->redraw();}
               Fl_Check_Button uiWindowFixedPosition {
                 label {Fixed Position}
                 tooltip {When this option is set, mrv2 will open in the position you set here (except if the window goes out of the Desktop).  If Akways Save on Exit is on, the values are recakculated upon exiting the program.} xywh {348 126 215 25} box UP_BOX down_box DOWN_BOX align 16
-                class {mrv::CheckButton}
+                
               }
               Fl_Value_Input uiWindowXPosition {
                 label {X:}
@@ -500,7 +481,7 @@ o->redraw();}
               Fl_Check_Button uiWindowFixedSize {
                 label {Fixed Size}
                 tooltip {When this option is on, mrv2 will always open to the size you set in W and H.  If Always Save on Exit is on, the values are recalculated upon exiting the program.} xywh {348 221 215 25} box UP_BOX down_box DOWN_BOX align 16
-                class {mrv::CheckButton}
+                
               }
               Fl_Value_Input uiWindowXSize {
                 label {W:}
@@ -528,17 +509,17 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
             Fl_Check_Button uiPrefsFileReqFolder {
               label {Single Click to Travel Drawers}
               tooltip {When using mrv2's file chooser, a single click on a folder will open it.} xywh {358 57 25 27} box UP_BOX down_box DOWN_BOX align 136
-              class {mrv::CheckButton}
+              
             }
             Fl_Check_Button uiPrefsFileReqThumbnails {
               label {Thumbnails Active}
               tooltip {Show thumbnails for known files.} xywh {358 100 25 27} box UP_BOX down_box DOWN_BOX align 136
-              class {mrv::CheckButton}
+              
             }
             Fl_Check_Button uiPrefsUSDThumbnails {
               label {USD Thumbnails}
               tooltip {Show Thumbnails for USD files (can be slow if they are big)} xywh {358 143 25 27} box UP_BOX down_box DOWN_BOX align 136
-              class {mrv::CheckButton}
+              
             }
             Fl_Check_Button uiPrefsNativeFileChooser {
               label {Use Native File Chooser}
@@ -546,36 +527,31 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
             }
           }
           Fl_Group {} {
-            label Playback
-            xywh {300 34 530 362} box EMBOSSED_BOX align 5 hide
+            label Playback open
+            xywh {300 34 530 362} box EMBOSSED_BOX align 5
           } {
             Fl_Group {} {
-              label Defaults
+              label Defaults open
               xywh {310 69 501 278} box ROUNDED_BOX align 5
             } {
               Fl_Check_Button uiPrefsAutoPlayback {
                 label {Auto Playback}
                 tooltip {Start Playback when opening files.} xywh {498 111 25 25} box UP_BOX down_box DOWN_BOX align 4
-                class {mrv::CheckButton}
+                
               }
-              Fl_Group {} {
+              Fl_Group {} {open
                 xywh {333 157 450 152} box ROUNDED_BOX
               } {
                 Fl_Group {} {
                   label Sequences open
                   xywh {348 180 415 92} box ROUNDED_FRAME color 35
                 } {
-                  Fl_Check_Button uiPrefsOverrideFPS {
-                    label {Override FPS}
-                    tooltip {Override playback fps when loading sequences.} xywh {588 186 25 25} box UP_BOX down_box DOWN_BOX align 4
-                    class {mrv::CheckButton}
-                  }
                   Fl_Group {} {open
                     xywh {373 215 390 57}
                   } {
                     Fl_Value_Input uiPrefsFPS {
-                      label Speed
-                      xywh {463 222 80 25} color 20 selection_color 0 maximum 120 value 24 textcolor 56
+                      label Speed selected
+                      tooltip {Frames Per Second value for sequences that don't have embedded speed.} xywh {463 222 80 25} color 20 selection_color 0 maximum 120 value 24 textcolor 56
                     }
                     Fl_Menu_Button {} {
                       label FPS
@@ -657,8 +633,8 @@ v->uiPrefsFPS->value( g );}
             }
           }
           Fl_Group {} {
-            label Timeline open
-            xywh {305 34 530 362} box EMBOSSED_BOX align 5
+            label Timeline
+            xywh {305 34 530 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Choice uiPrefsTimelineDisplay {
               label Display
@@ -681,12 +657,12 @@ v->uiPrefsFPS->value( g );}
             Fl_Check_Button uiPrefsTimelineThumbnails {
               label {Preview Thumbnails}
               tooltip {Thumbnails above timeline (does not work on Wayland)} xywh {397 88 63 20} down_box DOWN_BOX value 1
-              class {mrv::CheckButton}
+              
             }
             Fl_Check_Button uiPrefsRemoveEDLs {
               label {Remove EDLs in Temporary Folder on Exit}
               tooltip {When selected, temporary EDLs (Playlists) will be removed from the temporary folder.} xywh {397 120 73 20} down_box DOWN_BOX value 1
-              class {mrv::CheckButton}
+              
             }
             Fl_Group {} {
               label {Edit Viewport} open
@@ -717,27 +693,27 @@ v->uiPrefsFPS->value( g );}
               Fl_Check_Button uiPrefsShowTransitions {
                 label {Show Transitions}
                 tooltip {Show Transitions in Edit Viewport} xywh {565 309 15 20} down_box DOWN_BOX value 1 align 4
-                class {mrv::CheckButton}
+                
               }
               Fl_Check_Button uiPrefsShowMarkers {
                 label {Show Markers}
                 tooltip {Show Markers in Edit Viewport} xywh {565 338 15 20} down_box DOWN_BOX value 1 align 4
-                class {mrv::CheckButton}
+                
               }
               Fl_Check_Button uiPrefsTimelineEditable {
                 label Editable
                 tooltip {Editable Timeline Viewport.} xywh {565 213 15 20} down_box DOWN_BOX value 1 align 4 hide
-                class {mrv::CheckButton}
+                
               }
               Fl_Check_Button uiPrefsEditAssociatedClips {
                 label {Edit Associated Clips}
                 tooltip {Edit Associated Clips.} xywh {565 243 15 20} down_box DOWN_BOX value 1 align 4 hide
-                class {mrv::CheckButton}
+                
               }
               Fl_Check_Button uiPrefsEditMode {
                 label {Start in Edit mode}
                 tooltip {Editing viewport will be visible at start up.} xywh {565 181 63 24} down_box DOWN_BOX value 1 align 4
-                class {mrv::CheckButton}
+                
               }
             }
           }

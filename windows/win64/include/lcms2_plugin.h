@@ -249,7 +249,7 @@ extern "C"
 //----------------------------------------------------------------------------------------------------------
 
 // Plug-in foundation
-#    define cmsPluginMagicNumber 0x61637070            // 'acpp'
+#    define cmsPluginMagicNumber 0x61637070 // 'acpp'
 
 #    define cmsPluginMemHandlerSig 0x6D656D48          // 'memH'
 #    define cmsPluginInterpolationSig 0x696E7048       // 'inpH'
@@ -355,7 +355,7 @@ extern "C"
     { // Used on all interpolations. Supplied by lcms2 when calling the
       // interpolation function
 
-        cmsContext ContextID;     // The calling thread
+        cmsContext ContextID; // The calling thread
 
         cmsUInt32Number dwFlags;  // Keep original flags
         cmsUInt32Number nInputs;  // != 1 only in 3D interpolation
@@ -418,7 +418,7 @@ extern "C"
             ParameterCount[MAX_TYPES_IN_LCMS_PLUGIN]; // Number of parameters
                                                       // for each function
 
-        cmsParametricCurveEvaluator Evaluator;        // The evaluator
+        cmsParametricCurveEvaluator Evaluator; // The evaluator
 
     } cmsPluginParametricCurves;
     //----------------------------------------------------------------------------------------------------------
@@ -457,7 +457,7 @@ extern "C"
     } cmsFormatterDirection;
 
     typedef cmsFormatter (*cmsFormatterFactory)(
-        cmsUInt32Number Type,     // Specific type, i.e. TYPE_RGB_8
+        cmsUInt32Number Type, // Specific type, i.e. TYPE_RGB_8
         cmsFormatterDirection Dir,
         cmsUInt32Number dwFlags); // precision
 
@@ -589,9 +589,9 @@ extern "C"
         _cmsStageEvalFn EvalPtr, // Points to fn that evaluates the element
                                  // (always in floating point)
         _cmsStageDupElemFn
-            DupElemPtr,          // Points to a fn that duplicates the stage
+            DupElemPtr, // Points to a fn that duplicates the stage
         _cmsStageFreeElemFn
-            FreePtr,             // Points to a fn that sets the element free
+            FreePtr, // Points to a fn that sets the element free
         void*
             Data); // A generic pointer to whatever memory needed by the element
     typedef struct

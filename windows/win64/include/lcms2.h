@@ -198,12 +198,12 @@ typedef long cmsInt32Number;
 #            undef CMS_USE_BIG_ENDIAN
 #        endif
 
-#    else                      // CMS_USE_BIG_ENDIAN
+#    else // CMS_USE_BIG_ENDIAN
 
 #        ifdef WORDS_BIGENDIAN // set by configure (or explicitly on compiler
                                // command line)
 #            define CMS_USE_BIG_ENDIAN 1
-#        else                  // WORDS_BIGENDIAN
+#        else // WORDS_BIGENDIAN
 // Fall back to platform/compiler specific tests
 #            if defined(__sgi__) || defined(__sgi) || defined(sparc)
 #                define CMS_USE_BIG_ENDIAN 1
@@ -528,8 +528,8 @@ typedef long cmsInt32Number;
         cmsSigMatrixElemType = 0x6D617466,   //'matf'
         cmsSigCLutElemType = 0x636C7574,     //'clut'
 
-        cmsSigBAcsElemType = 0x62414353,     // 'bACS'
-        cmsSigEAcsElemType = 0x65414353,     // 'eACS'
+        cmsSigBAcsElemType = 0x62414353, // 'bACS'
+        cmsSigEAcsElemType = 0x65414353, // 'eACS'
 
         // Custom from here, not in the ICC Spec
         cmsSigXYZ2LabElemType = 0x6C327820,    // 'l2x '

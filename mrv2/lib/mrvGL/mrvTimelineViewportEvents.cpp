@@ -379,7 +379,7 @@ namespace mrv
             annotation->push_back(shape);
             // Calculate offset from corner due to cross and the bottom of
             // the font.
-            math::Vector2i offset(
+            const math::Vector2i offset(
                 kCrossSize + 2, kCrossSize + fl_height() - fl_descent());
 
             shape->text = text;
@@ -595,8 +595,8 @@ namespace mrv
                 }
                 case ActionMode::kText:
                 {
-                    const auto& viewportSize = getViewportSize();
-                    float pct = 1.0; // viewportSize.w / 1024.F;
+                    const auto& renderSize = getRenderSize();
+                    float pct = renderSize.h / 1024.F;
                     auto w = getMultilineInput();
 
                     value = settingsObject->value(kFontSize);
@@ -903,6 +903,7 @@ namespace mrv
                 Fl_Group::current(0);
                 p.popupMenu = new Fl_Menu_Button(0, 0, 0, 0);
 
+                p.popupMenu->textsize(12);
                 p.popupMenu->type(Fl_Menu_Button::POPUP3);
 
                 p.ui->uiMain->fill_menu(p.popupMenu);
@@ -1379,6 +1380,64 @@ namespace mrv
         }
 
         open_files_cb(loadFiles, p.ui);
+    }
+
+    void TimelineViewport::editText(
+        const std::shared_ptr< draw::Shape >& s, const int index) noexcept
+    {
+        TLRENDER_P();
+
+        auto player = getTimelinePlayer();
+        if (!player)
+            return;
+
+        auto annotation = player->getAnnotation();
+        if (!annotation)
+            return;
+
+        const auto& renderSize = getRenderSize();
+        float pct = renderSize.h / 1024.F;
+
+#ifdef USE_OPENGL2
+        auto shape = dynamic_cast<GL2TextShape*>(s.get());
+        if (!shape)
+            return;
+
+        fl_font(shape->font, shape->fontSize);
+
+        const math::Vector2i offset(
+            kCrossSize + 2, kCrossSize + fl_height() - fl_descent());
+        math::Vector2i pos(
+            shape->pts[0].x * shape->viewZoom + p.viewPos.x,
+            shape->pts[0].y * shape->viewZoom + p.viewPos.y);
+        const float devicePixelRatio = pixels_per_unit();
+        pos.x = pos.x / devicePixelRatio;
+        pos.y = h() - pos.y / devicePixelRatio;
+        pos.x -= offset.x;
+        pos.y -= offset.y;
+
+        auto w = new MultilineInput(pos.x, pos.y, 20, 30 * pct * p.viewZoom);
+        w->take_focus();
+        w->textfont(shape->font);
+        w->textsize(shape->fontSize);
+        w->value(shape->text.c_str(), shape->text.size());
+        w->recalc();
+#endif
+        Fl_Color fltk_color = fl_rgb_color(
+            shape->color.r * 255.F, shape->color.g * 255.F,
+            shape->color.b * 255.F);
+        w->textcolor(fltk_color);
+        w->viewPos = p.viewPos;
+        w->viewZoom = p.viewZoom;
+        w->redraw();
+
+        tcp->pushMessage("Remove Shape", index);
+
+        annotation->remove(s);
+        this->add(w);
+
+        p.ui->uiTimeline->redraw();
+        redrawWindows();
     }
 
 } // namespace mrv

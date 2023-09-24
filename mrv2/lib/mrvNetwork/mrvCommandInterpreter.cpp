@@ -585,6 +585,30 @@ namespace mrv
                 view->updateUndoRedoButtons();
                 view->redrawWindows();
             }
+            else if (c == "Remove Shape")
+            {
+                bool receive = prefs->ReceiveAnnotations->value();
+                if (!receive || !player)
+                {
+                    tcp->unlock();
+                    return;
+                }
+                auto annotation = player->getAnnotation();
+                if (!annotation)
+                {
+                    tcp->unlock();
+                    return;
+                }
+
+                int index = message["value"];
+                if (index >= 0 && index < annotation->shapes.size())
+                {
+                    auto shape = annotation->shapes[index];
+                    annotation->remove(shape);
+                    view->redrawWindows();
+                    ui->uiTimeline->redraw();
+                }
+            }
             else if (c == "Laser Fade")
             {
                 bool receive = prefs->ReceiveAnnotations->value();

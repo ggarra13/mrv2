@@ -457,9 +457,20 @@ namespace mrv
         if (!open)
             cg->close();
 
+        auto bW = new Widget< Fl_Button >(
+            g->x(), g->y(), g->w(), 20, _("Default Hotkeys"));
+        b = bW;
+        b->box(FL_UP_BOX);
+        bW->callback(
+            [=](auto o)
+            {
+                Preferences prefs(p.ui->uiPrefs, false, true);
+                p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
+            });
+
         // This does not work properly, and it is counter intuitive as
         // it hides the tool docks.
-        auto bW = new Widget< Fl_Button >(
+        bW = new Widget< Fl_Button >(
             g->x(), g->y(), g->w(), 20, _("Default Settings"));
         b = bW;
         b->box(FL_UP_BOX);
@@ -470,7 +481,6 @@ namespace mrv
                 save();
                 refresh();
             });
-
         // To refresh the timeline caching bars after a reset of settings.
         p.ui->uiTimeline->redraw();
     }

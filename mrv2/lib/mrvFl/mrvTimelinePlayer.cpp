@@ -560,6 +560,11 @@ namespace mrv
 
     ///@}
 
+    bool TimelinePlayer::hasAnnotations() const
+    {
+        return !_p->annotations.empty();
+    }
+
     const std::vector< otime::RationalTime >
     TimelinePlayer::getAnnotationTimes() const
     {

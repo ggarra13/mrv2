@@ -7,15 +7,31 @@
 #
 # This script checks the download count of mrv2 releases in github.com
 #
-# You must run it from the root of the mrv2 project.
-#
+
+if [[ ! -e etc/build_dir.sh ]]; then
+    echo "You must run this script from the root of mrv2 directory like:"
+    echo
+    script=`basename $0`
+    echo "> bin/$script"
+    exit 1
+fi
 
 . etc/build_dir.sh
 
+
 if [[ $KERNEL == *Msys* ]]; then
-    export PATH=$BUILD_DIR/install/bin:$PATH
-    python -m pip install requests
+    requests=$BUILD_DIR/install/bin/Lib/site-packages/requests
+    if [[ ! -e $requests ]]; then
+	python -m pip install requests
+    fi
+else    
+    extract_python_version
+    requests=$BUILD_DIR/install/lib/python$PYTHON_VERSION/site-packages/requests
+    if [[ ! -e $requests ]]; then
+	python$PYTHON_VERSION -m pip install requests
+    fi
 fi
+
 
 export TAG=$1
 
@@ -23,4 +39,4 @@ if [[ "$TAG" == "" ]]; then
     export TAG=`git ls-remote --tags --refs | tail -n1 | cut -d/ -f3`
 fi
 
-bin/github-download-count.py ggarra13 mrv2 $TAG
+bin/python/github-download-count.py ggarra13 mrv2 $TAG

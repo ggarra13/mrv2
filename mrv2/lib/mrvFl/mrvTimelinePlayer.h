@@ -318,6 +318,9 @@ namespace mrv
 
         ///@}
 
+        //! Returns whether there's annotations in the player
+        bool hasAnnotations() const;
+
         //! Return a list of annotation times
         const std::vector< otime::RationalTime > getAnnotationTimes() const;
 

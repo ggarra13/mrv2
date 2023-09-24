@@ -11,6 +11,7 @@ v0.7.8
 - Added saving the old color to the preferences.
 - Fixed saving current EDL through Python API.
 - Added a command-line switch (-resetHotkeys) to reset hotkeys to their default.
+- Added a button in Settings to reset hotkeys to their defaults.
 - Python API now supports Playlists again with a new API.
   You can add new clips to an EDL playlist, list all playlists,
   select a playlist based on its index, its name or its item
@@ -20,7 +21,32 @@ v0.7.8
 - Improved the User Documentation.
 - Fixed name of some hotkeys in Spanish locale.
 - Made playback buttons change background color when playing or stopping.
-- Added support for RAW formats through LibRaw.
+- Added support for Camera RAW formats through LibRaw.
+- Fixed File->Save Image and File->Save Movie resetting the UI.
+- Improved Windows build system dramatically.  Now there are bash scripts to
+  compile all the GNU-like dependencies (FFmpeg, libx264, libvpx and liblcms2).
+- Added x264 to the Linux and macOS builds but it is turned OFF by default.
+- Made right mouse button text size match that of the main menu bar.
+- Fixed Preferences->Playback->FPS not doing anything.  Removed
+  Preferences->Playback->Override FPS.
+- Added a way to edit baked Text Annotations from a frame.
+  If you click with the Right Mouse Button on the Text tool, a pop up Window
+  will appear displaying a pull down with all your text shapes for the
+  current frame.  Selecting one, and clicking on Edit Text will take you to
+  the Text widget where you will be able to reposition it, re-edit it, etc.
+  This also works in network connections.
+- Made text widget font size be dependant on the render size of the image.
+- Improved scripts in bin/ directory with help messages.
+- Moved python scripts in bin/ directory to bin/python.
+- Improved runme.sh script to accept a -gpl flag to compile FFmpeg with libx264
+  support in GPL mode on all platforms.  The default is still to build a LGPL
+  FFmpeg without libx264 saving support as that complies with the BSD license
+  of mrv2's source code.
+- Improved README.md build instructions to document the optional building of
+  FFmpeg.
+- Fixed saving movies when saving without annotations leading to bad redraws
+  later on in the timeline.
+
 
 v0.7.7
 ======

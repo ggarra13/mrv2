@@ -42,9 +42,9 @@ export DIST=0
 
 . etc/build_cores.sh
 
+export FFMPEG_GPL=$FFMPEG_GPL
 export CLEAN_DIR=0
 export CMAKE_OSX_ARCHITECTURES=""
-export SHOW_INCLUDES=0
 export CMAKE_BUILD_TYPE="Release"
 export CMAKE_GENERATOR="Ninja"
 export CMAKE_TARGET=""
@@ -77,6 +77,16 @@ for i in $@; do
 	    fi
 	    shift
 	    ;;
+	-lgpl|--lgpl)
+	    export FFMPEG_GPL=LGPL
+	    export CMAKE_FLAGS="-D TLRENDER_X264=OFF ${CMAKE_FLAGS}"
+	    shift
+	    ;;
+	-gpl|--gpl)
+	    export FFMPEG_GPL=GPL
+	    export CMAKE_FLAGS="-D TLRENDER_X264=ON ${CMAKE_FLAGS}"
+	    shift
+	    ;;
 	-v)
 	    export CMAKE_FLAGS="-D CMAKE_VERBOSE_MAKEFILE=ON ${CMAKE_FLAGS}"
 	    export FLAGS="-v ${FLAGS}"
@@ -107,8 +117,8 @@ for i in $@; do
 	    export CMAKE_TARGET=$1
 	    shift
 	    ;;
-	-h*)
-	    echo "$0 [debug] [clean] [dist] [-v] [-j <num>] [-D VAR=VALUE] [-help]"
+	-h|-help|--help)
+	    echo "$0 [debug] [clean] [dist] [-v] [-j <num>] [-lgpl] [-gpl] [-D VAR=VALUE] [-help]"
 	    echo ""
 	    echo "* debug builds a debug build."
 	    echo "* clean clears the directory before building -- use only with runme.sh"
@@ -116,6 +126,8 @@ for i in $@; do
 	    echo "* -j <num>  controls the threads to use when compiling."
 	    echo "* -v builds verbosely."
 	    echo "* -D sets cmake variables, like -D TLRENDER_USD=OFF."
+	    echo "* -gpl builds FFmpeg with x264 encoder support in a GPL version of it."
+	    echo "* -lgpl builds FFmpeg as a LGPL version of it."
 	    exit 1
 	    ;;
     esac
@@ -140,8 +152,6 @@ fi
 export FLAGS="${FLAGS} $*"
 export FLAGS="-j ${CPU_CORES} ${FLAGS}"
 
-echo "Build directory is ${BUILD_DIR}"
-
 if [[ $CLEAN_DIR == 1 ]]; then
     if [[ -d ${BUILD_DIR} ]]; then
 	echo "Cleaning ${BUILD_DIR}.  Please wait..."
@@ -149,24 +159,24 @@ if [[ $CLEAN_DIR == 1 ]]; then
     fi
 fi
 
-echo "Version to build is v${mrv2_VERSION}"
-echo "Architecture is ${ARCH}"
-echo "CMake flags are ${CMAKE_FLAGS}"
-echo "Compiler flags are ${FLAGS}"
-cmake --version
+if [[ $0 == *runme.sh* ]]; then
+    echo "Build directory is ${BUILD_DIR}"
+    echo "Version to build is v${mrv2_VERSION}"
+    echo "Architecture is ${ARCH}"
+    echo "FFmpeg will be built as ${FFMPEG_GPL}"
+    echo "CMake flags are ${CMAKE_FLAGS}"
+    echo "Compiler flags are ${FLAGS}"
+    cmake --version
+    mkdir -p $BUILD_DIR/install
 
-if [[ $KERNEL == *Msys* ]]; then
-    . $PWD/etc/windows_prepare.sh
+    if [[ $FFMPEG_GPL == LGPL ]]; then
+	rm -rf $BUILD_DIR/install/bin/libx264*.dll
+	rm -rf $BUILD_DIR/install/lib/libx264.lib
+    fi
 fi
 
 if [[ $0 == *runme.sh* ]]; then
-    #
-    # First run, create the standard directories.
-    #
-    mkdir -p $BUILD_DIR/install/bin $BUILD_DIR/install/lib
-    mkdir -p $BUILD_DIR/install/include
-
     if [[ $KERNEL == *Msys* ]]; then
-	. $PWD/etc/copy_dlls.sh
+	. $PWD/etc/compile_windows_dlls.sh
     fi
 fi
