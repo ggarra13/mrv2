@@ -1723,10 +1723,12 @@ namespace mrv
         const int kTransitionsHeight = 20;
         const int kMarkerHeight = 20;
 
+        int H = kMinEditModeH; // timeline height
+        if (editMode == EditMode::kTimeline)
+            return H;
+
         const Fl_Tile* tile = ui->uiTileGroup;
         const int tileH = tile->h(); // Tile Height (ie. View and Edit viewport)
-
-        int H = kMinEditModeH; // timeline height
 
         // Shift the view up to see the video thumbnails and audio waveforms
         const double pixelRatio = ui->uiTimeline->pixels_per_unit();

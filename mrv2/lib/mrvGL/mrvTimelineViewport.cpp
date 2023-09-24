@@ -1107,14 +1107,11 @@ namespace mrv
 
         if (p.ui->uiBottomBar->visible())
         {
-            if (p.ui->uiEdit->value())
-            {
-                H += calculate_edit_viewport_size(p.ui);
-                if (H > maxH)
-                    H = maxH;
-                if (mw->w() != W || mw->h() != H)
-                    mw->size(W, H);
-            }
+            H += calculate_edit_viewport_size(p.ui);
+            if (H > maxH)
+                H = maxH;
+            if (mw->w() != W || mw->h() != H)
+                mw->size(W, H);
         }
 
         if (p.frameView)

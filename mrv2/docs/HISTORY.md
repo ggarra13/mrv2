@@ -46,6 +46,8 @@ v0.7.8
   FFmpeg.
 - Fixed saving movies when saving without annotations leading to bad redraws
   later on in the timeline.
+- Fixed resizing of window when an image is loaded or the Fit Window to Image
+  button is pressed.  Now it will correctly zoom to 1 if it fits it.
 
 
 v0.7.7

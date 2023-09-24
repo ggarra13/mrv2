@@ -639,12 +639,15 @@ namespace mrv
         // Open the input files.
         if (!p.options.fileName[0].empty())
         {
-            for (int i = 2; i >= 0; --i)
+            for (int i = 0; i < 3; ++i)
             {
                 if (p.options.fileName[i].empty())
                     continue;
                 open(p.options.fileName[i], p.options.audioFileName);
             }
+
+            auto model = filesModel();
+            model->setA(0);
 
             if (!p.timelinePlayers.empty() && p.timelinePlayers[0])
             {
