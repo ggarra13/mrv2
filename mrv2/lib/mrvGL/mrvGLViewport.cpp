@@ -54,9 +54,14 @@ namespace mrv
         _gl(new GLPrivate)
     {
         int stereo = 0;
+#ifdef USE_GL_DOUBLE
+        const int fl_double = FL_DOUBLE;
+#else
+        const int fl_double = 0;
+#endif
         // if (can_do(FL_STEREO))
         //     stereo = FL_STEREO;
-        mode(FL_RGB | FL_DOUBLE | FL_ALPHA | FL_STENCIL | FL_OPENGL3 | stereo);
+        mode(FL_RGB | fl_double | FL_ALPHA | FL_STENCIL | FL_OPENGL3 | stereo);
     }
 
     Viewport::~Viewport() {}
@@ -323,7 +328,11 @@ namespace mrv
             b = ub / 255.0f;
         }
 
+#ifdef USE_GL_DOUBLE
         glDrawBuffer(GL_BACK_LEFT);
+#else
+        glDrawBuffer(GL_FRONT_LEFT);
+#endif
         CHECK_GL;
         glClearColor(r, g, b, a);
         CHECK_GL;
@@ -377,7 +386,11 @@ namespace mrv
 
                 if (gl.vao && gl.vbo)
                 {
+#ifdef USE_GL_DOUBLE
                     glDrawBuffer(GL_BACK_RIGHT);
+#else
+                    glDrawBuffer(GL_FRONT_RIGHT);
+#endif
                     CHECK_GL;
                     gl.vao->bind();
                     CHECK_GL;

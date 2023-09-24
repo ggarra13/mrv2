@@ -11,6 +11,9 @@
 // tlRender's OpenGL 3 freetype routines
 #define USE_OPENGL2 1
 
+// Set it to use double buffering in the view window.  Comment it otherwise.
+#define USE_GL_DOUBLE 1
+
 // Set it to debug OpenGL issues with the CHECK_GL macro.
 //#define USE_GL_CHECKS 1
 
