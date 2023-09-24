@@ -440,6 +440,11 @@ namespace mrv
         sp->value(digits);
         sp->minimum(0);
         sp->maximum(16);
+        sp->tooltip(
+            _("This value controls the number of threads that FFmpeg uses.  "
+              "For most movies, it should be left at 0.  Some movies will show "
+              "black frames.  For any like that, you should set them to 1, "
+              "press Enter and reload the movie file."));
         spW->callback(
             [=](auto o)
             {

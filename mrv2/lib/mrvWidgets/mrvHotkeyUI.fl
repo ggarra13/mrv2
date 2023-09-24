@@ -42,10 +42,10 @@ class HotkeyUI {open
   Function {make_window()} {open private
   } {
     Fl_Window uiMain {
-      label Hotkeys open selected
+      label Hotkeys open
       xywh {847 276 775 644} type Double box PLASTIC_DOWN_BOX resizable modal visible
     } {
-      Fl_Group {} {open
+      Fl_Group {} {open selected
         xywh {2 1 853 640} box PLASTIC_DOWN_BOX
       } {
         Fl_Browser uiFunction {
@@ -92,27 +92,6 @@ ui->uiSearchInput->do_callback();} open
               label Key
               xywh {10 10 100 20}
             }
-          }
-        }
-        Fl_Group {} {open
-          xywh {81 579 521 36}
-        } {
-          Fl_Button {} {
-            label Save
-            user_data main user_data_type {ViewerUI*}
-            callback {mrv::save_hotkeys( v, mrv::Preferences::hotkeys_file );}
-            xywh {522 579 80 30} box PLASTIC_UP_BOX
-          }
-          Fl_Button {} {
-            label Load
-            user_data main user_data_type {ViewerUI*}
-            callback {mrv::load_hotkeys( v, mrv::Preferences::hotkeys_file );}
-            xywh {432 579 85 30} box PLASTIC_UP_BOX
-          }
-          Fl_Output uiHotkeyFile {
-            label {Hotkey file:}
-            xywh {81 580 340 30} color 20 align 1 textcolor 56
-            code0 {o->textcolor( fl_contrast( FL_WHITE, o->color() ) );}
           }
         }
       }

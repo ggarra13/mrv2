@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.8\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-09-24 08:19-0300\n"
+"POT-Creation-Date: 2023-09-24 13:46-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2015,19 +2015,10 @@ msgid ""
 "Do you want to override it?"
 msgstr ""
 
-msgid "Hotkey file:"
-msgstr ""
-
 msgid "Hotkey for..."
 msgstr ""
 
 msgid "Hotkeys"
-msgstr ""
-
-msgid "Hotkeys (*.{keys.prefs})"
-msgstr ""
-
-msgid "Hotkeys file {0}/{1} does not exist!"
 msgstr ""
 
 msgid "How to display timeline by default."
@@ -2267,9 +2258,6 @@ msgid "Load Audio"
 msgstr ""
 
 msgid "Load Directory"
-msgstr ""
-
-msgid "Load Hotkeys Preferences"
 msgstr ""
 
 msgid "Load Image"
@@ -3364,9 +3352,6 @@ msgstr ""
 msgid "Saturation value of image pixel under mouse."
 msgstr ""
 
-msgid "Save"
-msgstr ""
-
 msgid "Save Annotations"
 msgstr ""
 
@@ -3376,9 +3361,6 @@ msgid ""
 msgstr ""
 
 msgid "Save Annotations to PDF"
-msgstr ""
-
-msgid "Save Hotkeys"
 msgstr ""
 
 msgid "Save Image"
@@ -3429,6 +3411,9 @@ msgid "Saving Movie %<PRId64> - %<PRId64>"
 msgstr ""
 
 msgid "Saving Options"
+msgstr ""
+
+msgid "Saving hotkeys to \"{0}{1}.prefs\"."
 msgstr ""
 
 msgid "Scanlines"
@@ -4079,6 +4064,13 @@ msgid ""
 "This setting controls the sensitivity of scrubbing (SHIFT and then the mouse "
 "right and left).  Smaller values make the mouse move jump more frames while "
 "higher values does the opposite."
+msgstr ""
+
+msgid ""
+"This value controls the number of threads that FFmpeg uses.  For most "
+"movies, it should be left at 0.  Some movies will show black frames.  For "
+"any like that, you should set them to 1, press Enter and reload the movie "
+"file."
 msgstr ""
 
 msgid "Thumbnails"

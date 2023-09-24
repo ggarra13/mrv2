@@ -51,6 +51,7 @@ v0.7.8
 - Made tiling slider of Timeline Viewport darker so it is more visible.
 - Fixed order of clips loaded from the command-line being in reverse order.
 - Fixed Settings Panel FFmpeg I/O Threads not accepting 0.
+- Simplified hotkeys loading and saving and now hotkeys are saved on exit.
 
 
 v0.7.7
