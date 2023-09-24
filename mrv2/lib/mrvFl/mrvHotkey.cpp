@@ -210,7 +210,7 @@ namespace mrv
 
         for (int i = 0; hotkeys[i].name != "END"; ++i)
         {
-            if (hotkeys[i].force == true)
+            if (hotkeys[i].force == false)
                 continue;
             hotkeys[i].hotkey.shift = hotkeys[i].hotkey.ctrl =
                 hotkeys[i].hotkey.alt = hotkeys[i].hotkey.meta = false;
@@ -297,6 +297,17 @@ namespace mrv
                 }
             }
         }
+
+        HotkeyUI* h = ui->uiHotkey;
+        fill_ui_hotkeys(h->uiFunction);
+    }
+
+    void load_hotkeys(ViewerUI* ui)
+    {
+        Fl_Preferences* keys = new Fl_Preferences(
+            prefspath().c_str(), "filmaura", Preferences::hotkeys_file.c_str());
+        load_hotkeys(ui, keys);
+        delete keys;
 
         HotkeyUI* h = ui->uiHotkey;
         fill_ui_hotkeys(h->uiFunction);

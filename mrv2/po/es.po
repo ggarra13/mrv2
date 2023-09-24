@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-09-24 13:46-0300\n"
+"POT-Creation-Date: 2023-09-24 14:56-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -2319,6 +2319,9 @@ msgstr "Tecla de Manejo para...."
 msgid "Hotkeys"
 msgstr "Teclas de Manejo"
 
+msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
+msgstr "Teclas han sido grabadas en: \"{0}{1}.prefs\"."
+
 msgid "How to display timeline by default."
 msgstr "Como mostrar la línea de tiempo por defecto."
 
@@ -3519,8 +3522,14 @@ msgstr "Resetear"
 msgid "Reset Gain/Gamma"
 msgstr "Resetear Gain y Gama"
 
+msgid "Reset Hotkeys"
+msgstr "Restear Teclas de Manejo"
+
 msgid "Reset hotkeys to defaults."
-msgstr "Resetar teclas a su valor por defecto."
+msgstr "Resetar teclas a los valores por defecto."
+
+msgid "Reset hotkeys to saved file."
+msgstr "Resetar teclas a archivo grabado."
 
 msgid "Reset settings to defaults."
 msgstr "Resetar seteos a su valor por defecto."
@@ -3746,9 +3755,6 @@ msgstr "Grabando Película %<PRId64> - %<PRId64>"
 
 msgid "Saving Options"
 msgstr "Opciones de Grabar"
-
-msgid "Saving hotkeys to \"{0}{1}.prefs\"."
-msgstr "Grabando teclas de manejo a \"{0}{1}.prefs\"."
 
 msgid "Scanlines"
 msgstr "Lineas"
@@ -4463,8 +4469,8 @@ msgid ""
 "any like that, you should set them to 1, press Enter and reload the movie "
 "file."
 msgstr ""
-"Este valor controla el número de hilos que FFmpeg use.  Para la mayoría "
-"de las películas, debería ser dejado en 0.  Algunas raras películas pueden "
+"Este valor controla el número de hilos que FFmpeg use.  Para la mayoría de "
+"las películas, debería ser dejado en 0.  Algunas raras películas pueden "
 "mostrar cuadros negros.  Para ellas, debes setear el valor en 1, presionar "
 "la tecla Entrar y recargarla."
 
@@ -5311,6 +5317,9 @@ msgstr "x9"
 msgid "xyY CIE xyY"
 msgstr "xyY CIE xyY"
 
+#~ msgid "Saving hotkeys to \"{0}{1}.prefs\"."
+#~ msgstr "Grabando teclas de manejo a \"{0}{1}.prefs\"."
+
 #~ msgid "Hotkey file:"
 #~ msgstr "Archivo de tecla de manejo:"
 
@@ -5325,9 +5334,6 @@ msgstr "xyY CIE xyY"
 
 #~ msgid "Save"
 #~ msgstr "Grabar"
-
-#~ msgid "Save Hotkeys"
-#~ msgstr "Grabar Teclas de Manejo"
 
 #~ msgid "Override FPS"
 #~ msgstr "Anular FPS"

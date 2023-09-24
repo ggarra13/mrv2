@@ -749,8 +749,6 @@ namespace mrv
         //
         // Hotkeys
         //
-        Fl_Preferences* keys;
-
         std::string fullhotkeysPath = prefspath() + hotkeys_file + ".prefs";
         if (resetHotkeys)
         {
@@ -765,16 +763,10 @@ namespace mrv
                 tl::string::Format(_("Loading hotkeys from \"{0}{1}.prefs\"."))
                     .arg(prefspath())
                     .arg(hotkeys_file);
+            LOG_INFO(msg);
         }
 
-        LOG_INFO(msg);
-
-        keys = new Fl_Preferences(
-            prefspath().c_str(), "filmaura", hotkeys_file.c_str());
-
-        load_hotkeys(ui, keys);
-
-        delete keys;
+        load_hotkeys(ui);
 
         std_any value;
 
@@ -1278,14 +1270,16 @@ namespace mrv
             "log_display", (int)uiPrefs->uiPrefsRaiseLogWindowOnError->value());
 
         {
-            msg = tl::string::Format(_("Saving hotkeys to \"{0}{1}.prefs\"."))
-                      .arg(prefspath())
-                      .arg(hotkeys_file);
-
-            LOG_INFO(msg);
 
             Fl_Preferences keys(
                 prefspath().c_str(), "filmaura", hotkeys_file.c_str());
+            save_hotkeys(keys);
+
+            msg = tl::string::Format(
+                      _("Hotkeys have been saved to \"{0}{1}.prefs\"."))
+                      .arg(prefspath())
+                      .arg(hotkeys_file);
+            LOG_INFO(msg);
         }
 
         base.flush();

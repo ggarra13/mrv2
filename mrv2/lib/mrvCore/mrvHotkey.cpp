@@ -59,7 +59,7 @@ namespace mrv
     Hotkey kDisplayWindow(true, false, false, false, 'd');
     Hotkey kDataWindow(false, false, false, false, 'd');
 
-    Hotkey kCompareWipe(false, false, false, false, 'w');
+    Hotkey kCompareWipe(false, false, true, false, 'w');
     Hotkey kCompareOverlay(false, false, false, false, 0);
     Hotkey kCompareDifference(false, false, false, false, 0);
     Hotkey kCompareHorizontal(false, false, false, false, 0);
@@ -319,12 +319,12 @@ namespace mrv
 
         HotkeyEntry(_("Open Directory"), kOpenDirectory),
         HotkeyEntry(_("Open Movie or Sequence"), kOpenImage),
-        HotkeyEntry(_("Open Session"), kOpenSession, true),
+        HotkeyEntry(_("Open Session"), kOpenSession),
         HotkeyEntry(_("Save Image"), kSaveImage),
 
         HotkeyEntry(_("Save Movie or Sequence"), kSaveSequence),
         HotkeyEntry(_("Save PDF Document"), kSavePDF),
-        HotkeyEntry(_("Save Session"), kSaveSession, true),
+        HotkeyEntry(_("Save Session"), kSaveSession),
         HotkeyEntry(_("Save Session As"), kSaveSessionAs),
 
         HotkeyEntry(_("Close Current"), kCloseCurrent),
@@ -462,7 +462,7 @@ namespace mrv
         HotkeyEntry(_("Toggle Playlist Panel"), kTogglePlaylist),
         HotkeyEntry(_("Toggle Compare Panel"), kToggleCompare),
         HotkeyEntry(_("Toggle Devices Panel"), kToggleDevices),
-        HotkeyEntry(_("Toggle Annotation Panel"), kToggleAnnotation, true),
+        HotkeyEntry(_("Toggle Annotation Panel"), kToggleAnnotation),
         HotkeyEntry(_("Toggle Settings Panel"), kToggleSettings),
         HotkeyEntry(_("Toggle Histogram Panel"), kToggleHistogram),
         HotkeyEntry(_("Toggle Vectorscope Panel"), kToggleVectorscope),

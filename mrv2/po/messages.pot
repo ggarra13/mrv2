@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.8\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-09-24 13:46-0300\n"
+"POT-Creation-Date: 2023-09-24 14:56-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2021,6 +2021,9 @@ msgstr ""
 msgid "Hotkeys"
 msgstr ""
 
+msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
+msgstr ""
+
 msgid "How to display timeline by default."
 msgstr ""
 
@@ -3198,7 +3201,13 @@ msgstr ""
 msgid "Reset Gain/Gamma"
 msgstr ""
 
+msgid "Reset Hotkeys"
+msgstr ""
+
 msgid "Reset hotkeys to defaults."
+msgstr ""
+
+msgid "Reset hotkeys to saved file."
 msgstr ""
 
 msgid "Reset settings to defaults."
@@ -3411,9 +3420,6 @@ msgid "Saving Movie %<PRId64> - %<PRId64>"
 msgstr ""
 
 msgid "Saving Options"
-msgstr ""
-
-msgid "Saving hotkeys to \"{0}{1}.prefs\"."
 msgstr ""
 
 msgid "Scanlines"

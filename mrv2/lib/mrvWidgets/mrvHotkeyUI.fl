@@ -45,19 +45,11 @@ class HotkeyUI {open
       label Hotkeys open
       xywh {847 276 775 644} type Double box PLASTIC_DOWN_BOX resizable modal visible
     } {
-      Fl_Group {} {open selected
-        xywh {2 1 853 640} box PLASTIC_DOWN_BOX
+      Fl_Group {} {open
+        xywh {0 4 853 640} box PLASTIC_DOWN_BOX resizable
       } {
-        Fl_Browser uiFunction {
-          user_data this user_data_type {HotkeyUI*}
-          callback {mrv::select_hotkey( v );}
-          xywh {88 78 601 461} box DOWN_BOX color 20 textcolor 32
-          code0 {mrv::fill_ui_hotkeys( o );}
-          code1 {o->textcolor( fl_contrast( FL_WHITE, o->color() ));}
-          class {mrv::Browser}
-        }
         Fl_Group {} {open
-          xywh {140 20 550 32}
+          xywh {138 23 550 32}
         } {
           Fl_Input uiSearchInput {
             label Search
@@ -72,8 +64,8 @@ if ( type == 0 )
 else
 {
     mrv::searchHotkey( text, ui->uiFunction );
-}}
-            xywh {140 21 354 31} color 20 when 11 textcolor 56
+}} selected
+            xywh {138 24 354 31} color 20 when 10 textcolor 56
           }
           Fl_Menu_Button uiSearchType {
             label Function
@@ -81,7 +73,7 @@ else
             callback {HotkeyUI* ui = static_cast<HotkeyUI*>(v);
 ui->type = o->value();
 ui->uiSearchInput->do_callback();} open
-            xywh {500 20 190 31} when 5
+            xywh {498 23 190 31} when 5
             class {mrv::PopupMenu}
           } {
             MenuItem {} {
@@ -93,6 +85,19 @@ ui->uiSearchInput->do_callback();} open
               xywh {10 10 100 20}
             }
           }
+        }
+        Fl_Browser uiFunction {
+          user_data this user_data_type {HotkeyUI*}
+          callback {mrv::select_hotkey( v );}
+          xywh {88 81 600 480} box DOWN_BOX color 20 textcolor 32 resizable
+          code0 {mrv::fill_ui_hotkeys( o );}
+          code1 {o->textcolor( fl_contrast( FL_WHITE, o->color() ));}
+          class {mrv::Browser}
+        }
+        Fl_Button {} {
+          label {Reset Hotkeys}
+          callback {mrv::load_hotkeys(main);}
+          tooltip {Reset hotkeys to saved file.} xywh {236 579 295 39}
         }
       }
     }
