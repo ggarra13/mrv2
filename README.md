@@ -326,7 +326,7 @@ If you pass -gpl or -lpgl to the runme.sh script, like:
 ./runme.sh -gpl
 ```
 
-The build system will compile FFmpeg as GPL or LGPL.  The default is to build a LGPL version of FFmpeg as that complies with the BSD binary distribution license.  The LGPL version of FFmpeg, however, does not come with libx264, which means you cannot save movie files with the H264 codec.
+The build system will compile FFmpeg as GPL or LGPL.  The default is to build a LGPL version of FFmpeg as that complies with the BSD binary distribution license.  The LGPL version of FFmpeg, however, does not come with libx264, which means you cannot save movie files with the H264 codec.  On Windows, if you don't specify neither -gpl nor -lgpl, the pre-compiled LGPL binaries are used.
 
 The GPL version of FFmpeg does not have that restriction and it will compile libx264 on all platforms.
 
