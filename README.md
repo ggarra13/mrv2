@@ -124,6 +124,7 @@ Currently supported:
 * Color management
 * A/B comparison
 * Native OpenTimelineIO with dissolves
+* .otioz file bundles
 * Creation of OpenTimelineIO playlists
 * OpenEXR multichannel, multiview and multipart support
 * Environment mapping (Spherical and Cubic)
