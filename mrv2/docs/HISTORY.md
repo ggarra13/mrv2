@@ -48,6 +48,7 @@ v0.7.8
   later on in the timeline.
 - Fixed resizing of window when an image is loaded or the Fit Window to Image
   button is pressed.  Now it will correctly zoom to 1 if it fits it.
+- Made tiling slider of Timeline Viewport darker so it is more visible.
 
 
 v0.7.7

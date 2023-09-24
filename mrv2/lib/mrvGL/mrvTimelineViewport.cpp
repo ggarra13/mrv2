@@ -1098,21 +1098,20 @@ namespace mrv
             p.frameView = true;
         }
 
+        if (p.ui->uiBottomBar->visible())
+        {
+            int timelineSize = calculate_edit_viewport_size(p.ui);
+            H += timelineSize;
+            if (H > maxH)
+                H = maxH;
+        }
+
         if (posX + W > maxW)
             posX = minx;
         if (posY + W > maxH)
             posY = miny;
 
         mw->resize(posX, posY, W, H);
-
-        if (p.ui->uiBottomBar->visible())
-        {
-            H += calculate_edit_viewport_size(p.ui);
-            if (H > maxH)
-                H = maxH;
-            if (mw->w() != W || mw->h() != H)
-                mw->size(W, H);
-        }
 
         if (p.frameView)
         {

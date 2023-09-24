@@ -109,7 +109,7 @@ decl {class AboutUI;} {public global
 }
 
 widget_class PixelToolBarClass {
-  xywh {217 122 690 30} resizable
+  xywh {225 122 682 31} resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {
@@ -829,10 +829,16 @@ uiSecondary = nullptr;} {}
               label Edit
               user_data this user_data_type {ViewerUI*}
               callback {int value = !o->value();
+bool presentation = uiView->getPresentationMode();
 mrv::EditMode mode = mrv::EditMode::kTimeline;
-if (value) mode = mrv::EditMode::kFull;
-else if (v->uiView->getPresentationMode())
-   mode = mrv::EditMode::kNone;
+if (value)             mode = mrv::EditMode::kFull;
+else if (presentation) mode = mrv::EditMode::kNone;
+//mrv::set_edit_mode_cb(mode, v);
+mrv::editMode = mode;
+if (!presentation)
+{
+    uiView->resizeWindow();
+}
 mrv::set_edit_mode_cb(mode, v);}
               tooltip {Toggle Edit Mode} xywh {602 0 58 25} down_box DOWN_BOX selection_color 95 labelsize 12
             }
@@ -1083,7 +1089,7 @@ if (Fl::event_clicks() >= 1)
 {
    mrv::annotations_panel_cb( nullptr, v);
    Fl::event_clicks(0);
-}} selected
+}}
                 tooltip {Text Tool.   Right click to edit previously stamped text.} image {../../icons/Text.svg} compress_image 1 xywh {1 298 40 35} down_box DOWN_BOX selection_color 95 labelfont 8 labelsize 24 labelcolor 7
                 class {mrv::Button}
               }
@@ -1145,8 +1151,8 @@ settingsObject->setValue( mrv::kPenColorA, a);}
               } {}
             }
           }
-          Fl_Group uiTimelineGroup {open
-            xywh {0 488 690 30} box FLAT_BOX
+          Fl_Group uiTimelineGroup {open selected
+            xywh {0 488 690 30} box FLAT_BOX color 51
             class {mrv::TimelineGroup}
           } {
             Fl_Group uiTimeline {open

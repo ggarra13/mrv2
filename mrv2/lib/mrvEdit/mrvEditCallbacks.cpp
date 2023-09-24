@@ -1726,6 +1726,12 @@ namespace mrv
         int H = kMinEditModeH; // timeline height
         if (editMode == EditMode::kTimeline)
             return H;
+        else if (editMode == EditMode::kSaved)
+            return editModeH;
+
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
+            return H;
 
         const Fl_Tile* tile = ui->uiTileGroup;
         const int tileH = tile->h(); // Tile Height (ie. View and Edit viewport)
@@ -1735,10 +1741,6 @@ namespace mrv
         const int maxTileHeight = tileH - 20;
         const timelineui::ItemOptions options =
             ui->uiTimeline->getItemOptions();
-        auto player = ui->uiView->getTimelinePlayer();
-        if (!player)
-            return H;
-
         auto timeline = player->getTimeline();
         for (const auto& child : timeline->tracks()->children())
         {
@@ -1811,8 +1813,6 @@ namespace mrv
             active = false;
 
         b->value(active);
-        if (!(mode == EditMode::kSaved) && !(ui->uiView->getFullScreenMode()))
-            ui->uiView->resizeWindow();
         if (b->value())
         {
             b->labelcolor(fl_rgb_color(255, 255, 255));
@@ -1838,8 +1838,8 @@ namespace mrv
             timeline->show();
             if (ui->uiMain->visible())
                 ui->uiTimeline->show();
+            editMode = mode;
             H = calculate_edit_viewport_size(ui);
-            editMode = EditMode::kSaved;
             editModeH = viewH = H;
         }
         else if (mode == EditMode::kSaved)
@@ -1880,6 +1880,8 @@ namespace mrv
 
         view->layout();
         tile->init_sizes();
+
+        editMode = mode;
 
         if (timeline->visible())
             timeline->redraw(); // needed
