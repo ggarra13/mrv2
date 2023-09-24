@@ -197,7 +197,7 @@ Aquí puede establecer el comportamiento del buscador de archivo de mrv2, así c
 
 .. note::
 
-Algunas versiones viejas de macOS no permitirían abrir directorios privados como Descargas, Documentos y Escritorio a menos que el Buscador de Archivos Nativo sea usado.
+   Algunas versiones viejas de macOS no permitirían abrir directorios privados como Descargas, Documentos y Escritorio a menos que el Buscador de Archivos Nativo sea usado.
 	   
 Reproducir
 ==========
@@ -237,7 +237,7 @@ Línea de Tiempo
 	   Miniaturas sobre la línea de tiempo cuando se mueve o arrastra el ratón.  No funciona en Wayland.
 
 Ventana de Edición
-------------------
+++++++++++++++++++
 
 .. topic:: Comenzar en Modo de Edición
 

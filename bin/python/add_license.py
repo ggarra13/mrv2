@@ -118,9 +118,14 @@ def process_bash_files():
         for f in files:
             with open( f ) as ip:
                 text = ip.read()
-            with open( f + ".new", "w" ) as out:
+                
+            has_license = False
+            if re.search( "Copyright", text ):
+                has_license = True
 
-                if not re.search( "Copyright", text ):
+            if has_license == False:
+                with open( f + ".new", "w" ) as out:
+
                     license = """# SPDX-License-Identifier: BSD-3-Clause
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
@@ -134,8 +139,11 @@ def process_bash_files():
 
                 out.write( text )
 
-            shutil.move( f + ".new", f )
-            os.chmod(f, 0o755)
+                shutil.move( f + ".new", f )
+                if os.name == 'nt':
+                    subprocess.run(['icacls', f, '/grant', '*S-1-1-0:(RX)'])
+                else:
+                    os.chmod(f, 0o755)
 
 
 process_cpp_files()

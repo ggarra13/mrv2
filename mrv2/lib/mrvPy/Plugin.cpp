@@ -231,44 +231,52 @@ Contains all classes related to python plugins.
         .def("menus", &mrv::Plugin::menus, _(R"PYTHON(
 Dictionary of menu entries with callbacks, like:
 
-    def menus(self):
-        menus = { "Nem Menu/Hello" : self.run }
-        return menus
+def menus(self):
+    menus = { "Nem Menu/Hello" : self.run }
+    return menus
 
 )PYTHON"))
         .doc() = _(R"PYTHON(
-Base Plugin class.  
-Must be overriden in a plugin Python file, like:
 
 import mrv2
-from mrv2 import timeline, plugin
+from mrv2 import plugin
 
 class DemoPlugin(plugin.Plugin):
-    """
-    Define your own variables here.
-    """
     def __init__(self):
-        super().__init__()
-        pass
+        """
+        Constructor for DemoPlugin.
 
-    """
-    Example method used for the callback.
-    """
+        Define your own variables here.
+        """
+        super().__init__()
+
     def run(self):
+        """
+        Example method used for the callback.
+        """
         print("Hello from Python plugin")
 
-    """
-    Optional method to return whether the plug-in is active or not.
-    """
     def active(self):
+        """
+        Optional method to return whether the plug-in is active or not.
+
+
+        :return: True if the plug-in is active, False otherwise.
+        :rtype: bool
+
+        """
         return True
 
-    """
-    Dictionary of menu entries as keys with callbacks as values.
-    """
     def menus(self):
-        menus = { "New Menu/Hello" : self.run,
-                  "New Menu/Play/Forward" : timeline.playForward }
+        """
+        Dictionary of menu entries as keys with callbacks as values.
+
+
+        :return: A dictionary of menu entries and their corresponding callbacks.
+        :rtype: dict
+
+        """
+        menus = {"New Menu/Hello": self.run}
         return menus
 
 )PYTHON");

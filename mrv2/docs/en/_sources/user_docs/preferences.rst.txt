@@ -236,7 +236,7 @@ Timeline
 	   Whether to show a thumbnail above the timeline when moving or dragging on the timeline.
 
 Edit Viewport
--------------
++++++++++++++
 
 .. topic:: Start in Edit mode
 
