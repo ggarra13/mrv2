@@ -28,46 +28,11 @@ export LIBVPX_TAG=v1.12.0
 export X264_TAG=master
 export FFMPEG_TAG=n6.0
 
-export GPL=""
-for i in $@; do
-    case $i in
-	-g|--gpl)
-	    export GPL=GPL
-	    shift
-	    ;;
-	-b|--bsd|-l|--lgpl)
-	    export GPL=LGPL
-	    shift
-	    ;;
-	-j)
-	    shift
-	    shift
-	    ;;
-	*)
-	    echo
-	    echo "Unknown parameter.  Usage is:"
-	    echo
-	    echo "$0 --gpl"
-	    echo
-	    echo "or:"
-	    echo
-	    echo "$0 --bsd"
-	    exit 1
-	    ;;
-    esac
-done
-
 ROOT_DIR=$PWD/$BUILD_DIR/tlRender/etc/SuperBuild/FFmpeg
 export INSTALL_DIR=$PWD/$BUILD_DIR/install
 
-if [[ $GPL == GPL ]]; then
-    echo
-    echo "GPL ffmpeg will be built in $ROOT_DIR"
-    echo
-elif [[ $GPL == LGPL ]]; then
-    echo
-    echo "LGPL ffmpeg will be built in $ROOT_DIR"
-    echo
+if [[ $FFMPEG_GPL == GPL || $FFMPEG_GPL == LGPL ]]; then
+    true
 else
     echo
     echo "You need to provide either a --gpl or --bsd flag."
@@ -88,7 +53,7 @@ export BUILD_LIBVPX=1
 # Build wiht h264 encoding.
 #
 export BUILD_LIBX264=1
-if [[ $GPL == LGPL ]]; then
+if [[ $FFMPEG_GPL == LGPL ]]; then
     export BUILD_LIBX264=0
 fi
 
@@ -98,28 +63,25 @@ fi
 export BUILD_FFMPEG=1
 
 
-#
-# Fix CMake/Ninja include list when compiling on non-English locale
-#
-export VSLANG=1033  # @bug: does not work
-
 
 if [[ $MSYS_LIBS == 1 ]]; then
-
-    #echo ""
-    #echo "If you are asked to close the terminal, you should do so and"
-    #echo "run this script again."
-    #echo ""
     pacman -Sy --noconfirm
 
     #
     # This is for libx264 and ffmpeg
     #
-    echo "Installing packages needed to build libx264 and ffmpeg..."
-    pacman -S make diffutils yasm nasm pkg-config --noconfirm
+    if [[ $FFMPEG_GPL == GPL ]]; then
+	echo
+	echo "Installing packages needed to build libvpx, libx264 and FFmpeg..."
+    else
+	echo
+	echo "Installing packages needed to build libvpx and FFmpeg..."
+    fi
+    echo
+    
+    pacman -Sy make diffutils yasm nasm pkg-config --noconfirm
 
 fi
-
 
 mkdir -p $ROOT_DIR
 
@@ -134,7 +96,6 @@ mkdir -p build
 ## BUILDING #
 #############
 
-
 ## Build libvpx
 export ENABLE_LIBVPX=""
 if [[ $BUILD_LIBVPX == 1 ]]; then
@@ -148,6 +109,11 @@ if [[ $BUILD_LIBVPX == 1 ]]; then
 	mkdir -p libvpx
 	cd libvpx
     
+	echo
+	echo "Compiling libvpx as $FFMPEG_GPL......"
+	echo
+
+	
 	./../../sources/libvpx/configure --prefix=$INSTALL_DIR --target=x86_64-win64-vs16 --disable-examples --disable-docs 
 	make -j ${CPU_CORES}
 	make install
@@ -164,6 +130,7 @@ fi
 #
 export ENABLE_LIBX264=""
 if [[ $BUILD_LIBX264 == 1 ]]; then
+    
     cd $ROOT_DIR/sources
 
     if [[ ! -d x264 ]]; then
@@ -178,6 +145,9 @@ if [[ $BUILD_LIBX264 == 1 ]]; then
     
 
     if [[ ! -e $INSTALL_DIR/lib/libx264.lib ]]; then
+	echo
+	echo "Compiling libx264 as $FFMPEG_GPL......"
+	echo
 	cd $ROOT_DIR/build
 	mkdir -p x264
 	cd x264
@@ -187,7 +157,11 @@ if [[ $BUILD_LIBX264 == 1 ]]; then
 	mv $INSTALL_DIR/lib/libx264.dll.lib $INSTALL_DIR/lib/libx264.lib
     fi
     
-    export ENABLE_LIBX264="--enable-libx264"
+    export ENABLE_LIBX264="--enable-libx264 --enable-gpl"
+else
+    # Remove unused libx264
+    rm -f $INSTALL_DIR/bin/libx264*.dll
+    rm -f $INSTALL_DIR/lib/libx264.lib
 fi
 
 #
@@ -195,20 +169,29 @@ fi
 #
 
 if [[ $BUILD_FFMPEG == 1 ]]; then
+    echo "Building FFmpeg..."
     cd $ROOT_DIR/sources
 
     if [[ ! -d ffmpeg ]]; then
-	git clone --depth 1 git://source.ffmpeg.org/ffmpeg.git --branch ${FFMPEG_TAG}
+	git clone --depth 1 --branch ${FFMPEG_TAG} git://source.ffmpeg.org/ffmpeg.git
     fi
-
-    if [[ ! -d $INSTALL_DIR/lib/avformat.lib ]]; then
+    
+    if [[ ! -e $INSTALL_DIR/lib/avformat.lib ]]; then
+	echo
+	echo "Compiling FFmpeg as ${FFMPEG_GPL}......"
+	echo
+	rm -rf $ROOT_DIR/build/ffmpeg
 	cd $ROOT_DIR/build
 	mkdir -p ffmpeg
 	cd ffmpeg
+	
+	if [[ -e $INSTALL_DIR/include/zconf.h ]]; then
+	    mv $INSTALL_DIR/include/zconf.h $INSTALL_DIR/include/zconf.h.orig
+	fi
 
 	export CC=cl
 	export PKG_CONFIG_PATH=$INSTALL_DIR/lib/pkgconfig
-	
+
 	./../../sources/ffmpeg/configure \
             --prefix=$INSTALL_DIR \
             --toolchain=msvc \
@@ -222,7 +205,6 @@ if [[ $BUILD_FFMPEG == 1 ]]; then
             --enable-swresample \
             $ENABLE_LIBX264 \
 	    $ENABLE_LIBVPX \
-            --enable-gpl \
             --extra-ldflags="-LIBPATH:$INSTALL_DIR/lib/" \
             --extra-cflags="-I$INSTALL_DIR/include/"
 
@@ -233,14 +215,17 @@ if [[ $BUILD_FFMPEG == 1 ]]; then
 
 	# @bug: FFmpeg places .lib in bin/
 	mv $INSTALL_DIR/bin/*.lib $INSTALL_DIR/lib/
+
+	if [[ -e $INSTALL_DIR/include/zconf.h.orig ]]; then
+	   mv $INSTALL_DIR/include/zconf.h.orig $INSTALL_DIR/include/zconf.h
+	fi
     fi
 fi
 
 
 if [[ $MSYS_LIBS == 1 ]]; then
-    #
-    # Remove the libx264 and ffmpeg libs we downloaded
-    #
-    echo "Removing packages used to build libx264 and ffmpeg..."
-    pacman -R make diffutils yasm nasm pkg-config --noconfirm
+    echo "Removing packages used to build libx264 and FFmpeg..."
+    pacman -R yasm nasm --noconfirm
 fi
+
+echo "Exiting..."

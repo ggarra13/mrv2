@@ -21,7 +21,11 @@ export LCMS2_ROOT=$PWD/windows/win64/
 
 #
 # Set the location of precompiled FFmpeg on Windows.
-# If not set, it will compile a GPL version of FFmpeg.
+# If not set, it will compile it.
 #
-
 export FFMPEG_ROOT=$PWD/windows/win64/
+if [[ $FFMPEG_GPL == GPL || $FFMPEG_GPL == LGPL ]]; then
+    rm -f $BUILD_DIR/install/lib/libx264.lib
+    rm -f $BUILD_DIR/install/lib/avformat.lib
+    export FFMPEG_ROOT=""
+fi

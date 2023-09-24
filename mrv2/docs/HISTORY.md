@@ -36,6 +36,16 @@ v0.7.8
   the Text widget where you will be able to reposition it, re-edit it, etc.
   This also works in network connections.
 - Made text widget font size be dependant on the render size of the image.
+- Improved scripts in bin/ directory with help messages.
+- Moved python scripts in bin/ directory to bin/python.
+- Improved runme.sh script to accept a -gpl flag to compile FFmpeg with libx264
+  support in GPL mode on all platforms.  The default is still to build a LGPL
+  FFmpeg without libx264 saving support as that complies with the BSD license
+  of mrv2's source code.
+- Improved README.md build instructions to document the optional building of
+  FFmpeg.
+- Fixed saving movies when saving without annotations leading to bad redraws
+  later on in the timeline.
 
 
 v0.7.7
