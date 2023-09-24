@@ -102,7 +102,8 @@ namespace mrv
 
     struct Options
     {
-        std::string fileName[3];
+        std::string dummy;
+        std::vector<std::string> fileNames;
         std::string audioFileName;
         std::string compareFileName;
         std::string pythonScript;
@@ -246,14 +247,9 @@ namespace mrv
             app::convert(argc, argv), context, "mrv2",
             _("Play timelines, movies, and image sequences."),
             {app::CmdLineValueArg<std::string>::create(
-                 p.options.fileName[0], "input",
-                 _("Timeline, movie, image sequence, or folder."), true),
-             app::CmdLineValueArg<std::string>::create(
-                 p.options.fileName[1], "second",
-                 _("Second timeline, movie, image sequence, or folder."), true),
-             app::CmdLineValueArg<std::string>::create(
-                 p.options.fileName[2], "third",
-                 _("Third timeline, movie, image sequence, or folder."), true)},
+                p.options.dummy, "inputs",
+                _("Timelines, movies, image sequences, or folders."), true,
+                true)},
             {
                 app::CmdLineValueOption<int>::create(
                     Preferences::debug, {"-debug", "-d"},
@@ -378,6 +374,20 @@ namespace mrv
         if (exitCode != 0)
         {
             return;
+        }
+
+        file::Path lastPath;
+        const auto& unusedArgs = getUnusedArgs();
+        for (const auto& unused : unusedArgs)
+        {
+            file::Path path = file::Path(unused);
+            if (path.getDirectory() == lastPath.getDirectory() &&
+                path.getBaseName() == lastPath.getBaseName() &&
+                path.getPadding() == lastPath.getPadding() &&
+                path.getExtension() == lastPath.getExtension())
+                continue;
+            lastPath = path;
+            p.options.fileNames.push_back(unused);
         }
 
         if (p.options.displayVersion)
@@ -615,14 +625,9 @@ namespace mrv
 
         if (!OSXfiles.empty())
         {
-            int idx = 0;
-            if (p.options.fileName[0].empty())
+            if (p.options.fileNames.empty())
             {
-                while (idx < 3)
-                {
-                    p.options.fileName[idx] = OSXfiles[idx];
-                    ++idx;
-                }
+                p.options.fileNames = OSXfiles;
             }
         }
 
@@ -637,13 +642,13 @@ namespace mrv
         }
 
         // Open the input files.
-        if (!p.options.fileName[0].empty())
+        if (!p.options.fileNames.empty())
         {
-            for (int i = 0; i < 3; ++i)
+            for (const auto& fileName : p.options.fileNames)
             {
-                if (p.options.fileName[i].empty())
+                if (fileName.empty())
                     continue;
-                open(p.options.fileName[i], p.options.audioFileName);
+                open(fileName, p.options.audioFileName);
             }
 
             auto model = filesModel();

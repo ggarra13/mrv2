@@ -25,7 +25,14 @@ namespace mrv
     {
 
         std::fstream logbuffer::out;
-        bool logbuffer::_debug = true;
+        std::thread::id logbuffer::mainThread;
+
+        logbuffer::logbuffer() :
+            string_stream()
+        {
+            str().reserve(1024);
+            mainThread = std::this_thread::get_id();
+        };
 
         logbuffer::~logbuffer()
         {
@@ -40,6 +47,11 @@ namespace mrv
 
             if (Flu_File_Chooser::window)
                 return;
+
+            if (std::this_thread::get_id() != mainThread)
+                return;
+
+            return;
 
             if (LogDisplay::prefs == LogDisplay::kDockOnError)
             {
@@ -70,9 +82,6 @@ namespace mrv
             if (!c)
                 return 1;
 
-            if (_debug && out.is_open())
-                out << c << std::flush;
-
             print(c);
 
             free(c);
@@ -80,22 +89,6 @@ namespace mrv
             // reset iterator to first position & unfreeze
             seekoff(0, std::ios::beg);
             return 0;
-        }
-
-        void logbuffer::open_stream()
-        {
-            if (!out.is_open())
-            {
-                std::string file = mrv::homepath();
-                file += "/.filmaura/errorlog.txt";
-                out.open(file.c_str(), std::ios_base::out);
-            }
-            if (out.is_open())
-            {
-                out << "DEBUG LOG" << std::endl
-                    << "=========" << std::endl
-                    << std::endl;
-            }
         }
 
         void errorbuffer::print(const char* c)
