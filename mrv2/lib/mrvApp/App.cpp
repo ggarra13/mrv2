@@ -376,9 +376,17 @@ namespace mrv
             return;
         }
 
+        file::Path lastPath;
         const auto& unusedArgs = getUnusedArgs();
         for (const auto& unused : unusedArgs)
         {
+            file::Path path = file::Path(unused);
+            if (path.getDirectory() == lastPath.getDirectory() &&
+                path.getBaseName() == lastPath.getBaseName() &&
+                path.getPadding() == lastPath.getPadding() &&
+                path.getExtension() == lastPath.getExtension())
+                continue;
+            lastPath = path;
             p.options.fileNames.push_back(unused);
         }
 
