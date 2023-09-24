@@ -438,6 +438,8 @@ namespace mrv
         digits = std_any_cast< int >(
             settingsObject->value("Performance/FFmpegThreadCount"));
         sp->value(digits);
+        sp->minumum(0);
+        sp->maximum(16);
         spW->callback(
             [=](auto o)
             {

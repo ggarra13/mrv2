@@ -50,6 +50,7 @@ v0.7.8
   button is pressed.  Now it will correctly zoom to 1 if it fits it.
 - Made tiling slider of Timeline Viewport darker so it is more visible.
 - Fixed order of clips loaded from the command-line being in reverse order.
+- Fixed Settings Panel FFmpeg I/O Threads not accepting 0.
 
 
 v0.7.7
