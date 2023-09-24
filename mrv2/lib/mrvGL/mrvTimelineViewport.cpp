@@ -319,6 +319,7 @@ namespace mrv
         case timeline::Playback::Reverse:
             c->uiPlayBackwards->color(color);
             break;
+        default:
         case timeline::Playback::Stop:
             c->uiStop->color(color);
             break;
