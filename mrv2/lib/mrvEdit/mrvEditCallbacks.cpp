@@ -1881,8 +1881,6 @@ namespace mrv
         view->layout();
         tile->init_sizes();
 
-        editMode = mode;
-
         if (timeline->visible())
             timeline->redraw(); // needed
     }
