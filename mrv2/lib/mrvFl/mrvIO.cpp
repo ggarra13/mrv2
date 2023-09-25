@@ -51,8 +51,6 @@ namespace mrv
             if (std::this_thread::get_id() != mainThread)
                 return;
 
-            return;
-
             if (LogDisplay::prefs == LogDisplay::kDockOnError)
             {
                 if (!logsPanel)
