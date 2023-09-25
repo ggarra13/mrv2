@@ -927,7 +927,7 @@ uiView->updateDisplayOptions();}
             Fl_Menu_Button uiICS {
               label {Input Color Space}
               user_data this user_data_type {ViewerUI*}
-              callback {uiView->updateColorConfigOptions();} open
+              callback {uiView->updateColorConfigOptions();} open selected
               tooltip {OCIO input color space for the image} xywh {277 27 143 22} box ROUNDED_BOX labelsize 10 align 96
               code0 {o->disable_submenus();}
               class {mrv::PopupMenu}
@@ -1105,7 +1105,8 @@ if (Fl::event_clicks() >= 1)
               Fl_Button uiFlipPenColor {
                 user_data this user_data_type {ViewerUI*}
                 callback {mrv::flip_pen_color_cb( o, v );}
-                tooltip {Switch Colors} image {../../icons/Flip.svg} compress_image 1 xywh {25 337 16 20} box NO_BOX color 1 selection_color 1 labelfont 8 labelsize 24 align 16
+                tooltip {Switch Colors} image {../../icons/Flip.svg} compress_image 1 xywh {25 337 16 20} box NO_BOX labelfont 8 labelsize 24 align 16
+                class {mrv::Button}
               }
               Fl_Slider uiPenOpacity {
                 callback {auto settingsObject = app->settingsObject();
@@ -1151,7 +1152,7 @@ settingsObject->setValue( mrv::kPenColorA, a);}
               } {}
             }
           }
-          Fl_Group uiTimelineGroup {open selected
+          Fl_Group uiTimelineGroup {open
             xywh {0 488 690 30} box FLAT_BOX color 51
             class {mrv::TimelineGroup}
           } {
