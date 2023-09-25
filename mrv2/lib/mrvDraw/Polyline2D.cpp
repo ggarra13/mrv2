@@ -9,7 +9,7 @@
 
 #include "Polyline2D.h"
 
-namespace tl
+namespace mrv
 {
     namespace draw
     {
@@ -244,9 +244,9 @@ namespace tl
             // wrap the angle around the 180° mark if it exceeds 90°
             // for minimum angle detection
             auto wrappedAngle = angle;
-            if (wrappedAngle > math::pi / 2)
+            if (wrappedAngle > tl::math::pi / 2)
             {
-                wrappedAngle = math::pi - wrappedAngle;
+                wrappedAngle = tl::math::pi - wrappedAngle;
             }
 
             if (jointStyle == JointStyle::MITER && wrappedAngle < miterMinAngle)
@@ -333,7 +333,7 @@ namespace tl
                 {
                     innerStart = innerSec;
                 }
-                else if (angle > math::pi / 2)
+                else if (angle > tl::math::pi / 2)
                 {
                     innerStart = outer1->b;
                 }
@@ -385,7 +385,7 @@ namespace tl
                 {
                     if (!innerSecOpt && m_softEdges)
                     {
-                        if (angle > math::pi / 2)
+                        if (angle > tl::math::pi / 2)
                         {
                             createRoundSoftCap(segment1, true);
                             createRoundSoftCap(segment2, false);
@@ -438,14 +438,14 @@ namespace tl
             {
                 if (angle2 > angle1)
                 {
-                    angle2 = angle2 - 2 * math::pi;
+                    angle2 = angle2 - 2 * tl::math::pi;
                 }
             }
             else
             {
                 if (angle1 > angle2)
                 {
-                    angle1 = angle1 - 2 * math::pi;
+                    angle1 = angle1 - 2 * tl::math::pi;
                 }
             }
 
@@ -570,4 +570,4 @@ namespace tl
 
     } // namespace draw
 
-} // namespace tl
+} // namespace mrv

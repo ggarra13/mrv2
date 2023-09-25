@@ -79,9 +79,6 @@ namespace mrv
         int run();
 
     public:
-        static App* application();
-
-    public:
         //! Open a file (with optional audio) or directory.
         void open(const std::string&, const std::string& = std::string());
 

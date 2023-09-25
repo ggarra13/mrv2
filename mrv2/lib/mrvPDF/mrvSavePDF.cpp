@@ -33,8 +33,8 @@ namespace mrv
 
         std::sort(
             annotations.begin(), annotations.end(),
-            [](const std::shared_ptr<tl::draw::Annotation>& a,
-               const std::shared_ptr<tl::draw::Annotation>& b)
+            [](const std::shared_ptr<draw::Annotation>& a,
+               const std::shared_ptr<draw::Annotation>& b)
             { return a->time < b->time; });
 
         PDFCreator pdf(pdfFile, annotations, ui);

@@ -73,7 +73,7 @@ namespace mrv
                 const std::string& prefix = settingsPanel->tab_prefix();
                 const std::string key = prefix + "Cache";
 
-                App* app = App::application();
+                App* app = App::ui->app;
                 auto settingsObject = app->settingsObject();
                 settingsObject->setValue(key, static_cast<int>(cg->is_open()));
 
@@ -168,7 +168,7 @@ namespace mrv
                 const std::string& prefix = settingsPanel->tab_prefix();
                 const std::string key = prefix + "File Sequences";
 
-                App* app = App::application();
+                App* app = App::ui->app;
                 auto settingsObject = app->settingsObject();
                 settingsObject->setValue(key, static_cast<int>(cg->is_open()));
 
@@ -278,7 +278,7 @@ namespace mrv
                 const std::string& prefix = settingsPanel->tab_prefix();
                 const std::string key = prefix + "Performance";
 
-                App* app = App::application();
+                App* app = App::ui->app;
                 auto settingsObject = app->settingsObject();
                 settingsObject->setValue(key, static_cast<int>(cg->is_open()));
 

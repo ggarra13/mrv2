@@ -664,14 +664,13 @@ namespace mrv
                     tcp->unlock();
                     return;
                 }
-                auto shape =
-                    dynamic_cast< tl::draw::PathShape* >(lastShape.get());
+                auto shape = dynamic_cast< draw::PathShape* >(lastShape.get());
                 if (!shape)
                 {
                     tcp->unlock();
                     return;
                 }
-                const tl::draw::Point& value = message["value"];
+                const draw::Point& value = message["value"];
                 shape->pts.push_back(value);
                 view->redrawWindows();
             }
@@ -736,12 +735,11 @@ namespace mrv
                     return;
                 }
 
-                const std::vector<tl::draw::Annotation>& tmp = message["value"];
-                std::vector< std::shared_ptr<tl::draw::Annotation> >
-                    annotations;
+                const std::vector<draw::Annotation>& tmp = message["value"];
+                std::vector< std::shared_ptr<draw::Annotation> > annotations;
                 for (const auto& ann : tmp)
                 {
-                    std::shared_ptr< tl::draw::Annotation > annotation =
+                    std::shared_ptr< draw::Annotation > annotation =
                         messageToAnnotation(ann);
                     annotations.push_back(annotation);
                 }

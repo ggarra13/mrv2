@@ -28,7 +28,7 @@ namespace
 namespace mrv
 {
 
-    std::shared_ptr< tl::draw::Shape > messageToShape(const Message& json)
+    std::shared_ptr< draw::Shape > messageToShape(const Message& json)
     {
         std::string type = json["type"];
         if (type == "DrawPath")
@@ -63,7 +63,7 @@ namespace mrv
         }
         else if (type == "Note")
         {
-            auto shape = std::make_shared< tl::draw::NoteShape >();
+            auto shape = std::make_shared< draw::NoteShape >();
             json.get_to(*shape.get());
             return shape;
         }
@@ -86,7 +86,7 @@ namespace mrv
         throw std::runtime_error(type);
     }
 
-    Message shapeToMessage(const std::shared_ptr< tl::draw::Shape > shape)
+    Message shapeToMessage(const std::shared_ptr< draw::Shape > shape)
     {
         Message msg;
         auto ptr = shape.get();
@@ -128,9 +128,9 @@ namespace mrv
             GLPathShape* p = dynamic_cast< GLPathShape* >(ptr);
             msg = *p;
         }
-        else if (dynamic_cast< tl::draw::NoteShape* >(ptr))
+        else if (dynamic_cast< draw::NoteShape* >(ptr))
         {
-            tl::draw::NoteShape* p = dynamic_cast< tl::draw::NoteShape* >(ptr);
+            draw::NoteShape* p = dynamic_cast< draw::NoteShape* >(ptr);
             msg = *p;
         }
         return msg;

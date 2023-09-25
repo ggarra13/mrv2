@@ -34,7 +34,7 @@ namespace mrv
 
     void from_json(const nlohmann::json& j, FilesModelItem& value)
     {
-        using namespace tl::draw;
+        using namespace mrv::draw;
         j.at("path").get_to(value.path);
         j.at("audioPath").get_to(value.audioPath);
         j.at("timeRange").get_to(value.timeRange);

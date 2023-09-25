@@ -179,16 +179,6 @@ namespace mrv
         bool running = false;
     };
 
-    namespace
-    {
-        App* _application = nullptr;
-    }
-
-    App* App::application()
-    {
-        return _application;
-    }
-
     ViewerUI* App::ui = nullptr;
 
     std::vector< std::string > OSXfiles;
@@ -235,7 +225,6 @@ namespace mrv
 
         XSetErrorHandler(xerrorhandler);
 #endif
-        _application = this;
         // Store the application object for further use down the line
         ViewerUI::app = this;
 

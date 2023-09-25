@@ -1774,9 +1774,9 @@ namespace mrv
 
     void clone_file_cb(Fl_Menu_* m, void* d)
     {
-        auto app = mrv::App::application();
+        auto ui = App::ui;
+        auto app = ui->app;
         auto model = app->filesModel();
-        auto ui = app->ui;
         if (model->observeFiles()->getSize() < 1)
             return;
 
@@ -1810,9 +1810,9 @@ namespace mrv
 
     void set_stereo_cb(Fl_Menu_* m, void* d)
     {
-        auto app = mrv::App::application();
+        auto ui = App::ui;
+        auto app = ui->app;
         auto model = app->filesModel();
-        auto ui = app->ui;
         size_t numFiles = model->observeFiles()->getSize();
         if (numFiles < 1)
             return;
@@ -1862,9 +1862,9 @@ namespace mrv
     // @todo: remove once tlRender supports this natively
     void refresh_file_cache_cb(Fl_Menu_* m, void* d)
     {
-        auto app = mrv::App::application();
+        auto ui = App::ui;
+        auto app = ui->app;
         auto model = app->filesModel();
-        auto ui = app->ui;
         if (model->observeFiles()->getSize() < 1)
             return;
 
@@ -1913,9 +1913,9 @@ namespace mrv
 
     void copy_filename_cb(Fl_Menu_* m, void* d)
     {
-        auto app = mrv::App::application();
+        auto ui = App::ui;
+        auto app = ui->app;
         auto model = app->filesModel();
-        auto ui = app->ui;
         if (model->observeFiles()->getSize() < 1)
             return;
 
@@ -1927,7 +1927,8 @@ namespace mrv
 
     void file_manager_cb(Fl_Menu_* m, void* d)
     {
-        auto app = mrv::App::application();
+        auto ui = App::ui;
+        auto app = ui->app;
         auto model = app->filesModel();
 
         auto item = model->observeA()->get();

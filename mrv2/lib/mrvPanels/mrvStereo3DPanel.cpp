@@ -317,7 +317,7 @@ namespace mrv
                 const std::string& prefix = stereo3DPanel->tab_prefix();
                 const std::string key = prefix + "Stereo 3D";
 
-                App* app = App::application();
+                App* app = App::ui->app;
                 auto settingsObject = app->settingsObject();
                 settingsObject->setValue(key, static_cast<int>(cg->is_open()));
 
@@ -403,7 +403,7 @@ namespace mrv
                 const std::string& prefix = stereo3DPanel->tab_prefix();
                 const std::string key = prefix + "Adjustments";
 
-                App* app = App::application();
+                App* app = App::ui->app;
                 auto settingsObject = app->settingsObject();
                 settingsObject->setValue(key, static_cast<int>(cg->is_open()));
 

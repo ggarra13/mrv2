@@ -9,16 +9,12 @@
 #include <tlTimeline/Timeline.h>
 #include <tlTimeline/Player.h>
 
-namespace tl
+namespace mrv
 {
     namespace draw
     {
         class Annotation;
     }
-} // namespace tl
-
-namespace mrv
-{
 
     using namespace tl;
 

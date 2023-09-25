@@ -17,11 +17,13 @@
 #include "mrvDraw/Point.h"
 #include "mrvGL/mrvGLLines.h"
 
-namespace tl
+namespace mrv
 {
 
     namespace draw
     {
+
+        using namespace tl;
 
         class Shape
         {
@@ -36,8 +38,8 @@ namespace tl
             virtual ~Shape(){};
 
             virtual void draw(
-                const std::shared_ptr<timeline::IRender>&,
-                const std::shared_ptr<gl::Lines>&) = 0;
+                const std::shared_ptr<tl::timeline::IRender>&,
+                const std::shared_ptr<opengl::Lines>&) = 0;
 
         public:
             math::Matrix4x4f matrix;
@@ -56,8 +58,8 @@ namespace tl
             virtual ~PathShape(){};
 
             virtual void draw(
-                const std::shared_ptr<timeline::IRender>&,
-                const std::shared_ptr<gl::Lines>&) = 0;
+                const std::shared_ptr<tl::timeline::IRender>&,
+                const std::shared_ptr<opengl::Lines>&) = 0;
 
             PointList pts;
         };
@@ -70,8 +72,8 @@ namespace tl
             virtual ~NoteShape(){};
 
             void draw(
-                const std::shared_ptr<timeline::IRender>&,
-                const std::shared_ptr<gl::Lines>&) override{};
+                const std::shared_ptr<tl::timeline::IRender>&,
+                const std::shared_ptr<opengl::Lines>&) override{};
 
         public:
             std::string text;
@@ -90,4 +92,4 @@ namespace tl
         void from_json(const nlohmann::json&, NoteShape&);
 
     } // namespace draw
-} // namespace tl
+} // namespace mrv

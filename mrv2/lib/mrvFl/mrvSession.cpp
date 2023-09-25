@@ -86,10 +86,12 @@ namespace mrv
         Message time;
         Message playback;
 
+        std::cerr << __LINE__ << std::endl;
+
         if (player)
         {
             auto annotations = player->getAllAnnotations();
-            std::vector< tl::draw::Annotation > jAnnotations;
+            std::vector< draw::Annotation > jAnnotations;
             for (const auto& ann : annotations)
             {
                 jAnnotations.push_back(*(ann.get()));
@@ -99,10 +101,12 @@ namespace mrv
             playback = player->playback();
         }
 
+        std::cerr << __LINE__ << std::endl;
         timeline["annotations"] = annotation;
         timeline["time"] = time;
         timeline["playback"] = playback;
 
+        std::cerr << __LINE__ << std::endl;
         Message bars = {
             {"menu_bar", (bool)ui->uiMenuGroup->visible()},
             {"top_bar", (bool)ui->uiTopBar->visible()},
@@ -113,6 +117,7 @@ namespace mrv
             {"secondary_window", (ui->uiSecondary != nullptr)},
         };
 
+        std::cerr << __LINE__ << std::endl;
         Message panels = {
             {"Files", (filesPanel != nullptr)},
             {"Color", (colorPanel != nullptr)},
@@ -132,6 +137,7 @@ namespace mrv
             {"Logs", (logsPanel != nullptr)},
         };
 
+        std::cerr << __LINE__ << std::endl;
         if (filesPanel)
             filesPanel->save();
         if (colorPanel)
@@ -189,7 +195,7 @@ namespace mrv
             // }
             try
             {
-                float tmpF = std_any_cast< float >(value);
+                float tmpF = std::any_cast< float >(value);
                 settings[key] = tmpF;
                 continue;
             }
@@ -198,7 +204,7 @@ namespace mrv
             }
             try
             {
-                int tmp = std_any_cast< int >(value);
+                int tmp = std::any_cast< int >(value);
                 settings[key] = tmp;
                 continue;
             }
@@ -207,7 +213,7 @@ namespace mrv
             }
             try
             {
-                bool tmp = std_any_cast< bool >(value);
+                bool tmp = std::any_cast< bool >(value);
                 settings[key] = tmp;
                 continue;
             }
@@ -216,7 +222,7 @@ namespace mrv
             }
             try
             {
-                const std::string& tmpS = std_any_cast< std::string >(value);
+                const std::string& tmpS = std::any_cast< std::string >(value);
                 settings[key] = tmpS;
                 continue;
             }
@@ -225,7 +231,7 @@ namespace mrv
             }
             try
             {
-                const std::string tmpS = std_any_cast< char* >(value);
+                const std::string tmpS = std::any_cast< char* >(value);
                 settings[key] = tmpS;
                 continue;
             }
@@ -376,10 +382,10 @@ namespace mrv
 
             auto tmp = j["annotations"];
 
-            std::vector< std::shared_ptr<tl::draw::Annotation> > annotations;
+            std::vector< std::shared_ptr<draw::Annotation> > annotations;
             for (const auto& value : tmp)
             {
-                auto annotation = tl::draw::messageToAnnotation(value);
+                auto annotation = draw::messageToAnnotation(value);
                 annotations.push_back(annotation);
             }
 
@@ -491,7 +497,7 @@ namespace mrv
                     {
                         try
                         {
-                            double v = std_any_cast<double>(val);
+                            double v = std::any_cast<double>(val);
                             settingsObject->setValue(key, value.get<double>());
                         }
                         catch (const std::bad_cast& e)

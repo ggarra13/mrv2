@@ -72,7 +72,7 @@ namespace mrv
             msg["command"] = "Annotations";
             auto annotationsPtr = player->getAllAnnotations();
 
-            std::vector< tl::draw::Annotation > annotations;
+            std::vector< draw::Annotation > annotations;
             annotations.resize(annotationsPtr.size());
             for (const auto& annotationPtr : annotationsPtr)
             {

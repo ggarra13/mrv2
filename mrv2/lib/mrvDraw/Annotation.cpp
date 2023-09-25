@@ -10,11 +10,11 @@
 
 #include "Annotation.h"
 
-namespace tl
+namespace mrv
 {
     namespace draw
     {
-        using namespace mrv;
+        using namespace tl;
 
         Annotation::Annotation(
             const otime::RationalTime& inTime, const bool inAllFrames)
@@ -115,4 +115,4 @@ namespace tl
         }
 
     } // namespace draw
-} // namespace tl
+} // namespace mrv

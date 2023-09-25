@@ -81,7 +81,7 @@ namespace mrv
                 const std::string& prefix = annotationsPanel->tab_prefix();
                 const std::string key = prefix + "Text";
 
-                App* app = App::application();
+                App* app = App::ui->app;
                 auto settingsObject = app->settingsObject();
                 settingsObject->setValue(key, static_cast<int>(cg->is_open()));
 
@@ -203,7 +203,7 @@ namespace mrv
                 const std::string& prefix = annotationsPanel->tab_prefix();
                 const std::string key = prefix + "Pen";
 
-                App* app = App::application();
+                App* app = App::ui->app;
                 auto settingsObject = app->settingsObject();
                 settingsObject->setValue(key, static_cast<int>(cg->is_open()));
 
@@ -320,7 +320,7 @@ namespace mrv
                 const std::string& prefix = annotationsPanel->tab_prefix();
                 const std::string key = prefix + "Ghosting";
 
-                App* app = App::application();
+                App* app = App::ui->app;
                 auto settingsObject = app->settingsObject();
                 settingsObject->setValue(key, static_cast<int>(cg->is_open()));
 
@@ -408,7 +408,7 @@ namespace mrv
                 const std::string& prefix = annotationsPanel->tab_prefix();
                 const std::string key = prefix + "Frames";
 
-                App* app = App::application();
+                App* app = App::ui->app;
                 auto settingsObject = app->settingsObject();
                 settingsObject->setValue(key, static_cast<int>(cg->is_open()));
 

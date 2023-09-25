@@ -110,7 +110,7 @@ namespace mrv
                 const std::string& prefix = colorPanel->tab_prefix();
                 const std::string key = prefix + "LUT";
 
-                App* app = App::application();
+                App* app = App::ui->app;
                 auto settingsObject = app->settingsObject();
                 settingsObject->setValue(key, static_cast<int>(cg->is_open()));
 
@@ -207,7 +207,7 @@ namespace mrv
                 const std::string& prefix = colorPanel->tab_prefix();
                 const std::string key = prefix + "Color Controls";
 
-                App* app = App::application();
+                App* app = App::ui->app;
                 auto settingsObject = app->settingsObject();
                 settingsObject->setValue(key, static_cast<int>(cg->is_open()));
 
@@ -333,7 +333,7 @@ namespace mrv
                 const std::string& prefix = colorPanel->tab_prefix();
                 const std::string key = prefix + "Levels";
 
-                App* app = App::application();
+                App* app = App::ui->app;
                 auto settingsObject = app->settingsObject();
                 settingsObject->setValue(key, static_cast<int>(cg->is_open()));
 
@@ -459,7 +459,7 @@ namespace mrv
                 const std::string& prefix = colorPanel->tab_prefix();
                 const std::string key = prefix + "Soft Clip";
 
-                App* app = App::application();
+                App* app = App::ui->app;
                 auto settingsObject = app->settingsObject();
                 settingsObject->setValue(key, static_cast<int>(cg->is_open()));
 

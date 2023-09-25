@@ -78,7 +78,7 @@ namespace mrv
         {
             std::string json;
             std::string fileName;
-            std::vector<std::shared_ptr<tl::draw::Annotation>> annotations;
+            std::vector<std::shared_ptr<draw::Annotation>> annotations;
         };
 
         static std::vector<UndoRedo> undoBuffer;

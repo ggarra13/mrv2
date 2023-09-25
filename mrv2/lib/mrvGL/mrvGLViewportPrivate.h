@@ -39,9 +39,9 @@ namespace mrv
         std::shared_ptr<gl::VAO> vao;
 
 #ifdef USE_ONE_PIXEL_LINES
-        std::shared_ptr<tl::gl::Outline> outline;
+        std::shared_ptr<opengl::Outline> outline;
 #endif
-        std::shared_ptr<tl::gl::Lines> lines;
+        std::shared_ptr<opengl::Lines> lines;
 
 #ifdef TLRENDER_API_GL_4_1_Debug
         bool init_debug = false;

@@ -476,7 +476,7 @@ namespace mrv
 #endif
 
     void Viewport::_drawShape(
-        const std::shared_ptr< tl::draw::Shape >& shape,
+        const std::shared_ptr< draw::Shape >& shape,
         const float alphamult) noexcept
     {
         TLRENDER_P();

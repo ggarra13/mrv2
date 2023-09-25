@@ -19,13 +19,20 @@ namespace tl
         extern std::string vertexSource();
     } // namespace timeline
 
-    namespace gl
+} // namespace tl
+
+namespace mrv
+{
+
+    namespace opengl
     {
+
+        using namespace tl;
 
         struct Lines::Private
         {
-            std::shared_ptr<tl::gl::Shader> softShader = nullptr;
-            std::shared_ptr<tl::gl::Shader> hardShader = nullptr;
+            std::shared_ptr<gl::Shader> softShader = nullptr;
+            std::shared_ptr<gl::Shader> hardShader = nullptr;
             std::shared_ptr<gl::VBO> vbo;
             std::shared_ptr<gl::VAO> vao;
         };
@@ -39,10 +46,10 @@ namespace tl
 
         void Lines::drawLines(
             const std::shared_ptr<timeline::IRender>& render,
-            const tl::draw::PointList& pts, const image::Color4f& color,
+            const draw::PointList& pts, const image::Color4f& color,
             const int width, const bool soft,
-            const tl::draw::Polyline2D::JointStyle jointStyle,
-            const tl::draw::Polyline2D::EndCapStyle endStyle,
+            const draw::Polyline2D::JointStyle jointStyle,
+            const draw::Polyline2D::EndCapStyle endStyle,
             const bool catmullRomSpline, const bool allowOverlap)
         {
             TLRENDER_P();
@@ -64,7 +71,7 @@ namespace tl
                 }
             }
 
-            using namespace tl::draw;
+            using namespace mrv::draw;
 
             Polyline2D path;
             path.setWidth(width);
@@ -203,7 +210,7 @@ namespace tl
             const math::Vector2i& start, const math::Vector2i& end,
             const image::Color4f& color, const int width)
         {
-            using namespace tl::draw;
+            using namespace mrv::draw;
 
             std::vector< Point > line;
             line.push_back(Point(start.x, start.y));
@@ -258,11 +265,11 @@ namespace tl
             const int triangleAmount = 30;
             const double twoPi = math::pi * 2.0;
 
-            tl::draw::PointList verts;
+            draw::PointList verts;
             verts.reserve(triangleAmount);
             for (int i = 0; i < triangleAmount; ++i)
             {
-                tl::draw::Point pt(
+                draw::Point pt(
                     center.x + (radius * cos(i * twoPi / triangleAmount)),
                     center.y + (radius * sin(i * twoPi / triangleAmount)));
                 verts.push_back(pt);
@@ -270,8 +277,8 @@ namespace tl
 
             drawLines(
                 render, verts, color, width, soft,
-                tl::draw::Polyline2D::JointStyle::ROUND,
-                tl::draw::Polyline2D::EndCapStyle::JOINT);
+                draw::Polyline2D::JointStyle::ROUND,
+                draw::Polyline2D::EndCapStyle::JOINT);
         }
 
         void Lines::drawCursor(
@@ -285,5 +292,5 @@ namespace tl
                 drawCircle(render, center, radius - 2.0F, 2.0, black, false);
         }
 
-    } // namespace gl
-} // namespace tl
+    } // namespace opengl
+} // namespace mrv

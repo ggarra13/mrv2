@@ -94,7 +94,7 @@ namespace mrv
                 const std::string& prefix = environmentMapPanel->tab_prefix();
                 const std::string key = prefix + "Type";
 
-                App* app = App::application();
+                App* app = App::ui->app;
                 auto settingsObject = app->settingsObject();
                 settingsObject->setValue(key, static_cast<int>(cg->is_open()));
 
@@ -192,7 +192,7 @@ namespace mrv
                 const std::string& prefix = environmentMapPanel->tab_prefix();
                 const std::string key = prefix + "Projection";
 
-                App* app = App::application();
+                App* app = App::ui->app;
                 auto settingsObject = app->settingsObject();
                 settingsObject->setValue(key, static_cast<int>(cg->is_open()));
 
@@ -275,7 +275,7 @@ namespace mrv
                 const std::string& prefix = environmentMapPanel->tab_prefix();
                 const std::string key = prefix + "Rotation";
 
-                App* app = App::application();
+                App* app = App::ui->app;
                 auto settingsObject = app->settingsObject();
                 settingsObject->setValue(key, static_cast<int>(cg->is_open()));
 
@@ -365,7 +365,7 @@ namespace mrv
                 const std::string& prefix = environmentMapPanel->tab_prefix();
                 const std::string key = prefix + "Subdivisions";
 
-                App* app = App::application();
+                App* app = App::ui->app;
                 auto settingsObject = app->settingsObject();
                 settingsObject->setValue(key, static_cast<int>(cg->is_open()));
 
