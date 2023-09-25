@@ -373,7 +373,8 @@ namespace mrv
             if (path.getDirectory() == lastPath.getDirectory() &&
                 path.getBaseName() == lastPath.getBaseName() &&
                 path.getPadding() == lastPath.getPadding() &&
-                path.getExtension() == lastPath.getExtension())
+                path.getExtension() == lastPath.getExtension() &&
+                !is_directory(unused))
                 continue;
             lastPath = path;
             p.options.fileNames.push_back(unused);
