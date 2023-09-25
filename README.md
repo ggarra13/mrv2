@@ -112,7 +112,7 @@ mrv2 binaries run on Windows 8.1+, RedHat 8+ or Ubuntu 20.04+ and macOS 10.15+.
 
 # Features
 
-The source code is written in C++17 and uses CMake for the build system.  
+The source code is written in C++17 and uses CMake for the build system, with some bash scripts for auxiliary tasks.  
 The core of the playback engine is a custom version of tlRender (www.github.com/darbyjohnston/tlRender.git).
 
 Currently supported:
