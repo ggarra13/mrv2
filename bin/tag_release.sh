@@ -38,7 +38,6 @@ add_local_tag()
     #
     # Mark current repository with a new tag
     #
-    echo "Create local tag ${tag} in tlRender"
     ${GIT_EXECUTABLE} tag "${tag}"
 }
 
@@ -58,12 +57,16 @@ ${GIT_EXECUTABLE} push
 
 export tag="v${mrv2_VERSION}"
 echo "--------------------------------"
-echo "  Will release ${tag}"
+echo "  Will release ${tag} in mrv2"
 echo "--------------------------------"
 
 add_local_tag $tag
 
 cd tlRender
+
+echo "-----------------------------------"
+echo "  Will release ${tag} in tlRender"
+echo "-----------------------------------"
 
 add_local_tag $tag
 
