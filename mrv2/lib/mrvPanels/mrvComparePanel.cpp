@@ -501,7 +501,7 @@ namespace mrv
                 const std::string& prefix = comparePanel->tab_prefix();
                 const std::string key = prefix + "Wipe";
 
-                App* app = App::application();
+                App* app = App::ui->app;
                 auto settingsObject = app->settingsObject();
                 settingsObject->setValue(key, static_cast<int>(cg->is_open()));
 
@@ -595,7 +595,7 @@ namespace mrv
                 const std::string& prefix = comparePanel->tab_prefix();
                 const std::string key = prefix + "Overlay";
 
-                App* app = App::application();
+                App* app = App::ui->app;
                 auto settingsObject = app->settingsObject();
                 settingsObject->setValue(key, static_cast<int>(cg->is_open()));
 

@@ -6,6 +6,7 @@
 
 #include "mrvApp/mrvSettingsObject.h"
 #include "mrvApp/App.h"
+#include "mrViewer.h"
 
 namespace mrv
 {
@@ -26,7 +27,7 @@ namespace mrv
 
     void store_port(const uint16_t port)
     {
-        App* app = App::application();
+        App* app = App::ui->app;
         auto settingsObject = app->settingsObject();
         char buf[64];
         snprintf(buf, 64, "%d", port);

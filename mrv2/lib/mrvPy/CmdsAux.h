@@ -8,24 +8,25 @@
 #include "mrvApp/mrvPlaylistsModel.h"
 #include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/App.h"
+#include "mrViewer.h"
 
 namespace
 {
     inline const std::shared_ptr<mrv::FilesModel>& filesModel()
     {
-        mrv::App* app = mrv::App::application();
+        mrv::App* app = mrv::App::ui->app;
         return app->filesModel();
     }
 
     inline const std::shared_ptr<mrv::PlaylistsModel>& playlistModel()
     {
-        mrv::App* app = mrv::App::application();
+        mrv::App* app = mrv::App::ui->app;
         return app->playlistsModel();
     }
 
     inline mrv::SettingsObject* settingsObject()
     {
-        mrv::App* app = mrv::App::application();
+        mrv::App* app = mrv::App::ui->app;
         return app->settingsObject();
     }
 
