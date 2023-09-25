@@ -9,6 +9,7 @@
 #include <iomanip>
 #include <sstream>
 #include <fstream>
+#include <thread>
 
 #include "mrvCore/mrvI8N.h"
 
@@ -24,24 +25,13 @@ namespace mrv
 
         struct logbuffer : public string_stream
         {
-            static bool _debug;
             static std::fstream out;
+            static std::thread::id mainThread;
 
-            logbuffer() :
-                string_stream()
-            {
-                str().reserve(1024);
-            };
+            logbuffer();
             virtual ~logbuffer();
 
             void open_log_panel();
-
-            static void debug(bool t)
-            {
-                _debug = t;
-                open_stream();
-            }
-            static void open_stream();
 
             //! from basic_streambuf, stl function used to sync stream
             virtual int sync();
