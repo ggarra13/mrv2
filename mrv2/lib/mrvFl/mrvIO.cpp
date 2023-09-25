@@ -20,6 +20,24 @@
 
 namespace mrv
 {
+    namespace
+    {
+        static void open_log_panel_cb(ViewerUI* ui)
+        {
+            if (!logsPanel)
+                logs_panel_cb(NULL, ui);
+            if (!logsPanel->is_panel())
+                logsPanel->dock();
+        }
+
+        static void open_log_window_cb(ViewerUI* ui)
+        {
+            if (!logsPanel)
+                logs_panel_cb(NULL, ui);
+            if (logsPanel->is_panel())
+                logsPanel->undock();
+        }
+    } // namespace
 
     namespace trace
     {
@@ -48,22 +66,21 @@ namespace mrv
             if (Flu_File_Chooser::window)
                 return;
 
-            if (std::this_thread::get_id() != mainThread)
-                return;
+            bool local = std::this_thread::get_id() == mainThread;
 
             if (LogDisplay::prefs == LogDisplay::kDockOnError)
             {
-                if (!logsPanel)
-                    logs_panel_cb(NULL, App::ui);
-                if (!logsPanel->is_panel())
-                    logsPanel->dock();
+                if (local)
+                    open_log_panel_cb(App::ui);
+                else
+                    Fl::awake((Fl_Awake_Handler)open_log_panel_cb, App::ui);
             }
             else if (LogDisplay::prefs == LogDisplay::kWindowOnError)
             {
-                if (!logsPanel)
-                    logs_panel_cb(NULL, App::ui);
-                if (logsPanel->is_panel())
-                    logsPanel->undock();
+                if (local)
+                    open_log_window_cb(App::ui);
+                else
+                    Fl::awake((Fl_Awake_Handler)open_log_window_cb, App::ui);
             }
         }
 

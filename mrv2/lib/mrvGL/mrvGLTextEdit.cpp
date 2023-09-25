@@ -101,6 +101,7 @@ namespace mrv
     {
         resizable(textOutput);
         end();
+        textOutput.textcolor(FL_BLACK);
         textAnnotations.callback((Fl_Callback*)updateText_cb, this);
         editButton.callback((Fl_Callback*)editText_cb, this);
     }
