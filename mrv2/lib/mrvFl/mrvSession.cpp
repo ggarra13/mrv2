@@ -86,8 +86,6 @@ namespace mrv
         Message time;
         Message playback;
 
-        std::cerr << __LINE__ << std::endl;
-
         if (player)
         {
             auto annotations = player->getAllAnnotations();
@@ -101,12 +99,10 @@ namespace mrv
             playback = player->playback();
         }
 
-        std::cerr << __LINE__ << std::endl;
         timeline["annotations"] = annotation;
         timeline["time"] = time;
         timeline["playback"] = playback;
 
-        std::cerr << __LINE__ << std::endl;
         Message bars = {
             {"menu_bar", (bool)ui->uiMenuGroup->visible()},
             {"top_bar", (bool)ui->uiTopBar->visible()},
@@ -117,7 +113,6 @@ namespace mrv
             {"secondary_window", (ui->uiSecondary != nullptr)},
         };
 
-        std::cerr << __LINE__ << std::endl;
         Message panels = {
             {"Files", (filesPanel != nullptr)},
             {"Color", (colorPanel != nullptr)},
@@ -137,7 +132,6 @@ namespace mrv
             {"Logs", (logsPanel != nullptr)},
         };
 
-        std::cerr << __LINE__ << std::endl;
         if (filesPanel)
             filesPanel->save();
         if (colorPanel)
@@ -561,8 +555,6 @@ namespace mrv
             EditMode editMode = session["editMode"];
             set_edit_mode_cb(editMode, ui);
         }
-
-        // std::cout << session << std::endl;
 
         enable_cypher(true);
         ui->uiMain->fill_menu(ui->uiMenuBar);
