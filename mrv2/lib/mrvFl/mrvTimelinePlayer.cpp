@@ -578,7 +578,7 @@ namespace mrv
         return times;
     }
 
-    std::vector< std::shared_ptr< tl::draw::Annotation > >
+    std::vector< std::shared_ptr< draw::Annotation > >
     TimelinePlayer::getAnnotations(const int previous, const int next) const
     {
         TLRENDER_P();
@@ -589,7 +589,7 @@ namespace mrv
             static_cast<double>(previous), time.rate());
         otime::RationalTime nextTime(static_cast<double>(next), time.rate());
 
-        std::vector< std::shared_ptr< tl::draw::Annotation > > annotations;
+        std::vector< std::shared_ptr< draw::Annotation > > annotations;
 
         auto found = p.annotations.begin();
 
@@ -615,8 +615,7 @@ namespace mrv
         return annotations;
     }
 
-    std::shared_ptr< tl::draw::Annotation >
-    TimelinePlayer::getAnnotation() const
+    std::shared_ptr< draw::Annotation > TimelinePlayer::getAnnotation() const
     {
         TLRENDER_P();
 
@@ -640,7 +639,7 @@ namespace mrv
         }
     }
 
-    std::shared_ptr< tl::draw::Annotation >
+    std::shared_ptr< draw::Annotation >
     TimelinePlayer::createAnnotation(const bool all_frames)
     {
         TLRENDER_P();

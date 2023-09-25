@@ -66,10 +66,10 @@ namespace mrv
         const math::Vector2i& center, const float radius,
         const image::Color4f& color, const bool soft = false);
 
-    //! Translate a nlohmann::json message to a tl::draw::Shape.
-    std::shared_ptr< tl::draw::Shape > messageToShape(const Message&);
+    //! Translate a nlohmann::json message to a draw::Shape.
+    std::shared_ptr< draw::Shape > messageToShape(const Message&);
 
     //! Translate a tl::draw::Shape to a nlohmann::json message.
-    Message shapeToMessage(const std::shared_ptr< tl::draw::Shape > shape);
+    Message shapeToMessage(const std::shared_ptr< draw::Shape > shape);
 
 } // namespace mrv

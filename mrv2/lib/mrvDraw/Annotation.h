@@ -12,7 +12,7 @@
 #include "mrvDraw/Shape.h"
 #include "mrvNetwork/mrvMessage.h"
 
-namespace tl
+namespace mrv
 {
     namespace draw
     {
@@ -51,4 +51,4 @@ namespace tl
 
     } // namespace draw
 
-} // namespace tl
+} // namespace mrv

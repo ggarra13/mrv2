@@ -10,7 +10,7 @@
 
 #include <Imath/ImathVec.h>
 
-namespace tl
+namespace mrv
 {
     namespace draw
     {
@@ -79,4 +79,4 @@ namespace tl
         typedef std::vector< Point > PointList;
     } // namespace draw
 
-} // namespace tl
+} // namespace mrv

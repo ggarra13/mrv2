@@ -9,10 +9,12 @@
 #include <tlCore/Box.h>
 #include <tlCore/Color.h>
 
-namespace tl
+namespace mrv
 {
-    namespace gl
+    namespace opengl
     {
+        using namespace tl;
+
         //! OpenGL Outline renderer.
         class Outline
         {
@@ -28,5 +30,5 @@ namespace tl
             TLRENDER_PRIVATE();
         };
 
-    } // namespace gl
-} // namespace tl
+    } // namespace opengl
+} // namespace mrv

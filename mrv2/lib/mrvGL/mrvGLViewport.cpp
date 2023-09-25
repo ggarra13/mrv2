@@ -114,10 +114,10 @@ namespace mrv
             CHECK_GL;
 
 #ifdef USE_ONE_PIXEL_LINES
-            gl.outline = std::make_shared<tl::gl::Outline>();
+            gl.outline = std::make_shared<opengl::Outline>();
 #endif
 
-            gl.lines = std::make_shared<tl::gl::Lines>();
+            gl.lines = std::make_shared<opengl::Lines>();
             CHECK_GL;
 
             try

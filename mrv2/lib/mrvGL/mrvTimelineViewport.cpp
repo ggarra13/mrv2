@@ -2503,11 +2503,11 @@ namespace mrv
         if (!shape)
             return;
 
-        auto path = dynamic_cast< tl::draw::PathShape* >(shape);
+        auto path = dynamic_cast< draw::PathShape* >(shape);
         if (path == nullptr)
             return;
 
-        const tl::draw::Point& pnt = path->pts.back();
+        const draw::Point& pnt = path->pts.back();
 
         nlohmann::json json = pnt;
 

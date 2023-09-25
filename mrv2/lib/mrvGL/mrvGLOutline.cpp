@@ -18,15 +18,20 @@ namespace tl
         extern std::string vertexSource();
         extern std::string meshFragmentSource();
     } // namespace timeline
+} // namespace tl
 
-    namespace gl
+namespace mrv
+{
+    namespace opengl
     {
+
+        using namespace tl::gl;
 
         struct Outline::Private
         {
-            std::shared_ptr<Shader> shader;
-            std::shared_ptr<VBO> vbo;
-            std::shared_ptr<VAO> vao;
+            std::shared_ptr<gl::Shader> shader;
+            std::shared_ptr<gl::VBO> vbo;
+            std::shared_ptr<gl::VAO> vao;
         };
 
         Outline::Outline() :
@@ -108,5 +113,5 @@ namespace tl
             }
         }
 
-    } // namespace gl
-} // namespace tl
+    } // namespace opengl
+} // namespace mrv

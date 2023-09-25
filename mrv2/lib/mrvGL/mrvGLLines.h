@@ -12,10 +12,12 @@
 
 #include "mrvDraw/Polyline2D.h"
 
-namespace tl
+namespace mrv
 {
-    namespace gl
+    namespace opengl
     {
+        using namespace tl;
+
         //! OpenGL Lines renderer.
         class Lines
         {
@@ -37,12 +39,12 @@ namespace tl
             //! Draw a set of connected line segments.
             void drawLines(
                 const std::shared_ptr<timeline::IRender>& render,
-                const tl::draw::PointList& pts, const image::Color4f& color,
+                const draw::PointList& pts, const image::Color4f& color,
                 const int width, const bool soft = false,
-                const tl::draw::Polyline2D::JointStyle jointStyle =
-                    tl::draw::Polyline2D::JointStyle::MITER,
-                const tl::draw::Polyline2D::EndCapStyle endStyle =
-                    tl::draw::Polyline2D::EndCapStyle::BUTT,
+                const draw::Polyline2D::JointStyle jointStyle =
+                    draw::Polyline2D::JointStyle::MITER,
+                const draw::Polyline2D::EndCapStyle endStyle =
+                    draw::Polyline2D::EndCapStyle::BUTT,
                 const bool catmullRomSpline = false,
                 const bool allowOverlap = false);
 
@@ -62,5 +64,5 @@ namespace tl
         private:
             TLRENDER_PRIVATE();
         };
-    } // namespace gl
-} // namespace tl
+    } // namespace opengl
+} // namespace mrv

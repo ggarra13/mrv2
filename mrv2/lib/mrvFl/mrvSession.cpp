@@ -89,7 +89,7 @@ namespace mrv
         if (player)
         {
             auto annotations = player->getAllAnnotations();
-            std::vector< tl::draw::Annotation > jAnnotations;
+            std::vector< draw::Annotation > jAnnotations;
             for (const auto& ann : annotations)
             {
                 jAnnotations.push_back(*(ann.get()));
@@ -376,10 +376,10 @@ namespace mrv
 
             auto tmp = j["annotations"];
 
-            std::vector< std::shared_ptr<tl::draw::Annotation> > annotations;
+            std::vector< std::shared_ptr<draw::Annotation> > annotations;
             for (const auto& value : tmp)
             {
-                auto annotation = tl::draw::messageToAnnotation(value);
+                auto annotation = draw::messageToAnnotation(value);
                 annotations.push_back(annotation);
             }
 

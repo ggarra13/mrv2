@@ -15,9 +15,10 @@ namespace mrv
 
     void GLPathShape::draw(
         const std::shared_ptr<timeline::IRender>& render,
-        const std::shared_ptr<gl::Lines>& lines)
+        const std::shared_ptr<opengl::Lines>& lines)
     {
-        using namespace tl::draw;
+        using namespace tl;
+        using namespace mrv::draw;
 
         CHECK_GL;
         gl::SetAndRestore(GL_BLEND, GL_TRUE);
@@ -38,9 +39,9 @@ namespace mrv
 
     void GLErasePathShape::draw(
         const std::shared_ptr<timeline::IRender>& render,
-        const std::shared_ptr<gl::Lines>& lines)
+        const std::shared_ptr<opengl::Lines>& lines)
     {
-        using namespace tl::draw;
+        using namespace mrv::draw;
 
         gl::SetAndRestore(GL_BLEND, GL_TRUE);
 
@@ -57,7 +58,7 @@ namespace mrv
 
     void GLCircleShape::draw(
         const std::shared_ptr<timeline::IRender>& render,
-        const std::shared_ptr<gl::Lines>& lines)
+        const std::shared_ptr<opengl::Lines>& lines)
     {
         gl::SetAndRestore(GL_BLEND, GL_TRUE);
 
@@ -70,9 +71,9 @@ namespace mrv
 
     void GLRectangleShape::draw(
         const std::shared_ptr<timeline::IRender>& render,
-        const std::shared_ptr<gl::Lines>& lines)
+        const std::shared_ptr<opengl::Lines>& lines)
     {
-        using namespace tl::draw;
+        using namespace mrv::draw;
 
         gl::SetAndRestore(GL_BLEND, GL_TRUE);
 
@@ -88,9 +89,9 @@ namespace mrv
 
     void GLArrowShape::draw(
         const std::shared_ptr<timeline::IRender>& render,
-        const std::shared_ptr<gl::Lines>& lines)
+        const std::shared_ptr<opengl::Lines>& lines)
     {
-        using namespace tl::draw;
+        using namespace mrv::draw;
 
         gl::SetAndRestore(GL_BLEND, GL_TRUE);
 
@@ -139,7 +140,7 @@ namespace mrv
 
     void GLTextShape::draw(
         const std::shared_ptr<timeline::IRender>& render,
-        const std::shared_ptr<gl::Lines>& lines)
+        const std::shared_ptr<opengl::Lines>& lines)
     {
         if (text.empty())
             return;
@@ -179,18 +180,18 @@ namespace mrv
 
     void to_json(nlohmann::json& json, const GLPathShape& value)
     {
-        to_json(json, static_cast<const tl::draw::PathShape&>(value));
+        to_json(json, static_cast<const draw::PathShape&>(value));
         json["type"] = "DrawPath";
     }
 
     void from_json(const nlohmann::json& json, GLPathShape& value)
     {
-        from_json(json, static_cast<tl::draw::PathShape&>(value));
+        from_json(json, static_cast<draw::PathShape&>(value));
     }
 
     void to_json(nlohmann::json& json, const GLTextShape& value)
     {
-        to_json(json, static_cast<const tl::draw::PathShape&>(value));
+        to_json(json, static_cast<const draw::PathShape&>(value));
         json["type"] = "Text";
         json["text"] = value.text;
         json["fontFamily"] = value.fontFamily;
@@ -199,7 +200,7 @@ namespace mrv
 
     void from_json(const nlohmann::json& json, GLTextShape& value)
     {
-        from_json(json, static_cast<tl::draw::PathShape&>(value));
+        from_json(json, static_cast<draw::PathShape&>(value));
         json.at("text").get_to(value.text);
         json.at("fontFamily").get_to(value.fontFamily);
         json.at("fontSize").get_to(value.fontSize);
@@ -208,7 +209,7 @@ namespace mrv
 #ifdef USE_OPENGL2
     void to_json(nlohmann::json& json, const GL2TextShape& value)
     {
-        to_json(json, static_cast<const tl::draw::PathShape&>(value));
+        to_json(json, static_cast<const draw::PathShape&>(value));
         json["type"] = "GL2Text";
         json["text"] = value.text;
         json["font"] = value.font;
@@ -217,7 +218,7 @@ namespace mrv
 
     void from_json(const nlohmann::json& json, GL2TextShape& value)
     {
-        from_json(json, static_cast<tl::draw::PathShape&>(value));
+        from_json(json, static_cast<draw::PathShape&>(value));
         json.at("text").get_to(value.text);
         json.at("font").get_to(value.font);
         json.at("fontSize").get_to(value.fontSize);
@@ -226,7 +227,7 @@ namespace mrv
 
     void to_json(nlohmann::json& json, const GLCircleShape& value)
     {
-        to_json(json, static_cast<const tl::draw::Shape&>(value));
+        to_json(json, static_cast<const draw::Shape&>(value));
         json["type"] = "Circle";
         json["center"] = value.center;
         json["radius"] = value.radius;
@@ -234,42 +235,42 @@ namespace mrv
 
     void from_json(const nlohmann::json& json, GLCircleShape& value)
     {
-        from_json(json, static_cast<tl::draw::Shape&>(value));
+        from_json(json, static_cast<draw::Shape&>(value));
         json.at("center").get_to(value.center);
         json.at("radius").get_to(value.radius);
     }
 
     void to_json(nlohmann::json& json, const GLArrowShape& value)
     {
-        to_json(json, static_cast<const tl::draw::PathShape&>(value));
+        to_json(json, static_cast<const draw::PathShape&>(value));
         json["type"] = "Arrow";
     }
 
     void from_json(const nlohmann::json& json, GLArrowShape& value)
     {
-        from_json(json, static_cast<tl::draw::PathShape&>(value));
+        from_json(json, static_cast<draw::PathShape&>(value));
     }
 
     void to_json(nlohmann::json& json, const GLRectangleShape& value)
     {
-        to_json(json, static_cast<const tl::draw::PathShape&>(value));
+        to_json(json, static_cast<const draw::PathShape&>(value));
         json["type"] = "Rectangle";
     }
 
     void from_json(const nlohmann::json& json, GLRectangleShape& value)
     {
-        from_json(json, static_cast<tl::draw::PathShape&>(value));
+        from_json(json, static_cast<draw::PathShape&>(value));
     }
 
     void to_json(nlohmann::json& json, const GLErasePathShape& value)
     {
-        to_json(json, static_cast<const tl::draw::PathShape&>(value));
+        to_json(json, static_cast<const draw::PathShape&>(value));
         json["type"] = "ErasePath";
     }
 
     void from_json(const nlohmann::json& json, GLErasePathShape& value)
     {
-        from_json(json, static_cast<tl::draw::PathShape&>(value));
+        from_json(json, static_cast<draw::PathShape&>(value));
     }
 
 } // namespace mrv
