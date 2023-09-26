@@ -493,8 +493,10 @@ namespace mrv
             ClipButton* b = m.second;
 
             uint16_t layerId = media->videoLayer;
+            bool found = false;
             if (aIndex == i)
             {
+                found = true;
                 layerId = p.ui->uiColorChannel->value();
             }
 
@@ -503,12 +505,15 @@ namespace mrv
                 b->value(0);
                 if (b->image())
                     continue;
-                time = otio::RationalTime(0.0, 1.0);
             }
             else
             {
+                found = true;
                 b->value(1);
             }
+
+            if (!found)
+                time = media->currentTime;
 
             const std::string& layer = getLayerName(layerId, p.ui);
             std::string text = dir + "\n" + file + layer;
