@@ -12,14 +12,29 @@
 
 #include "mrvWidgets/mrvVectorscope.h"
 
+#define MRV2_OPENGL
+
+#ifdef MRV2_OPENGL
+#    include "mrvGL/mrvGLOffscreenContext.h"
+#endif
+
 #include "mrViewer.h"
 #include "mrvCore/mrvI8N.h"
 
 namespace mrv
 {
+    struct Vectorscope::Private
+    {
+        int diameter;
+        math::Size2i renderSize;
+        math::Box2i box;
+        image::Color4f* image = nullptr;
+        ViewerUI* ui;
+    };
 
     Vectorscope::Vectorscope(int X, int Y, int W, int H, const char* L) :
-        Fl_Group(X, Y, W, H, L)
+        Fl_Group(X, Y, W, H, L),
+        _p(new Private)
     {
         tooltip(_("Mark an area in the image with SHIFT + the left mouse "
                   "button"));
@@ -27,16 +42,27 @@ namespace mrv
 
     Vectorscope::~Vectorscope() {}
 
+    void Vectorscope::main(ViewerUI* m)
+    {
+        _p->ui = m;
+    }
+
+    ViewerUI* Vectorscope::main()
+    {
+        return _p->ui;
+    }
+
     void Vectorscope::draw()
     {
+        TLRENDER_P();
         fl_rectf(x(), y(), w(), h(), 0, 0, 0);
 
-        diameter = h();
-        if (w() < diameter)
-            diameter = w();
+        p.diameter = h();
+        if (w() < p.diameter)
+            p.diameter = w();
 
         draw_grid();
-        if (image)
+        if (p.image)
         {
             draw_pixels();
         }
@@ -44,10 +70,12 @@ namespace mrv
 
     void Vectorscope::update(const area::Info& info)
     {
-        Viewport* view = ui->uiView;
+        TLRENDER_P();
+
+        Viewport* view = p.ui->uiView;
         const auto& newRenderSize = view->getRenderSize();
         const image::Color4f* viewImage = view->image();
-        box = info.box;
+        p.box = info.box;
 
         if (!viewImage || !newRenderSize.isValid())
         {
@@ -57,19 +85,21 @@ namespace mrv
 
         const size_t dataSize =
             newRenderSize.w * newRenderSize.h * sizeof(image::Color4f);
-        if (newRenderSize != renderSize)
+        if (newRenderSize != p.renderSize)
         {
-            renderSize = newRenderSize;
-            free(image);
-            image = (image::Color4f*)malloc(dataSize);
+            p.renderSize = newRenderSize;
+            free(p.image);
+            p.image = (image::Color4f*)malloc(dataSize);
         }
-        memcpy(image, viewImage, dataSize);
+        memcpy(p.image, viewImage, dataSize);
 
         redraw();
     }
 
     void Vectorscope::draw_pixel(image::Color4f& color) const noexcept
     {
+        TLRENDER_P();
+
         using namespace Imath;
 
         if (color.r < 0)
@@ -93,8 +123,8 @@ namespace mrv
 
         image::Color4f hsv = color::rgb::to_hsv(color);
 
-        int W = diameter / 2;
-        int H = diameter / 2;
+        int W = p.diameter / 2;
+        int H = p.diameter / 2;
 
 #ifdef __linux__
         M44f m;
@@ -109,7 +139,7 @@ namespace mrv
         float s = hsv.g * 0.375f;
         m.scale(V3f(s, s, 1));
 
-        V3f pos(0, diameter, 0);
+        V3f pos(0, p.diameter, 0);
 
         pos = pos * m;
 
@@ -129,7 +159,7 @@ namespace mrv
 
         fl_color(r, g, b);
         fl_begin_points();
-        fl_vertex(0, diameter);
+        fl_vertex(0, p.diameter);
         fl_end_points();
 
         fl_pop_matrix();
@@ -138,21 +168,23 @@ namespace mrv
 
     void Vectorscope::draw_pixels() const noexcept
     {
-        if (!box.isValid())
+        TLRENDER_P();
+
+        if (!p.box.isValid())
             return;
 
-        int stepX = (box.max.x - box.min.x) / diameter;
-        int stepY = (box.max.y - box.min.y) / diameter;
+        int stepX = (p.box.max.x - p.box.min.x) / p.diameter;
+        int stepY = (p.box.max.y - p.box.min.y) / p.diameter;
         if (stepX < 1)
             stepX = 1;
         if (stepY < 1)
             stepY = 1;
 
-        for (int Y = box.min.y; Y < box.max.y; Y += stepY)
+        for (int Y = p.box.min.y; Y < p.box.max.y; Y += stepY)
         {
-            for (int X = box.min.x; X < box.max.x; X += stepX)
+            for (int X = p.box.min.x; X < p.box.max.x; X += stepX)
             {
-                image::Color4f& color = image[X + Y * renderSize.w];
+                image::Color4f& color = p.image[X + Y * p.renderSize.w];
                 draw_pixel(color);
             }
         }
@@ -160,12 +192,14 @@ namespace mrv
 
     void Vectorscope::draw_grid() noexcept
     {
+        TLRENDER_P();
+
         fl_color(255, 255, 255);
-        fl_arc(x(), y(), diameter, diameter, 0, 360);
+        fl_arc(x(), y(), p.diameter, p.diameter, 0, 360);
 
         fl_line_style(0);
 
-        int R = diameter / 2;
+        int R = p.diameter / 2;
         int W = R;
         int H = R;
 
@@ -188,15 +222,15 @@ namespace mrv
         fl_translate(x(), y());
         fl_begin_line();
         fl_vertex(W, 0);
-        fl_vertex(W, diameter);
+        fl_vertex(W, p.diameter);
         fl_end_line();
         fl_begin_line();
         fl_vertex(0, H);
-        fl_vertex(diameter, H);
+        fl_vertex(p.diameter, H);
         fl_end_line();
         fl_pop_matrix();
 
-        int RW = int(diameter * 0.05f);
+        int RW = int(p.diameter * 0.05f);
         int RH = RW;
 
         fl_push_matrix();

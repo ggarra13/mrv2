@@ -451,18 +451,38 @@ namespace mrv
             if (Aindex != i)
             {
                 b->value(0);
+                auto bIndexes = model->observeBIndexes()->get();
+                auto stereoIndex = model->observeStereoIndex()->get();
+
+                bool doThumbnail = true;
                 if (b->image())
+                    doThumbnail = false;
+
+                for (const auto& bIndex : bIndexes)
+                {
+                    if (bIndex == i)
+                    {
+                        doThumbnail = true;
+                        break;
+                    }
+                }
+
+                if (i == stereoIndex)
+                    doThumbnail = true;
+
+                if (!doThumbnail)
                     continue;
             }
             else
             {
                 b->value(1);
-                if (player)
-                {
-                    time = player->currentTime();
-                    layerId = p.ui->uiColorChannel->value();
-                }
             }
+
+            if (player)
+            {
+                time = player->currentTime();
+            }
+            layerId = p.ui->uiColorChannel->value();
 
             if (auto context = _r->context.lock())
             {

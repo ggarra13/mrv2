@@ -676,13 +676,16 @@ namespace mrv
                 b->value(0);
                 found = true;
                 layerId = p.ui->uiColorChannel->value();
+                time = player->currentTime();
             }
+
             for (auto Bindex : Bindices)
             {
                 if (Bindex == i)
                 {
                     found = true;
                     b->value(1);
+                    time = player->currentTime();
                     break;
                 }
             }
@@ -690,10 +693,6 @@ namespace mrv
             {
                 b->value(0);
                 time = media->currentTime;
-            }
-            else
-            {
-                time = player->currentTime();
             }
             b->redraw();
 

@@ -23,9 +23,9 @@ namespace mrv
         void make_current();
         void release();
 
+    protected:
         void create_gl_window();
 
-    protected:
         TLRENDER_PRIVATE();
     };
 } // namespace mrv

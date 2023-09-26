@@ -28,19 +28,15 @@ namespace mrv
 
         void update(const area::Info& info);
 
-        void main(ViewerUI* m) { ui = m; };
-        ViewerUI* main() { return ui; };
+        void main(ViewerUI* m);
+        ViewerUI* main();
 
     protected:
         void draw_grid() noexcept;
         void draw_pixel(image::Color4f& rgb) const noexcept;
         void draw_pixels() const noexcept;
 
-        int diameter;
-        math::Size2i renderSize;
-        math::Box2i box;
-        image::Color4f* image = nullptr;
-        ViewerUI* ui;
+        TLRENDER_PRIVATE();
     };
 
 } // namespace mrv
