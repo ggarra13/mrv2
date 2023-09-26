@@ -7,6 +7,11 @@ v0.7.9
 - Stereo Panel thumbnails also update for the A and Stereo images.
 - Command-line -b <image> for the compare image now properly selects the
   image in the compare panel.
+- Fixed a precision issue with annotations which could make some of them
+  disappear.
+- Fixed go to next and previous annotations when several clips of different
+  rates were present in the timeline.
+- Fixed floating timeline thumbnail not updating properly when showing an EDL.
 
 
 v0.7.8

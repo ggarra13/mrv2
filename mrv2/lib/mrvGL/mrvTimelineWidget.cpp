@@ -23,6 +23,7 @@
 #include "mrvCore/mrvHotkey.h"
 
 #include "mrvEdit/mrvEditCallbacks.h"
+#include "mrvEdit/mrvEditUtil.h"
 
 #include "mrvFl/mrvIO.h"
 
@@ -40,6 +41,28 @@ namespace mrv
     {
         const double kTimeout = 0.0; // 05;
         const char* kModule = "timelineui";
+    } // namespace
+
+    namespace
+    {
+        int getIndex(const otio::SerializableObject::Retainer<otio::Composable>&
+                         composable)
+        {
+            int out = -1;
+            if (composable && composable->parent())
+            {
+                const auto& children = composable->parent()->children();
+                for (int i = 0; i < children.size(); ++i)
+                {
+                    if (composable == children[i].value)
+                    {
+                        out = i;
+                        break;
+                    }
+                }
+            }
+            return out;
+        }
     } // namespace
 
     namespace
@@ -150,6 +173,8 @@ namespace mrv
         p.timelineWidget->setFrameView(true);
         p.timelineWidget->setScrollBarsVisible(false);
         p.timelineWidget->setStopOnScrub(false);
+        p.timelineWidget->setInsertCallback(std::bind(
+            &mrv::TimelineWidget::insertCallback, this, std::placeholders::_1));
 
         p.eventLoop->addWidget(p.timelineWidget);
         const float devicePixelRatio = pixels_per_unit();
@@ -283,7 +308,13 @@ namespace mrv
         p.thumbnailWindow->resize(X, Y, W, H);
 #endif
 
-        const auto path = player->getPath();
+        file::Path path;
+        auto model = p.ui->app->filesModel();
+        auto Aitem = model->observeA()->get();
+        if (Aitem)
+            path = Aitem->path;
+        else
+            path = player->getPath();
         image::Size size(p.box->w(), p.box->h() - 24);
         const auto& time = _posToTime(_toUI(Fl::event_x()));
 
@@ -356,9 +387,6 @@ namespace mrv
             return;
         p.colorConfigOptions = colorConfigOptions;
     }
-
-    // @todo: do we need to do anything here?
-    void TimelineWidget::frameViewChanged(bool value) {}
 
     void TimelineWidget::setFrameView(bool value)
     {
@@ -647,6 +675,10 @@ namespace mrv
         {
             button = 0;
             _seek();
+            if (p.dragging)
+            {
+                makePathsAbsolute(p.player, p.ui);
+            }
         }
         else if (Fl::event_button2())
         {
@@ -658,6 +690,10 @@ namespace mrv
             return 0;
         }
         p.eventLoop->mouseButton(button, true, modifiers);
+
+        if (p.timelineWidget->isDragging())
+        {
+        }
         return 1;
     }
 
@@ -684,11 +720,6 @@ namespace mrv
     int TimelineWidget::mouseReleaseEvent()
     {
         TLRENDER_P();
-        if (p.dragging)
-        {
-            edit_store_undo(p.player, p.ui);
-            edit_clear_redo(p.ui);
-        }
         int button = 0;
         if (Fl::event_button1())
         {
@@ -699,7 +730,13 @@ namespace mrv
         p.eventLoop->cursorPos(
             math::Vector2i(_toUI(Fl::event_x()), _toUI(Fl::event_y())));
         p.eventLoop->mouseButton(button, false, fromFLTKModifiers());
-        p.dragging = false;
+        if (p.dragging)
+        {
+            toOtioFile(p.player, p.ui);
+            p.ui->uiView->redrawWindows();
+            redrawPanelThumbnails();
+            p.dragging = false;
+        }
         return 1;
     }
 
@@ -1293,6 +1330,15 @@ namespace mrv
         c->uiEndFrame->setUnits(value);
         c->uiFrame->setUnits(value);
         redraw();
+    }
+
+    void TimelineWidget::insertCallback(
+        const std::vector<tl::timeline::InsertData>& inserts)
+    {
+        TLRENDER_P();
+        edit_store_undo(p.player, p.ui);
+        edit_clear_redo(p.ui);
+        edit_insert_clip(inserts, p.ui);
     }
 
     void TimelineWidget::single_thumbnail(
