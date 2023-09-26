@@ -308,7 +308,13 @@ namespace mrv
         p.thumbnailWindow->resize(X, Y, W, H);
 #endif
 
-        const auto path = player->getPath();
+        file::Path path;
+        auto model = p.ui->app->filesModel();
+        auto Aitem = model->observeA()->get();
+        if (Aitem)
+            path = Aitem->path;
+        else
+            path = player->getPath();
         image::Size size(p.box->w(), p.box->h() - 24);
         const auto& time = _posToTime(_toUI(Fl::event_x()));
 
@@ -669,6 +675,10 @@ namespace mrv
         {
             button = 0;
             _seek();
+            if (p.dragging)
+            {
+                makePathsAbsolute(p.player, p.ui);
+            }
         }
         else if (Fl::event_button2())
         {
@@ -683,8 +693,6 @@ namespace mrv
 
         if (p.timelineWidget->isDragging())
         {
-            edit_store_undo(p.player, p.ui);
-            edit_clear_redo(p.ui);
         }
         return 1;
     }
@@ -695,10 +703,6 @@ namespace mrv
         if (Fl::event_button1())
         {
             _seek();
-            if (p.timelineWidget->isDragging())
-            {
-                edit_drag_item(p.player, p.ui);
-            }
         }
         else if (Fl::event_button2())
         {
@@ -1332,70 +1336,9 @@ namespace mrv
         const std::vector<tl::timeline::InsertData>& inserts)
     {
         TLRENDER_P();
-
-        const otio::SerializableObject::Retainer<otio::Timeline> out =
-            p.player->getTimeline();
-        const auto rate = out->duration().rate();
-        const auto& stack = out->tracks();
-        for (const auto& insert : inserts)
-        {
-            const int oldIndex = getIndex(insert.composable);
-            const int oldTrackIndex = getIndex(insert.composable->parent());
-            if (auto track = otio::dynamic_retainer_cast<otio::Track>(
-                    stack->children()[oldTrackIndex]))
-            {
-                if (track->kind() != otio::Track::Kind::video)
-                    continue;
-            }
-
-            if (oldIndex < 0 || oldTrackIndex < 0 || insert.trackIndex < 0 ||
-                insert.trackIndex >= stack->children().size())
-                continue;
-
-            int insertIndex = insert.insertIndex;
-            if (auto track = otio::dynamic_retainer_cast<otio::Track>(
-                    stack->children()[oldTrackIndex]))
-            {
-                auto child = track->children()[oldIndex];
-                auto item = otio::dynamic_retainer_cast<otio::Item>(child);
-                if (!item)
-                    continue;
-
-                auto oldRange = item->trimmed_range_in_parent().value();
-
-                if (auto track = otio::dynamic_retainer_cast<otio::Track>(
-                        stack->children()[insert.trackIndex]))
-                {
-                    otime::RationalTime startTime;
-                    if (insertIndex >= track->children().size())
-                    {
-                        auto child = track->children()[insertIndex - 1];
-                        auto item =
-                            otio::dynamic_retainer_cast<otio::Item>(child);
-                        if (!item)
-                            continue;
-
-                        auto insertRange =
-                            item->trimmed_range_in_parent().value();
-                        startTime = insertRange.start_time();
-                    }
-                    else
-                    {
-                        auto child = track->children()[insertIndex];
-                        auto item =
-                            otio::dynamic_retainer_cast<otio::Item>(child);
-                        if (!item)
-                            continue;
-
-                        auto insertRange =
-                            item->trimmed_range_in_parent().value();
-                        startTime = insertRange.start_time();
-                    }
-
-                    shiftAnnotations(oldRange, startTime, p.ui);
-                }
-            }
-        }
+        edit_store_undo(p.player, p.ui);
+        edit_clear_redo(p.ui);
+        edit_insert_clip(inserts, p.ui);
     }
 
     void TimelineWidget::single_thumbnail(

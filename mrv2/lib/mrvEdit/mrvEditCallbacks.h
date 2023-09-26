@@ -4,8 +4,10 @@
 
 #pragma once
 
+#include <vector>
 #include <string>
 
+#include <tlTimeline/Edit.h>
 #include <tlTimeline/Util.h>
 
 #include "mrvEdit/mrvEditMode.h"
@@ -33,11 +35,15 @@ namespace mrv
     //! Return whether edit has redo.
     bool edit_has_redo();
 
-    //! Set the temporary EDL for a drag item callback.
-    void edit_drag_item(TimelinePlayer*, ViewerUI* ui);
+    //! Handle insert of clip (used in shifting clips around in tlRender).
+    void edit_insert_clip(
+        const std::vector<tl::timeline::InsertData>& inserts, ViewerUI* ui);
 
     //! Set the temporary EDL for a drag item callback.
     void toOtioFile(TimelinePlayer*, ViewerUI* ui);
+
+    //! Make paths of an otio::Timeline absolute.
+    void makePathsAbsolute(TimelinePlayer* player, ViewerUI* ui);
 
     //! Menu function to copy one frame to the buffer.
     void edit_copy_frame_cb(Fl_Menu_* m, ViewerUI* ui);

@@ -1241,11 +1241,9 @@ namespace mrv
         std::vector< otime::RationalTime > times = player->getAnnotationTimes();
         std::sort(
             times.begin(), times.end(), std::greater<otime::RationalTime>());
-        const auto& range = player->timeRange();
-        const auto& duration = range.end_time_inclusive() - range.start_time();
-        for (auto time : times)
+        for (const auto& time : times)
         {
-            if (time < currentTime)
+            if (time::floor(time) < time::floor(currentTime))
             {
                 player->seek(time);
                 return;
@@ -1261,11 +1259,9 @@ namespace mrv
         auto currentTime = player->currentTime();
         std::vector< otime::RationalTime > times = player->getAnnotationTimes();
         std::sort(times.begin(), times.end());
-        const auto& range = player->timeRange();
-        const auto& duration = range.end_time_inclusive() - range.start_time();
-        for (auto time : times)
+        for (const auto& time : times)
         {
-            if (time > currentTime)
+            if (time::floor(time) > time::floor(currentTime))
             {
                 player->seek(time);
                 return;

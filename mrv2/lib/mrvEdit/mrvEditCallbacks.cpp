@@ -3,6 +3,7 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <set>
 #include <fstream>
 #include <filesystem>
 
@@ -143,6 +144,7 @@ namespace mrv
             const double rate = player->defaultSpeed();
             player->setSpeed(rate);
             player->setInOutRange(player->timeRange());
+            ui->uiTimeline->setTimelinePlayer(player);
             ui->uiTimeline->frameView();
             ui->uiTimeline->redraw();
 
@@ -704,20 +706,12 @@ namespace mrv
         toOtioFile(timeline, ui);
     }
 
-    void edit_drag_item(TimelinePlayer* player, ViewerUI* ui)
+    void makePathsAbsolute(TimelinePlayer* player, ViewerUI* ui)
     {
         auto timeline = player->getTimeline();
+        if (!timeline)
+            return;
         makePathsAbsolute(timeline, ui);
-
-        auto model = ui->app->filesModel();
-        auto Aitem = model->observeA()->get();
-
-        const file::Path path = Aitem->path;
-        if (!isTemporaryEDL(path))
-        {
-            Aitem->path = file::Path(_otioFilename(ui));
-            std::cerr << "set path to " << Aitem->path.get() << std::endl;
-        }
     }
 
     void edit_store_undo(TimelinePlayer* player, ViewerUI* ui)
@@ -1230,15 +1224,34 @@ namespace mrv
     }
 
     void shiftAnnotations(
-        const otime::TimeRange& range, const otime::RationalTime& startTime,
-        ViewerUI* ui)
+        const otime::TimeRange& range, const otime::RationalTime& insertTime,
+        const bool previous, ViewerUI* ui)
     {
+        using namespace draw;
+
         auto view = ui->uiView;
         auto player = view->getTimelinePlayer();
         if (!player)
             return;
 
-        auto annotations = player->getAllAnnotations();
+        const auto& originalAnnotations = player->getAllAnnotations();
+
+        // First, do a deep copy of all annotations.
+        std::vector<std::shared_ptr<draw::Annotation>> annotations;
+        std::vector< draw::Annotation > flatAnnotations;
+        for (const auto& annotation : originalAnnotations)
+        {
+            flatAnnotations.push_back(*annotation.get());
+        }
+        Message json = flatAnnotations;
+        for (const auto& j : json)
+        {
+            std::shared_ptr< Annotation > tmp = messageToAnnotation(j);
+            annotations.push_back(tmp);
+        }
+
+        // Then, adjust the annotations within the range.
+        std::set<std::shared_ptr<draw::Annotation>> skipAnnotations;
         for (auto& annotation : annotations)
         {
             if (annotation->allFrames)
@@ -1247,11 +1260,55 @@ namespace mrv
             if (range.contains(annotation->time))
             {
                 auto offset = annotation->time - range.start_time();
-                annotation->time = startTime + offset;
+                if (previous)
+                {
+                    annotation->time =
+                        insertTime + offset - range.end_time_exclusive();
+                }
+                else
+                {
+                    annotation->time = insertTime + offset;
+                }
+                skipAnnotations.insert(annotation);
+            }
+        }
+
+        // Finally, shift the annotations.
+        if (previous)
+        {
+            for (auto annotation : annotations)
+            {
+                if (annotation->allFrames)
+                    continue;
+
+                if (skipAnnotations.find(annotation) != skipAnnotations.end())
+                    continue;
+
+                if (annotation->time < insertTime)
+                {
+                    annotation->time -= range.duration();
+                }
+            }
+        }
+        else
+        {
+            for (auto& annotation : annotations)
+            {
+                if (annotation->allFrames)
+                    continue;
+
+                if (skipAnnotations.find(annotation) != skipAnnotations.end())
+                    continue;
+
+                if (annotation->time > insertTime)
+                {
+                    annotation->time += range.duration();
+                }
             }
         }
 
         player->setAllAnnotations(annotations);
+        view->redraw();
     }
 
     otio::SerializableObject::Retainer<otio::Timeline>
@@ -1671,6 +1728,77 @@ namespace mrv
         }
 
         tcp->unlock();
+    }
+
+    void edit_insert_clip(
+        const std::vector<tl::timeline::InsertData>& inserts, ViewerUI* ui)
+    {
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
+            return;
+
+        const auto& timeline = player->getTimeline();
+        const auto& stack = timeline->tracks();
+        const auto& tracks = stack->children();
+        for (const auto& insert : inserts)
+        {
+            const int oldIndex = getIndex(insert.composable);
+            const int oldTrackIndex = getIndex(insert.composable->parent());
+            if (auto track = otio::dynamic_retainer_cast<otio::Track>(
+                    stack->children()[oldTrackIndex]))
+            {
+                if (track->kind() != otio::Track::Kind::video)
+                    continue;
+            }
+
+            if (oldIndex < 0 || oldTrackIndex < 0 || insert.trackIndex < 0 ||
+                insert.trackIndex >= tracks.size())
+                continue;
+
+            int insertIndex = insert.insertIndex;
+            if (oldTrackIndex == insert.trackIndex && oldIndex < insertIndex)
+            {
+                --insertIndex;
+            }
+
+            if (auto track = otio::dynamic_retainer_cast<otio::Track>(
+                    tracks[oldTrackIndex]))
+            {
+                auto child = track->children()[oldIndex];
+                auto item = otio::dynamic_retainer_cast<otio::Item>(child);
+                if (!item)
+                    continue;
+
+                auto oldRange = item->trimmed_range_in_parent().value();
+
+                if (auto track = otio::dynamic_retainer_cast<otio::Track>(
+                        tracks[insert.trackIndex]))
+                {
+                    auto child = track->children()[insertIndex];
+                    auto item = otio::dynamic_retainer_cast<otio::Item>(child);
+                    if (!item)
+                        continue;
+
+                    auto insertRange = item->trimmed_range_in_parent().value();
+
+                    otime::RationalTime insertTime;
+                    bool previous = insertIndex > oldIndex;
+                    if (previous)
+                    {
+                        insertTime = insertRange.end_time_exclusive();
+                    }
+                    else
+                    {
+                        insertTime = insertRange.start_time();
+                    }
+
+                    //
+                    // Shift annotations
+                    //
+                    shiftAnnotations(oldRange, insertTime, previous, ui);
+                }
+            }
+        }
     }
 
     EditMode editMode = EditMode::kTimeline;
