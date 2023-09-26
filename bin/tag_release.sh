@@ -38,8 +38,44 @@ add_local_tag()
     #
     # Mark current repository with a new tag
     #
-    echo "Create local tag ${tag} in tlRender"
     ${GIT_EXECUTABLE} tag "${tag}"
+}
+
+add_remote_tag()
+{
+    input='y'
+    export has_tag=`${GIT_EXECUTABLE} ls-remote --tags origin | grep "${tag}"`
+    echo "has_tag?$has_tag"
+    if [[ $has_tag != "" ]]; then
+        echo "-------------------------------------------------------"
+        echo "  WARNING! Tag '${tag}' already in remote repository."
+        echo ""
+        echo "Are you sure you want to continue? (y/n)"
+        read input
+        if [[ $input == n* || $input == N* ]]; then
+	    exit 1
+        fi
+
+        #
+        # Delete remote tag if available
+        #
+        echo "Remove remote tag ${tag}"
+        ${GIT_EXECUTABLE} push --delete origin "${tag}"
+    else
+        echo "Tag '${tag}' does not exist in remote"
+        echo ""
+        echo "Are you sure you want to continue? (y/n)"
+        read input
+        if [[ $input == n* || $input == N* ]]; then
+	    exit 1
+        fi
+    fi
+
+    #
+    # Send new tag to repository
+    #
+    echo "Create remote tag ${tag}"
+    ${GIT_EXECUTABLE} push origin "${tag}"
 }
 
 #
@@ -58,48 +94,33 @@ ${GIT_EXECUTABLE} push
 
 export tag="v${mrv2_VERSION}"
 echo "--------------------------------"
-echo "  Will release ${tag}"
+echo "  Will release ${tag} in mrv2"
 echo "--------------------------------"
 
 add_local_tag $tag
 
 cd tlRender
 
+echo "-----------------------------------"
+echo "  Will release ${tag} in tlRender"
+echo "-----------------------------------"
+
 add_local_tag $tag
 
 cd ..
+echo "---------------------------------------"
+echo "  Will release remote ${tag} in mrv2"
+echo "---------------------------------------"
 
+add_remote_tag $tag
 
-input='y'
-export has_tag=`${GIT_EXECUTABLE} ls-remote --tags origin | grep "${tag}"`
-echo "has_tag?$has_tag"
-if [[ $has_tag != "" ]]; then
-    echo "-------------------------------------------------------"
-    echo "  WARNING! Tag '${tag}' already in remote repository."
-    echo ""
-    echo "Are you sure you want to continue? (y/n)"
-    read input
-    if [[ $input == n* || $input == N* ]]; then
-	exit 1
-    fi
+cd tlRender
 
-    #
-    # Delete remote tag if available
-    #
-    echo "Remove remote tag ${tag}"
-    ${GIT_EXECUTABLE} push --delete origin "${tag}"
-else
-    echo "Tag '${tag}' does not exist in remote"
-    echo ""
-    echo "Are you sure you want to continue? (y/n)"
-    read input
-    if [[ $input == n* || $input == N* ]]; then
-	exit 1
-    fi
-fi
+echo "------------------------------------------"
+echo "  Will release remote ${tag} in tlRender"
+echo "------------------------------------------"
 
-#
-# Send new tag to repository
-#
-echo "Create remote tag ${tag}"
-${GIT_EXECUTABLE} push origin "${tag}"
+add_remote_tag $tag
+
+cd ..
+
