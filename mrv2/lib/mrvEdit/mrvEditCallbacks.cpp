@@ -482,33 +482,6 @@ namespace mrv
             }
         }
 
-        //! Debug the timeline
-        void debug_timeline(otio::Timeline* timeline)
-        {
-            auto tracks = timeline->tracks()->children();
-            for (const auto& child : tracks)
-            {
-                auto track = otio::dynamic_retainer_cast<Track>(child);
-                if (!track)
-                    continue;
-                std::cerr << "Track " << track->kind() << std::endl;
-                int idx = 0;
-                for (const auto childItem : track->children())
-                {
-                    auto item = otio::dynamic_retainer_cast<Item>(childItem);
-                    if (!item)
-                        continue;
-                    std::cout << "\tchild " << idx
-                              << " trimmed= " << item->trimmed_range()
-                              << std::endl;
-                    auto track_range = item->trimmed_range_in_parent().value();
-                    std::cout << "\tchild " << idx
-                              << "   track= " << track_range << std::endl;
-                    ++idx;
-                }
-            }
-        }
-
         //! Change clips' source range to use the highest video and audio
         //! sample rate.  Also returns the largest time range for the timeline.
         void sanitizeVideoAndAudioRates(
@@ -672,19 +645,6 @@ namespace mrv
             return out;
         }
 
-        //! Return the EDL name for the Undo/Redo queue.
-        std::string getEDLName(ViewerUI* ui)
-        {
-            auto model = ui->app->filesModel();
-            auto Aitem = model->observeA()->get();
-
-            const file::Path path = Aitem->path;
-            if (!isTemporaryEDL(path))
-                return _otioFilename(ui);
-
-            return path.get();
-        }
-
         //! Switches to EDL clip for timeline processing during an Undo/Redo.
         bool switchToEDL(const std::string& fileName, ViewerUI* ui)
         {
@@ -722,24 +682,42 @@ namespace mrv
             }
         }
 
+        //! Return the EDL name for the Undo/Redo queue.
+        std::string getEDLName(ViewerUI* ui)
+        {
+            auto model = ui->app->filesModel();
+            auto Aitem = model->observeA()->get();
+
+            const file::Path path = Aitem->path;
+            if (!isTemporaryEDL(path))
+                return _otioFilename(ui);
+
+            return path.get();
+        }
+
     } // namespace
 
-    //! Dump undo queue to tmpdir.
-    void dump_undo_queue_cb(Fl_Menu_* m, ViewerUI* ui)
+    void toOtioFile(TimelinePlayer* player, ViewerUI* ui)
     {
-        // const std::string path = tmppath() + "/UndoQueue";
-        // int mode = 0777;
-        // fl_mkdir(path.c_str(), mode);
-        // unsigned int idx = 1;
-        // char buf[4096];
-        // for (auto& undo : undoBuffer)
-        // {
-        //     snprintf(buf, 4096, "%s/undo.%d.otio", path.c_str(), idx);
-        //     std::ofstream f(buf);
-        //     f << undo.json << std::endl;
-        //     f.close();
-        //     ++idx;
-        // }
+        auto timeline = player->getTimeline();
+        updateTimeline(timeline, player->currentTime(), ui);
+        toOtioFile(timeline, ui);
+    }
+
+    void edit_drag_item(TimelinePlayer* player, ViewerUI* ui)
+    {
+        auto timeline = player->getTimeline();
+        makePathsAbsolute(timeline, ui);
+
+        auto model = ui->app->filesModel();
+        auto Aitem = model->observeA()->get();
+
+        const file::Path path = Aitem->path;
+        if (!isTemporaryEDL(path))
+        {
+            Aitem->path = file::Path(_otioFilename(ui));
+            std::cerr << "set path to " << Aitem->path.get() << std::endl;
+        }
     }
 
     void edit_store_undo(TimelinePlayer* player, ViewerUI* ui)
@@ -759,6 +737,7 @@ namespace mrv
             }
         }
 
+        toOtioFile(timeline, ui);
         UndoRedo buffer;
         buffer.json = state;
         buffer.fileName = getEDLName(ui);
@@ -795,6 +774,7 @@ namespace mrv
             }
         }
 
+        toOtioFile(timeline, ui);
         UndoRedo buffer;
         buffer.json = state;
         buffer.fileName = getEDLName(ui);
@@ -1169,28 +1149,6 @@ namespace mrv
 
     void edit_roll_cb(Fl_Menu_* m, ViewerUI* ui) {}
 
-    void edit_remove_clip_with_gap_cb(Fl_Menu_* m, ViewerUI* ui)
-    {
-        auto player = ui->uiView->getTimelinePlayer();
-        if (!player)
-            return;
-
-        const auto& time = getTime(player);
-        const auto& tracks = getTracks(player, time);
-
-        auto timeline = player->getTimeline();
-        edit_store_undo(player, ui);
-
-        for (auto track : tracks)
-        {
-            otio::algo::remove(track, time);
-        }
-        player->setTimeline(timeline);
-        updateTimeline(timeline, time, ui);
-
-        toOtioFile(timeline, ui);
-    }
-
     void edit_undo_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         auto player = ui->uiView->getTimelinePlayer();
@@ -1224,8 +1182,8 @@ namespace mrv
         updateTimeline(timeline, player->currentTime(), ui);
 
         toOtioFile(timeline, ui);
-        if (playlistPanel)
-            playlistPanel->redraw();
+
+        redrawPanelThumbnails();
     }
 
     void edit_redo_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -1265,11 +1223,35 @@ namespace mrv
 
         toOtioFile(timeline, ui);
 
-        if (playlistPanel)
-            playlistPanel->redraw();
+        redrawPanelThumbnails();
 
         if (refreshCache)
             refresh_file_cache_cb(nullptr, ui);
+    }
+
+    void shiftAnnotations(
+        const otime::TimeRange& range, const otime::RationalTime& startTime,
+        ViewerUI* ui)
+    {
+        auto view = ui->uiView;
+        auto player = view->getTimelinePlayer();
+        if (!player)
+            return;
+
+        auto annotations = player->getAllAnnotations();
+        for (auto& annotation : annotations)
+        {
+            if (annotation->allFrames)
+                continue;
+
+            if (range.contains(annotation->time))
+            {
+                auto offset = annotation->time - range.start_time();
+                annotation->time = startTime + offset;
+            }
+        }
+
+        player->setAllAnnotations(annotations);
     }
 
     otio::SerializableObject::Retainer<otio::Timeline>

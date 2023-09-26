@@ -8,6 +8,8 @@
 
 #include <opentimelineio/clip.h>
 
+#include <tlTimeline/Edit.h>
+
 #include <tlTimelineUI/IItem.h>
 
 #include <FL/Fl_Gl_Window.H>
@@ -82,13 +84,11 @@ namespace mrv
         //! Frame the view.
         void frameView();
 
-        // Q_SIGNALS:
-        //! This signal is emitted when the frame view is changed.
-        void frameViewChanged(bool);
-
-        void resize(int X, int Y, int W, int H) override;
-        void draw() override;
-        int handle(int) override;
+        //! @{ Standard FLTK functions
+        void resize(int X, int Y, int W, int H) FL_OVERRIDE;
+        void draw() FL_OVERRIDE;
+        int handle(int) FL_OVERRIDE;
+        //! @}
 
         void single_thumbnail(
             const int64_t,
@@ -126,6 +126,8 @@ namespace mrv
         void mouseMoveEvent(const int X, const int Y);
         void scrollEvent(const float X, const float Y, const int modifiers);
 
+        void insertCallback(const std::vector<tl::timeline::InsertData>&);
+
     protected:
         void _initializeGL();
         void _initializeGLResources();
@@ -143,10 +145,9 @@ namespace mrv
         static void timerEvent_cb(void* data);
         void timerEvent();
 
-    private: // Q_SLOTS:
+    private:
         void _setTimeUnits(tl::timeline::TimeUnits);
 
-    private:
         int _toUI(int) const;
         math::Vector2i _toUI(const math::Vector2i&) const;
         int _fromUI(int) const;

@@ -23,6 +23,7 @@
 #include "mrvCore/mrvHotkey.h"
 
 #include "mrvEdit/mrvEditCallbacks.h"
+#include "mrvEdit/mrvEditUtil.h"
 
 #include "mrvFl/mrvIO.h"
 
@@ -40,6 +41,28 @@ namespace mrv
     {
         const double kTimeout = 0.0; // 05;
         const char* kModule = "timelineui";
+    } // namespace
+
+    namespace
+    {
+        int getIndex(const otio::SerializableObject::Retainer<otio::Composable>&
+                         composable)
+        {
+            int out = -1;
+            if (composable && composable->parent())
+            {
+                const auto& children = composable->parent()->children();
+                for (int i = 0; i < children.size(); ++i)
+                {
+                    if (composable == children[i].value)
+                    {
+                        out = i;
+                        break;
+                    }
+                }
+            }
+            return out;
+        }
     } // namespace
 
     namespace
@@ -150,6 +173,8 @@ namespace mrv
         p.timelineWidget->setFrameView(true);
         p.timelineWidget->setScrollBarsVisible(false);
         p.timelineWidget->setStopOnScrub(false);
+        p.timelineWidget->setInsertCallback(std::bind(
+            &mrv::TimelineWidget::insertCallback, this, std::placeholders::_1));
 
         p.eventLoop->addWidget(p.timelineWidget);
         const float devicePixelRatio = pixels_per_unit();
@@ -356,9 +381,6 @@ namespace mrv
             return;
         p.colorConfigOptions = colorConfigOptions;
     }
-
-    // @todo: do we need to do anything here?
-    void TimelineWidget::frameViewChanged(bool value) {}
 
     void TimelineWidget::setFrameView(bool value)
     {
@@ -658,6 +680,12 @@ namespace mrv
             return 0;
         }
         p.eventLoop->mouseButton(button, true, modifiers);
+
+        if (p.timelineWidget->isDragging())
+        {
+            edit_store_undo(p.player, p.ui);
+            edit_clear_redo(p.ui);
+        }
         return 1;
     }
 
@@ -667,6 +695,10 @@ namespace mrv
         if (Fl::event_button1())
         {
             _seek();
+            if (p.timelineWidget->isDragging())
+            {
+                edit_drag_item(p.player, p.ui);
+            }
         }
         else if (Fl::event_button2())
         {
@@ -684,11 +716,6 @@ namespace mrv
     int TimelineWidget::mouseReleaseEvent()
     {
         TLRENDER_P();
-        if (p.dragging)
-        {
-            edit_store_undo(p.player, p.ui);
-            edit_clear_redo(p.ui);
-        }
         int button = 0;
         if (Fl::event_button1())
         {
@@ -699,7 +726,13 @@ namespace mrv
         p.eventLoop->cursorPos(
             math::Vector2i(_toUI(Fl::event_x()), _toUI(Fl::event_y())));
         p.eventLoop->mouseButton(button, false, fromFLTKModifiers());
-        p.dragging = false;
+        if (p.dragging)
+        {
+            toOtioFile(p.player, p.ui);
+            p.ui->uiView->redrawWindows();
+            redrawPanelThumbnails();
+            p.dragging = false;
+        }
         return 1;
     }
 
@@ -1293,6 +1326,76 @@ namespace mrv
         c->uiEndFrame->setUnits(value);
         c->uiFrame->setUnits(value);
         redraw();
+    }
+
+    void TimelineWidget::insertCallback(
+        const std::vector<tl::timeline::InsertData>& inserts)
+    {
+        TLRENDER_P();
+
+        const otio::SerializableObject::Retainer<otio::Timeline> out =
+            p.player->getTimeline();
+        const auto rate = out->duration().rate();
+        const auto& stack = out->tracks();
+        for (const auto& insert : inserts)
+        {
+            const int oldIndex = getIndex(insert.composable);
+            const int oldTrackIndex = getIndex(insert.composable->parent());
+            if (auto track = otio::dynamic_retainer_cast<otio::Track>(
+                    stack->children()[oldTrackIndex]))
+            {
+                if (track->kind() != otio::Track::Kind::video)
+                    continue;
+            }
+
+            if (oldIndex < 0 || oldTrackIndex < 0 || insert.trackIndex < 0 ||
+                insert.trackIndex >= stack->children().size())
+                continue;
+
+            int insertIndex = insert.insertIndex;
+            if (auto track = otio::dynamic_retainer_cast<otio::Track>(
+                    stack->children()[oldTrackIndex]))
+            {
+                auto child = track->children()[oldIndex];
+                auto item = otio::dynamic_retainer_cast<otio::Item>(child);
+                if (!item)
+                    continue;
+
+                auto oldRange = item->trimmed_range_in_parent().value();
+
+                if (auto track = otio::dynamic_retainer_cast<otio::Track>(
+                        stack->children()[insert.trackIndex]))
+                {
+                    otime::RationalTime startTime;
+                    if (insertIndex >= track->children().size())
+                    {
+                        auto child = track->children()[insertIndex - 1];
+                        auto item =
+                            otio::dynamic_retainer_cast<otio::Item>(child);
+                        if (!item)
+                            continue;
+
+                        auto insertRange =
+                            item->trimmed_range_in_parent().value();
+                        startTime = insertRange.start_time();
+                    }
+                    else
+                    {
+                        auto child = track->children()[insertIndex];
+                        auto item =
+                            otio::dynamic_retainer_cast<otio::Item>(child);
+                        if (!item)
+                            continue;
+
+                        auto insertRange =
+                            item->trimmed_range_in_parent().value();
+                        startTime = insertRange.start_time();
+                    }
+
+                    shiftAnnotations(oldRange, startTime, p.ui);
+                }
+            }
+        }
     }
 
     void TimelineWidget::single_thumbnail(
