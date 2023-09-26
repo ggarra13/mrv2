@@ -1745,8 +1745,7 @@ namespace mrv
         {
             startTime = startTimeOpt.value();
             offsetAnnotations(
-                otime::RationalTime(0.0, timeline->duration().rate()),
-                -startTime, player->getAllAnnotations());
+                startTime, -startTime, player->getAllAnnotations());
         }
 
         const auto& stack = timeline->tracks();
