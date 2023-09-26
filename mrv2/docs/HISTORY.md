@@ -1,3 +1,14 @@
+v0.7.9
+======
+
+- File Panel thumbnails now update for the selected stereo and the compare
+  media too.
+- Compare Panel thumbnails also update for the A and B images.
+- Stereo Panel thumbnails also update for the A and Stereo images.
+- Command-line -b <image> for the compare image now properly selects the
+  image in the compare panel.
+
+
 v0.7.8
 ======
 

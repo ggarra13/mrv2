@@ -621,16 +621,6 @@ namespace mrv
             }
         }
 
-        if (!p.options.compareFileName.empty())
-        {
-            timeline::CompareOptions compareOptions;
-            compareOptions.mode = p.options.compareMode;
-            compareOptions.wipeCenter = p.options.wipeCenter;
-            compareOptions.wipeRotation = p.options.wipeRotation;
-            p.filesModel->setCompareOptions(compareOptions);
-            open(p.options.compareFileName);
-        }
-
         // Open the input files.
         if (!p.options.fileNames.empty())
         {
@@ -641,8 +631,7 @@ namespace mrv
                 open(fileName, p.options.audioFileName);
             }
 
-            auto model = filesModel();
-            model->setA(0);
+            p.filesModel->setA(0);
 
             if (!p.timelinePlayers.empty() && p.timelinePlayers[0])
             {
@@ -662,9 +651,27 @@ namespace mrv
                 }
                 if (p.options.loop != timeline::Loop::Count)
                     p.timelinePlayers[0]->setLoop(p.options.loop);
-                // if (p.options.playback != timeline::Playback::Count)
-                //     p.timelinePlayers[0]->setPlayback(p.options.playback);
             }
+        }
+
+        if (!p.options.compareFileName.empty())
+        {
+            timeline::CompareOptions compareOptions;
+            compareOptions.mode = p.options.compareMode;
+            compareOptions.wipeCenter = p.options.wipeCenter;
+            compareOptions.wipeRotation = p.options.wipeRotation;
+            p.filesModel->setCompareOptions(compareOptions);
+            open(p.options.compareFileName);
+
+            size_t numFiles = p.filesModel->observeFiles()->getSize();
+            p.filesModel->setB(numFiles - 1, true);
+        }
+
+        if (!p.options.fileNames.empty())
+        {
+            auto model = filesModel();
+            if (model->observeFiles()->getSize() > 0)
+                model->setA(0);
         }
 
         if (p.options.server)
