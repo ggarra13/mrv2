@@ -1738,7 +1738,17 @@ namespace mrv
         if (!player)
             return;
 
-        const auto& timeline = player->getTimeline();
+        auto& timeline = player->getTimeline();
+        const auto& startTimeOpt = timeline->global_start_time();
+        otime::RationalTime startTime(0.0, timeline->duration().rate());
+        if (startTimeOpt.has_value())
+        {
+            startTime = startTimeOpt.value();
+            offsetAnnotations(
+                otime::RationalTime(0.0, timeline->duration().rate()),
+                -startTime, player->getAllAnnotations());
+        }
+
         const auto& stack = timeline->tracks();
         const auto& tracks = stack->children();
         for (const auto& insert : inserts)
