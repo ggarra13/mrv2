@@ -406,7 +406,8 @@ namespace mrv
         {
             const auto& annotationTime = annotation->time;
             float alphamult = 0.F;
-            if (time == annotationTime || annotation->allFrames)
+            if (annotation->allFrames ||
+                time::floor(time) == time::floor(annotationTime))
                 alphamult = 1.F;
             else
             {
@@ -415,7 +416,8 @@ namespace mrv
                     for (short i = p.ghostPrevious - 1; i > 0; --i)
                     {
                         otime::RationalTime offset(i, time.rate());
-                        if (time - offset == annotationTime)
+                        if (time::floor(time - offset) ==
+                            time::floor(annotationTime))
                         {
                             alphamult = 1.F - (float)i / p.ghostPrevious;
                             break;
@@ -427,7 +429,8 @@ namespace mrv
                     for (short i = 1; i < p.ghostNext; ++i)
                     {
                         otime::RationalTime offset(i, time.rate());
-                        if (time + offset == annotationTime)
+                        if (time::floor(time + offset) ==
+                            time::floor(annotationTime))
                         {
                             alphamult = 1.F - (float)i / p.ghostNext;
                             break;
@@ -550,8 +553,8 @@ namespace mrv
         {
             const auto& annotationTime = annotation->time;
             float alphamult = 0.F;
-            if (time::floor(time) == time::floor(annotationTime) ||
-                annotation->allFrames)
+            if (annotation->allFrames ||
+                time::floor(time) == time::floor(annotationTime))
                 alphamult = 1.F;
             else
             {

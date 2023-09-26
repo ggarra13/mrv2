@@ -1292,6 +1292,7 @@ namespace mrv
         }
         else
         {
+            auto endTime = range.end_time_exclusive();
             for (auto& annotation : annotations)
             {
                 if (annotation->allFrames)
@@ -1300,7 +1301,7 @@ namespace mrv
                 if (skipAnnotations.find(annotation) != skipAnnotations.end())
                     continue;
 
-                if (annotation->time > insertTime)
+                if (annotation->time > insertTime && annotation->time < endTime)
                 {
                     annotation->time += range.duration();
                 }
