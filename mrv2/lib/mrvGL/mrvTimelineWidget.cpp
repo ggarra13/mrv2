@@ -249,7 +249,7 @@ namespace mrv
         }
         else
         {
-            p.dragging = true;
+            p.dragging = p.timelineWidget->isDragging();
         }
     }
 
