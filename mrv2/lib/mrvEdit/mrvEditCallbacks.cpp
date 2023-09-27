@@ -146,7 +146,6 @@ namespace mrv
             player->setSpeed(rate);
             player->setInOutRange(player->timeRange());
             ui->uiTimeline->setTimelinePlayer(player);
-            ui->uiTimeline->frameView();
             ui->uiTimeline->redraw();
 
             // Set the start and end frame
@@ -1721,6 +1720,7 @@ namespace mrv
                 return;
             player->setAllAnnotations(annotations);
             updateTimeline(timeline, player->currentTime(), ui);
+            ui->uiTimeline->frameView();
 
             refreshPanelThumbnails();
         }
@@ -2000,7 +2000,7 @@ namespace mrv
             active = false;
 
         b->value(active);
-        if (b->value())
+        if (active)
         {
             b->labelcolor(fl_rgb_color(255, 255, 255));
         }

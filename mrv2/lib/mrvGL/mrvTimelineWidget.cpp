@@ -696,6 +696,8 @@ namespace mrv
         {
             button = 0;
             _seek();
+            if (!p.dragging)
+                return 1;
         }
         else if (Fl::event_button2())
         {
@@ -717,6 +719,8 @@ namespace mrv
         if (Fl::event_button1())
         {
             _seek();
+            if (!p.dragging)
+                return 1;
         }
         else if (Fl::event_button2())
         {
@@ -737,6 +741,8 @@ namespace mrv
         if (button == 0)
         {
             _seek();
+            if (!p.dragging)
+                return 1;
         }
         mouseMoveEvent(X, Y);
         mousePressEvent(button, on, modifiers);
@@ -1324,7 +1330,7 @@ namespace mrv
           fromQt(palette.color(QPalette::ColorRole::WindowText)));*/
     }
 
-    otime::RationalTime TimelineWidget::_posToTime(float value) const noexcept
+    otime::RationalTime TimelineWidget::_posToTime(int value) const noexcept
     {
         TLRENDER_P();
 

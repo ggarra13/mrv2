@@ -1114,6 +1114,11 @@ namespace mrv
                     return;
                 }
                 EditMode value = message["value"];
+                editMode = value;
+                bool presentation = ui->uiView->getPresentationMode();
+                if (!presentation)
+                    ui->uiView->resizeWindow();
+
                 set_edit_mode_cb(value, ui);
             }
             else if (c == "Network Panel")
