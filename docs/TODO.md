@@ -4,16 +4,10 @@ TODO
 # Bug fixes
 -----------
 
-## Third-part
-- Fix .webm and TopGun.mp4 movies showing black in tlRender.
-
-
 ## Easy
 
 - Add Mute Audio to preferences.
 - Remove unused icons from icons/ directory.
-- Added HUD message display, like when playback starts/stops.
-
 
 ## Medium
 

@@ -1,0 +1,271 @@
+<p><a href="https://opensource.org/licenses/BSD-3-Clause"><img src="https://img.shields.io/badge/License-BSD%203--Clause-blue.svg" alt="License" /></a> <a href="https://github.com/ggarra13/mrv2/actions/workflows/ci-workflow.yml"><img src="https://github.com/ggarra13/mrv2/actions/workflows/ci-workflow.yml/badge.svg" alt="Build Status" /></a></p>
+<h1 id="mrv2">mrv2</h1>
+<p>mrv2 is an open source professional player and review tool for vfx, animation and computer graphics. It is the second generation of the popular mrViewer flipbook player.</p>
+<p>Contents:</p>
+<ul>
+<li><a href="#pre-built-binaries">Pre-built Binaries</a>
+<ul>
+<li><a href="#compatibility">Compatibility</a></li>
+<li><a href="#notes-on-installation">Notes on Installation</a></li>
+</ul></li>
+<li><a href="#features">Features</a></li>
+<li><a href="#building">Building</a>
+<ul>
+<li><a href="#building-with-docker">Building with Docker</a></li>
+<li><a href="#dependencies">Dependencies</a>
+<ul>
+<li><a href="#redhat">RedHat</a></li>
+<li><a href="#ubuntu">Ubuntu</a></li>
+<li><a href="#macos">macOS</a></li>
+<li><a href="#windows">Windows</a></li>
+</ul></li>
+<li><a href="#building-mrv2">Building mrv2</a></li>
+<li><a href="#debug-builds">Debug builds</a></li>
+<li><a href="#building-on-windows">Building on Windows</a></li>
+<li><a href="#building-ffmpeg-as-gpl-or-lgpl">Building FFmpeg as GPL or LGPL</a></li>
+</ul></li>
+<li><a href="#running-mrv2">Running mrv2</a>
+<ul>
+<li><a href="#macos-and-linux">macOS and Linux</a></li>
+<li><a href="#windows">Windows</a></li>
+</ul></li>
+<li><a href="#tutorials">Tutorials</a></li>
+<li><a href="#documenting">Documenting</a></li>
+<li><a href="#translating">Translating</a>
+<ul>
+<li><a href="#if-you-compiled-mrv2">If you compiled mrv2</a></li>
+<li><a href="#if-you-did-not-compile-mrv2">If you did not compile mrv2</a></li>
+<li><a href="#translating-on-windows">Translating on Windows</a></li>
+</ul></li>
+<li><a href="#packaging">Packaging</a></li>
+<li><a href="#developing">Developing</a></li>
+<li><a href="#donating">Donating</a></li>
+</ul>
+<h1 id="pre-built-binaries">Pre-built binaries</h1>
+<p>If you are looking for pre-built binaries for Windows, Linux or macOS (Intel), they can be found in:</p>
+<p><a href="https://github.com/ggarra13/mrv2/releases">GitHub</a></p>
+<p>or in its mirror site at:</p>
+<p><a href="https://sourceforge.net/projects/mrv2/files/">SourceForge</a></p>
+<h2 id="compatibility">Compatibility</h2>
+<p>mrv2 binaries run on Windows 8.1+, RedHat 8+ or Ubuntu 20.04+ and macOS 10.15+.</p>
+<h2 id="notes-on-installation">Notes on installation</h2>
+<ul>
+<li><p>On macOS you install it by opening the .dmg file, and dragging the mrv2 icon to the Applications directory. If there’s already an mrv2 version, we recommend you overwrite it. The macOS application is currently not notarized, so when you launch it you will not be able to run it as macOS will warn you that the file is not secure as it was downloaded from internet. To avoid that, you need to open the Finder, go to the Applications directory and CTRL + Left mouse click on the mrv2 application. That will bring up the same warning, but this time it will have a button that will allow you to open it. You only need to do this once.</p></li>
+<li><p>Windows and Chrome, like macOS, also protect you from installing files from the Internet. When you first download it with Chrome it may warn you that it is not an usual archive to be downloaded. Make sure to click on the right up arrow menu to Save it anyway. You cannot open the .exe from Chrome directly. You will need to open Windows Explorer and go to the Downloads directory. You should then run it from there. Then Windows will popup a Blue box telling you Windows SmartScreen prevented the start of an unknown aplication and that you can place your PC at risk. Click on the More Information text and a Button that says Run anyway or similar should appear. Click on it and follow the standard instructions to any Windows installer.</p></li>
+<li><p>On Linux, in order to install the .rpm or .deb packages requires your user to have sudo permissions.</p>
+<p>On Debian (Ubuntu, etc) systems, you would install with:</p></li>
+</ul>
+<pre><code>  sudo dpkg -i mrv2-v0.7.0-amd64.tar.gz</code></pre>
+<p>On Red Hat (Rocky Linux, etc), you would install it with:</p>
+<pre><code>  sudo rpm -i mrv2-v0.7.0-amd64.tar.gz</code></pre>
+<p>Once you install it, you can run mrv2 by just typing mrv2 in the shell, as a symlink to the executable is placed in /usr/bin. The installers will also associate file extensions and install an icon for easy starting up in the Desktop icon of the user that installed it. For running mrv2 with the icon, you need to select it and use the right mouse button to open the menu and choose Allow Launch.</p>
+<p>If you lack sudo permissions in your organization, you should download the .tar.gz file and you can uncompress it with:</p>
+<pre><code>  tar -xf mrv2-v0.7.0-amd64.tar.gz</code></pre>
+<p>That will create a folder in the direcory you uncompress it from. You can then run mrv2 by using the mrv2.sh shell script in the bin/ subdirectory.</p>
+<h1 id="features">Features</h1>
+<p>The source code is written in C++17 and uses CMake for the build system, with some bash scripts for auxiliary tasks.<br />
+The core of the playback engine is a custom version of tlRender (www.github.com/darbyjohnston/tlRender.git).</p>
+<p>Currently supported:</p>
+<ul>
+<li>Movie files (H264, MP4, WEBM, etc.)</li>
+<li>Image file sequences (Cineon, DPX, JPEG, OpenEXR, PNG, PPM, TIFF, TGA, BMP, PSD)</li>
+<li>Multi-channel audio</li>
+<li>Color management</li>
+<li>A/B comparison</li>
+<li>Native OpenTimelineIO with dissolves</li>
+<li>.otioz file bundles</li>
+<li>Creation of OpenTimelineIO playlists</li>
+<li>OpenEXR multichannel, multiview and multipart support</li>
+<li>Environment mapping (Spherical and Cubic)</li>
+<li>Python3 API and Plugin system</li>
+<li>Network connections</li>
+<li>Stereo 3D (Anaglyph, Scanlines, Columns, Checkered, Side by Side)</li>
+<li>PDF Exporting of Annotations and Notes</li>
+</ul>
+<h1 id="building">Building</h1>
+<h2 id="building-with-docker">Building with Docker</h2>
+<p>On Linux, if you have Docker installed with your user as part of the docker group, you can just build mrv2 with:</p>
+<pre><code>./runme_docker.sh</code></pre>
+<p>The resulting installers will be placed in a new packages/ directory of the root of mrv2.</p>
+<h2 id="dependencies">Dependencies</h2>
+<p>Basic required dependencies:</p>
+<ul>
+<li><a href="https://cmake.org/download/">CMake 3.26.2 or later</a></li>
+<li><a href="https://github.com/ninja-build/ninja.git">ninja-build</a></li>
+<li><a href="https://git-scm.com/downloads">Git</a></li>
+</ul>
+<p>Basic Windows required dependencies:</p>
+<ul>
+<li><a href="https://visualstudio.microsoft.com/en/free-developer-offers">Visual Studio 2019 or later Community</a></li>
+<li><a href="https://www.msys2.org/">MSYS2</a></li>
+<li><a href="https://nsis.sourceforge.io/Download">NSIS Installer for Packaging</a></li>
+</ul>
+<p>Additional dependencies are downloaded and built automatically by the CMake superbuild script. For a list of non-system libraries that mrv2 depends on and their licenses, please refer to mrv2/docs/Legal. The system dependencies for each OS is listed below.</p>
+<h3 id="redhat">RedHat</h3>
+<pre><code>#
+# Repositories
+#
+sudo dnf -y install dnf-plugins-core
+sudo dnf -y install epel-release
+sudo dnf config-manager --set-enabled powertools
+
+#
+# Update dnf database
+#
+sudo dnf makecache --refresh
+
+#
+# Install bundles
+#
+sudo dnf -y groupinstall &quot;Development Tools&quot;
+
+#
+# Install dependencies
+#
+sudo dnf -y install git wget cmake pango-devel gettext ninja-build \
+           libglvnd-devel alsa-lib-devel pulseaudio-libs-devel \
+           libXScrnSaver-devel dpkg libvpx-devel \
+           autoconf wayland-devel wayland-protocols-devel cairo-devel \
+           libxkbcommon-devel dbus-devel mesa-libGLU-devel gtk3-devel \
+           libffi-devel openssl-devel tk-devel tcl-devel libXt-devel</code></pre>
+<h3 id="ubuntu">Ubuntu</h3>
+<pre><code>#
+# Update apt database
+#
+sudo apt update
+
+#
+# Install dependencies
+#
+sudo apt -y install build-essential git cmake ninja-build libpango1.0-dev \
+            xorg-dev libx11-dev libxcursor-dev libxinerama-dev \
+            libxss-dev gettext libvpx-dev libasound2-dev \
+            libpulse-dev libssl-dev libffi-dev \
+            libwayland-dev wayland-protocols libdbus-1-dev \
+            libxkbcommon-dev libegl-dev libgtk-3-dev rpm \
+                    doxygen tk-dev libxt-dev</code></pre>
+<h3 id="macos">macOS</h3>
+<pre><code>#
+# Install
+#
+/bin/bash -c &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)&quot;
+
+#
+# Install development tools
+#
+xcode-select --install
+
+#
+# Install dependencies
+#
+brew install git cmake ninja gettext openssl readline sqlite3 xz zlib
+</code></pre>
+<h3 id="windows">Windows</h3>
+<p>The only special requirement is installing a new copy of cmake than the one that ships with MSVC19. If building the NSIS installer, you need to place the root of mrv2 in a path that has less than 20 characters, like:</p>
+<pre><code>     /D/code/applications</code></pre>
+<h2 id="building-mrv2">Building mrv2</h2>
+<p>Clone the repository:</p>
+<pre><code>cd some_dir
+
+#
+# Clone the latest cutting-edge build (might be unstable).
+#
+git clone https://github.com/ggarra13/mrv2.git
+
+cd mrv2
+./runme.sh</code></pre>
+<p>The script is a superbuild script that will download all needed dependencies required. It will create a build and a BUILD-KERNEL-ARCH/BUILDTYPE/install directory where all files shall reside.</p>
+<p>The default is to build with all cores in all the Operating Systems. If you want more or less cores pass another number to any of the runme*.sh scripts. For example, to build with 4 cores, you can do:</p>
+<pre><code>./runme.sh -j 4</code></pre>
+<p>Later, if you just want to build mrv2 quickly (runme quick mnemonic) without running through all the dependencies, run:</p>
+<pre><code>./runmeq.sh</code></pre>
+<p>Later, to just build FLTK, tlRender and mrv2 (runme three mnemonic), run;</p>
+<pre><code>./runmet.sh</code></pre>
+<h2 id="debug-builds">Debug builds</h2>
+<p>All runme.sh scripts support two additional parameters. For a debug build, you would do:</p>
+<pre><code>./runme.sh debug</code></pre>
+<p>To clean up the directory, run a debug build with 8 cores, run:</p>
+<pre><code>./runme.sh clean debug -j 8</code></pre>
+<h2 id="building-on-windows">Building on Windows</h2>
+<p>For windows, in addition to Visual Studio, you will need a new and fresh copy of Msys. There is a .bat file included in the distribution (in windows/bat), which needs to be modified to the path of Visual Studio (2019 by default), the optional Windows SDK (none by default) and your copy of Msys.</p>
+<p>As a convernience for Windows users, DLLs, includes and .lib files for FFmpeg, libintl, libiconv, and liblcms2 libraries are provided in mrv2’s windows/win64 directory.</p>
+<p>If you unset LCMS2_ROOT in windows/envvars/envvars.sh, the library will be compiled.</p>
+<h2 id="building-ffmpeg-as-gpl-or-lgpl">Building FFmpeg as GPL or LGPL</h2>
+<p>If you pass -gpl or -lpgl to the runme.sh script, like:</p>
+<pre><code>./runme.sh -gpl</code></pre>
+<p>The build system will compile FFmpeg as GPL or LGPL. The default is to build a LGPL version of FFmpeg as that complies with the BSD binary distribution license. The LGPL version of FFmpeg, however, does not come with libx264, which means you cannot save movie files with the H264 codec. On Windows, if you don’t specify neither -gpl nor -lgpl, the pre-compiled LGPL binaries are used.</p>
+<p>The GPL version of FFmpeg does not have that restriction and it will compile libx264 on all platforms.</p>
+<h1 id="running-mrv2">Running mrv2</h1>
+<h2 id="macos-and-linux">macOS and Linux</h2>
+<p>If you have a bin directory in your $HOME (ie. ~/bin ), the build scripts will create a symlink there. So you should add ~/bin to your PATH in your .bashrc or .zshrc.</p>
+<p>Assuming you complied mrv2 with the ~/bin directory already created, then to start mrv2 then you’d do:</p>
+<pre><code>export PATH=~/bin:$PATH  # no need if you add this line to your .bashrc
+mrv2</code></pre>
+<p>and to run the debug build.</p>
+<pre><code>export PATH=~/bin:$PATH  # no need if you add this line to your .bashrc
+mrv2-dbg</code></pre>
+<p>If you compiled mrv2 without bin directory in your HOME directory, you can start it from the BUILD directory with the mrv2.sh script, like:</p>
+<pre><code>BUILD-Linux-amd64/Release/install/bin/mrv2.sh</code></pre>
+<h2 id="windows-1">Windows</h2>
+<p>On Windows, we cannot create symbolic links, so in Msys you need to type the whole path to the install. That is, for example:</p>
+<pre><code>BUILD-Msys-amd64/Release/install/bin/mrv2.exe</code></pre>
+<p>If you like to work command line, you should add the whole path to the mrv2.exe to your path. In Msys, you can add it to the .bashrc like shown on macOS and Linux.</p>
+<p>For cmd.exe or PowerShell, on the Windows taskbar, right-click the Windows icon and select System. In the Settings window, under Related Settings, click Advanced system settings. On the Advanced tab, click Environment Variables. Find the PATH environment variable and add the full path to mrv2.exe.</p>
+<p>For working with a GUI, after the build is done, you should do:</p>
+<pre><code>cd BUILD-Msys-amd64/Release/install/bin/  # or similar
+explorer .</code></pre>
+<p>And in the explorer directory that it will open, you should create a shortcut with the RMB to the mrv2.exe. Once that is done, you can drag and rename the shortcut to your Desktop to have it handy. Note that if you will not be developing mrv2, you should instead proceed to <a href="#packaging">Packaging</a>.</p>
+<h1 id="tutorials">Tutorials</h1>
+<p>Besides the basic API documentation included, there is a special channel on youtube.com where you can find some tutorials on its basic use:</p>
+<p><a href="https://www.youtube.com/watch?v=8JViz-pPCrg&amp;list=PLxJ9NNBdNfRmd8AQ41AJYmb7WhN99G5C-">Video Tutorials</a></p>
+<h1 id="documenting">Documenting</h1>
+<p>Currently, the documentation is generated automatically from the translations. To do so, you must run:</p>
+<pre><code>./runmeq.sh -t doc</code></pre>
+<h1 id="translating">Translating</h1>
+<p>mrv2 can support multiple natural language translations. Currently, English and Spanish are supported. The translation system used is gettext so familiarity with it is desired (albeit not essential). The translations reside in mrv2/po and follow internationalization language code files, like es.po (for Spanish) or de.po (for German).</p>
+<p>To create such a file for a new language, open the file cmake/translations.cmake and add a language international code to this line:</p>
+<pre><code>set( LANGUAGES es ) # add a new language code inside the parenthesis, like &quot;de&quot;.</code></pre>
+<p>Then, run:</p>
+<pre><code>./runmeq.sh -t po</code></pre>
+<p>If there’s no .po file for that language yet, gettext’s msginit command will be run for you. You may be asked for your email address as part of the process.</p>
+<p>Go to mrv2/po/{lang}.po where lang is the language you added.</p>
+<p>and edit the text. Make sure to change the charset to UTF-8.</p>
+<p>Note that you should use an editor that can write in Unicode (UTF-8) to write non-Occidental languages.</p>
+<p>You need to edit “msgstr” strings and leave “msgid” untouched as a reference. If the comment has a “fuzzy” string it means gettext tried to guess the translation, but it will not use it. Remove the fuzzy qualifier and change the “msgstr” string. Note that if the “msgid” has new-lines you need to match them too. Refer to the gettext manual for further information.</p>
+<p>Once you are ready to test your translation, run:</p>
+<pre><code>./runmeq.sh -t mo</code></pre>
+<p>That will create the .mo files for your language.</p>
+<h2 id="if-you-compiled-mrv2">If you compiled mrv2</h2>
+<p>To test the translation, you can just run:</p>
+<pre><code>./runmeq.sh -t install</code></pre>
+<p>or just:</p>
+<pre><code>./runmeq.sh</code></pre>
+<p>and that will place the .mo files in the: <span class="math inline"><em>B</em><em>U</em><em>I</em><em>L</em><em>D</em>−</span>OS-<span class="math inline"><em>A</em><em>R</em><em>C</em><em>H</em>/</span>BUILD_TYPE/install/share/locale directory.</p>
+<p>If you add or remove strings as part of your code changes, you may want to regenerate the .pot files after a while, before calling -t mo. To do so:</p>
+<pre><code>./runmeq.sh -t pot</code></pre>
+<p>Note that this change is dramatic as your commits of the code changes will get mangled with all the .pot/.po comments, preventing a clean PR (Pull Request) on github.com.</p>
+<h2 id="if-you-did-not-compile-mrv2">If you did not compile mrv2</h2>
+<p>Manually copy the .mo to your installed mrv2 directory. Make sure the VERSION matches.</p>
+<pre><code>cp mrv2/share/locale/${lang}/LC_MESSAGES/mrv2-v${VERSION}.mo ${installed_location of mrv2)/hare/locale/${lang}/LC_MESSAGES/</code></pre>
+<h2 id="translating-on-windows">Translating on Windows</h2>
+<p>On Windows, besides the text of mrv2, you also need to translate the text for the NSIS .exe installer.</p>
+<p>You can do it by editing the cmake/nsis/mrv2_translations.nsh file. Just follow the examples in that file.</p>
+<h1 id="packaging">Packaging</h1>
+<p>Once you build mrv2 and tested that it runs, you might want to create a package for distribution. On macOS, this is a .dmg file. On Linux it is a RPM, DEB or TGZ file. On Windows it is a ZIP or an NSIS EXE installer.</p>
+<p>To do so, from the main dir of mrv2, you have to do:</p>
+<pre><code>./runmeq.sh -t package</code></pre>
+<p>For all architectures, the installers will be stored in:</p>
+<pre><code>packages/</code></pre>
+<p>That is the root directory of mrv2.</p>
+<h1 id="developing">Developing</h1>
+<p>If you want to become a developer, first familiarize yourself with the build process. Then clone the repository to your github account and send PRs. If you become an avid developer, you can then request access to the main repository.</p>
+<p>One additional thing that you will need for making commits to the repository, is:</p>
+<pre><code>clang-format</code></pre>
+<p>This is part of the LLVM project, you can download it from your usual repositories (apt, brew, etc.), or from:</p>
+<p>https://releases.llvm.org/download.html</p>
+<p>This utility verifies previous to a commit that all the C++ formatting follows the standard used in mrv2.</p>
+<p>You might also want to get Doxygen so as to get the source code documentation in docs/Doxygen.</p>
+<h1 id="donating">Donating</h1>
+<p>Go to:</p>
+<p>https://mrv2.sourceforge.io</p>
+<p>and click on the Paypal Donate button.</p>

@@ -7,7 +7,6 @@ mrv2 is still missing:
 - Subtitles (both embedded and coming from an .srt file).
 - Translations of the UI to different languages.
 - RED3D and Blackmagic RAW support.
-- RAW image format (draw).
 
 There are other features that have been deprecated and will *NOT* come back:
 
