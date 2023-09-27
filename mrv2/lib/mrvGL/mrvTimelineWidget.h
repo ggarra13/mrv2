@@ -129,6 +129,8 @@ namespace mrv
         void mouseMoveEvent(int X, int Y);
         void scrollEvent(const float X, const float Y, const int modifiers);
         int mouseDragEvent(int X, int Y);
+        int keyPressEvent(unsigned key, const int modifiers);
+        int keyReleaseEvent(unsigned key, const int modifiers);
 
         void insertCallback(const std::vector<tl::timeline::InsertData>&);
 

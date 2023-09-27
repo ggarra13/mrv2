@@ -190,6 +190,30 @@ namespace mrv
                 otime::RationalTime value = message["value"];
                 player->seek(value);
             }
+            else if (c == "Timeline Key Press")
+            {
+                bool receive = prefs->ReceiveTimeline->value();
+                if (!receive || !player)
+                {
+                    tcp->unlock();
+                    return;
+                }
+                const int key = message["value"];
+                const int modifiers = message["modifiers"];
+                ui->uiTimeline->keyPressEvent(key, modifiers);
+            }
+            else if (c == "Timeline Key Release")
+            {
+                bool receive = prefs->ReceiveTimeline->value();
+                if (!receive || !player)
+                {
+                    tcp->unlock();
+                    return;
+                }
+                const int key = message["value"];
+                const int modifiers = message["modifiers"];
+                ui->uiTimeline->keyReleaseEvent(key, modifiers);
+            }
             else if (c == "Timeline Mouse Press")
             {
                 bool receive = prefs->ReceiveTimeline->value();
@@ -1113,8 +1137,12 @@ namespace mrv
                     tcp->unlock();
                     return;
                 }
+                editModeH = message["height"];
                 EditMode value = message["value"];
                 set_edit_mode_cb(value, ui);
+                // if (value == EditMode::kTimeline)
+                //     ui->uiEdit->value(1);
+                // ui->uiEdit->do_callback();
             }
             else if (c == "Network Panel")
             {

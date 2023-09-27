@@ -2061,7 +2061,8 @@ namespace mrv
 
         if (mode != EditMode::kNone)
         {
-            Message msg = {{"command", "setEditMode"}, {"value", mode}};
+            Message msg = {
+                {"command", "setEditMode"}, {"value", mode}, {"height", H}};
             tcp->pushMessage(msg);
         }
 

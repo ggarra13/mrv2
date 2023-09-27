@@ -1110,11 +1110,9 @@ namespace mrv
         }
     }
 
-    int TimelineWidget::keyPressEvent()
+    int TimelineWidget::keyPressEvent(unsigned key, const int modifiers)
     {
         TLRENDER_P();
-        unsigned key = Fl::event_key();
-
         // First, check if it is one of the menu shortcuts
         int ret = p.ui->uiMenuBar->handle(FL_SHORTCUT);
         if (ret)
@@ -1124,19 +1122,50 @@ namespace mrv
             p.ui->uiEdit->do_callback();
             return 1;
         }
+        bool send = App::ui->uiPrefs->SendTimeline->value();
+        if (send)
+        {
+            Message message;
+            message["command"] = "Timeline Key Press";
+            message["value"] = key;
+            message["modifiers"] = modifiers;
+            tcp->pushMessage(message);
+        }
 
         key = _changeKey(key);
-        if (kFitScreen.match(key))
-            frameView();
-        p.eventLoop->key(fromFLTKKey(key), true, fromFLTKModifiers());
+        p.eventLoop->key(fromFLTKKey(key), true, modifiers);
+        return 1;
+    }
+
+    int TimelineWidget::keyPressEvent()
+    {
+        TLRENDER_P();
+        unsigned key = Fl::event_key();
+        keyPressEvent(key, fromFLTKModifiers());
+        return 1;
+    }
+
+    int TimelineWidget::keyReleaseEvent(unsigned key, const int modifiers)
+    {
+        TLRENDER_P();
+        bool send = App::ui->uiPrefs->SendTimeline->value();
+        if (send)
+        {
+            Message message;
+            message["command"] = "Timeline Key Release";
+            message["value"] = key;
+            message["modifiers"] = modifiers;
+            tcp->pushMessage(message);
+        }
+        key = _changeKey(key);
+        p.eventLoop->key(fromFLTKKey(key), false, modifiers);
         return 1;
     }
 
     int TimelineWidget::keyReleaseEvent()
     {
         TLRENDER_P();
-        unsigned key = _changeKey(Fl::event_key());
-        p.eventLoop->key(fromFLTKKey(key), false, fromFLTKModifiers());
+        keyReleaseEvent(Fl::event_key(), fromFLTKModifiers());
         return 1;
     }
 

@@ -15,7 +15,8 @@ v0.7.9
 - Added shifting of annotations when tlRender's darby routines drag an item
   into new place.
 - Made Fit ('f' key) in timeline viewport work on network connections.
-- Made Panning (Middle mouse drag) in timeline viewport work on network connections.
+- Made Panning (Middle mouse drag) in timeline viewport work on network
+  connections.
 
 
 v0.7.8
