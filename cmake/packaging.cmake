@@ -60,7 +60,7 @@ elseif(UNIX)
     install(FILES ${ROOT_DIR}/etc/mrv2.png
 	DESTINATION share/icons/hicolor/32x32/apps COMPONENT applications)
 
-    set(CPACK_GENERATOR DEB RPM TGZ )
+    set(CPACK_GENERATOR DEB ) # RPM TGZ )
     set(CPACK_INSTALL_PREFIX /usr/local/${mrv2ShortName})
 
     configure_file(

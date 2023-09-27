@@ -566,6 +566,7 @@ namespace mrv
             ui->app->getContext()->getLogSystem()->observeLog(),
             [this](const std::vector<log::Item>& value)
             {
+                static std::string lastMessage;
                 const char* kModule = "";
                 for (const auto& i : value)
                 {
@@ -573,11 +574,10 @@ namespace mrv
                     {
                     case log::Type::Error:
                     {
-                        const std::string& msg = string::Format("{0} {1}: {2}")
-                                                     .arg(i.time)
-                                                     .arg(i.prefix)
-                                                     .arg(i.message);
-                        ui->uiStatusBar->timeout(errorTimeout);
+                        const std::string& msg = i.message;
+                        if (msg == lastMessage)
+                            return;
+                        lastMessage = msg;
                         ui->uiStatusBar->copy_label(msg.c_str());
                         LOG_ERROR(msg);
                         break;

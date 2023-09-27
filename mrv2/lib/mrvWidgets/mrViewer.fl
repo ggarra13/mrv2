@@ -618,11 +618,11 @@ uiFPS->do_callback();} open
               xywh {5 3 100 20}
             }
             MenuItem {} {
-              label {14.988} selected
+              label {14.988}
               xywh {5 3 100 20}
             }
             MenuItem {} {
-              label {12.5} selected
+              label {12.5}
               xywh {5 3 100 20}
             }
             MenuItem {} {
@@ -804,8 +804,8 @@ uiSecondary = nullptr;} {}
       label mrv2
       user_data this user_data_type {ViewerUI*}
       callback {exit_cb( o, v );} open
-      xywh {998 185 690 602} type Double align 80 resizable
-      class {mrv::MainWindow} size_range {690 602 0 0} visible
+      xywh {998 185 690 602} type Double align 80 hide resizable
+      class {mrv::MainWindow} size_range {690 602 0 0}
     } {
       Fl_Pack uiRegion {open
         xywh {0 0 690 602} box FLAT_BOX resizable
@@ -1185,8 +1185,8 @@ settingsObject->setValue( mrv::kPenColorA, a);}
           xywh {0 577 690 25} color 0
         } {
           Fl_Group uiStatusBar {
-            label {Everything OK.  } open
-            xywh {0 577 690 25} box FLAT_BOX align 84
+            label {Everything OK.  } open selected
+            xywh {0 577 690 25} box FLAT_BOX labelsize 10 align 84
             code0 {o->save_colors();}
             class {mrv::StatusBar}
           } {

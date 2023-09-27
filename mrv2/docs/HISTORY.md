@@ -17,12 +17,9 @@ v0.7.9
 - Made Fit ('f' key) in timeline viewport work on network connections.
 - Made Panning (Middle mouse drag) in timeline viewport work on network
   connections.
-<<<<<<< HEAD
-=======
 - Fixed Edit button on network connections.
 - Fixed seeking on network connections when the viewport was zoomed in and
   the windows' size in the local and remote machines were different.
->>>>>>> insert
 
 
 v0.7.8
