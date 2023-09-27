@@ -8,43 +8,44 @@ mrv2 is an open source professional player and review tool for vfx, animation an
 It is the second generation of the popular mrViewer flipbook player.
 
 Contents:
-* [Pre-built Binaries](#pre-built-binaries)
-    * [Compatibility](#compatibility) 
-    * [Notes on Installation](#notes-on-installation)
-* [Features](#features)
-* [Building](#building)
-    * [Building with Docker](#building-with-docker)
-    * [Dependencies](#dependencies)
-      * [RedHat](#redhat)
-      * [Ubuntu](#ubuntu)
-      * [macOS](#macos)
-      * [Windows](#windows)
-    * [Building mrv2](#building-mrv2)
-    * [Debug builds](#debug-builds)
-    * [Building on Windows](#building-on-windows)
-    * [Building FFmpeg as GPL or LGPL](#building-ffmpeg-as-gpl-or-lgpl)
-* [Running mrv2](#running-mrv2)
-    * [macOS and Linux](#macos-and-linux)
-    * [Windows](#windows)
-* [Tutorials](#tutorials)
-* [Documenting](#documenting)
-* [Translating](#translating)
-   * [If you compiled mrv2](#if-you-compiled-mrv2)
-   * [If you did not compile mrv2](#if-you-did-not-compile-mrv2)
-   * [Translating on Windows](#translating-on-windows)
-* [Packaging](#packaging)
-* [Developing](#developing)
-* [Donating](#donating)
+
+- [Pre-built Binaries](#pre-built-binaries)
+    - [Compatibility](#compatibility) 
+    - [Notes on Installation](#notes-on-installation)
+- [Features](#features)
+- [Building](#building)
+    - [Building with Docker](#building-with-docker)
+    - [Dependencies](#dependencies)
+      - [RedHat](#redhat)
+      - [Ubuntu](#ubuntu)
+      - [macOS](#macos)
+      - [Windows](#windows)
+    - [Building mrv2](#building-mrv2)
+    - [Debug builds](#debug-builds)
+    - [Building on Windows](#building-on-windows)
+    - [Building FFmpeg as GPL or LGPL](#building-ffmpeg-as-gpl-or-lgpl)
+- [Running mrv2](#running-mrv2)
+    - [macOS and Linux](#macos-and-linux)
+    - [Windows](#windows)
+- [Tutorials](#tutorials)
+- [Documenting](#documenting)
+- [Translating](#translating)
+   - [If you compiled mrv2](#if-you-compiled-mrv2)
+   - [If you did not compile mrv2](#if-you-did-not-compile-mrv2)
+   - [Translating on Windows](#translating-on-windows)
+- [Packaging](#packaging)
+- [Developing](#developing)
+- [Donating](#donating)
 
 # Pre-built binaries
 
 If you are looking for pre-built binaries for Windows, Linux or macOS (Intel), they can be found in:
 
-https://github.com/ggarra13/mrv2/releases
+[GitHub](https://github.com/ggarra13/mrv2/releases)
 
 or in its mirror site at:
 
-https://sourceforge.net/projects/mrv2/files/
+[SourceForge](https://sourceforge.net/projects/mrv2/files/)
 
 ## Compatibility
 
@@ -117,21 +118,21 @@ The core of the playback engine is a custom version of tlRender (www.github.com/
 
 Currently supported:
 
-* Movie files (H264, MP4, WEBM, etc.)
-* Image file sequences (Cineon, DPX, JPEG, OpenEXR, PNG, PPM, TIFF, TGA, BMP,
+- Movie files (H264, MP4, WEBM, etc.)
+- Image file sequences (Cineon, DPX, JPEG, OpenEXR, PNG, PPM, TIFF, TGA, BMP,
   	     	       	PSD)
-* Multi-channel audio
-* Color management
-* A/B comparison
-* Native OpenTimelineIO with dissolves
-* .otioz file bundles
-* Creation of OpenTimelineIO playlists
-* OpenEXR multichannel, multiview and multipart support
-* Environment mapping (Spherical and Cubic)
-* Python3 API and Plugin system
-* Network connections
-* Stereo 3D (Anaglyph, Scanlines, Columns, Checkered, Side by Side)
-* PDF Exporting of Annotations and Notes
+- Multi-channel audio
+- Color management
+- A/B comparison
+- Native OpenTimelineIO with dissolves
+- .otioz file bundles
+- Creation of OpenTimelineIO playlists
+- OpenEXR multichannel, multiview and multipart support
+- Environment mapping (Spherical and Cubic)
+- Python3 API and Plugin system
+- Network connections
+- Stereo 3D (Anaglyph, Scanlines, Columns, Checkered, Side by Side)
+- PDF Exporting of Annotations and Notes
 
 # Building
 
@@ -149,14 +150,16 @@ root of mrv2.
 ## Dependencies
 
 Basic required dependencies:
-* [CMake 3.26.2 or later] (https://cmake.org/download/)
-* [ninja-build] (https://github.com/ninja-build/ninja.git)
-* [Git] (https://git-scm.com/downloads)
+
+- [CMake 3.26.2 or later](https://cmake.org/download/)
+- [ninja-build](https://github.com/ninja-build/ninja.git)
+- [Git](https://git-scm.com/downloads)
 
 Basic Windows required dependencies:
-* [Visual Studio 2019 or later Community] (https://visualstudio.microsoft.com/en/free-developer-offers)
-* [MSYS2] (https://www.msys2.org/)
-* [NSIS Installer] -for Packaging- (https://nsis.sourceforge.io/Download)
+
+- [Visual Studio 2019 or later Community](https://visualstudio.microsoft.com/en/free-developer-offers)
+- [MSYS2](https://www.msys2.org/)
+- [NSIS Installer for Packaging](https://nsis.sourceforge.io/Download)
 
 Additional dependencies are downloaded and built automatically by the CMake
 superbuild script.  For a list of non-system libraries that mrv2 depends on
@@ -384,15 +387,14 @@ explorer .
 And in the explorer directory that it will open, you should create a shortcut
 with the RMB to the mrv2.exe.  Once that is done, you can drag and rename the
 shortcut to your Desktop to have it handy.
-Note that if you will not be developing mrv2, you should proceed to Packaging
-instead(#packaging).
+Note that if you will not be developing mrv2, you should instead proceed to [Packaging](#packaging).
 
 # Tutorials
 
 Besides the basic API documentation included, there is a special channel on youtube.com where you can
 find some tutorials on its basic use:
 
-https://www.youtube.com/watch?v=8JViz-pPCrg&list=PLxJ9NNBdNfRmd8AQ41AJYmb7WhN99G5C-
+[Video Tutorials](https://www.youtube.com/watch?v=8JViz-pPCrg&list=PLxJ9NNBdNfRmd8AQ41AJYmb7WhN99G5C-)
 
 # Documenting
 
@@ -526,7 +528,7 @@ clang-format
 
 This is part of the LLVM project, you can download it from your usual repositories (apt, brew, etc.), or from:
 
-https://releases.llvm.org/download.html
+[LLVM Main Download Page](https://releases.llvm.org/download.html)
 
 This utility verifies previous to a commit that all the C++ formatting follows the standard used in mrv2.
 
@@ -536,6 +538,6 @@ You might also want to get Doxygen so as to get the source code documentation in
 
 Go to:
 
-https://mrv2.sourceforge.io
+[Main Web Page for Donating](https://mrv2.sourceforge.io)
 
 and click on the Paypal Donate button.
