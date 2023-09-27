@@ -267,7 +267,8 @@ cd mrv2
 
 The script is a superbuild script that will download all needed dependencies
 required.  It will create a build and a BUILD-KERNEL-ARCH/BUILDTYPE/install
-directory where all files shall reside.
+directory where all files shall reside.  Make sure you meet the basic
+dependencies for your platform.  See [Dependencies](#dependencies).
 
 The default is to build with all cores in all the Operating Systems.
 If you want more or less cores pass another number to any of
