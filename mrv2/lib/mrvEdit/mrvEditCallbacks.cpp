@@ -2000,7 +2000,7 @@ namespace mrv
             active = false;
 
         b->value(active);
-        if (b->value())
+        if (active)
         {
             b->labelcolor(fl_rgb_color(255, 255, 255));
         }

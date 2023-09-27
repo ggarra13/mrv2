@@ -1139,6 +1139,11 @@ namespace mrv
                 }
                 editModeH = message["height"];
                 EditMode value = message["value"];
+                editMode = value;
+                bool presentation = ui->uiView->getPresentationMode();
+                if (!presentation)
+                    ui->uiView->resizeWindow();
+
                 set_edit_mode_cb(value, ui);
                 // if (value == EditMode::kTimeline)
                 //     ui->uiEdit->value(1);

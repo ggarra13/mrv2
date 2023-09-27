@@ -100,8 +100,11 @@ namespace mrv
 
             // Set Edit mode
             msg["command"] = "setEditMode";
-            msg["value"] = editMode;
-            msg["height"] = editModeH;
+            EditMode mode =
+                (editMode == EditMode::kSaved || editMode == EditMode::kFull)
+                    ? EditMode::kFull
+                    : EditMode::kTimeline;
+            msg["value"] = mode;
             pushMessage(msg);
 
             // Seek to current time in player
