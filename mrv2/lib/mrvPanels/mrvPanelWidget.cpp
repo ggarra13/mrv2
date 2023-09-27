@@ -157,7 +157,6 @@ namespace mrv
     {
         TLRENDER_P();
 
-        DBG;
         SettingsObject* settingsObject = p.ui->app->settingsObject();
 
         std::string prefix = "gui/" + label;

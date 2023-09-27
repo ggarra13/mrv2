@@ -1,3 +1,13 @@
+v0.7.9
+======
+
+- Fixed sequence of images detection when there was an image with the same
+  basename, directory and prefix but no number.
+- Fixed the RAW image reader to handle images that are smaller once decoded.
+- Made the Log Panel not save its visibility upon program exit.  This prevents
+  the Log Panel Window from opening on a new start up of mrv2 once there had
+  been an error in the previous instance.
+
 v0.7.8
 ======
 
