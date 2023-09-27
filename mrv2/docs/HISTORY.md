@@ -12,6 +12,17 @@ v0.7.9
 - Fixed go to next and previous annotations when several clips of different
   rates were present in the timeline.
 - Fixed floating timeline thumbnail not updating properly when showing an EDL.
+- Added shifting of annotations when tlRender's darby routines drag an item
+  into new place.
+- Made Fit ('f' key) in timeline viewport work on network connections.
+- Made Panning (Middle mouse drag) in timeline viewport work on network
+  connections.
+<<<<<<< HEAD
+=======
+- Fixed Edit button on network connections.
+- Fixed seeking on network connections when the viewport was zoomed in and
+  the windows' size in the local and remote machines were different.
+>>>>>>> insert
 
 
 v0.7.8

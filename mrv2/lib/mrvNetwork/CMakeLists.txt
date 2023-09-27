@@ -13,6 +13,7 @@ set(HEADERS
     mrvFilesModelItem.h
     mrvFilePath.h
     mrvImageOptions.h
+    mrvInsertData.h
     mrvLUTOptions.h
     mrvMessage.h
     mrvMessagePublisher.h
@@ -32,6 +33,7 @@ set(SOURCES
     mrvFilesModelItem.cpp
     mrvFilePath.cpp
     mrvImageOptions.cpp
+    mrvInsertData.cpp
     mrvLUTOptions.cpp
     # mrvMessage.cpp
     mrvMessagePublisher.cpp

@@ -123,8 +123,14 @@ namespace mrv
         //! Toggle timeline editable
         void setEditable(bool);
 
-        void mouseMoveEvent(const int X, const int Y);
+        int mousePressEvent(int button, bool, int modifiers);
+        int mouseReleaseEvent(int X, int Y, int button, bool, int modifiers);
+
+        void mouseMoveEvent(int X, int Y);
         void scrollEvent(const float X, const float Y, const int modifiers);
+        int mouseDragEvent(int X, int Y);
+        int keyPressEvent(unsigned key, const int modifiers);
+        int keyReleaseEvent(unsigned key, const int modifiers);
 
         void insertCallback(const std::vector<tl::timeline::InsertData>&);
 
@@ -135,7 +141,6 @@ namespace mrv
         int enterEvent();
         int leaveEvent();
         int mousePressEvent();
-        int mouseDragEvent();
         int mouseReleaseEvent();
         int mouseMoveEvent();
         int wheelEvent();
@@ -156,7 +161,7 @@ namespace mrv
         unsigned _changeKey(unsigned key);
         void _drawAnnotationMarks() const noexcept;
 
-        otime::RationalTime _posToTime(float) const noexcept;
+        otime::RationalTime _posToTime(int) const noexcept;
         int _timeToPos(const otime::RationalTime&) const noexcept;
 
         //! Function used to send a seek to the network.
