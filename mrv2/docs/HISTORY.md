@@ -1,27 +1,3 @@
-v0.7.9
-======
-
-- File Panel thumbnails now update for the selected stereo and the compare
-  media too.
-- Compare Panel thumbnails also update for the A and B images.
-- Stereo Panel thumbnails also update for the A and Stereo images.
-- Command-line -b <image> for the compare image now properly selects the
-  image in the compare panel.
-- Fixed a precision issue with annotations which could make some of them
-  disappear.
-- Fixed go to next and previous annotations when several clips of different
-  rates were present in the timeline.
-- Fixed floating timeline thumbnail not updating properly when showing an EDL.
-- Added shifting of annotations when tlRender's darby routines drag an item
-  into new place.
-- Made Fit ('f' key) in timeline viewport work on network connections.
-- Made Panning (Middle mouse drag) in timeline viewport work on network
-  connections.
-- Fixed Edit button on network connections.
-- Fixed seeking on network connections when the viewport was zoomed in and
-  the windows' size in the local and remote machines were different.
-
-
 v0.7.8
 ======
 
@@ -78,7 +54,25 @@ v0.7.8
 - Simplified hotkeys loading and saving and now hotkeys are saved on exit.
 - Made command-line support any number of files instead of just three.
 - Fixed session saving which got partially broken in v0.7.7.
-
+- File Panel thumbnails now update for the selected stereo and the compare
+  media too.
+- Compare Panel thumbnails also update for the A and B images.
+- Stereo Panel thumbnails also update for the A and Stereo images.
+- Command-line -b <image> for the compare image now properly selects the
+  image in the compare panel.
+- Fixed a precision issue with annotations which could make some of them
+  disappear.
+- Fixed go to next and previous annotations when several clips of different
+  rates were present in the timeline.
+- Fixed floating timeline thumbnail not updating properly when showing an EDL.
+- Added shifting of annotations when tlRender's darby routines drag an item
+  into new place.
+- Made Fit ('f' key) in timeline viewport work on network connections.
+- Made Panning (Middle mouse drag) in timeline viewport work on network
+  connections.
+- Fixed Edit button on network connections.
+- Fixed seeking on network connections when the viewport was zoomed in and
+  the windows' size in the local and remote machines were different.
 
 v0.7.7
 ======
