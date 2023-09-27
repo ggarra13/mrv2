@@ -665,6 +665,27 @@ namespace mrv
         }
     } // namespace
 
+    int TimelineWidget::mousePressEvent(int button, bool on, int modifiers)
+    {
+        TLRENDER_P();
+        bool send = App::ui->uiPrefs->SendTimeline->value();
+        if (send)
+        {
+            Message message;
+            message["command"] = "Timeline Mouse Press";
+            message["button"] = button;
+            message["on"] = on;
+            message["modifiers"] = modifiers;
+            tcp->pushMessage(message);
+        }
+        if (p.dragging)
+        {
+            makePathsAbsolute(p.player, p.ui);
+        }
+        p.eventLoop->mouseButton(button, on, modifiers);
+        return 1;
+    }
+
     int TimelineWidget::mousePressEvent()
     {
         TLRENDER_P();
@@ -675,10 +696,6 @@ namespace mrv
         {
             button = 0;
             _seek();
-            if (p.dragging)
-            {
-                makePathsAbsolute(p.player, p.ui);
-            }
         }
         else if (Fl::event_button2())
         {
@@ -689,15 +706,12 @@ namespace mrv
         {
             return 0;
         }
-        p.eventLoop->mouseButton(button, true, modifiers);
 
-        if (p.timelineWidget->isDragging())
-        {
-        }
+        mousePressEvent(button, true, modifiers);
         return 1;
     }
 
-    int TimelineWidget::mouseDragEvent()
+    int TimelineWidget::mouseDragEvent(const int X, const int Y)
     {
         TLRENDER_P();
         if (Fl::event_button1())
@@ -706,30 +720,26 @@ namespace mrv
         }
         else if (Fl::event_button2())
         {
-            // Intentionally left empty....
+            // left empty on purpose
         }
         else
         {
             return 0;
         }
-        p.eventLoop->cursorPos(
-            math::Vector2i(_toUI(Fl::event_x()), _toUI(Fl::event_y())));
+        mouseMoveEvent(X, Y);
         return 1;
     }
 
-    int TimelineWidget::mouseReleaseEvent()
+    int TimelineWidget::mouseReleaseEvent(
+        const int X, const int Y, int button, bool on, int modifiers)
     {
         TLRENDER_P();
-        int button = 0;
-        if (Fl::event_button1())
+        if (button == 0)
         {
-            button = 0;
             _seek();
-            redraw();
         }
-        p.eventLoop->cursorPos(
-            math::Vector2i(_toUI(Fl::event_x()), _toUI(Fl::event_y())));
-        p.eventLoop->mouseButton(button, false, fromFLTKModifiers());
+        mouseMoveEvent(X, Y);
+        mousePressEvent(button, on, modifiers);
         if (p.dragging)
         {
             toOtioFile(p.player, p.ui);
@@ -737,28 +747,48 @@ namespace mrv
             redrawPanelThumbnails();
             p.dragging = false;
         }
+        bool send = App::ui->uiPrefs->SendTimeline->value();
+        if (send)
+        {
+            Message message;
+            message["command"] = "Timeline Mouse Release";
+            message["X"] = static_cast<float>(_toUI(X)) / pixel_w();
+            message["Y"] = static_cast<float>(_toUI(Y)) / pixel_h();
+            message["button"] = button;
+            message["on"] = on;
+            message["modifiers"] = modifiers;
+            tcp->pushMessage(message);
+        }
+        return 1;
+    }
+
+    int TimelineWidget::mouseReleaseEvent()
+    {
+        int button = 0;
+        mouseReleaseEvent(
+            Fl::event_x(), Fl::event_y(), button, false, fromFLTKModifiers());
         return 1;
     }
 
     int TimelineWidget::mouseMoveEvent()
     {
         TLRENDER_P();
-        Message message;
-        message["command"] = "timelineWidgetMouseMove";
-        message["X"] = Fl::event_x();
-        message["Y"] = Fl::event_y();
-        bool send = App::ui->uiPrefs->SendTimeline->value();
-        if (send)
-            tcp->pushMessage(message);
-
-        p.eventLoop->cursorPos(
-            math::Vector2i(_toUI(Fl::event_x()), _toUI(Fl::event_y())));
+        mouseMoveEvent(Fl::event_x(), Fl::event_y());
         return 1;
     }
 
     void TimelineWidget::mouseMoveEvent(const int X, const int Y)
     {
         TLRENDER_P();
+        bool send = App::ui->uiPrefs->SendTimeline->value();
+        if (send)
+        {
+            Message message;
+            message["command"] = "Timeline Mouse Move";
+            message["X"] = static_cast<float>(_toUI(X)) / pixel_w();
+            message["Y"] = static_cast<float>(_toUI(Y)) / pixel_h();
+            tcp->pushMessage(message);
+        }
         p.eventLoop->cursorPos(math::Vector2i(_toUI(X), _toUI(Y)));
     }
 
@@ -770,7 +800,7 @@ namespace mrv
         p.eventLoop->scroll(pos, modifiers);
 
         Message message;
-        message["command"] = "timelineWidgetScroll";
+        message["command"] = "Timeline Widget Scroll";
         message["X"] = X;
         message["Y"] = Y;
         message["modifiers"] = modifiers;
@@ -1071,6 +1101,13 @@ namespace mrv
             p.timeRange = innerPlayer->getTimeRange();
         }
         p.eventLoop->key(fromFLTKKey(key), true, 0);
+        bool send = App::ui->uiPrefs->SendTimeline->value();
+        if (send)
+        {
+            Message message;
+            message["command"] = "Timeline Fit";
+            tcp->pushMessage(message);
+        }
     }
 
     int TimelineWidget::keyPressEvent()
@@ -1089,6 +1126,8 @@ namespace mrv
         }
 
         key = _changeKey(key);
+        if (kFitScreen.match(key))
+            frameView();
         p.eventLoop->key(fromFLTKKey(key), true, fromFLTKModifiers());
         return 1;
     }
@@ -1153,7 +1192,7 @@ namespace mrv
                 _requestThumbnail(true);
             return mousePressEvent();
         case FL_DRAG:
-            return mouseDragEvent();
+            return mouseDragEvent(Fl::event_x(), Fl::event_y());
         case FL_RELEASE:
             redrawPanelThumbnails();
             return mouseReleaseEvent();
@@ -1247,8 +1286,8 @@ namespace mrv
         const auto& times = p.player->getAnnotationTimes();
         for (const auto time : times)
         {
-            double X = _timeToPos(time);
-            math::Box2i bbox(X - 0.5, 0, 2, 20 * devicePixelRatio);
+            double X = _timeToPos(time::floor(time));
+            math::Box2i bbox(X, 0, 2, 20 * devicePixelRatio);
             p.render->drawRect(bbox, color);
         }
     }
@@ -1338,7 +1377,7 @@ namespace mrv
         TLRENDER_P();
         edit_store_undo(p.player, p.ui);
         edit_clear_redo(p.ui);
-        edit_insert_clip(inserts, p.ui);
+        edit_insert_clip_annotations(inserts, p.ui);
     }
 
     void TimelineWidget::single_thumbnail(

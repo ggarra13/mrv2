@@ -16,13 +16,15 @@
 #include <atomic>
 #include <mutex>
 
-#include <mrvCore/mrvSequence.h>
+#include "mrvCore/mrvSequence.h"
 
 // mrViewer includes
-#include <mrvFl/mrvIO.h>
+#include "mrvFl/mrvIO.h"
 
 #include "mrvGL/mrvGLErrors.h"
 #include "mrvGL/mrvThumbnailCreator.h"
+
+#include "mrvEdit/mrvEditUtil.h"
 
 // For main fltk event loop
 #include <FL/Fl_RGB_Image.H>
@@ -326,9 +328,9 @@ namespace mrv
                         string::Format("{0}").arg(1);
                     options.ioOptions["FFmpeg/ThreadCount"] =
                         string::Format("{0}").arg(1);
+                    file::Path path(request.fileName);
                     try
                     {
-                        file::Path path(request.fileName);
                         request.timeline =
                             timeline::Timeline::create(path, context, options);
                         for (const auto& i : request.times)
@@ -345,7 +347,10 @@ namespace mrv
                     }
                     catch (const std::exception& e)
                     {
-                        LOG_ERROR(e.what());
+                        // We don't print an error for EDLs as the timeline
+                        // replacement is not be atomic.
+                        if (!isTemporaryEDL(path))
+                            LOG_ERROR(e.what());
                         p.running = false;
                         continue;
                     }

@@ -18,7 +18,10 @@ set(SOURCES
 add_library(mrvEdit ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
-set( LIBRARIES mrvWidgets)
+set(LIBRARIES mrvWidgets)
+if(MRV2_NETWORK)
+    list(APPEND LIBRARIES mrvNetwork)
+endif()
 
 target_link_libraries(mrvEdit PUBLIC ${LIBRARIES} )
 set_target_properties(mrvEdit PROPERTIES FOLDER lib)

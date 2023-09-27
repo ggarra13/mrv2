@@ -123,8 +123,12 @@ namespace mrv
         //! Toggle timeline editable
         void setEditable(bool);
 
-        void mouseMoveEvent(const int X, const int Y);
+        int mousePressEvent(int button, bool, int modifiers);
+        int mouseReleaseEvent(int X, int Y, int button, bool, int modifiers);
+
+        void mouseMoveEvent(int X, int Y);
         void scrollEvent(const float X, const float Y, const int modifiers);
+        int mouseDragEvent(int X, int Y);
 
         void insertCallback(const std::vector<tl::timeline::InsertData>&);
 
@@ -135,7 +139,6 @@ namespace mrv
         int enterEvent();
         int leaveEvent();
         int mousePressEvent();
-        int mouseDragEvent();
         int mouseReleaseEvent();
         int mouseMoveEvent();
         int wheelEvent();

@@ -21,6 +21,7 @@
 #include "mrvNetwork/mrvCommandInterpreter.h"
 #include "mrvNetwork/mrvCompareOptions.h"
 #include "mrvNetwork/mrvDisplayOptions.h"
+#include "mrvNetwork/mrvInsertData.h"
 #include "mrvNetwork/mrvImageOptions.h"
 #include "mrvNetwork/mrvLUTOptions.h"
 #include "mrvNetwork/mrvProtocolVersion.h"
@@ -189,18 +190,51 @@ namespace mrv
                 otime::RationalTime value = message["value"];
                 player->seek(value);
             }
-            else if (c == "timelineWidgetMouseMove")
+            else if (c == "Timeline Mouse Press")
             {
-                if (!player)
+                bool receive = prefs->ReceiveTimeline->value();
+                if (!receive || !player)
                 {
                     tcp->unlock();
                     return;
                 }
-                int X = message["X"];
-                int Y = message["Y"];
+                const int button = message["button"];
+                const bool on = message["on"];
+                const int modifiers = message["modifiers"];
+                ui->uiTimeline->mousePressEvent(button, on, modifiers);
+            }
+            else if (c == "Timeline Mouse Move")
+            {
+                bool receive = prefs->ReceiveTimeline->value();
+                if (!receive || !player)
+                {
+                    tcp->unlock();
+                    return;
+                }
+                float X = message["X"];
+                X *= ui->uiTimeline->pixel_w();
+                float Y = message["Y"];
+                Y *= ui->uiTimeline->pixel_h();
                 ui->uiTimeline->mouseMoveEvent(X, Y);
             }
-            else if (c == "timelineWidgetScroll")
+            else if (c == "Timeline Mouse Release")
+            {
+                bool receive = prefs->ReceiveTimeline->value();
+                if (!receive || !player)
+                {
+                    tcp->unlock();
+                    return;
+                }
+                float X = message["X"];
+                X *= ui->uiTimeline->pixel_w();
+                float Y = message["Y"];
+                Y *= ui->uiTimeline->pixel_h();
+                int button = message["button"];
+                bool on = message["on"];
+                int modifiers = message["modifiers"];
+                ui->uiTimeline->mouseReleaseEvent(X, Y, button, on, modifiers);
+            }
+            else if (c == "Timeline Widget Scroll")
             {
                 bool receive = prefs->ReceiveTimeline->value();
                 if (!receive || !player)
@@ -212,6 +246,16 @@ namespace mrv
                 float Y = message["Y"];
                 int modifiers = message["modifiers"];
                 ui->uiTimeline->scrollEvent(X, Y, modifiers);
+            }
+            else if (c == "Timeline Fit")
+            {
+                bool receive = prefs->ReceiveTimeline->value();
+                if (!receive || !player)
+                {
+                    tcp->unlock();
+                    return;
+                }
+                ui->uiTimeline->frameView();
             }
             else if (c == "setInOutRange")
             {
