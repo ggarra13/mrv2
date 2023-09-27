@@ -528,7 +528,7 @@ clang-format
 
 This is part of the LLVM project, you can download it from your usual repositories (apt, brew, etc.), or from:
 
-https://releases.llvm.org/download.html
+[LLVM Main Download Page](https://releases.llvm.org/download.html)
 
 This utility verifies previous to a commit that all the C++ formatting follows the standard used in mrv2.
 
