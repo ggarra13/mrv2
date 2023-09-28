@@ -1,29 +1,12 @@
 v0.7.9
 ======
 
-- File Panel thumbnails now update for the selected stereo and the compare
-  media too.
-- Compare Panel thumbnails also update for the A and B images.
-- Stereo Panel thumbnails also update for the A and Stereo images.
-- Command-line -b <image> for the compare image now properly selects the
-  image in the compare panel.
-- Fixed a precision issue with annotations which could make some of them
-  disappear.
-- Fixed go to next and previous annotations when several clips of different
-  rates were present in the timeline.
-- Fixed floating timeline thumbnail not updating properly when showing an EDL.
-- Added shifting of annotations when tlRender's darby routines drag an item
-  into new place.
-- Made Fit ('f' key) in timeline viewport work on network connections.
-- Made Panning (Middle mouse drag) in timeline viewport work on network
-  connections.
-<<<<<<< HEAD
-=======
-- Fixed Edit button on network connections.
-- Fixed seeking on network connections when the viewport was zoomed in and
-  the windows' size in the local and remote machines were different.
->>>>>>> insert
-
+- Fixed sequence of images detection when there was an image with the same
+  basename, directory and prefix but no number.
+- Fixed the RAW image reader to handle images that are smaller once decoded.
+- Made the Log Panel not save its visibility upon program exit.  This prevents
+  the Log Panel Window from opening on a new start up of mrv2 once there had
+  been an error in the previous instance.
 
 v0.7.8
 ======
@@ -81,7 +64,25 @@ v0.7.8
 - Simplified hotkeys loading and saving and now hotkeys are saved on exit.
 - Made command-line support any number of files instead of just three.
 - Fixed session saving which got partially broken in v0.7.7.
-
+- File Panel thumbnails now update for the selected stereo and the compare
+  media too.
+- Compare Panel thumbnails also update for the A and B images.
+- Stereo Panel thumbnails also update for the A and Stereo images.
+- Command-line -b <image> for the compare image now properly selects the
+  image in the compare panel.
+- Fixed a precision issue with annotations which could make some of them
+  disappear.
+- Fixed go to next and previous annotations when several clips of different
+  rates were present in the timeline.
+- Fixed floating timeline thumbnail not updating properly when showing an EDL.
+- Added shifting of annotations when tlRender's darby routines drag an item
+  into new place.
+- Made Fit ('f' key) in timeline viewport work on network connections.
+- Made Panning (Middle mouse drag) in timeline viewport work on network
+  connections.
+- Fixed Edit button on network connections.
+- Fixed seeking on network connections when the viewport was zoomed in and
+  the windows' size in the local and remote machines were different.
 
 v0.7.7
 ======

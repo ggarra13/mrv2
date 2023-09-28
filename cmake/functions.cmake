@@ -63,12 +63,43 @@ function( is_system_lib TARGET ISSYSLIB )
     #
     # List of libraries that are accepted to distribute
     #
-    set( _acceptedlibs libmount libmd libcairo libcap libcrypto )
+    set( _acceptedlibs
+	libavcodec libavdevice libavfilter libavformat libavutil libboost
+	libcairo libcap libcrypto liblcms2 libMaterial libmount libmd
+	libosd libraw libtbb libusd )
 
     #
     # List of system libraries that should not be distributed
     #
-    set( _syslibs ld-linux libasound libc libdl libharfbuzz libfontconfig libfreetype libgcc_s libgpg-error libEGL libGL libGLdispatch libGLX libX nvidia libdrm2 libpthread libresolv libm libOpenGL libpulse libpulse-simple librt libxcb libxshmfence libstdc libz )
+    set( _syslibs
+	linux-vdso
+	ld-linux
+	libasound
+	libc
+	libdl
+	libharfbuzz
+	libfontconfig
+	libfreetype
+	libgcc_s
+	libgpg-error
+	libEGL
+	libGL
+	libGLdispatch
+	libGLX
+	libX
+	nvidia
+	libdrm2
+	libpthread
+	libresolv
+	libm
+	libOpenGL
+	libpulse
+	libpulse-simple
+	librt
+	libxcb
+	libxshmfence
+	libstdc
+	libz )
 
     
     set( ${ISSYSLIB} 0 PARENT_SCOPE)
@@ -111,14 +142,15 @@ function(install_library_with_deps LIBRARY)
 	LIBRARIES ${LIBRARY}
 	RESOLVED_DEPENDENCIES_VAR RESOLVED_DEPS
 	UNRESOLVED_DEPENDENCIES_VAR UNRESOLVED_DEPS
-	)
-    foreach(FILE ${RESOLVED_DEPS})
-	if(NOT IS_SYMLINK ${FILE})
-	    install_library_with_deps(${FILE})
-	endif()
-    endforeach()
+    )
+    # This is not needed and it would create a cycle
+    # foreach(FILE ${RESOLVED_DEPS})
+    # 	if(NOT IS_SYMLINK ${FILE})
+    # 	    install_library_with_deps(${FILE})
+    # 	endif()
+    # endforeach()
     foreach(FILE ${UNRESOLVED_DEPS})
-	message(STATUS "Unresolved from ${LIBRARY}: ${FILE}")
+	message("UNRESOLVED from ${LIBRARY}: ${FILE}")
     endforeach()
 endfunction()
 
@@ -128,9 +160,7 @@ endfunction()
 #
 function( get_runtime_dependencies TARGET DEPENDENCIES )
 
-    # Add CMAKE_INSTALL_PREFIX first to library path
-    set( ENV{LD_LIBRARY_PATH} "${CMAKE_INSTALL_PREFIX}/lib:${LD_LIBRARY_PATH}" )
-
+    message( NOTICE "LD_LIBRARY_PATH=$ENV{LD_LIBRARY_PATH}")
 
     foreach (exe "${TARGET}")
 	if ( EXISTS ${exe} )
@@ -145,9 +175,13 @@ function( get_runtime_dependencies TARGET DEPENDENCIES )
 		    if (sys_lib EQUAL 0 OR INSTALL_SYSLIBS STREQUAL "true")
 			list (FIND dependencies ${dep_filename} found)
 			if (found LESS 0)
-			    message( STATUS "${dep_filename} must be installed" )
 			    install_library_with_deps( ${dep_filename} )
 			endif()
+		    endif()
+		else()
+		    is_system_lib (${dep_filename} sys_lib)
+		    if (sys_lib EQUAL 0)
+			message("${dep_filename} is NOT absolute - ${line}")
 		    endif()
 		endif()
 	    endforeach()
@@ -162,9 +196,6 @@ endfunction()
 # broken.
 #
 function( get_macos_runtime_dependencies TARGET DEPENDENCIES )
-
-    # Add CMAKE_INSTALL_PREFIX first to library path
-    set( ENV{DYLD_LIBRARY_PATH} "${CMAKE_INSTALL_PREFIX}/lib:${DYLD_LIBRARY_PATH}" )
 
     set(DEPENDENCIES  )
     foreach (exe "${TARGET}")

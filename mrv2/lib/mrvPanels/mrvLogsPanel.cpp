@@ -95,6 +95,18 @@ namespace mrv
         w->resize(X, Y, W, H);
     }
 
+    void LogsPanel::save()
+    {
+        TLRENDER_P();
+
+        PanelWidget::save();
+
+        // We make the log panel save as hidden, never visible.
+        SettingsObject* settingsObject = p.ui->app->settingsObject();
+        const std::string key = "gui/" + label + "/Window/Visible";
+        settingsObject->setValue(key, 0);
+    }
+
     void LogsPanel::add_controls()
     {
         TLRENDER_P();
