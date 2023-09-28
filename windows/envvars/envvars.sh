@@ -21,7 +21,6 @@ export LCMS2_ROOT=$PWD/windows/win64/
 
 #
 # Set the location of precompiled FFmpeg on Windows.
-# If not set, it will compile it.
 #
 export FFMPEG_ROOT=$PWD/windows/win64/
 if [[ $FFMPEG_GPL == GPL || $FFMPEG_GPL == LGPL ]]; then
