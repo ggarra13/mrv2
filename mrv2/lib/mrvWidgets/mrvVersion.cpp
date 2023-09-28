@@ -465,16 +465,6 @@ namespace mrv
           << "http://www.fltk.org/" << endl
           << "Copyright (c) 2000-Present Bill Spitzak & others" << endl
           << endl
-          << "Little Color Management System " << (LCMS_VERSION / 1000.0)
-          << "Copyright (c) 1998-Present Marti Maria Saguer" << endl
-          << endl
-          << "LibRaw " << LIBRAW_VERSION_STR << endl
-          << "Copyright (C) 2008-2021 LibRaw LLC (info@libraw.org)" << endl
-          << "The library includes source code from" << endl
-          << "dcraw.c, Dave Coffin's raw photo decoder" << endl
-          << "Copyright 1997-2016 by Dave Coffin, dcoffin a cybercom o net"
-          << endl
-          << endl
           << "Modified FLU - FLTK Utility Widgets" << endl
           << "Copyright (c) 2002 Ohio Supercomputer Center, Ohio State "
              "University"
@@ -492,6 +482,9 @@ namespace mrv
           << "Imath v" << IMATH_VERSION_STRING << endl
           << "Copyright Contributors to the OpenEXR Project" << endl
           << endl
+          << "Little Color Management System " << (LCMS_VERSION / 1000.0)
+          << "Copyright (c) 1998-Present Marti Maria Saguer" << endl
+          << endl
 #ifdef MRV2_PDF
           << "libharu v" << HPDF_VERSION_TEXT << endl
           << "Copyright (c) 1999-2006 Takeshi Kanno" << endl
@@ -505,6 +498,13 @@ namespace mrv
           << endl
           << "libjpeg" << endl
           << "Copyright (C) 1991-2016, Thomas G. Lane, Guido Vollbeding."
+          << endl
+          << endl
+          << "LibRaw " << LIBRAW_VERSION_STR << endl
+          << "Copyright (C) 2008-2021 LibRaw LLC (info@libraw.org)" << endl
+          << "The library includes source code from" << endl
+          << "dcraw.c, Dave Coffin's raw photo decoder" << endl
+          << "Copyright 1997-2016 by Dave Coffin, dcoffin a cybercom o net"
           << endl
           << endl
           << PNG_HEADER_VERSION_STRING
