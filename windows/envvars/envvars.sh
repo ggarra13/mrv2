@@ -25,7 +25,5 @@ export LCMS2_ROOT=$PWD/windows/win64/
 #
 export FFMPEG_ROOT=$PWD/windows/win64/
 if [[ $FFMPEG_GPL == GPL || $FFMPEG_GPL == LGPL ]]; then
-    rm -f $BUILD_DIR/install/lib/libx264.lib
-    rm -f $BUILD_DIR/install/lib/avformat.lib
     export FFMPEG_ROOT=""
 fi

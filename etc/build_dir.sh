@@ -153,10 +153,6 @@ done
 # Build a build directory with that information
 export BUILD_DIR=BUILD-$KERNEL-$ARCH/$CMAKE_BUILD_TYPE
 
-export PATH="$PWD/${BUILD_DIR}/install/bin:$PWD/$BUILD_DIR/install/bin/Scripts:${PATH}"
-export LD_LIBRARY_PATH="$PWD/${BUILD_DIR}/install/lib64:$PWD/${BUILD_DIR}/install/lib:${LD_LIBRARY_PATH}"
-export DYLD_LIBRARY_PATH="$PWD/${BUILD_DIR}/install/lib:${DYLD_LIBRARY_PATH}"
-export PKG_CONFIG_PATH="$PWD/${BUILD_DIR}/install/lib/pkgconfig:$PKG_CONFIG_PATH"
 if [[ $KERNEL == *Darwin* ]]; then
     export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:${PATH}"
     if [[ $ARCH == arm64 ]]; then
@@ -175,7 +171,7 @@ export FLAGS="${FLAGS} $*"
 if [[ $CLEAN_DIR == 1 ]]; then
     if [[ -d ${BUILD_DIR} ]]; then
 	echo "Cleaning ${BUILD_DIR}.  Please wait..."
-	rm -rf $BUILD_DIR
+	run_cmd rm -rf $BUILD_DIR
     fi
 fi
 
@@ -199,15 +195,12 @@ if [[ $RUNME == 1 && $0 != *runme.sh* ]]; then
 
 
     sleep 10
-
-
     mkdir -p $BUILD_DIR/install
     
-    if [[ $FFMPEG_GPL == LGPL ]]; then
-	echo "Removing GPL libx264..."
-	rm -rf $BUILD_DIR/install/bin/libx264*.dll
-	rm -rf $BUILD_DIR/install/lib/libx264.lib
-    fi
+    export PATH="$PWD/${BUILD_DIR}/install/bin:$PWD/$BUILD_DIR/install/bin/Scripts:${PATH}"
+    export LD_LIBRARY_PATH="$PWD/${BUILD_DIR}/install/lib64:$PWD/${BUILD_DIR}/install/lib:${LD_LIBRARY_PATH}"
+    export DYLD_LIBRARY_PATH="$PWD/${BUILD_DIR}/install/lib:${DYLD_LIBRARY_PATH}"
+    export PKG_CONFIG_PATH="$PWD/${BUILD_DIR}/install/lib/pkgconfig:$PKG_CONFIG_PATH"
 fi
 
 if [[ $RUNME == 1 && $0 == *runme_nolog.sh* ]]; then
