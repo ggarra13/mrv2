@@ -77,6 +77,7 @@ if [[ $MSYS_LIBS == 1 ]]; then
     if [[ $FFMPEG_GPL == GPL ]]; then
 	echo
 	echo "Installing packages needed to build libvpx, libx264 and FFmpeg..."
+	pacman -Sy mingw-w64-x86_64-gcc --noconfirm
     else
 	echo
 	echo "Installing packages needed to build libvpx and FFmpeg..."
@@ -115,7 +116,7 @@ if [[ $BUILD_LIBVPX == 1 ]]; then
 	cd libvpx
     
 	echo
-	echo "Compiling libvpx as $FFMPEG_GPL......"
+	echo "Compiling libvpx......"
 	echo
 
 	
