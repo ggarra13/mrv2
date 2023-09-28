@@ -187,17 +187,19 @@ if [[ $BUILD_FFMPEG == 1 ]]; then
 	git clone --depth 1 --branch ${FFMPEG_TAG} git://source.ffmpeg.org/ffmpeg.git
     fi
 
-    lgpl_ffmpeg=GPL
+    lgpl_ffmpeg=""
     if [[ -e $INSTALL_DIR/lib/avformat.lib ]]; then
 	avformat_dll=`ls $INSTALL_DIR/bin/avformat*.dll`
 	lgpl_ffmpeg=`strings $avformat_dll | findstr "LGPL" | grep -o "LGPL"`
     fi
 
-    if [[ $lgpl_ffmpeg != $FFMPEG_GPL ]]; then
-	echo "Incompatible FFmpeg already installed.  Installed is $lgpl_ffmpeg, want $FMMPEG_GPL."
-	run_cmd rm -rf $INSTALL_DIR/lib/avformat.lib
-    else
-	echo "Compatible FFmpeg already installed."
+    if [[ $lgpl_ffmpeg != "" ]]; then
+	if [[ $lgpl_ffmpeg != $FFMPEG_GPL ]]; then
+	    echo "Incompatible FFmpeg already installed.  Installed is $lgpl_ffmpeg, want $FMMPEG_GPL."
+	    run_cmd rm -rf $INSTALL_DIR/lib/avformat.lib
+	else
+	    echo "Compatible FFmpeg already installed."
+	fi
     fi
     
     if [[ ! -e $INSTALL_DIR/lib/avformat.lib ]]; then
