@@ -13,6 +13,7 @@ v0.7.9
    * Renamed runme.sh script to runme_nolog.sh.
    * Added a new runme.sh script that calls runme_nolog.sh but saves the
      compile log into BUILD-KERNEL-ARCH/CMAKE_BUILD_TYPE/compile.log.
+   * Updated windows build script to work with MSVC 2022, not just 2019.
 
 
 v0.7.8

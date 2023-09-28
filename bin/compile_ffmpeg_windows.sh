@@ -109,14 +109,7 @@ if [[ $BUILD_LIBX264 == 1 ]]; then
 
     if [[ ! -d x264 ]]; then
 	git clone --depth 1 https://code.videolan.org/videolan/x264.git --branch ${X264_TAG}
-	#
-	# Fix x264 build scripts
-	#
-	cd x264
-	curl "http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD" > config.guess
-	sed -i 's/host_os = mingw/host_os = msys/' configure
     fi
-    
 
     if [[ ! -e $INSTALL_DIR/lib/libx264.lib ]]; then
 	echo
@@ -158,15 +151,20 @@ if [[ $BUILD_LIBVPX == 1 ]]; then
 	echo
 
 	
+	# ./../../sources/libvpx/configure --prefix=$INSTALL_DIR \
+	# 				 --target=x86_64-win64-vs16 \
+	# 				 --disable-examples \
+	# 				 --disable-docs \
+	# 				 --disable-unit-tests \
+	# 				 --disable-debug \
+	# 				 --log=no \
+	# 				 --disable-debug-libs \
+	# 				 --disable-dependency-tracking
+	
 	./../../sources/libvpx/configure --prefix=$INSTALL_DIR \
 					 --target=x86_64-win64-vs16 \
 					 --disable-examples \
-					 --disable-docs \
-					 --disable-unit-tests \
-					 --disable-debug \
-					 --log=no \
-					 --disable-debug-libs \
-					 --disable-dependency-tracking
+					 --disable-docs
 	make -j ${CPU_CORES}
 	make install
 	run_cmd mv $INSTALL_DIR/lib/x64/vpxmd.lib $INSTALL_DIR/lib/vpx.lib
