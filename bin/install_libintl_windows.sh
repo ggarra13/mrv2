@@ -9,7 +9,9 @@
 # Script used to install libiconv and libintl on windows through Msys.
 #
 
-. etc/build_dir.sh
+if [[ ! $RUNME ]]; then
+    . etc/build_dir.sh
+fi
 
 pacman -Sy --noconfirm
 

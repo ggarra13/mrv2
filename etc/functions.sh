@@ -15,7 +15,7 @@ run_cmd()
     echo
     echo "> $*"
     echo
-    eval command $*
+    eval command time $*
 }
 
 

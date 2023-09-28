@@ -15,7 +15,9 @@ if [[ ! -e etc/build_dir.sh ]]; then
     exit 1
 fi
 
-. etc/build_dir.sh
+if [[ ! $RUNME ]]; then
+    . etc/build_dir.sh
+fi
 
 #
 # Set the main tag to compile

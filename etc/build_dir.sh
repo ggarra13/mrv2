@@ -38,10 +38,15 @@ else
     export ARCH=i386
 fi
 
-export DIST=0
 
 . etc/build_cores.sh
 
+export RUNME=0
+if [[ $0 == *runme.sh* || $0 == *runme_nolog.sh* ]]; then
+    RUNME=1
+fi
+
+export DIST=0
 export FFMPEG_GPL=$FFMPEG_GPL
 export CLEAN_DIR=0
 export CMAKE_OSX_ARCHITECTURES=""
@@ -61,7 +66,7 @@ for i in $@; do
 	    ;;
 	dist)
 	    export DIST=1
-	    if [[ $0 != *runme.sh* ]]; then
+	    if [[ ! $RUNME ]]; then
 		echo $0
 		echo "dist option can only be run with the runme.sh script"
 		exit 1
@@ -70,7 +75,7 @@ for i in $@; do
 	    ;;
 	clean)
 	    export CLEAN_DIR=1
-	    if [[ $0 != *runme.sh* ]]; then
+	    if [[ ! $RUNME ]]; then
 		echo $0
 		echo "clean option can only be run with the runme.sh script"
 		exit 1
@@ -95,6 +100,7 @@ for i in $@; do
 	-j)
 	    shift
 	    export CPU_CORES=$1
+	    export FLAGS="-j $CPU_CORES ${FLAGS}"
 	    shift
 	    ;;
 	-D)
@@ -104,7 +110,7 @@ for i in $@; do
 	    ;;
 	-G)
 	    shift
-	    if [[ $0 != *runme.sh* ]]; then
+	    if [[ ! $RUNME ]]; then
 		echo $0
 		echo "Cmake generator can only be run with the runme.sh script"
 		exit 1
@@ -153,7 +159,6 @@ if [[ $KERNEL == *Darwin* ]]; then
 fi
 
 export FLAGS="${FLAGS} $*"
-export FLAGS="-j ${CPU_CORES} ${FLAGS}"
 
 if [[ $CLEAN_DIR == 1 ]]; then
     if [[ -d ${BUILD_DIR} ]]; then
@@ -162,23 +167,32 @@ if [[ $CLEAN_DIR == 1 ]]; then
     fi
 fi
 
-if [[ $0 == *runme.sh* ]]; then
+if [[ $RUNME ]]; then
     echo "Build directory is ${BUILD_DIR}"
     echo "Version to build is v${mrv2_VERSION}"
     echo "Architecture is ${ARCH}"
-    echo "FFmpeg will be built as ${FFMPEG_GPL}"
+    echo "Building with ${CPU_CORES} cores"
+    if [[ $FFMPEG_GPL == "" ]]; then
+	if [[ $KERNEL == *Msys* ]]; then
+	    echo "Will use pre-build FFmpeg ${FFMPEG_GPL}"
+	else
+	    echo "FFmpeg will be built as LGPL"
+	fi
+    else
+	echo "FFmpeg will be built as ${FFMPEG_GPL}"
+    fi
     echo "CMake flags are ${CMAKE_FLAGS}"
     echo "Compiler flags are ${FLAGS}"
     cmake --version
     mkdir -p $BUILD_DIR/install
-
+    
     if [[ $FFMPEG_GPL == LGPL ]]; then
 	rm -rf $BUILD_DIR/install/bin/libx264*.dll
 	rm -rf $BUILD_DIR/install/lib/libx264.lib
     fi
 fi
 
-if [[ $0 == *runme.sh* ]]; then
+if [[ $RUNME ]]; then
     if [[ $KERNEL == *Msys* ]]; then
 	. $PWD/etc/compile_windows_dlls.sh
     fi

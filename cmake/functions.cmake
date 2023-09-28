@@ -143,14 +143,8 @@ function(install_library_with_deps LIBRARY)
 	RESOLVED_DEPENDENCIES_VAR RESOLVED_DEPS
 	UNRESOLVED_DEPENDENCIES_VAR UNRESOLVED_DEPS
     )
-    # This is not needed and it would create a cycle
-    # foreach(FILE ${RESOLVED_DEPS})
-    # 	if(NOT IS_SYMLINK ${FILE})
-    # 	    install_library_with_deps(${FILE})
-    # 	endif()
-    # endforeach()
     foreach(FILE ${UNRESOLVED_DEPS})
-	message("UNRESOLVED from ${LIBRARY}: ${FILE}")
+	message(NOTICE "UNRESOLVED DEPENDENCIES from ${LIBRARY}: ${FILE}")
     endforeach()
 endfunction()
 
