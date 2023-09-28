@@ -129,11 +129,12 @@ for i in $@; do
 	    echo "* debug builds a debug build."
 	    echo "* clean clears the directory before building -- use only with runme.sh"
 	    echo "* dist builds a Mojave compatible distribution (macOS)."
-	    echo "* -j <num>  controls the threads to use when compiling."
-	    echo "* -v builds verbosely."
+	    echo "* -j <num>  controls the threads to use when compiling. [default=$CPU_CORES]"
+	    echo "* -v builds verbosely. [default=off]"
 	    echo "* -D sets cmake variables, like -D TLRENDER_USD=OFF."
 	    echo "* -gpl builds FFmpeg with x264 encoder support in a GPL version of it."
 	    echo "* -lgpl builds FFmpeg as a LGPL version of it."
+	    echo "* -t <target> sets the cmake target to run. [default=none]"
 	    exit 1
 	    ;;
     esac
@@ -158,6 +159,9 @@ if [[ $KERNEL == *Darwin* ]]; then
     fi
 fi
 
+if [[ $FLAGS == "" ]]; then
+    export FLAGS="-j ${CPU_CORES}"
+fi
 export FLAGS="${FLAGS} $*"
 
 if [[ $CLEAN_DIR == 1 ]]; then
@@ -167,7 +171,7 @@ if [[ $CLEAN_DIR == 1 ]]; then
     fi
 fi
 
-if [[ $RUNME ]]; then
+if [[ $RUNME && $0 != *runme.sh* ]]; then
     echo "Build directory is ${BUILD_DIR}"
     echo "Version to build is v${mrv2_VERSION}"
     echo "Architecture is ${ARCH}"

@@ -5,7 +5,9 @@
 
 
 
-. $PWD/etc/build_dir.sh
+if [[ ! $RUNME ]]; then
+    . $PWD/etc/build_dir.sh
+fi
 
 
 dir=$BUILD_DIR/mrv2/src/mrv2-build
