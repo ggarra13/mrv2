@@ -3,11 +3,8 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 set(HEADERS
-    mrvClient.h
-    mrvCommandInterpreter.h
-    mrvCompareOptions.h
-    mrvConnectionHandler.h
     mrvCypher.h
+    mrvCompareOptions.h
     mrvDisplayOptions.h
     mrvDummyClient.h
     mrvFilesModelItem.h
@@ -15,41 +12,51 @@ set(HEADERS
     mrvImageOptions.h
     mrvInsertData.h
     mrvLUTOptions.h
-    mrvMessage.h
-    mrvMessagePublisher.h
-    mrvParseHost.h
-    mrvProtocolVersion.h
-    mrvServer.h
     mrvTCP.h
+    mrvMessage.h
 )
 
 set(SOURCES
-    mrvClient.cpp
-    mrvCommandInterpreter.cpp
-    mrvCompareOptions.cpp
-    mrvConnectionHandler.cpp
     mrvCypher.cpp
+    mrvCompareOptions.cpp
     mrvDisplayOptions.cpp
     mrvFilesModelItem.cpp
     mrvFilePath.cpp
     mrvImageOptions.cpp
     mrvInsertData.cpp
     mrvLUTOptions.cpp
-    # mrvMessage.cpp
-    mrvMessagePublisher.cpp
-    mrvParseHost.cpp
-    mrvServer.cpp
-    mrvSyncClient.cpp
-    mrvSyncMedia.cpp
-    mrvSyncUI.cpp
     mrvTCP.cpp
 )
+
+
+set( LIBRARIES mrvCore)
+if(MRV2_NETWORK)
+    list(APPEND SOURCES
+    		mrvClient.cpp
+    		mrvMessagePublisher.cpp
+    		mrvParseHost.cpp
+    		mrvSyncClient.cpp
+    		mrvSyncMedia.cpp
+    		mrvSyncUI.cpp
+    		mrvCommandInterpreter.cpp
+    		mrvConnectionHandler.cpp
+    		mrvServer.cpp )
+    list(APPEND HEADERS
+    		mrvMessagePublisher.h
+    		mrvParseHost.h
+    		mrvProtocolVersion.h
+    		mrvClient.h
+    		mrvCommandInterpreter.h
+		mrvConnectionHandler.h
+    		mrvServer.h)
+    list(APPEND LIBRARIES Poco::Net Poco::Foundation )
+endif()
 
 
 add_library(mrvNetwork ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
-set( LIBRARIES mrvCore Poco::Net Poco::Foundation )
+
 
 target_link_libraries(mrvNetwork PUBLIC ${LIBRARIES} )
 set_target_properties(mrvNetwork PROPERTIES FOLDER lib)

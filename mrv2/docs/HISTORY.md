@@ -20,6 +20,8 @@ v0.7.9
      compile log into BUILD-KERNEL-ARCH/BUILD_TYPE/compile.log.
      This helps in debugging problems when building mrv2.
    * Updated windows build script to work with MSVC 2022, not just 2019.
+   * Made all compile options work when off.  You can customize mrv2 to
+     build it with either all the bells and whistles or barebones.
 
 
 

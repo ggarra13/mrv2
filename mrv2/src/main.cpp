@@ -4,17 +4,20 @@
 
 #include <iostream>
 
-#include <pybind11/embed.h>
+#ifdef MRV2_PYBIND11
+#    include <pybind11/embed.h>
 namespace py = pybind11;
+
+#    include "mrvPy/Cmds.h"
+#endif
 
 #include "mrvFl/mrvInit.h"
 
 #include "tlGL/Init.h"
 
-#include "mrvPy/Cmds.h"
-
 #include "mrvApp/App.h"
 
+#ifdef MRV2_PYBIND11
 PYBIND11_EMBEDDED_MODULE(mrv2, m)
 {
     mrv2_enums(m);
@@ -30,12 +33,13 @@ PYBIND11_EMBEDDED_MODULE(mrv2, m)
     mrv2_playlist(m);
     mrv2_io(m);
     mrv2_annotations(m);
-#ifdef TLRENDER_USD
+#    ifdef TLRENDER_USD
     mrv2_usd(m);
-#endif
+#    endif
     mrv2_commands(m);
     mrv2_python_plugins(m);
 }
+#endif
 
 int main(int argc, char* argv[])
 {

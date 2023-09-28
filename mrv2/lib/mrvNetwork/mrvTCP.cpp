@@ -64,8 +64,11 @@ namespace mrv
 
     TCP::TCP() {}
 
-    TCP::TCP(const std::string& host, int16_t port) :
+    TCP::TCP(const std::string& host, int16_t port)
+#ifdef MRV2_NETWORK
+        :
         m_address(host, port)
+#endif
     {
     }
 
@@ -89,11 +92,13 @@ namespace mrv
 
     void TCP::close()
     {
+#ifdef MRV2_NETWORK
         // Check if the socket is initialized and valid
         if (m_socket.impl()->initialized())
         {
             m_socket.close();
         }
+#endif
     }
 
     void TCP::pushMessage(const Message& message)
@@ -200,6 +205,7 @@ namespace mrv
         Message message;
         message["command"] = "***FAILED***";
 
+#ifdef MRV2_NETWORK
         try
         {
             // Read the message length header from the socket
@@ -253,6 +259,7 @@ namespace mrv
             msg["command"] = "std::exception";
             return msg;
         }
+#endif
         return message;
     }
 

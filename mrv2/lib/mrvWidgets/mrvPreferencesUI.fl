@@ -60,9 +60,6 @@ decl {\#include "mrvWidgets/mrvPreferencesTree.h"} {public global
 decl {\#include "mrvWidgets/mrvPopupMenu.h"} {public global
 }
 
-decl {\#include "mrvNetwork/mrvTCP.h"} {private local
-}
-
 decl {\#include "make_ocio_chooser.h"} {public global
 }
 
@@ -318,25 +315,21 @@ If you try to open several mrv2s with different images, all these images will be
                 label FPS
                 user_data this user_data_type {PreferencesUI*}
                 xywh {483 287 20 20} box UP_BOX down_box DOWN_BOX align 8
-                
               }
               Fl_Check_Button uiPrefsHudMemory {
                 label Memory
                 user_data this user_data_type {PreferencesUI*}
                 xywh {337 345 20 20} box UP_BOX down_box DOWN_BOX align 8
-                
               }
               Fl_Check_Button uiPrefsHudCache {
                 label Cache
                 user_data this user_data_type {PreferencesUI*}
                 xywh {483 346 20 20} box UP_BOX down_box DOWN_BOX align 8
-                
               }
               Fl_Check_Button uiPrefsHudAttributes {
                 label Attributes
                 user_data this user_data_type {PreferencesUI*}
                 xywh {653 257 20 20} box UP_BOX down_box DOWN_BOX align 8
-                
               }
             }
           }
@@ -456,7 +449,6 @@ o->redraw();}
             Fl_Check_Button uiAlwaysSaveOnExit {
               label {Always Save on Exit}
               tooltip {When this option is set, mrv2 will save its position and size upon exiting the program.} xywh {458 73 215 25} box UP_BOX down_box DOWN_BOX align 16
-              
             }
             Fl_Group {} {open
               xywh {337 115 451 48} box ROUNDED_BOX
@@ -464,7 +456,6 @@ o->redraw();}
               Fl_Check_Button uiWindowFixedPosition {
                 label {Fixed Position}
                 tooltip {When this option is set, mrv2 will open in the position you set here (except if the window goes out of the Desktop).  If Akways Save on Exit is on, the values are recakculated upon exiting the program.} xywh {348 126 215 25} box UP_BOX down_box DOWN_BOX align 16
-                
               }
               Fl_Value_Input uiWindowXPosition {
                 label {X:}
@@ -481,7 +472,6 @@ o->redraw();}
               Fl_Check_Button uiWindowFixedSize {
                 label {Fixed Size}
                 tooltip {When this option is on, mrv2 will always open to the size you set in W and H.  If Always Save on Exit is on, the values are recalculated upon exiting the program.} xywh {348 221 215 25} box UP_BOX down_box DOWN_BOX align 16
-                
               }
               Fl_Value_Input uiWindowXSize {
                 label {W:}
@@ -509,17 +499,14 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
             Fl_Check_Button uiPrefsFileReqFolder {
               label {Single Click to Travel Drawers}
               tooltip {When using mrv2's file chooser, a single click on a folder will open it.} xywh {358 57 25 27} box UP_BOX down_box DOWN_BOX align 136
-              
             }
             Fl_Check_Button uiPrefsFileReqThumbnails {
               label {Thumbnails Active}
               tooltip {Show thumbnails for known files.} xywh {358 100 25 27} box UP_BOX down_box DOWN_BOX align 136
-              
             }
             Fl_Check_Button uiPrefsUSDThumbnails {
               label {USD Thumbnails}
               tooltip {Show Thumbnails for USD files (can be slow if they are big)} xywh {358 143 25 27} box UP_BOX down_box DOWN_BOX align 136
-              
             }
             Fl_Check_Button uiPrefsNativeFileChooser {
               label {Use Native File Chooser}
@@ -537,7 +524,6 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
               Fl_Check_Button uiPrefsAutoPlayback {
                 label {Auto Playback}
                 tooltip {Start Playback when opening files.} xywh {498 111 25 25} box UP_BOX down_box DOWN_BOX align 4
-                
               }
               Fl_Group {} {open
                 xywh {333 157 450 152} box ROUNDED_BOX
@@ -550,7 +536,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                     xywh {373 215 390 57}
                   } {
                     Fl_Value_Input uiPrefsFPS {
-                      label Speed selected
+                      label Speed
                       tooltip {Frames Per Second value for sequences that don't have embedded speed.} xywh {463 222 80 25} color 20 selection_color 0 maximum 120 value 24 textcolor 56
                     }
                     Fl_Menu_Button {} {
@@ -657,12 +643,10 @@ v->uiPrefsFPS->value( g );}
             Fl_Check_Button uiPrefsTimelineThumbnails {
               label {Preview Thumbnails}
               tooltip {Thumbnails above timeline (does not work on Wayland)} xywh {397 88 63 20} down_box DOWN_BOX value 1
-              
             }
             Fl_Check_Button uiPrefsRemoveEDLs {
               label {Remove EDLs in Temporary Folder on Exit}
               tooltip {When selected, temporary EDLs (Playlists) will be removed from the temporary folder.} xywh {397 120 73 20} down_box DOWN_BOX value 1
-              
             }
             Fl_Group {} {
               label {Edit Viewport} open
@@ -693,27 +677,22 @@ v->uiPrefsFPS->value( g );}
               Fl_Check_Button uiPrefsShowTransitions {
                 label {Show Transitions}
                 tooltip {Show Transitions in Edit Viewport} xywh {565 309 15 20} down_box DOWN_BOX value 1 align 4
-                
               }
               Fl_Check_Button uiPrefsShowMarkers {
                 label {Show Markers}
                 tooltip {Show Markers in Edit Viewport} xywh {565 338 15 20} down_box DOWN_BOX value 1 align 4
-                
               }
               Fl_Check_Button uiPrefsTimelineEditable {
                 label Editable
                 tooltip {Editable Timeline Viewport.} xywh {565 213 15 20} down_box DOWN_BOX value 1 align 4 hide
-                
               }
               Fl_Check_Button uiPrefsEditAssociatedClips {
                 label {Edit Associated Clips}
                 tooltip {Edit Associated Clips.} xywh {565 243 15 20} down_box DOWN_BOX value 1 align 4 hide
-                
               }
               Fl_Check_Button uiPrefsEditMode {
                 label {Start in Edit mode}
                 tooltip {Editing viewport will be visible at start up.} xywh {565 181 63 24} down_box DOWN_BOX value 1 align 4
-                
               }
             }
           }

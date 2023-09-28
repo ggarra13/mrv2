@@ -44,7 +44,9 @@ namespace
 
 namespace mrv
 {
+#ifdef MRV2_PYBIND11
     OrderedMap<std::string, py::handle > pythonMenus;
+#endif
 
     float kCrops[] = {0.00f, 1.00f, 1.19f, 1.37f, 1.50f, 1.56f, 1.66f, 1.77f,
                       1.85f, 2.00f, 2.10f, 2.20f, 2.35f, 2.39f, 4.00f};
@@ -416,6 +418,7 @@ namespace mrv
                 else
                     item->clear();
             }
+#ifdef MRV2_PYBIND11
             else if (tmp == _("Python"))
             {
                 if (pythonPanel)
@@ -423,6 +426,7 @@ namespace mrv
                 else
                     item->clear();
             }
+#endif
             else if (tmp == _("Network"))
             {
 #ifdef MRV2_NETWORK
@@ -1124,12 +1128,14 @@ namespace mrv
                 item->clear();
         }
 
+#ifdef MRV2_PYBIND11
         for (const auto& entry : pythonMenus)
         {
             menu->add(
                 entry.c_str(), 0, (Fl_Callback*)run_python_method_cb,
                 (void*)&pythonMenus.at(entry));
         }
+#endif
 
         menu->add(
             _("Help/Documentation"), 0, (Fl_Callback*)help_documentation_cb,

@@ -37,7 +37,9 @@
 
 #include "mrvEdit/mrvEditUtil.h"
 
-#include "mrvPDF/mrvSavePDF.h"
+#ifdef MRV2_PDF
+#    include "mrvPDF/mrvSavePDF.h"
+#endif
 
 #include "mrvNetwork/mrvTCP.h"
 #include "mrvNetwork/mrvCypher.h"
@@ -355,6 +357,7 @@ namespace mrv
 
     void save_pdf_cb(Fl_Menu_* w, ViewerUI* ui)
     {
+#ifdef MRV2_PDF
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
@@ -368,6 +371,7 @@ namespace mrv
             return;
 
         save_pdf(file, ui);
+#endif
     }
 
     void close_current_cb(Fl_Widget* w, ViewerUI* ui)
@@ -432,8 +436,10 @@ namespace mrv
             vectorscopePanel->save();
         if (environmentMapPanel)
             environmentMapPanel->save();
+#ifdef MRV2_PYBIND11
         if (pythonPanel)
             pythonPanel->save();
+#endif
 #ifdef MRV2_NETWORK
         if (networkPanel)
             networkPanel->save();

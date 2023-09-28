@@ -19,7 +19,6 @@ endif()
 # the stdc++fs library properly. 
 #
 set( LIBRARIES
-    mrvPy
     mrvApp
     mrvPanels
     mrvWidgets
@@ -29,6 +28,11 @@ set( LIBRARIES
     mrvNetwork
     mrvCore
     ${Intl_LIBRARIES} )
+
+if(MRV2_PYBIND11)
+    list(PREPEND LIBRARIES mrvPy)
+endif()
+
 
 if( APPLE )
     set( OSX_FRAMEWORKS "-framework Cocoa -framework IOKit" )

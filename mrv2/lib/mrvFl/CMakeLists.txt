@@ -47,7 +47,16 @@ set(SOURCES
 add_library(mrvFl ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
-set( LIBRARIES mrvEdit mrvUI mrvPDF pybind11::embed )
+set( LIBRARIES mrvEdit mrvUI )
+
+if(MRV2_PDF)
+    list( APPEND LIBRARIES mrvPDF )
+endif()
+
+if(MRV2_PYBIND11)
+    list( APPEND LIBRARIES pybind11::embed )
+endif()
+
 if (WIN32)
     list(APPEND LIBRARIES comsuppw)
 endif()
