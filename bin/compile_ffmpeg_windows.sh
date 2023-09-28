@@ -77,15 +77,13 @@ if [[ $MSYS_LIBS == 1 ]]; then
     if [[ $FFMPEG_GPL == GPL ]]; then
 	echo
 	echo "Installing packages needed to build libvpx, libx264 and FFmpeg..."
-	pacman -Sy mingw-w64-x86_64-gcc --noconfirm
     else
 	echo
 	echo "Installing packages needed to build libvpx and FFmpeg..."
     fi
     echo
     
-    pacman -Sy make diffutils yasm nasm pkg-config \
-	   mingw-w64-x86_64-toolchain --noconfirm
+    pacman -Sy make diffutils yasm nasm pkg-config --noconfirm
 
 fi
 
@@ -101,44 +99,6 @@ mkdir -p build
 #############
 ## BUILDING #
 #############
-
-## Build libvpx
-ENABLE_LIBVPX=""
-if [[ $BUILD_LIBVPX == 1 ]]; then
-    cd $ROOT_DIR/sources
-    if [[ ! -d libvpx ]]; then
-	git clone --depth 1 https://chromium.googlesource.com/webm/libvpx
-    fi
-    
-    if [[ ! -e $INSTALL_DIR/lib/vpx.lib ]]; then
-	cd $ROOT_DIR/build
-	mkdir -p libvpx
-	cd libvpx
-    
-	echo
-	echo "Compiling libvpx......"
-	echo
-
-	
-	./../../sources/libvpx/configure --prefix=$INSTALL_DIR \
-					 --target=x86_64-win64-vs16 \
-					 --disable-examples \
-					 --disable-docs \
-					 --disable-unit-tests \
-					 --disable-debug \
-					 --log=no \
-					 --disable-debug-libs \
-					 --disable-dependency-tracking
-	make -j ${CPU_CORES}
-	make install
-	run_cmd mv $INSTALL_DIR/lib/x64/vpxmd.lib $INSTALL_DIR/lib/vpx.lib
-	run_cmd rm -rf $INSTALL_DIR/lib/x64/
-    fi
-    
-    ENABLE_LIBVPX='--enable-libvpx --extra-libs=vpx.lib --extra-libs=kernel32.lib --extra-libs=user32.lib --extra-libs=gdi32.lib --extra-libs=winspool.lib --extra-libs=shell32.lib --extra-libs=ole32.lib --extra-libs=oleaut32.lib --extra-libs=uuid.lib --extra-libs=comdlg32.lib --extra-libs=advapi32.lib --extra-libs=msvcrt.lib'
-fi
-
-
 #
 # Build x264
 #
@@ -180,8 +140,46 @@ else
     fi
 fi
 
+## Build libvpx
+ENABLE_LIBVPX=""
+if [[ $BUILD_LIBVPX == 1 ]]; then
+    cd $ROOT_DIR/sources
+    if [[ ! -d libvpx ]]; then
+	git clone --depth 1 https://chromium.googlesource.com/webm/libvpx
+    fi
+    
+    if [[ ! -e $INSTALL_DIR/lib/vpx.lib ]]; then
+	cd $ROOT_DIR/build
+	mkdir -p libvpx
+	cd libvpx
+    
+	echo
+	echo "Compiling libvpx......"
+	echo
+
+	
+	./../../sources/libvpx/configure --prefix=$INSTALL_DIR \
+					 --target=x86_64-win64-vs16 \
+					 --disable-examples \
+					 --disable-docs \
+					 --disable-unit-tests \
+					 --disable-debug \
+					 --log=no \
+					 --disable-debug-libs \
+					 --disable-dependency-tracking
+	make -j ${CPU_CORES}
+	make install
+	run_cmd mv $INSTALL_DIR/lib/x64/vpxmd.lib $INSTALL_DIR/lib/vpx.lib
+	run_cmd rm -rf $INSTALL_DIR/lib/x64/
+    fi
+    
+    ENABLE_LIBVPX='--enable-libvpx --extra-libs=vpx.lib --extra-libs=kernel32.lib --extra-libs=user32.lib --extra-libs=gdi32.lib --extra-libs=winspool.lib --extra-libs=shell32.lib --extra-libs=ole32.lib --extra-libs=oleaut32.lib --extra-libs=uuid.lib --extra-libs=comdlg32.lib --extra-libs=advapi32.lib --extra-libs=msvcrt.lib'
+fi
+
+
+
 #
-# Build ffmpeg
+# Build FFmpeg
 #
 
 if [[ $BUILD_FFMPEG == 1 ]]; then
