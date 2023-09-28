@@ -66,7 +66,7 @@ for i in $@; do
 	    ;;
 	dist)
 	    export DIST=1
-	    if [[ ! $RUNME ]]; then
+	    if [[ $RUNME == 0 ]]; then
 		echo $0
 		echo "dist option can only be run with the runme.sh script"
 		exit 1
@@ -75,7 +75,7 @@ for i in $@; do
 	    ;;
 	clean)
 	    export CLEAN_DIR=1
-	    if [[ ! $RUNME ]]; then
+	    if [[ $RUNME == 0 ]]; then
 		echo $0
 		echo "clean option can only be run with the runme.sh script"
 		exit 1
@@ -110,7 +110,7 @@ for i in $@; do
 	    ;;
 	-G)
 	    shift
-	    if [[ ! $RUNME ]]; then
+	    if [[ $RUNME == 0 ]]; then
 		echo $0
 		echo "Cmake generator can only be run with the runme.sh script"
 		exit 1
@@ -124,17 +124,25 @@ for i in $@; do
 	    shift
 	    ;;
 	-h|-help|--help)
-	    echo "$0 [debug] [clean] [dist] [-v] [-j <num>] [-lgpl] [-gpl] [-D VAR=VALUE] [-help]"
-	    echo ""
-	    echo "* debug builds a debug build."
-	    echo "* clean clears the directory before building -- use only with runme.sh"
-	    echo "* dist builds a Mojave compatible distribution (macOS)."
-	    echo "* -j <num>  controls the threads to use when compiling. [default=$CPU_CORES]"
-	    echo "* -v builds verbosely. [default=off]"
-	    echo "* -D sets cmake variables, like -D TLRENDER_USD=OFF."
-	    echo "* -gpl builds FFmpeg with x264 encoder support in a GPL version of it."
-	    echo "* -lgpl builds FFmpeg as a LGPL version of it."
-	    echo "* -t <target> sets the cmake target to run. [default=none]"
+	    if [[ $RUNME == 1 ]]; then
+		echo "$0 [debug] [clean] [dist] [-v] [-j <num>] [-lgpl] [-gpl] [-D VAR=VALUE] [-t <targe>] [-help]"
+		echo ""
+		echo "* debug builds a debug build."
+		echo "* clean clears the directory before building -- use only with runme.sh"
+		echo "* dist builds a Mojave compatible distribution (macOS)."
+		echo "* -j <num>  controls the threads to use when compiling. [default=$CPU_CORES]"
+		echo "* -v builds verbosely. [default=off]"
+		echo "* -D sets cmake variables, like -D TLRENDER_USD=OFF."
+		echo "* -gpl builds FFmpeg with x264 encoder support in a GPL version of it."
+		echo "* -lgpl builds FFmpeg as a LGPL version of it."
+		echo "* -t <target> sets the cmake target to run. [default=none]"
+	    else
+		echo "$0 [debug] [-v] [-j <num>] [-help]"
+		echo ""
+		echo "* debug builds a debug build."
+		echo "* -j <num>  controls the threads to use when compiling. [default=$CPU_CORES]"
+		echo "* -v builds verbosely. [default=off]"
+	    fi
 	    exit 1
 	    ;;
     esac
@@ -171,7 +179,7 @@ if [[ $CLEAN_DIR == 1 ]]; then
     fi
 fi
 
-if [[ $RUNME && $0 != *runme.sh* ]]; then
+if [[ $RUNME == 1 && $0 != *runme.sh* ]]; then
     echo "Build directory is ${BUILD_DIR}"
     echo "Version to build is v${mrv2_VERSION}"
     echo "Architecture is ${ARCH}"
@@ -188,15 +196,21 @@ if [[ $RUNME && $0 != *runme.sh* ]]; then
     echo "CMake flags are ${CMAKE_FLAGS}"
     echo "Compiler flags are ${FLAGS}"
     cmake --version
+
+
+    sleep 10
+
+
     mkdir -p $BUILD_DIR/install
     
     if [[ $FFMPEG_GPL == LGPL ]]; then
+	echo "Removing GPL libx264..."
 	rm -rf $BUILD_DIR/install/bin/libx264*.dll
 	rm -rf $BUILD_DIR/install/lib/libx264.lib
     fi
 fi
 
-if [[ $RUNME ]]; then
+if [[ $RUNME == 1 && $0 == *runme_nolog.sh* ]]; then
     if [[ $KERNEL == *Msys* ]]; then
 	. $PWD/etc/compile_windows_dlls.sh
     fi

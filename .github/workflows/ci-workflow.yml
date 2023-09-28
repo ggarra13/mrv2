@@ -52,7 +52,7 @@ jobs:
 
     - name: Build mrv2
       run: >
-        ./runme.sh
+        ./runme_nolog.sh
 
 
   windows-build:
@@ -79,7 +79,7 @@ jobs:
 
     - name: Build mrv2
       run: >
-        ./runme.sh -D TLRENDER_USD=OFF
+        ./runme_nolog.sh -D TLRENDER_USD=OFF
 
 
   linux-quick-build:
@@ -131,7 +131,7 @@ jobs:
 
     - name: Build mrv2
       run: >
-        ./runme.sh -D TLRENDER_USD=OFF
+        ./runme_nolog.sh -D TLRENDER_USD=OFF
 
 
   macos-build:
@@ -164,7 +164,7 @@ jobs:
     - name: Build mrv2
       run: >
         export DYLD_LIBRARY_PATH=$PWD/BUILD-Darwin-amd64/Release/install/lib:$DYLD_LIBRARY_PATH &&
-        ./runme.sh dist
+        ./runme_nolog.sh dist
 
 
   macos-quick-build:
@@ -200,4 +200,31 @@ jobs:
     - name: Build mrv2
       run: >
         export DYLD_LIBRARY_PATH=$PWD/BUILD-Darwin-amd64/Release/install/lib:$DYLD_LIBRARY_PATH &&
-        ./runme.sh -v -D TLRENDER_USD=OFF
+        ./runme_nolog.sh -v -D TLRENDER_USD=OFF
+
+  windows-gpl-build:
+    runs-on: windows-latest
+
+    defaults:
+      run:
+        shell: msys2 {0}
+
+    steps:
+
+    - uses: actions/checkout@v2
+      with:
+        submodules: recursive
+
+    - name: Setup environment
+      uses: ilammy/msvc-dev-cmd@v1
+
+    - name: Setup MSYS
+      uses: msys2/setup-msys2@v2
+      with:
+        update: true
+        path-type: inherit
+
+    - name: Build mrv2
+      run: >
+        ./runme_nolog.sh -gpl -D TLRENDER_USD=OFF
+

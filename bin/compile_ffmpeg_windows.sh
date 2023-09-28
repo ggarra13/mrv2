@@ -208,7 +208,7 @@ if [[ $BUILD_FFMPEG == 1 ]]; then
             $ENABLE_LIBX264 \
 	    $ENABLE_LIBVPX \
             --extra-ldflags="-LIBPATH:$INSTALL_DIR/lib/" \
-            --extra-cflags="-I$INSTALL_DIR/include/"
+            --extra-cflags="-I$INSTALL_DIR/include/ -wd4828"
 
 	# @bug: MSVC creates bad characters on MSVC with different languages but
 	# we can't fix it
