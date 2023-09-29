@@ -223,6 +223,9 @@ namespace mrv
 #ifdef TLRENDER_EXR
         f = new FormatInfo(true, true, false, "EXR", "tlRender", "ILM OpenEXR");
         formats.push_back(f);
+        f = new FormatInfo(
+            true, true, false, "SXR", "tlRender", "ILM Stereo OpenEXR");
+        formats.push_back(f);
 #endif
 
 #ifdef TLRENDER_JPEG
@@ -236,7 +239,8 @@ namespace mrv
 #endif
 
 #ifdef TLRENDER_STB
-        f = new FormatInfo(true, false, false, "PSD", "tlRender", "Photoshop");
+        f = new FormatInfo(
+            true, false, false, "PSD", "tlRender", "Photoshop Document");
         formats.push_back(f);
 
         f = new FormatInfo(
@@ -250,15 +254,164 @@ namespace mrv
 #endif
 
 #ifdef TLRENDER_TIFF
-        f = new FormatInfo(true, true, false, "TIFF", "tlRender", "TIFF");
+        f = new FormatInfo(
+            true, true, false, "TIFF", "tlRender", "Tagged Image File Format");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, true, false, "TIF", "tlRender", "Tagged Image File Format");
         formats.push_back(f);
 #endif
 
         f = new FormatInfo(true, true, false, "Cineon", "tlRender", "Cineon");
         formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "OTIO", "tlRender", "OpenTimelineIO");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "PPM", "tlRender", "Portable Pixmap");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "RGB", "tlRender",
+            "Silicon Graphics RGB Picture");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "RGBA", "tlRender",
+            "Silicon Graphics RGBA Picture");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "SGI", "tlRender", "Silicon Graphics Image");
+        formats.push_back(f);
 
 #ifdef TLRENDER_RAW
-        f = new FormatInfo(true, false, false, "RAW", "tlRender", "RAW Camera");
+        f = new FormatInfo(
+            true, false, false, "3FR", "tlRender", "Hasselblad RAW Camera");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "ARW", "tlRender", "Sony RAW Camera");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "BAY", "tlRender", "Phase One RAW Camera");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "BMQ", "tlRender", "RAW Image File");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "CAP", "tlRender", "RAW Image File");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "CINE", "tlRender",
+            "Vision Research's Phantom RAW Camera");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "CR2", "tlRender", "Canon RAW Camera");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "CR3", "tlRender", "Canon RAW Camera");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "CRW", "tlRender", "Canon RAW Camera");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "CS1", "tlRender",
+            "CaptureShop 1-shot RAW Image");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "DC2", "tlRender", "Kodak RAW Camera");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "DCR", "tlRender", "Kodak RAW Camera");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "DNG", "tlRender", "Digital Negative Camera");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "DRF", "tlRender", "RAW Image File");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "DSC", "tlRender", "Digitial Still RAW Camera");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "ERF", "tlRender", "Epson RAW Camera");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "FFF", "tlRender", "Hasselblad RAW Camera");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "IA", "tlRender", "RAW Image File");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "IIQ", "tlRender", "Phase One RAW Camera");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "KDC", "tlRender", "Kodak RAW Camera");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "MDC", "tlRender", "Minolta RAW Camera");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "MEF", "tlRender", "Mamiya Electronic");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "MOS", "tlRender", "Leaf RAW Camera");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "MRW", "tlRender", "Minolta RAW Camera");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "MRW", "tlRender", "Minolta RAW Camera");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "NEF", "tlRender", "Nikon Electronic");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "NRW", "tlRender", "Nikon RAW Camera");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "ORF", "tlRender", "Olympus RAW Camera");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "PEF", "tlRender",
+            "Pentax Electronic File (Ricoh)");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "PTX", "tlRender", "Pentax RAW Camera");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "PXN", "tlRender",
+            "Logitech Fotoman Pixtura Camera");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "QTK", "tlRender", "Apple QuickTake Camera");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "RAF", "tlRender", "Fujifilm RAW Camera");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "RDC", "tlRender", "Red Digital Clip");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "RW2", "tlRender", "Panasonic RAW Camera");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "RWL", "tlRender", "Leica RAW Camera");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "RWZ", "tlRender", "RAW Image File");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "SR2", "tlRender", "Sony RAW Camera");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "SRF", "tlRender", "Sony RAW Camera");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "SRW", "tlRender", "Samsung RAW Camera");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "STI", "tlRender", "RAW Image File");
+        formats.push_back(f);
+        f = new FormatInfo(
+            true, false, false, "X3F", "tlRender", "Sigma (Foveon) RAW Camera");
         formats.push_back(f);
 #endif
 

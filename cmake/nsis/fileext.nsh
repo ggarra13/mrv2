@@ -102,7 +102,7 @@ System::Free $9
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".dcr" "Kodak RAW Camera Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".dng" "Digital Negative Camera Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".dpx" "Digital Picture Exchange" 1
-!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".drf" "RAW Image Filr" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".drf" "RAW Image File" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".dsc" "Digital Still RAW Camera Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".erf" "Epson RAW Camera Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".exr" "ILM OpenEXR" 1
@@ -121,12 +121,10 @@ System::Free $9
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".nrw" "Nikon RAW Camera Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".orf" "Olympus RAW Camera Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".otio" "OpenTimelineIO Format" 1
-!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".pbm" "Portable Bitmap" 1
-!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".pgm" "Portable Graymap" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".pef" "Pentax Electronic File (Ricoh)" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".png" "Portable Network Graphics" 1
-!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".pnm" "Portable Any Map" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".ppm" "Portable Pixmap" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".psd" "Photoshop Document" 0
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".sxr" "ILM Stereo OpenEXR Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".ptx" "Pentax RAW Camera Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".pxn" "Logitech Fotoman Pixtura Camera Format" 1
@@ -138,7 +136,7 @@ System::Free $9
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".rgba" "Silicon Graphics RGBA Picture" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".rw2" "Panasonic RAW Camera Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".rwl" "Leica RAW Camera Format" 1
-!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".rwz" "RAW Camera Format" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".rwz" "RAW Image File" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".sgi" "Silicon Graphics Image" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".sr2" "Sony RAW Camera Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".srf" "Sony RAW Camera Format" 1
