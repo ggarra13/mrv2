@@ -36,7 +36,7 @@ cd -
 
 dir=$BUILD_DIR/mrv2/src/mrv2-build
 
-# Needed to remove mrv2
+# Needed to remove mrv2 to force a relink.
 rm -f $dir/src/mrv2*
 
 if [[ "$CMAKE_TARGET" == "" ]]; then

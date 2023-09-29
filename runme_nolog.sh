@@ -29,17 +29,16 @@ cmd="cmake -G '${CMAKE_GENERATOR}' -D CMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE -D CMAK
 
 run_cmd $cmd
 
-cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE
+run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE
 
 cd -
 
-cmd="./runmeq.sh ${CMAKE_BUILD_TYPE} -t install"
+if [[ "$CMAKE_TARGET" == "" ]]; then
+    CMAKE_TARGET=install
+fi
+
+cmd="./runmeq.sh ${CMAKE_BUILD_TYPE} -t ${CMAKE_TARGET}"
 run_cmd $cmd
 
-if [[ $CMAKE_TARGET == "package" ]]; then
-    cmd="./runmeq.sh ${CMAKE_BUILD_TYPE} -t package"
-    run_cmd $cmd
-else
-    . $PWD/etc/build_end.sh
-fi
+. $PWD/etc/build_end.sh
 

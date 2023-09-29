@@ -221,197 +221,190 @@ namespace mrv
         FormatInfo* f = NULL;
 
 #ifdef TLRENDER_EXR
-        f = new FormatInfo(true, true, false, "EXR", "tlRender", "ILM OpenEXR");
+        f = new FormatInfo(true, true, false, "EXR", "mrv2", "ILM OpenEXR");
         formats.push_back(f);
         f = new FormatInfo(
-            true, true, false, "SXR", "tlRender", "ILM Stereo OpenEXR");
+            true, true, false, "SXR", "mrv2", "ILM Stereo OpenEXR");
         formats.push_back(f);
 #endif
 
 #ifdef TLRENDER_JPEG
-        f = new FormatInfo(true, true, false, "JPEG", "tlRender", "JPEG");
+        f = new FormatInfo(
+            true, true, false, "JPEG", "mrv2",
+            "Joint Photographic Experts Group");
         formats.push_back(f);
 #endif
 
 #ifdef TLRENDER_PNG
-        f = new FormatInfo(true, true, false, "PNG", "tlRender", "PNG");
+        f = new FormatInfo(true, true, false, "PNG", "mrv2", "PNG");
         formats.push_back(f);
 #endif
 
 #ifdef TLRENDER_STB
         f = new FormatInfo(
-            true, false, false, "PSD", "tlRender", "Photoshop Document");
+            true, false, false, "PSD", "mrv2", "Photoshop Document");
         formats.push_back(f);
 
         f = new FormatInfo(
-            true, true, false, "TGA", "tlRender",
-            "Truevision Graphics Adapter");
+            true, true, false, "TGA", "mrv2", "Truevision Graphics Adapter");
         formats.push_back(f);
 
         f = new FormatInfo(
-            true, true, false, "BMP", "tlRender", "Bitmap Image File");
+            true, true, false, "BMP", "mrv2", "Bitmap Image File");
         formats.push_back(f);
 #endif
 
 #ifdef TLRENDER_TIFF
         f = new FormatInfo(
-            true, true, false, "TIFF", "tlRender", "Tagged Image File Format");
+            true, true, false, "TIFF", "mrv2", "Tagged Image File Format");
         formats.push_back(f);
         f = new FormatInfo(
-            true, true, false, "TIF", "tlRender", "Tagged Image File Format");
+            true, true, false, "TIF", "mrv2", "Tagged Image File Format");
         formats.push_back(f);
 #endif
 
-        f = new FormatInfo(true, true, false, "Cineon", "tlRender", "Cineon");
+        f = new FormatInfo(true, true, false, "Cineon", "mrv2", "Cineon");
+        formats.push_back(f);
+        f = new FormatInfo(true, true, false, "DPX", "mrv2", "DPX");
         formats.push_back(f);
         f = new FormatInfo(
-            true, false, false, "OTIO", "tlRender", "OpenTimelineIO");
+            true, false, false, "OTIO", "mrv2", "OpenTimelineIO");
+        formats.push_back(f);
+        f = new FormatInfo(true, true, false, "PPM", "mrv2", "Portable Pixmap");
         formats.push_back(f);
         f = new FormatInfo(
-            true, false, false, "PPM", "tlRender", "Portable Pixmap");
+            true, true, false, "RGB", "mrv2", "Silicon Graphics RGB Picture");
         formats.push_back(f);
         f = new FormatInfo(
-            true, false, false, "RGB", "tlRender",
-            "Silicon Graphics RGB Picture");
+            true, true, false, "RGBA", "mrv2", "Silicon Graphics RGBA Picture");
         formats.push_back(f);
         f = new FormatInfo(
-            true, false, false, "RGBA", "tlRender",
-            "Silicon Graphics RGBA Picture");
-        formats.push_back(f);
-        f = new FormatInfo(
-            true, false, false, "SGI", "tlRender", "Silicon Graphics Image");
+            true, true, false, "SGI", "mrv2", "Silicon Graphics Image");
         formats.push_back(f);
 
 #ifdef TLRENDER_RAW
         f = new FormatInfo(
-            true, false, false, "3FR", "tlRender", "Hasselblad RAW Camera");
+            true, false, false, "3FR", "mrv2", "Hasselblad RAW Camera");
         formats.push_back(f);
         f = new FormatInfo(
-            true, false, false, "ARW", "tlRender", "Sony RAW Camera");
+            true, false, false, "ARW", "mrv2", "Sony RAW Camera");
         formats.push_back(f);
         f = new FormatInfo(
-            true, false, false, "BAY", "tlRender", "Phase One RAW Camera");
+            true, false, false, "BAY", "mrv2", "Phase One RAW Camera");
+        formats.push_back(f);
+        f = new FormatInfo(true, false, false, "BMQ", "mrv2", "RAW Image File");
+        formats.push_back(f);
+        f = new FormatInfo(true, false, false, "CAP", "mrv2", "RAW Image File");
         formats.push_back(f);
         f = new FormatInfo(
-            true, false, false, "BMQ", "tlRender", "RAW Image File");
-        formats.push_back(f);
-        f = new FormatInfo(
-            true, false, false, "CAP", "tlRender", "RAW Image File");
-        formats.push_back(f);
-        f = new FormatInfo(
-            true, false, false, "CINE", "tlRender",
+            true, false, false, "CINE", "mrv2",
             "Vision Research's Phantom RAW Camera");
         formats.push_back(f);
         f = new FormatInfo(
-            true, false, false, "CR2", "tlRender", "Canon RAW Camera");
+            true, false, false, "CR2", "mrv2", "Canon RAW Camera");
         formats.push_back(f);
         f = new FormatInfo(
-            true, false, false, "CR3", "tlRender", "Canon RAW Camera");
+            true, false, false, "CR3", "mrv2", "Canon RAW Camera");
         formats.push_back(f);
         f = new FormatInfo(
-            true, false, false, "CRW", "tlRender", "Canon RAW Camera");
+            true, false, false, "CRW", "mrv2", "Canon RAW Camera");
         formats.push_back(f);
         f = new FormatInfo(
-            true, false, false, "CS1", "tlRender",
-            "CaptureShop 1-shot RAW Image");
+            true, false, false, "CS1", "mrv2", "CaptureShop 1-shot RAW Image");
         formats.push_back(f);
         f = new FormatInfo(
-            true, false, false, "DC2", "tlRender", "Kodak RAW Camera");
+            true, false, false, "DC2", "mrv2", "Kodak RAW Camera");
         formats.push_back(f);
         f = new FormatInfo(
-            true, false, false, "DCR", "tlRender", "Kodak RAW Camera");
+            true, false, false, "DCR", "mrv2", "Kodak RAW Camera");
         formats.push_back(f);
         f = new FormatInfo(
-            true, false, false, "DNG", "tlRender", "Digital Negative Camera");
+            true, false, false, "DNG", "mrv2", "Digital Negative Camera");
+        formats.push_back(f);
+        f = new FormatInfo(true, false, false, "DRF", "mrv2", "RAW Image File");
         formats.push_back(f);
         f = new FormatInfo(
-            true, false, false, "DRF", "tlRender", "RAW Image File");
+            true, false, false, "DSC", "mrv2", "Digitial Still RAW Camera");
         formats.push_back(f);
         f = new FormatInfo(
-            true, false, false, "DSC", "tlRender", "Digitial Still RAW Camera");
+            true, false, false, "ERF", "mrv2", "Epson RAW Camera");
         formats.push_back(f);
         f = new FormatInfo(
-            true, false, false, "ERF", "tlRender", "Epson RAW Camera");
+            true, false, false, "FFF", "mrv2", "Hasselblad RAW Camera");
+        formats.push_back(f);
+        f = new FormatInfo(true, false, false, "IA", "mrv2", "RAW Image File");
         formats.push_back(f);
         f = new FormatInfo(
-            true, false, false, "FFF", "tlRender", "Hasselblad RAW Camera");
+            true, false, false, "IIQ", "mrv2", "Phase One RAW Camera");
         formats.push_back(f);
         f = new FormatInfo(
-            true, false, false, "IA", "tlRender", "RAW Image File");
+            true, false, false, "KDC", "mrv2", "Kodak RAW Camera");
         formats.push_back(f);
         f = new FormatInfo(
-            true, false, false, "IIQ", "tlRender", "Phase One RAW Camera");
+            true, false, false, "MDC", "mrv2", "Minolta RAW Camera");
         formats.push_back(f);
         f = new FormatInfo(
-            true, false, false, "KDC", "tlRender", "Kodak RAW Camera");
+            true, false, false, "MEF", "mrv2", "Mamiya Electronic");
         formats.push_back(f);
         f = new FormatInfo(
-            true, false, false, "MDC", "tlRender", "Minolta RAW Camera");
+            true, false, false, "MOS", "mrv2", "Leaf RAW Camera");
         formats.push_back(f);
         f = new FormatInfo(
-            true, false, false, "MEF", "tlRender", "Mamiya Electronic");
+            true, false, false, "MRW", "mrv2", "Minolta RAW Camera");
         formats.push_back(f);
         f = new FormatInfo(
-            true, false, false, "MOS", "tlRender", "Leaf RAW Camera");
+            true, false, false, "MRW", "mrv2", "Minolta RAW Camera");
         formats.push_back(f);
         f = new FormatInfo(
-            true, false, false, "MRW", "tlRender", "Minolta RAW Camera");
+            true, false, false, "NEF", "mrv2", "Nikon Electronic");
         formats.push_back(f);
         f = new FormatInfo(
-            true, false, false, "MRW", "tlRender", "Minolta RAW Camera");
+            true, false, false, "NRW", "mrv2", "Nikon RAW Camera");
         formats.push_back(f);
         f = new FormatInfo(
-            true, false, false, "NEF", "tlRender", "Nikon Electronic");
+            true, false, false, "ORF", "mrv2", "Olympus RAW Camera");
         formats.push_back(f);
         f = new FormatInfo(
-            true, false, false, "NRW", "tlRender", "Nikon RAW Camera");
-        formats.push_back(f);
-        f = new FormatInfo(
-            true, false, false, "ORF", "tlRender", "Olympus RAW Camera");
-        formats.push_back(f);
-        f = new FormatInfo(
-            true, false, false, "PEF", "tlRender",
+            true, false, false, "PEF", "mrv2",
             "Pentax Electronic File (Ricoh)");
         formats.push_back(f);
         f = new FormatInfo(
-            true, false, false, "PTX", "tlRender", "Pentax RAW Camera");
+            true, false, false, "PTX", "mrv2", "Pentax RAW Camera");
         formats.push_back(f);
         f = new FormatInfo(
-            true, false, false, "PXN", "tlRender",
+            true, false, false, "PXN", "mrv2",
             "Logitech Fotoman Pixtura Camera");
         formats.push_back(f);
         f = new FormatInfo(
-            true, false, false, "QTK", "tlRender", "Apple QuickTake Camera");
+            true, false, false, "QTK", "mrv2", "Apple QuickTake Camera");
         formats.push_back(f);
         f = new FormatInfo(
-            true, false, false, "RAF", "tlRender", "Fujifilm RAW Camera");
+            true, false, false, "RAF", "mrv2", "Fujifilm RAW Camera");
         formats.push_back(f);
         f = new FormatInfo(
-            true, false, false, "RDC", "tlRender", "Red Digital Clip");
+            true, false, false, "RDC", "mrv2", "Red Digital Clip");
         formats.push_back(f);
         f = new FormatInfo(
-            true, false, false, "RW2", "tlRender", "Panasonic RAW Camera");
+            true, false, false, "RW2", "mrv2", "Panasonic RAW Camera");
         formats.push_back(f);
         f = new FormatInfo(
-            true, false, false, "RWL", "tlRender", "Leica RAW Camera");
+            true, false, false, "RWL", "mrv2", "Leica RAW Camera");
+        formats.push_back(f);
+        f = new FormatInfo(true, false, false, "RWZ", "mrv2", "RAW Image File");
         formats.push_back(f);
         f = new FormatInfo(
-            true, false, false, "RWZ", "tlRender", "RAW Image File");
+            true, false, false, "SR2", "mrv2", "Sony RAW Camera");
         formats.push_back(f);
         f = new FormatInfo(
-            true, false, false, "SR2", "tlRender", "Sony RAW Camera");
+            true, false, false, "SRF", "mrv2", "Sony RAW Camera");
         formats.push_back(f);
         f = new FormatInfo(
-            true, false, false, "SRF", "tlRender", "Sony RAW Camera");
+            true, false, false, "SRW", "mrv2", "Samsung RAW Camera");
+        formats.push_back(f);
+        f = new FormatInfo(true, false, false, "STI", "mrv2", "RAW Image File");
         formats.push_back(f);
         f = new FormatInfo(
-            true, false, false, "SRW", "tlRender", "Samsung RAW Camera");
-        formats.push_back(f);
-        f = new FormatInfo(
-            true, false, false, "STI", "tlRender", "RAW Image File");
-        formats.push_back(f);
-        f = new FormatInfo(
-            true, false, false, "X3F", "tlRender", "Sigma (Foveon) RAW Camera");
+            true, false, false, "X3F", "mrv2", "Sigma (Foveon) RAW Camera");
         formats.push_back(f);
 #endif
 
@@ -723,7 +716,7 @@ namespace mrv
           << endl
           << "Copyright (c) 2013-Present Niels Lohmann" << endl
           << endl
-          << "OFL" << endl
+          << "OFL (Open Font License)" << endl
           << "Copyright (c) 26 February 2007" << endl
           << endl
           << "OpenColorIO v" << OCIO::GetVersion() << endl
@@ -804,7 +797,7 @@ namespace mrv
           << "Copyright (c) 2005-2019 Intel Corporation" << endl
           << endl
 #endif
-          << "tlRender v" << TLRENDER_VERSION << " (modified)." << endl
+          << "mrv2 v" << TLRENDER_VERSION << " (modified)." << endl
           << "Original at: " << endl
           << "https://www.github.com/darbyjohnston/tlRender" << endl
           << "(C) 2021-Present Darby Johnston." << endl
