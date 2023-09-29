@@ -18,6 +18,8 @@ v0.7.9
    * Added a new runme.sh script that calls runme_nolog.sh but saves the
      compile log into BUILD-KERNEL-ARCH/CMAKE_BUILD_TYPE/compile.log.
    * Updated windows build script to work with MSVC 2022, not just 2019.
+   * The windows compile takes advantage of Msys to install the dependencies
+     of libintl, libiconv and gettext.
    * Made all compile options work when off.  You can customize mrv2 to
      build it with either all the bells and whistles or pretty barebones.
    * Added --help flag to runme.sh to list all the possible settings.
