@@ -6,6 +6,8 @@
 
 #include <tlCore/Vector.h>
 
+#include <Imath/ImathFun.h>
+
 #include "mrvCore/mrvColorSpaces.h"
 
 using tl::image::Color4f;
@@ -138,7 +140,9 @@ namespace mrv
     namespace color
     {
 
+#ifdef TLRENDER_EXR
         Imf::Chromaticities kITU_709_chroma;
+#endif
         Imath::V3f kD50_whitePoint(0.3457f, 0.3585f, 0.2958f);
         Imath::V3f kD65_whitePoint(0.3127f, 0.3290f, 0.3582f);
 
@@ -180,6 +184,7 @@ namespace mrv
 
         namespace rgb
         {
+#ifdef TLRENDER_EXR
             /**
              * @brief Convert color::rgb to xyz.
              *
@@ -302,6 +307,7 @@ namespace mrv
                 luv.b = 13.0f * luv.r * (v1 - vr);
                 return luv;
             }
+#endif
 
             /**
              * @brief Convert a RGB color to HSV

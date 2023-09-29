@@ -5,6 +5,8 @@
 #include <FL/Enumerations.H>
 #include <FL/fl_draw.H>
 
+#include <Imath/ImathFun.h>
+
 #include "mrvWidgets/mrvHistogram.h"
 
 #include "mrViewer.h"

@@ -733,10 +733,12 @@ namespace mrv
           << "http://www.opencolorio.org/" << endl
           << "Copyright Contributors to the OpenColorIO Project." << endl
           << endl
+#ifdef TLRENDER_EXR
           << "OpenEXR v" << OPENEXR_VERSION_STRING << endl
           << "http://www.openexr.org/" << endl
           << "(C) 2005-Present Industrial Light & Magic" << endl
           << endl
+#endif
           << "OpenTimelineIO" << endl
           << "opentime " << AV_STRINGIFY(OPENTIME_VERSION) << endl
           << "opentimelineio " << AV_STRINGIFY(OPENTIMELINEIO_VERSION) << endl
