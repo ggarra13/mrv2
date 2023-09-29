@@ -16,6 +16,8 @@ fi
 
 if [[ ! $RUNME ]]; then
     . etc/build_dir.sh
+else
+    . etc/functions.sh
 fi
 
 #
@@ -48,14 +50,14 @@ if [[ ! -e $INSTALLDIR/lib/liblcms2.lib ]]; then
     mkdir -p $SUPERBUILD
     cd $SUPERBUILD
     if [[ ! -d LCMS2 ]]; then
-	git clone --depth 1 --branch $LCMS_BRANCH https://github.com/mm2/Little-CMS.git LCMS2 2> /dev/null
+	run_cmd git clone --depth 1 --branch $LCMS_BRANCH https://github.com/mm2/Little-CMS.git LCMS2 2> /dev/null
     fi
     
     #
     # Run configure
     #
     cd LCMS2
-    ./configure --enable-shared --disable-static --prefix=$INSTALLDIR
+    run_cmd ./configure --enable-shared --disable-static --prefix=$INSTALLDIR
     
     #
     # Compile and install the library
