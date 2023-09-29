@@ -661,7 +661,7 @@ namespace mrv
           << "Copyright Contributors to the OpenEXR Project" << endl
           << endl
 #ifdef TLRENDER_RAW
-          << jas_getversion() << endl
+          << "Jasper v" << jas_getversion() << endl
           << JAS_COPYRIGHT << endl
           << "Little Color Management System " << (LCMS_VERSION / 1000.0)
           << "Copyright (c) 1998-Present Marti Maria Saguer" << endl
