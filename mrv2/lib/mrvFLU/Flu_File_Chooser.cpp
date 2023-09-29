@@ -329,6 +329,8 @@ void Flu_File_Chooser::previewCB()
             if (e->type == ENTRY_SEQUENCE || e->type == ENTRY_FILE)
             {
                 tl::file::Path path(e->filename);
+                if (path.getExtension() == ".otioz")
+                    continue;
 
                 bool requestIcon = false;
                 if (auto context = p.context.lock())
