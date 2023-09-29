@@ -663,7 +663,8 @@ namespace mrv
 #ifdef TLRENDER_RAW
           << "Jasper v" << jas_getversion() << endl
           << JAS_COPYRIGHT << endl
-          << "Little Color Management System " << (LCMS_VERSION / 1000.0)
+          << "Little Color Management System v" << (LCMS_VERSION / 1000.0)
+          << endl
           << "Copyright (c) 1998-Present Marti Maria Saguer" << endl
           << endl
 #endif
