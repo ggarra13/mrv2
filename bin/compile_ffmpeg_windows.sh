@@ -17,6 +17,8 @@ fi
 
 if [[ ! $RUNME ]]; then
     . etc/build_dir.sh
+else
+    . etc/functions.sh
 fi
 
 
