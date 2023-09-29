@@ -89,7 +89,7 @@ System::Free $9
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".3fr" "RAW Camera Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".arw" "RAW Camera Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".bay" "RAW Camera Format" 1
-!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".bmp" "Bitmap Picture" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".bmp" "Bitmap Image File" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".bmq" "RAW Camera Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".cap" "RAW Camera Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".cin" "Kodak Cineon" 1

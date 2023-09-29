@@ -83,6 +83,22 @@ if(TLRENDER_FFMPEG)
     add_definitions(-DTLRENDER_FFMPEG)
 endif()
 
+if(TLRENDER_JPEG)
+    add_definitions(-DTLRENDER_JPEG)
+endif()
+
+if(TLRENDER_PNG)
+    add_definitions(-DTLRENDER_PNG)
+endif()
+
+if(TLRENDER_STB)
+    add_definitions(-DTLRENDER_STB)
+endif()
+
+if(TLRENDER_TIFF)
+    add_definitions(-DTLRENDER_TIFF)
+endif()
+
 if(TLRENDER_GL)
     add_definitions(-DTLRENDER_GL)
 endif()

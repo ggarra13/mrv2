@@ -2,6 +2,12 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <string>
+#include <sstream>
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
 #ifdef __linux__
 
 #    include <sys/types.h>
@@ -35,12 +41,6 @@
 #    include <EGL/egl.h>
 #    include <EGL/eglplatform.h>
 #endif
-
-#include <string>
-#include <sstream>
-#include <iostream>
-#include <vector>
-#include <algorithm>
 
 #include <expat.h>
 #include <Imath/ImathConfig.h>
@@ -81,8 +81,14 @@
 #include <OpenColorIO/OpenColorIO.h>
 namespace OCIO = OCIO_NAMESPACE;
 
-#include <rtaudio/RtAudio.h>
-#include <tiffvers.h>
+#ifdef TLRENDER_AUDIO
+#    include <rtaudio/RtAudio.h>
+#endif
+
+#ifdef TLRENDER_TIFF
+#    include <tiffvers.h>
+#endif
+
 #include <zlib.h>
 
 #ifdef TLRENDER_FFMPEG
@@ -94,6 +100,9 @@ extern "C"
 #    include <libswscale/version.h>
 #    include <libswresample/version.h>
 }
+#else
+#    define AV_STRINGIFY(s) AV_TOSTRING(s)
+#    define AV_TOSTRING(s) #s
 #endif
 
 #ifdef _WIN32
@@ -101,7 +110,6 @@ extern "C"
 #endif
 
 #include "mrvCore/mrvOS.h"
-#undef snprintf
 
 #include "mrvCore/mrvCPU.h"
 
@@ -149,16 +157,9 @@ namespace mrv
         }
     } // namespace
 
-    static const char* kVersion = MRV2_VERSION;
-    static const char* kBuild = "- Built " __DATE__ " " __TIME__;
-
-#if INTPTR_MAX == INT64_MAX
-    static const char* kArch = "64";
-#elif INTPTR_MAX == INT32_MAX
-    static const char* kArch = "32";
-#else
-#    error Unknown pointer size or missing size macros!
-#endif
+    const char* kVersion = MRV2_VERSION;
+    const char* kBuild = "- Built " __DATE__ " " __TIME__;
+    const char* kArch = "64";
 
     struct FormatInfo
     {
@@ -210,30 +211,59 @@ namespace mrv
     void ffmpeg_formats(mrv::Browser& browser)
     {
         using namespace std;
-
+#ifdef TLRENDER_FFMPEG
         const AVInputFormat* ifmt = NULL;
         const AVOutputFormat* ofmt = NULL;
+#endif
         const char* last_name = NULL;
 
         FormatList formats;
         FormatInfo* f = NULL;
 
+#ifdef TLRENDER_EXR
         f = new FormatInfo(true, true, false, "EXR", "tlRender", "ILM OpenEXR");
         formats.push_back(f);
+#endif
 
+#ifdef TLRENDER_JPEG
         f = new FormatInfo(true, true, false, "JPEG", "tlRender", "JPEG");
         formats.push_back(f);
+#endif
 
+#ifdef TLRENDER_PNG
         f = new FormatInfo(true, true, false, "PNG", "tlRender", "PNG");
         formats.push_back(f);
+#endif
 
+#ifdef TLRENDER_STB
+        f = new FormatInfo(true, false, false, "PSD", "tlRender", "Photoshop");
+        formats.push_back(f);
+
+        f = new FormatInfo(
+            true, true, false, "TGA", "tlRender",
+            "Truevision Graphics Adapter");
+        formats.push_back(f);
+
+        f = new FormatInfo(
+            true, true, false, "BMP", "tlRender", "Bitmap Image File");
+        formats.push_back(f);
+#endif
+
+#ifdef TLRENDER_TIFF
         f = new FormatInfo(true, true, false, "TIFF", "tlRender", "TIFF");
         formats.push_back(f);
+#endif
 
         f = new FormatInfo(true, true, false, "Cineon", "tlRender", "Cineon");
         formats.push_back(f);
 
+#ifdef TLRENDER_RAW
+        f = new FormatInfo(true, false, false, "RAW", "tlRender", "RAW Camera");
+        formats.push_back(f);
+#endif
+
         last_name = "000";
+#ifdef TLRENDER_FFMPEG
         for (;;)
         {
             bool decode = false;
@@ -274,7 +304,7 @@ namespace mrv
                 decode, encode, false, name, "FFMPEG", long_name);
             formats.push_back(f);
         }
-
+#endif
         // Sort formats alphabetically
         std::sort(formats.begin(), formats.end(), SortFormatsFunctor());
 
@@ -297,8 +327,7 @@ namespace mrv
 
     static void ffmpeg_codecs(mrv::Browser& browser, int type)
     {
-        using namespace std;
-
+#ifdef TLRENDER_FFMPEG
         const AVCodec* p;
         const AVCodec* p2;
         const char* last_name;
@@ -323,15 +352,8 @@ namespace mrv
                 }
                 if (p2 && strcmp(p->name, p2->name) == 0)
                 {
-#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(59, 33, 100)
                     encode = av_codec_is_encoder(p);
                     decode = av_codec_is_decoder(p);
-#else
-                    if (p->decode)
-                        decode = 1;
-                    if (p->encode2)
-                        encode = 1;
-#endif
                     cap |= p->capabilities;
                 }
             }
@@ -349,43 +371,41 @@ namespace mrv
               << (cap & AV_CODEC_CAP_DR1 ? "D\t" : " \t") << p2->name;
 
             browser.add(o.str().c_str());
-
-            /* if(p2->decoder && decode==0)
-               printf(" use %s for decoding", p2->decoder->name);*/
         }
+#endif
     }
 
     void ffmpeg_audio_codecs(mrv::Browser& browser)
     {
+#ifdef TLRENDER_FFMPEG
         return ffmpeg_codecs(browser, AVMEDIA_TYPE_AUDIO);
+#endif
     }
 
     void ffmpeg_video_codecs(mrv::Browser& browser)
     {
+#ifdef TLRENDER_FFMPEG
         return ffmpeg_codecs(browser, AVMEDIA_TYPE_VIDEO);
+#endif
     }
 
     void ffmpeg_subtitle_codecs(mrv::Browser& browser)
     {
+#ifdef TLRENDER_FFMPEG
         return ffmpeg_codecs(browser, AVMEDIA_TYPE_SUBTITLE);
+#endif
     }
 
     std::string ffmpeg_protocols()
     {
         std::ostringstream o;
-#if LIBAVUTIL_VERSION_MAJOR > 50
+#ifdef TLRENDER_FFMPEG
         void* opaque = NULL;
         const char* up;
         for (up = avio_enum_protocols(&opaque, 0); up;
              up = avio_enum_protocols(&opaque, 0))
         {
             o << " " << up << ":";
-        }
-#else
-        URLProtocol* up;
-        for (up = av_protocol_next(NULL); up; up = av_protocol_next(up))
-        {
-            o << " " << up->name << ":";
         }
 #endif
         return o.str();
@@ -410,7 +430,9 @@ namespace mrv
     {
         using namespace std;
 
+#ifdef TLRENDER_FFMPEG
         avformat_network_init();
+#endif
 
         std::ostringstream o;
 
@@ -510,9 +532,11 @@ namespace mrv
           << "Copyright 1997-2016 by Dave Coffin, dcoffin a cybercom o net"
           << endl
           << endl
+#ifdef TLRENDER_PNG
           << PNG_HEADER_VERSION_STRING
           << "Copyright (c) 1995-2019 The PNG Reference Library Authors."
           << endl
+#endif
           << "Copyright (c) 2018-2019 Cosmin Truta." << endl
           << "Copyright (c) 2000-2002, 2004, 2006-2018 Glenn Randers-Pehrson."
           << endl
@@ -524,8 +548,10 @@ namespace mrv
              "<erikd@mega-nerd.com>"
           << endl
           << endl
+#ifdef TLRENDER_TIFF
           << TIFFLIB_VERSION_STR << endl
           << endl
+#endif
           << "LibVPX" << endl
           << "Copyright (c) 2010, The WebM Project authors. All rights "
              "reserved."
@@ -610,12 +636,16 @@ namespace mrv
           << "All Rights Reserved." << endl
           << endl
 #endif
+#ifdef TLRENDER_AUDIO
           << "RtAudio v" << RTAUDIO_VERSION << endl
           << "Copyright (c) 2001-Present Gary P. Scavone" << endl
           << endl
+#endif
+#ifdef TLRENDER_STB
           << "stb v" << STBI_VERSION << endl
           << "Copyright (c) 2017 Sean Barrett" << endl
           << endl
+#endif
 #ifdef TLRENDER_USD
           << "tbb v" << TBB_VERSION_MAJOR << " " << TBB_VERSION_MINOR << endl
           << "Copyright (c) 2005-2019 Intel Corporation" << endl
