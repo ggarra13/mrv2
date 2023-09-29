@@ -184,7 +184,7 @@ if [[ $RUNME == 1 && $0 != *runme.sh* ]]; then
     echo "Building with ${CPU_CORES} cores"
     if [[ $FFMPEG_GPL == "" ]]; then
 	if [[ $KERNEL == *Msys* ]]; then
-	    echo "Will use pre-build FFmpeg ${FFMPEG_GPL}"
+	    echo "Will use pre-built FFmpeg ${FFMPEG_GPL}"
 	else
 	    echo "FFmpeg will be built as LGPL"
 	fi
