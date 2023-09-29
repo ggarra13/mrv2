@@ -4,9 +4,19 @@ v0.7.9
 - Fixed sequence of images detection when there was an image with the same
   basename, directory and prefix but no number.
 - Fixed the RAW image reader to handle images that are smaller once decoded.
+- Fixed RAW reader not supporting LCMS2 nor jasper.
 - Made the Log Panel not save its visibility upon program exit.  This prevents
   the Log Panel Window from opening on a new start up of mrv2 once there had
   been an error in the previous instance.
+- Build changes:
+
+   * Renamed runme.sh script to runme_nolog.sh.
+   * Added a new runme.sh script that calls runme_nolog.sh but saves the
+     compile log into BUILD-KERNEL-ARCH/CMAKE_BUILD_TYPE/compile.log.
+   * Updated windows build script to work with MSVC 2022, not just 2019.
+   * Made all compile options work when off.  You can customize mrv2 to
+     build it with either all the bells and whistles or barebones.
+
 
 v0.7.8
 ======

@@ -20,7 +20,9 @@
 #include <opentime/timeRange.h>
 namespace otime = opentime::OPENTIME_VERSION;
 
-#include <Poco/Net/StreamSocket.h>
+#ifdef MRV2_NETWORK
+#    include <Poco/Net/StreamSocket.h>
+#endif
 
 #include "mrvNetwork/mrvMessage.h"
 
@@ -78,8 +80,10 @@ namespace mrv
         Message receiveMessage();
 
     protected:
+#ifdef MRV2_NETWORK
         Poco::Net::StreamSocket m_socket;
         Poco::Net::SocketAddress m_address; // Example server/client address
+#endif
         volatile bool m_running = false;
 
         bool m_lock = false;

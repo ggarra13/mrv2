@@ -266,10 +266,19 @@ cd mrv2
 ```
 
 The script is a superbuild script that will download all needed dependencies
-required.  It will create a build and a BUILD-KERNEL-ARCH/BUILDTYPE/install
-directory where all files shall reside.  Make sure you meet the basic
-dependencies for your platform.  See [Dependencies](#dependencies).
+required.  It will create a build and a:
+```
+BUILD-KERNEL-ARCH/BUILDTYPE/install
+````
+directory where all files shall reside.  
 
+Make sure you meet the basic dependencies for your platform.  See [Dependencies](#dependencies).
+
+The runme.sh sript will output its progress to the terminal and also save itt
+in:
+````
+BUILD-KERNEL-ARCH/BUILDTYPE/compile.log.
+````
 The default is to build with all cores in all the Operating Systems.
 If you want more or less cores pass another number to any of
 the runme*.sh scripts.  For example, to build with 4 cores, you can do:

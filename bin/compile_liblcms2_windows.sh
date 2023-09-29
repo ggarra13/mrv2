@@ -4,8 +4,7 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #
-# This script compiles a GPL or LGPL version of ffmpeg. The GPL version has
-# libx264 encoding and libvpx support.  The LGPL version does not have libx264.
+# This script compiles a LCMS2 as a shared library (DLL).
 #
 if [[ ! -e etc/build_dir.sh ]]; then
     echo "You must run this script from the root of mrv2 directory like:"
@@ -15,12 +14,14 @@ if [[ ! -e etc/build_dir.sh ]]; then
     exit 1
 fi
 
-. etc/build_dir.sh
+if [[ ! $RUNME ]]; then
+    . etc/build_dir.sh
+fi
 
 #
 # Set the main tag to compile
 #
-export LCMS_BRANCH=lcms2.15
+LCMS_BRANCH=lcms2.15
 
 if [[ $KERNEL != *Msys* ]]; then
     echo
@@ -29,38 +30,41 @@ if [[ $KERNEL != *Msys* ]]; then
     exit 1
 fi
 
-superbuild=$PWD/$BUILD_DIR/tlRender/etc/SuperBuild
-installdir=$PWD/$BUILD_DIR/install
-lcms2dir=$superbuild/LCMS2
+MRV2_ROOT=$PWD
+SUPERBUILD=$PWD/$BUILD_DIR/tlRender/etc/SuperBuild
+INSTALLDIR=$PWD/$BUILD_DIR/install
 
-mkdir -p $superbuild
-mkdir -p $installdir
+if [[ ! -e $INSTALLDIR/lib/liblcms2.lib ]]; then
 
-rm -rf $lcms2dir
+    #
+    # Install development tools
+    #
+    pacman -Sy --noconfirm
+    pacman -Sy mingw-w64-x86_64-toolchain --noconfirm
+    
+    #
+    # Clone the repository
+    #
+    mkdir -p $SUPERBUILD
+    cd $SUPERBUILD
+    if [[ ! -d LCMS2 ]]; then
+	git clone --depth 1 --branch $LCMS_BRANCH https://github.com/mm2/Little-CMS.git LCMS2 2> /dev/null
+    fi
+    
+    #
+    # Run configure
+    #
+    cd LCMS2
+    ./configure --enable-shared --disable-static --prefix=$INSTALLDIR
+    
+    #
+    # Compile and install the library
+    #
+    make -j ${CPU_CORES} install
 
-#
-# Install development tools
-#
-pacman -Sy --noconfirm
-pacman -Sy base-devel --noconfirm
+    run_cmd mv $INSTALLDIR/lib/liblcms2.a $INSTALLDIR/lib/liblcms2.lib
 
-#
-# Clone the repository
-#
-cd $superbuild
-git clone --depth 1 --branch $LCMS_BRANCH https://github.com/mm2/Little-CMS.git LCMS2 2> /dev/null
-
-#
-# Run configure
-#
-cd $lcms2dir
-./configure --enable-shared --disable-static --prefix=$installdir
-
-#
-# Compile and install the library
-#
-make -j ${CPU_CORES} install
-
-mv $installdir/lib/liblcms2.a $installdir/lib/liblcms2.lib
-
-
+    cd $MRV2_ROOT
+else
+    echo "liblcms2 already installed."
+fi

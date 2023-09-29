@@ -9,8 +9,8 @@
 #include "mrvCore/mrvEnvironmentMapOptions.h"
 #include "mrvCore/mrvStereo3DOptions.h"
 
-#include "mrvNetwork/mrvCypher.h"
 #include "mrvNetwork/mrvMessage.h"
+#include "mrvNetwork/mrvCypher.h"
 #include "mrvNetwork/mrvFilesModelItem.h"
 #include "mrvNetwork/mrvCompareOptions.h"
 #include "mrvNetwork/mrvDisplayOptions.h"
@@ -124,11 +124,18 @@ namespace mrv
             {"Devices", (devicesPanel != nullptr)},
             {"Environment Map", (environmentMapPanel != nullptr)},
             {"Settings", (settingsPanel != nullptr)},
+#ifdef MRV2_PYBIND11
             {"Python", (pythonPanel != nullptr)},
+#endif
+#ifdef MRV2_NETWORK
             {"Network", (networkPanel != nullptr)},
+#endif
             {"Histogram", (histogramPanel != nullptr)},
             {"Vectorscope", (vectorscopePanel != nullptr)},
             {"Stereo 3D", (stereo3DPanel != nullptr)},
+#ifdef TLRENDER_USD
+            {"USD", (usdPanel != nullptr)},
+#endif
             {"Logs", (logsPanel != nullptr)},
         };
 
@@ -150,8 +157,18 @@ namespace mrv
             environmentMapPanel->save();
         if (settingsPanel)
             settingsPanel->save();
+#ifdef MRV2_PYBIND11
+        if (pythonPanel)
+            pythonPanel->save();
+#endif
+#ifdef MRV2_NETWORK
         if (networkPanel)
             networkPanel->save();
+#endif
+#ifdef TLRENDER_USD
+        if (usdPanel)
+            usdPanel->save();
+#endif
         if (histogramPanel)
             histogramPanel->save();
         if (vectorscopePanel)

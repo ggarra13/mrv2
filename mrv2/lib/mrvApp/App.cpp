@@ -7,8 +7,11 @@
 #include <fstream>
 #include <sstream>
 
-#include <pybind11/embed.h>
+#ifdef MRV2_PYBIND11
+#    include <pybind11/embed.h>
 namespace py = pybind11;
+#    include "mrvPy/Cmds.h"
+#endif
 
 #include <tlIO/System.h>
 #if defined(TLRENDER_USD)
@@ -38,15 +41,16 @@ namespace py = pybind11;
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
-#include "mrvPy/Cmds.h"
-
-#include "mrvNetwork/mrvCommandInterpreter.h"
-#include "mrvNetwork/mrvClient.h"
-#include "mrvNetwork/mrvServer.h"
 #include "mrvNetwork/mrvDummyClient.h"
 #include "mrvNetwork/mrvDisplayOptions.h"
 #include "mrvNetwork/mrvLUTOptions.h"
-#include "mrvNetwork/mrvParseHost.h"
+
+#ifdef MRV2_NETWORK
+#    include "mrvNetwork/mrvCommandInterpreter.h"
+#    include "mrvNetwork/mrvClient.h"
+#    include "mrvNetwork/mrvServer.h"
+#    include "mrvNetwork/mrvParseHost.h"
+#endif
 
 #include "mrvEdit/mrvEditUtil.h"
 
@@ -106,11 +110,15 @@ namespace mrv
         std::vector<std::string> fileNames;
         std::string audioFileName;
         std::string compareFileName;
+#ifdef MRV2_PYBIND11
         std::string pythonScript;
+#endif
 
+#ifdef MRV2_NETWORK
         bool server = false;
         std::string client;
         unsigned port = 55150;
+#endif
 
         timeline::CompareMode compareMode = timeline::CompareMode::A;
         math::Vector2f wipeCenter = math::Vector2f(.5F, .5F);
@@ -148,7 +156,9 @@ namespace mrv
         ContextObject* contextObject = nullptr;
         std::shared_ptr<timeline::TimeUnitsModel> timeUnitsModel;
         SettingsObject* settingsObject = nullptr;
+#ifdef MRV2_NETWORK
         CommandInterpreter* commandInterpreter = nullptr;
+#endif
 
         std::shared_ptr<PlaylistsModel> playlistsModel;
         std::shared_ptr<FilesModel> filesModel;
@@ -303,9 +313,11 @@ namespace mrv
                         _("LUT operation order."),
                         string::Format("{0}").arg(p.options.lutOptions.order),
                         string::join(timeline::getLUTOrderLabels(), ", ")),
+#ifdef MRV2_PYBIND11
                     app::CmdLineValueOption<std::string>::create(
                         p.options.pythonScript, {"-pythonScript", "-ps"},
                         _("Python Script to run and exit.")),
+#endif
                     app::CmdLineFlagOption::create(
                         p.options.resetSettings, {"-resetSettings"},
                         _("Reset settings to defaults.")),
@@ -340,6 +352,8 @@ namespace mrv
                         "disables the cache.",
                         string::Format("{0}").arg(p.options.usdDiskCache)),
 #endif // TLRENDER_USD
+
+#ifdef MRV2_NETWORK
                     app::CmdLineFlagOption::create(
                         p.options.server, {"-server"},
                         _("Start a server.  Use -port to specify a port "
@@ -353,6 +367,8 @@ namespace mrv
                         _("Port number for the server to listen to or for the "
                           "client to connect to."),
                         string::Format("{0}").arg(p.options.port)),
+#endif
+
                     app::CmdLineFlagOption::create(
                         p.options.displayVersion,
                         {"-version", "--version", "-v", "--v"},
@@ -389,6 +405,7 @@ namespace mrv
             return;
         }
 
+#ifdef MRV2_PYBIND11
         if (!p.options.pythonScript.empty())
         {
             if (!is_readable(p.options.pythonScript))
@@ -421,6 +438,7 @@ namespace mrv
             }
             return;
         }
+#endif
 
         // Initialize FLTK.
         Fl::scheme("gtk+");
@@ -439,7 +457,9 @@ namespace mrv
         p.settingsObject = new SettingsObject();
 
         // Classes used to handle network connections
+#ifdef MRV2_NETWORK
         p.commandInterpreter = new CommandInterpreter(ui);
+#endif
         tcp = new DummyClient();
 
         p.lutOptions = p.options.lutOptions;
@@ -471,12 +491,14 @@ namespace mrv
 
         LOG_INFO(msg);
 
+#ifdef MRV2_PYBIND11
         // Import the mrv2 python module so we read all python
         // plug-ins.
         py::module::import("mrv2");
 
         // Discover python plugins
         mrv2_discover_python_plugins();
+#endif
 
         std_any value;
 
@@ -674,6 +696,7 @@ namespace mrv
                 model->setA(0);
         }
 
+#ifdef MRV2_NETWORK
         if (p.options.server)
         {
             try
@@ -697,6 +720,7 @@ namespace mrv
             tcp = new Client(p.options.client, p.options.port);
             store_port(p.options.port);
         }
+#endif
 
         ui->uiMain->show();
         ui->uiView->take_focus();
@@ -717,7 +741,9 @@ namespace mrv
         TLRENDER_P();
 
         delete p.mainControl;
+#ifdef MRV2_NETWORK
         delete p.commandInterpreter;
+#endif
         delete p.contextObject;
         delete ui;
         if (tcp)

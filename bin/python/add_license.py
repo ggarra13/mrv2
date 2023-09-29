@@ -137,7 +137,7 @@ def process_bash_files():
                     shebang = "#!/usr/bin/env bash\n"
                     text = shebang + license + text
 
-                out.write( text )
+                    out.write( text )
 
                 shutil.move( f + ".new", f )
                 if os.name == 'nt':

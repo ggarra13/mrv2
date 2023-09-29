@@ -46,8 +46,6 @@ set(HEADERS
     mrvPopupMenu.h
     mrvPreferencesTree.h
     mrvProgressReport.h
-    mrvPythonEditor.h
-    mrvPythonOutput.h
     mrvResizableBar.h
     mrvSecondaryWindow.h
     mrvSlider.h
@@ -93,8 +91,6 @@ set(SOURCES
     mrvPopupMenu.cpp
     mrvPreferencesTree.cpp
     mrvProgressReport.cpp
-    mrvPythonEditor.cpp
-    mrvPythonOutput.cpp
     mrvResizableBar.cpp
     mrvSecondaryWindow.cpp
     mrvSlider.cpp
@@ -110,6 +106,14 @@ set(SOURCES
 )
 
 
+list( APPEND LIBRARIES mrvFlmm mrvFLU mrvCore fltk_images MINIZIP::minizip )
+if(MRV2_PYBIND11)
+    list( APPEND LIBRARIES pybind11::embed )
+    list( APPEND SOURCES mrvPythonEditor.cpp mrvPythonOutput.cpp)
+    list( APPEND HEADERS mrvPythonEditor.h mrvPythonOutput.h)
+endif()
+
+
 files_to_absolute_paths()
 
 if ( APPLE )
@@ -118,7 +122,6 @@ endif()
 
 add_library(mrvWidgets ${SOURCES} ${HEADERS})
 
-list( APPEND LIBRARIES mrvFlmm mrvFLU mrvCore fltk_images MINIZIP::minizip pybind11::embed )
 
 if ( UNIX)
     if ( NOT APPLE )

@@ -43,11 +43,6 @@ include_directories(
     ${include_dirs}
 )
 
-set( lib_dirs
-    ${CMAKE_INSTALL_PREFIX}/lib
-)
-
-link_directories( ${lib_dirs} )
 
 #
 # Fetch the tlRender library as a submodule with git.
@@ -75,6 +70,8 @@ endif()
 #
 # brew .dylibs are compiled only for the current version of the OS.
 # We rebuild zlib and gettext to be compatible with version 10.15.
+# tlRender builds zlib but statically, so on macOS the OS one gets picked
+# instead.
 #
 set( ZLIB_SHARED )
 if( BUILD_ZLIB )
@@ -100,10 +97,14 @@ if( MRV2_PYBIND11 )
     include( cmake/Modules/Buildpybind11.cmake )
 endif()
 
+if(NOT BUILD_PYTHON)
+   set(TLRENDER_USD FALSE)
+endif()
+
 add_subdirectory( tlRender/etc/SuperBuild )
 
 if(BUILD_PYTHON AND TLRENDER_USD)
-    add_dependencies( USD ${PYTHON_DEP} ${PYBIND11} )
+    add_dependencies( USD ${PYTHON_DEP} )
 endif()
 
 

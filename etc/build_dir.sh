@@ -38,10 +38,15 @@ else
     export ARCH=i386
 fi
 
-export DIST=0
 
 . etc/build_cores.sh
 
+export RUNME=0
+if [[ $0 == *runme.sh* || $0 == *runme_nolog.sh* ]]; then
+    RUNME=1
+fi
+
+export DIST=0
 export FFMPEG_GPL=$FFMPEG_GPL
 export CLEAN_DIR=0
 export CMAKE_OSX_ARCHITECTURES=""
@@ -61,7 +66,7 @@ for i in $@; do
 	    ;;
 	dist)
 	    export DIST=1
-	    if [[ $0 != *runme.sh* ]]; then
+	    if [[ $RUNME == 0 ]]; then
 		echo $0
 		echo "dist option can only be run with the runme.sh script"
 		exit 1
@@ -70,7 +75,7 @@ for i in $@; do
 	    ;;
 	clean)
 	    export CLEAN_DIR=1
-	    if [[ $0 != *runme.sh* ]]; then
+	    if [[ $RUNME == 0 ]]; then
 		echo $0
 		echo "clean option can only be run with the runme.sh script"
 		exit 1
@@ -95,6 +100,7 @@ for i in $@; do
 	-j)
 	    shift
 	    export CPU_CORES=$1
+	    export FLAGS="-j $CPU_CORES ${FLAGS}"
 	    shift
 	    ;;
 	-D)
@@ -104,7 +110,7 @@ for i in $@; do
 	    ;;
 	-G)
 	    shift
-	    if [[ $0 != *runme.sh* ]]; then
+	    if [[ $RUNME == 0 ]]; then
 		echo $0
 		echo "Cmake generator can only be run with the runme.sh script"
 		exit 1
@@ -118,16 +124,25 @@ for i in $@; do
 	    shift
 	    ;;
 	-h|-help|--help)
-	    echo "$0 [debug] [clean] [dist] [-v] [-j <num>] [-lgpl] [-gpl] [-D VAR=VALUE] [-help]"
-	    echo ""
-	    echo "* debug builds a debug build."
-	    echo "* clean clears the directory before building -- use only with runme.sh"
-	    echo "* dist builds a Mojave compatible distribution (macOS)."
-	    echo "* -j <num>  controls the threads to use when compiling."
-	    echo "* -v builds verbosely."
-	    echo "* -D sets cmake variables, like -D TLRENDER_USD=OFF."
-	    echo "* -gpl builds FFmpeg with x264 encoder support in a GPL version of it."
-	    echo "* -lgpl builds FFmpeg as a LGPL version of it."
+	    if [[ $RUNME == 1 ]]; then
+		echo "$0 [debug] [clean] [dist] [-v] [-j <num>] [-lgpl] [-gpl] [-D VAR=VALUE] [-t <targe>] [-help]"
+		echo ""
+		echo "* debug builds a debug build."
+		echo "* clean clears the directory before building -- use only with runme.sh"
+		echo "* dist builds a Mojave compatible distribution (macOS)."
+		echo "* -j <num>  controls the threads to use when compiling. [default=$CPU_CORES]"
+		echo "* -v builds verbosely. [default=off]"
+		echo "* -D sets cmake variables, like -D TLRENDER_USD=OFF."
+		echo "* -gpl builds FFmpeg with x264 encoder support in a GPL version of it."
+		echo "* -lgpl builds FFmpeg as a LGPL version of it."
+		echo "* -t <target> sets the cmake target to run. [default=none]"
+	    else
+		echo "$0 [debug] [-v] [-j <num>] [-help]"
+		echo ""
+		echo "* debug builds a debug build."
+		echo "* -j <num>  controls the threads to use when compiling. [default=$CPU_CORES]"
+		echo "* -v builds verbosely. [default=off]"
+	    fi
 	    exit 1
 	    ;;
     esac
@@ -138,10 +153,6 @@ done
 # Build a build directory with that information
 export BUILD_DIR=BUILD-$KERNEL-$ARCH/$CMAKE_BUILD_TYPE
 
-export PATH="$PWD/${BUILD_DIR}/install/bin:$PWD/$BUILD_DIR/install/bin/Scripts:${PATH}"
-export LD_LIBRARY_PATH="$PWD/${BUILD_DIR}/install/lib64:$PWD/${BUILD_DIR}/install/lib:${LD_LIBRARY_PATH}"
-export DYLD_LIBRARY_PATH="$PWD/${BUILD_DIR}/install/lib:${DYLD_LIBRARY_PATH}"
-export PKG_CONFIG_PATH="$PWD/${BUILD_DIR}/install/lib/pkgconfig:$PKG_CONFIG_PATH"
 if [[ $KERNEL == *Darwin* ]]; then
     export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:${PATH}"
     if [[ $ARCH == arm64 ]]; then
@@ -152,33 +163,48 @@ if [[ $KERNEL == *Darwin* ]]; then
     fi
 fi
 
+if [[ $FLAGS == "" ]]; then
+    export FLAGS="-j ${CPU_CORES}"
+fi
 export FLAGS="${FLAGS} $*"
-export FLAGS="-j ${CPU_CORES} ${FLAGS}"
 
 if [[ $CLEAN_DIR == 1 ]]; then
     if [[ -d ${BUILD_DIR} ]]; then
 	echo "Cleaning ${BUILD_DIR}.  Please wait..."
-	rm -rf $BUILD_DIR
+	run_cmd rm -rf $BUILD_DIR
     fi
 fi
 
-if [[ $0 == *runme.sh* ]]; then
+export PATH="$PWD/${BUILD_DIR}/install/bin:$PWD/$BUILD_DIR/install/bin/Scripts:${PATH}"
+
+if [[ $RUNME == 1 && $0 != *runme.sh* ]]; then
     echo "Build directory is ${BUILD_DIR}"
     echo "Version to build is v${mrv2_VERSION}"
     echo "Architecture is ${ARCH}"
-    echo "FFmpeg will be built as ${FFMPEG_GPL}"
+    echo "Building with ${CPU_CORES} cores"
+    if [[ $FFMPEG_GPL == "" ]]; then
+	if [[ $KERNEL == *Msys* ]]; then
+	    echo "Will use pre-build FFmpeg ${FFMPEG_GPL}"
+	else
+	    echo "FFmpeg will be built as LGPL"
+	fi
+    else
+	echo "FFmpeg will be built as ${FFMPEG_GPL}"
+    fi
     echo "CMake flags are ${CMAKE_FLAGS}"
     echo "Compiler flags are ${FLAGS}"
     cmake --version
-    mkdir -p $BUILD_DIR/install
 
-    if [[ $FFMPEG_GPL == LGPL ]]; then
-	rm -rf $BUILD_DIR/install/bin/libx264*.dll
-	rm -rf $BUILD_DIR/install/lib/libx264.lib
-    fi
+
+    sleep 10
+    mkdir -p $BUILD_DIR/install
+    
+    export LD_LIBRARY_PATH="$PWD/${BUILD_DIR}/install/lib64:$PWD/${BUILD_DIR}/install/lib:${LD_LIBRARY_PATH}"
+    export DYLD_LIBRARY_PATH="$PWD/${BUILD_DIR}/install/lib:${DYLD_LIBRARY_PATH}"
+    export PKG_CONFIG_PATH="$PWD/${BUILD_DIR}/install/lib/pkgconfig:$PKG_CONFIG_PATH"
 fi
 
-if [[ $0 == *runme.sh* ]]; then
+if [[ $RUNME == 1 && $0 == *runme_nolog.sh* ]]; then
     if [[ $KERNEL == *Msys* ]]; then
 	. $PWD/etc/compile_windows_dlls.sh
     fi

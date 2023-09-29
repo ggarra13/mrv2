@@ -69,7 +69,10 @@
 #include <nlohmann/json.hpp>
 #include <opentime/version.h>
 #include <opentimelineio/version.h>
-#include <Poco/Version.h>
+
+#ifdef MRV2_NETWORK
+#    include <Poco/Version.h>
+#endif
 
 #ifdef MRV2_PYBIND11
 #    include <pybind11/pybind11.h>
@@ -561,9 +564,9 @@ namespace mrv
 #ifdef MRV2_NETWORK
         o << "Poco v";
         semantic_versioning(o, POCO_VERSION);
-        o << endl
+        o << endl;
 #endif
-          << "Copyright (c) 2012, Applied Informatics Software Engineering "
+        o << "Copyright (c) 2012, Applied Informatics Software Engineering "
              "GmbH. and Contributors."
           << endl
           << endl
