@@ -96,7 +96,10 @@ if(TLRENDER_PNG)
 endif()
 
 if(TLRENDER_RAW)
-    add_definitions(-DTLRENDER_RAW)
+    find_package(Jasper)
+    if (JASPER_FOUND)
+        add_definitions(-DTLRENDER_RAW)
+    endif()
 endif()
 
 if(TLRENDER_STB)
