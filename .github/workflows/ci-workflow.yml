@@ -228,3 +228,54 @@ jobs:
       run: >
         ./runme_nolog.sh -gpl -D TLRENDER_USD=OFF
 
+
+  linux-minimal-build:
+    runs-on: ubuntu-latest
+
+    steps:
+    
+    - uses: actions/checkout@v2
+      with:
+        submodules: recursive
+        
+    - name: Update
+      run: sudo apt-get update
+
+    - name: Install OpenGL dev
+      run: sudo apt-get install -y xorg-dev libglu1-mesa-dev mesa-common-dev
+
+    - name: Install X11 dev
+      run: sudo apt-get install -y libx11-dev libxcursor-dev libxinerama-dev
+
+    - name: Install ALSA dev
+      run: sudo apt-get install -y libasound2-dev
+
+    - name: Install PulseAudio dev
+      run: sudo apt-get install -y libpulse-dev
+
+    - name: Install Pango dev
+      run: sudo apt-get install -y libpango1.0-dev
+
+    - name: Install Wayland
+      run: sudo apt-get install -y libwayland-dev wayland-protocols libdbus-1-dev libxkbcommon-dev libegl-dev libgtk-3-dev
+
+    - name: Install openssl
+      run: sudo apt-get install -y openssl
+      
+    - name: Install ninja-build
+      run: sudo apt-get install -y ninja-build
+      
+    - name: Install gettext
+      run: sudo apt-get install -y gettext
+      
+    - name: Install python dependencies
+      run: sudo apt-get install -y libssl-dev libffi-dev
+      
+    - name: Setup environment
+      run: >
+        echo "$PWD/BUILD-Linux-amd64/Release/install/bin" >> $GITHUB_PATH &&
+        echo "LD_LIBRARY_PATH=$PWD/BUILD-Linux-amd64/Release/install/lib:$LD_LIBRARY_PATH" >> $GITHUB_ENV
+
+    - name: Build mrv2
+      run: >
+        ./runme_nolog.sh -D TLRENDER_USD=OFF -D TLRENDER_RAW=OFF -D MRV2_PDF=OFF -D MRV2_NETWORK=OFF -D MRV2_PYBIND11=OFF -D BUILD_PYTHON=OFF
