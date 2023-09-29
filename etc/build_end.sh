@@ -6,7 +6,7 @@
 
 if [[ $CMAKE_BUILD_TYPE == Release && "$CMAKE_TARGET" == "package" ]]; then
 
-    echo "CMAKE_TARGET=package and Release build.  Will copy packages..."
+    echo "Target is package and Release build.  Will copy packages..."
 
     #
     # Here we move the installers to the packages location.
@@ -34,11 +34,11 @@ if [[ $KERNEL != *Msys* ]]; then
     chmod a+x $PWD/$BUILD_DIR/install/bin/mrv2.sh
     if [ -d ~/bin ] && [ -w ~/bin ]; then
 	if [[ $CMAKE_BUILD_TYPE == Debug ]]; then
-	    rm -f ~/bin/mrv2-dbg
-	    ln -s $PWD/$BUILD_DIR/install/bin/mrv2.sh ~/bin/mrv2-dbg
+	    run_cmd rm -f ~/bin/mrv2-dbg
+	    run_cmd ln -s $PWD/$BUILD_DIR/install/bin/mrv2.sh ~/bin/mrv2-dbg
 	else
-	    rm -f ~/bin/mrv2
-	    ln -s $PWD/$BUILD_DIR/install/bin/mrv2.sh ~/bin/mrv2
+	    run_cmd rm -f ~/bin/mrv2
+	    run_cmd ln -s $PWD/$BUILD_DIR/install/bin/mrv2.sh ~/bin/mrv2
 	fi
     fi
 fi

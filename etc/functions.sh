@@ -51,24 +51,11 @@ send_to_packages()
 	mkdir -p $PWD/packages
 	if [[ -e $package ]]; then
 	    echo "Installing $package in $PWD/packages"
-	    mv $package $PWD/packages
+	    run_cmd mv $package $PWD/packages
 	else
 	    echo "ERROR package $1 was not created in $stage."
 	fi
     else
 	echo "CMAKE_TARGET is empty.  Will not copy packages."
-    fi
-}
-
-#
-# Function to remove a path from the PATH environment variable
-#
-remove_path()
-{
-    local path_to_remove="$1"
-    if [[ ":$PATH:" == *":$path_to_remove:"* ]]; then
-	export PATH=${PATH//:$path_to_remove:/:}
-	export PATH=${PATH/#$path_to_remove:/}
-	export PATH=${PATH/%:$path_to_remove/}
     fi
 }

@@ -6,7 +6,9 @@
 
 
 if [[ ! $RUNME ]]; then
-    . $PWD/etc/build_dir.sh
+    . etc/build_dir.sh
+else
+    . etc/functions.sh
 fi
 
 
@@ -29,9 +31,9 @@ if [[ $CMAKE_TARGET == doc* || $CMAKE_TARGET == "install" ||
     # First, generate the translations and install them
     #
     cd $dir
-    cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t mo
+    run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t mo
 
-    cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
+    run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
     cd -
 fi
 
@@ -43,8 +45,8 @@ if [[ $CMAKE_TARGET == doc* ]]; then
     # Second, generate the documentation and install them
     #
     cd $dir
-    cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t doc
-    cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
+    run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t doc
+    run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
     cd -
 fi
 
@@ -52,8 +54,8 @@ fi
 
 cd $dir
 
-cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t ${CMAKE_TARGET}
+run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t ${CMAKE_TARGET}
 
 cd -
 
-. $PWD/etc/build_end.sh
+. etc/build_end.sh

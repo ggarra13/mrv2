@@ -1269,7 +1269,10 @@ namespace mrv
                         redrawPanelThumbnails();
                     if (ui->uiPrefs->uiPrefsAutoPlayback->value() && loaded)
                     {
-                        ui->uiView->playForwards();
+                        auto player = ui->uiView->getTimelinePlayer();
+                        if (player &&
+                            player->timeRange().duration().value() > 1.0)
+                            ui->uiView->playForwards();
                     }
                     ui->uiMain->fill_menu(ui->uiMenuBar);
                 }

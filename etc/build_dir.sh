@@ -125,7 +125,7 @@ for i in $@; do
 	    ;;
 	-h|-help|--help)
 	    if [[ $RUNME == 1 ]]; then
-		echo "$0 [debug] [clean] [dist] [-v] [-j <num>] [-lgpl] [-gpl] [-D VAR=VALUE] [-t <targe>] [-help]"
+		echo "$0 [debug] [clean] [dist] [-v] [-j <num>] [-lgpl] [-gpl] [-D VAR=VALUE] [-t <target>] [-help]"
 		echo ""
 		echo "* debug builds a debug build."
 		echo "* clean clears the directory before building -- use only with runme.sh"
@@ -184,7 +184,7 @@ if [[ $RUNME == 1 && $0 != *runme.sh* ]]; then
     echo "Building with ${CPU_CORES} cores"
     if [[ $FFMPEG_GPL == "" ]]; then
 	if [[ $KERNEL == *Msys* ]]; then
-	    echo "Will use pre-build FFmpeg ${FFMPEG_GPL}"
+	    echo "Will use pre-built FFmpeg ${FFMPEG_GPL}"
 	else
 	    echo "FFmpeg will be built as LGPL"
 	fi

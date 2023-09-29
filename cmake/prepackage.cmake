@@ -20,7 +20,7 @@ endif()
 
 file(REAL_PATH ${ROOT_DIR} ROOT_DIR )
 
-message( STATUS "cmake/prepacke.cmake has ROOT_DIR=${ROOT_DIR}" )
+message( STATUS "cmake/prepackage.cmake has ROOT_DIR=${ROOT_DIR}" )
 
 include( "${ROOT_DIR}/cmake/functions.cmake" )
 
