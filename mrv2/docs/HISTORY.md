@@ -7,6 +7,8 @@ v0.7.9
 - Fixed RAW reader not supporting LCMS2 nor jasper.  Now they are supported on
   all platforms.
 - Added Sigma .X3F RAW support to RAW Reader.
+- The RAW Reader properly reads all files but two from:
+      https://www.rawsamples.ch
 - Made the Log Panel not save its visibility upon program exit.  This prevents
   the Log Panel Window from opening on a new start up of mrv2 once there had
   been an error in the previous instance.
