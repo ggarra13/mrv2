@@ -52,23 +52,38 @@
 #include <jconfig.h>
 #include <libpng16/png.h>
 #include <mz.h>
-#include <stb/stb_image.h>
 
-#ifdef TLRENDER_USD
-#    include <boost/version.hpp>
-#    include <tbb/tbb_stddef.h>
-#    include <MaterialXCore/Util.h>
+#include <nlohmann/json.hpp>
+#include <opentime/version.h>
+#include <opentimelineio/version.h>
+
+#ifdef TLRENDER_AUDIO
+#    include <rtaudio/RtAudio.h>
 #endif
 
 #ifdef TLRENDER_GL
 #    include <tlGL/Init.h>
 #endif
 
-#include <lcms2.h>
-#include <libraw/libraw_version.h>
-#include <nlohmann/json.hpp>
-#include <opentime/version.h>
-#include <opentimelineio/version.h>
+#ifdef TLRENDER_RAW
+#    include <jasper/jas_version.h>
+#    include <lcms2.h>
+#    include <libraw/libraw_version.h>
+#endif
+
+#ifdef TLRENDER_STB
+#    include <stb/stb_image.h>
+#endif
+
+#ifdef TLRENDER_TIFF
+#    include <tiffvers.h>
+#endif
+
+#ifdef TLRENDER_USD
+#    include <boost/version.hpp>
+#    include <tbb/tbb_stddef.h>
+#    include <MaterialXCore/Util.h>
+#endif
 
 #ifdef MRV2_NETWORK
 #    include <Poco/Version.h>
@@ -80,14 +95,6 @@
 
 #include <OpenColorIO/OpenColorIO.h>
 namespace OCIO = OCIO_NAMESPACE;
-
-#ifdef TLRENDER_AUDIO
-#    include <rtaudio/RtAudio.h>
-#endif
-
-#ifdef TLRENDER_TIFF
-#    include <tiffvers.h>
-#endif
 
 #include <zlib.h>
 
@@ -653,9 +660,13 @@ namespace mrv
           << "Imath v" << IMATH_VERSION_STRING << endl
           << "Copyright Contributors to the OpenEXR Project" << endl
           << endl
+#ifdef TLRENDER_RAW
+          << jas_getversion() << endl
+          << JAS_COPYRIGHT << endl
           << "Little Color Management System " << (LCMS_VERSION / 1000.0)
           << "Copyright (c) 1998-Present Marti Maria Saguer" << endl
           << endl
+#endif
 #ifdef MRV2_PDF
           << "libharu v" << HPDF_VERSION_TEXT << endl
           << "Copyright (c) 1999-2006 Takeshi Kanno" << endl
@@ -667,10 +678,7 @@ namespace mrv
           << "Copyright (c) 2015 Viktor Szathmáry.  All Rights Reserved."
           << endl
           << endl
-          << "libjpeg" << endl
-          << "Copyright (C) 1991-2016, Thomas G. Lane, Guido Vollbeding."
-          << endl
-          << endl
+#ifdef TLRENDER_RAW
           << "LibRaw " << LIBRAW_VERSION_STR << endl
           << "Copyright (C) 2008-2021 LibRaw LLC (info@libraw.org)" << endl
           << "The library includes source code from" << endl
@@ -678,9 +686,11 @@ namespace mrv
           << "Copyright 1997-2016 by Dave Coffin, dcoffin a cybercom o net"
           << endl
           << endl
+#endif
 #ifdef TLRENDER_PNG
           << PNG_HEADER_VERSION_STRING
           << "Copyright (c) 1995-2019 The PNG Reference Library Authors."
+          << endl
           << endl
 #endif
           << "Copyright (c) 2018-2019 Cosmin Truta." << endl
