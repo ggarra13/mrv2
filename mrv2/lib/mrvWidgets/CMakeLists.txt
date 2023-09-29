@@ -106,7 +106,7 @@ set(SOURCES
 )
 
 
-list( APPEND LIBRARIES mrvFlmm mrvFLU mrvCore fltk_images MINIZIP::minizip )
+list( APPEND LIBRARIES mrvFlmm mrvFLU mrvCore fltk_images ${JASPER_LIBRARIES} MINIZIP::minizip )
 if(MRV2_PYBIND11)
     list( APPEND LIBRARIES pybind11::embed )
     list( APPEND SOURCES mrvPythonEditor.cpp mrvPythonOutput.cpp)

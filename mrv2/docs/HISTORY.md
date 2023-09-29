@@ -10,8 +10,8 @@ v0.7.9
 - The RAW Reader properly reads all files but two from:
       https://www.rawsamples.ch
 - Made the Log Panel not save its visibility upon program exit.  This prevents
-  the Log Panel Window from opening on a new start up of mrv2 once there had
-  been an error in the previous instance.
+  the Log Panel Window from opening on a new start up of mrv2 as it is usually
+  not wanted, but happens once there had been an error in the previous instance.
 - Build changes:
 
    * Renamed runme.sh script to runme_nolog.sh.
@@ -22,6 +22,9 @@ v0.7.9
      build it with either all the bells and whistles or pretty barebones.
    * Added --help flag to runme.sh to list all the possible settings.
    * All bash commands are run with run_cmd which prints them and times them.
+   * Added optional build support for all the optional TLRENDER_* settings and
+     for the MRV2_* settings.  It is now possible to build a light version of
+     mrv2 or one with all the features.
 
 
 v0.7.8
