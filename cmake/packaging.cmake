@@ -60,7 +60,7 @@ elseif(UNIX)
     install(FILES ${ROOT_DIR}/etc/mrv2.png
 	DESTINATION share/icons/hicolor/32x32/apps COMPONENT applications)
 
-    set(CPACK_GENERATOR DEB RPM TGZ )
+    set(CPACK_GENERATOR DEB ) #RPM TGZ )
     set(CPACK_INSTALL_PREFIX /usr/local/${mrv2ShortName})
 
     configure_file(
@@ -107,6 +107,10 @@ elseif(UNIX)
 	${PROJECT_BINARY_DIR}/etc/Linux/postrm)
 
     set(CPACK_DEBIAN_FILE_NAME	"${CPACK_PACKAGE_FILE_NAME}.deb" )
+
+    # no dependencies, we rely on LD_LIBRARY_PATH
+    set(CPACK_DEBIAN_PACKAGE_DEPENDS "")
+    set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS "")
 
 
     set(CPACK_SET_DESTDIR true) # Needed

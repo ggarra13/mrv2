@@ -1,17 +1,35 @@
 #!/bin/bash
 
+# Remove /usr/bin/mrv2 if it is a symlink to our version
+removed=0
 if [[ -L /usr/bin/mrv2 ]]; then
     fullpath=`readlink /usr/bin/mrv2`
     installpath="@CPACK_INSTALL_PREFIX@/bin/mrv2.sh"
     if [ "$fullpath" == "$installpath" ]; then
 	echo "Removing symlink from /usr/bin/mrv2"
 	rm -f /usr/bin/mrv2
+	removed=1
+    else
+	echo "/usr/bin/mrv2 does not point to the $installpath.  Won't remove."
     fi
 fi
 
 echo "Removing symlink from /usr/bin/mrv2-v@mrv2_VERSION@"
 rm -f /usr/bin/mrv2-v@mrv2_VERSION@
 
+# Find the closest version folder in /usr/bin
+closest_version=$(ls -1 "/usr/local/" | grep "mrv2-v" | sort -V | tail -n 1)
+
+# Check if a closest version was found
+if [[ -n "$closest_version" && $removed == 1 ]]; then
+    # Create a new symbolic link pointing to the closest version
+    ln -s "/usr/local/$closest_version/bin/mrv2.sh" "/usr/bin/mrv2"
+    echo "Created a new symbolic link: mrv2 --> $closest_version"
+else
+    echo "No suitable version found to create a symbolic link."
+fi
+
+  
 full_dir=$(xdg-user-dir DESKTOP)
 
 desktop_dir=${full_dir#/root/}

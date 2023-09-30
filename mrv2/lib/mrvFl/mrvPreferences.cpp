@@ -1687,6 +1687,13 @@ namespace mrv
                 break;
             }
         }
+
+        Fl_Preferences base(prefspath().c_str(), "filmaura", "mrv2");
+        Fl_Preferences gui(base, "ui");
+        gui.set("single_instance", uiPrefs->uiPrefsSingleInstance->value());
+        gui.set(
+            "single_instance", (int)uiPrefs->uiPrefsSingleInstance->value());
+        base.flush();
     }
 
     //////////////////////////////////////////////////////

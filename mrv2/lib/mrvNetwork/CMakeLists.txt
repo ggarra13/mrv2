@@ -33,6 +33,7 @@ set( LIBRARIES mrvCore)
 if(MRV2_NETWORK)
     list(APPEND SOURCES
     		mrvClient.cpp
+		mrvImageListener.cpp
     		mrvMessagePublisher.cpp
     		mrvParseHost.cpp
     		mrvSyncClient.cpp
@@ -42,8 +43,9 @@ if(MRV2_NETWORK)
     		mrvConnectionHandler.cpp
     		mrvServer.cpp )
     list(APPEND HEADERS
+		mrvImageListener.h
     		mrvMessagePublisher.h
-    		mrvParseHost.h
+		mrvParseHost.h
     		mrvProtocolVersion.h
     		mrvClient.h
     		mrvCommandInterpreter.h
