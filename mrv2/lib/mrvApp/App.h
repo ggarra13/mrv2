@@ -142,6 +142,8 @@ namespace mrv
         _activeCallback(const std::vector<std::shared_ptr<FilesModelItem> >&);
         void _settingsCallback();
 
+        void _clean();
+
     private:
         otime::RationalTime _cacheReadAhead() const;
         otime::RationalTime _cacheReadBehind() const;

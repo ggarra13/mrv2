@@ -12,7 +12,16 @@ v0.7.9
 - Made the Log Panel not save its visibility upon program exit.  This prevents
   the Log Panel Window from opening on a new start up of mrv2 as it is usually
   not wanted, but happens once there had been an error in the previous instance.
-- Build changes:
+- Linux uninstall with DEB and RPM has been improved.  Now, instead of just
+  removing the symlink of /usr/bin/mrv2, the symlink is changed to point to the
+  latest version installed if any.
+- You can now open only one instance of the viewer and new images opened will
+  be sent to the already opened viewer, instead of opening multiple instances
+  of the viewer.  You set the behavior in:
+  
+	Preferences->User Interface->Single Instance.
+
+- Build system changes:
 
    * Renamed runme.sh script to runme_nolog.sh.
    * Added a new runme.sh script that calls runme_nolog.sh but saves the

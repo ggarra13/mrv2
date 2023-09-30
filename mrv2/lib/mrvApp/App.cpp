@@ -46,8 +46,10 @@ namespace py = pybind11;
 #include "mrvNetwork/mrvLUTOptions.h"
 
 #ifdef MRV2_NETWORK
+#    include <Poco/Thread.h>
 #    include "mrvNetwork/mrvCommandInterpreter.h"
 #    include "mrvNetwork/mrvClient.h"
+#    include "mrvNetwork/mrvImageListener.h"
 #    include "mrvNetwork/mrvServer.h"
 #    include "mrvNetwork/mrvParseHost.h"
 #endif
@@ -158,6 +160,8 @@ namespace mrv
         SettingsObject* settingsObject = nullptr;
 #ifdef MRV2_NETWORK
         CommandInterpreter* commandInterpreter = nullptr;
+        ImageListener* imageListener = nullptr;
+        Poco::Thread receiverThread;
 #endif
 
         std::shared_ptr<PlaylistsModel> playlistsModel;
@@ -491,6 +495,43 @@ namespace mrv
 
         LOG_INFO(msg);
 
+        std_any value;
+
+        Preferences prefs(
+            ui->uiPrefs, p.options.resetSettings, p.options.resetHotkeys);
+        Preferences::run(ui);
+
+        if (!OSXfiles.empty())
+        {
+            if (p.options.fileNames.empty())
+            {
+                p.options.fileNames = OSXfiles;
+            }
+        }
+
+#ifdef MRV2_NETWORK
+        if (ui->uiPrefs->uiPrefsSingleInstance->value())
+        {
+            ImageSender sender;
+            if (sender.isRunning())
+            {
+                for (const auto& fileName : p.options.fileNames)
+                {
+                    // If another instance is running, send the new image data
+                    // to it.
+                    sender.sendImage(fileName);
+                }
+                return;
+            }
+            else
+            {
+                p.imageListener = new ImageListener(this);
+                // Start a thread to listen for incoming image data
+                p.receiverThread.start(*p.imageListener);
+            }
+        }
+#endif
+
 #ifdef MRV2_PYBIND11
         // Import the mrv2 python module so we read all python
         // plug-ins.
@@ -499,12 +540,6 @@ namespace mrv
         // Discover python plugins
         mrv2_discover_python_plugins();
 #endif
-
-        std_any value;
-
-        Preferences prefs(
-            ui->uiPrefs, p.options.resetSettings, p.options.resetHotkeys);
-        Preferences::run(ui);
 
 #if defined(TLRENDER_USD)
         p.settingsObject->setValue(
@@ -635,14 +670,6 @@ namespace mrv
         // Create the main control.
         p.mainControl = new MainControl(ui);
 
-        if (!OSXfiles.empty())
-        {
-            if (p.options.fileNames.empty())
-            {
-                p.options.fileNames = OSXfiles;
-            }
-        }
-
         // Open the input files.
         if (!p.options.fileNames.empty())
         {
@@ -736,13 +763,17 @@ namespace mrv
         }
     }
 
-    App::~App()
+    void App::_clean()
     {
         TLRENDER_P();
 
         delete p.mainControl;
 #ifdef MRV2_NETWORK
         delete p.commandInterpreter;
+        if (p.imageListener)
+            p.imageListener->stop();
+        p.receiverThread.join();
+        delete p.imageListener;
 #endif
         delete p.contextObject;
         delete ui;
@@ -752,6 +783,13 @@ namespace mrv
             tcp->close();
             delete tcp;
         }
+    }
+
+    App::~App()
+    {
+        TLRENDER_P();
+
+        _clean();
 
         //@todo:
         // delete p.outputDevice;

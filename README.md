@@ -121,6 +121,7 @@ Currently supported:
 - Movie files (H264, MP4, WEBM, etc.)
 - Image file sequences (Cineon, DPX, JPEG, OpenEXR, PNG, PPM, TIFF, TGA, BMP,
   	     	       	PSD)
+- RAW Camera Formats (CR2, CR3, X3F, etc).
 - Multi-channel audio
 - Color management
 - A/B comparison
