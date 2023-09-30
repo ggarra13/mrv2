@@ -887,8 +887,9 @@ namespace mrv
     {
         int i;
         ViewerUI* ui = App::ui;
-        PreferencesUI* uiPrefs = ViewerUI::uiPrefs;
-        SettingsObject* settingsObject = ViewerUI::app->settingsObject();
+        auto app = ui->app;
+        auto uiPrefs = ViewerUI::uiPrefs;
+        auto settingsObject = app->settingsObject();
 
         char* saved_locale = strdup(setlocale(LC_NUMERIC, NULL));
         setlocale(LC_NUMERIC, "C");
@@ -1296,7 +1297,7 @@ namespace mrv
                   .arg(prefspath());
         LOG_INFO(msg);
 
-        check_language(uiPrefs, language_index);
+        check_language(uiPrefs, language_index, app);
     }
 
     bool Preferences::set_transforms()
@@ -1311,7 +1312,7 @@ namespace mrv
         PreferencesUI* uiPrefs = ui->uiPrefs;
         App* app = ui->app;
 
-        check_language(uiPrefs, language_index);
+        check_language(uiPrefs, language_index, app);
 
 #ifdef __APPLE__
         if (uiPrefs->uiPrefsMacOSMenus->value())
@@ -1609,10 +1610,10 @@ namespace mrv
             }
         }
 
-        ui->uiMain->fill_menu(ui->uiMenuBar);
+        view->refreshWindows();
 
 #ifdef MRV2_NETWORK
-        if (ui->uiPrefs->uiPrefsSingleInstance->value())
+        if (uiPrefs->uiPrefsSingleInstance->value())
         {
             ImageSender sender;
             if (!sender.isRunning())
@@ -1625,6 +1626,8 @@ namespace mrv
             app->removeListener();
         }
 #endif
+
+        ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
     void Preferences::updateICS()

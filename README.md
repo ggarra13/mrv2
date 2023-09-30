@@ -329,7 +329,7 @@ which needs to be modified to the path of Visual Studio (2019 by default),
 the optional Windows SDK (none by default) and your copy of Msys.
 
 As a convernience for Windows users, DLLs, includes and .lib files
-for FFmpeg, libintl, libiconv, and liblcms2 libraries are provided in mrv2's windows/win64 directory.
+for FFmpeg and liblcms2 libraries are provided in mrv2's windows/win64 directory.  The libintl and libiconv libraries are taken from the MSys64 repositories as pre-flight check with the bin/install_libintl_window.sh script (part of runme.sh).
 
 If you unset LCMS2_ROOT in windows/envvars/envvars.sh, the library will be compiled. 
 

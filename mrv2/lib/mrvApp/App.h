@@ -140,6 +140,10 @@ namespace mrv
 
         void _cacheUpdate();
 
+        //! Tries to clean as many resources as possible.  This is usually done
+        //! before calling execv(), for example.
+        void cleanResources();
+
     public:
         static ViewerUI* ui;
 
@@ -147,9 +151,6 @@ namespace mrv
         void
         _activeCallback(const std::vector<std::shared_ptr<FilesModelItem> >&);
         void _settingsCallback();
-
-        // Clean all pointers and get ready to exit.
-        void _clean();
 
     private:
         otime::RationalTime _cacheReadAhead() const;

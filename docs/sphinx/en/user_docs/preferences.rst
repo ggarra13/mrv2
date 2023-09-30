@@ -52,7 +52,15 @@ The Window Behavior section allows you to set how the main and secondary window 
 
 .. topic:: Single Instance
 
-	   Currently unused.
+	   When selected, mrv2 will behave as a single instance.  If you open
+	   other movies with another mrv2, these will be redirected to the
+	   single instance of mrv2.  Note that you can toggle this setting at
+	   any time in the preferences to switch the behavior of mrv2.
+
+	   This works with a TCP port in 55120, so if you are on Windows, it may
+	   bring up a popup for allowing the connection to go through the
+	   Firewall.  On Linux or macOS, this is not necessary.
+	   
 
 .. topic:: Auto Refit Image
 

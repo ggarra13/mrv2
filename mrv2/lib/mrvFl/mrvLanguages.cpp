@@ -29,6 +29,8 @@ namespace fs = std::filesystem;
 #include "mrvFl/mrvLanguages.h"
 #include "mrvFl/mrvCallbacks.h"
 
+#include "mrvApp/App.h"
+
 #include "mrvPreferencesUI.h"
 
 #include "mrvFl/mrvIO.h"
@@ -123,7 +125,7 @@ namespace
 } // namespace
 #endif
 
-void check_language(PreferencesUI* uiPrefs, int& language_index)
+void check_language(PreferencesUI* uiPrefs, int& language_index, mrv::App* app)
 {
     int uiIndex = uiPrefs->uiLanguage->value();
     if (uiIndex != language_index)
@@ -149,6 +151,8 @@ void check_language(PreferencesUI* uiPrefs, int& language_index)
 
             base.flush();
 
+            app->cleanResources();
+
 #ifdef _WIN32
             win32_execv();
 #else
@@ -156,7 +160,12 @@ void check_language(PreferencesUI* uiPrefs, int& language_index)
             root += "/bin/mrv2";
 
             const char* const parmList[] = {root.c_str(), NULL};
-            execv(root.c_str(), (char* const*)parmList);
+            int ret = execv(root.c_str(), (char* const*)parmList);
+            if (ret == -1)
+            {
+                perror("execv failed");
+            }
+            exit(ret);
 #endif
         }
         else

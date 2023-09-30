@@ -7,6 +7,13 @@
 
 #include <string>
 
+namespace mrv
+{
+    class App;
+    class PopupMenu;
+    std::string setLanguageLocale();
+} // namespace mrv
+
 struct LanguageTable
 {
     const char* name; // in English
@@ -16,13 +23,7 @@ struct LanguageTable
 extern LanguageTable kLanguages[18];
 
 class PreferencesUI;
-void check_language(PreferencesUI* uiPrefs, int& language_index);
-
-namespace mrv
-{
-    class PopupMenu;
-    std::string setLanguageLocale();
-} // namespace mrv
+void check_language(PreferencesUI* uiPrefs, int& language_index, mrv::App*);
 
 char* select_character(const char* p, bool colon = false);
 void select_character(mrv::PopupMenu* w, bool colon = false);

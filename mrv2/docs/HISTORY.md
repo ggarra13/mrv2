@@ -9,6 +9,9 @@ v0.7.9
 - Added Sigma .X3F RAW support to RAW Reader.
 - The RAW Reader properly reads all files but two from:
       https://www.rawsamples.ch
+- Fixed an OpenGL refresh/redraw issue when going to the Preferences
+  Window and returning with new settings.  It could also provoke a crash on
+  Windows.
 - Made the Log Panel not save its visibility upon program exit.  This prevents
   the Log Panel Window from opening on a new start up of mrv2 as it is usually
   not wanted, but happens once there had been an error in the previous instance.

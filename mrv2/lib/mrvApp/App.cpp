@@ -514,11 +514,10 @@ namespace mrv
             {
                 for (const auto& fileName : p.options.fileNames)
                 {
-                    // If another instance is running, send the new image data
+                    // If another instance is running, send the new image files
                     // to it.
                     sender.sendImage(fileName);
                 }
-                _clean();
                 return;
             }
         }
@@ -757,23 +756,31 @@ namespace mrv
         }
     }
 
-    void App::_clean()
+    void App::cleanResources()
     {
         TLRENDER_P();
 
         delete p.mainControl;
+        p.mainControl = nullptr;
+
 #ifdef MRV2_NETWORK
         delete p.commandInterpreter;
+        p.commandInterpreter = nullptr;
 #endif
         removeListener();
-        delete p.contextObject;
+
         delete ui;
         ui = nullptr;
+
+        delete p.contextObject;
+        p.contextObject = nullptr;
+
         if (tcp)
         {
             tcp->stop();
             tcp->close();
             delete tcp;
+            tcp = nullptr;
         }
     }
 
@@ -781,7 +788,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        _clean();
+        cleanResources();
 
         //@todo:
         // delete p.outputDevice;
@@ -903,6 +910,7 @@ namespace mrv
         TLRENDER_P();
 
         delete p.imageListener;
+        p.imageListener = nullptr;
 #endif
     }
 

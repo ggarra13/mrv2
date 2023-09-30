@@ -25,7 +25,6 @@ namespace mrv
     struct ContextObject::Private
     {
         std::shared_ptr<system::Context> context;
-        std::atomic<bool> running;
     };
 
     ContextObject::ContextObject(
@@ -33,14 +32,12 @@ namespace mrv
         _p(new Private)
     {
         _p->context = context;
-        _p->running = true;
 
         Fl::add_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
     }
 
     ContextObject::~ContextObject()
     {
-        _p->running = false;
         Fl::remove_timeout((Fl_Timeout_Handler)timerEvent_cb, this);
     }
 
@@ -53,9 +50,7 @@ namespace mrv
     {
         _p->context->tick();
 
-        if (_p->running)
-            Fl::repeat_timeout(
-                kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
+        Fl::repeat_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
     }
 
     void ContextObject::timerEvent_cb(void* d)
