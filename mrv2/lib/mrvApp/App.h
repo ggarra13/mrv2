@@ -132,6 +132,12 @@ namespace mrv
         //! This signal is emitted when the audio mute is changed.
         void muteChanged(bool);
 
+        //! Create an image listener (opens a socket on localport).
+        void createListener();
+
+        //! Removes an image listener (closes a socket on localport).
+        void removeListener();
+
         void _cacheUpdate();
 
     public:
@@ -142,6 +148,7 @@ namespace mrv
         _activeCallback(const std::vector<std::shared_ptr<FilesModelItem> >&);
         void _settingsCallback();
 
+        // Clean all pointers and get ready to exit.
         void _clean();
 
     private:

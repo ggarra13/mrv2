@@ -4,6 +4,7 @@
 #include <tlCore/Util.h>
 
 #include <Poco/Net/ServerSocket.h>
+#include <Poco/Net/TCPServer.h>
 
 namespace mrv
 {
@@ -30,13 +31,7 @@ namespace mrv
         ImageListener(App* app, uint16_t port = kPORT_NUMBER);
         ~ImageListener();
 
-        void run();
-        void stop();
-
-    private:
-        App* app_ = nullptr;
-        Poco::Net::ServerSocket serverSocket;
-        std::thread* acceptThread = nullptr;
-        bool running = false;
+    public:
+        Poco::Net::TCPServer server;
     };
 } // namespace mrv
