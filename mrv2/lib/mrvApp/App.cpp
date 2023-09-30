@@ -509,6 +509,7 @@ namespace mrv
             }
         }
 
+#ifdef MRV2_NETWORK
         if (ui->uiPrefs->uiPrefsSingleInstance->value())
         {
             ImageSender sender;
@@ -529,6 +530,7 @@ namespace mrv
                 p.receiverThread.start(*p.imageListener);
             }
         }
+#endif
 
 #ifdef MRV2_PYBIND11
         // Import the mrv2 python module so we read all python
