@@ -46,7 +46,6 @@ namespace py = pybind11;
 #include "mrvNetwork/mrvLUTOptions.h"
 
 #ifdef MRV2_NETWORK
-#    include <Poco/Thread.h>
 #    include "mrvNetwork/mrvCommandInterpreter.h"
 #    include "mrvNetwork/mrvClient.h"
 #    include "mrvNetwork/mrvImageListener.h"
@@ -161,7 +160,6 @@ namespace mrv
 #ifdef MRV2_NETWORK
         CommandInterpreter* commandInterpreter = nullptr;
         ImageListener* imageListener = nullptr;
-        Poco::Thread receiverThread;
 #endif
 
         std::shared_ptr<PlaylistsModel> playlistsModel;
@@ -499,7 +497,6 @@ namespace mrv
 
         Preferences prefs(
             ui->uiPrefs, p.options.resetSettings, p.options.resetHotkeys);
-        Preferences::run(ui);
 
         if (!OSXfiles.empty())
         {
@@ -521,16 +518,13 @@ namespace mrv
                     // to it.
                     sender.sendImage(fileName);
                 }
+                _clean();
                 return;
-            }
-            else
-            {
-                p.imageListener = new ImageListener(this);
-                // Start a thread to listen for incoming image data
-                p.receiverThread.start(*p.imageListener);
             }
         }
 #endif
+
+        Preferences::run(ui);
 
 #ifdef MRV2_PYBIND11
         // Import the mrv2 python module so we read all python
@@ -770,13 +764,11 @@ namespace mrv
         delete p.mainControl;
 #ifdef MRV2_NETWORK
         delete p.commandInterpreter;
-        if (p.imageListener)
-            p.imageListener->stop();
-        p.receiverThread.join();
-        delete p.imageListener;
 #endif
+        removeListener();
         delete p.contextObject;
         delete ui;
+        ui = nullptr;
         if (tcp)
         {
             tcp->stop();
@@ -893,6 +885,25 @@ namespace mrv
             break;
         }
         delete p;
+    }
+
+    void App::createListener()
+    {
+#ifdef MRV2_NETWORK
+        TLRENDER_P();
+
+        if (!p.imageListener)
+            p.imageListener = new ImageListener(this);
+#endif
+    }
+
+    void App::removeListener()
+    {
+#ifdef MRV2_NETWORK
+        TLRENDER_P();
+
+        delete p.imageListener;
+#endif
     }
 
     int App::run()

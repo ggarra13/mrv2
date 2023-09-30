@@ -23,6 +23,10 @@ namespace fs = std::filesystem;
 
 #include "mrvWidgets/mrvLogDisplay.h"
 
+#ifdef MRV2_NETWORK
+#    include "mrvNetwork/mrvImageListener.h"
+#endif
+
 #include "mrvFl/mrvPreferences.h"
 #include "mrvFl/mrvHotkey.h"
 #include "mrvFl/mrvLanguages.h"
@@ -1607,8 +1611,20 @@ namespace mrv
 
         ui->uiMain->fill_menu(ui->uiMenuBar);
 
-        if (debug > 1)
-            schemes.debug();
+#ifdef MRV2_NETWORK
+        if (ui->uiPrefs->uiPrefsSingleInstance->value())
+        {
+            ImageSender sender;
+            if (!sender.isRunning())
+            {
+                app->createListener();
+            }
+        }
+        else
+        {
+            app->removeListener();
+        }
+#endif
     }
 
     void Preferences::updateICS()
