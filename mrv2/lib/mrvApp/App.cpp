@@ -46,7 +46,6 @@ namespace py = pybind11;
 #include "mrvNetwork/mrvLUTOptions.h"
 
 #ifdef MRV2_NETWORK
-#    include <Poco/Thread.h>
 #    include "mrvNetwork/mrvCommandInterpreter.h"
 #    include "mrvNetwork/mrvClient.h"
 #    include "mrvNetwork/mrvImageListener.h"
@@ -161,7 +160,6 @@ namespace mrv
 #ifdef MRV2_NETWORK
         CommandInterpreter* commandInterpreter = nullptr;
         ImageListener* imageListener = nullptr;
-        Poco::Thread receiverThread;
 #endif
 
         std::shared_ptr<PlaylistsModel> playlistsModel;
@@ -525,9 +523,7 @@ namespace mrv
             }
             else
             {
-                p.imageListener = new ImageListener(this);
-                // Start a thread to listen for incoming image data
-                p.receiverThread.start(*p.imageListener);
+                // p.imageListener = new ImageListener(this);
             }
         }
 #endif
@@ -770,9 +766,6 @@ namespace mrv
         delete p.mainControl;
 #ifdef MRV2_NETWORK
         delete p.commandInterpreter;
-        if (p.imageListener)
-            p.imageListener->stop();
-        p.receiverThread.join();
         delete p.imageListener;
 #endif
         delete p.contextObject;

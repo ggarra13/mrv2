@@ -1,7 +1,3 @@
-// SPDX-License-Identifier: BSD-3-Clause
-// mrv2
-// Copyright Contributors to the mrv2 Project. All rights reserved.
-
 #include <iostream>
 #include <thread>
 
@@ -78,11 +74,18 @@ namespace mrv
         acceptThread = new std::thread([this] { run(); });
     }
 
+    ImageListener::~ImageListener()
+    {
+        stop();
+    }
+
     void ImageListener::stop()
     {
         running = false;
         if (acceptThread && acceptThread->joinable())
             acceptThread->join();
+        delete acceptThread;
+        acceptThread = nullptr;
         serverSocket.close();
     }
 
@@ -93,6 +96,7 @@ namespace mrv
         {
             try
             {
+#if 0
                 Poco::Net::StreamSocket clientSocket =
                     serverSocket.acceptConnection();
                 Poco::Net::SocketStream stream(clientSocket);
@@ -110,11 +114,14 @@ namespace mrv
                     Fl::add_timeout(
                         0.0, (Fl_Timeout_Handler)open_file_cb, data);
                 }
+                
                 // Close the client socket
                 clientSocket.close();
+#endif
             }
-            catch (Poco::Exception&)
+            catch (Poco::Exception& e)
             {
+                std::cerr << e.displayText() << std::endl;
             }
         }
     }
