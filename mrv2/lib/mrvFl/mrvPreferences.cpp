@@ -23,7 +23,9 @@ namespace fs = std::filesystem;
 
 #include "mrvWidgets/mrvLogDisplay.h"
 
-#include "mrvNetwork/mrvImageListener.h"
+#ifdef MRV2_NETWORK
+#    include "mrvNetwork/mrvImageListener.h"
+#endif
 
 #include "mrvFl/mrvPreferences.h"
 #include "mrvFl/mrvHotkey.h"
