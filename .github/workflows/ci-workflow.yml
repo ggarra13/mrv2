@@ -75,7 +75,7 @@ jobs:
     - name: Build mrv2
       run: >
         ./runme_nolog.sh
-	
+
 
   linux-minimal-build:
     runs-on: ubuntu-20.04
