@@ -82,7 +82,7 @@ jobs:
         ./runme_nolog.sh -D TLRENDER_USD=OFF
 
 
-  linux-quick-build:
+  linux-minimal-build:
     runs-on: ubuntu-latest
 
     steps:
@@ -131,8 +131,7 @@ jobs:
 
     - name: Build mrv2
       run: >
-        ./runme_nolog.sh -D TLRENDER_USD=OFF
-
+        ./runme_nolog.sh -D TLRENDER_USD=OFF -D TLRENDER_FFMPEG=OFF -D TLRENDER_EXR=OFF -D TLRENDER_RAW=OFF -D TLRENDER_TIFF=OFF -D TLRENDER_AUDIO=OFF -D MRV2_PDF=OFF -D MRV2_NETWORK=OFF -D MRV2_PYBIND11=OFF -D BUILD_PYTHON=OFF
 
   macos-build:
     runs-on: macos-latest
@@ -163,7 +162,6 @@ jobs:
 
     - name: Build mrv2
       run: >
-        export DYLD_LIBRARY_PATH=$PWD/BUILD-Darwin-amd64/Release/install/lib:$DYLD_LIBRARY_PATH &&
         ./runme_nolog.sh dist
 
 
@@ -199,8 +197,41 @@ jobs:
 
     - name: Build mrv2
       run: >
-        export DYLD_LIBRARY_PATH=$PWD/BUILD-Darwin-amd64/Release/install/lib:$DYLD_LIBRARY_PATH &&
         ./runme_nolog.sh -v -D TLRENDER_USD=OFF
+
+  macos-minimal-build:
+    runs-on: macos-latest
+
+    steps:
+    
+    - uses: actions/checkout@v2
+      with:
+        submodules: recursive
+
+    - name: Install ninja-build
+      run: brew install ninja
+
+    - name: Install openssl
+      run: brew install openssl
+      
+    - name: Install automake
+      run: brew install automake
+
+    - name: Install GNU sed
+      run: brew install gnu-sed
+      
+    - name: Install Python dependencies
+      run: brew install openssl readline sqlite3 xz zlib
+
+    - name: Setup environment
+      run: >
+        mkdir -p "$PWD/BUILD-Darwin-amd64/Release/install/bin/" &&
+        ln -s /usr/bin/true "$PWD/BUILD-Darwin-amd64/Release/install/bin/makeinfo" &&
+        echo "$PWD/BUILD-Darwin-amd64/Release/install/bin:/usr/local/bin" >> $GITHUB_PATH
+
+    - name: Build mrv2
+      run: >
+        ./runme_nolog.sh -D TLRENDER_USD=OFF -D TLRENDER_FFMPEG=OFF -D TLRENDER_EXR=OFF -D TLRENDER_RAW=OFF -D TLRENDER_TIFF=OFF -D TLRENDER_AUDIO=OFF -D MRV2_PDF=OFF -D MRV2_NETWORK=OFF -D MRV2_PYBIND11=OFF -D BUILD_PYTHON=OFF
 
   windows-gpl-build:
     runs-on: windows-latest
@@ -252,4 +283,4 @@ jobs:
 
     - name: Build mrv2
       run: >
-        ./runme_nolog.sh -D TLRENDER_USD=OFF -D TLRENDER_FFMPEG=OFF -D TLRENDER_EXR=OFF -D TLRENDER_RAW=OFF -D TLRENDER_TIFF=OFF -D TLRENDER_OCIO=OFF -D TLRENDER_AUDIO=OFF -D MRV2_PDF=OFF -D MRV2_NETWORK=OFF -D MRV2_PYBIND11=OFF -D BUILD_PYTHON=OFF
+        ./runme_nolog.sh -D TLRENDER_USD=OFF -D TLRENDER_FFMPEG=OFF -D TLRENDER_EXR=OFF -D TLRENDER_RAW=OFF -D TLRENDER_TIFF=OFF -D TLRENDER_AUDIO=OFF -D MRV2_PDF=OFF -D MRV2_NETWORK=OFF -D MRV2_PYBIND11=OFF -D BUILD_PYTHON=OFF
