@@ -43,7 +43,8 @@ if(UNIX AND NOT APPLE)
 	    message( STATUS "Old g++ compiler detected.  Will link to stdc++fs")
 	    list( APPEND LIBRARIES "stdc++fs" )
 	endif()
-	list( APPEND LIBRARIES "util" )  # Needed for python3.10 on Rocky
+	# Needed for python3.10 on Rocky and Ubuntu 20.04
+	list( APPEND LIBRARIES "util" "c" ) 
     endif()
 endif()
 
