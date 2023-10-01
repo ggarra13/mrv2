@@ -331,6 +331,7 @@ namespace mrv2
             save_movie(file, App::ui, opts);
         }
 
+#ifdef MRV2_PDF
         /**
          * \brief Save a PDF document.
          *
@@ -342,6 +343,7 @@ namespace mrv2
 
             return save_pdf(file, ui);
         }
+#endif
 
         /**
          * \brief Open a session file.
@@ -488,10 +490,12 @@ Used to run main commands and get and set the display, image, compare, LUT optio
         _("Save a movie or sequence from the front layer."), py::arg("file"),
         py::arg("options") = mrv::SaveOptions());
 
+#ifdef MRV2_PDF
     cmds.def(
         "savePDF", &mrv2::cmd::savePDF,
         _("Save a PDF document with all annotations and notes."),
         py::arg("file"));
+#endif
 
     cmds.def(
         "oepnSession", &mrv2::cmd::openSession, _("Open a session file."),

@@ -14,6 +14,11 @@ if (WIN32)
     list( APPEND SOURCES ${APP_ICON_RESOURCE_WINDOWS} )
 endif()
 
+set( GL_LIBRARY )
+if (TLRENDER_GL)
+    set( GL_LIBRARY mrvGL )
+endif()
+
 #
 # We must list all libraries so that old gcc compiler on Docker will link
 # the stdc++fs library properly. 
@@ -26,6 +31,8 @@ set( LIBRARIES
     mrvFl
     mrvFLU
     mrvNetwork
+    mrvDraw
+    ${GL_LIBRARY}
     mrvCore
     ${Intl_LIBRARIES} )
 
@@ -81,7 +88,6 @@ include(InstallRequiredSystemLibraries)
 #
 # Extract python version from python executable
 #
-message("PYTHON_VERSION=${PYTHON_VERSION}")
 string( REGEX MATCH "^[0-9]+\\.[0-9]+" MRV2_PYTHON_VERSION "${PYTHON_VERSION}" )
 
 if (UNIX)

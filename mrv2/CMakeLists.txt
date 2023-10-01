@@ -114,6 +114,7 @@ endif()
 if(MRV2_PYBIND11)
     add_definitions(-DMRV2_PYBIND11)
     find_package(pybind11 REQUIRED)
+    message("pybind11 PYTHON_VERSION=${PYTHON_VERSION}")
 endif()
 
 # Omit superfluous "Up-to-date" messages.

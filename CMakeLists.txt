@@ -94,13 +94,7 @@ endif()
 
 set( PYBIND11 )
 if( MRV2_PYBIND11 )
-    if (NOT BUILD_PYTHON)
-    endif()
     include( cmake/Modules/Buildpybind11.cmake )
-endif()
-
-if(NOT BUILD_PYTHON)
-   set(TLRENDER_USD FALSE)
 endif()
 
 add_subdirectory( tlRender/etc/SuperBuild )

@@ -391,10 +391,13 @@ namespace mrv
             shape->font = w->textfont();
             shape->fontSize = w->textsize() / p.viewZoom * pixels_unit;
             auto pos = math::Vector2i(w->x() + offset.x, w->y() + offset.y);
+            std::cerr << "ACCEPT widget=" << pos << std::endl;
             pos = _getFocus(pos.x, pos.y);
+            std::cerr << "ACCEPT focus=" << pos << std::endl;
             pnt = _getRasterf(pos.x, pos.y);
             shape->pts[0].x = pnt.x;
             shape->pts[0].y = pnt.y;
+            std::cerr << "ACCEPT pts=" << pnt << std::endl;
 #else
             shape->fontFamily = w->fontFamily;
             shape->fontSize = w->textsize() / p.viewZoom * pixels_unit;
@@ -1404,17 +1407,20 @@ namespace mrv
             return;
 
         fl_font(shape->font, shape->fontSize);
+        std::cerr << "EDIT    pnt=" << shape->pts[0] << std::endl;
 
         const math::Vector2i offset(
             kCrossSize + 2, kCrossSize + fl_height() - fl_descent());
         math::Vector2i pos(
             shape->pts[0].x * shape->viewZoom + p.viewPos.x,
             shape->pts[0].y * shape->viewZoom + p.viewPos.y);
+        std::cerr << "EDIT    pos=" << pos << std::endl;
         const float devicePixelRatio = pixels_per_unit();
         pos.x = pos.x / devicePixelRatio;
         pos.y = h() - pos.y / devicePixelRatio;
         pos.x -= offset.x;
         pos.y -= offset.y;
+        std::cerr << "EDIT widget=" << pos << std::endl;
 
         auto w = new MultilineInput(pos.x, pos.y, 20, 30 * pct * p.viewZoom);
         w->take_focus();
