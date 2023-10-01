@@ -24,6 +24,9 @@ v0.7.9
   
 	Preferences->User Interface->Single Instance.
 - Removed all warnings and errors from the documentation generation.
+- Fixed positioning of text editing when re-editing a text annotaion.
+  Previously, it could be offset a tad if the zoom was not 1.
+- Added hotkey 'l' to show the lumma (the sum of R+G+B / 3).
 
 - Build system changes and fixes:
 

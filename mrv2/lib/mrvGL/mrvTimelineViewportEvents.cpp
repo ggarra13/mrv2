@@ -1403,16 +1403,19 @@ namespace mrv
         if (!shape)
             return;
 
-        fl_font(shape->font, shape->fontSize);
+        const float devicePixelRatio = pixels_per_unit();
+        const int fontsize =
+            shape->fontSize * shape->viewZoom / devicePixelRatio;
+        fl_font(shape->font, fontsize);
 
         const math::Vector2i offset(
             kCrossSize + 2, kCrossSize + fl_height() - fl_descent());
         math::Vector2i pos(
             shape->pts[0].x * shape->viewZoom + p.viewPos.x,
             shape->pts[0].y * shape->viewZoom + p.viewPos.y);
-        const float devicePixelRatio = pixels_per_unit();
         pos.x = pos.x / devicePixelRatio;
         pos.y = h() - pos.y / devicePixelRatio;
+
         pos.x -= offset.x;
         pos.y -= offset.y;
 
