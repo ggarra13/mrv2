@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   linux-build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     steps:
     
@@ -56,7 +56,7 @@ jobs:
 
 
   windows-build:
-    runs-on: windows-latest
+    runs-on: windows-2019
 
     defaults:
       run:
@@ -83,7 +83,7 @@ jobs:
 
 
   linux-minimal-build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     steps:
     
@@ -134,7 +134,7 @@ jobs:
         ./runme_nolog.sh -D TLRENDER_USD=OFF -D TLRENDER_FFMPEG=OFF -D TLRENDER_RAW=OFF -D TLRENDER_TIFF=OFF -D TLRENDER_AUDIO=OFF -D MRV2_PDF=OFF -D MRV2_NETWORK=OFF -D MRV2_PYBIND11=OFF -D BUILD_PYTHON=OFF
 
   macos-build:
-    runs-on: macos-latest
+    runs-on: macos-11
 
     steps:
     
@@ -166,7 +166,7 @@ jobs:
 
 
   macos-quick-build:
-    runs-on: macos-latest
+    runs-on: macos-11
 
     steps:
     
@@ -200,7 +200,7 @@ jobs:
         ./runme_nolog.sh -v -D TLRENDER_USD=OFF
 
   macos-minimal-build:
-    runs-on: macos-latest
+    runs-on: macos-11
 
     steps:
     
@@ -234,7 +234,7 @@ jobs:
         ./runme_nolog.sh -D TLRENDER_USD=OFF -D TLRENDER_FFMPEG=OFF -D TLRENDER_RAW=OFF -D TLRENDER_TIFF=OFF -D TLRENDER_AUDIO=OFF -D MRV2_PDF=OFF -D MRV2_NETWORK=OFF -D MRV2_PYBIND11=OFF -D BUILD_PYTHON=OFF
 
   windows-gpl-build:
-    runs-on: windows-latest
+    runs-on: windows-2019
 
     defaults:
       run:
@@ -260,7 +260,7 @@ jobs:
         ./runme_nolog.sh -gpl -D TLRENDER_USD=OFF
 
   windows-minimal-build:
-    runs-on: windows-latest
+    runs-on: windows-2019
 
     defaults:
       run:
