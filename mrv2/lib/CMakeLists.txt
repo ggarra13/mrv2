@@ -3,7 +3,6 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 add_subdirectory(mrvCore)
-add_subdirectory(mrvDraw)
 add_subdirectory(mrvFLU)
 add_subdirectory(mrvFlmm)
 add_subdirectory(mrvWidgets)
@@ -11,6 +10,7 @@ add_subdirectory(mrvUI)
 if(TLRENDER_GL)
     add_subdirectory(mrvGL)
 endif()
+add_subdirectory(mrvDraw)
 if(MRV2_PDF)
     add_subdirectory(mrvPDF)
 endif()

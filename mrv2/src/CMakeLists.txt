@@ -90,7 +90,7 @@ include(InstallRequiredSystemLibraries)
 #
 string( REGEX MATCH "^[0-9]+\\.[0-9]+" MRV2_PYTHON_VERSION "${PYTHON_VERSION}" )
 
-if (UNIX)
+if (UNIX AND BUILD_PYTHON)
     set( MRV2_PYTHON_LIBS ${CMAKE_INSTALL_PREFIX}/lib/python${MRV2_PYTHON_VERSION} )
     install( DIRECTORY ${MRV2_PYTHON_LIBS}
         DESTINATION lib
