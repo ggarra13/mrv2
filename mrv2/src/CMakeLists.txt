@@ -81,11 +81,12 @@ include(InstallRequiredSystemLibraries)
 #
 # Extract python version from python executable
 #
-string( REGEX MATCH "^[0-9]+\\.[0-9]+" MRV2_PYTHON_VERSION "${Python_VERSION}" )
+message("PYTHON_VERSION=${PYTHON_VERSION}")
+string( REGEX MATCH "^[0-9]+\\.[0-9]+" MRV2_PYTHON_VERSION "${PYTHON_VERSION}" )
 
 if (UNIX)
-    set( MRV_PYTHON_LIBS ${CMAKE_INSTALL_PREFIX}/lib/python${MRV2_PYTHON_VERSION} )
-    install( DIRECTORY ${MRV_PYTHON_LIBS}
+    set( MRV2_PYTHON_LIBS ${CMAKE_INSTALL_PREFIX}/lib/python${MRV2_PYTHON_VERSION} )
+    install( DIRECTORY ${MRV2_PYTHON_LIBS}
         DESTINATION lib
         COMPONENT applications )
 endif()

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Módulo de plugin &mdash; documentación de mrv2 - v0.7.8</title>
+  <title>Módulo de plugin &mdash; documentación de mrv2 - v0.7.9</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
@@ -14,7 +14,7 @@
   
         <script src="../_static/jquery.js?v=5d32c60e"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../_static/documentation_options.js?v=9dc8b9dc"></script>
+        <script src="../_static/documentation_options.js?v=39b03dc5"></script>
         <script src="../_static/doctools.js?v=888ff710"></script>
         <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="../_static/translations.js?v=efdbd0b9"></script>
@@ -109,21 +109,21 @@ from mrv2 import plugin</p>
 <dl>
 <dt>class DemoPlugin(plugin.Plugin):</dt><dd><dl>
 <dt>def __init__(self):</dt><dd><p>«»»
-Constructor for DemoPlugin.</p>
-<p>Define your own variables here.
+Constructor de DemoPlugin.</p>
+<p>Defina sus variables aquí.
 «»»
 super().__init__()</p>
 </dd>
 <dt>def run(self):</dt><dd><p>«»»
-Example method used for the callback.
+Método de ejemplo para la llamada.
 «»»
-print(«Hello from Python plugin»)</p>
+print(«Hola de un plugin de Python»)</p>
 </dd>
 <dt>def active(self):</dt><dd><p>«»»
-Optional method to return whether the plug-in is active or not.</p>
+Método opcional para returnar si el plug-in está activo o no.</p>
 <dl class="field-list simple">
 <dt class="field-odd">return<span class="colon">:</span></dt>
-<dd class="field-odd"><p>True if the plug-in is active, False otherwise.</p>
+<dd class="field-odd"><p>True si el plug-in está activo, False sino.</p>
 </dd>
 <dt class="field-even">rtype<span class="colon">:</span></dt>
 <dd class="field-even"><p>bool</p>
@@ -133,10 +133,10 @@ Optional method to return whether the plug-in is active or not.</p>
 return True</p>
 </dd>
 <dt>def menus(self):</dt><dd><p>«»»
-Dictionary of menu entries as keys with callbacks as values.</p>
+Diccionario de entradas de menúes como llaves con llamadas como valores.</p>
 <dl class="field-list simple">
 <dt class="field-odd">return<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A dictionary of menu entries and their corresponding callbacks.</p>
+<dd class="field-odd"><p>Un diccionario de entradas de menúes y sus llamadas correspondientes.</p>
 </dd>
 <dt class="field-even">rtype<span class="colon">:</span></dt>
 <dd class="field-even"><p>dict</p>
@@ -158,12 +158,14 @@ return menus</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="mrv2.plugin.Plugin.menus">
 <span class="sig-name descname"><span class="pre">menus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mrv2.plugin.Plugin" title="mrv2.plugin.Plugin"><span class="pre">mrv2.plugin.Plugin</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#mrv2.plugin.Plugin.menus" title="Link to this definition"></a></dt>
-<dd><p>Dictionary of menu entries with callbacks, like:</p>
-<dl class="simple">
-<dt>def menus(self):</dt><dd><p>menus = { «Nem Menu/Hello» : self.run }
+<dd><p>Diccionario de entradas del menu con métodos como:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>def menus(self):</dt><dd><p>menus = { «Nuevo Menu/Hola» : self.run }
 return menus</p>
 </dd>
 </dl>
+</div></blockquote>
 </dd></dl>
 
 </dd></dl>

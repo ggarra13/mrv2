@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Preferences &mdash; mrv2 v0.7.8 documentation</title>
+  <title>Preferences &mdash; mrv2 v0.7.9 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
@@ -14,7 +14,7 @@
   
         <script src="../_static/jquery.js?v=5d32c60e"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../_static/documentation_options.js?v=265a2590"></script>
+        <script src="../_static/documentation_options.js?v=8222a189"></script>
         <script src="../_static/doctools.js?v=888ff710"></script>
         <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -154,7 +154,13 @@ The Window Behavior section allows you to set how the main and secondary window 
 </aside>
 <aside class="topic">
 <p class="topic-title">Single Instance</p>
-<p>Currently unused.</p>
+<p>When selected, mrv2 will behave as a single instance.  If you open
+other movies with another mrv2, these will be redirected to the
+single instance of mrv2.  Note that you can toggle this setting at
+any time in the preferences to switch the behavior of mrv2.</p>
+<p>This works with a TCP port in 55120, so if you are on Windows, it may
+bring up a popup for allowing the connection to go through the
+Firewall.  On Linux or macOS, this is not necessary.</p>
 </aside>
 <aside class="topic">
 <p class="topic-title">Auto Refit Image</p>

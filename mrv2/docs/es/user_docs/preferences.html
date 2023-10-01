@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Preferencias &mdash; documentación de mrv2 - v0.7.8</title>
+  <title>Preferencias &mdash; documentación de mrv2 - v0.7.9</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
@@ -14,7 +14,7 @@
   
         <script src="../_static/jquery.js?v=5d32c60e"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../_static/documentation_options.js?v=9dc8b9dc"></script>
+        <script src="../_static/documentation_options.js?v=39b03dc5"></script>
         <script src="../_static/doctools.js?v=888ff710"></script>
         <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="../_static/translations.js?v=efdbd0b9"></script>
@@ -154,7 +154,16 @@ La sección de Comportamiento de la Ventana permite establecer cómo se comporta
 </aside>
 <aside class="topic">
 <p class="topic-title">Una Instance</p>
-<p>Actualmente sin uso.</p>
+<p>Al seleccionarlo, mrv2 se comportará como una sola instancia.
+Si abre otras películas con otro mrv2 (o con una asociación de
+archivi), éstas serán redireccionadas a la ya abierta instancia de
+mrv2.
+Nótese que puede cambiar este seteo en cualquier momento en las
+preferencias para cambiar el comporamiento de mrv2.</p>
+<p>Esta característica funciona con un puerto de TCP port em 55120, por
+lo que si su plataforma es Windows, la primera vez que lo use puede
+que su cortafuegos abra una ventana para permitir pasar la conección.
+En Linux o macOS no es necesario modificar el cortafuegos.</p>
 </aside>
 <aside class="topic">
 <p class="topic-title">Auto Reencuadrar la imagen</p>

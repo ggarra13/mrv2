@@ -16,6 +16,7 @@ set -o pipefail -e
 . etc/functions.sh
 
 extract_version
+extract_python_version
 
 #
 # Determine OS Kernel, OS CPU architecture
@@ -48,7 +49,7 @@ fi
 
 export DIST=0
 export FFMPEG_GPL=$FFMPEG_GPL
-export CLEAN_DIR=0
+CLEAN_DIR=0
 export CMAKE_OSX_ARCHITECTURES=""
 export CMAKE_BUILD_TYPE="Release"
 export CMAKE_GENERATOR="Ninja"
@@ -74,7 +75,7 @@ for i in $@; do
 	    shift
 	    ;;
 	clean)
-	    export CLEAN_DIR=1
+	    CLEAN_DIR=1
 	    if [[ $RUNME == 0 ]]; then
 		echo $0
 		echo "clean option can only be run with the runme.sh script"
@@ -168,7 +169,7 @@ if [[ $FLAGS == "" ]]; then
 fi
 export FLAGS="${FLAGS} $*"
 
-if [[ $CLEAN_DIR == 1 ]]; then
+if [[ $CLEAN_DIR == 1 && $0 == *runme.sh* ]]; then
     if [[ -d ${BUILD_DIR} ]]; then
 	echo "Cleaning ${BUILD_DIR}.  Please wait..."
 	run_cmd rm -rf $BUILD_DIR
@@ -178,7 +179,7 @@ fi
 export PATH="$PWD/${BUILD_DIR}/install/bin:$PWD/$BUILD_DIR/install/bin/Scripts:${PATH}"
 export LD_LIBRARY_PATH="$PWD/${BUILD_DIR}/install/lib64:$PWD/${BUILD_DIR}/install/lib:${LD_LIBRARY_PATH}"
 export DYLD_LIBRARY_PATH="$PWD/${BUILD_DIR}/install/lib:${DYLD_LIBRARY_PATH}"
-export PKG_CONFIG_PATH="$PWD/${BUILD_DIR}/install/lib/pkgconfig:$PKG_CONFIG_PATH"
+export PKG_CONFIG_PATH="$PWD/${BUILD_DIR}/install/lib/pkgconfig:${PKG_CONFIG_PATH}"
 
 if [[ $RUNME == 1 && $0 != *runme.sh* ]]; then
     echo "Build directory is ${BUILD_DIR}"

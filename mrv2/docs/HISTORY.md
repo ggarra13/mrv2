@@ -23,8 +23,9 @@ v0.7.9
   of the viewer.  You set the behavior in:
   
 	Preferences->User Interface->Single Instance.
+- Removed all warnings and errors from the documentation generation.
 
-- Build system changes:
+- Build system changes and fixes:
 
    * Renamed runme.sh script to runme_nolog.sh.
    * Added a new runme.sh script that calls runme_nolog.sh but saves the
@@ -39,6 +40,9 @@ v0.7.9
    * Added optional build support for all the optional TLRENDER_* settings and
      for the MRV2_* settings.  It is now possible to build a light version of
      mrv2 or one with all the features.
+   * Fixed a problem with the embedded python (pybind11) locating the system
+     python installation instead of the local one instead.  This created havok
+     on my Ubuntu 22.04 when there was an upgrade.
 
 
 v0.7.8

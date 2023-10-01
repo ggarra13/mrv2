@@ -5,6 +5,9 @@
 import os
 import sys
 
+# Print the Python version
+print("Python Version:", sys.version)
+
 # This script is to be run from inside mrv2 to document mrv2 and its python
 # API.  It should be run multiple times for each language that mrv2 accepts.
 
