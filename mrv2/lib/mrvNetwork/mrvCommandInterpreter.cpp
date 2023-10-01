@@ -13,6 +13,7 @@
 
 #ifdef TLRENDER_GL
 #    include "mrvGL/mrvGLUtil.h"
+#    include "mrvGL/mrvGLJson.h"
 #endif
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
@@ -645,7 +646,7 @@ namespace mrv
                     tcp->unlock();
                     return;
                 }
-                auto shape = messageToShape(message["value"]);
+                auto shape = draw::messageToShape(message["value"]);
                 annotation->shapes.push_back(shape);
 
                 // Create annotation menus if not there already
@@ -756,7 +757,7 @@ namespace mrv
                     tcp->unlock();
                     return;
                 }
-                auto shape = messageToShape(message["value"]);
+                auto shape = draw::messageToShape(message["value"]);
                 annotation->shapes.pop_back();
                 annotation->shapes.push_back(shape);
                 view->updateUndoRedoButtons();
@@ -776,7 +777,7 @@ namespace mrv
                     tcp->unlock();
                     return;
                 }
-                auto shape = messageToShape(message["value"]);
+                auto shape = draw::messageToShape(message["value"]);
                 annotation->shapes.push_back(shape);
                 // Create annotation menus if not there already
                 ui->uiMain->fill_menu(ui->uiMenuBar);
