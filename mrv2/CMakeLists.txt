@@ -91,6 +91,10 @@ if(TLRENDER_JPEG)
     add_definitions(-DTLRENDER_JPEG)
 endif()
 
+if(TLRENDER_OCIO)
+    add_definitions(-DTLRENDER_OCIO)
+endif()
+
 if(TLRENDER_PNG)
     add_definitions(-DTLRENDER_PNG)
 endif()
