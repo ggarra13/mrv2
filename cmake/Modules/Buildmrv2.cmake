@@ -4,6 +4,9 @@
 
 include(ExternalProject)
 
+if(MRV2_PYBIND11)
+    find_package(pybind11)
+endif()
 
 set(mrv2_ARGS
     ${TLRENDER_EXTERNAL_ARGS}

@@ -50,6 +50,8 @@ fi
 export DIST=0
 export FFMPEG_GPL=$FFMPEG_GPL
 CLEAN_DIR=0
+BUILD_ROOT=BUILD-$KERNEL-$ARCH
+
 export CMAKE_OSX_ARCHITECTURES=""
 export CMAKE_BUILD_TYPE="Release"
 export CMAKE_GENERATOR="Ninja"
@@ -91,6 +93,11 @@ for i in $@; do
 	-gpl|--gpl)
 	    export FFMPEG_GPL=GPL
 	    export CMAKE_FLAGS="-D TLRENDER_X264=ON ${CMAKE_FLAGS}"
+	    shift
+	    ;;
+	-dir|--dir|-build-dir|--build-dir)
+	    shift
+	    BUILD_ROOT=$1
 	    shift
 	    ;;
 	-v)
@@ -152,7 +159,7 @@ done
 
 
 # Build a build directory with that information
-export BUILD_DIR=BUILD-$KERNEL-$ARCH/$CMAKE_BUILD_TYPE
+export BUILD_DIR=$BUILD_ROOT/${CMAKE_BUILD_TYPE}
 
 if [[ $KERNEL == *Darwin* ]]; then
     export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:${PATH}"
