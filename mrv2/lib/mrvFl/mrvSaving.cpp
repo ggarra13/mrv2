@@ -9,7 +9,6 @@
 namespace fs = std::filesystem;
 
 #include <tlIO/System.h>
-#include <tlIO/FFmpeg.h>
 
 #include <tlCore/String.h>
 #include <tlCore/StringFormat.h>
@@ -342,7 +341,6 @@ namespace mrv
 
 #ifdef TLRENDER_EXR
             ioOptions["OpenEXR/Compression"] = getLabel(options.exrCompression);
-
             ioOptions["OpenEXR/PixelType"] = getLabel(options.exrPixelType);
 #endif
 

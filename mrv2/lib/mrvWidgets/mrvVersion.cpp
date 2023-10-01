@@ -95,8 +95,10 @@
 #    include <pybind11/pybind11.h>
 #endif
 
-#include <OpenColorIO/OpenColorIO.h>
+#ifdef TLRENDER_OCIO
+#    include <OpenColorIO/OpenColorIO.h>
 namespace OCIO = OCIO_NAMESPACE;
+#endif
 
 #include <zlib.h>
 
@@ -111,7 +113,7 @@ extern "C"
 }
 #else
 #    define AV_STRINGIFY(s) AV_TOSTRING(s)
-#    define AV_TOSTRING(s) #    s
+#    define AV_TOSTRING(s) #s
 #endif
 
 #ifdef _WIN32
@@ -734,10 +736,12 @@ namespace mrv
           << "OFL (Open Font License)" << endl
           << "Copyright (c) 26 February 2007" << endl
           << endl
+#ifdef TLRENDER_OCIO
           << "OpenColorIO v" << OCIO::GetVersion() << endl
           << "http://www.opencolorio.org/" << endl
           << "Copyright Contributors to the OpenColorIO Project." << endl
           << endl
+#endif
 #ifdef TLRENDER_EXR
           << "OpenEXR v" << OPENEXR_VERSION_STRING << endl
           << "http://www.openexr.org/" << endl

@@ -60,7 +60,9 @@ namespace mrv
 {
     ColorSchemes Preferences::schemes;
     bool Preferences::native_file_chooser;
+#ifdef TLRENDER_OCIO
     OCIO::ConstConfigRcPtr Preferences::config;
+#endif
     std::string Preferences::OCIO_Display;
     std::string Preferences::OCIO_View;
 
@@ -487,6 +489,7 @@ namespace mrv
         // OCIO
         /////////////////////////////////////////////////////
 
+#ifdef TLRENDER_OCIO
         // Check OCIO variable first, then saved prefs and finally if nothing,
         // use this default.
         std::string ocioDefault =
@@ -543,9 +546,9 @@ namespace mrv
 
         Fl_Preferences ics(ocio, "ICS");
         {
-#define OCIO_ICS(x, d)                                                         \
-    ok = ics.get(#x, tmpS, d, 2048);                                           \
-    uiPrefs->uiOCIO_##x##_ics->value(tmpS);
+#    define OCIO_ICS(x, d)                                                     \
+        ok = ics.get(#x, tmpS, d, 2048);                                       \
+        uiPrefs->uiOCIO_##x##_ics->value(tmpS);
 
             OCIO_ICS(8bits, "");
 
@@ -557,6 +560,7 @@ namespace mrv
 
             OCIO_ICS(float, "");
         }
+#endif
 
         //
         // ui/view/hud
@@ -1720,6 +1724,7 @@ namespace mrv
     /////////////////////////////////////////////////////
     void Preferences::OCIO(ViewerUI* ui)
     {
+#ifdef TLRENDER_OCIO
         PreferencesUI* uiPrefs = ui->uiPrefs;
 
         static std::string old_ocio;
@@ -1937,6 +1942,7 @@ namespace mrv
         ui->uiICS->show();
 
         updateICS();
+#endif
     }
 
 } // namespace mrv
