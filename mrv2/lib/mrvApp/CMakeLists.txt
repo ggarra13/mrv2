@@ -32,7 +32,7 @@ if (TLRENDER_GL)
     set( GL_LIBRARY mrvGL )
 endif()
 
-target_link_libraries(mrvApp PUBLIC tlApp mrvPanels mrvEdit mrvNetwork ${GL_LIBRARY} mrvDraw mrvFLU mrvWidgets )
+target_link_libraries(mrvApp PUBLIC tlApp mrvPanels ${GL_LIBRARY} mrvDraw mrvFLU mrvWidgets )
 target_include_directories(mrvApp PUBLIC ${INCLUDES} )
 set_target_properties(mrvApp PROPERTIES FOLDER lib)
 set_target_properties(mrvApp PROPERTIES PUBLIC_HEADER "${HEADERS}")
