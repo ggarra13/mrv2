@@ -14,16 +14,17 @@ if (WIN32)
     list( APPEND SOURCES ${APP_ICON_RESOURCE_WINDOWS} )
 endif()
 
-set( GL_LIBRARY )
-if (TLRENDER_GL)
-    set( GL_LIBRARY mrvGL )
-endif()
-
 #
 # We must list all libraries so that old gcc compiler on Docker will link
 # the stdc++fs library properly. 
 #
-set( LIBRARIES
+set(LIBRARIES )
+
+if(MRV2_PYBIND11)
+    list(APPEND LIBRARIES mrvPy)
+endif()
+
+list( APPEND LIBRARIES
     mrvApp
     mrvPanels
     mrvWidgets
@@ -31,14 +32,9 @@ set( LIBRARIES
     mrvFl
     mrvFLU
     mrvNetwork
-    mrvDraw
-    ${GL_LIBRARY}
     mrvCore
     ${Intl_LIBRARIES} )
 
-if(MRV2_PYBIND11)
-    list(PREPEND LIBRARIES mrvPy)
-endif()
 
 
 if( APPLE )

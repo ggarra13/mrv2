@@ -23,6 +23,7 @@ Contents:
     - [Building mrv2](#building-mrv2)
     - [Debug builds](#debug-builds)
     - [Building on Windows](#building-on-windows)
+    - [Optional CMake flags](#optional-cmake-flags) 
     - [Building FFmpeg as GPL or LGPL](#building-ffmpeg-as-gpl-or-lgpl)
 - [Running mrv2](#running-mrv2)
     - [macOS and Linux](#macos-and-linux)
@@ -331,7 +332,19 @@ the optional Windows SDK (none by default) and your copy of Msys.
 As a convernience for Windows users, DLLs, includes and .lib files
 for FFmpeg and liblcms2 libraries are provided in mrv2's windows/win64 directory.  The libintl and libiconv libraries are taken from the MSys64 repositories as pre-flight check with the bin/install_libintl_window.sh script (part of runme.sh).
 
-If you unset LCMS2_ROOT in windows/envvars/envvars.sh, the library will be compiled. 
+If you unset LCMS2_ROOT in windows/envvars/envvars.sh, the library will be compiled.
+
+## Optional CMake flags
+
+The main runme.sh script supports passing CMake flags to it and allows turning on or off some options of mrv2.  Currently, these are:
+
+BUILD_ZLIB    Toggles building zlib as a shared library (only for macOS).
+BUILD_GETTEXT Toggles Gettext (libintl / libiconv) creation (only for macOS).
+BUILD_FLTK    Toggles FLTK building (currently needed)
+BUILD_PYTHON  Toggles Python building.
+MRV2_PYBIND11 Toggles Python bindings (no Python support in mrv2).
+MRV2_NETWORK  Toggles Network and Single Instance.
+MRV2_PDF      Toggles PDF Saving and Creation.
 
 ## Building FFmpeg as GPL or LGPL
 
@@ -341,7 +354,7 @@ If you pass -gpl or -lpgl to the runme.sh script, like:
 ./runme.sh -gpl
 ```
 
-The build system will compile FFmpeg as GPL or LGPL.  The default is to build a LGPL version of FFmpeg as that complies with the BSD binary distribution license.  The LGPL version of FFmpeg, however, does not come with libx264, which means you cannot save movie files with the H264 codec.  On Windows, if you don't specify neither -gpl nor -lgpl, the pre-compiled LGPL binaries are used.
+The build system will compile FFmpeg as GPL or LGPL on all platforms.  The default is to build a LGPL version of FFmpeg as that complies with the BSD binary distribution license.  The LGPL version of FFmpeg, however, does not come with libx264, which means you cannot save movie files with the H264 codec.  On Windows, if you don't specify neither -gpl nor -lgpl, the pre-compiled LGPL binaries are used.
 
 The GPL version of FFmpeg does not have that restriction and it will compile libx264 on all platforms.
 
