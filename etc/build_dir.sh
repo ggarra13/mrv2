@@ -47,6 +47,8 @@ if [[ $0 == *runme.sh* || $0 == *runme_nolog.sh* ]]; then
     RUNME=1
 fi
 
+BUILD_ROOT=BUILD-$KERNEL-$ARCH
+
 export DIST=0
 export FFMPEG_GPL=$FFMPEG_GPL
 CLEAN_DIR=0
@@ -74,6 +76,11 @@ for i in $@; do
 		echo "dist option can only be run with the runme.sh script"
 		exit 1
 	    fi
+	    shift
+	    ;;
+	--build-dir|-build-dir|--dir|-dir|--root|-root)
+	    shift
+	    BUILD_ROOT=$1
 	    shift
 	    ;;
 	clean)

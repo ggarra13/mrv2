@@ -52,6 +52,17 @@ add_executable(mrv2 WIN32 ${SOURCES} ${HEADERS})
 target_link_libraries(mrv2 PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})
 target_link_directories( mrv2 BEFORE PUBLIC ${CMAKE_INSTALL_PREFIX}/lib /usr/local/lib )
 
+set(PRUNE_SYMBOLS )
+if(WIN32)
+    set(PRUNE_SYMBOLS "/OPT:REF" "/OPT:ICF")
+elseif(APPLE)
+    set(PRUNE_SYMBOLS "-Wl,-dead_strip")
+else(UNIX)
+    set(PRUNE_SYMBOLS "-Wl,--gc-sections")
+endif()
+
+target_link_options(mrv2 PRIVATE ${PRUNE_SYMBOLS})
+
 install(TARGETS mrv2
     RUNTIME DESTINATION bin COMPONENT applications
     LIBRARY DESTINATION lib COMPONENT libraries
