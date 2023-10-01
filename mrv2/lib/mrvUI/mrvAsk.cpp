@@ -14,11 +14,6 @@
 #include <FL/platform.H>
 #include <FL/fl_draw.H>
 
-extern "C"
-{
-#include <libavutil/mem.h>
-}
-
 namespace mrv
 {
 
@@ -426,70 +421,6 @@ namespace mrv
         innards(fmt, ap, 0, fl_close, 0);
         va_end(ap);
         iconlabel = "?";
-    }
-
-    /** Sets whether or not to move the common message box used in
-        many common dialogs like fl_message(), fl_alert(),
-        fl_ask(), fl_choice(), fl_input(), fl_password() to follow
-        the mouse pointer.
-
-        The default is \e enabled, so that the default button is the
-        hotspot and appears at the mouse position.
-        \note \#include <FL/fl_ask.H>
-        \param[in]	enable	non-zero enables hotspot behavior,
-                            0 disables hotspot
-     */
-    void fl_message_hotspot(int enable)
-    {
-        enableHotspot = enable ? 1 : 0;
-    }
-
-    /** Sets the title of the dialog window used in many common dialogs.
-
-        This window \p title will be used in the next call of one of the
-        common dialogs like fl_message(), fl_alert(), fl_ask(), fl_choice(),
-        fl_input(), fl_password().
-
-        The \p title string is copied internally, so that you can use a
-        local variable or free the string immediately after this call. It
-        applies only to the \b next call of one of the common dialogs and
-        will be reset to an empty title (the default for all dialogs) after
-        that call.
-
-        \note \#include <FL/fl_ask.H>
-        \param[in] title	window label, string copied internally
-    */
-    void fl_message_title(const char* title)
-    {
-        makeform();
-        message_form->copy_label(title);
-    }
-
-    /** Sets the default title of the dialog window used in many common dialogs.
-
-        This window \p title will be used in all subsequent calls of one of the
-        common dialogs like fl_message(), fl_alert(), fl_ask(), fl_choice(),
-        fl_input(), fl_password(), unless a specific title has been set
-        with fl_message_title(const char *title).
-
-        The default is no title. You can override the default title for a
-        single dialog with fl_message_title(const char *title).
-
-        The \p title string is copied internally, so that you can use a
-        local variable or free the string immediately after this call.
-
-        \note \#include <FL/fl_ask.H>
-        \param[in] title	default window label, string copied internally
-    */
-    void fl_message_title_default(const char* title)
-    {
-        if (message_title_default)
-        {
-            av_free((void*)message_title_default);
-            message_title_default = 0;
-        }
-        if (title)
-            message_title_default = av_strdup(title);
     }
 
 } // namespace mrv

@@ -33,12 +33,6 @@ namespace mrv
         fl_message_size_ = s;
     }
 
-    FL_EXPORT void fl_message_hotspot(int enable);
-    FL_EXPORT int fl_message_hotspot(void);
-
-    FL_EXPORT void fl_message_title(const char* title);
-    FL_EXPORT void fl_message_title_default(const char* title);
-
     // pointers you can use to change FLTK to another language:
     extern FL_EXPORT const char* fl_no;
     extern FL_EXPORT const char* fl_yes;
