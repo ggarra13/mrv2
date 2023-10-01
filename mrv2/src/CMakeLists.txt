@@ -26,13 +26,6 @@ endif()
 
 list( APPEND LIBRARIES
     mrvApp
-    mrvPanels
-    mrvWidgets
-    mrvUI
-    mrvFl
-    mrvFLU
-    mrvNetwork
-    mrvCore
     ${Intl_LIBRARIES} )
 
 

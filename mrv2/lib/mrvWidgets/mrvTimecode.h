@@ -8,7 +8,7 @@
 
 #include <FL/Fl_Float_Input.H>
 
-#include "mrvFl/mrvTimeObject.h"
+#include "mrvCore/mrvTimeObject.h"
 
 namespace mrv
 {

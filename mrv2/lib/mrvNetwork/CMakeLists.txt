@@ -30,6 +30,10 @@ set(SOURCES
 
 
 set( LIBRARIES mrvCore)
+if(TLRENDER_GL)
+    list(PREPEND LIBRARIES mrvGL)
+endif()
+
 if(MRV2_NETWORK)
     list(APPEND SOURCES
     		mrvClient.cpp

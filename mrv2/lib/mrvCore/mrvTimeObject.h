@@ -29,9 +29,6 @@ namespace mrv
     std::ostream& operator<<(std::ostream&, const TimeUnits&);
     std::istream& operator>>(std::istream&, TimeUnits&);
 
-    //! Get the time units size hint string.
-    std::string sizeHintString(TimeUnits);
-
     //! Get the time units validator regular expression.
     std::string validator(TimeUnits);
 
@@ -43,20 +40,4 @@ namespace mrv
     otime::RationalTime
     textToTime(const String& text, double rate, TimeUnits, otime::ErrorStatus*);
 
-    //! Time object.
-    class TimeObject
-    {
-    public:
-        TimeObject(ViewerUI*);
-
-        TimeUnits units() const;
-        void setUnits(TimeUnits t);
-
-        //! This signal is emitted when the time units are changed.
-        void unitsChanged(TimeUnits);
-
-    private:
-        TimeUnits _units = TimeUnits::Frames;
-        ViewerUI* ui;
-    };
 } // namespace mrv
