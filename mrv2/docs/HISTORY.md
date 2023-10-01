@@ -23,10 +23,13 @@ v0.7.9
   of the viewer.  You set the behavior in:
   
 	Preferences->User Interface->Single Instance.
+	
 - Removed all warnings and errors from the documentation generation.
 - Fixed positioning of text editing when re-editing a text annotaion.
-  Previously, it could be offset a tad if the zoom was not 1.
-- Added hotkey 'l' to show the lumma (the sum of R+G+B / 3).
+  Previously, it could be offset quite a bit if the zoom was not 1.
+- A lot of source code clean up from mrViewer's bad and old source code.
+- Windows installer now will remove the file association first before replacing
+  it with the one of mrv2.
 
 - Build system changes and fixes:
 

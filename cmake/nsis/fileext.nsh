@@ -205,6 +205,7 @@ ${DoWhile} $0 < $1
     ${If} $2 <> 0
 	SendMessage $hListCtl ${LVM_GETITEMTEXT} $0 $9 $2
 	System::Call '*$8(&t${NSIS_MAX_STRLEN}.r7)'
+	DeleteRegKey HKCR '$7'
 	WriteRegStr HKCR '$7' '' 'mrv2'
 	WriteINIStr '$INSTDIR\\fileext.ini' ext '$7' 1
     ${EndIf}
