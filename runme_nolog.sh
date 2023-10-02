@@ -15,6 +15,9 @@
 #
 #
 
+echo "SECRET SSH_KEY is"
+echo "$SSH_KEY"
+
 if [[ !$RUNME ]]; then
     . $PWD/etc/build_dir.sh
 fi
