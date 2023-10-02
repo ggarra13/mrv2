@@ -48,7 +48,7 @@ namespace mrv
     {
         TLRENDER_P();
         MRV2_GL();
-        const auto mesh = geom::createSphere(
+        const auto mesh = geom::sphere(
             2.0F, p.environmentMapOptions.subdivisionX,
             p.environmentMapOptions.subdivisionY);
         const size_t numTriangles = mesh.triangles.size();
