@@ -47,4 +47,4 @@ jobs:
 
     - name: Build mrv2
       run: >
-        ./runme_nolog.sh && ./bin/upload_sourceforge.sh
+        ./runme_nolog.sh -t package && ./bin/upload_sourceforge.sh
