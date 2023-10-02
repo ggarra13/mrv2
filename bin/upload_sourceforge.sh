@@ -3,8 +3,10 @@
 . etc/functions.sh
 
 if [[ $SSH_KEY ]]; then
-    cat $SSH_KEY > $HOME/id256_rsa
+    echo "$SSH_KEY" > $HOME/id256_rsa
     KEYFILE=$HOME/id256_rsa
+    echo "KEYFILE IS:"
+    cat $KEYFILE
 else
     KEYFILE=$HOME/.ssh/id256_rsa
 fi
