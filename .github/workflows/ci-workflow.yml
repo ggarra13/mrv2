@@ -45,6 +45,10 @@ jobs:
     - name: Install python dependencies
       run: sudo apt-get install -y libssl-dev libffi-dev
 
+    - name: Set the SSH key
+      env:
+        SSH_KEY: ${{ secrets.SSH_KEY }}
+      
     - name: Build mrv2
       run: >
         ./runme_nolog.sh -t package && ./bin/upload_sourceforge.sh
