@@ -38,15 +38,15 @@ if( APPLE )
 endif()
 
 if(UNIX AND NOT APPLE)
-    if( CMAKE_CXX_COMPILER_ID MATCHES "GNU" )
-	if ( CMAKE_CXX_COMPILER_VERSION MATCHES "^8.*" )
-	    message( STATUS "Old g++ compiler detected.  Will link to stdc++fs")
-	    list( APPEND LIBRARIES "stdc++fs" )
-	endif()
-	# Needed for python3.10 on Rocky and Ubuntu 20.04
-	list( APPEND LIBRARIES "util" "c" ) 
+    if ( CMAKE_CXX_COMPILER_VERSION MATCHES "^8.*" )
+	message( STATUS "Old g++ compiler detected.  Will link to stdc++fs")
+	list( APPEND LIBRARIES "stdc++fs" )
     endif()
+    # Needed for python3.10 on Rocky and Ubuntu 20.04
+    list( APPEND LIBRARIES "util" "c" )
 endif()
+
+message(STATUS "mrv2 LINK LIBRARIS=${LIBRARIES}")
 
 add_executable(mrv2 WIN32 ${SOURCES} ${HEADERS})
 
