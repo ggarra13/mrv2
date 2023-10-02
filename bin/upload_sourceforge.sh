@@ -2,8 +2,15 @@
 
 . etc/functions.sh
 
+if [[ $SSH_KEY ]]; then
+    cat $SSH_KEY > $HOME/id256_rsa
+    KEYFILE=$HOME/id256_rsa
+else
+    KEYFILE=$HOME/.ssh/id256_rsa
+fi
+
 # Create the remote directory
-ssh -i $HOME/.ssh/id256_rsa ggarra13@frs.sourceforge.net 'mkdir -p /home/frs/project/mrv2/beta/'
+ssh -i $KEYFILE ggarra13@frs.sourceforge.net 'mkdir -p /home/frs/project/mrv2/beta/'
 
 
 upload_file()
@@ -12,7 +19,7 @@ upload_file()
     echo
     echo "Sending $1 as $2..."
     echo
-    rsync -avP --ignore-errors -e "ssh -i $HOME/.ssh/id256_rsa" $1 ggarra13@frs.sourceforge.net:/home/frs/project/mrv2/beta/$2
+    rsync -avP --ignore-errors -e "ssh -i $KEYFILE" $1 ggarra13@frs.sourceforge.net:/home/frs/project/mrv2/beta/$2
 }
 
 # Extract cmake/version.cmake into mrv2_VERSION
