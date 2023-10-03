@@ -48,6 +48,8 @@ or in its mirror site at:
 
 [SourceForge](https://sourceforge.net/projects/mrv2/files/)
 
+The source forge site also hosts beta builds (nightly builds with the latest changes).
+
 ## Compatibility
 
 mrv2 binaries run on Windows 8.1+, RedHat 8+ or Ubuntu 20.04+ and macOS 10.15+.
@@ -86,13 +88,13 @@ mrv2 binaries run on Windows 8.1+, RedHat 8+ or Ubuntu 20.04+ and macOS 10.15+.
   On Debian (Ubuntu, etc) systems, you would install with:
 
 ```
-  sudo dpkg -i mrv2-v0.7.0-amd64.tar.gz
+  sudo dpkg -i mrv2-v0.7.8-Linux-amd64.tar.gz
 ```
 
   On Red Hat (Rocky Linux, etc), you would install it with:
   
 ```
-  sudo rpm -i mrv2-v0.7.0-amd64.tar.gz
+  sudo rpm -i mrv2-v0.7.8-Linux-amd64.tar.gz
 ```
 
   Once you install it, you can run mrv2 by just typing mrv2 in the shell, as
@@ -106,7 +108,7 @@ mrv2 binaries run on Windows 8.1+, RedHat 8+ or Ubuntu 20.04+ and macOS 10.15+.
   .tar.gz file and you can uncompress it with:
   
 ```
-  tar -xf mrv2-v0.7.0-amd64.tar.gz
+  tar -xf mrv2-v0.7.8-Linux-amd64.tar.gz
 ```
 
   That will create a folder in the direcory you uncompress it from.  You can
@@ -119,7 +121,7 @@ The core of the playback engine is a custom version of tlRender (www.github.com/
 
 Currently supported:
 
-- Movie files (H264, MP4, WEBM, etc.)
+- Movie files (H264, MP4, VPX, WEBM, etc.)
 - Image file sequences (Cineon, DPX, JPEG, OpenEXR, PNG, PPM, TIFF, TGA, BMP,
   	     	       	PSD)
 - RAW Camera Formats (CR2, CR3, X3F, etc).
@@ -147,7 +149,7 @@ group, you can just build mrv2 with:
 ./runme_docker.sh
 ```
 The resulting installers will be placed in a new packages/ directory of the
-root of mrv2.
+root of mrv2.  The docker images are compatible with RedHat 8.1 and Ubuntu 20.04.
 
 ## Dependencies
 
@@ -340,18 +342,17 @@ The main runme.sh script supports passing CMake flags to it and allows turning o
 
 -D TLRENDER_USD=OFF
 
-You *must* leave a space between the -D and the flag.
-
 Currently, the flags supported are:
 
 | Name              | Description                                       | Default   |
 | ----------------- | ------------------------------------------------- | --------- |
 | BUILD_FLTK        | Toggles FLTK building (currently needed)          | TRUE      |
-| BUILD_PYTHON      | Toggles Python building.                          | TRUE      |
+| BUILD_PYTHON      | Toggles Python building or system installed.      | TRUE      |
 | MRV2_PYBIND11     | Toggles Python support in mrv2.                   | TRUE      |
 | MRV2_NETWORK      | Toggles Network and Single Instance.              | TRUE      |
 | MRV2_PDF          | Toggles PDF Saving and Creation.                  | TRUE      |
 | TLRENDER_USD      | Toggles support for USD                           | TRUE      |
+| TLRENDER_RAW      | Toggles support for RAW Camera formats            | TRUE      |
 
 ## Building FFmpeg as GPL or LGPL
 

@@ -4,10 +4,10 @@ echo "RUNNING upload_sourceforge.sh......"
 
 . etc/functions.sh
 
-# if [[ "$(git rev-parse --abbrev-ref HEAD)" != "main" ]]; then
-#     echo "You are not on the main branch.  Will not make a release."
-#     exit 0
-# fi
+if [[ "$(git rev-parse --abbrev-ref HEAD)" != "main" ]]; then
+    echo "You are not on the main branch.  Will not make a release."
+    exit 0
+fi
 
 if [[ -e ssh/id_rsa ]]; then
     SSH_KEY=$PWD/ssh/id_rsa
@@ -24,6 +24,7 @@ fi
 echo "SSH KEY IS: ${SSH_KEY}"
 
 get_kernel
+
 # Extract cmake/version.cmake into mrv2_VERSION
 extract_version
 echo "mrv2 VERSION=$mrv2_VERSION"
@@ -57,7 +58,10 @@ fi
 
 
 # Create the remote directory
+echo "Create directory and register sourceforge site..."
 ssh -i $SSH_KEY -o StrictHostKeyChecking=no ggarra13@frs.sourceforge.net 'mkdir -p /home/frs/project/mrv2/beta/'
+
+echo "Proceed with uploading..."
 
 
 upload_file()
@@ -153,8 +157,72 @@ release_notes=$(sed -n "$start_line,${end_line}p" "$HISTORY")
 
 
 echo "$release_notes" >> upload_date.md
-cat upload_date.md
 
+cat <<"EOF" >> upload_date.md
+
+## Notes on installation
+
+- On macOS you install it by opening the .dmg file, and dragging the mrv2
+  icon to the Applications directory.  If there's already an mrv2 version,
+  we recommend you overwrite it.
+  The macOS application is currently not notarized, so when you launch it you
+  will not be able to run it as macOS will warn you that the file is not secure
+  as it was downloaded from internet.
+  To avoid that, you need to open the Finder, go to the Applications directory
+  and CTRL + Left mouse click on the mrv2 application.  That will bring up
+  the same warning, but this time it will have a button that will allow you
+  to open it.  You only need to do this once.
+
+- Windows and Chrome, like macOS, also protect you from installing files
+  from the Internet.  When you first download it with Chrome it may warn
+  you that it is not an usual archive to be downloaded.  Make sure to click
+  on the right up arrow menu to Save it anyway.
+  You cannot open the .exe from Chrome directly.  You will need to open
+  Windows Explorer and go to the Downloads directory.  You should then
+  run it from there.
+  Then Windows will popup a Blue box telling you Windows SmartScreen
+  prevented the start of an unknown aplication and that you can place your
+  PC at risk.
+  Click on the More Information text and a Button that says Run anyway or
+  similar should appear.  Click on it and follow the standard instructions
+  to any Windows installer.
+
+
+- On Linux, in order to install the .rpm or .deb packages requires your user to
+  have sudo permissions.
+
+  On Debian (Ubuntu, etc) systems, you would install with:
+
+```
+  sudo dpkg -i mrv2-beta-Linux-amd64.tar.gz
+```
+
+  On Red Hat (Rocky Linux, etc), you would install it with:
+  
+```
+  sudo rpm -i mrv2-beta-Linux-amd64.tar.gz
+```
+
+  Once you install it, you can run mrv2 by just typing mrv2 in the shell, as
+  a symlink to the executable is placed in /usr/bin.  The installers will also
+  associate file extensions and install an icon for easy starting up in the
+  Desktop icon of the user that installed it.  For running mrv2 with the icon,
+  you need to select it and use the right mouse button to open the menu and
+  choose Allow Launch.
+  
+  If you lack sudo permissions in your organization, you should download the
+  .tar.gz file and you can uncompress it with:
+  
+```
+  tar -xf mrv2-beta-Linux-amd64.tar.gz
+```
+
+  That will create a folder in the direcory you uncompress it from.  You can
+  then run mrv2 by using the mrv2.sh shell script in the bin/ subdirectory.
+EOF
+
+
+cat upload_date.md
 upload_file upload_date.md README.md
 rm upload_date.md
 
