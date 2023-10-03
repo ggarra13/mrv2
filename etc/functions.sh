@@ -18,6 +18,29 @@ run_cmd()
     time eval command $*
 }
 
+#
+# Get kernel and architecture
+#
+get_kernel()
+{
+    export KERNEL=`uname`
+    if [[ $KERNEL == *MSYS* || $KERNEL == *MINGW* ]]; then
+	export KERNEL=Msys
+	export ARCH=`which cl.exe`
+    fi
+
+    if [[ $ARCH == "" ]]; then
+	export ARCH=`uname -m` # was uname -a
+    fi
+
+    if [[ $ARCH == arm64 ]]; then
+	export ARCH=arm64
+    elif [[ $ARCH == *64* ]]; then
+	export ARCH=amd64
+    else
+	export ARCH=i386
+    fi
+}
 
 #
 # Extract version from cmake/version.cmake
