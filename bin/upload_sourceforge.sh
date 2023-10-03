@@ -23,6 +23,16 @@ else
 fi
 echo "SSH KEY IS: ${SSH_KEY}"
 
+get_kernel
+
+if [[ $KERNEL == *Msys* ]]; then
+    pacman -Sy openssh --noconfirm
+    echo "ssh is:"
+    which ssh
+    echo "scp is:"
+    which scp
+fi
+
 
 # Create the remote directory
 ssh -i $SSH_KEY -o StrictHostKeyChecking=no ggarra13@frs.sourceforge.net 'mkdir -p /home/frs/project/mrv2/beta/'
@@ -34,12 +44,11 @@ upload_file()
     echo
     echo "Sending $1 as $2..."
     echo
-    rsync -avP --ignore-errors -e "ssh -i $SSH_KEY" $1 ggarra13@frs.sourceforge.net:/home/frs/project/mrv2/beta/$2
+    scp -i $SSH_KEY $1 ggarra13@frs.sourceforge.net:/home/frs/project/mrv2/beta/$2
 }
 
 # Extract cmake/version.cmake into mrv2_VERSION
 extract_version
-
 echo "mrv2 VERSION=$mrv2_VERSION"
 
 
@@ -54,6 +63,7 @@ git_hash=`git rev-parse HEAD`
 #
 # Go to packages directory
 #
+mkdir -p packages
 cd packages
 
 #
@@ -94,7 +104,6 @@ EOF
 upload_file upload_date.md README.md
 rm upload_date.md
 
-
 # Read all the files of this version
 files=`ls -1 *v${mrv2_VERSION}*`
 
@@ -116,4 +125,5 @@ IFS=$' \t\n'
 
 # Go back to root directory
 cd ..
+
 
