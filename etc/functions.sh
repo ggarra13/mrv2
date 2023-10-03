@@ -35,8 +35,8 @@ extract_version()
 #
 extract_python_version()
 {
-    local major=`cat cmake/Modules/BuildPython.cmake | grep -o 'set.[ \t]*PYTHON_VERSION\s*[0-9]*' | sed -e 's/set.[ \t]*PYTHON_VERSION[ \t]*//'`
-    local minor=`cat cmake/Modules/BuildPython.cmake | grep -o 'set.[ \t]*PYTHON_VERSION\s*[0-9]*\.[0-9]*' | sed -e 's/set.[ \t]*PYTHON_VERSION[ \t]*[0-9]*\.//'`
+    local major=`cat cmake/Modules/BuildPython.cmake | grep -o 'set.[ \t]*Python_VERSION\s*[0-9]*' | sed -e 's/set.[ \t]*Python_VERSION[ \t]*//'`
+    local minor=`cat cmake/Modules/BuildPython.cmake | grep -o 'set.[ \t]*Python_VERSION\s*[0-9]*\.[0-9]*' | sed -e 's/set.[ \t]*Python_VERSION[ \t]*[0-9]*\.//'`
     export PYTHON_VERSION="${major}.${minor}"
 }
 

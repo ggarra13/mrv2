@@ -3,8 +3,6 @@
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#!/bin/bash
-
 #
 # Get the auxiliary functions
 #
@@ -20,7 +18,7 @@ NSIS_INSTALLER="${PWD}/packages/mrv2-v${mrv2_VERSION}-Windows-amd64.exe"
 AZURE_HTTP="http://timestamp.comodoca.com/authenticode"
 
 sign_installer() {
-    "$SIGNTOOL_PATH" sign -v -f "$PFX_FILE" -t "${AZURE_HTTP}" "$NSIS_INSTALLER"
+    run_cmd "$SIGNTOOL_PATH" sign -v -f "$PFX_FILE" -fd SHA256 -t "${AZURE_HTTP}" "$NSIS_INSTALLER"
 }
 
 # Call the function to sign the NSIS installer

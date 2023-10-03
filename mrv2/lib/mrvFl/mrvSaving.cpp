@@ -187,12 +187,16 @@ namespace mrv
             {
                 outputInfo.pixelType = image::PixelType::RGB_U8;
             }
+
+#ifdef TLRENDER_EXR
             if (annotations &&
                 string::compare(
                     extension, ".exr", string::Compare::CaseInsensitive))
             {
                 outputInfo.pixelType = options.exrPixelType;
             }
+#endif
+
             std::string msg = tl::string::Format(_("Output info: {0} {1}"))
                                   .arg(outputInfo.size)
                                   .arg(outputInfo.pixelType);
@@ -482,12 +486,16 @@ namespace mrv
             {
                 outputInfo.pixelType = image::PixelType::RGB_U8;
             }
+
+#ifdef TLRENDER_EXR
             if (annotations &&
                 string::compare(
                     extension, ".exr", string::Compare::CaseInsensitive))
             {
                 outputInfo.pixelType = options.exrPixelType;
             }
+#endif
+
             std::string msg = tl::string::Format(_("Output info: {0} {1}"))
                                   .arg(outputInfo.size)
                                   .arg(outputInfo.pixelType);

@@ -42,10 +42,7 @@ set(SOURCES
     mrvVectorscopePanel.cpp
 )
 
-set( LIBRARIES
-    mrvFl
-    mrvEdit
-    ${EXPORT_DYNAMIC})
+set( LIBRARIES mrvFl mrvEdit)
 	
 if(TLRENDER_USD)
     list( APPEND HEADERS mrvUSDPanel.h )
@@ -56,6 +53,10 @@ if(MRV2_PYBIND11)
     list( APPEND LIBRARIES pybind11::embed )
     list( APPEND HEADERS mrvPythonPanel.h )
     list( APPEND SOURCES mrvPythonPanel.cpp )
+    if(UNIX AND NOT APPLE)
+	# Needed for python3.10 on Rocky and Ubuntu 20.04
+	list( APPEND LIBRARIES "util" )
+    endif()
 endif()
 
 if(MRV2_NETWORK)
@@ -66,17 +67,11 @@ endif()
 add_library(mrvPanels ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
-set( EXPORT_DYNAMIC )
-if ( APPLE )
-    set( EXPORT_DYNAMIC -Wl,-export_dynamic )
-elseif( UNIX )
-    set( EXPORT_DYNAMIC -Wl,--export-dynamic )
-endif()
 
 
 target_link_libraries(mrvPanels PUBLIC ${LIBRARIES} )
 set_target_properties(mrvPanels PROPERTIES FOLDER lib)
-set_target_properties(mrvPanels PROPERTIES PUBLIC_HEADER "${HEADERS}")
+#set_target_properties(mrvPanels PROPERTIES PUBLIC_HEADER "${HEADERS}")
 
 install(TARGETS mrvPanels
     ARCHIVE DESTINATION lib

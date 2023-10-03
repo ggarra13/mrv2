@@ -26,6 +26,7 @@ set(BUILD_PYTHON TRUE CACHE BOOL "Enable building Python" )
 set(MRV2_PYBIND11 TRUE CACHE BOOL "Enable pybind11 building" )
 set(MRV2_NETWORK TRUE CACHE BOOL "Enable Networking in mrv2" )
 set(MRV2_PDF TRUE CACHE BOOL "Enable PDF creation in mrv2" )
+set(MRV2_DIST_RELEASE FALSE CACHE BOOL "Will remove some disk space but it is not good for recompilation.")
 set(BUILD_MRV2 TRUE CACHE BOOL "Enable mrv2 building")
 option(GIT_SUBMODULE "Check tlRender submodule during build if missing" ON)
 

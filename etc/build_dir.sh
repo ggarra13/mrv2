@@ -49,7 +49,7 @@ fi
 
 BUILD_ROOT=BUILD-$KERNEL-$ARCH
 
-export DIST=0
+export MRV2_DIST_RELEASE=0
 export FFMPEG_GPL=$FFMPEG_GPL
 CLEAN_DIR=0
 BUILD_ROOT=BUILD-$KERNEL-$ARCH
@@ -70,7 +70,7 @@ for i in $@; do
 	    shift
 	    ;;
 	dist)
-	    export DIST=1
+	    export MRV2_DIST_RELEASE=1
 	    if [[ $RUNME == 0 ]]; then
 		echo $0
 		echo "dist option can only be run with the runme.sh script"
@@ -173,9 +173,13 @@ if [[ $KERNEL == *Darwin* ]]; then
     if [[ $ARCH == arm64 ]]; then
 	export CMAKE_OSX_ARCHITECTURES=$ARCH
     fi
-    if [[ $DIST == 1 ]]; then
+    if [[ $MRV2_DIST_RELEASE == 1 ]]; then
 	export CMAKE_FLAGS="-DCMAKE_OSX_DEPLOYMENT_TARGET=10.15 ${CMAKE_FLAGS}"
     fi
+fi
+
+if [[ $MRV2_DIST_RELEASE == 1 ]]; then
+    export CMAKE_FLAGS="-D MRV2_DIST_RELEASE=ON ${CMAKE_FLAGS}"
 fi
 
 if [[ $FLAGS == "" ]]; then

@@ -26,7 +26,7 @@ files_to_absolute_paths()
 
 target_link_libraries(mrvDraw PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE} )
 set_target_properties(mrvDraw PROPERTIES FOLDER lib)
-set_target_properties(mrvDraw PROPERTIES PUBLIC_HEADER "${HEADERS}")
+#set_target_properties(mrvDraw PROPERTIES PUBLIC_HEADER "${HEADERS}")
 
 
 

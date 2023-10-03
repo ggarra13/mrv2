@@ -17,6 +17,7 @@ if [[ $CMAKE_BUILD_TYPE == Release && "$CMAKE_TARGET" == "package" ]]; then
 	. etc/windows_signing_installer.sh
     elif [[ $KERNEL == *Darwin* ]]; then
 	send_to_packages "mrv2-v${mrv2_VERSION}-Darwin-${ARCH}.dmg"
+	# . etc/macos_signing_installer.sh
     elif [[ $KERNEL == *Linux* ]]; then
 	send_to_packages "mrv2-v${mrv2_VERSION}-Linux-${ARCH}.deb"
 	send_to_packages "mrv2-v${mrv2_VERSION}-Linux-${ARCH}.rpm"

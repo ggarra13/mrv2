@@ -273,21 +273,22 @@ namespace mrv
             static_cast<bool>(saveOptions.Annotations->value());
 
         int value;
+
+#ifdef TLRENDER_EXR
         value = saveOptions.PixelType->value();
         if (value == 0)
             options.exrPixelType = tl::image::PixelType::RGBA_F16;
         if (value == 1)
             options.exrPixelType = tl::image::PixelType::RGBA_F32;
-
-        value = saveOptions.Compression->value();
-
-#ifdef TLRENDER_EXR
-        options.exrCompression = static_cast<tl::exr::Compression>(value);
 #endif
 
+#ifdef TLRENDER_EXR
+        value = saveOptions.Compression->value();
+        options.exrCompression = static_cast<tl::exr::Compression>(value);
         options.zipCompressionLevel =
             static_cast<int>(saveOptions.ZipCompressionLevel->value());
         options.dwaCompressionLevel = saveOptions.DWACompressionLevel->value();
+#endif
 
         save_single_frame(file, ui, options);
     }
@@ -344,13 +345,13 @@ namespace mrv
         options.ffmpegProfile = static_cast<tl::ffmpeg::Profile>(value);
 #endif
 
+#ifdef TLRENDER_EXR
         value = saveOptions.PixelType->value();
         if (value == 0)
             options.exrPixelType = tl::image::PixelType::RGBA_F16;
         if (value == 1)
             options.exrPixelType = tl::image::PixelType::RGBA_F32;
 
-#ifdef TLRENDER_EXR
         value = saveOptions.Compression->value();
         options.exrCompression = static_cast<tl::exr::Compression>(value);
 #endif

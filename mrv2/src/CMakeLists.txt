@@ -46,7 +46,7 @@ if(UNIX AND NOT APPLE)
     list( APPEND LIBRARIES "util" "c" )
 endif()
 
-message(STATUS "mrv2 LINK LIBRARIS=${LIBRARIES}")
+message(STATUS "mrv2 LIBRARIES=${LIBRARIES}")
 
 add_executable(mrv2 WIN32 ${SOURCES} ${HEADERS})
 

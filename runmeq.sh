@@ -51,7 +51,6 @@ if [[ $CMAKE_TARGET == doc* ]]; then
 fi
 
 
-
 cd $dir
 
 run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t ${CMAKE_TARGET}

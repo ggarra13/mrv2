@@ -25,7 +25,7 @@ endif()
 
 target_link_libraries(mrvEdit PUBLIC ${LIBRARIES} )
 set_target_properties(mrvEdit PROPERTIES FOLDER lib)
-set_target_properties(mrvEdit PROPERTIES PUBLIC_HEADER "${HEADERS}")
+#set_target_properties(mrvEdit PROPERTIES PUBLIC_HEADER "${HEADERS}")
 
 install(TARGETS mrvEdit
     ARCHIVE DESTINATION lib

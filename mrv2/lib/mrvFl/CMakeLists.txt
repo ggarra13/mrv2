@@ -19,7 +19,6 @@ set(HEADERS
     mrvSaving.h
     mrvSession.h
     mrvStereo3DAux.h
-#    mrvTimeObject.h
     mrvTimelinePlayer.h
     mrvVersioning.h
 )
@@ -39,7 +38,6 @@ set(SOURCES
     mrvSession.cpp
     mrvStereo3DAux.cpp
     mrvTimelinePlayer.cpp
-#    mrvTimeObject.cpp
     mrvVersioning.cpp
 )
 
@@ -55,6 +53,10 @@ endif()
 
 if(MRV2_PYBIND11)
     list( APPEND LIBRARIES pybind11::embed )
+    if(UNIX AND NOT APPLE)
+	# Needed for python3.10 on Rocky and Ubuntu 20.04
+	list( APPEND LIBRARIES "util" )
+    endif()
 endif()
 
 if (WIN32)
@@ -63,7 +65,7 @@ endif()
 
 target_link_libraries(mrvFl PUBLIC ${LIBRARIES} )
 set_target_properties(mrvFl PROPERTIES FOLDER lib)
-set_target_properties(mrvFl PROPERTIES PUBLIC_HEADER "${HEADERS}")
+#set_target_properties(mrvFl PROPERTIES PUBLIC_HEADER "${HEADERS}")
 
 install(TARGETS mrvFl
     ARCHIVE DESTINATION lib

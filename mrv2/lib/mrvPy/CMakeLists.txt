@@ -32,7 +32,7 @@ files_to_absolute_paths()
 target_link_libraries(mrvPy mrvApp )
 target_include_directories(mrvPy PUBLIC ${INCLUDES} )
 set_target_properties(mrvPy PROPERTIES FOLDER lib)
-set_target_properties(mrvPy PROPERTIES PUBLIC_HEADER "${HEADERS}")
+#set_target_properties(mrvPy PROPERTIES PUBLIC_HEADER "${HEADERS}")
 
 
 

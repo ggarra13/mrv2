@@ -22,7 +22,7 @@ set(LIBRARIES mrvWidgets)
 
 target_link_libraries(mrvUI PUBLIC ${LIBRARIES} )
 set_target_properties(mrvUI PROPERTIES FOLDER lib)
-set_target_properties(mrvUI PROPERTIES PUBLIC_HEADER "${HEADERS}")
+#set_target_properties(mrvUI PROPERTIES PUBLIC_HEADER "${HEADERS}")
 
 install(TARGETS mrvUI
     ARCHIVE DESTINATION lib
