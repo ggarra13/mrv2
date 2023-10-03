@@ -15,7 +15,7 @@ snap {
 decl {\#include <string>} {public global
 }
 
-decl {\#include "mrvCore/mrvSequence.h"} {public global
+decl {\#include "mrvCore/mrvUtil.h"} {selected public global
 }
 
 class SaveOptionsUI {open
@@ -196,13 +196,13 @@ v->redraw();}
             label {DWA Compression}
             user_data this user_data_type {SaveOptionsUI*}
             callback {v->DWACompressionSlider->value(o->value());}
-            xywh {214 384 64 26} color -1733777408 maximum 1000000 step 0.1 value 45 textcolor 56
+            xywh {214 384 64 26} color -1733777408 maximum 1e+06 step 0.1 value 45 textcolor 56
           }
           Fl_Slider DWACompressionSlider {
             user_data DWACompressionLevel user_data_type {Fl_Value_Input*}
             callback {v->value(o->value());
 v->redraw();}
-            xywh {278 384 104 26} type {Horz Knob} maximum 1000000 step 2 value 45 slider_size 0.1
+            xywh {278 384 104 26} type {Horz Knob} maximum 1e+06 step 2 value 45 slider_size 0.1
           }
         }
       }
@@ -221,7 +221,7 @@ if (ext == ".exr" && exr_valid)
 {
    OpenEXROptions->activate();
 }
-else if (mrv::is_valid_movie(ext.c_str()))
+else if (mrv::is_valid_movie(ext))
 {  
    FFmpegOptions->activate();
 }

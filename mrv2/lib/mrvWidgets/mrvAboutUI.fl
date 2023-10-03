@@ -39,10 +39,10 @@ class AboutUI {open
 	  user_data main user_data_type {ViewerUI*}
 	  callback {v->uiAbout->uiGPUInfo->clear();
 std::string s = mrv::gpu_information( v );
-stringArray a;
+std::vector<std::string> a;
 mrv::split( a, s, '\\n' );
-stringArray::iterator i = a.begin();
-stringArray::iterator e = a.end();
+std::vector<std::string>::iterator i = a.begin();
+std::vector<std::string>::iterator e = a.end();
 for (; i != e; ++i )
 	v->uiAbout->uiGPUInfo->add( (*i).c_str() );} open
 	  xywh {5 4 530 396}

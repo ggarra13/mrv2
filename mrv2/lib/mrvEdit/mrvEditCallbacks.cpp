@@ -1427,7 +1427,7 @@ namespace mrv
             return;
         }
 
-        auto otioFile = save_otio(nullptr, ui);
+        auto otioFile = save_otio(nullptr);
         if (otioFile.empty())
             return;
 

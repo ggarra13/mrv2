@@ -8,8 +8,10 @@ namespace fs = std::filesystem;
 
 #include <tlIO/System.h>
 
-#include "mrvUtil.h"
-#include "mrvSequence.h"
+#include "mrvCore/mrvUtil.h"
+#include "mrvCore/mrvSequence.h"
+
+#include "mrvApp/App.h"
 
 namespace mrv
 {
@@ -46,65 +48,62 @@ namespace mrv
     }
 
     // Given a frame extension, return true if a possible movie file.
-    bool is_valid_movie(const char* ext)
+    bool is_valid_movie(
+        const std::string& ext,
+        const std::shared_ptr<tl::system::Context>& context)
     {
-        if (ext == NULL)
-            return false;
+        std::string extension = tl::string::toLower(ext);
+        if (extension[0] != '.')
+            extension = '.' + extension;
 
-        std::string tmp = ext;
-        std::transform(
-            tmp.begin(), tmp.end(), tmp.begin(), (int (*)(int))tolower);
-        if (tmp[0] != '.')
-            tmp = '.' + tmp;
-
-        if (tmp == ".3gp" || tmp == ".asf" || tmp == ".avc" ||
-            tmp == ".avchd" || tmp == ".avi" || tmp == ".divx" ||
-            tmp == ".dv" || tmp == ".flv" || tmp == ".m2ts" || tmp == ".m2t" ||
-            tmp == ".m4v" || tmp == ".mkv" || tmp == ".mov" || tmp == ".mp4" ||
-            tmp == ".mpeg" || tmp == ".mpg" || tmp == ".mvb" || tmp == ".mxf" ||
-            tmp == ".ogg" || tmp == ".ogm" || tmp == ".ogv" || tmp == ".qt" ||
-            tmp == ".otio" || tmp == ".rm" || tmp == ".ts" || tmp == ".vob" ||
-            tmp == ".vp9" || tmp == ".wmv")
-            return true;
-        return false;
+        auto ioSystem = context->getSystem<tl::io::System>();
+        return (ioSystem->getFileType(extension) == tl::io::FileType::Movie);
     }
 
     // Given a frame extension, return true if a possible audio file.
-    bool is_valid_audio(const char* ext)
+    bool is_valid_audio(
+        const std::string& ext,
+        const std::shared_ptr<tl::system::Context>& context)
     {
-        std::string tmp = ext;
-        std::transform(
-            tmp.begin(), tmp.end(), tmp.begin(), (int (*)(int))tolower);
-        if (tmp[0] != '.')
-            tmp = '.' + tmp;
+        std::string extension = tl::string::toLower(ext);
+        if (extension[0] != '.')
+            extension = '.' + extension;
 
-        if (tmp == ".aiff" || tmp == ".flac" || tmp == ".mp3" ||
-            tmp == ".ogg" || tmp == ".opus" || tmp == ".snd" ||
-            tmp == ".vorbis" || tmp == ".wav")
-            return true;
+        auto ioSystem = context->getSystem<tl::io::System>();
+        return (ioSystem->getFileType(extension) == tl::io::FileType::Audio);
 
         return false;
     }
 
     // Given a frame extension, return true if a possible audio file.
-    bool is_valid_subtitle(const char* ext)
+    bool is_valid_subtitle(const std::string& ext)
     {
         std::string tmp = ext;
-        std::transform(
-            tmp.begin(), tmp.end(), tmp.begin(), (int (*)(int))tolower);
-        if (tmp[0] != '.')
-            tmp = '.' + tmp;
 
-            // @todo: add subtitle support like mrViewer
-#if 0
-        if ( tmp == ".srt" ||
-             tmp == ".sub" ||
-             tmp == ".ass" ||
-             tmp == ".vtt" )
+        std::string extension = tl::string::toLower(ext);
+        if (extension[0] != '.')
+            extension = '.' + extension;
+
+        // @todo: add subtitle support to tlRender.
+        if (extension == ".srt" || extension == ".sub" || extension == ".ass" ||
+            extension == ".vtt")
             return true;
-#endif
 
         return false;
+    }
+
+    // Given a frame extension, return true if a possible movie file.
+    bool is_valid_movie(const std::string& ext)
+    {
+        auto context = App::app->getContext();
+        return is_valid_movie(ext, context);
+    }
+
+    // Given a frame extension, return true if a possible audio file.
+    bool is_valid_audio(const std::string& ext)
+    {
+        auto context = App::app->getContext();
+        return is_valid_audio(ext, context);
     }
 
     bool is_valid_sequence(const std::string& filename)
@@ -154,6 +153,87 @@ namespace mrv
         }
 
         return result;
+    }
+
+    void parse_directory(
+        const std::string& dir, std::vector<std::string>& movies,
+        std::vector<std::string>& sequences, std::vector<std::string>& audios)
+    {
+
+        // default constructor yields path iter. end
+        std::vector<std::string> files;
+        fs::directory_iterator e;
+        for (fs::directory_iterator i(dir); i != e; ++i)
+        {
+            if (!fs::exists(*i) || fs::is_directory(*i))
+                continue;
+
+            std::string file = (*i).path().string();
+            files.push_back(file);
+        }
+        std::sort(files.begin(), files.end());
+
+        std::string root, frame, view, ext;
+        SequenceList tmpseqs;
+
+        for (const auto& file : files)
+        {
+            bool ok = mrv::split_sequence(root, frame, view, ext, file);
+            if (is_valid_movie(ext))
+                movies.push_back(file);
+            else if (is_valid_audio(ext))
+                audios.push_back(file);
+            else if (ok)
+            {
+                Sequence s;
+                s.root = root;
+                s.view = view;
+                s.number = frame;
+                s.ext = ext;
+
+                tmpseqs.push_back(s);
+            }
+        }
+
+        //
+        // Then, sort sequences and collapse them into a single file entry
+        //
+        std::sort(tmpseqs.begin(), tmpseqs.end(), SequenceSort());
+
+        std::string first;
+        std::string number;
+        int padding = -1;
+
+        for (const auto& i : tmpseqs)
+        {
+
+            const char* s = i.number.c_str();
+            int z = 0;
+            for (; *s == '0'; ++s)
+                ++z;
+
+            if (i.root != root || i.view != view || i.ext != ext ||
+                (padding != z && z != padding - 1))
+            {
+                // New sequence
+                root = i.root;
+                padding = z;
+                number = first = i.number;
+                view = i.view;
+                ext = i.ext;
+
+                std::string file = root;
+                file += first;
+                file += view;
+                file += ext;
+                sequences.push_back(file);
+            }
+            else
+            {
+                padding = z;
+                number = i.number;
+            }
+        }
     }
 
 } // namespace mrv

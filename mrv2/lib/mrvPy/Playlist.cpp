@@ -28,7 +28,7 @@ namespace mrv2
         {
             ViewerUI* ui = App::ui;
 
-            auto model = ui->app->filesModel();
+            auto model = App::app->filesModel();
             auto items = model->observeFiles()->get();
 
             std::vector<std::shared_ptr<FilesModelItem>> out;
@@ -44,9 +44,7 @@ namespace mrv2
 
         void select(const std::shared_ptr<FilesModelItem>& item)
         {
-            ViewerUI* ui = App::ui;
-
-            auto model = ui->app->filesModel();
+            auto model = App::app->filesModel();
             auto items = model->observeFiles()->get();
 
             int Aindex = -1;
@@ -69,9 +67,7 @@ namespace mrv2
 
         void select(const std::string& fileName)
         {
-            ViewerUI* ui = App::ui;
-
-            auto model = ui->app->filesModel();
+            auto model = App::app->filesModel();
             auto items = model->observeFiles()->get();
 
             int Aindex = -1;
@@ -94,9 +90,7 @@ namespace mrv2
 
         void select(const unsigned playlistIndex)
         {
-            ViewerUI* ui = App::ui;
-
-            auto model = ui->app->filesModel();
+            auto model = App::app->filesModel();
             auto items = model->observeFiles()->get();
 
             int Aindex = -1;
@@ -121,9 +115,7 @@ namespace mrv2
 
         void add_clip(const std::shared_ptr<FilesModelItem>& clip)
         {
-            ViewerUI* ui = App::ui;
-
-            auto model = ui->app->filesModel();
+            auto model = App::app->filesModel();
             auto items = model->observeFiles()->get();
             int playlistIndex = model->observeAIndex()->get();
             if (playlistIndex < 0)
@@ -146,7 +138,7 @@ namespace mrv2
                     _("Could not find clip in loaded clips."));
 
             const std::string Afile = items[Aindex]->path.get();
-            add_clip_to_timeline(Afile, Aindex, ui);
+            add_clip_to_timeline(Afile, Aindex, App::ui);
         }
 
         /**
@@ -158,8 +150,7 @@ namespace mrv2
         void save(const std::string& fileName)
         {
             ViewerUI* ui = App::ui;
-
-            auto model = ui->app->filesModel();
+            auto model = App::app->filesModel();
             auto Aitem = model->observeA()->get();
             file::Path path = Aitem->path;
             if (!isTemporaryEDL(path))

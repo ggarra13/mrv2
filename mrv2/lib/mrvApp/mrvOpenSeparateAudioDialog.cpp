@@ -88,7 +88,7 @@ namespace mrv
         TLRENDER_P();
         if (auto context = p.context.lock())
         {
-            stringArray video = open_image_file("", true, p.ui);
+            std::vector<std::string> video = open_image_file("", true);
             if (video.empty())
                 return;
 
@@ -101,7 +101,7 @@ namespace mrv
         TLRENDER_P();
         if (auto context = p.context.lock())
         {
-            std::string audio = open_audio_file("", p.ui);
+            std::string audio = open_audio_file("");
             setAudioFileName(audio);
         }
     }

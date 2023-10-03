@@ -192,6 +192,7 @@ namespace mrv
     };
 
     ViewerUI* App::ui = nullptr;
+    App* App::app = nullptr;
 
     std::vector< std::string > OSXfiles;
     void osx_open_cb(const char* fname)
@@ -238,6 +239,7 @@ namespace mrv
         XSetErrorHandler(xerrorhandler);
 #endif
         // Store the application object for further use down the line
+        App::app = this;
         ViewerUI::app = this;
 
         open_console();

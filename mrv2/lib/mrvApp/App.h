@@ -146,6 +146,7 @@ namespace mrv
 
     public:
         static ViewerUI* ui;
+        static App* app;
 
     private: // Q_SLOTS:
         void

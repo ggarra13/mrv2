@@ -1344,7 +1344,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        stringArray tmpFiles, loadFiles;
+        std::vector<std::string> tmpFiles, loadFiles;
         mrv::split_string(tmpFiles, text, "\n");
 
         for (auto file : tmpFiles)
@@ -1365,7 +1365,7 @@ namespace mrv
 #endif
             if (is_directory(file))
             {
-                stringArray movies, sequences, audios;
+                std::vector<std::string> movies, sequences, audios;
                 parse_directory(file, movies, sequences, audios);
                 loadFiles.insert(loadFiles.end(), movies.begin(), movies.end());
                 loadFiles.insert(

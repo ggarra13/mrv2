@@ -202,7 +202,7 @@ namespace mrv
             page, P.x + kThumbnailWidth + margin.x, P.y + thumbnailHeight - 27);
 
         // Split text into lines
-        stringArray lines;
+        std::vector<std::string> lines;
         split_string(lines, text, "\n");
 
         // Write out each line
