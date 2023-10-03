@@ -1,5 +1,6 @@
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![Build Status](https://github.com/ggarra13/mrv2/actions/workflows/ci-workflow.yml/badge.svg)](https://github.com/ggarra13/mrv2/actions/workflows/ci-workflow.yml)
+[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif%29)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=679N8GWCNDFSJ)
 
 mrv2
 ====
