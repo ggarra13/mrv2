@@ -36,7 +36,6 @@ Contents:
    - [Translating on Windows](#translating-on-windows)
 - [Packaging](#packaging)
 - [Developing](#developing)
-- [Donating](#donating)
 
 # Pre-built binaries
 
@@ -566,10 +565,3 @@ This utility verifies previous to a commit that all the C++ formatting follows t
 
 You might also want to get Doxygen so as to get the source code documentation in docs/Doxygen.
 
-# Donating
-
-Go to:
-
-[Main Web Page for Donating](https://mrv2.sourceforge.io)
-
-and click on the Paypal Donate button.
