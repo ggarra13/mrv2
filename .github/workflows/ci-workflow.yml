@@ -470,7 +470,7 @@ jobs:
       
     - name: Build mrv2
       run:
-        ./runme_nolog.sh -gpl -t package
+        ./runme_nolog.sh -gpl -t package -D TLRENDER_USD=OFF
       
     # - name: Upload binaries
     #   run:

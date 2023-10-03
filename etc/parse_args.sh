@@ -2,6 +2,43 @@
 
 get_kernel
 
+show_help()
+{
+    if [[ $RUNME == 1 ]]; then
+	echo "$0 [debug] [clean] [dist] [-v] [-j <num>] [-lgpl] [-gpl] [-D VAR=VALUE] [-t <target>] [-help]"
+	echo ""
+	echo "* debug builds a debug build."
+	echo "* clean clears the directory before building -- use only with runme.sh"
+	echo "* dist builds a Mojave compatible distribution (macOS)."
+	echo "* -j <num>  controls the threads to use when compiling. [default=$CPU_CORES]"
+	echo "* -v builds verbosely. [default=off]"
+	echo "* -D sets cmake variables, like -D TLRENDER_USD=OFF."
+	echo "* -gpl builds FFmpeg with x264 encoder support in a GPL version of it."
+	echo "* -lgpl builds FFmpeg as a LGPL version of it."
+	echo "* -t <target> sets the cmake target to run. [default=none]"
+    else
+	echo "$0 [debug] [-j <num>] [-help]"
+	echo ""
+	echo "* debug builds a debug build."
+	echo "* -j <num>  controls the threads to use when compiling. [default=$CPU_CORES]"
+    fi
+}
+
+parse_option()
+{
+    local input="$1"
+    echo "parse_option got $1"
+    # Use regular expressions to match the option and value
+    if [[ "$input" =~ ^(-D)?(.+)=(.+)$ ]]; then
+        local option="${BASH_REMATCH[2]}"
+        local value="${BASH_REMATCH[3]}"
+	export CMAKE_FLAGS="-D $option=$value ${CMAKE_FLAGS}"
+    else
+        echo "Invalid option format: $input"
+        exit 1
+    fi
+}
+
 export RUNME=0
 if [[ $0 == *runme.sh* || $0 == *runme_nolog.sh* ]]; then
     RUNME=1
@@ -12,12 +49,11 @@ BUILD_ROOT=BUILD-$KERNEL-$ARCH
 export MRV2_DIST_RELEASE=0
 export FFMPEG_GPL=$FFMPEG_GPL
 CLEAN_DIR=0
-BUILD_ROOT=BUILD-$KERNEL-$ARCH
-
 export CMAKE_OSX_ARCHITECTURES=""
 export CMAKE_BUILD_TYPE="Release"
 export CMAKE_GENERATOR="Ninja"
 export CMAKE_TARGET=""
+
 for i in $@; do
     case $i in
 	release|Release)
@@ -62,7 +98,7 @@ for i in $@; do
 	    export CMAKE_FLAGS="-D TLRENDER_X264=ON ${CMAKE_FLAGS}"
 	    shift
 	    ;;
-	-dir|--dir|-build-dir|--build-dir)
+	-dir|--dir|-build-dir|--build-dir|-root|--root-dir)
 	    shift
 	    BUILD_ROOT=$1
 	    shift
@@ -78,9 +114,11 @@ for i in $@; do
 	    export FLAGS="-j $CPU_CORES ${FLAGS}"
 	    shift
 	    ;;
-	-D)
-	    shift
-	    export CMAKE_FLAGS="-D $1 ${CMAKE_FLAGS}"
+	-D*)
+	    if [[ $1 == "-D" ]]; then
+	       shift
+	    fi
+	    parse_option $1
 	    shift
 	    ;;
 	-G)
@@ -99,26 +137,9 @@ for i in $@; do
 	    shift
 	    ;;
 	-h|-help|--help)
-	    if [[ $RUNME == 1 ]]; then
-		echo "$0 [debug] [clean] [dist] [-v] [-j <num>] [-lgpl] [-gpl] [-D VAR=VALUE] [-t <target>] [-help]"
-		echo ""
-		echo "* debug builds a debug build."
-		echo "* clean clears the directory before building -- use only with runme.sh"
-		echo "* dist builds a Mojave compatible distribution (macOS)."
-		echo "* -j <num>  controls the threads to use when compiling. [default=$CPU_CORES]"
-		echo "* -v builds verbosely. [default=off]"
-		echo "* -D sets cmake variables, like -D TLRENDER_USD=OFF."
-		echo "* -gpl builds FFmpeg with x264 encoder support in a GPL version of it."
-		echo "* -lgpl builds FFmpeg as a LGPL version of it."
-		echo "* -t <target> sets the cmake target to run. [default=none]"
-	    else
-		echo "$0 [debug] [-v] [-j <num>] [-help]"
-		echo ""
-		echo "* debug builds a debug build."
-		echo "* -j <num>  controls the threads to use when compiling. [default=$CPU_CORES]"
-		echo "* -v builds verbosely. [default=off]"
-	    fi
+	    show_help
 	    exit 1
 	    ;;
     esac
 done
+
