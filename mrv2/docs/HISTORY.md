@@ -23,7 +23,14 @@ v0.7.9
   of the viewer.  You set the behavior in:
   
 	Preferences->User Interface->Single Instance.
+	
 - Removed all warnings and errors from the documentation generation.
+- Fixed positioning of text editing when re-editing a text annotaion.
+  Previously, it could be offset quite a bit if the zoom was not 1.
+- A lot of source code clean up from mrViewer's bad and old source code.
+- Windows installer now will remove the file association first before replacing
+  it with the one of mrv2.
+- Made executable smaller on all platforms by using dead-code elimination.
 
 - Build system changes and fixes:
 
@@ -43,6 +50,11 @@ v0.7.9
    * Fixed a problem with the embedded python (pybind11) locating the system
      python installation instead of the local one instead.  This created havok
      on my Ubuntu 22.04 when there was an upgrade.
+   * Made the build system automatically release beta versions of the software
+     after each successful compilation.  You can now download the latest beta
+     binaries from:
+     
+         https://sourceforge.net/projects/mrv2/files/beta/
 
 
 v0.7.8

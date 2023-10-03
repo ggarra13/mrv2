@@ -4,9 +4,17 @@
 
 #include <tlCore/Image.h>
 
-#include <tlIO/FFmpeg.h>
-#include <tlIO/OpenEXR.h>
-#include <tlIO/USD.h>
+#ifdef TLRENDER_FFMPEG
+#    include <tlIO/FFmpeg.h>
+#endif
+
+#ifdef TLRENDER_EXR
+#    include <tlIO/OpenEXR.h>
+#endif
+
+#ifdef TLRENDER_USD
+#    include <tlIO/USD.h>
+#endif
 
 #include <tlTimeline/LUTOptions.h>
 #include <tlTimeline/ImageOptions.h>
@@ -28,6 +36,7 @@ void mrv2_enums(py::module& m)
 
     py::module io = m.def_submodule("io");
 
+#ifdef TLRENDER_FFMPEG
     py::enum_<ffmpeg::Profile>(io, "Profile")
         .value("None", ffmpeg::Profile::None)
         .value("H264", ffmpeg::Profile::H264)
@@ -37,7 +46,9 @@ void mrv2_enums(py::module& m)
         .value("ProRes_HQ", ffmpeg::Profile::ProRes_HQ)
         .value("ProRes_4444", ffmpeg::Profile::ProRes_4444)
         .value("ProRes_XQ", ffmpeg::Profile::ProRes_XQ);
+#endif
 
+#ifdef TLRENDER_EXR
     py::enum_<exr::Compression>(io, "Compression")
         .value("None", exr::Compression::None)
         .value("RLE", exr::Compression::RLE)
@@ -49,6 +60,7 @@ void mrv2_enums(py::module& m)
         .value("B44A", exr::Compression::B44A)
         .value("DWAA", exr::Compression::DWAA)
         .value("DWAB", exr::Compression::DWAB);
+#endif
 
     py::module image = m.def_submodule("image");
 
@@ -154,6 +166,7 @@ void mrv2_enums(py::module& m)
         .value("Directory", timeline::FileSequenceAudio::Directory)
         .export_values();
 
+#ifdef TLRENDER_USD
     py::module usd = m.def_submodule("usd");
 
     py::enum_<usd::DrawMode>(usd, "DrawMode")
@@ -166,4 +179,5 @@ void mrv2_enums(py::module& m)
         .value("GeomFlat", usd::DrawMode::GeomFlat)
         .value("GeomSmooth", usd::DrawMode::GeomSmooth)
         .export_values();
+#endif
 }

@@ -26,13 +26,6 @@ endif()
 
 list( APPEND LIBRARIES
     mrvApp
-    mrvPanels
-    mrvWidgets
-    mrvUI
-    mrvFl
-    mrvFLU
-    mrvNetwork
-    mrvCore
     ${Intl_LIBRARIES} )
 
 
@@ -45,19 +38,31 @@ if( APPLE )
 endif()
 
 if(UNIX AND NOT APPLE)
-    if( CMAKE_CXX_COMPILER_ID MATCHES "GNU" )
-	if ( CMAKE_CXX_COMPILER_VERSION MATCHES "^8.*" )
-	    message( STATUS "Old g++ compiler detected.  Will link to stdc++fs")
-	    list( APPEND LIBRARIES "stdc++fs" )
-	endif()
-	list( APPEND LIBRARIES "util" )  # Needed for python3.10 on Rocky
+    if ( CMAKE_CXX_COMPILER_VERSION MATCHES "^8.*" )
+	message( STATUS "Old g++ compiler detected.  Will link to stdc++fs")
+	list( APPEND LIBRARIES "stdc++fs" )
     endif()
+    # Needed for python3.10 on Rocky and Ubuntu 20.04
+    list( APPEND LIBRARIES "util" "c" )
 endif()
+
+message(STATUS "mrv2 LIBRARIES=${LIBRARIES}")
 
 add_executable(mrv2 WIN32 ${SOURCES} ${HEADERS})
 
 target_link_libraries(mrv2 PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})
 target_link_directories( mrv2 BEFORE PUBLIC ${CMAKE_INSTALL_PREFIX}/lib /usr/local/lib )
+
+set(PRUNE_SYMBOLS )
+if(WIN32)
+    set(PRUNE_SYMBOLS "/OPT:REF" "/OPT:ICF")
+elseif(APPLE)
+    set(PRUNE_SYMBOLS "-Wl,-dead_strip")
+else(UNIX)
+    set(PRUNE_SYMBOLS "-Wl,--gc-sections")
+endif()
+
+target_link_options(mrv2 PRIVATE ${PRUNE_SYMBOLS})
 
 install(TARGETS mrv2
     RUNTIME DESTINATION bin COMPONENT applications
@@ -86,7 +91,7 @@ include(InstallRequiredSystemLibraries)
 #
 string( REGEX MATCH "^[0-9]+\\.[0-9]+" MRV2_PYTHON_VERSION "${PYTHON_VERSION}" )
 
-if (UNIX)
+if (UNIX AND BUILD_PYTHON)
     set( MRV2_PYTHON_LIBS ${CMAKE_INSTALL_PREFIX}/lib/python${MRV2_PYTHON_VERSION} )
     install( DIRECTORY ${MRV2_PYTHON_LIBS}
         DESTINATION lib

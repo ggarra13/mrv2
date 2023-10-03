@@ -42,13 +42,15 @@
 #    include <EGL/eglplatform.h>
 #endif
 
-#include <expat.h>
-#include <Imath/ImathConfig.h>
+#ifdef TLRENDER_OCIO
+#    include <expat.h>
+#endif
 
 #ifdef MRV2_PDF
 #    include <hpdf_version.h>
 #endif
 
+#include <Imath/ImathConfig.h>
 #include <jconfig.h>
 #include <libpng16/png.h>
 #include <mz.h>
@@ -93,8 +95,10 @@
 #    include <pybind11/pybind11.h>
 #endif
 
-#include <OpenColorIO/OpenColorIO.h>
+#ifdef TLRENDER_OCIO
+#    include <OpenColorIO/OpenColorIO.h>
 namespace OCIO = OCIO_NAMESPACE;
+#endif
 
 #include <zlib.h>
 
@@ -604,7 +608,6 @@ namespace mrv
           << _("mrv2 depends on:") << endl
           << endl;
 
-        const auto expat = XML_ExpatVersionInfo();
 #ifdef TLRENDER_USD
         unsigned int boost_major = BOOST_VERSION / 100000;
         unsigned int boost_minor = BOOST_VERSION / 100 % 1000;
@@ -615,15 +618,18 @@ namespace mrv
           << endl
           << endl;
 #endif
+#ifdef TLRENDER_OCIO
+        const auto expat = XML_ExpatVersionInfo();
         o << "expat v" << expat.major << "." << expat.minor << "."
           << expat.micro << endl
           << "Copyright (c) 1998-2000 Thai Open Source Software Center Ltd and "
              "Clark Cooper"
           << endl
           << "Copyright (c) 2001-2022 Expat maintainers" << endl
-          << endl
+          << endl;
+#endif
 #ifdef TLRENDER_FFMPEG
-          << "FFmpeg" << endl
+        o << "FFmpeg" << endl
           << "libavutil          v" << AV_STRINGIFY(LIBAVUTIL_VERSION) << endl
           << "libavcodec      v" << AV_STRINGIFY(LIBAVCODEC_VERSION) << endl
           << "libavformat     v" << AV_STRINGIFY(LIBAVFORMAT_VERSION) << endl
@@ -634,9 +640,9 @@ namespace mrv
           << "License: " << avcodec_license() << endl
           << "Copyright (c) 2000-Present Fabrice Bellard, et al." << endl
           << "Configuration: " << avcodec_configuration() << endl
-          << endl
+          << endl;
 #endif
-          << "Flmm Color Picker (modified)" << endl
+        o << "Flmm Color Picker (modified)" << endl
           << "Copyright (c) 2002 - 2004 Matthias Melcher" << endl
           << endl
           << "FLTK v1.4" << endl
@@ -730,10 +736,12 @@ namespace mrv
           << "OFL (Open Font License)" << endl
           << "Copyright (c) 26 February 2007" << endl
           << endl
+#ifdef TLRENDER_OCIO
           << "OpenColorIO v" << OCIO::GetVersion() << endl
           << "http://www.opencolorio.org/" << endl
           << "Copyright Contributors to the OpenColorIO Project." << endl
           << endl
+#endif
 #ifdef TLRENDER_EXR
           << "OpenEXR v" << OPENEXR_VERSION_STRING << endl
           << "http://www.openexr.org/" << endl

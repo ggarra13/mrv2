@@ -27,6 +27,7 @@ set(HEADERS
   mrvStereo3DOptions.h
   mrvStereo3DOptionsInline.h
   mrvString.h
+  mrvTimeObject.h
   mrvUtil.h
   )
 
@@ -45,6 +46,7 @@ set(SOURCES
   mrvSequence.cpp
   mrvStereo3DOptions.cpp
   mrvString.cpp
+  mrvTimeObject.cpp
   mrvUtil.cpp
   )
 
@@ -85,7 +87,7 @@ files_to_absolute_paths()
 
 target_link_libraries(mrvCore PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE} )
 set_target_properties(mrvCore PROPERTIES FOLDER lib)
-set_target_properties(mrvCore PROPERTIES PUBLIC_HEADER "${HEADERS}")
+#set_target_properties(mrvCore PROPERTIES PUBLIC_HEADER "${HEADERS}")
 
 
 

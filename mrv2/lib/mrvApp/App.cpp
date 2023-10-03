@@ -657,7 +657,7 @@ namespace mrv
             });
 #endif
 
-        _cacheUpdate();
+        cacheUpdate();
         _audioUpdate();
 
         // Create the main control.
@@ -1336,7 +1336,7 @@ namespace mrv
             }
         }
 
-        _cacheUpdate();
+        cacheUpdate();
         _audioUpdate();
     }
 
@@ -1360,7 +1360,7 @@ namespace mrv
             value / static_cast<double>(activeCount), 1.0);
     }
 
-    void App::_cacheUpdate()
+    void App::cacheUpdate()
     {
         TLRENDER_P();
         if (p.timelinePlayers.empty())

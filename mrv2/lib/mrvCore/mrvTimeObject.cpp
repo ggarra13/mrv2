@@ -11,9 +11,7 @@
 #include <tlCore/Error.h>
 #include <tlCore/String.h>
 
-#include "mrvFl/mrvTimeObject.h"
-
-#include "mrViewer.h"
+#include "mrvCore/mrvTimeObject.h"
 
 namespace mrv
 {
@@ -34,26 +32,6 @@ namespace mrv
     //     value = static_cast<TimeUnits>(tmp);
     //     return ds;
     // }
-
-    std::string sizeHintString(TimeUnits units)
-    {
-        std::string out;
-        switch (units)
-        {
-        case TimeUnits::Frames:
-            out = "000000";
-            break;
-        case TimeUnits::Seconds:
-            out = "000000.00";
-            break;
-        case TimeUnits::Timecode:
-            out = "00:00:00:00";
-            break;
-        default:
-            break;
-        }
-        return out;
-    }
 
     std::string validator(TimeUnits units)
     {
@@ -127,30 +105,6 @@ namespace mrv
             break;
         }
         return out;
-    }
-
-    TimeObject::TimeObject(ViewerUI* m) :
-        ui(m)
-    {
-    }
-
-    TimeUnits TimeObject::units() const
-    {
-        return _units;
-    }
-
-    void TimeObject::setUnits(TimeUnits units)
-    {
-        if (_units == units)
-            return;
-        _units = units;
-
-        ui->uiTimeline->setUnits(units);
-
-        TimelineClass* c = ui->uiTimeWindow;
-        c->uiFrame->setUnits(units);
-        c->uiStartFrame->setUnits(units);
-        c->uiEndFrame->setUnits(units);
     }
 
 } // namespace mrv

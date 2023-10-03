@@ -23,7 +23,7 @@ Contents:
     - [Building mrv2](#building-mrv2)
     - [Debug builds](#debug-builds)
     - [Building on Windows](#building-on-windows)
-    - [Optional CMake flags](#optional-cmake-flags) 
+    - [CMake build options](#cmake-build-options) 
     - [Building FFmpeg as GPL or LGPL](#building-ffmpeg-as-gpl-or-lgpl)
 - [Running mrv2](#running-mrv2)
     - [macOS and Linux](#macos-and-linux)
@@ -334,17 +334,24 @@ for FFmpeg and liblcms2 libraries are provided in mrv2's windows/win64 directory
 
 If you unset LCMS2_ROOT in windows/envvars/envvars.sh, the library will be compiled.
 
-## Optional CMake flags
+## CMake build options
 
-The main runme.sh script supports passing CMake flags to it and allows turning on or off some options of mrv2.  Currently, these are:
+The main runme.sh script supports passing CMake flags to it and allows turning on or off some options of mrv2.  You must pass them like:
 
-BUILD_ZLIB    Toggles building zlib as a shared library (only for macOS).
-BUILD_GETTEXT Toggles Gettext (libintl / libiconv) creation (only for macOS).
-BUILD_FLTK    Toggles FLTK building (currently needed)
-BUILD_PYTHON  Toggles Python building.
-MRV2_PYBIND11 Toggles Python bindings (no Python support in mrv2).
-MRV2_NETWORK  Toggles Network and Single Instance.
-MRV2_PDF      Toggles PDF Saving and Creation.
+-D TLRENDER_USD=OFF
+
+You *must* leave a space between the -D and the flag.
+
+Currently, the flags supported are:
+
+| Name              | Description                                       | Default   |
+| ----------------- | ------------------------------------------------- | --------- |
+| BUILD_FLTK        | Toggles FLTK building (currently needed)          | TRUE      |
+| BUILD_PYTHON      | Toggles Python building.                          | TRUE      |
+| MRV2_PYBIND11     | Toggles Python support in mrv2.                   | TRUE      |
+| MRV2_NETWORK      | Toggles Network and Single Instance.              | TRUE      |
+| MRV2_PDF          | Toggles PDF Saving and Creation.                  | TRUE      |
+| TLRENDER_USD      | Toggles support for USD                           | TRUE      |
 
 ## Building FFmpeg as GPL or LGPL
 

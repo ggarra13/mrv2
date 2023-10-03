@@ -12,9 +12,10 @@
 
 #include "mrvFl/mrvColorSchemes.h"
 
-// OpenColorIO
-#include <OpenColorIO/OpenColorIO.h>
+#ifdef TLRENDER_OCIO
+#    include <OpenColorIO/OpenColorIO.h>
 namespace OCIO = OCIO_NAMESPACE;
+#endif
 
 class ViewerUI;
 class PreferencesUI;
@@ -39,7 +40,12 @@ namespace mrv
 
         static void updateICS();
 
-        static OCIO::ConstConfigRcPtr OCIOConfig() { return config; }
+#ifdef TLRENDER_OCIO
+        static OCIO::ConstConfigRcPtr OCIOConfig()
+        {
+            return config;
+        }
+#endif
 
     protected:
         static bool set_transforms();
@@ -53,7 +59,10 @@ namespace mrv
         static int selectiontextcolor;
         static int switching_images;
 
+#ifdef TLRENDER_OCIO
         static OCIO::ConstConfigRcPtr config;
+#endif
+
         static std::string OCIO_Display;
         static std::string OCIO_View;
 

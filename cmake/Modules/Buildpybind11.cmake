@@ -5,7 +5,7 @@
 include( ExternalProject )
 
 
-message(STATUS "PREVIOUS Build pybind11 Python_EXECUTABLE=${Python_EXECUTABLE}")
+message(STATUS "PREVIOUS Build pybind11 PYTHON_EXECUTABLE=${Python_EXECUTABLE}")
 message(STATUS "PREVIOUS Build pybind11 Python_VERSION=${Python_VERSION}")
 message(STATUS "PREVIOUS Build pybind11 PYTHON_VERSION=${PYTHON_VERSION}")
 
@@ -24,12 +24,11 @@ ExternalProject_Add(
     -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}
     -DCMAKE_C_FLAGS=${CMAKE_C_FLAGS}
     -DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
-    -DPYTHON_EXECUTABLE=${Python_EXECUTABLE}
     -DPYBIND11_TEST:BOOL=OFF
     DEPENDS ${PYTHON_DEP}
 )
 
-message(STATUS "AFTER Build pybind11 Python_EXECUTABLE=${Python_EXECUTABLE}")
+message(STATUS "AFTER Build pybind11 PYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}")
 message(STATUS "AFTER Build pybind11 Python_VERSION=${Python_VERSION}")
 message(STATUS "AFTER Build pybind11 PYTHON_VERSION=${PYTHON_VERSION}")
     

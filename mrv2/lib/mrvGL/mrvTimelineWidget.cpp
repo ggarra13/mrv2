@@ -21,6 +21,7 @@
 #include <tlGL/Util.h>
 
 #include "mrvCore/mrvHotkey.h"
+#include "mrvCore/mrvTimeObject.h"
 
 #include "mrvEdit/mrvEditCallbacks.h"
 #include "mrvEdit/mrvEditUtil.h"

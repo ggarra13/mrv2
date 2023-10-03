@@ -5,6 +5,7 @@
 set(HEADERS
     mrvGLDefines.h
     mrvGLErrors.h
+    mrvGLJson.h
     mrvGLLines.h
     mrvGLOffscreenContext.h
     mrvGLOutline.h
@@ -24,8 +25,9 @@ set(HEADERS
 set(SOURCES
     mrvGL2TextShape.cpp
     mrvGLErrors.cpp
-    mrvGLOffscreenContext.cpp
+    mrvGLJson.cpp
     mrvGLLines.cpp
+    mrvGLOffscreenContext.cpp
     mrvGLOutline.cpp
     mrvGLShaders.cpp
     mrvGLShape.cpp
@@ -51,7 +53,7 @@ files_to_absolute_paths()
 
 target_link_libraries(mrvGL PUBLIC ${LIBRARIES} ${LIBRARIES_PRIVATE})
 set_target_properties(mrvGL PROPERTIES FOLDER lib)
-set_target_properties(mrvGL PROPERTIES PUBLIC_HEADER "${HEADERS}")
+#set_target_properties(mrvGL PROPERTIES PUBLIC_HEADER "${HEADERS}")
 
 install(TARGETS mrvGL
     ARCHIVE DESTINATION lib

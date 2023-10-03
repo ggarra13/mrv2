@@ -138,7 +138,7 @@ namespace mrv
         //! Removes an image listener (closes a socket on localport).
         void removeListener();
 
-        void _cacheUpdate();
+        void cacheUpdate();
 
         //! Tries to clean as many resources as possible.  This is usually done
         //! before calling execv(), for example.

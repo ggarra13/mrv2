@@ -30,6 +30,10 @@ set(SOURCES
 
 
 set( LIBRARIES mrvCore)
+if(TLRENDER_GL)
+    list(PREPEND LIBRARIES mrvGL)
+endif()
+
 if(MRV2_NETWORK)
     list(APPEND SOURCES
     		mrvClient.cpp
@@ -62,7 +66,7 @@ files_to_absolute_paths()
 
 target_link_libraries(mrvNetwork PUBLIC ${LIBRARIES} )
 set_target_properties(mrvNetwork PROPERTIES FOLDER lib)
-set_target_properties(mrvNetwork PROPERTIES PUBLIC_HEADER "${HEADERS}")
+#set_target_properties(mrvNetwork PROPERTIES PUBLIC_HEADER "${HEADERS}")
 add_dependencies( mrvNetwork mrvFl )
 
 install(TARGETS mrvNetwork

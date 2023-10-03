@@ -44,7 +44,7 @@ namespace mrv2
             mrv::App* app = mrv::App::ui->app;
             auto settings = settingsObject();
             settings->setValue("Cache/GBytes", value);
-            app->_cacheUpdate();
+            app->cacheUpdate();
             if (settingsPanel)
                 settingsPanel->refresh();
         }
@@ -85,7 +85,7 @@ namespace mrv2
             mrv::App* app = mrv::App::ui->app;
             auto settings = settingsObject();
             settings->setValue("Cache/ReadAhead", value);
-            app->_cacheUpdate();
+            app->cacheUpdate();
             if (settingsPanel)
                 settingsPanel->refresh();
         }
@@ -100,7 +100,7 @@ namespace mrv2
             mrv::App* app = mrv::App::ui->app;
             auto settings = settingsObject();
             settings->setValue("Cache/ReadBehind", value);
-            app->_cacheUpdate();
+            app->cacheUpdate();
             if (settingsPanel)
                 settingsPanel->refresh();
         }

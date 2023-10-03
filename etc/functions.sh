@@ -18,6 +18,29 @@ run_cmd()
     time eval command $*
 }
 
+#
+# Get kernel and architecture
+#
+get_kernel()
+{
+    export KERNEL=`uname`
+    if [[ $KERNEL == *MSYS* || $KERNEL == *MINGW* ]]; then
+	export KERNEL=Msys
+	export ARCH=`which cl.exe`
+    fi
+
+    if [[ $ARCH == "" ]]; then
+	export ARCH=`uname -m` # was uname -a
+    fi
+
+    if [[ $ARCH == arm64 ]]; then
+	export ARCH=arm64
+    elif [[ $ARCH == *64* ]]; then
+	export ARCH=amd64
+    else
+	export ARCH=i386
+    fi
+}
 
 #
 # Extract version from cmake/version.cmake
@@ -35,8 +58,8 @@ extract_version()
 #
 extract_python_version()
 {
-    local major=`cat cmake/Modules/BuildPython.cmake | grep -o 'set.[ \t]*PYTHON_VERSION\s*[0-9]*' | sed -e 's/set.[ \t]*PYTHON_VERSION[ \t]*//'`
-    local minor=`cat cmake/Modules/BuildPython.cmake | grep -o 'set.[ \t]*PYTHON_VERSION\s*[0-9]*\.[0-9]*' | sed -e 's/set.[ \t]*PYTHON_VERSION[ \t]*[0-9]*\.//'`
+    local major=`cat cmake/Modules/BuildPython.cmake | grep -o 'set.[ \t]*Python_VERSION\s*[0-9]*' | sed -e 's/set.[ \t]*Python_VERSION[ \t]*//'`
+    local minor=`cat cmake/Modules/BuildPython.cmake | grep -o 'set.[ \t]*Python_VERSION\s*[0-9]*\.[0-9]*' | sed -e 's/set.[ \t]*Python_VERSION[ \t]*[0-9]*\.//'`
     export PYTHON_VERSION="${major}.${minor}"
 }
 

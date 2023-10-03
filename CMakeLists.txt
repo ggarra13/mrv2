@@ -87,6 +87,10 @@ if( BUILD_FLTK )
     include( cmake/Modules/BuildFLTK.cmake )
 endif()
 
+if(NOT MRV2_PYBIND11 AND BUILD_PYTHON)
+    set(BUILD_PYTHON OFF)
+endif()
+
 set( PYTHON_DEP )
 if( BUILD_PYTHON )
     include( cmake/Modules/BuildPython.cmake )
