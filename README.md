@@ -1,12 +1,11 @@
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![Build Status](https://github.com/ggarra13/mrv2/actions/workflows/ci-workflow.yml/badge.svg)](https://github.com/ggarra13/mrv2/actions/workflows/ci-workflow.yml)
-[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif%29)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=679N8GWCNDFSJ)
+[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=679N8GWCNDFSJ)
 
 mrv2
 ====
 
 mrv2 is an open source professional player and review tool for vfx, animation and computer graphics.
-It is the second generation of the popular mrViewer flipbook player.
 
 Contents:
 
@@ -37,7 +36,6 @@ Contents:
    - [Translating on Windows](#translating-on-windows)
 - [Packaging](#packaging)
 - [Developing](#developing)
-- [Donating](#donating)
 
 # Pre-built binaries
 
@@ -567,10 +565,3 @@ This utility verifies previous to a commit that all the C++ formatting follows t
 
 You might also want to get Doxygen so as to get the source code documentation in docs/Doxygen.
 
-# Donating
-
-Go to:
-
-[Main Web Page for Donating](https://mrv2.sourceforge.io)
-
-and click on the Paypal Donate button.
