@@ -4,10 +4,10 @@ echo "RUNNING upload_sourceforge.sh......"
 
 . etc/functions.sh
 
-# if [[ "$(git rev-parse --abbrev-ref HEAD)" != "main" ]]; then
-#     echo "You are not on the main branch.  Will not make a release."
-#     exit 0
-# fi
+if [[ "$(git rev-parse --abbrev-ref HEAD)" != "main" ]]; then
+    echo "You are not on the main branch.  Will not make a release."
+    exit 0
+fi
 
 if [[ -e ssh/id_rsa ]]; then
     SSH_KEY=$PWD/ssh/id_rsa
@@ -24,6 +24,7 @@ fi
 echo "SSH KEY IS: ${SSH_KEY}"
 
 get_kernel
+
 # Extract cmake/version.cmake into mrv2_VERSION
 extract_version
 echo "mrv2 VERSION=$mrv2_VERSION"
@@ -34,17 +35,17 @@ echo "mrv2 VERSION=$mrv2_VERSION"
 mkdir -p packages
 cd packages
 
-# # Read all the files of this version
-# shopt -s nullglob
-# files=(*v${mrv2_VERSION}*)
-# shopt -u nullglob
+# Read all the files of this version
+shopt -s nullglob
+files=(*v${mrv2_VERSION}*)
+shopt -u nullglob
 
-# if [[ "$files" == "" ]]; then
-#     echo
-#     echo "No v${mrv2_VERSION} files to upload.  Something probably went wrong in the compilation."
-#     echo
-#     exit 1
-# fi
+if [[ "$files" == "" ]]; then
+    echo
+    echo "No v${mrv2_VERSION} files to upload.  Something probably went wrong in the compilation."
+    echo
+    exit 1
+fi
 
 
 if [[ $KERNEL == *Msys* ]]; then
@@ -57,7 +58,10 @@ fi
 
 
 # Create the remote directory
+echo "Create directory and register sourceforge site..."
 ssh -i $SSH_KEY -o StrictHostKeyChecking=no ggarra13@frs.sourceforge.net 'mkdir -p /home/frs/project/mrv2/beta/'
+
+echo "Proceed with uploading..."
 
 
 upload_file()
@@ -154,7 +158,7 @@ release_notes=$(sed -n "$start_line,${end_line}p" "$HISTORY")
 
 echo "$release_notes" >> upload_date.md
 
-cat <<EOF >> upload_date.md
+cat <<"EOF" >> upload_date.md
 
 ## Notes on installation
 
@@ -190,13 +194,13 @@ cat <<EOF >> upload_date.md
   On Debian (Ubuntu, etc) systems, you would install with:
 
 ```
-  sudo dpkg -i mrv2-v0.7.0-amd64.tar.gz
+  sudo dpkg -i mrv2-beta-Linux-amd64.tar.gz
 ```
 
   On Red Hat (Rocky Linux, etc), you would install it with:
   
 ```
-  sudo rpm -i mrv2-v0.7.0-amd64.tar.gz
+  sudo rpm -i mrv2-beta-Linux-amd64.tar.gz
 ```
 
   Once you install it, you can run mrv2 by just typing mrv2 in the shell, as
@@ -210,7 +214,7 @@ cat <<EOF >> upload_date.md
   .tar.gz file and you can uncompress it with:
   
 ```
-  tar -xf mrv2-v0.7.0-amd64.tar.gz
+  tar -xf mrv2-beta-Linux-amd64.tar.gz
 ```
 
   That will create a folder in the direcory you uncompress it from.  You can
