@@ -52,7 +52,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        SettingsObject* settingsObject = p.ui->app->settingsObject();
+        SettingsObject* settingsObject = App::app->settingsObject();
         const std::string& prefix = tab_prefix();
 
         Fl_Group* bg;
@@ -79,8 +79,7 @@ namespace mrv
                 const std::string& prefix = usdPanel->tab_prefix();
                 const std::string key = prefix + "USD";
 
-                App* app = App::ui->app;
-                auto settingsObject = app->settingsObject();
+                auto settingsObject = App::app->settingsObject();
                 settingsObject->setValue(key, static_cast<int>(cg->is_open()));
 
                 usdPanel->refresh();

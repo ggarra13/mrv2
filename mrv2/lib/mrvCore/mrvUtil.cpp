@@ -156,12 +156,12 @@ namespace mrv
     }
 
     void parse_directory(
-        const std::string& dir, stringArray& movies, stringArray& sequences,
-        stringArray& audios)
+        const std::string& dir, std::vector<std::string>& movies,
+        std::vector<std::string>& sequences, std::vector<std::string>& audios)
     {
 
         // default constructor yields path iter. end
-        stringArray files;
+        std::vector<std::string> files;
         fs::directory_iterator e;
         for (fs::directory_iterator i(dir); i != e; ++i)
         {

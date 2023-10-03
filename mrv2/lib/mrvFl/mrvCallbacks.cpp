@@ -166,7 +166,7 @@ namespace mrv
 
     void open_cb(Fl_Widget* w, ViewerUI* ui)
     {
-        const stringArray& files = open_image_file(NULL, true);
+        const std::vector<std::string>& files = open_image_file(NULL, true);
         open_files_cb(files, ui);
     }
 
@@ -175,7 +175,7 @@ namespace mrv
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(w->mvalue());
         if (!item || !item->label())
             return;
-        stringArray files;
+        std::vector<std::string> files;
         std::string file = item->label();
         files.push_back(file);
         open_files_cb(files, ui);
@@ -196,7 +196,7 @@ namespace mrv
         if (!is_directory(dir))
             return;
 
-        stringArray movies, sequences, audios;
+        std::vector<std::string> movies, sequences, audios;
         parse_directory(dir, movies, sequences, audios);
 
         for (const auto& movie : movies)

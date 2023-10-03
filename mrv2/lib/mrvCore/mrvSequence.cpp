@@ -226,7 +226,7 @@ namespace mrv
         size_t len = i - e + 1;
         f = f.substr(len, f.size());
 
-        stringArray periods;
+        std::vector<std::string> periods;
         split(periods, f, '.');
 
         if (periods.size() == 4)

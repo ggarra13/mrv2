@@ -189,11 +189,11 @@ namespace mrv
         return file;
     }
 
-    stringArray file_multi_requester(
+    std::vector<std::string> file_multi_requester(
         const char* title, const char* pattern, const char* startfile,
         const bool compact_images)
     {
-        stringArray filelist;
+        std::vector<std::string> filelist;
 
         try
         {
@@ -344,7 +344,7 @@ namespace mrv
      *
      * @return Each file to be opened
      */
-    stringArray
+    std::vector<std::string>
     open_image_file(const char* startfile, const bool compact_images)
     {
         auto context = App::app->getContext();

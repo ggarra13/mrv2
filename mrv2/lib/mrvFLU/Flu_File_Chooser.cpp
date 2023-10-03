@@ -27,6 +27,7 @@
 #include <iostream>
 #include <algorithm>
 #include <mutex>
+#include <set>
 
 #define FLU_USE_REGISTRY
 

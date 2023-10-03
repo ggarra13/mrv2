@@ -40,7 +40,7 @@ namespace mrv
      *
      * @return opened filename(s)
      */
-    stringArray
+    std::vector<std::string>
     open_image_file(const char* startfile, const bool compact_files);
 
     // void attach_ocio_input_color_space( CMedia* img, ImageView* view );
