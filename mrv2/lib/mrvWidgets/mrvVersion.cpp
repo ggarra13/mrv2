@@ -109,7 +109,7 @@ extern "C"
 }
 #else
 #    define AV_STRINGIFY(s) AV_TOSTRING(s)
-#    define AV_TOSTRING(s) #s
+#    define AV_TOSTRING(s) #    s
 #endif
 
 #ifdef _WIN32
