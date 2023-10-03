@@ -40,5 +40,7 @@ fi
 cmd="./runmeq.sh ${CMAKE_BUILD_TYPE} -t ${CMAKE_TARGET}"
 run_cmd $cmd
 
-. $PWD/etc/build_end.sh
+if [[ "$CMAKE_TARGET" != "package" ]]; then
+    . $PWD/etc/build_end.sh
+fi
 

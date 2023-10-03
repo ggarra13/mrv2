@@ -23,15 +23,20 @@ if [[ $RUNME == 1 ]]; then
 	. bin/compile_ffmpeg_windows.sh
     else
 	if [[ ! -e $BUILD_DIR/install/lib/avformat.lib ]]; then
-	    echo "Copying pre-built FFmpeg from $FFMPEG_ROOT"
-	    run_cmd cp -f $FFMPEG_ROOT/bin/av*.dll $BUILD_DIR/install/bin
-	    run_cmd cp -f $FFMPEG_ROOT/bin/sw*.dll $BUILD_DIR/install/bin
-	    run_cmd cp -f $FFMPEG_ROOT/lib/av*.lib $BUILD_DIR/install/lib
-	    run_cmd cp -f $FFMPEG_ROOT/lib/sw*.lib $BUILD_DIR/install/lib
-	    run_cmd cp -rf $FFMPEG_ROOT/include/libav* \
-		    $BUILD_DIR/install/include
-	    run_cmd cp -rf $FFMPEG_ROOT/include/libsw* \
-		    $BUILD_DIR/install/include
+	    # echo "Copying pre-built FFmpeg from $FFMPEG_ROOT"
+	    if [[ $MRV2_DIST_RELEASE == 1 ]]; then
+		run_cmd mv -f $FFMPEG_ROOT/bin/av*.dll $BUILD_DIR/install/bin
+		run_cmd mv -f $FFMPEG_ROOT/bin/sw*.dll $BUILD_DIR/install/bin
+	    else
+		run_cmd cp -f $FFMPEG_ROOT/bin/av*.dll $BUILD_DIR/install/bin
+		run_cmd cp -f $FFMPEG_ROOT/bin/sw*.dll $BUILD_DIR/install/bin
+	    fi
+	    # run_cmd cp -f $FFMPEG_ROOT/lib/av*.lib $BUILD_DIR/install/lib
+	    # run_cmd cp -f $FFMPEG_ROOT/lib/sw*.lib $BUILD_DIR/install/lib
+	    # run_cmd cp -rf $FFMPEG_ROOT/include/libav* \
+	    # 	    $BUILD_DIR/install/include
+	    # run_cmd cp -rf $FFMPEG_ROOT/include/libsw* \
+	    # 	    $BUILD_DIR/install/include
 	fi
     fi
 

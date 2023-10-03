@@ -111,6 +111,11 @@ if(MRV2_PYBIND11)
     list( APPEND LIBRARIES pybind11::embed )
     list( APPEND SOURCES mrvPythonEditor.cpp mrvPythonOutput.cpp)
     list( APPEND HEADERS mrvPythonEditor.h mrvPythonOutput.h)
+    
+    if(UNIX AND NOT APPLE)
+	# Needed for python3.10 on Rocky and Ubuntu 20.04
+	list( APPEND LIBRARIES "util" )
+    endif()
 endif()
 
 
@@ -136,7 +141,7 @@ endif()
 
 target_link_libraries(mrvWidgets PUBLIC ${LIBRARIES} )
 set_target_properties(mrvWidgets PROPERTIES FOLDER lib)
-set_target_properties(mrvWidgets PROPERTIES PUBLIC_HEADER "${HEADERS}")
+#set_target_properties(mrvWidgets PROPERTIES PUBLIC_HEADER "${HEADERS}")
 
 install(TARGETS mrvWidgets
     ARCHIVE DESTINATION lib

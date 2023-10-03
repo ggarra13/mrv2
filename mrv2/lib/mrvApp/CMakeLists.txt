@@ -35,7 +35,7 @@ endif()
 target_link_libraries(mrvApp PUBLIC tlApp mrvPanels mrvNetwork ${GL_LIBRARY} mrvDraw mrvFLU mrvWidgets )
 target_include_directories(mrvApp PUBLIC ${INCLUDES} )
 set_target_properties(mrvApp PROPERTIES FOLDER lib)
-set_target_properties(mrvApp PROPERTIES PUBLIC_HEADER "${HEADERS}")
+#set_target_properties(mrvApp PROPERTIES PUBLIC_HEADER "${HEADERS}")
 
 
 

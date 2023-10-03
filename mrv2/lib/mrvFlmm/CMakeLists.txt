@@ -20,7 +20,7 @@ set( LIBRARIES fltk fltk_images )
 
 target_link_libraries(mrvFlmm PUBLIC ${LIBRARIES} )
 set_target_properties(mrvFlmm PROPERTIES FOLDER lib)
-set_target_properties(mrvFlmm PROPERTIES PUBLIC_HEADER "${HEADERS}")
+#set_target_properties(mrvFlmm PROPERTIES PUBLIC_HEADER "${HEADERS}")
 
 install(TARGETS mrvFlmm
     ARCHIVE DESTINATION lib

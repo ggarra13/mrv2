@@ -24,9 +24,8 @@ namespace mrv
 
 #ifdef TLRENDER_EXR
         tl::exr::Compression exrCompression = tl::exr::Compression::ZIP;
-#endif
-
         tl::image::PixelType exrPixelType = tl::image::PixelType::RGBA_F16;
+#endif
         int zipCompressionLevel = 4;
         float dwaCompressionLevel = 45.0F;
     };

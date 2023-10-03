@@ -20,7 +20,7 @@ set( LIBRARIES ${LibHaru} mrvWidgets )
 
 target_link_libraries(mrvPDF PUBLIC ${LIBRARIES} )
 set_target_properties(mrvPDF PROPERTIES FOLDER lib)
-set_target_properties(mrvPDF PROPERTIES PUBLIC_HEADER "${HEADERS}")
+#set_target_properties(mrvPDF PROPERTIES PUBLIC_HEADER "${HEADERS}")
 
 install(TARGETS mrvPDF
     ARCHIVE DESTINATION lib
