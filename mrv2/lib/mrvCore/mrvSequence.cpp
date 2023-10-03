@@ -245,8 +245,7 @@ namespace mrv
 
             if (!view.empty())
                 view += ".";
-            if (mrv::is_valid_movie(ext.c_str()) ||
-                mrv::is_valid_audio(ext.c_str()))
+            if (mrv::is_valid_movie(ext) || mrv::is_valid_audio(ext))
             {
                 if (frame != "" && (ext == ".gif" || ext == ".GIF"))
                     return true;
@@ -270,8 +269,7 @@ namespace mrv
                 root = root.substr(7, root.size());
             frame = periods[1];
             ext = '.' + periods[2];
-            if (mrv::is_valid_movie(ext.c_str()) ||
-                mrv::is_valid_audio(ext.c_str()))
+            if (mrv::is_valid_movie(ext) || mrv::is_valid_audio(ext))
             {
                 if (frame != "" && (ext == ".gif" || ext == ".GIF"))
                     return true;
@@ -348,8 +346,7 @@ namespace mrv
             ext = f.substr(idx[0], file.size() - idx[0]);
 
             bool ok = is_valid_frame(frame);
-            if (ok && (!is_valid_movie(ext.c_str()) ||
-                       mrv::is_valid_audio(ext.c_str())))
+            if (ok && (!is_valid_movie(ext) || mrv::is_valid_audio(ext)))
             {
                 return true;
             }
@@ -361,7 +358,7 @@ namespace mrv
                 ext.clear();
             }
 
-            if (is_valid_movie(ext.c_str()) || mrv::is_valid_audio(ext.c_str()))
+            if (is_valid_movie(ext) || mrv::is_valid_audio(ext))
             {
                 if (frame != "" && (ext == ".gif" || ext == ".GIF"))
                     return true;
@@ -380,7 +377,7 @@ namespace mrv
                 root = root.substr(7, root.size());
             ext = f.substr(idx[0] + 1, file.size());
 
-            if (is_valid_movie(ext.c_str()) || is_valid_audio(ext.c_str()))
+            if (is_valid_movie(ext) || is_valid_audio(ext))
             {
                 frame = "";
                 return false;
@@ -406,8 +403,7 @@ namespace mrv
             // Handle image0001.exr
             //
             std::string tmp = '.' + ext;
-            bool valid =
-                is_valid_movie(tmp.c_str()) || mrv::is_valid_audio(ext.c_str());
+            bool valid = is_valid_movie(tmp) || is_valid_audio(ext);
             size_t len = root.size();
             if (len >= 2 && !valid)
             {
@@ -484,87 +480,6 @@ namespace mrv
 
             frame = "";
             return false;
-        }
-    }
-
-    void parse_directory(
-        const std::string& dir, stringArray& movies, stringArray& sequences,
-        stringArray& audios)
-    {
-
-        // default constructor yields path iter. end
-        stringArray files;
-        fs::directory_iterator e;
-        for (fs::directory_iterator i(dir); i != e; ++i)
-        {
-            if (!fs::exists(*i) || fs::is_directory(*i))
-                continue;
-
-            std::string file = (*i).path().string();
-            files.push_back(file);
-        }
-        std::sort(files.begin(), files.end());
-
-        std::string root, frame, view, ext;
-        SequenceList tmpseqs;
-
-        for (const auto& file : files)
-        {
-            bool ok = mrv::split_sequence(root, frame, view, ext, file);
-            if (mrv::is_valid_movie(ext.c_str()))
-                movies.push_back(file);
-            else if (mrv::is_valid_audio(ext.c_str()))
-                audios.push_back(file);
-            else if (ok)
-            {
-                Sequence s;
-                s.root = root;
-                s.view = view;
-                s.number = frame;
-                s.ext = ext;
-
-                tmpseqs.push_back(s);
-            }
-        }
-
-        //
-        // Then, sort sequences and collapse them into a single file entry
-        //
-        std::sort(tmpseqs.begin(), tmpseqs.end(), SequenceSort());
-
-        std::string first;
-        std::string number;
-        int padding = -1;
-
-        for (const auto& i : tmpseqs)
-        {
-
-            const char* s = i.number.c_str();
-            int z = 0;
-            for (; *s == '0'; ++s)
-                ++z;
-
-            if (i.root != root || i.view != view || i.ext != ext ||
-                (padding != z && z != padding - 1))
-            {
-                // New sequence
-                root = i.root;
-                padding = z;
-                number = first = i.number;
-                view = i.view;
-                ext = i.ext;
-
-                std::string file = root;
-                file += first;
-                file += view;
-                file += ext;
-                sequences.push_back(file);
-            }
-            else
-            {
-                padding = z;
-                number = i.number;
-            }
         }
     }
 

@@ -515,7 +515,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
           }
           Fl_Group {} {
             label Playback open
-            xywh {300 34 530 362} box EMBOSSED_BOX align 5
+            xywh {300 34 530 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {
               label Defaults open
@@ -804,8 +804,8 @@ v->uiPrefsFPS->value( g );}
             }
           }
           Fl_Group {} {
-            label OCIO
-            xywh {293 34 542 362} box EMBOSSED_BOX align 5 hide
+            label OCIO open
+            xywh {293 34 542 362} box EMBOSSED_BOX align 5
           } {
             Fl_Group {} {open
               xywh {303 113 523 204}
@@ -819,11 +819,11 @@ v->uiPrefsFPS->value( g );}
                 label Pick
                 user_data m user_data_type {ViewerUI*}
                 callback {PreferencesUI* uiPrefs = v->uiPrefs;
-std::string r = mrv::open_ocio_config( uiPrefs->uiPrefsOCIOConfig->value(), v );
+std::string r = mrv::open_ocio_config(uiPrefs->uiPrefsOCIOConfig->value());
 if ( r.empty() ) return;
 
 unsetenv( "OCIO" );
-uiPrefs->uiPrefsOCIOConfig->value( r.c_str() );}
+uiPrefs->uiPrefsOCIOConfig->value( r.c_str() );} selected
                 tooltip {Pick a config.ocio file from disk.} xywh {693 180 55 31}
               }
             }
@@ -1188,7 +1188,7 @@ if (!found)
             class {mrv::PreferencesTree}
           }
         }
-        Fl_Group {} {open
+        Fl_Group {} {
           xywh {371 414 407 36}
         } {
           Fl_Button {} {

@@ -103,7 +103,7 @@ namespace mrv
             tw->add(gp);        // move the tool group into the floating window
             gp->position(1, 1); // align group in floating window
             tw->resizable(gp);
-            auto settingsObject = App::ui->app->settingsObject();
+            auto settingsObject = App::app->settingsObject();
             auto dragger = gp->get_dragger();
             std::string label = dragger->label();
             std::string prefix = "gui/" + label;

@@ -147,8 +147,7 @@ namespace mrv
         bW->callback(
             [=](auto t)
             {
-                std::string file =
-                    open_lut_file(_r->lutFilename->value(), p.ui);
+                std::string file = open_lut_file(_r->lutFilename->value());
                 if (!file.empty())
                 {
                     _r->lutFilename->value(file.c_str());

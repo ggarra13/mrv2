@@ -4608,9 +4608,8 @@ void Flu_File_Chooser::cd(const char* path)
                     std::transform(
                         tmp.begin(), tmp.end(), tmp.begin(),
                         (int (*)(int))tolower);
-                    if (mrv::is_valid_movie(tmp.c_str()) ||
-                        mrv::is_valid_audio(tmp.c_str()) ||
-                        mrv::is_valid_subtitle(tmp.c_str()) || tmp == ".ocio" ||
+                    if (mrv::is_valid_movie(tmp) || mrv::is_valid_audio(tmp) ||
+                        mrv::is_valid_subtitle(tmp) || tmp == ".ocio" ||
                         tmp == ".prefs" || tmp == ".py" || tmp == ".pyc")
                         is_sequence = false;
                 }

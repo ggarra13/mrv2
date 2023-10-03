@@ -22,12 +22,11 @@ namespace fs = std::filesystem;
 
 #include "mrvFl/mrvHotkey.h"
 #include "mrvFl/mrvSaving.h"
+#include "mrvFl/mrvPreferences.h"
 
 #include "mrvFLU/Flu_File_Chooser.h"
 
 #include "mrvApp/App.h"
-
-#include "mrViewer.h"
 
 #include "mrvFl/mrvIO.h"
 
@@ -142,8 +141,8 @@ namespace mrv
     }
 
     const std::string file_save_single_requester(
-        const ViewerUI* ui, const char* title, const char* pattern,
-        const char* startfile, const bool compact_images)
+        const char* title, const char* pattern, const char* startfile,
+        const bool compact_images)
     {
         std::string file;
         try
@@ -173,7 +172,7 @@ namespace mrv
             }
             else
             {
-                const auto context = ui->app->getContext();
+                const auto context = App::app->getContext();
                 const char* f = flu_save_chooser(
                     context, title, pattern, startfile, compact_images);
                 if (!f)
@@ -191,8 +190,8 @@ namespace mrv
     }
 
     stringArray file_multi_requester(
-        const ViewerUI* ui, const char* title, const char* pattern,
-        const char* startfile, const bool compact_images)
+        const char* title, const char* pattern, const char* startfile,
+        const bool compact_images)
     {
         stringArray filelist;
 
@@ -228,7 +227,7 @@ namespace mrv
             }
             else
             {
-                const auto context = ui->app->getContext();
+                const auto context = App::app->getContext();
                 flu_multi_file_chooser(
                     context, title, pattern, startfile, filelist,
                     compact_images);
@@ -244,8 +243,8 @@ namespace mrv
     }
 
     std::string file_single_requester(
-        const ViewerUI* ui, const char* title, const char* pattern,
-        const char* startfile, const bool compact_files)
+        const char* title, const char* pattern, const char* startfile,
+        const bool compact_files)
     {
         std::string file;
         try
@@ -277,7 +276,7 @@ namespace mrv
             }
             else
             {
-                const auto context = ui->app->getContext();
+                const auto context = App::app->getContext();
                 const char* f = flu_file_chooser(
                     context, title, pattern, startfile, compact_files);
                 if (f)
@@ -301,7 +300,7 @@ namespace mrv
      *
      * @return A directory to be opened or NULL
      */
-    std::string open_directory(const char* startfile, ViewerUI* ui)
+    std::string open_directory(const char* startfile)
     {
         std::string dir;
         std::string title = _("Load Directory");
@@ -329,7 +328,7 @@ namespace mrv
         }
         else
         {
-            const auto context = ui->app->getContext();
+            const auto context = App::app->getContext();
             const char* d = flu_dir_chooser(context, title.c_str(), startfile);
             if (d)
                 dir = d;
@@ -345,10 +344,10 @@ namespace mrv
      *
      * @return Each file to be opened
      */
-    stringArray open_image_file(
-        const char* startfile, const bool compact_images, ViewerUI* ui)
+    stringArray
+    open_image_file(const char* startfile, const bool compact_images)
     {
-        auto context = ui->app->getContext();
+        auto context = App::app->getContext();
         const std::string kREEL_PATTERN =
             _("Reels (*.{") + kReelPattern + "})\t";
         const std::string kAUDIO_PATTERN =
@@ -371,17 +370,17 @@ namespace mrv
         }
 
         return file_multi_requester(
-            ui, title.c_str(), pattern.c_str(), startfile, compact_images);
+            title.c_str(), pattern.c_str(), startfile, compact_images);
     }
 
-    std::string save_otio(const char* startfile, ViewerUI* ui)
+    std::string save_otio(const char* startfile)
     {
         std::string kOTIO_PATTERN = "OTIO (*.otio)\t";
 
         std::string title = _("Save OTIO timeline");
 
         std::string file = file_save_single_requester(
-            ui, title.c_str(), kOTIO_PATTERN.c_str(), startfile, false);
+            title.c_str(), kOTIO_PATTERN.c_str(), startfile, false);
         if (file.empty())
             return file;
 
@@ -398,14 +397,14 @@ namespace mrv
      *
      * @return  opened .py file or empty
      */
-    std::string save_python_file(const char* startfile, ViewerUI* ui)
+    std::string save_python_file(const char* startfile)
     {
         std::string kPYTHON_PATTERN = "Python (*.py)\t";
 
         std::string title = _("Save Python Script");
 
         return file_save_single_requester(
-            ui, title.c_str(), kPYTHON_PATTERN.c_str(), startfile, false);
+            title.c_str(), kPYTHON_PATTERN.c_str(), startfile, false);
     }
 
     /**
@@ -415,14 +414,14 @@ namespace mrv
      *
      * @return  opened python file or empty
      */
-    std::string open_python_file(const char* startfile, ViewerUI* ui)
+    std::string open_python_file(const char* startfile)
     {
         std::string kPYTHON_PATTERN = "Python (*.py)\t";
 
         std::string title = _("Load Python Script");
 
         return file_single_requester(
-            ui, title.c_str(), kPYTHON_PATTERN.c_str(), startfile, false);
+            title.c_str(), kPYTHON_PATTERN.c_str(), startfile, false);
     }
 
     /**
@@ -432,7 +431,7 @@ namespace mrv
      *
      * @return  opened lut file or empty
      */
-    std::string open_lut_file(const char* startfile, ViewerUI* ui)
+    std::string open_lut_file(const char* startfile)
     {
         std::string lut_pattern;
         for (const auto& i : tl::timeline::getLUTFormatExtensions())
@@ -446,7 +445,7 @@ namespace mrv
         std::string title = _("Load LUT");
 
         return file_single_requester(
-            ui, title.c_str(), kLUT_PATTERN.c_str(), startfile, false);
+            title.c_str(), kLUT_PATTERN.c_str(), startfile, false);
     }
 
     /**
@@ -456,7 +455,7 @@ namespace mrv
      *
      * @return  opened subtitle file or empty
      */
-    std::string open_subtitle_file(const char* startfile, ViewerUI* ui)
+    std::string open_subtitle_file(const char* startfile)
     {
         std::string kSUBTITLE_PATTERN =
             _("Subtitles (*.{") + kSubtitlePattern + "})\n";
@@ -464,7 +463,7 @@ namespace mrv
         std::string title = _("Load Subtitle");
 
         return file_single_requester(
-            ui, title.c_str(), kSUBTITLE_PATTERN.c_str(), startfile, false);
+            title.c_str(), kSUBTITLE_PATTERN.c_str(), startfile, false);
     }
 
     /**
@@ -474,21 +473,21 @@ namespace mrv
      *
      * @return  opened audio file or null
      */
-    std::string open_audio_file(const char* startfile, ViewerUI* ui)
+    std::string open_audio_file(const char* startfile)
     {
-        auto context = ui->app->getContext();
+        auto context = App::app->getContext();
         std::string kAUDIO_PATTERN =
             _("Audios (*.{") + getAudioPattern(context) + "})";
 
         std::string title = _("Load Audio");
 
         return file_single_requester(
-            ui, title.c_str(), kAUDIO_PATTERN.c_str(), startfile, true);
+            title.c_str(), kAUDIO_PATTERN.c_str(), startfile, true);
     }
 
-    std::string save_single_image(ViewerUI* ui, const char* startdir)
+    std::string save_single_image(const char* startdir)
     {
-        auto context = ui->app->getContext();
+        auto context = App::app->getContext();
         const std::string kIMAGE_PATTERN =
             _("Images (*.{") + getImagePattern(context) + "})";
         const std::string kALL_PATTERN = kIMAGE_PATTERN;
@@ -499,13 +498,13 @@ namespace mrv
             startdir = "";
 
         const std::string& file = file_save_single_requester(
-            ui, title.c_str(), kALL_PATTERN.c_str(), startdir, true);
+            title.c_str(), kALL_PATTERN.c_str(), startdir, true);
 
         return file;
     }
-    std::string save_movie_or_sequence_file(ViewerUI* ui, const char* startdir)
+    std::string save_movie_or_sequence_file(const char* startdir)
     {
-        auto context = ui->app->getContext();
+        auto context = App::app->getContext();
         // const std::string kAUDIO_PATTERN =
         //     ("Audios (*.{") + getAudioPattern(context) + "})\t";
         const std::string kIMAGE_PATTERN =
@@ -522,12 +521,12 @@ namespace mrv
             startdir = "";
 
         const std::string& file = file_save_single_requester(
-            ui, title.c_str(), kALL_PATTERN.c_str(), startdir, true);
+            title.c_str(), kALL_PATTERN.c_str(), startdir, true);
 
         return file;
     }
 
-    std::string save_pdf(ViewerUI* ui, const char* startdir)
+    std::string save_pdf(const char* startdir)
     {
         const std::string kPDF_PATTERN = _("Acrobat PDF (*.{pdf})");
         const std::string kALL_PATTERN = kPDF_PATTERN;
@@ -538,7 +537,7 @@ namespace mrv
             startdir = "";
 
         std::string file = file_save_single_requester(
-            ui, title.c_str(), kALL_PATTERN.c_str(), startdir, true);
+            title.c_str(), kALL_PATTERN.c_str(), startdir, true);
 
         if (file.empty())
             return file;
@@ -551,7 +550,7 @@ namespace mrv
         return file;
     }
 
-    std::string open_session_file(ViewerUI* ui, const char* startdir)
+    std::string open_session_file(const char* startdir)
     {
         const std::string kSESSION = _("Session");
         const std::string kSESSION_PATTERN = kSESSION + " (*.{mrv2s})";
@@ -563,12 +562,12 @@ namespace mrv
             startdir = "";
 
         const std::string& file = file_single_requester(
-            ui, title.c_str(), kALL_PATTERN.c_str(), startdir, true);
+            title.c_str(), kALL_PATTERN.c_str(), startdir, true);
 
         return file;
     }
 
-    std::string save_session_file(ViewerUI* ui, const char* startdir)
+    std::string save_session_file(const char* startdir)
     {
         const std::string kSESSION = _("Session");
         const std::string kSESSION_PATTERN = kSESSION + " (*.{mrv2s})";
@@ -580,7 +579,7 @@ namespace mrv
             startdir = "";
 
         std::string file = file_save_single_requester(
-            ui, title.c_str(), kALL_PATTERN.c_str(), startdir, true);
+            title.c_str(), kALL_PATTERN.c_str(), startdir, true);
         if (file.empty())
             return file;
 
@@ -592,13 +591,13 @@ namespace mrv
         return file;
     }
 
-    std::string open_ocio_config(const char* startfile, ViewerUI* ui)
+    std::string open_ocio_config(const char* startfile)
     {
         std::string kOCIO_PATTERN = _("OCIO config (*.{") + kOCIOPattern + "})";
         std::string title = _("Load OCIO Config");
 
         std::string file = file_single_requester(
-            ui, title.c_str(), kOCIO_PATTERN.c_str(), startfile, false);
+            title.c_str(), kOCIO_PATTERN.c_str(), startfile, false);
         return file;
     }
 
