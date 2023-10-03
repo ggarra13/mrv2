@@ -40,7 +40,7 @@ namespace mrv2
          */
         void open(const std::string& file, const std::string& audioFile)
         {
-            App* app = App::ui->app;
+            App* app = App::app;
             std::string filename = file;
             if (file[0] == '~')
             {
@@ -102,8 +102,7 @@ namespace mrv2
          */
         timeline::ImageOptions imageOptions()
         {
-            App* app = App::ui->app;
-            return app->imageOptions();
+            return App::app->imageOptions();
         }
 
         /**
@@ -136,8 +135,7 @@ namespace mrv2
          */
         void setImageOptions(const timeline::ImageOptions& value)
         {
-            App* app = App::ui->app;
-            app->setImageOptions(value);
+            App::app->setImageOptions(value);
         }
 
         /**
@@ -148,8 +146,7 @@ namespace mrv2
          */
         timeline::DisplayOptions displayOptions()
         {
-            App* app = App::ui->app;
-            return app->displayOptions();
+            return App::app->displayOptions();
         }
 
         /**
@@ -159,8 +156,7 @@ namespace mrv2
          */
         void setDisplayOptions(const timeline::DisplayOptions& value)
         {
-            App* app = App::ui->app;
-            app->setDisplayOptions(value);
+            App::app->setDisplayOptions(value);
         }
 
         /**
@@ -171,8 +167,7 @@ namespace mrv2
          */
         timeline::LUTOptions lutOptions()
         {
-            App* app = App::ui->app;
-            return app->lutOptions();
+            return App::app->lutOptions();
         }
 
         /**
@@ -183,7 +178,7 @@ namespace mrv2
          */
         float volume()
         {
-            App* app = App::ui->app;
+            App* app = App::app;
             return app->volume();
         }
 
@@ -193,7 +188,7 @@ namespace mrv2
          */
         void setVolume(const float value)
         {
-            App* app = App::ui->app;
+            App* app = App::app;
             app->setVolume(value);
         }
 
@@ -204,7 +199,7 @@ namespace mrv2
          */
         bool isMuted()
         {
-            App* app = App::ui->app;
+            App* app = App::app;
             return app->isMuted();
         }
 
@@ -214,8 +209,7 @@ namespace mrv2
          */
         void setMute(const float value)
         {
-            App* app = App::ui->app;
-            app->setMute(value);
+            App::app->setMute(value);
         }
 
         /**
@@ -225,8 +219,7 @@ namespace mrv2
          */
         void setLUTOptions(const timeline::LUTOptions& value)
         {
-            App* app = App::ui->app;
-            app->setLUTOptions(value);
+            App::app->setLUTOptions(value);
         }
 
         /**

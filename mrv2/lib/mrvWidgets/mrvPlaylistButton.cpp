@@ -59,7 +59,7 @@ namespace mrv
     {
         TLRENDER_P();
         const std::string text = label();
-        stringArray lines;
+        std::vector<std::string> lines;
         split_string(lines, text, "\n");
         std::string filename = lines[0] + lines[1];
         file::Path path(filename);
@@ -120,7 +120,7 @@ namespace mrv
         }
 
         const std::string text = label();
-        stringArray lines;
+        std::vector<std::string> lines;
         split_string(lines, text, "\n");
         char buf[4096];
         snprintf(

@@ -13,7 +13,7 @@ namespace py = pybind11;
 
 #include "mrvFl/mrvCallbacks.h"
 
-#include "mrViewer.h"
+#include "mrvApp/App.h"
 
 namespace mrv2
 {

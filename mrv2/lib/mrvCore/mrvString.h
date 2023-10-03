@@ -7,10 +7,6 @@
 #include <sstream>
 #include <string>
 #include <vector>
-#include <set>
-
-typedef std::vector< std::string > stringArray;
-typedef std::set< std::string > stringSet;
 
 namespace mrv
 {
@@ -32,7 +28,8 @@ namespace mrv
      * @param delim  delimiter to use for splitting the string.
      */
     void split_string(
-        stringArray& output, const std::string& str, const std::string& delim);
+        std::vector<std::string>& output, const std::string& str,
+        const std::string& delim);
 
     /**
      * Split a string on a char delimiter, returning a vector of std::string.
@@ -41,7 +38,8 @@ namespace mrv
      * @param s     original string.
      * @param delim char delimiter.
      */
-    inline void split(stringArray& elems, const std::string& s, char delim)
+    inline void
+    split(std::vector<std::string>& elems, const std::string& s, char delim)
     {
         std::stringstream ss(s);
         std::string item;

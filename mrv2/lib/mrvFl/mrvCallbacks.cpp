@@ -166,7 +166,7 @@ namespace mrv
 
     void open_cb(Fl_Widget* w, ViewerUI* ui)
     {
-        const stringArray& files = open_image_file(NULL, true, ui);
+        const std::vector<std::string>& files = open_image_file(NULL, true);
         open_files_cb(files, ui);
     }
 
@@ -175,7 +175,7 @@ namespace mrv
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(w->mvalue());
         if (!item || !item->label())
             return;
-        stringArray files;
+        std::vector<std::string> files;
         std::string file = item->label();
         files.push_back(file);
         open_files_cb(files, ui);
@@ -189,14 +189,14 @@ namespace mrv
 
     void open_directory_cb(Fl_Widget* w, ViewerUI* ui)
     {
-        std::string dir = open_directory(NULL, ui);
+        std::string dir = open_directory(NULL);
         if (dir.empty())
             return;
 
         if (!is_directory(dir))
             return;
 
-        stringArray movies, sequences, audios;
+        std::vector<std::string> movies, sequences, audios;
         parse_directory(dir, movies, sequences, audios);
 
         for (const auto& movie : movies)
@@ -229,7 +229,7 @@ namespace mrv
 
     void save_single_frame_cb(Fl_Menu_* w, ViewerUI* ui)
     {
-        const std::string& file = save_single_image(ui);
+        const std::string& file = save_single_image();
         if (file.empty())
             return;
 
@@ -295,7 +295,7 @@ namespace mrv
 
     void save_movie_cb(Fl_Menu_* w, ViewerUI* ui)
     {
-        const std::string& file = save_movie_or_sequence_file(ui);
+        const std::string& file = save_movie_or_sequence_file();
         if (file.empty())
             return;
 
@@ -374,7 +374,7 @@ namespace mrv
         if (annotations.empty())
             return;
 
-        const std::string& file = save_pdf(ui);
+        const std::string& file = save_pdf();
         if (file.empty())
             return;
 
@@ -1640,7 +1640,7 @@ namespace mrv
 
     void save_session_as_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        const std::string& file = save_session_file(ui);
+        const std::string& file = save_session_file();
         if (file.empty())
             return;
 
@@ -1660,7 +1660,7 @@ namespace mrv
 
     void load_session_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        const std::string& file = open_session_file(ui);
+        const std::string& file = open_session_file();
         if (file.empty())
             return;
 

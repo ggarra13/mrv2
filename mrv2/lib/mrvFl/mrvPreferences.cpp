@@ -1766,7 +1766,7 @@ namespace mrv
 
                 bool use_active = uiPrefs->uiOCIOUseActiveViews->value();
 
-                stringArray active_displays;
+                std::vector<std::string> active_displays;
                 const char* displaylist = config->getActiveDisplays();
                 if (use_active && displaylist && strlen(displaylist) > 0)
                 {
@@ -1789,7 +1789,7 @@ namespace mrv
                     }
                 }
 
-                stringArray active_views;
+                std::vector<std::string> active_views;
                 const char* viewlist = config->getActiveViews();
                 if (use_active && viewlist && strlen(viewlist) > 0)
                 {

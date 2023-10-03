@@ -119,7 +119,7 @@ namespace mrv
 
         void add_enum(
             const char* name, const char* tooltip, const std::string& content,
-            stringArray& options, const bool editable = false,
+            std::vector<std::string>& options, const bool editable = false,
             Fl_Callback* callback = NULL);
 
         void

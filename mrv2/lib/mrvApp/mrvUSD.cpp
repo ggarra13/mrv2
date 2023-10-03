@@ -10,7 +10,6 @@
 
 #    include "mrvApp/mrvSettingsObject.h"
 #    include "mrvApp/App.h"
-#    include "mrViewer.h"
 
 namespace mrv
 {
@@ -18,8 +17,7 @@ namespace mrv
     {
         tl::usd::RenderOptions renderOptions()
         {
-            App* app = App::ui->app;
-            auto settingsObject = app->settingsObject();
+            auto settingsObject = App::app->settingsObject();
             tl::usd::RenderOptions o;
             o.renderWidth =
                 std_any_cast<int>(settingsObject->value("usd/renderWidth"));
@@ -38,8 +36,7 @@ namespace mrv
 
         bool setRenderOptions(const tl::usd::RenderOptions& o)
         {
-            App* app = App::ui->app;
-            auto settingsObject = app->settingsObject();
+            auto settingsObject = App::app->settingsObject();
             settingsObject->setValue("usd/renderWidth", o.renderWidth);
             settingsObject->setValue("usd/complexity", o.complexity);
             settingsObject->setValue("usd/drawMode", o.drawMode);

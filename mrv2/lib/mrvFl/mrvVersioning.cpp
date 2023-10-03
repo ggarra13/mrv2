@@ -180,10 +180,8 @@ namespace mrv
                 {
                     ext = ext.substr(p, ext.size());
                 }
-                std::transform(
-                    ext.begin(), ext.end(), ext.begin(), (int (*)(int))tolower);
 
-                if (mrv::is_valid_movie(ext.c_str()))
+                if (is_valid_movie(ext))
                 {
                     if (is_readable(newfile))
                     {
