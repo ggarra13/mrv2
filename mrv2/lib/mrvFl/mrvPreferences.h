@@ -41,10 +41,7 @@ namespace mrv
         static void updateICS();
 
 #ifdef TLRENDER_OCIO
-        static OCIO::ConstConfigRcPtr OCIOConfig()
-        {
-            return config;
-        }
+        static OCIO::ConstConfigRcPtr OCIOConfig() { return config; }
 #endif
 
     protected:

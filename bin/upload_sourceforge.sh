@@ -49,11 +49,7 @@ fi
 
 
 if [[ $KERNEL == *Msys* ]]; then
-    pacman -Sy openssh --noconfirm
-    echo "ssh is:"
-    which ssh
-    echo "scp is:"
-    which scp
+    pacman -Sy openssh rsync --noconfirm
 fi
 
 
@@ -70,7 +66,8 @@ upload_file()
     echo
     echo "Sending $1 as $2..."
     echo
-    scp -i $SSH_KEY $1 ggarra13@frs.sourceforge.net:/home/frs/project/mrv2/beta/$2
+    rsync -avP --ignore-errors -e "ssh -i $SSH_KEY" $1 ggarra13@frs.sourceforge.net:/home/frs/project/mrv2/beta/$2
+    #scp -i $SSH_KEY $1 ggarra13@frs.sourceforge.net:/home/frs/project/mrv2/beta/$2
 }
 
 
@@ -97,7 +94,7 @@ export LC_ALL=$oldALL
 #
 # Create the README.md file
 #
-cat <<EOF > upload_date.md
+cat <<EOF > README.md
 
 mrv2 v${mrv2_VERSION} Beta
 ================
@@ -136,6 +133,8 @@ Enjoy!
 
 EOF
 
+# Output the README.md to the log so far.
+cat README.md
 
 HISTORY=../mrv2/docs/HISTORY.md
 
@@ -158,9 +157,10 @@ release_notes=$(sed -n "$start_line,${end_line}p" "$HISTORY")
 
 
 
-echo "$release_notes" >> upload_date.md
+echo "$release_notes" >> README.md
 
-cat <<"EOF" >> upload_date.md
+
+cat <<"EOF" >> README.md
 
 ## Notes on installation
 
@@ -224,9 +224,8 @@ cat <<"EOF" >> upload_date.md
 EOF
 
 
-cat upload_date.md
-upload_file upload_date.md README.md
-rm upload_date.md
+upload_file README.md README.md
+rm README.md
 
 # Set the IFS to newline to split the variable by lines
 IFS=$'\n'
