@@ -109,7 +109,7 @@ if(BUILD_PYTHON AND TLRENDER_USD)
 endif()
 
 set( pyFLTK_DEP )
-if(MRV2_PYFLTK)
+if(MRV2_PYFLTK AND MRV2_PYBIND11)
     include( cmake/Modules/BuildpyFLTK.cmake )
 endif()
 

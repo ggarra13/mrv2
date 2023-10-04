@@ -3,6 +3,9 @@ include(ExternalProject)
 set(pyFLTK_SVN_REPOSITORY "https://svn.code.sf.net/p/pyfltk/code/branches/fltk1.4")
 set(pyFLTK_SVN_REVISION )
 
+
+message(STATUS "pyFLTK got PYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}" )
+
 set(pyFLTK_PATCH )
 set(pyFLTK_CONFIGURE ${PYTHON_EXECUTABLE} setup.py swig)
 set(pyFLTK_BUILD     ${PYTHON_EXECUTABLE} setup.py build)

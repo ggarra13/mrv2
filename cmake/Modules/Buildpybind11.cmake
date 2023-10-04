@@ -5,10 +5,6 @@
 include( ExternalProject )
 
 
-message(STATUS "PREVIOUS Build pybind11 PYTHON_EXECUTABLE=${Python_EXECUTABLE}")
-message(STATUS "PREVIOUS Build pybind11 Python_VERSION=${Python_VERSION}")
-message(STATUS "PREVIOUS Build pybind11 PYTHON_VERSION=${PYTHON_VERSION}")
-
 ExternalProject_Add(
     pybind11
     GIT_REPOSITORY "https://github.com/pybind/pybind11"
@@ -28,8 +24,4 @@ ExternalProject_Add(
     -DPYBIND11_TEST:BOOL=OFF
 )
 
-message(STATUS "AFTER Build pybind11 PYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}")
-message(STATUS "AFTER Build pybind11 Python_VERSION=${Python_VERSION}")
-message(STATUS "AFTER Build pybind11 PYTHON_VERSION=${PYTHON_VERSION}")
-    
 set( PYBIND11_DEP pybind11 )
