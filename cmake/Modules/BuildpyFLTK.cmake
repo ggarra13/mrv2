@@ -3,6 +3,13 @@ include(ExternalProject)
 set(pyFLTK_SVN_REPOSITORY "https://svn.code.sf.net/p/pyfltk/code/branches/fltk1.4")
 set(pyFLTK_SVN_REVISION )
 
+if(NOT PYTHON_EXECUTABLE)
+    if(UNIX)
+	set(PYTHON_EXECUTABLE python3)
+    else()
+	set(PYTHON_EXECUTABLE python)
+    endif()
+endif()
 
 message(STATUS "pyFLTK got PYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}" )
 
