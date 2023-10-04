@@ -56,6 +56,7 @@ jobs:
       run: chmod 600 ssh/id_rsa
   
     - name: Build mrv2
+      shell: bash
       run:
         ./runme_nolog.sh -D TLRENDER_USD=OFF -D TLRENDER_FFMPEG=OFF -D MRV2_PDF=OFF -D MRV2_NETWORK=OFF -D MRV2_PYBIND11=ON -D BUILD_PYTHON=ON -D TLRENDER_EXR=OFF -D TLRENDER_RAW=OFF -D TLRENDER_TIFF=OFF
 
@@ -99,6 +100,7 @@ jobs:
         icacls "ssh\id_rsa" /inheritance:r /grant:r "%USERNAME%:R"
       
     - name: Build mrv2
+      shell: bash
       run:
         ./runme_nolog.sh -D TLRENDER_USD=OFF -D TLRENDER_FFMPEG=OFF -D MRV2_PDF=OFF -D MRV2_NETWORK=OFF -D MRV2_PYBIND11=ON -D BUILD_PYTHON=ON -D TLRENDER_EXR=OFF -D TLRENDER_RAW=OFF -D TLRENDER_TIFF=OFF
       
@@ -139,6 +141,7 @@ jobs:
       run: chmod 600 ssh/id_rsa
 
     - name: Build mrv2
+      shell: bash
       run:
         ./runme_nolog.sh -D TLRENDER_USD=OFF -D TLRENDER_FFMPEG=OFF -D MRV2_PDF=OFF -D MRV2_NETWORK=OFF -D MRV2_PYBIND11=ON -D BUILD_PYTHON=ON -D TLRENDER_EXR=OFF -D TLRENDER_RAW=OFF -D TLRENDER_TIFF=OFF
 
@@ -179,6 +182,7 @@ jobs:
   #     run: chmod 600 ssh/id_rsa
 
   #   - name: Build mrv2
+  #     shell: bash
   #     run:
   #       ./runme_nolog.sh -D TLRENDER_USD=OFF -D TLRENDER_FFMPEG=OFF -D MRV2_PDF=OFF -D MRV2_NETWORK=OFF -D MRV2_PYBIND11=ON -D BUILD_PYTHON=ON -D TLRENDER_EXR=OFF -D TLRENDER_RAW=OFF -D TLRENDER_TIFF=OFF
 
