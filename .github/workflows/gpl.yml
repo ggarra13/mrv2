@@ -60,13 +60,17 @@ jobs:
     - name: Set permissions on SSH key
       run: chmod 600 ssh/id_rsa
   
+    - name: Set executable permissions
+      run: |
+        chmod +x ./*.sh ./bin/*.sh ./etc/*.sh
+        
     - name: Build mrv2
-      run:
-        bash ./runme_nolog.sh -gpl -t package
+      run: |
+        ./runme_nolog.sh -gpl -t package
 
     # - name: Upload binaries
-    #   run:
-    #     bash ./bin/upload_sourceforge.sh
+    #   run: |
+    #     ./bin/upload_sourceforge.sh
 
   windows-gpl-build:
     runs-on: windows-2019
@@ -102,13 +106,17 @@ jobs:
       run: |
         icacls "ssh\id_rsa" /inheritance:r /grant:r "%USERNAME%:R"
       
+    - name: Set executable permissions
+      run: |
+        chmod +x ./*.sh ./bin/*.sh ./etc/*.sh
+        
     - name: Build mrv2
-      run:
-        bash ./runme_nolog.sh -gpl -t package -D TLRENDER_USD=OFF
+      run: |
+        ./runme_nolog.sh -gpl -t package -D TLRENDER_USD=OFF
       
     # - name: Upload binaries
-    #   run:
-    #     bash ./bin/upload_sourceforge.sh
+    #   run: |
+    #     ./bin/upload_sourceforge.sh
 
 
   macos-gpl-build:
@@ -141,11 +149,15 @@ jobs:
   
     - name: Set permissions on SSH key
       run: chmod 600 ssh/id_rsa
+      
+    - name: Set executable permissions
+      run: |
+        chmod +x ./*.sh ./bin/*.sh ./etc/*.sh
 
     - name: Build mrv2
-      run:
-        bash ./runme_nolog.sh -gpl -t package
+      run: |
+        ./runme_nolog.sh -gpl -t package
 
     # - name: Upload binaries
-    #   run:
-    #     bash ./bin/upload_sourceforge.sh
+    #   run: |
+    #     ./bin/upload_sourceforge.sh
