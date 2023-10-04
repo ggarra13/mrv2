@@ -9,6 +9,7 @@ do
 	if [[ -e $FILE ]]; then
             clang-format -i $FILE
 	    git add $FILE
+	    chmod 0644 $FILE
 	fi
     else
 	echo "Skipping formatting of $FILE"
