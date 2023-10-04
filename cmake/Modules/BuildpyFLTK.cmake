@@ -14,9 +14,9 @@ endif()
 message(STATUS "pyFLTK got PYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}" )
 
 set(pyFLTK_PATCH )
-set(pyFLTK_CONFIGURE ${PYTHON_EXECUTABLE} setup.py swig)
-set(pyFLTK_BUILD     ${PYTHON_EXECUTABLE} setup.py build)
-set(pyFLTK_INSTALL   ${PYTHON_EXECUTABLE} setup.py install)
+set(pyFLTK_CONFIGURE ${PYTHON_EXECUTABLE} setup.py --disable-forms swig)
+set(pyFLTK_BUILD     ${PYTHON_EXECUTABLE} setup.py --disable-forms build)
+set(pyFLTK_INSTALL   ${PYTHON_EXECUTABLE} setup.py --disable-forms install)
 
 ExternalProject_Add(
     pyFLTK
