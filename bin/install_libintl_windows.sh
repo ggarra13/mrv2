@@ -20,7 +20,7 @@ run_pacman=
 if [[ ! -e /usr/bin/gettext.exe ||
 	  ! -e /usr/lib/libiconv.dll.a ||
 	  ! -e /usr/lib/libintl.dll.a ]]; then
-    echo "Installing libiconv, libintl, subversion, git, swig and gettext thru Msys..."
+    echo "Installing libiconv, libintl, subversion, swig and gettext thru Msys..."
     run_pacman=1
 fi
 
@@ -36,13 +36,7 @@ if [[ ! -e /usr/bin/svn.exe ]]; then
 fi
 
 #
-# Install git
-#
-if [[ ! -e /usr/bin/git.exe ]]; then
-    pacman -Sy git --noconfirm
-fi
-
-# Install 
+# Install swig
 #
 if [[ ! -e /usr/bin/swig.exe ]]; then
     pacman -Sy swig --noconfirm

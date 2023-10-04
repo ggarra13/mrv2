@@ -31,7 +31,7 @@ list( APPEND LIBRARIES
 
 
 if( APPLE )
-    set( OSX_FRAMEWORKS "-framework Cocoa -framework IOKit" )
+    set( OSX_FRAMEWORKS "-framework IOKit" )
     list( APPEND LIBRARIES ${OSX_FRAMEWORKS} )
     set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
     set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib;/usr/local/lib")
