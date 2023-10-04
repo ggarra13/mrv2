@@ -20,10 +20,13 @@ endif()
 
 set( FLTK_PATCH )
 set( FLTK_BUILD_TYPE ${CMAKE_BUILD_TYPE} )
-sete ( FLTK_CXX_COMPILER ${CMAKE_CXX_COMPILER})
+
+set( FLTK_CXX_COMPILER ${CMAKE_CXX_COMPILER})
 set( FLTK_CXX_FLAGS ${CMAKE_CXX_FLAGS} )
+
 set( FLTK_C_COMPILER ${CMAKE_C_COMPILER})
 set( FLTK_C_FLAGS ${CMAKE_C_FLAGS} )
+
 if (APPLE)
     set(FLTK_PATCH cmake -E copy_if_different "${PROJECT_SOURCE_DIR}/cmake/patches/FLTK-patch/Fl_Cocoa_Gl_Window_Driver.mm" "${CMAKE_BINARY_DIR}/FLTK-prefix/src/FLTK/src/drivers/Cocoa")
 elseif(WIN32)
