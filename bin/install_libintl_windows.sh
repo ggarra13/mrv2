@@ -28,6 +28,12 @@ if [[ $run_pacman ]]; then
     pacman -Sy --noconfirm
 fi
 
+#
+# Install subversion
+#
+if [[ ! -e /mingw64/bin/svn.exe ]]; then
+    pacman -Sy subversion --noconfirm
+fi
 
 #
 # Install gettext
