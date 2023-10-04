@@ -1,3 +1,7 @@
+# SPDX-License-Identifier: BSD-3-Clause
+# mrv2
+# Copyright Contributors to the mrv2 Project. All rights reserved.
+
 include(ExternalProject)
 
 set(pyFLTK_SVN_REPOSITORY "https://svn.code.sf.net/p/pyfltk/code/branches/fltk1.4")
