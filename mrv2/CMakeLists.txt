@@ -34,6 +34,29 @@ set( FLTK_INCLUDE_DIR ${CMAKE_PREFIX_PATH}/include )
 find_package( FLTK REQUIRED CONFIG )
 message( STATUS "Found FLTK: ${FLTK_INCLUDE_DIR}" )
 
+set(FLTK_LIBRARIES fltk_images fltk)
+set(FLTK_gl_LIBRARY fltk_gl)
+
+if(FLTK_BUILD_SHARED_LIBS)
+    if(UNIX)
+	if(APPLE)
+	    set(FLTK_LIBRARIES fltk_images.dylib fltk.dylib)
+	    set(FLTK_gl_LIBRARY fltk_gl.dylib)
+	else()
+	    set(FLTK_LIBRARIES fltk_images.so fltk.so)
+	    set(FLTK_gl_LIBRARY fltk_gl.so)
+	    if(TLRENDER_GL)
+		list(APPEND FLTK_gl_LIBRARY GL)
+		if(FLTK_WAYLAND)
+		    list(APPEND FLTK_gl_LIBRARY EGL)
+		endif()
+	    endif()
+	endif()
+    endif()
+endif()
+
+message( STATUS "FLTK LIBRARIES: ${FLTK_gl_LIBRARY} ${FLTK_LIBRARIES}" )
+
 #
 # Make sure we use our own recently compiled fluid executable
 #
@@ -118,7 +141,7 @@ endif()
 if(MRV2_PYBIND11)
     add_definitions(-DMRV2_PYBIND11)
     find_package(pybind11 REQUIRED)
-    message("pybind11 PYTHON_VERSION=${PYTHON_VERSION}")
+    message("mrv2 running pybind11 PYTHON_VERSION=${PYTHON_VERSION}")
 endif()
 
 # Omit superfluous "Up-to-date" messages.

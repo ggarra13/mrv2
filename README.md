@@ -217,7 +217,7 @@ sudo apt -y install build-essential git cmake ninja-build libpango1.0-dev \
 		    libpulse-dev libssl-dev libffi-dev \
 		    libwayland-dev wayland-protocols libdbus-1-dev \
 		    libxkbcommon-dev libegl-dev libgtk-3-dev rpm \
-                    doxygen tk-dev libxt-dev
+                    doxygen tk-dev libxt-dev swig subversion
 ```
 
 ### macOS

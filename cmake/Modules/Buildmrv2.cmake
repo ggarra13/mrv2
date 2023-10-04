@@ -4,10 +4,6 @@
 
 include(ExternalProject)
 
-if(MRV2_PYBIND11)
-    find_package(pybind11)
-endif()
-
 set(mrv2_ARGS
     ${TLRENDER_EXTERNAL_ARGS}
 
@@ -42,14 +38,17 @@ set(mrv2_ARGS
     -DMRV2_NETWORK=${MRV2_NETWORK}
     -DMRV2_PYBIND11=${MRV2_PYBIND11}
     -DMRV2_PDF=${MRV2_PDF}
+
+    -DFLTK_WAYLAND=${FLTK_WAYLAND}
+    -DFLTK_PANGO=${FLTK_PANGO}
+    -DFLTK_BUILD_SHARED_LIBS=${FLTK_BUILD_SHARED_LIBS}
 )
 
 ExternalProject_Add(
     mrv2
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/mrv2
-    DEPENDS tlRender FLTK ${Gettext} ${ZLIB_SHARED}
+    DEPENDS tlRender ${FLTK_DEP} ${PYBIND11_DEP} ${POCO_DEP} ${LibHaru_DEP} ${Gettext} ${ZLIB_SHARED}
     SOURCE_DIR ${CMAKE_SOURCE_DIR}/mrv2
     LIST_SEPARATOR |
     CMAKE_ARGS ${mrv2_ARGS}
-    DEPENDS ${PYBIND11} ${POCO_DEP} ${LibHaru_DEP} tlRender
 )

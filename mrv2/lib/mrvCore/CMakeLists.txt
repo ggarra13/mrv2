@@ -50,7 +50,7 @@ set(SOURCES
   mrvUtil.cpp
   )
 
-set(LIBRARIES tlRender Imath::Imath fltk )
+set(LIBRARIES tlRender Imath::Imath ${FLTK_LIBRARIES} )
 
 
 if( WIN32 )

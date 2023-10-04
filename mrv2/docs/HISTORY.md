@@ -31,6 +31,8 @@ Preferences->User Interface->Single Instance.
 - Windows installer now will remove the file association first before replacing
   it with the one of mrv2.
 - Made executable smaller on all platforms by using dead-code elimination.
+- Added pyFLTK bindings to the distribution.  It is now possible to create
+  FLTK windows with Python and control mrv2's windows with it.
 - Build system changes and fixes:
    	* Renamed runme.sh script to runme_nolog.sh.
    	* Added a new runme.sh script that calls runme_nolog.sh but saves the compile log into BUILD-KERNEL-ARCH/CMAKE_BUILD_TYPE/compile.log.

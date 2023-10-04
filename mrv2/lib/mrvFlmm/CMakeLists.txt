@@ -16,7 +16,7 @@ set(SOURCES
 add_library(mrvFlmm ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
-set( LIBRARIES fltk fltk_images )
+set( LIBRARIES ${FLTK_LIBRARIES} )
 
 target_link_libraries(mrvFlmm PUBLIC ${LIBRARIES} )
 set_target_properties(mrvFlmm PROPERTIES FOLDER lib)

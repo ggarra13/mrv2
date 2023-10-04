@@ -3,7 +3,6 @@
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
-params=$*
 
 #
 #
@@ -16,6 +15,11 @@ params=$*
 #
 # It will also log the compilation on $BUILD_DIR/compile.log
 #
+
+#
+# Store the paramters for passing them later
+#
+params=$*
 
 #
 # Find out our build dir

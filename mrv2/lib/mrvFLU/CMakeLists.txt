@@ -36,7 +36,7 @@ set(SOURCES
 add_library(mrvFLU ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
-set( LIBRARIES fltk fltk_images )
+set( LIBRARIES ${FLTK_LIBRARIES} )
 
 target_link_libraries(mrvFLU PUBLIC ${LIBRARIES} )
 set_target_properties(mrvFLU PROPERTIES FOLDER lib)

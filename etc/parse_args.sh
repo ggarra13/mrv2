@@ -32,7 +32,6 @@ show_help()
 parse_option()
 {
     local input="$1"
-    echo "parse_option got $1"
     # Use regular expressions to match the option and value
     if [[ "$input" =~ ^(-D)?(.+)=(.+)$ ]]; then
         local option="${BASH_REMATCH[2]}"

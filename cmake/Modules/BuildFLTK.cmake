@@ -8,6 +8,12 @@ include( ExternalProject )
 set( FLTK_TAG c2cce9cba86dcc208c9396af994010cd49484988 )
 #set( FLTK_TAG master )
 
+
+set( FLTK_BUILD_SHARED_LIBS OFF )
+if(MRV2_PYFLTK)
+    set( FLTK_BUILD_SHARED_LIBS ON )
+endif()
+
 set( FLTK_PATCH )
 set( FLTK_BUILD_TYPE ${CMAKE_BUILD_TYPE} )
 set( FLTK_CXX_FLAGS ${CMAKE_CXX_FLAGS} )
@@ -17,12 +23,12 @@ if (APPLE)
 endif()
 
 if (APPLE OR WIN32)
-    set( wayland OFF )
-    set( pango   OFF )
+    set( FLTK_WAYLAND OFF )
+    set( FLTK_PANGO   OFF )
 else()
-    set( wayland  ON ) # we'll leave it on, but it is way
+    set( FLTK_WAYLAND  ON ) # we'll leave it on, but it is way
 		       # buggy with, at least, Nvidia cards.
-    set( pango    ON )
+    set( FLTK_PANGO    ON )
 endif()
 
 ExternalProject_Add(
@@ -43,10 +49,12 @@ ExternalProject_Add(
     -DCMAKE_INSTALL_MESSAGE=${CMAKE_INSTALL_MESSAGE}
     -DFLTK_BUILD_EXAMPLES=OFF
     -DFLTK_BUILD_TEST=OFF
-    -DOPTION_BUILD_SHARED_LIBS=0
+    -DOPTION_BUILD_SHARED_LIBS=${FLTK_BUILD_SHARED_LIBS}
     -DOPTION_USE_SYSTEM_ZLIB=0
     -DOPTION_USE_SYSTEM_LIBJPEG=0
     -DOPTION_USE_SYSTEM_LIBPNG=0
-    -DOPTION_USE_PANGO=${pango}
-    -DOPTION_USE_WAYLAND=${wayland}
+    -DOPTION_USE_FLTK_PANGO=${FLTK_PANGO}
+    -DOPTION_USE_FLTK_WAYLAND=${FLTK_WAYLAND}
     )
+
+set(FLTK_DEP FLTK)
