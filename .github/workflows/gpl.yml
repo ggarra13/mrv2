@@ -66,7 +66,7 @@ jobs:
 
     # - name: Upload binaries
     #   run:
-    #     ./bin/upload_sourceforge.sh
+    #     bash ./bin/upload_sourceforge.sh
 
   windows-gpl-build:
     runs-on: windows-2019
@@ -108,7 +108,7 @@ jobs:
       
     # - name: Upload binaries
     #   run:
-    #     ./bin/upload_sourceforge.sh
+    #     bash ./bin/upload_sourceforge.sh
 
 
   macos-gpl-build:
@@ -148,4 +148,4 @@ jobs:
 
     # - name: Upload binaries
     #   run:
-    #     ./bin/upload_sourceforge.sh
+    #     bash ./bin/upload_sourceforge.sh
