@@ -47,7 +47,7 @@ ExternalProject_Add(
     Python
     URL ${Python_URL}
     PATCH_COMMAND     "${Python_PATCH}"
-    CONFIGURE_COMMAND ${Python_CONFIGURE}
+    CONFIGURE_COMMAND "${Python_CONFIGURE}"
     BUILD_COMMAND     ${Python_BUILD}
     INSTALL_COMMAND   "${Python_INSTALL}"
     BUILD_IN_SOURCE 1
