@@ -1,9 +1,9 @@
-name: Minimal Builds
+name: Python Builds
 
 on: [push]
 
 jobs:
-  linux-minimal-build:
+  linux-python-build:
     runs-on: ubuntu-20.04
 
     steps:
@@ -64,7 +64,7 @@ jobs:
     #     ./bin/upload_sourceforge.sh
 
 
-  windows-minimal-build:
+  windows-python-build:
     runs-on: windows-2019
 
     defaults:
@@ -107,7 +107,7 @@ jobs:
     #     ./bin/upload_sourceforge.sh
 
 
-  macos-minimal-build:
+  macos-python-build:
     runs-on: macos-11
 
     steps:
@@ -147,7 +147,7 @@ jobs:
     #     ./bin/upload_sourceforge.sh
 
 
-  # macos-m1-minimal-build:
+  # macos-m1-python-build:
   #   runs-on: macos-13-xlarge
 
   #   steps:
