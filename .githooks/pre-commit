@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Running .githooks/pre-commit"
+echo "Running .githooks/pre-commit.sh"
 
 for FILE in $(git diff --cached --name-only)
 do
@@ -13,7 +13,8 @@ do
 	fi
     else
 	echo "Skipping formatting of $FILE"
-	if [[ $FILE == *.sh || $FILE == .py || $FILE == .rb ]]; then
+	if [[ $FILE == *.sh || $FILE == .py || $FILE == .rb ||
+	      $FILE == *pre-commit ]]; then
 	    chmod 0755 $FILE
 	else
 	    chmod 0644 $FILE

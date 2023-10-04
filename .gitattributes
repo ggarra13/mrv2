@@ -3,6 +3,7 @@
 *.h   text eol=lf
 *.html text eol=lf
 *.in  text eol=lf
+*.i   text eol=lf
 *.fl  text eol=lf
 *.md  text eol=lf
 *.po  text eol=lf
