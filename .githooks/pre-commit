@@ -17,7 +17,11 @@ do
 	      $FILE == *pre-commit ]]; then
 	    chmod 0755 $FILE
 	else
-	    chmod 0644 $FILE
+	    if [[ -d $FILE ]]; then
+		chmod 0755 $FILE
+	    else
+		chmod 0644 $FILE
+	    fi
 	fi
     fi
 done
