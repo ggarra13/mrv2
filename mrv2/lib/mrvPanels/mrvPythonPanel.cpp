@@ -259,8 +259,6 @@ namespace mrv
     {
         TLRENDER_P();
 
-        std::cerr << "pythonEditor=" << _r->pythonEditor << std::endl;
-
         menu->clear();
         menu->add(
             _("&File/&Open"), FL_COMMAND + 'o',
