@@ -25,9 +25,9 @@ set(pyFLTK_PATCH
     "${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK/")
 
 if(WIN32)
-    set(pyFLTK_CONFIGURE ${CMAKE_COMMAND} -E env FLTK_HOME=${FLTK_HOME} ${PYTHON_EXECUTABLE} --enable-shared setup.py swig)
-    set(pyFLTK_BUILD     ${CMAKE_COMMAND} -E env FLTK_HOME=${FLTK_HOME} ${PYTHON_EXECUTABLE} --enable-shared setup.py build)
-    set(pyFLTK_INSTALL   ${CMAKE_COMMAND} -E env FLTK_HOME=${FLTK_HOME} ${PYTHON_EXECUTABLE} --enable-shared setup.py install)
+    set(pyFLTK_CONFIGURE ${CMAKE_COMMAND} -E env FLTK_HOME=${FLTK_HOME} ${PYTHON_EXECUTABLE} setup.py swig --enable-shared)
+    set(pyFLTK_BUILD     ${CMAKE_COMMAND} -E env FLTK_HOME=${FLTK_HOME} ${PYTHON_EXECUTABLE} setup.py build --enable-shared)
+    set(pyFLTK_INSTALL   ${CMAKE_COMMAND} -E env FLTK_HOME=${FLTK_HOME} ${PYTHON_EXECUTABLE} setup.py install --enable-shared)
 else()
     set(pyFLTK_CONFIGURE ${PYTHON_EXECUTABLE} setup.py swig)
     set(pyFLTK_BUILD     ${PYTHON_EXECUTABLE} setup.py build)

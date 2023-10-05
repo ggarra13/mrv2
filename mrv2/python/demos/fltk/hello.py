@@ -19,21 +19,25 @@ from mrv2 import cmd, media, timeline
 from fltk14 import *
 
 if len(media.list()) == 0:
-    print("Please load a movie file or sequence with at least 100 frames.")
+    print("Please load a movie file or sequence.")
 else:
     #
     # Start the playback
     #
     timeline.playForwards()
 
-    main_window = None
 
+    # Find the main window of the UI
+    main_window = None
     pw = Fl.first_window();
     while pw:
-        print("Window label",pw.label())
-        pw = Fl.next_window();
+        if pw.parent() == None and main_window == None and pw.label() != None:
+            main_window = pw
+        pw = Fl.next_window(pw)
+
+
     
-    window = Fl_Window(300,180)
+    window = Fl_Window(300,180, main_window.label())
     box = Fl_Box(20,40,260,100,"Hello, World!")
     box.box(FL_UP_BOX)
     box.labelsize(36)
