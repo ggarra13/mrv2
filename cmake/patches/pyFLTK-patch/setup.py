@@ -77,6 +77,7 @@ if sys.platform == 'win32':
     static_lib_list = [ "fltk", "fltk_images", "fltk_forms", "fltk_gl", "opengl32", "fltk_jpeg", "fltk_png", "fltk_z"] + win32_lib_list
     shared_lib_list = ["libfltk", "fltk_jpeg", "fltk_png", "fltk_z"] + win32_lib_list
     if doShared:
+        def_list = def_list + [('FL_DLL', 1)]
         lib_list = shared_lib_list
     else:
         lib_list = static_lib_list
