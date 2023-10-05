@@ -104,6 +104,4 @@ p.align(FL_ALIGN_TOP)
 p.redraw()
 
 window.end()
-window.show(len(sys.argv), sys.argv)
-Fl.run()
-
+window.show()

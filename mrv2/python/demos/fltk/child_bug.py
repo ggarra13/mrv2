@@ -26,5 +26,3 @@ inp.value('Bye') #works because .value IS a method of Fl_Input
 
 print('notice the id of child 0 and child 1 are the same. This seems wrong.')
 win.show()
-Fl.run()
-

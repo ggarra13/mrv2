@@ -40,7 +40,7 @@ def beepcb(ptr, widget):
 	print("  fl_xid: ",fl_xid(widget))
 
 def exitcb(ptr, widget):
-	sys.exit(0)
+        window.hide()
 
 window = Fl_Window(100,100,320, 65,"Button")
 b1 = MyButton(20,20,80,25, "Beep")
@@ -50,8 +50,5 @@ b2 = Fl_Button(120,20, 80, 25, "&no op")
 b3 = Fl_Button(220,20, 80, 25, "Exit");
 b3.callback(exitcb,window)
 window.end()
-#window.show(len(sys.argv),sys.argv)
 window.show()
-Fl.run()
-
 

@@ -35,9 +35,9 @@ aBrowser = None	  # type 'Browser' from '()'
 
 
 def onOK(ptr):
-	import sys  # code
-	#checkBrowserCallback(aBrowser.this)  # code
-	sys.exit(0)  # code
+        import sys  # code
+        #checkBrowserCallback(aBrowser.this)  # code
+
 
 
 def main():
@@ -71,7 +71,7 @@ def main():
 if __name__=='__main__':
 	import sys
 	window = main()
-	window.show(len(sys.argv), sys.argv)
+	window.show()
 	print(aBrowser)
 	d="data for 1"
 	print("data(1,"+d+")")
@@ -81,5 +81,4 @@ if __name__=='__main__':
 	print("data(2):", aBrowser.get_data(2))
 	print("data(3):", aBrowser.get_data(3))
 
-	Fl.run()
 

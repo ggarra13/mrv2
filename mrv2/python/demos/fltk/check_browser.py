@@ -45,8 +45,7 @@ def checkBrowserCallback(ptr):
 def onOK(ptr):
     import sys  # code
     checkBrowserCallback(aCheckBrowser)  # code
-    sys.exit(0)  # code
-
+    window.hide()
 
 def main():
     global aCheckBrowser
@@ -76,5 +75,4 @@ def main():
 if __name__=='__main__':
     import sys
     window = main()
-    window.show(len(sys.argv), sys.argv)
-    Fl.run()
+    window.show()

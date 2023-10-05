@@ -83,7 +83,6 @@ okButton = Fl_Return_Button( (numCols-1)*(graphWidth+border),
 okButton.callback(cb_OK)
 
 foo_window.end()
-foo_window.show(len(sys.argv), sys.argv)
+foo_window.show()
 
-Fl.run()
 

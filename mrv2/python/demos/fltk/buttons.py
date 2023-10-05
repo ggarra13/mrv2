@@ -37,6 +37,5 @@ b4 = Fl_Light_Button(10,90,130,30,"Fl_Light_Button")
 b5 = Fl_Round_Button(150,50,160,30,"Fl_Round_Button")
 b6 = Fl_Check_Button(150,90,160,30,"Fl_Check_Button")
 window.end()
-window.show(len(sys.argv), sys.argv)
-Fl.run()
+window.show()
 

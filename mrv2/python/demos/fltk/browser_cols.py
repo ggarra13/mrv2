@@ -71,14 +71,11 @@ def main():
 if __name__=='__main__':
 	import sys
 	window = main()
-	window.show(len(sys.argv), sys.argv)
+	window.show()
 	d="data for 1"
 	aBrowser.data(1, d)
 	aBrowser.data(2, 123)
 	print("data(1):", aBrowser.data(1))
 	print("data(2):", aBrowser.data(2))
 	print("data(3):", aBrowser.data(3))
-
-
-	Fl.run()
 

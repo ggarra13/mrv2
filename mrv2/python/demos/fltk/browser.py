@@ -84,10 +84,13 @@ def show_cb(ptr):
 	else:
     		browser.make_visible(line)
 
-#  if (!Fl::args(argc,argv,i)) Fl::fatal(Fl::help)
+MRV2_ROOT = os.path.join(sys.base_prefix, "..")
+PYTHON_ROOT = os.path.join(MRV2_ROOT, "python")
+DEMOS_ROOT = os.path.join(PYTHON_ROOT, "demos")
+FLTK_ROOT = os.path.join(DEMOS_ROOT, "fltk")
+fname = os.path.join(FLTK_ROOT, "browser.py")
 
-fname = "browser.py"
-window = Fl_Window(400,400,fname)
+window = Fl_Double_Window(400,400,fname)
 #window.box(FL_NO_BOX) # because it is filled with browser
 
 browser = Fl_Select_Browser(0,0,400,350,"")
@@ -110,29 +113,26 @@ browser.has_scrollbar(Fl_Browser.BOTH_ALWAYS)
 
 if not browser.load(fname):
 	print("Can't load " +  fname)
-	sys.exit(1)
+else:
 
-browser.vposition(0)
+    browser.vposition(0)
 
-field = Fl_Int_Input(50,350,350,25,"Line #:")
-field.callback(show_cb)
+    field = Fl_Int_Input(50,350,350,25,"Line #:")
+    field.callback(show_cb)
 
-top = Fl_Button(0,375,100,25,"Top")
-top.callback(show_cb)
+    top = Fl_Button(0,375,100,25,"Top")
+    top.callback(show_cb)
 
-bottom = Fl_Button(100, 375, 100, 25, "Bottom")
-bottom.callback(show_cb);
-
-middle = Fl_Button(200, 375, 100, 25, "Middle")
-middle.callback(show_cb);
-
-visible = Fl_Button(300, 375, 100, 25, "Make Vis.")
-visible.callback(show_cb);
-
-window.end()
-
-window.resizable(browser)
-window.show(len(sys.argv), sys.argv)
-Fl.run()
-
-
+    bottom = Fl_Button(100, 375, 100, 25, "Bottom")
+    bottom.callback(show_cb);
+    
+    middle = Fl_Button(200, 375, 100, 25, "Middle")
+    middle.callback(show_cb);
+    
+    visible = Fl_Button(300, 375, 100, 25, "Make Vis.")
+    visible.callback(show_cb);
+    
+    window.end()
+    
+    window.resizable(browser)
+    window.show()

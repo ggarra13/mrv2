@@ -27,12 +27,12 @@
 from fltk14 import *
 import sys
 
-window = Fl_Window(220,220,"Fl_Clock")
+window = Fl_Double_Window(220,220,"Fl_Clock")
 
 c1 = Fl_Clock(0,0,220,220,"test")
 window.resizable(c1);
 window.end();
-window2 = Fl_Window(220,220,"Fl_Round_Clock")
+window2 = Fl_Double_Window(220,220,"Fl_Round_Clock")
 
 c2 = Fl_Round_Clock(0,0,220,220)
 window2.resizable(c2);
@@ -41,6 +41,6 @@ window2.end();
 #  // I don't want the class to be "clock":
 #  window.xclass("Fl_Clock")
 #  window2.xclass("Fl_Clock")
-window.show(len(sys.argv),sys.argv)
+window.show()
 window2.show()
 Fl.run()
