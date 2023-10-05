@@ -19,12 +19,15 @@ endif()
 set(pyFLTK_PATCH
     ${CMAKE_COMMAND} -E copy_if_different
     "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/swig/x.i"
-    "${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK/swig/")
+    "${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK/swig/"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/setup.py"
+    "${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK/")
 
 if(WIN32)
-    set(pyFLTK_CONFIGURE ${CMAKE_COMMAND} -E env FLTK_HOME=${FLTK_HOME} ${PYTHON_EXECUTABLE} setup.py swig)
-    set(pyFLTK_BUILD     ${CMAKE_COMMAND} -E env FLTK_HOME=${FLTK_HOME} ${PYTHON_EXECUTABLE} setup.py build)
-    set(pyFLTK_INSTALL   ${CMAKE_COMMAND} -E env FLTK_HOME=${FLTK_HOME} ${PYTHON_EXECUTABLE} setup.py install)
+    set(pyFLTK_CONFIGURE ${CMAKE_COMMAND} -E env FLTK_HOME=${FLTK_HOME} ${PYTHON_EXECUTABLE} --enable-shared setup.py swig)
+    set(pyFLTK_BUILD     ${CMAKE_COMMAND} -E env FLTK_HOME=${FLTK_HOME} ${PYTHON_EXECUTABLE} --enable-shared setup.py build)
+    set(pyFLTK_INSTALL   ${CMAKE_COMMAND} -E env FLTK_HOME=${FLTK_HOME} ${PYTHON_EXECUTABLE} --enable-shared setup.py install)
 else()
     set(pyFLTK_CONFIGURE ${PYTHON_EXECUTABLE} setup.py swig)
     set(pyFLTK_BUILD     ${PYTHON_EXECUTABLE} setup.py build)
