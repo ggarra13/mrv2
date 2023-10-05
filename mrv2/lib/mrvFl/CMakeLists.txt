@@ -63,6 +63,7 @@ if (WIN32)
     list(APPEND LIBRARIES comsuppw)
 endif()
 
+target_compile_definitions(mrvFl PUBLIC FL_DLL)
 target_link_libraries(mrvFl PUBLIC ${LIBRARIES} )
 set_target_properties(mrvFl PROPERTIES FOLDER lib)
 #set_target_properties(mrvFl PROPERTIES PUBLIC_HEADER "${HEADERS}")

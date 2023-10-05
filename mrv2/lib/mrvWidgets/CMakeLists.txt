@@ -140,6 +140,7 @@ if( WIN32 )
     list(APPEND LIBRARIES Crypt32.lib)
 endif()
 
+target_compile_definitions(mrvWidgets PUBLIC FL_DLL)
 target_link_libraries(mrvWidgets PUBLIC ${LIBRARIES} )
 set_target_properties(mrvWidgets PROPERTIES FOLDER lib)
 #set_target_properties(mrvWidgets PROPERTIES PUBLIC_HEADER "${HEADERS}")

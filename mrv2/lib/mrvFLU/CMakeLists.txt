@@ -38,9 +38,9 @@ files_to_absolute_paths()
 
 set( LIBRARIES ${FLTK_LIBRARIES} )
 
+target_compile_definitions(mrvFLU PUBLIC FL_DLL)
 target_link_libraries(mrvFLU PUBLIC ${LIBRARIES} )
 set_target_properties(mrvFLU PROPERTIES FOLDER lib)
-#set_target_properties(mrvFLU PROPERTIES PUBLIC_HEADER "${HEADERS}")
 
 install(TARGETS mrvFLU
     ARCHIVE DESTINATION lib

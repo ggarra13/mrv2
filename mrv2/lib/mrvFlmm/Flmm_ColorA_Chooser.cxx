@@ -639,8 +639,8 @@ static void change_color_cb(ColorAChip* o, void* v)
   c->do_callback();
 }
 
-extern const char* fl_ok;
-extern const char* fl_cancel;
+extern FL_EXPORT const char* fl_ok;
+extern FL_EXPORT const char* fl_cancel;
 
 Flmm_ColorA_Window::Flmm_ColorA_Window(int W, int H, const char* L) :
     Fl_Double_Window(W, H, L),
