@@ -10,7 +10,7 @@
 
 #include <iostream>
 
-#include <FL/fl_utf8.H>
+#include <FL/fl_utf8.h>
 
 #ifdef MRV2_PYBIND11
 #    include <pybind11/embed.h>

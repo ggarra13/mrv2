@@ -34,6 +34,8 @@ Preferences->User Interface->Single Instance.
 - Added pyFLTK bindings to the distribution.  It is now possible to create
   FLTK windows with Python and control and access mrv2's windows with it.
   This is the first step into making the UI fully customizable.
+- Added Find and Replace to Python Editor.
+- Added Comment region to Python Editor.
 - Build system changes and fixes:
    	* Renamed runme.sh script to runme_nolog.sh.
    	* Added a new runme.sh script that calls runme_nolog.sh but saves the compile log into BUILD-KERNEL-ARCH/CMAKE_BUILD_TYPE/compile.log.
