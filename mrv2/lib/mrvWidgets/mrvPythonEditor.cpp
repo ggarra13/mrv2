@@ -93,6 +93,16 @@ namespace mrv
             FL_BackSpace, FL_TEXT_EDITOR_ANY_STATE, (Key_Func)kf_backspace);
         add_key_binding(
             FL_Delete, FL_TEXT_EDITOR_ANY_STATE, (Key_Func)kf_delete);
+
+        replace_dlg = new Fl_Window(300, 105, _("Replace"));
+        replace_find = new Fl_Input(70, 10, 200, 25, _("Find:"));
+        replace_with = new Fl_Input(70, 40, 200, 25, _("Replace:"));
+        replace_all = new Fl_Button(10, 70, 90, 25, _("Replace All"));
+        replace_next =
+            new Fl_Return_Button(105, 70, 120, 25, _("Replace Next"));
+        replace_cancel = new Fl_Button(230, 70, 60, 25, _("Cancel"));
+
+        memset(search, 0, sizeof(search));
     }
 
     int PythonEditor::kf_enter(int key, Fl_Text_Editor* e)
