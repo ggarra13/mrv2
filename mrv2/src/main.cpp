@@ -2,9 +2,11 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <windows.h>
-#include <stdio.h>
-#include <stdlib.h>
+#ifdef _WIN32
+#    include <windows.h>
+#    include <stdio.h>
+#    include <stdlib.h>
+#endif
 
 #include <iostream>
 

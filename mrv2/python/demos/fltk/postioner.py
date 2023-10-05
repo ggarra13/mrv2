@@ -1,7 +1,7 @@
 #
-# "$Id: hello.py 536 2020-10-30 15:20:32Z andreasheld $"
+# "$Id: postioner.py 536 2020-10-30 15:20:32Z andreasheld $"
 #
-# Callback test program for pyFLTK the Python bindings
+# Positioner test program for pyFLTK the Python bindings
 # for the Fast Light Tool Kit (FLTK).
 #
 # FLTK copyright 1998-1999 by Bill Spitzak and others.
@@ -24,23 +24,45 @@
 # Please report all bugs and problems to "pyfltk-user@lists.sourceforge.net".
 #
 
+
 from fltk14 import *
-import sys
-from string import *
 
-def theCancelButtonCallback(ptr, data):
-	print("type = ", type(ptr))
-	print(f"theCancelButtonCallback({str(data)})")
-	print("Tooltip: ", ptr.tooltip())
 
-window = Fl_Window(100, 100, 200, 90)
-window.label(sys.argv[0])
-button = Fl_Button(9,20,180,50)
-button.label("Hello World")
-button.labeltype(FL_EMBOSSED_LABEL)
-button.callback(theCancelButtonCallback, "'some callback data'")
-button.tooltip("Press to see the callback!")
+# global object names
+theDisplay = None      # type 'Fl_Output' from '()'
+thePos = None      # type 'Fl_Positioner' from '()'
 
-window.end()
-window.show(sys.argv)
-Fl.run()
+
+def onOK(ptr):
+    sys.exit(0)  # code
+
+
+def thePosCallback(ptr):
+    theDisplay.value(f"{thePos.xvalue():3.3f}, {thePos.yvalue():3.3f}")  # code
+
+
+def main():
+    global theDisplay
+    global thePos
+
+    o_1_0 = Fl_Window(461, 360, 221, 185)
+
+    o_2_0 = Fl_Return_Button(80, 145, 65, 25, "OK")
+    o_2_0.label('OK')
+    o_2_0.callback(onOK)
+
+    theDisplay = Fl_Output(60, 110, 100, 25)
+
+    thePos = Fl_Positioner(10, 10, 200, 90)
+    thePos.callback(thePosCallback)
+    o_1_0.end()
+
+    return o_1_0
+
+
+
+if __name__=='__main__':
+    import sys
+    window = main()
+    window.show(len(sys.argv), sys.argv)
+    Fl.run()

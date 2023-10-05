@@ -1,7 +1,7 @@
 #
-# "$Id: hello.py 536 2020-10-30 15:20:32Z andreasheld $"
+# "$Id: buttons.py 28 2003-07-16 20:00:27Z andreasheld $"
 #
-# Callback test program for pyFLTK the Python bindings
+# Buttons test program for pyFLTK the Python bindings
 # for the Fast Light Tool Kit (FLTK).
 #
 # FLTK copyright 1998-1999 by Bill Spitzak and others.
@@ -26,21 +26,17 @@
 
 from fltk14 import *
 import sys
-from string import *
 
-def theCancelButtonCallback(ptr, data):
-	print("type = ", type(ptr))
-	print(f"theCancelButtonCallback({str(data)})")
-	print("Tooltip: ", ptr.tooltip())
 
-window = Fl_Window(100, 100, 200, 90)
-window.label(sys.argv[0])
-button = Fl_Button(9,20,180,50)
-button.label("Hello World")
-button.labeltype(FL_EMBOSSED_LABEL)
-button.callback(theCancelButtonCallback, "'some callback data'")
-button.tooltip("Press to see the callback!")
-
+window = Fl_Window(320,130)
+b1 = Fl_Button(10, 10, 130, 30, "Fl_Button")
+b1.tooltip("This is a Tooltip.")
+b2 = Fl_Return_Button(150, 10, 160, 30, "Fl_Return_Button")
+b3 = Fl_Repeat_Button(10,50,130,30,"Fl_Repeat_Button")
+b4 = Fl_Light_Button(10,90,130,30,"Fl_Light_Button")
+b5 = Fl_Round_Button(150,50,160,30,"Fl_Round_Button")
+b6 = Fl_Check_Button(150,90,160,30,"Fl_Check_Button")
 window.end()
-window.show(sys.argv)
+window.show(len(sys.argv), sys.argv)
 Fl.run()
+

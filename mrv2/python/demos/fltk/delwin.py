@@ -1,7 +1,7 @@
 #
-# "$Id: hello.py 536 2020-10-30 15:20:32Z andreasheld $"
+# "$Id: delwin.py 531 2019-12-27 12:15:45Z andreasheld $"
 #
-# Callback test program for pyFLTK the Python bindings
+# Delete window test program for pyFLTK the Python bindings
 # for the Fast Light Tool Kit (FLTK).
 #
 # FLTK copyright 1998-1999 by Bill Spitzak and others.
@@ -25,22 +25,50 @@
 #
 
 from fltk14 import *
-import sys
-from string import *
 
-def theCancelButtonCallback(ptr, data):
-	print("type = ", type(ptr))
-	print(f"theCancelButtonCallback({str(data)})")
-	print("Tooltip: ", ptr.tooltip())
 
-window = Fl_Window(100, 100, 200, 90)
-window.label(sys.argv[0])
-button = Fl_Button(9,20,180,50)
-button.label("Hello World")
-button.labeltype(FL_EMBOSSED_LABEL)
-button.callback(theCancelButtonCallback, "'some callback data'")
-button.tooltip("Press to see the callback!")
+# global object names
 
-window.end()
-window.show(sys.argv)
-Fl.run()
+
+def main():
+	_xxyzzy =	 o1_0 = Fl_Window(506, 641, 100, 100)
+	o2_0 = Fl_Button(25, 25, 25, 25, "button")
+	o2_0.callback(onB1)
+	o1_0.end()
+	return _xxyzzy
+
+w = None
+def onB1(ptr):
+	global w
+	if w == None:
+		_xxyzzy =	 o1_0 = Fl_Window(196, 85, 100, 100, "222 open")
+		o2_0 = Fl_Button(25, 25, 25, 25, "ok")
+		o2_0.callback(onWin2DelButton)
+		o1_0.end()
+		o1_0.show()
+		w = _xxyzzy
+		return _xxyzzy
+	else:
+		return None
+
+def onWin2DelButton(ptr):
+	global w
+	if w != None:
+		w.thisown = 1
+	w = None
+
+
+
+def t():
+	import sys
+	window = main()
+	window.show(len(sys.argv), sys.argv)
+	for i in range(0, 100, 1):
+		onB1(1)
+		onWin2DelButton(1)
+	onB1(1)
+	Fl.run()
+
+if __name__=='__main__':
+	t()
+

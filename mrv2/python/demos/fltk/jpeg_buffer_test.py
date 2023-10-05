@@ -1,7 +1,5 @@
-#
-# "$Id: hello.py 536 2020-10-30 15:20:32Z andreasheld $"
-#
-# Callback test program for pyFLTK the Python bindings
+# Fl_JPEG_Image from memory buffer
+# test program for pyFLTK the Python bindings
 # for the Fast Light Tool Kit (FLTK).
 #
 # FLTK copyright 1998-1999 by Bill Spitzak and others.
@@ -24,23 +22,31 @@
 # Please report all bugs and problems to "pyfltk-user@lists.sourceforge.net".
 #
 
+# cat image from https://commons.wikimedia.org/wiki/File:Arthur,_the_cat.jpg
+
 from fltk14 import *
-import sys
-from string import *
+from PIL import Image
+import io
 
-def theCancelButtonCallback(ptr, data):
-	print("type = ", type(ptr))
-	print(f"theCancelButtonCallback({str(data)})")
-	print("Tooltip: ", ptr.tooltip())
+def img_resize(fname,width):
+    '''resizes any image type using high quality PIL library'''
+    img = Image.open(fname) #opens all image formats supported by PIL
+    w,h = img.size
+    height = int(width*h/w)  #correct aspect ratio
+    img = img.resize((width, height), Image.BICUBIC) #high quality resizing
+    mem = io.BytesIO()  #byte stream memory object
+    img.save(mem, format="JPEG") #converts image type to JPEG byte stream
+    return Fl_JPEG_Image(None, mem.getbuffer())
 
-window = Fl_Window(100, 100, 200, 90)
-window.label(sys.argv[0])
-button = Fl_Button(9,20,180,50)
-button.label("Hello World")
-button.labeltype(FL_EMBOSSED_LABEL)
-button.callback(theCancelButtonCallback, "'some callback data'")
-button.tooltip("Press to see the callback!")
+pic = img_resize('cat.jpg', 300) #resizes to 300 pixels width
+win = Fl_Window(pic.w(), pic.h(), 'PIL resizing')
+win.begin()
+box = Fl_Box(0, 0, pic.w(), pic.h())
+win.end()
 
-window.end()
-window.show(sys.argv)
+box.image(pic)
+
+win.show()
 Fl.run()
+
+

@@ -1,5 +1,9 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+
 #
-# "$Id: hello.py 536 2020-10-30 15:20:32Z andreasheld $"
+# "$Id: hello.py 276 2006-11-13 11:01:40Z andreasheld $"
 #
 # Callback test program for pyFLTK the Python bindings
 # for the Fast Light Tool Kit (FLTK).
@@ -35,11 +39,21 @@ def theCancelButtonCallback(ptr, data):
 
 window = Fl_Window(100, 100, 200, 90)
 window.label(sys.argv[0])
-button = Fl_Button(9,20,180,50)
-button.label("Hello World")
+button = Fl_Button(9,20,180,60)
+utfstr = "日本語"
+extra_font = FL_TIMES_BOLD_ITALIC
+#Fl.set_font(extra_font, "*gothic*iso10646-1")
+Fl.set_font(extra_font, "*gothic-medium-r-normal*")
+Fl_Tooltip.font(extra_font)
+
+button.labelfont(extra_font)
+button.labelsize(30)
+button.label(utfstr)
 button.labeltype(FL_EMBOSSED_LABEL)
 button.callback(theCancelButtonCallback, "'some callback data'")
-button.tooltip("Press to see the callback!")
+button.callback(theCancelButtonCallback, "'任意のデータ'")
+#button.tooltip("Press to see the callback!")
+button.tooltip("データを見るため押して下さい。")
 
 window.end()
 window.show(sys.argv)

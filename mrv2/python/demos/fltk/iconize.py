@@ -1,7 +1,7 @@
 #
-# "$Id: hello.py 536 2020-10-30 15:20:32Z andreasheld $"
+# "$Id: iconize.py 35 2003-09-29 21:39:48Z andreasheld $"
 #
-# Callback test program for pyFLTK the Python bindings
+# Iconize test program for pyFLTK the Python bindings
 # for the Fast Light Tool Kit (FLTK).
 #
 # FLTK copyright 1998-1999 by Bill Spitzak and others.
@@ -26,21 +26,45 @@
 
 from fltk14 import *
 import sys
-from string import *
 
-def theCancelButtonCallback(ptr, data):
-	print("type = ", type(ptr))
-	print(f"theCancelButtonCallback({str(data)})")
-	print("Tooltip: ", ptr.tooltip())
 
-window = Fl_Window(100, 100, 200, 90)
-window.label(sys.argv[0])
-button = Fl_Button(9,20,180,50)
-button.label("Hello World")
-button.labeltype(FL_EMBOSSED_LABEL)
-button.callback(theCancelButtonCallback, "'some callback data'")
-button.tooltip("Press to see the callback!")
+def iconize_cb(ptr, win):
+	win.iconize()
 
-window.end()
-window.show(sys.argv)
+def show_cb(ptr, win):
+	win.show()
+
+def hide_cb(ptr, win):
+	win.hide()
+
+def window_cb(ptr):
+  	sys.exit(0)
+
+
+
+
+mainw = Fl_Window(200,200)
+mainw.end()
+mainw.show(len(sys.argv),sys.argv)
+
+control = Fl_Window(120,120)
+
+hide_button = Fl_Button(0,0,120,30,"hide()")
+hide_button.callback(hide_cb, mainw);
+
+iconize_button = Fl_Button(0,30,120,30,"iconize()")
+iconize_button.callback(iconize_cb, mainw)
+
+show_button = Fl_Button(0,60,120,30,"show()")
+show_button.callback(show_cb, mainw)
+
+show_button2 = Fl_Button(0,90,120,30,"show this")
+show_button2.callback(show_cb, control)
+
+#  Fl_Box box(FL_NO_BOX,0,60,120,30,"Also try running\nwith -i switch");
+
+control.end()
+control.show()
+control.callback(window_cb)
+
 Fl.run()

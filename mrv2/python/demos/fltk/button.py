@@ -1,7 +1,7 @@
 #
-# "$Id: hello.py 536 2020-10-30 15:20:32Z andreasheld $"
+# "$Id: button.py 495 2013-03-30 09:39:45Z andreasheld $"
 #
-# Callback test program for pyFLTK the Python bindings
+# Button test program for pyFLTK the Python bindings
 # for the Fast Light Tool Kit (FLTK).
 #
 # FLTK copyright 1998-1999 by Bill Spitzak and others.
@@ -26,21 +26,32 @@
 
 from fltk14 import *
 import sys
-from string import *
 
-def theCancelButtonCallback(ptr, data):
-	print("type = ", type(ptr))
-	print(f"theCancelButtonCallback({str(data)})")
-	print("Tooltip: ", ptr.tooltip())
+window = None
 
-window = Fl_Window(100, 100, 200, 90)
-window.label(sys.argv[0])
-button = Fl_Button(9,20,180,50)
-button.label("Hello World")
-button.labeltype(FL_EMBOSSED_LABEL)
-button.callback(theCancelButtonCallback, "'some callback data'")
-button.tooltip("Press to see the callback!")
+class MyButton(Fl_Button):
+	data = "My Secret Data"
+	def __init__(self, x, y, w, h, l):
+		Fl_Button.__init__(self, x, y, w, h, l)
+		
+def beepcb(ptr, widget):
+	print("beepcb: ")
+	print("  Widget member: ",ptr.data)
+	print("  fl_xid: ",fl_xid(widget))
 
+def exitcb(ptr, widget):
+	sys.exit(0)
+
+window = Fl_Window(100,100,320, 65,"Button")
+b1 = MyButton(20,20,80,25, "Beep")
+
+b1.callback(beepcb, window)
+b2 = Fl_Button(120,20, 80, 25, "&no op")
+b3 = Fl_Button(220,20, 80, 25, "Exit");
+b3.callback(exitcb,window)
 window.end()
-window.show(sys.argv)
+#window.show(len(sys.argv),sys.argv)
+window.show()
 Fl.run()
+
+

@@ -1,7 +1,7 @@
 #
-# "$Id: hello.py 536 2020-10-30 15:20:32Z andreasheld $"
+# "$Id: group.py 495 2013-03-30 09:39:45Z andreasheld $"
 #
-# Callback test program for pyFLTK the Python bindings
+# Group test program for pyFLTK the Python bindings
 # for the Fast Light Tool Kit (FLTK).
 #
 # FLTK copyright 1998-1999 by Bill Spitzak and others.
@@ -26,21 +26,38 @@
 
 from fltk14 import *
 import sys
-from string import *
 
-def theCancelButtonCallback(ptr, data):
-	print("type = ", type(ptr))
-	print(f"theCancelButtonCallback({str(data)})")
-	print("Tooltip: ", ptr.tooltip())
+removed = 0
+window = None
+grp = None
+btn = None
 
-window = Fl_Window(100, 100, 200, 90)
-window.label(sys.argv[0])
-button = Fl_Button(9,20,180,50)
-button.label("Hello World")
-button.labeltype(FL_EMBOSSED_LABEL)
-button.callback(theCancelButtonCallback, "'some callback data'")
-button.tooltip("Press to see the callback!")
 
+def btn_cb(ptr):
+    global window
+    global grp
+    global removed
+    if removed == 0:
+        print("removing button")
+        grp.remove(btn)
+        removed = 1
+    else:
+        print("adding button")
+        grp.add(btn)
+        removed = 0
+    window.redraw()
+
+window = Fl_Window(320,130)
+
+grp = Fl_Group(10, 10, 300,110)
+b1 = Fl_Button(10, 10, 130, 30, "Add/Remove")
+b1.tooltip("Pressing this button should remove the second button, pressing it again should add the other button.")
+b1.callback(btn_cb)
+grp.end()
 window.end()
-window.show(sys.argv)
+removed = 1
+btn = Fl_Return_Button(150, 10, 160, 30, "Fl_Return_Button")
+
+window.show(len(sys.argv), sys.argv)
 Fl.run()
+

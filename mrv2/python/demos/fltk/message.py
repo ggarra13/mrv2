@@ -1,7 +1,7 @@
 #
-# "$Id: hello.py 536 2020-10-30 15:20:32Z andreasheld $"
+# "$Id: message.py 536 2020-10-30 15:20:32Z andreasheld $"
 #
-# Callback test program for pyFLTK the Python bindings
+# Message test program for pyFLTK the Python bindings
 # for the Fast Light Tool Kit (FLTK).
 #
 # FLTK copyright 1998-1999 by Bill Spitzak and others.
@@ -25,22 +25,20 @@
 #
 
 from fltk14 import *
-import sys
-from string import *
 
-def theCancelButtonCallback(ptr, data):
-	print("type = ", type(ptr))
-	print(f"theCancelButtonCallback({str(data)})")
-	print("Tooltip: ", ptr.tooltip())
+fl_message("Spelling check sucessfull, %d errors found with %f confidence" \
+	%(1002, 100*(15/77.0)))
 
-window = Fl_Window(100, 100, 200, 90)
-window.label(sys.argv[0])
-button = Fl_Button(9,20,180,50)
-button.label("Hello World")
-button.labeltype(FL_EMBOSSED_LABEL)
-button.callback(theCancelButtonCallback, "'some callback data'")
-button.tooltip("Press to see the callback!")
+fl_alert("Quantum fluctuations in the space-time continuim detected, "
+	   "you have %f seconds to comply."% 10.0)
 
-window.end()
-window.show(sys.argv)
-Fl.run()
+print(f"fl_ask returned {fl_ask('Do you really want to continue?')}")
+
+print(f"fl_choice returned {fl_choice('Choose one of the following:', 'choice0', 'choice1', 'choice2')}")
+
+r = fl_input("Please enter a string for input:", "this is the default value")
+print(f"fl_input returned \"{str(r)}\"")
+
+r = fl_password("Enter password:", "123")
+print(f"fl_password returned \"{str(r)}\"")
+

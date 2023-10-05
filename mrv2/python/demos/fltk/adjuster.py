@@ -1,7 +1,7 @@
 #
-# "$Id: hello.py 536 2020-10-30 15:20:32Z andreasheld $"
+# "$Id: adjuster.py 35 2003-09-29 21:39:48Z andreasheld $"
 #
-# Callback test program for pyFLTK the Python bindings
+# Adjuster test program for pyFLTK the Python bindings
 # for the Fast Light Tool Kit (FLTK).
 #
 # FLTK copyright 1998-1999 by Bill Spitzak and others.
@@ -26,21 +26,33 @@
 
 from fltk14 import *
 import sys
-from string import *
+import time
 
-def theCancelButtonCallback(ptr, data):
-	print("type = ", type(ptr))
-	print(f"theCancelButtonCallback({str(data)})")
-	print("Tooltip: ", ptr.tooltip())
+label = ""
 
-window = Fl_Window(100, 100, 200, 90)
-window.label(sys.argv[0])
-button = Fl_Button(9,20,180,50)
-button.label("Hello World")
-button.labeltype(FL_EMBOSSED_LABEL)
-button.callback(theCancelButtonCallback, "'some callback data'")
-button.tooltip("Press to see the callback!")
+def adjcb(ptr, widget):
+	global label # need to keep this global to avoid garbage collection
+	label = widget.label()
+	ret,label = ptr.format(label)
+	widget.label(label)
+	widget.redraw()
+	return None
 
+window = Fl_Window(320,100)
+buf1 = '0.0000'
+b1 = Fl_Box(FL_DOWN_BOX,20,30,80,25,buf1)
+b1.color(FL_WHITE)
+a1 = Fl_Adjuster(20+80,30,3*25,25)
+a1.callback(adjcb,b1)
+
+buf2 = '0.0000'
+b2 = Fl_Box(FL_DOWN_BOX,20+80+4*25,30,80,25,buf2)
+b2.color(FL_WHITE)
+a2 = Fl_Adjuster(b2.x()+b2.w(),10,25,3*25)
+a2.callback(adjcb,b2)
+
+window.resizable(window)
 window.end()
-window.show(sys.argv)
+window.show()
+
 Fl.run()

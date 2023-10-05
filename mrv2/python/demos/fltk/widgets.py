@@ -1,7 +1,7 @@
 #
-# "$Id: hello.py 536 2020-10-30 15:20:32Z andreasheld $"
+# "$Id: widgets.py 28 2003-07-16 20:00:27Z andreasheld $"
 #
-# Callback test program for pyFLTK the Python bindings
+# Widgets test program for pyFLTK the Python bindings
 # for the Fast Light Tool Kit (FLTK).
 #
 # FLTK copyright 1998-1999 by Bill Spitzak and others.
@@ -24,23 +24,40 @@
 # Please report all bugs and problems to "pyfltk-user@lists.sourceforge.net".
 #
 
+
 from fltk14 import *
-import sys
-from string import *
 
-def theCancelButtonCallback(ptr, data):
-	print("type = ", type(ptr))
-	print(f"theCancelButtonCallback({str(data)})")
-	print("Tooltip: ", ptr.tooltip())
+window = None
 
-window = Fl_Window(100, 100, 200, 90)
-window.label(sys.argv[0])
-button = Fl_Button(9,20,180,50)
-button.label("Hello World")
-button.labeltype(FL_EMBOSSED_LABEL)
-button.callback(theCancelButtonCallback, "'some callback data'")
-button.tooltip("Press to see the callback!")
+def theExitCallback(ptr):
+    import sys
+    sys.exit(0)
+
+data = [ "@c Hello there.",
+         "This is a demo of some of the widgets pyFLTK can do",
+         "@s Unfortunately, that's about all it does...",
+         "@b Because now the darn font attributes work differently"
+       ]
+
+window = Fl_Window(100, 100, 400, 200, "widgets.py")
+
+browser = Fl_Browser(10, 10, 380, 100)
+for line in data:
+    browser.add(line)
+
+browser.data(3, "Fortunately")
+#print browser.get_data(3)
+
+slider = Fl_Hor_Value_Slider(10, 120, 180, 15)
+
+button = Fl_Button(200, 120, 190, 15, "Exit")
+button.callback(theExitCallback)
+
+output = Fl_Output(10, 150, 380, 20)
+output.value("Label's don't work either. Need to typemap some more.")
 
 window.end()
-window.show(sys.argv)
+#window.resizable(window.this)
+window.show()
+
 Fl.run()

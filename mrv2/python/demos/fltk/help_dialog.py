@@ -1,7 +1,7 @@
 #
-# "$Id: hello.py 536 2020-10-30 15:20:32Z andreasheld $"
+# "$Id: help_dialog.py 532 2020-05-11 20:10:32Z andreasheld $"
 #
-# Callback test program for pyFLTK the Python bindings
+# Help test program for pyFLTK the Python bindings
 # for the Fast Light Tool Kit (FLTK).
 #
 # FLTK copyright 1998-1999 by Bill Spitzak and others.
@@ -25,22 +25,23 @@
 #
 
 from fltk14 import *
-import sys
-from string import *
 
-def theCancelButtonCallback(ptr, data):
-	print("type = ", type(ptr))
-	print(f"theCancelButtonCallback({str(data)})")
-	print("Tooltip: ", ptr.tooltip())
+# 
+#  'main()' - Display the help GUI...
+# 
 
-window = Fl_Window(100, 100, 200, 90)
-window.label(sys.argv[0])
-button = Fl_Button(9,20,180,50)
-button.label("Hello World")
-button.labeltype(FL_EMBOSSED_LABEL)
-button.callback(theCancelButtonCallback, "'some callback data'")
-button.tooltip("Press to see the callback!")
+# int				#  O - Exit status
+# main(int  argc,			#  I - Number of command-line arguments
+#      char *argv[])		#  I - Command-line arguments
+# {
 
-window.end()
-window.show(sys.argv)
+
+help = Fl_Help_Dialog()
+help.load("HelpDialog.html")
+help.show()
+
 Fl.run()
+
+# 
+#  End of "$Id: help_dialog.py 532 2020-05-11 20:10:32Z andreasheld $".
+# 

@@ -1,7 +1,7 @@
 #
-# "$Id: hello.py 536 2020-10-30 15:20:32Z andreasheld $"
+# "$Id: wrapper.py 532 2020-05-11 20:10:32Z andreasheld $"
 #
-# Callback test program for pyFLTK the Python bindings
+# Dial test program for pyFLTK the Python bindings
 # for the Fast Light Tool Kit (FLTK).
 #
 # FLTK copyright 1998-1999 by Bill Spitzak and others.
@@ -24,23 +24,41 @@
 # Please report all bugs and problems to "pyfltk-user@lists.sourceforge.net".
 #
 
+
 from fltk14 import *
 import sys
-from string import *
 
-def theCancelButtonCallback(ptr, data):
-	print("type = ", type(ptr))
-	print(f"theCancelButtonCallback({str(data)})")
-	print("Tooltip: ", ptr.tooltip())
+def theCancelButtonCallback(ptr):
+	sys.exit(0)
 
-window = Fl_Window(100, 100, 200, 90)
-window.label(sys.argv[0])
-button = Fl_Button(9,20,180,50)
-button.label("Hello World")
-button.labeltype(FL_EMBOSSED_LABEL)
-button.callback(theCancelButtonCallback, "'some callback data'")
-button.tooltip("Press to see the callback!")
+def theDialChangedCallback(dial):
+    value = dial.value()
+    theTextOutputBox.value(str(value))
+    if (value>65):
+        theTextOutputBox.textcolor(1)
+    else:
+        theTextOutputBox.textcolor(0)
 
-window.end()
-window.show(sys.argv)
+
+mainWindow = Fl_Window(100, 100, 268, 159, sys.argv[0])
+mainWindow.box(FL_EMBOSSED_BOX)
+mainWindow.color(215)
+
+theDial = Fl_Roller(35, 60, 195, 25)
+theDial.type(1)
+theDial.maximum(100.0)
+theDial.step(0.5)
+theDial.callback(theDialChangedCallback)
+
+theTextOutputBox = Fl_Output(85, 20, 85, 25)
+theTextOutputBox.box(FL_ENGRAVED_BOX)
+
+theCancelButton = Fl_Button(70, 110, 125, 35, "Cancel")
+theCancelButton.color(214)
+theCancelButton.selection_color(133)
+theCancelButton.callback(theCancelButtonCallback)
+
+mainWindow.end()
+mainWindow.show(len(sys.argv), sys.argv)
+
 Fl.run()

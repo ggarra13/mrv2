@@ -1,7 +1,7 @@
 #
-# "$Id: hello.py 536 2020-10-30 15:20:32Z andreasheld $"
+# "$Id: symbols.py 495 2013-03-30 09:39:45Z andreasheld $"
 #
-# Callback test program for pyFLTK the Python bindings
+# Symbols test program for pyFLTK the Python bindings
 # for the Fast Light Tool Kit (FLTK).
 #
 # FLTK copyright 1998-1999 by Bill Spitzak and others.
@@ -26,21 +26,57 @@
 
 from fltk14 import *
 import sys
-from string import *
 
-def theCancelButtonCallback(ptr, data):
-	print("type = ", type(ptr))
-	print(f"theCancelButtonCallback({str(data)})")
-	print("Tooltip: ", ptr.tooltip())
+N=0
+W=60
+H=60
+ROWS=5
+COLS=5
+window=None
 
-window = Fl_Window(100, 100, 200, 90)
-window.label(sys.argv[0])
-button = Fl_Button(9,20,180,50)
-button.label("Hello World")
-button.labeltype(FL_EMBOSSED_LABEL)
-button.callback(theCancelButtonCallback, "'some callback data'")
-button.tooltip("Press to see the callback!")
+def bt(name):
+  global N
+  x = N%COLS
+  y = int(N/COLS)
+  N = N+1
+  x = x*W+10
+  y = y*H+10
+  b = Fl_Box(x,y,W-20,H-20,name)
+  b.box(FL_UP_BOX)
+  b.label(name)
+  b.labeltype(FL_NORMAL_LABEL)
+  b.labelcolor(FL_DARK3)
+  return b
+  
+window = Fl_Window(COLS*W,ROWS*H+20)
 
-window.end()
-window.show(sys.argv)
+b1 = bt("@->")
+b2 = bt("@>")
+b3 = bt("@>>")
+b4 = bt("@>|")
+b5 = bt("@>[]")
+b6 = bt("@|>")
+b7 = bt("@<-")
+b8 = bt("@<")
+b9 = bt("@<<")
+b10 = bt("@|<")
+b11 = bt("@[]<")
+b12 = bt("@<|")
+b13 = bt("@<->")
+b14 = bt("@-->")
+b15 = bt("@+")
+b16 = bt("@->|")
+b17 = bt("@||")
+b18 = bt("@arrow")
+b19 = bt("@returnarrow")
+b20 = bt("@square")
+b21 = bt("@circle")
+b22 = bt("@line")
+b23 = bt("@menu")
+b24 = bt("@UpArrow")
+b25 = bt("@DnArrow")
+
+window.resizable(window.this)
+window.show(len(sys.argv), sys.argv)
+
 Fl.run()

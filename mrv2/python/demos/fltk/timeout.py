@@ -1,7 +1,7 @@
 #
-# "$Id: hello.py 536 2020-10-30 15:20:32Z andreasheld $"
+# "$Id: timeout.py 536 2020-10-30 15:20:32Z andreasheld $"
 #
-# Callback test program for pyFLTK the Python bindings
+# Timeout test program for pyFLTK the Python bindings
 # for the Fast Light Tool Kit (FLTK).
 #
 # FLTK copyright 1998-1999 by Bill Spitzak and others.
@@ -26,21 +26,36 @@
 
 from fltk14 import *
 import sys
-from string import *
 
-def theCancelButtonCallback(ptr, data):
-	print("type = ", type(ptr))
-	print(f"theCancelButtonCallback({str(data)})")
-	print("Tooltip: ", ptr.tooltip())
+numTimeoutsCalled = 1
 
-window = Fl_Window(100, 100, 200, 90)
-window.label(sys.argv[0])
-button = Fl_Button(9,20,180,50)
-button.label("Hello World")
-button.labeltype(FL_EMBOSSED_LABEL)
-button.callback(theCancelButtonCallback, "'some callback data'")
-button.tooltip("Press to see the callback!")
+def timeoutCallback(data):
+	global numTimeoutsCalled
+	print(f"timeoutCallback({str(data)})")
+	Fl.repeat_timeout( 2.0, timeoutCallback, numTimeoutsCalled)
+	numTimeoutsCalled = numTimeoutsCalled + 1
+	if numTimeoutsCalled == 5:
+		print("Removing timeoutCallbackNoData")
+		Fl.remove_timeout(timeoutCallbackNoData)
+
+def timeoutCallbackNoData():
+	global numTimeoutsCalled
+	print("timeoutCallbackNoData")
+	Fl.repeat_timeout( 3.0, timeoutCallbackNoData)
+
+def theCancelButtonCallback(ptr):
+	sys.exit(0)
+		
+window = Fl_Window(100, 100, 200, 90, sys.argv[0])
+
+button = Fl_Button(9,20,180,50,"OK")
+button.labeltype(FL_NORMAL_LABEL)
+button.callback(theCancelButtonCallback)
 
 window.end()
-window.show(sys.argv)
+window.show(len(sys.argv), sys.argv)
+
+Fl.add_timeout( 2.0, timeoutCallback, "'this is the time-out data'")
+Fl.add_timeout( 3.0, timeoutCallbackNoData)
+
 Fl.run()

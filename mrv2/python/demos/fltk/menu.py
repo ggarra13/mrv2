@@ -1,7 +1,7 @@
 #
-# "$Id: hello.py 536 2020-10-30 15:20:32Z andreasheld $"
+# "$Id: menu.py 536 2020-10-30 15:20:32Z andreasheld $"
 #
-# Callback test program for pyFLTK the Python bindings
+# Menu test program for pyFLTK the Python bindings
 # for the Fast Light Tool Kit (FLTK).
 #
 # FLTK copyright 1998-1999 by Bill Spitzak and others.
@@ -24,23 +24,43 @@
 # Please report all bugs and problems to "pyfltk-user@lists.sourceforge.net".
 #
 
+
 from fltk14 import *
-import sys
-from string import *
 
-def theCancelButtonCallback(ptr, data):
-	print("type = ", type(ptr))
-	print(f"theCancelButtonCallback({str(data)})")
-	print("Tooltip: ", ptr.tooltip())
 
-window = Fl_Window(100, 100, 200, 90)
-window.label(sys.argv[0])
-button = Fl_Button(9,20,180,50)
-button.label("Hello World")
-button.labeltype(FL_EMBOSSED_LABEL)
-button.callback(theCancelButtonCallback, "'some callback data'")
-button.tooltip("Press to see the callback!")
+# global object names
 
-window.end()
-window.show(sys.argv)
-Fl.run()
+
+def onFileQuit(ptr, data):
+    #menuItem = Fl_Menu_ItemPtr(ptr)
+    menuItem = ptr
+    print(f'onFileQuit({str(menuItem)}, "{str(data)}")')
+    import sys  # code
+    sys.exit(0)  # code
+    
+
+def main():
+
+    o_1_0 = Fl_Window(810, 23, 100, 100)
+
+    o_2_0 = Fl_Menu_Bar(0, 0, 105, 25)
+
+    userData = "User callback data"
+    #setMenu( o_2_0, (
+    o_2_0.menu((
+        ("&File", 0, 0, 0, 64), 
+            ("&Quit", 0, onFileQuit, userData, 0), 
+            (None, ),
+        (None, ) ))
+
+    o_1_0.end()
+
+    return o_1_0
+
+
+
+if __name__=='__main__':
+    import sys
+    window = main()
+    window.show(len(sys.argv), sys.argv)
+    Fl.run()

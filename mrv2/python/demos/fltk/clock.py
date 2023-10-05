@@ -1,7 +1,7 @@
 #
-# "$Id: hello.py 536 2020-10-30 15:20:32Z andreasheld $"
+# "$Id: clock.py 103 2005-06-24 13:55:26Z andreasheld $"
 #
-# Callback test program for pyFLTK the Python bindings
+# Clock test program for pyFLTK the Python bindings
 # for the Fast Light Tool Kit (FLTK).
 #
 # FLTK copyright 1998-1999 by Bill Spitzak and others.
@@ -26,21 +26,21 @@
 
 from fltk14 import *
 import sys
-from string import *
 
-def theCancelButtonCallback(ptr, data):
-	print("type = ", type(ptr))
-	print(f"theCancelButtonCallback({str(data)})")
-	print("Tooltip: ", ptr.tooltip())
+window = Fl_Window(220,220,"Fl_Clock")
 
-window = Fl_Window(100, 100, 200, 90)
-window.label(sys.argv[0])
-button = Fl_Button(9,20,180,50)
-button.label("Hello World")
-button.labeltype(FL_EMBOSSED_LABEL)
-button.callback(theCancelButtonCallback, "'some callback data'")
-button.tooltip("Press to see the callback!")
+c1 = Fl_Clock(0,0,220,220,"test")
+window.resizable(c1);
+window.end();
+window2 = Fl_Window(220,220,"Fl_Round_Clock")
 
-window.end()
-window.show(sys.argv)
+c2 = Fl_Round_Clock(0,0,220,220)
+window2.resizable(c2);
+window2.end();
+#  // my machine had a clock* Xresource set for another program, so
+#  // I don't want the class to be "clock":
+#  window.xclass("Fl_Clock")
+#  window2.xclass("Fl_Clock")
+window.show(len(sys.argv),sys.argv)
+window2.show()
 Fl.run()

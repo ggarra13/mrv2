@@ -1,7 +1,7 @@
 #
-# "$Id: hello.py 536 2020-10-30 15:20:32Z andreasheld $"
+# "$Id: idle.py 536 2020-10-30 15:20:32Z andreasheld $"
 #
-# Callback test program for pyFLTK the Python bindings
+# Idle test program for pyFLTK the Python bindings
 # for the Fast Light Tool Kit (FLTK).
 #
 # FLTK copyright 1998-1999 by Bill Spitzak and others.
@@ -26,21 +26,35 @@
 
 from fltk14 import *
 import sys
-from string import *
 
-def theCancelButtonCallback(ptr, data):
-	print("type = ", type(ptr))
-	print(f"theCancelButtonCallback({str(data)})")
-	print("Tooltip: ", ptr.tooltip())
+button = None # forward dec
 
-window = Fl_Window(100, 100, 200, 90)
-window.label(sys.argv[0])
-button = Fl_Button(9,20,180,50)
-button.label("Hello World")
-button.labeltype(FL_EMBOSSED_LABEL)
-button.callback(theCancelButtonCallback, "'some callback data'")
-button.tooltip("Press to see the callback!")
+timesCalled = 0
+def anIdleCallback(data):
+	global timesCalled
+	timesCalled = timesCalled + 1
+	print(f"idle data={data} times called={timesCalled}")
+
+docb = 0
+def theCancelButtonCallback(ptr):
+	global docb
+	if docb:
+		Fl.remove_idle(anIdleCallback, 123)
+		button.label("Add Idle Callback")
+		docb = 0
+	else:
+		Fl.add_idle(anIdleCallback, 123)
+		docb = 1
+		button.label("Remove Idle Callback")
+
+		
+window = Fl_Window(100, 100, 200, 90, sys.argv[0])
+
+button = Fl_Button(9,20,180,50,"Add Idle Callback")
+button.labeltype(FL_NORMAL_LABEL)
+button.callback(theCancelButtonCallback)
 
 window.end()
-window.show(sys.argv)
+window.show(len(sys.argv), sys.argv)
+
 Fl.run()
