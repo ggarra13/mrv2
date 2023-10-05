@@ -51,7 +51,7 @@ The source forge site also hosts beta builds (nightly builds with the latest cha
 
 ## Compatibility
 
-mrv2 binaries run on Windows 8.1+, RedHat 8+ or Ubuntu 20.04+ and macOS 10.15+.
+mrv2 binaries run on Windows 8.1+, RedHat 8.1+ or Ubuntu 20.04+ and macOS 11.0+.
 
 ## Notes on installation
 

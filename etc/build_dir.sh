@@ -26,6 +26,7 @@ extract_python_version
 
 . etc/parse_args.sh
 
+export OSX_TARGET=11.0
 
 # Build a build directory with that information
 export BUILD_DIR=$BUILD_ROOT/${CMAKE_BUILD_TYPE}
@@ -36,7 +37,7 @@ if [[ $KERNEL == *Darwin* ]]; then
 	export CMAKE_OSX_ARCHITECTURES=$ARCH
     fi
     if [[ $MRV2_DIST_RELEASE == 1 ]]; then
-	export CMAKE_FLAGS="-DCMAKE_OSX_DEPLOYMENT_TARGET=10.15 ${CMAKE_FLAGS}"
+	export CMAKE_FLAGS="-DCMAKE_OSX_DEPLOYMENT_TARGET=${OSX_TARGET} ${CMAKE_FLAGS}"
     fi
 fi
 

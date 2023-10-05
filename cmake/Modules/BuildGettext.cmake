@@ -16,15 +16,26 @@ set(GETTEXT_ARGS
 	--disable-static
 	--enable-shared
 	--disable-curses
+
+	--disable-c++
+	--disable-curses
+	--disable-nls
 	--disable-acl
 	--disable-dependency-tracking
 	--disable-libaseprintf
+	--disable-openmp
+	--disable-xattr
+	--without-libtextstyle-prefix
+	--without-emacs
+	--without-bzip2
+	--without-xz
 	--prefix=${CMAKE_INSTALL_PREFIX})
     
 ExternalProject_Add(
     GETTEXT
-    URL "https://ftp.gnu.org/gnu/gettext/gettext-0.21.1.tar.gz"
+    URL "https://ftp.gnu.org/gnu/gettext/gettext-0.22.3.tar.gz"
     CONFIGURE_COMMAND ./configure ${GETTEXT_ARGS}
+    BUILD_COMMAND     make libintl.dylib
     "CFLAGS=${GETTEXT_C_FLAGS}"
     "CPPFLAGS=${GETTEXT_C_FLAGS}"
     "CXXFLAGS=${GETTEXT_CXX_FLAGS}"

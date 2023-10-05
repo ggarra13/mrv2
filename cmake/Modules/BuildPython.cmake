@@ -11,9 +11,10 @@ set( Python_URL https://www.python.org/ftp/python/${Python_VERSION}.${Python_TIN
 set( Python_PATCH )
 if(APPLE)
     set( Python_PATCH cmake -E copy ${PROJECT_SOURCE_DIR}/etc/configure-macos-python.sh ${CMAKE_CURRENT_BINARY_DIR}/ )
-    
-    set( Python_CXX_FLAGS "-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}")
-    set( Python_C_FLAGS "-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET} ${CMAKE_C_FLAGS}")
+
+    if(CMAKE_OSX_DEPLOYMENT_TARGET)
+	set( Python_C_FLAGS "-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET} ${CMAKE_C_FLAGS}")
+    endif()
     
     set( Python_CONFIGURE ${CMAKE_CURRENT_BINARY_DIR}/configure-macos-python.sh --prefix=${CMAKE_INSTALL_PREFIX}
         "CFLAGS=${Python_C_FLAGS}"

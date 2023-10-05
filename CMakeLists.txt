@@ -5,12 +5,11 @@ cmake_minimum_required(VERSION 3.23)
 project( mrv2 )
 
 if(APPLE)
-    if( CMAKE_OSX_DEPLOYMENT_TARGET )
-        message( STATUS "-------------------------------------------------" )
-        message( STATUS "Building for macOS ${CMAKE_OSX_DEPLOYMENT_TARGET}" )
-        message( STATUS "-------------------------------------------------" )
-        set( CMAKE_CXX_FLAGS "-Wno-register")
-    endif()
+    message( STATUS "-------------------------------------------------" )
+    message( STATUS "Building for macOS ${CMAKE_OSX_DEPLOYMENT_TARGET}" )
+    message( STATUS "-------------------------------------------------" )
+    set( CMAKE_CXX_FLAGS "-Wno-register")
+    set( CMAKE_C_FLAGS "-Wno-register")
 endif()
 
 
