@@ -73,4 +73,4 @@ while time.time() < startTime+5:
 
 print('removing timeout... (1, 30)')
 fltk.Fl.remove_timeout( tc.timeout_cb, ( 1, 30 ) )
-fltk.Fl.run()
+fltk.

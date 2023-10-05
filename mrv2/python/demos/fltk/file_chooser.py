@@ -148,7 +148,4 @@ window.resizable(files)
 window.end()
 window.show()
 
-Fl.run()
-
-
 

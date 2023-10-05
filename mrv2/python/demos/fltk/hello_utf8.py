@@ -56,5 +56,4 @@ button.callback(theCancelButtonCallback, "'任意のデータ'")
 button.tooltip("データを見るため押して下さい。")
 
 window.end()
-window.show(sys.argv)
-Fl.run()
+window.show()

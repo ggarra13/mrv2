@@ -139,5 +139,5 @@ if __name__=='__main__':
     
         win.resizable(win)
         win.show()
-        Fl.run()
+        
 

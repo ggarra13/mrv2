@@ -24,15 +24,15 @@
 #
 
 
-import fltk
+import fltk14
 
-class subwindow(fltk.Fl_Gl_Window):
+class subwindow(fltk14.Fl_Gl_Window):
 
     def __init__(self, x,y,w,h):
         super().__init__(x,y,w,h, "")
 
     def handle(self, event):
-        if event == fltk.FL_PUSH:
+        if event == fltk14.FL_PUSH:
             raise Exception("exception in handle")
         return super().handle(event)
 
@@ -41,16 +41,16 @@ class subwindow(fltk.Fl_Gl_Window):
 
 
 
-class MyButton(fltk.Fl_Button):
+class MyButton(fltk14.Fl_Button):
    def __init__(self, x,y,w,h, l):
        super().__init__(x,y,w,h, l)
-       #b=fltk.Fl_Button(0,0,120,30,"raise exception")
+       #b=fltk14.Fl_Button(0,0,120,30,"raise exception")
        self.callback(self.b_cb)
 
    def b_cb(self, wid):
        raise Exception("exception in callback")
    
-window = fltk.Fl_Double_Window(0, 0, 500, 500, "tst")
+window = fltk14.Fl_Double_Window(0, 0, 500, 500, "tst")
 
 widget = subwindow(0,0,500,400)
 window.resizable(widget)
@@ -61,7 +61,5 @@ mb = MyButton(200,420,100,60, "Exit")
 try:
     window.end()
     window.show()
-    fltk.Fl.run()
 except Exception as e:
     print("Exception: ", e)
-    #sys.exit()

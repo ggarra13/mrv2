@@ -387,8 +387,8 @@ if __name__=='__main__':
   # --- last page is the menu
   createMenuPage()
   window.end()
-  window.show(sys.argv)
-  Fl.run()
+  window.show()
+  
 
 
 

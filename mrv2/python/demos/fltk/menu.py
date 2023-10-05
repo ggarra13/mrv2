@@ -35,9 +35,7 @@ def onFileQuit(ptr, data):
     #menuItem = Fl_Menu_ItemPtr(ptr)
     menuItem = ptr
     print(f'onFileQuit({str(menuItem)}, "{str(data)}")')
-    import sys  # code
-    sys.exit(0)  # code
-    
+    window.hide()   
 
 def main():
 
@@ -62,5 +60,5 @@ def main():
 if __name__=='__main__':
     import sys
     window = main()
-    window.show(len(sys.argv), sys.argv)
-    Fl.run()
+    window.show()
+

@@ -230,5 +230,5 @@ grp2.end();
 
 myWindow.end()
 readPrefs()
-myWindow.show(sys.argv)
-Fl.run()
+myWindow.show()
+

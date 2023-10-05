@@ -75,6 +75,6 @@ tile.resizable(r)
 
 tile.end()
 window.end()
-window.show(len(sys.argv), sys.argv)
+window.show()
 w1.show()
-Fl.run()
+

@@ -87,5 +87,5 @@ def main():
 
 if __name__=='__main__':
     window = main()
-    window.show(len(sys.argv), sys.argv)
-    Fl.run()
+    window.show()
+    

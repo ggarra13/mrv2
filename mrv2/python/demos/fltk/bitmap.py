@@ -151,6 +151,6 @@ inactb.callback(button_cb)
 window.end()
 
 window.resizable(window)
-window.show(len(sys.argv), sys.argv)
+window.show()
 
-Fl.run()
+

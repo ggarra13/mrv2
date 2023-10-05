@@ -42,5 +42,5 @@ button.callback(theCancelButtonCallback, "'some callback data'")
 button.tooltip("Press to see the callback!")
 
 window.end()
-window.show(sys.argv)
-Fl.run()
+window.show()
+

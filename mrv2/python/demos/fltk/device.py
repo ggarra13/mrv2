@@ -632,9 +632,7 @@ class My_Button(Fl_Button):
 
 
 if __name__=='__main__':
-    #Fl.scheme("plastic")
-
-    window = Fl_Window(500,560,"Graphics test")
+    window = Fl_Double_Window(500,560,"Graphics test")
 
 
     c2 = Fl_Group(3, 43, 494, 514 )
@@ -700,7 +698,5 @@ if __name__=='__main__':
     b4.callback(print_cb,c2)
 
     window.end()
-    window.show(sys.argv)
-   
+    window.show()
 
-    Fl.run()

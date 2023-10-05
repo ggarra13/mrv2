@@ -43,4 +43,4 @@ window2.end();
 #  window2.xclass("Fl_Clock")
 window.show()
 window2.show()
-Fl.run()
+

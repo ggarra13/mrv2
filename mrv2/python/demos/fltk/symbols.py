@@ -77,6 +77,6 @@ b24 = bt("@UpArrow")
 b25 = bt("@DnArrow")
 
 window.resizable(window.this)
-window.show(len(sys.argv), sys.argv)
+window.show()
 
-Fl.run()
+

@@ -40,7 +40,7 @@ help = Fl_Help_Dialog()
 help.load("HelpDialog.html")
 help.show()
 
-Fl.run()
+
 
 # 
 #  End of "$Id: help_dialog.py 532 2020-05-11 20:10:32Z andreasheld $".

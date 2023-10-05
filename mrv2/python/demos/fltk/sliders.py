@@ -68,9 +68,9 @@ okButton = Fl_Return_Button( 520, 30, 60, 30, "OK")
 okButton.callback(cb_OK)
 
 window.end()
-window.show(len(sys.argv), sys.argv)
+window.show()
 
-Fl.run()
+
 
 
 

@@ -656,12 +656,12 @@ if __name__=='__main__':
     s = Sudoku()
 
     # show the game
-    s.show(sys.argv)
+    s.show()
 
     # load the previous game
     s.load_game()
 
     # run
-    Fl.run()
+    
     
     

@@ -254,6 +254,6 @@ window.resizable(mb)
 window.size_range(300,400,0,400)
 window.end()
 
-window.show(len(sys.argv), sys.argv)
+window.show()
 
-Fl.run()
+

@@ -601,9 +601,9 @@ if __name__ == '__main__':
         fl_set_status(0, 370, 100, 30)
 
     
-        main_win.show(sys.argv)
+        main_win.show()
 
         fnt_chooser_win.show()
     
-        Fl.run()
+        
 

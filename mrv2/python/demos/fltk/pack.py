@@ -104,7 +104,7 @@ o.step(1)
 o.callback(spacing_cb)
 
 w.end()
-w.show(len(sys.argv), sys.argv)
-Fl.run()
+w.show()
+
 
 

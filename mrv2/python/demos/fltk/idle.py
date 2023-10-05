@@ -55,6 +55,4 @@ button.labeltype(FL_NORMAL_LABEL)
 button.callback(theCancelButtonCallback)
 
 window.end()
-window.show(len(sys.argv), sys.argv)
-
-Fl.run()
+window.show()

@@ -101,7 +101,7 @@ def button_cb(ptr):
 
 
 
-window = Fl_Window(400,400)
+window = Fl_Double_Window(400,400)
 w = window
 window.color(FL_WHITE)
 b = Fl_Button(140,160,120,120,"Image w/Alpha")
@@ -140,6 +140,5 @@ inactb.callback(button_cb)
 
 window.resizable(window)
 window.end()
-window.show(len(sys.argv), sys.argv)
+window.show()
  
-Fl.run()

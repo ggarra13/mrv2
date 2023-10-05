@@ -110,9 +110,9 @@ while n < 6:
 window.end()
 #window.show(len(sys.argv),sys.argv)
 #window.show()
-window.show(sys.argv)
+window.show()
 
 d.redraw()
-Fl.run()
+
 
 

@@ -30,7 +30,6 @@ except:
 	print('''
 ERROR: PyOpenGL not installed properly.  
 		''')
-	sys.exit()
 
 
 # requires OpenGL
@@ -167,7 +166,7 @@ class MyBox(Fl_Group):
             self.end()
 
 def exit_cb(ptr):
-      sys.exit(0)
+      form.hide()
 
 def makeform(name):
     global form
@@ -197,7 +196,7 @@ def makeform(name):
 
 
 if __name__ == '__main__':
-   makeform(sys.argv[0])
+   makeform("cube.py")
 
    speed.bounds(4,0)
    cube.speed = 1.0
@@ -212,7 +211,7 @@ if __name__ == '__main__':
    cube2.wire = 1
    form.label("cube");
 
-   form.show(len(sys.argv), sys.argv)
+   form.show()
    cube.show()
    cube2.show()
 
@@ -233,6 +232,6 @@ if __name__ == '__main__':
 	   cube.redraw()
 	   cube2.redraw()
 	   if Fl.readqueue() == button:
-		   break
+                break
 
    

@@ -64,5 +64,5 @@ mb = mybutton(350,520,100,60, "Exit")
 window.end()
 window.show()
 
-fltk.Fl.run()
+fltk.
 

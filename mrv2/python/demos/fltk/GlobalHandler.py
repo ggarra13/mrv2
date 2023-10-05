@@ -112,8 +112,5 @@ b4.callback(Check2CB)
 
 win.show()
 
-Fl.run()
-
-
     
     

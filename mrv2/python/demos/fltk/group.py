@@ -58,6 +58,4 @@ window.end()
 removed = 1
 btn = Fl_Return_Button(150, 10, 160, 30, "Fl_Return_Button")
 
-window.show(len(sys.argv), sys.argv)
-Fl.run()
-
+window.show()

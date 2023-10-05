@@ -88,4 +88,4 @@ window.show()
 
 window.hotspot(100,100)
 
-Fl.run()
+

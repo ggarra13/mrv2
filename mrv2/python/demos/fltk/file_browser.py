@@ -61,4 +61,3 @@ if __name__=='__main__':
 
     win.show()
 
-    Fl.run()

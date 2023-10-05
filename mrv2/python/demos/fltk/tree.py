@@ -1080,6 +1080,6 @@ if __name__ == '__main__':
     elif tree.when() == FL_WHEN_NEVER:
         whenmode_chooser.value(2)
     
-    window.show(sys.argv)
+    window.show()
 
-    Fl.run()
+    

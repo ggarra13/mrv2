@@ -105,7 +105,7 @@ def make_window():
 	
 	global leftb, rightb, topb, bottomb, insideb, overb, inactb, w, b
 	
-	window = Fl_Window(400,400)
+	window = Fl_Double_Window(400,400)
 	w = window
 	window.color(FL_WHITE)
 	b = Fl_Button(140,160,120,120,"Image w/Alpha")
@@ -152,7 +152,5 @@ window = make_window()
 
 window.resizable(window)
 
-window.show(len(sys.argv), sys.argv)
-#window.show()
+window.show()
  
-Fl.run()

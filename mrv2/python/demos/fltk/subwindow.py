@@ -154,10 +154,10 @@ window.add(fb)
 window.add(popup)
 window.end()
 
-#window.show(len(sys.argv), sys.argv)
+#window.show()
 window.show()
 
 print("rec = ", sys.getrecursionlimit())
 #sys.setrecursionlimit(2000)
 
-Fl.run()
+

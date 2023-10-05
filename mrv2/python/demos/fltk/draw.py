@@ -85,7 +85,5 @@ make_image()
 widget=MyWidget(0,0,400,400,image)
 window.resizable(window)
 window.end()
-window.show(len(sys.argv), sys.argv)
+window.show()
  
-Fl.run()
-

@@ -62,13 +62,12 @@ def onWin2DelButton(ptr):
 def t():
 	import sys
 	window = main()
-	window.show(len(sys.argv), sys.argv)
+	window.show()
 	for i in range(0, 100, 1):
 		onB1(1)
 		onWin2DelButton(1)
 	onB1(1)
-	Fl.run()
 
 if __name__=='__main__':
-	t()
-
+    t()
+    

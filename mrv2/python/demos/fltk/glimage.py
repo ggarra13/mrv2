@@ -48,7 +48,7 @@ class MyWindow(Fl_Window):
         self.end()
 
         # display this window and the GL pane
-        self.show(len(sys.argv), sys.argv)
+        self.show()
         gl.show()
 
 class GLPane(Fl_Gl_Window):
@@ -88,8 +88,7 @@ class GLPane(Fl_Gl_Window):
 
 def main():
     w = MyWindow(400, 300)
-    Fl.run()
-
+    
 if __name__ == "__main__":
     main()
 

@@ -77,7 +77,7 @@ slider.step(1)
 slider.bounds(3, 40)
 
 window.end()
-window.show(len(sys.argv), sys.argv)
+window.show()
 sw.show()
 
-Fl.run()
+

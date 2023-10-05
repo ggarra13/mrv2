@@ -45,7 +45,7 @@ def main():
     global aLineDial
     global aFillDial
 
-    o_1_0 = Fl_Window(550, 247, 269, 116)
+    o_1_0 = Fl_Double_Window(550, 247, 269, 116)
 
     aDial = Fl_Dial(20, 15, 45, 45, "Dial")
     aDial.label('Dial')
@@ -69,5 +69,4 @@ def main():
 if __name__=='__main__':
     import sys
     window = main()
-    window.show(len(sys.argv), sys.argv)
-    Fl.run()
+    window.show()

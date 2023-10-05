@@ -63,8 +63,8 @@ window.resizable(b)
 
 window.callback(window_callback)
 
-window.show(len(sys.argv), sys.argv)
+window.show()
 
 
 
-Fl.run()
+

@@ -45,7 +45,7 @@ def window_cb(ptr):
 
 mainw = Fl_Window(200,200)
 mainw.end()
-mainw.show(len(sys.argv),sys.argv)
+mainw.show()
 
 control = Fl_Window(120,120)
 
@@ -67,4 +67,4 @@ control.end()
 control.show()
 control.callback(window_cb)
 
-Fl.run()
+

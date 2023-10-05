@@ -55,7 +55,7 @@ class UserInterface:
         self.window.end()
     def appRun(self):
         self.window.show()
-        #Fl.run()
+        #
         while self.window.visible():
             Fl.check()
             time.sleep(0.1)

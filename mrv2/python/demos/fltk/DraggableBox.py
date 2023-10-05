@@ -148,5 +148,5 @@ if __name__=='__main__':
 
     G_scroll.end()
     G_win.resizable(G_win)
-    G_win.show(len(sys.argv), sys.argv)
-    Fl.run()
+    G_win.show()
+

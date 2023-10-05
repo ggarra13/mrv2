@@ -59,6 +59,6 @@ theCancelButton.selection_color(133)
 theCancelButton.callback(theCancelButtonCallback)
 
 mainWindow.end()
-mainWindow.show(len(sys.argv), sys.argv)
+mainWindow.show()
 
-Fl.run()
+

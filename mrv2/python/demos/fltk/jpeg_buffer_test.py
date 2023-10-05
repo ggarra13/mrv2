@@ -47,6 +47,3 @@ win.end()
 box.image(pic)
 
 win.show()
-Fl.run()
-
-

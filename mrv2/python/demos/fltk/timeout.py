@@ -53,9 +53,9 @@ button.labeltype(FL_NORMAL_LABEL)
 button.callback(theCancelButtonCallback)
 
 window.end()
-window.show(len(sys.argv), sys.argv)
+window.show()
 
 Fl.add_timeout( 2.0, timeoutCallback, "'this is the time-out data'")
 Fl.add_timeout( 3.0, timeoutCallbackNoData)
 
-Fl.run()
+

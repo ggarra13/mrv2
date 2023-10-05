@@ -98,7 +98,7 @@ class EventHandler(Fl_Widget):
 
     def resize(self, X, Y, W, H):
         print(f"Resizing: {X}, {Y}, {W}, {H}\n")
-        #Fl_Widget.resize(self, X, Y, W, H)
+        Fl_Widget.resize(self, X, Y, W, H)
         
 
 
@@ -107,5 +107,4 @@ d = EventHandler(10,10,280,280,"test")
 window.resizable(d)
 
 window.end()
-window.show(len(sys.argv),sys.argv)
-Fl.run()
+window.show()

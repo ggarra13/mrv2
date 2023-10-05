@@ -111,5 +111,4 @@ bm2.bitmap(fl_bitmap.this)
 window.resizable(window)
 window.end()
 
-window.show(len(sys.argv), sys.argv)
-Fl.run()
+window.show()

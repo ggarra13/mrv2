@@ -525,7 +525,7 @@ def demo():
                             subnode.append(f"item-{i}{j}{k}")
     
     print("entering main loop")
-    fltk.Fl.run()
+    fltk.
 
 if __name__ == '__main__':
     demo()

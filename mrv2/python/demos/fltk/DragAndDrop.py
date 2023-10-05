@@ -81,5 +81,3 @@ if __name__=='__main__':
     window.end()
 
     window.show()
-
-    Fl.run()

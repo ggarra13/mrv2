@@ -134,5 +134,4 @@ slider3.value(bg)
 
 window.resizable(window)
 window.end()
-window.show(len(sys.argv),sys.argv)
-Fl.run()
+window.show()

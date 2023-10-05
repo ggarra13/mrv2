@@ -51,5 +51,5 @@ input4.value("12.44")
 window.end()
 window.show()
 
-Fl.run()
+
 

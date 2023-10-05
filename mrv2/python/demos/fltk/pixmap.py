@@ -147,5 +147,5 @@ insideb.callback(button_cb)
 
 window.resizable(window.this)
 window.end()
-window.show(len(sys.argv), sys.argv)
-Fl.run()
+window.show()
+

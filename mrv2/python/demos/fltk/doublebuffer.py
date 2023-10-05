@@ -127,12 +127,11 @@ if __name__ == '__main__':
    slider1.callback(slider_cb, 1)
    w02.end()
 
-   w01.show(len(sys.argv), sys.argv)
+   w01.show()
    w02.show()
 
 #   w1.redraw()
 
-   Fl.run()
 
 
 

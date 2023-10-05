@@ -54,8 +54,6 @@ b3 = createButton(20, 250, 120, 25, "Cross-platform!")
 b4 = createButton(20, 280, 120, 25, "Easy to use!")
 
 window.end()
-window.show(sys.argv)
+window.show()
 
 Fl.scheme("gleam")
-
-Fl.run()

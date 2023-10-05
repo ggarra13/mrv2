@@ -63,6 +63,5 @@ for t in range(0, 30, 1):
 
 window.resizable(window.this)
 window.end()
-window.show(len(sys.argv), sys.argv)
+window.show()
 
-Fl.run()

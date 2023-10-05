@@ -275,5 +275,5 @@ def main():
 if __name__=='__main__':
     import sys
     window = main()
-    window.show(len(sys.argv), sys.argv)
-    Fl.run()
+    window.show()
+    
