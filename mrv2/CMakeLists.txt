@@ -31,11 +31,18 @@ endif()
 
 # Make sure we pick our local FLTK copy
 set( FLTK_INCLUDE_DIR ${CMAKE_PREFIX_PATH}/include )
-find_package( FLTK REQUIRED CONFIG )
-message( STATUS "Found FLTK: ${FLTK_INCLUDE_DIR}" )
+if (NOT FLTK_BUILD_SHARED_LIBS)
+    find_package( FLTK REQUIRED CONFIG )
+elseif(WIN32)
+    # Intentionally left blank
+else()
+    find_package( FLTK REQUIRED CONFIG )
+endif()
 
 set(FLTK_LIBRARIES fltk_images fltk_jpeg fltk_png fltk_z fltk)
-set(FLTK_gl_LIBRARY fltk_gl)
+if(TLRENDER_GL)
+    set(FLTK_gl_LIBRARY fltk_gl)
+endif()
 
 if(FLTK_BUILD_SHARED_LIBS)
     if(UNIX)
@@ -52,19 +59,27 @@ if(FLTK_BUILD_SHARED_LIBS)
 		endif()
 	    endif()
 	endif()
+    else()
+	set(FLTK_LIBRARIES libfltk glu32 comctl32 ws2_32 opengl32 gdiplus)
+	set(FLTK_gl_LIBRARY )
+	# if(TLRENDER_GL)
+	#     list(APPEND FLTK_gl_LIBRARY fltk_gl fltk  )
+	# endif()
     endif()
 endif()
 
-message( STATUS "FLTK LIBRARIES: ${FLTK_gl_LIBRARY} ${FLTK_LIBRARIES}" )
 
 #
 # Make sure we use our own recently compiled fluid executable
 #
 if( WIN32 )
-    set( FLTK_FLUID_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/fluid-cmd)
+    set( FLTK_FLUID_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/fluid-cmd.exe)
 else()
     set( FLTK_FLUID_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/fluid)
 endif()
+message( STATUS "Found FLTK: ${FLTK_INCLUDE_DIR}" )
+message( STATUS "FLTK LIBRARIES: ${FLTK_gl_LIBRARY} ${FLTK_LIBRARIES}" )
+message( STATUS "FLTK_FLUID_EXECUTABLE: ${FLTK_FLUID_EXECUTABLE}" )
 
 
 find_package(Intl)
