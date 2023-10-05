@@ -38,7 +38,10 @@ files_to_absolute_paths()
 
 set( LIBRARIES ${FLTK_LIBRARIES} )
 
-target_compile_definitions(mrvFLU PUBLIC FL_DLL)
+if(WIN32 AND FLTK_BUILD_SHARED_LIBS)
+    target_compile_definitions(mrvFLU PUBLIC FL_DLL)
+endif()
+
 target_link_libraries(mrvFLU PUBLIC ${LIBRARIES} )
 set_target_properties(mrvFLU PROPERTIES FOLDER lib)
 

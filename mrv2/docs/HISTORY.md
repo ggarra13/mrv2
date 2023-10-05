@@ -24,7 +24,7 @@ v0.7.9
 ```  
 Preferences->User Interface->Single Instance.
 ```	
-- Removed all warnings and errors from the documentation generation.
+- Removed all warnings and errors from the Sphinx documentation generation.
 - Fixed positioning of text editing when re-editing a text annotaion.
   Previously, it could be offset quite a bit if the zoom was not 1.
 - A lot of source code clean up from mrViewer's bad and old source code.
@@ -32,7 +32,8 @@ Preferences->User Interface->Single Instance.
   it with the one of mrv2.
 - Made executable smaller on all platforms by using dead-code elimination.
 - Added pyFLTK bindings to the distribution.  It is now possible to create
-  FLTK windows with Python and control mrv2's windows with it.
+  FLTK windows with Python and control and access mrv2's windows with it.
+  This is the first step into making the UI fully customizable.
 - Build system changes and fixes:
    	* Renamed runme.sh script to runme_nolog.sh.
    	* Added a new runme.sh script that calls runme_nolog.sh but saves the compile log into BUILD-KERNEL-ARCH/CMAKE_BUILD_TYPE/compile.log.
