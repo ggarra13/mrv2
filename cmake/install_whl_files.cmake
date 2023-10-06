@@ -1,16 +1,19 @@
 # install_whl_files.cmake
 
 # Check if the WHL_DIRECTORY variable is provided
+if(NOT DEFINED PYTHON_EXECUTABLE)
+    message(FATAL_ERROR "PYTHON_EXECUTABLE is not defined. Please specify the path to the python executable using -DPYTHON_EXECUTABLE=<path/to/python>")
+endif()
+
+# Check if the WHL_DIRECTORY variable is provided
 if(NOT DEFINED WHL_DIRECTORY)
     message(FATAL_ERROR "WHL_DIRECTORY is not defined. Please specify the directory containing .whl files using -DWHL_DIRECTORY=<directory>")
 endif()
 
-# Check if the WHL_DIRECTORY variable is provided
-if(NOT DEFINED PYTHON_EXECUTABLE)
-    message(FATAL_ERROR "PYTHON_EXECUTABLE is not defined. Please specify the path to the python executable using -DPYTHON_EXECUTABLE=<path/to/python>")
-endif()
-    
+
+
 # Find all .whl files in the specified directory
+message(STATUS "Checking for wheel files ${WHL_DIRECTORY}/*.whl")
 file(GLOB whl_files "${WHL_DIRECTORY}/*.whl")
 
 # Install the found .whl files
