@@ -11,18 +11,18 @@
 
 
 #
-# Set the location of liblcms2 on Windows.
+# Set the location of precompiled liblcms2 on Windows.
 # If not set, it will compile it.
 #
 # On Linux and macOS this is always compiled by cmake.
 #
 
-export LCMS2_ROOT=$PWD/windows/win64/
+export LCMS2_ROOT=$PWD/precompiled/windows/win64/
 
 #
 # Set the location of precompiled FFmpeg on Windows.
 #
-export FFMPEG_ROOT=$PWD/windows/win64/
+export FFMPEG_ROOT=$PWD/precompiled/windows/win64/
 if [[ $FFMPEG_GPL == GPL || $FFMPEG_GPL == LGPL ]]; then
     export FFMPEG_ROOT=""
 fi

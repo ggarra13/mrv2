@@ -15,34 +15,42 @@ if(APPLE)
 endif()
 
 set(GETTEXT_ARGS
-    --enable-relocatable
+    --disable-silent-rules
+    --with-included-glib
+    --with-included-libcroco
+    --with-included-libunistring
+    --with-included-libxml
+    --with-included-gettext
+    
     --disable-java
-    --disable-static
-    --enable-shared
-    --disable-curses
+    --disable-csharp
 
-    --disable-c++
-    --disable-curses
-    --disable-nls
-    --disable-acl
-    --disable-dependency-tracking
-    --disable-libaseprintf
-    --disable-openmp
-    --disable-xattr
-    --without-libtextstyle-prefix
-    --without-emacs
-    --without-bzip2
+    --without-git
+    --without-cvs
     --without-xz
     
     --prefix=${CMAKE_INSTALL_PREFIX})
 
 ExternalProject_Add(
     GETTEXT
-    URL "https://ftp.gnu.org/gnu/gettext/gettext-0.22.3.tar.gz"
+    URL "https://ftp.gnu.org/gnu/gettext/gettext-0.21.1.tar.gz"
     CONFIGURE_COMMAND ./configure ${GETTEXT_ARGS}
     "CFLAGS=${GETTEXT_C_FLAGS}"
     "CXXFLAGS=${GETTEXT_CXX_FLAGS}"
+    BUILD_COMMAND make -j 16
     BUILD_IN_SOURCE 1
 )
+
+
+# ExternalProject_Add(
+#      GETTEXT
+#      URL "https://ftp.gnu.org/gnu/gettext/gettext-0.21.1.tar.gz"
+#      CONFIGURE_COMMAND ""
+#      BUILD_COMMAND ""
+#      INSTALL_COMMAND "true"
+#      BUILD_IN_SOURCE 1
+# )
+
+
 
 set( Gettext GETTEXT )
