@@ -40,7 +40,6 @@ ExternalProject_Add(
     GETTEXT
     URL "https://ftp.gnu.org/gnu/gettext/gettext-0.22.3.tar.gz"
     CONFIGURE_COMMAND ./configure ${GETTEXT_ARGS}
-    BUILD_COMMAND     make libintl.dylib
     "CFLAGS=${GETTEXT_C_FLAGS}"
     "CXXFLAGS=${GETTEXT_CXX_FLAGS}"
     BUILD_IN_SOURCE 1
