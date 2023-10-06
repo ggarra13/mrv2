@@ -33,7 +33,8 @@ else()
     set(pyFLTK_CONFIGURE ${PYTHON_EXECUTABLE} setup.py swig)
     set(pyFLTK_BUILD     ${PYTHON_EXECUTABLE} setup.py build)
     set(pyFLTK_INSTALL   ${PYTHON_EXECUTABLE} -m pip install wheel
-	COMMAND ${PYTHON_EXECUTABLE} setup.py bdist_wheel)
+	COMMAND ${PYTHON_EXECUTABLE} setup.py bdist_wheel
+	COMMAND ${CMAKE_COMMAND} -P cmake/install_whl_files.cmake -DPYTHON_EXECUTABLE="${PYTHON_EXECUTABLE}" -DWHL_DIRECTORY="${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK/dist")
 endif()
 
 ExternalProject_Add(
