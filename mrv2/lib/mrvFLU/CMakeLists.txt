@@ -36,7 +36,7 @@ set(SOURCES
 add_library(mrvFLU ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
-set( LIBRARIES ${FLTK_LIBRARIES} )
+set( LIBRARIES ${FLTK_LIBRARIES} ${Intl_LIBRARIES} )
 
 if(WIN32 AND FLTK_BUILD_SHARED_LIBS)
     target_compile_definitions(mrvFLU PUBLIC FL_DLL)

@@ -40,13 +40,15 @@ Preferences->User Interface->Single Instance.
    	* Renamed runme.sh script to runme_nolog.sh.
    	* Added a new runme.sh script that calls runme_nolog.sh but saves the compile log into BUILD-KERNEL-ARCH/CMAKE_BUILD_TYPE/compile.log.
    	* Updated windows build script to work with MSVC 2022, not just 2019.
-   	* The windows compile takes advantage of Msys to install the dependencies of libintl, libiconv and gettext.
+   	* The Windows compilation takes advantage of Msys to install the dependencies of libintl, libiconv and gettext.
    	* Made all compile options work when off.  You can customize mrv2 to build it with either all the bells and whistles or pretty barebones.
    	* Added --help flag to runme.sh to list all the possible settings.
    	* All bash commands are run with run_cmd which prints them and times them.
    	* Added optional build support for all the optional TLRENDER_* settings and for the MRV2_* settings.  It is now possible to build a light version of mrv2 or one with all the features.
    	* Fixed a problem with the embedded python (pybind11) locating the system Python installation instead of the local one instead.  This created havok on my Ubuntu 22.04 when there was an upgrade.
    	* Made parsing of -D options like -D TLRENDER_USD=OFF work with or without a space.
+	* Got rid of compiling the slow Gettext on macOS, replacing it with
+	  get
 	* Made the build system automatically release beta versions of the software after each successful compilation.  You can now download the latest beta binaries from:
      
          https://sourceforge.net/projects/mrv2/files/beta/

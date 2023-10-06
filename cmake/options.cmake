@@ -6,21 +6,8 @@ set( CMAKE_CXX_STANDARD 17 )
 set( CMAKE_CXX_STANDARD_REQUIRED ON )
 set( CMAKE_CXX_EXTENSIONS OFF )
 
-set( build_zlib FALSE )
-set( build_gettext FALSE )
-if ( APPLE )
-    #
-    # brew .dylibs are compiled only for the current version of the OS.
-    # We rebuild zlib and gettext to be compatible with version 10.15.
-    #
-    if(CMAKE_OSX_DEPLOYMENT_TARGET)
-	set( build_zlib TRUE )
-	set( build_gettext TRUE )
-    endif()
-endif()
-
-set(BUILD_ZLIB ${build_zlib} CACHE BOOL "Enable ZLIB building")
-set(BUILD_GETTEXT ${build_gettext} CACHE BOOL "Enable GETTEXT building")
+set(BUILD_ZLIB FALSE CACHE BOOL "Enable ZLIB building")
+set(BUILD_GETTEXT FALSE CACHE BOOL "Enable GETTEXT building")
 set(BUILD_FLTK TRUE CACHE BOOL "Enable FLTK building (needed)")
 set(BUILD_MRV2 TRUE CACHE BOOL "Enable mrv2 building")
 

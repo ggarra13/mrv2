@@ -13,8 +13,8 @@
 
 # Compiled Dynamic libraries
 *.so
-*.dylib
-#*.dll
+# *.dylib  # We distribute precompiled libintl
+# *.dll    # We distribute precompiled FFmpeg
 
 # Fortran module files
 *.mod

@@ -64,20 +64,20 @@ if(NOT DEFINED CMAKE_INSTALL_MESSAGE)
 endif()
 
 
-#
-# brew .dylibs are compiled only for the current version of the OS.
-# We rebuild zlib and gettext to be compatible with version 10.15.
-# tlRender builds zlib but statically, so on macOS the OS one gets picked
-# instead.
-#
 set( ZLIB_SHARED )
-if( BUILD_ZLIB )
-    include( cmake/Modules/BuildZLIB.cmake )
-endif()
 
 set( Gettext )
 if( BUILD_GETTEXT )
-    include( cmake/Modules/Buildgettext-tiny.cmake )
+    include( cmake/Modules/BuildGettext.cmake )
+elseif(APPLE)
+    if (CMAKE_OSX_DEPLOYMENT_TARGET)
+	#
+	# brew .dylibs are compiled only for the current version of the OS.
+	#
+	# We distribute libintl dylib compatible with v10.5
+	file(COPY precompiled/macOS/v10.5/ DESTINATION ${CMAKE_INSTALL_PREFIX}/
+	    FOLLOW_SYMLINK_CHAIN)
+    endif()
 endif()
 
 set(FLTK_DEP )
