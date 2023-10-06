@@ -4,7 +4,6 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 
-get_kernel
 
 show_help()
 {
@@ -41,6 +40,11 @@ parse_option()
         exit 1
     fi
 }
+
+#
+# Get the KERNEL and ARCH variables
+#
+get_kernel
 
 export RUNME=0
 if [[ $0 == *runme.sh* || $0 == *runme_nolog.sh* ]]; then

@@ -27,11 +27,13 @@ set(pyFLTK_PATCH
 if(WIN32)
     set(pyFLTK_CONFIGURE ${CMAKE_COMMAND} -E env FLTK_HOME=${FLTK_HOME} ${PYTHON_EXECUTABLE} setup.py swig --enable-shared)
     set(pyFLTK_BUILD     ${CMAKE_COMMAND} -E env FLTK_HOME=${FLTK_HOME} ${PYTHON_EXECUTABLE} setup.py build --enable-shared)
-    set(pyFLTK_INSTALL   ${CMAKE_COMMAND} -E env FLTK_HOME=${FLTK_HOME} ${PYTHON_EXECUTABLE} setup.py install --enable-shared)
+    set(pyFLTK_INSTALL   ${PYTHON_EXECUTABLE} -m pip install wheel
+	COMMAND ${CMAKE_COMMAND} -E env FLTK_HOME=${FLTK_HOME} ${PYTHON_EXECUTABLE} setup.py bdist_wheel --enable-shared)
 else()
     set(pyFLTK_CONFIGURE ${PYTHON_EXECUTABLE} setup.py swig)
     set(pyFLTK_BUILD     ${PYTHON_EXECUTABLE} setup.py build)
-    set(pyFLTK_INSTALL   ${PYTHON_EXECUTABLE} setup.py install)
+    set(pyFLTK_INSTALL   ${PYTHON_EXECUTABLE} -m pip install wheel
+	COMMAND ${PYTHON_EXECUTABLE} setup.py bdist_wheel)
 endif()
 
 ExternalProject_Add(

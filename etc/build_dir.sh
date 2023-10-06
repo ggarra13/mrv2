@@ -15,16 +15,22 @@ set -o pipefail -e
 #
 . etc/functions.sh
 
+#
+# Extract mrv2 version from cmake/version.cmake
+#
 extract_version
+
+#
+# Extract python version
+#
 extract_python_version
 
 #
 # Determine OS Kernel, OS CPU architecture
 #
+. etc/parse_args.sh
 
 . etc/build_cores.sh
-
-. etc/parse_args.sh
 
 export OSX_TARGET=11.0
 
