@@ -8,8 +8,6 @@ if(APPLE)
     message( STATUS "-------------------------------------------------" )
     message( STATUS "Building for macOS ${CMAKE_OSX_DEPLOYMENT_TARGET}" )
     message( STATUS "-------------------------------------------------" )
-    set( CMAKE_CXX_FLAGS "-Wno-register")
-    set( CMAKE_C_FLAGS "-Wno-register")
 endif()
 
 
@@ -79,7 +77,7 @@ endif()
 
 set( Gettext )
 if( BUILD_GETTEXT )
-    include( cmake/Modules/BuildGettext.cmake )
+    include( cmake/Modules/Buildgettext-tiny.cmake )
 endif()
 
 set(FLTK_DEP )
