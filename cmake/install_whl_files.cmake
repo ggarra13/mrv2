@@ -10,12 +10,6 @@ if(NOT DEFINED WHL_DIRECTORY)
     message(FATAL_ERROR "WHL_DIRECTORY is not defined. Please specify the directory containing .whl files using -DWHL_DIRECTORY=<directory>")
 endif()
 
-execute_process(
-    COMMAND sw_vers -productVersion
-    OUTPUT_VARIABLE MACOS_VERSION
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-)
-
 # Find all .whl files in the specified directory
 message(STATUS "Checking for wheel files ${WHL_DIRECTORY}/*.whl")
 file(GLOB whl_files "${WHL_DIRECTORY}/*.whl")
@@ -29,7 +23,8 @@ foreach(whl_file ${whl_files})
     # Install the .whl file to the desired installation location
     message( STATUS "Running pip install - ${whl_filename} - ..." )
     execute_process(
-        COMMAND ${PYTHON_EXECUTABLE} -m pip install ${whl_filename}
+        COMMAND
+	${PYTHON_EXECUTABLE} -m pip install ${whl_filename} --force-reinstall
 	WORKING_DIRECTORY ${WHL_DIRECTORY}
     )
 endforeach()

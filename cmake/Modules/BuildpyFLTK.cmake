@@ -47,7 +47,11 @@ set(pyFLTK_INSTALL_WHEELS ${CMAKE_COMMAND}
 set(pyFLTK_PATCH
     ${CMAKE_COMMAND} -E copy_if_different
     "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/setup.py"
-    "${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK/")
+    "${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK/"
+    COMMAND
+    ${CMAKE_COMMAND} -E copy_if_different
+    "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/swig/WindowShowTypemap.i"
+    "${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK/swig/" )
 set(pyFLTK_CONFIGURE ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} setup.py swig)
 set(pyFLTK_BUILD     ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} setup.py build)
 set(pyFLTK_INSTALL "${pyFLTK_PIP_INSTALL_WHEEL}"
@@ -59,7 +63,7 @@ ExternalProject_Add(
     SVN_REPOSITORY ${pyFLTK_SVN_REPOSITORY}
     SVN_REVISION ${pyFLTK_SVN_REVISION}
     DEPENDS ${PYTHON_DEP} ${FLTK_DEP}
-    PATCH_COMMAND     "${pyFLTK_PATCH}"
+    PATCH_COMMAND     ${pyFLTK_PATCH}
     CONFIGURE_COMMAND "${pyFLTK_CONFIGURE}"
     BUILD_COMMAND     "${pyFLTK_BUILD}"
     INSTALL_COMMAND   ${pyFLTK_INSTALL}
