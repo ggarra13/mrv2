@@ -15,12 +15,12 @@ if(NOT PYTHON_EXECUTABLE)
     endif()
 endif()
 
+    # ${CMAKE_COMMAND} -E copy_if_different
+    # "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/swig/x.i"
+    # "${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK/swig/"
 
 set(pyFLTK_PATCH
     ${CMAKE_COMMAND} -E copy_if_different
-    "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/swig/x.i"
-    "${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK/swig/"
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
     "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/setup.py"
     "${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK/")
 

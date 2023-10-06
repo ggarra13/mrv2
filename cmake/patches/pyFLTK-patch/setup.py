@@ -23,7 +23,7 @@ UserIncludeDirs = []
 # do not edit beyond this point
 ###########################################################################
 # command line configurations
-# --enable-shared
+# --enable-shared   (for Windows distributions that ship a single DLL)
 # --disable-gl
 # --disable-forms
 ##########################################################################
@@ -98,7 +98,7 @@ elif sys.platform in ['freebsd4','freebsd5','freebsd6','freebsd7', 'sunos5']:
     lib_list = ["fltk"]
 elif sys.platform == 'darwin':
     print("Building for  Mac OS X")
-    def_list = [('UNIX', '1')]
+    def_list = [('UNIX', '1'),('FL_INTERNALS','1')]
     lib_dir_list = [fltk_lib_dir]
     lib_list = ["fltk"]
     cpu_type = platform.processor()
