@@ -52,7 +52,7 @@ set(pyFLTK_CONFIGURE ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} setup.py swig)
 set(pyFLTK_BUILD     ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} setup.py build)
 set(pyFLTK_INSTALL "${pyFLTK_PIP_INSTALL_WHEEL}"
     COMMAND "${pyFLTK_CREATE_WHEELS}"
-    COMMAND "${pyFLTK_INSTALL_WHEELS}")CUTABLE} setup.py install)
+    COMMAND "${pyFLTK_INSTALL_WHEELS}")
 
 ExternalProject_Add(
     pyFLTK

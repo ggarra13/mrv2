@@ -329,7 +329,8 @@ class PySwigCommand(distutils.cmd.Command):
 
     #shutil.copy('fltk.py', "./fltk/fltk.py")
 
-compile_arg_list.append(cxx_flags)
+if cxx_flags != '':
+    compile_arg_list.append(cxx_flags)
 
 # module declarations
 module1 = Extension(name='fltk14._fltk14',
