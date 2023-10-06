@@ -97,7 +97,7 @@ elif sys.platform.startswith('linux')  or sys.platform.startswith('gnukfreebsd')
     lib_list = ["fltk"]
 elif sys.platform in ['freebsd4','freebsd5','freebsd6','freebsd7', 'sunos5']:
     print(f"Building for: {sys.platform}")
-    def_list = [('UNIX', '1')]
+    def_list = [('UNIX', '1'),('FL_INTERNALS','1')]
     lib_dir_list = [fltk_lib_dir,'/usr/X11R6/lib','/usr/lib']
     lib_list = ["fltk"]
 elif sys.platform == 'darwin':
