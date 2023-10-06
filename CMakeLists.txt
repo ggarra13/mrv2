@@ -64,8 +64,6 @@ if(NOT DEFINED CMAKE_INSTALL_MESSAGE)
 endif()
 
 
-set( ZLIB_SHARED )
-
 set( Gettext )
 if( BUILD_GETTEXT )
     include( cmake/Modules/BuildGettext.cmake )
