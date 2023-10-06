@@ -77,7 +77,7 @@ endif()
 
 set( Gettext )
 if( BUILD_GETTEXT )
-    include( cmake/Modules/BuildGettext.cmake )
+    include( cmake/Modules/Buildgettext-tiny.cmake )
 endif()
 
 set(FLTK_DEP )
