@@ -8,8 +8,6 @@ if(APPLE)
     message( STATUS "-------------------------------------------------" )
     message( STATUS "Building for macOS ${CMAKE_OSX_DEPLOYMENT_TARGET}" )
     message( STATUS "-------------------------------------------------" )
-    set( CMAKE_CXX_FLAGS "-Wno-register")
-    set( CMAKE_C_FLAGS "-Wno-register")
 endif()
 
 
