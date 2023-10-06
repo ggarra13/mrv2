@@ -23,10 +23,10 @@ endif()
 set(pyFLTK_CXX_FLAGS ${CMAKE_CXX_FLAGS} )
 set(pyFLTK_ENV )
 if(WIN32)
-    set(pyFLTK_ENV ${CMAKE_COMMAND} -E env FLTK_HOME=${FLTK_HOME} CXXFLAGS=${pyFLTK_CXX_FLAGS})
+    set(pyFLTK_ENV ${CMAKE_COMMAND} -E env FLTK_HOME=${FLTK_HOME} CXXFLAGS=${pyFLTK_CXX_FLAGS} -- )
 elseif(APPLE AND CMAKE_OSX_DEPLOYMENT_TARGET)
     list(APPEND pyFLTK_CXX_FLAGS "-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}")
-    set(pyFLTK_ENV ${CMAKE_COMMAND} -E env CXXFLAGS=${pyFLTK_CXX_FLAGS} )
+    set(pyFLTK_ENV ${CMAKE_COMMAND} -E env CXXFLAGS=${pyFLTK_CXX_FLAGS} -- )
 endif()
 
 
@@ -35,7 +35,7 @@ endif()
 # Install steps
 #
 set(pyFLTK_PIP_INSTALL_WHEEL   ${PYTHON_EXECUTABLE} -m pip install wheel )
-set(pyFLTK_CREATE_WHEELS ${pyFLTK_ENV} -- ${PYTHON_EXECUTABLE} setup.py bdist_wheel)
+set(pyFLTK_CREATE_WHEELS ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} setup.py bdist_wheel)
 set(pyFLTK_INSTALL_WHEELS ${CMAKE_COMMAND}
     -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}
     -DWHL_DIRECTORY=${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK/dist
@@ -48,8 +48,8 @@ set(pyFLTK_PATCH
     ${CMAKE_COMMAND} -E copy_if_different
     "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/setup.py"
     "${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK/")
-set(pyFLTK_CONFIGURE ${pyFLTK_ENV} -- ${PYTHON_EXECUTABLE} setup.py swig)
-set(pyFLTK_BUILD     ${pyFLTK_ENV} -- ${PYTHON_EXECUTABLE} setup.py build)
+set(pyFLTK_CONFIGURE ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} setup.py swig)
+set(pyFLTK_BUILD     ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} setup.py build)
 set(pyFLTK_INSTALL "${pyFLTK_PIP_INSTALL_WHEEL}"
     COMMAND "${pyFLTK_CREATE_WHEELS}"
     COMMAND "${pyFLTK_INSTALL_WHEELS}")
