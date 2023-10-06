@@ -24,19 +24,19 @@ set(pyFLTK_PATCH
     "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/setup.py"
     "${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK/")
 
+set(pyFLTK_RUN_COMMAND )
 if(WIN32)
-    set(pyFLTK_CONFIGURE ${CMAKE_COMMAND} -E env FLTK_HOME=${FLTK_HOME} ${PYTHON_EXECUTABLE} setup.py swig --enable-shared)
-    set(pyFLTK_BUILD     ${CMAKE_COMMAND} -E env FLTK_HOME=${FLTK_HOME} ${PYTHON_EXECUTABLE} setup.py build --enable-shared)
-    set(pyFLTK_INSTALL   ${PYTHON_EXECUTABLE} -m pip install wheel
-	COMMAND ${CMAKE_COMMAND} -E env FLTK_HOME=${FLTK_HOME} ${PYTHON_EXECUTABLE} setup.py bdist_wheel --enable-shared)
-else()
-    set(pyFLTK_CONFIGURE ${PYTHON_EXECUTABLE} setup.py swig)
-    set(pyFLTK_BUILD     ${PYTHON_EXECUTABLE} setup.py build)
-    set(pyFLTK_INSTALL   ${PYTHON_EXECUTABLE} -m pip install wheel
-	COMMAND ${PYTHON_EXECUTABLE} setup.py bdist_wheel
-	COMMAND ${CMAKE_COMMAND} -P cmake/install_whl_files.cmake -DPYTHON_EXECUTABLE="${PYTHON_EXECUTABLE}" -DWHL_DIRECTORY="${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK/dist")
+    set(pyFLTK_RUN_COMMAND ${CMAKE_COMMAND} -E env FLTK_HOME="${FLTK_HOME}" )
 endif()
 
+set(pyFLTK_CONFIGURE ${pyFLTK_RUN_COMMAND} ${PYTHON_EXECUTABLE} setup.py swig)
+set(pyFLTK_BUILD     ${pyFLTK_RUN_COMMAND} ${PYTHON_EXECUTABLE} setup.py build)
+set(pyFLTK_INSTALL
+    ${pyFLTK_RUN_COMMAND} ${PYTHON_EXECUTABLE} -m pip install wheel
+    COMMAND ${PYTHON_EXECUTABLE} setup.py bdist_wheel
+    COMMAND ${CMAKE_COMMAND} -P cmake/install_whl_files.cmake -DPYTHON_EXECUTABLE="${PYTHON_EXECUTABLE}" -DWHL_DIRECTORY="${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK/dist")
+
+    
 ExternalProject_Add(
     pyFLTK
     SVN_REPOSITORY ${pyFLTK_SVN_REPOSITORY}
