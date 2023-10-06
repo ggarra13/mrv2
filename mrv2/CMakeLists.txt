@@ -26,9 +26,11 @@ list(PREPEND CMAKE_MODULE_PATH
 # Add compile options
 #
 if ( UNIX )
-  add_compile_options( -fvisibility=hidden )
-  link_directories( ${CMAKE_INSTALL_PREFIX}/lib64
-                    ${CMAKE_INSTALL_PREFIX}/lib)
+    add_compile_options( -fvisibility=hidden )
+    if (NOT APPLE)
+	link_directories(${CMAKE_INSTALL_PREFIX}/lib64)
+    endif()
+    link_directories(${CMAKE_INSTALL_PREFIX}/lib)
 endif()
 
 set( FLTK_INCLUDE_DIR ${CMAKE_PREFIX_PATH}/include )

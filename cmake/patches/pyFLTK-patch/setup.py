@@ -15,6 +15,10 @@ opengl_dir = ""
 fltk_dir = os.environ.get('FLTK_HOME', '')
 opengl_dir = os.environ.get('OPENGL_HOME', '')
 
+# Use this to pass additional compile flags, like macOS -mmacosx-version-min=OS_VERSION
+cxx_flags = os.environ.get('CXX_FLAGS', '')
+print("pyFLTK CXX_FLAGS=",cxx_flags)
+
 # add your extensions here
 UserDefinedSources = []
 # add additional include paths here
@@ -71,7 +75,7 @@ if sys.platform == 'win32':
     print("Building for MS Windows, using Visual C++")
     opengl_lib_dir = os.path.join(opengl_dir, 'lib')
     def_list = [('WIN32', '1'),('FL_INTERNALS','1')]
-    compile_arg_list=['/GR', '/wd4101']
+    compile_arg_list= ['/GR', '/wd4101']
     lib_dir_list = [fltk_lib_dir, opengl_lib_dir]
     win32_lib_list = ["kernel32", "user32", "gdi32", "winspool", "comdlg32", "Comctl32", "advapi32", "shell32", "ole32", "oleaut32", "uuid", "odbc32", "odbccp32", "wsock32", "gdiplus", "glu32", "opengl32"]
     static_lib_list = [ "fltk", "fltk_images", "fltk_forms", "fltk_gl", "opengl32", "fltk_jpeg", "fltk_png", "fltk_z"] + win32_lib_list
@@ -324,6 +328,8 @@ class PySwigCommand(distutils.cmd.Command):
     subprocess.check_call(command)
 
     #shutil.copy('fltk.py', "./fltk/fltk.py")
+
+compile_arg_list.append(cxx_flags)
 
 # module declarations
 module1 = Extension(name='fltk14._fltk14',

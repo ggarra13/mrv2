@@ -74,11 +74,6 @@ for i in $@; do
 	    ;;
 	dist)
 	    export MRV2_DIST_RELEASE=1
-	    if [[ $RUNME == 0 ]]; then
-		echo $0
-		echo "dist option can only be run with the runme.sh script"
-		exit 1
-	    fi
 	    shift
 	    ;;
 	--build-dir|-build-dir|--dir|-dir|--root|-root)

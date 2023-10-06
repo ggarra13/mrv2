@@ -15,37 +15,54 @@ if(NOT PYTHON_EXECUTABLE)
     endif()
 endif()
 
+
+
+#
+# Environment setup
+#
+set(pyFLTK_CXX_FLAGS ${CMAKE_CXX_FLAGS} )
+set(pyFLTK_ENV )
+if(WIN32)
+    set(pyFLTK_ENV ${CMAKE_COMMAND} -E env FLTK_HOME=${FLTK_HOME} )
+elseif(APPLE AND CMAKE_OSX_DEPLOYMENT_TARGET)
+    list(APPEND pyFLTK_CXX_FLAGS "-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}")
+    set(pyFLTK_ENV ${CMAKE_COMMAND} -E env CXXFLAGS=${pyFLTK_CXX_FLAGS} )
+endif()
+
+
+
+#
+# Install steps
+#
+set(pyFLTK_PIP_INSTALL_WHEEL   ${PYTHON_EXECUTABLE} -m pip install wheel )
+set(pyFLTK_CREATE_WHEELS     ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} setup.py bdist_wheel)
+set(pyFLTK_INSTALL_WHEELS ${CMAKE_COMMAND}
+    -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}
+    -DWHL_DIRECTORY=${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK/dist
+    -P "${CMAKE_SOURCE_DIR}/cmake/install_whl_files.cmake" )
+
+#
+# Commands
+#
 set(pyFLTK_PATCH
     ${CMAKE_COMMAND} -E copy_if_different
     "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/setup.py"
     "${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK/")
-
-set(pyFLTK_ENV )
-if(WIN32)
-    set(pyFLTK_ENV ${CMAKE_COMMAND} -E env FLTK_HOME=${FLTK_HOME} )
-endif()
-
-
 set(pyFLTK_CONFIGURE ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} setup.py swig)
 set(pyFLTK_BUILD     ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} setup.py build)
-set(pyFLTK_INSTALL   ${PYTHON_EXECUTABLE} -m pip install wheel )
-set(pyFLTK_WHEEL     ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} setup.py bdist_wheel)
-set(pyFLTK_INSTALL_WHEEL ${CMAKE_COMMAND}
-    -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}
-    -DWHL_DIRECTORY=${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK/dist
-    -P "${CMAKE_SOURCE_DIR}/cmake/install_whl_files.cmake" )
-    
+set(pyFLTK_INSTALL "${pyFLTK_PIP_INSTALL_WHEEL}"
+    COMMAND "${pyFLTK_CREATE_WHEELS}"
+    COMMAND "${pyFLTK_INSTALL_WHEELS}")CUTABLE} setup.py install)
+
 ExternalProject_Add(
     pyFLTK
     SVN_REPOSITORY ${pyFLTK_SVN_REPOSITORY}
     SVN_REVISION ${pyFLTK_SVN_REVISION}
     DEPENDS ${PYTHON_DEP} ${FLTK_DEP}
     PATCH_COMMAND     "${pyFLTK_PATCH}"
-    CONFIGURE_COMMAND "${pyFLTK_CONFIGURE}"
-    BUILD_COMMAND     "${pyFLTK_BUILD}"
-    INSTALL_COMMAND   "${pyFLTK_INSTALL}"
-    COMMAND "${pyFLTK_WHEEL}"
-    COMMAND "${pyFLTK_INSTALL_WHEEL}"
+    CONFIGURE_COMMAND "CXX_FLAGS=${pyFLTK_CXX_FLAGS}" "${pyFLTK_CONFIGURE}"
+    BUILD_COMMAND     "CXX_FLAGS=${pyFLTK_CXX_FLAGS}" "${pyFLTK_BUILD}"
+    INSTALL_COMMAND   ${pyFLTK_INSTALL}
     BUILD_IN_SOURCE 1
 )
     
