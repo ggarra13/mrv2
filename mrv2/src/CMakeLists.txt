@@ -104,11 +104,17 @@ if ( APPLE )
 	DESTINATION lib
 	COMPONENT applications )
 elseif ( UNIX )
+
     # Install all .so in CMAKE_INSTALL_PREFIX/lib
     file( GLOB MRV_LIB_DSOS ${CMAKE_INSTALL_PREFIX}/lib/*.so* )
-    file( GLOB MRV_LIB64_DSOS ${CMAKE_INSTALL_PREFIX}/lib64/*.so* )
-    install( FILES ${MRV_LIB_DSOS} ${MRV_LIB64_DSOS}
+    install( FILES ${MRV_LIB_DSOS}
       DESTINATION lib
+      COMPONENT applications )
+
+    # For RedHat and Rocky Linux, we must install also lib64
+    file( GLOB MRV_LIB64_DSOS ${CMAKE_INSTALL_PREFIX}/lib64/*.so* )
+    install( FILES ${MRV_LIB64_DSOS}
+      DESTINATION lib64
       COMPONENT applications )
 elseif(WIN32)
     #
