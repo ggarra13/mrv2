@@ -24,6 +24,7 @@ namespace py = pybind11;
 #include <tlTimeline/Util.h>
 
 #include "mrvCore/mrvOS.h" // do not move up
+#include "mrvCore/mrvMemory.h"
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvUtil.h"
 #include "mrvCore/mrvRoot.h"
