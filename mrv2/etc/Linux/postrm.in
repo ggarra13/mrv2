@@ -18,7 +18,7 @@ echo "Removing symlink from /usr/bin/mrv2-v@mrv2_VERSION@"
 rm -f /usr/bin/mrv2-v@mrv2_VERSION@
 
 # Find the closest version folder in /usr/bin
-closest_version=$(ls -1 /usr/bin/ | grep "mrv2-*" | sed -e 's|/usr/bin/||' | sort -V | tail -n 1)
+closest_version=$(ls -1 /usr/bin/ | grep "mrv2-v*" | sort -V | tail -n 1)
 
 # Check if a closest version was found
 if [[ -n "$closest_version" && $removed == 1 ]]; then
