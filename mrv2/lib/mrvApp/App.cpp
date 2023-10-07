@@ -1377,6 +1377,21 @@ namespace mrv
             std_any_empty(any) ? 0 : std_any_cast<int>(any));
         if (Gbytes > 0)
         {
+            // Do some sanity checking in case the user is using several mrv2
+            // instances and cache would not fit.
+            uint64_t totalVirtualMem = 0;
+            uint64_t virtualMemUsed = 0;
+            uint64_t virtualMemUsedByMe = 0;
+            uint64_t totalPhysMem = 0;
+            uint64_t physMemUsed = 0;
+            uint64_t physMemUsedByMe = 0;
+            memory_information(
+                totalVirtualMem, virtualMemUsed, virtualMemUsedByMe,
+                totalPhysMem, physMemUsed, physMemUsedByMe);
+            totalPhysMem /= 1024;
+            if (totalPhysMem < Gbytes)
+                Gbytes = totalPhysMem / 2;
+
             const size_t activeCount = p.filesModel->observeActive()->getSize();
 
             uint64_t bytes = Gbytes * 1024 * 1024 * 1024;
