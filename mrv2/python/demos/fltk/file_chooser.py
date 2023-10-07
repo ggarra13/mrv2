@@ -34,7 +34,9 @@ files = None
 relative = ""
 
 def close_callback(ptr):
-	sys.exit(0)
+        global window
+        window.hide()
+        window = None
 
 def create_callback(ptr):
 	global fc

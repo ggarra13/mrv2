@@ -63,6 +63,7 @@ That was a blank line above this.
 """
 
 from fltk14 import *
+from mrv2 import cmd
 import sys
 
 def b_cb(ptr):
@@ -84,7 +85,7 @@ def show_cb(ptr):
 	else:
     		browser.make_visible(line)
 
-MRV2_ROOT = os.path.join(sys.base_prefix, "..")
+MRV2_ROOT = cmd.rootPath()
 PYTHON_ROOT = os.path.join(MRV2_ROOT, "python")
 DEMOS_ROOT = os.path.join(PYTHON_ROOT, "demos")
 FLTK_ROOT = os.path.join(DEMOS_ROOT, "fltk")

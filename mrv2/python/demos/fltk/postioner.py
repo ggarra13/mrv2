@@ -34,7 +34,9 @@ thePos = None      # type 'Fl_Positioner' from '()'
 
 
 def onOK(ptr):
-    sys.exit(0)  # code
+    global window
+    window.hide()
+    window = None
 
 
 def thePosCallback(ptr):

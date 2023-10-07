@@ -36,6 +36,10 @@ Preferences->User Interface->Single Instance.
   This is the first step into making the UI fully customizable.
 - Added Find and Replace to Python Editor in the Python Panel.
 - Added Comment and Uncomment region to Python Editor in the Python Panel.
+- Made focus selection on the main view window not work upon just entering.
+  This solves the issues with losing focus on the Frame, Start Frame and End
+  Frame widgets.  It also fixes problems when showing a Python window which
+  would otherwise not stay on top.
 - Build system changes and fixes:
    	* Renamed runme.sh script to runme_nolog.sh.
    	* Added a new runme.sh script that calls runme_nolog.sh but saves the compile log into BUILD-KERNEL-ARCH/CMAKE_BUILD_TYPE/compile.log.

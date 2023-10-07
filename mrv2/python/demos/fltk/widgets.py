@@ -30,8 +30,9 @@ from fltk14 import *
 window = None
 
 def theExitCallback(ptr):
-    import sys
-    sys.exit(0)
+    global window
+    window.hide()
+    window = None
 
 data = [ "@c Hello there.",
          "This is a demo of some of the widgets pyFLTK can do",

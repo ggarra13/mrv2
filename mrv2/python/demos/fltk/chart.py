@@ -34,10 +34,9 @@ import sys
 charts =[]
 
 def cb_OK(ptr):
-	global charts
-	charts = None  ### <- this allows the program to exit
-	sys.exit(0)
-
+        global charts
+        charts = None  ### <- this allows the program to exit
+        ptr.parent().hide()
 
 graphWidth = 150
 graphHeight = 100

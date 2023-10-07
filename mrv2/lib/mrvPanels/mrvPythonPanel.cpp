@@ -697,7 +697,8 @@ from mrv2 import playlist, timeline, usd, settings
     {
         const char* val;
 
-        val = fl_input(_("Search String:"), e->search);
+        const char* text = _("Search String:");
+        val = fl_input(text, e->search, 0);
         if (val != NULL)
         {
             // User entered a string - go find it!
@@ -708,9 +709,6 @@ from mrv2 import playlist, timeline, usd, settings
 
     void PythonPanel::find2_cb(Fl_Menu_* m, PythonEditor* e)
     {
-
-        std::cerr << "find2_cb " << e << std::endl;
-
         if (e->search[0] == '\0')
         {
             // Search string is blank; get a new one...

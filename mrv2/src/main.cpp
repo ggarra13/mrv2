@@ -52,12 +52,12 @@ PYBIND11_EMBEDDED_MODULE(mrv2, m)
 int main(int argc, char* argv[])
 {
     int r = 1;
+#ifdef MRV2_PYBIND11
+    // start the interpreter and keep it alive
+    py::scoped_interpreter guard{};
+#endif
     try
     {
-#ifdef MRV2_PYBIND11
-        // start the interpreter and keep it alive
-        py::scoped_interpreter guard{};
-#endif
         auto context = tl::system::Context::create();
         mrv::init(context);
         mrv::App app(argc, argv, context);

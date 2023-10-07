@@ -61,8 +61,8 @@ try:
             self.redraw()
 
 except NameError:
-	fl_message("This demo requires OpenGL.  Reconfigure and rebuild with OpenGl enabled.")
-	sys.exit(0)	
+        fl_message("This demo requires OpenGL.  Reconfigure and rebuild with OpenGl enabled.")
+        window.hide()
  
 window = Fl_Window(10, 10, 300, 330, sys.argv[0])
 

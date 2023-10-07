@@ -351,7 +351,7 @@ def close_cb(window, data):
     textbuf.remove_modify_callback(changed_cb, window, window)
     num_windows -= 1;
     if num_windows == 0:
-        sys.exit(0)
+         print("No more windows")
 
 def quit_cb(widget, data):
     global changed

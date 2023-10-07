@@ -27,9 +27,9 @@ try:
 	from OpenGL.GLUT import *
 	from OpenGL.GL import *
 except:
-	print('''
+        raise Exception('''
 ERROR: PyOpenGL not installed properly.  
-		''')
+		''')   
 
 
 # requires OpenGL

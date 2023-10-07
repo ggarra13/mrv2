@@ -44,7 +44,9 @@ def timeoutCallbackNoData():
 	Fl.repeat_timeout( 3.0, timeoutCallbackNoData)
 
 def theCancelButtonCallback(ptr):
-	sys.exit(0)
+        global window
+        window.hide()
+        window = None
 		
 window = Fl_Window(100, 100, 200, 90, sys.argv[0])
 

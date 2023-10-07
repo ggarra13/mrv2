@@ -837,11 +837,7 @@ namespace mrv
         case FL_ENTER:
         {
             bool takeFocus = true;
-            Fl_Widget* focusWidget = Fl::focus();
-            TimelineClass* c = p.ui->uiTimeWindow;
-            if (this == p.ui->uiView &&
-                (focusWidget == c->uiFrame || focusWidget == c->uiStartFrame ||
-                 focusWidget == c->uiEndFrame))
+            if (this == p.ui->uiView)
                 takeFocus = false;
             if (!children() && takeFocus)
                 take_focus();
@@ -874,6 +870,8 @@ namespace mrv
             if (!children() && Fl::focus() != this && Fl::event_button1())
             {
                 take_focus();
+                if (Fl::event_clicks() < 2)
+                    return 1;
             }
             p.mousePress = _getFocus();
             if (Fl::event_button1())

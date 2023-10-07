@@ -33,12 +33,12 @@ import sys
 from string import *
 
 def theCancelButtonCallback(ptr, data):
-	print("type = ", type(ptr))
-	print(f"theCancelButtonCallback({str(data)})")
-	print("Tooltip: ", ptr.tooltip())
+        pass
+        print("type = ", type(ptr))
+        print(f"theCancelButtonCallback({str(data)})")
+        print("Tooltip: ", ptr.tooltip())
 
 window = Fl_Window(100, 100, 200, 90)
-window.label(sys.argv[0])
 button = Fl_Button(9,20,180,60)
 utfstr = "日本語"
 extra_font = FL_TIMES_BOLD_ITALIC

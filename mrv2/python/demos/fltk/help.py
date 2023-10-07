@@ -24,16 +24,14 @@
 # Please report all bugs and problems to "pyfltk-user@lists.sourceforge.net".
 #
 
+from mrv2 import cmd
+
 from fltk14 import *
 import sys
 
 help = Fl_Help_Dialog()
-
-if len(sys.argv) < 2:
-    help.load("../docs/pyFltk.html")
-else:
-    help.load(sys.argv[1]);
-
+html = cmd.rootPath() + "/docs/en/index.html"
+help.load(html)
 help.show()
 
 

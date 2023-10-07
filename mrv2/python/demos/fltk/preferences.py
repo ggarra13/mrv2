@@ -33,14 +33,14 @@ wAmPm = None
 def closeWindowCB(widget):
     global myWindow
     myWindow.hide()
-    sys.exit(0)
+    myWindow = None
 
 def saveAndCloseCB(widget):
     global myWindow
     writePrefs()
-    myWindow.hide()
-    sys.exit(0)
-
+    myWindow.hide()    
+    myWindow = None
+    
 def readPrefs():
     global wAmPm
     app = Fl_Preferences(Fl_Preferences.USER, "fltk.org", "test/preferences")

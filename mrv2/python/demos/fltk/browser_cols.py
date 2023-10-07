@@ -35,10 +35,10 @@ from fltk14 import *
 aBrowser = None	  # type 'Browser' from '()'
 
 
-def onOK(ptr):
-	import sys  # code
-	#checkBrowserCallback(aBrowser.this)  # code
-	sys.exit(0)  # code
+def onOK(btn):
+        window = btn.parent()
+        window.hide()
+        window = None
 
 
 def main():

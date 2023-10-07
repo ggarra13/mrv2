@@ -73,6 +73,16 @@ namespace mrv2
             model->closeAll();
         }
 
+        std::string rootPath()
+        {
+            return mrv::rootpath();
+        }
+
+        std::string prefsPath()
+        {
+            return mrv::prefspath();
+        }
+
         /**
          * \brief Compare two clips with a comparison mode.
          *
@@ -409,6 +419,14 @@ Used to run main commands and get and set the display, image, compare, LUT optio
         py::arg("item") = -1);
 
     cmds.def("closeAll", &mrv2::cmd::closeAll, _("Close all file items."));
+
+    cmds.def(
+        "rootPath", &mrv2::cmd::rootPath,
+        _("Return the root path to the insallation of mrv2."));
+
+    cmds.def(
+        "prefsPath", &mrv2::cmd::prefsPath,
+        _("Return the path to preferences of mrv2."));
 
     cmds.def(
         "displayOptions", &mrv2::cmd::displayOptions,

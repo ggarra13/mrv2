@@ -30,7 +30,9 @@ import sys
 window = Fl_Window(100, 100, 600, 470)
 
 def cb_OK(ptr):
-	sys.exit(0)
+	global window
+        window.hide()
+        window = None
 
 
 horizPack = Fl_Pack( 0, 0, 600, 200)
