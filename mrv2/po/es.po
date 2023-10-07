@@ -728,7 +728,8 @@ msgstr "&Buscar/&Encontrar..."
 msgid "&Search/&Replace"
 msgstr "&Buscar/&Reemplazer"
 
-msgid "&Search/Replace &Again"
+#, fuzzy
+msgid "&Search/&Replace Again"
 msgstr "&Buscar/Reemplazar de &Nuevo"
 
 msgid "&Search/F&ind Again"
