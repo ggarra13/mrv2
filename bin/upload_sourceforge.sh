@@ -69,10 +69,14 @@ upload_file()
 {
     # Upload the file to the created directory
     echo
-    echo "Sending $1 as $2..."
+    echo "Uploading $1 as $2..."
     echo
-    rsync -avP --ignore-errors -e "ssh -i $SSH_KEY" $1 ggarra13@frs.sourceforge.net:/home/frs/project/mrv2/beta/$2
-    #scp -i $SSH_KEY $1 ggarra13@frs.sourceforge.net:/home/frs/project/mrv2/beta/$2
+    #rsync -av --ignore-errors -e "ssh -i $SSH_KEY" $1 ggarra13@frs.sourceforge.net:/home/frs/project/mrv2/beta/$2
+    scp -i $SSH_KEY $1 ggarra13@frs.sourceforge.net:/home/frs/project/mrv2/beta/$2
+    echo
+    echo "Upload was successful."
+    echo
+    sleep 15
 }
 
 
