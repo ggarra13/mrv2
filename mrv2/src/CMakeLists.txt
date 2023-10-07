@@ -105,8 +105,9 @@ if ( APPLE )
 	COMPONENT applications )
 elseif ( UNIX )
     # Install all .so in CMAKE_INSTALL_PREFIX/lib
-    file( GLOB MRV_DSOS ${CMAKE_INSTALL_PREFIX}/lib/*.so* )
-    install( FILES ${MRV_DSOS}
+    file( GLOB MRV_LIB_DSOS ${CMAKE_INSTALL_PREFIX}/lib/*.so* )
+    file( GLOB MRV_LIB64_DSOS ${CMAKE_INSTALL_PREFIX}/lib64/*.so* )
+    install( FILES ${MRV_LIB_DSOS} ${MRV_LIB64_DSOS}
       DESTINATION lib
       COMPONENT applications )
 elseif(WIN32)
