@@ -52,9 +52,9 @@
 
 #include <Imath/ImathConfig.h>
 #include <jconfig.h>
+#include <libintl.h>
 #include <libpng16/png.h>
 #include <mz.h>
-
 #include <nlohmann/json.hpp>
 #include <opentime/version.h>
 #include <opentimelineio/version.h>
@@ -113,7 +113,7 @@ extern "C"
 }
 #else
 #    define AV_STRINGIFY(s) AV_TOSTRING(s)
-#    define AV_TOSTRING(s) #s
+#    define AV_TOSTRING(s) #    s
 #endif
 
 #ifdef _WIN32
@@ -680,6 +680,9 @@ namespace mrv
           << "Copyright (c) 2007-2009 Antony Dovgal" << endl
           << endl
 #endif
+
+          << "libintl/gettext v0.22.3" << endl
+          << endl
           << "libjpeg-turbo v" << AV_STRINGIFY(LIBJPEG_TURBO_VERSION) << endl
           << "Copyright (c) 2009-2020 D. R. Commander.  All Rights Reserved."
           << "Copyright (c) 2015 Viktor Szathmáry.  All Rights Reserved."
@@ -758,11 +761,11 @@ namespace mrv
         o << "Poco v";
         semantic_versioning(o, POCO_VERSION);
         o << endl;
-#endif
         o << "Copyright (c) 2012, Applied Informatics Software Engineering "
              "GmbH. and Contributors."
           << endl
           << endl
+#endif
           << "Polyline2D (modified)" << endl
           << "Copyright © 2019 Marius Metzger (CrushedPixel)" << endl
           << endl
@@ -772,6 +775,11 @@ namespace mrv
           << "Copyright (c) 2016 Wenzel Jakob <wenzel.jakob@epfl.ch>, All "
              "rights reserved"
           << endl
+          << endl
+#endif
+#ifdef MRV2_PYFLTK
+          << "pyFLTK v1.4" << endl
+          << "Copyright 2003-Present by Andreas Held and others." << endl
           << endl
 #endif
           << "pystring" << endl

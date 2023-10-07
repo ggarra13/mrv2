@@ -145,11 +145,13 @@ if(TLRENDER_TIFF)
     add_definitions(-DTLRENDER_TIFF)
 endif()
 
-
 if(MRV2_PYBIND11)
     add_definitions(-DMRV2_PYBIND11)
     find_package(pybind11 REQUIRED)
-    message("mrv2 running pybind11 PYTHON_VERSION=${PYTHON_VERSION}")
+endif()
+
+if(MRV2_PYFLTK)
+    add_definitions(-DMRV2_PYFLTK)
 endif()
 
 # Omit superfluous "Up-to-date" messages.

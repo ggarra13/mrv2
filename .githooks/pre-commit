@@ -14,13 +14,15 @@ do
     else
 	echo "Skipping formatting of $FILE"
 	if [[ $FILE == *.sh || $FILE == .py || $FILE == .rb ||
-	      $FILE == *pre-commit ]]; then
-	    chmod 0755 $FILE
+		  $FILE == *pre-commit ]]; then
+	    if [[ -e $FILE ]]; then
+		chmod 0755 $FILE
+	    fi
 	else
 	    if [[ -d $FILE ]]; then
 		chmod 0755 $FILE
-	    else
-		chmod 0644 $FILE
+	    elif [[ -e $FILE ]]; then
+		     chmod 0644 $FILE
 	    fi
 	fi
     fi
