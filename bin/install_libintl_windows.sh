@@ -20,7 +20,7 @@ run_pacman=
 if [[ ! -e /mingw64/bin/gettext.exe ||
 	  ! -e /mingw64/lib/libiconv.dll.a ||
 	  ! -e /mingw64/lib/libintl.dll.a ]]; then
-    echo "Installing libiconv, libintl and gettext thru Msys..."
+    echo "Installing libiconv, libintl, subversion, swig and gettext thru Msys..."
     run_pacman=1
 fi
 
@@ -28,6 +28,26 @@ if [[ $run_pacman ]]; then
     pacman -Sy --noconfirm
 fi
 
+#
+# Install git (breaks BuildpyFLTK)
+#
+# if [[ ! -e /mingw64/bin/git.exe ]]; then
+#     pacman -Sy git --noconfirm
+# fi
+
+#
+# Install subversion
+#
+if [[ ! -e /mingw64/bin/svn.exe ]]; then
+    pacman -Sy subversion --noconfirm
+fi
+
+#
+# Install swig
+#
+if [[ ! -e /mingw64/bin/swig.exe ]]; then
+    pacman -Sy swig --noconfirm
+fi
 
 #
 # Install gettext

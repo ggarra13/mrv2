@@ -46,14 +46,16 @@ add_definitions( -DGL_SILENCE_DEPRECATION )
 
 set(LIBRARIES tlGL tlTimeline tlTimelineUI tlUI glfw)
 set(LIBRARIES_PRIVATE )
-list( APPEND LIBRARIES mrvEdit mrvWidgets mrvDraw mrvCore fltk_gl )
+list( APPEND LIBRARIES mrvEdit mrvWidgets mrvDraw mrvCore ${FLTK_gl_LIBRARY} )
 
 add_library(mrvGL ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
-target_link_libraries(mrvGL PUBLIC ${LIBRARIES} ${LIBRARIES_PRIVATE})
+if(WIN32 AND FLTK_BUILD_SHARED_LIBS)
+    target_compile_definitions(mrvGL PUBLIC FL_DLL)
+endif()
+target_link_libraries(mrvGL PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})
 set_target_properties(mrvGL PROPERTIES FOLDER lib)
-#set_target_properties(mrvGL PROPERTIES PUBLIC_HEADER "${HEADERS}")
 
 install(TARGETS mrvGL
     ARCHIVE DESTINATION lib

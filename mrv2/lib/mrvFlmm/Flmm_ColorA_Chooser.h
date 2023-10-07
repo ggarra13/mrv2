@@ -30,7 +30,7 @@
 #include <FL/Fl_Double_Window.H>
 #include "Flmm_ColorA_Button.h"
 
-class FL_EXPORT Flmm_HueBox : public Fl_Widget
+class Flmm_HueBox : public Fl_Widget
 {
     int px, py;
 
@@ -47,7 +47,7 @@ public:
     }
 };
 
-class FL_EXPORT Flmm_ValueBox : public Fl_Widget
+class Flmm_ValueBox : public Fl_Widget
 {
     int py;
 
@@ -64,7 +64,7 @@ public:
     }
 };
 
-class FL_EXPORT Flmm_AlphaBox : public Fl_Widget
+class Flmm_AlphaBox : public Fl_Widget
 {
     int py;
 
@@ -81,7 +81,7 @@ public:
     }
 };
 
-class FL_EXPORT Flmm_Value_Input : public Fl_Value_Input
+class Flmm_Value_Input : public Fl_Value_Input
 {
 public:
     int format(char*);
@@ -91,7 +91,7 @@ public:
     }
 };
 
-class FL_EXPORT Flmm_ColorA_Chooser : public Fl_Group
+class Flmm_ColorA_Chooser : public Fl_Group
 {
     Flmm_HueBox huebox;
     Flmm_ValueBox valuebox;
@@ -147,7 +147,7 @@ public:
     }
 };
 
-class FL_EXPORT Flmm_ColorA_Window : public Fl_Double_Window
+class Flmm_ColorA_Window : public Fl_Double_Window
 {
     Flmm_ColorA_Chooser chooser;
     ColorAChip ok_color;
@@ -163,9 +163,9 @@ public:
 
 extern Flmm_ColorA_Window* colorChooser;
 
-FL_EXPORT int flmm_color_a_chooser(
+int flmm_color_a_chooser(
     const char* name, double& r, double& g, double& b, double& a);
-FL_EXPORT int
-flmm_color_a_chooser(const char* name, float& r, float& g, float& b, float& a);
-FL_EXPORT int
-flmm_color_a_chooser(const char* name, uchar& r, uchar& g, uchar& b, uchar& a);
+int flmm_color_a_chooser(
+    const char* name, float& r, float& g, float& b, float& a);
+int flmm_color_a_chooser(
+    const char* name, uchar& r, uchar& g, uchar& b, uchar& a);

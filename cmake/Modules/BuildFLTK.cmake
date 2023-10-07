@@ -4,25 +4,55 @@
 
 include( ExternalProject )
 
-# Stable TAG
-set( FLTK_TAG c2cce9cba86dcc208c9396af994010cd49484988 )
 #set( FLTK_TAG master )
+# Stable TAG
+if (NOT APPLE)
+    set( FLTK_TAG master )
+else()
+    set( FLTK_TAG c2cce9cba86dcc208c9396af994010cd49484988 )
+endif()
+
+
+set( FLTK_BUILD_SHARED_LIBS OFF )
+if(MRV2_PYFLTK)
+    set( FLTK_BUILD_SHARED_LIBS ON )
+endif()
 
 set( FLTK_PATCH )
 set( FLTK_BUILD_TYPE ${CMAKE_BUILD_TYPE} )
+
+set( FLTK_CXX_COMPILER ${CMAKE_CXX_COMPILER})
 set( FLTK_CXX_FLAGS ${CMAKE_CXX_FLAGS} )
+
+set( FLTK_C_COMPILER ${CMAKE_C_COMPILER})
 set( FLTK_C_FLAGS ${CMAKE_C_FLAGS} )
+
 if (APPLE)
     set(FLTK_PATCH cmake -E copy_if_different "${PROJECT_SOURCE_DIR}/cmake/patches/FLTK-patch/Fl_Cocoa_Gl_Window_Driver.mm" "${CMAKE_BINARY_DIR}/FLTK-prefix/src/FLTK/src/drivers/Cocoa")
+    if(CMAKE_OSX_DEPLOYMENT_TARGET)
+	set( FLTK_C_FLAGS
+	    -mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}
+	    ${FLTK_C_FLAGS} )
+	set( FLTK_CXX_FLAGS
+	    -mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}
+	    ${FLTK_CXX_FLAGS} )
+    endif()
+elseif(WIN32)
+    set(FLTK_C_COMPILER cl)
+    set(FLTK_CXX_COMPILER cl)
+else()
+    list(APPEND FLTK_C_FLAGS -fPIC)
+    list(APPEND FLTK_CXX_FLAGS -fPIC)
 endif()
 
+
 if (APPLE OR WIN32)
-    set( wayland OFF )
-    set( pango   OFF )
+    set( FLTK_WAYLAND OFF )
+    set( FLTK_PANGO   OFF )
 else()
-    set( wayland  ON ) # we'll leave it on, but it is way
+    set( FLTK_WAYLAND  ON ) # we'll leave it on, but it is way
 		       # buggy with, at least, Nvidia cards.
-    set( pango    ON )
+    set( FLTK_PANGO    ON )
 endif()
 
 ExternalProject_Add(
@@ -31,6 +61,8 @@ ExternalProject_Add(
     GIT_TAG ${FLTK_TAG}
     PATCH_COMMAND ${FLTK_PATCH}
     CMAKE_ARGS
+    -DCMAKE_C_COMPILER=${FLTK_C_COMPILER}
+    -DCMAKE_CXX_COMPILER=${FLTK_CXX_COMPILER}
     -DCMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHIECTURES}
     -DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET}
     -DCMAKE_VERBOSE_MAKEFILE=${CMAKE_VERBOSE_MAKEFILE}
@@ -43,10 +75,16 @@ ExternalProject_Add(
     -DCMAKE_INSTALL_MESSAGE=${CMAKE_INSTALL_MESSAGE}
     -DFLTK_BUILD_EXAMPLES=OFF
     -DFLTK_BUILD_TEST=OFF
-    -DOPTION_BUILD_SHARED_LIBS=0
+    -DOPTION_BUILD_SHARED_LIBS=${FLTK_BUILD_SHARED_LIBS}
     -DOPTION_USE_SYSTEM_ZLIB=0
     -DOPTION_USE_SYSTEM_LIBJPEG=0
     -DOPTION_USE_SYSTEM_LIBPNG=0
-    -DOPTION_USE_PANGO=${pango}
-    -DOPTION_USE_WAYLAND=${wayland}
-    )
+    -DOPTION_USE_FLTK_PANGO=${FLTK_PANGO}
+    -DOPTION_USE_FLTK_WAYLAND=${FLTK_WAYLAND}
+)
+
+if(WIN32)
+    set(FLTK_HOME ${CMAKE_INSTALL_PREFIX})
+endif()
+
+set(FLTK_DEP FLTK)

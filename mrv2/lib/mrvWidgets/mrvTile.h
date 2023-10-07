@@ -9,7 +9,7 @@
 namespace mrv
 {
 
-    class FL_EXPORT Tile : public Fl_Tile
+    class Tile : public Fl_Tile
     {
     public:
         int handle(int event) FL_OVERRIDE;

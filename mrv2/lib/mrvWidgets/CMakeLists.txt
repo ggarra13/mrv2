@@ -15,6 +15,7 @@ set( FL_SOURCES
 )
 
 FLTK_WRAP_UI( mrvWidgets ${FL_SOURCES} )
+#FLTK_RUN_FLUID( mrvWidgets_FLTK_UI_SRCS "${FL_SOURCES}" )
 
 set(HEADERS
     mrvButton.h
@@ -106,7 +107,7 @@ set(SOURCES
 )
 
 
-list( APPEND LIBRARIES mrvFlmm mrvFLU mrvCore fltk_images ${JASPER_LIBRARIES} MINIZIP::minizip )
+list( APPEND LIBRARIES mrvFlmm mrvFLU mrvCore ${FLTK_LIBRARIES} ${JASPER_LIBRARIES} MINIZIP::minizip )
 if(MRV2_PYBIND11)
     list( APPEND LIBRARIES pybind11::embed )
     list( APPEND SOURCES mrvPythonEditor.cpp mrvPythonOutput.cpp)
@@ -137,6 +138,10 @@ endif()
 
 if( WIN32 )
     list(APPEND LIBRARIES Crypt32.lib)
+endif()
+
+if(WIN32 AND FLTK_BUILD_SHARED_LIBS)
+    target_compile_definitions(mrvWidgets PUBLIC FL_DLL)
 endif()
 
 target_link_libraries(mrvWidgets PUBLIC ${LIBRARIES} )

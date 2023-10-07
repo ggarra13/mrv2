@@ -36,11 +36,14 @@ set(SOURCES
 add_library(mrvFLU ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
-set( LIBRARIES fltk fltk_images )
+set( LIBRARIES ${FLTK_LIBRARIES} ${Intl_LIBRARIES} )
+
+if(WIN32 AND FLTK_BUILD_SHARED_LIBS)
+    target_compile_definitions(mrvFLU PUBLIC FL_DLL)
+endif()
 
 target_link_libraries(mrvFLU PUBLIC ${LIBRARIES} )
 set_target_properties(mrvFLU PROPERTIES FOLDER lib)
-#set_target_properties(mrvFLU PROPERTIES PUBLIC_HEADER "${HEADERS}")
 
 install(TARGETS mrvFLU
     ARCHIVE DESTINATION lib

@@ -818,7 +818,7 @@ namespace mrv
           << "Copyright (c) 2005-2019 Intel Corporation" << endl
           << endl
 #endif
-          << "mrv2 v" << TLRENDER_VERSION << " (modified)." << endl
+          << "tlRender v" << TLRENDER_VERSION << " (modified)." << endl
           << "Original at: " << endl
           << "https://www.github.com/darbyjohnston/tlRender" << endl
           << "(C) 2021-Present Darby Johnston." << endl

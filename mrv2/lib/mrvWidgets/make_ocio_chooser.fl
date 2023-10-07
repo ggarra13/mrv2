@@ -33,26 +33,26 @@ Function {make_ocio_chooser(std::string c, mrv::OCIOBrowser::Type type )} {open 
       xywh {0 0 395 445} box PLASTIC_UP_BOX
     } {
       Fl_Browser uiOCIOBrowser {
-	label {Select an OCIO Transform}
-	user_data {&ocio} user_data_type {std::string*}
-	callback {int elem = o->value();
+        label {Select an OCIO Transform}
+        user_data {&ocio} user_data_type {std::string*}
+        callback {int elem = o->value();
 if ( elem < 1 || elem > o->size() ) { v->clear(); return; }
 *v = o->text(elem); o->set_selection( *v );}
-	xywh {11 8 375 355} box UP_BOX labelcolor 32 when 4
-	code0 {o->set_selection(c); o->set_type(type);}
-	class {mrv::OCIOBrowser}
+        xywh {11 8 375 355} box UP_BOX labelcolor 32 when 4
+        code0 {o->set_selection(c); o->set_type(type);}
+        class {mrv::OCIOBrowser}
       }
       Fl_Button {} {
-	label Accept
-	user_data w user_data_type {Fl_Window*}
-	callback {v->hide();}
-	tooltip {Accept the selected OCIO file.} xywh {200 390 85 25}
+        label Accept
+        user_data w user_data_type {Fl_Window*}
+        callback {v->hide();}
+        tooltip {Accept the selected OCIO file.} xywh {200 390 85 25}
       }
       Fl_Button {} {
-	label Cancel
-	user_data w user_data_type {Fl_Window*}
-	callback {ocio = orig; v->hide();}
-	tooltip {Cancel the OCIO selection and don't change anything.} xywh {295 390 80 25}
+        label Cancel
+        user_data w user_data_type {Fl_Window*}
+        callback {ocio = orig; v->hide();}
+        tooltip {Cancel the OCIO selection and don't change anything.} xywh {295 390 80 25}
       }
     }
   }

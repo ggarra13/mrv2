@@ -460,7 +460,7 @@ namespace mrv
         bool send = ui->uiPrefs->SendUI->value();
         if (send)
         {
-            tcp->pushMessage("USD Panel", static_cast<bool>(!networkPanel));
+            tcp->pushMessage("USD Panel", static_cast<bool>(!usdPanel));
         }
         if (usdPanel)
         {
