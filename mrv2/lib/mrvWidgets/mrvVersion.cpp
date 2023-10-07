@@ -764,9 +764,9 @@ namespace mrv
         o << "Copyright (c) 2012, Applied Informatics Software Engineering "
              "GmbH. and Contributors."
           << endl
-          << endl
+          << endl;
 #endif
-          << "Polyline2D (modified)" << endl
+        o << "Polyline2D (modified)" << endl
           << "Copyright © 2019 Marius Metzger (CrushedPixel)" << endl
           << endl
 #ifdef MRV2_PYBIND11
