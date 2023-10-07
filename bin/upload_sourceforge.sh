@@ -113,9 +113,8 @@ It may contain bugs, new untested features and more.
 
 It should work on Ubuntu 20.04+, Windows 8.1+ and macOS 11+.
 
-This is unlike the official releases that work on Red Hat 8.1
-and macOS 10.5 (Catalina).  Also, the Windows release does not
-have USD support.
+This is unlike the official releases that work on Red Hat 8.1.
+Also, the Windows release does not have USD support.
 
 Its source code is at:
 https://www.github.com/ggarra13/mrv2

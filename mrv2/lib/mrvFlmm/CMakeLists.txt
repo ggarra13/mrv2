@@ -16,7 +16,11 @@ set(SOURCES
 add_library(mrvFlmm ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
-set( LIBRARIES fltk fltk_images )
+set( LIBRARIES ${FLTK_LIBRARIES} )
+
+if(WIN32 AND FLTK_BUILD_SHARED_LIBS)
+    target_compile_definitions(mrvFlmm PUBLIC FL_DLL)
+endif()
 
 target_link_libraries(mrvFlmm PUBLIC ${LIBRARIES} )
 set_target_properties(mrvFlmm PROPERTIES FOLDER lib)

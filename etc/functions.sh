@@ -40,6 +40,7 @@ get_kernel()
     else
 	export ARCH=i386
     fi
+    echo "KERNEL=$KERNEL ARCH=$ARCH"
 }
 
 #

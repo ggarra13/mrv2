@@ -3,8 +3,6 @@
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
-
-
 #
 #
 # Main build script for mrv2.  It builds all dependencies and will install the
@@ -12,6 +10,9 @@
 #
 # On Linux and macOS, it will also create a mrv2 or mrv2-dbg symbolic link
 # in $HOME/bin if the directory exists.
+#
+# This script does *NOT* save a log to  BUILD-OS-ARCH/BUILD_TYPE/compile.log.
+# Use runme.sh for that.
 #
 #
 

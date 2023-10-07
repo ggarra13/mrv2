@@ -26,7 +26,7 @@ include( "${ROOT_DIR}/cmake/functions.cmake" )
 
 
 #
-# Note UNIX CMAKE_INSTALL_PREFIX is broken!!!
+# @bug: UNIX CMAKE_INSTALL_PREFIX is broken!!!
 #
 if( UNIX AND NOT APPLE )
     set( CPACK_PREPACKAGE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_PREFIX}" )

@@ -8,6 +8,11 @@
 
 #include <FL/Fl_Text_Editor.H>
 
+class Fl_Window;
+class Fl_Input;
+class Fl_Button;
+class Fl_Return_Button;
+
 namespace mrv
 {
 
@@ -32,6 +37,13 @@ namespace mrv
         static void style_parse(const char* text, char* style, int length);
         static void style_parse(Fl_Text_Editor* e);
 
+        Fl_Window* replace_dlg;
+        Fl_Input* replace_find;
+        Fl_Input* replace_with;
+        Fl_Button* replace_all;
+        Fl_Return_Button* replace_next;
+        Fl_Button* replace_cancel;
+        char search[256]; // Search text
     protected:
         std::string m_code, m_eval, m_variable;
     };

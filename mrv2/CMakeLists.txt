@@ -27,21 +27,52 @@ list(PREPEND CMAKE_MODULE_PATH
 #
 if ( UNIX )
     add_compile_options( -fvisibility=hidden )
+    if (NOT APPLE)
+	link_directories(${CMAKE_INSTALL_PREFIX}/lib64)
+    endif()
+    link_directories(${CMAKE_INSTALL_PREFIX}/lib)
 endif()
 
-# Make sure we pick our local FLTK copy
 set( FLTK_INCLUDE_DIR ${CMAKE_PREFIX_PATH}/include )
-find_package( FLTK REQUIRED CONFIG )
-message( STATUS "Found FLTK: ${FLTK_INCLUDE_DIR}" )
+
+if(FLTK_BUILD_SHARED_LIBS)
+    if(UNIX)
+	if(APPLE)
+	    set(FLTK_LIBRARIES fltk_images.dylib fltk_jpeg.dylib fltk_png.dylib fltk_z.dylib fltk.dylib "-framework Cocoa" )
+	    set(FLTK_gl_LIBRARY fltk_gl.dylib "-framework OpenGL")
+	else()
+	    set(FLTK_LIBRARIES fltk_images.so fltk_jpeg.so fltk_png.so fltk_z.so fltk.so)
+	    set(FLTK_gl_LIBRARY fltk_gl.so)
+	    if(TLRENDER_GL)
+		list(APPEND FLTK_gl_LIBRARY GL)
+		if(FLTK_WAYLAND)
+		    list(APPEND FLTK_gl_LIBRARY EGL)
+		endif()
+	    endif()
+	endif()
+    else()
+	set(FLTK_LIBRARIES ${CMAKE_INSTALL_PREFIX}/lib/libfltk.lib glu32 comctl32 ws2_32 opengl32 gdiplus)
+	set(FLTK_gl_LIBRARY ${FLTK_LIBRARIES} )
+    endif()
+else()
+    set(FLTK_LIBRARIES fltk_images fltk_jpeg fltk_png fltk_z fltk)
+    if(TLRENDER_GL)
+	set(FLTK_gl_LIBRARY fltk_gl)
+    endif()
+endif()
+
 
 #
 # Make sure we use our own recently compiled fluid executable
 #
 if( WIN32 )
-    set( FLTK_FLUID_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/fluid-cmd)
+    set( FLTK_FLUID_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/fluid-cmd.exe)
 else()
     set( FLTK_FLUID_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/fluid)
 endif()
+message( STATUS "Found FLTK: ${FLTK_INCLUDE_DIR}" )
+message( STATUS "FLTK LIBRARIES: ${FLTK_gl_LIBRARY} ${FLTK_LIBRARIES}" )
+message( STATUS "FLTK_FLUID_EXECUTABLE: ${FLTK_FLUID_EXECUTABLE}" )
 
 
 find_package(Intl)
@@ -114,11 +145,13 @@ if(TLRENDER_TIFF)
     add_definitions(-DTLRENDER_TIFF)
 endif()
 
-
 if(MRV2_PYBIND11)
     add_definitions(-DMRV2_PYBIND11)
     find_package(pybind11 REQUIRED)
-    message("pybind11 PYTHON_VERSION=${PYTHON_VERSION}")
+endif()
+
+if(MRV2_PYFLTK)
+    add_definitions(-DMRV2_PYFLTK)
 endif()
 
 # Omit superfluous "Up-to-date" messages.

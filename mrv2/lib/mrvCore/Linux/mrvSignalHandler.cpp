@@ -47,8 +47,8 @@ namespace mrv
     {
         // Set up signal handlers
         std::signal(SIGSEGV, callback);
-        std::signal(SIGABRT, callback);
 
+        std::signal(SIGABRT, callback);
         std::signal(SIGBUS, callback);
 #ifndef NDEBUG
         // std::signal(SIGINT, callback);

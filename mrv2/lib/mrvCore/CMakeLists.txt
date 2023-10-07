@@ -50,7 +50,7 @@ set(SOURCES
   mrvUtil.cpp
   )
 
-set(LIBRARIES tlRender Imath::Imath fltk )
+set(LIBRARIES tlRender Imath::Imath ${FLTK_LIBRARIES} )
 
 
 if( WIN32 )
@@ -84,6 +84,10 @@ endif()
 add_library(mrvCore ${SOURCES} ${HEADERS})
 
 files_to_absolute_paths()
+
+if(WIN32 AND FLTK_BUILD_SHARED_LIBS)
+    target_compile_definitions(mrvCore PUBLIC FL_DLL)
+endif()
 
 target_link_libraries(mrvCore PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE} )
 set_target_properties(mrvCore PROPERTIES FOLDER lib)

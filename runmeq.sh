@@ -4,6 +4,12 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 
+#
+#
+# Wrap up script to compile just mrv2, do the documenting and packaging.
+#
+#
+
 
 if [[ ! $RUNME ]]; then
     . etc/build_dir.sh

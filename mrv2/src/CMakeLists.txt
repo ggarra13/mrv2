@@ -14,10 +14,6 @@ if (WIN32)
     list( APPEND SOURCES ${APP_ICON_RESOURCE_WINDOWS} )
 endif()
 
-#
-# We must list all libraries so that old gcc compiler on Docker will link
-# the stdc++fs library properly. 
-#
 set(LIBRARIES )
 
 if(MRV2_PYBIND11)
@@ -31,7 +27,7 @@ list( APPEND LIBRARIES
 
 
 if( APPLE )
-    set( OSX_FRAMEWORKS "-framework Cocoa -framework IOKit" )
+    set( OSX_FRAMEWORKS "-framework IOKit" )
     list( APPEND LIBRARIES ${OSX_FRAMEWORKS} )
     set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
     set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib;/usr/local/lib")
@@ -45,8 +41,6 @@ if(UNIX AND NOT APPLE)
     # Needed for python3.10 on Rocky and Ubuntu 20.04
     list( APPEND LIBRARIES "util" "c" )
 endif()
-
-message(STATUS "mrv2 LIBRARIES=${LIBRARIES}")
 
 add_executable(mrv2 WIN32 ${SOURCES} ${HEADERS})
 
@@ -93,13 +87,18 @@ string( REGEX MATCH "^[0-9]+\\.[0-9]+" MRV2_PYTHON_VERSION "${PYTHON_VERSION}" )
 
 if (UNIX AND BUILD_PYTHON)
     set( MRV2_PYTHON_LIBS ${CMAKE_INSTALL_PREFIX}/lib/python${MRV2_PYTHON_VERSION} )
+    if (MRV2_PYFLTK)
+	# Get rid of the pyFLTK demos as they don't work properly on an
+	# embedded python
+	file( REMOVE_RECURSE ${CMAKE_INSTALL_PREFIX}/lib/python${MRV2_PYTHON_VERSION}/site-packages/fltk14/test )
+    endif()
     install( DIRECTORY ${MRV2_PYTHON_LIBS}
         DESTINATION lib
         COMPONENT applications )
 endif()
 
 if ( APPLE )
-#Install all.dylibs in CMAKE_INSTALL_PREFIX / lib
+    # Install all.dylibs in CMAKE_INSTALL_PREFIX / lib
     file( GLOB MRV_DYLIBS ${CMAKE_INSTALL_PREFIX}/lib/*.dylib* )
     install( FILES ${MRV_DYLIBS}
 	DESTINATION lib
@@ -114,7 +113,14 @@ elseif(WIN32)
     #
     # Handle python DLL and libs and TCL
     #
-    if(MRV2_PYBIND11)	
+    if(MRV2_PYBIND11)
+
+	if (MRV2_PYFLTK)
+	    # Get rid of the pyFLTK demos as they don't work properly on an
+	    # embedded python
+	    file( REMOVE_RECURSE ${CMAKE_INSTALL_PREFIX}/bin/Lib/site-packages/fltk14/test )
+	endif()
+    
 	# Install all .dll in CMAKE_INSTALL_PREFIX/bin
 	file( GLOB MRV_PYLib ${CMAKE_INSTALL_PREFIX}/bin/Lib )
 	file( GLOB MRV_PYDLLs ${CMAKE_INSTALL_PREFIX}/bin/DLLs )
