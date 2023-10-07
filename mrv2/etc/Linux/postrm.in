@@ -18,16 +18,13 @@ echo "Removing symlink from /usr/bin/mrv2-v@mrv2_VERSION@"
 rm -f /usr/bin/mrv2-v@mrv2_VERSION@
 
 # Find the closest version folder in /usr/bin
-closest_version=$(ls -1 /usr/bin/ | grep "mrv2-v*" | sort -V | tail -n 1)
+closest_version=$(ls -1 "/usr/local/" | grep "mrv2-v" | sort -V | tail -n 1)
 
 # Check if a closest version was found
 if [[ -n "$closest_version" && $removed == 1 ]]; then
-    closest_intall=/usr/local/${closest_version}-Linux-64/bin/mrv2.sh
     # Create a new symbolic link pointing to the closest version
-    if [ -e $closest_install ]; then
-	ln -s "$closest_install" "/usr/bin/mrv2"
-	echo "Created a new symbolic link: mrv2 --> $closest_install"
-    fi
+    ln -s "/usr/local/$closest_version/bin/mrv2.sh" "/usr/bin/mrv2"
+    echo "Created a new symbolic link: mrv2 --> $closest_version"
 else
     echo "No suitable version found to create a symbolic link."
 fi
