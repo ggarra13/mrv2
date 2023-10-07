@@ -3,10 +3,15 @@ version 1.0400
 i18n_type 1
 i18n_include {<libintl.h>}
 i18n_conditional {}
-i18n_gnu_function gettext
-i18n_gnu_static_function gettext_noop
+i18n_function gettext
+i18n_static_function gettext_noop
 header_name {.h}
 code_name {.cxx}
+snap {
+  ver 1
+  current_suite FLTK
+  current_preset 0
+}
 decl {\#include "mrvFl/mrvPreferences.h"} {private local
 }
 
@@ -38,7 +43,7 @@ class HotkeyUI {open
   } {
     Fl_Window uiMain {
       label Hotkeys open
-      xywh {847 276 775 644} type Double box PLASTIC_DOWN_BOX resizable modal visible
+      xywh {569 132 775 644} type Double box PLASTIC_DOWN_BOX resizable modal visible
     } {
       Fl_Group {} {open
         xywh {0 4 853 640} box PLASTIC_DOWN_BOX resizable
