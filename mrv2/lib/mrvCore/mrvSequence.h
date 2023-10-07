@@ -94,44 +94,8 @@ namespace mrv
         int64_t& firstFrame, int64_t& lastFrame, std::string& file,
         const bool error = true);
 
-    /**
-     * Given a filename extension, return whether the extension is
-     * from a movie format.
-     *
-     * @param ext Filename extension
-     *
-     * @return true if a possible movie, false if not.
-     */
-    bool is_valid_movie(const char* ext);
-
-    /**
-     * Given a filename extension, return whether the extension is
-     * from an audio format.
-     *
-     * @param ext Filename extension
-     *
-     * @return true if a possible audio file, false if not.
-     */
-    bool is_valid_audio(const char* ext);
-
-    /**
-     * Given a filename extension, return whether the extension is
-     * from a subtitle format.
-     *
-     * @param ext Filename extension
-     *
-     * @return true if a possible subtitle file, false if not.
-     */
-    bool is_valid_subtitle(const char* ext);
-
     std::string get_short_view(bool left);
     std::string get_long_view(bool left);
-
-    //! Parse a directory and return all movies, sequences and audios found
-    //! there
-    void parse_directory(
-        const std::string& directory, stringArray& movies,
-        stringArray& sequences, stringArray& audios);
 
     //! Parse a %v or %V fileroot and return the appropiate view name.
     std::string parse_view(const std::string& fileroot, bool left = true);

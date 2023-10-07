@@ -23,6 +23,10 @@ namespace fs = std::filesystem;
 
 #include "mrvWidgets/mrvLogDisplay.h"
 
+#ifdef MRV2_NETWORK
+#    include "mrvNetwork/mrvImageListener.h"
+#endif
+
 #include "mrvFl/mrvPreferences.h"
 #include "mrvFl/mrvHotkey.h"
 #include "mrvFl/mrvLanguages.h"
@@ -56,7 +60,9 @@ namespace mrv
 {
     ColorSchemes Preferences::schemes;
     bool Preferences::native_file_chooser;
+#ifdef TLRENDER_OCIO
     OCIO::ConstConfigRcPtr Preferences::config;
+#endif
     std::string Preferences::OCIO_Display;
     std::string Preferences::OCIO_View;
 
@@ -483,6 +489,7 @@ namespace mrv
         // OCIO
         /////////////////////////////////////////////////////
 
+#ifdef TLRENDER_OCIO
         // Check OCIO variable first, then saved prefs and finally if nothing,
         // use this default.
         std::string ocioDefault =
@@ -539,9 +546,9 @@ namespace mrv
 
         Fl_Preferences ics(ocio, "ICS");
         {
-#define OCIO_ICS(x, d)                                                         \
-    ok = ics.get(#x, tmpS, d, 2048);                                           \
-    uiPrefs->uiOCIO_##x##_ics->value(tmpS);
+#    define OCIO_ICS(x, d)                                                     \
+        ok = ics.get(#x, tmpS, d, 2048);                                       \
+        uiPrefs->uiOCIO_##x##_ics->value(tmpS);
 
             OCIO_ICS(8bits, "");
 
@@ -553,6 +560,7 @@ namespace mrv
 
             OCIO_ICS(float, "");
         }
+#endif
 
         //
         // ui/view/hud
@@ -883,8 +891,9 @@ namespace mrv
     {
         int i;
         ViewerUI* ui = App::ui;
-        PreferencesUI* uiPrefs = ViewerUI::uiPrefs;
-        SettingsObject* settingsObject = ViewerUI::app->settingsObject();
+        auto app = ui->app;
+        auto uiPrefs = ViewerUI::uiPrefs;
+        auto settingsObject = app->settingsObject();
 
         char* saved_locale = strdup(setlocale(LC_NUMERIC, NULL));
         setlocale(LC_NUMERIC, "C");
@@ -1292,7 +1301,7 @@ namespace mrv
                   .arg(prefspath());
         LOG_INFO(msg);
 
-        check_language(uiPrefs, language_index);
+        check_language(uiPrefs, language_index, app);
     }
 
     bool Preferences::set_transforms()
@@ -1307,7 +1316,7 @@ namespace mrv
         PreferencesUI* uiPrefs = ui->uiPrefs;
         App* app = ui->app;
 
-        check_language(uiPrefs, language_index);
+        check_language(uiPrefs, language_index, app);
 
 #ifdef __APPLE__
         if (uiPrefs->uiPrefsMacOSMenus->value())
@@ -1605,10 +1614,24 @@ namespace mrv
             }
         }
 
-        ui->uiMain->fill_menu(ui->uiMenuBar);
+        view->refreshWindows();
 
-        if (debug > 1)
-            schemes.debug();
+#ifdef MRV2_NETWORK
+        if (uiPrefs->uiPrefsSingleInstance->value())
+        {
+            ImageSender sender;
+            if (!sender.isRunning())
+            {
+                app->createListener();
+            }
+        }
+        else
+        {
+            app->removeListener();
+        }
+#endif
+
+        ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
     void Preferences::updateICS()
@@ -1687,6 +1710,13 @@ namespace mrv
                 break;
             }
         }
+
+        Fl_Preferences base(prefspath().c_str(), "filmaura", "mrv2");
+        Fl_Preferences gui(base, "ui");
+        gui.set("single_instance", uiPrefs->uiPrefsSingleInstance->value());
+        gui.set(
+            "single_instance", (int)uiPrefs->uiPrefsSingleInstance->value());
+        base.flush();
     }
 
     //////////////////////////////////////////////////////
@@ -1694,6 +1724,7 @@ namespace mrv
     /////////////////////////////////////////////////////
     void Preferences::OCIO(ViewerUI* ui)
     {
+#ifdef TLRENDER_OCIO
         PreferencesUI* uiPrefs = ui->uiPrefs;
 
         static std::string old_ocio;
@@ -1735,7 +1766,7 @@ namespace mrv
 
                 bool use_active = uiPrefs->uiOCIOUseActiveViews->value();
 
-                stringArray active_displays;
+                std::vector<std::string> active_displays;
                 const char* displaylist = config->getActiveDisplays();
                 if (use_active && displaylist && strlen(displaylist) > 0)
                 {
@@ -1758,7 +1789,7 @@ namespace mrv
                     }
                 }
 
-                stringArray active_views;
+                std::vector<std::string> active_views;
                 const char* viewlist = config->getActiveViews();
                 if (use_active && viewlist && strlen(viewlist) > 0)
                 {
@@ -1911,6 +1942,7 @@ namespace mrv
         ui->uiICS->show();
 
         updateICS();
+#endif
     }
 
 } // namespace mrv

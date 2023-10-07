@@ -20,13 +20,13 @@ endif()
 
 file(REAL_PATH ${ROOT_DIR} ROOT_DIR )
 
-message( STATUS "cmake/prepacke.cmake has ROOT_DIR=${ROOT_DIR}" )
+message( STATUS "cmake/prepackage.cmake has ROOT_DIR=${ROOT_DIR}" )
 
 include( "${ROOT_DIR}/cmake/functions.cmake" )
 
 
 #
-# Note UNIX CMAKE_INSTALL_PREFIX is broken!!!
+# @bug: UNIX CMAKE_INSTALL_PREFIX is broken!!!
 #
 if( UNIX AND NOT APPLE )
     set( CPACK_PREPACKAGE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_PREFIX}" )

@@ -121,11 +121,11 @@ namespace mrv
         p.a->setIfChanged(p.files->getItem(p.files->getSize() - 1));
         p.aIndex->setIfChanged(_index(p.a->get()));
 
-        if (p.b->isEmpty())
-        {
-            p.b->pushBack(p.a->get());
-            p.bIndexes->setIfChanged(_bIndexes());
-        }
+        // if (p.b->isEmpty())
+        // {
+        //     p.b->pushBack(p.a->get());
+        //     p.bIndexes->setIfChanged(_bIndexes());
+        // }
 
         p.active->setIfChanged(_getActive());
         p.layers->setIfChanged(_getLayers());

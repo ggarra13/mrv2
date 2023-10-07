@@ -23,6 +23,8 @@ namespace mrv
         void dock() override;
         void undock() override;
 
+        void save() override;
+
         void info(const std::string& msg) const;
         void warning(const std::string& msg) const;
         void error(const std::string& msg) const;

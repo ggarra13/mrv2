@@ -1278,6 +1278,7 @@ namespace mrv
         case color::kHSL:
             hsv = color::rgb::to_hsl(rgba);
             break;
+#ifdef TLRENDER_EXR
         case color::kCIE_XYZ:
             hsv = color::rgb::to_xyz(rgba);
             break;
@@ -1290,6 +1291,7 @@ namespace mrv
         case color::kCIE_Luv:
             hsv = color::rgb::to_luv(rgba);
             break;
+#endif
         case color::kYUV:
             hsv = color::rgb::to_yuv(rgba);
             break;
@@ -1961,6 +1963,7 @@ namespace mrv
         case color::kHSL:
             hsv = color::rgb::to_hsl(rgba);
             break;
+#ifdef TLRENDER_HSV
         case color::kCIE_XYZ:
             hsv = color::rgb::to_xyz(rgba);
             break;
@@ -1973,6 +1976,7 @@ namespace mrv
         case color::kCIE_Luv:
             hsv = color::rgb::to_luv(rgba);
             break;
+#endif
         case color::kYUV:
             hsv = color::rgb::to_yuv(rgba);
             break;

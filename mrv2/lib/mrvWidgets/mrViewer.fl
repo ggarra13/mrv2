@@ -3,15 +3,10 @@ version 1.0400
 i18n_type 1
 i18n_include {<libintl.h>}
 i18n_conditional {}
-i18n_function gettext
-i18n_static_function gettext_noop
+i18n_gnu_function gettext
+i18n_gnu_static_function gettext_noop
 header_name {.h}
 code_name {.cxx}
-snap {
-  ver 1
-  current_suite FLTK
-  current_preset 0
-}
 decl {\#include "FL/Fl_Flex.H"} {public global
 }
 
@@ -415,7 +410,7 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
   }
 }
 
-widget_class TimelineClass {
+widget_class TimelineClass {open
   xywh {130 292 690 29} resizable
   class Fl_Double_Window visible
 } {
@@ -518,7 +513,7 @@ ui->uiView->take_focus();}
             label {@>}
             user_data this user_data_type {ViewerUI*}
             callback {ui->uiView->playForwards();}
-            tooltip {Play sequence forward.} xywh {242 3 28 24} labelcolor 28
+            tooltip {Play sequence forward.} xywh {242 3 28 24} down_box DOWN_BOX labelcolor 28
             class {mrv::Button}
           }
           Fl_Button {} {
@@ -804,8 +799,8 @@ uiSecondary = nullptr;} {}
       label mrv2
       user_data this user_data_type {ViewerUI*}
       callback {exit_cb( o, v );} open
-      xywh {998 185 690 602} type Double align 80 resizable
-      class {mrv::MainWindow} size_range {690 602 0 0} visible
+      xywh {998 185 690 602} type Double align 80 hide resizable
+      class {mrv::MainWindow} size_range {690 602 0 0}
     } {
       Fl_Pack uiRegion {open
         xywh {0 0 690 602} box FLAT_BOX resizable
@@ -927,7 +922,7 @@ uiView->updateDisplayOptions();}
             Fl_Menu_Button uiICS {
               label {Input Color Space}
               user_data this user_data_type {ViewerUI*}
-              callback {uiView->updateColorConfigOptions();} open selected
+              callback {uiView->updateColorConfigOptions();} open
               tooltip {OCIO input color space for the image} xywh {277 27 143 22} box ROUNDED_BOX labelsize 10 align 96
               code0 {o->disable_submenus();}
               class {mrv::PopupMenu}
@@ -1185,8 +1180,8 @@ settingsObject->setValue( mrv::kPenColorA, a);}
           xywh {0 577 690 25} color 0
         } {
           Fl_Group uiStatusBar {
-            label {Everything OK.  } open
-            xywh {0 577 690 25} box FLAT_BOX align 84
+            label {Everything OK.  } open selected
+            xywh {0 577 690 25} box FLAT_BOX labelsize 10 align 84
             code0 {o->save_colors();}
             class {mrv::StatusBar}
           } {

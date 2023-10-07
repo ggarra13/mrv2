@@ -37,7 +37,9 @@
 
 #include "mrvEdit/mrvEditUtil.h"
 
-#include "mrvPDF/mrvSavePDF.h"
+#ifdef MRV2_PDF
+#    include "mrvPDF/mrvSavePDF.h"
+#endif
 
 #include "mrvNetwork/mrvTCP.h"
 #include "mrvNetwork/mrvCypher.h"
@@ -164,7 +166,7 @@ namespace mrv
 
     void open_cb(Fl_Widget* w, ViewerUI* ui)
     {
-        const stringArray& files = open_image_file(NULL, true, ui);
+        const std::vector<std::string>& files = open_image_file(NULL, true);
         open_files_cb(files, ui);
     }
 
@@ -173,7 +175,7 @@ namespace mrv
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(w->mvalue());
         if (!item || !item->label())
             return;
-        stringArray files;
+        std::vector<std::string> files;
         std::string file = item->label();
         files.push_back(file);
         open_files_cb(files, ui);
@@ -187,14 +189,14 @@ namespace mrv
 
     void open_directory_cb(Fl_Widget* w, ViewerUI* ui)
     {
-        std::string dir = open_directory(NULL, ui);
+        std::string dir = open_directory(NULL);
         if (dir.empty())
             return;
 
         if (!is_directory(dir))
             return;
 
-        stringArray movies, sequences, audios;
+        std::vector<std::string> movies, sequences, audios;
         parse_directory(dir, movies, sequences, audios);
 
         for (const auto& movie : movies)
@@ -227,7 +229,7 @@ namespace mrv
 
     void save_single_frame_cb(Fl_Menu_* w, ViewerUI* ui)
     {
-        const std::string& file = save_single_image(ui);
+        const std::string& file = save_single_image();
         if (file.empty())
             return;
 
@@ -271,25 +273,29 @@ namespace mrv
             static_cast<bool>(saveOptions.Annotations->value());
 
         int value;
+
+#ifdef TLRENDER_EXR
         value = saveOptions.PixelType->value();
         if (value == 0)
             options.exrPixelType = tl::image::PixelType::RGBA_F16;
         if (value == 1)
             options.exrPixelType = tl::image::PixelType::RGBA_F32;
+#endif
 
+#ifdef TLRENDER_EXR
         value = saveOptions.Compression->value();
         options.exrCompression = static_cast<tl::exr::Compression>(value);
-
         options.zipCompressionLevel =
             static_cast<int>(saveOptions.ZipCompressionLevel->value());
         options.dwaCompressionLevel = saveOptions.DWACompressionLevel->value();
+#endif
 
         save_single_frame(file, ui, options);
     }
 
     void save_movie_cb(Fl_Menu_* w, ViewerUI* ui)
     {
-        const std::string& file = save_movie_or_sequence_file(ui);
+        const std::string& file = save_movie_or_sequence_file();
         if (file.empty())
             return;
 
@@ -334,9 +340,12 @@ namespace mrv
 
         int value;
 
+#ifdef TLRENDER_FFMPEG
         value = saveOptions.Profile->value();
         options.ffmpegProfile = static_cast<tl::ffmpeg::Profile>(value);
+#endif
 
+#ifdef TLRENDER_EXR
         value = saveOptions.PixelType->value();
         if (value == 0)
             options.exrPixelType = tl::image::PixelType::RGBA_F16;
@@ -345,6 +354,7 @@ namespace mrv
 
         value = saveOptions.Compression->value();
         options.exrCompression = static_cast<tl::exr::Compression>(value);
+#endif
 
         options.zipCompressionLevel =
             static_cast<int>(saveOptions.ZipCompressionLevel->value());
@@ -355,6 +365,7 @@ namespace mrv
 
     void save_pdf_cb(Fl_Menu_* w, ViewerUI* ui)
     {
+#ifdef MRV2_PDF
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
@@ -363,11 +374,12 @@ namespace mrv
         if (annotations.empty())
             return;
 
-        const std::string& file = save_pdf(ui);
+        const std::string& file = save_pdf();
         if (file.empty())
             return;
 
         save_pdf(file, ui);
+#endif
     }
 
     void close_current_cb(Fl_Widget* w, ViewerUI* ui)
@@ -432,8 +444,10 @@ namespace mrv
             vectorscopePanel->save();
         if (environmentMapPanel)
             environmentMapPanel->save();
+#ifdef MRV2_PYBIND11
         if (pythonPanel)
             pythonPanel->save();
+#endif
 #ifdef MRV2_NETWORK
         if (networkPanel)
             networkPanel->save();
@@ -1241,11 +1255,9 @@ namespace mrv
         std::vector< otime::RationalTime > times = player->getAnnotationTimes();
         std::sort(
             times.begin(), times.end(), std::greater<otime::RationalTime>());
-        const auto& range = player->timeRange();
-        const auto& duration = range.end_time_inclusive() - range.start_time();
-        for (auto time : times)
+        for (const auto& time : times)
         {
-            if (time < currentTime)
+            if (time::floor(time) < time::floor(currentTime))
             {
                 player->seek(time);
                 return;
@@ -1261,11 +1273,9 @@ namespace mrv
         auto currentTime = player->currentTime();
         std::vector< otime::RationalTime > times = player->getAnnotationTimes();
         std::sort(times.begin(), times.end());
-        const auto& range = player->timeRange();
-        const auto& duration = range.end_time_inclusive() - range.start_time();
-        for (auto time : times)
+        for (const auto& time : times)
         {
-            if (time > currentTime)
+            if (time::floor(time) > time::floor(currentTime))
             {
                 player->seek(time);
                 return;
@@ -1630,7 +1640,7 @@ namespace mrv
 
     void save_session_as_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        const std::string& file = save_session_file(ui);
+        const std::string& file = save_session_file();
         if (file.empty())
             return;
 
@@ -1650,7 +1660,7 @@ namespace mrv
 
     void load_session_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        const std::string& file = open_session_file(ui);
+        const std::string& file = open_session_file();
         if (file.empty())
             return;
 

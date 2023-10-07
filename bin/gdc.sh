@@ -18,7 +18,6 @@ fi
 
 . etc/build_dir.sh
 
-
 if [[ $KERNEL == *Msys* ]]; then
     requests=$BUILD_DIR/install/bin/Lib/site-packages/requests
     if [[ ! -e $requests ]]; then

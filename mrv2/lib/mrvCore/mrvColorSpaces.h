@@ -4,7 +4,11 @@
 
 #pragma once
 
-#include <ImfChromaticities.h>
+#include <Imath/ImathVec.h>
+
+#ifdef TLRENDER_EXR
+#    include <ImfChromaticities.h>
+#endif
 
 #include <tlCore/Color.h>
 #include <tlCore/Image.h>
@@ -36,7 +40,9 @@ namespace mrv
 
         extern Imath::V3f kD50_whitePoint;
         extern Imath::V3f kD65_whitePoint;
+#ifdef TLRENDER_EXR
         extern Imf::Chromaticities kITU_709_chroma;
+#endif
 
         enum Space {
             kRGB,
@@ -86,6 +92,7 @@ namespace mrv
 
         namespace rgb
         {
+#ifdef TLRENDER_EXR
             image::Color4f to_xyz(
                 const image::Color4f& rgb,
                 const Imf::Chromaticities& chroma = kITU_709_chroma,
@@ -102,6 +109,7 @@ namespace mrv
                 const image::Color4f& rgb,
                 const Imf::Chromaticities& chroma = kITU_709_chroma,
                 const float Y = 1.0f) noexcept;
+#endif
             image::Color4f to_hsv(const image::Color4f& rgb) noexcept;
             image::Color4f to_hsl(const image::Color4f& rgb) noexcept;
             image::Color4f to_yuv(const image::Color4f& rgb) noexcept;

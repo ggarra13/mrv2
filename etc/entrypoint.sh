@@ -27,7 +27,7 @@ chmod a+x ./etc/install_cmake.sh
 #
 # Run the build and package it.
 #
-./runme.sh -D TLRENDER_USD=ON -t package
+time ./runme_nolog.sh -D TLRENDER_USD=ON -t package
 
 
 #

@@ -3,6 +3,7 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <set>
 #include <fstream>
 #include <filesystem>
 
@@ -31,6 +32,7 @@ namespace fs = std::filesystem;
 #include "mrvDraw/Annotation.h"
 
 #include "mrvNetwork/mrvTCP.h"
+#include "mrvNetwork/mrvInsertData.h"
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
@@ -143,7 +145,7 @@ namespace mrv
             const double rate = player->defaultSpeed();
             player->setSpeed(rate);
             player->setInOutRange(player->timeRange());
-            ui->uiTimeline->frameView();
+            ui->uiTimeline->setTimelinePlayer(player);
             ui->uiTimeline->redraw();
 
             // Set the start and end frame
@@ -482,33 +484,6 @@ namespace mrv
             }
         }
 
-        //! Debug the timeline
-        void debug_timeline(otio::Timeline* timeline)
-        {
-            auto tracks = timeline->tracks()->children();
-            for (const auto& child : tracks)
-            {
-                auto track = otio::dynamic_retainer_cast<Track>(child);
-                if (!track)
-                    continue;
-                std::cerr << "Track " << track->kind() << std::endl;
-                int idx = 0;
-                for (const auto childItem : track->children())
-                {
-                    auto item = otio::dynamic_retainer_cast<Item>(childItem);
-                    if (!item)
-                        continue;
-                    std::cout << "\tchild " << idx
-                              << " trimmed= " << item->trimmed_range()
-                              << std::endl;
-                    auto track_range = item->trimmed_range_in_parent().value();
-                    std::cout << "\tchild " << idx
-                              << "   track= " << track_range << std::endl;
-                    ++idx;
-                }
-            }
-        }
-
         //! Change clips' source range to use the highest video and audio
         //! sample rate.  Also returns the largest time range for the timeline.
         void sanitizeVideoAndAudioRates(
@@ -672,19 +647,6 @@ namespace mrv
             return out;
         }
 
-        //! Return the EDL name for the Undo/Redo queue.
-        std::string getEDLName(ViewerUI* ui)
-        {
-            auto model = ui->app->filesModel();
-            auto Aitem = model->observeA()->get();
-
-            const file::Path path = Aitem->path;
-            if (!isTemporaryEDL(path))
-                return _otioFilename(ui);
-
-            return path.get();
-        }
-
         //! Switches to EDL clip for timeline processing during an Undo/Redo.
         bool switchToEDL(const std::string& fileName, ViewerUI* ui)
         {
@@ -722,24 +684,34 @@ namespace mrv
             }
         }
 
+        //! Return the EDL name for the Undo/Redo queue.
+        std::string getEDLName(ViewerUI* ui)
+        {
+            auto model = ui->app->filesModel();
+            auto Aitem = model->observeA()->get();
+
+            const file::Path path = Aitem->path;
+            if (!isTemporaryEDL(path))
+                return _otioFilename(ui);
+
+            return path.get();
+        }
+
     } // namespace
 
-    //! Dump undo queue to tmpdir.
-    void dump_undo_queue_cb(Fl_Menu_* m, ViewerUI* ui)
+    void toOtioFile(TimelinePlayer* player, ViewerUI* ui)
     {
-        // const std::string path = tmppath() + "/UndoQueue";
-        // int mode = 0777;
-        // fl_mkdir(path.c_str(), mode);
-        // unsigned int idx = 1;
-        // char buf[4096];
-        // for (auto& undo : undoBuffer)
-        // {
-        //     snprintf(buf, 4096, "%s/undo.%d.otio", path.c_str(), idx);
-        //     std::ofstream f(buf);
-        //     f << undo.json << std::endl;
-        //     f.close();
-        //     ++idx;
-        // }
+        auto timeline = player->getTimeline();
+        updateTimeline(timeline, player->currentTime(), ui);
+        toOtioFile(timeline, ui);
+    }
+
+    void makePathsAbsolute(TimelinePlayer* player, ViewerUI* ui)
+    {
+        auto timeline = player->getTimeline();
+        if (!timeline)
+            return;
+        makePathsAbsolute(timeline, ui);
     }
 
     void edit_store_undo(TimelinePlayer* player, ViewerUI* ui)
@@ -759,6 +731,7 @@ namespace mrv
             }
         }
 
+        toOtioFile(timeline, ui);
         UndoRedo buffer;
         buffer.json = state;
         buffer.fileName = getEDLName(ui);
@@ -795,6 +768,7 @@ namespace mrv
             }
         }
 
+        toOtioFile(timeline, ui);
         UndoRedo buffer;
         buffer.json = state;
         buffer.fileName = getEDLName(ui);
@@ -1169,28 +1143,6 @@ namespace mrv
 
     void edit_roll_cb(Fl_Menu_* m, ViewerUI* ui) {}
 
-    void edit_remove_clip_with_gap_cb(Fl_Menu_* m, ViewerUI* ui)
-    {
-        auto player = ui->uiView->getTimelinePlayer();
-        if (!player)
-            return;
-
-        const auto& time = getTime(player);
-        const auto& tracks = getTracks(player, time);
-
-        auto timeline = player->getTimeline();
-        edit_store_undo(player, ui);
-
-        for (auto track : tracks)
-        {
-            otio::algo::remove(track, time);
-        }
-        player->setTimeline(timeline);
-        updateTimeline(timeline, time, ui);
-
-        toOtioFile(timeline, ui);
-    }
-
     void edit_undo_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         auto player = ui->uiView->getTimelinePlayer();
@@ -1224,8 +1176,8 @@ namespace mrv
         updateTimeline(timeline, player->currentTime(), ui);
 
         toOtioFile(timeline, ui);
-        if (playlistPanel)
-            playlistPanel->redraw();
+
+        redrawPanelThumbnails();
     }
 
     void edit_redo_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -1265,11 +1217,99 @@ namespace mrv
 
         toOtioFile(timeline, ui);
 
-        if (playlistPanel)
-            playlistPanel->redraw();
+        redrawPanelThumbnails();
 
         if (refreshCache)
             refresh_file_cache_cb(nullptr, ui);
+    }
+
+    void shiftAnnotations(
+        const otime::TimeRange& range, const otime::RationalTime& insertTime,
+        const bool previous, ViewerUI* ui)
+    {
+        using namespace draw;
+
+        auto view = ui->uiView;
+        auto player = view->getTimelinePlayer();
+        if (!player)
+            return;
+
+        const auto& originalAnnotations = player->getAllAnnotations();
+
+        // First, do a deep copy of all annotations.
+        std::vector<std::shared_ptr<draw::Annotation>> annotations;
+        std::vector< draw::Annotation > flatAnnotations;
+        for (const auto& annotation : originalAnnotations)
+        {
+            flatAnnotations.push_back(*annotation.get());
+        }
+        Message json = flatAnnotations;
+        for (const auto& j : json)
+        {
+            std::shared_ptr< Annotation > tmp = messageToAnnotation(j);
+            annotations.push_back(tmp);
+        }
+
+        // Then, adjust the annotations within the range.
+        std::set<std::shared_ptr<draw::Annotation>> skipAnnotations;
+        for (auto& annotation : annotations)
+        {
+            if (annotation->allFrames)
+                continue;
+
+            if (range.contains(annotation->time))
+            {
+                auto offset = annotation->time - range.start_time();
+                if (previous)
+                {
+                    annotation->time =
+                        insertTime + offset - range.end_time_exclusive();
+                }
+                else
+                {
+                    annotation->time = insertTime + offset;
+                }
+                skipAnnotations.insert(annotation);
+            }
+        }
+
+        // Finally, shift the annotations.
+        if (previous)
+        {
+            for (auto annotation : annotations)
+            {
+                if (annotation->allFrames)
+                    continue;
+
+                if (skipAnnotations.find(annotation) != skipAnnotations.end())
+                    continue;
+
+                if (annotation->time < insertTime)
+                {
+                    annotation->time -= range.duration();
+                }
+            }
+        }
+        else
+        {
+            auto endTime = range.end_time_exclusive();
+            for (auto& annotation : annotations)
+            {
+                if (annotation->allFrames)
+                    continue;
+
+                if (skipAnnotations.find(annotation) != skipAnnotations.end())
+                    continue;
+
+                if (annotation->time > insertTime && annotation->time < endTime)
+                {
+                    annotation->time += range.duration();
+                }
+            }
+        }
+
+        player->setAllAnnotations(annotations);
+        view->redraw();
     }
 
     otio::SerializableObject::Retainer<otio::Timeline>
@@ -1387,7 +1427,7 @@ namespace mrv
             return;
         }
 
-        auto otioFile = save_otio(nullptr, ui);
+        auto otioFile = save_otio(nullptr);
         if (otioFile.empty())
             return;
 
@@ -1680,6 +1720,7 @@ namespace mrv
                 return;
             player->setAllAnnotations(annotations);
             updateTimeline(timeline, player->currentTime(), ui);
+            ui->uiTimeline->frameView();
 
             refreshPanelThumbnails();
         }
@@ -1689,6 +1730,152 @@ namespace mrv
         }
 
         tcp->unlock();
+    }
+
+    void edit_insert_clip_annotations(
+        const std::vector<mrv::InsertData>& inserts, ViewerUI* ui)
+    {
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
+            return;
+
+        auto& timeline = player->getTimeline();
+        const auto& startTimeOpt = timeline->global_start_time();
+        otime::RationalTime startTime(0.0, timeline->duration().rate());
+        if (startTimeOpt.has_value())
+        {
+            startTime = startTimeOpt.value();
+            offsetAnnotations(
+                startTime, -startTime, player->getAllAnnotations());
+        }
+
+        const auto& stack = timeline->tracks();
+        const auto& tracks = stack->children();
+        for (const auto& insert : inserts)
+        {
+            const int oldIndex = insert.oldIndex;
+            const int oldTrackIndex = insert.oldTrackIndex;
+            if (oldIndex < 0 || oldTrackIndex < 0 || insert.trackIndex < 0 ||
+                insert.trackIndex >= tracks.size())
+                continue;
+
+            if (auto track = otio::dynamic_retainer_cast<otio::Track>(
+                    stack->children()[oldTrackIndex]))
+            {
+                if (track->kind() != otio::Track::Kind::video)
+                    continue;
+            }
+
+            int insertIndex = insert.insertIndex;
+            if (oldTrackIndex == insert.trackIndex && oldIndex < insertIndex)
+            {
+                --insertIndex;
+            }
+
+            if (auto track = otio::dynamic_retainer_cast<otio::Track>(
+                    tracks[oldTrackIndex]))
+            {
+                auto child = track->children()[oldIndex];
+                auto item = otio::dynamic_retainer_cast<otio::Item>(child);
+                if (!item)
+                    continue;
+
+                auto oldRange = item->trimmed_range_in_parent().value();
+
+                if (auto track = otio::dynamic_retainer_cast<otio::Track>(
+                        tracks[insert.trackIndex]))
+                {
+                    auto child = track->children()[insertIndex];
+                    auto item = otio::dynamic_retainer_cast<otio::Item>(child);
+                    if (!item)
+                        continue;
+
+                    auto insertRange = item->trimmed_range_in_parent().value();
+
+                    otime::RationalTime insertTime;
+                    bool previous = insertIndex > oldIndex;
+                    if (previous)
+                    {
+                        insertTime = insertRange.end_time_exclusive();
+                    }
+                    else
+                    {
+                        insertTime = insertRange.start_time();
+                    }
+
+                    //
+                    // Shift annotations
+                    //
+                    shiftAnnotations(oldRange, insertTime, previous, ui);
+                }
+            }
+        }
+
+        ui->uiTimeline->redraw();
+    }
+
+    void
+    edit_insert_clip(const std::vector<mrv::InsertData>& inserts, ViewerUI* ui)
+    {
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
+            return;
+
+        std::vector<tl::timeline::InsertData> insertData;
+        const auto& timeline = player->getTimeline();
+        const auto& stack = timeline->tracks();
+        const auto& tracks = stack->children();
+        for (const auto& insert : inserts)
+        {
+            const int oldIndex = insert.oldIndex;
+            const int oldTrackIndex = insert.oldTrackIndex;
+
+            if (auto track = otio::dynamic_retainer_cast<otio::Track>(
+                    tracks[oldTrackIndex]))
+            {
+                if (auto child = track->children()[oldIndex])
+                {
+                    auto item = otio::dynamic_retainer_cast<otio::Item>(child);
+                    if (!item)
+                        continue;
+
+                    timeline::InsertData data;
+                    data.composable = child;
+                    data.trackIndex = insert.trackIndex;
+                    data.insertIndex = insert.insertIndex;
+                    insertData.push_back(data);
+                }
+            }
+        }
+
+        auto otioTimeline = tl::timeline::insert(timeline, insertData);
+        player->player()->getTimeline()->setTimeline(otioTimeline);
+
+        edit_insert_clip_annotations(inserts, ui);
+    }
+
+    void edit_insert_clip_annotations(
+        const std::vector<tl::timeline::InsertData>& inserts, ViewerUI* ui)
+    {
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
+            return;
+
+        // Convert tlRender data to mrv2's one.
+        std::vector<mrv::InsertData> networkInsertData;
+        for (const auto& insert : inserts)
+        {
+            const int oldIndex = getIndex(insert.composable);
+            const int oldTrackIndex = getIndex(insert.composable->parent());
+            InsertData networkInsert;
+            networkInsert.oldIndex = oldIndex;
+            networkInsert.oldTrackIndex = oldTrackIndex;
+            networkInsert.trackIndex = insert.trackIndex;
+            networkInsert.insertIndex = insert.insertIndex;
+            networkInsertData.push_back(networkInsert);
+        }
+
+        edit_insert_clip_annotations(networkInsertData, ui);
     }
 
     EditMode editMode = EditMode::kTimeline;
@@ -1813,7 +2000,7 @@ namespace mrv
             active = false;
 
         b->value(active);
-        if (b->value())
+        if (active)
         {
             b->labelcolor(fl_rgb_color(255, 255, 255));
         }
@@ -1874,7 +2061,8 @@ namespace mrv
 
         if (mode != EditMode::kNone)
         {
-            Message msg = {{"command", "setEditMode"}, {"value", mode}};
+            Message msg = {
+                {"command", "setEditMode"}, {"value", mode}, {"height", H}};
             tcp->pushMessage(msg);
         }
 

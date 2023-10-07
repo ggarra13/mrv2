@@ -22,9 +22,12 @@ void mrv2_io(py::module& m)
         .def_readwrite(
             "annotations", &mrv::SaveOptions::annotations,
             _("Save annotations."))
+#ifdef TLRENDER_FFMPEG
         .def_readwrite(
             "ffmpegProfile", &mrv::SaveOptions::ffmpegProfile,
             _("FFmpeg Profile."))
+#endif
+#ifdef TLRENDER_EXR
         .def_readwrite(
             "exrCompression", &mrv::SaveOptions::exrCompression,
             _("OpenEXR's Compression."))
@@ -37,6 +40,7 @@ void mrv2_io(py::module& m)
         .def_readwrite(
             "dwaCompressionLevel", &mrv::SaveOptions::dwaCompressionLevel,
             _("OpenEXR's DWA Compression Level."))
+#endif
         .def(
             "__repr__",
             [](const mrv::SaveOptions& o)
@@ -49,9 +53,10 @@ void mrv2_io(py::module& m)
 #endif
 #ifdef TLRENDER_EXR
                   << " exrCompression=" << getLabel(o.exrCompression)
-#endif
                   << " zipCompressionLevel=" << o.zipCompressionLevel
-                  << " dwaCompressionLevel=" << o.dwaCompressionLevel << ">";
+                  << " dwaCompressionLevel=" << o.dwaCompressionLevel
+#endif
+                  << ">";
                 return s.str();
             })
         .doc() = "Saving options.";

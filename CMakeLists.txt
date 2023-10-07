@@ -5,12 +5,9 @@ cmake_minimum_required(VERSION 3.23)
 project( mrv2 )
 
 if(APPLE)
-    if( CMAKE_OSX_DEPLOYMENT_TARGET )
-        message( STATUS "-------------------------------------------------" )
-        message( STATUS "Building for macOS ${CMAKE_OSX_DEPLOYMENT_TARGET}" )
-        message( STATUS "-------------------------------------------------" )
-        set( CMAKE_CXX_FLAGS "-Wno-register")
-    endif()
+    message( STATUS "-------------------------------------------------" )
+    message( STATUS "Building for macOS ${CMAKE_OSX_DEPLOYMENT_TARGET}" )
+    message( STATUS "-------------------------------------------------" )
 endif()
 
 
@@ -43,11 +40,6 @@ include_directories(
     ${include_dirs}
 )
 
-set( lib_dirs
-    ${CMAKE_INSTALL_PREFIX}/lib
-)
-
-link_directories( ${lib_dirs} )
 
 #
 # Fetch the tlRender library as a submodule with git.
@@ -72,22 +64,27 @@ if(NOT DEFINED CMAKE_INSTALL_MESSAGE)
 endif()
 
 
-#
-# brew .dylibs are compiled only for the current version of the OS.
-# We rebuild zlib and gettext to be compatible with version 10.15.
-#
-set( ZLIB_SHARED )
-if( BUILD_ZLIB )
-    include( cmake/Modules/BuildZLIB.cmake )
-endif()
-
 set( Gettext )
 if( BUILD_GETTEXT )
     include( cmake/Modules/BuildGettext.cmake )
+elseif(APPLE)
+    if (CMAKE_OSX_DEPLOYMENT_TARGET)
+	#
+	# brew .dylibs are compiled only for the current version of the OS.
+	#
+	# We distribute libintl dylib compatible with v10.5
+	file(COPY precompiled/macOS/v10.5/ DESTINATION ${CMAKE_INSTALL_PREFIX}/
+	    FOLLOW_SYMLINK_CHAIN)
+    endif()
 endif()
 
+set(FLTK_DEP )
 if( BUILD_FLTK )
     include( cmake/Modules/BuildFLTK.cmake )
+endif()
+
+if(NOT MRV2_PYBIND11 AND BUILD_PYTHON)
+    set(BUILD_PYTHON OFF)
 endif()
 
 set( PYTHON_DEP )
@@ -95,7 +92,7 @@ if( BUILD_PYTHON )
     include( cmake/Modules/BuildPython.cmake )
 endif()
 
-set( PYBIND11 )
+set( PYBIND11_DEP )
 if( MRV2_PYBIND11 )
     include( cmake/Modules/Buildpybind11.cmake )
 endif()
@@ -103,9 +100,13 @@ endif()
 add_subdirectory( tlRender/etc/SuperBuild )
 
 if(BUILD_PYTHON AND TLRENDER_USD)
-    add_dependencies( USD ${PYTHON_DEP} ${PYBIND11} )
+    add_dependencies( USD ${PYTHON_DEP} )
 endif()
 
+set( pyFLTK_DEP )
+if(MRV2_PYFLTK AND MRV2_PYBIND11)
+    include( cmake/Modules/BuildpyFLTK.cmake )
+endif()
 
 set( POCO_DEP )
 if( MRV2_NETWORK )

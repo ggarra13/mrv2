@@ -837,11 +837,7 @@ namespace mrv
         case FL_ENTER:
         {
             bool takeFocus = true;
-            Fl_Widget* focusWidget = Fl::focus();
-            TimelineClass* c = p.ui->uiTimeWindow;
-            if (this == p.ui->uiView &&
-                (focusWidget == c->uiFrame || focusWidget == c->uiStartFrame ||
-                 focusWidget == c->uiEndFrame))
+            if (this == p.ui->uiView)
                 takeFocus = false;
             if (!children() && takeFocus)
                 take_focus();
@@ -874,6 +870,8 @@ namespace mrv
             if (!children() && Fl::focus() != this && Fl::event_button1())
             {
                 take_focus();
+                if (Fl::event_clicks() < 2)
+                    return 1;
             }
             p.mousePress = _getFocus();
             if (Fl::event_button1())
@@ -1344,7 +1342,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        stringArray tmpFiles, loadFiles;
+        std::vector<std::string> tmpFiles, loadFiles;
         mrv::split_string(tmpFiles, text, "\n");
 
         for (auto file : tmpFiles)
@@ -1365,7 +1363,7 @@ namespace mrv
 #endif
             if (is_directory(file))
             {
-                stringArray movies, sequences, audios;
+                std::vector<std::string> movies, sequences, audios;
                 parse_directory(file, movies, sequences, audios);
                 loadFiles.insert(loadFiles.end(), movies.begin(), movies.end());
                 loadFiles.insert(
@@ -1403,16 +1401,19 @@ namespace mrv
         if (!shape)
             return;
 
-        fl_font(shape->font, shape->fontSize);
+        const float devicePixelRatio = pixels_per_unit();
+        const int fontsize =
+            shape->fontSize * shape->viewZoom / devicePixelRatio;
+        fl_font(shape->font, fontsize);
 
         const math::Vector2i offset(
             kCrossSize + 2, kCrossSize + fl_height() - fl_descent());
         math::Vector2i pos(
             shape->pts[0].x * shape->viewZoom + p.viewPos.x,
             shape->pts[0].y * shape->viewZoom + p.viewPos.y);
-        const float devicePixelRatio = pixels_per_unit();
         pos.x = pos.x / devicePixelRatio;
         pos.y = h() - pos.y / devicePixelRatio;
+
         pos.x -= offset.x;
         pos.y -= offset.y;
 

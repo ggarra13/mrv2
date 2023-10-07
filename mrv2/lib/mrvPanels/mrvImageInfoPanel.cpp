@@ -1255,10 +1255,11 @@ namespace mrv
 
     void ImageInfoPanel::add_enum(
         const char* name, const char* tooltip, const std::string& content,
-        stringArray& options, const bool editable, Fl_Callback* callback)
+        std::vector<std::string>& options, const bool editable,
+        Fl_Callback* callback)
     {
         size_t index;
-        stringArray::iterator it =
+        std::vector<std::string>::iterator it =
             std::find(options.begin(), options.end(), content);
         if (it != options.end())
         {

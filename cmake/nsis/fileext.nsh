@@ -85,17 +85,70 @@ SendMessage $hListCtl ${LVM_INSERTCOLUMN} 0x7fffffff $9
 System::Call '*$9(i,i,i,t "Description",i,i 1)'
 SendMessage $hListCtl ${LVM_INSERTCOLUMN} 0x7fffffff $9
 System::Free $9
+
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".3fr" "Hasselblad RAW Camera Format" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".arw" "Sony RAW Camera Format" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".bay" "Phase One RAW Camera Format" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".bmp" "Bitmap Image File" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".bmq" "RAW Image File" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".cap" "RAW Image File" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".cin" "Kodak Cineon" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".cine" "Vision Research's Phantom RAW Camera Format" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".cr2" "Canon RAW Camera Format" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".cr3" "Canon RAW Camera Format" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".crw" "Canon RAW Camera Format" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".cs1" "CaptureShop 1-shot RAW Image" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".dc2" "Kodak RAW Camera Format" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".dcr" "Kodak RAW Camera Format" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".dng" "Digital Negative Camera Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".dpx" "Digital Picture Exchange" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".drf" "RAW Image File" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".dsc" "Digital Still RAW Camera Format" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".erf" "Epson RAW Camera Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".exr" "ILM OpenEXR" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".fff" "Hasselblad RAW Camera Format" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".ia" "RAW Image File" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".iiq" "Phase One RAW Camera Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".jpeg" "JPEG File Interchange Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".jpg" "JPEG File Interchange Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".jfif" "JPEG File Interchange Format" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".kdc" "Kodak RAW Camera Format" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".mdc" "Minolta RAW Camera Format" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".mef" "Mamiya Electronic Format" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".mos" "Leaf RAW Camera Format" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".mrw" "Minolta RAW Camera Format" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".nef" "Nikon Electronic Format" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".nrw" "Nikon RAW Camera Format" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".orf" "Olympus RAW Camera Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".otio" "OpenTimelineIO Format" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".pef" "Pentax Electronic File (Ricoh)" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".png" "Portable Network Graphics" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".ppm" "Portable Pixmap" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".psd" "Photoshop Document" 0
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".sxr" "ILM Stereo OpenEXR Format" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".ptx" "Pentax RAW Camera Format" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".pxn" "Logitech Fotoman Pixtura Camera Format" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".qtk" "Apple QuickTake Camera Format" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".raf" "Fujifilm RAW Camera Format" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".raw" "RAW Image File" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".rdc" "Red Digital Clip" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".rgb" "Silicon Graphics RGB Picture" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".rgba" "Silicon Graphics RGBA Picture" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".rw2" "Panasonic RAW Camera Format" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".rwl" "Leica RAW Camera Format" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".rwz" "RAW Image File" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".sgi" "Silicon Graphics Image" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".sr2" "Sony RAW Camera Format" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".srf" "Sony RAW Camera Format" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".srw" "Samsung RAW Camera Format" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".sti" "RAW Image File" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".sxr" "Stereo OpenEXR" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".tga" "Truevision Graphics Adapter" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".tiff" "Tagged Image File Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".tif" "Tagged Image File Format" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".x3f" "Sigma (Foveon) RAW Camera Format" 1
+
+
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".avi" "Audio Video Interleave" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".divx" "DIVX Media Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".dv" "Digital Video Format" 1
@@ -152,6 +205,7 @@ ${DoWhile} $0 < $1
     ${If} $2 <> 0
 	SendMessage $hListCtl ${LVM_GETITEMTEXT} $0 $9 $2
 	System::Call '*$8(&t${NSIS_MAX_STRLEN}.r7)'
+	DeleteRegKey HKCR '$7'
 	WriteRegStr HKCR '$7' '' 'mrv2'
 	WriteINIStr '$INSTDIR\\fileext.ini' ext '$7' 1
     ${EndIf}

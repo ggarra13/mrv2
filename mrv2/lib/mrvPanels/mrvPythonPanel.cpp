@@ -266,14 +266,42 @@ namespace mrv
         menu->add(
             _("&File/&Save"), FL_COMMAND + 's',
             (Fl_Callback*)save_python_file_cb, this);
+        menu->add(_("&Edit/&Undo"), FL_COMMAND + 'z', 0, 0, FL_MENU_DIVIDER);
         menu->add(
-            _("Edit/Cu&t"), FL_COMMAND + 'x', (Fl_Callback*)cut_text_cb, this);
+            _("&Edit/Cu&t"), FL_COMMAND + 'x', (Fl_Callback*)cut_text_cb, this);
         menu->add(
-            _("Edit/&Copy"), FL_COMMAND + 'c', (Fl_Callback*)copy_text_cb,
+            _("&Edit/&Copy"), FL_COMMAND + 'c', (Fl_Callback*)copy_text_cb,
             this);
         menu->add(
-            _("Edit/&Paste"), FL_COMMAND + 'p', (Fl_Callback*)paste_text_cb,
-            this);
+            _("&Edit/&Paste"), FL_COMMAND + 'p', (Fl_Callback*)paste_text_cb,
+            this, FL_MENU_DIVIDER);
+        menu->add(
+            _("&Edit/&Delete"), 0, (Fl_Callback*)delete_cb, _r->pythonEditor);
+        menu->add(
+            _("&Edit/&Comment Selection"), FL_F + 12,
+            (Fl_Callback*)comment_text_cb, this);
+        menu->add(
+            _("&Edit/&Uncomment Selection"), FL_F + 11,
+            (Fl_Callback*)uncomment_text_cb, this);
+        // @todo: add search/replace
+        menu->add(
+            _("&Search/&Find..."), FL_COMMAND + 'f', (Fl_Callback*)find_cb,
+            _r->pythonEditor);
+        menu->add(
+            _("&Search/F&ind Again"), FL_COMMAND + 'g', (Fl_Callback*)find2_cb,
+            _r->pythonEditor);
+        menu->add(
+            _("&Search/&Replace"), FL_COMMAND + 'r', (Fl_Callback*)replace_cb,
+            _r->pythonEditor);
+        menu->add(
+            _("&Search/&Replace Again"), FL_COMMAND + 't',
+            (Fl_Callback*)replace2_cb, _r->pythonEditor);
+
+        _r->pythonEditor->replace_next->callback(
+            (Fl_Callback*)replace2_cb, _r->pythonEditor);
+        _r->pythonEditor->replace_all->callback(
+            (Fl_Callback*)replall_cb, _r->pythonEditor);
+
         menu->add(
             _("Clear/&Output"), FL_COMMAND + 'k', (Fl_Callback*)clear_output_cb,
             this, FL_MENU_DIVIDER);
@@ -314,11 +342,9 @@ namespace mrv
     {
         TLRENDER_P();
 
-        g->clear();
-
-        g->begin();
-
-        create_menu();
+        // First, we create the tile and the python editor so we can
+        // use it in the menu callbacks
+        Fl_Group::current(0);
 
         int H = g->h() - 20;
         int Y = 20;
@@ -334,7 +360,6 @@ namespace mrv
         _r->tile->resizable(r);
 
         _r->tile->add(outputDisplay);
-
         outputDisplay->resize(g->x(), g->y() + Y, g->w(), M);
 
         PythonEditor* e;
@@ -369,6 +394,13 @@ from mrv2 import playlist, timeline, usd, settings
         }
 
         _r->tile->end();
+
+        // Create the pack...
+        g->clear();
+        g->begin();
+        create_menu();
+        g->add(_r->tile);
+        g->end();
 
         Fl_Scroll* s = g->get_scroll();
         Pack* pack = g->get_pack();
@@ -512,8 +544,7 @@ from mrv2 import playlist, timeline, usd, settings
 
     void PythonPanel::save_python_file_cb(Fl_Menu_*, PythonPanel* o)
     {
-        std::string file =
-            mrv::save_python_file(mrv::rootpath().c_str(), App::ui);
+        std::string file = mrv::save_python_file(mrv::rootpath().c_str());
         if (file.empty())
             return;
         o->save_python_file(file);
@@ -521,8 +552,7 @@ from mrv2 import playlist, timeline, usd, settings
 
     void PythonPanel::open_python_file_cb(Fl_Menu_*, PythonPanel* o)
     {
-        std::string file =
-            mrv::open_python_file(mrv::pythonpath().c_str(), App::ui);
+        std::string file = mrv::open_python_file(mrv::pythonpath().c_str());
         if (file.empty())
             return;
         o->open_python_file(file);
@@ -574,6 +604,65 @@ from mrv2 import playlist, timeline, usd, settings
         PythonEditor::kf_paste(0, _r->pythonEditor);
     }
 
+    void PythonPanel::comment_text()
+    {
+        Fl_Text_Buffer* buffer = _r->pythonEditor->buffer();
+        if (!buffer->selected())
+            return;
+        const char* copy = buffer->selection_text();
+        std::string originalText = copy;
+        free((void*)copy);
+
+        // Create a stringstream to process the input string line by line
+        std::stringstream s(originalText);
+
+        // Initialize an output string to store the result
+        std::string outputText;
+
+        // Loop through each line in the input string
+        std::string line;
+        while (std::getline(s, line))
+        {
+            // Add a '#' character to the beginning of each line
+            outputText += '#' + line + '\n';
+        }
+        buffer->replace_selection(outputText.c_str());
+    }
+
+    void PythonPanel::uncomment_text()
+    {
+        Fl_Text_Buffer* buffer = _r->pythonEditor->buffer();
+        if (!buffer->selected())
+            return;
+        const char* copy = buffer->selection_text();
+        std::string originalText = copy;
+        free((void*)copy);
+
+        // Create a stringstream to process the input string line by line
+        std::stringstream s(originalText);
+
+        // Initialize an output string to store the result
+        std::string outputText;
+
+        // Loop through each line in the input string
+        std::string line;
+        while (std::getline(s, line))
+        {
+            // Remove first '#' character in each line
+            size_t pos = line.find('#');
+
+            // Check if '#' was found
+            if (pos == 0)
+            {
+                // Remove the first '#'
+                line = line.substr(pos + 1);
+            }
+            outputText += line + '\n';
+        }
+
+        buffer->replace_selection(outputText.c_str());
+    }
+
     void PythonPanel::cut_text_cb(Fl_Menu_* m, PythonPanel* o)
     {
         o->cut_text();
@@ -589,6 +678,143 @@ from mrv2 import playlist, timeline, usd, settings
         o->paste_text();
     }
 
+    void PythonPanel::delete_cb(Fl_Menu_* m, PythonEditor* e)
+    {
+        e->buffer()->remove_selection();
+    }
+
+    void PythonPanel::comment_text_cb(Fl_Menu_* m, PythonPanel* o)
+    {
+        o->comment_text();
+    }
+
+    void PythonPanel::uncomment_text_cb(Fl_Menu_* m, PythonPanel* o)
+    {
+        o->uncomment_text();
+    }
+
+    void PythonPanel::find_cb(Fl_Menu_* m, PythonEditor* e)
+    {
+        const char* val;
+
+        const char* text = _("Search String:");
+        val = fl_input(text, e->search, 0);
+        if (val != NULL)
+        {
+            // User entered a string - go find it!
+            strcpy(e->search, val);
+            find2_cb(m, e);
+        }
+    }
+
+    void PythonPanel::find2_cb(Fl_Menu_* m, PythonEditor* e)
+    {
+        if (e->search[0] == '\0')
+        {
+            // Search string is blank; get a new one...
+            find_cb(m, e);
+            return;
+        }
+
+        int pos = e->insert_position();
+        auto textBuffer = e->buffer();
+        int found = textBuffer->search_forward(pos, e->search, &pos);
+        if (found)
+        {
+            // Found a match; select and update the position...
+            textBuffer->select(pos, pos + strlen(e->search));
+            e->insert_position(pos + strlen(e->search));
+            e->show_insert_position();
+        }
+        else
+        {
+            fl_alert(_("No occurrences of \'%s\' found!"), e->search);
+        }
+    }
+
+    void PythonPanel::replace_cb(Fl_Menu_* m, PythonEditor* e)
+    {
+        e->replace_dlg->show();
+    }
+
+    void PythonPanel::replall_cb(Fl_Menu_* m, PythonEditor* e)
+    {
+        const char* find = e->replace_find->value();
+        const char* replace = e->replace_with->value();
+
+        find = e->replace_find->value();
+        if (find[0] == '\0')
+        {
+            // Search string is blank; get a new one...
+            e->replace_dlg->show();
+            return;
+        }
+
+        e->replace_dlg->hide();
+
+        e->insert_position(0);
+        int times = 0;
+
+        auto textBuffer = e->buffer();
+
+        // Loop through the whole string
+        for (int found = 1; found;)
+        {
+            int pos = e->insert_position();
+            found = textBuffer->search_forward(pos, find, &pos);
+
+            if (found)
+            {
+                // Found a match; update the position and replace text...
+                textBuffer->select(pos, pos + (int)strlen(find));
+                textBuffer->remove_selection();
+                textBuffer->insert(pos, replace);
+                e->insert_position(pos + (int)strlen(replace));
+                e->show_insert_position();
+                times++;
+            }
+        }
+
+        if (times)
+            fl_message("Replaced %d occurrences.", times);
+        else
+            fl_alert("No occurrences of \'%s\' found!", find);
+    }
+
+    void PythonPanel::replace2_cb(Fl_Menu_* m, PythonEditor* e)
+    {
+        const char* find = e->replace_find->value();
+        const char* replace = e->replace_with->value();
+
+        if (find[0] == '\0')
+        {
+            // Search string is blank; get a new one...
+            e->replace_dlg->show();
+            return;
+        }
+
+        e->replace_dlg->hide();
+
+        int pos = e->insert_position();
+        auto textBufferfer = e->buffer();
+        int found = textBuffer->search_forward(pos, find, &pos);
+
+        if (found)
+        {
+            // Found a match; update the position and replace text...
+            textBuffer->select(pos, pos + strlen(find));
+            textBuffer->remove_selection();
+            textBuffer->insert(pos, replace);
+            textBuffer->select(pos, pos + strlen(replace));
+            e->insert_position(pos + strlen(replace));
+            e->show_insert_position();
+        }
+        else
+        {
+            fl_alert("No occurrences of \'%s\' found!", find);
+        }
+    }
+
     void PythonPanel::add_to_script_list(const std::string& file)
     {
         TLRENDER_P();
@@ -601,8 +827,7 @@ from mrv2 import playlist, timeline, usd, settings
 
     void PythonPanel::add_to_script_list_cb(Fl_Menu_* m, PythonPanel* o)
     {
-        std::string file =
-            mrv::open_python_file(mrv::pythonpath().c_str(), App::ui);
+        std::string file = mrv::open_python_file(mrv::pythonpath().c_str());
         if (file.empty())
             return;
         o->add_to_script_list(file);

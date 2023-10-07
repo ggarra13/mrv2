@@ -40,7 +40,7 @@ namespace mrv2
          */
         void open(const std::string& file, const std::string& audioFile)
         {
-            App* app = App::ui->app;
+            App* app = App::app;
             std::string filename = file;
             if (file[0] == '~')
             {
@@ -73,6 +73,16 @@ namespace mrv2
             model->closeAll();
         }
 
+        std::string rootPath()
+        {
+            return mrv::rootpath();
+        }
+
+        std::string prefsPath()
+        {
+            return mrv::prefspath();
+        }
+
         /**
          * \brief Compare two clips with a comparison mode.
          *
@@ -102,8 +112,7 @@ namespace mrv2
          */
         timeline::ImageOptions imageOptions()
         {
-            App* app = App::ui->app;
-            return app->imageOptions();
+            return App::app->imageOptions();
         }
 
         /**
@@ -136,8 +145,7 @@ namespace mrv2
          */
         void setImageOptions(const timeline::ImageOptions& value)
         {
-            App* app = App::ui->app;
-            app->setImageOptions(value);
+            App::app->setImageOptions(value);
         }
 
         /**
@@ -148,8 +156,7 @@ namespace mrv2
          */
         timeline::DisplayOptions displayOptions()
         {
-            App* app = App::ui->app;
-            return app->displayOptions();
+            return App::app->displayOptions();
         }
 
         /**
@@ -159,8 +166,7 @@ namespace mrv2
          */
         void setDisplayOptions(const timeline::DisplayOptions& value)
         {
-            App* app = App::ui->app;
-            app->setDisplayOptions(value);
+            App::app->setDisplayOptions(value);
         }
 
         /**
@@ -171,8 +177,7 @@ namespace mrv2
          */
         timeline::LUTOptions lutOptions()
         {
-            App* app = App::ui->app;
-            return app->lutOptions();
+            return App::app->lutOptions();
         }
 
         /**
@@ -183,7 +188,7 @@ namespace mrv2
          */
         float volume()
         {
-            App* app = App::ui->app;
+            App* app = App::app;
             return app->volume();
         }
 
@@ -193,7 +198,7 @@ namespace mrv2
          */
         void setVolume(const float value)
         {
-            App* app = App::ui->app;
+            App* app = App::app;
             app->setVolume(value);
         }
 
@@ -204,7 +209,7 @@ namespace mrv2
          */
         bool isMuted()
         {
-            App* app = App::ui->app;
+            App* app = App::app;
             return app->isMuted();
         }
 
@@ -214,8 +219,7 @@ namespace mrv2
          */
         void setMute(const float value)
         {
-            App* app = App::ui->app;
-            app->setMute(value);
+            App::app->setMute(value);
         }
 
         /**
@@ -225,8 +229,7 @@ namespace mrv2
          */
         void setLUTOptions(const timeline::LUTOptions& value)
         {
-            App* app = App::ui->app;
-            app->setLUTOptions(value);
+            App::app->setLUTOptions(value);
         }
 
         /**
@@ -331,6 +334,7 @@ namespace mrv2
             save_movie(file, App::ui, opts);
         }
 
+#ifdef MRV2_PDF
         /**
          * \brief Save a PDF document.
          *
@@ -342,6 +346,7 @@ namespace mrv2
 
             return save_pdf(file, ui);
         }
+#endif
 
         /**
          * \brief Open a session file.
@@ -416,6 +421,14 @@ Used to run main commands and get and set the display, image, compare, LUT optio
     cmds.def("closeAll", &mrv2::cmd::closeAll, _("Close all file items."));
 
     cmds.def(
+        "rootPath", &mrv2::cmd::rootPath,
+        _("Return the root path to the insallation of mrv2."));
+
+    cmds.def(
+        "prefsPath", &mrv2::cmd::prefsPath,
+        _("Return the path to preferences of mrv2."));
+
+    cmds.def(
         "displayOptions", &mrv2::cmd::displayOptions,
         _("Return the display options."));
 
@@ -488,10 +501,12 @@ Used to run main commands and get and set the display, image, compare, LUT optio
         _("Save a movie or sequence from the front layer."), py::arg("file"),
         py::arg("options") = mrv::SaveOptions());
 
+#ifdef MRV2_PDF
     cmds.def(
         "savePDF", &mrv2::cmd::savePDF,
         _("Save a PDF document with all annotations and notes."),
         py::arg("file"));
+#endif
 
     cmds.def(
         "oepnSession", &mrv2::cmd::openSession, _("Open a session file."),

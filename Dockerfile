@@ -28,7 +28,7 @@ RUN dnf -y groupinstall "Development Tools"
 RUN dnf -y install git wget cmake pango-devel gettext ninja-build \
 		   libglvnd-devel alsa-lib-devel pulseaudio-libs-devel \
 		   libXScrnSaver-devel dpkg doxygen zlib-devel libffi-devel \
-		   openssl-devel tk-devel tcl-devel
+		   openssl-devel tk-devel tcl-devel swig subversion
 		   
 #
 # Install USD dependencies

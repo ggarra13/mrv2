@@ -454,10 +454,7 @@ namespace mrv
                 auto bIndexes = model->observeBIndexes()->get();
                 auto stereoIndex = model->observeStereoIndex()->get();
 
-                bool doThumbnail = true;
-                if (b->image())
-                    doThumbnail = false;
-
+                bool doThumbnail = false;
                 for (const auto& bIndex : bIndexes)
                 {
                     if (bIndex == i)
@@ -468,7 +465,9 @@ namespace mrv
                 }
 
                 if (i == stereoIndex)
+                {
                     doThumbnail = true;
+                }
 
                 if (!doThumbnail)
                     continue;

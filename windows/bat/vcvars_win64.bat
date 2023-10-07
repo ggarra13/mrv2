@@ -5,7 +5,7 @@ REM
 REM You can also call this command with an additional parameter to the SDK
 REM to use, like 8.1. or nothing to pick the default SDK.
 REM
-REM 8.1 allows you to create an executable which is compatible with Winddows
+REM 8.1 allows you to create an executable which is compatible with Windows
 REM 8.1, 10, and 11.
 REM
 

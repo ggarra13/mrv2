@@ -108,7 +108,6 @@ elseif(UNIX)
 
     set(CPACK_DEBIAN_FILE_NAME	"${CPACK_PACKAGE_FILE_NAME}.deb" )
 
-
     set(CPACK_SET_DESTDIR true) # Needed
     
 else()

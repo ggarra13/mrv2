@@ -25,9 +25,18 @@
 #include "mrvPanels/mrvVectorscopePanel.h"
 #include "mrvPanels/mrvEnvironmentMapPanel.h"
 #include "mrvPanels/mrvStereo3DPanel.h"
-#include "mrvPanels/mrvPythonPanel.h"
-#include "mrvPanels/mrvNetworkPanel.h"
-#include "mrvPanels/mrvUSDPanel.h"
+
+#ifdef MRV2_PYBIND11
+#    include "mrvPanels/mrvPythonPanel.h"
+#endif
+
+#ifdef MRV2_NETWORK
+#    include "mrvPanels/mrvNetworkPanel.h"
+#endif
+
+#ifdef TLRENDER_USD
+#    include "mrvPanels/mrvUSDPanel.h"
+#endif
 
 class ViewerUI;
 class Fl_Widget;
@@ -49,7 +58,9 @@ namespace mrv
     extern VectorscopePanel* vectorscopePanel;
     extern EnvironmentMapPanel* environmentMapPanel;
     extern Stereo3DPanel* stereo3DPanel;
+#ifdef MRV2_PYBIND11
     extern PythonPanel* pythonPanel;
+#endif
 #ifdef MRV2_NETWORK
     extern NetworkPanel* networkPanel;
 #endif

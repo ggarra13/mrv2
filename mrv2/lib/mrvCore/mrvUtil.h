@@ -49,21 +49,21 @@ namespace mrv
      * Given a lowercase filename extension, return whether the extension is
      * from a movie format.
      *
-     * @param ext Filename extension with period.
+     * @param ext Filename extension.
      *
      * @return true if a possible movie, false if not.
      */
-    bool is_valid_movie(const char* ext);
+    bool is_valid_movie(const std::string& ext);
 
     /**
      * Given a lowercase filename extension, return whether the extension is
      * from an audio format.
      *
-     * @param ext Filename extension with period.
+     * @param ext Filename extension.
      *
      * @return true if a possible audio file, false if not.
      */
-    bool is_valid_audio(const char* ext);
+    bool is_valid_audio(const std::string& ext);
 
     /**
      * Given a lowercase filename extension, return whether the extension is
@@ -73,7 +73,7 @@ namespace mrv
      *
      * @return true if a possible subtitle file, false if not.
      */
-    bool is_valid_subtitle(const char* ext);
+    bool is_valid_subtitle(const std::string& ext);
 
     /**
      * Given a single image filename, return whether the image is
@@ -185,7 +185,7 @@ namespace mrv
         int64_t frame = time.to_frames();
         const auto& num = path.getNumber();
         const auto& extension = path.getExtension();
-        if (mrv::is_valid_movie(extension.c_str()))
+        if (mrv::is_valid_movie(extension))
             frame = atoi(num.c_str());
 
         char buf[256];
@@ -205,6 +205,12 @@ namespace mrv
      */
     std::string
     commentCharacter(const std::string& input, const char match = '/');
+
+    //! Parse a directory and return all movies, sequences and audios found
+    //! there
+    void parse_directory(
+        const std::string& directory, std::vector<std::string>& movies,
+        std::vector<std::string>& sequences, std::vector<std::string>& audios);
 
     /**
      * Return true if the file exists and is readable

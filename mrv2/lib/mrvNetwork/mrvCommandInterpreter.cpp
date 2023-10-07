@@ -13,6 +13,7 @@
 
 #ifdef TLRENDER_GL
 #    include "mrvGL/mrvGLUtil.h"
+#    include "mrvGL/mrvGLJson.h"
 #endif
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
@@ -21,6 +22,7 @@
 #include "mrvNetwork/mrvCommandInterpreter.h"
 #include "mrvNetwork/mrvCompareOptions.h"
 #include "mrvNetwork/mrvDisplayOptions.h"
+#include "mrvNetwork/mrvInsertData.h"
 #include "mrvNetwork/mrvImageOptions.h"
 #include "mrvNetwork/mrvLUTOptions.h"
 #include "mrvNetwork/mrvProtocolVersion.h"
@@ -189,18 +191,75 @@ namespace mrv
                 otime::RationalTime value = message["value"];
                 player->seek(value);
             }
-            else if (c == "timelineWidgetMouseMove")
+            else if (c == "Timeline Key Press")
             {
-                if (!player)
+                bool receive = prefs->ReceiveTimeline->value();
+                if (!receive || !player)
                 {
                     tcp->unlock();
                     return;
                 }
-                int X = message["X"];
-                int Y = message["Y"];
+                const int key = message["value"];
+                const int modifiers = message["modifiers"];
+                ui->uiTimeline->keyPressEvent(key, modifiers);
+            }
+            else if (c == "Timeline Key Release")
+            {
+                bool receive = prefs->ReceiveTimeline->value();
+                if (!receive || !player)
+                {
+                    tcp->unlock();
+                    return;
+                }
+                const int key = message["value"];
+                const int modifiers = message["modifiers"];
+                ui->uiTimeline->keyReleaseEvent(key, modifiers);
+            }
+            else if (c == "Timeline Mouse Press")
+            {
+                bool receive = prefs->ReceiveTimeline->value();
+                if (!receive || !player)
+                {
+                    tcp->unlock();
+                    return;
+                }
+                const int button = message["button"];
+                const bool on = message["on"];
+                const int modifiers = message["modifiers"];
+                ui->uiTimeline->mousePressEvent(button, on, modifiers);
+            }
+            else if (c == "Timeline Mouse Move")
+            {
+                bool receive = prefs->ReceiveTimeline->value();
+                if (!receive || !player)
+                {
+                    tcp->unlock();
+                    return;
+                }
+                float X = message["X"];
+                X *= ui->uiTimeline->pixel_w();
+                float Y = message["Y"];
+                Y *= ui->uiTimeline->pixel_h();
                 ui->uiTimeline->mouseMoveEvent(X, Y);
             }
-            else if (c == "timelineWidgetScroll")
+            else if (c == "Timeline Mouse Release")
+            {
+                bool receive = prefs->ReceiveTimeline->value();
+                if (!receive || !player)
+                {
+                    tcp->unlock();
+                    return;
+                }
+                float X = message["X"];
+                X *= ui->uiTimeline->pixel_w();
+                float Y = message["Y"];
+                Y *= ui->uiTimeline->pixel_h();
+                int button = message["button"];
+                bool on = message["on"];
+                int modifiers = message["modifiers"];
+                ui->uiTimeline->mouseReleaseEvent(X, Y, button, on, modifiers);
+            }
+            else if (c == "Timeline Widget Scroll")
             {
                 bool receive = prefs->ReceiveTimeline->value();
                 if (!receive || !player)
@@ -212,6 +271,16 @@ namespace mrv
                 float Y = message["Y"];
                 int modifiers = message["modifiers"];
                 ui->uiTimeline->scrollEvent(X, Y, modifiers);
+            }
+            else if (c == "Timeline Fit")
+            {
+                bool receive = prefs->ReceiveTimeline->value();
+                if (!receive || !player)
+                {
+                    tcp->unlock();
+                    return;
+                }
+                ui->uiTimeline->frameView();
             }
             else if (c == "setInOutRange")
             {
@@ -577,7 +646,7 @@ namespace mrv
                     tcp->unlock();
                     return;
                 }
-                auto shape = messageToShape(message["value"]);
+                auto shape = draw::messageToShape(message["value"]);
                 annotation->shapes.push_back(shape);
 
                 // Create annotation menus if not there already
@@ -688,7 +757,7 @@ namespace mrv
                     tcp->unlock();
                     return;
                 }
-                auto shape = messageToShape(message["value"]);
+                auto shape = draw::messageToShape(message["value"]);
                 annotation->shapes.pop_back();
                 annotation->shapes.push_back(shape);
                 view->updateUndoRedoButtons();
@@ -708,7 +777,7 @@ namespace mrv
                     tcp->unlock();
                     return;
                 }
-                auto shape = messageToShape(message["value"]);
+                auto shape = draw::messageToShape(message["value"]);
                 annotation->shapes.push_back(shape);
                 // Create annotation menus if not there already
                 ui->uiMain->fill_menu(ui->uiMenuBar);
@@ -1069,8 +1138,17 @@ namespace mrv
                     tcp->unlock();
                     return;
                 }
+                editModeH = message["height"];
                 EditMode value = message["value"];
+                editMode = value;
+                bool presentation = ui->uiView->getPresentationMode();
+                if (!presentation)
+                    ui->uiView->resizeWindow();
+
                 set_edit_mode_cb(value, ui);
+                // if (value == EditMode::kTimeline)
+                //     ui->uiEdit->value(1);
+                // ui->uiEdit->do_callback();
             }
             else if (c == "Network Panel")
             {

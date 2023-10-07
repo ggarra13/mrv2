@@ -18,11 +18,14 @@ set(SOURCES
 add_library(mrvEdit ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
-set( LIBRARIES mrvWidgets)
+set(LIBRARIES mrvWidgets)
+if(MRV2_NETWORK)
+    list(APPEND LIBRARIES mrvNetwork)
+endif()
 
 target_link_libraries(mrvEdit PUBLIC ${LIBRARIES} )
 set_target_properties(mrvEdit PROPERTIES FOLDER lib)
-set_target_properties(mrvEdit PROPERTIES PUBLIC_HEADER "${HEADERS}")
+#set_target_properties(mrvEdit PROPERTIES PUBLIC_HEADER "${HEADERS}")
 
 install(TARGETS mrvEdit
     ARCHIVE DESTINATION lib

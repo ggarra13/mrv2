@@ -15,9 +15,33 @@ run_cmd()
     echo
     echo "> $*"
     echo
-    eval command $*
+    time eval command $*
 }
 
+#
+# Get kernel and architecture
+#
+get_kernel()
+{
+    export KERNEL=`uname`
+    if [[ $KERNEL == *MSYS* || $KERNEL == *MINGW* ]]; then
+	export KERNEL=Msys
+	export ARCH=`which cl.exe`
+    fi
+
+    if [[ $ARCH == "" ]]; then
+	export ARCH=`uname -m` # was uname -a
+    fi
+
+    if [[ $ARCH == arm64 ]]; then
+	export ARCH=arm64
+    elif [[ $ARCH == *64* ]]; then
+	export ARCH=amd64
+    else
+	export ARCH=i386
+    fi
+    echo "KERNEL=$KERNEL ARCH=$ARCH"
+}
 
 #
 # Extract version from cmake/version.cmake
@@ -35,8 +59,8 @@ extract_version()
 #
 extract_python_version()
 {
-    local major=`cat cmake/Modules/BuildPython.cmake | grep -o 'set.[ \t]*PYTHON_VERSION\s*[0-9]*' | sed -e 's/set.[ \t]*PYTHON_VERSION[ \t]*//'`
-    local minor=`cat cmake/Modules/BuildPython.cmake | grep -o 'set.[ \t]*PYTHON_VERSION\s*[0-9]*\.[0-9]*' | sed -e 's/set.[ \t]*PYTHON_VERSION[ \t]*[0-9]*\.//'`
+    local major=`cat cmake/Modules/BuildPython.cmake | grep -o 'set.[ \t]*Python_VERSION\s*[0-9]*' | sed -e 's/set.[ \t]*Python_VERSION[ \t]*//'`
+    local minor=`cat cmake/Modules/BuildPython.cmake | grep -o 'set.[ \t]*Python_VERSION\s*[0-9]*\.[0-9]*' | sed -e 's/set.[ \t]*Python_VERSION[ \t]*[0-9]*\.//'`
     export PYTHON_VERSION="${major}.${minor}"
 }
 
@@ -51,24 +75,11 @@ send_to_packages()
 	mkdir -p $PWD/packages
 	if [[ -e $package ]]; then
 	    echo "Installing $package in $PWD/packages"
-	    mv $package $PWD/packages
+	    run_cmd mv $package $PWD/packages
 	else
 	    echo "ERROR package $1 was not created in $stage."
 	fi
     else
 	echo "CMAKE_TARGET is empty.  Will not copy packages."
-    fi
-}
-
-#
-# Function to remove a path from the PATH environment variable
-#
-remove_path()
-{
-    local path_to_remove="$1"
-    if [[ ":$PATH:" == *":$path_to_remove:"* ]]; then
-	export PATH=${PATH//:$path_to_remove:/:}
-	export PATH=${PATH/#$path_to_remove:/}
-	export PATH=${PATH/%:$path_to_remove/}
     fi
 }

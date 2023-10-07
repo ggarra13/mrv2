@@ -100,8 +100,10 @@ namespace mrv
 
             // Set Edit mode
             msg["command"] = "setEditMode";
-            EditMode mode = editMode == EditMode::kSaved ? EditMode::kFull
-                                                         : EditMode::kTimeline;
+            EditMode mode =
+                (editMode == EditMode::kSaved || editMode == EditMode::kFull)
+                    ? EditMode::kFull
+                    : EditMode::kTimeline;
             msg["value"] = mode;
             pushMessage(msg);
 

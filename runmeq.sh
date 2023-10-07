@@ -4,8 +4,18 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 
+#
+#
+# Wrap up script to compile just mrv2, do the documenting and packaging.
+#
+#
 
-. $PWD/etc/build_dir.sh
+
+if [[ ! $RUNME ]]; then
+    . etc/build_dir.sh
+else
+    . etc/functions.sh
+fi
 
 
 dir=$BUILD_DIR/mrv2/src/mrv2-build
@@ -27,9 +37,9 @@ if [[ $CMAKE_TARGET == doc* || $CMAKE_TARGET == "install" ||
     # First, generate the translations and install them
     #
     cd $dir
-    cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t mo
+    run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t mo
 
-    cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
+    run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
     cd -
 fi
 
@@ -41,17 +51,16 @@ if [[ $CMAKE_TARGET == doc* ]]; then
     # Second, generate the documentation and install them
     #
     cd $dir
-    cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t doc
-    cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
+    run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t doc
+    run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
     cd -
 fi
 
 
-
 cd $dir
 
-cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t ${CMAKE_TARGET}
+run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t ${CMAKE_TARGET}
 
 cd -
 
-. $PWD/etc/build_end.sh
+. etc/build_end.sh

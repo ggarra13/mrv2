@@ -137,13 +137,10 @@ def process_bash_files():
                     shebang = "#!/usr/bin/env bash\n"
                     text = shebang + license + text
 
-                out.write( text )
+                    out.write( text )
 
                 shutil.move( f + ".new", f )
-                if os.name == 'nt':
-                    subprocess.run(['icacls', f, '/grant', '*S-1-1-0:(RX)'])
-                else:
-                    os.chmod(f, 0o755)
+                os.chmod(f, 0o755)
 
 
 process_cpp_files()

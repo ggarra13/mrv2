@@ -110,7 +110,7 @@ namespace mrv
             [=](auto w)
             {
                 settingsObject->setValue("Cache/GBytes", (int)w->value());
-                p.ui->app->_cacheUpdate();
+                p.ui->app->cacheUpdate();
             });
 
         sV =
@@ -126,7 +126,7 @@ namespace mrv
             [=](auto w)
             {
                 settingsObject->setValue("Cache/ReadAhead", (double)w->value());
-                p.ui->app->_cacheUpdate();
+                p.ui->app->cacheUpdate();
             });
 
         sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, _("Read Behind"));
@@ -142,7 +142,7 @@ namespace mrv
             {
                 settingsObject->setValue(
                     "Cache/ReadBehind", (double)w->value());
-                p.ui->app->_cacheUpdate();
+                p.ui->app->cacheUpdate();
             });
 
         cg->end();
@@ -360,7 +360,7 @@ namespace mrv
                 int requests = static_cast<int>(o->value());
                 settingsObject->setValue(
                     "Performance/VideoRequestCount", requests);
-                p.ui->app->_cacheUpdate();
+                p.ui->app->cacheUpdate();
             });
 
         DBG;
@@ -382,7 +382,7 @@ namespace mrv
                 std::cerr << "audio requests" << requests << std::endl;
                 settingsObject->setValue(
                     "Performance/AudioRequestCount", requests);
-                p.ui->app->_cacheUpdate();
+                p.ui->app->cacheUpdate();
             });
 
         spW = new Widget<Fl_Spinner>(
@@ -402,7 +402,7 @@ namespace mrv
                 int requests = static_cast<int>(o->value());
                 settingsObject->setValue(
                     "Performance/SequenceThreadCount", requests);
-                p.ui->app->_cacheUpdate();
+                p.ui->app->cacheUpdate();
             });
 
         bg->end();
@@ -451,7 +451,7 @@ namespace mrv
                 int requests = static_cast<int>(o->value());
                 settingsObject->setValue(
                     "Performance/FFmpegThreadCount", requests);
-                p.ui->app->_cacheUpdate();
+                p.ui->app->cacheUpdate();
             });
 
         bg->end();

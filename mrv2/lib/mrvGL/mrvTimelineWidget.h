@@ -8,11 +8,12 @@
 
 #include <opentimelineio/clip.h>
 
+#include <tlTimeline/Edit.h>
+
 #include <tlTimelineUI/IItem.h>
 
 #include <FL/Fl_Gl_Window.H>
 
-#include "mrvFl/mrvTimeObject.h"
 #include "mrvFl/mrvTimelinePlayer.h"
 
 namespace tl
@@ -82,13 +83,11 @@ namespace mrv
         //! Frame the view.
         void frameView();
 
-        // Q_SIGNALS:
-        //! This signal is emitted when the frame view is changed.
-        void frameViewChanged(bool);
-
-        void resize(int X, int Y, int W, int H) override;
-        void draw() override;
-        int handle(int) override;
+        //! @{ Standard FLTK functions
+        void resize(int X, int Y, int W, int H) FL_OVERRIDE;
+        void draw() FL_OVERRIDE;
+        int handle(int) FL_OVERRIDE;
+        //! @}
 
         void single_thumbnail(
             const int64_t,
@@ -123,8 +122,16 @@ namespace mrv
         //! Toggle timeline editable
         void setEditable(bool);
 
-        void mouseMoveEvent(const int X, const int Y);
+        int mousePressEvent(int button, bool, int modifiers);
+        int mouseReleaseEvent(int X, int Y, int button, bool, int modifiers);
+
+        void mouseMoveEvent(int X, int Y);
         void scrollEvent(const float X, const float Y, const int modifiers);
+        int mouseDragEvent(int X, int Y);
+        int keyPressEvent(unsigned key, const int modifiers);
+        int keyReleaseEvent(unsigned key, const int modifiers);
+
+        void insertCallback(const std::vector<tl::timeline::InsertData>&);
 
     protected:
         void _initializeGL();
@@ -133,7 +140,6 @@ namespace mrv
         int enterEvent();
         int leaveEvent();
         int mousePressEvent();
-        int mouseDragEvent();
         int mouseReleaseEvent();
         int mouseMoveEvent();
         int wheelEvent();
@@ -143,10 +149,9 @@ namespace mrv
         static void timerEvent_cb(void* data);
         void timerEvent();
 
-    private: // Q_SLOTS:
+    private:
         void _setTimeUnits(tl::timeline::TimeUnits);
 
-    private:
         int _toUI(int) const;
         math::Vector2i _toUI(const math::Vector2i&) const;
         int _fromUI(int) const;
@@ -155,7 +160,7 @@ namespace mrv
         unsigned _changeKey(unsigned key);
         void _drawAnnotationMarks() const noexcept;
 
-        otime::RationalTime _posToTime(float) const noexcept;
+        otime::RationalTime _posToTime(int) const noexcept;
         int _timeToPos(const otime::RationalTime&) const noexcept;
 
         //! Function used to send a seek to the network.

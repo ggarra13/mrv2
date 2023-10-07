@@ -27,6 +27,7 @@
 #include <iostream>
 #include <algorithm>
 #include <mutex>
+#include <set>
 
 #define FLU_USE_REGISTRY
 
@@ -71,11 +72,6 @@
 #include "mrvFLU/Flu_Separator.h"
 #include "mrvFLU/Flu_Enumerations.h"
 #include "mrvFLU/Flu_File_Chooser.h"
-
-extern "C"
-{
-#include <libavutil/mem.h>
-}
 
 #include "mrvFl/mrvIO.h"
 
@@ -329,6 +325,8 @@ void Flu_File_Chooser::previewCB()
             if (e->type == ENTRY_SEQUENCE || e->type == ENTRY_FILE)
             {
                 tl::file::Path path(e->filename);
+                if (path.getExtension() == ".otioz")
+                    continue;
 
                 bool requestIcon = false;
                 if (auto context = p.context.lock())
@@ -990,7 +988,7 @@ Flu_File_Chooser::~Flu_File_Chooser()
     Fl::remove_timeout(Flu_File_Chooser::selectCB);
 
     for (int i = 0; i < locationQuickJump->children(); i++)
-        av_free((void*)locationQuickJump->child(i)->label());
+        free((void*)locationQuickJump->child(i)->label());
 
     filelist->clear();
     filedetails->clear();
@@ -1435,12 +1433,12 @@ void Flu_File_Chooser::trashCB(bool recycle)
                 // of 'recycle'
                 {
                     size_t len = name.size();
-                    char* buf = (char*)av_malloc(len + 2);
+                    char* buf = (char*)malloc(len + 2);
                     strcpy(buf, name.c_str());
                     buf[len + 1] = '\0'; // have to have 2 '\0' at the end
                     fileop.pFrom = buf;
                     result = SHFileOperation(&fileop);
-                    av_free(buf);
+                    free(buf);
                 }
 #else
                 result = ::remove(name.c_str());
@@ -1465,12 +1463,12 @@ void Flu_File_Chooser::updateLocationQJ()
 {
     const char* path = location->value();
     for (int i = 0; i < locationQuickJump->children(); i++)
-        av_free((void*)locationQuickJump->child(i)->label());
+        free((void*)locationQuickJump->child(i)->label());
     locationQuickJump->clear();
     fl_font(location->input.textfont(), location->input.textsize());
     const char* next = path;
     const char* slash = strchr(next, '/');
-    char* blank = av_strdup(path);
+    char* blank = strdup(path);
     int offset = 0;
     while (slash)
     {
@@ -1485,7 +1483,7 @@ void Flu_File_Chooser::updateLocationQJ()
         memcpy(blank, path, slash - path);
         Fl_Button* b = new Fl_Button(
             locationQuickJump->x() + offset, locationQuickJump->y(), w,
-            locationQuickJump->h(), av_strdup(blank));
+            locationQuickJump->h(), strdup(blank));
         b->labeltype(FL_NO_LABEL);
         b->callback(_locationQJCB, this);
         offset += w;
@@ -1495,12 +1493,12 @@ void Flu_File_Chooser::updateLocationQJ()
     }
     Fl_Button* b = new Fl_Button(
         locationQuickJump->x() + offset, locationQuickJump->y(), 1,
-        locationQuickJump->h(), av_strdup(""));
+        locationQuickJump->h(), strdup(""));
     b->box(FL_NO_BOX);
     b->labeltype(FL_NO_LABEL);
     locationQuickJump->add(b);
     locationQuickJump->resizable(b);
-    av_free(blank);
+    free(blank);
 }
 
 void Flu_File_Chooser::favoritesCB()
@@ -3002,7 +3000,7 @@ int Flu_File_Chooser::popupContextMenu(Entry* entry)
         ext = const_cast<char*>(strrchr(filename, '.'));
     if (ext)
     {
-        ext = av_strdup(ext + 1); // skip the '.'
+        ext = strdup(ext + 1); // skip the '.'
         for (unsigned int i = 0; i < strlen(ext); i++)
             ext[i] = tolower(ext[i]);
     }
@@ -3060,7 +3058,7 @@ int Flu_File_Chooser::popupContextMenu(Entry* entry)
         entryPopup.add(_(contextHandlers[i].name.c_str()), 0, 0, (void*)i);
     }
     if (ext)
-        av_free(ext);
+        free(ext);
 
     entryPopup.position(Fl::event_x(), Fl::event_y());
     const Fl_Menu_Item* selection = entryPopup.popup();
@@ -4611,9 +4609,8 @@ void Flu_File_Chooser::cd(const char* path)
                     std::transform(
                         tmp.begin(), tmp.end(), tmp.begin(),
                         (int (*)(int))tolower);
-                    if (mrv::is_valid_movie(tmp.c_str()) ||
-                        mrv::is_valid_audio(tmp.c_str()) ||
-                        mrv::is_valid_subtitle(tmp.c_str()) || tmp == ".ocio" ||
+                    if (mrv::is_valid_movie(tmp) || mrv::is_valid_audio(tmp) ||
+                        mrv::is_valid_subtitle(tmp) || tmp == ".ocio" ||
                         tmp == ".prefs" || tmp == ".py" || tmp == ".pyc")
                         is_sequence = false;
                 }

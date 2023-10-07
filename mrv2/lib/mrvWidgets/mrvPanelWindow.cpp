@@ -7,11 +7,12 @@
 #include "mrvPanelWindow.h"
 #include "mrvEventHeader.h"
 
+#include "mrvWidgets/mrvPanelGroup.h"
+
 #include "mrvPanels/mrvPanelsAux.h"
 
 #include "mrvApp/mrvSettingsObject.h"
-
-#include "mrViewer.h"
+#include "mrvApp/App.h"
 
 namespace mrv
 {
@@ -270,7 +271,7 @@ namespace mrv
         }
         case FL_RELEASE:
         {
-            auto settingsObject = App::ui->app->settingsObject();
+            auto settingsObject = App::app->settingsObject();
             PanelGroup* gp = static_cast< PanelGroup* >(child(0));
             // gp->layout();
             auto dragger = gp->get_dragger();

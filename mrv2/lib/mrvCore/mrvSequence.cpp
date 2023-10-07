@@ -14,13 +14,8 @@ namespace fs = std::filesystem;
 #include "mrvCore/mrvString.h"
 #include "mrvCore/mrvSequence.h"
 #include "mrvCore/mrvUtil.h"
-
-extern "C"
-{
-#include <libavutil/avutil.h>
-}
-
 #include "mrvCore/mrvOS.h"
+
 #include "mrvFl/mrvIO.h"
 
 namespace
@@ -231,7 +226,7 @@ namespace mrv
         size_t len = i - e + 1;
         f = f.substr(len, f.size());
 
-        stringArray periods;
+        std::vector<std::string> periods;
         split(periods, f, '.');
 
         if (periods.size() == 4)
@@ -250,8 +245,7 @@ namespace mrv
 
             if (!view.empty())
                 view += ".";
-            if (mrv::is_valid_movie(ext.c_str()) ||
-                mrv::is_valid_audio(ext.c_str()))
+            if (mrv::is_valid_movie(ext) || mrv::is_valid_audio(ext))
             {
                 if (frame != "" && (ext == ".gif" || ext == ".GIF"))
                     return true;
@@ -275,8 +269,7 @@ namespace mrv
                 root = root.substr(7, root.size());
             frame = periods[1];
             ext = '.' + periods[2];
-            if (mrv::is_valid_movie(ext.c_str()) ||
-                mrv::is_valid_audio(ext.c_str()))
+            if (mrv::is_valid_movie(ext) || mrv::is_valid_audio(ext))
             {
                 if (frame != "" && (ext == ".gif" || ext == ".GIF"))
                     return true;
@@ -353,8 +346,7 @@ namespace mrv
             ext = f.substr(idx[0], file.size() - idx[0]);
 
             bool ok = is_valid_frame(frame);
-            if (ok && (!is_valid_movie(ext.c_str()) ||
-                       mrv::is_valid_audio(ext.c_str())))
+            if (ok && (!is_valid_movie(ext) || mrv::is_valid_audio(ext)))
             {
                 return true;
             }
@@ -366,7 +358,7 @@ namespace mrv
                 ext.clear();
             }
 
-            if (is_valid_movie(ext.c_str()) || mrv::is_valid_audio(ext.c_str()))
+            if (is_valid_movie(ext) || mrv::is_valid_audio(ext))
             {
                 if (frame != "" && (ext == ".gif" || ext == ".GIF"))
                     return true;
@@ -385,7 +377,7 @@ namespace mrv
                 root = root.substr(7, root.size());
             ext = f.substr(idx[0] + 1, file.size());
 
-            if (is_valid_movie(ext.c_str()) || is_valid_audio(ext.c_str()))
+            if (is_valid_movie(ext) || is_valid_audio(ext))
             {
                 frame = "";
                 return false;
@@ -411,8 +403,7 @@ namespace mrv
             // Handle image0001.exr
             //
             std::string tmp = '.' + ext;
-            bool valid =
-                is_valid_movie(tmp.c_str()) || mrv::is_valid_audio(ext.c_str());
+            bool valid = is_valid_movie(tmp) || is_valid_audio(ext);
             size_t len = root.size();
             if (len >= 2 && !valid)
             {
@@ -489,232 +480,6 @@ namespace mrv
 
             frame = "";
             return false;
-        }
-    }
-
-    bool get_sequence_limits(
-        int64_t& frameStart, int64_t& frameEnd, std::string& fileroot,
-        const bool error)
-    {
-        if ((frameStart != AV_NOPTS_VALUE && frameEnd != AV_NOPTS_VALUE))
-        {
-            return true;
-        }
-
-        fs::path file = fs::path(fileroot.c_str());
-        fs::path dir = file.parent_path();
-
-        char buf[1024];
-        if (dir.string() == "")
-        {
-            dir = fs::current_path();
-        }
-
-        if ((!fs::exists(dir)) || (!fs::is_directory(dir)))
-        {
-            if (error)
-            {
-                std::string err = tl::string::Format(_("Directory {0} does not "
-                                                       "exist or no directory"))
-                                      .arg(dir);
-                LOG_ERROR(err);
-            }
-            return false;
-        }
-
-        // Check if sequence is in ILM format first  ( image.1-30.exr )
-        stringArray tokens;
-        split(tokens, fileroot, '.');
-        if (tokens.size() > 2)
-        {
-            int idx = 2;
-
-            const std::string& range = tokens[tokens.size() - idx];
-
-            if (mrv::matches_chars(range.c_str(), "0123456789-"))
-            {
-                stringArray frames;
-                split(frames, range, '-');
-                if (frames.size() > 1 && !frames[0].empty())
-                {
-                    unsigned digits = (unsigned)frames[0].size();
-
-                    frameStart = atoi(frames[0].c_str());
-                    frameEnd = atoi(frames[1].c_str());
-
-                    if (frameEnd < frameStart)
-                    {
-                        frameEnd = frameStart = AV_NOPTS_VALUE;
-                        return false;
-                    }
-
-                    stringArray::iterator i = tokens.begin();
-                    stringArray::iterator e = tokens.end();
-                    fileroot = tokens[0];
-                    ++i;
-                    for (; i != e; ++i)
-                    {
-                        fileroot += ".";
-                        if (*i == range)
-                        {
-                            char buf[64];
-                            const char* pr = PRId64;
-                            if (digits < 10)
-                                pr = "d";
-                            snprintf(buf, 64, "%%0%d%s", digits, pr);
-                            fileroot += buf;
-                        }
-                        else
-                        {
-                            fileroot += *i;
-                        }
-                    }
-
-                    return true;
-                }
-            }
-        }
-
-        std::string root, frame, view, ext;
-        if (!split_sequence(root, frame, view, ext, file.filename().string()))
-        {
-            return false; // NOT a recognized sequence
-        }
-
-        std::string croot, cview, cframe, cext;
-        unsigned pad = 0;
-        if (is_valid_frame_spec(frame))
-        {
-            pad = padded_digits(frame);
-        }
-
-        fs::directory_iterator e; // default constructor yields path iter. end
-        for (fs::directory_iterator i(dir); i != e; ++i)
-        {
-            if (!fs::exists(*i) || fs::is_directory(*i))
-                continue;
-
-            std::string tmp = (*i).path().filename().generic_string();
-
-            // Do not continue on false return of split_sequence
-            if (!split_sequence(croot, cframe, cview, cext, tmp))
-            {
-                continue;
-            }
-
-            if (cext != ext || croot != root || cview != view)
-            {
-                continue; // not this sequence
-            }
-
-            if (cframe[0] == '0' && cframe.size() > 1 && pad == 0)
-                pad = (unsigned)cframe.size();
-
-            int64_t f = atoi(cframe.c_str());
-
-            if (f < frameStart || frameStart == AV_NOPTS_VALUE)
-                frameStart = f;
-            if (f > frameEnd || frameEnd == AV_NOPTS_VALUE)
-                frameEnd = f;
-        }
-
-        const char* prdigits = PRId64;
-        if (pad < 10)
-            prdigits = "d";
-
-        snprintf(buf, 1024, "%%0%d%s", pad, prdigits);
-
-        if (!split_sequence(root, frame, view, ext, fileroot))
-        {
-            return false;
-        }
-
-        fileroot = root;
-        fileroot += view;
-        fileroot += buf;
-        fileroot += ext;
-
-        return true;
-    }
-
-    void parse_directory(
-        const std::string& dir, stringArray& movies, stringArray& sequences,
-        stringArray& audios)
-    {
-
-        // default constructor yields path iter. end
-        stringArray files;
-        fs::directory_iterator e;
-        for (fs::directory_iterator i(dir); i != e; ++i)
-        {
-            if (!fs::exists(*i) || fs::is_directory(*i))
-                continue;
-
-            std::string file = (*i).path().string();
-            files.push_back(file);
-        }
-        std::sort(files.begin(), files.end());
-
-        std::string root, frame, view, ext;
-        SequenceList tmpseqs;
-
-        for (const auto& file : files)
-        {
-            bool ok = mrv::split_sequence(root, frame, view, ext, file);
-            if (mrv::is_valid_movie(ext.c_str()))
-                movies.push_back(file);
-            else if (mrv::is_valid_audio(ext.c_str()))
-                audios.push_back(file);
-            else if (ok)
-            {
-                Sequence s;
-                s.root = root;
-                s.view = view;
-                s.number = frame;
-                s.ext = ext;
-
-                tmpseqs.push_back(s);
-            }
-        }
-
-        //
-        // Then, sort sequences and collapse them into a single file entry
-        //
-        std::sort(tmpseqs.begin(), tmpseqs.end(), SequenceSort());
-
-        std::string first;
-        std::string number;
-        int padding = -1;
-
-        for (const auto& i : tmpseqs)
-        {
-
-            const char* s = i.number.c_str();
-            int z = 0;
-            for (; *s == '0'; ++s)
-                ++z;
-
-            if (i.root != root || i.view != view || i.ext != ext ||
-                (padding != z && z != padding - 1))
-            {
-                // New sequence
-                root = i.root;
-                padding = z;
-                number = first = i.number;
-                view = i.view;
-                ext = i.ext;
-
-                std::string file = root;
-                file += first;
-                file += view;
-                file += ext;
-                sequences.push_back(file);
-            }
-            else
-            {
-                padding = z;
-                number = i.number;
-            }
         }
     }
 

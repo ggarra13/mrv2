@@ -4,8 +4,10 @@
 
 #pragma once
 
+#include <vector>
 #include <string>
 
+#include <tlTimeline/Edit.h>
 #include <tlTimeline/Util.h>
 
 #include "mrvEdit/mrvEditMode.h"
@@ -20,6 +22,8 @@ namespace mrv
     class TimelinePlayer;
     using otio::Timeline;
 
+    struct InsertData;
+
     //@{
     //! Store timeline in undo queue.
 
@@ -33,11 +37,22 @@ namespace mrv
     //! Return whether edit has redo.
     bool edit_has_redo();
 
+    //! Handle insert of clip (used in shifting clips around in tlRender).
+    void edit_insert_clip_annotations(
+        const std::vector<tl::timeline::InsertData>& inserts, ViewerUI* ui);
+
+    //! Handle insert of clip annotations from network.
+    void
+    edit_insert_clip(const std::vector<mrv::InsertData>& inserts, ViewerUI* ui);
+
+    //! Set the temporary EDL for a drag item callback.
+    void toOtioFile(TimelinePlayer*, ViewerUI* ui);
+
+    //! Make paths of an otio::Timeline absolute.
+    void makePathsAbsolute(TimelinePlayer* player, ViewerUI* ui);
+
     //! Menu function to copy one frame to the buffer.
     void edit_copy_frame_cb(Fl_Menu_* m, ViewerUI* ui);
-
-    //! Actual function to cut a frame from the timeline.
-    void edit_cut_frame(ViewerUI* ui, bool saveOtio = true);
 
     //! Menu function to cut one frame from the timeline.
     void edit_cut_frame_cb(Fl_Menu_* m, ViewerUI* ui);
@@ -53,10 +68,6 @@ namespace mrv
 
     //! Menu function to remove item(s) from the timeline.
     void edit_remove_clip_cb(Fl_Menu_* m, ViewerUI* ui);
-
-    //! Menu function to remove item(s) from the timeline, replacing them
-    //! with gaps.
-    void edit_remove_clip_with_gap_cb(Fl_Menu_* m, ViewerUI* ui);
 
     //! Set Action Mode to trim
     void edit_trim_cb(Fl_Menu_* m, ViewerUI* ui);
@@ -79,6 +90,11 @@ namespace mrv
     //! Menu function to redo an edit or annotation.
     void edit_redo_cb(Fl_Menu_* m, ViewerUI* ui);
 
+    //! Edit function to shift annotations in a timeRange to a start time
+    void shiftAnnotations(
+        const otime::TimeRange& range, const otime::RationalTime& startTime,
+        ViewerUI* ui);
+
     //! Create empty timeline.
     void create_empty_timeline_cb(Fl_Menu_* m, ViewerUI* ui);
 
@@ -97,19 +113,13 @@ namespace mrv
     //! Save current OTIO timeline (EDL) to a permanent place on disk.
     void save_timeline_to_disk_cb(Fl_Menu_* m, ViewerUI* ui);
 
-    //! Verify current OTIO timeline (EDL).
-
     //! Save current OTIO timeline (EDL) to a filename.  Timeline and EDL
     //! must be verified first.
     void save_timeline_to_disk(otio::Timeline*, const std::string& fileName);
 
-    //! Dump undo queue to tmpdir.
-    void dump_undo_queue_cb(Fl_Menu_* m, ViewerUI* ui);
-
     //
     // Set the edit mode height.
     //
-
     extern EditMode editMode;
     extern int editModeH;
 

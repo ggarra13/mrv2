@@ -32,7 +32,7 @@ dir=${dir%/*}
 # Add mrv2's lib directory first to LD_LIBRARY_PATH (Linux)
 # or DYLD_FALLBACK_LIBRARY_PATH (macOS)
 #
-export LD_LIBRARY_PATH="${dir}/lib:${LD_LIBRARY_PATH}:/usr/lib64:/usr/lib"
+export LD_LIBRARY_PATH="${dir}/lib64:${dir}/lib:${LD_LIBRARY_PATH}:/usr/lib64:/usr/lib"
 export DYLD_FALLBACK_LIBRARY_PATH="${LD_LIBRARY_PATH}"
 export PYTHONPATH="${dir}/../../..:${dir}/lib/python310.zip:${dir}/lib/python@MRV2_PYTHON_VERSION@:${dir}/lib/python@MRV2_PYTHON_VERSION@:${dir}/lib/python@MRV2_PYTHON_VERSION@/lib-dynload:${dir}/lib/python@MRV2_PYTHON_VERSION@/site-packages:${PYTHONPATH}"
 

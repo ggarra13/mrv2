@@ -7,6 +7,7 @@
 
     set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
 	WriteRegStr HKCR 'mrv2' '' 'mrv2'
+	WriteRegStr HKCR 'mrv2\\\\DefaultIcon' '' '$INSTDIR\\\\bin\\\\mrv2.exe,O'
 	WriteRegStr HKCR 'mrv2\\\\shell' '' 'open'
 	WriteRegStr HKCR 'mrv2\\\\shell\\\\open\\\\command' '' '$INSTDIR\\\\bin\\\\mrv2.exe \\\"%1\\\"'
 	SectionEnd

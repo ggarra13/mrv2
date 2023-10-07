@@ -52,7 +52,17 @@ La sección de Comportamiento de la Ventana permite establecer cómo se comporta
 	   
 .. topic:: Una Instance
 
-	   Actualmente sin uso.
+	   Al seleccionarlo, mrv2 se comportará como una sola instancia.
+	   Si abre otras películas con otro mrv2 (o con una asociación de
+	   archivi), éstas serán redireccionadas a la ya abierta instancia de
+	   mrv2.
+	   Nótese que puede cambiar este seteo en cualquier momento en las
+	   preferencias para cambiar el comporamiento de mrv2.
+
+	   Esta característica funciona con un puerto de TCP port em 55120, por
+	   lo que si su plataforma es Windows, la primera vez que lo use puede
+	   que su cortafuegos abra una ventana para permitir pasar la conección.
+	   En Linux o macOS no es necesario modificar el cortafuegos.
 
 .. topic:: Auto Reencuadrar la imagen
 

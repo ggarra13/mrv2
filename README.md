@@ -1,54 +1,57 @@
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![Build Status](https://github.com/ggarra13/mrv2/actions/workflows/ci-workflow.yml/badge.svg)](https://github.com/ggarra13/mrv2/actions/workflows/ci-workflow.yml)
+[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=679N8GWCNDFSJ)
 
 mrv2
 ====
 
 mrv2 is an open source professional player and review tool for vfx, animation and computer graphics.
-It is the second generation of the popular mrViewer flipbook player.
 
 Contents:
-* [Pre-built Binaries](#pre-built-binaries)
-    * [Compatibility](#compatibility) 
-    * [Notes on Installation](#notes-on-installation)
-* [Features](#features)
-* [Building](#building)
-    * [Building with Docker](#building-with-docker)
-    * [Dependencies](#dependencies)
-      * [RedHat](#redhat)
-      * [Ubuntu](#ubuntu)
-      * [macOS](#macos)
-      * [Windows](#windows)
-    * [Building mrv2](#building-mrv2)
-    * [Debug builds](#debug-builds)
-    * [Building on Windows](#building-on-windows)
-    * [Building FFmpeg as GPL or LGPL](#building-ffmpeg-as-gpl-or-lgpl)
-* [Running mrv2](#running-mrv2)
-    * [macOS and Linux](#macos-and-linux)
-    * [Windows](#windows)
-* [Tutorials](#tutorials)
-* [Documenting](#documenting)
-* [Translating](#translating)
-   * [If you compiled mrv2](#if-you-compiled-mrv2)
-   * [If you did not compile mrv2](#if-you-did-not-compile-mrv2)
-   * [Translating on Windows](#translating-on-windows)
-* [Packaging](#packaging)
-* [Developing](#developing)
-* [Donating](#donating)
+
+- [Pre-built Binaries](#pre-built-binaries)
+    - [Compatibility](#compatibility) 
+    - [Notes on Installation](#notes-on-installation)
+- [Features](#features)
+- [Building](#building)
+    - [Building with Docker](#building-with-docker)
+    - [Dependencies](#dependencies)
+      - [RedHat](#redhat)
+      - [Ubuntu](#ubuntu)
+      - [macOS](#macos)
+      - [Windows](#windows)
+    - [Building mrv2](#building-mrv2)
+    - [Debug builds](#debug-builds)
+    - [Building on Windows](#building-on-windows)
+    - [CMake build options](#cmake-build-options) 
+    - [Building FFmpeg as GPL or LGPL](#building-ffmpeg-as-gpl-or-lgpl)
+- [Running mrv2](#running-mrv2)
+    - [macOS and Linux](#macos-and-linux)
+    - [Windows](#windows)
+- [Tutorials](#tutorials)
+- [Documenting](#documenting)
+- [Translating](#translating)
+   - [If you compiled mrv2](#if-you-compiled-mrv2)
+   - [If you did not compile mrv2](#if-you-did-not-compile-mrv2)
+   - [Translating on Windows](#translating-on-windows)
+- [Packaging](#packaging)
+- [Developing](#developing)
 
 # Pre-built binaries
 
 If you are looking for pre-built binaries for Windows, Linux or macOS (Intel), they can be found in:
 
-https://github.com/ggarra13/mrv2/releases
+[GitHub](https://github.com/ggarra13/mrv2/releases)
 
 or in its mirror site at:
 
-https://sourceforge.net/projects/mrv2/files/
+[SourceForge](https://sourceforge.net/projects/mrv2/files/)
+
+The source forge site also hosts beta builds (nightly builds with the latest changes).
 
 ## Compatibility
 
-mrv2 binaries run on Windows 8.1+, RedHat 8+ or Ubuntu 20.04+ and macOS 10.15+.
+mrv2 binaries run on Windows 8.1+, RedHat 8.1+ or Ubuntu 20.04+ and macOS 11.0+.
 
 ## Notes on installation
 
@@ -84,13 +87,13 @@ mrv2 binaries run on Windows 8.1+, RedHat 8+ or Ubuntu 20.04+ and macOS 10.15+.
   On Debian (Ubuntu, etc) systems, you would install with:
 
 ```
-  sudo dpkg -i mrv2-v0.7.0-amd64.tar.gz
+  sudo dpkg -i mrv2-v0.7.8-Linux-amd64.tar.gz
 ```
 
   On Red Hat (Rocky Linux, etc), you would install it with:
   
 ```
-  sudo rpm -i mrv2-v0.7.0-amd64.tar.gz
+  sudo rpm -i mrv2-v0.7.8-Linux-amd64.tar.gz
 ```
 
   Once you install it, you can run mrv2 by just typing mrv2 in the shell, as
@@ -104,7 +107,7 @@ mrv2 binaries run on Windows 8.1+, RedHat 8+ or Ubuntu 20.04+ and macOS 10.15+.
   .tar.gz file and you can uncompress it with:
   
 ```
-  tar -xf mrv2-v0.7.0-amd64.tar.gz
+  tar -xf mrv2-v0.7.8-Linux-amd64.tar.gz
 ```
 
   That will create a folder in the direcory you uncompress it from.  You can
@@ -117,21 +120,22 @@ The core of the playback engine is a custom version of tlRender (www.github.com/
 
 Currently supported:
 
-* Movie files (H264, MP4, WEBM, etc.)
-* Image file sequences (Cineon, DPX, JPEG, OpenEXR, PNG, PPM, TIFF, TGA, BMP,
+- Movie files (H264, MP4, VPX, WEBM, etc.)
+- Image file sequences (Cineon, DPX, JPEG, OpenEXR, PNG, PPM, TIFF, TGA, BMP,
   	     	       	PSD)
-* Multi-channel audio
-* Color management
-* A/B comparison
-* Native OpenTimelineIO with dissolves
-* .otioz file bundles
-* Creation of OpenTimelineIO playlists
-* OpenEXR multichannel, multiview and multipart support
-* Environment mapping (Spherical and Cubic)
-* Python3 API and Plugin system
-* Network connections
-* Stereo 3D (Anaglyph, Scanlines, Columns, Checkered, Side by Side)
-* PDF Exporting of Annotations and Notes
+- RAW Camera Formats (CR2, CR3, X3F, etc).
+- Multi-channel audio
+- Color management
+- A/B comparison
+- Native OpenTimelineIO with dissolves
+- .otioz file bundles
+- Creation of OpenTimelineIO playlists
+- OpenEXR multichannel, multiview and multipart support
+- Environment mapping (Spherical and Cubic)
+- Python3 API and Plugin system
+- Network connections
+- Stereo 3D (Anaglyph, Scanlines, Columns, Checkered, Side by Side)
+- PDF Exporting of Annotations and Notes
 
 # Building
 
@@ -144,24 +148,9 @@ group, you can just build mrv2 with:
 ./runme_docker.sh
 ```
 The resulting installers will be placed in a new packages/ directory of the
-root of mrv2.
+root of mrv2.  The docker images are compatible with RedHat 8.1 and Ubuntu 20.04.
 
 ## Dependencies
-
-Basic required dependencies:
-* [CMake 3.26.2 or later] (https://cmake.org/download/)
-* [ninja-build] (https://github.com/ninja-build/ninja.git)
-* [Git] (https://git-scm.com/downloads)
-
-Basic Windows required dependencies:
-* [Visual Studio 2019 or later Community] (https://visualstudio.microsoft.com/en/free-developer-offers)
-* [MSYS2] (https://www.msys2.org/)
-* [NSIS Installer] -for Packaging- (https://nsis.sourceforge.io/Download)
-
-Additional dependencies are downloaded and built automatically by the CMake
-superbuild script.  For a list of non-system libraries that mrv2 depends on
-and their licenses, please refer to mrv2/docs/Legal.
-The system dependencies for each OS is listed below.
 
 ### RedHat
 
@@ -211,7 +200,7 @@ sudo apt -y install build-essential git cmake ninja-build libpango1.0-dev \
 		    libpulse-dev libssl-dev libffi-dev \
 		    libwayland-dev wayland-protocols libdbus-1-dev \
 		    libxkbcommon-dev libegl-dev libgtk-3-dev rpm \
-                    doxygen tk-dev libxt-dev
+                    doxygen tk-dev libxt-dev swig subversion
 ```
 
 ### macOS
@@ -235,6 +224,17 @@ brew install git cmake ninja gettext openssl readline sqlite3 xz zlib
 ```
 
 ### Windows
+
+- [Visual Studio 2019 or later Community](https://visualstudio.microsoft.com/en/free-developer-offers)
+- [MSYS2](https://www.msys2.org/)
+- [Git](https://git-scm.com/downloads)
+- [CMake 3.26.2 or later](https://cmake.org/download/)
+- [NSIS Installer for Packaging](https://nsis.sourceforge.io/Download) - Optional
+
+Additional dependencies are downloaded and built automatically by the CMake
+superbuild script.  For a list of non-system libraries that mrv2 depends on
+and their licenses, please refer to mrv2/docs/Legal.
+The system dependencies for each OS is listed below.
 
 The only special requirement is installing a new copy of cmake than the
 one that ships with MSVC19.
@@ -263,9 +263,19 @@ cd mrv2
 ```
 
 The script is a superbuild script that will download all needed dependencies
-required.  It will create a build and a BUILD-KERNEL-ARCH/BUILDTYPE/install
-directory where all files shall reside.
+required.  It will create a build and a:
+```
+BUILD-KERNEL-ARCH/BUILDTYPE/install
+````
+directory where all files shall reside.  
 
+Make sure you meet the basic dependencies for your platform.  See [Dependencies](#dependencies).
+
+The runme.sh sript will output its progress to the terminal and also save itt
+in:
+````
+BUILD-KERNEL-ARCH/BUILDTYPE/compile.log.
+````
 The default is to build with all cores in all the Operating Systems.
 If you want more or less cores pass another number to any of
 the runme*.sh scripts.  For example, to build with 4 cores, you can do:
@@ -315,9 +325,27 @@ which needs to be modified to the path of Visual Studio (2019 by default),
 the optional Windows SDK (none by default) and your copy of Msys.
 
 As a convernience for Windows users, DLLs, includes and .lib files
-for FFmpeg, libintl, libiconv, and liblcms2 libraries are provided in mrv2's windows/win64 directory.
+for FFmpeg and liblcms2 libraries are provided in mrv2's windows/win64 directory.  The libintl and libiconv libraries are taken from the MSys64 repositories as pre-flight check with the bin/install_libintl_window.sh script (part of runme.sh).
 
-If you unset LCMS2_ROOT in windows/envvars/envvars.sh, the library will be compiled. 
+If you unset LCMS2_ROOT in windows/envvars/envvars.sh, the library will be compiled.
+
+## CMake build options
+
+The main runme.sh script supports passing CMake flags to it and allows turning on or off some options of mrv2.  You must pass them like:
+
+-D TLRENDER_USD=OFF
+
+Currently, the flags supported are:
+
+| Name              | Description                                       | Default   |
+| ----------------- | ------------------------------------------------- | --------- |
+| BUILD_FLTK        | Toggles FLTK building (currently needed)          | TRUE      |
+| BUILD_PYTHON      | Toggles Python building or system installed.      | TRUE      |
+| MRV2_PYBIND11     | Toggles Python support in mrv2.                   | TRUE      |
+| MRV2_NETWORK      | Toggles Network and Single Instance.              | TRUE      |
+| MRV2_PDF          | Toggles PDF Saving and Creation.                  | TRUE      |
+| TLRENDER_USD      | Toggles support for USD                           | TRUE      |
+| TLRENDER_RAW      | Toggles support for RAW Camera formats            | TRUE      |
 
 ## Building FFmpeg as GPL or LGPL
 
@@ -327,7 +355,7 @@ If you pass -gpl or -lpgl to the runme.sh script, like:
 ./runme.sh -gpl
 ```
 
-The build system will compile FFmpeg as GPL or LGPL.  The default is to build a LGPL version of FFmpeg as that complies with the BSD binary distribution license.  The LGPL version of FFmpeg, however, does not come with libx264, which means you cannot save movie files with the H264 codec.  On Windows, if you don't specify neither -gpl nor -lgpl, the pre-compiled LGPL binaries are used.
+The build system will compile FFmpeg as GPL or LGPL on all platforms.  The default is to build a LGPL version of FFmpeg as that complies with the BSD binary distribution license.  The LGPL version of FFmpeg, however, does not come with libx264, which means you cannot save movie files with the H264 codec.  On Windows, if you don't specify neither -gpl nor -lgpl, the pre-compiled LGPL binaries are used.
 
 The GPL version of FFmpeg does not have that restriction and it will compile libx264 on all platforms.
 
@@ -384,15 +412,14 @@ explorer .
 And in the explorer directory that it will open, you should create a shortcut
 with the RMB to the mrv2.exe.  Once that is done, you can drag and rename the
 shortcut to your Desktop to have it handy.
-Note that if you will not be developing mrv2, you should proceed to Packaging
-instead(#packaging).
+Note that if you will not be developing mrv2, you should instead proceed to [Packaging](#packaging).
 
 # Tutorials
 
 Besides the basic API documentation included, there is a special channel on youtube.com where you can
 find some tutorials on its basic use:
 
-https://www.youtube.com/watch?v=8JViz-pPCrg&list=PLxJ9NNBdNfRmd8AQ41AJYmb7WhN99G5C-
+[Video Tutorials](https://www.youtube.com/watch?v=8JViz-pPCrg&list=PLxJ9NNBdNfRmd8AQ41AJYmb7WhN99G5C-)
 
 # Documenting
 
@@ -526,16 +553,9 @@ clang-format
 
 This is part of the LLVM project, you can download it from your usual repositories (apt, brew, etc.), or from:
 
-https://releases.llvm.org/download.html
+[LLVM Main Download Page](https://releases.llvm.org/download.html)
 
 This utility verifies previous to a commit that all the C++ formatting follows the standard used in mrv2.
 
 You might also want to get Doxygen so as to get the source code documentation in docs/Doxygen.
 
-# Donating
-
-Go to:
-
-https://mrv2.sourceforge.io
-
-and click on the Paypal Donate button.

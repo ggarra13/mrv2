@@ -13,8 +13,11 @@ namespace fs = std::filesystem;
 #    include <tlIO/USD.h>
 #endif // TLRENDER_USD
 
+#include <tlCore/Memory.h>
 #include <tlCore/StringFormat.h>
+
 #include <tlTimeline/Player.h>
+#include <tlTimeline/Timeline.h>
 
 #include "mrvCore/mrvMemory.h"
 

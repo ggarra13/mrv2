@@ -25,7 +25,9 @@ namespace mrv
     HistogramPanel* histogramPanel = nullptr;
     VectorscopePanel* vectorscopePanel = nullptr;
     Stereo3DPanel* stereo3DPanel = nullptr;
+#ifdef MRV2_PYBIND11
     PythonPanel* pythonPanel = nullptr;
+#endif
 #ifdef MRV2_NETWORK
     NetworkPanel* networkPanel = nullptr;
 #endif
@@ -89,8 +91,10 @@ namespace mrv
             settings_panel_cb(nullptr, ui);
         if (logsPanel && logsPanel->is_panel())
             logs_panel_cb(nullptr, ui);
+#ifdef MRV2_PYBIND11
         if (pythonPanel && pythonPanel->is_panel())
             python_panel_cb(nullptr, ui);
+#endif
         if (devicesPanel && devicesPanel->is_panel())
             devices_panel_cb(nullptr, ui);
         if (colorAreaPanel && colorAreaPanel->is_panel())
@@ -129,8 +133,10 @@ namespace mrv
             settings_panel_cb(nullptr, ui);
         if (logsPanel && !logsPanel->is_panel())
             logs_panel_cb(nullptr, ui);
+#ifdef MRV2_PYBIND11
         if (pythonPanel && !pythonPanel->is_panel())
             python_panel_cb(nullptr, ui);
+#endif
         if (devicesPanel && !devicesPanel->is_panel())
             devices_panel_cb(nullptr, ui);
         if (colorAreaPanel && !colorAreaPanel->is_panel())
@@ -253,6 +259,7 @@ namespace mrv
 
     void python_panel_cb(Fl_Widget* w, ViewerUI* ui)
     {
+#ifdef MRV2_PYBIND11
         bool send = ui->uiPrefs->SendUI->value();
         if (send)
         {
@@ -267,10 +274,11 @@ namespace mrv
             return;
         }
         pythonPanel = new PythonPanel(ui);
-#ifdef __APPLE__
+#    ifdef __APPLE__
         if (!ui->uiPrefs->uiPrefsMacOSMenus->value())
-#endif
+#    endif
             ui->uiMain->fill_menu(ui->uiMenuBar);
+#endif
     }
 
     void logs_panel_cb(Fl_Widget* w, ViewerUI* ui)
@@ -452,7 +460,7 @@ namespace mrv
         bool send = ui->uiPrefs->SendUI->value();
         if (send)
         {
-            tcp->pushMessage("USD Panel", static_cast<bool>(!networkPanel));
+            tcp->pushMessage("USD Panel", static_cast<bool>(!usdPanel));
         }
         if (usdPanel)
         {
@@ -512,7 +520,9 @@ namespace mrv
                 "Stereo 3D Panel", static_cast<bool>(stereo3DPanel));
             tcp->pushMessage(
                 "Settings Panel", static_cast<bool>(settingsPanel));
+#ifdef MRV2_PYBIND11
             tcp->pushMessage("Python Panel", static_cast<bool>(pythonPanel));
+#endif
 #ifdef MRV2_NETWORK
             tcp->pushMessage("Network Panel", static_cast<bool>(networkPanel));
 #endif

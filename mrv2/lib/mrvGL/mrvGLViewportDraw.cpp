@@ -406,7 +406,8 @@ namespace mrv
         {
             const auto& annotationTime = annotation->time;
             float alphamult = 0.F;
-            if (time == annotationTime || annotation->allFrames)
+            if (annotation->allFrames ||
+                time::floor(time) == time::floor(annotationTime))
                 alphamult = 1.F;
             else
             {
@@ -415,7 +416,8 @@ namespace mrv
                     for (short i = p.ghostPrevious - 1; i > 0; --i)
                     {
                         otime::RationalTime offset(i, time.rate());
-                        if (time - offset == annotationTime)
+                        if (time::floor(time - offset) ==
+                            time::floor(annotationTime))
                         {
                             alphamult = 1.F - (float)i / p.ghostPrevious;
                             break;
@@ -427,7 +429,8 @@ namespace mrv
                     for (short i = 1; i < p.ghostNext; ++i)
                     {
                         otime::RationalTime offset(i, time.rate());
-                        if (time + offset == annotationTime)
+                        if (time::floor(time + offset) ==
+                            time::floor(annotationTime))
                         {
                             alphamult = 1.F - (float)i / p.ghostNext;
                             break;
@@ -550,7 +553,8 @@ namespace mrv
         {
             const auto& annotationTime = annotation->time;
             float alphamult = 0.F;
-            if (time == annotationTime || annotation->allFrames)
+            if (annotation->allFrames ||
+                time::floor(time) == time::floor(annotationTime))
                 alphamult = 1.F;
             else
             {
@@ -559,7 +563,8 @@ namespace mrv
                     for (short i = p.ghostPrevious - 1; i > 0; --i)
                     {
                         otime::RationalTime offset(i, time.rate());
-                        if (time - offset == annotationTime)
+                        if (time::floor(time - offset) ==
+                            time::floor(annotationTime))
                         {
                             alphamult = 1.F - (float)i / p.ghostPrevious;
                             break;
@@ -571,7 +576,8 @@ namespace mrv
                     for (short i = 1; i < p.ghostNext; ++i)
                     {
                         otime::RationalTime offset(i, time.rate());
-                        if (time + offset == annotationTime)
+                        if (time::floor(time + offset) ==
+                            time::floor(annotationTime))
                         {
                             alphamult = 1.F - (float)i / p.ghostNext;
                             break;
@@ -851,23 +857,27 @@ namespace mrv
 
         if (p.hud & HudDisplay::kResolution)
         {
-            const auto& info = player->player()->getIOInfo();
-            const auto& video = info.video[0];
-            if (video.size.pixelAspectRatio != 1.0)
+            const auto& inPlayer = player->player();
+            if (inPlayer)
             {
-                int width = video.size.w * video.size.pixelAspectRatio;
-                snprintf(
-                    buf, 512, "%d x %d  ( %.3g )  %d x %d", video.size.w,
-                    video.size.h, video.size.pixelAspectRatio, width,
-                    video.size.h);
+                const auto& info = inPlayer->getIOInfo();
+                const auto& video = info.video[0];
+                if (video.size.pixelAspectRatio != 1.0)
+                {
+                    int width = video.size.w * video.size.pixelAspectRatio;
+                    snprintf(
+                        buf, 512, "%d x %d  ( %.3g )  %d x %d", video.size.w,
+                        video.size.h, video.size.pixelAspectRatio, width,
+                        video.size.h);
+                }
+                else
+                {
+                    snprintf(buf, 512, "%d x %d", video.size.w, video.size.h);
+                }
+                _drawText(
+                    p.fontSystem->getGlyphs(buf, fontInfo), pos, lineHeight,
+                    labelColor);
             }
-            else
-            {
-                snprintf(buf, 512, "%d x %d", video.size.w, video.size.h);
-            }
-            _drawText(
-                p.fontSystem->getGlyphs(buf, fontInfo), pos, lineHeight,
-                labelColor);
         }
 
         std::string tmp;
@@ -934,7 +944,6 @@ namespace mrv
         tmp.clear();
         if (p.hud & HudDisplay::kMemory)
         {
-            char buf[128];
             uint64_t totalVirtualMem = 0;
             uint64_t virtualMemUsed = 0;
             uint64_t virtualMemUsedByMe = 0;
@@ -946,7 +955,7 @@ namespace mrv
                 totalPhysMem, physMemUsed, physMemUsedByMe);
 
             snprintf(
-                buf, 128,
+                buf, 512,
                 _("PMem: %" PRIu64 " / %" PRIu64 " MB  VMem: %" PRIu64
                   " / %" PRIu64 " MB"),
                 physMemUsedByMe, totalPhysMem, virtualMemUsedByMe,
@@ -1009,28 +1018,30 @@ namespace mrv
             image::Tags tags;
             if (!p.videoData.empty() && !p.videoData[0].layers.empty())
             {
-                tags = p.videoData[0].layers[0].image->getTags();
-                for (const auto& tag : tags)
+                if (p.videoData[0].layers[0].image)
                 {
-                    if (pos.y > viewportSize.h)
-                        return;
-                    snprintf(
-                        buf, 512, "%s = %s", tag.first.c_str(),
-                        tag.second.c_str());
-                    _drawText(
-                        p.fontSystem->getGlyphs(buf, fontInfo), pos, lineHeight,
-                        labelColor);
+                    tags = p.videoData[0].layers[0].image->getTags();
+                    for (const auto& tag : tags)
+                    {
+                        if (pos.y > viewportSize.h)
+                            return;
+                        snprintf(
+                            buf, 512, "%s = %s", tag.first.c_str(),
+                            tag.second.c_str());
+                        _drawText(
+                            p.fontSystem->getGlyphs(buf, fontInfo), pos,
+                            lineHeight, labelColor);
+                    }
                 }
             }
-
-            const auto& info = player->player()->getIOInfo();
+            const auto& inPlayer = player->player();
+            if (!inPlayer)
+                return;
+            const auto& info = inPlayer->getIOInfo();
             for (const auto& tag : info.tags)
             {
                 if (pos.y > viewportSize.h)
                     return;
-                auto it = tags.find(tag.first);
-                if (it != tags.end())
-                    continue;
                 snprintf(
                     buf, 512, "%s = %s", tag.first.c_str(), tag.second.c_str());
                 _drawText(

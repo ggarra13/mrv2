@@ -35,6 +35,7 @@ namespace mrv
 
     void OCIOBrowser::fill_view()
     {
+#ifdef TLRENDER_OCIO
         OCIO::ConstConfigRcPtr config = Preferences::OCIOConfig();
         const char* display = Preferences::OCIO_Display.c_str();
         std::vector< std::string > views;
@@ -55,10 +56,12 @@ namespace mrv
                 value(i + 1);
             }
         }
+#endif
     }
 
     void OCIOBrowser::fill_display()
     {
+#ifdef TLRENDER_OCIO
         OCIO::ConstConfigRcPtr config = Preferences::OCIOConfig();
         std::vector< std::string > displays;
         for (int i = 0; i < config->getNumDisplays(); ++i)
@@ -77,10 +80,12 @@ namespace mrv
                 value(i + 1);
             }
         }
+#endif
     }
 
     void OCIOBrowser::fill_input_color_space()
     {
+#ifdef TLRENDER_OCIO
         OCIO::ConstConfigRcPtr config = Preferences::OCIOConfig();
         std::vector< std::string > spaces;
         for (int i = 0; i < config->getNumColorSpaces(); ++i)
@@ -108,6 +113,7 @@ namespace mrv
                 value(i + 1);
             }
         }
+#endif
     }
 
     int OCIOBrowser::handle(int event)

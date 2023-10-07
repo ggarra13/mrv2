@@ -24,73 +24,75 @@
     <array>
 	<dict>
 	  <key>CFBundleTypeRole</key>
+	  <string>Viewer</string>
+	    <key>CFBundleTypeExtensions</key>
+	    <array>
+		<string>3fr</string>
+		<string>arw</string>
+		<string>bay</string>
+		<string>bmq</string>
+		<string>cap</string>
+		<string>cine</string>
+		<string>cr2</string>
+		<string>cr3</string>
+		<string>crw</string>
+		<string>cs1</string>
+		<string>dc2</string>
+		<string>dcr</string>
+		<string>dng</string>
+		<string>drf</string>
+		<string>dsc</string>
+		<string>erf</string>
+		<string>fff</string>
+		<string>ia</string>
+		<string>iiq</string>
+		<string>kdc</string>
+		<string>mdc</string>
+		<string>mef</string>
+		<string>mos</string>
+		<string>mrw</string>
+		<string>nef</string>
+		<string>nrw</string>
+		<string>pef</string>
+		<string>psd</string>
+		<string>ptx</string>
+		<string>pxn</string>
+		<string>qtk</string>
+		<string>raw</string>
+		<string>rdc</string>
+		<string>rw2</string>
+		<string>rwl</string>
+		<string>rwz</string>
+		<string>sr2</string>
+		<string>srf</string>
+		<string>srw</string>
+		<string>sti</string>
+		<string>x3f</string>
+	    </array>
+	</dict>
+        <dict>
+	  <key>CFBundleTypeRole</key>
 	  <string>Editor</string>
 	    <key>CFBundleTypeExtensions</key>
 	    <array>
+		<string>bmp</string>
 		<string>cin</string>
-	    </array>
-	</dict>
-	<dict>
-	  <key>CFBundleTypeRole</key>
-	  <string>Editor</string>
-	    <key>CFBundleTypeExtensions</key>
-	    <array>
 		<string>dpx</string>
-	    </array>
-	</dict>
-	<dict>
-	  <key>CFBundleTypeRole</key>
-	  <string>Editor</string>
-	    <key>CFBundleTypeExtensions</key>
-	    <array>
-		<string>iff</string>
-		<string>z</string>
-	    </array>
-	</dict>
-	<dict>
-	  <key>CFBundleTypeRole</key>
-	  <string>Editor</string>
-	    <key>CFBundleTypeExtensions</key>
-	    <array>
+		<string>exr</string>
 		<string>jpeg</string>
 		<string>jpg</string>
 		<string>jfif</string>
-	    </array>
-	</dict>
-	<dict>
-	  <key>CFBundleTypeRole</key>
-	  <string>Editor</string>
-	    <key>CFBundleTypeExtensions</key>
-	    <array>
-		<string>exr</string>
 		<string>sxr</string>
-	    </array>
-	</dict>
-	<dict>
-	  <key>CFBundleTypeRole</key>
-	  <string>Editor</string>
-	    <key>CFBundleTypeExtensions</key>
-	    <array>
-		<string>pic</string>
-	    </array>
-	</dict>
-	<dict>
-	  <key>CFBundleTypeRole</key>
-	  <string>Editor</string>
-	    <key>CFBundleTypeExtensions</key>
-	    <array>
+		<string>otio</string>
 		<string>png</string>
-	    </array>
-	</dict>
-	<dict>
-	  <key>CFBundleTypeRole</key>
-	  <string>Editor</string>
-	    <key>CFBundleTypeExtensions</key>
-	    <array>
 		<string>ppm</string>
-		<string>pnm</string>
-		<string>phm</string>
-		<string>pbm</string>
+		<string>sgi</string>
+		<string>sxr</string>
+		<string>rgba</string>
+		<string>rgb</string>
+		<string>tga</string>
+		<string>tiff</string>
+		<string>tif</string>
 	    </array>
 	</dict>
 	<dict>
@@ -99,16 +101,19 @@
 	    <key>CFBundleTypeExtensions</key>
 	    <array>
 		<string>avi</string>
+		<string>divx</string>
 		<string>dv</string>
-		<string>gif</string>
 		<string>flv</string>
 		<string>m2ts</string>
+		<string>m4v</string>
 		<string>mkv</string>
 		<string>mov</string>
+		<string>mp4</string>
 		<string>mpg</string>
 		<string>mpeg</string>
-		<string>mp4</string>
-		<string>m4v</string>
+		<string>mpeg2</string>
+		<string>mpeg3</string>
+		<string>mpeg4</string>
 		<string>mxf</string>
 		<string>ts</string>
 		<string>vob</string>
@@ -120,44 +125,7 @@
 	  <string>Editor</string>
 	    <key>CFBundleTypeExtensions</key>
 	    <array>
-		<string>rla</string>
-		<string>rpf</string>
-	    </array>
-	</dict>
-	<dict>
-	  <key>CFBundleTypeRole</key>
-	  <string>Editor</string>
-	    <key>CFBundleTypeExtensions</key>
-	    <array>
 		<string>mrv2s</string>
-	    </array>
-	</dict>
-	<dict>
-	  <key>CFBundleTypeRole</key>
-	  <string>Editor</string>
-	    <key>CFBundleTypeExtensions</key>
-	    <array>
-		<string>sgi</string>
-		<string>rgba</string>
-		<string>rgb</string>
-		<string>bw</string>
-	    </array>
-	</dict>
-	<dict>
-	  <key>CFBundleTypeRole</key>
-	  <string>Editor</string>
-	    <key>CFBundleTypeExtensions</key>
-	    <array>
-		<string>tga</string>
-	    </array>
-	</dict>
-	<dict>
-	  <key>CFBundleTypeRole</key>
-	  <string>Editor</string>
-	    <key>CFBundleTypeExtensions</key>
-	    <array>
-		<string>tiff</string>
-		<string>tif</string>
 	    </array>
 	</dict>
     </array>

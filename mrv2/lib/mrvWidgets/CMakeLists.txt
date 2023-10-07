@@ -15,6 +15,7 @@ set( FL_SOURCES
 )
 
 FLTK_WRAP_UI( mrvWidgets ${FL_SOURCES} )
+#FLTK_RUN_FLUID( mrvWidgets_FLTK_UI_SRCS "${FL_SOURCES}" )
 
 set(HEADERS
     mrvButton.h
@@ -46,8 +47,6 @@ set(HEADERS
     mrvPopupMenu.h
     mrvPreferencesTree.h
     mrvProgressReport.h
-    mrvPythonEditor.h
-    mrvPythonOutput.h
     mrvResizableBar.h
     mrvSecondaryWindow.h
     mrvSlider.h
@@ -93,8 +92,6 @@ set(SOURCES
     mrvPopupMenu.cpp
     mrvPreferencesTree.cpp
     mrvProgressReport.cpp
-    mrvPythonEditor.cpp
-    mrvPythonOutput.cpp
     mrvResizableBar.cpp
     mrvSecondaryWindow.cpp
     mrvSlider.cpp
@@ -110,6 +107,19 @@ set(SOURCES
 )
 
 
+list( APPEND LIBRARIES mrvFlmm mrvFLU mrvCore ${FLTK_LIBRARIES} ${JASPER_LIBRARIES} MINIZIP::minizip )
+if(MRV2_PYBIND11)
+    list( APPEND LIBRARIES pybind11::embed )
+    list( APPEND SOURCES mrvPythonEditor.cpp mrvPythonOutput.cpp)
+    list( APPEND HEADERS mrvPythonEditor.h mrvPythonOutput.h)
+    
+    if(UNIX AND NOT APPLE)
+	# Needed for python3.10 on Rocky and Ubuntu 20.04
+	list( APPEND LIBRARIES "util" )
+    endif()
+endif()
+
+
 files_to_absolute_paths()
 
 if ( APPLE )
@@ -118,7 +128,6 @@ endif()
 
 add_library(mrvWidgets ${SOURCES} ${HEADERS})
 
-list( APPEND LIBRARIES mrvFlmm mrvFLU mrvCore fltk_images MINIZIP::minizip pybind11::embed )
 
 if ( UNIX)
     if ( NOT APPLE )
@@ -131,9 +140,13 @@ if( WIN32 )
     list(APPEND LIBRARIES Crypt32.lib)
 endif()
 
+if(WIN32 AND FLTK_BUILD_SHARED_LIBS)
+    target_compile_definitions(mrvWidgets PUBLIC FL_DLL)
+endif()
+
 target_link_libraries(mrvWidgets PUBLIC ${LIBRARIES} )
 set_target_properties(mrvWidgets PROPERTIES FOLDER lib)
-set_target_properties(mrvWidgets PROPERTIES PUBLIC_HEADER "${HEADERS}")
+#set_target_properties(mrvWidgets PROPERTIES PUBLIC_HEADER "${HEADERS}")
 
 install(TARGETS mrvWidgets
     ARCHIVE DESTINATION lib

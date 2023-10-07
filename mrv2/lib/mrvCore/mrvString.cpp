@@ -30,7 +30,8 @@ namespace mrv
     }
 
     void split_string(
-        stringArray& output, const std::string& str, const std::string& delim)
+        std::vector<std::string>& output, const std::string& str,
+        const std::string& delim)
     {
         size_t offset = 0;
         size_t delimIndex = 0;

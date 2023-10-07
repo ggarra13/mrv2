@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-09-24 14:56-0300\n"
+"POT-Creation-Date: 2023-10-06 22:14-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -689,6 +689,27 @@ msgstr "%s - Página %d"
 msgid "&Copy/&Filename"
 msgstr "&Copiar/&Nombre del Archivo"
 
+msgid "&Edit/&Comment Selection"
+msgstr "&Editar/&Comentar Selección"
+
+msgid "&Edit/&Copy"
+msgstr "&Editar/&Copiar"
+
+msgid "&Edit/&Delete"
+msgstr "&Editar/&Pegar"
+
+msgid "&Edit/&Paste"
+msgstr "&Editar/&Pegar"
+
+msgid "&Edit/&Uncomment Selection"
+msgstr "&Editar/&Descomentar Selección"
+
+msgid "&Edit/&Undo"
+msgstr "&Editar/&Deshacer"
+
+msgid "&Edit/Cu&t"
+msgstr "&Editar/Cor&tar"
+
 msgid "&File/&Clone"
 msgstr "&Archivo/&Clonar"
 
@@ -700,6 +721,19 @@ msgstr "&Archivo/&Refrescar Cache"
 
 msgid "&File/&Save"
 msgstr "&Archivo/&Grabar"
+
+msgid "&Search/&Find..."
+msgstr "&Buscar/&Encontrar..."
+
+msgid "&Search/&Replace"
+msgstr "&Buscar/&Reemplazer"
+
+#, fuzzy
+msgid "&Search/&Replace Again"
+msgstr "&Buscar/Reemplazar de &Nuevo"
+
+msgid "&Search/F&ind Again"
+msgstr "&Buscar/E&ncontrar de Nuevo"
 
 msgid "&Show/In &File Manager"
 msgstr "&Mostrar/En &Buscador de Archivos"
@@ -1657,9 +1691,6 @@ msgstr "Carpeta donde el clip de audio reside"
 msgid "Directory where clip resides"
 msgstr "Carpeta donde el clip reside"
 
-msgid "Directory {0} does not exist or no directory"
-msgstr "Carpeta {0} no existe o no es carpeta"
-
 msgid "Disconnect"
 msgstr "Desconectar"
 
@@ -1776,12 +1807,6 @@ msgstr "Ventana de Edición"
 
 msgid "Edit/&Copy"
 msgstr "Editar/&Copiar"
-
-msgid "Edit/&Paste"
-msgstr "Editar/&Pegar"
-
-msgid "Edit/Cu&t"
-msgstr "Editar/Cor&tar"
 
 msgid "Edit/Frame/Copy"
 msgstr "Editar/Cuadro/&Copiar"
@@ -2014,6 +2039,9 @@ msgstr "Archivos"
 
 msgid "Filter EDLs"
 msgstr "Filtrar EDLs"
+
+msgid "Find:"
+msgstr "Encontrar:"
 
 msgid "First Frame"
 msgstr "Primer Cuadro"
@@ -2798,6 +2826,10 @@ msgstr "No"
 msgid "No item selected"
 msgstr "Ningún item seleccionado"
 
+#, c-format
+msgid "No occurrences of '%s' found!"
+msgstr "¡Ninguna ocurrencia de '%s' encontrado!"
+
 msgid "No playlist loaded."
 msgstr "No hay ninguna lista de reproducción cargada."
 
@@ -3516,6 +3548,18 @@ msgstr "Renderer:\t"
 msgid "Repeat  Frame"
 msgstr "Repetir Cuadro"
 
+msgid "Replace"
+msgstr "Reemplazar"
+
+msgid "Replace All"
+msgstr "Reemplazar Todas"
+
+msgid "Replace Next"
+msgstr "Reemplazar Siguient"
+
+msgid "Replace:"
+msgstr "Reemplazar:"
+
 msgid "Reset"
 msgstr "Resetear"
 
@@ -3590,6 +3634,12 @@ msgstr "Retorna la lista de índices B."
 
 msgid "Return the list of layers."
 msgstr "Retorna la lista de capas."
+
+msgid "Return the path to preferences of mrv2."
+msgstr "Retorna la carpeta de las preferencias de mrv2."
+
+msgid "Return the root path to the insallation of mrv2."
+msgstr "Retorna la carpeta raíz de la instalación de mrv2."
 
 msgid "Return the version and exit."
 msgstr "Retorna la versión y termina."
@@ -3790,8 +3840,8 @@ msgstr "Herramienta de Fregado"
 msgid "Search"
 msgstr "Buscar"
 
-msgid "Second timeline, movie, image sequence, or folder."
-msgstr "Segunda línea de tiempo, película, secuencias de imágenes o carpeta."
+msgid "Search String:"
+msgstr "Buscar Texto:"
 
 msgid "Secondary Display"
 msgstr "Display Secundario"
@@ -4430,9 +4480,6 @@ msgstr ""
 msgid "The stream is in an unrecoverable error state."
 msgstr "El flujo esta en un estado de error irrecuperable."
 
-msgid "Third timeline, movie, image sequence, or folder."
-msgstr "Tercera línea de tiempo, película, secuencias de imágenes o carpeta."
-
 msgid ""
 "This area specifies which elements should be shown as a HUD overlay on the "
 "view screen."
@@ -4498,9 +4545,6 @@ msgstr "Timecode"
 msgid "Timeline"
 msgstr "Línea de Tiempo"
 
-msgid "Timeline, movie, image sequence, or folder."
-msgstr "Línea de tiempo, película, secuencia de imágenes o carpeta."
-
 msgid "Timeline/Edit Associated Clips"
 msgstr "Línea de Tiempo/Editar Clips Asociados"
 
@@ -4524,6 +4568,9 @@ msgstr "Línea de Tiempo/Miniaturas/Pequeñas"
 
 msgid "Timeline/Transitions"
 msgstr "Línea de Tiempo/Transiciones"
+
+msgid "Timelines, movies, image sequences, or folders."
+msgstr "Líneas de tiempo, película, secuencia de imágenes o carpeta."
 
 msgid "Timer mode"
 msgstr "Modo de Timer"
@@ -5316,6 +5363,17 @@ msgstr "x9"
 
 msgid "xyY CIE xyY"
 msgstr "xyY CIE xyY"
+
+#~ msgid "Directory {0} does not exist or no directory"
+#~ msgstr "Carpeta {0} no existe o no es carpeta"
+
+#~ msgid "Second timeline, movie, image sequence, or folder."
+#~ msgstr ""
+#~ "Segunda línea de tiempo, película, secuencias de imágenes o carpeta."
+
+#~ msgid "Third timeline, movie, image sequence, or folder."
+#~ msgstr ""
+#~ "Tercera línea de tiempo, película, secuencias de imágenes o carpeta."
 
 #~ msgid "Saving hotkeys to \"{0}{1}.prefs\"."
 #~ msgstr "Grabando teclas de manejo a \"{0}{1}.prefs\"."

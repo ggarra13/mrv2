@@ -72,40 +72,6 @@ namespace mrv
             undo_shapes.pop_back();
         }
 
-        void to_json(nlohmann::json& json, const Annotation& value)
-        {
-            nlohmann::json shapes;
-            for (const auto& shape : value.shapes)
-            {
-                shapes.push_back(shapeToMessage(shape));
-            }
-            json = nlohmann::json{
-                {"all_frames", value.allFrames},
-                {"time", value.time},
-                {"shapes", shapes},
-            };
-        }
-
-        void from_json(const nlohmann::json& json, Annotation& value)
-        {
-            json.at("all_frames").get_to(value.allFrames);
-            if (json.contains("time"))
-            {
-                json.at("time").get_to(value.time);
-            }
-            else
-            {
-                int64_t frame;
-                json.at("frame").get_to(frame);
-                value.time = otime::RationalTime(frame, 24.0);
-            }
-            const nlohmann::json& shapes = json["shapes"];
-            for (auto& shape : shapes)
-            {
-                value.shapes.push_back(messageToShape(shape));
-            }
-        }
-
         std::shared_ptr< Annotation >
         messageToAnnotation(const mrv::Message& json)
         {

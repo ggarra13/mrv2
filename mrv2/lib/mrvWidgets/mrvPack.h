@@ -38,7 +38,7 @@
 namespace mrv
 {
 
-    class FL_EXPORT Pack : public Fl_Group
+    class Pack : public Fl_Group
     {
         int spacing_;
 

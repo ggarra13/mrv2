@@ -41,10 +41,10 @@ namespace mrv2
         {
             if (value < 0)
                 throw std::invalid_argument(_("Value less than 0"));
-            mrv::App* app = mrv::App::ui->app;
+            mrv::App* app = mrv::App::app;
             auto settings = settingsObject();
             settings->setValue("Cache/GBytes", value);
-            app->_cacheUpdate();
+            app->cacheUpdate();
             if (settingsPanel)
                 settingsPanel->refresh();
         }
@@ -82,10 +82,10 @@ namespace mrv2
          */
         void setReadAhead(const double value)
         {
-            mrv::App* app = mrv::App::ui->app;
+            mrv::App* app = mrv::App::app;
             auto settings = settingsObject();
             settings->setValue("Cache/ReadAhead", value);
-            app->_cacheUpdate();
+            app->cacheUpdate();
             if (settingsPanel)
                 settingsPanel->refresh();
         }
@@ -97,10 +97,10 @@ namespace mrv2
          */
         void setReadBehind(const double value)
         {
-            mrv::App* app = mrv::App::ui->app;
+            mrv::App* app = mrv::App::app;
             auto settings = settingsObject();
             settings->setValue("Cache/ReadBehind", value);
-            app->_cacheUpdate();
+            app->cacheUpdate();
             if (settingsPanel)
                 settingsPanel->refresh();
         }

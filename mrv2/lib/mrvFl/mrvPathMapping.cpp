@@ -68,7 +68,7 @@ namespace mrv
     void change_path_mapping(mrv::Browser* b, int idx)
     {
         std::string line = b->text(idx);
-        stringArray splitArray;
+        std::vector<std::string> splitArray;
         split(splitArray, line, '\t');
 
         std::string remote = splitArray[0];
@@ -108,7 +108,7 @@ namespace mrv
         for (int i = 2; i <= b->size(); ++i)
         {
             std::string line = b->text(i);
-            stringArray splitArray;
+            std::vector<std::string> splitArray;
             split(splitArray, line, '\t');
             map.insert(std::make_pair(splitArray[0], splitArray[1]));
         }

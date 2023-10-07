@@ -4,38 +4,39 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 
-
 #
 #
 # Main build script for mrv2.  It builds all dependencies and will install the
-# main executable on BUILD-OS-ARCH/BUILD_TYPE/install/bin.
+# main executable on BUILD_DIR (by default
+#                               BUILD-OS-ARCH/BUILD_TYPE/install/bin).
 #
 # On Linux and macOS, it will also create a mrv2 or mrv2-dbg symbolic link
 # in $HOME/bin if the directory exists.
 #
+# It will also log the compilation on $BUILD_DIR/compile.log
 #
 
-. $PWD/etc/build_dir.sh
+#
+# Store the paramters for passing them later
+#
+params=$*
 
-cd $BUILD_DIR
+#
+# Find out our build dir
+#
+. etc/build_dir.sh
 
-export TLRENDER_USD=ON
+mkdir -p $BUILD_DIR
 
-cmd="cmake -G '${CMAKE_GENERATOR}' -D CMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE -D CMAKE_INSTALL_PREFIX=$PWD/install -D CMAKE_PREFIX_PATH=$PWD/install -D TLRENDER_USD=${TLRENDER_USD} -D TLRENDER_RAW=ON -D TLRENDER_NFD=OFF -D TLRENDER_PROGRAMS=OFF -D TLRENDER_EXAMPLES=FALSE -D TLRENDER_TESTS=FALSE -D TLRENDER_QT6=OFF -D TLRENDER_QT5=OFF ${CMAKE_FLAGS} ../.."
 
+#
+# Clear the flags, as they will be set by runme_nolog.sh.
+#
+export FLAGS=""
+export CMAKE_FLAGS=""
+
+
+echo
+echo "Saving compile log to $BUILD_DIR/compile.log ..."
+cmd="./runme_nolog.sh $params 2>&1 | tee $BUILD_DIR/compile.log"
 run_cmd $cmd
-
-cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE
-
-cd -
-
-cmd="./runmeq.sh ${CMAKE_BUILD_TYPE} -t install"
-run_cmd $cmd
-
-if [[ $CMAKE_TARGET == "package" ]]; then
-    cmd="./runmeq.sh ${CMAKE_BUILD_TYPE} -t package"
-    run_cmd $cmd
-else
-    . $PWD/etc/build_end.sh
-fi
-

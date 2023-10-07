@@ -14,43 +14,49 @@ if (WIN32)
     list( APPEND SOURCES ${APP_ICON_RESOURCE_WINDOWS} )
 endif()
 
-#
-# We must list all libraries so that old gcc compiler on Docker will link
-# the stdc++fs library properly. 
-#
-set( LIBRARIES
-    mrvPy
+set(LIBRARIES )
+
+if(MRV2_PYBIND11)
+    list(APPEND LIBRARIES mrvPy)
+endif()
+
+list( APPEND LIBRARIES
     mrvApp
-    mrvPanels
-    mrvWidgets
-    mrvUI
-    mrvFl
-    mrvFLU
-    mrvNetwork
-    mrvCore
     ${Intl_LIBRARIES} )
 
+
+
 if( APPLE )
-    set( OSX_FRAMEWORKS "-framework Cocoa -framework IOKit" )
+    set( OSX_FRAMEWORKS "-framework IOKit" )
     list( APPEND LIBRARIES ${OSX_FRAMEWORKS} )
     set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
     set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib;/usr/local/lib")
 endif()
 
 if(UNIX AND NOT APPLE)
-    if( CMAKE_CXX_COMPILER_ID MATCHES "GNU" )
-	if ( CMAKE_CXX_COMPILER_VERSION MATCHES "^8.*" )
-	    message( STATUS "Old g++ compiler detected.  Will link to stdc++fs")
-	    list( APPEND LIBRARIES "stdc++fs" )
-	endif()
-	list( APPEND LIBRARIES "util" )  # Needed for python3.10 on Rocky
+    if ( CMAKE_CXX_COMPILER_VERSION MATCHES "^8.*" )
+	message( STATUS "Old g++ compiler detected.  Will link to stdc++fs")
+	list( APPEND LIBRARIES "stdc++fs" )
     endif()
+    # Needed for python3.10 on Rocky and Ubuntu 20.04
+    list( APPEND LIBRARIES "util" "c" )
 endif()
 
 add_executable(mrv2 WIN32 ${SOURCES} ${HEADERS})
 
 target_link_libraries(mrv2 PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})
 target_link_directories( mrv2 BEFORE PUBLIC ${CMAKE_INSTALL_PREFIX}/lib /usr/local/lib )
+
+set(PRUNE_SYMBOLS )
+if(WIN32)
+    set(PRUNE_SYMBOLS "/OPT:REF" "/OPT:ICF")
+elseif(APPLE)
+    set(PRUNE_SYMBOLS "-Wl,-dead_strip")
+else(UNIX)
+    set(PRUNE_SYMBOLS "-Wl,--gc-sections")
+endif()
+
+target_link_options(mrv2 PRIVATE ${PRUNE_SYMBOLS})
 
 install(TARGETS mrv2
     RUNTIME DESTINATION bin COMPONENT applications
@@ -77,17 +83,22 @@ include(InstallRequiredSystemLibraries)
 #
 # Extract python version from python executable
 #
-string( REGEX MATCH "^[0-9]+\\.[0-9]+" MRV2_PYTHON_VERSION "${Python_VERSION}" )
+string( REGEX MATCH "^[0-9]+\\.[0-9]+" MRV2_PYTHON_VERSION "${PYTHON_VERSION}" )
 
-if (UNIX)
-    set( MRV_PYTHON_LIBS ${CMAKE_INSTALL_PREFIX}/lib/python${MRV2_PYTHON_VERSION} )
-    install( DIRECTORY ${MRV_PYTHON_LIBS}
+if (UNIX AND BUILD_PYTHON)
+    set( MRV2_PYTHON_LIBS ${CMAKE_INSTALL_PREFIX}/lib/python${MRV2_PYTHON_VERSION} )
+    if (MRV2_PYFLTK)
+	# Get rid of the pyFLTK demos as they don't work properly on an
+	# embedded python
+	file( REMOVE_RECURSE ${CMAKE_INSTALL_PREFIX}/lib/python${MRV2_PYTHON_VERSION}/site-packages/fltk14/test )
+    endif()
+    install( DIRECTORY ${MRV2_PYTHON_LIBS}
         DESTINATION lib
         COMPONENT applications )
 endif()
 
 if ( APPLE )
-#Install all.dylibs in CMAKE_INSTALL_PREFIX / lib
+    # Install all.dylibs in CMAKE_INSTALL_PREFIX / lib
     file( GLOB MRV_DYLIBS ${CMAKE_INSTALL_PREFIX}/lib/*.dylib* )
     install( FILES ${MRV_DYLIBS}
 	DESTINATION lib
@@ -102,7 +113,14 @@ elseif(WIN32)
     #
     # Handle python DLL and libs and TCL
     #
-    if(MRV2_PYBIND11)	
+    if(MRV2_PYBIND11)
+
+	if (MRV2_PYFLTK)
+	    # Get rid of the pyFLTK demos as they don't work properly on an
+	    # embedded python
+	    file( REMOVE_RECURSE ${CMAKE_INSTALL_PREFIX}/bin/Lib/site-packages/fltk14/test )
+	endif()
+    
 	# Install all .dll in CMAKE_INSTALL_PREFIX/bin
 	file( GLOB MRV_PYLib ${CMAKE_INSTALL_PREFIX}/bin/Lib )
 	file( GLOB MRV_PYDLLs ${CMAKE_INSTALL_PREFIX}/bin/DLLs )

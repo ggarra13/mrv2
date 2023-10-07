@@ -132,10 +132,21 @@ namespace mrv
         //! This signal is emitted when the audio mute is changed.
         void muteChanged(bool);
 
-        void _cacheUpdate();
+        //! Create an image listener (opens a socket on localport).
+        void createListener();
+
+        //! Removes an image listener (closes a socket on localport).
+        void removeListener();
+
+        void cacheUpdate();
+
+        //! Tries to clean as many resources as possible.  This is usually done
+        //! before calling execv(), for example.
+        void cleanResources();
 
     public:
         static ViewerUI* ui;
+        static App* app;
 
     private: // Q_SLOTS:
         void
