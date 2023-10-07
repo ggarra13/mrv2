@@ -58,19 +58,27 @@ file( REMOVE_RECURSE "${CPACK_PREPACKAGE}/include" )
 #
 if( UNIX)
     set( EXES "${CPACK_PREPACKAGE}/bin/mrv2" )
+
+    set(linux_lib64_dir "${CPACK_PREPACKAGE}/lib64")
+    if (EXISTS "${linux_lib64_dir}" )
+	# For pyFLTK we need to install all libfltk DSOs including those we
+	# do not use, like forms.
+	message( NOTICE "${linux_lib64_dir} exists...")
+	file(GLOB fltk_dsos "${linux_lib64_dir}/libfltk*.so")
+	file(INSTALL
+	    DESTINATION "${CMAKE_INSTALL_PREFIX}/lib"
+	    TYPE SHARED_LIBRARY
+	    FOLLOW_SYMLINK_CHAIN
+	    FILES ${fltk_dsos}
+	)
+    else()
+	message( NOTICE "${linux_lib64_dir} does not exist...")
+    endif()
+	
     if ( APPLE )
 	get_macos_runtime_dependencies( ${EXES} DEPENDENCIES )
     else()
 	get_runtime_dependencies( ${EXES} DEPENDENCIES )
-	set(linux_lib64_dir "${CPACK_PREPACKAGE}/lib64")
-	if (EXISTS "${linux_lib64_dir}" )
-	    message( NOTICE "${linux_lib64_dir} exists...")
-	    file(GLOB lib64_dsos "${linux_lib64_dir}/*.so*")
-	    file( COPY ${linux_lib64_dsos}
-		DESTINATION "${CPACK_PREPACKAGE}/lib/" )
-	else()
-	    message( NOTICE "${linux_lib64_dir} does not exist...")
-	endif()
     endif()
     file( COPY ${DEPENDENCIES} DESTINATION "${CPACK_PREPACKAGE}/lib/" )
 elseif(WIN32)
