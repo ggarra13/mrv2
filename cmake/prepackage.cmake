@@ -57,7 +57,6 @@ file( REMOVE_RECURSE "${CPACK_PREPACKAGE}/include" )
 # Install system .SO dependencies
 #
 if( UNIX)
-    set( EXES "${CPACK_PREPACKAGE}/bin/mrv2" )
 
     set(linux_lib64_dir "${CPACK_PREPACKAGE}/lib64")
     if (EXISTS "${linux_lib64_dir}" )
@@ -75,6 +74,7 @@ if( UNIX)
 	message( NOTICE "${linux_lib64_dir} does not exist...")
     endif()
 	
+    set( EXES "${CPACK_PREPACKAGE}/bin/mrv2" )
     if ( APPLE )
 	get_macos_runtime_dependencies( ${EXES} DEPENDENCIES )
     else()
