@@ -39,6 +39,8 @@ Preferences->User Interface->Single Instance.
   This solves the issues with losing focus on the Frame, Start Frame and End
   Frame widgets.  It also fixes problems when showing a Python window which
   would otherwise not stay on top.
+- Added Save/OTIO EDL Timeline to the menus.
+- Allowed Saving OTIO Timelines of single clips and other .otio files.
 - Build system changes and fixes:
    	* Renamed runme.sh script to runme_nolog.sh.
    	* Added a new runme.sh script that calls runme_nolog.sh but saves the compile log into BUILD-KERNEL-ARCH/CMAKE_BUILD_TYPE/compile.log.

@@ -1386,14 +1386,18 @@ namespace mrv
         tcp->unlock();
     }
 
-    void
-    save_timeline_to_disk(otio::Timeline* timeline, const std::string& otioFile)
+    void save_timeline_to_disk(
+        otio::Timeline* timeline, const std::string& otioFile,
+        bool makeRelativePaths)
     {
         const std::string s = timeline->to_json_string();
         otio::SerializableObject::Retainer<otio::Timeline> out(
             dynamic_cast<otio::Timeline*>(otio::Timeline::from_json_string(s)));
         auto stack = out->tracks();
-        makePathsRelative(stack, otioFile);
+        if (makeRelativePaths)
+            makePathsRelative(stack, otioFile);
+        else
+            makePathsAbsolute(out, App::ui);
         otio::ErrorStatus errorStatus;
         out->to_json_file(otioFile, &errorStatus);
         if (otio::is_error(errorStatus))
@@ -1405,8 +1409,10 @@ namespace mrv
         }
     }
 
-    void save_timeline_to_disk_cb(Fl_Menu_* m, ViewerUI* ui)
+    void save_timeline_to_disk(const std::string& otioFile)
     {
+
+        ViewerUI* ui = App::ui;
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
@@ -1414,10 +1420,10 @@ namespace mrv
         auto model = ui->app->filesModel();
         auto Aitem = model->observeA()->get();
         file::Path path = Aitem->path;
-        if (!isTemporaryEDL(path))
+        bool makeRelativePaths = false;
+        if (isTemporaryEDL(path))
         {
-            LOG_ERROR(_("Not an EDL file to save."));
-            return;
+            makeRelativePaths = true;
         }
 
         auto timeline = player->getTimeline();
@@ -1427,11 +1433,17 @@ namespace mrv
             return;
         }
 
+        save_timeline_to_disk(timeline, otioFile, makeRelativePaths);
+    }
+
+    void save_timeline_to_disk_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+
         auto otioFile = save_otio(nullptr);
         if (otioFile.empty())
             return;
 
-        save_timeline_to_disk(timeline, otioFile);
+        save_timeline_to_disk(otioFile);
     }
 
     void
