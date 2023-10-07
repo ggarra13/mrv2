@@ -33,7 +33,6 @@ Preferences->User Interface->Single Instance.
 - Made executable smaller on all platforms by using dead-code elimination.
 - Added pyFLTK bindings to the distribution.  It is now possible to create
   FLTK windows with Python and control and access mrv2's windows with it.
-  This is the first step into making the UI fully customizable.
 - Added Find and Replace to Python Editor in the Python Panel.
 - Added Comment and Uncomment region to Python Editor in the Python Panel.
 - Made focus selection on the main view window not work upon just entering.
