@@ -6,12 +6,7 @@ include( ExternalProject )
 
 #set( FLTK_TAG master )
 # Stable TAG
-if (NOT APPLE)
-    #set( FLTK_TAG master )
-    set( FLTK_TAG f6690a974245407c5d266dcb688db694e51a3bb4 )
-else()
-    set( FLTK_TAG c2cce9cba86dcc208c9396af994010cd49484988 )
-endif()
+set( FLTK_TAG f6690a974245407c5d266dcb688db694e51a3bb4 )
 
 
 set( FLTK_BUILD_SHARED_LIBS OFF )
