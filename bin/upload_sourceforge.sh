@@ -240,9 +240,6 @@ IFS=$'\n'
 # Convert the variable into an array
 file_array=($files)
 
-# Create an array to store the files to upload
-files_to_upload=()
-
 # Iterate over the array of filenames
 for src in "${file_array[@]}"; do
     dest=`echo $src | sed -e "s/v$mrv2_VERSION/beta/"`
