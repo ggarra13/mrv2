@@ -12,10 +12,15 @@
 #
 run_cmd()
 {
-    echo
     echo "> $*"
-    echo
-    time eval command $*
+    # These quick commands we won't time them
+    if [[ "$1" == "rm" || "$1" == "mv" || "$1" == "cp" || \
+	      "$1" == "ln" ]]; then
+	eval command $*
+    else
+	time eval command $*
+	echo
+    fi
 }
 
 #
@@ -40,7 +45,6 @@ get_kernel()
     else
 	export ARCH=i386
     fi
-    echo "KERNEL=$KERNEL ARCH=$ARCH"
 }
 
 #
