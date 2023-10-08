@@ -3,7 +3,6 @@
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#!/usr/bin/env bash
 
 echo "RUNNING upload_sourceforge.sh......"
 
@@ -243,14 +242,23 @@ IFS=$'\n'
 # Convert the variable into an array
 file_array=($files)
 
+# Create an array to store the files to upload
+files_to_upload=()
+
 # Iterate over the array of filenames
 for src in "${file_array[@]}"; do
     dest=`echo $src | sed -e "s/v$mrv2_VERSION/beta/"`
-    upload_file $src $dest
+    files_to_upload+=("$src $dest")
 done
 
 # Reset IFS to its default value (space, tab, newline)
 IFS=$' \t\n'
+
+# Upload all files from the list
+for file_pair in "${files_to_upload[@]}"; do
+    file_src_dest=($file_pair)
+    upload_file "${file_src_dest[0]}" "${file_src_dest[1]}"
+done
 
 
 # Go back to root directory
