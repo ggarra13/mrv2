@@ -40,9 +40,7 @@ mkdir -p packages
 cd packages
 
 # Read all the files of this version
-shopt -s nullglob
-files=(*v${mrv2_VERSION}*)
-shopt -u nullglob
+files=$(ls -1 *v${mrv2_VERSION}*)
 
 if [[ "$files" == "" ]]; then
     echo
@@ -70,12 +68,12 @@ upload_file()
     echo
     echo "Uploading $1 as $2..."
     echo
-    #rsync -av --ignore-errors -e "ssh -i $SSH_KEY" $1 ggarra13@frs.sourceforge.net:/home/frs/project/mrv2/beta/$2
+    #rsync -avP --ignore-errors -e "ssh -i $SSH_KEY" $1 ggarra13@frs.sourceforge.net:/home/frs/project/mrv2/beta/$2
     scp -i $SSH_KEY $1 ggarra13@frs.sourceforge.net:/home/frs/project/mrv2/beta/$2
     echo
     echo "Upload was successful."
     echo
-    sleep 15
+
 }
 
 
@@ -248,18 +246,11 @@ files_to_upload=()
 # Iterate over the array of filenames
 for src in "${file_array[@]}"; do
     dest=`echo $src | sed -e "s/v$mrv2_VERSION/beta/"`
-    files_to_upload+=("$src $dest")
+    upload_file "${src}" "${dest}"
 done
 
 # Reset IFS to its default value (space, tab, newline)
 IFS=$' \t\n'
-
-# Upload all files from the list
-for file_pair in "${files_to_upload[@]}"; do
-    file_src_dest=($file_pair)
-    upload_file "${file_src_dest[0]}" "${file_src_dest[1]}"
-done
-
 
 # Go back to root directory
 cd ..
