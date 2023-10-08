@@ -113,9 +113,8 @@ namespace mrv
     //! Save current OTIO timeline (EDL) to a permanent place on disk.
     void save_timeline_to_disk_cb(Fl_Menu_* m, ViewerUI* ui);
 
-    //! Save current OTIO timeline (EDL) to a filename.  Timeline and EDL
-    //! must be verified first.
-    void save_timeline_to_disk(otio::Timeline*, const std::string& fileName);
+    //! Save current OTIO timeline (EDL) to a filename.
+    void save_timeline_to_disk(const std::string& otioFile);
 
     //
     // Set the edit mode height.

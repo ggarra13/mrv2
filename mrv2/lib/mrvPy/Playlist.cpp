@@ -142,33 +142,18 @@ namespace mrv2
         }
 
         /**
-         * @brief Save the .otio playlist to disk with relative paths
-         *        and loads it right after.
+         * @brief Save the .otio playlist to disk with relative paths.
          *
          * @param fileName file name of the playlist to save on disk.
          */
         void save(const std::string& fileName)
         {
-            ViewerUI* ui = App::ui;
-            auto model = App::app->filesModel();
-            auto Aitem = model->observeA()->get();
-            file::Path path = Aitem->path;
-            if (!isTemporaryEDL(path))
-                throw std::runtime_error(_("Not an EDL file to save."));
-
-            auto player = ui->uiView->getTimelinePlayer();
-            if (!player)
-                return;
-            auto timeline = player->getTimeline();
-            if (timeline->duration().value() <= 0.0)
-                throw std::runtime_error(_("Empty EDL file.  Not saving."));
-
             std::string otioFile = fileName;
             file::Path otioPath(otioFile);
             if (otioPath.getExtension() != ".otio")
                 otioFile += ".otio";
 
-            save_timeline_to_disk(timeline, otioFile);
+            save_timeline_to_disk(fileName);
         }
 
     } // namespace playlist
