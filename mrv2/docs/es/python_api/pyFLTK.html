@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sistema de Plug-ins &mdash; documentación de mrv2 - v0.7.9</title>
+  <title>pyFLTK &mdash; documentación de mrv2 - v0.7.9</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
@@ -22,8 +22,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Índice" href="../genindex.html" />
     <link rel="search" title="Búsqueda" href="../search.html" />
-    <link rel="next" title="Módulo timeline" href="timeline.html" />
-    <link rel="prev" title="Módulo settings" href="settings.html" /> 
+    <link rel="next" title="Módulo settings" href="settings.html" />
+    <link rel="prev" title="Módulo de plugin" href="plug-ins.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -57,12 +57,9 @@
 <li class="toctree-l2"><a class="reference internal" href="mrv2.html">Módulo mrv2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="playlist.html">Módulo playlist</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plug-ins.html">Módulo de plugin</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pyFLTK.html">pyFLTK</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">pyFLTK</a></li>
 <li class="toctree-l2"><a class="reference internal" href="settings.html">Módulo settings</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Sistema de Plug-ins</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#plug-ins">Plug-ins</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="sistema-de-plugins.html">Sistema de Plug-ins</a></li>
 <li class="toctree-l2"><a class="reference internal" href="timeline.html">Módulo timeline</a></li>
 <li class="toctree-l2"><a class="reference internal" href="usd.html">usd module</a></li>
 </ul>
@@ -84,9 +81,9 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="index.html">Python API</a></li>
-      <li class="breadcrumb-item active">Sistema de Plug-ins</li>
+      <li class="breadcrumb-item active">pyFLTK</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/python_api/sistema-de-plugins.rst.txt" rel="nofollow"> Ver código fuente de la página</a>
+            <a href="../_sources/python_api/pyFLTK.rst.txt" rel="nofollow"> Ver código fuente de la página</a>
       </li>
   </ul>
   <hr/>
@@ -94,48 +91,27 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="sistema-de-plug-ins">
-<h1>Sistema de Plug-ins<a class="headerlink" href="#sistema-de-plug-ins" title="Link to this heading"></a></h1>
-<section id="plug-ins">
-<h2>Plug-ins<a class="headerlink" href="#plug-ins" title="Link to this heading"></a></h2>
-<p>mrv2 suporta plug-ins de python para agregar entradas a los menus o
-incluso crear nuevas entradas.
-Esto te permite agregar comandos y clases a mrv2, yendo más allá de lo que la
-consola de Python te permite.</p>
-<p>Para usar los plug-ins, debes definir la variable de entorno:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">MRV2_PYTHON_PLUGINS</span>
+  <section id="pyfltk">
+<h1>pyFLTK<a class="headerlink" href="#pyfltk" title="Link to this heading"></a></h1>
+<p>mrv2 supporta FLTK en python a través del módulo pyFLTK.  Puede importarlo así:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fltk14</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 </div>
-<p>con una lista de directorios separados por dos puntos (Linux or macOS) o
-semi-comas (Windows) indicando dónde residen los plug-ins.</p>
-<p>Allí, archivos comunes de python (.py) deben tener esta estructura:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mrv2</span>
-<span class="kn">from</span> <span class="nn">mrv2</span> <span class="kn">import</span> <span class="n">plugin</span>
-
-<span class="k">class</span> <span class="nc">HolaPlugin</span><span class="p">(</span><span class="n">plugin</span><span class="o">.</span><span class="n">Plugin</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="k">pass</span>
-
-    <span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hola desde un plugin de python&quot;</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">menus</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">menu</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;Menu/Hola&quot;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">hola</span> <span class="p">}</span>
-        <span class="k">return</span> <span class="n">menu</span>
+<p>Una vez cargado, puede crear nuevas ventanas, botones, y cualquier otra clase de widgets que pyFLTK supporta.  Para algunos demos, mire en:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span><span class="o">/</span><span class="n">demos</span><span class="o">/</span><span class="n">fltk</span>
 </pre></div>
 </div>
-<p>Para un ejemplo más completo, refiérase a python/plug-ins/mrv2_hello.py en la
-distribución de mrv2.</p>
-</section>
+<p>Para información acerca de FLTK y pyFLTK (aunque la versión anterior 1.3), vaya a:</p>
+<p><a class="reference external" href="https://fltk.gitlab.io/fltk/">https://fltk.gitlab.io/fltk/</a></p>
+<p><a class="reference external" href="https://pyfltk.sourceforge.io/docs/CH0_Preface.html">https://pyfltk.sourceforge.io/docs/CH0_Preface.html</a></p>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pie de página">
-        <a href="settings.html" class="btn btn-neutral float-left" title="Módulo settings" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Anterior</a>
-        <a href="timeline.html" class="btn btn-neutral float-right" title="Módulo timeline" accesskey="n" rel="next">Siguiente <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="plug-ins.html" class="btn btn-neutral float-left" title="Módulo de plugin" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Anterior</a>
+        <a href="settings.html" class="btn btn-neutral float-right" title="Módulo settings" accesskey="n" rel="next">Siguiente <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
