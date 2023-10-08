@@ -47,7 +47,10 @@ or in its mirror site at:
 
 [SourceForge](https://sourceforge.net/projects/mrv2/files/)
 
-The source forge site also hosts beta builds (nightly builds with the latest changes).
+The source forge site also hosts beta builds (nightly builds with the latest changes):
+
+[SourceForge Betas](https://sourceforge.net/projects/mrv2/files/beta)
+
 
 ## Compatibility
 
