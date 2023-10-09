@@ -152,15 +152,44 @@ namespace mrv
     void run_python_method_cb(Fl_Menu_* m, void* d)
     {
         ViewerUI* ui = App::ui;
-        py::handle func = *(static_cast<py::handle*>(d));
+        const py::handle& obj = *(static_cast<py::handle*>(d));
         try
         {
             PyStdErrOutStreamRedirect pyRedirect;
-            func();
+            if (py::isinstance<py::function>(obj))
+            {
+                // obj is a Python function
+                py::function func = py::reinterpret_borrow<py::function>(obj);
+                func();
+            }
+            else if (py::isinstance<py::tuple>(obj))
+            {
+                // obj is a Python tuple
+                py::tuple tup = py::reinterpret_borrow<py::tuple>(obj);
+                if (tup.size() == 2 && py::isinstance<py::function>(tup[0]) &&
+                    py::isinstance<py::str>(tup[1]))
+                {
+                    py::function func(tup[0]);
+                    py::str str(tup[1]);
+                    func();
+                }
+                else
+                {
+                    throw std::runtime_error(
+                        _("Expected a tuple containing a Python function and a "
+                          "string with menu options in it."));
+                }
+            }
+            else
+            {
+                throw std::runtime_error(
+                    _("Expected a handle to a Python function or to a tuple "
+                      "containing a Python function and a "
+                      "string with menu options in it."));
+            }
 
             const std::string& out = pyRedirect.stdoutString();
             const std::string& err = pyRedirect.stderrString();
-
             if (!out.empty() || !err.empty())
             {
                 if (!pythonPanel)
