@@ -349,6 +349,16 @@ namespace mrv2
 #endif
 
         /**
+         * \brief Returns the current session file.
+         *
+         * @param file The path to the session file, like: test.mrv2s
+         */
+        std::string currentSession()
+        {
+            return current_session();
+        }
+
+        /**
          * \brief Open a session file.
          *
          * @param file The path to the session file, like: test.mrv2s
@@ -509,7 +519,11 @@ Used to run main commands and get and set the display, image, compare, LUT optio
 #endif
 
     cmds.def(
-        "oepnSession", &mrv2::cmd::openSession, _("Open a session file."),
+        "currentSession", &mrv2::cmd::currentSession,
+        _("Returns current session file."));
+
+    cmds.def(
+        "openSession", &mrv2::cmd::openSession, _("Open a session file."),
         py::arg("file"));
 
     cmds.def("saveSession", &mrv2::cmd::saveSession, _("Save a session file."));
