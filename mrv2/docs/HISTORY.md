@@ -1,3 +1,10 @@
+v0.8.0
+======
+
+- Fixed mrv2's file requester not selecting files with [] in them.
+- Fixed mrv2's file requester not changing directories if you had typed the
+  full name of the directory in the filename field and pressed Enter,
+
 v0.7.9
 ======
 
@@ -53,7 +60,7 @@ Preferences->User Interface->Single Instance.
    	* Fixed a problem with the embedded python (pybind11) locating the system Python installation instead of the local one instead.  This created havok on my Ubuntu 22.04 when there was an upgrade.
    	* Made parsing of -D options like -D TLRENDER_USD=OFF work with or without a space.
 	* Got rid of compiling the slow Gettext on macOS, replacing it with
-	  get
+	  a prebuilt dylib.
 	* Made the build system automatically release beta versions of the software after each successful compilation.  You can now download the latest beta binaries from:
      
          https://sourceforge.net/projects/mrv2/files/beta/
