@@ -9,6 +9,8 @@ v0.8.0
 - Fixed a typo in Python's binding to sessios (oepenSession instead of
   openSession).
 - Made Save Session not save temporary EDLs in the session file.
+- Added a __divider__ entry to Plug-in menus to add a divider line between
+  menu entries.
 
 v0.7.9
 ======
