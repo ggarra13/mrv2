@@ -305,7 +305,8 @@ namespace mrv
     void load_hotkeys(ViewerUI* ui)
     {
         Fl_Preferences* keys = new Fl_Preferences(
-            prefspath().c_str(), "filmaura", Preferences::hotkeys_file.c_str());
+            prefspath().c_str(), "filmaura", Preferences::hotkeys_file.c_str(),
+            Fl_Preferences::C_LOCALE);
         load_hotkeys(ui, keys);
         delete keys;
 

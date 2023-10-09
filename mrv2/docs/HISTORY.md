@@ -4,6 +4,10 @@ v0.8.0
 - Fixed mrv2's file requester not selecting files with [] in them.
 - Fixed mrv2's file requester not changing directories if you had typed the
   full name of the directory in the filename field and pressed Enter,
+- Fixed a crash when loading a session with no files.
+- Added session name to the window's title bar.
+- Fixed a typo in Python's binding to sessios (oepenSession instead of
+  openSession).
 
 v0.7.9
 ======

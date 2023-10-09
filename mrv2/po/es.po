@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-10-07 20:10-0300\n"
+"POT-Creation-Date: 2023-10-09 11:31-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -3652,6 +3652,9 @@ msgstr "Retorna la carpeta raíz de la instalación de mrv2."
 msgid "Return the version and exit."
 msgstr "Retorna la versión y termina."
 
+msgid "Returns current session file."
+msgstr "Retorna la Sesión actual."
+
 msgid ""
 "Returns the first valid timecode rate that has the least difference from the "
 "given value."
@@ -3987,6 +3990,9 @@ msgstr "Sesión"
 msgid "Session saved to \"{0}\"."
 msgstr "Sesión grabada a \"{0}\"."
 
+msgid "Session: "
+msgstr "Sesión: "
+
 msgid "Set Audio Buffer Frame Count."
 msgstr "Setear cuadros del buffer de Audio"
 
@@ -4127,6 +4133,9 @@ msgstr "Setear el rango de tiempo seleccionado en la línea de tiempo."
 
 msgid "Set the stereo 3D options."
 msgstr "Setear las opciones de estéreo 3D."
+
+msgid "Sets the current session file."
+msgstr "Setea el archivo de la sesión actual."
 
 msgid "Sets the default gain when mrv2 starts."
 msgstr "Establece la ganancia por defecto cuando mrv2 comienza."
