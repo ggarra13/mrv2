@@ -23,4 +23,5 @@ extern void mrv2_annotations(py::module& m);
 extern void mrv2_usd(py::module& m);
 extern void mrv2_commands(py::module& m);
 extern void mrv2_python_plugins(py::module& m);
+extern void mrv2_python_redirect(py::module& m);
 extern void mrv2_discover_python_plugins();

@@ -10,7 +10,7 @@ namespace py = pybind11;
 namespace mrv
 {
 
-    //! Class used to redirect stdout and stderr to two python strings
+    //! Class used to redirect stdout and stderr to FLTK widget
     class PyStdErrOutStreamRedirect
     {
         py::object _stdout;
@@ -24,23 +24,13 @@ namespace mrv
             auto sysm = py::module::import("sys");
             _stdout = sysm.attr("stdout");
             _stderr = sysm.attr("stderr");
-            auto stringio = py::module::import("io").attr("StringIO");
-            _stdout_buffer =
-                stringio(); // Other filelike object can be used here as well,
+            auto stdout = py::module::import("mrv2").attr("FLTKRedirectOutput");
+            auto stderr = py::module::import("mrv2").attr("FLTKRedirectError");
+            _stdout_buffer = stdout();
             // such as objects created by pybind11
-            _stderr_buffer = stringio();
+            _stderr_buffer = stderr();
             sysm.attr("stdout") = _stdout_buffer;
             sysm.attr("stderr") = _stderr_buffer;
-        }
-        std::string stdoutString()
-        {
-            _stdout_buffer.attr("seek")(0);
-            return py::str(_stdout_buffer.attr("read")());
-        }
-        std::string stderrString()
-        {
-            _stderr_buffer.attr("seek")(0);
-            return py::str(_stderr_buffer.attr("read")());
         }
         ~PyStdErrOutStreamRedirect()
         {

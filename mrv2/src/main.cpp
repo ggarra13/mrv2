@@ -46,6 +46,7 @@ PYBIND11_EMBEDDED_MODULE(mrv2, m)
 #    endif
     mrv2_commands(m);
     mrv2_python_plugins(m);
+    mrv2_python_redirect(m);
 }
 #endif
 
