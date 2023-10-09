@@ -63,6 +63,8 @@ namespace py = pybind11;
 #include "mrvApp/mrvOpenSeparateAudioDialog.h"
 #include "mrvApp/mrvSettingsObject.h"
 
+#include "mrvPy/PyStdErrOutRedirect.h"
+
 #include "mrvPreferencesUI.h"
 #include "mrViewer.h"
 
@@ -163,6 +165,7 @@ namespace mrv
         ImageListener* imageListener = nullptr;
 #endif
 
+        std::unique_ptr<PyStdErrOutStreamRedirect> pythonStdErrOutRedirect;
         std::shared_ptr<PlaylistsModel> playlistsModel;
         std::shared_ptr<FilesModel> filesModel;
         std::shared_ptr<
@@ -532,6 +535,9 @@ namespace mrv
         // Import the mrv2 python module so we read all python
         // plug-ins.
         py::module::import("mrv2");
+
+        // Redirect stdout/stderr to my own class
+        p.pythonStdErrOutRedirect.reset(new PyStdErrOutStreamRedirect);
 
         // Discover python plugins
         mrv2_discover_python_plugins();

@@ -187,26 +187,6 @@ namespace mrv
                       "containing a Python function and a "
                       "string with menu options in it."));
             }
-
-            const std::string& out = pyRedirect.stdoutString();
-            const std::string& err = pyRedirect.stderrString();
-            if (!out.empty() || !err.empty())
-            {
-                if (!pythonPanel)
-                    python_panel_cb(nullptr, ui);
-                PythonOutput* output = PythonPanel::output();
-                if (output)
-                {
-                    if (!out.empty())
-                    {
-                        output->info(out.c_str());
-                    }
-                    if (!err.empty())
-                    {
-                        output->error(out.c_str());
-                    }
-                }
-            }
         }
         catch (const std::exception& e)
         {

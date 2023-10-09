@@ -430,16 +430,6 @@ from mrv2 import playlist, timeline, usd, settings
                 py::object result = py::eval(eval);
                 py::print(result);
             }
-            const std::string& out = pyRedirect.stdoutString();
-            if (!out.empty())
-            {
-                outputDisplay->info(out.c_str());
-            }
-            const std::string& err = pyRedirect.stderrString();
-            if (!err.empty())
-            {
-                outputDisplay->error(out.c_str());
-            }
         }
         catch (const std::exception& e)
         {
