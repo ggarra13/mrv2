@@ -1132,9 +1132,24 @@ namespace mrv
         }
 
 #ifdef MRV2_PYBIND11
+        idx = -1;
         for (const auto& entry : pythonMenus)
         {
-            menu->add(
+            if (entry == "__divider__")
+            {
+                if (idx < 0)
+                {
+                    LOG_ERROR(
+                        _("__divider__ cannot be the first item in the menu."));
+                }
+                else
+                {
+                    item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+                    item->flags |= FL_MENU_DIVIDER;
+                }
+                continue;
+            }
+            idx = menu->add(
                 entry.c_str(), 0, (Fl_Callback*)run_python_method_cb,
                 (void*)&pythonMenus.at(entry));
         }
