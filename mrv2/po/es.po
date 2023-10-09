@@ -906,7 +906,7 @@ msgid "50"
 msgstr "50"
 
 msgid "59.94"
-msgstr "59.94"
+msgstr "59,94"
 
 msgid "60"
 msgstr "60"

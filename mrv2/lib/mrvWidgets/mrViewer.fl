@@ -3,15 +3,10 @@ version 1.0400
 i18n_type 1
 i18n_include {<libintl.h>}
 i18n_conditional {}
-i18n_function gettext
-i18n_static_function gettext_noop
+i18n_gnu_function gettext
+i18n_gnu_static_function gettext_noop
 header_name {.h}
 code_name {.cxx}
-snap {
-  ver 1
-  current_suite FLTK
-  current_preset 0
-}
 decl {\#include "FL/Fl_Flex.H"} {public global
 }
 
@@ -425,7 +420,7 @@ widget_class TimelineClass {open
     Fl_Group {} {open
       xywh {4 0 686 29}
     } {
-      Fl_Group {} {open
+      Fl_Group {} {
         xywh {4 3 94 26}
       } {
         Fl_Menu_Button uiTimecodeSwitch {
@@ -473,7 +468,7 @@ ui->uiView->take_focus();}
       Fl_Group {} {open
         xywh {99 1 411 28}
       } {
-        Fl_Group {} {open
+        Fl_Group {} {
           xywh {99 3 240 26}
         } {
           Fl_Button {} {
@@ -570,9 +565,14 @@ player->setLoop( loop );}
             label FPS
             user_data this user_data_type {ViewerUI*}
             callback {int idx = o->value();
+std::cerr << idx << ") " << o->text(idx)
+          << std::endl;
+const char* locale = setlocale(LC_NUMERIC, NULL);
+if (locale)
+    std::cerr << "locale is " << locale << std::endl;
 double speed = atof( o->text( idx ) );
 uiFPS->value( speed );
-uiFPS->do_callback();} open
+uiFPS->do_callback();}
             tooltip {Some default frame rate settings.} xywh {341 1 40 24} labelsize 10 align 16
             code0 {o->disable_label();}
             class {mrv::PopupMenu}
@@ -639,14 +639,13 @@ uiFPS->do_callback();} open
             callback {double speed = o->value();
 auto player = ui->uiView->getTimelinePlayer();
 
-	if ( speed <= 0.0 )
-	{
-		speed = player->defaultSpeed();
-		o->value(speed);
-		o->redraw();
-	}
-	player->setSpeed( speed );
-ui->uiView->take_focus();}
+if ( speed <= 0.0 )
+{
+  speed = player->defaultSpeed();
+  o->value(speed);
+  o->redraw();
+}
+player->setSpeed( speed );} selected
             tooltip {Allows you to adjust frame rate playback.} xywh {386 3 42 24} color -1733777408 selection_color 0
             code0 {o->textcolor( FL_BLACK );
 o->value(24);}
@@ -1185,7 +1184,7 @@ settingsObject->setValue( mrv::kPenColorA, a);}
           xywh {0 577 690 25} color 0
         } {
           Fl_Group uiStatusBar {
-            label {Everything OK.  } open selected
+            label {Everything OK.  } open
             xywh {0 577 690 25} box FLAT_BOX labelsize 10 align 84
             code0 {o->save_colors();}
             class {mrv::StatusBar}
