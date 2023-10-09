@@ -19,6 +19,7 @@
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrvEdit/mrvEditCallbacks.h"
+#include "mrvEdit/mrvEditUtil.h"
 
 #include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/mrvSettingsObject.h"
@@ -71,8 +72,11 @@ namespace mrv
         session["version"] = 6;
 
         std::vector< FilesModelItem > files;
-        for (const auto& file : files_ptrs)
+        for (const auto file : files_ptrs)
         {
+            const std::string fileName = file->path.get();
+            if (isTemporaryEDL(fileName))
+                continue;
             files.push_back(*file.get());
         }
         session["files"] = files;

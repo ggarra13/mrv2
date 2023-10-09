@@ -8,6 +8,7 @@ v0.8.0
 - Added session name to the window's title bar.
 - Fixed a typo in Python's binding to sessios (oepenSession instead of
   openSession).
+- Made Save Session not save temporary EDLs in the session file.
 
 v0.7.9
 ======
