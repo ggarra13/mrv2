@@ -953,7 +953,6 @@ msgstr "@|>"
 msgid "@||"
 msgstr "@||"
 
-#, c++-format
 msgid "A client connected from {0}"
 msgstr "Un cliente se conectó desde {0}."
 
@@ -1369,7 +1368,6 @@ msgstr "Borrar/&Salida"
 msgid "Client"
 msgstr "Cliente"
 
-#, c++-format
 msgid "Client at {0} disconnected."
 msgstr "Cliente en {0} desconectado."
 
@@ -1490,7 +1488,6 @@ msgstr "Comparar los archivos A y B de lado"
 msgid "Compare two file items with a compare mode."
 msgstr "Compare dos ítems de archivo con un modo de comparación."
 
-#, c++-format
 msgid "Comparing {0} to prefix {1}"
 msgstr "Comaparando {0} encontró prefijo {1}"
 
@@ -1514,7 +1511,6 @@ msgstr ""
 "Connectese a un servidor en <value>.  Use -port para especificar un número "
 "de puerto."
 
-#, c++-format
 msgid "Connected to server at {0}, port {1}"
 msgstr "Conectado al servidor en {0}, puerto {1}"
 
@@ -1546,7 +1542,6 @@ msgstr "Copiar Cuadro"
 msgid "Copy/Color"
 msgstr "Copiar/Color"
 
-#, c++-format
 msgid ""
 "Corruption in hotkeys preferences. Hotkey {0} for {1} will not be "
 "available.  Already used in {2}."
@@ -1569,19 +1564,15 @@ msgstr "No pude obtener el camino actual."
 msgid "Could not match "
 msgstr "No pude empatar "
 
-#, c++-format
 msgid "Could not open color theme from \"{0}\"."
 msgstr "No pude abrir tema de color desde \"{0}\"."
 
-#, c++-format
 msgid "Could not paste {0}.  Error {1}."
 msgstr "No pude pegar {0}.  Error {1}."
 
-#, c++-format
 msgid "Could not read python script '{0}'"
 msgstr "No pude leer script de python '{0}'"
 
-#, c++-format
 msgid "Could not save .otio file: {0}"
 msgstr "No pude grabar el archivo .otio: {0}"
 
@@ -1768,7 +1759,6 @@ msgstr "Modo de dibujo :class:`mrv2.usd.DrawMode`."
 msgid "Drop a clip here to create a playlist."
 msgstr "LLeve un clip aquí para crear una lista de reproducción."
 
-#, c++-format
 msgid "Duplicated Python plugin {0} in {1} and {2}."
 msgstr "Plugin de Python duplicado {0} en {1} y {2}."
 
@@ -1784,7 +1774,6 @@ msgstr "Duración del Subtítulo"
 msgid "E"
 msgstr "E"
 
-#, c++-format
 msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
 msgstr "Item de EDL '{0}' ya no está cargado.  No puedo deshacer ni rehacer."
 
@@ -1917,7 +1906,6 @@ msgstr "Modo de Borrar"
 msgid "Eraser Tool"
 msgstr "Herramienta de Borrar"
 
-#, c++-format
 msgid "Error saving {0}. {1}"
 msgstr "Error grabando {0}. {1}"
 
@@ -1996,7 +1984,6 @@ msgstr "Fallé en abrir el archivo para leer."
 msgid "Failed to open the file for writing."
 msgstr "Fallé en abrir el archivo para escribir."
 
-#, c++-format
 msgid "Failed to retrieve {0}."
 msgstr "Fallé en recuperar {0}."
 
@@ -2146,7 +2133,6 @@ msgstr "Formato"
 msgid "Formats"
 msgstr "Formatos"
 
-#, c++-format
 msgid "Found a match.  File is now {0}"
 msgstr "Encontre una equivalencia.  El archivo es ahora {0}"
 
@@ -2181,7 +2167,6 @@ msgstr "Avanzar unos Cuadros por Segundo"
 msgid "Frame Step Forwards"
 msgstr "Avanzar un Cuadro"
 
-#, c++-format
 msgid "Frame {0} - Timecode: {1} - {2} Secs."
 msgstr "Cuadro {0} - Timecode: {1} - {2} Segs."
 
@@ -2388,7 +2373,6 @@ msgstr "Tecla de Manejo para...."
 msgid "Hotkeys"
 msgstr "Teclas de Manejo"
 
-#, c++-format
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "Teclas han sido grabadas en: \"{0}{1}.prefs\"."
 
@@ -2433,7 +2417,6 @@ msgstr "Coordenade del pixel bajo el ratón."
 msgid "Image filters."
 msgstr "Filtros de imagen."
 
-#, c++-format
 msgid "Image info: {0} {1}"
 msgstr "Información de Imagen: {0} {1}"
 
@@ -2464,7 +2447,6 @@ msgstr "Imagen/Versión/Previa"
 msgid "Images (*.{"
 msgstr "Imagenes (*.{"
 
-#, c++-format
 msgid ""
 "In '{0}' expected a function a tuple containing a Python function and a "
 "string with menu options in it."
@@ -2472,7 +2454,6 @@ msgstr ""
 "En '{0}' experaba un tuple conteniendo una función de Python y una cadena de "
 "texto con opciones de menú en ella."
 
-#, c++-format
 msgid ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
 "function and a string with menu options in it."
@@ -2525,19 +2506,15 @@ msgstr "Invertir"
 msgid "Invert the color values."
 msgstr "Invertir valores de color."
 
-#, c++-format
 msgid "Iteration {0} matched prefix={1}"
 msgstr "Iteración {0} encontró prefijo={1}"
 
-#, c++-format
 msgid "Iteration {0} matched suffix={1}"
 msgstr "Iteración {0} encontró sufijo={1}"
 
-#, c++-format
 msgid "Iteration {0} matched version={1}"
 msgstr "Iteración {0} encontró versión={1}"
 
-#, c++-format
 msgid "Iteration {0} will check version={1}"
 msgstr "Iteración {0} encontró versión={1}"
 
@@ -2676,14 +2653,12 @@ msgstr "Cargar Subtítulo"
 msgid "Load an image or movie file"
 msgstr "Cargar una imagen o película"
 
-#, c++-format
 msgid "Loaded color themes from \"{0}\"."
 msgstr "Cargué tema de color desde \"{0}\"."
 
 msgid "Loading"
 msgstr "Cargando"
 
-#, c++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Cargué teclas de manejo desde \"{0}{1}.prefs\"."
 
@@ -3094,7 +3069,6 @@ msgstr "Valor de nivel bajo de salida."
 msgid "Output"
 msgstr "Salida"
 
-#, c++-format
 msgid "Output info: {0} {1}"
 msgstr "Información de Salida: {0} {1}"
 
@@ -3150,11 +3124,9 @@ msgstr "Archivo :class:`mrv2.Path` de la File Media."
 msgid "Path Mappings"
 msgstr "Mapeo de Carpetas"
 
-#, c++-format
 msgid "Path mappings have been loaded from \"{0}mrv2.paths.prefs\"."
 msgstr "Mapeo de carpetas ha sido cargado de \"{0}mrv2.paths.prefs\"."
 
-#, c++-format
 msgid "Path mappings have been saved to \"{0}mrv2.paths.prefs\"."
 msgstr "Mapeo de carpetas ha sido grabado en \"{0}mrv2.paths.prefs\"."
 
@@ -3341,7 +3313,6 @@ msgstr "Posicionado"
 msgid "Preferences"
 msgstr "Preferencias"
 
-#, c++-format
 msgid "Preferences have been saved to: \"{0}mrv2.prefs\"."
 msgstr "Preferencias han sido grabadas en: \"{0}mrv2.prefs\"."
 
@@ -3411,7 +3382,6 @@ msgstr "Error de Python:"
 msgid "Python Script to run and exit."
 msgstr "Script de Python para ejecutar y salir."
 
-#, c++-format
 msgid "Python file {0} already exists.  Do you want to overwrite it?"
 msgstr "El archivo python {0} ya existe. ¿Quiere sobreescribirlo?"
 
@@ -3448,7 +3418,6 @@ msgstr "        Atrás"
 msgid "Read Behind in seconds"
 msgstr "Leer Atrás en segundos"
 
-#, c++-format
 msgid "Reading preferences from \"{0}mrv2.prefs\"."
 msgstr "Leyendo preferencias desde \"{0}mrv2.prefs\"."
 
@@ -3498,7 +3467,6 @@ msgstr ""
 "con _v en el nombre del archivo, la carpeta o ambos. Por ejemplo: "
 "gizmo_v001.0001.exr"
 
-#, c++-format
 msgid ""
 "Regular expression created from {0}.  It is:\n"
 "{1}"
@@ -3506,7 +3474,6 @@ msgstr ""
 "Expression regular creada desde {0}.  Es:\n"
 "{1}"
 
-#, c++-format
 msgid "Regular expression error: {0}"
 msgstr "Error de expression regular: {0}"
 
@@ -3525,15 +3492,12 @@ msgstr "Restante"
 msgid "Remote Path"
 msgstr "Carpeta Remota"
 
-#, c++-format
 msgid "Remote file {0} does not exist on local filesystem."
 msgstr "Archivo remoto {0} no existe en el systema de archivos local."
 
-#, c++-format
 msgid "Remote file {0} does not match local filename."
 msgstr "Archivo remoto {0} no es igual al archivo local."
 
-#, c++-format
 msgid "Remote file {0} matches file name {1} but not path."
 msgstr "Archivo remoto {0} iguala nombra base {1} pero no la carpeta."
 
@@ -3555,7 +3519,6 @@ msgstr "Eliminar Carpetas"
 msgid "Remove the currently selected path mapping."
 msgstr "Eliminar el mapeo de carpeta actualmente seleccionado."
 
-#, c++-format
 msgid "Removing {0} from message publisher."
 msgstr "Removiendo {0} del publicador de mensajes."
 
@@ -3806,7 +3769,6 @@ msgstr "Rotación en X"
 msgid "Rotation on Y"
 msgstr "Rotación en Y"
 
-#, c++-format
 msgid "Running python script '{0}'"
 msgstr "Ejecutando script de python '{0}'..."
 
@@ -4043,13 +4005,11 @@ msgstr "Servidor"
 msgid "Server connection lost."
 msgstr "Conexión del servidor perdida."
 
-#, c++-format
 msgid "Server protocol version is {0}.  Client protocol version is {1}"
 msgstr ""
 "Versión del protocolo del Servidor es {0}.  Version del protocolo del "
 "cliente es {1}."
 
-#, c++-format
 msgid "Server started at port {0}."
 msgstr "Servidor corriendo en puerto {0}."
 
@@ -4062,7 +4022,6 @@ msgstr "Servicios"
 msgid "Session"
 msgstr "Sesión"
 
-#, c++-format
 msgid "Session saved to \"{0}\"."
 msgstr "Sesión grabada a \"{0}\"."
 
@@ -4084,7 +4043,6 @@ msgstr "Setear conversiòn FFmpeg de YUV a RGB"
 msgid "Set In Point"
 msgstr "Establecer Punto de Entrada"
 
-#, c++-format
 msgid "Set Language to {0}, Numbers to {1}"
 msgstr "Seteando el lenguaje a {0}, Números a {1}"
 
@@ -5053,7 +5011,6 @@ msgstr "Vista/Alternar Línea de Tiempo"
 msgid "View/Toggle Top bar"
 msgstr "Vista/Alternar Barra Superior"
 
-#, c++-format
 msgid "Viewport Size: {0}  Render Size: {1}"
 msgstr "Tamaño de la Ventana: {0}  Tamaño del Render {1}"
 
@@ -5328,8 +5285,8 @@ msgid ""
 "You have EDLs in the current session.  These will not be saved in the "
 "session file.  Do you want to continue?"
 msgstr ""
-"Tiene Listas de Edición en la sesión actual.  Éstas no serán grabadas en "
-"el archivo de sesión.  ¿Quiere continuar?"
+"Tiene Listas de Edición en la sesión actual.  Éstas no serán grabadas en el "
+"archivo de sesión.  ¿Quiere continuar?"
 
 msgid "ZIP"
 msgstr "ZIP"
@@ -5439,7 +5396,6 @@ msgstr "entero sin signo (32-bits por canal)"
 msgid "unsigned short (16-bits per channel)"
 msgstr "corto sin signo (16-bits por canal)"
 
-#, c++-format
 msgid "unsupported operand type(s) for {0}: RationalTime and {1}"
 msgstr "tipo(s) de operaciones no soportadas para {0}: RationalTime y {1}"
 

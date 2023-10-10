@@ -9,8 +9,8 @@ v0.8.0
 - Fixed a typo in Python's binding to sessios (oepenSession instead of
   openSession).
 - Made Save Session not save temporary EDLs in the session file.
-- Added a __divider__ tuple entry to Plug-in menus to add a divider line between
-  menu entries.
+- Added a '__divider__' tuple entry to Plug-in menus to add a divider line
+  between menu entries.
 - Made Python's output and errors automatically be sent to the Python editor,
   instead of waiting until the commands finish, like in v0.7.9 and previous
   ones.
@@ -22,6 +22,9 @@ v0.8.0
   ones.
 - Made saving of .otio files also work from File/Save/Movie or Sequence if the
   extension given is .otio.
+- Added user metadata to save in the session file as "metadata".  This can be
+  set with the Python commands setSessionMetadata and retrieved with
+  sessionMetadata.
 
 v0.7.9
 ======

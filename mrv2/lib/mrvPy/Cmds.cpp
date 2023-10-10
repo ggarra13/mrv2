@@ -372,16 +372,6 @@ namespace mrv2
         }
 
         /**
-         * \brief Returns the current session file.
-         *
-         * @param file The path to the session file, like: /home/gga/test.mrv2s
-         */
-        void setCurrentSession(const std::string& session)
-        {
-            return set_current_session(session);
-        }
-
-        /**
          * \brief Open a session file.
          *
          * @param file The path to the session file, like: test.mrv2s
@@ -550,12 +540,23 @@ Used to run main commands and get and set the display, image, compare, LUT optio
         py::arg("file"));
 #endif
 
+    //
+    // Session commands
+    //
     cmds.def(
-        "currentSession", &mrv2::cmd::currentSession,
+        "sessionMetadata", &mrv::session_metadata,
+        _("Returns the current session metadata."));
+
+    cmds.def(
+        "setSessionMetadata", &mrv::set_session_metadata,
+        _("Sets the current session metadata."));
+
+    cmds.def(
+        "currentSession", &mrv::current_session,
         _("Returns current session file."));
 
     cmds.def(
-        "setCurrentSession", &mrv2::cmd::setCurrentSession,
+        "setCurrentSession", &mrv::set_current_session,
         _("Sets the current session file."), py::arg("file"));
 
     cmds.def(

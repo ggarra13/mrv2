@@ -34,7 +34,8 @@
 namespace
 {
     const char* kModule = "mrv2s";
-}
+    const int kSessionVersion = 7;
+} // namespace
 
 namespace mrv
 {
@@ -47,6 +48,7 @@ namespace mrv
             w->hide();
     }
 
+    std::string sessionMetadata;
     std::string currentSession;
 
     std::string current_session()
@@ -71,7 +73,7 @@ namespace mrv
         enable_cypher(false);
 
         Message session;
-        session["version"] = 6;
+        session["version"] = kSessionVersion;
 
         std::vector< FilesModelItem > files;
         for (const auto file : files_ptrs)
@@ -286,6 +288,7 @@ namespace mrv
         session["environmentMapOptions"] = environmentMap;
         session["displayOptions"] = display;
         session["editMode"] = editMode;
+        session["metadata"] = sessionMetadata;
 
         std::ofstream ofs(fileName);
         if (!ofs.is_open())
@@ -579,6 +582,11 @@ namespace mrv
             set_edit_mode_cb(editMode, ui);
         }
 
+        if (version >= 7)
+        {
+            session["metadata"].get_to(sessionMetadata);
+        }
+
         enable_cypher(true);
         ui->uiMain->fill_menu(ui->uiMenuBar);
 
@@ -586,6 +594,18 @@ namespace mrv
         set_current_session(fileName);
 
         return true;
+    }
+
+    //! Returns user provided metadata in the last saved session.
+    const std::string& session_metadata()
+    {
+        return sessionMetadata;
+    }
+
+    //! Stores some user provided metadata.
+    void set_session_metadata(const std::string& metadata)
+    {
+        sessionMetadata = metadata;
     }
 
 } // namespace mrv
