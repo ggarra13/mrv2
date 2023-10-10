@@ -312,6 +312,12 @@ namespace mrv
             return;
         }
 
+        if (extension == ".otio")
+        {
+            save_timeline_to_disk(file);
+            return;
+        }
+
         bool valid_for_exr = false;
         // Sanity check - make sure the video pixel for the current
         // layerId type is float/half

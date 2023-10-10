@@ -20,6 +20,8 @@ v0.8.0
   present.
 - Fixed macOS menu bar font size when switching from macOS menus back to normal
   ones.
+- Made saving of .otio files also work from File/Save/Movie or Sequence if the
+  extension given is .otio.
 
 v0.7.9
 ======
