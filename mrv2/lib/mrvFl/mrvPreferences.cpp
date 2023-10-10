@@ -1340,6 +1340,7 @@ namespace mrv
                 smenubar->clear();
                 delete ui->uiMenuBar;
                 ui->uiMenuBar = new MenuBar(0, 0, ui->uiStatus->x(), 25);
+                ui->uiMenuBar->textsize(12);
                 ui->uiMenuGroup->add(ui->uiMenuBar);
                 ui->uiMenuGroup->redraw();
             }

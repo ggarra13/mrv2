@@ -29,6 +29,7 @@
 #include "mrvGL/mrvGLShape.h"
 #include "mrvGL/mrvGLTextEdit.h"
 
+#include "mrvUI/mrvAsk.h"
 #include "mrvUI/mrvMenus.h"
 
 #include "mrvFlmm/Flmm_ColorA_Chooser.h"
@@ -1629,6 +1630,31 @@ namespace mrv
 
     static void save_session_impl(const std::string& file, ViewerUI* ui)
     {
+        auto model = ui->app->filesModel();
+        auto files = model->observeFiles()->get();
+
+        bool hasEDLs = false;
+        for (const auto& file : files)
+        {
+            const file::Path path = file->path;
+            if (isTemporaryEDL(path))
+            {
+                hasEDLs = true;
+                break;
+            }
+        }
+
+        if (hasEDLs)
+        {
+            int ok = fl_choice(
+                _("You have EDLs in the current session.  These "
+                  "will not be saved in the session file.  "
+                  "Do you want to continue?"),
+                _("No"), _("Yes"), NULL, NULL);
+            if (!ok)
+                return;
+        }
+
         if (save_session(file))
         {
             auto settingsObject = ui->app->settingsObject();

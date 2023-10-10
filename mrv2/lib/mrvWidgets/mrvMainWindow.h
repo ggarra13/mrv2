@@ -37,6 +37,9 @@ namespace mrv
         //! Fill menu based on context information
         void fill_menu(Fl_Menu_* menu);
 
+        //! Update title bar
+        void update_title_bar();
+
         //! Make window appear always on top of others
         void always_on_top(int above);
 

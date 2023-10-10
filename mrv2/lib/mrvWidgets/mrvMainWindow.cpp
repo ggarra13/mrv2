@@ -4,6 +4,8 @@
 
 #include "mrvCore/mrvHotkey.h"
 
+#include "mrvFl/mrvSession.h"
+
 #include "mrvMainWindow.h"
 
 #include "mrvPreferencesUI.h"
@@ -184,4 +186,60 @@ namespace mrv
         // std::cerr << "2) " << pct << " " << newEdlY << std::endl;
         // t->move_intersection(0, oldEdlY, 0, newEdlY);
     }
+
+    void MainWindow::update_title_bar()
+    {
+        App* app = App::app;
+        auto model = app->filesModel();
+
+        size_t numFiles = model->observeFiles()->getSize();
+
+        char buf[256];
+        std::string session = current_session();
+        if (!session.empty())
+        {
+            file::Path path(session);
+            session = " | ";
+            session += _("Session: ") + path.get(-1, false) + " ";
+        }
+        const int aIndex = model->observeAIndex()->get();
+        std::string fileName;
+        if (numFiles > 0 && aIndex >= 0 && aIndex < numFiles)
+        {
+            const auto& files = model->observeFiles()->get();
+            fileName = files[aIndex]->path.get(-1, false);
+
+            const auto& ioInfo = files[aIndex]->ioInfo;
+            std::stringstream ss;
+            ss.precision(2);
+            if (!ioInfo.video.empty())
+            {
+                {
+                    ss << "V:" << ioInfo.video[0].size.w << "x"
+                       << ioInfo.video[0].size.h << ":" << std::fixed
+                       << ioInfo.video[0].size.getAspect() << " "
+                       << ioInfo.video[0].pixelType;
+                }
+            }
+            if (ioInfo.audio.isValid())
+            {
+                if (!ss.str().empty())
+                    ss << ", ";
+                ss << "A: " << static_cast<size_t>(ioInfo.audio.channelCount)
+                   << " " << ioInfo.audio.dataType << " "
+                   << ioInfo.audio.sampleRate;
+            }
+            snprintf(
+                buf, 256, "%s %s%s", fileName.c_str(), ss.str().c_str(),
+                session.c_str());
+        }
+        else
+        {
+            snprintf(
+                buf, 256, "mrv2 v%s %s%s", mrv::version(), mrv::build_date(),
+                session.c_str());
+        }
+        copy_label(buf);
+    }
+
 } // namespace mrv

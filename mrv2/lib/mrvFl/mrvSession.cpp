@@ -57,6 +57,8 @@ namespace mrv
     void set_current_session(const std::string& file)
     {
         currentSession = file;
+        ViewerUI* ui = App::ui;
+        ui->uiMain->update_title_bar();
     }
 
     bool save_session(const std::string& fileName)

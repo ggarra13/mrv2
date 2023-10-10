@@ -18,6 +18,8 @@ v0.8.0
 - Made playback play with audio when changing frame rates (slower or faster).
 - Fixed a locale change when using the FPS pull-down and there were thumbnails
   present.
+- Fixed macOS menu bar font size when switching from macOS menus back to normal
+  ones.
 
 v0.7.9
 ======
