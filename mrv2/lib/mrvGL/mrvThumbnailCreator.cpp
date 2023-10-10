@@ -16,6 +16,7 @@
 #include <atomic>
 #include <mutex>
 
+#include "mrvCore/mrvLocale.h"
 #include "mrvCore/mrvSequence.h"
 
 // mrViewer includes
@@ -404,21 +405,19 @@ namespace mrv
                                 gl::OffscreenBufferBinding binding(
                                     offscreenBuffer);
 
-                                char* saved_locale =
-                                    strdup(setlocale(LC_NUMERIC, NULL));
-                                setlocale(LC_NUMERIC, "C");
-                                render->begin(
-                                    offscreenBufferSize,
-                                    requestIt->colorConfigOptions,
-                                    requestIt->lutOptions);
-                                render->drawVideo(
-                                    {videoData},
-                                    {math::Box2i(
-                                        0, 0, info.size.w, info.size.h)},
-                                    {i}, {d});
-                                render->end();
-                                setlocale(LC_NUMERIC, saved_locale);
-                                free(saved_locale);
+                                {
+                                    StoreLocale;
+                                    render->begin(
+                                        offscreenBufferSize,
+                                        requestIt->colorConfigOptions,
+                                        requestIt->lutOptions);
+                                    render->drawVideo(
+                                        {videoData},
+                                        {math::Box2i(
+                                            0, 0, info.size.w, info.size.h)},
+                                        {i}, {d});
+                                    render->end();
+                                }
 
                                 glPixelStorei(GL_PACK_ALIGNMENT, 1);
                                 glReadPixels(

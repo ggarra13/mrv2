@@ -32,6 +32,11 @@ namespace mrv2
     {
         using namespace mrv;
 
+        std::string getVersion()
+        {
+            return mrv::version();
+        }
+
         /**
          *  \brief Open a file with optiona audio.
          *
@@ -334,6 +339,16 @@ namespace mrv2
             save_movie(file, App::ui, opts);
         }
 
+        /**
+         * \brief Save an .otio file with relative paths if possible.
+         *
+         * @param file The .otio file, like D:/movies/EDL.otio
+         */
+        void saveOTIO(const std::string& file)
+        {
+            save_timeline_to_disk(file);
+        }
+
 #ifdef MRV2_PDF
         /**
          * \brief Save a PDF document.
@@ -492,9 +507,13 @@ Used to run main commands and get and set the display, image, compare, LUT optio
     cmds.def(
         "setStereo3DOptions", &mrv2::cmd::setStereo3DOptions,
         _("Set the stereo 3D options."), py::arg("options"));
+
     cmds.def(
         "getLayers", &mrv2::cmd::getLayers,
         _("Get the layers of the timeline (GUI)."));
+
+    cmds.def(
+        "getVersion", &mrv2::cmd::getVersion, _("Get the version of mrv2."));
 
     cmds.def(
         "update", &mrv2::cmd::update,
@@ -518,6 +537,11 @@ Used to run main commands and get and set the display, image, compare, LUT optio
         "save", &mrv2::cmd::save,
         _("Save a movie or sequence from the front layer."), py::arg("file"),
         py::arg("options") = mrv::SaveOptions());
+
+    cmds.def(
+        "saveOTIO", &mrv2::cmd::saveOTIO,
+        _("Save an .otio file from the current selected image."),
+        py::arg("file"));
 
 #ifdef MRV2_PDF
     cmds.def(

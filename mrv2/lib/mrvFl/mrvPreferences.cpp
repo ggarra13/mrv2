@@ -16,6 +16,7 @@ namespace fs = std::filesystem;
 #include <FL/fl_utf8.h>         // for fl_getenv
 #include <FL/Fl_Sys_Menu_Bar.H> // for macOS menus
 
+#include "mrvCore/mrvLocale.h"
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvHotkey.h"
 #include "mrvCore/mrvMedia.h"
@@ -121,8 +122,7 @@ namespace mrv
         float tmpF;
         char tmpS[2048];
 
-        char* saved_locale = strdup(setlocale(LC_NUMERIC, NULL));
-        setlocale(LC_NUMERIC, "C");
+        StoreLocale;
 
         std::string msg =
             tl::string::Format(_("Reading preferences from \"{0}mrv2.prefs\"."))
@@ -848,9 +848,6 @@ namespace mrv
             width = 270;
 
         ui->uiViewGroup->fixed(ui->uiDockGroup, width);
-
-        setlocale(LC_NUMERIC, saved_locale);
-        free(saved_locale);
     }
 
     void Preferences::open_windows()
@@ -897,8 +894,7 @@ namespace mrv
         auto uiPrefs = ViewerUI::uiPrefs;
         auto settingsObject = app->settingsObject();
 
-        char* saved_locale = strdup(setlocale(LC_NUMERIC, NULL));
-        setlocale(LC_NUMERIC, "C");
+        StoreLocale;
 
         int visible = 0;
         if (uiPrefs->uiMain->visible())
@@ -1302,9 +1298,6 @@ namespace mrv
         }
 
         base.flush();
-
-        setlocale(LC_NUMERIC, saved_locale);
-        free(saved_locale);
 
         msg = tl::string::Format(_("Preferences have been saved to: "
                                    "\"{0}mrv2.prefs\"."))

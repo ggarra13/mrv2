@@ -42,6 +42,8 @@ class HelloPlugin(mrv2.plugin.Plugin):
 
     Returns:
     dict: a dictionary of key for menu entries and values as methods.
+          The value can be a tuple to add options like a divider for a menu
+          entry.
     """
     def menus(self):
         menus = {
@@ -83,11 +85,13 @@ class PlaybackPlugin(mrv2.plugin.Plugin):
 
     Returns:
     dict: a dictionary of key for menu entries and values as methods.
+          The value can be a tuple to add options like a divider for a menu
+          entry.
     """
     def menus(self):
         menus = {
-            "Python/Play/Forwards" : self.play,              # call a method
-            "__divider__"          : None,                   # add a divider
+            # Call a method and place a divider line after the menu
+            "Python/Play/Forwards" : (self.play, '__divider__'), 
             "Python/Play/Backwards" : timeline.playBackwards # call a function
         }
         return menus
