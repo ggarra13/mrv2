@@ -25,6 +25,7 @@ v0.8.0
 - Added user metadata to save in the session file as "metadata".  This can be
   set with the Python commands setSessionMetadata and retrieved with
   sessionMetadata.
+- Added a warning check when saving a session with temporary EDLs in it.
 
 v0.7.9
 ======
