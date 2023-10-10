@@ -15,6 +15,7 @@ set(HEADERS
   mrvHome.h
   mrvHotkey.h
   mrvI8N.h
+  mrvLocale.h
   mrvMedia.h
   mrvMemory.h
   mrvMesh.h
@@ -38,6 +39,7 @@ set(SOURCES
   mrvFilesPanelOptions.cpp
   mrvHome.cpp
   mrvHotkey.cpp
+  mrvLocale.cpp
   mrvMedia.cpp
   mrvMemory.cpp
   mrvMesh.cpp
