@@ -143,7 +143,9 @@ void check_language(PreferencesUI* uiPrefs, int& language_index, mrv::App* app)
             // setenv( "LC_CTYPE", "UTF-8", 1 );
             setenv("LANGUAGE", language, 1);
 
-            Fl_Preferences base(mrv::prefspath().c_str(), "filmaura", "mrv2");
+            Fl_Preferences base(
+                mrv::prefspath().c_str(), "filmaura", "mrv2",
+                Fl_Preferences::C_LOCALE);
 
             // Save ui preferences
             Fl_Preferences ui(base, "ui");
@@ -279,7 +281,9 @@ namespace mrv
         char languageCode[32];
         const char* language = "en_US.UTF-8";
 
-        Fl_Preferences base(mrv::prefspath().c_str(), "filmaura", "mrv2");
+        Fl_Preferences base(
+            mrv::prefspath().c_str(), "filmaura", "mrv2",
+            Fl_Preferences::C_LOCALE);
 
         // Load ui language preferences
         Fl_Preferences ui(base, "ui");

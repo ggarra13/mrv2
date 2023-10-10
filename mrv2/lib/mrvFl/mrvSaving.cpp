@@ -19,6 +19,7 @@ namespace fs = std::filesystem;
 #include <tlTimeline/GLRender.h>
 
 #include "mrvCore/mrvUtil.h"
+#include "mrvCore/mrvLocale.h"
 
 #include "mrvWidgets/mrvProgressReport.h"
 
@@ -266,19 +267,18 @@ namespace mrv
                     // Render the video.
                     gl::OffscreenBufferBinding binding(buffer);
                     CHECK_GL;
-                    const std::string savedLocale =
-                        std::setlocale(LC_NUMERIC, nullptr);
-                    setlocale(LC_NUMERIC, "C");
-                    render->begin(
-                        offscreenBufferSize, view->getColorConfigOptions(),
-                        view->lutOptions());
-                    CHECK_GL;
-                    render->drawVideo(
-                        {videoData},
-                        {math::Box2i(0, 0, renderSize.w, renderSize.h)});
-                    CHECK_GL;
-                    render->end();
-                    std::setlocale(LC_NUMERIC, savedLocale.c_str());
+                    {
+                        StoreLocale;
+                        render->begin(
+                            offscreenBufferSize, view->getColorConfigOptions(),
+                            view->lutOptions());
+                        CHECK_GL;
+                        render->drawVideo(
+                            {videoData},
+                            {math::Box2i(0, 0, renderSize.w, renderSize.h)});
+                        CHECK_GL;
+                        render->end();
+                    }
 
                     glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
                     CHECK_GL;
@@ -593,19 +593,20 @@ namespace mrv
                         // Render the video.
                         gl::OffscreenBufferBinding binding(buffer);
                         CHECK_GL;
-                        const std::string savedLocale =
-                            std::setlocale(LC_NUMERIC, nullptr);
-                        setlocale(LC_NUMERIC, "C");
-                        render->begin(
-                            offscreenBufferSize, view->getColorConfigOptions(),
-                            view->lutOptions());
-                        CHECK_GL;
-                        render->drawVideo(
-                            {videoData},
-                            {math::Box2i(0, 0, renderSize.w, renderSize.h)});
-                        CHECK_GL;
-                        render->end();
-                        std::setlocale(LC_NUMERIC, savedLocale.c_str());
+                        {
+                            StoreLocale;
+                            render->begin(
+                                offscreenBufferSize,
+                                view->getColorConfigOptions(),
+                                view->lutOptions());
+                            CHECK_GL;
+                            render->drawVideo(
+                                {videoData},
+                                {math::Box2i(
+                                    0, 0, renderSize.w, renderSize.h)});
+                            CHECK_GL;
+                            render->end();
+                        }
 
                         // back to conventional pixel operation
                         // glUnmapBuffer(GL_PIXEL_PACK_BUFFER);

@@ -16,6 +16,7 @@
 #include "mrViewer.h"
 
 #include "mrvCore/mrvColorSpaces.h"
+#include "mrvCore/mrvLocale.h"
 #include "mrvCore/mrvSequence.h"
 #include "mrvCore/mrvI8N.h"
 
@@ -266,8 +267,8 @@ namespace mrv
                 {
                     gl::OffscreenBufferBinding binding(gl.buffer);
                     CHECK_GL;
-                    char* saved_locale = strdup(setlocale(LC_NUMERIC, NULL));
-                    setlocale(LC_NUMERIC, "C");
+
+                    StoreLocale;
                     gl.render->begin(
                         renderSize, p.colorConfigOptions, p.lutOptions);
                     CHECK_GL;
@@ -303,8 +304,6 @@ namespace mrv
                     CHECK_GL;
                     gl.render->end();
                     CHECK_GL;
-                    setlocale(LC_NUMERIC, saved_locale);
-                    free(saved_locale);
                 }
             }
         }
