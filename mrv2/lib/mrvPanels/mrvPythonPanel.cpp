@@ -418,12 +418,10 @@ from mrv2 import playlist, timeline, usd, settings
         outputDisplay->warning(code.c_str());
         if (!eval.empty() && var != eval)
         {
-            eval += '\n';
             outputDisplay->warning(eval.c_str());
         }
         try
         {
-            PyStdErrOutStreamRedirect pyRedirect;
             py::exec(code);
             if (!eval.empty())
             {
@@ -434,7 +432,6 @@ from mrv2 import playlist, timeline, usd, settings
         catch (const std::exception& e)
         {
             outputDisplay->error(e.what());
-            outputDisplay->error("\n");
         }
     }
 
