@@ -15,7 +15,7 @@ v0.8.0
   instead of waiting until the commands finish, like in v0.7.9 and previous
   ones.
 - Added a cmd.getVersion() to get the version of mrv2 from Python.
-- Made playback play with audio when changing frame rates (slower or faster).
+- Made playback play with audio when changing frame rate (slower or faster).
 - Fixed a locale change when using the FPS pull-down and there were thumbnails
   present.
 - Fixed macOS menu bar font size when switching from macOS menus back to normal
@@ -26,6 +26,14 @@ v0.8.0
   set with the Python commands setSessionMetadata and retrieved with
   sessionMetadata.
 - Added a warning check when saving a session with temporary EDLs in it.
+- Added timeline.speed(), timeline.defaultSpeed() and timeline.setSpeed() to
+  retrieve and manipulate the FPS.
+- Added image.ocioIcs() and image.setOcioIcs() and image.ocioIcsList() to
+  Python to set the input color space of the image.
+- Added image.ocioView(), image.setOcioView() and image.ocioViewList() to
+  Python to set the Display/View color space and to retrieve a list of all
+  Display/Views.  
+
 
 v0.7.9
 ======

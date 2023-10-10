@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-10-10 04:18-0300\n"
+"POT-Creation-Date: 2023-10-10 08:55-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -2269,6 +2269,22 @@ msgstr "Obtenga el volumen de reproducción."
 msgid "Get the version of mrv2."
 msgstr "Retorna la versión de mrv2."
 
+msgid "Gets a list of all input color spaces."
+msgstr "Obtiene un listado de todos los Espacios de Entrada de Color."
+
+msgid "Gets the current Display/View."
+msgstr "Retorna la Display/View de OCIO actual."
+
+msgid "Gets the current FPS of timeline."
+msgstr "Obtiene los cuadros por segundo en la línea de tiempo."
+
+msgid "Gets the current input color space."
+msgstr "Obtiene el Espacio de Entrada de Color actual."
+
+msgid "Gets the default speed of the timeline."
+msgstr ""
+"Obtiene la velocidad (cuadros por segundo) por defecto de la línea de tiempo."
+
 msgid "Ghosting"
 msgstr "Fanstasma"
 
@@ -2493,6 +2509,13 @@ msgstr "Insertar"
 
 msgid "Insert Frame"
 msgstr "Insertar Cuadro"
+
+#, f
+msgid "Invalid OCIO Display/View '{0}'."
+msgstr "Display/View de OCIO inválido para '{0}'."
+
+msgid "Invalid OCIO Ics '{0}'."
+msgstr "Espacio de Entrada de Color de OCIO inválido para '{0}'."
 
 msgid "Invalid font for text drawing"
 msgstr "Fuente inválida para dibujar texto"
@@ -3687,6 +3710,9 @@ msgstr "Retorna la versión y termina."
 msgid "Returns current session file."
 msgstr "Retorna la Sesión actual."
 
+msgid "Returns the current session metadata."
+msgstr "Retorna la metadata de la sesión actual."
+
 msgid ""
 "Returns the first valid timecode rate that has the least difference from the "
 "given value."
@@ -4073,6 +4099,12 @@ msgstr "Setear un nuevo índice de archivo B."
 msgid "Set a new stereo file index."
 msgstr "Setear un nuevo índice de archivo para estéreo."
 
+msgid "Set an OCIO Display/View."
+msgstr "Setea la OCIO Display/Vista."
+
+msgid "Set current FPS of timeline."
+msgstr "Setea la velocidad (cuadros por segundo) de la línea de tiempo."
+
 msgid "Set current loop mode of timeline."
 msgstr "Setear modo de bucle en la línea de tiempo."
 
@@ -4133,6 +4165,9 @@ msgstr ""
 msgid "Set the in/out points range."
 msgstr "Setear el range de entrada/salida."
 
+msgid "Set the input color space."
+msgstr "Setea el Espacio de Entrada de Color."
+
 msgid "Set the last version for current media."
 msgstr "Setear la última versión para el medio actual."
 
@@ -4171,6 +4206,9 @@ msgstr "Setear las opciones de estéreo 3D."
 
 msgid "Sets the current session file."
 msgstr "Setea el archivo de la sesión actual."
+
+msgid "Sets the current session metadata."
+msgstr "Setea la metadata de la sesión actual."
 
 msgid "Sets the default gain when mrv2 starts."
 msgstr "Establece la ganancia por defecto cuando mrv2 comienza."
@@ -5540,9 +5578,6 @@ msgstr "xyY CIE xyY"
 
 #~ msgid "Remove selected files from Playlist"
 #~ msgstr "Remover archivcos seleccionados de la Lista de Reproducción."
-
-#~ msgid "Return the current playlist."
-#~ msgstr "Retorna la lista de reproducción."
 
 #~ msgid "Select playlist image for removal."
 #~ msgstr "Seleccionar una imagen de la lista de reproducción para remover."
