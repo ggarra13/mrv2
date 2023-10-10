@@ -1,19 +1,19 @@
-*.txt text eol=lf
-*.md  text eol=lf
-*.sh  text eol=lf
+*.cmake text eol=lf
 *.cpp text eol=lf
 *.h   text eol=lf
-*.rb  text eol=lf
-*.py  text eol=lf
-*.rst text eol=lf
 *.html text eol=lf
 *.in  text eol=lf
+*.i   text eol=lf
 *.fl  text eol=lf
-*.cmake text eol=lf
-*.po  diff=podiff
-*.pot diff=podiff
-*.po  filter=po
-*.pot filter=po
+*.md  text eol=lf
+*.po  text eol=lf
+*.pot text eol=lf
+*.py  text eol=lf
+*.rb  text eol=lf
+*.rst text eol=lf
+*.sh  text eol=lf
+*.txt text eol=lf
+
 *.ttf -text
 *.lib -text
 *.dll -text
@@ -22,13 +22,17 @@
 *.mpv -text
 *.webm -text
 
-*.py  linguist-language=Python
-*.sh  linguist-language=bash
+*.po  diff=podiff
+*.pot diff=podiff
+*.po  filter=po
+*.pot filter=poç
 
 windows/win32/include/lib/** linguist-language=C
 windows/win64/include/lib/** linguist-language=C
 
+*.bat linguist-language=bat
 *.cpp linguist-language=C++
 *.h   linguist-language=C++
 *.nsh linguist-language=NSIS
-*.bat linguist-language=bat
+*.py  linguist-language=Python
+*.sh  linguist-language=bash

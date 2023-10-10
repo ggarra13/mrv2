@@ -130,7 +130,8 @@ namespace mrv
 
         LOG_INFO(msg);
 
-        Fl_Preferences base(prefspath().c_str(), "filmaura", "mrv2");
+        Fl_Preferences base(
+            prefspath().c_str(), "filmaura", "mrv2", Fl_Preferences::C_LOCALE);
 
         base.get("version", version, 7);
 
@@ -689,7 +690,8 @@ namespace mrv
 
         char key[256];
         Fl_Preferences path_mapping(
-            prefspath().c_str(), "filmaura", "mrv2.paths");
+            prefspath().c_str(), "filmaura", "mrv2.paths",
+            Fl_Preferences::C_LOCALE);
         num = path_mapping.entries();
         for (int i = 0; i < num; ++i)
         {
@@ -912,7 +914,10 @@ namespace mrv
             visible = 1;
         settingsObject->setValue("gui/DockGroup/Visible", visible);
 
-        Fl_Preferences base(prefspath().c_str(), "filmaura", "mrv2");
+        Fl_Preferences base(
+            prefspath().c_str(), "filmaura", "mrv2",
+            (Fl_Preferences::Root)(
+                (int)Fl_Preferences::C_LOCALE | (int)Fl_Preferences::CLEAR));
         base.set("version", 7);
 
         Fl_Preferences fltk_settings(base, "settings");
@@ -1233,7 +1238,9 @@ namespace mrv
 
         char key[256];
         Fl_Preferences path_mapping(
-            prefspath().c_str(), "filmaura", "mrv2.paths");
+            prefspath().c_str(), "filmaura", "mrv2.paths",
+            (Fl_Preferences::Root)(
+                (int)Fl_Preferences::C_LOCALE | (int)Fl_Preferences::CLEAR));
         path_mapping.clear();
         for (int i = 2; i <= uiPrefs->PathMappings->size(); ++i)
         {
@@ -1281,7 +1288,10 @@ namespace mrv
         {
 
             Fl_Preferences keys(
-                prefspath().c_str(), "filmaura", hotkeys_file.c_str());
+                prefspath().c_str(), "filmaura", hotkeys_file.c_str(),
+                (Fl_Preferences::Root)(
+                    (int)Fl_Preferences::C_LOCALE |
+                    (int)Fl_Preferences::CLEAR));
             save_hotkeys(keys);
 
             msg = tl::string::Format(
@@ -1711,7 +1721,8 @@ namespace mrv
             }
         }
 
-        Fl_Preferences base(prefspath().c_str(), "filmaura", "mrv2");
+        Fl_Preferences base(
+            prefspath().c_str(), "filmaura", "mrv2", Fl_Preferences::C_LOCALE);
         Fl_Preferences gui(base, "ui");
         gui.set("single_instance", uiPrefs->uiPrefsSingleInstance->value());
         gui.set(

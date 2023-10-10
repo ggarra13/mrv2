@@ -73,6 +73,16 @@ namespace mrv2
             model->closeAll();
         }
 
+        std::string rootPath()
+        {
+            return mrv::rootpath();
+        }
+
+        std::string prefsPath()
+        {
+            return mrv::prefspath();
+        }
+
         /**
          * \brief Compare two clips with a comparison mode.
          *
@@ -339,6 +349,24 @@ namespace mrv2
 #endif
 
         /**
+         * \brief Returns the current session file.
+         */
+        std::string currentSession()
+        {
+            return current_session();
+        }
+
+        /**
+         * \brief Returns the current session file.
+         *
+         * @param file The path to the session file, like: /home/gga/test.mrv2s
+         */
+        void setCurrentSession(const std::string& session)
+        {
+            return set_current_session(session);
+        }
+
+        /**
          * \brief Open a session file.
          *
          * @param file The path to the session file, like: test.mrv2s
@@ -409,6 +437,14 @@ Used to run main commands and get and set the display, image, compare, LUT optio
         py::arg("item") = -1);
 
     cmds.def("closeAll", &mrv2::cmd::closeAll, _("Close all file items."));
+
+    cmds.def(
+        "rootPath", &mrv2::cmd::rootPath,
+        _("Return the root path to the insallation of mrv2."));
+
+    cmds.def(
+        "prefsPath", &mrv2::cmd::prefsPath,
+        _("Return the path to preferences of mrv2."));
 
     cmds.def(
         "displayOptions", &mrv2::cmd::displayOptions,
@@ -491,7 +527,15 @@ Used to run main commands and get and set the display, image, compare, LUT optio
 #endif
 
     cmds.def(
-        "oepnSession", &mrv2::cmd::openSession, _("Open a session file."),
+        "currentSession", &mrv2::cmd::currentSession,
+        _("Returns current session file."));
+
+    cmds.def(
+        "setCurrentSession", &mrv2::cmd::setCurrentSession,
+        _("Sets the current session file."), py::arg("file"));
+
+    cmds.def(
+        "openSession", &mrv2::cmd::openSession, _("Open a session file."),
         py::arg("file"));
 
     cmds.def("saveSession", &mrv2::cmd::saveSession, _("Save a session file."));

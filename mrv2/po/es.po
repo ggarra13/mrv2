@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-10-03 15:36-0300\n"
+"POT-Creation-Date: 2023-10-09 11:31-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -689,6 +689,27 @@ msgstr "%s - Página %d"
 msgid "&Copy/&Filename"
 msgstr "&Copiar/&Nombre del Archivo"
 
+msgid "&Edit/&Comment Selection"
+msgstr "&Editar/&Comentar Selección"
+
+msgid "&Edit/&Copy"
+msgstr "&Editar/&Copiar"
+
+msgid "&Edit/&Delete"
+msgstr "&Editar/&Pegar"
+
+msgid "&Edit/&Paste"
+msgstr "&Editar/&Pegar"
+
+msgid "&Edit/&Uncomment Selection"
+msgstr "&Editar/&Descomentar Selección"
+
+msgid "&Edit/&Undo"
+msgstr "&Editar/&Deshacer"
+
+msgid "&Edit/Cu&t"
+msgstr "&Editar/Cor&tar"
+
 msgid "&File/&Clone"
 msgstr "&Archivo/&Clonar"
 
@@ -700,6 +721,18 @@ msgstr "&Archivo/&Refrescar Cache"
 
 msgid "&File/&Save"
 msgstr "&Archivo/&Grabar"
+
+msgid "&Search/&Find..."
+msgstr "&Buscar/&Encontrar..."
+
+msgid "&Search/&Replace"
+msgstr "&Buscar/&Reemplazer"
+
+msgid "&Search/&Replace Again"
+msgstr "&Buscar/Reemplazar de &Nuevo"
+
+msgid "&Search/F&ind Again"
+msgstr "&Buscar/E&ncontrar de Nuevo"
 
 msgid "&Show/In &File Manager"
 msgstr "&Mostrar/En &Buscador de Archivos"
@@ -873,7 +906,7 @@ msgid "50"
 msgstr "50"
 
 msgid "59.94"
-msgstr "59.94"
+msgstr "59,94"
 
 msgid "60"
 msgstr "60"
@@ -956,6 +989,9 @@ msgid ""
 msgstr ""
 "Acepta los seteos pero no los graba.  Serán grabados cuando se sale del "
 "programa."
+
+msgid "Accept the selected OCIO file."
+msgstr "Acepte el archivo OCIO seleccionado."
 
 msgid "Acrobat PDF (*.{pdf})"
 msgstr "Acrobat PDF (*.{pdf})"
@@ -1233,6 +1269,9 @@ msgstr ""
 
 msgid "Cancel"
 msgstr "Cancelar"
+
+msgid "Cancel the OCIO selection and don't change anything."
+msgstr "Cancele la selección de OCIO y no cambie nada."
 
 msgid "Cannot append audio clip"
 msgstr "No puedo agragar clip de audio"
@@ -1774,12 +1813,6 @@ msgstr "Ventana de Edición"
 msgid "Edit/&Copy"
 msgstr "Editar/&Copiar"
 
-msgid "Edit/&Paste"
-msgstr "Editar/&Pegar"
-
-msgid "Edit/Cu&t"
-msgstr "Editar/Cor&tar"
-
 msgid "Edit/Frame/Copy"
 msgstr "Editar/Cuadro/&Copiar"
 
@@ -1985,6 +2018,9 @@ msgstr "Archivo/Reciente/%s"
 msgid "File/Save/Movie or Sequence"
 msgstr "Archivo/Grabar/Pelídula o Secuencia"
 
+msgid "File/Save/OTIO EDL Timeline"
+msgstr "&Archivo/&Grabar/Línea de Tiempo &OTIO"
+
 msgid "File/Save/PDF Document"
 msgstr "&Archivo/&Grabar/Documento &PDF"
 
@@ -2011,6 +2047,9 @@ msgstr "Archivos"
 
 msgid "Filter EDLs"
 msgstr "Filtrar EDLs"
+
+msgid "Find:"
+msgstr "Encontrar:"
 
 msgid "First Frame"
 msgstr "Primer Cuadro"
@@ -2795,6 +2834,10 @@ msgstr "No"
 msgid "No item selected"
 msgstr "Ningún item seleccionado"
 
+#, c-format
+msgid "No occurrences of '%s' found!"
+msgstr "¡Ninguna ocurrencia de '%s' encontrado!"
+
 msgid "No playlist loaded."
 msgstr "No hay ninguna lista de reproducción cargada."
 
@@ -2829,9 +2872,6 @@ msgstr "Ninguno"
 msgid "Normal"
 msgstr "Normal"
 
-msgid "Not an EDL file to save."
-msgstr "No es un archivo EDL para grabar."
-
 msgid "Not an EDL playlist to add clips to."
 msgstr "No es un archivo EDL para agregar clips."
 
@@ -2858,6 +2898,9 @@ msgstr "Número de pistas de video en archivo"
 
 msgid "OCIO"
 msgstr "OCIO"
+
+msgid "OCIO Browser"
+msgstr "Visor de OCIO"
 
 msgid "OCIO Config File"
 msgstr "Archivo Config de OCIO"
@@ -3513,6 +3556,18 @@ msgstr "Renderer:\t"
 msgid "Repeat  Frame"
 msgstr "Repetir Cuadro"
 
+msgid "Replace"
+msgstr "Reemplazar"
+
+msgid "Replace All"
+msgstr "Reemplazar Todas"
+
+msgid "Replace Next"
+msgstr "Reemplazar Siguient"
+
+msgid "Replace:"
+msgstr "Reemplazar:"
+
 msgid "Reset"
 msgstr "Resetear"
 
@@ -3588,8 +3643,17 @@ msgstr "Retorna la lista de índices B."
 msgid "Return the list of layers."
 msgstr "Retorna la lista de capas."
 
+msgid "Return the path to preferences of mrv2."
+msgstr "Retorna la carpeta de las preferencias de mrv2."
+
+msgid "Return the root path to the insallation of mrv2."
+msgstr "Retorna la carpeta raíz de la instalación de mrv2."
+
 msgid "Return the version and exit."
 msgstr "Retorna la versión y termina."
+
+msgid "Returns current session file."
+msgstr "Retorna la Sesión actual."
 
 msgid ""
 "Returns the first valid timecode rate that has the least difference from the "
@@ -3707,6 +3771,9 @@ msgstr "Grabar Imagen"
 msgid "Save Movie or Sequence"
 msgstr "Grabar Película o Secuencia"
 
+msgid "Save OTIO Timeline"
+msgstr "Grabar Línea de Tiempo OTIO"
+
 msgid "Save OTIO timeline"
 msgstr "Grabar Línea de Tiempo OTIO"
 
@@ -3787,6 +3854,9 @@ msgstr "Herramienta de Fregado"
 msgid "Search"
 msgstr "Buscar"
 
+msgid "Search String:"
+msgstr "Buscar Texto:"
+
 msgid "Secondary Display"
 msgstr "Display Secundario"
 
@@ -3816,6 +3886,9 @@ msgstr "Seleccionar una lista de reproducción con el nombre de archivo dado."
 
 msgid "Select a playlist by index."
 msgstr "Seleccionar una lista de reproducción con el índice dado."
+
+msgid "Select an OCIO Transform"
+msgstr "Seleccione una Transformación de OCIO"
 
 msgid "Select default looping mode in timeline."
 msgstr "Selecionar modo de bucle por defecto en la línea de tiempo."
@@ -3916,6 +3989,9 @@ msgstr "Sesión"
 
 msgid "Session saved to \"{0}\"."
 msgstr "Sesión grabada a \"{0}\"."
+
+msgid "Session: "
+msgstr "Sesión: "
 
 msgid "Set Audio Buffer Frame Count."
 msgstr "Setear cuadros del buffer de Audio"
@@ -4057,6 +4133,9 @@ msgstr "Setear el rango de tiempo seleccionado en la línea de tiempo."
 
 msgid "Set the stereo 3D options."
 msgstr "Setear las opciones de estéreo 3D."
+
+msgid "Sets the current session file."
+msgstr "Setea el archivo de la sesión actual."
 
 msgid "Sets the default gain when mrv2 starts."
 msgstr "Establece la ganancia por defecto cuando mrv2 comienza."
@@ -5307,6 +5386,9 @@ msgstr "x9"
 
 msgid "xyY CIE xyY"
 msgstr "xyY CIE xyY"
+
+#~ msgid "Not an EDL file to save."
+#~ msgstr "No es un archivo EDL para grabar."
 
 #~ msgid "Directory {0} does not exist or no directory"
 #~ msgstr "Carpeta {0} no existe o no es carpeta"

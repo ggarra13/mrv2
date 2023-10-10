@@ -3,11 +3,6 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 include( ExternalProject )
-
-message(STATUS "PREVIOUS Build Python Python_EXECUTABLE=${Python_EXECUTABLE}")
-message(STATUS "PREVIOUS Build Python PYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}")
-message(STATUS "PREVIOUS Build Python Python_VERSION=${Python_VERSION}")
-message(STATUS "PREVIOUS Build Python PYTHON_VERSION=${PYTHON_VERSION}")
 	
 set( Python_VERSION 3.10 )
 set( Python_TINY   9 )
@@ -16,25 +11,28 @@ set( Python_URL https://www.python.org/ftp/python/${Python_VERSION}.${Python_TIN
 set( Python_PATCH )
 if(APPLE)
     set( Python_PATCH cmake -E copy ${PROJECT_SOURCE_DIR}/etc/configure-macos-python.sh ${CMAKE_CURRENT_BINARY_DIR}/ )
-    
-    set( Python_CXX_FLAGS "-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}")
-    set( Python_C_FLAGS "-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET} ${CMAKE_C_FLAGS}")
+
+    if(CMAKE_OSX_DEPLOYMENT_TARGET)
+	set( Python_C_FLAGS "-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET} ${CMAKE_C_FLAGS}")
+    endif()
     
     set( Python_CONFIGURE ${CMAKE_CURRENT_BINARY_DIR}/configure-macos-python.sh --prefix=${CMAKE_INSTALL_PREFIX}
         "CFLAGS=${Python_C_FLAGS}"
         "CPPFLAGS=${Python_C_FLAGS}"
         "CXXFLAGS=${Python_CXX_FLAGS}"
     )
-    set( Python_BUILD    make -j 4)
+    set( Python_BUILD    )
     set( Python_INSTALL  make altinstall )
 elseif(UNIX)
-    set( Python_CONFIGURE ./configure --enable-optimizations
+    set( Python_CONFIGURE ./configure
+	--enable-optimizations
+	--enable-shared
         --prefix=${CMAKE_INSTALL_PREFIX}
         "CFLAGS=${CMAKE_C_FLAGS}"
         "CPPFLAGS=${CMAKE_C_FLAGS}"
         "CXXFLAGS=${CMAKE_CXX_FLAGS}"
     )
-    set( Python_BUILD    make -j 4)
+    set( Python_BUILD    )
     set( Python_INSTALL  make altinstall )
 else()
     set( platform x64 )
@@ -49,10 +47,10 @@ endif()
 ExternalProject_Add(
     Python
     URL ${Python_URL}
-    PATCH_COMMAND     ${Python_PATCH}
+    PATCH_COMMAND     "${Python_PATCH}"
     CONFIGURE_COMMAND "${Python_CONFIGURE}"
     BUILD_COMMAND     ${Python_BUILD}
-    INSTALL_COMMAND   ${Python_INSTALL}
+    INSTALL_COMMAND   "${Python_INSTALL}"
     BUILD_IN_SOURCE 1
 )
 
@@ -69,9 +67,3 @@ else()
 endif()
 
 set(PYTHON_EXECUTABLE ${Python_EXECUTABLE} )
-
-
-message(STATUS "AFTER Build Python Python_EXECUTABLE=${Python_EXECUTABLE}")
-message(STATUS "AFTER Build Python PYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}")
-message(STATUS "AFTER Build Python Python_VERSION=${Python_VERSION}")
-message(STATUS "AFTER Build Python PYTHON_VERSION=${PYTHON_VERSION}")

@@ -59,13 +59,17 @@ jobs:
   
     - name: Set permissions on SSH key
       run: chmod 600 ssh/id_rsa
+      
+    - name: Set executable permissions
+      run: |
+        chmod +x ./*.sh ./bin/*.sh ./etc/*.sh
   
     - name: Build mrv2
-      run:
+      run: |
         ./runme_nolog.sh -t package
 
     - name: Upload binaries
-      run:
+      run: |
         ./bin/upload_sourceforge.sh
 
   windows-full-build:
@@ -101,13 +105,17 @@ jobs:
       shell: cmd
       run: |
         icacls "ssh\id_rsa" /inheritance:r /grant:r "%USERNAME%:R"
+        
+    - name: Set executable permissions
+      run: |
+        chmod +x ./*.sh ./bin/*.sh ./etc/*.sh
       
     - name: Build mrv2
-      run:
+      run: |
         ./runme_nolog.sh -t package -D TLRENDER_USD=OFF
       
     - name: Upload binaries
-      run:
+      run: |
         ./bin/upload_sourceforge.sh
 
 
@@ -141,13 +149,17 @@ jobs:
   
     - name: Set permissions on SSH key
       run: chmod 600 ssh/id_rsa
+      
+    - name: Set executable permissions
+      run: |
+        chmod +x ./*.sh ./bin/*.sh ./etc/*.sh
 
     - name: Build mrv2
-      run:
+      run: |
         ./runme_nolog.sh -t package
 
     - name: Upload binaries
-      run:
+      run: |
         ./bin/upload_sourceforge.sh
 
   # macos-m1-full-build:
@@ -180,11 +192,15 @@ jobs:
   
   #   - name: Set permissions on SSH key
   #     run: chmod 600 ssh/id_rsa
+  
+  #   - name: Set executable permissions
+  #      run: |
+  #        chmod +x ./*.sh ./bin/*.sh ./etc/*.sh
 
   #   - name: Build mrv2
-  #     run:
+  #     run: |
   #       ./runme_nolog.sh -t package
 
-  #   # - name: Upload binaries
-  #   #   run:
-  #   #     ./bin/upload_sourceforge.sh
+  #   - name: Upload binaries
+  #     run: |
+  #       ./bin/upload_sourceforge.sh

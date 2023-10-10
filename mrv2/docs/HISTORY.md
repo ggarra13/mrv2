@@ -1,3 +1,17 @@
+v0.8.0
+======
+
+- Fixed mrv2's file requester not selecting files with [] in them.
+- Fixed mrv2's file requester not changing directories if you had typed the
+  full name of the directory in the filename field and pressed Enter,
+- Fixed a crash when loading a session with no files.
+- Added session name to the window's title bar.
+- Fixed a typo in Python's binding to sessios (oepenSession instead of
+  openSession).
+- Made Save Session not save temporary EDLs in the session file.
+- Added a __divider__ entry to Plug-in menus to add a divider line between
+  menu entries.
+
 v0.7.9
 ======
 
@@ -24,24 +38,36 @@ v0.7.9
 ```  
 Preferences->User Interface->Single Instance.
 ```	
-- Removed all warnings and errors from the documentation generation.
+- Removed all warnings and errors from the Sphinx documentation generation.
 - Fixed positioning of text editing when re-editing a text annotaion.
   Previously, it could be offset quite a bit if the zoom was not 1.
 - A lot of source code clean up from mrViewer's bad and old source code.
 - Windows installer now will remove the file association first before replacing
   it with the one of mrv2.
 - Made executable smaller on all platforms by using dead-code elimination.
+- Added pyFLTK bindings to the distribution.  It is now possible to create
+  FLTK windows with Python and control and access mrv2's windows with it.
+- Added Find and Replace to Python Editor in the Python Panel.
+- Added Comment and Uncomment region to Python Editor in the Python Panel.
+- Made focus selection on the main view window not work upon just entering.
+  This solves the issues with losing focus on the Frame, Start Frame and End
+  Frame widgets.  It also fixes problems when showing a Python window which
+  would otherwise not stay on top.
+- Added Save/OTIO EDL Timeline to the menus.
+- Allowed Saving OTIO Timelines of single clips and other .otio files.
 - Build system changes and fixes:
    	* Renamed runme.sh script to runme_nolog.sh.
    	* Added a new runme.sh script that calls runme_nolog.sh but saves the compile log into BUILD-KERNEL-ARCH/CMAKE_BUILD_TYPE/compile.log.
    	* Updated windows build script to work with MSVC 2022, not just 2019.
-   	* The windows compile takes advantage of Msys to install the dependencies of libintl, libiconv and gettext.
+   	* The Windows compilation takes advantage of Msys to install the dependencies of libintl, libiconv and gettext.
    	* Made all compile options work when off.  You can customize mrv2 to build it with either all the bells and whistles or pretty barebones.
    	* Added --help flag to runme.sh to list all the possible settings.
    	* All bash commands are run with run_cmd which prints them and times them.
    	* Added optional build support for all the optional TLRENDER_* settings and for the MRV2_* settings.  It is now possible to build a light version of mrv2 or one with all the features.
    	* Fixed a problem with the embedded python (pybind11) locating the system Python installation instead of the local one instead.  This created havok on my Ubuntu 22.04 when there was an upgrade.
    	* Made parsing of -D options like -D TLRENDER_USD=OFF work with or without a space.
+	* Got rid of compiling the slow Gettext on macOS, replacing it with
+	  a prebuilt dylib.
 	* Made the build system automatically release beta versions of the software after each successful compilation.  You can now download the latest beta binaries from:
      
          https://sourceforge.net/projects/mrv2/files/beta/

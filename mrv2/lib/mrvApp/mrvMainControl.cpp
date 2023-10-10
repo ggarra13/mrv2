@@ -5,6 +5,7 @@
 #include "mrViewer.h"
 
 #include "mrvFl/mrvTimelinePlayer.h"
+#include "mrvFl/mrvSession.h"
 
 #include "mrvNetwork/mrvTCP.h"
 #include "mrvNetwork/mrvCompareOptions.h"
@@ -401,9 +402,16 @@ namespace mrv
         //     audioPanel->setTimelinelinePlayer( player );
         // }
 
+        char buf[256];
+        std::string session = current_session();
+        if (!session.empty())
+        {
+            file::Path path(session);
+            session = " | ";
+            session += _("Session: ") + path.get(-1, false) + " ";
+        }
         const int aIndex = model->observeAIndex()->get();
         std::string fileName;
-        char buf[256];
         if (numFiles > 0 && aIndex >= 0 && aIndex < numFiles)
         {
             const auto& files = model->observeFiles()->get();
@@ -429,12 +437,15 @@ namespace mrv
                    << " " << ioInfo.audio.dataType << " "
                    << ioInfo.audio.sampleRate;
             }
-            snprintf(buf, 256, "%s  %s", fileName.c_str(), ss.str().c_str());
+            snprintf(
+                buf, 256, "%s %s%s", fileName.c_str(), ss.str().c_str(),
+                session.c_str());
         }
         else
         {
             snprintf(
-                buf, 256, "mrv2 v%s %s", mrv::version(), mrv::build_date());
+                buf, 256, "mrv2 v%s %s%s", mrv::version(), mrv::build_date(),
+                session.c_str());
         }
         p.ui->uiMain->copy_label(buf);
 

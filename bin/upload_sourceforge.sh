@@ -3,14 +3,13 @@
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#!/usr/bin/env bash
 
 echo "RUNNING upload_sourceforge.sh......"
 
 . etc/functions.sh
 
-if [[ "$(git rev-parse --abbrev-ref HEAD)" != "main" ]]; then
-    echo "You are not on the main branch.  Will not make a release."
+if [[ "$(git rev-parse --abbrev-ref HEAD)" != "beta" ]]; then
+    echo "You are not on the beta branch.  Will not make a release."
     exit 0
 fi
 
@@ -41,9 +40,7 @@ mkdir -p packages
 cd packages
 
 # Read all the files of this version
-shopt -s nullglob
-files=(*v${mrv2_VERSION}*)
-shopt -u nullglob
+files=$(ls -1 *v${mrv2_VERSION}*)
 
 if [[ "$files" == "" ]]; then
     echo
@@ -69,10 +66,14 @@ upload_file()
 {
     # Upload the file to the created directory
     echo
-    echo "Sending $1 as $2..."
+    echo "Uploading $1 as $2..."
     echo
-    rsync -avP --ignore-errors -e "ssh -i $SSH_KEY" $1 ggarra13@frs.sourceforge.net:/home/frs/project/mrv2/beta/$2
-    #scp -i $SSH_KEY $1 ggarra13@frs.sourceforge.net:/home/frs/project/mrv2/beta/$2
+    #rsync -avP --ignore-errors -e "ssh -i $SSH_KEY" $1 ggarra13@frs.sourceforge.net:/home/frs/project/mrv2/beta/$2
+    scp -i $SSH_KEY $1 ggarra13@frs.sourceforge.net:/home/frs/project/mrv2/beta/$2
+    echo
+    echo "Upload was successful."
+    echo
+
 }
 
 
@@ -113,9 +114,8 @@ It may contain bugs, new untested features and more.
 
 It should work on Ubuntu 20.04+, Windows 8.1+ and macOS 11+.
 
-This is unlike the official releases that work on Red Hat 8.1
-and macOS 10.5 (Catalina).  Also, the Windows release does not
-have USD support.
+This is unlike the official releases that work on Red Hat 8.1.
+Also, the Windows release does not have USD support.
 
 Its source code is at:
 https://www.github.com/ggarra13/mrv2
@@ -243,12 +243,11 @@ file_array=($files)
 # Iterate over the array of filenames
 for src in "${file_array[@]}"; do
     dest=`echo $src | sed -e "s/v$mrv2_VERSION/beta/"`
-    upload_file $src $dest
+    upload_file "${src}" "${dest}"
 done
 
 # Reset IFS to its default value (space, tab, newline)
 IFS=$' \t\n'
-
 
 # Go back to root directory
 cd ..

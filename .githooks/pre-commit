@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Running .githooks/pre-commit"
+echo "Running .githooks/pre-commit.sh"
 
 for FILE in $(git diff --cached --name-only)
 do
@@ -9,11 +9,23 @@ do
 	if [[ -e $FILE ]]; then
             clang-format -i $FILE
 	    git add $FILE
+	    chmod 0644 $FILE
 	fi
     else
 	echo "Skipping formatting of $FILE"
-	if [[ $FILE == *.sh || $FILE == .py || $FILE == .rb ]]; then
-	    chmod 0755 $FILE
+	if [[ $FILE == *.sh || $FILE == *.py || $FILE == *.rb ||
+		  $FILE == *pre-commit ]]; then
+	    if [[ -e $FILE ]]; then
+		echo "Changing $FILE permissions to 0755"
+		chmod 0755 $FILE
+	    fi
+	else
+	    if [[ -d $FILE ]]; then
+		chmod 0755 $FILE
+	    elif [[ -e $FILE ]]; then
+		echo "Changing $FILE permissions to 0644"
+		chmod 0644 $FILE
+	    fi
 	fi
     fi
 done

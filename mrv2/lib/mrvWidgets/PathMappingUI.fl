@@ -21,7 +21,7 @@ class PathMappingUI {open
   } {
     Fl_Window uiMain {
       label {Remote to Local Path Mapping} open
-      xywh {918 279 647 187} type Double box PLASTIC_UP_BOX resizable modal visible
+      xywh {697 279 647 187} type Double box PLASTIC_UP_BOX resizable modal visible
     } {
       Fl_Group {} {open
         xywh {1 0 645 183} box UP_BOX

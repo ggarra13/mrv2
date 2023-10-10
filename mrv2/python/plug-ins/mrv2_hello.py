@@ -87,6 +87,7 @@ class PlaybackPlugin(mrv2.plugin.Plugin):
     def menus(self):
         menus = {
             "Python/Play/Forwards" : self.play,              # call a method
+            "__divider__"          : None,                   # add a divider
             "Python/Play/Backwards" : timeline.playBackwards # call a function
         }
         return menus

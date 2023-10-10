@@ -26,7 +26,7 @@ include( "${ROOT_DIR}/cmake/functions.cmake" )
 
 
 #
-# Note UNIX CMAKE_INSTALL_PREFIX is broken!!!
+# @bug: UNIX CMAKE_INSTALL_PREFIX is broken!!!
 #
 if( UNIX AND NOT APPLE )
     set( CPACK_PREPACKAGE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_PREFIX}" )
@@ -57,6 +57,23 @@ file( REMOVE_RECURSE "${CPACK_PREPACKAGE}/include" )
 # Install system .SO dependencies
 #
 if( UNIX)
+
+    set(linux_lib64_dir "${CPACK_PREPACKAGE}/lib64")
+    if (EXISTS "${linux_lib64_dir}" )
+	# For pyFLTK we need to install all libfltk DSOs including those we
+	# do not use, like forms.
+	message( NOTICE "${linux_lib64_dir} exists...")
+	file(GLOB fltk_dsos "${linux_lib64_dir}/libfltk*.so")
+	file(INSTALL
+	    DESTINATION "${CMAKE_INSTALL_PREFIX}/lib"
+	    TYPE SHARED_LIBRARY
+	    FOLLOW_SYMLINK_CHAIN
+	    FILES ${fltk_dsos}
+	)
+    else()
+	message( NOTICE "${linux_lib64_dir} does not exist...")
+    endif()
+	
     set( EXES "${CPACK_PREPACKAGE}/bin/mrv2" )
     if ( APPLE )
 	get_macos_runtime_dependencies( ${EXES} DEPENDENCIES )

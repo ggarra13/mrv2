@@ -23,5 +23,10 @@ if(MRV2_PYBIND11)
     add_subdirectory(mrvPy)
 endif()
 
+
+# add_subdirectory(libtest)
+# add_subdirectory(exetest)
+
+
 set( PO_SOURCES ${PO_SOURCES} PARENT_SCOPE)
 set( PO_ABS_SOURCES ${PO_ABS_SOURCES} PARENT_SCOPE)

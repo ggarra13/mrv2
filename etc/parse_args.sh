@@ -3,9 +3,7 @@
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#!/usr/bin/env bash
 
-get_kernel
 
 show_help()
 {
@@ -32,7 +30,6 @@ show_help()
 parse_option()
 {
     local input="$1"
-    echo "parse_option got $1"
     # Use regular expressions to match the option and value
     if [[ "$input" =~ ^(-D)?(.+)=(.+)$ ]]; then
         local option="${BASH_REMATCH[2]}"
@@ -43,6 +40,11 @@ parse_option()
         exit 1
     fi
 }
+
+#
+# Get the KERNEL and ARCH variables
+#
+get_kernel
 
 export RUNME=0
 if [[ $0 == *runme.sh* || $0 == *runme_nolog.sh* ]]; then
@@ -72,11 +74,6 @@ for i in $@; do
 	    ;;
 	dist)
 	    export MRV2_DIST_RELEASE=1
-	    if [[ $RUNME == 0 ]]; then
-		echo $0
-		echo "dist option can only be run with the runme.sh script"
-		exit 1
-	    fi
 	    shift
 	    ;;
 	--build-dir|-build-dir|--dir|-dir|--root|-root)
