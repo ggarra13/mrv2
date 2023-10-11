@@ -364,6 +364,9 @@ namespace mrv
         //! Returns whtehr annotation at current time can be redone.
         bool hasRedo() const;
 
+        //! Update Undo/Redo draw buttons after a frame change.
+        void updateUndoRedoButtons() const;
+
     protected:
         template < typename T >
         void pushMessage(const std::string& command, const T& value);

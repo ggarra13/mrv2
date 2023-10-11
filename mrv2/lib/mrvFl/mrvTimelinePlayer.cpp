@@ -396,22 +396,66 @@ namespace mrv
             timelineViewport->updateUndoRedoButtons();
     }
 
+    struct StopData
+    {
+        TimelinePlayer* player;
+        double speed;
+        otio::RationalTime time;
+    };
+
+    void stop_playback_cb(StopData* data)
+    {
+        auto player = data->player;
+        player->player()->setPlayback(timeline::Playback::Stop);
+        player->seek(data->time);
+        player->setSpeed(data->speed);
+        player->updateUndoRedoButtons();
+        redrawPanelThumbnails();
+        delete data;
+    }
+
+    void TimelinePlayer::updateUndoRedoButtons() const
+    {
+        if (timelineViewport)
+        {
+            timelineViewport->updateUndoRedoButtons();
+            timelineViewport->updatePlaybackButtons();
+        }
+    }
+
     void TimelinePlayer::framePrev()
     {
         pushMessage("framePrev", 0);
-        _p->timelinePlayer->framePrev();
-        redrawPanelThumbnails();
-        if (timelineViewport)
-            timelineViewport->updateUndoRedoButtons();
+        //_p->timelinePlayer->framePrev();
+        auto time = currentTime() -
+                    otime::RationalTime(1.0, timeRange().duration().rate());
+        _p->timelinePlayer->setPlayback(timeline::Playback::Reverse);
+        StopData* data = new StopData;
+        data->player = this;
+        data->time = time;
+        data->speed = speed();
+
+        Fl::add_timeout(
+            1.75 / speed(), (Fl_Timeout_Handler)stop_playback_cb, data);
     }
 
     void TimelinePlayer::frameNext()
     {
         pushMessage("frameNext", 0);
-        _p->timelinePlayer->frameNext();
-        redrawPanelThumbnails();
-        if (timelineViewport)
-            timelineViewport->updateUndoRedoButtons();
+        //_p->timelinePlayer->frameNext();
+
+        auto time = currentTime() +
+                    otime::RationalTime(1.0, timeRange().duration().rate());
+        _p->timelinePlayer->setPlayback(timeline::Playback::Forward);
+        StopData* data = new StopData;
+        data->player = this;
+        data->time = time;
+        data->speed = speed();
+        Fl::add_timeout(
+            1.75 / speed(), (Fl_Timeout_Handler)stop_playback_cb, data);
+
+        // if (timelineViewport)
+        //     timelineViewport->updateUndoRedoButtons();
     }
 
     void TimelinePlayer::setInOutRange(const otime::TimeRange& value)

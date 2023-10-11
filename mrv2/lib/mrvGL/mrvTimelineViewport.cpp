@@ -299,7 +299,7 @@ namespace mrv
         }
     }
 
-    void TimelineViewport::_updatePlaybackButtons() const noexcept
+    void TimelineViewport::updatePlaybackButtons() const noexcept
     {
         TLRENDER_P();
         if (p.timelinePlayers.empty())
@@ -337,7 +337,7 @@ namespace mrv
         {
             i->start();
         }
-        _updatePlaybackButtons();
+        updatePlaybackButtons();
         p.skippedFrames = 0;
     }
 
@@ -348,7 +348,7 @@ namespace mrv
         {
             i->framePrev();
         }
-        _updatePlaybackButtons();
+        updatePlaybackButtons();
         p.skippedFrames = 0;
     }
 
@@ -359,7 +359,7 @@ namespace mrv
         {
             i->frameNext();
         }
-        _updatePlaybackButtons();
+        updatePlaybackButtons();
     }
 
     void TimelineViewport::endFrame() noexcept
@@ -379,7 +379,7 @@ namespace mrv
         {
             i->setPlayback(timeline::Playback::Reverse);
         }
-        _updatePlaybackButtons();
+        updatePlaybackButtons();
         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
     }
 
@@ -391,7 +391,7 @@ namespace mrv
         {
             i->setPlayback(timeline::Playback::Stop);
         }
-        _updatePlaybackButtons();
+        updatePlaybackButtons();
         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
     }
 
@@ -403,7 +403,7 @@ namespace mrv
         {
             i->setPlayback(timeline::Playback::Forward);
         }
-        _updatePlaybackButtons();
+        updatePlaybackButtons();
         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
     }
 
@@ -415,7 +415,7 @@ namespace mrv
         {
             i->togglePlayback();
         }
-        _updatePlaybackButtons();
+        updatePlaybackButtons();
         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
     }
 

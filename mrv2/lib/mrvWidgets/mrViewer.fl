@@ -410,7 +410,7 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
   }
 }
 
-widget_class TimelineClass {
+widget_class TimelineClass {open
   xywh {130 292 690 29} resizable
   class Fl_Double_Window visible
 } {
@@ -567,7 +567,7 @@ player->setLoop( loop );}
             callback {int idx = o->value();
 double speed = atof( o->text( idx ) );
 uiFPS->value( speed );
-uiFPS->do_callback();}
+uiFPS->do_callback();} selected
             tooltip {Some default frame rate settings.} xywh {341 1 40 24} labelsize 10 align 16
             code0 {o->disable_label();}
             class {mrv::PopupMenu}
@@ -645,6 +645,8 @@ player->setSpeed( speed );}
             code0 {o->textcolor( FL_BLACK );
 o->value(24);}
             code1 {o->step(0.001);}
+            code2 {o->minimum(1);}
+            code3 {o->maximum(60.0);}
             class Fl_Value_Input
           }
         }
@@ -859,7 +861,7 @@ if (!player) return;
 player->setVideoLayer( o->value() );
 auto model = v->app->filesModel();
 auto item = model->observeA()->get();
-model->setLayer(item, o->value());} open selected
+model->setLayer(item, o->value());} open
               tooltip {Allows you to select different image channels or layers.} xywh {3 26 122 25} box ROUNDED_BOX labelsize 12
               class {mrv::PopupMenu}
             } {}

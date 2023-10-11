@@ -338,6 +338,9 @@ namespace mrv
         void editText(
             const std::shared_ptr< draw::Shape >&, const int index) noexcept;
 
+        //! Update the playback buttons.
+        void updatePlaybackButtons() const noexcept;
+
     protected:
         virtual void _readPixel(image::Color4f& rgba) const noexcept = 0;
         math::Vector2i _getViewportCenter() const noexcept;
@@ -412,8 +415,6 @@ namespace mrv
         void _scrub(float change) noexcept;
 
         bool _hasSecondaryViewport() const noexcept;
-
-        void _updatePlaybackButtons() const noexcept;
 
         TLRENDER_PRIVATE();
     };

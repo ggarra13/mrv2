@@ -16,6 +16,8 @@ v0.8.0
   ones.
 - Added a cmd.getVersion() to get the version of mrv2 from Python.
 - Made playback play with audio when changing frame rate (slower or faster).
+- Made audio play when stepping through frames.  It is currently a hack and not
+  a proper fix yet.  Also, the stepping buttons are not updated properly.
 - Fixed a locale change when using the FPS pull-down and there were thumbnails
   present.
 - Fixed macOS menu bar font size when switching from macOS menus back to normal
@@ -32,7 +34,8 @@ v0.8.0
   Python to set the input color space of the image.
 - Added image.ocioView(), image.setOcioView() and image.ocioViewList() to
   Python to set the Display/View color space and to retrieve a list of all
-  Display/Views.  
+  Display/Views.
+- Sped up and removed some bugs in reverse playback.
 
 
 v0.7.9
