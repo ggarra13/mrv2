@@ -112,10 +112,6 @@ namespace mrv
                 [this](const otime::TimeRange value)
                 { inOutRangeChanged(value); });
 
-        p.videoLayerObserver = observer::ValueObserver<size_t>::create(
-            p.timelinePlayer->observeVideoLayer(),
-            [this](size_t value) { videoLayerChanged(value); });
-
         p.currentVideoObserver =
             observer::ValueObserver<timeline::VideoData>::create(
                 p.timelinePlayer->observeCurrentVideo(),
@@ -258,11 +254,6 @@ namespace mrv
     const otime::TimeRange& TimelinePlayer::inOutRange() const
     {
         return _p->timelinePlayer->observeInOutRange()->get();
-    }
-
-    int TimelinePlayer::videoLayer() const
-    {
-        return _p->timelinePlayer->observeVideoLayer()->get();
     }
 
     const timeline::VideoData& TimelinePlayer::currentVideo() const
@@ -444,11 +435,21 @@ namespace mrv
         _p->timelinePlayer->resetOutPoint();
     }
 
+    int TimelinePlayer::videoLayer() const
+    {
+        auto model = App::app->filesModel();
+        auto Aitem = model->observeA()->get();
+        return Aitem->videoLayer;
+    }
+
     void TimelinePlayer::setVideoLayer(int value)
     {
         pushMessage("setVideoLayer", value);
-        _p->timelinePlayer->setVideoLayer(math::clamp(
-            value, 0, static_cast<int>(std::numeric_limits<int>::max())));
+        auto model = App::app->filesModel();
+        auto Aitem = model->observeA()->get();
+        model->setLayer(Aitem, value);
+        // _p->timelinePlayer->setVideoLayer(math::clamp(
+        //     value, 0, static_cast<int>(std::numeric_limits<int>::max())));
     }
 
     void TimelinePlayer::setVolume(float value)
@@ -510,9 +511,6 @@ namespace mrv
 
     //! \name Video
     ///@{
-
-    //! This signal is emitted when the current video layer is changed.
-    void TimelinePlayer::videoLayerChanged(size_t) {}
 
     //! This signal is emitted when the cache options have changed.
     void

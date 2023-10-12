@@ -356,9 +356,7 @@ namespace mrv
                     return;
                 }
                 int value = message["value"];
-
                 {
-                    // player->setVideoLayer(value);
                     ui->uiColorChannel->value(value);
                     ui->uiColorChannel->do_callback();
                 }

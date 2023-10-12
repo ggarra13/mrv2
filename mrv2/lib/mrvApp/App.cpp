@@ -141,13 +141,12 @@ namespace mrv
         bool otioEditMode = false;
 
 #if defined(TLRENDER_USD)
-        size_t usdRenderWidth = usd::RenderOptions().renderWidth;
-        float usdComplexity = usd::RenderOptions().complexity;
-        usd::DrawMode usdDrawMode = usd::RenderOptions().drawMode;
-        bool usdEnableLighting = usd::RenderOptions().enableLighting;
-        size_t usdStageCache = usd::RenderOptions().stageCacheCount;
-        size_t usdDiskCache =
-            usd::RenderOptions().diskCacheByteCount / memory::gigabyte;
+        int usdRenderWidth = 1920;
+        float usdComplexity = 1.F;
+        usd::DrawMode usdDrawMode = usd::DrawMode::ShadedSmooth;
+        bool usdEnableLighting = true;
+        size_t usdStageCache = 10;
+        size_t usdDiskCache = 0;
 #endif // TLRENDER_USD
     };
 
@@ -330,7 +329,7 @@ namespace mrv
                         p.options.resetHotkeys, {"-resetHotkeys"},
                         _("Reset hotkeys to defaults.")),
 #if defined(TLRENDER_USD)
-                    app::CmdLineValueOption<size_t>::create(
+                    app::CmdLineValueOption<int>::create(
                         p.options.usdRenderWidth, {"-usdRenderWidth"},
                         "USD render width.",
                         string::Format("{0}").arg(p.options.usdRenderWidth)),
@@ -539,18 +538,18 @@ namespace mrv
 
 #if defined(TLRENDER_USD)
         p.settingsObject->setValue(
-            "usd/renderWidth", static_cast<int>(p.options.usdRenderWidth));
+            "USD/renderWidth", static_cast<int>(p.options.usdRenderWidth));
         p.settingsObject->setValue(
-            "usd/complexity", static_cast<float>(p.options.usdComplexity));
+            "USD/complexity", static_cast<float>(p.options.usdComplexity));
         p.settingsObject->setValue(
-            "usd/drawMode", static_cast<int>(p.options.usdDrawMode));
+            "USD/drawMode", static_cast<int>(p.options.usdDrawMode));
         p.settingsObject->setValue(
-            "usd/enableLighting",
+            "USD/enableLighting",
             static_cast<int>(p.options.usdEnableLighting));
         p.settingsObject->setValue(
-            "usd/stageCacheCount", static_cast<int>(p.options.usdStageCache));
+            "USD/stageCache", static_cast<int>(p.options.usdStageCache));
         p.settingsObject->setValue(
-            "usd/diskCacheByteCount",
+            "USD/diskCacheByte",
             static_cast<int>(p.options.usdDiskCache * memory::gigabyte));
 #endif // TLRENDER_USD
 
@@ -1154,30 +1153,30 @@ namespace mrv
                     string::Format("{0}").arg(ui->uiPrefs->uiPrefsFPS->value());
 
 #if defined(TLRENDER_USD)
-                options.ioOptions["usd/renderWidth"] =
+                options.ioOptions["USD/renderWidth"] =
                     string::Format("{0}").arg(std_any_cast<int>(
-                        p.settingsObject->value("usd/renderWidth")));
+                        p.settingsObject->value("USD/renderWidth")));
                 float complexity = std_any_cast<float>(
-                    p.settingsObject->value("usd/complexity"));
-                options.ioOptions["usd/complexity"] =
+                    p.settingsObject->value("USD/complexity"));
+                options.ioOptions["USD/complexity"] =
                     string::Format("{0}").arg(complexity);
                 {
                     std::stringstream ss;
                     usd::DrawMode usdDrawMode =
                         static_cast<usd::DrawMode>(std_any_cast<int>(
-                            p.settingsObject->value("usd/drawMode")));
+                            p.settingsObject->value("USD/drawMode")));
                     ss << usdDrawMode;
-                    options.ioOptions["usd/drawMode"] = ss.str();
+                    options.ioOptions["USD/drawMode"] = ss.str();
                 }
-                options.ioOptions["usd/enableLighting"] =
+                options.ioOptions["USD/enableLighting"] =
                     string::Format("{0}").arg(std_any_cast<int>(
-                        p.settingsObject->value("usd/enableLighting")));
-                options.ioOptions["usd/stageCacheCount"] =
+                        p.settingsObject->value("USD/enableLighting")));
+                options.ioOptions["USD/stageCacheCount"] =
                     string::Format("{0}").arg(std_any_cast<int>(
-                        p.settingsObject->value("usd/stageCacheCount")));
-                options.ioOptions["usd/diskCacheByteCount"] =
+                        p.settingsObject->value("USD/stageCacheCount")));
+                options.ioOptions["USD/diskCacheByteCount"] =
                     string::Format("{0}").arg(std_any_cast<int>(
-                        p.settingsObject->value("usd/diskCacheByteCount")));
+                        p.settingsObject->value("USD/diskCacheByteCount")));
 
                 auto ioSystem = _context->getSystem<io::System>();
                 ioSystem->setOptions(options.ioOptions);

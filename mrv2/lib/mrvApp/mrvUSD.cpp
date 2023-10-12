@@ -15,35 +15,34 @@ namespace mrv
 {
     namespace usd
     {
-        tl::usd::RenderOptions renderOptions()
+        RenderOptions renderOptions()
         {
             auto settingsObject = App::app->settingsObject();
-            tl::usd::RenderOptions o;
+            RenderOptions o;
             o.renderWidth =
-                std_any_cast<int>(settingsObject->value("usd/renderWidth"));
+                std_any_cast<int>(settingsObject->value("USD/renderWidth"));
             o.complexity =
-                std_any_cast<float>(settingsObject->value("usd/complexity"));
+                std_any_cast<float>(settingsObject->value("USD/complexity"));
             o.drawMode = static_cast<tl::usd::DrawMode>(
-                std_any_cast<int>(settingsObject->value("usd/drawMode")));
+                std_any_cast<int>(settingsObject->value("USD/drawMode")));
             o.enableLighting = static_cast<bool>(
-                std_any_cast<int>(settingsObject->value("usd/enableLighting")));
-            o.stageCacheCount =
-                std_any_cast<int>(settingsObject->value("usd/stageCacheCount"));
-            o.diskCacheByteCount = std_any_cast<int>(
-                settingsObject->value("usd/diskCacheByteCount"));
+                std_any_cast<int>(settingsObject->value("USD/enableLighting")));
+            o.stageCache =
+                std_any_cast<int>(settingsObject->value("USD/stageCache"));
+            o.diskCache =
+                std_any_cast<int>(settingsObject->value("USD/diskCache"));
             return o;
         }
 
-        bool setRenderOptions(const tl::usd::RenderOptions& o)
+        bool setRenderOptions(const RenderOptions& o)
         {
             auto settingsObject = App::app->settingsObject();
-            settingsObject->setValue("usd/renderWidth", o.renderWidth);
-            settingsObject->setValue("usd/complexity", o.complexity);
-            settingsObject->setValue("usd/drawMode", o.drawMode);
-            settingsObject->setValue("usd/enableLighting", o.enableLighting);
-            settingsObject->setValue("usd/stageCacheCount", o.stageCacheCount);
-            settingsObject->setValue(
-                "usd/diskCacheByteCount", o.diskCacheByteCount);
+            settingsObject->setValue("USD/renderWidth", o.renderWidth);
+            settingsObject->setValue("USD/complexity", o.complexity);
+            settingsObject->setValue("USD/drawMode", o.drawMode);
+            settingsObject->setValue("USD/enableLighting", o.enableLighting);
+            settingsObject->setValue("USD/stageCache", o.stageCache);
+            settingsObject->setValue("USD/diskCache", o.diskCache);
 
             if (usdPanel)
                 usdPanel->refresh();

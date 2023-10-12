@@ -1635,7 +1635,7 @@ namespace mrv
             settingsObject->addRecentFile(file);
         }
 
-        ui->uiMain->fill_menu(ui->uiMenuBar);
+        ui->uiMain->update_title_bar();
     }
 
     void save_session_as_cb(Fl_Menu_* m, ViewerUI* ui)
