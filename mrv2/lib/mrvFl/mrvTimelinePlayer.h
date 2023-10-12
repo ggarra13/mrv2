@@ -4,8 +4,6 @@
 
 #pragma once
 
-#include <tlCore/Audio.h>
-
 #include <tlTimeline/Timeline.h>
 #include <tlTimeline/Player.h>
 
@@ -16,9 +14,9 @@ namespace mrv
         class Annotation;
     }
 
-    using namespace tl;
-
     class TimelineViewport;
+
+    using namespace tl;
 
     //! FLTK based timeline player.
     class TimelinePlayer
@@ -45,10 +43,10 @@ namespace mrv
         const std::shared_ptr<timeline::Timeline>& timeline() const;
 
         //! Get the path.
-        const file::Path& path() const;
+        const tl::file::Path& path() const;
 
         //! Get the audio path.
-        const file::Path& audioPath() const;
+        const tl::file::Path& audioPath() const;
 
         //! Get the timeline player options.
         const timeline::PlayerOptions& getPlayerOptions() const;

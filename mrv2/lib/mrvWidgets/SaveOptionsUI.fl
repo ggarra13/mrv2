@@ -15,7 +15,7 @@ snap {
 decl {\#include <string>} {public global
 }
 
-decl {\#include "mrvCore/mrvUtil.h"} {selected public global
+decl {\#include "mrvCore/mrvFile.h"} {selected public global
 }
 
 class SaveOptionsUI {open
@@ -221,7 +221,7 @@ if (ext == ".exr" && exr_valid)
 {
    OpenEXROptions->activate();
 }
-else if (mrv::is_valid_movie(ext))
+else if (mrv::file::isMovie(ext))
 {  
    FFmpegOptions->activate();
 }

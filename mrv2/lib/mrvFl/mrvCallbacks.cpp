@@ -194,7 +194,7 @@ namespace mrv
         if (dir.empty())
             return;
 
-        if (!is_directory(dir))
+        if (!file::isDirectory(dir))
             return;
 
         std::vector<std::string> movies, sequences, audios;

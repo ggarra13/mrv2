@@ -399,7 +399,7 @@ namespace mrv
                 path.getBaseName() == lastPath.getBaseName() &&
                 path.getPadding() == lastPath.getPadding() &&
                 path.getExtension() == lastPath.getExtension() &&
-                !is_directory(unused))
+                !file::isDirectory(unused))
                 continue;
             lastPath = path;
             p.options.fileNames.push_back(unused);
@@ -417,7 +417,7 @@ namespace mrv
 #ifdef MRV2_PYBIND11
         if (!p.options.pythonScript.empty())
         {
-            if (!is_readable(p.options.pythonScript))
+            if (!file::isReadable(p.options.pythonScript))
             {
                 std::cerr << std::string(
                                  string::Format(

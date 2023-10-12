@@ -12,7 +12,7 @@ namespace fs = std::filesystem;
 #include "mrViewer.h"
 
 #include "mrvCore/mrvSequence.h"
-#include "mrvCore/mrvUtil.h"
+#include "mrvCore/mrvFile.h"
 
 #include "mrvFl/mrvVersioning.h"
 
@@ -165,9 +165,9 @@ namespace mrv
 
             newfile += suffix;
 
-            if (mrv::is_valid_sequence(newfile))
+            if (file::isSequence(newfile))
             {
-                if (is_readable(newfile))
+                if (file::isReadable(newfile))
                 {
                     loadfile = newfile;
                 }
@@ -181,9 +181,9 @@ namespace mrv
                     ext = ext.substr(p, ext.size());
                 }
 
-                if (is_valid_movie(ext))
+                if (file::isMovie(ext))
                 {
-                    if (is_readable(newfile))
+                    if (file::isReadable(newfile))
                     {
                         loadfile = newfile;
                         start = 1;

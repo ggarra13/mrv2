@@ -9,7 +9,7 @@ v0.8.0
 - Fixed a typo in Python's binding to sessios (oepenSession instead of
   openSession).
 - Made Save Session not save temporary EDLs in the session file.
-- Added a '__divider__' tuple entry to Plug-in menus to add a divider line
+- Added a '\_\_divider\_\_' tuple entry to Plug-in menus to add a divider line
   between menu entries.
 - Made Python's output and errors automatically be sent to the Python editor,
   instead of waiting until the commands finish, like in v0.7.9 and previous
@@ -36,6 +36,7 @@ v0.8.0
   Python to set the Display/View color space and to retrieve a list of all
   Display/Views.
 - Sped up and removed some bugs in reverse playback.
+- Fixed reading of OCIO file name in network connections.
 
 
 v0.7.9

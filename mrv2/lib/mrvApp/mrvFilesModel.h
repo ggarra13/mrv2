@@ -27,8 +27,8 @@ namespace mrv
      */
     struct FilesModelItem
     {
-        file::Path path;
-        file::Path audioPath;
+        tl::file::Path path;
+        tl::file::Path audioPath;
 
         bool init = false;
 

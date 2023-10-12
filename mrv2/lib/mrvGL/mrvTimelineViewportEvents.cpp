@@ -12,8 +12,8 @@
 
 #include "mrViewer.h"
 
+#include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvHotkey.h"
-#include "mrvCore/mrvSequence.h"
 #include "mrvCore/mrvColorSpaces.h"
 
 #include "mrvFl/mrvCallbacks.h"
@@ -1361,7 +1361,7 @@ namespace mrv
             file = decode;
             free(decode);
 #endif
-            if (is_directory(file))
+            if (file::isDirectory(file))
             {
                 std::vector<std::string> movies, sequences, audios;
                 parse_directory(file, movies, sequences, audios);
