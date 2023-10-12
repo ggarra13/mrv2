@@ -2,6 +2,8 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <tlCore/StringFormat.h>
+
 #include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvHotkey.h"
 #include "mrvCore/mrvMath.h"
@@ -1134,9 +1136,48 @@ namespace mrv
 #ifdef MRV2_PYBIND11
         for (const auto& entry : pythonMenus)
         {
-            menu->add(
+            int mode = 0;
+            const py::handle& obj = pythonMenus.at(entry);
+            if (!py::isinstance<py::function>(obj) &&
+                !py::isinstance<py::tuple>(obj))
+            {
+                std::string msg =
+                    string::Format(_("In '{0}' expected a function as a value "
+                                     "or a tuple containing a Python function "
+                                     "and a string with menu options in it."))
+                        .arg(entry);
+                LOG_ERROR(msg);
+                continue;
+            }
+            if (py::isinstance<py::tuple>(obj))
+            {
+                // obj is a Python tuple
+                py::tuple tup = py::reinterpret_borrow<py::tuple>(obj);
+                if (tup.size() == 2 && py::isinstance<py::function>(tup[0]) &&
+                    py::isinstance<py::str>(tup[1]))
+                {
+                    py::str str(tup[1]);
+                    const std::string modes = str.cast<std::string>();
+                    if (modes.find("__divider__") != std::string::npos)
+                    {
+                        mode |= FL_MENU_DIVIDER;
+                    }
+                }
+                else
+                {
+                    std::string msg =
+                        string::Format(
+                            _("In '{0}' expected a function a tuple "
+                              "containing a Python function and a string "
+                              "with menu options in it."))
+                            .arg(entry);
+                    LOG_ERROR(msg);
+                    continue;
+                }
+            }
+            idx = menu->add(
                 entry.c_str(), 0, (Fl_Callback*)run_python_method_cb,
-                (void*)&pythonMenus.at(entry));
+                (void*)&pythonMenus.at(entry), mode);
         }
 #endif
 

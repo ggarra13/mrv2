@@ -44,7 +44,11 @@ jobs:
       
     - name: Install python dependencies
       run: sudo apt-get install -y libssl-dev libffi-dev
-      
+
+    - name: Synchronize clock
+      run: |
+        sudo apt-get install -y ntp
+  
     - name: Setup environment
       run: mkdir -p ssh
 
@@ -86,6 +90,14 @@ jobs:
         update: true
         path-type: inherit
 
+    - name: Synchronize clock
+      shell: cmd
+      run: |
+        w32tm /config /manualpeerlist:time.windows.com /syncfromflags:manual /reliable:YES /update
+        net stop w32time
+        net start w32time
+        w32tm /resync /rediscover
+        
     - name: Setup environment
       run: mkdir -p ssh
 

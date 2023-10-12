@@ -12,6 +12,7 @@ set(SOURCES
     Cmds.cpp
     Enums.cpp
     IO.cpp
+    FLTKRedirectOutput.cpp
     FileItem.cpp
     FilesModel.cpp
     FilePath.cpp

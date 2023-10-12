@@ -4,6 +4,7 @@
 
 #include <tlGL/Util.h>
 
+#include "mrvCore/mrvLocale.h"
 #include "mrvCore/mrvMemory.h"
 #include "mrvCore/mrvUtil.h"
 
@@ -235,9 +236,9 @@ namespace mrv
         const auto& renderSize = getRenderSize();
 
         {
+            StoreLocale;
+
             gl::OffscreenBufferBinding binding(gl.buffer);
-            char* saved_locale = strdup(setlocale(LC_NUMERIC, NULL));
-            setlocale(LC_NUMERIC, "C");
             gl.render->begin(renderSize, p.colorConfigOptions, p.lutOptions);
             if (p.missingFrame &&
                 p.missingFrameType != MissingFrameType::kBlackFrame)
@@ -256,15 +257,12 @@ namespace mrv
             _drawOverlays(renderSize);
 
             gl.render->end();
-            setlocale(LC_NUMERIC, saved_locale);
-            free(saved_locale);
         }
 
         {
+            StoreLocale;
             gl::OffscreenBufferBinding binding(gl.stereoBuffer);
 
-            char* saved_locale = strdup(setlocale(LC_NUMERIC, NULL));
-            setlocale(LC_NUMERIC, "C");
             gl.render->begin(renderSize, p.colorConfigOptions, p.lutOptions);
 
             if (p.stereo3DOptions.eyeSeparation != 0.F)
@@ -283,8 +281,6 @@ namespace mrv
             _drawOverlays(renderSize);
 
             gl.render->end();
-            setlocale(LC_NUMERIC, saved_locale);
-            free(saved_locale);
         }
     }
 

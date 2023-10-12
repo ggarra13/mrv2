@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Módulo cmd &mdash; documentación de mrv2 - v0.7.9</title>
+  <title>Módulo cmd &mdash; documentación de mrv2 - v0.8.0</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
@@ -14,7 +14,7 @@
   
         <script src="../_static/jquery.js?v=5d32c60e"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../_static/documentation_options.js?v=39b03dc5"></script>
+        <script src="../_static/documentation_options.js?v=08482557"></script>
         <script src="../_static/doctools.js?v=888ff710"></script>
         <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="../_static/translations.js?v=efdbd0b9"></script>
@@ -55,26 +55,32 @@
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.closeAll"><code class="docutils literal notranslate"><span class="pre">closeAll()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.compare"><code class="docutils literal notranslate"><span class="pre">compare()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.compareOptions"><code class="docutils literal notranslate"><span class="pre">compareOptions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.currentSession"><code class="docutils literal notranslate"><span class="pre">currentSession()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.displayOptions"><code class="docutils literal notranslate"><span class="pre">displayOptions()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.environmentMapOptions"><code class="docutils literal notranslate"><span class="pre">environmentMapOptions()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.getLayers"><code class="docutils literal notranslate"><span class="pre">getLayers()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.getVersion"><code class="docutils literal notranslate"><span class="pre">getVersion()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.imageOptions"><code class="docutils literal notranslate"><span class="pre">imageOptions()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.isMuted"><code class="docutils literal notranslate"><span class="pre">isMuted()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.lutOptions"><code class="docutils literal notranslate"><span class="pre">lutOptions()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.oepnSession"><code class="docutils literal notranslate"><span class="pre">oepnSession()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.open"><code class="docutils literal notranslate"><span class="pre">open()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.openSession"><code class="docutils literal notranslate"><span class="pre">openSession()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.prefsPath"><code class="docutils literal notranslate"><span class="pre">prefsPath()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.rootPath"><code class="docutils literal notranslate"><span class="pre">rootPath()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.save"><code class="docutils literal notranslate"><span class="pre">save()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.saveOTIO"><code class="docutils literal notranslate"><span class="pre">saveOTIO()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.savePDF"><code class="docutils literal notranslate"><span class="pre">savePDF()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.saveSession"><code class="docutils literal notranslate"><span class="pre">saveSession()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.saveSessionAs"><code class="docutils literal notranslate"><span class="pre">saveSessionAs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.sessionMetadata"><code class="docutils literal notranslate"><span class="pre">sessionMetadata()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.setCompareOptions"><code class="docutils literal notranslate"><span class="pre">setCompareOptions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.setCurrentSession"><code class="docutils literal notranslate"><span class="pre">setCurrentSession()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.setDisplayOptions"><code class="docutils literal notranslate"><span class="pre">setDisplayOptions()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.setEnvironmentMapOptions"><code class="docutils literal notranslate"><span class="pre">setEnvironmentMapOptions()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.setImageOptions"><code class="docutils literal notranslate"><span class="pre">setImageOptions()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.setLUTOptions"><code class="docutils literal notranslate"><span class="pre">setLUTOptions()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.setMute"><code class="docutils literal notranslate"><span class="pre">setMute()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.setSessionMetadata"><code class="docutils literal notranslate"><span class="pre">setSessionMetadata()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.setStereo3DOptions"><code class="docutils literal notranslate"><span class="pre">setStereo3DOptions()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.setVolume"><code class="docutils literal notranslate"><span class="pre">setVolume()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.stereo3DOptions"><code class="docutils literal notranslate"><span class="pre">stereo3DOptions()</span></code></a></li>
@@ -151,6 +157,12 @@
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="mrv2.cmd.currentSession">
+<span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">currentSession</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#mrv2.cmd.currentSession" title="Link to this definition"></a></dt>
+<dd><p>Retorna la Sesión actual.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.displayOptions">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">displayOptions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="image.html#mrv2.image.DisplayOptions" title="mrv2.image.DisplayOptions"><span class="pre">mrv2.image.DisplayOptions</span></a></span></span><a class="headerlink" href="#mrv2.cmd.displayOptions" title="Link to this definition"></a></dt>
 <dd><p>Retorna las opciones de display.</p>
@@ -166,6 +178,12 @@
 <dt class="sig sig-object py" id="mrv2.cmd.getLayers">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">getLayers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#mrv2.cmd.getLayers" title="Link to this definition"></a></dt>
 <dd><p>Obtener las capas de la línea de tiempo (GUI).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mrv2.cmd.getVersion">
+<span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">getVersion</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#mrv2.cmd.getVersion" title="Link to this definition"></a></dt>
+<dd><p>Retorna la versión de mrv2.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -187,15 +205,15 @@
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="mrv2.cmd.oepnSession">
-<span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">oepnSession</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#mrv2.cmd.oepnSession" title="Link to this definition"></a></dt>
-<dd><p>Abrir una Sesión</p>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.open">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">open</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">audioFilename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.cmd.open" title="Link to this definition"></a></dt>
 <dd><p>Abrir un archivo con audio opcional.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mrv2.cmd.openSession">
+<span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">openSession</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#mrv2.cmd.openSession" title="Link to this definition"></a></dt>
+<dd><p>Abrir una Sesión</p>
 </dd></dl>
 
 <dl class="py function">
@@ -217,6 +235,12 @@
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="mrv2.cmd.saveOTIO">
+<span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">saveOTIO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.cmd.saveOTIO" title="Link to this definition"></a></dt>
+<dd><p>Crear una línea de tiempo desde el clip seleccionado.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.savePDF">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">savePDF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#mrv2.cmd.savePDF" title="Link to this definition"></a></dt>
 <dd><p>Grabar un dcoumento PDF con todas las anotaciones y notas.</p>
@@ -235,9 +259,21 @@
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="mrv2.cmd.sessionMetadata">
+<span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">sessionMetadata</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#mrv2.cmd.sessionMetadata" title="Link to this definition"></a></dt>
+<dd><p>Retorna la metadata de la sesión actual.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.setCompareOptions">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">setCompareOptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="media.html#mrv2.media.CompareOptions" title="mrv2.media.CompareOptions"><span class="pre">mrv2.media.CompareOptions</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.cmd.setCompareOptions" title="Link to this definition"></a></dt>
 <dd><p>Setear las opciones de comparación.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mrv2.cmd.setCurrentSession">
+<span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">setCurrentSession</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.cmd.setCurrentSession" title="Link to this definition"></a></dt>
+<dd><p>Setea el archivo de la sesión actual.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -268,6 +304,12 @@
 <dt class="sig sig-object py" id="mrv2.cmd.setMute">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">setMute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mute</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.cmd.setMute" title="Link to this definition"></a></dt>
 <dd><p>Setea el mutismo del audio.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mrv2.cmd.setSessionMetadata">
+<span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">setSessionMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.cmd.setSessionMetadata" title="Link to this definition"></a></dt>
+<dd><p>Setea la metadata de la sesión actual.</p>
 </dd></dl>
 
 <dl class="py function">

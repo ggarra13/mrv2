@@ -11,6 +11,7 @@
 #    include <pybind11/embed.h>
 namespace py = pybind11;
 #    include "mrvPy/Cmds.h"
+#    include "mrvPy/PyStdErrOutRedirect.h"
 #endif
 
 #include <tlIO/System.h>
@@ -162,6 +163,9 @@ namespace mrv
         ImageListener* imageListener = nullptr;
 #endif
 
+#ifdef MRV2_PYBIND11
+        std::unique_ptr<PyStdErrOutStreamRedirect> pythonStdErrOutRedirect;
+#endif
         std::shared_ptr<PlaylistsModel> playlistsModel;
         std::shared_ptr<FilesModel> filesModel;
         std::shared_ptr<
@@ -394,7 +398,7 @@ namespace mrv
                 path.getBaseName() == lastPath.getBaseName() &&
                 path.getPadding() == lastPath.getPadding() &&
                 path.getExtension() == lastPath.getExtension() &&
-                !is_directory(unused))
+                !file::isDirectory(unused))
                 continue;
             lastPath = path;
             p.options.fileNames.push_back(unused);
@@ -412,7 +416,7 @@ namespace mrv
 #ifdef MRV2_PYBIND11
         if (!p.options.pythonScript.empty())
         {
-            if (!is_readable(p.options.pythonScript))
+            if (!file::isReadable(p.options.pythonScript))
             {
                 std::cerr << std::string(
                                  string::Format(
@@ -531,6 +535,9 @@ namespace mrv
         // Import the mrv2 python module so we read all python
         // plug-ins.
         py::module::import("mrv2");
+
+        // Redirect stdout/stderr to my own class
+        p.pythonStdErrOutRedirect.reset(new PyStdErrOutStreamRedirect);
 
         // Discover python plugins
         mrv2_discover_python_plugins();
@@ -948,7 +955,7 @@ namespace mrv
             fileName.substr(fileName.size() - 6, fileName.size()) == ".mrv2s")
         {
             p.session = true;
-            load_session(fileName);
+            session::load(fileName);
             return;
         }
 

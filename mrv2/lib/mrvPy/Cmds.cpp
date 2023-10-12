@@ -32,6 +32,11 @@ namespace mrv2
     {
         using namespace mrv;
 
+        std::string getVersion()
+        {
+            return mrv::version();
+        }
+
         /**
          *  \brief Open a file with optiona audio.
          *
@@ -334,6 +339,16 @@ namespace mrv2
             save_movie(file, App::ui, opts);
         }
 
+        /**
+         * \brief Save an .otio file with relative paths if possible.
+         *
+         * @param file The .otio file, like D:/movies/EDL.otio
+         */
+        void saveOTIO(const std::string& file)
+        {
+            save_timeline_to_disk(file);
+        }
+
 #ifdef MRV2_PDF
         /**
          * \brief Save a PDF document.
@@ -349,13 +364,21 @@ namespace mrv2
 #endif
 
         /**
+         * \brief Returns the current session file.
+         */
+        std::string currentSession()
+        {
+            return session::current();
+        }
+
+        /**
          * \brief Open a session file.
          *
          * @param file The path to the session file, like: test.mrv2s
          */
         bool openSession(std::string file)
         {
-            return load_session(file);
+            return session::load(file);
         }
 
         /**
@@ -365,14 +388,14 @@ namespace mrv2
          */
         bool saveSession()
         {
-            const std::string& file = current_session();
+            const std::string& file = session::current();
             if (file.empty())
             {
                 throw std::runtime_error(
                     _("No session name established, cannot save."));
                 return false;
             }
-            return save_session(file);
+            return session::save(file);
         }
 
         /**
@@ -386,7 +409,7 @@ namespace mrv2
             {
                 file += ".mrv2s";
             }
-            return save_session(file);
+            return session::save(file);
         }
 
     } // namespace cmd
@@ -474,9 +497,13 @@ Used to run main commands and get and set the display, image, compare, LUT optio
     cmds.def(
         "setStereo3DOptions", &mrv2::cmd::setStereo3DOptions,
         _("Set the stereo 3D options."), py::arg("options"));
+
     cmds.def(
         "getLayers", &mrv2::cmd::getLayers,
         _("Get the layers of the timeline (GUI)."));
+
+    cmds.def(
+        "getVersion", &mrv2::cmd::getVersion, _("Get the version of mrv2."));
 
     cmds.def(
         "update", &mrv2::cmd::update,
@@ -501,6 +528,11 @@ Used to run main commands and get and set the display, image, compare, LUT optio
         _("Save a movie or sequence from the front layer."), py::arg("file"),
         py::arg("options") = mrv::SaveOptions());
 
+    cmds.def(
+        "saveOTIO", &mrv2::cmd::saveOTIO,
+        _("Save an .otio file from the current selected image."),
+        py::arg("file"));
+
 #ifdef MRV2_PDF
     cmds.def(
         "savePDF", &mrv2::cmd::savePDF,
@@ -508,8 +540,27 @@ Used to run main commands and get and set the display, image, compare, LUT optio
         py::arg("file"));
 #endif
 
+    //
+    // Session commands
+    //
     cmds.def(
-        "oepnSession", &mrv2::cmd::openSession, _("Open a session file."),
+        "sessionMetadata", &mrv::session::metadata,
+        _("Returns the current session metadata."));
+
+    cmds.def(
+        "setSessionMetadata", &mrv::session::setMetadata,
+        _("Sets the current session metadata."));
+
+    cmds.def(
+        "currentSession", &mrv::session::current,
+        _("Returns current session file."));
+
+    cmds.def(
+        "setCurrentSession", &mrv::session::setCurrent,
+        _("Sets the current session file."), py::arg("file"));
+
+    cmds.def(
+        "openSession", &mrv2::cmd::openSession, _("Open a session file."),
         py::arg("file"));
 
     cmds.def("saveSession", &mrv2::cmd::saveSession, _("Save a session file."));

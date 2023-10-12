@@ -16,8 +16,10 @@ namespace fs = std::filesystem;
 #include <FL/fl_utf8.h>         // for fl_getenv
 #include <FL/Fl_Sys_Menu_Bar.H> // for macOS menus
 
+#include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvHotkey.h"
+#include "mrvCore/mrvLocale.h"
 #include "mrvCore/mrvMedia.h"
 #include "mrvCore/mrvUtil.h"
 
@@ -47,7 +49,8 @@ namespace fs = std::filesystem;
 namespace
 {
     const char* kModule = "prefs";
-}
+    const int kPreferencesVersion = 7;
+} // namespace
 
 extern float kCrops[];
 
@@ -121,8 +124,7 @@ namespace mrv
         float tmpF;
         char tmpS[2048];
 
-        char* saved_locale = strdup(setlocale(LC_NUMERIC, NULL));
-        setlocale(LC_NUMERIC, "C");
+        StoreLocale;
 
         std::string msg =
             tl::string::Format(_("Reading preferences from \"{0}mrv2.prefs\"."))
@@ -133,7 +135,7 @@ namespace mrv
         Fl_Preferences base(
             prefspath().c_str(), "filmaura", "mrv2", Fl_Preferences::C_LOCALE);
 
-        base.get("version", version, 7);
+        base.get("version", version, kPreferencesVersion);
 
         SettingsObject* settingsObject = ViewerUI::app->settingsObject();
 
@@ -191,7 +193,7 @@ namespace mrv
             if (recent_files.get(buf, tmpS, "", 2048))
             {
                 // Only add existing files to the list.
-                if (is_readable(tmpS))
+                if (file::isReadable(tmpS))
                     settingsObject->addRecentFile(tmpS);
             }
             else
@@ -304,8 +306,18 @@ namespace mrv
         gui.get("timeline_edit_markers", tmp, 0);
         uiPrefs->uiPrefsShowMarkers->value(tmp);
 
-        gui.get("timeline_editable", tmp, 0);
-        uiPrefs->uiPrefsTimelineEditable->value(tmp);
+        if (version > 7)
+        {
+            gui.get("timeline_editable", tmp, 1);
+            uiPrefs->uiPrefsTimelineEditable->value(tmp);
+        }
+        else
+        {
+            gui.get("timeline_editable", tmp, 0);
+            if (version < kPreferencesVersion)
+                tmp = 1;
+            uiPrefs->uiPrefsTimelineEditable->value(tmp);
+        }
 
         gui.get("timeline_edit_associated_clips", tmp, 1);
         uiPrefs->uiPrefsEditAssociatedClips->value(tmp);
@@ -504,7 +516,7 @@ namespace mrv
 
             if (strlen(tmpS) != 0)
             {
-                if (is_readable(tmpS))
+                if (file::isReadable(tmpS))
                 {
                     mrvLOG_INFO(
                         "ocio", _("Setting OCIO config from preferences.")
@@ -762,7 +774,7 @@ namespace mrv
         std::string fullhotkeysPath = prefspath() + hotkeys_file + ".prefs";
         if (resetHotkeys)
         {
-            if (is_readable(fullhotkeysPath))
+            if (file::isReadable(fullhotkeysPath))
             {
                 fs::remove(fullhotkeysPath);
             }
@@ -848,9 +860,6 @@ namespace mrv
             width = 270;
 
         ui->uiViewGroup->fixed(ui->uiDockGroup, width);
-
-        setlocale(LC_NUMERIC, saved_locale);
-        free(saved_locale);
     }
 
     void Preferences::open_windows()
@@ -897,8 +906,7 @@ namespace mrv
         auto uiPrefs = ViewerUI::uiPrefs;
         auto settingsObject = app->settingsObject();
 
-        char* saved_locale = strdup(setlocale(LC_NUMERIC, NULL));
-        setlocale(LC_NUMERIC, "C");
+        StoreLocale;
 
         int visible = 0;
         if (uiPrefs->uiMain->visible())
@@ -918,7 +926,7 @@ namespace mrv
             prefspath().c_str(), "filmaura", "mrv2",
             (Fl_Preferences::Root)(
                 (int)Fl_Preferences::C_LOCALE | (int)Fl_Preferences::CLEAR));
-        base.set("version", 7);
+        base.set("version", kPreferencesVersion);
 
         Fl_Preferences fltk_settings(base, "settings");
         fltk_settings.clear();
@@ -1303,9 +1311,6 @@ namespace mrv
 
         base.flush();
 
-        setlocale(LC_NUMERIC, saved_locale);
-        free(saved_locale);
-
         msg = tl::string::Format(_("Preferences have been saved to: "
                                    "\"{0}mrv2.prefs\"."))
                   .arg(prefspath());
@@ -1347,6 +1352,7 @@ namespace mrv
                 smenubar->clear();
                 delete ui->uiMenuBar;
                 ui->uiMenuBar = new MenuBar(0, 0, ui->uiStatus->x(), 25);
+                ui->uiMenuBar->textsize(12);
                 ui->uiMenuGroup->add(ui->uiMenuBar);
                 ui->uiMenuGroup->redraw();
             }

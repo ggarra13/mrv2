@@ -4,7 +4,7 @@
 
 #include <tlCore/StringFormat.h>
 
-#include "mrvCore/mrvUtil.h"
+#include "mrvCore/mrvFile.h"
 
 #include "mrvFl/mrvIO.h"
 #include "mrvFl/mrvPathMapping.h"
@@ -24,7 +24,7 @@ namespace
 {
     bool fileIsReadable(const std::string& filePath)
     {
-        if (!mrv::is_readable(filePath))
+        if (!mrv::file::isReadable(filePath))
         {
             std::string msg =
                 tl::string::Format(_("Remote file {0} does not "
@@ -91,8 +91,8 @@ namespace mrv
                 auto audioPath = remoteFiles[i].audioPath;
                 auto filePath = path.get();
                 auto audioFilePath = audioPath.get();
-                if (is_readable(filePath) &&
-                    (audioFilePath.empty() || is_readable(audioFilePath)))
+                if (file::isReadable(filePath) &&
+                    (audioFilePath.empty() || file::isReadable(audioFilePath)))
                 {
                     syncFile(filePath, audioFilePath, remoteFiles[i]);
                 }

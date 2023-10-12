@@ -10,6 +10,7 @@
 
 #include <FL/Fl_Double_Window.H>
 
+#include <tlCore/Path.h>
 #include <tlCore/StringFormat.h>
 
 #include "mrvCore/mrvString.h"
@@ -117,7 +118,7 @@ namespace mrv
 
     bool replace_path(std::string& file)
     {
-        if (is_readable(file))
+        if (file::isReadable(file))
             return true;
 
         const std::map< std::string, std::string >& map = path_mappings();
@@ -135,7 +136,7 @@ namespace mrv
                 std::string outFile = file;
                 outFile.replace(0, remote.size(), local);
 
-                if (is_readable(outFile))
+                if (file::isReadable(outFile))
                 {
                     file = outFile;
                     msg =

@@ -8,13 +8,25 @@
 
 namespace mrv
 {
-    std::string current_session();
+    namespace session
+    {
+        //! Returns user provided metadata in the last saved session.
+        const std::string& metadata();
 
-    void set_current_session(const std::string& file);
+        //! Stores some user provided metadata.
+        void setMetadata(const std::string& metadata);
 
-    //! Returns true on success, false on failure
-    bool save_session(const std::string& file);
+        //! Returns the current session file name.
+        std::string current();
 
-    //! Returns true on success, false on failure
-    bool load_session(const std::string& file);
+        //! Sets the current session to file.
+        void setCurrent(const std::string& file);
+
+        //! Returns true on success, false on failure
+        bool save(const std::string& file);
+
+        //! Returns true on success, false on failure
+        bool load(const std::string& file);
+    } // namespace session
+
 } // namespace mrv

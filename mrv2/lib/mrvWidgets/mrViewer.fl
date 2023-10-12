@@ -3,15 +3,10 @@ version 1.0400
 i18n_type 1
 i18n_include {<libintl.h>}
 i18n_conditional {}
-i18n_function gettext
-i18n_static_function gettext_noop
+i18n_gnu_function gettext
+i18n_gnu_static_function gettext_noop
 header_name {.h}
 code_name {.cxx}
-snap {
-  ver 1
-  current_suite FLTK
-  current_preset 0
-}
 decl {\#include "FL/Fl_Flex.H"} {public global
 }
 
@@ -425,7 +420,7 @@ widget_class TimelineClass {open
     Fl_Group {} {open
       xywh {4 0 686 29}
     } {
-      Fl_Group {} {open
+      Fl_Group {} {
         xywh {4 3 94 26}
       } {
         Fl_Menu_Button uiTimecodeSwitch {
@@ -473,7 +468,7 @@ ui->uiView->take_focus();}
       Fl_Group {} {open
         xywh {99 1 411 28}
       } {
-        Fl_Group {} {open
+        Fl_Group {} {
           xywh {99 3 240 26}
         } {
           Fl_Button {} {
@@ -586,12 +581,20 @@ uiFPS->do_callback();} open
               xywh {5 3 100 20}
             }
             MenuItem {} {
-              label {59.94}
+              label {59.952} selected
               xywh {5 3 100 20}
             }
             MenuItem {} {
               label 50
               xywh {5 3 100 20}
+            }
+            MenuItem {} {
+              label 48
+              xywh {15 13 100 20}
+            }
+            MenuItem {} {
+              label {47.952}
+              xywh {25 23 100 20}
             }
             MenuItem {} {
               label 30
@@ -639,18 +642,19 @@ uiFPS->do_callback();} open
             callback {double speed = o->value();
 auto player = ui->uiView->getTimelinePlayer();
 
-	if ( speed <= 0.0 )
-	{
-		speed = player->defaultSpeed();
-		o->value(speed);
-		o->redraw();
-	}
-	player->setSpeed( speed );
-ui->uiView->take_focus();}
+if ( speed <= 0.0 )
+{
+  speed = player->defaultSpeed();
+  o->value(speed);
+  o->redraw();
+}
+player->setSpeed( speed );}
             tooltip {Allows you to adjust frame rate playback.} xywh {386 3 42 24} color -1733777408 selection_color 0
             code0 {o->textcolor( FL_BLACK );
 o->value(24);}
             code1 {o->step(0.001);}
+            code2 {o->minimum(1);}
+            code3 {o->maximum(60.0);}
             class Fl_Value_Input
           }
         }
@@ -794,7 +798,7 @@ class ViewerUI {open
   }
   decl {mrv::SecondaryWindow* uiSecondary;} {public local
   }
-  Function {make_window()} {open private
+  Function {make_window()} {private
   } {
     code {uiPrefs = new PreferencesUI( this );
 uiHotkey = new HotkeyUI( this );
@@ -815,7 +819,7 @@ uiSecondary = nullptr;} {}
         code3 {o->fixed( uiPixelBar, uiPixelBar->h() ); o->fixed( uiStatusGroup, uiStatusGroup->h() );}
         class Fl_Flex
       } {
-        Fl_Group uiMenuGroup {open
+        Fl_Group uiMenuGroup {
           xywh {0 0 690 25} box FLAT_BOX
         } {
           Fl_Group {} {open
@@ -860,10 +864,12 @@ mrv::set_edit_mode_cb(mode, v);}
               label {(no image)}
               user_data this user_data_type {ViewerUI*}
               callback {const auto& player = uiView->getTimelinePlayer();
-	      		player->setVideoLayer( o->value() );
-			auto model = v->app->filesModel();
-			auto item = model->observeA()->get();
-			model->setLayer(item, o->value());} open
+if (!player) return;
+
+player->setVideoLayer( o->value() );
+auto model = v->app->filesModel();
+auto item = model->observeA()->get();
+model->setLayer(item, o->value());} open
               tooltip {Allows you to select different image channels or layers.} xywh {3 26 122 25} box ROUNDED_BOX labelsize 12
               class {mrv::PopupMenu}
             } {}
@@ -993,7 +999,7 @@ Value is:  pow( 2, 1/x );} xywh {632 28 54 22} type {Horz Knob} maximum 4 step 0
             code1 {uiMain->workspace = uiViewGroup;}
             class Fl_Flex
           } {
-            Fl_Group uiToolsGroup {open
+            Fl_Group uiToolsGroup {
               xywh {0 53 42 433} box FLAT_BOX
             } {
               Fl_Button uiScrub {
@@ -1185,7 +1191,7 @@ settingsObject->setValue( mrv::kPenColorA, a);}
           xywh {0 577 690 25} color 0
         } {
           Fl_Group uiStatusBar {
-            label {Everything OK.  } open selected
+            label {Everything OK.  } open
             xywh {0 577 690 25} box FLAT_BOX labelsize 10 align 84
             code0 {o->save_colors();}
             class {mrv::StatusBar}

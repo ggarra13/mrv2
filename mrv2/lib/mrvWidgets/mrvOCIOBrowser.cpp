@@ -7,6 +7,7 @@
 #include <algorithm>
 
 #include "mrvCore/mrvOS.h"
+#include "mrvCore/mrvLocale.h"
 #include "mrvCore/mrvMedia.h"
 
 #include "mrvFl/mrvIO.h"
@@ -125,7 +126,7 @@ namespace mrv
     {
         this->clear();
 
-        const char* oldloc = setlocale(LC_NUMERIC, "C");
+        StoreLocale;
 
         switch (_type)
         {
@@ -141,8 +142,6 @@ namespace mrv
         default:
             LOG_ERROR(_("Unknown type for mrvOCIOBrowser"));
         }
-
-        setlocale(LC_NUMERIC, oldloc);
     }
 
 } // namespace mrv

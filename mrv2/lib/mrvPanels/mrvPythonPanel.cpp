@@ -418,33 +418,20 @@ from mrv2 import playlist, timeline, usd, settings
         outputDisplay->warning(code.c_str());
         if (!eval.empty() && var != eval)
         {
-            eval += '\n';
             outputDisplay->warning(eval.c_str());
         }
         try
         {
-            PyStdErrOutStreamRedirect pyRedirect;
             py::exec(code);
             if (!eval.empty())
             {
                 py::object result = py::eval(eval);
                 py::print(result);
             }
-            const std::string& out = pyRedirect.stdoutString();
-            if (!out.empty())
-            {
-                outputDisplay->info(out.c_str());
-            }
-            const std::string& err = pyRedirect.stderrString();
-            if (!err.empty())
-            {
-                outputDisplay->error(out.c_str());
-            }
         }
         catch (const std::exception& e)
         {
             outputDisplay->error(e.what());
-            outputDisplay->error("\n");
         }
     }
 

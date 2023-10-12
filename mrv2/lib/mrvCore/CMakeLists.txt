@@ -9,12 +9,14 @@ set(HEADERS
   mrvEnv.h
   mrvEnvironmentMapOptions.h
   mrvEnvironmentMapOptionsInline.h
+  mrvFile.h
   mrvFilesPanelOptions.h
   mrvFilesPanelOptionsInline.h
   mrvHelpers.h
   mrvHome.h
   mrvHotkey.h
   mrvI8N.h
+  mrvLocale.h
   mrvMedia.h
   mrvMemory.h
   mrvMesh.h
@@ -35,9 +37,11 @@ set(SOURCES
   mrvColorSpaces.cpp
   mrvCPU.cpp
   mrvEnvironmentMapOptions.cpp
+  mrvFile.cpp
   mrvFilesPanelOptions.cpp
   mrvHome.cpp
   mrvHotkey.cpp
+  mrvLocale.cpp
   mrvMedia.cpp
   mrvMemory.cpp
   mrvMesh.cpp

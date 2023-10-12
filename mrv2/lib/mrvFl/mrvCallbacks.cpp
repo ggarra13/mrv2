@@ -29,6 +29,7 @@
 #include "mrvGL/mrvGLShape.h"
 #include "mrvGL/mrvGLTextEdit.h"
 
+#include "mrvUI/mrvAsk.h"
 #include "mrvUI/mrvMenus.h"
 
 #include "mrvFlmm/Flmm_ColorA_Chooser.h"
@@ -193,7 +194,7 @@ namespace mrv
         if (dir.empty())
             return;
 
-        if (!is_directory(dir))
+        if (!file::isDirectory(dir))
             return;
 
         std::vector<std::string> movies, sequences, audios;
@@ -308,6 +309,12 @@ namespace mrv
         if (extension.empty())
         {
             LOG_ERROR(_("File extension cannot be empty."));
+            return;
+        }
+
+        if (extension == ".otio")
+        {
+            save_timeline_to_disk(file);
             return;
         }
 
@@ -1629,7 +1636,32 @@ namespace mrv
 
     static void save_session_impl(const std::string& file, ViewerUI* ui)
     {
-        if (save_session(file))
+        auto model = ui->app->filesModel();
+        auto files = model->observeFiles()->get();
+
+        bool hasEDLs = false;
+        for (const auto& file : files)
+        {
+            const file::Path path = file->path;
+            if (isTemporaryEDL(path))
+            {
+                hasEDLs = true;
+                break;
+            }
+        }
+
+        if (hasEDLs)
+        {
+            int ok = fl_choice(
+                _("You have EDLs in the current session.  These "
+                  "will not be saved in the session file.  "
+                  "Do you want to continue?"),
+                _("No"), _("Yes"), NULL, NULL);
+            if (!ok)
+                return;
+        }
+
+        if (session::save(file))
         {
             auto settingsObject = ui->app->settingsObject();
             settingsObject->addRecentFile(file);
@@ -1646,12 +1678,12 @@ namespace mrv
 
         save_session_impl(file, ui);
 
-        set_current_session(file);
+        session::setCurrent(file);
     }
 
     void save_session_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        const std::string file = current_session();
+        const std::string file = session::current();
         if (file.empty())
             return save_session_as_cb(m, ui);
 
@@ -1664,7 +1696,7 @@ namespace mrv
         if (file.empty())
             return;
 
-        if (load_session(file))
+        if (session::load(file))
         {
             auto settingsObject = ui->app->settingsObject();
             settingsObject->addRecentFile(file);

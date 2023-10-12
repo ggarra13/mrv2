@@ -6,7 +6,7 @@
 
 #include <FL/Fl_Multiline_Input.H>
 
-#include "mrvCore/mrvUtil.h"
+#include "mrvCore/mrvFile.h"
 
 #include "mrvFl/mrvCallbacks.h"
 #include "mrvFl/mrvIO.h"
@@ -504,10 +504,10 @@ namespace mrv
 
                 // If we cannot read the config file, keep the local one
                 replace_path(o.fileName);
-                if (o.fileName.empty() || !!is_readable(o.fileName))
+                if (o.fileName.empty() || !file::isReadable(o.fileName))
                 {
                     o.fileName = local.fileName;
-                    if (o.fileName.empty() || !is_readable(o.fileName))
+                    if (o.fileName.empty() || !file::isReadable(o.fileName))
                     {
                         o.fileName = prefs->uiPrefsOCIOConfig->value();
                     }
