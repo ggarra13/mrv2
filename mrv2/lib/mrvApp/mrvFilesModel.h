@@ -41,6 +41,7 @@ namespace mrv
         otime::RationalTime currentTime = time::invalidTime;
         otime::TimeRange inOutRange = time::invalidTimeRange;
 
+        std::vector<std::string> videoLayers;
         size_t videoLayer = 0;
 
         float volume = 0.F;

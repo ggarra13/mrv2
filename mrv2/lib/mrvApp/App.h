@@ -148,9 +148,12 @@ namespace mrv
         static ViewerUI* ui;
         static App* app;
 
-    private: // Q_SLOTS:
+    private:
         void
         _activeCallback(const std::vector<std::shared_ptr<FilesModelItem> >&);
+        void
+        _filesCallback(const std::vector<std::shared_ptr<FilesModelItem> >&);
+
         void _settingsCallback();
 
     private:

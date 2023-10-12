@@ -279,7 +279,6 @@ namespace mrv
                 if (player)
                 {
                     time = player->currentTime();
-                    layerId = p.ui->uiColorChannel->value();
                 }
             }
             else
@@ -287,7 +286,7 @@ namespace mrv
                 b->value(0);
             }
 
-            const std::string& layer = getLayerName(layerId, p.ui);
+            const std::string layer = getLayerName(media, layerId);
             std::string text = dir + "\n" + file + layer;
             b->copy_label(text.c_str());
 
@@ -440,14 +439,14 @@ namespace mrv
             const std::string fullfile = dir + file;
             FileButton* b = m.second;
 
-            const std::string& layer = getLayerName(media->videoLayer, p.ui);
+            uint16_t layerId = media->videoLayer;
+            const std::string layer = getLayerName(media, layerId);
             std::string text = dir + "\n" + file + layer;
             b->copy_label(text.c_str());
 
             b->labelcolor(FL_WHITE);
             WidgetIndices::iterator it = _r->indices.find(b);
             time = media->currentTime;
-            uint16_t layerId = media->videoLayer;
             if (Aindex != i)
             {
                 b->value(0);

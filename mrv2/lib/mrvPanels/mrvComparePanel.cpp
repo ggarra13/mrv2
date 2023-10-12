@@ -274,7 +274,7 @@ namespace mrv
 
             _r->map[i] = b;
 
-            const std::string& layer = getLayerName(layerId, p.ui);
+            const std::string& layer = getLayerName(media, layerId);
             std::string text = dir + "\n" + file + layer;
             b->copy_label(text.c_str());
 
@@ -696,7 +696,7 @@ namespace mrv
             }
             b->redraw();
 
-            const std::string& layer = getLayerName(layerId, p.ui);
+            const std::string& layer = getLayerName(media, layerId);
             std::string text = dir + "\n" + file + layer;
             b->copy_label(text.c_str());
 

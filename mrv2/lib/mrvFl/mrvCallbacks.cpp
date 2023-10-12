@@ -407,19 +407,20 @@ namespace mrv
 
     void close_all_cb(Fl_Widget* w, ViewerUI* ui)
     {
+        if (ui->uiPrefs->SendMedia->value())
+            tcp->pushMessage("closeAll", 0);
+
         auto model = ui->app->filesModel();
         model->closeAll();
 
         ui->uiMain->fill_menu(ui->uiMenuBar);
-
-        if (ui->uiPrefs->SendMedia->value())
-            tcp->pushMessage("closeAll", 0);
 
         reset_timeline(ui);
     }
 
     void exit_cb(Fl_Widget* w, ViewerUI* ui)
     {
+
         tcp->lock();
 
         ui->uiView->stop();

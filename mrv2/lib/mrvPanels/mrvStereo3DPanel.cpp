@@ -221,11 +221,6 @@ namespace mrv
             _r->indices[b] = i;
 
             uint16_t layerId = media->videoLayer;
-            if (aIndex == i)
-            {
-                layerId = p.ui->uiColorChannel->value();
-            }
-
             if (stereoIndex == i)
             {
                 b->value(1);
@@ -249,7 +244,7 @@ namespace mrv
 
             _r->map.insert(std::make_pair(i, b));
 
-            const std::string& layer = getLayerName(layerId, p.ui);
+            const std::string& layer = getLayerName(media, layerId);
             std::string text = dir + "\n" + file + layer;
             b->copy_label(text.c_str());
 
@@ -495,10 +490,7 @@ namespace mrv
             uint16_t layerId = media->videoLayer;
             bool found = false;
             if (aIndex == i)
-            {
                 found = true;
-                layerId = p.ui->uiColorChannel->value();
-            }
 
             if (stereoIndex != i)
             {
@@ -515,7 +507,7 @@ namespace mrv
             if (!found)
                 time = media->currentTime;
 
-            const std::string& layer = getLayerName(layerId, p.ui);
+            const std::string& layer = getLayerName(media, layerId);
             std::string text = dir + "\n" + file + layer;
             b->copy_label(text.c_str());
             b->labelcolor(FL_WHITE);

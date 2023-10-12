@@ -37,6 +37,8 @@ v0.8.0
   Display/Views.
 - Sped up and removed some bugs in reverse playback.
 - Fixed reading of OCIO file name in network connections.
+- Color channels (layers) are now kept with the file so that switching between
+  media will not revert to the rgba channel if there isn't an equivalent one.
 
 
 v0.7.9

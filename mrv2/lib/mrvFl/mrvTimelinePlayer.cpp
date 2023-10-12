@@ -479,6 +479,8 @@ namespace mrv
     {
         auto model = App::app->filesModel();
         auto Aitem = model->observeA()->get();
+        if (!Aitem)
+            return 0;
         return Aitem->videoLayer;
     }
 
@@ -487,9 +489,9 @@ namespace mrv
         pushMessage("setVideoLayer", value);
         auto model = App::app->filesModel();
         auto Aitem = model->observeA()->get();
+        if (!Aitem)
+            return;
         model->setLayer(Aitem, value);
-        // _p->timelinePlayer->setVideoLayer(math::clamp(
-        //     value, 0, static_cast<int>(std::numeric_limits<int>::max())));
     }
 
     void TimelinePlayer::setVolume(float value)

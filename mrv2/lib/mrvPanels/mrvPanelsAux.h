@@ -8,7 +8,7 @@
 
 #include "mrvCore/mrvI8N.h"
 
-class ViewerUI;
+#include "mrvApp/mrvFilesModel.h"
 
 namespace mrv
 {
@@ -21,6 +21,7 @@ namespace mrv
         return false;
     }
 
-    std::string getLayerName(uint16_t layerId, ViewerUI* ui);
+    std::string getLayerName(
+        const std::shared_ptr<FilesModelItem>& item, const uint16_t layerId);
 
 } // namespace mrv
