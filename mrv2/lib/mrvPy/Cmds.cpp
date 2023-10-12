@@ -368,7 +368,7 @@ namespace mrv2
          */
         std::string currentSession()
         {
-            return current_session();
+            return session::current();
         }
 
         /**
@@ -378,7 +378,7 @@ namespace mrv2
          */
         bool openSession(std::string file)
         {
-            return load_session(file);
+            return session::load(file);
         }
 
         /**
@@ -388,14 +388,14 @@ namespace mrv2
          */
         bool saveSession()
         {
-            const std::string& file = current_session();
+            const std::string& file = session::current();
             if (file.empty())
             {
                 throw std::runtime_error(
                     _("No session name established, cannot save."));
                 return false;
             }
-            return save_session(file);
+            return session::save(file);
         }
 
         /**
@@ -409,7 +409,7 @@ namespace mrv2
             {
                 file += ".mrv2s";
             }
-            return save_session(file);
+            return session::save(file);
         }
 
     } // namespace cmd
@@ -544,19 +544,19 @@ Used to run main commands and get and set the display, image, compare, LUT optio
     // Session commands
     //
     cmds.def(
-        "sessionMetadata", &mrv::session_metadata,
+        "sessionMetadata", &mrv::session::metadata,
         _("Returns the current session metadata."));
 
     cmds.def(
-        "setSessionMetadata", &mrv::set_session_metadata,
+        "setSessionMetadata", &mrv::session::setMetadata,
         _("Sets the current session metadata."));
 
     cmds.def(
-        "currentSession", &mrv::current_session,
+        "currentSession", &mrv::session::current,
         _("Returns current session file."));
 
     cmds.def(
-        "setCurrentSession", &mrv::set_current_session,
+        "setCurrentSession", &mrv::session::setCurrent,
         _("Sets the current session file."), py::arg("file"));
 
     cmds.def(

@@ -956,7 +956,7 @@ namespace mrv
             fileName.substr(fileName.size() - 6, fileName.size()) == ".mrv2s")
         {
             p.session = true;
-            load_session(fileName);
+            session::load(fileName);
             return;
         }
 

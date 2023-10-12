@@ -1661,7 +1661,7 @@ namespace mrv
                 return;
         }
 
-        if (save_session(file))
+        if (session::save(file))
         {
             auto settingsObject = ui->app->settingsObject();
             settingsObject->addRecentFile(file);
@@ -1678,12 +1678,12 @@ namespace mrv
 
         save_session_impl(file, ui);
 
-        set_current_session(file);
+        session::setCurrent(file);
     }
 
     void save_session_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        const std::string file = current_session();
+        const std::string file = session::current();
         if (file.empty())
             return save_session_as_cb(m, ui);
 
@@ -1696,7 +1696,7 @@ namespace mrv
         if (file.empty())
             return;
 
-        if (load_session(file))
+        if (session::load(file))
         {
             auto settingsObject = ui->app->settingsObject();
             settingsObject->addRecentFile(file);

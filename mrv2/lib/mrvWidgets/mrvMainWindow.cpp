@@ -195,7 +195,7 @@ namespace mrv
         size_t numFiles = model->observeFiles()->getSize();
 
         char buf[256];
-        std::string session = current_session();
+        std::string session = session::current();
         if (!session.empty())
         {
             file::Path path(session);
