@@ -460,6 +460,10 @@ namespace mrv
         if (networkPanel)
             networkPanel->save();
 #endif
+#ifdef TLRENDER_USD
+        if (usdPanel)
+            usdPanel->save();
+#endif
         if (stereo3DPanel)
             stereo3DPanel->save();
         if (ui->uiSecondary)
@@ -1902,56 +1906,15 @@ namespace mrv
         model->setStereo3DOptions(o);
     }
 
-    // @todo: remove once tlRender supports this natively
     void refresh_file_cache_cb(Fl_Menu_* m, void* d)
     {
         auto ui = App::ui;
-        auto app = ui->app;
-        auto model = app->filesModel();
-        if (model->observeFiles()->getSize() < 1)
-            return;
-
-        auto AIndex = model->observeAIndex()->get();
-        auto item = model->observeA()->get();
         int layer = ui->uiColorChannel->value();
-
         auto player = ui->uiView->getTimelinePlayer();
-        timeline::Playback playback = player->playback();
-        auto currentTime = player->currentTime();
-        auto inOutRange = player->inOutRange();
-
-        app->open(item->path.get(), item->audioPath.get());
-
-        auto newItem = model->observeA()->get();
-        auto ANewIndex = model->observeAIndex()->get();
-        newItem->inOutRange = inOutRange;
-        newItem->speed = item->speed;
-        newItem->audioOffset = item->audioOffset;
-        newItem->loop = item->loop;
-        newItem->playback = playback;
-        newItem->currentTime = currentTime;
-        newItem->annotations = item->annotations;
-        if (layer < ui->uiColorChannel->children())
-        {
-            ui->uiColorChannel->value(layer);
-            ui->uiColorChannel->do_callback();
-        }
-        else
-        {
-            ui->uiColorChannel->label(_("(no image)"));
-        }
-
-        // Close the old item
-        model->setA(AIndex);
-        model->close();
-
-        // Switch to new item
-        model->setA(ANewIndex);
-
-        player = ui->uiView->getTimelinePlayer();
-        player->setAllAnnotations(newItem->annotations);
-        player->seek(currentTime);
-        player->setPlayback(playback);
+        if (!player)
+            return;
+        const io::Options& options = player->getIOOptions();
+        player->setIOOptions(options);
     }
 
     void copy_filename_cb(Fl_Menu_* m, void* d)

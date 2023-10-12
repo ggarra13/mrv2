@@ -735,6 +735,8 @@ namespace mrv
         UndoRedo buffer;
         buffer.json = state;
         buffer.fileName = getEDLName(ui);
+
+        player = ui->uiView->getTimelinePlayer();
         buffer.annotations = player->getAllAnnotations();
         undoBuffer.push_back(buffer);
     }
@@ -772,6 +774,7 @@ namespace mrv
         UndoRedo buffer;
         buffer.json = state;
         buffer.fileName = getEDLName(ui);
+        player = ui->uiView->getTimelinePlayer();
         buffer.annotations = player->getAllAnnotations();
         redoBuffer.push_back(buffer);
     }
@@ -1462,10 +1465,16 @@ namespace mrv
 
         auto model = ui->app->filesModel();
 
-        const auto& sourceItems = model->observeFiles()->get();
+        const auto sourceItems = model->observeFiles()->get();
+
         auto sourceItem = sourceItems[index];
 
         auto destItem = model->observeA()->get();
+        if (!destItem)
+        {
+            LOG_ERROR(_("Destination file is invalid."));
+            return;
+        }
 
         if (!isTemporaryEDL(destItem->path))
         {

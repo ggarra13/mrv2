@@ -44,7 +44,7 @@ namespace mrv
 
     struct TimelinePlayer::Private
     {
-        std::shared_ptr<timeline::Player> timelinePlayer;
+        std::shared_ptr<timeline::Player> player;
 
         std::shared_ptr<observer::ValueObserver<double> > speedObserver;
         std::shared_ptr<observer::ValueObserver<timeline::Playback> >
@@ -80,72 +80,72 @@ namespace mrv
     };
 
     void TimelinePlayer::_init(
-        const std::shared_ptr<timeline::Player>& timelinePlayer,
+        const std::shared_ptr<timeline::Player>& player,
         const std::shared_ptr<system::Context>& context)
     {
         TLRENDER_P();
 
-        p.timelinePlayer = timelinePlayer;
+        p.player = player;
 
         p.speedObserver = observer::ValueObserver<double>::create(
-            p.timelinePlayer->observeSpeed(),
+            p.player->observeSpeed(),
             [this](double value) { speedChanged(value); });
 
         p.playbackObserver =
             observer::ValueObserver<timeline::Playback>::create(
-                p.timelinePlayer->observePlayback(),
+                p.player->observePlayback(),
                 [this](timeline::Playback value) { playbackChanged(value); });
 
         p.loopObserver = observer::ValueObserver<timeline::Loop>::create(
-            p.timelinePlayer->observeLoop(),
+            p.player->observeLoop(),
             [this](timeline::Loop value) { loopChanged(value); });
 
         p.currentTimeObserver =
             observer::ValueObserver<otime::RationalTime>::create(
-                p.timelinePlayer->observeCurrentTime(),
+                p.player->observeCurrentTime(),
                 [this](const otime::RationalTime& value)
                 { currentTimeChanged(value); });
 
         p.inOutRangeObserver =
             observer::ValueObserver<otime::TimeRange>::create(
-                p.timelinePlayer->observeInOutRange(),
+                p.player->observeInOutRange(),
                 [this](const otime::TimeRange value)
                 { inOutRangeChanged(value); });
 
         p.currentVideoObserver =
             observer::ValueObserver<timeline::VideoData>::create(
-                p.timelinePlayer->observeCurrentVideo(),
+                p.player->observeCurrentVideo(),
                 [this](const timeline::VideoData& value)
                 { currentVideoChanged(value); },
                 observer::CallbackAction::Suppress);
 
         p.volumeObserver = observer::ValueObserver<float>::create(
-            p.timelinePlayer->observeVolume(),
+            p.player->observeVolume(),
             [this](float value) { volumeChanged(value); });
 
         p.muteObserver = observer::ValueObserver<bool>::create(
-            p.timelinePlayer->observeMute(),
+            p.player->observeMute(),
             [this](bool value) { muteChanged(value); });
 
         p.audioOffsetObserver = observer::ValueObserver<double>::create(
-            p.timelinePlayer->observeAudioOffset(),
+            p.player->observeAudioOffset(),
             [this](double value) { audioOffsetChanged(value); });
 
         p.currentAudioObserver =
             observer::ListObserver<timeline::AudioData>::create(
-                p.timelinePlayer->observeCurrentAudio(),
+                p.player->observeCurrentAudio(),
                 [this](const std::vector<timeline::AudioData>& value)
                 { currentAudioChanged(value); });
 
         p.cacheOptionsObserver =
             observer::ValueObserver<timeline::PlayerCacheOptions>::create(
-                p.timelinePlayer->observeCacheOptions(),
+                p.player->observeCacheOptions(),
                 [this](const timeline::PlayerCacheOptions& value)
                 { cacheOptionsChanged(value); });
 
         p.cacheInfoObserver =
             observer::ValueObserver<timeline::PlayerCacheInfo>::create(
-                p.timelinePlayer->observeCacheInfo(),
+                p.player->observeCacheInfo(),
                 [this](const timeline::PlayerCacheInfo& value)
                 { cacheInfoChanged(value); });
 
@@ -157,11 +157,11 @@ namespace mrv
     }
 
     TimelinePlayer::TimelinePlayer(
-        const std::shared_ptr<timeline::Player>& timelinePlayer,
+        const std::shared_ptr<timeline::Player>& player,
         const std::shared_ptr<system::Context>& context) :
         _p(new Private)
     {
-        _init(timelinePlayer, context);
+        _init(player, context);
     }
 
     TimelinePlayer::~TimelinePlayer()
@@ -171,124 +171,134 @@ namespace mrv
 
     const std::weak_ptr<system::Context>& TimelinePlayer::context() const
     {
-        return _p->timelinePlayer->getContext();
+        return _p->player->getContext();
     }
 
     const std::shared_ptr<timeline::Player>& TimelinePlayer::player() const
     {
-        return _p->timelinePlayer;
+        return _p->player;
     }
 
     const std::shared_ptr<timeline::Timeline>& TimelinePlayer::timeline() const
     {
-        return _p->timelinePlayer->getTimeline();
+        return _p->player->getTimeline();
     }
 
     const otio::SerializableObject::Retainer<otio::Timeline>&
     TimelinePlayer::getTimeline() const
     {
-        return _p->timelinePlayer->getTimeline()->getTimeline();
+        return _p->player->getTimeline()->getTimeline();
     }
 
     void TimelinePlayer::setTimeline(
         const otio::SerializableObject::Retainer<otio::Timeline>& timeline)
     {
-        _p->timelinePlayer->getTimeline()->setTimeline(timeline);
+        _p->player->getTimeline()->setTimeline(timeline);
     }
 
     const file::Path& TimelinePlayer::path() const
     {
-        return _p->timelinePlayer->getPath();
+        return _p->player->getPath();
     }
 
     const file::Path& TimelinePlayer::audioPath() const
     {
-        return _p->timelinePlayer->getAudioPath();
+        return _p->player->getAudioPath();
     }
 
     const timeline::PlayerOptions& TimelinePlayer::getPlayerOptions() const
     {
-        return _p->timelinePlayer->getPlayerOptions();
+        return _p->player->getPlayerOptions();
     }
 
     const timeline::Options& TimelinePlayer::getOptions() const
     {
-        return _p->timelinePlayer->getOptions();
+        return _p->player->getOptions();
     }
 
     const otime::TimeRange& TimelinePlayer::timeRange() const
     {
-        return _p->timelinePlayer->getTimeRange();
+        return _p->player->getTimeRange();
     }
 
     const tl::io::Info& TimelinePlayer::ioInfo() const
     {
-        return _p->timelinePlayer->getIOInfo();
+        return _p->player->getIOInfo();
     }
 
     double TimelinePlayer::defaultSpeed() const
     {
-        return _p->timelinePlayer->getDefaultSpeed();
+        return _p->player->getDefaultSpeed();
     }
 
     double TimelinePlayer::speed() const
     {
-        return _p->timelinePlayer->observeSpeed()->get();
+        return _p->player->observeSpeed()->get();
     }
 
     timeline::Playback TimelinePlayer::playback() const
     {
-        return _p->timelinePlayer->observePlayback()->get();
+        return _p->player->observePlayback()->get();
     }
 
     timeline::Loop TimelinePlayer::loop() const
     {
-        return _p->timelinePlayer->observeLoop()->get();
+        return _p->player->observeLoop()->get();
     }
 
     const otime::RationalTime& TimelinePlayer::currentTime() const
     {
-        return _p->timelinePlayer->observeCurrentTime()->get();
+        return _p->player->observeCurrentTime()->get();
     }
 
     const otime::TimeRange& TimelinePlayer::inOutRange() const
     {
-        return _p->timelinePlayer->observeInOutRange()->get();
+        return _p->player->observeInOutRange()->get();
+    }
+
+    tl::io::Options TimelinePlayer::getIOOptions() const
+    {
+        return _p->player->getIOOptions();
+    }
+
+    void TimelinePlayer::setIOOptions(const io::Options& value)
+    {
+        _p->player->setIOOptions(value);
     }
 
     const timeline::VideoData& TimelinePlayer::currentVideo() const
     {
-        return _p->timelinePlayer->observeCurrentVideo()->get();
+        return _p->player->observeCurrentVideo()->get();
     }
 
     float TimelinePlayer::volume() const
     {
-        return _p->timelinePlayer->observeVolume()->get();
+        return _p->player->observeVolume()->get();
     }
 
     bool TimelinePlayer::isMuted() const
     {
-        return _p->timelinePlayer->observeMute()->get();
+        return _p->player->observeMute()->get();
     }
 
     double TimelinePlayer::audioOffset() const
     {
-        return _p->timelinePlayer->observeAudioOffset()->get();
+        return _p->player->observeAudioOffset()->get();
     }
 
     const std::vector<timeline::AudioData>& TimelinePlayer::currentAudio() const
     {
-        return _p->timelinePlayer->observeCurrentAudio()->get();
+        return _p->player->observeCurrentAudio()->get();
     }
 
     const timeline::PlayerCacheOptions& TimelinePlayer::cacheOptions() const
     {
-        return _p->timelinePlayer->observeCacheOptions()->get();
+        return _p->player->observeCacheOptions()->get();
     }
 
     const timeline::PlayerCacheInfo& TimelinePlayer::cacheInfo() const
     {
-        return _p->timelinePlayer->observeCacheInfo()->get();
+        return _p->player->observeCacheInfo()->get();
     }
 
     template < typename T >
@@ -306,14 +316,14 @@ namespace mrv
     {
         pushMessage("setSpeed", value);
 
-        _p->timelinePlayer->setSpeed(value);
+        _p->player->setSpeed(value);
     }
 
     void TimelinePlayer::setPlayback(timeline::Playback value)
     {
         pushMessage("seek", currentTime());
         pushMessage("setPlayback", value);
-        _p->timelinePlayer->setPlayback(value);
+        _p->player->setPlayback(value);
 
         if (value == timeline::Playback::Stop)
         {
@@ -331,20 +341,19 @@ namespace mrv
     void TimelinePlayer::forward()
     {
         pushMessage("setPlayback", timeline::Playback::Forward);
-        _p->timelinePlayer->setPlayback(timeline::Playback::Forward);
+        _p->player->setPlayback(timeline::Playback::Forward);
     }
 
     void TimelinePlayer::reverse()
     {
         pushMessage("setPlayback", timeline::Playback::Reverse);
-        _p->timelinePlayer->setPlayback(timeline::Playback::Reverse);
+        _p->player->setPlayback(timeline::Playback::Reverse);
     }
 
     void TimelinePlayer::togglePlayback()
     {
         setPlayback(
-            timeline::Playback::Stop ==
-                    _p->timelinePlayer->observePlayback()->get()
+            timeline::Playback::Stop == _p->player->observePlayback()->get()
                 ? timeline::Playback::Forward
                 : timeline::Playback::Stop);
     }
@@ -353,26 +362,26 @@ namespace mrv
     {
         Message m = value;
         pushMessage("setLoop", m);
-        _p->timelinePlayer->setLoop(value);
+        _p->player->setLoop(value);
     }
 
     void TimelinePlayer::seek(const otime::RationalTime& value)
     {
         pushMessage("seek", value);
-        _p->timelinePlayer->seek(value);
+        _p->player->seek(value);
         if (timelineViewport)
             timelineViewport->updateUndoRedoButtons();
     }
 
     void TimelinePlayer::timeAction(timeline::TimeAction value)
     {
-        _p->timelinePlayer->timeAction(value);
+        _p->player->timeAction(value);
     }
 
     void TimelinePlayer::start()
     {
         pushMessage("start", 0);
-        _p->timelinePlayer->start();
+        _p->player->start();
         redrawPanelThumbnails();
         if (timelineViewport)
             timelineViewport->updateUndoRedoButtons();
@@ -381,7 +390,7 @@ namespace mrv
     void TimelinePlayer::end()
     {
         pushMessage("end", 0);
-        _p->timelinePlayer->end();
+        _p->player->end();
         redrawPanelThumbnails();
         if (timelineViewport)
             timelineViewport->updateUndoRedoButtons();
@@ -420,7 +429,7 @@ namespace mrv
 
         auto time = currentTime() -
                     otime::RationalTime(1.0, timeRange().duration().rate());
-        _p->timelinePlayer->setPlayback(timeline::Playback::Reverse);
+        _p->player->setPlayback(timeline::Playback::Reverse);
         StopData* data = new StopData;
         data->player = this;
         data->time = time;
@@ -436,7 +445,7 @@ namespace mrv
 
         auto time = currentTime() +
                     otime::RationalTime(1.0, timeRange().duration().rate());
-        _p->timelinePlayer->setPlayback(timeline::Playback::Forward);
+        _p->player->setPlayback(timeline::Playback::Forward);
         StopData* data = new StopData;
         data->player = this;
         data->time = time;
@@ -448,31 +457,31 @@ namespace mrv
     void TimelinePlayer::setInOutRange(const otime::TimeRange& value)
     {
         pushMessage("setInOutRange", value);
-        _p->timelinePlayer->setInOutRange(value);
+        _p->player->setInOutRange(value);
     }
 
     void TimelinePlayer::setInPoint()
     {
         pushMessage("setInPoint", 0);
-        _p->timelinePlayer->setInPoint();
+        _p->player->setInPoint();
     }
 
     void TimelinePlayer::resetInPoint()
     {
         pushMessage("resetInPoint", 0);
-        _p->timelinePlayer->resetInPoint();
+        _p->player->resetInPoint();
     }
 
     void TimelinePlayer::setOutPoint()
     {
         pushMessage("setOutPoint", 0);
-        _p->timelinePlayer->setOutPoint();
+        _p->player->setOutPoint();
     }
 
     void TimelinePlayer::resetOutPoint()
     {
         pushMessage("resetOutPoint", 0);
-        _p->timelinePlayer->resetOutPoint();
+        _p->player->resetOutPoint();
     }
 
     int TimelinePlayer::videoLayer() const
@@ -496,12 +505,12 @@ namespace mrv
 
     void TimelinePlayer::setVolume(float value)
     {
-        _p->timelinePlayer->setVolume(value);
+        _p->player->setVolume(value);
     }
 
     void TimelinePlayer::setMute(bool value)
     {
-        _p->timelinePlayer->setMute(value);
+        _p->player->setMute(value);
     }
 
     void TimelinePlayer::setAudioOffset(double value)
@@ -509,7 +518,7 @@ namespace mrv
         bool send = App::ui->uiPrefs->SendAudio->value();
         if (send)
             tcp->pushMessage("setAudioOffset", value);
-        _p->timelinePlayer->setAudioOffset(value);
+        _p->player->setAudioOffset(value);
     }
 
     void TimelinePlayer::setTimelineViewport(TimelineViewport* view)
@@ -801,7 +810,7 @@ namespace mrv
     void
     TimelinePlayer::setCacheOptions(const timeline::PlayerCacheOptions& value)
     {
-        _p->timelinePlayer->setCacheOptions(value);
+        _p->player->setCacheOptions(value);
     }
 
     bool TimelinePlayer::hasUndo() const
@@ -839,7 +848,7 @@ namespace mrv
         std::cout << "timeout duration: " << diff.count() << std::endl;
         _p->start_time = std::chrono::steady_clock::now();
 #endif
-        _p->timelinePlayer->tick();
+        _p->player->tick();
         Fl::repeat_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
     }
 

@@ -18,6 +18,9 @@ namespace mrv
         virtual ~USDPanel(){};
 
         void add_controls() override;
+
+    protected:
+        void _update();
     };
 
 #endif // TLRENDER_USD

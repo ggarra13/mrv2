@@ -39,7 +39,15 @@ v0.8.0
 - Fixed reading of OCIO file name in network connections.
 - Color channels (layers) are now kept with the file so that switching between
   media will not revert to the rgba channel if there isn't an equivalent one.
-
+- USD Panel is now interactive.  You can change the parameters and it will
+  show the change.  The only parameter not recommended to change (except for
+  very simple scenes) is the complexity.
+- USD Panel visibility is now saved in the Preferences.
+- Refreshing of cache is now done in seconds, without re-loading and
+  switching an image as before.
+- Creating a timeline in the Playlist Panel is also done in seconds.
+- Fixed a crash when creating an empty timeline or a timeline from a clip in
+  the Playlist Panel.
 
 v0.7.9
 ======

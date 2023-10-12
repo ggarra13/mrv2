@@ -99,6 +99,14 @@ namespace mrv
 
         ///@}
 
+        //! \name I/O Options
+        ///@{
+
+        tl::io::Options getIOOptions() const;
+        void setIOOptions(const tl::io::Options&);
+
+        ///@}
+
         //! \name Video
         ///@{
 

@@ -22,6 +22,7 @@ set(HEADERS
     mrvPlaylistsModel.cpp
     mrvSettingsObject.cpp
     mrvUSD.cpp
+    mrvUSDInline.cpp
   )
 
 add_library(mrvApp ${SOURCES} ${HEADERS})

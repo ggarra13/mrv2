@@ -3,7 +3,6 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #if defined(TLRENDER_USD)
-#    include <tlIO/USD.h>
 
 #    include <tlCore/StringFormat.h>
 
@@ -22,6 +21,7 @@
 
 #    include "mrvFl/mrvIO.h"
 
+#    include "mrvApp/mrvUSD.h"
 #    include "mrvApp/mrvSettingsObject.h"
 
 namespace mrv
@@ -89,18 +89,10 @@ namespace mrv
         cg->begin();
 
         Y += 30;
-        bg = new Fl_Group(g->x(), Y, g->w(), 22 * 8);
+        bg = new Fl_Group(g->x(), Y, g->w(), 22 * 7);
         bg->box(FL_NO_BOX);
         bg->begin();
 
-        Fl_Box* box = new Fl_Box(
-            g->x(), Y, g->w(), 40,
-            _("Changes are applied to "
-              "newly opened files."));
-        box->labelsize(12);
-        box->align(FL_ALIGN_WRAP);
-
-        Y += 50;
         auto spW = new Widget< Fl_Spinner >(
             g->x() + 160, Y, g->w() - 160, 20, _("Render Width"));
         sp = spW;
@@ -111,14 +103,15 @@ namespace mrv
         sp->step(1);
         sp->range(32, 4096);
         sp->align(FL_ALIGN_LEFT);
-        int v = std_any_cast<int>(settingsObject->value("usd/renderWidth"));
+        int v = std_any_cast<int>(settingsObject->value("USD/renderWidth"));
         sp->value(v);
 
         spW->callback(
             [=](auto o)
             {
                 int v = static_cast<int>(o->value());
-                settingsObject->setValue("usd/renderWidth", v);
+                settingsObject->setValue("USD/renderWidth", v);
+                _update();
             });
 
         Y += 22;
@@ -129,37 +122,41 @@ namespace mrv
         sp->labelsize(12);
         sp->color((Fl_Color)-1733777408);
         sp->textcolor(FL_BLACK);
-        sp->step(0.1);
-        sp->range(1, 12);
+        sp->step(0.001);
+        // sp->range(1, 12);
+        sp->range(1, 2);
         sp->align(FL_ALIGN_LEFT);
 
         float complexity =
-            std_any_cast<float>(settingsObject->value("usd/complexity"));
+            std_any_cast<float>(settingsObject->value("USD/complexity"));
         sp->value(complexity);
 
         spW->callback(
             [=](auto o)
             {
                 float v = static_cast<float>(o->value());
-                settingsObject->setValue("usd/complexity", v);
+                settingsObject->setValue("USD/complexity", v);
+                _update();
             });
 
         Y += 22;
+
         auto mW = new Widget< Fl_Choice >(
             g->x() + 130, Y, g->w() - 130, 20, _("Draw Mode"));
         Fl_Choice* m = mW;
         m->labelsize(12);
         m->align(FL_ALIGN_LEFT);
-        for (const auto& i : usd::getDrawModeLabels())
+        for (const auto& i : tl::usd::getDrawModeLabels())
         {
             m->add(_(i.c_str()));
         }
-        m->value(std_any_cast<int>(settingsObject->value("usd/drawMode")));
+        m->value(std_any_cast<int>(settingsObject->value("USD/drawMode")));
         mW->callback(
             [=](auto o)
             {
                 int v = o->value();
-                settingsObject->setValue("usd/drawMode", v);
+                settingsObject->setValue("USD/drawMode", v);
+                _update();
             });
 
         Y += 22;
@@ -168,13 +165,14 @@ namespace mrv
         Fl_Check_Button* c = cV;
         c->labelsize(12);
         c->value(
-            std_any_cast<int>(settingsObject->value("usd/enableLighting")));
+            std_any_cast<int>(settingsObject->value("USD/enableLighting")));
 
         cV->callback(
             [=](auto w)
             {
                 int v = w->value();
-                settingsObject->setValue("usd/enableLighting", v);
+                settingsObject->setValue("USD/enableLighting", v);
+                _update();
             });
 
         Y += 22;
@@ -188,14 +186,15 @@ namespace mrv
         sp->step(1);
         sp->range(32, 4096);
         sp->align(FL_ALIGN_LEFT);
-        v = std_any_cast<int>(settingsObject->value("usd/stageCacheCount"));
+        v = std_any_cast<int>(settingsObject->value("USD/stageCache"));
         sp->value(v);
 
         spW->callback(
             [=](auto o)
             {
                 int v = static_cast<int>(o->value());
-                settingsObject->setValue("usd/stageCacheCount", v);
+                settingsObject->setValue("USD/stageCache", v);
+                _update();
             });
 
         Y += 22;
@@ -209,14 +208,15 @@ namespace mrv
         sp->step(1);
         sp->range(32, 4096);
         sp->align(FL_ALIGN_LEFT);
-        v = std_any_cast<int>(settingsObject->value("usd/diskCacheByteCount"));
+        v = std_any_cast<int>(settingsObject->value("USD/diskCache"));
         sp->value(v);
 
         spW->callback(
             [=](auto o)
             {
                 int v = static_cast<int>(o->value());
-                settingsObject->setValue("usd/diskCacheByteCount", v);
+                settingsObject->setValue("USD/diskCache", v);
+                _update();
             });
 
         bg->end();
@@ -228,6 +228,11 @@ namespace mrv
         open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
         if (!open)
             cg->close();
+    }
+
+    void USDPanel::_update()
+    {
+        usd::sendIOOptions();
     }
 
 } // namespace mrv
