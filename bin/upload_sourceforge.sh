@@ -6,27 +6,6 @@
 
 echo "RUNNING upload_sourceforge.sh......"
 
-#
-# Get the date in English
-#
-export oldTZ=$TZ
-export oldTIME=$LC_TIME
-export oldALL=$LC_ALL
-export LC_ALL=en_US.UTF-8
-export LC_TIME=en_US.UTF-8
-
-#
-# Report the date for 
-#
-export TZ="America/Argentina/Buenos_Aires"
-date=`date "+%e of %B of %Y at %H:%M:%S Buenos Aires, Argentina (%z UTC/GMT)" | awk '{sub(/^ */, "", $1); print}'`
-git_hash=`git rev-parse HEAD`
-export TZ=$oldTZ
-export LC_TIME=$oldTIME
-export LC_ALL=$oldALL
-
-echo "DATE: ${date}"
-
 . etc/functions.sh
 
 if [[ "$(git rev-parse --abbrev-ref HEAD)" != "beta" ]]; then
@@ -49,6 +28,29 @@ fi
 echo "SSH KEY IS: ${SSH_KEY}"
 
 get_kernel
+
+
+#
+# Get the date in English
+#
+export oldTZ=$TZ
+export oldTIME=$LC_TIME
+export oldALL=$LC_ALL
+export LC_ALL=en_US.UTF-8
+export LC_TIME=en_US.UTF-8
+
+#
+# Report the date for 
+#
+export TZ="America/Argentina/Buenos_Aires"
+date=`date "+%e of %B of %Y at %H:%M:%S Buenos Aires, Argentina (%z UTC/GMT)" | awk '{sub(/^ */, "", $1); print}'`
+git_hash=`git rev-parse HEAD`
+export TZ=$oldTZ
+export LC_TIME=$oldTIME
+export LC_ALL=$oldALL
+
+echo "DATE: ${date}"
+
 
 # Extract cmake/version.cmake into mrv2_VERSION
 extract_version
