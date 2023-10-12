@@ -426,7 +426,7 @@ namespace mrv
     void TimelinePlayer::framePrev()
     {
         pushMessage("framePrev", 0);
-        //_p->timelinePlayer->framePrev();
+
         auto time = currentTime() -
                     otime::RationalTime(1.0, timeRange().duration().rate());
         _p->timelinePlayer->setPlayback(timeline::Playback::Reverse);
@@ -436,13 +436,12 @@ namespace mrv
         data->speed = speed();
 
         Fl::add_timeout(
-            1.75 / speed(), (Fl_Timeout_Handler)stop_playback_cb, data);
+            1.0 / speed(), (Fl_Timeout_Handler)stop_playback_cb, data);
     }
 
     void TimelinePlayer::frameNext()
     {
         pushMessage("frameNext", 0);
-        //_p->timelinePlayer->frameNext();
 
         auto time = currentTime() +
                     otime::RationalTime(1.0, timeRange().duration().rate());
@@ -453,9 +452,6 @@ namespace mrv
         data->speed = speed();
         Fl::add_timeout(
             1.75 / speed(), (Fl_Timeout_Handler)stop_playback_cb, data);
-
-        // if (timelineViewport)
-        //     timelineViewport->updateUndoRedoButtons();
     }
 
     void TimelinePlayer::setInOutRange(const otime::TimeRange& value)
