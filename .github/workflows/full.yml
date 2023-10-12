@@ -53,7 +53,6 @@ jobs:
     - name: Synchronize clock
       run: |
         sudo apt-get install -y ntp
-        sudo ntpdate pool.ntp.org
 
     - name: Setup environment
       run: mkdir -p ssh
@@ -152,12 +151,6 @@ jobs:
       
     - name: Install Python dependencies
       run: brew install libffi openssl readline sqlite3 xz zlib
-
-    - name: Synchronize clock
-      run: |
-        systemsetup -setnetworktimeserver time.apple.com
-        systemsetup -setusingnetworktime on
-        systemsetup -getnetworktime
         
     - name: Setup environment
       run: mkdir -p ssh
