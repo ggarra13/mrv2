@@ -12,7 +12,10 @@ namespace mrv
     {
         bool RenderOptions::operator==(const RenderOptions& b) const
         {
-            return (*this == b);
+            return (
+                renderWidth == b.renderWidth && complexity == b.complexity &&
+                drawMode == b.drawMode && enableLighting == b.enableLighting &&
+                stageCache == b.stageCache && diskCache == b.diskCache);
         }
 
         bool RenderOptions::operator!=(const RenderOptions& b) const
