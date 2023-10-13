@@ -410,7 +410,7 @@ namespace mrv
                                     offscreenBuffer);
 
                                 {
-                                    StoreLocale;
+                                    locale::SetAndRestore saved;
                                     render->begin(
                                         offscreenBufferSize,
                                         requestIt->colorConfigOptions,

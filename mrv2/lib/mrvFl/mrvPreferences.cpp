@@ -126,7 +126,7 @@ namespace mrv
         float tmpF;
         char tmpS[2048];
 
-        StoreLocale;
+        locale::SetAndRestore saved;
 
         std::string msg =
             tl::string::Format(_("Reading preferences from \"{0}mrv2.prefs\"."))
@@ -908,7 +908,7 @@ namespace mrv
         auto uiPrefs = ViewerUI::uiPrefs;
         auto settingsObject = app->settingsObject();
 
-        StoreLocale;
+        locale::SetAndRestore saved;
 
         int visible = 0;
         if (uiPrefs->uiMain->visible())

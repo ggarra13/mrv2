@@ -237,7 +237,7 @@ namespace mrv
         const auto& renderSize = getRenderSize();
 
         {
-            StoreLocale;
+            locale::SetAndRestore saved;
 
             gl::OffscreenBufferBinding binding(gl.buffer);
             gl.render->begin(renderSize, p.colorConfigOptions, p.lutOptions);
@@ -261,7 +261,7 @@ namespace mrv
         }
 
         {
-            StoreLocale;
+            locale::SetAndRestore saved;
             gl::OffscreenBufferBinding binding(gl.stereoBuffer);
 
             gl.render->begin(renderSize, p.colorConfigOptions, p.lutOptions);

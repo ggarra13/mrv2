@@ -329,7 +329,7 @@ namespace mrv
         text.str("");
         text.str().reserve(1024);
 
-        StoreLocale;
+        locale::SetAndRestore saved;
         text.imbue(std::locale(saved.stored()));
         text << "@b\t" << std::fixed << std::setw(7) << std::setprecision(2)
              << kR << "R"

@@ -126,7 +126,7 @@ namespace mrv
     {
         this->clear();
 
-        StoreLocale;
+        locale::SetAndRestore saved;
 
         switch (_type)
         {

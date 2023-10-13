@@ -268,7 +268,7 @@ namespace mrv
                     gl::OffscreenBufferBinding binding(gl.buffer);
                     CHECK_GL;
 
-                    StoreLocale;
+                    locale::SetAndRestore saved;
 
                     gl.render->begin(
                         renderSize, p.colorConfigOptions, p.lutOptions);
