@@ -18,34 +18,39 @@ namespace
 
 namespace mrv
 {
-    int file_manager_show_uri(const std::string& file)
+    namespace file_manager
     {
-        int ret = -1;
+
+        int show_uri(const std::string& file)
+        {
+            int ret = -1;
         
-        const char* path = file.c_str();
+            const char* path = file.c_str();
 
-        @autoreleasepool {
-            // Convert the C-string path to NSString
-            NSString *filePath = [NSString stringWithCString:path encoding:NSUTF8StringEncoding];
+            @autoreleasepool {
+                // Convert the C-string path to NSString
+                NSString *filePath = [NSString stringWithCString:path encoding:NSUTF8StringEncoding];
 
-            // Prepare the AppleScript command to reveal the file or directory in Finder
-            NSString *scriptCommand = [NSString stringWithFormat:@"tell application \"Finder\" to reveal POSIX file \"%@\"", filePath];
+                // Prepare the AppleScript command to reveal the file or directory in Finder
+                NSString *scriptCommand = [NSString stringWithFormat:@"tell application \"Finder\" to reveal POSIX file \"%@\"", filePath];
 
-            // Create an NSTask to run the AppleScript
-            NSTask *task = [[NSTask alloc] init];
-            [task setLaunchPath:@"/usr/bin/osascript"];
-            [task setArguments:@[@"-e", scriptCommand]];
-            [task launch];
-            [task waitUntilExit];
+                // Create an NSTask to run the AppleScript
+                NSTask *task = [[NSTask alloc] init];
+                [task setLaunchPath:@"/usr/bin/osascript"];
+                [task setArguments:@[@"-e", scriptCommand]];
+                [task launch];
+                [task waitUntilExit];
 
-            int status = [task terminationStatus];
-            if (status != 0) {
-                std::cerr << "Error: Failed to open file or directory." << std::endl;
-                return 1;
+                int status = [task terminationStatus];
+                if (status != 0) {
+                    std::cerr << "Error: Failed to open file or directory." << std::endl;
+                    return 1;
+                }
             }
-        }
 
-        return 0;
-    }
+            return 0;
+        }
+	
+    }  // namespace file_manage
 
 } // namespace mrv

@@ -106,15 +106,20 @@ namespace mrv
     }
 #endif
 
-#ifndef __APPLE__
-    int file_manager_show_uri(const std::string& file)
+    namespace file_manager
     {
+
+#ifndef __APPLE__
+        int show_uri(const std::string& file)
+        {
 #    ifdef __linux__
-        return nautilus_file_manager(file);
+            return nautilus_file_manager(file);
 #    elif _WIN32
-        return explorer_file_manager(file);
+            return explorer_file_manager(file);
 #    endif
-    }
+        }
 #endif
+
+    } // namespace file_manager
 
 } // namespace mrv

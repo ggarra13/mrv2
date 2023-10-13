@@ -8,7 +8,10 @@
 
 namespace mrv
 {
-    //! Given a filename, open it in Nautilus (Linux), Explorer (Windows)
-    //! or Finder (macOS).
-    int file_manager_show_uri(const std::string& path);
+    namespace file_manager
+    {
+        //! Given a filename, open it in Nautilus (Linux), Explorer (Windows)
+        //! or Finder (macOS).
+        int show_uri(const std::string& path);
+    } // namespace file_manager
 } // namespace mrv

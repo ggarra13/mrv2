@@ -1968,7 +1968,7 @@ namespace mrv
         }
         auto path = item->path.get();
 
-        file_manager_show_uri(path);
+        file_manager::show_uri(path);
     }
 
 } // namespace mrv
