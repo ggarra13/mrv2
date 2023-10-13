@@ -21,7 +21,7 @@ namespace fs = std::filesystem;
 
 namespace
 {
-    const char* kModule = "helpers";
+    const char* kModule = "filemgr";
 }
 
 #ifdef __linux__

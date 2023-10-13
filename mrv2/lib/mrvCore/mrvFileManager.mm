@@ -6,14 +6,14 @@
 #import <Cocoa/Cocoa.h>
 
 
-#include "mrvCore/mrvHelpers.h"
+#include "mrvCore/mrvFileManager.h"
 #include "mrvCore/mrvI8N.h"
 
 #include "mrvFl/mrvIO.h"
 
 namespace
 {
-    const char* kModule = "helpers";
+    const char* kModule = "filemgr";
 }
 
 namespace mrv

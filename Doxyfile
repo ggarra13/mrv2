@@ -38,7 +38,7 @@ PROJECT_NAME           = mrv2
 # could be handy for archiving the generated documentation or if some version
 # control system is used.
 
-PROJECT_NUMBER         = 0.3.8
+PROJECT_NUMBER         = 0.8.0
 
 # Using the PROJECT_BRIEF tag one can provide an optional one line description
 # for a project that appears at the top of each page and should give viewer a
@@ -877,7 +877,6 @@ WARN_LOGFILE           =
 INPUT                  = mrv2/lib/mrvCore \
 			 mrv2/lib/mrvFLU \
 			 mrv2/lib/mrvFlmm \
-			 mrv2/lib/mrvWidgets \
 			 mrv2/lib/mrvUI \
 			 mrv2/lib/mrvGL \
 			 mrv2/lib/mrvDraw \
