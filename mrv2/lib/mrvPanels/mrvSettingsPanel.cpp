@@ -7,7 +7,6 @@
 #include <FL/Fl_Input.H>
 #include <FL/Fl_Check_Button.H>
 #include <FL/Fl_Choice.H>
-#include <FL/Fl_Spinner.H>
 #include <FL/Fl_Int_Input.H>
 
 #include "mrViewer.h"
@@ -16,6 +15,7 @@
 
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvHorSlider.h"
+#include <mrvWidgets/mrvSpinner.h>
 #include "mrvWidgets/mrvCollapsibleGroup.h"
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
@@ -85,7 +85,7 @@ namespace mrv
 
         Fl_Check_Button* c;
         HorSlider* s;
-        Fl_Spinner* sp;
+        Spinner* sp;
         int digits;
 
         uint64_t totalVirtualMem, virtualMemUsed, virtualMemUsedByMe,
@@ -204,8 +204,8 @@ namespace mrv
             g->x() + 130, 150, g->w() - 130, 20, _("Audio file name"));
         i = iW;
         i->labelsize(12);
-        i->color((Fl_Color)-1733777408);
         i->textcolor(FL_BLACK);
+        i->cursor_color(FL_RED);
         std::string file = std_any_cast<std::string>(
             settingsObject->value("FileSequence/AudioFileName"));
 
@@ -221,8 +221,8 @@ namespace mrv
             g->x() + 130, 170, g->w() - 130, 20, "Audio directory");
         i = iW;
         i->labelsize(12);
-        i->color((Fl_Color)-1733777408);
         i->textcolor(FL_BLACK);
+        i->cursor_color(FL_RED);
         i->value(std_any_cast<std::string>(
                      settingsObject->value("FileSequence/AudioDirectory"))
                      .c_str());
@@ -238,8 +238,8 @@ namespace mrv
             g->x() + 130, 190, g->w() - 130, 20, _("Maximum Digits"));
         i = inW;
         i->labelsize(12);
-        i->color((Fl_Color)-1733777408);
         i->textcolor(FL_BLACK);
+        i->cursor_color(FL_RED);
         digits = std_any_cast< int >(
             settingsObject->value("Misc/MaxFileSequenceDigits"));
         std::string text = string::Format("{0}").arg(digits);
@@ -299,7 +299,6 @@ namespace mrv
         box->labelsize(12);
         box->align(FL_ALIGN_WRAP);
 
-        DBG;
         mW = new Widget< Fl_Choice >(
             g->x() + 130, 270, g->w() - 130, 20, _("Timer mode"));
         m = mW;
@@ -320,13 +319,9 @@ namespace mrv
                 settingsObject->setValue("Performance/TimerMode", v);
             });
 
-        auto spW = new Widget< Fl_Spinner >(
+        auto spW = new Widget< Spinner >(
             g->x() + 160, 294, g->w() - 160, 20, _("Audio buffer frames"));
         sp = spW;
-        sp->format("%4.4g");
-        sp->labelsize(12);
-        sp->color((Fl_Color)-1733777408);
-        sp->textcolor(FL_BLACK);
         sp->step(1);
         sp->range(1024, 4096);
         sp->align(FL_ALIGN_LEFT);
@@ -342,13 +337,9 @@ namespace mrv
                     "Performance/AudioBufferFrameCount", v);
             });
 
-        spW = new Widget< Fl_Spinner >(
+        spW = new Widget< Spinner >(
             g->x() + 160, 318, g->w() - 160, 20, _("Video Requests"));
         sp = spW;
-        sp->format("%4.4g");
-        sp->labelsize(12);
-        sp->color((Fl_Color)-1733777408);
-        sp->textcolor(FL_BLACK);
         // sp->range( 1, 64 );
         digits = std_any_cast< int >(
             settingsObject->value("Performance/VideoRequestCount"));
@@ -363,14 +354,9 @@ namespace mrv
                 p.ui->app->cacheUpdate();
             });
 
-        DBG;
-        spW = new Widget<Fl_Spinner>(
+        spW = new Widget<Spinner>(
             g->x() + 160, 342, g->w() - 160, 20, _("Audio Requests"));
         sp = spW;
-        sp->format("%4.4g");
-        sp->labelsize(12);
-        sp->color((Fl_Color)-1733777408);
-        sp->textcolor(FL_BLACK);
         // sp->irange( 1, 64 );
         digits = std_any_cast< int >(
             settingsObject->value("Performance/AudioRequestCount"));
@@ -379,19 +365,14 @@ namespace mrv
             [=](auto o)
             {
                 int requests = static_cast<int>(o->value());
-                std::cerr << "audio requests" << requests << std::endl;
                 settingsObject->setValue(
                     "Performance/AudioRequestCount", requests);
                 p.ui->app->cacheUpdate();
             });
 
-        spW = new Widget<Fl_Spinner>(
+        spW = new Widget<Spinner>(
             g->x() + 160, 366, g->w() - 160, 20, _("Sequence I/O threads"));
         sp = spW;
-        sp->format("%4.4g");
-        sp->labelsize(12);
-        sp->color((Fl_Color)-1733777408);
-        sp->textcolor(FL_BLACK);
         // sp->irange( 1, 64 );
         digits = std_any_cast< int >(
             settingsObject->value("Performance/SequenceThreadCount"));
@@ -408,9 +389,7 @@ namespace mrv
         bg->end();
 
         auto cV = new Widget< Fl_Check_Button >(
-            g->x() + 90, 398, g->w(), 20,
-            _("FFmpeg YUV to RGB "
-              "conversion"));
+            g->x() + 90, 398, g->w(), 20, _("FFmpeg YUV to RGB conversion"));
         c = cV;
         c->labelsize(12);
         c->value(std_any_cast<int>(
@@ -428,13 +407,9 @@ namespace mrv
         bg->box(FL_NO_BOX);
         bg->begin();
 
-        spW = new Widget<Fl_Spinner>(
+        spW = new Widget<Spinner>(
             g->x() + 160, 420, g->w() - 160, 20, _("FFmpeg I/O threads"));
         sp = spW;
-        sp->format("%4.4g");
-        sp->labelsize(12);
-        sp->color((Fl_Color)-1733777408);
-        sp->textcolor(FL_BLACK);
         digits = std_any_cast< int >(
             settingsObject->value("Performance/FFmpegThreadCount"));
         sp->value(digits);

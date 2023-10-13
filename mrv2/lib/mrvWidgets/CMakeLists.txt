@@ -29,9 +29,11 @@ set(HEADERS
     mrvDropWindow.h
     mrvFileButton.h
     mrvFileDragger.h
+    mrvFPSInput.h
     mrvFunctional.h
     mrvHistogram.h
     mrvHorSlider.h
+    mrvIntInput.h
     mrvLogDisplay.h
     mrvMainWindow.h
     mrvMenuBar.h
@@ -50,6 +52,7 @@ set(HEADERS
     mrvResizableBar.h
     mrvSecondaryWindow.h
     mrvSlider.h
+    mrvSpinner.h
     mrvStateButton.h
     mrvStatusBar.h
     mrvTable.h
@@ -75,6 +78,7 @@ set(SOURCES
     mrvDropWindow.cpp
     mrvFileButton.cpp
     mrvFileDragger.cpp
+    mrvFPSInput.cpp
     mrvHistogram.cpp
     mrvHorSlider.cpp
     mrvLogDisplay.cpp

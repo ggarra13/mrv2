@@ -22,6 +22,9 @@
 #include "mrvFl/mrvPreferences.h"
 
 #include "mrvWidgets/mrvHorSlider.h"
+#include "mrvWidgets/mrvInput.h"
+#include "mrvWidgets/mrvIntInput.h"
+#include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvPack.h"
 #include "mrvWidgets/mrvCollapsibleGroup.h"
 #include "mrvWidgets/mrvTable.h"
@@ -58,7 +61,6 @@ namespace mrv
 {
 
     static const int kLineHeight = 20;
-    static const int kTextSize = 12;
     static const int kLabelSize = 12;
 
     static const Fl_Color kTitleColors[] = {
@@ -123,9 +125,9 @@ namespace mrv
         }
         else if (
             (type == kMatchValue || type == kMatchAll) &&
-            dynamic_cast< Fl_Input* >(w) != nullptr)
+            dynamic_cast< Input* >(w) != nullptr)
         {
-            Fl_Input* input = (Fl_Input*)w;
+            Input* input = (Input*)w;
             if (regex_match(row, match, input->value()))
                 return true;
         }
@@ -382,9 +384,7 @@ namespace mrv
         Fl_Box* box = new Fl_Box(controls->x(), Y, 80, 30, _("Search"));
         flex->fixed(box, 80);
         m_entry =
-            new Fl_Input(controls->x() + box->w(), Y, controls->w() - 200, 30);
-        m_entry->textcolor(FL_BLACK);
-        m_entry->color((Fl_Color)-1733777408);
+            new Input(controls->x() + box->w(), Y, controls->w() - 200, 30);
         m_entry->when(
             FL_WHEN_CHANGED | FL_WHEN_NOT_CHANGED | FL_WHEN_ENTER_KEY);
         m_entry->callback((Fl_Callback*)search_cb, this);
@@ -574,7 +574,7 @@ namespace mrv
     }
 
     // Update int slider from int input
-    static void update_int_slider(Fl_Int_Input* w)
+    static void update_int_slider(IntInput* w)
     {
         Fl_Group* g = w->parent();
         Fl_Slider* s = (Fl_Slider*)g->child(1);
@@ -583,20 +583,20 @@ namespace mrv
 
     void ImageInfoPanel::int_slider_cb(Fl_Slider* s, void* data)
     {
-        Fl_Int_Input* n = (Fl_Int_Input*)data;
+        IntInput* n = (IntInput*)data;
         char buf[64];
         snprintf(buf, 64, "%g", s->value());
         n->value(buf);
         n->do_callback();
     }
 
-    static bool modify_int(Fl_Int_Input* w, tl::io::Attribute::iterator& i)
+    static bool modify_int(IntInput* w, tl::io::Attribute::iterator& i)
     {
         update_int_slider(w);
         return true;
     }
 
-    static void change_first_frame_cb(Fl_Int_Input* w, ImageInfoPanel* info)
+    static void change_first_frame_cb(IntInput* w, ImageInfoPanel* info)
     {
         int first = atoi(w->value());
         const auto& player = info->timelinePlayer();
@@ -612,7 +612,7 @@ namespace mrv
         ui->uiTimeline->redraw();
     }
 
-    static void change_last_frame_cb(Fl_Int_Input* w, ImageInfoPanel* info)
+    static void change_last_frame_cb(IntInput* w, ImageInfoPanel* info)
     {
         int last = atoi(w->value());
         const auto& player = info->timelinePlayer();
@@ -992,11 +992,10 @@ namespace mrv
             Fl_Group* sg = new Fl_Group(kMiddle, Y, kMiddle, hh);
             sg->end();
 
-            Fl_Input* widget = new Fl_Input(kMiddle, Y, sg->w() - 50, hh);
+            Input* widget = new Input(kMiddle, Y, sg->w() - 50, hh);
             widget->value(content);
             widget->align(FL_ALIGN_LEFT);
             widget->box(FL_FLAT_BOX);
-            widget->textsize(kTextSize);
             widget->textcolor(FL_BLACK);
             widget->color(colB);
             widget->tooltip(tooltip ? tooltip : lbl->label());
@@ -1043,16 +1042,14 @@ namespace mrv
                 Fl_Output* o = new Fl_Output(kMiddle, Y, g->w() - kMiddle, hh);
                 widget = o;
                 o->value(content);
-                o->textsize(kTextSize);
+                o->textsize(12);
                 o->textcolor(FL_BLACK);
             }
             else
             {
-                Fl_Input* o = new Fl_Input(kMiddle, Y, g->w() - kMiddle, hh);
+                Input* o = new Input(kMiddle, Y, g->w() - kMiddle, hh);
                 widget = o;
                 o->value(content);
-                o->textsize(kTextSize);
-                o->textcolor(FL_BLACK);
             }
             widget->align(FL_ALIGN_LEFT);
             widget->box(FL_FLAT_BOX);
@@ -1119,15 +1116,12 @@ namespace mrv
 
             if (!editable)
             {
-                Fl_Int_Input* widget = new Fl_Int_Input(kMiddle, Y, p->w(), hh);
+                IntInput* widget = new IntInput(kMiddle, Y, p->w(), hh);
                 snprintf(buf, 64, "% 9d", content);
                 widget->value(buf);
                 widget->align(FL_ALIGN_LEFT);
-                widget->color((Fl_Color)0xf98a8a800);
                 widget->deactivate();
                 widget->box(FL_FLAT_BOX);
-                widget->textsize(kTextSize);
-                widget->textcolor(FL_BLACK);
                 if (tooltip)
                     widget->tooltip(tooltip);
                 else
@@ -1135,13 +1129,10 @@ namespace mrv
             }
             else
             {
-                Fl_Int_Input* widget = new Fl_Int_Input(kMiddle, Y, 50, hh);
+                IntInput* widget = new IntInput(kMiddle, Y, 50, hh);
                 snprintf(buf, 64, "% 9d", content);
                 widget->value(buf);
                 widget->align(FL_ALIGN_LEFT);
-                widget->color((Fl_Color)0xf98a8a800);
-                widget->textsize(kTextSize);
-                widget->textcolor(FL_BLACK);
                 if (tooltip)
                     widget->tooltip(tooltip);
                 else
@@ -1223,7 +1214,7 @@ namespace mrv
             widget->align(FL_ALIGN_LEFT | FL_ALIGN_INSIDE);
             widget->color(colB);
             widget->labelcolor(FL_BLACK);
-            widget->textsize(kTextSize);
+            widget->textsize(12);
             widget->textcolor(FL_BLACK);
             for (size_t i = 0; i < num; ++i)
             {
@@ -1312,13 +1303,10 @@ namespace mrv
             p->begin();
             if (!editable)
             {
-                Fl_Int_Input* widget = new Fl_Int_Input(kMiddle, Y, p->w(), hh);
+                IntInput* widget = new IntInput(kMiddle, Y, p->w(), hh);
                 snprintf(buf, 64, "% 9d", content);
                 widget->value(buf);
                 widget->box(FL_FLAT_BOX);
-                widget->color((Fl_Color)0xf98a8a800);
-                widget->textsize(kTextSize);
-                widget->textcolor(FL_BLACK);
                 widget->deactivate();
                 if (tooltip)
                     widget->tooltip(tooltip);
@@ -1327,13 +1315,10 @@ namespace mrv
             }
             else
             {
-                Fl_Int_Input* widget = new Fl_Int_Input(kMiddle, Y, 60, hh);
+                IntInput* widget = new IntInput(kMiddle, Y, 60, hh);
                 snprintf(buf, 64, "% 9d", content);
                 widget->value(buf);
                 widget->align(FL_ALIGN_CENTER);
-                widget->textsize(kTextSize);
-                widget->textcolor(FL_BLACK);
-                widget->color((Fl_Color)0xf98a8a800);
                 if (tooltip)
                     widget->tooltip(tooltip);
                 else
@@ -1452,13 +1437,11 @@ namespace mrv
         else
             g2->tooltip(lbl->label());
         {
-            Fl_Int_Input* widget = new Fl_Int_Input(kMiddle, Y, dw, hh);
+            IntInput* widget = new IntInput(kMiddle, Y, dw, hh);
             snprintf(buf, 64, "%d", content.min.x);
             widget->value(buf);
             widget->align(FL_ALIGN_LEFT);
             widget->color(colB);
-            widget->textcolor(FL_BLACK);
-            widget->textsize(kTextSize);
             widget->box(FL_FLAT_BOX);
             if (!editable)
             {
@@ -1473,13 +1456,11 @@ namespace mrv
             g2->add(widget);
         }
         {
-            Fl_Int_Input* widget = new Fl_Int_Input(kMiddle + dw, Y, dw, hh);
+            IntInput* widget = new IntInput(kMiddle + dw, Y, dw, hh);
             snprintf(buf, 64, "%d", content.min.y);
             widget->value(buf);
             widget->align(FL_ALIGN_LEFT);
             widget->box(FL_FLAT_BOX);
-            widget->textcolor(FL_BLACK);
-            widget->textsize(kTextSize);
             widget->color(colB);
             if (!editable)
             {
@@ -1494,14 +1475,11 @@ namespace mrv
             g2->add(widget);
         }
         {
-            Fl_Int_Input* widget =
-                new Fl_Int_Input(kMiddle + dw * 2, Y, dw, hh);
+            IntInput* widget = new IntInput(kMiddle + dw * 2, Y, dw, hh);
             snprintf(buf, 64, "%d", content.max.x);
             widget->value(buf);
             widget->align(FL_ALIGN_LEFT);
             widget->box(FL_FLAT_BOX);
-            widget->textcolor(FL_BLACK);
-            widget->textsize(kTextSize);
             widget->color(colB);
             if (!editable)
             {
@@ -1516,14 +1494,11 @@ namespace mrv
             g2->add(widget);
         }
         {
-            Fl_Int_Input* widget =
-                new Fl_Int_Input(kMiddle + dw * 3, Y, dw, hh);
+            IntInput* widget = new IntInput(kMiddle + dw * 3, Y, dw, hh);
             snprintf(buf, 64, "%d", content.max.y);
             widget->value(buf);
             widget->align(FL_ALIGN_LEFT);
             widget->box(FL_FLAT_BOX);
-            widget->textcolor(FL_BLACK);
-            widget->textsize(kTextSize);
             widget->color(colB);
             if (!editable)
             {
@@ -1538,8 +1513,7 @@ namespace mrv
             g2->add(widget);
         }
         {
-            Fl_Int_Input* widget =
-                new Fl_Int_Input(kMiddle + dw * 4, Y, dw, hh, "W:");
+            IntInput* widget = new IntInput(kMiddle + dw * 4, Y, dw, hh, "W:");
             snprintf(buf, 64, "%d", content.w());
             widget->value(buf);
             widget->align(FL_ALIGN_LEFT);
@@ -1547,13 +1521,12 @@ namespace mrv
             widget->color(colB);
             widget->labelcolor(FL_LIGHT3);
             widget->textcolor(FL_BLACK);
-            widget->textsize(kTextSize);
+            widget->textsize(12);
             widget->deactivate();
             g2->add(widget);
         }
         {
-            Fl_Int_Input* widget =
-                new Fl_Int_Input(kMiddle + dw * 5, Y, dw, hh, "H:");
+            IntInput* widget = new IntInput(kMiddle + dw * 5, Y, dw, hh, "H:");
             snprintf(buf, 64, "%d", content.h());
             widget->value(buf);
             widget->align(FL_ALIGN_LEFT);
@@ -1607,8 +1580,6 @@ namespace mrv
             widget->default_value(content);
             widget->align(FL_ALIGN_LEFT);
             widget->color(colB);
-            widget->textsize(kTextSize);
-            widget->textcolor(FL_BLACK);
             double maxS = maxV;
             if (content > 100000 && maxV <= 100000)
                 maxS = 1000000;
@@ -1670,12 +1641,10 @@ namespace mrv
         m_curr->add(g);
 
         {
-            Fl_Input* widget = new Fl_Input(kMiddle, Y, g->w() - kMiddle, 20);
+            Input* widget = new Input(kMiddle, Y, g->w() - kMiddle, 20);
             widget->value(content ? _("Yes") : _("No"));
             widget->box(FL_FLAT_BOX);
             widget->align(FL_ALIGN_LEFT);
-            widget->textcolor(FL_BLACK);
-            widget->textsize(kTextSize);
             widget->color(colB);
             if (tooltip)
                 widget->tooltip(tooltip);

@@ -48,6 +48,15 @@ v0.8.0
 - Creating a timeline in the Playlist Panel is also done in seconds.
 - Fixed a crash when creating an empty timeline or a timeline from a clip in
   the Playlist Panel.
+- Some UI fixes:
+    * The Zoom factor in the Pixel Toolbar keeps its value  when selecting
+      it from the pulldown.
+    * All buttons and displays have the same size.
+    * Cursor in all input fields is now red for easier reading.
+    * The FPS input widget now displays the FPS with different number of
+      digits to fit the value as best it can on the limited width.
+
+
 
 v0.7.9
 ======

@@ -9,6 +9,8 @@
 #include <FL/Fl_Flex.H>
 
 #include "mrvWidgets/mrvFunctional.h"
+#include "mrvWidgets/mrvInput.h"
+#include "mrvWidgets/mrvIntInput.h"
 #include "mrvWidgets/mrvPack.h"
 
 #include "mrvFl/mrvIO.h"
@@ -37,7 +39,7 @@ namespace mrv
     {
         Fl_Button* createButton = nullptr;
         Fl_Group* hostGroup = nullptr;
-        Fl_Input* host = nullptr;
+        Input* host = nullptr;
         PopupMenu* hostMenu = nullptr;
         Fl_Group* portGroup = nullptr;
         Fl_Int_Input* port = nullptr;
@@ -75,8 +77,8 @@ namespace mrv
 
         std_any value;
 
-        Fl_Input* i;
-        Fl_Int_Input* in;
+        Input* i;
+        IntInput* in;
         Fl_Button* b;
         PopupMenu* m;
 
@@ -116,14 +118,11 @@ namespace mrv
         Y += 20;
 
         _r->hostGroup = new Fl_Group(g->x(), Y, g->w(), 30);
-        auto iW = new Widget< Fl_Input >(
+        auto iW = new Widget< Input >(
             g->x() + X, Y + 5, g->w() - X - 30, 20, _("Host"));
         _r->host = i = iW;
         i->tooltip(_("Host name or IP to connect to.  "
                      "For example: 127.0.0.1"));
-        i->color((Fl_Color)0xf98a8a800);
-        i->textcolor((Fl_Color)56);
-        i->labelsize(12);
         iW->callback(
             [=](auto o)
             {
@@ -170,8 +169,7 @@ namespace mrv
         }
 
         _r->portGroup = new Fl_Group(g->x(), Y, g->w(), 30);
-        auto inV =
-            new Widget<Fl_Int_Input>(g->x() + X, Y + 5, 80, 20, _("Port"));
+        auto inV = new Widget<IntInput>(g->x() + X, Y + 5, 80, 20, _("Port"));
         _r->port = in = inV;
 
         value = settingsObject->value("TCP/Control/Port");
@@ -181,10 +179,6 @@ namespace mrv
         in->value(portNumber.c_str());
         in->tooltip(_("Port to connect to.  Make sure your firewall and router "
                       "allows read/write through it."));
-        in->color((Fl_Color)0xf98a8a800);
-        in->textcolor((Fl_Color)56);
-        in->labelsize(12);
-
         inV->callback(
             [=](auto w)
             {

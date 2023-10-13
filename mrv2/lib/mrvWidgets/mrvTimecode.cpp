@@ -42,8 +42,9 @@ namespace mrv
         Fl_Float_Input(X, Y, W, H, L),
         _p(new Private)
     {
-        TLRENDER_P();
-
+        color((Fl_Color)0xf98a8a800);
+        cursor_color(FL_RED);
+        textcolor(FL_BLACK);
         _updateGeometry();
         _textUpdate();
     }

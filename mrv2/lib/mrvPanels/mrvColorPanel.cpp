@@ -10,6 +10,7 @@
 
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvHorSlider.h"
+#include "mrvWidgets/mrvInput.h"
 #include "mrvWidgets/mrvCollapsibleGroup.h"
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
@@ -25,7 +26,7 @@ namespace mrv
 
     struct ColorPanel::Private
     {
-        Fl_Input* lutFilename = nullptr;
+        Input* lutFilename = nullptr;
         Fl_Choice* lutOrder = nullptr;
 
         Fl_Check_Button* colorOn = nullptr;
@@ -123,14 +124,11 @@ namespace mrv
         Fl_Group* gb = new Fl_Group(g->x(), 40, g->w(), 20);
         gb->begin();
 
-        Fl_Input* i;
+        Input* i;
         int X = 100 * g->w() / 270;
-        auto iW = new Widget<Fl_Input>(
+        auto iW = new Widget<Input>(
             g->x() + X, 40, g->w() - X - 30, 20, _("Filename"));
         i = _r->lutFilename = iW;
-        i->color((Fl_Color)0xf98a8a800);
-        i->textcolor((Fl_Color)56);
-        i->labelsize(12);
         iW->callback(
             [=](auto o)
             {

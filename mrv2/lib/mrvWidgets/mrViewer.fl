@@ -16,13 +16,13 @@ decl {\#include "mrvCore/mrvColorSpaces.h"} {public global
 decl {\#include "mrvCore/mrvI8N.h"} {public global
 }
 
-decl {\#include "mrvWidgets/mrvDockGroup.h"} {public global
-}
-
 decl {\#include "mrvWidgets/mrvButton.h"} {public global
 }
 
-decl {\#include "mrvWidgets/mrvStateButton.h"} {public global
+decl {\#include "mrvWidgets/mrvDockGroup.h"} {public global
+}
+
+decl {\#include "mrvWidgets/mrvFPSInput.h"} {public global
 }
 
 decl {\#include "mrvWidgets/mrvMainWindow.h"} {public global
@@ -41,6 +41,9 @@ decl {\#include "mrvWidgets/mrvVolumeSlider.h"} {public global
 }
 
 decl {\#include "mrvWidgets/mrvResizableBar.h"} {public global
+}
+
+decl {\#include "mrvWidgets/mrvStateButton.h"} {public global
 }
 
 decl {\#include "mrvWidgets/mrvStatusBar.h"} {public global
@@ -103,11 +106,11 @@ decl {class HotkeyUI;} {public global
 decl {class AboutUI;} {public global
 }
 
-widget_class PixelToolBarClass {
-  xywh {225 122 682 31} resizable
+widget_class PixelToolBarClass {open
+  xywh {585 471 682 31} resizable
   class Fl_Double_Window visible
 } {
-  Fl_Group {} {
+  Fl_Group {} {open
     xywh {-2 0 688 30} box FLAT_BOX color 56
   } {
     Fl_Menu_Button uiZoom {
@@ -129,9 +132,8 @@ else
 f = float(t - 7);
 }
 ui->uiView->setViewZoom( f );
-ui->uiView->centerView();
-o->value(8);}
-      tooltip {Image zoom setting.} xywh {1 3 26 24} color 1397969664 labelsize 10 labelcolor 26 align 16 textsize 10
+ui->uiView->centerView();}
+      tooltip {Image zoom setting.} xywh {1 3 26 25} color 1397969664 labelsize 10 labelcolor 26 align 16 textsize 10
       class {mrv::PopupMenu}
     } {
       MenuItem {} {
@@ -256,12 +258,12 @@ o->value(8);}
                 tooltip {Blue value of image pixel under mouse.} xywh {248 3 50 25} box FLAT_BOX color 56 align 56 textsize 12 textcolor 4
               }
               Fl_Output uiPixelA {
-                tooltip {Alpha value of image pixel under mouse.} xywh {298 3 50 25} box FLAT_BOX color 56 align 56 textsize 12 textcolor 7
+                tooltip {Alpha value of image pixel under mouse.} xywh {298 3 50 25} box FLAT_BOX color 56 align 56 textsize 12 textcolor 55
               }
             }
           }
           Fl_Output uiPixelView {
-            tooltip {8-bit sample of image pixel under mouse.} xywh {374 2 25 25} box FLAT_BOX color 1397969664
+            tooltip {8-bit sample of image pixel under mouse.} xywh {374 3 25 25} box FLAT_BOX color 1397969664
           }
           Fl_Group {} {open
             xywh {401 3 178 26}
@@ -323,13 +325,13 @@ ui->uiView->redraw();}
               }
             }
             Fl_Output uiPixelH {
-              tooltip {Hue value of image pixel under mouse.} xywh {429 3 50 24} box FLAT_BOX color 56 align 48 textsize 12 textcolor 3
+              tooltip {Hue value of image pixel under mouse.} xywh {429 3 50 25} box FLAT_BOX color 56 align 48 textsize 12 textcolor 3
             }
             Fl_Output uiPixelS {
-              tooltip {Saturation value of image pixel under mouse.} xywh {479 3 50 24} box FLAT_BOX color 56 align 48 textsize 12 textcolor 3
+              tooltip {Saturation value of image pixel under mouse.} xywh {479 3 50 25} box FLAT_BOX color 56 align 48 textsize 12 textcolor 3
             }
             Fl_Output uiPixelV {
-              tooltip {Value (Intensity) of image pixel under mouse.} xywh {529 3 50 24} box FLAT_BOX color 56 align 48 textsize 12 textcolor 3
+              tooltip {Value (Intensity) of image pixel under mouse.} xywh {529 3 50 25} box FLAT_BOX color 56 align 48 textsize 12 textcolor 3
             }
           }
           Fl_Menu_Button uiPixelValue {
@@ -339,7 +341,7 @@ ui->uiView->updatePixelBar();
 ui->uiView->redraw();} open
             tooltip {Displays:
 * Full Pixel Values (Gamma, Gain and LUT)
-* Original (No Gamma, No Gain, No Lut)} xywh {351 4 20 24} align 48
+* Original (No Gamma, No Gain, No Lut)} xywh {351 3 20 25} align 48
             code0 {o->value(0);
 o->disable_glyph();}
             class {mrv::PopupMenu}
@@ -371,7 +373,7 @@ Y' (Lumma) is the weighted pixel value according to:
 L (Lightness) is the human perception of luminance of the image which is non linear.
 According to CIE No.15.2:
       L = (116 * Y ^ 1/3 - 16) / 100
-A pixel of Y = 0.18 (L = 0.5) will appear about half as bright as Y = L = 1.0 (white).} xywh {591 3 21 24} align 112
+A pixel of Y = 0.18 (L = 0.5) will appear about half as bright as Y = L = 1.0 (white).} xywh {591 3 21 25} align 112
               code0 {o->value(0);}
               code1 {o->disable_glyph();}
               code2 {o->disable_label();}
@@ -395,7 +397,7 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
               }
             }
             Fl_Output uiPixelL {
-              tooltip {Luminance of image pixel under mouse.} xywh {612 3 75 24} box FLAT_BOX color 56 align 36 textsize 12 textcolor 7
+              tooltip {Luminance of image pixel under mouse.} xywh {612 3 75 25} box FLAT_BOX color 56 align 36 textsize 12 textcolor 55
             }
           }
         }
@@ -411,7 +413,7 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
 }
 
 widget_class TimelineClass {open
-  xywh {130 292 690 29} resizable
+  xywh {225 321 690 29} resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {open
@@ -420,7 +422,7 @@ widget_class TimelineClass {open
     Fl_Group {} {open
       xywh {4 0 686 29}
     } {
-      Fl_Group {} {
+      Fl_Group {} {open selected
         xywh {4 3 94 26}
       } {
         Fl_Menu_Button uiTimecodeSwitch {
@@ -460,7 +462,7 @@ auto time = textToTime( text, rate, units,
 if ( ! tl::time::isValid(time) ) return;
 player->seek( time );
 ui->uiView->take_focus();}
-          tooltip {Current frame.} xywh {28 3 70 24} color -1733777408 selection_color 0 when 8
+          tooltip {Current frame.} xywh {28 3 70 24} selection_color 0 when 8
           code1 {o->textcolor( FL_BLACK );}
           class {mrv::Timecode}
         }
@@ -567,7 +569,7 @@ player->setLoop( loop );}
             callback {int idx = o->value();
 double speed = atof( o->text( idx ) );
 uiFPS->value( speed );
-uiFPS->do_callback();} open
+uiFPS->do_callback();}
             tooltip {Some default frame rate settings.} xywh {341 1 40 24} labelsize 10 align 16
             code0 {o->disable_label();}
             class {mrv::PopupMenu}
@@ -581,7 +583,7 @@ uiFPS->do_callback();} open
               xywh {5 3 100 20}
             }
             MenuItem {} {
-              label {59.952} selected
+              label {59.952}
               xywh {5 3 100 20}
             }
             MenuItem {} {
@@ -649,13 +651,12 @@ if ( speed <= 0.0 )
   o->redraw();
 }
 player->setSpeed( speed );}
-            tooltip {Allows you to adjust frame rate playback.} xywh {386 3 42 24} color -1733777408 selection_color 0
-            code0 {o->textcolor( FL_BLACK );
-o->value(24);}
+            tooltip {Allows you to adjust frame rate playback.} xywh {386 3 42 24} selection_color 0
+            code0 {o->textcolor( FL_BLACK );o->value(24);}
             code1 {o->step(0.001);}
             code2 {o->minimum(1);}
             code3 {o->maximum(60.0);}
-            class Fl_Value_Input
+            class {mrv::FPSInput}
           }
         }
         Fl_Group {} {open
@@ -709,7 +710,7 @@ player->setInOutRange( new_range );
 ui->uiTimeline->setTimelinePlayer(player);
 ui->uiTimeline->redraw();
 ui->uiView->take_focus();}
-          tooltip {Allows you to set starting frame for timeline.} xywh {530 3 70 24} color -1733777408 selection_color 0 when 8
+          tooltip {Allows you to set starting frame for timeline.} xywh {530 3 70 24} selection_color 0 when 8
           code1 {o->textcolor( FL_BLACK );}
           class {mrv::Timecode}
         }
@@ -732,7 +733,7 @@ player->setInOutRange( new_range );
 ui->uiTimeline->setTimelinePlayer(player);
 ui->uiTimeline->redraw();
 ui->uiView->take_focus();}
-          tooltip {Allows you to set the ending frame for timeline.} xywh {620 3 70 24} color -1733777408 selection_color 0 when 8
+          tooltip {Allows you to set the ending frame for timeline.} xywh {620 3 70 24} selection_color 0 when 8
           code1 {o->textcolor( FL_BLACK );}
           class {mrv::Timecode}
         }
@@ -780,8 +781,7 @@ ui->uiTimeline->redraw();}
   }
   decl {ViewerUI* ui;} {private local
   }
-  Function {setUI( ViewerUI* x )} {open
-  } {
+  Function {setUI( ViewerUI* x )} {} {
     code {ui = x;} {}
   }
 }
@@ -915,7 +915,7 @@ uiGain->do_callback();}
               user_data this user_data_type {ViewerUI*}
               callback {uiGain->value( o->value() );
 uiView->updateDisplayOptions();}
-              tooltip {Gain image value.  A simple multiplier of the image pixel values.} xywh {180 27 35 22} color -1733777408 selection_color 0 maximum 64 value 1
+              tooltip {Gain image value.  A simple multiplier of the image pixel values.} xywh {180 27 35 22} selection_color 0 maximum 64 value 1
               code0 {o->textsize(12);}
               code1 {o->textcolor( FL_BLACK );}
             }
@@ -971,9 +971,10 @@ uiGamma->do_callback();}
               callback {uiGamma->value( o->value() );
 uiView->updateDisplayOptions();}
               tooltip {Allows you to adjust gamma curve for display.
-Value is:  pow( 2, 1/x );} xywh {597 28 35 22} color -1733777408 selection_color 0 maximum 64 value 1
+Value is:  pow( 2, 1/x );} xywh {597 28 35 22} selection_color 0 maximum 64 value 1
               code0 {o->textsize(12);}
               code1 {o->textcolor( FL_BLACK );}
+              code2 {o->color((Fl_Color)0xf98a8a800);}
             }
             Fl_Slider uiGamma {
               user_data this user_data_type {ViewerUI*}

@@ -98,7 +98,6 @@ namespace mrv
         sp = spW;
         sp->format("%4.4g");
         sp->labelsize(12);
-        sp->color((Fl_Color)-1733777408);
         sp->textcolor(FL_BLACK);
         sp->step(1);
         sp->range(32, 4096);
@@ -120,7 +119,6 @@ namespace mrv
         sp = spW;
         sp->format("%4.4g");
         sp->labelsize(12);
-        sp->color((Fl_Color)-1733777408);
         sp->textcolor(FL_BLACK);
         sp->step(0.001);
         // sp->range(1, 12);
@@ -181,7 +179,6 @@ namespace mrv
         sp = spW;
         sp->format("%4.4g");
         sp->labelsize(12);
-        sp->color((Fl_Color)-1733777408);
         sp->textcolor(FL_BLACK);
         sp->step(1);
         sp->range(32, 4096);
@@ -203,7 +200,6 @@ namespace mrv
         sp = spW;
         sp->format("%4.4g");
         sp->labelsize(12);
-        sp->color((Fl_Color)-1733777408);
         sp->textcolor(FL_BLACK);
         sp->step(1);
         sp->range(32, 4096);

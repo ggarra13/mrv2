@@ -1117,7 +1117,7 @@ theme "Black"
     cmap 4 0   0   220		# blu (label color for "Reports", "Current Job", "Run/Busy" state..)
     cmap 5 120 0   120		# mag LOGFILE: jobdonecommand.log, jobdumpcommand.log
     cmap 6 0   120 120		# cyn
-    cmap 7 220 220 220		# wht color of pixel bar
+    cmap 7 152 168 168	        # color of background of input fiels
     cmap 8 100 100 100		# desaturated black
     cmap 9 100 0  0             # desaturated red
     cmap 10 0 100 0		# desaturated grn
