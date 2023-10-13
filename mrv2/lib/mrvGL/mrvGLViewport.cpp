@@ -212,13 +212,6 @@ namespace mrv
             {
                 gl::OffscreenBufferOptions offscreenBufferOptions;
                 offscreenBufferOptions.colorType = image::PixelType::RGBA_F32;
-                if (!p.displayOptions.empty())
-                {
-                    offscreenBufferOptions.colorFilters =
-                        p.displayOptions[0].imageFilters;
-                }
-                offscreenBufferOptions.depth = gl::OffscreenDepth::_24;
-                offscreenBufferOptions.stencil = gl::OffscreenStencil::_8;
                 if (gl::doCreate(
                         gl.background, renderSize, offscreenBufferOptions))
                 {
@@ -226,6 +219,13 @@ namespace mrv
                         renderSize, offscreenBufferOptions);
                 }
 
+                if (!p.displayOptions.empty())
+                {
+                    offscreenBufferOptions.colorFilters =
+                        p.displayOptions[0].imageFilters;
+                }
+                offscreenBufferOptions.depth = gl::OffscreenDepth::_24;
+                offscreenBufferOptions.stencil = gl::OffscreenStencil::_8;
                 if (gl::doCreate(gl.buffer, renderSize, offscreenBufferOptions))
                 {
                     gl.buffer = gl::OffscreenBuffer::create(
