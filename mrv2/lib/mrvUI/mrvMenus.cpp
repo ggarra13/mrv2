@@ -488,7 +488,8 @@ namespace mrv
 
         const timeline::DisplayOptions& d = ui->app->displayOptions();
         const timeline::ImageOptions& o = ui->uiView->getImageOptions(-1);
-        const bool blackBackground = ui->uiView->getBlackBackground();
+        const timeline::BackgroundOptions backgroundOptions =
+            ui->uiView->getBackgroundOptions();
 
         mode = FL_MENU_RADIO;
         if (numFiles == 0)
@@ -555,16 +556,29 @@ namespace mrv
             _("Render/Mirror Y"), kFlipY.hotkey(), (Fl_Callback*)mirror_y_cb,
             ui, FL_MENU_DIVIDER | mode);
 
-        mode = FL_MENU_TOGGLE;
+        mode = FL_MENU_RADIO;
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
 
         idx = menu->add(
-            _("Render/Black Background  "), kToggleBlackBackground.hotkey(),
-            (Fl_Callback*)toggle_black_background_cb, ui,
-            FL_MENU_DIVIDER | mode);
+            _("Render/Background/Transparent"), kToggleBlackBackground.hotkey(),
+            (Fl_Callback*)transparent_background_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (blackBackground)
+        if (backgroundOptions.type == timeline::Background::Transparent)
+            item->set();
+
+        idx = menu->add(
+            _("Render/Background/Solid"), kToggleBlackBackground.hotkey(),
+            (Fl_Callback*)solid_background_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (backgroundOptions.type == timeline::Background::Solid)
+            item->set();
+
+        idx = menu->add(
+            _("Render/Background/Checkers"), kToggleBlackBackground.hotkey(),
+            (Fl_Callback*)checkers_background_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (backgroundOptions.type == timeline::Background::Checkers)
             item->set();
 
         mode = FL_MENU_RADIO;

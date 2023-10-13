@@ -269,6 +269,7 @@ namespace mrv
                     CHECK_GL;
 
                     StoreLocale;
+
                     gl.render->begin(
                         renderSize, p.colorConfigOptions, p.lutOptions);
                     CHECK_GL;
@@ -318,20 +319,31 @@ namespace mrv
         CHECK_GL;
 
         float r = 0.F, g = 0.F, b = 0.F, a = 1.F;
-        if (!p.presentation && !p.blackBackground)
+        if (!p.presentation)
         {
-            uint8_t ur, ug, ub;
-            Fl::get_color(p.ui->uiPrefs->uiPrefsViewBG->color(), ur, ug, ub);
-            r = ur / 255.0f;
-            g = ug / 255.0f;
-            b = ub / 255.0f;
+            switch (p.backgroundOptions.type)
+            {
+            case timeline::Background::Solid:
+                p.backgroundOptions.solidColor =
+                    image::Color4f(0.F, 0.F, 0.F, 1.F);
+                break;
+            case timeline::Background::Transparent:
+            {
+                uint8_t ur, ug, ub;
+                Fl::get_color(
+                    p.ui->uiPrefs->uiPrefsViewBG->color(), ur, ug, ub);
+                r = ur / 255.0f;
+                g = ug / 255.0f;
+                b = ub / 255.0f;
+                p.backgroundOptions.solidColor = image::Color4f(r, g, b, a);
+                break;
+            }
+            default:
+                break;
+            }
         }
 
-#ifdef USE_GL_DOUBLE
         glDrawBuffer(GL_BACK_LEFT);
-#else
-        glDrawBuffer(GL_FRONT_LEFT);
-#endif
         CHECK_GL;
         glClearColor(r, g, b, a);
         CHECK_GL;
@@ -340,6 +352,8 @@ namespace mrv
 
         if (gl.buffer && gl.shader)
         {
+            _drawBackground();
+
             math::Matrix4x4f mvp;
 
             if (p.environmentMapOptions.type != EnvironmentMapOptions::kNone)

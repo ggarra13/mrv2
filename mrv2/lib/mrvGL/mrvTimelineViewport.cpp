@@ -46,6 +46,7 @@ namespace mrv
 {
     using namespace tl;
 
+    timeline::BackgroundOptions TimelineViewport::Private::backgroundOptions;
     EnvironmentMapOptions TimelineViewport::Private::environmentMapOptions;
     math::Box2i TimelineViewport::Private::selection =
         math::Box2i(0, 0, -1, -1);
@@ -58,7 +59,6 @@ namespace mrv
     bool TimelineViewport::Private::safeAreas = false;
     bool TimelineViewport::Private::dataWindow = false;
     bool TimelineViewport::Private::displayWindow = false;
-    bool TimelineViewport::Private::blackBackground = false;
     std::string TimelineViewport::Private::helpText;
     float TimelineViewport::Private::helpTextFade;
     bool TimelineViewport::Private::hudActive = true;
@@ -428,6 +428,26 @@ namespace mrv
     TimelineViewport::getColorConfigOptions() noexcept
     {
         return _p->colorConfigOptions;
+    }
+
+    const timeline::BackgroundOptions&
+    TimelineViewport::getBackgroundOptions() const noexcept
+    {
+        return _p->backgroundOptions;
+    }
+
+    void TimelineViewport::setBackgroundOptions(
+        const timeline::BackgroundOptions& value)
+    {
+        TLRENDER_P();
+        if (value == p.backgroundOptions)
+            return;
+        Message msg;
+        msg["command"] = "setBackgroundOptions";
+        msg["value"] = value;
+        tcp->pushMessage(msg);
+        p.backgroundOptions = value;
+        redrawWindows();
     }
 
     void TimelineViewport::setColorConfigOptions(
@@ -1702,17 +1722,6 @@ namespace mrv
     {
         redraw();
         Fl::flush(); // force the redraw
-    }
-
-    bool TimelineViewport::getBlackBackground() const noexcept
-    {
-        return _p->blackBackground;
-    }
-
-    void TimelineViewport::setBlackBackground(bool active) noexcept
-    {
-        _p->blackBackground = active;
-        redrawWindows();
     }
 
     bool TimelineViewport::getPresentationMode() const noexcept

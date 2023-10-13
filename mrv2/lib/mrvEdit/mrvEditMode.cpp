@@ -15,4 +15,5 @@ namespace mrv
 
     TLRENDER_ENUM_IMPL(EditMode, "None", "Timeline", "Saved", "Full");
     TLRENDER_ENUM_SERIALIZE_IMPL(EditMode);
+
 } // namespace mrv

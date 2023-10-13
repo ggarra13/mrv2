@@ -34,7 +34,7 @@
 namespace
 {
     const char* kModule = "mrv2s";
-    const int kSessionVersion = 7;
+    const int kSessionVersion = 8;
 } // namespace
 
 namespace
@@ -281,6 +281,7 @@ namespace mrv
             Message compare = model->observeCompareOptions()->get();
             Message stereo = model->observeStereo3DOptions()->get();
             Message environmentMap = ui->uiView->getEnvironmentMapOptions();
+            Message background = ui->uiView->getBackgroundOptions();
             int stereoIndex = model->observeStereoIndex()->get();
 
             session["ui"] = bars;
@@ -293,6 +294,7 @@ namespace mrv
             session["stereo3DOptions"] = stereo;
             session["stereoIndex"] = stereoIndex;
             session["environmentMapOptions"] = environmentMap;
+            session["backgroundOptions"] = background;
             session["displayOptions"] = display;
             session["editMode"] = editMode;
             session["metadata"] = sessionMetadata;
@@ -595,6 +597,13 @@ namespace mrv
             if (version >= 7)
             {
                 session["metadata"].get_to(sessionMetadata);
+            }
+
+            if (version >= 8)
+            {
+                timeline::BackgroundOptions background =
+                    session["backgroundOptions"];
+                view->setBackgroundOptions(background);
             }
 
             enable_cypher(true);

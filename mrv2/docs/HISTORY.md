@@ -51,6 +51,8 @@ v0.8.0
 - Fixed missing frames (Repeat Last and Repeat Scratched) when the user was
   reading a different layer and he was playing backwards or stepping through
   the frames.
+- Added drawing background transparent, solid or checkers.
+- Fixed a network error (harmless) about edit mode.
 - Some UI fixes:
     * The Zoom factor in the Pixel Toolbar keeps its value  when selecting
       it from the pulldown.

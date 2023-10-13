@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <tlTimeline/BackgroundOptions.h>
 #include <tlTimeline/IRender.h>
 
 #include "mrvCore/mrvStereo3DOptions.h"
@@ -84,6 +85,13 @@ namespace mrv
 
         //! Return the current video image in BGRA order after drawing it.
         const image::Color4f* image() const;
+
+        //! Get the compositing status.
+        const timeline::BackgroundOptions&
+        getBackgroundOptions() const noexcept;
+
+        //! Set the background options.
+        void setBackgroundOptions(const timeline::BackgroundOptions& value);
 
         //! Set the color configuration.
         void
@@ -272,12 +280,6 @@ namespace mrv
 
         //! Get the window to full screen and hide/show all bars.
         bool getPresentationMode() const noexcept;
-
-        //! Get the compositing status.
-        bool getBlackBackground() const noexcept;
-
-        //! Set the compositing status.
-        void setBlackBackground(bool active) noexcept;
 
         //! Retrieve the full sceen mode.
         bool getFullScreenMode() const noexcept;

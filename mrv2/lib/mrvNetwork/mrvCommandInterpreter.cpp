@@ -526,6 +526,12 @@ namespace mrv
                 app->setDisplayOptions(o);
                 ui->uiMain->fill_menu(ui->uiMenuBar);
             }
+            else if (c == "setBackgroundOptions")
+            {
+                const tl::timeline::BackgroundOptions& o = message["value"];
+                view->setBackgroundOptions(o);
+                ui->uiMain->fill_menu(ui->uiMenuBar);
+            }
             else if (c == "setCompareOptions")
             {
                 const tl::timeline::CompareOptions& o = message["value"];
@@ -1136,17 +1142,15 @@ namespace mrv
                     tcp->unlock();
                     return;
                 }
-                editModeH = message["height"];
                 EditMode value = message["value"];
                 editMode = value;
+                std::cerr << "message " << message << std::endl;
+                editModeH = message["height"];
                 bool presentation = ui->uiView->getPresentationMode();
                 if (!presentation)
                     ui->uiView->resizeWindow();
 
                 set_edit_mode_cb(value, ui);
-                // if (value == EditMode::kTimeline)
-                //     ui->uiEdit->value(1);
-                // ui->uiEdit->do_callback();
             }
             else if (c == "Network Panel")
             {

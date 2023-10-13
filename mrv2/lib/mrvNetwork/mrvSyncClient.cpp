@@ -105,6 +105,7 @@ namespace mrv
                     ? EditMode::kFull
                     : EditMode::kTimeline;
             msg["value"] = mode;
+            msg["height"] = editModeH;
             pushMessage(msg);
 
             // Seek to current time in player

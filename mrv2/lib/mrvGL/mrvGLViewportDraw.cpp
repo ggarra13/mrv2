@@ -2,6 +2,7 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <tlUI/DrawUtil.h>
 #include <tlGL/Util.h>
 
 #include "mrvCore/mrvLocale.h"
@@ -1164,4 +1165,40 @@ namespace mrv
         gl.render->end();
     }
 
+    void Viewport::_drawBackground() const noexcept
+    {
+        MRV2_GL();
+        TLRENDER_P();
+        if (p.timelinePlayers.empty())
+            return;
+        const auto& viewportSize = getViewportSize();
+
+        timeline::RenderOptions renderOptions;
+        renderOptions.clear = false;
+
+        gl.render->begin(
+            viewportSize, timeline::ColorConfigOptions(),
+            timeline::LUTOptions(), renderOptions);
+
+        switch (p.backgroundOptions.type)
+        {
+        case timeline::Background::Solid:
+            gl.render->clearViewport(p.backgroundOptions.solidColor);
+            break;
+        case timeline::Background::Checkers:
+            gl.render->clearViewport(image::Color4f(0.F, 0.F, 0.F));
+            gl.render->drawColorMesh(
+                ui::checkers(
+                    math::Box2i(0, 0, viewportSize.w, viewportSize.h),
+                    p.backgroundOptions.checkersColor0,
+                    p.backgroundOptions.checkersColor1,
+                    p.backgroundOptions.checkersSize),
+                math::Vector2i(), image::Color4f(1.F, 1.F, 1.F));
+            break;
+        default:
+            break;
+        }
+
+        gl.render->end();
+    }
 } // namespace mrv

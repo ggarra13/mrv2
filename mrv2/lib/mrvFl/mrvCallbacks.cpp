@@ -1547,13 +1547,35 @@ namespace mrv
         fl_open_uri(docs.c_str());
     }
 
-    void toggle_black_background_cb(Fl_Menu_* m, ViewerUI* ui)
+    void transparent_background_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        timeline::BackgroundOptions options =
+            ui->uiView->getBackgroundOptions();
+        const Fl_Menu_Item* item = m->mvalue();
+        if (item->checked())
+            options.type = timeline::Background::Transparent;
+        ui->uiView->setBackgroundOptions(options);
+    }
+
+    void solid_background_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        timeline::BackgroundOptions options =
+            ui->uiView->getBackgroundOptions();
+        const Fl_Menu_Item* item = m->mvalue();
+        if (item->checked())
+            options.type = timeline::Background::Solid;
+        ui->uiView->setBackgroundOptions(options);
+    }
+
+    void checkers_background_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        timeline::BackgroundOptions options =
+            ui->uiView->getBackgroundOptions();
         bool value = true;
         const Fl_Menu_Item* item = m->mvalue();
-        if (!item->checked())
-            value = false;
-        ui->uiView->setBlackBackground(value);
+        if (item->checked())
+            options.type = timeline::Background::Checkers;
+        ui->uiView->setBackgroundOptions(options);
     }
 
     void toggle_annotation_cb(Fl_Menu_* m, ViewerUI* ui)
