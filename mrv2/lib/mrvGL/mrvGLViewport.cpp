@@ -85,6 +85,7 @@ namespace mrv
 #ifdef USE_ONE_PIXEL_LINES
         gl.outline.reset();
 #endif
+        gl.background.reset();
         gl.buffer.reset();
         gl.annotation.reset();
         gl.shader.reset();
@@ -202,6 +203,9 @@ namespace mrv
 
         const auto& viewportSize = getViewportSize();
         const auto& renderSize = getRenderSize();
+        bool transparent =
+            p.backgroundOptions.type == timeline::Background::Transparent;
+
         try
         {
             if (renderSize.isValid())
@@ -215,6 +219,13 @@ namespace mrv
                 }
                 offscreenBufferOptions.depth = gl::OffscreenDepth::_24;
                 offscreenBufferOptions.stencil = gl::OffscreenStencil::_8;
+                if (gl::doCreate(
+                        gl.background, renderSize, offscreenBufferOptions))
+                {
+                    gl.background = gl::OffscreenBuffer::create(
+                        renderSize, offscreenBufferOptions);
+                }
+
                 if (gl::doCreate(gl.buffer, renderSize, offscreenBufferOptions))
                 {
                     gl.buffer = gl::OffscreenBuffer::create(
@@ -250,8 +261,21 @@ namespace mrv
             }
             else
             {
+                gl.background.reset();
                 gl.buffer.reset();
                 gl.stereoBuffer.reset();
+            }
+
+            if (gl.background && !transparent)
+            {
+                gl::OffscreenBufferBinding binding(gl.background);
+
+                locale::SetAndRestore saved;
+
+                gl.render->begin(
+                    renderSize, p.colorConfigOptions, p.lutOptions);
+                _drawBackground();
+                gl.render->end();
             }
 
             if (gl.buffer && gl.render)
@@ -272,8 +296,6 @@ namespace mrv
 
                     gl.render->begin(
                         renderSize, p.colorConfigOptions, p.lutOptions);
-
-                    _drawBackground();
                     CHECK_GL;
                     if (p.missingFrame &&
                         p.missingFrameType != MissingFrameType::kBlackFrame)
@@ -323,23 +345,12 @@ namespace mrv
         float r = 0.F, g = 0.F, b = 0.F, a = 1.F;
         if (!p.presentation)
         {
-            switch (p.backgroundOptions.type)
-            {
-            case timeline::Background::Solid:
-            case timeline::Background::Transparent:
-            {
-                uint8_t ur, ug, ub;
-                Fl::get_color(
-                    p.ui->uiPrefs->uiPrefsViewBG->color(), ur, ug, ub);
-                r = ur / 255.0f;
-                g = ug / 255.0f;
-                b = ub / 255.0f;
-                p.backgroundOptions.solidColor = image::Color4f(r, g, b, a);
-                break;
-            }
-            default:
-                break;
-            }
+            uint8_t ur, ug, ub;
+            Fl::get_color(p.ui->uiPrefs->uiPrefsViewBG->color(), ur, ug, ub);
+            r = ur / 255.0f;
+            g = ug / 255.0f;
+            b = ub / 255.0f;
+            p.backgroundOptions.solidColor = image::Color4f(r, g, b, a);
         }
 
         glDrawBuffer(GL_BACK_LEFT);
@@ -348,6 +359,30 @@ namespace mrv
         CHECK_GL;
         glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
         CHECK_GL;
+
+        if (gl.background && !transparent && !p.presentation)
+        {
+            math::Matrix4x4f mvp;
+            mvp = _createTexturedRectangle();
+
+            gl.shader->bind();
+            CHECK_GL;
+            gl.shader->setUniform("transform.mvp", mvp);
+            CHECK_GL;
+
+            glActiveTexture(GL_TEXTURE0);
+            CHECK_GL;
+            glBindTexture(GL_TEXTURE_2D, gl.background->getColorID());
+            CHECK_GL;
+
+            if (gl.vao && gl.vbo)
+            {
+                gl.vao->bind();
+                CHECK_GL;
+                gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
+                CHECK_GL;
+            }
+        }
 
         if (gl.buffer && gl.shader)
         {
