@@ -4,15 +4,13 @@
 
 #pragma once
 
-#include <mrvCore/mrvString.h>
-
 #include <tlCore/Time.h>
 
-class ViewerUI;
+#include "mrvCore/mrvString.h"
 
 namespace mrv
 {
-    using namespace tl;
+    namespace otime = opentime::OPENTIME_VERSION;
 
     //! Time units.
     enum class TimeUnits {
@@ -37,7 +35,8 @@ namespace mrv
     timeToText(char* out, const otime::RationalTime&, const TimeUnits) noexcept;
 
     //! Convert text to a time value.
-    otime::RationalTime
-    textToTime(const String& text, double rate, TimeUnits, otime::ErrorStatus*);
+    otime::RationalTime textToTime(
+        const string::String& text, double rate, TimeUnits,
+        otime::ErrorStatus*);
 
 } // namespace mrv

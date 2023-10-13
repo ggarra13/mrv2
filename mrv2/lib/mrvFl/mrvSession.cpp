@@ -71,6 +71,8 @@ namespace mrv
 
         bool save(const std::string& fileName)
         {
+            using namespace panel;
+
             ViewerUI* ui = App::ui;
             App* app = ui->app;
             auto model = app->filesModel();
@@ -331,6 +333,8 @@ namespace mrv
 
         bool load(const std::string& fileName)
         {
+            using namespace panel;
+
             ViewerUI* ui = App::ui;
             App* app = ui->app;
             auto view = ui->uiView;

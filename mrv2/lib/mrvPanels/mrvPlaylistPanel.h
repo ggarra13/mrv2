@@ -10,41 +10,43 @@
 
 #include "mrvPanelWidget.h"
 
-class ViewerUI;
 class Fl_RGB_Image;
 
 namespace mrv
 {
-    using namespace tl;
-
     class PlaylistButton;
 
-    class PlaylistPanel : public PanelWidget
+    namespace panel
     {
-    public:
-        PlaylistPanel(ViewerUI* ui);
-        ~PlaylistPanel();
+        using namespace tl;
 
-        void clear_controls();
-        void add_controls() override;
+        class PlaylistPanel : public PanelWidget
+        {
+        public:
+            PlaylistPanel(ViewerUI* ui);
+            ~PlaylistPanel();
 
-        void
-        add(const math::Vector2i& pos, const std::string& filename,
-            const size_t index, ViewerUI* ui);
+            void clear_controls();
+            void add_controls() override;
 
-        void redraw();
-        void refresh();
-        void playlistThumbnail(
-            const int64_t id,
-            const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&
-                thumbnails,
-            PlaylistButton* w);
+            void
+            add(const math::Vector2i& pos, const std::string& filename,
+                const size_t index, ViewerUI* ui);
 
-    protected:
-        void cancel_thumbnails();
+            void redraw();
+            void refresh();
+            void playlistThumbnail(
+                const int64_t id,
+                const std::vector<
+                    std::pair<otime::RationalTime, Fl_RGB_Image*> >& thumbnails,
+                PlaylistButton* w);
 
-    private:
-        MRV2_PRIVATE();
-    };
+        protected:
+            void cancel_thumbnails();
 
+        private:
+            MRV2_PRIVATE();
+        };
+
+    } // namespace panel
 } // namespace mrv

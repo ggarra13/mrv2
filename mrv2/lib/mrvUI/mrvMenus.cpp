@@ -55,6 +55,8 @@ namespace mrv
 
     void MainWindow::fill_menu(Fl_Menu_* menu)
     {
+        using namespace panel;
+
         Fl_Menu_Item* item = nullptr;
         int mode = 0;
         char buf[256];

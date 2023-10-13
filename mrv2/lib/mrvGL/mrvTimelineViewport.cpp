@@ -1410,9 +1410,9 @@ namespace mrv
             tcp->pushMessage(msg);
         }
 
-        if (environmentMapPanel)
+        if (panel::environmentMapPanel)
         {
-            environmentMapPanel->setEnvironmentMapOptions(
+            panel::environmentMapPanel->setEnvironmentMapOptions(
                 p.environmentMapOptions);
         }
 

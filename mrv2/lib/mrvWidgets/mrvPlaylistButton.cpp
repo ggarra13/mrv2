@@ -59,8 +59,7 @@ namespace mrv
     {
         TLRENDER_P();
         const std::string text = label();
-        std::vector<std::string> lines;
-        split_string(lines, text, "\n");
+        auto lines = string::split(text, '\n');
         std::string filename = lines[0] + lines[1];
         file::Path path(filename);
         p.timeline = timeline::create(path, context);
@@ -120,8 +119,7 @@ namespace mrv
         }
 
         const std::string text = label();
-        std::vector<std::string> lines;
-        split_string(lines, text, "\n");
+        auto lines = string::split(text, '\n');
         char buf[4096];
         snprintf(
             buf, 4096, "%s\n%s\nVideo:%u Audio:%u", lines[0].c_str(),

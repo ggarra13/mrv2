@@ -379,22 +379,22 @@ namespace mrv
         p.ui->uiTimeline->setLUTOptions(p.lutOptions);
         p.ui->uiTimeline->redraw();
 
-        if (comparePanel)
+        if (panel::comparePanel)
         {
-            comparePanel->setCompareOptions(p.compareOptions);
+            panel::comparePanel->setCompareOptions(p.compareOptions);
         }
-        if (colorPanel)
+        if (panel::colorPanel)
         {
-            colorPanel->setLUTOptions(p.lutOptions);
-            colorPanel->setDisplayOptions(p.displayOptions);
+            panel::colorPanel->setLUTOptions(p.lutOptions);
+            panel::colorPanel->setDisplayOptions(p.displayOptions);
         }
-        if (stereo3DPanel)
+        if (panel::stereo3DPanel)
         {
-            stereo3DPanel->setStereo3DOptions(p.stereo3DOptions);
+            panel::stereo3DPanel->setStereo3DOptions(p.stereo3DOptions);
         }
-        if (imageInfoPanel)
+        if (panel::imageInfoPanel)
         {
-            imageInfoPanel->setTimelinePlayer(player);
+            panel::imageInfoPanel->setTimelinePlayer(player);
         }
         // @todo: do we need it?
         // if ( audioPanel )

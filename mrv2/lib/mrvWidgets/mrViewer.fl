@@ -1013,7 +1013,7 @@ Value is:  pow( 2, 1/x );} xywh {632 27 54 23} type {Horz Knob} maximum 4 step 0
 
 if (Fl::event_clicks() >= 1)
 {
-   mrv::color_area_panel_cb( nullptr, v);
+   mrv::panel::color_area_panel_cb( nullptr, v);
    Fl::event_clicks(0);
 }}
                 tooltip {Area Select Tool} image {../../icons/select.xpm} compress_image 0 xywh {2 88 40 35} down_box DOWN_BOX selection_color 95
@@ -1025,7 +1025,7 @@ if (Fl::event_clicks() >= 1)
 
 if (Fl::event_clicks() >= 1)
 {
-   mrv::annotations_panel_cb( nullptr, v);
+   mrv::panel::annotations_panel_cb( nullptr, v);
    Fl::event_clicks(0);
 }}
                 tooltip {Freehand Drawing Tool} image {../../icons/draw.xpm} compress_image 0 xywh {2 123 40 35} down_box DOWN_BOX selection_color 95
@@ -1037,7 +1037,7 @@ if (Fl::event_clicks() >= 1)
 
 if (Fl::event_clicks() >= 1)
 {
-   mrv::annotations_panel_cb( nullptr, v);
+   mrv::panel::annotations_panel_cb( nullptr, v);
    Fl::event_clicks(0);
 }}
                 tooltip {Eraser Tool} image {../../icons/erase.xpm} compress_image 0 xywh {2 158 40 35} down_box DOWN_BOX selection_color 95
@@ -1049,7 +1049,7 @@ if (Fl::event_clicks() >= 1)
 
 if (Fl::event_clicks() >= 1)
 {
-   mrv::annotations_panel_cb( nullptr, v);
+   mrv::panel::annotations_panel_cb( nullptr, v);
    Fl::event_clicks(0);
 }}
                 tooltip {Circle Tool} image {../../icons/circle.xpm} compress_image 0 xywh {2 193 40 35} down_box DOWN_BOX selection_color 95
@@ -1061,7 +1061,7 @@ if (Fl::event_clicks() >= 1)
 
 if (Fl::event_clicks() >= 1)
 {
-   mrv::annotations_panel_cb( nullptr, v);
+   mrv::panel::annotations_panel_cb( nullptr, v);
    Fl::event_clicks(0);
 }}
                 tooltip {Rectangle Tool} image {../../icons/rectangle.xpm} compress_image 0 xywh {2 228 40 35} down_box DOWN_BOX selection_color 95
@@ -1073,7 +1073,7 @@ if (Fl::event_clicks() >= 1)
 
 if (Fl::event_clicks() >= 1)
 {
-   mrv::annotations_panel_cb( nullptr, v);
+   mrv::panel::annotations_panel_cb( nullptr, v);
    Fl::event_clicks(0);
 }}
                 tooltip {Arrow Tool} image {../../icons/arrow.xpm} compress_image 0 xywh {2 263 40 35} down_box DOWN_BOX selection_color 95
@@ -1092,7 +1092,7 @@ if (Fl::event_button() == FL_RIGHT_MOUSE)
 
 if (Fl::event_clicks() >= 1)
 {
-   mrv::annotations_panel_cb( nullptr, v);
+   mrv::panel::annotations_panel_cb( nullptr, v);
    Fl::event_clicks(0);
 }}
                 tooltip {Text Tool.   Right click to edit previously stamped text.} image {../../icons/Text.svg} compress_image 1 xywh {1 298 40 35} down_box DOWN_BOX selection_color 95 labelfont 8 labelsize 24 labelcolor 7

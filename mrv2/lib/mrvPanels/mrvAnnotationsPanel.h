@@ -14,22 +14,25 @@ namespace mrv
 {
     class Button;
 
-    class AnnotationsPanel : public PanelWidget
+    namespace panel
     {
-        Fl_Button* penColor = nullptr;
-        Button* hardBrush = nullptr;
-        Button* softBrush = nullptr;
+        class AnnotationsPanel : public PanelWidget
+        {
+            Fl_Button* penColor = nullptr;
+            Button* hardBrush = nullptr;
+            Button* softBrush = nullptr;
 
-    public:
-        Fl_Multiline_Input* notes = nullptr;
+        public:
+            Fl_Multiline_Input* notes = nullptr;
 
-    public:
-        AnnotationsPanel(ViewerUI* ui);
-        virtual ~AnnotationsPanel(){};
+        public:
+            AnnotationsPanel(ViewerUI* ui);
+            virtual ~AnnotationsPanel(){};
 
-        void add_controls() override;
+            void add_controls() override;
 
-        void redraw();
-    };
+            void redraw();
+        };
+    } // namespace panel
 
 } // namespace mrv

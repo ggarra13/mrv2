@@ -106,6 +106,7 @@ namespace mrv
 
         try
         {
+            using namespace panel;
 
             tcp->lock();
 

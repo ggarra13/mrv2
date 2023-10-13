@@ -32,6 +32,8 @@ namespace
 
 namespace mrv
 {
+    using namespace panel;
+
     struct FileButton::Private
     {
         size_t index = 0;
@@ -114,8 +116,7 @@ namespace mrv
                 if (box.contains(pos))
                 {
                     const std::string text = label();
-                    std::vector<std::string> lines;
-                    split_string(lines, text, "\n");
+                    auto lines = string::split(text, '\n');
                     std::string filename = lines[0] + lines[1];
                     add_clip_to_timeline(filename, p.index, ui);
                     return 1;
@@ -134,8 +135,7 @@ namespace mrv
                     if (box.contains(pos))
                     {
                         const std::string text = label();
-                        std::vector<std::string> lines;
-                        split_string(lines, text, "\n");
+                        auto lines = string::split(text, '\n');
                         std::string filename = lines[0] + lines[1];
                         playlistPanel->add(pos, filename, p.index, ui);
                         return 1;
@@ -155,8 +155,7 @@ namespace mrv
             if (Fl::event_button1())
             {
                 const std::string text = label();
-                std::vector<std::string> lines;
-                split_string(lines, text, "\n");
+                auto lines = string::split(text, '\n');
                 std::string filename = lines[0] + lines[1];
 
                 if (!p.drag)

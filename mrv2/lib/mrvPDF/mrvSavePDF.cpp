@@ -37,7 +37,7 @@ namespace mrv
                const std::shared_ptr<draw::Annotation>& b)
             { return a->time < b->time; });
 
-        PDFCreator pdf(pdfFile, annotations, ui);
+        pdf::Creator pdf(pdfFile, annotations, ui);
         try
         {
             pdf.create();

@@ -6,17 +6,21 @@
 
 namespace mrv
 {
-
-    std::string getLayerName(
-        const std::shared_ptr<FilesModelItem>& item, const uint16_t layerId)
+    namespace panel
     {
-        if (!item || layerId >= item->videoLayers.size())
-            return "";
 
-        std::string layer = item->videoLayers[layerId];
-        if (layer == "Default" || layer == "A,B,G,R" || layer == "B,G,R")
-            layer = "Color";
-        return "\n" + layer;
-    }
+        std::string getLayerName(
+            const std::shared_ptr<FilesModelItem>& item, const uint16_t layerId)
+        {
+            if (!item || layerId >= item->videoLayers.size())
+                return "";
+
+            std::string layer = item->videoLayers[layerId];
+            if (layer == "Default" || layer == "A,B,G,R" || layer == "B,G,R")
+                layer = "Color";
+            return "\n" + layer;
+        }
+
+    } // namespace panel
 
 } // namespace mrv

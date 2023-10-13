@@ -6,13 +6,12 @@
 
 #    include <tlCore/StringFormat.h>
 
+#    include "mrvCore/mrvUSD.h"
+
 #    include "mrvPanels/mrvPanelsCallbacks.h"
 
 #    include "mrvApp/mrvSettingsObject.h"
-#    include "mrvApp/mrvUSD.h"
 #    include "mrvApp/App.h"
-
-#    include "mrViewer.h"
 
 namespace mrv
 {
@@ -37,40 +36,14 @@ namespace mrv
             return o;
         }
 
-        void sendIOOptions()
-        {
-            auto player = App::ui->uiView->getTimelinePlayer();
-            if (!player)
-                return;
-
-            auto o = renderOptions();
-
-            io::Options ioOptions;
-            ioOptions["USD/renderWidth"] =
-                string::Format("{0}").arg(o.renderWidth);
-            ioOptions["USD/complexity"] =
-                string::Format("{0}").arg(o.complexity);
-            {
-                std::stringstream ss;
-                ss << o.drawMode;
-                ioOptions["USD/drawMode"] = ss.str();
-            }
-            ioOptions["USD/enableLighting"] =
-                string::Format("{0}").arg(o.enableLighting);
-            ioOptions["USD/stageCacheCount"] =
-                string::Format("{0}").arg(o.stageCache);
-            ioOptions["USD/diskCacheByteCount"] =
-                string::Format("{0}").arg(o.diskCache);
-
-            player->setIOOptions(ioOptions);
-        }
-
         void setRenderOptions(const RenderOptions& o)
         {
-            auto settingsObject = App::app->settingsObject();
             if (o == renderOptions())
                 return;
 
+            using panel::usdPanel;
+
+            auto settingsObject = App::app->settingsObject();
             settingsObject->setValue("USD/renderWidth", o.renderWidth);
             settingsObject->setValue("USD/complexity", o.complexity);
             settingsObject->setValue("USD/drawMode", o.drawMode);

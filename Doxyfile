@@ -875,13 +875,19 @@ WARN_LOGFILE           =
 # Note: If this tag is empty the current directory is searched.
 
 INPUT                  = mrv2/lib/mrvCore \
-			 mrv2/lib/mrvFl \
 			 mrv2/lib/mrvFLU \
-			 mrv2/lib/mrvDraw \
+			 mrv2/lib/mrvFlmm \
 			 mrv2/lib/mrvWidgets \
-			 mrv2/lib/mrvPanels \
+			 mrv2/lib/mrvUI \
 			 mrv2/lib/mrvGL \
+			 mrv2/lib/mrvDraw \
+			 mrv2/lib/mrvPDF \
+			 mrv2/lib/mrvFl \
+			 mrv2/lib/mrvNetwork \
+			 mrv2/lib/mrvEdit \
+			 mrv2/lib/mrvPanels \
 			 mrv2/lib/mrvApp \
+			 mrv2/lib/mrvPy \
 			 mrv2/src \
 			 tlRender/lib/tlTimeline \
 			 tlRender/lib/tlCore

@@ -506,8 +506,8 @@ namespace mrv
         auto note = dynamic_cast< draw::NoteShape* >(shape.get());
         if (note)
         {
-            if (annotationsPanel && alphamult == 1.F)
-                annotationsPanel->notes->value(note->text.c_str());
+            if (panel::annotationsPanel && alphamult == 1.F)
+                panel::annotationsPanel->notes->value(note->text.c_str());
         }
         else
         {
@@ -530,9 +530,9 @@ namespace mrv
 
         const otime::RationalTime& time = p.videoData[0].time;
 
-        if (annotationsPanel)
+        if (panel::annotationsPanel)
         {
-            annotationsPanel->notes->value("");
+            panel::annotationsPanel->notes->value("");
         }
 
         const auto& annotations =

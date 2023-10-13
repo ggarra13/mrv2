@@ -480,7 +480,7 @@ namespace mrv
                 refresh_file_cache_cb(nullptr, ui);
             else if (create)
             {
-                refreshPanelThumbnails();
+                panel::refreshPanelThumbnails();
             }
         }
 
@@ -975,7 +975,7 @@ namespace mrv
 
         toOtioFile(timeline, ui);
 
-        redrawPanelThumbnails();
+        panel::redrawPanelThumbnails();
 
         tcp->pushMessage("Edit/Frame/Paste", time);
     }
@@ -1042,7 +1042,7 @@ namespace mrv
         updateTimeline(timeline, scaledTime, ui);
         toOtioFile(timeline, ui);
 
-        redrawPanelThumbnails();
+        panel::redrawPanelThumbnails();
 
         tcp->pushMessage("Edit/Frame/Insert", time);
     }
@@ -1180,7 +1180,7 @@ namespace mrv
 
         toOtioFile(timeline, ui);
 
-        redrawPanelThumbnails();
+        panel::redrawPanelThumbnails();
     }
 
     void edit_redo_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -1220,7 +1220,7 @@ namespace mrv
 
         toOtioFile(timeline, ui);
 
-        redrawPanelThumbnails();
+        panel::redrawPanelThumbnails();
 
         if (refreshCache)
             refresh_file_cache_cb(nullptr, ui);
@@ -1743,7 +1743,7 @@ namespace mrv
             updateTimeline(timeline, player->currentTime(), ui);
             ui->uiTimeline->frameView();
 
-            refreshPanelThumbnails();
+            panel::refreshPanelThumbnails();
         }
         catch (const std::exception& e)
         {

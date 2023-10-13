@@ -27,15 +27,6 @@ namespace mrv
 
     void callback(int signal)
     {
-
-        std::string lockfile = mrv::lockfile();
-        if (fs::exists(lockfile))
-        {
-            if (!fs::remove(lockfile))
-                std::cerr << "Could not remove lockfile " << lockfile
-                          << std::endl;
-        }
-
         std::cerr << "GOT SIGNAL " << signal << std::endl;
 
         printStackTrace();

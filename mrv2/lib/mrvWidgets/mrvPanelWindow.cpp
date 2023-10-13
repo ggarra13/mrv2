@@ -286,7 +286,7 @@ namespace mrv
 
             // Only store height if it is not a growing panel/window, like
             // the Files, Compare or Playlist panel.
-            if (isPanelWithHeight(label))
+            if (panel::isPanelWithHeight(label))
             {
                 settingsObject->setValue(key, h());
             }

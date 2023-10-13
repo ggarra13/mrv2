@@ -19,158 +19,162 @@
 
 namespace mrv
 {
-
-    struct LogsPanel::Private
+    namespace panel
     {
-        App* app;
-        Fl_Button* clearButton;
-        std::shared_ptr<observer::ListObserver<log::Item> > logObserver;
-    };
 
-    LogsPanel::LogsPanel(ViewerUI* ui) :
-        _r(new Private),
-        PanelWidget(ui)
-    {
-        add_group("Logs");
+        struct LogsPanel::Private
+        {
+            App* app;
+            Fl_Button* clearButton;
+            std::shared_ptr<observer::ListObserver<log::Item> > logObserver;
+        };
 
-        Fl_SVG_Image* svg = load_svg("Logs.svg");
-        g->image(svg);
+        LogsPanel::LogsPanel(ViewerUI* ui) :
+            _r(new Private),
+            PanelWidget(ui)
+        {
+            add_group("Logs");
 
-        g->callback(
-            [](Fl_Widget* w, void* d)
-            {
-                ViewerUI* ui = static_cast< ViewerUI* >(d);
-                delete logsPanel;
-                logsPanel = nullptr;
-                ui->uiMain->fill_menu(ui->uiMenuBar);
-            },
-            ui);
-    }
+            Fl_SVG_Image* svg = load_svg("Logs.svg");
+            g->image(svg);
 
-    LogsPanel::~LogsPanel()
-    {
-        g->remove(uiLogDisplay);
-    }
+            g->callback(
+                [](Fl_Widget* w, void* d)
+                {
+                    ViewerUI* ui = static_cast< ViewerUI* >(d);
+                    delete logsPanel;
+                    logsPanel = nullptr;
+                    ui->uiMain->fill_menu(ui->uiMenuBar);
+                },
+                ui);
+        }
 
-    void LogsPanel::dock()
-    {
-        PanelWidget::dock();
-        // @todo: avoid scrolling issues
-    }
+        LogsPanel::~LogsPanel()
+        {
+            g->remove(uiLogDisplay);
+        }
 
-    void LogsPanel::undock()
-    {
-        TLRENDER_P();
+        void LogsPanel::dock()
+        {
+            PanelWidget::dock();
+            // @todo: avoid scrolling issues
+        }
 
-        PanelWidget::undock();
-        PanelWindow* w = g->get_window();
+        void LogsPanel::undock()
+        {
+            TLRENDER_P();
 
-        SettingsObject* settingsObject = p.ui->app->settingsObject();
+            PanelWidget::undock();
+            PanelWindow* w = g->get_window();
 
-        std::string prefix = "gui/" + label;
-        std::string key;
-        std_any value;
+            SettingsObject* settingsObject = p.ui->app->settingsObject();
 
-        key = prefix + "/WindowX";
-        value = settingsObject->value(key);
-        int X = std_any_empty(value) ? w->x() : std_any_cast<int>(value);
+            std::string prefix = "gui/" + label;
+            std::string key;
+            std_any value;
 
-        key = prefix + "/WindowY";
-        value = settingsObject->value(key);
-        int Y = std_any_empty(value) ? w->y() : std_any_cast<int>(value);
+            key = prefix + "/WindowX";
+            value = settingsObject->value(key);
+            int X = std_any_empty(value) ? w->x() : std_any_cast<int>(value);
 
-        key = prefix + "/WindowW";
-        value = settingsObject->value(key);
-        int W = std_any_empty(value) ? 512 : std_any_cast<int>(value);
+            key = prefix + "/WindowY";
+            value = settingsObject->value(key);
+            int Y = std_any_empty(value) ? w->y() : std_any_cast<int>(value);
 
-        key = prefix + "/WindowH";
-        value = settingsObject->value(key);
-        int H = std_any_empty(value) ? 512 : std_any_cast<int>(value);
+            key = prefix + "/WindowW";
+            value = settingsObject->value(key);
+            int W = std_any_empty(value) ? 512 : std_any_cast<int>(value);
 
-        if (W < 512)
-            W = 512;
-        if (H < 512)
-            H = 512;
+            key = prefix + "/WindowH";
+            value = settingsObject->value(key);
+            int H = std_any_empty(value) ? 512 : std_any_cast<int>(value);
 
-        w->resize(X, Y, W, H);
-    }
+            if (W < 512)
+                W = 512;
+            if (H < 512)
+                H = 512;
 
-    void LogsPanel::save()
-    {
-        TLRENDER_P();
+            w->resize(X, Y, W, H);
+        }
 
-        PanelWidget::save();
+        void LogsPanel::save()
+        {
+            TLRENDER_P();
 
-        // We make the log panel save as hidden, never visible.
-        SettingsObject* settingsObject = p.ui->app->settingsObject();
-        const std::string key = "gui/" + label + "/Window/Visible";
-        settingsObject->setValue(key, 0);
-    }
+            PanelWidget::save();
 
-    void LogsPanel::add_controls()
-    {
-        TLRENDER_P();
+            // We make the log panel save as hidden, never visible.
+            SettingsObject* settingsObject = p.ui->app->settingsObject();
+            const std::string key = "gui/" + label + "/Window/Visible";
+            settingsObject->setValue(key, 0);
+        }
 
-        g->remove(uiLogDisplay);
+        void LogsPanel::add_controls()
+        {
+            TLRENDER_P();
 
-        Fl_Group* controls = g->get_group();
-        controls->size(g->w(), 30); // needed
-        controls->show();
+            g->remove(uiLogDisplay);
 
-        controls->begin();
+            Fl_Group* controls = g->get_group();
+            controls->size(g->w(), 30); // needed
+            controls->show();
 
-        assert(controls->h() >= 0);
+            controls->begin();
 
-        int Y = controls->y();
-        _r->clearButton = new Fl_Button(g->x(), Y, g->w(), 30);
-        _r->clearButton->image(load_svg("Clear.svg"));
-        _r->clearButton->tooltip(_("Clear the messages"));
-        _r->clearButton->callback(
-            [](Fl_Widget* w, void* d)
-            {
-                LogDisplay* log = static_cast< LogDisplay* >(d);
-                log->clear();
-            },
-            uiLogDisplay);
+            assert(controls->h() >= 0);
 
-        controls->end();
+            int Y = controls->y();
+            _r->clearButton = new Fl_Button(g->x(), Y, g->w(), 30);
+            _r->clearButton->image(load_svg("Clear.svg"));
+            _r->clearButton->tooltip(_("Clear the messages"));
+            _r->clearButton->callback(
+                [](Fl_Widget* w, void* d)
+                {
+                    LogDisplay* log = static_cast< LogDisplay* >(d);
+                    log->clear();
+                },
+                uiLogDisplay);
 
-        g->clear();
+            controls->end();
 
-        g->begin();
+            g->clear();
 
-        g->add(uiLogDisplay);
+            g->begin();
 
-        Y = controls->y() + controls->h();
+            g->add(uiLogDisplay);
 
-        Fl_Scroll* scroll = g->get_scroll();
-        scroll->position(scroll->x(), Y);
+            Y = controls->y() + controls->h();
 
-        Pack* pack = g->get_pack();
-        pack->position(pack->x(), Y);
-        pack->layout();
+            Fl_Scroll* scroll = g->get_scroll();
+            scroll->position(scroll->x(), Y);
 
-        uiLogDisplay->resize(g->x(), Y, g->w(), g->h());
+            Pack* pack = g->get_pack();
+            pack->position(pack->x(), Y);
+            pack->layout();
 
-        g->resizable(uiLogDisplay);
-        g->end();
-    }
+            uiLogDisplay->resize(g->x(), Y, g->w(), g->h());
 
-    void LogsPanel::info(const std::string& msg) const
-    {
-        auto context = _p->ui->app->getContext();
-        context->log("", msg, log::Type::Message);
-    }
-    void LogsPanel::warning(const std::string& msg) const
-    {
-        auto context = _p->ui->app->getContext();
-        context->log("", msg, log::Type::Warning);
-    }
+            g->resizable(uiLogDisplay);
+            g->end();
+        }
 
-    void LogsPanel::error(const std::string& msg) const
-    {
-        auto context = _p->ui->app->getContext();
-        context->log("", msg, log::Type::Error);
-    }
+        void LogsPanel::info(const std::string& msg) const
+        {
+            auto context = _p->ui->app->getContext();
+            context->log("", msg, log::Type::Message);
+        }
+        void LogsPanel::warning(const std::string& msg) const
+        {
+            auto context = _p->ui->app->getContext();
+            context->log("", msg, log::Type::Warning);
+        }
+
+        void LogsPanel::error(const std::string& msg) const
+        {
+            auto context = _p->ui->app->getContext();
+            context->log("", msg, log::Type::Error);
+        }
+
+    } // namespace panel
 
 } // namespace mrv

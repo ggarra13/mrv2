@@ -24,18 +24,18 @@ namespace mrv
     {
         static void open_log_panel_cb(ViewerUI* ui)
         {
-            if (!logsPanel)
-                logs_panel_cb(NULL, ui);
-            if (!logsPanel->is_panel())
-                logsPanel->dock();
+            if (!panel::logsPanel)
+                panel::logs_panel_cb(NULL, ui);
+            if (!panel::logsPanel->is_panel())
+                panel::logsPanel->dock();
         }
 
         static void open_log_window_cb(ViewerUI* ui)
         {
-            if (!logsPanel)
-                logs_panel_cb(NULL, ui);
-            if (logsPanel->is_panel())
-                logsPanel->undock();
+            if (!panel::logsPanel)
+                panel::logs_panel_cb(NULL, ui);
+            if (panel::logsPanel->is_panel())
+                panel::logsPanel->undock();
         }
     } // namespace
 

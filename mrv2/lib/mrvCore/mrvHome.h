@@ -9,6 +9,7 @@
 
 namespace mrv
 {
+
     //! Name of user running mrv2
     std::string username();
 
@@ -27,15 +28,10 @@ namespace mrv
     //! Path to preference's file (with a trailing slash)
     std::string prefspath();
 
-    //! Path to lockfile (currently unused in mrv2)
-    std::string lockfile();
-
     //! Path to the built-in python script demos
     std::string pythonpath();
 
     //! Paths to the built-in python plug-ins
     std::vector<std::string> python_plugin_paths();
 
-    //! Path to glsl shaders
-    std::string shaderpath();
 } // namespace mrv

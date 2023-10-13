@@ -43,8 +43,7 @@ class AboutUI {open
           user_data main user_data_type {ViewerUI*}
           callback {v->uiAbout->uiGPUInfo->clear();
 std::string s = mrv::gpu_information( v );
-std::vector<std::string> a;
-mrv::split( a, s, '\\n' );
+auto a = mrv::string::split( s, '\\n' );
 std::vector<std::string>::iterator i = a.begin();
 std::vector<std::string>::iterator e = a.end();
 for (; i != e; ++i )

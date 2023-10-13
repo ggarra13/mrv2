@@ -8,7 +8,7 @@ namespace mrv
 {
     struct Timecode::Private
     {
-        otime::RationalTime value = time::invalidTime;
+        otime::RationalTime value = tl::time::invalidTime;
         TimeUnits units = TimeUnits::Timecode;
     };
 

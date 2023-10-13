@@ -442,8 +442,7 @@ namespace mrv
              << kS << info.hsv.mean.g << "\t@c" << kV << info.hsv.mean.b
              << "\t@c" << kL << info.hsv.mean.a << "\n";
 
-        std::vector<std::string> lines;
-        mrv::split_string(lines, text.str(), "\n");
+        auto lines = string::split(text.str(), '\n');
         std::vector<std::string>::iterator i = lines.begin();
         std::vector<std::string>::iterator e = lines.end();
         area->redraw_label();

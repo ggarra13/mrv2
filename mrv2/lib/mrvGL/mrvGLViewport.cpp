@@ -437,18 +437,18 @@ namespace mrv
                 {
                     p.image = nullptr;
                 }
-                if (colorAreaPanel)
+                if (panel::colorAreaPanel)
                 {
                     _calculateColorArea(p.colorAreaInfo);
-                    colorAreaPanel->update(p.colorAreaInfo);
+                    panel::colorAreaPanel->update(p.colorAreaInfo);
                 }
-                if (histogramPanel)
+                if (panel::histogramPanel)
                 {
-                    histogramPanel->update(p.colorAreaInfo);
+                    panel::histogramPanel->update(p.colorAreaInfo);
                 }
-                if (vectorscopePanel)
+                if (panel::vectorscopePanel)
                 {
-                    vectorscopePanel->update(p.colorAreaInfo);
+                    panel::vectorscopePanel->update(p.colorAreaInfo);
                 }
 
                 // Uodate the pixel bar from here only if we are playing a movie
@@ -507,7 +507,7 @@ namespace mrv
                 }
 
                 // Refresh media info panel if there's data window present
-                if (imageInfoPanel && !p.videoData.empty() &&
+                if (panel::imageInfoPanel && !p.videoData.empty() &&
                     !p.videoData[0].layers.empty() &&
                     p.videoData[0].layers[0].image)
                 {
@@ -515,7 +515,7 @@ namespace mrv
                         p.videoData[0].layers[0].image->getTags();
                     image::Tags::const_iterator i = tags.find("Data Window");
                     if (i != tags.end())
-                        imageInfoPanel->refresh();
+                        panel::imageInfoPanel->refresh();
                 }
 
                 if (p.dataWindow)

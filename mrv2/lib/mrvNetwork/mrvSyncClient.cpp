@@ -48,7 +48,7 @@ namespace mrv
         syncUI();
 
         // Sync panels
-        syncPanels();
+        panel::syncPanels();
 
         // Set the current file index
         msg["command"] = "Set A Index";

@@ -10,16 +10,21 @@ class ViewerUI;
 
 namespace mrv
 {
-    class DevicesPanel : public PanelWidget
+    namespace panel
     {
-    public:
-        DevicesPanel(ViewerUI* ui);
-        ~DevicesPanel();
 
-        void add_controls() override;
+        class DevicesPanel : public PanelWidget
+        {
+        public:
+            DevicesPanel(ViewerUI* ui);
+            ~DevicesPanel();
 
-    private:
-        MRV2_PRIVATE();
-    };
+            void add_controls() override;
+
+        private:
+            MRV2_PRIVATE();
+        };
+
+    } // namespace panel
 
 } // namespace mrv

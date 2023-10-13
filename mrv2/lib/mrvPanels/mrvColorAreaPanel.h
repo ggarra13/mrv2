@@ -17,18 +17,22 @@ namespace mrv
         class Info;
     }
 
-    class ColorAreaPanel : public PanelWidget
+    namespace panel
     {
-    public:
-        ColorAreaPanel(ViewerUI* ui);
-        ~ColorAreaPanel();
+        class ColorAreaPanel : public PanelWidget
+        {
+        public:
+            ColorAreaPanel(ViewerUI* ui);
+            ~ColorAreaPanel();
 
-        void add_controls() override;
+            void add_controls() override;
 
-        void update(const area::Info& info);
+            void update(const area::Info& info);
 
-    private:
-        MRV2_PRIVATE();
-    };
+        private:
+            MRV2_PRIVATE();
+        };
+
+    } // namespace panel
 
 } // namespace mrv

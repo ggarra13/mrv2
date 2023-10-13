@@ -11,17 +11,20 @@ class ViewerUI;
 namespace mrv
 {
 #ifdef TLRENDER_USD
-    class USDPanel : public PanelWidget
+    namespace panel
     {
-    public:
-        USDPanel(ViewerUI* ui);
-        virtual ~USDPanel(){};
+        class USDPanel : public PanelWidget
+        {
+        public:
+            USDPanel(ViewerUI* ui);
+            virtual ~USDPanel(){};
 
-        void add_controls() override;
+            void add_controls() override;
 
-    protected:
-        void _update();
-    };
+        protected:
+            void _update();
+        };
 
+    }  // namespace panel
 #endif // TLRENDER_USD
 } // namespace mrv

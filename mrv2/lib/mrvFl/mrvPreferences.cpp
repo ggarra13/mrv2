@@ -61,6 +61,8 @@ HotkeyUI* ViewerUI::uiHotkey = nullptr;
 
 namespace mrv
 {
+    using namespace panel;
+
     ColorSchemes Preferences::schemes;
     bool Preferences::native_file_chooser;
 #ifdef TLRENDER_OCIO
@@ -1787,7 +1789,7 @@ namespace mrv
                 const char* displaylist = config->getActiveDisplays();
                 if (use_active && displaylist && strlen(displaylist) > 0)
                 {
-                    mrv::split(active_displays, displaylist, ',');
+                    active_displays = string::split(displaylist, ',');
 
                     // Eliminate forward spaces in names
                     for (unsigned i = 0; i < active_displays.size(); ++i)
@@ -1810,7 +1812,7 @@ namespace mrv
                 const char* viewlist = config->getActiveViews();
                 if (use_active && viewlist && strlen(viewlist) > 0)
                 {
-                    mrv::split(active_views, viewlist, ',');
+                    active_views = string::split(viewlist, ',');
 
                     // Eliminate forward spaces in names
                     for (unsigned i = 0; i < active_views.size(); ++i)

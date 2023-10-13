@@ -29,44 +29,49 @@ class ViewerUI;
 
 namespace mrv
 {
-    using namespace tl;
-
-    class PanelWidget
+    namespace panel
     {
-    protected:
-        PanelGroup* g = nullptr;
-        std::string label;
 
-    public:
-        PanelWidget(ViewerUI* ui);
-        virtual ~PanelWidget();
+        using namespace tl;
 
-        virtual void add_group(const char* label);
-        void begin_group();
-        virtual void end_group();
+        class PanelWidget
+        {
+        protected:
+            PanelGroup* g = nullptr;
+            std::string label;
 
-        void clear_controls();
-        void refresh();
+        public:
+            PanelWidget(ViewerUI* ui);
+            virtual ~PanelWidget();
 
-        math::Box2i box() const;
+            virtual void add_group(const char* label);
+            void begin_group();
+            virtual void end_group();
 
-        bool is_panel() const { return g->docked(); };
-        virtual void save();
+            void clear_controls();
+            void refresh();
 
-        virtual void dock();
-        virtual void undock();
+            math::Box2i box() const;
 
-        virtual void add_static_controls(){};
-        virtual void add_controls() = 0;
+            bool is_panel() const { return g->docked(); };
+            virtual void save();
 
-        std::string tab_prefix() const { return "gui/" + label + "/Tab/"; }
+            virtual void dock();
+            virtual void undock();
 
-        TLRENDER_PRIVATE();
-    };
+            virtual void add_static_controls(){};
+            virtual void add_controls() = 0;
 
-    struct PanelWidget::Private
-    {
-        ViewerUI* ui;
-    };
+            std::string tab_prefix() const { return "gui/" + label + "/Tab/"; }
+
+            TLRENDER_PRIVATE();
+        };
+
+        struct PanelWidget::Private
+        {
+            ViewerUI* ui;
+        };
+
+    } // namespace panel
 
 } // namespace mrv

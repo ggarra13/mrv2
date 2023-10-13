@@ -28,21 +28,8 @@ namespace mrv
         restore_signal_handler();
     }
 
-    void removeLockFile()
-    {
-        std::string lockfile = mrv::lockfile();
-        if (fs::exists(lockfile))
-        {
-            if (!fs::remove(lockfile))
-                std::cerr << "Could not remove lockfile " << lockfile
-                          << std::endl;
-        }
-    }
-
     void callback(int signal)
     {
-        removeLockFile();
-
         std::cerr << "GOT SIGNAL " << signal << std::endl;
 
         printStackTrace();

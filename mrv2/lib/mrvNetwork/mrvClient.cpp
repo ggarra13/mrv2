@@ -30,8 +30,8 @@ namespace mrv
     {
         delete tcp;
         tcp = new DummyClient();
-        if (networkPanel)
-            networkPanel->refresh();
+        if (panel::networkPanel)
+            panel::networkPanel->refresh();
     }
 
     Client::Client(const std::string& host, const uint16_t port) :

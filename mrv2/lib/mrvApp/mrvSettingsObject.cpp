@@ -20,7 +20,7 @@ namespace fs = std::filesystem;
 #include "mrvFl/mrvIO.h"
 
 #if defined(TLRENDER_USD)
-#    include "mrvApp/mrvUSD.h"
+#    include "mrvCore/mrvUSD.h"
 #endif // TLRENDER_USD
 #include "mrvApp/mrvSettingsObject.h"
 

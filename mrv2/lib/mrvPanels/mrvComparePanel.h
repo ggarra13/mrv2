@@ -17,42 +17,46 @@ class Fl_RGB_Image;
 
 namespace mrv
 {
-    using namespace tl;
 
     class ClipButton;
     class HorSlider;
 
-    class ComparePanel : public PanelWidget
+    namespace panel
     {
-    public:
-        HorSlider* wipeX;
-        HorSlider* wipeY;
-        HorSlider* wipeRotation;
-        HorSlider* overlay;
+        using namespace tl;
 
-    public:
-        ComparePanel(ViewerUI* ui);
-        ~ComparePanel();
+        class ComparePanel : public PanelWidget
+        {
+        public:
+            HorSlider* wipeX;
+            HorSlider* wipeY;
+            HorSlider* wipeRotation;
+            HorSlider* overlay;
 
-        void clear_controls();
-        void add_controls() override;
+        public:
+            ComparePanel(ViewerUI* ui);
+            ~ComparePanel();
 
-        void redraw();
+            void clear_controls();
+            void add_controls() override;
 
-        void setCompareOptions(const tl::timeline::CompareOptions&);
+            void redraw();
 
-        void refresh();
-        void compareThumbnail(
-            const int64_t id,
-            const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&
-                thumbnails,
-            ClipButton* w);
+            void setCompareOptions(const tl::timeline::CompareOptions&);
 
-    protected:
-        void cancel_thumbnails();
+            void refresh();
+            void compareThumbnail(
+                const int64_t id,
+                const std::vector<
+                    std::pair<otime::RationalTime, Fl_RGB_Image*> >& thumbnails,
+                ClipButton* w);
 
-    private:
-        MRV2_PRIVATE();
-    };
+        protected:
+            void cancel_thumbnails();
 
+        private:
+            MRV2_PRIVATE();
+        };
+
+    } // namespace panel
 } // namespace mrv

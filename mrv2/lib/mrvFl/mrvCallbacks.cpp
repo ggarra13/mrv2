@@ -83,6 +83,7 @@ namespace
 
 namespace mrv
 {
+    using namespace panel;
 
     WindowCallback kWindowCallbacks[] = {
         {_("Files"), (Fl_Callback*)files_panel_cb},
@@ -119,8 +120,8 @@ namespace mrv
     {
         void reset_timeline(ViewerUI* ui)
         {
-            if (imageInfoPanel)
-                imageInfoPanel->setTimelinePlayer(nullptr);
+            if (panel::imageInfoPanel)
+                panel::imageInfoPanel->setTimelinePlayer(nullptr);
             ui->uiTimeline->setTimelinePlayer(nullptr);
             ui->uiTimeline->redraw();
             otio::RationalTime start = otio::RationalTime(1, 24);
@@ -130,9 +131,9 @@ namespace mrv
             c->uiStartFrame->setTime(start);
             c->uiEndFrame->setTime(end);
 
-            if (annotationsPanel)
+            if (panel::annotationsPanel)
             {
-                annotationsPanel->notes->value("");
+                panel::annotationsPanel->notes->value("");
             }
         }
 
@@ -426,46 +427,46 @@ namespace mrv
         ui->uiView->stop();
 
         // Store window preferences
-        if (colorPanel)
-            colorPanel->save();
-        if (filesPanel)
-            filesPanel->save();
-        if (colorAreaPanel)
-            colorAreaPanel->save();
-        if (comparePanel)
-            comparePanel->save();
-        if (playlistPanel)
-            playlistPanel->save();
-        if (settingsPanel)
-            settingsPanel->save();
-        if (logsPanel)
-            logsPanel->save();
-        if (devicesPanel)
-            devicesPanel->save();
-        if (annotationsPanel)
-            annotationsPanel->save();
-        if (imageInfoPanel)
-            imageInfoPanel->save();
-        if (histogramPanel)
-            histogramPanel->save();
-        if (vectorscopePanel)
-            vectorscopePanel->save();
-        if (environmentMapPanel)
-            environmentMapPanel->save();
+        if (panel::colorPanel)
+            panel::colorPanel->save();
+        if (panel::filesPanel)
+            panel::filesPanel->save();
+        if (panel::colorAreaPanel)
+            panel::colorAreaPanel->save();
+        if (panel::comparePanel)
+            panel::comparePanel->save();
+        if (panel::playlistPanel)
+            panel::playlistPanel->save();
+        if (panel::settingsPanel)
+            panel::settingsPanel->save();
+        if (panel::logsPanel)
+            panel::logsPanel->save();
+        if (panel::devicesPanel)
+            panel::devicesPanel->save();
+        if (panel::annotationsPanel)
+            panel::annotationsPanel->save();
+        if (panel::imageInfoPanel)
+            panel::imageInfoPanel->save();
+        if (panel::histogramPanel)
+            panel::histogramPanel->save();
+        if (panel::vectorscopePanel)
+            panel::vectorscopePanel->save();
+        if (panel::environmentMapPanel)
+            panel::environmentMapPanel->save();
 #ifdef MRV2_PYBIND11
-        if (pythonPanel)
-            pythonPanel->save();
+        if (panel::pythonPanel)
+            panel::pythonPanel->save();
 #endif
 #ifdef MRV2_NETWORK
-        if (networkPanel)
-            networkPanel->save();
+        if (panel::networkPanel)
+            panel::networkPanel->save();
 #endif
 #ifdef TLRENDER_USD
-        if (usdPanel)
-            usdPanel->save();
+        if (panel::usdPanel)
+            panel::usdPanel->save();
 #endif
-        if (stereo3DPanel)
-            stereo3DPanel->save();
+        if (panel::stereo3DPanel)
+            panel::stereo3DPanel->save();
         if (ui->uiSecondary)
             ui->uiSecondary->save();
 
@@ -484,17 +485,17 @@ namespace mrv
         PanelGroup::hide_all();
 
         // Delete all panels with images or threads
-        delete stereo3DPanel;
-        stereo3DPanel = nullptr;
-        delete filesPanel;
-        filesPanel = nullptr;
-        delete comparePanel;
-        comparePanel = nullptr;
-        delete playlistPanel;
-        playlistPanel = nullptr;
+        delete panel::stereo3DPanel;
+        panel::stereo3DPanel = nullptr;
+        delete panel::filesPanel;
+        panel::filesPanel = nullptr;
+        delete panel::comparePanel;
+        panel::comparePanel = nullptr;
+        delete panel::playlistPanel;
+        panel::playlistPanel = nullptr;
 #ifdef MRV2_NETWORK
-        delete networkPanel;
-        networkPanel = nullptr;
+        delete panel::networkPanel;
+        panel::networkPanel = nullptr;
 #endif
 
         // Close all files
@@ -1874,7 +1875,7 @@ namespace mrv
         player->setAllAnnotations(newItem->annotations);
         player->setPlayback(playback);
         player->seek(currentTime);
-        redrawPanelThumbnails();
+        panel::redrawPanelThumbnails();
     }
 
     void set_stereo_cb(Fl_Menu_* m, void* d)

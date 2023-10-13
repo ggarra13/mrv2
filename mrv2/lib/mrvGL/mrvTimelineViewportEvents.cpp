@@ -934,10 +934,10 @@ namespace mrv
             {
                 if (p.lastEvent == FL_DRAG)
                 {
-                    if (filesPanel)
-                        filesPanel->redraw();
-                    if (comparePanel)
-                        comparePanel->redraw();
+                    if (panel::filesPanel)
+                        panel::filesPanel->redraw();
+                    if (panel::comparePanel)
+                        panel::comparePanel->redraw();
                     p.lastEvent = 0;
                 }
                 else
@@ -1342,8 +1342,8 @@ namespace mrv
     {
         TLRENDER_P();
 
-        std::vector<std::string> tmpFiles, loadFiles;
-        mrv::split_string(tmpFiles, text, "\n");
+        std::vector<std::string> loadFiles;
+        auto tmpFiles = string::split(text, '\n');
 
         for (auto file : tmpFiles)
         {

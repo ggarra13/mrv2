@@ -38,6 +38,7 @@ set(SOURCES
     mrvSession.cpp
     mrvStereo3DAux.cpp
     mrvTimelinePlayer.cpp
+    mrvUSD.cpp
     mrvVersioning.cpp
 )
 
