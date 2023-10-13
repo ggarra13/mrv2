@@ -106,9 +106,9 @@ decl {class HotkeyUI;} {public global
 decl {class AboutUI;} {public global
 }
 
-widget_class PixelToolBarClass {open
-  xywh {585 471 682 31} resizable
-  class Fl_Double_Window visible
+widget_class PixelToolBarClass {
+  xywh {585 471 682 31} hide resizable
+  class Fl_Double_Window
 } {
   Fl_Group {} {open
     xywh {-2 0 688 30} box FLAT_BOX color 56
@@ -273,7 +273,7 @@ ui->uiView->centerView();}
               callback {int i = o->value();
 if ( i < 0 ) return;
 o->label( mrv::color::space2id( (mrv::color::Space) (i+1)) );
-ui->uiView->redraw();}
+ui->uiView->redraw();} open
               tooltip {Switch pixel color space information display for the pixel under the cursor.} xywh {402 3 27 25} labelsize 9
               code0 {o->disable_glyph();}
               code1 {o->disable_label();}
@@ -413,16 +413,16 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
 }
 
 widget_class TimelineClass {open
-  xywh {225 321 690 29} resizable
+  xywh {604 164 690 29} box NO_BOX resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {open
-    xywh {0 0 690 29} box ENGRAVED_BOX
+    xywh {0 0 690 29}
   } {
     Fl_Group {} {open
       xywh {4 0 686 29}
     } {
-      Fl_Group {} {open selected
+      Fl_Group {} {
         xywh {4 3 94 26}
       } {
         Fl_Menu_Button uiTimecodeSwitch {
@@ -431,7 +431,7 @@ widget_class TimelineClass {open
           callback {mrv::TimeUnits units = (mrv::TimeUnits) o->value();
 ui->uiTimeline->setUnits( units );
 select_character( uiTimecodeSwitch );}
-          tooltip {Switch between Frame, Seconds and Timecode display} xywh {8 3 20 24}
+          tooltip {Switch between Frame, Seconds and Timecode display} xywh {7 3 20 24}
           code0 {o->disable_label();}
           class {mrv::PopupMenu}
         } {
@@ -468,9 +468,9 @@ ui->uiView->take_focus();}
         }
       }
       Fl_Group {} {open
-        xywh {99 1 411 28}
+        xywh {99 1 402 28}
       } {
-        Fl_Group {} {
+        Fl_Group {} {open
           xywh {99 3 240 26}
         } {
           Fl_Button {} {
@@ -480,21 +480,21 @@ ui->uiView->take_focus();}
 	    if (!player) return;
 	    const auto& timeRange = player->inOutRange();
 	    player->seek( timeRange.start_time() );}
-            tooltip {Go to the beginning of the sequence.} xywh {102 3 28 24} labelcolor 28
+            tooltip {Go to the beginning of the sequence.} xywh {102 3 28 24} labelcolor 19
             class {mrv::Button}
           }
           Fl_Button uiPlayBackwards {
             label {@<}
             user_data this user_data_type {ViewerUI*}
             callback {ui->uiView->playBackwards();}
-            tooltip {Play sequence backwards.} xywh {130 3 28 24} labelcolor 28
+            tooltip {Play sequence backwards.} xywh {130 3 28 24} labelcolor 19
             class {mrv::Button}
           }
           Fl_Button {} {
             label {@<|}
             user_data this user_data_type {ViewerUI*}
             callback {ui->uiView->framePrev();}
-            tooltip {Go back one frame.} xywh {158 3 28 24} labelcolor 28
+            tooltip {Go back one frame.} xywh {158 3 28 24} labelcolor 19
             class {mrv::Button}
           }
           Fl_Button uiStop {
@@ -508,14 +508,14 @@ ui->uiView->take_focus();}
             label {@|>}
             user_data this user_data_type {ViewerUI*}
             callback {ui->uiView->frameNext();}
-            tooltip {Advance one frame.} xywh {214 3 28 24} labelcolor 28
+            tooltip {Advance one frame.} xywh {214 3 28 24} labelcolor 19
             class {mrv::Button}
           }
           Fl_Button uiPlayForwards {
             label {@>}
             user_data this user_data_type {ViewerUI*}
             callback {ui->uiView->playForwards();}
-            tooltip {Play sequence forward.} xywh {242 3 28 24} down_box DOWN_BOX labelcolor 28
+            tooltip {Play sequence forward.} xywh {242 3 28 24} down_box DOWN_BOX labelcolor 19
             class {mrv::Button}
           }
           Fl_Button {} {
@@ -525,7 +525,7 @@ ui->uiView->take_focus();}
 	    if (!player) return;
 	    const auto& timeRange = player->inOutRange();
 	    player->seek( timeRange.end_time_inclusive() );}
-            tooltip {Go to the end of the sequence.} xywh {270 3 28 24} labelcolor 28
+            tooltip {Go to the end of the sequence.} xywh {270 3 28 24} labelcolor 19
             class {mrv::Button}
           }
           Fl_Button uiLoopMode {
@@ -553,15 +553,14 @@ ui->uiMain->fill_menu( ui->uiMenuBar );
 auto player = ui->uiView->getTimelinePlayer();
 if( !player ) return;
 
-player->setLoop( loop );}
-            xywh {309 3 24 24} labelcolor 55
+player->setLoop( loop );} selected
+            xywh {309 3 24 24} labelcolor 19
             code0 {o->image( mrv::load_svg( "LoopMode.svg" ) );}
-            code1 {o->labelcolor( 0xFFFFFFFF );}
             class {mrv::StateButton}
           }
         }
-        Fl_Group {} {open
-          xywh {341 1 87 28}
+        Fl_Group {} {
+          xywh {341 1 86 28}
         } {
           Fl_Menu_Button fpsDefaults {
             label FPS
@@ -570,7 +569,7 @@ player->setLoop( loop );}
 double speed = atof( o->text( idx ) );
 uiFPS->value( speed );
 uiFPS->do_callback();}
-            tooltip {Some default frame rate settings.} xywh {341 1 40 24} labelsize 10 align 16
+            tooltip {Some default frame rate settings.} xywh {341 3 40 24} labelsize 10 align 16
             code0 {o->disable_label();}
             class {mrv::PopupMenu}
           } {
@@ -651,7 +650,7 @@ if ( speed <= 0.0 )
   o->redraw();
 }
 player->setSpeed( speed );}
-            tooltip {Allows you to adjust frame rate playback.} xywh {386 3 42 24} selection_color 0
+            tooltip {Allows you to adjust frame rate playback.} xywh {382 3 42 24} selection_color 0
             code0 {o->textcolor( FL_BLACK );o->value(24);}
             code1 {o->step(0.001);}
             code2 {o->minimum(1);}
@@ -660,7 +659,7 @@ player->setSpeed( speed );}
           }
         }
         Fl_Group {} {open
-          xywh {429 3 81 26}
+          xywh {427 3 74 24}
         } {
           Fl_Button uiAudioTracks {
             user_data this user_data_type {ViewerUI*}
@@ -676,21 +675,40 @@ else
    o->image( mrv::load_svg( "Audio.svg" ) );
 }
 o->redraw();}
-            tooltip {Mute audio.} xywh {437 3 18 23} type Toggle labelsize 10 align 80
+            tooltip {Mute audio.} xywh {427 3 20 24} type Toggle labelsize 10 align 80
             code1 {o->image( mrv::load_svg( "Audio.svg" ) );}
           }
           Fl_Slider uiVolume {
             user_data this user_data_type {ViewerUI*}
             callback {float value = o->value();
 ui->app->setVolume(value);}
-            tooltip {Audio Volume} xywh {455 6 55 15} type {Horz Knob} selection_color 1 align 4 step 0.1 value 1 slider_size 0.25
+            tooltip {Audio Volume} xywh {448 7 53 16} type {Horz Knob} selection_color 1 align 4 step 0.1 value 1 slider_size 0.2
             class {mrv::VolumeSlider}
           }
         }
       }
-      Fl_Group {} {open
-        xywh {509 3 181 26}
+      Fl_Group {} {
+        xywh {501 3 189 26}
       } {
+        Fl_Button uiStartButton {
+          label S
+          user_data this user_data_type {ViewerUI*}
+          callback {auto player = ui->uiView->getTimelinePlayer();
+		    if ( !player ) return;
+if ( !o->value() )
+	player->resetInPoint();
+else
+	player->setInPoint();
+
+const auto& range = player->inOutRange();
+const auto& startTime = range.start_time();
+
+uiStartFrame->setTime( startTime );
+
+ui->uiTimeline->setTimelinePlayer(player);
+ui->uiTimeline->redraw();}
+          xywh {505 3 20 24} type Toggle down_box DOWN_BOX align 16
+        }
         Fl_Input uiStartFrame {
           user_data this user_data_type {ViewerUI*}
           callback {auto player = ui->uiView->getTimelinePlayer();
@@ -710,9 +728,29 @@ player->setInOutRange( new_range );
 ui->uiTimeline->setTimelinePlayer(player);
 ui->uiTimeline->redraw();
 ui->uiView->take_focus();}
-          tooltip {Allows you to set starting frame for timeline.} xywh {530 3 70 24} selection_color 0 when 8
+          tooltip {Allows you to set starting frame for timeline.} xywh {528 3 70 24} selection_color 0 when 8
           code1 {o->textcolor( FL_BLACK );}
           class {mrv::Timecode}
+        }
+        Fl_Button uiEndButton {
+          label E
+          user_data this user_data_type {ViewerUI*}
+          callback {auto player = ui->uiView->getTimelinePlayer();
+if ( !player ) return;
+
+if ( !o->value() )
+	player->resetOutPoint();
+else
+	player->setOutPoint();
+
+const auto& range = player->inOutRange();
+const auto& endTime = range.end_time_inclusive();
+
+uiEndFrame->setTime( endTime );
+
+ui->uiTimeline->setTimelinePlayer(player);
+ui->uiTimeline->redraw();}
+          xywh {599 3 20 24} type Toggle
         }
         Fl_Input uiEndFrame {
           user_data this user_data_type {ViewerUI*}
@@ -737,45 +775,6 @@ ui->uiView->take_focus();}
           code1 {o->textcolor( FL_BLACK );}
           class {mrv::Timecode}
         }
-        Fl_Button uiStartButton {
-          label S
-          user_data this user_data_type {ViewerUI*}
-          callback {auto player = ui->uiView->getTimelinePlayer();
-		    if ( !player ) return;
-if ( !o->value() )
-	player->resetInPoint();
-else
-	player->setInPoint();
-
-const auto& range = player->inOutRange();
-const auto& startTime = range.start_time();
-
-uiStartFrame->setTime( startTime );
-
-ui->uiTimeline->setTimelinePlayer(player);
-ui->uiTimeline->redraw();}
-          xywh {511 3 20 24} type Toggle down_box DOWN_BOX align 16
-        }
-        Fl_Button uiEndButton {
-          label E
-          user_data this user_data_type {ViewerUI*}
-          callback {auto player = ui->uiView->getTimelinePlayer();
-if ( !player ) return;
-
-if ( !o->value() )
-	player->resetOutPoint();
-else
-	player->setOutPoint();
-
-const auto& range = player->inOutRange();
-const auto& endTime = range.end_time_inclusive();
-
-uiEndFrame->setTime( endTime );
-
-ui->uiTimeline->setTimelinePlayer(player);
-ui->uiTimeline->redraw();}
-          xywh {599 3 20 24} type Toggle
-        }
       }
     }
   }
@@ -786,8 +785,7 @@ ui->uiTimeline->redraw();}
   }
 }
 
-class ViewerUI {open
-} {
+class ViewerUI {} {
   decl {static mrv::App* app;} {public local
   }
   decl {static PreferencesUI* uiPrefs;} {public local
@@ -798,7 +796,7 @@ class ViewerUI {open
   }
   decl {mrv::SecondaryWindow* uiSecondary;} {public local
   }
-  Function {make_window()} {private
+  Function {make_window()} {open private
   } {
     code {uiPrefs = new PreferencesUI( this );
 uiHotkey = new HotkeyUI( this );
@@ -808,8 +806,8 @@ uiSecondary = nullptr;} {}
       label mrv2
       user_data this user_data_type {ViewerUI*}
       callback {exit_cb( o, v );} open
-      xywh {998 185 690 602} type Double align 80 hide resizable
-      class {mrv::MainWindow} size_range {690 602 0 0}
+      xywh {970 276 690 602} type Double align 80 resizable
+      class {mrv::MainWindow} size_range {690 602 0 0} visible
     } {
       Fl_Pack uiRegion {open
         xywh {0 0 690 602} box FLAT_BOX resizable
@@ -870,7 +868,7 @@ player->setVideoLayer( o->value() );
 auto model = v->app->filesModel();
 auto item = model->observeA()->get();
 model->setLayer(item, o->value());} open
-              tooltip {Allows you to select different image channels or layers.} xywh {3 26 122 25} box ROUNDED_BOX labelsize 12
+              tooltip {Allows you to select different image channels or layers.} xywh {3 26 122 25} down_box DOWN_BOX labelsize 12
               class {mrv::PopupMenu}
             } {}
           }
@@ -915,7 +913,7 @@ uiGain->do_callback();}
               user_data this user_data_type {ViewerUI*}
               callback {uiGain->value( o->value() );
 uiView->updateDisplayOptions();}
-              tooltip {Gain image value.  A simple multiplier of the image pixel values.} xywh {180 27 35 22} selection_color 0 maximum 64 value 1
+              tooltip {Gain image value.  A simple multiplier of the image pixel values.} xywh {180 27 35 23} selection_color 0 maximum 64 value 1
               code0 {o->textsize(12);}
               code1 {o->textcolor( FL_BLACK );}
             }
@@ -923,7 +921,7 @@ uiView->updateDisplayOptions();}
               user_data this user_data_type {ViewerUI*}
               callback {uiGainInput->value( o->value() );
 uiView->updateDisplayOptions();}
-              tooltip {Allows you to adjust the gain or exposure of the image.} xywh {215 27 59 22} type {Horz Knob} maximum 64 value 1
+              tooltip {Allows you to adjust the gain or exposure of the image.} xywh {215 27 59 23} type {Horz Knob} maximum 64 value 1
               code0 {o->minimum( 0.02 );}
               code1 {o->maximum( 64.0 ); o->step( 0.1 );}
               code2 {o->value( 1.0 );}
@@ -934,7 +932,7 @@ uiView->updateDisplayOptions();}
               label {Input Color Space}
               user_data this user_data_type {ViewerUI*}
               callback {uiView->updateColorConfigOptions();} open
-              tooltip {OCIO input color space for the image} xywh {277 27 143 22} box ROUNDED_BOX labelsize 10 align 96
+              tooltip {OCIO input color space for the image} xywh {277 26 143 25} down_box DOWN_BOX labelsize 10 align 96
               code0 {o->disable_submenus();}
               class {mrv::PopupMenu}
             } {}
@@ -946,7 +944,7 @@ uiView->updateDisplayOptions();}
               label OCIO
               user_data this user_data_type {ViewerUI*}
               callback {uiView->updateColorConfigOptions();} open
-              tooltip {OCIO Display/View} xywh {425 27 150 22} box ROUNDED_BOX labelsize 12 align 80
+              tooltip {OCIO Display/View} xywh {425 26 150 25} down_box DOWN_BOX labelsize 12 align 80
               code0 {o->disable_submenus();}
               class {mrv::PopupMenu}
             } {}
@@ -964,14 +962,14 @@ else
    uiGamma->value( 1.0f );
 }
 uiGamma->do_callback();}
-              tooltip {Toggle gamma between 1 and the previous setting.} xywh {575 28 22 22}
+              tooltip {Toggle gamma between 1 and the previous setting.} xywh {575 26 22 25}
             }
             Fl_Value_Input uiGammaInput {
               user_data this user_data_type {ViewerUI*}
               callback {uiGamma->value( o->value() );
 uiView->updateDisplayOptions();}
               tooltip {Allows you to adjust gamma curve for display.
-Value is:  pow( 2, 1/x );} xywh {597 28 35 22} selection_color 0 maximum 64 value 1
+Value is:  pow( 2, 1/x );} xywh {597 27 35 23} selection_color 0 maximum 64 value 1
               code0 {o->textsize(12);}
               code1 {o->textcolor( FL_BLACK );}
               code2 {o->color((Fl_Color)0xf98a8a800);}
@@ -981,7 +979,7 @@ Value is:  pow( 2, 1/x );} xywh {597 28 35 22} selection_color 0 maximum 64 valu
               callback {uiGammaInput->value( o->value() );
 uiView->updateDisplayOptions();}
               tooltip {Allows you to adjust gamma curve for display.
-Value is:  pow( 2, 1/x );} xywh {632 28 54 22} type {Horz Knob} maximum 4 step 0.01 value 1
+Value is:  pow( 2, 1/x );} xywh {632 27 54 23} type {Horz Knob} maximum 4 step 0.01 value 1
               class {mrv::Slider}
             }
           }
