@@ -1913,7 +1913,8 @@ namespace mrv
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
-        const io::Options& options = player->getIOOptions();
+        io::Options options = player->getIOOptions();
+        options["refresh"] = randomString();
         player->setIOOptions(options);
     }
 

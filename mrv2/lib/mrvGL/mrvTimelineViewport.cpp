@@ -794,6 +794,7 @@ namespace mrv
             p.videoData[index] = value;
             if (index == 0)
             {
+                int layerId = sender->videoLayer();
                 p.missingFrame = false;
                 if (p.missingFrameType != MissingFrameType::kBlackFrame &&
                     !value.layers.empty())
@@ -806,17 +807,24 @@ namespace mrv
                         p.missingFrame = true;
                         if (sender->playback() != timeline::Playback::Forward)
                         {
+                            io::Options ioOptions;
+                            {
+                                std::stringstream s;
+                                s << layerId;
+                                ioOptions["Layer"] = s.str();
+                            }
                             const auto& timeline = sender->timeline();
                             const auto& inOutRange = sender->inOutRange();
                             auto currentTime = value.time;
-                            // Seek until we find a previous frame or reach the
-                            // beginning of the inOutRange.
+                            // Seek until we find a previous frame or reach
+                            // the beginning of the inOutRange.
                             while (1)
                             {
                                 currentTime -=
                                     otio::RationalTime(1, currentTime.rate());
                                 const auto& videoData =
-                                    timeline->getVideo(currentTime).get();
+                                    timeline->getVideo(currentTime, ioOptions)
+                                        .get();
                                 if (videoData.layers.empty())
                                     continue;
                                 const auto& image = videoData.layers[0].image;

@@ -16,12 +16,12 @@ v0.8.0
   ones.
 - Added a cmd.getVersion() to get the version of mrv2 from Python.
 - Made playback play with audio when changing frame rate (slower or faster).
-- Made audio play when stepping through frames.  It is currently a hack and not
-  a proper fix yet.  Also, the stepping buttons are not updated properly.
+- Made audio play when stepping through frames.  It is currently a hack and
+  not a proper fix yet.  Also, the stepping buttons are not updated properly.
 - Fixed a locale change when using the FPS pull-down and there were thumbnails
   present.
-- Fixed macOS menu bar font size when switching from macOS menus back to normal
-  ones.
+- Fixed macOS menu bar font size when switching from macOS menus back to
+  normal ones.
 - Made saving of .otio files also work from File/Save/Movie or Sequence if the
   extension given is .otio.
 - Added user metadata to save in the session file as "metadata".  This can be
@@ -48,6 +48,9 @@ v0.8.0
 - Creating a timeline in the Playlist Panel is also done in seconds.
 - Fixed a crash when creating an empty timeline or a timeline from a clip in
   the Playlist Panel.
+- Fixed missing frames (Repeat Last and Repeat Scratched) when the user was
+  reading a different layer and he was playing backwards or stepping through
+  the frames.
 - Some UI fixes:
     * The Zoom factor in the Pixel Toolbar keeps its value  when selecting
       it from the pulldown.
