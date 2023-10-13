@@ -15,7 +15,6 @@ set( FL_SOURCES
 )
 
 FLTK_WRAP_UI( mrvWidgets ${FL_SOURCES} )
-#FLTK_RUN_FLUID( mrvWidgets_FLTK_UI_SRCS "${FL_SOURCES}" )
 
 set(HEADERS
     mrvButton.h
@@ -150,11 +149,9 @@ endif()
 
 target_link_libraries(mrvWidgets PUBLIC ${LIBRARIES} )
 set_target_properties(mrvWidgets PROPERTIES FOLDER lib)
-#set_target_properties(mrvWidgets PROPERTIES PUBLIC_HEADER "${HEADERS}")
 
 install(TARGETS mrvWidgets
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION bin
-    PUBLIC_HEADER DESTINATION include/mrv2/mrvWidgets
     COMPONENT libraries)

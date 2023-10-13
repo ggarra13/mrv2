@@ -10,7 +10,7 @@
 
 #include <FL/filename.H> // for fl_open_uri()
 
-#include "mrvCore/mrvHelpers.h"
+#include "mrvCore/mrvFileManager.h"
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvUtil.h"
 

@@ -26,7 +26,6 @@ files_to_absolute_paths()
 
 target_link_libraries(mrvDraw PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE} )
 set_target_properties(mrvDraw PROPERTIES FOLDER lib)
-#set_target_properties(mrvDraw PROPERTIES PUBLIC_HEADER "${HEADERS}")
 
 
 
@@ -34,5 +33,4 @@ install(TARGETS mrvDraw
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION bin
-    PUBLIC_HEADER DESTINATION include/mrv2/mrvDraw
     COMPONENT libraries)

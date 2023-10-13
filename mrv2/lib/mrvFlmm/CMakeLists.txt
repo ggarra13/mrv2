@@ -24,11 +24,9 @@ endif()
 
 target_link_libraries(mrvFlmm PUBLIC ${LIBRARIES} )
 set_target_properties(mrvFlmm PROPERTIES FOLDER lib)
-#set_target_properties(mrvFlmm PROPERTIES PUBLIC_HEADER "${HEADERS}")
 
 install(TARGETS mrvFlmm
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION bin
-    PUBLIC_HEADER DESTINATION include/mrv2/mrvFlmm
     COMPONENT libraries)

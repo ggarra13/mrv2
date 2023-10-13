@@ -66,12 +66,10 @@ files_to_absolute_paths()
 
 target_link_libraries(mrvNetwork PUBLIC ${LIBRARIES} )
 set_target_properties(mrvNetwork PROPERTIES FOLDER lib)
-#set_target_properties(mrvNetwork PROPERTIES PUBLIC_HEADER "${HEADERS}")
 add_dependencies( mrvNetwork mrvFl )
 
 install(TARGETS mrvNetwork
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION bin
-    PUBLIC_HEADER DESTINATION include/mrv2/mrvNetwork
     COMPONENT libraries)

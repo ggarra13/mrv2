@@ -70,11 +70,9 @@ endif()
 
 target_link_libraries(mrvFl PUBLIC ${LIBRARIES} )
 set_target_properties(mrvFl PROPERTIES FOLDER lib)
-#set_target_properties(mrvFl PROPERTIES PUBLIC_HEADER "${HEADERS}")
 
 install(TARGETS mrvFl
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION bin
-    PUBLIC_HEADER DESTINATION include/mrv2/mrvFl
     COMPONENT libraries)
