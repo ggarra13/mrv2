@@ -1169,27 +1169,17 @@ namespace mrv
     {
         MRV2_GL();
         TLRENDER_P();
-        if (p.timelinePlayers.empty())
-            return;
-        const auto& viewportSize = getViewportSize();
-
-        timeline::RenderOptions renderOptions;
-        renderOptions.clear = false;
-
-        gl.render->begin(
-            viewportSize, timeline::ColorConfigOptions(),
-            timeline::LUTOptions(), renderOptions);
-
+        const auto renderSize = getRenderSize();
         switch (p.backgroundOptions.type)
         {
         case timeline::Background::Solid:
-            gl.render->clearViewport(p.backgroundOptions.solidColor);
+            gl.render->clearViewport(image::Color4f(0.F, 0.F, 0.F));
             break;
         case timeline::Background::Checkers:
             gl.render->clearViewport(image::Color4f(0.F, 0.F, 0.F));
             gl.render->drawColorMesh(
                 ui::checkers(
-                    math::Box2i(0, 0, viewportSize.w, viewportSize.h),
+                    math::Box2i(0, 0, renderSize.w, renderSize.h),
                     p.backgroundOptions.checkersColor0,
                     p.backgroundOptions.checkersColor1,
                     p.backgroundOptions.checkersSize),
@@ -1198,7 +1188,5 @@ namespace mrv
         default:
             break;
         }
-
-        gl.render->end();
     }
 } // namespace mrv

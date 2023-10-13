@@ -272,6 +272,8 @@ namespace mrv
 
                     gl.render->begin(
                         renderSize, p.colorConfigOptions, p.lutOptions);
+
+                    _drawBackground();
                     CHECK_GL;
                     if (p.missingFrame &&
                         p.missingFrameType != MissingFrameType::kBlackFrame)
@@ -324,9 +326,6 @@ namespace mrv
             switch (p.backgroundOptions.type)
             {
             case timeline::Background::Solid:
-                p.backgroundOptions.solidColor =
-                    image::Color4f(0.F, 0.F, 0.F, 1.F);
-                break;
             case timeline::Background::Transparent:
             {
                 uint8_t ur, ug, ub;
@@ -352,8 +351,6 @@ namespace mrv
 
         if (gl.buffer && gl.shader)
         {
-            _drawBackground();
-
             math::Matrix4x4f mvp;
 
             if (p.environmentMapOptions.type != EnvironmentMapOptions::kNone)

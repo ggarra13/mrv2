@@ -561,21 +561,21 @@ namespace mrv
             mode |= FL_MENU_INACTIVE;
 
         idx = menu->add(
-            _("Render/Background/Transparent"), kToggleBlackBackground.hotkey(),
+            _("Render/Background/Transparent"), kTransparentBackground.hotkey(),
             (Fl_Callback*)transparent_background_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (backgroundOptions.type == timeline::Background::Transparent)
             item->set();
 
         idx = menu->add(
-            _("Render/Background/Solid"), kToggleBlackBackground.hotkey(),
+            _("Render/Background/Solid"), kSolidBackground.hotkey(),
             (Fl_Callback*)solid_background_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (backgroundOptions.type == timeline::Background::Solid)
             item->set();
 
         idx = menu->add(
-            _("Render/Background/Checkers"), kToggleBlackBackground.hotkey(),
+            _("Render/Background/Checkers"), kCheckersBackground.hotkey(),
             (Fl_Callback*)checkers_background_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (backgroundOptions.type == timeline::Background::Checkers)

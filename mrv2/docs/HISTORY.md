@@ -6,7 +6,7 @@ v0.8.0
   full name of the directory in the filename field and pressed Enter,
 - Fixed a crash when loading a session with no files.
 - Added session name to the window's title bar.
-- Fixed a typo in Python's binding to sessios (oepenSession instead of
+- Fixed a typo in Python's binding to session (oepenSession instead of
   openSession).
 - Made Save Session not save temporary EDLs in the session file.
 - Added a '\_\_divider\_\_' tuple entry to Plug-in menus to add a divider line
@@ -51,12 +51,14 @@ v0.8.0
 - Fixed missing frames (Repeat Last and Repeat Scratched) when the user was
   reading a different layer and he was playing backwards or stepping through
   the frames.
-- Added drawing background transparent, solid or checkers.
+- Added drawing background as transparent, solid or checkers.
+- Made dragging a clip from the Files Panel not loose the selection.
 - Fixed a network error (harmless) about edit mode.
 - Some UI fixes:
-    * The Zoom factor in the Pixel Toolbar keeps its value  when selecting
+    * The Zoom factor in the Pixel Toolbar keeps its value when selecting
       it from the pulldown.
-    * All buttons and displays have the same size.
+    * All buttons and displays have the same size on both the timeline and
+      pixel toolbar.
     * Cursor in all input fields is now red for easier reading.
     * The FPS input widget now displays the FPS with different number of
       digits to fit the value as best it can on the limited width.

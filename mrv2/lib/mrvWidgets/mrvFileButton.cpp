@@ -169,7 +169,7 @@ namespace mrv
 
                 if (p.drag)
                 {
-                    value(0);
+                    value(1);
                     redraw();
                     int X = Fl::event_x_root();
                     int Y = Fl::event_y_root();
