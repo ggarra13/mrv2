@@ -39,8 +39,6 @@ namespace mrv
 
     LONG WINAPI exceptionHandler(EXCEPTION_POINTERS* exceptionInfo)
     {
-        removeLockFile();
-
         DWORD exceptionCode = exceptionInfo->ExceptionRecord->ExceptionCode;
         std::cerr << "Exception " << exceptionCode << " caught" << std::endl;
         // Do any necessary cleanup or logging here
