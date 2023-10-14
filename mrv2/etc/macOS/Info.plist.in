@@ -121,6 +121,10 @@
 	    </array>
 	</dict>
 	<dict>
+	  <key>CFBundleTypeName</key>
+          <string>mrv2 Session File</string>
+          <key>UTTypeIdentifier</key>
+          <string>com.mrv2.mrv2.session</string>
 	  <key>CFBundleTypeRole</key>
 	  <string>Editor</string>
 	    <key>CFBundleTypeExtensions</key>

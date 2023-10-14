@@ -565,11 +565,6 @@ player->setLoop( loop );}
             label FPS
             user_data this user_data_type {ViewerUI*}
             callback {int idx = o->value();
-std::cerr << idx << ") " << o->text(idx)
-          << std::endl;
-const char* locale = setlocale(LC_NUMERIC, NULL);
-if (locale)
-    std::cerr << "locale is " << locale << std::endl;
 double speed = atof( o->text( idx ) );
 uiFPS->value( speed );
 uiFPS->do_callback();}

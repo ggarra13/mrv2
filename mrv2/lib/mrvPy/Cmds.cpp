@@ -32,6 +32,11 @@ namespace mrv2
     {
         using namespace mrv;
 
+        std::string getVersion()
+        {
+            return mrv::version();
+        }
+
         /**
          *  \brief Open a file with optiona audio.
          *
@@ -502,9 +507,13 @@ Used to run main commands and get and set the display, image, compare, LUT optio
     cmds.def(
         "setStereo3DOptions", &mrv2::cmd::setStereo3DOptions,
         _("Set the stereo 3D options."), py::arg("options"));
+
     cmds.def(
         "getLayers", &mrv2::cmd::getLayers,
         _("Get the layers of the timeline (GUI)."));
+
+    cmds.def(
+        "getVersion", &mrv2::cmd::getVersion, _("Get the version of mrv2."));
 
     cmds.def(
         "update", &mrv2::cmd::update,

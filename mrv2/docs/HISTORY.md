@@ -14,6 +14,10 @@ v0.8.0
 - Made Python's output and errors automatically be sent to the Python editor,
   instead of waiting until the commands finish, like in v0.7.9 and previous
   ones.
+- Added a cmd.getVersion() to get the version of mrv2 from Python.
+- Made playback play with audio when changing frame rates (slower or faster).
+- Fixed a locale change when using the FPS pull-down and there were thumbnails
+  present.
 
 v0.7.9
 ======

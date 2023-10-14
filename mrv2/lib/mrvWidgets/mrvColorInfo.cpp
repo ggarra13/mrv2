@@ -14,12 +14,14 @@
 #include <FL/Fl_Box.H>
 #include <FL/Enumerations.H>
 
-#include "mrViewer.h"
-
 #include "mrvCore/mrvColorSpaces.h"
+#include "mrvCore/mrvLocale.h"
 #include "mrvCore/mrvString.h"
-#include "mrvGL/mrvGLViewport.h"
+
+#include "mrvGL/mrvTimelineViewport.h"
+
 #include "mrvColorInfo.h"
+#include "mrViewer.h"
 
 #include "mrvFl/mrvIO.h"
 
@@ -326,8 +328,9 @@ namespace mrv
 
         text.str("");
         text.str().reserve(1024);
-        const char* locale = setlocale(LC_NUMERIC, NULL);
-        text.imbue(std::locale(locale));
+
+        StoreLocale;
+        text.imbue(std::locale(saved.stored()));
         text << "@b\t" << std::fixed << std::setw(7) << std::setprecision(2)
              << kR << "R"
              << "\t" << kG << "G"

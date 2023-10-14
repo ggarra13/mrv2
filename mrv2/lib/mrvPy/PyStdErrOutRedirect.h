@@ -24,11 +24,11 @@ namespace mrv
             auto sysm = py::module::import("sys");
             _stdout = sysm.attr("stdout");
             _stderr = sysm.attr("stderr");
-            auto stdout = py::module::import("mrv2").attr("FLTKRedirectOutput");
-            auto stderr = py::module::import("mrv2").attr("FLTKRedirectError");
-            _stdout_buffer = stdout();
+            auto out = py::module::import("mrv2").attr("FLTKRedirectOutput");
+            auto err = py::module::import("mrv2").attr("FLTKRedirectError");
+            _stdout_buffer = out();
             // such as objects created by pybind11
-            _stderr_buffer = stderr();
+            _stderr_buffer = err();
             sysm.attr("stdout") = _stdout_buffer;
             sysm.attr("stderr") = _stderr_buffer;
         }

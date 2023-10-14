@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.8.0\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-10-09 15:32-0300\n"
+"POT-Creation-Date: 2023-10-09 17:14-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -87,7 +87,7 @@ msgid ""
 ":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
 msgstr ""
 
-#: mrvPy/Cmds.cpp:432
+#: mrvPy/Cmds.cpp:435
 msgid ""
 "\n"
 "Command module.\n"
@@ -1244,7 +1244,7 @@ msgid ""
 "calculate the Read Ahead and Read Behind"
 msgstr ""
 
-#: mrvPy/Cmds.cpp:513
+#: mrvPy/Cmds.cpp:520
 msgid ""
 "Call Fl::check to update the GUI and return the number of seconds that "
 "elapsed."
@@ -1397,7 +1397,7 @@ msgstr ""
 msgid "Close Current"
 msgstr ""
 
-#: mrvPy/Cmds.cpp:451
+#: mrvPy/Cmds.cpp:454
 msgid "Close all file items."
 msgstr ""
 
@@ -1421,7 +1421,7 @@ msgstr ""
 msgid "Close the current A file."
 msgstr ""
 
-#: mrvPy/Cmds.cpp:448
+#: mrvPy/Cmds.cpp:451
 msgid "Close the file item."
 msgstr ""
 
@@ -1541,7 +1541,7 @@ msgstr ""
 msgid "Compare the A and B files side by side"
 msgstr ""
 
-#: mrvPy/Cmds.cpp:444
+#: mrvPy/Cmds.cpp:447
 msgid "Compare two file items with a compare mode."
 msgstr ""
 
@@ -2566,12 +2566,16 @@ msgstr ""
 msgid "Get maximum file sequence digits."
 msgstr ""
 
-#: mrvPy/Cmds.cpp:509
+#: mrvPy/Cmds.cpp:513
 msgid "Get the layers of the timeline (GUI)."
 msgstr ""
 
-#: mrvPy/Cmds.cpp:523
+#: mrvPy/Cmds.cpp:530
 msgid "Get the playback volume."
+msgstr ""
+
+#: mrvPy/Cmds.cpp:516
+msgid "Get the version of mrv2."
 msgstr ""
 
 #: mrvPanels/mrvAnnotationsPanel.cpp:307
@@ -3401,7 +3405,7 @@ msgstr ""
 msgid "No playlist selected."
 msgstr ""
 
-#: mrvPy/Cmds.cpp:402
+#: mrvPy/Cmds.cpp:405
 msgid "No session name established, cannot save."
 msgstr ""
 
@@ -3584,11 +3588,11 @@ msgstr ""
 msgid "Open a filename with audio"
 msgstr ""
 
-#: mrvPy/Cmds.cpp:555
+#: mrvPy/Cmds.cpp:562
 msgid "Open a session file."
 msgstr ""
 
-#: mrvPy/Cmds.cpp:439
+#: mrvPy/Cmds.cpp:442
 msgid "Open file with optional audio."
 msgstr ""
 
@@ -4427,19 +4431,19 @@ msgstr ""
 msgid "Return the A file item."
 msgstr ""
 
-#: mrvPy/Cmds.cpp:470
+#: mrvPy/Cmds.cpp:473
 msgid "Return the LUT options."
 msgstr ""
 
-#: mrvPy/Cmds.cpp:463
+#: mrvPy/Cmds.cpp:466
 msgid "Return the display options."
 msgstr ""
 
-#: mrvPy/Cmds.cpp:486
+#: mrvPy/Cmds.cpp:489
 msgid "Return the environment map options."
 msgstr ""
 
-#: mrvPy/Cmds.cpp:478
+#: mrvPy/Cmds.cpp:481
 msgid "Return the image options."
 msgstr ""
 
@@ -4455,11 +4459,11 @@ msgstr ""
 msgid "Return the list of layers."
 msgstr ""
 
-#: mrvPy/Cmds.cpp:459
+#: mrvPy/Cmds.cpp:462
 msgid "Return the path to preferences of mrv2."
 msgstr ""
 
-#: mrvPy/Cmds.cpp:455
+#: mrvPy/Cmds.cpp:458
 msgid "Return the root path to the insallation of mrv2."
 msgstr ""
 
@@ -4467,7 +4471,7 @@ msgstr ""
 msgid "Return the version and exit."
 msgstr ""
 
-#: mrvPy/Cmds.cpp:548
+#: mrvPy/Cmds.cpp:555
 msgid "Returns current session file."
 msgstr ""
 
@@ -4497,7 +4501,7 @@ msgstr ""
 msgid "Returns the time value for time converted to new_rate."
 msgstr ""
 
-#: mrvPy/Cmds.cpp:517
+#: mrvPy/Cmds.cpp:524
 msgid "Returns true if audio is muted."
 msgstr ""
 
@@ -4638,19 +4642,19 @@ msgstr ""
 msgid "Save Single Frame"
 msgstr ""
 
-#: mrvPy/Cmds.cpp:542
+#: mrvPy/Cmds.cpp:549
 msgid "Save a PDF document with all annotations and notes."
 msgstr ""
 
-#: mrvPy/Cmds.cpp:531
+#: mrvPy/Cmds.cpp:538
 msgid "Save a movie or sequence from the front layer."
 msgstr ""
 
-#: mrvPy/Cmds.cpp:558 mrvPy/Cmds.cpp:561
+#: mrvPy/Cmds.cpp:565 mrvPy/Cmds.cpp:568
 msgid "Save a session file."
 msgstr ""
 
-#: mrvPy/Cmds.cpp:536
+#: mrvPy/Cmds.cpp:543
 msgid "Save an .otio file from the current selected image."
 msgstr ""
 
@@ -4991,7 +4995,7 @@ msgstr ""
 msgid "Set the A file index."
 msgstr ""
 
-#: mrvPy/Cmds.cpp:473
+#: mrvPy/Cmds.cpp:476
 msgid "Set the LUT options."
 msgstr ""
 
@@ -4999,15 +5003,15 @@ msgstr ""
 msgid "Set the cache memory setting in gigabytes."
 msgstr ""
 
-#: mrvPy/Cmds.cpp:498
+#: mrvPy/Cmds.cpp:501
 msgid "Set the compare options."
 msgstr ""
 
-#: mrvPy/Cmds.cpp:467
+#: mrvPy/Cmds.cpp:470
 msgid "Set the display options."
 msgstr ""
 
-#: mrvPy/Cmds.cpp:490
+#: mrvPy/Cmds.cpp:493
 msgid "Set the environment map options."
 msgstr ""
 
@@ -5015,7 +5019,7 @@ msgstr ""
 msgid "Set the first version for current media."
 msgstr ""
 
-#: mrvPy/Cmds.cpp:482
+#: mrvPy/Cmds.cpp:485
 msgid "Set the image options."
 msgstr ""
 
@@ -5039,7 +5043,7 @@ msgstr ""
 msgid "Set the last version for current media."
 msgstr ""
 
-#: mrvPy/Cmds.cpp:520
+#: mrvPy/Cmds.cpp:527
 msgid "Set the muting of the audio."
 msgstr ""
 
@@ -5059,7 +5063,7 @@ msgstr ""
 msgid "Set the out time of the selected time range of the timeline."
 msgstr ""
 
-#: mrvPy/Cmds.cpp:526
+#: mrvPy/Cmds.cpp:533
 msgid "Set the playback volume."
 msgstr ""
 
@@ -5071,11 +5075,11 @@ msgstr ""
 msgid "Set the selected time range of the timeline."
 msgstr ""
 
-#: mrvPy/Cmds.cpp:506
+#: mrvPy/Cmds.cpp:509
 msgid "Set the stereo 3D options."
 msgstr ""
 
-#: mrvPy/Cmds.cpp:552
+#: mrvPy/Cmds.cpp:559
 msgid "Sets the current session file."
 msgstr ""
 
