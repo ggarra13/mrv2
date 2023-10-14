@@ -559,9 +559,10 @@ namespace mrv
             "USD/enableLighting",
             static_cast<int>(p.options.usdEnableLighting));
         p.settingsObject->setValue(
-            "USD/stageCache", static_cast<int>(p.options.usdStageCache));
+            "USD/stageCacheByteCount",
+            static_cast<int>(p.options.usdStageCache));
         p.settingsObject->setValue(
-            "USD/diskCacheByte",
+            "USD/diskCacheByteCount",
             static_cast<int>(p.options.usdDiskCache * memory::gigabyte));
 #endif // TLRENDER_USD
 
@@ -1131,8 +1132,9 @@ namespace mrv
             std_any_cast<int>(p.settingsObject->value("USD/enableLighting")));
         out["USD/sRGB"] = string::Format("{0}").arg(
             std_any_cast<int>(p.settingsObject->value("USD/sRGB")));
-        out["USD/stageCacheCount"] = string::Format("{0}").arg(
-            std_any_cast<int>(p.settingsObject->value("USD/stageCacheCount")));
+        out["USD/stageCacheByteCount"] =
+            string::Format("{0}").arg(std_any_cast<int>(
+                p.settingsObject->value("USD/stageCacheByteCount")));
         out["USD/diskCacheByteCount"] =
             string::Format("{0}").arg(std_any_cast<int>(
                 p.settingsObject->value("USD/diskCacheByteCount")));
@@ -1162,12 +1164,11 @@ namespace mrv
                     p.settingsObject->value("FileSequence/AudioFileName");
                 options.fileSequenceAudioFileName =
                     std_any_cast<std::string>(v);
-
                 options.fileSequenceAudioDirectory = std_any_cast<std::string>(
                     p.settingsObject->value("FileSequence/AudioDirectory"));
+
                 options.videoRequestCount = std_any_cast<int>(
                     p.settingsObject->value("Performance/VideoRequestCount"));
-
                 options.audioRequestCount = std_any_cast<int>(
                     p.settingsObject->value("Performance/AudioRequestCount"));
 
