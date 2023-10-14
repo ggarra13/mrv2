@@ -147,7 +147,7 @@ namespace mrv
         Fl_Gl_Window(X, Y, W, H, L),
         _p(new Private)
     {
-        const int fl_double = FL_DOUBLE;
+        int fl_double = FL_DOUBLE;
 #ifdef __APPLE__
         fl_double = 0;
 #endif
