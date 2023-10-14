@@ -158,6 +158,7 @@ namespace mrv
         ContextObject* contextObject = nullptr;
         std::shared_ptr<timeline::TimeUnitsModel> timeUnitsModel;
         SettingsObject* settingsObject = nullptr;
+
 #ifdef MRV2_NETWORK
         CommandInterpreter* commandInterpreter = nullptr;
         ImageListener* imageListener = nullptr;
@@ -166,6 +167,7 @@ namespace mrv
 #ifdef MRV2_PYBIND11
         std::unique_ptr<PyStdErrOutStreamRedirect> pythonStdErrOutRedirect;
 #endif
+
         std::shared_ptr<PlaylistsModel> playlistsModel;
         std::shared_ptr<FilesModel> filesModel;
         std::shared_ptr<
@@ -597,13 +599,12 @@ namespace mrv
                 for (size_t i = 0;
                      i < value.size() && i < _p->timelinePlayers.size(); ++i)
                 {
-                    if (_p->timelinePlayers[i])
+                    if (auto player = _p->timelinePlayers[i]->player())
                     {
-                        io::Options ioOptions;
+                        auto ioOptions = _getIOOptions();
                         ioOptions["Layer"] =
                             string::Format("{0}").arg(value[i]);
-                        _p->timelinePlayers[i]->player()->setIOOptions(
-                            ioOptions);
+                        player->setIOOptions(ioOptions);
                     }
                 }
             });
@@ -1094,6 +1095,52 @@ namespace mrv
         p.settingsObject->setValue("Audio/Mute", value);
     }
 
+    io::Options App::_getIOOptions() const
+    {
+        TLRENDER_P();
+        io::Options out;
+
+        out["SequenceIO/ThreadCount"] =
+            string::Format("{0}").arg(std_any_cast<int>(
+                p.settingsObject->value("SequenceIO/ThreadCount")));
+        out["SequenceIO/DefaultSpeed"] =
+            string::Format("{0}").arg(ui->uiPrefs->uiPrefsFPS->value());
+
+#if defined(TLRENDER_FFMPEG)
+        out["FFmpeg/YUVToRGBConversion"] =
+            string::Format("{0}").arg(std_any_cast<int>(p.settingsObject->value(
+                "Performance/FFmpegYUVToRGBConversion")));
+        out["FFmpeg/ThreadCount"] = string::Format("{0}").arg(std_any_cast<int>(
+            p.settingsObject->value("Performance/FFmpegThreadCount")));
+#endif // TLRENDER_FFMPEG
+
+#if defined(TLRENDER_USD)
+        out["USD/renderWidth"] = string::Format("{0}").arg(
+            std_any_cast<int>(p.settingsObject->value("USD/renderWidth")));
+        float complexity =
+            std_any_cast<float>(p.settingsObject->value("USD/complexity"));
+        out["USD/complexity"] = string::Format("{0}").arg(complexity);
+        {
+            std::stringstream ss;
+            usd::DrawMode usdDrawMode = static_cast<usd::DrawMode>(
+                std_any_cast<int>(p.settingsObject->value("USD/drawMode")));
+            ss << usdDrawMode;
+            out["USD/drawMode"] = ss.str();
+        }
+        out["USD/enableLighting"] = string::Format("{0}").arg(
+            std_any_cast<int>(p.settingsObject->value("USD/enableLighting")));
+        out["USD/sRGB"] = string::Format("{0}").arg(
+            std_any_cast<int>(p.settingsObject->value("USD/sRGB")));
+        out["USD/stageCacheCount"] = string::Format("{0}").arg(
+            std_any_cast<int>(p.settingsObject->value("USD/stageCacheCount")));
+        out["USD/diskCacheByteCount"] =
+            string::Format("{0}").arg(std_any_cast<int>(
+                p.settingsObject->value("USD/diskCacheByteCount")));
+#endif
+
+        return out;
+    }
+
     void App::_filesCallback(
         const std::vector<std::shared_ptr<FilesModelItem> >& items)
     {
@@ -1109,7 +1156,6 @@ namespace mrv
 
                 int value = std_any_cast<int>(
                     p.settingsObject->value("FileSequence/Audio"));
-
                 options.fileSequenceAudio = (timeline::FileSequenceAudio)value;
 
                 std_any v =
@@ -1125,63 +1171,7 @@ namespace mrv
                 options.audioRequestCount = std_any_cast<int>(
                     p.settingsObject->value("Performance/AudioRequestCount"));
 
-                options.ioOptions["SequenceIO/ThreadCount"] =
-                    string::Format("{0}").arg(
-                        std_any_cast<int>(p.settingsObject->value(
-                            "Performance/SequenceThreadCount")));
-
-                options.ioOptions["FFmpeg/YUVToRGBConversion"] =
-                    string::Format("{0}").arg(
-                        std_any_cast< int>(p.settingsObject->value(
-                            "Performance/FFmpegYUVToRGBConversion")));
-
-                const audio::Info audioInfo =
-                    audioSystem->getDefaultOutputInfo();
-                options.ioOptions["FFmpeg/AudioChannelCount"] =
-                    string::Format("{0}").arg(audioInfo.channelCount);
-                options.ioOptions["FFmpeg/AudioDataType"] =
-                    string::Format("{0}").arg(audioInfo.dataType);
-                options.ioOptions["FFmpeg/AudioSampleRate"] =
-                    string::Format("{0}").arg(audioInfo.sampleRate);
-
-                options.ioOptions["FFmpeg/ThreadCount"] =
-                    string::Format("{0}").arg(
-                        std_any_cast<int>(p.settingsObject->value(
-                            "Performance/FFmpegThreadCount")));
-
-                options.ioOptions["SequenceIO/DefaultSpeed"] =
-                    string::Format("{0}").arg(ui->uiPrefs->uiPrefsFPS->value());
-
-#if defined(TLRENDER_USD)
-                options.ioOptions["USD/renderWidth"] =
-                    string::Format("{0}").arg(std_any_cast<int>(
-                        p.settingsObject->value("USD/renderWidth")));
-                float complexity = std_any_cast<float>(
-                    p.settingsObject->value("USD/complexity"));
-                options.ioOptions["USD/complexity"] =
-                    string::Format("{0}").arg(complexity);
-                {
-                    std::stringstream ss;
-                    usd::DrawMode usdDrawMode =
-                        static_cast<usd::DrawMode>(std_any_cast<int>(
-                            p.settingsObject->value("USD/drawMode")));
-                    ss << usdDrawMode;
-                    options.ioOptions["USD/drawMode"] = ss.str();
-                }
-                options.ioOptions["USD/enableLighting"] =
-                    string::Format("{0}").arg(std_any_cast<int>(
-                        p.settingsObject->value("USD/enableLighting")));
-                options.ioOptions["USD/stageCache"] =
-                    string::Format("{0}").arg(std_any_cast<int>(
-                        p.settingsObject->value("USD/stageCache")));
-                options.ioOptions["USD/diskCache"] =
-                    string::Format("{0}").arg(std_any_cast<int>(
-                        p.settingsObject->value("USD/diskCache")));
-
-                auto ioSystem = _context->getSystem<io::System>();
-                ioSystem->setOptions(options.ioOptions);
-#endif
-
+                options.ioOptions = _getIOOptions();
                 options.pathOptions.maxNumberDigits = std::min(
                     std_any_cast<int>(
                         p.settingsObject->value("Misc/MaxFileSequenceDigits")),
@@ -1278,63 +1268,7 @@ namespace mrv
                 options.audioRequestCount = std_any_cast<int>(
                     p.settingsObject->value("Performance/AudioRequestCount"));
 
-                options.ioOptions["SequenceIO/ThreadCount"] =
-                    string::Format("{0}").arg(
-                        std_any_cast<int>(p.settingsObject->value(
-                            "Performance/SequenceThreadCount")));
-
-                options.ioOptions["FFmpeg/YUVToRGBConversion"] =
-                    string::Format("{0}").arg(
-                        std_any_cast< int>(p.settingsObject->value(
-                            "Performance/FFmpegYUVToRGBConversion")));
-
-                const audio::Info audioInfo =
-                    audioSystem->getDefaultOutputInfo();
-                options.ioOptions["FFmpeg/AudioChannelCount"] =
-                    string::Format("{0}").arg(audioInfo.channelCount);
-                options.ioOptions["FFmpeg/AudioDataType"] =
-                    string::Format("{0}").arg(audioInfo.dataType);
-                options.ioOptions["FFmpeg/AudioSampleRate"] =
-                    string::Format("{0}").arg(audioInfo.sampleRate);
-
-                options.ioOptions["FFmpeg/ThreadCount"] =
-                    string::Format("{0}").arg(
-                        std_any_cast<int>(p.settingsObject->value(
-                            "Performance/FFmpegThreadCount")));
-
-                options.ioOptions["SequenceIO/DefaultSpeed"] =
-                    string::Format("{0}").arg(ui->uiPrefs->uiPrefsFPS->value());
-
-#if defined(TLRENDER_USD)
-                options.ioOptions["USD/renderWidth"] =
-                    string::Format("{0}").arg(std_any_cast<int>(
-                        p.settingsObject->value("USD/renderWidth")));
-                float complexity = std_any_cast<float>(
-                    p.settingsObject->value("USD/complexity"));
-                options.ioOptions["USD/complexity"] =
-                    string::Format("{0}").arg(complexity);
-                {
-                    std::stringstream ss;
-                    usd::DrawMode usdDrawMode =
-                        static_cast<usd::DrawMode>(std_any_cast<int>(
-                            p.settingsObject->value("USD/drawMode")));
-                    ss << usdDrawMode;
-                    options.ioOptions["USD/drawMode"] = ss.str();
-                }
-                options.ioOptions["USD/enableLighting"] =
-                    string::Format("{0}").arg(std_any_cast<int>(
-                        p.settingsObject->value("USD/enableLighting")));
-                options.ioOptions["USD/stageCache"] =
-                    string::Format("{0}").arg(std_any_cast<int>(
-                        p.settingsObject->value("USD/stageCache")));
-                options.ioOptions["USD/diskCache"] =
-                    string::Format("{0}").arg(std_any_cast<int>(
-                        p.settingsObject->value("USD/diskCache")));
-
-                auto ioSystem = _context->getSystem<io::System>();
-                ioSystem->setOptions(options.ioOptions);
-#endif
-
+                options.ioOptions = _getIOOptions();
                 options.pathOptions.maxNumberDigits = std::min(
                     std_any_cast<int>(
                         p.settingsObject->value("Misc/MaxFileSequenceDigits")),

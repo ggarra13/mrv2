@@ -122,8 +122,6 @@ namespace mrv
                     string::Format("{0}: Cannot open").arg(file));
             }
 
-            writerPlugin->setOptions(ioOptions);
-
             int X = 0, Y = 0;
             bool presentation = view->getPresentationMode();
 
@@ -209,7 +207,7 @@ namespace mrv
             ioInfo.video.push_back(outputInfo);
             ioInfo.videoTime = timeRange;
 
-            auto writer = writerPlugin->write(path, ioInfo);
+            auto writer = writerPlugin->write(path, ioInfo, ioOptions);
             if (!writer)
             {
                 throw std::runtime_error(
@@ -420,8 +418,6 @@ namespace mrv
                     string::Format("{0}: Cannot open").arg(file));
             }
 
-            writerPlugin->setOptions(ioOptions);
-
             int X = 0, Y = 0;
             bool presentation = view->getPresentationMode();
 
@@ -507,7 +503,7 @@ namespace mrv
             ioInfo.video.push_back(outputInfo);
             ioInfo.videoTime = timeRange;
 
-            auto writer = writerPlugin->write(path, ioInfo);
+            auto writer = writerPlugin->write(path, ioInfo, ioOptions);
             if (!writer)
             {
                 throw std::runtime_error(

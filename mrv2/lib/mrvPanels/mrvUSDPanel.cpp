@@ -180,6 +180,19 @@ namespace mrv
                     _update();
                 });
 
+            cV = new Widget< Fl_Check_Button >(
+                g->x() + 90, Y, g->w(), 20, _("Enable sRGB"));
+            c->labelsize(12);
+            c->value(std_any_cast<int>(settingsObject->value("USD/sRGB")));
+
+            cV->callback(
+                [=](auto w)
+                {
+                    int v = w->value();
+                    settingsObject->setValue("USD/sRGB", v);
+                    _update();
+                });
+
             Y += 22;
             spW = new Widget< Fl_Spinner >(
                 g->x() + 160, Y, g->w() - 160, 20, _("Stage Cache"));
@@ -190,20 +203,21 @@ namespace mrv
             sp->step(1);
             sp->range(32, 4096);
             sp->align(FL_ALIGN_LEFT);
-            v = std_any_cast<int>(settingsObject->value("USD/stageCache"));
+            v = std_any_cast<int>(
+                settingsObject->value("USD/stageCacheByteCount"));
             sp->value(v);
 
             spW->callback(
                 [=](auto o)
                 {
                     int v = static_cast<int>(o->value());
-                    settingsObject->setValue("USD/stageCache", v);
+                    settingsObject->setValue("USD/stageCacheByteCount", v);
                     _update();
                 });
 
             Y += 22;
             spW = new Widget< Fl_Spinner >(
-                g->x() + 160, Y, g->w() - 160, 20, _("Disk Cache"));
+                g->x() + 160, Y, g->w() - 160, 20, _("Disk Cache in GB"));
             sp = spW;
             sp->format("%4.4g");
             sp->labelsize(12);
@@ -211,14 +225,15 @@ namespace mrv
             sp->step(1);
             sp->range(32, 4096);
             sp->align(FL_ALIGN_LEFT);
-            v = std_any_cast<int>(settingsObject->value("USD/diskCache"));
+            v = std_any_cast<int>(
+                settingsObject->value("USD/diskCacheByteCount"));
             sp->value(v);
 
             spW->callback(
                 [=](auto o)
                 {
                     int v = static_cast<int>(o->value());
-                    settingsObject->setValue("USD/diskCache", v);
+                    settingsObject->setValue("USD/diskCacheByteCount", v);
                     _update();
                 });
 

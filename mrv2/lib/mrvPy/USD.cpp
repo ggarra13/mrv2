@@ -40,6 +40,7 @@ Contains all classes and enums related to USD (Universal Scene Description).
         .def_readwrite(
             "enableLighting", &usd::RenderOptions::enableLighting,
             _("Enable Lighting"))
+        .def_readwrite("sRGB", &usd::RenderOptions::sRGB, _("Enable sRGB"))
         .def_readwrite(
             "stageCache", &usd::RenderOptions::stageCache,
             _("Stage Cache Count"))
@@ -55,6 +56,7 @@ Contains all classes and enums related to USD (Universal Scene Description).
                   << " complexity=" << o.complexity
                   << " drawMode=" << o.drawMode
                   << " enableLighting=" << (o.enableLighting ? "True" : "False")
+                  << " sRGB=" << (o.sRGB ? "True" : "False")
                   << " stageCache=" << o.stageCache
                   << " diskCache=" << o.diskCache << ">";
                 return s.str();

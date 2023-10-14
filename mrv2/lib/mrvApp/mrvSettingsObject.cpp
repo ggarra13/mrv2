@@ -95,11 +95,13 @@ namespace mrv
             static_cast<float>(usd::RenderOptions().complexity);
         p.defaultValues["USD/drawMode"] =
             static_cast<int>(usd::RenderOptions().drawMode);
+        p.defaultValues["USD/sRGB"] =
+            static_cast<int>(usd::RenderOptions().sRGB);
         p.defaultValues["USD/enableLighting"] =
             static_cast<int>(usd::RenderOptions().enableLighting);
-        p.defaultValues["USD/stageCache"] =
+        p.defaultValues["USD/stageCacheByteCount"] =
             static_cast<int>(usd::RenderOptions().stageCache);
-        p.defaultValues["USD/diskCache"] =
+        p.defaultValues["USD/diskCacheByteCount"] =
             static_cast<int>(usd::RenderOptions().diskCache / memory::gigabyte);
 #endif
         p.defaultValues[kTextFont] = 0;
