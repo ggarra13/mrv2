@@ -147,7 +147,11 @@ namespace mrv
         Fl_Gl_Window(X, Y, W, H, L),
         _p(new Private)
     {
-        mode(FL_RGB | FL_ALPHA | FL_STENCIL | FL_OPENGL3);
+        const int fl_double = FL_DOUBLE;
+#ifdef __APPLE__
+        fl_double = 0;
+#endif
+        mode(FL_RGB | FL_ALPHA | FL_STENCIL | fl_double | FL_OPENGL3);
     }
 
     void TimelineWidget::setContext(
