@@ -1188,9 +1188,11 @@ namespace mrv
                     tcp->unlock();
                     return;
                 }
+#ifdef MRV2_PYBIND11
                 bool value = message["value"];
                 if ((!value && pythonPanel) || (value && !pythonPanel))
                     python_panel_cb(nullptr, ui);
+#endif
             }
             else if (c == "Playlist Panel")
             {
