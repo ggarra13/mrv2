@@ -43,58 +43,62 @@ class Fl_Widget;
 
 namespace mrv
 {
+    namespace panel
+    {
 
-    extern ColorPanel* colorPanel;
-    extern FilesPanel* filesPanel;
-    extern ComparePanel* comparePanel;
-    extern PlaylistPanel* playlistPanel;
-    extern SettingsPanel* settingsPanel;
-    extern LogsPanel* logsPanel;
-    extern DevicesPanel* devicesPanel;
-    extern ColorAreaPanel* colorAreaPanel;
-    extern AnnotationsPanel* annotationsPanel;
-    extern ImageInfoPanel* imageInfoPanel;
-    extern HistogramPanel* histogramPanel;
-    extern VectorscopePanel* vectorscopePanel;
-    extern EnvironmentMapPanel* environmentMapPanel;
-    extern Stereo3DPanel* stereo3DPanel;
+        extern ColorPanel* colorPanel;
+        extern FilesPanel* filesPanel;
+        extern ComparePanel* comparePanel;
+        extern PlaylistPanel* playlistPanel;
+        extern SettingsPanel* settingsPanel;
+        extern LogsPanel* logsPanel;
+        extern DevicesPanel* devicesPanel;
+        extern ColorAreaPanel* colorAreaPanel;
+        extern AnnotationsPanel* annotationsPanel;
+        extern ImageInfoPanel* imageInfoPanel;
+        extern HistogramPanel* histogramPanel;
+        extern VectorscopePanel* vectorscopePanel;
+        extern EnvironmentMapPanel* environmentMapPanel;
+        extern Stereo3DPanel* stereo3DPanel;
 #ifdef MRV2_PYBIND11
-    extern PythonPanel* pythonPanel;
+        extern PythonPanel* pythonPanel;
 #endif
 #ifdef MRV2_NETWORK
-    extern NetworkPanel* networkPanel;
+        extern NetworkPanel* networkPanel;
 #endif
 #ifdef TLRENDER_USD
-    extern USDPanel* usdPanel;
+        extern USDPanel* usdPanel;
 #endif
 
-    void onePanelOnly(bool t);
-    bool onePanelOnly();
+        void onePanelOnly(bool t);
+        bool onePanelOnly();
 
-    void removePanels(ViewerUI* ui);
-    void removeWindows(ViewerUI* ui);
+        void removePanels(ViewerUI* ui);
+        void removeWindows(ViewerUI* ui);
 
-    void redrawPanelThumbnails();
-    void refreshPanelThumbnails();
+        void redrawPanelThumbnails();
+        void refreshPanelThumbnails();
 
-    void syncPanels();
+        void syncPanels();
 
-    void annotations_panel_cb(Fl_Widget* w, ViewerUI* ui);
-    void color_area_panel_cb(Fl_Widget* w, ViewerUI* ui);
-    void color_panel_cb(Fl_Widget* w, ViewerUI* ui);
-    void compare_panel_cb(Fl_Widget* w, ViewerUI* ui);
-    void devices_panel_cb(Fl_Widget* w, ViewerUI* ui);
-    void environment_map_panel_cb(Fl_Widget* w, ViewerUI* ui);
-    void files_panel_cb(Fl_Widget* w, ViewerUI* ui);
-    void histogram_panel_cb(Fl_Widget* w, ViewerUI* ui);
-    void image_info_panel_cb(Fl_Widget* w, ViewerUI* ui);
-    void logs_panel_cb(Fl_Widget* w, ViewerUI* ui);
-    void network_panel_cb(Fl_Widget* w, ViewerUI* ui);
-    void python_panel_cb(Fl_Widget* w, ViewerUI* ui);
-    void playlist_panel_cb(Fl_Widget* w, ViewerUI* ui);
-    void settings_panel_cb(Fl_Widget* w, ViewerUI* ui);
-    void usd_panel_cb(Fl_Widget* w, ViewerUI* ui);
-    void vectorscope_panel_cb(Fl_Widget* w, ViewerUI* ui);
-    void stereo3D_panel_cb(Fl_Widget* w, ViewerUI* ui);
+        void annotations_panel_cb(Fl_Widget* w, ViewerUI* ui);
+        void color_area_panel_cb(Fl_Widget* w, ViewerUI* ui);
+        void color_panel_cb(Fl_Widget* w, ViewerUI* ui);
+        void compare_panel_cb(Fl_Widget* w, ViewerUI* ui);
+        void devices_panel_cb(Fl_Widget* w, ViewerUI* ui);
+        void environment_map_panel_cb(Fl_Widget* w, ViewerUI* ui);
+        void files_panel_cb(Fl_Widget* w, ViewerUI* ui);
+        void histogram_panel_cb(Fl_Widget* w, ViewerUI* ui);
+        void image_info_panel_cb(Fl_Widget* w, ViewerUI* ui);
+        void logs_panel_cb(Fl_Widget* w, ViewerUI* ui);
+        void network_panel_cb(Fl_Widget* w, ViewerUI* ui);
+        void python_panel_cb(Fl_Widget* w, ViewerUI* ui);
+        void playlist_panel_cb(Fl_Widget* w, ViewerUI* ui);
+        void settings_panel_cb(Fl_Widget* w, ViewerUI* ui);
+        void usd_panel_cb(Fl_Widget* w, ViewerUI* ui);
+        void vectorscope_panel_cb(Fl_Widget* w, ViewerUI* ui);
+        void stereo3D_panel_cb(Fl_Widget* w, ViewerUI* ui);
+
+    } // namespace panel
 
 } // namespace mrv

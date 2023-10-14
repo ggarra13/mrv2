@@ -268,7 +268,7 @@ namespace mrv
                     gl::OffscreenBufferBinding binding(buffer);
                     CHECK_GL;
                     {
-                        StoreLocale;
+                        locale::SetAndRestore saved;
                         render->begin(
                             offscreenBufferSize, view->getColorConfigOptions(),
                             view->lutOptions());
@@ -594,7 +594,7 @@ namespace mrv
                         gl::OffscreenBufferBinding binding(buffer);
                         CHECK_GL;
                         {
-                            StoreLocale;
+                            locale::SetAndRestore saved;
                             render->begin(
                                 offscreenBufferSize,
                                 view->getColorConfigOptions(),

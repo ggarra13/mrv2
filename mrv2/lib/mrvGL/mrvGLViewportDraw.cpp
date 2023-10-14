@@ -2,6 +2,7 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <tlUI/DrawUtil.h>
 #include <tlGL/Util.h>
 
 #include "mrvCore/mrvLocale.h"
@@ -236,7 +237,7 @@ namespace mrv
         const auto& renderSize = getRenderSize();
 
         {
-            StoreLocale;
+            locale::SetAndRestore saved;
 
             gl::OffscreenBufferBinding binding(gl.buffer);
             gl.render->begin(renderSize, p.colorConfigOptions, p.lutOptions);
@@ -260,7 +261,7 @@ namespace mrv
         }
 
         {
-            StoreLocale;
+            locale::SetAndRestore saved;
             gl::OffscreenBufferBinding binding(gl.stereoBuffer);
 
             gl.render->begin(renderSize, p.colorConfigOptions, p.lutOptions);
@@ -505,8 +506,8 @@ namespace mrv
         auto note = dynamic_cast< draw::NoteShape* >(shape.get());
         if (note)
         {
-            if (annotationsPanel && alphamult == 1.F)
-                annotationsPanel->notes->value(note->text.c_str());
+            if (panel::annotationsPanel && alphamult == 1.F)
+                panel::annotationsPanel->notes->value(note->text.c_str());
         }
         else
         {
@@ -529,9 +530,9 @@ namespace mrv
 
         const otime::RationalTime& time = p.videoData[0].time;
 
-        if (annotationsPanel)
+        if (panel::annotationsPanel)
         {
-            annotationsPanel->notes->value("");
+            panel::annotationsPanel->notes->value("");
         }
 
         const auto& annotations =
@@ -1164,4 +1165,40 @@ namespace mrv
         gl.render->end();
     }
 
+    void Viewport::_drawBackground() const noexcept
+    {
+        MRV2_GL();
+        TLRENDER_P();
+        const auto renderSize = getRenderSize();
+        if (!renderSize.isValid())
+            return;
+
+        std::cerr << "draw" << std::endl;
+        switch (p.backgroundOptions.type)
+        {
+        case timeline::Background::Solid:
+            gl.render->clearViewport(image::Color4f(0.F, 0.F, 0.F));
+            break;
+        case timeline::Background::Checkers:
+#ifndef __APPLE__
+            gl.render->drawColorMesh(
+                ui::checkers(
+                    math::Box2i(0, 0, renderSize.w, renderSize.h),
+                    p.backgroundOptions.checkersColor0,
+                    p.backgroundOptions.checkersColor1,
+                    p.backgroundOptions.checkersSize),
+                math::Vector2i(), image::Color4f(1.F, 1.F, 1.F));
+#else
+            gl.render->clearViewport(p.backgroundOptions.checkersColor0);
+            gl.render->drawMesh(
+                checkers(
+                    math::Box2i(0, 0, renderSize.w, renderSize.h),
+                    p.backgroundOptions.checkersSize),
+                math::Vector2i(), p.backgroundOptions.checkersColor1);
+#endif
+            break;
+        default:
+            break;
+        }
+    }
 } // namespace mrv

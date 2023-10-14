@@ -12,20 +12,23 @@
 
 namespace mrv
 {
-    class HorSlider;
-
-    class EnvironmentMapPanel : public PanelWidget
+    namespace panel
     {
-    public:
-        EnvironmentMapPanel(ViewerUI* ui);
-        ~EnvironmentMapPanel();
 
-        void setEnvironmentMapOptions(const EnvironmentMapOptions& value);
+        class EnvironmentMapPanel : public PanelWidget
+        {
+        public:
+            EnvironmentMapPanel(ViewerUI* ui);
+            ~EnvironmentMapPanel();
 
-        void add_controls() override;
+            void setEnvironmentMapOptions(const EnvironmentMapOptions& value);
 
-    private:
-        MRV2_PRIVATE();
-    };
+            void add_controls() override;
+
+        private:
+            MRV2_PRIVATE();
+        };
+
+    } // namespace panel
 
 } // namespace mrv

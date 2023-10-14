@@ -10,7 +10,7 @@ namespace py = pybind11;
 #include "mrvCore/mrvI8N.h"
 
 #ifdef TLRENDER_USD
-#    include "mrvApp/mrvUSD.h"
+#    include "mrvCore/mrvUSD.h"
 #endif
 
 void mrv2_usd(pybind11::module& m)
@@ -25,7 +25,7 @@ Contains all classes and enums related to USD (Universal Scene Description).
 
 #ifdef TLRENDER_USD
 
-    using namespace tl;
+    using namespace mrv;
 
     py::class_<usd::RenderOptions>(usd, "RenderOptions")
         .def(py::init<>())
@@ -41,10 +41,10 @@ Contains all classes and enums related to USD (Universal Scene Description).
             "enableLighting", &usd::RenderOptions::enableLighting,
             _("Enable Lighting"))
         .def_readwrite(
-            "stageCacheCount", &usd::RenderOptions::stageCacheCount,
+            "stageCache", &usd::RenderOptions::stageCache,
             _("Stage Cache Count"))
         .def_readwrite(
-            "diskCacheByteCount", &usd::RenderOptions::diskCacheByteCount,
+            "diskCache", &usd::RenderOptions::diskCache,
             _("Disk Cache Byte Count"))
         .def(
             "__repr__",
@@ -55,8 +55,8 @@ Contains all classes and enums related to USD (Universal Scene Description).
                   << " complexity=" << o.complexity
                   << " drawMode=" << o.drawMode
                   << " enableLighting=" << (o.enableLighting ? "True" : "False")
-                  << " stageCacheCount=" << o.stageCacheCount
-                  << " diskCacheByteCount=" << o.diskCacheByteCount << ">";
+                  << " stageCache=" << o.stageCache
+                  << " diskCache=" << o.diskCache << ">";
                 return s.str();
             })
         .doc() = _("USD Render Options.");

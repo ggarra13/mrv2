@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <tlTimeline/BackgroundOptions.h>
 #include <tlTimeline/IRender.h>
 
 #include "mrvCore/mrvStereo3DOptions.h"
@@ -84,6 +85,13 @@ namespace mrv
 
         //! Return the current video image in BGRA order after drawing it.
         const image::Color4f* image() const;
+
+        //! Get the compositing status.
+        const timeline::BackgroundOptions&
+        getBackgroundOptions() const noexcept;
+
+        //! Set the background options.
+        void setBackgroundOptions(const timeline::BackgroundOptions& value);
 
         //! Set the color configuration.
         void
@@ -273,12 +281,6 @@ namespace mrv
         //! Get the window to full screen and hide/show all bars.
         bool getPresentationMode() const noexcept;
 
-        //! Get the compositing status.
-        bool getBlackBackground() const noexcept;
-
-        //! Set the compositing status.
-        void setBlackBackground(bool active) noexcept;
-
         //! Retrieve the full sceen mode.
         bool getFullScreenMode() const noexcept;
 
@@ -337,6 +339,9 @@ namespace mrv
         //! Edit a text shape.
         void editText(
             const std::shared_ptr< draw::Shape >&, const int index) noexcept;
+
+        //! Update the playback buttons.
+        void updatePlaybackButtons() const noexcept;
 
     protected:
         virtual void _readPixel(image::Color4f& rgba) const noexcept = 0;
@@ -412,8 +417,6 @@ namespace mrv
         void _scrub(float change) noexcept;
 
         bool _hasSecondaryViewport() const noexcept;
-
-        void _updatePlaybackButtons() const noexcept;
 
         TLRENDER_PRIVATE();
     };

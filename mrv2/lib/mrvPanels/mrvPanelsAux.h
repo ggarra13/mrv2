@@ -8,19 +8,25 @@
 
 #include "mrvCore/mrvI8N.h"
 
-class ViewerUI;
+#include "mrvApp/mrvFilesModel.h"
 
 namespace mrv
 {
-    inline bool isPanelWithHeight(const std::string& label)
+    namespace panel
     {
-        if (label != _("Files") && label != _("Compare") &&
-            label != _("Playlist") && label != _("Network") &&
-            label != _("Stereo 3D"))
-            return true;
-        return false;
-    }
+        inline bool isPanelWithHeight(const std::string& label)
+        {
+            if (label != _("Files") && label != _("Compare") &&
+                label != _("Playlist") && label != _("Network") &&
+                label != _("Stereo 3D"))
+                return true;
+            return false;
+        }
 
-    std::string getLayerName(uint16_t layerId, ViewerUI* ui);
+        std::string getLayerName(
+            const std::shared_ptr<FilesModelItem>& item,
+            const uint16_t layerId);
+
+    } // namespace panel
 
 } // namespace mrv

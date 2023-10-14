@@ -3,8 +3,8 @@ version 1.0400
 i18n_type 1
 i18n_include {<libintl.h>}
 i18n_conditional {}
-i18n_function gettext
-i18n_static_function gettext_noop
+i18n_gnu_function gettext
+i18n_gnu_static_function gettext_noop
 header_name {.h}
 code_name {.cxx}
 snap {
@@ -43,8 +43,7 @@ class AboutUI {open
           user_data main user_data_type {ViewerUI*}
           callback {v->uiAbout->uiGPUInfo->clear();
 std::string s = mrv::gpu_information( v );
-std::vector<std::string> a;
-mrv::split( a, s, '\\n' );
+auto a = mrv::string::split( s, '\\n' );
 std::vector<std::string>::iterator i = a.begin();
 std::vector<std::string>::iterator e = a.end();
 for (; i != e; ++i )

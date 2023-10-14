@@ -340,6 +340,46 @@ namespace mrv2
             return player->timeRange();
         }
 
+        /**
+         * @brief Sets the FPS.
+         *
+         * @return TimeRange
+         */
+        double defaultSpeed(double fps)
+        {
+            auto player = App::ui->uiView->getTimelinePlayer();
+            if (!player)
+                return 24.0;
+
+            return player->defaultSpeed();
+        }
+
+        /**
+         * @brief Sets the FPS.
+         *
+         * @return TimeRange
+         */
+        double speed(double fps)
+        {
+            auto player = App::ui->uiView->getTimelinePlayer();
+            if (!player)
+                return 24.0;
+
+            return player->speed();
+        }
+
+        /**
+         * @brief Sets the FPS.
+         *
+         * @return TimeRange
+         */
+        void setSpeed(double value)
+        {
+            TimelineClass* c = App::ui->uiTimeWindow;
+            c->uiFPS->value(value);
+            c->uiFPS->do_callback();
+        }
+
     } // namespace timeline
 } // namespace mrv2
 
@@ -416,4 +456,16 @@ Contains all functions related to the timeline control.
     timeline.def(
         "setLoop", &mrv2::timeline::setLoop,
         _("Set current loop mode of timeline."));
+
+    timeline.def(
+        "speed", &mrv2::timeline::speed,
+        _("Gets the current FPS of timeline."));
+
+    timeline.def(
+        "defaultSpeed", &mrv2::timeline::defaultSpeed,
+        _("Gets the default speed of the timeline."));
+
+    timeline.def(
+        "setSpeed", &mrv2::timeline::setSpeed,
+        _("Set current FPS of timeline."), py::arg("fps"));
 }

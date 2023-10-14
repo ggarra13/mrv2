@@ -48,7 +48,7 @@ namespace mrv
         syncUI();
 
         // Sync panels
-        syncPanels();
+        panel::syncPanels();
 
         // Set the current file index
         msg["command"] = "Set A Index";
@@ -105,6 +105,7 @@ namespace mrv
                     ? EditMode::kFull
                     : EditMode::kTimeline;
             msg["value"] = mode;
+            msg["height"] = editModeH;
             pushMessage(msg);
 
             // Seek to current time in player

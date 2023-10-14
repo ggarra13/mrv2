@@ -28,21 +28,8 @@ namespace mrv
         restore_signal_handler();
     }
 
-    void removeLockFile()
-    {
-        std::string lockfile = mrv::lockfile();
-        if (fs::exists(lockfile))
-        {
-            if (!fs::remove(lockfile))
-                std::cerr << "Could not remove lockfile " << lockfile
-                          << std::endl;
-        }
-    }
-
     void callback(int signal)
     {
-        removeLockFile();
-
         std::cerr << "GOT SIGNAL " << signal << std::endl;
 
         printStackTrace();
@@ -52,8 +39,6 @@ namespace mrv
 
     LONG WINAPI exceptionHandler(EXCEPTION_POINTERS* exceptionInfo)
     {
-        removeLockFile();
-
         DWORD exceptionCode = exceptionInfo->ExceptionRecord->ExceptionCode;
         std::cerr << "Exception " << exceptionCode << " caught" << std::endl;
         // Do any necessary cleanup or logging here

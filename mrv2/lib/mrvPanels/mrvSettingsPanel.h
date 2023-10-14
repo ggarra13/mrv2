@@ -10,17 +10,21 @@ class ViewerUI;
 
 namespace mrv
 {
-    using namespace tl;
-
-    class SettingsPanel : public PanelWidget
+    namespace panel
     {
-    public:
-        SettingsPanel(ViewerUI* ui);
-        virtual ~SettingsPanel(){};
+        using namespace tl;
 
-        void add_controls() override;
+        class SettingsPanel : public PanelWidget
+        {
+        public:
+            SettingsPanel(ViewerUI* ui);
+            virtual ~SettingsPanel(){};
 
-        void refresh();
-    };
+            void add_controls() override;
+
+            void refresh();
+        };
+
+    } // namespace panel
 
 } // namespace mrv

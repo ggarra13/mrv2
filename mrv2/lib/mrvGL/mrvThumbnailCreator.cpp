@@ -336,13 +336,17 @@ namespace mrv
                             timeline::Timeline::create(path, context, options);
                         for (const auto& i : request.times)
                         {
+                            io::Options ioOptions;
+                            ioOptions["Layer"] =
+                                string::Format("{0}").arg(request.layer);
+
                             request.futures.push_back(
                                 request.timeline->getVideo(
                                     time::isValid(i)
                                         ? i
                                         : request.timeline->getTimeRange()
                                               .start_time(),
-                                    request.layer));
+                                    ioOptions));
                         }
                         p.requestsInProgress.push_back(std::move(request));
                     }
@@ -406,7 +410,7 @@ namespace mrv
                                     offscreenBuffer);
 
                                 {
-                                    StoreLocale;
+                                    locale::SetAndRestore saved;
                                     render->begin(
                                         offscreenBufferSize,
                                         requestIt->colorConfigOptions,

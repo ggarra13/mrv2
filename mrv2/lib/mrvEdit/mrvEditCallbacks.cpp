@@ -480,7 +480,7 @@ namespace mrv
                 refresh_file_cache_cb(nullptr, ui);
             else if (create)
             {
-                refreshPanelThumbnails();
+                panel::refreshPanelThumbnails();
             }
         }
 
@@ -735,6 +735,8 @@ namespace mrv
         UndoRedo buffer;
         buffer.json = state;
         buffer.fileName = getEDLName(ui);
+
+        player = ui->uiView->getTimelinePlayer();
         buffer.annotations = player->getAllAnnotations();
         undoBuffer.push_back(buffer);
     }
@@ -772,6 +774,7 @@ namespace mrv
         UndoRedo buffer;
         buffer.json = state;
         buffer.fileName = getEDLName(ui);
+        player = ui->uiView->getTimelinePlayer();
         buffer.annotations = player->getAllAnnotations();
         redoBuffer.push_back(buffer);
     }
@@ -972,7 +975,7 @@ namespace mrv
 
         toOtioFile(timeline, ui);
 
-        redrawPanelThumbnails();
+        panel::redrawPanelThumbnails();
 
         tcp->pushMessage("Edit/Frame/Paste", time);
     }
@@ -1039,7 +1042,7 @@ namespace mrv
         updateTimeline(timeline, scaledTime, ui);
         toOtioFile(timeline, ui);
 
-        redrawPanelThumbnails();
+        panel::redrawPanelThumbnails();
 
         tcp->pushMessage("Edit/Frame/Insert", time);
     }
@@ -1177,7 +1180,7 @@ namespace mrv
 
         toOtioFile(timeline, ui);
 
-        redrawPanelThumbnails();
+        panel::redrawPanelThumbnails();
     }
 
     void edit_redo_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -1217,7 +1220,7 @@ namespace mrv
 
         toOtioFile(timeline, ui);
 
-        redrawPanelThumbnails();
+        panel::redrawPanelThumbnails();
 
         if (refreshCache)
             refresh_file_cache_cb(nullptr, ui);
@@ -1462,10 +1465,16 @@ namespace mrv
 
         auto model = ui->app->filesModel();
 
-        const auto& sourceItems = model->observeFiles()->get();
+        const auto sourceItems = model->observeFiles()->get();
+
         auto sourceItem = sourceItems[index];
 
         auto destItem = model->observeA()->get();
+        if (!destItem)
+        {
+            LOG_ERROR(_("Destination file is invalid."));
+            return;
+        }
 
         if (!isTemporaryEDL(destItem->path))
         {
@@ -1734,7 +1743,7 @@ namespace mrv
             updateTimeline(timeline, player->currentTime(), ui);
             ui->uiTimeline->frameView();
 
-            refreshPanelThumbnails();
+            panel::refreshPanelThumbnails();
         }
         catch (const std::exception& e)
         {
@@ -2073,8 +2082,10 @@ namespace mrv
 
         if (mode != EditMode::kNone)
         {
-            Message msg = {
-                {"command", "setEditMode"}, {"value", mode}, {"height", H}};
+            Message msg;
+            msg["command"] = "setEditMode";
+            msg["value"] = mode;
+            msg["height"] = H;
             tcp->pushMessage(msg);
         }
 

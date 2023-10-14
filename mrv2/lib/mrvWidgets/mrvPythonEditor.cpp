@@ -255,7 +255,6 @@ namespace mrv
                 }
                 if (skip || m_eval.substr(0, 1) == "#")
                 {
-                    m_code += "\n";
                     m_code += m_eval;
                     m_eval.clear();
                 }
@@ -280,9 +279,9 @@ namespace mrv
 
     int PythonEditor::kf_kp_enter(int key, Fl_Text_Editor* e)
     {
-        if (pythonPanel)
+        if (panel::pythonPanel)
         {
-            pythonPanel->run_code();
+            panel::pythonPanel->run_code();
         }
         return 1;
     }
@@ -326,8 +325,9 @@ namespace mrv
         int r = Fl_Text_Editor::handle(e);
         if (e == FL_ENTER)
         {
-            if (App::ui->uiPrefs->uiPrefsMacOSMenus->value() && pythonPanel)
-                pythonPanel->create_menu();
+            if (App::ui->uiPrefs->uiPrefsMacOSMenus->value() &&
+                panel::pythonPanel)
+                panel::pythonPanel->create_menu();
             r = 1;
         }
         else if (e == FL_PUSH && Fl::event_button3())
@@ -337,7 +337,7 @@ namespace mrv
 
             popupMenu->type(Fl_Menu_Button::POPUP3);
 
-            pythonPanel->create_menu(popupMenu);
+            panel::pythonPanel->create_menu(popupMenu);
             popupMenu->popup();
 
             delete popupMenu;

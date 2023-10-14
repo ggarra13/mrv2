@@ -45,8 +45,8 @@ namespace mrv2
             auto settings = settingsObject();
             settings->setValue("Cache/GBytes", value);
             app->cacheUpdate();
-            if (settingsPanel)
-                settingsPanel->refresh();
+            if (panel::settingsPanel)
+                panel::settingsPanel->refresh();
         }
 
         /**
@@ -86,8 +86,8 @@ namespace mrv2
             auto settings = settingsObject();
             settings->setValue("Cache/ReadAhead", value);
             app->cacheUpdate();
-            if (settingsPanel)
-                settingsPanel->refresh();
+            if (panel::settingsPanel)
+                panel::settingsPanel->refresh();
         }
 
         /**
@@ -101,16 +101,16 @@ namespace mrv2
             auto settings = settingsObject();
             settings->setValue("Cache/ReadBehind", value);
             app->cacheUpdate();
-            if (settingsPanel)
-                settingsPanel->refresh();
+            if (panel::settingsPanel)
+                panel::settingsPanel->refresh();
         }
 
         void setFileSequenceAudio(const timeline::FileSequenceAudio value)
         {
             auto settings = settingsObject();
             settings->setValue("FileSequence/Audio", static_cast<int>(value));
-            if (settingsPanel)
-                settingsPanel->refresh();
+            if (panel::settingsPanel)
+                panel::settingsPanel->refresh();
         }
 
         timeline::FileSequenceAudio fileSequenceAudio()
@@ -132,8 +132,8 @@ namespace mrv2
         {
             auto settings = settingsObject();
             settings->setValue("FileSequence/AudioFileName", value);
-            if (settingsPanel)
-                settingsPanel->refresh();
+            if (panel::settingsPanel)
+                panel::settingsPanel->refresh();
         }
 
         /**
@@ -158,8 +158,8 @@ namespace mrv2
         {
             auto settings = settingsObject();
             settings->setValue("FileSequence/AudioDirectory", value);
-            if (settingsPanel)
-                settingsPanel->refresh();
+            if (panel::settingsPanel)
+                panel::settingsPanel->refresh();
         }
 
         /**
@@ -187,8 +187,8 @@ namespace mrv2
                 throw std::invalid_argument("Value less than 1.");
             auto settings = settingsObject();
             settings->setValue("Misc/MaxFileSequenceDigits", value);
-            if (settingsPanel)
-                settingsPanel->refresh();
+            if (panel::settingsPanel)
+                panel::settingsPanel->refresh();
         }
 
         /**
@@ -209,8 +209,8 @@ namespace mrv2
             auto settings = settingsObject();
             settings->setValue(
                 "Performance/TimerMode", static_cast<int>(value));
-            if (settingsPanel)
-                settingsPanel->refresh();
+            if (panel::settingsPanel)
+                panel::settingsPanel->refresh();
         }
 
         timeline::TimerMode timerMode()
@@ -227,8 +227,8 @@ namespace mrv2
             auto settings = settingsObject();
             settings->setValue(
                 "Performance/AudioBufferFrameCount", static_cast<int>(value));
-            if (settingsPanel)
-                settingsPanel->refresh();
+            if (panel::settingsPanel)
+                panel::settingsPanel->refresh();
         }
 
         int audioBufferFrameCount()
@@ -250,8 +250,8 @@ namespace mrv2
                 throw std::invalid_argument("Invalid value less than 1");
             auto settings = settingsObject();
             settings->setValue("Performance/VideoRequestCount", value);
-            if (settingsPanel)
-                settingsPanel->refresh();
+            if (panel::settingsPanel)
+                panel::settingsPanel->refresh();
         }
 
         /**
@@ -278,8 +278,8 @@ namespace mrv2
                 throw std::runtime_error("Invalid value less than 1");
             auto settings = settingsObject();
             settings->setValue("Performance/AudioRequestCount", value);
-            if (settingsPanel)
-                settingsPanel->refresh();
+            if (panel::settingsPanel)
+                panel::settingsPanel->refresh();
         }
 
         /**
@@ -306,8 +306,8 @@ namespace mrv2
                 throw std::invalid_argument("Invalid value less than 1");
             auto settings = settingsObject();
             settings->setValue("Performance/SequenceThreadCount", value);
-            if (settingsPanel)
-                settingsPanel->refresh();
+            if (panel::settingsPanel)
+                panel::settingsPanel->refresh();
         }
 
         /**
@@ -333,8 +333,8 @@ namespace mrv2
             auto settings = settingsObject();
             settings->setValue(
                 "Performance/FFmpegYUVToRGBConversion", (int)value);
-            if (settingsPanel)
-                settingsPanel->refresh();
+            if (panel::settingsPanel)
+                panel::settingsPanel->refresh();
         }
 
         /**
@@ -362,8 +362,8 @@ namespace mrv2
                 throw std::invalid_argument("Invalid value less than 0");
             auto settings = settingsObject();
             settings->setValue("Performance/FFmpegThreadCount", value);
-            if (settingsPanel)
-                settingsPanel->refresh();
+            if (panel::settingsPanel)
+                panel::settingsPanel->refresh();
         }
 
         /**

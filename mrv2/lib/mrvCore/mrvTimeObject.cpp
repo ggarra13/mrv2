@@ -7,9 +7,7 @@
 #include <array>
 
 #include <tlCore/StringFormat.h>
-
 #include <tlCore/Error.h>
-#include <tlCore/String.h>
 
 #include "mrvCore/mrvTimeObject.h"
 
@@ -57,6 +55,8 @@ namespace mrv
         char* out, const otime::RationalTime& time,
         const TimeUnits units) noexcept
     {
+        using namespace tl;
+
         out[0] = 0;
         switch (units)
         {
@@ -84,10 +84,10 @@ namespace mrv
     }
 
     otime::RationalTime textToTime(
-        const String& text, double rate, TimeUnits units,
+        const string::String& text, double rate, TimeUnits units,
         otime::ErrorStatus* errorStatus)
     {
-        otime::RationalTime out = time::invalidTime;
+        otime::RationalTime out = tl::time::invalidTime;
         switch (units)
         {
         case TimeUnits::Frames:

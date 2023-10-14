@@ -27,8 +27,8 @@ namespace mrv
      */
     struct FilesModelItem
     {
-        file::Path path;
-        file::Path audioPath;
+        tl::file::Path path;
+        tl::file::Path audioPath;
 
         bool init = false;
 
@@ -41,6 +41,7 @@ namespace mrv
         otime::RationalTime currentTime = time::invalidTime;
         otime::TimeRange inOutRange = time::invalidTimeRange;
 
+        std::vector<std::string> videoLayers;
         size_t videoLayer = 0;
 
         float volume = 0.F;

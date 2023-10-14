@@ -9,9 +9,10 @@ set(HEADERS
   mrvEnv.h
   mrvEnvironmentMapOptions.h
   mrvEnvironmentMapOptionsInline.h
+  mrvFile.h
+  mrvFileManager.h
   mrvFilesPanelOptions.h
   mrvFilesPanelOptionsInline.h
-  mrvHelpers.h
   mrvHome.h
   mrvHotkey.h
   mrvI8N.h
@@ -29,6 +30,7 @@ set(HEADERS
   mrvStereo3DOptionsInline.h
   mrvString.h
   mrvTimeObject.h
+  mrvUSD.h
   mrvUtil.h
   )
 
@@ -36,6 +38,7 @@ set(SOURCES
   mrvColorSpaces.cpp
   mrvCPU.cpp
   mrvEnvironmentMapOptions.cpp
+  mrvFile.cpp
   mrvFilesPanelOptions.cpp
   mrvHome.cpp
   mrvHotkey.cpp
@@ -49,6 +52,8 @@ set(SOURCES
   mrvStereo3DOptions.cpp
   mrvString.cpp
   mrvTimeObject.cpp
+  mrvUSD.cpp
+  mrvUSDInline.cpp
   mrvUtil.cpp
   )
 
@@ -61,20 +66,20 @@ if( WIN32 )
 	mrvOS.h 
 	win32/mrvStackTrace.cpp
 	win32/mrvSignalHandler.cpp
-        mrvHelpers.cpp
+        mrvFileManager.cpp
 	mrvEnv.cpp )
     list( APPEND LIBRARIES_PRIVATE Dbghelp )
 elseif( APPLE )
     # macOS has a built-in stack trace and signal handler
     list( APPEND SOURCES
-        mrvHelpers.mm
+        mrvFileManager.mm
         )
     # list( APPEND SOURCES
     # 	macOS/mrvStackTrace.cpp 
     # 	macOS/mrvSignalHandler.cpp)
 else()
     list( APPEND SOURCES
-        mrvHelpers.cpp
+        mrvFileManager.cpp
 	Linux/mrvStackTrace.cpp 
 	Linux/mrvSignalHandler.cpp)
 endif()
@@ -93,13 +98,10 @@ endif()
 
 target_link_libraries(mrvCore PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE} )
 set_target_properties(mrvCore PROPERTIES FOLDER lib)
-#set_target_properties(mrvCore PROPERTIES PUBLIC_HEADER "${HEADERS}")
-
 
 
 install(TARGETS mrvCore
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION bin
-    PUBLIC_HEADER DESTINATION include/mrv2/mrvCore
     COMPONENT libraries )

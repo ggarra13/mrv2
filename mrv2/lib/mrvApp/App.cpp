@@ -142,13 +142,12 @@ namespace mrv
         bool otioEditMode = false;
 
 #if defined(TLRENDER_USD)
-        size_t usdRenderWidth = usd::RenderOptions().renderWidth;
-        float usdComplexity = usd::RenderOptions().complexity;
-        usd::DrawMode usdDrawMode = usd::RenderOptions().drawMode;
-        bool usdEnableLighting = usd::RenderOptions().enableLighting;
-        size_t usdStageCache = usd::RenderOptions().stageCacheCount;
-        size_t usdDiskCache =
-            usd::RenderOptions().diskCacheByteCount / memory::gigabyte;
+        int usdRenderWidth = 1920;
+        float usdComplexity = 1.F;
+        usd::DrawMode usdDrawMode = usd::DrawMode::ShadedSmooth;
+        bool usdEnableLighting = true;
+        size_t usdStageCache = 10;
+        size_t usdDiskCache = 0;
 #endif // TLRENDER_USD
     };
 
@@ -169,6 +168,9 @@ namespace mrv
 #endif
         std::shared_ptr<PlaylistsModel> playlistsModel;
         std::shared_ptr<FilesModel> filesModel;
+        std::shared_ptr<
+            observer::ListObserver<std::shared_ptr<FilesModelItem> > >
+            filesObserver;
         std::shared_ptr<
             observer::ListObserver<std::shared_ptr<FilesModelItem> > >
             activeObserver;
@@ -334,7 +336,7 @@ namespace mrv
                         p.options.resetHotkeys, {"-resetHotkeys"},
                         _("Reset hotkeys to defaults.")),
 #if defined(TLRENDER_USD)
-                    app::CmdLineValueOption<size_t>::create(
+                    app::CmdLineValueOption<int>::create(
                         p.options.usdRenderWidth, {"-usdRenderWidth"},
                         "USD render width.",
                         string::Format("{0}").arg(p.options.usdRenderWidth)),
@@ -399,7 +401,7 @@ namespace mrv
                 path.getBaseName() == lastPath.getBaseName() &&
                 path.getPadding() == lastPath.getPadding() &&
                 path.getExtension() == lastPath.getExtension() &&
-                !is_directory(unused))
+                !file::isDirectory(unused))
                 continue;
             lastPath = path;
             p.options.fileNames.push_back(unused);
@@ -417,7 +419,7 @@ namespace mrv
 #ifdef MRV2_PYBIND11
         if (!p.options.pythonScript.empty())
         {
-            if (!is_readable(p.options.pythonScript))
+            if (!file::isReadable(p.options.pythonScript))
             {
                 std::cerr << std::string(
                                  string::Format(
@@ -546,18 +548,18 @@ namespace mrv
 
 #if defined(TLRENDER_USD)
         p.settingsObject->setValue(
-            "usd/renderWidth", static_cast<int>(p.options.usdRenderWidth));
+            "USD/renderWidth", static_cast<int>(p.options.usdRenderWidth));
         p.settingsObject->setValue(
-            "usd/complexity", static_cast<float>(p.options.usdComplexity));
+            "USD/complexity", static_cast<float>(p.options.usdComplexity));
         p.settingsObject->setValue(
-            "usd/drawMode", static_cast<int>(p.options.usdDrawMode));
+            "USD/drawMode", static_cast<int>(p.options.usdDrawMode));
         p.settingsObject->setValue(
-            "usd/enableLighting",
+            "USD/enableLighting",
             static_cast<int>(p.options.usdEnableLighting));
         p.settingsObject->setValue(
-            "usd/stageCacheCount", static_cast<int>(p.options.usdStageCache));
+            "USD/stageCache", static_cast<int>(p.options.usdStageCache));
         p.settingsObject->setValue(
-            "usd/diskCacheByteCount",
+            "USD/diskCacheByte",
             static_cast<int>(p.options.usdDiskCache * memory::gigabyte));
 #endif // TLRENDER_USD
 
@@ -573,6 +575,13 @@ namespace mrv
             c->uiLoopMode->value(static_cast<int>(p.options.loop));
             c->uiLoopMode->do_callback();
         }
+
+        p.filesObserver =
+            observer::ListObserver<std::shared_ptr<FilesModelItem> >::create(
+                p.filesModel->observeFiles(),
+                [this](
+                    const std::vector< std::shared_ptr<FilesModelItem> >& value)
+                { _filesCallback(value); });
 
         p.activeObserver =
             observer::ListObserver<std::shared_ptr<FilesModelItem> >::create(
@@ -590,7 +599,11 @@ namespace mrv
                 {
                     if (_p->timelinePlayers[i])
                     {
-                        _p->timelinePlayers[i]->setVideoLayer(value[i]);
+                        io::Options ioOptions;
+                        ioOptions["Layer"] =
+                            string::Format("{0}").arg(value[i]);
+                        _p->timelinePlayers[i]->player()->setIOOptions(
+                            ioOptions);
                     }
                 }
             });
@@ -956,7 +969,7 @@ namespace mrv
             fileName.substr(fileName.size() - 6, fileName.size()) == ".mrv2s")
         {
             p.session = true;
-            load_session(fileName);
+            session::load(fileName);
             return;
         }
 
@@ -1081,6 +1094,139 @@ namespace mrv
         p.settingsObject->setValue("Audio/Mute", value);
     }
 
+    void App::_filesCallback(
+        const std::vector<std::shared_ptr<FilesModelItem> >& items)
+    {
+        TLRENDER_P();
+
+        auto audioSystem = _context->getSystem<audio::System>();
+        for (size_t i = 0; i < items.size(); ++i)
+        {
+            const auto& item = items[i];
+            try
+            {
+                timeline::Options options;
+
+                int value = std_any_cast<int>(
+                    p.settingsObject->value("FileSequence/Audio"));
+
+                options.fileSequenceAudio = (timeline::FileSequenceAudio)value;
+
+                std_any v =
+                    p.settingsObject->value("FileSequence/AudioFileName");
+                options.fileSequenceAudioFileName =
+                    std_any_cast<std::string>(v);
+
+                options.fileSequenceAudioDirectory = std_any_cast<std::string>(
+                    p.settingsObject->value("FileSequence/AudioDirectory"));
+                options.videoRequestCount = std_any_cast<int>(
+                    p.settingsObject->value("Performance/VideoRequestCount"));
+
+                options.audioRequestCount = std_any_cast<int>(
+                    p.settingsObject->value("Performance/AudioRequestCount"));
+
+                options.ioOptions["SequenceIO/ThreadCount"] =
+                    string::Format("{0}").arg(
+                        std_any_cast<int>(p.settingsObject->value(
+                            "Performance/SequenceThreadCount")));
+
+                options.ioOptions["FFmpeg/YUVToRGBConversion"] =
+                    string::Format("{0}").arg(
+                        std_any_cast< int>(p.settingsObject->value(
+                            "Performance/FFmpegYUVToRGBConversion")));
+
+                const audio::Info audioInfo =
+                    audioSystem->getDefaultOutputInfo();
+                options.ioOptions["FFmpeg/AudioChannelCount"] =
+                    string::Format("{0}").arg(audioInfo.channelCount);
+                options.ioOptions["FFmpeg/AudioDataType"] =
+                    string::Format("{0}").arg(audioInfo.dataType);
+                options.ioOptions["FFmpeg/AudioSampleRate"] =
+                    string::Format("{0}").arg(audioInfo.sampleRate);
+
+                options.ioOptions["FFmpeg/ThreadCount"] =
+                    string::Format("{0}").arg(
+                        std_any_cast<int>(p.settingsObject->value(
+                            "Performance/FFmpegThreadCount")));
+
+                options.ioOptions["SequenceIO/DefaultSpeed"] =
+                    string::Format("{0}").arg(ui->uiPrefs->uiPrefsFPS->value());
+
+#if defined(TLRENDER_USD)
+                options.ioOptions["USD/renderWidth"] =
+                    string::Format("{0}").arg(std_any_cast<int>(
+                        p.settingsObject->value("USD/renderWidth")));
+                float complexity = std_any_cast<float>(
+                    p.settingsObject->value("USD/complexity"));
+                options.ioOptions["USD/complexity"] =
+                    string::Format("{0}").arg(complexity);
+                {
+                    std::stringstream ss;
+                    usd::DrawMode usdDrawMode =
+                        static_cast<usd::DrawMode>(std_any_cast<int>(
+                            p.settingsObject->value("USD/drawMode")));
+                    ss << usdDrawMode;
+                    options.ioOptions["USD/drawMode"] = ss.str();
+                }
+                options.ioOptions["USD/enableLighting"] =
+                    string::Format("{0}").arg(std_any_cast<int>(
+                        p.settingsObject->value("USD/enableLighting")));
+                options.ioOptions["USD/stageCache"] =
+                    string::Format("{0}").arg(std_any_cast<int>(
+                        p.settingsObject->value("USD/stageCache")));
+                options.ioOptions["USD/diskCache"] =
+                    string::Format("{0}").arg(std_any_cast<int>(
+                        p.settingsObject->value("USD/diskCache")));
+
+                auto ioSystem = _context->getSystem<io::System>();
+                ioSystem->setOptions(options.ioOptions);
+#endif
+
+                options.pathOptions.maxNumberDigits = std::min(
+                    std_any_cast<int>(
+                        p.settingsObject->value("Misc/MaxFileSequenceDigits")),
+                    255);
+
+                auto otioTimeline =
+                    item->audioPath.isEmpty()
+                        ? timeline::create(item->path, _context, options)
+                        : timeline::create(
+                              item->path, item->audioPath, _context, options);
+
+                auto timeline =
+                    timeline::Timeline::create(otioTimeline, _context, options);
+
+                timeline::PlayerOptions playerOptions;
+                playerOptions.cache.readAhead = _cacheReadAhead();
+                playerOptions.cache.readBehind = _cacheReadBehind();
+
+                value = std_any_cast<int>(
+                    p.settingsObject->value("Performance/TimerMode"));
+                playerOptions.timerMode = (timeline::TimerMode)value;
+                value = std_any_cast<int>(p.settingsObject->value(
+                    "Performance/AudioBufferFrameCount"));
+                playerOptions.audioBufferFrameCount = value;
+                if (item->init)
+                {
+                    playerOptions.currentTime = items[0]->currentTime;
+                }
+
+                auto player =
+                    timeline::Player::create(timeline, _context, playerOptions);
+
+                items[i]->videoLayers.clear();
+                for (const auto& video : player->getIOInfo().video)
+                {
+                    items[i]->videoLayers.push_back(video.name);
+                }
+            }
+            catch (const std::exception& e)
+            {
+                _log(e.what(), log::Type::Error);
+            }
+        }
+    }
+
     void App::_activeCallback(
         const std::vector<std::shared_ptr<FilesModelItem> >& items)
     {
@@ -1098,7 +1244,6 @@ namespace mrv
             p.active[0]->loop = p.timelinePlayers[0]->loop();
             p.active[0]->currentTime = p.timelinePlayers[0]->currentTime();
             p.active[0]->inOutRange = p.timelinePlayers[0]->inOutRange();
-            p.active[0]->videoLayer = p.timelinePlayers[0]->videoLayer();
             p.active[0]->audioOffset = p.timelinePlayers[0]->audioOffset();
             p.active[0]->annotations =
                 p.timelinePlayers[0]->getAllAnnotations();
@@ -1161,30 +1306,30 @@ namespace mrv
                     string::Format("{0}").arg(ui->uiPrefs->uiPrefsFPS->value());
 
 #if defined(TLRENDER_USD)
-                options.ioOptions["usd/renderWidth"] =
+                options.ioOptions["USD/renderWidth"] =
                     string::Format("{0}").arg(std_any_cast<int>(
-                        p.settingsObject->value("usd/renderWidth")));
+                        p.settingsObject->value("USD/renderWidth")));
                 float complexity = std_any_cast<float>(
-                    p.settingsObject->value("usd/complexity"));
-                options.ioOptions["usd/complexity"] =
+                    p.settingsObject->value("USD/complexity"));
+                options.ioOptions["USD/complexity"] =
                     string::Format("{0}").arg(complexity);
                 {
                     std::stringstream ss;
                     usd::DrawMode usdDrawMode =
                         static_cast<usd::DrawMode>(std_any_cast<int>(
-                            p.settingsObject->value("usd/drawMode")));
+                            p.settingsObject->value("USD/drawMode")));
                     ss << usdDrawMode;
-                    options.ioOptions["usd/drawMode"] = ss.str();
+                    options.ioOptions["USD/drawMode"] = ss.str();
                 }
-                options.ioOptions["usd/enableLighting"] =
+                options.ioOptions["USD/enableLighting"] =
                     string::Format("{0}").arg(std_any_cast<int>(
-                        p.settingsObject->value("usd/enableLighting")));
-                options.ioOptions["usd/stageCacheCount"] =
+                        p.settingsObject->value("USD/enableLighting")));
+                options.ioOptions["USD/stageCache"] =
                     string::Format("{0}").arg(std_any_cast<int>(
-                        p.settingsObject->value("usd/stageCacheCount")));
-                options.ioOptions["usd/diskCacheByteCount"] =
+                        p.settingsObject->value("USD/stageCache")));
+                options.ioOptions["USD/diskCache"] =
                     string::Format("{0}").arg(std_any_cast<int>(
-                        p.settingsObject->value("usd/diskCacheByteCount")));
+                        p.settingsObject->value("USD/diskCache")));
 
                 auto ioSystem = _context->getSystem<io::System>();
                 ioSystem->setOptions(options.ioOptions);
@@ -1219,11 +1364,10 @@ namespace mrv
                     playerOptions.currentTime = items[0]->currentTime;
                 }
 
-                auto timelinePlayer =
+                auto player =
                     timeline::Player::create(timeline, _context, playerOptions);
 
-                mrvTimelinePlayer =
-                    new mrv::TimelinePlayer(timelinePlayer, _context);
+                mrvTimelinePlayer = new mrv::TimelinePlayer(player, _context);
 
                 item->timeRange = mrvTimelinePlayer->timeRange();
                 item->ioInfo = mrvTimelinePlayer->ioInfo();
@@ -1236,7 +1380,6 @@ namespace mrv
                     item->loop = mrvTimelinePlayer->loop();
                     item->currentTime = mrvTimelinePlayer->currentTime();
                     item->inOutRange = mrvTimelinePlayer->inOutRange();
-                    item->videoLayer = mrvTimelinePlayer->videoLayer();
                     item->audioOffset = mrvTimelinePlayer->audioOffset();
 
                     // Add the new file to recent files, unless it is an EDL.
@@ -1251,7 +1394,6 @@ namespace mrv
                     mrvTimelinePlayer->setSpeed(items[0]->speed);
                     mrvTimelinePlayer->setLoop(items[0]->loop);
                     mrvTimelinePlayer->setInOutRange(items[0]->inOutRange);
-                    mrvTimelinePlayer->setVideoLayer(items[0]->videoLayer);
                     mrvTimelinePlayer->setVolume(p.volume);
                     mrvTimelinePlayer->setMute(p.mute);
                     mrvTimelinePlayer->setAudioOffset(items[0]->audioOffset);
@@ -1260,7 +1402,6 @@ namespace mrv
                 }
                 if (i > 0)
                 {
-                    mrvTimelinePlayer->setVideoLayer(items[i]->videoLayer);
                     mrvTimelinePlayer->setAllAnnotations(items[i]->annotations);
                     mrvTimelinePlayer->player()->setExternalTime(
                         newTimelinePlayers[0]->player());
@@ -1298,7 +1439,6 @@ namespace mrv
 
         if (ui)
         {
-
             if (!validTimelinePlayers.empty())
             {
                 auto player = validTimelinePlayers[0];
@@ -1331,9 +1471,9 @@ namespace mrv
                 if (p.running)
                 {
                     if (loaded)
-                        refreshPanelThumbnails();
+                        panel::refreshPanelThumbnails();
                     else
-                        redrawPanelThumbnails();
+                        panel::redrawPanelThumbnails();
                     if (ui->uiPrefs->uiPrefsAutoPlayback->value() && loaded)
                     {
                         auto player = ui->uiView->getTimelinePlayer();

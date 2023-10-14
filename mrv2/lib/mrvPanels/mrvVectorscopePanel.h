@@ -8,8 +8,6 @@
 
 #include "mrvFl/mrvColorAreaInfo.h"
 
-class ViewerUI;
-
 namespace mrv
 {
     namespace area
@@ -17,18 +15,21 @@ namespace mrv
         class Info;
     }
 
-    class VectorscopePanel : public PanelWidget
+    namespace panel
     {
-    public:
-        VectorscopePanel(ViewerUI* ui);
-        ~VectorscopePanel();
+        class VectorscopePanel : public PanelWidget
+        {
+        public:
+            VectorscopePanel(ViewerUI* ui);
+            ~VectorscopePanel();
 
-        void add_controls() override;
+            void add_controls() override;
 
-        void update(const area::Info& info);
+            void update(const area::Info& info);
 
-    private:
-        MRV2_PRIVATE();
-    };
+        private:
+            MRV2_PRIVATE();
+        };
 
+    } // namespace panel
 } // namespace mrv

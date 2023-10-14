@@ -36,6 +36,10 @@ export OSX_TARGET=11.0
 
 # Build a build directory with that information
 export BUILD_DIR=$BUILD_ROOT/${CMAKE_BUILD_TYPE}
+if [[ $MRV2_DIST_RELEASE == 1 ]]; then
+    export BUILD_DIR=$BUILD_DIR-dist
+fi
+
 
 if [[ $KERNEL == *Darwin* ]]; then
     export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:${PATH}"

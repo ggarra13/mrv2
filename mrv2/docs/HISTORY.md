@@ -6,18 +6,64 @@ v0.8.0
   full name of the directory in the filename field and pressed Enter,
 - Fixed a crash when loading a session with no files.
 - Added session name to the window's title bar.
-- Fixed a typo in Python's binding to sessios (oepenSession instead of
+- Fixed a typo in Python's binding to session (oepenSession instead of
   openSession).
 - Made Save Session not save temporary EDLs in the session file.
-- Added a __divider__ tuple entry to Plug-in menus to add a divider line between
-  menu entries.
+- Added a '\_\_divider\_\_' tuple entry to Plug-in menus to add a divider line
+  between menu entries.
 - Made Python's output and errors automatically be sent to the Python editor,
   instead of waiting until the commands finish, like in v0.7.9 and previous
   ones.
 - Added a cmd.getVersion() to get the version of mrv2 from Python.
-- Made playback play with audio when changing frame rates (slower or faster).
+- Made playback play with audio when changing frame rate (slower or faster).
+- Made audio play when stepping through frames.  It is currently a hack and
+  not a proper fix yet.  Also, the stepping buttons are not updated properly.
 - Fixed a locale change when using the FPS pull-down and there were thumbnails
   present.
+- Fixed macOS menu bar font size when switching from macOS menus back to
+  normal ones.
+- Made saving of .otio files also work from File/Save/Movie or Sequence if the
+  extension given is .otio.
+- Added user metadata to save in the session file as "metadata".  This can be
+  set with the Python commands setSessionMetadata and retrieved with
+  sessionMetadata.
+- Added a warning check when saving a session with temporary EDLs in it.
+- Added timeline.speed(), timeline.defaultSpeed() and timeline.setSpeed() to
+  retrieve and manipulate the FPS.
+- Added image.ocioIcs() and image.setOcioIcs() and image.ocioIcsList() to
+  Python to set the input color space of the image.
+- Added image.ocioView(), image.setOcioView() and image.ocioViewList() to
+  Python to set the Display/View color space and to retrieve a list of all
+  Display/Views.
+- Sped up and removed some bugs in reverse playback.
+- Fixed reading of OCIO file name in network connections.
+- Color channels (layers) are now kept with the file so that switching between
+  media will not revert to the rgba channel if there isn't an equivalent one.
+- USD Panel is now interactive.  You can change the parameters and it will
+  show the change.  The only parameter not recommended to change (except for
+  very simple scenes) is the complexity.
+- USD Panel visibility is now saved in the Preferences.
+- Refreshing of cache is now done in seconds, without re-loading and
+  switching an image as before.
+- Creating a timeline in the Playlist Panel is also done in seconds.
+- Fixed a crash when creating an empty timeline or a timeline from a clip in
+  the Playlist Panel.
+- Fixed missing frames (Repeat Last and Repeat Scratched) when the user was
+  reading a different layer and he was playing backwards or stepping through
+  the frames.
+- Added drawing background as transparent, solid or checkers.
+- Made dragging a clip from the Files Panel not loose the selection.
+- Fixed a network error (harmless) about edit mode.
+- Some UI fixes:
+    * The Zoom factor in the Pixel Toolbar keeps its value when selecting
+      it from the pulldown.
+    * All buttons and displays have the same size on both the timeline and
+      pixel toolbar.
+    * Cursor in all input fields is now red for easier reading.
+    * The FPS input widget now displays the FPS with different number of
+      digits to fit the value as best it can on the limited width.
+
+
 
 v0.7.9
 ======

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Running .githooks/pre-commit.sh"
+echo "Running .githooks/pre-commit"
 
 for FILE in $(git diff --cached --name-only)
 do

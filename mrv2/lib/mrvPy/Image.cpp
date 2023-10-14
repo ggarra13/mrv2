@@ -6,10 +6,13 @@
 #include <sstream>
 
 #include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 
 namespace py = pybind11;
 
 #include <tlCore/Image.h>
+#include <tlCore/StringFormat.h>
+
 #include <tlTimeline/ImageOptions.h>
 #include <tlTimeline/LUTOptions.h>
 #include <tlTimeline/DisplayOptions.h>
@@ -17,6 +20,8 @@ namespace py = pybind11;
 #include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvStereo3DOptions.h"
 #include "mrvCore/mrvEnvironmentMapOptions.h"
+
+#include "mrViewer.h"
 
 namespace tl
 {
@@ -116,6 +121,130 @@ namespace mrv
           << " swapEyes=" << (o.swapEyes ? "True" : "False") << ">";
         return s;
     }
+
+    namespace image
+    {
+        std::string ocioIcs()
+        {
+            auto uiICS = App::ui->uiICS;
+            int idx = uiICS->value();
+            if (idx < 0 || idx >= uiICS->children())
+                return "";
+            return uiICS->label();
+        }
+
+        void setOcioIcs(const unsigned value)
+        {
+            auto uiICS = App::ui->uiICS;
+            if (value >= uiICS->children())
+                return;
+            uiICS->value(value);
+            uiICS->do_callback();
+        }
+
+        std::vector<std::string> ocioIcsList()
+        {
+            auto uiICS = App::ui->uiICS;
+            std::vector<std::string> out;
+            for (int i = 0; i < uiICS->children(); ++i)
+            {
+                const Fl_Menu_Item* item = uiICS->child(i);
+                if (!item || !item->label())
+                    continue;
+
+                out.push_back(item->label());
+            }
+            return out;
+        }
+
+        void setOcioIcs(const std::string& name)
+        {
+            auto uiICS = App::ui->uiICS;
+            int value = -1;
+            for (int i = 0; i < uiICS->children(); ++i)
+            {
+                const Fl_Menu_Item* item = uiICS->child(i);
+                if (!item || !item->label())
+                    continue;
+
+                if (name == item->label())
+                {
+                    value = i;
+                    break;
+                }
+            }
+            if (value == -1)
+            {
+                std::string err =
+                    string::Format(_("Invalid OCIO Ics '{0}'.")).arg(name);
+                throw std::runtime_error(err);
+                return;
+            }
+            uiICS->value(value);
+            uiICS->do_callback();
+        }
+
+        std::string ocioView()
+        {
+            auto uiOCIOView = App::ui->OCIOView;
+            int idx = uiOCIOView->value();
+            if (idx < 0 || idx >= uiOCIOView->children())
+                return "";
+            return uiOCIOView->label();
+        }
+
+        std::vector<std::string> ocioViewList()
+        {
+            auto uiOCIOView = App::ui->OCIOView;
+            std::vector<std::string> out;
+            for (int i = 0; i < uiOCIOView->children(); ++i)
+            {
+                const Fl_Menu_Item* item = uiOCIOView->child(i);
+                if (!item || !item->label())
+                    continue;
+
+                out.push_back(item->label());
+            }
+            return out;
+        }
+
+        void setOcioView(const unsigned value)
+        {
+            auto uiOCIOView = App::ui->OCIOView;
+            if (value >= uiOCIOView->children())
+                return;
+            uiOCIOView->value(value);
+            uiOCIOView->do_callback();
+        }
+
+        void setOcioView(const std::string& name)
+        {
+            auto uiOCIOView = App::ui->OCIOView;
+            int value = -1;
+            for (int i = 0; i < uiOCIOView->children(); ++i)
+            {
+                const Fl_Menu_Item* item = uiOCIOView->child(i);
+                if (!item || !item->label())
+                    continue;
+
+                if (name == item->label())
+                {
+                    value = i;
+                    break;
+                }
+            }
+            if (value == -1)
+            {
+                std::string err =
+                    string::Format(_("Invalid OCIO Display/View '{0}'."))
+                        .arg(name);
+                throw std::runtime_error(err);
+                return;
+            }
+            uiOCIOView->value(value);
+            uiOCIOView->do_callback();
+        }
+    } // namespace image
 } // namespace mrv
 
 void mrv2_image(pybind11::module& m)
@@ -360,4 +489,35 @@ Contains all classes and enums related to image controls.
                 return s.str();
             })
         .doc() = _("Stereo3D options.");
+
+    image.def(
+        "ocioIcs", &mrv::image::ocioIcs,
+        _("Gets the current input color space."));
+
+    image.def(
+        "ocioIcsList", &mrv::image::ocioIcsList,
+        _("Gets a list of all input color spaces."));
+
+    image.def(
+        "setOcioIcs",
+        py::overload_cast<const unsigned>(&mrv::image::setOcioIcs),
+        _("Set the input color space."), py::arg("index"));
+
+    image.def(
+        "setOcioIcs",
+        py::overload_cast<const std::string&>(&mrv::image::setOcioIcs),
+        _("Set the input color space."), py::arg("ics"));
+
+    image.def(
+        "ocioView", &mrv::image::ocioView, _("Gets the current Display/View."));
+
+    image.def(
+        "setOcioView",
+        py::overload_cast<const unsigned>(&mrv::image::setOcioView),
+        _("Set an OCIO Display/View."), py::arg("index"));
+
+    image.def(
+        "setOcioView",
+        py::overload_cast<const std::string&>(&mrv::image::setOcioView),
+        _("Set an OCIO Display/View."), py::arg("view"));
 }

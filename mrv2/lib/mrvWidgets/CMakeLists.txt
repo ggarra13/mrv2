@@ -15,7 +15,6 @@ set( FL_SOURCES
 )
 
 FLTK_WRAP_UI( mrvWidgets ${FL_SOURCES} )
-#FLTK_RUN_FLUID( mrvWidgets_FLTK_UI_SRCS "${FL_SOURCES}" )
 
 set(HEADERS
     mrvButton.h
@@ -29,9 +28,11 @@ set(HEADERS
     mrvDropWindow.h
     mrvFileButton.h
     mrvFileDragger.h
+    mrvFPSInput.h
     mrvFunctional.h
     mrvHistogram.h
     mrvHorSlider.h
+    mrvIntInput.h
     mrvLogDisplay.h
     mrvMainWindow.h
     mrvMenuBar.h
@@ -50,6 +51,7 @@ set(HEADERS
     mrvResizableBar.h
     mrvSecondaryWindow.h
     mrvSlider.h
+    mrvSpinner.h
     mrvStateButton.h
     mrvStatusBar.h
     mrvTable.h
@@ -75,6 +77,7 @@ set(SOURCES
     mrvDropWindow.cpp
     mrvFileButton.cpp
     mrvFileDragger.cpp
+    mrvFPSInput.cpp
     mrvHistogram.cpp
     mrvHorSlider.cpp
     mrvLogDisplay.cpp
@@ -146,11 +149,9 @@ endif()
 
 target_link_libraries(mrvWidgets PUBLIC ${LIBRARIES} )
 set_target_properties(mrvWidgets PROPERTIES FOLDER lib)
-#set_target_properties(mrvWidgets PROPERTIES PUBLIC_HEADER "${HEADERS}")
 
 install(TARGETS mrvWidgets
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION bin
-    PUBLIC_HEADER DESTINATION include/mrv2/mrvWidgets
     COMPONENT libraries)

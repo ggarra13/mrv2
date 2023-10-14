@@ -182,8 +182,10 @@ namespace mrv
     //! Call the browser with documentation.
     void help_documentation_cb(Fl_Menu_*, ViewerUI* ui);
 
-    //! Make background black or default gray.
-    void toggle_black_background_cb(Fl_Menu_* m, ViewerUI* ui);
+    //! Make background transparent (gray), black or checkers.
+    void transparent_background_cb(Fl_Menu_* m, ViewerUI* ui);
+    void solid_background_cb(Fl_Menu_* m, ViewerUI* ui);
+    void checkers_background_cb(Fl_Menu_* m, ViewerUI* ui);
 
     // Netowrk toggles
     void toggle_sync_send_cb(Fl_Menu_* m, ViewerUI* ui);

@@ -18,36 +18,39 @@ class ViewerUI;
 
 namespace mrv
 {
-    using namespace tl;
 
     class FileButton;
     class FilesPanelOptions;
 
-    class FilesPanel : public PanelWidget
+    namespace panel
     {
-    public:
-        FilesPanel(ViewerUI* ui);
-        ~FilesPanel();
+        using namespace tl;
+        class FilesPanel : public PanelWidget
+        {
+        public:
+            FilesPanel(ViewerUI* ui);
+            ~FilesPanel();
 
-        void clear_controls();
-        void add_controls() override;
+            void clear_controls();
+            void add_controls() override;
 
-        void setFilesPanelOptions(const FilesPanelOptions&);
+            void setFilesPanelOptions(const FilesPanelOptions&);
 
-        void redraw();
+            void redraw();
 
-        void refresh();
-        void filesThumbnail(
-            const int64_t id,
-            const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&
-                thumbnails,
-            FileButton* w);
+            void refresh();
+            void filesThumbnail(
+                const int64_t id,
+                const std::vector<
+                    std::pair<otime::RationalTime, Fl_RGB_Image*> >& thumbnails,
+                FileButton* w);
 
-    protected:
-        void cancel_thumbnails();
+        protected:
+            void cancel_thumbnails();
 
-    private:
-        MRV2_PRIVATE();
-    };
+        private:
+            MRV2_PRIVATE();
+        };
 
+    } // namespace panel
 } // namespace mrv

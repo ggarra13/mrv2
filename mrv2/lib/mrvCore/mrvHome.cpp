@@ -161,13 +161,6 @@ namespace mrv
         return prefs;
     }
 
-    std::string lockfile()
-    {
-        std::string lockfile = mrv::homepath();
-        lockfile += "/.filmaura/mrv2.lock.prefs";
-        return lockfile;
-    }
-
     std::string pythonpath()
     {
         std::string path = mrv::rootpath();
@@ -183,23 +176,11 @@ namespace mrv
             return out;
 
 #ifdef _WIN32
-        split_string(out, c, ";");
+        out = string::split(c, ';');
 #else
-        split_string(out, c, ":");
+        out = string::split(c, ':');
 #endif
         return out;
-    }
-
-    std::string shaderpath()
-    {
-        std::string path = mrv::rootpath();
-        path += "/shaders/";
-#ifdef TLRENDER_OPENGL
-        path += "/opengl/";
-#else
-        path += "/metal/";
-#endif
-        return path;
     }
 
 } // namespace mrv

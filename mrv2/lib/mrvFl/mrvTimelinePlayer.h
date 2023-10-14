@@ -4,8 +4,6 @@
 
 #pragma once
 
-#include <tlCore/Audio.h>
-
 #include <tlTimeline/Timeline.h>
 #include <tlTimeline/Player.h>
 
@@ -16,9 +14,9 @@ namespace mrv
         class Annotation;
     }
 
-    using namespace tl;
-
     class TimelineViewport;
+
+    using namespace tl;
 
     //! FLTK based timeline player.
     class TimelinePlayer
@@ -45,10 +43,10 @@ namespace mrv
         const std::shared_ptr<timeline::Timeline>& timeline() const;
 
         //! Get the path.
-        const file::Path& path() const;
+        const tl::file::Path& path() const;
 
         //! Get the audio path.
-        const file::Path& audioPath() const;
+        const tl::file::Path& audioPath() const;
 
         //! Get the timeline player options.
         const timeline::PlayerOptions& getPlayerOptions() const;
@@ -98,6 +96,14 @@ namespace mrv
 
         //! Get the in/out points range.
         const otime::TimeRange& inOutRange() const;
+
+        ///@}
+
+        //! \name I/O Options
+        ///@{
+
+        tl::io::Options getIOOptions() const;
+        void setIOOptions(const tl::io::Options&);
 
         ///@}
 
@@ -261,9 +267,6 @@ namespace mrv
         //! \name Video
         ///@{
 
-        //! This signal is emitted when the current video layer is changed.
-        void videoLayerChanged(size_t);
-
         //! This signal is emitted when the video is changed.
         void currentVideoChanged(const tl::timeline::VideoData&);
 
@@ -363,6 +366,9 @@ namespace mrv
 
         //! Returns whtehr annotation at current time can be redone.
         bool hasRedo() const;
+
+        //! Update Undo/Redo draw buttons after a frame change.
+        void updateUndoRedoButtons() const;
 
     protected:
         template < typename T >

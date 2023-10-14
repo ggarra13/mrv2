@@ -25,6 +25,7 @@ namespace mrv
 
         // GL variables
         //! OpenGL Offscreen buffers
+        std::shared_ptr<tl::gl::OffscreenBuffer> background = nullptr;
         std::shared_ptr<tl::gl::OffscreenBuffer> buffer = nullptr;
         std::shared_ptr<tl::gl::OffscreenBuffer> stereoBuffer = nullptr;
         std::shared_ptr<tl::gl::OffscreenBuffer> annotation = nullptr;

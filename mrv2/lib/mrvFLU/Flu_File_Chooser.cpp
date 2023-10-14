@@ -60,6 +60,7 @@
 
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvSequence.h"
+#include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvUtil.h"
 
 #include "mrvFl/mrvPreferences.h"
@@ -327,11 +328,7 @@ void Flu_File_Chooser::previewCB()
                 if (path.getExtension() == ".otioz")
                     continue;
 
-                bool requestIcon = false;
-                if (auto context = p.context.lock())
-                {
-                    requestIcon = mrv::is_valid_file_type(path, context);
-                }
+                bool requestIcon = mrv::file::isValidType(path);
 
                 if (!thumbnailsUSD)
                 {
@@ -1834,7 +1831,7 @@ void Flu_File_Chooser::okCB()
         const char* file = filename.value();
         if (strlen(file) != 0)
         {
-            if (mrv::is_directory(file))
+            if (mrv::file::isDirectory(file))
             {
                 cd(file);
                 filename.value("");
@@ -4586,23 +4583,19 @@ void Flu_File_Chooser::cd(const char* path)
             }
             else
             {
-                bool is_sequence = false;
-                std::string root, frame, view, ext;
 
-                bool ok = mrv::split_sequence(root, frame, view, ext, name);
+                file::Path path(name);
+                const std::string root = path.getBaseName();
+                const std::string frame = path.getNumber();
+                const std::string view = ""; // @todo: path.getView();
+                const std::string ext = path.getExtension();
 
+                bool is_sequence = mrv::file::isSequence(name);
                 if (compact_files())
                 {
-                    if ((!root.empty() || !ext.empty()) && !frame.empty())
-                        is_sequence = true;
-
-                    std::string tmp = ext;
-                    std::transform(
-                        tmp.begin(), tmp.end(), tmp.begin(),
-                        (int (*)(int))tolower);
-                    if (mrv::is_valid_movie(tmp) || mrv::is_valid_audio(tmp) ||
-                        mrv::is_valid_subtitle(tmp) || tmp == ".ocio" ||
-                        tmp == ".prefs" || tmp == ".py" || tmp == ".pyc")
+                    if (mrv::file::isMovie(ext) || mrv::file::isAudio(ext) ||
+                        mrv::file::isSubtitle(ext) || ext == ".ocio" ||
+                        ext == ".prefs" || ext == ".py" || ext == ".pyc")
                         is_sequence = false;
                 }
                 else

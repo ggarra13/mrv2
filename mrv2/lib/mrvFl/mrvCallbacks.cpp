@@ -10,7 +10,7 @@
 
 #include <FL/filename.H> // for fl_open_uri()
 
-#include "mrvCore/mrvHelpers.h"
+#include "mrvCore/mrvFileManager.h"
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvUtil.h"
 
@@ -29,6 +29,7 @@
 #include "mrvGL/mrvGLShape.h"
 #include "mrvGL/mrvGLTextEdit.h"
 
+#include "mrvUI/mrvAsk.h"
 #include "mrvUI/mrvMenus.h"
 
 #include "mrvFlmm/Flmm_ColorA_Chooser.h"
@@ -82,6 +83,7 @@ namespace
 
 namespace mrv
 {
+    using namespace panel;
 
     WindowCallback kWindowCallbacks[] = {
         {_("Files"), (Fl_Callback*)files_panel_cb},
@@ -118,8 +120,8 @@ namespace mrv
     {
         void reset_timeline(ViewerUI* ui)
         {
-            if (imageInfoPanel)
-                imageInfoPanel->setTimelinePlayer(nullptr);
+            if (panel::imageInfoPanel)
+                panel::imageInfoPanel->setTimelinePlayer(nullptr);
             ui->uiTimeline->setTimelinePlayer(nullptr);
             ui->uiTimeline->redraw();
             otio::RationalTime start = otio::RationalTime(1, 24);
@@ -129,9 +131,9 @@ namespace mrv
             c->uiStartFrame->setTime(start);
             c->uiEndFrame->setTime(end);
 
-            if (annotationsPanel)
+            if (panel::annotationsPanel)
             {
-                annotationsPanel->notes->value("");
+                panel::annotationsPanel->notes->value("");
             }
         }
 
@@ -193,7 +195,7 @@ namespace mrv
         if (dir.empty())
             return;
 
-        if (!is_directory(dir))
+        if (!file::isDirectory(dir))
             return;
 
         std::vector<std::string> movies, sequences, audios;
@@ -311,6 +313,12 @@ namespace mrv
             return;
         }
 
+        if (extension == ".otio")
+        {
+            save_timeline_to_disk(file);
+            return;
+        }
+
         bool valid_for_exr = false;
         // Sanity check - make sure the video pixel for the current
         // layerId type is float/half
@@ -400,60 +408,65 @@ namespace mrv
 
     void close_all_cb(Fl_Widget* w, ViewerUI* ui)
     {
+        if (ui->uiPrefs->SendMedia->value())
+            tcp->pushMessage("closeAll", 0);
+
         auto model = ui->app->filesModel();
         model->closeAll();
 
         ui->uiMain->fill_menu(ui->uiMenuBar);
-
-        if (ui->uiPrefs->SendMedia->value())
-            tcp->pushMessage("closeAll", 0);
 
         reset_timeline(ui);
     }
 
     void exit_cb(Fl_Widget* w, ViewerUI* ui)
     {
+
         tcp->lock();
 
         ui->uiView->stop();
 
         // Store window preferences
-        if (colorPanel)
-            colorPanel->save();
-        if (filesPanel)
-            filesPanel->save();
-        if (colorAreaPanel)
-            colorAreaPanel->save();
-        if (comparePanel)
-            comparePanel->save();
-        if (playlistPanel)
-            playlistPanel->save();
-        if (settingsPanel)
-            settingsPanel->save();
-        if (logsPanel)
-            logsPanel->save();
-        if (devicesPanel)
-            devicesPanel->save();
-        if (annotationsPanel)
-            annotationsPanel->save();
-        if (imageInfoPanel)
-            imageInfoPanel->save();
-        if (histogramPanel)
-            histogramPanel->save();
-        if (vectorscopePanel)
-            vectorscopePanel->save();
-        if (environmentMapPanel)
-            environmentMapPanel->save();
+        if (panel::colorPanel)
+            panel::colorPanel->save();
+        if (panel::filesPanel)
+            panel::filesPanel->save();
+        if (panel::colorAreaPanel)
+            panel::colorAreaPanel->save();
+        if (panel::comparePanel)
+            panel::comparePanel->save();
+        if (panel::playlistPanel)
+            panel::playlistPanel->save();
+        if (panel::settingsPanel)
+            panel::settingsPanel->save();
+        if (panel::logsPanel)
+            panel::logsPanel->save();
+        if (panel::devicesPanel)
+            panel::devicesPanel->save();
+        if (panel::annotationsPanel)
+            panel::annotationsPanel->save();
+        if (panel::imageInfoPanel)
+            panel::imageInfoPanel->save();
+        if (panel::histogramPanel)
+            panel::histogramPanel->save();
+        if (panel::vectorscopePanel)
+            panel::vectorscopePanel->save();
+        if (panel::environmentMapPanel)
+            panel::environmentMapPanel->save();
 #ifdef MRV2_PYBIND11
-        if (pythonPanel)
-            pythonPanel->save();
+        if (panel::pythonPanel)
+            panel::pythonPanel->save();
 #endif
 #ifdef MRV2_NETWORK
-        if (networkPanel)
-            networkPanel->save();
+        if (panel::networkPanel)
+            panel::networkPanel->save();
 #endif
-        if (stereo3DPanel)
-            stereo3DPanel->save();
+#ifdef TLRENDER_USD
+        if (panel::usdPanel)
+            panel::usdPanel->save();
+#endif
+        if (panel::stereo3DPanel)
+            panel::stereo3DPanel->save();
         if (ui->uiSecondary)
             ui->uiSecondary->save();
 
@@ -472,17 +485,17 @@ namespace mrv
         PanelGroup::hide_all();
 
         // Delete all panels with images or threads
-        delete stereo3DPanel;
-        stereo3DPanel = nullptr;
-        delete filesPanel;
-        filesPanel = nullptr;
-        delete comparePanel;
-        comparePanel = nullptr;
-        delete playlistPanel;
-        playlistPanel = nullptr;
+        delete panel::stereo3DPanel;
+        panel::stereo3DPanel = nullptr;
+        delete panel::filesPanel;
+        panel::filesPanel = nullptr;
+        delete panel::comparePanel;
+        panel::comparePanel = nullptr;
+        delete panel::playlistPanel;
+        panel::playlistPanel = nullptr;
 #ifdef MRV2_NETWORK
-        delete networkPanel;
-        networkPanel = nullptr;
+        delete panel::networkPanel;
+        panel::networkPanel = nullptr;
 #endif
 
         // Close all files
@@ -1535,13 +1548,35 @@ namespace mrv
         fl_open_uri(docs.c_str());
     }
 
-    void toggle_black_background_cb(Fl_Menu_* m, ViewerUI* ui)
+    void transparent_background_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        timeline::BackgroundOptions options =
+            ui->uiView->getBackgroundOptions();
+        const Fl_Menu_Item* item = m->mvalue();
+        if (item->checked())
+            options.type = timeline::Background::Transparent;
+        ui->uiView->setBackgroundOptions(options);
+    }
+
+    void solid_background_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        timeline::BackgroundOptions options =
+            ui->uiView->getBackgroundOptions();
+        const Fl_Menu_Item* item = m->mvalue();
+        if (item->checked())
+            options.type = timeline::Background::Solid;
+        ui->uiView->setBackgroundOptions(options);
+    }
+
+    void checkers_background_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        timeline::BackgroundOptions options =
+            ui->uiView->getBackgroundOptions();
         bool value = true;
         const Fl_Menu_Item* item = m->mvalue();
-        if (!item->checked())
-            value = false;
-        ui->uiView->setBlackBackground(value);
+        if (item->checked())
+            options.type = timeline::Background::Checkers;
+        ui->uiView->setBackgroundOptions(options);
     }
 
     void toggle_annotation_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -1629,13 +1664,38 @@ namespace mrv
 
     static void save_session_impl(const std::string& file, ViewerUI* ui)
     {
-        if (save_session(file))
+        auto model = ui->app->filesModel();
+        auto files = model->observeFiles()->get();
+
+        bool hasEDLs = false;
+        for (const auto& file : files)
+        {
+            const file::Path path = file->path;
+            if (isTemporaryEDL(path))
+            {
+                hasEDLs = true;
+                break;
+            }
+        }
+
+        if (hasEDLs)
+        {
+            int ok = fl_choice(
+                _("You have EDLs in the current session.  These "
+                  "will not be saved in the session file.  "
+                  "Do you want to continue?"),
+                _("No"), _("Yes"), NULL, NULL);
+            if (!ok)
+                return;
+        }
+
+        if (session::save(file))
         {
             auto settingsObject = ui->app->settingsObject();
             settingsObject->addRecentFile(file);
         }
 
-        ui->uiMain->fill_menu(ui->uiMenuBar);
+        ui->uiMain->update_title_bar();
     }
 
     void save_session_as_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -1646,12 +1706,12 @@ namespace mrv
 
         save_session_impl(file, ui);
 
-        set_current_session(file);
+        session::setCurrent(file);
     }
 
     void save_session_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        const std::string file = current_session();
+        const std::string file = session::current();
         if (file.empty())
             return save_session_as_cb(m, ui);
 
@@ -1664,7 +1724,7 @@ namespace mrv
         if (file.empty())
             return;
 
-        if (load_session(file))
+        if (session::load(file))
         {
             auto settingsObject = ui->app->settingsObject();
             settingsObject->addRecentFile(file);
@@ -1815,7 +1875,7 @@ namespace mrv
         player->setAllAnnotations(newItem->annotations);
         player->setPlayback(playback);
         player->seek(currentTime);
-        redrawPanelThumbnails();
+        panel::redrawPanelThumbnails();
     }
 
     void set_stereo_cb(Fl_Menu_* m, void* d)
@@ -1869,56 +1929,16 @@ namespace mrv
         model->setStereo3DOptions(o);
     }
 
-    // @todo: remove once tlRender supports this natively
     void refresh_file_cache_cb(Fl_Menu_* m, void* d)
     {
         auto ui = App::ui;
-        auto app = ui->app;
-        auto model = app->filesModel();
-        if (model->observeFiles()->getSize() < 1)
-            return;
-
-        auto AIndex = model->observeAIndex()->get();
-        auto item = model->observeA()->get();
         int layer = ui->uiColorChannel->value();
-
         auto player = ui->uiView->getTimelinePlayer();
-        timeline::Playback playback = player->playback();
-        auto currentTime = player->currentTime();
-        auto inOutRange = player->inOutRange();
-
-        app->open(item->path.get(), item->audioPath.get());
-
-        auto newItem = model->observeA()->get();
-        auto ANewIndex = model->observeAIndex()->get();
-        newItem->inOutRange = inOutRange;
-        newItem->speed = item->speed;
-        newItem->audioOffset = item->audioOffset;
-        newItem->loop = item->loop;
-        newItem->playback = playback;
-        newItem->currentTime = currentTime;
-        newItem->annotations = item->annotations;
-        if (layer < ui->uiColorChannel->children())
-        {
-            ui->uiColorChannel->value(layer);
-            ui->uiColorChannel->do_callback();
-        }
-        else
-        {
-            ui->uiColorChannel->label(_("(no image)"));
-        }
-
-        // Close the old item
-        model->setA(AIndex);
-        model->close();
-
-        // Switch to new item
-        model->setA(ANewIndex);
-
-        player = ui->uiView->getTimelinePlayer();
-        player->setAllAnnotations(newItem->annotations);
-        player->seek(currentTime);
-        player->setPlayback(playback);
+        if (!player)
+            return;
+        io::Options options = player->getIOOptions();
+        options["refresh"] = randomString();
+        player->setIOOptions(options);
     }
 
     void copy_filename_cb(Fl_Menu_* m, void* d)
@@ -1948,7 +1968,7 @@ namespace mrv
         }
         auto path = item->path.get();
 
-        file_manager_show_uri(path);
+        file_manager::show_uri(path);
     }
 
 } // namespace mrv

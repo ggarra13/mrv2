@@ -77,6 +77,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.timeline.TimerMode.name"><code class="docutils literal notranslate"><span class="pre">TimerMode.name</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.timeline.defaultSpeed"><code class="docutils literal notranslate"><span class="pre">defaultSpeed()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.timeline.frame"><code class="docutils literal notranslate"><span class="pre">frame()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.timeline.inOutRange"><code class="docutils literal notranslate"><span class="pre">inOutRange()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.timeline.loop"><code class="docutils literal notranslate"><span class="pre">loop()</span></code></a></li>
@@ -88,6 +89,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.timeline.setInOutRange"><code class="docutils literal notranslate"><span class="pre">setInOutRange()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.timeline.setLoop"><code class="docutils literal notranslate"><span class="pre">setLoop()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.timeline.setOut"><code class="docutils literal notranslate"><span class="pre">setOut()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.timeline.setSpeed"><code class="docutils literal notranslate"><span class="pre">setSpeed()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.timeline.speed"><code class="docutils literal notranslate"><span class="pre">speed()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.timeline.stop"><code class="docutils literal notranslate"><span class="pre">stop()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.timeline.time"><code class="docutils literal notranslate"><span class="pre">time()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.timeline.timeRange"><code class="docutils literal notranslate"><span class="pre">timeRange()</span></code></a></li>
@@ -181,6 +184,12 @@
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#mrv2.timeline.TimerMode.name" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mrv2.timeline.defaultSpeed">
+<span class="sig-prename descclassname"><span class="pre">mrv2.timeline.</span></span><span class="sig-name descname"><span class="pre">defaultSpeed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#mrv2.timeline.defaultSpeed" title="Link to this definition"></a></dt>
+<dd><p>Gets the default speed of the timeline.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -283,6 +292,18 @@
 <li><p>setOut(arg0: float) -&gt; None</p></li>
 </ol>
 <p>Set the out seconds of the selected time range of the timeline.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mrv2.timeline.setSpeed">
+<span class="sig-prename descclassname"><span class="pre">mrv2.timeline.</span></span><span class="sig-name descname"><span class="pre">setSpeed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.timeline.setSpeed" title="Link to this definition"></a></dt>
+<dd><p>Set current FPS of timeline.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mrv2.timeline.speed">
+<span class="sig-prename descclassname"><span class="pre">mrv2.timeline.</span></span><span class="sig-name descname"><span class="pre">speed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#mrv2.timeline.speed" title="Link to this definition"></a></dt>
+<dd><p>Gets the current FPS of timeline.</p>
 </dd></dl>
 
 <dl class="py function">

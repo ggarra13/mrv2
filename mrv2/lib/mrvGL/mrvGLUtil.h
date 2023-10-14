@@ -68,4 +68,8 @@ namespace mrv
         const math::Vector2i& center, const float radius,
         const image::Color4f& color, const bool soft = false);
 
+    //! Create a mesh for drawing checkers.
+    geom::TriangleMesh2
+    checkers(const math::Box2i&, const math::Size2i& checkerSize);
+
 } // namespace mrv

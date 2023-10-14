@@ -25,55 +25,57 @@ namespace
 
 namespace mrv
 {
-
-    struct ColorAreaPanel::Private
+    namespace panel
     {
-        ColorInfo* colorInfo = nullptr;
-    };
+        struct ColorAreaPanel::Private
+        {
+            ColorInfo* colorInfo = nullptr;
+        };
 
-    ColorAreaPanel::ColorAreaPanel(ViewerUI* ui) :
-        _r(new Private),
-        PanelWidget(ui)
-    {
-        add_group("Color Area");
+        ColorAreaPanel::ColorAreaPanel(ViewerUI* ui) :
+            _r(new Private),
+            PanelWidget(ui)
+        {
+            add_group("Color Area");
 
-        Fl_SVG_Image* svg = load_svg("ColorArea.svg");
-        g->image(svg);
+            Fl_SVG_Image* svg = load_svg("ColorArea.svg");
+            g->image(svg);
 
-        g->callback(
-            [](Fl_Widget* w, void* d)
-            {
-                ViewerUI* ui = static_cast< ViewerUI* >(d);
-                delete colorAreaPanel;
-                colorAreaPanel = nullptr;
-                ui->uiMain->fill_menu(ui->uiMenuBar);
-            },
-            ui);
-    }
+            g->callback(
+                [](Fl_Widget* w, void* d)
+                {
+                    ViewerUI* ui = static_cast< ViewerUI* >(d);
+                    delete colorAreaPanel;
+                    colorAreaPanel = nullptr;
+                    ui->uiMain->fill_menu(ui->uiMenuBar);
+                },
+                ui);
+        }
 
-    ColorAreaPanel::~ColorAreaPanel() {}
+        ColorAreaPanel::~ColorAreaPanel() {}
 
-    void ColorAreaPanel::add_controls()
-    {
-        TLRENDER_P();
-        MRV2_R();
+        void ColorAreaPanel::add_controls()
+        {
+            TLRENDER_P();
+            MRV2_R();
 
-        g->clear();
-        g->begin();
+            g->clear();
+            g->begin();
 
-        int X = g->x();
-        int Y = g->y() + 20;
+            int X = g->x();
+            int Y = g->y() + 20;
 
-        r.colorInfo = new ColorInfo(X, Y, g->w(), 280);
-        r.colorInfo->main(p.ui);
+            r.colorInfo = new ColorInfo(X, Y, g->w(), 280);
+            r.colorInfo->main(p.ui);
 
-        g->end();
-    }
+            g->end();
+        }
 
-    void ColorAreaPanel::update(const area::Info& info)
-    {
-        MRV2_R();
-        r.colorInfo->update(info);
-    }
+        void ColorAreaPanel::update(const area::Info& info)
+        {
+            MRV2_R();
+            r.colorInfo->update(info);
+        }
 
+    } // namespace panel
 } // namespace mrv

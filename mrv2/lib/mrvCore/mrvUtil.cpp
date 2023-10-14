@@ -3,121 +3,36 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #include <algorithm>
+#include <random>
 #include <filesystem>
 namespace fs = std::filesystem;
 
 #include <tlIO/System.h>
 
-#include "mrvCore/mrvUtil.h"
+#include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvSequence.h"
+#include "mrvCore/mrvUtil.h"
 
 #include "mrvApp/App.h"
 
 namespace mrv
 {
-    bool is_valid_file_type(
-        const std::string extension,
-        const std::shared_ptr<tl::system::Context>& context)
+    std::string randomString()
     {
-        auto ioSystem = context->getSystem<tl::io::System>();
+        static const std::string charset =
+            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        std::string out;
 
-        bool validFile = false;
-        switch (ioSystem->getFileType(extension))
+        const int length = 16;
+        std::random_device rd;
+        std::default_random_engine generator(rd());
+        std::uniform_int_distribution<int> distribution(0, charset.size() - 1);
+
+        for (int i = 0; i < length; ++i)
         {
-        case tl::io::FileType::Sequence:
-        case tl::io::FileType::Movie:
-        case tl::io::FileType::Audio:
-            validFile = true;
-            break;
-        default:
-            if (".otio" == extension || ".otioz" == extension)
-            {
-                validFile = true;
-            }
-            break;
+            out += charset[distribution(generator)];
         }
-        return validFile;
-    }
-
-    bool is_valid_file_type(
-        const tl::file::Path& path,
-        const std::shared_ptr<tl::system::Context>& context)
-    {
-        std::string extension = tl::string::toLower(path.getExtension());
-        return is_valid_file_type(extension, context);
-    }
-
-    // Given a frame extension, return true if a possible movie file.
-    bool is_valid_movie(
-        const std::string& ext,
-        const std::shared_ptr<tl::system::Context>& context)
-    {
-        std::string extension = tl::string::toLower(ext);
-        if (extension[0] != '.')
-            extension = '.' + extension;
-
-        auto ioSystem = context->getSystem<tl::io::System>();
-        return (ioSystem->getFileType(extension) == tl::io::FileType::Movie);
-    }
-
-    // Given a frame extension, return true if a possible audio file.
-    bool is_valid_audio(
-        const std::string& ext,
-        const std::shared_ptr<tl::system::Context>& context)
-    {
-        std::string extension = tl::string::toLower(ext);
-        if (extension[0] != '.')
-            extension = '.' + extension;
-
-        auto ioSystem = context->getSystem<tl::io::System>();
-        return (ioSystem->getFileType(extension) == tl::io::FileType::Audio);
-
-        return false;
-    }
-
-    // Given a frame extension, return true if a possible audio file.
-    bool is_valid_subtitle(const std::string& ext)
-    {
-        std::string tmp = ext;
-
-        std::string extension = tl::string::toLower(ext);
-        if (extension[0] != '.')
-            extension = '.' + extension;
-
-        // @todo: add subtitle support to tlRender.
-        if (extension == ".srt" || extension == ".sub" || extension == ".ass" ||
-            extension == ".vtt")
-            return true;
-
-        return false;
-    }
-
-    // Given a frame extension, return true if a possible movie file.
-    bool is_valid_movie(const std::string& ext)
-    {
-        auto context = App::app->getContext();
-        return is_valid_movie(ext, context);
-    }
-
-    // Given a frame extension, return true if a possible audio file.
-    bool is_valid_audio(const std::string& ext)
-    {
-        auto context = App::app->getContext();
-        return is_valid_audio(ext, context);
-    }
-
-    bool is_valid_sequence(const std::string& filename)
-    {
-        std::string root, frame, view, ext;
-        bool ok = split_sequence(root, frame, view, ext, filename);
-        if (ext == "mrv2s" || ext == "otio" || ext == "prefs")
-            return false;
-        return ok;
-    }
-
-    bool is_directory(const std::string& dir)
-    {
-        return fs::is_directory(dir);
+        return out;
     }
 
     int padded_digits(const std::string& frame)
@@ -137,22 +52,22 @@ namespace mrv
 
     std::string commentCharacter(const std::string& input, const char match)
     {
-        std::string result;
+        std::string out;
 
         for (char c : input)
         {
             if (c == match)
             {
-                result += "\\";
-                result += match;
+                out += "\\";
+                out += match;
             }
             else
             {
-                result += c;
+                out += c;
             }
         }
 
-        return result;
+        return out;
     }
 
     void parse_directory(
@@ -178,12 +93,16 @@ namespace mrv
 
         for (const auto& file : files)
         {
-            bool ok = mrv::split_sequence(root, frame, view, ext, file);
-            if (is_valid_movie(ext))
+            file::Path path(file);
+            const std::string root = path.getBaseName();
+            const std::string frame = path.getNumber();
+            const std::string view = ""; // @todo: path.getView();
+            const std::string ext = path.getExtension();
+            if (file::isMovie(ext))
                 movies.push_back(file);
-            else if (is_valid_audio(ext))
+            else if (file::isAudio(ext))
                 audios.push_back(file);
-            else if (ok)
+            else if (file::isSequence(file))
             {
                 Sequence s;
                 s.root = root;

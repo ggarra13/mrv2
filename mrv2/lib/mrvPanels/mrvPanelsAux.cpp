@@ -2,37 +2,25 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <limits>
-
-#include <tlCore/StringFormat.h>
-
 #include "mrvPanelsAux.h"
-
-#include "mrViewer.h"
 
 namespace mrv
 {
-
-    std::string getLayerName(uint16_t layerId, ViewerUI* ui)
+    namespace panel
     {
-        std::string layer;
-        unsigned numLayers = ui->uiColorChannel->children();
-        if (layerId == std::numeric_limits<uint16_t>::max())
-            layerId = 0;
-        if (layerId < numLayers)
+
+        std::string getLayerName(
+            const std::shared_ptr<FilesModelItem>& item, const uint16_t layerId)
         {
-            layer = "\n";
-            layer += ui->uiColorChannel->child(layerId)->label();
+            if (!item || layerId >= item->videoLayers.size())
+                return "";
+
+            std::string layer = item->videoLayers[layerId];
+            if (layer == "Default" || layer == "A,B,G,R" || layer == "B,G,R")
+                layer = "Color";
+            return "\n" + layer;
         }
-        else if (layerId == 0 && numLayers == 0)
-        {
-            layer = "\nColor";
-        }
-        else if (layerId >= ui->uiColorChannel->children())
-        {
-            layer = tl::string::Format("\nLayer Number={0}").arg(layerId);
-        }
-        return layer;
-    }
+
+    } // namespace panel
 
 } // namespace mrv

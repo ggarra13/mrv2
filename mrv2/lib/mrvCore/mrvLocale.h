@@ -4,8 +4,6 @@
 #include <clocale>
 #include <mutex>
 
-#define StoreLocale mrv::locale::SetAndRestore saved;
-
 namespace mrv
 {
     namespace locale

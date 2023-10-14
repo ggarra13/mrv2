@@ -12,31 +12,36 @@ namespace mrv
 {
     class HorSlider;
 
-    class Stereo3DPanel : public PanelWidget
+    namespace panel
     {
-    public:
-        Stereo3DPanel(ViewerUI* ui);
-        ~Stereo3DPanel();
 
-        void setStereo3DOptions(const Stereo3DOptions& value);
+        class Stereo3DPanel : public PanelWidget
+        {
+        public:
+            Stereo3DPanel(ViewerUI* ui);
+            ~Stereo3DPanel();
 
-        void add_controls() override;
+            void setStereo3DOptions(const Stereo3DOptions& value);
 
-        void refresh();
+            void add_controls() override;
 
-        void redraw();
+            void refresh();
 
-        void stereo3DThumbnail(
-            const int64_t id,
-            const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&
-                thumbnails,
-            ClipButton* w);
+            void redraw();
 
-    private:
-        void cancel_thumbnails();
-        void clear_controls();
+            void stereo3DThumbnail(
+                const int64_t id,
+                const std::vector<
+                    std::pair<otime::RationalTime, Fl_RGB_Image*> >& thumbnails,
+                ClipButton* w);
 
-        MRV2_PRIVATE();
-    };
+        private:
+            void cancel_thumbnails();
+            void clear_controls();
+
+            MRV2_PRIVATE();
+        };
+
+    } // namespace panel
 
 } // namespace mrv

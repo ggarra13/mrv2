@@ -15,52 +15,57 @@ class ViewerUI;
 
 namespace mrv
 {
-    using namespace tl;
-
-    class PDFCreator
+    namespace pdf
     {
-    protected:
-        const int kThumbnailWidth = 175;
-        const int kThumbnailHeight = 80;
 
-    public:
-        PDFCreator(
-            const std::string& fileName,
+        using namespace tl;
+
+        class Creator
+        {
+        protected:
+            const int kThumbnailWidth = 175;
+            const int kThumbnailHeight = 80;
+
+        public:
+            Creator(
+                const std::string& fileName,
+                const std::vector< std::shared_ptr< draw::Annotation >>&
+                    annotations,
+                const ViewerUI* ui);
+
+            bool create();
+
+        private:
+            std::string file;
+            const ViewerUI* ui;
             const std::vector< std::shared_ptr< draw::Annotation >>&
-                annotations,
-            const ViewerUI* ui);
+                annotations;
 
-        bool create();
+            otime::RationalTime time;
 
-    private:
-        std::string file;
-        const ViewerUI* ui;
-        const std::vector< std::shared_ptr< draw::Annotation >>& annotations;
+            unsigned pageNumber = 1;
 
-        otime::RationalTime time;
+            unsigned thumbnailHeight;
 
-        unsigned pageNumber = 1;
+            HPDF_Doc pdf;
+            HPDF_Page page;
+            HPDF_Font time_font;
+            HPDF_Font note_font;
+            HPDF_REAL tw;
+            HPDF_REAL height;
+            HPDF_REAL width;
+            HPDF_Point P;
+            HPDF_Point margin;
+            HPDF_Image image;
 
-        unsigned thumbnailHeight;
+            void addPage();
+            void flip_image_y(
+                GLubyte* image, const int width, const int height,
+                const int channels = 3);
+            void create_thumbnail(size_t W, size_t H, const HPDF_BYTE* buffer);
+            void print_time(HPDF_Font font, const ViewerUI* ui);
+            void print_note(HPDF_Font font, const std::string& text);
+        };
 
-        HPDF_Doc pdf;
-        HPDF_Page page;
-        HPDF_Font time_font;
-        HPDF_Font note_font;
-        HPDF_REAL tw;
-        HPDF_REAL height;
-        HPDF_REAL width;
-        HPDF_Point P;
-        HPDF_Point margin;
-        HPDF_Image image;
-
-        void addPage();
-        void flip_image_y(
-            GLubyte* image, const int width, const int height,
-            const int channels = 3);
-        void create_thumbnail(size_t W, size_t H, const HPDF_BYTE* buffer);
-        void print_time(HPDF_Font font, const ViewerUI* ui);
-        void print_note(HPDF_Font font, const std::string& text);
-    };
-
+    } // namespace pdf
 } // namespace mrv

@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <tlTimeline/BackgroundOptions.h>
+
 #include "mrvDraw/Annotation.h"
 
 class ViewerUI;
@@ -14,6 +16,7 @@ namespace mrv
 
     struct TimelineViewport::Private
     {
+        static timeline::BackgroundOptions backgroundOptions;
         timeline::ColorConfigOptions colorConfigOptions;
         timeline::LUTOptions lutOptions;
         std::vector<tl::timeline::ImageOptions> imageOptions;
@@ -61,9 +64,6 @@ namespace mrv
 
         //! Right mouse menu
         Fl_Menu_Button* popupMenu = nullptr;
-
-        //! Compositing switch (render on black or on background color)
-        static bool blackBackground;
 
         //! Temporary help text displayed in HUD
         static std::string helpText;

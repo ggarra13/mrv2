@@ -29,6 +29,29 @@ echo "SSH KEY IS: ${SSH_KEY}"
 
 get_kernel
 
+
+#
+# Get the date in English
+#
+export oldTZ=$TZ
+export oldTIME=$LC_TIME
+export oldALL=$LC_ALL
+export LC_ALL=en_US.UTF-8
+export LC_TIME=en_US.UTF-8
+
+#
+# Report the date for 
+#
+export TZ="America/Argentina/Buenos_Aires"
+date=`date "+%e of %B of %Y at %H:%M:%S Buenos Aires, Argentina (%z UTC/GMT)" | awk '{sub(/^ */, "", $1); print}'`
+git_hash=`git rev-parse HEAD`
+export TZ=$oldTZ
+export LC_TIME=$oldTIME
+export LC_ALL=$oldALL
+
+echo "DATE: ${date}"
+
+
 # Extract cmake/version.cmake into mrv2_VERSION
 extract_version
 echo "mrv2 VERSION=$mrv2_VERSION"
@@ -76,27 +99,6 @@ upload_file()
 
 }
 
-
-
-#
-# Get the date in English
-#
-export oldTZ=$TZ
-export oldTIME=$LC_TIME
-export oldALL=$LC_ALL
-export LC_ALL=en_US.UTF-8
-export LC_TIME=en_US.UTF-8
-
-#
-# Report the date for 
-#
-export TZ="America/Argentina/Buenos_Aires"
-date=`date "+%e of %B of %Y at %H:%M:%S Buenos Aires, Argentina (%z UTC/GMT)" | awk '{sub(/^ */, "", $1); print}'`
-git_hash=`git rev-parse HEAD`
-export TZ=$oldTZ
-export LC_TIME=$oldTIME
-export LC_ALL=$oldALL
-
 #
 # Create the README.md file
 #
@@ -140,16 +142,13 @@ Enjoy!
 
 EOF
 
-# Output the README.md to the log so far.
-cat README.md
-
 HISTORY=../mrv2/docs/HISTORY.md
 
 # Find the line number of "v${mrv2_VERSION}" in the file
-start_line=$(grep -n "v${mrv2_VERSION}" "$HISTORY" | cut -d':' -f1)
+start_line=$(grep -n "^v${mrv2_VERSION}" "$HISTORY" | cut -d':' -f1)
 
 # Find the line numbers of all "v0.*.*" occurrences in the file
-end_lines=$(grep -n "v0\.[0-9]\+\.[0-9]\+" "$HISTORY" | cut -d':' -f1)
+end_lines=$(grep -n "^v0\.[0-9]\+\.[0-9]\+" "$HISTORY" | cut -d':' -f1)
 
 # Convert the end_lines string into an array
 IFS=$'\n' read -rd '' -a end_lines <<< "$end_lines"
@@ -161,8 +160,6 @@ start_line=$((start_line + 2))
 
 # Use sed to extract the text between the two lines and store it in a variable
 release_notes=$(sed -n "$start_line,${end_line}p" "$HISTORY")
-
-
 
 echo "$release_notes" >> README.md
 

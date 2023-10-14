@@ -12,23 +12,26 @@ class ViewerUI;
 
 namespace mrv
 {
-
-    class ColorPanel : public PanelWidget
+    namespace panel
     {
-    public:
-        ColorPanel(ViewerUI* ui);
-        ~ColorPanel();
+        class ColorPanel : public PanelWidget
+        {
+        public:
+            ColorPanel(ViewerUI* ui);
+            ~ColorPanel();
 
-        void setLUTOptions(const timeline::LUTOptions&);
+            void setLUTOptions(const timeline::LUTOptions&);
 
-        void setDisplayOptions(const timeline::DisplayOptions&);
+            void setDisplayOptions(const timeline::DisplayOptions&);
 
-        void redraw() noexcept;
+            void redraw() noexcept;
 
-        void add_controls() override;
+            void add_controls() override;
 
-    private:
-        MRV2_PRIVATE();
-    };
+        private:
+            MRV2_PRIVATE();
+        };
+
+    } // namespace panel
 
 } // namespace mrv

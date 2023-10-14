@@ -36,136 +36,142 @@ namespace mrv
     class CollapsibleGroup;
     class Table;
 
-    class ImageInfoPanel : public PanelWidget
+    namespace panel
     {
 
-    public:
-        ImageInfoPanel(ViewerUI* ui);
-        ~ImageInfoPanel();
+        class ImageInfoPanel : public PanelWidget
+        {
 
-        void refresh();
+        public:
+            ImageInfoPanel(ViewerUI* ui);
+            ~ImageInfoPanel();
 
-        TimelinePlayer* timelinePlayer() const;
-        void setTimelinePlayer(TimelinePlayer* p);
+            void refresh();
 
-        void save() override;
+            TimelinePlayer* timelinePlayer() const;
+            void setTimelinePlayer(TimelinePlayer* p);
 
-        void scroll_to(int w, int h);
+            void save() override;
 
-        Pack* get_pack() const { return g->get_pack(); };
+            void scroll_to(int w, int h);
 
-        ViewerUI* main() const;
+            Pack* get_pack() const { return g->get_pack(); };
 
-        void set_tabs() const;
+            ViewerUI* main() const;
 
-    protected:
-        Fl_Color get_title_color();
-        Fl_Color get_widget_color();
+            void set_tabs() const;
 
-        void clear_callback_data();
+        protected:
+            Fl_Color get_title_color();
+            Fl_Color get_widget_color();
 
-        void hide_tabs();
+            void clear_callback_data();
 
-        static void enum_cb(mrv::PopupMenu* w, ImageInfoPanel* v);
+            void hide_tabs();
 
-        static void toggle_tab(Fl_Widget* w, void* data);
-        static void int_slider_cb(Fl_Slider* w, void* data);
-        static void float_slider_cb(Fl_Slider* w, void* data);
+            static void enum_cb(mrv::PopupMenu* w, ImageInfoPanel* v);
 
-        double to_memory(long double value, const char*& extension);
+            static void toggle_tab(Fl_Widget* w, void* data);
+            static void int_slider_cb(Fl_Slider* w, void* data);
+            static void float_slider_cb(Fl_Slider* w, void* data);
 
-        Table* add_browser(mrv::CollapsibleGroup* g);
-        Table* add_browser(mrv::CollapsibleGroup* g, const char* label);
+            double to_memory(long double value, const char*& extension);
 
-        void add_button(
-            const char* name, const char* tooltip, Fl_Callback* callback = NULL,
-            Fl_Callback* callback2 = NULL);
+            Table* add_browser(mrv::CollapsibleGroup* g);
+            Table* add_browser(mrv::CollapsibleGroup* g, const char* label);
 
-        void add_scale(
-            const char* name, const char* tooltip, int pressed, int num_scales,
-            Fl_Callback* callback = NULL);
+            void add_button(
+                const char* name, const char* tooltip,
+                Fl_Callback* callback = NULL, Fl_Callback* callback2 = NULL);
 
-        void add_ocio_ics(
-            const char* name, const char* tooltip, const char* content,
-            const bool editable = true, Fl_Callback* callback = NULL);
+            void add_scale(
+                const char* name, const char* tooltip, int pressed,
+                int num_scales, Fl_Callback* callback = NULL);
 
-        void add_text(
-            const char* name, const char* tooltip, const char* content,
-            const bool editable = false, const bool active = false,
-            Fl_Callback* callback = NULL);
-        void add_text(
-            const char* name, const char* tooltip, const std::string& content,
-            const bool editable = false, const bool active = false,
-            Fl_Callback* callback = NULL);
-        void add_float(
-            const char* name, const char* tooltip, const float content,
-            const bool editable = false, const bool active = false,
-            Fl_Callback* callback = NULL, const float minV = 0.0f,
-            const float maxV = 1.0f, const int when = FL_WHEN_RELEASE,
-            const mrv::Slider::SliderType type = mrv::Slider::kNORMAL);
-        void add_rect(
-            const char* name, const char* tooltip,
-            const tl::math::Box2i& content, const bool editable = false,
-            Fl_Callback* callback = NULL);
+            void add_ocio_ics(
+                const char* name, const char* tooltip, const char* content,
+                const bool editable = true, Fl_Callback* callback = NULL);
 
-        void add_time(
-            const char* name, const char* tooltip,
-            const otime::RationalTime& content, const bool editable = false);
+            void add_text(
+                const char* name, const char* tooltip, const char* content,
+                const bool editable = false, const bool active = false,
+                Fl_Callback* callback = NULL);
+            void add_text(
+                const char* name, const char* tooltip,
+                const std::string& content, const bool editable = false,
+                const bool active = false, Fl_Callback* callback = NULL);
+            void add_float(
+                const char* name, const char* tooltip, const float content,
+                const bool editable = false, const bool active = false,
+                Fl_Callback* callback = NULL, const float minV = 0.0f,
+                const float maxV = 1.0f, const int when = FL_WHEN_RELEASE,
+                const mrv::Slider::SliderType type = mrv::Slider::kNORMAL);
+            void add_rect(
+                const char* name, const char* tooltip,
+                const tl::math::Box2i& content, const bool editable = false,
+                Fl_Callback* callback = NULL);
 
-        void add_enum(
-            const char* name, const char* tooltip, const size_t content,
-            const char* const* options, const size_t num,
-            const bool editable = false, Fl_Callback* callback = NULL);
+            void add_time(
+                const char* name, const char* tooltip,
+                const otime::RationalTime& content,
+                const bool editable = false);
 
-        void add_enum(
-            const char* name, const char* tooltip, const std::string& content,
-            std::vector<std::string>& options, const bool editable = false,
-            Fl_Callback* callback = NULL);
+            void add_enum(
+                const char* name, const char* tooltip, const size_t content,
+                const char* const* options, const size_t num,
+                const bool editable = false, Fl_Callback* callback = NULL);
 
-        void
-        add_int64(const char* name, const char* tooltip, const int64_t content);
+            void add_enum(
+                const char* name, const char* tooltip,
+                const std::string& content, std::vector<std::string>& options,
+                const bool editable = false, Fl_Callback* callback = NULL);
 
-        void add_int(
-            const char* name, const char* tooltip, const int content,
-            const bool editable = false, const bool active = true,
-            Fl_Callback* callback = NULL, const int minV = 0,
-            const int maxV = 10, const int when = FL_WHEN_RELEASE);
-        void add_int(
-            const char* name, const char* tooltip, const unsigned int content,
-            const bool editable = false, const bool active = true,
-            Fl_Callback* callback = NULL, const unsigned int minV = 0,
-            const unsigned int maxV = 9999);
-        void add_bool(
-            const char* name, const char* tooltip, const bool content,
-            const bool editable = false, Fl_Callback* callback = NULL);
+            void add_int64(
+                const char* name, const char* tooltip, const int64_t content);
 
-        void add_controls() override;
-        void fill_data();
+            void add_int(
+                const char* name, const char* tooltip, const int content,
+                const bool editable = false, const bool active = true,
+                Fl_Callback* callback = NULL, const int minV = 0,
+                const int maxV = 10, const int when = FL_WHEN_RELEASE);
+            void add_int(
+                const char* name, const char* tooltip,
+                const unsigned int content, const bool editable = false,
+                const bool active = true, Fl_Callback* callback = NULL,
+                const unsigned int minV = 0, const unsigned int maxV = 9999);
+            void add_bool(
+                const char* name, const char* tooltip, const bool content,
+                const bool editable = false, Fl_Callback* callback = NULL);
 
-    public:
-        Fl_Flex* flex;
-        CollapsibleGroup* m_image;
-        CollapsibleGroup* m_video;
-        CollapsibleGroup* m_audio;
-        CollapsibleGroup* m_subtitle;
-        CollapsibleGroup* m_attributes;
-        Fl_Input* m_entry;
-        Fl_Choice* m_type;
+            void add_controls() override;
+            void fill_data();
 
-    protected:
-        int kMiddle;
-        Table* m_curr;
-        Fl_Color m_color;
-        unsigned int group;
-        unsigned int row;
-        unsigned int X, Y, W, H;
-        TimelinePlayer* player = nullptr;
+        public:
+            Fl_Flex* flex;
+            CollapsibleGroup* m_image;
+            CollapsibleGroup* m_video;
+            CollapsibleGroup* m_audio;
+            CollapsibleGroup* m_subtitle;
+            CollapsibleGroup* m_attributes;
+            Fl_Input* m_entry;
+            Fl_Choice* m_type;
 
-    public:
-        Fl_Menu_Button* menu = nullptr;
+        protected:
+            int kMiddle;
+            Table* m_curr;
+            Fl_Color m_color;
+            unsigned int group;
+            unsigned int row;
+            unsigned int X, Y, W, H;
+            TimelinePlayer* player = nullptr;
 
-    private:
-        MRV2_PRIVATE();
-    };
+        public:
+            Fl_Menu_Button* menu = nullptr;
+
+        private:
+            MRV2_PRIVATE();
+        };
+
+    } // namespace panel
 
 } // namespace mrv

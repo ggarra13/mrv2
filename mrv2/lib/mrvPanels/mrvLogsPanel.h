@@ -13,24 +13,28 @@ namespace mrv
     class LogDisplay;
     extern LogDisplay* uiLogDisplay;
 
-    class LogsPanel : public PanelWidget
+    namespace panel
     {
-    public:
-        LogsPanel(ViewerUI* ui);
-        ~LogsPanel();
 
-        void add_controls() override;
-        void dock() override;
-        void undock() override;
+        class LogsPanel : public PanelWidget
+        {
+        public:
+            LogsPanel(ViewerUI* ui);
+            ~LogsPanel();
 
-        void save() override;
+            void add_controls() override;
+            void dock() override;
+            void undock() override;
 
-        void info(const std::string& msg) const;
-        void warning(const std::string& msg) const;
-        void error(const std::string& msg) const;
+            void save() override;
 
-    private:
-        MRV2_PRIVATE();
-    };
+            void info(const std::string& msg) const;
+            void warning(const std::string& msg) const;
+            void error(const std::string& msg) const;
 
+        private:
+            MRV2_PRIVATE();
+        };
+
+    } // namespace panel
 } // namespace mrv

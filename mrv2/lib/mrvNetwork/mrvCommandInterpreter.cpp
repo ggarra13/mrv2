@@ -6,7 +6,7 @@
 
 #include <FL/Fl_Multiline_Input.H>
 
-#include "mrvCore/mrvUtil.h"
+#include "mrvCore/mrvFile.h"
 
 #include "mrvFl/mrvCallbacks.h"
 #include "mrvFl/mrvIO.h"
@@ -106,6 +106,7 @@ namespace mrv
 
         try
         {
+            using namespace panel;
 
             tcp->lock();
 
@@ -356,9 +357,7 @@ namespace mrv
                     return;
                 }
                 int value = message["value"];
-
                 {
-                    // player->setVideoLayer(value);
                     ui->uiColorChannel->value(value);
                     ui->uiColorChannel->do_callback();
                 }
@@ -506,10 +505,10 @@ namespace mrv
 
                 // If we cannot read the config file, keep the local one
                 replace_path(o.fileName);
-                if (o.fileName.empty() || !!is_readable(o.fileName))
+                if (o.fileName.empty() || !file::isReadable(o.fileName))
                 {
                     o.fileName = local.fileName;
-                    if (o.fileName.empty() || !is_readable(o.fileName))
+                    if (o.fileName.empty() || !file::isReadable(o.fileName))
                     {
                         o.fileName = prefs->uiPrefsOCIOConfig->value();
                     }
@@ -526,6 +525,12 @@ namespace mrv
                 }
                 const tl::timeline::DisplayOptions& o = message["value"];
                 app->setDisplayOptions(o);
+                ui->uiMain->fill_menu(ui->uiMenuBar);
+            }
+            else if (c == "setBackgroundOptions")
+            {
+                const tl::timeline::BackgroundOptions& o = message["value"];
+                view->setBackgroundOptions(o);
                 ui->uiMain->fill_menu(ui->uiMenuBar);
             }
             else if (c == "setCompareOptions")
@@ -1138,17 +1143,15 @@ namespace mrv
                     tcp->unlock();
                     return;
                 }
-                editModeH = message["height"];
                 EditMode value = message["value"];
                 editMode = value;
+                std::cerr << "message " << message << std::endl;
+                editModeH = message["height"];
                 bool presentation = ui->uiView->getPresentationMode();
                 if (!presentation)
                     ui->uiView->resizeWindow();
 
                 set_edit_mode_cb(value, ui);
-                // if (value == EditMode::kTimeline)
-                //     ui->uiEdit->value(1);
-                // ui->uiEdit->do_callback();
             }
             else if (c == "Network Panel")
             {
@@ -1185,9 +1188,11 @@ namespace mrv
                     tcp->unlock();
                     return;
                 }
+#ifdef MRV2_PYBIND11
                 bool value = message["value"];
                 if ((!value && pythonPanel) || (value && !pythonPanel))
                     python_panel_cb(nullptr, ui);
+#endif
             }
             else if (c == "Playlist Panel")
             {

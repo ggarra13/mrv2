@@ -9,10 +9,6 @@
 #include <filesystem>
 namespace fs = std::filesystem;
 
-#if defined(TLRENDER_USD)
-#    include <tlIO/USD.h>
-#endif // TLRENDER_USD
-
 #include <tlCore/Memory.h>
 #include <tlCore/StringFormat.h>
 
@@ -23,6 +19,9 @@ namespace fs = std::filesystem;
 
 #include "mrvFl/mrvIO.h"
 
+#if defined(TLRENDER_USD)
+#    include "mrvCore/mrvUSD.h"
+#endif // TLRENDER_USD
 #include "mrvApp/mrvSettingsObject.h"
 
 namespace mrv
@@ -90,18 +89,18 @@ namespace mrv
         p.defaultValues["EnvironmentMap/Spin"] = 1;
         p.defaultValues["TCP/Control/Port"] = std::string("55150");
 #if defined(TLRENDER_USD)
-        p.defaultValues["usd/renderWidth"] =
+        p.defaultValues["USD/renderWidth"] =
             static_cast<int>(usd::RenderOptions().renderWidth);
-        p.defaultValues["usd/complexity"] =
+        p.defaultValues["USD/complexity"] =
             static_cast<float>(usd::RenderOptions().complexity);
-        p.defaultValues["usd/drawMode"] =
+        p.defaultValues["USD/drawMode"] =
             static_cast<int>(usd::RenderOptions().drawMode);
-        p.defaultValues["usd/enableLighting"] =
+        p.defaultValues["USD/enableLighting"] =
             static_cast<int>(usd::RenderOptions().enableLighting);
-        p.defaultValues["usd/stageCacheCount"] =
-            static_cast<int>(usd::RenderOptions().stageCacheCount);
-        p.defaultValues["usd/diskCacheByteCount"] = static_cast<int>(
-            usd::RenderOptions().diskCacheByteCount / memory::gigabyte);
+        p.defaultValues["USD/stageCache"] =
+            static_cast<int>(usd::RenderOptions().stageCache);
+        p.defaultValues["USD/diskCache"] =
+            static_cast<int>(usd::RenderOptions().diskCache / memory::gigabyte);
 #endif
         p.defaultValues[kTextFont] = 0;
         p.defaultValues[kFontSize] = 52;

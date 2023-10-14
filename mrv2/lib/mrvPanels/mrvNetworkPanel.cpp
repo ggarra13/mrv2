@@ -9,6 +9,8 @@
 #include <FL/Fl_Flex.H>
 
 #include "mrvWidgets/mrvFunctional.h"
+#include "mrvWidgets/mrvInput.h"
+#include "mrvWidgets/mrvIntInput.h"
 #include "mrvWidgets/mrvPack.h"
 
 #include "mrvFl/mrvIO.h"
@@ -33,243 +35,244 @@ namespace mrv
 {
 
 #ifdef MRV2_NETWORK
-    struct NetworkPanel::Private
+    namespace panel
     {
-        Fl_Button* createButton = nullptr;
-        Fl_Group* hostGroup = nullptr;
-        Fl_Input* host = nullptr;
-        PopupMenu* hostMenu = nullptr;
-        Fl_Group* portGroup = nullptr;
-        Fl_Int_Input* port = nullptr;
-        PopupMenu* typeMenu = nullptr;
-        Type type = Type::Client;
-    };
 
-    NetworkPanel::NetworkPanel(ViewerUI* ui) :
-        _r(new Private),
-        PanelWidget(ui)
-    {
-        add_group("Network");
-
-        Fl_SVG_Image* svg = load_svg("Network.svg");
-        g->image(svg);
-
-        g->callback(
-            [](Fl_Widget* w, void* d)
-            {
-                ViewerUI* ui = static_cast< ViewerUI* >(d);
-                delete networkPanel;
-                networkPanel = nullptr;
-                ui->uiMain->fill_menu(ui->uiMenuBar);
-            },
-            ui);
-    }
-
-    NetworkPanel::~NetworkPanel() {}
-
-    void NetworkPanel::add_controls()
-    {
-        TLRENDER_P();
-
-        SettingsObject* settingsObject = p.ui->app->settingsObject();
-
-        std_any value;
-
-        Fl_Input* i;
-        Fl_Int_Input* in;
-        Fl_Button* b;
-        PopupMenu* m;
-
-        g->begin();
-
-        int X = 80 * g->w() / 270;
-        int Y = 20;
-
-        Fl_Group* gp = new Fl_Group(g->x(), Y, g->w(), 20);
-
-        Fl_Box* box = new Fl_Box(g->x(), Y, 70, 20, _("Type"));
-        box->labelsize(12);
-        box->align(FL_ALIGN_INSIDE | FL_ALIGN_RIGHT);
-
-        const char* kLabel = _("Client");
-        if (_r->type == Type::Server || dynamic_cast< Server* >(tcp))
+        struct NetworkPanel::Private
         {
-            _r->type = Type::Server;
-            kLabel = _("Server");
-        }
+            Fl_Button* createButton = nullptr;
+            Fl_Group* hostGroup = nullptr;
+            Input* host = nullptr;
+            PopupMenu* hostMenu = nullptr;
+            Fl_Group* portGroup = nullptr;
+            Fl_Int_Input* port = nullptr;
+            PopupMenu* typeMenu = nullptr;
+            Type type = Type::Client;
+        };
 
-        auto pW = new Widget<PopupMenu>(g->x() + X, Y, g->w() - X, 20, kLabel);
-        m = _r->typeMenu = pW;
-        m->add(_("Client"));
-        m->add(_("Server"));
-        m->value(static_cast<int>(_r->type));
+        NetworkPanel::NetworkPanel(ViewerUI* ui) :
+            _r(new Private),
+            PanelWidget(ui)
+        {
+            add_group("Network");
 
-        gp->end();
+            Fl_SVG_Image* svg = load_svg("Network.svg");
+            g->image(svg);
 
-        pW->callback(
-            [=](auto t)
-            {
-                _r->type = static_cast<Type>(t->value());
-                refresh();
-            });
-
-        Y += 20;
-
-        _r->hostGroup = new Fl_Group(g->x(), Y, g->w(), 30);
-        auto iW = new Widget< Fl_Input >(
-            g->x() + X, Y + 5, g->w() - X - 30, 20, _("Host"));
-        _r->host = i = iW;
-        i->tooltip(_("Host name or IP to connect to.  "
-                     "For example: 127.0.0.1"));
-        i->color((Fl_Color)0xf98a8a800);
-        i->textcolor((Fl_Color)56);
-        i->labelsize(12);
-        iW->callback(
-            [=](auto o)
-            {
-                std::string port;
-                std::string host = o->value();
-                parse_hostname(host, port);
-                if (!port.empty())
+            g->callback(
+                [](Fl_Widget* w, void* d)
                 {
-                    _r->port->value(port.c_str());
-                }
-                o->value(host.c_str());
-            });
-
-        if (dynamic_cast< Client* >(tcp))
-        {
-            Client* client = dynamic_cast< Client* >(tcp);
-            const std::string& host = client->host();
-            _r->host->value(host.c_str());
+                    ViewerUI* ui = static_cast< ViewerUI* >(d);
+                    delete networkPanel;
+                    networkPanel = nullptr;
+                    ui->uiMain->fill_menu(ui->uiMenuBar);
+                },
+                ui);
         }
 
-        auto hM =
-            new Widget<PopupMenu>(g->x() + g->w() - 30, Y + 5, 30, 20, "@2>");
-        m = _r->hostMenu = hM;
-        m->disable_glyph();
-        m->disable_label();
-        m->tooltip(_("Previously used Hosts"));
-        for (const auto& host : settingsObject->recentHosts())
+        NetworkPanel::~NetworkPanel() {}
+
+        void NetworkPanel::add_controls()
         {
-            m->add(host.c_str());
-        }
-        hM->callback(
-            [=](auto o)
+            TLRENDER_P();
+
+            SettingsObject* settingsObject = p.ui->app->settingsObject();
+
+            std_any value;
+
+            Input* i;
+            IntInput* in;
+            Fl_Button* b;
+            PopupMenu* m;
+
+            g->begin();
+
+            int X = 80 * g->w() / 270;
+            int Y = 20;
+
+            Fl_Group* gp = new Fl_Group(g->x(), Y, g->w(), 20);
+
+            Fl_Box* box = new Fl_Box(g->x(), Y, 70, 20, _("Type"));
+            box->labelsize(12);
+            box->align(FL_ALIGN_INSIDE | FL_ALIGN_RIGHT);
+
+            const char* kLabel = _("Client");
+            if (_r->type == Type::Server || dynamic_cast< Server* >(tcp))
             {
-                const Fl_Menu_Item* item = o->mvalue();
-                _r->host->value(item->label());
-            });
-        _r->hostGroup->end();
+                _r->type = Type::Server;
+                kLabel = _("Server");
+            }
 
-        Y += 30;
+            auto pW =
+                new Widget<PopupMenu>(g->x() + X, Y, g->w() - X, 20, kLabel);
+            m = _r->typeMenu = pW;
+            m->add(_("Client"));
+            m->add(_("Server"));
+            m->value(static_cast<int>(_r->type));
 
-        if (_r->type == Type::Server)
-        {
-            _r->hostGroup->hide();
-        }
+            gp->end();
 
-        _r->portGroup = new Fl_Group(g->x(), Y, g->w(), 30);
-        auto inV =
-            new Widget<Fl_Int_Input>(g->x() + X, Y + 5, 80, 20, _("Port"));
-        _r->port = in = inV;
-
-        value = settingsObject->value("TCP/Control/Port");
-        std::string portNumber =
-            std_any_empty(value) ? "55150" : std_any_cast<std::string>(value);
-
-        in->value(portNumber.c_str());
-        in->tooltip(_("Port to connect to.  Make sure your firewall and router "
-                      "allows read/write through it."));
-        in->color((Fl_Color)0xf98a8a800);
-        in->textcolor((Fl_Color)56);
-        in->labelsize(12);
-
-        inV->callback(
-            [=](auto w)
-            {
-                std::string value = w->value();
-                settingsObject->setValue("TCP/Control/Port", value);
-            });
-
-        _r->portGroup->end();
-
-        Y += 30;
-
-        const char* kButtonLabel = _("Connect");
-        if (_r->type == Type::Server)
-            kButtonLabel = _("Create");
-        auto bW = new Widget<Fl_Button>(g->x(), Y, 30, 20, kButtonLabel);
-        b = _r->createButton = bW;
-        bW->callback(
-            [=](auto t)
-            {
-                if (dynamic_cast< DummyClient* >(tcp) == nullptr)
+            pW->callback(
+                [=](auto t)
                 {
-                    shutdown();
-                    return;
-                }
+                    _r->type = static_cast<Type>(t->value());
+                    refresh();
+                });
 
-                uint16_t port = atoi(_r->port->value());
+            Y += 20;
 
-                try
+            _r->hostGroup = new Fl_Group(g->x(), Y, g->w(), 30);
+            auto iW = new Widget< Input >(
+                g->x() + X, Y + 5, g->w() - X - 30, 20, _("Host"));
+            _r->host = i = iW;
+            i->tooltip(_("Host name or IP to connect to.  "
+                         "For example: 127.0.0.1"));
+            iW->callback(
+                [=](auto o)
                 {
-                    if (_r->type == Type::Client)
+                    std::string port;
+                    std::string host = o->value();
+                    parse_hostname(host, port);
+                    if (!port.empty())
                     {
-                        std::string host = _r->host->value();
-                        tcp = new Client(host, port);
-                        settingsObject->addRecentHost(host);
+                        _r->port->value(port.c_str());
                     }
-                    else
-                    {
-                        tcp = new Server(port);
-                    }
-                    deactivate();
-                }
-                catch (const std::exception& e)
+                    o->value(host.c_str());
+                });
+
+            if (dynamic_cast< Client* >(tcp))
+            {
+                Client* client = dynamic_cast< Client* >(tcp);
+                const std::string& host = client->host();
+                _r->host->value(host.c_str());
+            }
+
+            auto hM = new Widget<PopupMenu>(
+                g->x() + g->w() - 30, Y + 5, 30, 20, "@2>");
+            m = _r->hostMenu = hM;
+            m->disable_glyph();
+            m->disable_label();
+            m->tooltip(_("Previously used Hosts"));
+            for (const auto& host : settingsObject->recentHosts())
+            {
+                m->add(host.c_str());
+            }
+            hM->callback(
+                [=](auto o)
                 {
-                    LOG_ERROR(e.what());
-                }
-            });
+                    const Fl_Menu_Item* item = o->mvalue();
+                    _r->host->value(item->label());
+                });
+            _r->hostGroup->end();
 
-        g->end();
+            Y += 30;
 
-        if (dynamic_cast< DummyClient* >(tcp) == nullptr)
-        {
-            deactivate();
+            if (_r->type == Type::Server)
+            {
+                _r->hostGroup->hide();
+            }
+
+            _r->portGroup = new Fl_Group(g->x(), Y, g->w(), 30);
+            auto inV =
+                new Widget<IntInput>(g->x() + X, Y + 5, 80, 20, _("Port"));
+            _r->port = in = inV;
+
+            value = settingsObject->value("TCP/Control/Port");
+            std::string portNumber = std_any_empty(value)
+                                         ? "55150"
+                                         : std_any_cast<std::string>(value);
+
+            in->value(portNumber.c_str());
+            in->tooltip(
+                _("Port to connect to.  Make sure your firewall and router "
+                  "allows read/write through it."));
+            inV->callback(
+                [=](auto w)
+                {
+                    std::string value = w->value();
+                    settingsObject->setValue("TCP/Control/Port", value);
+                });
+
+            _r->portGroup->end();
+
+            Y += 30;
+
+            const char* kButtonLabel = _("Connect");
+            if (_r->type == Type::Server)
+                kButtonLabel = _("Create");
+            auto bW = new Widget<Fl_Button>(g->x(), Y, 30, 20, kButtonLabel);
+            b = _r->createButton = bW;
+            bW->callback(
+                [=](auto t)
+                {
+                    if (dynamic_cast< DummyClient* >(tcp) == nullptr)
+                    {
+                        shutdown();
+                        return;
+                    }
+
+                    uint16_t port = atoi(_r->port->value());
+
+                    try
+                    {
+                        if (_r->type == Type::Client)
+                        {
+                            std::string host = _r->host->value();
+                            tcp = new Client(host, port);
+                            settingsObject->addRecentHost(host);
+                        }
+                        else
+                        {
+                            tcp = new Server(port);
+                        }
+                        deactivate();
+                    }
+                    catch (const std::exception& e)
+                    {
+                        LOG_ERROR(e.what());
+                    }
+                });
+
+            g->end();
+
+            if (dynamic_cast< DummyClient* >(tcp) == nullptr)
+            {
+                deactivate();
+            }
         }
-    }
 
-    void NetworkPanel::deactivate()
-    {
-        _r->typeMenu->deactivate();
-        _r->port->deactivate();
-        _r->hostGroup->deactivate();
+        void NetworkPanel::deactivate()
+        {
+            _r->typeMenu->deactivate();
+            _r->port->deactivate();
+            _r->hostGroup->deactivate();
 
-        const char* kButtonLabel = _("Disconnect");
-        if (dynamic_cast< Server* >(tcp))
-            kButtonLabel = _("Shutdown");
+            const char* kButtonLabel = _("Disconnect");
+            if (dynamic_cast< Server* >(tcp))
+                kButtonLabel = _("Shutdown");
 
-        _r->createButton->copy_label(kButtonLabel);
-        _p->ui->uiMain->fill_menu(_p->ui->uiMenuBar);
-    }
+            _r->createButton->copy_label(kButtonLabel);
+            _p->ui->uiMain->fill_menu(_p->ui->uiMenuBar);
+        }
 
-    void NetworkPanel::shutdown()
-    {
-        tcp->stop();
-        tcp->close();
-        delete tcp;
-        tcp = new DummyClient;
+        void NetworkPanel::shutdown()
+        {
+            tcp->stop();
+            tcp->close();
+            delete tcp;
+            tcp = new DummyClient;
 
-        const char* kButtonLabel = _("Connect");
-        if (_r->type == Type::Server)
-            kButtonLabel = _("Create");
-        _r->createButton->label(kButtonLabel);
+            const char* kButtonLabel = _("Connect");
+            if (_r->type == Type::Server)
+                kButtonLabel = _("Create");
+            _r->createButton->label(kButtonLabel);
 
-        _r->typeMenu->activate();
-        _r->port->activate();
-        _r->hostGroup->activate();
-    }
+            _r->typeMenu->activate();
+            _r->port->activate();
+            _r->hostGroup->activate();
+        }
+
+    } // namespace panel
 #endif
 
 } // namespace mrv

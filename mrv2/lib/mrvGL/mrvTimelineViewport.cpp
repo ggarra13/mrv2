@@ -46,6 +46,7 @@ namespace mrv
 {
     using namespace tl;
 
+    timeline::BackgroundOptions TimelineViewport::Private::backgroundOptions;
     EnvironmentMapOptions TimelineViewport::Private::environmentMapOptions;
     math::Box2i TimelineViewport::Private::selection =
         math::Box2i(0, 0, -1, -1);
@@ -58,7 +59,6 @@ namespace mrv
     bool TimelineViewport::Private::safeAreas = false;
     bool TimelineViewport::Private::dataWindow = false;
     bool TimelineViewport::Private::displayWindow = false;
-    bool TimelineViewport::Private::blackBackground = false;
     std::string TimelineViewport::Private::helpText;
     float TimelineViewport::Private::helpTextFade;
     bool TimelineViewport::Private::hudActive = true;
@@ -299,7 +299,7 @@ namespace mrv
         }
     }
 
-    void TimelineViewport::_updatePlaybackButtons() const noexcept
+    void TimelineViewport::updatePlaybackButtons() const noexcept
     {
         TLRENDER_P();
         if (p.timelinePlayers.empty())
@@ -337,7 +337,7 @@ namespace mrv
         {
             i->start();
         }
-        _updatePlaybackButtons();
+        updatePlaybackButtons();
         p.skippedFrames = 0;
     }
 
@@ -348,7 +348,7 @@ namespace mrv
         {
             i->framePrev();
         }
-        _updatePlaybackButtons();
+        updatePlaybackButtons();
         p.skippedFrames = 0;
     }
 
@@ -359,7 +359,7 @@ namespace mrv
         {
             i->frameNext();
         }
-        _updatePlaybackButtons();
+        updatePlaybackButtons();
     }
 
     void TimelineViewport::endFrame() noexcept
@@ -379,7 +379,7 @@ namespace mrv
         {
             i->setPlayback(timeline::Playback::Reverse);
         }
-        _updatePlaybackButtons();
+        updatePlaybackButtons();
         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
     }
 
@@ -391,7 +391,7 @@ namespace mrv
         {
             i->setPlayback(timeline::Playback::Stop);
         }
-        _updatePlaybackButtons();
+        updatePlaybackButtons();
         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
     }
 
@@ -403,7 +403,7 @@ namespace mrv
         {
             i->setPlayback(timeline::Playback::Forward);
         }
-        _updatePlaybackButtons();
+        updatePlaybackButtons();
         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
     }
 
@@ -415,7 +415,7 @@ namespace mrv
         {
             i->togglePlayback();
         }
-        _updatePlaybackButtons();
+        updatePlaybackButtons();
         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
     }
 
@@ -428,6 +428,26 @@ namespace mrv
     TimelineViewport::getColorConfigOptions() noexcept
     {
         return _p->colorConfigOptions;
+    }
+
+    const timeline::BackgroundOptions&
+    TimelineViewport::getBackgroundOptions() const noexcept
+    {
+        return _p->backgroundOptions;
+    }
+
+    void TimelineViewport::setBackgroundOptions(
+        const timeline::BackgroundOptions& value)
+    {
+        TLRENDER_P();
+        if (value == p.backgroundOptions)
+            return;
+        Message msg;
+        msg["command"] = "setBackgroundOptions";
+        msg["value"] = value;
+        tcp->pushMessage(msg);
+        p.backgroundOptions = value;
+        redrawWindows();
     }
 
     void TimelineViewport::setColorConfigOptions(
@@ -794,6 +814,7 @@ namespace mrv
             p.videoData[index] = value;
             if (index == 0)
             {
+                int layerId = sender->videoLayer();
                 p.missingFrame = false;
                 if (p.missingFrameType != MissingFrameType::kBlackFrame &&
                     !value.layers.empty())
@@ -806,17 +827,24 @@ namespace mrv
                         p.missingFrame = true;
                         if (sender->playback() != timeline::Playback::Forward)
                         {
+                            io::Options ioOptions;
+                            {
+                                std::stringstream s;
+                                s << layerId;
+                                ioOptions["Layer"] = s.str();
+                            }
                             const auto& timeline = sender->timeline();
                             const auto& inOutRange = sender->inOutRange();
                             auto currentTime = value.time;
-                            // Seek until we find a previous frame or reach the
-                            // beginning of the inOutRange.
+                            // Seek until we find a previous frame or reach
+                            // the beginning of the inOutRange.
                             while (1)
                             {
                                 currentTime -=
                                     otio::RationalTime(1, currentTime.rate());
                                 const auto& videoData =
-                                    timeline->getVideo(currentTime).get();
+                                    timeline->getVideo(currentTime, ioOptions)
+                                        .get();
                                 if (videoData.layers.empty())
                                     continue;
                                 const auto& image = videoData.layers[0].image;
@@ -1382,9 +1410,9 @@ namespace mrv
             tcp->pushMessage(msg);
         }
 
-        if (environmentMapPanel)
+        if (panel::environmentMapPanel)
         {
-            environmentMapPanel->setEnvironmentMapOptions(
+            panel::environmentMapPanel->setEnvironmentMapOptions(
                 p.environmentMapOptions);
         }
 
@@ -1694,17 +1722,6 @@ namespace mrv
     {
         redraw();
         Fl::flush(); // force the redraw
-    }
-
-    bool TimelineViewport::getBlackBackground() const noexcept
-    {
-        return _p->blackBackground;
-    }
-
-    void TimelineViewport::setBlackBackground(bool active) noexcept
-    {
-        _p->blackBackground = active;
-        redrawWindows();
     }
 
     bool TimelineViewport::getPresentationMode() const noexcept

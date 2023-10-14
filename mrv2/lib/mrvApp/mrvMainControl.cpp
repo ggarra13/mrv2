@@ -379,22 +379,22 @@ namespace mrv
         p.ui->uiTimeline->setLUTOptions(p.lutOptions);
         p.ui->uiTimeline->redraw();
 
-        if (comparePanel)
+        if (panel::comparePanel)
         {
-            comparePanel->setCompareOptions(p.compareOptions);
+            panel::comparePanel->setCompareOptions(p.compareOptions);
         }
-        if (colorPanel)
+        if (panel::colorPanel)
         {
-            colorPanel->setLUTOptions(p.lutOptions);
-            colorPanel->setDisplayOptions(p.displayOptions);
+            panel::colorPanel->setLUTOptions(p.lutOptions);
+            panel::colorPanel->setDisplayOptions(p.displayOptions);
         }
-        if (stereo3DPanel)
+        if (panel::stereo3DPanel)
         {
-            stereo3DPanel->setStereo3DOptions(p.stereo3DOptions);
+            panel::stereo3DPanel->setStereo3DOptions(p.stereo3DOptions);
         }
-        if (imageInfoPanel)
+        if (panel::imageInfoPanel)
         {
-            imageInfoPanel->setTimelinePlayer(player);
+            panel::imageInfoPanel->setTimelinePlayer(player);
         }
         // @todo: do we need it?
         // if ( audioPanel )
@@ -402,58 +402,13 @@ namespace mrv
         //     audioPanel->setTimelinelinePlayer( player );
         // }
 
-        char buf[256];
-        std::string session = current_session();
-        if (!session.empty())
-        {
-            file::Path path(session);
-            session = " | ";
-            session += _("Session: ") + path.get(-1, false) + " ";
-        }
-        const int aIndex = model->observeAIndex()->get();
-        std::string fileName;
-        if (numFiles > 0 && aIndex >= 0 && aIndex < numFiles)
-        {
-            const auto& files = model->observeFiles()->get();
-            fileName = files[aIndex]->path.get(-1, false);
-
-            const auto& ioInfo = files[aIndex]->ioInfo;
-            std::stringstream ss;
-            ss.precision(2);
-            if (!ioInfo.video.empty())
-            {
-                {
-                    ss << "V:" << ioInfo.video[0].size.w << "x"
-                       << ioInfo.video[0].size.h << ":" << std::fixed
-                       << ioInfo.video[0].size.getAspect() << " "
-                       << ioInfo.video[0].pixelType;
-                }
-            }
-            if (ioInfo.audio.isValid())
-            {
-                if (!ss.str().empty())
-                    ss << ", ";
-                ss << "A: " << static_cast<size_t>(ioInfo.audio.channelCount)
-                   << " " << ioInfo.audio.dataType << " "
-                   << ioInfo.audio.sampleRate;
-            }
-            snprintf(
-                buf, 256, "%s %s%s", fileName.c_str(), ss.str().c_str(),
-                session.c_str());
-        }
-        else
-        {
-            snprintf(
-                buf, 256, "mrv2 v%s %s%s", mrv::version(), mrv::build_date(),
-                session.c_str());
-        }
-        p.ui->uiMain->copy_label(buf);
+        p.ui->uiMain->update_title_bar();
 
         if (p.ui->uiSecondary)
         {
             MainWindow* main = p.ui->uiSecondary->window();
             std::string label = "Secondary ";
-            label += buf;
+            label += p.ui->uiMain->label();
             main->copy_label(label.c_str());
             view = p.ui->uiSecondary->viewport();
             view->setColorConfigOptions(p.colorConfigOptions);

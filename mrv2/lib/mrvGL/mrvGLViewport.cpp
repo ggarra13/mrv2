@@ -85,6 +85,7 @@ namespace mrv
 #ifdef USE_ONE_PIXEL_LINES
         gl.outline.reset();
 #endif
+        gl.background.reset();
         gl.buffer.reset();
         gl.annotation.reset();
         gl.shader.reset();
@@ -202,12 +203,22 @@ namespace mrv
 
         const auto& viewportSize = getViewportSize();
         const auto& renderSize = getRenderSize();
+        bool transparent =
+            p.backgroundOptions.type == timeline::Background::Transparent;
+
         try
         {
             if (renderSize.isValid())
             {
                 gl::OffscreenBufferOptions offscreenBufferOptions;
                 offscreenBufferOptions.colorType = image::PixelType::RGBA_F32;
+                if (gl::doCreate(
+                        gl.background, renderSize, offscreenBufferOptions))
+                {
+                    gl.background = gl::OffscreenBuffer::create(
+                        renderSize, offscreenBufferOptions);
+                }
+
                 if (!p.displayOptions.empty())
                 {
                     offscreenBufferOptions.colorFilters =
@@ -250,8 +261,21 @@ namespace mrv
             }
             else
             {
+                gl.background.reset();
                 gl.buffer.reset();
                 gl.stereoBuffer.reset();
+            }
+
+            if (gl.background && !transparent)
+            {
+                gl::OffscreenBufferBinding binding(gl.background);
+
+                locale::SetAndRestore saved;
+
+                gl.render->begin(
+                    renderSize, p.colorConfigOptions, p.lutOptions);
+                _drawBackground();
+                gl.render->end();
             }
 
             if (gl.buffer && gl.render)
@@ -268,7 +292,8 @@ namespace mrv
                     gl::OffscreenBufferBinding binding(gl.buffer);
                     CHECK_GL;
 
-                    StoreLocale;
+                    locale::SetAndRestore saved;
+
                     gl.render->begin(
                         renderSize, p.colorConfigOptions, p.lutOptions);
                     CHECK_GL;
@@ -318,25 +343,46 @@ namespace mrv
         CHECK_GL;
 
         float r = 0.F, g = 0.F, b = 0.F, a = 1.F;
-        if (!p.presentation && !p.blackBackground)
+        if (!p.presentation)
         {
             uint8_t ur, ug, ub;
             Fl::get_color(p.ui->uiPrefs->uiPrefsViewBG->color(), ur, ug, ub);
             r = ur / 255.0f;
             g = ug / 255.0f;
             b = ub / 255.0f;
+            p.backgroundOptions.solidColor = image::Color4f(r, g, b, a);
         }
 
-#ifdef USE_GL_DOUBLE
         glDrawBuffer(GL_BACK_LEFT);
-#else
-        glDrawBuffer(GL_FRONT_LEFT);
-#endif
         CHECK_GL;
         glClearColor(r, g, b, a);
         CHECK_GL;
         glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
         CHECK_GL;
+
+        if (gl.background && !transparent && !p.presentation)
+        {
+            math::Matrix4x4f mvp;
+            mvp = _createTexturedRectangle();
+
+            gl.shader->bind();
+            CHECK_GL;
+            gl.shader->setUniform("transform.mvp", mvp);
+            CHECK_GL;
+
+            glActiveTexture(GL_TEXTURE0);
+            CHECK_GL;
+            glBindTexture(GL_TEXTURE_2D, gl.background->getColorID());
+            CHECK_GL;
+
+            if (gl.vao && gl.vbo)
+            {
+                gl.vao->bind();
+                CHECK_GL;
+                gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
+                CHECK_GL;
+            }
+        }
 
         if (gl.buffer && gl.shader)
         {
@@ -426,18 +472,18 @@ namespace mrv
                 {
                     p.image = nullptr;
                 }
-                if (colorAreaPanel)
+                if (panel::colorAreaPanel)
                 {
                     _calculateColorArea(p.colorAreaInfo);
-                    colorAreaPanel->update(p.colorAreaInfo);
+                    panel::colorAreaPanel->update(p.colorAreaInfo);
                 }
-                if (histogramPanel)
+                if (panel::histogramPanel)
                 {
-                    histogramPanel->update(p.colorAreaInfo);
+                    panel::histogramPanel->update(p.colorAreaInfo);
                 }
-                if (vectorscopePanel)
+                if (panel::vectorscopePanel)
                 {
-                    vectorscopePanel->update(p.colorAreaInfo);
+                    panel::vectorscopePanel->update(p.colorAreaInfo);
                 }
 
                 // Uodate the pixel bar from here only if we are playing a movie
@@ -496,7 +542,7 @@ namespace mrv
                 }
 
                 // Refresh media info panel if there's data window present
-                if (imageInfoPanel && !p.videoData.empty() &&
+                if (panel::imageInfoPanel && !p.videoData.empty() &&
                     !p.videoData[0].layers.empty() &&
                     p.videoData[0].layers[0].image)
                 {
@@ -504,7 +550,7 @@ namespace mrv
                         p.videoData[0].layers[0].image->getTags();
                     image::Tags::const_iterator i = tags.find("Data Window");
                     if (i != tags.end())
-                        imageInfoPanel->refresh();
+                        panel::imageInfoPanel->refresh();
                 }
 
                 if (p.dataWindow)

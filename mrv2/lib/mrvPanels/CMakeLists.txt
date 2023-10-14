@@ -71,11 +71,9 @@ files_to_absolute_paths()
 
 target_link_libraries(mrvPanels PUBLIC ${LIBRARIES} )
 set_target_properties(mrvPanels PROPERTIES FOLDER lib)
-#set_target_properties(mrvPanels PROPERTIES PUBLIC_HEADER "${HEADERS}")
 
 install(TARGETS mrvPanels
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION bin
-    PUBLIC_HEADER DESTINATION include/mrv2/mrvPanels
     COMPONENT libraries)

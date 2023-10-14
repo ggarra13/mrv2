@@ -26,7 +26,7 @@ namespace mrv
 
             popupMenu->type(Fl_Menu_Button::POPUP3);
 
-            pythonPanel->create_menu(popupMenu);
+            panel::pythonPanel->create_menu(popupMenu);
             popupMenu->popup();
 
             delete popupMenu;

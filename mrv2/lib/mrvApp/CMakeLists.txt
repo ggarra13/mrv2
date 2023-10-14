@@ -11,7 +11,6 @@ set(HEADERS
     mrvPlaylistsModel.h
     mrvSettingsObject.h
     mrvStdAnyHelper.h
-    mrvUSD.h
   )
   set(SOURCES
     App.cpp
@@ -21,7 +20,6 @@ set(HEADERS
     mrvOpenSeparateAudioDialog.cpp
     mrvPlaylistsModel.cpp
     mrvSettingsObject.cpp
-    mrvUSD.cpp
   )
 
 add_library(mrvApp ${SOURCES} ${HEADERS})
@@ -39,7 +37,6 @@ endif()
 target_link_libraries(mrvApp PUBLIC tlApp mrvPanels mrvNetwork ${GL_LIBRARY} mrvDraw mrvFLU mrvWidgets ${FLTK_LIBRARIES} )
 target_include_directories(mrvApp PUBLIC ${INCLUDES} )
 set_target_properties(mrvApp PROPERTIES FOLDER lib)
-#set_target_properties(mrvApp PROPERTIES PUBLIC_HEADER "${HEADERS}")
 
 
 
@@ -47,5 +44,4 @@ install(TARGETS mrvApp
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION bin
-    PUBLIC_HEADER DESTINATION include/mrv2/mrvApp
     COMPONENT libraries )

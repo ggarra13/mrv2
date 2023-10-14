@@ -12,8 +12,8 @@
 
 #include "mrViewer.h"
 
+#include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvHotkey.h"
-#include "mrvCore/mrvSequence.h"
 #include "mrvCore/mrvColorSpaces.h"
 
 #include "mrvFl/mrvCallbacks.h"
@@ -934,10 +934,10 @@ namespace mrv
             {
                 if (p.lastEvent == FL_DRAG)
                 {
-                    if (filesPanel)
-                        filesPanel->redraw();
-                    if (comparePanel)
-                        comparePanel->redraw();
+                    if (panel::filesPanel)
+                        panel::filesPanel->redraw();
+                    if (panel::comparePanel)
+                        panel::comparePanel->redraw();
                     p.lastEvent = 0;
                 }
                 else
@@ -1342,8 +1342,8 @@ namespace mrv
     {
         TLRENDER_P();
 
-        std::vector<std::string> tmpFiles, loadFiles;
-        mrv::split_string(tmpFiles, text, "\n");
+        std::vector<std::string> loadFiles;
+        auto tmpFiles = string::split(text, '\n');
 
         for (auto file : tmpFiles)
         {
@@ -1361,7 +1361,7 @@ namespace mrv
             file = decode;
             free(decode);
 #endif
-            if (is_directory(file))
+            if (file::isDirectory(file))
             {
                 std::vector<std::string> movies, sequences, audios;
                 parse_directory(file, movies, sequences, audios);
