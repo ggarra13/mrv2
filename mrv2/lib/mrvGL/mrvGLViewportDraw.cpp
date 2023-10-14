@@ -1180,7 +1180,7 @@ namespace mrv
             gl.render->clearViewport(image::Color4f(0.F, 0.F, 0.F));
             break;
         case timeline::Background::Checkers:
-#ifndef __APPLE__
+#ifdef USE_GL_DRAW_COLOR_MESH
             gl.render->drawColorMesh(
                 ui::checkers(
                     math::Box2i(0, 0, renderSize.w, renderSize.h),
