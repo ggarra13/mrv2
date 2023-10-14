@@ -1498,7 +1498,7 @@ msgid "Compare two file items with a compare mode."
 msgstr "Compare dos ítems de archivo con un modo de comparación."
 
 msgid "Comparing {0} to prefix {1}"
-msgstr "Comaparando {0} encontró prefijo {1}"
+msgstr "Comparando {0} a prefijo {1}"
 
 msgid "Comparison options."
 msgstr "Opciones de Comparación."

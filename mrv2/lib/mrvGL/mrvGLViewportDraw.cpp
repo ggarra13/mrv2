@@ -1170,13 +1170,17 @@ namespace mrv
         MRV2_GL();
         TLRENDER_P();
         const auto renderSize = getRenderSize();
+        if (!renderSize.isValid())
+            return;
+
+        std::cerr << "draw" << std::endl;
         switch (p.backgroundOptions.type)
         {
         case timeline::Background::Solid:
             gl.render->clearViewport(image::Color4f(0.F, 0.F, 0.F));
             break;
         case timeline::Background::Checkers:
-            gl.render->clearViewport(image::Color4f(0.F, 0.F, 0.F));
+#ifndef __APPLE__
             gl.render->drawColorMesh(
                 ui::checkers(
                     math::Box2i(0, 0, renderSize.w, renderSize.h),
@@ -1184,6 +1188,14 @@ namespace mrv
                     p.backgroundOptions.checkersColor1,
                     p.backgroundOptions.checkersSize),
                 math::Vector2i(), image::Color4f(1.F, 1.F, 1.F));
+#else
+            gl.render->clearViewport(p.backgroundOptions.checkersColor0);
+            gl.render->drawMesh(
+                checkers(
+                    math::Box2i(0, 0, renderSize.w, renderSize.h),
+                    p.backgroundOptions.checkersSize),
+                math::Vector2i(), p.backgroundOptions.checkersColor1);
+#endif
             break;
         default:
             break;
