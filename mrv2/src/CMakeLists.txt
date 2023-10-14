@@ -98,6 +98,13 @@ if (UNIX AND BUILD_PYTHON)
 endif()
 
 if ( APPLE )
+
+    # Install the main python executable and the pip script
+    install( FILES
+	${CMAKE_INSTALL_PREFIX}/bin/python${MRV2_PYTHON_VERSION}
+	DESTINATION bin/
+	COMPONENT applications )
+    
     # Install all.dylibs in CMAKE_INSTALL_PREFIX / lib
     file( GLOB MRV_DYLIBS ${CMAKE_INSTALL_PREFIX}/lib/*.dylib* )
     install( FILES ${MRV_DYLIBS}
@@ -105,17 +112,24 @@ if ( APPLE )
 	COMPONENT applications )
 elseif ( UNIX )
 
+    # Install the main python executable and the pip script
+    install( FILES
+	${CMAKE_INSTALL_PREFIX}/bin/python${MRV2_PYTHON_VERSION}
+	DESTINATION bin/
+	COMPONENT applications )
+  
     # Install all .so in CMAKE_INSTALL_PREFIX/lib
     file( GLOB MRV_LIB_DSOS ${CMAKE_INSTALL_PREFIX}/lib/*.so* )
     install( FILES ${MRV_LIB_DSOS}
-      DESTINATION lib
-      COMPONENT applications )
-
+	DESTINATION lib
+	COMPONENT applications )
+  
     # For RedHat and Rocky Linux, we must install also lib64
     file( GLOB MRV_LIB64_DSOS ${CMAKE_INSTALL_PREFIX}/lib64/*.so* )
     install( FILES ${MRV_LIB64_DSOS}
       DESTINATION lib64
       COMPONENT applications )
+  
 elseif(WIN32)
     #
     # Handle python DLL and libs and TCL
@@ -128,6 +142,11 @@ elseif(WIN32)
 	    file( REMOVE_RECURSE ${CMAKE_INSTALL_PREFIX}/bin/Lib/site-packages/fltk14/test )
 	endif()
     
+	# Install the main python executable
+	install( FILES ${CMAKE_INSTALL_PREFIX}/bin/python.exe
+	    DESTINATION bin/
+	    COMPONENT applications )
+	
 	# Install all .dll in CMAKE_INSTALL_PREFIX/bin
 	file( GLOB MRV_PYLib ${CMAKE_INSTALL_PREFIX}/bin/Lib )
 	file( GLOB MRV_PYDLLs ${CMAKE_INSTALL_PREFIX}/bin/DLLs )
@@ -146,8 +165,8 @@ elseif(WIN32)
     # For Python, Poco and FFmpeg
     file( GLOB MRV_DLLS ${CMAKE_INSTALL_PREFIX}/bin/*.dll  )
     install( FILES ${MRV_DLLS}
-    	     DESTINATION bin/
-	     COMPONENT applications )
+    	DESTINATION bin/
+	COMPONENT applications )
 	    
 endif()
 
