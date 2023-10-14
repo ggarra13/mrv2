@@ -99,11 +99,13 @@ endif()
 
 if ( APPLE )
 
-    # Install the main python executable and the pip script
-    install( FILES
-	${CMAKE_INSTALL_PREFIX}/bin/python${MRV2_PYTHON_VERSION}
-	DESTINATION bin/
-	COMPONENT applications )
+    if(MRV2_PYBIND11)
+	# Install the main python executable
+	install( FILES
+	    ${CMAKE_INSTALL_PREFIX}/bin/python${MRV2_PYTHON_VERSION}
+	    DESTINATION bin/
+	    COMPONENT applications )
+    endif()
     
     # Install all.dylibs in CMAKE_INSTALL_PREFIX / lib
     file( GLOB MRV_DYLIBS ${CMAKE_INSTALL_PREFIX}/lib/*.dylib* )
@@ -112,12 +114,14 @@ if ( APPLE )
 	COMPONENT applications )
 elseif ( UNIX )
 
-    # Install the main python executable and the pip script
-    install( FILES
-	${CMAKE_INSTALL_PREFIX}/bin/python${MRV2_PYTHON_VERSION}
-	DESTINATION bin/
-	COMPONENT applications )
-  
+    if(MRV2_PYBIND11)
+	# Install the main python executable
+	install( FILES
+	    ${CMAKE_INSTALL_PREFIX}/bin/python${MRV2_PYTHON_VERSION}
+	    DESTINATION bin/
+	    COMPONENT applications )
+    endif()
+    
     # Install all .so in CMAKE_INSTALL_PREFIX/lib
     file( GLOB MRV_LIB_DSOS ${CMAKE_INSTALL_PREFIX}/lib/*.so* )
     install( FILES ${MRV_LIB_DSOS}
