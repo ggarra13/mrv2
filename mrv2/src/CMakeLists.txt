@@ -104,6 +104,10 @@ if ( APPLE )
 	install( FILES
 	    ${CMAKE_INSTALL_PREFIX}/bin/python${MRV2_PYTHON_VERSION}
 	    DESTINATION bin/
+            PERMISSIONS 
+            OWNER_READ OWNER_WRITE OWNER_EXECUTE
+            GROUP_READ GROUP_EXECUTE
+            WORLD_READ WORLD_EXECUTE
 	    COMPONENT applications )
     endif()
     
@@ -119,6 +123,10 @@ elseif ( UNIX )
 	install( FILES
 	    ${CMAKE_INSTALL_PREFIX}/bin/python${MRV2_PYTHON_VERSION}
 	    DESTINATION bin/
+            PERMISSIONS 
+            OWNER_READ OWNER_WRITE OWNER_EXECUTE
+            GROUP_READ GROUP_EXECUTE
+            WORLD_READ WORLD_EXECUTE
 	    COMPONENT applications )
     endif()
     
@@ -180,9 +188,14 @@ if ( NOT WIN32 )
     configure_file(${CMAKE_SOURCE_DIR}/bin/environment.sh.in
 	${CMAKE_INSTALL_PREFIX}/bin/environment.sh @ONLY)
     
+    # Configure python.sh with python path
+    configure_file(${CMAKE_SOURCE_DIR}/bin/python.sh.in
+	${CMAKE_INSTALL_PREFIX}/bin/python.sh @ONLY)
+    
     install( FILES
 	${CMAKE_SOURCE_DIR}/bin/mrv2.sh
 	${CMAKE_INSTALL_PREFIX}/bin/environment.sh
+	${CMAKE_INSTALL_PREFIX}/bin/python.sh
 	DESTINATION bin
         PERMISSIONS 
         OWNER_READ OWNER_WRITE OWNER_EXECUTE
