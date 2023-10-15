@@ -420,7 +420,8 @@ namespace mrv
                         auto ref =
                             dynamic_cast<otio::ImageSequenceReference*>(media))
                     {
-                        file::Path urlPath(ref->target_url_base());
+                        file::Path urlPath(
+                            ref->target_url_base() + "/" + ref->name_prefix());
                         urlPath = getRelativePath(urlPath, otioFilePath);
                         ref->set_target_url_base(urlPath.getDirectory());
                     }
@@ -1398,11 +1399,10 @@ namespace mrv
         const std::string s = timeline->to_json_string();
         otio::SerializableObject::Retainer<otio::Timeline> out(
             dynamic_cast<otio::Timeline*>(otio::Timeline::from_json_string(s)));
+        makePathsAbsolute(out, App::ui);
         auto stack = out->tracks();
         if (makeRelativePaths)
             makePathsRelative(stack, otioFile);
-        else
-            makePathsAbsolute(out, App::ui);
         otio::ErrorStatus errorStatus;
         out->to_json_file(otioFile, &errorStatus);
         if (otio::is_error(errorStatus))
@@ -1739,10 +1739,7 @@ namespace mrv
             destItem->inOutRange = timeRange;
             destItem->speed = videoRate;
 
-            if (reloadOtio)
-            {
-                clone_and_replace_cb(nullptr, ui);
-            }
+            clone_and_replace_cb(nullptr, ui);
 
             player = ui->uiView->getTimelinePlayer();
             if (!player)
