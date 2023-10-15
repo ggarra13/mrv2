@@ -54,6 +54,8 @@ v0.8.0
 - Made dragging a clip from the Files Panel not loose the selection.
 - Fixed a network error (harmless) about edit mode.
 - Fixed Creation of EDL Playlist with image sequences.
+- Fixed annotations copying from source clip to EDL Playlist when adding the
+  clip to the playlist.
 - Some UI fixes:
     * The Zoom factor in the Pixel Toolbar keeps its value when selecting
       it from the pulldown.

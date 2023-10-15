@@ -632,7 +632,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        auto time = currentTime();
+        const auto& time = currentTime();
 
         otime::RationalTime previousTime(
             static_cast<double>(previous), time.rate());
@@ -650,8 +650,8 @@ namespace mrv
                 {
                     if (a->allFrames)
                         return true;
-                    otime::RationalTime start = a->time - previousTime;
-                    otime::RationalTime end = a->time + nextTime;
+                    const otime::RationalTime start = a->time - previousTime;
+                    const otime::RationalTime end = a->time + nextTime;
                     return (time > start && time < end);
                 });
 

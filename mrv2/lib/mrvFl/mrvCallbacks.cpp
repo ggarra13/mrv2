@@ -1886,38 +1886,14 @@ namespace mrv
         if (model->observeFiles()->getSize() < 1)
             return;
 
-        auto item = model->observeA()->get();
         auto origIndex = model->observeAIndex()->get();
-        int layer = ui->uiColorChannel->value();
 
-        auto player = ui->uiView->getTimelinePlayer();
-        timeline::Playback playback = player->playback();
-        auto currentTime = player->currentTime();
-        auto inOutRange = player->inOutRange();
+        clone_file_cb(m, d);
 
-        app->open(item->path.get(), item->audioPath.get());
-
-        auto newItem = model->observeA()->get();
         auto newIndex = model->observeAIndex()->get();
-        newItem->inOutRange = inOutRange;
-        newItem->speed = item->speed;
-        newItem->audioOffset = item->audioOffset;
-        newItem->loop = item->loop;
-        newItem->playback = playback;
-        newItem->currentTime = currentTime;
-        newItem->annotations = item->annotations;
-        ui->uiColorChannel->value(layer);
-        ui->uiColorChannel->do_callback();
-
         model->setA(origIndex);
         model->close();
         model->setA(newIndex);
-
-        player = ui->uiView->getTimelinePlayer();
-        player->setAllAnnotations(newItem->annotations);
-        player->setPlayback(playback);
-        player->seek(currentTime);
-        panel::redrawPanelThumbnails();
     }
 
     void set_stereo_cb(Fl_Menu_* m, void* d)

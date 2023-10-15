@@ -388,7 +388,7 @@ namespace mrv
         if (!player)
             return;
 
-        const otime::RationalTime& time = p.videoData[0].time;
+        const otime::RationalTime& time = player->currentTime();
 
         const auto& annotations =
             player->getAnnotations(p.ghostPrevious, p.ghostNext);
@@ -528,14 +528,14 @@ namespace mrv
         if (!player)
             return;
 
-        const otime::RationalTime& time = p.videoData[0].time;
+        const otime::RationalTime& time = player->currentTime();
 
         if (panel::annotationsPanel)
         {
             panel::annotationsPanel->notes->value("");
         }
 
-        const auto& annotations =
+        const auto annotations =
             player->getAnnotations(p.ghostPrevious, p.ghostNext);
         if (annotations.empty())
             return;

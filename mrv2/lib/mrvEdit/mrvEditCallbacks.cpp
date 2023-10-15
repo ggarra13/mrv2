@@ -243,6 +243,28 @@ namespace mrv
             copiedFrames.push_back(frame);
         }
 
+        std::vector<std::shared_ptr<draw::Annotation> > deepCopyAnnotations(
+            const std::vector<std::shared_ptr<draw::Annotation> >&
+                originalAnnotations)
+        {
+            // First, do a deep copy of all annotations.
+            std::vector<std::shared_ptr<draw::Annotation>> annotations;
+            std::vector< draw::Annotation > flatAnnotations;
+            for (const auto& annotation : originalAnnotations)
+            {
+                flatAnnotations.push_back(*annotation.get());
+            }
+            Message json = flatAnnotations;
+            for (const auto& j : json)
+            {
+                std::shared_ptr< draw::Annotation > tmp =
+                    draw::messageToAnnotation(j);
+                annotations.push_back(tmp);
+            }
+
+            return annotations;
+        }
+
         static size_t otioIndex = 1;
         file::Path savedPath, savedAudioPath;
 
@@ -629,23 +651,27 @@ namespace mrv
         //! Routine used to add annotations to the end of the timeline,
         //! once a clip is added.
         std::vector<std::shared_ptr<draw::Annotation>> addAnnotations(
-            const RationalTime& duration, const double videoRate,
-            const std::vector<std::shared_ptr<draw::Annotation>>& annotations,
+            const RationalTime& duration,
+            const std::vector<std::shared_ptr<draw::Annotation>>&
+                playerAnnotations,
             const std::vector<std::shared_ptr<draw::Annotation>>&
                 clipAnnotations)
         {
             std::vector<std::shared_ptr<draw::Annotation>> out;
-            for (auto a : annotations)
+
+            // Shallow copy player annotations
+            for (auto a : playerAnnotations)
             {
                 out.push_back(a);
             }
-            for (auto a : clipAnnotations)
+
+            // First, do a deep copy of all clip annotations.
+            auto annotations = deepCopyAnnotations(clipAnnotations);
+            for (auto& a : annotations)
             {
-                out.push_back(a);
-                auto time = out.back()->time;
+                auto& time = a->time;
                 time += duration;
-                time = time::round(time.rescaled_to(videoRate));
-                out.back()->time = time;
+                out.push_back(a);
             }
             return out;
         }
@@ -1241,20 +1267,7 @@ namespace mrv
             return;
 
         const auto& originalAnnotations = player->getAllAnnotations();
-
-        // First, do a deep copy of all annotations.
-        std::vector<std::shared_ptr<draw::Annotation>> annotations;
-        std::vector< draw::Annotation > flatAnnotations;
-        for (const auto& annotation : originalAnnotations)
-        {
-            flatAnnotations.push_back(*annotation.get());
-        }
-        Message json = flatAnnotations;
-        for (const auto& j : json)
-        {
-            std::shared_ptr< Annotation > tmp = messageToAnnotation(j);
-            annotations.push_back(tmp);
-        }
+        auto annotations = deepCopyAnnotations(originalAnnotations);
 
         // Then, adjust the annotations within the range.
         std::set<std::shared_ptr<draw::Annotation>> skipAnnotations;
@@ -1510,16 +1523,17 @@ namespace mrv
         try
         {
             auto timelineDuration = timeline->duration();
+            timelineDuration =
+                timelineDuration.rescaled_to(player->defaultSpeed());
             auto annotations = addAnnotations(
-                timelineDuration, player->defaultSpeed(),
-                player->getAllAnnotations(), sourceItem->annotations);
+                timelineDuration, player->getAllAnnotations(),
+                sourceItem->annotations);
 
             edit_store_undo(player, ui);
 
             auto Aindex = model->observeAIndex()->get();
 
             auto stack = timeline->tracks();
-            bool reloadOtio = hasEmptyTracks(stack);
             auto tracks = stack->children();
             otio::ErrorStatus errorStatus;
             int videoTrackIndex = -1;
@@ -1744,8 +1758,10 @@ namespace mrv
             player = ui->uiView->getTimelinePlayer();
             if (!player)
                 return;
-            player->setAllAnnotations(annotations);
+
             updateTimeline(timeline, player->currentTime(), ui);
+            player->setAllAnnotations(annotations);
+            player->seek(timelineDuration + sourceItem->currentTime);
             ui->uiTimeline->frameView();
 
             panel::refreshPanelThumbnails();
