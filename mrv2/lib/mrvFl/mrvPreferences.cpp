@@ -852,6 +852,7 @@ namespace mrv
         timeline::Background type = static_cast<timeline::Background>(
             std_any_empty(value) ? 0 : std_any_cast<int>(value));
         timeline::BackgroundOptions backgroundOptions;
+        backgroundOptions.type = type;
         ui->uiView->setBackgroundOptions(backgroundOptions);
 
         // Handle Dockgroup size (based on percentage)
