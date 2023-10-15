@@ -15,7 +15,8 @@ namespace mrv
             return (
                 renderWidth == b.renderWidth && complexity == b.complexity &&
                 drawMode == b.drawMode && enableLighting == b.enableLighting &&
-                stageCache == b.stageCache && diskCache == b.diskCache);
+                sRGB == b.sRGB && stageCache == b.stageCache &&
+                diskCache == b.diskCache);
         }
 
         bool RenderOptions::operator!=(const RenderOptions& b) const

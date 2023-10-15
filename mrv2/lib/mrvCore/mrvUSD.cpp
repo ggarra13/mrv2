@@ -29,6 +29,8 @@ namespace mrv
                 std_any_cast<int>(settingsObject->value("USD/drawMode")));
             o.enableLighting = static_cast<bool>(
                 std_any_cast<int>(settingsObject->value("USD/enableLighting")));
+            o.sRGB = static_cast<bool>(
+                std_any_cast<int>(settingsObject->value("USD/sRGB")));
             o.stageCache =
                 std_any_cast<int>(settingsObject->value("USD/stageCache"));
             o.diskCache =
@@ -48,6 +50,7 @@ namespace mrv
             settingsObject->setValue("USD/complexity", o.complexity);
             settingsObject->setValue("USD/drawMode", o.drawMode);
             settingsObject->setValue("USD/enableLighting", o.enableLighting);
+            settingsObject->setValue("USD/sRGB", o.sRGB);
             settingsObject->setValue("USD/stageCache", o.stageCache);
             settingsObject->setValue("USD/diskCache", o.diskCache);
 

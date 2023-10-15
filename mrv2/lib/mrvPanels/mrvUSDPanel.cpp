@@ -180,8 +180,11 @@ namespace mrv
                     _update();
                 });
 
+            Y += 22;
+
             cV = new Widget< Fl_Check_Button >(
                 g->x() + 90, Y, g->w(), 20, _("Enable sRGB"));
+            c = cV;
             c->labelsize(12);
             c->value(std_any_cast<int>(settingsObject->value("USD/sRGB")));
 

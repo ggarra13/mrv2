@@ -35,7 +35,6 @@ v0.8.0
 - Added image.ocioView(), image.setOcioView() and image.ocioViewList() to
   Python to set the Display/View color space and to retrieve a list of all
   Display/Views.
-- Sped up and removed some bugs in reverse playback.
 - Fixed reading of OCIO file name in network connections.
 - Color channels (layers) are now kept with the file so that switching between
   media will not revert to the rgba channel if there isn't an equivalent one.
@@ -54,6 +53,7 @@ v0.8.0
 - Added drawing background as transparent, solid or checkers.
 - Made dragging a clip from the Files Panel not loose the selection.
 - Fixed a network error (harmless) about edit mode.
+- Fixed Creation of EDL Playlist with image sequences.
 - Some UI fixes:
     * The Zoom factor in the Pixel Toolbar keeps its value when selecting
       it from the pulldown.

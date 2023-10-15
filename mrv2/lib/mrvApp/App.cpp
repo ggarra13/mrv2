@@ -146,6 +146,7 @@ namespace mrv
         float usdComplexity = 1.F;
         usd::DrawMode usdDrawMode = usd::DrawMode::ShadedSmooth;
         bool usdEnableLighting = true;
+        bool usdSRGB = true;
         size_t usdStageCache = 10;
         size_t usdDiskCache = 0;
 #endif // TLRENDER_USD
@@ -355,6 +356,10 @@ namespace mrv
                         p.options.usdEnableLighting, {"-usdEnableLighting"},
                         "USD render enable lighting setting.",
                         string::Format("{0}").arg(p.options.usdEnableLighting)),
+                    app::CmdLineValueOption<bool>::create(
+                        p.options.usdEnableLighting, {"-usdSRGB"},
+                        "USD render SRGB setting.",
+                        string::Format("{0}").arg(p.options.usdSRGB)),
                     app::CmdLineValueOption<size_t>::create(
                         p.options.usdStageCache, {"-usdStageCache"},
                         "USD stage cache size.",
@@ -558,6 +563,8 @@ namespace mrv
         p.settingsObject->setValue(
             "USD/enableLighting",
             static_cast<int>(p.options.usdEnableLighting));
+        p.settingsObject->setValue(
+            "USD/sRGB", static_cast<int>(p.options.usdSRGB));
         p.settingsObject->setValue(
             "USD/stageCacheByteCount",
             static_cast<int>(p.options.usdStageCache));

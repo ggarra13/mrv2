@@ -35,6 +35,7 @@ namespace mrv
             }
             ioOptions["USD/enableLighting"] =
                 string::Format("{0}").arg(o.enableLighting);
+            ioOptions["USD/sRGB"] = string::Format("{0}").arg(o.sRGB);
             ioOptions["USD/stageCacheCount"] =
                 string::Format("{0}").arg(o.stageCache);
             ioOptions["USD/diskCacheByteCount"] =
