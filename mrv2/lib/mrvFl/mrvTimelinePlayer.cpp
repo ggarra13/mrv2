@@ -329,7 +329,7 @@ namespace mrv
         {
             // Send a seek request to make sure we are at the right time
             pushMessage("seek", currentTime());
-            panel::redrawPanelThumbnails();
+            panel::redrawThumbnails();
         }
     }
 
@@ -382,7 +382,7 @@ namespace mrv
     {
         pushMessage("start", 0);
         _p->player->start();
-        panel::redrawPanelThumbnails();
+        panel::redrawThumbnails();
         if (timelineViewport)
             timelineViewport->updateUndoRedoButtons();
     }
@@ -391,7 +391,7 @@ namespace mrv
     {
         pushMessage("end", 0);
         _p->player->end();
-        panel::redrawPanelThumbnails();
+        panel::redrawThumbnails();
         if (timelineViewport)
             timelineViewport->updateUndoRedoButtons();
     }
@@ -410,7 +410,7 @@ namespace mrv
         player->seek(data->time);
         player->setSpeed(data->speed);
         player->updateUndoRedoButtons();
-        panel::redrawPanelThumbnails();
+        panel::redrawThumbnails();
         delete data;
     }
 

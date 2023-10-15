@@ -370,7 +370,7 @@ namespace mrv
                     tcp->unlock();
                     return;
                 }
-                redrawPanelThumbnails();
+                panel::redrawThumbnails();
             }
             else if (c == "setVolume")
             {

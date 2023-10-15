@@ -9,29 +9,27 @@
 
 #include <tlCore/Util.h>
 
-// @todo: these should be listed alphabetically but lead to include issues on
-//        windows.
-#include "mrvPanels/mrvFilesPanel.h"
+#include "mrvPanels/mrvAnnotationsPanel.h"
+#include "mrvPanels/mrvColorAreaPanel.h"
 #include "mrvPanels/mrvColorPanel.h"
 #include "mrvPanels/mrvComparePanel.h"
+#include "mrvPanels/mrvDevicesPanel.h"
+#include "mrvPanels/mrvEnvironmentMapPanel.h"
+#include "mrvPanels/mrvFilesPanel.h"
+#include "mrvPanels/mrvHistogramPanel.h"
+#include "mrvPanels/mrvImageInfoPanel.h"
+#include "mrvPanels/mrvLogsPanel.h"
 #include "mrvPanels/mrvPlaylistPanel.h"
 #include "mrvPanels/mrvSettingsPanel.h"
-#include "mrvPanels/mrvLogsPanel.h"
-#include "mrvPanels/mrvDevicesPanel.h"
-#include "mrvPanels/mrvColorAreaPanel.h"
-#include "mrvPanels/mrvAnnotationsPanel.h"
-#include "mrvPanels/mrvImageInfoPanel.h"
-#include "mrvPanels/mrvHistogramPanel.h"
-#include "mrvPanels/mrvVectorscopePanel.h"
-#include "mrvPanels/mrvEnvironmentMapPanel.h"
 #include "mrvPanels/mrvStereo3DPanel.h"
-
-#ifdef MRV2_PYBIND11
-#    include "mrvPanels/mrvPythonPanel.h"
-#endif
+#include "mrvPanels/mrvVectorscopePanel.h"
 
 #ifdef MRV2_NETWORK
 #    include "mrvPanels/mrvNetworkPanel.h"
+#endif
+
+#ifdef MRV2_PYBIND11
+#    include "mrvPanels/mrvPythonPanel.h"
 #endif
 
 #ifdef TLRENDER_USD
@@ -76,8 +74,8 @@ namespace mrv
         void removePanels(ViewerUI* ui);
         void removeWindows(ViewerUI* ui);
 
-        void redrawPanelThumbnails();
-        void refreshPanelThumbnails();
+        void redrawThumbnails();
+        void refreshThumbnails();
 
         void syncPanels();
 

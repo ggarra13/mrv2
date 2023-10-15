@@ -1413,9 +1413,9 @@ namespace mrv
                 if (p.running)
                 {
                     if (loaded)
-                        panel::refreshPanelThumbnails();
+                        panel::refreshThumbnails();
                     else
-                        panel::redrawPanelThumbnails();
+                        panel::redrawThumbnails();
                     if (ui->uiPrefs->uiPrefsAutoPlayback->value() && loaded)
                     {
                         auto player = ui->uiView->getTimelinePlayer();

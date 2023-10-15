@@ -7,13 +7,10 @@ TODO
 ## Easy
 
 - Add Mute Audio to preferences.
-- Remove unused icons from icons/ directory.
 
 ## Medium
 
 - Add comments to all source code (and clean up the code more).
-- Sort Tools alphabetically in mrvPanelsCallbacks (but avoid include conflicts).
-
 
 ## Difficult
 

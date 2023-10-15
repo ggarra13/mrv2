@@ -505,7 +505,7 @@ namespace mrv
                 refresh_file_cache_cb(nullptr, ui);
             else if (create)
             {
-                panel::refreshPanelThumbnails();
+                panel::refreshThumbnails();
             }
         }
 
@@ -654,6 +654,7 @@ namespace mrv
             const RationalTime& duration,
             const std::vector<std::shared_ptr<draw::Annotation>>&
                 playerAnnotations,
+            const TimeRange& clipRange,
             const std::vector<std::shared_ptr<draw::Annotation>>&
                 clipAnnotations)
         {
@@ -670,6 +671,8 @@ namespace mrv
             for (auto& a : annotations)
             {
                 auto& time = a->time;
+                if (!clipRange.contains(time))
+                    continue;
                 time += duration;
                 out.push_back(a);
             }
@@ -1004,7 +1007,7 @@ namespace mrv
 
         toOtioFile(timeline, ui);
 
-        panel::redrawPanelThumbnails();
+        panel::redrawThumbnails();
 
         tcp->pushMessage("Edit/Frame/Paste", time);
     }
@@ -1071,7 +1074,7 @@ namespace mrv
         updateTimeline(timeline, scaledTime, ui);
         toOtioFile(timeline, ui);
 
-        panel::redrawPanelThumbnails();
+        panel::redrawThumbnails();
 
         tcp->pushMessage("Edit/Frame/Insert", time);
     }
@@ -1209,7 +1212,7 @@ namespace mrv
 
         toOtioFile(timeline, ui);
 
-        panel::redrawPanelThumbnails();
+        panel::redrawThumbnails();
     }
 
     void edit_redo_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -1249,7 +1252,7 @@ namespace mrv
 
         toOtioFile(timeline, ui);
 
-        panel::redrawPanelThumbnails();
+        panel::redrawThumbnails();
 
         if (refreshCache)
             refresh_file_cache_cb(nullptr, ui);
@@ -1527,7 +1530,7 @@ namespace mrv
                 timelineDuration.rescaled_to(player->defaultSpeed());
             auto annotations = addAnnotations(
                 timelineDuration, player->getAllAnnotations(),
-                sourceItem->annotations);
+                sourceItem->inOutRange, sourceItem->annotations);
 
             edit_store_undo(player, ui);
 
@@ -1764,7 +1767,7 @@ namespace mrv
             player->seek(timelineDuration + sourceItem->currentTime);
             ui->uiTimeline->frameView();
 
-            panel::refreshPanelThumbnails();
+            panel::refreshThumbnails();
         }
         catch (const std::exception& e)
         {

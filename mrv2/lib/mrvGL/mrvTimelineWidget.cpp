@@ -755,7 +755,7 @@ namespace mrv
         {
             toOtioFile(p.player, p.ui);
             p.ui->uiView->redrawWindows();
-            panel::redrawPanelThumbnails();
+            panel::redrawThumbnails();
             p.dragging = false;
         }
         bool send = App::ui->uiPrefs->SendTimeline->value();
@@ -1234,7 +1234,7 @@ namespace mrv
         case FL_DRAG:
             return mouseDragEvent(Fl::event_x(), Fl::event_y());
         case FL_RELEASE:
-            panel::redrawPanelThumbnails();
+            panel::redrawThumbnails();
             return mouseReleaseEvent();
         case FL_MOVE:
             _requestThumbnail();

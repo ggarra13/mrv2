@@ -1875,7 +1875,7 @@ namespace mrv
         player->setAllAnnotations(newItem->annotations);
         player->setPlayback(playback);
         player->seek(currentTime);
-        panel::redrawPanelThumbnails();
+        panel::redrawThumbnails();
     }
 
     void clone_and_replace_cb(Fl_Menu_* m, void* d)

@@ -51,7 +51,7 @@ namespace mrv
             return one_panel_only;
         }
 
-        void redrawPanelThumbnails()
+        void redrawThumbnails()
         {
             using namespace panel;
             if (filesPanel)
@@ -67,7 +67,7 @@ namespace mrv
                 tcp->pushMessage("Redraw Panel Thumbnails", 0);
         }
 
-        void refreshPanelThumbnails()
+        void refreshThumbnails()
         {
             using namespace panel;
             if (filesPanel)
