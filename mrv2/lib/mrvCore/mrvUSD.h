@@ -18,6 +18,7 @@ namespace mrv
             float complexity = 1.F;
             tl::usd::DrawMode drawMode = tl::usd::DrawMode::ShadedSmooth;
             bool enableLighting = true;
+            bool sRGB = true;
             size_t stageCache = 10;
             size_t diskCache = 0;
 

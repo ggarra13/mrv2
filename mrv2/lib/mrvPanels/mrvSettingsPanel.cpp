@@ -391,14 +391,14 @@ namespace mrv
             sp = spW;
             // sp->irange( 1, 64 );
             digits = std_any_cast< int >(
-                settingsObject->value("Performance/SequenceThreadCount"));
+                settingsObject->value("SequenceIO/ThreadCount"));
             sp->value(digits);
             spW->callback(
                 [=](auto o)
                 {
                     int requests = static_cast<int>(o->value());
                     settingsObject->setValue(
-                        "Performance/SequenceThreadCount", requests);
+                        "SequenceIO/ThreadCount", requests);
                     p.ui->app->cacheUpdate();
                 });
 

@@ -9,6 +9,8 @@
 #include <tlTimeline/IRender.h>
 #include <tlTimeline/TimeUnits.h>
 
+#include <tlIO/IO.h>
+
 namespace
 {
     const char* const kProgramName = "mrv2";
@@ -149,16 +151,18 @@ namespace mrv
         static App* app;
 
     private:
-        void
-        _activeCallback(const std::vector<std::shared_ptr<FilesModelItem> >&);
-        void
-        _filesCallback(const std::vector<std::shared_ptr<FilesModelItem> >&);
-
         void _settingsCallback();
 
     private:
+        io::Options _getIOOptions() const;
+
         otime::RationalTime _cacheReadAhead() const;
         otime::RationalTime _cacheReadBehind() const;
+
+        void
+        _filesCallback(const std::vector<std::shared_ptr<FilesModelItem> >&);
+        void
+        _activeCallback(const std::vector<std::shared_ptr<FilesModelItem> >&);
 
         void _audioUpdate();
 

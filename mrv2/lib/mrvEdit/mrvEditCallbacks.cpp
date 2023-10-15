@@ -20,6 +20,8 @@ namespace fs = std::filesystem;
 #include <opentimelineio/transition.h>
 
 #include <tlCore/Path.h>
+#include <tlCore/File.h>
+#include <tlCore/FileInfo.h>
 #include <tlCore/StringFormat.h>
 
 #include <tlIO/System.h>
@@ -418,7 +420,8 @@ namespace mrv
                         auto ref =
                             dynamic_cast<otio::ImageSequenceReference*>(media))
                     {
-                        file::Path urlPath(ref->target_url_base());
+                        file::Path urlPath(
+                            ref->target_url_base() + "/" + ref->name_prefix());
                         urlPath = getRelativePath(urlPath, otioFilePath);
                         ref->set_target_url_base(urlPath.getDirectory());
                     }
@@ -1396,11 +1399,10 @@ namespace mrv
         const std::string s = timeline->to_json_string();
         otio::SerializableObject::Retainer<otio::Timeline> out(
             dynamic_cast<otio::Timeline*>(otio::Timeline::from_json_string(s)));
+        makePathsAbsolute(out, App::ui);
         auto stack = out->tracks();
         if (makeRelativePaths)
             makePathsRelative(stack, otioFile);
-        else
-            makePathsAbsolute(out, App::ui);
         otio::ErrorStatus errorStatus;
         out->to_json_file(otioFile, &errorStatus);
         if (otio::is_error(errorStatus))
@@ -1517,7 +1519,7 @@ namespace mrv
             auto Aindex = model->observeAIndex()->get();
 
             auto stack = timeline->tracks();
-            const bool refreshCache = hasEmptyTracks(stack);
+            bool reloadOtio = hasEmptyTracks(stack);
             auto tracks = stack->children();
             otio::ErrorStatus errorStatus;
             int videoTrackIndex = -1;
@@ -1547,6 +1549,8 @@ namespace mrv
             {
                 const auto info = read->getInfo().get();
 
+                otime::RationalTime startTime = time::invalidTime;
+
                 bool isSequence =
                     io::FileType::Sequence ==
                         ioSystem->getFileType(path.getExtension()) &&
@@ -1557,14 +1561,16 @@ namespace mrv
                     auto track = otio::dynamic_retainer_cast<Track>(
                         tracks[videoTrackIndex]);
                     auto clip = new otio::Clip;
-                    const TimeRange mediaRange(info.videoTime);
+                    TimeRange mediaRange(info.videoTime);
                     if (isSequence)
                     {
+                        mediaRange = sourceItem->timeRange;
                         auto media = new otio::ImageSequenceReference(
                             path.getDirectory(), path.getBaseName(),
                             path.getExtension(),
                             mediaRange.start_time().value(), 1,
                             mediaRange.duration().rate(), path.getPadding());
+                        media->set_available_range(mediaRange);
                         clip->set_media_reference(media);
                     }
                     else
@@ -1733,8 +1739,7 @@ namespace mrv
             destItem->inOutRange = timeRange;
             destItem->speed = videoRate;
 
-            if (refreshCache)
-                refresh_file_cache_cb(nullptr, ui);
+            clone_and_replace_cb(nullptr, ui);
 
             player = ui->uiView->getTimelinePlayer();
             if (!player)

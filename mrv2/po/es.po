@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-10-11 16:09-0300\n"
+"POT-Creation-Date: 2023-10-15 09:14-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -1344,6 +1344,9 @@ msgstr "Canales"
 msgid "Checkerboard"
 msgstr "Cuadriculado"
 
+msgid "Checkers Background"
+msgstr "Fondo Cuadriculado"
+
 msgid "Cinemascope"
 msgstr "Cinemascope"
 
@@ -1687,6 +1690,9 @@ msgstr "Borrar"
 msgid "Depth"
 msgstr "Profudidas"
 
+msgid "Destination file is invalid."
+msgstr "Archivo de destino es inválido."
+
 msgid "Devices"
 msgstr "Dispositivos"
 
@@ -1708,11 +1714,11 @@ msgstr "Carpeta donde el clip reside"
 msgid "Disconnect"
 msgstr "Desconectar"
 
-msgid "Disk Cache"
-msgstr "Cache en Disco"
-
 msgid "Disk Cache Byte Count"
 msgstr "Conteo en Bytes de Cache en Disco"
+
+msgid "Disk Cache in GB"
+msgstr "Cache en Disco en GB"
 
 msgid "Disk space"
 msgstr "Espacio en Disco"
@@ -1875,6 +1881,9 @@ msgstr "Archivo EDL vacío.  No grabando."
 
 msgid "Enable Lighting"
 msgstr "Activar Iluminación"
+
+msgid "Enable sRGB"
+msgstr "Habilitar sRGB"
 
 msgid "Enabled"
 msgstr "Habilitado"
@@ -3571,8 +3580,14 @@ msgstr "Render/Mezcla Alfa/Derecha"
 msgid "Render/Alpha Channel"
 msgstr "Render/Canal Alfa"
 
-msgid "Render/Black Background  "
-msgstr "Render/Fondo Negro"
+msgid "Render/Background/Checkers"
+msgstr "Render/Fondo/Cuadriculado"
+
+msgid "Render/Background/Solid"
+msgstr "Render/Fondo/Sólido"
+
+msgid "Render/Background/Transparent"
+msgstr "Render/Fondo/Transparente"
 
 msgid "Render/Blue Channel"
 msgstr "Render/Canal Azul"
@@ -4305,6 +4320,9 @@ msgstr "Valor de soft clip."
 msgid "Softimage Picture"
 msgstr "Dibujo Softimage"
 
+msgid "Solid Background"
+msgstr "Fondo Sólido"
+
 msgid "Some default frame rate settings."
 msgstr "Algunos seteos por defector de cuadros por segundo."
 
@@ -4688,9 +4706,6 @@ msgstr "Alternar Ventana de Acerca de mrv2"
 msgid "Toggle Annotation Panel"
 msgstr "Alternar Panel de Anotación"
 
-msgid "Toggle Black Background"
-msgstr "Alternar Fondo Negro"
-
 msgid "Toggle Color Area Info Panel"
 msgstr "Alternar Panel de Área de Color"
 
@@ -4819,6 +4834,9 @@ msgstr "Herramientas"
 
 msgid "Topbar"
 msgstr "Barra Superior"
+
+msgid "Transparent Background"
+msgstr "Fondo Transparente"
 
 msgid "Trim"
 msgstr "Recortar"
@@ -5474,6 +5492,9 @@ msgstr "x9"
 
 msgid "xyY CIE xyY"
 msgstr "xyY CIE xyY"
+
+#~ msgid "Toggle Black Background"
+#~ msgstr "Alternar Fondo Negro"
 
 #~ msgid "Not an EDL file to save."
 #~ msgstr "No es un archivo EDL para grabar."

@@ -77,9 +77,9 @@ namespace mrv
             static_cast<int>(playerOptions.timerMode);
         p.defaultValues["Performance/AudioBufferFrameCount"] =
             static_cast<int>(playerOptions.audioBufferFrameCount);
+        p.defaultValues["SequenceIO/ThreadCount"] = 16;
         p.defaultValues["Performance/VideoRequestCount"] = 16;
         p.defaultValues["Performance/AudioRequestCount"] = 16;
-        p.defaultValues["Performance/SequenceThreadCount"] = 16;
         p.defaultValues["Performance/FFmpegThreadCount"] = 0;
         p.defaultValues["Performance/FFmpegYUVToRGBConversion"] = 0;
         p.defaultValues["Misc/MaxFileSequenceDigits"] = 9;
@@ -88,6 +88,7 @@ namespace mrv
         p.defaultValues["EnvironmentMap/Sphere/SubdivisionY"] = 36;
         p.defaultValues["EnvironmentMap/Spin"] = 1;
         p.defaultValues["TCP/Control/Port"] = std::string("55150");
+
 #if defined(TLRENDER_USD)
         p.defaultValues["USD/renderWidth"] =
             static_cast<int>(usd::RenderOptions().renderWidth);
@@ -97,11 +98,14 @@ namespace mrv
             static_cast<int>(usd::RenderOptions().drawMode);
         p.defaultValues["USD/enableLighting"] =
             static_cast<int>(usd::RenderOptions().enableLighting);
-        p.defaultValues["USD/stageCache"] =
+        p.defaultValues["USD/sRGB"] =
+            static_cast<int>(usd::RenderOptions().sRGB);
+        p.defaultValues["USD/stageCacheByteCount"] =
             static_cast<int>(usd::RenderOptions().stageCache);
-        p.defaultValues["USD/diskCache"] =
+        p.defaultValues["USD/diskCacheByteCount"] =
             static_cast<int>(usd::RenderOptions().diskCache / memory::gigabyte);
 #endif
+
         p.defaultValues[kTextFont] = 0;
         p.defaultValues[kFontSize] = 52;
 
