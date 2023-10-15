@@ -188,7 +188,7 @@ if ( NOT WIN32 )
     configure_file(${CMAKE_SOURCE_DIR}/bin/environment.sh.in
 	${CMAKE_INSTALL_PREFIX}/bin/environment.sh @ONLY)
     
-    # Configure python.sh with python path
+    # Configure python.sh with python version
     configure_file(${CMAKE_SOURCE_DIR}/bin/python.sh.in
 	${CMAKE_INSTALL_PREFIX}/bin/python.sh @ONLY)
     
