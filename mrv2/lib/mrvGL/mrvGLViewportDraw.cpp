@@ -1173,13 +1173,13 @@ namespace mrv
         if (!renderSize.isValid())
             return;
 
-        std::cerr << "draw" << std::endl;
         switch (p.backgroundOptions.type)
         {
         case timeline::Background::Solid:
             gl.render->clearViewport(image::Color4f(0.F, 0.F, 0.F));
             break;
         case timeline::Background::Checkers:
+            // @bug macOS has problems using drawColorMesh.
 #ifdef USE_GL_DRAW_COLOR_MESH
             gl.render->drawColorMesh(
                 ui::checkers(

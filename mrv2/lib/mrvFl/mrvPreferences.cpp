@@ -847,6 +847,13 @@ namespace mrv
 
         ui->uiPenOpacity->value(a / 255.0F);
 
+        // Handle background options
+        value = settingsObject->value("gui/Background/Options");
+        timeline::Background type = static_cast<timeline::Background>(
+            std_any_empty(value) ? 0 : std_any_cast<int>(value));
+        timeline::BackgroundOptions backgroundOptions;
+        ui->uiView->setBackgroundOptions(backgroundOptions);
+
         // Handle Dockgroup size (based on percentage)
         value = settingsObject->value("gui/DockGroup/Width");
         float pct = std_any_empty(value) ? 0.2 : std_any_cast<float>(value);
@@ -914,6 +921,11 @@ namespace mrv
         if (uiPrefs->uiMain->visible())
             visible = 1;
         settingsObject->setValue("gui/Preferences/Window/Visible", visible);
+
+        // Handle background options
+        auto backgroundOptions = ui->uiView->getBackgroundOptions();
+        settingsObject->setValue(
+            "gui/Background/Options", static_cast<int>(backgroundOptions.type));
 
         int width = ui->uiDockGroup->w() == 0 ? 1 : ui->uiDockGroup->w();
         float pct = (float)width / ui->uiViewGroup->w();
