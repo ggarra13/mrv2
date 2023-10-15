@@ -722,7 +722,7 @@ namespace mrv
 
     void toggle_one_panel_only_cb(Fl_Menu_* w, ViewerUI* ui)
     {
-        onePanelOnly(!onePanelOnly());
+        panel::onlyOne(!panel::onlyOne());
     }
 
     void show_window_cb(const std::string& label, ViewerUI* ui)

@@ -1479,7 +1479,7 @@ namespace mrv
 
         ui->uiRegion->layout();
 
-        onePanelOnly((bool)uiPrefs->uiPrefsOnePanelOnly->value());
+        panel::onlyOne((bool)uiPrefs->uiPrefsOnePanelOnly->value());
 
         //
         // Widget/Viewer settings

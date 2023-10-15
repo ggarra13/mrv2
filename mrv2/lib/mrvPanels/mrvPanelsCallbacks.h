@@ -68,17 +68,29 @@ namespace mrv
         extern USDPanel* usdPanel;
 #endif
 
-        void onePanelOnly(bool t);
-        bool onePanelOnly();
+        //! \name Handle one panel only
+        ///@{
+        void onlyOne(bool t);
+        bool onlyOne();
+        ///@}
 
+        //! \name Removal of panels (or panel windows)
+        ///@{
         void removePanels(ViewerUI* ui);
         void removeWindows(ViewerUI* ui);
+        ///@}
 
+        //! \name Thumbnail functions.
+        ///@{
         void redrawThumbnails();
         void refreshThumbnails();
+        ///@}
 
+        //! Sync panels on a network connection.
         void syncPanels();
 
+        //! \name Panel FLTK menu and function callbacks.
+        ///@{
         void annotations_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void color_area_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void color_panel_cb(Fl_Widget* w, ViewerUI* ui);
@@ -96,7 +108,7 @@ namespace mrv
         void usd_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void vectorscope_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void stereo3D_panel_cb(Fl_Widget* w, ViewerUI* ui);
-
+        ///@}
     } // namespace panel
 
 } // namespace mrv

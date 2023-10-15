@@ -268,7 +268,7 @@ namespace mrv
             (Fl_Callback*)toggle_one_panel_only_cb, ui,
             FL_MENU_TOGGLE | FL_MENU_DIVIDER);
         item = (Fl_Menu_Item*)&menu->menu()[idx];
-        if (onePanelOnly())
+        if (panel::onlyOne())
             item->set();
         else
             item->clear();

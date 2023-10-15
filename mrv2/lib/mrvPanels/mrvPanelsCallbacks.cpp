@@ -38,7 +38,7 @@ namespace mrv
 
         bool one_panel_only = false;
 
-        void onePanelOnly(bool t)
+        void panel::onlyOne(bool t)
         {
             one_panel_only = t;
             bool send = App::ui->uiPrefs->SendUI->value();
@@ -46,7 +46,7 @@ namespace mrv
                 tcp->pushMessage("One Panel Only", t);
         }
 
-        bool onePanelOnly()
+        bool panel::onlyOne()
         {
             return one_panel_only;
         }
@@ -508,8 +508,8 @@ namespace mrv
             bool send = App::ui->uiPrefs->SendUI->value();
             if (send)
             {
-                onePanelOnly(
-                    onePanelOnly()); // send one panel only setting first
+                panel::onlyOne(
+                    panel::onlyOne()); // send one panel only setting first
                 tcp->pushMessage("Files Panel", static_cast<bool>(filesPanel));
                 tcp->pushMessage("Color Panel", static_cast<bool>(colorPanel));
                 tcp->pushMessage(

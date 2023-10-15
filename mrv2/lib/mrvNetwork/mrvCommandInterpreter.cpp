@@ -1028,7 +1028,8 @@ namespace mrv
                     return;
                 }
                 bool value = message["value"];
-                if ((!value && onePanelOnly()) || (value && !onePanelOnly()))
+                if ((!value && panel::onlyOne()) ||
+                    (value && !panel::onlyOne()))
                     toggle_one_panel_only_cb(nullptr, ui);
             }
             else if (c == "Color Panel")

@@ -89,7 +89,7 @@ namespace mrv
             }
             else
             {
-                if (onePanelOnly())
+                if (panel::onlyOne())
                     removePanels(p.ui);
             }
 
