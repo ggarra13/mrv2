@@ -765,8 +765,8 @@ namespace mrv
         {
             Message message;
             message["command"] = "Timeline Mouse Release";
-            message["X"] = static_cast<float>(_toUI(X)) / pixel_w();
-            message["Y"] = static_cast<float>(_toUI(Y)) / pixel_h();
+            message["X"] = static_cast<float>(X) / pixel_w();
+            message["Y"] = static_cast<float>(Y) / pixel_h();
             message["button"] = button;
             message["on"] = on;
             message["modifiers"] = modifiers;
@@ -800,8 +800,8 @@ namespace mrv
         {
             Message message;
             message["command"] = "Timeline Mouse Move";
-            message["X"] = static_cast<float>(_toUI(X)) / pixel_w();
-            message["Y"] = static_cast<float>(_toUI(Y)) / pixel_h();
+            message["X"] = static_cast<float>(X) / pixel_w();
+            message["Y"] = static_cast<float>(Y) / pixel_h();
             tcp->pushMessage(message);
         }
         p.eventLoop->cursorPos(math::Vector2i(_toUI(X), _toUI(Y)));
