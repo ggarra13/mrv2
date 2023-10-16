@@ -62,6 +62,8 @@ v0.8.0
   size of thumbnails, transitions and markers).
 - Thumbnail above the timeline no longer appears when there's no clip loaded
   after it was shown once.
+- Fixed pixel zooming and panning on timeline viewport on network connections
+  when the pixels per unit was not 1 (like macOS Retina).
 - Some UI fixes and improvements:
     * The Zoom factor in the Pixel Toolbar keeps its value when selecting
       it from the pulldown.
