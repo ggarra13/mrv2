@@ -1147,7 +1147,6 @@ namespace mrv
                 }
                 EditMode value = message["value"];
                 editMode = value;
-                std::cerr << "message " << message << std::endl;
                 editModeH = message["height"];
                 bool presentation = ui->uiView->getPresentationMode();
                 if (!presentation)

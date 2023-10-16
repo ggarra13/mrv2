@@ -240,7 +240,7 @@ namespace mrv
         _p->timelineWidget->setEditable(value);
     }
 
-    void TimelineWidget::_seek()
+    int TimelineWidget::_seek()
     {
         TLRENDER_P();
         const int maxY = 48;
@@ -251,10 +251,12 @@ namespace mrv
         {
             auto time = _posToTime(X);
             p.player->seek(time);
+            return 1;
         }
         else
         {
             p.dragging = p.timelineWidget->isDragging();
+            return 0;
         }
     }
 
@@ -695,13 +697,13 @@ namespace mrv
     {
         TLRENDER_P();
         take_focus();
-        int button = 0;
+        int button = -1;
         int modifiers = fromFLTKModifiers();
         if (Fl::event_button1())
         {
             button = 0;
-            _seek();
-            if (!p.dragging)
+            int ok = _seek();
+            if (!p.dragging && ok)
                 return 1;
         }
         else if (Fl::event_button2())
@@ -723,8 +725,8 @@ namespace mrv
         TLRENDER_P();
         if (Fl::event_button1())
         {
-            _seek();
-            if (!p.dragging)
+            int ok = _seek();
+            if (!p.dragging && ok)
                 return 1;
         }
         else if (Fl::event_button2())
@@ -743,10 +745,10 @@ namespace mrv
         const int X, const int Y, int button, bool on, int modifiers)
     {
         TLRENDER_P();
-        if (button == 0)
+        if (button == 1)
         {
-            _seek();
-            if (!p.dragging)
+            int ok = _seek();
+            if (!p.dragging && ok)
                 return 1;
         }
         mouseMoveEvent(X, Y);
@@ -776,6 +778,8 @@ namespace mrv
     int TimelineWidget::mouseReleaseEvent()
     {
         int button = 0;
+        if (Fl::event_button1())
+            button = 1;
         mouseReleaseEvent(
             Fl::event_x(), Fl::event_y(), button, false, fromFLTKModifiers());
         return 1;
