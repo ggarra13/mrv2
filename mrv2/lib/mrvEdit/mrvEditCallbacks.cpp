@@ -1566,8 +1566,6 @@ namespace mrv
             {
                 const auto info = read->getInfo().get();
 
-                otime::RationalTime startTime = time::invalidTime;
-
                 bool isSequence =
                     io::FileType::Sequence ==
                         ioSystem->getFileType(path.getExtension()) &&
@@ -1673,12 +1671,6 @@ namespace mrv
                         TimeRange videoRange =
                             videoClip->trimmed_range_in_parent(&errorStatus)
                                 .value();
-
-                        auto gapRange = TimeRange(
-                            RationalTime(0.0, rate),
-                            RationalTime(
-                                videoRange.start_time().rescaled_to(rate)));
-                        auto gap = new otio::Gap(gapRange);
                         otio::Track* audioTrack;
                         if (audioTrackIndex < 0)
                         {
@@ -1691,16 +1683,26 @@ namespace mrv
                             audioTrack = otio::dynamic_retainer_cast<Track>(
                                 tracks[audioTrackIndex]);
                         }
-                        audioTrack->append_child(gap);
-                        if (audioTrackIndex < 0)
-                            stack->append_child(audioTrack, &errorStatus);
-                        if (otio::is_error(errorStatus))
+                        if (!emptyAudioTrack)
                         {
-                            throw std::runtime_error(
-                                _("Cannot append audio track."));
+                            auto gapRange = TimeRange(
+                                RationalTime(0.0, rate),
+                                RationalTime(
+                                    videoRange.start_time().rescaled_to(rate)));
+                            auto gap = new otio::Gap(gapRange);
+                            audioTrack->append_child(gap);
                         }
-                        tracks = stack->children();
-                        audioTrackIndex = tracks.size() - 1;
+                        if (audioTrackIndex < 0)
+                        {
+                            stack->append_child(audioTrack, &errorStatus);
+                            if (otio::is_error(errorStatus))
+                            {
+                                throw std::runtime_error(
+                                    _("Cannot append audio track."));
+                            }
+                            tracks = stack->children();
+                            audioTrackIndex = tracks.size() - 1;
+                        }
                     }
 
                     auto track = otio::dynamic_retainer_cast<Track>(
