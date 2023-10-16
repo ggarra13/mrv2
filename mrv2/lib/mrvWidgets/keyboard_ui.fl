@@ -10,9 +10,6 @@ code_name {.cxx}
 decl {\#include <cstdio>} {private local
 }
 
-decl {\#include <iostream>} {private local
-}
-
 decl {\#include "mrvCore/mrvHotkey.h"} {public local
 }
 
@@ -31,7 +28,7 @@ class ChooseHotkey {open
   Function {make_window(const std::string& name)} {open
   } {
     Fl_Window uiMain {
-      label {Hotkey for...} open selected
+      label {Hotkey for...} open
       xywh {235 379 360 140} type Double box PLASTIC_UP_BOX resizable
       code0 {std::string title = "Hotkey for ";}
       code1 {title += name;}
@@ -94,9 +91,15 @@ if ( v->uiKey->value() && strlen(v->uiKey->value()) > 0 )
     v->hk.key = text[0];
     v->hk.text = text[0];
    }
+   
+   if (isupper(v->hk.key))
+   {
+  	v->hk.shift = true;
+  	v->hk.key = tolower(v->hk.key);
+   }
 }
 
-v->uiMain->hide();}
+v->uiMain->hide();} selected
           xywh {220 92 55 26}
         }
         Fl_Button {} {
@@ -128,10 +131,10 @@ for (int i = 1; i < 13; i++)
       }
     }
   }
-  Function {ChooseHotkey( const mrv::Hotkey& h )} {open
+  Function {ChooseHotkey( const mrv::Hotkey* h )} {open
   } {
-    code {backup = h;
-hk = h;} {}
+    code {backup = *h;
+hk = *h;} {}
   }
   Function {fill()} {open
   } {

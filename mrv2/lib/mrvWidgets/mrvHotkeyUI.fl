@@ -7,11 +7,9 @@ i18n_gnu_function gettext
 i18n_gnu_static_function gettext_noop
 header_name {.h}
 code_name {.cxx}
-snap {
-  ver 1
-  current_suite FLTK
-  current_preset 0
+decl {\#include "mrvCore/mrvHotkey.h"} {private local
 }
+
 decl {\#include "mrvFl/mrvPreferences.h"} {private local
 }
 
@@ -24,9 +22,6 @@ decl {\#include "mrvWidgets/mrvBrowser.h"} {public global
 decl {\#include "mrvWidgets/mrvPopupMenu.h"} {public global
 }
 
-decl {\#include "mrvFl/mrvFileRequester.h"} {private local
-}
-
 decl {\#include "FL/Fl.H"} {public global
 }
 
@@ -35,15 +30,15 @@ decl {\#include "mrViewer.h"} {public global
 
 class HotkeyUI {open
 } {
-  decl {ViewerUI* main;} {private local
+  decl {ViewerUI* ui;} {private local
   }
   decl {int type;} {private local
   }
   Function {make_window()} {open private
   } {
     Fl_Window uiMain {
-      label Hotkeys open
-      xywh {569 132 775 644} type Double box PLASTIC_DOWN_BOX resizable modal visible
+      label Hotkeys
+      xywh {1023 101 775 644} type Double hide resizable
     } {
       Fl_Group {} {open
         xywh {0 4 853 640} box PLASTIC_DOWN_BOX resizable
@@ -64,7 +59,7 @@ if ( type == 0 )
 else
 {
     mrv::searchHotkey( text, ui->uiFunction );
-}} selected
+}}
             xywh {138 24 354 31} color 20 when 10 textcolor 56
           }
           Fl_Menu_Button uiSearchType {
@@ -72,7 +67,7 @@ else
             user_data this
             callback {HotkeyUI* ui = static_cast<HotkeyUI*>(v);
 ui->type = o->value();
-ui->uiSearchInput->do_callback();} open
+ui->uiSearchInput->do_callback();}
             xywh {498 23 190 31} when 5
             class {mrv::PopupMenu}
           } {
@@ -90,14 +85,22 @@ ui->uiSearchInput->do_callback();} open
           user_data this user_data_type {HotkeyUI*}
           callback {mrv::select_hotkey( v );}
           xywh {88 81 600 480} box DOWN_BOX color 20 textcolor 32 resizable
-          code0 {mrv::fill_ui_hotkeys( o );}
           code1 {o->textcolor( fl_contrast( FL_WHITE, o->color() ));}
           class {mrv::Browser}
         }
         Fl_Button {} {
+          label {Reload Hotkeys}
+          user_data uiFunction user_data_type {mrv::Browser*}
+          callback {mrv::load_hotkeys();
+fill_ui_hotkeys(v);}
+          tooltip {Reload hotkeys to last saved file.} xywh {88 579 295 39}
+        }
+        Fl_Button {} {
           label {Reset Hotkeys}
-          callback {mrv::load_hotkeys(main);}
-          tooltip {Reset hotkeys to saved file.} xywh {236 579 295 39}
+          user_data uiFunction user_data_type {mrv::Browser*}
+          callback {mrv::reset_hotkeys();
+fill_ui_hotkeys(v);}
+          tooltip {Reset hotkeys to mrv2's default configuration.} xywh {393 579 295 39}
         }
       }
     }
@@ -105,11 +108,12 @@ ui->uiSearchInput->do_callback();} open
   Function {HotkeyUI(ViewerUI* m)} {open
   } {
     code {type = 0;
-main = m;
+ui = m;
 make_window();} {}
   }
   Function {~HotkeyUI()} {open
   } {
-    code {delete uiMain; uiMain = NULL;} {}
+    code {delete uiMain; uiMain = NULL;} {selected
+    }
   }
 }

@@ -64,6 +64,15 @@ v0.8.0
   after it was shown once.
 - Fixed pixel zooming and panning on timeline viewport on network connections
   when the pixels per unit was not 1 (like macOS Retina).
+- Added a Reset Hotkeys to default in the Hotkeys Window.  This will reset
+  *all* your hotkeys to the default values of mrv2 (no need to mess with
+  mrv2.keys.prefs).
+- Added a Reload Hotkeys to the Hotkeys Window.  This will reload the last saved
+  hotkeys (ie. $HOME/.filmaura/mrv2.keys.prefs).
+- Fixed Annotations Clear Frame and Annotations Clear All Frames hotkeys being
+  the same.
+- Hotkeys are now compared properly when they are uppercase and shift was not
+  used while another hotkey had shift and a the same lowercase letter.
 - Some UI fixes and improvements:
     * The Zoom factor in the Pixel Toolbar keeps its value when selecting
       it from the pulldown.

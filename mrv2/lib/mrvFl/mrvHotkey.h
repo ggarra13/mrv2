@@ -19,7 +19,7 @@ namespace mrv
     void fill_ui_hotkeys(mrv::Browser* o);
     void select_hotkey(HotkeyUI* m);
 
-    void load_hotkeys(ViewerUI* ui);
+    void load_hotkeys();
     void save_hotkeys(Fl_Preferences& keys);
 
 } // namespace mrv

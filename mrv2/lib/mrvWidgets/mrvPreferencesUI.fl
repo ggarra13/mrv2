@@ -7,11 +7,6 @@ i18n_gnu_function gettext
 i18n_gnu_static_function gettext_noop
 header_name {.h}
 code_name {.cxx}
-snap {
-  ver 1
-  current_suite FLTK
-  current_preset 0
-}
 decl {\#include <FL/Fl_Color_Chooser.H>} {public global
 }
 
@@ -54,7 +49,7 @@ decl {\#include "mrvWidgets/mrvOCIOBrowser.h"} {public global
 decl {\#include "mrvFl/mrvFileRequester.h"} {public global
 }
 
-decl {\#include "mrvWidgets/mrvPreferencesTree.h"} {public global
+decl {\#include "mrvWidgets/mrvPreferencesTree.h"} {selected public global
 }
 
 decl {\#include "mrvWidgets/mrvPopupMenu.h"} {public global
@@ -71,11 +66,8 @@ class PreferencesUI {open
   } {
     Fl_Window uiMain {
       label Preferences
-      user_data this user_data_type {PreferencesUI*}
-      callback {// reload original preferences
-mrv::Preferences prefs(v, false, false);
-uiMain->hide();} open
-      xywh {497 310 847 466} type Double resizable
+      user_data this user_data_type {PreferencesUI*} open
+      xywh {337 111 847 466} type Double resizable
       code0 {main = m;} modal visible
     } {
       Fl_Group {} {open
@@ -444,7 +436,7 @@ o->redraw();}
           }
           Fl_Group {} {
             label Positioning
-            xywh {300 34 530 362} box EMBOSSED_BOX hide
+            xywh {300 34 530 362} box EMBOSSED_BOX
           } {
             Fl_Check_Button uiAlwaysSaveOnExit {
               label {Always Save on Exit}
@@ -805,7 +797,7 @@ v->uiPrefsFPS->value( g );}
           }
           Fl_Group {} {
             label OCIO open
-            xywh {293 34 542 362} box EMBOSSED_BOX align 5
+            xywh {293 34 542 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {open
               xywh {303 113 523 204}
@@ -823,7 +815,7 @@ std::string r = mrv::open_ocio_config(uiPrefs->uiPrefsOCIOConfig->value());
 if ( r.empty() ) return;
 
 unsetenv( "OCIO" );
-uiPrefs->uiPrefsOCIOConfig->value( r.c_str() );} selected
+uiPrefs->uiPrefsOCIOConfig->value( r.c_str() );}
                 tooltip {Pick a config.ocio file from disk.} xywh {693 180 55 31}
               }
             }

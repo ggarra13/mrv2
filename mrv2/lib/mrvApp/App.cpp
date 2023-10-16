@@ -27,6 +27,7 @@ namespace py = pybind11;
 #include "mrvCore/mrvOS.h" // do not move up
 #include "mrvCore/mrvMemory.h"
 #include "mrvCore/mrvHome.h"
+#include "mrvCore/mrvHotkey.h"
 #include "mrvCore/mrvUtil.h"
 #include "mrvCore/mrvRoot.h"
 #include "mrvCore/mrvSignalHandler.h"
@@ -508,6 +509,8 @@ namespace mrv
         uiLogDisplay = new LogDisplay(0, 20, 340, 320);
 
         LOG_INFO(msg);
+
+        store_default_hotkeys();
 
         std_any value;
 

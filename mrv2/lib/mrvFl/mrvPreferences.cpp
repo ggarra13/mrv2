@@ -42,6 +42,7 @@ namespace fs = std::filesystem;
 #include "mrvApp/App.h"
 
 #include "mrvPreferencesUI.h"
+#include "mrvHotkeyUI.h"
 
 #include "mrvFl/mrvIO.h"
 #include "mrvCore/mrvOS.h"
@@ -773,24 +774,24 @@ namespace mrv
         //
         // Hotkeys
         //
-        std::string fullhotkeysPath = prefspath() + hotkeys_file + ".prefs";
-        if (resetHotkeys)
-        {
-            if (file::isReadable(fullhotkeysPath))
-            {
-                fs::remove(fullhotkeysPath);
-            }
-        }
-        else
+        reset_hotkeys();
+        if (!resetHotkeys)
         {
             msg =
                 tl::string::Format(_("Loading hotkeys from \"{0}{1}.prefs\"."))
                     .arg(prefspath())
                     .arg(hotkeys_file);
-            LOG_INFO(msg);
+            load_hotkeys();
         }
+        else
+        {
+            msg = tl::string::Format(_("Reseting hotkeys to default."));
+        }
+        LOG_INFO(msg);
 
-        load_hotkeys(ui);
+        // Fill the hotkeys window
+        HotkeyUI* h = ui->uiHotkey;
+        fill_ui_hotkeys(h->uiFunction);
 
         std_any value;
 

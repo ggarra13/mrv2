@@ -52,11 +52,12 @@ namespace mrv
         // Labels
         b->add(_("@B12@C7@b@.Function\t@B12@C7@b@.Hotkey"));
 
-        for (int i = 0; hotkeys[i].name != "END"; ++i)
+        for (int i = 0; hotkeys[i].hotkey; ++i)
         {
-            HotkeyEntry& h = hotkeys[i];
+            const HotkeyEntry& h = hotkeys[i];
+            const std::string hotkey = h.hotkey->to_s();
+
             std::string row(_(h.name.c_str()));
-            const std::string hotkey = h.hotkey.to_s();
             row += "\t" + hotkey;
 
             b->add(row.c_str());
@@ -73,9 +74,9 @@ namespace mrv
             return;
 
         const std::string& name = hotkeys[idx].name;
-        Hotkey& hk = hotkeys[idx].hotkey;
+        Hotkey* hotkey = hotkeys[idx].hotkey;
 
-        ChooseHotkey* h = new ChooseHotkey(hk);
+        ChooseHotkey* h = new ChooseHotkey(hotkey);
         h->make_window(name);
         h->fill();
 
@@ -86,11 +87,11 @@ namespace mrv
         while (window->visible())
             Fl::check();
 
-        for (int i = 0; hotkeys[i].name != "END"; ++i)
+        for (int i = 0; hotkeys[i].hotkey; ++i)
         {
-            if (h->hk == hotkeys[i].hotkey && idx != i &&
-                hotkeys[i].hotkey.to_s() != "[" &&
-                hotkeys[i].hotkey.to_s() != "]")
+            if (h->hk == *(hotkeys[i].hotkey) && idx != i &&
+                hotkeys[i].hotkey->to_s() != "[" &&
+                hotkeys[i].hotkey->to_s() != "]")
             {
                 int ok = fl_choice(
                     _("Hotkey \"%s\" already used in \"%s\".\n"
@@ -104,12 +105,12 @@ namespace mrv
                 }
                 else
                 {
-                    hotkeys[i].hotkey.clear();
+                    hotkeys[i].hotkey->clear();
                 }
             }
         }
 
-        hk = h->hk;
+        *hotkey = h->hk;
 
         delete h;
 
@@ -184,99 +185,102 @@ namespace mrv
     void save_hotkeys(Fl_Preferences& keys)
     {
         keys.set("version", 11);
-        for (int i = 0; hotkeys[i].name != "END"; ++i)
+        for (int i = 0; hotkeys[i].hotkey; ++i)
         {
             keys.set(
-                (hotkeys[i].name + " ctrl").c_str(), hotkeys[i].hotkey.ctrl);
-            keys.set((hotkeys[i].name + " alt").c_str(), hotkeys[i].hotkey.alt);
+                (hotkeys[i].name + " ctrl").c_str(), hotkeys[i].hotkey->ctrl);
             keys.set(
-                (hotkeys[i].name + " meta").c_str(), hotkeys[i].hotkey.meta);
+                (hotkeys[i].name + " alt").c_str(), hotkeys[i].hotkey->alt);
             keys.set(
-                (hotkeys[i].name + " shift").c_str(), hotkeys[i].hotkey.shift);
+                (hotkeys[i].name + " meta").c_str(), hotkeys[i].hotkey->meta);
             keys.set(
-                (hotkeys[i].name + " key").c_str(), (int)hotkeys[i].hotkey.key);
+                (hotkeys[i].name + " shift").c_str(), hotkeys[i].hotkey->shift);
+            keys.set(
+                (hotkeys[i].name + " key").c_str(),
+                (int)hotkeys[i].hotkey->key);
             keys.set(
                 (hotkeys[i].name + " text").c_str(),
-                hotkeys[i].hotkey.text.c_str());
+                hotkeys[i].hotkey->text.c_str());
         }
     }
 
-    void load_hotkeys(ViewerUI* ui, Fl_Preferences* keys)
+    void load_hotkeys(Fl_Preferences* keys)
     {
         int version = 0;
         keys->get("version", version, 11);
         int tmp = 0;
         char tmpS[2048];
 
-        for (int i = 0; hotkeys[i].name != "END"; ++i)
+        for (int i = 0; hotkeys[i].hotkey; ++i)
         {
             if (hotkeys[i].force == false)
                 continue;
-            hotkeys[i].hotkey.shift = hotkeys[i].hotkey.ctrl =
-                hotkeys[i].hotkey.alt = hotkeys[i].hotkey.meta = false;
-            hotkeys[i].hotkey.key = 0;
-            hotkeys[i].hotkey.text.clear();
+            hotkeys[i].hotkey->shift = hotkeys[i].hotkey->ctrl =
+                hotkeys[i].hotkey->alt = hotkeys[i].hotkey->meta = false;
+            hotkeys[i].hotkey->key = 0;
+            hotkeys[i].hotkey->text.clear();
         }
 
-        for (int i = 0; hotkeys[i].name != "END"; ++i)
+        for (int i = 0; hotkeys[i].hotkey; ++i)
         {
-            Hotkey saved = hotkeys[i].hotkey;
+            Hotkey* saved = new Hotkey(*hotkeys[i].hotkey);
 
             keys->get(
                 (hotkeys[i].name + " key").c_str(), tmp,
-                (int)hotkeys[i].hotkey.key);
+                (int)hotkeys[i].hotkey->key);
             if (tmp)
                 hotkeys[i].force = false;
-            hotkeys[i].hotkey.key = unsigned(tmp);
+            hotkeys[i].hotkey->key = unsigned(tmp);
 
             keys->get(
                 (hotkeys[i].name + " text").c_str(), tmpS,
-                hotkeys[i].hotkey.text.c_str(), 16);
+                hotkeys[i].hotkey->text.c_str(), 16);
             if (strlen(tmpS) > 0)
             {
                 hotkeys[i].force = false;
-                hotkeys[i].hotkey.text = tmpS;
+                hotkeys[i].hotkey->text = tmpS;
             }
             else
-                hotkeys[i].hotkey.text.clear();
+                hotkeys[i].hotkey->text.clear();
 
             if (hotkeys[i].force)
             {
+                delete hotkeys[i].hotkey;
                 hotkeys[i].hotkey = saved;
                 continue;
             }
             keys->get(
                 (hotkeys[i].name + " ctrl").c_str(), tmp,
-                (int)hotkeys[i].hotkey.ctrl);
+                (int)hotkeys[i].hotkey->ctrl);
             if (tmp)
-                hotkeys[i].hotkey.ctrl = true;
+                hotkeys[i].hotkey->ctrl = true;
             else
-                hotkeys[i].hotkey.ctrl = false;
+                hotkeys[i].hotkey->ctrl = false;
             keys->get(
                 (hotkeys[i].name + " alt").c_str(), tmp,
-                (int)hotkeys[i].hotkey.alt);
+                (int)hotkeys[i].hotkey->alt);
             if (tmp)
-                hotkeys[i].hotkey.alt = true;
+                hotkeys[i].hotkey->alt = true;
             else
-                hotkeys[i].hotkey.alt = false;
+                hotkeys[i].hotkey->alt = false;
 
             keys->get(
                 (hotkeys[i].name + " meta").c_str(), tmp,
-                (int)hotkeys[i].hotkey.meta);
+                (int)hotkeys[i].hotkey->meta);
             if (tmp)
-                hotkeys[i].hotkey.meta = true;
+                hotkeys[i].hotkey->meta = true;
             else
-                hotkeys[i].hotkey.meta = false;
+                hotkeys[i].hotkey->meta = false;
 
             keys->get(
                 (hotkeys[i].name + " shift").c_str(), tmp,
-                (int)hotkeys[i].hotkey.shift);
+                (int)hotkeys[i].hotkey->shift);
             if (tmp)
-                hotkeys[i].hotkey.shift = true;
+                hotkeys[i].hotkey->shift = true;
             else
-                hotkeys[i].hotkey.shift = false;
+                hotkeys[i].hotkey->shift = false;
 
-            for (int j = 0; hotkeys[j].name != "END"; ++j)
+            for (int j = 0; hotkeys[j].hotkey; ++j)
             {
                 if (j != i && hotkeys[j].hotkey == hotkeys[i].hotkey)
                 {
@@ -285,33 +289,27 @@ namespace mrv
                         std::string err =
                             tl::string::Format(
                                 _("Corruption in hotkeys preferences. "
-                                  "Hotkey {0} for {1} will not be "
+                                  "Hotkey '{0}' for {1} will not be "
                                   "available.  "
                                   "Already used in {2}."))
-                                .arg(hotkeys[j].hotkey.to_s())
+                                .arg(hotkeys[j].hotkey->to_s())
                                 .arg(_(hotkeys[j].name.c_str()))
                                 .arg(_(hotkeys[i].name.c_str()));
                         LOG_ERROR(err);
                     }
-                    hotkeys[j].hotkey = Hotkey();
+                    hotkeys[j].hotkey = new Hotkey();
                 }
             }
         }
-
-        HotkeyUI* h = ui->uiHotkey;
-        fill_ui_hotkeys(h->uiFunction);
     }
 
-    void load_hotkeys(ViewerUI* ui)
+    void load_hotkeys()
     {
         Fl_Preferences* keys = new Fl_Preferences(
             prefspath().c_str(), "filmaura", Preferences::hotkeys_file.c_str(),
             Fl_Preferences::C_LOCALE);
-        load_hotkeys(ui, keys);
+        load_hotkeys(keys);
         delete keys;
-
-        HotkeyUI* h = ui->uiHotkey;
-        fill_ui_hotkeys(h->uiFunction);
     }
 
 } // namespace mrv

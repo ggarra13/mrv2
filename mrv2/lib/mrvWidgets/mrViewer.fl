@@ -1220,16 +1220,8 @@ delete uiAbout; uiAbout = nullptr;} {}
   } {
     code {if ( uiMain ) uiMain->redraw();
 if ( uiPrefs ) uiPrefs->uiMain->redraw();
-//if ( uiLog ) uiLog->uiMain->redraw();
-//if ( uiAbout ) uiAbout->uiMain->redraw();
+if ( uiAbout ) uiAbout->uiMain->redraw();
 if ( uiHotkey ) uiHotkey->uiMain->redraw();
-//if ( uiConnection ) uiConnection->uiMain->redraw();
-//if ( uiGL3dView ) uiGL3dView->uiMain->redraw();
-//if ( uiColorArea ) uiColorArea->uiMain->redraw();
-//if ( uiHistogram ) uiHistogram->uiMain->redraw();
-//if ( uiVectorscope ) uiVectorscope->uiMain->redraw();
-//if ( uiWaveform ) uiWaveform->uiMain->redraw();
-
 Fl::check(); // needed to refresh windows} {}
   }
 }

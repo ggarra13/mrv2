@@ -296,6 +296,14 @@ namespace mrv
     struct HotkeyEntry
     {
         /**
+         * Default constructor.
+         *
+         */
+        HotkeyEntry() :
+            force(false),
+            hotkey(nullptr){};
+
+        /**
          * HotkeyEntry constructor.
          *
          * @param n name of the hotkey command.
@@ -303,14 +311,16 @@ namespace mrv
          * @param f whether to force its use.
          *
          */
-        HotkeyEntry(const std::string n, Hotkey& h, bool f = false) :
+        HotkeyEntry(const std::string n, Hotkey* h, bool f = false) :
             force(f),
             name(n),
             hotkey(h){};
 
+        ~HotkeyEntry() {}
+
         bool force;
         std::string name;
-        Hotkey& hotkey;
+        Hotkey* hotkey;
     };
 
     /**
@@ -325,4 +335,7 @@ namespace mrv
 
     extern struct TableText table[];
     extern HotkeyEntry hotkeys[];
+
+    void store_default_hotkeys();
+    void reset_hotkeys();
 } // namespace mrv

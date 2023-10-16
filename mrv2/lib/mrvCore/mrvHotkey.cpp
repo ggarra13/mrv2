@@ -2,6 +2,8 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <cstring>
+
 #include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvHotkey.h"
 
@@ -318,172 +320,175 @@ namespace mrv
         return ok;
     }
 
+    HotkeyEntry* kDefaultHotkeys = nullptr;
+
     HotkeyEntry hotkeys[] = {
 
-        HotkeyEntry(_("Open Directory"), kOpenDirectory),
-        HotkeyEntry(_("Open Movie or Sequence"), kOpenImage),
-        HotkeyEntry(_("Open Session"), kOpenSession),
-        HotkeyEntry(_("Save Image"), kSaveImage),
+        HotkeyEntry(_("Open Directory"), &kOpenDirectory),
+        HotkeyEntry(_("Open Movie or Sequence"), &kOpenImage),
+        HotkeyEntry(_("Open Session"), &kOpenSession),
+        HotkeyEntry(_("Save Image"), &kSaveImage),
 
-        HotkeyEntry(_("Save Movie or Sequence"), kSaveSequence),
-        HotkeyEntry(_("Save OTIO Timeline"), kSaveOTIOEDL),
-        HotkeyEntry(_("Save PDF Document"), kSavePDF),
-        HotkeyEntry(_("Save Session"), kSaveSession),
-        HotkeyEntry(_("Save Session As"), kSaveSessionAs),
+        HotkeyEntry(_("Save Movie or Sequence"), &kSaveSequence),
+        HotkeyEntry(_("Save OTIO Timeline"), &kSaveOTIOEDL),
+        HotkeyEntry(_("Save PDF Document"), &kSavePDF),
+        HotkeyEntry(_("Save Session"), &kSaveSession),
+        HotkeyEntry(_("Save Session As"), &kSaveSessionAs),
 
-        HotkeyEntry(_("Close Current"), kCloseCurrent),
-        HotkeyEntry(_("Close All"), kCloseAll),
+        HotkeyEntry(_("Close Current"), &kCloseCurrent),
+        HotkeyEntry(_("Close All"), &kCloseAll),
 
-        HotkeyEntry(_("Quit Program"), kQuitProgram),
+        HotkeyEntry(_("Quit Program"), &kQuitProgram),
 
-        HotkeyEntry(_("Center Image"), kCenterImage),
-        HotkeyEntry(_("Fit Screen"), kFitScreen),
-        HotkeyEntry(_("Resize Main Window to Fit"), kResizeMainWindow),
-        HotkeyEntry(_("Fit All"), kFitAll),
+        HotkeyEntry(_("Center Image"), &kCenterImage),
+        HotkeyEntry(_("Fit Screen"), &kFitScreen),
+        HotkeyEntry(_("Resize Main Window to Fit"), &kResizeMainWindow),
+        HotkeyEntry(_("Fit All"), &kFitAll),
         HotkeyEntry(
-            _("Toggle Minify Texture Filtering"), kMinifyTextureFiltering),
+            _("Toggle Minify Texture Filtering"), &kMinifyTextureFiltering),
         HotkeyEntry(
-            _("Toggle Magnify Texture Filtering"), kMagnifyTextureFiltering),
-        HotkeyEntry(_("Safe Areas"), kSafeAreas),
-        HotkeyEntry(_("Display Window"), kDisplayWindow),
-        HotkeyEntry(_("Data Window"), kDataWindow),
-        HotkeyEntry(_("Compare Wipe"), kCompareWipe),
-        HotkeyEntry(_("Compare Overlay"), kCompareOverlay),
-        HotkeyEntry(_("Compare Difference"), kCompareDifference),
-        HotkeyEntry(_("Compare Horizontal"), kCompareHorizontal),
-        HotkeyEntry(_("Compare Vertical"), kCompareVertical),
-        HotkeyEntry(_("Compare Tile"), kCompareTile),
-        HotkeyEntry(_("Color Channel"), kColorChannel),
-        HotkeyEntry(_("Red Channel"), kRedChannel),
-        HotkeyEntry(_("Green Channel"), kGreenChannel),
-        HotkeyEntry(_("Blue Channel"), kBlueChannel),
-        HotkeyEntry(_("Alpha Channel"), kAlphaChannel),
-        HotkeyEntry(_("Flip X"), kFlipX),
-        HotkeyEntry(_("Flip Y"), kFlipY),
+            _("Toggle Magnify Texture Filtering"), &kMagnifyTextureFiltering),
+        HotkeyEntry(_("Safe Areas"), &kSafeAreas),
+        HotkeyEntry(_("Display Window"), &kDisplayWindow),
+        HotkeyEntry(_("Data Window"), &kDataWindow),
+        HotkeyEntry(_("Compare Wipe"), &kCompareWipe),
+        HotkeyEntry(_("Compare Overlay"), &kCompareOverlay),
+        HotkeyEntry(_("Compare Difference"), &kCompareDifference),
+        HotkeyEntry(_("Compare Horizontal"), &kCompareHorizontal),
+        HotkeyEntry(_("Compare Vertical"), &kCompareVertical),
+        HotkeyEntry(_("Compare Tile"), &kCompareTile),
+        HotkeyEntry(_("Color Channel"), &kColorChannel),
+        HotkeyEntry(_("Red Channel"), &kRedChannel),
+        HotkeyEntry(_("Green Channel"), &kGreenChannel),
+        HotkeyEntry(_("Blue Channel"), &kBlueChannel),
+        HotkeyEntry(_("Alpha Channel"), &kAlphaChannel),
+        HotkeyEntry(_("Flip X"), &kFlipX),
+        HotkeyEntry(_("Flip Y"), &kFlipY),
 
-        HotkeyEntry(_("Annotation Clear Frame"), kShapeFrameClear),
-        HotkeyEntry(_("Annotation Clear All Frames"), kShapeFrameClear),
-        HotkeyEntry(_("Annotation Frame Step Backwards"), kShapeFrameStepBack),
+        HotkeyEntry(_("Annotation Clear Frame"), &kShapeFrameClear),
+        HotkeyEntry(_("Annotation Clear All Frames"), &kShapeFrameClearAll),
+        HotkeyEntry(_("Annotation Frame Step Backwards"), &kShapeFrameStepBack),
 
-        HotkeyEntry(_("Frame Step Backwards"), kFrameStepBack),
-        HotkeyEntry(_("Frame Step FPS Backwards"), kFrameStepFPSBack),
-        HotkeyEntry(_("Annotation Frame Step Forwards"), kShapeFrameStepFwd),
-        HotkeyEntry(_("Frame Step Forwards"), kFrameStepFwd),
-        HotkeyEntry(_("Frame Step FPS Forwards"), kFrameStepFPSFwd),
-        HotkeyEntry(_("Play Backwards"), kPlayBack),
-        HotkeyEntry(_("Play Backwards / Change Speed"), kPlayBackHalfSpeed),
-        HotkeyEntry(_("Play in Current Direction"), kPlayDirection),
-        HotkeyEntry(_("Play Forwards"), kPlayFwd),
-        HotkeyEntry(_("Play Forwards / Change Speed"), kPlayFwdTwiceSpeed),
-        HotkeyEntry(_("Stop"), kStop),
-        HotkeyEntry(_("First Frame"), kFirstFrame),
-        HotkeyEntry(_("Last Frame"), kLastFrame),
+        HotkeyEntry(_("Frame Step Backwards"), &kFrameStepBack),
+        HotkeyEntry(_("Frame Step FPS Backwards"), &kFrameStepFPSBack),
+        HotkeyEntry(_("Annotation Frame Step Forwards"), &kShapeFrameStepFwd),
+        HotkeyEntry(_("Frame Step Forwards"), &kFrameStepFwd),
+        HotkeyEntry(_("Frame Step FPS Forwards"), &kFrameStepFPSFwd),
+        HotkeyEntry(_("Play Backwards"), &kPlayBack),
+        HotkeyEntry(_("Play Backwards / Change Speed"), &kPlayBackHalfSpeed),
+        HotkeyEntry(_("Play in Current Direction"), &kPlayDirection),
+        HotkeyEntry(_("Play Forwards"), &kPlayFwd),
+        HotkeyEntry(_("Play Forwards / Change Speed"), &kPlayFwdTwiceSpeed),
+        HotkeyEntry(_("Stop"), &kStop),
+        HotkeyEntry(_("First Frame"), &kFirstFrame),
+        HotkeyEntry(_("Last Frame"), &kLastFrame),
 
-        HotkeyEntry(_("Loop Playback"), kPlaybackLoop),
-        HotkeyEntry(_("Playback Once"), kPlaybackOnce),
-        HotkeyEntry(_("Playback Ping Pong"), kPlaybackPingPong),
+        HotkeyEntry(_("Loop Playback"), &kPlaybackLoop),
+        HotkeyEntry(_("Playback Once"), &kPlaybackOnce),
+        HotkeyEntry(_("Playback Ping Pong"), &kPlaybackPingPong),
 
-        HotkeyEntry(_("First Image Version"), kFirstVersionImage),
-        HotkeyEntry(_("Previous Image Version"), kPreviousVersionImage),
-        HotkeyEntry(_("Next Image Version"), kNextVersionImage),
-        HotkeyEntry(_("Last Image Version"), kLastVersionImage),
+        HotkeyEntry(_("First Image Version"), &kFirstVersionImage),
+        HotkeyEntry(_("Previous Image Version"), &kPreviousVersionImage),
+        HotkeyEntry(_("Next Image Version"), &kNextVersionImage),
+        HotkeyEntry(_("Last Image Version"), &kLastVersionImage),
 
-        HotkeyEntry(_("Previous Image"), kPreviousImage),
-        HotkeyEntry(_("Next Image"), kNextImage),
+        HotkeyEntry(_("Previous Image"), &kPreviousImage),
+        HotkeyEntry(_("Next Image"), &kNextImage),
 
-        HotkeyEntry(_("Previous Image Limited"), kPreviousImageLimited),
-        HotkeyEntry(_("Next Image Limited"), kNextImageLimited),
+        HotkeyEntry(_("Previous Image Limited"), &kPreviousImageLimited),
+        HotkeyEntry(_("Next Image Limited"), &kNextImageLimited),
 
-        HotkeyEntry(_("Previous Channel"), kPreviousChannel),
-        HotkeyEntry(_("Next Channel"), kNextChannel),
+        HotkeyEntry(_("Previous Channel"), &kPreviousChannel),
+        HotkeyEntry(_("Next Channel"), &kNextChannel),
 
-        HotkeyEntry(_("Cut Frame"), kEditCutFrame),
-        HotkeyEntry(_("Copy Frame"), kEditCopyFrame),
-        HotkeyEntry(_("Paste Frame"), kEditPasteFrame),
-        HotkeyEntry(_("Insert Frame"), kEditInsertFrame),
+        HotkeyEntry(_("Cut Frame"), &kEditCutFrame),
+        HotkeyEntry(_("Copy Frame"), &kEditCopyFrame),
+        HotkeyEntry(_("Paste Frame"), &kEditPasteFrame),
+        HotkeyEntry(_("Insert Frame"), &kEditInsertFrame),
 
-        HotkeyEntry(_("Slice Clip"), kEditSliceClip),
-        HotkeyEntry(_("Remove Clip"), kEditRemoveClip),
+        HotkeyEntry(_("Slice Clip"), &kEditSliceClip),
+        HotkeyEntry(_("Remove Clip"), &kEditRemoveClip),
 
-        HotkeyEntry(_("Edit Undo"), kEditUndo),
-        HotkeyEntry(_("Edit Redo"), kEditRedo),
+        HotkeyEntry(_("Edit Undo"), &kEditUndo),
+        HotkeyEntry(_("Edit Redo"), &kEditRedo),
 
-        HotkeyEntry(_("Toggle Menu Bar"), kToggleMenuBar),
-        HotkeyEntry(_("Toggle Top Bar"), kToggleTopBar),
-        HotkeyEntry(_("Toggle Pixel Bar"), kTogglePixelBar),
-        HotkeyEntry(_("Toggle Timeline"), kToggleTimeline),
-        HotkeyEntry(_("Toggle Status Bar"), kToggleStatusBar),
-        HotkeyEntry(_("Toggle Tool Dock"), kToggleToolBar),
-        HotkeyEntry(_("Toggle Full Screen"), kFullScreen),
-        HotkeyEntry(_("Toggle Presentation"), kTogglePresentation),
-        HotkeyEntry(_("Toggle Float On Top"), kToggleFloatOnTop),
-        HotkeyEntry(_("Toggle Secondary"), kToggleSecondary),
+        HotkeyEntry(_("Toggle Menu Bar"), &kToggleMenuBar),
+        HotkeyEntry(_("Toggle Top Bar"), &kToggleTopBar),
+        HotkeyEntry(_("Toggle Pixel Bar"), &kTogglePixelBar),
+        HotkeyEntry(_("Toggle Timeline"), &kToggleTimeline),
+        HotkeyEntry(_("Toggle Status Bar"), &kToggleStatusBar),
+        HotkeyEntry(_("Toggle Tool Dock"), &kToggleToolBar),
+        HotkeyEntry(_("Toggle Full Screen"), &kFullScreen),
+        HotkeyEntry(_("Toggle Presentation"), &kTogglePresentation),
+        HotkeyEntry(_("Toggle Float On Top"), &kToggleFloatOnTop),
+        HotkeyEntry(_("Toggle Secondary"), &kToggleSecondary),
         HotkeyEntry(
-            _("Toggle Secondary Float On Top"), kToggleSecondaryFloatOnTop),
-        HotkeyEntry(_("Toggle Network"), kToggleNetwork),
-        HotkeyEntry(_("Toggle USD"), kToggleUSD),
-        HotkeyEntry(_("Toggle Stereo 3D"), kToggleStereo3D),
-        HotkeyEntry(_("Toggle Edit Mode"), kToggleEditMode),
-        HotkeyEntry(_("Toggle Timeline Thumbnails"), kToggleTimelineThumbnails),
+            _("Toggle Secondary Float On Top"), &kToggleSecondaryFloatOnTop),
+        HotkeyEntry(_("Toggle Network"), &kToggleNetwork),
+        HotkeyEntry(_("Toggle USD"), &kToggleUSD),
+        HotkeyEntry(_("Toggle Stereo 3D"), &kToggleStereo3D),
+        HotkeyEntry(_("Toggle Edit Mode"), &kToggleEditMode),
         HotkeyEntry(
-            _("Toggle Timeline Transitions"), kToggleTimelineTransitions),
-        HotkeyEntry(_("Toggle Timeline Markers"), kToggleTimelineMarkers),
+            _("Toggle Timeline Thumbnails"), &kToggleTimelineThumbnails),
+        HotkeyEntry(
+            _("Toggle Timeline Transitions"), &kToggleTimelineTransitions),
+        HotkeyEntry(_("Toggle Timeline Markers"), &kToggleTimelineMarkers),
 
-        HotkeyEntry(_("Reset Gain/Gamma"), kResetChanges),
-        HotkeyEntry(_("Exposure More"), kExposureMore),
-        HotkeyEntry(_("Exposure Less"), kExposureLess),
-        HotkeyEntry(_("Gamma More"), kGammaMore),
-        HotkeyEntry(_("Gamma Less"), kGammaLess),
-        HotkeyEntry(_("OCIO Input Color Space"), kOCIOInputColorSpace),
-        HotkeyEntry(_("OCIO Display"), kOCIODisplay),
-        HotkeyEntry(_("OCIO View"), kOCIOView),
+        HotkeyEntry(_("Reset Gain/Gamma"), &kResetChanges),
+        HotkeyEntry(_("Exposure More"), &kExposureMore),
+        HotkeyEntry(_("Exposure Less"), &kExposureLess),
+        HotkeyEntry(_("Gamma More"), &kGammaMore),
+        HotkeyEntry(_("Gamma Less"), &kGammaLess),
+        HotkeyEntry(_("OCIO Input Color Space"), &kOCIOInputColorSpace),
+        HotkeyEntry(_("OCIO Display"), &kOCIODisplay),
+        HotkeyEntry(_("OCIO View"), &kOCIOView),
 
-        HotkeyEntry(_("Scrub Mode"), kScrubMode),
-        HotkeyEntry(_("Area Selection Mode"), kAreaMode),
-        HotkeyEntry(_("Draw Mode"), kDrawMode),
-        HotkeyEntry(_("Erase Mode"), kEraseMode),
-        HotkeyEntry(_("Arrow Mode"), kArrowMode),
-        HotkeyEntry(_("Rectangle Mode"), kRectangleMode),
-        HotkeyEntry(_("Circle Mode"), kCircleMode),
-        HotkeyEntry(_("Text Mode"), kTextMode),
-        HotkeyEntry(_("Pen Size More"), kPenSizeMore),
-        HotkeyEntry(_("Pen Size Less"), kPenSizeLess),
-        HotkeyEntry(_("Undo Draw"), kUndoDraw),
-        HotkeyEntry(_("Redo Draw"), kRedoDraw),
-        HotkeyEntry(_("Switch Pen Color"), kSwitchPenColor),
+        HotkeyEntry(_("Scrub Mode"), &kScrubMode),
+        HotkeyEntry(_("Area Selection Mode"), &kAreaMode),
+        HotkeyEntry(_("Draw Mode"), &kDrawMode),
+        HotkeyEntry(_("Erase Mode"), &kEraseMode),
+        HotkeyEntry(_("Arrow Mode"), &kArrowMode),
+        HotkeyEntry(_("Rectangle Mode"), &kRectangleMode),
+        HotkeyEntry(_("Circle Mode"), &kCircleMode),
+        HotkeyEntry(_("Text Mode"), &kTextMode),
+        HotkeyEntry(_("Pen Size More"), &kPenSizeMore),
+        HotkeyEntry(_("Pen Size Less"), &kPenSizeLess),
+        HotkeyEntry(_("Undo Draw"), &kUndoDraw),
+        HotkeyEntry(_("Redo Draw"), &kRedoDraw),
+        HotkeyEntry(_("Switch Pen Color"), &kSwitchPenColor),
 
-        HotkeyEntry(_("Set In Point"), kSetInPoint),
-        HotkeyEntry(_("Set Out Point"), kSetOutPoint),
+        HotkeyEntry(_("Set In Point"), &kSetInPoint),
+        HotkeyEntry(_("Set Out Point"), &kSetOutPoint),
 
-        HotkeyEntry(_("Solid Background"), kSolidBackground),
-        HotkeyEntry(_("Checkers Background"), kCheckersBackground),
-        HotkeyEntry(_("Transparent Background"), kTransparentBackground),
+        HotkeyEntry(_("Solid Background"), &kSolidBackground),
+        HotkeyEntry(_("Checkers Background"), &kCheckersBackground),
+        HotkeyEntry(_("Transparent Background"), &kTransparentBackground),
 
-        HotkeyEntry(_("Hud Window"), kHudToggle),
+        HotkeyEntry(_("Hud Window"), &kHudToggle),
 
-        HotkeyEntry(_("Toggle One Panel Only"), kToggleOnePanelOnly),
-        HotkeyEntry(_("Toggle Files Panel"), kToggleReel),
-        HotkeyEntry(_("Toggle Media Info Panel"), kToggleMediaInfo),
-        HotkeyEntry(_("Toggle Color Area Info Panel"), kToggleColorInfo),
-        HotkeyEntry(_("Toggle Color Controls Panel"), kToggleColorControls),
-        HotkeyEntry(_("Toggle Playlist Panel"), kTogglePlaylist),
-        HotkeyEntry(_("Toggle Compare Panel"), kToggleCompare),
-        HotkeyEntry(_("Toggle Devices Panel"), kToggleDevices),
-        HotkeyEntry(_("Toggle Annotation Panel"), kToggleAnnotation),
-        HotkeyEntry(_("Toggle Settings Panel"), kToggleSettings),
-        HotkeyEntry(_("Toggle Histogram Panel"), kToggleHistogram),
-        HotkeyEntry(_("Toggle Vectorscope Panel"), kToggleVectorscope),
-        HotkeyEntry(_("Toggle Waveform Panel"), kToggleWaveform),
-        HotkeyEntry(_("Toggle Environment Map Panel"), kToggleEnvironmentMap),
-        HotkeyEntry(_("Toggle Preferences Window"), kTogglePreferences),
-        HotkeyEntry(_("Toggle Python Panel"), kTogglePythonConsole),
-        HotkeyEntry(_("Toggle Log Panel"), kToggleLogs),
+        HotkeyEntry(_("Toggle One Panel Only"), &kToggleOnePanelOnly),
+        HotkeyEntry(_("Toggle Files Panel"), &kToggleReel),
+        HotkeyEntry(_("Toggle Media Info Panel"), &kToggleMediaInfo),
+        HotkeyEntry(_("Toggle Color Area Info Panel"), &kToggleColorInfo),
+        HotkeyEntry(_("Toggle Color Controls Panel"), &kToggleColorControls),
+        HotkeyEntry(_("Toggle Playlist Panel"), &kTogglePlaylist),
+        HotkeyEntry(_("Toggle Compare Panel"), &kToggleCompare),
+        HotkeyEntry(_("Toggle Devices Panel"), &kToggleDevices),
+        HotkeyEntry(_("Toggle Annotation Panel"), &kToggleAnnotation),
+        HotkeyEntry(_("Toggle Settings Panel"), &kToggleSettings),
+        HotkeyEntry(_("Toggle Histogram Panel"), &kToggleHistogram),
+        HotkeyEntry(_("Toggle Vectorscope Panel"), &kToggleVectorscope),
+        HotkeyEntry(_("Toggle Waveform Panel"), &kToggleWaveform),
+        HotkeyEntry(_("Toggle Environment Map Panel"), &kToggleEnvironmentMap),
+        HotkeyEntry(_("Toggle Preferences Window"), &kTogglePreferences),
+        HotkeyEntry(_("Toggle Python Panel"), &kTogglePythonConsole),
+        HotkeyEntry(_("Toggle Log Panel"), &kToggleLogs),
 
-        HotkeyEntry(_("Toggle Hotkeys Window"), kToggleHotkeys),
-        HotkeyEntry(_("Toggle About Window"), kToggleAbout),
-        // HotkeyEntry( _("Rotate Image +90 Degrees"), kRotatePlus90),
-        // HotkeyEntry( _("Rotate Image -90 Degrees"), kRotateMinus90),
-        HotkeyEntry("END", kGammaLess),
+        HotkeyEntry(_("Toggle Hotkeys Window"), &kToggleHotkeys),
+        HotkeyEntry(_("Toggle About Window"), &kToggleAbout),
+        // HotkeyEntry( _("Rotate Image +90 Degrees"), &kRotatePlus90),
+        // HotkeyEntry( _("Rotate Image -90 Degrees"), &kRotateMinus90),
+        HotkeyEntry("END", nullptr),
     };
 
     struct TableText table[] = {
@@ -597,4 +602,32 @@ namespace mrv
         return false;
     }
 
+    void store_default_hotkeys()
+    {
+        size_t numHotkeys = sizeof(hotkeys) / sizeof(HotkeyEntry);
+        kDefaultHotkeys = new HotkeyEntry[numHotkeys];
+        for (size_t i = 0; i < numHotkeys; ++i)
+        {
+            kDefaultHotkeys[i] = hotkeys[i];
+            if (hotkeys[i].hotkey)
+                kDefaultHotkeys[i].hotkey = new Hotkey(*hotkeys[i].hotkey);
+        }
+    }
+
+    void reset_hotkeys()
+    {
+        size_t numHotkeys = sizeof(hotkeys) / sizeof(HotkeyEntry);
+        for (size_t i = 0; i < numHotkeys; ++i)
+        {
+            if (kDefaultHotkeys[i].hotkey)
+            {
+                hotkeys[i].hotkey->ctrl = kDefaultHotkeys[i].hotkey->ctrl;
+                hotkeys[i].hotkey->meta = kDefaultHotkeys[i].hotkey->meta;
+                hotkeys[i].hotkey->alt = kDefaultHotkeys[i].hotkey->alt;
+                hotkeys[i].hotkey->shift = kDefaultHotkeys[i].hotkey->shift;
+                hotkeys[i].hotkey->key = kDefaultHotkeys[i].hotkey->key;
+                hotkeys[i].hotkey->text = kDefaultHotkeys[i].hotkey->text;
+            }
+        }
+    }
 } // namespace mrv
