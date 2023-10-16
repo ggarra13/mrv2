@@ -13,6 +13,7 @@ set(HEADERS
     mrvInsertData.h
     mrvLUTOptions.h
     mrvTCP.h
+    mrvTimelineItemOptions.h
     mrvMessage.h
 )
 
@@ -26,6 +27,7 @@ set(SOURCES
     mrvInsertData.cpp
     mrvLUTOptions.cpp
     mrvTCP.cpp
+    mrvTimelineItemOptions.cpp
 )
 
 

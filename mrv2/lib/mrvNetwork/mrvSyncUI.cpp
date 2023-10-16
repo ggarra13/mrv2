@@ -7,6 +7,7 @@
 #include "mrViewer.h"
 
 #include "mrvNetwork/mrvFilesModelItem.h"
+#include "mrvNetwork/mrvTimelineItemOptions.h"
 #include "mrvNetwork/mrvProtocolVersion.h"
 #include "mrvNetwork/mrvConnectionHandler.h"
 
@@ -44,5 +45,15 @@ namespace mrv
             "Status Bar", static_cast<bool>(ui->uiStatusBar->visible()));
         tcp->pushMessage(
             "Action Bar", static_cast<bool>(ui->uiToolsGroup->visible()));
+
+        auto options = ui->uiTimeline->getItemOptions();
+        Message msg;
+        msg["command"] = "setTimelineItemOptions";
+        msg["value"] = options;
+
+        bool editable = ui->uiTimeline->isEditable();
+        msg["command"] = "setTimelineEditable";
+        msg["value"] = editable;
+        tcp->pushMessage(msg);
     }
 } // namespace mrv
