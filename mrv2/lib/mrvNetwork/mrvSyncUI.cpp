@@ -53,7 +53,7 @@ namespace mrv
 
         bool editable = ui->uiTimeline->isEditable();
         msg["command"] = "setTimelineEditable";
-        msg["value"] = options;
+        msg["value"] = editable;
         tcp->pushMessage(msg);
     }
 } // namespace mrv
