@@ -45,6 +45,7 @@
 #include "mrvNetwork/mrvTCP.h"
 #include "mrvNetwork/mrvCypher.h"
 #include "mrvNetwork/mrvFilesModelItem.h"
+#include "mrvNetwork/mrvTimelineItemOptions.h"
 
 #include "mrvApp/mrvSettingsObject.h"
 #include "mrvApp/App.h"
@@ -1298,7 +1299,7 @@ namespace mrv
 
     void annotation_clear_cb(Fl_Menu_*, ViewerUI* ui)
     {
-        const auto& player = ui->uiView->getTimelinePlayer();
+        const auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
         if (ui->uiPrefs->SendAnnotations->value())
@@ -1310,7 +1311,7 @@ namespace mrv
 
     void annotation_clear_all_cb(Fl_Menu_*, ViewerUI* ui)
     {
-        const auto& player = ui->uiView->getTimelinePlayer();
+        const auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
         if (ui->uiPrefs->SendAnnotations->value())
@@ -1325,6 +1326,11 @@ namespace mrv
     {
         auto options = ui->uiTimeline->getItemOptions();
         options.thumbnails = false;
+        Message msg;
+        msg["command"] = "setTimelineItemOptions";
+        msg["value"] = options;
+        if (ui->uiPrefs->SendUI->value())
+            tcp->pushMessage(msg);
         ui->uiTimeline->setItemOptions(options);
         if (editMode != EditMode::kTimeline)
             set_edit_mode_cb(EditMode::kFull, ui);
@@ -1336,6 +1342,11 @@ namespace mrv
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
         bool editable = (bool)item->checked();
         ui->uiTimeline->setEditable(editable);
+        Message msg;
+        msg["command"] = "setTimelineEditable";
+        msg["value"] = editable;
+        if (ui->uiPrefs->SendUI->value())
+            tcp->pushMessage(msg);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
@@ -1344,6 +1355,11 @@ namespace mrv
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
         auto options = ui->uiTimeline->getItemOptions();
         options.editAssociatedClips = item->checked();
+        Message msg;
+        msg["command"] = "setTimelineItemOptions";
+        msg["value"] = options;
+        if (ui->uiPrefs->SendUI->value())
+            tcp->pushMessage(msg);
         ui->uiTimeline->setItemOptions(options);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
@@ -1353,6 +1369,11 @@ namespace mrv
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
         auto options = ui->uiTimeline->getItemOptions();
         options.showMarkers = item->checked();
+        Message msg;
+        msg["command"] = "setTimelineItemOptions";
+        msg["value"] = options;
+        if (ui->uiPrefs->SendUI->value())
+            tcp->pushMessage(msg);
         ui->uiTimeline->setItemOptions(options);
         if (editMode != EditMode::kTimeline)
             set_edit_mode_cb(EditMode::kFull, ui);
@@ -1364,6 +1385,11 @@ namespace mrv
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
         auto options = ui->uiTimeline->getItemOptions();
         options.showTransitions = item->checked();
+        Message msg;
+        msg["command"] = "setTimelineItemOptions";
+        msg["value"] = options;
+        if (ui->uiPrefs->SendUI->value())
+            tcp->pushMessage(msg);
         ui->uiTimeline->setItemOptions(options);
         if (editMode != EditMode::kTimeline)
             set_edit_mode_cb(EditMode::kFull, ui);
@@ -1376,6 +1402,11 @@ namespace mrv
         options.thumbnails = true;
         options.thumbnailHeight = 100;
         options.waveformHeight = options.thumbnailHeight / 2;
+        Message msg;
+        msg["command"] = "setTimelineItemOptions";
+        msg["value"] = options;
+        if (ui->uiPrefs->SendUI->value())
+            tcp->pushMessage(msg);
         ui->uiTimeline->setItemOptions(options);
         if (editMode != EditMode::kTimeline)
             set_edit_mode_cb(EditMode::kFull, ui);
@@ -1388,6 +1419,11 @@ namespace mrv
         options.thumbnails = true;
         options.thumbnailHeight = 200;
         options.waveformHeight = options.thumbnailHeight / 2;
+        Message msg;
+        msg["command"] = "setTimelineItemOptions";
+        msg["value"] = options;
+        if (ui->uiPrefs->SendUI->value())
+            tcp->pushMessage(msg);
         ui->uiTimeline->setItemOptions(options);
         if (editMode != EditMode::kTimeline)
             set_edit_mode_cb(EditMode::kFull, ui);
@@ -1400,6 +1436,11 @@ namespace mrv
         options.thumbnails = true;
         options.thumbnailHeight = 300;
         options.waveformHeight = options.thumbnailHeight / 2;
+        Message msg;
+        msg["command"] = "setTimelineItemOptions";
+        msg["value"] = options;
+        if (ui->uiPrefs->SendUI->value())
+            tcp->pushMessage(msg);
         ui->uiTimeline->setItemOptions(options);
         if (editMode != EditMode::kTimeline)
             set_edit_mode_cb(EditMode::kFull, ui);

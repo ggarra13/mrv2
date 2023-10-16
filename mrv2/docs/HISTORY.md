@@ -56,7 +56,13 @@ v0.8.0
 - Fixed Creation of EDL Playlist with image sequences.
 - Fixed annotations copying from source clip to EDL Playlist when adding the
   clip to the playlist.
-- Some UI fixes:
+- Adding a clip to an EDL playlist will now positiong the current time at the
+  frame of the new clip, instead of resetting it to 0.
+- Session files also save and load the timeline viewport options (ie. Edit mode,
+  size of thumbnails, transitions and markers).
+- Thumbnail above the timeline no longer appears when there's no clip loaded
+  after it was shown once.
+- Some UI fixes and improvements:
     * The Zoom factor in the Pixel Toolbar keeps its value when selecting
       it from the pulldown.
     * All buttons and displays have the same size on both the timeline and

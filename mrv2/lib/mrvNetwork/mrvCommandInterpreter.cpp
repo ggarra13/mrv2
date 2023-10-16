@@ -25,6 +25,7 @@
 #include "mrvNetwork/mrvInsertData.h"
 #include "mrvNetwork/mrvImageOptions.h"
 #include "mrvNetwork/mrvLUTOptions.h"
+#include "mrvNetwork/mrvTimelineItemOptions.h"
 #include "mrvNetwork/mrvProtocolVersion.h"
 
 #include "mrViewer.h"
@@ -1243,6 +1244,28 @@ namespace mrv
                 bool value = message["value"];
                 if ((!value && stereo3DPanel) || (value && !stereo3DPanel))
                     stereo3D_panel_cb(nullptr, ui);
+            }
+            else if (c == "setTimelineItemOptions")
+            {
+                bool receive = prefs->ReceiveUI->value();
+                if (!receive)
+                {
+                    tcp->unlock();
+                    return;
+                }
+                timelineui::ItemOptions value = message["value"];
+                ui->uiTimeline->setItemOptions(value);
+            }
+            else if (c == "setTimelineEditable")
+            {
+                bool receive = prefs->ReceiveUI->value();
+                if (!receive)
+                {
+                    tcp->unlock();
+                    return;
+                }
+                bool value = message["value"];
+                ui->uiTimeline->setEditable(value);
             }
             else if (c == "Clear Frame Annotations")
             {
