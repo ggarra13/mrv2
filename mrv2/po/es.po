@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-10-15 09:14-0300\n"
+"POT-Creation-Date: 2023-10-16 16:39-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -1555,7 +1555,7 @@ msgid "Copy/Color"
 msgstr "Copiar/Color"
 
 msgid ""
-"Corruption in hotkeys preferences. Hotkey {0} for {1} will not be "
+"Corruption in hotkeys preferences. Hotkey '{0}' for {1} will not be "
 "available.  Already used in {2}."
 msgstr ""
 "Corrupción de hotkeys en preferencias. Hotkey {0} para {1} no estará "
@@ -3517,6 +3517,9 @@ msgstr ""
 msgid "Regular expression error: {0}"
 msgstr "Error de expression regular: {0}"
 
+msgid "Reload Hotkeys"
+msgstr "Recargar Teclas de Manejo"
+
 msgid "Reload Theme"
 msgstr "Recargar Tema"
 
@@ -3525,6 +3528,9 @@ msgid ""
 msgstr ""
 "Recargar tema de color desde el archivo mrv2.colors nuevamente para "
 "refrescar el cambio en colores."
+
+msgid "Reload hotkeys to last saved file."
+msgstr "Recargar teclas a archivo grabado."
 
 msgid "Remaining"
 msgstr "Restante"
@@ -3658,14 +3664,17 @@ msgstr "Restear Teclas de Manejo"
 msgid "Reset hotkeys to defaults."
 msgstr "Resetar teclas a los valores por defecto."
 
-msgid "Reset hotkeys to saved file."
-msgstr "Resetar teclas a archivo grabado."
+msgid "Reset hotkeys to mrv2's default configuration."
+msgstr "Resetar teclas a los valores por defecto."
 
 msgid "Reset settings to defaults."
 msgstr "Resetar seteos a su valor por defecto."
 
 msgid "Reset to default value"
 msgstr "Resetar a su valor por defecto."
+
+msgid "Reseting hotkeys to default."
+msgstr "Reseteando teclas a los valores por defecto."
 
 msgid "Resize Main Window to Fit"
 msgstr "Ajustar Ventana a la Imagen"
