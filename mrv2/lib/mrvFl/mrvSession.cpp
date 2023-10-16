@@ -11,9 +11,10 @@
 
 #include "mrvNetwork/mrvMessage.h"
 #include "mrvNetwork/mrvCypher.h"
-#include "mrvNetwork/mrvFilesModelItem.h"
 #include "mrvNetwork/mrvCompareOptions.h"
 #include "mrvNetwork/mrvDisplayOptions.h"
+#include "mrvNetwork/mrvFilesModelItem.h"
+#include "mrvNetwork/mrvTimelineItemOptions.h"
 
 #include "mrvFl/mrvCallbacks.h"
 #include "mrvPanels/mrvPanelsCallbacks.h"
@@ -34,7 +35,7 @@
 namespace
 {
     const char* kModule = "mrv2s";
-    const int kSessionVersion = 8;
+    const int kSessionVersion = 9;
 } // namespace
 
 namespace
@@ -286,6 +287,10 @@ namespace mrv
             Message background = ui->uiView->getBackgroundOptions();
             int stereoIndex = model->observeStereoIndex()->get();
 
+            auto options = ui->uiTimeline->getItemOptions();
+            Message timelineViewport = options;
+            timelineViewport["editable"] = ui->uiTimeline->isEditable();
+
             session["ui"] = bars;
             session["panels"] = panels;
             session["timeline"] = timeline;
@@ -300,6 +305,7 @@ namespace mrv
             session["displayOptions"] = display;
             session["editMode"] = editMode;
             session["metadata"] = sessionMetadata;
+            session["timelineViewport"] = timelineViewport;
 
             std::ofstream ofs(fileName);
             if (!ofs.is_open())
@@ -347,270 +353,293 @@ namespace mrv
                 return false;
             }
 
-            Message session;
             enable_cypher(false);
 
-            ifs >> session;
-
-            if (ifs.fail())
+            try
             {
-                LOG_ERROR(_("Failed to write to the file."));
-                return false;
-            }
-            if (ifs.bad())
-            {
-                LOG_ERROR(_("The stream is in an unrecoverable error state."));
-                return false;
-            }
-            ifs.close();
+                Message session;
 
-            // Get session version
-            int version = session["version"];
+                ifs >> session;
 
-            // Decode session file
-            close_all_cb(nullptr, ui);
-
-            for (const auto& j : session["files"])
-            {
-                FilesModelItem item;
-                j.get_to(item);
-
-                std::string path = item.path.get();
-                std::string audioPath = item.audioPath.get();
-
-                replace_path(path);
-                if (!audioPath.empty())
-                    replace_path(audioPath);
-
-                app->open(path, audioPath);
-
-                // Copy annotations to both item and player
-                auto Aitem = model->observeA()->get();
-                Aitem->annotations = item.annotations;
-                Aitem->videoLayer = item.videoLayer;
-                Aitem->currentTime = item.currentTime;
-
-                ui->uiColorChannel->value(item.videoLayer);
-                ui->uiColorChannel->do_callback();
-
-                auto player = view->getTimelinePlayer();
-                if (player)
+                if (ifs.fail())
                 {
-                    player->setAllAnnotations(item.annotations);
-                    player->seek(Aitem->currentTime);
+                    LOG_ERROR(_("Failed to write to the file."));
+                    return false;
                 }
-            }
-
-            if (version >= 2)
-            {
-                int Aindex = session["Aindex"];
-                model->setA(Aindex);
-
-                std::vector<int> Bindexes = session["Bindexes"];
-                model->clearB();
-                for (auto i : Bindexes)
-                    model->setB(i, true);
-
-                Message j = session["timeline"];
-
-                auto tmp = j["annotations"];
-
-                std::vector< std::shared_ptr<draw::Annotation> > annotations;
-                for (const auto& value : tmp)
+                if (ifs.bad())
                 {
-                    auto annotation = draw::messageToAnnotation(value);
-                    annotations.push_back(annotation);
+                    LOG_ERROR(
+                        _("The stream is in an unrecoverable error state."));
+                    return false;
                 }
+                ifs.close();
 
-                auto player = view->getTimelinePlayer();
-                if (player)
+                // Get session version
+                int version = session["version"];
+
+                // Decode session file
+                close_all_cb(nullptr, ui);
+
+                for (const auto& j : session["files"])
                 {
-                    player->setAllAnnotations(annotations);
+                    FilesModelItem item;
+                    j.get_to(item);
 
-                    if (version >= 3)
+                    std::string path = item.path.get();
+                    std::string audioPath = item.audioPath.get();
+
+                    replace_path(path);
+                    if (!audioPath.empty())
+                        replace_path(audioPath);
+
+                    app->open(path, audioPath);
+
+                    // Copy annotations to both item and player
+                    auto Aitem = model->observeA()->get();
+                    Aitem->annotations = item.annotations;
+                    Aitem->videoLayer = item.videoLayer;
+                    Aitem->currentTime = item.currentTime;
+
+                    ui->uiColorChannel->value(item.videoLayer);
+                    ui->uiColorChannel->do_callback();
+
+                    auto player = view->getTimelinePlayer();
+                    if (player)
                     {
-                        timeline::Playback playback;
-                        if (j["playback"].type() ==
-                            nlohmann::json::value_t::string)
-                        {
-                            j.at("playback").get_to(playback);
-                        }
-                        else
-                        {
-                            int v;
-                            j.at("playback").get_to(v);
-                            playback = static_cast<timeline::Playback>(v);
-                        }
-                        player->setPlayback(playback);
+                        player->setAllAnnotations(item.annotations);
+                        player->seek(Aitem->currentTime);
+                    }
+                }
+
+                if (version >= 2)
+                {
+                    int Aindex = session["Aindex"];
+                    model->setA(Aindex);
+
+                    std::vector<int> Bindexes = session["Bindexes"];
+                    model->clearB();
+                    for (auto i : Bindexes)
+                        model->setB(i, true);
+
+                    Message j = session["timeline"];
+
+                    auto tmp = j["annotations"];
+
+                    std::vector< std::shared_ptr<draw::Annotation> >
+                        annotations;
+                    for (const auto& value : tmp)
+                    {
+                        auto annotation = draw::messageToAnnotation(value);
+                        annotations.push_back(annotation);
                     }
 
-                    otime::RationalTime time;
-                    j["time"].get_to(time);
-                    player->seek(time);
-                }
-
-                ui->uiTimeline->redraw();
-                ui->uiMain->fill_menu(ui->uiMenuBar);
-            }
-
-            Message j = session["ui"];
-
-            // Decode bars
-            toggle_widget(ui->uiMenuGroup, j["menu_bar"]);
-            toggle_widget(ui->uiTopBar, j["top_bar"]);
-            toggle_widget(ui->uiPixelBar, j["pixel_bar"]);
-            toggle_widget(ui->uiBottomBar, j["bottom_bar"]);
-            toggle_widget(ui->uiStatusBar, j["status_bar"]);
-            toggle_widget(ui->uiToolsGroup, j["action_bar"]);
-
-            if ((j["secondary_window"] && !ui->uiSecondary) ||
-                (!j["secondary_window"] && ui->uiSecondary))
-            {
-                toggle_secondary_cb(nullptr, ui);
-            }
-
-            // Decode ICS
-            if (version >= 2)
-            {
-                //
-                // Handle color channel layer
-                //
-                int layer = session["layer"];
-                ui->uiColorChannel->value(layer);
-                ui->uiColorChannel->do_callback();
-
-                //
-                // Handle OCIO
-                //
-                j = session["ocio"];
-                std::string config = j["config"];
-
-                replace_path(config);
-
-                ui->uiPrefs->uiPrefsOCIOConfig->value(config.c_str());
-
-                Preferences::OCIO(ui);
-
-                int value = j["ics"];
-                ui->uiICS->value(value);
-                value = j["view"];
-                ui->OCIOView->value(value);
-                ui->uiView->updateColorConfigOptions();
-
-                // Hide Panels and Windows
-                removePanels(ui);
-                removeWindows(ui);
-
-                j = session["settings"];
-
-                auto settingsObject = app->settingsObject();
-
-                for (const auto& item : j.items())
-                {
-                    const std::string& key = item.key();
-                    Message value = item.value();
-                    Message::value_t type = value.type();
-                    switch (type)
+                    auto player = view->getTimelinePlayer();
+                    if (player)
                     {
-                    case Message::value_t::boolean:
-                        settingsObject->setValue(key, value.get<bool>());
-                        continue;
-                    case Message::value_t::number_unsigned:
-                    {
-                        int v = value.get<unsigned>();
-                        settingsObject->setValue(key, v);
-                        continue;
-                    }
-                    case Message::value_t::number_integer:
-                        settingsObject->setValue(key, value.get<int>());
-                        continue;
-                    case Message::value_t::number_float:
-                    {
-                        std_any val = settingsObject->value(key);
-                        if (!std_any_empty(val))
+                        player->setAllAnnotations(annotations);
+
+                        if (version >= 3)
                         {
-                            try
+                            timeline::Playback playback;
+                            if (j["playback"].type() ==
+                                nlohmann::json::value_t::string)
                             {
-                                double v = std::any_cast<double>(val);
-                                settingsObject->setValue(
-                                    key, value.get<double>());
+                                j.at("playback").get_to(playback);
                             }
-                            catch (const std::bad_cast& e)
+                            else
+                            {
+                                int v;
+                                j.at("playback").get_to(v);
+                                playback = static_cast<timeline::Playback>(v);
+                            }
+                            player->setPlayback(playback);
+                        }
+
+                        otime::RationalTime time;
+                        j["time"].get_to(time);
+                        player->seek(time);
+                    }
+                }
+
+                Message j = session["ui"];
+
+                // Decode bars
+                toggle_widget(ui->uiMenuGroup, j["menu_bar"]);
+                toggle_widget(ui->uiTopBar, j["top_bar"]);
+                toggle_widget(ui->uiPixelBar, j["pixel_bar"]);
+                toggle_widget(ui->uiBottomBar, j["bottom_bar"]);
+                toggle_widget(ui->uiStatusBar, j["status_bar"]);
+                toggle_widget(ui->uiToolsGroup, j["action_bar"]);
+
+                if ((j["secondary_window"] && !ui->uiSecondary) ||
+                    (!j["secondary_window"] && ui->uiSecondary))
+                {
+                    toggle_secondary_cb(nullptr, ui);
+                }
+
+                // Decode ICS
+                if (version >= 2)
+                {
+                    //
+                    // Handle color channel layer
+                    //
+                    int layer = session["layer"];
+                    ui->uiColorChannel->value(layer);
+                    ui->uiColorChannel->do_callback();
+
+                    //
+                    // Handle OCIO
+                    //
+                    j = session["ocio"];
+                    std::string config = j["config"];
+
+                    replace_path(config);
+
+                    ui->uiPrefs->uiPrefsOCIOConfig->value(config.c_str());
+
+                    Preferences::OCIO(ui);
+
+                    int value = j["ics"];
+                    ui->uiICS->value(value);
+                    value = j["view"];
+                    ui->OCIOView->value(value);
+                    ui->uiView->updateColorConfigOptions();
+
+                    // Hide Panels and Windows
+                    removePanels(ui);
+                    removeWindows(ui);
+
+                    j = session["settings"];
+
+                    auto settingsObject = app->settingsObject();
+
+                    for (const auto& item : j.items())
+                    {
+                        const std::string& key = item.key();
+                        Message value = item.value();
+                        Message::value_t type = value.type();
+                        switch (type)
+                        {
+                        case Message::value_t::boolean:
+                            settingsObject->setValue(key, value.get<bool>());
+                            continue;
+                        case Message::value_t::number_unsigned:
+                        {
+                            int v = value.get<unsigned>();
+                            settingsObject->setValue(key, v);
+                            continue;
+                        }
+                        case Message::value_t::number_integer:
+                            settingsObject->setValue(key, value.get<int>());
+                            continue;
+                        case Message::value_t::number_float:
+                        {
+                            std_any val = settingsObject->value(key);
+                            if (!std_any_empty(val))
+                            {
+                                try
+                                {
+                                    double v = std::any_cast<double>(val);
+                                    settingsObject->setValue(
+                                        key, value.get<double>());
+                                }
+                                catch (const std::bad_cast& e)
+                                {
+                                    settingsObject->setValue(
+                                        key, value.get<float>());
+                                }
+                            }
+                            else
                             {
                                 settingsObject->setValue(
                                     key, value.get<float>());
                             }
+                            continue;
                         }
-                        else
-                        {
-                            settingsObject->setValue(key, value.get<float>());
+                        case Message::value_t::string:
+                            settingsObject->setValue(
+                                key, value.get<std::string>());
+                            continue;
+                        default:
+                            LOG_ERROR(
+                                "Unknown Message::value_t for key " << key);
                         }
-                        continue;
-                    }
-                    case Message::value_t::string:
-                        settingsObject->setValue(key, value.get<std::string>());
-                        continue;
-                    default:
-                        LOG_ERROR("Unknown Message::value_t for key " << key);
                     }
                 }
-            }
 
-            // Decode panels
-            j = session["panels"];
-            const WindowCallback* wc = kWindowCallbacks;
-            for (; wc->name; ++wc)
-            {
-                Message value = j[wc->name];
-                bool shown = false;
-                if (!value.is_null())
-                    shown = value;
-                if (shown)
+                // Decode panels
+                j = session["panels"];
+                const WindowCallback* wc = kWindowCallbacks;
+                for (; wc->name; ++wc)
                 {
-                    show_window_cb(_(wc->name), ui);
+                    Message value = j[wc->name];
+                    bool shown = false;
+                    if (!value.is_null())
+                        shown = value;
+                    if (shown)
+                    {
+                        show_window_cb(_(wc->name), ui);
+                    }
+                }
+
+                if (version >= 3)
+                {
+                    EnvironmentMapOptions env =
+                        session["environmentMapOptions"];
+                    view->setEnvironmentMapOptions(env);
+
+                    timeline::CompareOptions compare =
+                        session["compareOptions"];
+                    model->setCompareOptions(compare);
+
+                    int stereoIndex = session["stereoIndex"];
+                    model->setStereo(stereoIndex);
+
+                    Stereo3DOptions stereo = session["stereo3DOptions"];
+                    model->setStereo3DOptions(stereo);
+                }
+
+                if (version >= 4)
+                {
+                    timeline::DisplayOptions display =
+                        session["displayOptions"];
+                    app->setDisplayOptions(display);
+                }
+
+                if (version >= 7)
+                {
+                    session["metadata"].get_to(sessionMetadata);
+                }
+
+                if (version >= 8)
+                {
+                    timeline::BackgroundOptions background =
+                        session["backgroundOptions"];
+                    view->setBackgroundOptions(background);
+                }
+
+                if (version >= 9)
+                {
+                    Message timelineViewport = session["timelineViewport"];
+                    auto options = timelineViewport;
+                    bool isEditable = timelineViewport["editable"];
+                    ui->uiTimeline->setEditable(isEditable);
+                    ui->uiTimeline->setItemOptions(options);
+                }
+
+                if (version >= 6)
+                {
+                    EditMode editMode = session["editMode"];
+                    set_edit_mode_cb(editMode, ui);
                 }
             }
-
-            if (version >= 3)
+            catch (const std::exception& e)
             {
-                EnvironmentMapOptions env = session["environmentMapOptions"];
-                view->setEnvironmentMapOptions(env);
-
-                timeline::CompareOptions compare = session["compareOptions"];
-                model->setCompareOptions(compare);
-
-                int stereoIndex = session["stereoIndex"];
-                model->setStereo(stereoIndex);
-
-                Stereo3DOptions stereo = session["stereo3DOptions"];
-                model->setStereo3DOptions(stereo);
-            }
-
-            if (version >= 4)
-            {
-                timeline::DisplayOptions display = session["displayOptions"];
-                app->setDisplayOptions(display);
-            }
-
-            if (version >= 6)
-            {
-                EditMode editMode = session["editMode"];
-                set_edit_mode_cb(editMode, ui);
-            }
-
-            if (version >= 7)
-            {
-                session["metadata"].get_to(sessionMetadata);
-            }
-
-            if (version >= 8)
-            {
-                timeline::BackgroundOptions background =
-                    session["backgroundOptions"];
-                view->setBackgroundOptions(background);
+                LOG_ERROR(e.what());
             }
 
             enable_cypher(true);
+            ui->uiTimeline->redraw();
             ui->uiMain->fill_menu(ui->uiMenuBar);
 
             // Change current session filename.

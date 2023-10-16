@@ -1207,7 +1207,7 @@ namespace mrv
             return 1;
         case FL_ENTER:
             cursor(FL_CURSOR_DEFAULT);
-            if (p.thumbnailWindow &&
+            if (p.thumbnailWindow && p.player &&
                 p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
             {
                 p.thumbnailWindow->show();
