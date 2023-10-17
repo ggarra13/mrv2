@@ -1,3 +1,12 @@
+v0.8.2
+======
+
+- Python commands to set the ocio config have been added to the image module.
+  image.setOcioConfig() and image.ocioConfig().
+- Python documentation has been updated.
+- Python's Editor bug that would concatenate the last two lines together
+  incorrectly has been fixed.
+
 v0.8.1
 ======
 
