@@ -65,13 +65,6 @@ cd packages
 # Read all the files of this version
 files=$(ls -1 *v${mrv2_VERSION}*)
 
-if [[ "$files" == "" ]]; then
-    echo
-    echo "No v${mrv2_VERSION} files to upload.  Something probably went wrong in the compilation."
-    echo
-    exit 1
-fi
-
 
 if [[ $KERNEL == *Msys* ]]; then
     pacman -Sy openssh rsync --noconfirm
@@ -230,6 +223,13 @@ EOF
 
 upload_file README.md README.md
 rm README.md
+
+if [[ "$files" == "" ]]; then
+    echo
+    echo "No v${mrv2_VERSION} files to upload.  Something probably went wrong in the compilation.  Only README.md file was updated."
+    echo
+    exit 1
+fi
 
 # Set the IFS to newline to split the variable by lines
 IFS=$'\n'
