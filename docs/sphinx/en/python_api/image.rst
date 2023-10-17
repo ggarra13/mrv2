@@ -3,27 +3,7 @@ image module
 
 .. automodule:: mrv2.image
     :members:
-    :exclude-members: Mirror, Color, Levels, ImageFilters, SoftClip, DisplayOptions, LUTOptions, EnvironmentMapOptions, Stereo3DOptions
-	       
-.. autoclass:: mrv2.image.AlphaBlend
-	       
-.. autoclass:: mrv2.image.Channels
-	       
-.. autoclass:: mrv2.image.EnvironmentMapType
-	       
-.. autoclass:: mrv2.image.ImageFilter
-    
-.. autoclass:: mrv2.image.InputVideoLevels
-	       
-.. autoclass:: mrv2.image.LUTOrder
-	       
-.. autoclass:: mrv2.image.VideoLevels
-	       
-.. autoclass:: mrv2.image.YUVCoefficients
-               
-.. autoclass:: mrv2.image.Stereo3DInput
-               
-.. autoclass:: mrv2.image.Stereo3DOutput
+    :exclude-members: Mirror, Color, Levels, ImageFilters, SoftClip, DisplayOptions, LUTOptions, ImageOptions, EnvironmentMapOptions, Stereo3DOptions
 	       
 .. autoclass:: mrv2.image.Mirror
 	       

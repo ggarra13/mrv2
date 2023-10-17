@@ -21,8 +21,8 @@ usd module
    .. autoattribute:: enableLighting
       :annotation: = bool
 		   
-   .. autoattribute:: stageCacheCount
+   .. autoattribute:: stageCache
       :annotation: = int
 
-   .. autoattribute:: diskCacheByteCount
+   .. autoattribute:: diskCache
       :annotation: = int
