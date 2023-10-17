@@ -110,7 +110,7 @@ what the Python console allows.</p>
 plug-ins reside.</p>
 <p>In there, python files (.py) that have this basic structure:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mrv2</span>
-<span class="kn">from</span> <span class="nn">mrv2</span> <span class="kn">import</span> <span class="n">plugin</span>
+<span class="kn">from</span> <span class="nn">mrv2</span> <span class="kn">import</span> <span class="n">plugin</span><span class="p">,</span> <span class="n">timeline</span>
 
 <span class="k">class</span> <span class="nc">HelloPlugin</span><span class="p">(</span><span class="n">plugin</span><span class="o">.</span><span class="n">Plugin</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -120,11 +120,19 @@ plug-ins reside.</p>
     <span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hello from a python plugin&quot;</span><span class="p">)</span>
 
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function creates a new menu called Menu with two entries.</span>
+<span class="sd">    One called Hello with a divider line that calls the self.hello method</span>
+<span class="sd">    and one called Play that triggers playback of the current clip.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">menus</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">menu</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;Menu/Hello&quot;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">hello</span> <span class="p">}</span>
+        <span class="n">menu</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;Menu/Hello&quot;</span> <span class="p">:</span> <span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">hello</span><span class="p">,</span> <span class="s2">&quot;__divider__&quot;</span> <span class="p">),</span>
+                 <span class="s2">&quot;Menu/Play&quot;</span>  <span class="p">:</span> <span class="n">timeline</span><span class="o">.</span><span class="n">playForwards</span><span class="p">}</span>
         <span class="k">return</span> <span class="n">menu</span>
 </pre></div>
 </div>
+<p>You can define more than one plug-in per file.
+For a more complete example, refer to python/plug-ins/mrv2_hello.py in the mrv2 distribution.</p>
 </section>
 </section>
 

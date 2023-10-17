@@ -20,7 +20,7 @@ plug-ins reside.
 In there, python files (.py) that have this basic structure::
 
     import mrv2
-    from mrv2 import plugin
+    from mrv2 import plugin, timeline
   
     class HelloPlugin(plugin.Plugin):
         def __init__(self):
@@ -29,7 +29,16 @@ In there, python files (.py) that have this basic structure::
 	    
         def hello(self):
             print("Hello from a python plugin")
-       
+
+	"""
+	This function creates a new menu called Menu with two entries.
+	One called Hello with a divider line that calls the self.hello method
+	and one called Play that triggers playback of the current clip.
+	"""
         def menus(self):
-            menu = { "Menu/Hello" : self.hello }
+            menu = { "Menu/Hello" : ( self.hello, "__divider__" ),
+                     "Menu/Play"  : timeline.playForwards}
             return menu
+
+You can define more than one plug-in per file.
+For a more complete example, refer to python/plug-ins/mrv2_hello.py in the mrv2 distribution.

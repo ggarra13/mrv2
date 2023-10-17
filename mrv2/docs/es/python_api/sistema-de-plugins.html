@@ -110,22 +110,29 @@ consola de Python te permite.</p>
 semi-comas (Windows) indicando dónde residen los plug-ins.</p>
 <p>Allí, archivos comunes de python (.py) deben tener esta estructura:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mrv2</span>
-<span class="kn">from</span> <span class="nn">mrv2</span> <span class="kn">import</span> <span class="n">plugin</span>
+<span class="kn">from</span> <span class="nn">mrv2</span> <span class="kn">import</span> <span class="n">plugin</span><span class="p">,</span> <span class="n">timeline</span>
 
 <span class="k">class</span> <span class="nc">HolaPlugin</span><span class="p">(</span><span class="n">plugin</span><span class="o">.</span><span class="n">Plugin</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="k">pass</span>
 
-    <span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">hola</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hola desde un plugin de python&quot;</span><span class="p">)</span>
 
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Esta función crea un nuevo menu llamado Menu con dos entradas.</span>
+<span class="sd">    Una llamada Hola con una línea divisoria que llama al método self.hola</span>
+<span class="sd">    y una llamada Reproducir que ejecuta la reproducción del clip actual.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">menus</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">menu</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;Menu/Hola&quot;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">hola</span> <span class="p">}</span>
+        <span class="n">menu</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;Menu/Hola&quot;</span> <span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hola</span><span class="p">,</span> <span class="s2">&quot;__divider__&quot;</span><span class="p">)</span> <span class="p">},</span>
+                 <span class="s2">&quot;Menu/Reproducir&quot;</span> <span class="p">:</span> <span class="n">timeline</span><span class="o">.</span><span class="n">playForwards</span> <span class="p">}</span>
         <span class="k">return</span> <span class="n">menu</span>
 </pre></div>
 </div>
-<p>Para un ejemplo más completo, refiérase a python/plug-ins/mrv2_hello.py en la
+<p>Se puede definir más de un plug-in por achivo de Python.
+Para un ejemplo más completo, refiérase a python/plug-ins/mrv2_hello.py en la
 distribución de mrv2.</p>
 </section>
 </section>

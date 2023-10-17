@@ -57,7 +57,7 @@ foreach( LANGUAGE ${LANGUAGES} )
     
     add_custom_target( ${DOC_TARGET}
 	COMMAND ${CMAKE_COMMAND} -E env LANGUAGE=${LANGUAGE} LANG=en_US.UTF-8 LANGUAGE_CODE=${LANGUAGE} ${CMAKE_INSTALL_PREFIX}/bin/${MRV2_COMMAND} -pythonScript ${SPHINX_DIR}/${LANGUAGE}/document.py
-	DEPENDS install
+	DEPENDS install ${DOCUMENT_OUT}
 	)
     
 endforeach()
