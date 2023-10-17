@@ -31,7 +31,7 @@ In there, python files (.py) that have this basic structure::
             print("Hello from a python plugin")
 
 	"""
-	This function creates a new Menu called Menu with two entries.
+	This function creates a new menu called Menu with two entries.
 	One called Hello with a divider line that calls the self.hello method
 	and one called Play that triggers playback of the current clip.
 	"""
@@ -41,3 +41,4 @@ In there, python files (.py) that have this basic structure::
             return menu
 
 You can define more than one plug-in per file.
+For a more complete example, refer to python/plug-ins/mrv2_hello.py in the mrv2 distribution.
