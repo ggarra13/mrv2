@@ -1603,6 +1603,7 @@ namespace mrv
                     }
 
                     // If audio is longer than video, append a video gap.
+                    // It seems this should *not* be done.
 #if 0
                     if (info.audio.isValid())
                     {
@@ -1613,12 +1614,6 @@ namespace mrv
                         const auto clip_duration = sourceRange.duration();
                         const auto gap_duration =
                             audio_duration - clip_duration;
-                        std::cerr << "audio_duration=" << audio_duration
-                                  << std::endl
-                                  << " clip_duration=" << clip_duration
-                                  << std::endl
-                                  << "  gap_duration=" << gap_duration
-                                  << std::endl;
                         if (gap_duration.value() > 0.0)
                         {
                             const auto gapRange = TimeRange(
