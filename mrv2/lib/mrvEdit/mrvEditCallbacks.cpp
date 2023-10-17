@@ -1595,7 +1595,6 @@ namespace mrv
                         clip->set_media_reference(media);
                     }
                     auto sourceRange = sourceItem->inOutRange;
-                    const double rate = sourceRange.duration().rate();
                     clip->set_source_range(sourceRange);
                     track->append_child(clip, &errorStatus);
                     if (otio::is_error(errorStatus))
@@ -1604,17 +1603,30 @@ namespace mrv
                     }
 
                     // If audio is longer than video, append a video gap.
+#if 0
                     if (info.audio.isValid())
                     {
+                        const auto audioRate = info.audioTime.duration().rate();
+                        const auto videoRate = sourceRange.duration().rate();
                         const auto audio_duration =
-                            info.audioTime.duration().rescaled_to(rate);
-                        const auto clip_duration = mediaRange.duration();
+                            info.audioTime.duration().rescaled_to(videoRate);
+                        const auto clip_duration = sourceRange.duration();
                         const auto gap_duration =
                             audio_duration - clip_duration;
-                        if (time::round(gap_duration).value() > 0.0)
+                        std::cerr << "audio_duration=" << audio_duration
+                                  << std::endl
+                                  << " clip_duration=" << clip_duration
+                                  << std::endl
+                                  << "  gap_duration=" << gap_duration
+                                  << std::endl;
+                        if (gap_duration.value() > 0.0)
                         {
                             const auto gapRange = TimeRange(
-                                RationalTime(0.0, rate), gap_duration);
+                                RationalTime(0.0, videoRate),
+                                gap_duration);
+                            
+                            std::cerr << "gapRange=" << gapRange
+                                      << std::endl;
                             auto gap = new otio::Gap(gapRange);
                             track->append_child(gap, &errorStatus);
                             if (otio::is_error(errorStatus))
@@ -1624,27 +1636,32 @@ namespace mrv
                             }
                         }
                     }
+#endif
                 }
 
-                if (info.audio.isValid())
+                auto audioRate = 0.0;
+                if (!info.audio.isValid() && audioTrackIndex >= 0)
                 {
-                    const auto rate = info.audioTime.duration().rate();
-                    // If no audio track, create one and fill it with a gap
-                    // until new clip.
-
-                    bool emptyAudioTrack = false;
-                    if (audioTrackIndex > 0)
+                    auto audioTrack = otio::dynamic_retainer_cast<Track>(
+                        tracks[audioTrackIndex]);
+                    if (audioTrack)
                     {
-                        auto audioTrack = otio::dynamic_retainer_cast<Track>(
-                            tracks[audioTrackIndex]);
-                        auto audioChildren = audioTrack->children();
-                        if (audioChildren.size() <= 0)
-                        {
-                            emptyAudioTrack = true;
-                        }
+                        audioRate =
+                            audioTrack->trimmed_range().duration().rate();
                     }
+                }
+                else
+                {
+                    audioRate = info.audioTime.duration().rate();
+                }
 
-                    if (audioTrackIndex == -1 || emptyAudioTrack)
+                if (audioRate != 0)
+                {
+
+                    // If no audio track, create one and fill it with a gap
+                    // until new video clip.
+                    // If no audio (a sequence), we also fill it with a gap.
+                    if (audioTrackIndex == -1 || !info.audio.isValid())
                     {
                         auto videoTrack = otio::dynamic_retainer_cast<Track>(
                             tracks[videoTrackIndex]);
@@ -1671,29 +1688,13 @@ namespace mrv
                         TimeRange videoRange =
                             videoClip->trimmed_range_in_parent(&errorStatus)
                                 .value();
+
                         otio::Track* audioTrack;
                         if (audioTrackIndex < 0)
                         {
                             audioTrack = new otio::Track(
                                 "Audio", otio::nullopt,
                                 otio::Track::Kind::audio);
-                        }
-                        else
-                        {
-                            audioTrack = otio::dynamic_retainer_cast<Track>(
-                                tracks[audioTrackIndex]);
-                        }
-                        if (!emptyAudioTrack)
-                        {
-                            auto gapRange = TimeRange(
-                                RationalTime(0.0, rate),
-                                RationalTime(
-                                    videoRange.start_time().rescaled_to(rate)));
-                            auto gap = new otio::Gap(gapRange);
-                            audioTrack->append_child(gap);
-                        }
-                        if (audioTrackIndex < 0)
-                        {
                             stack->append_child(audioTrack, &errorStatus);
                             if (otio::is_error(errorStatus))
                             {
@@ -1703,6 +1704,17 @@ namespace mrv
                             tracks = stack->children();
                             audioTrackIndex = tracks.size() - 1;
                         }
+                        else
+                        {
+                            audioTrack = otio::dynamic_retainer_cast<Track>(
+                                tracks[audioTrackIndex]);
+                        }
+                        auto gapRange = TimeRange(
+                            RationalTime(0.0, audioRate),
+                            RationalTime(videoRange.start_time().rescaled_to(
+                                audioRate)));
+                        auto gap = new otio::Gap(gapRange);
+                        audioTrack->append_child(gap);
                     }
 
                     auto track = otio::dynamic_retainer_cast<Track>(
@@ -1713,9 +1725,10 @@ namespace mrv
                     clip->set_media_reference(media);
                     const auto inOutRange = sourceItem->inOutRange;
                     const auto start =
-                        inOutRange.start_time().rescaled_to(rate);
-                    auto duration = inOutRange.duration().rescaled_to(rate);
-                    auto gap_duration = RationalTime(0.0, rate);
+                        inOutRange.start_time().rescaled_to(audioRate);
+                    auto duration =
+                        inOutRange.duration().rescaled_to(audioRate);
+                    auto gap_duration = RationalTime(0.0, audioRate);
                     if (duration > info.audioTime.duration())
                     {
                         gap_duration = duration - info.audioTime.duration();
@@ -1731,8 +1744,8 @@ namespace mrv
                     // Append a gap if audio is too short.
                     if (gap_duration.value() > 0.0)
                     {
-                        const auto gapRange =
-                            TimeRange(RationalTime(0.0, rate), gap_duration);
+                        const auto gapRange = TimeRange(
+                            RationalTime(0.0, audioRate), gap_duration);
                         auto gap = new otio::Gap(gapRange);
                         track->append_child(gap, &errorStatus);
                         if (otio::is_error(errorStatus))
