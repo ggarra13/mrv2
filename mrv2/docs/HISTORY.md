@@ -1,3 +1,8 @@
+v0.8.1
+======
+
+- This is a quick bug fix release to the Playlist creation which got broken.
+
 v0.8.0
 ======
 
