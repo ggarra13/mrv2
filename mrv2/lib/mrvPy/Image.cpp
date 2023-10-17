@@ -18,6 +18,7 @@ namespace py = pybind11;
 #include <tlTimeline/DisplayOptions.h>
 
 #include "mrvCore/mrvI8N.h"
+#include "mrvCore/mrvUtil.h"
 #include "mrvCore/mrvStereo3DOptions.h"
 #include "mrvCore/mrvEnvironmentMapOptions.h"
 
@@ -124,6 +125,45 @@ namespace mrv
 
     namespace image
     {
+        std::string ocioConfig()
+        {
+            ViewerUI* ui = App::ui;
+            PreferencesUI* uiPrefs = ui->uiPrefs;
+            const char* out = uiPrefs->uiPrefsOCIOConfig->value();
+            if (!out)
+                return "";
+            return out;
+        }
+
+        void setOcioConfig(const std::string config)
+        {
+            ViewerUI* ui = App::ui;
+            PreferencesUI* uiPrefs = ui->uiPrefs;
+            if (config.empty())
+            {
+                throw std::runtime_error(
+                    _("OCIO config file cannot be empty."));
+            }
+            if (!file::isReadable(config))
+            {
+                std::string err = string::Format(_("OCIO config '{0}' does not "
+                                                   "exist or is not readable."))
+                                      .arg(config);
+                throw std::runtime_error(err);
+            }
+
+            const char* oldconfig = uiPrefs->uiPrefsOCIOConfig->value();
+            if (oldconfig && strlen(oldconfig) > 0)
+            {
+                // Same config file.  Nothing to do.
+                if (config == oldconfig)
+                    return;
+            }
+
+            uiPrefs->uiPrefsOCIOConfig->value(config.c_str());
+            Preferences::OCIO(ui);
+        }
+
         std::string ocioIcs()
         {
             auto uiICS = App::ui->uiICS;
@@ -489,6 +529,14 @@ Contains all classes and enums related to image controls.
                 return s.str();
             })
         .doc() = _("Stereo3D options.");
+
+    image.def(
+        "ocioConfig", &mrv::image::ocioConfig,
+        _("Gets the current OCIO config file."));
+
+    image.def(
+        "setOcioConfig", &mrv::image::setOcioConfig,
+        _("Sets the current OCIO config file."));
 
     image.def(
         "ocioIcs", &mrv::image::ocioIcs,

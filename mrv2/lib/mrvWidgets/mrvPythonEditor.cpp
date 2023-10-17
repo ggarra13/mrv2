@@ -255,6 +255,7 @@ namespace mrv
                 }
                 if (skip || m_eval.substr(0, 1) == "#")
                 {
+                    m_code += "\n";
                     m_code += m_eval;
                     m_eval.clear();
                 }
