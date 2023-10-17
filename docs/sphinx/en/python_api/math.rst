@@ -2,6 +2,8 @@ math module
 ===========
 
 .. automodule:: mrv2.math
+		:members:
+		:exclude-members: Vector2i, Vector2f, Vector3f, Vector4f
     
 .. autoclass:: mrv2.math.Vector2i
 
