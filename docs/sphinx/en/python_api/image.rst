@@ -2,6 +2,8 @@ image module
 ============
 
 .. automodule:: mrv2.image
+    :members:
+    :exclude-members: Mirror, Color, Levels, ImageFilters, SoftClip, DisplayOptions, LUTOptions, EnvironmentMapOptions, Stereo3DOptions
 	       
 .. autoclass:: mrv2.image.AlphaBlend
 	       
