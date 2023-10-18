@@ -1,5 +1,5 @@
 io Module
-=============
+=========
 
 .. automodule:: mrv2.io
     :members:
