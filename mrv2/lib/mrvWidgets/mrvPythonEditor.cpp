@@ -271,6 +271,13 @@ namespace mrv
 
         if (!m_code.empty())
             m_code += "\n";
+
+        if (!m_eval.empty())
+            m_eval += "\n";
+
+        if (!m_variable.empty())
+            m_variable += "\n";
+
         // std::cerr << "CODE=!" << m_code << "!" << std::endl;
         // std::cerr << "EVAL=!" << m_eval << "!" << std::endl;
         // std::cerr << "VAR =!" << m_variable << "!" << std::endl;
