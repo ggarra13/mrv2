@@ -330,6 +330,7 @@ namespace mrv
             if (p.thumbnailRequestId)
             {
                 p.thumbnailCreator->cancelRequests(p.thumbnailRequestId);
+                p.thumbnailRequestId = 0;
             }
 
             if (fetch)
@@ -1222,7 +1223,10 @@ namespace mrv
             if (p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
             {
                 if (p.thumbnailCreator && p.thumbnailRequestId)
+                {
                     p.thumbnailCreator->cancelRequests(p.thumbnailRequestId);
+                    p.thumbnailRequestId = 0;
+                }
                 if (!Fl::has_timeout(
                         (Fl_Timeout_Handler)hideThumbnail_cb, this))
                 {
@@ -1258,7 +1262,10 @@ namespace mrv
             if (p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
             {
                 if (p.thumbnailCreator && p.thumbnailRequestId)
+                {
                     p.thumbnailCreator->cancelRequests(p.thumbnailRequestId);
+                    p.thumbnailRequestId = 0;
+                }
                 if (!Fl::has_timeout(
                         (Fl_Timeout_Handler)hideThumbnail_cb, this))
                 {
