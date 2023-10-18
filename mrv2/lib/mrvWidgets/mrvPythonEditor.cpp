@@ -188,12 +188,14 @@ namespace mrv
             end_char = b->char_at(end);
         }
 
-        line_start = b->line_start(end);
-        if (line_start == end)
-        {
-            end = b->prev_char(end);
-            line_start = b->line_start(end);
-        }
+        // @bug: this would swallow the last character like ')'
+        //
+        // line_start = b->line_start(end);
+        // if (line_start == end)
+        // {
+        //     end = b->prev_char(end);
+        //     line_start = b->line_start(end);
+        // }
 
         int pos = end;
         int found = b->search_forward(line_start, "=", &pos);
@@ -278,9 +280,9 @@ namespace mrv
         if (!m_variable.empty())
             m_variable += "\n";
 
-        // std::cerr << "CODE=!" << m_code << "!" << std::endl;
-        // std::cerr << "EVAL=!" << m_eval << "!" << std::endl;
-        // std::cerr << "VAR =!" << m_variable << "!" << std::endl;
+        std::cerr << "CODE=!" << m_code << "!" << std::endl;
+        std::cerr << "EVAL=!" << m_eval << "!" << std::endl;
+        std::cerr << "VAR =!" << m_variable << "!" << std::endl;
 
         free(text);
     }

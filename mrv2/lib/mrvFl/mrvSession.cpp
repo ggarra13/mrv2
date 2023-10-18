@@ -14,6 +14,7 @@
 #include "mrvNetwork/mrvCompareOptions.h"
 #include "mrvNetwork/mrvDisplayOptions.h"
 #include "mrvNetwork/mrvFilesModelItem.h"
+#include "mrvNetwork/mrvImageOptions.h"
 #include "mrvNetwork/mrvTimelineItemOptions.h"
 
 #include "mrvFl/mrvCallbacks.h"
@@ -35,7 +36,7 @@
 namespace
 {
     const char* kModule = "mrv2s";
-    const int kSessionVersion = 9;
+    const int kSessionVersion = 10;
 } // namespace
 
 namespace
@@ -283,6 +284,7 @@ namespace mrv
             Message display = app->displayOptions();
             Message compare = model->observeCompareOptions()->get();
             Message stereo = model->observeStereo3DOptions()->get();
+            Message image = app->imageOptions();
             Message environmentMap = ui->uiView->getEnvironmentMapOptions();
             Message background = ui->uiView->getBackgroundOptions();
             int stereoIndex = model->observeStereoIndex()->get();
@@ -300,6 +302,7 @@ namespace mrv
             session["compareOptions"] = compare;
             session["stereo3DOptions"] = stereo;
             session["stereoIndex"] = stereoIndex;
+            session["imageOptions"] = image;
             session["environmentMapOptions"] = environmentMap;
             session["backgroundOptions"] = background;
             session["displayOptions"] = display;
@@ -625,6 +628,13 @@ namespace mrv
                     bool isEditable = timelineViewport["editable"];
                     ui->uiTimeline->setEditable(isEditable);
                     ui->uiTimeline->setItemOptions(options);
+                }
+
+                if (version >= 10)
+                {
+                    timeline::ImageOptions imageOptions =
+                        session["imageOptions"];
+                    app->setImageOptions(imageOptions);
                 }
 
                 if (version >= 6)

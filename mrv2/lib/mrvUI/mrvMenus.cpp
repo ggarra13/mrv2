@@ -489,7 +489,7 @@ namespace mrv
         syncPanels();
 
         const timeline::DisplayOptions& d = ui->app->displayOptions();
-        const timeline::ImageOptions& o = ui->uiView->getImageOptions(-1);
+        const timeline::ImageOptions& o = ui->app->imageOptions();
         const timeline::BackgroundOptions backgroundOptions =
             ui->uiView->getBackgroundOptions();
 
@@ -584,8 +584,6 @@ namespace mrv
             item->set();
 
         mode = FL_MENU_RADIO;
-        if (numFiles == 0)
-            mode |= FL_MENU_INACTIVE;
 
         idx = menu->add(
             _("Render/Video Levels/From File"), 0,
@@ -610,8 +608,6 @@ namespace mrv
             item->set();
 
         mode = FL_MENU_RADIO;
-        if (numFiles == 0)
-            mode |= FL_MENU_INACTIVE;
 
         idx = menu->add(
             _("Render/Alpha Blend/None"), 0, (Fl_Callback*)alpha_blend_none_cb,
@@ -923,11 +919,10 @@ namespace mrv
         if (options.showMarkers)
             item->set();
 
-        if (numFiles > 0)
+        const int aIndex = ui->app->filesModel()->observeAIndex()->get();
+        if (numFiles > 0 && aIndex >= 0)
         {
-
-            const int aIndex = ui->app->filesModel()->observeAIndex()->get();
-            const auto& files = ui->app->filesModel()->observeFiles()->get();
+            const auto files = ui->app->filesModel()->observeFiles()->get();
             std::string fileName = files[aIndex]->path.get(-1, false);
 
             const std::regex& regex = version_regex(ui, false);

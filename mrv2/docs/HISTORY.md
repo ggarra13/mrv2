@@ -13,6 +13,10 @@ v0.8.2
   the command-line receives the audio file, instead of all files.
 - Fixed most issues when mixing clips of different frame rates and different
   audio sample rates in an EDL.  Some precision issues seem unavoidable, thou.
+- Synchronized menu items to python changes as some were not being taken into
+  account.
+- Added imageOptions to session loading and saving.
+- Fixed swallowing of last character in PythonEditor.
 
 v0.8.1
 ======

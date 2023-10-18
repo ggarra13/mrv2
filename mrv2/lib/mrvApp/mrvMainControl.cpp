@@ -433,5 +433,7 @@ namespace mrv
         p.app->outputDevice()->setCompareOptions(p.compareOptions);
         p.app->outputDevice()->setTimelinePlayers(p.timelinePlayers);
 #endif
+
+        p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
     }
 } // namespace mrv

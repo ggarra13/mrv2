@@ -1379,12 +1379,6 @@ namespace mrv
         _updatePixelBar(rgba);
     }
 
-    std::vector< timeline::ImageOptions >&
-    TimelineViewport::getImageOptions() noexcept
-    {
-        return _p->imageOptions;
-    }
-
     EnvironmentMapOptions
     TimelineViewport::getEnvironmentMapOptions() const noexcept
     {
@@ -1432,24 +1426,6 @@ namespace mrv
             view->valid(0);
             view->redraw();
         }
-    }
-
-    timeline::ImageOptions& TimelineViewport::getImageOptions(int idx) noexcept
-    {
-        TLRENDER_P();
-        static timeline::ImageOptions empty;
-        if (p.imageOptions.empty())
-            return empty;
-        if (idx < 0)
-            return p.imageOptions[0];
-        else
-            return p.imageOptions[idx];
-    }
-
-    std::vector< timeline::DisplayOptions >&
-    TimelineViewport::getDisplayOptions() noexcept
-    {
-        return _p->displayOptions;
     }
 
     void TimelineViewport::updateImageOptions() noexcept
