@@ -923,11 +923,10 @@ namespace mrv
         if (options.showMarkers)
             item->set();
 
-        if (numFiles > 0)
+        const int aIndex = ui->app->filesModel()->observeAIndex()->get();
+        if (numFiles > 0 && aIndex >= 0)
         {
-
-            const int aIndex = ui->app->filesModel()->observeAIndex()->get();
-            const auto& files = ui->app->filesModel()->observeFiles()->get();
+            const auto files = ui->app->filesModel()->observeFiles()->get();
             std::string fileName = files[aIndex]->path.get(-1, false);
 
             const std::regex& regex = version_regex(ui, false);
