@@ -16,7 +16,7 @@ v0.8.2
 - Synchronized menu items to python changes as some were not being taken into
   account.
 - Added imageOptions to session loading and saving.
-
+- Fixed swallowing of last character in PythonEditor.
 
 v0.8.1
 ======
