@@ -584,8 +584,6 @@ namespace mrv
             item->set();
 
         mode = FL_MENU_RADIO;
-        if (numFiles == 0)
-            mode |= FL_MENU_INACTIVE;
 
         idx = menu->add(
             _("Render/Video Levels/From File"), 0,
@@ -610,8 +608,6 @@ namespace mrv
             item->set();
 
         mode = FL_MENU_RADIO;
-        if (numFiles == 0)
-            mode |= FL_MENU_INACTIVE;
 
         idx = menu->add(
             _("Render/Alpha Blend/None"), 0, (Fl_Callback*)alpha_blend_none_cb,
