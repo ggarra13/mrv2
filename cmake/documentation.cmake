@@ -37,7 +37,7 @@ foreach( LANGUAGE ${LANGUAGES} )
     #
 
     set(DOCUMENT_IN  ${SPHINX_DIR}/document.py.in)
-    set(DOCUMENT_OUT ${SPHINX_DIR}/${LANGUAGE}/document.py)
+    set(DOCUMENT_OUT ${CMAKE_INSTALL_PREFIX}/sphinx/${LANGUAGE}/document.py)
 
     file( REMOVE ${DOCUMENT_OUT} )
     
@@ -56,13 +56,13 @@ foreach( LANGUAGE ${LANGUAGES} )
     list( APPEND DOCUMENTATION_TARGETS ${DOC_TARGET} )
     
     add_custom_target( ${DOC_TARGET}
-	COMMAND ${CMAKE_COMMAND} -E env LANGUAGE=${LANGUAGE} LANG=en_US.UTF-8 LANGUAGE_CODE=${LANGUAGE} ${CMAKE_INSTALL_PREFIX}/bin/${MRV2_COMMAND} -pythonScript ${SPHINX_DIR}/${LANGUAGE}/document.py
+	COMMAND ${CMAKE_COMMAND} -E env LANGUAGE=${LANGUAGE} LANG=en_US.UTF-8 LANGUAGE_CODE=${LANGUAGE} ${CMAKE_INSTALL_PREFIX}/bin/${MRV2_COMMAND} -pythonScript ${CMAKE_INSTALL_PREFIX}/sphinx/${LANGUAGE}/document.py
 	DEPENDS install ${DOCUMENT_OUT}
 	)
     
 endforeach()
 
 add_custom_target( doc
-    COMMAND echo "Documented all languages."
+    COMMAND ${CMAKE_COMMAND} -E echo "Documented all languages."
     DEPENDS ${DOCUMENTATION_TARGETS}
     )

@@ -38,7 +38,7 @@ void mrv2_enums(py::module& m)
 
 #ifdef TLRENDER_FFMPEG
     py::enum_<ffmpeg::Profile>(io, "Profile")
-        .value("None", ffmpeg::Profile::None)
+        .value("ProfileNone", ffmpeg::Profile::None)
         .value("H264", ffmpeg::Profile::H264)
         .value("ProRes", ffmpeg::Profile::ProRes)
         .value("ProRes_Proxy", ffmpeg::Profile::ProRes_Proxy)
@@ -50,7 +50,7 @@ void mrv2_enums(py::module& m)
 
 #ifdef TLRENDER_EXR
     py::enum_<exr::Compression>(io, "Compression")
-        .value("None", exr::Compression::None)
+        .value("CompressionNone", exr::Compression::None)
         .value("RLE", exr::Compression::RLE)
         .value("ZIPS", exr::Compression::ZIPS)
         .value("ZIP", exr::Compression::ZIP)
@@ -91,7 +91,7 @@ void mrv2_enums(py::module& m)
         .export_values();
 
     py::enum_<timeline::AlphaBlend>(image, "AlphaBlend")
-        .value("None", timeline::AlphaBlend::None)
+        .value("AlphaBlendNone", timeline::AlphaBlend::None)
         .value("Straight", timeline::AlphaBlend::Straight)
         .value("Premultiplied", timeline::AlphaBlend::Premultiplied)
         .export_values();
@@ -107,13 +107,13 @@ void mrv2_enums(py::module& m)
         .export_values();
 
     py::enum_<mrv::EnvironmentMapOptions::Type>(image, "EnvironmentMapType")
-        .value("None", mrv::EnvironmentMapOptions::Type::kNone)
+        .value("EnvironmentMapNone", mrv::EnvironmentMapOptions::Type::kNone)
         .value("Spherical", mrv::EnvironmentMapOptions::Type::kSpherical)
         .value("Cubic", mrv::EnvironmentMapOptions::Type::kCubic);
     //.export_values();
 
     py::enum_<mrv::Stereo3DInput>(image, "Stereo3DInput")
-        .value("None", mrv::Stereo3DInput::None)
+        .value("Stereo3DInputNone", mrv::Stereo3DInput::None)
         .value("Image", mrv::Stereo3DInput::Image)
         .export_values();
 
@@ -160,7 +160,7 @@ void mrv2_enums(py::module& m)
         .export_values();
 
     py::enum_<timeline::FileSequenceAudio>(timeline, "FileSequenceAudio")
-        .value("None", timeline::FileSequenceAudio::None)
+        .value("FileSequenceAudioNone", timeline::FileSequenceAudio::None)
         .value("BaseName", timeline::FileSequenceAudio::BaseName)
         .value("FileName", timeline::FileSequenceAudio::FileName)
         .value("Directory", timeline::FileSequenceAudio::Directory)
