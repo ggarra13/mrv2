@@ -24,7 +24,7 @@ foreach( LANGUAGE ${LANGUAGES} )
     # Prepare Sphinx's conf.py
     #
     set(CONFFILE_IN ${SPHINX_DIR}/${LANGUAGE}/conf.py.in)
-    set(CONFFILE_OUT ${SPHINX_DIR}/${LANGUAGE}/conf.py)
+    set(CONFFILE_OUT ${CMAKE_INSTALL_PREFIX}/sphinx/${LANGUAGE}/conf.py)
 
     # Replace variables inside @@ with the current values
     file( REMOVE ${CONFFILE_OUT} )
