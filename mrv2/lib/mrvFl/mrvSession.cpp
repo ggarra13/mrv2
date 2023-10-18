@@ -284,7 +284,7 @@ namespace mrv
             Message display = app->displayOptions();
             Message compare = model->observeCompareOptions()->get();
             Message stereo = model->observeStereo3DOptions()->get();
-            Message image = ui->uiView->getImageOptions();
+            Message image = app->imageOptions();
             Message environmentMap = ui->uiView->getEnvironmentMapOptions();
             Message background = ui->uiView->getBackgroundOptions();
             int stereoIndex = model->observeStereoIndex()->get();
@@ -632,12 +632,9 @@ namespace mrv
 
                 if (version >= 10)
                 {
-                    std::vector<timeline::ImageOptions> imageOptions =
+                    timeline::ImageOptions imageOptions =
                         session["imageOptions"];
-                    if (!imageOptions.empty())
-                    {
-                        app->setImageOptions(imageOptions[0]);
-                    }
+                    app->setImageOptions(imageOptions);
                 }
 
                 if (version >= 6)

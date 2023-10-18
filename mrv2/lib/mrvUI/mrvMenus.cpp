@@ -489,7 +489,7 @@ namespace mrv
         syncPanels();
 
         const timeline::DisplayOptions& d = ui->app->displayOptions();
-        const timeline::ImageOptions& o = ui->uiView->getImageOptions(-1);
+        const timeline::ImageOptions& o = ui->app->imageOptions();
         const timeline::BackgroundOptions backgroundOptions =
             ui->uiView->getBackgroundOptions();
 
