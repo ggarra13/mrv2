@@ -11,6 +11,8 @@ v0.8.2
 - Fixed adding a sequence with audio to the EDL Playlist.
 - Fixed parsing command-line audio files.  Now only the first sequence added in
   the command-line receives the audio file, instead of all files.
+- Fixed most issues when mixing clips of different frame rates and different
+  audio sample rates in an EDL.  Some precision issues seem unavoidable, thou.
 
 v0.8.1
 ======
