@@ -1287,9 +1287,8 @@ namespace mrv
             }
             else if (c == "Add Clip to Timeline")
             {
-                std::string filename = message["fileName"];
-                size_t srcIndex = message["sourceIndex"];
-                add_clip_to_timeline(filename, srcIndex, ui);
+                int Aindex = message["value"];
+                add_clip_to_timeline(Aindex, ui);
             }
             else if (c == "Edit/Frame/Cut")
             {

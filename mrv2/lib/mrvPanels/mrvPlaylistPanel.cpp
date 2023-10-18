@@ -436,8 +436,7 @@ namespace mrv
         }
 
         void PlaylistPanel::add(
-            const math::Vector2i& pos, const std::string& filename,
-            const size_t index, ViewerUI* ui)
+            const math::Vector2i& pos, const size_t index, ViewerUI* ui)
         {
             int aIndex = -1;
             bool validDrop = false;
@@ -481,7 +480,7 @@ namespace mrv
                 {
                     auto model = ui->app->filesModel();
                     model->setA(aIndex);
-                    add_clip_to_timeline(filename, index, ui);
+                    add_clip_to_timeline(index, ui);
                 }
             }
         }

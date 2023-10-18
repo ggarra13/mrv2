@@ -6,6 +6,11 @@ v0.8.2
 - Python documentation has been updated.
 - Python's Editor bug that would concatenate the last two lines together
   incorrectly has been fixed.
+- Fixed playlist of adding a sequence when it had no audio at the beginning of
+  the EDL.
+- Fixed adding a sequence with audio to the EDL Playlist.
+- Fixed parsing command-line audio files.  Now only the first sequence added in
+  the command-line receives the audio file, instead of all files.
 
 v0.8.1
 ======

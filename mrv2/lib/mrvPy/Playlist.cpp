@@ -137,8 +137,7 @@ namespace mrv2
                 throw std::runtime_error(
                     _("Could not find clip in loaded clips."));
 
-            const std::string Afile = items[Aindex]->path.get();
-            add_clip_to_timeline(Afile, Aindex, App::ui);
+            add_clip_to_timeline(Aindex, App::ui);
         }
 
         /**

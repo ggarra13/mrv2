@@ -30,8 +30,7 @@ namespace mrv
             void add_controls() override;
 
             void
-            add(const math::Vector2i& pos, const std::string& filename,
-                const size_t index, ViewerUI* ui);
+            add(const math::Vector2i& pos, const size_t index, ViewerUI* ui);
 
             void redraw();
             void refresh();

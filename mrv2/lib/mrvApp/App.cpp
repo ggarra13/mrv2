@@ -701,11 +701,20 @@ namespace mrv
         // Open the input files.
         if (!p.options.fileNames.empty())
         {
+            bool foundAudio = false;
             for (const auto& fileName : p.options.fileNames)
             {
                 if (fileName.empty())
                     continue;
-                open(fileName, p.options.audioFileName);
+                if (file::isSequence(fileName) && !foundAudio)
+                {
+                    open(fileName, p.options.audioFileName);
+                    foundAudio = true;
+                }
+                else
+                {
+                    open(fileName);
+                }
             }
 
             p.filesModel->setA(0);

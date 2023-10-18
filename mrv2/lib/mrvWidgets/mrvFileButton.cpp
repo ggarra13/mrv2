@@ -105,6 +105,7 @@ namespace mrv
                 math::Vector2i pos(X, Y);
 
                 ViewerUI* ui = App::ui;
+                auto model = ui->app->filesModel();
                 math::Box2i box(
                     ui->uiTimeline->x() + ui->uiMain->x(),
                     ui->uiTimeline->y() + ui->uiMain->y(), ui->uiTimeline->w(),
@@ -115,10 +116,7 @@ namespace mrv
 
                 if (box.contains(pos))
                 {
-                    const std::string text = label();
-                    auto lines = string::split(text, '\n');
-                    std::string filename = lines[0] + lines[1];
-                    add_clip_to_timeline(filename, p.index, ui);
+                    add_clip_to_timeline(p.index, ui);
                     return 1;
                 }
 
@@ -134,10 +132,7 @@ namespace mrv
 
                     if (box.contains(pos))
                     {
-                        const std::string text = label();
-                        auto lines = string::split(text, '\n');
-                        std::string filename = lines[0] + lines[1];
-                        playlistPanel->add(pos, filename, p.index, ui);
+                        playlistPanel->add(pos, p.index, ui);
                         return 1;
                     }
                 }
