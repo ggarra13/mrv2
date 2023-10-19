@@ -502,6 +502,7 @@ namespace mrv
         p.timeUnitsModel = timeline::TimeUnitsModel::create(context);
         p.filesModel = FilesModel::create(context);
         p.playlistsModel = PlaylistsModel::create(context);
+        p.devicesModel = DevicesModel::create(context);
 
         ui->uiTimeline->setContext(context, p.timeUnitsModel, ui);
         ui->uiTimeline->setScrollBarsVisible(false);
@@ -509,6 +510,9 @@ namespace mrv
         uiLogDisplay = new LogDisplay(0, 20, 340, 320);
 
         LOG_INFO(msg);
+
+        // Create the main control.
+        p.mainControl = new MainControl(ui);
 
         store_default_hotkeys();
 
@@ -621,7 +625,6 @@ namespace mrv
             });
 
         // p.outputDevice = new OutputDevice(context);
-        p.devicesModel = DevicesModel::create(context);
         value = p.settingsObject->value("Devices/DeviceIndex");
         p.devicesModel->setDeviceIndex(
             value.type() == typeid(void) ? 0 : std_any_cast<int>(value));
@@ -694,9 +697,6 @@ namespace mrv
 
         cacheUpdate();
         _audioUpdate();
-
-        // Create the main control.
-        p.mainControl = new MainControl(ui);
 
         // Open the input files.
         if (!p.options.fileNames.empty())
