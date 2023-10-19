@@ -190,16 +190,21 @@ namespace mrv
             end = b->prev_char(end);
             end_char = b->char_at(end);
         }
+        end = b->next_char(end);
 
-        // line_start = b->line_start(end);
-        // if (line_start == end)
-        // {
-        //     end = b->prev_char(end);
-        //     line_start = b->line_start(end);
-        // }
+        line_start = b->line_start(end);
+        if (line_start == end)
+        {
+            end = b->prev_char(end);
+            line_start = b->line_start(end);
+        }
 
         int pos = end;
         int found = b->search_forward(line_start, "=", &pos);
+        std::cerr << "found = " << found << " line_start=" << line_start
+                  << "  pos = " << pos << std::endl;
+        std::cerr << "text  =|" << b->text_range(line_start, pos) << "|"
+                  << std::endl;
 
         if (b->char_at(line_start) != ' ')
         {
@@ -210,6 +215,7 @@ namespace mrv
                 while (b->char_at(prev) == ' ')
                     prev = b->prev_char(prev);
                 prev = b->next_char(prev);
+                line_start = b->line_start(prev);
                 char* tmp = b->text_range(line_start, prev);
                 m_variable = tmp;
                 free(tmp);

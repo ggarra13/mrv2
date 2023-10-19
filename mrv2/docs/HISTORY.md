@@ -18,6 +18,7 @@ v0.8.2
 - Added imageOptions to session loading and saving.
 - Fixed swallowing of last character in Python Editor.
 - Fixed nested parenthesis in last expression in Python Editor.
+- Fixed Python Editor sometimes not running a multi-line expression.
 
 v0.8.1
 ======
