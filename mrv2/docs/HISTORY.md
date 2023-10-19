@@ -16,7 +16,11 @@ v0.8.2
 - Synchronized menu items to python changes as some were not being taken into
   account.
 - Added imageOptions to session loading and saving.
-- Fixed swallowing of last character in PythonEditor.
+- Fixed swallowing of last character in Python Editor.
+- Fixed nested parenthesis in last expression in Python Editor.
+- Fixed Python Editor sometimes not running a multi-line expression.
+- Added keyword constructors to all Python classes.
+- Added support for YUVA formats in FFmpeg through RGBA conversion.
 
 v0.8.1
 ======

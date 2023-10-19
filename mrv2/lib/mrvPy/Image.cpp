@@ -10,6 +10,7 @@
 
 namespace py = pybind11;
 
+#include <tlCore/Vector.h>
 #include <tlCore/Image.h>
 #include <tlCore/StringFormat.h>
 
@@ -48,8 +49,10 @@ namespace tl
         inline std::ostream& operator<<(std::ostream& o, const Color& a)
         {
             o << "<mrv2.image.Color enabled=" << (a.enabled ? "True" : "False")
-              << " add=" << a.add << " brightness=" << a.brightness
-              << " contrast=" << a.contrast << " saturation=" << a.saturation
+              << " add=<mrv2.math.Vector3f " << a.add << ">"
+              << " brightness=<mrv2.math.Vector3f " << a.brightness << ">"
+              << " contrast=<mrv2.math.Vector3f " << a.contrast << ">"
+              << " saturation=<mrv2.math.Vector3f " << a.saturation << ">"
               << " tint=" << a.tint
               << " invert=" << (a.invert ? "True" : "False") << ">";
             return o;
@@ -61,6 +64,15 @@ namespace tl
               << " inLow=" << a.inLow << " inHigh=" << a.inHigh
               << " gamma=" << a.gamma << " outLow=" << a.outLow
               << " outHigh=" << a.outHigh << ">";
+            return o;
+        }
+
+        inline std::ostream& operator<<(std::ostream& o, const EXRDisplay& a)
+        {
+            o << "<mrv2.image.EXRDisplay enabled="
+              << (a.enabled ? "True" : "False") << " exposure=" << a.exposure
+              << " defog=" << a.defog << " kneeLow=" << a.kneeLow
+              << " kneeHigh=" << a.kneeHigh << ">";
             return o;
         }
 
@@ -84,7 +96,7 @@ namespace tl
 
         inline std::ostream& operator<<(std::ostream& s, const ImageOptions& o)
         {
-            s << "<mrv2.image.inageOptions videoLevels=" << o.videoLevels
+            s << "<mrv2.image.imageOptions videoLevels=" << o.videoLevels
               << " alphaBlend=" << o.alphaBlend
               << " imageFilters=" << o.imageFilters << ">";
             return s;
@@ -117,8 +129,11 @@ namespace mrv
 
     inline std::ostream& operator<<(std::ostream& s, const Stereo3DOptions& o)
     {
-        s << "<mrv2.image.Stereo3DOptions input=" << o.input
-          << " output=" << o.output << " eyeSeparation=" << o.eyeSeparation
+        std::stringstream ss;
+        ss << o.input;
+        s << "<mrv2.image.Stereo3DOptions input="
+          << (ss.str() == "None" ? "kNone" : ss.str()) << " output=" << o.output
+          << " eyeSeparation=" << o.eyeSeparation
           << " swapEyes=" << (o.swapEyes ? "True" : "False") << ">";
         return s;
     }
@@ -299,7 +314,7 @@ Contains all classes and enums related to image controls.
 )PYTHON");
 
     py::class_<image::Mirror>(image, "Mirror")
-        .def(py::init<>())
+        .def(py::init<bool, bool>(), py::arg("x") = false, py::arg("y") = false)
         .def_readwrite("x", &image::Mirror::x, _("Flip image on X."))
         .def_readwrite("y", &image::Mirror::y, _("Flip image on Y."))
         .def(
@@ -315,6 +330,13 @@ Contains all classes and enums related to image controls.
     // Cannot be timeline as it clashes with timeline::Color class
     py::class_<timeline::Color>(image, "Color")
         .def(py::init<>())
+        .def(
+            py::init<
+                bool, math::Vector3f, math::Vector3f, math::Vector3f,
+                math::Vector3f, float, bool>(),
+            py::arg("enabled"), py::arg("add"), py::arg("brightness"),
+            py::arg("contrast"), py::arg("saturation"), py::arg("tint"),
+            py::arg("invert"))
         .def_readwrite(
             "enabled", &timeline::Color::enabled, _("Enabled Levels."))
         .def_readwrite(
@@ -348,7 +370,11 @@ Contains all classes and enums related to image controls.
         .doc() = _("Color values.");
 
     py::class_<timeline::Levels>(image, "Levels")
-        .def(py::init<>())
+        .def(
+            py::init<bool, float, float, float, float, float>(),
+            py::arg("enabled") = false, py::arg("inLow") = 0.F,
+            py::arg("inHigh") = 1.F, py::arg("gamma") = 1.F,
+            py::arg("outLow") = 0.F, py::arg("outHigh") = 1.F)
         .def_readwrite(
             "enabled", &timeline::Levels::enabled, _("Enabled Levels."))
         .def_readwrite(
@@ -371,8 +397,36 @@ Contains all classes and enums related to image controls.
             })
         .doc() = _("Levels values.");
 
+    py::class_<timeline::EXRDisplay>(image, "EXRDisplay")
+        .def(
+            py::init<bool, float, float, float, float>(),
+            py::arg("enabled") = false, py::arg("exposure") = 0.F,
+            py::arg("defog") = 0.F, py::arg("kneeLow") = 0.F,
+            py::arg("kneeHigh") = 5.F)
+        .def_readwrite(
+            "enabled", &timeline::EXRDisplay::enabled,
+            _("Enabled EXR display."))
+        .def_readwrite(
+            "exposure", &timeline::EXRDisplay::exposure, _("Exposure value."))
+        .def_readwrite("defog", &timeline::EXRDisplay::defog, _("Defog value."))
+        .def_readwrite(
+            "kneeLow", &timeline::EXRDisplay::kneeLow, _("kneeLow value."))
+        .def_readwrite(
+            "kneeHigh", &timeline::EXRDisplay::kneeHigh, _("kneeHigh value."))
+        .def(
+            "__repr__",
+            [](const timeline::EXRDisplay& o)
+            {
+                std::ostringstream s;
+                s << o;
+                return s.str();
+            })
+        .doc() = _("EXR display values.");
+
     py::class_<timeline::SoftClip>(image, "SoftClip")
-        .def(py::init<>())
+        .def(
+            py::init<bool, float>(), py::arg("enabled") = false,
+            py::arg("value") = 0.F)
         .def_readwrite(
             "enabled", &timeline::SoftClip::enabled, _("Enabled Soft Clip."))
         .def_readwrite(
@@ -389,6 +443,10 @@ Contains all classes and enums related to image controls.
 
     py::class_<timeline::ImageFilters>(image, "ImageFilters")
         .def(py::init<>())
+        .def(
+            py::init<timeline::ImageFilter, timeline::ImageFilter>(),
+            py::arg("minify") = timeline::ImageFilter::Nearest,
+            py::arg("magnify") = timeline::ImageFilter::Nearest)
         .def_readwrite(
             "minify", &timeline::ImageFilters::minify,
             _("Minify filter :class:`mrv2.image.ImageFilter`."))
@@ -407,6 +465,15 @@ Contains all classes and enums related to image controls.
 
     py::class_<timeline::DisplayOptions>(image, "DisplayOptions")
         .def(py::init<>())
+        .def(
+            py::init<
+                timeline::Channels, image::Mirror, timeline::Color,
+                timeline::Levels, timeline::EXRDisplay, timeline::SoftClip,
+                timeline::ImageFilters, image::VideoLevels>(),
+            py::arg("channels") = timeline::Channels::Color, py::arg("mirror"),
+            py::arg("color"), py::arg("levels"), py::arg("exrDisplay"),
+            py::arg("softClip"), py::arg("imageFilters"),
+            py::arg("videoLevels") = image::VideoLevels::FullRange)
         .def_readwrite(
             "channels", &timeline::DisplayOptions::channels,
             _("Color channels :class:`mrv2.image.Channels`."))
@@ -420,8 +487,11 @@ Contains all classes and enums related to image controls.
             "levels", &timeline::DisplayOptions::levels,
             _("Levels options :class:`mrv2.image.Levels`."))
         .def_readwrite(
+            "exrDisplay", &timeline::DisplayOptions::exrDisplay,
+            _("EXR Display options :class:`mrv2.image.EXRDisplay`.."))
+        .def_readwrite(
             "softClip", &timeline::DisplayOptions::softClip,
-            _("Soft Clip options  :class:`mrv2.image.SoftClip`.."))
+            _("Soft Clip options :class:`mrv2.image.SoftClip`.."))
         .def(
             "__repr__",
             [](const timeline::DisplayOptions& o)
@@ -434,6 +504,12 @@ Contains all classes and enums related to image controls.
 
     py::class_<timeline::LUTOptions>(image, "LUTOptions")
         .def(py::init<>())
+        .def(
+            py::init<bool, std::string, timeline::LUTOrder>(),
+            py::arg("enabled") = false, py::arg("fileName") = "",
+            py::arg("order") = timeline::LUTOrder::First)
+        .def_readwrite(
+            "enable", &timeline::LUTOptions::enabled, _("LUT enabled."))
         .def_readwrite(
             "fileName", &timeline::LUTOptions::fileName, _("LUT filename."))
         .def_readwrite(
@@ -451,6 +527,12 @@ Contains all classes and enums related to image controls.
 
     py::class_<timeline::ImageOptions>(image, "ImageOptions")
         .def(py::init<>())
+        .def(
+            py::init<
+                timeline::InputVideoLevels, timeline::AlphaBlend,
+                timeline::ImageFilters>(),
+            py::arg("videoLevels"), py::arg("alphaBlend"),
+            py::arg("imageFilter"))
         .def_readwrite(
             "videoLevels", &timeline::ImageOptions::videoLevels,
             _("Video Levels."))
@@ -472,6 +554,16 @@ Contains all classes and enums related to image controls.
 
     py::class_<mrv::EnvironmentMapOptions>(image, "EnvironmentMapOptions")
         .def(py::init<>())
+        .def(
+            py::init<
+                mrv::EnvironmentMapOptions::Type, float, float, float, float,
+                float, unsigned, unsigned, bool>(),
+            py::arg("type") = mrv::EnvironmentMapOptions::kNone,
+            py::arg("horizontalAperture") = 24.F,
+            py::arg("verticalAperture") = 0.F, py::arg("focalLength") = 45.F,
+            py::arg("rotateX") = 0.F, py::arg("rotateY") = 0.F,
+            py::arg("subdivisionX") = 36, py::arg("subdivisionY") = 36,
+            py::arg("spin") = true)
         .def_readwrite(
             "type", &mrv::EnvironmentMapOptions::type,
             _("Environment Map type."))
@@ -508,6 +600,10 @@ Contains all classes and enums related to image controls.
 
     py::class_<mrv::Stereo3DOptions>(image, "Stereo3DOptions")
         .def(py::init<>())
+        .def(
+            py::init< mrv::Stereo3DInput, mrv::Stereo3DOutput, float, bool>(),
+            py::arg("input"), py::arg("output"), py::arg("eyeSeparation") = 0.F,
+            py::arg("swapEyes") = false)
         .def_readwrite(
             "input", &mrv::Stereo3DOptions::input,
             _("Stereo 3d input :class:`mrv2.image.StereoInput`.."))

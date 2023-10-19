@@ -191,6 +191,12 @@ if ( NOT WIN32 )
     # Configure python.sh with python version
     configure_file(${CMAKE_SOURCE_DIR}/bin/python.sh.in
 	${CMAKE_INSTALL_PREFIX}/bin/python.sh @ONLY)
+
+    file(CHMOD ${CMAKE_INSTALL_PREFIX}/bin/python.sh
+        PERMISSIONS 
+        OWNER_READ OWNER_WRITE OWNER_EXECUTE
+        GROUP_READ GROUP_EXECUTE
+        WORLD_READ WORLD_EXECUTE )
     
     install( FILES
 	${CMAKE_SOURCE_DIR}/bin/mrv2.sh

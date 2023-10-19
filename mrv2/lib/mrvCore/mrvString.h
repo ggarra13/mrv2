@@ -38,6 +38,39 @@ namespace mrv
         }
 
         /**
+         * Strip leading whitespace (' ', '\n' and '\r') from a string
+         *
+         * @param input string
+         *
+         * @return stripped string
+         */
+        inline std::string stripLeadingWhitespace(const std::string& input)
+        {
+            size_t start = 0;
+            while (start < input.length() &&
+                   (std::isspace(input[start]) || input[start] == '\n' ||
+                    input[start] == '\r'))
+            {
+                start++;
+            }
+
+            return input.substr(start);
+        }
+
+        inline std::string stripAtStart(const std::string& s)
+        {
+            std::string out;
+            bool found = false;
+            for (const auto& c : s)
+            {
+                if (!found && (c == ' ' || c == '\n' || c == '\r'))
+                    continue;
+                out.push_back(c);
+            }
+            return out;
+        }
+
+        /**
          * @brief Class used to mimic Qt's string function so that it converts
          *       to integers or doubles.
          *

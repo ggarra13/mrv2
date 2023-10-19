@@ -64,6 +64,40 @@ void mrv2_enums(py::module& m)
 
     py::module image = m.def_submodule("image");
 
+    py::enum_<image::PixelType>(image, "PixelType")
+        .value("kNone", image::PixelType::None)
+        .value("L_U8", image::PixelType::L_U8)
+        .value("L_U16", image::PixelType::L_U16)
+        .value("L_U32", image::PixelType::L_U32)
+        .value("L_F16", image::PixelType::L_F16)
+        .value("L_F32", image::PixelType::L_F32)
+
+        .value("LA_U8", image::PixelType::LA_U8)
+        .value("LA_U16", image::PixelType::LA_U16)
+        .value("LA_U32", image::PixelType::LA_U32)
+        .value("LA_F16", image::PixelType::LA_F16)
+        .value("LA_F32", image::PixelType::LA_F32)
+
+        .value("RGB_U8", image::PixelType::RGB_U8)
+        .value("RGB_U16", image::PixelType::RGB_U16)
+        .value("RGB_U32", image::PixelType::RGB_U32)
+        .value("RGB_F16", image::PixelType::RGB_F16)
+        .value("RGB_F32", image::PixelType::RGB_F32)
+
+        .value("RGBA_U8", image::PixelType::RGBA_U8)
+        .value("RGBA_U16", image::PixelType::RGBA_U16)
+        .value("RGBA_U32", image::PixelType::RGBA_U32)
+        .value("RGBA_F16", image::PixelType::RGBA_F16)
+        .value("RGBA_F32", image::PixelType::RGBA_F32)
+
+        .value("YUV_420P_U8", image::PixelType::YUV_420P_U8)
+        .value("YUV_422P_U8", image::PixelType::YUV_422P_U8)
+        .value("YUV_444P_U8", image::PixelType::YUV_444P_U8)
+
+        .value("YUV_420P_U16", image::PixelType::YUV_420P_U16)
+        .value("YUV_422P_U16", image::PixelType::YUV_422P_U16)
+        .value("YUV_444P_U16", image::PixelType::YUV_444P_U16);
+
     py::enum_<image::VideoLevels>(image, "VideoLevels")
         .value("FullRange", image::VideoLevels::FullRange)
         .value("LegalRange", image::VideoLevels::LegalRange)
