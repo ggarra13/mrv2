@@ -458,6 +458,15 @@ namespace mrv
                     p.actionMode == ActionMode::kRotate)
                 {
                     p.lastEvent = FL_PUSH;
+
+                    if (p.actionMode == ActionMode::kScrub)
+                    {
+                        p.playbackMode = timeline::Playback::Stop;
+                        if (!p.timelinePlayers.empty())
+                        {
+                            p.playbackMode = p.timelinePlayers[0]->playback();
+                        }
+                    }
                     return;
                 }
 
@@ -934,11 +943,16 @@ namespace mrv
             {
                 if (p.lastEvent == FL_DRAG)
                 {
+                    p.lastEvent = 0;
+                    if (p.timelinePlayers.empty())
+                        return 0;
+                    auto player = p.timelinePlayers[0];
+                    player->setPlayback(p.playbackMode);
+
                     if (panel::filesPanel)
                         panel::filesPanel->redraw();
                     if (panel::comparePanel)
                         panel::comparePanel->redraw();
-                    p.lastEvent = 0;
                 }
                 else
                 {

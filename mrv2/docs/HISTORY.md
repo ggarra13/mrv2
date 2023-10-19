@@ -23,7 +23,8 @@ v0.8.2
 - Added support for YUVA formats in FFmpeg through RGBA conversion.
 - Fixed Preferences for Safe Areas not doing anything.
 - Added Video Levels and Alpha Blend to:
-  Preferences->User Interface->View Window.
+     Preferences->User Interface->View Window.
+- Made scrubbing automatically switch to playback with audio.
 
 
 v0.8.1
