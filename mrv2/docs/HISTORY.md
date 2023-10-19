@@ -19,6 +19,7 @@ v0.8.2
 - Fixed swallowing of last character in Python Editor.
 - Fixed nested parenthesis in last expression in Python Editor.
 - Fixed Python Editor sometimes not running a multi-line expression.
+- Added keyword constructors to all Python classes.
 
 v0.8.1
 ======

@@ -29,6 +29,13 @@ Contains all classes and enums related to USD (Universal Scene Description).
 
     py::class_<usd::RenderOptions>(usd, "RenderOptions")
         .def(py::init<>())
+        .def(
+            py::init<
+                int, float, tl::usd::DrawMode, bool, bool, size_t, size_t>(),
+            py::arg("renderWidth") = 1920, py::arg("complexity") = 1.F,
+            py::arg("drawMode") = tl::usd::DrawMode::ShadedSmooth,
+            py::arg("enableLighting") = true, py::arg("sRGB") = true,
+            py::arg("stageCache") = 10, py::arg("diskCache") = 0)
         .def_readwrite(
             "renderWidth", &usd::RenderOptions::renderWidth, _("Render Width"))
         .def_readwrite(

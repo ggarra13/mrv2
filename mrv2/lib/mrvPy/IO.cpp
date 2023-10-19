@@ -18,7 +18,31 @@ void mrv2_io(py::module& m)
     py::module io = m.def_submodule("io");
 
     py::class_<mrv::SaveOptions>(io, "SaveOptions")
-        .def(py::init<>())
+        .def(
+            py::init<
+                bool
+#ifdef TLRENDER_FFMPEG
+                ,
+                tl::ffmpeg::Profile
+#endif
+#ifdef TLRENDER_EXR
+                ,
+                tl::exr::Compression, tl::image::PixelType, int, float
+#endif
+                >(),
+            py::arg("annotations") = false
+#ifdef TLRENDER_FFMPEG
+            ,
+            py::arg("ffmpegProfile") = tl::ffmpeg::Profile::None
+#endif
+#ifdef TLRENDER_EXR
+            ,
+            py::arg("exrCompression") = tl::exr::Compression::ZIP,
+            py::arg("exrPixelType") = tl::image::PixelType::RGBA_F16,
+            py::arg("zipCompressionLevel") = 4,
+            py::arg("dwaCompressionLevel") = 45.0F
+#endif
+            )
         .def_readwrite(
             "annotations", &mrv::SaveOptions::annotations,
             _("Save annotations."))
