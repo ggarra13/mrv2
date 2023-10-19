@@ -10,6 +10,7 @@
 
 namespace py = pybind11;
 
+#include <tlCore/Vector.h>
 #include <tlCore/Image.h>
 #include <tlCore/StringFormat.h>
 
@@ -299,7 +300,7 @@ Contains all classes and enums related to image controls.
 )PYTHON");
 
     py::class_<image::Mirror>(image, "Mirror")
-        .def(py::init<>())
+        .def(py::init<bool, bool>(), py::arg("x") = false, py::arg("y") = false)
         .def_readwrite("x", &image::Mirror::x, _("Flip image on X."))
         .def_readwrite("y", &image::Mirror::y, _("Flip image on Y."))
         .def(
@@ -314,7 +315,13 @@ Contains all classes and enums related to image controls.
 
     // Cannot be timeline as it clashes with timeline::Color class
     py::class_<timeline::Color>(image, "Color")
-        .def(py::init<>())
+        .def(
+            py::init<
+                bool, math::Vector3f, math::Vector3f, math::Vector3f,
+                math::Vector3f, float, bool>(),
+            py::arg("enabled"), py::arg("add"), py::arg("brightness"),
+            py::arg("contrast"), py::arg("saturation"), py::arg("tint"),
+            py::arg("invert"))
         .def_readwrite(
             "enabled", &timeline::Color::enabled, _("Enabled Levels."))
         .def_readwrite(
@@ -348,7 +355,11 @@ Contains all classes and enums related to image controls.
         .doc() = _("Color values.");
 
     py::class_<timeline::Levels>(image, "Levels")
-        .def(py::init<>())
+        .def(
+            py::init<bool, float, float, float, float, float>(),
+            py::arg("enabled") = false, py::arg("inLow") = 0.F,
+            py::arg("inHigh") = 1.F, py::arg("gamma") = 1.F,
+            py::arg("outLow") = 0.F, py::arg("outHigh") = 1.F)
         .def_readwrite(
             "enabled", &timeline::Levels::enabled, _("Enabled Levels."))
         .def_readwrite(
@@ -372,7 +383,9 @@ Contains all classes and enums related to image controls.
         .doc() = _("Levels values.");
 
     py::class_<timeline::SoftClip>(image, "SoftClip")
-        .def(py::init<>())
+        .def(
+            py::init<bool, float>(), py::arg("enabled") = false,
+            py::arg("value") = 0.F)
         .def_readwrite(
             "enabled", &timeline::SoftClip::enabled, _("Enabled Soft Clip."))
         .def_readwrite(
@@ -388,7 +401,10 @@ Contains all classes and enums related to image controls.
         .doc() = _("Soft clip value.");
 
     py::class_<timeline::ImageFilters>(image, "ImageFilters")
-        .def(py::init<>())
+        .def(
+            py::init<timeline::ImageFilter, timeline::ImageFilter>(),
+            py::arg("minify") = timeline::ImageFilter::Nearest,
+            py::arg("magnify") = timeline::ImageFilter::Nearest)
         .def_readwrite(
             "minify", &timeline::ImageFilters::minify,
             _("Minify filter :class:`mrv2.image.ImageFilter`."))
@@ -406,7 +422,18 @@ Contains all classes and enums related to image controls.
         .doc() = _("Image filters.");
 
     py::class_<timeline::DisplayOptions>(image, "DisplayOptions")
-        .def(py::init<>())
+        .def(
+            py::init<
+                timeline::Channels, image::Mirror, timeline::Color,
+                timeline::Levels, timeline::SoftClip, timeline::ImageFilters,
+                image::VideoLevels>(),
+            py::arg("channels") = timeline::Channels::Color,
+            py::arg("mirror") = image::Mirror(),
+            py::arg("color") = timeline::Color(),
+            py::arg("levels") = timeline::Levels(),
+            py::arg("softClip") = timeline::SoftClip(),
+            py::arg("imageFilters") = timeline::ImageFilters(),
+            py::arg("videoLevels") = image::VideoLevels::FullRange)
         .def_readwrite(
             "channels", &timeline::DisplayOptions::channels,
             _("Color channels :class:`mrv2.image.Channels`."))
