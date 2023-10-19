@@ -201,10 +201,6 @@ namespace mrv
 
         int pos = end;
         int found = b->search_forward(line_start, "=", &pos);
-        std::cerr << "found = " << found << " line_start=" << line_start
-                  << "  pos = " << pos << std::endl;
-        std::cerr << "text  =|" << b->text_range(line_start, pos) << "|"
-                  << std::endl;
 
         if (b->char_at(line_start) != ' ')
         {
@@ -327,10 +323,6 @@ namespace mrv
 
         if (!m_variable.empty())
             m_variable += "\n";
-
-        std::cerr << "CODE=!" << m_code << "!" << std::endl;
-        std::cerr << "EVAL=!" << m_eval << "!" << std::endl;
-        std::cerr << "VAR =!" << m_variable << "!" << std::endl;
 
         free(text);
     }
