@@ -84,7 +84,7 @@ namespace tl
 
         inline std::ostream& operator<<(std::ostream& s, const ImageOptions& o)
         {
-            s << "<mrv2.image.inageOptions videoLevels=" << o.videoLevels
+            s << "<mrv2.image.imageOptions videoLevels=" << o.videoLevels
               << " alphaBlend=" << o.alphaBlend
               << " imageFilters=" << o.imageFilters << ">";
             return s;

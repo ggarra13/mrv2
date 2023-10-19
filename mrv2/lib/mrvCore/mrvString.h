@@ -38,18 +38,32 @@ namespace mrv
         }
 
         /**
-         * Strip spaces, newlines and carriage retuns from the start of a string
+         * Strip leading whitespace (' ', '\n' and '\r') from a string
          *
-         * @param s      input string
+         * @param input string
          *
-         * @return new string
+         * @return stripped string
          */
+        inline std::string stripLeadingWhitespace(const std::string& input)
+        {
+            size_t start = 0;
+            while (start < input.length() &&
+                   (std::isspace(input[start]) || input[start] == '\n' ||
+                    input[start] == '\r'))
+            {
+                start++;
+            }
+
+            return input.substr(start);
+        }
+
         inline std::string stripAtStart(const std::string& s)
         {
             std::string out;
-            for (auto& c : s)
+            bool found = false;
+            for (const auto& c : s)
             {
-                if (c == ' ' || c == '\n' || c == '\r')
+                if (!found && (c == ' ' || c == '\n' || c == '\r'))
                     continue;
                 out.push_back(c);
             }

@@ -217,7 +217,7 @@ namespace mrv
                 while (b->char_at(next) == ' ')
                     next = b->next_char(next);
                 m_eval = m_variable;
-                m_eval = string::stripAtStart(m_eval);
+                m_eval = string::stripLeadingWhitespace(m_eval);
                 tmp = b->text_range(start, end);
                 m_code = tmp;
                 free(tmp);
@@ -226,7 +226,7 @@ namespace mrv
             {
                 char* tmp = b->text_range(line_start, end);
                 m_eval = tmp;
-                m_eval = string::stripAtStart(m_eval);
+                m_eval = string::stripLeadingWhitespace(m_eval);
                 free(tmp);
                 int prev = 0;
                 if (line_start != 0)
