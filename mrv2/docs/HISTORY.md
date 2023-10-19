@@ -20,6 +20,7 @@ v0.8.2
 - Fixed nested parenthesis in last expression in Python Editor.
 - Fixed Python Editor sometimes not running a multi-line expression.
 - Added keyword constructors to all Python classes.
+- Added support for YUVA formats in FFmpeg through RGBA conversion.
 
 v0.8.1
 ======
