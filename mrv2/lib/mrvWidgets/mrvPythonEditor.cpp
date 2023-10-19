@@ -3,7 +3,10 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #include <cstring>
+
 #include <iostream>
+#include <string>
+#include <regex>
 
 #include "mrvWidgets/mrvPythonEditor.h"
 
@@ -168,7 +171,7 @@ namespace mrv
         char* text = b->selection_text();
         int start = 0;
         int line_start = 0;
-        int end = b->length() - 1;
+        int end = b->length();
         if (!text || strlen(text) == 0)
         {
             text = b->text();
@@ -188,8 +191,6 @@ namespace mrv
             end_char = b->char_at(end);
         }
 
-        // @bug: this would swallow the last character like ')'
-        //
         // line_start = b->line_start(end);
         // if (line_start == end)
         // {
@@ -216,6 +217,7 @@ namespace mrv
                 while (b->char_at(next) == ' ')
                     next = b->next_char(next);
                 m_eval = m_variable;
+                m_eval = string::stripAtStart(m_eval);
                 tmp = b->text_range(start, end);
                 m_code = tmp;
                 free(tmp);
@@ -224,6 +226,7 @@ namespace mrv
             {
                 char* tmp = b->text_range(line_start, end);
                 m_eval = tmp;
+                m_eval = string::stripAtStart(m_eval);
                 free(tmp);
                 int prev = 0;
                 if (line_start != 0)
@@ -232,6 +235,45 @@ namespace mrv
                     tmp = b->text_range(start, prev);
                     m_code = tmp;
                     free(tmp);
+                }
+
+                if (!m_eval.empty() && m_eval[0] == ')')
+                {
+                    // Skip nested parenthesis
+                    unsigned back_parenthesis = 1;
+                    int pos = line_start;
+                    while (pos > 0)
+                    {
+                        end_char = b->char_at(pos);
+                        while (end_char != '(' && pos > 0)
+                        {
+                            pos = b->prev_char(pos);
+                            end_char = b->char_at(pos);
+                            if (end_char == ')')
+                                ++back_parenthesis;
+                        }
+                        --back_parenthesis;
+                        if (back_parenthesis == 0)
+                            break;
+                        pos = b->prev_char(pos);
+                    }
+
+                    // Find the first equal sign
+                    line_start = b->line_start(pos);
+                    int found = b->search_forward(line_start, "=", &pos);
+                    if (found)
+                    {
+                        int prev = b->prev_char(pos);
+                        while (b->char_at(prev) == ' ')
+                            prev = b->prev_char(prev);
+
+                        prev = b->next_char(prev);
+
+                        // Grab the variable name
+                        m_eval = b->text_range(line_start, prev);
+                        m_variable = m_eval;
+                        m_code += ')';
+                    }
                 }
 
                 // py::eval cannot handle commands
@@ -255,7 +297,7 @@ namespace mrv
                         break;
                     }
                 }
-                if (skip || m_eval.substr(0, 1) == "#")
+                if (skip || (!m_eval.empty() && m_eval[0] == '#'))
                 {
                     m_code += "\n";
                     m_code += m_eval;

@@ -38,6 +38,25 @@ namespace mrv
         }
 
         /**
+         * Strip spaces, newlines and carriage retuns from the start of a string
+         *
+         * @param s      input string
+         *
+         * @return new string
+         */
+        inline std::string stripAtStart(const std::string& s)
+        {
+            std::string out;
+            for (auto& c : s)
+            {
+                if (c == ' ' || c == '\n' || c == '\r')
+                    continue;
+                out.push_back(c);
+            }
+            return out;
+        }
+
+        /**
          * @brief Class used to mimic Qt's string function so that it converts
          *       to integers or doubles.
          *

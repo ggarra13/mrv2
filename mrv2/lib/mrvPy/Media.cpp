@@ -9,10 +9,7 @@
 
 namespace py = pybind11;
 
-#include <tlCore/Image.h>
-#include <tlTimeline/ImageOptions.h>
-#include <tlTimeline/LUTOptions.h>
-#include <tlTimeline/DisplayOptions.h>
+#include <tlTimeline/CompareOptions.h>
 
 #include "mrvCore/mrvI8N.h"
 
