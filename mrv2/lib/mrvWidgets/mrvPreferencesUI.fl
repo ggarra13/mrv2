@@ -49,7 +49,7 @@ decl {\#include "mrvWidgets/mrvOCIOBrowser.h"} {public global
 decl {\#include "mrvFl/mrvFileRequester.h"} {public global
 }
 
-decl {\#include "mrvWidgets/mrvPreferencesTree.h"} {selected public global
+decl {\#include "mrvWidgets/mrvPreferencesTree.h"} {public global
 }
 
 decl {\#include "mrvWidgets/mrvPopupMenu.h"} {public global
@@ -67,7 +67,7 @@ class PreferencesUI {open
     Fl_Window uiMain {
       label Preferences
       user_data this user_data_type {PreferencesUI*} open
-      xywh {337 111 847 466} type Double resizable
+      xywh {893 97 847 466} type Double resizable
       code0 {main = m;} modal visible
     } {
       Fl_Group {} {open
@@ -82,7 +82,7 @@ class PreferencesUI {open
             xywh {288 49 554 349} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {
-              label {Window Behavior} open
+              label {Window Behavior}
               xywh {293 53 545 144} box ROUNDED_BOX
             } {
               Fl_Check_Button uiPrefsAlwaysOnTop {
@@ -158,12 +158,12 @@ If you try to open several mrv2s with different images, all these images will be
             }
           }
           Fl_Group {} {
-            label {View Window}
-            xywh {288 35 555 349} box EMBOSSED_BOX align 5 hide
+            label {View Window} open
+            xywh {288 35 555 349} box EMBOSSED_BOX align 5
           } {
             Fl_Group {} {
-              label Defaults
-              xywh {298 65 529 162} box ROUNDED_BOX
+              label Defaults open selected
+              xywh {298 65 531 162} box ROUNDED_BOX
             } {
               Fl_Value_Input uiPrefsViewGain {
                 label Gain
@@ -171,7 +171,7 @@ If you try to open several mrv2s with different images, all these images will be
               }
               Fl_Value_Input uiPrefsViewGamma {
                 label Gamma
-                tooltip {Sets the default gamma when mrv2 starts.} xywh {693 81 60 25} maximum 4 value 1 textcolor 56
+                tooltip {Sets the default gamma when mrv2 starts.} xywh {685 82 60 25} maximum 4 value 1 textcolor 56
               }
               Fl_Choice uiPrefsCropArea {
                 label Crop
@@ -243,10 +243,10 @@ If you try to open several mrv2s with different images, all these images will be
               Fl_Check_Button uiPrefsSafeAreas {
                 label {Safe Areas}
                 user_data this user_data_type {PreferencesUI*}
-                tooltip {When mrv2 starts, the safe area display will be active by default.} xywh {653 131 20 20} box UP_BOX down_box DOWN_BOX align 8
+                tooltip {When mrv2 starts, the safe area display will be active by default.} xywh {685 131 20 20} box UP_BOX down_box DOWN_BOX align 4
               }
               Fl_Choice uiPrefsZoomSpeed {
-                label {Zoom Speed} open
+                label {Zoom Speed}
                 xywh {358 186 90 25} down_box BORDER_BOX align 1
               } {
                 MenuItem {} {
@@ -260,6 +260,40 @@ If you try to open several mrv2s with different images, all these images will be
                 MenuItem {} {
                   label Fast
                   xywh {30 30 30 20}
+                }
+              }
+              Fl_Choice uiPrefsAlphaBlend {
+                label {Alpha Blend} open
+                xywh {685 186 135 25} down_box BORDER_BOX
+              } {
+                MenuItem {} {
+                  label None
+                  xywh {0 0 100 20}
+                }
+                MenuItem {} {
+                  label Straight
+                  xywh {10 10 100 20}
+                }
+                MenuItem {} {
+                  label Premultiplied
+                  xywh {20 20 100 20}
+                }
+              }
+              Fl_Choice uiPrefsVideoLevels {
+                label {Video Levels} open
+                xywh {685 156 135 25} down_box BORDER_BOX
+              } {
+                MenuItem {} {
+                  label {From File}
+                  xywh {10 10 100 20}
+                }
+                MenuItem {} {
+                  label {Legal Range}
+                  xywh {20 20 100 20}
+                }
+                MenuItem {} {
+                  label {Full Range}
+                  xywh {30 30 100 20}
                 }
               }
             }
@@ -436,7 +470,7 @@ o->redraw();}
           }
           Fl_Group {} {
             label Positioning
-            xywh {300 34 530 362} box EMBOSSED_BOX
+            xywh {300 34 530 362} box EMBOSSED_BOX hide
           } {
             Fl_Check_Button uiAlwaysSaveOnExit {
               label {Always Save on Exit}
@@ -506,7 +540,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
             }
           }
           Fl_Group {} {
-            label Playback open
+            label Playback
             xywh {300 34 530 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {
@@ -796,7 +830,7 @@ v->uiPrefsFPS->value( g );}
             }
           }
           Fl_Group {} {
-            label OCIO open
+            label OCIO
             xywh {293 34 542 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {open
@@ -1139,7 +1173,7 @@ v->uiOCIO_float_ics->do_callback();}
             }
           }
         }
-        Fl_Group {} {
+        Fl_Group {} {open
           xywh {9 0 270 447} box PLASTIC_UP_BOX
         } {
           Fl_Tree {} {
