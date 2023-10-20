@@ -21,6 +21,7 @@ v0.8.2
 - Fixed Python Editor sometimes not running a multi-line expression.
 - Added keyword constructors to all Python classes.
 - Added support for YUVA formats in FFmpeg through RGBA conversion.
+  This means both ProRes444 and webm (vpx) videos now support alpha channels.
 - Fixed Preferences for Safe Areas not doing anything.
 - Added Video Levels and Alpha Blend to:
      Preferences->User Interface->View Window.
@@ -30,6 +31,8 @@ v0.8.2
 - There's a new 'session' module to handle everything related to sessions,
   including saving, loading and setting the metadata.
 - The metadata for sessions has changed API.  Now it is a Python dict.
+- Added libvpx on Linux and macOS which was missing.
+- Added support for decoding webm (vpx) videos with alpha channel.
 
 
 v0.8.1
