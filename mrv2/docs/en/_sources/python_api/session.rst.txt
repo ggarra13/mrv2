@@ -1,4 +1,4 @@
-Session module
+session Module
 ==============
 
 .. automodule:: mrv2.session
