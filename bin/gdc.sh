@@ -18,7 +18,10 @@ fi
 
 . etc/build_dir.sh
 
+
+PYTHONEXE=$BUILD_DIR/install/bin/python${PYTHON_VERSION}
 if [[ $KERNEL == *Msys* ]]; then
+    PYTHONEXE=$BUILD_DIR/install/bin/python.exe
     requests=$BUILD_DIR/install/bin/Lib/site-packages/requests
     if [[ ! -e $requests ]]; then
 	python -m pip install requests
@@ -38,4 +41,4 @@ if [[ "$TAG" == "" ]]; then
     export TAG=`git ls-remote --tags --refs | tail -n1 | cut -d/ -f3`
 fi
 
-bin/python/github-download-count.py ggarra13 mrv2 $TAG
+$PYTHONEXE bin/python/github-download-count.py ggarra13 mrv2 $TAG
