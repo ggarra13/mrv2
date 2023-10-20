@@ -421,9 +421,8 @@ from mrv2 import playlist, timeline, usd, session, settings
 
             std::string code = e->code();
             std::string eval = e->eval();
-            std::string var = e->variable();
             outputDisplay->warning(code.c_str());
-            if (!eval.empty() && var != eval)
+            if (!eval.empty())
             {
                 outputDisplay->warning(eval.c_str());
             }

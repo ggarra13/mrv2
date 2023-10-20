@@ -38,7 +38,7 @@ namespace mrv
         }
 
         /**
-         * Strip leading whitespace (' ', '\n' and '\r') from a string
+         * Strip leading whitespace (' ', '\t', '\n' and '\r') from a string
          *
          * @param input string
          *
@@ -49,7 +49,7 @@ namespace mrv
             size_t start = 0;
             while (start < input.length() &&
                    (std::isspace(input[start]) || input[start] == '\n' ||
-                    input[start] == '\r'))
+                    input[start] == '\r' || input[start] == '\t'))
             {
                 start++;
             }
@@ -58,7 +58,7 @@ namespace mrv
         }
 
         /**
-         * Strip leading whitespace (' ', '\n' and '\r') from a string
+         * Strip leading whitespace (' ', '\t', '\n' and '\r') from a string
          *
          * @param input string
          *
@@ -66,7 +66,7 @@ namespace mrv
          */
         inline std::string stripTrailingWhitespace(const std::string& input)
         {
-            size_t endPos = input.find_last_not_of(" \r\n");
+            size_t endPos = input.find_last_not_of(" \r\n\t");
 
             if (endPos != std::string::npos)
             {

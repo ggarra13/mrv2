@@ -20,6 +20,20 @@ namespace
     const char* kModule = "pyeditor";
 }
 
+namespace
+{
+    int countParenthesis(const std::string& input)
+    {
+        int out = 0;
+        for (auto c : input)
+        {
+            if (c == ')')
+                ++out;
+        }
+        return out;
+    }
+} // namespace
+
 namespace mrv
 {
     namespace
@@ -167,11 +181,39 @@ namespace mrv
         return 1;
     }
 
+    // If a close parenthesis is found, keep searching backwards until
+    // we find the matching opening parenthesis.
+    // We need to skip other set of open/close parenthesis, so we go
+    // one character at a time.
+    int PythonEditor::skipParenthesis(int pos, int numParenthesis)
+    {
+        const Fl_Text_Buffer* b = buffer();
+        pos = b->prev_char(pos);
+        int parenthesisPos = -1;
+        while (pos > 0)
+        {
+            unsigned curChar = b->char_at(pos);
+            while (curChar != '(' && pos > 0)
+            {
+                pos = b->prev_char(pos);
+                curChar = b->char_at(pos);
+                if (curChar == ')')
+                    ++numParenthesis;
+            }
+            parenthesisPos = pos;
+            --numParenthesis;
+            if (numParenthesis == 0)
+                break;
+            pos = b->prev_char(pos);
+        }
+        // Okay, modify line_start now
+        return b->line_start(pos);
+    }
+
     void PythonEditor::split_code()
     {
         m_code.clear();
         m_eval.clear();
-        m_variable.clear();
 
         Fl_Text_Buffer* b = buffer();
         char* text = b->selection_text();
@@ -198,6 +240,7 @@ namespace mrv
         }
         end = b->next_char(end);
 
+        // Find the beginning of the last line.
         line_start = b->line_start(end);
         if (line_start == end)
         {
@@ -205,47 +248,76 @@ namespace mrv
             line_start = b->line_start(end);
         }
 
+        // Search for a closing parenthesis in the last line.
+        int closeParenthesis = -1;
+        int found = b->search_backward(end, ")", &closeParenthesis);
+        if (found && closeParenthesis >= line_start)
+        {
+            // If we have one, search backwards until we match a closing
+            // parenthesis and set the line start to that line, as we are
+            // dealing with a multi-line expression.
+            line_start = skipParenthesis(closeParenthesis, 1);
+        }
+
+        //
+        // Now, from the line start, look for the first parenthesis (if any).
+        //
         int parenthesisPos = end;
         int parenthesisFound =
             b->search_forward(line_start, "(", &parenthesisPos);
 
+        // Then search for an equal sign from the line start (if any).
         int pos = end;
-        int found = b->search_forward(line_start, "=", &pos);
+        found = b->search_forward(line_start, "=", &pos);
 
+        // If a parenthesis was found and the equal sign comes *after* it,
+        // we don't have a valid variable assignment.  Set found to 0 and pos
+        // at end.
         if (parenthesisFound && pos > parenthesisPos)
         {
             found = 0;
             pos = end;
         }
 
-        if (b->char_at(line_start) != ' ')
+        // If line does *not* begin with a space, we have a potential variable
+        // assignment or expression to evaluate.
+        // If the line begins with a space, the user is defining a class or
+        // function, so no eval needed.
+        // If the line begins with a comment, we also don't have to eval it.
+        if (b->char_at(line_start) != ' ' && b->char_at(line_start) != '#')
         {
             end = b->next_char(end);
             if (found && pos < end)
             {
+                // Okay, we have a variable assignment.
                 int prev = b->prev_char(pos);
                 while (b->char_at(prev) == ' ')
                     prev = b->prev_char(prev);
                 prev = b->next_char(prev);
+
+                // Get the variable name that we'll evaluate
                 line_start = b->line_start(prev);
                 char* tmp = b->text_range(line_start, prev);
-                m_variable = tmp;
+                m_eval = tmp;
                 free(tmp);
-                int next = b->next_char(pos);
-                while (b->char_at(next) == ' ')
-                    next = b->next_char(next);
-                m_eval = m_variable;
                 m_eval = string::stripLeadingWhitespace(m_eval);
+
+                // Get everything into code to exec.
                 tmp = b->text_range(start, end);
                 m_code = tmp;
                 free(tmp);
             }
             else
             {
+                // We don't have a variable assignment, but we may
+                // have an expression like   10 + 5, or a function call
+                // so we get that for evaluation.
                 char* tmp = b->text_range(line_start, end);
                 m_eval = tmp;
                 m_eval = string::stripLeadingWhitespace(m_eval);
                 free(tmp);
+
+                // what comes before is code.
                 int prev = 0;
                 if (line_start != 0)
                 {
@@ -255,46 +327,7 @@ namespace mrv
                     free(tmp);
                 }
 
-                if (!m_eval.empty() && m_eval[0] == ')')
-                {
-                    // Skip nested parenthesis
-                    unsigned back_parenthesis = 1;
-                    int pos = line_start;
-                    while (pos > 0)
-                    {
-                        end_char = b->char_at(pos);
-                        while (end_char != '(' && pos > 0)
-                        {
-                            pos = b->prev_char(pos);
-                            end_char = b->char_at(pos);
-                            if (end_char == ')')
-                                ++back_parenthesis;
-                        }
-                        --back_parenthesis;
-                        if (back_parenthesis == 0)
-                            break;
-                        pos = b->prev_char(pos);
-                    }
-
-                    // Find the first equal sign
-                    line_start = b->line_start(pos);
-                    int found = b->search_forward(line_start, "=", &pos);
-                    if (found)
-                    {
-                        int prev = b->prev_char(pos);
-                        while (b->char_at(prev) == ' ')
-                            prev = b->prev_char(prev);
-
-                        prev = b->next_char(prev);
-
-                        // Grab the variable name
-                        m_eval = b->text_range(line_start, prev);
-                        m_variable = m_eval;
-                        m_code += ')';
-                    }
-                }
-
-                // py::eval cannot handle commands
+                // py::eval cannot handle commands or built-in functions
                 bool skip = false;
                 for (int i = 0; i < sizeof(kKeywords) / sizeof(kKeywords[0]);
                      ++i)
@@ -315,26 +348,23 @@ namespace mrv
                         break;
                     }
                 }
-                if (skip ||
-                    (!m_eval.empty() && (m_eval[0] == '#' || m_eval[0] == ')')))
+
+                if (skip)
                 {
                     m_code += "\n";
                     m_code += m_eval;
                     m_eval.clear();
                 }
-                m_variable.clear();
             }
         }
         else
         {
             m_code = text;
             m_eval.clear();
-            m_variable.clear();
         }
 
         m_code = string::stripTrailingWhitespace(m_code);
         m_eval = string::stripTrailingWhitespace(m_eval);
-        m_variable = string::stripTrailingWhitespace(m_variable);
 
         if (!m_code.empty())
             m_code += "\n";
@@ -342,12 +372,8 @@ namespace mrv
         if (!m_eval.empty())
             m_eval += "\n";
 
-        if (!m_variable.empty())
-            m_variable += "\n";
-
         DBGM0("|CODE|" << m_code << "|");
         DBGM0("|EVAL|" << m_eval << "|");
-        DBGM0("|VAR |" << m_variable << "|");
 
         free(text);
     }
