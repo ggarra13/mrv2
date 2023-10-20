@@ -379,6 +379,12 @@ namespace mrv
         view.get("safe_areas", tmp, 0);
         uiPrefs->uiPrefsSafeAreas->value((bool)tmp);
 
+        view.get("video_levels", tmp, 0);
+        uiPrefs->uiPrefsVideoLevels->value(tmp);
+
+        view.get("alpha_blend", tmp, 1);
+        uiPrefs->uiPrefsAlphaBlend->value(tmp);
+
         view.get("crop_area", tmp, 0);
         uiPrefs->uiPrefsCropArea->value(tmp);
 
@@ -1127,6 +1133,8 @@ namespace mrv
         view.set("gamma", uiPrefs->uiPrefsViewGamma->value());
 
         view.set("safe_areas", uiPrefs->uiPrefsSafeAreas->value());
+        view.set("video_levels", uiPrefs->uiPrefsVideoLevels->value());
+        view.set("alpha_blend", uiPrefs->uiPrefsAlphaBlend->value());
         view.set("crop_area", uiPrefs->uiPrefsCropArea->value());
         view.set("zoom_speed", (int)uiPrefs->uiPrefsZoomSpeed->value());
 
@@ -1551,6 +1559,19 @@ namespace mrv
         int crop = uiPrefs->uiPrefsCropArea->value();
         float mask = kCrops[crop];
         view->setMask(mask);
+
+        // Handle Safe areas
+        bool safeAreas = (bool)uiPrefs->uiPrefsSafeAreas->value();
+        view->setSafeAreas(safeAreas);
+
+        // Handle image options
+        auto imageOptions = app->imageOptions();
+        int alphaBlend = uiPrefs->uiPrefsAlphaBlend->value();
+        int videoLevels = uiPrefs->uiPrefsVideoLevels->value();
+        imageOptions.alphaBlend = static_cast<timeline::AlphaBlend>(alphaBlend);
+        imageOptions.videoLevels =
+            static_cast<timeline::InputVideoLevels>(videoLevels);
+        app->setImageOptions(imageOptions);
 
         //
         // Handle HUD

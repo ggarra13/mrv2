@@ -249,8 +249,8 @@ namespace mrv
         p.volume = app->volume();
         p.mute = app->isMuted();
 
-        const auto& model = app->filesModel();
-        const auto& files = model->observeFiles()->get();
+        const auto model = app->filesModel();
+        const auto files = model->observeFiles()->get();
         const size_t numFiles = files.size();
         TimelineClass* c = p.ui->uiTimeWindow;
         if (numFiles > 0)

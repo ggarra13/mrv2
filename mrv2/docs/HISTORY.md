@@ -21,6 +21,11 @@ v0.8.2
 - Fixed Python Editor sometimes not running a multi-line expression.
 - Added keyword constructors to all Python classes.
 - Added support for YUVA formats in FFmpeg through RGBA conversion.
+- Fixed Preferences for Safe Areas not doing anything.
+- Added Video Levels and Alpha Blend to:
+     Preferences->User Interface->View Window.
+- Made scrubbing automatically switch to playback with audio.
+
 
 v0.8.1
 ======

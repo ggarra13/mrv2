@@ -52,6 +52,8 @@ namespace mrv
         math::Box2i(0, 0, -1, -1);
     image::Size TimelineViewport::Private::videoSize;
     ActionMode TimelineViewport::Private::actionMode = ActionMode::kScrub;
+    timeline::Playback TimelineViewport::Private::playbackMode =
+        timeline::Playback::Stop;
     float TimelineViewport::Private::masking = 0.F;
     otio::RationalTime TimelineViewport::Private::lastTime;
     uint64_t TimelineViewport::Private::skippedFrames = 0;
@@ -266,9 +268,17 @@ namespace mrv
     {
         TLRENDER_P();
 
-        const auto& player = p.timelinePlayers[0];
-        const auto t = player->currentTime();
+        const auto player = p.timelinePlayers[0];
+        const auto& t = player->currentTime();
         const auto& time = t + otime::RationalTime(dx, t.rate());
+        if (dx > 0)
+        {
+            player->setPlayback(timeline::Playback::Forward);
+        }
+        else
+        {
+            player->setPlayback(timeline::Playback::Reverse);
+        }
         player->seek(time);
     }
 

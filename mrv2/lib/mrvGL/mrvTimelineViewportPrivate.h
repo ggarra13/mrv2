@@ -5,6 +5,7 @@
 #pragma once
 
 #include <tlTimeline/BackgroundOptions.h>
+#include <tlTimeline/Player.h>
 
 #include "mrvDraw/Annotation.h"
 
@@ -75,6 +76,9 @@ namespace mrv
 
         //! Action Mode
         static ActionMode actionMode;
+
+        //! Playback mode before scrubbing
+        static tl::timeline::Playback playbackMode;
 
         //! Rectangle selection ( Color area )
         static math::Box2i selection;
