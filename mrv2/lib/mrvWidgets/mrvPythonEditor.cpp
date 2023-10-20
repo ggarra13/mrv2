@@ -214,6 +214,7 @@ namespace mrv
     {
         m_code.clear();
         m_eval.clear();
+        m_variable.clear();
 
         Fl_Text_Buffer* b = buffer();
         char* text = b->selection_text();
@@ -301,6 +302,7 @@ namespace mrv
                 m_eval = tmp;
                 free(tmp);
                 m_eval = string::stripLeadingWhitespace(m_eval);
+                m_variable = m_eval;
 
                 // Get everything into code to exec.
                 tmp = b->text_range(start, end);
@@ -372,8 +374,12 @@ namespace mrv
         if (!m_eval.empty())
             m_eval += "\n";
 
+        if (!m_variable.empty())
+            m_variable += "\n";
+
         DBGM0("|CODE|" << m_code << "|");
         DBGM0("|EVAL|" << m_eval << "|");
+        DBGM0("|VAR |" << m_variable << "|");
 
         free(text);
     }

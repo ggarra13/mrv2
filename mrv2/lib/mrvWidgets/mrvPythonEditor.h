@@ -25,6 +25,7 @@ namespace mrv
 
         inline const std::string& code() const { return m_code; }
         inline const std::string& eval() const { return m_eval; }
+        inline const std::string& variable() const { return m_variable; }
 
         void split_code();
 
@@ -46,7 +47,7 @@ namespace mrv
     protected:
         int skipParenthesis(int start, int numParenthesis = 1);
 
-        std::string m_code, m_eval;
+        std::string m_code, m_eval, m_variable;
     };
 
 } // namespace mrv

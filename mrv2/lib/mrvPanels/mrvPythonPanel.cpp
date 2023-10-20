@@ -419,10 +419,12 @@ from mrv2 import playlist, timeline, usd, session, settings
             PythonEditor* e = _r->pythonEditor;
             e->split_code();
 
-            std::string code = e->code();
-            std::string eval = e->eval();
+            const std::string& code = e->code();
+            const std::string& eval = e->eval();
+            const std::string& var = e->variable();
+
             outputDisplay->warning(code.c_str());
-            if (!eval.empty())
+            if (!eval.empty() && eval != var)
             {
                 outputDisplay->warning(eval.c_str());
             }
