@@ -12,7 +12,6 @@
 #include "mrvCore/mrvHome.h"
 
 #include "mrvFl/mrvSaving.h"
-#include "mrvFl/mrvSession.h"
 #include "mrvFl/mrvIO.h"
 
 #include "mrvPDF/mrvSavePDF.h"
@@ -362,56 +361,6 @@ namespace mrv2
             return save_pdf(file, ui);
         }
 #endif
-
-        /**
-         * \brief Returns the current session file.
-         */
-        std::string currentSession()
-        {
-            return session::current();
-        }
-
-        /**
-         * \brief Open a session file.
-         *
-         * @param file The path to the session file, like: test.mrv2s
-         */
-        bool openSession(std::string file)
-        {
-            return session::load(file);
-        }
-
-        /**
-         * \brief Save a session file.
-         *
-         * @param file The path to the session file, like: test.mrv2s
-         */
-        bool saveSession()
-        {
-            const std::string& file = session::current();
-            if (file.empty())
-            {
-                throw std::runtime_error(
-                    _("No session name established, cannot save."));
-                return false;
-            }
-            return session::save(file);
-        }
-
-        /**
-         * \brief Save a session file.
-         *
-         * @param file The path to the session file, like: test.mrv2s
-         */
-        bool saveSessionAs(std::string file)
-        {
-            if (file.substr(file.size() - 6, file.size()) != ".mrv2s")
-            {
-                file += ".mrv2s";
-            }
-            return session::save(file);
-        }
-
     } // namespace cmd
 } // namespace mrv2
 
@@ -539,37 +488,4 @@ Used to run main commands and get and set the display, image, compare, LUT optio
         _("Save a PDF document with all annotations and notes."),
         py::arg("file"));
 #endif
-
-    //
-    // Session commands
-    //
-    cmds.def(
-        "sessionMetadata", &mrv::session::metadata,
-        _("Returns the current session metadata."));
-
-    cmds.def(
-        "setSessionMetadata", &mrv::session::setMetadata,
-        _("Sets the current session metadata."));
-
-    cmds.def(
-        "currentSession", &mrv::session::current,
-        _("Returns current session file."));
-
-    cmds.def(
-        "setCurrentSession", &mrv::session::setCurrent,
-        _("Sets the current session file."), py::arg("file"));
-
-    cmds.def(
-        "openSession", &mrv2::cmd::openSession, _("Open a session file."),
-        py::arg("file"));
-
-    cmds.def("saveSession", &mrv2::cmd::saveSession, _("Save a session file."));
-
-    cmds.def(
-        "saveSessionAs", &mrv2::cmd::saveSessionAs, _("Save a session file."),
-        py::arg("file"));
 }
-/**
- * \endcond
- *
- */

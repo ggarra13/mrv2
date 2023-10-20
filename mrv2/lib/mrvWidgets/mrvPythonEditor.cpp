@@ -205,8 +205,18 @@ namespace mrv
             line_start = b->line_start(end);
         }
 
+        int parenthesisPos = end;
+        int parenthesisFound =
+            b->search_forward(line_start, "(", &parenthesisPos);
+
         int pos = end;
         int found = b->search_forward(line_start, "=", &pos);
+
+        if (parenthesisFound && pos > parenthesisPos)
+        {
+            found = 0;
+            pos = end;
+        }
 
         if (b->char_at(line_start) != ' ')
         {

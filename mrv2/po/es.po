@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-10-19 22:21-0300\n"
+"POT-Creation-Date: 2023-10-20 04:12-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -298,6 +298,17 @@ msgstr ""
 "Returna verdadero si el tiempo no es válido. El tiempo es considerado "
 "inválido si el valor o la razón son valoers NaN\n"
 "o si la razón es menor o igual a cero.\n"
+
+msgid ""
+"\n"
+"Session module.\n"
+"\n"
+"Used to manage everything related to sessions.\n"
+msgstr ""
+"\n"
+"Módulo de Sesión.\n"
+"\n"
+"Usado para manejar todo lo relacionado a sesiones.\n"
 
 msgid ""
 "\n"
@@ -1376,6 +1387,9 @@ msgstr "Borrar/&Editor"
 
 msgid "Clear/&Output"
 msgstr "Borrar/&Salida"
+
+msgid "Clears the current session metadata."
+msgstr "Vacía los metadatos de la sesión actual."
 
 msgid "Client"
 msgstr "Cliente"
@@ -3775,6 +3789,9 @@ msgstr "Retorna la versión y termina."
 msgid "Returns current session file."
 msgstr "Retorna la Sesión actual."
 
+msgid "Returns the current metadata for a key."
+msgstr "Retorna los metadatos para una clave."
+
 msgid "Returns the current session metadata."
 msgstr "Retorna la metadata de la sesión actual."
 
@@ -4269,20 +4286,23 @@ msgstr "Setear el rango de tiempo seleccionado en la línea de tiempo."
 msgid "Set the stereo 3D options."
 msgstr "Setear las opciones de estéreo 3D."
 
+msgid "Sets all the session metadata for a session."
+msgstr "Setea todos los metadatos de la sesión actual."
+
 msgid "Sets the current OCIO config file."
 msgstr "Setea el archivo de config de OCIO."
 
 msgid "Sets the current session file."
 msgstr "Setea el archivo de la sesión actual."
 
-msgid "Sets the current session metadata."
-msgstr "Setea la metadata de la sesión actual."
-
 msgid "Sets the default gain when mrv2 starts."
 msgstr "Establece la ganancia por defecto cuando mrv2 comienza."
 
 msgid "Sets the default gamma when mrv2 starts."
 msgstr "Establece la gama por defecto cuando mrv2 comienza."
+
+msgid "Sets the session metadata for a key."
+msgstr "Setea los metadatos para una clave."
 
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr "Seteando OCIO config de la variable de entorno OCIO."

@@ -21,6 +21,7 @@ set(SOURCES
     OTIO.cpp
     Playlist.cpp
     Plugin.cpp
+    Session.cpp
     Settings.cpp
     Timeline.cpp
     USD.cpp

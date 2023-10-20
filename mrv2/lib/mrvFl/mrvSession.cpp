@@ -56,7 +56,7 @@ namespace mrv
     namespace session
     {
 
-        std::string sessionMetadata;
+        std::map<std::string, std::string> sessionMetadata;
         std::string currentSession;
 
         std::string current()
@@ -658,16 +658,38 @@ namespace mrv
             return true;
         }
 
-        //! Returns user provided metadata in the last saved session.
-        const std::string& metadata()
+        const std::map<std::string, std::string>& metadata()
         {
             return sessionMetadata;
         }
 
-        //! Stores some user provided metadata.
-        void setMetadata(const std::string& metadata)
+        const std::string& metadata(const std::string& key)
         {
-            sessionMetadata = metadata;
+            static std::string empty;
+            try
+            {
+                return sessionMetadata.at(key);
+            }
+            catch (const std::exception& e)
+            {
+                LOG_ERROR(e.what());
+                return empty;
+            }
+        }
+
+        void setMetadata(const std::string& key, const std::string& value)
+        {
+            sessionMetadata[key] = value;
+        }
+
+        void setMetadata(const std::map<std::string, std::string>& value)
+        {
+            sessionMetadata = value;
+        }
+
+        void clearMetadata()
+        {
+            sessionMetadata.clear();
         }
 
     } // namespace session
