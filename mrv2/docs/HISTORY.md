@@ -25,6 +25,8 @@ v0.8.2
 - Added Video Levels and Alpha Blend to:
      Preferences->User Interface->View Window.
 - Made scrubbing automatically switch to playback with audio.
+- Fixed coloring of Python functions when they were typed at the start of a
+  line.
 
 
 v0.8.1
