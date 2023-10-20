@@ -455,7 +455,7 @@ Contains all classes and enums related to image controls.
             _("Magnify filter :class:`mrv2.image.ImageFilter`."))
         .def(
             "__repr__",
-            [](const timeline::Levels& o)
+            [](const timeline::ImageFilters& o)
             {
                 std::ostringstream s;
                 s << o;
