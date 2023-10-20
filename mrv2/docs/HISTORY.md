@@ -27,6 +27,9 @@ v0.8.2
 - Made scrubbing automatically switch to playback with audio.
 - Fixed coloring of Python functions when they were typed at the start of a
   line.
+- There's a new 'session' module to handle everything related to sessions,
+  including saving, loading and setting the metadata.
+- The metadata for sessions has changed API.  Now it is a Python dict.
 
 
 v0.8.1

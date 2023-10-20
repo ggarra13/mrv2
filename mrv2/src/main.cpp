@@ -44,6 +44,7 @@ PYBIND11_EMBEDDED_MODULE(mrv2, m)
 #    ifdef TLRENDER_USD
     mrv2_usd(m);
 #    endif
+    mrv2_session(m);
     mrv2_commands(m);
     mrv2_python_plugins(m);
     mrv2_python_redirect(m);
