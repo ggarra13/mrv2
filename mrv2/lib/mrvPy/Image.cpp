@@ -532,7 +532,7 @@ Contains all classes and enums related to image controls.
                 timeline::InputVideoLevels, timeline::AlphaBlend,
                 timeline::ImageFilters>(),
             py::arg("videoLevels"), py::arg("alphaBlend"),
-            py::arg("imageFilter"))
+            py::arg("imageFilters"))
         .def_readwrite(
             "videoLevels", &timeline::ImageOptions::videoLevels,
             _("Video Levels."))
