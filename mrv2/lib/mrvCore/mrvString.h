@@ -57,6 +57,28 @@ namespace mrv
             return input.substr(start);
         }
 
+        /**
+         * Strip leading whitespace (' ', '\n' and '\r') from a string
+         *
+         * @param input string
+         *
+         * @return stripped string
+         */
+        inline std::string stripTrailingWhitespace(const std::string& input)
+        {
+            size_t endPos = input.find_last_not_of(" \r\n");
+
+            if (endPos != std::string::npos)
+            {
+                return input.substr(0, endPos + 1);
+            }
+            else
+            {
+                // The string is entirely whitespace
+                return "";
+            }
+        }
+
         inline std::string stripAtStart(const std::string& s)
         {
             std::string out;

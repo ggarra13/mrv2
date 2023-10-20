@@ -6,13 +6,19 @@
 
 #include <iostream>
 #include <string>
-#include <regex>
+
+#include "mrvFl/mrvIO.h"
 
 #include "mrvWidgets/mrvPythonEditor.h"
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrViewer.h"
+
+namespace
+{
+    const char* kModule = "pyeditor";
+}
 
 namespace mrv
 {
@@ -299,7 +305,8 @@ namespace mrv
                         break;
                     }
                 }
-                if (skip || (!m_eval.empty() && m_eval[0] == '#'))
+                if (skip ||
+                    (!m_eval.empty() && (m_eval[0] == '#' || m_eval[0] == ')')))
                 {
                     m_code += "\n";
                     m_code += m_eval;
@@ -315,6 +322,10 @@ namespace mrv
             m_variable.clear();
         }
 
+        m_code = string::stripTrailingWhitespace(m_code);
+        m_eval = string::stripTrailingWhitespace(m_eval);
+        m_variable = string::stripTrailingWhitespace(m_variable);
+
         if (!m_code.empty())
             m_code += "\n";
 
@@ -323,6 +334,10 @@ namespace mrv
 
         if (!m_variable.empty())
             m_variable += "\n";
+
+        DBGM0("|CODE|" << m_code << "|");
+        DBGM0("|EVAL|" << m_eval << "|");
+        DBGM0("|VAR |" << m_variable << "|");
 
         free(text);
     }
@@ -560,7 +575,7 @@ namespace mrv
                          *bufptr++ = *temp++)
                         ;
 
-                    if (*temp == '(' && start == ' ')
+                    if (*temp == '(' && (start == ' ' || start == '\0'))
                     {
                         *bufptr = '\0';
 
