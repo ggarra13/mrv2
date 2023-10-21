@@ -165,6 +165,8 @@ if [[ $BUILD_LIBVPX == 1 ]]; then
 	
 	./../../sources/libvpx/configure --prefix=$INSTALL_DIR \
 					 --target=x86_64-win64-vs16 \
+					 --enable-vp9-highbitdepth \
+					 --disable-unit-tests \
 					 --disable-examples \
 					 --disable-docs
 	make -j ${CPU_CORES}
