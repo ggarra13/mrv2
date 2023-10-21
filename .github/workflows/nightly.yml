@@ -1,4 +1,4 @@
-name: Full Builds
+name: Nightly Builds
 
 on:
   schedule:
