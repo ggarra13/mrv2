@@ -479,15 +479,10 @@ namespace mrv
                     r / 255.F, g / 255.F, b / 255.F, alpha);
                 const float pen_size = _getPenSize();
 
-                std_any value;
-                value = settingsObject->value(kLaser);
-                int laser = std_any_cast<int>(value);
-
-                value = settingsObject->value(kSoftBrush);
-                int softBrush = std_any_cast<int>(value);
-
-                value = settingsObject->value(kTextFont);
-                Fl_Font font = std_any_cast<int>(value);
+                bool laser = settingsObject->getValue<bool>(kLaser);
+                bool softBrush = settingsObject->getValue<bool>(kSoftBrush);
+                Fl_Font font = static_cast<Fl_Font>(
+                    settingsObject->getValue<int>(kTextFont));
 
                 p.mousePos = _getFocus();
                 draw::Point pnt(_getRasterf());
@@ -497,9 +492,8 @@ namespace mrv
                     return;
 
                 auto annotation = player->getAnnotation();
-                bool all_frames = false;
-                value = p.ui->app->settingsObject()->value(kAllFrames);
-                all_frames = std_any_cast<int>(value);
+                bool all_frames =
+                    p.ui->app->settingsObject()->getValue<bool>(kAllFrames);
                 if (!annotation)
                 {
                     annotation = player->createAnnotation(all_frames);
@@ -608,8 +602,7 @@ namespace mrv
                     float pct = renderSize.h / 1024.F;
                     auto w = getMultilineInput();
 
-                    value = settingsObject->value(kFontSize);
-                    int font_size = std_any_cast<int>(value);
+                    int font_size = settingsObject->getValue<int>(kFontSize);
                     double fontSize =
                         font_size * pct * p.viewZoom / pixels_per_unit();
                     math::Vector2i pos(p.event_x, p.event_y);
@@ -1211,7 +1204,7 @@ namespace mrv
             {
                 auto settingsObject = p.ui->app->settingsObject();
                 std_any value;
-                value = settingsObject->value(kPenSize);
+                value = settingsObject->getValue<std::any>(kPenSize);
                 int v = std_any_empty(value) ? 12 : std_any_cast<int>(value);
                 ++v;
                 settingsObject->setValue(kPenSize, v);
@@ -1223,7 +1216,7 @@ namespace mrv
             {
                 auto settingsObject = p.ui->app->settingsObject();
                 std_any value;
-                value = settingsObject->value(kPenSize);
+                value = settingsObject->getValue<std::any>(kPenSize);
                 int v = std_any_empty(value) ? 12 : std_any_cast<int>(value);
                 --v;
                 settingsObject->setValue(kPenSize, v);

@@ -21,20 +21,15 @@ namespace mrv
         {
             auto settingsObject = App::app->settingsObject();
             RenderOptions o;
-            o.renderWidth =
-                std_any_cast<int>(settingsObject->value("USD/renderWidth"));
-            o.complexity =
-                std_any_cast<float>(settingsObject->value("USD/complexity"));
+            o.renderWidth = settingsObject->getValue<int>("USD/renderWidth");
+            o.complexity = settingsObject->getValue<float>("USD/complexity");
             o.drawMode = static_cast<tl::usd::DrawMode>(
-                std_any_cast<int>(settingsObject->value("USD/drawMode")));
-            o.enableLighting = static_cast<bool>(
-                std_any_cast<int>(settingsObject->value("USD/enableLighting")));
-            o.sRGB = static_cast<bool>(
-                std_any_cast<int>(settingsObject->value("USD/sRGB")));
-            o.stageCache =
-                std_any_cast<int>(settingsObject->value("USD/stageCache"));
-            o.diskCache =
-                std_any_cast<int>(settingsObject->value("USD/diskCache"));
+                settingsObject->getValue<int>("USD/drawMode"));
+            o.enableLighting =
+                settingsObject->getValue<bool>("USD/enableLighting");
+            o.sRGB = settingsObject->getValue<bool>("USD/sRGB");
+            o.stageCache = settingsObject->getValue<int>("USD/stageCache");
+            o.diskCache = settingsObject->getValue<int>("USD/diskCache");
             return o;
         }
 

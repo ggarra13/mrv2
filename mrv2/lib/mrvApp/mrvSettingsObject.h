@@ -11,6 +11,8 @@
 #include <tlCore/Util.h>
 #include <tlCore/Memory.h>
 
+#include "mrvFl/mrvIO.h"
+
 #include "mrvApp/mrvStdAnyHelper.h"
 
 #define std_any std::any
@@ -52,8 +54,8 @@ namespace mrv
         //! Get the list of keys in settings.
         const std::vector<std::string> keys() const;
 
-        //! Get a settings value.
-        std_any value(const std::string&);
+        //! Get a value safely.
+        template < typename T > T getValue(const std::string&);
 
         //! Get the list of recent files.
         const std::vector<std::string>& recentFiles() const;
@@ -69,7 +71,6 @@ namespace mrv
         //! Get whether tooltips are enabled.
         bool hasToolTipsEnabled() const;
 
-    public: // Q_SLOTS
         //! Set a settings value.
         void setValue(const std::string&, const std_any&);
 
@@ -89,6 +90,10 @@ namespace mrv
         void addPythonScript(const std::string&);
 
     private:
+        //! Get a settings value without error checking.
+        std_any _value(const std::string&);
+
         TLRENDER_PRIVATE();
     };
+
 } // namespace mrv

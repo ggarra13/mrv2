@@ -112,11 +112,11 @@ namespace mrv
             std_any value;
 
             key = prefix + "/WindowW";
-            value = settingsObject->value(key);
+            value = settingsObject->getValue<std::any>(key);
             W = std_any_empty(value) ? W : std_any_cast<int>(value);
 
             key = prefix + "/WindowH";
-            value = settingsObject->value(key);
+            value = settingsObject->getValue<std::any>(key);
 
             int H2 = std_any_empty(value) ? H : std_any_cast<int>(value);
             if (H2 != 0)

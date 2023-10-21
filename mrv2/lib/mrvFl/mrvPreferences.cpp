@@ -801,8 +801,8 @@ namespace mrv
 
         std_any value;
 
-        value = settingsObject->value("Performance/AudioBufferFrameCount");
-        int v = std_any_cast<int>(value);
+        int v =
+            settingsObject->getValue<int>("Performance/AudioBufferFrameCount");
         if (v < 1024)
         {
             settingsObject->setValue(
@@ -810,65 +810,51 @@ namespace mrv
                 (int)timeline::PlayerOptions().audioBufferFrameCount);
         }
 
-        value = settingsObject->value(kPenColorR);
-        int r = std_any_cast<int>(value);
-
-        value = settingsObject->value(kPenColorG);
-        int g = std_any_cast<int>(value);
-
-        value = settingsObject->value(kPenColorB);
-        int b = std_any_cast<int>(value);
-
-        value = settingsObject->value(kPenColorA);
-        int a = std_any_cast<int>(value);
+        int r = settingsObject->getValue<int>(kPenColorR);
+        int g = settingsObject->getValue<int>(kPenColorG);
+        int b = settingsObject->getValue<int>(kPenColorB);
+        int a = settingsObject->getValue<int>(kPenColorA);
 
         ui->uiPenColor->color((Fl_Color)61);
         Fl_Color c = (Fl_Color)ui->uiPenColor->color();
         Fl::set_color(c, r, g, b);
 
-        settingsObject->setValue(kPenColorR, (int)r);
-        settingsObject->setValue(kPenColorG, (int)g);
-        settingsObject->setValue(kPenColorB, (int)b);
-        settingsObject->setValue(kPenColorA, (int)a);
+        settingsObject->setValue(kPenColorR, r);
+        settingsObject->setValue(kPenColorG, g);
+        settingsObject->setValue(kPenColorB, b);
+        settingsObject->setValue(kPenColorA, a);
 
-        value = settingsObject->value(kOldPenColorR);
-        r = std_any_cast<int>(value);
-
-        value = settingsObject->value(kOldPenColorG);
-        g = std_any_cast<int>(value);
-
-        value = settingsObject->value(kOldPenColorB);
-        b = std_any_cast<int>(value);
-
-        value = settingsObject->value(kOldPenColorA);
-        a = std_any_cast<int>(value);
+        r = settingsObject->getValue<int>(kOldPenColorR);
+        g = settingsObject->getValue<int>(kOldPenColorG);
+        b = settingsObject->getValue<int>(kOldPenColorB);
+        a = settingsObject->getValue<int>(kOldPenColorA);
 
         ui->uiOldPenColor->color((Fl_Color)62);
         c = (Fl_Color)ui->uiOldPenColor->color();
         Fl::set_color(c, r, g, b);
 
-        settingsObject->setValue(kOldPenColorR, (int)r);
-        settingsObject->setValue(kOldPenColorG, (int)g);
-        settingsObject->setValue(kOldPenColorB, (int)b);
-        settingsObject->setValue(kOldPenColorA, (int)a);
+        settingsObject->setValue(kOldPenColorR, r);
+        settingsObject->setValue(kOldPenColorG, g);
+        settingsObject->setValue(kOldPenColorB, b);
+        settingsObject->setValue(kOldPenColorA, a);
 
         ui->uiPenOpacity->value(a / 255.0F);
 
         // Handle background options
-        value = settingsObject->value("gui/Background/Options");
         timeline::Background type = static_cast<timeline::Background>(
-            std_any_empty(value) ? 0 : std_any_cast<int>(value));
+            settingsObject->getValue<int>("gui/Background/Options"));
+
         timeline::BackgroundOptions backgroundOptions;
         backgroundOptions.type = type;
         ui->uiView->setBackgroundOptions(backgroundOptions);
 
         // Handle Dockgroup size (based on percentage)
-        value = settingsObject->value("gui/DockGroup/Width");
-        float pct = std_any_empty(value) ? 0.2 : std_any_cast<float>(value);
+        float pct = settingsObject->getValue<float>("gui/DockGroup/Width");
+        if (pct < 0.2F)
+            pct = 0.2F;
         int width = ui->uiViewGroup->w() * pct;
 
-        value = settingsObject->value("gui/DockGroup/Visible");
-        int visible = std_any_empty(value) ? 0 : std_any_cast<int>(value);
+        int visible = settingsObject->getValue<int>("gui/DockGroup/Visible");
         if (visible)
             ui->uiDockGroup->show();
 
@@ -896,8 +882,7 @@ namespace mrv
                 std::string key = "gui/";
                 key += wc->name;
                 key += "/Window/Visible";
-                value = settingsObject->value(key);
-                visible = std_any_empty(value) ? 0 : std_any_cast< int >(value);
+                visible = settingsObject->getValue<int>(key);
                 if (visible)
                 {
                     if (std::string("Logs") == wc->name && logsPanel)
@@ -909,8 +894,7 @@ namespace mrv
 
         // Handle secondary window which is a tad special
         std::string key = "gui/Secondary/Window/Visible";
-        value = settingsObject->value(key);
-        visible = std_any_empty(value) ? 0 : std_any_cast< int >(value);
+        visible = settingsObject->getValue<int>(key);
         if (visible)
             toggle_secondary_cb(nullptr, ui);
     }
@@ -956,7 +940,7 @@ namespace mrv
         const std::vector< std::string >& keys = settingsObject->keys();
         for (auto key : keys)
         {
-            std_any value = settingsObject->value(key);
+            std::any value = settingsObject->getValue<std::any>(key);
             try
             {
                 double tmpD = std::any_cast<double>(value);
@@ -1495,13 +1479,9 @@ namespace mrv
         //
 
         {
-            std_any value;
-            value = settingsObject->value(kGhostNext);
-            ui->uiView->setGhostNext(
-                std_any_empty(value) ? 5 : std_any_cast< int >(value));
-            value = settingsObject->value(kGhostPrevious);
+            ui->uiView->setGhostNext(settingsObject->getValue<int>(kGhostNext));
             ui->uiView->setGhostPrevious(
-                std_any_empty(value) ? 5 : std_any_cast< int >(value));
+                settingsObject->getValue<int>(kGhostPrevious));
 
             ui->uiView->setMissingFrameType(static_cast<MissingFrameType>(
                 uiPrefs->uiMissingFrameType->value()));

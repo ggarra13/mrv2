@@ -61,33 +61,3 @@ template <> inline int std_any_cast(const std::any& value)
     }
     return out;
 }
-
-template <> inline float std_any_cast(const std::any& value)
-{
-    float out = 0.0F; // Default value in case of bad_any_cast
-    try
-    {
-        out = std::any_cast<float>(value);
-    }
-    catch (const std::bad_any_cast& e)
-    {
-        const char* kModule = "any";
-        LOG_ERROR(e.what() << " expected float is " << anyName(value));
-    }
-    return out;
-}
-
-template <> inline double std_any_cast(const std::any& value)
-{
-    double out = 0.0; // Default value in case of bad_any_cast
-    try
-    {
-        out = std::any_cast<double>(value);
-    }
-    catch (const std::bad_any_cast& e)
-    {
-        const char* kModule = "any";
-        LOG_ERROR(e.what() << " expected double is " << anyName(value));
-    }
-    return out;
-}

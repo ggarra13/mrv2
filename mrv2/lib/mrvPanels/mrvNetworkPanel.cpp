@@ -177,7 +177,7 @@ namespace mrv
                 new Widget<IntInput>(g->x() + X, Y + 5, 80, 20, _("Port"));
             _r->port = in = inV;
 
-            value = settingsObject->value("TCP/Control/Port");
+            value = settingsObject->getValue<std::any>("TCP/Control/Port");
             std::string portNumber = std_any_empty(value)
                                          ? "55150"
                                          : std_any_cast<std::string>(value);

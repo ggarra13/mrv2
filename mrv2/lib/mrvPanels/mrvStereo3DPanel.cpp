@@ -381,7 +381,7 @@ namespace mrv
             cg->end();
 
             std::string key = prefix + "Stereo 3D";
-            value = settingsObject->value(key);
+            value = settingsObject->getValue<std::any>(key);
             int open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
             if (!open)
                 cg->close();
@@ -454,7 +454,7 @@ namespace mrv
             cg->end();
 
             key = prefix + "Adjustments";
-            value = settingsObject->value(key);
+            value = settingsObject->getValue<std::any>(key);
             open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
             if (!open)
                 cg->close();
