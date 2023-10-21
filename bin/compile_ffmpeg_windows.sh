@@ -5,7 +5,7 @@
 
 #
 # This script compiles a GPL or BSD version of ffmpeg. The GPL version has
-# libx264 encoding and libvpx support.  The BSD version does not have libx264.
+# libx264 encoding and libvpx support.  The LGPL version does not have libx264.
 #
 if [[ ! -e etc/build_dir.sh ]]; then
     echo "You must run this script from the root of mrv2 directory like:"
@@ -41,7 +41,7 @@ if [[ $FFMPEG_GPL == GPL || $FFMPEG_GPL == LGPL ]]; then
     true
 else
     echo
-    echo "You need to provide either a --gpl or --bsd flag."
+    echo "You need to provide either a --gpl or --lgpl flag."
     exit 1
 fi
 #
@@ -165,6 +165,8 @@ if [[ $BUILD_LIBVPX == 1 ]]; then
 	
 	./../../sources/libvpx/configure --prefix=$INSTALL_DIR \
 					 --target=x86_64-win64-vs16 \
+					 --enable-vp9-highbitdepth \
+					 --disable-unit-tests \
 					 --disable-examples \
 					 --disable-docs
 	make -j ${CPU_CORES}
