@@ -90,13 +90,13 @@ mrv2 binaries run on Windows 8.1+, RedHat 8.1+ or Ubuntu 20.04+ and macOS 11.0+.
   On Debian (Ubuntu, etc) systems, you would install with:
 
 ```
-  sudo dpkg -i mrv2-v0.7.8-Linux-amd64.tar.gz
+  sudo dpkg -i mrv2-v0.8.2-Linux-amd64.tar.gz
 ```
 
   On Red Hat (Rocky Linux, etc), you would install it with:
   
 ```
-  sudo rpm -i mrv2-v0.7.8-Linux-amd64.tar.gz
+  sudo rpm -i mrv2-v0.8.2-Linux-amd64.tar.gz
 ```
 
   Once you install it, you can run mrv2 by just typing mrv2 in the shell, as
@@ -110,7 +110,7 @@ mrv2 binaries run on Windows 8.1+, RedHat 8.1+ or Ubuntu 20.04+ and macOS 11.0+.
   .tar.gz file and you can uncompress it with:
   
 ```
-  tar -xf mrv2-v0.7.8-Linux-amd64.tar.gz
+  tar -xf mrv2-v0.8.2-Linux-amd64.tar.gz
 ```
 
   That will create a folder in the direcory you uncompress it from.  You can
@@ -180,7 +180,7 @@ sudo dnf -y groupinstall "Development Tools"
 #
 sudo dnf -y install git wget cmake pango-devel gettext ninja-build \
 	       libglvnd-devel alsa-lib-devel pulseaudio-libs-devel \
-	       libXScrnSaver-devel dpkg libvpx-devel \
+	       libXScrnSaver-devel dpkg \
 	       autoconf wayland-devel wayland-protocols-devel cairo-devel \
 	       libxkbcommon-devel dbus-devel mesa-libGLU-devel gtk3-devel \
 	       libffi-devel openssl-devel tk-devel tcl-devel libXt-devel
@@ -199,7 +199,7 @@ sudo apt update
 #
 sudo apt -y install build-essential git cmake ninja-build libpango1.0-dev \
 		    xorg-dev libx11-dev libxcursor-dev libxinerama-dev \
-		    libxss-dev gettext libvpx-dev libasound2-dev \
+		    libxss-dev gettext libasound2-dev \
 		    libpulse-dev libssl-dev libffi-dev \
 		    libwayland-dev wayland-protocols libdbus-1-dev \
 		    libxkbcommon-dev libegl-dev libgtk-3-dev rpm \
