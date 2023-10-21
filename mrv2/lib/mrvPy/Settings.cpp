@@ -28,8 +28,7 @@ namespace mrv2
         int memory()
         {
             auto settings = settingsObject();
-            std_any any = settings->value("Cache/GBytes");
-            return std_any_cast<int>(any);
+            return settings->getValue<int>("Cache/GBytes");
         }
 
         /**
@@ -58,8 +57,7 @@ namespace mrv2
         double readAhead()
         {
             auto settings = settingsObject();
-            std_any any = settings->value("Cache/ReadAhead");
-            return std_any_cast<double>(any);
+            return settings->getValue<double>("Cache/ReadAhead");
         }
 
         /**
@@ -71,8 +69,7 @@ namespace mrv2
         double readBehind()
         {
             auto settings = settingsObject();
-            std_any any = settings->value("Cache/ReadBehind");
-            return std_any_cast<double>(any);
+            return settings->getValue<double>("Cache/ReadBehind");
         }
 
         /**
@@ -116,11 +113,8 @@ namespace mrv2
         timeline::FileSequenceAudio fileSequenceAudio()
         {
             auto settings = settingsObject();
-            std_any any = settings->value("FileSequence/Audio");
-            const timeline::FileSequenceAudio value =
-                static_cast<timeline::FileSequenceAudio>(
-                    std_any_cast<int>(any));
-            return value;
+            return static_cast<timeline::FileSequenceAudio>(
+                settings->getValue<int>("FileSequence/Audio"));
         }
 
         /**
@@ -144,9 +138,8 @@ namespace mrv2
         std::string fileSequenceAudioFileName()
         {
             auto settings = settingsObject();
-            std_any any = settings->value("FileSequence/AudioFileName");
-            std::string value = std_any_cast<std::string>(any);
-            return value;
+            return settings->getValue<std::string>(
+                "FileSequence/AudioFileName");
         }
 
         /**
@@ -171,9 +164,8 @@ namespace mrv2
         std::string fileSequenceAudioDirectory()
         {
             auto settings = settingsObject();
-            std_any any = settings->value("FileSequence/AudioDirectory");
-            std::string value = std_any_cast<std::string>(any);
-            return value;
+            return settings->getValue<std::string>(
+                "FileSequence/AudioDirectory");
         }
 
         /**
@@ -199,9 +191,7 @@ namespace mrv2
         int maxFileSequenceDigits()
         {
             auto settings = settingsObject();
-            std_any any = settings->value("Misc/MaxFileSequenceDigits");
-            int value = std_any_cast<int>(any);
-            return value;
+            return settings->getValue<int>("Misc/MaxFileSequenceDigits");
         }
 
         void setTimerMode(const timeline::TimerMode value)
@@ -216,10 +206,8 @@ namespace mrv2
         timeline::TimerMode timerMode()
         {
             auto settings = settingsObject();
-            std_any any = settings->value("Performance/TimerMode");
-            timeline::TimerMode value =
-                static_cast<timeline::TimerMode>(std_any_cast<int>(any));
-            return value;
+            return static_cast<timeline::TimerMode>(
+                settings->getValue<int>("Performance/TimerMode"));
         }
 
         void setAudioBufferFrameCount(const int value)
@@ -234,9 +222,7 @@ namespace mrv2
         int audioBufferFrameCount()
         {
             auto settings = settingsObject();
-            std_any any = settings->value("Performance/AudioBufferFrameCount");
-            int value = std_any_cast<int>(any);
-            return value;
+            return settings->getValue<int>("Performance/AudioBufferFrameCount");
         }
 
         /**
@@ -262,9 +248,7 @@ namespace mrv2
         int videoRequests()
         {
             auto settings = settingsObject();
-            std_any any = settings->value("Performance/VideoRequestCount");
-            int value = std_any_cast<int>(any);
-            return value;
+            return settings->getValue<int>("Performance/VideoRequestCount");
         }
 
         /**
@@ -290,9 +274,7 @@ namespace mrv2
         int audioRequests()
         {
             auto settings = settingsObject();
-            std_any any = settings->value("Performance/AudioRequestCount");
-            int value = std_any_cast<int>(any);
-            return value;
+            return settings->getValue<int>("Performance/AudioRequestCount");
         }
 
         /**
@@ -318,9 +300,7 @@ namespace mrv2
         int sequenceThreadCount()
         {
             auto settings = settingsObject();
-            std_any any = settings->value("Performance/SequenceThreadCount");
-            int value = std_any_cast<int>(any);
-            return value;
+            return settings->getValue<int>("Performance/SequenceThreadCount");
         }
 
         /**
@@ -345,10 +325,8 @@ namespace mrv2
         bool FFmpegYUVToRGBConversion()
         {
             auto settings = settingsObject();
-            std_any any =
-                settings->value("Performance/FFmpegYUVToRGBConversion");
-            bool value = static_cast<bool>(std_any_cast<int>(any));
-            return value;
+            return settings->getValue<bool>(
+                "Performance/FFmpegYUVToRGBConversion");
         }
 
         /**
@@ -374,9 +352,7 @@ namespace mrv2
         int FFmpegThreadCount()
         {
             auto settings = settingsObject();
-            std_any any = settings->value("Performance/FFmpegThreadCount");
-            int value = std_any_cast<int>(any);
-            return value;
+            return settings->getValue<int>("Performance/FFmpegThreadCount");
         }
     } // namespace settings
 

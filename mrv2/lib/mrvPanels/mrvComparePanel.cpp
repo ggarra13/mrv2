@@ -580,7 +580,7 @@ namespace mrv
             cg->end();
 
             std::string key = prefix + "Wipe";
-            std_any value = settingsObject->value(key);
+            std_any value = settingsObject->getValue<std::any>(key);
             int open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
             if (!open)
                 cg->close();
@@ -637,7 +637,7 @@ namespace mrv
             cg->end();
 
             key = prefix + "Overlay";
-            value = settingsObject->value(key);
+            value = settingsObject->getValue<std::any>(key);
             open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
             if (!open)
                 cg->close();

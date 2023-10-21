@@ -124,9 +124,7 @@ namespace mrv
             }
 #endif
 
-            value = settingsObject->value(kTextFont);
-            int font =
-                std_any_empty(value) ? FL_HELVETICA : std_any_cast<int>(value);
+            int font = settingsObject->getValue<int>(kTextFont);
             if (font > numFonts)
                 font = 0;
             c->value(font);
@@ -163,8 +161,7 @@ namespace mrv
             s->range(12, 100);
             s->step(1);
             s->tooltip(_("Selects the current font size."));
-            value = settingsObject->value(kFontSize);
-            s->default_value(std_any_cast< int >(value));
+            s->default_value(settingsObject->getValue<int>(kFontSize));
             sV->callback(
                 [=](auto o)
                 {
@@ -186,7 +183,7 @@ namespace mrv
             cg->end();
 
             std::string key = prefix + "Text";
-            value = settingsObject->value(key);
+            value = settingsObject->getValue<std::any>(key);
             int open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
             if (!open)
                 cg->close();
@@ -226,8 +223,7 @@ namespace mrv
             cb->labelsize(11);
             cb->tooltip(_("Makes the following annotation "
                           "dissapear a second after drawn."));
-            value = settingsObject->value(kLaser);
-            cb->value(std_any_empty(value) ? 0 : std_any_cast<int>(value));
+            cb->value(settingsObject->getValue<bool>(kLaser));
             cB->callback(
                 [=](auto w) {
                     settingsObject->setValue(
@@ -242,8 +238,7 @@ namespace mrv
             b->labelsize(11);
             b->callback((Fl_Callback*)set_pen_color_cb, p.ui);
 
-            value = settingsObject->value(kSoftBrush);
-            int soft = std_any_cast<int>(value);
+            bool soft = settingsObject->getValue<bool>(kSoftBrush);
 
             auto bW = new Widget< Button >(X + 150, Y, 25, 25);
             bt = hardBrush = bW;
@@ -292,8 +287,7 @@ namespace mrv
             s->range(2, 150);
             s->step(1);
             s->tooltip(_("Selects the current pen size."));
-            value = settingsObject->value(kPenSize);
-            s->default_value(std_any_cast< int >(value));
+            s->default_value(settingsObject->getValue<int>(kPenSize));
             sV->callback(
                 [=](auto o)
                 {
@@ -305,7 +299,7 @@ namespace mrv
             cg->end();
 
             key = prefix + "Pen";
-            value = settingsObject->value(key);
+            value = settingsObject->getValue<std::any>(key);
             open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
             if (!open)
                 cg->close();
@@ -352,8 +346,7 @@ namespace mrv
             d->step(1);
             d->tooltip(_("Selects the number of fading frames previous to the "
                          "frame of the annotation."));
-            value = settingsObject->value(kGhostPrevious);
-            d->value(std_any_empty(value) ? 5 : std_any_cast< int >(value));
+            d->value(settingsObject->getValue<int>(kGhostPrevious));
             dV->callback(
                 [=](auto w)
                 {
@@ -380,8 +373,7 @@ namespace mrv
             d->tooltip(
                 _("Selects the number of fading frames following the frame "
                   "of the annotation."));
-            value = settingsObject->value(kGhostNext);
-            d->value(std_any_empty(value) ? 5 : std_any_cast< int >(value));
+            d->value(settingsObject->getValue<int>(kGhostNext));
             dV->callback(
                 [=](auto w)
                 {
@@ -396,7 +388,7 @@ namespace mrv
             cg->end();
 
             key = prefix + "Ghosting";
-            value = settingsObject->value(key);
+            value = settingsObject->getValue<std::any>(key);
             open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
             if (!open)
                 cg->close();
@@ -434,7 +426,7 @@ namespace mrv
             auto rV = new Widget< Fl_Radio_Round_Button >(
                 X, 40, 50, 20, _("Current"));
             r = rV;
-            value = settingsObject->value(kAllFrames);
+            value = settingsObject->getValue<std::any>(kAllFrames);
             r->tooltip(_("Makes the following annotation "
                          "show on this frame only."));
             r->value(std_any_empty(value) ? 1 : !std_any_cast< int >(value));
@@ -449,7 +441,7 @@ namespace mrv
             r = rV;
             r->tooltip(_("Makes the following annotation "
                          "show on all frames."));
-            value = settingsObject->value(kAllFrames);
+            value = settingsObject->getValue<std::any>(kAllFrames);
             r->value(std_any_empty(value) ? 0 : std_any_cast< int >(value));
             rV->callback(
                 [=](auto w) {
@@ -462,7 +454,7 @@ namespace mrv
             cg->end();
 
             key = prefix + "Frames";
-            value = settingsObject->value(key);
+            value = settingsObject->getValue<std::any>(key);
             open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
             if (!open)
                 cg->close();
@@ -496,10 +488,8 @@ namespace mrv
             penColor->color(p.ui->uiPenColor->color());
             penColor->redraw();
 
-            std_any value;
             SettingsObject* settingsObject = p.ui->app->settingsObject();
-            value = settingsObject->value(kSoftBrush);
-            int soft = std_any_cast<int>(value);
+            bool soft = settingsObject->getValue<bool>(kSoftBrush);
             softBrush->value(0);
             hardBrush->value(0);
             if (soft)
