@@ -33,6 +33,8 @@ v0.8.2
 - The metadata for sessions has changed API.  Now it is a Python dict.
 - Added libvpx on Linux and macOS which was missing.
 - Added support for decoding webm (vpx) videos with alpha channel.
+- Fixed crashing issues on macOS at start up due to brew libraries being
+  loaded instead of the mrv2 shipped libraries.
 
 
 v0.8.1
