@@ -83,7 +83,6 @@ namespace mrv
         p.defaultValues["Performance/FFmpegThreadCount"] = 0;
         p.defaultValues["Performance/FFmpegYUVToRGBConversion"] = 0;
         p.defaultValues["Misc/MaxFileSequenceDigits"] = 9;
-        p.defaultValues["Misc/ToolTipsEnabled"] = 1;
         p.defaultValues["EnvironmentMap/Sphere/SubdivisionX"] = 36;
         p.defaultValues["EnvironmentMap/Sphere/SubdivisionY"] = 36;
         p.defaultValues["EnvironmentMap/Spin"] = 1;
@@ -119,9 +118,9 @@ namespace mrv
         p.defaultValues[kOldPenColorB] = 0;
         p.defaultValues[kOldPenColorA] = 255;
 
-        p.defaultValues[kLaser] = 0;
+        p.defaultValues[kLaser] = false;
         p.defaultValues[kPenSize] = 10;
-        p.defaultValues[kSoftBrush] = 0;
+        p.defaultValues[kSoftBrush] = false;
 
         p.defaultValues[kGhostPrevious] = 15;
         p.defaultValues[kGhostNext] = 15;
@@ -167,6 +166,18 @@ namespace mrv
         return p.settings[name] = defaultValue;
     }
 
+    std::any SettingsObject::_defaultValue(const std::string& name)
+    {
+        TLRENDER_P();
+        std::any defaultValue;
+        auto i = p.defaultValues.find(name);
+        if (i != p.defaultValues.end())
+        {
+            defaultValue = i->second;
+        }
+        return p.settings[name] = defaultValue;
+    }
+
     template < typename T > T SettingsObject::getValue(const std::string& name)
     {
         T out;
@@ -194,7 +205,9 @@ namespace mrv
         catch (const std::bad_any_cast& e)
         {
             LOG_ERROR(
-                "For " << name << " " << e.what() << " is " << anyName(value));
+                "For " << name << " " << e.what() << " should be string is "
+                       << anyName(value));
+            setValue(name, out);
         }
         return out;
     }
@@ -221,8 +234,9 @@ namespace mrv
             catch (const std::bad_any_cast& e)
             {
                 LOG_ERROR(
-                    "For " << name << " " << e.what() << " is "
+                    "For " << name << " " << e.what() << " should be bool is "
                            << anyName(value));
+                setValue(name, out);
             }
         }
         return out;
@@ -244,9 +258,17 @@ namespace mrv
             }
             catch (const std::bad_any_cast& e)
             {
-                LOG_ERROR(
-                    "For " << name << " " << e.what() << " is "
-                           << anyName(value));
+                try
+                {
+                    value = _defaultValue(name);
+                    out = std_any_empty(value) ? 0 : std::any_cast<int>(value);
+                }
+                catch (const std::bad_any_cast& e)
+                {
+                    LOG_ERROR(
+                        "For " << name << " should be int " << e.what()
+                               << " is " << anyName(value));
+                }
             }
         }
         return out;
@@ -262,8 +284,25 @@ namespace mrv
         }
         catch (const std::bad_any_cast& e)
         {
-            LOG_ERROR(
-                "For " << name << " " << e.what() << " is " << anyName(value));
+            try
+            {
+                out = static_cast<float>(std::any_cast<double>(value));
+            }
+            catch (const std::bad_any_cast& e)
+            {
+                try
+                {
+                    value = _defaultValue(name);
+                    out =
+                        std_any_empty(value) ? 0 : std::any_cast<float>(value);
+                }
+                catch (const std::bad_any_cast& e)
+                {
+                    LOG_ERROR(
+                        "For " << name << " should be float " << e.what()
+                               << " is " << anyName(value));
+                }
+            }
         }
         return out;
     }
@@ -278,8 +317,17 @@ namespace mrv
         }
         catch (const std::bad_any_cast& e)
         {
-            LOG_ERROR(
-                "For " << name << " " << e.what() << " is " << anyName(value));
+            try
+            {
+                value = _defaultValue(name);
+                out = std_any_empty(value) ? 0 : std::any_cast<double>(value);
+            }
+            catch (const std::bad_any_cast& e)
+            {
+                LOG_ERROR(
+                    "For " << name << " should be double " << e.what() << " is "
+                           << anyName(value));
+            }
         }
         return out;
     }
