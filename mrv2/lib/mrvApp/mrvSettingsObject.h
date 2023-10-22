@@ -91,7 +91,9 @@ namespace mrv
 
     private:
         //! Get a settings value without error checking.
-        std_any _value(const std::string&);
+        std::any _value(const std::string&);
+        //! Get a settings default value without error checking.
+        std::any _defaultValue(const std::string&);
 
         TLRENDER_PRIVATE();
     };
