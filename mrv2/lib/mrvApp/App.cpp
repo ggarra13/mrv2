@@ -1227,16 +1227,14 @@ namespace mrv
                 _log(e.what(), log::Type::Error);
             }
         }
+
+        panel::refreshThumbnails();
     }
 
     void App::_activeCallback(
         const std::vector<std::shared_ptr<FilesModelItem> >& items)
     {
         TLRENDER_P();
-
-        // Flag used to determine if clip was just loaded or we just switched
-        // from a compare or a file list change.
-        bool loaded = false;
 
         if (!p.active.empty() && !p.timelinePlayers.empty() &&
             p.timelinePlayers[0])
@@ -1315,9 +1313,13 @@ namespace mrv
                 item->ioInfo = mrvTimelinePlayer->ioInfo();
                 if (!item->init)
                 {
-                    loaded = true;
                     item->init = true;
                     item->speed = mrvTimelinePlayer->speed();
+                    if (ui->uiPrefs->uiPrefsAutoPlayback->value())
+                    {
+                        mrvTimelinePlayer->setPlayback(
+                            timeline::Playback::Forward);
+                    }
                     item->playback = mrvTimelinePlayer->playback();
                     item->loop = mrvTimelinePlayer->loop();
                     item->currentTime = mrvTimelinePlayer->currentTime();
@@ -1412,18 +1414,7 @@ namespace mrv
 
                 if (p.running)
                 {
-                    if (loaded)
-                        panel::refreshThumbnails();
-                    else
-                        panel::redrawThumbnails();
-                    if (ui->uiPrefs->uiPrefsAutoPlayback->value() && loaded)
-                    {
-                        auto player = ui->uiView->getTimelinePlayer();
-                        if (player &&
-                            player->timeRange().duration().value() > 1.0)
-                            ui->uiView->playForwards();
-                    }
-                    ui->uiMain->fill_menu(ui->uiMenuBar);
+                    panel::redrawThumbnails();
                 }
             }
         }

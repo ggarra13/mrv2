@@ -1613,53 +1613,16 @@ namespace mrv
                     }
                     auto sourceRange = sourceItem->inOutRange;
                     videoDuration = sourceRange.duration();
+                    if (videoDuration.rate() > videoRate)
+                        videoRate = videoDuration.rate();
                     clip->set_source_range(sourceRange);
                     track->append_child(clip, &errorStatus);
                     if (otio::is_error(errorStatus))
                     {
                         throw std::runtime_error("Cannot append child");
                     }
-
-                    // If audio is longer than video, append a video gap.
-                    // It seems this should *not* be done.
-                    // #if 0
-                    //                     if (audioInfo.audio.isValid())
-                    //                     {
-                    //                         const auto audioRate =
-                    //                         audioInfo.audioTime.duration().rate();
-                    //                         const auto videoRate =
-                    //                         sourceRange.duration().rate();
-                    //                         const auto audio_duration =
-                    //                             audioInfo.audioTime.duration().rescaled_to(videoRate);
-                    //                         const auto clip_duration =
-                    //                         sourceRange.duration(); const
-                    //                         auto gap_duration =
-                    //                             audio_duration -
-                    //                             clip_duration;
-                    //                         if (gap_duration.value() > 0.0)
-                    //                         {
-                    //                             const auto gapRange =
-                    //                             TimeRange(
-                    //                                 RationalTime(0.0,
-                    //                                 videoRate),
-                    //                                 gap_duration);
-
-                    //                             auto gap = new
-                    //                             otio::Gap(gapRange);
-                    //                             track->append_child(gap,
-                    //                             &errorStatus); if
-                    //                             (otio::is_error(errorStatus))
-                    //                             {
-                    //                                 throw std::runtime_error(
-                    //                                     _("Cannot append
-                    //                                     video gap"));
-                    //                             }
-                    //                         }
-                    //                     }
-                    // #endif
                 }
 
-                auto audioInfoDuration = audioInfo.audioTime.duration();
                 if (!audioInfo.audio.isValid() && audioTrackIndex >= 0)
                 {
                     auto audioTrack = otio::dynamic_retainer_cast<Track>(
@@ -1673,15 +1636,19 @@ namespace mrv
                     }
                 }
 
-                if (audioInfoDuration.rate() > sampleRate)
-                    sampleRate = audioInfoDuration.rate();
+                auto audioDuration = RationalTime(0.0, sampleRate);
+                if (audioInfo.audio.isValid())
+                {
+                    audioDuration = audioInfo.audioTime.duration();
+                }
+
+                if (audioDuration.rate() > sampleRate)
+                    sampleRate = audioDuration.rate();
                 else
-                    audioInfoDuration =
-                        audioInfoDuration.rescaled_to(sampleRate);
+                    audioDuration = audioDuration.rescaled_to(sampleRate);
 
                 if (sampleRate > 0)
                 {
-
                     // If no audio track, create one and fill it with a gap
                     // until new video clip.
                     // If no audio (a sequence), we also fill it with a gap.
@@ -1733,10 +1700,11 @@ namespace mrv
                             audioTrack = otio::dynamic_retainer_cast<Track>(
                                 tracks[audioTrackIndex]);
                         }
+                        audioDuration = RationalTime(
+                            videoRange.duration().rescaled_to(sampleRate));
                         auto gapRange = TimeRange(
-                            RationalTime(0.0, sampleRate),
-                            RationalTime(videoRange.start_time().rescaled_to(
-                                sampleRate)));
+                            RationalTime(0.0, sampleRate), audioDuration);
+
                         auto gap = new otio::Gap(gapRange);
                         audioTrack->append_child(gap);
                     }
@@ -1754,8 +1722,8 @@ namespace mrv
                         auto media = new otio::ExternalReference(
                             audioPath.get(), audioInfo.audioTime);
                         clip->set_media_reference(media);
-                        if (sourceDuration > audioInfoDuration)
-                            sourceDuration = audioInfoDuration;
+                        if (sourceDuration > audioDuration)
+                            sourceDuration = audioDuration;
                         const TimeRange sourceRange(start, sourceDuration);
                         clip->set_source_range(sourceRange);
                         audioTrack->append_child(clip, &errorStatus);
@@ -1766,10 +1734,10 @@ namespace mrv
                         }
                     }
                     auto gap_duration = RationalTime(0.0, sampleRate);
-                    if (videoDuration > audioInfoDuration)
+                    if (videoDuration > audioDuration)
                     {
                         if (audioInfo.audio.isValid())
-                            gap_duration = videoDuration - audioInfoDuration;
+                            gap_duration = videoDuration - audioDuration;
                         else
                             gap_duration = videoDuration;
                     }

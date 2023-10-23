@@ -37,6 +37,11 @@ v0.8.2
   loaded instead of the mrv2 shipped libraries.
 - Fixed sequence detection when the sequence would reach the number of padded
   digits.
+- Fixed Auto Playback working only for the first clip loaded.
+- Fixed playback buttons when switching clips not showing playback.
+- Fixed a random OpenGL error when creating the color texture in the main
+  viewport.
+- Fixed EDL creation for movies that did not have audio.
 
 
 v0.8.1
