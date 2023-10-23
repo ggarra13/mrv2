@@ -112,7 +112,7 @@ namespace mrv
             s->step(1.0);
             s->range(0.f, static_cast<double>(totalPhysMem));
             s->default_value(0.0f);
-            s->value(std_any_cast<int>(settingsObject->value("Cache/GBytes")));
+            s->value(settingsObject->getValue<int>("Cache/GBytes"));
             sV->callback(
                 [=](auto w)
                 {
@@ -127,8 +127,7 @@ namespace mrv
             s->step(0.1f);
             s->range(0.f, 100.0f);
             s->default_value(timeline::PlayerCacheOptions().readAhead.value());
-            s->value(
-                std_any_cast<double>(settingsObject->value("Cache/ReadAhead")));
+            s->value(settingsObject->getValue<double>("Cache/ReadAhead"));
             sV->callback(
                 [=](auto w)
                 {
@@ -144,8 +143,7 @@ namespace mrv
             s->step(0.1f);
             s->range(0.f, 100.0f);
             s->default_value(timeline::PlayerCacheOptions().readBehind.value());
-            s->value(std_any_cast<double>(
-                settingsObject->value("Cache/ReadBehind")));
+            s->value(settingsObject->getValue<double>("Cache/ReadBehind"));
             sV->callback(
                 [=](auto w)
                 {
@@ -156,7 +154,7 @@ namespace mrv
 
             cg->end();
             std::string key = prefix + "Cache";
-            std_any value = settingsObject->value(key);
+            std_any value = settingsObject->getValue<std::any>(key);
             int open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
             if (!open)
                 cg->close();
@@ -201,8 +199,7 @@ namespace mrv
             {
                 m->add(_(i.c_str()));
             }
-            m->value(
-                std_any_cast<int>(settingsObject->value("FileSequence/Audio")));
+            m->value(settingsObject->getValue<int>("FileSequence/Audio"));
             mW->callback(
                 [=](auto o)
                 {
@@ -217,8 +214,8 @@ namespace mrv
             i->labelsize(12);
             i->textcolor(FL_BLACK);
             i->cursor_color(FL_RED);
-            std::string file = std_any_cast<std::string>(
-                settingsObject->value("FileSequence/AudioFileName"));
+            std::string file = settingsObject->getValue<std::string>(
+                "FileSequence/AudioFileName");
 
             i->value(file.c_str());
             iW->callback(
@@ -235,8 +232,8 @@ namespace mrv
             i->labelsize(12);
             i->textcolor(FL_BLACK);
             i->cursor_color(FL_RED);
-            i->value(std_any_cast<std::string>(
-                         settingsObject->value("FileSequence/AudioDirectory"))
+            i->value(settingsObject
+                         ->getValue<std::string>("FileSequence/AudioDirectory")
                          .c_str());
             iW->callback(
                 [=](auto o)
@@ -253,8 +250,8 @@ namespace mrv
             i->labelsize(12);
             i->textcolor(FL_BLACK);
             i->cursor_color(FL_RED);
-            digits = std_any_cast< int >(
-                settingsObject->value("Misc/MaxFileSequenceDigits"));
+            digits =
+                settingsObject->getValue<int>("Misc/MaxFileSequenceDigits");
             std::string text = string::Format("{0}").arg(digits);
             i->value(text.c_str());
             inW->callback(
@@ -270,7 +267,7 @@ namespace mrv
             cg->end();
 
             key = prefix + "File Sequences";
-            value = settingsObject->value(key);
+            value = settingsObject->getValue<std::any>(key);
             open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
             if (!open)
                 cg->close();
@@ -325,8 +322,7 @@ namespace mrv
                 m->add(i.c_str());
             }
 
-            m->value(std_any_cast<int>(
-                settingsObject->value("Performance/TimerMode")));
+            m->value(settingsObject->getValue<int>("Performance/TimerMode"));
 
             mW->callback(
                 [=](auto o)
@@ -341,8 +337,8 @@ namespace mrv
             sp->step(1);
             sp->range(1024, 4096);
             sp->align(FL_ALIGN_LEFT);
-            int v = std_any_cast<int>(
-                settingsObject->value("Performance/AudioBufferFrameCount"));
+            int v = settingsObject->getValue<int>(
+                "Performance/AudioBufferFrameCount");
             sp->value(v);
 
             spW->callback(
@@ -357,8 +353,8 @@ namespace mrv
                 g->x() + 160, 318, g->w() - 160, 20, _("Video Requests"));
             sp = spW;
             // sp->range( 1, 64 );
-            digits = std_any_cast< int >(
-                settingsObject->value("Performance/VideoRequestCount"));
+            digits =
+                settingsObject->getValue<int>("Performance/VideoRequestCount");
             sp->value(digits);
 
             spW->callback(
@@ -374,8 +370,8 @@ namespace mrv
                 g->x() + 160, 342, g->w() - 160, 20, _("Audio Requests"));
             sp = spW;
             // sp->irange( 1, 64 );
-            digits = std_any_cast< int >(
-                settingsObject->value("Performance/AudioRequestCount"));
+            digits =
+                settingsObject->getValue<int>("Performance/AudioRequestCount");
             sp->value(digits);
             spW->callback(
                 [=](auto o)
@@ -390,8 +386,7 @@ namespace mrv
                 g->x() + 160, 366, g->w() - 160, 20, _("Sequence I/O threads"));
             sp = spW;
             // sp->irange( 1, 64 );
-            digits = std_any_cast< int >(
-                settingsObject->value("SequenceIO/ThreadCount"));
+            digits = settingsObject->getValue<int>("SequenceIO/ThreadCount");
             sp->value(digits);
             spW->callback(
                 [=](auto o)
@@ -409,8 +404,8 @@ namespace mrv
                 _("FFmpeg YUV to RGB conversion"));
             c = cV;
             c->labelsize(12);
-            c->value(std_any_cast<int>(
-                settingsObject->value("Performance/FFmpegYUVToRGBConversion")));
+            c->value(settingsObject->getValue<bool>(
+                "Performance/FFmpegYUVToRGBConversion"));
 
             cV->callback(
                 [=](auto w)
@@ -427,8 +422,8 @@ namespace mrv
             spW = new Widget<Spinner>(
                 g->x() + 160, 420, g->w() - 160, 20, _("FFmpeg I/O threads"));
             sp = spW;
-            digits = std_any_cast< int >(
-                settingsObject->value("Performance/FFmpegThreadCount"));
+            digits =
+                settingsObject->getValue<int>("Performance/FFmpegThreadCount");
             sp->value(digits);
             sp->minimum(0);
             sp->maximum(16);
@@ -452,7 +447,7 @@ namespace mrv
             cg->end();
 
             key = prefix + "Performance";
-            value = settingsObject->value(key);
+            value = settingsObject->getValue<std::any>(key);
             open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
             if (!open)
                 cg->close();

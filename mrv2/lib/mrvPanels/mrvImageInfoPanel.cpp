@@ -446,7 +446,7 @@ namespace mrv
 
             std::string prefix = tab_prefix();
             std::string key = prefix + "Main";
-            std_any value = settingsObject->value(key);
+            std_any value = settingsObject->getValue<std::any>(key);
             int open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
             if (!open)
                 m_image->close();
@@ -468,7 +468,7 @@ namespace mrv
                 m_video);
 
             key = prefix + "Video";
-            value = settingsObject->value(key);
+            value = settingsObject->getValue<std::any>(key);
             open = std_any_empty(value) ? 0 : std_any_cast<int>(value);
             if (!open)
                 m_video->close();
@@ -491,7 +491,7 @@ namespace mrv
                 m_audio);
 
             key = prefix + "Audio";
-            value = settingsObject->value(key);
+            value = settingsObject->getValue<std::any>(key);
             open = std_any_empty(value) ? 0 : std_any_cast<int>(value);
             if (!open)
                 m_audio->close();
@@ -514,7 +514,7 @@ namespace mrv
                 m_subtitle);
 
             key = prefix + "Subtitle";
-            value = settingsObject->value(key);
+            value = settingsObject->getValue<std::any>(key);
             open = std_any_empty(value) ? 0 : std_any_cast<int>(value);
             if (!open)
                 m_subtitle->close();
@@ -538,8 +538,7 @@ namespace mrv
                 m_attributes);
 
             key = prefix + "Attributes";
-            value = settingsObject->value(key);
-            open = std_any_empty(value) ? 0 : std_any_cast<int>(value);
+            open = settingsObject->getValue<int>(key);
             if (!open)
                 m_attributes->close();
         }

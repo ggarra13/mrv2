@@ -211,7 +211,7 @@ namespace mrv
             const auto keys = settingsObject->keys();
             for (const auto& key : keys)
             {
-                std_any value = settingsObject->value(key);
+                std::any value = settingsObject->getValue<std::any>(key);
                 // // nlohmann::json cannot distinguish floats from doubles
                 // try
                 // {
@@ -537,7 +537,8 @@ namespace mrv
                             continue;
                         case Message::value_t::number_float:
                         {
-                            std_any val = settingsObject->value(key);
+                            std::any val =
+                                settingsObject->getValue<std::any>(key);
                             if (!std_any_empty(val))
                             {
                                 try

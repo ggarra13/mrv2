@@ -109,7 +109,7 @@ namespace mrv
             sp->step(1);
             sp->range(32, 4096);
             sp->align(FL_ALIGN_LEFT);
-            int v = std_any_cast<int>(settingsObject->value("USD/renderWidth"));
+            int v = settingsObject->getValue<int>("USD/renderWidth");
             sp->value(v);
 
             spW->callback(
@@ -133,7 +133,7 @@ namespace mrv
             sp->align(FL_ALIGN_LEFT);
 
             float complexity =
-                std_any_cast<float>(settingsObject->value("USD/complexity"));
+                settingsObject->getValue<float>("USD/complexity");
             sp->value(complexity);
 
             spW->callback(
@@ -155,7 +155,7 @@ namespace mrv
             {
                 m->add(_(i.c_str()));
             }
-            m->value(std_any_cast<int>(settingsObject->value("USD/drawMode")));
+            m->value(settingsObject->getValue<int>("USD/drawMode"));
             mW->callback(
                 [=](auto o)
                 {
@@ -169,8 +169,7 @@ namespace mrv
                 g->x() + 90, Y, g->w(), 20, _("Enable Lighting"));
             Fl_Check_Button* c = cV;
             c->labelsize(12);
-            c->value(
-                std_any_cast<int>(settingsObject->value("USD/enableLighting")));
+            c->value(settingsObject->getValue<bool>("USD/enableLighting"));
 
             cV->callback(
                 [=](auto w)
@@ -186,7 +185,7 @@ namespace mrv
                 g->x() + 90, Y, g->w(), 20, _("Enable sRGB"));
             c = cV;
             c->labelsize(12);
-            c->value(std_any_cast<int>(settingsObject->value("USD/sRGB")));
+            c->value(settingsObject->getValue<bool>("USD/sRGB"));
 
             cV->callback(
                 [=](auto w)
@@ -206,8 +205,7 @@ namespace mrv
             sp->step(1);
             sp->range(32, 4096);
             sp->align(FL_ALIGN_LEFT);
-            v = std_any_cast<int>(
-                settingsObject->value("USD/stageCacheByteCount"));
+            v = settingsObject->getValue<int>("USD/stageCacheByteCount");
             sp->value(v);
 
             spW->callback(
@@ -228,8 +226,7 @@ namespace mrv
             sp->step(1);
             sp->range(32, 4096);
             sp->align(FL_ALIGN_LEFT);
-            v = std_any_cast<int>(
-                settingsObject->value("USD/diskCacheByteCount"));
+            v = settingsObject->getValue<int>("USD/diskCacheByteCount");
             sp->value(v);
 
             spW->callback(
@@ -245,7 +242,7 @@ namespace mrv
             cg->end();
 
             std::string key = prefix + "USD";
-            value = settingsObject->value(key);
+            value = settingsObject->getValue<std::any>(key);
             open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
             if (!open)
                 cg->close();

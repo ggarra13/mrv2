@@ -64,25 +64,25 @@ namespace mrv
             SettingsObject* settingsObject = p.ui->app->settingsObject();
             std::string prefix = "gui/" + label;
             std::string key = prefix + "/Window";
-            std_any value = settingsObject->value(key);
+            std_any value = settingsObject->getValue<std::any>(key);
             int window = std_any_empty(value) ? 0 : std_any_cast<int>(value);
 
             if (window)
             {
                 key = prefix + "/WindowX";
-                value = settingsObject->value(key);
+                value = settingsObject->getValue<std::any>(key);
                 X = std_any_empty(value) ? X : std_any_cast<int>(value);
 
                 key = prefix + "/WindowY";
-                value = settingsObject->value(key);
+                value = settingsObject->getValue<std::any>(key);
                 Y = std_any_empty(value) ? Y : std_any_cast<int>(value);
 
                 key = prefix + "/WindowW";
-                value = settingsObject->value(key);
+                value = settingsObject->getValue<std::any>(key);
                 W = std_any_empty(value) ? W : std_any_cast<int>(value);
 
                 key = prefix + "/WindowH";
-                value = settingsObject->value(key);
+                value = settingsObject->getValue<std::any>(key);
                 H = std_any_empty(value) ? H : std_any_cast<int>(value);
                 if (H == 0)
                     H = 20 + 30;

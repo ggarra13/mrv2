@@ -580,11 +580,8 @@ namespace mrv
             static_cast<int>(p.options.usdDiskCache * memory::gigabyte));
 #endif // TLRENDER_USD
 
-        value = p.settingsObject->value("Audio/Volume");
-        p.volume = std_any_cast<float>(value);
-
-        value = p.settingsObject->value("Audio/Mute");
-        p.mute = std_any_cast<bool>(value);
+        p.volume = p.settingsObject->getValue<float>("Audio/Volume");
+        p.mute = p.settingsObject->getValue<bool>("Audio/Mute");
 
         if (p.options.loop != timeline::Loop::Count)
         {
@@ -625,20 +622,21 @@ namespace mrv
             });
 
         // p.outputDevice = new OutputDevice(context);
-        value = p.settingsObject->value("Devices/DeviceIndex");
+        value = p.settingsObject->getValue<std::any>("Devices/DeviceIndex");
         p.devicesModel->setDeviceIndex(
             value.type() == typeid(void) ? 0 : std_any_cast<int>(value));
-        value = p.settingsObject->value("Devices/DisplayModeIndex");
+        value =
+            p.settingsObject->getValue<std::any>("Devices/DisplayModeIndex");
         p.devicesModel->setDisplayModeIndex(
             value.type() == typeid(void) ? 0 : std_any_cast<int>(value));
-        value = p.settingsObject->value("Devices/PixelTypeIndex");
+        value = p.settingsObject->getValue<std::any>("Devices/PixelTypeIndex");
         p.devicesModel->setPixelTypeIndex(
             value.type() == typeid(void) ? 0 : std_any_cast<int>(value));
         p.settingsObject->setDefaultValue(
             "Devices/HDRMode", static_cast<int>(device::HDRMode::FromFile));
         p.devicesModel->setHDRMode(static_cast<device::HDRMode>(
-            std_any_cast<int>(p.settingsObject->value("Devices/HDRMode"))));
-        value = p.settingsObject->value("Devices/HDRData");
+            p.settingsObject->getValue<int>("Devices/HDRMode")));
+        value = p.settingsObject->getValue<std::any>("Devices/HDRData");
         std::string s = value.type() == typeid(void)
                             ? std::string()
                             : std_any_cast< std::string >(value);
@@ -995,8 +993,8 @@ namespace mrv
         }
 
         file::PathOptions pathOptions;
-        pathOptions.maxNumberDigits = std_any_cast<int>(
-            p.settingsObject->value("Misc/MaxFileSequenceDigits"));
+        pathOptions.maxNumberDigits =
+            p.settingsObject->getValue<int>("Misc/MaxFileSequenceDigits");
         file::Path filePath(fileName);
         for (const auto& path :
              timeline::getPaths(filePath, pathOptions, _context))
@@ -1120,43 +1118,39 @@ namespace mrv
         TLRENDER_P();
         io::Options out;
 
-        out["SequenceIO/ThreadCount"] =
-            string::Format("{0}").arg(std_any_cast<int>(
-                p.settingsObject->value("SequenceIO/ThreadCount")));
+        out["SequenceIO/ThreadCount"] = string::Format("{0}").arg(
+            p.settingsObject->getValue<int>("SequenceIO/ThreadCount"));
         out["SequenceIO/DefaultSpeed"] =
             string::Format("{0}").arg(ui->uiPrefs->uiPrefsFPS->value());
 
 #if defined(TLRENDER_FFMPEG)
         out["FFmpeg/YUVToRGBConversion"] =
-            string::Format("{0}").arg(std_any_cast<int>(p.settingsObject->value(
-                "Performance/FFmpegYUVToRGBConversion")));
-        out["FFmpeg/ThreadCount"] = string::Format("{0}").arg(std_any_cast<int>(
-            p.settingsObject->value("Performance/FFmpegThreadCount")));
+            string::Format("{0}").arg(p.settingsObject->getValue<int>(
+                "Performance/FFmpegYUVToRGBConversion"));
+        out["FFmpeg/ThreadCount"] = string::Format("{0}").arg(
+            p.settingsObject->getValue<int>("Performance/FFmpegThreadCount"));
 #endif // TLRENDER_FFMPEG
 
 #if defined(TLRENDER_USD)
         out["USD/renderWidth"] = string::Format("{0}").arg(
-            std_any_cast<int>(p.settingsObject->value("USD/renderWidth")));
-        float complexity =
-            std_any_cast<float>(p.settingsObject->value("USD/complexity"));
+            p.settingsObject->getValue<int>("USD/renderWidth"));
+        float complexity = p.settingsObject->getValue<float>("USD/complexity");
         out["USD/complexity"] = string::Format("{0}").arg(complexity);
         {
             std::stringstream ss;
             usd::DrawMode usdDrawMode = static_cast<usd::DrawMode>(
-                std_any_cast<int>(p.settingsObject->value("USD/drawMode")));
+                p.settingsObject->getValue<int>("USD/drawMode"));
             ss << usdDrawMode;
             out["USD/drawMode"] = ss.str();
         }
         out["USD/enableLighting"] = string::Format("{0}").arg(
-            std_any_cast<int>(p.settingsObject->value("USD/enableLighting")));
+            p.settingsObject->getValue<bool>("USD/enableLighting"));
         out["USD/sRGB"] = string::Format("{0}").arg(
-            std_any_cast<int>(p.settingsObject->value("USD/sRGB")));
-        out["USD/stageCacheByteCount"] =
-            string::Format("{0}").arg(std_any_cast<int>(
-                p.settingsObject->value("USD/stageCacheByteCount")));
-        out["USD/diskCacheByteCount"] =
-            string::Format("{0}").arg(std_any_cast<int>(
-                p.settingsObject->value("USD/diskCacheByteCount")));
+            p.settingsObject->getValue<bool>("USD/sRGB"));
+        out["USD/stageCacheByteCount"] = string::Format("{0}").arg(
+            p.settingsObject->getValue<int>("USD/stageCacheByteCount"));
+        out["USD/diskCacheByteCount"] = string::Format("{0}").arg(
+            p.settingsObject->getValue<int>("USD/diskCacheByteCount"));
 #endif
 
         return out;
@@ -1175,26 +1169,25 @@ namespace mrv
             {
                 timeline::Options options;
 
-                int value = std_any_cast<int>(
-                    p.settingsObject->value("FileSequence/Audio"));
-                options.fileSequenceAudio = (timeline::FileSequenceAudio)value;
-
-                std_any v =
-                    p.settingsObject->value("FileSequence/AudioFileName");
+                options.fileSequenceAudio =
+                    static_cast<timeline::FileSequenceAudio>(
+                        p.settingsObject->getValue<int>("FileSequence/Audio"));
                 options.fileSequenceAudioFileName =
-                    std_any_cast<std::string>(v);
-                options.fileSequenceAudioDirectory = std_any_cast<std::string>(
-                    p.settingsObject->value("FileSequence/AudioDirectory"));
+                    p.settingsObject->getValue<std::string>(
+                        "FileSequence/AudioFileName");
+                options.fileSequenceAudioDirectory =
+                    p.settingsObject->getValue<std::string>(
+                        "FileSequence/AudioDirectory");
 
-                options.videoRequestCount = std_any_cast<int>(
-                    p.settingsObject->value("Performance/VideoRequestCount"));
-                options.audioRequestCount = std_any_cast<int>(
-                    p.settingsObject->value("Performance/AudioRequestCount"));
+                options.videoRequestCount = p.settingsObject->getValue<int>(
+                    "Performance/VideoRequestCount");
+                options.audioRequestCount = p.settingsObject->getValue<int>(
+                    "Performance/AudioRequestCount");
 
                 options.ioOptions = _getIOOptions();
                 options.pathOptions.maxNumberDigits = std::min(
-                    std_any_cast<int>(
-                        p.settingsObject->value("Misc/MaxFileSequenceDigits")),
+                    p.settingsObject->getValue<int>(
+                        "Misc/MaxFileSequenceDigits"),
                     255);
 
                 auto otioTimeline =
@@ -1210,12 +1203,11 @@ namespace mrv
                 playerOptions.cache.readAhead = _cacheReadAhead();
                 playerOptions.cache.readBehind = _cacheReadBehind();
 
-                value = std_any_cast<int>(
-                    p.settingsObject->value("Performance/TimerMode"));
-                playerOptions.timerMode = (timeline::TimerMode)value;
-                value = std_any_cast<int>(p.settingsObject->value(
-                    "Performance/AudioBufferFrameCount"));
-                playerOptions.audioBufferFrameCount = value;
+                playerOptions.timerMode = static_cast<timeline::TimerMode>(
+                    p.settingsObject->getValue<int>("Performance/TimerMode"));
+                playerOptions.audioBufferFrameCount =
+                    p.settingsObject->getValue<int>(
+                        "Performance/AudioBufferFrameCount");
                 if (item->init)
                 {
                     playerOptions.currentTime = items[0]->currentTime;
@@ -1270,28 +1262,25 @@ namespace mrv
             {
                 timeline::Options options;
 
-                int value = std_any_cast<int>(
-                    p.settingsObject->value("FileSequence/Audio"));
-
-                options.fileSequenceAudio = (timeline::FileSequenceAudio)value;
-
-                std_any v =
-                    p.settingsObject->value("FileSequence/AudioFileName");
+                options.fileSequenceAudio =
+                    static_cast<timeline::FileSequenceAudio>(
+                        p.settingsObject->getValue<int>("FileSequence/Audio"));
                 options.fileSequenceAudioFileName =
-                    std_any_cast<std::string>(v);
+                    p.settingsObject->getValue<std::string>(
+                        "FileSequence/AudioFileName");
+                options.fileSequenceAudioDirectory =
+                    p.settingsObject->getValue<std::string>(
+                        "FileSequence/AudioDirectory");
 
-                options.fileSequenceAudioDirectory = std_any_cast<std::string>(
-                    p.settingsObject->value("FileSequence/AudioDirectory"));
-                options.videoRequestCount = std_any_cast<int>(
-                    p.settingsObject->value("Performance/VideoRequestCount"));
-
-                options.audioRequestCount = std_any_cast<int>(
-                    p.settingsObject->value("Performance/AudioRequestCount"));
+                options.videoRequestCount = p.settingsObject->getValue<int>(
+                    "Performance/VideoRequestCount");
+                options.audioRequestCount = p.settingsObject->getValue<int>(
+                    "Performance/AudioRequestCount");
 
                 options.ioOptions = _getIOOptions();
                 options.pathOptions.maxNumberDigits = std::min(
-                    std_any_cast<int>(
-                        p.settingsObject->value("Misc/MaxFileSequenceDigits")),
+                    p.settingsObject->getValue<int>(
+                        "Misc/MaxFileSequenceDigits"),
                     255);
 
                 auto otioTimeline =
@@ -1307,12 +1296,11 @@ namespace mrv
                 playerOptions.cache.readAhead = _cacheReadAhead();
                 playerOptions.cache.readBehind = _cacheReadBehind();
 
-                value = std_any_cast<int>(
-                    p.settingsObject->value("Performance/TimerMode"));
-                playerOptions.timerMode = (timeline::TimerMode)value;
-                value = std_any_cast<int>(p.settingsObject->value(
-                    "Performance/AudioBufferFrameCount"));
-                playerOptions.audioBufferFrameCount = value;
+                playerOptions.timerMode = static_cast<timeline::TimerMode>(
+                    p.settingsObject->getValue<int>("Performance/TimerMode"));
+                playerOptions.audioBufferFrameCount =
+                    p.settingsObject->getValue<int>(
+                        "Performance/AudioBufferFrameCount");
                 if (item->init)
                 {
                     playerOptions.currentTime = items[0]->currentTime;
@@ -1448,8 +1436,7 @@ namespace mrv
     {
         TLRENDER_P();
         const size_t activeCount = p.filesModel->observeActive()->getSize();
-        double value =
-            std_any_cast<double>(p.settingsObject->value("Cache/ReadAhead"));
+        double value = p.settingsObject->getValue<double>("Cache/ReadAhead");
         return otime::RationalTime(
             value / static_cast<double>(activeCount), 1.0);
     }
@@ -1458,8 +1445,7 @@ namespace mrv
     {
         TLRENDER_P();
         const size_t activeCount = p.filesModel->observeActive()->getSize();
-        double value =
-            std_any_cast<double>(p.settingsObject->value("Cache/ReadBehind"));
+        double value = p.settingsObject->getValue<double>("Cache/ReadBehind");
         return otime::RationalTime(
             value / static_cast<double>(activeCount), 1.0);
     }
@@ -1474,9 +1460,8 @@ namespace mrv
         options.readAhead = _cacheReadAhead();
         options.readBehind = _cacheReadBehind();
 
-        std_any any = p.settingsObject->value("Cache/GBytes");
         uint64_t Gbytes = static_cast<uint64_t>(
-            std_any_empty(any) ? 0 : std_any_cast<int>(any));
+            p.settingsObject->getValue<int>("Cache/GBytes"));
         if (Gbytes > 0)
         {
             // Do some sanity checking in case the user is using several mrv2

@@ -175,7 +175,7 @@ namespace mrv
             cg->end();
 
             std::string key = prefix + "Type";
-            value = settingsObject->value(key);
+            value = settingsObject->getValue<std::any>(key);
             int open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
             if (!open)
                 cg->close();
@@ -261,7 +261,7 @@ namespace mrv
             cg->end();
 
             key = prefix + "Projection";
-            value = settingsObject->value(key);
+            value = settingsObject->getValue<std::any>(key);
             open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
             if (!open)
                 cg->close();
@@ -301,7 +301,7 @@ namespace mrv
             c->tooltip(
                 _("Spin with middle mouse instead of rotating with it."));
 
-            value = settingsObject->value("EnvironmenºtMap/Spin");
+            value = settingsObject->getValue<std::any>("EnvironmentMap/Spin");
             v = std_any_empty(value) ? 0 : std_any_cast<int>(value);
             c->value(v);
             auto view = p.ui->uiView;
@@ -353,7 +353,7 @@ namespace mrv
             cg->end();
 
             key = prefix + "Rotation";
-            value = settingsObject->value(key);
+            value = settingsObject->getValue<std::any>(key);
             open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
             if (!open)
                 cg->close();
@@ -395,7 +395,8 @@ namespace mrv
             s->range(4.0f, 90.0f);
             s->step(1);
 
-            value = settingsObject->value("EnvironmentMap/Sphere/SubdivisionX");
+            value = settingsObject->getValue<std::any>(
+                "EnvironmentMap/Sphere/SubdivisionX");
             v = std_any_empty(value) ? 36 : std_any_cast<int>(value);
 
             s->default_value(v);
@@ -411,7 +412,8 @@ namespace mrv
                     view->setEnvironmentMapOptions(o);
                 });
 
-            value = settingsObject->value("EnvironmentMap/Sphere/SubdivisionY");
+            value = settingsObject->getValue<std::any>(
+                "EnvironmentMap/Sphere/SubdivisionY");
             v = std_any_empty(value) ? 36 : std_any_cast<int>(value);
 
             sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, "Y");
@@ -420,7 +422,8 @@ namespace mrv
             s->range(4.0f, 90.0f);
             s->step(1);
 
-            value = settingsObject->value("EnvironmentMap/Sphere/SubdivisionY");
+            value = settingsObject->getValue<std::any>(
+                "EnvironmentMap/Sphere/SubdivisionY");
             v = std_any_empty(value) ? 36 : std_any_cast<int>(value);
 
             s->default_value(v);
@@ -439,7 +442,7 @@ namespace mrv
             cg->end();
 
             key = prefix + "Subdivisions";
-            value = settingsObject->value(key);
+            value = settingsObject->getValue<std::any>(key);
             open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
             if (!open)
                 cg->close();

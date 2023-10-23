@@ -28,7 +28,7 @@ namespace mrv
 {
     namespace
     {
-        const char* kModule = "SettingsObject";
+        const char* kModule = "settings";
         const int kRecentFilesMax = 10;
         const int kRecentHostsMax = 10;
         const int kRecentPythonScriptsMax = 10;
@@ -83,7 +83,6 @@ namespace mrv
         p.defaultValues["Performance/FFmpegThreadCount"] = 0;
         p.defaultValues["Performance/FFmpegYUVToRGBConversion"] = 0;
         p.defaultValues["Misc/MaxFileSequenceDigits"] = 9;
-        p.defaultValues["Misc/ToolTipsEnabled"] = 1;
         p.defaultValues["EnvironmentMap/Sphere/SubdivisionX"] = 36;
         p.defaultValues["EnvironmentMap/Sphere/SubdivisionY"] = 36;
         p.defaultValues["EnvironmentMap/Spin"] = 1;
@@ -119,9 +118,9 @@ namespace mrv
         p.defaultValues[kOldPenColorB] = 0;
         p.defaultValues[kOldPenColorA] = 255;
 
-        p.defaultValues[kLaser] = 0;
+        p.defaultValues[kLaser] = false;
         p.defaultValues[kPenSize] = 10;
-        p.defaultValues[kSoftBrush] = 0;
+        p.defaultValues[kSoftBrush] = false;
 
         p.defaultValues[kGhostPrevious] = 15;
         p.defaultValues[kGhostNext] = 15;
@@ -149,7 +148,7 @@ namespace mrv
         return ret;
     }
 
-    std_any SettingsObject::value(const std::string& name)
+    std::any SettingsObject::_value(const std::string& name)
     {
         TLRENDER_P();
         std_any defaultValue;
@@ -165,6 +164,172 @@ namespace mrv
             defaultValue = i->second;
         }
         return p.settings[name] = defaultValue;
+    }
+
+    std::any SettingsObject::_defaultValue(const std::string& name)
+    {
+        TLRENDER_P();
+        std::any defaultValue;
+        auto i = p.defaultValues.find(name);
+        if (i != p.defaultValues.end())
+        {
+            defaultValue = i->second;
+        }
+        return p.settings[name] = defaultValue;
+    }
+
+    template < typename T > T SettingsObject::getValue(const std::string& name)
+    {
+        T out;
+        std::any value = _value(name);
+        try
+        {
+            out = std::any_cast<T>(value);
+        }
+        catch (const std::bad_any_cast& e)
+        {
+            LOG_ERROR(
+                "For " << name << " " << e.what() << " is " << anyName(value));
+        }
+        return out;
+    }
+
+    template <> std::string SettingsObject::getValue(const std::string& name)
+    {
+        std::string out;
+        std::any value = _value(name);
+        try
+        {
+            out = std::any_cast<std::string>(value);
+        }
+        catch (const std::bad_any_cast& e)
+        {
+            LOG_ERROR(
+                "For " << name << " " << e.what() << " should be string is "
+                       << anyName(value));
+            setValue(name, out);
+        }
+        return out;
+    }
+
+    template <> std::any SettingsObject::getValue(const std::string& name)
+    {
+        return _value(name);
+    }
+
+    template <> bool SettingsObject::getValue(const std::string& name)
+    {
+        bool out = false;
+        std_any value = _value(name);
+        try
+        {
+            out = std_any_empty(value) ? false : std::any_cast<bool>(value);
+        }
+        catch (const std::bad_any_cast& e)
+        {
+            try
+            {
+                out = static_cast<bool>(std::any_cast<int>(value));
+            }
+            catch (const std::bad_any_cast& e)
+            {
+                LOG_ERROR(
+                    "For " << name << " " << e.what() << " should be bool is "
+                           << anyName(value));
+                setValue(name, out);
+            }
+        }
+        return out;
+    }
+
+    template <> int SettingsObject::getValue(const std::string& name)
+    {
+        int out = 0;
+        std_any value = _value(name);
+        try
+        {
+            out = std_any_empty(value) ? 0 : std::any_cast<int>(value);
+        }
+        catch (const std::bad_any_cast& e)
+        {
+            try
+            {
+                out = static_cast<int>(std::any_cast<bool>(value));
+            }
+            catch (const std::bad_any_cast& e)
+            {
+                try
+                {
+                    value = _defaultValue(name);
+                    out = std_any_empty(value) ? 0 : std::any_cast<int>(value);
+                }
+                catch (const std::bad_any_cast& e)
+                {
+                    LOG_ERROR(
+                        "For " << name << " should be int " << e.what()
+                               << " is " << anyName(value));
+                }
+            }
+        }
+        return out;
+    }
+
+    template <> float SettingsObject::getValue(const std::string& name)
+    {
+        float out = 0.F;
+        std_any value = _value(name);
+        try
+        {
+            out = std_any_empty(value) ? 0.F : std::any_cast<float>(value);
+        }
+        catch (const std::bad_any_cast& e)
+        {
+            try
+            {
+                out = static_cast<float>(std::any_cast<double>(value));
+            }
+            catch (const std::bad_any_cast& e)
+            {
+                try
+                {
+                    value = _defaultValue(name);
+                    out =
+                        std_any_empty(value) ? 0 : std::any_cast<float>(value);
+                }
+                catch (const std::bad_any_cast& e)
+                {
+                    LOG_ERROR(
+                        "For " << name << " should be float " << e.what()
+                               << " is " << anyName(value));
+                }
+            }
+        }
+        return out;
+    }
+
+    template <> double SettingsObject::getValue(const std::string& name)
+    {
+        double out = 0.F;
+        std_any value = _value(name);
+        try
+        {
+            out = std_any_empty(value) ? 0.F : std::any_cast<double>(value);
+        }
+        catch (const std::bad_any_cast& e)
+        {
+            try
+            {
+                value = _defaultValue(name);
+                out = std_any_empty(value) ? 0 : std::any_cast<double>(value);
+            }
+            catch (const std::bad_any_cast& e)
+            {
+                LOG_ERROR(
+                    "For " << name << " should be double " << e.what() << " is "
+                           << anyName(value));
+            }
+        }
+        return out;
     }
 
     const std::vector<std::string>& SettingsObject::recentFiles() const

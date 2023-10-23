@@ -2621,8 +2621,8 @@ namespace mrv
         const float kPenSizeMultiplier = 800.F;
         const auto settingsObject = _p->ui->app->settingsObject();
         std_any value;
-        value = settingsObject->value(kPenSize);
-        float pen_size = static_cast<float>(std_any_cast<int>(value));
+        float pen_size =
+            static_cast<float>(settingsObject->getValue<int>(kPenSize));
         auto renderSize = getRenderSize();
         pen_size *= renderSize.h / kPenSizeMultiplier;
         if (pen_size < 2.0F)

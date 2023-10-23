@@ -36,19 +36,19 @@ namespace mrv
         std_any value;
 
         key = "gui/Secondary/WindowX";
-        value = settings->value(key);
+        value = settings->getValue<std::any>(key);
         X = std_any_empty(value) ? X : std_any_cast<int>(value);
 
         key = "gui/Secondary/WindowY";
-        value = settings->value(key);
+        value = settings->getValue<std::any>(key);
         Y = std_any_empty(value) ? Y : std_any_cast<int>(value);
 
         key = "gui/Secondary/WindowW";
-        value = settings->value(key);
+        value = settings->getValue<std::any>(key);
         W = std_any_empty(value) ? W : std_any_cast<int>(value);
 
         key = "gui/Secondary/WindowH";
-        value = settings->value(key);
+        value = settings->getValue<std::any>(key);
         H = std_any_empty(value) ? H : std_any_cast<int>(value);
 
         Fl_Group::current(0);
