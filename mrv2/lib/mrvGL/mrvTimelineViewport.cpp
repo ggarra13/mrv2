@@ -312,10 +312,19 @@ namespace mrv
     void TimelineViewport::updatePlaybackButtons() const noexcept
     {
         TLRENDER_P();
-        if (p.timelinePlayers.empty())
-            return;
 
         TimelineClass* c = p.ui->uiTimeWindow;
+
+        if (p.timelinePlayers.empty())
+        {
+            c->uiPlayForwards->color(FL_BACKGROUND_COLOR);
+            c->uiPlayBackwards->color(FL_BACKGROUND_COLOR);
+            c->uiStop->color(FL_BACKGROUND_COLOR);
+            c->uiPlayForwards->redraw();
+            c->uiPlayBackwards->redraw();
+            c->uiStop->redraw();
+            return;
+        }
 
         c->uiPlayForwards->color(FL_BACKGROUND_COLOR);
         c->uiPlayBackwards->color(FL_BACKGROUND_COLOR);

@@ -373,6 +373,7 @@ namespace mrv
         view->setCompareOptions(p.compareOptions);
         view->setStereo3DOptions(p.stereo3DOptions);
         view->setTimelinePlayers(p.timelinePlayers);
+        view->updatePlaybackButtons();
         view->redraw();
 
         p.ui->uiTimeline->setColorConfigOptions(p.colorConfigOptions);

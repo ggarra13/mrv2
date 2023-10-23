@@ -38,6 +38,7 @@ v0.8.2
 - Fixed sequence detection when the sequence would reach the number of padded
   digits.
 - Fixed Auto Playback working only for the first clip loaded.
+- Fixed playback buttons when switching clips not showing playback.
 
 
 v0.8.1
