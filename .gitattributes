@@ -17,6 +17,7 @@
 *.ttf -text
 *.lib -text
 *.dll -text
+*.dylib -text
 *.mov -text
 *.mp4 -text
 *.mpv -text
@@ -27,8 +28,7 @@
 *.po  filter=po
 *.pot filter=poç
 
-windows/win32/include/lib/** linguist-language=C
-windows/win64/include/lib/** linguist-language=C
+precompiled/windows/win64/include/lib/** linguist-language=C
 
 *.bat linguist-language=bat
 *.cpp linguist-language=C++
