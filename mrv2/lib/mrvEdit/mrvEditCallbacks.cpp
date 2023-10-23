@@ -1285,6 +1285,11 @@ namespace mrv
                 annotation->time = insertTime + offset;
                 skipAnnotations.insert(annotation);
             }
+            else if (previous)
+            {
+                if (annotation->time < range.start_time())
+                    skipAnnotations.insert(annotation);
+            }
         }
 
         // Finally, move the annotations.
@@ -1659,7 +1664,7 @@ namespace mrv
                     // #endif
                 }
 
-                auto audioInfoDuration = audioInfo.audioTime.duration();
+                auto audioInfoDuration = RationalTime(0.0, sampleRate);
                 if (!audioInfo.audio.isValid() && audioTrackIndex >= 0)
                 {
                     auto audioTrack = otio::dynamic_retainer_cast<Track>(
@@ -1671,6 +1676,11 @@ namespace mrv
                         if (trackSampleRate > sampleRate)
                             sampleRate = trackSampleRate;
                     }
+                }
+                else
+                {
+                    std::cerr << "valid audio info" << std::endl;
+                    audioInfoDuration = audioInfo.audioTime.duration();
                 }
 
                 if (audioInfoDuration.rate() > sampleRate)
@@ -1735,8 +1745,8 @@ namespace mrv
                         }
                         auto gapRange = TimeRange(
                             RationalTime(0.0, sampleRate),
-                            RationalTime(videoRange.start_time().rescaled_to(
-                                sampleRate)));
+                            RationalTime(
+                                videoRange.duration().rescaled_to(sampleRate)));
                         auto gap = new otio::Gap(gapRange);
                         audioTrack->append_child(gap);
                     }
