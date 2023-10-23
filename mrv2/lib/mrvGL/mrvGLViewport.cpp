@@ -201,11 +201,11 @@ namespace mrv
         bool transparent =
             p.backgroundOptions.type == timeline::Background::Transparent;
 
-        try
+        if (renderSize.isValid())
         {
-            if (renderSize.isValid())
+            gl::OffscreenBufferOptions offscreenBufferOptions;
+            try
             {
-                gl::OffscreenBufferOptions offscreenBufferOptions;
                 offscreenBufferOptions.colorType = image::PixelType::RGBA_F32;
                 if (gl::doCreate(
                         gl.background, renderSize, offscreenBufferOptions))
@@ -213,7 +213,16 @@ namespace mrv
                     gl.background = gl::OffscreenBuffer::create(
                         renderSize, offscreenBufferOptions);
                 }
+            }
+            catch (const std::exception& e)
+            {
+                LOG_ERROR("Creating background: " << e.what());
+                gl.buffer.reset();
+                gl.stereoBuffer.reset();
+            }
 
+            try
+            {
                 if (!p.displayOptions.empty())
                 {
                     offscreenBufferOptions.colorFilters =
@@ -241,8 +250,16 @@ namespace mrv
                     glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
                     CHECK_GL;
                 }
+            }
+            catch (const std::exception& e)
+            {
+                LOG_ERROR("Creating buffer: " << e.what());
+                gl.buffer.reset();
+            }
 
-                if (can_do(FL_STEREO))
+            if (can_do(FL_STEREO))
+            {
+                try
                 {
                     if (gl::doCreate(
                             gl.stereoBuffer, renderSize,
@@ -253,15 +270,23 @@ namespace mrv
                         CHECK_GL;
                     }
                 }
+                catch (const std::exception& e)
+                {
+                    LOG_ERROR("Creating stereo buffer: " << e.what());
+                    gl.stereoBuffer.reset();
+                }
             }
-            else
-            {
-                gl.background.reset();
-                gl.buffer.reset();
-                gl.stereoBuffer.reset();
-            }
+        }
+        else
+        {
+            gl.background.reset();
+            gl.buffer.reset();
+            gl.stereoBuffer.reset();
+        }
 
-            if (gl.background && !transparent)
+        try
+        {
+            if (gl.background && gl.render && !transparent)
             {
                 gl::OffscreenBufferBinding binding(gl.background);
 
@@ -329,9 +354,11 @@ namespace mrv
         }
         catch (const std::exception& e)
         {
-            LOG_ERROR(e.what());
+            LOG_ERROR("tlRender internal error: " << e.what());
+            gl.background.reset();
             gl.buffer.reset();
             gl.stereoBuffer.reset();
+            valid(0);
         }
 
         glViewport(0, 0, GLsizei(viewportSize.w), GLsizei(viewportSize.h));
