@@ -37,6 +37,7 @@ v0.8.2
   loaded instead of the mrv2 shipped libraries.
 - Fixed sequence detection when the sequence would reach the number of padded
   digits.
+- Fixed Auto Playback working only for the first clip loaded.
 
 
 v0.8.1
