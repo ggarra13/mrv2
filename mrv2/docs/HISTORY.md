@@ -35,6 +35,8 @@ v0.8.2
 - Added support for decoding webm (vpx) videos with alpha channel.
 - Fixed crashing issues on macOS at start up due to brew libraries being
   loaded instead of the mrv2 shipped libraries.
+- Fixed sequence detection when the sequence would reach the number of padded
+  digits.
 
 
 v0.8.1
