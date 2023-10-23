@@ -1274,7 +1274,7 @@ namespace mrv
 
         // Then, adjust the annotations within the range.
         std::set<std::shared_ptr<draw::Annotation>> skipAnnotations;
-        for (auto annotation : annotations)
+        for (auto& annotation : annotations)
         {
             if (annotation->allFrames)
                 continue;
@@ -1290,7 +1290,7 @@ namespace mrv
         // Finally, move the annotations.
         if (previous)
         {
-            for (auto annotation : annotations)
+            for (auto& annotation : annotations)
             {
                 if (annotation->allFrames)
                     continue;
@@ -1307,7 +1307,7 @@ namespace mrv
         else
         {
             auto endTime = range.end_time_exclusive();
-            for (auto annotation : annotations)
+            for (auto& annotation : annotations)
             {
                 if (annotation->allFrames)
                     continue;
