@@ -212,13 +212,14 @@ namespace mrv
                 {
                     gl.background = gl::OffscreenBuffer::create(
                         renderSize, offscreenBufferOptions);
+                    CHECK_GL;
                 }
             }
             catch (const std::exception& e)
             {
-                LOG_ERROR("Creating background: " << e.what());
-                gl.buffer.reset();
-                gl.stereoBuffer.reset();
+                LOG_WARNING("Creating background: " << e.what());
+                gl.background.reset();
+                valid(0);
             }
 
             try
@@ -253,8 +254,9 @@ namespace mrv
             }
             catch (const std::exception& e)
             {
-                LOG_ERROR("Creating buffer: " << e.what());
+                LOG_WARNING("Creating buffer: " << e.what());
                 gl.buffer.reset();
+                valid(0);
             }
 
             if (can_do(FL_STEREO))
@@ -272,8 +274,9 @@ namespace mrv
                 }
                 catch (const std::exception& e)
                 {
-                    LOG_ERROR("Creating stereo buffer: " << e.what());
+                    LOG_WARNING("Creating stereo buffer: " << e.what());
                     gl.stereoBuffer.reset();
+                    valid(0);
                 }
             }
         }
@@ -382,7 +385,7 @@ namespace mrv
         glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
         CHECK_GL;
 
-        if (gl.background && !transparent && !p.presentation)
+        if (gl.background && gl.shader && !transparent && !p.presentation)
         {
             math::Matrix4x4f mvp;
             mvp = _createTexturedRectangle();
