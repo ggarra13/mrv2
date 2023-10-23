@@ -33,6 +33,8 @@ v0.8.2
 - The metadata for sessions has changed API.  Now it is a Python dict.
 - Added libvpx on Linux and macOS which was missing.
 - Added support for decoding webm (vpx) videos with alpha channel.
+- Fixed sequence detection when the sequence would reach the number of padded
+  digits.
 
 
 v0.8.1
