@@ -9,6 +9,7 @@
 namespace py = pybind11;
 
 #include <tlCore/Vector.h>
+#include <tlCore/Size.h>
 
 #include "mrvCore/mrvI8N.h"
 
@@ -91,4 +92,19 @@ Contains all math classes.
                 return s.str();
             })
         .doc() = _("Vector of 4 floats.");
+
+    py::class_<math::Size2i>(math, "Size2i")
+        .def(py::init<>())
+        .def(py::init<int, int>(), py::arg("w"), py::arg("h"))
+        .def_readwrite("w", &math::Size2i::w)
+        .def_readwrite("h", &math::Size2i::h)
+        .def(
+            "__repr__",
+            [](const math::Size2i& o)
+            {
+                std::stringstream s;
+                s << "<mrv2.math.Size2i w=" << o.w << " h=" << o.h << ">";
+                return s.str();
+            })
+        .doc() = _("Size of 2 integers.");
 }

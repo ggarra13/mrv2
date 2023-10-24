@@ -2,6 +2,8 @@ Módulo math
 ===========
 
 .. automodule:: mrv2.math
+		:members:
+		:exclude-members: Vector2i, Vector2f, Vector3f, Vector4f, Size2i
     
 .. autoclass:: mrv2.math.Vector2i
 
@@ -43,3 +45,11 @@ Módulo math
 		   
    .. autoattribute:: w
       :annotation: = float
+
+.. autoclass:: mrv2.math.Size2i
+
+   .. autoattribute:: w
+      :annotation: = int
+
+   .. autoattribute:: h
+      :annotation: = int
