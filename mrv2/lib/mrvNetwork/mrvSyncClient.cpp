@@ -83,9 +83,14 @@ namespace mrv
             pushMessage(msg);
 
             // Send Environment Map Options
-            auto o = view->getEnvironmentMapOptions();
             msg["command"] = "setEnvironmentMapOptions";
-            msg["value"] = o;
+            msg["value"] = view->getEnvironmentMapOptions();
+            pushMessage(msg);
+
+            // Send Background Options
+            msg["command"] = "setBackgroundOptions";
+            msg["value"] = view->getBackgroundOptions();
+            ;
             pushMessage(msg);
 
             // Send Compare Options

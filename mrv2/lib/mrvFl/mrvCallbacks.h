@@ -168,6 +168,11 @@ namespace mrv
     void alpha_blend_straight_cb(Fl_Menu_*, ViewerUI* ui);
     void alpha_blend_premultiplied_cb(Fl_Menu_*, ViewerUI* ui);
 
+    // Auxialiary color function
+    image::Color4f from_fltk_color(const Fl_Color& color);
+    Fl_Color to_fltk_color(const image::Color4f& color);
+    image::Color4f get_color_cb(Fl_Color c, ViewerUI* ui);
+
     // Annotations
     void set_pen_color_cb(Fl_Button*, ViewerUI* ui);
     void flip_pen_color_cb(Fl_Button*, ViewerUI* ui);
@@ -182,12 +187,7 @@ namespace mrv
     //! Call the browser with documentation.
     void help_documentation_cb(Fl_Menu_*, ViewerUI* ui);
 
-    //! Make background transparent (gray), black or checkers.
-    void transparent_background_cb(Fl_Menu_* m, ViewerUI* ui);
-    void solid_background_cb(Fl_Menu_* m, ViewerUI* ui);
-    void checkers_background_cb(Fl_Menu_* m, ViewerUI* ui);
-
-    // Netowrk toggles
+    // Network toggles
     void toggle_sync_send_cb(Fl_Menu_* m, ViewerUI* ui);
     void toggle_sync_receive_cb(Fl_Menu_* m, ViewerUI* ui);
 

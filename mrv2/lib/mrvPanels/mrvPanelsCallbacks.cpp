@@ -26,6 +26,7 @@ namespace mrv
         HistogramPanel* histogramPanel = nullptr;
         VectorscopePanel* vectorscopePanel = nullptr;
         Stereo3DPanel* stereo3DPanel = nullptr;
+        BackgroundPanel* backgroundPanel = nullptr;
 #ifdef MRV2_PYBIND11
         PythonPanel* pythonPanel = nullptr;
 #endif
@@ -113,6 +114,8 @@ namespace mrv
                 vectorscope_panel_cb(nullptr, ui);
             if (stereo3DPanel && stereo3DPanel->is_panel())
                 stereo3D_panel_cb(nullptr, ui);
+            if (backgroundPanel && backgroundPanel->is_panel())
+                background_panel_cb(nullptr, ui);
 #ifdef MRV2_NETWORK
             if (networkPanel && networkPanel->is_panel())
                 network_panel_cb(nullptr, ui);
@@ -156,6 +159,8 @@ namespace mrv
                 vectorscope_panel_cb(nullptr, ui);
             if (stereo3DPanel && !stereo3DPanel->is_panel())
                 stereo3D_panel_cb(nullptr, ui);
+            if (backgroundPanel && !backgroundPanel->is_panel())
+                background_panel_cb(nullptr, ui);
 #ifdef MRV2_NETWORK
             if (networkPanel && !networkPanel->is_panel())
                 network_panel_cb(nullptr, ui);
@@ -174,14 +179,14 @@ namespace mrv
                 tcp->pushMessage("Color Panel", static_cast<bool>(!colorPanel));
             }
 
-            if (panel::colorPanel)
+            if (colorPanel)
             {
-                delete panel::colorPanel;
-                panel::colorPanel = nullptr;
+                delete colorPanel;
+                colorPanel = nullptr;
                 ui->uiMain->fill_menu(ui->uiMenuBar);
                 return;
             }
-            panel::colorPanel = new ColorPanel(ui);
+            colorPanel = new ColorPanel(ui);
             ui->uiMain->fill_menu(ui->uiMenuBar);
         }
 
@@ -193,14 +198,14 @@ namespace mrv
                 tcp->pushMessage("Files Panel", static_cast<bool>(!filesPanel));
             }
 
-            if (panel::filesPanel)
+            if (filesPanel)
             {
-                delete panel::filesPanel;
-                panel::filesPanel = nullptr;
+                delete filesPanel;
+                filesPanel = nullptr;
                 ui->uiMain->fill_menu(ui->uiMenuBar);
                 return;
             }
-            panel::filesPanel = new FilesPanel(ui);
+            filesPanel = new FilesPanel(ui);
             ui->uiMain->fill_menu(ui->uiMenuBar);
         }
 
@@ -213,13 +218,13 @@ namespace mrv
                     "Compare Panel", static_cast<bool>(!comparePanel));
             }
 
-            if (panel::comparePanel)
+            if (comparePanel)
             {
-                delete panel::comparePanel;
-                panel::comparePanel = nullptr;
+                delete comparePanel;
+                comparePanel = nullptr;
                 return;
             }
-            panel::comparePanel = new ComparePanel(ui);
+            comparePanel = new ComparePanel(ui);
             ui->uiMain->fill_menu(ui->uiMenuBar);
         }
 
@@ -229,17 +234,17 @@ namespace mrv
             if (send)
             {
                 tcp->pushMessage(
-                    "Playlist Panel", static_cast<bool>(!panel::playlistPanel));
+                    "Playlist Panel", static_cast<bool>(!playlistPanel));
             }
 
-            if (panel::playlistPanel)
+            if (playlistPanel)
             {
-                delete panel::playlistPanel;
-                panel::playlistPanel = nullptr;
+                delete playlistPanel;
+                playlistPanel = nullptr;
                 ui->uiMain->fill_menu(ui->uiMenuBar);
                 return;
             }
-            panel::playlistPanel = new PlaylistPanel(ui);
+            playlistPanel = new PlaylistPanel(ui);
             ui->uiMain->fill_menu(ui->uiMenuBar);
         }
 
@@ -359,6 +364,25 @@ namespace mrv
                 return;
             }
             annotationsPanel = new AnnotationsPanel(ui);
+            ui->uiMain->fill_menu(ui->uiMenuBar);
+        }
+
+        void background_panel_cb(Fl_Widget* w, ViewerUI* ui)
+        {
+            bool send = ui->uiPrefs->SendUI->value();
+            if (send)
+            {
+                tcp->pushMessage(
+                    "Background Panel", static_cast<bool>(!backgroundPanel));
+            }
+            if (backgroundPanel)
+            {
+                delete backgroundPanel;
+                backgroundPanel = nullptr;
+                ui->uiMain->fill_menu(ui->uiMenuBar);
+                return;
+            }
+            backgroundPanel = new BackgroundPanel(ui);
             ui->uiMain->fill_menu(ui->uiMenuBar);
         }
 
@@ -491,7 +515,7 @@ namespace mrv
                 tcp->pushMessage(
                     "Stereo 3D Panel", static_cast<bool>(!stereo3DPanel));
             }
-            if (panel::stereo3DPanel)
+            if (stereo3DPanel)
             {
                 delete stereo3DPanel;
                 stereo3DPanel = nullptr;
@@ -504,12 +528,10 @@ namespace mrv
 
         void syncPanels()
         {
-            using namespace panel;
             bool send = App::ui->uiPrefs->SendUI->value();
             if (send)
             {
-                panel::onlyOne(
-                    panel::onlyOne()); // send one panel only setting first
+                onlyOne(onlyOne()); // send one panel only setting first
                 tcp->pushMessage("Files Panel", static_cast<bool>(filesPanel));
                 tcp->pushMessage("Color Panel", static_cast<bool>(colorPanel));
                 tcp->pushMessage(
@@ -517,11 +539,13 @@ namespace mrv
                 tcp->pushMessage(
                     "Color Area Panel", static_cast<bool>(colorAreaPanel));
                 tcp->pushMessage(
-                    "Playlist Panel", static_cast<bool>(panel::playlistPanel));
+                    "Playlist Panel", static_cast<bool>(playlistPanel));
                 tcp->pushMessage(
                     "Media Info Panel", static_cast<bool>(imageInfoPanel));
                 tcp->pushMessage(
                     "Annotations Panel", static_cast<bool>(annotationsPanel));
+                tcp->pushMessage(
+                    "Background Panel", static_cast<bool>(backgroundPanel));
 #ifdef TLRENDER_BMD
                 tcp->pushMessage(
                     "Devices Panel", static_cast<bool>(devicesPanel));

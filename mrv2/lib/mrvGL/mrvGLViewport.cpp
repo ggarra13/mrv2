@@ -345,7 +345,6 @@ namespace mrv
             r = ur / 255.0f;
             g = ug / 255.0f;
             b = ub / 255.0f;
-            p.backgroundOptions.solidColor = image::Color4f(r, g, b, a);
         }
 
         glDrawBuffer(GL_BACK_LEFT);
