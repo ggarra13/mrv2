@@ -1884,7 +1884,7 @@ namespace mrv
         if (!player)
             return;
 
-        std::vector<tl::timeline::InsertData> insertData;
+        std::vector<tl::timeline::MoveData> moveData;
         const auto& timeline = player->getTimeline();
         const auto& stack = timeline->tracks();
         const auto& tracks = stack->children();
@@ -1893,32 +1893,22 @@ namespace mrv
             const int oldIndex = insert.oldIndex;
             const int oldTrackIndex = insert.oldTrackIndex;
 
-            if (auto track = otio::dynamic_retainer_cast<otio::Track>(
-                    tracks[oldTrackIndex]))
-            {
-                if (auto child = track->children()[oldIndex])
-                {
-                    auto item = otio::dynamic_retainer_cast<otio::Item>(child);
-                    if (!item)
-                        continue;
-
-                    timeline::InsertData data;
-                    data.composable = child;
-                    data.trackIndex = insert.trackIndex;
-                    data.insertIndex = insert.insertIndex;
-                    insertData.push_back(data);
-                }
-            }
+            timeline::MoveData data;
+            data.fromTrack = oldTrackIndex;
+            data.fromIndex = oldIndex;
+            data.toTrack = insert.trackIndex;
+            data.toIndex = insert.insertIndex;
+            moveData.push_back(data);
         }
 
-        auto otioTimeline = tl::timeline::insert(timeline, insertData);
+        auto otioTimeline = tl::timeline::move(timeline, moveData);
         player->player()->getTimeline()->setTimeline(otioTimeline);
 
         edit_insert_clip_annotations(inserts, ui);
     }
 
     void edit_insert_clip_annotations(
-        const std::vector<tl::timeline::InsertData>& inserts, ViewerUI* ui)
+        const std::vector<tl::timeline::MoveData>& inserts, ViewerUI* ui)
     {
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
@@ -1928,13 +1918,11 @@ namespace mrv
         std::vector<mrv::InsertData> networkInsertData;
         for (const auto& insert : inserts)
         {
-            const int oldIndex = getIndex(insert.composable);
-            const int oldTrackIndex = getIndex(insert.composable->parent());
             InsertData networkInsert;
-            networkInsert.oldIndex = oldIndex;
-            networkInsert.oldTrackIndex = oldTrackIndex;
-            networkInsert.trackIndex = insert.trackIndex;
-            networkInsert.insertIndex = insert.insertIndex;
+            networkInsert.oldIndex = insert.fromIndex;
+            networkInsert.oldTrackIndex = insert.fromTrack;
+            networkInsert.trackIndex = insert.toTrack;
+            networkInsert.insertIndex = insert.toIndex;
             networkInsertData.push_back(networkInsert);
         }
 

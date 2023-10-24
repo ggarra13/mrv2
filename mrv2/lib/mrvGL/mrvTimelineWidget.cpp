@@ -178,8 +178,8 @@ namespace mrv
         p.timelineWidget->setFrameView(true);
         p.timelineWidget->setScrollBarsVisible(false);
         p.timelineWidget->setStopOnScrub(false);
-        p.timelineWidget->setInsertCallback(std::bind(
-            &mrv::TimelineWidget::insertCallback, this, std::placeholders::_1));
+        p.timelineWidget->setMoveCallback(std::bind(
+            &mrv::TimelineWidget::moveCallback, this, std::placeholders::_1));
 
         p.eventLoop->addWidget(p.timelineWidget);
         const float devicePixelRatio = pixels_per_unit();
@@ -1415,13 +1415,13 @@ namespace mrv
         redraw();
     }
 
-    void TimelineWidget::insertCallback(
-        const std::vector<tl::timeline::InsertData>& inserts)
+    void TimelineWidget::moveCallback(
+        const std::vector<tl::timeline::MoveData>& moves)
     {
         TLRENDER_P();
         edit_store_undo(p.player, p.ui);
         edit_clear_redo(p.ui);
-        edit_insert_clip_annotations(inserts, p.ui);
+        edit_insert_clip_annotations(moves, p.ui);
     }
 
     void TimelineWidget::single_thumbnail(

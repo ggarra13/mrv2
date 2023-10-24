@@ -39,7 +39,7 @@ namespace mrv
 
     //! Handle insert of clip (used in shifting clips around in tlRender).
     void edit_insert_clip_annotations(
-        const std::vector<tl::timeline::InsertData>& inserts, ViewerUI* ui);
+        const std::vector<tl::timeline::MoveData>& moves, ViewerUI* ui);
 
     //! Handle insert of clip annotations from network.
     void
