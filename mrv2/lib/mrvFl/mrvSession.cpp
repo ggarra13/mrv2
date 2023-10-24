@@ -47,6 +47,8 @@ namespace
             w->show();
         else
             w->hide();
+        mrv::App::ui->uiRegion->layout();
+        mrv::App::ui->uiViewGroup->layout();
     }
 } // namespace
 
@@ -640,8 +642,15 @@ namespace mrv
 
                 if (version >= 6)
                 {
-                    EditMode editMode = session["editMode"];
-                    set_edit_mode_cb(editMode, ui);
+                    if (ui->uiBottomBar->visible())
+                    {
+                        EditMode editMode = session["editMode"];
+                        set_edit_mode_cb(editMode, ui);
+                    }
+                    else
+                    {
+                        set_edit_mode_cb(EditMode::kNone, ui);
+                    }
                 }
             }
             catch (const std::exception& e)
