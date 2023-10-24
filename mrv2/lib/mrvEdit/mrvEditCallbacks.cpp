@@ -34,7 +34,7 @@ namespace fs = std::filesystem;
 #include "mrvDraw/Annotation.h"
 
 #include "mrvNetwork/mrvTCP.h"
-#include "mrvNetwork/mrvMoveData.h"
+#include "mrvNetwork/mrvInsertData.h"
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
@@ -593,6 +593,7 @@ namespace mrv
                             auto duration = time::round(
                                 range.duration().rescaled_to(sampleRate));
                             range = TimeRange(start, duration);
+                            duration = duration.rescaled_to(videoRate);
                             clip->set_source_range(range);
                         }
                     }
@@ -1257,7 +1258,7 @@ namespace mrv
             refresh_file_cache_cb(nullptr, ui);
     }
 
-    void moveAnnotations(
+    void shiftAnnotations(
         const otime::TimeRange& range, const otime::RationalTime& insertTime,
         const bool previous, ViewerUI* ui)
     {
@@ -1794,8 +1795,8 @@ namespace mrv
         tcp->unlock();
     }
 
-    void edit_move_clip_annotations(
-        const std::vector<mrv::MoveData>& moves, ViewerUI* ui)
+    void edit_insert_clip_annotations(
+        const std::vector<mrv::InsertData>& inserts, ViewerUI* ui)
     {
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
@@ -1813,73 +1814,62 @@ namespace mrv
 
         const auto& stack = timeline->tracks();
         const auto& tracks = stack->children();
-        for (const auto& move : moves)
+        for (const auto& insert : inserts)
         {
-            if (move.fromTrack < 0 || move.fromTrack >= tracks.size() ||
-                move.toTrack < 0 || move.toTrack >= tracks.size())
+            const int oldIndex = insert.oldIndex;
+            const int oldTrackIndex = insert.oldTrackIndex;
+            if (oldIndex < 0 || oldTrackIndex < 0 || insert.trackIndex < 0 ||
+                insert.trackIndex >= tracks.size())
                 continue;
 
             if (auto track = otio::dynamic_retainer_cast<otio::Track>(
-                    stack->children()[move.fromTrack]))
+                    stack->children()[oldTrackIndex]))
             {
                 if (track->kind() != otio::Track::Kind::video)
                     continue;
             }
 
-            int toIndex = move.toIndex;
-            if (move.fromTrack == move.toTrack && move.fromIndex < toIndex)
+            int insertIndex = insert.insertIndex;
+            if (oldTrackIndex == insert.trackIndex && oldIndex < insertIndex)
             {
-                --toIndex;
+                --insertIndex;
             }
 
             if (auto track = otio::dynamic_retainer_cast<otio::Track>(
-                    tracks[move.fromTrack]))
+                    tracks[oldTrackIndex]))
             {
-                auto child = track->children()[move.fromIndex];
+                auto child = track->children()[oldIndex];
                 auto item = otio::dynamic_retainer_cast<otio::Item>(child);
                 if (!item)
                     continue;
 
-                auto fromRange = item->trimmed_range_in_parent().value();
+                auto oldRange = item->trimmed_range_in_parent().value();
 
                 if (auto track = otio::dynamic_retainer_cast<otio::Track>(
-                        tracks[move.toTrack]))
+                        tracks[insert.trackIndex]))
                 {
-                    auto child = track->children()[toIndex];
+                    auto child = track->children()[insertIndex];
                     auto item = otio::dynamic_retainer_cast<otio::Item>(child);
                     if (!item)
                         continue;
 
-                    auto toRange = item->trimmed_range_in_parent().value();
+                    auto insertRange = item->trimmed_range_in_parent().value();
 
                     otime::RationalTime insertTime;
-                    bool previous = toIndex > move.fromIndex;
+                    bool previous = insertIndex > oldIndex;
                     if (previous)
                     {
-                        insertTime =
-                            toRange.end_time_exclusive() - fromRange.duration();
+                        insertTime = insertRange.end_time_exclusive();
                     }
                     else
                     {
-                        insertTime = toRange.start_time();
+                        insertTime = insertRange.start_time();
                     }
 
                     //
                     // Shift annotations
                     //
-                    // std::cerr << "---------------------------------------"
-                    //           << std::endl;
-                    // std::cerr << "IS PREV: " << previous << std::endl;
-                    // std::cerr << "   FROM: " << move.fromIndex << " "
-                    //           << fromRange << std::endl;
-                    // std::cerr << "     TO: " << move.toIndex
-                    //           << "  RANGE: " << toRange << std::endl;
-                    // std::cerr << "CORR.TO: " << toIndex << " RANGE: " <<
-                    // toRange
-                    //           << std::endl;
-                    // std::cerr << "   PREV: " << previousRange << std::endl;
-                    // std::cerr << "     TO: " << insertTime << std::endl;
-                    moveAnnotations(fromRange, insertTime, previous, ui);
+                    shiftAnnotations(oldRange, insertTime, previous, ui);
                 }
             }
         }
@@ -1887,63 +1877,68 @@ namespace mrv
         ui->uiTimeline->redraw();
     }
 
-    void edit_move_clip(const std::vector<mrv::MoveData>& moves, ViewerUI* ui)
+    void
+    edit_insert_clip(const std::vector<mrv::InsertData>& inserts, ViewerUI* ui)
     {
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
 
-        std::vector<tl::timeline::MoveData> moveData;
+        std::vector<tl::timeline::InsertData> insertData;
         const auto& timeline = player->getTimeline();
         const auto& stack = timeline->tracks();
         const auto& tracks = stack->children();
-        for (const auto& move : moves)
+        for (const auto& insert : inserts)
         {
+            const int oldIndex = insert.oldIndex;
+            const int oldTrackIndex = insert.oldTrackIndex;
+
             if (auto track = otio::dynamic_retainer_cast<otio::Track>(
-                    tracks[move.fromTrack]))
+                    tracks[oldTrackIndex]))
             {
-                if (auto child = track->children()[move.fromIndex])
+                if (auto child = track->children()[oldIndex])
                 {
                     auto item = otio::dynamic_retainer_cast<otio::Item>(child);
                     if (!item)
                         continue;
 
-                    timeline::MoveData data;
-                    data.fromTrack = move.fromTrack;
-                    data.fromIndex = move.fromIndex;
-                    data.toTrack = move.toTrack;
-                    data.toIndex = move.toIndex;
-                    moveData.push_back(data);
+                    timeline::InsertData data;
+                    data.composable = child;
+                    data.trackIndex = insert.trackIndex;
+                    data.insertIndex = insert.insertIndex;
+                    insertData.push_back(data);
                 }
             }
         }
 
-        auto otioTimeline = tl::timeline::move(timeline, moveData);
+        auto otioTimeline = tl::timeline::insert(timeline, insertData);
         player->player()->getTimeline()->setTimeline(otioTimeline);
 
-        edit_move_clip_annotations(moves, ui);
+        edit_insert_clip_annotations(inserts, ui);
     }
 
-    void edit_move_clip_annotations(
-        const std::vector<tl::timeline::MoveData>& moves, ViewerUI* ui)
+    void edit_insert_clip_annotations(
+        const std::vector<tl::timeline::InsertData>& inserts, ViewerUI* ui)
     {
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
 
         // Convert tlRender data to mrv2's one.
-        std::vector<mrv::MoveData> networkMoveData;
-        for (const auto& move : moves)
+        std::vector<mrv::InsertData> networkInsertData;
+        for (const auto& insert : inserts)
         {
-            MoveData networkMove;
-            networkMove.fromIndex = move.fromIndex;
-            networkMove.fromTrack = move.fromTrack;
-            networkMove.toTrack = move.toTrack;
-            networkMove.toIndex = move.toIndex;
-            networkMoveData.push_back(networkMove);
+            const int oldIndex = getIndex(insert.composable);
+            const int oldTrackIndex = getIndex(insert.composable->parent());
+            InsertData networkInsert;
+            networkInsert.oldIndex = oldIndex;
+            networkInsert.oldTrackIndex = oldTrackIndex;
+            networkInsert.trackIndex = insert.trackIndex;
+            networkInsert.insertIndex = insert.insertIndex;
+            networkInsertData.push_back(networkInsert);
         }
 
-        edit_move_clip_annotations(networkMoveData, ui);
+        edit_insert_clip_annotations(networkInsertData, ui);
     }
 
     EditMode editMode = EditMode::kTimeline;

@@ -131,7 +131,7 @@ namespace mrv
         int keyPressEvent(unsigned key, const int modifiers);
         int keyReleaseEvent(unsigned key, const int modifiers);
 
-        void moveCallback(const std::vector<tl::timeline::MoveData>&);
+        void insertCallback(const std::vector<tl::timeline::InsertData>&);
 
     protected:
         void _initializeGL();

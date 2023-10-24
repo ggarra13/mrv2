@@ -648,6 +648,8 @@ namespace mrv
             p.devicesModel->setHDRData(data);
         }
 
+        DBG;
+
         p.logObserver = observer::ListObserver<log::Item>::create(
             ui->app->getContext()->getLogSystem()->observeLog(),
             [this](const std::vector<log::Item>& value)
@@ -693,9 +695,11 @@ namespace mrv
             });
 #endif
 
+        DBG;
         cacheUpdate();
         _audioUpdate();
 
+        DBG;
         // Open the input files.
         if (!p.options.fileNames.empty())
         {
@@ -714,8 +718,6 @@ namespace mrv
                     open(fileName);
                 }
             }
-
-            p.filesModel->setA(0);
 
             if (!p.timelinePlayers.empty() && p.timelinePlayers[0])
             {
@@ -751,13 +753,14 @@ namespace mrv
             p.filesModel->setB(numFiles - 1, true);
         }
 
-        if (!p.options.fileNames.empty())
+        if (!p.options.fileNames.empty() && !p.session)
         {
             auto model = filesModel();
             if (model->observeFiles()->getSize() > 0)
                 model->setA(0);
         }
 
+        DBG;
 #ifdef MRV2_NETWORK
         if (p.options.server)
         {
@@ -784,18 +787,23 @@ namespace mrv
         }
 #endif
 
+        DBG;
         ui->uiMain->show();
         ui->uiView->take_focus();
+
+        DBG;
 
         if (!p.session)
             Preferences::open_windows();
         ui->uiMain->fill_menu(ui->uiMenuBar);
 
+        DBG;
         if (ui->uiSecondary)
         {
             // We raise the secondary window last, so it shows at front
             ui->uiSecondary->window()->show();
         }
+        DBG;
     }
 
     void App::cleanResources()
