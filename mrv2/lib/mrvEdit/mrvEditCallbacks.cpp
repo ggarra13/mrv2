@@ -5,9 +5,6 @@
 
 #include <set>
 #include <fstream>
-#include <filesystem>
-
-namespace fs = std::filesystem;
 
 #include <FL/fl_utf8.h>
 
@@ -126,16 +123,6 @@ namespace mrv
         {
             auto parent = composable->parent();
             return parent->index_of_child(composable);
-        }
-
-        file::Path
-        getRelativePath(const file::Path& path, fs::path otioFilename)
-        {
-            fs::path filePath = path.get();
-            otioFilename = otioFilename.parent_path(); // Remove .otio file.
-            fs::path relative = fs::relative(filePath, otioFilename);
-            std::string file = relative.generic_string();
-            return file::Path(file);
         }
 
         void updateTimeline(
@@ -730,6 +717,27 @@ namespace mrv
         }
 
     } // namespace
+
+    file::Path getRelativePath(const file::Path& path, const fs::path& filename)
+    {
+        fs::path filePath = path.get();
+        auto directory = fs::absolute(filename);
+        // Remove file name leaving directory only.
+        directory = directory.parent_path();
+        fs::path relative = fs::relative(filePath, directory);
+        std::string file = relative.generic_string();
+        if (file.empty())
+        {
+            std::string err =
+                string::Format(
+                    _("Making relative path for '{0}', from '{1}' failed."))
+                    .arg(path.get())
+                    .arg(directory);
+            LOG_ERROR(err);
+            return path;
+        }
+        return file::Path(file);
+    }
 
     void toOtioFile(TimelinePlayer* player, ViewerUI* ui)
     {

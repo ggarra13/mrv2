@@ -6,6 +6,8 @@
 
 #include <vector>
 #include <string>
+#include <filesystem>
+namespace fs = std::filesystem;
 
 #include <tlTimeline/Edit.h>
 #include <tlTimeline/Util.h>
@@ -50,6 +52,9 @@ namespace mrv
 
     //! Make paths of an otio::Timeline absolute.
     void makePathsAbsolute(TimelinePlayer* player, ViewerUI* ui);
+
+    //! Make a path relative to another file
+    file::Path getRelativePath(const file::Path& path, const fs::path& file);
 
     //! Menu function to copy one frame to the buffer.
     void edit_copy_frame_cb(Fl_Menu_* m, ViewerUI* ui);
