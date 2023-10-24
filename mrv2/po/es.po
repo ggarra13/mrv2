@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-10-20 04:12-0300\n"
+"POT-Creation-Date: 2023-10-24 12:17-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -1355,9 +1355,6 @@ msgstr "Canales"
 msgid "Checkerboard"
 msgstr "Cuadriculado"
 
-msgid "Checkers Background"
-msgstr "Fondo Cuadriculado"
-
 msgid "Cinemascope"
 msgstr "Cinemascope"
 
@@ -2106,6 +2103,9 @@ msgstr "Filtrar EDLs"
 
 msgid "Find:"
 msgstr "Encontrar:"
+
+msgid "First Color:"
+msgstr "Primer Color:"
 
 msgid "First Frame"
 msgstr "Primer Cuadro"
@@ -3235,6 +3235,9 @@ msgstr "Performance"
 msgid "Pick"
 msgstr "Elegir"
 
+msgid "Pick Color"
+msgstr "Elegir Color"
+
 msgid "Pick Draw Color and Alpha"
 msgstr "Elegir Color y Opacidad de Dibujo"
 
@@ -3633,15 +3636,6 @@ msgstr "Render/Mezcla Alfa/Derecha"
 msgid "Render/Alpha Channel"
 msgstr "Render/Canal Alfa"
 
-msgid "Render/Background/Checkers"
-msgstr "Render/Fondo/Cuadriculado"
-
-msgid "Render/Background/Solid"
-msgstr "Render/Fondo/Sólido"
-
-msgid "Render/Background/Transparent"
-msgstr "Render/Fondo/Transparente"
-
 msgid "Render/Blue Channel"
 msgstr "Render/Canal Azul"
 
@@ -4000,6 +3994,9 @@ msgstr "Buscar"
 msgid "Search String:"
 msgstr "Buscar Texto:"
 
+msgid "Second Color:"
+msgstr "Segundo Color:"
+
 msgid "Secondary Display"
 msgstr "Display Secundario"
 
@@ -4057,6 +4054,9 @@ msgstr "Selecciona un pincel suave."
 msgid "Selects the background color of areas outside the current image."
 msgstr "Selecciona el color del fondo de areas fuera de la imagen actual."
 
+msgid "Selects the checker size."
+msgstr "Seleccion el tamaño de la cuadrícula."
+
 msgid "Selects the color of HUD overlays."
 msgstr "Selecciona el color de los sobreimpresos del HUD."
 
@@ -4065,6 +4065,9 @@ msgstr "Selecciona el color de los sobreimpresos de texto."
 
 msgid "Selects the color of the selection rectangle over the current image."
 msgstr "Selecciona el color del rectángulo de selección sobre la imagen."
+
+msgid "Selects the current background type from the list"
+msgstr "Selecciona el tipo de fondo de la lista."
 
 msgid "Selects the current font from the list"
 msgstr "Selecciona la tipografía de la lista."
@@ -4078,6 +4081,9 @@ msgstr "Selecciona el color del lápiz."
 msgid "Selects the current pen size."
 msgstr "Seleccion el tamaño del lápiz."
 
+msgid "Selects the first color."
+msgstr "Selecciona el primer color de la cuadrícula."
+
 msgid ""
 "Selects the number of fading frames following the frame of the annotation."
 msgstr ""
@@ -4088,6 +4094,12 @@ msgid ""
 "Selects the number of fading frames previous to the frame of the annotation."
 msgstr ""
 "Selecciona el número de cuadros de fundido previos al cuadro de la anotación."
+
+msgid "Selects the second color in Checkers."
+msgstr "Selecciona el segundo color de la cuadrícula."
+
+msgid "Selects the solid color."
+msgstr "Selecciona el color sólido de fondo."
 
 msgid "Send"
 msgstr "Enviar"
@@ -4385,8 +4397,8 @@ msgstr "Valor de soft clip."
 msgid "Softimage Picture"
 msgstr "Dibujo Softimage"
 
-msgid "Solid Background"
-msgstr "Fondo Sólido"
+msgid "Solid Color:"
+msgstr "Color Sólido:"
 
 msgid "Some default frame rate settings."
 msgstr "Algunos seteos por defector de cuadros por segundo."
@@ -4774,6 +4786,9 @@ msgstr "Alternar Ventana de Acerca de mrv2"
 msgid "Toggle Annotation Panel"
 msgstr "Alternar Panel de Anotación"
 
+msgid "Toggle Background Panel"
+msgstr "Alternar Panel de Fondo"
+
 msgid "Toggle Color Area Info Panel"
 msgstr "Alternar Panel de Área de Color"
 
@@ -4902,9 +4917,6 @@ msgstr "Herramientas"
 
 msgid "Topbar"
 msgstr "Barra Superior"
-
-msgid "Transparent Background"
-msgstr "Fondo Transparente"
 
 msgid "Trim"
 msgstr "Recortar"
@@ -5567,6 +5579,24 @@ msgstr "x9"
 msgid "xyY CIE xyY"
 msgstr "xyY CIE xyY"
 
+#~ msgid "Checkers Background"
+#~ msgstr "Fondo Cuadriculado"
+
+#~ msgid "Render/Background/Checkers"
+#~ msgstr "Render/Fondo/Cuadriculado"
+
+#~ msgid "Render/Background/Solid"
+#~ msgstr "Render/Fondo/Sólido"
+
+#~ msgid "Render/Background/Transparent"
+#~ msgstr "Render/Fondo/Transparente"
+
+#~ msgid "Solid Background"
+#~ msgstr "Fondo Sólido"
+
+#~ msgid "Transparent Background"
+#~ msgstr "Fondo Transparente"
+
 #~ msgid "Edit/Remove With Gap"
 #~ msgstr "Editar/Remover con Brecha"
 
@@ -5575,9 +5605,6 @@ msgstr "xyY CIE xyY"
 
 #~ msgid "Cannot append video gap"
 #~ msgstr "No puedo agregar brecha de vídeo"
-
-#~ msgid "Toggle Black Background"
-#~ msgstr "Alternar Fondo Negro"
 
 #~ msgid "Not an EDL file to save."
 #~ msgstr "No es un archivo EDL para grabar."
@@ -5725,10 +5752,6 @@ msgstr "xyY CIE xyY"
 
 #~ msgid "Vertical"
 #~ msgstr "Vertical"
-
-#, fuzzy
-#~ msgid "Pick Draw Color"
-#~ msgstr "Elegir Color y Opacidad de Dibujo"
 
 #~ msgid "Playback/Annotation/Show"
 #~ msgstr "Reproducción/Anotación/Mostrar"

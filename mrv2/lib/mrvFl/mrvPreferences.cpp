@@ -844,11 +844,23 @@ namespace mrv
         ui->uiPenOpacity->value(a / 255.0F);
 
         // Handle background options
-        timeline::Background type = static_cast<timeline::Background>(
-            settingsObject->getValue<int>("gui/Background/Options"));
 
         timeline::BackgroundOptions backgroundOptions;
-        backgroundOptions.type = type;
+        backgroundOptions.type = static_cast<timeline::Background>(
+            settingsObject->getValue<int>("Background/Type"));
+
+        int color = settingsObject->getValue<int>("Background/SolidColor");
+        backgroundOptions.solidColor = from_fltk_color(color);
+
+        int size = settingsObject->getValue<int>("Background/CheckersSize");
+        backgroundOptions.checkersSize = math::Size2i(size, size);
+
+        color = settingsObject->getValue<int>("Background/CheckersColor0");
+        backgroundOptions.checkersColor0 = from_fltk_color(color);
+
+        color = settingsObject->getValue<int>("Background/CheckersColor1");
+        backgroundOptions.checkersColor1 = from_fltk_color(color);
+
         ui->uiView->setBackgroundOptions(backgroundOptions);
 
         // Handle Dockgroup size (based on percentage)

@@ -317,6 +317,8 @@ namespace mrv
                 hotkey = kToggleUSD.hotkey();
             else if (tmp == "Stereo 3D")
                 hotkey = kToggleStereo3D.hotkey();
+            else if (tmp == "Background")
+                hotkey = kToggleBackground.hotkey();
             else if (tmp == "Python")
                 hotkey = kTogglePythonConsole.hotkey();
             else if (tmp == "Logs")
@@ -473,6 +475,13 @@ namespace mrv
                 else
                     item->clear();
             }
+            else if (tmp == _("Background"))
+            {
+                if (backgroundPanel)
+                    item->set();
+                else
+                    item->clear();
+            }
             else if (
                 tmp == _("Hotkeys") || tmp == _("Preferences") ||
                 tmp == _("About"))
@@ -558,31 +567,6 @@ namespace mrv
         idx = menu->add(
             _("Render/Mirror Y"), kFlipY.hotkey(), (Fl_Callback*)mirror_y_cb,
             ui, FL_MENU_DIVIDER | mode);
-
-        mode = FL_MENU_RADIO;
-        if (numFiles == 0)
-            mode |= FL_MENU_INACTIVE;
-
-        idx = menu->add(
-            _("Render/Background/Transparent"), kTransparentBackground.hotkey(),
-            (Fl_Callback*)transparent_background_cb, ui, mode);
-        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (backgroundOptions.type == timeline::Background::Transparent)
-            item->set();
-
-        idx = menu->add(
-            _("Render/Background/Solid"), kSolidBackground.hotkey(),
-            (Fl_Callback*)solid_background_cb, ui, mode);
-        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (backgroundOptions.type == timeline::Background::Solid)
-            item->set();
-
-        idx = menu->add(
-            _("Render/Background/Checkers"), kCheckersBackground.hotkey(),
-            (Fl_Callback*)checkers_background_cb, ui, mode);
-        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (backgroundOptions.type == timeline::Background::Checkers)
-            item->set();
 
         mode = FL_MENU_RADIO;
 

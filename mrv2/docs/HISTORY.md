@@ -42,7 +42,8 @@ v0.8.2
 - Fixed a random OpenGL error when creating the color texture in the main
   viewport.
 - Fixed EDL creation for movies that did not have audio.
-- Fixed selecting the wrong clip when loading a session from the command-line. 
+- Fixed selecting the wrong clip when loading a session from the command-line.
+- Added Background panel to change solid color, checker size and checker colors.
 
 
 v0.8.1
