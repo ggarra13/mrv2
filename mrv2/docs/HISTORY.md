@@ -42,6 +42,7 @@ v0.8.2
 - Fixed a random OpenGL error when creating the color texture in the main
   viewport.
 - Fixed EDL creation for movies that did not have audio.
+- Fixed selecting the wrong clip when loading a session from the command-line. 
 
 
 v0.8.1

@@ -178,8 +178,8 @@ namespace mrv
         p.timelineWidget->setFrameView(true);
         p.timelineWidget->setScrollBarsVisible(false);
         p.timelineWidget->setStopOnScrub(false);
-        p.timelineWidget->setMoveCallback(std::bind(
-            &mrv::TimelineWidget::moveCallback, this, std::placeholders::_1));
+        p.timelineWidget->setInsertCallback(std::bind(
+            &mrv::TimelineWidget::insertCallback, this, std::placeholders::_1));
 
         p.eventLoop->addWidget(p.timelineWidget);
         const float devicePixelRatio = pixels_per_unit();
@@ -330,7 +330,6 @@ namespace mrv
             if (p.thumbnailRequestId)
             {
                 p.thumbnailCreator->cancelRequests(p.thumbnailRequestId);
-                p.thumbnailRequestId = 0;
             }
 
             if (fetch)
@@ -1223,10 +1222,7 @@ namespace mrv
             if (p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
             {
                 if (p.thumbnailCreator && p.thumbnailRequestId)
-                {
                     p.thumbnailCreator->cancelRequests(p.thumbnailRequestId);
-                    p.thumbnailRequestId = 0;
-                }
                 if (!Fl::has_timeout(
                         (Fl_Timeout_Handler)hideThumbnail_cb, this))
                 {
@@ -1262,10 +1258,7 @@ namespace mrv
             if (p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
             {
                 if (p.thumbnailCreator && p.thumbnailRequestId)
-                {
                     p.thumbnailCreator->cancelRequests(p.thumbnailRequestId);
-                    p.thumbnailRequestId = 0;
-                }
                 if (!Fl::has_timeout(
                         (Fl_Timeout_Handler)hideThumbnail_cb, this))
                 {
@@ -1422,13 +1415,13 @@ namespace mrv
         redraw();
     }
 
-    void TimelineWidget::moveCallback(
-        const std::vector<tl::timeline::MoveData>& inserts)
+    void TimelineWidget::insertCallback(
+        const std::vector<tl::timeline::InsertData>& inserts)
     {
         TLRENDER_P();
         edit_store_undo(p.player, p.ui);
         edit_clear_redo(p.ui);
-        edit_move_clip_annotations(inserts, p.ui);
+        edit_insert_clip_annotations(inserts, p.ui);
     }
 
     void TimelineWidget::single_thumbnail(
