@@ -1058,6 +1058,18 @@ namespace mrv
                     (value && !annotationsPanel))
                     annotations_panel_cb(nullptr, ui);
             }
+            else if (c == "Background Panel")
+            {
+                bool receive = prefs->ReceiveUI->value();
+                if (!receive)
+                {
+                    tcp->unlock();
+                    return;
+                }
+                bool value = message["value"];
+                if ((!value && backgroundPanel) || (value && !backgroundPanel))
+                    background_panel_cb(nullptr, ui);
+            }
             else if (c == "Color Area Panel")
             {
                 bool receive = prefs->ReceiveUI->value();
@@ -1072,6 +1084,12 @@ namespace mrv
             }
             else if (c == "Compare Panel")
             {
+                bool receive = prefs->ReceiveUI->value();
+                if (!receive)
+                {
+                    tcp->unlock();
+                    return;
+                }
                 bool value = message["value"];
                 if ((!value && comparePanel) || (value && !comparePanel))
                     compare_panel_cb(nullptr, ui);

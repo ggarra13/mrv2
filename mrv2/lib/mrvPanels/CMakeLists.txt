@@ -4,6 +4,7 @@
 
 set(HEADERS
     mrvAnnotationsPanel.h
+    mrvBackgroundPanel.h
     mrvColorAreaPanel.h
     mrvColorPanel.h
     mrvComparePanel.h
@@ -24,6 +25,7 @@ set(HEADERS
 
 set(SOURCES
     mrvAnnotationsPanel.cpp
+    mrvBackgroundPanel.cpp
     mrvColorAreaPanel.cpp
     mrvColorPanel.cpp
     mrvComparePanel.cpp

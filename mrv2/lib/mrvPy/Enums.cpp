@@ -16,6 +16,7 @@
 #    include <tlIO/USD.h>
 #endif
 
+#include <tlTimeline/BackgroundOptions.h>
 #include <tlTimeline/LUTOptions.h>
 #include <tlTimeline/ImageOptions.h>
 #include <tlTimeline/CompareOptions.h>
@@ -106,6 +107,12 @@ void mrv2_enums(py::module& m)
     py::enum_<image::YUVCoefficients>(image, "YUVCoefficients")
         .value("REC709", image::YUVCoefficients::REC709)
         .value("BT2020", image::YUVCoefficients::BT2020)
+        .export_values();
+
+    py::enum_<timeline::Background>(image, "Background")
+        .value("Transparent", timeline::Background::Transparent)
+        .value("Solid", timeline::Background::Solid)
+        .value("Checkers", timeline::Background::Checkers)
         .export_values();
 
     // We cannot export this one as Color conflicts with Color class

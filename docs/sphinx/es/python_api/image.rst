@@ -3,7 +3,21 @@ Módulo image
 
 .. automodule:: mrv2.image
     :members:
-    :exclude-members: Mirror, Color, Levels, ImageFilters, SoftClip, DisplayOptions, LUTOptions, ImageOptions, EnvironmentMapOptions, Stereo3DOptions
+    :exclude-members: Mirror, Color, Levels, ImageFilters, SoftClip, DisplayOptions, LUTOptions, ImageOptions, EnvironmentMapOptions, Stereo3DOptions, Color4f
+
+.. autoclass:: mrv2.image.Color4f
+
+   .. autoattribute:: r
+      :annotation: = float
+		   
+   .. autoattribute:: g
+      :annotation: = float
+		   
+   .. autoattribute:: g
+      :annotation: = float
+		   
+   .. autoattribute:: a
+      :annotation: = float
 	       
 .. autoclass:: mrv2.image.Mirror
 	       

@@ -1176,7 +1176,7 @@ namespace mrv
         switch (p.backgroundOptions.type)
         {
         case timeline::Background::Solid:
-            gl.render->clearViewport(image::Color4f(0.F, 0.F, 0.F));
+            gl.render->clearViewport(p.backgroundOptions.solidColor);
             break;
         case timeline::Background::Checkers:
             // @bug macOS has problems using drawColorMesh.

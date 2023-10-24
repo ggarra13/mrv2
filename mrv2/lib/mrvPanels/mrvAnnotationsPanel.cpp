@@ -152,7 +152,7 @@ namespace mrv
 #endif
                     w->textfont((Fl_Font)font);
                     w->redraw();
-                    view->redraw();
+                    view->redrawWindows();
                 });
 
             auto sV =

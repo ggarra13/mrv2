@@ -10,6 +10,7 @@
 #include <tlCore/Util.h>
 
 #include "mrvPanels/mrvAnnotationsPanel.h"
+#include "mrvPanels/mrvBackgroundPanel.h"
 #include "mrvPanels/mrvColorAreaPanel.h"
 #include "mrvPanels/mrvColorPanel.h"
 #include "mrvPanels/mrvComparePanel.h"
@@ -58,6 +59,7 @@ namespace mrv
         extern VectorscopePanel* vectorscopePanel;
         extern EnvironmentMapPanel* environmentMapPanel;
         extern Stereo3DPanel* stereo3DPanel;
+        extern BackgroundPanel* backgroundPanel;
 #ifdef MRV2_PYBIND11
         extern PythonPanel* pythonPanel;
 #endif
@@ -92,6 +94,7 @@ namespace mrv
         //! \name Panel FLTK menu and function callbacks.
         ///@{
         void annotations_panel_cb(Fl_Widget* w, ViewerUI* ui);
+        void background_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void color_area_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void color_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void compare_panel_cb(Fl_Widget* w, ViewerUI* ui);

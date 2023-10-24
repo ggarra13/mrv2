@@ -15,6 +15,8 @@ namespace fs = std::filesystem;
 #include <tlTimeline/Player.h>
 #include <tlTimeline/Timeline.h>
 
+#include <FL/Fl.H>
+
 #include "mrvCore/mrvMemory.h"
 
 #include "mrvFl/mrvIO.h"
@@ -87,6 +89,18 @@ namespace mrv
         p.defaultValues["EnvironmentMap/Sphere/SubdivisionY"] = 36;
         p.defaultValues["EnvironmentMap/Spin"] = 1;
         p.defaultValues["TCP/Control/Port"] = std::string("55150");
+
+        p.defaultValues["Background/Type"] = 0;
+
+        Fl_Color c = fl_rgb_color(0, 0, 0);
+        p.defaultValues["Background/SolidColor"] = static_cast<int>(c);
+
+        c = fl_rgb_color(128, 128, 128);
+        p.defaultValues["Background/CheckersColor1"] = static_cast<int>(c);
+        c = fl_rgb_color(255, 255, 255);
+        p.defaultValues["Background/CheckersColor0"] = static_cast<int>(c);
+
+        p.defaultValues["Background/CheckersSize"] = 100;
 
 #if defined(TLRENDER_USD)
         p.defaultValues["USD/renderWidth"] =
