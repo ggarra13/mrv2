@@ -88,12 +88,18 @@ namespace mrv
             session["version"] = kSessionVersion;
 
             std::vector< FilesModelItem > files;
-            for (const auto file : files_ptrs)
+            for (const auto file_ptr : files_ptrs)
             {
-                const std::string fileName = file->path.get();
-                if (isTemporaryEDL(fileName))
+                FilesModelItem file = *file_ptr;
+                file::Path path = file.path;
+                if (isTemporaryEDL(path))
                     continue;
-                files.push_back(*file.get());
+                file::Path audioPath = file.audioPath;
+                const fs::path sessionPath(fileName);
+                file.path = getRelativePath(path, sessionPath);
+                if (!audioPath.isEmpty())
+                    file.audioPath = getRelativePath(audioPath, sessionPath);
+                files.push_back(file);
             }
             session["files"] = files;
             session["Aindex"] = model->observeAIndex()->get();
@@ -197,6 +203,10 @@ namespace mrv
                 logsPanel->save();
 
             std::string config = ui->uiPrefs->uiPrefsOCIOConfig->value();
+
+            file::Path path(config);
+            config = getRelativePath(path, fileName).get();
+
             int ics = ui->uiICS->value();
             int view = ui->OCIOView->value();
             int layer = ui->uiColorChannel->value();
@@ -378,6 +388,12 @@ namespace mrv
                     return false;
                 }
                 ifs.close();
+
+                // Change directory to that of session file
+                fs::path currentDir = fileName;
+                currentDir = fs::absolute(currentDir);
+                currentDir = currentDir.parent_path();
+                fl_chdir(currentDir.generic_string().c_str());
 
                 // Get session version
                 int version = session["version"];

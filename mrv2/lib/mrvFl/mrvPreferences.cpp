@@ -135,7 +135,8 @@ namespace mrv
 
         LOG_INFO(msg);
 
-        Fl_Preferences base(prefspath().c_str(), "filmaura", "mrv2");
+        Fl_Preferences base(
+            prefspath().c_str(), "filmaura", "mrv2", (Fl_Preferences::Root)0);
 
         base.get("version", version, kPreferencesVersion);
 
@@ -715,7 +716,8 @@ namespace mrv
 
         char key[256];
         Fl_Preferences path_mapping(
-            prefspath().c_str(), "filmaura", "mrv2.paths");
+            prefspath().c_str(), "filmaura", "mrv2.paths",
+            (Fl_Preferences::Root)0);
         num = path_mapping.entries();
         for (int i = 0; i < num; ++i)
         {
@@ -1757,7 +1759,8 @@ namespace mrv
             }
         }
 
-        Fl_Preferences base(prefspath().c_str(), "filmaura", "mrv2");
+        Fl_Preferences base(
+            prefspath().c_str(), "filmaura", "mrv2", (Fl_Preferences::Root)0);
         Fl_Preferences gui(base, "ui");
         gui.set("single_instance", uiPrefs->uiPrefsSingleInstance->value());
         gui.set(

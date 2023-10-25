@@ -243,11 +243,18 @@ namespace mrv
         set_root_path(argc, argv);
 
 #ifdef __linux__
-        int ok = XInitThreads();
-        if (!ok)
-            throw std::runtime_error("XInitThreads failed");
 
-        XSetErrorHandler(xerrorhandler);
+#    ifdef FLTK_USE_X11
+        if (!fl_wl_display())
+        {
+            int ok = XInitThreads();
+            if (!ok)
+                throw std::runtime_error("XInitThreads failed");
+
+            XSetErrorHandler(xerrorhandler);
+        }
+#    endif
+
 #endif
         // Store the application object for further use down the line
         App::app = this;

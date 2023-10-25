@@ -144,7 +144,7 @@ namespace mrv
     };
 
     TimelineWidget::TimelineWidget(int X, int Y, int W, int H, const char* L) :
-        Fl_Gl_Window(X, Y, W, H, L),
+        Fl_SuperClass(X, Y, W, H, L),
         _p(new Private)
     {
         int fl_double = FL_DOUBLE;
@@ -178,8 +178,8 @@ namespace mrv
         p.timelineWidget->setFrameView(true);
         p.timelineWidget->setScrollBarsVisible(false);
         p.timelineWidget->setStopOnScrub(false);
-        p.timelineWidget->setInsertCallback(std::bind(
-            &mrv::TimelineWidget::insertCallback, this, std::placeholders::_1));
+        p.timelineWidget->setMoveCallback(std::bind(
+            &mrv::TimelineWidget::moveCallback, this, std::placeholders::_1));
 
         p.eventLoop->addWidget(p.timelineWidget);
         const float devicePixelRatio = pixels_per_unit();
@@ -520,6 +520,9 @@ namespace mrv
     {
         TLRENDER_P();
         const math::Size2i renderSize(pixel_w(), pixel_h());
+
+        make_current();
+
         if (!valid())
         {
             _initializeGL();
@@ -1415,13 +1418,13 @@ namespace mrv
         redraw();
     }
 
-    void TimelineWidget::insertCallback(
-        const std::vector<tl::timeline::InsertData>& inserts)
+    void TimelineWidget::moveCallback(
+        const std::vector<tl::timeline::MoveData>& moves)
     {
         TLRENDER_P();
         edit_store_undo(p.player, p.ui);
         edit_clear_redo(p.ui);
-        edit_insert_clip_annotations(inserts, p.ui);
+        edit_move_clip_annotations(moves, p.ui);
     }
 
     void TimelineWidget::single_thumbnail(

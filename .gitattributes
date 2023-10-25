@@ -6,6 +6,7 @@
 *.i   text eol=lf
 *.fl  text eol=lf
 *.md  text eol=lf
+*.mm  text eol=lf
 *.po  text eol=lf
 *.pot text eol=lf
 *.py  text eol=lf
