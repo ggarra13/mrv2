@@ -15,6 +15,7 @@ set(HEADERS
     mrvGLUtil.h
     mrvGLViewport.h
     mrvGLViewportPrivate.h
+    mrvGLWindow.h
     mrvThumbnailCreator.h
     mrvThumbnailWindow.h
     mrvTimelineViewport.h
@@ -36,12 +37,17 @@ set(SOURCES
     mrvGLViewport.cpp
     mrvGLViewportDraw.cpp
     mrvGLViewportPrims.cpp
+    mrvGLWindow.cpp
     mrvThumbnailCreator.cpp
     mrvTimelineViewportEvents.cpp
     mrvTimelineViewport.cpp
     mrvTimelineWidget.cpp
-    )
+)
 
+if(APPLE)
+    list(APPEND SOURCES mrvGLWindow.mm)
+endif()
+    
 add_definitions( -DGL_SILENCE_DEPRECATION )
 
 set(LIBRARIES tlGL tlTimeline tlTimelineUI tlUI glfw)

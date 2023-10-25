@@ -12,9 +12,12 @@
 
 #include <tlTimelineUI/IItem.h>
 
-#include <FL/Fl_Gl_Window.H>
-
 #include "mrvFl/mrvTimelinePlayer.h"
+
+#ifdef TLRENDER_GL
+#    include "mrvGL/mrvGLWindow.h"
+#    define Fl_SuperClass GLWindow
+#endif
 
 namespace tl
 {
@@ -33,7 +36,7 @@ namespace mrv
     class ThumbnailCreator;
 
     //! Timeline widget.
-    class TimelineWidget : public Fl_Gl_Window
+    class TimelineWidget : public Fl_SuperClass
     {
     public:
         TimelineWidget(int X, int Y, int W, int H, const char* L = 0);
@@ -131,7 +134,7 @@ namespace mrv
         int keyPressEvent(unsigned key, const int modifiers);
         int keyReleaseEvent(unsigned key, const int modifiers);
 
-        void insertCallback(const std::vector<tl::timeline::InsertData>&);
+        void moveCallback(const std::vector<tl::timeline::MoveData>&);
 
     protected:
         void _initializeGL();

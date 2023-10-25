@@ -6,6 +6,8 @@
 
 #include <vector>
 #include <string>
+#include <filesystem>
+namespace fs = std::filesystem;
 
 #include <tlTimeline/Edit.h>
 #include <tlTimeline/Util.h>
@@ -22,7 +24,7 @@ namespace mrv
     class TimelinePlayer;
     using otio::Timeline;
 
-    struct InsertData;
+    struct MoveData;
 
     //@{
     //! Store timeline in undo queue.
@@ -37,16 +39,19 @@ namespace mrv
     //! Return whether edit has redo.
     bool edit_has_redo();
 
-    //! Handle insert of clip (used in shifting clips around in tlRender).
-    void edit_insert_clip_annotations(
-        const std::vector<tl::timeline::InsertData>& inserts, ViewerUI* ui);
+    //! Handle move of clip (used in shifting clips around in tlRender).
+    void edit_move_clip_annotations(
+        const std::vector<tl::timeline::MoveData>& moves, ViewerUI* ui);
 
-    //! Handle insert of clip annotations from network.
-    void
-    edit_insert_clip(const std::vector<mrv::InsertData>& inserts, ViewerUI* ui);
+    //! Handle move of clip annotations from network.
+    void edit_move_clip(const std::vector<mrv::MoveData>& moves, ViewerUI* ui);
 
     //! Set the temporary EDL for a drag item callback.
     void toOtioFile(TimelinePlayer*, ViewerUI* ui);
+
+    //! Make path relative to another fileName if possible.
+    file::Path
+    getRelativePath(const file::Path& path, const fs::path& fileName);
 
     //! Make paths of an otio::Timeline absolute.
     void makePathsAbsolute(TimelinePlayer* player, ViewerUI* ui);

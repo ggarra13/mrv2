@@ -44,6 +44,12 @@ v0.8.2
 - Fixed EDL creation for movies that did not have audio.
 - Fixed selecting the wrong clip when loading a session from the command-line.
 - Added Background panel to change solid color, checker size and checker colors.
+- Made session files try to store relative paths to clips and OCIO config so
+  as to be able to use them on different platforms.
+- Made routine for relative paths return the original path if the path could not
+  be translated into a relative path.
+- Fixed the annoying macOS bug where the timeline viewport elements would not
+  get drawn sometimes.
 
 
 v0.8.1
