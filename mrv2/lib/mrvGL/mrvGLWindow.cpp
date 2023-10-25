@@ -47,23 +47,11 @@ namespace mrv
             return;
 
         HWND hwnd = fl_win32_xid(this);
-        assert(hwnd);
         HDC hdc = fl_GetDC(hwnd);
-        assert(hdc);
-        assert(hglrc);
         wglMakeCurrent(hdc, hglrc);
 #    endif
 
 #    ifdef __linux__
-#        ifdef FLTK_USE_X11
-        auto dpy = fl_x11_display();
-        if (dpy)
-        {
-            auto win = fl_x11_xid(this);
-            assert(win);
-            glXMakeCurrent(dpy, win, (GLXContext)ctx);
-        }
-#        endif
 #        ifdef FLTK_USE_WAYLAND
         auto wldpy = fl_wl_display();
         if (wldpy)
@@ -74,10 +62,17 @@ namespace mrv
                 return;
 
             auto win = fl_wl_xid(this);
-            assert(win);
 
             auto surface = fl_wl_surface(win);
             eglMakeCurrent(wldpy, surface, surface, eglctx);
+        }
+#        endif
+#        ifdef FLTK_USE_X11
+        auto dpy = fl_x11_display();
+        if (dpy)
+        {
+            auto win = fl_x11_xid(this);
+            glXMakeCurrent(dpy, win, (GLXContext)ctx);
         }
 #        endif
 #    endif
