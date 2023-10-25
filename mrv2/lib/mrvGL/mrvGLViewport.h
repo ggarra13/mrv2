@@ -37,9 +37,6 @@ namespace mrv
         //! Refresh window by clearing the associated resources.
         void refresh() override;
 
-        //! Force context to be made current, unlike FLTK's optimized approach.
-        void make_current();
-
     protected:
         void _initializeGL();
         void _initializeGLResources();

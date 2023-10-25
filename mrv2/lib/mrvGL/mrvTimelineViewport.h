@@ -15,8 +15,10 @@
 #include "mrvFl/mrvLaserFadeData.h"
 
 // FLTK includes
-#include <FL/Fl_Gl_Window.H>
-#define Fl_SuperClass Fl_Gl_Window
+#ifdef TLRENDER_GL
+#    include "mrvGL/mrvGLWindow.h"
+#    define Fl_SuperClass GLWindow
+#endif
 
 class ViewerUI;
 

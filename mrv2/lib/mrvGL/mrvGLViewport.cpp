@@ -191,65 +191,12 @@ namespace mrv
         return TimelineViewport::handle(event);
     }
 
-    void Viewport::make_current()
-    {
-        GLContext ctx = this->context();
-        if (!ctx)
-            return TimelineViewport::make_current();
-
-#ifdef _WIN32
-        HGLRC cur_hglrc = wglGetCurrentContext();
-        HGLRC hglrc = fl_win32_glcontext(ctx);
-        if (hglrc == cur_hglrc)
-            return;
-
-        HWND hwnd = fl_win32_xid(this);
-        assert(hwnd);
-        HDC hdc = fl_GetDC(hwnd);
-        assert(hdc);
-        assert(hglrc);
-        wglMakeCurrent(hdc, hglrc);
-#endif
-
-#ifdef __linux__
-#    ifdef FLTK_USE_X11
-        auto dpy = fl_x11_display();
-        if (dpy)
-        {
-            auto win = fl_x11_xid(this);
-            assert(win);
-            glXMakeCurrent(dpy, win, (GLXContext)ctx);
-        }
-#    endif
-#    ifdef FLTK_USE_WAYLAND
-        auto wldpy = fl_wl_display();
-        if (wldpy)
-        {
-            auto eglctx = fl_wl_glcontext(ctx);
-            EGLContext currentContext = eglGetCurrentContext();
-            if (currentContext == eglctx)
-                return;
-
-            auto win = fl_wl_xid(this);
-            assert(win);
-
-            auto surface = fl_wl_surface(win);
-            eglMakeCurrent(wldpy, surface, surface, eglctx);
-        }
-#    endif
-#endif
-
-#ifdef __APPLE__
-        // CGLSetCurrentContext(ctx);
-#endif
-    }
-
     void Viewport::draw()
     {
         TLRENDER_P();
         MRV2_GL();
 
-        make_current();
+        make_current(); // needed to work with GLFW
 
         if (!valid())
         {

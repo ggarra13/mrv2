@@ -144,7 +144,7 @@ namespace mrv
     };
 
     TimelineWidget::TimelineWidget(int X, int Y, int W, int H, const char* L) :
-        Fl_Gl_Window(X, Y, W, H, L),
+        Fl_SuperClass(X, Y, W, H, L),
         _p(new Private)
     {
         int fl_double = FL_DOUBLE;
@@ -520,6 +520,9 @@ namespace mrv
     {
         TLRENDER_P();
         const math::Size2i renderSize(pixel_w(), pixel_h());
+
+        make_current();
+
         if (!valid())
         {
             _initializeGL();
