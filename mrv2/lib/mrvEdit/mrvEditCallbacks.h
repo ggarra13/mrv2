@@ -24,7 +24,7 @@ namespace mrv
     class TimelinePlayer;
     using otio::Timeline;
 
-    struct InsertData;
+    struct MoveData;
 
     //@{
     //! Store timeline in undo queue.
@@ -39,22 +39,22 @@ namespace mrv
     //! Return whether edit has redo.
     bool edit_has_redo();
 
-    //! Handle insert of clip (used in shifting clips around in tlRender).
-    void edit_insert_clip_annotations(
+    //! Handle move of clip (used in shifting clips around in tlRender).
+    void edit_move_clip_annotations(
         const std::vector<tl::timeline::MoveData>& moves, ViewerUI* ui);
 
-    //! Handle insert of clip annotations from network.
-    void
-    edit_insert_clip(const std::vector<mrv::InsertData>& inserts, ViewerUI* ui);
+    //! Handle move of clip annotations from network.
+    void edit_move_clip(const std::vector<mrv::MoveData>& moves, ViewerUI* ui);
 
     //! Set the temporary EDL for a drag item callback.
     void toOtioFile(TimelinePlayer*, ViewerUI* ui);
 
+    //! Make path relative to another fileName if possible.
+    file::Path
+    getRelativePath(const file::Path& path, const fs::path& fileName);
+
     //! Make paths of an otio::Timeline absolute.
     void makePathsAbsolute(TimelinePlayer* player, ViewerUI* ui);
-
-    //! Make a path relative to another file
-    file::Path getRelativePath(const file::Path& path, const fs::path& file);
 
     //! Menu function to copy one frame to the buffer.
     void edit_copy_frame_cb(Fl_Menu_* m, ViewerUI* ui);

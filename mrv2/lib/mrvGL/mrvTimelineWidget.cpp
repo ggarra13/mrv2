@@ -1421,7 +1421,7 @@ namespace mrv
         TLRENDER_P();
         edit_store_undo(p.player, p.ui);
         edit_clear_redo(p.ui);
-        edit_insert_clip_annotations(moves, p.ui);
+        edit_move_clip_annotations(moves, p.ui);
     }
 
     void TimelineWidget::single_thumbnail(

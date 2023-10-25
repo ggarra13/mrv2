@@ -105,7 +105,7 @@ namespace mrv
 #define mrvLOG_INFO(mod, msg)                                                  \
     do                                                                         \
     {                                                                          \
-        mrv::trace::info << _("       ") << "[" << mod << "] " << msg;         \
+        mrv::trace::info << "       [" << mod << "] " << msg;                  \
     } while (0)
 
 #define LOG_ERROR(msg) mrvLOG_ERROR(kModule, msg << std::endl)

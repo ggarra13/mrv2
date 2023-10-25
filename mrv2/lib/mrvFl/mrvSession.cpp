@@ -95,7 +95,7 @@ namespace mrv
                 if (isTemporaryEDL(path))
                     continue;
                 file::Path audioPath = file.audioPath;
-                const fs::path sessionPath(current());
+                const fs::path sessionPath(fileName);
                 file.path = getRelativePath(path, sessionPath);
                 if (!audioPath.isEmpty())
                     file.audioPath = getRelativePath(audioPath, sessionPath);
@@ -205,7 +205,7 @@ namespace mrv
             std::string config = ui->uiPrefs->uiPrefsOCIOConfig->value();
 
             file::Path path(config);
-            config = getRelativePath(path, current()).get();
+            config = getRelativePath(path, fileName).get();
 
             int ics = ui->uiICS->value();
             int view = ui->OCIOView->value();
@@ -388,6 +388,12 @@ namespace mrv
                     return false;
                 }
                 ifs.close();
+
+                // Change directory to that of session file
+                fs::path currentDir = fileName;
+                currentDir = fs::absolute(currentDir);
+                currentDir = currentDir.parent_path();
+                fl_chdir(currentDir.generic_string().c_str());
 
                 // Get session version
                 int version = session["version"];
