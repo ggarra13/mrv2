@@ -533,13 +533,6 @@ namespace mrv
                     string::Format("{0}: Cannot open").arg(file));
             }
 
-            std::cerr << "format == GL_RGBA? " << (format == GL_RGBA)
-                      << std::endl;
-            std::cerr << "type   == GL_UNSIGNED_SHORT? "
-                      << (type == GL_UNSIGNED_SHORT) << std::endl;
-            std::cerr << "offscreenBufferOptions.colorType="
-                      << offscreenBufferOptions.colorType << std::endl;
-
             player->start();
 
             // Turn off hud so it does not get captured by glReadPixels.
