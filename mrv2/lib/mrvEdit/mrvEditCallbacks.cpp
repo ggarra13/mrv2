@@ -1304,11 +1304,6 @@ namespace mrv
                     skipAnnotations.insert(annotation);
                 }
             }
-            else if (previous)
-            {
-                if (annotation->time < range.start_time())
-                    skipAnnotations.insert(annotation);
-            }
         }
 
         // Finally, shift the other annotations.
@@ -1648,10 +1643,6 @@ namespace mrv
                 {
                     audioDuration = audioInfo.audioTime.duration();
                 }
-                else
-                {
-                    audioInfoDuration = audioInfo.audioTime.duration();
-                }
 
                 if (audioDuration.rate() > sampleRate)
                     sampleRate = audioDuration.rate();
@@ -1720,6 +1711,7 @@ namespace mrv
                             videoRange.duration().rescaled_to(sampleRate));
                         auto gapRange = TimeRange(
                             RationalTime(0.0, sampleRate), audioDuration);
+
                         auto gap = new otio::Gap(gapRange);
                         audioTrack->append_child(gap);
                     }
