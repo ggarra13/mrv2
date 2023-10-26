@@ -144,7 +144,7 @@ namespace mrv
     };
 
     TimelineWidget::TimelineWidget(int X, int Y, int W, int H, const char* L) :
-        Fl_Gl_Window(X, Y, W, H, L),
+        Fl_SuperClass(X, Y, W, H, L),
         _p(new Private)
     {
         int fl_double = FL_DOUBLE;
@@ -330,7 +330,6 @@ namespace mrv
             if (p.thumbnailRequestId)
             {
                 p.thumbnailCreator->cancelRequests(p.thumbnailRequestId);
-                p.thumbnailRequestId = 0;
             }
 
             if (fetch)
@@ -521,6 +520,11 @@ namespace mrv
     {
         TLRENDER_P();
         const math::Size2i renderSize(pixel_w(), pixel_h());
+
+        DBG2;
+        make_current();
+
+        DBG2;
         if (!valid())
         {
             _initializeGL();
@@ -591,6 +595,7 @@ namespace mrv
         glClear(GL_COLOR_BUFFER_BIT);
         CHECK_GL;
 
+        DBG2;
         if (p.buffer)
         {
             p.shader->bind();
@@ -625,6 +630,7 @@ namespace mrv
                 p.vao->draw(GL_TRIANGLES, 0, p.vbo->getSize());
             }
         }
+        DBG2;
     }
 
     int TimelineWidget::enterEvent()
@@ -1195,7 +1201,7 @@ namespace mrv
     {
         TLRENDER_P();
         p.eventLoop->tick();
-        if (p.eventLoop->hasDrawUpdate())
+        if (visible_r() && p.eventLoop->hasDrawUpdate())
         {
             redraw();
         }
@@ -1223,10 +1229,7 @@ namespace mrv
             if (p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
             {
                 if (p.thumbnailCreator && p.thumbnailRequestId)
-                {
                     p.thumbnailCreator->cancelRequests(p.thumbnailRequestId);
-                    p.thumbnailRequestId = 0;
-                }
                 if (!Fl::has_timeout(
                         (Fl_Timeout_Handler)hideThumbnail_cb, this))
                 {
@@ -1262,10 +1265,7 @@ namespace mrv
             if (p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
             {
                 if (p.thumbnailCreator && p.thumbnailRequestId)
-                {
                     p.thumbnailCreator->cancelRequests(p.thumbnailRequestId);
-                    p.thumbnailRequestId = 0;
-                }
                 if (!Fl::has_timeout(
                         (Fl_Timeout_Handler)hideThumbnail_cb, this))
                 {
@@ -1423,12 +1423,12 @@ namespace mrv
     }
 
     void TimelineWidget::moveCallback(
-        const std::vector<tl::timeline::MoveData>& inserts)
+        const std::vector<tl::timeline::MoveData>& moves)
     {
         TLRENDER_P();
         edit_store_undo(p.player, p.ui);
         edit_clear_redo(p.ui);
-        edit_move_clip_annotations(inserts, p.ui);
+        edit_move_clip_annotations(moves, p.ui);
     }
 
     void TimelineWidget::single_thumbnail(

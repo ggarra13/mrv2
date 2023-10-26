@@ -12,9 +12,12 @@
 
 #include <tlTimelineUI/IItem.h>
 
-#include <FL/Fl_Gl_Window.H>
-
 #include "mrvFl/mrvTimelinePlayer.h"
+
+#ifdef TLRENDER_GL
+#    include "mrvGL/mrvGLWindow.h"
+#    define Fl_SuperClass GLWindow
+#endif
 
 namespace tl
 {
@@ -33,7 +36,7 @@ namespace mrv
     class ThumbnailCreator;
 
     //! Timeline widget.
-    class TimelineWidget : public Fl_Gl_Window
+    class TimelineWidget : public Fl_SuperClass
     {
     public:
         TimelineWidget(int X, int Y, int W, int H, const char* L = 0);

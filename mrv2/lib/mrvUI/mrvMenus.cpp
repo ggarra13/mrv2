@@ -62,8 +62,8 @@ namespace mrv
         char buf[256];
 
         const auto model = ui->app->filesModel();
-        const auto files = model->observeFiles();
-        size_t numFiles = files->getSize();
+        const auto& files = model->observeFiles()->get();
+        size_t numFiles = files.size();
 
         menu->clear();
 
@@ -317,6 +317,8 @@ namespace mrv
                 hotkey = kToggleUSD.hotkey();
             else if (tmp == "Stereo 3D")
                 hotkey = kToggleStereo3D.hotkey();
+            else if (tmp == "Background")
+                hotkey = kToggleBackground.hotkey();
             else if (tmp == "Python")
                 hotkey = kTogglePythonConsole.hotkey();
             else if (tmp == "Logs")
@@ -473,6 +475,13 @@ namespace mrv
                 else
                     item->clear();
             }
+            else if (tmp == _("Background"))
+            {
+                if (backgroundPanel)
+                    item->set();
+                else
+                    item->clear();
+            }
             else if (
                 tmp == _("Hotkeys") || tmp == _("Preferences") ||
                 tmp == _("About"))
@@ -558,31 +567,6 @@ namespace mrv
         idx = menu->add(
             _("Render/Mirror Y"), kFlipY.hotkey(), (Fl_Callback*)mirror_y_cb,
             ui, FL_MENU_DIVIDER | mode);
-
-        mode = FL_MENU_RADIO;
-        if (numFiles == 0)
-            mode |= FL_MENU_INACTIVE;
-
-        idx = menu->add(
-            _("Render/Background/Transparent"), kTransparentBackground.hotkey(),
-            (Fl_Callback*)transparent_background_cb, ui, mode);
-        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (backgroundOptions.type == timeline::Background::Transparent)
-            item->set();
-
-        idx = menu->add(
-            _("Render/Background/Solid"), kSolidBackground.hotkey(),
-            (Fl_Callback*)solid_background_cb, ui, mode);
-        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (backgroundOptions.type == timeline::Background::Solid)
-            item->set();
-
-        idx = menu->add(
-            _("Render/Background/Checkers"), kCheckersBackground.hotkey(),
-            (Fl_Callback*)checkers_background_cb, ui, mode);
-        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (backgroundOptions.type == timeline::Background::Checkers)
-            item->set();
 
         mode = FL_MENU_RADIO;
 
@@ -794,6 +778,23 @@ namespace mrv
             if (numFiles == 0)
                 mode |= FL_MENU_INACTIVE;
 
+            if (numFiles)
+            {
+                auto Aitem = model->observeA()->get();
+                if (string::compare(
+                        Aitem->path.getExtension(), ".otio",
+                        string::Compare::CaseInsensitive))
+                {
+                    menu->add(
+                        _("Playback/Go to/Previous Clip"),
+                        kPreviousClip.hotkey(), (Fl_Callback*)previous_clip_cb,
+                        ui, mode);
+                    menu->add(
+                        _("Playback/Go to/Next Clip"), kNextClip.hotkey(),
+                        (Fl_Callback*)next_clip_cb, ui, FL_MENU_DIVIDER | mode);
+                }
+            }
+
             const auto& annotations = player->getAllAnnotations();
             if (!annotations.empty())
             {
@@ -925,10 +926,9 @@ namespace mrv
         if (options.showMarkers)
             item->set();
 
-        const int aIndex = ui->app->filesModel()->observeAIndex()->get();
-        if (numFiles > 0 && aIndex >= 0)
+        const int aIndex = model->observeAIndex()->get();
+        if (numFiles > 0 && aIndex >= 0 && aIndex < numFiles)
         {
-            const auto files = ui->app->filesModel()->observeFiles()->get();
             std::string fileName = files[aIndex]->path.get(-1, false);
 
             const std::regex& regex = version_regex(ui, false);

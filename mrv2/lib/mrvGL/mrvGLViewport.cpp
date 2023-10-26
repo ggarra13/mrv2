@@ -41,6 +41,18 @@
 
 #include "mrvApp/mrvSettingsObject.h"
 
+#include <FL/platform.H>
+#undef None
+
+#ifdef FLTK_USE_X11
+#    include <X11/Xlib.h>
+#    include <GL/glx.h>
+#endif
+
+#ifdef FLTK_USE_WAYLAND
+#    include <EGL/egl.h>
+#endif
+
 namespace
 {
     const char* kModule = "view";
@@ -183,6 +195,8 @@ namespace mrv
     {
         TLRENDER_P();
         MRV2_GL();
+
+        make_current(); // needed to work with GLFW
 
         if (!valid())
         {
@@ -345,7 +359,6 @@ namespace mrv
             r = ur / 255.0f;
             g = ug / 255.0f;
             b = ub / 255.0f;
-            p.backgroundOptions.solidColor = image::Color4f(r, g, b, a);
         }
 
         glDrawBuffer(GL_BACK_LEFT);

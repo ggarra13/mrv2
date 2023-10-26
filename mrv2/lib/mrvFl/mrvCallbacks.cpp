@@ -111,6 +111,7 @@ namespace mrv
         {_("Histogram"), (Fl_Callback*)histogram_panel_cb},
         {_("Vectorscope"), (Fl_Callback*)vectorscope_panel_cb},
         {_("Stereo 3D"), (Fl_Callback*)stereo3D_panel_cb},
+        {_("Background"), (Fl_Callback*)background_panel_cb},
         {_("Hotkeys"), (Fl_Callback*)nullptr},
         {_("Preferences"), (Fl_Callback*)nullptr},
         {_("Logs"), (Fl_Callback*)logs_panel_cb},
@@ -468,6 +469,10 @@ namespace mrv
 #endif
         if (panel::stereo3DPanel)
             panel::stereo3DPanel->save();
+
+        if (panel::backgroundPanel)
+            panel::backgroundPanel->save();
+
         if (ui->uiSecondary)
             ui->uiSecondary->save();
 
@@ -1260,6 +1265,62 @@ namespace mrv
         ui->uiView->framePrev();
     }
 
+    void next_clip_cb(Fl_Menu_*, ViewerUI* ui)
+    {
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
+            return;
+
+        const auto time = player->currentTime();
+        const auto timeline = player->getTimeline();
+        const auto tracks = timeline->video_tracks();
+        const auto track = tracks[0];
+
+        const auto item =
+            otio::dynamic_retainer_cast<otio::Item>(track->child_at_time(time));
+        if (!item)
+            return;
+
+        int index = track->index_of_child(item) + 1;
+        if (index >= track->children().size())
+            index = 0;
+        const auto child = track->children()[index];
+        const auto next_item = otio::dynamic_retainer_cast<otio::Item>(child);
+        if (!next_item)
+            return;
+        const auto range = next_item->trimmed_range_in_parent().value();
+        const auto next_time = range.start_time();
+        player->seek(next_time);
+    }
+
+    void previous_clip_cb(Fl_Menu_*, ViewerUI* ui)
+    {
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
+            return;
+
+        const auto time = player->currentTime();
+        const auto timeline = player->getTimeline();
+        const auto tracks = timeline->video_tracks();
+        const auto track = tracks[0];
+
+        const auto item =
+            otio::dynamic_retainer_cast<otio::Item>(track->child_at_time(time));
+        if (!item)
+            return;
+
+        int index = track->index_of_child(item) - 1;
+        if (index < 0)
+            index = track->children().size() - 1;
+        const auto child = track->children()[index];
+        const auto prev_item = otio::dynamic_retainer_cast<otio::Item>(child);
+        if (!prev_item)
+            return;
+        const auto range = prev_item->trimmed_range_in_parent().value();
+        const auto prev_time = range.start_time();
+        player->seek(prev_time);
+    }
+
     void previous_annotation_cb(Fl_Menu_*, ViewerUI* ui)
     {
         const auto& player = ui->uiView->getTimelinePlayer();
@@ -1466,6 +1527,33 @@ namespace mrv
         w->redraw();
     }
 
+    image::Color4f from_fltk_color(const Fl_Color& c)
+    {
+        uint8_t r, g, b;
+        Fl::get_color(c, r, g, b);
+        image::Color4f color = image::Color4f(r / 255.F, g / 255.F, b / 255.F);
+        return color;
+    }
+
+    Fl_Color to_fltk_color(const image::Color4f& color)
+    {
+        Fl_Color c = fl_rgb_color(color.r * 255, color.g * 255, color.b * 255);
+        return c;
+    }
+
+    image::Color4f get_color_cb(Fl_Color c, ViewerUI* ui)
+    {
+        uint8_t r, g, b;
+        Fl::get_color(c, r, g, b);
+        image::Color4f color = image::Color4f(r / 255.F, g / 255.F, b / 255.F);
+
+        if (!fl_color_chooser(_("Pick Color"), r, g, b))
+            return color;
+
+        color = image::Color4f(r / 255.F, g / 255.F, b / 255.F);
+        return color;
+    }
+
     void set_pen_color_cb(Fl_Button* o, ViewerUI* ui)
     {
         uint8_t r, g, b;
@@ -1587,37 +1675,6 @@ namespace mrv
         std::string docs =
             "file://" + mrv::rootpath() + "/docs/" + code + "/index.html";
         fl_open_uri(docs.c_str());
-    }
-
-    void transparent_background_cb(Fl_Menu_* m, ViewerUI* ui)
-    {
-        timeline::BackgroundOptions options =
-            ui->uiView->getBackgroundOptions();
-        const Fl_Menu_Item* item = m->mvalue();
-        if (item->checked())
-            options.type = timeline::Background::Transparent;
-        ui->uiView->setBackgroundOptions(options);
-    }
-
-    void solid_background_cb(Fl_Menu_* m, ViewerUI* ui)
-    {
-        timeline::BackgroundOptions options =
-            ui->uiView->getBackgroundOptions();
-        const Fl_Menu_Item* item = m->mvalue();
-        if (item->checked())
-            options.type = timeline::Background::Solid;
-        ui->uiView->setBackgroundOptions(options);
-    }
-
-    void checkers_background_cb(Fl_Menu_* m, ViewerUI* ui)
-    {
-        timeline::BackgroundOptions options =
-            ui->uiView->getBackgroundOptions();
-        bool value = true;
-        const Fl_Menu_Item* item = m->mvalue();
-        if (item->checked())
-            options.type = timeline::Background::Checkers;
-        ui->uiView->setBackgroundOptions(options);
     }
 
     void toggle_annotation_cb(Fl_Menu_* m, ViewerUI* ui)

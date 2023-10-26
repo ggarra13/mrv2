@@ -8,15 +8,17 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
+#define PYBIND11_DETAILED_ERROR_MESSAGES
 namespace py = pybind11;
 
 #include <tlCore/Vector.h>
 #include <tlCore/Image.h>
 #include <tlCore/StringFormat.h>
 
+#include <tlTimeline/BackgroundOptions.h>
+#include <tlTimeline/DisplayOptions.h>
 #include <tlTimeline/ImageOptions.h>
 #include <tlTimeline/LUTOptions.h>
-#include <tlTimeline/DisplayOptions.h>
 
 #include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvUtil.h"
@@ -109,6 +111,17 @@ namespace tl
             return s;
         }
 
+        inline std::ostream&
+        operator<<(std::ostream& s, const BackgroundOptions& o)
+        {
+            s << "<mrv2.image.BackgroundOptions type=" << o.type
+              << " solidColor=" << o.solidColor
+              << " checkersSize=" << o.checkersSize
+              << " checkersColor0=" << o.checkersColor0
+              << " checkersColor1=" << o.checkersColor1 << ">";
+            return s;
+        }
+
     } // namespace timeline
 } // namespace tl
 
@@ -140,6 +153,18 @@ namespace mrv
 
     namespace image
     {
+        tl::timeline::BackgroundOptions backgroundOptions()
+        {
+            ViewerUI* ui = App::ui;
+            return ui->uiView->getBackgroundOptions();
+        }
+
+        void setBackgroundOptions(const tl::timeline::BackgroundOptions& value)
+        {
+            ViewerUI* ui = App::ui;
+            ui->uiView->setBackgroundOptions(value);
+        }
+
         std::string ocioConfig()
         {
             ViewerUI* ui = App::ui;
@@ -312,6 +337,24 @@ Image module.
 
 Contains all classes and enums related to image controls. 
 )PYTHON");
+
+    py::class_<image::Color4f>(image, "Color4f")
+        .def(
+            py::init<float, float, float, float>(), py::arg("r"), py::arg("g"),
+            py::arg("b"), py::arg("a") = 1.F)
+        .def_readwrite("r", &image::Color4f::r, _("Red Channel."))
+        .def_readwrite("g", &image::Color4f::g, _("Green Channel."))
+        .def_readwrite("b", &image::Color4f::b, _("Blue Channel."))
+        .def_readwrite("a", &image::Color4f::a, _("Alpha Channel."))
+        .def(
+            "__repr__",
+            [](const image::Color4f& o)
+            {
+                std::ostringstream s;
+                s << o;
+                return s.str();
+            })
+        .doc() = _("Image mirroring.");
 
     py::class_<image::Mirror>(image, "Mirror")
         .def(py::init<bool, bool>(), py::arg("x") = false, py::arg("y") = false)
@@ -625,6 +668,50 @@ Contains all classes and enums related to image controls.
                 return s.str();
             })
         .doc() = _("Stereo3D options.");
+
+    py::class_<timeline::BackgroundOptions>(image, "BackgroundOptions")
+        .def(py::init<>())
+        .def(
+            py::init<
+                timeline::Background, image::Color4f, image::Color4f,
+                image::Color4f, math::Size2i>(),
+            py::arg("type") = timeline::Background::Transparent,
+            py::arg("solidColor") = image::Color4f(0.F, 0.F, 0.F),
+            py::arg("checkersColor0") = image::Color4f(1.F, 1.F, 1.F),
+            py::arg("checkersColor1") = image::Color4f(0.5F, 0.5F, 0.5F),
+            py::arg("checkersSize") = math::Size2i(100, 100))
+        .def_readwrite(
+            "type", &timeline::BackgroundOptions::type,
+            _("Background type :class:`mrv2.image.Background`.."))
+        .def_readwrite(
+            "solidColor", &timeline::BackgroundOptions::solidColor,
+            _("Solid Color :class:`mrv2.image.Color4f`.."))
+        .def_readwrite(
+            "checkersColor0", &timeline::BackgroundOptions::checkersColor0,
+            _("Checkers Color0 :class:`mrv2.image.Color4f`.."))
+        .def_readwrite(
+            "checkersColor1", &timeline::BackgroundOptions::checkersColor1,
+            _("Checkers Color1 :class:`mrv2.image.Color4f`.."))
+        .def_readwrite(
+            "checkersSize", &timeline::BackgroundOptions::checkersSize,
+            _("Checkers Size :class:`mrv2.math.Size2i`.."))
+        .def(
+            "__repr__",
+            [](const timeline::BackgroundOptions& o)
+            {
+                std::stringstream s;
+                s << o;
+                return s.str();
+            })
+        .doc() = _("Background options.");
+
+    image.def(
+        "backgroundOptions", &mrv::image::backgroundOptions,
+        _("Gets the current background options."));
+
+    image.def(
+        "setBackgroundOptions", &mrv::image::setBackgroundOptions,
+        _("Sets the current background options."));
 
     image.def(
         "ocioConfig", &mrv::image::ocioConfig,

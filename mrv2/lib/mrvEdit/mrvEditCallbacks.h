@@ -6,6 +6,8 @@
 
 #include <vector>
 #include <string>
+#include <filesystem>
+namespace fs = std::filesystem;
 
 #include <tlTimeline/Edit.h>
 #include <tlTimeline/Util.h>
@@ -22,8 +24,6 @@ namespace mrv
     class TimelinePlayer;
     using otio::Timeline;
 
-    struct MoveData;
-
     //@{
     //! Store timeline in undo queue.
 
@@ -37,16 +37,16 @@ namespace mrv
     //! Return whether edit has redo.
     bool edit_has_redo();
 
-    //! Handle insert of clip (used in shifting clips around in tlRender).
+    //! Handle move of clip (used in shifting clips around in tlRender).
     void edit_move_clip_annotations(
-        const std::vector<tl::timeline::MoveData>& inserts, ViewerUI* ui);
-
-    //! Handle insert of clip annotations from network.
-    void
-    edit_move_clip(const std::vector<mrv::MoveData>& inserts, ViewerUI* ui);
+        const std::vector<tl::timeline::MoveData>& moves, ViewerUI* ui);
 
     //! Set the temporary EDL for a drag item callback.
     void toOtioFile(TimelinePlayer*, ViewerUI* ui);
+
+    //! Make path relative to another fileName if possible.
+    file::Path
+    getRelativePath(const file::Path& path, const fs::path& fileName);
 
     //! Make paths of an otio::Timeline absolute.
     void makePathsAbsolute(TimelinePlayer* player, ViewerUI* ui);
@@ -95,20 +95,17 @@ namespace mrv
         const otime::TimeRange& range, const otime::RationalTime& startTime,
         ViewerUI* ui);
 
-    //! Create empty timeline.
-    void create_empty_timeline_cb(Fl_Menu_* m, ViewerUI* ui);
-
     //! Refresh file cache
     void refresh_file_cache_cb(Fl_Menu_* m, void* d);
 
-    //! Add clip to otio timeline.
-    void add_clip_to_timeline(const int, ViewerUI* ui);
-
-    //! Create new timeline from a clip.
-    void create_new_timeline(ViewerUI* ui);
-
     //! Create new timeline from selected clip.
-    void create_new_timeline_cb(Fl_Menu_* m, ViewerUI* ui);
+    void create_new_timeline_cb(ViewerUI* ui);
+
+    //! Add clip to otio timeline.
+    void add_clip_to_new_timeline_cb(const int, ViewerUI* ui);
+
+    //! Add clip to otio timeline.
+    void add_clip_to_timeline_cb(const int, ViewerUI* ui);
 
     //! Save current OTIO timeline (EDL) to a permanent place on disk.
     void save_timeline_to_disk_cb(Fl_Menu_* m, ViewerUI* ui);

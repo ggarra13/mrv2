@@ -22,7 +22,6 @@
 #include "mrvNetwork/mrvCommandInterpreter.h"
 #include "mrvNetwork/mrvCompareOptions.h"
 #include "mrvNetwork/mrvDisplayOptions.h"
-#include "mrvNetwork/mrvMoveData.h"
 #include "mrvNetwork/mrvImageOptions.h"
 #include "mrvNetwork/mrvLUTOptions.h"
 #include "mrvNetwork/mrvTimelineItemOptions.h"
@@ -1058,6 +1057,18 @@ namespace mrv
                     (value && !annotationsPanel))
                     annotations_panel_cb(nullptr, ui);
             }
+            else if (c == "Background Panel")
+            {
+                bool receive = prefs->ReceiveUI->value();
+                if (!receive)
+                {
+                    tcp->unlock();
+                    return;
+                }
+                bool value = message["value"];
+                if ((!value && backgroundPanel) || (value && !backgroundPanel))
+                    background_panel_cb(nullptr, ui);
+            }
             else if (c == "Color Area Panel")
             {
                 bool receive = prefs->ReceiveUI->value();
@@ -1072,6 +1083,12 @@ namespace mrv
             }
             else if (c == "Compare Panel")
             {
+                bool receive = prefs->ReceiveUI->value();
+                if (!receive)
+                {
+                    tcp->unlock();
+                    return;
+                }
                 bool value = message["value"];
                 if ((!value && comparePanel) || (value && !comparePanel))
                     compare_panel_cb(nullptr, ui);
@@ -1274,21 +1291,14 @@ namespace mrv
             {
                 annotation_clear_all_cb(nullptr, ui);
             }
-            else if (c == "Create Empty Timeline")
-            {
-                create_empty_timeline_cb(nullptr, ui);
-            }
             else if (c == "Create New Timeline")
             {
-                int Aindex = message["value"];
-                auto model = app->filesModel();
-                model->setA(Aindex);
-                create_new_timeline_cb(nullptr, ui);
+                create_new_timeline_cb(ui);
             }
             else if (c == "Add Clip to Timeline")
             {
                 int Aindex = message["value"];
-                add_clip_to_timeline(Aindex, ui);
+                add_clip_to_timeline_cb(Aindex, ui);
             }
             else if (c == "Edit/Frame/Cut")
             {

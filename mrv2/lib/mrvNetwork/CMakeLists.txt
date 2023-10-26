@@ -10,7 +10,6 @@ set(HEADERS
     mrvFilesModelItem.h
     mrvFilePath.h
     mrvImageOptions.h
-    mrvMoveData.h
     mrvLUTOptions.h
     mrvTCP.h
     mrvTimelineItemOptions.h
@@ -24,7 +23,6 @@ set(SOURCES
     mrvFilesModelItem.cpp
     mrvFilePath.cpp
     mrvImageOptions.cpp
-    mrvMoveData.cpp
     mrvLUTOptions.cpp
     mrvTCP.cpp
     mrvTimelineItemOptions.cpp

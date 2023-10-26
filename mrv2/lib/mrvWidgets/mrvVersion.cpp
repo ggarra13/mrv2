@@ -639,7 +639,10 @@ namespace mrv
           << "http://ffmpeg.mplayerhq.hu/" << endl
           << "License: " << avcodec_license() << endl
           << "Copyright (c) 2000-Present Fabrice Bellard, et al." << endl
-          << "Configuration: " << avcodec_configuration() << endl
+          << "Configuration: " << endl
+          << "\tavutil: " << avutil_configuration() << endl
+          << "\tavcodec: " << avcodec_configuration() << endl
+          << "\tavformat: " << avformat_configuration() << endl
           << endl;
 #endif
         o << "Flmm Color Picker (modified)" << endl

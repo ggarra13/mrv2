@@ -1,3 +1,4 @@
+
 v0.8.2
 ======
 
@@ -37,6 +38,27 @@ v0.8.2
   loaded instead of the mrv2 shipped libraries.
 - Fixed sequence detection when the sequence would reach the number of padded
   digits.
+- Fixed Auto Playback working only for the first clip loaded.
+- Fixed playback buttons when switching clips not showing playback.
+- Fixed a random OpenGL error when creating the color texture in the main
+  viewport.
+- Fixed EDL creation for movies that did not have audio.
+- Fixed selecting the wrong clip when loading a session from the command-line.
+- Added Background panel to change solid color, checker size and checker colors.
+- Made session files try to store relative paths to clips and OCIO config so
+  as to be able to use them on different platforms.
+- Made routine for relative paths return the original path if the path could not
+  be translated into a relative path.
+- Fixed the annoying macOS bug where the timeline viewport elements would not
+  get drawn sometimes.
+- Fixed adding a movie with no audio, which created an audio gap of sample
+  rate of 1, leading to precision issues.
+- Fixed Annotations shifting when moving clips around in the Timeline Viewport
+  (feature of v0.9.0 not yet released by Darby).
+- Added support for HDR Radiance (.hdr) format, both loading and saving.
+- Fixed a crash when deleting the last clip from the Files Panel.
+- Added a Go to/Previous Clip and Go to/Next Clip for .otio files, using
+  Ctrl + Right Arrow and Ctrl + Left Arrow.
 
 
 v0.8.1

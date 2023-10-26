@@ -51,9 +51,7 @@ namespace mrv
 
     Hotkey kToggleShowAnnotations(false, false, false, false, 0);
 
-    Hotkey kTransparentBackground(true, false, false, false, 't');
-    Hotkey kSolidBackground(true, false, false, false, 'b');
-    Hotkey kCheckersBackground(false, false, false, false, 0);
+    Hotkey kToggleBackground(true, false, false, false, 'b');
 
     Hotkey kFitScreen(false, false, false, false, 'f');
     Hotkey kResizeMainWindow(false, false, false, true, 'w');
@@ -114,6 +112,9 @@ namespace mrv
 
     Hotkey kFirstFrame(false, false, false, false, FL_Home);
     Hotkey kLastFrame(false, false, false, false, FL_End);
+
+    Hotkey kNextClip(true, false, false, false, FL_Right);
+    Hotkey kPreviousClip(true, false, false, false, FL_Left);
 
     Hotkey kToggleMenuBar(false, false, false, true, FL_F + 1);
     Hotkey kToggleTopBar(false, false, false, false, FL_F + 1);
@@ -460,10 +461,6 @@ namespace mrv
         HotkeyEntry(_("Set In Point"), &kSetInPoint),
         HotkeyEntry(_("Set Out Point"), &kSetOutPoint),
 
-        HotkeyEntry(_("Solid Background"), &kSolidBackground),
-        HotkeyEntry(_("Checkers Background"), &kCheckersBackground),
-        HotkeyEntry(_("Transparent Background"), &kTransparentBackground),
-
         HotkeyEntry(_("Hud Window"), &kHudToggle),
 
         HotkeyEntry(_("Toggle One Panel Only"), &kToggleOnePanelOnly),
@@ -475,6 +472,7 @@ namespace mrv
         HotkeyEntry(_("Toggle Compare Panel"), &kToggleCompare),
         HotkeyEntry(_("Toggle Devices Panel"), &kToggleDevices),
         HotkeyEntry(_("Toggle Annotation Panel"), &kToggleAnnotation),
+        HotkeyEntry(_("Toggle Background Panel"), &kToggleBackground),
         HotkeyEntry(_("Toggle Settings Panel"), &kToggleSettings),
         HotkeyEntry(_("Toggle Histogram Panel"), &kToggleHistogram),
         HotkeyEntry(_("Toggle Vectorscope Panel"), &kToggleVectorscope),

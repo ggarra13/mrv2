@@ -141,7 +141,6 @@ namespace mrv
         TLRENDER_P();
 
 #if defined(_WIN32)
-        ///! Note:  Is this is not thread safe?  Not sure
         p.win->context(nullptr, true);
         p.win->make_current();
         if (!p.win->context())

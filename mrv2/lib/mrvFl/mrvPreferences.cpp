@@ -136,7 +136,7 @@ namespace mrv
         LOG_INFO(msg);
 
         Fl_Preferences base(
-            prefspath().c_str(), "filmaura", "mrv2", Fl_Preferences::C_LOCALE);
+            prefspath().c_str(), "filmaura", "mrv2", (Fl_Preferences::Root)0);
 
         base.get("version", version, kPreferencesVersion);
 
@@ -163,7 +163,7 @@ namespace mrv
                     value = tmp;
                     break;
                 case 'f':
-                    fltk_settings.get(key, tmpF, 0.0f);
+                    fltk_settings.get(key, tmpF, 0.F);
                     value = tmpF;
                     break;
                 case 'd':
@@ -186,6 +186,7 @@ namespace mrv
                 settingsObject->setValue(keyS, value);
             }
         }
+        DBG3;
 
         Fl_Preferences recent_files(base, "recentFiles");
         num = recent_files.entries();
@@ -207,6 +208,7 @@ namespace mrv
             }
         }
 
+        DBG3;
         Fl_Preferences recent_hosts(base, "recentHosts");
         num = recent_hosts.entries();
         settingsObject->addRecentHost("localhost");
@@ -226,6 +228,7 @@ namespace mrv
             }
         }
 
+        DBG3;
         Fl_Preferences python_scripts(base, "pythonScripts");
         num = python_scripts.entries();
         for (unsigned i = num; i > 0; --i)
@@ -249,6 +252,7 @@ namespace mrv
             settingsObject->reset();
         }
 
+        DBG3;
         //
         // Get ui preferences
         //
@@ -391,6 +395,7 @@ namespace mrv
         view.get("zoom_speed", tmp, 2);
         uiPrefs->uiPrefsZoomSpeed->value(tmp);
 
+        DBG3;
         //
         // ui/colors
         //
@@ -712,7 +717,7 @@ namespace mrv
         char key[256];
         Fl_Preferences path_mapping(
             prefspath().c_str(), "filmaura", "mrv2.paths",
-            Fl_Preferences::C_LOCALE);
+            (Fl_Preferences::Root)0);
         num = path_mapping.entries();
         for (int i = 0; i < num; ++i)
         {
@@ -841,11 +846,23 @@ namespace mrv
         ui->uiPenOpacity->value(a / 255.0F);
 
         // Handle background options
-        timeline::Background type = static_cast<timeline::Background>(
-            settingsObject->getValue<int>("gui/Background/Options"));
 
         timeline::BackgroundOptions backgroundOptions;
-        backgroundOptions.type = type;
+        backgroundOptions.type = static_cast<timeline::Background>(
+            settingsObject->getValue<int>("Background/Type"));
+
+        int color = settingsObject->getValue<int>("Background/SolidColor");
+        backgroundOptions.solidColor = from_fltk_color(color);
+
+        int size = settingsObject->getValue<int>("Background/CheckersSize");
+        backgroundOptions.checkersSize = math::Size2i(size, size);
+
+        color = settingsObject->getValue<int>("Background/CheckersColor0");
+        backgroundOptions.checkersColor0 = from_fltk_color(color);
+
+        color = settingsObject->getValue<int>("Background/CheckersColor1");
+        backgroundOptions.checkersColor1 = from_fltk_color(color);
+
         ui->uiView->setBackgroundOptions(backgroundOptions);
 
         // Handle Dockgroup size (based on percentage)
@@ -930,8 +947,7 @@ namespace mrv
 
         Fl_Preferences base(
             prefspath().c_str(), "filmaura", "mrv2",
-            (Fl_Preferences::Root)(
-                (int)Fl_Preferences::C_LOCALE | (int)Fl_Preferences::CLEAR));
+            (Fl_Preferences::Root)(int)Fl_Preferences::CLEAR);
         base.set("version", kPreferencesVersion);
 
         Fl_Preferences fltk_settings(base, "settings");
@@ -1255,8 +1271,7 @@ namespace mrv
         char key[256];
         Fl_Preferences path_mapping(
             prefspath().c_str(), "filmaura", "mrv2.paths",
-            (Fl_Preferences::Root)(
-                (int)Fl_Preferences::C_LOCALE | (int)Fl_Preferences::CLEAR));
+            (Fl_Preferences::Root)((int)Fl_Preferences::CLEAR));
         path_mapping.clear();
         for (int i = 2; i <= uiPrefs->PathMappings->size(); ++i)
         {
@@ -1305,9 +1320,7 @@ namespace mrv
 
             Fl_Preferences keys(
                 prefspath().c_str(), "filmaura", hotkeys_file.c_str(),
-                (Fl_Preferences::Root)(
-                    (int)Fl_Preferences::C_LOCALE |
-                    (int)Fl_Preferences::CLEAR));
+                (Fl_Preferences::Root)((int)Fl_Preferences::CLEAR));
             save_hotkeys(keys);
 
             msg = tl::string::Format(
@@ -1636,6 +1649,8 @@ namespace mrv
             ui->uiMain->always_on_top(value);
         }
 
+        DBG3;
+
         SecondaryWindow* secondary = ui->uiSecondary;
         if (secondary)
         {
@@ -1745,7 +1760,7 @@ namespace mrv
         }
 
         Fl_Preferences base(
-            prefspath().c_str(), "filmaura", "mrv2", Fl_Preferences::C_LOCALE);
+            prefspath().c_str(), "filmaura", "mrv2", (Fl_Preferences::Root)0);
         Fl_Preferences gui(base, "ui");
         gui.set("single_instance", uiPrefs->uiPrefsSingleInstance->value());
         gui.set(

@@ -243,11 +243,18 @@ namespace mrv
         set_root_path(argc, argv);
 
 #ifdef __linux__
-        int ok = XInitThreads();
-        if (!ok)
-            throw std::runtime_error("XInitThreads failed");
 
-        XSetErrorHandler(xerrorhandler);
+#    ifdef FLTK_USE_X11
+        if (!fl_wl_display())
+        {
+            int ok = XInitThreads();
+            if (!ok)
+                throw std::runtime_error("XInitThreads failed");
+
+            XSetErrorHandler(xerrorhandler);
+        }
+#    endif
+
 #endif
         // Store the application object for further use down the line
         App::app = this;
@@ -648,6 +655,8 @@ namespace mrv
             p.devicesModel->setHDRData(data);
         }
 
+        DBG;
+
         p.logObserver = observer::ListObserver<log::Item>::create(
             ui->app->getContext()->getLogSystem()->observeLog(),
             [this](const std::vector<log::Item>& value)
@@ -693,9 +702,11 @@ namespace mrv
             });
 #endif
 
+        DBG;
         cacheUpdate();
         _audioUpdate();
 
+        DBG;
         // Open the input files.
         if (!p.options.fileNames.empty())
         {
@@ -714,8 +725,6 @@ namespace mrv
                     open(fileName);
                 }
             }
-
-            p.filesModel->setA(0);
 
             if (!p.timelinePlayers.empty() && p.timelinePlayers[0])
             {
@@ -751,13 +760,14 @@ namespace mrv
             p.filesModel->setB(numFiles - 1, true);
         }
 
-        if (!p.options.fileNames.empty())
+        if (!p.options.fileNames.empty() && !p.session)
         {
             auto model = filesModel();
             if (model->observeFiles()->getSize() > 0)
                 model->setA(0);
         }
 
+        DBG;
 #ifdef MRV2_NETWORK
         if (p.options.server)
         {
@@ -784,18 +794,23 @@ namespace mrv
         }
 #endif
 
+        DBG;
         ui->uiMain->show();
         ui->uiView->take_focus();
+
+        DBG;
 
         if (!p.session)
             Preferences::open_windows();
         ui->uiMain->fill_menu(ui->uiMenuBar);
 
+        DBG;
         if (ui->uiSecondary)
         {
             // We raise the secondary window last, so it shows at front
             ui->uiSecondary->window()->show();
         }
+        DBG;
     }
 
     void App::cleanResources()
@@ -1227,16 +1242,14 @@ namespace mrv
                 _log(e.what(), log::Type::Error);
             }
         }
+
+        panel::refreshThumbnails();
     }
 
     void App::_activeCallback(
         const std::vector<std::shared_ptr<FilesModelItem> >& items)
     {
         TLRENDER_P();
-
-        // Flag used to determine if clip was just loaded or we just switched
-        // from a compare or a file list change.
-        bool loaded = false;
 
         if (!p.active.empty() && !p.timelinePlayers.empty() &&
             p.timelinePlayers[0])
@@ -1315,9 +1328,13 @@ namespace mrv
                 item->ioInfo = mrvTimelinePlayer->ioInfo();
                 if (!item->init)
                 {
-                    loaded = true;
                     item->init = true;
                     item->speed = mrvTimelinePlayer->speed();
+                    if (ui->uiPrefs->uiPrefsAutoPlayback->value())
+                    {
+                        mrvTimelinePlayer->setPlayback(
+                            timeline::Playback::Forward);
+                    }
                     item->playback = mrvTimelinePlayer->playback();
                     item->loop = mrvTimelinePlayer->loop();
                     item->currentTime = mrvTimelinePlayer->currentTime();
@@ -1412,18 +1429,7 @@ namespace mrv
 
                 if (p.running)
                 {
-                    if (loaded)
-                        panel::refreshThumbnails();
-                    else
-                        panel::redrawThumbnails();
-                    if (ui->uiPrefs->uiPrefsAutoPlayback->value() && loaded)
-                    {
-                        auto player = ui->uiView->getTimelinePlayer();
-                        if (player &&
-                            player->timeRange().duration().value() > 1.0)
-                            ui->uiView->playForwards();
-                    }
-                    ui->uiMain->fill_menu(ui->uiMenuBar);
+                    panel::redrawThumbnails();
                 }
             }
         }

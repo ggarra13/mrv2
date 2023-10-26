@@ -56,6 +56,18 @@
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.image.AlphaBlend.name"><code class="docutils literal notranslate"><span class="pre">AlphaBlend.name</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.image.Background"><code class="docutils literal notranslate"><span class="pre">Background</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.image.Background.name"><code class="docutils literal notranslate"><span class="pre">Background.name</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.image.BackgroundOptions"><code class="docutils literal notranslate"><span class="pre">BackgroundOptions</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.image.BackgroundOptions.checkersColor0"><code class="docutils literal notranslate"><span class="pre">BackgroundOptions.checkersColor0</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.image.BackgroundOptions.checkersColor1"><code class="docutils literal notranslate"><span class="pre">BackgroundOptions.checkersColor1</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.image.BackgroundOptions.checkersSize"><code class="docutils literal notranslate"><span class="pre">BackgroundOptions.checkersSize</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.image.BackgroundOptions.solidColor"><code class="docutils literal notranslate"><span class="pre">BackgroundOptions.solidColor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.image.BackgroundOptions.type"><code class="docutils literal notranslate"><span class="pre">BackgroundOptions.type</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.image.Channels"><code class="docutils literal notranslate"><span class="pre">Channels</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.image.Channels.name"><code class="docutils literal notranslate"><span class="pre">Channels.name</span></code></a></li>
 </ul>
@@ -104,13 +116,22 @@
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.image.YUVCoefficients.name"><code class="docutils literal notranslate"><span class="pre">YUVCoefficients.name</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.image.backgroundOptions"><code class="docutils literal notranslate"><span class="pre">backgroundOptions()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.image.ocioConfig"><code class="docutils literal notranslate"><span class="pre">ocioConfig()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.image.ocioIcs"><code class="docutils literal notranslate"><span class="pre">ocioIcs()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.image.ocioIcsList"><code class="docutils literal notranslate"><span class="pre">ocioIcsList()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.image.ocioView"><code class="docutils literal notranslate"><span class="pre">ocioView()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.image.setBackgroundOptions"><code class="docutils literal notranslate"><span class="pre">setBackgroundOptions()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.image.setOcioConfig"><code class="docutils literal notranslate"><span class="pre">setOcioConfig()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.image.setOcioIcs"><code class="docutils literal notranslate"><span class="pre">setOcioIcs()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.image.setOcioView"><code class="docutils literal notranslate"><span class="pre">setOcioView()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.image.Color4f"><code class="docutils literal notranslate"><span class="pre">Color4f</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.image.Color4f.r"><code class="docutils literal notranslate"><span class="pre">Color4f.r</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.image.Color4f.g"><code class="docutils literal notranslate"><span class="pre">Color4f.g</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">Color4f.g</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.image.Color4f.a"><code class="docutils literal notranslate"><span class="pre">Color4f.a</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.image.Mirror"><code class="docutils literal notranslate"><span class="pre">Mirror</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.image.Mirror.x"><code class="docutils literal notranslate"><span class="pre">Mirror.x</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.image.Mirror.y"><code class="docutils literal notranslate"><span class="pre">Mirror.y</span></code></a></li>
@@ -241,6 +262,56 @@
 <dt class="sig sig-object py" id="mrv2.image.AlphaBlend.name">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#mrv2.image.AlphaBlend.name" title="Link to this definition"></a></dt>
 <dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mrv2.image.Background">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">Background</span></span><a class="headerlink" href="#mrv2.image.Background" title="Link to this definition"></a></dt>
+<dd><p>Members:</p>
+<p>Transparent</p>
+<p>Solid</p>
+<p>Checkers</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="mrv2.image.Background.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#mrv2.image.Background.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mrv2.image.BackgroundOptions">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">BackgroundOptions</span></span><a class="headerlink" href="#mrv2.image.BackgroundOptions" title="Link to this definition"></a></dt>
+<dd><p>Opciones de Fondo.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="mrv2.image.BackgroundOptions.checkersColor0">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">checkersColor0</span></span><a class="headerlink" href="#mrv2.image.BackgroundOptions.checkersColor0" title="Link to this definition"></a></dt>
+<dd><p>Opciones de Color0 del cuadriculado <a class="reference internal" href="#mrv2.image.Color4f" title="mrv2.image.Color4f"><code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.image.Color4f</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mrv2.image.BackgroundOptions.checkersColor1">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">checkersColor1</span></span><a class="headerlink" href="#mrv2.image.BackgroundOptions.checkersColor1" title="Link to this definition"></a></dt>
+<dd><p>Opciones de Color1 del cuadriculado <a class="reference internal" href="#mrv2.image.Color4f" title="mrv2.image.Color4f"><code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.image.Color4f</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mrv2.image.BackgroundOptions.checkersSize">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">checkersSize</span></span><a class="headerlink" href="#mrv2.image.BackgroundOptions.checkersSize" title="Link to this definition"></a></dt>
+<dd><p>Tamaño del Cuadriculado <a class="reference internal" href="math.html#mrv2.math.Size2i" title="mrv2.math.Size2i"><code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.math.Size2i</span></code></a>..</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mrv2.image.BackgroundOptions.solidColor">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">solidColor</span></span><a class="headerlink" href="#mrv2.image.BackgroundOptions.solidColor" title="Link to this definition"></a></dt>
+<dd><p>Opciones de Color Sólido <a class="reference internal" href="#mrv2.image.Color4f" title="mrv2.image.Color4f"><code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.image.Color4f</span></code></a>..</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mrv2.image.BackgroundOptions.type">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#mrv2.image.BackgroundOptions.type" title="Link to this definition"></a></dt>
+<dd><p>Tipo de fondo <a class="reference internal" href="#mrv2.image.Background" title="mrv2.image.Background"><code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.image.Background</span></code></a>..</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -444,6 +515,12 @@
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="mrv2.image.backgroundOptions">
+<span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">backgroundOptions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#mrv2.image.BackgroundOptions" title="mrv2.image.BackgroundOptions"><span class="pre">mrv2.image.BackgroundOptions</span></a></span></span><a class="headerlink" href="#mrv2.image.backgroundOptions" title="Link to this definition"></a></dt>
+<dd><p>Retorna las opciones actual del fondo.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="mrv2.image.ocioConfig">
 <span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">ocioConfig</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#mrv2.image.ocioConfig" title="Link to this definition"></a></dt>
 <dd><p>Obtiene el archivo config de OCIO actual.</p>
@@ -465,6 +542,12 @@
 <dt class="sig sig-object py" id="mrv2.image.ocioView">
 <span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">ocioView</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#mrv2.image.ocioView" title="Link to this definition"></a></dt>
 <dd><p>Retorna la Display/View de OCIO actual.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mrv2.image.setBackgroundOptions">
+<span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">setBackgroundOptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mrv2.image.BackgroundOptions" title="mrv2.image.BackgroundOptions"><span class="pre">mrv2.image.BackgroundOptions</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.image.setBackgroundOptions" title="Link to this definition"></a></dt>
+<dd><p>Setea las opciones de fondo.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -499,6 +582,36 @@
 <li><p>setOcioView(view: str) -&gt; None</p></li>
 </ol>
 <p>Setea la OCIO Display/Vista.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mrv2.image.Color4f">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">Color4f</span></span><a class="headerlink" href="#mrv2.image.Color4f" title="Link to this definition"></a></dt>
+<dd><p>Espejado de la imagen.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mrv2.image.Color4f.r">
+<span class="sig-name descname"><span class="pre">r</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></em><a class="headerlink" href="#mrv2.image.Color4f.r" title="Link to this definition"></a></dt>
+<dd><p>Canal Rojo.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mrv2.image.Color4f.g">
+<span class="sig-name descname"><span class="pre">g</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></em><a class="headerlink" href="#mrv2.image.Color4f.g" title="Link to this definition"></a></dt>
+<dd><p>Canal Verde.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">g</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd><p>Canal Verde.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mrv2.image.Color4f.a">
+<span class="sig-name descname"><span class="pre">a</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></em><a class="headerlink" href="#mrv2.image.Color4f.a" title="Link to this definition"></a></dt>
+<dd><p>Canal Alfa.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">

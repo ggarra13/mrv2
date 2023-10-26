@@ -124,9 +124,7 @@ namespace mrv
     extern Hotkey kDisplayWindow;
     extern Hotkey kDataWindow;
 
-    extern Hotkey kTransparentBackground;
-    extern Hotkey kSolidBackground;
-    extern Hotkey kCheckersBackground;
+    extern Hotkey kToggleBackground;
 
     extern Hotkey kCompareWipe;
     extern Hotkey kCompareOverlay;
@@ -186,6 +184,9 @@ namespace mrv
 
     extern Hotkey kFirstFrame;
     extern Hotkey kLastFrame;
+
+    extern Hotkey kPreviousClip;
+    extern Hotkey kNextClip;
 
     extern Hotkey kToggleMenuBar;
     extern Hotkey kToggleTopBar;

@@ -17,6 +17,7 @@ set(SOURCES
     FilesModel.cpp
     FilePath.cpp
     Image.cpp
+    Math.cpp
     Media.cpp
     OTIO.cpp
     Playlist.cpp
@@ -25,7 +26,6 @@ set(SOURCES
     Settings.cpp
     Timeline.cpp
     USD.cpp
-    Vectors.cpp
 )
 
 add_library(mrvPy ${SOURCES} ${HEADERS})
