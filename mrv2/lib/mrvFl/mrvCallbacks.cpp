@@ -1265,6 +1265,62 @@ namespace mrv
         ui->uiView->framePrev();
     }
 
+    void next_clip_cb(Fl_Menu_*, ViewerUI* ui)
+    {
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
+            return;
+
+        const auto time = player->currentTime();
+        const auto timeline = player->getTimeline();
+        const auto tracks = timeline->video_tracks();
+        const auto track = tracks[0];
+
+        const auto item =
+            otio::dynamic_retainer_cast<otio::Item>(track->child_at_time(time));
+        if (!item)
+            return;
+
+        int index = track->index_of_child(item) + 1;
+        if (index >= track->children().size())
+            index = 0;
+        const auto child = track->children()[index];
+        const auto next_item = otio::dynamic_retainer_cast<otio::Item>(child);
+        if (!next_item)
+            return;
+        const auto range = next_item->trimmed_range_in_parent().value();
+        const auto next_time = range.start_time();
+        player->seek(next_time);
+    }
+
+    void previous_clip_cb(Fl_Menu_*, ViewerUI* ui)
+    {
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
+            return;
+
+        const auto time = player->currentTime();
+        const auto timeline = player->getTimeline();
+        const auto tracks = timeline->video_tracks();
+        const auto track = tracks[0];
+
+        const auto item =
+            otio::dynamic_retainer_cast<otio::Item>(track->child_at_time(time));
+        if (!item)
+            return;
+
+        int index = track->index_of_child(item) - 1;
+        if (index < 0)
+            index = track->children().size() - 1;
+        const auto child = track->children()[index];
+        const auto prev_item = otio::dynamic_retainer_cast<otio::Item>(child);
+        if (!prev_item)
+            return;
+        const auto range = prev_item->trimmed_range_in_parent().value();
+        const auto prev_time = range.start_time();
+        player->seek(prev_time);
+    }
+
     void previous_annotation_cb(Fl_Menu_*, ViewerUI* ui)
     {
         const auto& player = ui->uiView->getTimelinePlayer();

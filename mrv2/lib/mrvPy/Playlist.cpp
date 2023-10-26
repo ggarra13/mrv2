@@ -113,7 +113,7 @@ namespace mrv2
             model->setA(Aindex);
         }
 
-        void add_clip(const std::shared_ptr<FilesModelItem>& clip)
+        void addClip(const std::shared_ptr<FilesModelItem>& clip)
         {
             auto model = App::app->filesModel();
             auto items = model->observeFiles()->get();
@@ -137,7 +137,7 @@ namespace mrv2
                 throw std::runtime_error(
                     _("Could not find clip in loaded clips."));
 
-            add_clip_to_timeline(Aindex, App::ui);
+            add_clip_to_timeline_cb(Aindex, App::ui);
         }
 
         /**
@@ -187,7 +187,7 @@ Contains all functions and classes related to the playlists.
         _("Select a playlist by index."), py::arg("playlistIndex"));
 
     playlist.def(
-        "add_clip", &mrv2::playlist::add_clip,
+        "addClip", &mrv2::playlist::addClip,
         _("Add a clip to currently selected Playlist EDL."), py::arg("clip"));
 
     playlist.def(

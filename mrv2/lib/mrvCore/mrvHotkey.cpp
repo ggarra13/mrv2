@@ -113,6 +113,9 @@ namespace mrv
     Hotkey kFirstFrame(false, false, false, false, FL_Home);
     Hotkey kLastFrame(false, false, false, false, FL_End);
 
+    Hotkey kNextClip(true, false, false, false, FL_Right);
+    Hotkey kPreviousClip(true, false, false, false, FL_Left);
+
     Hotkey kToggleMenuBar(false, false, false, true, FL_F + 1);
     Hotkey kToggleTopBar(false, false, false, false, FL_F + 1);
     Hotkey kTogglePixelBar(false, false, false, false, FL_F + 2);
