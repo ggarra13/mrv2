@@ -1,3 +1,14 @@
+v0.8.3
+======
+
+- Fixed adding a movie with no audio, which created an audio gap of sample
+  rate of 1, leading to precision issues.
+- Fixed creation of an empty timeline.
+- Fixed Annotations shifting when moving clips around in the Timeline Viewport
+  (feature of v0.9.0 not yet finished by Darby).
+- Added support for HDR Radiance (.hdr) format.
+
+
 v0.8.2
 ======
 

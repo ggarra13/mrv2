@@ -24,8 +24,6 @@ namespace mrv
     class TimelinePlayer;
     using otio::Timeline;
 
-    struct MoveData;
-
     //@{
     //! Store timeline in undo queue.
 
@@ -42,9 +40,6 @@ namespace mrv
     //! Handle move of clip (used in shifting clips around in tlRender).
     void edit_move_clip_annotations(
         const std::vector<tl::timeline::MoveData>& moves, ViewerUI* ui);
-
-    //! Handle move of clip annotations from network.
-    void edit_move_clip(const std::vector<mrv::MoveData>& moves, ViewerUI* ui);
 
     //! Set the temporary EDL for a drag item callback.
     void toOtioFile(TimelinePlayer*, ViewerUI* ui);
