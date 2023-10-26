@@ -459,6 +459,7 @@ namespace mrv
                     auto model = ui->app->filesModel();
                     model->setA(index);
                     create_new_timeline_cb(nullptr, ui);
+                    aIndex = model->observeAIndex()->get();
                 }
             }
             else
@@ -475,13 +476,13 @@ namespace mrv
                         break;
                     }
                 }
+            }
 
-                if (validDrop && aIndex >= 0)
-                {
-                    auto model = ui->app->filesModel();
-                    model->setA(aIndex);
-                    add_clip_to_timeline(index, ui);
-                }
+            if (validDrop && aIndex >= 0)
+            {
+                auto model = ui->app->filesModel();
+                model->setA(aIndex);
+                add_clip_to_timeline(index, ui);
             }
         }
     } // namespace panel
