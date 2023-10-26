@@ -62,8 +62,8 @@ namespace mrv
         char buf[256];
 
         const auto model = ui->app->filesModel();
-        const auto files = model->observeFiles();
-        size_t numFiles = files->getSize();
+        const auto& files = model->observeFiles()->get();
+        size_t numFiles = files.size();
 
         menu->clear();
 
@@ -909,10 +909,9 @@ namespace mrv
         if (options.showMarkers)
             item->set();
 
-        const int aIndex = ui->app->filesModel()->observeAIndex()->get();
-        if (numFiles > 0 && aIndex >= 0)
+        const int aIndex = model->observeAIndex()->get();
+        if (numFiles > 0 && aIndex >= 0 && aIndex < numFiles)
         {
-            const auto files = ui->app->filesModel()->observeFiles()->get();
             std::string fileName = files[aIndex]->path.get(-1, false);
 
             const std::regex& regex = version_regex(ui, false);

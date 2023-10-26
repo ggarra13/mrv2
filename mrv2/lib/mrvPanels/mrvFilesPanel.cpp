@@ -228,8 +228,6 @@ namespace mrv
 
             file::Path lastPath;
 
-            const std::string tmpdir = tmppath() + "/";
-
             for (size_t i = 0; i < numFiles; ++i)
             {
                 const auto& media = files->getItem(i);
@@ -417,7 +415,6 @@ namespace mrv
 
         void FilesPanel::redraw()
         {
-
             TLRENDER_P();
 
             otio::RationalTime time = otio::RationalTime(0.0, 1.0);
