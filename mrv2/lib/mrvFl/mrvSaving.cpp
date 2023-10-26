@@ -43,6 +43,19 @@ namespace mrv
     void save_single_frame(
         const std::string& file, const ViewerUI* ui, SaveOptions options)
     {
+        Viewport* view = ui->uiView;
+        bool presentation = view->getPresentationMode();
+
+        auto player = view->getTimelinePlayer();
+        if (!player)
+            return; // should never happen
+
+        // Stop the playback
+        player->stop();
+
+        // Time range.
+        auto currentTime = player->currentTime();
+
         try
         {
 
@@ -68,17 +81,6 @@ namespace mrv
                 ioOptions["OpenEXR/DWACompressionLevel"] = s.str();
             }
 
-            Viewport* view = ui->uiView;
-
-            auto player = view->getTimelinePlayer();
-            if (!player)
-                return; // should never happen
-
-            // Stop the playback
-            player->stop();
-
-            // Time range.
-            auto currentTime = player->currentTime();
             otime::TimeRange timeRange(
                 currentTime, otime::RationalTime(1, currentTime.rate()));
 
@@ -123,7 +125,6 @@ namespace mrv
             }
 
             int X = 0, Y = 0;
-            bool presentation = view->getPresentationMode();
 
             if (annotations)
             {
@@ -243,75 +244,61 @@ namespace mrv
             auto buffer = gl::OffscreenBuffer::create(
                 offscreenBufferSize, offscreenBufferOptions);
 
-            try
+            if (annotations)
             {
-                if (annotations)
+                // Refresh the view (so we turn off the HUD, for example).
+                view->redraw();
+                view->flush();
+                Fl::check();
+
+                glReadBuffer(GL_FRONT);
+                CHECK_GL;
+                glReadPixels(
+                    X, Y, outputInfo.size.w, outputInfo.size.h, format, type,
+                    outputImage->getData());
+                CHECK_GL;
+            }
+            else
+            {
+                // Get the videoData
+                const auto& videoData = timeline->getVideo(currentTime).get();
+
+                view->make_current();
+                gl::initGLAD();
+
+                // Render the video.
+                gl::OffscreenBufferBinding binding(buffer);
+                CHECK_GL;
                 {
-                    // Refresh the view (so we turn off the HUD, for example).
-                    view->redraw();
-                    view->flush();
-                    Fl::check();
-
-                    glReadBuffer(GL_FRONT);
+                    locale::SetAndRestore saved;
+                    render->begin(
+                        offscreenBufferSize, view->getColorConfigOptions(),
+                        view->lutOptions());
                     CHECK_GL;
-                    glReadPixels(
-                        X, Y, outputInfo.size.w, outputInfo.size.h, format,
-                        type, outputImage->getData());
+                    render->drawVideo(
+                        {videoData},
+                        {math::Box2i(0, 0, renderSize.w, renderSize.h)});
                     CHECK_GL;
-                }
-                else
-                {
-                    // Get the videoData
-                    const auto& videoData =
-                        timeline->getVideo(currentTime).get();
-
-                    view->make_current();
-                    gl::initGLAD();
-
-                    // Render the video.
-                    gl::OffscreenBufferBinding binding(buffer);
-                    CHECK_GL;
-                    {
-                        locale::SetAndRestore saved;
-                        render->begin(
-                            offscreenBufferSize, view->getColorConfigOptions(),
-                            view->lutOptions());
-                        CHECK_GL;
-                        render->drawVideo(
-                            {videoData},
-                            {math::Box2i(0, 0, renderSize.w, renderSize.h)});
-                        CHECK_GL;
-                        render->end();
-                    }
-
-                    glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
-                    CHECK_GL;
-
-                    glPixelStorei(
-                        GL_PACK_ALIGNMENT, outputInfo.layout.alignment);
-                    CHECK_GL;
-                    glPixelStorei(
-                        GL_PACK_SWAP_BYTES,
-                        outputInfo.layout.endian != memory::getEndian());
-                    CHECK_GL;
-
-                    glReadPixels(
-                        0, 0, outputInfo.size.w, outputInfo.size.h, format,
-                        type, outputImage->getData());
-                    CHECK_GL;
+                    render->end();
                 }
 
-                writer->writeVideo(currentTime, outputImage);
-            }
-            catch (std::exception& e)
-            {
-                LOG_ERROR(e.what());
+                glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+                CHECK_GL;
+
+                glPixelStorei(GL_PACK_ALIGNMENT, outputInfo.layout.alignment);
+                CHECK_GL;
+                glPixelStorei(
+                    GL_PACK_SWAP_BYTES,
+                    outputInfo.layout.endian != memory::getEndian());
+                CHECK_GL;
+
+                glReadPixels(
+                    0, 0, outputInfo.size.w, outputInfo.size.h, format, type,
+                    outputImage->getData());
+                CHECK_GL;
             }
 
-            view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());
-            view->setHudActive(hud);
-            view->setPresentationMode(presentation);
-            tcp->unlock();
+            writer->writeVideo(currentTime, outputImage);
 
             // Rename file name that got saved with a frame number to the actual
             // frame that the user set.
@@ -326,16 +313,37 @@ namespace mrv
             {
                 fs::rename(fs::path(filename), fs::path(file));
             }
+            tcp->unlock();
         }
         catch (const std::exception& e)
         {
             LOG_ERROR(e.what());
         }
+
+        view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());
+        view->setHudActive(hud);
+        view->setPresentationMode(presentation);
     }
 
     void
     save_movie(const std::string& file, const ViewerUI* ui, SaveOptions options)
     {
+        Viewport* view = ui->uiView;
+        bool presentation = view->getPresentationMode();
+
+        auto player = view->getTimelinePlayer();
+        if (!player)
+            return; // should never happen
+
+        // Stop the playback
+        player->stop();
+
+        // Time range.
+        auto timeRange = player->inOutRange();
+        auto startTime = timeRange.start_time();
+        auto endTime = timeRange.end_time_inclusive();
+        auto currentTime = startTime;
+
         try
         {
 
@@ -360,21 +368,6 @@ namespace mrv
                 s << options.dwaCompressionLevel;
                 ioOptions["OpenEXR/DWACompressionLevel"] = s.str();
             }
-
-            Viewport* view = ui->uiView;
-
-            auto player = view->getTimelinePlayer();
-            if (!player)
-                return; // should never happen
-
-            // Stop the playback
-            player->stop();
-
-            // Time range.
-            auto timeRange = player->inOutRange();
-            auto startTime = timeRange.start_time();
-            auto endTime = timeRange.end_time_inclusive();
-            auto currentTime = startTime;
 
             auto context = ui->app->getContext();
             auto timeline = player->timeline();
@@ -425,7 +418,6 @@ namespace mrv
             }
 
             int X = 0, Y = 0;
-            bool presentation = view->getPresentationMode();
 
             if (annotations)
             {
@@ -541,6 +533,13 @@ namespace mrv
                     string::Format("{0}: Cannot open").arg(file));
             }
 
+            std::cerr << "format == GL_RGBA? " << (format == GL_RGBA)
+                      << std::endl;
+            std::cerr << "type   == GL_UNSIGNED_SHORT? "
+                      << (type == GL_UNSIGNED_SHORT) << std::endl;
+            std::cerr << "offscreenBufferOptions.colorType="
+                      << offscreenBufferOptions.colorType << std::endl;
+
             player->start();
 
             // Turn off hud so it does not get captured by glReadPixels.
@@ -554,119 +553,110 @@ namespace mrv
                 offscreenBufferSize, offscreenBufferOptions);
             CHECK_GL;
 
-            try
+            while (running)
             {
-                while (running)
+
+                if (annotations)
                 {
+                    view->redraw();
+                    view->flush();
+                    Fl::check();
 
-                    if (annotations)
+                    // If progress window is closed, exit loop.
+                    if (!progress.tick())
+                        break;
+
+                    glReadBuffer(GL_FRONT);
+                    CHECK_GL;
+                    glReadPixels(
+                        X, Y, outputInfo.size.w, outputInfo.size.h, format,
+                        type, outputImage->getData());
+                    CHECK_GL;
+                }
+                else
+                {
+                    // Get the videoData
+                    const auto& videoData =
+                        timeline->getVideo(currentTime).get();
+
+                    // If progress window is closed, exit loop.
+                    if (!progress.tick())
+                        break;
+
+                    // This updates Viewport display
+                    view->make_current();
+                    CHECK_GL;
+                    view->currentVideoCallback(videoData, player);
+                    CHECK_GL;
+                    view->flush();
+                    CHECK_GL;
+
+                    view->make_current();
+                    CHECK_GL;
+                    gl::initGLAD();
+
+                    // Render the video.
+                    gl::OffscreenBufferBinding binding(buffer);
+                    CHECK_GL;
                     {
-                        view->redraw();
-                        view->flush();
-                        Fl::check();
-
-                        // If progress window is closed, exit loop.
-                        if (!progress.tick())
-                            break;
-
-                        glReadBuffer(GL_FRONT);
+                        locale::SetAndRestore saved;
+                        render->begin(
+                            offscreenBufferSize, view->getColorConfigOptions(),
+                            view->lutOptions());
                         CHECK_GL;
-                        glReadPixels(
-                            X, Y, outputInfo.size.w, outputInfo.size.h, format,
-                            type, outputImage->getData());
+                        render->drawVideo(
+                            {videoData},
+                            {math::Box2i(0, 0, renderSize.w, renderSize.h)});
                         CHECK_GL;
-                    }
-                    else
-                    {
-                        // Get the videoData
-                        const auto& videoData =
-                            timeline->getVideo(currentTime).get();
-
-                        // If progress window is closed, exit loop.
-                        if (!progress.tick())
-                            break;
-
-                        // This updates Viewport display
-                        view->make_current();
-                        CHECK_GL;
-                        view->currentVideoCallback(videoData, player);
-                        CHECK_GL;
-                        view->flush();
-                        CHECK_GL;
-
-                        view->make_current();
-                        CHECK_GL;
-                        gl::initGLAD();
-
-                        // Render the video.
-                        gl::OffscreenBufferBinding binding(buffer);
-                        CHECK_GL;
-                        {
-                            locale::SetAndRestore saved;
-                            render->begin(
-                                offscreenBufferSize,
-                                view->getColorConfigOptions(),
-                                view->lutOptions());
-                            CHECK_GL;
-                            render->drawVideo(
-                                {videoData},
-                                {math::Box2i(
-                                    0, 0, renderSize.w, renderSize.h)});
-                            CHECK_GL;
-                            render->end();
-                        }
-
-                        // back to conventional pixel operation
-                        // glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
-                        // CHECK_GL;
-                        glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
-                        CHECK_GL;
-
-                        glPixelStorei(
-                            GL_PACK_ALIGNMENT, outputInfo.layout.alignment);
-                        CHECK_GL;
-                        glPixelStorei(
-                            GL_PACK_SWAP_BYTES,
-                            outputInfo.layout.endian != memory::getEndian());
-                        CHECK_GL;
-
-                        glReadPixels(
-                            0, 0, outputInfo.size.w, outputInfo.size.h, format,
-                            type, outputImage->getData());
-                        CHECK_GL;
+                        render->end();
                     }
 
-                    writer->writeVideo(currentTime, outputImage);
+                    // back to conventional pixel operation
+                    // glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
+                    // CHECK_GL;
+                    glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+                    CHECK_GL;
 
-                    // We need to use frameNext instead of seeking as large
-                    // movies can lag behind the seek
-                    if (annotations)
-                        player->frameNext();
+                    glPixelStorei(
+                        GL_PACK_ALIGNMENT, outputInfo.layout.alignment);
+                    CHECK_GL;
+                    glPixelStorei(
+                        GL_PACK_SWAP_BYTES,
+                        outputInfo.layout.endian != memory::getEndian());
+                    CHECK_GL;
 
-                    currentTime += otime::RationalTime(1, currentTime.rate());
-                    if (currentTime > endTime)
-                    {
-                        running = false;
-                    }
+                    glReadPixels(
+                        0, 0, outputInfo.size.w, outputInfo.size.h, format,
+                        type, outputImage->getData());
+                    CHECK_GL;
+                }
+
+                writer->writeVideo(currentTime, outputImage);
+
+                // We need to use frameNext instead of seeking as large
+                // movies can lag behind the seek
+                if (annotations)
+                    player->frameNext();
+
+                currentTime += otime::RationalTime(1, currentTime.rate());
+                if (currentTime > endTime)
+                {
+                    running = false;
                 }
             }
-            catch (std::exception& e)
-            {
-                LOG_ERROR(e.what());
-            }
-
-            player->seek(currentTime);
-            view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());
-            view->setHudActive(hud);
-            view->setPresentationMode(presentation);
-            ui->uiTimeline->valid(0); // needed
-            ui->uiTimeline->redraw();
-            tcp->unlock();
         }
         catch (std::exception& e)
         {
             LOG_ERROR(e.what());
         }
+
+        view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());
+        view->setHudActive(hud);
+        view->setPresentationMode(presentation);
+        player->seek(currentTime);
+        ui->uiTimeline->valid(0); // needed
+        ui->uiTimeline->redraw();
+        tcp->unlock();
     }
 
 } // namespace mrv

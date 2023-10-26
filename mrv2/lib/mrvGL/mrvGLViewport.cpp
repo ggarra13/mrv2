@@ -361,6 +361,9 @@ namespace mrv
             b = ub / 255.0f;
         }
 
+        if (transparent)
+            a = 0.F;
+
         glDrawBuffer(GL_BACK_LEFT);
         CHECK_GL;
         glClearColor(r, g, b, a);
