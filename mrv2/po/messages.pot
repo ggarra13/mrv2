@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v0.8.2\n"
+"Project-Id-Version: mrv2 v0.8.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-10-24 12:17-0300\n"
+"POT-Creation-Date: 2023-10-26 09:11-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -147,7 +147,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: mrvPy/Image.cpp:310
+#: mrvPy/Image.cpp:335
 msgid ""
 "\n"
 "Image module.\n"
@@ -155,7 +155,7 @@ msgid ""
 "Contains all classes and enums related to image controls. \n"
 msgstr ""
 
-#: mrvPy/Vectors.cpp:20
+#: mrvPy/Math.cpp:21
 msgid ""
 "\n"
 "Math module.\n"
@@ -420,10 +420,6 @@ msgid ""
 "         *\n"
 "   [    this    ]\n"
 "\n"
-msgstr ""
-
-#: mrvFl/mrvIO.h:108
-msgid "       "
 msgstr ""
 
 #: mrvPanels/mrvSettingsPanel.cpp:107
@@ -854,19 +850,19 @@ msgstr ""
 msgid "A client connected from {0}"
 msgstr ""
 
-#: mrvApp/App.cpp:276
+#: mrvApp/App.cpp:283
 msgid "A/B comparison \"B\" file name."
 msgstr ""
 
-#: mrvApp/App.cpp:279
+#: mrvApp/App.cpp:286
 msgid "A/B comparison mode."
 msgstr ""
 
-#: mrvApp/App.cpp:284
+#: mrvApp/App.cpp:291
 msgid "A/B comparison wipe center."
 msgstr ""
 
-#: mrvApp/App.cpp:288
+#: mrvApp/App.cpp:295
 msgid "A/B comparison wipe rotation."
 msgstr ""
 
@@ -885,7 +881,7 @@ msgstr ""
 msgid "About"
 msgstr ""
 
-#: mrvApp/App.cpp:487 mrvUI/mrvMenus.cpp:1184
+#: mrvApp/App.cpp:494 mrvUI/mrvMenus.cpp:1200
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:23
 msgid "About mrv2"
 msgstr ""
@@ -905,7 +901,7 @@ msgstr ""
 msgid "Accept the selected OCIO file."
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:531
+#: mrvFl/mrvFileRequester.cpp:536
 msgid "Acrobat PDF (*.{pdf})"
 msgstr ""
 
@@ -913,7 +909,7 @@ msgstr ""
 msgid "Active"
 msgstr ""
 
-#: mrvPanels/mrvColorPanel.cpp:236 mrvCore/mrvHotkey.cpp:540
+#: mrvPanels/mrvColorPanel.cpp:236 mrvCore/mrvHotkey.cpp:542
 msgid "Add"
 msgstr ""
 
@@ -921,7 +917,7 @@ msgstr ""
 msgid "Add Paths"
 msgstr ""
 
-#: mrvPy/Image.cpp:344
+#: mrvPy/Image.cpp:387
 msgid "Add a :class:`mrv2.math.Vector3f` to image."
 msgstr ""
 
@@ -970,7 +966,7 @@ msgstr ""
 msgid "All"
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:358 mrvFl/mrvFileRequester.cpp:515
+#: mrvFl/mrvFileRequester.cpp:360 mrvFl/mrvFileRequester.cpp:519
 msgid "All (*.{"
 msgstr ""
 
@@ -1009,11 +1005,15 @@ msgstr ""
 msgid "Alpha Blend"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:362
+#: mrvCore/mrvHotkey.cpp:365
 msgid "Alpha Channel"
 msgstr ""
 
-#: mrvPy/Image.cpp:541
+#: mrvPy/Image.cpp:348
+msgid "Alpha Channel."
+msgstr ""
+
+#: mrvPy/Image.cpp:584
 msgid "Alpha blending algorithm"
 msgstr ""
 
@@ -1037,19 +1037,19 @@ msgstr ""
 msgid "Anaglyph"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:367
+#: mrvCore/mrvHotkey.cpp:370
 msgid "Annotation Clear All Frames"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:366
+#: mrvCore/mrvHotkey.cpp:369
 msgid "Annotation Clear Frame"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:368
+#: mrvCore/mrvHotkey.cpp:371
 msgid "Annotation Frame Step Backwards"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:372
+#: mrvCore/mrvHotkey.cpp:375
 msgid "Annotation Frame Step Forwards"
 msgstr ""
 
@@ -1057,8 +1057,8 @@ msgstr ""
 msgid "Annotation already existed at this time"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:96 mrvFl/mrvCallbacks.cpp:1661
-#: mrvFl/mrvCallbacks.cpp:1699 mrvUI/mrvMenus.cpp:409
+#: mrvFl/mrvCallbacks.cpp:96 mrvFl/mrvCallbacks.cpp:1711
+#: mrvFl/mrvCallbacks.cpp:1749 mrvUI/mrvMenus.cpp:409
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1478
 msgid "Annotations"
 msgstr ""
@@ -1079,7 +1079,7 @@ msgstr ""
 msgid "Area Select Tool"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:445
+#: mrvCore/mrvHotkey.cpp:448
 msgid "Area Selection Mode"
 msgstr ""
 
@@ -1087,7 +1087,7 @@ msgstr ""
 msgid "Arrow"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:448
+#: mrvCore/mrvHotkey.cpp:451
 msgid "Arrow Mode"
 msgstr ""
 
@@ -1114,8 +1114,8 @@ msgid "Attributes"
 msgstr ""
 
 #: mrvApp/mrvOpenSeparateAudioDialog.cpp:52 mrvPanels/mrvSettingsPanel.cpp:194
-#: mrvPanels/mrvImageInfoPanel.cpp:477 mrvFl/mrvCallbacks.cpp:1665
-#: mrvFl/mrvCallbacks.cpp:1703
+#: mrvPanels/mrvImageInfoPanel.cpp:477 mrvFl/mrvCallbacks.cpp:1715
+#: mrvFl/mrvCallbacks.cpp:1753
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:137
 msgid "Audio"
 msgstr ""
@@ -1157,7 +1157,7 @@ msgstr ""
 msgid "Audio file name"
 msgstr ""
 
-#: mrvApp/App.cpp:273
+#: mrvApp/App.cpp:280
 msgid "Audio file name."
 msgstr ""
 
@@ -1169,7 +1169,7 @@ msgstr ""
 msgid "Audio path :class:`mrv2.Path` to the File Media if any."
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:480
+#: mrvFl/mrvFileRequester.cpp:482
 msgid "Audios (*.{"
 msgstr ""
 
@@ -1197,13 +1197,21 @@ msgstr ""
 msgid "B44A"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:492
+#: mrvCore/mrvHotkey.cpp:494
 msgid "BackSpace"
 msgstr ""
 
 #: mrvFl/mrvCallbacks.cpp:114 mrvUI/mrvMenus.cpp:478
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:779
 msgid "Background"
+msgstr ""
+
+#: mrvPy/Image.cpp:706
+msgid "Background options."
+msgstr ""
+
+#: mrvPy/Image.cpp:685
+msgid "Background type :class:`mrv2.image.Background`.."
 msgstr ""
 
 #: mrvPanels/mrvImageInfoPanel.cpp:1745
@@ -1232,8 +1240,12 @@ msgstr ""
 msgid "Blue"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:361
+#: mrvCore/mrvHotkey.cpp:364
 msgid "Blue Channel"
+msgstr ""
+
+#: mrvPy/Image.cpp:347
+msgid "Blue Channel."
 msgstr ""
 
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:289
@@ -1285,16 +1297,20 @@ msgstr ""
 msgid "Cancel the OCIO selection and don't change anything."
 msgstr ""
 
-#: mrvEdit/mrvEditCallbacks.cpp:1734
+#: mrvEdit/mrvEditCallbacks.cpp:1740
 msgid "Cannot append audio clip"
 msgstr ""
 
-#: mrvEdit/mrvEditCallbacks.cpp:1756
+#: mrvEdit/mrvEditCallbacks.cpp:1762
 msgid "Cannot append audio gap"
 msgstr ""
 
-#: mrvEdit/mrvEditCallbacks.cpp:1694
+#: mrvEdit/mrvEditCallbacks.cpp:1700
 msgid "Cannot append audio track."
+msgstr ""
+
+#: mrvEdit/mrvEditCallbacks.cpp:1623
+msgid "Cannot append video track."
 msgstr ""
 
 #: mrvGL/mrvTimelineViewportEvents.cpp:511
@@ -1309,7 +1325,7 @@ msgid ""
 "annotation already exists."
 msgstr ""
 
-#: mrvApp/App.cpp:472
+#: mrvApp/App.cpp:479
 msgid "Cannot create window"
 msgstr ""
 
@@ -1317,27 +1333,27 @@ msgstr ""
 msgid "Canon Raw Picture"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:516
+#: mrvCore/mrvHotkey.cpp:518
 msgid "CapsLock"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:341
+#: mrvCore/mrvHotkey.cpp:344
 msgid "Center Image"
 msgstr ""
 
-#: mrvPy/Image.cpp:347
+#: mrvPy/Image.cpp:390
 msgid "Change a :class:`mrv2.math.Vector3f` of brightness to image."
 msgstr ""
 
-#: mrvPy/Image.cpp:351
+#: mrvPy/Image.cpp:394
 msgid "Change a :class:`mrv2.math.Vector3f` of contrast to image."
 msgstr ""
 
-#: mrvPy/Image.cpp:355
+#: mrvPy/Image.cpp:398
 msgid "Change a :class:`mrv2.math.Vector3f` of saturation to image."
 msgstr ""
 
-#: mrvPy/Image.cpp:359
+#: mrvPy/Image.cpp:402
 msgid "Change tint of image to image between 0 and 1."
 msgstr ""
 
@@ -1357,6 +1373,18 @@ msgstr ""
 msgid "Checkerboard"
 msgstr ""
 
+#: mrvPy/Image.cpp:691
+msgid "Checkers Color0 :class:`mrv2.image.Color4f`.."
+msgstr ""
+
+#: mrvPy/Image.cpp:694
+msgid "Checkers Color1 :class:`mrv2.image.Color4f`.."
+msgstr ""
+
+#: mrvPy/Image.cpp:697
+msgid "Checkers Size :class:`mrv2.math.Size2i`.."
+msgstr ""
+
 #: mrvPanels/mrvImageInfoPanel.cpp:569
 msgid "Cinemascope"
 msgstr ""
@@ -1369,7 +1397,7 @@ msgstr ""
 msgid "Circle"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:450
+#: mrvCore/mrvHotkey.cpp:453
 msgid "Circle Mode"
 msgstr ""
 
@@ -1413,11 +1441,11 @@ msgstr ""
 msgid "Clip Compression"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:337
+#: mrvCore/mrvHotkey.cpp:340
 msgid "Close All"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:336
+#: mrvCore/mrvHotkey.cpp:339
 msgid "Close Current"
 msgstr ""
 
@@ -1425,7 +1453,7 @@ msgstr ""
 msgid "Close all file items."
 msgstr ""
 
-#: mrvPanels/mrvFilesPanel.cpp:376
+#: mrvPanels/mrvFilesPanel.cpp:374
 msgid "Close all filenames"
 msgstr ""
 
@@ -1433,11 +1461,11 @@ msgstr ""
 msgid "Close all files."
 msgstr ""
 
-#: mrvPanels/mrvPlaylistPanel.cpp:322
+#: mrvPanels/mrvPlaylistPanel.cpp:325
 msgid "Close current EDL."
 msgstr ""
 
-#: mrvPanels/mrvFilesPanel.cpp:368
+#: mrvPanels/mrvFilesPanel.cpp:366
 msgid "Close current filename"
 msgstr ""
 
@@ -1466,8 +1494,8 @@ msgstr ""
 msgid "Codecs"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:91 mrvFl/mrvCallbacks.cpp:1653
-#: mrvFl/mrvCallbacks.cpp:1691 mrvGL/mrvTimelineViewport.cpp:1702
+#: mrvFl/mrvCallbacks.cpp:91 mrvFl/mrvCallbacks.cpp:1703
+#: mrvFl/mrvCallbacks.cpp:1741 mrvGL/mrvTimelineViewport.cpp:1702
 #: mrvGL/mrvTimelineViewport.cpp:1704 mrvGL/mrvTimelineViewport.cpp:1706
 #: mrvUI/mrvMenus.cpp:360
 msgid "Color"
@@ -1477,7 +1505,7 @@ msgstr ""
 msgid "Color Area"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:358
+#: mrvCore/mrvHotkey.cpp:361
 msgid "Color Channel"
 msgstr ""
 
@@ -1493,19 +1521,19 @@ msgstr ""
 msgid "Color Theme"
 msgstr ""
 
-#: mrvPy/Image.cpp:479
+#: mrvPy/Image.cpp:522
 msgid "Color channels :class:`mrv2.image.Channels`."
 msgstr ""
 
-#: mrvApp/App.cpp:313
+#: mrvApp/App.cpp:320
 msgid "Color configuration file name (config.ocio)."
 msgstr ""
 
-#: mrvPy/Image.cpp:485
+#: mrvPy/Image.cpp:528
 msgid "Color options :class:`mrv2.image.Color`."
 msgstr ""
 
-#: mrvPy/Image.cpp:370
+#: mrvPy/Image.cpp:413
 msgid "Color values."
 msgstr ""
 
@@ -1533,27 +1561,27 @@ msgstr ""
 msgid "Compare B"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:354
+#: mrvCore/mrvHotkey.cpp:357
 msgid "Compare Difference"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:355
+#: mrvCore/mrvHotkey.cpp:358
 msgid "Compare Horizontal"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:353
+#: mrvCore/mrvHotkey.cpp:356
 msgid "Compare Overlay"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:357
+#: mrvCore/mrvHotkey.cpp:360
 msgid "Compare Tile"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:356
+#: mrvCore/mrvHotkey.cpp:359
 msgid "Compare Vertical"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:352
+#: mrvCore/mrvHotkey.cpp:355
 msgid "Compare Wipe"
 msgstr ""
 
@@ -1594,7 +1622,7 @@ msgstr ""
 msgid "Connect"
 msgstr ""
 
-#: mrvApp/App.cpp:382
+#: mrvApp/App.cpp:389
 msgid "Connect to a server at <value>.  Use -port to specify a port number."
 msgstr ""
 
@@ -1625,7 +1653,7 @@ msgstr ""
 msgid "Convert to timecode (``HH:MM:SS;FRAME``)"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:403
+#: mrvCore/mrvHotkey.cpp:406
 msgid "Copy Frame"
 msgstr ""
 
@@ -1647,11 +1675,11 @@ msgstr ""
 msgid "Could not find clip in loaded clips."
 msgstr ""
 
-#: mrvEdit/mrvEditCallbacks.cpp:1678
+#: mrvEdit/mrvEditCallbacks.cpp:1684
 msgid "Could not find video clip."
 msgstr ""
 
-#: mrvEdit/mrvEditCallbacks.cpp:326 mrvEdit/mrvEditCallbacks.cpp:1501
+#: mrvEdit/mrvEditCallbacks.cpp:316 mrvEdit/mrvEditCallbacks.cpp:1501
 msgid "Could not get current path."
 msgstr ""
 
@@ -1659,7 +1687,7 @@ msgstr ""
 msgid "Could not match "
 msgstr ""
 
-#: mrvFl/mrvPreferences.cpp:432
+#: mrvFl/mrvPreferences.cpp:433
 msgid "Could not open color theme from \"{0}\"."
 msgstr ""
 
@@ -1667,11 +1695,11 @@ msgstr ""
 msgid "Could not paste {0}.  Error {1}."
 msgstr ""
 
-#: mrvApp/App.cpp:434
+#: mrvApp/App.cpp:441
 msgid "Could not read python script '{0}'"
 msgstr ""
 
-#: mrvEdit/mrvEditCallbacks.cpp:1360 mrvEdit/mrvEditCallbacks.cpp:1391
+#: mrvEdit/mrvEditCallbacks.cpp:1386
 msgid "Could not save .otio file: {0}"
 msgstr ""
 
@@ -1679,7 +1707,7 @@ msgstr ""
 msgid "Create"
 msgstr ""
 
-#: mrvPanels/mrvPlaylistPanel.cpp:304
+#: mrvPanels/mrvPlaylistPanel.cpp:303
 msgid "Create a timeline from the selected clip."
 msgstr ""
 
@@ -1739,11 +1767,11 @@ msgstr ""
 msgid "Current tool being used."
 msgstr ""
 
-#: mrvEdit/mrvEditCallbacks.cpp:192
+#: mrvEdit/mrvEditCallbacks.cpp:182
 msgid "Currently, you cannot add an .otio file to an EDL playlist."
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:402
+#: mrvCore/mrvHotkey.cpp:405
 msgid "Cut Frame"
 msgstr ""
 
@@ -1767,15 +1795,15 @@ msgstr ""
 msgid "DWAB"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:351
+#: mrvCore/mrvHotkey.cpp:354
 msgid "Data Window"
 msgstr ""
 
-#: mrvApp/App.cpp:270
+#: mrvApp/App.cpp:277
 msgid "Debug verbosity."
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:542
+#: mrvCore/mrvHotkey.cpp:544
 msgid "Decimal"
 msgstr ""
 
@@ -1805,11 +1833,11 @@ msgstr ""
 msgid "Defaults"
 msgstr ""
 
-#: mrvPy/Image.cpp:411
+#: mrvPy/Image.cpp:454
 msgid "Defog value."
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:503
+#: mrvCore/mrvHotkey.cpp:505
 msgid "Delete"
 msgstr ""
 
@@ -1867,15 +1895,15 @@ msgstr ""
 msgid "Display"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:350
+#: mrvCore/mrvHotkey.cpp:353
 msgid "Display Window"
 msgstr ""
 
-#: mrvApp/App.cpp:319
+#: mrvApp/App.cpp:326
 msgid "Display color space."
 msgstr ""
 
-#: mrvPy/Image.cpp:503
+#: mrvPy/Image.cpp:546
 msgid "Display options."
 msgstr ""
 
@@ -1894,7 +1922,7 @@ msgstr ""
 msgid "Disposition of Track"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:543
+#: mrvCore/mrvHotkey.cpp:545
 msgid "Divide"
 msgstr ""
 
@@ -1906,7 +1934,7 @@ msgstr ""
 msgid "Dock"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:510
+#: mrvCore/mrvHotkey.cpp:512
 msgid "Down"
 msgstr ""
 
@@ -1914,7 +1942,7 @@ msgstr ""
 msgid "Draw"
 msgstr ""
 
-#: mrvPanels/mrvUSDPanel.cpp:150 mrvCore/mrvHotkey.cpp:446
+#: mrvPanels/mrvUSDPanel.cpp:150 mrvCore/mrvHotkey.cpp:449
 msgid "Draw Mode"
 msgstr ""
 
@@ -1946,7 +1974,7 @@ msgstr ""
 msgid "E"
 msgstr ""
 
-#: mrvEdit/mrvEditCallbacks.cpp:706
+#: mrvEdit/mrvEditCallbacks.cpp:696
 msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
 msgstr ""
 
@@ -1954,7 +1982,7 @@ msgstr ""
 msgid "ERROR: "
 msgstr ""
 
-#: mrvPy/Image.cpp:491
+#: mrvPy/Image.cpp:534
 msgid "EXR Display options :class:`mrv2.image.EXRDisplay`.."
 msgstr ""
 
@@ -1962,7 +1990,7 @@ msgstr ""
 msgid "EXR Picture"
 msgstr ""
 
-#: mrvPy/Image.cpp:424
+#: mrvPy/Image.cpp:467
 msgid "EXR display values."
 msgstr ""
 
@@ -1982,7 +2010,7 @@ msgstr ""
 msgid "Edit Associated Clips."
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:411
+#: mrvCore/mrvHotkey.cpp:414
 msgid "Edit Redo"
 msgstr ""
 
@@ -1990,11 +2018,11 @@ msgstr ""
 msgid "Edit Text"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:1853
+#: mrvFl/mrvCallbacks.cpp:1903
 msgid "Edit Text Annotation"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:410
+#: mrvCore/mrvHotkey.cpp:413
 msgid "Edit Undo"
 msgstr ""
 
@@ -2006,35 +2034,35 @@ msgstr ""
 msgid "Edit/&Copy"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:941
+#: mrvUI/mrvMenus.cpp:957
 msgid "Edit/Frame/Copy"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:938
+#: mrvUI/mrvMenus.cpp:954
 msgid "Edit/Frame/Cut"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:947
+#: mrvUI/mrvMenus.cpp:963
 msgid "Edit/Frame/Insert"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:944
+#: mrvUI/mrvMenus.cpp:960
 msgid "Edit/Frame/Paste"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:961
+#: mrvUI/mrvMenus.cpp:977
 msgid "Edit/Redo"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:954
+#: mrvUI/mrvMenus.cpp:970
 msgid "Edit/Remove"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:951
+#: mrvUI/mrvMenus.cpp:967
 msgid "Edit/Slice"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:958
+#: mrvUI/mrvMenus.cpp:974
 msgid "Edit/Undo"
 msgstr ""
 
@@ -2062,7 +2090,7 @@ msgstr ""
 msgid "Elapsed"
 msgstr ""
 
-#: mrvEdit/mrvEditCallbacks.cpp:1443
+#: mrvEdit/mrvEditCallbacks.cpp:1437
 msgid "Empty EDL file.  Not saving."
 msgstr ""
 
@@ -2079,19 +2107,19 @@ msgstr ""
 msgid "Enabled"
 msgstr ""
 
-#: mrvPy/Image.cpp:408
+#: mrvPy/Image.cpp:451
 msgid "Enabled EXR display."
 msgstr ""
 
-#: mrvPy/Image.cpp:341 mrvPy/Image.cpp:379
+#: mrvPy/Image.cpp:384 mrvPy/Image.cpp:422
 msgid "Enabled Levels."
 msgstr ""
 
-#: mrvPy/Image.cpp:431
+#: mrvPy/Image.cpp:474
 msgid "Enabled Soft Clip."
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:504
+#: mrvCore/mrvHotkey.cpp:506
 msgid "End"
 msgstr ""
 
@@ -2112,11 +2140,11 @@ msgstr ""
 msgid "Environment Map"
 msgstr ""
 
-#: mrvPy/Image.cpp:569
+#: mrvPy/Image.cpp:612
 msgid "Environment Map type."
 msgstr ""
 
-#: mrvPy/Image.cpp:599
+#: mrvPy/Image.cpp:642
 msgid "EnvironmentMap options."
 msgstr ""
 
@@ -2124,7 +2152,7 @@ msgstr ""
 msgid "Erase"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:447
+#: mrvCore/mrvHotkey.cpp:450
 msgid "Erase Mode"
 msgstr ""
 
@@ -2132,7 +2160,7 @@ msgstr ""
 msgid "Eraser Tool"
 msgstr ""
 
-#: mrvEdit/mrvEditCallbacks.cpp:1416
+#: mrvEdit/mrvEditCallbacks.cpp:1410
 msgid "Error saving {0}. {1}"
 msgstr ""
 
@@ -2141,7 +2169,7 @@ msgstr ""
 msgid "Errors"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:491
+#: mrvCore/mrvHotkey.cpp:493
 msgid "Escape"
 msgstr ""
 
@@ -2157,7 +2185,7 @@ msgstr ""
 msgid "Exception caught: "
 msgstr ""
 
-#: mrvFl/mrvPreferences.cpp:1792
+#: mrvFl/mrvPreferences.cpp:1795
 msgid "Expanded OCIO config to:"
 msgstr ""
 
@@ -2173,15 +2201,15 @@ msgid ""
 "in it."
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:437
+#: mrvCore/mrvHotkey.cpp:440
 msgid "Exposure Less"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:436
+#: mrvCore/mrvHotkey.cpp:439
 msgid "Exposure More"
 msgstr ""
 
-#: mrvPy/Image.cpp:410
+#: mrvPy/Image.cpp:453
 msgid "Exposure value."
 msgstr ""
 
@@ -2231,21 +2259,21 @@ msgstr ""
 msgid "FPS"
 msgstr ""
 
-#: mrvFl/mrvSession.cpp:357
+#: mrvFl/mrvSession.cpp:367
 msgid "Failed to open the file for reading."
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:484 mrvFl/mrvSession.cpp:318
+#: mrvPanels/mrvPythonPanel.cpp:484 mrvFl/mrvSession.cpp:328
 msgid "Failed to open the file for writing."
 msgstr ""
 
-#: mrvFl/mrvPreferences.cpp:205 mrvFl/mrvPreferences.cpp:225
-#: mrvFl/mrvPreferences.cpp:244
+#: mrvFl/mrvPreferences.cpp:206 mrvFl/mrvPreferences.cpp:226
+#: mrvFl/mrvPreferences.cpp:245
 msgid "Failed to retrieve {0}."
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:493 mrvFl/mrvSession.cpp:326
-#: mrvFl/mrvSession.cpp:371
+#: mrvPanels/mrvPythonPanel.cpp:493 mrvFl/mrvSession.cpp:336
+#: mrvFl/mrvSession.cpp:381
 msgid "Failed to write to the file."
 msgstr ""
 
@@ -2344,7 +2372,7 @@ msgstr ""
 msgid "Files"
 msgstr ""
 
-#: mrvPanels/mrvFilesPanel.cpp:402
+#: mrvPanels/mrvFilesPanel.cpp:400
 msgid "Filter EDLs"
 msgstr ""
 
@@ -2352,15 +2380,15 @@ msgstr ""
 msgid "Find:"
 msgstr ""
 
-#: mrvPanels/mrvBackgroundPanel.cpp:162
+#: mrvPanels/mrvBackgroundPanel.cpp:167
 msgid "First Color:"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1754 mrvCore/mrvHotkey.cpp:381
+#: mrvPanels/mrvImageInfoPanel.cpp:1754 mrvCore/mrvHotkey.cpp:384
 msgid "First Frame"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:388
+#: mrvCore/mrvHotkey.cpp:391
 msgid "First Image Version"
 msgstr ""
 
@@ -2368,11 +2396,11 @@ msgstr ""
 msgid "First frame of clip - User selected"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:344
+#: mrvCore/mrvHotkey.cpp:347
 msgid "Fit All"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:342
+#: mrvCore/mrvHotkey.cpp:345
 msgid "Fit Screen"
 msgstr ""
 
@@ -2392,19 +2420,19 @@ msgstr ""
 msgid "Flash Movie"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:363
+#: mrvCore/mrvHotkey.cpp:366
 msgid "Flip X"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:364
+#: mrvCore/mrvHotkey.cpp:367
 msgid "Flip Y"
 msgstr ""
 
-#: mrvPy/Image.cpp:318
+#: mrvPy/Image.cpp:361
 msgid "Flip image on X."
 msgstr ""
 
-#: mrvPy/Image.cpp:319
+#: mrvPy/Image.cpp:362
 msgid "Flip image on Y."
 msgstr ""
 
@@ -2416,7 +2444,7 @@ msgstr ""
 msgid "Float Values"
 msgstr ""
 
-#: mrvPy/Image.cpp:579 mrvPanels/mrvEnvironmentMapPanel.cpp:244
+#: mrvPy/Image.cpp:622 mrvPanels/mrvEnvironmentMapPanel.cpp:244
 msgid "Focal Length"
 msgstr ""
 
@@ -2474,19 +2502,19 @@ msgstr ""
 msgid "Frame Range"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:370
+#: mrvCore/mrvHotkey.cpp:373
 msgid "Frame Step Backwards"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:371
+#: mrvCore/mrvHotkey.cpp:374
 msgid "Frame Step FPS Backwards"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:374
+#: mrvCore/mrvHotkey.cpp:377
 msgid "Frame Step FPS Forwards"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:373
+#: mrvCore/mrvHotkey.cpp:376
 msgid "Frame Step Forwards"
 msgstr ""
 
@@ -2562,15 +2590,15 @@ msgstr ""
 msgid "Gamma"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:439
+#: mrvCore/mrvHotkey.cpp:442
 msgid "Gamma Less"
 msgstr ""
 
-#: mrvPy/Image.cpp:385
+#: mrvPy/Image.cpp:428
 msgid "Gamma Level value."
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:438
+#: mrvCore/mrvHotkey.cpp:441
 msgid "Gamma More"
 msgstr ""
 
@@ -2634,11 +2662,11 @@ msgstr ""
 msgid "Get the version of mrv2."
 msgstr ""
 
-#: mrvPy/Image.cpp:643
+#: mrvPy/Image.cpp:730
 msgid "Gets a list of all input color spaces."
 msgstr ""
 
-#: mrvPy/Image.cpp:656
+#: mrvPy/Image.cpp:743
 msgid "Gets the current Display/View."
 msgstr ""
 
@@ -2646,11 +2674,15 @@ msgstr ""
 msgid "Gets the current FPS of timeline."
 msgstr ""
 
-#: mrvPy/Image.cpp:631
+#: mrvPy/Image.cpp:718
 msgid "Gets the current OCIO config file."
 msgstr ""
 
-#: mrvPy/Image.cpp:639
+#: mrvPy/Image.cpp:710
+msgid "Gets the current background options."
+msgstr ""
+
+#: mrvPy/Image.cpp:726
 msgid "Gets the current input color space."
 msgstr ""
 
@@ -2678,8 +2710,12 @@ msgstr ""
 msgid "Green"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:360
+#: mrvCore/mrvHotkey.cpp:363
 msgid "Green Channel"
+msgstr ""
+
+#: mrvPy/Image.cpp:346
+msgid "Green Channel."
 msgstr ""
 
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:281
@@ -2735,11 +2771,11 @@ msgstr ""
 msgid "Height of clip"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1175
+#: mrvUI/mrvMenus.cpp:1191
 msgid "Help/About"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1172
+#: mrvUI/mrvMenus.cpp:1188
 msgid "Help/Documentation"
 msgstr ""
 
@@ -2751,11 +2787,11 @@ msgstr ""
 msgid "Hex Values"
 msgstr ""
 
-#: mrvApp/App.cpp:490 mrvUI/mrvMenus.cpp:1187
+#: mrvApp/App.cpp:497 mrvUI/mrvMenus.cpp:1203
 msgid "Hide Others"
 msgstr ""
 
-#: mrvApp/App.cpp:489 mrvUI/mrvMenus.cpp:1186
+#: mrvApp/App.cpp:496 mrvUI/mrvMenus.cpp:1202
 msgid "Hide mrv2"
 msgstr ""
 
@@ -2763,7 +2799,7 @@ msgstr ""
 msgid "Histogram"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:500
+#: mrvCore/mrvHotkey.cpp:502
 msgid "Home"
 msgstr ""
 
@@ -2771,7 +2807,7 @@ msgstr ""
 msgid "Horizontal Aperture of the Projection."
 msgstr ""
 
-#: mrvPy/Image.cpp:573
+#: mrvPy/Image.cpp:616
 msgid "Horizontal aperture"
 msgstr ""
 
@@ -2799,7 +2835,7 @@ msgstr ""
 msgid "Hotkeys"
 msgstr ""
 
-#: mrvFl/mrvPreferences.cpp:1325
+#: mrvFl/mrvPreferences.cpp:1327
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr ""
 
@@ -2808,7 +2844,7 @@ msgstr ""
 msgid "How to display timeline by default."
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:462
+#: mrvCore/mrvHotkey.cpp:464
 msgid "Hud Window"
 msgstr ""
 
@@ -2844,7 +2880,7 @@ msgstr ""
 msgid "Image Channels"
 msgstr ""
 
-#: mrvPy/Image.cpp:544
+#: mrvPy/Image.cpp:587
 msgid "Image Filters"
 msgstr ""
 
@@ -2852,23 +2888,23 @@ msgstr ""
 msgid "Image coordinate of pixel under mouse."
 msgstr ""
 
-#: mrvPy/Image.cpp:464
+#: mrvPy/Image.cpp:507
 msgid "Image filters."
 msgstr ""
 
-#: mrvFl/mrvSaving.cpp:178 mrvFl/mrvSaving.cpp:474
+#: mrvFl/mrvSaving.cpp:178 mrvFl/mrvSaving.cpp:480
 msgid "Image info: {0} {1}"
 msgstr ""
 
-#: mrvPy/Image.cpp:328
+#: mrvPy/Image.cpp:357 mrvPy/Image.cpp:371
 msgid "Image mirroring."
 msgstr ""
 
-#: mrvPy/Image.cpp:553
+#: mrvPy/Image.cpp:596
 msgid "Image options."
 msgstr ""
 
-#: mrvFl/mrvSaving.cpp:156 mrvFl/mrvSaving.cpp:452 mrvPDF/mrvPDFCreator.cpp:277
+#: mrvFl/mrvSaving.cpp:156 mrvFl/mrvSaving.cpp:458 mrvPDF/mrvPDFCreator.cpp:277
 msgid "Image too big.  Will save the viewport size."
 msgstr ""
 
@@ -2876,34 +2912,34 @@ msgstr ""
 msgid "Image zoom setting."
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:924
+#: mrvUI/mrvMenus.cpp:940
 msgid "Image/Version/First"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:927
+#: mrvUI/mrvMenus.cpp:943
 msgid "Image/Version/Last"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:933
+#: mrvUI/mrvMenus.cpp:949
 msgid "Image/Version/Next"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:930
+#: mrvUI/mrvMenus.cpp:946
 msgid "Image/Version/Previous"
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:356 mrvFl/mrvFileRequester.cpp:492
-#: mrvFl/mrvFileRequester.cpp:511
+#: mrvFl/mrvFileRequester.cpp:358 mrvFl/mrvFileRequester.cpp:494
+#: mrvFl/mrvFileRequester.cpp:513
 msgid "Images (*.{"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1157
+#: mrvUI/mrvMenus.cpp:1173
 msgid ""
 "In '{0}' expected a function a tuple containing a Python function and a "
 "string with menu options in it."
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1132
+#: mrvUI/mrvMenus.cpp:1148
 msgid ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
 "function and a string with menu options in it."
@@ -2913,7 +2949,7 @@ msgstr ""
 msgid "In High"
 msgstr ""
 
-#: mrvPy/Image.cpp:383
+#: mrvPy/Image.cpp:426
 msgid "In High Level value."
 msgstr ""
 
@@ -2921,7 +2957,7 @@ msgstr ""
 msgid "In Low"
 msgstr ""
 
-#: mrvPy/Image.cpp:381
+#: mrvPy/Image.cpp:424
 msgid "In Low Level value."
 msgstr ""
 
@@ -2943,23 +2979,23 @@ msgstr ""
 msgid "Input Color Space"
 msgstr ""
 
-#: mrvApp/App.cpp:316
+#: mrvApp/App.cpp:323
 msgid "Input color space."
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:499
+#: mrvCore/mrvHotkey.cpp:501
 msgid "Insert"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:405
+#: mrvCore/mrvHotkey.cpp:408
 msgid "Insert Frame"
 msgstr ""
 
-#: mrvPy/Image.cpp:294
+#: mrvPy/Image.cpp:319
 msgid "Invalid OCIO Display/View '{0}'."
 msgstr ""
 
-#: mrvPy/Image.cpp:234
+#: mrvPy/Image.cpp:259
 msgid "Invalid OCIO Ics '{0}'."
 msgstr ""
 
@@ -2967,7 +3003,7 @@ msgstr ""
 msgid "Invalid font for text drawing"
 msgstr ""
 
-#: mrvEdit/mrvEditCallbacks.cpp:185
+#: mrvEdit/mrvEditCallbacks.cpp:175
 msgid "Invalid index for add clip to timeline."
 msgstr ""
 
@@ -2975,7 +3011,7 @@ msgstr ""
 msgid "Invert"
 msgstr ""
 
-#: mrvPy/Image.cpp:361
+#: mrvPy/Image.cpp:404
 msgid "Invert the color values."
 msgstr ""
 
@@ -3029,31 +3065,31 @@ msgstr ""
 msgid "LUT"
 msgstr ""
 
-#: mrvPy/Image.cpp:512
+#: mrvPy/Image.cpp:555
 msgid "LUT enabled."
 msgstr ""
 
-#: mrvApp/App.cpp:325
+#: mrvApp/App.cpp:332
 msgid "LUT file name."
 msgstr ""
 
-#: mrvPy/Image.cpp:514
+#: mrvPy/Image.cpp:557
 msgid "LUT filename."
 msgstr ""
 
-#: mrvApp/App.cpp:328
+#: mrvApp/App.cpp:335
 msgid "LUT operation order."
 msgstr ""
 
-#: mrvPy/Image.cpp:526
+#: mrvPy/Image.cpp:569
 msgid "LUT options."
 msgstr ""
 
-#: mrvPy/Image.cpp:517
+#: mrvPy/Image.cpp:560
 msgid "LUT transformation order."
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:443
+#: mrvFl/mrvFileRequester.cpp:445
 msgid "LUTS (*.{"
 msgstr ""
 
@@ -3083,11 +3119,11 @@ msgstr ""
 msgid "Laser"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1758 mrvCore/mrvHotkey.cpp:382
+#: mrvPanels/mrvImageInfoPanel.cpp:1758 mrvCore/mrvHotkey.cpp:385
 msgid "Last Frame"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:391
+#: mrvCore/mrvHotkey.cpp:394
 msgid "Last Image Version"
 msgstr ""
 
@@ -3095,23 +3131,23 @@ msgstr ""
 msgid "Last frame of clip - User selected"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:506
+#: mrvCore/mrvHotkey.cpp:508
 msgid "Left"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:517
+#: mrvCore/mrvHotkey.cpp:519
 msgid "LeftAlt"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:513
+#: mrvCore/mrvHotkey.cpp:515
 msgid "LeftCtrl"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:519
+#: mrvCore/mrvHotkey.cpp:521
 msgid "LeftMeta"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:511
+#: mrvCore/mrvHotkey.cpp:513
 msgid "LeftShift"
 msgstr ""
 
@@ -3123,11 +3159,11 @@ msgstr ""
 msgid "Levels"
 msgstr ""
 
-#: mrvPy/Image.cpp:488
+#: mrvPy/Image.cpp:531
 msgid "Levels options :class:`mrv2.image.Levels`."
 msgstr ""
 
-#: mrvPy/Image.cpp:398
+#: mrvPy/Image.cpp:441
 msgid "Levels values."
 msgstr ""
 
@@ -3151,35 +3187,35 @@ msgstr ""
 msgid "Load"
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:482
+#: mrvFl/mrvFileRequester.cpp:484
 msgid "Load Audio"
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:306
+#: mrvFl/mrvFileRequester.cpp:308
 msgid "Load Directory"
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:365
+#: mrvFl/mrvFileRequester.cpp:367
 msgid "Load Image"
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:445
+#: mrvFl/mrvFileRequester.cpp:447
 msgid "Load LUT"
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:368
+#: mrvFl/mrvFileRequester.cpp:370
 msgid "Load Movie or Sequence"
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:597
+#: mrvFl/mrvFileRequester.cpp:602
 msgid "Load OCIO Config"
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:421
+#: mrvFl/mrvFileRequester.cpp:423
 msgid "Load Python Script"
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:463
+#: mrvFl/mrvFileRequester.cpp:465
 msgid "Load Subtitle"
 msgstr ""
 
@@ -3187,7 +3223,7 @@ msgstr ""
 msgid "Load an image or movie file"
 msgstr ""
 
-#: mrvFl/mrvPreferences.cpp:442
+#: mrvFl/mrvPreferences.cpp:443
 msgid "Loaded color themes from \"{0}\"."
 msgstr ""
 
@@ -3196,7 +3232,7 @@ msgstr ""
 msgid "Loading"
 msgstr ""
 
-#: mrvFl/mrvPreferences.cpp:790
+#: mrvFl/mrvPreferences.cpp:792
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr ""
 
@@ -3216,7 +3252,7 @@ msgstr ""
 msgid "Loop"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:384
+#: mrvCore/mrvHotkey.cpp:387
 msgid "Loop Playback"
 msgstr ""
 
@@ -3265,7 +3301,7 @@ msgstr ""
 msgid "MXF Movie"
 msgstr ""
 
-#: mrvPy/Image.cpp:455
+#: mrvPy/Image.cpp:498
 msgid "Magnify filter :class:`mrv2.image.ImageFilter`."
 msgstr ""
 
@@ -3334,7 +3370,7 @@ msgstr ""
 msgid "Mean"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:1641 mrvFl/mrvCallbacks.cpp:1679
+#: mrvFl/mrvCallbacks.cpp:1691 mrvFl/mrvCallbacks.cpp:1729
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1413
 msgid "Media"
 msgstr ""
@@ -3358,7 +3394,7 @@ msgstr ""
 msgid "Memory without Compression"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:522
+#: mrvCore/mrvHotkey.cpp:524
 msgid "Menu"
 msgstr ""
 
@@ -3374,7 +3410,7 @@ msgstr ""
 msgid "Metadata"
 msgstr ""
 
-#: mrvPy/Image.cpp:452
+#: mrvPy/Image.cpp:495
 msgid "Minify filter :class:`mrv2.image.ImageFilter`."
 msgstr ""
 
@@ -3382,7 +3418,7 @@ msgstr ""
 msgid "Minimum"
 msgstr ""
 
-#: mrvPy/Image.cpp:482
+#: mrvPy/Image.cpp:525
 msgid "Mirror on X, Y or both :class:`mrv2.image.Mirror`."
 msgstr ""
 
@@ -3402,11 +3438,11 @@ msgstr ""
 msgid "Motion Estimation Methods"
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:361 mrvFl/mrvFileRequester.cpp:513
+#: mrvFl/mrvFileRequester.cpp:363 mrvFl/mrvFileRequester.cpp:515
 msgid "Movies (*.{"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:539
+#: mrvCore/mrvHotkey.cpp:541
 msgid "Multiply"
 msgstr ""
 
@@ -3436,10 +3472,6 @@ msgid ""
 "Need to reboot mrv2 to change language.  Are you sure you want to continue?"
 msgstr ""
 
-#: mrvEdit/mrvEditCallbacks.cpp:1551
-msgid "Neither video nor audio tracks found."
-msgstr ""
-
 #: mrvPanels/mrvPanelsAux.h:20 mrvFl/mrvCallbacks.cpp:106
 #: mrvUI/mrvMenus.cpp:439
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1403
@@ -3447,23 +3479,23 @@ msgstr ""
 msgid "Network"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:400
+#: mrvCore/mrvHotkey.cpp:403
 msgid "Next Channel"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:394
+#: mrvCore/mrvHotkey.cpp:397
 msgid "Next Image"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:397
+#: mrvCore/mrvHotkey.cpp:400
 msgid "Next Image Limited"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:390
+#: mrvCore/mrvHotkey.cpp:393
 msgid "Next Image Version"
 msgstr ""
 
-#: mrvPanels/mrvFilesPanel.cpp:392 mrvPanels/mrvComparePanel.cpp:479
+#: mrvPanels/mrvFilesPanel.cpp:390 mrvPanels/mrvComparePanel.cpp:479
 msgid "Next filename"
 msgstr ""
 
@@ -3473,11 +3505,11 @@ msgstr ""
 
 #: mrvPanels/mrvPythonPanel.cpp:476 mrvPanels/mrvImageInfoPanel.cpp:1654
 #: mrvFl/mrvLanguages.cpp:136 mrvFl/mrvHotkey.cpp:99
-#: mrvFl/mrvCallbacks.cpp:1735
+#: mrvFl/mrvCallbacks.cpp:1785
 msgid "No"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:2033
+#: mrvFl/mrvCallbacks.cpp:2083
 msgid "No item selected"
 msgstr ""
 
@@ -3512,11 +3544,11 @@ msgid ""
 "a versioning string."
 msgstr ""
 
-#: mrvEdit/mrvEditCallbacks.cpp:1669
+#: mrvEdit/mrvEditCallbacks.cpp:1675
 msgid "No video children found."
 msgstr ""
 
-#: mrvEdit/mrvEditCallbacks.cpp:1663
+#: mrvEdit/mrvEditCallbacks.cpp:1669
 msgid "No video track found."
 msgstr ""
 
@@ -3545,7 +3577,7 @@ msgstr ""
 msgid "Nov"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:523
+#: mrvCore/mrvHotkey.cpp:525
 msgid "NumLock"
 msgstr ""
 
@@ -3584,7 +3616,7 @@ msgstr ""
 msgid "OCIO Defaults"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:441
+#: mrvCore/mrvHotkey.cpp:444
 msgid "OCIO Display"
 msgstr ""
 
@@ -3592,27 +3624,27 @@ msgstr ""
 msgid "OCIO Display/View"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1933 mrvCore/mrvHotkey.cpp:440
+#: mrvPanels/mrvImageInfoPanel.cpp:1933 mrvCore/mrvHotkey.cpp:443
 msgid "OCIO Input Color Space"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:442
+#: mrvCore/mrvHotkey.cpp:445
 msgid "OCIO View"
 msgstr ""
 
-#: mrvPy/Image.cpp:164
+#: mrvPy/Image.cpp:189
 msgid "OCIO config '{0}' does not exist or is not readable."
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:596
+#: mrvFl/mrvFileRequester.cpp:601
 msgid "OCIO config (*.{"
 msgstr ""
 
-#: mrvPy/Image.cpp:160
+#: mrvPy/Image.cpp:185
 msgid "OCIO config file cannot be empty."
 msgstr ""
 
-#: mrvFl/mrvPreferences.cpp:1784
+#: mrvFl/mrvPreferences.cpp:1787
 msgid "OCIO config is now:"
 msgstr ""
 
@@ -3666,7 +3698,7 @@ msgstr ""
 msgid "Opacity of pen stroke"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:325
+#: mrvCore/mrvHotkey.cpp:328
 msgid "Open Directory"
 msgstr ""
 
@@ -3678,19 +3710,19 @@ msgstr ""
 msgid "Open Logs on Window"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:326
+#: mrvCore/mrvHotkey.cpp:329
 msgid "Open Movie or Sequence"
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:559 mrvCore/mrvHotkey.cpp:327
+#: mrvFl/mrvFileRequester.cpp:564 mrvCore/mrvHotkey.cpp:330
 msgid "Open Session"
 msgstr ""
 
-#: mrvPanels/mrvFilesPanel.cpp:352
+#: mrvPanels/mrvFilesPanel.cpp:350
 msgid "Open a filename"
 msgstr ""
 
-#: mrvPanels/mrvFilesPanel.cpp:360
+#: mrvPanels/mrvFilesPanel.cpp:358
 msgid "Open a filename with audio"
 msgstr ""
 
@@ -3730,7 +3762,7 @@ msgstr ""
 msgid "OpenGL"
 msgstr ""
 
-#: mrvApp/App.cpp:292
+#: mrvApp/App.cpp:299
 msgid "OpenTimelineIO Edit mode."
 msgstr ""
 
@@ -3750,7 +3782,7 @@ msgstr ""
 msgid "Out High"
 msgstr ""
 
-#: mrvPy/Image.cpp:389
+#: mrvPy/Image.cpp:432
 msgid "Out High Level value."
 msgstr ""
 
@@ -3758,7 +3790,7 @@ msgstr ""
 msgid "Out Low"
 msgstr ""
 
-#: mrvPy/Image.cpp:387
+#: mrvPy/Image.cpp:430
 msgid "Out Low Level value."
 msgstr ""
 
@@ -3766,7 +3798,7 @@ msgstr ""
 msgid "Output"
 msgstr ""
 
-#: mrvFl/mrvSaving.cpp:199 mrvFl/mrvSaving.cpp:495
+#: mrvFl/mrvSaving.cpp:205 mrvFl/mrvSaving.cpp:507
 msgid "Output info: {0} {1}"
 msgstr ""
 
@@ -3804,15 +3836,15 @@ msgstr ""
 msgid "PXR24"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:505
+#: mrvCore/mrvHotkey.cpp:507
 msgid "PageDown"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:501
+#: mrvCore/mrvHotkey.cpp:503
 msgid "PageUp"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:1649 mrvFl/mrvCallbacks.cpp:1687
+#: mrvFl/mrvCallbacks.cpp:1699 mrvFl/mrvCallbacks.cpp:1737
 msgid "Pan And Zoom"
 msgstr ""
 
@@ -3828,7 +3860,7 @@ msgstr ""
 msgid "Panel/One Panel Only"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:404
+#: mrvCore/mrvHotkey.cpp:407
 msgid "Paste Frame"
 msgstr ""
 
@@ -3841,15 +3873,15 @@ msgstr ""
 msgid "Path Mappings"
 msgstr ""
 
-#: mrvFl/mrvPreferences.cpp:728
+#: mrvFl/mrvPreferences.cpp:730
 msgid "Path mappings have been loaded from \"{0}mrv2.paths.prefs\"."
 msgstr ""
 
-#: mrvFl/mrvPreferences.cpp:1280
+#: mrvFl/mrvPreferences.cpp:1282
 msgid "Path mappings have been saved to \"{0}mrv2.paths.prefs\"."
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:498
+#: mrvCore/mrvHotkey.cpp:500
 msgid "Pause"
 msgstr ""
 
@@ -3857,11 +3889,11 @@ msgstr ""
 msgid "Pen"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:453
+#: mrvCore/mrvHotkey.cpp:456
 msgid "Pen Size Less"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:452
+#: mrvCore/mrvHotkey.cpp:455
 msgid "Pen Size More"
 msgstr ""
 
@@ -3883,11 +3915,11 @@ msgstr ""
 msgid "Pick"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:1500
+#: mrvFl/mrvCallbacks.cpp:1550
 msgid "Pick Color"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:1514
+#: mrvFl/mrvCallbacks.cpp:1564
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2689
 msgid "Pick Draw Color and Alpha"
 msgstr ""
@@ -3926,19 +3958,19 @@ msgstr ""
 msgid "Play"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:375
+#: mrvCore/mrvHotkey.cpp:378
 msgid "Play Backwards"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:376
+#: mrvCore/mrvHotkey.cpp:379
 msgid "Play Backwards / Change Speed"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:378
+#: mrvCore/mrvHotkey.cpp:381
 msgid "Play Forwards"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:379
+#: mrvCore/mrvHotkey.cpp:382
 msgid "Play Forwards / Change Speed"
 msgstr ""
 
@@ -3950,7 +3982,7 @@ msgstr ""
 msgid "Play forwards."
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:377
+#: mrvCore/mrvHotkey.cpp:380
 msgid "Play in Current Direction"
 msgstr ""
 
@@ -3962,7 +3994,7 @@ msgstr ""
 msgid "Play sequence forward."
 msgstr ""
 
-#: mrvApp/App.cpp:262
+#: mrvApp/App.cpp:269
 msgid "Play timelines, movies, and image sequences."
 msgstr ""
 
@@ -3971,23 +4003,23 @@ msgstr ""
 msgid "Playback"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:385
+#: mrvCore/mrvHotkey.cpp:388
 msgid "Playback Once"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:386
+#: mrvCore/mrvHotkey.cpp:389
 msgid "Playback Ping Pong"
 msgstr ""
 
-#: mrvApp/App.cpp:301
+#: mrvApp/App.cpp:308
 msgid "Playback loop mode."
 msgstr ""
 
-#: mrvApp/App.cpp:297
+#: mrvApp/App.cpp:304
 msgid "Playback mode."
 msgstr ""
 
-#: mrvApp/App.cpp:294
+#: mrvApp/App.cpp:301
 msgid "Playback speed."
 msgstr ""
 
@@ -3995,11 +4027,11 @@ msgstr ""
 msgid "Playback state :class:`mrv2.timeline.Playbacks` of the File Media."
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:795
+#: mrvUI/mrvMenus.cpp:812
 msgid "Playback/Annotation/Clear"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:798
+#: mrvUI/mrvMenus.cpp:815
 msgid "Playback/Annotation/Clear All"
 msgstr ""
 
@@ -4015,16 +4047,24 @@ msgstr ""
 msgid "Playback/Go to/End"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:789
+#: mrvUI/mrvMenus.cpp:806
 msgid "Playback/Go to/Next Annotation"
+msgstr ""
+
+#: mrvUI/mrvMenus.cpp:793
+msgid "Playback/Go to/Next Clip"
 msgstr ""
 
 #: mrvUI/mrvMenus.cpp:772
 msgid "Playback/Go to/Next Frame"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:785
+#: mrvUI/mrvMenus.cpp:802
 msgid "Playback/Go to/Previous Annotation"
+msgstr ""
+
+#: mrvUI/mrvMenus.cpp:789
+msgid "Playback/Go to/Previous Clip"
 msgstr ""
 
 #: mrvUI/mrvMenus.cpp:769
@@ -4077,7 +4117,7 @@ msgstr ""
 msgid "Port"
 msgstr ""
 
-#: mrvApp/App.cpp:386
+#: mrvApp/App.cpp:393
 msgid ""
 "Port number for the server to listen to or for the client to connect to."
 msgstr ""
@@ -4097,7 +4137,7 @@ msgstr ""
 msgid "Preferences"
 msgstr ""
 
-#: mrvFl/mrvPreferences.cpp:1333
+#: mrvFl/mrvPreferences.cpp:1335
 msgid "Preferences have been saved to: \"{0}mrv2.prefs\"."
 msgstr ""
 
@@ -4113,23 +4153,23 @@ msgstr ""
 msgid "Preview Thumbnails"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:399
+#: mrvCore/mrvHotkey.cpp:402
 msgid "Previous Channel"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:393
+#: mrvCore/mrvHotkey.cpp:396
 msgid "Previous Image"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:396
+#: mrvCore/mrvHotkey.cpp:399
 msgid "Previous Image Limited"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:389
+#: mrvCore/mrvHotkey.cpp:392
 msgid "Previous Image Version"
 msgstr ""
 
-#: mrvPanels/mrvFilesPanel.cpp:384 mrvPanels/mrvComparePanel.cpp:466
+#: mrvPanels/mrvFilesPanel.cpp:382 mrvPanels/mrvComparePanel.cpp:466
 msgid "Previous filename"
 msgstr ""
 
@@ -4141,7 +4181,7 @@ msgstr ""
 msgid "Previously used Hosts"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:495
+#: mrvCore/mrvHotkey.cpp:497
 msgid "Print"
 msgstr ""
 
@@ -4185,11 +4225,11 @@ msgstr ""
 msgid "Python"
 msgstr ""
 
-#: mrvApp/App.cpp:453
+#: mrvApp/App.cpp:460
 msgid "Python Error: "
 msgstr ""
 
-#: mrvApp/App.cpp:334
+#: mrvApp/App.cpp:341
 msgid "Python Script to run and exit."
 msgstr ""
 
@@ -4201,11 +4241,11 @@ msgstr ""
 msgid "Quicktime Movie"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:339
+#: mrvCore/mrvHotkey.cpp:342
 msgid "Quit Program"
 msgstr ""
 
-#: mrvApp/App.cpp:493 mrvUI/mrvMenus.cpp:1189
+#: mrvApp/App.cpp:500 mrvUI/mrvMenus.cpp:1205
 msgid "Quit mrv2"
 msgstr ""
 
@@ -4254,7 +4294,7 @@ msgstr ""
 msgid "Rectangle"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:449
+#: mrvCore/mrvHotkey.cpp:452
 msgid "Rectangle Mode"
 msgstr ""
 
@@ -4266,15 +4306,19 @@ msgstr ""
 msgid "Red"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:359
+#: mrvCore/mrvHotkey.cpp:362
 msgid "Red Channel"
+msgstr ""
+
+#: mrvPy/Image.cpp:345
+msgid "Red Channel."
 msgstr ""
 
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:273
 msgid "Red value of image pixel under mouse."
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:455
+#: mrvCore/mrvHotkey.cpp:458
 msgid "Redo Draw"
 msgstr ""
 
@@ -4286,7 +4330,7 @@ msgstr ""
 msgid "Reduce gain 1/2 stop (divide by sqrt(2))."
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:352
+#: mrvFl/mrvFileRequester.cpp:354
 msgid "Reels (*.{"
 msgstr ""
 
@@ -4354,7 +4398,7 @@ msgstr ""
 msgid "Remote to Local Path Mapping"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:408
+#: mrvCore/mrvHotkey.cpp:411
 msgid "Remove Clip"
 msgstr ""
 
@@ -4480,7 +4524,7 @@ msgstr ""
 msgid "Reset"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:435
+#: mrvCore/mrvHotkey.cpp:438
 msgid "Reset Gain/Gamma"
 msgstr ""
 
@@ -4488,7 +4532,7 @@ msgstr ""
 msgid "Reset Hotkeys"
 msgstr ""
 
-#: mrvApp/App.cpp:341
+#: mrvApp/App.cpp:348
 msgid "Reset hotkeys to defaults."
 msgstr ""
 
@@ -4496,7 +4540,7 @@ msgstr ""
 msgid "Reset hotkeys to mrv2's default configuration."
 msgstr ""
 
-#: mrvApp/App.cpp:338
+#: mrvApp/App.cpp:345
 msgid "Reset settings to defaults."
 msgstr ""
 
@@ -4504,11 +4548,11 @@ msgstr ""
 msgid "Reset to default value"
 msgstr ""
 
-#: mrvFl/mrvPreferences.cpp:797
+#: mrvFl/mrvPreferences.cpp:799
 msgid "Reseting hotkeys to default."
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:343
+#: mrvCore/mrvHotkey.cpp:346
 msgid "Resize Main Window to Fit"
 msgstr ""
 
@@ -4529,7 +4573,7 @@ msgstr ""
 msgid "Retrieve the cache memory setting in gigabytes."
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:494
+#: mrvCore/mrvHotkey.cpp:496
 msgid "Return"
 msgstr ""
 
@@ -4589,7 +4633,7 @@ msgstr ""
 msgid "Return the root path to the insallation of mrv2."
 msgstr ""
 
-#: mrvApp/App.cpp:394
+#: mrvApp/App.cpp:401
 msgid "Return the version and exit."
 msgstr ""
 
@@ -4647,23 +4691,23 @@ msgstr ""
 msgid "Revert settings to last saved preferences."
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:509
+#: mrvCore/mrvHotkey.cpp:511
 msgid "Right"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:518
+#: mrvCore/mrvHotkey.cpp:520
 msgid "RightAlt"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:515
+#: mrvCore/mrvHotkey.cpp:517
 msgid "RightCtrl"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:521
+#: mrvCore/mrvHotkey.cpp:523
 msgid "RightMeta"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:512
+#: mrvCore/mrvHotkey.cpp:514
 msgid "RightShift"
 msgstr ""
 
@@ -4693,15 +4737,15 @@ msgid ""
 "Rotation in Y of the projection.  Use middle mouse button to move around."
 msgstr ""
 
-#: mrvPy/Image.cpp:581
+#: mrvPy/Image.cpp:624
 msgid "Rotation on X"
 msgstr ""
 
-#: mrvPy/Image.cpp:583
+#: mrvPy/Image.cpp:626
 msgid "Rotation on Y"
 msgstr ""
 
-#: mrvApp/App.cpp:441
+#: mrvApp/App.cpp:448
 msgid "Running python script '{0}'"
 msgstr ""
 
@@ -4710,7 +4754,7 @@ msgid "S"
 msgstr ""
 
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:605
-#: mrvCore/mrvHotkey.cpp:349
+#: mrvCore/mrvHotkey.cpp:352
 msgid "Safe Areas"
 msgstr ""
 
@@ -4732,43 +4776,43 @@ msgid ""
 "OpenEXRs from an 8-bit movie and changing OpenEXR's pixel type."
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:534
+#: mrvFl/mrvFileRequester.cpp:539
 msgid "Save Annotations to PDF"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:328
+#: mrvCore/mrvHotkey.cpp:331
 msgid "Save Image"
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:518 mrvCore/mrvHotkey.cpp:330
+#: mrvFl/mrvFileRequester.cpp:523 mrvCore/mrvHotkey.cpp:333
 msgid "Save Movie or Sequence"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:331
+#: mrvCore/mrvHotkey.cpp:334
 msgid "Save OTIO Timeline"
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:380
+#: mrvFl/mrvFileRequester.cpp:382
 msgid "Save OTIO timeline"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:332
+#: mrvCore/mrvHotkey.cpp:335
 msgid "Save PDF Document"
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:404
+#: mrvFl/mrvFileRequester.cpp:406
 msgid "Save Python Script"
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:576 mrvCore/mrvHotkey.cpp:333
+#: mrvFl/mrvFileRequester.cpp:581 mrvCore/mrvHotkey.cpp:336
 msgid "Save Session"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:334
+#: mrvCore/mrvHotkey.cpp:337
 msgid "Save Session As"
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:495
+#: mrvFl/mrvFileRequester.cpp:497
 msgid "Save Single Frame"
 msgstr ""
 
@@ -4796,7 +4840,7 @@ msgstr ""
 msgid "Save current .otio file with relative paths."
 msgstr ""
 
-#: mrvPanels/mrvPlaylistPanel.cpp:313
+#: mrvPanels/mrvPlaylistPanel.cpp:316
 msgid ""
 "Save current EDL to a permanent location, making paths relative if possible."
 msgstr ""
@@ -4831,7 +4875,7 @@ msgstr ""
 msgid "Scripts/Add To Script List"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:497
+#: mrvCore/mrvHotkey.cpp:499
 msgid "ScrollLock"
 msgstr ""
 
@@ -4840,7 +4884,7 @@ msgstr ""
 msgid "Scrub"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:444
+#: mrvCore/mrvHotkey.cpp:447
 msgid "Scrub Mode"
 msgstr ""
 
@@ -4861,7 +4905,7 @@ msgstr ""
 msgid "Search String:"
 msgstr ""
 
-#: mrvPanels/mrvBackgroundPanel.cpp:189
+#: mrvPanels/mrvBackgroundPanel.cpp:194
 msgid "Second Color:"
 msgstr ""
 
@@ -4890,7 +4934,7 @@ msgstr ""
 msgid "Seek to a time in timeline."
 msgstr ""
 
-#: mrvApp/App.cpp:306
+#: mrvApp/App.cpp:313
 msgid "Seek to the given time."
 msgstr ""
 
@@ -4914,7 +4958,7 @@ msgstr ""
 msgid "Select default looping mode in timeline."
 msgstr ""
 
-#: mrvPanels/mrvFilesPanel.cpp:261
+#: mrvPanels/mrvFilesPanel.cpp:259
 msgid "Select main A image."
 msgstr ""
 
@@ -4943,7 +4987,7 @@ msgstr ""
 msgid "Selects the background color of areas outside the current image."
 msgstr ""
 
-#: mrvPanels/mrvBackgroundPanel.cpp:144
+#: mrvPanels/mrvBackgroundPanel.cpp:148
 msgid "Selects the checker size."
 msgstr ""
 
@@ -4959,7 +5003,7 @@ msgstr ""
 msgid "Selects the color of the selection rectangle over the current image."
 msgstr ""
 
-#: mrvPanels/mrvBackgroundPanel.cpp:85
+#: mrvPanels/mrvBackgroundPanel.cpp:86
 msgid "Selects the current background type from the list"
 msgstr ""
 
@@ -4979,7 +5023,7 @@ msgstr ""
 msgid "Selects the current pen size."
 msgstr ""
 
-#: mrvPanels/mrvBackgroundPanel.cpp:164
+#: mrvPanels/mrvBackgroundPanel.cpp:169
 msgid "Selects the first color."
 msgstr ""
 
@@ -4993,11 +5037,11 @@ msgid ""
 "Selects the number of fading frames previous to the frame of the annotation."
 msgstr ""
 
-#: mrvPanels/mrvBackgroundPanel.cpp:191
+#: mrvPanels/mrvBackgroundPanel.cpp:196
 msgid "Selects the second color in Checkers."
 msgstr ""
 
-#: mrvPanels/mrvBackgroundPanel.cpp:108
+#: mrvPanels/mrvBackgroundPanel.cpp:113
 msgid "Selects the solid color."
 msgstr ""
 
@@ -5009,7 +5053,7 @@ msgstr ""
 msgid "Sep"
 msgstr ""
 
-#: mrvPy/Image.cpp:615
+#: mrvPy/Image.cpp:658
 msgid "Separation between left and right eye."
 msgstr ""
 
@@ -5033,7 +5077,7 @@ msgstr ""
 msgid "Server connection lost."
 msgstr ""
 
-#: mrvNetwork/mrvCommandInterpreter.cpp:1362
+#: mrvNetwork/mrvCommandInterpreter.cpp:1354
 msgid "Server protocol version is {0}.  Client protocol version is {1}"
 msgstr ""
 
@@ -5045,20 +5089,24 @@ msgstr ""
 msgid "Server stopped."
 msgstr ""
 
-#: mrvApp/App.cpp:491 mrvUI/mrvMenus.cpp:1188
+#: mrvApp/App.cpp:498 mrvUI/mrvMenus.cpp:1204
 msgid "Services"
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:555 mrvFl/mrvFileRequester.cpp:572
+#: mrvFl/mrvFileRequester.cpp:560 mrvFl/mrvFileRequester.cpp:577
 msgid "Session"
 msgstr ""
 
-#: mrvFl/mrvSession.cpp:339
+#: mrvFl/mrvSession.cpp:349
 msgid "Session saved to \"{0}\"."
 msgstr ""
 
 #: mrvWidgets/mrvMainWindow.cpp:203
 msgid "Session: "
+msgstr ""
+
+#: mrvFl/mrvFileRequester.cpp:517
+msgid "Sessions (*.{"
 msgstr ""
 
 #: mrvPy/Settings.cpp:442
@@ -5077,7 +5125,7 @@ msgstr ""
 msgid "Set FFmpeg YUV To RGB Conversion."
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:458
+#: mrvCore/mrvHotkey.cpp:461
 msgid "Set In Point"
 msgstr ""
 
@@ -5085,7 +5133,7 @@ msgstr ""
 msgid "Set Language to {0}, Numbers to {1}"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:459
+#: mrvCore/mrvHotkey.cpp:462
 msgid "Set Out Point"
 msgstr ""
 
@@ -5121,7 +5169,7 @@ msgstr ""
 msgid "Set a new stereo file index."
 msgstr ""
 
-#: mrvPy/Image.cpp:661 mrvPy/Image.cpp:666
+#: mrvPy/Image.cpp:748 mrvPy/Image.cpp:753
 msgid "Set an OCIO Display/View."
 msgstr ""
 
@@ -5197,11 +5245,11 @@ msgstr ""
 msgid "Set the in time of the selected time range of the timeline."
 msgstr ""
 
-#: mrvApp/App.cpp:309
+#: mrvApp/App.cpp:316
 msgid "Set the in/out points range."
 msgstr ""
 
-#: mrvPy/Image.cpp:648 mrvPy/Image.cpp:653
+#: mrvPy/Image.cpp:735 mrvPy/Image.cpp:740
 msgid "Set the input color space."
 msgstr ""
 
@@ -5249,8 +5297,12 @@ msgstr ""
 msgid "Sets all the session metadata for a session."
 msgstr ""
 
-#: mrvPy/Image.cpp:635
+#: mrvPy/Image.cpp:722
 msgid "Sets the current OCIO config file."
+msgstr ""
+
+#: mrvPy/Image.cpp:714
+msgid "Sets the current background options."
 msgstr ""
 
 #: mrvPy/Session.cpp:102
@@ -5269,15 +5321,15 @@ msgstr ""
 msgid "Sets the session metadata for a key."
 msgstr ""
 
-#: mrvFl/mrvPreferences.cpp:557
+#: mrvFl/mrvPreferences.cpp:558
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr ""
 
-#: mrvFl/mrvPreferences.cpp:535
+#: mrvFl/mrvPreferences.cpp:536
 msgid "Setting OCIO config from preferences."
 msgstr ""
 
-#: mrvFl/mrvPreferences.cpp:546 mrvFl/mrvPreferences.cpp:566
+#: mrvFl/mrvPreferences.cpp:547 mrvFl/mrvPreferences.cpp:567
 msgid "Setting OCIO config to default."
 msgstr ""
 
@@ -5290,7 +5342,7 @@ msgstr ""
 msgid "Shift"
 msgstr ""
 
-#: mrvApp/App.cpp:492
+#: mrvApp/App.cpp:499
 msgid "Show All"
 msgstr ""
 
@@ -5338,11 +5390,15 @@ msgstr ""
 msgid "Size"
 msgstr ""
 
-#: mrvPanels/mrvBackgroundPanel.cpp:140 mrvPanels/mrvAnnotationsPanel.cpp:159
+#: mrvPy/Math.cpp:109
+msgid "Size of 2 integers."
+msgstr ""
+
+#: mrvPanels/mrvBackgroundPanel.cpp:144 mrvPanels/mrvAnnotationsPanel.cpp:159
 msgid "Size:"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:407
+#: mrvCore/mrvHotkey.cpp:410
 msgid "Slice Clip"
 msgstr ""
 
@@ -5366,11 +5422,11 @@ msgstr ""
 msgid "Soft Clip"
 msgstr ""
 
-#: mrvPy/Image.cpp:494
+#: mrvPy/Image.cpp:537
 msgid "Soft Clip options :class:`mrv2.image.SoftClip`.."
 msgstr ""
 
-#: mrvPy/Image.cpp:433 mrvPy/Image.cpp:442
+#: mrvPy/Image.cpp:476 mrvPy/Image.cpp:485
 msgid "Soft clip value."
 msgstr ""
 
@@ -5378,7 +5434,11 @@ msgstr ""
 msgid "Softimage Picture"
 msgstr ""
 
-#: mrvPanels/mrvBackgroundPanel.cpp:106
+#: mrvPy/Image.cpp:688
+msgid "Solid Color :class:`mrv2.image.Color4f`.."
+msgstr ""
+
+#: mrvPanels/mrvBackgroundPanel.cpp:111
 msgid "Solid Color:"
 msgstr ""
 
@@ -5386,7 +5446,7 @@ msgstr ""
 msgid "Some default frame rate settings."
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:537
+#: mrvCore/mrvHotkey.cpp:539
 msgid "Space (' ')"
 msgstr ""
 
@@ -5411,7 +5471,7 @@ msgstr ""
 msgid "Spherical"
 msgstr ""
 
-#: mrvPy/Image.cpp:590 mrvPanels/mrvEnvironmentMapPanel.cpp:298
+#: mrvPy/Image.cpp:633 mrvPanels/mrvEnvironmentMapPanel.cpp:298
 msgid "Spin"
 msgstr ""
 
@@ -5443,7 +5503,7 @@ msgstr ""
 msgid "Start Time"
 msgstr ""
 
-#: mrvApp/App.cpp:378
+#: mrvApp/App.cpp:385
 msgid "Start a server.  Use -port to specify a port number."
 msgstr ""
 
@@ -5468,21 +5528,21 @@ msgstr ""
 msgid "Stereo 3D"
 msgstr ""
 
-#: mrvPy/Image.cpp:609
+#: mrvPy/Image.cpp:652
 msgid "Stereo 3d input :class:`mrv2.image.StereoInput`.."
 msgstr ""
 
-#: mrvPy/Image.cpp:612
+#: mrvPy/Image.cpp:655
 msgid "Stereo 3d output :class:`mrv2.image.StereoOutput`.."
 msgstr ""
 
-#: mrvPy/Image.cpp:627
+#: mrvPy/Image.cpp:670
 msgid "Stereo3D options."
 msgstr ""
 
 #: mrvGL/mrvTimelineViewportEvents.cpp:964
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:169
-#: mrvCore/mrvHotkey.cpp:380
+#: mrvCore/mrvHotkey.cpp:383
 msgid "Stop"
 msgstr ""
 
@@ -5506,11 +5566,11 @@ msgstr ""
 msgid "Subdivision of the sphere when doing spherical projections"
 msgstr ""
 
-#: mrvPy/Image.cpp:586
+#: mrvPy/Image.cpp:629
 msgid "Subdivision on X"
 msgstr ""
 
-#: mrvPy/Image.cpp:589
+#: mrvPy/Image.cpp:632
 msgid "Subdivision on Y"
 msgstr ""
 
@@ -5531,11 +5591,11 @@ msgstr ""
 msgid "Subtitles"
 msgstr ""
 
-#: mrvFl/mrvFileRequester.cpp:461
+#: mrvFl/mrvFileRequester.cpp:463
 msgid "Subtitles (*.{"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:541
+#: mrvCore/mrvHotkey.cpp:543
 msgid "Subtract"
 msgstr ""
 
@@ -5543,7 +5603,7 @@ msgstr ""
 msgid "Swap Eyes"
 msgstr ""
 
-#: mrvPy/Image.cpp:618
+#: mrvPy/Image.cpp:661
 msgid "Swap left and right eye"
 msgstr ""
 
@@ -5555,7 +5615,7 @@ msgstr ""
 msgid "Switch Colors"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:456
+#: mrvCore/mrvHotkey.cpp:459
 msgid "Switch Pen Color"
 msgstr ""
 
@@ -5589,59 +5649,59 @@ msgid ""
 "Switch pixel color space information display for the pixel under the cursor."
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1106
+#: mrvUI/mrvMenus.cpp:1122
 msgid "Sync/Accept/Annotations"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1114
+#: mrvUI/mrvMenus.cpp:1130
 msgid "Sync/Accept/Audio"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1090
+#: mrvUI/mrvMenus.cpp:1106
 msgid "Sync/Accept/Color"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1063
+#: mrvUI/mrvMenus.cpp:1079
 msgid "Sync/Accept/Media"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1082
+#: mrvUI/mrvMenus.cpp:1098
 msgid "Sync/Accept/Pan And Zoom"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1098
+#: mrvUI/mrvMenus.cpp:1114
 msgid "Sync/Accept/Timeline"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1074
+#: mrvUI/mrvMenus.cpp:1090
 msgid "Sync/Accept/UI"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1043
+#: mrvUI/mrvMenus.cpp:1059
 msgid "Sync/Send/Annotations"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1051
+#: mrvUI/mrvMenus.cpp:1067
 msgid "Sync/Send/Audio"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1027
+#: mrvUI/mrvMenus.cpp:1043
 msgid "Sync/Send/Color"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1000
+#: mrvUI/mrvMenus.cpp:1016
 msgid "Sync/Send/Media"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1019
+#: mrvUI/mrvMenus.cpp:1035
 msgid "Sync/Send/Pan And Zoom"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1035
+#: mrvUI/mrvMenus.cpp:1051
 msgid "Sync/Send/Timeline"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1011
+#: mrvUI/mrvMenus.cpp:1027
 msgid "Sync/Send/UI"
 msgstr ""
 
@@ -5650,7 +5710,7 @@ msgstr ""
 msgid "TIFF Picture"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:493
+#: mrvCore/mrvHotkey.cpp:495
 msgid "Tab"
 msgstr ""
 
@@ -5663,7 +5723,7 @@ msgstr ""
 msgid "Text"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:451
+#: mrvCore/mrvHotkey.cpp:454
 msgid "Text Mode"
 msgstr ""
 
@@ -5709,8 +5769,8 @@ msgid ""
 "(Environment variable: MRV_OCIO_float_ICS)"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:499 mrvFl/mrvSession.cpp:331
-#: mrvFl/mrvSession.cpp:377
+#: mrvPanels/mrvPythonPanel.cpp:499 mrvFl/mrvSession.cpp:341
+#: mrvFl/mrvSession.cpp:387
 msgid "The stream is in an unrecoverable error state."
 msgstr ""
 
@@ -5779,7 +5839,7 @@ msgstr ""
 msgid "Timecode"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:1657 mrvFl/mrvCallbacks.cpp:1695
+#: mrvFl/mrvCallbacks.cpp:1707 mrvFl/mrvCallbacks.cpp:1745
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:491
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1015
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1452
@@ -5787,39 +5847,39 @@ msgstr ""
 msgid "Timeline"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:851
+#: mrvUI/mrvMenus.cpp:868
 msgid "Timeline/Edit Associated Clips"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:843
+#: mrvUI/mrvMenus.cpp:860
 msgid "Timeline/Editable"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:906
+#: mrvUI/mrvMenus.cpp:923
 msgid "Timeline/Markers"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:890
+#: mrvUI/mrvMenus.cpp:907
 msgid "Timeline/Thumbnails/Large"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:884
+#: mrvUI/mrvMenus.cpp:901
 msgid "Timeline/Thumbnails/Medium"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:872
+#: mrvUI/mrvMenus.cpp:889
 msgid "Timeline/Thumbnails/None"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:878
+#: mrvUI/mrvMenus.cpp:895
 msgid "Timeline/Thumbnails/Small"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:900
+#: mrvUI/mrvMenus.cpp:917
 msgid "Timeline/Transitions"
 msgstr ""
 
-#: mrvApp/App.cpp:265
+#: mrvApp/App.cpp:272
 msgid "Timelines, movies, image sequences, or folders."
 msgstr ""
 
@@ -5831,164 +5891,164 @@ msgstr ""
 msgid "Tint"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:484
+#: mrvCore/mrvHotkey.cpp:486
 msgid "Toggle About Window"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:472
+#: mrvCore/mrvHotkey.cpp:474
 msgid "Toggle Annotation Panel"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:473
+#: mrvCore/mrvHotkey.cpp:475
 msgid "Toggle Background Panel"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:467
+#: mrvCore/mrvHotkey.cpp:469
 msgid "Toggle Color Area Info Panel"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:468
+#: mrvCore/mrvHotkey.cpp:470
 msgid "Toggle Color Controls Panel"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:470
+#: mrvCore/mrvHotkey.cpp:472
 msgid "Toggle Compare Panel"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:471
+#: mrvCore/mrvHotkey.cpp:473
 msgid "Toggle Devices Panel"
 msgstr ""
 
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2381
-#: mrvCore/mrvHotkey.cpp:428
+#: mrvCore/mrvHotkey.cpp:431
 msgid "Toggle Edit Mode"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:478
+#: mrvCore/mrvHotkey.cpp:480
 msgid "Toggle Environment Map Panel"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:465
+#: mrvCore/mrvHotkey.cpp:467
 msgid "Toggle Files Panel"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:421
+#: mrvCore/mrvHotkey.cpp:424
 msgid "Toggle Float On Top"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:419
+#: mrvCore/mrvHotkey.cpp:422
 msgid "Toggle Full Screen"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:475
+#: mrvCore/mrvHotkey.cpp:477
 msgid "Toggle Histogram Panel"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:483
+#: mrvCore/mrvHotkey.cpp:485
 msgid "Toggle Hotkeys Window"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:481
+#: mrvCore/mrvHotkey.cpp:483
 msgid "Toggle Log Panel"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:348
+#: mrvCore/mrvHotkey.cpp:351
 msgid "Toggle Magnify Texture Filtering"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:466
+#: mrvCore/mrvHotkey.cpp:468
 msgid "Toggle Media Info Panel"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:413
+#: mrvCore/mrvHotkey.cpp:416
 msgid "Toggle Menu Bar"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:346
+#: mrvCore/mrvHotkey.cpp:349
 msgid "Toggle Minify Texture Filtering"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:425
+#: mrvCore/mrvHotkey.cpp:428
 msgid "Toggle Network"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:464
+#: mrvCore/mrvHotkey.cpp:466
 msgid "Toggle One Panel Only"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:415
+#: mrvCore/mrvHotkey.cpp:418
 msgid "Toggle Pixel Bar"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:469
+#: mrvCore/mrvHotkey.cpp:471
 msgid "Toggle Playlist Panel"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:479
+#: mrvCore/mrvHotkey.cpp:481
 msgid "Toggle Preferences Window"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:420
+#: mrvCore/mrvHotkey.cpp:423
 msgid "Toggle Presentation"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:480
+#: mrvCore/mrvHotkey.cpp:482
 msgid "Toggle Python Panel"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:422
+#: mrvCore/mrvHotkey.cpp:425
 msgid "Toggle Secondary"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:424
+#: mrvCore/mrvHotkey.cpp:427
 msgid "Toggle Secondary Float On Top"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:474
+#: mrvCore/mrvHotkey.cpp:476
 msgid "Toggle Settings Panel"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:417
+#: mrvCore/mrvHotkey.cpp:420
 msgid "Toggle Status Bar"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:427
+#: mrvCore/mrvHotkey.cpp:430
 msgid "Toggle Stereo 3D"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:416
+#: mrvCore/mrvHotkey.cpp:419
 msgid "Toggle Timeline"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:433
+#: mrvCore/mrvHotkey.cpp:436
 msgid "Toggle Timeline Markers"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:430
+#: mrvCore/mrvHotkey.cpp:433
 msgid "Toggle Timeline Thumbnails"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:432
+#: mrvCore/mrvHotkey.cpp:435
 msgid "Toggle Timeline Transitions"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:418
+#: mrvCore/mrvHotkey.cpp:421
 msgid "Toggle Tool Dock"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:414
+#: mrvCore/mrvHotkey.cpp:417
 msgid "Toggle Top Bar"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:426
+#: mrvCore/mrvHotkey.cpp:429
 msgid "Toggle USD"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:476
+#: mrvCore/mrvHotkey.cpp:478
 msgid "Toggle Vectorscope Panel"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:477
+#: mrvCore/mrvHotkey.cpp:479
 msgid "Toggle Waveform Panel"
 msgstr ""
 
@@ -6029,7 +6089,7 @@ msgid "Turn off image warping."
 msgstr ""
 
 #: mrvPanels/mrvNetworkPanel.cpp:95 mrvPanels/mrvEnvironmentMapPanel.cpp:83
-#: mrvPanels/mrvHistogramPanel.cpp:78 mrvPanels/mrvBackgroundPanel.cpp:75
+#: mrvPanels/mrvHistogramPanel.cpp:78 mrvPanels/mrvBackgroundPanel.cpp:76
 msgid "Type"
 msgstr ""
 
@@ -6039,7 +6099,7 @@ msgid ""
 "it.  Press Keypad Enter to run it."
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:1645 mrvFl/mrvCallbacks.cpp:1683
+#: mrvFl/mrvCallbacks.cpp:1695 mrvFl/mrvCallbacks.cpp:1733
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:733
 msgid "UI"
 msgstr ""
@@ -6065,7 +6125,7 @@ msgstr ""
 msgid "USD Thumbnails"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:454
+#: mrvCore/mrvHotkey.cpp:457
 msgid "Undo Draw"
 msgstr ""
 
@@ -6099,7 +6159,7 @@ msgstr ""
 msgid "Unknown type for mrvOCIOBrowser"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:507
+#: mrvCore/mrvHotkey.cpp:509
 msgid "Up"
 msgstr ""
 
@@ -6179,19 +6239,19 @@ msgstr ""
 msgid "Value less than 0"
 msgstr ""
 
-#: mrvPy/Vectors.cpp:54
+#: mrvPy/Math.cpp:55
 msgid "Vector of 2 floats."
 msgstr ""
 
-#: mrvPy/Vectors.cpp:39
+#: mrvPy/Math.cpp:40
 msgid "Vector of 2 integers."
 msgstr ""
 
-#: mrvPy/Vectors.cpp:73
+#: mrvPy/Math.cpp:74
 msgid "Vector of 3 floats."
 msgstr ""
 
-#: mrvPy/Vectors.cpp:93
+#: mrvPy/Math.cpp:94
 msgid "Vector of 4 floats."
 msgstr ""
 
@@ -6215,7 +6275,7 @@ msgstr ""
 msgid "Vertical Aperture of the Projection."
 msgstr ""
 
-#: mrvPy/Image.cpp:576
+#: mrvPy/Image.cpp:619
 msgid "Vertical aperture"
 msgstr ""
 
@@ -6230,7 +6290,7 @@ msgstr ""
 msgid "Video Levels"
 msgstr ""
 
-#: mrvPy/Image.cpp:538
+#: mrvPy/Image.cpp:581
 msgid "Video Levels."
 msgstr ""
 
@@ -6263,7 +6323,7 @@ msgstr ""
 msgid "View Window"
 msgstr ""
 
-#: mrvApp/App.cpp:322
+#: mrvApp/App.cpp:329
 msgid "View color space."
 msgstr ""
 
@@ -6275,7 +6335,7 @@ msgstr ""
 msgid "View/Display Window"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:827
+#: mrvUI/mrvMenus.cpp:844
 msgid "View/Hud"
 msgstr ""
 
@@ -6283,7 +6343,7 @@ msgstr ""
 msgid "View/Mask"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:815
+#: mrvUI/mrvMenus.cpp:832
 #, c-format
 msgid "View/Mask/%s"
 msgstr ""
@@ -6316,7 +6376,7 @@ msgstr ""
 msgid "View/Toggle Top bar"
 msgstr ""
 
-#: mrvFl/mrvSaving.cpp:161 mrvFl/mrvSaving.cpp:457 mrvPDF/mrvPDFCreator.cpp:282
+#: mrvFl/mrvSaving.cpp:161 mrvFl/mrvSaving.cpp:463 mrvPDF/mrvPDFCreator.cpp:282
 msgid "Viewport Size: {0}  Render Size: {1}"
 msgstr ""
 
@@ -6608,7 +6668,7 @@ msgstr ""
 
 #: mrvPanels/mrvPythonPanel.cpp:476 mrvPanels/mrvImageInfoPanel.cpp:1654
 #: mrvFl/mrvLanguages.cpp:136 mrvFl/mrvHotkey.cpp:99
-#: mrvFl/mrvCallbacks.cpp:1735
+#: mrvFl/mrvCallbacks.cpp:1785
 msgid "Yes"
 msgstr ""
 
@@ -6616,7 +6676,7 @@ msgstr ""
 msgid "You can only add clips to an .otio EDL playlist."
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:1732
+#: mrvFl/mrvCallbacks.cpp:1782
 msgid ""
 "You have EDLs in the current session.  These will not be saved in the "
 "session file.  Do you want to continue?"
@@ -6674,11 +6734,11 @@ msgstr ""
 msgid "host_statistics64 failed"
 msgstr ""
 
-#: mrvPy/Image.cpp:415
+#: mrvPy/Image.cpp:458
 msgid "kneeHigh value."
 msgstr ""
 
-#: mrvPy/Image.cpp:413
+#: mrvPy/Image.cpp:456
 msgid "kneeLow value."
 msgstr ""
 
@@ -6699,47 +6759,47 @@ msgstr ""
 msgid "oxy"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:525
+#: mrvCore/mrvHotkey.cpp:527
 msgid "pad0"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:527
+#: mrvCore/mrvHotkey.cpp:529
 msgid "pad1"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:528
+#: mrvCore/mrvHotkey.cpp:530
 msgid "pad2"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:529
+#: mrvCore/mrvHotkey.cpp:531
 msgid "pad3"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:530
+#: mrvCore/mrvHotkey.cpp:532
 msgid "pad4"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:531
+#: mrvCore/mrvHotkey.cpp:533
 msgid "pad5"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:533
+#: mrvCore/mrvHotkey.cpp:535
 msgid "pad6"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:534
+#: mrvCore/mrvHotkey.cpp:536
 msgid "pad7"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:535
+#: mrvCore/mrvHotkey.cpp:537
 msgid "pad8"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:536
+#: mrvCore/mrvHotkey.cpp:538
 msgid "pad9"
 msgstr ""
 
-#: mrvCore/mrvHotkey.cpp:524
+#: mrvCore/mrvHotkey.cpp:526
 msgid "padEnter"
 msgstr ""
 
