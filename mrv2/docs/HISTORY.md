@@ -7,6 +7,7 @@ v0.8.3
 - Fixed Annotations shifting when moving clips around in the Timeline Viewport
   (feature of v0.9.0 not yet finished by Darby).
 - Added support for HDR Radiance (.hdr) format.
+- Fixed a crash when deleting the last clip from the Files Panel.
 
 
 v0.8.2
