@@ -116,7 +116,7 @@ namespace mrv
 
                 if (box.contains(pos))
                 {
-                    add_clip_to_timeline(p.index, ui);
+                    add_clip_to_timeline_cb(p.index, ui);
                     return 1;
                 }
 

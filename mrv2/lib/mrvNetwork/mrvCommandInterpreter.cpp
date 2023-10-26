@@ -1291,21 +1291,14 @@ namespace mrv
             {
                 annotation_clear_all_cb(nullptr, ui);
             }
-            else if (c == "Create Empty Timeline")
-            {
-                create_empty_timeline_cb(nullptr, ui);
-            }
             else if (c == "Create New Timeline")
             {
-                int Aindex = message["value"];
-                auto model = app->filesModel();
-                model->setA(Aindex);
-                create_new_timeline_cb(nullptr, ui);
+                create_new_timeline_cb(ui);
             }
             else if (c == "Add Clip to Timeline")
             {
                 int Aindex = message["value"];
-                add_clip_to_timeline(Aindex, ui);
+                add_clip_to_timeline_cb(Aindex, ui);
             }
             else if (c == "Edit/Frame/Cut")
             {

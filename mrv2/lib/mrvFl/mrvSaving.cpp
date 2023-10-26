@@ -195,6 +195,12 @@ namespace mrv
                 outputInfo.pixelType = options.exrPixelType;
             }
 #endif
+            if (string::compare(
+                    extension, ".hdr", string::Compare::CaseInsensitive))
+            {
+                outputInfo.pixelType = image::PixelType::RGB_F32;
+                offscreenBufferOptions.colorType = image::PixelType::RGB_F32;
+            }
 
             std::string msg = tl::string::Format(_("Output info: {0} {1}"))
                                   .arg(outputInfo.size)
@@ -491,6 +497,12 @@ namespace mrv
                 outputInfo.pixelType = options.exrPixelType;
             }
 #endif
+            if (string::compare(
+                    extension, ".hdr", string::Compare::CaseInsensitive))
+            {
+                outputInfo.pixelType = image::PixelType::RGB_F32;
+                offscreenBufferOptions.colorType = image::PixelType::RGB_F32;
+            }
 
             std::string msg = tl::string::Format(_("Output info: {0} {1}"))
                                   .arg(outputInfo.size)

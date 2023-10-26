@@ -95,20 +95,17 @@ namespace mrv
         const otime::TimeRange& range, const otime::RationalTime& startTime,
         ViewerUI* ui);
 
-    //! Create empty timeline.
-    void create_empty_timeline_cb(Fl_Menu_* m, ViewerUI* ui);
-
     //! Refresh file cache
     void refresh_file_cache_cb(Fl_Menu_* m, void* d);
 
-    //! Add clip to otio timeline.
-    void add_clip_to_timeline(const int, ViewerUI* ui);
-
-    //! Create new timeline from a clip.
-    void create_new_timeline(ViewerUI* ui);
-
     //! Create new timeline from selected clip.
-    void create_new_timeline_cb(Fl_Menu_* m, ViewerUI* ui);
+    void create_new_timeline_cb(ViewerUI* ui);
+
+    //! Add clip to otio timeline.
+    void add_clip_to_new_timeline_cb(const int, ViewerUI* ui);
+
+    //! Add clip to otio timeline.
+    void add_clip_to_timeline_cb(const int, ViewerUI* ui);
 
     //! Save current OTIO timeline (EDL) to a permanent place on disk.
     void save_timeline_to_disk_cb(Fl_Menu_* m, ViewerUI* ui);

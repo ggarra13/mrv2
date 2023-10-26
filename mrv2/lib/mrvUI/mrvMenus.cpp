@@ -778,6 +778,23 @@ namespace mrv
             if (numFiles == 0)
                 mode |= FL_MENU_INACTIVE;
 
+            if (numFiles)
+            {
+                auto Aitem = model->observeA()->get();
+                if (string::compare(
+                        Aitem->path.getExtension(), ".otio",
+                        string::Compare::CaseInsensitive))
+                {
+                    menu->add(
+                        _("Playback/Go to/Previous Clip"),
+                        kPreviousClip.hotkey(), (Fl_Callback*)previous_clip_cb,
+                        ui, mode);
+                    menu->add(
+                        _("Playback/Go to/Next Clip"), kNextClip.hotkey(),
+                        (Fl_Callback*)next_clip_cb, ui, FL_MENU_DIVIDER | mode);
+                }
+            }
+
             const auto& annotations = player->getAllAnnotations();
             if (!annotations.empty())
             {
