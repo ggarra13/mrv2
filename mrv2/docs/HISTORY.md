@@ -3,6 +3,7 @@ v0.8.3
 
 - Fixed saving of L16, LA16, RGB_16 and RGBA_16 movies which were flipped on Y.
 - Sorted Panels in the Panel menu alphabetically instead of by shortcut.
+- Fixed Alpha Channel saving imges on Annotations when movie was RGBA_U16.
 
 v0.8.2
 ======
