@@ -87,34 +87,34 @@ namespace mrv
     using namespace panel;
 
     WindowCallback kWindowCallbacks[] = {
-        {_("Files"), (Fl_Callback*)files_panel_cb},
+        {_("Annotations"), (Fl_Callback*)annotations_panel_cb},
+        {_("Background"), (Fl_Callback*)background_panel_cb},
         {_("Color"), (Fl_Callback*)color_panel_cb},
         {_("Color Area"), (Fl_Callback*)color_area_panel_cb},
         {_("Compare"), (Fl_Callback*)compare_panel_cb},
-        {_("Playlist"), (Fl_Callback*)playlist_panel_cb},
-        {_("Media Information"), (Fl_Callback*)image_info_panel_cb},
-        {_("Annotations"), (Fl_Callback*)annotations_panel_cb},
 #ifdef TLRENDER_BMD
         {_("Devices"), (Fl_Callback*)devices_panel_cb},
 #endif
         {_("Environment Map"), (Fl_Callback*)environment_map_panel_cb},
-        {_("Settings"), (Fl_Callback*)settings_panel_cb},
-#ifdef MRV2_PYBIND11
-        {_("Python"), (Fl_Callback*)python_panel_cb},
-#endif
+        {_("Files"), (Fl_Callback*)files_panel_cb},
+        {_("Histogram"), (Fl_Callback*)histogram_panel_cb},
+        {_("Logs"), (Fl_Callback*)logs_panel_cb},
+        {_("Media Information"), (Fl_Callback*)image_info_panel_cb},
 #ifdef MRV2_NETWORK
         {_("Network"), (Fl_Callback*)network_panel_cb},
 #endif
+        {_("Playlist"), (Fl_Callback*)playlist_panel_cb},
+#ifdef MRV2_PYBIND11
+        {_("Python"), (Fl_Callback*)python_panel_cb},
+#endif
+        {_("Settings"), (Fl_Callback*)settings_panel_cb},
+        {_("Stereo 3D"), (Fl_Callback*)stereo3D_panel_cb},
 #ifdef TLRENDER_USD
         {_("USD"), (Fl_Callback*)usd_panel_cb},
 #endif
-        {_("Histogram"), (Fl_Callback*)histogram_panel_cb},
         {_("Vectorscope"), (Fl_Callback*)vectorscope_panel_cb},
-        {_("Stereo 3D"), (Fl_Callback*)stereo3D_panel_cb},
-        {_("Background"), (Fl_Callback*)background_panel_cb},
         {_("Hotkeys"), (Fl_Callback*)nullptr},
         {_("Preferences"), (Fl_Callback*)nullptr},
-        {_("Logs"), (Fl_Callback*)logs_panel_cb},
         {_("About"), (Fl_Callback*)nullptr},
         {nullptr, nullptr}};
 
