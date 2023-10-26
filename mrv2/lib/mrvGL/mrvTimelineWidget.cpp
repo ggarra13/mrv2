@@ -521,8 +521,10 @@ namespace mrv
         TLRENDER_P();
         const math::Size2i renderSize(pixel_w(), pixel_h());
 
+        DBG2;
         make_current();
 
+        DBG2;
         if (!valid())
         {
             _initializeGL();
@@ -593,6 +595,7 @@ namespace mrv
         glClear(GL_COLOR_BUFFER_BIT);
         CHECK_GL;
 
+        DBG2;
         if (p.buffer)
         {
             p.shader->bind();
@@ -627,6 +630,7 @@ namespace mrv
                 p.vao->draw(GL_TRIANGLES, 0, p.vbo->getSize());
             }
         }
+        DBG2;
     }
 
     int TimelineWidget::enterEvent()
@@ -1197,7 +1201,7 @@ namespace mrv
     {
         TLRENDER_P();
         p.eventLoop->tick();
-        if (p.eventLoop->hasDrawUpdate())
+        if (visible_r() && p.eventLoop->hasDrawUpdate())
         {
             redraw();
         }
