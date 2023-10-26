@@ -185,6 +185,9 @@ namespace mrv
     extern Hotkey kFirstFrame;
     extern Hotkey kLastFrame;
 
+    extern Hotkey kPreviousClip;
+    extern Hotkey kNextClip;
+
     extern Hotkey kToggleMenuBar;
     extern Hotkey kToggleTopBar;
     extern Hotkey kTogglePixelBar;

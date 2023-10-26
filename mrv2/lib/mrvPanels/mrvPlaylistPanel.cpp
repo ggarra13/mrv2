@@ -294,16 +294,19 @@ namespace mrv
             b->image(svg);
             b->tooltip(
                 _("Create an empty timeline with a video and audio track."));
-            bW->callback([=](auto w)
-                         { create_empty_timeline_cb(nullptr, p.ui); });
+            bW->callback([=](auto w) { create_new_timeline_cb(p.ui); });
 
             bW = new Widget< Button >(g->x() + 40, Y, 30, 30);
             b = bW;
             svg = load_svg("TracksFromA.svg");
             b->image(svg);
             b->tooltip(_("Create a timeline from the selected clip."));
-            bW->callback([=](auto w)
-                         { create_new_timeline_cb(nullptr, p.ui); });
+            bW->callback(
+                [=](auto w)
+                {
+                    int index = model->observeAIndex()->get();
+                    add_clip_to_new_timeline_cb(index, p.ui);
+                });
 
             bW = new Widget< Button >(g->x() + 70, Y, 30, 30);
             b = bW;
@@ -458,8 +461,7 @@ namespace mrv
                 {
                     auto model = ui->app->filesModel();
                     model->setA(index);
-                    create_new_timeline_cb(nullptr, ui);
-                    aIndex = model->observeAIndex()->get();
+                    create_new_timeline_cb(ui);
                 }
             }
             else
@@ -472,17 +474,17 @@ namespace mrv
                     if (box.contains(pos))
                     {
                         aIndex = static_cast<int>(m.first);
+                        auto model = ui->app->filesModel();
+                        model->setA(aIndex);
                         validDrop = true;
                         break;
                     }
                 }
             }
 
-            if (validDrop && aIndex >= 0)
+            if (validDrop)
             {
-                auto model = ui->app->filesModel();
-                model->setA(aIndex);
-                add_clip_to_timeline(index, ui);
+                add_clip_to_timeline_cb(index, ui);
             }
         }
     } // namespace panel

@@ -1362,30 +1362,7 @@ namespace mrv
         return otioTimeline;
     }
 
-    void create_empty_timeline_cb(Fl_Menu_*, ViewerUI* ui)
-    {
-        tcp->pushMessage("Create Empty Timeline", 0);
-        tcp->lock();
-        const std::string file = otioFilename(ui);
-
-        auto timeline = create_empty_timeline(ui);
-
-        otio::ErrorStatus errorStatus;
-        timeline->to_json_file(file, &errorStatus);
-        if (otio::is_error(errorStatus))
-        {
-            std::string error =
-                string::Format(_("Could not save .otio file: {0}"))
-                    .arg(errorStatus.full_description);
-            tcp->unlock();
-            throw std::runtime_error(error);
-        }
-
-        ui->app->open(file);
-        tcp->unlock();
-    }
-
-    void create_new_timeline_cb(Fl_Menu_*, ViewerUI* ui)
+    void create_new_timeline_cb(ViewerUI* ui)
     {
         auto model = ui->app->filesModel();
         int Aindex = model->observeAIndex()->get();
@@ -1474,7 +1451,13 @@ namespace mrv
         save_timeline_to_disk(otioFile);
     }
 
-    void add_clip_to_timeline(const int index, ViewerUI* ui)
+    void add_clip_to_new_timeline_cb(const int index, ViewerUI* ui)
+    {
+        create_new_timeline_cb(ui);
+        add_clip_to_timeline_cb(index, ui);
+    }
+
+    void add_clip_to_timeline_cb(const int index, ViewerUI* ui)
     {
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)

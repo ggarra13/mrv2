@@ -131,6 +131,7 @@ namespace mrv
     void playback_once_cb(Fl_Menu_*, ViewerUI* ui);
     void playback_ping_pong_cb(Fl_Menu_*, ViewerUI* ui);
 
+    // Navigation
     void start_frame_cb(Fl_Menu_*, ViewerUI* ui);
     void end_frame_cb(Fl_Menu_*, ViewerUI* ui);
 
@@ -140,8 +141,8 @@ namespace mrv
     void next_annotation_cb(Fl_Menu_*, ViewerUI* ui);
     void previous_annotation_cb(Fl_Menu_*, ViewerUI* ui);
 
-    void annotation_clear_cb(Fl_Menu_*, ViewerUI* ui);
-    void annotation_clear_all_cb(Fl_Menu_*, ViewerUI* ui);
+    void next_clip_cb(Fl_Menu_*, ViewerUI* ui);
+    void previous_clip_cb(Fl_Menu_*, ViewerUI* ui);
 
     // Timeline view
     void toggle_timeline_markers_cb(Fl_Menu_*, ViewerUI* ui);
@@ -177,6 +178,8 @@ namespace mrv
     void set_pen_color_cb(Fl_Button*, ViewerUI* ui);
     void flip_pen_color_cb(Fl_Button*, ViewerUI* ui);
     void toggle_annotation_cb(Fl_Menu_* m, ViewerUI* ui);
+    void annotation_clear_cb(Fl_Menu_*, ViewerUI* ui);
+    void annotation_clear_all_cb(Fl_Menu_*, ViewerUI* ui);
 
     // Versioning
     void first_image_version_cb(Fl_Menu_*, ViewerUI* ui);
