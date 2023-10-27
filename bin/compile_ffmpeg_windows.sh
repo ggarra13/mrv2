@@ -64,6 +64,12 @@ if [[ $FFMPEG_GPL == LGPL ]]; then
 fi
 
 #
+# Build with openssl and libcrypto support
+# 
+BUILD_SSL=0
+
+
+#
 # Build FFMPEG with the GPL libraries specified above.
 #
 BUILD_FFMPEG=1
@@ -179,6 +185,28 @@ if [[ $BUILD_LIBVPX == 1 ]]; then
 fi
 
 
+#
+# Install openssl nad libcrypto
+#
+ENABLE_OPENSSL=""
+if [[ $BUILD_SSL == 1 ]]; then
+    if [[ ! -e $BUILD_DIR/install/lib/ssl.lib ]]; then
+	
+	if [[ ! -e /mingw64/lib/libssl.dll.a ]]; then
+	    pacman -Sy mingw-w64-x86_64-openssl --noconfirm
+	fi
+
+	run_cmd cp /mingw64/bin/libssl*.dll $BUILD_DIR/install/bin/
+	run_cmd cp /mingw64/lib/libssl.dll.a $BUILD_DIR/install/lib/ssl.lib
+	run_cmd cp /mingw64/bin/libcrypto*.dll $BUILD_DIR/install/bin/
+	run_cmd cp /mingw64/lib/libcrypto.dll.a $BUILD_DIR/install/lib/crypto.lib
+
+	run_cmd cp -r /mingw64/include/openssl $BUILD_DIR/install/include/
+	run_cmd sed -i -e 's/SSL_library_init../SSL_library_init/' $BUILD_DIR/install/include/openssl/ssl.h
+    fi
+    ENABLE_OPENSSL="--enable-openssl"
+fi
+
 
 #
 # Build FFmpeg
@@ -235,10 +263,11 @@ if [[ $BUILD_FFMPEG == 1 ]]; then
             --disable-static \
             --disable-programs \
             --enable-swresample \
+	    $ENABLE_OPENSSL \
             $ENABLE_LIBX264 \
 	    $ENABLE_LIBVPX \
             --extra-ldflags="-LIBPATH:$INSTALL_DIR/lib/" \
-            --extra-cflags="-I$INSTALL_DIR/include/ -wd4828 -wd4101"
+            --extra-cflags="-I$INSTALL_DIR/include/ -MD -wd4828 -wd4101"
 
 	make -j ${CPU_CORES}
 	make install
