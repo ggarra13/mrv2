@@ -1011,6 +1011,17 @@ namespace mrv
         pathOptions.maxNumberDigits =
             p.settingsObject->getValue<int>("Misc/MaxFileSequenceDigits");
         file::Path filePath(fileName);
+
+        if (!file::isReadable(fileName))
+        {
+            std::string err =
+                string::Format(_("Filename '{0}' does not exist or does not "
+                                 "have read permissions."))
+                    .arg(fileName);
+            LOG_ERROR(err);
+            return;
+        }
+
         for (const auto& path :
              timeline::getPaths(filePath, pathOptions, _context))
         {

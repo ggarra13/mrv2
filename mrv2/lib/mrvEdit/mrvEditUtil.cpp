@@ -5,12 +5,23 @@
 #include <filesystem>
 namespace fs = std::filesystem;
 
+#include <tlCore/String.h>
+
 #include "mrvCore/mrvHome.h"
 #include "mrvEdit/mrvEditUtil.h"
 
 namespace mrv
 {
     using namespace tl;
+
+    bool isOtioFile(const file::Path& path)
+    {
+        auto extension = path.getExtension();
+        if (string::compare(
+                ".otio", extension, string::Compare::CaseInsensitive))
+            return true;
+        return false;
+    }
 
     bool isTemporaryEDL(const file::Path& path)
     {
@@ -25,12 +36,6 @@ namespace mrv
             return false;
         }
         return true;
-    }
-
-    bool isTemporaryEDL(const std::string& filename)
-    {
-        file::Path path(filename);
-        return isTemporaryEDL(path);
     }
 
     void removeTemporaryEDLs(ViewerUI* ui)

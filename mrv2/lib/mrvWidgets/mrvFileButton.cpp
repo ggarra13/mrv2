@@ -136,6 +136,8 @@ namespace mrv
                         return 1;
                     }
                 }
+                selection_color(FL_YELLOW);
+                panel::redrawThumbnails();
                 return 1;
             }
             break;
@@ -163,6 +165,7 @@ namespace mrv
 
                 if (p.drag)
                 {
+                    selection_color(FL_CYAN);
                     value(1);
                     redraw();
                     int X = Fl::event_x_root();

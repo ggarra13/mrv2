@@ -1,9 +1,24 @@
 v0.8.3
 ======
 
-- Fixed saving of L16, LA16, RGB_16 and RGBA_16 movies which were flipped on Y.
+- Fixed saving of L_U16, LA_U16, RGB_U16 and RGBA_U16 movies which were
+  flipped on Y.
 - Sorted Panels in the Panel menu alphabetically instead of by shortcut.
 - Fixed Alpha Channel saving imges on Annotations when movie was RGBA_U16.
+- Now you can concatenate .otio clips into the EDL Playlist.  Just drag the
+  .otio clip to the Playlist Panel where you have the temporary EDL
+  or to the Timeline Viewport while selecting the EDL and it will
+  be added to any previous clips in the timeline.
+  The .otio clips support in and out points and annotations.  Transitions are
+  supported, but you cannot cut a transition in half with the in and out
+  points.
+- Fixed a crash when trying to load an inexistent clip from the command-line.
+- Made dragging of a clip show the dragged clip in cyan in the Files Panel, to
+  distinguish it from the selected one.
+- Fixed the dragged clip being also selected after an unsuccessful drag when
+  there was a clip selected.
+- Made Panel shortcut keys in the menu be more separated from the actual name
+  of panel.  Small UI improvement.
 
 v0.8.2
 ======

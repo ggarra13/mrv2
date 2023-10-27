@@ -175,7 +175,7 @@ namespace mrv
     Hotkey kToggleMediaInfo(false, false, false, false, FL_F + 5);
     Hotkey kToggleColorControls(false, false, false, false, FL_F + 6);
     Hotkey kToggleColorInfo(false, false, false, false, FL_F + 7);
-    Hotkey kTogglePlaylist(false, false, false, false, 0);
+    Hotkey kTogglePlaylist(true, false, false, false, 'p');
     Hotkey kToggleCompare(false, false, false, false, FL_F + 8);
     Hotkey kToggleDevices(false, false, false, false, 0);
     Hotkey kToggleAnnotation(true, false, false, false, 'a');
@@ -183,7 +183,7 @@ namespace mrv
     Hotkey kTogglePreferences(false, false, false, false, FL_F + 10);
     Hotkey kToggleHistogram(false, false, false, false, 0);
     Hotkey kToggleVectorscope(false, false, false, false, 0);
-    Hotkey kToggleEnvironmentMap(false, false, false, false, 0);
+    Hotkey kToggleEnvironmentMap(true, false, false, false, 'e');
     Hotkey kToggleWaveform(false, false, false, false, 0);
     Hotkey kToggleHotkeys(false, false, false, false, 0);
     Hotkey kTogglePythonConsole(false, false, false, false, 0);
@@ -468,7 +468,7 @@ namespace mrv
         HotkeyEntry(_("Toggle Media Info Panel"), &kToggleMediaInfo),
         HotkeyEntry(_("Toggle Color Area Info Panel"), &kToggleColorInfo),
         HotkeyEntry(_("Toggle Color Controls Panel"), &kToggleColorControls),
-        HotkeyEntry(_("Toggle Playlist Panel"), &kTogglePlaylist),
+        HotkeyEntry(_("Toggle Playlist Panel"), &kTogglePlaylist, true),
         HotkeyEntry(_("Toggle Compare Panel"), &kToggleCompare),
         HotkeyEntry(_("Toggle Devices Panel"), &kToggleDevices),
         HotkeyEntry(_("Toggle Annotation Panel"), &kToggleAnnotation),
@@ -477,7 +477,8 @@ namespace mrv
         HotkeyEntry(_("Toggle Histogram Panel"), &kToggleHistogram),
         HotkeyEntry(_("Toggle Vectorscope Panel"), &kToggleVectorscope),
         HotkeyEntry(_("Toggle Waveform Panel"), &kToggleWaveform),
-        HotkeyEntry(_("Toggle Environment Map Panel"), &kToggleEnvironmentMap),
+        HotkeyEntry(
+            _("Toggle Environment Map Panel"), &kToggleEnvironmentMap, true),
         HotkeyEntry(_("Toggle Preferences Window"), &kTogglePreferences),
         HotkeyEntry(_("Toggle Python Panel"), &kTogglePythonConsole),
         HotkeyEntry(_("Toggle Log Panel"), &kToggleLogs),

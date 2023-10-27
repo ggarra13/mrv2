@@ -346,7 +346,7 @@ namespace mrv
             }
 
             tmp = _(wc->name);
-            std::string menu_name = menu_root + tmp;
+            std::string menu_name = menu_root + tmp + "\t";
             int idx = menu->add(
                 menu_name.c_str(), hotkey, (Fl_Callback*)window_cb, ui, mode);
             item = const_cast<Fl_Menu_Item*>(&menu->menu()[idx]);
