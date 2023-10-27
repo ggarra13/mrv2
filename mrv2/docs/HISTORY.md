@@ -4,7 +4,7 @@ v0.8.3
 - Fixed saving of L_U16, LA_U16, RGB_U16 and RGBA_U16 movies which were
   flipped on Y.
 - Sorted Panels in the Panel menu alphabetically instead of by shortcut.
-- Fixed Alpha Channel saving imges on Annotations when movie was RGBA_U16.
+- Fixed Alpha Channel saving images on Annotations when movie was RGBA_U16.
 - Now you can concatenate .otio clips into the EDL Playlist.  Just drag the
   .otio clip to the Playlist Panel where you have the temporary EDL
   or to the Timeline Viewport while selecting the EDL and it will
@@ -19,7 +19,9 @@ v0.8.3
   there was a clip selected.
 - Made Panel shortcut keys in the menu be more separated from the actual name
   of panel.  Small UI improvement.
-
+- Added shortcuts to Environment Map Panel (Ctrl + e) and
+  Playlist Panel (Ctrl + p).
+  
 v0.8.2
 ======
 
