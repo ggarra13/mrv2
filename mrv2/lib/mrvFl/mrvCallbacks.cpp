@@ -778,7 +778,9 @@ namespace mrv
     {
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
         std::string label_with_tab = item->text;
-        auto label = label_with_tab.substr(0, label_with_tab.size() - 1);
+        auto label = label_with_tab;
+        if (label_with_tab[label_with_tab.size() - 1] == '\t')
+            label = label_with_tab.substr(0, label_with_tab.size() - 1);
         show_window_cb(label, ui);
     }
 
