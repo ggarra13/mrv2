@@ -113,10 +113,12 @@ namespace mrv
 
                 delete p.drag;
                 p.drag = nullptr;
+                selection_color(FL_YELLOW);
 
                 if (box.contains(pos))
                 {
                     add_clip_to_timeline_cb(p.index, ui);
+                    panel::redrawThumbnails();
                     return 1;
                 }
 
@@ -133,10 +135,10 @@ namespace mrv
                     if (box.contains(pos))
                     {
                         playlistPanel->add(pos, p.index, ui);
+                        panel::redrawThumbnails();
                         return 1;
                     }
                 }
-                selection_color(FL_YELLOW);
                 panel::redrawThumbnails();
                 return 1;
             }
