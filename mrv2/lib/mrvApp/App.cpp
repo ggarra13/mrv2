@@ -618,6 +618,9 @@ namespace mrv
                 for (size_t i = 0;
                      i < value.size() && i < _p->timelinePlayers.size(); ++i)
                 {
+                    if (!_p->timelinePlayers[i])
+                        continue;
+
                     if (auto player = _p->timelinePlayers[i]->player())
                     {
                         auto ioOptions = _getIOOptions();
@@ -1030,6 +1033,7 @@ namespace mrv
             item->audioPath = file::Path(audioFileName);
             p.filesModel->add(item);
         }
+        DBG;
 
         if (ui->uiPrefs->SendMedia->value())
         {

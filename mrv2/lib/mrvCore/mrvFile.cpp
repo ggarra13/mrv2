@@ -114,6 +114,15 @@ namespace mrv
 
         bool isReadable(const fs::path& p)
         {
+            const std::string fileName = p.generic_string();
+            if (fileName.substr(0, 5) == "http:" ||
+                fileName.substr(0, 6) == "https:" ||
+                fileName.substr(0, 5) == "rtmp:" ||
+                fileName.substr(0, 4) == "rtp:")
+            {
+                return true;
+            }
+
             std::error_code ec; // For noexcept overload usage.
             if (!fs::exists(p, ec))
                 return false;
