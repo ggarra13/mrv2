@@ -107,11 +107,6 @@ ${date}.
 
 It may contain bugs, new untested features and more.
 
-Its source code is at:
-https://www.github.com/ggarra13/mrv2
-
-Hash is ${git_hash}
-
 You can extract it to compile yourself with:
 
 \`\`\`

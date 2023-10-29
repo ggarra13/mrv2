@@ -1,4 +1,3 @@
-
 // SPDX-License-Identifier: BSD-3-Clause
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
@@ -175,14 +174,6 @@ namespace mrv
                 LOG_ERROR(_("Invalid index for add clip to timeline."));
                 return false;
             }
-
-            // auto sourceItem = sourceItems[index];
-            // if (sourceItem->path.getExtension() == ".otio")
-            // {
-            //     LOG_ERROR(_("Currently, you cannot add an .otio file to an "
-            //                 "EDL playlist."));
-            //     return false;
-            // }
             return true;
         }
 
@@ -548,18 +539,29 @@ namespace mrv
                 {
                     for (auto child : track->children())
                     {
-                        auto clip = otio::dynamic_retainer_cast<Item>(child);
-                        if (!clip)
+                        auto item = otio::dynamic_retainer_cast<Item>(child);
+                        if (!item)
                             continue;
                         if (videoRate > 0)
                         {
-                            auto range = clip->trimmed_range();
+                            auto range = item->trimmed_range();
                             auto start = time::round(
                                 range.start_time().rescaled_to(videoRate));
                             auto duration = time::round(
                                 range.duration().rescaled_to(videoRate));
                             range = TimeRange(start, duration);
-                            clip->set_source_range(range);
+                            item->set_source_range(range);
+
+                            if (auto clip =
+                                    otio::dynamic_retainer_cast<Clip>(item))
+                            {
+                                if (auto ref = dynamic_cast<
+                                        otio::ImageSequenceReference*>(
+                                        clip->media_reference()))
+                                {
+                                    ref->set_rate(videoRate);
+                                }
+                            }
                         }
                     }
                     const TimeRange range = track->trimmed_range();
@@ -572,19 +574,19 @@ namespace mrv
                 {
                     for (auto child : track->children())
                     {
-                        auto clip = otio::dynamic_retainer_cast<Item>(child);
-                        if (!clip)
+                        auto item = otio::dynamic_retainer_cast<Item>(child);
+                        if (!item)
                             continue;
                         if (sampleRate > 0)
                         {
-                            auto range = clip->trimmed_range();
+                            auto range = item->trimmed_range();
                             auto start = time::round(
                                 range.start_time().rescaled_to(sampleRate));
                             auto duration = time::round(
                                 range.duration().rescaled_to(sampleRate));
                             range = TimeRange(start, duration);
                             duration = duration.rescaled_to(videoRate);
-                            clip->set_source_range(range);
+                            item->set_source_range(range);
                         }
                     }
                 }
@@ -1165,6 +1167,8 @@ namespace mrv
 
         toOtioFile(timeline, ui);
 
+        panel::redrawThumbnails();
+
         tcp->pushMessage("Edit/Remove", time);
     }
 
@@ -1343,19 +1347,16 @@ namespace mrv
     }
 
     otio::SerializableObject::Retainer<otio::Timeline>
-    create_empty_timeline(ViewerUI* ui)
+    createEmptyTimeline(ViewerUI* ui)
     {
         otio::SerializableObject::Retainer<otio::Timeline> otioTimeline =
             new otio::Timeline("EDL");
 
         auto videoTrack =
             new otio::Track("Video", otio::nullopt, otio::Track::Kind::video);
-        auto audioTrack =
-            new otio::Track("Audio", otio::nullopt, otio::Track::Kind::audio);
 
         auto stack = new otio::Stack;
         stack->append_child(videoTrack);
-        stack->append_child(audioTrack);
 
         otioTimeline->set_tracks(stack);
 
@@ -1367,7 +1368,7 @@ namespace mrv
         const std::string file = otioFilename(ui);
 
         otio::ErrorStatus errorStatus;
-        auto timeline = create_empty_timeline(ui);
+        auto timeline = createEmptyTimeline(ui);
         timeline->to_json_file(file, &errorStatus);
         if (otio::is_error(errorStatus))
         {
@@ -1385,7 +1386,7 @@ namespace mrv
         otio::Timeline* timeline, const std::string& otioFile,
         bool makeRelativePaths)
     {
-        const std::string s = timeline->to_json_string();
+        const std::string& s = timeline->to_json_string();
         otio::SerializableObject::Retainer<otio::Timeline> out(
             dynamic_cast<otio::Timeline*>(otio::Timeline::from_json_string(s)));
         makePathsAbsolute(out, App::ui);
@@ -1446,30 +1447,39 @@ namespace mrv
         add_clip_to_timeline_cb(index, ui);
     }
 
-    void add_otio_clip_to_timeline(
-        const int sourceIndex,
-        const std::shared_ptr<FilesModelItem>& sourceItem,
-        std::shared_ptr<FilesModelItem>& destItem, otio::Timeline* destTimeline,
-        ViewerUI* ui)
+    void addTimelineToEDL(
+        otio::Timeline* destTimeline, const otio::Timeline* sourceTimeline,
+        const TimeRange& inOutRange, const TimeRange& timeRange)
     {
-        const auto timelineDuration = destTimeline->duration();
-        const auto context = ui->app->getContext();
-        auto sourceTimeline = timeline::create(sourceItem->path, context);
-
-        auto inOutRange = sourceItem->inOutRange;
-
-        auto model = ui->app->filesModel();
-        auto destIndex = model->observeAIndex()->get();
-        model->setA(sourceIndex);
-        makePathsAbsolute(sourceTimeline, ui);
-        model->setA(destIndex);
+        auto globalStartTime =
+            RationalTime(0.0, sourceTimeline->duration().rate());
+        auto startTimeOpt = sourceTimeline->global_start_time();
+        if (startTimeOpt.has_value())
+            globalStartTime = startTimeOpt.value();
 
         const auto& sourceVideoTracks = sourceTimeline->video_tracks();
         const auto& sourceAudioTracks = sourceTimeline->audio_tracks();
 
         auto destStack = destTimeline->tracks();
 
-        // First, append video tracks
+        auto destVideoTracks = destTimeline->video_tracks();
+        auto destStartTime = time::invalidTime;
+        for (size_t i = 0; i < destVideoTracks.size(); ++i)
+        {
+            auto track = destVideoTracks[i];
+            if (!track)
+                continue; // should never happen
+            auto duration = track->trimmed_range().duration();
+            if (duration > destStartTime)
+                destStartTime = duration;
+        }
+
+        if (time::compareExact(destStartTime, time::invalidTime))
+        {
+            destStartTime = RationalTime(0.0, 24.0);
+        }
+
+        // Then, append video tracks
         for (size_t i = 0; i < sourceVideoTracks.size(); ++i)
         {
             auto destTracks = destTimeline->video_tracks();
@@ -1486,9 +1496,23 @@ namespace mrv
                 track = destTracks[i];
             }
 
+            // If track duration is smaller than start time (ie. usually smaller
+            // than all video tracks), add a gap filling the difference.
+            auto destTrackDuration = track->duration();
+            auto duration = destStartTime - destTrackDuration;
+            if (duration.value() > 0.0)
+            {
+                auto gapRange =
+                    TimeRange(RationalTime(0.0, duration.rate()), duration);
+                auto gap = new otio::Gap(gapRange);
+                track->append_child(gap);
+            }
+
             // Now, append all video children.
             const auto& children = sourceVideoTracks[i]->children();
             double videoRate = track->duration().rate();
+            if (sourceVideoTracks[i]->duration().rate() > videoRate)
+                videoRate = sourceVideoTracks[i]->duration().rate();
             for (const auto& child : children)
             {
                 auto clone = child->clone();
@@ -1501,27 +1525,71 @@ namespace mrv
                     auto itemRange = srcItem->trimmed_range();
                     if (itemRange.duration().rate() > videoRate)
                         videoRate = itemRange.duration().rate();
+                    itemTrackRange = TimeRange(
+                        itemTrackRange.start_time().rescaled_to(videoRate),
+                        itemTrackRange.duration().rescaled_to(videoRate));
                     auto videoInOutRange = TimeRange(
                         inOutRange.start_time().rescaled_to(videoRate),
                         inOutRange.duration().rescaled_to(videoRate));
-                    if (videoInOutRange.intersects(itemTrackRange))
+                    auto videoGlobalRange = TimeRange(
+                        itemTrackRange.start_time().rescaled_to(videoRate) +
+                            globalStartTime.rescaled_to(videoRate),
+                        itemTrackRange.duration().rescaled_to(videoRate));
+
+                    // file::PathOptions options;
+                    // auto clip = otio::dynamic_retainer_cast<Clip>(child);
+                    // file::Path path;
+                    // if (clip)
+                    //     path = timeline::getPath(clip->media_reference(),
+                    //                              "",
+                    //                              options);
+
+                    // std::cerr << "---------------- " << path.get(-1, false)
+                    //           << std::endl;
+                    // std::cerr << "      itemRange=" << itemRange
+                    //           << std::endl;
+                    // std::cerr << " itemTrackRange=" << itemTrackRange
+                    //           << std::endl;
+                    // std::cerr << "     inOutRange=" << inOutRange <<
+                    // std::endl; std::cerr << "    globalRange=" <<
+                    // videoGlobalRange
+                    //           << std::endl;
+                    // std::cerr << "videoInOutRange=" << videoInOutRange <<
+                    // std::endl;
+
+                    if (videoInOutRange.intersects(videoGlobalRange))
                     {
-                        auto startTime = itemTrackRange.start_time();
-                        auto duration = itemTrackRange.duration();
-                        if (inOutRange.start_time() > startTime)
+                        // Set local clip start and duration.
+                        auto startTime =
+                            itemRange.start_time().rescaled_to(videoRate);
+                        auto duration =
+                            itemRange.duration().rescaled_to(videoRate);
+
+                        // If user changed the in point, adjust start time.
+                        if (videoInOutRange.start_time() >
+                            timeRange.start_time().rescaled_to(videoRate))
                         {
-                            startTime = videoInOutRange.start_time();
-                            duration -=
-                                (videoInOutRange.start_time() - startTime);
+                            startTime = timeline::toVideoMediaTime(
+                                videoInOutRange.start_time(), videoGlobalRange,
+                                itemRange, videoRate);
+                            auto endTime = timeline::toVideoMediaTime(
+                                videoInOutRange.end_time_exclusive(),
+                                videoGlobalRange, itemRange, videoRate);
+
+                            // Clamp the in / out points to item range
+                            if (startTime < itemRange.start_time())
+                                startTime = itemRange.start_time();
+                            if (endTime > itemRange.end_time_exclusive())
+                                endTime = itemRange.end_time_exclusive();
+                            duration = endTime - startTime;
                         }
+
+                        // If user changed the out point, adjust duration.
                         if (videoInOutRange.duration() < duration)
                         {
                             duration = videoInOutRange.duration();
                         }
-                        const TimeRange clipRange(
-                            itemRange.start_time() + startTime -
-                                itemTrackRange.start_time(),
-                            duration);
+                        const TimeRange clipRange(startTime, duration);
                         item->set_source_range(clipRange);
                         track->append_child(item);
                     }
@@ -1541,7 +1609,7 @@ namespace mrv
             }
         }
 
-        // First, append audio tracks
+        // Finally, append audio tracks
         for (size_t i = 0; i < sourceAudioTracks.size(); ++i)
         {
             auto destTracks = destTimeline->audio_tracks();
@@ -1558,9 +1626,23 @@ namespace mrv
                 track = destTracks[i];
             }
 
+            // If track duration is smaller than start time (ie. usually smaller
+            // than video), add a gap filling the difference.
+            auto destTrackDuration = track->duration();
+            auto duration = destStartTime - destTrackDuration;
+            if (duration.value() > 0.0)
+            {
+                auto gapRange =
+                    TimeRange(RationalTime(0.0, duration.rate()), duration);
+                auto gap = new otio::Gap(gapRange);
+                track->append_child(gap);
+            }
+
             // Now, append all audio children.
             const auto& children = sourceAudioTracks[i]->children();
             double sampleRate = track->duration().rate();
+            if (sourceAudioTracks[i]->duration().rate() > sampleRate)
+                sampleRate = sourceAudioTracks[i]->duration().rate();
             for (const auto& child : children)
             {
                 auto clone = child->clone();
@@ -1573,29 +1655,50 @@ namespace mrv
                     auto itemRange = srcItem->trimmed_range();
                     if (itemRange.duration().rate() > sampleRate)
                         sampleRate = itemRange.duration().rate();
-
                     auto audioInOutRange = TimeRange(
                         inOutRange.start_time().rescaled_to(sampleRate),
                         inOutRange.duration().rescaled_to(sampleRate));
-                    if (audioInOutRange.intersects(itemTrackRange))
+                    auto audioGlobalRange = TimeRange(
+                        itemTrackRange.start_time().rescaled_to(sampleRate) +
+                            globalStartTime.rescaled_to(sampleRate),
+                        itemTrackRange.duration().rescaled_to(sampleRate));
+
+                    if (audioInOutRange.intersects(audioGlobalRange))
                     {
-                        auto startTime = itemTrackRange.start_time();
-                        auto duration = itemTrackRange.duration();
-                        if (audioInOutRange.start_time() > startTime)
+                        // Set local clip start and duration.
+                        auto startTime =
+                            itemRange.start_time().rescaled_to(sampleRate);
+                        auto duration =
+                            itemRange.duration().rescaled_to(sampleRate);
+
+                        // If user changed the in point, adjust start time.
+                        if (audioInOutRange.start_time() >
+                            timeRange.start_time().rescaled_to(sampleRate))
                         {
-                            startTime = audioInOutRange.start_time();
-                            duration -=
-                                (audioInOutRange.start_time() - startTime);
+                            // Calculate the in / out points in clip space.
+                            // The use of toVideoMediaTime instead of
+                            // toAudioMediaTime is not a typo.
+                            startTime = timeline::toVideoMediaTime(
+                                audioInOutRange.start_time(), audioGlobalRange,
+                                itemRange, sampleRate);
+                            auto endTime = timeline::toVideoMediaTime(
+                                audioInOutRange.end_time_exclusive(),
+                                audioGlobalRange, itemRange, sampleRate);
+
+                            // Clamp the in / out points to item range
+                            if (startTime < itemRange.start_time())
+                                startTime = itemRange.start_time();
+                            if (endTime > itemRange.end_time_exclusive())
+                                endTime = itemRange.end_time_exclusive();
+                            duration = endTime - startTime;
                         }
+
+                        // If user changed the out point, adjust duration.
                         if (audioInOutRange.duration() < duration)
                         {
                             duration = audioInOutRange.duration();
                         }
-
-                        const TimeRange clipRange(
-                            itemRange.start_time() + startTime -
-                                itemTrackRange.start_time(),
-                            duration);
+                        const TimeRange clipRange(startTime, duration);
                         item->set_source_range(clipRange);
                         track->append_child(item);
                     }
@@ -1616,265 +1719,33 @@ namespace mrv
         }
     }
 
-    void add_normal_clip_to_timeline(
-        const int sourceIndex,
-        const std::shared_ptr<FilesModelItem>& sourceItem,
-        std::shared_ptr<FilesModelItem>& destItem, otio::Timeline* destTimeline,
-        ViewerUI* ui)
+    void addClipToTimeline(
+        const int sourceIndex, otio::Timeline* destTimeline, ViewerUI* ui)
     {
-        auto timelineDuration = destTimeline->duration();
-        auto stack = destTimeline->tracks();
-        auto tracks = stack->children();
-        otio::ErrorStatus errorStatus;
-        double videoRate = 0.F;
-        double sampleRate = 0.F;
-        int videoTrackIndex = -1;
-        int audioTrackIndex = -1;
-        for (int i = 0; i < tracks.size(); ++i)
-        {
-            auto track = otio::dynamic_retainer_cast<Track>(tracks[i]);
-            if (!track)
-                continue;
-            if (track->kind() == otio::Track::Kind::video &&
-                videoTrackIndex == -1)
-            {
-                videoTrackIndex = i;
-                videoRate = track->trimmed_range().duration().rate();
-            }
+        auto model = ui->app->filesModel();
+        auto destIndex = model->observeAIndex()->get();
+        model->setA(sourceIndex);
 
-            if (track->kind() == otio::Track::Kind::audio &&
-                audioTrackIndex == -1)
-            {
-                audioTrackIndex = i;
-                sampleRate = track->trimmed_range().duration().rate();
-            }
-        }
+        auto sourceItem = model->observeA()->get();
+        auto inOutRange = sourceItem->inOutRange;
+        auto timeRange = sourceItem->timeRange;
 
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
 
-        file::Path path = sourceItem->path;
-        file::Path audioPath =
-            sourceItem->audioPath.isEmpty() ? path : sourceItem->audioPath;
+        auto timeline = player->getTimeline();
 
-        if (!path.isAbsolute())
-        {
-            char currentDir[4096];
-            if (fl_getcwd(currentDir, 4096) == nullptr)
-            {
-                LOG_ERROR(_("Could not get current path."));
-                return;
-            }
+        // Make a copy of the timeline, so we don't modify the original in
+        // place.
+        const std::string& s = timeline->to_json_string();
+        otio::SerializableObject::Retainer<otio::Timeline> sourceTimeline(
+            dynamic_cast<otio::Timeline*>(otio::Timeline::from_json_string(s)));
+        makePathsAbsolute(sourceTimeline, ui);
 
-            std::string fullpath = currentDir;
-            fullpath += '/' + path.get();
-            path = file::Path(fullpath);
-        }
+        model->setA(destIndex);
 
-        TimeRange timeRange;
-        auto sourceDuration = sourceItem->inOutRange.duration();
-        if (sourceDuration.rate() > videoRate)
-        {
-            videoRate = sourceDuration.rate();
-
-            sanitizeVideoAndAudioRates(
-                destTimeline, timeRange, videoRate, sampleRate);
-
-            updateTimeline(destTimeline, player->currentTime(), ui);
-        }
-
-        const auto& context = ui->app->getContext();
-        auto ioSystem = context->getSystem<tl::io::System>();
-        if (auto read = ioSystem->read(path))
-        {
-            const auto info = read->getInfo().get();
-            auto audioInfo = info;
-            if (path != audioPath)
-            {
-                read = ioSystem->read(audioPath);
-                audioInfo = read->getInfo().get();
-            }
-            bool isSequence = io::FileType::Sequence ==
-                                  ioSystem->getFileType(path.getExtension()) &&
-                              !path.getNumber().empty();
-
-            RationalTime videoDuration(0.F, videoRate);
-
-            if (!info.video.empty())
-            {
-                auto clip = new otio::Clip;
-                TimeRange mediaRange(info.videoTime);
-                if (isSequence)
-                {
-                    mediaRange = sourceItem->timeRange;
-                    auto media = new otio::ImageSequenceReference(
-                        path.getDirectory(), path.getBaseName(),
-                        path.getExtension(), mediaRange.start_time().value(), 1,
-                        mediaRange.duration().rate(), path.getPadding());
-                    media->set_available_range(mediaRange);
-                    clip->set_media_reference(media);
-                }
-                else
-                {
-                    auto media =
-                        new otio::ExternalReference(path.get(), mediaRange);
-                    clip->set_media_reference(media);
-                }
-                auto sourceRange = sourceItem->inOutRange;
-                videoDuration = sourceRange.duration();
-                if (videoDuration.rate() > videoRate)
-                    videoRate = videoDuration.rate();
-                clip->set_source_range(sourceRange);
-
-                otio::Track* videoTrack;
-                if (videoTrackIndex < 0)
-                {
-                    videoTrack = new otio::Track(
-                        "Video", otio::nullopt, otio::Track::Kind::video);
-                    stack->append_child(videoTrack, &errorStatus);
-                    if (otio::is_error(errorStatus))
-                    {
-                        throw std::runtime_error(
-                            _("Cannot append video track."));
-                    }
-                    tracks = stack->children();
-                    videoTrackIndex = tracks.size() - 1;
-                    videoRate = mediaRange.duration().rate();
-                }
-                else
-                {
-                    videoTrack = otio::dynamic_retainer_cast<Track>(
-                        tracks[videoTrackIndex]);
-                }
-                videoTrack->append_child(clip, &errorStatus);
-                if (otio::is_error(errorStatus))
-                {
-                    throw std::runtime_error("Cannot append child");
-                }
-            }
-
-            auto audioDuration = RationalTime(0.0, sampleRate);
-            if (audioInfo.audio.isValid())
-            {
-                audioDuration = audioInfo.audioTime.duration();
-            }
-
-            if (audioDuration.rate() > sampleRate)
-                sampleRate = audioDuration.rate();
-            else
-                audioDuration = audioDuration.rescaled_to(sampleRate);
-
-            if (videoRate > sampleRate)
-            {
-                sampleRate = videoRate;
-            }
-
-            if (sampleRate > 0.F)
-            {
-                // If no audio track, create one and fill it with a gap
-                // until new video clip.
-                // If no audio (a sequence), we also fill it with a gap.
-                if (audioTrackIndex == -1 || !audioInfo.audio.isValid())
-                {
-                    auto videoTrack = otio::dynamic_retainer_cast<Track>(
-                        tracks[videoTrackIndex]);
-                    if (!videoTrack)
-                    {
-                        throw std::runtime_error(_("No video track found."));
-                    }
-                    auto videoChildren = videoTrack->children();
-                    if (videoChildren.size() <= 0)
-                    {
-                        throw std::runtime_error(_("No video children found."));
-                    }
-                    auto videoComposable =
-                        videoChildren[videoChildren.size() - 1];
-                    auto videoClip =
-                        otio::dynamic_retainer_cast<Item>(videoComposable);
-                    if (!videoClip)
-                    {
-                        throw std::runtime_error(
-                            _("Could not find video clip."));
-                    }
-                    TimeRange videoRange =
-                        videoClip->trimmed_range_in_parent(&errorStatus)
-                            .value();
-
-                    otio::Track* audioTrack;
-                    if (audioTrackIndex < 0)
-                    {
-                        audioTrack = new otio::Track(
-                            "Audio", otio::nullopt, otio::Track::Kind::audio);
-                        stack->append_child(audioTrack, &errorStatus);
-                        if (otio::is_error(errorStatus))
-                        {
-                            throw std::runtime_error(
-                                _("Cannot append audio track."));
-                        }
-                        tracks = stack->children();
-                        audioTrackIndex = tracks.size() - 1;
-                    }
-                    else
-                    {
-                        audioTrack = otio::dynamic_retainer_cast<Track>(
-                            tracks[audioTrackIndex]);
-                    }
-                    audioDuration = RationalTime(
-                        videoRange.duration().rescaled_to(sampleRate));
-                    auto gapRange =
-                        TimeRange(RationalTime(0.0, sampleRate), audioDuration);
-
-                    auto gap = new otio::Gap(gapRange);
-                    audioTrack->append_child(gap);
-                }
-
-                const auto inOutRange = sourceItem->inOutRange;
-                const auto start =
-                    inOutRange.start_time().rescaled_to(sampleRate);
-                auto sourceDuration =
-                    inOutRange.duration().rescaled_to(sampleRate);
-                auto audioTrack =
-                    otio::dynamic_retainer_cast<Track>(tracks[audioTrackIndex]);
-                if (audioInfo.audio.isValid())
-                {
-                    auto clip = new otio::Clip;
-                    auto media = new otio::ExternalReference(
-                        audioPath.get(), audioInfo.audioTime);
-                    clip->set_media_reference(media);
-                    if (sourceDuration > audioDuration)
-                        sourceDuration = audioDuration;
-                    const TimeRange sourceRange(start, sourceDuration);
-                    clip->set_source_range(sourceRange);
-                    audioTrack->append_child(clip, &errorStatus);
-                    if (otio::is_error(errorStatus))
-                    {
-                        throw std::runtime_error(_("Cannot append audio clip"));
-                    }
-                }
-                auto gap_duration = RationalTime(0.0, sampleRate);
-                if (videoDuration > audioDuration)
-                {
-                    if (audioInfo.audio.isValid())
-                        gap_duration = videoDuration - audioDuration;
-                    else
-                        gap_duration = videoDuration;
-                }
-                // Append a gap if audio is too short.
-                if (gap_duration.value() > 0.0)
-                {
-                    const auto gapRange = TimeRange(
-                        RationalTime(0.0, sampleRate),
-                        gap_duration.rescaled_to(sampleRate));
-                    auto gap = new otio::Gap(gapRange);
-                    audioTrack->append_child(gap, &errorStatus);
-                    if (otio::is_error(errorStatus))
-                    {
-                        throw std::runtime_error(_("Cannot append audio gap"));
-                    }
-                }
-            }
-        }
+        addTimelineToEDL(destTimeline, sourceTimeline, inOutRange, timeRange);
     }
 
     void add_clip_to_timeline_cb(const int index, ViewerUI* ui)
@@ -1940,17 +1811,15 @@ namespace mrv
             auto tracks = stack->children();
 
             double videoRate = 0.F;
-            int videoTrackIndex = -1;
             for (int i = 0; i < tracks.size(); ++i)
             {
                 auto track = otio::dynamic_retainer_cast<Track>(tracks[i]);
                 if (!track)
                     continue;
-                if (track->kind() == otio::Track::Kind::video &&
-                    videoTrackIndex == -1)
+                if (track->kind() == otio::Track::Kind::video)
                 {
-                    videoTrackIndex = i;
-                    videoRate = track->trimmed_range().duration().rate();
+                    if (track->trimmed_range().duration().rate() > videoRate)
+                        videoRate = track->trimmed_range().duration().rate();
                 }
             }
 
@@ -1959,12 +1828,7 @@ namespace mrv
                 player->getAllAnnotations(), sourceItem->inOutRange,
                 sourceItem->annotations);
 
-            if (isOtioFile(path))
-                add_otio_clip_to_timeline(
-                    index, sourceItem, destItem, destTimeline, ui);
-            else
-                add_normal_clip_to_timeline(
-                    index, sourceItem, destItem, destTimeline, ui);
+            addClipToTimeline(index, destTimeline, ui);
 
             //
             // Sanity check on video and sample rate.

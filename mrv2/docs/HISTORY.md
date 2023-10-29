@@ -21,6 +21,11 @@ v0.8.3
   of panel.  Small UI improvement.
 - Added shortcuts to Environment Map Panel (Ctrl + e) and
   Playlist Panel (Ctrl + p).
+- Improved .otio Playlist creation. Now the audio channel is created only when
+  needed.
+- Fixed creation of .otio Playlist with a sequence that had the audio on disk
+  with the same base name.
+- Fixed frame stepping when there were in/out points in the timeline.
   
 v0.8.2
 ======

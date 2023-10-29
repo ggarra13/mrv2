@@ -427,8 +427,25 @@ namespace mrv
     {
         pushMessage("framePrev", 0);
 
-        auto time = currentTime() -
-                    otime::RationalTime(1.0, timeRange().duration().rate());
+        const auto oneFrame =
+            otime::RationalTime(1.0, timeRange().duration().rate());
+        auto time = currentTime() - oneFrame;
+        if (time <= inOutRange().start_time())
+        {
+            switch (loop())
+            {
+            case timeline::Loop::Once:
+                time = currentTime();
+                break;
+            case timeline::Loop::PingPong:
+                time = inOutRange().start_time() + oneFrame;
+                break;
+            case timeline::Loop::Loop:
+            default:
+                time = inOutRange().end_time_exclusive() - oneFrame;
+                break;
+            }
+        }
         _p->player->setPlayback(timeline::Playback::Reverse);
         StopData* data = new StopData;
         data->player = this;
@@ -443,8 +460,26 @@ namespace mrv
     {
         pushMessage("frameNext", 0);
 
-        auto time = currentTime() +
-                    otime::RationalTime(1.0, timeRange().duration().rate());
+        const auto oneFrame =
+            otime::RationalTime(1.0, timeRange().duration().rate());
+        auto time = currentTime() + oneFrame;
+
+        if (time >= inOutRange().end_time_exclusive())
+        {
+            switch (loop())
+            {
+            case timeline::Loop::Once:
+                time = currentTime();
+                break;
+            case timeline::Loop::PingPong:
+                time = inOutRange().end_time_exclusive() - oneFrame;
+                break;
+            case timeline::Loop::Loop:
+            default:
+                time = inOutRange().start_time();
+                break;
+            }
+        }
         _p->player->setPlayback(timeline::Playback::Forward);
         StopData* data = new StopData;
         data->player = this;
