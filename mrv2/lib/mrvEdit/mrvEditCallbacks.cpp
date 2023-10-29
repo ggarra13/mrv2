@@ -551,17 +551,6 @@ namespace mrv
                                 range.duration().rescaled_to(videoRate));
                             range = TimeRange(start, duration);
                             item->set_source_range(range);
-
-                            if (auto clip =
-                                    otio::dynamic_retainer_cast<Clip>(item))
-                            {
-                                if (auto ref = dynamic_cast<
-                                        otio::ImageSequenceReference*>(
-                                        clip->media_reference()))
-                                {
-                                    ref->set_rate(videoRate);
-                                }
-                            }
                         }
                     }
                     const TimeRange range = track->trimmed_range();
