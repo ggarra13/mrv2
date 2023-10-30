@@ -525,6 +525,8 @@ Flu_File_Chooser::Flu_File_Chooser(
     add_type("mxf", _("MXF Movie"), &reel);
     add_type("ogm", _("Ogg Movie"), &reel);
     add_type("ogv", _("Ogg Video"), &reel);
+    add_type("otio", _("OpenTimelineIO EDL"), &reel);
+    add_type("otioz", _("OpenTimelineIO Zipped EDL"), &reel);
     add_type("qt", _("Quicktime Movie"), &reel);
     add_type("rm", _("Real Media Movie"), &reel);
     add_type("ts", _("AVCHD Video"), &reel);
@@ -1217,27 +1219,46 @@ void Flu_File_Chooser::newFolderCB()
     }
 
     // create a new entry with the name of the new folder. add to either the
-    // list or the details
+    // list or the details at the end of directories and scroll to it.
     Entry* entry =
         new Entry(newName.c_str(), ENTRY_DIR, fileDetailsBtn->value(), this);
-    if (!fileDetailsBtn->value())
-        filelist->add(*entry);
+
+    i = 0;
+    if (fileDetailsBtn->value())
+    {
+        for (; i < filedetails->children(); ++i)
+        {
+            Entry* e = (Entry*)filedetails->child(i);
+            if (e->type != ENTRY_DIR)
+                break;
+        }
+        filedetails->insert(*entry, i);
+    }
     else
-        filedetails->add(*entry);
+    {
+        for (; i < filelist->children(); ++i)
+        {
+            Entry* e = (Entry*)filelist->child(i);
+            if (e->type != ENTRY_DIR)
+                break;
+        }
+        filelist->insert(*entry, i);
+    }
+
+    // Update the entry sizes (so scrollbar is updated)
+    updateEntrySizes();
 
     // switch that entry to input mode and scroll the browser to it
     entry->editCB();
-    /*
-      entry->editMode = 2;
-      entry->value( entry->filename.c_str() );
-      entry->take_focus();
-      entry->position( 0, entry->filename.size() );
-      entry->redraw();
-    */
-    if (!fileDetailsBtn->value())
-        filelist->scroll_to(entry);
-    else
-        filedetails->scroll_to(entry);
+
+    // Only scroll if the entry is not visible already.
+    if (!entry->visible())
+    {
+        if (!fileDetailsBtn->value())
+            filelist->scroll_to(entry);
+        else
+            filedetails->scroll_to(entry);
+    }
 }
 
 void Flu_File_Chooser::recursiveScan(const char* dir, FluStringVector* files)
@@ -1638,8 +1659,8 @@ void Flu_File_Chooser::sortCB(Fl_Widget* w)
         break;
     }
 
-    filelist->sort();
-    filedetails->sort();
+    filelist->sort(filelist->countDirs());
+    filedetails->sort(filedetails->countDirs());
 
     Fl_Group* g = getEntryGroup();
     unsigned num = g->children();
@@ -2070,6 +2091,18 @@ Flu_File_Chooser::FileList::FileList(
 
 Flu_File_Chooser::FileList::~FileList() {}
 
+int Flu_File_Chooser::FileList::countDirs()
+{
+    numDirs = 0;
+    for (int i = 0; i < children(); ++i)
+    {
+        Entry* e = static_cast<Entry*>(child(i));
+        if (e->type == ENTRY_DIR)
+            ++numDirs;
+    }
+    return numDirs;
+}
+
 void Flu_File_Chooser::FileList::sort(int n)
 {
     if (n != -1)
@@ -2201,20 +2234,34 @@ Flu_File_Chooser::FileDetails::~FileDetails() {}
 
 void Flu_File_Chooser::FileDetails::scroll_to(Fl_Widget* w)
 {
-    // we know all the widgets are the same height
-    // so just find this widget and scroll to the accumulated height
     int H = 0;
-    for (int i = 0; i < children(); i++)
+    for (int i = 0; i < children(); ++i)
     {
-        if (child(i) == w)
+        const Entry* o = static_cast<Entry*>(child(i));
+        if (o == w)
         {
-            if (H > (int)chooser->filescroll->scrollbar.maximum())
-                H = (int)chooser->filescroll->scrollbar.maximum();
+            int maxH = (int)chooser->filescroll->scrollbar.maximum() + 6;
+            if (chooser->filescroll->hscrollbar.visible())
+                maxH += (int)chooser->filescroll->hscrollbar.h();
+            if (H > maxH)
+                H = maxH;
             chooser->filescroll->scroll_to(0, H);
             return;
         }
-        H += w->h();
+        H += o->h();
     }
+}
+
+int Flu_File_Chooser::FileDetails::countDirs()
+{
+    numDirs = 0;
+    for (int i = 0; i < children(); ++i)
+    {
+        Entry* e = static_cast<Entry*>(child(i));
+        if (e->type == ENTRY_DIR)
+            ++numDirs;
+    }
+    return numDirs;
 }
 
 void Flu_File_Chooser::FileDetails::sort(int n)
@@ -2651,6 +2698,11 @@ void Flu_File_Chooser::Entry::inputCB()
 
     // only turn off editing if we have a successful name change
     editMode = 0;
+
+    if (type == ENTRY_DIR)
+    {
+        chooser->sortCB(this);
+    }
 }
 
 Fl_Group* Flu_File_Chooser::getEntryGroup()
@@ -3062,13 +3114,6 @@ int Flu_File_Chooser::popupContextMenu(Entry* entry)
             break;
         case ACTION_RENAME:
             entry->editCB();
-            /*
-              entry->editMode = 2;
-              entry->value( entry->filename.c_str() );
-              entry->take_focus();
-              entry->position( 0, entry->filename.size() );
-              trashBtn->deactivate();
-            */
             break;
         case ACTION_DELETE:
             // recycle by default, unless the shift key is held down
@@ -3095,6 +3140,7 @@ void Flu_File_Chooser::Entry::draw()
             fl_draw_box(FL_FLAT_BOX, x(), y(), w(), h(), FL_WHITE);
             redraw();
         }
+        textcolor(fl_rgb_color(0, 0, 0));
         Fl_Input::draw();
         return;
     }

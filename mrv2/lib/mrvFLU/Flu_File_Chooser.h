@@ -544,6 +544,7 @@ public:
 
         int handle(int event);
         void sort(int numDirs = -1);
+        int countDirs();
 
         inline Fl_Widget* child(int n) const
         {
@@ -565,6 +566,7 @@ public:
 
         int handle(int event);
         void sort(int numDirs = -1);
+        int countDirs();
 
         void scroll_to(Fl_Widget* w);
         Fl_Widget* next(Fl_Widget* w);

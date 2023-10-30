@@ -26,18 +26,11 @@ namespace mrv
         _end(end),
         _time(0)
     {
-#if 1
         Fl_Group::current(0);
         w = new Fl_Window(
             main->x() + main->w() / 2 - 320,
             main->y() + main->h() / 2 - 120 / 2, 640, 120);
-#else
-        Fl_Group::current(main);
-        w = new Fl_Window(
-            main->w() / 2 - 320, main->h() / 2 - 120 / 2, 640, 120);
-#endif
         w->size_range(640, 120);
-        // w->set_modal();
         w->begin();
         Fl_Group* g = new Fl_Group(0, 0, w->w(), 120);
         g->begin();
@@ -50,7 +43,6 @@ namespace mrv
         snprintf(
             title, 1024, _("Saving Movie %" PRId64 " - %" PRId64), start, end);
         progress->copy_label(title);
-        // progress->showtext(true);
         elapsed = new Fl_Output(120, 80, 120, 20, _("Elapsed"));
         elapsed->labelsize(16);
         elapsed->box(FL_FLAT_BOX);
@@ -70,10 +62,10 @@ namespace mrv
         w->resizable(w);
         w->set_modal();
         w->end();
-        main->end();
-        Fl_Group::current(0);
 
         _startTime = std::chrono::steady_clock::now();
+        _lastTime = _startTime;
+        _frameDuration = 0;
     }
 
     ProgressReport::~ProgressReport()
@@ -103,6 +95,12 @@ namespace mrv
         std::chrono::duration<float> diff = now - _startTime;
         _time += diff.count();
 
+        if (_frameDuration <= 0)
+        {
+            std::chrono::duration<double> diff = now - _lastTime;
+            _frameDuration = diff.count() * 1000;
+        }
+
         int hour, min, sec;
         to_hour_min_sec(_time, hour, min, sec);
 
@@ -110,8 +108,10 @@ namespace mrv
         snprintf(buf, 120, " %02d:%02d:%02d", hour, min, sec);
         elapsed->value(buf);
 
-        double r = _time / (double)_frame;
-        r *= (_end - _frame);
+        double r = 0;
+        int64_t frame_diff = _end - _frame;
+        if (frame_diff > 0)
+            r = _frameDuration * frame_diff;
 
         to_hour_min_sec(r, hour, min, sec);
 

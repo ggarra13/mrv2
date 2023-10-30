@@ -38,6 +38,7 @@ namespace mrv
         int64_t _end;
         int64_t _start;
 
+        double _frameDuration = 0;
         double _actualFrameRate = 0.F;
         int _framesSinceLastFpsFrame = 0;
 

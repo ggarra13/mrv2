@@ -797,23 +797,18 @@ namespace mrv
         }
 #endif
 
-        DBG;
         ui->uiMain->show();
         ui->uiView->take_focus();
-
-        DBG;
 
         if (!p.session)
             Preferences::open_windows();
         ui->uiMain->fill_menu(ui->uiMenuBar);
 
-        DBG;
         if (ui->uiSecondary)
         {
             // We raise the secondary window last, so it shows at front
             ui->uiSecondary->window()->show();
         }
-        DBG;
     }
 
     void App::cleanResources()
@@ -1002,8 +997,9 @@ namespace mrv
     {
         TLRENDER_P();
 
-        if (fileName.size() > 6 &&
-            fileName.substr(fileName.size() - 6, fileName.size()) == ".mrv2s")
+        file::Path filePath(fileName);
+
+        if (filePath.getExtension() == ".mrv2s")
         {
             p.session = true;
             session::load(fileName);
@@ -1013,7 +1009,6 @@ namespace mrv
         file::PathOptions pathOptions;
         pathOptions.maxNumberDigits =
             p.settingsObject->getValue<int>("Misc/MaxFileSequenceDigits");
-        file::Path filePath(fileName);
 
         if (!file::isReadable(fileName))
         {
@@ -1033,7 +1028,6 @@ namespace mrv
             item->audioPath = file::Path(audioFileName);
             p.filesModel->add(item);
         }
-        DBG;
 
         if (ui->uiPrefs->SendMedia->value())
         {

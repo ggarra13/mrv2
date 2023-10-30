@@ -26,6 +26,17 @@ v0.8.3
 - Fixed creation of .otio Playlist with a sequence that had the audio on disk
   with the same base name.
 - Fixed frame stepping when there were in/out points in the timeline.
+- Fixed text input color when creating a new folder in mrv2's custom file
+  requester.
+- Fixed scrollbar when creating a new directory in mrv2's custom file
+  requester.
+- When creating a directory in mrv2's custom file directory, the entry widget
+  is placed at the end of all directories instead of at the end of all files.
+- After creating a new directory, it is sorted back into the list of
+  directories.
+- Fixed Saving remaining time progress being incorrect.
+- Made mrv2's file chooser recognize .otio and .otioz as OpenTimelineIO EDLs.
+
   
 v0.8.2
 ======
