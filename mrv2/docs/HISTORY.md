@@ -36,6 +36,7 @@ v0.8.3
   directories.
 - Fixed Saving remaining time progress being incorrect.
 - Made mrv2's file chooser recognize .otio and .otioz as OpenTimelineIO EDLs.
+- Refactored and simplified code.
 
   
 v0.8.2
