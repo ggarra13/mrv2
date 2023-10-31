@@ -666,6 +666,9 @@ namespace mrv
             auto model = ui->app->filesModel();
             auto Aindex = model->observeAIndex()->get();
             auto Aitem = model->observeA()->get();
+            if (!Aitem)
+                return false;
+
             if (Aitem->path.get() == fileName)
                 return true;
 
@@ -702,6 +705,8 @@ namespace mrv
         {
             auto model = ui->app->filesModel();
             auto Aitem = model->observeA()->get();
+            if (!Aitem)
+                return;
 
             const file::Path path = Aitem->path;
             if (!isTemporaryEDL(path))
@@ -1403,6 +1408,9 @@ namespace mrv
 
         auto model = ui->app->filesModel();
         auto Aitem = model->observeA()->get();
+        if (!Aitem)
+            return;
+
         file::Path path = Aitem->path;
         bool makeRelativePaths = false;
         if (isTemporaryEDL(path))
@@ -1716,6 +1724,9 @@ namespace mrv
         model->setA(sourceIndex);
 
         auto sourceItem = model->observeA()->get();
+        if (!sourceItem)
+            return;
+
         auto inOutRange = sourceItem->inOutRange;
         auto timeRange = sourceItem->timeRange;
 
@@ -1930,6 +1941,7 @@ namespace mrv
                     // std::cerr << "  toIndex=" << toIndex << std::endl;
                     // std::cerr << " oldRange=" << oldRange << std::endl;
                     // std::cerr << "   insert=" << insertTime << std::endl;
+
                     //
                     // Shift annotations
                     //

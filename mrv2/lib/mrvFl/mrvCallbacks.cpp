@@ -65,23 +65,6 @@ namespace
     const char* kModule = "cback";
 }
 
-namespace
-{
-    using namespace tl;
-
-    void debug_composition_children(otio::Composition* composition)
-    {
-        for (auto child : composition->children())
-        {
-            auto clip = otio::dynamic_retainer_cast<otio::Clip>(child);
-            if (!clip)
-                continue;
-            std::cout << clip->name() << " " << clip->trimmed_range()
-                      << std::endl;
-        }
-    }
-} // namespace
-
 namespace mrv
 {
     using namespace panel;
@@ -1981,8 +1964,7 @@ namespace mrv
 
     void clone_and_replace_cb(Fl_Menu_* m, void* d)
     {
-        auto ui = App::ui;
-        auto app = ui->app;
+        auto app = App::app;
         auto model = app->filesModel();
         if (model->observeFiles()->getSize() < 1)
             return;
@@ -2051,19 +2033,17 @@ namespace mrv
     void refresh_file_cache_cb(Fl_Menu_* m, void* d)
     {
         auto ui = App::ui;
-        int layer = ui->uiColorChannel->value();
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
         io::Options options = player->getIOOptions();
-        options["refresh"] = randomString();
+        options["refresh"] = string::random();
         player->setIOOptions(options);
     }
 
     void copy_filename_cb(Fl_Menu_* m, void* d)
     {
-        auto ui = App::ui;
-        auto app = ui->app;
+        auto app = App::app;
         auto model = app->filesModel();
         if (model->observeFiles()->getSize() < 1)
             return;

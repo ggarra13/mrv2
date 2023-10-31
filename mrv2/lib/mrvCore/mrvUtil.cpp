@@ -3,7 +3,6 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #include <algorithm>
-#include <random>
 #include <filesystem>
 namespace fs = std::filesystem;
 
@@ -17,23 +16,6 @@ namespace fs = std::filesystem;
 
 namespace mrv
 {
-    std::string randomString()
-    {
-        static const std::string charset =
-            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        std::string out;
-
-        const int length = 16;
-        std::random_device rd;
-        std::default_random_engine generator(rd());
-        std::uniform_int_distribution<int> distribution(0, charset.size() - 1);
-
-        for (int i = 0; i < length; ++i)
-        {
-            out += charset[distribution(generator)];
-        }
-        return out;
-    }
 
     int padded_digits(const std::string& frame)
     {

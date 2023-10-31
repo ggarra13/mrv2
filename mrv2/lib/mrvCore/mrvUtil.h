@@ -18,13 +18,6 @@ namespace otime = opentime::OPENTIME_VERSION;
 
 namespace mrv
 {
-    /**
-     * Returns a random string (useful to refresh cache).
-     *
-     *
-     * @return random string
-     */
-    std::string randomString();
 
     /**
      * Given a frame string like "0020", return the number of
