@@ -40,6 +40,9 @@ v0.8.3
 - Fixed clearing of cache resulting in cache starting again from the beginning.
 - Fixed seek and timeline thumbnail preview being incorrect after an Edit/Cut
   or Edit/Insert on a movie with timecode.
+- Improved interactivity of editing tools (cut, insert, slice and remove)
+  due to cache no longer starting from the beginning but from the current
+  position.
 
   
 v0.8.2
