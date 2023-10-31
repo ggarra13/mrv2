@@ -1,3 +1,7 @@
+# SPDX-License-Identifier: BSD-3-Clause
+# mrv2
+# Copyright Contributors to the mrv2 Project. All rights reserved.
+
 #
 # "$Id: valuators.py 531 2019-12-27 12:15:45Z andreasheld $"
 #

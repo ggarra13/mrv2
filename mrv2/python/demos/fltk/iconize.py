@@ -1,3 +1,7 @@
+# SPDX-License-Identifier: BSD-3-Clause
+# mrv2
+# Copyright Contributors to the mrv2 Project. All rights reserved.
+
 #
 # "$Id: iconize.py 35 2003-09-29 21:39:48Z andreasheld $"
 #

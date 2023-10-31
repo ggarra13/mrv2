@@ -1,3 +1,7 @@
+# SPDX-License-Identifier: BSD-3-Clause
+# mrv2
+# Copyright Contributors to the mrv2 Project. All rights reserved.
+
 #
 # "$Id: message.py 201 2006-02-16 07:26:03Z andreasheld $"
 #

@@ -1,3 +1,7 @@
+# SPDX-License-Identifier: BSD-3-Clause
+# mrv2
+# Copyright Contributors to the mrv2 Project. All rights reserved.
+
 #
 # "$Id: clock.py 103 2005-06-24 13:55:26Z andreasheld $"
 #

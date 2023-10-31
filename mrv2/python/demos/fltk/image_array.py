@@ -1,3 +1,7 @@
+# SPDX-License-Identifier: BSD-3-Clause
+# mrv2
+# Copyright Contributors to the mrv2 Project. All rights reserved.
+
 #
 # "$Id: image_array.py 247 2006-08-22 05:54:01Z andreasheld $"
 #

@@ -1,3 +1,7 @@
+# SPDX-License-Identifier: BSD-3-Clause
+# mrv2
+# Copyright Contributors to the mrv2 Project. All rights reserved.
+
 # window test program for pyFLTK the Python bindings
 # for the Fast Light Tool Kit (FLTK).
 #

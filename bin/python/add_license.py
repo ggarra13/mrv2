@@ -39,6 +39,7 @@ CMAKE_DIRS = CPP_DIRS + [
     "cmake/Modules",
     "mrv2/src",
     "mrv2/lib",
+    "mrv2/python/demos/fltk",
     "mrv2/python/demos",
     "mrv2/python/plug-ins",
     "mrv2/bin",
@@ -91,9 +92,9 @@ def process_cmake_files():
       files = aux_files + cmakelist_files + python_files
 
       for f in files:
-            with open( f ) as ip:
+            with open( f, encoding='utf-8' ) as ip:
                 text = ip.read()
-            with open( f + ".new", "w" ) as out:
+            with open( f + ".new", "w", encoding='utf-8' ) as out:
 
                 if not re.search( "Copyright", text ):
                     license = """# SPDX-License-Identifier: BSD-3-Clause

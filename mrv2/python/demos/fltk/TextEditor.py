@@ -1,3 +1,7 @@
+# SPDX-License-Identifier: BSD-3-Clause
+# mrv2
+# Copyright Contributors to the mrv2 Project. All rights reserved.
+
 #!/usr/bin/env python
 # $Id: TextEditor.py 536 2020-10-30 15:20:32Z andreasheld $
 # Author: Chris Green <cmg@dok.org>

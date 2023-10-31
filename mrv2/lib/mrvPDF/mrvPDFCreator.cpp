@@ -105,7 +105,7 @@ namespace mrv
                 HPDF_Page_SetFontAndSize(page, time_font, kTitleSize);
             }
 
-            auto model = ui->app->filesModel();
+            auto model = App::app->filesModel();
             auto item = model->observeA()->get();
             auto path = item->path;
             std::string title =

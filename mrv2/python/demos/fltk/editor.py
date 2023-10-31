@@ -1,3 +1,7 @@
+# SPDX-License-Identifier: BSD-3-Clause
+# mrv2
+# Copyright Contributors to the mrv2 Project. All rights reserved.
+
 #!/usr/bin/env python
 # $Id: editor.py 198 2006-02-16 07:22:28Z andreasheld $
 # Author: Anderas Held
