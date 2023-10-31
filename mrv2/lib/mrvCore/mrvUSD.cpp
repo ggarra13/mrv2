@@ -19,17 +19,16 @@ namespace mrv
     {
         RenderOptions renderOptions()
         {
-            auto settingsObject = App::app->settingsObject();
+            auto settings = App::app->settings();
             RenderOptions o;
-            o.renderWidth = settingsObject->getValue<int>("USD/renderWidth");
-            o.complexity = settingsObject->getValue<float>("USD/complexity");
+            o.renderWidth = settings->getValue<int>("USD/renderWidth");
+            o.complexity = settings->getValue<float>("USD/complexity");
             o.drawMode = static_cast<tl::usd::DrawMode>(
-                settingsObject->getValue<int>("USD/drawMode"));
-            o.enableLighting =
-                settingsObject->getValue<bool>("USD/enableLighting");
-            o.sRGB = settingsObject->getValue<bool>("USD/sRGB");
-            o.stageCache = settingsObject->getValue<int>("USD/stageCache");
-            o.diskCache = settingsObject->getValue<int>("USD/diskCache");
+                settings->getValue<int>("USD/drawMode"));
+            o.enableLighting = settings->getValue<bool>("USD/enableLighting");
+            o.sRGB = settings->getValue<bool>("USD/sRGB");
+            o.stageCache = settings->getValue<int>("USD/stageCache");
+            o.diskCache = settings->getValue<int>("USD/diskCache");
             return o;
         }
 
@@ -40,14 +39,14 @@ namespace mrv
 
             using panel::usdPanel;
 
-            auto settingsObject = App::app->settingsObject();
-            settingsObject->setValue("USD/renderWidth", o.renderWidth);
-            settingsObject->setValue("USD/complexity", o.complexity);
-            settingsObject->setValue("USD/drawMode", o.drawMode);
-            settingsObject->setValue("USD/enableLighting", o.enableLighting);
-            settingsObject->setValue("USD/sRGB", o.sRGB);
-            settingsObject->setValue("USD/stageCache", o.stageCache);
-            settingsObject->setValue("USD/diskCache", o.diskCache);
+            auto settings = App::app->settings();
+            settings->setValue("USD/renderWidth", o.renderWidth);
+            settings->setValue("USD/complexity", o.complexity);
+            settings->setValue("USD/drawMode", o.drawMode);
+            settings->setValue("USD/enableLighting", o.enableLighting);
+            settings->setValue("USD/sRGB", o.sRGB);
+            settings->setValue("USD/stageCache", o.stageCache);
+            settings->setValue("USD/diskCache", o.diskCache);
 
             sendIOOptions();
 

@@ -1114,9 +1114,9 @@ if (Fl::event_clicks() >= 1)
                 class {mrv::Button}
               }
               Fl_Slider uiPenOpacity {
-                callback {auto settingsObject = app->settingsObject();
+                callback {auto settings = app->settings();
 int a = o->value() * 255;
-settingsObject->setValue( mrv::kPenColorA, a);}
+settings->setValue( mrv::kPenColorA, a);}
                 tooltip {Opacity of pen stroke} xywh {7 373 34 19} type {Horz Knob} step 0.01 value 1
               }
               Fl_Group {} {open

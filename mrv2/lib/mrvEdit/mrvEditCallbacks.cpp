@@ -705,8 +705,6 @@ namespace mrv
         {
             auto model = ui->app->filesModel();
             auto Aitem = model->observeA()->get();
-            if (!Aitem)
-                return;
 
             const file::Path path = Aitem->path;
             if (!isTemporaryEDL(path))

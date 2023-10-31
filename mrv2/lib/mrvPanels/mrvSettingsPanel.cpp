@@ -59,7 +59,7 @@ namespace mrv
         {
             TLRENDER_P();
 
-            SettingsObject* settingsObject = p.ui->app->settingsObject();
+            SettingsObject* settings = p.ui->app->settings();
             const std::string& prefix = tab_prefix();
 
             auto cg = new CollapsibleGroup(g->x(), 20, g->w(), 20, _("Cache"));
@@ -79,9 +79,8 @@ namespace mrv
                     const std::string key = prefix + "Cache";
 
                     App* app = App::ui->app;
-                    auto settingsObject = app->settingsObject();
-                    settingsObject->setValue(
-                        key, static_cast<int>(cg->is_open()));
+                    auto settings = app->settings();
+                    settings->setValue(key, static_cast<int>(cg->is_open()));
 
                     settingsPanel->refresh();
                 },
@@ -112,11 +111,11 @@ namespace mrv
             s->step(1.0);
             s->range(0.f, static_cast<double>(totalPhysMem));
             s->default_value(0.0f);
-            s->value(settingsObject->getValue<int>("Cache/GBytes"));
+            s->value(settings->getValue<int>("Cache/GBytes"));
             sV->callback(
                 [=](auto w)
                 {
-                    settingsObject->setValue("Cache/GBytes", (int)w->value());
+                    settings->setValue("Cache/GBytes", (int)w->value());
                     p.ui->app->cacheUpdate();
                 });
 
@@ -127,12 +126,11 @@ namespace mrv
             s->step(0.1f);
             s->range(0.f, 100.0f);
             s->default_value(timeline::PlayerCacheOptions().readAhead.value());
-            s->value(settingsObject->getValue<double>("Cache/ReadAhead"));
+            s->value(settings->getValue<double>("Cache/ReadAhead"));
             sV->callback(
                 [=](auto w)
                 {
-                    settingsObject->setValue(
-                        "Cache/ReadAhead", (double)w->value());
+                    settings->setValue("Cache/ReadAhead", (double)w->value());
                     p.ui->app->cacheUpdate();
                 });
 
@@ -143,18 +141,17 @@ namespace mrv
             s->step(0.1f);
             s->range(0.f, 100.0f);
             s->default_value(timeline::PlayerCacheOptions().readBehind.value());
-            s->value(settingsObject->getValue<double>("Cache/ReadBehind"));
+            s->value(settings->getValue<double>("Cache/ReadBehind"));
             sV->callback(
                 [=](auto w)
                 {
-                    settingsObject->setValue(
-                        "Cache/ReadBehind", (double)w->value());
+                    settings->setValue("Cache/ReadBehind", (double)w->value());
                     p.ui->app->cacheUpdate();
                 });
 
             cg->end();
             std::string key = prefix + "Cache";
-            std_any value = settingsObject->getValue<std::any>(key);
+            std_any value = settings->getValue<std::any>(key);
             int open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
             if (!open)
                 cg->close();
@@ -177,9 +174,8 @@ namespace mrv
                     const std::string key = prefix + "File Sequences";
 
                     App* app = App::ui->app;
-                    auto settingsObject = app->settingsObject();
-                    settingsObject->setValue(
-                        key, static_cast<int>(cg->is_open()));
+                    auto settings = app->settings();
+                    settings->setValue(key, static_cast<int>(cg->is_open()));
 
                     settingsPanel->refresh();
                 },
@@ -199,12 +195,12 @@ namespace mrv
             {
                 m->add(_(i.c_str()));
             }
-            m->value(settingsObject->getValue<int>("FileSequence/Audio"));
+            m->value(settings->getValue<int>("FileSequence/Audio"));
             mW->callback(
                 [=](auto o)
                 {
                     int v = o->value();
-                    settingsObject->setValue("FileSequence/Audio", v);
+                    settings->setValue("FileSequence/Audio", v);
                 });
 
             Fl_Input* i;
@@ -214,16 +210,15 @@ namespace mrv
             i->labelsize(12);
             i->textcolor(FL_BLACK);
             i->cursor_color(FL_RED);
-            std::string file = settingsObject->getValue<std::string>(
-                "FileSequence/AudioFileName");
+            std::string file =
+                settings->getValue<std::string>("FileSequence/AudioFileName");
 
             i->value(file.c_str());
             iW->callback(
                 [=](auto o)
                 {
                     std::string file = o->value();
-                    settingsObject->setValue(
-                        "FileSequence/AudioFileName", file);
+                    settings->setValue("FileSequence/AudioFileName", file);
                 });
 
             iW = new Widget<Fl_Input>(
@@ -232,15 +227,14 @@ namespace mrv
             i->labelsize(12);
             i->textcolor(FL_BLACK);
             i->cursor_color(FL_RED);
-            i->value(settingsObject
-                         ->getValue<std::string>("FileSequence/AudioDirectory")
-                         .c_str());
+            i->value(
+                settings->getValue<std::string>("FileSequence/AudioDirectory")
+                    .c_str());
             iW->callback(
                 [=](auto o)
                 {
                     std::string dir = o->value();
-                    settingsObject->setValue(
-                        "FileSequence/AudioDirectory", dir);
+                    settings->setValue("FileSequence/AudioDirectory", dir);
                 });
 
             DBG;
@@ -250,16 +244,14 @@ namespace mrv
             i->labelsize(12);
             i->textcolor(FL_BLACK);
             i->cursor_color(FL_RED);
-            digits =
-                settingsObject->getValue<int>("Misc/MaxFileSequenceDigits");
+            digits = settings->getValue<int>("Misc/MaxFileSequenceDigits");
             std::string text = string::Format("{0}").arg(digits);
             i->value(text.c_str());
             inW->callback(
                 [=](auto o)
                 {
                     int digits = atoi(o->value());
-                    settingsObject->setValue(
-                        "Misc/MaxFileSequenceDigits", digits);
+                    settings->setValue("Misc/MaxFileSequenceDigits", digits);
                 });
 
             bg->end();
@@ -267,7 +259,7 @@ namespace mrv
             cg->end();
 
             key = prefix + "File Sequences";
-            value = settingsObject->getValue<std::any>(key);
+            value = settings->getValue<std::any>(key);
             open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
             if (!open)
                 cg->close();
@@ -291,9 +283,8 @@ namespace mrv
                     const std::string key = prefix + "Performance";
 
                     App* app = App::ui->app;
-                    auto settingsObject = app->settingsObject();
-                    settingsObject->setValue(
-                        key, static_cast<int>(cg->is_open()));
+                    auto settings = app->settings();
+                    settings->setValue(key, static_cast<int>(cg->is_open()));
 
                     settingsPanel->refresh();
                 },
@@ -322,13 +313,13 @@ namespace mrv
                 m->add(i.c_str());
             }
 
-            m->value(settingsObject->getValue<int>("Performance/TimerMode"));
+            m->value(settings->getValue<int>("Performance/TimerMode"));
 
             mW->callback(
                 [=](auto o)
                 {
                     int v = o->value();
-                    settingsObject->setValue("Performance/TimerMode", v);
+                    settings->setValue("Performance/TimerMode", v);
                 });
 
             auto spW = new Widget< Spinner >(
@@ -337,31 +328,29 @@ namespace mrv
             sp->step(1);
             sp->range(1024, 4096);
             sp->align(FL_ALIGN_LEFT);
-            int v = settingsObject->getValue<int>(
-                "Performance/AudioBufferFrameCount");
+            int v =
+                settings->getValue<int>("Performance/AudioBufferFrameCount");
             sp->value(v);
 
             spW->callback(
                 [=](auto o)
                 {
                     int v = static_cast<int>(o->value());
-                    settingsObject->setValue(
-                        "Performance/AudioBufferFrameCount", v);
+                    settings->setValue("Performance/AudioBufferFrameCount", v);
                 });
 
             spW = new Widget< Spinner >(
                 g->x() + 160, 318, g->w() - 160, 20, _("Video Requests"));
             sp = spW;
             // sp->range( 1, 64 );
-            digits =
-                settingsObject->getValue<int>("Performance/VideoRequestCount");
+            digits = settings->getValue<int>("Performance/VideoRequestCount");
             sp->value(digits);
 
             spW->callback(
                 [=](auto o)
                 {
                     int requests = static_cast<int>(o->value());
-                    settingsObject->setValue(
+                    settings->setValue(
                         "Performance/VideoRequestCount", requests);
                     p.ui->app->cacheUpdate();
                 });
@@ -370,14 +359,13 @@ namespace mrv
                 g->x() + 160, 342, g->w() - 160, 20, _("Audio Requests"));
             sp = spW;
             // sp->irange( 1, 64 );
-            digits =
-                settingsObject->getValue<int>("Performance/AudioRequestCount");
+            digits = settings->getValue<int>("Performance/AudioRequestCount");
             sp->value(digits);
             spW->callback(
                 [=](auto o)
                 {
                     int requests = static_cast<int>(o->value());
-                    settingsObject->setValue(
+                    settings->setValue(
                         "Performance/AudioRequestCount", requests);
                     p.ui->app->cacheUpdate();
                 });
@@ -386,14 +374,13 @@ namespace mrv
                 g->x() + 160, 366, g->w() - 160, 20, _("Sequence I/O threads"));
             sp = spW;
             // sp->irange( 1, 64 );
-            digits = settingsObject->getValue<int>("SequenceIO/ThreadCount");
+            digits = settings->getValue<int>("SequenceIO/ThreadCount");
             sp->value(digits);
             spW->callback(
                 [=](auto o)
                 {
                     int requests = static_cast<int>(o->value());
-                    settingsObject->setValue(
-                        "SequenceIO/ThreadCount", requests);
+                    settings->setValue("SequenceIO/ThreadCount", requests);
                     p.ui->app->cacheUpdate();
                 });
 
@@ -404,14 +391,14 @@ namespace mrv
                 _("FFmpeg YUV to RGB conversion"));
             c = cV;
             c->labelsize(12);
-            c->value(settingsObject->getValue<bool>(
+            c->value(settings->getValue<bool>(
                 "Performance/FFmpegYUVToRGBConversion"));
 
             cV->callback(
                 [=](auto w)
                 {
                     int v = w->value();
-                    settingsObject->setValue(
+                    settings->setValue(
                         "Performance/FFmpegYUVToRGBConversion", v);
                 });
 
@@ -422,8 +409,7 @@ namespace mrv
             spW = new Widget<Spinner>(
                 g->x() + 160, 420, g->w() - 160, 20, _("FFmpeg I/O threads"));
             sp = spW;
-            digits =
-                settingsObject->getValue<int>("Performance/FFmpegThreadCount");
+            digits = settings->getValue<int>("Performance/FFmpegThreadCount");
             sp->value(digits);
             sp->minimum(0);
             sp->maximum(16);
@@ -437,7 +423,7 @@ namespace mrv
                 [=](auto o)
                 {
                     int requests = static_cast<int>(o->value());
-                    settingsObject->setValue(
+                    settings->setValue(
                         "Performance/FFmpegThreadCount", requests);
                     p.ui->app->cacheUpdate();
                 });
@@ -447,7 +433,7 @@ namespace mrv
             cg->end();
 
             key = prefix + "Performance";
-            value = settingsObject->getValue<std::any>(key);
+            value = settings->getValue<std::any>(key);
             open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
             if (!open)
                 cg->close();
@@ -472,7 +458,7 @@ namespace mrv
             bW->callback(
                 [=](auto o)
                 {
-                    settingsObject->reset();
+                    settings->reset();
                     save();
                     refresh();
                 });

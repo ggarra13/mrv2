@@ -118,7 +118,7 @@ namespace mrv
             ui, mode);
 
         std_any value;
-        SettingsObject* settings = ui->app->settingsObject();
+        SettingsObject* settings = ui->app->settings();
         const std::vector< std::string >& recentFiles = settings->recentFiles();
 
         // Add files to Recent menu quoting the / to avoid splitting the menu

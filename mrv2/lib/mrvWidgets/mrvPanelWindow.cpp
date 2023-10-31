@@ -271,7 +271,7 @@ namespace mrv
         }
         case FL_RELEASE:
         {
-            auto settingsObject = App::app->settingsObject();
+            auto settings = App::app->settings();
             PanelGroup* gp = static_cast< PanelGroup* >(child(0));
             // gp->layout();
             auto dragger = gp->get_dragger();
@@ -280,7 +280,7 @@ namespace mrv
             std::string key;
 
             key = prefix + "/WindowW";
-            settingsObject->setValue(key, w());
+            settings->setValue(key, w());
 
             key = prefix + "/WindowH";
 
@@ -288,11 +288,11 @@ namespace mrv
             // the Files, Compare or Playlist panel.
             if (panel::isPanelWithHeight(label))
             {
-                settingsObject->setValue(key, h());
+                settings->setValue(key, h());
             }
             else
             {
-                settingsObject->setValue(key, 0);
+                settings->setValue(key, 0);
             }
 
             return 1;

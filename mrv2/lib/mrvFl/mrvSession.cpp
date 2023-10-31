@@ -217,18 +217,18 @@ namespace mrv
                 {"view", view},
             };
 
-            Message settings;
+            Message json_settings;
 
-            const auto settingsObject = app->settingsObject();
-            const auto keys = settingsObject->keys();
+            const auto settings = app->settings();
+            const auto keys = settings->keys();
             for (const auto& key : keys)
             {
-                std::any value = settingsObject->getValue<std::any>(key);
+                std::any value = settings->getValue<std::any>(key);
                 // // nlohmann::json cannot distinguish floats from doubles
                 // try
                 // {
                 //     double tmpD = std_any_cast< double >(value);
-                //     settings[key] = tmpD;
+                //     json_settings[key] = tmpD;
                 //     continue;
                 // }
                 // catch (const std::bad_cast& e)
@@ -237,7 +237,7 @@ namespace mrv
                 try
                 {
                     float tmpF = std::any_cast< float >(value);
-                    settings[key] = tmpF;
+                    json_settings[key] = tmpF;
                     continue;
                 }
                 catch (const std::bad_cast& e)
@@ -246,7 +246,7 @@ namespace mrv
                 try
                 {
                     int tmp = std::any_cast< int >(value);
-                    settings[key] = tmp;
+                    json_settings[key] = tmp;
                     continue;
                 }
                 catch (const std::bad_cast& e)
@@ -255,7 +255,7 @@ namespace mrv
                 try
                 {
                     bool tmp = std::any_cast< bool >(value);
-                    settings[key] = tmp;
+                    json_settings[key] = tmp;
                     continue;
                 }
                 catch (const std::bad_cast& e)
@@ -265,7 +265,7 @@ namespace mrv
                 {
                     const std::string& tmpS =
                         std::any_cast< std::string >(value);
-                    settings[key] = tmpS;
+                    json_settings[key] = tmpS;
                     continue;
                 }
                 catch (const std::bad_cast& e)
@@ -274,7 +274,7 @@ namespace mrv
                 try
                 {
                     const std::string tmpS = std::any_cast< char* >(value);
-                    settings[key] = tmpS;
+                    json_settings[key] = tmpS;
                     continue;
                 }
                 catch (const std::bad_cast& e)
@@ -310,7 +310,7 @@ namespace mrv
             session["timeline"] = timeline;
             session["ocio"] = ocio;
             session["layer"] = layer;
-            session["settings"] = settings;
+            session["settings"] = json_settings;
             session["compareOptions"] = compare;
             session["stereo3DOptions"] = stereo;
             session["stereoIndex"] = stereoIndex;
@@ -532,7 +532,7 @@ namespace mrv
 
                     j = session["settings"];
 
-                    auto settingsObject = app->settingsObject();
+                    auto settings = app->settings();
 
                     for (const auto& item : j.items())
                     {
@@ -542,45 +542,41 @@ namespace mrv
                         switch (type)
                         {
                         case Message::value_t::boolean:
-                            settingsObject->setValue(key, value.get<bool>());
+                            settings->setValue(key, value.get<bool>());
                             continue;
                         case Message::value_t::number_unsigned:
                         {
                             int v = value.get<unsigned>();
-                            settingsObject->setValue(key, v);
+                            settings->setValue(key, v);
                             continue;
                         }
                         case Message::value_t::number_integer:
-                            settingsObject->setValue(key, value.get<int>());
+                            settings->setValue(key, value.get<int>());
                             continue;
                         case Message::value_t::number_float:
                         {
-                            std::any val =
-                                settingsObject->getValue<std::any>(key);
+                            std::any val = settings->getValue<std::any>(key);
                             if (!std_any_empty(val))
                             {
                                 try
                                 {
                                     double v = std::any_cast<double>(val);
-                                    settingsObject->setValue(
+                                    settings->setValue(
                                         key, value.get<double>());
                                 }
                                 catch (const std::bad_cast& e)
                                 {
-                                    settingsObject->setValue(
-                                        key, value.get<float>());
+                                    settings->setValue(key, value.get<float>());
                                 }
                             }
                             else
                             {
-                                settingsObject->setValue(
-                                    key, value.get<float>());
+                                settings->setValue(key, value.get<float>());
                             }
                             continue;
                         }
                         case Message::value_t::string:
-                            settingsObject->setValue(
-                                key, value.get<std::string>());
+                            settings->setValue(key, value.get<std::string>());
                             continue;
                         default:
                             LOG_ERROR(

@@ -165,7 +165,7 @@ namespace mrv
         {
             TLRENDER_P();
 
-            auto settingsObject = p.ui->app->settingsObject();
+            auto settings = p.ui->app->settings();
             const std::string& prefix = tab_prefix();
 
             _r->thumbnailCreator = p.ui->uiTimeline->thumbnailCreator();
@@ -316,9 +316,8 @@ namespace mrv
                     const std::string key = prefix + "Stereo 3D";
 
                     App* app = App::ui->app;
-                    auto settingsObject = app->settingsObject();
-                    settingsObject->setValue(
-                        key, static_cast<int>(cg->is_open()));
+                    auto settings = app->settings();
+                    settings->setValue(key, static_cast<int>(cg->is_open()));
 
                     stereo3DPanel->refresh();
                 },
@@ -381,7 +380,7 @@ namespace mrv
             cg->end();
 
             std::string key = prefix + "Stereo 3D";
-            value = settingsObject->getValue<std::any>(key);
+            value = settings->getValue<std::any>(key);
             int open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
             if (!open)
                 cg->close();
@@ -403,9 +402,8 @@ namespace mrv
                     const std::string key = prefix + "Adjustments";
 
                     App* app = App::ui->app;
-                    auto settingsObject = app->settingsObject();
-                    settingsObject->setValue(
-                        key, static_cast<int>(cg->is_open()));
+                    auto settings = app->settings();
+                    settings->setValue(key, static_cast<int>(cg->is_open()));
 
                     stereo3DPanel->refresh();
                 },
@@ -454,7 +452,7 @@ namespace mrv
             cg->end();
 
             key = prefix + "Adjustments";
-            value = settingsObject->getValue<std::any>(key);
+            value = settings->getValue<std::any>(key);
             open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
             if (!open)
                 cg->close();

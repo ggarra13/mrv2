@@ -90,7 +90,7 @@ namespace mrv
             g->clear();
             g->begin();
 
-            SettingsObject* settingsObject = p.ui->app->settingsObject();
+            SettingsObject* settings = p.ui->app->settings();
             std::string prefix = tab_prefix();
 
             // ---------------------------- LUT
@@ -113,9 +113,8 @@ namespace mrv
                     const std::string key = prefix + "LUT";
 
                     App* app = App::ui->app;
-                    auto settingsObject = app->settingsObject();
-                    settingsObject->setValue(
-                        key, static_cast<int>(cg->is_open()));
+                    auto settings = app->settings();
+                    settings->setValue(key, static_cast<int>(cg->is_open()));
 
                     colorPanel->refresh();
                 },
@@ -181,7 +180,7 @@ namespace mrv
             cg->end();
 
             std::string key = prefix + "LUT";
-            std_any value = settingsObject->getValue<std::any>(key);
+            std_any value = settings->getValue<std::any>(key);
             int open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
             if (!open)
                 cg->close();
@@ -208,9 +207,8 @@ namespace mrv
                     const std::string key = prefix + "Color Controls";
 
                     App* app = App::ui->app;
-                    auto settingsObject = app->settingsObject();
-                    settingsObject->setValue(
-                        key, static_cast<int>(cg->is_open()));
+                    auto settings = app->settings();
+                    settings->setValue(key, static_cast<int>(cg->is_open()));
 
                     colorPanel->refresh();
                 },
@@ -312,7 +310,7 @@ namespace mrv
             cg->end();
 
             key = prefix + "Color Controls";
-            value = settingsObject->getValue<std::any>(key);
+            value = settings->getValue<std::any>(key);
             open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
             if (!open)
                 cg->close();
@@ -336,9 +334,8 @@ namespace mrv
                     const std::string key = prefix + "Levels";
 
                     App* app = App::ui->app;
-                    auto settingsObject = app->settingsObject();
-                    settingsObject->setValue(
-                        key, static_cast<int>(cg->is_open()));
+                    auto settings = app->settings();
+                    settings->setValue(key, static_cast<int>(cg->is_open()));
 
                     colorPanel->refresh();
                 },
@@ -441,7 +438,7 @@ namespace mrv
             cg->end();
 
             key = prefix + "Levels";
-            value = settingsObject->getValue<std::any>(key);
+            value = settings->getValue<std::any>(key);
             open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
             if (!open)
                 cg->close();
@@ -463,9 +460,8 @@ namespace mrv
                     const std::string key = prefix + "Soft Clip";
 
                     App* app = App::ui->app;
-                    auto settingsObject = app->settingsObject();
-                    settingsObject->setValue(
-                        key, static_cast<int>(cg->is_open()));
+                    auto settings = app->settings();
+                    settings->setValue(key, static_cast<int>(cg->is_open()));
 
                     colorPanel->refresh();
                 },
@@ -505,7 +501,7 @@ namespace mrv
             cg->end();
 
             key = prefix + "Soft Clip";
-            value = settingsObject->getValue<std::any>(key);
+            value = settings->getValue<std::any>(key);
             open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
             if (!open)
                 cg->close();

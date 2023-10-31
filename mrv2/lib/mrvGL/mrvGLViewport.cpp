@@ -588,8 +588,7 @@ namespace mrv
         if (w)
         {
             std_any value;
-            int font_size =
-                p.ui->app->settingsObject()->getValue<int>(kFontSize);
+            int font_size = p.ui->app->settings()->getValue<int>(kFontSize);
             double pixels_unit = pixels_per_unit();
             double pct = renderSize.h / 1024.F;
             double fontSize = font_size * pct * p.viewZoom / pixels_unit;

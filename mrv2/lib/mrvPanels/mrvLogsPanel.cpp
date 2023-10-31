@@ -67,26 +67,26 @@ namespace mrv
             PanelWidget::undock();
             PanelWindow* w = g->get_window();
 
-            SettingsObject* settingsObject = p.ui->app->settingsObject();
+            SettingsObject* settings = p.ui->app->settings();
 
             std::string prefix = "gui/" + label;
             std::string key;
             std_any value;
 
             key = prefix + "/WindowX";
-            value = settingsObject->getValue<std::any>(key);
+            value = settings->getValue<std::any>(key);
             int X = std_any_empty(value) ? w->x() : std_any_cast<int>(value);
 
             key = prefix + "/WindowY";
-            value = settingsObject->getValue<std::any>(key);
+            value = settings->getValue<std::any>(key);
             int Y = std_any_empty(value) ? w->y() : std_any_cast<int>(value);
 
             key = prefix + "/WindowW";
-            value = settingsObject->getValue<std::any>(key);
+            value = settings->getValue<std::any>(key);
             int W = std_any_empty(value) ? 512 : std_any_cast<int>(value);
 
             key = prefix + "/WindowH";
-            value = settingsObject->getValue<std::any>(key);
+            value = settings->getValue<std::any>(key);
             int H = std_any_empty(value) ? 512 : std_any_cast<int>(value);
 
             if (W < 512)
@@ -104,9 +104,9 @@ namespace mrv
             PanelWidget::save();
 
             // We make the log panel save as hidden, never visible.
-            SettingsObject* settingsObject = p.ui->app->settingsObject();
+            SettingsObject* settings = p.ui->app->settings();
             const std::string key = "gui/" + label + "/Window/Visible";
-            settingsObject->setValue(key, 0);
+            settings->setValue(key, 0);
         }
 
         void LogsPanel::add_controls()

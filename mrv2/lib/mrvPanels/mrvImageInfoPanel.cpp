@@ -426,7 +426,7 @@ namespace mrv
                 sw = 0;
             int W = g->w() - sw;
 
-            SettingsObject* settingsObject = p.ui->app->settingsObject();
+            SettingsObject* settings = p.ui->app->settings();
 
             // CollapsibleGrop recalcs, we don't care its xyh sizes
             m_image = new CollapsibleGroup(g->x(), Y, W, 800, _("Main"));
@@ -446,7 +446,7 @@ namespace mrv
 
             std::string prefix = tab_prefix();
             std::string key = prefix + "Main";
-            std_any value = settingsObject->getValue<std::any>(key);
+            std_any value = settings->getValue<std::any>(key);
             int open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
             if (!open)
                 m_image->close();
@@ -468,7 +468,7 @@ namespace mrv
                 m_video);
 
             key = prefix + "Video";
-            value = settingsObject->getValue<std::any>(key);
+            value = settings->getValue<std::any>(key);
             open = std_any_empty(value) ? 0 : std_any_cast<int>(value);
             if (!open)
                 m_video->close();
@@ -491,7 +491,7 @@ namespace mrv
                 m_audio);
 
             key = prefix + "Audio";
-            value = settingsObject->getValue<std::any>(key);
+            value = settings->getValue<std::any>(key);
             open = std_any_empty(value) ? 0 : std_any_cast<int>(value);
             if (!open)
                 m_audio->close();
@@ -514,7 +514,7 @@ namespace mrv
                 m_subtitle);
 
             key = prefix + "Subtitle";
-            value = settingsObject->getValue<std::any>(key);
+            value = settings->getValue<std::any>(key);
             open = std_any_empty(value) ? 0 : std_any_cast<int>(value);
             if (!open)
                 m_subtitle->close();
@@ -538,7 +538,7 @@ namespace mrv
                 m_attributes);
 
             key = prefix + "Attributes";
-            open = settingsObject->getValue<int>(key);
+            open = settings->getValue<int>(key);
             if (!open)
                 m_attributes->close();
         }
@@ -711,27 +711,27 @@ namespace mrv
         {
             TLRENDER_P();
 
-            SettingsObject* settingsObject = p.ui->app->settingsObject();
+            SettingsObject* settings = p.ui->app->settings();
             std::string prefix = tab_prefix();
             std::string key = prefix + "Main";
             int value = m_image->is_open();
-            settingsObject->setValue(key, value);
+            settings->setValue(key, value);
 
             key = prefix + "Video";
             value = m_video->is_open();
-            settingsObject->setValue(key, value);
+            settings->setValue(key, value);
 
             key = prefix + "Audio";
             value = m_audio->is_open();
-            settingsObject->setValue(key, value);
+            settings->setValue(key, value);
 
             key = prefix + "Subtitle";
             value = m_subtitle->is_open();
-            settingsObject->setValue(key, value);
+            settings->setValue(key, value);
 
             key = prefix + "Attributes";
             value = m_attributes->is_open();
-            settingsObject->setValue(key, value);
+            settings->setValue(key, value);
         }
 
         void ImageInfoPanel::save()

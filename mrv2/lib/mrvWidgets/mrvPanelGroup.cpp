@@ -103,7 +103,7 @@ namespace mrv
             tw->add(gp);        // move the tool group into the floating window
             gp->position(1, 1); // align group in floating window
             tw->resizable(gp);
-            auto settingsObject = App::app->settingsObject();
+            auto settings = App::app->settings();
             auto dragger = gp->get_dragger();
             std::string label = dragger->label();
             std::string prefix = "gui/" + label;
@@ -112,11 +112,11 @@ namespace mrv
             std_any value;
 
             key = prefix + "/WindowW";
-            value = settingsObject->getValue<std::any>(key);
+            value = settings->getValue<std::any>(key);
             W = std_any_empty(value) ? W : std_any_cast<int>(value);
 
             key = prefix + "/WindowH";
-            value = settingsObject->getValue<std::any>(key);
+            value = settings->getValue<std::any>(key);
 
             int H2 = std_any_empty(value) ? H : std_any_cast<int>(value);
             if (H2 != 0)

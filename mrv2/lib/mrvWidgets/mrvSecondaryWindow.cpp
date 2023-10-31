@@ -31,7 +31,7 @@ namespace mrv
 
         int X = 30, Y = 30, W = 1280, H = 720;
 
-        SettingsObject* settings = ui->app->settingsObject();
+        SettingsObject* settings = ui->app->settings();
         std::string key;
         std_any value;
 
@@ -84,7 +84,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        SettingsObject* settings = p.ui->app->settingsObject();
+        SettingsObject* settings = p.ui->app->settings();
 
         const auto& player = p.viewport->getTimelinePlayer();
         timeline::Playback playback = timeline::Playback::Forward;
@@ -107,7 +107,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        SettingsObject* settings = p.ui->app->settingsObject();
+        SettingsObject* settings = p.ui->app->settings();
 
         std::string key = "gui/Secondary/Window/Visible";
         MainWindow* w = p.mainWindow;

@@ -55,7 +55,7 @@ namespace mrv
         {
             TLRENDER_P();
 
-            SettingsObject* settingsObject = p.ui->app->settingsObject();
+            SettingsObject* settings = p.ui->app->settings();
 
             int X = g->x();
             int Y = 20;
@@ -88,7 +88,7 @@ namespace mrv
                 [=](auto o)
                 {
                     int type = o->value();
-                    settingsObject->setValue("Background/Type", type);
+                    settings->setValue("Background/Type", type);
                     auto view = p.ui->uiView;
                     auto options = view->getBackgroundOptions();
                     options.type = static_cast<tl::timeline::Background>(type);
@@ -121,7 +121,7 @@ namespace mrv
                     {
                         auto color = get_color_cb(o->color(), p.ui);
                         Fl_Color c = to_fltk_color(color);
-                        settingsObject->setValue(
+                        settings->setValue(
                             "Background/SolidColor", static_cast<int>(c));
                         o->color(c);
                         o->redraw();
@@ -150,7 +150,7 @@ namespace mrv
                 sV->callback(
                     [=](auto o)
                     {
-                        settingsObject->setValue(
+                        settings->setValue(
                             "Background/CheckersSize",
                             static_cast<int>(o->value()));
                         auto view = p.ui->uiView;
@@ -177,7 +177,7 @@ namespace mrv
                     {
                         auto color = get_color_cb(o->color(), p.ui);
                         Fl_Color c = to_fltk_color(color);
-                        settingsObject->setValue(
+                        settings->setValue(
                             "Background/CheckersColor1", static_cast<int>(c));
                         o->color(c);
                         o->redraw();
@@ -204,7 +204,7 @@ namespace mrv
                     {
                         auto color = get_color_cb(o->color(), p.ui);
                         Fl_Color c = to_fltk_color(color);
-                        settingsObject->setValue(
+                        settings->setValue(
                             "Background/CheckersColor0", static_cast<int>(c));
                         o->color(c);
                         o->redraw();

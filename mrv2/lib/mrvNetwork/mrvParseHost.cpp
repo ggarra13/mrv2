@@ -28,9 +28,9 @@ namespace mrv
     void store_port(const uint16_t port)
     {
         App* app = App::ui->app;
-        auto settingsObject = app->settingsObject();
+        auto settings = app->settings();
         char buf[64];
         snprintf(buf, 64, "%d", port);
-        settingsObject->setValue("TCP/Control/Port", std::string(buf));
+        settings->setValue("TCP/Control/Port", std::string(buf));
     }
 } // namespace mrv

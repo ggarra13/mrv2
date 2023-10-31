@@ -37,9 +37,9 @@ namespace mrv
 
             save();
 
-            SettingsObject* settingsObject = p.ui->app->settingsObject();
+            SettingsObject* settings = p.ui->app->settings();
             std::string key = "gui/" + label + "/Window/Visible";
-            settingsObject->setValue(key, 0);
+            settings->setValue(key, 0);
 
             delete g->image();
             g->image(nullptr);
@@ -61,28 +61,28 @@ namespace mrv
             int H = dg->h();
 
             label = lbl;
-            SettingsObject* settingsObject = p.ui->app->settingsObject();
+            SettingsObject* settings = p.ui->app->settings();
             std::string prefix = "gui/" + label;
             std::string key = prefix + "/Window";
-            std_any value = settingsObject->getValue<std::any>(key);
+            std_any value = settings->getValue<std::any>(key);
             int window = std_any_empty(value) ? 0 : std_any_cast<int>(value);
 
             if (window)
             {
                 key = prefix + "/WindowX";
-                value = settingsObject->getValue<std::any>(key);
+                value = settings->getValue<std::any>(key);
                 X = std_any_empty(value) ? X : std_any_cast<int>(value);
 
                 key = prefix + "/WindowY";
-                value = settingsObject->getValue<std::any>(key);
+                value = settings->getValue<std::any>(key);
                 Y = std_any_empty(value) ? Y : std_any_cast<int>(value);
 
                 key = prefix + "/WindowW";
-                value = settingsObject->getValue<std::any>(key);
+                value = settings->getValue<std::any>(key);
                 W = std_any_empty(value) ? W : std_any_cast<int>(value);
 
                 key = prefix + "/WindowH";
-                value = settingsObject->getValue<std::any>(key);
+                value = settings->getValue<std::any>(key);
                 H = std_any_empty(value) ? H : std_any_cast<int>(value);
                 if (H == 0)
                     H = 20 + 30;
@@ -160,28 +160,28 @@ namespace mrv
         {
             TLRENDER_P();
 
-            SettingsObject* settingsObject = p.ui->app->settingsObject();
+            SettingsObject* settings = p.ui->app->settings();
 
             std::string prefix = "gui/" + label;
             std::string key = prefix + "/Window";
             int window = !g->docked();
-            settingsObject->setValue(key, window);
+            settings->setValue(key, window);
 
             key += "/Visible";
-            settingsObject->setValue(key, 1);
+            settings->setValue(key, 1);
 
             if (window)
             {
                 PanelWindow* w = g->get_window();
 
                 key = prefix + "/WindowX";
-                settingsObject->setValue(key, w->x());
+                settings->setValue(key, w->x());
 
                 key = prefix + "/WindowY";
-                settingsObject->setValue(key, w->y());
+                settings->setValue(key, w->y());
 
                 key = prefix + "/WindowW";
-                settingsObject->setValue(key, w->w());
+                settings->setValue(key, w->w());
 
                 key = prefix + "/WindowH";
 
@@ -192,7 +192,7 @@ namespace mrv
                 {
                     H = w->h();
                 }
-                settingsObject->setValue(key, H);
+                settings->setValue(key, H);
             }
         }
 

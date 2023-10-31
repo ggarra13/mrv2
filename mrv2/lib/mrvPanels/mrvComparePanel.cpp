@@ -194,7 +194,7 @@ namespace mrv
 
             _r->thumbnailCreator = p.ui->uiTimeline->thumbnailCreator();
 
-            auto settingsObject = p.ui->app->settingsObject();
+            auto settings = p.ui->app->settings();
             const std::string& prefix = tab_prefix();
 
             g->clear();
@@ -505,9 +505,8 @@ namespace mrv
                     const std::string key = prefix + "Wipe";
 
                     App* app = App::ui->app;
-                    auto settingsObject = app->settingsObject();
-                    settingsObject->setValue(
-                        key, static_cast<int>(cg->is_open()));
+                    auto settings = app->settings();
+                    settings->setValue(key, static_cast<int>(cg->is_open()));
 
                     comparePanel->refresh();
                 },
@@ -580,7 +579,7 @@ namespace mrv
             cg->end();
 
             std::string key = prefix + "Wipe";
-            std_any value = settingsObject->getValue<std::any>(key);
+            std_any value = settings->getValue<std::any>(key);
             int open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
             if (!open)
                 cg->close();
@@ -602,9 +601,8 @@ namespace mrv
                     const std::string key = prefix + "Overlay";
 
                     App* app = App::ui->app;
-                    auto settingsObject = app->settingsObject();
-                    settingsObject->setValue(
-                        key, static_cast<int>(cg->is_open()));
+                    auto settings = app->settings();
+                    settings->setValue(key, static_cast<int>(cg->is_open()));
 
                     comparePanel->refresh();
                 },
@@ -637,7 +635,7 @@ namespace mrv
             cg->end();
 
             key = prefix + "Overlay";
-            value = settingsObject->getValue<std::any>(key);
+            value = settings->getValue<std::any>(key);
             open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
             if (!open)
                 cg->close();

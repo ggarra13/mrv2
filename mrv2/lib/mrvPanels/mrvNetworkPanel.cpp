@@ -76,7 +76,7 @@ namespace mrv
         {
             TLRENDER_P();
 
-            SettingsObject* settingsObject = p.ui->app->settingsObject();
+            SettingsObject* settings = p.ui->app->settings();
 
             std_any value;
 
@@ -153,7 +153,7 @@ namespace mrv
             m->disable_glyph();
             m->disable_label();
             m->tooltip(_("Previously used Hosts"));
-            for (const auto& host : settingsObject->recentHosts())
+            for (const auto& host : settings->recentHosts())
             {
                 m->add(host.c_str());
             }
@@ -177,7 +177,7 @@ namespace mrv
                 new Widget<IntInput>(g->x() + X, Y + 5, 80, 20, _("Port"));
             _r->port = in = inV;
 
-            value = settingsObject->getValue<std::any>("TCP/Control/Port");
+            value = settings->getValue<std::any>("TCP/Control/Port");
             std::string portNumber = std_any_empty(value)
                                          ? "55150"
                                          : std_any_cast<std::string>(value);
@@ -190,7 +190,7 @@ namespace mrv
                 [=](auto w)
                 {
                     std::string value = w->value();
-                    settingsObject->setValue("TCP/Control/Port", value);
+                    settings->setValue("TCP/Control/Port", value);
                 });
 
             _r->portGroup->end();
@@ -219,7 +219,7 @@ namespace mrv
                         {
                             std::string host = _r->host->value();
                             tcp = new Client(host, port);
-                            settingsObject->addRecentHost(host);
+                            settings->addRecentHost(host);
                         }
                         else
                         {

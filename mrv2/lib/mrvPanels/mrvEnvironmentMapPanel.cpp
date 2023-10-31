@@ -67,7 +67,7 @@ namespace mrv
         {
             TLRENDER_P();
 
-            auto settingsObject = p.ui->app->settingsObject();
+            auto settings = p.ui->app->settings();
             const std::string& prefix = tab_prefix();
 
             std_any value;
@@ -98,9 +98,8 @@ namespace mrv
                     const std::string key = prefix + "Type";
 
                     App* app = App::ui->app;
-                    auto settingsObject = app->settingsObject();
-                    settingsObject->setValue(
-                        key, static_cast<int>(cg->is_open()));
+                    auto settings = app->settings();
+                    settings->setValue(key, static_cast<int>(cg->is_open()));
 
                     environmentMapPanel->refresh();
                 },
@@ -175,7 +174,7 @@ namespace mrv
             cg->end();
 
             std::string key = prefix + "Type";
-            value = settingsObject->getValue<std::any>(key);
+            value = settings->getValue<std::any>(key);
             int open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
             if (!open)
                 cg->close();
@@ -198,9 +197,8 @@ namespace mrv
                     const std::string key = prefix + "Projection";
 
                     App* app = App::ui->app;
-                    auto settingsObject = app->settingsObject();
-                    settingsObject->setValue(
-                        key, static_cast<int>(cg->is_open()));
+                    auto settings = app->settings();
+                    settings->setValue(key, static_cast<int>(cg->is_open()));
 
                     environmentMapPanel->refresh();
                 },
@@ -261,7 +259,7 @@ namespace mrv
             cg->end();
 
             key = prefix + "Projection";
-            value = settingsObject->getValue<std::any>(key);
+            value = settings->getValue<std::any>(key);
             open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
             if (!open)
                 cg->close();
@@ -284,9 +282,8 @@ namespace mrv
                     const std::string key = prefix + "Rotation";
 
                     App* app = App::ui->app;
-                    auto settingsObject = app->settingsObject();
-                    settingsObject->setValue(
-                        key, static_cast<int>(cg->is_open()));
+                    auto settings = app->settings();
+                    settings->setValue(key, static_cast<int>(cg->is_open()));
 
                     environmentMapPanel->refresh();
                 },
@@ -301,7 +298,7 @@ namespace mrv
             c->tooltip(
                 _("Spin with middle mouse instead of rotating with it."));
 
-            value = settingsObject->getValue<std::any>("EnvironmentMap/Spin");
+            value = settings->getValue<std::any>("EnvironmentMap/Spin");
             v = std_any_empty(value) ? 0 : std_any_cast<int>(value);
             c->value(v);
             auto view = p.ui->uiView;
@@ -315,8 +312,7 @@ namespace mrv
                     auto view = p.ui->uiView;
                     EnvironmentMapOptions o = view->getEnvironmentMapOptions();
                     o.spin = w->value();
-                    settingsObject->setValue(
-                        "EnvironmentMap/Spin", (int)o.spin);
+                    settings->setValue("EnvironmentMap/Spin", (int)o.spin);
                     view->setEnvironmentMapOptions(o);
                 });
 
@@ -353,7 +349,7 @@ namespace mrv
             cg->end();
 
             key = prefix + "Rotation";
-            value = settingsObject->getValue<std::any>(key);
+            value = settings->getValue<std::any>(key);
             open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
             if (!open)
                 cg->close();
@@ -379,9 +375,8 @@ namespace mrv
                     const std::string key = prefix + "Subdivisions";
 
                     App* app = App::ui->app;
-                    auto settingsObject = app->settingsObject();
-                    settingsObject->setValue(
-                        key, static_cast<int>(cg->is_open()));
+                    auto settings = app->settings();
+                    settings->setValue(key, static_cast<int>(cg->is_open()));
 
                     environmentMapPanel->refresh();
                 },
@@ -395,7 +390,7 @@ namespace mrv
             s->range(4.0f, 90.0f);
             s->step(1);
 
-            value = settingsObject->getValue<std::any>(
+            value = settings->getValue<std::any>(
                 "EnvironmentMap/Sphere/SubdivisionX");
             v = std_any_empty(value) ? 36 : std_any_cast<int>(value);
 
@@ -407,12 +402,11 @@ namespace mrv
                     EnvironmentMapOptions o = view->getEnvironmentMapOptions();
                     int v = static_cast<int>(w->value());
                     o.subdivisionX = v;
-                    settingsObject->setValue(
-                        "EnvironmentMap/Sphere/SubdivisionX", v);
+                    settings->setValue("EnvironmentMap/Sphere/SubdivisionX", v);
                     view->setEnvironmentMapOptions(o);
                 });
 
-            value = settingsObject->getValue<std::any>(
+            value = settings->getValue<std::any>(
                 "EnvironmentMap/Sphere/SubdivisionY");
             v = std_any_empty(value) ? 36 : std_any_cast<int>(value);
 
@@ -422,7 +416,7 @@ namespace mrv
             s->range(4.0f, 90.0f);
             s->step(1);
 
-            value = settingsObject->getValue<std::any>(
+            value = settings->getValue<std::any>(
                 "EnvironmentMap/Sphere/SubdivisionY");
             v = std_any_empty(value) ? 36 : std_any_cast<int>(value);
 
@@ -434,15 +428,14 @@ namespace mrv
                     EnvironmentMapOptions o = view->getEnvironmentMapOptions();
                     int v = static_cast<int>(w->value());
                     o.subdivisionY = v;
-                    settingsObject->setValue(
-                        "EnvironmentMap/Sphere/SubdivisionY", v);
+                    settings->setValue("EnvironmentMap/Sphere/SubdivisionY", v);
                     view->setEnvironmentMapOptions(o);
                 });
 
             cg->end();
 
             key = prefix + "Subdivisions";
-            value = settingsObject->getValue<std::any>(key);
+            value = settings->getValue<std::any>(key);
             open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
             if (!open)
                 cg->close();

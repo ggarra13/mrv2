@@ -140,7 +140,7 @@ namespace mrv
 
         base.get("version", version, kPreferencesVersion);
 
-        SettingsObject* settingsObject = ViewerUI::app->settingsObject();
+        SettingsObject* settings = ViewerUI::app->settings();
 
         Fl_Preferences fltk_settings(base, "settings");
         unsigned num = fltk_settings.entries();
@@ -183,7 +183,7 @@ namespace mrv
                     LOG_ERROR("Unknown type " << type << " for key " << keyS);
                     break;
                 }
-                settingsObject->setValue(keyS, value);
+                settings->setValue(keyS, value);
             }
         }
         DBG3;
@@ -198,7 +198,7 @@ namespace mrv
             {
                 // Only add existing files to the list.
                 if (file::isReadable(tmpS))
-                    settingsObject->addRecentFile(tmpS);
+                    settings->addRecentFile(tmpS);
             }
             else
             {
@@ -211,14 +211,14 @@ namespace mrv
         DBG3;
         Fl_Preferences recent_hosts(base, "recentHosts");
         num = recent_hosts.entries();
-        settingsObject->addRecentHost("localhost");
+        settings->addRecentHost("localhost");
         for (unsigned i = num; i > 0; --i)
         {
             char buf[16];
             snprintf(buf, 16, "Host #%d", i);
             if (recent_hosts.get(buf, tmpS, "", 2048))
             {
-                settingsObject->addRecentHost(tmpS);
+                settings->addRecentHost(tmpS);
             }
             else
             {
@@ -237,7 +237,7 @@ namespace mrv
             snprintf(buf, 16, "Script #%d", i);
             if (python_scripts.get(buf, tmpS, "", 2048))
             {
-                settingsObject->addPythonScript(tmpS);
+                settings->addPythonScript(tmpS);
             }
             else
             {
@@ -249,7 +249,7 @@ namespace mrv
 
         if (resetSettings)
         {
-            settingsObject->reset();
+            settings->reset();
         }
 
         DBG3;
@@ -806,42 +806,41 @@ namespace mrv
 
         std_any value;
 
-        int v =
-            settingsObject->getValue<int>("Performance/AudioBufferFrameCount");
+        int v = settings->getValue<int>("Performance/AudioBufferFrameCount");
         if (v < 1024)
         {
-            settingsObject->setValue(
+            settings->setValue(
                 "Performance/AudioBufferFrameCount",
                 (int)timeline::PlayerOptions().audioBufferFrameCount);
         }
 
-        int r = settingsObject->getValue<int>(kPenColorR);
-        int g = settingsObject->getValue<int>(kPenColorG);
-        int b = settingsObject->getValue<int>(kPenColorB);
-        int a = settingsObject->getValue<int>(kPenColorA);
+        int r = settings->getValue<int>(kPenColorR);
+        int g = settings->getValue<int>(kPenColorG);
+        int b = settings->getValue<int>(kPenColorB);
+        int a = settings->getValue<int>(kPenColorA);
 
         ui->uiPenColor->color((Fl_Color)61);
         Fl_Color c = (Fl_Color)ui->uiPenColor->color();
         Fl::set_color(c, r, g, b);
 
-        settingsObject->setValue(kPenColorR, r);
-        settingsObject->setValue(kPenColorG, g);
-        settingsObject->setValue(kPenColorB, b);
-        settingsObject->setValue(kPenColorA, a);
+        settings->setValue(kPenColorR, r);
+        settings->setValue(kPenColorG, g);
+        settings->setValue(kPenColorB, b);
+        settings->setValue(kPenColorA, a);
 
-        r = settingsObject->getValue<int>(kOldPenColorR);
-        g = settingsObject->getValue<int>(kOldPenColorG);
-        b = settingsObject->getValue<int>(kOldPenColorB);
-        a = settingsObject->getValue<int>(kOldPenColorA);
+        r = settings->getValue<int>(kOldPenColorR);
+        g = settings->getValue<int>(kOldPenColorG);
+        b = settings->getValue<int>(kOldPenColorB);
+        a = settings->getValue<int>(kOldPenColorA);
 
         ui->uiOldPenColor->color((Fl_Color)62);
         c = (Fl_Color)ui->uiOldPenColor->color();
         Fl::set_color(c, r, g, b);
 
-        settingsObject->setValue(kOldPenColorR, r);
-        settingsObject->setValue(kOldPenColorG, g);
-        settingsObject->setValue(kOldPenColorB, b);
-        settingsObject->setValue(kOldPenColorA, a);
+        settings->setValue(kOldPenColorR, r);
+        settings->setValue(kOldPenColorG, g);
+        settings->setValue(kOldPenColorB, b);
+        settings->setValue(kOldPenColorA, a);
 
         ui->uiPenOpacity->value(a / 255.0F);
 
@@ -849,29 +848,29 @@ namespace mrv
 
         timeline::BackgroundOptions backgroundOptions;
         backgroundOptions.type = static_cast<timeline::Background>(
-            settingsObject->getValue<int>("Background/Type"));
+            settings->getValue<int>("Background/Type"));
 
-        int color = settingsObject->getValue<int>("Background/SolidColor");
+        int color = settings->getValue<int>("Background/SolidColor");
         backgroundOptions.solidColor = from_fltk_color(color);
 
-        int size = settingsObject->getValue<int>("Background/CheckersSize");
+        int size = settings->getValue<int>("Background/CheckersSize");
         backgroundOptions.checkersSize = math::Size2i(size, size);
 
-        color = settingsObject->getValue<int>("Background/CheckersColor0");
+        color = settings->getValue<int>("Background/CheckersColor0");
         backgroundOptions.checkersColor0 = from_fltk_color(color);
 
-        color = settingsObject->getValue<int>("Background/CheckersColor1");
+        color = settings->getValue<int>("Background/CheckersColor1");
         backgroundOptions.checkersColor1 = from_fltk_color(color);
 
         ui->uiView->setBackgroundOptions(backgroundOptions);
 
         // Handle Dockgroup size (based on percentage)
-        float pct = settingsObject->getValue<float>("gui/DockGroup/Width");
+        float pct = settings->getValue<float>("gui/DockGroup/Width");
         if (pct < 0.2F)
             pct = 0.2F;
         int width = ui->uiViewGroup->w() * pct;
 
-        int visible = settingsObject->getValue<int>("gui/DockGroup/Visible");
+        int visible = settings->getValue<int>("gui/DockGroup/Visible");
         if (visible)
             ui->uiDockGroup->show();
 
@@ -888,7 +887,7 @@ namespace mrv
         int visible;
 
         ViewerUI* ui = App::ui;
-        SettingsObject* settingsObject = ViewerUI::app->settingsObject();
+        SettingsObject* settings = ViewerUI::app->settings();
 
         if (!ui->uiView->getPresentationMode())
         {
@@ -899,7 +898,7 @@ namespace mrv
                 std::string key = "gui/";
                 key += wc->name;
                 key += "/Window/Visible";
-                visible = settingsObject->getValue<int>(key);
+                visible = settings->getValue<int>(key);
                 if (visible)
                 {
                     if (std::string("Logs") == wc->name && logsPanel)
@@ -911,7 +910,7 @@ namespace mrv
 
         // Handle secondary window which is a tad special
         std::string key = "gui/Secondary/Window/Visible";
-        visible = settingsObject->getValue<int>(key);
+        visible = settings->getValue<int>(key);
         if (visible)
             toggle_secondary_cb(nullptr, ui);
     }
@@ -922,28 +921,28 @@ namespace mrv
         ViewerUI* ui = App::ui;
         auto app = ui->app;
         auto uiPrefs = ViewerUI::uiPrefs;
-        auto settingsObject = app->settingsObject();
+        auto settings = app->settings();
 
         locale::SetAndRestore saved;
 
         int visible = 0;
         if (uiPrefs->uiMain->visible())
             visible = 1;
-        settingsObject->setValue("gui/Preferences/Window/Visible", visible);
+        settings->setValue("gui/Preferences/Window/Visible", visible);
 
         // Handle background options
         auto backgroundOptions = ui->uiView->getBackgroundOptions();
-        settingsObject->setValue(
+        settings->setValue(
             "gui/Background/Options", static_cast<int>(backgroundOptions.type));
 
         int width = ui->uiDockGroup->w() == 0 ? 1 : ui->uiDockGroup->w();
         float pct = (float)width / ui->uiViewGroup->w();
-        settingsObject->setValue("gui/DockGroup/Width", pct);
+        settings->setValue("gui/DockGroup/Width", pct);
 
         visible = 0;
         if (ui->uiDockGroup->visible())
             visible = 1;
-        settingsObject->setValue("gui/DockGroup/Visible", visible);
+        settings->setValue("gui/DockGroup/Visible", visible);
 
         Fl_Preferences base(
             prefspath().c_str(), "filmaura", "mrv2",
@@ -953,10 +952,10 @@ namespace mrv
         Fl_Preferences fltk_settings(base, "settings");
         fltk_settings.clear();
 
-        const std::vector< std::string >& keys = settingsObject->keys();
+        const std::vector< std::string >& keys = settings->keys();
         for (auto key : keys)
         {
-            std::any value = settingsObject->getValue<std::any>(key);
+            std::any value = settings->getValue<std::any>(key);
             try
             {
                 double tmpD = std::any_cast<double>(value);
@@ -1033,7 +1032,7 @@ namespace mrv
         }
 
         Fl_Preferences recent_files(base, "recentFiles");
-        const std::vector< std::string >& files = settingsObject->recentFiles();
+        const std::vector< std::string >& files = settings->recentFiles();
         for (unsigned i = 1; i <= files.size(); ++i)
         {
             char buf[16];
@@ -1042,7 +1041,7 @@ namespace mrv
         }
 
         Fl_Preferences recent_hosts(base, "recentHosts");
-        const std::vector< std::string >& hosts = settingsObject->recentHosts();
+        const std::vector< std::string >& hosts = settings->recentHosts();
         for (unsigned i = 1; i <= hosts.size(); ++i)
         {
             char buf[16];
@@ -1051,8 +1050,7 @@ namespace mrv
         }
 
         Fl_Preferences python_scripts(base, "pythonScripts");
-        const std::vector< std::string >& scripts =
-            settingsObject->pythonScripts();
+        const std::vector< std::string >& scripts = settings->pythonScripts();
         for (unsigned i = 1; i <= scripts.size(); ++i)
         {
             char buf[16];
@@ -1380,7 +1378,7 @@ namespace mrv
         }
 #endif
 
-        SettingsObject* settingsObject = ViewerUI::app->settingsObject();
+        SettingsObject* settings = ViewerUI::app->settings();
 
         //
         // Windows
@@ -1492,9 +1490,9 @@ namespace mrv
         //
 
         {
-            ui->uiView->setGhostNext(settingsObject->getValue<int>(kGhostNext));
+            ui->uiView->setGhostNext(settings->getValue<int>(kGhostNext));
             ui->uiView->setGhostPrevious(
-                settingsObject->getValue<int>(kGhostPrevious));
+                settings->getValue<int>(kGhostPrevious));
 
             ui->uiView->setMissingFrameType(static_cast<MissingFrameType>(
                 uiPrefs->uiMissingFrameType->value()));

@@ -1497,11 +1497,11 @@ namespace mrv
     void update_pen_color(
         Fl_Color c, uint8_t r, uint8_t g, uint8_t b, uint8_t a, ViewerUI* ui)
     {
-        SettingsObject* settingsObject = ui->app->settingsObject();
-        settingsObject->setValue(kPenColorR, (int)r);
-        settingsObject->setValue(kPenColorG, (int)g);
-        settingsObject->setValue(kPenColorB, (int)b);
-        settingsObject->setValue(kPenColorA, (int)a);
+        SettingsObject* settings = ui->app->settings();
+        settings->setValue(kPenColorR, (int)r);
+        settings->setValue(kPenColorG, (int)g);
+        settings->setValue(kPenColorB, (int)b);
+        settings->setValue(kPenColorA, (int)a);
 
         if (annotationsPanel)
             annotationsPanel->redraw();
@@ -1574,11 +1574,11 @@ namespace mrv
         update_pen_color(c, r, g, b, a, ui);
 
         Fl::get_color(saved, r, g, b);
-        SettingsObject* settingsObject = ui->app->settingsObject();
-        settingsObject->setValue(kOldPenColorR, (int)r);
-        settingsObject->setValue(kOldPenColorG, (int)g);
-        settingsObject->setValue(kOldPenColorB, (int)b);
-        settingsObject->setValue(kOldPenColorA, (int)a);
+        SettingsObject* settings = ui->app->settings();
+        settings->setValue(kOldPenColorR, (int)r);
+        settings->setValue(kOldPenColorG, (int)g);
+        settings->setValue(kOldPenColorB, (int)b);
+        settings->setValue(kOldPenColorA, (int)a);
     }
 
     static void image_version_cb(
@@ -1775,8 +1775,8 @@ namespace mrv
 
         if (session::save(file))
         {
-            auto settingsObject = ui->app->settingsObject();
-            settingsObject->addRecentFile(file);
+            auto settings = ui->app->settings();
+            settings->addRecentFile(file);
         }
 
         ui->uiMain->update_title_bar();
@@ -1810,8 +1810,8 @@ namespace mrv
 
         if (session::load(file))
         {
-            auto settingsObject = ui->app->settingsObject();
-            settingsObject->addRecentFile(file);
+            auto settings = ui->app->settings();
+            settings->addRecentFile(file);
         }
 
         ui->uiMain->fill_menu(ui->uiMenuBar);

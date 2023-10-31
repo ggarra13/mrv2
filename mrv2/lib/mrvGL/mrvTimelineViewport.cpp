@@ -2628,10 +2628,9 @@ namespace mrv
     float TimelineViewport::_getPenSize() const noexcept
     {
         const float kPenSizeMultiplier = 800.F;
-        const auto settingsObject = _p->ui->app->settingsObject();
+        const auto settings = _p->ui->app->settings();
         std_any value;
-        float pen_size =
-            static_cast<float>(settingsObject->getValue<int>(kPenSize));
+        float pen_size = static_cast<float>(settings->getValue<int>(kPenSize));
         auto renderSize = getRenderSize();
         pen_size *= renderSize.h / kPenSizeMultiplier;
         if (pen_size < 2.0F)

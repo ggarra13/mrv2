@@ -471,7 +471,7 @@ namespace mrv
                 }
 
                 uint8_t r, g, b;
-                SettingsObject* settingsObject = p.ui->app->settingsObject();
+                SettingsObject* settings = p.ui->app->settings();
                 int fltk_color = p.ui->uiPenColor->color();
                 Fl::get_color((Fl_Color)fltk_color, r, g, b);
                 float alpha = p.ui->uiPenOpacity->value();
@@ -479,10 +479,10 @@ namespace mrv
                     r / 255.F, g / 255.F, b / 255.F, alpha);
                 const float pen_size = _getPenSize();
 
-                bool laser = settingsObject->getValue<bool>(kLaser);
-                bool softBrush = settingsObject->getValue<bool>(kSoftBrush);
-                Fl_Font font = static_cast<Fl_Font>(
-                    settingsObject->getValue<int>(kTextFont));
+                bool laser = settings->getValue<bool>(kLaser);
+                bool softBrush = settings->getValue<bool>(kSoftBrush);
+                Fl_Font font =
+                    static_cast<Fl_Font>(settings->getValue<int>(kTextFont));
 
                 p.mousePos = _getFocus();
                 draw::Point pnt(_getRasterf());
@@ -493,7 +493,7 @@ namespace mrv
 
                 auto annotation = player->getAnnotation();
                 bool all_frames =
-                    p.ui->app->settingsObject()->getValue<bool>(kAllFrames);
+                    p.ui->app->settings()->getValue<bool>(kAllFrames);
                 if (!annotation)
                 {
                     annotation = player->createAnnotation(all_frames);
@@ -602,7 +602,7 @@ namespace mrv
                     float pct = renderSize.h / 1024.F;
                     auto w = getMultilineInput();
 
-                    int font_size = settingsObject->getValue<int>(kFontSize);
+                    int font_size = settings->getValue<int>(kFontSize);
                     double fontSize =
                         font_size * pct * p.viewZoom / pixels_per_unit();
                     math::Vector2i pos(p.event_x, p.event_y);
@@ -1202,24 +1202,24 @@ namespace mrv
             else if (
                 p.actionMode == ActionMode::kDraw && kPenSizeMore.match(rawkey))
             {
-                auto settingsObject = p.ui->app->settingsObject();
+                auto settings = p.ui->app->settings();
                 std_any value;
-                value = settingsObject->getValue<std::any>(kPenSize);
+                value = settings->getValue<std::any>(kPenSize);
                 int v = std_any_empty(value) ? 12 : std_any_cast<int>(value);
                 ++v;
-                settingsObject->setValue(kPenSize, v);
+                settings->setValue(kPenSize, v);
                 redrawWindows();
                 return 1;
             }
             else if (
                 p.actionMode == ActionMode::kDraw && kPenSizeLess.match(rawkey))
             {
-                auto settingsObject = p.ui->app->settingsObject();
+                auto settings = p.ui->app->settings();
                 std_any value;
-                value = settingsObject->getValue<std::any>(kPenSize);
+                value = settings->getValue<std::any>(kPenSize);
                 int v = std_any_empty(value) ? 12 : std_any_cast<int>(value);
                 --v;
-                settingsObject->setValue(kPenSize, v);
+                settings->setValue(kPenSize, v);
                 redrawWindows();
                 return 1;
             }

@@ -9,7 +9,7 @@
 #include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/App.h"
 
-namespace
+namespace mrv
 {
     inline const std::shared_ptr<mrv::FilesModel>& filesModel()
     {
@@ -23,10 +23,10 @@ namespace
         return app->playlistsModel();
     }
 
-    inline mrv::SettingsObject* settingsObject()
+    inline mrv::SettingsObject* settings()
     {
         mrv::App* app = mrv::App::app;
-        return app->settingsObject();
+        return app->settings();
     }
 
     inline std::ostream&
@@ -41,4 +41,4 @@ namespace
           << " audioOffset=" << a.audioOffset << ">";
         return o;
     }
-} // namespace
+} // namespace mrv

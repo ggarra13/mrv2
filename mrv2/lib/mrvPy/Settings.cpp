@@ -27,8 +27,7 @@ namespace mrv2
          */
         int memory()
         {
-            auto settings = settingsObject();
-            return settings->getValue<int>("Cache/GBytes");
+            return mrv::settings()->getValue<int>("Cache/GBytes");
         }
 
         /**
@@ -41,8 +40,7 @@ namespace mrv2
             if (value < 0)
                 throw std::invalid_argument(_("Value less than 0"));
             mrv::App* app = mrv::App::app;
-            auto settings = settingsObject();
-            settings->setValue("Cache/GBytes", value);
+            mrv::settings()->setValue("Cache/GBytes", value);
             app->cacheUpdate();
             if (panel::settingsPanel)
                 panel::settingsPanel->refresh();
@@ -56,8 +54,7 @@ namespace mrv2
          */
         double readAhead()
         {
-            auto settings = settingsObject();
-            return settings->getValue<double>("Cache/ReadAhead");
+            return mrv::settings()->getValue<double>("Cache/ReadAhead");
         }
 
         /**
@@ -68,8 +65,7 @@ namespace mrv2
          */
         double readBehind()
         {
-            auto settings = settingsObject();
-            return settings->getValue<double>("Cache/ReadBehind");
+            return mrv::settings()->getValue<double>("Cache/ReadBehind");
         }
 
         /**
@@ -80,8 +76,7 @@ namespace mrv2
         void setReadAhead(const double value)
         {
             mrv::App* app = mrv::App::app;
-            auto settings = settingsObject();
-            settings->setValue("Cache/ReadAhead", value);
+            mrv::settings()->setValue("Cache/ReadAhead", value);
             app->cacheUpdate();
             if (panel::settingsPanel)
                 panel::settingsPanel->refresh();
@@ -95,8 +90,7 @@ namespace mrv2
         void setReadBehind(const double value)
         {
             mrv::App* app = mrv::App::app;
-            auto settings = settingsObject();
-            settings->setValue("Cache/ReadBehind", value);
+            mrv::settings()->setValue("Cache/ReadBehind", value);
             app->cacheUpdate();
             if (panel::settingsPanel)
                 panel::settingsPanel->refresh();
@@ -104,17 +98,16 @@ namespace mrv2
 
         void setFileSequenceAudio(const timeline::FileSequenceAudio value)
         {
-            auto settings = settingsObject();
-            settings->setValue("FileSequence/Audio", static_cast<int>(value));
+            mrv::settings()->setValue(
+                "FileSequence/Audio", static_cast<int>(value));
             if (panel::settingsPanel)
                 panel::settingsPanel->refresh();
         }
 
         timeline::FileSequenceAudio fileSequenceAudio()
         {
-            auto settings = settingsObject();
             return static_cast<timeline::FileSequenceAudio>(
-                settings->getValue<int>("FileSequence/Audio"));
+                mrv::settings()->getValue<int>("FileSequence/Audio"));
         }
 
         /**
@@ -124,8 +117,7 @@ namespace mrv2
          */
         void setFileSequenceAudioFileName(const std::string& value)
         {
-            auto settings = settingsObject();
-            settings->setValue("FileSequence/AudioFileName", value);
+            mrv::settings()->setValue("FileSequence/AudioFileName", value);
             if (panel::settingsPanel)
                 panel::settingsPanel->refresh();
         }
@@ -137,8 +129,7 @@ namespace mrv2
          */
         std::string fileSequenceAudioFileName()
         {
-            auto settings = settingsObject();
-            return settings->getValue<std::string>(
+            return mrv::settings()->getValue<std::string>(
                 "FileSequence/AudioFileName");
         }
 
@@ -149,8 +140,7 @@ namespace mrv2
          */
         void setFileSequenceAudioDirectory(const std::string& value)
         {
-            auto settings = settingsObject();
-            settings->setValue("FileSequence/AudioDirectory", value);
+            mrv::settings()->setValue("FileSequence/AudioDirectory", value);
             if (panel::settingsPanel)
                 panel::settingsPanel->refresh();
         }
@@ -163,8 +153,7 @@ namespace mrv2
          */
         std::string fileSequenceAudioDirectory()
         {
-            auto settings = settingsObject();
-            return settings->getValue<std::string>(
+            return mrv::settings()->getValue<std::string>(
                 "FileSequence/AudioDirectory");
         }
 
@@ -177,8 +166,7 @@ namespace mrv2
         {
             if (value < 1)
                 throw std::invalid_argument("Value less than 1.");
-            auto settings = settingsObject();
-            settings->setValue("Misc/MaxFileSequenceDigits", value);
+            mrv::settings()->setValue("Misc/MaxFileSequenceDigits", value);
             if (panel::settingsPanel)
                 panel::settingsPanel->refresh();
         }
@@ -190,14 +178,12 @@ namespace mrv2
          */
         int maxFileSequenceDigits()
         {
-            auto settings = settingsObject();
-            return settings->getValue<int>("Misc/MaxFileSequenceDigits");
+            return mrv::settings()->getValue<int>("Misc/MaxFileSequenceDigits");
         }
 
         void setTimerMode(const timeline::TimerMode value)
         {
-            auto settings = settingsObject();
-            settings->setValue(
+            mrv::settings()->setValue(
                 "Performance/TimerMode", static_cast<int>(value));
             if (panel::settingsPanel)
                 panel::settingsPanel->refresh();
@@ -205,15 +191,13 @@ namespace mrv2
 
         timeline::TimerMode timerMode()
         {
-            auto settings = settingsObject();
             return static_cast<timeline::TimerMode>(
-                settings->getValue<int>("Performance/TimerMode"));
+                mrv::settings()->getValue<int>("Performance/TimerMode"));
         }
 
         void setAudioBufferFrameCount(const int value)
         {
-            auto settings = settingsObject();
-            settings->setValue(
+            mrv::settings()->setValue(
                 "Performance/AudioBufferFrameCount", static_cast<int>(value));
             if (panel::settingsPanel)
                 panel::settingsPanel->refresh();
@@ -221,8 +205,8 @@ namespace mrv2
 
         int audioBufferFrameCount()
         {
-            auto settings = settingsObject();
-            return settings->getValue<int>("Performance/AudioBufferFrameCount");
+            return mrv::settings()->getValue<int>(
+                "Performance/AudioBufferFrameCount");
         }
 
         /**
@@ -234,8 +218,7 @@ namespace mrv2
         {
             if (value < 1)
                 throw std::invalid_argument("Invalid value less than 1");
-            auto settings = settingsObject();
-            settings->setValue("Performance/VideoRequestCount", value);
+            mrv::settings()->setValue("Performance/VideoRequestCount", value);
             if (panel::settingsPanel)
                 panel::settingsPanel->refresh();
         }
@@ -247,8 +230,8 @@ namespace mrv2
          */
         int videoRequests()
         {
-            auto settings = settingsObject();
-            return settings->getValue<int>("Performance/VideoRequestCount");
+            return mrv::settings()->getValue<int>(
+                "Performance/VideoRequestCount");
         }
 
         /**
@@ -260,8 +243,7 @@ namespace mrv2
         {
             if (value < 1)
                 throw std::runtime_error("Invalid value less than 1");
-            auto settings = settingsObject();
-            settings->setValue("Performance/AudioRequestCount", value);
+            mrv::settings()->setValue("Performance/AudioRequestCount", value);
             if (panel::settingsPanel)
                 panel::settingsPanel->refresh();
         }
@@ -273,8 +255,8 @@ namespace mrv2
          */
         int audioRequests()
         {
-            auto settings = settingsObject();
-            return settings->getValue<int>("Performance/AudioRequestCount");
+            return mrv::settings()->getValue<int>(
+                "Performance/AudioRequestCount");
         }
 
         /**
@@ -286,8 +268,7 @@ namespace mrv2
         {
             if (value < 1)
                 throw std::invalid_argument("Invalid value less than 1");
-            auto settings = settingsObject();
-            settings->setValue("Performance/SequenceThreadCount", value);
+            mrv::settings()->setValue("Performance/SequenceThreadCount", value);
             if (panel::settingsPanel)
                 panel::settingsPanel->refresh();
         }
@@ -299,8 +280,8 @@ namespace mrv2
          */
         int sequenceThreadCount()
         {
-            auto settings = settingsObject();
-            return settings->getValue<int>("Performance/SequenceThreadCount");
+            return mrv::settings()->getValue<int>(
+                "Performance/SequenceThreadCount");
         }
 
         /**
@@ -310,8 +291,7 @@ namespace mrv2
          */
         void setFFmpegYUVToRGBConversion(const bool value)
         {
-            auto settings = settingsObject();
-            settings->setValue(
+            mrv::settings()->setValue(
                 "Performance/FFmpegYUVToRGBConversion", (int)value);
             if (panel::settingsPanel)
                 panel::settingsPanel->refresh();
@@ -324,8 +304,7 @@ namespace mrv2
          */
         bool FFmpegYUVToRGBConversion()
         {
-            auto settings = settingsObject();
-            return settings->getValue<bool>(
+            return mrv::settings()->getValue<bool>(
                 "Performance/FFmpegYUVToRGBConversion");
         }
 
@@ -338,8 +317,7 @@ namespace mrv2
         {
             if (value < 0)
                 throw std::invalid_argument("Invalid value less than 0");
-            auto settings = settingsObject();
-            settings->setValue("Performance/FFmpegThreadCount", value);
+            mrv::settings()->setValue("Performance/FFmpegThreadCount", value);
             if (panel::settingsPanel)
                 panel::settingsPanel->refresh();
         }
@@ -351,8 +329,8 @@ namespace mrv2
          */
         int FFmpegThreadCount()
         {
-            auto settings = settingsObject();
-            return settings->getValue<int>("Performance/FFmpegThreadCount");
+            return mrv::settings()->getValue<int>(
+                "Performance/FFmpegThreadCount");
         }
     } // namespace settings
 
