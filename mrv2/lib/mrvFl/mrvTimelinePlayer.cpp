@@ -301,6 +301,11 @@ namespace mrv
         return _p->player->observeCacheInfo()->get();
     }
 
+    void TimelinePlayer::clearCache()
+    {
+        _p->player->clearCache();
+    }
+
     template < typename T >
     void TimelinePlayer::pushMessage(const std::string& command, const T& value)
     {

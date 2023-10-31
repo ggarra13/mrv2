@@ -127,6 +127,9 @@ namespace mrv
         //! Get the cache information.
         const timeline::PlayerCacheInfo& cacheInfo() const;
 
+        //! Clear the cache.
+        void clearCache();
+
         ///@}
 
         //! \name Audio

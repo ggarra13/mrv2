@@ -37,6 +37,9 @@ v0.8.3
 - Fixed Saving remaining time progress being incorrect.
 - Made mrv2's file chooser recognize .otio and .otioz as OpenTimelineIO EDLs.
 - Refactored and simplified code.
+- Fixed clearing of cache resulting in cache starting again from the beginning.
+- Fixed seek and timeline thumbnail preview being incorrect after an Edit/Cut
+  or Edit/Insert on a movie with timecode.
 
   
 v0.8.2

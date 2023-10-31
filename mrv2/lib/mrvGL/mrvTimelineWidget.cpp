@@ -249,6 +249,7 @@ namespace mrv
         if ((Y < maxY && !p.timelineWidget->isDragging()) ||
             !p.timelineWidget->isEditable())
         {
+            p.timeRange = p.player->player()->getTimeRange();
             auto time = _posToTime(X);
             p.player->seek(time);
             return 1;
@@ -277,6 +278,9 @@ namespace mrv
             }
             return 0;
         }
+
+        p.timeRange = player->getTimeRange();
+
         int W = 128;
         int H = 90;
         int X = Fl::event_x_root() - p.ui->uiMain->x() - W / 2;

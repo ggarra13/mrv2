@@ -2036,9 +2036,10 @@ namespace mrv
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
-        io::Options options = player->getIOOptions();
-        options["refresh"] = string::random();
-        player->setIOOptions(options);
+        // auto options = player->getIOOptions();
+        // options["refresh"] = string::random();
+        // player->setIOOptions(options);
+        player->clearCache();
     }
 
     void copy_filename_cb(Fl_Menu_* m, void* d)
