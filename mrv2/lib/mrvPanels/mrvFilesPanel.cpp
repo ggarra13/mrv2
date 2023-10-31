@@ -208,7 +208,7 @@ namespace mrv
 
             g->begin();
 
-            const auto model = p.ui->app->filesModel();
+            const auto model = App::app->filesModel();
 
             const auto files = model->observeFiles();
 
@@ -380,7 +380,7 @@ namespace mrv
             b->image(svg);
             _r->buttons.push_back(b);
             b->tooltip(_("Previous filename"));
-            bW->callback([=](auto w) { p.ui->app->filesModel()->prev(); });
+            bW->callback([=](auto w) { App::app->filesModel()->prev(); });
 
             bW = new Widget< Button >(g->x() + 150, Y, 30, 30);
             b = bW;
@@ -388,7 +388,7 @@ namespace mrv
             b->image(svg);
             _r->buttons.push_back(b);
             b->tooltip(_("Next filename"));
-            bW->callback([=](auto w) { p.ui->app->filesModel()->next(); });
+            bW->callback([=](auto w) { App::app->filesModel()->next(); });
 
             auto btW = new Widget< Fl_Button >(g->x() + 150, Y, 30, 30);
             b = btW;
@@ -401,7 +401,7 @@ namespace mrv
             btW->callback(
                 [=](auto w)
                 {
-                    auto model = p.ui->app->filesModel();
+                    auto model = App::app->filesModel();
                     FilesPanelOptions o =
                         model->observeFilesPanelOptions()->get();
                     o.filterEDL ^= true;
@@ -423,7 +423,7 @@ namespace mrv
 
             image::Size size(128, 64);
 
-            const auto& model = p.ui->app->filesModel();
+            const auto& model = App::app->filesModel();
             auto Aindex = model->observeAIndex()->get();
             const auto files = model->observeFiles();
 

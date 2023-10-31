@@ -165,12 +165,12 @@ namespace mrv
         {
             TLRENDER_P();
 
-            auto settings = p.ui->app->settings();
+            auto settings = App::app->settings();
             const std::string& prefix = tab_prefix();
 
             _r->thumbnailCreator = p.ui->uiTimeline->thumbnailCreator();
 
-            const auto& model = p.ui->app->filesModel();
+            const auto& model = App::app->filesModel();
 
             std_any value;
             int v;
@@ -240,7 +240,7 @@ namespace mrv
                         int index = (*it).second;
                         if (b->value())
                             index = -1;
-                        const auto& model = p.ui->app->filesModel();
+                        const auto& model = App::app->filesModel();
                         model->setStereo(index);
                     });
 
@@ -422,7 +422,7 @@ namespace mrv
             sV->callback(
                 [=](auto w)
                 {
-                    auto model = p.ui->app->filesModel();
+                    auto model = App::app->filesModel();
                     Stereo3DOptions o = model->observeStereo3DOptions()->get();
                     o.eyeSeparation = w->value();
                     model->setStereo3DOptions(o);
@@ -441,7 +441,7 @@ namespace mrv
             cV->callback(
                 [=](auto w)
                 {
-                    auto model = p.ui->app->filesModel();
+                    auto model = App::app->filesModel();
                     Stereo3DOptions o = model->observeStereo3DOptions()->get();
                     o.swapEyes = static_cast<bool>(w->value());
                     model->setStereo3DOptions(o);
@@ -473,7 +473,7 @@ namespace mrv
 
             image::Size size(128, 64);
 
-            const auto& model = p.ui->app->filesModel();
+            const auto& model = App::app->filesModel();
             auto aIndex = model->observeAIndex()->get();
             auto stereoIndex = model->observeStereoIndex()->get();
             const auto files = model->observeFiles();

@@ -325,7 +325,7 @@ namespace mrv
                 _("Scripts/Add To Script List"), 0,
                 (Fl_Callback*)add_to_script_list_cb, this, FL_MENU_DIVIDER);
 
-            auto settings = p.ui->app->settings();
+            auto settings = App::app->settings();
             for (const auto fullfile : settings->pythonScripts())
             {
                 fs::path fullPath = fullfile;
@@ -816,7 +816,7 @@ from mrv2 import playlist, timeline, usd, session, settings
         {
             TLRENDER_P();
 
-            auto settings = p.ui->app->settings();
+            auto settings = App::app->settings();
             settings->addPythonScript(file);
 
             create_menu(_r->menu);
@@ -834,7 +834,7 @@ from mrv2 import playlist, timeline, usd, session, settings
         {
             TLRENDER_P();
 
-            auto settings = p.ui->app->settings();
+            auto settings = App::app->settings();
 
             const std::string script = settings->pythonScript(idx);
 

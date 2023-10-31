@@ -169,7 +169,7 @@ namespace mrv
             mW->callback(
                 [=](auto o)
                 {
-                    p.ui->app->devicesModel()->setHDRMode(
+                    App::app->devicesModel()->setHDRMode(
                         static_cast<device::HDRMode>(o->value()));
                 });
 
@@ -409,7 +409,7 @@ namespace mrv
             g->end();
 
             r.dataObserver = observer::ValueObserver<DevicesModelData>::create(
-                p.ui->app->devicesModel()->observeData(),
+                App::app->devicesModel()->observeData(),
                 [this](const DevicesModelData& value)
                 {
                     {

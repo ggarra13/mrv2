@@ -188,7 +188,7 @@ namespace mrv
 
             int Y = g->y() + 22;
 
-            const auto& model = p.ui->app->filesModel();
+            const auto& model = App::app->filesModel();
             const auto& files = model->observeFiles().get()->get();
             const auto& aIndex = model->observeAIndex()->get();
             const size_t numFiles = files.size();
@@ -326,7 +326,7 @@ namespace mrv
             bW->callback(
                 [=](auto w)
                 {
-                    const auto& model = p.ui->app->filesModel();
+                    const auto& model = App::app->filesModel();
                     const auto& Aitem = model->observeA()->get();
                     std::string extension = Aitem->path.getExtension();
                     if (extension != ".otio")
@@ -351,7 +351,7 @@ namespace mrv
 
             image::Size size(128, 64);
 
-            const auto& model = p.ui->app->filesModel();
+            const auto& model = App::app->filesModel();
             auto Aindex = model->observeAIndex()->get();
             const auto files = model->observeFiles();
 

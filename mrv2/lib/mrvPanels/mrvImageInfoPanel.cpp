@@ -426,7 +426,7 @@ namespace mrv
                 sw = 0;
             int W = g->w() - sw;
 
-            SettingsObject* settings = p.ui->app->settings();
+            SettingsObject* settings = App::app->settings();
 
             // CollapsibleGrop recalcs, we don't care its xyh sizes
             m_image = new CollapsibleGroup(g->x(), Y, W, 800, _("Main"));
@@ -711,7 +711,7 @@ namespace mrv
         {
             TLRENDER_P();
 
-            SettingsObject* settings = p.ui->app->settings();
+            SettingsObject* settings = App::app->settings();
             std::string prefix = tab_prefix();
             std::string key = prefix + "Main";
             int value = m_image->is_open();

@@ -55,7 +55,7 @@ namespace mrv
         {
             TLRENDER_P();
 
-            SettingsObject* settings = p.ui->app->settings();
+            SettingsObject* settings = App::app->settings();
 
             int X = g->x();
             int Y = 20;

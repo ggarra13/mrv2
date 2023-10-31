@@ -67,7 +67,7 @@ namespace mrv
             PanelWidget::undock();
             PanelWindow* w = g->get_window();
 
-            SettingsObject* settings = p.ui->app->settings();
+            SettingsObject* settings = App::app->settings();
 
             std::string prefix = "gui/" + label;
             std::string key;
@@ -104,7 +104,7 @@ namespace mrv
             PanelWidget::save();
 
             // We make the log panel save as hidden, never visible.
-            SettingsObject* settings = p.ui->app->settings();
+            SettingsObject* settings = App::app->settings();
             const std::string key = "gui/" + label + "/Window/Visible";
             settings->setValue(key, 0);
         }

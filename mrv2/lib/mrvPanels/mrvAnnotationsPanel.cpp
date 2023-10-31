@@ -47,7 +47,7 @@ namespace mrv
         {
             TLRENDER_P();
 
-            SettingsObject* settings = p.ui->app->settings();
+            SettingsObject* settings = App::app->settings();
             std::string prefix = tab_prefix();
 
             int X = g->x();
@@ -480,7 +480,7 @@ namespace mrv
             penColor->color(p.ui->uiPenColor->color());
             penColor->redraw();
 
-            SettingsObject* settings = p.ui->app->settings();
+            SettingsObject* settings = App::app->settings();
             bool soft = settings->getValue<bool>(kSoftBrush);
             softBrush->value(0);
             hardBrush->value(0);

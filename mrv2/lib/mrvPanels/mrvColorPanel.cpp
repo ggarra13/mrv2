@@ -90,7 +90,7 @@ namespace mrv
             g->clear();
             g->begin();
 
-            SettingsObject* settings = p.ui->app->settings();
+            SettingsObject* settings = App::app->settings();
             std::string prefix = tab_prefix();
 
             // ---------------------------- LUT
@@ -133,10 +133,10 @@ namespace mrv
             iW->callback(
                 [=](auto o)
                 {
-                    auto lutOptions = p.ui->app->lutOptions();
+                    auto lutOptions = App::app->lutOptions();
                     std::string file = o->value();
                     lutOptions.fileName = file;
-                    p.ui->app->setLUTOptions(lutOptions);
+                    App::app->setLUTOptions(lutOptions);
                 });
 
             auto bW = new Widget<Fl_Button>(
@@ -170,9 +170,9 @@ namespace mrv
                 [=](auto o)
                 {
                     timeline::LUTOrder order = (timeline::LUTOrder)o->value();
-                    auto lutOptions = p.ui->app->lutOptions();
+                    auto lutOptions = App::app->lutOptions();
                     lutOptions.order = order;
-                    p.ui->app->setLUTOptions(lutOptions);
+                    App::app->setLUTOptions(lutOptions);
                 });
 
             gb->end();
@@ -185,7 +185,7 @@ namespace mrv
             if (!open)
                 cg->close();
 
-            timeline::DisplayOptions o = p.ui->app->displayOptions();
+            timeline::DisplayOptions o = App::app->displayOptions();
 
             // ---------------------------- Color Controls
 
@@ -226,9 +226,9 @@ namespace mrv
             cV->callback(
                 [=](auto w)
                 {
-                    timeline::DisplayOptions o = p.ui->app->displayOptions();
+                    timeline::DisplayOptions o = App::app->displayOptions();
                     o.color.enabled = w->value();
-                    p.ui->app->setDisplayOptions(o);
+                    App::app->setDisplayOptions(o);
                 });
 
             auto sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, _("Add"));
@@ -240,11 +240,11 @@ namespace mrv
             sV->callback(
                 [=](auto w)
                 {
-                    timeline::DisplayOptions o = p.ui->app->displayOptions();
+                    timeline::DisplayOptions o = App::app->displayOptions();
                     float f = w->value();
                     o.color.enabled = true;
                     o.color.add = math::Vector3f(f, f, f);
-                    p.ui->app->setDisplayOptions(o);
+                    App::app->setDisplayOptions(o);
                 });
 
             sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, _("Contrast"));
@@ -255,11 +255,11 @@ namespace mrv
             sV->callback(
                 [=](auto w)
                 {
-                    timeline::DisplayOptions o = p.ui->app->displayOptions();
+                    timeline::DisplayOptions o = App::app->displayOptions();
                     float f = w->value();
                     o.color.enabled = true;
                     o.color.contrast = math::Vector3f(f, f, f);
-                    p.ui->app->setDisplayOptions(o);
+                    App::app->setDisplayOptions(o);
                 });
 
             sV = new Widget< HorSlider >(
@@ -271,11 +271,11 @@ namespace mrv
             sV->callback(
                 [=](auto w)
                 {
-                    timeline::DisplayOptions o = p.ui->app->displayOptions();
+                    timeline::DisplayOptions o = App::app->displayOptions();
                     float f = w->value();
                     o.color.enabled = true;
                     o.color.saturation = math::Vector3f(f, f, f);
-                    p.ui->app->setDisplayOptions(o);
+                    App::app->setDisplayOptions(o);
                 });
 
             sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, _("Tint"));
@@ -287,10 +287,10 @@ namespace mrv
             sV->callback(
                 [=](auto w)
                 {
-                    timeline::DisplayOptions o = p.ui->app->displayOptions();
+                    timeline::DisplayOptions o = App::app->displayOptions();
                     o.color.enabled = true;
                     o.color.tint = w->value();
-                    p.ui->app->setDisplayOptions(o);
+                    App::app->setDisplayOptions(o);
                 });
 
             cV = new Widget< Fl_Check_Button >(
@@ -301,10 +301,10 @@ namespace mrv
             cV->callback(
                 [=](auto w)
                 {
-                    timeline::DisplayOptions o = p.ui->app->displayOptions();
+                    timeline::DisplayOptions o = App::app->displayOptions();
                     o.color.enabled = true;
                     o.color.invert = w->value();
-                    p.ui->app->setDisplayOptions(o);
+                    App::app->setDisplayOptions(o);
                 });
 
             cg->end();
@@ -351,9 +351,9 @@ namespace mrv
             cV->callback(
                 [=](auto w)
                 {
-                    timeline::DisplayOptions o = p.ui->app->displayOptions();
+                    timeline::DisplayOptions o = App::app->displayOptions();
                     o.levels.enabled = w->value();
-                    p.ui->app->setDisplayOptions(o);
+                    App::app->setDisplayOptions(o);
                 });
 
             sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, _("In Low"));
@@ -365,10 +365,10 @@ namespace mrv
             sV->callback(
                 [=](auto w)
                 {
-                    timeline::DisplayOptions o = p.ui->app->displayOptions();
+                    timeline::DisplayOptions o = App::app->displayOptions();
                     o.levels.enabled = true;
                     o.levels.inLow = w->value();
-                    p.ui->app->setDisplayOptions(o);
+                    App::app->setDisplayOptions(o);
                 });
 
             sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, _("In High"));
@@ -380,10 +380,10 @@ namespace mrv
             sV->callback(
                 [=](auto w)
                 {
-                    timeline::DisplayOptions o = p.ui->app->displayOptions();
+                    timeline::DisplayOptions o = App::app->displayOptions();
                     o.levels.enabled = true;
                     o.levels.inHigh = w->value();
-                    p.ui->app->setDisplayOptions(o);
+                    App::app->setDisplayOptions(o);
                 });
 
             sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, _("Gamma"));
@@ -396,13 +396,13 @@ namespace mrv
             sV->callback(
                 [=](auto w)
                 {
-                    timeline::DisplayOptions o = p.ui->app->displayOptions();
+                    timeline::DisplayOptions o = App::app->displayOptions();
                     float f = w->value();
                     p.ui->uiGamma->value(f);
                     p.ui->uiGammaInput->value(f);
                     o.levels.enabled = true;
                     o.levels.gamma = f;
-                    p.ui->app->setDisplayOptions(o);
+                    App::app->setDisplayOptions(o);
                 });
 
             sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, _("Out Low"));
@@ -414,10 +414,10 @@ namespace mrv
             sV->callback(
                 [=](auto w)
                 {
-                    timeline::DisplayOptions o = p.ui->app->displayOptions();
+                    timeline::DisplayOptions o = App::app->displayOptions();
                     o.levels.enabled = true;
                     o.levels.outLow = w->value();
-                    p.ui->app->setDisplayOptions(o);
+                    App::app->setDisplayOptions(o);
                 });
 
             sV = new Widget< HorSlider >(g->x(), 90, g->w(), 20, _("Out High"));
@@ -429,10 +429,10 @@ namespace mrv
             sV->callback(
                 [=](auto w)
                 {
-                    timeline::DisplayOptions o = p.ui->app->displayOptions();
+                    timeline::DisplayOptions o = App::app->displayOptions();
                     o.levels.enabled = true;
                     o.levels.outHigh = w->value();
-                    p.ui->app->setDisplayOptions(o);
+                    App::app->setDisplayOptions(o);
                 });
 
             cg->end();
@@ -477,9 +477,9 @@ namespace mrv
             cV->callback(
                 [=](auto w)
                 {
-                    timeline::DisplayOptions o = p.ui->app->displayOptions();
+                    timeline::DisplayOptions o = App::app->displayOptions();
                     o.softClip.enabled = w->value();
-                    p.ui->app->setDisplayOptions(o);
+                    App::app->setDisplayOptions(o);
                 });
 
             sV = new Widget< HorSlider >(
@@ -492,10 +492,10 @@ namespace mrv
             sV->callback(
                 [=](auto w)
                 {
-                    timeline::DisplayOptions o = p.ui->app->displayOptions();
+                    timeline::DisplayOptions o = App::app->displayOptions();
                     o.softClip.enabled = true;
                     o.softClip.value = w->value();
-                    p.ui->app->setDisplayOptions(o);
+                    App::app->setDisplayOptions(o);
                 });
 
             cg->end();

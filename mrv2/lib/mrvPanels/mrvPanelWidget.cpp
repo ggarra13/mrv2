@@ -37,7 +37,7 @@ namespace mrv
 
             save();
 
-            SettingsObject* settings = p.ui->app->settings();
+            SettingsObject* settings = App::app->settings();
             std::string key = "gui/" + label + "/Window/Visible";
             settings->setValue(key, 0);
 
@@ -61,7 +61,7 @@ namespace mrv
             int H = dg->h();
 
             label = lbl;
-            SettingsObject* settings = p.ui->app->settings();
+            SettingsObject* settings = App::app->settings();
             std::string prefix = "gui/" + label;
             std::string key = prefix + "/Window";
             std_any value = settings->getValue<std::any>(key);
@@ -160,7 +160,7 @@ namespace mrv
         {
             TLRENDER_P();
 
-            SettingsObject* settings = p.ui->app->settings();
+            SettingsObject* settings = App::app->settings();
 
             std::string prefix = "gui/" + label;
             std::string key = prefix + "/Window";

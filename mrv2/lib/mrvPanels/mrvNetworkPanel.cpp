@@ -76,7 +76,7 @@ namespace mrv
         {
             TLRENDER_P();
 
-            SettingsObject* settings = p.ui->app->settings();
+            SettingsObject* settings = App::app->settings();
 
             std_any value;
 

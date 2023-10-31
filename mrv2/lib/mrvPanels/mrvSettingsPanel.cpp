@@ -59,7 +59,7 @@ namespace mrv
         {
             TLRENDER_P();
 
-            SettingsObject* settings = p.ui->app->settings();
+            SettingsObject* settings = App::app->settings();
             const std::string& prefix = tab_prefix();
 
             auto cg = new CollapsibleGroup(g->x(), 20, g->w(), 20, _("Cache"));
@@ -116,7 +116,7 @@ namespace mrv
                 [=](auto w)
                 {
                     settings->setValue("Cache/GBytes", (int)w->value());
-                    p.ui->app->cacheUpdate();
+                    App::app->cacheUpdate();
                 });
 
             sV = new Widget< HorSlider >(
@@ -131,7 +131,7 @@ namespace mrv
                 [=](auto w)
                 {
                     settings->setValue("Cache/ReadAhead", (double)w->value());
-                    p.ui->app->cacheUpdate();
+                    App::app->cacheUpdate();
                 });
 
             sV = new Widget< HorSlider >(
@@ -146,7 +146,7 @@ namespace mrv
                 [=](auto w)
                 {
                     settings->setValue("Cache/ReadBehind", (double)w->value());
-                    p.ui->app->cacheUpdate();
+                    App::app->cacheUpdate();
                 });
 
             cg->end();
@@ -352,7 +352,7 @@ namespace mrv
                     int requests = static_cast<int>(o->value());
                     settings->setValue(
                         "Performance/VideoRequestCount", requests);
-                    p.ui->app->cacheUpdate();
+                    App::app->cacheUpdate();
                 });
 
             spW = new Widget<Spinner>(
@@ -367,7 +367,7 @@ namespace mrv
                     int requests = static_cast<int>(o->value());
                     settings->setValue(
                         "Performance/AudioRequestCount", requests);
-                    p.ui->app->cacheUpdate();
+                    App::app->cacheUpdate();
                 });
 
             spW = new Widget<Spinner>(
@@ -381,7 +381,7 @@ namespace mrv
                 {
                     int requests = static_cast<int>(o->value());
                     settings->setValue("SequenceIO/ThreadCount", requests);
-                    p.ui->app->cacheUpdate();
+                    App::app->cacheUpdate();
                 });
 
             bg->end();
@@ -425,7 +425,7 @@ namespace mrv
                     int requests = static_cast<int>(o->value());
                     settings->setValue(
                         "Performance/FFmpegThreadCount", requests);
-                    p.ui->app->cacheUpdate();
+                    App::app->cacheUpdate();
                 });
 
             bg->end();

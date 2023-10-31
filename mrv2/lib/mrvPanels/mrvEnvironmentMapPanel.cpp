@@ -67,7 +67,7 @@ namespace mrv
         {
             TLRENDER_P();
 
-            auto settings = p.ui->app->settings();
+            auto settings = App::app->settings();
             const std::string& prefix = tab_prefix();
 
             std_any value;
