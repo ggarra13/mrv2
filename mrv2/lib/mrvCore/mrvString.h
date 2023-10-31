@@ -93,13 +93,6 @@ namespace mrv
         }
 
         /**
-         * Returns a random string (useful to refresh cache).
-         *
-         * @return random string
-         */
-        std::string random();
-
-        /**
          * @brief Class used to mimic Qt's string function so that it converts
          *       to integers or doubles.
          *

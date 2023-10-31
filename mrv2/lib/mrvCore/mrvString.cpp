@@ -11,25 +11,6 @@ namespace mrv
 {
     namespace string
     {
-        std::string random()
-        {
-            static const std::string charset =
-                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ012345678"
-                "9";
-            std::string out;
-
-            const int length = 16;
-            std::random_device rd;
-            std::default_random_engine generator(rd());
-            std::uniform_int_distribution<int> distribution(
-                0, charset.size() - 1);
-
-            for (int i = 0; i < length; ++i)
-            {
-                out += charset[distribution(generator)];
-            }
-            return out;
-        }
 
         int64_t String::toInt() const
         {

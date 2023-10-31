@@ -196,13 +196,13 @@ if [[ $BUILD_SSL == 1 ]]; then
 	    pacman -Sy mingw-w64-x86_64-openssl --noconfirm
 	fi
 
-	run_cmd cp /mingw64/bin/libssl*.dll $BUILD_DIR/install/bin/
-	run_cmd cp /mingw64/lib/libssl.dll.a $BUILD_DIR/install/lib/ssl.lib
-	run_cmd cp /mingw64/bin/libcrypto*.dll $BUILD_DIR/install/bin/
-	run_cmd cp /mingw64/lib/libcrypto.dll.a $BUILD_DIR/install/lib/crypto.lib
+	run_cmd cp /mingw64/bin/libssl*.dll $INSTALL_DIR/bin/
+	run_cmd cp /mingw64/lib/libssl.dll.a $INSTALL_DIR/lib/ssl.lib
+	run_cmd cp /mingw64/bin/libcrypto*.dll $INSTALL_DIR/bin/
+	run_cmd cp /mingw64/lib/libcrypto.dll.a $INSTALL_DIR/lib/crypto.lib
 
-	run_cmd cp -r /mingw64/include/openssl $BUILD_DIR/install/include/
-	run_cmd sed -i -e 's/SSL_library_init../SSL_library_init/' $BUILD_DIR/install/include/openssl/ssl.h
+	run_cmd cp -r /mingw64/include/openssl $INSTALL_DIR/include/
+	run_cmd sed -i -e 's/SSL_library_init../SSL_library_init/' $INSTALL_DIR/include/openssl/ssl.h
     fi
     ENABLE_OPENSSL="--enable-openssl"
 fi
