@@ -516,6 +516,12 @@ namespace mrv
 
         uiLogDisplay = new LogDisplay(0, 20, 340, 320);
 
+        std::string version = "mrv2 v";
+        version += mrv::version();
+        version += " ";
+        version += mrv::build_date();
+        LOG_INFO(version);
+
         LOG_INFO(msg);
 
         // Create the main control.

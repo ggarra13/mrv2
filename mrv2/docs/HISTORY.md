@@ -43,6 +43,7 @@ v0.8.3
 - Improved interactivity of editing tools (cut, insert, slice and remove)
   due to cache no longer starting from the beginning but from the current
   position.
+- Added license to all fltk demos.
 
   
 v0.8.2
