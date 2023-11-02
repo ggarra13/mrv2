@@ -34,7 +34,8 @@ set(SOURCES
     mrvLanguages.cpp
     mrvPathMapping.cpp
     mrvPreferences.cpp
-    mrvSaving.cpp
+    mrvSavingImage.cpp
+    mrvSavingMovie.cpp
     mrvSession.cpp
     mrvStereo3DAux.cpp
     mrvTimelinePlayer.cpp
