@@ -63,23 +63,17 @@ namespace mrv
 
             char buf[256];
 
-#ifdef TLRENDER_FFMPEG
-            ioOptions["FFmpeg/WriteProfile"] = getLabel(options.ffmpegProfile);
-#endif
-
 #ifdef TLRENDER_EXR
             ioOptions["OpenEXR/Compression"] = getLabel(options.exrCompression);
             ioOptions["OpenEXR/PixelType"] = getLabel(options.exrPixelType);
-#endif
-
             snprintf(buf, 256, "%d", options.zipCompressionLevel);
             ioOptions["OpenEXR/ZipCompressionLevel"] = buf;
-
             {
                 std::stringstream s;
                 s << options.dwaCompressionLevel;
                 ioOptions["OpenEXR/DWACompressionLevel"] = s.str();
             }
+#endif
 
             otime::TimeRange timeRange(
                 currentTime, otime::RationalTime(1, currentTime.rate()));
@@ -397,6 +391,7 @@ namespace mrv
 
             auto videoTime = info.videoTime;
             const bool hasVideo =
+                !info.video.empty() &&
                 time::compareExact(videoTime, time::invalidTimeRange);
 
             if (hasVideo && player->timeRange() != timeRange)
@@ -426,16 +421,6 @@ namespace mrv
             const size_t maxAudioSampleCount =
                 timeRange.duration().rescaled_to(sampleRate).value();
 
-            int layerId = 0;
-            bool annotations = false;
-            if (options.annotations)
-            {
-                annotations = true;
-                layerId = ui->uiColorChannel->value();
-            }
-
-            auto renderSize = info.video[layerId].size;
-
             const std::string& originalFile = player->path().get();
             if (originalFile == file)
             {
@@ -447,12 +432,26 @@ namespace mrv
             file::Path path(file);
             const std::string& extension = path.getExtension();
 
-            // Create the renderer.
-            auto render = timeline::GLRender::create(context);
+            bool annotations = false;
 
             gl::OffscreenBufferOptions offscreenBufferOptions;
+            std::shared_ptr<timeline::GLRender> render;
+            image::Size renderSize;
+            int layerId = 0;
+            if (hasVideo)
+            {
+                if (options.annotations)
+                {
+                    annotations = true;
+                    layerId = ui->uiColorChannel->value();
+                }
 
-            offscreenBufferOptions.colorType = image::PixelType::RGBA_F32;
+                renderSize = info.video[layerId].size;
+
+                // Create the renderer.
+                render = timeline::GLRender::create(context);
+                offscreenBufferOptions.colorType = image::PixelType::RGBA_F32;
+            }
 
             // Create the writer.
             auto writerPlugin =
@@ -466,7 +465,7 @@ namespace mrv
 
             int X = 0, Y = 0;
 
-            if (annotations)
+            if (annotations && hasVideo)
             {
                 view->setActionMode(ActionMode::kScrub);
                 view->setPresentationMode(true);
@@ -511,56 +510,66 @@ namespace mrv
                 LOG_INFO(msg);
             }
 
+            io::Info ioInfo;
             image::Info outputInfo;
-            outputInfo.size = renderSize;
-            outputInfo.pixelType = info.video[layerId].pixelType;
-
+            std::shared_ptr<image::Image> outputImage;
+            if (hasVideo)
             {
-                std::string msg = tl::string::Format(_("Image info: {0} {1}"))
+                outputInfo.size = renderSize;
+                outputInfo.pixelType = info.video[layerId].pixelType;
+
+                {
+                    std::string msg =
+                        tl::string::Format(_("Image info: {0} {1}"))
+                            .arg(outputInfo.size)
+                            .arg(outputInfo.pixelType);
+                    LOG_INFO(msg);
+                }
+
+                outputInfo = writerPlugin->getWriteInfo(outputInfo);
+                if (image::PixelType::None == outputInfo.pixelType)
+                {
+                    outputInfo.pixelType = image::PixelType::RGB_U8;
+                }
+
+#ifdef TLRENDER_EXR
+                if (annotations &&
+                    string::compare(
+                        extension, ".exr", string::Compare::CaseInsensitive))
+                {
+                    outputInfo.pixelType = options.exrPixelType;
+                }
+#endif
+                if (string::compare(
+                        extension, ".hdr", string::Compare::CaseInsensitive))
+                {
+                    outputInfo.pixelType = image::PixelType::RGB_F32;
+                    offscreenBufferOptions.colorType =
+                        image::PixelType::RGB_F32;
+                }
+
+                std::string msg = tl::string::Format(_("Output info: {0} {1}"))
                                       .arg(outputInfo.size)
                                       .arg(outputInfo.pixelType);
                 LOG_INFO(msg);
+
+                outputImage = image::Image::create(outputInfo);
+
+                ioInfo.video.push_back(outputInfo);
+                ioInfo.videoTime = timeRange;
             }
 
-            outputInfo = writerPlugin->getWriteInfo(outputInfo);
-            if (image::PixelType::None == outputInfo.pixelType)
-            {
-                outputInfo.pixelType = image::PixelType::RGB_U8;
-            }
+            if (hasAudio)
+                ioInfo.audio = info.audio;
 
-#ifdef TLRENDER_EXR
-            if (annotations &&
-                string::compare(
-                    extension, ".exr", string::Compare::CaseInsensitive))
-            {
-                outputInfo.pixelType = options.exrPixelType;
-            }
-#endif
-            if (string::compare(
-                    extension, ".hdr", string::Compare::CaseInsensitive))
-            {
-                outputInfo.pixelType = image::PixelType::RGB_F32;
-                offscreenBufferOptions.colorType = image::PixelType::RGB_F32;
-            }
-
-            std::string msg = tl::string::Format(_("Output info: {0} {1}"))
-                                  .arg(outputInfo.size)
-                                  .arg(outputInfo.pixelType);
-            LOG_INFO(msg);
-
-            auto outputImage = image::Image::create(outputInfo);
-
-            io::Info ioInfo;
-            ioInfo.video.push_back(outputInfo);
-            ioInfo.videoTime = timeRange;
-            ioInfo.audio = info.audio;
-
+            std::cerr << __LINE__ << std::endl;
             auto writer = writerPlugin->write(path, ioInfo, ioOptions);
             if (!writer)
             {
                 throw std::runtime_error(
                     string::Format("{0}: Cannot open").arg(file));
             }
+            std::cerr << __LINE__ << std::endl;
 
             int64_t startFrame = startTime.to_frames();
             int64_t endFrame = endTime.to_frames();
@@ -573,12 +582,17 @@ namespace mrv
             // Don't send any tcp updates
             tcp->lock();
 
-            const GLenum format = gl::getReadPixelsFormat(outputInfo.pixelType);
-            const GLenum type = gl::getReadPixelsType(outputInfo.pixelType);
-            if (GL_NONE == format || GL_NONE == type)
+            GLenum format, type;
+
+            if (hasVideo)
             {
-                throw std::runtime_error(
-                    string::Format("{0}: Cannot open").arg(file));
+                format = gl::getReadPixelsFormat(outputInfo.pixelType);
+                type = gl::getReadPixelsType(outputInfo.pixelType);
+                if (GL_NONE == format || GL_NONE == type)
+                {
+                    throw std::runtime_error(
+                        string::Format("{0}: Cannot open").arg(file));
+                }
             }
 
             player->start();
@@ -587,12 +601,17 @@ namespace mrv
             bool hud = view->getHudActive();
             view->setHudActive(false);
 
+            std::shared_ptr<gl::OffscreenBuffer> buffer;
+
             math::Size2i offscreenBufferSize(renderSize.w, renderSize.h);
-            view->make_current();
-            gl::initGLAD();
-            auto buffer = gl::OffscreenBuffer::create(
-                offscreenBufferSize, offscreenBufferOptions);
-            CHECK_GL;
+            if (hasVideo)
+            {
+                view->make_current();
+                gl::initGLAD();
+                buffer = gl::OffscreenBuffer::create(
+                    offscreenBufferSize, offscreenBufferOptions);
+                CHECK_GL;
+            }
 
             size_t totalSamples = 0;
             size_t currentSampleCount =
@@ -600,78 +619,82 @@ namespace mrv
 
             while (running)
             {
-
-                if (annotations)
+                if (hasVideo)
                 {
-                    view->redraw();
-                    view->flush();
-                    Fl::check();
-
-                    // If progress window is closed, exit loop.
-                    if (!progress.tick())
-                        break;
-
-                    glReadBuffer(GL_FRONT);
-                    CHECK_GL;
-                    glReadPixels(
-                        X, Y, outputInfo.size.w, outputInfo.size.h, format,
-                        type, outputImage->getData());
-                    CHECK_GL;
-                }
-                else
-                {
-                    // Get the videoData
-                    const auto& videoData =
-                        timeline->getVideo(currentTime).get();
-
-                    // If progress window is closed, exit loop.
-                    if (!progress.tick())
-                        break;
-
-                    player->seek(currentTime);
-
-                    view->make_current();
-                    CHECK_GL;
-                    gl::initGLAD();
-
-                    // Render the video.
-                    gl::OffscreenBufferBinding binding(buffer);
-                    CHECK_GL;
+                    if (annotations)
                     {
-                        locale::SetAndRestore saved;
-                        render->begin(
-                            offscreenBufferSize, view->getColorConfigOptions(),
-                            view->lutOptions());
+                        view->redraw();
+                        view->flush();
+                        Fl::check();
+
+                        // If progress window is closed, exit loop.
+                        if (!progress.tick())
+                            break;
+
+                        glReadBuffer(GL_FRONT);
                         CHECK_GL;
-                        render->drawVideo(
-                            {videoData},
-                            {math::Box2i(0, 0, renderSize.w, renderSize.h)});
+                        glReadPixels(
+                            X, Y, outputInfo.size.w, outputInfo.size.h, format,
+                            type, outputImage->getData());
                         CHECK_GL;
-                        render->end();
+                    }
+                    else
+                    {
+                        // Get the videoData
+                        const auto& videoData =
+                            timeline->getVideo(currentTime).get();
+
+                        // If progress window is closed, exit loop.
+                        if (!progress.tick())
+                            break;
+
+                        player->seek(currentTime);
+
+                        view->make_current();
+                        CHECK_GL;
+                        gl::initGLAD();
+
+                        // Render the video.
+                        gl::OffscreenBufferBinding binding(buffer);
+                        CHECK_GL;
+                        {
+                            locale::SetAndRestore saved;
+                            render->begin(
+                                offscreenBufferSize,
+                                view->getColorConfigOptions(),
+                                view->lutOptions());
+                            CHECK_GL;
+                            render->drawVideo(
+                                {videoData},
+                                {math::Box2i(
+                                    0, 0, renderSize.w, renderSize.h)});
+                            CHECK_GL;
+                            render->end();
+                        }
+
+                        // back to conventional pixel operation
+                        // glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
+                        // CHECK_GL;
+                        glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+                        CHECK_GL;
+
+                        glPixelStorei(
+                            GL_PACK_ALIGNMENT, outputInfo.layout.alignment);
+                        CHECK_GL;
+                        glPixelStorei(
+                            GL_PACK_SWAP_BYTES,
+                            outputInfo.layout.endian != memory::getEndian());
+                        CHECK_GL;
+
+                        glReadPixels(
+                            0, 0, outputInfo.size.w, outputInfo.size.h, format,
+                            type, outputImage->getData());
+                        CHECK_GL;
                     }
 
-                    // back to conventional pixel operation
-                    // glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
-                    // CHECK_GL;
-                    glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
-                    CHECK_GL;
-
-                    glPixelStorei(
-                        GL_PACK_ALIGNMENT, outputInfo.layout.alignment);
-                    CHECK_GL;
-                    glPixelStorei(
-                        GL_PACK_SWAP_BYTES,
-                        outputInfo.layout.endian != memory::getEndian());
-                    CHECK_GL;
-
-                    glReadPixels(
-                        0, 0, outputInfo.size.w, outputInfo.size.h, format,
-                        type, outputImage->getData());
-                    CHECK_GL;
+                    if (videoTime.contains(currentTime))
+                        writer->writeVideo(currentTime, outputImage);
                 }
-
-                if (videoTime.contains(currentTime))
-                    writer->writeVideo(currentTime, outputImage);
 
                 if (hasAudio)
                 {

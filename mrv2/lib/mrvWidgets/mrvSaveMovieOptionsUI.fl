@@ -10,6 +10,9 @@ code_name {.cxx}
 decl {\#include <string>} {public global
 }
 
+decl {\#include "tlIO/FFmpeg.h"} {public global
+}
+
 decl {\#include "mrvCore/mrvFile.h"} {public global
 }
 
@@ -37,69 +40,26 @@ class SaveMovieOptionsUI {open
         xywh {49 120 375 69} box ROUNDED_FRAME color 56
       } {
         Fl_Choice Profile {
-          label Profile open
+          label Profile open selected
           tooltip {FFMpeg's Profile settings.} xywh {151 140 170 29} down_box BORDER_BOX
-        } {
-          MenuItem {} {
-            label None
-            xywh {186 0 100 20}
-          }
-          MenuItem {} {
-            label H264
-            xywh {186 10 100 20}
-          }
-          MenuItem {} {
-            label ProRes
-            xywh {186 20 100 20}
-          }
-          MenuItem {} {
-            label ProRes_Proxy
-            xywh {186 30 100 20}
-          }
-          MenuItem {} {
-            label ProRes_LT
-            xywh {186 40 100 20}
-          }
-          MenuItem {} {
-            label ProRes_HQ
-            xywh {186 50 100 20}
-          }
-          MenuItem {} {
-            label ProRes_4444
-            xywh {186 60 100 20}
-          }
-          MenuItem {} {
-            label ProRes_XQ
-            xywh {186 70 100 20}
-          }
-        }
+          code0 {auto entries = tl::ffmpeg::getProfileLabels();}
+          code1 {for (auto entry : entries)}
+          code2 {o->add(entry.c_str());}
+          code3 {o->value(0);}
+        } {}
       }
       Fl_Group AudioOptions {
-        label {Audio Options}
+        label {Audio Options} open
         xywh {49 230 375 69} box ROUNDED_FRAME color 56
       } {
         Fl_Choice AudioCodec {
-          label Codec selected
+          label Codec open
           tooltip {FFMpeg's H264 Profile settings.} xywh {151 250 170 29} down_box BORDER_BOX
-          code0 {o->value(1);}
-        } {
-          MenuItem {} {
-            label None
-            xywh {186 10 100 20}
-          }
-          MenuItem {} {
-            label AAC
-            xywh {186 20 100 20}
-          }
-          MenuItem {} {
-            label AC3
-            xywh {186 30 100 20}
-          }
-          MenuItem {} {
-            label {True HD}
-            xywh {186 40 100 20}
-          }
-        }
+          code0 {auto entries = tl::ffmpeg::getAudioCodecLabels();}
+          code1 {for (auto entry : entries)}
+          code2 {o->add(entry.c_str());}
+          code3 {o->value(1);}
+        } {}
       }
       Fl_Group {} {open
         xywh {114 335 244 34}

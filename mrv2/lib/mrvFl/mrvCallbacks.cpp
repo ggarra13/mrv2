@@ -310,7 +310,7 @@ namespace mrv
         mrv::SaveOptions options;
 
 #ifdef TLRENDER_FFMPEG
-        if (file::isMovie(extension))
+        if (file::isMovie(extension) || file::isAudio(extension))
         {
             SaveMovieOptionsUI saveOptions;
             if (saveOptions.cancel)
