@@ -432,6 +432,9 @@ namespace mrv
     {
         pushMessage("framePrev", 0);
 
+        if (isMuted())
+            return _p->player->framePrev();
+
         const auto oneFrame =
             otime::RationalTime(1.0, timeRange().duration().rate());
         auto time = currentTime() - oneFrame;
@@ -464,6 +467,9 @@ namespace mrv
     void TimelinePlayer::frameNext()
     {
         pushMessage("frameNext", 0);
+
+        if (isMuted())
+            return _p->player->frameNext();
 
         const auto oneFrame =
             otime::RationalTime(1.0, timeRange().duration().rate());

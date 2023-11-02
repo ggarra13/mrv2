@@ -344,6 +344,9 @@ namespace mrv
         auto endTime = timeRange.end_time_inclusive();
         auto currentTime = startTime;
 
+        auto mute = player->isMuted();
+        player->setMute(true);
+
         try
         {
 
@@ -757,6 +760,7 @@ namespace mrv
         view->setHudActive(hud);
         view->setPresentationMode(presentation);
         player->seek(currentTime);
+        player->setMute(mute);
         ui->uiTimeline->valid(0); // needed
         ui->uiTimeline->redraw();
         tcp->unlock();

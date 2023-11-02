@@ -53,6 +53,7 @@ v0.8.3
 - Split the Save Options popup into a Save Movie Options and a Save Image
   Options.
 - Added a Cancel button to both Save Movie Options and Save Image Options.
+- Turned off audio (as it would stutter) while saving movies with annotations.
 
   
 v0.8.2

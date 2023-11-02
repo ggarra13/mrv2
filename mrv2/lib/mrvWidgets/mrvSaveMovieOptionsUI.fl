@@ -20,7 +20,7 @@ class SaveMovieOptionsUI {open
   Function {SaveMovieOptionsUI()} {open
   } {
     Fl_Window uiMain {
-      label {Save Movie Options} open selected
+      label {Save Movie Options} open
       xywh {838 262 473 399} type Double align 5 modal visible
     } {
       Fl_Group {} {
@@ -79,8 +79,9 @@ class SaveMovieOptionsUI {open
         xywh {49 230 375 69} box ROUNDED_FRAME color 56
       } {
         Fl_Choice AudioCodec {
-          label Codec
+          label Codec selected
           tooltip {FFMpeg's H264 Profile settings.} xywh {151 250 170 29} down_box BORDER_BOX
+          code0 {o->value(1);}
         } {
           MenuItem {} {
             label None
