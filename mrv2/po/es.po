@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-10-26 09:11-0300\n"
+"POT-Creation-Date: 2023-11-02 14:05-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -985,6 +985,12 @@ msgstr "Centro del limpiaparabrisas de la comparación A/B."
 msgid "A/B comparison wipe rotation."
 msgstr "Rotación del limpiaparabrisas de la comparación A/B."
 
+msgid "AAC"
+msgstr "AAC"
+
+msgid "AC3"
+msgstr "AC3"
+
 msgid "AVCHD Video"
 msgstr "Video AVCHD"
 
@@ -1181,6 +1187,9 @@ msgstr "Carpeta del Audio"
 msgid "Audio Filename"
 msgstr "Nombre del Audio"
 
+msgid "Audio Options"
+msgstr "Opciones de Audio"
+
 msgid "Audio Requests"
 msgstr "Pedidos de Audio"
 
@@ -1304,18 +1313,6 @@ msgstr "Cancelar"
 
 msgid "Cancel the OCIO selection and don't change anything."
 msgstr "Cancele la selección de OCIO y no cambie nada."
-
-msgid "Cannot append audio clip"
-msgstr "No puedo agragar clip de audio"
-
-msgid "Cannot append audio gap"
-msgstr "No puedo agregar brecha de audio"
-
-msgid "Cannot append audio track."
-msgstr "No puedo agregar pista de audio."
-
-msgid "Cannot append video track."
-msgstr "No puedo agregar pista de vídeo."
 
 msgid ""
 "Cannot create an annotation here for all frames.  A current frame annotation "
@@ -1599,9 +1596,6 @@ msgstr "No pude convertir el mensaje a figura: "
 msgid "Could not find clip in loaded clips."
 msgstr "No pude encontrar clip en items cargados."
 
-msgid "Could not find video clip."
-msgstr "No pude encontrar video clip."
-
 msgid "Could not get current path."
 msgstr "No pude obtener el camino actual."
 
@@ -1667,9 +1661,6 @@ msgstr "Tiempo actual en la línea de tiempo."
 
 msgid "Current tool being used."
 msgstr "Herramienta siendo usada."
-
-msgid "Currently, you cannot add an .otio file to an EDL playlist."
-msgstr "Actualmente no se puede concatenar dos archivos .otio."
 
 msgid "Cut Frame"
 msgstr "Cortar Cuadro"
@@ -2019,11 +2010,14 @@ msgstr "C:"
 msgid "FFMpeg's H264 Profile settings."
 msgstr "Seteos del perfil de code H264 de FFmpeg."
 
+msgid "FFMpeg's Profile settings."
+msgstr "Seteos del perfil de FFmpeg."
+
+msgid "FFmpeg Audio Codec."
+msgstr "Codec de Audio de FFmpeg."
+
 msgid "FFmpeg I/O threads"
 msgstr "Hilos de FFmpeg I/O"
-
-msgid "FFmpeg Options"
-msgstr "Opciones de FFmpeg"
 
 msgid "FFmpeg Profile."
 msgstr "Perfil de FFmpeg"
@@ -2109,6 +2103,9 @@ msgstr "&Archivo/&Grabar/Un &Cuadro"
 
 msgid "Filename"
 msgstr "Nombre"
+
+msgid "Filename '{0}' does not exist or does not have read permissions."
+msgstr "Archivo '{0}' no existe o no es leíble."
 
 msgid "Filename of the audio clip"
 msgstr "Nombre del archivo del clip de audio"
@@ -2994,12 +2991,6 @@ msgstr ""
 "Sin versión en este clip.  Por favor crée una imagen o carpeta con un nombre "
 "con versión."
 
-msgid "No video children found."
-msgstr "No se encontró elementos de vídeox"
-
-msgid "No video track found."
-msgstr "No se encontró pista de vídeo."
-
 msgid "None"
 msgstr "Ninguno"
 
@@ -3150,8 +3141,14 @@ msgstr "Nivel de compresión Zip de OpenEXR."
 msgid "OpenGL"
 msgstr "OpenGL"
 
+msgid "OpenTimelineIO EDL"
+msgstr "LDE de OpenTimelineIO."
+
 msgid "OpenTimelineIO Edit mode."
 msgstr "Modo de Edición de OpenTimelineIO."
+
+msgid "OpenTimelineIO Zipped EDL"
+msgstr "Zip LDE de OpenTimelineIO."
 
 msgid "Order"
 msgstr "Orden"
@@ -3935,6 +3932,12 @@ msgstr "Grabar Anotaciones a PDF"
 msgid "Save Image"
 msgstr "Grabar Imagen"
 
+msgid "Save Image Options"
+msgstr "Opciones de Grabar Imagen"
+
+msgid "Save Movie Options"
+msgstr "Opciones de Grabar Película"
+
 msgid "Save Movie or Sequence"
 msgstr "Grabar Película o Secuencia"
 
@@ -3986,9 +3989,6 @@ msgstr ""
 #, c-format
 msgid "Saving Movie %<PRId64> - %<PRId64>"
 msgstr "Grabando Película %<PRId64> - %<PRId64>"
-
-msgid "Saving Options"
-msgstr "Opciones de Grabar"
 
 msgid "Scanlines"
 msgstr "Lineas"
@@ -4966,6 +4966,9 @@ msgstr "Barra Superior"
 msgid "Trim"
 msgstr "Recortar"
 
+msgid "True HD"
+msgstr "True HD"
+
 msgid "Turn a frame number and rate into a :class:`~RationalTime` object."
 msgstr ""
 "Convertir un número de cuadro y una razón a un objeto :class:`~RationalTime`."
@@ -5137,6 +5140,9 @@ msgstr "Niveles de Vídeo"
 
 msgid "Video Levels."
 msgstr "Niveles de Vídeo."
+
+msgid "Video Options"
+msgstr "Opciones de Vídeo"
 
 msgid "Video Requests"
 msgstr "Pedidos de Vídeo"
@@ -5623,6 +5629,33 @@ msgstr "x9"
 
 msgid "xyY CIE xyY"
 msgstr "xyY CIE xyY"
+
+#~ msgid "Saving Options"
+#~ msgstr "Opciones de Grabar"
+
+#~ msgid "Cannot append audio clip"
+#~ msgstr "No puedo agragar clip de audio"
+
+#~ msgid "Cannot append audio gap"
+#~ msgstr "No puedo agregar brecha de audio"
+
+#~ msgid "Cannot append audio track."
+#~ msgstr "No puedo agregar pista de audio."
+
+#~ msgid "Cannot append video track."
+#~ msgstr "No puedo agregar pista de vídeo."
+
+#~ msgid "Could not find video clip."
+#~ msgstr "No pude encontrar video clip."
+
+#~ msgid "Currently, you cannot add an .otio file to an EDL playlist."
+#~ msgstr "Actualmente no se puede concatenar dos archivos .otio."
+
+#~ msgid "No video children found."
+#~ msgstr "No se encontró elementos de vídeox"
+
+#~ msgid "No video track found."
+#~ msgstr "No se encontró pista de vídeo."
 
 #~ msgid "       "
 #~ msgstr "       "

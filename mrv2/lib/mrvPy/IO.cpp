@@ -51,6 +51,9 @@ void mrv2_io(py::module& m)
         .def_readwrite(
             "ffmpegProfile", &mrv::SaveOptions::ffmpegProfile,
             _("FFmpeg Profile."))
+        .def_readwrite(
+            "ffmpegAudioCodec", &mrv::SaveOptions::ffmpegAudioCodec,
+            _("FFmpeg Audio Codec."))
 #endif
 #ifdef TLRENDER_EXR
         .def_readwrite(
@@ -75,6 +78,7 @@ void mrv2_io(py::module& m)
                   << " annotations=" << (o.annotations ? "True" : "False")
 #ifdef TLRENDER_FFMPEG
                   << " ffmpegProfile=" << getLabel(o.ffmpegProfile)
+                  << " ffmpegAudioCodec=" << getLabel(o.ffmpegAudioCodec)
 #endif
 #ifdef TLRENDER_EXR
                   << " exrCompression=" << getLabel(o.exrCompression)

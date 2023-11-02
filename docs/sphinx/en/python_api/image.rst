@@ -13,7 +13,7 @@ image module
    .. autoattribute:: g
       :annotation: = float
 		   
-   .. autoattribute:: g
+   .. autoattribute:: b
       :annotation: = float
 		   
    .. autoattribute:: a

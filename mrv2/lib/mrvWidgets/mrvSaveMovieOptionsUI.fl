@@ -20,7 +20,7 @@ class SaveMovieOptionsUI {open
   Function {SaveMovieOptionsUI()} {open
   } {
     Fl_Window uiMain {
-      label {Saving Movie Options} open
+      label {Save Movie Options} open selected
       xywh {838 262 473 399} type Double align 5 modal visible
     } {
       Fl_Group {} {
@@ -33,7 +33,7 @@ class SaveMovieOptionsUI {open
         }
       }
       Fl_Group VideoOptions {
-        label {Video Options} open selected
+        label {Video Options} open
         xywh {49 120 375 69} box ROUNDED_FRAME color 56
       } {
         Fl_Choice Profile {

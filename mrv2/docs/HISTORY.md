@@ -52,6 +52,8 @@ v0.8.3
   partially outside the screen.
 - Split the Save Options popup into a Save Movie Options and a Save Image
   Options.
+- Added a Cancel button to both Save Movie Options and Save Image Options.
+
   
 v0.8.2
 ======
