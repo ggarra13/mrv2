@@ -10,7 +10,8 @@ set( FL_SOURCES
     mrvHUDUI.fl
     PathMappingUI.fl
     mrvPreferencesUI.fl
-    SaveOptionsUI.fl
+    mrvSaveImageOptionsUI.fl
+    mrvSaveMovieOptionsUI.fl
     mrViewer.fl
 )
 

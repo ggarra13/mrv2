@@ -80,11 +80,14 @@ namespace mrv
     }
 
     void ProgressReport::to_hour_min_sec(
-        const double t, int& hour, int& min, int& sec)
+        const double t, int& hour, int& min, int& sec, int& ms)
     {
-        hour = int(floor(t / 3600.0));
-        min = int(floor(t / 60.0)) % 60;
-        sec = int(floor(t)) % 60;
+        long long milliseconds = t;
+        long long total_seconds = milliseconds / 1000;
+        hour = total_seconds / 3600;
+        min = (total_seconds % 3600) / 60;
+        sec = total_seconds % 60;
+        ms = milliseconds % 1000;
     }
 
     bool ProgressReport::tick()
@@ -101,11 +104,11 @@ namespace mrv
             _frameDuration = diff.count() * 1000;
         }
 
-        int hour, min, sec;
-        to_hour_min_sec(_time, hour, min, sec);
+        int hour, min, sec, ms;
+        to_hour_min_sec(_time, hour, min, sec, ms);
 
         char buf[120];
-        snprintf(buf, 120, " %02d:%02d:%02d", hour, min, sec);
+        snprintf(buf, 120, " %02d:%02d:%02d.%d", hour, min, sec, ms);
         elapsed->value(buf);
 
         double r = 0;
@@ -113,9 +116,9 @@ namespace mrv
         if (frame_diff > 0)
             r = _frameDuration * frame_diff;
 
-        to_hour_min_sec(r, hour, min, sec);
+        to_hour_min_sec(r, hour, min, sec, ms);
 
-        snprintf(buf, 120, " %02d:%02d:%02d", hour, min, sec);
+        snprintf(buf, 120, " %02d:%02d:%02d.%d", hour, min, sec, ms);
         remain->value(buf);
 
         _lastTime = now;

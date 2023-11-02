@@ -36,7 +36,7 @@
 namespace
 {
     const char* kModule = "mrv2s";
-    const int kSessionVersion = 10;
+    const int kSessionVersion = 11;
 } // namespace
 
 namespace
@@ -111,6 +111,7 @@ namespace mrv
             Message annotation;
             Message time;
             Message playback;
+            Message inOutRange;
 
             if (player)
             {
@@ -123,11 +124,13 @@ namespace mrv
                 annotation = jAnnotations;
                 time = player->currentTime();
                 playback = player->playback();
+                inOutRange = player->inOutRange();
             }
 
             timeline["annotations"] = annotation;
             timeline["time"] = time;
             timeline["playback"] = playback;
+            timeline["inOutRange"] = inOutRange;
 
             Message bars = {
                 {"menu_bar", (bool)ui->uiMenuGroup->visible()},
@@ -474,6 +477,36 @@ namespace mrv
                                 playback = static_cast<timeline::Playback>(v);
                             }
                             player->setPlayback(playback);
+                        }
+
+                        if (version >= 11)
+                        {
+                            otime::TimeRange inOutRange;
+                            j["inOutRange"].get_to(inOutRange);
+                            player->setInOutRange(inOutRange);
+
+                            auto timeRange = player->timeRange();
+                            if (inOutRange != timeRange)
+                            {
+                                TimelineClass* c = ui->uiTimeWindow;
+                                if (inOutRange.start_time() !=
+                                    timeRange.start_time())
+                                {
+                                    c->uiStartFrame->setTime(
+                                        inOutRange.start_time());
+                                    c->uiStartButton->value(1);
+                                }
+
+                                if (inOutRange.end_time_exclusive() !=
+                                    timeRange.end_time_exclusive())
+                                {
+                                    c->uiEndFrame->setTime(
+                                        inOutRange.end_time_exclusive() -
+                                        otime::RationalTime(
+                                            1.0, inOutRange.duration().rate()));
+                                    c->uiEndButton->value(1);
+                                }
+                            }
                         }
 
                         otime::RationalTime time;

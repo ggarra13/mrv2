@@ -24,8 +24,10 @@ namespace mrv
         void show();
 
     protected:
-        //! Convert a double in seconds to hour, minutes and seconds
-        void to_hour_min_sec(const double t, int& hour, int& min, int& sec);
+        //! Convert a double in seconds to hour, minutes, seconds and
+        //! milliseconds
+        void
+        to_hour_min_sec(const double t, int& hour, int& min, int& sec, int& ms);
 
     protected:
         Fl_Window* w;

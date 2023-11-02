@@ -7,28 +7,25 @@ i18n_gnu_function gettext
 i18n_gnu_static_function gettext_noop
 header_name {.h}
 code_name {.cxx}
-snap {
-  ver 1
-  current_suite FLTK
-  current_preset 0
-}
 decl {\#include <string>} {public global
 }
 
-decl {\#include "mrvCore/mrvFile.h"} {selected public global
+decl {\#include "mrvCore/mrvFile.h"} {public global
 }
 
-class SaveOptionsUI {open
+class SaveImageOptionsUI {open
 } {
+  decl {bool cancel = false;} {public local
+  }
   decl {bool valid_for_exr = false;} {private local
   }
   decl {std::string extension;} {private local
   }
-  Function {SaveOptionsUI(const std::string ext, const bool exr_valid)} {open
+  Function {SaveImageOptionsUI(const std::string ext, const bool exr_valid)} {open
   } {
     Fl_Window uiMain {
       label {Saving Options} open
-      xywh {635 296 529 515} type Double align 5 hide modal
+      xywh {635 296 523 453} type Double align 5 hide modal
     } {
       Fl_Group {} {
         label {Common Settings} open
@@ -57,51 +54,9 @@ else
           tooltip {Save Annotations burned into the movie or sequence.  It also allows saving OpenEXRs from an 8-bit movie and changing OpenEXR's pixel type.} xywh {192 46 25 25} down_box DOWN_BOX
         }
       }
-      Fl_Group FFmpegOptions {
-        label {FFmpeg Options}
-        xywh {78 120 375 69} box ROUNDED_FRAME color 56
-      } {
-        Fl_Choice Profile {
-          label Profile
-          tooltip {FFMpeg's H264 Profile settings.} xywh {180 140 170 29} down_box BORDER_BOX
-        } {
-          MenuItem {} {
-            label None
-            xywh {0 0 100 20}
-          }
-          MenuItem {} {
-            label H264
-            xywh {10 10 100 20}
-          }
-          MenuItem {} {
-            label ProRes
-            xywh {20 20 100 20}
-          }
-          MenuItem {} {
-            label ProRes_Proxy
-            xywh {30 30 100 20}
-          }
-          MenuItem {} {
-            label ProRes_LT
-            xywh {40 40 100 20}
-          }
-          MenuItem {} {
-            label ProRes_HQ
-            xywh {50 50 100 20}
-          }
-          MenuItem {} {
-            label ProRes_4444
-            xywh {60 60 100 20}
-          }
-          MenuItem {} {
-            label ProRes_XQ
-            xywh {70 70 100 20}
-          }
-        }
-      }
       Fl_Group OpenEXROptions {
         label {OpenEXR Options} open
-        xywh {71 237 374 212} box ROUNDED_FRAME color 56
+        xywh {80 121 374 212} box ROUNDED_FRAME color 56
       } {
         Fl_Choice Compression {
           label Compression
@@ -115,9 +70,9 @@ if (label == "ZIP" || label == "ZIPS")
 }
 else if (label == "DWAA" || label == "DWAB")
 {
-	DWACompressionGroup->activate();
+     DWACompressionGroup->activate();
 }}
-          tooltip {FFMpeg's H264 Profile settings.} xywh {212 259 170 29} down_box BORDER_BOX
+          tooltip {FFMpeg's H264 Profile settings.} xywh {221 143 170 29} down_box BORDER_BOX
         } {
           MenuItem {} {
             label None
@@ -161,8 +116,8 @@ else if (label == "DWAA" || label == "DWAB")
           }
         }
         Fl_Choice PixelType {
-          label {Pixel Type} open
-          tooltip {FFMpeg's H264 Profile settings.} xywh {212 300 170 29} down_box BORDER_BOX deactivate
+          label {Pixel Type}
+          tooltip {FFMpeg's H264 Profile settings.} xywh {221 184 170 29} down_box BORDER_BOX deactivate
         } {
           MenuItem {} {
             label Half
@@ -173,57 +128,63 @@ else if (label == "DWAA" || label == "DWAB")
             xywh {30 30 100 20}
           }
         }
-        Fl_Group ZipCompressionGroup {
-          xywh {214 346 168 26} deactivate
+        Fl_Group ZipCompressionGroup {open
+          xywh {223 230 168 26} deactivate
         } {
           Fl_Value_Input ZipCompressionLevel {
             label {ZIP Compression}
-            user_data this user_data_type {SaveOptionsUI*}
+            user_data this user_data_type {SaveImageOptionsUI*}
             callback {v->ZipCompressionSlider->value(o->value());}
-            xywh {214 346 64 26} color -1733777408 minimum 1 maximum 9 step 1 value 4 textcolor 56
+            xywh {223 230 64 26} color -1733777408 minimum 1 maximum 9 step 1 value 4 textcolor 56
           }
           Fl_Slider ZipCompressionSlider {
             user_data ZipCompressionLevel user_data_type {Fl_Value_Input*}
             callback {v->value(o->value());
 v->redraw();}
-            xywh {278 346 104 26} type {Horz Knob} minimum 1 maximum 9 step 1 value 4 slider_size 0.1
+            xywh {287 230 104 26} type {Horz Knob} minimum 1 maximum 9 step 1 value 4 slider_size 0.1
           }
         }
         Fl_Group DWACompressionGroup {open
-          xywh {214 384 168 26} deactivate
+          xywh {223 268 168 26} deactivate
         } {
           Fl_Value_Input DWACompressionLevel {
             label {DWA Compression}
-            user_data this user_data_type {SaveOptionsUI*}
-            callback {v->DWACompressionSlider->value(o->value());}
-            xywh {214 384 64 26} color -1733777408 maximum 1e+06 step 0.1 value 45 textcolor 56
+            user_data this user_data_type {SaveImageOptionsUI*}
+            callback {v->DWACompressionSlider->value(o->value());} selected
+            xywh {223 268 64 26} color -1733777408 maximum 1e+06 step 0.1 value 45 textcolor 56
           }
           Fl_Slider DWACompressionSlider {
             user_data DWACompressionLevel user_data_type {Fl_Value_Input*}
             callback {v->value(o->value());
 v->redraw();}
-            xywh {278 384 104 26} type {Horz Knob} maximum 1e+06 step 2 value 45 slider_size 0.1
+            xywh {287 268 104 26} type {Horz Knob} maximum 1e+06 step 2 value 45 slider_size 0.1
           }
         }
       }
-      Fl_Button {} {
-        label Ok
-        user_data uiMain user_data_type {Fl_Double_Window*}
-        callback {v->hide();}
-        xywh {200 455 90 34}
+      Fl_Group {} {open
+        xywh {133 381 262 34}
+      } {
+        Fl_Button {} {
+          label Ok
+          user_data uiMain user_data_type {Fl_Double_Window*}
+          callback {v->hide();}
+          xywh {133 381 90 34}
+        }
+        Fl_Button {} {
+          label Cancel
+          user_data uiMain user_data_type {Fl_Double_Window*}
+          callback {cancel = true;
+v->hide();}
+          xywh {305 381 90 34}
+        }
       }
     }
-    code {FFmpegOptions->deactivate();
-OpenEXROptions->deactivate();
+    code {OpenEXROptions->deactivate();
 extension = ext;
 valid_for_exr = exr_valid;
 if (ext == ".exr" && exr_valid)
 {
    OpenEXROptions->activate();
-}
-else if (mrv::file::isMovie(ext))
-{  
-   FFmpegOptions->activate();
 }
 uiMain->show();
 while (uiMain->visible())

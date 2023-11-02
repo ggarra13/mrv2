@@ -20,6 +20,7 @@ namespace mrv
 
 #ifdef TLRENDER_FFMPEG
         tl::ffmpeg::Profile ffmpegProfile = tl::ffmpeg::Profile::None;
+        tl::ffmpeg::AudioCodec ffmpegAudioCodec = tl::ffmpeg::AudioCodec::AAC;
 #endif
 
 #ifdef TLRENDER_EXR

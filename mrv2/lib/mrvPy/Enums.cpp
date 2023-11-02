@@ -47,6 +47,12 @@ void mrv2_enums(py::module& m)
         .value("ProRes_HQ", ffmpeg::Profile::ProRes_HQ)
         .value("ProRes_4444", ffmpeg::Profile::ProRes_4444)
         .value("ProRes_XQ", ffmpeg::Profile::ProRes_XQ);
+
+    py::enum_<ffmpeg::AudioCodec>(io, "AudioCodec")
+        .value("kNone", ffmpeg::AudioCodec::None)
+        .value("AAC", ffmpeg::AudioCodec::AAC)
+        .value("AC3", ffmpeg::AudioCodec::AC3)
+        .value("True_HD", ffmpeg::AudioCodec::True_HD);
 #endif
 
 #ifdef TLRENDER_EXR

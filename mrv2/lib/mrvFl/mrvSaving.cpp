@@ -353,6 +353,7 @@ namespace mrv
 
 #ifdef TLRENDER_FFMPEG
             ioOptions["FFmpeg/WriteProfile"] = getLabel(options.ffmpegProfile);
+            ioOptions["FFmpeg/AudioCodec"] = getLabel(options.ffmpegAudioCodec);
 #endif
 
 #ifdef TLRENDER_EXR
@@ -372,12 +373,55 @@ namespace mrv
             auto context = ui->app->getContext();
             auto timeline = player->timeline();
 
+            auto startTimeOpt = timeline->getTimeline()->global_start_time();
+            if (startTime.value() > 0.0 || startTimeOpt.has_value())
+            {
+                std::stringstream s;
+                std::string timecode = startTime.to_timecode();
+                if (timecode.empty() && startTimeOpt.has_value())
+                {
+                    timecode = startTimeOpt.value().to_timecode();
+                }
+                if (!timecode.empty())
+                {
+                    s << timecode;
+                    ioOptions["timecode"] = s.str();
+                }
+            }
+
             // Render information.
             const auto& info = player->ioInfo();
-            if (info.video.empty())
+
+            auto videoTime = info.videoTime;
+            const bool hasVideo =
+                time::compareExact(videoTime, time::invalidTimeRange);
+
+            if (hasVideo && player->timeRange() != timeRange)
             {
-                throw std::runtime_error("No video information");
+                double videoRate = info.videoTime.duration().rate();
+                videoTime = otime::TimeRange(
+                    timeRange.start_time().rescaled_to(videoRate),
+                    timeRange.duration().rescaled_to(videoRate));
             }
+
+            auto audioTime = time::invalidTimeRange;
+            const double sampleRate = info.audio.sampleRate;
+            const bool hasAudio = info.audio.isValid();
+            if (hasAudio)
+            {
+                audioTime = info.audioTime;
+                if (player->timeRange() != timeRange)
+                {
+                    audioTime = otime::TimeRange(
+                        timeRange.start_time().rescaled_to(sampleRate),
+                        timeRange.duration().rescaled_to(sampleRate));
+                }
+            }
+
+            const size_t endAudioSampleCount =
+                endTime.rescaled_to(sampleRate).value();
+            const size_t maxAudioSampleCount =
+                timeRange.duration().rescaled_to(sampleRate).value();
 
             int layerId = 0;
             bool annotations = false;
@@ -506,6 +550,7 @@ namespace mrv
             io::Info ioInfo;
             ioInfo.video.push_back(outputInfo);
             ioInfo.videoTime = timeRange;
+            ioInfo.audio = info.audio;
 
             auto writer = writerPlugin->write(path, ioInfo, ioOptions);
             if (!writer)
@@ -546,6 +591,10 @@ namespace mrv
                 offscreenBufferSize, offscreenBufferOptions);
             CHECK_GL;
 
+            size_t totalSamples = 0;
+            size_t currentSampleCount =
+                startTime.rescaled_to(sampleRate).value();
+
             while (running)
             {
 
@@ -576,13 +625,7 @@ namespace mrv
                     if (!progress.tick())
                         break;
 
-                    // This updates Viewport display
-                    view->make_current();
-                    CHECK_GL;
-                    view->currentVideoCallback(videoData, player);
-                    CHECK_GL;
-                    view->flush();
-                    CHECK_GL;
+                    player->seek(currentTime);
 
                     view->make_current();
                     CHECK_GL;
@@ -624,7 +667,74 @@ namespace mrv
                     CHECK_GL;
                 }
 
-                writer->writeVideo(currentTime, outputImage);
+                if (videoTime.contains(currentTime))
+                    writer->writeVideo(currentTime, outputImage);
+
+                if (hasAudio)
+                {
+                    const double seconds = currentTime.to_seconds();
+                    const auto audioData = timeline->getAudio(seconds).get();
+                    if (!audioData.layers.empty())
+                    {
+                        bool skip = false;
+                        auto range = otime::TimeRange(
+                            currentTime,
+                            otime::RationalTime(1.0, currentTime.rate()));
+
+                        auto audio = audioData.layers[0].audio;
+
+                        // \todo mix audio layers (or have a function in
+                        // timeline to do it).
+                        const auto currentAudioTime =
+                            currentTime.rescaled_to(sampleRate);
+
+                        // timeline->getAudio() returns one second of audio.
+                        // Clamp to end of the timeRange/inOutRange.
+                        if (currentAudioTime.value() >= currentSampleCount)
+                        {
+                            const size_t sampleCount = audio->getSampleCount();
+                            if (currentSampleCount + sampleCount >=
+                                endAudioSampleCount)
+                            {
+                                int64_t clampedSamples =
+                                    maxAudioSampleCount - totalSamples;
+                                if (clampedSamples > 0)
+                                {
+                                    clampedSamples = std::min(
+                                        static_cast<size_t>(clampedSamples),
+                                        sampleCount);
+                                    auto tmp = audio::Audio::create(
+                                        audio->getInfo(), clampedSamples);
+                                    memcpy(
+                                        tmp->getData(), audio->getData(),
+                                        tmp->getByteCount());
+                                    audio = tmp;
+                                }
+                                else
+                                {
+                                    skip = true;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            skip = true;
+                        }
+
+                        if (audioTime.contains(currentAudioTime))
+                        {
+                            if (!skip)
+                            {
+                                writer->writeAudio(range, audio);
+
+                                const size_t sampleCount =
+                                    audio->getSampleCount();
+                                currentSampleCount += sampleCount;
+                                totalSamples += sampleCount;
+                            }
+                        }
+                    }
+                }
 
                 // We need to use frameNext instead of seeking as large
                 // movies can lag behind the seek
@@ -638,7 +748,7 @@ namespace mrv
                 }
             }
         }
-        catch (std::exception& e)
+        catch (const std::exception& e)
         {
             LOG_ERROR(e.what());
         }

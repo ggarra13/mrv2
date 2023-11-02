@@ -51,7 +51,8 @@
 #include "mrvApp/App.h"
 
 #include "make_ocio_chooser.h"
-#include "SaveOptionsUI.h"
+#include "mrvSaveImageOptionsUI.h"
+#include "mrvSaveMovieOptionsUI.h"
 #include "mrvHUDUI.h"
 #include "mrvHotkeyUI.h"
 #include "mrViewer.h"
@@ -253,7 +254,9 @@ namespace mrv
             }
         }
 
-        SaveOptionsUI saveOptions(extension, valid_for_exr);
+        SaveImageOptionsUI saveOptions(extension, valid_for_exr);
+        if (saveOptions.cancel)
+            return;
 
         mrv::SaveOptions options;
         options.annotations =
@@ -304,54 +307,75 @@ namespace mrv
             return;
         }
 
-        bool valid_for_exr = false;
-        // Sanity check - make sure the video pixel for the current
-        // layerId type is float/half
-        if (extension == ".exr")
-        {
-            auto info = player->ioInfo();
-            unsigned layerId = ui->uiColorChannel->value();
-            auto video = info.video[layerId];
-            if (video.pixelType == image::PixelType::RGBA_F16 ||
-                video.pixelType == image::PixelType::RGBA_F32 ||
-                video.pixelType == image::PixelType::RGB_F16 ||
-                video.pixelType == image::PixelType::RGB_F32 ||
-                video.pixelType == image::PixelType::LA_F16 ||
-                video.pixelType == image::PixelType::LA_F32 ||
-                video.pixelType == image::PixelType::L_F16 ||
-                video.pixelType == image::PixelType::L_F32)
-            {
-                valid_for_exr = true;
-            }
-        }
-
-        SaveOptionsUI saveOptions(extension, valid_for_exr);
-
         mrv::SaveOptions options;
-        options.annotations =
-            static_cast<bool>(saveOptions.Annotations->value());
-
-        int value;
 
 #ifdef TLRENDER_FFMPEG
-        value = saveOptions.Profile->value();
-        options.ffmpegProfile = static_cast<tl::ffmpeg::Profile>(value);
+        if (file::isMovie(extension))
+        {
+            SaveMovieOptionsUI saveOptions;
+            if (saveOptions.cancel)
+                return;
+
+            options.annotations =
+                static_cast<bool>(saveOptions.Annotations->value());
+
+            int value;
+            value = saveOptions.Profile->value();
+            options.ffmpegProfile = static_cast<tl::ffmpeg::Profile>(value);
+
+            value = saveOptions.AudioCodec->value();
+            options.ffmpegAudioCodec =
+                static_cast<tl::ffmpeg::AudioCodec>(value);
+        }
+        else
 #endif
+        {
+            bool valid_for_exr = false;
+            // Sanity check - make sure the video pixel for the current
+            // layerId type is float/half
+            if (extension == ".exr")
+            {
+                auto info = player->ioInfo();
+                unsigned layerId = ui->uiColorChannel->value();
+                auto video = info.video[layerId];
+                if (video.pixelType == image::PixelType::RGBA_F16 ||
+                    video.pixelType == image::PixelType::RGBA_F32 ||
+                    video.pixelType == image::PixelType::RGB_F16 ||
+                    video.pixelType == image::PixelType::RGB_F32 ||
+                    video.pixelType == image::PixelType::LA_F16 ||
+                    video.pixelType == image::PixelType::LA_F32 ||
+                    video.pixelType == image::PixelType::L_F16 ||
+                    video.pixelType == image::PixelType::L_F32)
+                {
+                    valid_for_exr = true;
+                }
+            }
+
+            SaveImageOptionsUI saveOptions(extension, valid_for_exr);
+            if (saveOptions.cancel)
+                return;
+
+            options.annotations =
+                static_cast<bool>(saveOptions.Annotations->value());
+
+            int value;
 
 #ifdef TLRENDER_EXR
-        value = saveOptions.PixelType->value();
-        if (value == 0)
-            options.exrPixelType = tl::image::PixelType::RGBA_F16;
-        if (value == 1)
-            options.exrPixelType = tl::image::PixelType::RGBA_F32;
+            value = saveOptions.PixelType->value();
+            if (value == 0)
+                options.exrPixelType = tl::image::PixelType::RGBA_F16;
+            if (value == 1)
+                options.exrPixelType = tl::image::PixelType::RGBA_F32;
 
-        value = saveOptions.Compression->value();
-        options.exrCompression = static_cast<tl::exr::Compression>(value);
+            value = saveOptions.Compression->value();
+            options.exrCompression = static_cast<tl::exr::Compression>(value);
+
+            options.zipCompressionLevel =
+                static_cast<int>(saveOptions.ZipCompressionLevel->value());
+            options.dwaCompressionLevel =
+                saveOptions.DWACompressionLevel->value();
 #endif
-
-        options.zipCompressionLevel =
-            static_cast<int>(saveOptions.ZipCompressionLevel->value());
-        options.dwaCompressionLevel = saveOptions.DWACompressionLevel->value();
+        }
 
         save_movie(file, ui, options);
     }

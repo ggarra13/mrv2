@@ -23,7 +23,7 @@ void mrv2_io(py::module& m)
                 bool
 #ifdef TLRENDER_FFMPEG
                 ,
-                tl::ffmpeg::Profile
+                tl::ffmpeg::Profile, tl::ffmpeg::AudioCodec
 #endif
 #ifdef TLRENDER_EXR
                 ,
@@ -33,7 +33,8 @@ void mrv2_io(py::module& m)
             py::arg("annotations") = false
 #ifdef TLRENDER_FFMPEG
             ,
-            py::arg("ffmpegProfile") = tl::ffmpeg::Profile::None
+            py::arg("ffmpegProfile") = tl::ffmpeg::Profile::None,
+            py::arg("ffmpegAudioCodec") = tl::ffmpeg::AudioCodec::None
 #endif
 #ifdef TLRENDER_EXR
             ,
