@@ -43,7 +43,6 @@ set(SOURCES
     mrvVersioning.cpp
 )
 
-
 add_library(mrvFl ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 

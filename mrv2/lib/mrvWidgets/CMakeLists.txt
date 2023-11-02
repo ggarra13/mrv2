@@ -11,9 +11,12 @@ set( FL_SOURCES
     PathMappingUI.fl
     mrvPreferencesUI.fl
     mrvSaveImageOptionsUI.fl
-    mrvSaveMovieOptionsUI.fl
     mrViewer.fl
 )
+
+if(TLRENDER_FFMPEG)
+    list(APPEND FL_SOURCES mrvSaveMovieOptionsUI.fl)
+endif()
 
 FLTK_WRAP_UI( mrvWidgets ${FL_SOURCES} )
 

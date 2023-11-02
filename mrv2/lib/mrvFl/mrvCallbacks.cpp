@@ -52,7 +52,11 @@
 
 #include "make_ocio_chooser.h"
 #include "mrvSaveImageOptionsUI.h"
-#include "mrvSaveMovieOptionsUI.h"
+
+#ifdef TLRENDER_FFMPEG
+#    include "mrvSaveMovieOptionsUI.h"
+#endif
+
 #include "mrvHUDUI.h"
 #include "mrvHotkeyUI.h"
 #include "mrViewer.h"
