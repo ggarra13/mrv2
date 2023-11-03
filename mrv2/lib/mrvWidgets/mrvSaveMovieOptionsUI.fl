@@ -24,7 +24,7 @@ class SaveMovieOptionsUI {open
   } {
     Fl_Window uiMain {
       label {Save Movie Options} open
-      xywh {838 262 473 399} type Double align 5 hide modal
+      xywh {838 262 473 399} type Double align 0 modal visible
     } {
       Fl_Group {} {
         label {Common Settings} open
@@ -37,11 +37,11 @@ class SaveMovieOptionsUI {open
       }
       Fl_Group VideoOptions {
         label {Video Options} open
-        xywh {49 120 375 69} box ROUNDED_FRAME color 56
+        xywh {48 111 375 69} box ROUNDED_FRAME color 56
       } {
         Fl_Choice Profile {
-          label Profile open
-          tooltip {FFMpeg's Profile settings.} xywh {151 140 170 29} down_box BORDER_BOX
+          label Profile open selected
+          tooltip {FFMpeg's Profile settings.} xywh {150 131 170 29} down_box BORDER_BOX
           code0 {auto entries = tl::ffmpeg::getProfileLabels();}
           code1 {for (auto entry : entries)}
           code2 {o->add(entry.c_str());}
@@ -50,32 +50,36 @@ class SaveMovieOptionsUI {open
       }
       Fl_Group AudioOptions {
         label {Audio Options} open
-        xywh {49 230 375 69} box ROUNDED_FRAME color 56
+        xywh {43 206 380 132} box ROUNDED_FRAME color 56
       } {
         Fl_Choice AudioCodec {
           label Codec open
-          tooltip {FFMpeg's H264 Profile settings.} xywh {151 250 170 29} down_box BORDER_BOX
+          tooltip {FFMpeg's Audio Codec settings.} xywh {150 230 170 29} down_box BORDER_BOX
           code0 {auto entries = tl::ffmpeg::getAudioCodecLabels();}
           code1 {for (auto entry : entries)}
           code2 {o->add(entry.c_str());}
           code3 {o->value(1);}
         } {}
+        Fl_Box {} {
+          label {Note that while saving with audio, the audio will not be heard.}
+          xywh {66 268 335 60} labelsize 12 align 16
+        }
       }
       Fl_Group {} {open
-        xywh {114 335 244 34}
+        xywh {114 355 244 34}
       } {
         Fl_Button {} {
           label Ok
           user_data uiMain user_data_type {Fl_Double_Window*}
           callback {v->hide();}
-          xywh {114 335 90 34}
+          xywh {114 355 90 34}
         }
         Fl_Button {} {
           label Cancel
           user_data uiMain user_data_type {Fl_Double_Window*}
           callback {cancel = true;
 v->hide();}
-          xywh {268 335 90 34}
+          xywh {268 355 90 34}
         }
       }
     }
@@ -86,7 +90,6 @@ v->hide();}
 }
 uiMain->show();
 while (uiMain->visible())
-  Fl::check();} {selected
-    }
+  Fl::check();} {}
   }
 }

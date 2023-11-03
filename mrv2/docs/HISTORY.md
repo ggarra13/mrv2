@@ -44,7 +44,8 @@ v0.8.3
   due to cache no longer starting from the beginning but from the current
   position.
 - Added license to all fltk demos.
-- Made Save->Movie files optionally save with audio.
+- Made Save->Movie files optionally save with audio.  Note that while saving
+  audio is not heard.
 - Fix saving of additional frames when video is shorter than audio.
 - Split Saving options between saving movies and saving images.
 - Added saving of player's In/Out Ranges to session files.
