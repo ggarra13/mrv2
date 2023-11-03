@@ -55,6 +55,9 @@ v0.8.3
   Options.
 - Added a Cancel button to both Save Movie Options and Save Image Options.
 - Turned off audio (as it would stutter) while saving movies with annotations.
+- Added a different message to the Save Movie Progress Report to indicate
+  whether you are saving with audio or not.
+- Added a check when saving audio and there's no audio in the current clip.
 
   
 v0.8.2
