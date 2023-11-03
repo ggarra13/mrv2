@@ -299,7 +299,8 @@ namespace mrv
                 if (static_cast<ffmpeg::AudioCodec>(options.ffmpegAudioCodec) ==
                     ffmpeg::AudioCodec::None)
                     snprintf(
-                        title, 1024, _("Saving Movie %" PRId64 " - %" PRId64),
+                        title, 1024,
+                        _("Saving Movie without Audio %" PRId64 " - %" PRId64),
                         startFrame, endFrame);
                 else
                     snprintf(

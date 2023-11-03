@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.8.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-11-03 04:13-0300\n"
+"POT-Creation-Date: 2023-11-03 04:21-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -4826,19 +4826,19 @@ msgid ""
 "Save current EDL to a permanent location, making paths relative if possible."
 msgstr ""
 
-#: mrvFl/mrvSavingMovie.cpp:313
+#: mrvFl/mrvSavingMovie.cpp:314
 #, c-format
 msgid "Saving Audio %<PRId64> - %<PRId64>"
 msgstr ""
 
-#: mrvFl/mrvSavingMovie.cpp:302
-#, c-format
-msgid "Saving Movie %<PRId64> - %<PRId64>"
-msgstr ""
-
-#: mrvFl/mrvSavingMovie.cpp:306
+#: mrvFl/mrvSavingMovie.cpp:308
 #, c-format
 msgid "Saving Movie with Audio %<PRId64> - %<PRId64>"
+msgstr ""
+
+#: mrvFl/mrvSavingMovie.cpp:303
+#, c-format
+msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
 msgstr ""
 
 #: mrvPanels/mrvStereo3DPanel.cpp:363

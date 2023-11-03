@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-11-03 04:13-0300\n"
+"POT-Creation-Date: 2023-11-03 04:21-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -3970,12 +3970,12 @@ msgid "Saving Audio %<PRId64> - %<PRId64>"
 msgstr "Grabando Audio %<PRId64> - %<PRId64>"
 
 #, c-format
-msgid "Saving Movie %<PRId64> - %<PRId64>"
-msgstr "Grabando Película %<PRId64> - %<PRId64>"
-
-#, c-format
 msgid "Saving Movie with Audio %<PRId64> - %<PRId64>"
 msgstr "Grabando Película con Audio %<PRId64> - %<PRId64>"
+
+#, c-format
+msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
+msgstr "Grabando Película sin Audio %<PRId64> - %<PRId64>"
 
 msgid "Scanlines"
 msgstr "Lineas"
@@ -5613,6 +5613,10 @@ msgstr "x9"
 
 msgid "xyY CIE xyY"
 msgstr "xyY CIE xyY"
+
+#, c-format
+#~ msgid "Saving Movie %<PRId64> - %<PRId64>"
+#~ msgstr "Grabando Película %<PRId64> - %<PRId64>"
 
 #~ msgid "AAC"
 #~ msgstr "AAC"
