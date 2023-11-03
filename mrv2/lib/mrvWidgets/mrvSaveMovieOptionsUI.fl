@@ -20,11 +20,11 @@ class SaveMovieOptionsUI {open
 } {
   decl {bool cancel = false;} {public local
   }
-  Function {SaveMovieOptionsUI()} {open
+  Function {SaveMovieOptionsUI(bool audioOnly = false)} {open
   } {
     Fl_Window uiMain {
       label {Save Movie Options} open
-      xywh {838 262 473 399} type Double align 5 modal visible
+      xywh {838 262 473 399} type Double align 5 hide modal
     } {
       Fl_Group {} {
         label {Common Settings} open
@@ -40,7 +40,7 @@ class SaveMovieOptionsUI {open
         xywh {49 120 375 69} box ROUNDED_FRAME color 56
       } {
         Fl_Choice Profile {
-          label Profile open selected
+          label Profile open
           tooltip {FFMpeg's Profile settings.} xywh {151 140 170 29} down_box BORDER_BOX
           code0 {auto entries = tl::ffmpeg::getProfileLabels();}
           code1 {for (auto entry : entries)}
@@ -79,8 +79,14 @@ v->hide();}
         }
       }
     }
-    code {uiMain->show();
+    code {if (audioOnly)
+{
+  Annotations->deactivate();
+  VideoOptions->deactivate();
+}
+uiMain->show();
 while (uiMain->visible())
-  Fl::check();} {}
+  Fl::check();} {selected
+    }
   }
 }

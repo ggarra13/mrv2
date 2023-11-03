@@ -316,7 +316,8 @@ namespace mrv
 #ifdef TLRENDER_FFMPEG
         if (file::isMovie(extension) || file::isAudio(extension))
         {
-            SaveMovieOptionsUI saveOptions;
+            bool audioOnly = file::isAudio(extension);
+            SaveMovieOptionsUI saveOptions(audioOnly);
             if (saveOptions.cancel)
                 return;
 
