@@ -81,7 +81,7 @@ include(InstallRequiredSystemLibraries)
 
 
 #
-# Extract python version from python executable
+# Extract python version
 #
 string( REGEX MATCH "^[0-9]+\\.[0-9]+" MRV2_PYTHON_VERSION "${PYTHON_VERSION}" )
 

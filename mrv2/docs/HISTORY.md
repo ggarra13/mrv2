@@ -1,3 +1,15 @@
+v0.8.4
+======
+
+- Fixed issues with python library dependencies not copying the dependant DSOs
+  on Linux.  This would lead to issues with libssl and libcrypto, for example.
+- Fixed cmake's function get_runtime_dependencies() and
+  get_macos_runtime_dependencies() only working for one element instead of a
+  list.
+- Created a python script to automatically check the latest released version
+  of mrv2 on github, allow to download it and install it.
+
+
 v0.8.3
 ======
 

@@ -1,58 +1,97 @@
-import requests, os, platform, re, tempfile, subprocess
+#!/usr/bin/env python
+
+import importlib, os, platform, re, tempfile, subprocess
+
+#
+# mrv2 imports
+#
+from mrv2 import cmd
 from fltk14 import *
 
-password = None
+#
+# Non-standard imports
+#
+module_name = "requests"
 
-def run_as_admin(command):
-    cmd = ''
+try:
+    # Try to import the module
+    importlib.import_module(module_name)
+    print(f"{module_name} is already installed.")
+except ImportError:
+    # If the module is not found, install it using pip
+    print(f"{module_name} is not installed. Installing it now...")
+    if platform.system() == 'Windows':
+        python_exec = 'python.exe'
+    else:
+        python_exec = 'python.sh'
+    path = cmd.rootPath()
+    path = os.path.join(path, 'bin')
+    python_exec = os.path.join(path, python_exec)
+    print(python_exec)
+    subprocess.call([python_exec, "-m", "pip", "install", module_name])
+
+
+import requests
+
+
+def run_as_admin(command, download_file, password = None):
+    cmd = None
     if platform.system() == 'Windows':
         cmd = r'Powershell -Command Start-Process "' + command + '" -Verb RunAs'
     elif platform.system() == 'Linux':
-        user = os.getlogin()
-        cmd = f'echo "{password}" | sudo {user} -S "{command}"'
+        cmd = f'echo "{password}" | sudo -S {command}'
     elif platform.system() == 'Darwin':
         cmd = command
     else:
         print("Unknown platform")
         return
     
-    print(cmd)
-    os.system(cmd)
+    ret = os.system(cmd)
+    if ret == 0:
+        print("The new version of mrv2 was installed.")
+        if os.path.exists(download_file):
+            os.remove(download_file)
+        print(f"Removed temporary {download_file}.")
+    else:
+        print("Something failed installing mrv2")
 
-def set_password(widget, pwd):
-    password = pwd.value()
-    print(f'Password: {password}')
+def set_password(widget, args):
+    command = args[0]
+    download_file = args[1]
+    password = widget.value()
     widget.parent().hide()
+    run_as_admin(command, download_file, password)
     
-def ask_for_password():
-    win = Fl_Window(320, 200)
+def ask_for_password(command, download_file):
+    win = Fl_Window(320, 100, "Enter Sudo Password")
     pwd = Fl_Secret_Input(20, 40, win.w() - 40, 40, "Password")
+    pwd.textcolor(fl_rgb_color(0, 0, 0 ))
     pwd.align(FL_ALIGN_TOP)
-    btn = Fl_Button(20, 100, win.w() - 40, 40, "Install")
-    btn.callback(set_password, pwd)
+    pwd.when(FL_WHEN_ENTER_KEY | FL_WHEN_NOT_CHANGED)
+    pwd.callback(set_password, [command, download_file])
     win.end()
     win.set_non_modal()
     win.show()
-    return Fl.run()
+    while win.visible():
+        Fl.check()
 
 def install_download(download_file):
-    command = ''
     if download_file.endswith('.exe'):
         command = download_file
+        run_as_admin(command, download_file)
     elif download_file.endswith('.rpm'):
-        ask_for_password()
         command = f'rpm -i {download_file}'
+        ask_for_password(command, download_file)
     elif download_file.endswith('.deb'):
-        ask_for_password()
         command = f'dpkg -i {download_file}'
+        ask_for_password(command, download_file)
     elif download_file.endswith('.dmg'):
         command = f'open {download_file}'
+        run_as_admin(command, download_file)
     else:
         print(f'You will need to install file "{download_file}" manually.')
         return
     
-    run_as_admin(command)
-
               
 def check_linux_flavor():
     if os.system('which dpkg > /dev/null') == 0:
@@ -62,7 +101,8 @@ def check_linux_flavor():
     elif os.system('which pacman > /dev/null') == 0:
         return '.tar.gz'
     else:
-        return 'Unable to determine Linux flavor'
+        print('Unable to determine Linux flavor')
+        return '.tar.gz'
 
 def get_download_extension():
     if platform.system() == 'Windows':
@@ -76,11 +116,11 @@ def get_download_extension():
 
 def download_version(name, download_url):
     download_file = os.path.join(tempfile.gettempdir(), name)
-    # print(f"Downloading: {name} ...")
-    # download_response = requests.get(download_url)
-    # with open(download_file, 'wb') as f:
-    #    f.write(download_response.content)
-    #    print(f"Download complete: {download_file}")
+    print(f"Downloading: {name} ...")
+    download_response = requests.get(download_url)
+    with open(download_file, 'wb') as f:
+        f.write(download_response.content)
+        print(f"Download complete: {download_file}")
     if os.path.exists(download_file):
         install_download(download_file)
 
@@ -114,7 +154,8 @@ def ask_to_upgrade(current_version, version, data):
     win.end()
     win.set_non_modal()
     win.show()
-    return Fl.run()
+    while win.visible():
+        Fl.check()
     
 def check_latest_release(user, project):
     url = f"https://api.github.com/repos/{user}/{project}/releases/latest"
@@ -124,7 +165,7 @@ def check_latest_release(user, project):
         
         release = data['name']
         
-        current_version = '0.8.2'
+        current_version = cmd.getVersion()
         version = match_version(release)
 
         if current_version == version:

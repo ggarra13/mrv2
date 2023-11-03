@@ -7,6 +7,8 @@
 # message( STATUS "CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}" )
 
 #
+# bug:
+#
 # According to the CMAKE docs CMAKE_INSTALL_PREFIX should point to the
 # install directory, but on Linux, macOS and Windows each path is different.
 #
@@ -19,6 +21,7 @@ else()
 endif()
 
 file(REAL_PATH ${ROOT_DIR} ROOT_DIR )
+
 
 message( STATUS "cmake/prepackage.cmake has ROOT_DIR=${ROOT_DIR}" )
 
@@ -74,11 +77,24 @@ if( UNIX)
 	message( NOTICE "${linux_lib64_dir} does not exist...")
     endif()
 	
-    set( EXES "${CPACK_PREPACKAGE}/bin/mrv2" )
+    set( exes "${CPACK_PREPACKAGE}/bin/mrv2" )
     if ( APPLE )
-	get_macos_runtime_dependencies( ${EXES} DEPENDENCIES )
+	get_macos_runtime_dependencies( "${exes}" DEPENDENCIES )
     else()
-	get_runtime_dependencies( ${EXES} DEPENDENCIES )
+	#
+	# Glob python directory as we don't know the version of directory
+	#
+	file(GLOB MRV2_PYTHON_DIR "${CPACK_PREPACKAGE}/lib/python*")
+	set(MRV2_PYTHON_LIBDIR "${MRV2_PYTHON_DIR}/lib-dynload")
+
+	#
+	# We need to get the dependencies of the python DSOs to avoid
+	# issues like openssl and libcrypto changing between Rocky Linux 8.1
+	# and Ubuntu 22.04.5.
+	#
+	file(GLOB python_dsos "${MRV2_PYTHON_LIBDIR}/*.so")
+	list(APPEND exes ${python_dsos} )
+	get_runtime_dependencies( "${exes}" DEPENDENCIES )
     endif()
     file( COPY ${DEPENDENCIES} DESTINATION "${CPACK_PREPACKAGE}/lib/" )
 elseif(WIN32)

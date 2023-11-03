@@ -31,7 +31,7 @@ set( ROOT_DIR ${CMAKE_SOURCE_DIR} )
 
 #
 # This dummy (empty) install script is needed so variables get passed to
-# the CPACK_PRE_BUILD_SCRIPTS. @bug: cmake 3.21 at leaset
+# the CPACK_PRE_BUILD_SCRIPTS. @bug: cmake 3.21 at least
 set( CPACK_INSTALL_SCRIPT ${CMAKE_SOURCE_DIR}/../cmake/dummy.cmake )
 set( CPACK_PRE_BUILD_SCRIPTS ${CMAKE_SOURCE_DIR}/../cmake/prepackage.cmake )
 

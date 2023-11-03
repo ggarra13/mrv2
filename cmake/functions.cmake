@@ -156,7 +156,7 @@ function( get_runtime_dependencies TARGET DEPENDENCIES )
 
     message( NOTICE "LD_LIBRARY_PATH=$ENV{LD_LIBRARY_PATH}")
 
-    foreach (exe "${TARGET}")
+    foreach (exe ${TARGET})
 	if ( EXISTS ${exe} )
 	    message( STATUS "PARSING ${exe} for DSOs...." )
 	    execute_process(COMMAND ldd ${exe} OUTPUT_VARIABLE ldd_out)
@@ -180,9 +180,12 @@ function( get_runtime_dependencies TARGET DEPENDENCIES )
 		endif()
 	    endforeach()
 	else()
-	    message( WARNING "Executable ${exe} does not exist!" )
+	    message( WARNING "Executable or library ${exe} does not exist!" )
 	endif()
     endforeach()
+
+    # Use LIST(REMOVE_DUPLICATES) to make the list unique
+    list(REMOVE_DUPLICATES DEPENDENCIES)
 endfunction()
 
 #
@@ -192,9 +195,9 @@ endfunction()
 function( get_macos_runtime_dependencies TARGET DEPENDENCIES )
 
     set(DEPENDENCIES  )
-    foreach (exe "${TARGET}")
+    foreach (exe ${TARGET})
 	if ( EXISTS ${exe} )
-	    message( STATUS "PARSING ${exe} for DSOs...." )
+	    message( STATUS "PARSING ${exe} for DYLIBS...." )
 	    execute_process(COMMAND otool -L ${exe} OUTPUT_VARIABLE ldd_out)
 	    string (REPLACE "\n" ";" ldd_out_lines ${ldd_out})
 	    foreach (line ${ldd_out_lines})
