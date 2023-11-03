@@ -14,7 +14,8 @@ namespace mrv
     class ProgressReport
     {
     public:
-        ProgressReport(Fl_Window* main, int64_t start, int64_t end);
+        ProgressReport(
+            Fl_Window* main, int64_t start, int64_t end, const char* title);
         ~ProgressReport();
 
         Fl_Window* window() const { return w; }

@@ -20,7 +20,7 @@ namespace mrv
 {
 
     ProgressReport::ProgressReport(
-        Fl_Window* main, int64_t start, int64_t end) :
+        Fl_Window* main, int64_t start, int64_t end, const char* title) :
         _frame(start),
         _start(start),
         _end(end),
@@ -39,9 +39,6 @@ namespace mrv
         progress->minimum(0);
         progress->maximum(float(end - start + 1));
         progress->align(FL_ALIGN_TOP);
-        char title[1024];
-        snprintf(
-            title, 1024, _("Saving Movie %" PRId64 " - %" PRId64), start, end);
         progress->copy_label(title);
         elapsed = new Fl_Output(120, 80, 120, 20, _("Elapsed"));
         elapsed->labelsize(16);

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.8.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-11-03 03:49-0300\n"
+"POT-Creation-Date: 2023-11-03 04:13-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2070,7 +2070,7 @@ msgstr ""
 msgid "Editor/Toggle &Line Numbers"
 msgstr ""
 
-#: mrvWidgets/mrvProgressReport.cpp:46
+#: mrvWidgets/mrvProgressReport.cpp:43
 msgid "Elapsed"
 msgstr ""
 
@@ -2242,7 +2242,7 @@ msgstr ""
 msgid "FIT"
 msgstr ""
 
-#: mrvWidgets/mrvProgressReport.cpp:56
+#: mrvWidgets/mrvProgressReport.cpp:53
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:932
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:701
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:928
@@ -4341,7 +4341,7 @@ msgstr ""
 msgid "Reload hotkeys to last saved file."
 msgstr ""
 
-#: mrvWidgets/mrvProgressReport.cpp:51
+#: mrvWidgets/mrvProgressReport.cpp:48
 msgid "Remaining"
 msgstr ""
 
@@ -4826,9 +4826,19 @@ msgid ""
 "Save current EDL to a permanent location, making paths relative if possible."
 msgstr ""
 
-#: mrvWidgets/mrvProgressReport.cpp:44
+#: mrvFl/mrvSavingMovie.cpp:313
+#, c-format
+msgid "Saving Audio %<PRId64> - %<PRId64>"
+msgstr ""
+
+#: mrvFl/mrvSavingMovie.cpp:302
 #, c-format
 msgid "Saving Movie %<PRId64> - %<PRId64>"
+msgstr ""
+
+#: mrvFl/mrvSavingMovie.cpp:306
+#, c-format
+msgid "Saving Movie with Audio %<PRId64> - %<PRId64>"
 msgstr ""
 
 #: mrvPanels/mrvStereo3DPanel.cpp:363

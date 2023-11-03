@@ -292,7 +292,29 @@ namespace mrv
             int64_t startFrame = startTime.to_frames();
             int64_t endFrame = endTime.to_frames();
 
-            ProgressReport progress(ui->uiMain, startFrame, endFrame);
+            char title[1024];
+
+            if (hasVideo)
+            {
+                if (static_cast<ffmpeg::AudioCodec>(options.ffmpegAudioCodec) ==
+                    ffmpeg::AudioCodec::None)
+                    snprintf(
+                        title, 1024, _("Saving Movie %" PRId64 " - %" PRId64),
+                        startFrame, endFrame);
+                else
+                    snprintf(
+                        title, 1024,
+                        _("Saving Movie with Audio %" PRId64 " - %" PRId64),
+                        startFrame, endFrame);
+            }
+            else
+            {
+                snprintf(
+                    title, 1024, _("Saving Audio %" PRId64 " - %" PRId64),
+                    startFrame, endFrame);
+            }
+
+            ProgressReport progress(ui->uiMain, startFrame, endFrame, title);
             progress.show();
 
             bool running = true;

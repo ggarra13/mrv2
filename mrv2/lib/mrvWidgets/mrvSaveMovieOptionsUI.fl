@@ -13,7 +13,7 @@ decl {\#include <string>} {public global
 decl {\#include "tlIO/FFmpeg.h"} {public global
 }
 
-decl {\#include "mrvCore/mrvFile.h"} {public global
+decl {\#include "mrvCore/mrvI8N.h"} {selected public global
 }
 
 class SaveMovieOptionsUI {open
@@ -40,11 +40,11 @@ class SaveMovieOptionsUI {open
         xywh {48 111 375 69} box ROUNDED_FRAME color 56
       } {
         Fl_Choice Profile {
-          label Profile open selected
+          label Profile open
           tooltip {FFMpeg's Profile settings.} xywh {150 131 170 29} down_box BORDER_BOX
           code0 {auto entries = tl::ffmpeg::getProfileLabels();}
           code1 {for (auto entry : entries)}
-          code2 {o->add(entry.c_str());}
+          code2 {o->add(_(entry.c_str()));}
           code3 {o->value(0);}
         } {}
       }
@@ -57,7 +57,7 @@ class SaveMovieOptionsUI {open
           tooltip {FFMpeg's Audio Codec settings.} xywh {150 230 170 29} down_box BORDER_BOX
           code0 {auto entries = tl::ffmpeg::getAudioCodecLabels();}
           code1 {for (auto entry : entries)}
-          code2 {o->add(entry.c_str());}
+          code2 {o->add(_(entry.c_str()));}
           code3 {o->value(1);}
         } {}
         Fl_Box {} {
