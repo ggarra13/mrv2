@@ -312,12 +312,16 @@ namespace mrv
         }
 
         mrv::SaveOptions options;
+        const auto& ioInfo = player->ioInfo();
 
 #ifdef TLRENDER_FFMPEG
         if (file::isMovie(extension) || file::isAudio(extension))
         {
+            bool hasAudio = false;
+            if (ioInfo.audio.isValid())
+                hasAudio = true;
             bool audioOnly = file::isAudio(extension);
-            SaveMovieOptionsUI saveOptions(audioOnly);
+            SaveMovieOptionsUI saveOptions(hasAudio, audioOnly);
             if (saveOptions.cancel)
                 return;
 
@@ -340,9 +344,8 @@ namespace mrv
             // layerId type is float/half
             if (extension == ".exr")
             {
-                auto info = player->ioInfo();
                 unsigned layerId = ui->uiColorChannel->value();
-                auto video = info.video[layerId];
+                auto video = ioInfo.video[layerId];
                 if (video.pixelType == image::PixelType::RGBA_F16 ||
                     video.pixelType == image::PixelType::RGBA_F32 ||
                     video.pixelType == image::PixelType::RGB_F16 ||

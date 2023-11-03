@@ -13,14 +13,14 @@ decl {\#include <string>} {public global
 decl {\#include "tlIO/FFmpeg.h"} {public global
 }
 
-decl {\#include "mrvCore/mrvI8N.h"} {selected public global
+decl {\#include "mrvCore/mrvI8N.h"} {public global
 }
 
 class SaveMovieOptionsUI {open
 } {
   decl {bool cancel = false;} {public local
   }
-  Function {SaveMovieOptionsUI(bool audioOnly = false)} {open
+  Function {SaveMovieOptionsUI(bool hasAudio = true, bool audioOnly = false)} {open
   } {
     Fl_Window uiMain {
       label {Save Movie Options} open
@@ -83,13 +83,18 @@ v->hide();}
         }
       }
     }
-    code {if (audioOnly)
+    code {if (!hasAudio)
+{
+  AudioOptions->deactivate();
+}
+if (audioOnly)
 {
   Annotations->deactivate();
   VideoOptions->deactivate();
 }
 uiMain->show();
 while (uiMain->visible())
-  Fl::check();} {}
+  Fl::check();} {selected
+    }
   }
 }
