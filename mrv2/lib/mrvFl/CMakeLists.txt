@@ -16,7 +16,7 @@ set(HEADERS
     mrvPathMapping.h
     mrvPreferences.h
     mrvSaveOptions.h
-    mrvSaving.h
+    mrvSave.h
     mrvSession.h
     mrvStereo3DAux.h
     mrvTimelinePlayer.h
@@ -34,8 +34,8 @@ set(SOURCES
     mrvLanguages.cpp
     mrvPathMapping.cpp
     mrvPreferences.cpp
-    mrvSavingImage.cpp
-    mrvSavingMovie.cpp
+    mrvSaveImage.cpp
+    mrvSaveMovie.cpp
     mrvSession.cpp
     mrvStereo3DAux.cpp
     mrvTimelinePlayer.cpp

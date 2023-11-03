@@ -21,7 +21,7 @@
 #include "mrvFl/mrvSaveOptions.h"
 #include "mrvFl/mrvVersioning.h"
 #include "mrvFl/mrvFileRequester.h"
-#include "mrvFl/mrvSaving.h"
+#include "mrvFl/mrvSave.h"
 #include "mrvFl/mrvSession.h"
 #include "mrvFl/mrvStereo3DAux.h"
 #include "mrvFl/mrvCallbacks.h"
@@ -320,7 +320,7 @@ namespace mrv
             bool hasAudio = false;
             if (ioInfo.audio.isValid())
                 hasAudio = true;
-            bool audioOnly = file::isAudio(extension);
+            bool audioOnly = file::isAudio(extension) || ioInfo.video.empty();
             if (!hasAudio && audioOnly)
             {
                 LOG_ERROR(

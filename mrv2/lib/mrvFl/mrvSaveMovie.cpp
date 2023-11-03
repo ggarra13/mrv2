@@ -165,8 +165,6 @@ namespace mrv
 
             if (hasVideo)
                 renderSize = info.video[layerId].size;
-            else
-                renderSize = image::Size(1, 1);
 
             // Create the renderer.
             render = timeline::GLRender::create(context);
@@ -179,7 +177,8 @@ namespace mrv
             if (!writerPlugin)
             {
                 throw std::runtime_error(
-                    string::Format("{0}: Cannot open").arg(file));
+                    string::Format(_("{0}: Cannot open writer plugin."))
+                        .arg(file));
             }
 
             int X = 0, Y = 0;
@@ -233,48 +232,48 @@ namespace mrv
             image::Info outputInfo;
 
             outputInfo.size = renderSize;
-            if (hasVideo)
-                outputInfo.pixelType = info.video[layerId].pixelType;
-            else
-                outputInfo.pixelType = image::PixelType::RGB_U8;
+            std::shared_ptr<image::Image> outputImage;
 
+            if (hasVideo)
             {
+                outputInfo.pixelType = info.video[layerId].pixelType;
+
                 std::string msg = tl::string::Format(_("Image info: {0} {1}"))
                                       .arg(outputInfo.size)
                                       .arg(outputInfo.pixelType);
                 LOG_INFO(msg);
-            }
 
-            outputInfo = writerPlugin->getWriteInfo(outputInfo);
-            if (image::PixelType::None == outputInfo.pixelType)
-            {
-                outputInfo.pixelType = image::PixelType::RGB_U8;
-            }
+                outputInfo = writerPlugin->getWriteInfo(outputInfo);
+                if (image::PixelType::None == outputInfo.pixelType)
+                {
+                    outputInfo.pixelType = image::PixelType::RGB_U8;
+                }
 
 #ifdef TLRENDER_EXR
-            if (annotations &&
-                string::compare(
-                    extension, ".exr", string::Compare::CaseInsensitive))
-            {
-                outputInfo.pixelType = options.exrPixelType;
-            }
+                if (annotations &&
+                    string::compare(
+                        extension, ".exr", string::Compare::CaseInsensitive))
+                {
+                    outputInfo.pixelType = options.exrPixelType;
+                }
 #endif
-            if (string::compare(
-                    extension, ".hdr", string::Compare::CaseInsensitive))
-            {
-                outputInfo.pixelType = image::PixelType::RGB_F32;
-                offscreenBufferOptions.colorType = image::PixelType::RGB_F32;
+                if (string::compare(
+                        extension, ".hdr", string::Compare::CaseInsensitive))
+                {
+                    outputInfo.pixelType = image::PixelType::RGB_F32;
+                    offscreenBufferOptions.colorType =
+                        image::PixelType::RGB_F32;
+                }
+
+                msg = tl::string::Format(_("Output info: {0} {1}"))
+                          .arg(outputInfo.size)
+                          .arg(outputInfo.pixelType);
+                LOG_INFO(msg);
+
+                outputImage = image::Image::create(outputInfo);
+                ioInfo.videoTime = videoTime;
+                ioInfo.video.push_back(outputInfo);
             }
-
-            std::string msg = tl::string::Format(_("Output info: {0} {1}"))
-                                  .arg(outputInfo.size)
-                                  .arg(outputInfo.pixelType);
-            LOG_INFO(msg);
-
-            auto outputImage = image::Image::create(outputInfo);
-
-            ioInfo.videoTime = videoTime;
-            ioInfo.video.push_back(outputInfo);
 
             if (hasAudio)
             {
@@ -325,10 +324,14 @@ namespace mrv
 
             GLenum format = gl::getReadPixelsFormat(outputInfo.pixelType);
             GLenum type = gl::getReadPixelsType(outputInfo.pixelType);
-            if (GL_NONE == format || GL_NONE == type)
+            if (hasVideo)
             {
-                throw std::runtime_error(
-                    string::Format("{0}: Cannot open").arg(file));
+                if (GL_NONE == format || GL_NONE == type)
+                {
+                    throw std::runtime_error(
+                        string::Format(_("{0}: Invalid OpenGL format and type"))
+                            .arg(file));
+                }
             }
 
             player->start();
@@ -337,13 +340,16 @@ namespace mrv
             bool hud = view->getHudActive();
             view->setHudActive(false);
 
+            math::Size2i offscreenBufferSize(renderSize.w, renderSize.h);
             std::shared_ptr<gl::OffscreenBuffer> buffer;
 
-            math::Size2i offscreenBufferSize(renderSize.w, renderSize.h);
-            view->make_current();
-            gl::initGLAD();
-            buffer = gl::OffscreenBuffer::create(
-                offscreenBufferSize, offscreenBufferOptions);
+            if (hasVideo)
+            {
+                view->make_current();
+                gl::initGLAD();
+                buffer = gl::OffscreenBuffer::create(
+                    offscreenBufferSize, offscreenBufferOptions);
+            }
 
             size_t totalSamples = 0;
             size_t currentSampleCount =
@@ -446,28 +452,36 @@ namespace mrv
                     else
                     {
                         // Get the videoData
-                        const auto& videoData =
+                        const auto videoData =
                             timeline->getVideo(currentTime).get();
+                        if (videoData.layers.empty())
+                        {
+                            std::string err =
+                                string::Format(
+                                    _("Empty video data at time {0}."))
+                                    .arg(currentTime);
+                            LOG_ERROR(err);
+                        }
 
+                        // This refreshes the view window
                         view->make_current();
-                        CHECK_GL;
+                        view->currentVideoCallback(videoData, player);
+                        view->flush();
+
                         gl::initGLAD();
 
-                        // Render the video.
+                        // Render the video to an offscreen buffer.
                         gl::OffscreenBufferBinding binding(buffer);
-                        CHECK_GL;
                         {
                             locale::SetAndRestore saved;
                             render->begin(
                                 offscreenBufferSize,
                                 view->getColorConfigOptions(),
                                 view->lutOptions());
-                            CHECK_GL;
                             render->drawVideo(
                                 {videoData},
                                 {math::Box2i(
                                     0, 0, renderSize.w, renderSize.h)});
-                            CHECK_GL;
                             render->end();
                         }
 
@@ -475,20 +489,16 @@ namespace mrv
                         // glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
                         // CHECK_GL;
                         glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
-                        CHECK_GL;
 
                         glPixelStorei(
                             GL_PACK_ALIGNMENT, outputInfo.layout.alignment);
-                        CHECK_GL;
                         glPixelStorei(
                             GL_PACK_SWAP_BYTES,
                             outputInfo.layout.endian != memory::getEndian());
-                        CHECK_GL;
 
                         glReadPixels(
                             0, 0, outputInfo.size.w, outputInfo.size.h, format,
                             type, outputImage->getData());
-                        CHECK_GL;
                     }
 
                     if (videoTime.contains(currentTime))
@@ -509,9 +519,11 @@ namespace mrv
                 {
                     // We need to use frameNext instead of seeking as large
                     // movies can lag behind the seek
+                    // When saving video and not annotations, we cannot use
+                    // seek as it corrupts the timeline.
                     if (annotations && hasVideo)
                         player->frameNext();
-                    else
+                    else if (!hasVideo)
                         player->seek(currentTime);
                 }
             }

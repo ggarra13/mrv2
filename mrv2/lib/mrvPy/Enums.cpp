@@ -54,6 +54,9 @@ void mrv2_enums(py::module& m)
         .value("AC3", ffmpeg::AudioCodec::AC3)
         .value("True_HD", ffmpeg::AudioCodec::True_HD)
         .value("MP2", ffmpeg::AudioCodec::MP2)
+        .value("MP3", ffmpeg::AudioCodec::MP3)
+        .value("OPUS", ffmpeg::AudioCodec::OPUS)
+        .value("VORBIS", ffmpeg::AudioCodec::VORBIS)
         .value("PCM_S16LE", ffmpeg::AudioCodec::PCM_S16LE);
 #endif
 

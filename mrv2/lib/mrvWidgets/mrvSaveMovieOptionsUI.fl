@@ -24,7 +24,7 @@ class SaveMovieOptionsUI {open
   } {
     Fl_Window uiMain {
       label {Save Movie Options} open
-      xywh {838 262 473 399} type Double align 0 modal visible
+      xywh {838 262 473 399} type Double align 0 hide modal
     } {
       Fl_Group {} {
         label {Common Settings} open
@@ -44,7 +44,7 @@ class SaveMovieOptionsUI {open
           tooltip {FFMpeg's Profile settings.} xywh {150 131 170 29} down_box BORDER_BOX
           code0 {auto entries = tl::ffmpeg::getProfileLabels();}
           code1 {for (auto entry : entries)}
-          code2 {o->add(_(entry.c_str()));}
+          code2 {o->add(gettext(entry.c_str()));}
           code3 {o->value(0);}
         } {}
       }
@@ -57,12 +57,12 @@ class SaveMovieOptionsUI {open
           tooltip {FFMpeg's Audio Codec settings.} xywh {150 230 170 29} down_box BORDER_BOX
           code0 {auto entries = tl::ffmpeg::getAudioCodecLabels();}
           code1 {for (auto entry : entries)}
-          code2 {o->add(_(entry.c_str()));}
+          code2 {o->add(gettext(entry.c_str()));}
           code3 {o->value(1);}
         } {}
         Fl_Box {} {
           label {Note that while saving with audio, the audio will not be heard.}
-          xywh {66 268 335 60} labelsize 12 align 16
+          xywh {66 268 335 60} labelsize 12 align 144
         }
       }
       Fl_Group {} {open
@@ -94,7 +94,6 @@ if (audioOnly)
 }
 uiMain->show();
 while (uiMain->visible())
-  Fl::check();} {selected
-    }
+  Fl::check();} {}
   }
 }
