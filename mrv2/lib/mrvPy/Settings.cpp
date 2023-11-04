@@ -10,6 +10,8 @@ namespace py = pybind11;
 #include "mrvApp/mrvSettingsObject.h"
 #include "mrvApp/App.h"
 
+#include "mrViewer.h"
+
 #include "mrvPy/CmdsAux.h"
 
 namespace mrv2
@@ -18,6 +20,11 @@ namespace mrv2
     {
         using namespace tl;
         using namespace mrv;
+
+        bool checkForUpdates()
+        {
+            return (bool)App::ui->uiPrefs->uiPrefsCheckForUpdates->value();
+        }
 
         /**
          * @brief Returns the Gigabytes memory setting.
@@ -346,6 +353,10 @@ Settings module.
 
 Contains all settings functions.
 )PYTHON");
+
+    settings.def(
+        "checkForUpdates", &mrv2::settings::checkForUpdates,
+        _("Returns whether to check for updates at start up."));
 
     settings.def(
         "memory", &mrv2::settings::memory,

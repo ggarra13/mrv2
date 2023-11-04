@@ -158,11 +158,11 @@ If you try to open several mrv2s with different images, all these images will be
             }
           }
           Fl_Group {} {
-            label {View Window} open
-            xywh {288 35 555 349} box EMBOSSED_BOX align 5
+            label {View Window}
+            xywh {288 35 555 349} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {
-              label Defaults open selected
+              label Defaults open
               xywh {298 65 531 162} box ROUNDED_BOX
             } {
               Fl_Value_Input uiPrefsViewGain {
@@ -1172,6 +1172,29 @@ v->uiOCIO_float_ics->do_callback();}
               }
             }
           }
+          Fl_Group {} {
+            label Behavior open
+            xywh {297 36 532 362} box EMBOSSED_BOX align 5
+          } {
+            Fl_Group {} {open
+              xywh {335 36 446 313}
+            } {
+              Fl_Choice uiPrefsCheckForUpdates {
+                label {Check for Updates} open
+                tooltip {Allows you to automatically download updates of mrv2 when it starts up.} xywh {487 170 255 25} down_box BORDER_BOX align 132 textcolor 32
+                class {mrv::Choice}
+              } {
+                MenuItem {} {
+                  label {On Demand From Help Menu}
+                  xywh {30 30 100 20}
+                }
+                MenuItem {} {
+                  label {At Start Up} selected
+                  xywh {30 30 100 20}
+                }
+              }
+            }
+          }
         }
         Fl_Group {} {open
           xywh {9 0 270 447} box PLASTIC_UP_BOX
@@ -1260,6 +1283,7 @@ o->add( _("Loading") );
 o->add( _("Path Mappings") );
 o->add( _("Network") );
 o->add( _("Errors") );
+o->add( _("Behavior") );
 o->select( item );} {}
   }
 }

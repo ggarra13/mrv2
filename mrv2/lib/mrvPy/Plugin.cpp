@@ -3,6 +3,8 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #include <iostream>
+#include <set>
+#include <vector>
 #include <algorithm>
 #include <filesystem>
 namespace fs = std::filesystem;
@@ -111,14 +113,24 @@ namespace mrv
         std::string installed_plugins = mrv::rootpath() + "/python/plug-ins";
         paths.push_back(installed_plugins);
 
-        // Step 1: Sort the vector
-        std::sort(paths.begin(), paths.end());
+        // Create a set to store unique elements.
+        std::set<std::string> uniquePaths;
 
-        // Step 2: Use std::unique to remove duplicates
-        auto it = std::unique(paths.begin(), paths.end());
+        // Iterate through the original vector and add elements to the set.
+        for (const std::string& path : paths)
+        {
+            uniquePaths.insert(path);
+        }
 
-        // Step 3: Erase the elements that were made unique
-        paths.erase(it, paths.end());
+        // Clear the original vector.
+        paths.clear();
+
+        // Copy unique elements back from the set to the original vector while
+        // preserving order.
+        for (const std::string& uniquePath : uniquePaths)
+        {
+            paths.push_back(uniquePath);
+        }
 
         for (const auto& path : paths)
         {

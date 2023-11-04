@@ -2,23 +2,34 @@
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#!/usr/bin/env python
+
+
 
 #
 # Standard libs
 #
-import importlib, os, platform, re, tempfile, subprocess, sys, requests
+import importlib, os, platform, re, tempfile, subprocess, sys, requests, time
 
 #
 # mrv2 imports
 #
 import mrv2
-from mrv2 import cmd, plugin
+from mrv2 import cmd, plugin, settings
 from fltk14 import *
 
 
-class UpgradePlugin(plugin.Plugin):
+class UpdatePlugin(plugin.Plugin):
+    """
+    This plugin checks GitHub for the latest release version of mrv2 and
+    allows the user to download and install it.  It works on all platforms.
+    """
 
+    def __init__(self):
+        super().__init__()
+        if settings.checkForUpdates():
+            self.check_latest_release("ggarra13", "mrv2")
+        
+    
     def match_version(self, s):
         """Match a version in a string like v0.8.3.
         
@@ -33,35 +44,84 @@ class UpgradePlugin(plugin.Plugin):
             return match.group(1)
         else:
             return "No match found"
+        
+    def get_installed_executable(self, download_file):
+        """
+        Given a download file, return the default location for the
+        installed executable.
+
+        Args:
+            download_file (str): Download file.
+        
+        Returns:
+            str: Installed executable.
+        """
+        version = self.match_version(download_file)
+        kernel = platform.system()
+        exe = None
+        if kernel == 'Linux':
+            exe = f'/usr/local/mrv2-v{version}-Linux-64/bin/mrv2.sh'
+        elif kernel == 'Windows':
+            exe = f'C:/Program Files/mrv2 {version}/bin/mrv2.exe'
+        elif kernel == 'Darwin':
+            exe = f'/Applications/mrv2.app/Contents/MacOS/mrv2'
+        else:
+            print(f'Unknown platform "{kernel}"')
+        return exe
+        
+    def run_command(self, cmd):
+        """
+        Run a command trapping stderr and stdout.
+
+        Returns:
+          int: Exit code of the process.
+        """
+
+        print(f"Running:\n{cmd}")
+        
+        # Run the command and capture stdout, stderr, and the exit code
+        process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE,
+                                   stderr=subprocess.PIPE)
+        
+        # Wait for the command to complete
+        stdout, stderr = process.communicate()
+
+        # Get the exit code
+        exit_code = process.returncode
+
+        # Print or handle the captured stdout and stderr
+        print("Standard Output:")
+        print(stdout.decode('utf-8'))
+
+        print("Standard Error:")
+        print(stderr.decode('utf-8'))
+
+        return exit_code
 
     def start_new_mrv2(self, download_file, kernel):
         """Given a download_file and a platform, create the path to the new
         executable.
         """
         version = self.match_version(download_file)
-        exe = ''
-        if kernel == 'Linux':
-            exe = f'/usr/local/mrv2-v{version}-Linux-64/bin/mrv2.sh'
-        elif kernel == 'Windows':
-            exe = f'C:\Program Files\mrv2 {version}\bin\mrv2.exe'
-        elif kernel == 'Darwin':
-            exe = f'/Applications/mrv2.app/Contents/MacOS/mrv2'
+        exe = self.get_installed_executable(download_file)
+        if kernel == 'Windows':
+            quoted_exe = f'"{exe}"'
         else:
-            print(f'Unknown platform "{kernel}"')
-            return
+            quoted_exe = exe
 
         try:
-            print(f'Starting "{exe}"...')
-            os.execv(exe, [exe])
+            print(f'Starting {exe}...')
+            os.execv(exe, [quoted_exe])
         except Exception as e:
             print(f"An unexpected error occurred: {e}")
             return
 
     def run_as_admin(self, command, download_file, password = None):
-        """Given a download file, use the extension name to try to install it.
-        If required, pop a requester to ask for a password.
+        """Given a command, a download file, and an optional password,
+        install the download_file by running the command using the provided
+        password if needed.
         Once the file is successfully installed, it removes the temporary
-        downloaded file.
+        downloaded file and starts the new version.
         
         Args:
             command (str): Command to run to install the downloaded file
@@ -88,18 +148,42 @@ class UpgradePlugin(plugin.Plugin):
         else:
             print("Unknown platform")
             return
-    
-        ret = os.system(cmd)
+
+        ret = self.run_command(cmd)
         if ret == 0:
-            print("The new version of mrv2 was installed.")
-            Fl.check()
-            if os.path.exists(download_file):
-                pass #os.remove(download_file)
-                print(f"Removed temporary {download_file}.")
+            kernel = platform.system()
+
+            # On Windows, the installer runs as a background process, but it
+            # locks the installer file.  We keep trying to remove it until we
+            # can, which means the installer finished
+            if kernel == 'Windows':
+                time.sleep(10) # Wait for the installer to start
+                while os.path.exists(download_file):
+                    try:
+                        os.remove(download_file)
+                        print(f"Removed temporary {download_file}.")
+                        Fl.check()
+                    except:
+                        time.sleep(2) # Wait 2 seconds before trying again. 
+                        pass
+
+            exe = self.get_installed_executable(download_file)
+            if os.path.exists(exe):
+                print("The new version of mrv2 was installed.")
                 Fl.check()
+                if os.path.exists(download_file):
+                    os.remove(download_file)
+                    print(f"Removed temporary {download_file}.")
+                    Fl.check()
                 self.start_new_mrv2(download_file, kernel)
+            else:
+                if kernel == 'Windows':
+                    print(f'Could not locate mrv2 in "{exe}".  '
+                          f'Maybe you installed it in a non-default location.')
+                    return
+                print(f'Something failed installing mrv2 - It is not in "{exe}"')
         else:
-            print("Something failed installing mrv2")
+            print(f"Something failed installing mrv2 - Return error was {ret}")
             
 
     @staticmethod
@@ -136,7 +220,7 @@ class UpgradePlugin(plugin.Plugin):
         pwd.textcolor(fl_rgb_color(0, 0, 0 ))
         pwd.align(FL_ALIGN_TOP)
         pwd.when(FL_WHEN_ENTER_KEY | FL_WHEN_NOT_CHANGED)
-        pwd.callback(UpgradePlugin.get_password_cb, [self, command, download_file])
+        pwd.callback(UpdatePlugin.get_password_cb, [self, command, download_file])
         win.end()
         win.set_non_modal()
         win.show()
@@ -228,10 +312,25 @@ class UpgradePlugin(plugin.Plugin):
         download_response = requests.get(download_url)
         with open(download_file, 'wb') as f:
             f.write(download_response.content)
-            print(f"Download complete: {download_file}")
-            if os.path.exists(download_file):
-                self.install_download(download_file)
+        print(f"Download complete: {download_file}")
+        if os.path.exists(download_file):
+            self.install_download(download_file)
 
+                
+    @staticmethod
+    def ignore_cb(widget, args):
+        """FLTK callback to ignore the upgrade and continue with the
+        current version.
+
+        Args:
+            widget (Fl_Widget): FLTK widget that triggered the callback
+            args (list): None
+
+        Returns:
+            None
+        """
+        widget.parent().hide()
+        Fl.check()
                 
     @staticmethod
     def get_latest_release_cb(widget, args):
@@ -261,12 +360,12 @@ class UpgradePlugin(plugin.Plugin):
             print(f"No file matching {extension} was found")
 
 
-    def ask_to_upgrade(self, current_version, latest_version, title, data):
-        """Open an FLTK window to allow the user to upgrade.
+    def ask_to_update(self, current_version, latest_version, title, data):
+        """Open an FLTK window to allow the user to update mrv2.
 
         Args:
-            current_version (str): The current version.
-            latest_version (str): The latest version to upgrade.
+            current_version (str): The current version that is running.
+            latest_version (str): The latest version for upgrade.
             data (map): github data for the latest release in a map.
 
         Returns:
@@ -275,9 +374,11 @@ class UpgradePlugin(plugin.Plugin):
         win = Fl_Window(320, 200)
         box = Fl_Box(20, 20, win.w() - 40, 60)
         box.copy_label(f"Current version is v{current_version},\n"
-                       f"latest is v{latest_version}")
-        btn = Fl_Button(20, 100, win.w() - 40, 40, title)
-        btn.callback(UpgradePlugin.get_latest_release_cb, [self, data])
+                       f"Latest at Github is v{latest_version}.")
+        update = Fl_Button(20, 100, 130, 40, title)
+        update.callback(UpdatePlugin.get_latest_release_cb, [self, data])
+        ignore = Fl_Button(update.w() + 40, 100, 130, 40, "Ignore")
+        ignore.callback(UpdatePlugin.ignore_cb, None)
         win.end()
         win.set_non_modal()
         win.show()
@@ -336,15 +437,12 @@ class UpgradePlugin(plugin.Plugin):
 
             result = self.compare_versions(current_version, version)
             if result == 0:
-                print(f"Already in the latest version of mrv2 (v{version})")
                 return
             elif result == 1:
-                print(f"Version v{current_version} is newer than v{version}")
-                self.ask_to_upgrade(current_version, version, 'Downgrade', data)
+                self.ask_to_update(current_version, version, 'Downgrade', data)
                 return
             else:
-                print(f"Version v{current_version} is older than v{version}")
-                self.ask_to_upgrade(current_version, version, 'Upgrade', data)
+                self.ask_to_update(current_version, version, 'Upgrade', data)
             
         else:
             print("No release files found.")
@@ -356,7 +454,7 @@ class UpgradePlugin(plugin.Plugin):
     def menus(self):
         menus = {
             # Call a method and place a divider line after the menu
-            "Help/Upgrade mrv2" : (self.run, '__divider__')
+            "Help/Update mrv2" : (self.run, '__divider__')
         }
         try:
             if re.search('es', cmd.getLanguage()):

@@ -782,6 +782,10 @@ namespace mrv
         uiPrefs->uiPrefsRaiseLogWindowOnError->value(tmp);
         LogDisplay::prefs = (LogDisplay::ShowPreferences)tmp;
 
+        Fl_Preferences behavior(base, "behavior");
+        behavior.get("check_for_updates", tmp, 0);
+        uiPrefs->uiPrefsCheckForUpdates->value(tmp);
+
         //
         // Hotkeys
         //
@@ -1313,6 +1317,10 @@ namespace mrv
         Fl_Preferences errors(base, "errors");
         errors.set(
             "log_display", (int)uiPrefs->uiPrefsRaiseLogWindowOnError->value());
+
+        Fl_Preferences behavior(base, "behavior");
+        behavior.set(
+            "check_for_updates", (int)uiPrefs->uiPrefsCheckForUpdates->value());
 
         {
 

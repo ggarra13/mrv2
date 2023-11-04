@@ -6,8 +6,12 @@ v0.8.4
 - Fixed cmake's function get_runtime_dependencies() and
   get_macos_runtime_dependencies() only working for one element instead of a
   list.
-- Created a python script to automatically check the latest released version
-  of mrv2 on github, allow to download it and install it.
+- Created a python plug-in to automatically check the latest released version
+  of mrv2 on github, allow to download it and install it, asking for a password
+  if sudo permissions are needed.
+  The plug-in is installed by default.  In order to have mrv2 automatically
+  check for updates on start-up, you must set Preferences->Behavior and select
+  Check for Updates at start up.
 
 
 v0.8.3
