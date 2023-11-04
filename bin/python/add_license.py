@@ -48,6 +48,7 @@ CMAKE_DIRS = CPP_DIRS + [
 BASH_DIRS = [
     ".",
     "bin",
+    "mrv2/bin",
     "etc",
     "windows/envvars",
     "certificates",

@@ -220,6 +220,16 @@ if ( NOT WIN32 )
         GROUP_READ GROUP_EXECUTE
         WORLD_READ WORLD_EXECUTE
 	COMPONENT applications )
+
+    if(APPLE)
+	${CMAKE_SOURCE_DIR}/bin/install_dmg.sh
+	DESTINATION bin
+        PERMISSIONS 
+        OWNER_READ OWNER_WRITE OWNER_EXECUTE
+        GROUP_READ GROUP_EXECUTE
+        WORLD_READ WORLD_EXECUTE
+	COMPONENT applications )
+    endif()
     
     if(TLRENDER_USD)
 	install( DIRECTORY

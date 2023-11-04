@@ -17,4 +17,5 @@ fi
 
 . etc/build_dir.sh
 
-bin/python/add_license.py
+
+$PYTHONEXE bin/python/add_license.py

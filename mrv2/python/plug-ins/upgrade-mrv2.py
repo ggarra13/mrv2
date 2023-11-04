@@ -1,3 +1,7 @@
+# SPDX-License-Identifier: BSD-3-Clause
+# mrv2
+# Copyright Contributors to the mrv2 Project. All rights reserved.
+
 #!/usr/bin/env python
 
 #
@@ -41,7 +45,7 @@ class UpgradePlugin(plugin.Plugin):
         elif kernel == 'Windows':
             exe = f'C:\Program Files\mrv2 {version}\bin\mrv2.exe'
         elif kernel == 'Darwin':
-            exe = f'/Applications/mrv2.app/Contents/mrv2'
+            exe = f'/Applications/mrv2.app/Contents/MacOS/mrv2'
         else:
             print(f'Unknown platform "{kernel}"')
             return
@@ -90,7 +94,7 @@ class UpgradePlugin(plugin.Plugin):
             print("The new version of mrv2 was installed.")
             Fl.check()
             if os.path.exists(download_file):
-                os.remove(download_file)
+                pass #os.remove(download_file)
                 print(f"Removed temporary {download_file}.")
                 Fl.check()
                 self.start_new_mrv2(download_file, kernel)
@@ -162,7 +166,8 @@ class UpgradePlugin(plugin.Plugin):
             command = f'tar -xzvf {download_file} -C ~/'
             self.run_as_admin(command, download_file)
         elif download_file.endswith('.dmg'):
-            command = f'open {download_file}'
+            root_dir=cmd.rootPath()
+            command = f'{root_dir}/bin/install_dmg.sh {download_file}'
             self.run_as_admin(command, download_file)
         else:
             print(f'You will need to install file "{download_file}" manually.')
@@ -255,7 +260,7 @@ class UpgradePlugin(plugin.Plugin):
             print(f"No file matching {extension} was found")
 
 
-    def ask_to_upgrade(self, current_version, latest_version, data):
+    def ask_to_upgrade(self, current_version, latest_version, title, data):
         """Open an FLTK window to allow the user to upgrade.
 
         Args:
@@ -270,7 +275,7 @@ class UpgradePlugin(plugin.Plugin):
         box = Fl_Box(20, 20, win.w() - 40, 60)
         box.copy_label(f"Current version is v{current_version},\n"
                        f"latest is v{latest_version}")
-        btn = Fl_Button(20, 100, win.w() - 40, 40, "Upgrade")
+        btn = Fl_Button(20, 100, win.w() - 40, 40, title)
         btn.callback(UpgradePlugin.get_latest_release_cb, [self, data])
         win.end()
         win.set_non_modal()
@@ -334,10 +339,11 @@ class UpgradePlugin(plugin.Plugin):
                 return
             elif result == 1:
                 print(f"Version v{current_version} is newer than v{version}")
+                self.ask_to_upgrade(current_version, version, 'Downgrade', data)
                 return
             else:
                 print(f"Version v{current_version} is older than v{version}")
-                self.ask_to_upgrade(current_version, version, data)
+                self.ask_to_upgrade(current_version, version, 'Upgrade', data)
             
         else:
             print("No release files found.")

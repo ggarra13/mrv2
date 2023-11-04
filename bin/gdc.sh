@@ -18,22 +18,7 @@ fi
 
 . etc/build_dir.sh
 
-
-PYTHONEXE=$BUILD_DIR/install/bin/python${PYTHON_VERSION}
-if [[ $KERNEL == *Msys* ]]; then
-    PYTHONEXE=$BUILD_DIR/install/bin/python.exe
-    requests=$BUILD_DIR/install/bin/Lib/site-packages/requests
-    if [[ ! -e $requests ]]; then
-	python -m pip install requests
-    fi
-else    
-    extract_python_version
-    requests=$BUILD_DIR/install/lib/python$PYTHON_VERSION/site-packages/requests
-    if [[ ! -e $requests ]]; then
-	python$PYTHON_VERSION -m pip install requests
-    fi
-fi
-
+$PYTHONEXE -m pip install requests
 
 export TAG=$1
 

@@ -69,6 +69,10 @@ export LD_LIBRARY_PATH="$PWD/${BUILD_DIR}/install/lib64:$PWD/${BUILD_DIR}/instal
 export DYLD_LIBRARY_PATH="$PWD/${BUILD_DIR}/install/lib:${DYLD_LIBRARY_PATH}"
 export PKG_CONFIG_PATH="$PWD/${BUILD_DIR}/install/lib/pkgconfig:${PKG_CONFIG_PATH}"
 export PYTHONPATH="$PWD/${BUILD_DIR}/install/lib/python${PYTHON_VERSION}:$PWD/${BUILD_DIR}/install/lib/python${PYTHON_VERSION}/site-packages:${PYTHONPATH}"
+export PYTHONEXE="$PWD/${BUILD_DIR}/install/bin/python${PYTHON_VERSION}"
+if [[ $KERNEL == *Msys* ]]; then
+    export PYTHONEXE="$PWD/${BUILD_DIR}/install/lib/python.exe"
+fi
 
 if [[ $RUNME == 1 && $0 != *runme.sh* ]]; then
     echo "Build directory is ${BUILD_DIR}"

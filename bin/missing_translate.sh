@@ -17,4 +17,4 @@ fi
 
 . etc/build_dir.sh
 
-bin/python/missing_translate.py
+$PYTHONEXE bin/python/missing_translate.py
