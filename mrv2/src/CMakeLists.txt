@@ -97,6 +97,18 @@ if (UNIX AND BUILD_PYTHON)
         COMPONENT applications )
 endif()
 
+
+#
+# Install python's requests library
+#
+if (MRV2_PYBIND11)
+    if(UNIX)
+	execute_process( COMMAND ${PYTHON_EXECUTABLE} -m pip install --target ${CMAKE_INSTALL_PREFIX}/lib/python${MRV2_PYTHON_VERSION}/site-packages requests )
+    else()
+	execute_process( COMMAND ${PYTHON_EXECUTABLE} -m pip install --target ${CMAKE_INSTALL_PREFIX}/bin/Lib/site-packages requests )
+    endif()
+endif()
+    
 if ( APPLE )
 
     if(MRV2_PYBIND11)
