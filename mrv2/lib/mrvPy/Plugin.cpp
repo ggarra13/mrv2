@@ -3,6 +3,7 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #include <iostream>
+#include <algorithm>
 #include <filesystem>
 namespace fs = std::filesystem;
 
@@ -105,7 +106,20 @@ namespace mrv
     void discover_python_plugins(py::module m)
     {
         std::unordered_map<std::string, std::string> plugins;
-        const std::vector<std::string>& paths = python_plugin_paths();
+        std::vector<std::string> paths = python_plugin_paths();
+
+        std::string installed_plugins = mrv::rootpath() + "/python/plug-ins";
+        paths.push_back(installed_plugins);
+
+        // Step 1: Sort the vector
+        std::sort(paths.begin(), paths.end());
+
+        // Step 2: Use std::unique to remove duplicates
+        auto it = std::unique(paths.begin(), paths.end());
+
+        // Step 3: Erase the elements that were made unique
+        paths.erase(it, paths.end());
+
         for (const auto& path : paths)
         {
             for (const auto& entry : fs::directory_iterator(path))
