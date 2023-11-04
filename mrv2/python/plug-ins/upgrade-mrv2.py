@@ -100,6 +100,7 @@ class UpgradePlugin(plugin.Plugin):
                 self.start_new_mrv2(download_file, kernel)
         else:
             print("Something failed installing mrv2")
+            
 
     @staticmethod
     def get_password_cb(widget, args):
@@ -355,7 +356,15 @@ class UpgradePlugin(plugin.Plugin):
     def menus(self):
         menus = {
             # Call a method and place a divider line after the menu
-            "Help/Upgrade" : (self.run, '__divider__')
+            "Help/Upgrade mrv2" : (self.run, '__divider__')
         }
+        try:
+            if re.search('es', cmd.getLanguage()):
+                menus = {
+                    # Call a method and place a divider line after the menu
+                    "Ayuda/Actualizar mrv2" : (self.run, '__divider__')
+                }
+        except:
+            pass
         return menus
         

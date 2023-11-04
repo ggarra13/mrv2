@@ -3,17 +3,18 @@
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#!/bin/bash
-
 # Specify the path to your .dmg file
 DMG_FILE=$1
-DMG_NAME=`echo $1 | sed -e 's/.dmg//'` 
+DMG_BASENAME=`basename $1`
+DMG_NAME="${DMG_BASENAME%.dmg}"
 
 # Open the .dmg file
+echo "Open $DMG_FILE"
 open "$DMG_FILE"
 
 # Wait for the .dmg to be mounted
-while [ ! -d "/Volumes/${DMG_NAME}" ]; do
+echo "Wait for /Volumes/$DMG_NAME..."
+while [ ! -d "/Volumes/$DMG_NAME" ]; do
     sleep 1
 done
 
@@ -26,7 +27,7 @@ rm -rf /Applications/mrv2.app
 
 # You can add additional commands here to automate the installation if needed
 echo "Installing ${DMG_NAME}..."
-cp -f /Volumes/${DMG_NAME}/mrv2.app /Applications
+cp -rf /Volumes/${DMG_NAME}/mrv2.app /Applications/
 
 # When you're done, unmount the .dmg (optional)
 hdiutil detach "/Volumes/${DMG_NAME}"

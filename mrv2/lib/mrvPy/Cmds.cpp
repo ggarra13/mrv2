@@ -31,6 +31,11 @@ namespace mrv2
     {
         using namespace mrv;
 
+        std::string getLanguage()
+        {
+            return fl_getenv("LANGUAGE");
+        }
+
         std::string getVersion()
         {
             return mrv::version();
@@ -446,6 +451,9 @@ Used to run main commands and get and set the display, image, compare, LUT optio
     cmds.def(
         "setStereo3DOptions", &mrv2::cmd::setStereo3DOptions,
         _("Set the stereo 3D options."), py::arg("options"));
+
+    cmds.def(
+        "getLanguage", &mrv2::cmd::getLanguage, _("Get the language of mrv2."));
 
     cmds.def(
         "getLayers", &mrv2::cmd::getLayers,
