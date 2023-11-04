@@ -12,6 +12,7 @@ v0.8.4
   The plug-in is installed by default.  In order to have mrv2 automatically
   check for updates on start-up, you must set Preferences->Behavior and select
   Check for Updates at start up.
+- Fixed a minor memory leak when saving movies with audio.
 
 
 v0.8.3
