@@ -222,6 +222,7 @@ if ( NOT WIN32 )
 	COMPONENT applications )
 
     if(APPLE)
+	install( FILES
 	${CMAKE_SOURCE_DIR}/bin/install_dmg.sh
 	DESTINATION bin
         PERMISSIONS 
