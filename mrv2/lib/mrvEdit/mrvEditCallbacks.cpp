@@ -1179,7 +1179,6 @@ namespace mrv
         // Find first video clip at current time.
         int clipIndex = -1;
         otio::ErrorStatus errorStatus;
-        otime::TimeRange clipTrackRange;
         otio::Clip* clip = nullptr;
         for (auto composition : compositions)
         {
@@ -1196,7 +1195,6 @@ namespace mrv
             if (!clip)
                 continue;
 
-            clipTrackRange = track->trimmed_range();
             clipIndex = track->index_of_child(clip);
             break;
         }
@@ -1248,8 +1246,7 @@ namespace mrv
             if (track->kind() != otio::Track::Kind::audio)
                 continue;
 
-            auto trackRange = track->trimmed_range();
-            auto sampleRate = trackRange.duration().rate();
+            auto sampleRate = track->trimmed_range().duration().rate();
 
             auto rangeInTrack = otime::TimeRange(
                 range.start_time().rescaled_to(sampleRate),
@@ -1270,6 +1267,7 @@ namespace mrv
             }
 
             modified = true;
+
             int audioIndex = track->index_of_child(audioItem);
             auto audioClipRange = otime::TimeRange(
                 clipRange.start_time().rescaled_to(sampleRate),
@@ -1783,6 +1781,27 @@ namespace mrv
         }
 
         // Finally, append audio tracks
+        if (sourceAudioTracks.size() == 0)
+        {
+            auto destTracks = destTimeline->audio_tracks();
+            for (size_t i = 0; i < destTracks.size(); ++i)
+            {
+                otio::Track* track = destTracks[i];
+                // If track duration is smaller than start time
+                // (ie. usually smaller than video), add a gap filling the
+                // difference.
+                auto destTrackDuration = track->duration();
+                auto duration = destStartTime - destTrackDuration;
+                if (duration.value() > 0.0)
+                {
+                    auto gapRange =
+                        TimeRange(RationalTime(0.0, duration.rate()), duration);
+                    auto gap = new otio::Gap(gapRange);
+                    track->append_child(gap);
+                }
+            }
+        }
+
         for (size_t i = 0; i < sourceAudioTracks.size(); ++i)
         {
             auto destTracks = destTimeline->audio_tracks();
@@ -1803,8 +1822,11 @@ namespace mrv
             // than video), add a gap filling the difference.
             auto destTrackDuration = track->duration();
             auto duration = destStartTime - destTrackDuration;
+            std::cerr << "dest start time     " << destStartTime << std::endl;
+            std::cerr << "dest track duration " << duration << std::endl;
             if (duration.value() > 0.0)
             {
+                std::cerr << "add start gap " << duration << std::endl;
                 auto gapRange =
                     TimeRange(RationalTime(0.0, duration.rate()), duration);
                 auto gap = new otio::Gap(gapRange);
