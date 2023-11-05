@@ -512,12 +512,14 @@ namespace mrv
             _("Images (*.{") + getImagePattern(context) + "})\t";
         const std::string kMOVIE_PATTERN =
             _("Movies (*.{") + getMoviePattern(context) + "})\t";
+        const std::string kAUDIO_PATTERN =
+            _("Audios (*.{") + getAudioPattern(context) + "})\t";
         const std::string kSESSION_PATTERN =
             _("Sessions (*.{") + kSessionPattern + "})";
         const std::string kALL_PATTERN =
             _("All (*.{") + getImagePattern(context) + "," +
             getMoviePattern(context) + "," + kSessionPattern + "})\t" +
-            kIMAGE_PATTERN + kMOVIE_PATTERN + kSESSION_PATTERN;
+            kIMAGE_PATTERN + kMOVIE_PATTERN + kAUDIO_PATTERN + kSESSION_PATTERN;
 
         std::string title = _("Save Movie or Sequence");
 
