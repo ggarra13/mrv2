@@ -69,6 +69,12 @@ namespace mrv
     //! Menu function to remove item(s) from the timeline.
     void edit_remove_clip_cb(Fl_Menu_* m, ViewerUI* ui);
 
+    //! Menu function to insert an audio gap at current time.
+    void edit_insert_audio_gap_cb(Fl_Menu_* m, ViewerUI* ui);
+
+    //! Menu function to remove audio gap at current time.
+    void edit_remove_audio_gap_cb(Fl_Menu_* m, ViewerUI* ui);
+
     //! Set Action Mode to trim
     void edit_trim_cb(Fl_Menu_* m, ViewerUI* ui);
 

@@ -1316,6 +1316,14 @@ namespace mrv
             {
                 edit_insert_frame_cb(nullptr, ui);
             }
+            else if (c == "Edit/Audio Gap/Insert")
+            {
+                edit_insert_audio_gap_cb(nullptr, ui);
+            }
+            else if (c == "Edit/Audio Gap/Remove")
+            {
+                edit_remove_audio_gap_cb(nullptr, ui);
+            }
             else if (c == "Edit/Slice")
             {
                 edit_slice_clip_cb(nullptr, ui);

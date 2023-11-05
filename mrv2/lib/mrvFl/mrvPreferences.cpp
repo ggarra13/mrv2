@@ -313,18 +313,8 @@ namespace mrv
         gui.get("timeline_edit_markers", tmp, 0);
         uiPrefs->uiPrefsShowMarkers->value(tmp);
 
-        if (version > 7)
-        {
-            gui.get("timeline_editable", tmp, 1);
-            uiPrefs->uiPrefsTimelineEditable->value(tmp);
-        }
-        else
-        {
-            gui.get("timeline_editable", tmp, 0);
-            if (version < kPreferencesVersion)
-                tmp = 1;
-            uiPrefs->uiPrefsTimelineEditable->value(tmp);
-        }
+        gui.get("timeline_editable", tmp, 1);
+        uiPrefs->uiPrefsTimelineEditable->value(tmp);
 
         gui.get("timeline_edit_associated_clips", tmp, 1);
         uiPrefs->uiPrefsEditAssociatedClips->value(tmp);

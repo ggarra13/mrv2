@@ -14,6 +14,13 @@ v0.8.4
   Check for Updates at start up.
 - Fixed a minor memory leak when saving movies with audio.
 - Made Saving Audio only pop up its own file requester window.
+- Thanks to the great Darby Johnston, it is now possible to edit the video and
+  audio clips of an otio timeline in the timeline viewport.
+- Added Preferences->Timeline the options to start in edit mode and start with
+  Edit Associated Clips.
+- Added the code and callback to edit the annotations when editing the clips.
+- Added Edit/Audio Gap/Insert and Edit/Audio Gap/Remove to insert or remove
+  audio gaps matching the length of the video clip at the current time.
 
 
 v0.8.3

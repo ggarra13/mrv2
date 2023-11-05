@@ -67,7 +67,7 @@ class PreferencesUI {open
     Fl_Window uiMain {
       label Preferences
       user_data this user_data_type {PreferencesUI*} open
-      xywh {893 97 847 466} type Double resizable
+      xywh {899 64 847 466} type Double resizable
       code0 {main = m;} modal visible
     } {
       Fl_Group {} {open
@@ -645,8 +645,8 @@ v->uiPrefsFPS->value( g );}
             }
           }
           Fl_Group {} {
-            label Timeline
-            xywh {305 34 530 362} box EMBOSSED_BOX align 5 hide
+            label Timeline open
+            xywh {305 34 530 362} box EMBOSSED_BOX align 5
           } {
             Fl_Choice uiPrefsTimelineDisplay {
               label Display
@@ -710,14 +710,14 @@ v->uiPrefsFPS->value( g );}
               }
               Fl_Check_Button uiPrefsTimelineEditable {
                 label Editable
-                tooltip {Editable Timeline Viewport.} xywh {565 213 15 20} down_box DOWN_BOX value 1 align 4 hide
+                tooltip {Editable Timeline Viewport.} xywh {565 213 15 20} down_box DOWN_BOX value 1 align 4
               }
               Fl_Check_Button uiPrefsEditAssociatedClips {
                 label {Edit Associated Clips}
-                tooltip {Edit Associated Clips.} xywh {565 243 15 20} down_box DOWN_BOX value 1 align 4 hide
+                tooltip {Edit Associated Clips.} xywh {565 243 15 20} down_box DOWN_BOX value 1 align 4
               }
               Fl_Check_Button uiPrefsEditMode {
-                label {Start in Edit mode}
+                label {Start in Edit mode} selected
                 tooltip {Editing viewport will be visible at start up.} xywh {565 181 63 24} down_box DOWN_BOX value 1 align 4
               }
             }
@@ -1173,8 +1173,8 @@ v->uiOCIO_float_ics->do_callback();}
             }
           }
           Fl_Group {} {
-            label Behavior open
-            xywh {297 36 532 362} box EMBOSSED_BOX align 5
+            label Behavior
+            xywh {297 36 532 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {open
               xywh {335 36 446 313}
@@ -1189,7 +1189,7 @@ v->uiOCIO_float_ics->do_callback();}
                   xywh {30 30 100 20}
                 }
                 MenuItem {} {
-                  label {At Start Up} selected
+                  label {At Start Up}
                   xywh {30 30 100 20}
                 }
               }
