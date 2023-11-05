@@ -13,6 +13,7 @@ v0.8.4
   check for updates on start-up, you must set Preferences->Behavior and select
   Check for Updates at start up.
 - Fixed a minor memory leak when saving movies with audio.
+- Made Saving Audio only pop up its own file requester window.
 
 
 v0.8.3
