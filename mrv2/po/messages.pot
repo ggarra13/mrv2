@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.8.4\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-11-05 12:22-0300\n"
+"POT-Creation-Date: 2023-11-05 12:32-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1495,8 +1495,8 @@ msgid "Video"
 msgstr ""
 
 #: mrvApp/mrvOpenSeparateAudioDialog.cpp:52 mrvPanels/mrvSettingsPanel.cpp:190
-#: mrvPanels/mrvImageInfoPanel.cpp:477 mrvFl/mrvCallbacks.cpp:1746
-#: mrvFl/mrvCallbacks.cpp:1784
+#: mrvPanels/mrvImageInfoPanel.cpp:477 mrvFl/mrvCallbacks.cpp:1755
+#: mrvFl/mrvCallbacks.cpp:1793
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:137
 msgid "Audio"
 msgstr ""
@@ -1836,13 +1836,13 @@ msgstr ""
 
 #: mrvPanels/mrvPythonPanel.cpp:476 mrvPanels/mrvImageInfoPanel.cpp:1654
 #: mrvFl/mrvLanguages.cpp:136 mrvFl/mrvHotkey.cpp:99
-#: mrvFl/mrvCallbacks.cpp:1816
+#: mrvFl/mrvCallbacks.cpp:1825
 msgid "No"
 msgstr ""
 
 #: mrvPanels/mrvPythonPanel.cpp:476 mrvPanels/mrvImageInfoPanel.cpp:1654
 #: mrvFl/mrvLanguages.cpp:136 mrvFl/mrvHotkey.cpp:99
-#: mrvFl/mrvCallbacks.cpp:1816
+#: mrvFl/mrvCallbacks.cpp:1825
 msgid "Yes"
 msgstr ""
 
@@ -3442,8 +3442,8 @@ msgstr ""
 msgid "Default"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:78 mrvFl/mrvCallbacks.cpp:1742
-#: mrvFl/mrvCallbacks.cpp:1780 mrvUI/mrvMenus.cpp:409
+#: mrvFl/mrvCallbacks.cpp:78 mrvFl/mrvCallbacks.cpp:1751
+#: mrvFl/mrvCallbacks.cpp:1789 mrvUI/mrvMenus.cpp:409
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1485
 msgid "Annotations"
 msgstr ""
@@ -3453,8 +3453,8 @@ msgstr ""
 msgid "Background"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:80 mrvFl/mrvCallbacks.cpp:1734
-#: mrvFl/mrvCallbacks.cpp:1772 mrvGL/mrvTimelineViewport.cpp:1702
+#: mrvFl/mrvCallbacks.cpp:80 mrvFl/mrvCallbacks.cpp:1743
+#: mrvFl/mrvCallbacks.cpp:1781 mrvGL/mrvTimelineViewport.cpp:1702
 #: mrvGL/mrvTimelineViewport.cpp:1704 mrvGL/mrvTimelineViewport.cpp:1706
 #: mrvUI/mrvMenus.cpp:360
 msgid "Color"
@@ -3497,18 +3497,18 @@ msgstr ""
 msgid "Vectorscope"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:104 mrvFl/mrvCallbacks.cpp:781 mrvUI/mrvMenus.cpp:486
+#: mrvFl/mrvCallbacks.cpp:104 mrvFl/mrvCallbacks.cpp:790 mrvUI/mrvMenus.cpp:486
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvHotkeyUI.cxx:68
 msgid "Hotkeys"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:105 mrvFl/mrvCallbacks.cpp:779 mrvUI/mrvMenus.cpp:486
+#: mrvFl/mrvCallbacks.cpp:105 mrvFl/mrvCallbacks.cpp:788 mrvUI/mrvMenus.cpp:486
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:402
 msgid "Preferences"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:106 mrvFl/mrvCallbacks.cpp:783
-#: mrvFl/mrvCallbacks.cpp:817 mrvUI/mrvMenus.cpp:487
+#: mrvFl/mrvCallbacks.cpp:106 mrvFl/mrvCallbacks.cpp:792
+#: mrvFl/mrvCallbacks.cpp:826 mrvUI/mrvMenus.cpp:487
 msgid "About"
 msgstr ""
 
@@ -3516,38 +3516,42 @@ msgstr ""
 msgid "File extension cannot be empty."
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:334
+#: mrvFl/mrvCallbacks.cpp:336
 msgid "Saving audio but current clip does not have audio."
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:1106
+#: mrvFl/mrvCallbacks.cpp:342
+msgid "Saving video but with an audio extension."
+msgstr ""
+
+#: mrvFl/mrvCallbacks.cpp:1115
 msgid "View/Mask"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:1581
+#: mrvFl/mrvCallbacks.cpp:1590
 msgid "Pick Color"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:1595
+#: mrvFl/mrvCallbacks.cpp:1604
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2689
 msgid "Pick Draw Color and Alpha"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:1722 mrvFl/mrvCallbacks.cpp:1760
+#: mrvFl/mrvCallbacks.cpp:1731 mrvFl/mrvCallbacks.cpp:1769
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1420
 msgid "Media"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:1726 mrvFl/mrvCallbacks.cpp:1764
+#: mrvFl/mrvCallbacks.cpp:1735 mrvFl/mrvCallbacks.cpp:1773
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:740
 msgid "UI"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:1730 mrvFl/mrvCallbacks.cpp:1768
+#: mrvFl/mrvCallbacks.cpp:1739 mrvFl/mrvCallbacks.cpp:1777
 msgid "Pan And Zoom"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:1738 mrvFl/mrvCallbacks.cpp:1776
+#: mrvFl/mrvCallbacks.cpp:1747 mrvFl/mrvCallbacks.cpp:1785
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:497
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1022
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1459
@@ -3555,17 +3559,17 @@ msgstr ""
 msgid "Timeline"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:1813
+#: mrvFl/mrvCallbacks.cpp:1822
 msgid ""
 "You have EDLs in the current session.  These will not be saved in the "
 "session file.  Do you want to continue?"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:1934
+#: mrvFl/mrvCallbacks.cpp:1943
 msgid "Edit Text Annotation"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:2109
+#: mrvFl/mrvCallbacks.cpp:2118
 msgid "No item selected"
 msgstr ""
 

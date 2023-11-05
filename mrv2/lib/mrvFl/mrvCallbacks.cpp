@@ -328,12 +328,21 @@ namespace mrv
             if (ioInfo.audio.isValid())
                 hasAudio = true;
 
+            bool hasVideo = !ioInfo.video.empty();
+
             if (!hasAudio && file::isAudio(extension))
             {
                 LOG_ERROR(
                     _("Saving audio but current clip does not have audio."));
                 return;
             }
+
+            if (hasVideo && file::isAudio(extension))
+            {
+                LOG_ERROR(_("Saving video but with an audio extension."));
+                return;
+            }
+
             SaveMovieOptionsUI saveOptions(hasAudio, audioOnly);
             if (saveOptions.cancel)
                 return;
