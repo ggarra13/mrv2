@@ -80,6 +80,8 @@ namespace mrv
 
     std::string save_single_image(const char* startfile = nullptr);
 
+    std::string save_audio_file(const char* startfile = nullptr);
+
     std::string save_movie_or_sequence_file(const char* startfile = nullptr);
 
     std::string save_pdf(const char* startdir = nullptr);

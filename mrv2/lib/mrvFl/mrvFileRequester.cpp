@@ -503,28 +503,44 @@ namespace mrv
 
         return file;
     }
+
+    std::string save_audio_file(const char* startdir)
+    {
+        auto context = App::app->getContext();
+        const std::string kAUDIO_PATTERN =
+            _("Audios (*.{") + getAudioPattern(context) + "})";
+        const std::string kALL_PATTERN =
+            _("All (*.{") + getAudioPattern(context) + "})\t" + kAUDIO_PATTERN;
+
+        if (!startdir)
+            startdir = "";
+
+        std::string title = _("Save Audio");
+
+        const std::string& file = file_save_single_requester(
+            title.c_str(), kALL_PATTERN.c_str(), startdir, true);
+
+        return file;
+    }
+
     std::string save_movie_or_sequence_file(const char* startdir)
     {
         auto context = App::app->getContext();
-        // const std::string kAUDIO_PATTERN =
-        //     ("Audios (*.{") + getAudioPattern(context) + "})\t";
         const std::string kIMAGE_PATTERN =
             _("Images (*.{") + getImagePattern(context) + "})\t";
         const std::string kMOVIE_PATTERN =
             _("Movies (*.{") + getMoviePattern(context) + "})\t";
         const std::string kAUDIO_PATTERN =
-            _("Audios (*.{") + getAudioPattern(context) + "})\t";
-        const std::string kSESSION_PATTERN =
-            _("Sessions (*.{") + kSessionPattern + "})";
+            _("Audios (*.{") + getAudioPattern(context) + "})";
         const std::string kALL_PATTERN =
             _("All (*.{") + getImagePattern(context) + "," +
-            getMoviePattern(context) + "," + kSessionPattern + "})\t" +
-            kIMAGE_PATTERN + kMOVIE_PATTERN + kAUDIO_PATTERN + kSESSION_PATTERN;
-
-        std::string title = _("Save Movie or Sequence");
+            getMoviePattern(context) + "," + getAudioPattern(context) + "})\t" +
+            kIMAGE_PATTERN + kMOVIE_PATTERN + kAUDIO_PATTERN;
 
         if (!startdir)
             startdir = "";
+
+        std::string title = _("Save Movie or Sequence");
 
         const std::string& file = file_save_single_requester(
             title.c_str(), kALL_PATTERN.c_str(), startdir, true);

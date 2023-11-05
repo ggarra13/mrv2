@@ -289,12 +289,20 @@ namespace mrv
 
     void save_movie_cb(Fl_Menu_* w, ViewerUI* ui)
     {
-        const std::string& file = save_movie_or_sequence_file();
-        if (file.empty())
-            return;
 
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
+            return;
+
+        const auto& ioInfo = player->ioInfo();
+        bool audioOnly = ioInfo.video.empty();
+
+        std::string file;
+        if (audioOnly)
+            file = save_audio_file();
+        else
+            file = save_movie_or_sequence_file();
+        if (file.empty())
             return;
 
         std::string extension = tl::file::Path(file).getExtension();
@@ -312,7 +320,6 @@ namespace mrv
         }
 
         mrv::SaveOptions options;
-        const auto& ioInfo = player->ioInfo();
 
 #ifdef TLRENDER_FFMPEG
         if (file::isMovie(extension) || file::isAudio(extension))
@@ -320,8 +327,8 @@ namespace mrv
             bool hasAudio = false;
             if (ioInfo.audio.isValid())
                 hasAudio = true;
-            bool audioOnly = file::isAudio(extension) || ioInfo.video.empty();
-            if (!hasAudio && audioOnly)
+
+            if (!hasAudio && file::isAudio(extension))
             {
                 LOG_ERROR(
                     _("Saving audio but current clip does not have audio."));

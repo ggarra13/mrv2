@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-11-04 09:27-0300\n"
+"POT-Creation-Date: 2023-11-05 12:22-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -2949,8 +2949,8 @@ msgstr "Cargar Audio"
 msgid "Save Single Frame"
 msgstr "Grabar un Solo Cuadro"
 
-msgid "Sessions (*.{"
-msgstr "Sesión: (*.{"
+msgid "Save Audio"
+msgstr "Grabar Audio"
 
 msgid "Save Movie or Sequence"
 msgstr "Grabar Película o Secuencia"
@@ -5650,6 +5650,12 @@ msgstr "Decimal"
 
 msgid "Divide"
 msgstr "Dividir"
+
+#~ msgid "Save Movie or Sequenece"
+#~ msgstr "Grabar Película o Secuencia"
+
+#~ msgid "Sessions (*.{"
+#~ msgstr "Sesión: (*.{"
 
 #, c-format
 #~ msgid "Saving Movie %<PRId64> - %<PRId64>"
