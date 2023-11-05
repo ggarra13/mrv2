@@ -22,7 +22,7 @@ v0.8.4
 - Added Edit/Audio Gap/Insert and Edit/Audio Gap/Remove to insert or remove
   audio gaps matching the length of the video clip at the current time.
 - Fixed adding a clip without audio to a timeline with audio that ends before
-  the video.  Now a gap is added.
+  the video.  Now a gap is added before the new clip.
 
 
 v0.8.3
