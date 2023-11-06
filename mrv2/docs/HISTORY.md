@@ -23,6 +23,8 @@ v0.8.4
   audio gaps matching the length of the video clip at the current time.
 - Fixed adding a clip without audio to a timeline with audio that ends before
   the video.  Now a gap is added before the new clip.
+- Fixed Wayland support on modern platforms like Ubuntu 22.04.3.  Under Rocky
+  Linux 8.1, I believe it does not work properly.
 
 
 v0.8.3
