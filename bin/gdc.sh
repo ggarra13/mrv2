@@ -18,7 +18,15 @@ fi
 
 . etc/build_dir.sh
 
-$PYTHONEXE -m pip install requests
+
+site_dir=$BUILD_DIR/install/lib/python${PYTHON_VERSION}/site-packages/requests
+if [[ $KERNEL == *Msys* ]]; then
+    site_dir=$BUILD_DIR/install/bin/Lib/site-packages/requests
+fi
+
+if [[ ! -d $site_dir ]]; then
+    $PYTHONEXE -m pip install requests
+fi
 
 export TAG=$1
 
