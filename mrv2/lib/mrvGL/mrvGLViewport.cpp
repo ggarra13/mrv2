@@ -348,7 +348,6 @@ namespace mrv
             gl.stereoBuffer.reset();
         }
 
-        glViewport(0, 0, GLsizei(viewportSize.w), GLsizei(viewportSize.h));
         CHECK_GL;
 
         float r = 0.F, g = 0.F, b = 0.F, a = 1.F;
@@ -361,10 +360,11 @@ namespace mrv
             b = ub / 255.0f;
         }
 
-        if (transparent)
-            a = 0.F;
-
         glDrawBuffer(GL_BACK_LEFT);
+
+        glViewport(0, 0, GLsizei(viewportSize.w), GLsizei(viewportSize.h));
+        CHECK_GL;
+        glClearStencil(0);
         CHECK_GL;
         glClearColor(r, g, b, a);
         CHECK_GL;

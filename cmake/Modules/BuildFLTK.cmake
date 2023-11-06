@@ -5,9 +5,12 @@
 include( ExternalProject )
 
 #set( FLTK_TAG master )
+
 # Stable TAG
 set( FLTK_TAG f6690a974245407c5d266dcb688db694e51a3bb4 )
 
+# Working under Linux fine.
+#set( FLTK_TAG c86ca1a9fc3bb8b09eb429458b2ecf68b62cd1de )
 
 set( FLTK_BUILD_SHARED_LIBS OFF )
 if(MRV2_PYFLTK)
