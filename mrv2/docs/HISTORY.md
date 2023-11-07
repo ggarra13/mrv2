@@ -24,8 +24,16 @@ v0.8.4
 - Fixed adding a clip without audio to a timeline with audio that ends before
   the video.  Now a gap is added before the new clip.
 - Fixed Wayland support on modern platforms like Ubuntu 22.04.3.  Under Rocky
-  Linux 8.1, I believe it does not work properly, so you have to compile from
-  source.
+  Linux 8.1, running with current distros under Wayland you may encounter an
+  error about missing "antialising".
+
+  To fix it:
+       $ sudo cp /usr/share/glib-2.0/schemas/org.gnome.settings-daemon.plugins.xsettings.gschema.xml /usr/share/glib-2.0/schemas/org.gnome.settings-daemon.plugins.xsettings.gschema.xml.bad
+       $ sudo nano /usr/share/glib-2.0/schemas/org.gnome.settings-daemon.plugins.xsettings.gschema.xml
+       	    (remove lines 19 and 20)
+	 <   </schema>
+	 <   <schema id="org.gnome.settings-daemon.plugins.xsettings.deprecated">
+       $ sudo glib-compile-schemas /usr/share/glib-2.0/schemas
 
 
 v0.8.3
