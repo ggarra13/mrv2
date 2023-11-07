@@ -424,8 +424,10 @@ If you did not compile from source and are trying to run the Rocky Linux 8.1
 binaries under Wayland on a more modern distribution, you may encounter an
 error like:
 
+```
 (mrv2:540344): GLib-GIO-ERROR **: 20:47:45.978: Settings schema 'org.gnome.settings-daemon.plugins.xsettings' does not contain a key named 'antialiasing'
 Trace/breakpoint trap (core dumped)
+```
 
 To fix it, you may need to do a hack, like:
        $ sudo cp /usr/share/glib-2.0/schemas/org.gnome.settings-daemon.plugins.xsettings.gschema.xml /usr/share/glib-2.0/schemas/org.gnome.settings-daemon.plugins.xsettings.gschema.xml.bad
