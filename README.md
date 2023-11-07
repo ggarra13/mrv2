@@ -28,6 +28,7 @@ Contents:
 - [Running mrv2](#running-mrv2)
     - [macOS and Linux](#macos-and-linux)
     - [Windows](#windows)
+    - [Linux Wayland](#linux-wayland)
 - [Tutorials](#tutorials)
 - [Documenting](#documenting)
 - [Translating](#translating)
@@ -416,6 +417,24 @@ And in the explorer directory that it will open, you should create a shortcut
 with the RMB to the mrv2.exe.  Once that is done, you can drag and rename the
 shortcut to your Desktop to have it handy.
 Note that if you will not be developing mrv2, you should instead proceed to [Packaging](#packaging).
+
+## Linux Wayland
+
+If you did not compile from source and are trying to run the Rocky Linux 8.1
+binaries under Wayland on a more modern distribution, you may encounter an
+error like:
+
+(mrv2:540344): GLib-GIO-ERROR **: 20:47:45.978: Settings schema 'org.gnome.settings-daemon.plugins.xsettings' does not contain a key named 'antialiasing'
+Trace/breakpoint trap (core dumped)
+
+To fix it, you may need to do a hack, like:
+       $ sudo cp /usr/share/glib-2.0/schemas/org.gnome.settings-daemon.plugins.xsettings.gschema.xml /usr/share/glib-2.0/schemas/org.gnome.settings-daemon.plugins.xsettings.gschema.xml.bad
+       $ sudo nano /usr/share/glib-2.0/schemas/org.gnome.settings-daemon.plugins.xsettings.gschema.xml
+       	    (remove lines 19 and 20)
+	 <   </schema>
+	 <   <schema id="org.gnome.settings-daemon.plugins.xsettings.deprecated">
+       $ sudo glib-compile-schemas /usr/share/glib-2.0/schemas
+
 
 # Tutorials
 
