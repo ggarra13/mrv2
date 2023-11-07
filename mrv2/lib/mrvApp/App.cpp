@@ -1432,6 +1432,12 @@ namespace mrv
                     }
                     ui->uiView->take_focus();
                 }
+                else
+                {
+                    if (!ui->uiView->getPresentationMode() &&
+                        ui->uiEdit->value())
+                        set_edit_mode_cb(EditMode::kFull, ui);
+                }
 
                 Preferences::updateICS();
 

@@ -1160,6 +1160,8 @@ namespace mrv
 
         mw->resize(posX, posY, W, H);
 
+        p.ui->uiRegion->layout();
+
         if (p.frameView)
         {
             frameView();

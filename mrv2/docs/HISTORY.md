@@ -16,13 +16,15 @@ v0.8.4
 - Made Saving Audio only pop up its own file requester window.
 - Thanks to the great Darby Johnston, it is now possible to edit the video and
   audio clips of an otio timeline in the timeline viewport.
-- Added Preferences->Timeline the options to start in edit mode and start with
-  Edit Associated Clips.
+- Added Preferences->Timeline the options to start in editing mode and start
+  with Edit Associated Clips.
 - Added the code and callback to edit the annotations when editing the clips.
 - Added Edit/Audio Gap/Insert and Edit/Audio Gap/Remove to insert or remove
   audio gaps matching the length of the video clip at the current time.
 - Fixed adding a clip without audio to a timeline with audio that ends before
   the video.  Now a gap is added before the new clip.
+- Fixed changing of Timeline->Markers or Timeline->Transitions leaving too
+  little or too much space.
 - Fixed Wayland support on modern platforms like Ubuntu 22.04.3.  Under Rocky
   Linux 8.1, running with current distros under Wayland you may encounter an
   error about missing "antialising".

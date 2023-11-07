@@ -835,7 +835,6 @@ bool presentation = uiView->getPresentationMode();
 mrv::EditMode mode = mrv::EditMode::kTimeline;
 if (value)             mode = mrv::EditMode::kFull;
 else if (presentation) mode = mrv::EditMode::kNone;
-//mrv::set_edit_mode_cb(mode, v);
 mrv::editMode = mode;
 if (!presentation)
 {
