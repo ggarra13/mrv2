@@ -430,12 +430,14 @@ Trace/breakpoint trap (core dumped)
 ```
 
 To fix it, you may need to do a hack, like:
-       $ sudo cp /usr/share/glib-2.0/schemas/org.gnome.settings-daemon.plugins.xsettings.gschema.xml /usr/share/glib-2.0/schemas/org.gnome.settings-daemon.plugins.xsettings.gschema.xml.bad
-       $ sudo nano /usr/share/glib-2.0/schemas/org.gnome.settings-daemon.plugins.xsettings.gschema.xml
-       	    (remove lines 19 and 20)
+```
+$ sudo cp /usr/share/glib-2.0/schemas/org.gnome.settings-daemon.plugins.xsettings.gschema.xml /usr/share/glib-2.0/schemas/org.gnome.settings-daemon.plugins.xsettings.gschema.xml.bad
+$ sudo nano /usr/share/glib-2.0/schemas/org.gnome.settings-daemon.plugins.xsettings.gschema.xml
+    (remove lines 19 and 20)
 	 <   </schema>
 	 <   <schema id="org.gnome.settings-daemon.plugins.xsettings.deprecated">
-       $ sudo glib-compile-schemas /usr/share/glib-2.0/schemas
+$ sudo glib-compile-schemas /usr/share/glib-2.0/schemas
+```
 
 
 # Tutorials
