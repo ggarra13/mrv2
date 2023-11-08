@@ -80,14 +80,9 @@ if [[ $RUNME == 1 && $0 != *runme.sh* ]]; then
     echo "Architecture is ${ARCH}"
     echo "Building with ${CPU_CORES} cores"
     if [[ $FFMPEG_GPL == "" ]]; then
-	if [[ $KERNEL == *Msys* ]]; then
-	    echo "Will use pre-built FFmpeg ${FFMPEG_GPL}"
-	else
-	    echo "FFmpeg will be built as LGPL"
-	fi
-    else
-	echo "FFmpeg will be built as ${FFMPEG_GPL}"
+	FFMPEG_GPL=LGPL
     fi
+    echo "FFmpeg will be built as ${FFMPEG_GPL}"
     echo "CMake flags are ${CMAKE_FLAGS}"
     echo "Compiler flags are ${FLAGS}"
     cmake --version
