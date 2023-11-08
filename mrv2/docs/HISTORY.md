@@ -25,9 +25,11 @@ v0.8.4
   the video.  Now a gap is added before the new clip.
 - Fixed changing of Timeline->Markers or Timeline->Transitions leaving too
   little or too much space.
+- Thanks to Darby Johnston, we now support playing back non-streaming movies
+  directly from the http:// and http::// protocols.
 - Fixed Wayland support on modern platforms like Ubuntu 22.04.3.  Under Rocky
-  Linux 8.1, running with current distros under Wayland you may encounter an
-  error about missing "antialising".
+  Linux 8.1 builds, running with more modern distros under Wayland you may
+  encounter an error about missing "antialising".
 
   To fix it:
     
