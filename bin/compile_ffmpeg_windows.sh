@@ -66,7 +66,7 @@ fi
 #
 # Build with openssl and libcrypto support
 # 
-BUILD_SSL=0
+BUILD_SSL=1
 
 
 #
@@ -254,30 +254,69 @@ if [[ $BUILD_FFMPEG == 1 ]]; then
 	# -wd4101 disables local variable without reference
 	./../../sources/ffmpeg/configure \
             --prefix=$INSTALL_DIR \
+            --disable-programs \
+            --disable-doc \
+            --disable-postproc \
+            --disable-avfilter \
+            --disable-hwaccels \
+            --disable-devices \
+            --disable-filters \
+            --disable-alsa \
+            --disable-appkit \
+            --disable-avfoundation \
+            --disable-bzlib \
+            --disable-coreimage \
+            --disable-iconv \
+            --disable-libxcb \
+            --disable-libxcb-shm \
+            --disable-libxcb-xfixes \
+            --disable-libxcb-shape \
+            --disable-lzma \
+            --disable-metal \
+            --disable-sndio \
+            --disable-schannel \
+            --disable-sdl2 \
+            --disable-securetransport \
+            --disable-vulkan \
+            --disable-xlib \
+            --disable-zlib \
+            --disable-amf \
+            --disable-audiotoolbox \
+            --disable-cuda-llvm \
+            --disable-cuvid \
+            --disable-d3d11va \
+            --disable-dxva2 \
+            --disable-ffnvcodec \
+            --disable-nvdec \
+            --disable-nvenc \
+            --disable-v4l2-m2m \
+            --disable-vaapi \
+            --disable-vdpau \
+            --disable-videotoolbox \
+            --enable-pic \
             --toolchain=msvc \
-	    --target-os=win64 \
+            --target-os=win64 \
             --arch=x86_64 \
             --enable-x86asm \
             --enable-asm \
             --enable-shared \
             --disable-static \
-            --disable-programs \
             --enable-swresample \
-	    $ENABLE_OPENSSL \
+            $ENABLE_OPENSSL \
             $ENABLE_LIBX264 \
-	    $ENABLE_LIBVPX \
+            $ENABLE_LIBVPX \
             --extra-ldflags="-LIBPATH:$INSTALL_DIR/lib/" \
             --extra-cflags="-I$INSTALL_DIR/include/ -MD -wd4828 -wd4101"
 
-	make -j ${CPU_CORES}
-	make install
+        make -j ${CPU_CORES}
+        make install
 
-	# @bug: FFmpeg places .lib in bin/
-	run_cmd mv $INSTALL_DIR/bin/*.lib $INSTALL_DIR/lib/
+        # @bug: FFmpeg places .lib in bin/
+        run_cmd mv $INSTALL_DIR/bin/*.lib $INSTALL_DIR/lib/
 
-	if [[ -e $INSTALL_DIR/include/zconf.h.orig ]]; then
-	    run_cmd mv $INSTALL_DIR/include/zconf.h.orig $INSTALL_DIR/include/zconf.h
-	fi
+        if [[ -e $INSTALL_DIR/include/zconf.h.orig ]]; then
+            run_cmd mv $INSTALL_DIR/include/zconf.h.orig $INSTALL_DIR/include/zconf.h
+        fi
     fi
 fi
 
