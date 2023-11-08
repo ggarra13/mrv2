@@ -15,12 +15,7 @@ if [[ ! -e etc/build_dir.sh ]]; then
     exit 1
 fi
 
-if [[ ! $RUNME ]]; then
-    . etc/build_dir.sh
-else
-    . etc/functions.sh
-fi
-
+. etc/build_dir.sh
 
 if [[ $KERNEL != *Msys* ]]; then
     echo
@@ -33,7 +28,7 @@ LIBVPX_TAG=v1.12.0
 X264_TAG=master
 FFMPEG_TAG=n6.0
 
-MRV2_DIR=$PWD
+MRV2_ROOT=$PWD
 ROOT_DIR=$PWD/$BUILD_DIR/tlRender/etc/SuperBuild/FFmpeg
 INSTALL_DIR=$PWD/$BUILD_DIR/install
 
@@ -41,9 +36,10 @@ if [[ $FFMPEG_GPL == GPL || $FFMPEG_GPL == LGPL ]]; then
     true
 else
     echo
-    echo "You need to provide either a --gpl or --lgpl flag."
-    exit 1
+    echo "No --gpl or --lgpl flag provided to compile FFmpeg.  Choosing --lgpl."
+    export FFMPEG_GPL=LGPL
 fi
+
 #
 # This configures the environment for compilation.  It also cleans at the
 # end to leave it ready for mrv2 build.
@@ -186,7 +182,7 @@ fi
 
 
 #
-# Install openssl nad libcrypto
+# Install openssl and libcrypto
 #
 ENABLE_OPENSSL=""
 if [[ $BUILD_SSL == 1 ]]; then
@@ -326,4 +322,4 @@ if [[ $MSYS_LIBS == 1 ]]; then
     pacman -R yasm nasm --noconfirm
 fi
 
-cd $MRV2_DIR
+cd $MRV2_ROOT

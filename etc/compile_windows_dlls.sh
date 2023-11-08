@@ -18,11 +18,11 @@ if [[ $RUNME == 1 ]]; then
     #
     # Deal with libcms2 (compile from source)
     #
-    . bin/compile_liblcms2_windows.sh
+    bin/compile_liblcms2_windows.sh
     
     #
     # Deal with FFmpeg next (compile from source)
     #
-    . bin/compile_ffmpeg_windows.sh
+    . bin/compile_ffmpeg_windows.sh 
 
 fi
