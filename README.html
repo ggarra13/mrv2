@@ -108,8 +108,12 @@ sudo dnf makecache --refresh
 #
 # Install bundles
 #
-sudo dnf -y groupinstall &quot;Development Tools&quot;
+sudo dnf -y groupinstall &quot;Development Tools&quot; \
+    &amp;&amp; dnf -y install perl perl-CPAN
 
+# Install IPC::Cmd non-interactively
+sudo cpan App::cpanminus &amp;&amp; cpanm --notest IPC::Cmd
+    
 #
 # Install dependencies
 #
@@ -128,13 +132,17 @@ sudo apt update
 #
 # Install dependencies
 #
-sudo apt -y install build-essential git cmake ninja-build libpango1.0-dev \
+sudo apt -y install build-essential perl git cmake ninja-build libpango1.0-dev \
             xorg-dev libx11-dev libxcursor-dev libxinerama-dev \
             libxss-dev gettext libasound2-dev \
             libpulse-dev libssl-dev libffi-dev \
             libwayland-dev wayland-protocols libdbus-1-dev \
             libxkbcommon-dev libegl-dev libgtk-3-dev rpm \
-                    doxygen tk-dev libxt-dev swig subversion</code></pre>
+                    doxygen tk-dev libxt-dev swig subversion
+
+# Install cpanminus and IPC::Cmd non-interactively
+sudo cpan App::cpanminus &amp;&amp; cpanm --notest IPC::Cmd
+</code></pre>
 <h3 id="macos">macOS</h3>
 <pre><code>#
 # Install
@@ -271,8 +279,15 @@ explorer .</code></pre>
 <p>And in the explorer directory that it will open, you should create a shortcut with the RMB to the mrv2.exe. Once that is done, you can drag and rename the shortcut to your Desktop to have it handy. Note that if you will not be developing mrv2, you should instead proceed to <a href="#packaging">Packaging</a>.</p>
 <h2 id="linux-wayland">Linux Wayland</h2>
 <p>If you did not compile from source and are trying to run the Rocky Linux 8.1 binaries under Wayland on a more modern distribution, you may encounter an error like:</p>
-<p>(mrv2:540344): GLib-GIO-ERROR **: 20:47:45.978: Settings schema ‘org.gnome.settings-daemon.plugins.xsettings’ does not contain a key named ‘antialiasing’ Trace/breakpoint trap (core dumped)</p>
-<p>To fix it, you may need to do a hack, like: $ sudo cp /usr/share/glib-2.0/schemas/org.gnome.settings-daemon.plugins.xsettings.gschema.xml /usr/share/glib-2.0/schemas/org.gnome.settings-daemon.plugins.xsettings.gschema.xml.bad $ sudo nano /usr/share/glib-2.0/schemas/org.gnome.settings-daemon.plugins.xsettings.gschema.xml (remove lines 19 and 20) &lt; </schema> &lt; <schema id="org.gnome.settings-daemon.plugins.xsettings.deprecated"> $ sudo glib-compile-schemas /usr/share/glib-2.0/schemas</p>
+<pre><code>(mrv2:540344): GLib-GIO-ERROR **: 20:47:45.978: Settings schema &#39;org.gnome.settings-daemon.plugins.xsettings&#39; does not contain a key named &#39;antialiasing&#39;
+Trace/breakpoint trap (core dumped)</code></pre>
+<p>To fix it, you may need to do a hack, like:</p>
+<pre><code>$ sudo cp /usr/share/glib-2.0/schemas/org.gnome.settings-daemon.plugins.xsettings.gschema.xml /usr/share/glib-2.0/schemas/org.gnome.settings-daemon.plugins.xsettings.gschema.xml.bad
+$ sudo nano /usr/share/glib-2.0/schemas/org.gnome.settings-daemon.plugins.xsettings.gschema.xml
+    (remove lines 19 and 20)
+     &lt;   &lt;/schema&gt;
+     &lt;   &lt;schema id=&quot;org.gnome.settings-daemon.plugins.xsettings.deprecated&quot;&gt;
+$ sudo glib-compile-schemas /usr/share/glib-2.0/schemas</code></pre>
 <h1 id="tutorials">Tutorials</h1>
 <p>Besides the basic API documentation included, there is a special channel on youtube.com where you can find some tutorials on its basic use:</p>
 <p><a href="https://www.youtube.com/watch?v=8JViz-pPCrg&amp;list=PLxJ9NNBdNfRmd8AQ41AJYmb7WhN99G5C-">Video Tutorials</a></p>

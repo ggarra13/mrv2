@@ -111,8 +111,8 @@ endif()
 # OpenSSL must be built after Python and pyFLTK or else Python _ssl
 # module fails.
 if(TLRENDER_NET AND NOT WIN32)
-    if (BUILD_PYTHON OR MRV2_PYFLTK)
-	add_dependencies( OpenSSL ${PYTHON_DEP} ${pyFLTK_DEP})
+    if (BUILD_PYTHON OR MRV2_PYFLTK OR MRV2_PYBIND11)
+	add_dependencies( OpenSSL ${PYTHON_DEP} ${PYBIND11_DEP} ${pyFLTK_DEP})
     endif()
 endif()
 
