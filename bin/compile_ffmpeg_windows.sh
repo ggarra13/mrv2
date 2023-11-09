@@ -91,7 +91,7 @@ if [[ $MSYS_LIBS == 1 ]]; then
     fi
     echo
     
-    pacman -Sy make diffutils yasm nasm pkg-config --noconfirm
+    pacman -Sy make diffutils yasm nasm pkg-config mingw-w64-x86_64-toolchain --noconfirm
 
 fi
 
@@ -323,7 +323,7 @@ fi
 
 if [[ $MSYS_LIBS == 1 ]]; then
     echo "Removing packages used to build libx264 and FFmpeg..."
-    pacman -R yasm nasm --noconfirm
+    pacman -R yasm nasm mingw-w64-x86_64-toolchain --noconfirm
 fi
 
 cd $MRV2_ROOT

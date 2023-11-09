@@ -66,6 +66,8 @@ if [[ ! -e $INSTALLDIR/lib/liblcms2.lib ]]; then
 
     run_cmd mv $INSTALLDIR/lib/liblcms2.a $INSTALLDIR/lib/liblcms2.lib
 
+    pacman -R mingw-w64-x86_64-toolchain --noconfirm
+    
     cd $MRV2_ROOT
 else
     echo "liblcms2 already installed."
