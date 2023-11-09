@@ -107,13 +107,12 @@ extern "C"
 {
 #    include <libavcodec/avcodec.h>
 #    include <libavformat/avformat.h>
-#    include <libavfilter/version.h>
 #    include <libswscale/version.h>
 #    include <libswresample/version.h>
 }
 #else
 #    define AV_STRINGIFY(s) AV_TOSTRING(s)
-#    define AV_TOSTRING(s) #s
+#    define AV_TOSTRING(s) #    s
 #endif
 
 #ifdef _WIN32
@@ -633,7 +632,6 @@ namespace mrv
           << "libavutil          v" << AV_STRINGIFY(LIBAVUTIL_VERSION) << endl
           << "libavcodec      v" << AV_STRINGIFY(LIBAVCODEC_VERSION) << endl
           << "libavformat     v" << AV_STRINGIFY(LIBAVFORMAT_VERSION) << endl
-          << "libavfilter        v" << AV_STRINGIFY(LIBAVFILTER_VERSION) << endl
           << "libswresample v" << AV_STRINGIFY(LIBSWRESAMPLE_VERSION) << endl
           << "libswscale       v" << AV_STRINGIFY(LIBSWSCALE_VERSION) << endl
           << "http://ffmpeg.mplayerhq.hu/" << endl
