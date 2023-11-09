@@ -9,13 +9,8 @@ include( ExternalProject )
 # Stable TAG
 set( FLTK_TAG f6690a974245407c5d266dcb688db694e51a3bb4 )
 
-# Working under Linux fine.
-#set( FLTK_TAG c86ca1a9fc3bb8b09eb429458b2ecf68b62cd1de )
 
-set( FLTK_BUILD_SHARED_LIBS OFF )
-if(MRV2_PYFLTK)
-    set( FLTK_BUILD_SHARED_LIBS ON )
-endif()
+set( FLTK_BUILD_SHARED_LIBS ON )  # We no longer compile static
 
 set( FLTK_PATCH )
 set( FLTK_BUILD_TYPE ${CMAKE_BUILD_TYPE} )
@@ -27,7 +22,6 @@ set( FLTK_C_COMPILER ${CMAKE_C_COMPILER})
 set( FLTK_C_FLAGS ${CMAKE_C_FLAGS} )
 
 if (APPLE)
-    set(FLTK_PATCH cmake -E copy_if_different "${PROJECT_SOURCE_DIR}/cmake/patches/FLTK-patch/Fl_Cocoa_Gl_Window_Driver.mm" "${CMAKE_BINARY_DIR}/FLTK-prefix/src/FLTK/src/drivers/Cocoa")
     if(CMAKE_OSX_DEPLOYMENT_TARGET)
 	set( FLTK_C_FLAGS
 	    -mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}
@@ -49,8 +43,7 @@ if (APPLE OR WIN32)
     set( FLTK_WAYLAND OFF )
     set( FLTK_PANGO   OFF )
 else()
-    set( FLTK_WAYLAND  ON ) # we'll leave it on, but it is way
-		       # buggy with, at least, Nvidia cards.
+    set( FLTK_WAYLAND  ON )
     set( FLTK_PANGO    ON )
 endif()
 
