@@ -116,7 +116,7 @@ if [[ $BUILD_LIBX264 == 1 ]]; then
     cd $ROOT_DIR/sources
 
     if [[ ! -d x264 ]]; then
-	git clone --depth 1 https://code.videolan.org/videolan/x264.git --branch ${X264_TAG}
+	git clone --depth 1 https://code.videolan.org/videolan/x264.git --branch ${X264_TAG} 2> /dev/null
     fi
 
     if [[ ! -e $INSTALL_DIR/lib/libx264.lib ]]; then
@@ -146,7 +146,7 @@ ENABLE_LIBVPX=""
 if [[ $BUILD_LIBVPX == 1 ]]; then
     cd $ROOT_DIR/sources
     if [[ ! -d libvpx ]]; then
-	git clone --depth 1 https://chromium.googlesource.com/webm/libvpx
+	git clone --depth 1 --branch ${LIBVPX_TAG} https://chromium.googlesource.com/webm/libvpx 2> /dev/null
     fi
     
     if [[ ! -e $INSTALL_DIR/lib/vpx.lib ]]; then
@@ -216,7 +216,7 @@ if [[ $BUILD_FFMPEG == 1 ]]; then
     cd $ROOT_DIR/sources
 
     if [[ ! -d ffmpeg ]]; then
-	git clone --depth 1 --branch ${FFMPEG_TAG} git://source.ffmpeg.org/ffmpeg.git
+	git clone --depth 1 --branch ${FFMPEG_TAG} git://source.ffmpeg.org/ffmpeg.git 2> /dev/null
     fi
 
     lgpl_ffmpeg=""
