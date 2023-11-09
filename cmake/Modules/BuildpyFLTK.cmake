@@ -7,6 +7,13 @@ include(ExternalProject)
 set(pyFLTK_SVN_REPOSITORY "https://svn.code.sf.net/p/pyfltk/code/branches/fltk1.4")
 set(pyFLTK_SVN_REVISION )
 
+
+set(pyFLTK_REVISION_ARG )
+if(pyFLTK_SVN_REVISION )
+    set(pyFLTK_REVISION_ARG "-r ${pyFLTK_SVN_REVISION}")
+endif()
+
+
 if(NOT PYTHON_EXECUTABLE)
     if(UNIX)
 	set(PYTHON_EXECUTABLE python3)
@@ -21,12 +28,20 @@ endif()
 # Environment setup
 #
 set(pyFLTK_CXX_FLAGS ${CMAKE_CXX_FLAGS} )
+set(pyFLTK_LD_LIBRARY_PATH $ENV{OLD_LD_LIBRARY_PATH})
+
+set(pyFLTK_CHECKOUT_CMD ${CMAKE_COMMAND} -E env LD_LIBRARY_PATH=${pyFLTK_LD_LIBRARY_PATH} svn checkout ${pyFLTK_SVN_REVISION_ARG} ${pyFLTK_SVN_REPOSITORY} ${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK)
+
+
 set(pyFLTK_ENV )
 if(WIN32)
     set(pyFLTK_ENV ${CMAKE_COMMAND} -E env FLTK_HOME=${FLTK_HOME} CXXFLAGS=${pyFLTK_CXX_FLAGS} -- )
 elseif(APPLE AND CMAKE_OSX_DEPLOYMENT_TARGET)
+    set(pyFLTK_LD_LIBRARY_PATH $ENV{OLD_DYLD_LIBRARY_PATH})
+    set(pyFLTK_CHECKOUT_CMD ${CMAKE_COMMAND} -E env DYLD_LIBRARY_PATH=${pyFLTK_DYLD_LIBRARY_PATH} svn checkout ${pyFLTK_SVN_REVISION_ARG} ${pyFLTK_SVN_REPOSITORY} ${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK)
     list(APPEND pyFLTK_CXX_FLAGS "-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}")
     set(pyFLTK_ENV ${CMAKE_COMMAND} -E env CXXFLAGS=${pyFLTK_CXX_FLAGS} -- )
+else()
 endif()
 
 
@@ -58,16 +73,23 @@ set(pyFLTK_INSTALL "${pyFLTK_PIP_INSTALL_WHEEL}"
     COMMAND "${pyFLTK_CREATE_WHEELS}"
     COMMAND "${pyFLTK_INSTALL_WHEELS}")
 
+
+
+
 ExternalProject_Add(
     pyFLTK
-    SVN_REPOSITORY ${pyFLTK_SVN_REPOSITORY}
-    SVN_REVISION ${pyFLTK_SVN_REVISION}
+    # \bug: subversion on Linux is usually not compiled with the latest OpenSSL
+    #       so we need to DOWNLOAD_COMMAND for checking out the repository.
+    # SVN_REPOSITORY ${pyFLTK_SVN_REPOSITORY}
+    # SVN_REVISION ${pyFLTK_SVN_REVISION}
     DEPENDS ${PYTHON_DEP} ${FLTK_DEP}
+    DOWNLOAD_COMMAND  ${pyFLTK_CHECKOUT_CMD}
     PATCH_COMMAND     ${pyFLTK_PATCH}
     CONFIGURE_COMMAND "${pyFLTK_CONFIGURE}"
     BUILD_COMMAND     "${pyFLTK_BUILD}"
     INSTALL_COMMAND   ${pyFLTK_INSTALL}
     BUILD_IN_SOURCE 1
 )
-    
+
+
 set( pyFLTK_DEP pyFLTK )

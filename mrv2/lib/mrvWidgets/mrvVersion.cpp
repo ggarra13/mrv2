@@ -89,8 +89,6 @@
 
 #ifdef TLRENDER_NET
 #    include <curl/curl.h>
-#    include <openssl/opensslv.h>
-#    include <libssh2.h>
 #endif
 
 #ifdef MRV2_NETWORK
@@ -681,7 +679,7 @@ namespace mrv
           << endl;
 #endif
 #ifdef TLRENDER_NET
-        o << "libcurl v" << curl_version() << endl
+        o << curl_version() << endl
           << "(C) Daniel Stenberg, <daniel@haxx.se>, et al." << endl
           << endl;
 #endif
@@ -723,14 +721,6 @@ namespace mrv
              "<erikd@mega-nerd.com>"
           << endl
           << endl;
-#ifdef TLRENDER_NET
-        LIBSSH2_VERSION_INFO info;
-        libssh2_version(0);
-        libssh2_version(1);
-        libssh2_version(2);
-        info = libssh2_version(3);
-        o << info.version << endl << endl;
-#endif
 #ifdef TLRENDER_TIFF
         o << TIFFLIB_VERSION_STR << endl << endl;
 #endif
@@ -765,12 +755,6 @@ namespace mrv
         o << "OpenEXR v" << OPENEXR_VERSION_STRING << endl
           << "http://www.openexr.org/" << endl
           << "(C) 2005-Present Industrial Light & Magic" << endl
-          << endl;
-#endif
-#ifdef TLRENDER_NET
-        o << OPENSSL_VERSION_TEXT << endl
-          << "(C) 1999-2020 The OpenSSL Project Authors. All Rights Reserved."
-          << endl
           << endl;
 #endif
         o << "OpenTimelineIO" << endl
