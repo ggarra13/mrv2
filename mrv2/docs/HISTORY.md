@@ -29,6 +29,7 @@ v0.8.4
   dissolve and audio would suddenly stop/start.
 - Thanks to Darby Johnston, we now support playing back non-streaming movies
   directly from the http:// and http::// protocols.
+- Fixed redraw issues under Wayland and XFCE.
 - Fixed Wayland support on modern platforms like Ubuntu 22.04.3.  Under Rocky
   Linux 8.1 builds, running with more modern distros under Wayland you may
   encounter an error about missing "antialising".
