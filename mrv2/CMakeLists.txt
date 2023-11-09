@@ -56,7 +56,7 @@ else()
     else()
 	set(FLTK_LIBRARIES ${CMAKE_INSTALL_PREFIX}/lib/libfltk.lib)
     endif()
-    list(APPEND FLTK_LIBRARIES kernel32 user32 gdi32 winspool comdlg32 Comctl32 advapi32 shell32 ole32 oleaut32 uuid odbc32 odbccp32 ws_32 gdiplus)
+    list(APPEND FLTK_LIBRARIES kernel32 user32 gdi32 winspool comdlg32 Comctl32 advapi32 shell32 ole32 oleaut32 uuid odbc32 odbccp32 ws2_32 gdiplus)
     set(FLTK_gl_LIBRARY ${FLTK_LIBRARIES} glu32 opengl32)
 endif()
 
