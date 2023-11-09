@@ -87,6 +87,12 @@
 #    include <MaterialXCore/Util.h>
 #endif
 
+#ifdef TLRENDER_NET
+#    include <curl/curl.h>
+#    include <openssl/opensslv.h>
+#    include <libssh2.h>
+#endif
+
 #ifdef MRV2_NETWORK
 #    include <Poco/Version.h>
 #endif
@@ -645,119 +651,133 @@ namespace mrv
 #endif
         o << "Flmm Color Picker (modified)" << endl
           << "Copyright (c) 2002 - 2004 Matthias Melcher" << endl
-          << endl
-          << "FLTK v1.4" << endl
+          << endl;
+        o << "FLTK v1.4" << endl
           << "http://www.fltk.org/" << endl
           << "Copyright (c) 2000-Present Bill Spitzak & others" << endl
-          << endl
-          << "Modified FLU - FLTK Utility Widgets" << endl
+          << endl;
+        o << "Modified FLU - FLTK Utility Widgets" << endl
           << "Copyright (c) 2002 Ohio Supercomputer Center, Ohio State "
              "University"
           << endl
-          << endl
-          << "FreeType" << endl
+          << endl;
+        o << "FreeType" << endl
           << "Copyright (c) 1996-2002, 2006 by David Turner, Robert Wilhelm, "
-             "and "
-             "Werner Lemberg"
+             "and Werner Lemberg"
           << endl
-          << endl
-          << "glad v" << GLAD_GENERATOR_VERSION << endl
+          << endl;
+        o << "glad v" << GLAD_GENERATOR_VERSION << endl
           << "Copyright (c) 2013-2020 David Herberth" << endl
-          << endl
-          << "Imath v" << IMATH_VERSION_STRING << endl
+          << endl;
+        o << "Imath v" << IMATH_VERSION_STRING << endl
           << "Copyright Contributors to the OpenEXR Project" << endl
-          << endl
+          << endl;
 #ifdef TLRENDER_RAW
-          << "Jasper v" << jas_getversion() << endl
+        o << "Jasper v" << jas_getversion() << endl
           << JAS_COPYRIGHT << endl
           << "Little Color Management System v" << (LCMS_VERSION / 1000.0)
           << endl
           << "Copyright (c) 1998-Present Marti Maria Saguer" << endl
-          << endl
+          << endl;
+#endif
+#ifdef TLRENDER_NET
+        o << "libcurl v" << curl_version() << endl
+          << "(C) Daniel Stenberg, <daniel@haxx.se>, et al." << endl
+          << endl;
 #endif
 #ifdef MRV2_PDF
-          << "libharu v" << HPDF_VERSION_TEXT << endl
+        o << "libharu v" << HPDF_VERSION_TEXT << endl
           << "Copyright (c) 1999-2006 Takeshi Kanno" << endl
           << "Copyright (c) 2007-2009 Antony Dovgal" << endl
-          << endl
+          << endl;
 #endif
-
-          << "libintl/gettext v0.22.3" << endl
+        o << "libintl/gettext v0.22.3" << endl
           << endl
           << "libjpeg-turbo v" << AV_STRINGIFY(LIBJPEG_TURBO_VERSION) << endl
           << "Copyright (c) 2009-2020 D. R. Commander.  All Rights Reserved."
           << "Copyright (c) 2015 Viktor Szathmáry.  All Rights Reserved."
           << endl
-          << endl
+          << endl;
 #ifdef TLRENDER_RAW
-          << "LibRaw " << LIBRAW_VERSION_STR << endl
+        o << "LibRaw " << LIBRAW_VERSION_STR << endl
           << "Copyright (C) 2008-2021 LibRaw LLC (info@libraw.org)" << endl
           << "The library includes source code from" << endl
           << "dcraw.c, Dave Coffin's raw photo decoder" << endl
           << "Copyright 1997-2016 by Dave Coffin, dcoffin a cybercom o net"
           << endl
-          << endl
+          << endl;
 #endif
 #ifdef TLRENDER_PNG
-          << PNG_HEADER_VERSION_STRING
+        o << PNG_HEADER_VERSION_STRING
           << "Copyright (c) 1995-2019 The PNG Reference Library Authors."
           << endl
-          << endl
-#endif
           << "Copyright (c) 2018-2019 Cosmin Truta." << endl
           << "Copyright (c) 2000-2002, 2004, 2006-2018 Glenn Randers-Pehrson."
           << endl
           << "Copyright (c) 1996-1997 Andreas Dilger." << endl
           << "Copyright (c) 1995-1996 Guy Eric Schalnat, Group 42, Inc." << endl
-          << endl
-          << "libsamplerate" << endl
+          << endl;
+#endif
+        o << "libsamplerate" << endl
           << "Copyright (c) 2012-2016, Erik de Castro Lopo "
              "<erikd@mega-nerd.com>"
           << endl
-          << endl
-#ifdef TLRENDER_TIFF
-          << TIFFLIB_VERSION_STR << endl
-          << endl
+          << endl;
+#ifdef TLRENDER_NET
+        LIBSSH2_VERSION_INFO info;
+        libssh2_version(0);
+        libssh2_version(1);
+        libssh2_version(2);
+        info = libssh2_version(3);
+        o << info.version << endl << endl;
 #endif
-          << "LibVPX" << endl
+#ifdef TLRENDER_TIFF
+        o << TIFFLIB_VERSION_STR << endl << endl;
+#endif
+        o << "LibVPX" << endl
           << "Copyright (c) 2010, The WebM Project authors. All rights "
              "reserved."
           << endl
-          << endl
+          << endl;
 #ifdef TLRENDER_USD
-          << "MaterialX v" << MaterialX::getVersionString() << endl
+        o << "MaterialX v" << MaterialX::getVersionString() << endl
           << "Copyright Contributors to the MaterialX Project" << endl
-          << endl
+          << endl;
 #endif
-          << "minizip-ng v" << MZ_VERSION << endl
+        o << "minizip-ng v" << MZ_VERSION << endl
           << "Copyright (C) Nathan Moinvaziri" << endl
-          << endl
-          << "nlohmann_json v" << NLOHMANN_JSON_VERSION_MAJOR << "."
+          << endl;
+        o << "nlohmann_json v" << NLOHMANN_JSON_VERSION_MAJOR << "."
           << NLOHMANN_JSON_VERSION_MINOR << "." << NLOHMANN_JSON_VERSION_PATCH
           << endl
           << "Copyright (c) 2013-Present Niels Lohmann" << endl
-          << endl
-          << "OFL (Open Font License)" << endl
+          << endl;
+        o << "OFL (Open Font License)" << endl
           << "Copyright (c) 26 February 2007" << endl
-          << endl
+          << endl;
 #ifdef TLRENDER_OCIO
-          << "OpenColorIO v" << OCIO::GetVersion() << endl
+        o << "OpenColorIO v" << OCIO::GetVersion() << endl
           << "http://www.opencolorio.org/" << endl
           << "Copyright Contributors to the OpenColorIO Project." << endl
-          << endl
+          << endl;
 #endif
 #ifdef TLRENDER_EXR
-          << "OpenEXR v" << OPENEXR_VERSION_STRING << endl
+        o << "OpenEXR v" << OPENEXR_VERSION_STRING << endl
           << "http://www.openexr.org/" << endl
           << "(C) 2005-Present Industrial Light & Magic" << endl
-          << endl
+          << endl;
 #endif
-          << "OpenTimelineIO" << endl
+#ifdef TLRENDER_NET
+        o << OPENSSL_VERSION_TEXT << endl
+          << "(C) 1999-2020 The OpenSSL Project Authors. All Rights Reserved."
+          << endl
+          << endl;
+#endif
+        o << "OpenTimelineIO" << endl
           << "opentime " << AV_STRINGIFY(OPENTIME_VERSION) << endl
           << "opentimelineio " << AV_STRINGIFY(OPENTIMELINEIO_VERSION) << endl
           << "Copyright Contributors to the OpenTimelineIO project" << endl
           << endl;
-
 #ifdef MRV2_NETWORK
         o << "Poco v";
         semantic_versioning(o, POCO_VERSION);
@@ -769,27 +789,27 @@ namespace mrv
 #endif
         o << "Polyline2D (modified)" << endl
           << "Copyright © 2019 Marius Metzger (CrushedPixel)" << endl
-          << endl
+          << endl;
 #ifdef MRV2_PYBIND11
-          << "pybind11 v" << PYBIND11_VERSION_MAJOR << "."
+        o << "pybind11 v" << PYBIND11_VERSION_MAJOR << "."
           << PYBIND11_VERSION_MINOR << "." << PYBIND11_VERSION_PATCH << endl
           << "Copyright (c) 2016 Wenzel Jakob <wenzel.jakob@epfl.ch>, All "
              "rights reserved"
           << endl
-          << endl
+          << endl;
 #endif
 #ifdef MRV2_PYFLTK
-          << "pyFLTK v1.4" << endl
+        o << "pyFLTK v1.4" << endl
           << "Copyright 2003-Present by Andreas Held and others." << endl
-          << endl
+          << endl;
 #endif
-          << "pystring" << endl
+        o << "pystring" << endl
           << "Copyright (c) 2008-Present Contributors to the Pystring project."
           << endl
           << "All Rights Reserved." << endl
-          << endl
+          << endl;
 #ifdef MRV2_PYBIND11
-          << "Python v" << PY_VERSION << " - ";
+        o << "Python v" << PY_VERSION << " - ";
         switch (PY_RELEASE_LEVEL)
         {
         case PY_RELEASE_LEVEL_ALPHA:
@@ -810,41 +830,41 @@ namespace mrv
         o << endl
           << "Copyright (c) 2001-Present Python Software Foundation." << endl
           << "All Rights Reserved." << endl
-          << endl
+          << endl;
 #endif
 #ifdef TLRENDER_AUDIO
-          << "RtAudio v" << RTAUDIO_VERSION << endl
+        o << "RtAudio v" << RTAUDIO_VERSION << endl
           << "Copyright (c) 2001-Present Gary P. Scavone" << endl
-          << endl
+          << endl;
 #endif
 #ifdef TLRENDER_STB
-          << "stb v" << STBI_VERSION << endl
+        o << "stb v" << STBI_VERSION << endl
           << "Copyright (c) 2017 Sean Barrett" << endl
-          << endl
+          << endl;
 #endif
 #ifdef TLRENDER_USD
-          << "tbb v" << TBB_VERSION_MAJOR << " " << TBB_VERSION_MINOR << endl
+        o << "tbb v" << TBB_VERSION_MAJOR << " " << TBB_VERSION_MINOR << endl
           << "Copyright (c) 2005-2019 Intel Corporation" << endl
-          << endl
+          << endl;
 #endif
-          << "tlRender v" << TLRENDER_VERSION << " (modified)." << endl
+        o << "tlRender v" << TLRENDER_VERSION << " (modified)." << endl
           << "Original at: " << endl
           << "https://www.github.com/darbyjohnston/tlRender" << endl
           << "(C) 2021-Present Darby Johnston." << endl
-          << endl
+          << endl;
 #ifdef TLRENDER_USD
-          << "USD v" << MaterialX::getVersionString() << endl
+        o << "USD v" << MaterialX::getVersionString() << endl
           << "(C) 2016-Present Pixar" << endl
-          << endl
+          << endl;
 #endif
-          << "yaml-cpp" << endl
+        o << "yaml-cpp" << endl
           << "Copyright (c) 2008-2015 Jesse Beder." << endl
-          << endl
-          << "zlib v" << ZLIB_VERSION << endl
+          << endl;
+        o << "zlib v" << ZLIB_VERSION << endl
           << "(C) 2008-Present Jean-loup Gailly and Mark Adler" << endl
           << endl
-          << endl
-          << "A big thank you goes to Greg Ercolano who helped with" << endl
+          << endl;
+        o << "A big thank you goes to Greg Ercolano who helped with" << endl
           << "the fltk1.4 porting and with the color schemes.";
 
         return o.str();
