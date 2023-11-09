@@ -42,7 +42,7 @@ if [[ ! -e $INSTALLDIR/lib/liblcms2.lib ]]; then
     # Install development tools
     #
     pacman -Sy --noconfirm
-    pacman -Sy mingw-w64-x86_64-toolchain --noconfirm
+    # pacman -Sy mingw-w64-x86_64-toolchain --noconfirm
     
     #
     # Clone the repository
@@ -65,8 +65,6 @@ if [[ ! -e $INSTALLDIR/lib/liblcms2.lib ]]; then
     make -j ${CPU_CORES} install
 
     run_cmd mv $INSTALLDIR/lib/liblcms2.a $INSTALLDIR/lib/liblcms2.lib
-
-    pacman -R mingw-w64-x86_64-toolchain --noconfirm
     
     cd $MRV2_ROOT
 else
