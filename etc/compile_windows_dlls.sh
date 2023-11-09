@@ -15,45 +15,14 @@ if [[ $RUNME == 1 ]]; then
     #
     bin/install_libintl_windows.sh
 
+    #
+    # Deal with libcms2 (compile from source)
+    #
+    bin/compile_liblcms2_windows.sh
+    
+    #
+    # Deal with FFmpeg next (compile from source)
+    #
+    . bin/compile_ffmpeg_windows.sh 
 
-    #
-    # Deal with FFmpeg next
-    #
-    if [[ ! -e $FFMPEG_ROOT/lib/avformat.lib ]]; then
-	. bin/compile_ffmpeg_windows.sh
-    else
-	if [[ ! -e $BUILD_DIR/install/lib/avformat.lib ]]; then
-	    # echo "Copying pre-built FFmpeg from $FFMPEG_ROOT"
-	    if [[ $MRV2_DIST_RELEASE == 1 ]]; then
-		run_cmd mv -f $FFMPEG_ROOT/bin/av*.dll $BUILD_DIR/install/bin
-		run_cmd mv -f $FFMPEG_ROOT/bin/sw*.dll $BUILD_DIR/install/bin
-	    else
-		run_cmd cp -f $FFMPEG_ROOT/bin/av*.dll $BUILD_DIR/install/bin
-		run_cmd cp -f $FFMPEG_ROOT/bin/sw*.dll $BUILD_DIR/install/bin
-	    fi
-	    # run_cmd cp -f $FFMPEG_ROOT/lib/av*.lib $BUILD_DIR/install/lib
-	    # run_cmd cp -f $FFMPEG_ROOT/lib/sw*.lib $BUILD_DIR/install/lib
-	    # run_cmd cp -rf $FFMPEG_ROOT/include/libav* \
-	    # 	    $BUILD_DIR/install/include
-	    # run_cmd cp -rf $FFMPEG_ROOT/include/libsw* \
-	    # 	    $BUILD_DIR/install/include
-	fi
-    fi
-
-
-    #
-    # Deal with libcms2
-    #
-    if [[ ! -e $LCMS2_ROOT/lib/liblcms2.lib ]]; then
-	echo "Compiling liblcms2..."
-	. bin/compile_liblcms2_windows.sh
-    else
-	if [[ ! -e $BUILD_DIR/install/lib/liblcms2.lib ]]; then
-	    echo "Copying pre-built liblcms from $LCMS2_ROOT"
-	    run_cmd cp -f $LCMS2_ROOT/bin/liblcms2*.dll  $BUILD_DIR/install/bin
-	    run_cmd cp -f $LCMS2_ROOT/lib/liblcms2.lib   $BUILD_DIR/install/lib
-	    run_cmd cp -f $LCMS2_ROOT/include/lcms2.h    \
-		    $BUILD_DIR/install/include
-	fi
-    fi
 fi

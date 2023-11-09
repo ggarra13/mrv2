@@ -21,7 +21,6 @@ else
     . etc/functions.sh
 fi
 
-
 if [[ $KERNEL != *Msys* ]]; then
     echo
     echo "This script is for Windows MSys2-64 only."
@@ -33,7 +32,7 @@ LIBVPX_TAG=v1.12.0
 X264_TAG=master
 FFMPEG_TAG=n6.0
 
-MRV2_DIR=$PWD
+MRV2_ROOT=$PWD
 ROOT_DIR=$PWD/$BUILD_DIR/tlRender/etc/SuperBuild/FFmpeg
 INSTALL_DIR=$PWD/$BUILD_DIR/install
 
@@ -41,9 +40,10 @@ if [[ $FFMPEG_GPL == GPL || $FFMPEG_GPL == LGPL ]]; then
     true
 else
     echo
-    echo "You need to provide either a --gpl or --lgpl flag."
-    exit 1
+    echo "No --gpl or --lgpl flag provided to compile FFmpeg.  Choosing --lgpl."
+    export FFMPEG_GPL=LGPL
 fi
+
 #
 # This configures the environment for compilation.  It also cleans at the
 # end to leave it ready for mrv2 build.
@@ -66,7 +66,7 @@ fi
 #
 # Build with openssl and libcrypto support
 # 
-BUILD_SSL=0
+BUILD_SSL=1
 
 
 #
@@ -186,7 +186,7 @@ fi
 
 
 #
-# Install openssl nad libcrypto
+# Install openssl and libcrypto
 #
 ENABLE_OPENSSL=""
 if [[ $BUILD_SSL == 1 ]]; then
@@ -254,30 +254,69 @@ if [[ $BUILD_FFMPEG == 1 ]]; then
 	# -wd4101 disables local variable without reference
 	./../../sources/ffmpeg/configure \
             --prefix=$INSTALL_DIR \
+            --disable-programs \
+            --disable-doc \
+            --disable-postproc \
+            --disable-avfilter \
+            --disable-hwaccels \
+            --disable-devices \
+            --disable-filters \
+            --disable-alsa \
+            --disable-appkit \
+            --disable-avfoundation \
+            --disable-bzlib \
+            --disable-coreimage \
+            --disable-iconv \
+            --disable-libxcb \
+            --disable-libxcb-shm \
+            --disable-libxcb-xfixes \
+            --disable-libxcb-shape \
+            --disable-lzma \
+            --disable-metal \
+            --disable-sndio \
+            --disable-schannel \
+            --disable-sdl2 \
+            --disable-securetransport \
+            --disable-vulkan \
+            --disable-xlib \
+            --disable-zlib \
+            --disable-amf \
+            --disable-audiotoolbox \
+            --disable-cuda-llvm \
+            --disable-cuvid \
+            --disable-d3d11va \
+            --disable-dxva2 \
+            --disable-ffnvcodec \
+            --disable-nvdec \
+            --disable-nvenc \
+            --disable-v4l2-m2m \
+            --disable-vaapi \
+            --disable-vdpau \
+            --disable-videotoolbox \
+            --enable-pic \
             --toolchain=msvc \
-	    --target-os=win64 \
+            --target-os=win64 \
             --arch=x86_64 \
             --enable-x86asm \
             --enable-asm \
             --enable-shared \
             --disable-static \
-            --disable-programs \
             --enable-swresample \
-	    $ENABLE_OPENSSL \
+            $ENABLE_OPENSSL \
             $ENABLE_LIBX264 \
-	    $ENABLE_LIBVPX \
+            $ENABLE_LIBVPX \
             --extra-ldflags="-LIBPATH:$INSTALL_DIR/lib/" \
             --extra-cflags="-I$INSTALL_DIR/include/ -MD -wd4828 -wd4101"
 
-	make -j ${CPU_CORES}
-	make install
+        make -j ${CPU_CORES}
+        make install
 
-	# @bug: FFmpeg places .lib in bin/
-	run_cmd mv $INSTALL_DIR/bin/*.lib $INSTALL_DIR/lib/
+        # @bug: FFmpeg places .lib in bin/
+        run_cmd mv $INSTALL_DIR/bin/*.lib $INSTALL_DIR/lib/
 
-	if [[ -e $INSTALL_DIR/include/zconf.h.orig ]]; then
-	    run_cmd mv $INSTALL_DIR/include/zconf.h.orig $INSTALL_DIR/include/zconf.h
-	fi
+        if [[ -e $INSTALL_DIR/include/zconf.h.orig ]]; then
+            run_cmd mv $INSTALL_DIR/include/zconf.h.orig $INSTALL_DIR/include/zconf.h
+        fi
     fi
 fi
 
@@ -287,4 +326,4 @@ if [[ $MSYS_LIBS == 1 ]]; then
     pacman -R yasm nasm --noconfirm
 fi
 
-cd $MRV2_DIR
+cd $MRV2_ROOT

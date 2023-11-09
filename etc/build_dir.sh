@@ -65,8 +65,6 @@ if [[ $CLEAN_DIR == 1 && $0 == *runme.sh* ]]; then
 fi
 
 export PATH="$PWD/${BUILD_DIR}/install/bin:$PWD/$BUILD_DIR/install/bin/Scripts:${PATH}"
-export LD_LIBRARY_PATH="$PWD/${BUILD_DIR}/install/lib64:$PWD/${BUILD_DIR}/install/lib:${LD_LIBRARY_PATH}"
-export DYLD_LIBRARY_PATH="$PWD/${BUILD_DIR}/install/lib:${DYLD_LIBRARY_PATH}"
 export PKG_CONFIG_PATH="$PWD/${BUILD_DIR}/install/lib/pkgconfig:${PKG_CONFIG_PATH}"
 export PYTHONPATH="$PWD/${BUILD_DIR}/install/lib/python${PYTHON_VERSION}:$PWD/${BUILD_DIR}/install/lib/python${PYTHON_VERSION}/site-packages:${PYTHONPATH}"
 export PYTHONEXE="$PWD/${BUILD_DIR}/install/bin/python${PYTHON_VERSION}"
@@ -80,14 +78,9 @@ if [[ $RUNME == 1 && $0 != *runme.sh* ]]; then
     echo "Architecture is ${ARCH}"
     echo "Building with ${CPU_CORES} cores"
     if [[ $FFMPEG_GPL == "" ]]; then
-	if [[ $KERNEL == *Msys* ]]; then
-	    echo "Will use pre-built FFmpeg ${FFMPEG_GPL}"
-	else
-	    echo "FFmpeg will be built as LGPL"
-	fi
-    else
-	echo "FFmpeg will be built as ${FFMPEG_GPL}"
+	FFMPEG_GPL=LGPL
     fi
+    echo "FFmpeg will be built as ${FFMPEG_GPL}"
     echo "CMake flags are ${CMAKE_FLAGS}"
     echo "Compiler flags are ${FLAGS}"
     cmake --version
