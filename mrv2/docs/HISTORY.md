@@ -25,6 +25,8 @@ v0.8.4
   the video.  Now a gap is added before the new clip.
 - Fixed changing of Timeline->Markers or Timeline->Transitions leaving too
   little or too much space.
+- mrv2 now supports audio fading of clips.  Previously, only video would
+  dissolve and audio would suddenly stop/start.
 - Fixed Wayland support on modern platforms like Ubuntu 22.04.3.  Under Rocky
   Linux 8.1, running with current distros under Wayland you may encounter an
   error about missing "antialising".
