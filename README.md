@@ -174,8 +174,12 @@ sudo dnf makecache --refresh
 #
 # Install bundles
 #
-sudo dnf -y groupinstall "Development Tools"
+sudo dnf -y groupinstall "Development Tools" \
+    && dnf -y install perl perl-CPAN
 
+# Install IPC::Cmd non-interactively
+sudo cpan App::cpanminus && cpanm --notest IPC::Cmd
+    
 #
 # Install dependencies
 #
@@ -198,13 +202,17 @@ sudo apt update
 #
 # Install dependencies
 #
-sudo apt -y install build-essential git cmake ninja-build libpango1.0-dev \
+sudo apt -y install build-essential perl git cmake ninja-build libpango1.0-dev \
 		    xorg-dev libx11-dev libxcursor-dev libxinerama-dev \
 		    libxss-dev gettext libasound2-dev \
 		    libpulse-dev libssl-dev libffi-dev \
 		    libwayland-dev wayland-protocols libdbus-1-dev \
 		    libxkbcommon-dev libegl-dev libgtk-3-dev rpm \
                     doxygen tk-dev libxt-dev swig subversion
+
+# Install cpanminus and IPC::Cmd non-interactively
+sudo cpan App::cpanminus && cpanm --notest IPC::Cmd
+
 ```
 
 ### macOS

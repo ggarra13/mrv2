@@ -20,7 +20,11 @@ RUN dnf makecache --refresh
 #
 # Install bundles
 #
-RUN dnf -y groupinstall "Development Tools"
+RUN dnf -y groupinstall "Development Tools" \
+    && dnf -y install perl perl-CPAN
+    
+# Install IPC::Cmd non-interactively
+RUN cpan App::cpanminus && cpanm --notest IPC::Cmd
 
 #
 # Install dependencies
