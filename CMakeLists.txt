@@ -103,6 +103,11 @@ if(BUILD_PYTHON AND TLRENDER_USD)
     add_dependencies( USD ${PYTHON_DEP} )
 endif()
 
+# OpenSSL must be built after Python
+if(BUILD_PYTHON AND TLRENDER_NET AND NOT WIN32)
+    add_dependencies( OpenSSL ${PYTHON_DEP} )
+endif()
+
 set( pyFLTK_DEP )
 if(MRV2_PYFLTK AND MRV2_PYBIND11)
     include( cmake/Modules/BuildpyFLTK.cmake )
