@@ -110,7 +110,7 @@ It may contain bugs, new untested features and more.
 You can extract it to compile yourself with:
 
 \`\`\`
-   git clone https://www.github.com/ggarra13/mrv2.git
+   git clone https://github.com/ggarra13/mrv2.git
    cd mrv2
    git checkout ${git_hash}
    ./runme.sh
