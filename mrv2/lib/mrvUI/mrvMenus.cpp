@@ -1211,6 +1211,13 @@ namespace mrv
 
             smenubar->update();
         }
+        else
+        {
+            menu->textfont(ui->uiPrefs->uiFontMenus->value());
+        }
+
+#else
+        menu->textfont(ui->uiPrefs->uiFontMenus->value());
 #endif
 
         menu->redraw();

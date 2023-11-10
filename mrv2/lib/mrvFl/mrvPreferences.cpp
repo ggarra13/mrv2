@@ -500,6 +500,16 @@ namespace mrv
             uiPrefs->uiPrefsViewHud->color(tmp);
         }
 
+        //
+        // UI Fonts
+        //
+        Fl_Preferences fonts(gui, "fonts");
+        fonts.get("menus", tmp, FL_HELVETICA);
+        uiPrefs->uiFontMenus->value(tmp);
+
+        fonts.get("panels", tmp, FL_HELVETICA);
+        uiPrefs->uiFontPanels->value(tmp);
+
         Fl_Preferences ocio(view, "ocio");
 
         //////////////////////////////////////////////////////
@@ -1143,6 +1153,15 @@ namespace mrv
             colors.set("selection_color", tmp);
             tmp = uiPrefs->uiPrefsViewHud->color();
             colors.set("hud_color", tmp);
+        }
+
+        //
+        // UI Fonts
+        //
+        {
+            Fl_Preferences fonts(gui, "fonts");
+            fonts.set("menus", uiPrefs->uiFontMenus->value());
+            fonts.set("panels", uiPrefs->uiFontPanels->value());
         }
 
         {

@@ -16,6 +16,9 @@ decl {\#include "mrViewer.h"} {public global
 decl {\#include "mrvCore/mrvEnv.h"} {public global
 }
 
+decl {\#include "mrvCore/mrvFonts.h"} {public global
+}
+
 decl {\#include "mrvCore/mrvI8N.h"} {public global
 }
 
@@ -67,15 +70,15 @@ class PreferencesUI {open
     Fl_Window uiMain {
       label Preferences
       user_data this user_data_type {PreferencesUI*} open
-      xywh {899 64 847 466} type Double resizable
+      xywh {497 64 847 466} type Double resizable
       code0 {main = m;} modal visible
     } {
       Fl_Group {} {open
-        xywh {0 0 847 469} box FLAT_BOX
+        xywh {0 0 853 469} box FLAT_BOX
       } {
         Fl_Wizard uiWizard {
           label Settings open
-          xywh {283 26 564 380} box PLASTIC_UP_BOX labelcolor 32
+          xywh {283 26 570 380} box PLASTIC_UP_BOX labelcolor 32
         } {
           Fl_Group {} {
             label {User Interface}
@@ -469,6 +472,34 @@ o->redraw();}
             }
           }
           Fl_Group {} {
+            label Fonts open
+            xywh {298 45 555 349} box EMBOSSED_BOX align 5
+          } {
+            Fl_Group {} {
+              label Fonts open
+              xywh {369 100 403 199} box ROUNDED_BOX
+            } {
+              Fl_Group {} {open
+                xywh {490 162 160 75}
+              } {
+                Fl_Choice uiFontMenus {
+                  label Menus open selected
+                  tooltip {Sets the font to use in menus.} xywh {490 162 160 25} down_box BORDER_BOX
+                  code0 {const auto& fonts = mrv::fonts::list();}
+                  code1 {for (const auto& font : fonts)}
+                  code2 {o->add(font.c_str());}
+                } {}
+                Fl_Choice uiFontPanels {
+                  label Panels open
+                  tooltip {Sets the font to use in panels. (Not yet working)} xywh {490 212 160 25} down_box BORDER_BOX
+                  code0 {const auto& fonts = mrv::fonts::list();}
+                  code1 {for (const auto& font : fonts)}
+                  code2 {o->add(font.c_str());}
+                } {}
+              }
+            }
+          }
+          Fl_Group {} {
             label Positioning
             xywh {300 34 530 362} box EMBOSSED_BOX hide
           } {
@@ -645,8 +676,8 @@ v->uiPrefsFPS->value( g );}
             }
           }
           Fl_Group {} {
-            label Timeline open
-            xywh {305 34 530 362} box EMBOSSED_BOX align 5
+            label Timeline
+            xywh {305 34 530 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Choice uiPrefsTimelineDisplay {
               label Display
@@ -717,7 +748,7 @@ v->uiPrefsFPS->value( g );}
                 tooltip {Edit Associated Clips.} xywh {565 243 15 20} down_box DOWN_BOX value 1 align 4
               }
               Fl_Check_Button uiPrefsEditMode {
-                label {Start in Edit mode} selected
+                label {Start in Edit mode}
                 tooltip {Editing viewport will be visible at start up.} xywh {565 181 63 24} down_box DOWN_BOX value 1 align 4
               }
             }
@@ -1272,6 +1303,7 @@ v->uiPrefs->run(v);}
     code {Fl_Tree_Item* item = o->add( _("User Interface") );
 o->add( _("User Interface/View Window") );
 o->add( _("User Interface/View Window/Language and Colors") );
+o->add( _("User Interface/Fonts") );
 o->add( _("User Interface/Positioning") );
 o->add( _("User Interface/File Requester") );
 o->add( _("Playback") );
