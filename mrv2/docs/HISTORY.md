@@ -28,8 +28,9 @@ v0.8.4
 - mrv2 now supports audio fading of clips.  Previously, only video would
   dissolve and audio would suddenly stop/start.
 - Thanks to Darby Johnston, we now support playing back non-streaming movies
-  directly from the http:// and http::// protocols.
-- Fixed redraw issues under Wayland and XFCE.
+  directly from the http:// and https::// protocols.
+- Fixed redraw issues under Wayland.
+- Fixed muting of audio not working.
 - Fixed Wayland support on modern platforms like Ubuntu 22.04.3.  Under Rocky
   Linux 8.1 builds, running with more modern distros under Wayland you may
   encounter an error about missing "antialising".
