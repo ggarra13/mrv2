@@ -8,6 +8,8 @@
 
 #include "mrViewer.h"
 
+#include "mrvCore/mrvFonts.h"
+
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvButton.h"
@@ -105,12 +107,11 @@ namespace mrv
             c->align(FL_ALIGN_LEFT);
 
 #ifdef USE_OPENGL2
-            auto numFonts = Fl::set_fonts("-*");
-            for (unsigned i = 0; i < numFonts; ++i)
+            const std::vector<std::string>& fontList = fonts::list();
+            int numFonts = fontList.size();
+            for (const auto& font : fontList)
             {
-                int attrs = 0;
-                const char* fontName = Fl::get_font_name((Fl_Font)i, &attrs);
-                c->add(fontName);
+                c->add(font.c_str());
             }
 #else
             const char* kFonts[3] = {

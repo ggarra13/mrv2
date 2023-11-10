@@ -13,6 +13,7 @@ set(HEADERS
   mrvFileManager.h
   mrvFilesPanelOptions.h
   mrvFilesPanelOptionsInline.h
+  mrvFonts.h
   mrvHome.h
   mrvHotkey.h
   mrvI8N.h
@@ -40,6 +41,7 @@ set(SOURCES
   mrvEnvironmentMapOptions.cpp
   mrvFile.cpp
   mrvFilesPanelOptions.cpp
+  mrvFonts.cpp
   mrvHome.cpp
   mrvHotkey.cpp
   mrvLocale.cpp
