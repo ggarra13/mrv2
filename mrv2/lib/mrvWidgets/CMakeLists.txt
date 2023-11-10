@@ -144,11 +144,8 @@ if ( UNIX)
 endif()
 
 if(TLRENDER_NET)
-    if(UNIX)
-	list(APPEND LIBRARIES curl ssh2 ssl crypto)
-    else()
-	list(APPEND LIBRARIES libcurl.lib libssh2.lib ssl.lib crypto.lib)
-    endif()
+    find_package(CURL REQUIRED)
+    list(APPEND LIBRARIES CURL::libcurl)
 endif()
 
 if( WIN32 )
