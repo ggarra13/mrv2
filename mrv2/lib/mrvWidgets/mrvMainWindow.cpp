@@ -200,14 +200,15 @@ namespace mrv
         {
             file::Path path(session);
             session = " | ";
-            session += _("Session: ") + path.get(-1, false) + " ";
+            session +=
+                _("Session: ") + path.get(-1, file::PathType::FileName) + " ";
         }
         const int aIndex = model->observeAIndex()->get();
         std::string fileName;
         if (numFiles > 0 && aIndex >= 0 && aIndex < numFiles)
         {
             const auto& files = model->observeFiles()->get();
-            fileName = files[aIndex]->path.get(-1, false);
+            fileName = files[aIndex]->path.get(-1, file::PathType::FileName);
 
             const auto& ioInfo = files[aIndex]->ioInfo;
             std::stringstream ss;

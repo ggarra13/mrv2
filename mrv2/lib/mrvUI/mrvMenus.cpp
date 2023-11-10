@@ -925,7 +925,7 @@ namespace mrv
         const int aIndex = model->observeAIndex()->get();
         if (numFiles > 0 && aIndex >= 0 && aIndex < numFiles)
         {
-            std::string fileName = files[aIndex]->path.get(-1, false);
+            std::string fileName = files[aIndex]->path.get(-1);
 
             const std::regex& regex = version_regex(ui, false);
             bool has_version = regex_match(fileName, regex);

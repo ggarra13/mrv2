@@ -1715,7 +1715,8 @@ namespace mrv
                     //                              "",
                     //                              options);
 
-                    // std::cerr << "---------------- " << path.get(-1, false)
+                    // std::cerr << "---------------- " << path.get(-1,
+                    // file::PathType::FileName)
                     //           << std::endl;
                     // std::cerr << "      itemRange=" << itemRange
                     //           << std::endl;
