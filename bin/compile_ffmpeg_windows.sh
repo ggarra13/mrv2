@@ -132,7 +132,10 @@ if [[ $BUILD_LIBX264 == 1 ]]; then
 	run_cmd mv $INSTALL_DIR/lib/libx264.dll.lib $INSTALL_DIR/lib/libx264.lib
     fi
     
-    ENABLE_LIBX264="--enable-libx264 --enable-gpl --enable-version3"
+    ENABLE_LIBX264="--enable-libx264 --enable-gpl"
+    if [[ $BUILD_SSL == 1 ]]; then
+	ENABLE_LIBX264="${ENABLE_LIBX264} --enable-version3"
+    fi
 else
     # Remove unused libx264
     if [[ -e $INSTALL_DIR/lib/libx264.lib ]]; then
