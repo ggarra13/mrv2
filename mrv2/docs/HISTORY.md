@@ -33,7 +33,6 @@ v0.8.4
 - Fixed muting of audio not working.
 - It is now possible to change the font of the menus in:
      Preferences->User Interface->Fonts.
-- There's still no support to change the fonts in the Panels.
 - Fixed Wayland support on modern platforms like Ubuntu 22.04.3.  Under Rocky
   Linux 8.1 builds, running with more modern distros under Wayland you may
   encounter an error about missing "antialising".
