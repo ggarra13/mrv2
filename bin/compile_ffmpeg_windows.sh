@@ -134,7 +134,7 @@ if [[ $BUILD_LIBX264 == 1 ]]; then
     
     ENABLE_LIBX264="--enable-libx264 --enable-gpl"
     if [[ $BUILD_SSL == 1 ]]; then
-	ENABLE_LIBX264="${ENABLE_LIBX264} --enable-version3"
+	ENABLE_LIBX264="${ENABLE_LIBX264} --enable-nonfree"
     fi
 else
     # Remove unused libx264
