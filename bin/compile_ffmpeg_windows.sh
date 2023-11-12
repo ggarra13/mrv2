@@ -134,7 +134,7 @@ if [[ $BUILD_LIBX264 == 1 ]]; then
     
     ENABLE_LIBX264="--enable-libx264 --enable-gpl"
     if [[ $BUILD_SSL == 1 ]]; then
-	ENABLE_LIBX264="${ENABLE_LIBX264} --enable-nonfree"
+	ENABLE_LIBX264="${ENABLE_LIBX264} --enable-version3"
     fi
 else
     # Remove unused libx264
@@ -203,11 +203,18 @@ if [[ $BUILD_SSL == 1 ]]; then
 	run_cmd cp /mingw64/lib/libssl.dll.a $INSTALL_DIR/lib/ssl.lib
 	run_cmd cp /mingw64/bin/libcrypto*.dll $INSTALL_DIR/bin/
 	run_cmd cp /mingw64/lib/libcrypto.dll.a $INSTALL_DIR/lib/crypto.lib
+	run_cmd mkdir -p $INSTALL_DIR/lib/pkgconfig
+	run_cmd cp /mingw64/lib/pkgconfig/libssl.pc $INSTALL_DIR/lib/pkgconfig/openssl.pc
 
 	run_cmd cp -r /mingw64/include/openssl $INSTALL_DIR/include/
 	run_cmd sed -i -e 's/SSL_library_init../SSL_library_init/' $INSTALL_DIR/include/openssl/ssl.h
+	run_cmd sed -i -e "s#=/mingw64#=$INSTALL_DIR#" $INSTALL_DIR/lib/pkgconfig/openssl.pc
+	run_cmd sed -i -e 's%Requires.private:.libcrypto%%' $INSTALL_DIR/lib/pkgconfig/openssl.pc
+	
+	run_cmd cp /mingw64/lib/pkgconfig/libcrypto.pc $INSTALL_DIR/lib/pkgconfig/
+	run_cmd sed -i -e "s#=/mingw64#=$INSTALL_DIR#" $INSTALL_DIR/lib/pkgconfig/libcrypto.pc
     fi
-    ENABLE_OPENSSL="--enable-openssl"
+    ENABLE_OPENSSL="--enable-openssl --extra-libs=crypto.lib"
 fi
 
 
