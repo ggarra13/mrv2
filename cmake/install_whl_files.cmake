@@ -25,7 +25,7 @@ foreach(whl_file ${whl_files})
     get_filename_component(whl_filename ${whl_file} NAME)
 
     # Install the .whl file to the desired installation location
-    message( STATUS "Running pip install - ${whl_filename} - ..." )
+    message( STATUS "Running ${PYTHON_EXECUTABLE} -m pip install ${whl_filename} --force-reinstall ..." )
     execute_process(
         COMMAND
 	${PYTHON_EXECUTABLE} -m pip install ${whl_filename} --force-reinstall
