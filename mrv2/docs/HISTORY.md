@@ -1,4 +1,4 @@
-v0.8.4
+v0.9.0
 ======
 
 - Fixed issues with python library dependencies not copying the dependant DSOs
