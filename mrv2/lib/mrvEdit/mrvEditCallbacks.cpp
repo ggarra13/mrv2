@@ -2176,7 +2176,7 @@ namespace mrv
     int calculate_edit_viewport_size(ViewerUI* ui)
     {
         // Some constants, as Darby does not expose this in tlRender.
-        const int kTrackTitleHeight = 20;
+        const int kTrackTitleHeight = 24;
         const int kTrackBottomHeight = 20;
         const int kTransitionsHeight = 20;
         const int kAudioGapOnlyHeight = 20;
@@ -2262,7 +2262,7 @@ namespace mrv
                         if (markerSizeForItem > markerSizeForTrack)
                             markerSizeForTrack = markerSizeForItem;
                     }
-                    markersHeight += markerSizeForTrack;
+                    markersHeight += markerSizeForTrack / pixelRatio;
                 }
                 // Handle transitions
                 if (options.showTransitions)
@@ -2278,7 +2278,7 @@ namespace mrv
                         }
                     }
                     if (found)
-                        transitionsHeight += kTransitionsHeight;
+                        transitionsHeight += kTransitionsHeight / pixelRatio;
                 }
             }
         }
