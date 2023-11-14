@@ -1,3 +1,8 @@
+v0.9.1
+======
+- Fixed In / Out ranges when loading session files for clips that were not
+  the one in playback.
+
 v0.9.0
 ======
 
