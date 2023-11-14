@@ -3,6 +3,9 @@ v0.9.1
 - Fixed In / Out ranges when loading session files for clips that were not
   the one in playback.
 - Fixed editing clips that had a timecode in them.
+- Fixed an OpenGL issue mainly on Windows which would flip the video on Y when
+  dragging it to create a playlist.  It could also lead to a crash.
+  
 
 v0.9.0
 ======
