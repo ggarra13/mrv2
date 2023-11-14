@@ -8,6 +8,7 @@
 
 #include "mrvCore/mrvEnvironmentMapOptions.h"
 #include "mrvCore/mrvStereo3DOptions.h"
+#include "mrvCore/mrvFile.h"
 
 #include "mrvNetwork/mrvMessage.h"
 #include "mrvNetwork/mrvCypher.h"
@@ -410,7 +411,9 @@ namespace mrv
                     j.get_to(item);
 
                     std::string path = item.path.get();
-                    std::string audioPath = item.audioPath.get();
+                    std::string audioPath;
+                    if (!item.audioPath.isEmpty())
+                        audioPath = item.audioPath.get();
 
                     replace_path(path);
                     if (!audioPath.empty())
@@ -551,7 +554,8 @@ namespace mrv
 
                     replace_path(config);
 
-                    ui->uiPrefs->uiPrefsOCIOConfig->value(config.c_str());
+                    if (file::isReadable(config))
+                        ui->uiPrefs->uiPrefsOCIOConfig->value(config.c_str());
 
                     Preferences::OCIO(ui);
 

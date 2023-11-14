@@ -124,7 +124,7 @@ namespace mrv
             }
 
             std::error_code ec; // For noexcept overload usage.
-            if (!fs::exists(p, ec))
+            if (!fs::exists(p, ec) || fileName.empty())
                 return false;
             auto perms = fs::status(p, ec).permissions();
             if ((perms & fs::perms::owner_read) != fs::perms::none &&
