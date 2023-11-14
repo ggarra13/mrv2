@@ -2047,13 +2047,12 @@ namespace mrv
             if (!player)
                 return;
 
-            updateTimeline(destTimeline, player->currentTime(), ui);
-            player->setAllAnnotations(annotations);
-            const auto time = sourceItem->currentTime;
-            player->seek(timelineDuration.rescaled_to(time.rate()) + time);
-            ui->uiTimeline->frameView();
+            auto time = timelineDuration.rescaled_to(videoRate) +
+                        sourceItem->currentTime.rescaled_to(videoRate);
+            updateTimeline(destTimeline, time, ui);
 
-            panel::refreshThumbnails();
+            player->setAllAnnotations(annotations);
+            ui->uiTimeline->frameView();
         }
         catch (const std::exception& e)
         {

@@ -423,6 +423,7 @@ namespace mrv
                     Aitem->annotations = item.annotations;
                     Aitem->videoLayer = item.videoLayer;
                     Aitem->currentTime = item.currentTime;
+                    Aitem->inOutRange = item.inOutRange;
 
                     ui->uiColorChannel->value(item.videoLayer);
                     ui->uiColorChannel->do_callback();
@@ -431,6 +432,7 @@ namespace mrv
                     if (player)
                     {
                         player->setAllAnnotations(item.annotations);
+                        player->setInOutRange(Aitem->inOutRange);
                         player->seek(Aitem->currentTime);
                     }
                 }
