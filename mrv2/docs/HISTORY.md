@@ -5,6 +5,8 @@ v0.9.1
 - Fixed editing clips that had a timecode in them.
 - Fixed an OpenGL issue mainly on Windows which would flip the video on Y when
   dragging it to create a playlist.  It could also lead to a crash.
+- If OCIO config cannot be found, like when it is loaded from a session file,
+  defaults to previous config.  Previously it could crash mrv2.
   
 
 v0.9.0

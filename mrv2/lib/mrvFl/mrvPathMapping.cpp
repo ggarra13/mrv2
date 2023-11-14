@@ -116,6 +116,9 @@ namespace mrv
 
     bool replace_path(std::string& file)
     {
+        if (file.empty())
+            return false;
+
         if (file::isReadable(file))
             return true;
 
