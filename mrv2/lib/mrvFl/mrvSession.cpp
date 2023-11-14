@@ -432,8 +432,8 @@ namespace mrv
                     if (player)
                     {
                         player->setAllAnnotations(item.annotations);
-                        player->seek(Aitem->currentTime);
                         player->setInOutRange(Aitem->inOutRange);
+                        player->seek(Aitem->currentTime);
                     }
                 }
 
