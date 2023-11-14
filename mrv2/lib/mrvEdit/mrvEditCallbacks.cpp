@@ -2043,6 +2043,9 @@ namespace mrv
 
             clone_and_replace_cb(nullptr, ui);
 
+            ui->uiView->valid(0); // needed
+            ui->uiView->redraw(); // needed
+
             player = ui->uiView->getTimelinePlayer();
             if (!player)
                 return;
