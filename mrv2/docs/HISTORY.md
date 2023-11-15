@@ -1,5 +1,6 @@
 v0.9.1
 ======
+
 - Fixed In / Out ranges when loading session files for clips that were not
   the one in playback.
 - Fixed editing clips that had a timecode in them.
