@@ -405,6 +405,10 @@ namespace mrv
                 // Decode session file
                 close_all_cb(nullptr, ui);
 
+                // Turn off auto-playback temporarily
+                bool autoplayback = ui->uiPrefs->uiPrefsAutoPlayback->value();
+                ui->uiPrefs->uiPrefsAutoPlayback->value(false);
+
                 for (const auto& j : session["files"])
                 {
                     FilesModelItem item;
@@ -437,86 +441,6 @@ namespace mrv
                         player->setAllAnnotations(item.annotations);
                         player->setInOutRange(Aitem->inOutRange);
                         player->seek(Aitem->currentTime);
-                    }
-                }
-
-                if (version >= 2)
-                {
-                    int Aindex = session["Aindex"];
-                    model->setA(Aindex);
-
-                    std::vector<int> Bindexes = session["Bindexes"];
-                    model->clearB();
-                    for (auto i : Bindexes)
-                        model->setB(i, true);
-
-                    Message j = session["timeline"];
-
-                    auto tmp = j["annotations"];
-
-                    std::vector< std::shared_ptr<draw::Annotation> >
-                        annotations;
-                    for (const auto& value : tmp)
-                    {
-                        auto annotation = draw::messageToAnnotation(value);
-                        annotations.push_back(annotation);
-                    }
-
-                    auto player = view->getTimelinePlayer();
-                    if (player)
-                    {
-                        player->setAllAnnotations(annotations);
-
-                        if (version >= 3)
-                        {
-                            timeline::Playback playback;
-                            if (j["playback"].type() ==
-                                nlohmann::json::value_t::string)
-                            {
-                                j.at("playback").get_to(playback);
-                            }
-                            else
-                            {
-                                int v;
-                                j.at("playback").get_to(v);
-                                playback = static_cast<timeline::Playback>(v);
-                            }
-                            player->setPlayback(playback);
-                        }
-
-                        if (version >= 11)
-                        {
-                            otime::TimeRange inOutRange;
-                            j["inOutRange"].get_to(inOutRange);
-                            player->setInOutRange(inOutRange);
-
-                            auto timeRange = player->timeRange();
-                            if (inOutRange != timeRange)
-                            {
-                                TimelineClass* c = ui->uiTimeWindow;
-                                if (inOutRange.start_time() !=
-                                    timeRange.start_time())
-                                {
-                                    c->uiStartFrame->setTime(
-                                        inOutRange.start_time());
-                                    c->uiStartButton->value(1);
-                                }
-
-                                if (inOutRange.end_time_exclusive() !=
-                                    timeRange.end_time_exclusive())
-                                {
-                                    c->uiEndFrame->setTime(
-                                        inOutRange.end_time_exclusive() -
-                                        otime::RationalTime(
-                                            1.0, inOutRange.duration().rate()));
-                                    c->uiEndButton->value(1);
-                                }
-                            }
-                        }
-
-                        otime::RationalTime time;
-                        j["time"].get_to(time);
-                        player->seek(time);
                     }
                 }
 
@@ -701,6 +625,90 @@ namespace mrv
                     else
                     {
                         set_edit_mode_cb(EditMode::kNone, ui);
+                    }
+                }
+
+                if (version >= 2)
+                {
+                    ui->uiPrefs->uiPrefsAutoPlayback->value(autoplayback);
+
+                    int Aindex = session["Aindex"];
+                    model->setA(Aindex);
+
+                    std::vector<int> Bindexes = session["Bindexes"];
+                    model->clearB();
+                    for (auto i : Bindexes)
+                        model->setB(i, true);
+
+                    Message j = session["timeline"];
+
+                    auto tmp = j["annotations"];
+
+                    std::vector< std::shared_ptr<draw::Annotation> >
+                        annotations;
+                    for (const auto& value : tmp)
+                    {
+                        auto annotation = draw::messageToAnnotation(value);
+                        annotations.push_back(annotation);
+                    }
+
+                    auto player = view->getTimelinePlayer();
+                    if (player)
+                    {
+                        player->setAllAnnotations(annotations);
+
+                        if (version >= 11)
+                        {
+                            otime::TimeRange inOutRange;
+                            j["inOutRange"].get_to(inOutRange);
+                            player->setInOutRange(inOutRange);
+
+                            auto timeRange = player->timeRange();
+                            if (inOutRange != timeRange)
+                            {
+                                TimelineClass* c = ui->uiTimeWindow;
+                                if (inOutRange.start_time() !=
+                                    timeRange.start_time())
+                                {
+                                    c->uiStartFrame->setTime(
+                                        inOutRange.start_time());
+                                    c->uiStartButton->value(1);
+                                }
+
+                                if (inOutRange.end_time_exclusive() !=
+                                    timeRange.end_time_exclusive())
+                                {
+                                    c->uiEndFrame->setTime(
+                                        inOutRange.end_time_exclusive() -
+                                        otime::RationalTime(
+                                            1.0, inOutRange.duration().rate()));
+                                    c->uiEndButton->value(1);
+                                }
+                            }
+                        }
+
+                        otime::RationalTime time;
+                        j["time"].get_to(time);
+                        player->seek(time);
+
+                        if (version >= 3)
+                        {
+                            timeline::Playback playback;
+                            if (j["playback"].type() ==
+                                nlohmann::json::value_t::string)
+                            {
+                                j.at("playback").get_to(playback);
+                            }
+                            else
+                            {
+                                int v;
+                                j.at("playback").get_to(v);
+                                playback = static_cast<timeline::Playback>(v);
+                            }
+                            if (ui->uiPrefs->uiPrefsAutoPlayback->value())
+                                playback = timeline::Playback::Forward;
+                            player->setPlayback(playback);
+                        }
                     }
                 }
             }
