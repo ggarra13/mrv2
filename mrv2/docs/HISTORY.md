@@ -10,7 +10,9 @@ v0.9.1
   defaults to previous config.  Previously it could crash mrv2.
 - Made internal checks for files that are not found and for replacing paths in
   path mapping deal with empty filenames properly.
-  
+- Fixed a random crash on Windows when loading a session file with
+  Auto Playback set to on.
+
 
 v0.9.0
 ======
