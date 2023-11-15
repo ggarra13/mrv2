@@ -67,7 +67,7 @@ files=$(ls -1 *v${mrv2_VERSION}*)
 
 
 if [[ $KERNEL == *Msys* ]]; then
-    pacman -Sy openssh rsync --noconfirm
+    pacman -Sy openssh --noconfirm
 fi
 
 
@@ -84,7 +84,6 @@ upload_file()
     echo
     echo "Uploading $1 as $2..."
     echo
-    #rsync -avP --ignore-errors -e "ssh -i $SSH_KEY" $1 ggarra13@frs.sourceforge.net:/home/frs/project/mrv2/beta/$2
     scp -i $SSH_KEY $1 ggarra13@frs.sourceforge.net:/home/frs/project/mrv2/beta/$2
     echo
     echo "Upload was successful."
