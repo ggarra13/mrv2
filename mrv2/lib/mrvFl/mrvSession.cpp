@@ -382,7 +382,7 @@ namespace mrv
 
                 if (ifs.fail())
                 {
-                    LOG_ERROR(_("Failed to write to the file."));
+                    LOG_ERROR(_("Failed to load the file."));
                     return false;
                 }
                 if (ifs.bad())
@@ -392,6 +392,9 @@ namespace mrv
                     return false;
                 }
                 ifs.close();
+
+                // Set the edit mode to timeline
+                set_edit_mode_cb(EditMode::kTimeline, ui);
 
                 // Change directory to that of session file
                 fs::path currentDir = fileName;
