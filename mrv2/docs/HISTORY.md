@@ -22,6 +22,8 @@ v0.9.1
   overriding the setting set in the OCIO config file.
 - Made panning work with CTRL + Left Mouse Button, besides the Middle Mouse
   Button on both the view and timeline viewport.
+- Added Preferences->Playback->Single Click Playback to turn off playing by
+  clicking on the main viewport, which was very annoying.
 
 
 v0.9.0

@@ -674,6 +674,9 @@ namespace mrv
         playback.get("auto_playback", tmp, 1);
         uiPrefs->uiPrefsAutoPlayback->value(tmp);
 
+        playback.get("single_click_playback", tmp, 0);
+        uiPrefs->uiPrefsSingleClickPlayback->value(tmp);
+
         playback.get("fps", tmpF, 24.0);
         uiPrefs->uiPrefsFPS->value(tmpF);
 
@@ -1263,6 +1266,9 @@ namespace mrv
         Fl_Preferences playback(base, "playback");
         playback.set(
             "auto_playback", (int)uiPrefs->uiPrefsAutoPlayback->value());
+        playback.set(
+            "single_click_playback",
+            (int)uiPrefs->uiPrefsSingleClickPlayback->value());
         playback.set("fps", uiPrefs->uiPrefsFPS->value());
         playback.delete_entry("loop_mode"); // legacy preference
         playback.set("loop", uiPrefs->uiPrefsLoopMode->value());
