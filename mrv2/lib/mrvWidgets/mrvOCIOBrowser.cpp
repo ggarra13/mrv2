@@ -84,6 +84,35 @@ namespace mrv
 #endif
     }
 
+    void OCIOBrowser::fill_display_and_view()
+    {
+#ifdef TLRENDER_OCIO
+        OCIO::ConstConfigRcPtr config = Preferences::OCIOConfig();
+        std::vector< std::string > views;
+        for (int i = 0; i < config->getNumDisplays(); ++i)
+        {
+            const std::string& display = config->getDisplay(i);
+            int numViews = config->getNumViews(display.c_str());
+            for (int i = 0; i < numViews; i++)
+            {
+                std::string view = config->getView(display.c_str(), i);
+                views.push_back(display + "/" + view);
+            }
+        }
+
+        value(1);
+        std::sort(views.begin(), views.end());
+        for (size_t i = 0; i < views.size(); ++i)
+        {
+            add(views[i].c_str());
+            if (views[i] == _sel)
+            {
+                value(i + 1);
+            }
+        }
+#endif
+    }
+
     void OCIOBrowser::fill_input_color_space()
     {
 #ifdef TLRENDER_OCIO
@@ -138,6 +167,9 @@ namespace mrv
             break;
         case kDisplay:
             fill_display();
+            break;
+        case kDisplay_And_View:
+            fill_display_and_view();
             break;
         default:
             LOG_ERROR(_("Unknown type for mrvOCIOBrowser"));
