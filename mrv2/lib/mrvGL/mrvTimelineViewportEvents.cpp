@@ -955,7 +955,8 @@ namespace mrv
                 else
                 {
                     if (p.lastEvent == FL_PUSH &&
-                        Fl::event_button() == FL_LEFT_MOUSE)
+                        Fl::event_button() == FL_LEFT_MOUSE &&
+                        p.ui->uiPrefs->uiPrefsSingleClickPlayback->value())
                     {
                         if (p.timelinePlayers.empty())
                             return 0;

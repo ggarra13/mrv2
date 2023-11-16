@@ -73,8 +73,8 @@ class PreferencesUI {open
     Fl_Window uiMain {
       label Preferences
       user_data this user_data_type {PreferencesUI*} open
-      xywh {497 64 847 466} type Double hide resizable
-      code0 {main = m;} modal
+      xywh {497 64 847 466} type Double resizable
+      code0 {main = m;} modal visible
     } {
       Fl_Group {} {open
         xywh {0 0 853 469} box FLAT_BOX
@@ -574,8 +574,8 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
             }
           }
           Fl_Group {} {
-            label Playback
-            xywh {300 34 530 362} box EMBOSSED_BOX align 5 hide
+            label Playback open
+            xywh {300 34 530 362} box EMBOSSED_BOX align 5
           } {
             Fl_Group {} {
               label Defaults open
@@ -584,6 +584,10 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
               Fl_Check_Button uiPrefsAutoPlayback {
                 label {Auto Playback}
                 tooltip {Start Playback when opening files.} xywh {498 111 25 25} box UP_BOX down_box DOWN_BOX align 4
+              }
+              Fl_Check_Button uiPrefsSingleClickPlayback {
+                label {Single Click Playback} selected
+                tooltip {Start Playback when single clicking the left mouse button on the view window} xywh {702 111 25 25} box UP_BOX down_box DOWN_BOX align 4
               }
               Fl_Group {} {open
                 xywh {333 157 450 152} box ROUNDED_BOX
@@ -889,15 +893,15 @@ uiPrefs->uiPrefsOCIOConfig->value( r.c_str() );}
             }
           }
           Fl_Group {} {
-            label {OCIO Defaults} open
-            xywh {303 34 532 362} align 5
+            label {OCIO Defaults}
+            xywh {303 34 532 362} align 5 hide
           } {
             Fl_Light_Button uiOCIOUseActiveViews {
               label {Use Active Views and Active Displays}
               tooltip {When this option is off, OCIO files with active_views: and active_displays: are not taken into account.} xywh {417 51 288 24}
             }
             Fl_Group uiOCIO_ICS {
-              label {Input Color Space} open
+              label {Input Color Space}
               xywh {317 114 500 228} box ROUNDED_BOX
             } {
               Fl_Group {} {
@@ -996,7 +1000,7 @@ v->uiOCIO_float_ics->do_callback();}
                 }
               }
             }
-            Fl_Group {} {open
+            Fl_Group {} {
               xywh {313 350 480 34}
             } {
               Fl_Input uiOCIO_Display_View {
@@ -1009,7 +1013,7 @@ v->uiOCIO_float_ics->do_callback();}
 catch(const std::exception& e)
 {
   o->value("");
-}} selected
+}}
                 tooltip {Default Display / View} xywh {398 354 283 25} box THIN_DOWN_BOX color 20 labelsize 11 align 132 textcolor 56
               }
               Fl_Button {} {
