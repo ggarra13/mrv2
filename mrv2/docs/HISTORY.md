@@ -12,6 +12,8 @@ v0.9.1
   path mapping deal with empty filenames properly.
 - Fixed a random crash on Windows when loading a session file with
   Auto Playback set to on.
+- Fixed an OpenGL flipping/flickering when Timeline Viewport was open and the
+  user switched media items.
 
 
 v0.9.0
