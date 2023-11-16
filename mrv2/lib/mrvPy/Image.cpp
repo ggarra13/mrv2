@@ -7,8 +7,6 @@
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
-
-#define PYBIND11_DETAILED_ERROR_MESSAGES
 namespace py = pybind11;
 
 #include <tlCore/Vector.h>
@@ -26,6 +24,8 @@ namespace py = pybind11;
 #include "mrvCore/mrvEnvironmentMapOptions.h"
 
 #include "mrViewer.h"
+
+#include "mrvFl/mrvImage.h"
 
 namespace tl
 {
@@ -264,15 +264,6 @@ namespace mrv
             uiICS->do_callback();
         }
 
-        std::string ocioView()
-        {
-            auto uiOCIOView = App::ui->OCIOView;
-            int idx = uiOCIOView->value();
-            if (idx < 0 || idx >= uiOCIOView->children())
-                return "";
-            return uiOCIOView->label();
-        }
-
         std::vector<std::string> ocioViewList()
         {
             auto uiOCIOView = App::ui->OCIOView;
@@ -280,10 +271,15 @@ namespace mrv
             for (int i = 0; i < uiOCIOView->children(); ++i)
             {
                 const Fl_Menu_Item* item = uiOCIOView->child(i);
-                if (!item || !item->label())
+                if (!item || !item->label() || (item->flags & FL_SUBMENU))
                     continue;
 
-                out.push_back(item->label());
+                char pathname[1024];
+                int ret = uiOCIOView->item_pathname(pathname, 1024, item);
+                if (ret != 0)
+                    continue;
+
+                out.push_back(pathname);
             }
             return out;
         }
@@ -297,33 +293,6 @@ namespace mrv
             uiOCIOView->do_callback();
         }
 
-        void setOcioView(const std::string& name)
-        {
-            auto uiOCIOView = App::ui->OCIOView;
-            int value = -1;
-            for (int i = 0; i < uiOCIOView->children(); ++i)
-            {
-                const Fl_Menu_Item* item = uiOCIOView->child(i);
-                if (!item || !item->label())
-                    continue;
-
-                if (name == item->label())
-                {
-                    value = i;
-                    break;
-                }
-            }
-            if (value == -1)
-            {
-                std::string err =
-                    string::Format(_("Invalid OCIO Display/View '{0}'."))
-                        .arg(name);
-                throw std::runtime_error(err);
-                return;
-            }
-            uiOCIOView->value(value);
-            uiOCIOView->do_callback();
-        }
     } // namespace image
 } // namespace mrv
 
@@ -741,6 +710,10 @@ Contains all classes and enums related to image controls.
 
     image.def(
         "ocioView", &mrv::image::ocioView, _("Gets the current Display/View."));
+
+    image.def(
+        "ocioViewList", &mrv::image::ocioViewList,
+        _("Gets the list of Displays/Views."));
 
     image.def(
         "setOcioView",

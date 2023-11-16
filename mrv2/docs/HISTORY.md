@@ -14,6 +14,14 @@ v0.9.1
   Auto Playback set to on.
 - Fixed an OpenGL flipping/flickering when Timeline Viewport was open and the
   user switched media items.
+- Fixed Python's setOcioView() and ocioView() just returning the view name.
+  Now both the display and view name are returned.
+- Added ocioViewList() Python function to list all Displays / Views available.
+- Added a setting for Display / View to Preferences->OCIO Defaults.  It will
+  get used whenever the application opens or the user access the Preferences,
+  overriding the setting set in the OCIO config file.
+- Made panning work with CTRL + Left Mouse Button, besides the Middle Mouse
+  Button on both the view and timeline viewport.
 
 
 v0.9.0

@@ -45,6 +45,7 @@ namespace fs = std::filesystem;
 #include "mrvHotkeyUI.h"
 
 #include "mrvFl/mrvIO.h"
+#include "mrvFl/mrvImage.h"
 #include "mrvCore/mrvOS.h"
 
 namespace
@@ -588,6 +589,10 @@ namespace mrv
             OCIO_ICS(float, "");
         }
 #endif
+
+        Fl_Preferences display_view(ocio, "DisplayView");
+        display_view.get("DisplayView", tmpS, "", 2048);
+        uiPrefs->uiOCIO_Display_View->value(tmpS);
 
         //
         // ui/view/hud
@@ -1179,6 +1184,10 @@ namespace mrv
                 ics.set("half", uiPrefs->uiOCIO_half_ics->value());
                 ics.set("float", uiPrefs->uiOCIO_float_ics->value());
             }
+
+            Fl_Preferences display_view(ocio, "DisplayView");
+            display_view.set(
+                "DisplayView", uiPrefs->uiOCIO_Display_View->value());
         }
 
         //
@@ -1956,6 +1965,18 @@ namespace mrv
                 }
 
                 ui->OCIOView->redraw();
+
+                std::string display_view =
+                    uiPrefs->uiOCIO_Display_View->value();
+                try
+                {
+                    if (!display_view.empty())
+                        image::setOcioView(display_view);
+                }
+                catch (const std::exception& e)
+                {
+                    LOG_ERROR(e.what());
+                }
 
                 std::vector< std::string > spaces;
                 for (int i = 0; i < config->getNumColorSpaces(); ++i)

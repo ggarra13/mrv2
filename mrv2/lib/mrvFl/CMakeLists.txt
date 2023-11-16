@@ -9,6 +9,7 @@ set(HEADERS
     mrvContextObject.h
     mrvFileRequester.h
     mrvHotkey.h
+    mrvImage.h
     mrvInit.h
     mrvIO.h
     mrvLanguages.h
@@ -29,6 +30,7 @@ set(SOURCES
     mrvContextObject.cpp
     mrvFileRequester.cpp
     mrvHotkey.cpp
+    mrvImage.cpp
     mrvInit.cpp
     mrvIO.cpp
     mrvLanguages.cpp

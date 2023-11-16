@@ -52,6 +52,9 @@ decl {\#include "mrvWidgets/mrvOCIOBrowser.h"} {public global
 decl {\#include "mrvFl/mrvFileRequester.h"} {public global
 }
 
+decl {\#include "mrvFl/mrvImage.h"} {private global
+}
+
 decl {\#include "mrvWidgets/mrvPreferencesTree.h"} {public global
 }
 
@@ -70,8 +73,8 @@ class PreferencesUI {open
     Fl_Window uiMain {
       label Preferences
       user_data this user_data_type {PreferencesUI*} open
-      xywh {497 64 847 466} type Double resizable
-      code0 {main = m;} modal visible
+      xywh {497 64 847 466} type Double hide resizable
+      code0 {main = m;} modal
     } {
       Fl_Group {} {open
         xywh {0 0 853 469} box FLAT_BOX
@@ -473,7 +476,7 @@ o->redraw();}
           }
           Fl_Group {} {
             label Fonts open
-            xywh {298 45 555 349} box EMBOSSED_BOX align 5
+            xywh {298 45 555 349} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {
               label Fonts open
@@ -483,7 +486,7 @@ o->redraw();}
                 xywh {490 162 160 75}
               } {
                 Fl_Choice uiFontMenus {
-                  label Menus open selected
+                  label Menus open
                   tooltip {Sets the font to use in menus.} xywh {490 162 160 25} down_box BORDER_BOX
                   code0 {const auto& fonts = mrv::fonts::list();}
                   code1 {for (const auto& font : fonts)}
@@ -886,18 +889,18 @@ uiPrefs->uiPrefsOCIOConfig->value( r.c_str() );}
             }
           }
           Fl_Group {} {
-            label {OCIO Defaults}
-            xywh {303 34 532 362} align 5 hide
+            label {OCIO Defaults} open
+            xywh {303 34 532 362} align 5
           } {
             Fl_Light_Button uiOCIOUseActiveViews {
               label {Use Active Views and Active Displays}
               tooltip {When this option is off, OCIO files with active_views: and active_displays: are not taken into account.} xywh {417 51 288 24}
             }
             Fl_Group uiOCIO_ICS {
-              label {Input Color Space}
-              xywh {317 114 500 252} box ROUNDED_BOX
+              label {Input Color Space} open
+              xywh {317 114 500 228} box ROUNDED_BOX
             } {
-              Fl_Group {} {open
+              Fl_Group {} {
                 xywh {365 122 411 34}
               } {
                 Fl_Input uiOCIO_8bits_ics {
@@ -916,7 +919,7 @@ v->uiOCIO_8bits_ics->do_callback();}
                   xywh {688 126 88 25}
                 }
               }
-              Fl_Group {} {open
+              Fl_Group {} {
                 xywh {373 169 403 32}
               } {
                 Fl_Input uiOCIO_16bits_ics {
@@ -935,7 +938,7 @@ v->uiOCIO_16bits_ics->do_callback();}
                   xywh {688 173 88 25}
                 }
               }
-              Fl_Group {} {open
+              Fl_Group {} {
                 xywh {373 212 403 39}
               } {
                 Fl_Input uiOCIO_32bits_ics {
@@ -954,7 +957,7 @@ v->uiOCIO_32bits_ics->do_callback();}
                   xywh {688 217 88 25}
                 }
               }
-              Fl_Group {} {open
+              Fl_Group {} {
                 xywh {370 258 406 33}
               } {
                 Fl_Input uiOCIO_half_ics {
@@ -973,7 +976,7 @@ v->uiOCIO_half_ics->do_callback();}
                   xywh {688 262 88 25}
                 }
               }
-              Fl_Group {} {open
+              Fl_Group {} {
                 xywh {368 303 406 33}
               } {
                 Fl_Input uiOCIO_float_ics {
@@ -991,6 +994,31 @@ v->uiOCIO_float_ics->value(c.c_str());
 v->uiOCIO_float_ics->do_callback();}
                   xywh {686 307 88 25}
                 }
+              }
+            }
+            Fl_Group {} {open
+              xywh {313 350 480 34}
+            } {
+              Fl_Input uiOCIO_Display_View {
+                label {Display / View}
+                user_data this user_data_type {PreferencesUI*}
+                callback {try
+{
+  mrv::image::setOcioView(o->value());
+}
+catch(const std::exception& e)
+{
+  o->value("");
+}} selected
+                tooltip {Default Display / View} xywh {398 354 283 25} box THIN_DOWN_BOX color 20 labelsize 11 align 132 textcolor 56
+              }
+              Fl_Button {} {
+                label Pick
+                user_data this user_data_type {PreferencesUI*}
+                callback {std::string c = make_ocio_chooser(v->uiOCIO_Display_View->value(), mrv::OCIOBrowser::kDisplay_And_View);
+v->uiOCIO_Display_View->value(c.c_str());
+v->uiOCIO_Display_View->do_callback();}
+                xywh {686 354 88 25}
               }
             }
           }
