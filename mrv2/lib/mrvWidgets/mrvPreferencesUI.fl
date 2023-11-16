@@ -52,6 +52,9 @@ decl {\#include "mrvWidgets/mrvOCIOBrowser.h"} {public global
 decl {\#include "mrvFl/mrvFileRequester.h"} {public global
 }
 
+decl {\#include "mrvFl/mrvImage.h"} {private global
+}
+
 decl {\#include "mrvWidgets/mrvPreferencesTree.h"} {public global
 }
 
@@ -70,8 +73,8 @@ class PreferencesUI {open
     Fl_Window uiMain {
       label Preferences
       user_data this user_data_type {PreferencesUI*} open
-      xywh {497 64 847 466} type Double resizable
-      code0 {main = m;} modal visible
+      xywh {497 64 847 466} type Double hide resizable
+      code0 {main = m;} modal
     } {
       Fl_Group {} {open
         xywh {0 0 853 469} box FLAT_BOX
@@ -999,14 +1002,22 @@ v->uiOCIO_float_ics->do_callback();}
               Fl_Input uiOCIO_Display_View {
                 label {Display / View}
                 user_data this user_data_type {PreferencesUI*}
-                tooltip {Display / View} xywh {398 354 283 25} box THIN_DOWN_BOX color 20 labelsize 11 align 132 textcolor 56
+                callback {try
+{
+  mrv::image::setOcioView(o->value());
+}
+catch(const std::exception& e)
+{
+  o->value("");
+}} selected
+                tooltip {Default Display / View} xywh {398 354 283 25} box THIN_DOWN_BOX color 20 labelsize 11 align 132 textcolor 56
               }
               Fl_Button {} {
                 label Pick
                 user_data this user_data_type {PreferencesUI*}
-                callback {// std::string c = make_ocio_chooser(v->uiOCIO_8bits_ics->value(), mrv::OCIOBrowser::kInputColorSpace);
-// v->uiOCIO_8bits_ics->value(c.c_str());
-// v->uiOCIO_8bits_ics->do_callback();} selected
+                callback {std::string c = make_ocio_chooser(v->uiOCIO_Display_View->value(), mrv::OCIOBrowser::kDisplay_And_View);
+v->uiOCIO_Display_View->value(c.c_str());
+v->uiOCIO_Display_View->do_callback();}
                 xywh {686 354 88 25}
               }
             }
