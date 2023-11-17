@@ -21,7 +21,7 @@ set( FLTK_C_COMPILER ${CMAKE_C_COMPILER})
 set( FLTK_C_FLAGS ${CMAKE_C_FLAGS} )
 
 if (APPLE)
-    set(FLTK_PATCH cmake -E copy_if_different "${PROJECT_SOURCE_DIR}/cmake/patches/FLTK-patch/Fl_Cocoa_Gl_Window_Driver.mm" "${CMAKE_BINARY_DIR}/FLTK-prefix/src/FLTK/src/drivers/Cocoa")
+    # set(FLTK_PATCH cmake -E copy_if_different "${PROJECT_SOURCE_DIR}/cmake/patches/FLTK-patch/Fl_Cocoa_Gl_Window_Driver.mm" "${CMAKE_BINARY_DIR}/FLTK-prefix/src/FLTK/src/drivers/Cocoa")
     if(CMAKE_OSX_DEPLOYMENT_TARGET)
 	set( FLTK_C_FLAGS
 	    -mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}
