@@ -379,6 +379,7 @@ namespace mrv
             i->frameNext();
         }
         updatePlaybackButtons();
+        p.skippedFrames = 0;
     }
 
     void TimelineViewport::endFrame() noexcept
@@ -388,6 +389,8 @@ namespace mrv
         {
             i->end();
         }
+        updatePlaybackButtons();
+        p.skippedFrames = 0;
     }
 
     void TimelineViewport::playBackwards() noexcept
@@ -922,7 +925,8 @@ namespace mrv
         if (!p.timelinePlayers.empty())
         {
             auto player = p.timelinePlayers[0];
-            stopped = (player->playback() == timeline::Playback::Stop);
+            stopped = (player->playback() == timeline::Playback::Stop) ||
+                      player->isStepping();
         }
         return stopped;
     }
