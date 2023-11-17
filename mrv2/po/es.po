@@ -4643,7 +4643,9 @@ msgstr "Reproducción con un solo click."
 
 msgid ""
 "Start Playback when single clicking the left mouse button on the view window"
-msgstr "Comenzar la reproducción con un solo click del botón izquierdo del ratón en la ventana de imágen"
+msgstr ""
+"Comenzar la reproducción con un solo click del botón izquierdo del ratón en "
+"la ventana de imagen"
 
 msgid "Sequences"
 msgstr "Secuencias"

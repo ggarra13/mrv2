@@ -493,7 +493,7 @@ namespace mrv
                     panel::vectorscopePanel->update(p.colorAreaInfo);
                 }
 
-                // Uodate the pixel bar from here only if we are playing a movie
+                // Update the pixel bar from here only if we are playing a movie
                 // and one that is not 1 frames long.
                 bool update = !_shouldUpdatePixelBar();
                 if (update)
