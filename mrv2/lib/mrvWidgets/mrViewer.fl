@@ -553,7 +553,7 @@ ui->uiMain->fill_menu( ui->uiMenuBar );
 auto player = ui->uiView->getTimelinePlayer();
 if( !player ) return;
 
-player->setLoop( loop );} selected
+player->setLoop( loop );}
             xywh {309 3 24 24} labelcolor 19
             code0 {o->image( mrv::load_svg( "LoopMode.svg" ) );}
             class {mrv::StateButton}
@@ -785,7 +785,8 @@ ui->uiView->take_focus();}
   }
 }
 
-class ViewerUI {} {
+class ViewerUI {open
+} {
   decl {static mrv::App* app;} {public local
   }
   decl {static PreferencesUI* uiPrefs;} {public local
@@ -806,8 +807,8 @@ uiSecondary = nullptr;} {}
       label mrv2
       user_data this user_data_type {ViewerUI*}
       callback {exit_cb( o, v );} open
-      xywh {970 276 690 602} type Double align 80 resizable
-      class {mrv::MainWindow} size_range {690 602 0 0} visible
+      xywh {38 75 690 602} type Double align 80 hide resizable
+      class {mrv::MainWindow} size_range {690 602 0 0}
     } {
       Fl_Pack uiRegion {open
         xywh {0 0 690 602} box FLAT_BOX resizable
@@ -991,14 +992,14 @@ Value is:  pow( 2, 1/x );} xywh {632 27 54 23} type {Horz Knob} maximum 4 step 0
           Fl_Group {} {
             xywh {0 80 690 408} labeltype NO_LABEL hide resizable
           } {}
-          Fl_Pack uiViewGroup {open
-            xywh {0 53 690 433} type HORIZONTAL
+          Fl_Pack uiViewGroup {
+            xywh {0 53 690 435} type HORIZONTAL
             code0 {o->fixed( uiToolsGroup, uiToolsGroup->w() );}
             code1 {uiMain->workspace = uiViewGroup;}
             class Fl_Flex
           } {
             Fl_Group uiToolsGroup {
-              xywh {0 53 42 433} box FLAT_BOX
+              xywh {0 53 42 435} box FLAT_BOX
             } {
               Fl_Button uiScrub {
                 user_data this user_data_type {ViewerUI*}
@@ -1135,21 +1136,21 @@ settings->setValue( mrv::kPenColorA, a);}
                 }
               }
             }
-            Fl_Group uiView {
-              xywh {42 53 378 433} labeltype NO_LABEL resizable
+            Fl_Group uiView {open
+              xywh {42 53 378 435} labeltype NO_LABEL resizable
               code0 {o->main( this );}
               class {mrv::Viewport}
             } {}
             Fl_Group uiDockGroup {
-              xywh {420 53 270 433} hide
+              xywh {420 53 270 435} hide
               code0 {uiViewGroup->fixed( o, 270 );}
             } {
               Fl_Box uiResizableBar {
-                xywh {420 53 10 433} box ENGRAVED_BOX
+                xywh {420 53 10 435} box ENGRAVED_BOX
                 class {mrv::ResizableBar}
               }
               Fl_Group uiDock {open
-                xywh {430 53 260 433} box FLAT_BOX resizable
+                xywh {430 53 260 435} box FLAT_BOX resizable
                 code0 {o->set_window( uiMain );}
                 code1 {uiMain->set_dock(o);}
                 class {mrv::DockGroup}
@@ -1160,13 +1161,13 @@ settings->setValue( mrv::kPenColorA, a);}
             xywh {0 488 690 30} box FLAT_BOX color 51
             class {mrv::TimelineGroup}
           } {
-            Fl_Group uiTimeline {open
+            Fl_Group uiTimeline {selected
               xywh {0 496 690 22} resizable
               class {mrv::TimelineWidget}
             } {}
           }
         }
-        Fl_Group uiBottomBar {open
+        Fl_Group uiBottomBar {
           xywh {0 518 690 29} box FLAT_BOX
         } {
           Fl_Group uiTimeWindow {open
@@ -1176,7 +1177,7 @@ settings->setValue( mrv::kPenColorA, a);}
             class TimelineClass
           } {}
         }
-        Fl_Group uiPixelBar {open
+        Fl_Group uiPixelBar {
           xywh {0 547 690 30} box FLAT_BOX color 56 labelcolor 17
         } {
           Fl_Group uiPixelWindow {open
@@ -1185,7 +1186,7 @@ settings->setValue( mrv::kPenColorA, a);}
             class PixelToolBarClass
           } {}
         }
-        Fl_Group uiStatusGroup {open
+        Fl_Group uiStatusGroup {
           xywh {0 577 690 25} color 0
         } {
           Fl_Group uiStatusBar {
