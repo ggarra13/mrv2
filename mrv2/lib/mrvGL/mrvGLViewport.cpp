@@ -67,9 +67,13 @@ namespace mrv
         _gl(new GLPrivate)
     {
         int stereo = 0;
+        int fl_double = FL_DOUBLE;
+#ifdef __APPLE__
+        fl_double = 0;
+#endif
         // if (can_do(FL_STEREO))
         //     stereo = FL_STEREO;
-        mode(FL_RGB | FL_DOUBLE | FL_ALPHA | FL_STENCIL | FL_OPENGL3 | stereo);
+        mode(FL_RGB | fl_double | FL_ALPHA | FL_STENCIL | FL_OPENGL3 | stereo);
     }
 
     Viewport::~Viewport() {}
