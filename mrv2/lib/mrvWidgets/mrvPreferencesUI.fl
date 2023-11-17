@@ -168,7 +168,7 @@ If you try to open several mrv2s with different images, all these images will be
             xywh {288 35 555 349} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {
-              label Defaults open
+              label Defaults
               xywh {298 65 531 162} box ROUNDED_BOX
             } {
               Fl_Value_Input uiPrefsViewGain {
@@ -268,40 +268,6 @@ If you try to open several mrv2s with different images, all these images will be
                   xywh {30 30 30 20}
                 }
               }
-              Fl_Choice uiPrefsAlphaBlend {
-                label {Alpha Blend} open
-                xywh {685 186 135 25} down_box BORDER_BOX
-              } {
-                MenuItem {} {
-                  label None
-                  xywh {0 0 100 20}
-                }
-                MenuItem {} {
-                  label Straight
-                  xywh {10 10 100 20}
-                }
-                MenuItem {} {
-                  label Premultiplied
-                  xywh {20 20 100 20}
-                }
-              }
-              Fl_Choice uiPrefsVideoLevels {
-                label {Video Levels} open
-                xywh {685 156 135 25} down_box BORDER_BOX
-              } {
-                MenuItem {} {
-                  label {From File}
-                  xywh {10 10 100 20}
-                }
-                MenuItem {} {
-                  label {Legal Range}
-                  xywh {20 20 100 20}
-                }
-                MenuItem {} {
-                  label {Full Range}
-                  xywh {30 30 100 20}
-                }
-              }
             }
             Fl_Group uiPrefsHud {
               label HUD
@@ -362,6 +328,75 @@ If you try to open several mrv2s with different images, all these images will be
                 label Attributes
                 user_data this user_data_type {PreferencesUI*}
                 xywh {653 257 20 20} box UP_BOX down_box DOWN_BOX align 8
+              }
+            }
+          }
+          Fl_Group {} {
+            label Render open selected
+            xywh {298 45 555 349} box EMBOSSED_BOX align 5
+          } {
+            Fl_Group {} {open
+              xywh {308 75 531 170} box ROUNDED_BOX
+            } {
+              Fl_Choice uiPrefsVideoLevels {
+                label {Video Levels}
+                xywh {520 89 135 25} down_box BORDER_BOX
+              } {
+                MenuItem {} {
+                  label {From File}
+                  xywh {20 20 100 20}
+                }
+                MenuItem {} {
+                  label {Legal Range}
+                  xywh {30 30 100 20}
+                }
+                MenuItem {} {
+                  label {Full Range}
+                  xywh {40 40 100 20}
+                }
+              }
+              Fl_Choice uiPrefsAlphaBlend {
+                label {Alpha Blend}
+                xywh {520 119 135 25} down_box BORDER_BOX
+              } {
+                MenuItem {} {
+                  label None
+                  xywh {10 10 100 20}
+                }
+                MenuItem {} {
+                  label Straight
+                  xywh {20 20 100 20}
+                }
+                MenuItem {} {
+                  label Premultiplied
+                  xywh {30 30 100 20}
+                }
+              }
+              Fl_Choice uiPrefsMinifyFilter {
+                label {Minify Filter}
+                xywh {520 172 135 25} down_box BORDER_BOX
+              } {
+                MenuItem {} {
+                  label Nearest
+                  xywh {30 30 100 20}
+                }
+                MenuItem {} {
+                  label Linear
+                  xywh {40 40 100 20}
+                }
+              }
+              Fl_Choice uiPrefsMagnifyFilter {
+                label {Magnify Filter}
+                xywh {520 205 135 25} down_box BORDER_BOX
+              } {
+                MenuItem {} {
+                  label Nearest
+                  xywh {40 40 100 20}
+                }
+                MenuItem {} {
+                  label Linear
+                  xywh {50 50 100 20}
+                }
               }
             }
           }
@@ -475,7 +510,7 @@ o->redraw();}
             }
           }
           Fl_Group {} {
-            label Fonts open
+            label Fonts
             xywh {298 45 555 349} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {
@@ -574,8 +609,8 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
             }
           }
           Fl_Group {} {
-            label Playback open
-            xywh {300 34 530 362} box EMBOSSED_BOX align 5
+            label Playback
+            xywh {300 34 530 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {
               label Defaults open
@@ -586,7 +621,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                 tooltip {Start Playback when opening files.} xywh {498 111 25 25} box UP_BOX down_box DOWN_BOX align 4
               }
               Fl_Check_Button uiPrefsSingleClickPlayback {
-                label {Single Click Playback} selected
+                label {Single Click Playback}
                 tooltip {Start Playback when single clicking the left mouse button on the view window} xywh {702 111 25 25} box UP_BOX down_box DOWN_BOX align 4
               }
               Fl_Group {} {open
@@ -1335,6 +1370,7 @@ v->uiPrefs->run(v);}
     code {Fl_Tree_Item* item = o->add( _("User Interface") );
 o->add( _("User Interface/View Window") );
 o->add( _("User Interface/View Window/Language and Colors") );
+o->add( _("User Interface/Render") );
 o->add( _("User Interface/Fonts") );
 o->add( _("User Interface/Positioning") );
 o->add( _("User Interface/File Requester") );
