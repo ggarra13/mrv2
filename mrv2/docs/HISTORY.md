@@ -24,6 +24,8 @@ v0.9.1
   Button on both the view and timeline viewport.
 - Added Preferences->Playback->Single Click Playback to turn off playing by
   clicking on the main viewport, which was very annoying.
+- Added Preferences->User Interface->Render->Minify and Magnify Filters.
+  Moved Video Levels and Alpha Blend to this new preferences panel.
 
 
 v0.9.0

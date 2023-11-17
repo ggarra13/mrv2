@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-11-16 18:52-0300\n"
+"POT-Creation-Date: 2023-11-17 04:34-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -4194,12 +4194,6 @@ msgstr "Medio"
 msgid "Fast"
 msgstr "Rápido"
 
-msgid "Straight"
-msgstr "Derecho"
-
-msgid "Premultiplied"
-msgstr "Premultiplicado"
-
 msgid "From File"
 msgstr "Del Archivo"
 
@@ -4208,6 +4202,15 @@ msgstr "Rango Legal"
 
 msgid "Full Range"
 msgstr "Rango Completo"
+
+msgid "Straight"
+msgstr "Derecho"
+
+msgid "Premultiplied"
+msgstr "Premultiplicado"
+
+msgid "Nearest"
+msgstr "Cercanía"
 
 msgid "base"
 msgstr "base"
@@ -4450,9 +4453,6 @@ msgstr ""
 msgid "Zoom Speed"
 msgstr "Velocidad de Zoom"
 
-msgid "Alpha Blend"
-msgstr "Mezcla Alfa"
-
 msgid "HUD"
 msgstr "HUD"
 
@@ -4477,6 +4477,18 @@ msgstr "Resolución"
 
 msgid "Attributes"
 msgstr "Atributos"
+
+msgid "Render"
+msgstr "Render"
+
+msgid "Alpha Blend"
+msgstr "Mezcla Alfa"
+
+msgid "Minify Filter"
+msgstr "Filtro Minificación"
+
+msgid "Magnify Filter"
+msgstr "Filtro Magnificación"
 
 msgid "Language and Colors"
 msgstr "Lenguaje y Colores"
@@ -4625,6 +4637,13 @@ msgstr "Auto Reproducir"
 
 msgid "Start Playback when opening files."
 msgstr "Comenzar la Reproducción al abrir archivos."
+
+msgid "Single Click Playback"
+msgstr "Reproducción con un solo click."
+
+msgid ""
+"Start Playback when single clicking the left mouse button on the view window"
+msgstr "Comenzar la reproducción con un solo click del botón izquierdo del ratón en la ventana de imágen"
 
 msgid "Sequences"
 msgstr "Secuencias"
@@ -4927,6 +4946,9 @@ msgstr "Interfaz del Usuario/Ventana de Vista"
 
 msgid "User Interface/View Window/Language and Colors"
 msgstr "Interfaz del Usuario/Ventana de Vista/Lenguaje y Colores"
+
+msgid "User Interface/Render"
+msgstr "Interfaz del Usuario/Render"
 
 msgid "User Interface/Fonts"
 msgstr "Interfaz del Usuario/Tipografías"

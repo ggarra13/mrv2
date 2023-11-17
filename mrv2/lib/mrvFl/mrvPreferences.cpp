@@ -380,6 +380,12 @@ namespace mrv
         view.get("alpha_blend", tmp, 1);
         uiPrefs->uiPrefsAlphaBlend->value(tmp);
 
+        view.get("minify_filter", tmp, 0);
+        uiPrefs->uiPrefsMinifyFilter->value(tmp);
+
+        view.get("magnify_filter", tmp, 0);
+        uiPrefs->uiPrefsMagnifyFilter->value(tmp);
+
         view.get("crop_area", tmp, 0);
         uiPrefs->uiPrefsCropArea->value(tmp);
 
@@ -1145,6 +1151,8 @@ namespace mrv
         view.set("safe_areas", uiPrefs->uiPrefsSafeAreas->value());
         view.set("video_levels", uiPrefs->uiPrefsVideoLevels->value());
         view.set("alpha_blend", uiPrefs->uiPrefsAlphaBlend->value());
+        view.set("minify_filter", uiPrefs->uiPrefsMinifyFilter->value());
+        view.set("magnify_filter", uiPrefs->uiPrefsMagnifyFilter->value());
         view.set("crop_area", uiPrefs->uiPrefsCropArea->value());
         view.set("zoom_speed", (int)uiPrefs->uiPrefsZoomSpeed->value());
 
@@ -1591,10 +1599,19 @@ namespace mrv
         auto imageOptions = app->imageOptions();
         int alphaBlend = uiPrefs->uiPrefsAlphaBlend->value();
         int videoLevels = uiPrefs->uiPrefsVideoLevels->value();
+        int minifyFilter = uiPrefs->uiPrefsMinifyFilter->value();
+        int magnifyFilter = uiPrefs->uiPrefsMagnifyFilter->value();
         imageOptions.alphaBlend = static_cast<timeline::AlphaBlend>(alphaBlend);
         imageOptions.videoLevels =
             static_cast<timeline::InputVideoLevels>(videoLevels);
         app->setImageOptions(imageOptions);
+
+        auto displayOptions = app->displayOptions();
+        displayOptions.imageFilters.minify =
+            static_cast<timeline::ImageFilter>(minifyFilter);
+        displayOptions.imageFilters.magnify =
+            static_cast<timeline::ImageFilter>(magnifyFilter);
+        app->setDisplayOptions(displayOptions);
 
         //
         // Handle HUD
