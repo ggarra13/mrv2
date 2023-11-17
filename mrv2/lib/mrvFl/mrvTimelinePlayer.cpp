@@ -67,6 +67,8 @@ namespace mrv
         std::shared_ptr<observer::ValueObserver<timeline::PlayerCacheInfo> >
             cacheInfoObserver;
 
+        bool isStepping = false;
+
         //! Measuring timer
 #ifdef DEBUG_SPEED
         std::chrono::time_point<std::chrono::steady_clock> start_time;
@@ -332,6 +334,7 @@ namespace mrv
 
         if (value == timeline::Playback::Stop)
         {
+            _p->isStepping = false;
             // Send a seek request to make sure we are at the right time
             pushMessage("seek", currentTime());
             panel::redrawThumbnails();
@@ -428,6 +431,11 @@ namespace mrv
         }
     }
 
+    bool TimelinePlayer::isStepping() const
+    {
+        return _p->isStepping;
+    }
+
     void TimelinePlayer::framePrev()
     {
         pushMessage("framePrev", 0);
@@ -435,6 +443,7 @@ namespace mrv
         if (isMuted())
             return _p->player->framePrev();
 
+        _p->isStepping = true;
         const auto oneFrame =
             otime::RationalTime(1.0, timeRange().duration().rate());
         auto time = currentTime() - oneFrame;
@@ -471,6 +480,7 @@ namespace mrv
         if (isMuted())
             return _p->player->frameNext();
 
+        _p->isStepping = true;
         const auto oneFrame =
             otime::RationalTime(1.0, timeRange().duration().rate());
         auto time = currentTime() + oneFrame;

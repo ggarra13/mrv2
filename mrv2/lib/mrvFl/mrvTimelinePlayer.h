@@ -78,6 +78,9 @@ namespace mrv
         //! Get the playback mode.
         timeline::Playback playback() const;
 
+        //! Are we stepping frames?
+        bool isStepping() const;
+
         //! Get the playback loop mode.
         timeline::Loop loop() const;
 
