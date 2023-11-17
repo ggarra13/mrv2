@@ -878,6 +878,11 @@ namespace mrv
             p.mousePress = _getFocus();
             if (Fl::event_button1())
             {
+                if (Fl::event_ctrl())
+                {
+                    p.viewPosMousePress = p.viewPos;
+                    return 1;
+                }
                 _handlePushLeftMouseButton();
             }
             else if (Fl::event_button2())
@@ -950,7 +955,8 @@ namespace mrv
                 else
                 {
                     if (p.lastEvent == FL_PUSH &&
-                        Fl::event_button() == FL_LEFT_MOUSE)
+                        Fl::event_button() == FL_LEFT_MOUSE &&
+                        p.ui->uiPrefs->uiPrefsSingleClickPlayback->value())
                     {
                         if (p.timelinePlayers.empty())
                             return 0;
@@ -1007,8 +1013,15 @@ namespace mrv
             p.mousePos = _getFocus();
             if (Fl::event_button1())
             {
-                _handleDragLeftMouseButton();
-                _updatePixelBar();
+                if (Fl::event_ctrl())
+                {
+                    _handleDragMiddleMouseButton();
+                }
+                else
+                {
+                    _handleDragLeftMouseButton();
+                    _updatePixelBar();
+                }
             }
             else if (Fl::event_button2())
             {

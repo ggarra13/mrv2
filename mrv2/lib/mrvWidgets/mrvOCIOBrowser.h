@@ -20,6 +20,7 @@ namespace mrv
             kInputColorSpace,
             kDisplay,
             kView,
+            kDisplay_And_View,
             kNone,
         };
 
@@ -41,6 +42,7 @@ namespace mrv
         void fill();
         void fill_view();
         void fill_display();
+        void fill_display_and_view();
         void fill_input_color_space();
 
     protected:

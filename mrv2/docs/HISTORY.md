@@ -12,6 +12,20 @@ v0.9.1
   path mapping deal with empty filenames properly.
 - Fixed a random crash on Windows when loading a session file with
   Auto Playback set to on.
+- Fixed an OpenGL flipping/flickering when Timeline Viewport was open and the
+  user switched media items.
+- Fixed Python's setOcioView() and ocioView() just returning the view name.
+  Now both the display and view name are returned.
+- Added ocioViewList() Python function to list all Displays / Views available.
+- Added a setting for Display / View to Preferences->OCIO Defaults.  It will
+  get used whenever the application opens or the user access the Preferences,
+  overriding the setting set in the OCIO config file.
+- Made panning work with CTRL + Left Mouse Button, besides the Middle Mouse
+  Button on both the view and timeline viewport.
+- Added Preferences->Playback->Single Click Playback to turn off playing by
+  clicking on the main viewport, which was very annoying.
+- Added Preferences->User Interface->Render->Minify and Magnify Filters.
+  Moved Video Levels and Alpha Blend to this new preferences panel.
 
 
 v0.9.0

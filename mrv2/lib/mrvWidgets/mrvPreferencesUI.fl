@@ -52,6 +52,9 @@ decl {\#include "mrvWidgets/mrvOCIOBrowser.h"} {public global
 decl {\#include "mrvFl/mrvFileRequester.h"} {public global
 }
 
+decl {\#include "mrvFl/mrvImage.h"} {private global
+}
+
 decl {\#include "mrvWidgets/mrvPreferencesTree.h"} {public global
 }
 
@@ -165,7 +168,7 @@ If you try to open several mrv2s with different images, all these images will be
             xywh {288 35 555 349} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {
-              label Defaults open
+              label Defaults
               xywh {298 65 531 162} box ROUNDED_BOX
             } {
               Fl_Value_Input uiPrefsViewGain {
@@ -265,40 +268,6 @@ If you try to open several mrv2s with different images, all these images will be
                   xywh {30 30 30 20}
                 }
               }
-              Fl_Choice uiPrefsAlphaBlend {
-                label {Alpha Blend} open
-                xywh {685 186 135 25} down_box BORDER_BOX
-              } {
-                MenuItem {} {
-                  label None
-                  xywh {0 0 100 20}
-                }
-                MenuItem {} {
-                  label Straight
-                  xywh {10 10 100 20}
-                }
-                MenuItem {} {
-                  label Premultiplied
-                  xywh {20 20 100 20}
-                }
-              }
-              Fl_Choice uiPrefsVideoLevels {
-                label {Video Levels} open
-                xywh {685 156 135 25} down_box BORDER_BOX
-              } {
-                MenuItem {} {
-                  label {From File}
-                  xywh {10 10 100 20}
-                }
-                MenuItem {} {
-                  label {Legal Range}
-                  xywh {20 20 100 20}
-                }
-                MenuItem {} {
-                  label {Full Range}
-                  xywh {30 30 100 20}
-                }
-              }
             }
             Fl_Group uiPrefsHud {
               label HUD
@@ -359,6 +328,75 @@ If you try to open several mrv2s with different images, all these images will be
                 label Attributes
                 user_data this user_data_type {PreferencesUI*}
                 xywh {653 257 20 20} box UP_BOX down_box DOWN_BOX align 8
+              }
+            }
+          }
+          Fl_Group {} {
+            label Render open selected
+            xywh {298 45 555 349} box EMBOSSED_BOX align 5
+          } {
+            Fl_Group {} {open
+              xywh {308 75 531 170} box ROUNDED_BOX
+            } {
+              Fl_Choice uiPrefsVideoLevels {
+                label {Video Levels}
+                xywh {520 89 135 25} down_box BORDER_BOX
+              } {
+                MenuItem {} {
+                  label {From File}
+                  xywh {20 20 100 20}
+                }
+                MenuItem {} {
+                  label {Legal Range}
+                  xywh {30 30 100 20}
+                }
+                MenuItem {} {
+                  label {Full Range}
+                  xywh {40 40 100 20}
+                }
+              }
+              Fl_Choice uiPrefsAlphaBlend {
+                label {Alpha Blend}
+                xywh {520 119 135 25} down_box BORDER_BOX
+              } {
+                MenuItem {} {
+                  label None
+                  xywh {10 10 100 20}
+                }
+                MenuItem {} {
+                  label Straight
+                  xywh {20 20 100 20}
+                }
+                MenuItem {} {
+                  label Premultiplied
+                  xywh {30 30 100 20}
+                }
+              }
+              Fl_Choice uiPrefsMinifyFilter {
+                label {Minify Filter}
+                xywh {520 172 135 25} down_box BORDER_BOX
+              } {
+                MenuItem {} {
+                  label Nearest
+                  xywh {30 30 100 20}
+                }
+                MenuItem {} {
+                  label Linear
+                  xywh {40 40 100 20}
+                }
+              }
+              Fl_Choice uiPrefsMagnifyFilter {
+                label {Magnify Filter}
+                xywh {520 205 135 25} down_box BORDER_BOX
+              } {
+                MenuItem {} {
+                  label Nearest
+                  xywh {40 40 100 20}
+                }
+                MenuItem {} {
+                  label Linear
+                  xywh {50 50 100 20}
+                }
               }
             }
           }
@@ -472,8 +510,8 @@ o->redraw();}
             }
           }
           Fl_Group {} {
-            label Fonts open
-            xywh {298 45 555 349} box EMBOSSED_BOX align 5
+            label Fonts
+            xywh {298 45 555 349} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {
               label Fonts open
@@ -483,7 +521,7 @@ o->redraw();}
                 xywh {490 162 160 75}
               } {
                 Fl_Choice uiFontMenus {
-                  label Menus open selected
+                  label Menus open
                   tooltip {Sets the font to use in menus.} xywh {490 162 160 25} down_box BORDER_BOX
                   code0 {const auto& fonts = mrv::fonts::list();}
                   code1 {for (const auto& font : fonts)}
@@ -581,6 +619,10 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
               Fl_Check_Button uiPrefsAutoPlayback {
                 label {Auto Playback}
                 tooltip {Start Playback when opening files.} xywh {498 111 25 25} box UP_BOX down_box DOWN_BOX align 4
+              }
+              Fl_Check_Button uiPrefsSingleClickPlayback {
+                label {Single Click Playback}
+                tooltip {Start Playback when single clicking the left mouse button on the view window} xywh {702 111 25 25} box UP_BOX down_box DOWN_BOX align 4
               }
               Fl_Group {} {open
                 xywh {333 157 450 152} box ROUNDED_BOX
@@ -895,9 +937,9 @@ uiPrefs->uiPrefsOCIOConfig->value( r.c_str() );}
             }
             Fl_Group uiOCIO_ICS {
               label {Input Color Space}
-              xywh {317 114 500 252} box ROUNDED_BOX
+              xywh {317 114 500 228} box ROUNDED_BOX
             } {
-              Fl_Group {} {open
+              Fl_Group {} {
                 xywh {365 122 411 34}
               } {
                 Fl_Input uiOCIO_8bits_ics {
@@ -916,7 +958,7 @@ v->uiOCIO_8bits_ics->do_callback();}
                   xywh {688 126 88 25}
                 }
               }
-              Fl_Group {} {open
+              Fl_Group {} {
                 xywh {373 169 403 32}
               } {
                 Fl_Input uiOCIO_16bits_ics {
@@ -935,7 +977,7 @@ v->uiOCIO_16bits_ics->do_callback();}
                   xywh {688 173 88 25}
                 }
               }
-              Fl_Group {} {open
+              Fl_Group {} {
                 xywh {373 212 403 39}
               } {
                 Fl_Input uiOCIO_32bits_ics {
@@ -954,7 +996,7 @@ v->uiOCIO_32bits_ics->do_callback();}
                   xywh {688 217 88 25}
                 }
               }
-              Fl_Group {} {open
+              Fl_Group {} {
                 xywh {370 258 406 33}
               } {
                 Fl_Input uiOCIO_half_ics {
@@ -973,7 +1015,7 @@ v->uiOCIO_half_ics->do_callback();}
                   xywh {688 262 88 25}
                 }
               }
-              Fl_Group {} {open
+              Fl_Group {} {
                 xywh {368 303 406 33}
               } {
                 Fl_Input uiOCIO_float_ics {
@@ -991,6 +1033,31 @@ v->uiOCIO_float_ics->value(c.c_str());
 v->uiOCIO_float_ics->do_callback();}
                   xywh {686 307 88 25}
                 }
+              }
+            }
+            Fl_Group {} {
+              xywh {313 350 480 34}
+            } {
+              Fl_Input uiOCIO_Display_View {
+                label {Display / View}
+                user_data this user_data_type {PreferencesUI*}
+                callback {try
+{
+  mrv::image::setOcioView(o->value());
+}
+catch(const std::exception& e)
+{
+  o->value("");
+}}
+                tooltip {Default Display / View} xywh {398 354 283 25} box THIN_DOWN_BOX color 20 labelsize 11 align 132 textcolor 56
+              }
+              Fl_Button {} {
+                label Pick
+                user_data this user_data_type {PreferencesUI*}
+                callback {std::string c = make_ocio_chooser(v->uiOCIO_Display_View->value(), mrv::OCIOBrowser::kDisplay_And_View);
+v->uiOCIO_Display_View->value(c.c_str());
+v->uiOCIO_Display_View->do_callback();}
+                xywh {686 354 88 25}
               }
             }
           }
@@ -1303,6 +1370,7 @@ v->uiPrefs->run(v);}
     code {Fl_Tree_Item* item = o->add( _("User Interface") );
 o->add( _("User Interface/View Window") );
 o->add( _("User Interface/View Window/Language and Colors") );
+o->add( _("User Interface/Render") );
 o->add( _("User Interface/Fonts") );
 o->add( _("User Interface/Positioning") );
 o->add( _("User Interface/File Requester") );

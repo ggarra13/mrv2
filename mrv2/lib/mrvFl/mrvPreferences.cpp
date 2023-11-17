@@ -45,6 +45,7 @@ namespace fs = std::filesystem;
 #include "mrvHotkeyUI.h"
 
 #include "mrvFl/mrvIO.h"
+#include "mrvFl/mrvImage.h"
 #include "mrvCore/mrvOS.h"
 
 namespace
@@ -379,6 +380,12 @@ namespace mrv
         view.get("alpha_blend", tmp, 1);
         uiPrefs->uiPrefsAlphaBlend->value(tmp);
 
+        view.get("minify_filter", tmp, 0);
+        uiPrefs->uiPrefsMinifyFilter->value(tmp);
+
+        view.get("magnify_filter", tmp, 0);
+        uiPrefs->uiPrefsMagnifyFilter->value(tmp);
+
         view.get("crop_area", tmp, 0);
         uiPrefs->uiPrefsCropArea->value(tmp);
 
@@ -589,6 +596,10 @@ namespace mrv
         }
 #endif
 
+        Fl_Preferences display_view(ocio, "DisplayView");
+        display_view.get("DisplayView", tmpS, "", 2048);
+        uiPrefs->uiOCIO_Display_View->value(tmpS);
+
         //
         // ui/view/hud
         //
@@ -668,6 +679,9 @@ namespace mrv
 
         playback.get("auto_playback", tmp, 1);
         uiPrefs->uiPrefsAutoPlayback->value(tmp);
+
+        playback.get("single_click_playback", tmp, 0);
+        uiPrefs->uiPrefsSingleClickPlayback->value(tmp);
 
         playback.get("fps", tmpF, 24.0);
         uiPrefs->uiPrefsFPS->value(tmpF);
@@ -1137,6 +1151,8 @@ namespace mrv
         view.set("safe_areas", uiPrefs->uiPrefsSafeAreas->value());
         view.set("video_levels", uiPrefs->uiPrefsVideoLevels->value());
         view.set("alpha_blend", uiPrefs->uiPrefsAlphaBlend->value());
+        view.set("minify_filter", uiPrefs->uiPrefsMinifyFilter->value());
+        view.set("magnify_filter", uiPrefs->uiPrefsMagnifyFilter->value());
         view.set("crop_area", uiPrefs->uiPrefsCropArea->value());
         view.set("zoom_speed", (int)uiPrefs->uiPrefsZoomSpeed->value());
 
@@ -1179,6 +1195,10 @@ namespace mrv
                 ics.set("half", uiPrefs->uiOCIO_half_ics->value());
                 ics.set("float", uiPrefs->uiOCIO_float_ics->value());
             }
+
+            Fl_Preferences display_view(ocio, "DisplayView");
+            display_view.set(
+                "DisplayView", uiPrefs->uiOCIO_Display_View->value());
         }
 
         //
@@ -1254,6 +1274,9 @@ namespace mrv
         Fl_Preferences playback(base, "playback");
         playback.set(
             "auto_playback", (int)uiPrefs->uiPrefsAutoPlayback->value());
+        playback.set(
+            "single_click_playback",
+            (int)uiPrefs->uiPrefsSingleClickPlayback->value());
         playback.set("fps", uiPrefs->uiPrefsFPS->value());
         playback.delete_entry("loop_mode"); // legacy preference
         playback.set("loop", uiPrefs->uiPrefsLoopMode->value());
@@ -1576,10 +1599,19 @@ namespace mrv
         auto imageOptions = app->imageOptions();
         int alphaBlend = uiPrefs->uiPrefsAlphaBlend->value();
         int videoLevels = uiPrefs->uiPrefsVideoLevels->value();
+        int minifyFilter = uiPrefs->uiPrefsMinifyFilter->value();
+        int magnifyFilter = uiPrefs->uiPrefsMagnifyFilter->value();
         imageOptions.alphaBlend = static_cast<timeline::AlphaBlend>(alphaBlend);
         imageOptions.videoLevels =
             static_cast<timeline::InputVideoLevels>(videoLevels);
         app->setImageOptions(imageOptions);
+
+        auto displayOptions = app->displayOptions();
+        displayOptions.imageFilters.minify =
+            static_cast<timeline::ImageFilter>(minifyFilter);
+        displayOptions.imageFilters.magnify =
+            static_cast<timeline::ImageFilter>(magnifyFilter);
+        app->setDisplayOptions(displayOptions);
 
         //
         // Handle HUD
@@ -1956,6 +1988,18 @@ namespace mrv
                 }
 
                 ui->OCIOView->redraw();
+
+                std::string display_view =
+                    uiPrefs->uiOCIO_Display_View->value();
+                try
+                {
+                    if (!display_view.empty())
+                        image::setOcioView(display_view);
+                }
+                catch (const std::exception& e)
+                {
+                    LOG_ERROR(e.what());
+                }
 
                 std::vector< std::string > spaces;
                 for (int i = 0; i < config->getNumColorSpaces(); ++i)

@@ -610,7 +610,7 @@ namespace mrv
 
         p.ui->uiColorChannel->redraw();
 
-        // refreshWindows();
+        refreshWindows(); // needed - do not remove.
     }
 
     mrv::TimelinePlayer* TimelineViewport::getTimelinePlayer() const noexcept

@@ -713,9 +713,12 @@ namespace mrv
         if (Fl::event_button1())
         {
             button = 0;
-            int ok = _seek();
-            if (!p.dragging && ok)
-                return 1;
+            if (modifiers == 0)
+            {
+                int ok = _seek();
+                if (!p.dragging && ok)
+                    return 1;
+            }
         }
         else if (Fl::event_button2())
         {
@@ -734,11 +737,15 @@ namespace mrv
     int TimelineWidget::mouseDragEvent(const int X, const int Y)
     {
         TLRENDER_P();
+        int modifiers = fromFLTKModifiers();
         if (Fl::event_button1())
         {
-            int ok = _seek();
-            if (!p.dragging && ok)
-                return 1;
+            if (modifiers == 0)
+            {
+                int ok = _seek();
+                if (!p.dragging && ok)
+                    return 1;
+            }
         }
         else if (Fl::event_button2())
         {
