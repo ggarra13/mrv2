@@ -26,6 +26,8 @@ v0.9.1
   clicking on the main viewport, which was very annoying.
 - Added Preferences->User Interface->Render->Minify and Magnify Filters.
   Moved Video Levels and Alpha Blend to this new preferences panel.
+- Fixed color display (in both pixel bar and area color panel) not updating
+  properly when single stepping through a file.
 
 
 v0.9.0
