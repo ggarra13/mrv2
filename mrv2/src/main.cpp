@@ -77,63 +77,48 @@ int main(int argc, char* argv[])
 }
 
 #ifdef _WIN32
-/* static int mbcs2utf(const char *s, int l, char *dst, unsigned dstlen) */
-static int mbcs2utf(const char* s, int l, char* dst)
+
+#    include <iostream>
+#    include <locale>
+#    include <codecvt>
+
+// Function to convert wstring to UTF-8 string
+std::string wstring_to_utf8(const std::wstring& ws)
 {
-    static wchar_t* mbwbuf;
-    unsigned dstlen = 0;
-    if (!s)
-        return 0;
-    dstlen = (l * 6) + 6;
-    mbwbuf = (wchar_t*)malloc(dstlen * sizeof(wchar_t));
-    l = (int)mbstowcs(mbwbuf, s, l);
-    /* l = fl_unicode2utf(mbwbuf, l, dst); */
-    l = fl_utf8fromwc(dst, dstlen, mbwbuf, l);
-    dst[l] = 0;
-    free(mbwbuf);
-    return l;
+    std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+    return converter.to_bytes(ws);
 }
 
-int WINAPI WinMain(
+int WinMain(
     HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-    int rc, i;
-    char** ar;
+    // Convert the command line arguments to UTF-8
+    int argc;
+    char** argv;
 
-    ar = (char**)malloc(sizeof(char*) * (__argc + 1));
-    i = 0;
-    while (i < __argc)
+    // Get the command line as a wide string
+    LPWSTR* wideArgv = CommandLineToArgvW(GetCommandLineW(), &argc);
+
+    // Convert each wide string argument to UTF-8
+    argv = new char*[argc];
+    for (int i = 0; i < argc; ++i)
     {
-        int l;
-        unsigned dstlen;
-        if (__wargv)
-        {
-            for (l = 0; __wargv[i] && __wargv[i][l]; l++)
-            {
-            }; /* is this just wstrlen??? */
-            dstlen = (l * 5) + 1;
-            ar[i] = (char*)malloc(dstlen);
-            /*    ar[i][fl_unicode2utf(__wargv[i], l, ar[i])] = 0; */
-            dstlen = fl_utf8fromwc(ar[i], dstlen, __wargv[i], l);
-            ar[i][dstlen] = 0;
-        }
-        else
-        {
-            for (l = 0; __argv[i] && __argv[i][l]; l++)
-            {
-            };
-            dstlen = (l * 5) + 1;
-            ar[i] = (char*)malloc(dstlen);
-            /*      ar[i][mbcs2utf(__argv[i], l, ar[i], dstlen)] = 0; */
-            ar[i][mbcs2utf(__argv[i], l, ar[i])] = 0;
-        }
-        i++;
+        argv[i] = strdup(wstring_to_utf8(wideArgv[i]).c_str());
     }
-    ar[__argc] = 0;
-    /* Run the standard main entry point function... */
-    rc = main(__argc, ar);
 
-    return rc;
+    // Free the wide string array
+    LocalFree(wideArgv);
+
+    int ret = main(argc, argv);
+
+    // Cleanup allocated memory for argv
+    for (int i = 0; i < argc; ++i)
+    {
+        free(argv[i]);
+    }
+    delete[] argv;
+
+    return ret;
 }
 
 #endif

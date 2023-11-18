@@ -28,6 +28,8 @@ v0.9.1
   Moved Video Levels and Alpha Blend to this new preferences panel.
 - Fixed color display (in both pixel bar and area color panel) not updating
   properly when single stepping through a file.
+- Corrected handling of wstring characters on command-line and file associations
+  on Windows start up.
 
 
 v0.9.0
