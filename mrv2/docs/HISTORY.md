@@ -30,6 +30,10 @@ v0.9.1
   properly when single stepping through a file.
 - Corrected handling of wstring characters on command-line and file associations
   on Windows start up.
+- Improved Skipped Frame HUD display (SF:) when FPS is set to active so that it
+  does not get confused when scrubbing.
+- Fixed Skipped Frame HUD display not resetting itself when going to the first
+  or last frame of the movie.
 
 
 v0.9.0

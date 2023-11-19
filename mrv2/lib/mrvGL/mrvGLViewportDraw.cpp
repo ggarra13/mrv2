@@ -903,7 +903,8 @@ namespace mrv
 
         if (p.hud & HudDisplay::kFPS)
         {
-            if (player->playback() != timeline::Playback::Stop)
+            if (player->playback() != timeline::Playback::Stop &&
+                (p.actionMode != ActionMode::kScrub || p.lastEvent != FL_DRAG))
             {
                 int64_t frame_diff = (time.value() - p.lastTime.value());
                 int64_t absdiff = std::abs(frame_diff);
