@@ -1430,6 +1430,7 @@ namespace mrv
                             ui->uiPrefs->uiPrefsEditMode->value())
                             set_edit_mode_cb(EditMode::kFull, ui);
                     }
+                    ui->uiView->togglePixelBar();
                     ui->uiView->take_focus();
                 }
                 else

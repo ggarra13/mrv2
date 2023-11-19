@@ -73,8 +73,8 @@ class PreferencesUI {open
     Fl_Window uiMain {
       label Preferences
       user_data this user_data_type {PreferencesUI*} open
-      xywh {497 64 847 466} type Double resizable
-      code0 {main = m;} modal visible
+      xywh {371 47 847 466} type Double hide resizable
+      code0 {main = m;} modal
     } {
       Fl_Group {} {open
         xywh {0 0 853 469} box FLAT_BOX
@@ -332,8 +332,8 @@ If you try to open several mrv2s with different images, all these images will be
             }
           }
           Fl_Group {} {
-            label Render open selected
-            xywh {298 45 555 349} box EMBOSSED_BOX align 5
+            label Render
+            xywh {298 45 555 349} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {open
               xywh {308 75 531 170} box ROUNDED_BOX
@@ -609,8 +609,8 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
             }
           }
           Fl_Group {} {
-            label Playback
-            xywh {300 34 530 362} box EMBOSSED_BOX align 5 hide
+            label Playback open
+            xywh {300 34 530 362} box EMBOSSED_BOX align 5
           } {
             Fl_Group {} {
               label Defaults open
@@ -623,6 +623,10 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
               Fl_Check_Button uiPrefsSingleClickPlayback {
                 label {Single Click Playback}
                 tooltip {Start Playback when single clicking the left mouse button on the view window} xywh {702 111 25 25} box UP_BOX down_box DOWN_BOX align 4
+              }
+              Fl_Check_Button uiPrefsAutoHidePixelBar {
+                label {Auto Hide Pixel Bar} selected
+                tooltip {The Pixel Bar can slow down playback at high resolutions.  When this option is on, the pixel toolbar will be hidden automatically.} xywh {702 77 25 25} box UP_BOX down_box DOWN_BOX align 4
               }
               Fl_Group {} {open
                 xywh {333 157 450 152} box ROUNDED_BOX

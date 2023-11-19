@@ -6,6 +6,7 @@
 #    include <windows.h>
 #    include <stdio.h>
 #    include <stdlib.h>
+#    include <shellapi.h>
 #endif
 
 #include <iostream>
@@ -76,49 +77,61 @@ int main(int argc, char* argv[])
     return r;
 }
 
-#ifdef _WIN32
+#if defined(_WIN32) && defined(_MSC_VER)
 
-#    include <iostream>
-#    include <locale>
-#    include <codecvt>
+#    include <FL/fl_utf8.h>
+#    include <FL/fl_string_functions.h>
 
-// Function to convert wstring to UTF-8 string
-std::string wstring_to_utf8(const std::wstring& ws)
-{
-    std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
-    return converter.to_bytes(ws);
-}
-
-int WinMain(
+int WINAPI WinMain(
     HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-    // Convert the command line arguments to UTF-8
+    int rc;
+    int i;
     int argc;
     char** argv;
+    char strbuf[2048];
 
-    // Get the command line as a wide string
+    /*
+     * If we are compiling in debug mode, open a console window so
+     * we can see any printf's, etc...
+     *
+     * While we can detect if the program was run from the command-line -
+     * look at the CMDLINE environment variable, it will be "WIN" for
+     * programs started from the GUI - the shell seems to run all Windows
+     * applications in the background anyways...
+     */
+
+    /* Convert the command line arguments to UTF-8 */
     LPWSTR* wideArgv = CommandLineToArgvW(GetCommandLineW(), &argc);
-
-    // Convert each wide string argument to UTF-8
-    argv = new char*[argc];
-    for (int i = 0; i < argc; ++i)
+    argv = (char**)malloc(argc * sizeof(void*));
+    for (i = 0; i < argc; i++)
     {
-        argv[i] = strdup(wstring_to_utf8(wideArgv[i]).c_str());
+        int ret = WideCharToMultiByte(
+            CP_UTF8,        /* CodePage          */
+            0,              /* dwFlags           */
+            wideArgv[i],    /* lpWideCharStr     */
+            -1,             /* cchWideChar       */
+            strbuf,         /* lpMultiByteStr    */
+            sizeof(strbuf), /* cbMultiByte       */
+            NULL,           /* lpDefaultChar     */
+            NULL);          /* lpUsedDefaultChar */
+        argv[i] = fl_strdup(strbuf);
     }
 
-    // Free the wide string array
+    /* Free the wide character string array */
     LocalFree(wideArgv);
 
-    int ret = main(argc, argv);
+    /* Call the program's entry point main() */
+    rc = main(argc, argv);
 
-    // Cleanup allocated memory for argv
+    /* Cleanup allocated memory for argv */
     for (int i = 0; i < argc; ++i)
     {
-        free(argv[i]);
+        free((void*)argv[i]);
     }
-    delete[] argv;
+    free((void*)argv);
 
-    return ret;
+    return rc;
 }
 
 #endif

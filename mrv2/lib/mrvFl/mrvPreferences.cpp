@@ -683,6 +683,9 @@ namespace mrv
         playback.get("single_click_playback", tmp, 0);
         uiPrefs->uiPrefsSingleClickPlayback->value(tmp);
 
+        playback.get("auto_hide_pixel_bar", tmp, 0);
+        uiPrefs->uiPrefsAutoHidePixelBar->value(tmp);
+
         playback.get("fps", tmpF, 24.0);
         uiPrefs->uiPrefsFPS->value(tmpF);
 
@@ -1277,6 +1280,9 @@ namespace mrv
         playback.set(
             "single_click_playback",
             (int)uiPrefs->uiPrefsSingleClickPlayback->value());
+        playback.set(
+            "auto_hide_pixel_bar",
+            (int)uiPrefs->uiPrefsAutoHidePixelBar->value());
         playback.set("fps", uiPrefs->uiPrefsFPS->value());
         playback.delete_entry("loop_mode"); // legacy preference
         playback.set("loop", uiPrefs->uiPrefsLoopMode->value());

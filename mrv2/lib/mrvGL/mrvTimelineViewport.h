@@ -336,6 +336,9 @@ namespace mrv
         //! Update the playback buttons.
         void updatePlaybackButtons() const noexcept;
 
+        //! Toggle the pixel tool bar if the preference option for it is set.
+        void togglePixelBar() const noexcept;
+
     protected:
         virtual void _readPixel(image::Color4f& rgba) const noexcept = 0;
         math::Vector2i _getViewportCenter() const noexcept;

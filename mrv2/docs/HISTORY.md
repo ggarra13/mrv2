@@ -34,6 +34,9 @@ v0.9.1
   does not get confused when scrubbing.
 - Fixed Skipped Frame HUD display not resetting itself when going to the first
   or last frame of the movie.
+- Added Preferences->Playback->Auto Hide Pixel Bar, which when set, hides the
+  pixel bar when playback is started.  This is to prevent slow-downs and
+  skipped frames of clips at high resolutions.
 
 
 v0.9.0

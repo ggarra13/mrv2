@@ -401,6 +401,7 @@ namespace mrv
         {
             i->setPlayback(timeline::Playback::Reverse);
         }
+        togglePixelBar();
         updatePlaybackButtons();
         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
     }
@@ -413,6 +414,7 @@ namespace mrv
         {
             i->setPlayback(timeline::Playback::Stop);
         }
+        togglePixelBar();
         updatePlaybackButtons();
         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
     }
@@ -425,8 +427,31 @@ namespace mrv
         {
             i->setPlayback(timeline::Playback::Forward);
         }
+        togglePixelBar();
         updatePlaybackButtons();
         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
+    }
+
+    void TimelineViewport::togglePixelBar() const noexcept
+    {
+        TLRENDER_P();
+
+        if (p.timelinePlayers.empty() ||
+            !p.ui->uiPrefs->uiPrefsAutoHidePixelBar->value() ||
+            !p.ui->uiPrefs->uiPrefsPixelToolbar->value())
+            return;
+
+        auto playback = p.timelinePlayers[0]->playback();
+        if (playback == timeline::Playback::Stop)
+        {
+            if (!p.ui->uiPixelBar->visible())
+                toggle_pixel_bar(nullptr, p.ui);
+        }
+        else
+        {
+            if (p.ui->uiPixelBar->visible())
+                toggle_pixel_bar(nullptr, p.ui);
+        }
     }
 
     void TimelineViewport::togglePlayback() noexcept
@@ -437,6 +462,7 @@ namespace mrv
         {
             i->togglePlayback();
         }
+        togglePixelBar();
         updatePlaybackButtons();
         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
     }
