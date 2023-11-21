@@ -120,7 +120,6 @@ System::Free $9
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".nef" "Nikon Electronic Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".nrw" "Nikon RAW Camera Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".orf" "Olympus RAW Camera Format" 1
-!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".otio" "OpenTimelineIO Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".pef" "Pentax Electronic File (Ricoh)" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".png" "Portable Network Graphics" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".ppm" "Portable Pixmap" 1
@@ -163,6 +162,8 @@ System::Free $9
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".mpeg3" "MPEG3 Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".mpeg4" "MPEG4 Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".mxf" "Material eXchange Format" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".otio" "OpenTimelineIO Format" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".otioz" "OpenTimelineIO ZIP Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".qt" "Apple's Quicktime" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".rm" "RealNetwork's Real Media" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".usd" "Universal Scene Description" 1

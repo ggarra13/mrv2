@@ -1,3 +1,7 @@
+v0.9.2
+======
+- Added .otioz to Windows file associations installer and uninstaller.
+
 v0.9.1
 ======
 
@@ -37,8 +41,6 @@ v0.9.1
 - Added Preferences->Playback->Auto Hide Pixel Bar, which when set, hides the
   pixel bar when playback is started.  This is to prevent slow-downs and
   skipped frames of clips at high resolutions.
-- Fixed UTF-8 conversion on command-line and file associations on Windows,
-  which would make files or directories written, in say, Chinese not work.
 
 
 v0.9.0
