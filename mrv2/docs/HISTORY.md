@@ -1,10 +1,14 @@
 v0.9.2
 ======
 - Added .otioz to Windows file associations installer and uninstaller.
-- Added .vscode directory with tasks to:
-  * Build All mrv2 Project with all Dependencies (main compile)
-  * Build tlRender, FLTK and mrv2
-  * Build mrv2 only
+- Fixed Hotkeys not working.
+- Caught Escape hotkey on Window callback to prevent it from exiting the
+  application if it is not set to do so.
+- For programmers using VSCode, added .vscode directory with tasks to:
+  * Build All mrv2 Project with all Dependencies (main compile -- runme.sh)
+  * Build tlRender, FLTK and mrv2 (runmet.sh)
+  * Build mrv2 only (runmeq.sh)
+
 
 v0.9.1
 ======

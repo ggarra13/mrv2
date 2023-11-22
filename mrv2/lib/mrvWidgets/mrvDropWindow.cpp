@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include <FL/Fl.H>
+#include <FL/names.h>
 
 #include "mrvDropWindow.h"
 #include "mrvEventHeader.h"
@@ -58,18 +59,10 @@ namespace mrv
             if (visible() && (cx > ex) && (cy > ey) && (cx < (ew + ex)) &&
                 (cy < (eh + ey)))
             {
-                // std::cerr << "ACCEPTED" << std::endl;
                 res = 1;
             }
             else
             {
-                // std::cerr << "REJECTED visible? " << visible() << std::endl;
-                // std::cerr << "cx > ex = " << (cx > ex) << std::endl
-                //           << "cy > ey = " << (cy > ey) << std::endl
-                //           << "(cx < (ew + ex)) = " << (cx < (ew + ex)) <<
-                //           std::endl
-                //           << "(cy < (eh + ey)) = " << (cy < (eh + ey)) <<
-                //           std::endl;
                 res = 0;
             }
         }

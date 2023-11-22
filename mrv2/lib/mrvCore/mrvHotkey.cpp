@@ -412,7 +412,7 @@ namespace mrv
         HotkeyEntry(_("Slice Clip"), &kEditSliceClip),
         HotkeyEntry(_("Remove Clip"), &kEditRemoveClip),
         HotkeyEntry(_("Insert Audio Gap"), &kEditInsertAudioGap),
-        HotkeyEntry(_("Remove Audio Gap"), &kEditInsertAudioGap),
+        HotkeyEntry(_("Remove Audio Gap"), &kEditRemoveAudioGap),
 
         HotkeyEntry(_("Edit Undo"), &kEditUndo),
         HotkeyEntry(_("Edit Redo"), &kEditRedo),
@@ -622,7 +622,7 @@ namespace mrv
         size_t numHotkeys = sizeof(hotkeys) / sizeof(HotkeyEntry);
         for (size_t i = 0; i < numHotkeys; ++i)
         {
-            if (kDefaultHotkeys[i].hotkey)
+            if (kDefaultHotkeys[i].hotkey && hotkeys[i].hotkey)
             {
                 hotkeys[i].hotkey->ctrl = kDefaultHotkeys[i].hotkey->ctrl;
                 hotkeys[i].hotkey->meta = kDefaultHotkeys[i].hotkey->meta;

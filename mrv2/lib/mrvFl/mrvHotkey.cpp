@@ -223,7 +223,7 @@ namespace mrv
 
         for (int i = 0; hotkeys[i].hotkey; ++i)
         {
-            Hotkey* saved = new Hotkey(*hotkeys[i].hotkey);
+            Hotkey saved(*hotkeys[i].hotkey);
 
             keys->get(
                 (hotkeys[i].name + " key").c_str(), tmp,
@@ -245,8 +245,7 @@ namespace mrv
 
             if (hotkeys[i].force)
             {
-                delete hotkeys[i].hotkey;
-                hotkeys[i].hotkey = saved;
+                *(hotkeys[i].hotkey) = saved;
                 continue;
             }
             keys->get(
@@ -297,7 +296,12 @@ namespace mrv
                                 .arg(_(hotkeys[i].name.c_str()));
                         LOG_ERROR(err);
                     }
-                    hotkeys[j].hotkey = new Hotkey();
+                    hotkeys[j].hotkey->ctrl = false;
+                    hotkeys[j].hotkey->shift = false;
+                    hotkeys[j].hotkey->meta = false;
+                    hotkeys[j].hotkey->alt = false;
+                    hotkeys[j].hotkey->text.clear();
+                    hotkeys[j].hotkey->key = 0;
                 }
             }
         }
@@ -307,7 +311,7 @@ namespace mrv
     {
         Fl_Preferences* keys = new Fl_Preferences(
             prefspath().c_str(), "filmaura", Preferences::hotkeys_file.c_str(),
-            Fl_Preferences::C_LOCALE);
+            (Fl_Preferences::Root)0);
         load_hotkeys(keys);
         delete keys;
     }

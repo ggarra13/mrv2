@@ -412,7 +412,7 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
   }
 }
 
-widget_class TimelineClass {open
+widget_class TimelineClass {
   xywh {604 164 690 29} box NO_BOX resizable
   class Fl_Double_Window visible
 } {
@@ -806,9 +806,11 @@ uiSecondary = nullptr;} {}
     Fl_Window uiMain {
       label mrv2
       user_data this user_data_type {ViewerUI*}
-      callback {exit_cb( o, v );} open
-      xywh {38 75 690 602} type Double align 80 hide resizable
-      class {mrv::MainWindow} size_range {690 602 0 0}
+      callback {int reason = Fl::callback_reason();
+if (reason == FL_REASON_CLOSED)
+    exit_cb( o, v );} open selected
+      xywh {728 116 690 602} type Double align 80 resizable
+      class {mrv::MainWindow} size_range {690 602 0 0} visible
     } {
       Fl_Pack uiRegion {open
         xywh {0 0 690 602} box FLAT_BOX resizable
@@ -1161,7 +1163,7 @@ settings->setValue( mrv::kPenColorA, a);}
             xywh {0 488 690 30} box FLAT_BOX color 51
             class {mrv::TimelineGroup}
           } {
-            Fl_Group uiTimeline {selected
+            Fl_Group uiTimeline {
               xywh {0 496 690 22} resizable
               class {mrv::TimelineWidget}
             } {}

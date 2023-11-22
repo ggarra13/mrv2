@@ -317,13 +317,14 @@ namespace mrv
         HotkeyEntry(const std::string n, Hotkey* h, bool f = false) :
             force(f),
             name(n),
-            hotkey(nullptr)
-        {
-            if (h)
-                hotkey = new Hotkey(*h);
-        };
+            hotkey(h){
+                // if (h)
+                //     hotkey = new Hotkey(*h);
+            };
 
-        ~HotkeyEntry() { delete hotkey; }
+        ~HotkeyEntry()
+        { /*delete hotkey;*/
+        }
 
         bool force;
         std::string name;
