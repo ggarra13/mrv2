@@ -3,7 +3,7 @@
 FROM rockylinux:8
 
 # LABEL about the custom image
-LABEL maintainer="ggara13@gmail.com"
+LABEL maintainer="ggarra13@gmail.com"
 LABEL description="This is a custom Docker Image for mrv2."
 
 #
