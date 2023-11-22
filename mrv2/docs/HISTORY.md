@@ -1,6 +1,10 @@
 v0.9.2
 ======
 - Added .otioz to Windows file associations installer and uninstaller.
+- Added .vscode directory with tasks to:
+  * Build All mrv2 Project with all Dependencies (main compile)
+  * Build tlRender, FLTK and mrv2
+  * Build mrv2 only
 
 v0.9.1
 ======
