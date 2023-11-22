@@ -13,12 +13,7 @@
 
 # Compiled Dynamic libraries
 *.so
-# *.dylib  # We distribute precompiled libintl
-# *.dll    # We distribute precompiled FFmpeg
-
-# Fortran module files
-*.mod
-*.smod
+# *.dylib  # We distribute precompiled libintl for macOS
 
 # Compiled Static libraries
 *.lai
@@ -33,6 +28,8 @@
 
 # Directories and backup files
 BUILD-*
+tlRender/build*
+tlRender/debug_tests
 Qt5
 Qt6
 packages
@@ -53,4 +50,3 @@ packages
 *#
 *~
 .git
-.vscode
