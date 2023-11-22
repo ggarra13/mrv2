@@ -1524,7 +1524,7 @@ namespace mrv
             input = "";
 
         timeline::ColorConfigOptions o;
-        if (!input.empty())
+        if (!input.empty() && input != _("None"))
             o.enabled = true;
         else
             o.enabled = false;

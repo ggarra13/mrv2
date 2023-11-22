@@ -1855,6 +1855,7 @@ namespace mrv
             // menu
             ui->OCIOView->clear();
             ui->uiICS->clear();
+            ui->uiICS->add(_("None"));
 
             try
             {
