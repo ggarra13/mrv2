@@ -130,6 +130,11 @@ namespace mrv
 
         //! Default missing frame type.  Should be static.
         MissingFrameType missingFrameType = kBlackFrame;
+
+        //! Auxiliary variables to count FPS
+        unsigned frameCount = 0;
+        double actualFPS;
+        std::chrono::high_resolution_clock::time_point startTime;
     };
 
 } // namespace mrv

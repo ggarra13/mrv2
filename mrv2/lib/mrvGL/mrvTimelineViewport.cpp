@@ -333,9 +333,13 @@ namespace mrv
         switch (p.timelinePlayers[0]->playback())
         {
         case timeline::Playback::Forward:
+            p.actualFPS = p.timelinePlayers[0]->speed();
+            p.startTime = std::chrono::high_resolution_clock::now();
             c->uiPlayForwards->color(color);
             break;
         case timeline::Playback::Reverse:
+            p.actualFPS = p.timelinePlayers[0]->speed();
+            p.startTime = std::chrono::high_resolution_clock::now();
             c->uiPlayBackwards->color(color);
             break;
         default:

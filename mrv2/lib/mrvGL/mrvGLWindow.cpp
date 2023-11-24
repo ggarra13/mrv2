@@ -71,6 +71,11 @@ namespace mrv
         auto dpy = fl_x11_display();
         if (dpy)
         {
+            // Get the current OpenGL context
+            GLXContext currentContext = glXGetCurrentContext();
+            if (currentContext == ctx)
+                return;
+
             auto win = fl_x11_xid(this);
             glXMakeCurrent(dpy, win, (GLXContext)ctx);
         }

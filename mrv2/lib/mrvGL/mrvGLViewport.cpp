@@ -211,7 +211,7 @@ namespace mrv
         }
 
 #ifdef DEBUG_SPEED
-        auto start_time = std::chrono::steady_clock::now();
+        auto start_time = std::chrono::high_resolution_clock::now();
 #endif
 
         const auto& viewportSize = getViewportSize();
@@ -636,7 +636,7 @@ namespace mrv
 #endif
 
 #ifdef DEBUG_SPEED
-        auto end_time = std::chrono::steady_clock::now();
+        auto end_time = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> diff = end_time - start_time;
         std::cout << "GL::draw() duration " << diff.count() << std::endl;
 #endif

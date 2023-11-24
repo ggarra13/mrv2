@@ -323,9 +323,9 @@ namespace mrv2
          */
         double update()
         {
-            auto start_time = std::chrono::steady_clock::now();
+            auto start_time = std::chrono::high_resolution_clock::now();
             Fl::check();
-            auto end_time = std::chrono::steady_clock::now();
+            auto end_time = std::chrono::high_resolution_clock::now();
             std::chrono::duration<double> diff = end_time - start_time;
             return diff.count();
         }

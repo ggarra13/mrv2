@@ -71,7 +71,7 @@ namespace mrv
 
         //! Measuring timer
 #ifdef DEBUG_SPEED
-        std::chrono::time_point<std::chrono::steady_clock> start_time;
+        std::chrono::time_point<std::chrono::high_resolution_clock> start_time;
 #endif
 
         //! List of annotations ( drawings/text per time )
@@ -152,7 +152,7 @@ namespace mrv
                 { cacheInfoChanged(value); });
 
 #ifdef DEBUG_SPEED
-        p.start_time = std::chrono::steady_clock::now();
+        p.start_time = std::chrono::high_resolution_clock::now();
 #endif
 
         Fl::add_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
@@ -899,10 +899,10 @@ namespace mrv
     void TimelinePlayer::timerEvent()
     {
 #ifdef DEBUG_SPEED
-        auto end_time = std::chrono::steady_clock::now();
+        auto end_time = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> diff = end_time - _p->start_time;
         std::cout << "timeout duration: " << diff.count() << std::endl;
-        _p->start_time = std::chrono::steady_clock::now();
+        _p->start_time = std::chrono::high_resolution_clock::now();
 #endif
         _p->player->tick();
         Fl::repeat_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);

@@ -910,10 +910,30 @@ namespace mrv
                 int64_t absdiff = std::abs(frame_diff);
                 if (absdiff > 1 && absdiff < 60)
                     p.skippedFrames += absdiff - 1;
+                ++p.frameCount;
+
+                // Calculate elapsed time
+                auto endTime = std::chrono::high_resolution_clock::now();
+                auto elapsedTime =
+                    std::chrono::duration_cast<std::chrono::milliseconds>(
+                        endTime - p.startTime)
+                        .count();
+
+                // Update FPS every second (adjust as needed)
+                if (elapsedTime >= 1000)
+                {
+                    p.actualFPS = p.frameCount / (elapsedTime / 1000.0);
+
+                    // Reset variables for the next second
+                    p.frameCount = 0;
+                    p.startTime = std::chrono::high_resolution_clock::now();
+                }
+
+                snprintf(
+                    buf, 512, "SF: %" PRIu64 " FPS: %.3f/%.3f", p.skippedFrames,
+                    p.actualFPS, player->speed());
             }
-            snprintf(
-                buf, 512, "SF: %" PRIu64 " FPS: %.3f", p.skippedFrames,
-                player->speed());
+
             tmp += buf;
         }
 
