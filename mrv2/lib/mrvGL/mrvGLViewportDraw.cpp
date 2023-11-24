@@ -932,9 +932,9 @@ namespace mrv
                 snprintf(
                     buf, 512, "SF: %" PRIu64 " FPS: %.3f/%.3f", p.skippedFrames,
                     p.actualFPS, player->speed());
-            }
 
-            tmp += buf;
+                tmp += buf;
+            }
         }
 
         p.lastTime = time;
