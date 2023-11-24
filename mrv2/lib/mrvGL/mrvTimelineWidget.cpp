@@ -525,10 +525,8 @@ namespace mrv
         TLRENDER_P();
         const math::Size2i renderSize(pixel_w(), pixel_h());
 
-        DBG2;
         make_current();
 
-        DBG2;
         if (!valid())
         {
             _initializeGL();
@@ -594,12 +592,12 @@ namespace mrv
             }
         }
 
+#if 0
         glViewport(0, 0, renderSize.w, renderSize.h);
         glClearColor(0.F, 0.F, 0.F, 0.F);
         glClear(GL_COLOR_BUFFER_BIT);
         CHECK_GL;
 
-        DBG2;
         if (p.buffer)
         {
             p.shader->bind();
@@ -634,7 +632,14 @@ namespace mrv
                 p.vao->draw(GL_TRIANGLES, 0, p.vbo->getSize());
             }
         }
-        DBG2;
+#else
+        glBindFramebuffer(GL_READ_FRAMEBUFFER, p.buffer->getID());
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); // 0 is screen
+
+        glBlitFramebuffer(
+            0, 0, renderSize.w, renderSize.h, 0, 0, renderSize.w, renderSize.h,
+            GL_COLOR_BUFFER_BIT, GL_NEAREST);
+#endif
     }
 
     int TimelineWidget::enterEvent()
