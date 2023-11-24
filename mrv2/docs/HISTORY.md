@@ -6,6 +6,7 @@ v0.9.2
   application if it is not set to do so.
 - Increased performance of playback on Linux when the timeline is visible at
   high frame rates (60 FPS).
+- Increased performance of playback on Windows when the timeline is visible.
 - Actual Frame Rate display in the HUD when FPS is selected (it shows
   Skipped Frames, Actual Frame Rate and Target Frame Rate).
 - For programmers using VSCode, added .vscode directory with tasks to:
