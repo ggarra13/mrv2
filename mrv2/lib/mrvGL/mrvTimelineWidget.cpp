@@ -592,7 +592,7 @@ namespace mrv
             }
         }
 
-#if 0
+#if defined(__APPLE__)
         glViewport(0, 0, renderSize.w, renderSize.h);
         glClearColor(0.F, 0.F, 0.F, 0.F);
         glClear(GL_COLOR_BUFFER_BIT);
