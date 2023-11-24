@@ -55,7 +55,7 @@ The source forge site also hosts beta builds (nightly builds with the latest cha
 
 ## Compatibility
 
-mrv2 binaries run on Windows 8.1+, RedHat 8.1+ or Ubuntu 20.04+ and macOS 11.0+.
+mrv2 binaries run on Windows 8.1+, RedHat 8.8+ or Ubuntu 20.04+ and macOS 11.0+.
 
 ## Notes on installation
 
@@ -152,7 +152,7 @@ group, you can just build mrv2 with:
 ./runme_docker.sh
 ```
 The resulting installers will be placed in a new packages/ directory of the
-root of mrv2.  The docker images are compatible with RedHat 8.1 and Ubuntu 20.04.
+root of mrv2.  The docker images are compatible with RedHat 8.8 and Ubuntu 20.04.
 
 ## Dependencies
 
@@ -428,7 +428,7 @@ Note that if you will not be developing mrv2, you should instead proceed to [Pac
 
 ## Linux Wayland
 
-If you did not compile from source and are trying to run the Rocky Linux 8.1
+If you did not compile from source and are trying to run the Rocky Linux 8.8
 binaries under Wayland on a more modern distribution, you may encounter an
 error like:
 
