@@ -931,6 +931,11 @@ namespace mrv
                 _updateCursor();
                 redrawWindows();
             }
+            if (p.presentation)
+            {
+                _updateCursor();
+                p.presentationTime = std::chrono::high_resolution_clock::now();
+            }
             _updatePixelBar();
             return 1;
         }
