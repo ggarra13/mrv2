@@ -246,7 +246,6 @@ brew install git cmake ninja gettext openssl readline sqlite3 xz zlib
 Additional dependencies are downloaded and built automatically by the CMake
 superbuild script.  For a list of non-system libraries that mrv2 depends on
 and their licenses, please refer to mrv2/docs/Legal.
-The system dependencies for each OS is listed below.
 
 The only special requirement is installing a new copy of cmake than the
 one that ships with MSVC19.
