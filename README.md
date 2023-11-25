@@ -288,6 +288,8 @@ in:
 BUILD-KERNEL-ARCH/BUILDTYPE/compile.log.
 ````
 The default is to build with all cores in all the Operating Systems.
+Currently, the build with all settings on takes about 25 mins. on 16 cores.
+
 If you want more or less cores pass another number to any of
 the runme*.sh scripts.  For example, to build with 4 cores, you can do:
 
@@ -335,10 +337,9 @@ There is a .bat file included in the distribution (in windows/bat),
 which needs to be modified to the path of Visual Studio (2019 by default),
 the optional Windows SDK (none by default) and your copy of Msys.
 
-As a convernience for Windows users, DLLs, includes and .lib files
-for FFmpeg and liblcms2 libraries are provided in mrv2's windows/win64 directory.  The libintl and libiconv libraries are taken from the MSys64 repositories as pre-flight check with the bin/install_libintl_window.sh script (part of runme.sh).
+FFmpeg and liblcms2 are now compiled as part of the pre-flight cmake build.  libssh and libcrypto are taken from Msys64 repositories when building FFmpeg.
 
-If you unset LCMS2_ROOT in windows/envvars/envvars.sh, the library will be compiled.
+The libintl and libiconv libraries are taken from the MSys64 repositories as pre-flight check with the bin/install_libintl_window.sh script (part of runme.sh).
 
 ## CMake build options
 
@@ -346,7 +347,7 @@ The main runme.sh script supports passing CMake flags to it and allows turning o
 
 -D TLRENDER_USD=OFF
 
-Currently, the flags supported are:
+Currently, the main flags supported (that have an effect on how long it takes to compile) are:
 
 | Name              | Description                                       | Default   |
 | ----------------- | ------------------------------------------------- | --------- |
