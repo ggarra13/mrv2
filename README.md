@@ -356,6 +356,7 @@ Currently, the flags supported are:
 | MRV2_NETWORK      | Toggles Network and Single Instance.              | TRUE      |
 | MRV2_PDF          | Toggles PDF Saving and Creation.                  | TRUE      |
 | TLRENDER_USD      | Toggles support for USD                           | TRUE      |
+| TLRENDER_NET      | Toggles support for Network playback              | TRUE      |
 | TLRENDER_RAW      | Toggles support for RAW Camera formats            | TRUE      |
 
 ## Building FFmpeg as GPL or LGPL
@@ -366,7 +367,7 @@ If you pass -gpl or -lpgl to the runme.sh script, like:
 ./runme.sh -gpl
 ```
 
-The build system will compile FFmpeg as GPL or LGPL on all platforms.  The default is to build a LGPL version of FFmpeg as that complies with the BSD binary distribution license.  The LGPL version of FFmpeg, however, does not come with libx264, which means you cannot save movie files with the H264 codec.  On Windows, if you don't specify neither -gpl nor -lgpl, the pre-compiled LGPL binaries are used.
+The build system will compile FFmpeg as GPL or LGPL on all platforms.  The default is to build a LGPL version of FFmpeg as that complies with the BSD binary distribution license.  The LGPL version of FFmpeg, however, does not come with libx264, which means you cannot save movie files with the H264 codec.
 
 The GPL version of FFmpeg does not have that restriction and it will compile libx264 on all platforms.
 

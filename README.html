@@ -224,8 +224,7 @@ Packaging</a> - Optional</li>
 </ul>
 <p>Additional dependencies are downloaded and built automatically by the
 CMake superbuild script. For a list of non-system libraries that mrv2
-depends on and their licenses, please refer to mrv2/docs/Legal. The
-system dependencies for each OS is listed below.</p>
+depends on and their licenses, please refer to mrv2/docs/Legal.</p>
 <p>The only special requirement is installing a new copy of cmake than
 the one that ships with MSVC19. If building the NSIS installer, you need
 to place the root of mrv2 in a path that has less than 20 characters,
@@ -331,6 +330,11 @@ like:</p>
 <td>TRUE</td>
 </tr>
 <tr class="odd">
+<td>TLRENDER_NET</td>
+<td>Toggles support for Network playback</td>
+<td>TRUE</td>
+</tr>
+<tr class="even">
 <td>TLRENDER_RAW</td>
 <td>Toggles support for RAW Camera formats</td>
 <td>TRUE</td>
@@ -345,8 +349,7 @@ LGPL</h2>
 The default is to build a LGPL version of FFmpeg as that complies with
 the BSD binary distribution license. The LGPL version of FFmpeg,
 however, does not come with libx264, which means you cannot save movie
-files with the H264 codec. On Windows, if you don’t specify neither -gpl
-nor -lgpl, the pre-compiled LGPL binaries are used.</p>
+files with the H264 codec.</p>
 <p>The GPL version of FFmpeg does not have that restriction and it will
 compile libx264 on all platforms.</p>
 <h1 id="running-mrv2">Running mrv2</h1>
