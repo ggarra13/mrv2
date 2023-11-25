@@ -251,7 +251,9 @@ href="#dependencies">Dependencies</a>.</p>
 save itt in:</p>
 <pre><code>BUILD-KERNEL-ARCH/BUILDTYPE/compile.log.</code></pre>
 <p>The default is to build with all cores in all the Operating Systems.
-If you want more or less cores pass another number to any of the
+Currently, the build with all settings on takes about 25 mins. on 16
+cores.</p>
+<p>If you want more or less cores pass another number to any of the
 runme*.sh scripts. For example, to build with 4 cores, you can do:</p>
 <pre><code>./runme.sh -j 4</code></pre>
 <p>Later, if you just want to build mrv2 quickly (runme quick mnemonic)
@@ -272,19 +274,19 @@ fresh copy of Msys. There is a .bat file included in the distribution
 (in windows/bat), which needs to be modified to the path of Visual
 Studio (2019 by default), the optional Windows SDK (none by default) and
 your copy of Msys.</p>
-<p>As a convernience for Windows users, DLLs, includes and .lib files
-for FFmpeg and liblcms2 libraries are provided in mrv2’s windows/win64
-directory. The libintl and libiconv libraries are taken from the MSys64
+<p>FFmpeg and liblcms2 are now compiled as part of the pre-flight cmake
+build. libssh and libcrypto are taken from Msys64 repositories when
+building FFmpeg.</p>
+<p>The libintl and libiconv libraries are taken from the MSys64
 repositories as pre-flight check with the bin/install_libintl_window.sh
 script (part of runme.sh).</p>
-<p>If you unset LCMS2_ROOT in windows/envvars/envvars.sh, the library
-will be compiled.</p>
 <h2 id="cmake-build-options">CMake build options</h2>
 <p>The main runme.sh script supports passing CMake flags to it and
 allows turning on or off some options of mrv2. You must pass them
 like:</p>
 <p>-D TLRENDER_USD=OFF</p>
-<p>Currently, the flags supported are:</p>
+<p>Currently, the main flags supported (that have an effect on how long
+it takes to compile) are:</p>
 <table>
 <colgroup>
 <col style="width: 22%" />
