@@ -29,7 +29,7 @@ class ChooseHotkey {open
   } {
     Fl_Window uiMain {
       label {Hotkey for...} open
-      xywh {235 379 360 140} type Double box PLASTIC_UP_BOX resizable
+      xywh {608 536 360 140} type Double box PLASTIC_UP_BOX resizable
       code0 {std::string title = "Hotkey for ";}
       code1 {title += name;}
       code2 {o->copy_label( title.c_str() );} modal visible
@@ -56,6 +56,51 @@ class ChooseHotkey {open
         Fl_Check_Button uiMeta {
           label Meta
           xywh {155 103 25 27} down_box DOWN_BOX labelcolor 32
+        }
+        Fl_Button {} {
+          label {Press Hotkey}
+          user_data this user_data_type {ChooseHotkey*}
+          callback {v->hk.ctrl  = (bool) v->uiCtrl->value();
+v->hk.alt   = (bool) v->uiAlt->value();
+v->hk.meta  = (bool) v->uiMeta->value();
+v->hk.shift = (bool) v->uiShift->value();
+
+v->hk.key = 0;
+v->hk.text = "";
+if ( v->uiKey->value() && strlen(v->uiKey->value()) > 0 )
+{
+  std::string text = v->uiKey->value();
+
+  unsigned key = 0;
+  for (int i = 0; i < 45; i++)
+     if (text == mrv::table[i].text) {key = mrv::table[i].n; break;}
+
+  if ( key == 0 )
+  {
+    char buffer[128];
+    for( int i = FL_F + 1; i <= FL_F_Last; ++i )
+    {
+	snprintf(buffer, 128, "F%d", i - FL_F);
+	if ( text == buffer ) { key = i; break; }
+    }
+  }
+
+  if ( key > 0 ) v->hk.key = key;
+  else if ( text.size() )
+  {
+    v->hk.key = text[0];
+    v->hk.text = text[0];
+   }
+   
+   if (isupper(v->hk.key))
+   {
+  	v->hk.shift = true;
+  	v->hk.key = tolower(v->hk.key);
+   }
+}
+
+v->uiMain->hide();} selected
+          tooltip {Open an Input to allow presin} xywh {220 60 130 28}
         }
         Fl_Button {} {
           label Okay
@@ -99,15 +144,15 @@ if ( v->uiKey->value() && strlen(v->uiKey->value()) > 0 )
    }
 }
 
-v->uiMain->hide();} selected
-          xywh {220 92 55 26}
+v->uiMain->hide();}
+          xywh {220 103 55 26}
         }
         Fl_Button {} {
           label Cancel
           user_data this user_data_type {ChooseHotkey*}
           callback {v->hk = v->backup;
 v->uiMain->hide();}
-          xywh {280 92 70 26}
+          xywh {280 103 70 26}
         }
         Fl_Menu_Button uiSpecialKey {
           label Special
