@@ -17,7 +17,7 @@
 #
 
 #
-# Store the paramters for passing them later
+# Store the parameters for passing them later
 #
 params=$*
 

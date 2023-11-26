@@ -10,6 +10,7 @@ v0.9.2
 - Actual Frame Rate display in the HUD when FPS is selected (it shows
   Skipped Frames, Actual Frame Rate and Target Frame Rate).
 - Made cursor disappear on Presentation mode after three seconds of inactivity.
+- Fixed compilation for Windows WSL2.
 - For programmers using VSCode, added .vscode directory with tasks to:
     * Build All mrv2 Project with all Dependencies (main compile -- runme.sh)
     * Build tlRender, FLTK and mrv2 (runmet.sh)
