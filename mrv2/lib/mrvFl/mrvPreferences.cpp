@@ -799,6 +799,19 @@ namespace mrv
         uiPrefs->uiPrefsRaiseLogWindowOnError->value(tmp);
         LogDisplay::prefs = (LogDisplay::ShowPreferences)tmp;
 
+        Fl_Preferences opengl(base, "opengl");
+
+        opengl.get("vsync", tmp, 0);
+        uiPrefs->uiPrefsOpenGLVsync->value(tmp);
+
+#if defined(__linux__) || defined(_WIN32)
+        opengl.get("blit_timeline", tmp, 1);
+#else
+        // macOS seems to work better with shaders than with blitting.
+        opengl.get("blit_timeline", tmp, 0);
+#endif
+        uiPrefs->uiPrefsBlitTimeline->value(tmp);
+
         Fl_Preferences behavior(base, "behavior");
         behavior.get("check_for_updates", tmp, 0);
         uiPrefs->uiPrefsCheckForUpdates->value(tmp);
@@ -1355,6 +1368,10 @@ namespace mrv
         Fl_Preferences errors(base, "errors");
         errors.set(
             "log_display", (int)uiPrefs->uiPrefsRaiseLogWindowOnError->value());
+
+        Fl_Preferences opengl(base, "opengl");
+        opengl.set("vsync", (int)uiPrefs->uiPrefsOpenGLVsync->value());
+        opengl.set("blit_timeline", (int)uiPrefs->uiPrefsBlitTimeline->value());
 
         Fl_Preferences behavior(base, "behavior");
         behavior.set(

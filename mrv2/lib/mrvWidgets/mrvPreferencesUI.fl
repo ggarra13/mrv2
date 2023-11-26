@@ -73,15 +73,15 @@ class PreferencesUI {open
     Fl_Window uiMain {
       label Preferences
       user_data this user_data_type {PreferencesUI*} open
-      xywh {371 47 847 466} type Double hide resizable
-      code0 {main = m;} modal
+      xywh {673 230 847 466} type Double resizable
+      code0 {main = m;} modal visible
     } {
       Fl_Group {} {open
-        xywh {0 0 853 469} box FLAT_BOX
+        xywh {0 0 847 466} box FLAT_BOX
       } {
         Fl_Wizard uiWizard {
           label Settings open
-          xywh {283 26 570 380} box PLASTIC_UP_BOX labelcolor 32
+          xywh {283 26 564 380} box PLASTIC_UP_BOX labelcolor 32
         } {
           Fl_Group {} {
             label {User Interface}
@@ -333,14 +333,14 @@ If you try to open several mrv2s with different images, all these images will be
           }
           Fl_Group {} {
             label Render
-            xywh {298 45 555 349} box EMBOSSED_BOX align 5 hide
+            xywh {291 45 549 349} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {open
-              xywh {308 75 531 170} box ROUNDED_BOX
+              xywh {301 75 531 170} box ROUNDED_BOX
             } {
               Fl_Choice uiPrefsVideoLevels {
                 label {Video Levels}
-                xywh {520 89 135 25} down_box BORDER_BOX
+                xywh {513 89 135 25} down_box BORDER_BOX
               } {
                 MenuItem {} {
                   label {From File}
@@ -357,7 +357,7 @@ If you try to open several mrv2s with different images, all these images will be
               }
               Fl_Choice uiPrefsAlphaBlend {
                 label {Alpha Blend}
-                xywh {520 119 135 25} down_box BORDER_BOX
+                xywh {513 119 135 25} down_box BORDER_BOX
               } {
                 MenuItem {} {
                   label None
@@ -374,7 +374,7 @@ If you try to open several mrv2s with different images, all these images will be
               }
               Fl_Choice uiPrefsMinifyFilter {
                 label {Minify Filter}
-                xywh {520 172 135 25} down_box BORDER_BOX
+                xywh {513 172 135 25} down_box BORDER_BOX
               } {
                 MenuItem {} {
                   label Nearest
@@ -387,7 +387,7 @@ If you try to open several mrv2s with different images, all these images will be
               }
               Fl_Choice uiPrefsMagnifyFilter {
                 label {Magnify Filter}
-                xywh {520 205 135 25} down_box BORDER_BOX
+                xywh {513 205 135 25} down_box BORDER_BOX
               } {
                 MenuItem {} {
                   label Nearest
@@ -511,25 +511,25 @@ o->redraw();}
           }
           Fl_Group {} {
             label Fonts
-            xywh {298 45 555 349} box EMBOSSED_BOX align 5 hide
+            xywh {293 45 547 349} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {
               label Fonts open
-              xywh {369 100 403 199} box ROUNDED_BOX
+              xywh {364 100 403 199} box ROUNDED_BOX
             } {
               Fl_Group {} {open
-                xywh {490 162 160 75}
+                xywh {485 162 160 75}
               } {
                 Fl_Choice uiFontMenus {
                   label Menus open
-                  tooltip {Sets the font to use in menus.} xywh {490 162 160 25} down_box BORDER_BOX
+                  tooltip {Sets the font to use in menus.} xywh {485 162 160 25} down_box BORDER_BOX
                   code0 {const auto& fonts = mrv::fonts::list();}
                   code1 {for (const auto& font : fonts)}
                   code2 {o->add(font.c_str());}
                 } {}
                 Fl_Choice uiFontPanels {
                   label Panels open
-                  tooltip {Sets the font to use in panels. (Not yet working)} xywh {490 212 160 25} down_box BORDER_BOX
+                  tooltip {Sets the font to use in panels. (Not yet working)} xywh {485 212 160 25} down_box BORDER_BOX
                   code0 {const auto& fonts = mrv::fonts::list();}
                   code1 {for (const auto& font : fonts)}
                   code2 {o->add(font.c_str());}
@@ -609,8 +609,8 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
             }
           }
           Fl_Group {} {
-            label Playback open
-            xywh {300 34 530 362} box EMBOSSED_BOX align 5
+            label Playback
+            xywh {300 34 530 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {
               label Defaults open
@@ -625,7 +625,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                 tooltip {Start Playback when single clicking the left mouse button on the view window} xywh {702 111 25 25} box UP_BOX down_box DOWN_BOX align 4
               }
               Fl_Check_Button uiPrefsAutoHidePixelBar {
-                label {Auto Hide Pixel Bar} selected
+                label {Auto Hide Pixel Bar}
                 tooltip {The Pixel Bar can slow down playback at high resolutions.  When this option is on, the pixel toolbar will be hidden automatically.} xywh {702 77 25 25} box UP_BOX down_box DOWN_BOX align 4
               }
               Fl_Group {} {open
@@ -1248,6 +1248,43 @@ v->uiOCIO_Display_View->do_callback();}
             }
           }
           Fl_Group {} {
+            label OpenGL open
+            xywh {291 36 532 362} box EMBOSSED_BOX align 5
+          } {
+            Fl_Group {} {open
+              xywh {329 36 446 313}
+            } {
+              Fl_Choice uiPrefsOpenGLVsync {
+                label {OpenGL VSync} open
+                tooltip {Turns on and off OpenGL's Vsync.} xywh {480 170 255 25} down_box BORDER_BOX align 132 textcolor 32
+                class {mrv::Choice}
+              } {
+                MenuItem {} {
+                  label No
+                  xywh {30 30 100 20}
+                }
+                MenuItem {} {
+                  label Yes
+                  xywh {30 30 100 20}
+                }
+              }
+              Fl_Choice uiPrefsBlitTimeline {
+                label {Blit Timeline} open
+                tooltip {Timeline can be drawn with blitting or with OpenGL shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {480 223 255 25} down_box BORDER_BOX align 132 textcolor 32
+                class {mrv::Choice}
+              } {
+                MenuItem {} {
+                  label No
+                  xywh {40 40 100 20}
+                }
+                MenuItem {} {
+                  label Yes
+                  xywh {40 40 100 20}
+                }
+              }
+            }
+          }
+          Fl_Group {} {
             label Errors
             xywh {303 39 532 362} box EMBOSSED_BOX align 5 hide
           } {
@@ -1386,8 +1423,10 @@ o->add( _("OCIO Defaults") );
 o->add( _("Loading") );
 o->add( _("Path Mappings") );
 o->add( _("Network") );
+o->add( _("OpenGL") );
 o->add( _("Errors") );
 o->add( _("Behavior") );
-o->select( item );} {}
+o->select( item );} {selected
+    }
   }
 }

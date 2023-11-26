@@ -592,54 +592,58 @@ namespace mrv
             }
         }
 
-#if defined(__APPLE__)
-        glViewport(0, 0, renderSize.w, renderSize.h);
-        glClearColor(0.F, 0.F, 0.F, 0.F);
-        glClear(GL_COLOR_BUFFER_BIT);
-        CHECK_GL;
-
-        if (p.buffer)
+        if (!p.ui->uiPrefs->uiPrefsBlitTimeline->value())
         {
-            p.shader->bind();
-            const auto pm = math::ortho(
-                0.F, static_cast<float>(renderSize.w), 0.F,
-                static_cast<float>(renderSize.h), -1.F, 1.F);
-            p.shader->setUniform("transform.mvp", pm);
+            glViewport(0, 0, renderSize.w, renderSize.h);
+            glClearColor(0.F, 0.F, 0.F, 0.F);
+            glClear(GL_COLOR_BUFFER_BIT);
+            CHECK_GL;
 
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, p.buffer->getColorID());
+            if (p.buffer)
+            {
+                p.shader->bind();
+                const auto pm = math::ortho(
+                    0.F, static_cast<float>(renderSize.w), 0.F,
+                    static_cast<float>(renderSize.h), -1.F, 1.F);
+                p.shader->setUniform("transform.mvp", pm);
 
-            const auto mesh =
-                geom::box(math::Box2i(0, 0, renderSize.w, renderSize.h));
-            if (!p.vbo)
-            {
-                p.vbo = gl::VBO::create(
-                    mesh.triangles.size() * 3, gl::VBOType::Pos2_F32_UV_U16);
-            }
-            if (p.vbo)
-            {
-                p.vbo->copy(convert(mesh, gl::VBOType::Pos2_F32_UV_U16));
-            }
+                glActiveTexture(GL_TEXTURE0);
+                glBindTexture(GL_TEXTURE_2D, p.buffer->getColorID());
 
-            if (!p.vao && p.vbo)
-            {
-                p.vao = gl::VAO::create(
-                    gl::VBOType::Pos2_F32_UV_U16, p.vbo->getID());
-            }
-            if (p.vao && p.vbo)
-            {
-                p.vao->bind();
-                p.vao->draw(GL_TRIANGLES, 0, p.vbo->getSize());
+                const auto mesh =
+                    geom::box(math::Box2i(0, 0, renderSize.w, renderSize.h));
+                if (!p.vbo)
+                {
+                    p.vbo = gl::VBO::create(
+                        mesh.triangles.size() * 3,
+                        gl::VBOType::Pos2_F32_UV_U16);
+                }
+                if (p.vbo)
+                {
+                    p.vbo->copy(convert(mesh, gl::VBOType::Pos2_F32_UV_U16));
+                }
+
+                if (!p.vao && p.vbo)
+                {
+                    p.vao = gl::VAO::create(
+                        gl::VBOType::Pos2_F32_UV_U16, p.vbo->getID());
+                }
+                if (p.vao && p.vbo)
+                {
+                    p.vao->bind();
+                    p.vao->draw(GL_TRIANGLES, 0, p.vbo->getSize());
+                }
             }
         }
-#else
-        glBindFramebuffer(GL_READ_FRAMEBUFFER, p.buffer->getID());
-        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); // 0 is screen
+        else
+        {
+            glBindFramebuffer(GL_READ_FRAMEBUFFER, p.buffer->getID());
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); // 0 is screen
 
-        glBlitFramebuffer(
-            0, 0, renderSize.w, renderSize.h, 0, 0, renderSize.w, renderSize.h,
-            GL_COLOR_BUFFER_BIT, GL_NEAREST);
-#endif
+            glBlitFramebuffer(
+                0, 0, renderSize.w, renderSize.h, 0, 0, renderSize.w,
+                renderSize.h, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+        }
     }
 
     int TimelineWidget::enterEvent()
