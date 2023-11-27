@@ -19,6 +19,9 @@ decl {\#include "mrvCore/mrvI8N.h"} {private local
 decl {\#include "mrvWidgets/mrvPopupMenu.h"} {public local
 }
 
+decl {\#include "mrvWidgets/mrvHotkeyInput.h"} {public local
+}
+
 class ChooseHotkey {open
 } {
   decl {mrv::Hotkey hk;} {public local
@@ -38,8 +41,10 @@ class ChooseHotkey {open
         xywh {0 0 360 140} box UP_BOX
       } {
         Fl_Input uiKey {
-          label Key
-          xywh {55 19 140 27} color 49 labelcolor 32 textcolor 17
+          label Key selected
+          tooltip {Type a key.} xywh {55 19 140 27} color 49 labelcolor 32 textcolor 17
+          code0 {o->choose(this);}
+          class {mrv::HotkeyInput}
         }
         Fl_Check_Button uiShift {
           label Shift
@@ -56,51 +61,6 @@ class ChooseHotkey {open
         Fl_Check_Button uiMeta {
           label Meta
           xywh {155 103 25 27} down_box DOWN_BOX labelcolor 32
-        }
-        Fl_Button {} {
-          label {Press Hotkey}
-          user_data this user_data_type {ChooseHotkey*}
-          callback {v->hk.ctrl  = (bool) v->uiCtrl->value();
-v->hk.alt   = (bool) v->uiAlt->value();
-v->hk.meta  = (bool) v->uiMeta->value();
-v->hk.shift = (bool) v->uiShift->value();
-
-v->hk.key = 0;
-v->hk.text = "";
-if ( v->uiKey->value() && strlen(v->uiKey->value()) > 0 )
-{
-  std::string text = v->uiKey->value();
-
-  unsigned key = 0;
-  for (int i = 0; i < 45; i++)
-     if (text == mrv::table[i].text) {key = mrv::table[i].n; break;}
-
-  if ( key == 0 )
-  {
-    char buffer[128];
-    for( int i = FL_F + 1; i <= FL_F_Last; ++i )
-    {
-	snprintf(buffer, 128, "F%d", i - FL_F);
-	if ( text == buffer ) { key = i; break; }
-    }
-  }
-
-  if ( key > 0 ) v->hk.key = key;
-  else if ( text.size() )
-  {
-    v->hk.key = text[0];
-    v->hk.text = text[0];
-   }
-   
-   if (isupper(v->hk.key))
-   {
-  	v->hk.shift = true;
-  	v->hk.key = tolower(v->hk.key);
-   }
-}
-
-v->uiMain->hide();} selected
-          tooltip {Open an Input to allow presin} xywh {220 60 130 28}
         }
         Fl_Button {} {
           label Okay

@@ -36,6 +36,7 @@ set(HEADERS
     mrvFunctional.h
     mrvHistogram.h
     mrvHorSlider.h
+    mrvHotkeyInput.h
     mrvIntInput.h
     mrvLogDisplay.h
     mrvMainWindow.h
@@ -84,6 +85,7 @@ set(SOURCES
     mrvFPSInput.cpp
     mrvHistogram.cpp
     mrvHorSlider.cpp
+    mrvHotkeyInput.cpp
     mrvLogDisplay.cpp
     mrvMainWindow.cpp
     mrvMenuBar.cpp
