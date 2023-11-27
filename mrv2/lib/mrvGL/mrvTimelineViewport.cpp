@@ -1851,6 +1851,11 @@ namespace mrv
                 Fl::add_timeout(
                     0.01, (Fl_Timeout_Handler)restore_ui_state, p.ui);
             p.presentation = false;
+            if (p.ui->uiPrefs->uiPrefsOpenGLVsync->value() ==
+                MonitorVSync::kVSyncPresentationOnly)
+            {
+                swap_interval(0);
+            }
             _updateCursor();
         }
         else
@@ -1863,6 +1868,11 @@ namespace mrv
             _setFullScreen(active);
             p.presentation = true;
             p.presentationTime = std::chrono::high_resolution_clock::now();
+            if (p.ui->uiPrefs->uiPrefsOpenGLVsync->value() ==
+                MonitorVSync::kVSyncPresentationOnly)
+            {
+                swap_interval(1);
+            }
         }
     }
 

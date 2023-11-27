@@ -801,7 +801,7 @@ namespace mrv
 
         Fl_Preferences opengl(base, "opengl");
 
-        opengl.get("vsync", tmp, 0);
+        opengl.get("vsync", tmp, 1);
         uiPrefs->uiPrefsOpenGLVsync->value(tmp);
 
 #if defined(__linux__) || defined(_WIN32)

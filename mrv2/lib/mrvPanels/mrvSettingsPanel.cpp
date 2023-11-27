@@ -237,7 +237,6 @@ namespace mrv
                     settings->setValue("FileSequence/AudioDirectory", dir);
                 });
 
-            DBG;
             auto inW = new Widget<Fl_Int_Input>(
                 g->x() + 130, 190, g->w() - 130, 20, _("Maximum Digits"));
             i = inW;

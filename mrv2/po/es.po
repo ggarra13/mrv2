@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-11-19 08:23-0300\n"
+"POT-Creation-Date: 2023-11-27 09:40-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -4281,6 +4281,12 @@ msgstr "Repetir Cuadro"
 msgid "Scratched  Frame"
 msgstr "Repetir Cuadro Marcado"
 
+msgid "Always"
+msgstr "Siempre"
+
+msgid "Presentation Mode"
+msgstr "Modo de Presentación"
+
 msgid "Do Nothing"
 msgstr "Hacer Nada"
 
@@ -4923,6 +4929,27 @@ msgstr "Controles de Color"
 msgid "Audio Control"
 msgstr "Control de Audio"
 
+msgid "Monitor VSync"
+msgstr "VSync del Monitor"
+
+msgid ""
+"Turns on and off Monitor's Vsync.  VSync off can display movies faster, at "
+"the cost of potential tearing in the image."
+msgstr ""
+"Prende y apaga el sincronismo vertical (VSync) del monitor.  VSync apagado "
+"puede mostrar películas más rapido, al costo de 'desgarros' en la imagen."
+
+msgid "Blit Timeline"
+msgstr "Transferir Línea de Tiempo"
+
+msgid ""
+"Timeline can be drawn with blitting or with OpenGL shaders.  Depending on "
+"graphics card and OS one can perform better then the other."
+msgstr ""
+"La línea de tiempo puede ser dibujada con blitting (transferencia) o con "
+"shaders de OpenGL.  Dependiendo en tu tarjeta gráfica y sistema operativo "
+"una u otra puede desempeñarse mejor que la otra."
+
 msgid "Errors"
 msgstr "Errores"
 
@@ -5035,6 +5062,12 @@ msgstr "Métodos de Estimación de Moviento"
 msgid "Hotkey for..."
 msgstr "Tecla de Manejo para...."
 
+msgid "Type Key"
+msgstr "Tipée Tecla"
+
+msgid "Type a key."
+msgstr "Tipée una tecla."
+
 msgid "Shift"
 msgstr "Mayús"
 
@@ -5047,8 +5080,8 @@ msgstr "Alt"
 msgid "Meta"
 msgstr "Meta"
 
-msgid "Special"
-msgstr "Especial"
+msgid "Clear"
+msgstr "Borrar"
 
 msgid "OCIO Browser"
 msgstr "Visor de OCIO"
@@ -5212,6 +5245,138 @@ msgstr "Oct"
 msgid "Nov"
 msgstr "Nov"
 
+msgid "Escape"
+msgstr "Escape"
+
+msgid "BackSpace"
+msgstr "Retroceso"
+
+msgid "Tab"
+msgstr "Tab"
+
+msgid "Return"
+msgstr "Retorno"
+
+msgid "Print"
+msgstr "Imprimir"
+
+msgid "ScrollLock"
+msgstr "Bloq.Despl."
+
+msgid "Pause"
+msgstr "Pausa"
+
+msgid "Insert"
+msgstr "Insertar"
+
+msgid "Home"
+msgstr "Inicio"
+
+msgid "PageUp"
+msgstr "Re.Pág."
+
+msgid "Delete"
+msgstr "Borrar"
+
+msgid "End"
+msgstr "Fin"
+
+msgid "PageDown"
+msgstr "Av.Pág."
+
+msgid "Left"
+msgstr "Izq."
+
+msgid "Up"
+msgstr "Arriba"
+
+msgid "Right"
+msgstr "Derecha"
+
+msgid "Down"
+msgstr "Abajo"
+
+msgid "LeftShift"
+msgstr "Mayús. Izq."
+
+msgid "RightShift"
+msgstr "Mayús. Der."
+
+msgid "LeftCtrl"
+msgstr "Ctrl Izq."
+
+msgid "RightCtrl"
+msgstr "Ctrl Der."
+
+msgid "CapsLock"
+msgstr "Bloq.Mayús."
+
+msgid "LeftAlt"
+msgstr "Alt Izq."
+
+msgid "RightAlt"
+msgstr "Alt Der."
+
+msgid "LeftMeta"
+msgstr "Meta Izq."
+
+msgid "RightMeta"
+msgstr "Meta Der."
+
+msgid "Menu"
+msgstr "Menu"
+
+msgid "NumLock"
+msgstr "Blq.Num."
+
+msgid "padEnter"
+msgstr "padEnter"
+
+msgid "pad0"
+msgstr "pad0"
+
+msgid "pad1"
+msgstr "pad1"
+
+msgid "pad2"
+msgstr "pad2"
+
+msgid "pad3"
+msgstr "pad3"
+
+msgid "pad4"
+msgstr "pad4"
+
+msgid "pad5"
+msgstr "pad5"
+
+msgid "pad6"
+msgstr "pad6"
+
+msgid "pad7"
+msgstr "pad7"
+
+msgid "pad8"
+msgstr "pad8"
+
+msgid "pad9"
+msgstr "pad9"
+
+msgid "Space (' ')"
+msgstr "Espacio (' ')"
+
+msgid "Multiply"
+msgstr "Multiplicar"
+
+msgid "Subtract"
+msgstr "Substraer"
+
+msgid "Decimal"
+msgstr "Decimal"
+
+msgid "Divide"
+msgstr "Dividir"
+
 msgid "@B12@C7@b@.Remote\t@B12@C7@b@.Local"
 msgstr "@B12@C7@b@.Remoto\t@B12@C7@b@.Local"
 
@@ -5250,6 +5415,12 @@ msgstr "Cerrar Todas"
 
 msgid "Quit Program"
 msgstr "Salir del Programa"
+
+msgid "Zoom Minimum"
+msgstr "Zoom Mínimo"
+
+msgid "Zoom Maximum"
+msgstr "Zoom Máximo"
 
 msgid "Center Image"
 msgstr "Centrar la Imagen"
@@ -5599,137 +5770,14 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
 
-msgid "Escape"
-msgstr "Escape"
+#~ msgid "OpenGL VSync"
+#~ msgstr "VSync de OpenGL"
 
-msgid "BackSpace"
-msgstr "Retroceso"
+#~ msgid "Turns on and off OpenGL's Vsync."
+#~ msgstr "Activa y desactiva sincronismo del monitor con OpenGL."
 
-msgid "Tab"
-msgstr "Tab"
-
-msgid "Return"
-msgstr "Retorno"
-
-msgid "Print"
-msgstr "Imprimir"
-
-msgid "ScrollLock"
-msgstr "Bloq.Despl."
-
-msgid "Pause"
-msgstr "Pausa"
-
-msgid "Insert"
-msgstr "Insertar"
-
-msgid "Home"
-msgstr "Inicio"
-
-msgid "PageUp"
-msgstr "Re.Pág."
-
-msgid "Delete"
-msgstr "Borrar"
-
-msgid "End"
-msgstr "Fin"
-
-msgid "PageDown"
-msgstr "Av.Pág."
-
-msgid "Left"
-msgstr "Izq."
-
-msgid "Up"
-msgstr "Arriba"
-
-msgid "Right"
-msgstr "Derecha"
-
-msgid "Down"
-msgstr "Abajo"
-
-msgid "LeftShift"
-msgstr "Mayús. Izq."
-
-msgid "RightShift"
-msgstr "Mayús. Der."
-
-msgid "LeftCtrl"
-msgstr "Ctrl Izq."
-
-msgid "RightCtrl"
-msgstr "Ctrl Der."
-
-msgid "CapsLock"
-msgstr "Bloq.Mayús."
-
-msgid "LeftAlt"
-msgstr "Alt Izq."
-
-msgid "RightAlt"
-msgstr "Alt Der."
-
-msgid "LeftMeta"
-msgstr "Meta Izq."
-
-msgid "RightMeta"
-msgstr "Meta Der."
-
-msgid "Menu"
-msgstr "Menu"
-
-msgid "NumLock"
-msgstr "Blq.Num."
-
-msgid "padEnter"
-msgstr "padEnter"
-
-msgid "pad0"
-msgstr "pad0"
-
-msgid "pad1"
-msgstr "pad1"
-
-msgid "pad2"
-msgstr "pad2"
-
-msgid "pad3"
-msgstr "pad3"
-
-msgid "pad4"
-msgstr "pad4"
-
-msgid "pad5"
-msgstr "pad5"
-
-msgid "pad6"
-msgstr "pad6"
-
-msgid "pad7"
-msgstr "pad7"
-
-msgid "pad8"
-msgstr "pad8"
-
-msgid "pad9"
-msgstr "pad9"
-
-msgid "Space (' ')"
-msgstr "Espacio (' ')"
-
-msgid "Multiply"
-msgstr "Multiplicar"
-
-msgid "Subtract"
-msgstr "Substraer"
-
-msgid "Decimal"
-msgstr "Decimal"
-
-msgid "Divide"
-msgstr "Dividir"
+#~ msgid "Special"
+#~ msgstr "Especial"
 
 #~ msgid "Save Movie or Sequenece"
 #~ msgstr "Grabar Película o Secuencia"

@@ -1255,8 +1255,8 @@ v->uiOCIO_Display_View->do_callback();}
               xywh {329 36 446 313}
             } {
               Fl_Choice uiPrefsOpenGLVsync {
-                label {OpenGL VSync} open
-                tooltip {Turns on and off OpenGL's Vsync.} xywh {480 170 255 25} down_box BORDER_BOX align 132 textcolor 32
+                label {Monitor VSync} open selected
+                tooltip {Turns on and off Monitor's Vsync.  VSync off can display movies faster, at the cost of potential tearing in the image.} xywh {480 170 255 25} down_box BORDER_BOX align 132 textcolor 32
                 class {mrv::Choice}
               } {
                 MenuItem {} {
@@ -1264,8 +1264,12 @@ v->uiOCIO_Display_View->do_callback();}
                   xywh {30 30 100 20}
                 }
                 MenuItem {} {
-                  label Yes
+                  label Always
                   xywh {30 30 100 20}
+                }
+                MenuItem {} {
+                  label {Presentation Mode}
+                  xywh {40 40 100 20}
                 }
               }
               Fl_Choice uiPrefsBlitTimeline {
@@ -1426,7 +1430,6 @@ o->add( _("Network") );
 o->add( _("OpenGL") );
 o->add( _("Errors") );
 o->add( _("Behavior") );
-o->select( item );} {selected
-    }
+o->select( item );} {}
   }
 }

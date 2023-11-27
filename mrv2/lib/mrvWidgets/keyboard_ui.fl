@@ -32,17 +32,17 @@ class ChooseHotkey {open
   } {
     Fl_Window uiMain {
       label {Hotkey for...} open
-      xywh {608 536 360 140} type Double box PLASTIC_UP_BOX resizable
+      xywh {608 536 360 140} type Double box PLASTIC_UP_BOX hide resizable
       code0 {std::string title = "Hotkey for ";}
       code1 {title += name;}
-      code2 {o->copy_label( title.c_str() );} modal visible
+      code2 {o->copy_label( title.c_str() );} modal
     } {
-      Fl_Group {} {open
+      Fl_Group {} {open selected
         xywh {0 0 360 140} box UP_BOX
       } {
         Fl_Input uiKey {
-          label Key
-          tooltip {Type a key.} xywh {55 19 140 27} color 49 labelcolor 32 textcolor 17
+          label {Type Key}
+          tooltip {Type a key.} xywh {130 18 140 27}
           code0 {o->choose(this);}
           class {mrv::HotkeyInput}
         }
@@ -63,6 +63,16 @@ class ChooseHotkey {open
           xywh {155 103 25 27} down_box DOWN_BOX labelcolor 32
         }
         Fl_Button {} {
+          label Clear
+          user_data this user_data_type {ChooseHotkey*}
+          callback {v->uiKey->value("");
+v->uiCtrl->value(0);
+v->uiAlt->value(0);
+v->uiMeta->value(0);
+v->uiShift->value(0);}
+          xywh {220 64 130 28}
+        }
+        Fl_Button {} {
           label Okay
           user_data this user_data_type {ChooseHotkey*}
           callback {v->hk.ctrl  = (bool) v->uiCtrl->value();
@@ -77,7 +87,7 @@ if ( v->uiKey->value() && strlen(v->uiKey->value()) > 0 )
   std::string text = v->uiKey->value();
 
   unsigned key = 0;
-  for (int i = 0; i < 45; i++)
+  for (int i = 0; i < sizeof(mrv::table) / sizeof(mrv::TableText); i++)
      if (text == _(mrv::table[i].text)) {key = mrv::table[i].n; break;}
 
   if ( key == 0 )
@@ -98,7 +108,7 @@ if ( v->uiKey->value() && strlen(v->uiKey->value()) > 0 )
    }
 }
 
-v->uiMain->hide();} selected
+v->uiMain->hide();}
           xywh {220 103 55 26}
         }
         Fl_Button {} {
@@ -108,25 +118,6 @@ v->uiMain->hide();} selected
 v->uiMain->hide();}
           xywh {280 103 70 26}
         }
-        Fl_Menu_Button uiSpecialKey {
-          label Special
-          user_data uiKey user_data_type {Fl_Input*}
-          callback {int idx = o->value();
-const char* text = o->child(idx)->label();
-uiKey->value( _(text) );} open
-          xywh {205 19 110 27} labelcolor 17 textcolor 17
-          code0 {for (int i = 0; i < 45; i++)
-{
-   uiSpecialKey->add( _(mrv::table[i].text) );
-}
-char buf[128];
-for (int i = 1; i < 13; i++)
-{
-   snprintf( buf, 128, "F%d", i );
-   uiSpecialKey->add(buf);
-}}
-          class {mrv::PopupMenu}
-        } {}
       }
     }
   }
@@ -145,24 +136,37 @@ uiShift->value( hk.shift );
 char buffer[100];
 const char *keyname = buffer;
 unsigned k = hk.key;
-if (!k) {
-      keyname = "0";
-   } else if (k <= 7) {
-      snprintf(buffer, 100, "(mouse button %d)", k);
-   } else if (k < 256 && k != 32) {
-      snprintf(buffer, 100, "%c", k);
-   } else if (k >= FL_F && k <= FL_F_Last) {
-      snprintf(buffer, 100, "F%d", k - FL_F);
-   } else {
-      snprintf(buffer, 100, "0x%04x", k);
-      for (int i = 0; i < 45; ++i)
+if (!k)
+   keyname = "0";
+else if (k < 128) 
+{ // ASCII
+   snprintf(buffer, sizeof(buffer), "%c", k);
+} 
+else if (k >= 0xa0 && k <= 0xff) { // ISO-8859-1 (international keyboards)
+   char key[8];
+   int kl = fl_utf8encode((unsigned)k, key);
+   key[kl] = '\\0';
+   snprintf(buffer, sizeof(buffer), "%s", key);
+} 
+else if (k > FL_F && k <= FL_F_Last) 
+{
+   snprintf(buffer, sizeof(buffer), "F%d", k - FL_F);
+} 
+else if (k >= FL_Button && k <= FL_Button+7) 
+{
+   snprintf(buffer, sizeof(buffer), "FL_Button+%d", k-FL_Button);
+} 
+else 
+{
+   snprintf(buffer, sizeof(buffer), "0x%04x", k);
+   for (int i = 0; i < sizeof(mrv::table) / sizeof(mrv::TableText); i++)
+      if (mrv::table[i].n == k) 
       {
-     if (mrv::table[i].n == k) {
-	keyname = _(mrv::table[i].text);
-	break;
-     }
-    }
-   }
+        strcpy(buffer, _(mrv::table[i].text) );
+      	break;
+      }
+}
+
 
 if (k == 0 )
    uiKey->value( hk.text.c_str() );
