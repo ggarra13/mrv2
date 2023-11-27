@@ -4,6 +4,7 @@
 #include <FL/Fl.H>
 
 #include "mrvCore/mrvI8N.h"
+#include "mrvCore/mrvHotkey.h"
 
 #include "mrvWidgets/mrvHotkeyInput.h"
 
@@ -22,6 +23,7 @@ namespace mrv
         {
             char buffer[1000];
             buffer[0] = '\0';
+            m_text.clear();
             m_key = static_cast<unsigned>(Fl::event_key());
             if (m_key < 128)
             { // ASCII
@@ -34,23 +36,33 @@ namespace mrv
                 key[kl] = '\0';
                 snprintf(buffer, sizeof(buffer), "%s", key);
             }
-            else if (m_key > FL_F && m_key <= FL_F_Last)
-            {
-                snprintf(buffer, sizeof(buffer), "FL_F+%d", m_key - FL_F);
-            }
-            else if (m_key >= FL_KP && m_key <= FL_KP_Last)
-            {
-                snprintf(buffer, sizeof(buffer), "FL_KP+'%c'", m_key - FL_KP);
-            }
 
-            bool m_ctrl = Fl::event_state(FL_CTRL);
-            bool m_shift = Fl::event_state(FL_SHIFT);
-            bool m_alt = Fl::event_state(FL_ALT);
-            bool m_meta = Fl::event_state(FL_META);
+            bool m_ctrl = false;
+            bool m_shift = false;
+            bool m_alt = false;
+            bool m_meta = false;
 
-            char key = Fl::event_text()[0];
-            if (key != '?' && key != '!')
-                m_text = Fl::event_text();
+            for (int i = 0; i < 45; i++)
+            {
+                if (mrv::table[i].n == m_key)
+                {
+                    m_text = _(mrv::table[i].text);
+                    break;
+                }
+            }
+            if (m_text.empty())
+            {
+                m_ctrl = Fl::event_state(FL_CTRL);
+                m_shift = Fl::event_state(FL_SHIFT);
+                m_alt = Fl::event_state(FL_ALT);
+                m_meta = Fl::event_state(FL_META);
+
+                char key = Fl::event_text()[0];
+                if (key != '?' && key != '!' && key != '^')
+                    m_text = Fl::event_text();
+                else
+                    m_text = buffer;
+            }
             value(m_text.c_str());
 
             if (hotkey)

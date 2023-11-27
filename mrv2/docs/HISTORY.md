@@ -2,6 +2,8 @@ v0.9.2
 ======
 - Added .otioz to Windows file associations installer and uninstaller.
 - Fixed Hotkeys not working.
+- Fixed dead hotkeys Shift 1 to 9 and 0.
+- Made Hotkey entry work on just pressing a key, without having to type.
 - Caught Escape hotkey on Window callback to prevent it from exiting the
   application if it is not set to do so.
 - Increased performance of playback on Linux when the timeline is visible at

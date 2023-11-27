@@ -41,7 +41,7 @@ class ChooseHotkey {open
         xywh {0 0 360 140} box UP_BOX
       } {
         Fl_Input uiKey {
-          label Key selected
+          label Key
           tooltip {Type a key.} xywh {55 19 140 27} color 49 labelcolor 32 textcolor 17
           code0 {o->choose(this);}
           class {mrv::HotkeyInput}
@@ -78,7 +78,7 @@ if ( v->uiKey->value() && strlen(v->uiKey->value()) > 0 )
 
   unsigned key = 0;
   for (int i = 0; i < 45; i++)
-     if (text == mrv::table[i].text) {key = mrv::table[i].n; break;}
+     if (text == _(mrv::table[i].text)) {key = mrv::table[i].n; break;}
 
   if ( key == 0 )
   {
@@ -96,15 +96,9 @@ if ( v->uiKey->value() && strlen(v->uiKey->value()) > 0 )
     v->hk.key = text[0];
     v->hk.text = text[0];
    }
-   
-   if (isupper(v->hk.key))
-   {
-  	v->hk.shift = true;
-  	v->hk.key = tolower(v->hk.key);
-   }
 }
 
-v->uiMain->hide();}
+v->uiMain->hide();} selected
           xywh {220 103 55 26}
         }
         Fl_Button {} {
@@ -119,11 +113,11 @@ v->uiMain->hide();}
           user_data uiKey user_data_type {Fl_Input*}
           callback {int idx = o->value();
 const char* text = o->child(idx)->label();
-uiKey->value( text );} open
+uiKey->value( _(text) );} open
           xywh {205 19 110 27} labelcolor 17 textcolor 17
           code0 {for (int i = 0; i < 45; i++)
 {
-   uiSpecialKey->add( mrv::table[i].text );
+   uiSpecialKey->add( _(mrv::table[i].text) );
 }
 char buf[128];
 for (int i = 1; i < 13; i++)
@@ -164,7 +158,7 @@ if (!k) {
       for (int i = 0; i < 45; ++i)
       {
      if (mrv::table[i].n == k) {
-	keyname = mrv::table[i].text;
+	keyname = _(mrv::table[i].text);
 	break;
      }
     }
