@@ -1,5 +1,6 @@
 v0.9.2
 ======
+
 - Added .otioz to Windows file associations installer and uninstaller.
 - Fixed Hotkeys not working.
 - Fixed dead hotkeys Shift 1 to 9 and 0.
@@ -20,7 +21,8 @@ v0.9.2
   tests Windows and Linux benefit from blitting while macOS benefits from
   using shaders.
 - Added OpenGL control for Vsync.  Currently it works on Linux and macOS.
-- Fixed compilation for Windows WSL2.
+- Fixed default value of Minify / Magnify filters from the preferences to
+  be Linear instead of Nearest.
 - For programmers using VSCode, added .vscode directory with tasks to:
     * Build All mrv2 Project with all Dependencies (main compile -- runme.sh)
     * Build tlRender, FLTK and mrv2 (runmet.sh)
