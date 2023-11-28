@@ -28,6 +28,8 @@ namespace mrv
 
     class MultilineInput;
 
+    enum MonitorVSync { kVSyncNone, kVSyncAlways, kVSyncPresentationOnly };
+
     enum PixelDisplay { kRGBA_Float, kRGBA_Hex, kRGBA_Decimal };
 
     enum PixelValue { kFull, kOriginal };

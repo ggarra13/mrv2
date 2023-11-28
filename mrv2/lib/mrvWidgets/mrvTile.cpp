@@ -182,7 +182,7 @@ namespace mrv
         Fl_Tile::init_sizes();
     }
 
-    static void set_cursor(Fl_Tile* t, Fl_Cursor c)
+    static void tile_set_cursor(Fl_Tile* t, Fl_Cursor c)
     {
         static Fl_Cursor cursor;
         if (cursor == c || !t->window())
@@ -268,14 +268,14 @@ namespace mrv
                     sdrag |= DRAGV;
                     sy = oldy;
                 }
-                set_cursor(this, cursors[sdrag]);
+                tile_set_cursor(this, cursors[sdrag]);
                 if (sdrag)
                     return 1;
                 return Fl_Group::handle(event);
             }
 
         case FL_LEAVE:
-            set_cursor(this, FL_CURSOR_DEFAULT);
+            tile_set_cursor(this, FL_CURSOR_DEFAULT);
             break;
 
         case FL_DRAG:

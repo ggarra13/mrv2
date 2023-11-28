@@ -1,7 +1,13 @@
 v0.9.2
 ======
+
 - Added .otioz to Windows file associations installer and uninstaller.
 - Fixed Hotkeys not working.
+- Fixed dead hotkeys Shift 1 to 9 and 0.
+- Made Hotkey entry work on just pressing a key, without having to type or
+  having to select a special key from the awkward Special pull down menu.
+- Fixed Meta (Windows) hotkey shortcuts on Linux.
+- Added Zoom Minimum and Zoom Maximum to hotkeys, so you can turn them off.
 - Caught Escape hotkey on Window callback to prevent it from exiting the
   application if it is not set to do so.
 - Increased performance of playback on Linux when the timeline is visible at
@@ -9,7 +15,14 @@ v0.9.2
 - Increased performance of playback on Windows when the timeline is visible.
 - Actual Frame Rate display in the HUD when FPS is selected (it shows
   Skipped Frames, Actual Frame Rate and Target Frame Rate).
-- Fixed compilation for Windows WSL2.
+- Made cursor disappear on Presentation mode after three seconds of inactivity.
+- Added OpenGL controls for blitting the timeline or using shaders.  Blitting
+  the timeline can improve performance on some graphic cards and OS.  In my
+  tests Windows and Linux benefit from blitting while macOS benefits from
+  using shaders.
+- Added OpenGL control for Vsync.  Currently it works on Linux and macOS.
+- Fixed default value of Minify / Magnify filters from the preferences to
+  be Linear instead of Nearest.
 - For programmers using VSCode, added .vscode directory with tasks to:
     * Build All mrv2 Project with all Dependencies (main compile -- runme.sh)
     * Build tlRender, FLTK and mrv2 (runmet.sh)

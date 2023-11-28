@@ -9,6 +9,8 @@
 
 #include <FL/Enumerations.H>
 
+#include "mrvCore/mrvI8N.h"
+
 namespace mrv
 {
 
@@ -341,7 +343,63 @@ namespace mrv
         const char* text;
     };
 
-    extern struct TableText table[];
+    static struct TableText table[] = {
+        {FL_Escape, _("Escape")},
+        {FL_BackSpace, _("BackSpace")},
+        {FL_Tab, _("Tab")},
+        {FL_Enter, _("Return")},
+        {FL_Print, _("Print")},
+
+        {FL_Scroll_Lock, _("ScrollLock")},
+        {FL_Pause, _("Pause")},
+        {FL_Insert, _("Insert")},
+        {FL_Home, _("Home")},
+        {FL_Page_Up, _("PageUp")},
+
+        {FL_Delete, _("Delete")},
+        {FL_End, _("End")},
+        {FL_Page_Down, _("PageDown")},
+        {FL_Left, _("Left")},
+        {FL_Up, _("Up")},
+
+        {FL_Right, _("Right")},
+        {FL_Down, _("Down")},
+        {FL_Shift_L, _("LeftShift")},
+        {FL_Shift_R, _("RightShift")},
+        {FL_Control_L, _("LeftCtrl")},
+
+        {FL_Control_R, _("RightCtrl")},
+        {FL_Caps_Lock, _("CapsLock")},
+        {FL_Alt_L, _("LeftAlt")},
+        {FL_Alt_R, _("RightAlt")},
+        {FL_Meta_L, _("LeftMeta")},
+
+        {FL_Meta_R, _("RightMeta")},
+        {FL_Menu, _("Menu")},
+        {FL_Num_Lock, _("NumLock")},
+        {FL_KP_Enter, _("padEnter")},
+        {FL_KP + '0', _("pad0")},
+
+        {FL_KP + '1', _("pad1")},
+        {FL_KP + '2', _("pad2")},
+        {FL_KP + '3', _("pad3")},
+        {FL_KP + '4', _("pad4")},
+        {FL_KP + '5', _("pad5")},
+
+        {FL_KP + '6', _("pad6")},
+        {FL_KP + '7', _("pad7")},
+        {FL_KP + '8', _("pad8")},
+        {FL_KP + '9', _("pad9")},
+        {' ', _("Space (' ')")},
+
+        {FL_KP + '*', _("Multiply")},
+        {FL_KP + '+', _("Add")},
+        {FL_KP + '-', _("Subtract")},
+        {FL_KP + '.', _("Decimal")},
+        {FL_KP + '/', _("Divide")},
+        {FL_Help, "FL_Help"},
+    };
+
     extern HotkeyEntry hotkeys[];
 
     void store_default_hotkeys();

@@ -246,7 +246,6 @@ brew install git cmake ninja gettext openssl readline sqlite3 xz zlib
 Additional dependencies are downloaded and built automatically by the CMake
 superbuild script.  For a list of non-system libraries that mrv2 depends on
 and their licenses, please refer to mrv2/docs/Legal.
-The system dependencies for each OS is listed below.
 
 The only special requirement is installing a new copy of cmake than the
 one that ships with MSVC19.
@@ -289,6 +288,8 @@ in:
 BUILD-KERNEL-ARCH/BUILDTYPE/compile.log.
 ````
 The default is to build with all cores in all the Operating Systems.
+Currently, the build with all settings on takes about 25 mins. on 16 cores.
+
 If you want more or less cores pass another number to any of
 the runme*.sh scripts.  For example, to build with 4 cores, you can do:
 
@@ -336,10 +337,9 @@ There is a .bat file included in the distribution (in windows/bat),
 which needs to be modified to the path of Visual Studio (2019 by default),
 the optional Windows SDK (none by default) and your copy of Msys.
 
-As a convernience for Windows users, DLLs, includes and .lib files
-for FFmpeg and liblcms2 libraries are provided in mrv2's windows/win64 directory.  The libintl and libiconv libraries are taken from the MSys64 repositories as pre-flight check with the bin/install_libintl_window.sh script (part of runme.sh).
+FFmpeg and liblcms2 are now compiled as part of the pre-flight cmake build.  libssh and libcrypto are taken from Msys64 repositories when building FFmpeg.
 
-If you unset LCMS2_ROOT in windows/envvars/envvars.sh, the library will be compiled.
+The libintl and libiconv libraries are taken from the MSys64 repositories as pre-flight check with the bin/install_libintl_window.sh script (part of runme.sh).
 
 ## CMake build options
 
@@ -347,7 +347,7 @@ The main runme.sh script supports passing CMake flags to it and allows turning o
 
 -D TLRENDER_USD=OFF
 
-Currently, the flags supported are:
+Currently, the main flags supported (that have an effect on how long it takes to compile) are:
 
 | Name              | Description                                       | Default   |
 | ----------------- | ------------------------------------------------- | --------- |
@@ -357,6 +357,7 @@ Currently, the flags supported are:
 | MRV2_NETWORK      | Toggles Network and Single Instance.              | TRUE      |
 | MRV2_PDF          | Toggles PDF Saving and Creation.                  | TRUE      |
 | TLRENDER_USD      | Toggles support for USD                           | TRUE      |
+| TLRENDER_NET      | Toggles support for Network playback              | TRUE      |
 | TLRENDER_RAW      | Toggles support for RAW Camera formats            | TRUE      |
 
 ## Building FFmpeg as GPL or LGPL
@@ -367,7 +368,7 @@ If you pass -gpl or -lpgl to the runme.sh script, like:
 ./runme.sh -gpl
 ```
 
-The build system will compile FFmpeg as GPL or LGPL on all platforms.  The default is to build a LGPL version of FFmpeg as that complies with the BSD binary distribution license.  The LGPL version of FFmpeg, however, does not come with libx264, which means you cannot save movie files with the H264 codec.  On Windows, if you don't specify neither -gpl nor -lgpl, the pre-compiled LGPL binaries are used.
+The build system will compile FFmpeg as GPL or LGPL on all platforms.  The default is to build a LGPL version of FFmpeg as that complies with the BSD binary distribution license.  The LGPL version of FFmpeg, however, does not come with libx264, which means you cannot save movie files with the H264 codec.
 
 The GPL version of FFmpeg does not have that restriction and it will compile libx264 on all platforms.
 

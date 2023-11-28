@@ -931,6 +931,11 @@ namespace mrv
                 _updateCursor();
                 redrawWindows();
             }
+            if (p.presentation)
+            {
+                _updateCursor();
+                p.presentationTime = std::chrono::high_resolution_clock::now();
+            }
             _updatePixelBar();
             return 1;
         }
@@ -1301,7 +1306,10 @@ namespace mrv
                 flip_pen_color_cb(nullptr, p.ui);
                 return 1;
             }
-            else if (rawkey >= kZoomMin.key && rawkey <= kZoomMax.key)
+            else if (
+                !Fl::event_state(FL_SHIFT) && !Fl::event_state(FL_ALT) &&
+                !Fl::event_state(FL_META) &&
+                (rawkey >= kZoomMin.key && rawkey <= kZoomMax.key))
             {
                 if (rawkey == kZoomMin.key)
                 {

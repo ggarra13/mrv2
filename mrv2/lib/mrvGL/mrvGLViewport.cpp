@@ -206,6 +206,12 @@ namespace mrv
         {
             _initializeGL();
 
+            if (p.ui->uiPrefs->uiPrefsOpenGLVsync->value() ==
+                MonitorVSync::kVSyncNone)
+                swap_interval(0);
+            else
+                swap_interval(1);
+
             CHECK_GL;
             valid(1);
         }
@@ -362,6 +368,18 @@ namespace mrv
             r = ur / 255.0f;
             g = ug / 255.0f;
             b = ub / 255.0f;
+        }
+        else
+        {
+            auto time = std::chrono::high_resolution_clock::now();
+            auto elapsedTime =
+                std::chrono::duration_cast<std::chrono::milliseconds>(
+                    time - p.presentationTime)
+                    .count();
+            if (elapsedTime >= 3000)
+            {
+                window()->cursor(FL_CURSOR_NONE);
+            }
         }
 
         glDrawBuffer(GL_BACK_LEFT);

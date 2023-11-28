@@ -131,6 +131,9 @@ namespace mrv
         //! Default missing frame type.  Should be static.
         MissingFrameType missingFrameType = kBlackFrame;
 
+        //! Auxiliary variable used to hide cursor in presentation mode.
+        std::chrono::high_resolution_clock::time_point presentationTime;
+
         //! Auxiliary variables to count FPS
         unsigned frameCount = 0;
         double actualFPS;

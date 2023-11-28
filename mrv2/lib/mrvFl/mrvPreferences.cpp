@@ -380,10 +380,10 @@ namespace mrv
         view.get("alpha_blend", tmp, 1);
         uiPrefs->uiPrefsAlphaBlend->value(tmp);
 
-        view.get("minify_filter", tmp, 0);
+        view.get("minify_filter", tmp, 1);
         uiPrefs->uiPrefsMinifyFilter->value(tmp);
 
-        view.get("magnify_filter", tmp, 0);
+        view.get("magnify_filter", tmp, 1);
         uiPrefs->uiPrefsMagnifyFilter->value(tmp);
 
         view.get("crop_area", tmp, 0);
@@ -801,7 +801,7 @@ namespace mrv
 
         Fl_Preferences opengl(base, "opengl");
 
-        opengl.get("vsync", tmp, 0);
+        opengl.get("vsync", tmp, 1);
         uiPrefs->uiPrefsOpenGLVsync->value(tmp);
 
 #if defined(__linux__) || defined(_WIN32)
