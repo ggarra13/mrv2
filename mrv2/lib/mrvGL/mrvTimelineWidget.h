@@ -54,7 +54,7 @@ namespace mrv
         void setLUTOptions(const timeline::LUTOptions&);
 
         //! Set the color configuration.
-        void setColorConfigOptions(const timeline::ColorConfigOptions&);
+        void setColorConfigOptions(const timeline::OCIOOptions&);
 
         //! Get timelineUI's timelineWidget item options
         timelineui::ItemOptions getItemOptions() const;
@@ -154,6 +154,23 @@ namespace mrv
 
     private:
         void _setTimeUnits(tl::timeline::TimeUnits);
+
+        void _tickEvent(
+            const std::shared_ptr<ui::IWidget>&, bool visible, bool enabled,
+            const ui::TickEvent&);
+
+        bool _getSizeUpdate(const std::shared_ptr<ui::IWidget>&) const;
+        void _sizeHintEvent(
+            const std::shared_ptr<ui::IWidget>&, const ui::SizeHintEvent&);
+
+        void _clipEvent(
+            const std::shared_ptr<ui::IWidget>&, const math::Box2i&,
+            bool clipped);
+
+        bool _getDrawUpdate(const std::shared_ptr<ui::IWidget>&) const;
+        void _drawEvent(
+            const std::shared_ptr<ui::IWidget>&, const math::Box2i&,
+            const ui::DrawEvent&);
 
         int _toUI(int) const;
         math::Vector2i _toUI(const math::Vector2i&) const;

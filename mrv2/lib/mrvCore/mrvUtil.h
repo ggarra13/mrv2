@@ -115,7 +115,7 @@ namespace mrv
         buf[0] = 0;
         if (!num.empty())
         {
-            auto padding = path.getPadding();
+            int padding = static_cast<int>(path.getPadding());
             snprintf(buf, 256, "%0*" PRId64, padding, frame);
         }
 

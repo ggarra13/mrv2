@@ -499,9 +499,9 @@ namespace mrv
                     tcp->unlock();
                     return;
                 }
-                const tl::timeline::ColorConfigOptions& local =
+                const tl::timeline::OCIOOptions& local =
                     view->getColorConfigOptions();
-                tl::timeline::ColorConfigOptions o = message["value"];
+                tl::timeline::OCIOOptions o = message["value"];
 
                 // If we cannot read the config file, keep the local one
                 replace_path(o.fileName);

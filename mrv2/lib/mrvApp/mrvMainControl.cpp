@@ -39,7 +39,7 @@ namespace mrv
         std::vector<mrv::TimelinePlayer*> timelinePlayers;
         bool floatOnTop = false;
         bool secondaryFloatOnTop = false;
-        timeline::ColorConfigOptions colorConfigOptions;
+        timeline::OCIOOptions ocioOptions;
         timeline::LUTOptions lutOptions;
         timeline::ImageOptions imageOptions;
         timeline::DisplayOptions displayOptions;
@@ -58,8 +58,8 @@ namespace mrv
         std::shared_ptr<observer::ListObserver<int> > bIndexesObserver;
         std::shared_ptr<observer::ValueObserver<timeline::CompareOptions> >
             compareOptionsObserver;
-        std::shared_ptr<observer::ValueObserver<timeline::ColorConfigOptions> >
-            colorConfigOptionsObserver;
+        std::shared_ptr<observer::ValueObserver<timeline::OCIOOptions> >
+            ocioOptionsObserver;
         std::shared_ptr<observer::ValueObserver<DevicesModelData> >
             devicesModelObserver;
         std::shared_ptr<observer::ValueObserver<Stereo3DOptions> >
@@ -134,17 +134,6 @@ namespace mrv
 
                     _widgetUpdate();
                 });
-
-        // @ttodo:
-
-        // p.colorConfigOptionsObserver =
-        // observer::ValueObserver<timeline::ColorConfigOptions>::create(
-        //     app->colorModel()->observeConfigOptions(),
-        //     [this](const timeline::ColorConfigOptions& value)
-        //         {
-        //             _p->colorConfigOptions = value;
-        //             _widgetUpdate();
-        //         });
 
         p.devicesModelObserver =
             observer::ValueObserver<DevicesModelData>::create(
@@ -359,7 +348,7 @@ namespace mrv
 
         Viewport* view = p.ui->uiView;
 
-        view->setColorConfigOptions(p.colorConfigOptions);
+        view->setColorConfigOptions(p.ocioOptions);
         view->setLUTOptions(p.lutOptions);
         std::vector<timeline::ImageOptions> imageOptions;
         std::vector<timeline::DisplayOptions> displayOptions;
@@ -376,7 +365,7 @@ namespace mrv
         view->updatePlaybackButtons();
         view->redraw();
 
-        p.ui->uiTimeline->setColorConfigOptions(p.colorConfigOptions);
+        p.ui->uiTimeline->setColorConfigOptions(p.ocioOptions);
         p.ui->uiTimeline->setLUTOptions(p.lutOptions);
         p.ui->uiTimeline->redraw();
 
@@ -412,7 +401,7 @@ namespace mrv
             label += p.ui->uiMain->label();
             main->copy_label(label.c_str());
             view = p.ui->uiSecondary->viewport();
-            view->setColorConfigOptions(p.colorConfigOptions);
+            view->setColorConfigOptions(p.ocioOptions);
             view->setLUTOptions(p.lutOptions);
             view->setImageOptions(imageOptions);
             view->setDisplayOptions(displayOptions);
@@ -423,7 +412,7 @@ namespace mrv
         }
 
 #ifdef TLRENDER_BMD
-        p.app->outputDevice()->setColorConfigOptions(p.colorConfigOptions);
+        p.app->outputDevice()->setColorConfigOptions(p.ocioOptions);
         p.app->outputDevice()->setLUTOptions(p.lutOptions);
         p.app->outputDevice()->setImageOptions(imageOptions);
         for (auto& i : displayOptions)

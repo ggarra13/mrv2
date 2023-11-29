@@ -264,9 +264,9 @@ namespace mrv
                 CHECK_GL;
                 {
                     locale::SetAndRestore saved;
-                    render->begin(
-                        offscreenBufferSize, view->getColorConfigOptions(),
-                        view->lutOptions());
+                    render->begin(offscreenBufferSize);
+                    render->setOCIOOptions(view->getColorConfigOptions());
+                    render->setLUTOptions(view->lutOptions());
                     CHECK_GL;
                     render->drawVideo(
                         {videoData},
@@ -300,7 +300,8 @@ namespace mrv
             snprintf(
                 filename, 4096, "%s%s%0*" PRId64 "%s",
                 path.getDirectory().c_str(), path.getBaseName().c_str(),
-                path.getPadding(), currentFrame, path.getExtension().c_str());
+                static_cast<int>(path.getPadding()), currentFrame,
+                path.getExtension().c_str());
 
             if (filename != file)
             {

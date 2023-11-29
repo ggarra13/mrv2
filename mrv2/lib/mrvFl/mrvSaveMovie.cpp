@@ -481,10 +481,10 @@ namespace mrv
                         gl::OffscreenBufferBinding binding(buffer);
                         {
                             locale::SetAndRestore saved;
-                            render->begin(
-                                offscreenBufferSize,
-                                view->getColorConfigOptions(),
-                                view->lutOptions());
+                            render->begin(offscreenBufferSize);
+                            render->setOCIOOptions(
+                                view->getColorConfigOptions());
+                            render->setLUTOptions(view->lutOptions());
                             render->drawVideo(
                                 {videoData},
                                 {math::Box2i(

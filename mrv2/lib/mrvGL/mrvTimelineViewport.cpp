@@ -477,10 +477,10 @@ namespace mrv
         return _p->colorAreaInfo;
     }
 
-    const timeline::ColorConfigOptions&
+    const timeline::OCIOOptions&
     TimelineViewport::getColorConfigOptions() noexcept
     {
-        return _p->colorConfigOptions;
+        return _p->ocioOptions;
     }
 
     const timeline::BackgroundOptions&
@@ -504,16 +504,16 @@ namespace mrv
     }
 
     void TimelineViewport::setColorConfigOptions(
-        const timeline::ColorConfigOptions& value) noexcept
+        const timeline::OCIOOptions& value) noexcept
     {
         TLRENDER_P();
-        if (value == p.colorConfigOptions)
+        if (value == p.ocioOptions)
             return;
 
         if (value.input.empty() || value.view.empty())
             return;
 
-        p.colorConfigOptions = value;
+        p.ocioOptions = value;
 
         p.ui->uiICS->copy_label(value.input.c_str());
         p.ui->OCIOView->copy_label(value.view.c_str());
@@ -1528,7 +1528,7 @@ namespace mrv
         if (inputIndex < 0)
             input = "";
 
-        timeline::ColorConfigOptions o;
+        timeline::OCIOOptions o;
         if (!input.empty() && input != _("None"))
             o.enabled = true;
         else
@@ -1592,16 +1592,16 @@ namespace mrv
         menu->copy_label(o.view.c_str());
 
 #if 0
-        std::cerr << "p.colorConfigOptions.fileName="
-                  << p.colorConfigOptions.fileName << "." << std::endl
-                  << "p.colorConfigOptions.input="
-                  << p.colorConfigOptions.input << "." << std::endl
-                  << "p.colorConfigOptions.display="
-                  << p.colorConfigOptions.display << "." << std::endl
-                  << "p.colorConfigOptions.view="
-                  << p.colorConfigOptions.view << "." << std::endl
-                  << "p.colorConfigOptions.look="
-                  << p.colorConfigOptions.look << "." << std::endl;
+        std::cerr << "p.ocioOptions.fileName="
+                  << p.ocioOptions.fileName << "." << std::endl
+                  << "p.ocioOptions.input="
+                  << p.ocioOptions.input << "." << std::endl
+                  << "p.ocioOptions.display="
+                  << p.ocioOptions.display << "." << std::endl
+                  << "p.ocioOptions.view="
+                  << p.ocioOptions.view << "." << std::endl
+                  << "p.ocioOptions.look="
+                  << p.ocioOptions.look << "." << std::endl;
 #endif
         setColorConfigOptions(o);
         redrawWindows();

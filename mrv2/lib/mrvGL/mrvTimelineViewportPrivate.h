@@ -18,7 +18,7 @@ namespace mrv
     struct TimelineViewport::Private
     {
         static timeline::BackgroundOptions backgroundOptions;
-        timeline::ColorConfigOptions colorConfigOptions;
+        timeline::OCIOOptions ocioOptions;
         timeline::LUTOptions lutOptions;
         std::vector<tl::timeline::ImageOptions> imageOptions;
         std::vector<tl::timeline::DisplayOptions> displayOptions;

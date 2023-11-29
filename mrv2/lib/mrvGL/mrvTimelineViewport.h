@@ -98,10 +98,9 @@ namespace mrv
         void setBackgroundOptions(const timeline::BackgroundOptions& value);
 
         //! Set the color configuration.
-        void
-        setColorConfigOptions(const timeline::ColorConfigOptions&) noexcept;
+        void setColorConfigOptions(const timeline::OCIOOptions&) noexcept;
 
-        const timeline::ColorConfigOptions& getColorConfigOptions() noexcept;
+        const timeline::OCIOOptions& getColorConfigOptions() noexcept;
 
         //! Set the LUT options.
         void setLUTOptions(const timeline::LUTOptions&) noexcept;

@@ -35,8 +35,7 @@ namespace mrv
             const std::string&, const otime::RationalTime&, const image::Size&,
             const callback_t callback, void* callbackData,
             const uint16_t layer = 0,
-            const timeline::ColorConfigOptions& =
-                timeline::ColorConfigOptions(),
+            const timeline::OCIOOptions& = timeline::OCIOOptions(),
             const timeline::LUTOptions& = timeline::LUTOptions());
 
         //! Request a thumbnail. The request ID is returned.
@@ -44,8 +43,7 @@ namespace mrv
             const std::string&, const std::vector< otime::RationalTime >&,
             const image::Size&, const callback_t func, void* callbackData,
             const uint16_t layer = 0,
-            const timeline::ColorConfigOptions& =
-                timeline::ColorConfigOptions(),
+            const timeline::OCIOOptions& = timeline::OCIOOptions(),
             const timeline::LUTOptions& = timeline::LUTOptions());
 
         //! Initialize the main thread to look for thumbnails.

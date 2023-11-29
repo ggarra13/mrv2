@@ -291,8 +291,9 @@ namespace mrv
 
                 locale::SetAndRestore saved;
 
-                gl.render->begin(
-                    renderSize, p.colorConfigOptions, p.lutOptions);
+                gl.render->begin(renderSize);
+                gl.render->setOCIOOptions(p.ocioOptions);
+                gl.render->setLUTOptions(p.lutOptions);
                 _drawBackground();
                 gl.render->end();
             }
@@ -313,8 +314,9 @@ namespace mrv
 
                     locale::SetAndRestore saved;
 
-                    gl.render->begin(
-                        renderSize, p.colorConfigOptions, p.lutOptions);
+                    gl.render->begin(renderSize);
+                    gl.render->setOCIOOptions(p.ocioOptions);
+                    gl.render->setLUTOptions(p.lutOptions);
                     CHECK_GL;
                     if (p.missingFrame &&
                         p.missingFrameType != MissingFrameType::kBlackFrame)

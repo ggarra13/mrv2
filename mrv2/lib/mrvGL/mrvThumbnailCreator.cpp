@@ -53,7 +53,7 @@ namespace mrv
             std::string fileName;
             std::vector< otime::RationalTime > times;
             image::Size size;
-            timeline::ColorConfigOptions colorConfigOptions;
+            timeline::OCIOOptions ocioOptions;
             timeline::LUTOptions lutOptions;
             uint16_t layer = 0;
 
@@ -152,8 +152,7 @@ namespace mrv
     int64_t ThumbnailCreator::request(
         const std::string& fileName, const otime::RationalTime& time,
         const image::Size& size, const callback_t callback, void* callbackData,
-        const uint16_t layer,
-        const timeline::ColorConfigOptions& colorConfigOptions,
+        const uint16_t layer, const timeline::OCIOOptions& ocioOptions,
         const timeline::LUTOptions& lutOptions)
     {
         TLRENDER_P();
@@ -168,7 +167,7 @@ namespace mrv
             request.times.push_back(time);
             request.size = size;
             request.layer = layer;
-            request.colorConfigOptions = colorConfigOptions;
+            request.ocioOptions = ocioOptions;
             request.lutOptions = lutOptions;
             request.callback = callback;
             request.callbackData = callbackData;
@@ -183,7 +182,7 @@ namespace mrv
         const std::string& fileName,
         const std::vector<otime::RationalTime>& times, const image::Size& size,
         const callback_t callback, void* callbackData, const uint16_t layer,
-        const timeline::ColorConfigOptions& colorConfigOptions,
+        const timeline::OCIOOptions& ocioOptions,
         const timeline::LUTOptions& lutOptions)
     {
         TLRENDER_P();
@@ -196,7 +195,7 @@ namespace mrv
             request.fileName = fileName;
             request.times = times;
             request.size = size;
-            request.colorConfigOptions = colorConfigOptions;
+            request.ocioOptions = ocioOptions;
             request.lutOptions = lutOptions;
             request.layer = layer;
             request.callback = callback;
@@ -411,9 +410,10 @@ namespace mrv
 
                                 {
                                     locale::SetAndRestore saved;
-                                    render->begin(
-                                        offscreenBufferSize,
-                                        requestIt->colorConfigOptions,
+                                    render->begin(offscreenBufferSize);
+                                    render->setOCIOOptions(
+                                        requestIt->ocioOptions);
+                                    render->setLUTOptions(
                                         requestIt->lutOptions);
                                     render->drawVideo(
                                         {videoData},

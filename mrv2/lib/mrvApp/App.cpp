@@ -133,7 +133,6 @@ namespace mrv
         otime::RationalTime seek = time::invalidTime;
         otime::TimeRange inOutRange = time::invalidTimeRange;
 
-        timeline::ColorConfigOptions colorConfigOptions;
         timeline::LUTOptions lutOptions;
 
         bool hud = true;
@@ -314,19 +313,6 @@ namespace mrv
                     app::CmdLineValueOption<otime::TimeRange>::create(
                         p.options.inOutRange, {"-inOutRange"},
                         _("Set the in/out points range.")),
-                    app::CmdLineValueOption<std::string>::create(
-                        p.options.colorConfigOptions.fileName,
-                        {"-colorConfig", "-cc"},
-                        _("Color configuration file name (config.ocio).")),
-                    app::CmdLineValueOption<std::string>::create(
-                        p.options.colorConfigOptions.input,
-                        {"-colorInput", "-ci"}, _("Input color space.")),
-                    app::CmdLineValueOption<std::string>::create(
-                        p.options.colorConfigOptions.display,
-                        {"-colorDisplay", "-cd"}, _("Display color space.")),
-                    app::CmdLineValueOption<std::string>::create(
-                        p.options.colorConfigOptions.view,
-                        {"-colorView", "-cv"}, _("View color space.")),
                     app::CmdLineValueOption<std::string>::create(
                         p.options.lutOptions.fileName, {"-lut"},
                         _("LUT file name.")),

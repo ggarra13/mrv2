@@ -240,7 +240,9 @@ namespace mrv
             locale::SetAndRestore saved;
 
             gl::OffscreenBufferBinding binding(gl.buffer);
-            gl.render->begin(renderSize, p.colorConfigOptions, p.lutOptions);
+            gl.render->begin(renderSize);
+            gl.render->setOCIOOptions(p.ocioOptions);
+            gl.render->setLUTOptions(p.lutOptions);
             if (p.missingFrame &&
                 p.missingFrameType != MissingFrameType::kBlackFrame)
             {
@@ -264,7 +266,9 @@ namespace mrv
             locale::SetAndRestore saved;
             gl::OffscreenBufferBinding binding(gl.stereoBuffer);
 
-            gl.render->begin(renderSize, p.colorConfigOptions, p.lutOptions);
+            gl.render->begin(renderSize);
+            gl.render->setOCIOOptions(p.ocioOptions);
+            gl.render->setLUTOptions(p.lutOptions);
 
             if (p.stereo3DOptions.eyeSeparation != 0.F)
             {
@@ -588,9 +592,9 @@ namespace mrv
 
             {
                 gl::OffscreenBufferBinding binding(gl.annotation);
-                gl.render->begin(
-                    viewportSize, timeline::ColorConfigOptions(),
-                    timeline::LUTOptions());
+                gl.render->begin(viewportSize);
+                gl.render->setOCIOOptions(timeline::OCIOOptions());
+                gl.render->setLUTOptions(timeline::LUTOptions());
                 gl.render->setTransform(mvp);
                 const auto& shapes = annotation->shapes;
                 for (const auto& shape : shapes)
@@ -830,9 +834,9 @@ namespace mrv
 
         timeline::RenderOptions renderOptions;
         renderOptions.clear = false;
-        gl.render->begin(
-            viewportSize, timeline::ColorConfigOptions(),
-            timeline::LUTOptions(), renderOptions);
+        gl.render->begin(viewportSize, renderOptions);
+        gl.render->setOCIOOptions(timeline::OCIOOptions());
+        gl.render->setLUTOptions(timeline::LUTOptions());
 
         char buf[512];
         if (p.hud & HudDisplay::kDirectory)
@@ -1172,9 +1176,9 @@ namespace mrv
             labelBox.max.x + 1 - labelSpacing - labelSize.w,
             labelBox.min.y + fontMetrics.ascender);
 
-        gl.render->begin(
-            viewportSize, timeline::ColorConfigOptions(),
-            timeline::LUTOptions(), renderOptions);
+        gl.render->begin(viewportSize, renderOptions);
+        gl.render->setOCIOOptions(timeline::OCIOOptions());
+        gl.render->setLUTOptions(timeline::LUTOptions());
 
         gl.render->drawRect(
             box, image::Color4f(0.F, 0.F, 0.F, 0.7F * p.helpTextFade));
