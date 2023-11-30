@@ -1519,7 +1519,7 @@ namespace mrv
         redraw();
     }
 
-    void TimelineViewport::updateColorConfigOptions() noexcept
+    void TimelineViewport::updateOCIOOptions() noexcept
     {
         TLRENDER_P();
         int inputIndex = p.ui->uiICS->value();

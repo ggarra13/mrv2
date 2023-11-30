@@ -251,8 +251,8 @@ namespace mrv
             const tl::timeline::VideoData&,
             const TimelinePlayer* sender) noexcept;
 
-        //! Set the color configuration from the GUI.
-        void updateColorConfigOptions() noexcept;
+        //! Set the OCIO configuration from the GUI.
+        void updateOCIOOptions() noexcept;
 
         //! Updatee the image options from the GUI.
         void updateImageOptions() noexcept;

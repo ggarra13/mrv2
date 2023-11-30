@@ -490,7 +490,7 @@ namespace mrv
                     ui->uiICS->value(value);
                     value = j["view"];
                     ui->OCIOView->value(value);
-                    ui->uiView->updateColorConfigOptions();
+                    ui->uiView->updateOCIOOptions();
 
                     // Hide Panels and Windows
                     removePanels(ui);

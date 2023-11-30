@@ -933,7 +933,7 @@ uiView->updateDisplayOptions();}
             Fl_Menu_Button uiICS {
               label {Input Color Space}
               user_data this user_data_type {ViewerUI*}
-              callback {uiView->updateColorConfigOptions();} open
+              callback {uiView->updateOCIOOptions();} open
               tooltip {OCIO input color space for the image} xywh {277 26 143 25} down_box DOWN_BOX labelsize 10 align 96
               code0 {o->disable_submenus();}
               class {mrv::PopupMenu}
@@ -945,7 +945,7 @@ uiView->updateDisplayOptions();}
             Fl_Menu_Button OCIOView {
               label OCIO
               user_data this user_data_type {ViewerUI*}
-              callback {uiView->updateColorConfigOptions();} open
+              callback {uiView->updateOCIOOptions();} open
               tooltip {OCIO Display/View} xywh {425 26 150 25} down_box DOWN_BOX labelsize 12 align 80
               code0 {o->disable_submenus();}
               class {mrv::PopupMenu}
