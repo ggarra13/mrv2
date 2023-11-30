@@ -477,8 +477,7 @@ namespace mrv
         return _p->colorAreaInfo;
     }
 
-    const timeline::OCIOOptions&
-    TimelineViewport::getColorConfigOptions() noexcept
+    const timeline::OCIOOptions& TimelineViewport::getOCIOOptions() noexcept
     {
         return _p->ocioOptions;
     }
@@ -503,7 +502,7 @@ namespace mrv
         redrawWindows();
     }
 
-    void TimelineViewport::setColorConfigOptions(
+    void TimelineViewport::setOCIOOptions(
         const timeline::OCIOOptions& value) noexcept
     {
         TLRENDER_P();
@@ -521,7 +520,7 @@ namespace mrv
         if (p.ui->uiSecondary && p.ui->uiSecondary->viewport())
         {
             Viewport* view = p.ui->uiSecondary->viewport();
-            view->setColorConfigOptions(value);
+            view->setOCIOOptions(value);
         }
         p.ui->uiTimeline->setColorConfigOptions(value);
         p.ui->uiTimeline->redraw(); // to refresh thumbnail
@@ -1603,7 +1602,7 @@ namespace mrv
                   << "p.ocioOptions.look="
                   << p.ocioOptions.look << "." << std::endl;
 #endif
-        setColorConfigOptions(o);
+        setOCIOOptions(o);
         redrawWindows();
     }
 

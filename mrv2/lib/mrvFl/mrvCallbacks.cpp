@@ -722,7 +722,7 @@ namespace mrv
         {
             App* app = ui->app;
             view->setContext(app->getContext());
-            view->setColorConfigOptions(ui->uiView->getColorConfigOptions());
+            view->setOCIOOptions(ui->uiView->getOCIOOptions());
             view->setLUTOptions(app->lutOptions());
             std::vector< timeline::ImageOptions > imageOptions;
             std::vector< timeline::DisplayOptions > displayOptions;

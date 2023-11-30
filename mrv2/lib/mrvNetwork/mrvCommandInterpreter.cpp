@@ -499,8 +499,7 @@ namespace mrv
                     tcp->unlock();
                     return;
                 }
-                const tl::timeline::OCIOOptions& local =
-                    view->getColorConfigOptions();
+                const tl::timeline::OCIOOptions& local = view->getOCIOOptions();
                 tl::timeline::OCIOOptions o = message["value"];
 
                 // If we cannot read the config file, keep the local one
@@ -513,7 +512,7 @@ namespace mrv
                         o.fileName = prefs->uiPrefsOCIOConfig->value();
                     }
                 }
-                view->setColorConfigOptions(o);
+                view->setOCIOOptions(o);
             }
             else if (c == "Display Options")
             {

@@ -348,7 +348,7 @@ namespace mrv
 
         Viewport* view = p.ui->uiView;
 
-        view->setColorConfigOptions(p.ocioOptions);
+        view->setOCIOOptions(p.ocioOptions);
         view->setLUTOptions(p.lutOptions);
         std::vector<timeline::ImageOptions> imageOptions;
         std::vector<timeline::DisplayOptions> displayOptions;
@@ -401,7 +401,7 @@ namespace mrv
             label += p.ui->uiMain->label();
             main->copy_label(label.c_str());
             view = p.ui->uiSecondary->viewport();
-            view->setColorConfigOptions(p.ocioOptions);
+            view->setOCIOOptions(p.ocioOptions);
             view->setLUTOptions(p.lutOptions);
             view->setImageOptions(imageOptions);
             view->setDisplayOptions(displayOptions);
@@ -412,7 +412,7 @@ namespace mrv
         }
 
 #ifdef TLRENDER_BMD
-        p.app->outputDevice()->setColorConfigOptions(p.ocioOptions);
+        p.app->outputDevice()->setOCIOOptions(p.ocioOptions);
         p.app->outputDevice()->setLUTOptions(p.lutOptions);
         p.app->outputDevice()->setImageOptions(imageOptions);
         for (auto& i : displayOptions)

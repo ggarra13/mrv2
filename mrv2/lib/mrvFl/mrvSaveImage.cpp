@@ -265,7 +265,7 @@ namespace mrv
                 {
                     locale::SetAndRestore saved;
                     render->begin(offscreenBufferSize);
-                    render->setOCIOOptions(view->getColorConfigOptions());
+                    render->setOCIOOptions(view->getOCIOOptions());
                     render->setLUTOptions(view->lutOptions());
                     CHECK_GL;
                     render->drawVideo(
