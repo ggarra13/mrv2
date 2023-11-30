@@ -1,3 +1,12 @@
+v0.9.3
+======
+
+- Made calculation of Actual Frame Rate more robust by averaging it over
+  multiple frames.
+- Added OCIO looks to the GUI, to Python API and to OpenGL display.
+- Added OCIO to Color Panel, so that it becomes clearer what you have selected.
+- Removed deprecated OCIO scene_linear space.
+
 v0.9.2
 ======
 

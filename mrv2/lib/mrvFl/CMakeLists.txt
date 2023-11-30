@@ -9,11 +9,11 @@ set(HEADERS
     mrvContextObject.h
     mrvFileRequester.h
     mrvHotkey.h
-    mrvImage.h
     mrvInit.h
     mrvIO.h
     mrvLanguages.h
     mrvLaserFadeData.h
+    mrvOCIO.h
     mrvPathMapping.h
     mrvPreferences.h
     mrvSaveOptions.h
@@ -30,10 +30,10 @@ set(SOURCES
     mrvContextObject.cpp
     mrvFileRequester.cpp
     mrvHotkey.cpp
-    mrvImage.cpp
     mrvInit.cpp
     mrvIO.cpp
     mrvLanguages.cpp
+    mrvOCIO.cpp
     mrvPathMapping.cpp
     mrvPreferences.cpp
     mrvSaveImage.cpp

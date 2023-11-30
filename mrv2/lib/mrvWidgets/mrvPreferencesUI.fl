@@ -52,7 +52,7 @@ decl {\#include "mrvWidgets/mrvOCIOBrowser.h"} {public global
 decl {\#include "mrvFl/mrvFileRequester.h"} {public global
 }
 
-decl {\#include "mrvFl/mrvImage.h"} {private global
+decl {\#include "mrvFl/mrvOCIO.h"} {private global
 }
 
 decl {\#include "mrvWidgets/mrvPreferencesTree.h"} {public global
@@ -932,26 +932,26 @@ uiPrefs->uiPrefsOCIOConfig->value( r.c_str() );}
             }
           }
           Fl_Group {} {
-            label {OCIO Defaults}
-            xywh {303 34 532 362} align 5 hide
+            label {OCIO Defaults} open
+            xywh {303 34 532 362} align 5
           } {
             Fl_Light_Button uiOCIOUseActiveViews {
               label {Use Active Views and Active Displays}
-              tooltip {When this option is off, OCIO files with active_views: and active_displays: are not taken into account.} xywh {417 51 288 24}
+              tooltip {When this option is off, OCIO files with active_views: and active_displays: are not taken into account.} xywh {417 38 288 24}
             }
             Fl_Group uiOCIO_ICS {
-              label {Input Color Space}
-              xywh {317 114 500 228} box ROUNDED_BOX
+              label {Input Color Space} open
+              xywh {317 83 500 220} box ROUNDED_BOX
             } {
               Fl_Group {} {
-                xywh {365 122 411 34}
+                xywh {365 91 411 34}
               } {
                 Fl_Input uiOCIO_8bits_ics {
                   label {8-bits}
                   user_data this user_data_type {PreferencesUI*}
                   callback {mrv::Media::ocio_8bits_ics = o->value();}
                   tooltip {The name of the OCIO default image color space for 8 bit images (jpg, bmp, etc)
-(Environment variable: MRV_OCIO_8bits_ICS)} xywh {400 126 283 25} box THIN_DOWN_BOX color 20 labelsize 11 align 132 textcolor 56
+(Environment variable: MRV_OCIO_8bits_ICS)} xywh {400 95 283 25} box THIN_DOWN_BOX color 20 labelsize 11 align 132 textcolor 56
                 }
                 Fl_Button {} {
                   label Pick
@@ -959,18 +959,18 @@ uiPrefs->uiPrefsOCIOConfig->value( r.c_str() );}
                   callback {std::string c = make_ocio_chooser(v->uiOCIO_8bits_ics->value(), mrv::OCIOBrowser::kInputColorSpace);
 v->uiOCIO_8bits_ics->value(c.c_str());
 v->uiOCIO_8bits_ics->do_callback();}
-                  xywh {688 126 88 25}
+                  xywh {688 95 88 25}
                 }
               }
               Fl_Group {} {
-                xywh {373 169 403 32}
+                xywh {373 131 403 32}
               } {
                 Fl_Input uiOCIO_16bits_ics {
                   label {16-bits}
                   user_data this user_data_type {PreferencesUI*}
                   callback {mrv::Media::ocio_16bits_ics = o->value();}
                   tooltip {The name of the OCIO default image color space for 16-bit images (cin, tiff, etc)
-(Environment variable: MRV_OCIO_16bits_ICS)} xywh {400 173 283 25} box THIN_DOWN_BOX color 20 labelsize 11 align 132 textcolor 56
+(Environment variable: MRV_OCIO_16bits_ICS)} xywh {400 135 283 25} box THIN_DOWN_BOX color 20 labelsize 11 align 132 textcolor 56
                 }
                 Fl_Button {} {
                   label Pick
@@ -978,18 +978,18 @@ v->uiOCIO_8bits_ics->do_callback();}
                   callback {std::string c = make_ocio_chooser(v->uiOCIO_16bits_ics->value(), mrv::OCIOBrowser::kInputColorSpace);
 v->uiOCIO_16bits_ics->value(c.c_str());
 v->uiOCIO_16bits_ics->do_callback();}
-                  xywh {688 173 88 25}
+                  xywh {688 135 88 25}
                 }
               }
               Fl_Group {} {
-                xywh {373 212 403 39}
+                xywh {373 173 403 39}
               } {
                 Fl_Input uiOCIO_32bits_ics {
                   label {32-bits}
                   user_data this user_data_type {PreferencesUI*}
                   callback {mrv::Media::ocio_32bits_ics = o->value();}
                   tooltip {The name of the OCIO default image color space for 32-bit int images (openexr integers, etc)
-(Environment variable: MRV_OCIO_32bits_ICS)} xywh {400 217 283 24} box THIN_DOWN_BOX color 20 labelsize 11 align 132 textcolor 56
+(Environment variable: MRV_OCIO_32bits_ICS)} xywh {400 178 283 24} box THIN_DOWN_BOX color 20 labelsize 11 align 132 textcolor 56
                 }
                 Fl_Button {} {
                   label Pick
@@ -997,18 +997,18 @@ v->uiOCIO_16bits_ics->do_callback();}
                   callback {std::string c = make_ocio_chooser(v->uiOCIO_32bits_ics->value(), mrv::OCIOBrowser::kInputColorSpace);
 v->uiOCIO_32bits_ics->value(c.c_str());
 v->uiOCIO_32bits_ics->do_callback();}
-                  xywh {688 217 88 25}
+                  xywh {688 178 88 25}
                 }
               }
               Fl_Group {} {
-                xywh {370 258 406 33}
+                xywh {370 218 406 33}
               } {
                 Fl_Input uiOCIO_half_ics {
                   label half
                   user_data this user_data_type {PreferencesUI*}
                   callback {mrv::Media::ocio_half_ics = o->value();}
                   tooltip {The name of the OCIO default image color space for OpenEXR half images
-(Environment variable: MRV_OCIO_half_ICS)} xywh {399 262 284 25} box THIN_DOWN_BOX color 20 labelsize 11 align 132 textcolor 56
+(Environment variable: MRV_OCIO_half_ICS)} xywh {399 222 284 25} box THIN_DOWN_BOX color 20 labelsize 11 align 132 textcolor 56
                 }
                 Fl_Button {} {
                   label Pick
@@ -1016,18 +1016,18 @@ v->uiOCIO_32bits_ics->do_callback();}
                   callback {std::string c = make_ocio_chooser(v->uiOCIO_half_ics->value(), mrv::OCIOBrowser::kInputColorSpace);
 v->uiOCIO_half_ics->value(c.c_str());
 v->uiOCIO_half_ics->do_callback();}
-                  xywh {688 262 88 25}
+                  xywh {688 222 88 25}
                 }
               }
               Fl_Group {} {
-                xywh {368 303 406 33}
+                xywh {368 261 406 33}
               } {
                 Fl_Input uiOCIO_float_ics {
                   label float
                   user_data this user_data_type {PreferencesUI*}
                   callback {mrv::Media::ocio_float_ics = o->value();}
                   tooltip {The name of the OCIO default image color space for half and float images (OpenEXR, dpx, etc)
-(Environment variable: MRV_OCIO_float_ICS)} xywh {397 307 284 25} box THIN_DOWN_BOX color 20 labelsize 11 align 132 textcolor 56
+(Environment variable: MRV_OCIO_float_ICS)} xywh {397 265 284 25} box THIN_DOWN_BOX color 20 labelsize 11 align 132 textcolor 56
                 }
                 Fl_Button {} {
                   label Pick
@@ -1035,12 +1035,12 @@ v->uiOCIO_half_ics->do_callback();}
                   callback {std::string c = make_ocio_chooser(v->uiOCIO_float_ics->value(), mrv::OCIOBrowser::kInputColorSpace);
 v->uiOCIO_float_ics->value(c.c_str());
 v->uiOCIO_float_ics->do_callback();}
-                  xywh {686 307 88 25}
+                  xywh {686 265 88 25}
                 }
               }
             }
-            Fl_Group {} {
-              xywh {313 350 480 34}
+            Fl_Group {} {open
+              xywh {307 349 500 35}
             } {
               Fl_Input uiOCIO_Display_View {
                 label {Display / View}
@@ -1062,6 +1062,31 @@ catch(const std::exception& e)
 v->uiOCIO_Display_View->value(c.c_str());
 v->uiOCIO_Display_View->do_callback();}
                 xywh {686 354 88 25}
+              }
+            }
+            Fl_Group {} {open selected
+              xywh {313 310 480 34}
+            } {
+              Fl_Input uiOCIO_Look {
+                label Look
+                user_data this user_data_type {PreferencesUI*}
+                callback {try
+{
+  mrv::image::setOcioLook(o->value());
+}
+catch(const std::exception& e)
+{
+  o->value("");
+}}
+                tooltip {Default Look} xywh {398 314 283 25} box THIN_DOWN_BOX color 20 labelsize 11 align 132 textcolor 56
+              }
+              Fl_Button {} {
+                label Pick
+                user_data this user_data_type {PreferencesUI*}
+                callback {std::string c = make_ocio_chooser(v->uiOCIO_Look->value(), mrv::OCIOBrowser::kLook);
+v->uiOCIO_Look->value(c.c_str());
+v->uiOCIO_Look->do_callback();}
+                xywh {686 314 88 25}
               }
             }
           }
@@ -1248,14 +1273,14 @@ v->uiOCIO_Display_View->do_callback();}
             }
           }
           Fl_Group {} {
-            label OpenGL open
-            xywh {291 36 532 362} box EMBOSSED_BOX align 5
+            label OpenGL
+            xywh {291 36 532 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {open
               xywh {329 36 446 313}
             } {
               Fl_Choice uiPrefsOpenGLVsync {
-                label {Monitor VSync} open selected
+                label {Monitor VSync} open
                 tooltip {Turns on and off Monitor's Vsync.  VSync off can display movies faster, at the cost of potential tearing in the image.} xywh {480 170 255 25} down_box BORDER_BOX align 132 textcolor 32
                 class {mrv::Choice}
               } {

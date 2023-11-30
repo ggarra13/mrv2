@@ -1,13 +1,15 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="es" >
+<html class="writer-html5" lang="es" data-content_root="../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Módulo image &mdash; documentación de mrv2 - v0.8.2</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=eafc0fe6" />
+
+  
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -120,11 +122,14 @@
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.image.ocioConfig"><code class="docutils literal notranslate"><span class="pre">ocioConfig()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.image.ocioIcs"><code class="docutils literal notranslate"><span class="pre">ocioIcs()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.image.ocioIcsList"><code class="docutils literal notranslate"><span class="pre">ocioIcsList()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.image.ocioLook"><code class="docutils literal notranslate"><span class="pre">ocioLook()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.image.ocioLookList"><code class="docutils literal notranslate"><span class="pre">ocioLookList()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.image.ocioView"><code class="docutils literal notranslate"><span class="pre">ocioView()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.image.ocioViewList"><code class="docutils literal notranslate"><span class="pre">ocioViewList()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.image.setBackgroundOptions"><code class="docutils literal notranslate"><span class="pre">setBackgroundOptions()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.image.setOcioConfig"><code class="docutils literal notranslate"><span class="pre">setOcioConfig()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.image.setOcioIcs"><code class="docutils literal notranslate"><span class="pre">setOcioIcs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.image.setOcioLook"><code class="docutils literal notranslate"><span class="pre">setOcioLook()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.image.setOcioView"><code class="docutils literal notranslate"><span class="pre">setOcioView()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.image.Color4f"><code class="docutils literal notranslate"><span class="pre">Color4f</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.image.Color4f.r"><code class="docutils literal notranslate"><span class="pre">Color4f.r</span></code></a></li>
@@ -540,6 +545,18 @@
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="mrv2.image.ocioLook">
+<span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">ocioLook</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#mrv2.image.ocioLook" title="Link to this definition"></a></dt>
+<dd><p>Obtiene el look de OCIO actual.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mrv2.image.ocioLookList">
+<span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">ocioLookList</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#mrv2.image.ocioLookList" title="Link to this definition"></a></dt>
+<dd><p>Obtiene un listado de todos los looks de OCIO.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="mrv2.image.ocioView">
 <span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">ocioView</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#mrv2.image.ocioView" title="Link to this definition"></a></dt>
 <dd><p>Retorna la Display/View de OCIO actual.</p>
@@ -575,6 +592,20 @@
 <li><p>setOcioIcs(ics: str) -&gt; None</p></li>
 </ol>
 <p>Setea el Espacio de Entrada de Color.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mrv2.image.setOcioLook">
+<span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">setOcioLook</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mrv2.image.setOcioLook" title="Link to this definition"></a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>setOcioLook(index: int) -&gt; None</p></li>
+</ol>
+<p>Setear el look de OCIO por índice.</p>
+<ol class="arabic simple" start="2">
+<li><p>setOcioLook(look: str) -&gt; None</p></li>
+</ol>
+<p>Setear el look de OCIO por nombre.</p>
 </dd></dl>
 
 <dl class="py function">

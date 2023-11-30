@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2023-11-27 09:40-0300\n"
+"POT-Creation-Date: 2023-11-30 09:35-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -1006,9 +1006,6 @@ msgstr "El archivo config de OCIO no puede estar vacío."
 msgid "OCIO config '{0}' does not exist or is not readable."
 msgstr "Config de OCIO '{0}' no existe o no es leíble."
 
-msgid "Invalid OCIO Ics '{0}'."
-msgstr "Espacio de Entrada de Color de OCIO inválido para '{0}'."
-
 msgid ""
 "\n"
 "Image module.\n"
@@ -1253,6 +1250,18 @@ msgstr "Retorna la list ade Displays/Views de OCIO."
 
 msgid "Set an OCIO Display/View."
 msgstr "Setea la OCIO Display/Vista."
+
+msgid "Gets the current OCIO look."
+msgstr "Obtiene el look de OCIO actual."
+
+msgid "Gets a list of all OCIO looks."
+msgstr "Obtiene un listado de todos los looks de OCIO."
+
+msgid "Set the OCIO look by index."
+msgstr "Setear el look de OCIO por índice."
+
+msgid "Set the OCIO look by name."
+msgstr "Setear el look de OCIO por nombre."
 
 msgid "Return all the files."
 msgstr "Retorne todo los archivos."
@@ -1550,18 +1559,6 @@ msgstr "Saltar al tiempo dado."
 
 msgid "Set the in/out points range."
 msgstr "Setear el range de entrada/salida."
-
-msgid "Color configuration file name (config.ocio)."
-msgstr "Archivo de configuración de color (config.ocio)."
-
-msgid "Input color space."
-msgstr "Espacio de Entrada de Color"
-
-msgid "Display color space."
-msgstr "Espacio de Color de Display"
-
-msgid "View color space."
-msgstr "Espacio de color de la vista."
 
 msgid "LUT file name."
 msgstr "Nombre del archivo LUT."
@@ -2510,6 +2507,9 @@ msgstr ""
 "Use la tecla Alt + el botón izquierdo del ratón para cambiar la "
 "transparencia."
 
+msgid "OCIO"
+msgstr "OCIO"
+
 msgid "LUT"
 msgstr "LUT"
 
@@ -2868,6 +2868,15 @@ msgstr "Comparando {0} a prefijo {1}"
 msgid "Found a match.  File is now {0}"
 msgstr "Encontre una equivalencia.  El archivo es ahora {0}"
 
+msgid "Invalid OCIO Ics '{0}'."
+msgstr "Espacio de Entrada de Color de OCIO inválido para '{0}'."
+
+msgid "Invalid OCIO Look '{0}'."
+msgstr "Look de OCIO inválido para '{0}'."
+
+msgid "Invalid OCIO Display/View '{0}'."
+msgstr "Display/View de OCIO inválido para '{0}'."
+
 msgid "English"
 msgstr "Inglés"
 
@@ -2882,9 +2891,6 @@ msgstr ""
 
 msgid "Set Language to {0}, Numbers to {1}"
 msgstr "Seteando el lenguaje a {0}, Números a {1}"
-
-msgid "Invalid OCIO Display/View '{0}'."
-msgstr "Display/View de OCIO inválido para '{0}'."
 
 msgid "@B12@C7@b@.Function\t@B12@C7@b@.Hotkey"
 msgstr "@B12@C7@b@.Función\t@B12@C7@b@.Tecla"
@@ -4029,11 +4035,14 @@ msgstr "Te permite ajustar la ganancia o exposición de la imagen."
 msgid "OCIO input color space for the image"
 msgstr "OCIO espacio de color para la imagen"
 
-msgid "OCIO"
-msgstr "OCIO"
-
 msgid "OCIO Display/View"
 msgstr "OCIO Display/Vista"
+
+msgid "L"
+msgstr "L"
+
+msgid "OCIO Looks"
+msgstr "Looks de OCIO"
 
 msgid "Toggle gamma between 1 and the previous setting."
 msgstr "Intercambia gama enter 1 y el seteo previo."
@@ -5769,6 +5778,18 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
+
+#~ msgid "Color configuration file name (config.ocio)."
+#~ msgstr "Archivo de configuración de color (config.ocio)."
+
+#~ msgid "Input color space."
+#~ msgstr "Espacio de Entrada de Color"
+
+#~ msgid "Display color space."
+#~ msgstr "Espacio de Color de Display"
+
+#~ msgid "View color space."
+#~ msgstr "Espacio de color de la vista."
 
 #~ msgid "OpenGL VSync"
 #~ msgstr "VSync de OpenGL"

@@ -21,6 +21,7 @@ namespace mrv
             kDisplay,
             kView,
             kDisplay_And_View,
+            kLook,
             kNone,
         };
 
@@ -44,6 +45,7 @@ namespace mrv
         void fill_display();
         void fill_display_and_view();
         void fill_input_color_space();
+        void fill_look();
 
     protected:
         Type _type;

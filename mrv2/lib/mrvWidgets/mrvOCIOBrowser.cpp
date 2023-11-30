@@ -112,6 +112,30 @@ namespace mrv
         }
 #endif
     }
+    void OCIOBrowser::fill_look()
+    {
+#ifdef TLRENDER_OCIO
+        OCIO::ConstConfigRcPtr config = Preferences::OCIOConfig();
+
+        std::vector<std::string> looks;
+        int numLooks = config->getNumLooks();
+        for (int i = 0; i < numLooks; ++i)
+        {
+            looks.push_back(config->getLookNameByIndex(i));
+        }
+
+        value(1);
+        std::sort(looks.begin(), looks.end());
+        for (size_t i = 0; i < looks.size(); ++i)
+        {
+            add(looks[i].c_str());
+            if (looks[i] == _sel)
+            {
+                value(i + 1);
+            }
+        }
+#endif
+    }
 
     void OCIOBrowser::fill_input_color_space()
     {
@@ -170,6 +194,9 @@ namespace mrv
             break;
         case kDisplay_And_View:
             fill_display_and_view();
+            break;
+        case kLook:
+            fill_look();
             break;
         default:
             LOG_ERROR(_("Unknown type for mrvOCIOBrowser"));

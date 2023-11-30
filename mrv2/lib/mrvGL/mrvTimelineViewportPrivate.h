@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <deque>
+
 #include <tlTimeline/BackgroundOptions.h>
 #include <tlTimeline/Player.h>
 
@@ -135,8 +137,7 @@ namespace mrv
         std::chrono::high_resolution_clock::time_point presentationTime;
 
         //! Auxiliary variables to count FPS
-        unsigned frameCount = 0;
-        double actualFPS;
+        std::deque<double> frameTimes;
         std::chrono::high_resolution_clock::time_point startTime;
     };
 

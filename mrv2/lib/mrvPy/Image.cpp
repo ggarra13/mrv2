@@ -25,7 +25,7 @@ namespace py = pybind11;
 
 #include "mrViewer.h"
 
-#include "mrvFl/mrvImage.h"
+#include "mrvFl/mrvOCIO.h"
 
 namespace tl
 {
@@ -204,15 +204,6 @@ namespace mrv
             Preferences::OCIO(ui);
         }
 
-        std::string ocioIcs()
-        {
-            auto uiICS = App::ui->uiICS;
-            int idx = uiICS->value();
-            if (idx < 0 || idx >= uiICS->children())
-                return "";
-            return uiICS->label();
-        }
-
         void setOcioIcs(const unsigned value)
         {
             auto uiICS = App::ui->uiICS;
@@ -237,31 +228,28 @@ namespace mrv
             return out;
         }
 
-        void setOcioIcs(const std::string& name)
+        std::vector<std::string> ocioLookList()
         {
-            auto uiICS = App::ui->uiICS;
-            int value = -1;
-            for (int i = 0; i < uiICS->children(); ++i)
+            auto OCIOLook = App::ui->OCIOLook;
+            std::vector<std::string> out;
+            for (int i = 0; i < OCIOLook->children(); ++i)
             {
-                const Fl_Menu_Item* item = uiICS->child(i);
+                const Fl_Menu_Item* item = OCIOLook->child(i);
                 if (!item || !item->label())
                     continue;
 
-                if (name == item->label())
-                {
-                    value = i;
-                    break;
-                }
+                out.push_back(item->label());
             }
-            if (value == -1)
-            {
-                std::string err =
-                    string::Format(_("Invalid OCIO Ics '{0}'.")).arg(name);
-                throw std::runtime_error(err);
+            return out;
+        }
+
+        void setOcioLook(const unsigned value)
+        {
+            auto OCIOLook = App::ui->OCIOLook;
+            if (value >= OCIOLook->children())
                 return;
-            }
-            uiICS->value(value);
-            uiICS->do_callback();
+            OCIOLook->value(value);
+            OCIOLook->do_callback();
         }
 
         std::vector<std::string> ocioViewList()
@@ -724,4 +712,21 @@ Contains all classes and enums related to image controls.
         "setOcioView",
         py::overload_cast<const std::string&>(&mrv::image::setOcioView),
         _("Set an OCIO Display/View."), py::arg("view"));
+
+    image.def(
+        "ocioLook", &mrv::image::ocioLook, _("Gets the current OCIO look."));
+
+    image.def(
+        "ocioLookList", &mrv::image::ocioLookList,
+        _("Gets a list of all OCIO looks."));
+
+    image.def(
+        "setOcioLook",
+        py::overload_cast<const unsigned>(&mrv::image::setOcioLook),
+        _("Set the OCIO look by index."), py::arg("index"));
+
+    image.def(
+        "setOcioLook",
+        py::overload_cast<const std::string&>(&mrv::image::setOcioLook),
+        _("Set the OCIO look by name."), py::arg("look"));
 }

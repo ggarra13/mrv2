@@ -413,7 +413,7 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
 }
 
 widget_class TimelineClass {
-  xywh {604 164 690 29} box NO_BOX resizable
+  xywh {685 527 690 29} box NO_BOX resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {open
@@ -649,7 +649,8 @@ if ( speed <= 0.0 )
   o->value(speed);
   o->redraw();
 }
-player->setSpeed( speed );}
+player->setSpeed( speed );
+ui->uiView->updatePlaybackButtons()}
             tooltip {Allows you to adjust frame rate playback.} xywh {382 3 42 24} selection_color 0
             code0 {o->textcolor( FL_BLACK );o->value(24);}
             code1 {o->step(0.001);}
@@ -808,7 +809,7 @@ uiSecondary = nullptr;} {}
       user_data this user_data_type {ViewerUI*}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
-    exit_cb( o, v );} open selected
+    exit_cb( o, v );} open
       xywh {728 116 690 602} type Double align 80 resizable
       class {mrv::MainWindow} size_range {690 602 0 0} visible
     } {
@@ -940,14 +941,23 @@ uiView->updateDisplayOptions();}
             } {}
           }
           Fl_Group {} {open
-            xywh {425 25 264 27}
+            xywh {421 25 268 27}
           } {
             Fl_Menu_Button OCIOView {
               label OCIO
               user_data this user_data_type {ViewerUI*}
               callback {uiView->updateOCIOOptions();} open
-              tooltip {OCIO Display/View} xywh {425 26 150 25} down_box DOWN_BOX labelsize 12 align 80
+              tooltip {OCIO Display/View} xywh {421 26 150 25} down_box DOWN_BOX labelsize 12 align 80
               code0 {o->disable_submenus();}
+              class {mrv::PopupMenu}
+            } {}
+            Fl_Menu_Button OCIOLook {
+              label L
+              user_data this user_data_type {ViewerUI*}
+              callback {uiView->updateOCIOOptions();} open
+              tooltip {OCIO Looks} xywh {572 26 22 25} down_box DOWN_BOX labelsize 12 align 80
+              code0 {o->disable_label();}
+              code1 {o->disable_glyph();}
               class {mrv::PopupMenu}
             } {}
             Fl_Button uiGammaSwitch {
@@ -964,14 +974,14 @@ else
    uiGamma->value( 1.0f );
 }
 uiGamma->do_callback();}
-              tooltip {Toggle gamma between 1 and the previous setting.} xywh {575 26 22 25}
+              tooltip {Toggle gamma between 1 and the previous setting.} xywh {594 26 22 25}
             }
             Fl_Value_Input uiGammaInput {
               user_data this user_data_type {ViewerUI*}
               callback {uiGamma->value( o->value() );
 uiView->updateDisplayOptions();}
               tooltip {Allows you to adjust gamma curve for display.
-Value is:  pow( 2, 1/x );} xywh {597 27 35 23} selection_color 0 maximum 64 value 1
+Value is:  pow( 2, 1/x );} xywh {616 27 35 23} selection_color 0 maximum 64 value 1
               code0 {o->textsize(12);}
               code1 {o->textcolor( FL_BLACK );}
               code2 {o->color((Fl_Color)0xf98a8a800);}
@@ -979,14 +989,14 @@ Value is:  pow( 2, 1/x );} xywh {597 27 35 23} selection_color 0 maximum 64 valu
             Fl_Slider uiGamma {
               user_data this user_data_type {ViewerUI*}
               callback {uiGammaInput->value( o->value() );
-uiView->updateDisplayOptions();}
+uiView->updateDisplayOptions();} selected
               tooltip {Allows you to adjust gamma curve for display.
-Value is:  pow( 2, 1/x );} xywh {632 27 54 23} type {Horz Knob} maximum 4 step 0.01 value 1
+Value is:  pow( 2, 1/x );} xywh {651 26 35 25} type {Horz Knob} maximum 4 step 0.01 value 1
               class {mrv::Slider}
             }
           }
         }
-        Fl_Tile uiTileGroup {open
+        Fl_Tile uiTileGroup {
           xywh {0 53 690 465}
           code0 {;}
           class {mrv::Tile}

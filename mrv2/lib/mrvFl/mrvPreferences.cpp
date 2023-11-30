@@ -45,7 +45,7 @@ namespace fs = std::filesystem;
 #include "mrvHotkeyUI.h"
 
 #include "mrvFl/mrvIO.h"
-#include "mrvFl/mrvImage.h"
+#include "mrvFl/mrvOCIO.h"
 #include "mrvCore/mrvOS.h"
 
 namespace
@@ -1870,6 +1870,7 @@ namespace mrv
 
             // First, remove all additional defaults if any from pulldown
             // menu
+            ui->OCIOLook->clear();
             ui->OCIOView->clear();
             ui->uiICS->clear();
             ui->uiICS->add(_("None"));
@@ -2013,6 +2014,24 @@ namespace mrv
 
                 ui->OCIOView->redraw();
 
+                int numLooks = config->getNumLooks();
+                ui->OCIOLook->add(_("None"));
+                for (int i = 0; i < numLooks; ++i)
+                {
+                    ui->OCIOLook->add(config->getLookNameByIndex(i));
+                }
+
+                std::string look = uiPrefs->uiOCIO_Look->value();
+                try
+                {
+                    if (!look.empty())
+                        image::setOcioLook(look);
+                }
+                catch (const std::exception& e)
+                {
+                    LOG_ERROR(e.what());
+                }
+
                 std::string display_view =
                     uiPrefs->uiOCIO_Display_View->value();
                 try
@@ -2028,16 +2047,8 @@ namespace mrv
                 std::vector< std::string > spaces;
                 for (int i = 0; i < config->getNumColorSpaces(); ++i)
                 {
-
                     std::string csname = config->getColorSpaceNameByIndex(i);
                     spaces.push_back(csname);
-                }
-
-                if (std::find(
-                        spaces.begin(), spaces.end(),
-                        OCIO::ROLE_SCENE_LINEAR) == spaces.end())
-                {
-                    spaces.push_back(OCIO::ROLE_SCENE_LINEAR);
                 }
 
                 mrv::PopupMenu* w = ui->uiICS;
@@ -2074,6 +2085,9 @@ namespace mrv
         ui->uiICS->show();
 
         updateICS();
+
+        if (panel::colorPanel)
+            panel::colorPanel->refresh();
 #endif
     }
 

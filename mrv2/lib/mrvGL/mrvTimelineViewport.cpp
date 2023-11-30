@@ -313,6 +313,8 @@ namespace mrv
     {
         TLRENDER_P();
 
+        p.frameTimes.clear();
+
         TimelineClass* c = p.ui->uiTimeWindow;
 
         if (p.timelinePlayers.empty())
@@ -333,12 +335,10 @@ namespace mrv
         switch (p.timelinePlayers[0]->playback())
         {
         case timeline::Playback::Forward:
-            p.actualFPS = p.timelinePlayers[0]->speed();
             p.startTime = std::chrono::high_resolution_clock::now();
             c->uiPlayForwards->color(color);
             break;
         case timeline::Playback::Reverse:
-            p.actualFPS = p.timelinePlayers[0]->speed();
             p.startTime = std::chrono::high_resolution_clock::now();
             c->uiPlayBackwards->color(color);
             break;
@@ -346,6 +346,7 @@ namespace mrv
         case timeline::Playback::Stop:
             _updateCursor();
             c->uiStop->color(color);
+            redrawWindows(); // to refresh FPS if set
             break;
         }
 
@@ -514,8 +515,26 @@ namespace mrv
 
         p.ocioOptions = value;
 
+#if 0
+        std::cerr << "p.ocioOptions.fileName="
+                  << p.ocioOptions.fileName << "." << std::endl
+                  << "p.ocioOptions.input="
+                  << p.ocioOptions.input << "." << std::endl
+                  << "p.ocioOptions.display="
+                  << p.ocioOptions.display << "." << std::endl
+                  << "p.ocioOptions.view="
+                  << p.ocioOptions.view << "." << std::endl
+                  << "p.ocioOptions.look="
+                  << p.ocioOptions.look << "." << std::endl;
+#endif
+
         p.ui->uiICS->copy_label(value.input.c_str());
         p.ui->OCIOView->copy_label(value.view.c_str());
+
+        if (panel::colorPanel)
+        {
+            panel::colorPanel->refresh();
+        }
 
         if (p.ui->uiSecondary && p.ui->uiSecondary->viewport())
         {
@@ -1590,18 +1609,17 @@ namespace mrv
 
         menu->copy_label(o.view.c_str());
 
-#if 0
-        std::cerr << "p.ocioOptions.fileName="
-                  << p.ocioOptions.fileName << "." << std::endl
-                  << "p.ocioOptions.input="
-                  << p.ocioOptions.input << "." << std::endl
-                  << "p.ocioOptions.display="
-                  << p.ocioOptions.display << "." << std::endl
-                  << "p.ocioOptions.view="
-                  << p.ocioOptions.view << "." << std::endl
-                  << "p.ocioOptions.look="
-                  << p.ocioOptions.look << "." << std::endl;
-#endif
+        PopupMenu* lookMenu = p.ui->OCIOLook;
+
+        int lookIndex = lookMenu->value();
+        if (lookIndex >= 0 && lookIndex < lookMenu->children())
+        {
+            w = lookMenu->child(lookIndex);
+            std::string look = w->label();
+            if (look == _("None"))
+                look = "";
+            o.look = look;
+        }
         setOCIOOptions(o);
         redrawWindows();
     }
