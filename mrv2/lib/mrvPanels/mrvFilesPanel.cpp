@@ -139,20 +139,24 @@ namespace mrv
                 ListObserver<std::shared_ptr<FilesModelItem> >::create(
                     ui->app->filesModel()->observeFiles(),
                     [this](const std::vector< std::shared_ptr<FilesModelItem> >&
-                               value) { refresh(); });
+                               value) { refresh(); },
+                    observer::CallbackAction::Suppress);
 
             _r->filesPanelOptionsObserver =
                 observer::ValueObserver<FilesPanelOptions>::create(
                     ui->app->filesModel()->observeFilesPanelOptions(),
-                    [this](const FilesPanelOptions& value) { refresh(); });
+                    [this](const FilesPanelOptions& value) { refresh(); },
+                    observer::CallbackAction::Suppress);
 
             _r->aIndexObserver = observer::ValueObserver<int>::create(
                 ui->app->filesModel()->observeAIndex(),
-                [this](int value) { redraw(); });
+                [this](int value) { redraw(); },
+                observer::CallbackAction::Suppress);
 
             _r->layerObserver = observer::ListObserver<int>::create(
                 ui->app->filesModel()->observeLayers(),
-                [this](const std::vector<int>& value) { redraw(); });
+                [this](const std::vector<int>& value) { redraw(); },
+                observer::CallbackAction::Suppress);
         }
 
         FilesPanel::~FilesPanel()
@@ -245,11 +249,12 @@ namespace mrv
                 if (o.filterEDL && isEDL)
                     continue;
 
+                const std::string protocol = path.getProtocol();
                 const std::string dir = path.getDirectory();
                 const std::string base = path.getBaseName();
                 const std::string extension = path.getExtension();
                 const std::string file = base + path.getNumber() + extension;
-                const std::string fullfile = dir + file;
+                const std::string fullfile = protocol + dir + file;
 
                 auto bW = new Widget<FileButton>(
                     g->x(), g->y() + 22 + i * 68, g->w(), 68);
@@ -286,7 +291,7 @@ namespace mrv
                 }
 
                 const std::string layer = getLayerName(media, layerId);
-                std::string text = dir + "\n" + file + layer;
+                std::string text = protocol + dir + "\n" + file + layer;
                 b->copy_label(text.c_str());
 
                 if (auto context = _r->context.lock())
@@ -433,15 +438,16 @@ namespace mrv
                 const auto& media = files->getItem(i);
                 const auto& path = media->path;
 
+                const std::string protocol = path.getProtocol();
                 const std::string& dir = path.getDirectory();
                 const std::string file =
                     path.getBaseName() + path.getNumber() + path.getExtension();
-                const std::string fullfile = dir + file;
+                const std::string fullfile = protocol + dir + file;
                 FileButton* b = m.second;
 
                 uint16_t layerId = media->videoLayer;
                 const std::string layer = getLayerName(media, layerId);
-                std::string text = dir + "\n" + file + layer;
+                std::string text = protocol + dir + "\n" + file + layer;
                 b->copy_label(text.c_str());
 
                 b->labelcolor(FL_WHITE);

@@ -228,11 +228,12 @@ namespace mrv
                     continue;
                 lastPath = path;
 
-                const std::string dir = path.getDirectory();
-                const std::string base = path.getBaseName();
-                const std::string extension = path.getExtension();
+                const std::string& protocol = path.getProtocol();
+                const std::string& dir = path.getDirectory();
+                const std::string& base = path.getBaseName();
+                const std::string& extension = path.getExtension();
                 const std::string file = base + path.getNumber() + extension;
-                const std::string fullfile = dir + file;
+                const std::string fullfile = protocol + dir + file;
 
                 auto bW = new Widget<ClipButton>(
                     g->x(), g->y() + 20 + i * 68, g->w(), 68);
@@ -276,7 +277,7 @@ namespace mrv
                 _r->map[i] = b;
 
                 const std::string& layer = getLayerName(media, layerId);
-                std::string text = dir + "\n" + file + layer;
+                std::string text = protocol + dir + "\n" + file + layer;
                 b->copy_label(text.c_str());
 
                 if (auto context = _r->context.lock())
@@ -667,10 +668,11 @@ namespace mrv
                 const auto& media = files->getItem(i);
                 const auto& path = media->path;
 
+                const std::string& protocol = path.getProtocol();
                 const std::string& dir = path.getDirectory();
                 const std::string file =
                     path.getBaseName() + path.getNumber() + path.getExtension();
-                const std::string fullfile = dir + file;
+                const std::string fullfile = protocol + dir + file;
 
                 auto m = _r->map.find(i);
                 ClipButton* b = (*m).second;
@@ -703,7 +705,7 @@ namespace mrv
                 b->redraw();
 
                 const std::string& layer = getLayerName(media, layerId);
-                std::string text = dir + "\n" + file + layer;
+                std::string text = protocol + dir + "\n" + file + layer;
                 b->copy_label(text.c_str());
 
                 if (auto context = _r->context.lock())
