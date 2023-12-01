@@ -365,7 +365,7 @@ namespace mrv
         view->updatePlaybackButtons();
         view->redraw();
 
-        p.ui->uiTimeline->setColorConfigOptions(p.ocioOptions);
+        p.ui->uiTimeline->setOCIOOptions(p.ocioOptions);
         p.ui->uiTimeline->setLUTOptions(p.lutOptions);
         p.ui->uiTimeline->redraw();
 

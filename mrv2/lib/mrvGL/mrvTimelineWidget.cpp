@@ -443,8 +443,7 @@ namespace mrv
         p.lutOptions = lutOptions;
     }
 
-    void
-    TimelineWidget::setColorConfigOptions(const timeline::OCIOOptions& value)
+    void TimelineWidget::setOCIOOptions(const timeline::OCIOOptions& value)
     {
         TLRENDER_P();
         if (p.ocioOptions == value)
@@ -565,6 +564,8 @@ namespace mrv
 
         p.vbo.reset();
         p.vao.reset();
+
+        // redraw();
     }
 
     void TimelineWidget::draw()

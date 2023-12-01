@@ -54,7 +54,7 @@ namespace mrv
         void setLUTOptions(const timeline::LUTOptions&);
 
         //! Set the color configuration.
-        void setColorConfigOptions(const timeline::OCIOOptions&);
+        void setOCIOOptions(const timeline::OCIOOptions&);
 
         //! Get timelineUI's timelineWidget item options
         timelineui::ItemOptions getItemOptions() const;

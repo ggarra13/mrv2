@@ -491,7 +491,7 @@ namespace mrv
                 const EnvironmentMapOptions& o = message["value"];
                 view->setEnvironmentMapOptions(o);
             }
-            else if (c == "setColorConfigOptions")
+            else if (c == "setOCIOOptions")
             {
                 bool receive = prefs->ReceiveColor->value();
                 if (!receive || !view)

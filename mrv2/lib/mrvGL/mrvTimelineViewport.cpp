@@ -541,11 +541,11 @@ namespace mrv
             Viewport* view = p.ui->uiSecondary->viewport();
             view->setOCIOOptions(value);
         }
-        p.ui->uiTimeline->setColorConfigOptions(value);
+        p.ui->uiTimeline->setOCIOOptions(value);
         p.ui->uiTimeline->redraw(); // to refresh thumbnail
 
         Message msg;
-        msg["command"] = "setColorConfigOptions";
+        msg["command"] = "setOCIOOptions";
         msg["value"] = value;
         tcp->pushMessage(msg);
 
