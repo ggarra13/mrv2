@@ -1969,10 +1969,12 @@ namespace mrv
                                     name += " (" + quoted_display + ")";
                                 }
 
-                                ui->OCIOView->add(name.c_str());
+                                int idx = ui->OCIOView->add(name.c_str());
 
-                                if (view == OCIO_View && !OCIO_View.empty())
+                                if (view == OCIO_View && !OCIO_View.empty() &&
+                                    display == OCIO_Display)
                                 {
+                                    ui->OCIOView->value(idx);
                                     ui->OCIOView->copy_label(view.c_str());
                                     ui->uiGamma->value(1.0f);
                                     ui->uiGammaInput->value(1.0f);
@@ -2000,10 +2002,12 @@ namespace mrv
                                 name += " (" + quoted_display + ")";
                             }
 
-                            ui->OCIOView->add(name.c_str());
+                            int idx = ui->OCIOView->add(name.c_str());
 
-                            if (view == OCIO_View && !OCIO_View.empty())
+                            if (view == OCIO_View && !OCIO_View.empty() &&
+                                display == OCIO_Display)
                             {
+                                ui->OCIOView->value(idx);
                                 ui->OCIOView->copy_label(view.c_str());
                                 ui->uiGamma->value(1.0f);
                                 ui->uiGammaInput->value(1.0f);

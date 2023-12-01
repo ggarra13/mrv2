@@ -6,6 +6,11 @@ v0.9.3
 - Added OCIO looks to the GUI, to Python API and to OpenGL display.
 - Added OCIO to Color Panel, so that it becomes clearer what you have selected.
 - Removed deprecated OCIO scene_linear space.
+- Corrected popup-menu pulldown changing label even when enable label was
+  disabled.
+- Fixed OCIO view pull-down menu value being selected from the last display
+  instead of the actual selected and used display at start-up.
+
 
 v0.9.2
 ======

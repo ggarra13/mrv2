@@ -160,7 +160,8 @@ namespace mrv
             return;
         Fl_Menu_Button::value(X);
         const char* label = child(X)->label();
-        copy_label(label);
+        if (_enable_label)
+            copy_label(label);
         redraw_label();
     }
 
