@@ -1473,7 +1473,10 @@ namespace mrv
 
         if (uiPrefs->uiPrefsPixelToolbar->value())
         {
-            ui->uiPixelBar->show();
+            auto player = ui->uiView->getTimelinePlayer();
+            if (!uiPrefs->uiPrefsAutoHidePixelBar->value() || !player ||
+                player->playback() == timeline::Playback::Stop)
+                ui->uiPixelBar->show();
         }
         else
         {

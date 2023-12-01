@@ -10,6 +10,8 @@ v0.9.3
   disabled.
 - Fixed OCIO view pull-down menu value being selected from the last display
   instead of the actual selected and used display at start-up.
+- Made pixel bar not show up after going to Preferences if video clip is
+  playing and Auto Hide Pixel Bar is on.
 - Documentation is now online at:
   		English: https://mrv2.sourceforge.io/docs/en
 		Spanish: https://mrv2.sourceforge.io/docs/es
