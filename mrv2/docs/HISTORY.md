@@ -10,7 +10,9 @@ v0.9.3
   disabled.
 - Fixed OCIO view pull-down menu value being selected from the last display
   instead of the actual selected and used display at start-up.
-
+- Documentation is now online at:
+  		English: https://mrv2.sourceforge.io/docs/en
+		Spanish: https://mrv2.sourceforge.io/docs/es
 
 v0.9.2
 ======
