@@ -12,6 +12,7 @@ v0.9.3
   instead of the actual selected and used display at start-up.
 - Made pixel bar not show up after going to Preferences if video clip is
   playing and Auto Hide Pixel Bar is on.
+- Added OCIO Looks loading/saving to mrv2.prefs file.
 - Documentation is now online at:
   		English: https://mrv2.sourceforge.io/docs/en
 		Spanish: https://mrv2.sourceforge.io/docs/es

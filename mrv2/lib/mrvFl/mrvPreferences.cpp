@@ -600,6 +600,10 @@ namespace mrv
         display_view.get("DisplayView", tmpS, "", 2048);
         uiPrefs->uiOCIO_Display_View->value(tmpS);
 
+        Fl_Preferences look(ocio, "Look");
+        look.get("Look", tmpS, "", 2048);
+        uiPrefs->uiOCIO_Look->value(tmpS);
+
         //
         // ui/view/hud
         //
@@ -1215,6 +1219,9 @@ namespace mrv
             Fl_Preferences display_view(ocio, "DisplayView");
             display_view.set(
                 "DisplayView", uiPrefs->uiOCIO_Display_View->value());
+
+            Fl_Preferences look(ocio, "Look");
+            look.set("Look", uiPrefs->uiOCIO_Look->value());
         }
 
         //
@@ -2033,6 +2040,8 @@ namespace mrv
                 {
                     if (!look.empty())
                         image::setOcioLook(look);
+                    else
+                        image::setOcioLook(_("None"));
                 }
                 catch (const std::exception& e)
                 {
