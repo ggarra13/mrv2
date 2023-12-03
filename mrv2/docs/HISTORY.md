@@ -13,6 +13,8 @@ v0.9.3
 - Made pixel bar not show up after going to Preferences if video clip is
   playing and Auto Hide Pixel Bar is on.
 - Added OCIO Looks loading/saving to mrv2.prefs file.
+- Added YUV420P rotation and flipping to handle movie files taken from a phone
+  like an IPhone.
 - Documentation is now online at:
   		English: https://mrv2.sourceforge.io/docs/en
 		Spanish: https://mrv2.sourceforge.io/docs/es
