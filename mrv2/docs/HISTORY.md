@@ -1,6 +1,9 @@
 v0.9.3
 ======
 
+v1.0 of mrv2 will be released on January 1st, 2024.  Therefore it is of most
+importance you report any bugs you find before that.
+
 - Made calculation of Actual Frame Rate more robust by averaging it over
   multiple frames.
 - Added OCIO looks to the GUI, to Python API and to OpenGL display.
