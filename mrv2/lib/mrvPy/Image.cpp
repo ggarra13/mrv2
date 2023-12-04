@@ -204,15 +204,6 @@ namespace mrv
             Preferences::OCIO(ui);
         }
 
-        void setOcioIcs(const unsigned value)
-        {
-            auto uiICS = App::ui->uiICS;
-            if (value >= uiICS->children())
-                return;
-            uiICS->value(value);
-            uiICS->do_callback();
-        }
-
         std::vector<std::string> ocioIcsList()
         {
             auto uiICS = App::ui->uiICS;
@@ -220,10 +211,18 @@ namespace mrv
             for (int i = 0; i < uiICS->children(); ++i)
             {
                 const Fl_Menu_Item* item = uiICS->child(i);
-                if (!item || !item->label())
+                if (!item || !item->label() || item->flags & FL_SUBMENU)
                     continue;
 
-                out.push_back(item->label());
+                char pathname[1024];
+                int ret = uiICS->item_pathname(pathname, 1024, item);
+                if (ret != 0)
+                    continue;
+
+                if (pathname[0] == '/')
+                    out.push_back(item->label());
+                else
+                    out.push_back(pathname);
             }
             return out;
         }
@@ -241,15 +240,6 @@ namespace mrv
                 out.push_back(item->label());
             }
             return out;
-        }
-
-        void setOcioLook(const unsigned value)
-        {
-            auto OCIOLook = App::ui->OCIOLook;
-            if (value >= OCIOLook->children())
-                return;
-            OCIOLook->value(value);
-            OCIOLook->do_callback();
         }
 
         std::vector<std::string> ocioViewList()
@@ -270,15 +260,6 @@ namespace mrv
                 out.push_back(pathname);
             }
             return out;
-        }
-
-        void setOcioView(const unsigned value)
-        {
-            auto uiOCIOView = App::ui->OCIOView;
-            if (value >= uiOCIOView->children())
-                return;
-            uiOCIOView->value(value);
-            uiOCIOView->do_callback();
         }
 
     } // namespace image
@@ -687,14 +668,8 @@ Contains all classes and enums related to image controls.
         _("Gets a list of all input color spaces."));
 
     image.def(
-        "setOcioIcs",
-        py::overload_cast<const unsigned>(&mrv::image::setOcioIcs),
-        _("Set the input color space."), py::arg("index"));
-
-    image.def(
-        "setOcioIcs",
-        py::overload_cast<const std::string&>(&mrv::image::setOcioIcs),
-        _("Set the input color space."), py::arg("ics"));
+        "setOcioIcs", &mrv::image::setOcioIcs, _("Set the input color space."),
+        py::arg("ics"));
 
     image.def(
         "ocioView", &mrv::image::ocioView, _("Gets the current Display/View."));
@@ -704,14 +679,8 @@ Contains all classes and enums related to image controls.
         _("Gets the list of Displays/Views."));
 
     image.def(
-        "setOcioView",
-        py::overload_cast<const unsigned>(&mrv::image::setOcioView),
-        _("Set an OCIO Display/View."), py::arg("index"));
-
-    image.def(
-        "setOcioView",
-        py::overload_cast<const std::string&>(&mrv::image::setOcioView),
-        _("Set an OCIO Display/View."), py::arg("view"));
+        "setOcioView", &mrv::image::setOcioView, _("Set an OCIO Display/View."),
+        py::arg("view"));
 
     image.def(
         "ocioLook", &mrv::image::ocioLook, _("Gets the current OCIO look."));
@@ -721,12 +690,6 @@ Contains all classes and enums related to image controls.
         _("Gets a list of all OCIO looks."));
 
     image.def(
-        "setOcioLook",
-        py::overload_cast<const unsigned>(&mrv::image::setOcioLook),
-        _("Set the OCIO look by index."), py::arg("index"));
-
-    image.def(
-        "setOcioLook",
-        py::overload_cast<const std::string&>(&mrv::image::setOcioLook),
+        "setOcioLook", &mrv::image::setOcioLook,
         _("Set the OCIO look by name."), py::arg("look"));
 }
