@@ -18,6 +18,9 @@ importance you report any bugs you find before that.
 - Added OCIO Looks loading/saving to mrv2.prefs file.
 - Added YUV420P rotation and flipping to handle movie files taken from a phone
   like an IPhone.
+- Removed setting OCIO ICS, View and Look by index as they were not taking into
+  account the submenus.
+- Solidified OCIO ICS return and set functions to support submenus.
 - Documentation is now online at:
   		English: https://mrv2.sourceforge.io/docs/en
 		Spanish: https://mrv2.sourceforge.io/docs/es

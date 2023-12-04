@@ -18,7 +18,17 @@ namespace mrv
             int idx = uiICS->value();
             if (idx < 0 || idx >= uiICS->children())
                 return "";
-            return uiICS->label();
+
+            const Fl_Menu_Item* item = uiICS->child(idx);
+            if (!item || !item->label() || item->flags & FL_SUBMENU)
+                return "";
+
+            char pathname[1024];
+            int ret = uiICS->item_pathname(pathname, 1024, item);
+            if (ret != 0)
+                return "";
+
+            return pathname;
         }
 
         void setOcioIcs(const std::string& name)
@@ -28,10 +38,15 @@ namespace mrv
             for (int i = 0; i < uiICS->children(); ++i)
             {
                 const Fl_Menu_Item* item = uiICS->child(i);
-                if (!item || !item->label())
+                if (!item || !item->label() || item->flags & FL_SUBMENU)
                     continue;
 
-                if (name == item->label())
+                char pathname[1024];
+                int ret = uiICS->item_pathname(pathname, 1024, item);
+                if (ret != 0)
+                    continue;
+
+                if (name == pathname || name == item->label())
                 {
                     value = i;
                     break;
@@ -46,6 +61,8 @@ namespace mrv
             }
             uiICS->value(value);
             uiICS->do_callback();
+            if (panel::colorPanel)
+                panel::colorPanel->refresh();
         }
 
         std::string ocioLook()
@@ -54,7 +71,9 @@ namespace mrv
             int idx = OCIOLook->value();
             if (idx < 0 || idx >= OCIOLook->children())
                 return "";
-            return OCIOLook->child(idx)->label();
+
+            const Fl_Menu_Item* item = OCIOLook->child(idx);
+            return item->label();
         }
 
         void setOcioLook(const std::string& name)
@@ -64,10 +83,15 @@ namespace mrv
             for (int i = 0; i < OCIOLook->children(); ++i)
             {
                 const Fl_Menu_Item* item = OCIOLook->child(i);
-                if (!item || !item->label())
+                if (!item || !item->label() || item->flags & FL_SUBMENU)
                     continue;
 
-                if (name == item->label())
+                char pathname[1024];
+                int ret = OCIOLook->item_pathname(pathname, 1024, item);
+                if (ret != 0)
+                    continue;
+
+                if (name == pathname || name == item->label())
                 {
                     value = i;
                     break;
@@ -82,6 +106,8 @@ namespace mrv
             }
             OCIOLook->value(value);
             OCIOLook->do_callback();
+            if (panel::colorPanel)
+                panel::colorPanel->refresh();
         }
 
         std::string ocioView()
@@ -131,7 +157,8 @@ namespace mrv
             }
             uiOCIOView->value(value);
             uiOCIOView->do_callback();
-            uiOCIOView->redraw();
+            if (panel::colorPanel)
+                panel::colorPanel->refresh();
         }
     } // namespace image
 } // namespace mrv

@@ -152,7 +152,14 @@ namespace mrv
                 ++count;
                 if (i == p.ui->uiICS->value())
                     selected = count;
-                br->add(item->label());
+                char pathname[1024];
+                int ret = menu->item_pathname(pathname, sizeof(pathname), item);
+                if (ret != 0)
+                    continue;
+                if (pathname[0] == '/')
+                    br->add(item->label());
+                else
+                    br->add(pathname);
             }
             br->value(selected);
 
