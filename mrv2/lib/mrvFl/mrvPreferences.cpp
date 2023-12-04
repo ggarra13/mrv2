@@ -929,11 +929,33 @@ namespace mrv
 
         if (!ui->uiView->getPresentationMode())
         {
-            // Handle windows/panels
+            // Handle panels
+            Fl_Preferences base(
+                prefspath().c_str(), "filmaura", "mrv2",
+                (Fl_Preferences::Root)0);
+
+            Fl_Preferences panel_list(base, "panels");
+            unsigned numPanels = panel_list.entries();
+            for (unsigned i = 0; i < numPanels; ++i)
+            {
+                const char* key = panel_list.entry(i);
+                show_window_cb(key, ui);
+            }
+
+            // Handle windows
             const WindowCallback* wc = kWindowCallbacks;
             for (; wc->name; ++wc)
             {
                 std::string key = "gui/";
+                key += wc->name;
+                key += "/Window";
+                std_any value = settings->getValue<std::any>(key);
+                int window =
+                    std_any_empty(value) ? 0 : std_any_cast<int>(value);
+                if (!window)
+                    continue;
+
+                key = "gui/";
                 key += wc->name;
                 key += "/Window/Visible";
                 visible = settings->getValue<int>(key);
@@ -986,6 +1008,15 @@ namespace mrv
             prefspath().c_str(), "filmaura", "mrv2",
             (Fl_Preferences::Root)(int)Fl_Preferences::CLEAR);
         base.set("version", kPreferencesVersion);
+
+        Fl_Preferences panel_list(base, "panels");
+        panel_list.clear();
+        // Get panel list so we keep the order
+        auto panels = ui->uiDock->getPanelList();
+        for (auto panel : panels)
+        {
+            panel_list.set(panel.c_str(), 1);
+        }
 
         Fl_Preferences fltk_settings(base, "settings");
         fltk_settings.clear();

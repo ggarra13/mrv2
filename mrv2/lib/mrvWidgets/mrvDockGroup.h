@@ -4,8 +4,10 @@
 
 #pragma once
 
+#include <string>
+#include <vector>
+
 #include <FL/Fl_Group.H>
-// #include <FL/Fl_Pack.H>
 #include <FL/Fl_Scroll.H>
 
 #include "mrvPack.h"
@@ -34,6 +36,8 @@ namespace mrv
         // methods for adding or removing toolgroups from the dock
         void add(Fl_Widget* w);
         void remove(Fl_Widget* w);
+
+        std::vector<std::string> getPanelList() const;
     };
 
 } // namespace mrv

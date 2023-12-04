@@ -21,6 +21,8 @@ importance you report any bugs you find before that.
 - Removed setting OCIO ICS, View and Look by index as they were not taking into
   account the submenus.
 - Solidified OCIO ICS return and set functions to support submenus.
+- Made Panels appear in the same order that they were when exiting the
+  application, instead of showing alphabetically.
 - Documentation is now online at:
   		English: https://mrv2.sourceforge.io/docs/en
 		Spanish: https://mrv2.sourceforge.io/docs/es

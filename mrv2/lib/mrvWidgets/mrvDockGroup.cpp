@@ -66,4 +66,20 @@ namespace mrv
         }
     }
 
+    std::vector<std::string> DockGroup::getPanelList() const
+    {
+        std::vector<std::string> out;
+        for (int i = 0; i < pack->children(); ++i)
+        {
+            PanelGroup* g = dynamic_cast<PanelGroup*>(pack->child(i));
+            if (!g)
+                out.push_back("Not a Panel");
+            else if (!g->label().empty())
+                out.push_back(g->label().c_str());
+            else
+                out.push_back("Unknown Panel Label");
+        }
+        return out;
+    }
+
 } // namespace mrv
