@@ -16,8 +16,8 @@ importance you report any bugs you find before that.
 - Made pixel bar not show up after going to Preferences if video clip is
   playing and Auto Hide Pixel Bar is on.
 - Added OCIO Looks loading/saving to mrv2.prefs file.
-- Added YUV420P rotation and flipping to handle movie files taken from a phone
-  like an IPhone.
+- Added rotation and flipping for YUV formats to handle movie files taken from
+  a phone like an IPhone.
 - Removed setting OCIO ICS, View and Look by index as they were not taking into
   account the submenus.
 - Solidified OCIO ICS return and set functions to support submenus.
