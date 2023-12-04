@@ -11,12 +11,10 @@ mrv2 is an open source professional flipbook and review tool for the Visual Effe
 mrv2 can handle collections of media sources quickly, loads specialised image formats and displays images with colour management. Users can quickly import, organise and group media into playlists and 'subsets', playing through and looping on media items and adding review notes and sketched annotations, allowing one to view the media in a highly interactive and collaborative way. This enables workflows that are essential for teams in VFX, animation and other post-production activities who need to see, on demand, the artwork that they and their colleagues are creating. For example one can jump between the viewed media source instantaneously, inspect pixels close-up, do frame-by-frame comparisons across multiple media sources, annotate the media with drawings and captions or add feedback notes to share.
 
 
-Current Version: v0.8.0 - Overview
+Current Version: v1.0.0 - Overview
 **********************************
 
 This version of the application is a robust and high performance playback and review solution. mrv2 has been deployed at multiple facilities and is used by multiple individuals daily since August 2022.
-
-The development phase is still in full swing as work continues on some major features. 
 
 Here are some key features:
 
