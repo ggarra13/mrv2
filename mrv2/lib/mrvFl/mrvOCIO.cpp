@@ -141,7 +141,7 @@ namespace mrv
                 if (ret != 0)
                     continue;
 
-                if (name == pathname)
+                if (name == pathname || name == item->label())
                 {
                     value = i;
                     break;

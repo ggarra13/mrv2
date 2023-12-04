@@ -147,7 +147,7 @@ namespace mrv
             for (int i = 0; i < menu->children(); ++i)
             {
                 const Fl_Menu_Item* item = menu->child(i);
-                if (!item || item->flags & FL_SUBMENU || !item->label())
+                if (!item || !item->label() || item->flags & FL_SUBMENU)
                     continue;
                 ++count;
                 if (i == p.ui->uiICS->value())
@@ -182,6 +182,8 @@ namespace mrv
             for (int i = 0; i < menu->children(); ++i)
             {
                 const Fl_Menu_Item* item = menu->child(i);
+                if (!item || !item->label() || item->flags & FL_SUBMENU)
+                    continue;
                 int ret = menu->item_pathname(name, sizeof(name), item);
                 if (ret != 0)
                     continue;
@@ -193,13 +195,22 @@ namespace mrv
                 int idx = menu->find_index(item);
                 if (idx == menu->value())
                     selected = count;
-                br->add(name);
+                if (name[0] == '/')
+                    br->add(item->label());
+                else
+                    br->add(name);
             }
             br->value(selected);
 
             br->end();
-            brW->callback([=](auto o)
-                          { mrv::image::setOcioView(o->text(o->value())); });
+            brW->callback(
+                [=](auto o)
+                {
+                    int idx = o->value();
+                    if (idx < 1)
+                        idx = 1;
+                    mrv::image::setOcioView(o->text(idx));
+                });
 
             gb->end();
 
@@ -215,7 +226,7 @@ namespace mrv
             for (int i = 0; i < menu->children(); ++i)
             {
                 const Fl_Menu_Item* item = menu->child(i);
-                if (!item || !item->label())
+                if (!item || !item->label() || item->flags & FL_SUBMENU)
                     continue;
                 ++count;
                 int idx = menu->find_index(item);
