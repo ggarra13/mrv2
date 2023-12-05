@@ -560,12 +560,16 @@ namespace mrv
 
         Fl_Gl_Window::resize(X, Y, W, H);
 
-        p.timelineWindow->setGeometry(math::Box2i(0, 0, _toUI(W), _toUI(H)));
+        const math::Box2i geometry(0, 0, _toUI(w()), _toUI(h()));
+        p.timelineWindow->setGeometry(geometry);
+
+        const float devicePixelRatio = this->pixels_per_unit();
+        ui::SizeHintEvent sizeHintEvent(
+            p.style, p.iconLibrary, p.fontSystem, devicePixelRatio);
+        _sizeHintEvent(p.timelineWindow, sizeHintEvent);
 
         p.vbo.reset();
         p.vao.reset();
-
-        // redraw();
     }
 
     void TimelineWidget::draw()
