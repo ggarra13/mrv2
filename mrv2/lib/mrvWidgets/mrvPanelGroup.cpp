@@ -106,6 +106,8 @@ namespace mrv
             auto settings = App::app->settings();
             auto dragger = gp->get_dragger();
             std::string label = dragger->label();
+            if (label == "Python")
+                tw->size_range(640, 400);
             std::string prefix = "gui/" + label;
             std::string key;
 
