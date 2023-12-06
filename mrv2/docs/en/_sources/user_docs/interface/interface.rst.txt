@@ -32,6 +32,7 @@ F1            Toggle Topbar.
 F2            Toggle Pixel Toolbar.
 F3            Toggle Timeline Viewport and controls.
 Shift + F7    Toggle Drawing and Action Tools.
+e             Toggle Thumbnails (Edit) of Timeline.
 F11           Toggle Fullscreen mode.
 F12           Toggle Presentation mode (no toolbars).
 ============  =======================================
@@ -73,7 +74,9 @@ The Input Color Space is right next to it.  This is the OpenColorIO (OCIO) contr
 
 Coming next, is the view and display control of OpenColorIO (OCIO).
 
-Finally, the last control is the gama one which is driven by the slider and is toggled between two previous values with the "Y" button.
+The "L" button brings up the OpenColorIO Looks, which allow adding an artistic look to the image, besides the normal ACES workflow. 
+
+Finally, the last control is the gamma one which is driven by the slider and is toggled between two previous values with the "Y" button.
 
 .. note::
 
@@ -86,7 +89,7 @@ The Timeline
 .. image:: ../images/timeline-01.png
    :align: center
 
-The Timeline Viewport allows you to scale the Editing's Thumbnails and Audio waveforms by dragging the viewport up and down.  For a quick display of all the tracks, you can click on the Edit button in the Menu toolbar.
+The Timeline Viewport allows you to scale the Editing's Thumbnails and Audio waveforms by dragging the viewport up and down.  For a quick display of all the tracks, you can click on the Edit button (Shortcut 'e' by default) in the Menu toolbar.
 When showing the pictures, you can zoom in and out with the mousewheel.
 
 Frame Indicator
@@ -181,7 +184,7 @@ mrv2 supports Panels to organize the information logically.  These panels can be
 Divider
 +++++++
 
-The Panels have a divided, just like the Timeline Viewport, and can be dragged to make the panel bigger or smaller (and change the size of the main viewport).
+The Panels have a divider, just like the Timeline Viewport, and can be dragged to make the panel bigger or smaller (and change the size of the main viewport).
 
 
 

@@ -558,18 +558,20 @@ namespace mrv
     {
         TLRENDER_P();
 
-        Fl_Gl_Window::resize(X, Y, W, H);
-
-        const math::Box2i geometry(0, 0, _toUI(w()), _toUI(h()));
-        p.timelineWindow->setGeometry(geometry);
-
         const float devicePixelRatio = this->pixels_per_unit();
         ui::SizeHintEvent sizeHintEvent(
             p.style, p.iconLibrary, p.fontSystem, devicePixelRatio);
         _sizeHintEvent(p.timelineWindow, sizeHintEvent);
 
+        const math::Box2i geometry(0, 0, _toUI(W), _toUI(H));
+        p.timelineWindow->setGeometry(geometry);
+
+        _clipEvent(p.timelineWindow, geometry, false);
+
         p.vbo.reset();
         p.vao.reset();
+
+        Fl_Gl_Window::resize(X, Y, W, H);
     }
 
     void TimelineWidget::draw()

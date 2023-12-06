@@ -24,17 +24,18 @@ Ocultando/Mostrando Elementos de la GUI
 
 Algunas teclas útiles por defecto:
 
-============  =============================================
+============  ======================================================
 Tecla         Acción
-============  =============================================
+============  =====================================================
 Shift + F1    Alternar la barra de Menú.
 F1            Alternar la barra Superior.
 F2            Alternar la barra de Pixel.
 F3            Alternar la barra de Línea de Tiempo.
+e             Alternar los dibujos (edición) en la Línea de Tiempo.
 Shift + F7    Alternar las Herramientas de Dibujo y Acción.
 F11           Alternar el modo Pantalla Completa.
 F12           Alternar el modo Presentación (sin barras).
-============  =============================================
+============  =====================================================
 
 
 Personalizando la Interfaz
@@ -56,7 +57,7 @@ El factor de zoom actual es mostrado en la barra de pixel a la izquierda.
 
 .. note::
     Para 'centrar' la vista, sin cambiar el factor de zoom, puede usar la tecla
-    'h' hotkey.
+    'h' (Home en inglés).
 
 .. note::
    Si quiere acercase o alejarse un porcentaje particular (digamos 2x), puede
@@ -72,6 +73,8 @@ La ganancia (controlada con el deslizador) y/o exposición, manejada con las fle
 El Espacio de Entrada de Color está a su lado.  Este es el Control de OpenColorIO (OCIO) de la imágen.
 
 Junto a él, está el control de OpenColorIO (OCIO) del display y de la vista.
+
+El siguiente botón marcado con "L" es el controls de "Looks" de OpenColorIO (OCIO).  Permite agregar un look artístico a la imagen sobre el ya aplicado ACES, por ejemplo.
 
 Finalmente, el último control es el de gama que se controla con el deslizador y se alterna entre dos valores con el botón marcado con "Y".
 
