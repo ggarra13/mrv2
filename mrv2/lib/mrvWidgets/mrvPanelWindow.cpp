@@ -14,6 +14,12 @@
 #include "mrvApp/mrvSettingsObject.h"
 #include "mrvApp/App.h"
 
+namespace
+{
+    const int kMinWidth = 150;
+    const int kMinHeight = 150;
+} // namespace
+
 namespace mrv
 {
 
@@ -23,8 +29,6 @@ namespace mrv
     PanelWindow* PanelWindow::active_list[TW_MAX_FLOATERS]; // list of active
                                                             // PanelWindows
     short PanelWindow::active = 0; // count of active tool windows
-    constexpr int kMinWidth = 150;
-    constexpr int kMinHeight = 150;
 
     // Dummy close button callback
     static void cb_ignore(void)
@@ -164,15 +168,11 @@ namespace mrv
         if (Y + H > maxY)
             H = maxY - Y;
 
-        assert(W > 0);
-        assert(H > 0);
-
         Fl_Double_Window::resize(X, Y, W, H);
     }
 
     int PanelWindow::handle(int event)
     {
-        int ret = Fl_Double_Window::handle(event);
         int ex = Fl::event_x_root();
         int ey = Fl::event_y_root();
         switch (event)
@@ -190,7 +190,9 @@ namespace mrv
             return 1;
         case FL_MOVE:
         {
-            set_cursor(ex, ey);
+            int ret = Fl_Double_Window::handle(event);
+            if (!ret)
+                set_cursor(ex, ey);
             return 1;
         }
         case FL_PUSH:
@@ -298,6 +300,6 @@ namespace mrv
             return 1;
         }
         }
-        return ret;
+        return Fl_Double_Window::handle(event);
     }
 } // namespace mrv

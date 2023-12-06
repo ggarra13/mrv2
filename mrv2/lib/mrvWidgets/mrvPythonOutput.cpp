@@ -15,6 +15,7 @@ namespace mrv
     {
         setMaxLines(0); // make output infinite
         box(FL_DOWN_BOX);
+        wrap_mode(WRAP_NONE, 80);
     }
 
     int PythonOutput::handle(int e)

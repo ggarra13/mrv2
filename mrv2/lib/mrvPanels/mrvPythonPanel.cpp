@@ -357,10 +357,10 @@ namespace mrv
             int Y = 20;
             int M = (H - Y) / 2;
 
-            _r->tile = new Fl_Tile(g->x(), g->y() + Y, g->w(), H + Y + 3);
+            _r->tile = new Fl_Tile(g->x(), g->y() + Y, g->w(), H - 3);
             _r->tile->labeltype(FL_NO_LABEL);
 
-            int dx = 20, dy = dx; // border width of resizable() - see below
+            int dx = 600, dy = 600; // border width of resizable() - see below
             Fl_Box r(
                 _r->tile->x() + dx, _r->tile->y() + dy, _r->tile->w() - 2 * dx,
                 _r->tile->h() - 2 * dy);
@@ -408,6 +408,12 @@ from mrv2 import playlist, timeline, usd, session, settings
             create_menu();
             g->add(_r->tile);
             g->end();
+
+            auto w = g->get_window();
+            if (w)
+            {
+                w->size_range(640, 400);
+            }
 
             Fl_Scroll* s = g->get_scroll();
             Pack* pack = g->get_pack();

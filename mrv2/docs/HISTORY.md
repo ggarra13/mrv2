@@ -1,10 +1,27 @@
 v0.9.4
 ======
 
+v1.0.0 of mrv2 will be released on January 1st, 2024.  Therefore it is of most
+importance you report any bugs you find before that.
+
+- Improved Help/Update mrv2 Python script to work fine at start up on beta
+  builds.
+- Added the option to Update mrv2 even if you are already using the same
+  version.  Useful to upgrade from a beta build to a release build.
+- Improved performance of Python Panel by not having it wrap at bounds.  This
+  allows faster resizing of the panel on Linux mainly.
+- Fixed cursor shape in Python Panel when entering the divider between the
+  output and the editor.
+- Prevented resizing of the Python Panel to very small sizes when in window
+  mode.
+- Added $HOME/.local/lib/python${PYTHON_VERSION}/site-packages to the default
+  search path of PYTHONPATH in environment.sh.
+
+
 v0.9.3
 ======
 
-v1.0 of mrv2 will be released on January 1st, 2024.  Therefore it is of most
+v1.0.0 of mrv2 will be released on January 1st, 2024.  Therefore it is of most
 importance you report any bugs you find before that.
 
 - Made calculation of Actual Frame Rate more robust by averaging it over

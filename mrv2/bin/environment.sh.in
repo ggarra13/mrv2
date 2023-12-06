@@ -34,7 +34,7 @@ dir=${dir%/*}
 #
 export LD_LIBRARY_PATH="${dir}/lib64:${dir}/lib:${LD_LIBRARY_PATH}:/usr/lib64:/usr/lib"
 export DYLD_FALLBACK_LIBRARY_PATH="${LD_LIBRARY_PATH}"
-export PYTHONPATH="${dir}/lib/python@MRV2_PYTHON_VERSION@:${dir}/lib/python@MRV2_PYTHON_VERSION@/lib-dynload:${dir}/lib/python@MRV2_PYTHON_VERSION@/site-packages:${PYTHONPATH}"
+export PYTHONPATH="${dir}/lib/python@MRV2_PYTHON_VERSION@:${dir}/lib/python@MRV2_PYTHON_VERSION@/lib-dynload:${dir}/lib/python@MRV2_PYTHON_VERSION@/site-packages:${HOME}/.local/lib/python@MRV2_PYTHON_VERSION@/site_packages:${PYTHONPATH}"
 
 #
 # For Linux, when running on Wayland we switch it to run on X11 emulation,

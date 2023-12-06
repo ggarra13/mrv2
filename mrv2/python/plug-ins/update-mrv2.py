@@ -24,11 +24,13 @@ class UpdatePlugin(plugin.Plugin):
     allows the user to download and install it.  It works on all platforms.
     """
 
+    startup = True
+    
     def __init__(self):
         super().__init__()
         if settings.checkForUpdates():
             self.check_latest_release("ggarra13", "mrv2")
-        
+        UpdatePlugin.startup = False
     
     def match_version(self, s):
         """Match a version in a string like v0.8.3.
@@ -437,9 +439,14 @@ class UpdatePlugin(plugin.Plugin):
 
             result = self.compare_versions(current_version, version)
             if result == 0:
+                if not UpdatePlugin.startup:
+                    self.ask_to_update(current_version, version,
+                                       'Update anyway', data)
                 return
             elif result == 1:
-                self.ask_to_update(current_version, version, 'Downgrade', data)
+                if not UpdatePlugin.startup:
+                    self.ask_to_update(current_version, version, 'Downgrade',
+                                       data)
                 return
             else:
                 self.ask_to_update(current_version, version, 'Upgrade', data)
@@ -452,17 +459,15 @@ class UpdatePlugin(plugin.Plugin):
         self.check_latest_release("ggarra13", "mrv2")
 
     def menus(self):
-        menus = {
-            # Call a method and place a divider line after the menu
-            "Help/Update mrv2" : (self.run, '__divider__')
-        }
+        menu_entry = "Help/Update mrv2"
         try:
             if re.search('es', cmd.getLanguage()):
-                menus = {
-                    # Call a method and place a divider line after the menu
-                    "Ayuda/Actualizar mrv2" : (self.run, '__divider__')
-                }
+                menu_entry = "Ayuda/Actualizar mrv2"
         except:
             pass
+        menus = {
+            # Call a method and place a divider line after the menu
+            menu_entry : (self.run, '__divider__')
+        }
         return menus
         
