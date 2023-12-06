@@ -364,14 +364,15 @@ namespace mrv
             Fl_Box r(
                 _r->tile->x() + dx, _r->tile->y() + dy, _r->tile->w() - 2 * dx,
                 _r->tile->h() - 2 * dy);
+            r.clear_visible();
             _r->tile->resizable(r);
 
             _r->tile->add(outputDisplay);
-            outputDisplay->resize(g->x(), g->y() + Y, g->w(), M);
+            outputDisplay->resize(g->x(), _r->tile->y(), g->w(), M);
 
             PythonEditor* e;
             _r->pythonEditor = e = new PythonEditor(
-                g->x(), g->y() + M + Y, g->w(), _r->tile->h() - M);
+                g->x(), _r->tile->y() + M, g->w(), _r->tile->h() - M);
             e->box(FL_DOWN_BOX);
             e->textfont(FL_COURIER);
             e->textcolor(FL_BLACK);
