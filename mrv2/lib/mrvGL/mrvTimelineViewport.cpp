@@ -444,7 +444,7 @@ namespace mrv
 
         if (p.timelinePlayers.empty() ||
             !p.ui->uiPrefs->uiPrefsAutoHidePixelBar->value() ||
-            !p.ui->uiPrefs->uiPrefsPixelToolbar->value())
+            !p.ui->uiPrefs->uiPrefsPixelToolbar->value() || p.presentation)
             return;
 
         auto playback = p.timelinePlayers[0]->playback();

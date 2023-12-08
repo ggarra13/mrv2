@@ -360,7 +360,7 @@ namespace mrv
             _r->tile = new Fl_Tile(g->x(), g->y() + Y, g->w(), H - 3);
             _r->tile->labeltype(FL_NO_LABEL);
 
-            int dx = 600, dy = 600; // border width of resizable() - see below
+            int dx = 20, dy = 20; // border width of resizable() - see below
             Fl_Box r(
                 _r->tile->x() + dx, _r->tile->y() + dy, _r->tile->w() - 2 * dx,
                 _r->tile->h() - 2 * dy);
