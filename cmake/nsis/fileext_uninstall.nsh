@@ -78,6 +78,7 @@ Pop $0
 !insertmacro BorrarKey '.mxf'
 !insertmacro BorrarKey '.qt'
 !insertmacro BorrarKey '.rm'
+!insertmacro BorrarKey '.ts'
 !insertmacro BorrarKey '.vob'
 !insertmacro BorrarKey '.vp9'
 !insertmacro BorrarKey '.webm'
