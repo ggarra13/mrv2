@@ -128,7 +128,7 @@ namespace mrv
         math::Vector2f wipeCenter = math::Vector2f(.5F, .5F);
         float wipeRotation = 0.F;
         double speed = 0.0;
-        timeline::Playback playback = timeline::Playback::Forward;
+        timeline::Playback playback = timeline::Playback::Count;
         timeline::Loop loop = timeline::Loop::Count;
         otime::RationalTime seek = time::invalidTime;
         otime::TimeRange inOutRange = time::invalidTimeRange;
@@ -301,7 +301,7 @@ namespace mrv
                     app::CmdLineValueOption<timeline::Playback>::create(
                         p.options.playback, {"-playback", "-p"},
                         _("Playback mode."),
-                        string::Format("{0}").arg(p.options.playback),
+                        string::Format("{0}").arg(timeline::Playback::Stop),
                         string::join(timeline::getPlaybackLabels(), ", ")),
                     app::CmdLineValueOption<timeline::Loop>::create(
                         p.options.loop, {"-loop"}, _("Playback loop mode."),
@@ -968,14 +968,16 @@ namespace mrv
         Fl::flush();
         bool autoPlayback = ui->uiPrefs->uiPrefsAutoPlayback->value();
         if (!p.timelinePlayers.empty() && p.timelinePlayers[0] &&
-            p.options.playback != timeline::Playback::Count && autoPlayback &&
+            (p.options.playback != timeline::Playback::Count || autoPlayback) &&
             !p.session)
         {
             // We use a timeout to start playback of the loaded video to
             // make sure to show all frames
             PlaybackData* data = new PlaybackData;
             data->view = ui->uiView;
-            data->playback = p.options.playback;
+            data->playback = p.options.playback == timeline::Playback::Count
+                                 ? timeline::Playback::Forward
+                                 : p.options.playback;
             Fl::add_timeout(0.005, (Fl_Timeout_Handler)start_playback, data);
         }
         p.running = true;

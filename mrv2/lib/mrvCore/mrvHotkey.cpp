@@ -117,8 +117,8 @@ namespace mrv
 
     Hotkey kToggleMenuBar(false, false, false, true, FL_F + 1);
     Hotkey kToggleTopBar(false, false, false, false, FL_F + 1);
-    Hotkey kTogglePixelBar(false, false, false, false, FL_F + 2);
-    Hotkey kToggleTimeline(false, false, false, false, FL_F + 3);
+    Hotkey kToggleTimeline(false, false, false, false, FL_F + 2);
+    Hotkey kTogglePixelBar(false, false, false, false, FL_F + 3);
     Hotkey kToggleStatusBar(false, false, false, false, 0);
     Hotkey kToggleToolBar(false, false, false, true, FL_F + 7);
     Hotkey kTogglePresentation(false, false, false, false, FL_F + 12);

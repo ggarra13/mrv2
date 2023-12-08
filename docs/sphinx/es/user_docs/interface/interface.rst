@@ -13,9 +13,9 @@ La primer barra es la de los menúes.  Puede alternarse con Shift + F1. Los menu
 
 La segunda barra es la de capas o canales, exposición, OCIO y controles de gama.  Puede ser alternada con F1.
 
-La tercera barra es la ventana de la línea de tiempo y sus controles.  Puede alternarla con F3.
+La tercera barra es la ventana de la línea de tiempo y sus controles.  Puede alternarla con F2.
 
-La cuarta barra es la de Información de Pixel, que muestra el pixel actual bajo el cursor.  Puede activar y desactivarla con F2.
+La cuarta barra es la de Información de Pixel, que muestra el pixel actual bajo el cursor.  Puede activar y desactivarla con F3.
 
 Finalmente, la últime barra es la de Estatus.  Imprimirá errores y te dejará saber en que modo estás (Por defecto es Scrubbing).
 
@@ -29,8 +29,8 @@ Tecla         Acción
 ============  =====================================================
 Shift + F1    Alternar la barra de Menú.
 F1            Alternar la barra Superior.
-F2            Alternar la barra de Pixel.
-F3            Alternar la barra de Línea de Tiempo.
+F2            Alternar la barra de Línea de Tiempo.
+F3            Alternar la barra de Pixel.
 e             Alternar los dibujos (edición) en la Línea de Tiempo.
 Shift + F7    Alternar las Herramientas de Dibujo y Acción.
 F11           Alternar el modo Pantalla Completa.

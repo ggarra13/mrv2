@@ -18,6 +18,14 @@ importance you report any bugs you find before that.
   search path of PYTHONPATH in environment.sh.
 - Fixed Pixel Bar showing up when set to auto hide pixel bar on playaback and
   in presentation mode.
+- Made the command-line -p (-playback) switch override the default Auto
+  Playback preference setting.
+- Switched the default hotkeys of the Pixel Bar (was F2, now F3) and timeline
+  (was F3, now F2) to make them consistent to the order on the view window.
+  For that new hotkey assignment to take effect, you need to reset the hotkeys
+  in Windows->Hotkeys or remove $HOME/.filmaura/mrv2.prefs.
+  Note that that means you will loose any custom hotkeys you may have.
+- Added support for .ts movies.
 
 
 v0.9.3
