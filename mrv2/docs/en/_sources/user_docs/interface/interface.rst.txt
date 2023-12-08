@@ -13,9 +13,9 @@ The first toolbar is the menu toolbar.  It can be toggled with Shift + F1. The m
 
 The second toolbar is the main layer, exposure, OCIO and gamma controls.  It can be toggled with F1.
 
-The third toolbar is the Timeline Viewport and controls.  You can toggle it with F3.
+The third toolbar is the Timeline Viewport and controls.  You can toggle it with F2.
 
-The fourth toolbar is the Pixel Toolbar, which shows the current pixel under the cursor.  You can toggle it with F2.
+The fourth toolbar is the Pixel Toolbar, which shows the current pixel under the cursor.  You can toggle it with F3.
 
 Finally, the last toolbar is the Status toolbar.  It will print out errors and let you know in what action mode you are in (Default is Scrubbing).
 
@@ -29,8 +29,8 @@ Shortcut      Action
 ============  =======================================
 Shift + F1    Toggle Menu Toolbar.
 F1            Toggle Topbar.
-F2            Toggle Pixel Toolbar.
-F3            Toggle Timeline Viewport and controls.
+F2            Toggle Timeline Viewport and controls.
+F3            Toggle Pixel Toolbar.
 Shift + F7    Toggle Drawing and Action Tools.
 e             Toggle Thumbnails (Edit) of Timeline.
 F11           Toggle Fullscreen mode.
