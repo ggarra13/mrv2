@@ -28,6 +28,7 @@
 #include "mrvNetwork/mrvProtocolVersion.h"
 
 #include "mrViewer.h"
+#include "mrvFl/mrvOCIO.h"
 
 namespace
 {
@@ -101,7 +102,7 @@ namespace mrv
             player = view->getTimelinePlayer();
 
 #ifndef NDEBUG
-            // std::cerr << "Command: " << message << std::endl;
+        std::cerr << "Command: " << message << std::endl;
 #endif
 
         try
@@ -512,6 +513,18 @@ namespace mrv
                         o.fileName = prefs->uiPrefsOCIOConfig->value();
                     }
                 }
+
+                int index = mrv::image::ocioIcsIndex(o.input);
+                ui->uiICS->value(index);
+
+                std::string mergedView =
+                    mrv::image::ocioDisplayViewShortened(o.display, o.view);
+                index = mrv::image::ocioViewIndex(mergedView);
+                ui->OCIOView->value(index);
+
+                index = mrv::image::ocioLookIndex(o.look);
+                ui->OCIOLook->value(index);
+
                 view->setOCIOOptions(o);
             }
             else if (c == "Display Options")

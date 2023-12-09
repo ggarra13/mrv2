@@ -26,6 +26,9 @@ importance you report any bugs you find before that.
   in Windows->Hotkeys or remove $HOME/.filmaura/mrv2.prefs.
   Note that that means you will loose any custom hotkeys you may have.
 - Added support for .ts movies.
+- Fixed OCIO support on network connections, changing both the pulldown menus
+  as the OCIO color panel, which had gotten broken on the OCIO optimization and
+  the OCIO looks addition.
 
 
 v0.9.3
