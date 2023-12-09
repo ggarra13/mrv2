@@ -16,7 +16,7 @@ importance you report any bugs you find before that.
   mode.
 - Added $HOME/.local/lib/python${PYTHON_VERSION}/site-packages to the default
   search path of PYTHONPATH in environment.sh.
-- Fixed Pixel Bar showing up when set to auto hide pixel bar on playaback and
+- Fixed Pixel Bar showing up when set to auto hide pixel bar on playback and
   in presentation mode.
 - Made the command-line -p (-playback) switch override the default Auto
   Playback preference setting.
