@@ -16,7 +16,7 @@ importance you report any bugs you find before that.
   mode.
 - Added $HOME/.local/lib/python${PYTHON_VERSION}/site-packages to the default
   search path of PYTHONPATH in environment.sh.
-- Fixed Pixel Bar showing up when set to auto hide pixel bar on playaback and
+- Fixed Pixel Bar showing up when set to auto hide pixel bar on playback and
   in presentation mode.
 - Made the command-line -p (-playback) switch override the default Auto
   Playback preference setting.
@@ -26,6 +26,9 @@ importance you report any bugs you find before that.
   in Windows->Hotkeys or remove $HOME/.filmaura/mrv2.prefs.
   Note that that means you will loose any custom hotkeys you may have.
 - Added support for .ts movies.
+- Fixed OCIO support on network connections, changing both the pulldown menus
+  as the OCIO color panel, which had gotten broken on the OCIO optimization and
+  the OCIO looks addition.
 
 
 v0.9.3

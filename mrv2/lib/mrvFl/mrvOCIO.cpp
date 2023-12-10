@@ -65,6 +65,30 @@ namespace mrv
                 panel::colorPanel->refresh();
         }
 
+        int ocioIcsIndex(const std::string& name)
+        {
+            auto uiICS = App::ui->uiICS;
+            int value = -1;
+            for (int i = 0; i < uiICS->children(); ++i)
+            {
+                const Fl_Menu_Item* item = uiICS->child(i);
+                if (!item || !item->label() || item->flags & FL_SUBMENU)
+                    continue;
+
+                char pathname[1024];
+                int ret = uiICS->item_pathname(pathname, 1024, item);
+                if (ret != 0)
+                    continue;
+
+                if (name == pathname)
+                {
+                    value = i;
+                    break;
+                }
+            }
+            return value;
+        }
+
         std::string ocioLook()
         {
             auto OCIOLook = App::ui->OCIOLook;
@@ -108,6 +132,30 @@ namespace mrv
             OCIOLook->do_callback();
             if (panel::colorPanel)
                 panel::colorPanel->refresh();
+        }
+
+        int ocioLookIndex(const std::string& name)
+        {
+            auto uiLook = App::ui->OCIOLook;
+            int value = -1;
+            for (int i = 0; i < uiLook->children(); ++i)
+            {
+                const Fl_Menu_Item* item = uiLook->child(i);
+                if (!item || !item->label() || item->flags & FL_SUBMENU)
+                    continue;
+
+                char pathname[1024];
+                int ret = uiLook->item_pathname(pathname, 1024, item);
+                if (ret != 0)
+                    continue;
+
+                if (name == pathname)
+                {
+                    value = i;
+                    break;
+                }
+            }
+            return value;
         }
 
         std::string ocioView()
@@ -159,6 +207,58 @@ namespace mrv
             uiOCIOView->do_callback();
             if (panel::colorPanel)
                 panel::colorPanel->refresh();
+        }
+
+        std::string ocioDisplayViewShortened(
+            const std::string& display, const std::string& view)
+        {
+            std::string out;
+            auto uiOCIOView = App::ui->OCIOView;
+            bool has_submenu = false;
+            for (int i = 0; i < uiOCIOView->children(); ++i)
+            {
+                const Fl_Menu_Item* item = uiOCIOView->child(i);
+                if (!item)
+                    continue;
+                if (item->flags & FL_SUBMENU)
+                {
+                    has_submenu = true;
+                    break;
+                }
+            }
+            if (has_submenu)
+            {
+                out = display + '/' + view;
+            }
+            else
+            {
+                out = view + '(' + display + ')';
+            }
+            return out;
+        }
+
+        int ocioViewIndex(const std::string& displayViewName)
+        {
+            int value = -1;
+            auto uiOCIOView = App::ui->OCIOView;
+            for (int i = 0; i < uiOCIOView->children(); ++i)
+            {
+                const Fl_Menu_Item* item = uiOCIOView->child(i);
+                if (!item || !item->label() || (item->flags & FL_SUBMENU))
+                    continue;
+
+                char pathname[1024];
+                int ret = uiOCIOView->item_pathname(pathname, 1024, item);
+                if (ret != 0)
+                    continue;
+
+                if (displayViewName == pathname)
+                {
+                    value = i;
+                    break;
+                }
+            }
+            return value;
         }
     } // namespace image
 } // namespace mrv

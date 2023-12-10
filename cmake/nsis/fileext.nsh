@@ -166,6 +166,7 @@ System::Free $9
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".otioz" "OpenTimelineIO ZIP Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".qt" "Apple's Quicktime" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".rm" "RealNetwork's Real Media" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".ts" "Transport Stream Media" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".usd" "Universal Scene Description" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".usda" "Universal Scene Description ASCII" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".usdc" "Universal Scene Description Binary" 1
