@@ -20,6 +20,7 @@
 #include <tlTimeline/LUTOptions.h>
 #include <tlTimeline/ImageOptions.h>
 #include <tlTimeline/CompareOptions.h>
+#include <tlTimeline/DisplayOptions.h>
 #include <tlTimeline/Timeline.h>
 #include <tlTimeline/Player.h>
 
