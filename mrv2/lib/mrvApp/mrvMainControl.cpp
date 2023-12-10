@@ -348,7 +348,7 @@ namespace mrv
 
         Viewport* view = p.ui->uiView;
 
-        view->setOCIOOptions(p.ocioOptions);
+        p.ocioOptions = view->getOCIOOptions();
         view->setLUTOptions(p.lutOptions);
         std::vector<timeline::ImageOptions> imageOptions;
         std::vector<timeline::DisplayOptions> displayOptions;

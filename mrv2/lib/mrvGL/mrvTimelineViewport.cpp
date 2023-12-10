@@ -510,6 +510,9 @@ namespace mrv
         if (value == p.ocioOptions)
             return;
 
+        if (value.input.empty() || value.view.empty())
+            return;
+
         p.ocioOptions = value;
 
 #if 0
