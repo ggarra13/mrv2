@@ -35,8 +35,6 @@ importance you report any bugs you find before that.
   name and frame number without asking for confirmation.
   If you want to reset saving the image name, go to File/Save/Single Frame
   as usual.
-  you invoked
-  the function it will save the image, with
 
 
 v0.9.3
