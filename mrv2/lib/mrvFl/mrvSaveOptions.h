@@ -29,5 +29,7 @@ namespace mrv
 #endif
         int zipCompressionLevel = 4;
         float dwaCompressionLevel = 45.0F;
+
+        bool noRename = false;
     };
 } // namespace mrv

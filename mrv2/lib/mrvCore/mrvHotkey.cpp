@@ -25,6 +25,7 @@ namespace mrv
     Hotkey kOpenSession(false, false, true, false, 'o');
 
     Hotkey kSaveImage(false, false, false, false, 0);
+    Hotkey kSaveImageToFolder(false, false, false, false, 0);
     Hotkey kSaveSequence(true, false, false, true, 's');
     Hotkey kSaveOTIOEDL(false, false, false, false, 0);
     Hotkey kSavePDF(false, false, false, false, 0);
@@ -330,6 +331,7 @@ namespace mrv
         HotkeyEntry(_("Open Movie or Sequence"), &kOpenImage),
         HotkeyEntry(_("Open Session"), &kOpenSession),
         HotkeyEntry(_("Save Image"), &kSaveImage),
+        HotkeyEntry(_("Save Frames To Folder"), &kSaveImageToFolder),
 
         HotkeyEntry(_("Save Movie or Sequence"), &kSaveSequence),
         HotkeyEntry(_("Save OTIO Timeline"), &kSaveOTIOEDL),

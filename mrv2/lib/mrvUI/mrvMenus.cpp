@@ -97,6 +97,10 @@ namespace mrv
             _("File/Save/Single Frame"), kSaveImage.hotkey(),
             (Fl_Callback*)save_single_frame_cb, ui, mode | FL_MENU_DIVIDER);
         menu->add(
+            _("File/Save/Frames to Folder"), kSaveImageToFolder.hotkey(),
+            (Fl_Callback*)save_single_frame_to_folder_cb, ui,
+            mode | FL_MENU_DIVIDER);
+        menu->add(
             _("File/Save/OTIO EDL Timeline"), kSaveOTIOEDL.hotkey(),
             (Fl_Callback*)save_timeline_to_disk_cb, ui, mode | FL_MENU_DIVIDER);
         menu->add(

@@ -219,7 +219,10 @@ namespace mrv
         model->next();
     }
 
-    void save_single_frame_cb(Fl_Menu_* w, ViewerUI* ui)
+    static std::string lastSavedFile;
+    static mrv::SaveOptions lastSavedOptions;
+
+    void save_single_frame_renaming(Fl_Menu_* w, ViewerUI* ui, bool rename)
     {
         const std::string& file = save_single_image();
         if (file.empty())
@@ -284,7 +287,36 @@ namespace mrv
         options.dwaCompressionLevel = saveOptions.DWACompressionLevel->value();
 #endif
 
-        save_single_frame(file, ui, options);
+        options.noRename = !rename;
+
+        if (save_single_frame(file, ui, options) == 0)
+        {
+            lastSavedFile = file;
+            lastSavedOptions = options;
+            lastSavedOptions.noRename = true;
+        }
+    }
+
+    void save_single_frame_cb(Fl_Menu_* w, ViewerUI* ui)
+    {
+        save_single_frame_renaming(w, ui, true);
+    }
+
+    void save_single_frame_to_folder_cb(Fl_Menu_* w, ViewerUI* ui)
+    {
+
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
+            return;
+
+        if (lastSavedFile.empty())
+            return save_single_frame_renaming(w, ui, false);
+
+        file::Path path(lastSavedFile);
+        auto currentTime = player->currentTime();
+        std::string file = path.get(currentTime.value());
+
+        save_single_frame(file, ui, lastSavedOptions);
     }
 
     void save_movie_cb(Fl_Menu_* w, ViewerUI* ui)

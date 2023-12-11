@@ -92,6 +92,7 @@ namespace mrv
     extern Hotkey kOpenStereoImage;
     extern Hotkey kOpenSession;
     extern Hotkey kSaveImage;
+    extern Hotkey kSaveImageToFolder;
     extern Hotkey kSaveOTIOEDL;
     extern Hotkey kSaveSequence;
     extern Hotkey kSavePDF;

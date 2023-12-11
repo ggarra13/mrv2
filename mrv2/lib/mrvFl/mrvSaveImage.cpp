@@ -39,15 +39,16 @@ namespace
 namespace mrv
 {
 
-    void save_single_frame(
+    int save_single_frame(
         const std::string& file, const ViewerUI* ui, SaveOptions options)
     {
+        int ret = 0;
         Viewport* view = ui->uiView;
         bool presentation = view->getPresentationMode();
 
         auto player = view->getTimelinePlayer();
         if (!player)
-            return; // should never happen
+            return -1; // should never happen
 
         // Stop the playback
         player->stop();
@@ -303,7 +304,7 @@ namespace mrv
                 static_cast<int>(path.getPadding()), currentFrame,
                 path.getExtension().c_str());
 
-            if (filename != file)
+            if (filename != file && !options.noRename)
             {
                 fs::rename(fs::path(filename), fs::path(file));
             }
@@ -312,11 +313,13 @@ namespace mrv
         catch (const std::exception& e)
         {
             LOG_ERROR(e.what());
+            ret = -1;
         }
 
         view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());
         view->setHudActive(hud);
         view->setPresentationMode(presentation);
+        return ret;
     }
 
 } // namespace mrv

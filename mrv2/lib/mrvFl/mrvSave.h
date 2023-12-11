@@ -11,7 +11,8 @@ class ViewerUI;
 namespace mrv
 {
 
-    void save_single_frame(
+    //! Save single frame.  Returns 0 if successful, -1 if not.
+    int save_single_frame(
         const std::string& file, const ViewerUI* ui,
         SaveOptions options = SaveOptions());
 

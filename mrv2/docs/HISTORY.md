@@ -29,6 +29,14 @@ importance you report any bugs you find before that.
 - Fixed OCIO support on network connections, changing both the pulldown menus
   as the OCIO color panel, which had gotten broken on the OCIO optimization and
   the OCIO looks addition.
+- Added option to File->Save->Frames to Folder.  First, you will be asked
+  to save an image and settings as usual.  However, after you save the first
+  image, every time you invoke this function, it will save the image with the
+  name and frame number without asking for confirmation.
+  If you want to reset saving the image name, go to File/Save/Single Frame
+  as usual.
+  you invoked
+  the function it will save the image, with
 
 
 v0.9.3
