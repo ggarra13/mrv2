@@ -1,8 +1,8 @@
 v0.9.4
 ======
 
-v1.0.0 of mrv2 will be released on January 1st, 2024.  Therefore it is of most
-importance you report any bugs you find before that.
+v1.0.0 of mrv2 will be released on January 1st, 2024.  Therefore, it is of
+utmost importance that you report any bugs you find before that.
 
 - Improved Help/Update mrv2 Python script to work fine at start up on beta
   builds.
@@ -35,6 +35,7 @@ importance you report any bugs you find before that.
   name and frame number without asking for confirmation.
   If you want to reset saving the image name, go to File/Save/Single Frame
   as usual.
+- Some minor speed optimizations from Darby Johnston.
 
 
 v0.9.3
