@@ -10,8 +10,11 @@ utmost importance that you report any bugs you find before that.
   to improve the performance of scrubbing 4K movies.
 - Fixed a crash when showing an .otio timeline with markers at start or when
   dragging a clip with .otio markers.
-- Added dissolves to Timeline Viewport.  If you edit a clip that has
-  transitions, those will be removed.
+- Added display of transitions (Dissolves) to Timeline Viewport.  If you edit
+  a clip that has transitions, those will be removed before the move.
+  Currently, there's no way to add transitions again (you need to edit the
+  .otio file manually, or convert it from a Non-Linear Editor format).
+
 
 v0.9.4
 ======

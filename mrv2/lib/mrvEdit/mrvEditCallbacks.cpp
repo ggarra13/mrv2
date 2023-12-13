@@ -2136,12 +2136,6 @@ namespace mrv
                         insertTime = insertRange.start_time();
                     }
 
-                    // std::cerr << "previous =" << previous << std::endl;
-                    // std::cerr << "fromIndex=" << move.fromIndex << std::endl;
-                    // std::cerr << "  toIndex=" << toIndex << std::endl;
-                    // std::cerr << " oldRange=" << oldRange << std::endl;
-                    // std::cerr << "   insert=" << insertTime << std::endl;
-
                     //
                     // Shift annotations
                     //
@@ -2154,7 +2148,8 @@ namespace mrv
         otio::ErrorStatus errorStatus;
         for (const auto& move : moves)
         {
-            if (move.fromIndex < 0 || move.fromTrack < 0)
+            if (move.fromIndex < 0 || move.fromTrack < 0 || move.toTrack < 0 ||
+                move.toTrack >= tracks.size())
                 continue;
 
             std::vector<int> fromOtioIndexes;
