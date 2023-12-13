@@ -1527,7 +1527,7 @@ namespace mrv
             constexpr double defaultReadAhead =
                 timeline::PlayerCacheOptions().readAhead.value();
             constexpr double defaultReadBehind =
-                timeline::PlayerCacheOptions().readBehind.value();
+                timeline::PlayerCacheOptions().readBehind.value() * 2;
             constexpr double totalTime = defaultReadAhead + defaultReadBehind;
             double readAhead = defaultReadAhead / totalTime;
             double readBehind = defaultReadBehind;
