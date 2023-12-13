@@ -14,6 +14,7 @@ utmost importance that you report any bugs you find before that.
   a clip that has transitions, those will be removed before the move.
   Currently, there's no way to add transitions again (you need to edit the
   .otio file manually, or convert it from a Non-Linear Editor format).
+- You can also not currently move or scale the transitions.
 
 
 v0.9.4
