@@ -1527,16 +1527,13 @@ namespace mrv
             constexpr double defaultReadAhead =
                 timeline::PlayerCacheOptions().readAhead.value();
             constexpr double defaultReadBehind =
-                timeline::PlayerCacheOptions().readBehind.value() * 2;
+                timeline::PlayerCacheOptions().readBehind.value();
             constexpr double totalTime = defaultReadAhead + defaultReadBehind;
             double readAhead = defaultReadAhead / totalTime;
             double readBehind = defaultReadBehind;
 
             readAhead *= seconds / static_cast<double>(activeCount);
-
-            // We must keep readBehind small or tlRender will cache the whole
-            // timeline from the beginning.
-            readBehind /= static_cast<double>(activeCount);
+            readBehind *= seconds / static_cast<double>(activeCount);
 
             options.readAhead = otime::RationalTime(readAhead, 1.0);
             options.readBehind = otime::RationalTime(readBehind, 1.0);

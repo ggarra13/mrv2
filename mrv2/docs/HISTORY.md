@@ -1,3 +1,15 @@
+v0.9.5
+======
+
+v1.0.0 of mrv2 will be released on January 1st, 2024.  Therefore, it is of
+utmost importance that you report any bugs you find before that.
+
+- Improved performance of scrubbing when audio is turned off in the timeline
+  section of the main UI.  Helps in scrubbing 4K movies.
+- Made readBehind cache expand freely when using Gygabytes in Settings
+  to improve the performance of scrubbing 4K movies.
+
+
 v0.9.4
 ======
 

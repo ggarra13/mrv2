@@ -271,13 +271,16 @@ namespace mrv
         const auto player = p.timelinePlayers[0];
         const auto& t = player->currentTime();
         const auto& time = t + otime::RationalTime(dx, t.rate());
-        if (dx > 0)
+        if (!player->isMuted())
         {
-            player->setPlayback(timeline::Playback::Forward);
-        }
-        else
-        {
-            player->setPlayback(timeline::Playback::Reverse);
+            if (dx > 0)
+            {
+                player->setPlayback(timeline::Playback::Forward);
+            }
+            else
+            {
+                player->setPlayback(timeline::Playback::Reverse);
+            }
         }
         player->seek(time);
     }
