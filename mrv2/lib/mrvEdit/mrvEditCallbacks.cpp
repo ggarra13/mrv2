@@ -4,8 +4,9 @@
 
 #include <set>
 #include <fstream>
-#include <filesystem>
+#include <algorithm>
 
+#include <filesystem>
 namespace fs = std::filesystem;
 
 #include <FL/fl_utf8.h>
@@ -1768,15 +1769,15 @@ namespace mrv
                 }
                 else
                 {
-                    auto transition = dynamic_cast<Transition*>(clone);
-                    if (transition)
-                    {
-                        track->append_child(transition);
-                    }
-                    else
-                    {
-                        LOG_ERROR("Unknown child " << child->name());
-                    }
+                    // auto transition = dynamic_cast<Transition*>(clone);
+                    // if (transition)
+                    // {
+                    //     track->append_child(transition);
+                    // }
+                    // else
+                    // {
+                    //     LOG_ERROR("Unknown child " << child->name());
+                    // }
                 }
             }
         }
@@ -1898,15 +1899,15 @@ namespace mrv
                 }
                 else
                 {
-                    auto transition = dynamic_cast<Transition*>(clone);
-                    if (transition)
-                    {
-                        track->append_child(transition);
-                    }
-                    else
-                    {
-                        LOG_ERROR("Unknown child " << child->name());
-                    }
+                    // auto transition = dynamic_cast<Transition*>(clone);
+                    // if (transition)
+                    // {
+                    //     track->append_child(transition);
+                    // }
+                    // else
+                    // {
+                    //     LOG_ERROR("Unknown child " << child->name());
+                    // }
                 }
             }
         }
@@ -2084,6 +2085,7 @@ namespace mrv
 
         const auto& stack = timeline->tracks();
         const auto& tracks = stack->children();
+
         for (const auto& move : moves)
         {
             if (move.fromIndex < 0 || move.fromTrack < 0 || move.toTrack < 0 ||
@@ -2091,7 +2093,7 @@ namespace mrv
                 continue;
 
             if (auto track = otio::dynamic_retainer_cast<otio::Track>(
-                    stack->children()[move.fromTrack]))
+                    tracks[move.fromTrack]))
             {
                 if (track->kind() != otio::Track::Kind::video)
                     continue;
@@ -2114,7 +2116,7 @@ namespace mrv
                 auto oldRange = item->trimmed_range_in_parent().value();
 
                 if (auto track = otio::dynamic_retainer_cast<otio::Track>(
-                        tracks[move.fromTrack]))
+                        tracks[move.toTrack]))
                 {
                     auto child = track->children()[toIndex];
                     auto item = otio::dynamic_retainer_cast<otio::Item>(child);
@@ -2148,7 +2150,84 @@ namespace mrv
             }
         }
 
-        ui->uiTimeline->redraw();
+        // Finally, remove transitions from both from and to clips
+        otio::ErrorStatus errorStatus;
+        for (const auto& move : moves)
+        {
+            if (move.fromIndex < 0 || move.fromTrack < 0)
+                continue;
+
+            std::vector<int> fromOtioIndexes;
+            std::vector<int> toOtioIndexes;
+            if (auto track = otio::dynamic_retainer_cast<otio::Track>(
+                    tracks[move.fromTrack]))
+            {
+                auto child = track->children()[move.fromOtioIndex];
+
+                auto item = otio::dynamic_retainer_cast<otio::Item>(child);
+                if (item)
+                {
+                    const auto neighbors =
+                        track->neighbors_of(item, &errorStatus);
+                    if (auto transition = dynamic_cast<otio::Transition*>(
+                            neighbors.second.value))
+                    {
+                        const int index = track->index_of_child(transition);
+                        fromOtioIndexes.push_back(index);
+                    }
+
+                    if (auto transition = dynamic_cast<otio::Transition*>(
+                            neighbors.first.value))
+                    {
+                        const int index = track->index_of_child(transition);
+                        fromOtioIndexes.push_back(index);
+                    }
+                }
+
+                std::sort(
+                    fromOtioIndexes.begin(), fromOtioIndexes.end(),
+                    std::greater<int>());
+                for (const auto index : fromOtioIndexes)
+                {
+                    track->remove_child(index);
+                }
+            }
+            if (auto track = otio::dynamic_retainer_cast<otio::Track>(
+                    tracks[move.toTrack]))
+            {
+                auto child = track->children()[move.toOtioIndex];
+
+                auto item = otio::dynamic_retainer_cast<otio::Item>(child);
+                if (!item)
+                    continue;
+
+                const auto neighbors = track->neighbors_of(item, &errorStatus);
+                if (auto transition =
+                        dynamic_cast<otio::Transition*>(neighbors.second.value))
+                {
+                    const int index = track->index_of_child(transition);
+                    toOtioIndexes.push_back(index);
+                }
+
+                if (auto transition =
+                        dynamic_cast<otio::Transition*>(neighbors.first.value))
+                {
+                    const int index = track->index_of_child(transition);
+                    toOtioIndexes.push_back(index);
+                }
+
+                std::sort(
+                    toOtioIndexes.begin(), toOtioIndexes.end(),
+                    std::greater<int>());
+                for (const auto index : toOtioIndexes)
+                {
+                    track->remove_child(index);
+                }
+            }
+        }
+
+        // Refresh edit mode in case there are no transition tracks.
+        set_edit_mode_cb(editMode, ui);
     }
 
     EditMode editMode = EditMode::kTimeline;
