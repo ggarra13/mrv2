@@ -8,7 +8,8 @@ utmost importance that you report any bugs you find before that.
   section of the main UI.  Helps in scrubbing 4K movies.
 - Made readBehind cache expand freely when using Gygabytes in Settings
   to improve the performance of scrubbing 4K movies.
-
+- Fixed a crash when showing an .otio timeline with markers at start or when
+  dragging a clip with .otio markers.
 
 v0.9.4
 ======
