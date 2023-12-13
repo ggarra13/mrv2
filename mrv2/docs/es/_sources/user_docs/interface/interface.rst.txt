@@ -9,7 +9,7 @@ La interfaz de mrv2
 
 La ventana principal de mrv2 provee de 6 barras diferentes que pueden ser ocultadas o mostradas.
 
-La primer barra es la de los menúes.  Puede alternarse con Shift + F1. Los menus están tambien disponibles con el Botón Derecho del Mouse en la vista principal de mrv2.  La barra de menú tiene también el botón de Edición para alternar el modo de edición y el botón de Ajustar Ventana a la Imagen.
+La primer barra es la de los menúes.  Puede alternarse con Shift + F1. Los menús están tambien disponibles con el Botón Derecho del Mouse en la vista principal de mrv2.  La barra de menú tiene también el botón de Edición para alternar el modo de edición y el botón de Ajustar Ventana a la Imagen.
 
 La segunda barra es la de capas o canales, exposición, OCIO y controles de gama.  Puede ser alternada con F1.
 
@@ -61,7 +61,7 @@ El factor de zoom actual es mostrado en la barra de pixel a la izquierda.
 
 .. note::
    Si quiere acercase o alejarse un porcentaje particular (digamos 2x), puede
-   elegirlo desde el menu de zoom en la barra de Pixel.
+   elegirlo desde el menú de zoom en la barra de Pixel.
 
 La Barra Superior
 +++++++++++++++++
@@ -95,7 +95,7 @@ Cuando se muestran las miniaturas, puedes acercarte o alejarte con la rueda del 
 Indicador de Cuadro
 -------------------
 
-Inmediatamente a la izquierda y abajo de la línea de tiempo está el 'cuadro actual'. Junto a él esta un menu de opciones para establecer como el tiempo se muestra:
+Inmediatamente a la izquierda y abajo de la línea de tiempo está el 'cuadro actual'. Junto a él esta un menú de opciones para establecer como el tiempo se muestra:
     - *Cuadros:* cuadros, empezando en 0 para películas o uno normalmente para xsecuencias.
     - *Segundos:* La posición en segundos del medio.
     - *Timecode:* el timecode de 8 digitos. Si el medio tiene metadatos de timecode estos serán usados.
@@ -123,7 +123,7 @@ Dos botones en la parte inferior de los controles de la línea de tiempo proveen
     - *Volumen/Control mudo:* cliquée en la bocina para alternar el control de mudo. Arrastre el deslizador a su lado para controlar el volumen.
     - *Mode de Bucle:* Estableza si la reproducción se hará una vez y dentendrá en el cuadro final, si se reproducirá en bucle o en 'ping-pong'.
 
-Menu de Vista
+Menú de Vista
 +++++++++++++
 
 El menú de Vista provee controles para modificar la apariencia y comportamiento del visor:
@@ -177,6 +177,105 @@ El menú de Render provee controles para modificar la representación de la imag
 .. topic:: Filtros de Minificación y Magnificación
 
    Con estos dos controles, puede seleccionar cómo mrv2 muestra las imágenes cuando está de cerca o de lejos.  Puede elegir en usar un Filtro de Cercanía (Pixelado) o uno Lineal.  El Filtro de Magnificación puede ser alternado con Shift + F.
+
+Menú de Reproducción
+++++++++++++++++++++
+
+El menú de reproducción tiene las funciones estándard de reproducción que funcionan igual que los botones de la sección de la línea de tiempo en la interfaz principal.  Además de ello, puedes:
+
+.. topic:: Alternar el Punto de Entrada
+
+	   Con esta opción puedes alternar el punto de entrada del o los clips en la línea de tiempo.
+
+.. topic:: Alternar el Punto de Salida
+
+	   Con esta opción puedes alternar el punto de salida del o los clips en la línea de tiempo.
+
+.. topic:: Ir a/Anotación Previa, Ir A/Anotación Siguiente
+
+	   Una vez que hayas creado una o más anotaciones, podrás usar estas opciones de menu para saltar de un cuadro a otro donde la anotación reside.
+
+.. topic:: Anotación/Borrar, Anotación/Borrar Todas
+
+	   Con estos comandos, una vez creada una o más anotaciones podrás borrar la anotación en el cuadro actual o todas las anotaciones de la línea de tiempo.
+
+Menú de Línea de Tiempo
++++++++++++++++++++++++
+
+El menú de línea de tiempo provee controles para modificar la ventana gráfica de la línea de tiempo en la parte inferior de la ventana de vista:
+
+.. topic:: Editable
+
+   Cuando está activada, podrás mover varios clips creados con el Panel de Lista de Reproducción, la herramienta Editar/Rebanar o cuando se lea un archivo .otio.  La parte superior de la línea de tiempo (aquella con números), te permitirá ir de un cuadro a otro.  Cuando no está activa, puedes cliquear en cualquiera de las imágenes y eso también te llevará a otro cuadro. 
+    
+.. topic:: Edit Clips Asociados.
+
+   Cuando este control está activado, clips de vídeo y audio pueden ser
+   movidos juntos si comienzan y terminan *EXACTAMENTE* en el mismo lugar.
+   Nótese que es en general díficil lograr que los tracks de audio y video
+   empaten exáctamente.
+   
+.. topic:: Miniaturas
+
+   Este seteo te permite desactivar los dibujos en minitura de la ventana
+   gráfica de la línea de tiempo, así como seleccionar tamaños más grandes si
+   tienes un monitor con más alta resolución.
+	   
+.. topic:: Transitiones
+
+   Con esto prendido, podés mostrar las transiciones de audio y vídeo en
+   archivos .otio.
+   (Actualmente no implementado en v1.0.0).
+
+.. topic:: Marcadores
+
+   Con este seteo prendido, podés mostrar marcadores .otio en la ventana
+   gráfica de la línea de tiempo.
+   Los marcardores son usados en archivos .otio para marcar areas interesantes
+   en la línea de tiempo.
+   
+Menú de Imagen
+++++++++++++++
+
+Este menú aparece solo cuando up clip con version es detectado en el disco.  Por defecto, esto es un directorio, archivoe o ambos nombrados con "_v" y un número, como::
+
+  Fluid_v0001.0001.exr
+  Bunny_v1/Bunny.0001.exr
+
+Nótese que esto se puede cambiar con expression regular (regex) en Ventana->Preferencias->Cargando.
+
+.. topic:: Version/Primera, Version/Última
+
+	   Chequeará en el disco por la primera o última version en el disco.  Por defecto, aceptará un máximo de 10 versiones antes de rendirse.  Puede ver como empata el clip en panel de Bitácora o en la consola si arrancó mrv2 en la línea de comandos.
+
+.. topic:: Version/Previous, Version/Next
+
+	   Buscará la siguiente o previa version en el disco.  Por defecto, aceptará un máximo de 10 versiones antes de rendirse.  Puede ver como empata el clip en panel de Bitácora o en la consola si arrancó mrv2 en la línea de comandos.
+  
+Menú de Editar
+++++++++++++++
+
+El menú de editar provee funcionalidad rápida para editar la línea de tiempo y los clips.  No intenta ser un Editor No Lineal completo, pero sí una forma de testear tus cambios y ajustar tus animaciones.
+
+.. topic:: Cuadro/Cortar, Cuadro/Copiar, Cuadro/Pegar, Cuadro/Insertar
+
+	   Estos controles te permiten cortar, copiar, pegar e insertar un solo cuadro de animación.  Es útil para animadores para bloquear su timing, sin tener que necesariamente abrir el paquete de animación y ajustar múltiples curvas.
+    
+.. topic:: Brecha de Audio/Insertar, Brecha de Audio/Remover
+
+	   Esta opción de menú permite agregar una brecha de audio de una porción de vídeo que no tiene audio.  Posiciónese en la línea de tiempo sobre el cuadro del clip al que le quiere agregar la brecha y seleccione Insertar.  Para removerla, haga lo mismo pero use Remover.
+   
+.. topic:: Rebanar
+
+	   Este comando rebanará (cortará) el o los clip(s) en el cuadro actual de la línea de tiempo, creando dos clips.
+	   
+.. topic:: Remover
+
+	   Esta opcion removerá el o los clips en la posición actual de la línea de tiempo.
+
+.. topic:: Deshacer/Rehacer
+
+	   Estos comando deshacen o rehacen la última edición.  No deben de confundirse con el Deshacer y Rehacer de las anotaciones.
 
 Los Paneles
 +++++++++++

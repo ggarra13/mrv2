@@ -176,6 +176,101 @@ The Render menu provides controls for modifying the rendering of the image on th
 
    With these two controls, you can select how mrv2 displays the images when zoomed in or zoomed out.  You can choose whether to use a Nearest (Pixelated) Filter or a Linear one.  The Magnify Filter can be toggled with Shift + F.
 
+Playback Menu
++++++++++++++
+
+The playback menu holds the standard playback functions that work just like the buttons in the timeline section of the main UI.  In addition to that, you can:
+
+.. topic:: Toggle In Point
+
+	   With this option you can toggle the starting point of the clip in the timeline.
+
+.. topic:: Toggle Out Point
+
+	   With this option you can toggle the ending point of the clip in the timeline.
+
+.. topic:: Go to Next/Previous Annotation
+
+	   Once you have created more than one annotation you can use these menu options to jump to each frame where the annotation resides.
+	   
+.. topic:: Annotation/Clear, Annotation/Clear All
+	   
+	   With these commands, once one or more annotations have been created, you will be able to clear the annotation on the current frame or all the annoations on the timeline.
+
+Timeline Menu
++++++++++++++
+
+The Timeline menu provides controls for modifying the timeline viewport at the bottom of the view window:
+
+.. topic:: Editable
+
+   When set to on, you will be able to move several clips created with the built-in Playlist Panel, Edit/Slice tool or when read from an .otio file.  The top part of the timeline (that with numbers), will allow you to go from one frame to the next.  When inactive, you can click on any of picture images, too, to move from frame to the next. 
+    
+.. topic:: Edit Associated Clips
+
+   When this control is on, and Editable is on, video and audio clips can be
+   moved together if they start and end *EXACTLY* at the same time.  Note that
+   it is often difficult to get audio tracks to match video tracks exactly.
+   
+.. topic:: Thumbnails
+
+   This setting allows you to turn off the picture thumbnails in the timeline
+   viewport as well as select the size of them if you have larger monitor
+   resolutions.	
+	   
+.. topic:: Transitions
+
+   With this on, you can show audio and video transitions in .otio files.
+   (Currently not implemented in v1.0.0).
+
+.. topic:: Markers
+
+   With this setting on, you can show .otio markers in the timeline viewport.
+   Markers are used in .otio files to mark interesting areas in the timeline.
+   
+Image Menu
+++++++++++
+
+This menu appears only when a versioned clip is detected on disk.  By default, this is a directory or file or both named with "_v" and a number, like::
+
+  Fluid_v0001.0001.exr
+  Bunny_v1/Bunny.0001.exr
+
+Note that this can be changed with a regular expression on the Preferences Window->Loading.
+
+.. topic:: Version/First, Version/Last
+
+	   It will check the disk for the first and last version it can find.  By default, it will accept a maximum gap of 10 versions before giving up.  You can see how it matches the clip in the Log Panel or in the shell console if you started it command-line.
+
+.. topic:: Version/Previous, Version/Next
+
+	   It will look for the previous or next version of the current clip.  By default, it will accept a maximum gap of 10 versions before giving up.  You can see how it matches the clip in the Log Panel or in the shell console if you started it command-line.
+  
+Edit Menu
++++++++++
+
+The edit menu provides some quick editing functionality to edit the timeline and the clips.  It is not meant to be a full-blown Non Linear Editor, but a quick way to see and adjust your animations.
+
+.. topic:: Frame/Cut, Frame/Copy, Frame/Paste, Frame/Insert
+
+	   These controls allow you to cut, copy, paste and insert a single frame of animation.  It is useful for animators to block their timing, without having to actually go to their animation package itself.
+    
+.. topic:: Audio Gap/Insert, Audio Gap/Remove
+
+	   This menu options allow you to add or remove an audio gap from a timeline portion that has no audio.  Just position the timeline frame above the clip you want to add the audio gap to and select Insert.  To remove it, do the same but use Remove.
+   
+.. topic:: Slice
+
+	   This command will slice the clip(s) at current frame of the timeline, creating two clips.
+	   
+.. topic:: Remove
+
+	   This command will remove the current clip(s) at the point in the timeline.
+
+.. topic:: Undo/Remove
+
+	   These command undo or redo the latest edit.  They should not be confused with the Undo/Redo annotations.
+
 The Panels
 ++++++++++
 

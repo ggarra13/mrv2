@@ -68,6 +68,10 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#view-menu">View Menu</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#render-menu">Render Menu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#playback-menu">Playback Menu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#timeline-menu">Timeline Menu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#image-menu">Image Menu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#edit-menu">Edit Menu</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#the-panels">The Panels</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#divider">Divider</a></li>
 </ul>
@@ -282,6 +286,97 @@ When showing the pictures, you can zoom in and out with the mousewheel.</p>
 <aside class="topic">
 <p class="topic-title">Minify and Magnify Filters</p>
 <p>With these two controls, you can select how mrv2 displays the images when zoomed in or zoomed out.  You can choose whether to use a Nearest (Pixelated) Filter or a Linear one.  The Magnify Filter can be toggled with Shift + F.</p>
+</aside>
+</section>
+<section id="playback-menu">
+<h2>Playback Menu<a class="headerlink" href="#playback-menu" title="Link to this heading"></a></h2>
+<p>The playback menu holds the standard playback functions that work just like the buttons in the timeline section of the main UI.  In addition to that, you can:</p>
+<aside class="topic">
+<p class="topic-title">Toggle In Point</p>
+<p>With this option you can toggle the starting point of the clip in the timeline.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Toggle Out Point</p>
+<p>With this option you can toggle the ending point of the clip in the timeline.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Go to Next/Previous Annotation</p>
+<p>Once you have created more than one annotation you can use these menu options to jump to each frame where the annotation resides.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Annotation/Clear, Annotation/Clear All</p>
+<p>With these commands, once one or more annotations have been created, you will be able to clear the annotation on the current frame or all the annoations on the timeline.</p>
+</aside>
+</section>
+<section id="timeline-menu">
+<h2>Timeline Menu<a class="headerlink" href="#timeline-menu" title="Link to this heading"></a></h2>
+<p>The Timeline menu provides controls for modifying the timeline viewport at the bottom of the view window:</p>
+<aside class="topic">
+<p class="topic-title">Editable</p>
+<p>When set to on, you will be able to move several clips created with the built-in Playlist Panel, Edit/Slice tool or when read from an .otio file.  The top part of the timeline (that with numbers), will allow you to go from one frame to the next.  When inactive, you can click on any of picture images, too, to move from frame to the next.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Edit Associated Clips</p>
+<p>When this control is on, and Editable is on, video and audio clips can be
+moved together if they start and end <em>EXACTLY</em> at the same time.  Note that
+it is often difficult to get audio tracks to match video tracks exactly.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Thumbnails</p>
+<p>This setting allows you to turn off the picture thumbnails in the timeline
+viewport as well as select the size of them if you have larger monitor
+resolutions.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Transitions</p>
+<p>With this on, you can show audio and video transitions in .otio files.
+(Currently not implemented in v1.0.0).</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Markers</p>
+<p>With this setting on, you can show .otio markers in the timeline viewport.
+Markers are used in .otio files to mark interesting areas in the timeline.</p>
+</aside>
+</section>
+<section id="image-menu">
+<h2>Image Menu<a class="headerlink" href="#image-menu" title="Link to this heading"></a></h2>
+<p>This menu appears only when a versioned clip is detected on disk.  By default, this is a directory or file or both named with “_v” and a number, like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Fluid_v0001</span><span class="mf">.0001</span><span class="o">.</span><span class="n">exr</span>
+<span class="n">Bunny_v1</span><span class="o">/</span><span class="n">Bunny</span><span class="mf">.0001</span><span class="o">.</span><span class="n">exr</span>
+</pre></div>
+</div>
+<p>Note that this can be changed with a regular expression on the Preferences Window-&gt;Loading.</p>
+<aside class="topic">
+<p class="topic-title">Version/First, Version/Last</p>
+<p>It will check the disk for the first and last version it can find.  By default, it will accept a maximum gap of 10 versions before giving up.  You can see how it matches the clip in the Log Panel or in the shell console if you started it command-line.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Version/Previous, Version/Next</p>
+<p>It will look for the previous or next version of the current clip.  By default, it will accept a maximum gap of 10 versions before giving up.  You can see how it matches the clip in the Log Panel or in the shell console if you started it command-line.</p>
+</aside>
+</section>
+<section id="edit-menu">
+<h2>Edit Menu<a class="headerlink" href="#edit-menu" title="Link to this heading"></a></h2>
+<p>The edit menu provides some quick editing functionality to edit the timeline and the clips.  It is not meant to be a full-blown Non Linear Editor, but a quick way to see and adjust your animations.</p>
+<aside class="topic">
+<p class="topic-title">Frame/Cut, Frame/Copy, Frame/Paste, Frame/Insert</p>
+<p>These controls allow you to cut, copy, paste and insert a single frame of animation.  It is useful for animators to block their timing, without having to actually go to their animation package itself.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Audio Gap/Insert, Audio Gap/Remove</p>
+<p>This menu options allow you to add or remove an audio gap from a timeline portion that has no audio.  Just position the timeline frame above the clip you want to add the audio gap to and select Insert.  To remove it, do the same but use Remove.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Slice</p>
+<p>This command will slice the clip(s) at current frame of the timeline, creating two clips.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Remove</p>
+<p>This command will remove the current clip(s) at the point in the timeline.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Undo/Remove</p>
+<p>These command undo or redo the latest edit.  They should not be confused with the Undo/Redo annotations.</p>
 </aside>
 </section>
 <section id="the-panels">

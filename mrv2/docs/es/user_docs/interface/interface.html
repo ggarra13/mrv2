@@ -67,8 +67,12 @@
 <li class="toctree-l4"><a class="reference internal" href="#player-viewer-controls">Player/Viewer Controls</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#menu-de-vista">Menu de Vista</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#menu-de-vista">Menú de Vista</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#menu-de-render">Menú de Render</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#menu-de-reproduccion">Menú de Reproducción</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#menu-de-linea-de-tiempo">Menú de Línea de Tiempo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#menu-de-imagen">Menú de Imagen</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#menu-de-editar">Menú de Editar</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#los-paneles">Los Paneles</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#divisor">Divisor</a></li>
 </ul>
@@ -114,7 +118,7 @@
 <span id="interface"></span><h1>La interfaz de mrv2<a class="headerlink" href="#la-interfaz-de-mrv2" title="Link to this heading"></a></h1>
 <img alt="../../_images/interface-02.png" class="align-center" src="../../_images/interface-02.png" />
 <p>La ventana principal de mrv2 provee de 6 barras diferentes que pueden ser ocultadas o mostradas.</p>
-<p>La primer barra es la de los menúes.  Puede alternarse con Shift + F1. Los menus están tambien disponibles con el Botón Derecho del Mouse en la vista principal de mrv2.  La barra de menú tiene también el botón de Edición para alternar el modo de edición y el botón de Ajustar Ventana a la Imagen.</p>
+<p>La primer barra es la de los menúes.  Puede alternarse con Shift + F1. Los menús están tambien disponibles con el Botón Derecho del Mouse en la vista principal de mrv2.  La barra de menú tiene también el botón de Edición para alternar el modo de edición y el botón de Ajustar Ventana a la Imagen.</p>
 <p>La segunda barra es la de capas o canales, exposición, OCIO y controles de gama.  Puede ser alternada con F1.</p>
 <p>La tercera barra es la ventana de la línea de tiempo y sus controles.  Puede alternarla con F2.</p>
 <p>La cuarta barra es la de Información de Pixel, que muestra el pixel actual bajo el cursor.  Puede activar y desactivarla con F3.</p>
@@ -152,7 +156,7 @@ El factor de zoom actual es mostrado en la barra de pixel a la izquierda.</p>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
 <p>Si quiere acercase o alejarse un porcentaje particular (digamos 2x), puede
-elegirlo desde el menu de zoom en la barra de Pixel.</p>
+elegirlo desde el menú de zoom en la barra de Pixel.</p>
 </div>
 </section>
 </section>
@@ -178,7 +182,7 @@ Cuando se muestran las miniaturas, puedes acercarte o alejarte con la rueda del 
 <section id="indicador-de-cuadro">
 <h3>Indicador de Cuadro<a class="headerlink" href="#indicador-de-cuadro" title="Link to this heading"></a></h3>
 <dl class="simple">
-<dt>Inmediatamente a la izquierda y abajo de la línea de tiempo está el “cuadro actual”. Junto a él esta un menu de opciones para establecer como el tiempo se muestra:</dt><dd><ul class="simple">
+<dt>Inmediatamente a la izquierda y abajo de la línea de tiempo está el “cuadro actual”. Junto a él esta un menú de opciones para establecer como el tiempo se muestra:</dt><dd><ul class="simple">
 <li><p><em>Cuadros:</em> cuadros, empezando en 0 para películas o uno normalmente para xsecuencias.</p></li>
 <li><p><em>Segundos:</em> La posición en segundos del medio.</p></li>
 <li><p><em>Timecode:</em> el timecode de 8 digitos. Si el medio tiene metadatos de timecode estos serán usados.</p></li>
@@ -211,7 +215,7 @@ Hay un boton de Play para atrás, Pausa y Play para adelante, paso hacia delante
 </section>
 </section>
 <section id="menu-de-vista">
-<h2>Menu de Vista<a class="headerlink" href="#menu-de-vista" title="Link to this heading"></a></h2>
+<h2>Menú de Vista<a class="headerlink" href="#menu-de-vista" title="Link to this heading"></a></h2>
 <p>El menú de Vista provee controles para modificar la apariencia y comportamiento del visor:</p>
 <aside class="topic">
 <p class="topic-title">Safe Areas</p>
@@ -260,6 +264,101 @@ Hay un boton de Play para atrás, Pausa y Play para adelante, paso hacia delante
 <aside class="topic">
 <p class="topic-title">Filtros de Minificación y Magnificación</p>
 <p>Con estos dos controles, puede seleccionar cómo mrv2 muestra las imágenes cuando está de cerca o de lejos.  Puede elegir en usar un Filtro de Cercanía (Pixelado) o uno Lineal.  El Filtro de Magnificación puede ser alternado con Shift + F.</p>
+</aside>
+</section>
+<section id="menu-de-reproduccion">
+<h2>Menú de Reproducción<a class="headerlink" href="#menu-de-reproduccion" title="Link to this heading"></a></h2>
+<p>El menú de reproducción tiene las funciones estándard de reproducción que funcionan igual que los botones de la sección de la línea de tiempo en la interfaz principal.  Además de ello, puedes:</p>
+<aside class="topic">
+<p class="topic-title">Alternar el Punto de Entrada</p>
+<p>Con esta opción puedes alternar el punto de entrada del o los clips en la línea de tiempo.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Alternar el Punto de Salida</p>
+<p>Con esta opción puedes alternar el punto de salida del o los clips en la línea de tiempo.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Ir a/Anotación Previa, Ir A/Anotación Siguiente</p>
+<p>Una vez que hayas creado una o más anotaciones, podrás usar estas opciones de menu para saltar de un cuadro a otro donde la anotación reside.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Anotación/Borrar, Anotación/Borrar Todas</p>
+<p>Con estos comandos, una vez creada una o más anotaciones podrás borrar la anotación en el cuadro actual o todas las anotaciones de la línea de tiempo.</p>
+</aside>
+</section>
+<section id="menu-de-linea-de-tiempo">
+<h2>Menú de Línea de Tiempo<a class="headerlink" href="#menu-de-linea-de-tiempo" title="Link to this heading"></a></h2>
+<p>El menú de línea de tiempo provee controles para modificar la ventana gráfica de la línea de tiempo en la parte inferior de la ventana de vista:</p>
+<aside class="topic">
+<p class="topic-title">Editable</p>
+<p>Cuando está activada, podrás mover varios clips creados con el Panel de Lista de Reproducción, la herramienta Editar/Rebanar o cuando se lea un archivo .otio.  La parte superior de la línea de tiempo (aquella con números), te permitirá ir de un cuadro a otro.  Cuando no está activa, puedes cliquear en cualquiera de las imágenes y eso también te llevará a otro cuadro.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Edit Clips Asociados.</p>
+<p>Cuando este control está activado, clips de vídeo y audio pueden ser
+movidos juntos si comienzan y terminan <em>EXACTAMENTE</em> en el mismo lugar.
+Nótese que es en general díficil lograr que los tracks de audio y video
+empaten exáctamente.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Miniaturas</p>
+<p>Este seteo te permite desactivar los dibujos en minitura de la ventana
+gráfica de la línea de tiempo, así como seleccionar tamaños más grandes si
+tienes un monitor con más alta resolución.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Transitiones</p>
+<p>Con esto prendido, podés mostrar las transiciones de audio y vídeo en
+archivos .otio.
+(Actualmente no implementado en v1.0.0).</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Marcadores</p>
+<p>Con este seteo prendido, podés mostrar marcadores .otio en la ventana
+gráfica de la línea de tiempo.
+Los marcardores son usados en archivos .otio para marcar areas interesantes
+en la línea de tiempo.</p>
+</aside>
+</section>
+<section id="menu-de-imagen">
+<h2>Menú de Imagen<a class="headerlink" href="#menu-de-imagen" title="Link to this heading"></a></h2>
+<p>Este menú aparece solo cuando up clip con version es detectado en el disco.  Por defecto, esto es un directorio, archivoe o ambos nombrados con «_v» y un número, como:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Fluid_v0001</span><span class="mf">.0001</span><span class="o">.</span><span class="n">exr</span>
+<span class="n">Bunny_v1</span><span class="o">/</span><span class="n">Bunny</span><span class="mf">.0001</span><span class="o">.</span><span class="n">exr</span>
+</pre></div>
+</div>
+<p>Nótese que esto se puede cambiar con expression regular (regex) en Ventana-&gt;Preferencias-&gt;Cargando.</p>
+<aside class="topic">
+<p class="topic-title">Version/Primera, Version/Última</p>
+<p>Chequeará en el disco por la primera o última version en el disco.  Por defecto, aceptará un máximo de 10 versiones antes de rendirse.  Puede ver como empata el clip en panel de Bitácora o en la consola si arrancó mrv2 en la línea de comandos.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Version/Previous, Version/Next</p>
+<p>Buscará la siguiente o previa version en el disco.  Por defecto, aceptará un máximo de 10 versiones antes de rendirse.  Puede ver como empata el clip en panel de Bitácora o en la consola si arrancó mrv2 en la línea de comandos.</p>
+</aside>
+</section>
+<section id="menu-de-editar">
+<h2>Menú de Editar<a class="headerlink" href="#menu-de-editar" title="Link to this heading"></a></h2>
+<p>El menú de editar provee funcionalidad rápida para editar la línea de tiempo y los clips.  No intenta ser un Editor No Lineal completo, pero sí una forma de testear tus cambios y ajustar tus animaciones.</p>
+<aside class="topic">
+<p class="topic-title">Cuadro/Cortar, Cuadro/Copiar, Cuadro/Pegar, Cuadro/Insertar</p>
+<p>Estos controles te permiten cortar, copiar, pegar e insertar un solo cuadro de animación.  Es útil para animadores para bloquear su timing, sin tener que necesariamente abrir el paquete de animación y ajustar múltiples curvas.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Brecha de Audio/Insertar, Brecha de Audio/Remover</p>
+<p>Esta opción de menú permite agregar una brecha de audio de una porción de vídeo que no tiene audio.  Posiciónese en la línea de tiempo sobre el cuadro del clip al que le quiere agregar la brecha y seleccione Insertar.  Para removerla, haga lo mismo pero use Remover.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Rebanar</p>
+<p>Este comando rebanará (cortará) el o los clip(s) en el cuadro actual de la línea de tiempo, creando dos clips.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Remover</p>
+<p>Esta opcion removerá el o los clips en la posición actual de la línea de tiempo.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Deshacer/Rehacer</p>
+<p>Estos comando deshacen o rehacen la última edición.  No deben de confundirse con el Deshacer y Rehacer de las anotaciones.</p>
 </aside>
 </section>
 <section id="los-paneles">
