@@ -933,7 +933,7 @@ uiPrefs->uiPrefsOCIOConfig->value( r.c_str() );}
           }
           Fl_Group {} {
             label {OCIO Defaults} open
-            xywh {303 34 532 362} align 5
+            xywh {303 34 532 362} align 5 hide
           } {
             Fl_Light_Button uiOCIOUseActiveViews {
               label {Use Active Views and Active Displays}
@@ -1064,7 +1064,7 @@ v->uiOCIO_Display_View->do_callback();}
                 xywh {686 354 88 25}
               }
             }
-            Fl_Group {} {open selected
+            Fl_Group {} {open
               xywh {313 310 480 34}
             } {
               Fl_Input uiOCIO_Look {
@@ -1091,15 +1091,15 @@ v->uiOCIO_Look->do_callback();}
             }
           }
           Fl_Group {} {
-            label Loading
-            xywh {297 34 543 362} align 5 hide
+            label Loading open
+            xywh {297 34 543 362} align 5
           } {
-            Fl_Group {} {
+            Fl_Group {} {open
               xywh {324 137 494 240}
             } {
               Fl_Input uiPrefsVersionRegex {
-                label {Version Regex}
-                tooltip {Regular Expression used to match clip versions.  Must group three things (prefix, number and suffix). If left on its default value (_v), it will automatically be created a regulat expression to match verisions defined with _v in the name of the file, directory or both. For example: gizmo_v001.0001.exr} xywh {443 161 345 30} color 20 textcolor 56
+                label {Version Regex} selected
+                tooltip {Regular Expression used to match clip versions.  Must group three things (prefix, number and suffix). If left on its default value (_v), it will automatically be created a regular expression to match verisions defined with _v in the name of the file, directory or both. For example: gizmo_v001.0001.exr} xywh {443 161 345 30} color 20 textcolor 56
                 code0 {o->value( "_v" );}
               }
               Fl_Spinner uiPrefsMaxImagesApart {
