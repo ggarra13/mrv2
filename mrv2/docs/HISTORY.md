@@ -15,6 +15,8 @@ utmost importance that you report any bugs you find before that.
   Currently, there's no way to add transitions again (you need to edit the
   .otio file manually, or convert it from a Non-Linear Editor format).
 - You can also not currently move or scale the transitions.
+- Fixed default versioning regex for '_v' to match UNC paths on Windows.
+- Improved rotation of Spherical Environment maps.
 
 
 v0.9.4

@@ -38,7 +38,7 @@ namespace mrv
 
         if (orig.size() < 5)
         {
-            prefix = "([\\w:/]*?[/\\._]*" + orig + ")(\\d+)([%\\w\\d\\./]*)";
+            prefix = "([\\w\\\\:/]*?[/\\._]*" + orig + ")(\\d+)([\\w\\d\\./]*)";
             if (verbose)
             {
                 std::string msg = tl::string::Format(

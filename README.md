@@ -153,7 +153,7 @@ group, you can just build mrv2 with:
 ./runme_docker.sh
 ```
 The resulting installers will be placed in a new packages/ directory of the
-root of mrv2.  The docker images are compatible with RedHat 8.8 and Ubuntu 20.04.
+root of mrv2.  The docker images are compatible with RedHat 8.8 and Ubuntu 20.04, but have issues with Wayland on more modern distros.
 
 ## Dependencies
 
