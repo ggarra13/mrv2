@@ -6,7 +6,7 @@ utmost importance that you report any bugs you find before that.
 
 - Improved performance of scrubbing when audio is turned off in the timeline
   section of the main UI.  Helps in scrubbing 4K movies.
-- Made readBehind cache expand freely when using Gygabytes in Settings
+- Made readBehind cache expand freely when using Gigabytes in Settings
   to improve the performance of scrubbing 4K movies.
 - Fixed a crash when showing an .otio timeline with markers at start or when
   dragging a clip with .otio markers.
@@ -16,7 +16,7 @@ utmost importance that you report any bugs you find before that.
   .otio file manually, or convert it from a Non-Linear Editor format).
 - You can also not currently move or scale the transitions.
 - Fixed default versioning regex for '_v' to match UNC paths on Windows.
-- Improved rotation of Spherical Environment maps.
+- Fixed version of USD which showed MaterialX version instead.
 
 
 v0.9.4

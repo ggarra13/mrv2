@@ -85,6 +85,7 @@
 #    include <boost/version.hpp>
 #    include <tbb/tbb_stddef.h>
 #    include <MaterialXCore/Util.h>
+#    include <pxr/pxr.h>
 #endif
 
 #ifdef TLRENDER_NET
@@ -837,7 +838,8 @@ namespace mrv
           << "(C) 2021-Present Darby Johnston." << endl
           << endl;
 #ifdef TLRENDER_USD
-        o << "USD v" << MaterialX::getVersionString() << endl
+        o << "USD v" << PXR_MAJOR_VERSION << "." << PXR_MINOR_VERSION
+          << "." << PXR_PATCH_VERSION << endl
           << "(C) 2016-Present Pixar" << endl
           << endl;
 #endif
