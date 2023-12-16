@@ -21,6 +21,8 @@ namespace mrv
         {
             auto settings = App::app->settings();
             RenderOptions o;
+            o.rendererName =
+                settings->getValue<std::string>("USD/rendererName");
             o.renderWidth = settings->getValue<int>("USD/renderWidth");
             o.complexity = settings->getValue<float>("USD/complexity");
             o.drawMode = static_cast<tl::usd::DrawMode>(
@@ -40,6 +42,7 @@ namespace mrv
             using panel::usdPanel;
 
             auto settings = App::app->settings();
+            settings->setValue("USD/rendererName", o.rendererName);
             settings->setValue("USD/renderWidth", o.renderWidth);
             settings->setValue("USD/complexity", o.complexity);
             settings->setValue("USD/drawMode", o.drawMode);
