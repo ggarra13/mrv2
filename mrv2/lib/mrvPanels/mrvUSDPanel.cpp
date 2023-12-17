@@ -110,15 +110,19 @@ namespace mrv
             {
                 const auto& inPlayer = player->player();
                 const auto& info = inPlayer->getIOInfo();
+                bool hasRenderer = false;
                 for (const auto& tag : info.tags)
                 {
                     const std::string& key = tag.first;
                     const std::string rendererKey = "Renderer ";
                     if (key.compare(0, rendererKey.size(), rendererKey) == 0)
                     {
+                        hasRenderer = true;
                         m->add(tag.second.c_str());
                     }
                 }
+                if (!hasRenderer)
+                    m->add(_("None"));
             }
             std::string rendererName =
                 settings->getValue<std::string>("USD/rendererName");
