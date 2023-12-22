@@ -1,8 +1,8 @@
 v0.9.5
 ======
 
-v1.0.0 of mrv2 will be released on January 1st, 2024.  Therefore, it is of
-utmost importance that you report any bugs you find before that.
+Due to a serious bug with multithreading, release of v1.0.0 of mrv2 has been
+post-poned till further notice. 
 
 - Improved performance of scrubbing when audio is turned off in the timeline
   section of the main UI.  Helps in scrubbing 4K movies.
