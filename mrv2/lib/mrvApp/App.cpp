@@ -1530,7 +1530,7 @@ namespace mrv
                 timeline::PlayerCacheOptions().readBehind.value();
             constexpr double totalTime = defaultReadAhead + defaultReadBehind;
             double readAhead = defaultReadAhead / totalTime;
-            double readBehind = defaultReadBehind;
+            double readBehind = defaultReadBehind / totalTime;
 
             readAhead *= seconds / static_cast<double>(activeCount);
             readBehind *= seconds / static_cast<double>(activeCount);
