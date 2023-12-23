@@ -1490,7 +1490,12 @@ namespace mrv
 
             const size_t activeCount = p.filesModel->observeActive()->getSize();
 
-            uint64_t bytes = Gbytes * 1024 * 1024 * 1024;
+            uint64_t bytes = Gbytes * memory::gigabyte;
+
+            // Update the I/O cache.
+            auto ioSystem = _context->getSystem<io::System>();
+            ioSystem->getCache()->setMax(bytes);
+
             TimelinePlayer* player = nullptr;
             for (const auto& i : p.timelinePlayers)
             {
