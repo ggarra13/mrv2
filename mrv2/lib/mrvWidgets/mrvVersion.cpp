@@ -606,7 +606,7 @@ namespace mrv
 #else
           << _("With msvc ") << _MSC_VER << endl
 #endif
-          << "(C) 2022-Present Film Aura, LLC." << endl
+          << "(C) 2022-Present" << endl
           << "Gonzalo Garramuño & others" << endl
           << endl
           << _("mrv2 depends on:") << endl
@@ -838,8 +838,8 @@ namespace mrv
           << "(C) 2021-Present Darby Johnston." << endl
           << endl;
 #ifdef TLRENDER_USD
-        o << "USD v" << PXR_MAJOR_VERSION << "." << PXR_MINOR_VERSION
-          << "." << PXR_PATCH_VERSION << endl
+        o << "USD v" << PXR_MAJOR_VERSION << "." << PXR_MINOR_VERSION << "."
+          << PXR_PATCH_VERSION << endl
           << "(C) 2016-Present Pixar" << endl
           << endl;
 #endif
