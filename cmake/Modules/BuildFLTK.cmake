@@ -4,10 +4,12 @@
 
 include( ExternalProject )
 
-#set( FLTK_TAG master )
+set( FLTK_TAG master )
 # Stable TAG
-set(FLTK_TAG 6ea31316fb64f64d346dc4a3a30984048f5df4cd)
-
+set(FLTK_TAG 6ea31316fb64f64d346dc4a3a30984048f5df4cd) # removes Fl_Int_Vector
+#set(FLTK_TAG 05ac0247cbd902f910fa89f8d4f4fde9de904b0f)
+#set(FLTK_TAG 92e9181a0a885b2b58e002e3a5e76152763388a2 )
+#set(FLTK_TAG 20230728)
 
 set( FLTK_BUILD_SHARED_LIBS ON )  # We no longer compile static.
 
