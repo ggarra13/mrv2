@@ -36,8 +36,8 @@ elseif(WIN32)
     set(FLTK_C_COMPILER cl)
     set(FLTK_CXX_COMPILER cl)
 else()
-    list(APPEND FLTK_C_FLAGS -fPIC)
-    list(APPEND FLTK_CXX_FLAGS -fPIC)
+    set( FLTK_C_FLAGS "${FLTK_C_FLAGS} -fPIC")
+    set( FLTK_CXX_FLAGS "${FLTK_CXX_FLAGS} -fPIC" )
 endif()
 
 

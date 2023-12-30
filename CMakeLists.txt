@@ -64,11 +64,24 @@ if(NOT DEFINED CMAKE_INSTALL_MESSAGE)
 endif()
 
 
+if(NOT MRV2_PYBIND11 AND BUILD_PYTHON)
+    set(BUILD_PYTHON OFF)
+endif()
+
+#
+# Python cannot be built with asan dependencies
+#
+set( PYTHON_DEP )
+if( BUILD_PYTHON )
+    include( cmake/Modules/BuildPython.cmake )
+endif()
+
 if(CMAKE_BUILD_TYPE MATCHES "^Debug$")
     # Check for Clang or GCC compiler  (@todo: add Microsoft support)
     if (TLRENDER_ASAN AND
 	    (CMAKE_CXX_COMPILER_ID MATCHES "Clang") OR
 	    (CMAKE_CXX_COMPILER_ID STREQUAL "GNU"))
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=address")
 	set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -fsanitize=address")
@@ -94,15 +107,6 @@ endif()
 set(FLTK_DEP )
 if( BUILD_FLTK )
     include( cmake/Modules/BuildFLTK.cmake )
-endif()
-
-if(NOT MRV2_PYBIND11 AND BUILD_PYTHON)
-    set(BUILD_PYTHON OFF)
-endif()
-
-set( PYTHON_DEP )
-if( BUILD_PYTHON )
-    include( cmake/Modules/BuildPython.cmake )
 endif()
 
 set( PYBIND11_DEP )
