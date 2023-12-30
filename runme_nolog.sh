@@ -28,7 +28,7 @@ cd $BUILD_DIR
 # These are some of the expensive mrv2 options
 #
 export BUILD_PYTHON=ON
-export MRV2_PYFLTK=OFF
+export MRV2_PYFLTK=ON
 export MRV2_PYBIND11=ON
 export MRV2_NETWORK=ON
 export MRV2_PDF=ON
@@ -36,11 +36,12 @@ export MRV2_PDF=ON
 #
 # These are some of the expensive TLRENDER options
 #
-export TLRENDER_WAYLAND=ON
-export TLRENDER_USD=ON
+export TLRENDER_ASAN=OFF  # asan memory debugging
 export TLRENDER_NET=ON
 export TLRENDER_RAW=ON
+export TLRENDER_USD=ON
 export TLRENDER_VPX=ON
+export TLRENDER_WAYLAND=ON
 export TLRENDER_YASM=ON
 
 cmd="cmake -G '${CMAKE_GENERATOR}' \

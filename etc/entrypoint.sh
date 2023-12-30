@@ -27,7 +27,21 @@ chmod a+x ./etc/install_cmake.sh
 #
 # Run the build and package it.
 #
-time ./runme_nolog.sh -D TLRENDER_USD=ON -t package
+time ./runme_nolog.sh \
+     -D BUILD_PYTHON=ON \
+     -D MRV2_PYFLTK=ON \
+     -D MRV2_PYBIND11=ON \
+     -D MRV2_NETWORK=ON \
+     -D MRV2_PDF=ON \
+     -D TLRENDER_ASAN=OFF \
+     -D TLRENDER_NET=ON \
+     -D TLRENDER_RAW=ON \
+     -D TLRENDER_USD=ON \
+     -D TLRENDER_VPX=ON \
+     -D TLRENDER_WAYLAND=ON \
+     -D TLRENDER_YASM=ON \
+     -D TLRENDER_USD=ON \
+     -t package
 
 
 #
