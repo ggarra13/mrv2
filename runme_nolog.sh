@@ -38,11 +38,7 @@ export MRV2_PDF=ON
 #
 
 # asan memory debugging
-if [[ $CMAKE_BUILD_TYPE == "*Debug*" ]]; then
-    export TLRENDER_ASAN=ON
-else
-    export TLRENDER_ASAN=OFF
-fi
+export TLRENDER_ASAN=OFF
 export TLRENDER_NET=ON
 export TLRENDER_RAW=ON
 export TLRENDER_USD=ON

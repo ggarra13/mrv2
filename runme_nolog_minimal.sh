@@ -37,12 +37,7 @@ export MRV2_PDF=ON
 # These are some of the expensive TLRENDER options
 #
 
-# asan memory debugging
-if [[ $CMAKE_BUILD_TYPE == "*Debug*" ]]; then
-    export TLRENDER_ASAN=ON
-else
-    export TLRENDER_ASAN=OFF
-fi
+export TLRENDER_ASAN=OFF # asan memory debugging
 export TLRENDER_NET=OFF
 export TLRENDER_RAW=OFF
 export TLRENDER_USD=OFF

@@ -22,7 +22,8 @@ endif()
 
 list( APPEND LIBRARIES
     mrvApp
-    ${Intl_LIBRARIES} )
+    ${Intl_LIBRARIES}
+    ${FLTK_LIBRARIES})
 
 
 if( APPLE )
