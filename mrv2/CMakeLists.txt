@@ -94,13 +94,6 @@ if( MRV2_PDF )
     add_definitions( -DMRV2_PDF )
 endif()
 
-if(TLRENDER_USD)
-    find_package(pxr)
-    if(pxr_FOUND)
-        add_definitions(-DTLRENDER_USD)
-    endif()
-endif()
-
 if(TLRENDER_BMD)
     add_definitions(-DTLRENDER_BMD)
 endif()
@@ -146,6 +139,13 @@ endif()
 
 if(TLRENDER_TIFF)
     add_definitions(-DTLRENDER_TIFF)
+endif()
+
+if(TLRENDER_USD)
+    find_package(pxr)
+    if(pxr_FOUND)
+        add_definitions(-DTLRENDER_USD)
+    endif()
 endif()
 
 if(MRV2_PYBIND11)

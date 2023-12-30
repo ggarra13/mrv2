@@ -25,7 +25,6 @@ list( APPEND LIBRARIES
     ${Intl_LIBRARIES} )
 
 
-
 if( APPLE )
     set( OSX_FRAMEWORKS "-framework IOKit" )
     list( APPEND LIBRARIES ${OSX_FRAMEWORKS} )
