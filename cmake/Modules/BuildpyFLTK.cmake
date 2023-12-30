@@ -71,6 +71,10 @@ set(pyFLTK_PATCH
     COMMAND
     ${CMAKE_COMMAND} -E copy_if_different
     "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/swig/fl_string_functions.i"
+    "${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK/swig/"
+    COMMAND
+    ${CMAKE_COMMAND} -E copy_if_different
+    "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/swig/fltk.i"
     "${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK/swig/" )
 set(pyFLTK_CONFIGURE ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} setup.py swig --enable-shared)
 set(pyFLTK_BUILD     ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} setup.py build --enable-shared)
