@@ -95,9 +95,51 @@ namespace mrv
             cg->begin();
 
             Y += 30;
-            bg = new Fl_Group(g->x(), Y, g->w(), 22 * 7);
+            bg = new Fl_Group(g->x(), Y, g->w(), 22 * 8);
             bg->box(FL_NO_BOX);
             bg->begin();
+
+            auto mW = new Widget< Fl_Choice >(
+                g->x() + 130, Y, g->w() - 130, 20, _("Renderer"));
+            Fl_Choice* m = mW;
+            m->labelsize(12);
+            m->align(FL_ALIGN_LEFT);
+
+            auto player = p.ui->uiView->getTimelinePlayer();
+            if (player)
+            {
+                const auto& inPlayer = player->player();
+                const auto& info = inPlayer->getIOInfo();
+                bool hasRenderer = false;
+                for (const auto& tag : info.tags)
+                {
+                    const std::string& key = tag.first;
+                    const std::string rendererKey = "Renderer ";
+                    if (key.compare(0, rendererKey.size(), rendererKey) == 0)
+                    {
+                        hasRenderer = true;
+                        m->add(tag.second.c_str());
+                    }
+                }
+                if (!hasRenderer)
+                    m->add(_("None"));
+            }
+            std::string rendererName =
+                settings->getValue<std::string>("USD/rendererName");
+            int index = m->find_index(rendererName.c_str());
+            if (index < 0)
+                index = 0;
+            m->value(index);
+            mW->callback(
+                [=](auto o)
+                {
+                    const Fl_Menu_Item* item = o->mvalue();
+                    std::string renderName = item->label();
+                    settings->setValue("USD/rendererName", renderName);
+                    _update();
+                });
+
+            Y += 22;
 
             auto spW = new Widget< Fl_Spinner >(
                 g->x() + 160, Y, g->w() - 160, 20, _("Render Width"));
@@ -144,9 +186,9 @@ namespace mrv
 
             Y += 22;
 
-            auto mW = new Widget< Fl_Choice >(
+            mW = new Widget< Fl_Choice >(
                 g->x() + 130, Y, g->w() - 130, 20, _("Draw Mode"));
-            Fl_Choice* m = mW;
+            m = mW;
             m->labelsize(12);
             m->align(FL_ALIGN_LEFT);
             for (const auto& i : tl::usd::getDrawModeLabels())

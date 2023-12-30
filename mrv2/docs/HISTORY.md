@@ -1,17 +1,23 @@
 v0.9.5
 ======
 
-v1.0.0 of mrv2 will be released on January 1st, 2024.  Therefore, it is of
-utmost importance that you report any bugs you find before that.
+Due to a serious bug with multithreading, release of v1.0.0 of mrv2 has been
+post-poned till further notice. 
 
 - Improved performance of scrubbing when audio is turned off in the timeline
   section of the main UI.  Helps in scrubbing 4K movies.
-- Made readBehind cache expand freely when using Gygabytes in Settings
+- Made readBehind cache expand freely when using Gigabytes in Settings
   to improve the performance of scrubbing 4K movies.
 - Fixed a crash when showing an .otio timeline with markers at start or when
   dragging a clip with .otio markers.
-- Added dissolves to Timeline Viewport.  However, editing clips with dissolves
-  will lead to unpredictable results currently.
+- Added display of transitions (Dissolves) to Timeline Viewport.  If you edit
+  a clip that has transitions, those will be removed before the move.
+  Currently, there's no way to add transitions again (you need to edit the
+  .otio file manually, or convert it from a Non-Linear Editor format).
+- You can also not currently move or scale the transitions.
+- Fixed default versioning regex for '_v' to match UNC paths on Windows.
+- Fixed version of USD which showed MaterialX version instead.
+
 
 v0.9.4
 ======

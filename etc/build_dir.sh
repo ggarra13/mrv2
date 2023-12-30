@@ -77,7 +77,7 @@ if [[ $KERNEL == *Msys* ]]; then
     export PYTHONEXE="$PWD/${BUILD_DIR}/install/bin/python.exe"
 fi
 
-if [[ $RUNME == 1 && $0 != *runme.sh* ]]; then
+if [[ $RUNME == 1 && $0 != *runme.sh* && $0 != runme_minimal.sh ]]; then
     echo "Build directory is ${BUILD_DIR}"
     echo "Version to build is v${mrv2_VERSION}"
     echo "Architecture is ${ARCH}"

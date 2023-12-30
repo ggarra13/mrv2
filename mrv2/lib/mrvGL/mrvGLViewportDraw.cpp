@@ -1076,8 +1076,11 @@ namespace mrv
             {
                 if (pos.y > viewportSize.h)
                     return;
-                snprintf(
-                    buf, 512, "%s = %s", tag.first.c_str(), tag.second.c_str());
+                const std::string& key = tag.first;
+                const std::string rendererKey = "Renderer ";
+                if (key.compare(0, rendererKey.size(), rendererKey) == 0)
+                    continue;
+                snprintf(buf, 512, "%s = %s", key.c_str(), tag.second.c_str());
                 _drawText(
                     p.fontSystem->getGlyphs(buf, fontInfo), pos, lineHeight,
                     labelColor);

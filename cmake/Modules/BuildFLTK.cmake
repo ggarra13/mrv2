@@ -4,10 +4,12 @@
 
 include( ExternalProject )
 
-#set( FLTK_TAG master )
+set( FLTK_TAG master )
 # Stable TAG
-set(FLTK_TAG 6ea31316fb64f64d346dc4a3a30984048f5df4cd)
-
+set(FLTK_TAG 6ea31316fb64f64d346dc4a3a30984048f5df4cd) # removes Fl_Int_Vector
+#set(FLTK_TAG 05ac0247cbd902f910fa89f8d4f4fde9de904b0f)
+#set(FLTK_TAG 92e9181a0a885b2b58e002e3a5e76152763388a2 )
+#set(FLTK_TAG 20230728)
 
 set( FLTK_BUILD_SHARED_LIBS ON )  # We no longer compile static.
 
@@ -34,8 +36,8 @@ elseif(WIN32)
     set(FLTK_C_COMPILER cl)
     set(FLTK_CXX_COMPILER cl)
 else()
-    list(APPEND FLTK_C_FLAGS -fPIC)
-    list(APPEND FLTK_CXX_FLAGS -fPIC)
+    set( FLTK_C_FLAGS "${FLTK_C_FLAGS} -fPIC")
+    set( FLTK_CXX_FLAGS "${FLTK_CXX_FLAGS} -fPIC" )
 endif()
 
 
@@ -43,8 +45,7 @@ if (APPLE OR WIN32)
     set( FLTK_WAYLAND OFF )
     set( FLTK_PANGO   OFF )
 else()
-    set( FLTK_WAYLAND  ON ) # we'll leave it on, but it is way
-		       # buggy with, at least, Nvidia cards.
+    set( FLTK_WAYLAND  ON ) 
     set( FLTK_PANGO    ON )
 endif()
 
@@ -72,8 +73,8 @@ ExternalProject_Add(
     -DOPTION_USE_SYSTEM_ZLIB=0
     -DOPTION_USE_SYSTEM_LIBJPEG=0
     -DOPTION_USE_SYSTEM_LIBPNG=0
-    -DOPTION_USE_FLTK_PANGO=${FLTK_PANGO}
-    -DOPTION_USE_FLTK_WAYLAND=${FLTK_WAYLAND}
+    -DOPTION_USE_PANGO=${FLTK_PANGO}
+    -DOPTION_USE_WAYLAND=${FLTK_WAYLAND}
 )
 
 if(WIN32)

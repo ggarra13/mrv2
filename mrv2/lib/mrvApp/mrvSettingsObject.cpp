@@ -103,6 +103,7 @@ namespace mrv
         p.defaultValues["Background/CheckersSize"] = 100;
 
 #if defined(TLRENDER_USD)
+        p.defaultValues["USD/rendererName"] = usd::RenderOptions().rendererName;
         p.defaultValues["USD/renderWidth"] =
             static_cast<int>(usd::RenderOptions().renderWidth);
         p.defaultValues["USD/complexity"] =

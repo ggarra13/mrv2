@@ -91,13 +91,13 @@ mrv2 binaries run on Windows 8.1+, RedHat 8.8+ or Ubuntu 20.04+ and macOS 11.0+.
   On Debian (Ubuntu, etc) systems, you would install with:
 
 ```
-  sudo dpkg -i mrv2-v0.8.2-Linux-amd64.tar.gz
+  sudo dpkg -i mrv2-v1.0.0-Linux-amd64.tar.gz
 ```
 
   On Red Hat (Rocky Linux, etc), you would install it with:
   
 ```
-  sudo rpm -i mrv2-v0.8.2-Linux-amd64.tar.gz
+  sudo rpm -i mrv2-v1.0.0-Linux-amd64.tar.gz
 ```
 
   Once you install it, you can run mrv2 by just typing mrv2 in the shell, as
@@ -111,7 +111,7 @@ mrv2 binaries run on Windows 8.1+, RedHat 8.8+ or Ubuntu 20.04+ and macOS 11.0+.
   .tar.gz file and you can uncompress it with:
   
 ```
-  tar -xf mrv2-v0.8.2-Linux-amd64.tar.gz
+  tar -xf mrv2-v1.0.0-Linux-amd64.tar.gz
 ```
 
   That will create a folder in the direcory you uncompress it from.  You can
@@ -152,7 +152,7 @@ group, you can just build mrv2 with:
 ./runme_docker.sh
 ```
 The resulting installers will be placed in a new packages/ directory of the
-root of mrv2.  The docker images are compatible with RedHat 8.8 and Ubuntu 20.04.
+root of mrv2.  The docker images are compatible with RedHat 8.8 and Ubuntu 20.04, but have issues with Wayland on more modern distros.
 
 ## Dependencies
 
