@@ -222,8 +222,8 @@ if sys.version > '3':
 %include Fl_Anim_GIF_Image.i
 %include Fl_ICO_Image.i
 %include Fl_Image_Surface.i
-%include Fl_Int_Vector.i
-%include Fl_String.i
+ //%include Fl_Int_Vector.i
+ //%include Fl_String.i
  //%include fl_string_functions.i
 #ifndef DO_NOT_USE_OPENGL
 %include Fl_Gl_Window.i
@@ -284,7 +284,7 @@ if sys.version > '3':
 %include fl_show_colormap.i
 %include fl_show_input.i
 %include Fl_Simple_Counter.i
-%include Fl_Simple_Terminal.i
+//%include Fl_Simple_Terminal.i
 //%include Fl_Sys_Menu_Bar.i
 %include Fl_Tabs.i
 %include Fl_Text_Buffer.i

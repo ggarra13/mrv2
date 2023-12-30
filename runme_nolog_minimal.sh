@@ -43,9 +43,9 @@ if [[ $CMAKE_BUILD_TYPE == "*Debug*" ]]; then
 else
     export TLRENDER_ASAN=OFF
 fi
-export TLRENDER_NET=ON
-export TLRENDER_RAW=ON
-export TLRENDER_USD=ON
+export TLRENDER_NET=OFF
+export TLRENDER_RAW=OFF
+export TLRENDER_USD=OFF
 export TLRENDER_VPX=ON
 export TLRENDER_WAYLAND=ON
 export TLRENDER_YASM=ON

@@ -45,8 +45,7 @@ if (APPLE OR WIN32)
     set( FLTK_WAYLAND OFF )
     set( FLTK_PANGO   OFF )
 else()
-    set( FLTK_WAYLAND  ON ) # we'll leave it on, but it is way
-		       # buggy with, at least, Nvidia cards.
+    set( FLTK_WAYLAND  ON ) 
     set( FLTK_PANGO    ON )
 endif()
 
@@ -74,8 +73,8 @@ ExternalProject_Add(
     -DOPTION_USE_SYSTEM_ZLIB=0
     -DOPTION_USE_SYSTEM_LIBJPEG=0
     -DOPTION_USE_SYSTEM_LIBPNG=0
-    -DOPTION_USE_FLTK_PANGO=${FLTK_PANGO}
-    -DOPTION_USE_FLTK_WAYLAND=${FLTK_WAYLAND}
+    -DOPTION_USE_PANGO=${FLTK_PANGO}
+    -DOPTION_USE_WAYLAND=${FLTK_WAYLAND}
 )
 
 if(WIN32)
