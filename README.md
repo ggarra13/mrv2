@@ -55,7 +55,7 @@ The source forge site also hosts beta builds (nightly builds with the latest cha
 
 ## Compatibility
 
-mrv2 binaries run on Windows 8.1+, RedHat 8.8+ or Ubuntu 20.04+ and macOS 11.0+.
+mrv2 binaries run on Windows 8.1+, RedHat 8.9+ or Ubuntu 20.04+ and macOS 11.0+.
 
 ## Notes on installation
 
@@ -152,7 +152,7 @@ group, you can just build mrv2 with:
 ./runme_docker.sh
 ```
 The resulting installers will be placed in a new packages/ directory of the
-root of mrv2.  The docker images are compatible with RedHat 8.8 and Ubuntu 20.04, but have issues with Wayland on more modern distros.
+root of mrv2.  The docker images are compatible with RedHat 8.9 and Ubuntu 20.04, but have issues with Wayland on more modern distros.
 
 ## Dependencies
 
