@@ -83,6 +83,8 @@ if [[ $input == n* || $input == N* ]]; then
     exit 0
 fi
 
+bin/clean_containers.sh
+
 docker build -t mrv2_builder .
 
 #
@@ -90,5 +92,5 @@ docker build -t mrv2_builder .
 # not root as creating the docs otherwise fails.
 #
 docker run -v ${PWD}/packages:/packages \
-       --name mrv2_build_$(date "+%s") \
+       --name mrv2_build \
        mrv2_builder $TAG
