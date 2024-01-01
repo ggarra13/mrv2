@@ -197,7 +197,7 @@ if sys.version > '3':
 %include Fl_Menu_.i
 %include Fl_Menu.i
 %include Fl_Choice.i
-%include Fl_Copy_Surface.i
+ //%include Fl_Copy_Surface.i  // @bug: linker errors on Windows
 %include Fl_Clock.i
 %include Fl_Value_Input.i
 %include Fl_Color_Chooser.i
@@ -221,7 +221,7 @@ if sys.version > '3':
  //TODO %include Fl_GIF_Image.i
 %include Fl_Anim_GIF_Image.i
 %include Fl_ICO_Image.i
-%include Fl_Image_Surface.i
+ //%include Fl_Image_Surface.i  // @bug: linker errors on Windows
  //%include Fl_Int_Vector.i
  //%include Fl_String.i
  //%include fl_string_functions.i
@@ -274,8 +274,8 @@ if sys.version > '3':
 %include Fl_Roller.i
 %include Fl_Round_Clock.i
 %include Fl_Scroll.i
-%include Fl_Scheme.i
-%include Fl_Scheme_Choice.i
+ //%include Fl_Scheme.i         // @bug:
+ //%include Fl_Scheme_Choice.i  // results in link error on Windows
 %include Fl_Scrollbar.i
 %include Fl_Secret_Input.i
 %include Fl_Select_Browser.i
