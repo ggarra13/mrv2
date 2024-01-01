@@ -28,7 +28,7 @@ cd $BUILD_DIR
 # These are some of the expensive mrv2 options
 #
 export BUILD_PYTHON=ON
-export MRV2_PYFLTK=OFF
+export MRV2_PYFLTK=ON
 export MRV2_PYBIND11=ON
 export MRV2_NETWORK=ON
 export MRV2_PDF=ON

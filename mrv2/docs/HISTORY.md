@@ -1,8 +1,5 @@
-v0.9.5
+v1.0.0
 ======
-
-Due to a serious bug with multithreading, release of v1.0.0 of mrv2 has been
-post-poned till further notice. 
 
 - Improved performance of scrubbing when audio is turned off in the timeline
   section of the main UI.  Helps in scrubbing 4K movies.
@@ -17,6 +14,7 @@ post-poned till further notice.
 - You can also not currently move or scale the transitions.
 - Fixed default versioning regex for '_v' to match UNC paths on Windows.
 - Fixed version of USD which showed MaterialX version instead.
+- Updated USD to v23.11.
 
 
 v0.9.4
