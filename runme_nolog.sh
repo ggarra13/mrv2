@@ -25,7 +25,7 @@ sleep 10
 #
 # Download a latest cmake and install it in staging area
 #
-if [[ $KERNEL != *MSys* ]]; then
+if [[ $KERNEL == *Linux* ]]; then
     chmod a+x ./etc/install_cmake.sh
     ./etc/install_cmake.sh ${CMAKE_BUILD_TYPE}
 fi
