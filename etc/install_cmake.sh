@@ -3,37 +3,27 @@
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
+echo "Getting latest release of cmake"
+
 . ./etc/build_dir.sh
 
 echo "Will install it in $PWD/$BUILD_DIR/install.."
+
+echo "Downloading cmake..."
+wget -c -q https://github.com/Kitware/CMake/releases/download/v3.26.3/cmake-3.26.3-linux-x86_64.tar.gz
+
+echo "Decompressing archive..."
+tar -xf cmake-3.26.3-linux-x86_64.tar.gz
+
+echo "Installing..."
 if [[ ! -d $PWD/$BUILD_DIR/install/ ]]; then
     mkdir -p $PWD/$BUILD_DIR/install/
 fi
+mv -f cmake-3.26.3-linux-x86_64/* $PWD/$BUILD_DIR/install/
 
-cmake_version=3.28.1  # 3.26.3 worked on Docker
+echo "Cleaning up..."
+rm -rf cmake-3.26.3-linux-x86_64*
 
-if [[ ! -e cmake-${cmake_version}-linux-x86_64.tar.gz ]]; then
-    echo "Cleaning up old cmake version..."
-    rm -rf cmake-${cmake_version}-linux-x86_64*
-    
-    echo "Downloading cmake v${cmake_version}..."
-    curl -# -L -o cmake-${cmake_version}-linux-x86_64.tar.gz https://github.com/Kitware/CMake/releases/download/v${cmake_version}/cmake-${cmake_version}-linux-x86_64.tar.gz
-    
-    echo "Decompressing archive..."
-    tar -xf cmake-${cmake_version}-linux-x86_64.tar.gz
-    
-    echo "Installing..."
-    
-    if [[ ! -d $PWD/$BUILD_DIR/install/bin ]]; then
-	mv -f cmake-${cmake_version}-linux-x86_64/* $PWD/$BUILD_DIR/install/
-    else
-	rsync -avz cmake-${cmake_version}-linux-x86_64/ $PWD/$BUILD_DIR/install/
-    fi
-    
-    echo "Cleaning up..."
-    rm -rf cmake-${cmake_version}-linux-x86_64*
-
-    echo "Checking executable is there:"
-    ls  $BUILD_DIR/install/bin
-    echo "Done with installing cmake"
-fi
+echo "Checking executable is there:"
+ls  $BUILD_DIR/install/bin
+echo "Done with installing cmake"
