@@ -47,11 +47,14 @@ parse_option()
 get_kernel
 
 export RUNME=0
-if [[ $0 == *runme.sh* || $0 == *runme_nolog.sh* ]]; then
+if [[ $0 == *runme.sh* || $0 == *runme_minimal.sh* ]]; then
     RUNME=1
 fi
 
 BUILD_ROOT=BUILD-$KERNEL-$ARCH
+
+
+echo "COMMAND=$0"
 
 export MRV2_DIST_RELEASE=0
 export FFMPEG_GPL=$FFMPEG_GPL
@@ -82,11 +85,11 @@ for i in $@; do
 	    shift
 	    ;;
 	clean)
-	    CLEAN_DIR=1
 	    if [[ $RUNME == 0 ]]; then
-		echo $0
-		echo "clean option can only be run with the runme.sh script"
-		exit 1
+		echo "COMMNAD=$0"
+		echo "WARNING: clean option can only be run with the runme.sh script"
+	    else
+		CLEAN_DIR=1
 	    fi
 	    shift
 	    ;;

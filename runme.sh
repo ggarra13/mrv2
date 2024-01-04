@@ -28,7 +28,6 @@ params=$*
 
 mkdir -p $BUILD_DIR
 
-
 #
 # Clear the flags, as they will be set by runme_nolog.sh.
 #

@@ -29,6 +29,11 @@ params=$*
 
 mkdir -p $BUILD_DIR
 
+#
+# Download a latest cmake and install it in staging area
+#
+chmod a+x ./etc/install_cmake.sh
+./etc/install_cmake.sh $CMAKE_BUILD_TYPE
 
 #
 # Clear the flags, as they will be set by runme_nolog.sh.

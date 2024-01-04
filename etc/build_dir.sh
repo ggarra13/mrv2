@@ -57,8 +57,8 @@ if [[ $FLAGS == "" ]]; then
 fi
 export FLAGS="${FLAGS} $*"
 
-if [[ $CLEAN_DIR == 1 && $0 == *runme.sh* ]]; then
-    if [[ -d ${BUILD_DIR} ]]; then
+if [[ $CLEAN_DIR == 1 ]]; then
+    if [[ -d ${BUILD_DIR} && ! -e ${BUILD_DIR}/install/bin/cmake ]]; then
 	echo "Cleaning ${BUILD_DIR}.  Please wait..."
 	run_cmd rm -rf $BUILD_DIR
     fi

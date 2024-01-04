@@ -78,14 +78,16 @@ endif()
 
 if(CMAKE_BUILD_TYPE MATCHES "^Debug$")
     # Check for Clang or GCC compiler  (@todo: add Microsoft support)
-    if (TLRENDER_ASAN AND
-	    (CMAKE_CXX_COMPILER_ID MATCHES "Clang") OR
-	    (CMAKE_CXX_COMPILER_ID STREQUAL "GNU"))
-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
-	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=address")
-	set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -fsanitize=address")
-	set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -fsanitize=address")
+    if (TLRENDER_ASAN)
+	message(FATAL_ERROR "TLRENDER_ASAN=${TLRENDER_ASAN}" )
+	if((CMAKE_CXX_COMPILER_ID MATCHES "Clang") OR
+		(CMAKE_CXX_COMPILER_ID STREQUAL "GNU"))
+	    set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS} -fsanitize=address -fno-omit-frame-pointer)
+	    set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -fsanitize=address -fno-omit-frame-pointer)
+	    set(CMAKE_EXE_LINKER_FLAGS ${CMAKE_EXE_LINKER_FLAGS} -fsanitize=address)
+	    set(CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS} -fsanitize=address)
+	    set(CMAKE_MODULE_LINKER_FLAGS ${CMAKE_MODULE_LINKER_FLAGS} -fsanitize=address)
+	endif()
     endif()
 endif()
 
