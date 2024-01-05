@@ -27,7 +27,7 @@ params=$*
 #
 . etc/build_dir.sh
 
-export BUILD_DIR=BUILD-$KERNEL-$ARCH-minimal/$CMAKE_BUILD_TYPE
+export BUILD_DIR=BUILD-$KERNEL-$ARCH-ndi/$CMAKE_BUILD_TYPE
 
 mkdir -p $BUILD_DIR
 
@@ -45,9 +45,9 @@ echo "Saving compile log to $BUILD_DIR/compile.log ..."
 #
 # These are some of the expensive mrv2 options
 #
-export BUILD_PYTHON=ON
-export MRV2_PYFLTK=ON
-export MRV2_PYBIND11=ON
+export BUILD_PYTHON=OFF
+export MRV2_PYFLTK=OFF
+export MRV2_PYBIND11=OFF
 export MRV2_NETWORK=OFF
 export MRV2_PDF=OFF
 
@@ -60,11 +60,11 @@ export TLRENDER_NET=OFF
 export TLRENDER_RAW=OFF
 export TLRENDER_USD=OFF
 export TLRENDER_VPX=OFF
-export TLRENDER_WAYLAND=ON
+export TLRENDER_WAYLAND=OFF
 export TLRENDER_YASM=OFF
 
 cmd="./runme_nolog.sh 
-           --build-dir BUILD-$KERNEL-$ARCH-minimal
+           --build-dir BUILD-$KERNEL-$ARCH-ndi
 	   -D BUILD_PYTHON=${BUILD_PYTHON} \
 	   -D MRV2_PYFLTK=${MRV2_PYFLTK} \
 	   -D MRV2_PYBIND11=${MRV2_PYBIND11} \
@@ -81,5 +81,7 @@ cmd="./runme_nolog.sh
 	   -D TLRENDER_TESTS=FALSE \
 	   -D TLRENDER_QT6=OFF \
 	   -D TLRENDER_QT5=OFF \
+           -D TLRENDER_NDI=ON \
+           -D TLRENDER_NDI_SDK=/home/gga/code/lib/NDI_SDK_v5_Linux/NDI\ SDK\ for\ Linux/ \
             $params 2>&1 | tee $BUILD_DIR/compile.log"
 run_cmd $cmd

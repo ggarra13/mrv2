@@ -22,6 +22,7 @@ fi
 
 sleep 10
 
+mkdir -p $BUILD_DIR
 cd $BUILD_DIR
 
 #
