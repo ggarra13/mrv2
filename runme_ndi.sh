@@ -27,8 +27,6 @@ params=$*
 #
 . etc/build_dir.sh
 
-export BUILD_DIR=BUILD-$KERNEL-$ARCH-ndi/$CMAKE_BUILD_TYPE
-
 mkdir -p $BUILD_DIR
 
 
@@ -64,10 +62,11 @@ export TLRENDER_WAYLAND=OFF
 export TLRENDER_YASM=OFF
 
 cmd="./runme_nolog.sh 
-           --build-dir BUILD-$KERNEL-$ARCH-ndi
+           --ndi
 	   -D BUILD_PYTHON=${BUILD_PYTHON} \
 	   -D MRV2_PYFLTK=${MRV2_PYFLTK} \
 	   -D MRV2_PYBIND11=${MRV2_PYBIND11} \
+	   -D MRV2_NETWORK=${MRV2_NETWORK} \
 	   -D MRV2_PDF=${MRV2_PDF} \
 	   -D TLRENDER_USD=${TLRENDER_USD} \
 	   -D TLRENDER_VPX=${TLRENDER_VPX} \
@@ -82,6 +81,6 @@ cmd="./runme_nolog.sh
 	   -D TLRENDER_QT6=OFF \
 	   -D TLRENDER_QT5=OFF \
            -D TLRENDER_NDI=ON \
-           -D TLRENDER_NDI_SDK=/home/gga/code/lib/NDI_SDK_v5_Linux/NDI\ SDK\ for\ Linux/ \
+           -D TLRENDER_NDI_SDK='/home/gga/code/lib/NDI_SDK_v5_Linux/NDI_SDK_for_Linux/' \
             $params 2>&1 | tee $BUILD_DIR/compile.log"
 run_cmd $cmd

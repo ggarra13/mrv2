@@ -76,6 +76,14 @@ for i in $@; do
 	    export MRV2_DIST_RELEASE=1
 	    shift
 	    ;;
+	--ndi|-ndi)
+	    shift
+	    BUILD_ROOT=BUILD-${KERNEL}-${ARCH}-ndi
+	    ;;
+	--minimal|-minimal)
+	    shift
+	    BUILD_ROOT=BUILD-${KERNEL}-${ARCH}-minimal
+	    ;;
 	--build-dir|-build-dir|--dir|-dir|--root|-root)
 	    shift
 	    BUILD_ROOT=$1

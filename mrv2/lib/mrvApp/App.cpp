@@ -1002,7 +1002,7 @@ namespace mrv
         pathOptions.maxNumberDigits =
             p.settings->getValue<int>("Misc/MaxFileSequenceDigits");
 
-        if (!file::isReadable(fileName) && fileName != "ndi")
+        if (!file::isReadable(fileName) && fileName != ".ndi")
         {
             std::string err =
                 string::Format(_("Filename '{0}' does not exist or does not "
