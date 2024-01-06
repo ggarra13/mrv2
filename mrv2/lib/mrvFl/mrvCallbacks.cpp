@@ -91,6 +91,9 @@ namespace mrv
 #ifdef MRV2_NETWORK
         {_("Network"), (Fl_Callback*)network_panel_cb},
 #endif
+#ifdef TLRENDER_NDI
+        {_("NDI"), (Fl_Callback*)ndi_panel_cb},
+#endif
         {_("Playlist"), (Fl_Callback*)playlist_panel_cb},
 #ifdef MRV2_PYBIND11
         {_("Python"), (Fl_Callback*)python_panel_cb},

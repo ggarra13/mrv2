@@ -315,6 +315,8 @@ namespace mrv
                 hotkey = kToggleEnvironmentMap.hotkey();
             else if (tmp == "Waveform")
                 hotkey = kToggleWaveform.hotkey();
+            else if (tmp == "NDI")
+                hotkey = kToggleNDI.hotkey();
             else if (tmp == "Network")
                 hotkey = kToggleNetwork.hotkey();
             else if (tmp == "USD")
@@ -440,6 +442,15 @@ namespace mrv
                     item->clear();
             }
 #endif
+            else if (tmp == _("NDI"))
+            {
+#ifdef TLRENDER_NDI
+                if (ndiPanel)
+                    item->set();
+                else
+                    item->clear();
+#endif
+            }
             else if (tmp == _("Network"))
             {
 #ifdef MRV2_NETWORK
