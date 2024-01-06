@@ -120,6 +120,10 @@ if(TLRENDER_JPEG)
     add_definitions(-DTLRENDER_JPEG)
 endif()
 
+if(TLRENDER_NDI)
+    add_definitions(-DTLRENDER_NDI)
+endif()
+
 if(TLRENDER_NET)
     add_definitions(-DTLRENDER_NET)
 endif()
