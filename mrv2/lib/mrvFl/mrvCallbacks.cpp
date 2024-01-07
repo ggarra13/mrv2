@@ -539,6 +539,10 @@ namespace mrv
         if (panel::usdPanel)
             panel::usdPanel->save();
 #endif
+#ifdef TLRENDER_NDI
+        if (panel::ndiPanel)
+            panel::ndiPanel->save();
+#endif
         if (panel::stereo3DPanel)
             panel::stereo3DPanel->save();
 
