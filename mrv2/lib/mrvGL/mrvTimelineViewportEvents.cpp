@@ -1036,12 +1036,17 @@ namespace mrv
             {
                 if (Fl::event_alt())
                 {
+                    int idx = p.ui->uiPrefs->uiPrefsZoomSpeed->value();
+                    const float speedValues[] = {0.1f, 0.25f, 0.5f};
+                    const float speed = speedValues[idx];
+                    
                     int diff = p.event_x - p.last_x;
                     if (diff == 0)
                         return 1;
                     int dir = -1;
                     if (diff > 0)
                         dir = 1;
+            
                     if (dir != p.zoomDir)
                     {
                         p.viewPosMousePress.x = p.mousePos.x;
@@ -1049,7 +1054,7 @@ namespace mrv
                     p.zoomDir = dir;
                     p.last_x = p.event_x;
                     int dx = p.mousePos.x - p.viewPosMousePress.x;
-                    float factor = dx * viewZoom() / 500.0f;
+                    float factor = dx / 1500.0f * speed;
                     float zoom = viewZoom() + factor;
                     if (zoom < 0.01F)
                         zoom = 0.01F;
