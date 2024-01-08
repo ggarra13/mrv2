@@ -1051,6 +1051,7 @@ namespace mrv
                     {
                         p.viewPosMousePress.x = p.mousePos.x;
                     }
+                    
                     p.zoomDir = dir;
                     p.last_x = p.event_x;
                     int dx = p.mousePos.x - p.viewPosMousePress.x;
