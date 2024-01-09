@@ -81,6 +81,8 @@ cmd="./runme_nolog.sh
 	   -D TLRENDER_YASM=${TLRENDER_YASM} \
 	   -D TLRENDER_RAW=${TLRENDER_RAW} \
 	   -D TLRENDER_WAYLAND=${TLRENDER_WAYLAND} \
+           -D TLRENDER_NDI=ON \
+           -D TLRENDER_NDI_SDK='${NDI_SDK}' \
 	   -D TLRENDER_NET=${TLRENDER_NET} \
 	   -D TLRENDER_NFD=OFF \
 	   -D TLRENDER_PROGRAMS=OFF \
@@ -88,7 +90,5 @@ cmd="./runme_nolog.sh
 	   -D TLRENDER_TESTS=FALSE \
 	   -D TLRENDER_QT6=OFF \
 	   -D TLRENDER_QT5=OFF \
-           -D TLRENDER_NDI=ON \
-           -D TLRENDER_NDI_SDK='$NDI_SDK' \
             $params 2>&1 | tee $BUILD_DIR/compile.log"
 run_cmd $cmd

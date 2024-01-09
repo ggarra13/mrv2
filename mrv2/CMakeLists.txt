@@ -121,6 +121,7 @@ if(TLRENDER_JPEG)
 endif()
 
 if(TLRENDER_NDI)
+    message(FATAL_ERROR "NDI_SDK=${TLRENDER_NDI_SDK}")
     add_definitions(-DTLRENDER_NDI)
 endif()
 

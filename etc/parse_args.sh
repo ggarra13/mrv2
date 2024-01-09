@@ -29,7 +29,7 @@ show_help()
 
 parse_option()
 {
-    local input="$1"
+    local input="$@"
     # Use regular expressions to match the option and value
     if [[ "$input" =~ ^(-D)?(.+)=(.+)$ ]]; then
         local option="${BASH_REMATCH[2]}"
@@ -61,7 +61,7 @@ export CMAKE_BUILD_TYPE="Release"
 export CMAKE_GENERATOR="Ninja"
 export CMAKE_TARGET=""
 
-for i in $@; do
+for i in "$@"; do
     case $i in
 	release|Release)
 	    export CMAKE_BUILD_TYPE="Release"
