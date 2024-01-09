@@ -61,6 +61,14 @@ export TLRENDER_VPX=OFF
 export TLRENDER_WAYLAND=OFF
 export TLRENDER_YASM=OFF
 
+if [[ $KERNEL == *Linux* ]]; then
+    NDI_SDK="/home/gga/code/lib/NDI_SDK_v5_Linux/NDI_SDK_for_Linux/"
+elif [[ $KERNEL == *Msys* ]]; then
+    NDI_SDK="C:/Program\ Files/NDI/NDI\ 5\ SDK/"
+else
+    echo "Not done yet"
+fi
+
 cmd="./runme_nolog.sh 
            --ndi
 	   -D BUILD_PYTHON=${BUILD_PYTHON} \
@@ -81,6 +89,6 @@ cmd="./runme_nolog.sh
 	   -D TLRENDER_QT6=OFF \
 	   -D TLRENDER_QT5=OFF \
            -D TLRENDER_NDI=ON \
-           -D TLRENDER_NDI_SDK='/home/gga/code/lib/NDI_SDK_v5_Linux/NDI_SDK_for_Linux/' \
+           -D TLRENDER_NDI_SDK='$NDI_SDK' \
             $params 2>&1 | tee $BUILD_DIR/compile.log"
 run_cmd $cmd
