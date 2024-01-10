@@ -1,3 +1,10 @@
+v1.0.1
+======
+
+- Fixed relative paths function on Windows returning an empty path when the
+  path could not be made relative.
+- Made ALT + RMB zooming a tad less sensitive.
+
 v1.0.0
 ======
 

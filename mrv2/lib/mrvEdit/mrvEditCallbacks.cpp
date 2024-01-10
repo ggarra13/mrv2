@@ -722,6 +722,8 @@ namespace mrv
         fs::path directory = fs::absolute(fileName).parent_path();
         fs::path relative = fs::relative(filePath, directory);
         std::string file = relative.generic_string();
+        if (file.empty())
+            return path;
         return file::Path(file);
     }
 
