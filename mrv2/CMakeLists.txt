@@ -122,6 +122,7 @@ endif()
 
 if(TLRENDER_NDI)
     add_definitions(-DTLRENDER_NDI)
+    message(STATUS "NDI_SDK=${TLRENDER_NDI_SDK}")
 endif()
 
 if(TLRENDER_NET)
