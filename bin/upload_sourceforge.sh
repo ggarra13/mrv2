@@ -56,6 +56,7 @@ echo "DATE: ${date}"
 extract_version
 echo "mrv2 VERSION=$mrv2_VERSION"
 
+
 #
 # Go to packages directory
 #
@@ -129,8 +130,8 @@ HISTORY=../mrv2/docs/HISTORY.md
 # Find the line number of "v${mrv2_VERSION}" in the file
 start_line=$(grep -n "^v${mrv2_VERSION}" "$HISTORY" | cut -d':' -f1)
 
-# Find the line numbers of all "v0.*.*" occurrences in the file
-end_lines=$(grep -n "^v0\.[0-9]\+\.[0-9]\+" "$HISTORY" | cut -d':' -f1)
+# Find the line numbers of all "v*.*.*" occurrences in the file
+end_lines=$(grep -n "^v[0-9]\+\.[0-9]\+\.[0-9]\+" "$HISTORY" | cut -d':' -f1)
 
 # Convert the end_lines string into an array
 IFS=$'\n' read -rd '' -a end_lines <<< "$end_lines"
