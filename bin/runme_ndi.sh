@@ -20,7 +20,7 @@
 #
 # Store the parameters for passing them later
 #
-params=$*
+params="$@"
 
 #
 # Find out our build dir
@@ -70,7 +70,6 @@ else
 fi
 
 cmd="./runme_nolog.sh 
-           --ndi
 	   -D BUILD_PYTHON=${BUILD_PYTHON} \
 	   -D MRV2_PYFLTK=${MRV2_PYFLTK} \
 	   -D MRV2_PYBIND11=${MRV2_PYBIND11} \

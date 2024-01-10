@@ -53,6 +53,12 @@ fi
 
 BUILD_ROOT=BUILD-$KERNEL-$ARCH
 
+if [[ $KERNEL == *Msys* ]]; then
+    get_msvc_version
+    echo "MSVC_VERSION=$MSVC_VERSION"
+    BUILD_ROOT=$BUILD_ROOT-$MSVC_VERSION
+fi
+
 export MRV2_DIST_RELEASE=0
 export FFMPEG_GPL=$FFMPEG_GPL
 CLEAN_DIR=0
@@ -78,11 +84,11 @@ for i in "$@"; do
 	    ;;
 	--ndi|-ndi)
 	    shift
-	    BUILD_ROOT=BUILD-${KERNEL}-${ARCH}-ndi
+	    BUILD_ROOT=${BUILD_ROOT}-ndi
 	    ;;
 	--minimal|-minimal)
 	    shift
-	    BUILD_ROOT=BUILD-${KERNEL}-${ARCH}-minimal
+	    BUILD_ROOT=${BUILD_ROOT}-minimal
 	    ;;
 	--build-dir|-build-dir|--dir|-dir|--root|-root)
 	    shift
