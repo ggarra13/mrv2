@@ -1055,7 +1055,7 @@ namespace mrv
                     p.zoomDir = dir;
                     p.last_x = p.event_x;
                     int dx = p.mousePos.x - p.viewPosMousePress.x;
-                    float factor = dx / 1500.0f * speed;
+                    float factor = dx / 2500.0f * speed;
                     float zoom = viewZoom() + factor;
                     if (zoom < 0.01F)
                         zoom = 0.01F;
