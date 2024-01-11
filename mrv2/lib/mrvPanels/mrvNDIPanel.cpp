@@ -266,6 +266,8 @@ namespace mrv
             }
         }
 
+        // @todo: this does not work.  Options are used only when
+        //        opening a file, not on changing on the fly.
         void NDIPanel::_update()
         {
             TLRENDER_P();
