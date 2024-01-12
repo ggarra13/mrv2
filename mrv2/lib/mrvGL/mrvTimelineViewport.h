@@ -415,6 +415,8 @@ namespace mrv
 
         bool _hasSecondaryViewport() const noexcept;
 
+        float _getZoomSpeedValue() const noexcept;
+        
         TLRENDER_PRIVATE();
     };
 } // namespace mrv
