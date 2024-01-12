@@ -1338,7 +1338,8 @@ namespace mrv
                     item->audioOffset = mrvTimelinePlayer->audioOffset();
 
                     // Add the new file to recent files, unless it is an EDL.
-                    if (!isTemporaryEDL(item->path))
+                    if (!isTemporaryEDL(item->path) &&
+                        !file::isTemporaryNDI(item->path))
                     {
                         const std::string& file = item->path.get();
                         p.settings->addRecentFile(file);

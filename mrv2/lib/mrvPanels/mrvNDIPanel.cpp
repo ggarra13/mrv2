@@ -16,6 +16,7 @@
 #    include <Processing.NDI.Lib.h>
 
 #    include "mrvCore/mrvHome.h"
+#    include "mrvCore/mrvFile.h"
 
 #    include "mrvWidgets/mrvFunctional.h"
 #    include "mrvWidgets/mrvButton.h"
@@ -291,7 +292,7 @@ namespace mrv
             TLRENDER_P();
             MRV2_R();
             
-            std::string ndiFile = mrv::tmppath() + "/test.ndi";
+            std::string ndiFile = file::NDI(p.ui);
             std::ofstream s(ndiFile);
 
             const Fl_Menu_Item* item = r.source->mvalue();

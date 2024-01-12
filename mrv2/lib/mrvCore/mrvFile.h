@@ -9,6 +9,9 @@ namespace fs = std::filesystem;
 
 #include <tlCore/Path.h>
 
+
+class ViewerUI;
+
 namespace mrv
 {
     namespace file
@@ -95,6 +98,13 @@ namespace mrv
          * @return true if it exists and is readable, false if not.
          */
         bool isReadable(const fs::path& p);
+        
+        
+        //! Returns an NDI filename for the current process
+        std::string NDI(ViewerUI* ui);
+        
+        //! Returns true or false whether the filename is a temporary NDI file.
+        bool isTemporaryNDI(const tl::file::Path& path);
 
     } // namespace file
 

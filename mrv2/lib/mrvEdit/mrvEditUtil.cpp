@@ -23,6 +23,7 @@ namespace mrv
         return false;
     }
 
+    
     bool isTemporaryEDL(const file::Path& path)
     {
         const std::string tmpdir = tmppath() + '/';
@@ -37,7 +38,7 @@ namespace mrv
         }
         return true;
     }
-
+    
     void removeTemporaryEDLs(ViewerUI* ui)
     {
         const std::string directory = tmppath();
