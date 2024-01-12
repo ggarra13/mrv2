@@ -177,9 +177,7 @@ namespace mrv
 
                 if (Fl::event_shift() && _isEnvironmentMap())
                 {
-                    int idx = p.ui->uiPrefs->uiPrefsZoomSpeed->value();
-                    const float speedValues[] = {0.1f, 0.25f, 0.5f};
-                    float speed = speedValues[idx];
+                    const float speed = _getZoomSpeedValue();
                     auto o = p.environmentMapOptions;
                     o.focalLength += dx * speed;
                     p.mousePress = pos;
@@ -707,9 +705,7 @@ namespace mrv
 
             if (Fl::event_shift())
             {
-                int idx = p.ui->uiPrefs->uiPrefsZoomSpeed->value();
-                const float speedValues[] = {0.1f, 0.25f, 0.5f};
-                float speed = speedValues[idx];
+                const float speed = _getZoomSpeedValue();
                 auto o = p.environmentMapOptions;
                 o.focalLength += dx * speed;
                 p.mousePress = pos;
@@ -899,7 +895,6 @@ namespace mrv
                 if (Fl::event_alt())
                 {
                     p.last_x = p.event_x;
-                    p.viewPosMousePress = p.mousePress;
                     return 1;
                 }
 
@@ -1036,32 +1031,31 @@ namespace mrv
             {
                 if (Fl::event_alt())
                 {
-                    int idx = p.ui->uiPrefs->uiPrefsZoomSpeed->value();
-                    const float speedValues[] = {0.1f, 0.25f, 0.5f};
-                    const float speed = speedValues[idx];
+                    const float speed = _getZoomSpeedValue() / 4.0F;
                     
-                    int diff = p.event_x - p.last_x;
-                    if (diff == 0)
+                    int dx = p.last_x - p.event_x;
+                    if (dx == 0)
                         return 1;
-                    int dir = -1;
-                    if (diff > 0)
-                        dir = 1;
-            
-                    if (dir != p.zoomDir)
-                    {
-                        p.viewPosMousePress.x = p.mousePos.x;
-                    }
-                    
-                    p.zoomDir = dir;
                     p.last_x = p.event_x;
-                    int dx = p.mousePos.x - p.viewPosMousePress.x;
-                    float factor = dx / 2500.0f * speed;
-                    float zoom = viewZoom() + factor;
+                    
+                    float change = 1.0;
+                    float factor = dx * speed;
+                    if (dx > 0)
+                    {
+                        change += factor;
+                        change = 1.0f / change;
+                    }
+                    else
+                    {
+                        change -= factor;
+                    }
+                    float zoom = viewZoom() * change;
                     if (zoom < 0.01F)
                         zoom = 0.01F;
                     else if (zoom > 120.F)
                         zoom = 120.F;
-                    setViewZoom(zoom, p.mousePos);
+                    
+                    setViewZoom(zoom, p.mousePress);
                 }
             }
             _updateCoords();
@@ -1071,9 +1065,7 @@ namespace mrv
         case FL_MOUSEWHEEL:
         {
             float dy = Fl::event_dy();
-            int idx = p.ui->uiPrefs->uiPrefsZoomSpeed->value();
-            const float speedValues[] = {0.1f, 0.25f, 0.5f};
-            const float speed = speedValues[idx];
+            const float speed = _getZoomSpeedValue();
             if (_isEnvironmentMap())
             {
                 auto o = _p->environmentMapOptions;
@@ -1101,7 +1093,8 @@ namespace mrv
                     {
                         change -= dy * speed;
                     }
-                    setViewZoom(viewZoom() * change, _getFocus());
+                    float zoom = viewZoom() * change;
+                    setViewZoom(zoom, _getFocus());
                 }
             }
             return 1;
