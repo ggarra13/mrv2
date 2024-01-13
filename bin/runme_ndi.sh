@@ -67,6 +67,7 @@ elif [[ $KERNEL == *Msys* ]]; then
     NDI_SDK="C:/Program\ Files/NDI/NDI\ 5\ SDK/"
 else
     echo "Not done yet"
+    exit 1
 fi
 
 cmd="./runme_nolog.sh 
