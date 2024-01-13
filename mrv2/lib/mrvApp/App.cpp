@@ -1229,18 +1229,12 @@ namespace mrv
                     timeline::Timeline::create(otioTimeline, _context, options);
 
                 timeline::PlayerOptions playerOptions;
-                playerOptions.cache.readAhead = _cacheReadAhead();
-                playerOptions.cache.readBehind = _cacheReadBehind();
-
-                playerOptions.timerMode = static_cast<timeline::TimerMode>(
-                    p.settings->getValue<int>("Performance/TimerMode"));
-                playerOptions.audioBufferFrameCount = p.settings->getValue<int>(
-                    "Performance/AudioBufferFrameCount");
+                _playerOptions(playerOptions, item);
                 if (item->init)
                 {
                     playerOptions.currentTime = items[0]->currentTime;
                 }
-
+                
                 auto player =
                     timeline::Player::create(timeline, _context, playerOptions);
 
@@ -1259,6 +1253,24 @@ namespace mrv
         panel::refreshThumbnails();
     }
 
+    void App::_playerOptions(timeline::PlayerOptions& playerOptions,
+                             const std::shared_ptr<FilesModelItem>& item)
+    {
+        TLRENDER_P();
+
+        playerOptions.cache.readAhead = _cacheReadAhead();
+        playerOptions.cache.readBehind = _cacheReadBehind();
+
+        playerOptions.timerMode = static_cast<timeline::TimerMode>(
+            p.settings->getValue<int>("Performance/TimerMode"));
+        playerOptions.audioBufferFrameCount = p.settings->getValue<int>(
+            "Performance/AudioBufferFrameCount");
+        // if (file::isTemporaryNDI(item->path))
+        // {
+        //     playerOptions.timerMode = timeline::TimerMode::Audio;
+        // }
+    }
+    
     void App::_activeCallback(
         const std::vector<std::shared_ptr<FilesModelItem> >& items)
     {
@@ -1318,18 +1330,11 @@ namespace mrv
                     timeline::Timeline::create(otioTimeline, _context, options);
 
                 timeline::PlayerOptions playerOptions;
-                playerOptions.cache.readAhead = _cacheReadAhead();
-                playerOptions.cache.readBehind = _cacheReadBehind();
-
-                playerOptions.timerMode = static_cast<timeline::TimerMode>(
-                    p.settings->getValue<int>("Performance/TimerMode"));
-                playerOptions.audioBufferFrameCount = p.settings->getValue<int>(
-                    "Performance/AudioBufferFrameCount");
+                _playerOptions(playerOptions, item);
                 if (item->init)
                 {
                     playerOptions.currentTime = items[0]->currentTime;
                 }
-
                 auto player =
                     timeline::Player::create(timeline, _context, playerOptions);
 

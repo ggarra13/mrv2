@@ -48,23 +48,23 @@ echo "Saving compile log to $BUILD_DIR/compile.log ..."
 #
 # These are some of the expensive mrv2 options
 #
-export BUILD_PYTHON=OFF
-export MRV2_PYFLTK=OFF
-export MRV2_PYBIND11=OFF
-export MRV2_NETWORK=OFF
-export MRV2_PDF=OFF
+export BUILD_PYTHON=ON
+export MRV2_PYFLTK=ON
+export MRV2_PYBIND11=ON
+export MRV2_NETWORK=ON
+export MRV2_PDF=ON
 
 #
 # These are some of the expensive TLRENDER options
 #
 
 export TLRENDER_ASAN=OFF # asan memory debugging (not yet working)
-export TLRENDER_NET=OFF
-export TLRENDER_RAW=OFF
-export TLRENDER_USD=OFF
-export TLRENDER_VPX=OFF
-export TLRENDER_WAYLAND=OFF
-export TLRENDER_YASM=OFF
+export TLRENDER_NET=ON
+export TLRENDER_RAW=ON
+export TLRENDER_USD=ON
+export TLRENDER_VPX=ON
+export TLRENDER_WAYLAND=ON
+export TLRENDER_YASM=ON
 
 if [[ $KERNEL == *Linux* ]]; then
     NDI_SDK="/home/gga/code/lib/NDI_SDK_v5_Linux/NDI_SDK_for_Linux/"

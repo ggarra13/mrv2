@@ -12,6 +12,7 @@
 #    include <tlCore/StringFormat.h>
 
 #    include <FL/Fl_Choice.H>
+#    include <FL/Fl_Check_Button.H>
 
 #    include <Processing.NDI.Lib.h>
 
@@ -44,6 +45,7 @@ namespace mrv
         struct NDIPanel::Private
         {
             Fl_Choice* source = nullptr;
+            Fl_Check_Button* noAudio = nullptr;
 
             NDIlib_find_instance_t NDI_find = nullptr;
             
@@ -234,9 +236,15 @@ namespace mrv
                         });
             }
             
+                
             Y += 44;
 
-
+            auto cW = new Widget< Fl_Check_Button >(
+                g->x() + 60, Y, g->w() - 60, 20, _("No Audio"));
+            Fl_Check_Button* c = _r->noAudio = cW;
+            c->labelsize(12);
+            c->align(FL_ALIGN_LEFT);
+            c->value(0);
             
             bg->end();
 
@@ -265,10 +273,11 @@ namespace mrv
             
             std::ofstream s(ndiFile);
             s << sourceName << std::endl;
+            s << r.noAudio->value() << std::endl;
             s.close();
 
             open_file_cb(ndiFile, p.ui);
-            std::this_thread::sleep_for(std::chrono::seconds(5));
+            //std::this_thread::sleep_for(std::chrono::seconds(5));
         }
 
     } // namespace panel
