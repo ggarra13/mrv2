@@ -22,6 +22,11 @@
 #
 params="$@"
 
+if [[ $params != *"-ndi"* ]]; then
+    echo "Please pass the -ndi flag to this script"
+    exit 1
+fi
+
 #
 # Find out our build dir
 #
