@@ -64,9 +64,6 @@ namespace mrv
             // @todo:
             // Fl_SVG_Image* svg = load_svg("NDI.svg");
             // g->image(svg);
-            
-            if(!NDIlib_initialize())
-                throw std::runtime_error(_("Could not initialize NDI"));
 
             r.NDI_find = NDIlib_find_create_v2();
             if (!r.NDI_find)
@@ -84,9 +81,10 @@ namespace mrv
                         
                             uint32_t no_sources = 0;
                             const NDIlib_source_t* p_sources = NULL;
-                    
+
                             using namespace std::chrono;
-                            for (const auto start = high_resolution_clock::now(); high_resolution_clock::now() - start < seconds(10);)
+                            for (const auto start = high_resolution_clock::now();
+                                 high_resolution_clock::now() - start < seconds(10);)
                             {
                                 // Wait up till 1 second to check for new sources to be added or removed
                                 if (!NDIlib_find_wait_for_sources(r.NDI_find, 1000 /* milliseconds */)) {
@@ -96,7 +94,7 @@ namespace mrv
                             }
 
 
-                            while (!no_sources)
+                            while (!no_sources && r.running)
                             {
                                 // Get the updated list of sources
                                 p_sources = NDIlib_find_get_current_sources(r.NDI_find, &no_sources);
@@ -166,7 +164,7 @@ namespace mrv
         NDIPanel::~NDIPanel()
         {
             MRV2_R();
-
+            
             r.running = false;
             if (r.thread.joinable())
                 r.thread.join();
@@ -228,29 +226,15 @@ namespace mrv
                 m->labelsize(12);
                 m->align(FL_ALIGN_LEFT);
                 mW->callback(
-                    [=](auto o)
+                    [this](auto o)
                         {
-                            _update();
-                            _open_ndi();
+                            const Fl_Menu_Item* item = o->mvalue();
+                            if (!item) return;
+                            _open_ndi(item);
                         });
             }
             
             Y += 44;
-            
-            auto bW = new Widget< Fl_Button >(
-                g->x() + 60, Y, g->w() - 60, 20, _("Refresh Sources"));
-            b = bW;
-            b->labelsize(12);
-            b->align(FL_ALIGN_CENTER|FL_ALIGN_INSIDE);
-            b->box(FL_UP_BOX);
-
-            bW->callback(
-                [=](auto o)
-                {
-                    refresh();
-                });
-
-            Y += 22;
 
 
             
@@ -266,43 +250,25 @@ namespace mrv
                 cg->close();
             }
         }
-
-        // @todo: this does not work.  Options are used only when
-        //        opening a file, not on changing on the fly.
-        void NDIPanel::_update()
-        {
-            TLRENDER_P();
-            MRV2_R();
-
-            auto player = p.ui->uiView->getTimelinePlayer();
-            if (!player)
-                return;
-
-            const Fl_Menu_Item* item = r.source->mvalue();
-            const std::string sourceName = item->label();
-            
-            io::Options ioOptions;
-            ioOptions["NDI/SourceName"] = string::Format("{0}").arg(sourceName);
-            
-            player->setIOOptions(ioOptions);
-        }
         
-        void NDIPanel::_open_ndi()
+        void NDIPanel::_open_ndi(const Fl_Menu_Item* item)
         {
             TLRENDER_P();
             MRV2_R();
-            
-            std::string ndiFile = file::NDI(p.ui);
-            std::ofstream s(ndiFile);
 
-            const Fl_Menu_Item* item = r.source->mvalue();
+            // Get the NDI name from the menu item
             const std::string sourceName = item->label();
+            LOG_INFO("Opened stream " << sourceName);
+
+            // Create an ndi file 
+            std::string ndiFile = file::NDI(p.ui);
+            
+            std::ofstream s(ndiFile);
             s << sourceName << std::endl;
             s.close();
 
-            std::vector<std::string> ndiFiles;
-            ndiFiles.push_back(ndiFile);
-            open_files_cb(ndiFiles, p.ui);
+            open_file_cb(ndiFile, p.ui);
+            std::this_thread::sleep_for(std::chrono::seconds(5));
         }
 
     } // namespace panel

@@ -53,11 +53,11 @@ fi
 
 BUILD_ROOT=BUILD-$KERNEL-$ARCH
 
-if [[ $KERNEL == *Msys* ]]; then
-    get_msvc_version
-    echo "MSVC_VERSION=$MSVC_VERSION"
-    BUILD_ROOT=$BUILD_ROOT-$MSVC_VERSION
-fi
+# if [[ $KERNEL == *Msys* ]]; then
+#     get_msvc_version
+#     echo "MSVC_VERSION=$MSVC_VERSION"
+#     BUILD_ROOT=$BUILD_ROOT-$MSVC_VERSION
+# fi
 
 export MRV2_DIST_RELEASE=0
 export FFMPEG_GPL=$FFMPEG_GPL

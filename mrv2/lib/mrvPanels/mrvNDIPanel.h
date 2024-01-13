@@ -7,6 +7,7 @@
 #include "mrvPanelWidget.h"
 
 class ViewerUI;
+class Fl_Menu_Item;
 
 namespace mrv
 {
@@ -22,8 +23,7 @@ namespace mrv
             void add_controls() override;
 
         protected:
-            void _update();
-            void _open_ndi();
+            void _open_ndi(const Fl_Menu_Item*);
             
         private:
             MRV2_PRIVATE();

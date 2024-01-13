@@ -5,6 +5,8 @@ v1.0.1
   path could not be made relative.
 - Made ALT + RMB zooming a tad less sensitive.
 - Fixed ALT + RMB zooming sliding incorrectly.
+- Improved speed on exiting the application.
+
 
 v1.0.0
 ======

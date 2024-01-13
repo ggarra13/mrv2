@@ -79,6 +79,10 @@ namespace py = pybind11;
 
 #include "mrvFl/mrvIO.h"
 
+#ifdef TLRENDER_NDI
+#    include <Processing.NDI.Lib.h>
+#endif
+
 namespace
 {
     const char* kModule = "app";
@@ -578,6 +582,11 @@ namespace mrv
             static_cast<int>(p.options.usdDiskCache * memory::gigabyte));
 #endif // TLRENDER_USD
 
+#ifdef TLRENDER_NDI
+        if(!NDIlib_initialize())
+            throw std::runtime_error(_("Could not initialize NDI"));
+#endif
+            
         p.volume = p.settings->getValue<float>("Audio/Volume");
         p.mute = p.settings->getValue<bool>("Audio/Mute");
 
@@ -805,6 +814,12 @@ namespace mrv
     {
         TLRENDER_P();
 
+
+#ifdef TLRENDER_NDI
+        // Not required, but nice
+        NDIlib_destroy();
+#endif
+        
         delete p.mainControl;
         p.mainControl = nullptr;
 
@@ -1002,7 +1017,7 @@ namespace mrv
         pathOptions.maxNumberDigits =
             p.settings->getValue<int>("Misc/MaxFileSequenceDigits");
 
-        if (!file::isReadable(fileName) && fileName != ".ndi")
+        if (!file::isReadable(fileName))
         {
             std::string err =
                 string::Format(_("Filename '{0}' does not exist or does not "
@@ -1326,16 +1341,18 @@ namespace mrv
                 {
                     item->init = true;
                     item->speed = mrvTimelinePlayer->speed();
-                    if (ui->uiPrefs->uiPrefsAutoPlayback->value())
-                    {
-                        mrvTimelinePlayer->setPlayback(
-                            timeline::Playback::Forward);
-                    }
                     item->playback = mrvTimelinePlayer->playback();
                     item->loop = mrvTimelinePlayer->loop();
                     item->currentTime = mrvTimelinePlayer->currentTime();
                     item->inOutRange = mrvTimelinePlayer->inOutRange();
                     item->audioOffset = mrvTimelinePlayer->audioOffset();
+
+                    bool autoPlayback = ui->uiPrefs->uiPrefsAutoPlayback->value();
+                    if (autoPlayback)
+                    {
+                        mrvTimelinePlayer->setPlayback(
+                            timeline::Playback::Forward);
+                    }
 
                     // Add the new file to recent files, unless it is an EDL.
                     if (!isTemporaryEDL(item->path) &&
@@ -1344,6 +1361,7 @@ namespace mrv
                         const std::string& file = item->path.get();
                         p.settings->addRecentFile(file);
                     }
+
                 }
                 else if (0 == i)
                 {

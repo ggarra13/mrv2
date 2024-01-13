@@ -159,6 +159,12 @@ namespace mrv
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
+    void open_file_cb(const std::string& file, ViewerUI* ui)
+    {
+        ui->app->open(file);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+    
     void open_cb(Fl_Widget* w, ViewerUI* ui)
     {
         const std::vector<std::string>& files = open_image_file(NULL, true);
@@ -485,17 +491,21 @@ namespace mrv
         if (ui->uiPrefs->SendMedia->value())
             tcp->pushMessage("closeAll", 0);
 
+        std::cerr << __LINE__ << std::endl;
         auto model = ui->app->filesModel();
+        std::cerr << __LINE__ << " model=" << model << std::endl;
         model->closeAll();
 
+        std::cerr << __LINE__ << std::endl;
         ui->uiMain->fill_menu(ui->uiMenuBar);
 
+        std::cerr << __LINE__ << std::endl;
         reset_timeline(ui);
+        std::cerr << __LINE__ << std::endl;
     }
 
     void exit_cb(Fl_Widget* w, ViewerUI* ui)
     {
-
         tcp->lock();
 
         ui->uiView->stop();
@@ -539,10 +549,10 @@ namespace mrv
         if (panel::usdPanel)
             panel::usdPanel->save();
 #endif
-#ifdef TLRENDER_NDI
-        if (panel::ndiPanel)
-            panel::ndiPanel->save();
-#endif
+// #ifdef TLRENDER_NDI
+//         if (panel::ndiPanel)
+//             panel::ndiPanel->save();
+// #endif
         if (panel::stereo3DPanel)
             panel::stereo3DPanel->save();
 
@@ -579,9 +589,13 @@ namespace mrv
         delete panel::networkPanel;
         panel::networkPanel = nullptr;
 #endif
+#ifdef TLRENDER_NDI
+        delete panel::ndiPanel;
+        panel::ndiPanel = nullptr;
+#endif
 
         // Close all files
-        close_all_cb(w, ui);
+        // close_all_cb(w, ui);  // takes too long to exit .ndi files
 
         // Hide any GL Window (needed in Windows)
         Fl_Window* pw = Fl::first_window();
