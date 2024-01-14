@@ -21,6 +21,7 @@
 
 #    include "mrvWidgets/mrvFunctional.h"
 #    include "mrvWidgets/mrvButton.h"
+#    include "mrvWidgets/mrvSpinner.h"
 #    include "mrvWidgets/mrvCollapsibleGroup.h"
 
 #    include "mrvPanels/mrvPanelsCallbacks.h"
@@ -46,6 +47,7 @@ namespace mrv
         {
             Fl_Choice* source = nullptr;
             Fl_Check_Button* noAudio = nullptr;
+            Spinner*         preroll = nullptr;
 
             NDIlib_find_instance_t NDI_find = nullptr;
 
@@ -189,7 +191,7 @@ namespace mrv
             const std::string& prefix = tab_prefix();
 
             Fl_Group* bg;
-            Fl_Spinner* sp;
+            Spinner* sp;
             std_any value;
             int open;
 
@@ -242,8 +244,19 @@ namespace mrv
             }
             
                 
-            Y += 44;
+            Y += 22;
 
+            auto spW = new Widget< Spinner >(
+                g->x() + 60, Y, g->w() - 60, 20, _("Preroll"));
+            sp = _r->preroll = spW;
+            sp->step(1);
+            sp->range(1, 10);
+            sp->tooltip(_("Preroll in seconds"));
+            sp->value(3);
+            
+            Y += 22;
+
+            
             auto cW = new Widget< Fl_Check_Button >(
                 g->x() + 60, Y, g->w() - 60, 20, _("No Audio"));
             Fl_Check_Button* c = _r->noAudio = cW;
@@ -268,7 +281,6 @@ namespace mrv
         {
             TLRENDER_P();
             MRV2_R();
-            std::cerr << __LINE__ << std::endl;
 
             // Get the NDI name from the menu item
             const std::string sourceName = item->label();
@@ -292,8 +304,10 @@ namespace mrv
                 r.playThread = std::thread(
                     [this, player]
                         {
+                            MRV2_R();
+                            
                             // Sleep so the cache fills up
-                            int seconds = 5;
+                            int seconds = r.preroll->value();
                             std::this_thread::sleep_for(
                                 std::chrono::seconds(seconds));
                             player->start();
