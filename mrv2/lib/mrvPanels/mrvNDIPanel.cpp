@@ -273,11 +273,10 @@ namespace mrv
             
             std::ofstream s(ndiFile);
             s << sourceName << std::endl;
-            s << r.noAudio->value() << std::endl;
+            s << (int)r.noAudio->value() << std::endl;
             s.close();
 
             open_file_cb(ndiFile, p.ui);
-            //std::this_thread::sleep_for(std::chrono::seconds(5));
         }
 
     } // namespace panel
