@@ -71,8 +71,7 @@ if [[ $KERNEL == *Linux* ]]; then
 elif [[ $KERNEL == *Msys* ]]; then
     NDI_SDK="C:/Program\ Files/NDI/NDI\ 5\ SDK/"
 else
-    echo "Not done yet"
-    exit 1
+    NDI_SDK="/Library/NDI\ SDK\ for\ Apple/"
 fi
 
 cmd="./runme_nolog.sh 
