@@ -268,6 +268,7 @@ namespace mrv
         {
             TLRENDER_P();
             MRV2_R();
+            std::cerr << __LINE__ << std::endl;
 
             // Get the NDI name from the menu item
             const std::string sourceName = item->label();
@@ -286,22 +287,17 @@ namespace mrv
             auto player = p.ui->uiView->getTimelinePlayer();
             if (player)
             {
-                LOG_INFO("Waiting for cache to fill up...");
-                std::cerr << "stopping player..." << std::endl;
+                LOG_INFO("Waiting for player cache to fill up...");
                 player->stop();
                 r.playThread = std::thread(
                     [this, player]
                         {
                             // Sleep so the cache fills up
                             int seconds = 5;
-                            std::cerr << "go to sleep for " << seconds
-                                      << " seconds..." << std::endl;
                             std::this_thread::sleep_for(
                                 std::chrono::seconds(seconds));
-                            std::cerr << "wake up..." << std::endl;
                             player->start();
                             player->forward();
-                            std::cerr << "exit..." << std::endl;
                         });
             }
         }
