@@ -48,8 +48,10 @@ namespace mrv
             Fl_Check_Button* noAudio = nullptr;
 
             NDIlib_find_instance_t NDI_find = nullptr;
+
+            std::thread playThread;
             
-            std::thread thread;
+            std::thread findThread;
             std::mutex mutex;
             std::atomic<bool> running = false;
         };
@@ -72,7 +74,7 @@ namespace mrv
                 LOG_ERROR("Could not create NDI find");
                         
             // Run for one minute
-            r.thread = std::thread(
+            r.findThread = std::thread(
                     [this]
                     {
                         MRV2_R();
@@ -168,8 +170,11 @@ namespace mrv
             MRV2_R();
             
             r.running = false;
-            if (r.thread.joinable())
-                r.thread.join();
+            if (r.findThread.joinable())
+                r.findThread.join();
+            
+            if (r.playThread.joinable())
+                r.playThread.join();
             
             NDIlib_find_destroy(r.NDI_find);
             r.NDI_find = nullptr; 
@@ -277,6 +282,28 @@ namespace mrv
             s.close();
 
             open_file_cb(ndiFile, p.ui);
+
+            auto player = p.ui->uiView->getTimelinePlayer();
+            if (player)
+            {
+                LOG_INFO("Waiting for cache to fill up...");
+                std::cerr << "stopping player..." << std::endl;
+                player->stop();
+                r.playThread = std::thread(
+                    [this, player]
+                        {
+                            // Sleep so the cache fills up
+                            int seconds = 5;
+                            std::cerr << "go to sleep for " << seconds
+                                      << " seconds..." << std::endl;
+                            std::this_thread::sleep_for(
+                                std::chrono::seconds(seconds));
+                            std::cerr << "wake up..." << std::endl;
+                            player->start();
+                            player->forward();
+                            std::cerr << "exit..." << std::endl;
+                        });
+            }
         }
 
     } // namespace panel
