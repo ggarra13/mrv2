@@ -22,16 +22,12 @@
 #
 params="$@"
 
-if [[ $params != *"-ndi"* ]]; then
-    echo "Please pass the -ndi flag to this script"
-    exit 1
-fi
-
 #
 # Find out our build dir
 #
 . etc/build_dir.sh
 
+export BUILD_DIR=BUILD-$KERNEL-$ARCH-ndi/Release
 mkdir -p $BUILD_DIR
 
 
@@ -59,6 +55,7 @@ export MRV2_PDF=ON
 #
 
 export TLRENDER_ASAN=OFF # asan memory debugging (not yet working)
+export TLRENDER_NDI=ON
 export TLRENDER_NET=ON
 export TLRENDER_RAW=ON
 export TLRENDER_USD=ON
@@ -67,34 +64,13 @@ export TLRENDER_WAYLAND=ON
 export TLRENDER_YASM=ON
 
 if [[ $KERNEL == *Linux* ]]; then
-    NDI_SDK="/home/gga/code/lib/NDI_SDK_v5_Linux/NDI_SDK_for_Linux/"
+    export TLRENDER_NDI_SDK="/home/gga/code/lib/NDI_SDK_v5_Linux/NDI_SDK_for_Linux/"
 elif [[ $KERNEL == *Msys* ]]; then
-    NDI_SDK="C:/Program\ Files/NDI/NDI\ 5\ SDK/"
+    export TLRENDER_NDI_SDK="C:/Program\ Files/NDI/NDI\ 5\ SDK/"
 else
     echo "Not done yet"
     exit 1
 fi
 
-cmd="./runme_nolog.sh 
-	   -D BUILD_PYTHON=${BUILD_PYTHON} \
-	   -D MRV2_PYFLTK=${MRV2_PYFLTK} \
-	   -D MRV2_PYBIND11=${MRV2_PYBIND11} \
-	   -D MRV2_NETWORK=${MRV2_NETWORK} \
-	   -D MRV2_PDF=${MRV2_PDF} \
-           -D TLRENDER_FFMPEG=ON \
-           -D TLRENDER_NDI=ON \
-           -D TLRENDER_NDI_SDK='${NDI_SDK}' \
-	   -D TLRENDER_NET=${TLRENDER_NET} \
-	   -D TLRENDER_NFD=OFF \
-	   -D TLRENDER_PROGRAMS=OFF \
-	   -D TLRENDER_EXAMPLES=FALSE \
-	   -D TLRENDER_TESTS=FALSE \
-	   -D TLRENDER_YASM=${TLRENDER_YASM} \
-	   -D TLRENDER_QT6=OFF \
-	   -D TLRENDER_QT5=OFF \
-	   -D TLRENDER_RAW=${TLRENDER_RAW} \
-	   -D TLRENDER_USD=${TLRENDER_USD} \
-	   -D TLRENDER_VPX=${TLRENDER_VPX} \
-	   -D TLRENDER_WAYLAND=${TLRENDER_WAYLAND} \
-            $params 2>&1 | tee $BUILD_DIR/compile.log"
+cmd="./runme_nolog.sh -ndi $params 2>&1 | tee $BUILD_DIR/compile.log"
 run_cmd $cmd
