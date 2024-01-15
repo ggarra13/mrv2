@@ -45,25 +45,94 @@ namespace mrv
 
         struct NDIPanel::Private
         {
-            Fl_Choice* source = nullptr;
+            PopupMenu* source = nullptr;
             Fl_Check_Button* noAudio = nullptr;
             Spinner*         preroll = nullptr;
 
             NDIlib_find_instance_t NDI_find = nullptr;
+            uint32_t no_sources = 0;
+            const NDIlib_source_t* p_sources = NULL;
 
             std::thread playThread;
             
             std::thread findThread;
-            std::mutex mutex;
             std::atomic<bool> running = false;
         };
 
+
+        void NDIPanel::refresh_sources_cb(void* v)
+        {
+            NDIPanel* self = (NDIPanel*) v;
+            self->refresh_sources();
+        }
         
+        void NDIPanel::refresh_sources()   
+        {
+            MRV2_R();
+                                
+            PopupMenu* m = r.source;
+            if (!m) return;
+
+            if (m->popped())
+                return;
+
+            std::string sourceName;
+            int selected = m->value();
+            bool changed = false;
+            if (r.no_sources != m->children())
+            {
+                changed = true;
+            }
+            else
+            {
+                const Fl_Menu_Item* item = nullptr;
+                if (selected >= 0 && selected < m->size())
+                {
+                    item = m->child(selected);
+                    if (item->label())
+                        sourceName = item->label();
+                }
+                for (int i = 0; i < r.no_sources; ++i)
+                {
+                    item = m->child(i);
+                    if (item->label() &&
+                        !strcmp(item->label(), r.p_sources[i].p_ndi_name))
+                    {
+                        changed = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!changed || !r.p_sources)
+                return;
+
+            m->clear();
+            int idx = 0;
+            for (int i = 0; i < r.no_sources; ++i)
+            {
+                if (r.p_sources[i].p_ndi_name)
+                {
+                    const std::string ndiName = r.p_sources[i].p_ndi_name;
+                    m->add(ndiName.c_str());
+                    if (sourceName == ndiName)
+                        selected = idx;
+                    ++idx;
+                }
+            }
+            m->menu_end();
+            if (selected >= 0 && selected < m->size())
+                m->value(selected);
+
+        }
+                                
         NDIPanel::NDIPanel(ViewerUI* ui) :
             _r(new Private),
             PanelWidget(ui)
         {
             MRV2_R();
+
+            Fl::lock(); // needed
             
             add_group("NDI");
 
@@ -71,9 +140,11 @@ namespace mrv
             // Fl_SVG_Image* svg = load_svg("NDI.svg");
             // g->image(svg);
 
+                            
             r.NDI_find = NDIlib_find_create_v2();
             if (!r.NDI_find)
                 LOG_ERROR("Could not create NDI find");
+                            
                         
             // Run for one minute
             r.findThread = std::thread(
@@ -84,9 +155,6 @@ namespace mrv
                         r.running = true;
                         while (r.running)
                         {
-                        
-                            uint32_t no_sources = 0;
-                            const NDIlib_source_t* p_sources = NULL;
 
                             using namespace std::chrono;
                             for (const auto start = high_resolution_clock::now();
@@ -100,59 +168,20 @@ namespace mrv
                             }
 
 
-                            while (!no_sources && r.running)
+                            r.no_sources = 0;
+                            while (!r.no_sources && r.running)
                             {
                                 // Get the updated list of sources
-                                p_sources = NDIlib_find_get_current_sources(r.NDI_find, &no_sources);
+                                r.p_sources = NDIlib_find_get_current_sources(
+                                    r.NDI_find, &r.no_sources);
                             }
-
                             
                             if (!r.source) continue;
-                        
-                            {
-                                std::unique_lock<std::mutex> lock(r.mutex);
-                                Fl_Choice* m = r.source;
 
-
-                                std::string sourceName;
-                                int selected = m->value();
-                                bool changed = false;
-                                if (no_sources != m->size())
-                                {
-                                    changed = true;
-                                }
-                                else
-                                {
-                                    const Fl_Menu_Item* item = nullptr;
-                                    if (selected >= 0)
-                                    {
-                                        item = &m->menu()[selected];
-                                        sourceName = item->label();
-                                    }
-                                    for (int i = 0; i < no_sources; ++i)
-                                    {
-                                        item = &m->menu()[i];
-                                        if (!strcmp(item->label(), p_sources[i].p_ndi_name))
-                                        {
-                                            changed = true;
-                                            break;
-                                        }
-                                    }
-                                }
-
-                                if (changed)
-                                {
-                                    m->clear();
-                                    for (int i = 0; i < no_sources; ++i)
-                                    {
-                                        const std::string ndiName = p_sources[i].p_ndi_name;
-                                        m->add(ndiName.c_str());
-                                        if (sourceName == ndiName)
-                                            selected = i;
-                                    }
-                                    m->value(selected);
-                                }
-                            }
+                            Fl::awake( (Fl_Awake_Handler) refresh_sources_cb,
+                                       this );
+            
+                            
                         }
                     });
                 
@@ -177,9 +206,12 @@ namespace mrv
             
             if (r.playThread.joinable())
                 r.playThread.join();
-            
-            NDIlib_find_destroy(r.NDI_find);
-            r.NDI_find = nullptr; 
+
+            if (r.NDI_find)
+            {
+                NDIlib_find_destroy(r.NDI_find);
+                r.NDI_find = nullptr;
+            }
         }
 
         void NDIPanel::add_controls()
@@ -225,23 +257,19 @@ namespace mrv
             bg = new Fl_Group(g->x(), Y, g->w(), 22 * 8);
             bg->box(FL_NO_BOX);
             bg->begin();
-
-            {
-                std::unique_lock<std::mutex> lock(r.mutex);
             
-                auto mW = new Widget< Fl_Choice >(
-                    g->x() + 60, Y, g->w() - 60, 20, _("Source"));
-                Fl_Choice* m = _r->source = mW;
-                m->labelsize(12);
-                m->align(FL_ALIGN_LEFT);
-                mW->callback(
-                    [this](auto o)
-                        {
-                            const Fl_Menu_Item* item = o->mvalue();
-                            if (!item) return;
-                            _open_ndi(item);
+            auto mW = new Widget< PopupMenu >(
+                g->x() + 60, Y, g->w() - 60, 20, _("Source"));
+            PopupMenu* m = _r->source = mW;
+            m->labelsize(12);
+            m->align(FL_ALIGN_CENTER);
+            mW->callback(
+                [=](auto o)
+                    {
+                        const Fl_Menu_Item* item = o->mvalue();
+                        if (!item) return;
+                        _open_ndi(item);
                         });
-            }
             
                 
             Y += 22;
