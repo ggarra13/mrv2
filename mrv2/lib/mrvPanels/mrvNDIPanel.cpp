@@ -106,7 +106,7 @@ namespace mrv
                 }
             }
 
-            if (!changed || !r.p_sources)
+            if (!changed)
                 return;
 
             m->clear();
@@ -180,8 +180,10 @@ namespace mrv
                             }
 
 
-                            r.no_sources = 0;
-                            while (!r.no_sources && r.running)
+                            r.no_sources = std::numeric_limits<uint32_t>::max();
+                            while (r.no_sources ==
+                                       std::numeric_limits<uint32_t>::max() &&
+                                   r.running)
                             {
                                 // Get the updated list of sources
                                 r.p_sources = NDIlib_find_get_current_sources(
