@@ -53,6 +53,8 @@ namespace mrv
             uint32_t no_sources = 0;
             const NDIlib_source_t* p_sources = NULL;
 
+            std::string lastStream;
+            
             std::thread playThread;
             
             std::thread findThread;
@@ -316,6 +318,11 @@ namespace mrv
 
             // Get the NDI name from the menu item
             const std::string sourceName = item->label();
+
+            if (r.lastStream == sourceName)
+                return;
+            r.lastStream = sourceName;
+            
             LOG_INFO("Opened stream " << sourceName);
 
             // Create an ndi file 
