@@ -64,11 +64,11 @@ export TLRENDER_WAYLAND=ON
 export TLRENDER_YASM=ON
 
 if [[ $KERNEL == *Linux* ]]; then
-    export TLRENDER_NDI_SDK="/home/gga/code/lib/NDI_SDK_v5_Linux/NDI_SDK_for_Linux/"
+    export TLRENDER_NDI_SDK="/home/gga/code/lib/NDI_SDK_v5_Linux/NDI\ SDK\ for\ Linux/"
 elif [[ $KERNEL == *Msys* ]]; then
     export TLRENDER_NDI_SDK="C:/Program\ Files/NDI/NDI\ 5\ SDK/"
 else
-    NDI_SDK="/Library/NDI\ SDK\ for\ Apple/"
+    export TLRENDER_NDI_SDK="/Library/NDI\ SDK\ for\ Apple/"
 fi
 
 cmd="./runme_nolog.sh -ndi $params 2>&1 | tee $BUILD_DIR/compile.log"

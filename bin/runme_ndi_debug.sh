@@ -69,8 +69,7 @@ if [[ $KERNEL == *Linux* ]]; then
 elif [[ $KERNEL == *Msys* ]]; then
     export TLRENDER_NDI_SDK="C:/Program\ Files/NDI/NDI\ 5\ SDK/"
 else
-    echo "Not done yet"
-    exit 1
+    export TLRENDER_NDI_SDK="/Library/NDI\ SDK\ for\ Apple/"
 fi
 
 cmd="./runme_nolog.sh -ndi debug $params 2>&1 | tee $BUILD_DIR/compile.log"
