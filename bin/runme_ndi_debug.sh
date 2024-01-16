@@ -27,7 +27,8 @@ params="$@"
 #
 . etc/build_dir.sh
 
-export BUILD_DIR=BUILD-$KERNEL-$ARCH-ndi/Release
+export BUILD_DIR=BUILD-$KERNEL-$ARCH-ndi/Debug
+
 mkdir -p $BUILD_DIR
 
 
@@ -44,11 +45,11 @@ echo "Saving compile log to $BUILD_DIR/compile.log ..."
 #
 # These are some of the expensive mrv2 options
 #
-export BUILD_PYTHON=ON
-export MRV2_PYFLTK=ON
-export MRV2_PYBIND11=ON
-export MRV2_NETWORK=ON
-export MRV2_PDF=ON
+export BUILD_PYTHON=OFF
+export MRV2_PYFLTK=OFF
+export MRV2_PYBIND11=OFF
+export MRV2_NETWORK=OFF
+export MRV2_PDF=OFF
 
 #
 # These are some of the expensive TLRENDER options
@@ -56,20 +57,21 @@ export MRV2_PDF=ON
 
 export TLRENDER_ASAN=OFF # asan memory debugging (not yet working)
 export TLRENDER_NDI=ON
-export TLRENDER_NET=ON
-export TLRENDER_RAW=ON
-export TLRENDER_USD=ON
-export TLRENDER_VPX=ON
-export TLRENDER_WAYLAND=ON
-export TLRENDER_YASM=ON
+export TLRENDER_NET=OFF
+export TLRENDER_RAW=OFF
+export TLRENDER_USD=OFF
+export TLRENDER_VPX=OFF
+export TLRENDER_WAYLAND=OFF
+export TLRENDER_YASM=OFF
 
 if [[ $KERNEL == *Linux* ]]; then
     export TLRENDER_NDI_SDK="/home/gga/code/lib/NDI_SDK_v5_Linux/NDI_SDK_for_Linux/"
 elif [[ $KERNEL == *Msys* ]]; then
     export TLRENDER_NDI_SDK="C:/Program\ Files/NDI/NDI\ 5\ SDK/"
 else
-    NDI_SDK="/Library/NDI\ SDK\ for\ Apple/"
+    echo "Not done yet"
+    exit 1
 fi
 
-cmd="./runme_nolog.sh -ndi $params 2>&1 | tee $BUILD_DIR/compile.log"
+cmd="./runme_nolog.sh -ndi debug $params 2>&1 | tee $BUILD_DIR/compile.log"
 run_cmd $cmd

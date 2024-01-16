@@ -22,9 +22,12 @@ namespace mrv
 
             void add_controls() override;
 
+            static void refresh_sources_cb(void* v);
+            void refresh_sources();
+
         protected:
             void _open_ndi(const Fl_Menu_Item*);
-            
+
         private:
             MRV2_PRIVATE();
         };
