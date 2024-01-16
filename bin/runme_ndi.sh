@@ -64,7 +64,7 @@ export TLRENDER_WAYLAND=ON
 export TLRENDER_YASM=ON
 
 if [[ $KERNEL == *Linux* ]]; then
-    export TLRENDER_NDI_SDK="/home/gga/code/lib/NDI_SDK_v5_Linux/NDI\ SDK\ for\ Linux/"
+    export TLRENDER_NDI_SDK="/home/gga/code/lib/NDI\ SDK\ for\ Linux/"
 elif [[ $KERNEL == *Msys* ]]; then
     export TLRENDER_NDI_SDK="C:/Program\ Files/NDI/NDI\ 5\ SDK/"
 else
