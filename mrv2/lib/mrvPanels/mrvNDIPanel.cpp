@@ -217,9 +217,6 @@ namespace mrv
             r.running = false;
             if (r.findThread.joinable())
                 r.findThread.join();
-            
-            if (r.playThread.joinable())
-                r.playThread.join();
         }
 
         void NDIPanel::add_controls()
@@ -267,7 +264,7 @@ namespace mrv
             bg->begin();
             
             auto mW = new Widget< PopupMenu >(
-                g->x() + 60, Y, g->w() - 60, 20, _("Source"));
+                g->x() + 10, Y, g->w() - 10, 20, _("Source"));
             PopupMenu* m = _r->source = mW;
             m->labelsize(12);
             m->align(FL_ALIGN_CENTER);
@@ -323,9 +320,9 @@ namespace mrv
 
             if (r.lastStream == sourceName)
                 return;
-            r.lastStream = sourceName;
+            LOG_INFO("Close stream " << r.lastStream);
             
-            LOG_INFO("Opened stream " << sourceName);
+            r.lastStream = sourceName;
 
             // Create an ndi file 
             std::string ndiFile = file::NDI(p.ui);
@@ -335,14 +332,16 @@ namespace mrv
             s << (int)r.noAudio->value() << std::endl;
             s.close();
             
-            auto player = p.ui->uiView->getTimelinePlayer();
-            if (player)
-                player->stop();
+
+            auto model = p.ui->app->filesModel();
+            if (model)
+                model->close();
+            
+            LOG_INFO("Opened stream " << sourceName);
             
             open_file_cb(ndiFile, p.ui);
 
-#if 1
-            player = p.ui->uiView->getTimelinePlayer();
+            auto player = p.ui->uiView->getTimelinePlayer();
             if (player)
             {
                 LOG_INFO("Waiting for player "
@@ -353,15 +352,19 @@ namespace mrv
                             MRV2_R();
 
                             Fl::lock();
+                            
                             std::cerr << "stop player..." << std::endl;
                             player->stop();
                             
                             // Sleep so the cache fills up
                             int seconds = r.preroll->value();
-                            std::cerr << "sleep " << seconds
-                                      << " seconds..." << std::endl;
-                            std::this_thread::sleep_for(
-                                std::chrono::seconds(seconds));
+                            if (!r.noAudio->value())
+                            {
+                                std::cerr << "sleep " << seconds
+                                          << " seconds..." << std::endl;
+                                std::this_thread::sleep_for(
+                                    std::chrono::seconds(seconds));
+                            }
                             //player->start();
                             player->forward();
                             std::cerr << "play forwards player..." << std::endl;
@@ -370,7 +373,6 @@ namespace mrv
                         });
                 r.playThread.detach();
             }
-#endif
         }
 
     } // namespace panel

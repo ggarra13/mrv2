@@ -157,14 +157,19 @@ namespace mrv
             {
                 const int aPrevIndex = _index(p.a->get());
 
+                std::cerr << __func__ << " " << __LINE__ << std::endl;
                 files.erase(i);
+                std::cerr << __func__ << " " << __LINE__ << std::endl;
                 p.files->setIfChanged(files);
 
+                std::cerr << __func__ << " " << __LINE__ << std::endl;
                 const int aNewIndex = math::clamp(
                     aPrevIndex, 0, static_cast<int>(files.size()) - 1);
+                std::cerr << __func__ << " " << __LINE__ << std::endl;
                 p.a->setIfChanged(aNewIndex != -1 ? files[aNewIndex] : nullptr);
                 p.aIndex->setIfChanged(_index(p.a->get()));
 
+                std::cerr << __func__ << " " << __LINE__ << std::endl;
                 auto b = p.b->get();
                 auto j = b.begin();
                 while (j != b.end())
@@ -182,11 +187,15 @@ namespace mrv
                 p.b->setIfChanged(b);
                 p.bIndexes->setIfChanged(_bIndexes());
 
+                std::cerr << __func__ << " " << __LINE__ << std::endl;
                 p.stereo->setIfChanged(nullptr);
                 p.stereoIndex->setIfChanged(-1);
 
+                std::cerr << __func__ << " " << __LINE__ << std::endl;
                 p.active->setIfChanged(_getActive());
+                std::cerr << __func__ << " " << __LINE__ << std::endl;
                 p.layers->setIfChanged(_getLayers());
+                std::cerr << __func__ << " " << __LINE__ << std::endl;
             }
         }
     }

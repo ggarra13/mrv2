@@ -1265,10 +1265,6 @@ namespace mrv
             p.settings->getValue<int>("Performance/TimerMode"));
         playerOptions.audioBufferFrameCount = p.settings->getValue<int>(
             "Performance/AudioBufferFrameCount");
-        // if (file::isTemporaryNDI(item->path))
-        // {
-        //     playerOptions.timerMode = timeline::TimerMode::Audio;
-        // }
     }
     
     void App::_activeCallback(
@@ -1366,7 +1362,6 @@ namespace mrv
                         const std::string& file = item->path.get();
                         p.settings->addRecentFile(file);
                     }
-
                 }
                 else if (0 == i)
                 {
@@ -1516,6 +1511,11 @@ namespace mrv
 
             uint64_t bytes = Gbytes * memory::gigabyte;
 
+            // Check if an NDI movie and set cache to 1 gigabyte
+            auto Aitem = p.filesModel->observeA()->get();
+            if (file::isTemporaryNDI(Aitem->path))
+                bytes = activeCount * memory::gigabyte;
+            
             // Update the I/O cache.
             auto ioSystem = _context->getSystem<io::System>();
             ioSystem->getCache()->setMax(bytes);
