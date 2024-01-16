@@ -73,7 +73,6 @@ namespace mrv
             MRV2_R();
                                 
             PopupMenu* m = r.source;
-            if (!m) return;
 
             if (m->popped())
                 return;
@@ -81,13 +80,18 @@ namespace mrv
             std::string sourceName;
             int selected = m->value();
             bool changed = false;
-            if (r.no_sources != m->children())
+            const Fl_Menu_Item* item = nullptr;
+
+            // Empty menu returns 0, while all others return +1.
+            int size = m->size() - 1;
+            if (size < 0) size = 0;
+            
+            if (r.no_sources != size)
             {
                 changed = true;
             }
             else
             {
-                const Fl_Menu_Item* item = nullptr;
                 if (selected >= 0 && selected < m->size())
                 {
                     item = m->child(selected);
@@ -97,7 +101,7 @@ namespace mrv
                 for (int i = 0; i < r.no_sources; ++i)
                 {
                     item = m->child(i);
-                    if (item->label() &&
+                    if (!item->label() ||
                         !strcmp(item->label(), r.p_sources[i].p_ndi_name))
                     {
                         changed = true;
@@ -125,13 +129,6 @@ namespace mrv
             m->menu_end();
             if (selected >= 0 && selected < m->size())
                 m->value(selected);
-
-            if (r.NDI_find)
-            {
-                NDIlib_find_destroy(r.NDI_find);
-                r.NDI_find = nullptr;
-            }
-
         }
                                 
         NDIPanel::NDIPanel(ViewerUI* ui) :
@@ -148,12 +145,9 @@ namespace mrv
             // Fl_SVG_Image* svg = load_svg("NDI.svg");
             // g->image(svg);
 
-                            
             r.NDI_find = NDIlib_find_create_v2();
-            if (!r.NDI_find)
-                LOG_ERROR("Could not create NDI find");
-                            
-                        
+
+                
             // Run for one minute
             r.findThread = std::thread(
                     [this]
@@ -163,39 +157,32 @@ namespace mrv
                         r.running = true;
                         while (r.running)
                         {
-
-                            r.NDI_find = NDIlib_find_create_v2();
-                            if (!r.NDI_find)
-                                LOG_ERROR("Could not create NDI find");
-                        
                             using namespace std::chrono;
                             for (const auto start = high_resolution_clock::now();
                                  high_resolution_clock::now() - start < seconds(10);)
                             {
                                 // Wait up till 1 second to check for new sources to be added or removed
-                                if (!NDIlib_find_wait_for_sources(r.NDI_find, 1000 /* milliseconds */)) {
+                                if (!NDIlib_find_wait_for_sources(r.NDI_find,
+                                                                  1000 /* milliseconds */)) {
                                     break;
                                 }
                         
                             }
 
+                            if (!r.source) continue;
 
-                            r.no_sources = std::numeric_limits<uint32_t>::max();
-                            while (r.no_sources ==
-                                       std::numeric_limits<uint32_t>::max() &&
-                                   r.running)
+                            r.no_sources = 0;
+
+                            
+                            while (!r.no_sources && r.running)
                             {
                                 // Get the updated list of sources
                                 r.p_sources = NDIlib_find_get_current_sources(
                                     r.NDI_find, &r.no_sources);
                             }
-                            
-                            if (!r.source) continue;
 
-                            Fl::awake( (Fl_Awake_Handler) refresh_sources_cb,
-                                       this );
-            
-                            
+                            Fl::awake(
+                                (Fl_Awake_Handler)refresh_sources_cb, this);
                         }
                     });
                 
@@ -217,6 +204,12 @@ namespace mrv
             r.running = false;
             if (r.findThread.joinable())
                 r.findThread.join();
+
+            if (r.NDI_find)
+            {
+                NDIlib_find_destroy(r.NDI_find);
+                r.NDI_find = nullptr;
+            }
         }
 
         void NDIPanel::add_controls()
@@ -266,6 +259,7 @@ namespace mrv
             auto mW = new Widget< PopupMenu >(
                 g->x() + 10, Y, g->w() - 10, 20, _("Source"));
             PopupMenu* m = _r->source = mW;
+            m->disable_submenus();
             m->labelsize(12);
             m->align(FL_ALIGN_CENTER);
             mW->callback(
@@ -331,7 +325,7 @@ namespace mrv
             s << sourceName << std::endl;
             s << (int)r.noAudio->value() << std::endl;
             s.close();
-            
+
 
             auto model = p.ui->app->filesModel();
             if (model)
