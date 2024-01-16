@@ -46,7 +46,7 @@ namespace mrv
         struct NDIPanel::Private
         {
             PopupMenu* source = nullptr;
-            Fl_Check_Button* noAudio = nullptr;
+            Fl_Choice* noAudio = nullptr;
             Spinner*         preroll = nullptr;
 
             NDIlib_find_instance_t NDI_find = nullptr;
@@ -81,10 +81,17 @@ namespace mrv
             int selected = m->value();
             bool changed = false;
             const Fl_Menu_Item* item = nullptr;
-
+            
             // Empty menu returns 0, while all others return +1.
             int size = m->size() - 1;
             if (size < 0) size = 0;
+            if (selected >= 0 && selected < size)
+            {
+                item = m->child(selected);
+                if (item->label())
+                    sourceName = item->label();
+            }
+
             
             if (r.no_sources != size)
             {
@@ -92,12 +99,6 @@ namespace mrv
             }
             else
             {
-                if (selected >= 0 && selected < m->size())
-                {
-                    item = m->child(selected);
-                    if (item->label())
-                        sourceName = item->label();
-                }
                 for (int i = 0; i < r.no_sources; ++i)
                 {
                     item = m->child(i);
@@ -114,16 +115,13 @@ namespace mrv
                 return;
 
             m->clear();
-            int idx = 0;
             for (int i = 0; i < r.no_sources; ++i)
             {
-                if (r.p_sources[i].p_ndi_name)
+                const std::string ndiName = r.p_sources[i].p_ndi_name;
+                m->add(ndiName.c_str());
+                if (sourceName == ndiName)
                 {
-                    const std::string ndiName = r.p_sources[i].p_ndi_name;
-                    m->add(ndiName.c_str());
-                    if (sourceName == ndiName)
-                        selected = idx;
-                    ++idx;
+                    selected = i;
                 }
             }
             m->menu_end();
@@ -171,10 +169,9 @@ namespace mrv
 
                             if (!r.source) continue;
 
-                            r.no_sources = 0;
-
-                            
-                            while (!r.no_sources && r.running)
+                            r.no_sources = std::numeric_limits<uint32_t>::max();
+                            while (r.no_sources == std::numeric_limits<uint32_t>::max() &&
+                                   r.running)
                             {
                                 // Get the updated list of sources
                                 r.p_sources = NDIlib_find_get_current_sources(
@@ -284,11 +281,13 @@ namespace mrv
             Y += 22;
 
             
-            auto cW = new Widget< Fl_Check_Button >(
-                g->x() + 60, Y, g->w() - 60, 20, _("No Audio"));
-            Fl_Check_Button* c = _r->noAudio = cW;
+            auto cW = new Widget< Fl_Choice >(
+                g->x() + 60, Y, g->w() - 60, 20, _("Audio"));
+            Fl_Choice* c = _r->noAudio = cW;
             c->labelsize(12);
             c->align(FL_ALIGN_LEFT);
+            c->add(_("Play"));
+            c->add(_("Ignore"));
             c->value(0);
             
             bg->end();
@@ -315,7 +314,6 @@ namespace mrv
             if (r.lastStream == sourceName)
                 return;
             LOG_INFO("Close stream " << r.lastStream);
-            
             r.lastStream = sourceName;
 
             // Create an ndi file 
@@ -338,8 +336,8 @@ namespace mrv
             auto player = p.ui->uiView->getTimelinePlayer();
             if (player)
             {
-                LOG_INFO("Waiting for player "
-                         << player << " cache to fill up...");
+                LOG_INFO(_("Waiting for player cache to fill up..."));
+                p.ui->uiStatusBar->label(_("Waiting for player cache to fill up..."));
                 r.playThread = std::thread(
                     [this, player]
                         {
@@ -347,26 +345,23 @@ namespace mrv
 
                             Fl::lock();
                             
-                            std::cerr << "stop player..." << std::endl;
                             player->stop();
                             
                             // Sleep so the cache fills up
                             int seconds = r.preroll->value();
                             if (!r.noAudio->value())
                             {
-                                std::cerr << "sleep " << seconds
-                                          << " seconds..." << std::endl;
                                 std::this_thread::sleep_for(
                                     std::chrono::seconds(seconds));
                             }
                             //player->start();
                             player->forward();
-                            std::cerr << "play forwards player..." << std::endl;
 
                             Fl::unlock();
                         });
                 r.playThread.detach();
             }
+            p.ui->uiStatusBar->label(_("Everything OK."));
         }
 
     } // namespace panel
