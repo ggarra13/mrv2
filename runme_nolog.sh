@@ -61,7 +61,7 @@ if [ -z "$TLRENDER_FFMPEG" ]; then
 fi
 
 if [ -z "$TLRENDER_NDI" ]; then
-    export TLRENDER_NDI=ON
+    export TLRENDER_NDI=OFF
 fi
 
 if [ -z "$TLRENDER_NDI_SDK" ]; then
