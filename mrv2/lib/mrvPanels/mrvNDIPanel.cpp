@@ -73,6 +73,8 @@ namespace mrv
         {
             MRV2_R();
 
+            std::unique_lock<std::mutex> lock(r.mutex);
+
             PopupMenu* m = r.source;
 
             if (m->popped() || !r.running)
@@ -173,6 +175,8 @@ namespace mrv
 
                         if (!r.source)
                             continue;
+
+                        std::unique_lock<std::mutex> lock(r.mutex);
 
                         r.no_sources = std::numeric_limits<uint32_t>::max();
                         while (r.no_sources ==
@@ -363,7 +367,7 @@ namespace mrv
                     {
                         MRV2_R();
 
-                        Fl::lock();
+                        // Fl::lock();
 
                         // Sleep so the cache fills up
                         if (!noAudio)
@@ -372,11 +376,11 @@ namespace mrv
                             std::this_thread::sleep_for(
                                 std::chrono::seconds(seconds));
                         }
-                        player->start();
+                        // player->start();
                         LOG_INFO(_("Starting playback..."));
                         player->forward();
 
-                        Fl::unlock();
+                        // Fl::unlock();
                     });
                 r.playThread.detach();
             }
