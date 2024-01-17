@@ -41,27 +41,7 @@ export CMAKE_FLAGS=""
 echo
 echo "Saving compile log to $BUILD_DIR/compile.log ..."
 
-#
-# These are some of the expensive mrv2 options
-#
-export BUILD_PYTHON=ON
-export MRV2_PYFLTK=ON
-export MRV2_PYBIND11=ON
-export MRV2_NETWORK=ON
-export MRV2_PDF=ON
-
-#
-# These are some of the expensive TLRENDER options
-#
-
-export TLRENDER_ASAN=OFF # asan memory debugging (not yet working)
 export TLRENDER_NDI=ON
-export TLRENDER_NET=ON
-export TLRENDER_RAW=ON
-export TLRENDER_USD=ON
-export TLRENDER_VPX=ON
-export TLRENDER_WAYLAND=ON
-export TLRENDER_YASM=ON
 
 if [[ $KERNEL == *Linux* ]]; then
     export TLRENDER_NDI_SDK="/home/gga/code/lib/NDI\ SDK\ for\ Linux/"
