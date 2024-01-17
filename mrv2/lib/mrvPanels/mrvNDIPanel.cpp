@@ -53,12 +53,14 @@ namespace mrv
             uint32_t no_sources = 0;
             const NDIlib_source_t* p_sources = NULL;
 
+            std::atomic<bool> has_awake = false;
             std::string lastStream;
 
             std::thread playThread;
 
             std::thread findThread;
             std::atomic<bool> running = false;
+            std::mutex mutex;
         };
 
         void NDIPanel::refresh_sources_cb(void* v)
@@ -73,7 +75,7 @@ namespace mrv
 
             PopupMenu* m = r.source;
 
-            if (m->popped())
+            if (m->popped() || !r.running)
                 return;
 
             std::string sourceName;
@@ -126,6 +128,8 @@ namespace mrv
             m->menu_end();
             if (selected >= 0 && selected < m->size())
                 m->value(selected);
+
+            r.has_awake = false;
         }
 
         NDIPanel::NDIPanel(ViewerUI* ui) :
@@ -180,8 +184,14 @@ namespace mrv
                                 r.NDI_find, &r.no_sources);
                         }
 
-                        Fl::awake((Fl_Awake_Handler)refresh_sources_cb, this);
+                        if (!r.has_awake)
+                        {
+                            Fl::awake(
+                                (Fl_Awake_Handler)refresh_sources_cb, this);
+                            r.has_awake = true;
+                        }
                     }
+                    r.no_sources = 0;
                 });
 
             g->callback(
@@ -199,7 +209,9 @@ namespace mrv
         {
             MRV2_R();
 
+            r.has_awake = true;
             r.running = false;
+
             if (r.findThread.joinable())
                 r.findThread.join();
 
@@ -313,7 +325,10 @@ namespace mrv
 
             if (r.lastStream == sourceName)
                 return;
-            LOG_INFO("Close stream " << r.lastStream);
+
+            if (!r.lastStream.empty())
+                LOG_INFO("Close stream " << r.lastStream);
+
             r.lastStream = sourceName;
 
             // Create an ndi file
@@ -338,23 +353,27 @@ namespace mrv
                 LOG_INFO(_("Waiting for player cache to fill up..."));
                 p.ui->uiStatusBar->label(
                     _("Waiting for player cache to fill up..."));
+
+                player->stop();
+                int noAudio = r.noAudio->value();
+                int seconds = r.preroll->value();
+
                 r.playThread = std::thread(
-                    [this, player]
+                    [this, player, seconds, noAudio]
                     {
                         MRV2_R();
 
                         Fl::lock();
 
-                        player->stop();
-
                         // Sleep so the cache fills up
-                        int seconds = r.preroll->value();
-                        if (!r.noAudio->value())
+                        if (!noAudio)
                         {
+                            LOG_INFO("Waiting " << seconds << " seconds...");
                             std::this_thread::sleep_for(
                                 std::chrono::seconds(seconds));
                         }
-                        // player->start();
+                        player->start();
+                        LOG_INFO(_("Starting playback..."));
                         player->forward();
 
                         Fl::unlock();
