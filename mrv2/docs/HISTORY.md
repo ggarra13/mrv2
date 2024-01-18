@@ -5,15 +5,11 @@ v1.0.1
   path could not be made relative.
 - Made ALT + RMB zooming a tad less sensitive.
 - Fixed ALT + RMB zooming sliding incorrectly.
-<<<<<<< HEAD
 - Improved speed on exiting the application.
-
-=======
 - Made zooming with RMB + Alt slower for users with tablets.  
 - Added an options to Preferences->Playback called Auto Scrub Playback, which
   when turned off will turn off the audio playback while scrubbing, like
   on previous versions of mrv2 (v0.8.2 and earlier).
->>>>>>> main
 
 v1.0.0
 ======
