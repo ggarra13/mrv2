@@ -47,6 +47,12 @@ get_kernel()
     fi
 }
 
+get_msvc_version()
+{
+    export MSVC_VERSION=`echo $VCINSTALLDIR | grep -o '2[0-9]\+'`
+}
+
+
 #
 # Extract version from cmake/version.cmake
 #

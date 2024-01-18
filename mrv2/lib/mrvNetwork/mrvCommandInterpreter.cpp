@@ -1209,6 +1209,20 @@ namespace mrv
                     usd_panel_cb(nullptr, ui);
 #endif
             }
+            else if (c == "NDI Panel")
+            {
+#ifdef TLRENDER_NDI
+                bool receive = prefs->ReceiveUI->value();
+                if (!receive)
+                {
+                    tcp->unlock();
+                    return;
+                }
+                bool value = message["value"];
+                if ((!value && ndiPanel) || (value && !ndiPanel))
+                    ndi_panel_cb(nullptr, ui);
+#endif
+            }
             // Logs panel is not sent nor received.
             else if (c == "Python Panel")
             {

@@ -59,6 +59,11 @@
 #include <opentime/version.h>
 #include <opentimelineio/version.h>
 
+#ifdef TLRENDER_NDI
+#    include <Processing.NDI.Lib.h>
+#endif
+
+
 #ifdef TLRENDER_AUDIO
 #    include <rtaudio/RtAudio.h>
 #endif
@@ -738,6 +743,11 @@ namespace mrv
         o << "minizip-ng v" << MZ_VERSION << endl
           << "Copyright (C) Nathan Moinvaziri" << endl
           << endl;
+#ifdef TLRENDER_NDI
+        o << "NDI® v" << NDIlib_version() << endl
+          << "Copyright (C) 2021-Present Vizrt NDI AB" << endl
+          << endl;
+#endif
         o << "nlohmann_json v" << NLOHMANN_JSON_VERSION_MAJOR << "."
           << NLOHMANN_JSON_VERSION_MINOR << "." << NLOHMANN_JSON_VERSION_PATCH
           << endl

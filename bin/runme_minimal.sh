@@ -62,9 +62,11 @@ export TLRENDER_WAYLAND=ON
 export TLRENDER_YASM=OFF
 
 cmd="./runme_nolog.sh 
+           --minimal
 	   -D BUILD_PYTHON=${BUILD_PYTHON} \
 	   -D MRV2_PYFLTK=${MRV2_PYFLTK} \
 	   -D MRV2_PYBIND11=${MRV2_PYBIND11} \
+	   -D MRV2_NETWORK=${MRV2_NETWORK} \
 	   -D MRV2_PDF=${MRV2_PDF} \
 	   -D TLRENDER_USD=${TLRENDER_USD} \
 	   -D TLRENDER_VPX=${TLRENDER_VPX} \

@@ -120,6 +120,10 @@ if(TLRENDER_JPEG)
     add_definitions(-DTLRENDER_JPEG)
 endif()
 
+if(TLRENDER_NDI)
+    add_definitions(-DTLRENDER_NDI)
+endif()
+
 if(TLRENDER_NET)
     add_definitions(-DTLRENDER_NET)
 endif()
@@ -205,6 +209,7 @@ set( mrv2_INCLUDE_DIRS
     # We need to include all these non-public tlRender directories
     # as we get the version information from them as well as some variables
     # and constants.
+    ${TLRENDER_NDI_SDK}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/../tlRender/deps
     ${CMAKE_CURRENT_SOURCE_DIR}/../tlRender/lib
     # For icons on the mrv2/icons directory.

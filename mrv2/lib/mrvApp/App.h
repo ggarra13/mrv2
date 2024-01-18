@@ -6,6 +6,7 @@
 
 #include <tlApp/IApp.h>
 
+#include <tlTimeline/PlayerOptions.h>
 #include <tlTimeline/IRender.h>
 #include <tlTimeline/TimeUnits.h>
 
@@ -165,6 +166,9 @@ namespace mrv
         _activeCallback(const std::vector<std::shared_ptr<FilesModelItem> >&);
 
         void _audioUpdate();
+
+        void _playerOptions(timeline::PlayerOptions& playerOptions,
+                            const std::shared_ptr<FilesModelItem>& item);
 
         TLRENDER_PRIVATE();
     };

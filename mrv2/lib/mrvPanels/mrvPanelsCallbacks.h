@@ -37,6 +37,10 @@
 #    include "mrvPanels/mrvUSDPanel.h"
 #endif
 
+#ifdef TLRENDER_NDI
+#    include "mrvPanels/mrvNDIPanel.h"
+#endif
+
 class ViewerUI;
 class Fl_Widget;
 
@@ -68,6 +72,9 @@ namespace mrv
 #endif
 #ifdef TLRENDER_USD
         extern USDPanel* usdPanel;
+#endif
+#ifdef TLRENDER_NDI
+        extern NDIPanel* ndiPanel;
 #endif
 
         //! \name Handle one panel only
@@ -105,6 +112,7 @@ namespace mrv
         void image_info_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void logs_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void network_panel_cb(Fl_Widget* w, ViewerUI* ui);
+        void ndi_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void python_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void playlist_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void settings_panel_cb(Fl_Widget* w, ViewerUI* ui);

@@ -79,6 +79,10 @@ namespace py = pybind11;
 
 #include "mrvFl/mrvIO.h"
 
+#ifdef TLRENDER_NDI
+#    include <Processing.NDI.Lib.h>
+#endif
+
 namespace
 {
     const char* kModule = "app";
@@ -578,6 +582,11 @@ namespace mrv
             static_cast<int>(p.options.usdDiskCache * memory::gigabyte));
 #endif // TLRENDER_USD
 
+#ifdef TLRENDER_NDI
+        if (!NDIlib_initialize())
+            throw std::runtime_error(_("Could not initialize NDI"));
+#endif
+
         p.volume = p.settings->getValue<float>("Audio/Volume");
         p.mute = p.settings->getValue<bool>("Audio/Mute");
 
@@ -804,6 +813,11 @@ namespace mrv
     void App::cleanResources()
     {
         TLRENDER_P();
+
+#ifdef TLRENDER_NDI
+        // Not required, but nice
+        NDIlib_destroy();
+#endif
 
         delete p.mainControl;
         p.mainControl = nullptr;
@@ -1214,13 +1228,7 @@ namespace mrv
                     timeline::Timeline::create(otioTimeline, _context, options);
 
                 timeline::PlayerOptions playerOptions;
-                playerOptions.cache.readAhead = _cacheReadAhead();
-                playerOptions.cache.readBehind = _cacheReadBehind();
-
-                playerOptions.timerMode = static_cast<timeline::TimerMode>(
-                    p.settings->getValue<int>("Performance/TimerMode"));
-                playerOptions.audioBufferFrameCount = p.settings->getValue<int>(
-                    "Performance/AudioBufferFrameCount");
+                _playerOptions(playerOptions, item);
                 if (item->init)
                 {
                     playerOptions.currentTime = items[0]->currentTime;
@@ -1242,6 +1250,21 @@ namespace mrv
         }
 
         panel::refreshThumbnails();
+    }
+
+    void App::_playerOptions(
+        timeline::PlayerOptions& playerOptions,
+        const std::shared_ptr<FilesModelItem>& item)
+    {
+        TLRENDER_P();
+
+        playerOptions.cache.readAhead = _cacheReadAhead();
+        playerOptions.cache.readBehind = _cacheReadBehind();
+
+        playerOptions.timerMode = static_cast<timeline::TimerMode>(
+            p.settings->getValue<int>("Performance/TimerMode"));
+        playerOptions.audioBufferFrameCount =
+            p.settings->getValue<int>("Performance/AudioBufferFrameCount");
     }
 
     void App::_activeCallback(
@@ -1303,18 +1326,11 @@ namespace mrv
                     timeline::Timeline::create(otioTimeline, _context, options);
 
                 timeline::PlayerOptions playerOptions;
-                playerOptions.cache.readAhead = _cacheReadAhead();
-                playerOptions.cache.readBehind = _cacheReadBehind();
-
-                playerOptions.timerMode = static_cast<timeline::TimerMode>(
-                    p.settings->getValue<int>("Performance/TimerMode"));
-                playerOptions.audioBufferFrameCount = p.settings->getValue<int>(
-                    "Performance/AudioBufferFrameCount");
+                _playerOptions(playerOptions, item);
                 if (item->init)
                 {
                     playerOptions.currentTime = items[0]->currentTime;
                 }
-
                 auto player =
                     timeline::Player::create(timeline, _context, playerOptions);
 
@@ -1326,19 +1342,23 @@ namespace mrv
                 {
                     item->init = true;
                     item->speed = mrvTimelinePlayer->speed();
-                    if (ui->uiPrefs->uiPrefsAutoPlayback->value())
-                    {
-                        mrvTimelinePlayer->setPlayback(
-                            timeline::Playback::Forward);
-                    }
                     item->playback = mrvTimelinePlayer->playback();
                     item->loop = mrvTimelinePlayer->loop();
                     item->currentTime = mrvTimelinePlayer->currentTime();
                     item->inOutRange = mrvTimelinePlayer->inOutRange();
                     item->audioOffset = mrvTimelinePlayer->audioOffset();
 
+                    bool autoPlayback =
+                        ui->uiPrefs->uiPrefsAutoPlayback->value();
+                    if (autoPlayback)
+                    {
+                        mrvTimelinePlayer->setPlayback(
+                            timeline::Playback::Forward);
+                    }
+
                     // Add the new file to recent files, unless it is an EDL.
-                    if (!isTemporaryEDL(item->path))
+                    if (!isTemporaryEDL(item->path) &&
+                        !file::isTemporaryNDI(item->path))
                     {
                         const std::string& file = item->path.get();
                         p.settings->addRecentFile(file);
@@ -1491,6 +1511,11 @@ namespace mrv
             const size_t activeCount = p.filesModel->observeActive()->getSize();
 
             uint64_t bytes = Gbytes * memory::gigabyte;
+
+            // Check if an NDI movie and set cache to 1 gigabyte
+            auto Aitem = p.filesModel->observeA()->get();
+            if (file::isTemporaryNDI(Aitem->path))
+                bytes = activeCount * memory::gigabyte;
 
             // Update the I/O cache.
             auto ioSystem = _context->getSystem<io::System>();

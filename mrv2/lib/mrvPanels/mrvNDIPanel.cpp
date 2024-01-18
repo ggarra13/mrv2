@@ -1,0 +1,397 @@
+// SPDX-License-Identifier: BSD-3-Clause
+// mrv2
+// Copyright Contributors to the mrv2 Project. All rights reserved.
+
+#if defined(TLRENDER_NDI)
+
+#    include <chrono>
+#    include <thread>
+#    include <mutex>
+#    include <atomic>
+
+#    include <tlCore/StringFormat.h>
+
+#    include <FL/Fl_Choice.H>
+#    include <FL/Fl_Check_Button.H>
+
+#    include <Processing.NDI.Lib.h>
+
+#    include "mrvCore/mrvHome.h"
+#    include "mrvCore/mrvFile.h"
+
+#    include "mrvWidgets/mrvFunctional.h"
+#    include "mrvWidgets/mrvButton.h"
+#    include "mrvWidgets/mrvSpinner.h"
+#    include "mrvWidgets/mrvCollapsibleGroup.h"
+
+#    include "mrvPanels/mrvPanelsCallbacks.h"
+#    include "mrvPanels/mrvNDIPanel.h"
+
+#    include "mrvFl/mrvIO.h"
+
+#    include "mrvApp/mrvSettingsObject.h"
+
+#    include "mrViewer.h"
+
+namespace
+{
+    const char* kModule = "ndi";
+}
+
+namespace mrv
+{
+    namespace panel
+    {
+
+        struct NDIPanel::Private
+        {
+            PopupMenu* source = nullptr;
+            Fl_Choice* noAudio = nullptr;
+            Spinner* preroll = nullptr;
+
+            NDIlib_find_instance_t NDI_find = nullptr;
+            uint32_t no_sources = 0;
+            const NDIlib_source_t* p_sources = NULL;
+
+            std::atomic<bool> has_awake = false;
+            std::string lastStream;
+
+            std::thread playThread;
+
+            std::thread findThread;
+            std::atomic<bool> running = false;
+            std::mutex mutex;
+        };
+
+        void NDIPanel::refresh_sources_cb(void* v)
+        {
+            NDIPanel* self = (NDIPanel*)v;
+            self->refresh_sources();
+        }
+
+        void NDIPanel::refresh_sources()
+        {
+            MRV2_R();
+
+            std::unique_lock<std::mutex> lock(r.mutex);
+
+            PopupMenu* m = r.source;
+
+            if (m->popped() || !r.running)
+                return;
+
+            std::string sourceName;
+            int selected = m->value();
+            bool changed = false;
+            const Fl_Menu_Item* item = nullptr;
+
+            // Empty menu returns 0, while all others return +1.
+            int size = m->size() - 1;
+            if (size < 0)
+                size = 0;
+            if (selected >= 0 && selected < size)
+            {
+                item = m->child(selected);
+                if (item->label())
+                    sourceName = item->label();
+            }
+
+            if (r.no_sources != size)
+            {
+                changed = true;
+            }
+            else
+            {
+                for (int i = 0; i < r.no_sources; ++i)
+                {
+                    item = m->child(i);
+                    if (!item->label() ||
+                        !strcmp(item->label(), r.p_sources[i].p_ndi_name))
+                    {
+                        changed = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!changed)
+            {
+                r.has_awake = false;
+                return;
+            }
+
+            m->clear();
+            for (int i = 0; i < r.no_sources; ++i)
+            {
+                const std::string ndiName = r.p_sources[i].p_ndi_name;
+                m->add(ndiName.c_str());
+                if (sourceName == ndiName)
+                {
+                    selected = i;
+                }
+            }
+            m->menu_end();
+            if (selected >= 0 && selected < m->size())
+                m->value(selected);
+
+            r.has_awake = false;
+        }
+
+        NDIPanel::NDIPanel(ViewerUI* ui) :
+            _r(new Private),
+            PanelWidget(ui)
+        {
+            MRV2_R();
+
+            Fl::lock(); // needed
+
+            add_group("NDI");
+
+            // @todo:
+            // Fl_SVG_Image* svg = load_svg("NDI.svg");
+            // g->image(svg);
+
+            r.NDI_find = NDIlib_find_create_v2();
+
+            // Run for one minute
+            r.findThread = std::thread(
+                [this]
+                {
+                    MRV2_R();
+
+                    r.running = true;
+                    while (r.running)
+                    {
+                        using namespace std::chrono;
+                        for (const auto start = high_resolution_clock::now();
+                             high_resolution_clock::now() - start <
+                             seconds(10);)
+                        {
+                            // Wait up till 1 second to check for new sources to
+                            // be added or removed
+                            if (!NDIlib_find_wait_for_sources(
+                                    r.NDI_find, 1000 /* milliseconds */))
+                            {
+                                break;
+                            }
+                        }
+
+                        if (!r.source)
+                            continue;
+
+                        std::unique_lock<std::mutex> lock(r.mutex);
+
+                        r.no_sources = std::numeric_limits<uint32_t>::max();
+                        while (r.no_sources ==
+                                   std::numeric_limits<uint32_t>::max() &&
+                               r.running)
+                        {
+                            // Get the updated list of sources
+                            r.p_sources = NDIlib_find_get_current_sources(
+                                r.NDI_find, &r.no_sources);
+                        }
+
+                        if (!r.has_awake)
+                        {
+                            Fl::awake(
+                                (Fl_Awake_Handler)refresh_sources_cb, this);
+                            r.has_awake = true;
+                        }
+                    }
+                    r.no_sources = 0;
+                });
+
+            g->callback(
+                [](Fl_Widget* w, void* d)
+                {
+                    ViewerUI* ui = static_cast< ViewerUI* >(d);
+                    delete ndiPanel;
+                    ndiPanel = nullptr;
+                    ui->uiMain->fill_menu(ui->uiMenuBar);
+                },
+                ui);
+        }
+
+        NDIPanel::~NDIPanel()
+        {
+            MRV2_R();
+
+            r.has_awake = true;
+            r.running = false;
+
+            if (r.findThread.joinable())
+                r.findThread.join();
+
+            if (r.NDI_find)
+            {
+                NDIlib_find_destroy(r.NDI_find);
+                r.NDI_find = nullptr;
+            }
+        }
+
+        void NDIPanel::add_controls()
+        {
+            TLRENDER_P();
+            MRV2_R();
+
+            SettingsObject* settings = App::app->settings();
+            const std::string& prefix = tab_prefix();
+
+            Fl_Group* bg;
+            Spinner* sp;
+            std_any value;
+            int open;
+
+            int Y = g->y();
+
+            auto cg = new CollapsibleGroup(g->x(), Y, g->w(), 20, _("NDI"));
+            cg->spacing(2);
+            auto b = cg->button();
+            b->labelsize(14);
+            b->size(b->w(), 18);
+            b->callback(
+                [](Fl_Widget* w, void* d)
+                {
+                    CollapsibleGroup* cg = static_cast<CollapsibleGroup*>(d);
+                    if (cg->is_open())
+                        cg->close();
+                    else
+                        cg->open();
+
+                    const std::string& prefix = ndiPanel->tab_prefix();
+                    const std::string key = prefix + "NDI";
+
+                    auto settings = App::app->settings();
+                    settings->setValue(key, static_cast<int>(cg->is_open()));
+                },
+                cg);
+
+            cg->begin();
+
+            Y += 30;
+            bg = new Fl_Group(g->x(), Y, g->w(), 22 * 8);
+            bg->box(FL_NO_BOX);
+            bg->begin();
+
+            auto mW = new Widget< PopupMenu >(
+                g->x() + 10, Y, g->w() - 10, 20, _("Source"));
+            PopupMenu* m = _r->source = mW;
+            m->disable_submenus();
+            m->labelsize(12);
+            m->align(FL_ALIGN_CENTER);
+            mW->callback(
+                [=](auto o)
+                {
+                    const Fl_Menu_Item* item = o->mvalue();
+                    if (!item)
+                        return;
+                    _open_ndi(item);
+                });
+
+            Y += 22;
+
+            auto spW = new Widget< Spinner >(
+                g->x() + 60, Y, g->w() - 60, 20, _("Preroll"));
+            sp = _r->preroll = spW;
+            sp->step(1);
+            sp->range(1, 10);
+            sp->tooltip(_("Preroll in seconds"));
+            sp->value(3);
+
+            Y += 22;
+
+            auto cW = new Widget< Fl_Choice >(
+                g->x() + 60, Y, g->w() - 60, 20, _("Audio"));
+            Fl_Choice* c = _r->noAudio = cW;
+            c->labelsize(12);
+            c->align(FL_ALIGN_LEFT);
+            c->add(_("Play"));
+            c->add(_("Ignore"));
+            c->value(0);
+
+            bg->end();
+
+            cg->end();
+
+            std::string key = prefix + "NDI";
+            value = settings->getValue<std::any>(key);
+            open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
+            if (!open)
+            {
+                cg->close();
+            }
+        }
+
+        void NDIPanel::_open_ndi(const Fl_Menu_Item* item)
+        {
+            TLRENDER_P();
+            MRV2_R();
+
+            // Get the NDI name from the menu item
+            const std::string sourceName = item->label();
+
+            if (r.lastStream == sourceName)
+                return;
+
+            if (!r.lastStream.empty())
+                LOG_INFO("Close stream " << r.lastStream);
+
+            r.lastStream = sourceName;
+
+            // Create an ndi file
+            std::string ndiFile = file::NDI(p.ui);
+
+            std::ofstream s(ndiFile);
+            s << sourceName << std::endl;
+            s << (int)r.noAudio->value() << std::endl;
+            s.close();
+
+            auto model = p.ui->app->filesModel();
+            if (model)
+                model->close();
+
+            LOG_INFO("Opened stream " << sourceName);
+
+            open_file_cb(ndiFile, p.ui);
+
+            auto player = p.ui->uiView->getTimelinePlayer();
+            if (player)
+            {
+                LOG_INFO(_("Waiting for player cache to fill up..."));
+                p.ui->uiStatusBar->label(
+                    _("Waiting for player cache to fill up..."));
+
+                player->stop();
+                int noAudio = r.noAudio->value();
+                int seconds = r.preroll->value();
+
+                r.playThread = std::thread(
+                    [this, player, seconds, noAudio]
+                    {
+                        MRV2_R();
+
+                        // Fl::lock();
+
+                        // Sleep so the cache fills up
+                        if (!noAudio)
+                        {
+                            LOG_INFO("Waiting " << seconds << " seconds...");
+                            std::this_thread::sleep_for(
+                                std::chrono::seconds(seconds));
+                        }
+                        // player->start();
+                        LOG_INFO(_("Starting playback..."));
+                        player->forward();
+
+                        // Fl::unlock();
+                    });
+                r.playThread.detach();
+            }
+            p.ui->uiStatusBar->label(_("Everything OK."));
+        }
+
+    } // namespace panel
+
+} // namespace mrv
+
+#endif // TLRENDER_NDI
