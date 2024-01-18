@@ -105,6 +105,9 @@ mrv2 v${mrv2_VERSION} Beta
 This beta release of v${mrv2_VERSION} corresponds to:
 ${date}.
 
+It works on Windows 8.1+ (without USD support), Ubuntu 20.04 LTS+,
+and macOS 11. 
+
 It may contain bugs, new untested features and more.
 
 You can extract it to compile yourself with:
