@@ -115,7 +115,10 @@ namespace mrv
             }
 
             if (!changed)
+            {
+                r.has_awake = false;
                 return;
+            }
 
             m->clear();
             for (int i = 0; i < r.no_sources; ++i)
