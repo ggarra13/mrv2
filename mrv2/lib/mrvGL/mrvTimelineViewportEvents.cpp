@@ -1031,24 +1031,27 @@ namespace mrv
             {
                 if (Fl::event_alt())
                 {
-                    const float speed = _getZoomSpeedValue() / 4.0F;
-                    
+                    int step = 8;
+                    const float speed = _getZoomSpeedValue() / 4.0 / step;
+
                     int dx = p.last_x - p.event_x;
-                    if (dx == 0)
+                    if (abs(dx) < step)
                         return 1;
+                    
                     p.last_x = p.event_x;
                     
-                    float change = 1.0;
+                    float change = 1.0F;
                     float factor = dx * speed;
                     if (dx > 0)
                     {
                         change += factor;
-                        change = 1.0f / change;
+                        change = 1.0F / change;
                     }
                     else
                     {
                         change -= factor;
                     }
+
                     float zoom = viewZoom() * change;
                     if (zoom < 0.01F)
                         zoom = 0.01F;
@@ -1084,14 +1087,15 @@ namespace mrv
                 else
                 {
                     float change = 1.0f;
+                    float factor = dy * speed;
                     if (dy > 0)
                     {
-                        change += dy * speed;
+                        change += factor;
                         change = 1.0f / change;
                     }
                     else
                     {
-                        change -= dy * speed;
+                        change -= factor;
                     }
                     float zoom = viewZoom() * change;
                     setViewZoom(zoom, _getFocus());

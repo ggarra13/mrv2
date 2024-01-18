@@ -16,9 +16,9 @@ run_cmd()
     # These quick commands we won't time them
     if [[ "$1" == "rm" || "$1" == "mv" || "$1" == "cp" || \
 	      "$1" == "ln" ]]; then
-	eval command $@
+	eval command "$@"
     else
-	time eval command $@
+	time eval command "$@"
 	echo
     fi
 }
