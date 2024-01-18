@@ -27,7 +27,6 @@ params="$@"
 #
 . etc/build_dir.sh
 
-export BUILD_DIR=BUILD-$KERNEL-$ARCH-ndi/Release
 mkdir -p $BUILD_DIR
 
 
@@ -51,5 +50,5 @@ else
     export TLRENDER_NDI_SDK="/Library/NDI\ SDK\ for\ Apple/"
 fi
 
-cmd="./runme_nolog.sh -ndi $params 2>&1 | tee $BUILD_DIR/compile.log"
+cmd="./runme_nolog.sh $params 2>&1 | tee $BUILD_DIR/compile.log"
 run_cmd $cmd
