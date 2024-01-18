@@ -237,7 +237,7 @@ namespace mrv
             SettingsObject* settings = App::app->settings();
             const std::string& prefix = tab_prefix();
 
-            Fl_Group* bg;
+            Fl_Group* bg, *bg2;
             Spinner* sp;
             std_any value;
             int open;
@@ -268,10 +268,15 @@ namespace mrv
 
             cg->begin();
 
-            Y += 30;
             bg = new Fl_Group(g->x(), Y, g->w(), 22 * 8);
             bg->box(FL_NO_BOX);
             bg->begin();
+
+            Y += 22;
+            
+            bg2 = new Fl_Group(g->x(), Y, g->w(), 22 * 6);
+            bg2->box(FL_NO_BOX);
+            bg2->begin();
 
             auto mW = new Widget< PopupMenu >(
                 g->x() + 10, Y, g->w() - 10, 20, _("Source"));
@@ -288,7 +293,7 @@ namespace mrv
                     _open_ndi(item);
                 });
 
-            Y += 22;
+            Y += 30;
 
             auto spW = new Widget< Spinner >(
                 g->x() + 60, Y, g->w() - 60, 20, _("Preroll"));
@@ -296,9 +301,15 @@ namespace mrv
             sp->step(1);
             sp->range(1, 10);
             sp->tooltip(_("Preroll in seconds"));
-            sp->value(3);
-
-            Y += 22;
+            sp->value(settings->getValue<int>("NDI/Preroll"));
+            spW->callback(
+                [=](auto w)
+                    {
+                        settings->setValue("NDI/Preroll", (int)w->value());
+                    }
+                );
+            
+            Y += 30;
 
             auto cW = new Widget< Fl_Choice >(
                 g->x() + 60, Y, g->w() - 60, 20, _("Audio"));
@@ -307,8 +318,16 @@ namespace mrv
             c->align(FL_ALIGN_LEFT);
             c->add(_("Play"));
             c->add(_("Ignore"));
-            c->value(0);
+            c->value(settings->getValue<int>("NDI/Audio"));
+            cW->callback(
+                [=](auto w)
+                    {
+                        settings->setValue("NDI/Audio", (int)w->value());
+                    }
+                );
 
+            bg2->end();
+            
             bg->end();
 
             cg->end();
