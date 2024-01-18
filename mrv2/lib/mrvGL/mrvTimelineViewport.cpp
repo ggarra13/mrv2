@@ -271,7 +271,7 @@ namespace mrv
         const auto player = p.timelinePlayers[0];
         const auto& t = player->currentTime();
         const auto& time = t + otime::RationalTime(dx, t.rate());
-        if (!player->isMuted())
+        if (!player->isMuted() && p.ui->uiPrefs->uiPrefsScrubAutoPlay->value())
         {
             if (dx > 0)
             {

@@ -698,6 +698,9 @@ namespace mrv
 
         playback.get("scrubbing_sensitivity", tmpF, 5.0f);
         uiPrefs->uiPrefsScrubbingSensitivity->value(tmpF);
+        
+        playback.get("scrub_auto_playback", tmp, 1);
+        uiPrefs->uiPrefsScrubAutoPlay->value(tmp);
 
         Fl_Preferences pixel_toolbar(base, "pixel_toolbar");
 
@@ -1340,6 +1343,8 @@ namespace mrv
         playback.set(
             "scrubbing_sensitivity",
             uiPrefs->uiPrefsScrubbingSensitivity->value());
+        playback.set(
+            "scrub_auto_playback", uiPrefs->uiPrefsScrubAutoPlay->value());
 
         Fl_Preferences pixel_toolbar(base, "pixel_toolbar");
         pixel_toolbar.set("RGBA_pixel", uiPrefs->uiPrefsPixelRGBA->value());
