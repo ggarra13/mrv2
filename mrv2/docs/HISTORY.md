@@ -10,6 +10,8 @@ v1.0.1
 - Added an options to Preferences->Playback called Auto Scrub Playback, which
   when turned off will turn off the audio playback while scrubbing, like
   on previous versions of mrv2 (v0.8.2 and earlier).
+- Added NDI support in source code.  You need to compile mrv2 against the
+  NDI SDK for now.
 
 v1.0.0
 ======

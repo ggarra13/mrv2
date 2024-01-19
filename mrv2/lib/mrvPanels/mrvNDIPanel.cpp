@@ -79,8 +79,11 @@ namespace mrv
             PopupMenu* m = r.source;
 
             if (m->popped() || !r.running)
+            {
+                r.has_awake = false;
                 return;
-
+            }
+            
             std::string sourceName;
             int selected = m->value();
             bool changed = false;
@@ -148,9 +151,8 @@ namespace mrv
 
             add_group("NDI");
 
-            // @todo:
-            // Fl_SVG_Image* svg = load_svg("NDI.svg");
-            // g->image(svg);
+            Fl_SVG_Image* svg = load_svg("NDI.svg");
+            g->image(svg);
 
             r.NDI_find = NDIlib_find_create_v2();
 
