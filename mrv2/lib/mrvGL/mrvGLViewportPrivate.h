@@ -8,7 +8,7 @@
 
 #include <tlGL/Mesh.h>
 #include <tlGL/OffscreenBuffer.h>
-#include <tlTimeline/GLRender.h>
+#include <tlTimelineGL/Render.h>
 #include <tlGL/Shader.h>
 
 #include "mrvGL/mrvGLDefines.h"
@@ -29,7 +29,7 @@ namespace mrv
         std::shared_ptr<tl::gl::OffscreenBuffer> buffer = nullptr;
         std::shared_ptr<tl::gl::OffscreenBuffer> stereoBuffer = nullptr;
         std::shared_ptr<tl::gl::OffscreenBuffer> annotation = nullptr;
-        std::shared_ptr<timeline::GLRender> render = nullptr;
+        std::shared_ptr<timeline_gl::Render> render = nullptr;
         std::shared_ptr<gl::Shader> shader = nullptr;
         std::shared_ptr<gl::Shader> annotationShader = nullptr;
         std::shared_ptr<gl::Shader> stereoShader = nullptr;

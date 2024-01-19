@@ -13,6 +13,14 @@
 #
 params="$@"
 
+. etc/build_dir.sh
+
+#
+# Clear the flags, as they will be set by runme_nolog.sh.
+#
+export FLAGS=""
+export CMAKE_FLAGS=""
+
 export TLRENDER_NDI=ON
 
 if [[ $KERNEL == *Linux* ]]; then
@@ -23,5 +31,4 @@ else
     export TLRENDER_NDI_SDK="/Library/NDI\ SDK\ for\ Apple/"
 fi
 
-cmd="./runme.sh $params"
-run_cmd $cmd
+./runme.sh $params

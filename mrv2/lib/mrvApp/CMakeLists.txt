@@ -4,7 +4,6 @@
 
 set(HEADERS
     App.h
-    mrvDevicesModel.h
     mrvFilesModel.h
     mrvMainControl.h
     mrvOpenSeparateAudioDialog.h
@@ -14,7 +13,6 @@ set(HEADERS
   )
   set(SOURCES
     App.cpp
-    mrvDevicesModel.cpp
     mrvFilesModel.cpp
     mrvMainControl.cpp
     mrvOpenSeparateAudioDialog.cpp

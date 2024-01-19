@@ -15,7 +15,7 @@ namespace fs = std::filesystem;
 
 #include <tlGL/Init.h>
 #include <tlGL/Util.h>
-#include <tlTimeline/GLRender.h>
+#include <tlTimelineGL/Render.h>
 
 #include "mrvCore/mrvUtil.h"
 #include "mrvCore/mrvLocale.h"
@@ -102,7 +102,7 @@ namespace mrv
             const std::string& extension = path.getExtension();
 
             // Create the renderer.
-            auto render = timeline::GLRender::create(context);
+            auto render = timeline_gl::Render::create(context);
 
             gl::OffscreenBufferOptions offscreenBufferOptions;
 

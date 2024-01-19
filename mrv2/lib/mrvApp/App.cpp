@@ -58,7 +58,6 @@ namespace py = pybind11;
 
 #include "mrvEdit/mrvEditUtil.h"
 
-#include "mrvApp/mrvDevicesModel.h"
 #include "mrvApp/mrvPlaylistsModel.h"
 #include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/mrvMainControl.h"
@@ -189,11 +188,6 @@ namespace mrv
         timeline::DisplayOptions displayOptions;
         float volume = 1.F;
         bool mute = false;
-        OutputDevice* outputDevice = nullptr;
-        bool deviceActive = false;
-        std::shared_ptr<DevicesModel> devicesModel;
-        std::shared_ptr<observer::ValueObserver<DevicesModelData> >
-            devicesObserver;
         std::shared_ptr<observer::ListObserver<log::Item> > logObserver;
 
         std::vector<TimelinePlayer*> timelinePlayers;
@@ -237,7 +231,7 @@ namespace mrv
     App::App(
         int argc, char** argv,
         const std::shared_ptr<system::Context>& context) :
-        IApp(),
+        BaseApp(),
         _p(new Private)
     {
         TLRENDER_P();
@@ -267,7 +261,7 @@ namespace mrv
 
         const std::string& msg = setLanguageLocale();
 
-        IApp::_init(
+        BaseApp::_init(
             app::convert(argc, argv), context, "mrv2",
             _("Play timelines, movies, and image sequences."),
             {app::CmdLineValueArg<std::string>::create(
@@ -499,7 +493,6 @@ namespace mrv
         p.timeUnitsModel = timeline::TimeUnitsModel::create(context);
         p.filesModel = FilesModel::create(context);
         p.playlistsModel = PlaylistsModel::create(context);
-        p.devicesModel = DevicesModel::create(context);
 
         ui->uiTimeline->setContext(context, p.timeUnitsModel, ui);
         ui->uiTimeline->setScrollBarsVisible(false);
@@ -631,33 +624,6 @@ namespace mrv
                 }
             });
 
-        // p.outputDevice = new OutputDevice(context);
-        value = p.settings->getValue<std::any>("Devices/DeviceIndex");
-        p.devicesModel->setDeviceIndex(
-            value.type() == typeid(void) ? 0 : std_any_cast<int>(value));
-        value = p.settings->getValue<std::any>("Devices/DisplayModeIndex");
-        p.devicesModel->setDisplayModeIndex(
-            value.type() == typeid(void) ? 0 : std_any_cast<int>(value));
-        value = p.settings->getValue<std::any>("Devices/PixelTypeIndex");
-        p.devicesModel->setPixelTypeIndex(
-            value.type() == typeid(void) ? 0 : std_any_cast<int>(value));
-        p.settings->setDefaultValue(
-            "Devices/HDRMode", static_cast<int>(device::HDRMode::FromFile));
-        p.devicesModel->setHDRMode(static_cast<device::HDRMode>(
-            p.settings->getValue<int>("Devices/HDRMode")));
-        value = p.settings->getValue<std::any>("Devices/HDRData");
-        std::string s = value.type() == typeid(void)
-                            ? std::string()
-                            : std_any_cast< std::string >(value);
-        if (!s.empty())
-        {
-            auto json = nlohmann::json::parse(s);
-            image::HDRData data;
-            from_json(json, data);
-            p.devicesModel->setHDRData(data);
-        }
-
-        DBG;
 
         p.logObserver = observer::ListObserver<log::Item>::create(
             ui->app->getContext()->getLogSystem()->observeLog(),
@@ -685,24 +651,6 @@ namespace mrv
                 }
             });
 
-#ifdef TLRENDER_BMD
-        p.devicesObserver = observer::ValueObserver<DevicesModelData>::create(
-            p.devicesModel->observeData(),
-            [this](const DevicesModelData& value)
-            {
-                const device::PixelType pixelType =
-                    value.pixelTypeIndex >= 0 &&
-                            value.pixelTypeIndex < value.pixelTypes.size()
-                        ? value.pixelTypes[value.pixelTypeIndex]
-                        : device::PixelType::None;
-                // @todo:
-                _p->outputDevice->setDevice(
-                    value.deviceIndex - 1, value.displayModeIndex - 1,
-                    pixelType);
-                _p->outputDevice->setDeviceEnabled(value.deviceEnabled);
-                _p->outputDevice->setHDR(value.hdrMode, value.hdrData);
-            });
-#endif
 
         DBG;
         cacheUpdate();
@@ -848,29 +796,6 @@ namespace mrv
         TLRENDER_P();
 
         cleanResources();
-
-        //@todo:
-        // delete p.outputDevice;
-
-        if (p.settings && p.devicesModel)
-        {
-            const auto& deviceData = p.devicesModel->observeData()->get();
-            p.settings->setValue(
-                "Devices/DeviceIndex",
-                static_cast<int>(deviceData.deviceIndex));
-            p.settings->setValue(
-                "Devices/DisplayModeIndex",
-                static_cast<int>(deviceData.displayModeIndex));
-            p.settings->setValue(
-                "Devices/PixelTypeIndex",
-                static_cast<int>(deviceData.pixelTypeIndex));
-            p.settings->setValue(
-                "Devices/HDRMode", static_cast<int>(deviceData.hdrMode));
-            nlohmann::json json;
-            to_json(json, deviceData.hdrData);
-            const std::string& data = json.dump();
-            p.settings->setValue("Devices/HDRData", data);
-        }
     }
 
     const std::shared_ptr<timeline::TimeUnitsModel>& App::timeUnitsModel() const
@@ -916,16 +841,6 @@ namespace mrv
     bool App::isMuted() const
     {
         return _p->mute;
-    }
-
-    OutputDevice* App::outputDevice() const
-    {
-        return _p->outputDevice;
-    }
-
-    const std::shared_ptr<DevicesModel>& App::devicesModel() const
-    {
-        return _p->devicesModel;
     }
 
     struct PlaybackData
@@ -1586,7 +1501,7 @@ namespace mrv
             if (i)
             {
                 i->setVolume(p.volume);
-                i->setMute(p.mute || p.deviceActive);
+                i->setMute(p.mute);
             }
         }
 #ifdef TLRENDER_BMD
