@@ -109,6 +109,19 @@ if (MRV2_PYBIND11)
     endif()
 endif()
     
+
+if(TLRENDER_NDI)
+    if (WIN32)
+    elseif (APPLE)
+    elseif(UNIX)
+	file( GLOB MRV2_LIB_DSOS ${TLRENDER_NDI_SDK}/lib/x86_64-linux-gnu/*.so* )
+	install( FILES ${MRV2_LIB_DSOS}
+	    DESTINATION lib
+	    COMPONENT applications )
+    endif()
+endif()
+
+    
 if ( APPLE )
 
     if(MRV2_PYBIND11)
@@ -124,8 +137,8 @@ if ( APPLE )
     endif()
     
     # Install all.dylibs in CMAKE_INSTALL_PREFIX / lib
-    file( GLOB MRV_DYLIBS ${CMAKE_INSTALL_PREFIX}/lib/*.dylib* )
-    install( FILES ${MRV_DYLIBS}
+    file( GLOB MRV2_DYLIBS ${CMAKE_INSTALL_PREFIX}/lib/*.dylib* )
+    install( FILES ${MRV2_DYLIBS}
 	DESTINATION lib
 	COMPONENT applications )
 elseif ( UNIX )
@@ -143,14 +156,14 @@ elseif ( UNIX )
     endif()
     
     # Install all .so in CMAKE_INSTALL_PREFIX/lib
-    file( GLOB MRV_LIB_DSOS ${CMAKE_INSTALL_PREFIX}/lib/*.so* )
-    install( FILES ${MRV_LIB_DSOS}
+    file( GLOB MRV2_LIB_DSOS ${CMAKE_INSTALL_PREFIX}/lib/*.so* )
+    install( FILES ${MRV2_LIB_DSOS}
 	DESTINATION lib
 	COMPONENT applications )
   
     # For RedHat and Rocky Linux, we must install also lib64
-    file( GLOB MRV_LIB64_DSOS ${CMAKE_INSTALL_PREFIX}/lib64/*.so* )
-    install( FILES ${MRV_LIB64_DSOS}
+    file( GLOB MRV2_LIB64_DSOS ${CMAKE_INSTALL_PREFIX}/lib64/*.so* )
+    install( FILES ${MRV2_LIB64_DSOS}
       DESTINATION lib64
       COMPONENT applications )
   

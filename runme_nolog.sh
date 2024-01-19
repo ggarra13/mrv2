@@ -22,44 +22,96 @@ fi
 
 sleep 10
 
+mkdir -p $BUILD_DIR
 cd $BUILD_DIR
 
 #
 # These are some of the expensive mrv2 options
 #
-export BUILD_PYTHON=ON
-export MRV2_PYFLTK=ON
-export MRV2_PYBIND11=ON
-export MRV2_NETWORK=ON
-export MRV2_PDF=ON
+if [ -z "$BUILD_PYTHON" ]; then
+    export BUILD_PYTHON=ON
+fi
+
+if [ -z "$MRV2_PYFLTK" ]; then
+    export MRV2_PYFLTK=ON
+fi
+
+if [ -z "$MRV2_PYBIND11" ]; then
+    export MRV2_PYBIND11=ON
+fi
+
+if [ -z "$MRV2_NETWORK" ]; then
+    export MRV2_NETWORK=ON
+fi
+
+if [ -z "$MRV2_PDF" ]; then
+    export MRV2_PDF=ON
+fi
 
 #
 # These are some of the expensive TLRENDER options
 #
 
-export TLRENDER_ASAN=OFF # asan memory debugging (not yet working)
-export TLRENDER_NET=ON
-export TLRENDER_RAW=ON
-export TLRENDER_USD=ON
-export TLRENDER_VPX=ON
-export TLRENDER_WAYLAND=ON
-export TLRENDER_YASM=ON
+if [ -z "$TLRENDER_ASAN" ]; then
+    export TLRENDER_ASAN=OFF # asan memory debugging (not yet working)
+fi
+
+if [ -z "$TLRENDER_FFMPEG" ]; then
+    export TLRENDER_FFMPEG=ON
+fi
+
+if [ -z "$TLRENDER_NDI" ]; then
+    export TLRENDER_NDI=OFF
+fi
+
+if [ -z "$TLRENDER_NDI_SDK" ]; then
+    export TLRENDER_NDI_SDK=""
+fi
+
+if [ -z "$TLRENDER_NET" ]; then
+    export TLRENDER_NET=ON
+fi
+
+if [ -z "$TLRENDER_RAW" ]; then
+    export TLRENDER_RAW=ON
+fi
+
+if [ -z "$TLRENDER_USD" ]; then
+    export TLRENDER_USD=ON
+fi
+
+if [ -z "$TLRENDER_VPX" ]; then
+    export TLRENDER_VPX=ON
+fi
+
+if [ -z "$TLRENDER_WAYLAND" ]; then
+    export TLRENDER_WAYLAND=ON
+fi
+
+if [ -z "$TLRENDER_YASM" ]; then
+    export TLRENDER_YASM=ON
+fi
 
 cmd="cmake -G '${CMAKE_GENERATOR}' \
 	   -D CMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE \
 	   -D CMAKE_INSTALL_PREFIX=$PWD/install \
 	   -D CMAKE_PREFIX_PATH=$PWD/install \
 	   -D BUILD_PYTHON=${BUILD_PYTHON} \
+	   -D MRV2_NETWORK=${MRV2_NETWORK} \
 	   -D MRV2_PYFLTK=${MRV2_PYFLTK} \
 	   -D MRV2_PYBIND11=${MRV2_PYBIND11} \
 	   -D MRV2_PDF=${MRV2_PDF} \
-	   -D TLRENDER_USD=${TLRENDER_USD} \
-	   -D TLRENDER_VPX=${TLRENDER_VPX} \
-	   -D TLRENDER_YASM=${TLRENDER_YASM} \
-	   -D TLRENDER_RAW=${TLRENDER_RAW} \
-	   -D TLRENDER_WAYLAND=${TLRENDER_WAYLAND} \
+           -D TLRENDER_ASAN=${TLRENDER_ASAN} \
+           -D TLRENDER_FFMPEG=${TLRENDER_FFMPEG} \
+	   -D TLRENDER_NDI=${TLRENDER_NDI} \
+	   -D TLRENDER_NDI_SDK=${TLRENDER_NDI_SDK} \
 	   -D TLRENDER_NET=${TLRENDER_NET} \
 	   -D TLRENDER_NFD=OFF \
+	   -D TLRENDER_RAW=${TLRENDER_RAW} \
+	   -D TLRENDER_USD=${TLRENDER_USD} \
+	   -D TLRENDER_VPX=${TLRENDER_VPX} \
+	   -D TLRENDER_WAYLAND=${TLRENDER_WAYLAND} \
+	   -D TLRENDER_YASM=${TLRENDER_YASM} \
 	   -D TLRENDER_PROGRAMS=OFF \
 	   -D TLRENDER_EXAMPLES=FALSE \
 	   -D TLRENDER_TESTS=FALSE \

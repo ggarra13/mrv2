@@ -91,6 +91,9 @@ namespace mrv
 #ifdef MRV2_NETWORK
         {_("Network"), (Fl_Callback*)network_panel_cb},
 #endif
+#ifdef TLRENDER_NDI
+        {_("NDI"), (Fl_Callback*)ndi_panel_cb},
+#endif
         {_("Playlist"), (Fl_Callback*)playlist_panel_cb},
 #ifdef MRV2_PYBIND11
         {_("Python"), (Fl_Callback*)python_panel_cb},
@@ -156,6 +159,12 @@ namespace mrv
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
+    void open_file_cb(const std::string& file, ViewerUI* ui)
+    {
+        ui->app->open(file);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+    
     void open_cb(Fl_Widget* w, ViewerUI* ui)
     {
         const std::vector<std::string>& files = open_image_file(NULL, true);
@@ -492,7 +501,6 @@ namespace mrv
 
     void exit_cb(Fl_Widget* w, ViewerUI* ui)
     {
-
         tcp->lock();
 
         ui->uiView->stop();
@@ -527,6 +535,10 @@ namespace mrv
 #ifdef MRV2_PYBIND11
         if (panel::pythonPanel)
             panel::pythonPanel->save();
+#endif
+#ifdef TLRENDER_NDI
+        if (panel::ndiPanel)
+            panel::ndiPanel->save();
 #endif
 #ifdef MRV2_NETWORK
         if (panel::networkPanel)
@@ -572,9 +584,13 @@ namespace mrv
         delete panel::networkPanel;
         panel::networkPanel = nullptr;
 #endif
+#ifdef TLRENDER_NDI
+        delete panel::ndiPanel;
+        panel::ndiPanel = nullptr;
+#endif
 
         // Close all files
-        close_all_cb(w, ui);
+        //close_all_cb(w, ui);  // takes too long to exit .ndi files
 
         // Hide any GL Window (needed in Windows)
         Fl_Window* pw = Fl::first_window();

@@ -8,6 +8,7 @@ namespace fs = std::filesystem;
 #include <tlIO/System.h>
 
 #include "mrvCore/mrvFile.h"
+#include "mrvCore/mrvHome.h"
 
 #include "mrvApp/App.h"
 
@@ -136,5 +137,37 @@ namespace mrv
             return false;
         }
 
+
+        static size_t ndiIndex = 1;
+    
+        std::string NDI(ViewerUI* ui)
+        {
+            char buf[256];
+#ifdef _WIN32
+            snprintf(buf, 256, "NDI0x%p.%zu.ndi", ui, ndiIndex);
+#else
+            snprintf(buf, 256, "NDI%p.%zu.ndi", ui, ndiIndex);
+#endif
+            ++ndiIndex;
+            auto out = tmppath() + '/' + buf;
+            return out;
+        }
+
+        bool isTemporaryNDI(const file::Path& path)
+        {
+            bool out = true;
+            
+            const std::string tmpdir = tmppath() + '/';            
+            auto dir = path.getDirectory();
+            auto base = path.getBaseName();
+            auto extension = path.getExtension();
+            if (dir != tmpdir || base.substr(0, 5) != "NDI0x" ||
+                extension != ".ndi")
+            {
+                out = false;
+            }
+            return out;
+        }
+        
     } // namespace file
 } // namespace mrv

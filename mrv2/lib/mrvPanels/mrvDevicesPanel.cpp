@@ -4,6 +4,14 @@
 
 #include <map>
 
+#if defined(TLRENDER_BMD)
+#include <tlPlay/BMDDevicesModel.h>
+#endif // TLRENDER_BMD
+
+#if defined(TLRENDER_BMD)
+#include <tlDevice/BMDOutputDevice.h>
+#endif // TLRENDER_BMD
+
 #include <FL/Fl_Choice.H>
 
 #include "mrvWidgets/mrvFunctional.h"
@@ -16,8 +24,6 @@
 
 #include "mrvDevicesPanel.h"
 
-#include "mrvApp/mrvDevicesModel.h"
-
 #include "mrViewer.h"
 
 namespace mrv
@@ -27,21 +33,13 @@ namespace mrv
 
         struct DevicesPanel::Private
         {
-            std::shared_ptr<observer::ValueObserver<DevicesModelData> >
-                dataObserver;
+            Fl_Check_Button* enabledCheckBox = nullptr;
             Fl_Choice* deviceComboBox = nullptr;
             Fl_Choice* displayModeComboBox = nullptr;
             Fl_Choice* pixelTypeComboBox = nullptr;
             Fl_Choice* videoLevelsComboBox = nullptr;
             Fl_Choice* hdrModeComboBox = nullptr;
-            std::pair<DoubleSpinner*, DoubleSpinner*> redPrimariesSpinBoxes =
-                std::make_pair(nullptr, nullptr);
-            std::pair<DoubleSpinner*, DoubleSpinner*> greenPrimariesSpinBoxes =
-                std::make_pair(nullptr, nullptr);
-            std::pair<DoubleSpinner*, DoubleSpinner*> bluePrimariesSpinBoxes =
-                std::make_pair(nullptr, nullptr);
-            std::pair<DoubleSpinner*, DoubleSpinner*> whitePrimariesSpinBoxes =
-                std::make_pair(nullptr, nullptr);
+            std::vector<std::pair<DoubleSpinner*, DoubleSpinner*> >primariesSpinBoxes;
             std::pair<DoubleSpinner*, DoubleSpinner*>
                 masteringLuminanceSpinBoxes = std::make_pair(nullptr, nullptr);
             HorSlider* maxCLLSlider = nullptr;
@@ -75,6 +73,7 @@ namespace mrv
             TLRENDER_P();
             MRV2_R();
 
+#if defined(TLRENDER_BMD)
             Fl_Box* box;
             Pack* sg;
             Fl_Group* bg;
@@ -183,111 +182,40 @@ namespace mrv
             sg->spacing(5);
             sg->begin();
 
-            box = new Fl_Box(X, Y, 120, 20, "Red Primaries:");
-            box->labelsize(12);
-            box->align(FL_ALIGN_LEFT | FL_ALIGN_INSIDE);
+            const std::array<std::string, image::HDRPrimaries::Count>
+                primariesLabels = {
+                    "Red primaries:", "Green primaries:", "Blue primaries:",
+                    "White primaries:"};
+            for (size_t i = 0; i < image::HDRPrimaries::Count; ++i)
+            {
+                sg = new Pack(g->x(), Y, g->w(), 25);
+                sg->type(Pack::HORIZONTAL);
+                sg->spacing(5);
+                sg->begin();
+                box = new Fl_Box(X, Y, 120, 20, _(primariesLabels.c_str()));
+                box->labelsize(12);
+                box->align(FL_ALIGN_LEFT | FL_ALIGN_INSIDE);
+            
+                auto min = new Widget< DoubleSpinner >(X, Y, 50, 25);
+                min->range(0.0, 1.0);
+                min->step(0.01);
+                min->callback(
+                    [=](auto o)
+                        {
+                        });
+                auto max = new Widget< DoubleSpinner >(X, Y, 50, 25);
+                max->range(0.0, 1.0);
+                max->step(0.01);
+                max->callback(
+                    [=](auto o)
+                        {
+                        });
+                p.primariesSpinBoxes.push_back(std::make_pair(min, max));
+                sg->end();
+                
+                Y += 75;
+            }
 
-            auto dW = new Widget< DoubleSpinner >(X, Y, 50, 25);
-            r.redPrimariesSpinBoxes.first = dW;
-            dW->callback(
-                [=](auto o)
-                {
-                    auto hdrData = _p->ui->app->devicesModel()
-                                       ->observeData()
-                                       ->get()
-                                       .hdrData;
-                    hdrData.redPrimaries.x = o->value();
-                    _p->ui->app->devicesModel()->setHDRData(hdrData);
-                });
-            dW = new Widget< DoubleSpinner >(X, Y, 50, 25);
-            r.redPrimariesSpinBoxes.second = dW;
-            dW->callback(
-                [=](auto o)
-                {
-                    auto hdrData = _p->ui->app->devicesModel()
-                                       ->observeData()
-                                       ->get()
-                                       .hdrData;
-                    hdrData.redPrimaries.y = o->value();
-                    _p->ui->app->devicesModel()->setHDRData(hdrData);
-                });
-
-            sg->end();
-            Y += 25;
-
-            sg = new Pack(g->x(), Y, g->w(), 25);
-            sg->type(Pack::HORIZONTAL);
-            sg->spacing(5);
-            sg->begin();
-
-            box = new Fl_Box(X, Y, 120, 20, "Green Primaries:");
-            box->labelsize(12);
-            box->align(FL_ALIGN_LEFT | FL_ALIGN_INSIDE);
-
-            dW = new Widget< DoubleSpinner >(X, Y, 50, 25);
-            r.greenPrimariesSpinBoxes.first = dW;
-            dW->callback(
-                [=](auto o)
-                {
-                    auto hdrData = _p->ui->app->devicesModel()
-                                       ->observeData()
-                                       ->get()
-                                       .hdrData;
-                    hdrData.greenPrimaries.x = o->value();
-                    _p->ui->app->devicesModel()->setHDRData(hdrData);
-                });
-            dW = new Widget< DoubleSpinner >(X, Y, 50, 25);
-            r.greenPrimariesSpinBoxes.second = dW;
-            dW->callback(
-                [=](auto o)
-                {
-                    auto hdrData = _p->ui->app->devicesModel()
-                                       ->observeData()
-                                       ->get()
-                                       .hdrData;
-                    hdrData.greenPrimaries.y = o->value();
-                    _p->ui->app->devicesModel()->setHDRData(hdrData);
-                });
-
-            sg->end();
-            Y += 25;
-
-            sg = new Pack(g->x(), Y, g->w(), 25);
-            sg->type(Pack::HORIZONTAL);
-            sg->spacing(5);
-            sg->begin();
-
-            box = new Fl_Box(X, Y, 120, 20, "Blue Primaries:");
-            box->labelsize(12);
-            box->align(FL_ALIGN_LEFT | FL_ALIGN_INSIDE);
-
-            dW = new Widget< DoubleSpinner >(X, Y, 50, 25);
-            r.bluePrimariesSpinBoxes.first = dW;
-            dW->callback(
-                [=](auto o)
-                {
-                    auto hdrData = _p->ui->app->devicesModel()
-                                       ->observeData()
-                                       ->get()
-                                       .hdrData;
-                    hdrData.bluePrimaries.x = o->value();
-                    _p->ui->app->devicesModel()->setHDRData(hdrData);
-                });
-            dW = new Widget< DoubleSpinner >(X, Y, 50, 25);
-            r.bluePrimariesSpinBoxes.second = dW;
-            dW->callback(
-                [=](auto o)
-                {
-                    auto hdrData = _p->ui->app->devicesModel()
-                                       ->observeData()
-                                       ->get()
-                                       .hdrData;
-                    hdrData.bluePrimaries.y = o->value();
-                    _p->ui->app->devicesModel()->setHDRData(hdrData);
-                });
-
-            sg->end();
-            Y += 25;
 
             sg = new Pack(g->x(), Y, g->w(), 25);
             sg->type(Pack::HORIZONTAL);
@@ -407,128 +335,8 @@ namespace mrv
             cg->end();
 
             g->end();
-
-            r.dataObserver = observer::ValueObserver<DevicesModelData>::create(
-                App::app->devicesModel()->observeData(),
-                [this](const DevicesModelData& value)
-                {
-                    {
-                        _r->deviceComboBox->clear();
-                        for (const auto& i : value.devices)
-                        {
-                            _r->deviceComboBox->add(i.c_str());
-                        }
-                        _r->deviceComboBox->value(value.deviceIndex);
-                    }
-                    {
-                        _r->displayModeComboBox->clear();
-                        for (const auto& i : value.displayModes)
-                        {
-                            _r->displayModeComboBox->add(i.c_str());
-                        }
-                        _r->displayModeComboBox->value(value.displayModeIndex);
-                    }
-                    {
-                        _r->pixelTypeComboBox->clear();
-                        for (const auto& i : value.pixelTypes)
-                        {
-                            std::stringstream ss;
-                            ss << i;
-                            _r->pixelTypeComboBox->add(ss.str().c_str());
-                        }
-                        _r->pixelTypeComboBox->value(value.pixelTypeIndex);
-                    }
-                    {
-                        _r->videoLevelsComboBox->clear();
-                        for (const auto& i : image::getVideoLevelsEnums())
-                        {
-                            std::stringstream ss;
-                            ss << i;
-                            _r->videoLevelsComboBox->add(ss.str().c_str());
-                        }
-                        _r->videoLevelsComboBox->value(
-                            static_cast<int>(value.videoLevels));
-                    }
-                    {
-                        _r->hdrModeComboBox->clear();
-                        for (const auto& i : device::getHDRModeLabels())
-                        {
-                            _r->hdrModeComboBox->add(i.c_str());
-                        }
-                        _r->hdrModeComboBox->value(
-                            static_cast<int>(value.hdrMode));
-                    }
-                    {
-                        _r->redPrimariesSpinBoxes.first->value(
-                            value.hdrData.redPrimaries.x);
-                        _r->redPrimariesSpinBoxes.first->setEnabled(
-                            device::HDRMode::Custom == value.hdrMode);
-                    }
-                    {
-                        _r->redPrimariesSpinBoxes.second->value(
-                            value.hdrData.redPrimaries.y);
-                        _r->redPrimariesSpinBoxes.second->setEnabled(
-                            device::HDRMode::Custom == value.hdrMode);
-                    }
-                    {
-                        _r->greenPrimariesSpinBoxes.first->value(
-                            value.hdrData.greenPrimaries.x);
-                        _r->greenPrimariesSpinBoxes.first->setEnabled(
-                            device::HDRMode::Custom == value.hdrMode);
-                    }
-                    {
-                        _r->greenPrimariesSpinBoxes.second->value(
-                            value.hdrData.greenPrimaries.y);
-                        _r->greenPrimariesSpinBoxes.second->setEnabled(
-                            device::HDRMode::Custom == value.hdrMode);
-                    }
-                    {
-                        _r->bluePrimariesSpinBoxes.first->value(
-                            value.hdrData.bluePrimaries.x);
-                        _r->bluePrimariesSpinBoxes.first->setEnabled(
-                            device::HDRMode::Custom == value.hdrMode);
-                    }
-                    {
-                        _r->bluePrimariesSpinBoxes.second->value(
-                            value.hdrData.bluePrimaries.y);
-                        _r->bluePrimariesSpinBoxes.second->setEnabled(
-                            device::HDRMode::Custom == value.hdrMode);
-                    }
-                    {
-                        _r->whitePrimariesSpinBoxes.first->value(
-                            value.hdrData.whitePrimaries.x);
-                        _r->whitePrimariesSpinBoxes.first->setEnabled(
-                            device::HDRMode::Custom == value.hdrMode);
-                    }
-                    {
-                        _r->whitePrimariesSpinBoxes.second->value(
-                            value.hdrData.whitePrimaries.y);
-                        _r->whitePrimariesSpinBoxes.second->setEnabled(
-                            device::HDRMode::Custom == value.hdrMode);
-                    }
-                    {
-                        _r->masteringLuminanceSpinBoxes.first->value(
-                            value.hdrData.displayMasteringLuminance.getMin());
-                        _r->masteringLuminanceSpinBoxes.first->setEnabled(
-                            device::HDRMode::Custom == value.hdrMode);
-                    }
-                    {
-                        _r->masteringLuminanceSpinBoxes.second->value(
-                            value.hdrData.displayMasteringLuminance.getMax());
-                        _r->masteringLuminanceSpinBoxes.second->setEnabled(
-                            device::HDRMode::Custom == value.hdrMode);
-                    }
-                    {
-                        _r->maxCLLSlider->value(value.hdrData.maxCLL);
-                        _r->maxCLLSlider->setEnabled(
-                            device::HDRMode::Custom == value.hdrMode);
-                    }
-                    {
-                        _r->maxFALLSlider->value(value.hdrData.maxFALL);
-                        _r->maxFALLSlider->setEnabled(
-                            device::HDRMode::Custom == value.hdrMode);
-                    }
-                });
+#endif
+            
         }
 
     } // namespace panel

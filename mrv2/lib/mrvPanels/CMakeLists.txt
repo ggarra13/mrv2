@@ -51,6 +51,11 @@ if(TLRENDER_USD)
     list( APPEND SOURCES mrvUSDPanel.cpp)
 endif()
 
+if(TLRENDER_NDI)
+    list( APPEND HEADERS mrvNDIPanel.h )
+    list( APPEND SOURCES mrvNDIPanel.cpp)
+endif()
+
 if(MRV2_PYBIND11)
     list( APPEND LIBRARIES pybind11::embed )
     list( APPEND HEADERS mrvPythonPanel.h )
