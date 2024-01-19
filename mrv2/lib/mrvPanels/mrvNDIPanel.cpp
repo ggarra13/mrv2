@@ -10,6 +10,7 @@
 #    include <atomic>
 
 #    include <tlCore/StringFormat.h>
+#    include <tlCore/NDI.h>
 
 #    include <FL/Fl_Choice.H>
 #    include <FL/Fl_Check_Button.H>
@@ -360,9 +361,15 @@ namespace mrv
             // Create an ndi file
             std::string ndiFile = file::NDI(p.ui);
 
+            ndi::Options options;
+            options.sourceName = sourceName;
+            options.noAudio = (int) r.noAudio->value();
+
+            nlohmann::json j;
+            j = options;
+            
             std::ofstream s(ndiFile);
-            s << sourceName << std::endl;
-            s << (int)r.noAudio->value() << std::endl;
+            s << j << std::endl;
             s.close();
 
             auto model = p.ui->app->filesModel();
