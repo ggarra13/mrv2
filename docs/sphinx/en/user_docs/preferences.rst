@@ -227,7 +227,13 @@ Playback
 
 .. topic:: Scrub Sensitivity
 
-	   How fast or slow does dragging the mouse work when scrubbing. 
+	   How fast or slow does dragging the mouse work when scrubbing.
+	   
+.. topic:: Auto Scrub Playback
+
+	   When this is on, scrubbing will automatically start playback so
+	   that audio can be heard.  Note that this makes scrubbing start-up
+	   a tad slower.
 	   
 Timeline
 ========

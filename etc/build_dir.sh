@@ -66,9 +66,13 @@ fi
 
 
 export PATH="$PWD/${BUILD_DIR}/install/bin:$PWD/$BUILD_DIR/install/bin/Scripts:${PATH}"
-export OLD_LD_LIBRARY_PATH=${LD_LIBRARY_PATH}
+if [ -z "$OLD_LD_LIBRARY_PATH" ]; then
+    export OLD_LD_LIBRARY_PATH=${LD_LIBRARY_PATH}
+fi
 export LD_LIBRARY_PATH="$PWD/${BUILD_DIR}/install/lib64:$PWD/${BUILD_DIR}/install/lib:${LD_LIBRARY_PATH}"
-export OLD_DYLIBRARY_PATH=${DYLD_LIBRARY_PATH}
+if [ -z "$OLD_DYLIBRARY_PATH" ]; then
+    export OLD_DYLIBRARY_PATH=${DYLD_LIBRARY_PATH}
+fi
 export DYLD_LIBRARY_PATH="$PWD/${BUILD_DIR}/install/lib:${DYLD_LIBRARY_PATH}"
 export PKG_CONFIG_PATH="$PWD/${BUILD_DIR}/install/lib64/pkgconfig:$PWD/${BUILD_DIR}/install/lib/pkgconfig:${PKG_CONFIG_PATH}"
 export PYTHONPATH="$PWD/${BUILD_DIR}/install/lib/python${PYTHON_VERSION}:$PWD/${BUILD_DIR}/install/lib/python${PYTHON_VERSION}/site-packages:${PYTHONPATH}"

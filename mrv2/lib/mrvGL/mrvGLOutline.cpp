@@ -13,7 +13,7 @@
 
 namespace tl
 {
-    namespace timeline
+    namespace timeline_gl
     {
         extern std::string vertexSource();
         extern std::string meshFragmentSource();
@@ -50,7 +50,8 @@ namespace mrv
             if (!p.shader)
             {
                 p.shader = Shader::create(
-                    timeline::vertexSource(), timeline::meshFragmentSource());
+                    timeline_gl::vertexSource(),
+                    timeline_gl::meshFragmentSource());
                 CHECK_GL;
             }
 

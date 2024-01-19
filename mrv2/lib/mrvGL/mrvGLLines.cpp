@@ -14,10 +14,10 @@
 
 namespace tl
 {
-    namespace timeline
+    namespace timeline_gl
     {
         extern std::string vertexSource();
-    } // namespace timeline
+    } // namespace timeline_gl
 
 } // namespace tl
 
@@ -59,7 +59,7 @@ namespace mrv
                 try
                 {
                     const std::string& vertexSource =
-                        tl::timeline::vertexSource();
+                        tl::timeline_gl::vertexSource();
                     p.softShader = gl::Shader::create(
                         vertexSource, mrv::softFragmentSource());
                     p.hardShader = gl::Shader::create(
