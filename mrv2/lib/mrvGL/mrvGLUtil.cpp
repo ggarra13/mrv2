@@ -8,7 +8,7 @@
 
 #include <tlGL/Shader.h>
 #include <tlGL/Mesh.h>
-#include <tlTimeline/GLRenderPrivate.h>
+#include <tlTimelineGL/RenderPrivate.h>
 #include <tlGL/Util.h>
 
 #include "mrvCore/mrvI8N.h"

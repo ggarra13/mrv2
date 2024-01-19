@@ -4,7 +4,6 @@
 
 set(HEADERS
     App.h
-    mrvDevicesModel.h
     mrvFilesModel.h
     mrvMainControl.h
     mrvOpenSeparateAudioDialog.h
@@ -14,7 +13,6 @@ set(HEADERS
   )
   set(SOURCES
     App.cpp
-    mrvDevicesModel.cpp
     mrvFilesModel.cpp
     mrvMainControl.cpp
     mrvOpenSeparateAudioDialog.cpp
@@ -34,7 +32,7 @@ if(WIN32 AND FLTK_BUILD_SHARED_LIBS)
     target_compile_definitions(mrvApp PUBLIC FL_DLL)
 endif()
 
-target_link_libraries(mrvApp PUBLIC tlApp mrvPanels mrvNetwork ${GL_LIBRARY} mrvDraw mrvFLU mrvWidgets ${FLTK_LIBRARIES} )
+target_link_libraries(mrvApp PUBLIC mrvPanels mrvNetwork ${GL_LIBRARY} mrvDraw mrvFLU mrvWidgets ${FLTK_LIBRARIES} )
 target_include_directories(mrvApp PUBLIC ${INCLUDES} )
 set_target_properties(mrvApp PROPERTIES FOLDER lib)
 

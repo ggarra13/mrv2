@@ -11,7 +11,6 @@
 #include "mrvNetwork/mrvCompareOptions.h"
 
 #include "mrvApp/mrvFilesModel.h"
-#include "mrvApp/mrvDevicesModel.h"
 #include "mrvApp/mrvMainControl.h"
 #include "mrvApp/App.h"
 
@@ -60,8 +59,6 @@ namespace mrv
             compareOptionsObserver;
         std::shared_ptr<observer::ValueObserver<timeline::OCIOOptions> >
             ocioOptionsObserver;
-        std::shared_ptr<observer::ValueObserver<DevicesModelData> >
-            devicesModelObserver;
         std::shared_ptr<observer::ValueObserver<Stereo3DOptions> >
             stereo3DOptionsObserver;
         std::shared_ptr<observer::ValueObserver<FilesPanelOptions> >
@@ -132,15 +129,6 @@ namespace mrv
                     msg["value"] = opts;
                     tcp->pushMessage(msg);
 
-                    _widgetUpdate();
-                });
-
-        p.devicesModelObserver =
-            observer::ValueObserver<DevicesModelData>::create(
-                app->devicesModel()->observeData(),
-                [this](const DevicesModelData& value)
-                {
-                    _p->outputVideoLevels = value.videoLevels;
                     _widgetUpdate();
                 });
 
@@ -227,7 +215,6 @@ namespace mrv
             auto view = p.ui->uiSecondary->viewport();
             view->setTimelinePlayers(p.timelinePlayers, false);
         }
-        // p.app->outputDevice()->setTimelinePlayers(p.timelinePlayers);
     }
 
     void MainControl::_widgetUpdate()

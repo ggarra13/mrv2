@@ -13,7 +13,7 @@
 
 #include <tlGL/Init.h>
 #include <tlGL/Util.h>
-#include <tlTimeline/GLRender.h>
+#include <tlTimelineGL/Render.h>
 
 #include "mrvCore/mrvUtil.h"
 #include "mrvCore/mrvLocale.h"
@@ -154,7 +154,7 @@ namespace mrv
             bool annotations = false;
 
             gl::OffscreenBufferOptions offscreenBufferOptions;
-            std::shared_ptr<timeline::GLRender> render;
+            std::shared_ptr<timeline_gl::Render> render;
             image::Size renderSize;
             int layerId = 0;
             if (options.annotations)
@@ -167,7 +167,7 @@ namespace mrv
                 renderSize = info.video[layerId].size;
 
             // Create the renderer.
-            render = timeline::GLRender::create(context);
+            render = timeline_gl::Render::create(context);
             offscreenBufferOptions.colorType = image::PixelType::RGBA_F32;
 
             // Create the writer.

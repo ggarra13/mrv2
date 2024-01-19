@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <tlApp/IApp.h>
+#include <tlBaseApp/BaseApp.h>
 
 #include <tlTimeline/PlayerOptions.h>
 #include <tlTimeline/IRender.h>
@@ -35,7 +35,7 @@ namespace mrv
     class SettingsObject;
 
     //! Application.
-    class App : public app::IApp
+    class App : public app::BaseApp
     {
         TLRENDER_NON_COPYABLE(App);
 
