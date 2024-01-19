@@ -1,8 +1,18 @@
-v0.9.5
+v1.0.1
 ======
 
-Due to a serious bug with multithreading, release of v1.0.0 of mrv2 has been
-post-poned till further notice. 
+- Fixed relative paths function on Windows returning an empty path when the
+  path could not be made relative.
+- Made ALT + RMB zooming a tad less sensitive.
+- Fixed ALT + RMB zooming sliding incorrectly.
+- Improved speed on exiting the application.
+- Made zooming with RMB + Alt slower for users with tablets.  
+- Added an options to Preferences->Playback called Auto Scrub Playback, which
+  when turned off will turn off the audio playback while scrubbing, like
+  on previous versions of mrv2 (v0.8.2 and earlier).
+
+v1.0.0
+======
 
 - Improved performance of scrubbing when audio is turned off in the timeline
   section of the main UI.  Helps in scrubbing 4K movies.
@@ -17,6 +27,7 @@ post-poned till further notice.
 - You can also not currently move or scale the transitions.
 - Fixed default versioning regex for '_v' to match UNC paths on Windows.
 - Fixed version of USD which showed MaterialX version instead.
+- Updated USD to v23.11.
 
 
 v0.9.4

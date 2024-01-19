@@ -50,6 +50,12 @@ if(UNIX)
 	    endif()
 	endif()
     endif()
+    
+    if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+	if(TLRENDER_ASAN)
+	    list(APPEND FLTK_LIBRARIES asan)
+	endif()
+    endif()
 else()
     if (CMAKE_BUILD_TYPE STREQUAL "Debug")
 	set(FLTK_LIBRARIES ${CMAKE_INSTALL_PREFIX}/lib/libfltkd.lib)
@@ -94,13 +100,6 @@ if( MRV2_PDF )
     add_definitions( -DMRV2_PDF )
 endif()
 
-if(TLRENDER_USD)
-    find_package(pxr)
-    if(pxr_FOUND)
-        add_definitions(-DTLRENDER_USD)
-    endif()
-endif()
-
 if(TLRENDER_BMD)
     add_definitions(-DTLRENDER_BMD)
 endif()
@@ -119,6 +118,10 @@ endif()
 
 if(TLRENDER_JPEG)
     add_definitions(-DTLRENDER_JPEG)
+endif()
+
+if(TLRENDER_NDI)
+    add_definitions(-DTLRENDER_NDI)
 endif()
 
 if(TLRENDER_NET)
@@ -146,6 +149,13 @@ endif()
 
 if(TLRENDER_TIFF)
     add_definitions(-DTLRENDER_TIFF)
+endif()
+
+if(TLRENDER_USD)
+    find_package(pxr)
+    if(pxr_FOUND)
+        add_definitions(-DTLRENDER_USD)
+    endif()
 endif()
 
 if(MRV2_PYBIND11)
@@ -191,6 +201,7 @@ set( mrv2_INCLUDE_DIRS
     ${CMAKE_PREFIX_PATH}/include/OpenEXR
     ${CMAKE_PREFIX_PATH}/include/Imath
     ${CMAKE_PREFIX_PATH}/include/opentimelineio/deps
+    ${CMAKE_PREFIX_PATH}/include/boost-1_78
     ${CMAKE_PREFIX_PATH}/include/boost-1_76
     ${CMAKE_PREFIX_PATH}/include/tlRender
     ${CMAKE_PREFIX_PATH}/include
@@ -198,6 +209,7 @@ set( mrv2_INCLUDE_DIRS
     # We need to include all these non-public tlRender directories
     # as we get the version information from them as well as some variables
     # and constants.
+    ${TLRENDER_NDI_SDK}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/../tlRender/deps
     ${CMAKE_CURRENT_SOURCE_DIR}/../tlRender/lib
     # For icons on the mrv2/icons directory.

@@ -120,6 +120,11 @@ namespace mrv
             static_cast<int>(usd::RenderOptions().diskCache / memory::gigabyte);
 #endif
 
+#if defined(TLRENDER_NDI)
+        p.defaultValues["NDI/Preroll"] = 3;
+        p.defaultValues["NDI/Audio"] = 0;
+#endif
+        
         p.defaultValues[kTextFont] = 0;
         p.defaultValues[kFontSize] = 52;
 

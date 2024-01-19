@@ -271,7 +271,7 @@ namespace mrv
         const auto player = p.timelinePlayers[0];
         const auto& t = player->currentTime();
         const auto& time = t + otime::RationalTime(dx, t.rate());
-        if (!player->isMuted())
+        if (!player->isMuted() && p.ui->uiPrefs->uiPrefsScrubAutoPlay->value())
         {
             if (dx > 0)
             {
@@ -2708,6 +2708,13 @@ namespace mrv
         if (pen_size < 2.0F)
             pen_size = 2.0F;
         return pen_size;
+    }
+    
+    float TimelineViewport::_getZoomSpeedValue() const noexcept
+    {
+        int idx = _p->ui->uiPrefs->uiPrefsZoomSpeed->value();
+        const float speedValues[] = {0.1F, 0.25F, 0.5F};
+        return speedValues[idx];
     }
 
 } // namespace mrv

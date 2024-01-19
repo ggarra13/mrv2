@@ -4,8 +4,9 @@
 
 #pragma once
 
-#include <tlApp/IApp.h>
+#include <tlBaseApp/BaseApp.h>
 
+#include <tlTimeline/PlayerOptions.h>
 #include <tlTimeline/IRender.h>
 #include <tlTimeline/TimeUnits.h>
 
@@ -34,7 +35,7 @@ namespace mrv
     class SettingsObject;
 
     //! Application.
-    class App : public app::IApp
+    class App : public app::BaseApp
     {
         TLRENDER_NON_COPYABLE(App);
 
@@ -165,6 +166,9 @@ namespace mrv
         _activeCallback(const std::vector<std::shared_ptr<FilesModelItem> >&);
 
         void _audioUpdate();
+
+        void _playerOptions(timeline::PlayerOptions& playerOptions,
+                            const std::shared_ptr<FilesModelItem>& item);
 
         TLRENDER_PRIVATE();
     };

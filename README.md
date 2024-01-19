@@ -1,6 +1,5 @@
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![Build Status](https://github.com/ggarra13/mrv2/actions/workflows/full.yml/badge.svg)](https://github.com/ggarra13/mrv2/actions/workflows/full.yml)
-[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=679N8GWCNDFSJ)
 [![Sponsor](https://img.shields.io/badge/Sponsor-ggarra13-blue.svg)](https://github.com/sponsors/ggarra13)
 
 mrv2
@@ -56,7 +55,7 @@ The source forge site also hosts beta builds (nightly builds with the latest cha
 
 ## Compatibility
 
-mrv2 binaries run on Windows 8.1+, RedHat 8.8+ or Ubuntu 20.04+ and macOS 11.0+.
+mrv2 binaries run on Windows 8.1+, RedHat 8.9+ or Ubuntu 20.04+ and macOS 11.0+.
 
 ## Notes on installation
 
@@ -92,13 +91,13 @@ mrv2 binaries run on Windows 8.1+, RedHat 8.8+ or Ubuntu 20.04+ and macOS 11.0+.
   On Debian (Ubuntu, etc) systems, you would install with:
 
 ```
-  sudo dpkg -i mrv2-v0.8.2-Linux-amd64.tar.gz
+  sudo dpkg -i mrv2-v1.0.0-Linux-amd64.tar.gz
 ```
 
   On Red Hat (Rocky Linux, etc), you would install it with:
   
 ```
-  sudo rpm -i mrv2-v0.8.2-Linux-amd64.tar.gz
+  sudo rpm -i mrv2-v1.0.0-Linux-amd64.tar.gz
 ```
 
   Once you install it, you can run mrv2 by just typing mrv2 in the shell, as
@@ -112,7 +111,7 @@ mrv2 binaries run on Windows 8.1+, RedHat 8.8+ or Ubuntu 20.04+ and macOS 11.0+.
   .tar.gz file and you can uncompress it with:
   
 ```
-  tar -xf mrv2-v0.8.2-Linux-amd64.tar.gz
+  tar -xf mrv2-v1.0.0-Linux-amd64.tar.gz
 ```
 
   That will create a folder in the direcory you uncompress it from.  You can
@@ -153,7 +152,7 @@ group, you can just build mrv2 with:
 ./runme_docker.sh
 ```
 The resulting installers will be placed in a new packages/ directory of the
-root of mrv2.  The docker images are compatible with RedHat 8.8 and Ubuntu 20.04, but have issues with Wayland on more modern distros.
+root of mrv2.  The docker images are compatible with RedHat 8.9 and Ubuntu 20.04, but have issues with Wayland on more modern distros.
 
 ## Dependencies
 

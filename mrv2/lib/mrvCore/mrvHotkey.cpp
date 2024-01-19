@@ -189,6 +189,7 @@ namespace mrv
     Hotkey kTogglePythonConsole(false, false, false, false, 0);
     Hotkey kToggleLogs(false, false, false, false, 0);
     Hotkey kToggleAbout(false, false, false, false, 0);
+    Hotkey kToggleNDI(false, false, false, false, 0);
     Hotkey kToggleNetwork(false, false, false, false, 'n');
     Hotkey kToggleUSD(false, false, false, false, 'u');
     Hotkey kToggleStereo3D(false, false, false, false, 0);
@@ -433,6 +434,7 @@ namespace mrv
         HotkeyEntry(_("Toggle Secondary"), &kToggleSecondary),
         HotkeyEntry(
             _("Toggle Secondary Float On Top"), &kToggleSecondaryFloatOnTop),
+        HotkeyEntry(_("Toggle NDI"), &kToggleNDI),
         HotkeyEntry(_("Toggle Network"), &kToggleNetwork),
         HotkeyEntry(_("Toggle USD"), &kToggleUSD),
         HotkeyEntry(_("Toggle Stereo 3D"), &kToggleStereo3D),

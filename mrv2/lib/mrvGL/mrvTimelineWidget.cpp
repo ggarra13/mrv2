@@ -13,7 +13,7 @@
 #include <tlUI/IWindow.h>
 #include <tlUI/RowLayout.h>
 
-#include <tlTimeline/GLRender.h>
+#include <tlTimelineGL/Render.h>
 
 #include <tlGL/Init.h>
 #include <tlGL/Mesh.h>
@@ -496,7 +496,7 @@ namespace mrv
         {
             try
             {
-                p.render = timeline::GLRender::create(context);
+                p.render = timeline_gl::Render::create(context);
                 CHECK_GL;
                 const std::string vertexSource =
                     "#version 410\n"

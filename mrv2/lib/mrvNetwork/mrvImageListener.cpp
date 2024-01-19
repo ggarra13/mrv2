@@ -28,7 +28,7 @@ namespace mrv
             App* app;
         };
 
-        void open_file_cb(ImageData* d)
+        void open_data_file_cb(ImageData* d)
         {
             d->app->open(d->fileName);
             delete d;
@@ -116,7 +116,7 @@ namespace mrv
                         data->fileName = fileName;
                         data->app = ViewerUI::app;
                         Fl::add_timeout(
-                            0.0, (Fl_Timeout_Handler)open_file_cb, data);
+                            0.0, (Fl_Timeout_Handler)open_data_file_cb, data);
                     }
                 }
             }

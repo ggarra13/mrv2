@@ -58,7 +58,6 @@ namespace py = pybind11;
 
 #include "mrvEdit/mrvEditUtil.h"
 
-#include "mrvApp/mrvDevicesModel.h"
 #include "mrvApp/mrvPlaylistsModel.h"
 #include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/mrvMainControl.h"
@@ -78,6 +77,10 @@ namespace py = pybind11;
 #endif
 
 #include "mrvFl/mrvIO.h"
+
+#ifdef TLRENDER_NDI
+#    include <Processing.NDI.Lib.h>
+#endif
 
 namespace
 {
@@ -185,11 +188,6 @@ namespace mrv
         timeline::DisplayOptions displayOptions;
         float volume = 1.F;
         bool mute = false;
-        OutputDevice* outputDevice = nullptr;
-        bool deviceActive = false;
-        std::shared_ptr<DevicesModel> devicesModel;
-        std::shared_ptr<observer::ValueObserver<DevicesModelData> >
-            devicesObserver;
         std::shared_ptr<observer::ListObserver<log::Item> > logObserver;
 
         std::vector<TimelinePlayer*> timelinePlayers;
@@ -233,7 +231,7 @@ namespace mrv
     App::App(
         int argc, char** argv,
         const std::shared_ptr<system::Context>& context) :
-        IApp(),
+        BaseApp(),
         _p(new Private)
     {
         TLRENDER_P();
@@ -263,7 +261,7 @@ namespace mrv
 
         const std::string& msg = setLanguageLocale();
 
-        IApp::_init(
+        BaseApp::_init(
             app::convert(argc, argv), context, "mrv2",
             _("Play timelines, movies, and image sequences."),
             {app::CmdLineValueArg<std::string>::create(
@@ -495,7 +493,6 @@ namespace mrv
         p.timeUnitsModel = timeline::TimeUnitsModel::create(context);
         p.filesModel = FilesModel::create(context);
         p.playlistsModel = PlaylistsModel::create(context);
-        p.devicesModel = DevicesModel::create(context);
 
         ui->uiTimeline->setContext(context, p.timeUnitsModel, ui);
         ui->uiTimeline->setScrollBarsVisible(false);
@@ -578,6 +575,11 @@ namespace mrv
             static_cast<int>(p.options.usdDiskCache * memory::gigabyte));
 #endif // TLRENDER_USD
 
+#ifdef TLRENDER_NDI
+        if (!NDIlib_initialize())
+            throw std::runtime_error(_("Could not initialize NDI"));
+#endif
+
         p.volume = p.settings->getValue<float>("Audio/Volume");
         p.mute = p.settings->getValue<bool>("Audio/Mute");
 
@@ -622,33 +624,6 @@ namespace mrv
                 }
             });
 
-        // p.outputDevice = new OutputDevice(context);
-        value = p.settings->getValue<std::any>("Devices/DeviceIndex");
-        p.devicesModel->setDeviceIndex(
-            value.type() == typeid(void) ? 0 : std_any_cast<int>(value));
-        value = p.settings->getValue<std::any>("Devices/DisplayModeIndex");
-        p.devicesModel->setDisplayModeIndex(
-            value.type() == typeid(void) ? 0 : std_any_cast<int>(value));
-        value = p.settings->getValue<std::any>("Devices/PixelTypeIndex");
-        p.devicesModel->setPixelTypeIndex(
-            value.type() == typeid(void) ? 0 : std_any_cast<int>(value));
-        p.settings->setDefaultValue(
-            "Devices/HDRMode", static_cast<int>(device::HDRMode::FromFile));
-        p.devicesModel->setHDRMode(static_cast<device::HDRMode>(
-            p.settings->getValue<int>("Devices/HDRMode")));
-        value = p.settings->getValue<std::any>("Devices/HDRData");
-        std::string s = value.type() == typeid(void)
-                            ? std::string()
-                            : std_any_cast< std::string >(value);
-        if (!s.empty())
-        {
-            auto json = nlohmann::json::parse(s);
-            image::HDRData data;
-            from_json(json, data);
-            p.devicesModel->setHDRData(data);
-        }
-
-        DBG;
 
         p.logObserver = observer::ListObserver<log::Item>::create(
             ui->app->getContext()->getLogSystem()->observeLog(),
@@ -676,24 +651,6 @@ namespace mrv
                 }
             });
 
-#ifdef TLRENDER_BMD
-        p.devicesObserver = observer::ValueObserver<DevicesModelData>::create(
-            p.devicesModel->observeData(),
-            [this](const DevicesModelData& value)
-            {
-                const device::PixelType pixelType =
-                    value.pixelTypeIndex >= 0 &&
-                            value.pixelTypeIndex < value.pixelTypes.size()
-                        ? value.pixelTypes[value.pixelTypeIndex]
-                        : device::PixelType::None;
-                // @todo:
-                _p->outputDevice->setDevice(
-                    value.deviceIndex - 1, value.displayModeIndex - 1,
-                    pixelType);
-                _p->outputDevice->setDeviceEnabled(value.deviceEnabled);
-                _p->outputDevice->setHDR(value.hdrMode, value.hdrData);
-            });
-#endif
 
         DBG;
         cacheUpdate();
@@ -805,6 +762,11 @@ namespace mrv
     {
         TLRENDER_P();
 
+#ifdef TLRENDER_NDI
+        // Not required, but nice
+        NDIlib_destroy();
+#endif
+
         delete p.mainControl;
         p.mainControl = nullptr;
 
@@ -834,29 +796,6 @@ namespace mrv
         TLRENDER_P();
 
         cleanResources();
-
-        //@todo:
-        // delete p.outputDevice;
-
-        if (p.settings && p.devicesModel)
-        {
-            const auto& deviceData = p.devicesModel->observeData()->get();
-            p.settings->setValue(
-                "Devices/DeviceIndex",
-                static_cast<int>(deviceData.deviceIndex));
-            p.settings->setValue(
-                "Devices/DisplayModeIndex",
-                static_cast<int>(deviceData.displayModeIndex));
-            p.settings->setValue(
-                "Devices/PixelTypeIndex",
-                static_cast<int>(deviceData.pixelTypeIndex));
-            p.settings->setValue(
-                "Devices/HDRMode", static_cast<int>(deviceData.hdrMode));
-            nlohmann::json json;
-            to_json(json, deviceData.hdrData);
-            const std::string& data = json.dump();
-            p.settings->setValue("Devices/HDRData", data);
-        }
     }
 
     const std::shared_ptr<timeline::TimeUnitsModel>& App::timeUnitsModel() const
@@ -902,16 +841,6 @@ namespace mrv
     bool App::isMuted() const
     {
         return _p->mute;
-    }
-
-    OutputDevice* App::outputDevice() const
-    {
-        return _p->outputDevice;
-    }
-
-    const std::shared_ptr<DevicesModel>& App::devicesModel() const
-    {
-        return _p->devicesModel;
     }
 
     struct PlaybackData
@@ -1214,13 +1143,7 @@ namespace mrv
                     timeline::Timeline::create(otioTimeline, _context, options);
 
                 timeline::PlayerOptions playerOptions;
-                playerOptions.cache.readAhead = _cacheReadAhead();
-                playerOptions.cache.readBehind = _cacheReadBehind();
-
-                playerOptions.timerMode = static_cast<timeline::TimerMode>(
-                    p.settings->getValue<int>("Performance/TimerMode"));
-                playerOptions.audioBufferFrameCount = p.settings->getValue<int>(
-                    "Performance/AudioBufferFrameCount");
+                _playerOptions(playerOptions, item);
                 if (item->init)
                 {
                     playerOptions.currentTime = items[0]->currentTime;
@@ -1242,6 +1165,21 @@ namespace mrv
         }
 
         panel::refreshThumbnails();
+    }
+
+    void App::_playerOptions(
+        timeline::PlayerOptions& playerOptions,
+        const std::shared_ptr<FilesModelItem>& item)
+    {
+        TLRENDER_P();
+
+        playerOptions.cache.readAhead = _cacheReadAhead();
+        playerOptions.cache.readBehind = _cacheReadBehind();
+
+        playerOptions.timerMode = static_cast<timeline::TimerMode>(
+            p.settings->getValue<int>("Performance/TimerMode"));
+        playerOptions.audioBufferFrameCount =
+            p.settings->getValue<int>("Performance/AudioBufferFrameCount");
     }
 
     void App::_activeCallback(
@@ -1303,18 +1241,11 @@ namespace mrv
                     timeline::Timeline::create(otioTimeline, _context, options);
 
                 timeline::PlayerOptions playerOptions;
-                playerOptions.cache.readAhead = _cacheReadAhead();
-                playerOptions.cache.readBehind = _cacheReadBehind();
-
-                playerOptions.timerMode = static_cast<timeline::TimerMode>(
-                    p.settings->getValue<int>("Performance/TimerMode"));
-                playerOptions.audioBufferFrameCount = p.settings->getValue<int>(
-                    "Performance/AudioBufferFrameCount");
+                _playerOptions(playerOptions, item);
                 if (item->init)
                 {
                     playerOptions.currentTime = items[0]->currentTime;
                 }
-
                 auto player =
                     timeline::Player::create(timeline, _context, playerOptions);
 
@@ -1326,19 +1257,23 @@ namespace mrv
                 {
                     item->init = true;
                     item->speed = mrvTimelinePlayer->speed();
-                    if (ui->uiPrefs->uiPrefsAutoPlayback->value())
-                    {
-                        mrvTimelinePlayer->setPlayback(
-                            timeline::Playback::Forward);
-                    }
                     item->playback = mrvTimelinePlayer->playback();
                     item->loop = mrvTimelinePlayer->loop();
                     item->currentTime = mrvTimelinePlayer->currentTime();
                     item->inOutRange = mrvTimelinePlayer->inOutRange();
                     item->audioOffset = mrvTimelinePlayer->audioOffset();
 
+                    bool autoPlayback =
+                        ui->uiPrefs->uiPrefsAutoPlayback->value();
+                    if (autoPlayback)
+                    {
+                        mrvTimelinePlayer->setPlayback(
+                            timeline::Playback::Forward);
+                    }
+
                     // Add the new file to recent files, unless it is an EDL.
-                    if (!isTemporaryEDL(item->path))
+                    if (!isTemporaryEDL(item->path) &&
+                        !file::isTemporaryNDI(item->path))
                     {
                         const std::string& file = item->path.get();
                         p.settings->addRecentFile(file);
@@ -1492,6 +1427,11 @@ namespace mrv
 
             uint64_t bytes = Gbytes * memory::gigabyte;
 
+            // Check if an NDI movie and set cache to 1 gigabyte
+            auto Aitem = p.filesModel->observeA()->get();
+            if (file::isTemporaryNDI(Aitem->path))
+                bytes = activeCount * memory::gigabyte;
+
             // Update the I/O cache.
             auto ioSystem = _context->getSystem<io::System>();
             ioSystem->getCache()->setMax(bytes);
@@ -1561,7 +1501,7 @@ namespace mrv
             if (i)
             {
                 i->setVolume(p.volume);
-                i->setMute(p.mute || p.deviceActive);
+                i->setMute(p.mute);
             }
         }
 #ifdef TLRENDER_BMD

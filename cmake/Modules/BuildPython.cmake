@@ -12,6 +12,8 @@ set( Python_PATCH )
 if(APPLE)
     set( Python_PATCH cmake -E copy ${PROJECT_SOURCE_DIR}/etc/configure-macos-python.sh ${CMAKE_CURRENT_BINARY_DIR}/ )
 
+    set(Python_C_FLAGS ${CMAKE_C_FLAGS} )
+    set(Python_LD_FLAGS ${CMAKE_SHARED_LINKER_FLAGS} )
     if(CMAKE_OSX_DEPLOYMENT_TARGET)
 	set( Python_C_FLAGS "-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET} ${CMAKE_C_FLAGS}")
     endif()
@@ -20,17 +22,22 @@ if(APPLE)
         "CFLAGS=${Python_C_FLAGS}"
         "CPPFLAGS=${Python_C_FLAGS}"
         "CXXFLAGS=${Python_CXX_FLAGS}"
+        "LDFLAGS=${Python_LD_FLAGS}"
     )
     set( Python_BUILD    )
     set( Python_INSTALL  make altinstall )
 elseif(UNIX)
+    set(Python_C_FLAGS ${CMAKE_C_FLAGS} )
+    set(Python_CXX_FLAGS ${CMAKE_CXX_FLAGS} )
+    set(Python_LD_FLAGS ${CMAKE_SHARED_LINKER_FLAGS} )
     set( Python_CONFIGURE ./configure
 	--enable-optimizations
 	--enable-shared
         --prefix=${CMAKE_INSTALL_PREFIX}
-        "CFLAGS=${CMAKE_C_FLAGS}"
-        "CPPFLAGS=${CMAKE_C_FLAGS}"
-        "CXXFLAGS=${CMAKE_CXX_FLAGS}"
+        "CFLAGS=${Python_C_FLAGS}"
+        "CPPFLAGS=${Python_CXX_FLAGS}"
+        "CXXFLAGS=${Python_CXX_FLAGS}"
+        "LDFLAGS=${Python_LD_FLAGS}"
     )
     set( Python_BUILD    )
     set( Python_INSTALL  make altinstall )

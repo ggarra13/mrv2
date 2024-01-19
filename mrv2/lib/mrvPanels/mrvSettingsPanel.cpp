@@ -15,7 +15,7 @@
 
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvHorSlider.h"
-#include <mrvWidgets/mrvSpinner.h>
+#include "mrvWidgets/mrvSpinner.h"
 #include "mrvWidgets/mrvCollapsibleGroup.h"
 
 #include "mrvPanels/mrvPanelsCallbacks.h"

@@ -5818,7 +5818,6 @@ msgstr "Alternar Ventana de Acerca de mrv2"
 #~ msgid "Sessions (*.{"
 #~ msgstr "Sesión: (*.{"
 
-#, c-format
 #~ msgid "Saving Movie %<PRId64> - %<PRId64>"
 #~ msgstr "Grabando Película %<PRId64> - %<PRId64>"
 

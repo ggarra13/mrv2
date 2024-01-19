@@ -8,7 +8,7 @@
 #include <tlCore/StringFormat.h>
 
 #include <tlGL/OffscreenBuffer.h>
-#include <tlTimeline/GLRenderPrivate.h>
+#include <tlTimelineGL/RenderPrivate.h>
 #include <tlGL/Init.h>
 #include <tlGL/Util.h>
 
@@ -117,7 +117,7 @@ namespace mrv
         if (auto context = gl.context.lock())
         {
 
-            gl.render = timeline::GLRender::create(context);
+            gl.render = timeline_gl::Render::create(context);
             CHECK_GL;
 
             glGenBuffers(2, gl.pboIds);
@@ -135,7 +135,7 @@ namespace mrv
 
             try
             {
-                const std::string& vertexSource = timeline::vertexSource();
+                const std::string& vertexSource = timeline_gl::vertexSource();
                 gl.shader =
                     gl::Shader::create(vertexSource, textureFragmentSource());
                 CHECK_GL;
