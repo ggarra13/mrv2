@@ -1,3 +1,9 @@
+v1.0.2
+======
+
+- Added a Gigabytes setting to NDI® Panel to allow reproducing 4K and higher
+  movie files with synced audio.
+
 v1.0.1
 ======
 

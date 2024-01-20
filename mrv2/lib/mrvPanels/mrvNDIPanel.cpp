@@ -19,10 +19,11 @@
 
 #    include "mrvCore/mrvHome.h"
 #    include "mrvCore/mrvFile.h"
+#    include "mrvCore/mrvMemory.h"
 
 #    include "mrvWidgets/mrvFunctional.h"
 #    include "mrvWidgets/mrvButton.h"
-#    include "mrvWidgets/mrvSpinner.h"
+#    include "mrvWidgets/mrvHorSlider.h"
 #    include "mrvWidgets/mrvCollapsibleGroup.h"
 
 #    include "mrvPanels/mrvPanelsCallbacks.h"
@@ -48,7 +49,7 @@ namespace mrv
         {
             PopupMenu* source = nullptr;
             Fl_Choice* noAudio = nullptr;
-            Spinner* preroll = nullptr;
+            HorSlider* preroll = nullptr;
 
             NDIlib_find_instance_t NDI_find = nullptr;
             uint32_t no_sources = 0;
@@ -237,11 +238,13 @@ namespace mrv
             TLRENDER_P();
             MRV2_R();
 
+            int LM = 70;  // left margin
+            
             SettingsObject* settings = App::app->settings();
             const std::string& prefix = tab_prefix();
 
+            HorSlider* s;
             Fl_Group* bg, *bg2;
-            Spinner* sp;
             std_any value;
             int open;
 
@@ -298,13 +301,14 @@ namespace mrv
 
             Y += 30;
 
-            auto spW = new Widget< Spinner >(
-                g->x() + 60, Y, g->w() - 60, 20, _("Preroll"));
-            sp = _r->preroll = spW;
-            sp->step(1);
-            sp->range(1, 10);
-            sp->tooltip(_("Preroll in seconds"));
-            sp->value(settings->getValue<int>("NDI/Preroll"));
+            auto spW = new Widget< HorSlider >(
+                g->x(), Y, g->w(), 20, _("Preroll"));
+            s = _r->preroll = spW;
+            s->step(1);
+            s->range(1, 10);
+            s->default_value(3);
+            s->tooltip(_("Preroll in seconds"));
+            s->value(settings->getValue<int>("NDI/Preroll"));
             spW->callback(
                 [=](auto w)
                     {
@@ -313,9 +317,35 @@ namespace mrv
                 );
             
             Y += 30;
+            
+            uint64_t totalVirtualMem, virtualMemUsed, virtualMemUsedByMe,
+                totalPhysMem, physMemUsed, physMemUsedByMe;
+
+            memory_information(
+                totalVirtualMem, virtualMemUsed, virtualMemUsedByMe,
+                totalPhysMem, physMemUsed, physMemUsedByMe);
+
+            totalPhysMem /= 1024;
+            
+            auto sV = new Widget< HorSlider >(
+                g->x(), Y, g->w(), 20, _("Gigabytes"));
+            s = sV;
+            s->tooltip(
+                _("Cache in Gigabytes for NDI streams.  For most HD streams, this should be set to 1.  For higher resolutions and audio channels, you might want to increase this"));
+            s->step(1.0);
+            s->range(1.f, static_cast<double>(totalPhysMem));
+            s->default_value(1.0f);
+            s->value(settings->getValue<int>("NDI/GBytes"));
+            sV->callback(
+                [=](auto w)
+                {
+                    settings->setValue("NDI/GBytes", (int)w->value());
+                });
+
+            Y += 30;
 
             auto cW = new Widget< Fl_Choice >(
-                g->x() + 60, Y, g->w() - 60, 20, _("Audio"));
+                g->x() + LM, Y, g->w() - LM, 20, _("Audio"));
             Fl_Choice* c = _r->noAudio = cW;
             c->labelsize(12);
             c->align(FL_ALIGN_LEFT);

@@ -121,6 +121,7 @@ namespace mrv
 #endif
 
 #if defined(TLRENDER_NDI)
+        p.defaultValues["NDI/GBytes"] = 1;
         p.defaultValues["NDI/Preroll"] = 3;
         p.defaultValues["NDI/Audio"] = 0;
 #endif
