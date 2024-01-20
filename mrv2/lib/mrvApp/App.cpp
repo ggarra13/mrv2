@@ -1429,7 +1429,7 @@ namespace mrv
 
             // Check if an NDI movie and set cache to 1 gigabyte
             auto Aitem = p.filesModel->observeA()->get();
-            if (file::isTemporaryNDI(Aitem->path))
+            if (Aitem && file::isTemporaryNDI(Aitem->path))
             {
                 uint64_t NDIGbytes =
                     static_cast<uint64_t>(p.settings->getValue<int>("NDI/GBytes"));           
