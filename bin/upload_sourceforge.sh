@@ -109,6 +109,7 @@ It works on Windows 8.1+ (without USD support), Ubuntu 20.04 LTS+,
 and macOS 11. 
 
 It may contain bugs, new untested features and more.
+It does not support NDI® on any platform.
 
 You can extract it to compile yourself with:
 
