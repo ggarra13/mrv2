@@ -210,7 +210,7 @@ cat <<"EOF" >> README.md
   tar -xf mrv2-beta-Linux-amd64.tar.gz
 ```
 
-  That will create a folder in the direcory you uncompress it from.  You can
+  That will create a folder in the directory you uncompress it from.  You can
   then run mrv2 by using the mrv2.sh shell script in the bin/ subdirectory.
 EOF
 
