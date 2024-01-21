@@ -5,6 +5,7 @@
 #if defined(TLRENDER_NDI)
 
 #    include <chrono>
+#    include <regex>
 #    include <thread>
 #    include <mutex>
 #    include <atomic>
@@ -91,7 +92,10 @@ namespace mrv
             const Fl_Menu_Item* item = nullptr;
 
             // Empty menu returns 0, while all others return +1.
-            int size = m->size() - 1;
+            size_t numSources = r.no_sources;
+
+            // We substract 2: 1 for FLTK quirk and one for "No Source".
+            int size = m->size() - 2;
             if (size < 0)
                 size = 0;
             if (selected >= 0 && selected < size)
@@ -101,15 +105,16 @@ namespace mrv
                     sourceName = item->label();
             }
 
-            if (r.no_sources != size)
+            if (numSources != size)
             {
                 changed = true;
             }
             else
             {
-                for (int i = 0; i < r.no_sources; ++i)
+                // child(0) is "No Source".
+                for (int i = 0; i < numSources; ++i)
                 {
-                    item = m->child(i);
+                    item = m->child(i + 1);
                     if (!item->label() ||
                         !strcmp(item->label(), r.p_sources[i].p_ndi_name))
                     {
@@ -126,6 +131,7 @@ namespace mrv
             }
 
             m->clear();
+            m->add(_("No Source"));
             for (int i = 0; i < r.no_sources; ++i)
             {
                 const std::string ndiName = r.p_sources[i].p_ndi_name;
@@ -285,7 +291,7 @@ namespace mrv
             bg2->begin();
 
             auto mW = new Widget< PopupMenu >(
-                g->x() + 10, Y, g->w() - 10, 20, _("Source"));
+                g->x() + 10, Y, g->w() - 10, 20, _("No Source"));
             PopupMenu* m = _r->source = mW;
             m->disable_submenus();
             m->labelsize(12);
@@ -307,7 +313,7 @@ namespace mrv
             s->step(1);
             s->range(1, 10);
             s->default_value(3);
-            s->tooltip(_("Preroll in seconds"));
+            s->tooltip(_("Preroll in seconds to synchronize audio."));
             s->value(settings->getValue<int>("NDI/Preroll"));
             spW->callback(
                 [=](auto w)
@@ -331,7 +337,7 @@ namespace mrv
                 g->x(), Y, g->w(), 20, _("Gigabytes"));
             s = sV;
             s->tooltip(
-                _("Cache in Gigabytes for NDI streams.  For most HD streams, this should be set to 1.  For higher resolutions and audio channels, you might want to increase this"));
+                _("Cache in Gigabytes for NDI streams.  For most HD streams, this should be set to 1.  For higher resolutions and audio channels, you might want to increase this to 3 or higher for proper audio sync."));
             s->step(1.0);
             s->range(1.f, static_cast<double>(totalPhysMem));
             s->default_value(1.0f);
@@ -388,6 +394,20 @@ namespace mrv
             if (!r.lastStream.empty())
                 LOG_INFO("Close stream " << r.lastStream);
 
+            auto model = p.ui->app->filesModel();
+            if (model)
+            {
+                auto aItem = model->observeA()->get();
+                if (aItem && file::isTemporaryNDI(aItem->path))
+                    model->close();
+            }
+            
+            std::regex pattern(
+                "remote connection", std::regex_constants::icase);
+            if (sourceName == _("No Source") ||
+                std::regex_search(sourceName, pattern))
+                return;
+
             r.lastStream = sourceName;
 
             // Create an ndi file
@@ -403,10 +423,6 @@ namespace mrv
             std::ofstream s(ndiFile);
             s << j << std::endl;
             s.close();
-
-            auto model = p.ui->app->filesModel();
-            if (model)
-                model->close();
 
             LOG_INFO("Opened stream " << sourceName);
 
