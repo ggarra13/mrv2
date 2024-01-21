@@ -57,7 +57,7 @@ namespace mrv
             const NDIlib_source_t* p_sources = NULL;
 
             std::atomic<bool> has_awake = false;
-            std::string lastStream;
+            static std::string lastStream;
 
             std::thread playThread;
 
@@ -65,6 +65,8 @@ namespace mrv
             std::atomic<bool> running = false;
             std::mutex mutex;
         };
+
+        std::string NDIPanel::Private::lastStream;
 
         void NDIPanel::refresh_sources_cb(void* v)
         {
@@ -87,7 +89,6 @@ namespace mrv
             }
             
             std::string sourceName;
-            int selected = m->value();
             bool changed = false;
             const Fl_Menu_Item* item = nullptr;
 
@@ -98,12 +99,8 @@ namespace mrv
             int size = m->size() - 2;
             if (size < 0)
                 size = 0;
-            if (selected >= 0 && selected < size)
-            {
-                item = m->child(selected);
-                if (item->label())
-                    sourceName = item->label();
-            }
+
+            sourceName = r.lastStream;
 
             if (numSources != size)
             {
@@ -132,13 +129,14 @@ namespace mrv
 
             m->clear();
             m->add(_("No Source"));
+            int selected = 0;
             for (int i = 0; i < r.no_sources; ++i)
             {
                 const std::string ndiName = r.p_sources[i].p_ndi_name;
                 m->add(ndiName.c_str());
                 if (sourceName == ndiName)
                 {
-                    selected = i;
+                    selected = i + 1;
                 }
             }
             m->menu_end();
@@ -289,21 +287,25 @@ namespace mrv
             bg2 = new Fl_Group(g->x(), Y, g->w(), 22 * 6);
             bg2->box(FL_NO_BOX);
             bg2->begin();
-
+            
             auto mW = new Widget< PopupMenu >(
                 g->x() + 10, Y, g->w() - 10, 20, _("No Source"));
             PopupMenu* m = _r->source = mW;
             m->disable_submenus();
             m->labelsize(12);
             m->align(FL_ALIGN_CENTER);
+            
             mW->callback(
                 [=](auto o)
                 {
+                    settings->setValue("NDI/SourceIndex", (int)o->value());
                     const Fl_Menu_Item* item = o->mvalue();
                     if (!item)
                         return;
                     _open_ndi(item);
                 });
+
+            r.has_awake = false;
 
             Y += 30;
 
@@ -431,22 +433,23 @@ namespace mrv
             auto player = p.ui->uiView->getTimelinePlayer();
             if (player)
             {
-                LOG_INFO(_("Waiting for player cache to fill up..."));
-                p.ui->uiStatusBar->label(
-                    _("Waiting for player cache to fill up..."));
-
-                player->stop();
                 int noAudio = r.noAudio->value();
-                int seconds = r.preroll->value();
 
+                int seconds = 0;
+                if (!noAudio)
+                {
+                    LOG_INFO(_("Waiting for player cache to fill up..."));
+                    p.ui->uiStatusBar->label(
+                        _("Waiting for player cache to fill up..."));
+                    player->stop();
+                    seconds = r.preroll->value();
+                }
+                
                 r.playThread = std::thread(
                     [this, player, seconds, noAudio]
                     {
                         MRV2_R();
 
-                        // Fl::lock();
-
-                        // Sleep so the cache fills up
                         if (!noAudio)
                         {
                             LOG_INFO("Waiting " << seconds << " seconds...");
@@ -456,8 +459,6 @@ namespace mrv
                         // player->start();
                         LOG_INFO(_("Starting playback..."));
                         player->forward();
-
-                        // Fl::unlock();
                     });
                 r.playThread.detach();
             }

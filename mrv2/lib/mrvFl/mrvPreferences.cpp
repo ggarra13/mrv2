@@ -184,7 +184,10 @@ namespace mrv
                     LOG_ERROR("Unknown type " << type << " for key " << keyS);
                     break;
                 }
-                settings->setValue(keyS, value);
+                if (keyS == "NDI/SourceIndex")
+                    settings->setValue(keyS, -1);
+                else
+                    settings->setValue(keyS, value);
             }
         }
         DBG3;

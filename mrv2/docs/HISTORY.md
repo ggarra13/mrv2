@@ -6,6 +6,8 @@ v1.0.2
 - Fixed NDI streams playing with audio sometimes hanging at start up.
 - Added a "No Source" to disconnect from NDI.
 - Made "Remote Connection" not be a valid NDI connection.
+- Fixed closing and reopening panel not showing the selected source.
+
 
 v1.0.1
 ======
@@ -21,6 +23,7 @@ v1.0.1
   on previous versions of mrv2 (v0.8.2 and earlier).
 - Added NDI® support in source code.  You need to compile mrv2 against the
   NDI® SDK for now.
+
 
 v1.0.0
 ======
