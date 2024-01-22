@@ -19,7 +19,6 @@ namespace py = pybind11;
 #    include <tlIO/USD.h>
 #endif // TLRENDER_USD
 
-#include <tlCore/AudioSystem.h>
 #include <tlCore/StringFormat.h>
 
 #include <tlTimeline/Util.h>
@@ -1105,7 +1104,6 @@ namespace mrv
     {
         TLRENDER_P();
 
-        auto audioSystem = _context->getSystem<audio::System>();
         for (size_t i = 0; i < items.size(); ++i)
         {
             const auto& item = items[i];
@@ -1201,7 +1199,6 @@ namespace mrv
         }
 
         std::vector<TimelinePlayer*> newTimelinePlayers;
-        auto audioSystem = _context->getSystem<audio::System>();
         for (size_t i = 0; i < items.size(); ++i)
         {
             const auto& item = items[i];
