@@ -3,10 +3,12 @@ v1.0.2
 
 - Added a Gigabytes setting to NDI® Panel to allow reproducing 4K and higher
   movie files with synced audio.
-- Fixed NDI streams playing with audio sometimes hanging at start up.
-- Added a "No Source" to disconnect from NDI.
-- Made "Remote Connection" not be a valid NDI connection.
+- Fixed NDI® streams playing with audio sometimes hanging at start up.
+- Added a "No Source" to disconnect from NDI®.
+- Made "Remote Connection" not be a valid NDI® connection.
 - Fixed closing and reopening panel not showing the selected source.
+- Fixed hang ups when switching sources in NDI® panel with videos with audio.
+  Videos without audio were fine.
 
 
 v1.0.1
