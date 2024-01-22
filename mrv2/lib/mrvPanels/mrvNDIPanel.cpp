@@ -359,6 +359,8 @@ namespace mrv
             c->align(FL_ALIGN_LEFT);
             c->add(_("Play"));
             c->add(_("Ignore"));
+            c->tooltip(_("Whether to ignore or play the stream with audio if it"
+                         " has at least one audio track."));
             c->value(settings->getValue<int>("NDI/Audio"));
             cW->callback(
                 [=](auto w)
