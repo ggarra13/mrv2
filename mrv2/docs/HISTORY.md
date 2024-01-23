@@ -10,6 +10,7 @@ v1.0.2
 - Fixed hang ups when switching sources in NDI® panel with videos with audio.
   Videos without audio were fine.
 - Removed references to NDI/Source Index.
+- Improved startup times of NDI® Sources with Audio.
 
 
 v1.0.1
