@@ -87,7 +87,7 @@ namespace mrv
                 r.has_awake = false;
                 return;
             }
-            
+
             std::string sourceName;
             bool changed = false;
             const Fl_Menu_Item* item = nullptr;
@@ -242,13 +242,13 @@ namespace mrv
             TLRENDER_P();
             MRV2_R();
 
-            int LM = 70;  // left margin
-            
+            int LM = 70; // left margin
+
             SettingsObject* settings = App::app->settings();
             const std::string& prefix = tab_prefix();
 
             HorSlider* s;
-            Fl_Group* bg, *bg2;
+            Fl_Group *bg, *bg2;
             std_any value;
             int open;
 
@@ -283,22 +283,21 @@ namespace mrv
             bg->begin();
 
             Y += 22;
-            
+
             bg2 = new Fl_Group(g->x(), Y, g->w(), 22 * 6);
             bg2->box(FL_NO_BOX);
             bg2->begin();
-            
+
             auto mW = new Widget< PopupMenu >(
                 g->x() + 10, Y, g->w() - 10, 20, _("No Source"));
             PopupMenu* m = _r->source = mW;
             m->disable_submenus();
             m->labelsize(12);
             m->align(FL_ALIGN_CENTER);
-            
+
             mW->callback(
                 [=](auto o)
                 {
-                    settings->setValue("NDI/SourceIndex", (int)o->value());
                     const Fl_Menu_Item* item = o->mvalue();
                     if (!item)
                         return;
@@ -308,9 +307,21 @@ namespace mrv
             r.has_awake = false;
 
             Y += 30;
-            
+
+            auto spW =
+                new Widget< HorSlider >(g->x(), Y, g->w(), 20, _("Preroll"));
+            s = _r->preroll = spW;
+            s->step(1);
+            s->range(1, 10);
+            s->default_value(3);
+            s->tooltip(_("Preroll in seconds to synchronize audio."));
+            s->value(settings->getValue<int>("NDI/Preroll"));
+            spW->callback(
+                [=](auto w)
+                { settings->setValue("NDI/Preroll", (int)w->value()); });
+
             Y += 30;
-            
+
             uint64_t totalVirtualMem, virtualMemUsed, virtualMemUsedByMe,
                 totalPhysMem, physMemUsed, physMemUsedByMe;
 
@@ -319,21 +330,22 @@ namespace mrv
                 totalPhysMem, physMemUsed, physMemUsedByMe);
 
             totalPhysMem /= 1024;
-            
-            auto sV = new Widget< HorSlider >(
-                g->x(), Y, g->w(), 20, _("Gigabytes"));
+
+            auto sV =
+                new Widget< HorSlider >(g->x(), Y, g->w(), 20, _("Gigabytes"));
             s = sV;
             s->tooltip(
-                _("Cache in Gigabytes for NDI streams.  For most HD streams, this should be set to 1.  For higher resolutions and audio channels, you might want to increase this to 3 or higher for proper audio sync."));
+                _("Cache in Gigabytes for NDI streams.  For most HD streams, "
+                  "this should be set to 1.  For higher resolutions and audio "
+                  "channels, you might want to increase this to 3 or higher "
+                  "for proper audio sync."));
             s->step(1.0);
             s->range(1.f, static_cast<double>(totalPhysMem));
             s->default_value(1.0f);
             s->value(settings->getValue<int>("NDI/GBytes"));
             sV->callback(
                 [=](auto w)
-                {
-                    settings->setValue("NDI/GBytes", (int)w->value());
-                });
+                { settings->setValue("NDI/GBytes", (int)w->value()); });
 
             Y += 30;
 
@@ -347,15 +359,11 @@ namespace mrv
             c->tooltip(_("Whether to ignore or play the stream with audio if it"
                          " has at least one audio track."));
             c->value(settings->getValue<int>("NDI/Audio"));
-            cW->callback(
-                [=](auto w)
-                    {
-                        settings->setValue("NDI/Audio", (int)w->value());
-                    }
-                );
+            cW->callback([=](auto w)
+                         { settings->setValue("NDI/Audio", (int)w->value()); });
 
             bg2->end();
-            
+
             bg->end();
 
             cg->end();
@@ -390,7 +398,7 @@ namespace mrv
                 if (aItem && file::isTemporaryNDI(aItem->path))
                     model->close();
             }
-            
+
             std::regex pattern(
                 "remote connection", std::regex_constants::icase);
             if (sourceName == _("No Source") ||
@@ -404,11 +412,11 @@ namespace mrv
 
             ndi::Options options;
             options.sourceName = sourceName;
-            options.noAudio = (int) r.noAudio->value();
+            options.noAudio = (int)r.noAudio->value();
 
             nlohmann::json j;
             j = options;
-            
+
             std::ofstream s(ndiFile);
             s << j << std::endl;
             s.close();
@@ -429,30 +437,34 @@ namespace mrv
                     p.ui->uiStatusBar->label(
                         _("Waiting for player cache to fill up..."));
                     player->stop();
+                    seconds = r.preroll->value();
                 }
-                
+
                 r.playThread = std::thread(
-                    [this, player, noAudio]
+                    [this, player, seconds, noAudio]
                     {
                         MRV2_R();
 
                         if (!noAudio)
                         {
+                            auto start = std::chrono::steady_clock::now();
                             auto startTime = player->currentTime();
                             auto endTime =
                                 startTime +
                                 otime::RationalTime(2.0, 1.0).rescaled_to(
                                     startTime.rate());
-                            
+
                             bool found = false;
-                            while (!found)
+                            while (!found &&
+                                   std::chrono::steady_clock::now() - start <=
+                                       std::chrono::seconds(seconds))
                             {
                                 const auto cache =
                                     player->player()->observeCacheInfo()->get();
                                 for (const auto& t : cache.audioFrames)
                                 {
-                                    if (t.end_time_exclusive() >=
-                                        endTime)
+                                    if (t.start_time() <= startTime &&
+                                        t.end_time_exclusive() >= endTime)
                                     {
                                         found = true;
                                         break;

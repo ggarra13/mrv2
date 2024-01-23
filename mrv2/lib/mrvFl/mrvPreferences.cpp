@@ -184,10 +184,7 @@ namespace mrv
                     LOG_ERROR("Unknown type " << type << " for key " << keyS);
                     break;
                 }
-                if (keyS == "NDI/SourceIndex")
-                    settings->setValue(keyS, -1);
-                else
-                    settings->setValue(keyS, value);
+                settings->setValue(keyS, value);
             }
         }
         DBG3;
@@ -701,7 +698,7 @@ namespace mrv
 
         playback.get("scrubbing_sensitivity", tmpF, 5.0f);
         uiPrefs->uiPrefsScrubbingSensitivity->value(tmpF);
-        
+
         playback.get("scrub_auto_playback", tmp, 1);
         uiPrefs->uiPrefsScrubAutoPlay->value(tmp);
 

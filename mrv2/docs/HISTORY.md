@@ -9,6 +9,7 @@ v1.0.2
 - Fixed closing and reopening panel not showing the selected source.
 - Fixed hang ups when switching sources in NDI® panel with videos with audio.
   Videos without audio were fine.
+- Removed references to NDI/Source Index.
 
 
 v1.0.1
