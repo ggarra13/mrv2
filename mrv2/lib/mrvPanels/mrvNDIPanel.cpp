@@ -308,21 +308,6 @@ namespace mrv
             r.has_awake = false;
 
             Y += 30;
-
-            auto spW = new Widget< HorSlider >(
-                g->x(), Y, g->w(), 20, _("Preroll"));
-            s = _r->preroll = spW;
-            s->step(1);
-            s->range(1, 10);
-            s->default_value(3);
-            s->tooltip(_("Preroll in seconds to synchronize audio."));
-            s->value(settings->getValue<int>("NDI/Preroll"));
-            spW->callback(
-                [=](auto w)
-                    {
-                        settings->setValue("NDI/Preroll", (int)w->value());
-                    }
-                );
             
             Y += 30;
             
@@ -444,19 +429,36 @@ namespace mrv
                     p.ui->uiStatusBar->label(
                         _("Waiting for player cache to fill up..."));
                     player->stop();
-                    seconds = r.preroll->value();
                 }
                 
                 r.playThread = std::thread(
-                    [this, player, seconds, noAudio]
+                    [this, player, noAudio]
                     {
                         MRV2_R();
 
                         if (!noAudio)
                         {
-                            LOG_INFO("Waiting " << seconds << " seconds...");
-                            std::this_thread::sleep_for(
-                                std::chrono::seconds(seconds));
+                            auto startTime = player->currentTime();
+                            auto endTime =
+                                startTime +
+                                otime::RationalTime(2.0, 1.0).rescaled_to(
+                                    startTime.rate());
+                            
+                            bool found = false;
+                            while (!found)
+                            {
+                                const auto cache =
+                                    player->player()->observeCacheInfo()->get();
+                                for (const auto& t : cache.audioFrames)
+                                {
+                                    if (t.end_time_exclusive() >=
+                                        endTime)
+                                    {
+                                        found = true;
+                                        break;
+                                    }
+                                }
+                            }
                         }
                         // player->start();
                         LOG_INFO(_("Starting playback..."));
