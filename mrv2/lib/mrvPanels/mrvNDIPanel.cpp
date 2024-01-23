@@ -459,9 +459,14 @@ namespace mrv
                                    std::chrono::steady_clock::now() - start <=
                                        std::chrono::seconds(seconds))
                             {
-                                const auto cache =
-                                    player->player()->observeCacheInfo()->get();
-                                for (const auto& t : cache.audioFrames)
+                                const auto observer = player->player()->observeCacheInfo();
+                                const auto cache = observer->get();
+                                
+                                // Make a copy of the audioFrames vector
+                                // to avoid concurrent issues.
+                                const auto audioFramesCopy = cache.audioFrames;
+                                
+                                for (const auto& t : audioFramesCopy)
                                 {
                                     if (t.start_time() <= startTime &&
                                         t.end_time_exclusive() >= endTime)
