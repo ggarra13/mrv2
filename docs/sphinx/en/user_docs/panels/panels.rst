@@ -107,6 +107,26 @@ The Network Panel allows you to start a sync session between two or more machine
 
 For the connection to take place, you need to make sure your firewall allows incoming and outgoing connections to the port you set up.
 
+NDI Panel
++++++++++
+
+.. image:: ../images/ndi-panel-01.png
+   :align: center
+
+
+The NDI Panel allows you to play back an NDI® stream (ie. a video and audio playback stream) from anywhere on your network using the Network Device Interfacce protocol.
+
+For the connection to take place, you need to make sure your firewall allows incoming and outgoing connections.  For more information, refer to the NDI® SDK documentation.
+
+The first pulldown allows you to select the source to play.  It may take a couple of seconds for the playback to start, particularly with sound.
+
+Preroll selects a maximum of seconds to wait for the audio preroll to take place.
+
+Gigabytes adjusts the memory used to cache the video and audio.  For 2K and stereo streams, 1 Gb should be fine.  For 4K or higher, you may need to set the value to 3 or higher.
+
+Audio allows you to play the incoming audio or ignore it.  You can usually get a faster start up and smoother playback if you ignore the audio.
+
+
 Playlist Panel
 ++++++++++++++
 

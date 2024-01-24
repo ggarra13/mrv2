@@ -24,10 +24,12 @@ foreach( LANGUAGE ${LANGUAGES} )
     # Prepare Sphinx's conf.py
     #
     set(CONFFILE_IN ${SPHINX_DIR}/${LANGUAGE}/conf.py.in)
-    set(CONFFILE_OUT ${CMAKE_INSTALL_PREFIX}/sphinx/${LANGUAGE}/conf.py)
+    set(CONFFILE_OUT ${SPHINX_DIR}/${LANGUAGE}/conf.py)
 
     # Replace variables inside @@ with the current values
     file( REMOVE ${CONFFILE_OUT} )
+
+    # Replace variables inside @@ with the current values
     message( STATUS "Creating ${CONFFILE_OUT}..." )
     configure_file(${CONFFILE_IN} ${CONFFILE_OUT} @ONLY)
     
@@ -57,7 +59,7 @@ foreach( LANGUAGE ${LANGUAGES} )
     
     add_custom_target( ${DOC_TARGET}
 	COMMAND ${CMAKE_COMMAND} -E env LANGUAGE=${LANGUAGE} LANG=en_US.UTF-8 LANGUAGE_CODE=${LANGUAGE} ${CMAKE_INSTALL_PREFIX}/bin/${MRV2_COMMAND} -pythonScript ${CMAKE_INSTALL_PREFIX}/sphinx/${LANGUAGE}/document.py
-	DEPENDS install ${DOCUMENT_OUT}
+	DEPENDS install ${DOCUMENT_OUT} ${CONFFILE_OUT}
 	)
     
 endforeach()
