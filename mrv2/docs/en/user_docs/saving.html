@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Video Tutorials &mdash; mrv2 v1.0.2 documentation</title>
+  <title>Saving &mdash; mrv2 v1.0.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=eafc0fe6" />
@@ -23,8 +23,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Python API" href="../python_api/index.html" />
-    <link rel="prev" title="Saving" href="saving.html" /> 
+    <link rel="next" title="Video Tutorials" href="videos.html" />
+    <link rel="prev" title="Preferences" href="preferences.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -58,8 +58,12 @@
 <li class="toctree-l2"><a class="reference internal" href="settings.html">Settings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hotkeys.html">Hotkeys</a></li>
 <li class="toctree-l2"><a class="reference internal" href="preferences.html">Preferences</a></li>
-<li class="toctree-l2"><a class="reference internal" href="saving.html">Saving</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Video Tutorials</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Saving</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#saving-a-movie">Saving a Movie</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#saving-a-sequence-of-images">Saving a Sequence of Images</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="videos.html">Video Tutorials</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../python_api/index.html">Python API</a></li>
@@ -80,9 +84,9 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="index.html">mrv2 User Guide</a></li>
-      <li class="breadcrumb-item active">Video Tutorials</li>
+      <li class="breadcrumb-item active">Saving</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/user_docs/videos.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/user_docs/saving.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -90,18 +94,89 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="video-tutorials">
-<h1>Video Tutorials<a class="headerlink" href="#video-tutorials" title="Link to this heading"></a></h1>
-<p>In addition to this documentation, during the development of mrv2, several video tutorials were created.  These may not use the latest version of mrv2, but they may still be quite useful as a reference:</p>
-<p><a class="reference external" href="https://www.youtube.com/watch?v=8JViz-pPCrg&amp;list=PLxJ9NNBdNfRmd8AQ41AJYmb7WhN99G5C">https://www.youtube.com/watch?v=8JViz-pPCrg&amp;list=PLxJ9NNBdNfRmd8AQ41AJYmb7WhN99G5C</a>-</p>
+  <section id="saving">
+<h1>Saving<a class="headerlink" href="#saving" title="Link to this heading"></a></h1>
+<section id="saving-a-movie">
+<h2>Saving a Movie<a class="headerlink" href="#saving-a-movie" title="Link to this heading"></a></h2>
+<p>When saving a movie from the menu File-&gt;Save Movie or Sequence and typing in the extension of a movie file (like “test.mov”) an option window will appear.</p>
+<img alt="../_images/save-movie-01.png" class="align-center" src="../_images/save-movie-01.png" />
+<aside class="topic">
+<p class="topic-title">Save Annotations</p>
+<p>When this option is on, annotations in the video will get saved.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Video Options</p>
+<ul>
+<li><p>Profile</p>
+<p>With the Profile option, you can select the basic codec used when</p>
+</li>
+</ul>
+</aside>
+<p>saving the movie.  Currently these can be “None”, “H264”, “ProRes”, “ProRes_Proxy”, “ProRes_LT”, “ProRes_HQ”, “ProRes_4444” or “ProRes_XQ”.
+Note that the most compatible codec (“H264”) requires a license from VideoLAN for encoding or to compile mrv2 in GPL mode.
+Please refer to the compilation instructions of mrv2 at:</p>
+<blockquote>
+<div><p><a class="reference external" href="https:://github.com/ggarra13/mrv2">https:://github.com/ggarra13/mrv2</a></p>
+</div></blockquote>
+<aside class="topic">
+<p class="topic-title">Audio Options</p>
+<ul>
+<li><p>Codec</p>
+<blockquote>
+<div><p>With this setting, you will be able to control the codec used
+when saving a movie file with audio.</p>
+</div></blockquote>
+</li>
+</ul>
+</aside>
+</section>
+<section id="saving-a-sequence-of-images">
+<h2>Saving a Sequence of Images<a class="headerlink" href="#saving-a-sequence-of-images" title="Link to this heading"></a></h2>
+<p>When saving a sequence of pictures from the menu File-&gt;Save Movie or Sequence and typing in the extension of a sequence with a number (like “test.0001.exr”) an option window will appear.</p>
+<img alt="../_images/save-images-01.png" class="align-center" src="../_images/save-images-01.png" />
+<aside class="topic">
+<p class="topic-title">Save Annotations</p>
+<p>When this option is on, annotations in the video will get saved.
+This option will also allow you to save formats that are incompatible
+with OpenEXR, for example, such as the YUV formats of most movies.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">OpenEXR Options</p>
+<ul>
+<li><p>Compression</p>
+<blockquote>
+<div><p>This setting allows you to select the type of compression used
+when saving the sequence of OpenEXRs.</p>
+</div></blockquote>
+</li>
+<li><p>Pixel Type</p>
+<blockquote>
+<div><p>You can select the type of pixel type to save (Half or Float).</p>
+</div></blockquote>
+</li>
+<li><p>ZIP Compression</p>
+<blockquote>
+<div><p>When saving the compression type “ZIP” or “ZIPS” this setting
+allows you to control the amount of zip compression.</p>
+</div></blockquote>
+</li>
+<li><p>DWA Compression</p>
+<blockquote>
+<div><p>For DWAA and DWAB compression, this setting controls the amount
+of compression in those formats.</p>
+</div></blockquote>
+</li>
+</ul>
+</aside>
+</section>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="saving.html" class="btn btn-neutral float-left" title="Saving" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../python_api/index.html" class="btn btn-neutral float-right" title="Python API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="preferences.html" class="btn btn-neutral float-left" title="Preferences" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="videos.html" class="btn btn-neutral float-right" title="Video Tutorials" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
