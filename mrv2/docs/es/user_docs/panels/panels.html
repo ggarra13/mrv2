@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Paneles &mdash; documentación de mrv2 - v0.8.2</title>
+  <title>Paneles &mdash; documentación de mrv2 - v1.0.2</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=eafc0fe6" />
@@ -16,7 +16,7 @@
   
         <script src="../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=9bc82b24"></script>
+        <script src="../../_static/documentation_options.js?v=5ef04a28"></script>
         <script src="../../_static/doctools.js?v=888ff710"></script>
         <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="../../_static/translations.js?v=efdbd0b9"></script>
@@ -65,6 +65,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#panel-de-bitacora">Panel de Bitácora</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#panel-de-informacion-del-medio">Panel de Información del Medio</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#panel-de-red">Panel de Red</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#panel-de-ndi">Panel de NDI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#panel-de-lista-de-reproduccion">Panel de Lista de Reproducción</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#panel-de-python">Panel de Python</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#panel-de-seteos">Panel de Seteos</a></li>
@@ -78,6 +79,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../settings.html">Seteos</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../hotkeys.html">Teclas de Manejo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../preferences.html">Preferencias</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../saving.html">Grabando</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../videos.html">Tutoriales de Video (en Inglés)</a></li>
 </ul>
 </li>
@@ -178,6 +180,16 @@ Horizontal, Vertical y Mosaicos.  La comparación de Mosaicos permite que muchas
 <img alt="../../_images/network-panel-01.png" class="align-center" src="../../_images/network-panel-01.png" />
 <p>El Panel de Red permite comenzar una session en sincronismo entre dos o más maquinas.  Para que funcione, debe setear una máquina como el servidor y las otras como clientes que se conectan a dicha máquina.  Las máquinas son distinguidas por su dirección IPv4 o IPv6 o por su nombre de alias si utiliza un archivo «hosts» en su sistema operativo.  Además de la máquina, tiene que especificar un número de puerto para conectarse, pero el puerto por defecto (55150) debería estar bien.</p>
 <p>Para que la conección se lleve a cabo, deberá asegurarse que su cortafuegos permte conecciones entrantes y salientes en el port establecido.</p>
+</section>
+<section id="panel-de-ndi">
+<h2>Panel de NDI<a class="headerlink" href="#panel-de-ndi" title="Link to this heading"></a></h2>
+<img alt="../../_images/ndi-panel-01.png" class="align-center" src="../../_images/ndi-panel-01.png" />
+<p>El Panel de NDI permite reproducir una fuente de NDI® (es decir, una fuente de video y audio) desde cualquier lugar en tu red usando el protocolo Network Device Interface.</p>
+<p>Para que la conección se ejecute, debés tener varios puertos de tu cortafuegos abiertos de entrada y salida.  Para más información, refiérase a la documentación del SDK de NDI®.</p>
+<p>El primer menú permite elegir qué fuentre reproducir.  Puede que tome unos cuantos segundos para que la reproducción comience, particularmente con sonido.</p>
+<p>Preroll controla el máximo de segundos a esperar para que el preroll de audio se sincronice.</p>
+<p>Gigabytes ajusta la memoria usada para el cache de video y audio.  Para 2K y estéreo, 1 Gb debería ser suficiente.  Para 4K y más, deberás ajustar el valor a 3 o más.</p>
+<p>Audio te permite reproducir el audio entrante o ignorarlo.  Puedes obtener una reproducción más rápida y más suave si ignorás el audio.</p>
 </section>
 <section id="panel-de-lista-de-reproduccion">
 <h2>Panel de Lista de Reproducción<a class="headerlink" href="#panel-de-lista-de-reproduccion" title="Link to this heading"></a></h2>

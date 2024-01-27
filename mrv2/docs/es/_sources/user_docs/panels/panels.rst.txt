@@ -107,6 +107,26 @@ El Panel de Red permite comenzar una session en sincronismo entre dos o más maq
 
 Para que la conección se lleve a cabo, deberá asegurarse que su cortafuegos permte conecciones entrantes y salientes en el port establecido.
 
+Panel de NDI
+++++++++++++
+
+.. image:: ../images/ndi-panel-01.png
+   :align: center
+
+
+El Panel de NDI permite reproducir una fuente de NDI® (es decir, una fuente de video y audio) desde cualquier lugar en tu red usando el protocolo Network Device Interface.
+
+Para que la conección se ejecute, debés tener varios puertos de tu cortafuegos abiertos de entrada y salida.  Para más información, refiérase a la documentación del SDK de NDI®.
+
+El primer menú permite elegir qué fuentre reproducir.  Puede que tome unos cuantos segundos para que la reproducción comience, particularmente con sonido.
+
+Preroll controla el máximo de segundos a esperar para que el preroll de audio se sincronice.
+
+Gigabytes ajusta la memoria usada para el cache de video y audio.  Para 2K y estéreo, 1 Gb debería ser suficiente.  Para 4K y más, deberás ajustar el valor a 3 o más.
+
+Audio te permite reproducir el audio entrante o ignorarlo.  Puedes obtener una reproducción más rápida y más suave si ignorás el audio.
+
+
 Panel de Lista de Reproducción
 ++++++++++++++++++++++++++++++
 
