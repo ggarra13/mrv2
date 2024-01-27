@@ -399,13 +399,16 @@ namespace mrv
                     model->close();
             }
 
-            std::regex pattern(
-                "remote connection", std::regex_constants::icase);
-            if (sourceName == _("No Source") ||
-                std::regex_search(sourceName, pattern))
-                return;
 
+            const std::regex pattern(
+                "remote connection", std::regex_constants::icase);
+            if (std::regex_search(sourceName, pattern))
+                return;
+            
             r.lastStream = sourceName;
+            
+            if (sourceName == _("No Source"))
+                return;
 
             // Create an ndi file
             std::string ndiFile = file::NDI(p.ui);

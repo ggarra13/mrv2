@@ -26,7 +26,7 @@ Algunas teclas útiles por defecto:
 
 ============  ======================================================
 Tecla         Acción
-============  =====================================================
+============  ======================================================
 Shift + F1    Alternar la barra de Menú.
 F1            Alternar la barra Superior.
 F2            Alternar la barra de Línea de Tiempo.
@@ -35,7 +35,7 @@ e             Alternar los dibujos (edición) en la Línea de Tiempo.
 Shift + F7    Alternar las Herramientas de Dibujo y Acción.
 F11           Alternar el modo Pantalla Completa.
 F12           Alternar el modo Presentación (sin barras).
-============  =====================================================
+============  ======================================================
 
 
 Personalizando la Interfaz

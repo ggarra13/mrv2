@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Panels &mdash; mrv2 v0.8.2 documentation</title>
+  <title>Panels &mdash; mrv2 v1.0.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=eafc0fe6" />
@@ -16,7 +16,7 @@
   
         <script src="../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=205ab768"></script>
+        <script src="../../_static/documentation_options.js?v=e562d664"></script>
         <script src="../../_static/doctools.js?v=888ff710"></script>
         <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -64,6 +64,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#logs-panel">Logs Panel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#media-information-panel">Media Information Panel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#network-panel">Network Panel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ndi-panel">NDI Panel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#playlist-panel">Playlist Panel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#python-panel">Python Panel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#settings-panel">Settings Panel</a></li>
@@ -77,6 +78,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../settings.html">Settings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../hotkeys.html">Hotkeys</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../preferences.html">Preferences</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../saving.html">Saving</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../videos.html">Video Tutorials</a></li>
 </ul>
 </li>
@@ -176,6 +178,16 @@ Horizontal, Vertical and Tile.  The Tile comparison allows multiple images to be
 <img alt="../../_images/network-panel-01.png" class="align-center" src="../../_images/network-panel-01.png" />
 <p>The Network Panel allows you to start a sync session between two or more machines.  For it to work, you must set one of the machine as a server and the other machines as clients that connect to that machine.  The machines are distinguised by their IPv4 or IPv6 address or their host alias names if you use a hosts file on your OS.  In addition to the machine, you need to specify a port number to connect to, but the default port number should be fine.</p>
 <p>For the connection to take place, you need to make sure your firewall allows incoming and outgoing connections to the port you set up.</p>
+</section>
+<section id="ndi-panel">
+<h2>NDI Panel<a class="headerlink" href="#ndi-panel" title="Link to this heading"></a></h2>
+<img alt="../../_images/ndi-panel-01.png" class="align-center" src="../../_images/ndi-panel-01.png" />
+<p>The NDI Panel allows you to play back an NDI® stream (ie. a video and audio playback stream) from anywhere on your network using the Network Device Interfacce protocol.</p>
+<p>For the connection to take place, you need to make sure your firewall allows incoming and outgoing connections.  For more information, refer to the NDI® SDK documentation.</p>
+<p>The first pulldown allows you to select the source to play.  It may take a couple of seconds for the playback to start, particularly with sound.</p>
+<p>Preroll selects a maximum of seconds to wait for the audio preroll to take place.</p>
+<p>Gigabytes adjusts the memory used to cache the video and audio.  For 2K and stereo streams, 1 Gb should be fine.  For 4K or higher, you may need to set the value to 3 or higher.</p>
+<p>Audio allows you to play the incoming audio or ignore it.  You can usually get a faster start up and smoother playback if you ignore the audio.</p>
 </section>
 <section id="playlist-panel">
 <h2>Playlist Panel<a class="headerlink" href="#playlist-panel" title="Link to this heading"></a></h2>

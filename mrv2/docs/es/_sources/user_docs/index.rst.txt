@@ -16,4 +16,5 @@ Guía del Usuario de mrv2
    settings
    hotkeys
    preferences
+   saving
    videos

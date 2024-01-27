@@ -744,7 +744,7 @@ namespace mrv
           << "Copyright (C) Nathan Moinvaziri" << endl
           << endl;
 #ifdef TLRENDER_NDI
-        o << "NDI® v" << NDIlib_version() << endl
+        o << "NDI® " << NDIlib_version() << endl
           << "Copyright (C) 2021-Present Vizrt NDI AB" << endl
           << endl;
 #endif
