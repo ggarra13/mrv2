@@ -113,6 +113,10 @@ endif()
 if(TLRENDER_NDI)
     if (WIN32)
     elseif (APPLE)
+	file( GLOB MRV2_LIB_DYLIBS ${TLRENDER_NDI_SDK}/lib/macOS/*.dylib* )
+	install( FILES ${MRV2_LIB_DYLIBS}
+	    DESTINATION lib
+	    COMPONENT applications )
     elseif(UNIX)
 	file( GLOB MRV2_LIB_DSOS ${TLRENDER_NDI_SDK}/lib/x86_64-linux-gnu/*.so* )
 	install( FILES ${MRV2_LIB_DSOS}
