@@ -31,7 +31,7 @@ function (FLTK_RUN_FLUID TARGET SOURCES)
 endfunction()
 
 #
-# Function used to discard system DSOS or those already insta
+# Function used to discard system DSOS or those already installed
 #
 function( is_macos_system_lib TARGET ISSYSLIB )
 
