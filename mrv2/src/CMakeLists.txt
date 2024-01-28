@@ -112,6 +112,9 @@ endif()
 
 if(TLRENDER_NDI)
     if (WIN32)
+	install( FILES  ${TLRENDER_NDI_SDK}/bin/x64/Processing.NDI.Lib.x64.dll
+	    DESTINATION bin
+	    COMPONENT applications )
     elseif (APPLE)
 	file( GLOB MRV2_LIB_DYLIBS ${TLRENDER_NDI_SDK}/lib/macOS/*.dylib* )
 	install( FILES ${MRV2_LIB_DYLIBS}
