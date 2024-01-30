@@ -1,0 +1,47 @@
+name: M1 Full Build
+
+on: [push]
+
+jobs:
+  macos-m1-full-build:
+    runs-on: macos-14
+
+    steps:
+    
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Install ninja-build
+      run: brew install ninja
+      
+    - name: Install automake
+      run: brew install automake
+
+    - name: Install GNU sed
+      run: brew install gnu-sed
+      
+    - name: Install Python dependencies
+      run: brew install libffi openssl readline sqlite3 xz zlib
+
+    - name: Setup environment
+      run: mkdir -p ssh
+
+    - name: Decode SSH key
+      run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ssh/id_rsa
+      shell: bash
+  
+    - name: Set permissions on SSH key
+      run: chmod 600 ssh/id_rsa
+  
+    - name: Set executable permissions
+       run: |
+         chmod +x ./*.sh ./bin/*.sh ./etc/*.sh
+
+    - name: Build mrv2
+      run: |
+        ./runme_nolog.sh -t package
+
+    - name: Upload binaries
+      run: |
+        ./bin/upload_sourceforge.sh
