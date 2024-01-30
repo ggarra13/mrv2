@@ -35,7 +35,7 @@ jobs:
       run: chmod 600 ssh/id_rsa
   
     - name: Set executable permissions
-       run: |
+      run: |
          chmod +x ./*.sh ./bin/*.sh ./etc/*.sh
 
     - name: Build mrv2
