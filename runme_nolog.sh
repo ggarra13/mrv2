@@ -34,7 +34,7 @@ fi
 
 if [ -z "$MRV2_PYFLTK" ]; then
     export MRV2_PYFLTK=ON
-    if [[ $ARCH == "arm64" ]]; then
+    if [[ $KERNEL == *Darwin* ]]; then
 	export MRV2_PYFLTK=OFF
     fi
 fi
