@@ -1,7 +1,7 @@
 v1.0.3
 ======
 
-- Added Darwin-arm64 beta builds (ie. M1 architecture).
+- Added Darwin arm64 beta builds (ie. M1 architecture).
 - Fixed a problem when saving OpenEXR not setting the format to RGB_F16, but
   trying to use RGB_U8 instead.
 
