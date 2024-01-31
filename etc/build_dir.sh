@@ -41,6 +41,7 @@ export BUILD_DIR=$BUILD_ROOT/${CMAKE_BUILD_TYPE}
 if [[ $KERNEL == *Darwin* ]]; then
     export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:${PATH}"
     if [[ $ARCH == arm64 ]]; then
+	export ARCH=aarch64
 	export CMAKE_OSX_ARCHITECTURES=$ARCH
     fi
     if [[ $MRV2_DIST_RELEASE == 1 ]]; then
