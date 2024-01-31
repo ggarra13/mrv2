@@ -40,7 +40,7 @@ jobs:
 
     - name: Build mrv2
       run: |
-        ./runme_nolog.sh -D TLRENDER_USD=OFF -D TLRENDER_FFMPEG=OFF -D MRV2_PDF=OFF -D MRV2_NETWORK=OFF -D MRV2_PYBIND11=ON -D MRV2_PYFLTK=OFF -D BUILD_PYTHON=ON -D TLRENDER_EXR=OFF -D TLRENDER_RAW=OFF -D TLRENDER_NET=OFF -D TLRENDER_TIFF=OFF -t package
+        ./runme_nolog.sh -t package
 
     - name: Upload binaries
       run: |
