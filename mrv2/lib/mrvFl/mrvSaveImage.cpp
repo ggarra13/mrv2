@@ -179,7 +179,11 @@ namespace mrv
             outputInfo = writerPlugin->getWriteInfo(outputInfo);
             if (image::PixelType::None == outputInfo.pixelType)
             {
+#ifdef TLRENDER_EXR
+                outputInfo.pixelType = image::PixelType::RGB_F16;
+#else
                 outputInfo.pixelType = image::PixelType::RGB_U8;
+#endif
             }
 
 #ifdef TLRENDER_EXR
