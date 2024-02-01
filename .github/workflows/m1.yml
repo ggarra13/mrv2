@@ -4,6 +4,47 @@ on: [push]
 
 jobs:
 
+  macos-11:
+    runs-on: macos-11
+
+    steps:
+    
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Install ninja-build
+      run: brew install ninja
+      
+    - name: Install automake
+      run: brew install automake
+
+    - name: Install GNU sed
+      run: brew install gnu-sed
+      
+    - name: Install Python dependencies
+      run: brew install subversion swig libffi openssl readline sqlite3 xz zlib
+
+    - name: Setup environment
+      run: mkdir -p ssh
+
+    - name: Decode SSH key
+      run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ssh/id_rsa
+      shell: bash
+  
+    - name: Set permissions on SSH key
+      run: chmod 600 ssh/id_rsa
+  
+    - name: Set executable permissions
+      run: |
+         chmod +x ./*.sh ./bin/*.sh ./etc/*.sh
+
+    - name: Build mrv2
+      run: |
+        ./runme_nolog.sh -D TLRENDER_USD=OFF -D TLRENDER_NET=OFF -D MRV2_NETWORK=OFF -D TLRENDER_FFMPEG=OFF -D TLRENDER_EXR=OFF -D TLRENDER_RAW=OFF -D TLRENDER_VPX=OFF -t package
+
+
+
   macos-m1:
     runs-on: macos-14
 
