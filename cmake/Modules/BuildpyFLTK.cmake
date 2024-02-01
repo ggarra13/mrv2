@@ -58,7 +58,7 @@ set(pyFLTK_PATCH
     COMMAND
     ${CMAKE_COMMAND} -E copy_if_different
     "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/swig/WindowShowTypemap.i"
-    "${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK/swig/"
+    "${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK/swig/")
 set(pyFLTK_CONFIGURE ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} setup.py swig --enable-shared)
 set(pyFLTK_BUILD     ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} setup.py build --enable-shared)
 set(pyFLTK_INSTALL "${pyFLTK_PIP_INSTALL_WHEEL}"
