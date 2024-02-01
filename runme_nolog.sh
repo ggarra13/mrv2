@@ -34,9 +34,6 @@ fi
 
 if [ -z "$MRV2_PYFLTK" ]; then
     export MRV2_PYFLTK=ON
-    if [[ $KERNEL == *Darwin* ]]; then
-	export MRV2_PYFLTK=OFF
-    fi
 fi
 
 if [ -z "$MRV2_PYBIND11" ]; then
