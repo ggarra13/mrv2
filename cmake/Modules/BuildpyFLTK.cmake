@@ -5,7 +5,7 @@
 include(ExternalProject)
 
 set(pyFLTK_SVN_REPOSITORY "https://svn.code.sf.net/p/pyfltk/code/branches/fltk1.4")
-set(pyFLTK_SVN_REVISION 624)  # was 609
+set(pyFLTK_SVN_REVISION 609)
 set(pyFLTK_SVN_REVISION_ARG -r ${pyFLTK_SVN_REVISION})
 
 
@@ -55,9 +55,16 @@ set(pyFLTK_INSTALL_WHEELS ${CMAKE_COMMAND}
 # Commands
 #
 set(pyFLTK_PATCH
+    ${CMAKE_COMMAND} -E copy_if_different
+    "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/setup.py"
+    "${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK/"
     COMMAND
     ${CMAKE_COMMAND} -E copy_if_different
     "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/swig/WindowShowTypemap.i"
+    "${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK/swig/"
+    COMMAND
+    ${CMAKE_COMMAND} -E copy_if_different
+    "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/swig/fltk.i"
     "${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK/swig/" )
 set(pyFLTK_CONFIGURE ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} setup.py swig --enable-shared)
 set(pyFLTK_BUILD     ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} setup.py build --enable-shared)
