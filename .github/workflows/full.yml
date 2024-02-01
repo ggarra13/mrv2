@@ -176,7 +176,7 @@ jobs:
 
 
   macos-m1-full-build:
-    runs-on: macos-14-large
+    runs-on: macos-14
 
     steps:
     
