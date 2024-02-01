@@ -6,8 +6,7 @@ include( ExternalProject )
 
 #set( FLTK_TAG master )
 # Stable TAG
-set(FLTK_TAG 6ea31316fb64f64d346dc4a3a30984048f5df4cd)
-
+set(FLTK_TAG 3b1ea22d1de7fe9e55414bfa6e3d8461e49cf0c3)
 
 set( FLTK_BUILD_SHARED_LIBS ON )  # We no longer compile static.
 
