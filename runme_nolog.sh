@@ -26,6 +26,13 @@ mkdir -p $BUILD_DIR
 cd $BUILD_DIR
 
 #
+# These are some common options
+#
+if [ -z "$CMAKE_OSX_DEPLOYMENT_TARGET" ]; then
+    export CMAKE_OSX_DEPLOYMENT_TARGET=11.0
+fi
+
+#
 # These are some of the expensive mrv2 options
 #
 if [ -z "$BUILD_PYTHON" ]; then
@@ -96,6 +103,7 @@ cmd="cmake -G '${CMAKE_GENERATOR}' \
 	   -D CMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE \
 	   -D CMAKE_INSTALL_PREFIX=$PWD/install \
 	   -D CMAKE_PREFIX_PATH=$PWD/install \
+           -D CMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET} \
 	   -D BUILD_PYTHON=${BUILD_PYTHON} \
 	   -D MRV2_NETWORK=${MRV2_NETWORK} \
 	   -D MRV2_PYFLTK=${MRV2_PYFLTK} \
