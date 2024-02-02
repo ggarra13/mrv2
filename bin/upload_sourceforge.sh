@@ -105,11 +105,12 @@ mrv2 v${mrv2_VERSION} Beta
 This beta release of v${mrv2_VERSION} corresponds to:
 ${date}.
 
+It does not support NDI® on any platform.
+
 It works on Windows 8.1+ (without USD support), Ubuntu 20.04 LTS+,
-and macOS 11. 
+macOS 11 (amd64) and macOS M1 (arm64). 
 
 It may contain bugs, new untested features and more.
-It does not support NDI® on any platform.
 
 You can extract it to compile yourself with:
 

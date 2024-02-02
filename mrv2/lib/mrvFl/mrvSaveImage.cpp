@@ -120,6 +120,26 @@ namespace mrv
 
             int X = 0, Y = 0;
 
+            image::Info outputInfo;
+            outputInfo.size = renderSize;
+            outputInfo.pixelType = info.video[layerId].pixelType;
+
+            {
+                std::string msg = tl::string::Format(_("Image info: {0} {1}"))
+                                      .arg(outputInfo.size)
+                                      .arg(outputInfo.pixelType);
+                LOG_INFO(msg);
+            }
+
+            outputInfo = writerPlugin->getWriteInfo(outputInfo);
+            if (image::PixelType::None == outputInfo.pixelType)
+            {
+                outputInfo.pixelType = image::PixelType::RGB_U8;
+#ifdef TLRENDER_EXR
+                annotations = true;
+#endif
+            }
+
             if (annotations)
             {
                 view->setActionMode(ActionMode::kScrub);
@@ -163,23 +183,6 @@ namespace mrv
                           .arg(X)
                           .arg(Y);
                 LOG_INFO(msg);
-            }
-
-            image::Info outputInfo;
-            outputInfo.size = renderSize;
-            outputInfo.pixelType = info.video[layerId].pixelType;
-
-            {
-                std::string msg = tl::string::Format(_("Image info: {0} {1}"))
-                                      .arg(outputInfo.size)
-                                      .arg(outputInfo.pixelType);
-                LOG_INFO(msg);
-            }
-
-            outputInfo = writerPlugin->getWriteInfo(outputInfo);
-            if (image::PixelType::None == outputInfo.pixelType)
-            {
-                outputInfo.pixelType = image::PixelType::RGB_U8;
             }
 
 #ifdef TLRENDER_EXR

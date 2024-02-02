@@ -13,7 +13,7 @@
       if (PyString_Check(o))
 %#endif
 	//$1[i] = PyString_AsString(PyList_GetItem($input,i));
-	$1[i] = SWIG_Python_str_AsChar(PyList_GetItem($input,i));
+        $1[i] = const_cast<char*>(PyUnicode_AsUTF8(PyList_GetItem($input,i)));
       else {
 	PyErr_SetString(PyExc_TypeError,"list must contain strings");
 	free($1);
@@ -52,7 +52,7 @@ void show(PyObject *count = 0, PyObject *data = 0)
 %#else  
         if (PyString_Check(o))
 %#endif
-	  tmp[i] = SWIG_Python_str_AsChar(PyList_GetItem(count,i));
+     tmp[i] = const_cast<char*>(PyUnicode_AsUTF8(PyList_GetItem(count,i)));
 	  //tmp[i] = PyString_AsString(PyList_GetItem(count,i));
 	else {
 	  PyErr_SetString(PyExc_TypeError,"list must contain strings");
@@ -77,7 +77,7 @@ void show(PyObject *count = 0, PyObject *data = 0)
 %#else  
         if (PyString_Check(o))
 %#endif
-	  tmp[i] = SWIG_Python_str_AsChar(PyList_GetItem(data,i));
+     tmp[i] = const_cast<char*>(PyUnicode_AsUTF8(PyList_GetItem(data,i)));
 	  //tmp[i] = PyString_AsString(PyList_GetItem(data,i));
 	else {
 	  PyErr_SetString(PyExc_TypeError,"list must contain strings");

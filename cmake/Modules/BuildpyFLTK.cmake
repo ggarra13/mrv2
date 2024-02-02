@@ -5,8 +5,8 @@
 include(ExternalProject)
 
 set(pyFLTK_SVN_REPOSITORY "https://svn.code.sf.net/p/pyfltk/code/branches/fltk1.4")
-set(pyFLTK_SVN_REVISION 609)
-set(pyFLTK_REVISION_ARG "-r ${pyFLTK_SVN_REVISION}")
+set(pyFLTK_SVN_REVISION 627)
+set(pyFLTK_SVN_REVISION_ARG -r ${pyFLTK_SVN_REVISION})
 
 
 if(NOT PYTHON_EXECUTABLE)
@@ -30,10 +30,12 @@ set(pyFLTK_ENV )
 if(WIN32)
     set(pyFLTK_CHECKOUT_CMD ${CMAKE_COMMAND} -E env -- svn checkout ${pyFLTK_SVN_REVISION_ARG} ${pyFLTK_SVN_REPOSITORY} pyFLTK)
     set(pyFLTK_ENV ${CMAKE_COMMAND} -E env FLTK_HOME=${FLTK_HOME} CXXFLAGS=${pyFLTK_CXX_FLAGS} -- )
-elseif(APPLE AND CMAKE_OSX_DEPLOYMENT_TARGET)
+elseif(APPLE)
     set(pyFLTK_LD_LIBRARY_PATH $ENV{OLD_DYLD_LIBRARY_PATH})
     set(pyFLTK_CHECKOUT_CMD  ${CMAKE_COMMAND} -E env DYLD_LIBRARY_PATH="${pyFLTK_DYLD_LIBRARY_PATH}" svn checkout ${pyFLTK_SVN_REVISION_ARG} ${pyFLTK_SVN_REPOSITORY} pyFLTK)
-    list(APPEND pyFLTK_CXX_FLAGS "-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}")
+    if(CMAKE_OSX_DEPLOYMENT_TARGET)
+	list(APPEND pyFLTK_CXX_FLAGS "-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}")
+    endif()
     set(pyFLTK_ENV ${CMAKE_COMMAND} -E env CXXFLAGS=${pyFLTK_CXX_FLAGS} -- )
 else()
     set(pyFLTK_CHECKOUT_CMD ${CMAKE_COMMAND} -E env LD_LIBRARY_PATH="${pyFLTK_LD_LIBRARY_PATH}" svn checkout ${pyFLTK_SVN_REVISION_ARG} ${pyFLTK_SVN_REPOSITORY} pyFLTK)
@@ -55,17 +57,10 @@ set(pyFLTK_INSTALL_WHEELS ${CMAKE_COMMAND}
 # Commands
 #
 set(pyFLTK_PATCH
-    ${CMAKE_COMMAND} -E copy_if_different
-    "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/setup.py"
-    "${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK/"
     COMMAND
     ${CMAKE_COMMAND} -E copy_if_different
     "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/swig/WindowShowTypemap.i"
-    "${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK/swig/"
-    COMMAND
-    ${CMAKE_COMMAND} -E copy_if_different
-    "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/swig/fltk.i"
-    "${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK/swig/" )
+    "${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK/swig/")
 set(pyFLTK_CONFIGURE ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} setup.py swig --enable-shared)
 set(pyFLTK_BUILD     ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} setup.py build --enable-shared)
 set(pyFLTK_INSTALL "${pyFLTK_PIP_INSTALL_WHEEL}"

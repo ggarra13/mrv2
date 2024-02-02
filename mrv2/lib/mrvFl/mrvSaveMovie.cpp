@@ -183,51 +183,6 @@ namespace mrv
 
             int X = 0, Y = 0;
 
-            if (annotations)
-            {
-                view->setActionMode(ActionMode::kScrub);
-                view->setPresentationMode(true);
-                view->redraw();
-                // flush is needed
-                Fl::flush();
-                view->flush();
-                Fl::check();
-                const auto& viewportSize = view->getViewportSize();
-                if (viewportSize.w >= renderSize.w &&
-                    viewportSize.h >= renderSize.h)
-                {
-                    view->setFrameView(false);
-                    view->setViewZoom(1.0);
-                    view->centerView();
-                    view->redraw();
-                    // flush is needed
-                    Fl::flush();
-
-                    X = (viewportSize.w - renderSize.w) / 2;
-                    Y = (viewportSize.h - renderSize.h) / 2;
-                }
-                else
-                {
-                    view->frameView();
-                    renderSize.w = viewportSize.w;
-                    renderSize.h = viewportSize.h;
-                    LOG_WARNING(_("Image too big.  "
-                                  "Will save the viewport size."));
-                }
-
-                std::string msg = tl::string::Format(
-                                      _("Viewport Size: {0}  Render Size: {1}"))
-                                      .arg(viewportSize)
-                                      .arg(renderSize);
-                LOG_INFO(msg);
-
-                msg = tl::string::Format("viewZoom: {2} X: {3} Y: {4}")
-                          .arg(view->viewZoom())
-                          .arg(X)
-                          .arg(Y);
-                LOG_INFO(msg);
-            }
-
             io::Info ioInfo;
             image::Info outputInfo;
 
@@ -246,7 +201,11 @@ namespace mrv
                 outputInfo = writerPlugin->getWriteInfo(outputInfo);
                 if (image::PixelType::None == outputInfo.pixelType)
                 {
+#ifdef TLRENDER_EXR
+                    annotations = true;
+#else
                     outputInfo.pixelType = image::PixelType::RGB_U8;
+#endif
                 }
 
 #ifdef TLRENDER_EXR
@@ -263,6 +222,52 @@ namespace mrv
                     outputInfo.pixelType = image::PixelType::RGB_F32;
                     offscreenBufferOptions.colorType =
                         image::PixelType::RGB_F32;
+                }
+
+                if (annotations)
+                {
+                    view->setActionMode(ActionMode::kScrub);
+                    view->setPresentationMode(true);
+                    view->redraw();
+                    // flush is needed
+                    Fl::flush();
+                    view->flush();
+                    Fl::check();
+                    const auto& viewportSize = view->getViewportSize();
+                    if (viewportSize.w >= renderSize.w &&
+                        viewportSize.h >= renderSize.h)
+                    {
+                        view->setFrameView(false);
+                        view->setViewZoom(1.0);
+                        view->centerView();
+                        view->redraw();
+                        // flush is needed
+                        Fl::flush();
+
+                        X = (viewportSize.w - renderSize.w) / 2;
+                        Y = (viewportSize.h - renderSize.h) / 2;
+                    }
+                    else
+                    {
+                        view->frameView();
+                        renderSize.w = viewportSize.w;
+                        renderSize.h = viewportSize.h;
+                        LOG_WARNING(_("Image too big.  "
+                                      "Will save the viewport size."));
+                    }
+
+                    std::string msg =
+                        tl::string::Format(
+                            _("Viewport Size: {0}  Render Size: {1}"))
+                            .arg(viewportSize)
+                            .arg(renderSize);
+                    LOG_INFO(msg);
+
+                    msg = tl::string::Format("viewZoom: {2} X: {3} Y: {4}")
+                              .arg(view->viewZoom())
+                              .arg(X)
+                              .arg(Y);
+                    LOG_INFO(msg);
                 }
 
                 msg = tl::string::Format(_("Output info: {0} {1}"))
