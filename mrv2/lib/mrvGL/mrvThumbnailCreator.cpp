@@ -27,6 +27,8 @@
 
 #include "mrvEdit/mrvEditUtil.h"
 
+#include "mrViewer.h"
+
 // For main fltk event loop
 #include <FL/Fl_RGB_Image.H>
 #include <FL/platform.H>
@@ -328,6 +330,9 @@ namespace mrv
                         string::Format("{0}").arg(1);
                     options.ioOptions["FFmpeg/ThreadCount"] =
                         string::Format("{0}").arg(1);
+                    options.ioOptions["OpenEXR/IgnoreDisplayWindow"] =
+                        string::Format("{0}").arg(
+                            App::ui->uiView->getIgnoreDisplayWindow());
                     file::Path path(request.fileName);
                     try
                     {
