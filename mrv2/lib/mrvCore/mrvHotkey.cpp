@@ -59,6 +59,7 @@ namespace mrv
     Hotkey kMinifyTextureFiltering(false, false, false, false, 0);
     Hotkey kMagnifyTextureFiltering(false, false, false, true, 'f');
     Hotkey kSafeAreas(false, false, false, false, 's');
+    Hotkey kIgnoreDisplayWindow(false, false, false, false, 0);
     Hotkey kDisplayWindow(true, false, false, false, 'd');
     Hotkey kDataWindow(false, false, false, false, 'd');
 
@@ -357,6 +358,7 @@ namespace mrv
         HotkeyEntry(
             _("Toggle Magnify Texture Filtering"), &kMagnifyTextureFiltering),
         HotkeyEntry(_("Safe Areas"), &kSafeAreas),
+        HotkeyEntry(_("Ignore Display Window"), &kIgnoreDisplayWindow),
         HotkeyEntry(_("Display Window"), &kDisplayWindow),
         HotkeyEntry(_("Data Window"), &kDataWindow),
         HotkeyEntry(_("Compare Wipe"), &kCompareWipe),

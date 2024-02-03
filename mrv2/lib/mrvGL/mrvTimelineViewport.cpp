@@ -61,6 +61,7 @@ namespace mrv
     bool TimelineViewport::Private::safeAreas = false;
     bool TimelineViewport::Private::dataWindow = false;
     bool TimelineViewport::Private::displayWindow = false;
+    bool TimelineViewport::Private::ignoreDisplayWindow = false;
     std::string TimelineViewport::Private::helpText;
     float TimelineViewport::Private::helpTextFade;
     bool TimelineViewport::Private::hudActive = true;
@@ -715,6 +716,11 @@ namespace mrv
     {
         return _p->displayWindow;
     }
+    
+    bool TimelineViewport::getIgnoreDisplayWindow() const noexcept
+    {
+        return _p->ignoreDisplayWindow;
+    }
 
     void TimelineViewport::setSafeAreas(bool value) noexcept
     {
@@ -737,6 +743,14 @@ namespace mrv
         if (value == _p->displayWindow)
             return;
         _p->displayWindow = value;
+        redrawWindows();
+    }
+
+    void TimelineViewport::setIgnoreDisplayWindow(bool value) noexcept
+    {
+        if (value == _p->ignoreDisplayWindow)
+            return;
+        _p->ignoreDisplayWindow = value;
         redrawWindows();
     }
 

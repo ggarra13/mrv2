@@ -211,12 +211,19 @@ namespace mrv
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (ui->uiView->getDataWindow())
             item->set();
-
+        
         idx = menu->add(
             _("View/Display Window"), kDisplayWindow.hotkey(),
             (Fl_Callback*)display_window_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (ui->uiView->getDisplayWindow())
+            item->set();
+        
+        idx = menu->add(
+            _("View/Ignore Display Window"), kIgnoreDisplayWindow.hotkey(),
+            (Fl_Callback*)ignore_display_window_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (ui->uiView->getIgnoreDisplayWindow())
             item->set();
 
         snprintf(buf, 256, "%s", _("View/Toggle Menu bar"));

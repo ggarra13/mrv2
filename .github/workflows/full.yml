@@ -178,6 +178,9 @@ jobs:
   macos-m1-full-build:
     runs-on: macos-14
 
+    env:
+      CMAKE_OSX_DEPLOYMENT_TARGET: 14.0
+      
     steps:
     
     - uses: actions/checkout@v4

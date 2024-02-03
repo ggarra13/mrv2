@@ -1150,6 +1150,14 @@ namespace mrv
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
+    void ignore_display_window_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
+        ui->uiView->setIgnoreDisplayWindow(item->checked());
+        clone_and_replace_cb(m, ui);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+    
     void display_window_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());

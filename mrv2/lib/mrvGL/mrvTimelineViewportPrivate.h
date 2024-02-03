@@ -98,6 +98,9 @@ namespace mrv
 
         //! Display Window
         static bool displayWindow;
+        
+        //! Ignore Display Window
+        static bool ignoreDisplayWindow;
 
         //! Masking
         static float masking;

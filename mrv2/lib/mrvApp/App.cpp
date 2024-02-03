@@ -1067,6 +1067,11 @@ namespace mrv
         out["SequenceIO/DefaultSpeed"] =
             string::Format("{0}").arg(ui->uiPrefs->uiPrefsFPS->value());
 
+#if defined(TLRENDER_EXR)
+        out["OpenEXR/IgnoreDisplayWindow"] =
+            string::Format("{0}").arg(ui->uiView->getIgnoreDisplayWindow());
+#endif
+
 #if defined(TLRENDER_FFMPEG)
         out["FFmpeg/YUVToRGBConversion"] = string::Format("{0}").arg(
             p.settings->getValue<int>("Performance/FFmpegYUVToRGBConversion"));

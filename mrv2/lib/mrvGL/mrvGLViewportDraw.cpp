@@ -724,14 +724,12 @@ namespace mrv
         box.min.y = -(renderSize.h - Y);
         box.max.x = X;
         box.max.y = -Y;
-#if 0
-        // @bug:
-        //
-        // Using USE_ONE_PIXEL_LINES would make the primary display flicker
-        // after the secondary one was closed.
-        _drawRectangleOutline( box, color, mvp );
-#else
+
         int width = 2 / _p->viewZoom; //* renderSize.w / viewportSize.w;
+        
+#ifdef USE_ONE_PIXEL_LINES
+        gl.outline->drawRect(box, color, mvp);
+#else
         if (width < 2)
             width = 2;
         gl.render->setTransform(mvp);
@@ -1112,8 +1110,12 @@ namespace mrv
             static_cast<float>(viewportSize.h), -1.F, 1.F);
         auto mvp = pm * vm;
         mvp = mvp * math::scale(math::Vector3f(1.F, -1.F, 1.F));
+#ifdef USE_ONE_PIXEL_LINES
+        _drawRectangleOutline( box, color, mvp );
+#else        
         gl.render->setTransform(mvp);
         drawRectOutline(gl.render, box, color, 2);
+#endif
     }
 
     void Viewport::_drawDataWindow() const noexcept
