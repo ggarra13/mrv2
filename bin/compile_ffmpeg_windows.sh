@@ -217,6 +217,7 @@ if [[ $BUILD_SSL == 1 ]]; then
     ENABLE_OPENSSL="--enable-openssl --extra-libs=crypto.lib"
 fi
 
+echo "Preparing to build FFmpeg...."
 
 #
 # Build FFmpeg
@@ -226,7 +227,9 @@ if [[ $BUILD_FFMPEG == 1 ]]; then
     cd $ROOT_DIR/sources
 
     if [[ ! -d ffmpeg ]]; then
-	git clone --depth 1 --branch ${FFMPEG_TAG} git://source.ffmpeg.org/ffmpeg.git 2> /dev/null
+	echo "Cloning ffmpeg repository..."
+	git clone --depth 1 --branch ${FFMPEG_TAG} https://git.ffmpeg.org/ffmpeg.git 2> /dev/null
+	echo "Cloned!"
     fi
 
     lgpl_ffmpeg=""
@@ -235,7 +238,7 @@ if [[ $BUILD_FFMPEG == 1 ]]; then
 	lgpl_ffmpeg=`strings $avformat_dll | findstr "LGPL" | grep -o "LGPL"`
     fi
 
-    if [[ $lgpl_ffmpeg != "" ]]; then
+    if [[ "$lgpl_ffmpeg" != "" ]]; then
 	if [[ $lgpl_ffmpeg != $FFMPEG_GPL ]]; then
 	    echo "Incompatible FFmpeg already installed.  Installed is $lgpl_ffmpeg, want $FMMPEG_GPL."
 	    run_cmd rm -rf $INSTALL_DIR/lib/avformat.lib
