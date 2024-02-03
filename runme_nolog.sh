@@ -26,13 +26,6 @@ mkdir -p $BUILD_DIR
 cd $BUILD_DIR
 
 #
-# These are some common options
-#
-if [ -z "$CMAKE_OSX_DEPLOYMENT_TARGET" ]; then
-    export CMAKE_OSX_DEPLOYMENT_TARGET=11.0
-fi
-
-#
 # These are some of the expensive mrv2 options
 #
 if [ -z "$BUILD_PYTHON" ]; then
