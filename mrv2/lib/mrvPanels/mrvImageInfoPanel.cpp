@@ -743,8 +743,7 @@ namespace mrv
 
         void ImageInfoPanel::refresh()
         {
-            TLRENDER_P();
-
+            
             hide_tabs();
 
             m_image->clear();
@@ -760,9 +759,10 @@ namespace mrv
             m_video->end();
             m_audio->end();
             m_subtitle->end();
+            
 
             if (player)
-                end_group();
+                g->end();
 
             DBG3;
         }

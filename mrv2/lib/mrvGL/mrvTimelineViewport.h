@@ -140,6 +140,9 @@ namespace mrv
 
         //! Return if display window is active
         bool getDisplayWindow() const noexcept;
+        
+        //! Return if ignoring display window is active
+        bool getIgnoreDisplayWindow() const noexcept;
 
         //! Set the crop mask
         void setSafeAreas(bool) noexcept;
@@ -149,6 +152,9 @@ namespace mrv
 
         //! Set display window
         void setDisplayWindow(bool) noexcept;
+        
+        //! Set ignore of display window
+        void setIgnoreDisplayWindow(bool) noexcept;
 
         //! Clear the help text after 1 second has elapsed.
         void clearHelpText();

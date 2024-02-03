@@ -124,6 +124,7 @@ namespace mrv
 
     extern Hotkey kSafeAreas;
 
+    extern Hotkey kIgnoreDisplayWindow;
     extern Hotkey kDisplayWindow;
     extern Hotkey kDataWindow;
 
