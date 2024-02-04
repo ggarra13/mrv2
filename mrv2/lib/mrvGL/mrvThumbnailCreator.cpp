@@ -249,6 +249,10 @@ namespace mrv
         std::unique_lock<std::mutex> lock(p.mutex);
         p.requestTimeout = std::chrono::milliseconds(value > 0 ? value : 0);
     }
+    
+    void ThumbnailCreator::clearCache()
+    {
+    }
 
     void ThumbnailCreator::setTimerInterval(double value)
     {

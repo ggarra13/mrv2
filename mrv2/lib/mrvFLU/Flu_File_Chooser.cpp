@@ -24,6 +24,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+#include <random>
 #include <iostream>
 #include <algorithm>
 #include <mutex>
@@ -3386,6 +3387,10 @@ Flu_File_Chooser::toTLRenderTime(const Flu_File_Chooser::Entry* e)
         number = number.substr(0, pos);
         int64_t frame = atoi(number.c_str());
         time = otime::RationalTime(frame, 24.0);
+    }
+    else if (e->type == ENTRY_FILE)
+    {
+        time = otime::RationalTime(0.0, 24.0);
     }
 
     return time;

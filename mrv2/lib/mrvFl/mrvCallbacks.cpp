@@ -250,24 +250,9 @@ namespace mrv
         }
 
         bool valid_for_exr = false;
-        // Sanity check - make sure the video pixel for the current
-        // layerId type is float/half
         if (extension == ".exr")
         {
-            auto info = player->ioInfo();
-            unsigned layerId = ui->uiColorChannel->value();
-            auto video = info.video[layerId];
-            if (video.pixelType == image::PixelType::RGBA_F16 ||
-                video.pixelType == image::PixelType::RGBA_F32 ||
-                video.pixelType == image::PixelType::RGB_F16 ||
-                video.pixelType == image::PixelType::RGB_F32 ||
-                video.pixelType == image::PixelType::LA_F16 ||
-                video.pixelType == image::PixelType::LA_F32 ||
-                video.pixelType == image::PixelType::L_F16 ||
-                video.pixelType == image::PixelType::L_F32)
-            {
-                valid_for_exr = true;
-            }
+            valid_for_exr = true;
         }
 
         SaveImageOptionsUI saveOptions(extension, valid_for_exr);
@@ -403,23 +388,9 @@ namespace mrv
 #endif
         {
             bool valid_for_exr = false;
-            // Sanity check - make sure the video pixel for the current
-            // layerId type is float/half
             if (extension == ".exr")
             {
-                unsigned layerId = ui->uiColorChannel->value();
-                auto video = ioInfo.video[layerId];
-                if (video.pixelType == image::PixelType::RGBA_F16 ||
-                    video.pixelType == image::PixelType::RGBA_F32 ||
-                    video.pixelType == image::PixelType::RGB_F16 ||
-                    video.pixelType == image::PixelType::RGB_F32 ||
-                    video.pixelType == image::PixelType::LA_F16 ||
-                    video.pixelType == image::PixelType::LA_F32 ||
-                    video.pixelType == image::PixelType::L_F16 ||
-                    video.pixelType == image::PixelType::L_F32)
-                {
-                    valid_for_exr = true;
-                }
+                valid_for_exr = true;
             }
 
             SaveImageOptionsUI saveOptions(extension, valid_for_exr);
