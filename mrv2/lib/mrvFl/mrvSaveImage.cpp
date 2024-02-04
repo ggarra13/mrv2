@@ -56,6 +56,15 @@ namespace mrv
         // Time range.
         auto currentTime = player->currentTime();
 
+
+        file::Path path(file);
+        const std::string& extension = path.getExtension();
+            
+        bool saveEXR = string::compare(
+            extension, ".exr", string::Compare::CaseInsensitive);
+        bool saveHDR = string::compare(
+            extension, ".hdr", string::Compare::CaseInsensitive);
+
         try
         {
 
@@ -98,9 +107,6 @@ namespace mrv
 
             auto renderSize = info.video[layerId].size;
 
-            file::Path path(file);
-            const std::string& extension = path.getExtension();
-
             // Create the renderer.
             auto render = timeline_gl::Render::create(context);
 
@@ -123,7 +129,7 @@ namespace mrv
             image::Info outputInfo;
             outputInfo.size = renderSize;
             outputInfo.pixelType = info.video[layerId].pixelType;
-
+            
             {
                 std::string msg = tl::string::Format(_("Image info: {0} {1}"))
                                       .arg(outputInfo.size)
@@ -135,8 +141,13 @@ namespace mrv
             if (image::PixelType::None == outputInfo.pixelType)
             {
                 outputInfo.pixelType = image::PixelType::RGB_U8;
+                offscreenBufferOptions.colorType = image::PixelType::RGB_U8;
 #ifdef TLRENDER_EXR
-                annotations = true;
+                if (saveEXR)
+                {
+                    outputInfo.pixelType = image::PixelType::RGB_F32;
+                    offscreenBufferOptions.colorType = image::PixelType::RGB_F32;
+                }
 #endif
             }
 
@@ -186,15 +197,12 @@ namespace mrv
             }
 
 #ifdef TLRENDER_EXR
-            if (annotations &&
-                string::compare(
-                    extension, ".exr", string::Compare::CaseInsensitive))
+            if (annotations && saveEXR)
             {
                 outputInfo.pixelType = options.exrPixelType;
             }
 #endif
-            if (string::compare(
-                    extension, ".hdr", string::Compare::CaseInsensitive))
+            if (saveHDR)
             {
                 outputInfo.pixelType = image::PixelType::RGB_F32;
                 offscreenBufferOptions.colorType = image::PixelType::RGB_F32;
@@ -227,6 +235,14 @@ namespace mrv
             {
                 throw std::runtime_error(
                     string::Format("{0}: Cannot open").arg(file));
+            }
+
+            {
+                std::string msg = tl::string::Format(_("OpenGL info: {0} format={1} type={2}"))
+                                  .arg(offscreenBufferOptions.colorType)
+                                  .arg(format)
+                                  .arg(type);
+                LOG_INFO(msg);
             }
 
             // Turn off hud so it does not get captured by glReadPixels.
