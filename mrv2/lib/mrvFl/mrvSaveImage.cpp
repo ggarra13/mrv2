@@ -56,10 +56,9 @@ namespace mrv
         // Time range.
         auto currentTime = player->currentTime();
 
-
         file::Path path(file);
         const std::string& extension = path.getExtension();
-            
+
         bool saveEXR = string::compare(
             extension, ".exr", string::Compare::CaseInsensitive);
         bool saveHDR = string::compare(
@@ -129,7 +128,7 @@ namespace mrv
             image::Info outputInfo;
             outputInfo.size = renderSize;
             outputInfo.pixelType = info.video[layerId].pixelType;
-            
+
             {
                 std::string msg = tl::string::Format(_("Image info: {0} {1}"))
                                       .arg(outputInfo.size)
@@ -145,8 +144,8 @@ namespace mrv
 #ifdef TLRENDER_EXR
                 if (saveEXR)
                 {
-                    outputInfo.pixelType = image::PixelType::RGB_F32;
-                    offscreenBufferOptions.colorType = image::PixelType::RGB_F32;
+                    offscreenBufferOptions.colorType =
+                        image::PixelType::RGB_F32;
                 }
 #endif
             }
@@ -197,7 +196,7 @@ namespace mrv
             }
 
 #ifdef TLRENDER_EXR
-            if (annotations && saveEXR)
+            if (saveEXR)
             {
                 outputInfo.pixelType = options.exrPixelType;
             }
@@ -238,10 +237,11 @@ namespace mrv
             }
 
             {
-                std::string msg = tl::string::Format(_("OpenGL info: {0} format={1} type={2}"))
-                                  .arg(offscreenBufferOptions.colorType)
-                                  .arg(format)
-                                  .arg(type);
+                std::string msg = tl::string::Format(
+                                      _("OpenGL info: {0} format={1} type={2}"))
+                                      .arg(offscreenBufferOptions.colorType)
+                                      .arg(format)
+                                      .arg(type);
                 LOG_INFO(msg);
             }
 
@@ -288,6 +288,8 @@ namespace mrv
                     render->setOCIOOptions(view->getOCIOOptions());
                     render->setLUTOptions(view->lutOptions());
                     CHECK_GL;
+                    // glClearColor(1.0, .0, .0, 1.0);
+                    // glClear(GL_COLOR_BUFFER_BIT);
                     render->drawVideo(
                         {videoData},
                         {math::Box2i(0, 0, renderSize.w, renderSize.h)});

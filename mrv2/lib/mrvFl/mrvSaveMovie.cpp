@@ -103,6 +103,14 @@ namespace mrv
                 }
             }
 
+            file::Path path(file);
+            const std::string& extension = path.getExtension();
+
+            bool saveEXR = string::compare(
+                extension, ".exr", string::Compare::CaseInsensitive);
+            bool saveHDR = string::compare(
+                extension, ".hdr", string::Compare::CaseInsensitive);
+
             // Render information.
             const auto& info = player->ioInfo();
 
@@ -147,9 +155,6 @@ namespace mrv
                     string::Format("{0}: Saving over same file being played!")
                         .arg(file));
             }
-
-            file::Path path(file);
-            const std::string& extension = path.getExtension();
 
             bool annotations = false;
 
@@ -201,23 +206,24 @@ namespace mrv
                 outputInfo = writerPlugin->getWriteInfo(outputInfo);
                 if (image::PixelType::None == outputInfo.pixelType)
                 {
-#ifdef TLRENDER_EXR
-                    annotations = true;
-#else
                     outputInfo.pixelType = image::PixelType::RGB_U8;
+                    offscreenBufferOptions.colorType = image::PixelType::RGB_U8;
+#ifdef TLRENDER_EXR
+                    if (saveEXR)
+                    {
+                        offscreenBufferOptions.colorType =
+                            image::PixelType::RGB_F32;
+                    }
 #endif
                 }
 
 #ifdef TLRENDER_EXR
-                if (annotations &&
-                    string::compare(
-                        extension, ".exr", string::Compare::CaseInsensitive))
+                if (saveEXR)
                 {
                     outputInfo.pixelType = options.exrPixelType;
                 }
 #endif
-                if (string::compare(
-                        extension, ".hdr", string::Compare::CaseInsensitive))
+                if (saveHDR)
                 {
                     outputInfo.pixelType = image::PixelType::RGB_F32;
                     offscreenBufferOptions.colorType =
@@ -344,6 +350,15 @@ namespace mrv
                         string::Format(_("{0}: Invalid OpenGL format and type"))
                             .arg(file));
                 }
+            }
+
+            {
+                std::string msg = tl::string::Format(
+                                      _("OpenGL info: {0} format={1} type={2}"))
+                                      .arg(offscreenBufferOptions.colorType)
+                                      .arg(format)
+                                      .arg(type);
+                LOG_INFO(msg);
             }
 
             player->start();
