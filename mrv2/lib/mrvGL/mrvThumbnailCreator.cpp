@@ -48,7 +48,7 @@ namespace mrv
     struct ThumbnailCreator::Private
     {
         std::weak_ptr<system::Context> context;
-
+        
         struct Request
         {
             int64_t id;
@@ -80,6 +80,7 @@ namespace mrv
 
         int64_t id = 0;
         std::vector<int64_t> cancelRequests;
+        bool clearCache = false;
         size_t requestCount = 1;
         std::chrono::milliseconds requestTimeout =
             std::chrono::milliseconds(50);
@@ -252,6 +253,8 @@ namespace mrv
     
     void ThumbnailCreator::clearCache()
     {
+        TLRENDER_P();
+        p.clearCache = true;
     }
 
     void ThumbnailCreator::setTimerInterval(double value)
@@ -337,6 +340,12 @@ namespace mrv
                     options.ioOptions["OpenEXR/IgnoreDisplayWindow"] =
                         string::Format("{0}").arg(
                             App::ui->uiView->getIgnoreDisplayWindow());
+                    if (p.clearCache)
+                    {
+                        options.ioOptions["clearCache"] =
+                            string::Format("{0}").arg(rand());
+                    }
+                    
                     file::Path path(request.fileName);
                     try
                     {
@@ -347,7 +356,6 @@ namespace mrv
                             io::Options ioOptions;
                             ioOptions["Layer"] =
                                 string::Format("{0}").arg(request.layer);
-
                             request.futures.push_back(
                                 request.timeline->getVideo(
                                     time::isValid(i)
@@ -361,13 +369,15 @@ namespace mrv
                     catch (const std::exception& e)
                     {
                         // We don't print an error for EDLs as the timeline
-                        // replacement is not be atomic.
+                        // replacement is not atomic.
                         if (!isTemporaryEDL(path))
                             LOG_ERROR(e.what());
                         p.running = false;
                         continue;
                     }
                 }
+
+                p.clearCache = false;
 
                 // Check for finished requests.
                 std::vector<Private::Result> results;

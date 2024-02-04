@@ -355,6 +355,7 @@ void Flu_File_Chooser::previewCB()
                     ThumbnailData* data = new ThumbnailData;
                     data->chooser = this;
                     data->entry = e;
+                    p.thumbnailCreator->clearCache();
                     auto id = p.thumbnailCreator->request(
                         fullname, time, size, createdThumbnail_cb, (void*)data);
                     p.thumbnailIds.insert(id);
@@ -5051,6 +5052,8 @@ static const char* _flu_file_chooser(
     {
         Flu_File_Chooser::window->value(retname.c_str());
     }
+    // Refresh thumbnails in case we saved a frame last time
+    Flu_File_Chooser::window->previewCB(); 
     Flu_File_Chooser::window->set_modal();
     Flu_File_Chooser::window->show();
 

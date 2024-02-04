@@ -7,6 +7,8 @@ v1.0.3
 - Added the options to show OpenEXRs with data windows bigger than their display windows.  You activate it with View->Ignore Display Window and it will reload the exr image or sequence.
 - Improved drawing of Data and Display Window at high resolutions.
 - Fixed zooming when Media Information was active on an image sequence.
+- Fixed a refresh of mrv2's custom file requester when saving a single image
+  over a previous image file.  The icon would not get refreshed previously.
 
 
 v1.0.2
