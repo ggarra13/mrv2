@@ -12,6 +12,8 @@
 
 #include <tlIO/IO.h>
 
+#include "mrvApp/mrvFilesModel.h"
+
 namespace
 {
     const char* const kProgramName = "mrv2";
@@ -22,11 +24,11 @@ class ViewerUI;
 namespace mrv
 {
     using namespace tl;
-
+    
     class OutputDevice;
 
     struct Playlist;
-    struct FilesModelItem;
+    // struct FilesModelItem;
 
     class TimeObject;
     class DevicesModel;
@@ -35,7 +37,7 @@ namespace mrv
     class SettingsObject;
 
     //! Application.
-    class App : public app::BaseApp
+    class App : public tl::app::BaseApp
     {
         TLRENDER_NON_COPYABLE(App);
 

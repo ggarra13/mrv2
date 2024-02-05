@@ -19,7 +19,7 @@
 namespace mrv
 {
     using namespace tl;
-
+    
     /**
      * \struct mrv::FilesModelItem
      * \brief This class models a media file item.
