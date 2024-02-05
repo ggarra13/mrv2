@@ -1,7 +1,7 @@
 v1.0.3
 ======
 
-- Added Darwin arm64 beta builds (ie. M1 architecture).
+- Added Darwin arm64 beta builds (ie. M1 architecture) but without NDI® support.
 - Fixed a problem when saving OpenEXR not setting the format to RGB_F16, but
   trying to use RGB_U8 instead.
 - Added the options to show OpenEXRs with data windows bigger than their display windows.  You activate it with View->Ignore Display Window and it will reload the exr image or sequence.
