@@ -25,7 +25,6 @@ set(HEADERS
   mrvStackTrace.h
   mrvString.h
   mrvTimeObject.h
-  mrvUSD.h
   mrvUtil.h
   )
 
@@ -45,8 +44,6 @@ set(SOURCES
   mrvSequence.cpp
   mrvString.cpp
   mrvTimeObject.cpp
-  mrvUSD.cpp
-  mrvUSDInline.cpp
   mrvUtil.cpp
   )
 
@@ -75,10 +72,6 @@ else()
         mrvFileManager.cpp
 	Linux/mrvStackTrace.cpp 
 	Linux/mrvSignalHandler.cpp)
-endif()
-
-if(TLRENDER_USD)
-    list(APPEND LIBRARIES_PRIVATE tf usd usdGeom usdImagingGL usdAppUtils hd)
 endif()
 
 add_library(mrvCore ${SOURCES} ${HEADERS})
