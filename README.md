@@ -337,8 +337,11 @@ fresh copy of Msys.
 There is a .bat file included in the distribution (in windows/bat),
 which needs to be modified to the path of Visual Studio (2019 by default),
 the optional Windows SDK (none by default) and your copy of Msys.
+You run the .bat file first, which will set the Visual Studio paths and 
+fire up a Msys console.  From then on, all commands described are run in 
+the Msys console.
 
-FFmpeg and liblcms2 are now compiled as part of the pre-flight cmake build.  libssh and libcrypto are taken from Msys64 repositories when building FFmpeg.
+FFmpeg and liblcms2 are now compiled as part of the pre-flight cmake build.  libssh and libcrypto are taken from Msys64 repositories when building FFmpeg as well as swig and subversion.
 
 The libintl and libiconv libraries are taken from the MSys64 repositories as pre-flight check with the bin/install_libintl_window.sh script (part of runme.sh).
 
