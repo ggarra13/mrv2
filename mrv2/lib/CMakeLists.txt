@@ -3,6 +3,7 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 add_subdirectory(mrvCore)
+add_subdirectory(mrvOptions)
 add_subdirectory(mrvFLU)
 add_subdirectory(mrvFlmm)
 add_subdirectory(mrvWidgets)

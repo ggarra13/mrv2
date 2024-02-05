@@ -7,12 +7,8 @@ set(HEADERS
   mrvColorSpaces.h
   mrvCPU.h
   mrvEnv.h
-  mrvEnvironmentMapOptions.h
-  mrvEnvironmentMapOptionsInline.h
   mrvFile.h
   mrvFileManager.h
-  mrvFilesPanelOptions.h
-  mrvFilesPanelOptionsInline.h
   mrvFonts.h
   mrvHome.h
   mrvHotkey.h
@@ -27,8 +23,6 @@ set(HEADERS
   mrvSequence.h
   mrvSignalHandler.h
   mrvStackTrace.h
-  mrvStereo3DOptions.h
-  mrvStereo3DOptionsInline.h
   mrvString.h
   mrvTimeObject.h
   mrvUSD.h
@@ -38,9 +32,7 @@ set(HEADERS
 set(SOURCES
   mrvColorSpaces.cpp
   mrvCPU.cpp
-  mrvEnvironmentMapOptions.cpp
   mrvFile.cpp
-  mrvFilesPanelOptions.cpp
   mrvFonts.cpp
   mrvHome.cpp
   mrvHotkey.cpp
@@ -51,7 +43,6 @@ set(SOURCES
   mrvPathMapping.cpp
   mrvRoot.cpp
   mrvSequence.cpp
-  mrvStereo3DOptions.cpp
   mrvString.cpp
   mrvTimeObject.cpp
   mrvUSD.cpp

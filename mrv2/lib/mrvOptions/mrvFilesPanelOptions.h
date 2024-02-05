@@ -26,4 +26,4 @@ namespace mrv
 
 } // namespace mrv
 
-#include "mrvCore/mrvFilesPanelOptionsInline.h"
+#include "mrvOptions/mrvFilesPanelOptionsInline.h"

@@ -2,7 +2,7 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include "mrvCore/mrvFilesPanelOptions.h"
+#include "mrvOptions/mrvFilesPanelOptions.h"
 
 namespace mrv
 {

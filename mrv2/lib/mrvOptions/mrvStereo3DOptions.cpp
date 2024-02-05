@@ -5,7 +5,7 @@
 #include <tlCore/Error.h>
 #include <tlCore/String.h>
 
-#include "mrvCore/mrvStereo3DOptions.h"
+#include "mrvOptions/mrvStereo3DOptions.h"
 
 namespace mrv
 {

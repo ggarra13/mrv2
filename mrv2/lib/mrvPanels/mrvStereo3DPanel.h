@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "mrvCore/mrvStereo3DOptions.h"
+#include "mrvOptions/mrvStereo3DOptions.h"
 
 #include "mrvPanels/mrvPanelWidget.h"
 

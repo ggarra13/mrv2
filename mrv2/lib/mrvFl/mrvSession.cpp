@@ -6,9 +6,10 @@
 
 #include <tlCore/StringFormat.h>
 
-#include "mrvCore/mrvEnvironmentMapOptions.h"
-#include "mrvCore/mrvStereo3DOptions.h"
 #include "mrvCore/mrvFile.h"
+
+#include "mrvOptions/mrvEnvironmentMapOptions.h"
+#include "mrvOptions/mrvStereo3DOptions.h"
 
 #include "mrvNetwork/mrvMessage.h"
 #include "mrvNetwork/mrvCypher.h"

@@ -56,4 +56,4 @@ namespace mrv
 
 } // namespace mrv
 
-#include "mrvCore/mrvStereo3DOptionsInline.h"
+#include "mrvOptions/mrvStereo3DOptionsInline.h"

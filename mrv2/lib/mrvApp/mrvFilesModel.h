@@ -11,8 +11,8 @@
 #include <tlTimeline/IRender.h>
 #include <tlTimeline/Player.h>
 
-#include "mrvCore/mrvStereo3DOptions.h"
-#include "mrvCore/mrvFilesPanelOptions.h"
+#include "mrvOptions/mrvStereo3DOptions.h"
+#include "mrvOptions/mrvFilesPanelOptions.h"
 
 #include "mrvDraw/Annotation.h"
 

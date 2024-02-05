@@ -10,7 +10,7 @@
 
 #include <tlCore/Time.h>
 
-#include "mrvCore/mrvFilesPanelOptions.h"
+#include "mrvOptions/mrvFilesPanelOptions.h"
 
 #include "mrvPanelWidget.h"
 

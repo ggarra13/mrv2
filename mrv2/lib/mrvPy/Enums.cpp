@@ -24,8 +24,9 @@
 #include <tlTimeline/Timeline.h>
 #include <tlTimeline/Player.h>
 
-#include "mrvCore/mrvStereo3DOptions.h"
-#include "mrvCore/mrvEnvironmentMapOptions.h"
+#include "mrvOptions/mrvStereo3DOptions.h"
+#include "mrvOptions/mrvEnvironmentMapOptions.h"
+
 #include "mrvFl/mrvSaveOptions.h"
 
 #include <pybind11/pybind11.h>

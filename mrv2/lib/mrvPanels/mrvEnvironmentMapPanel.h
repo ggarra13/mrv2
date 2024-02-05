@@ -6,7 +6,7 @@
 
 #include <FL/Fl_Radio_Round_Button.H>
 
-#include "mrvCore/mrvEnvironmentMapOptions.h"
+#include "mrvOptions/mrvEnvironmentMapOptions.h"
 
 #include "mrvPanels/mrvPanelWidget.h"
 

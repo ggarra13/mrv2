@@ -40,4 +40,4 @@ namespace mrv
 
 } // namespace mrv
 
-#include "mrvCore/mrvEnvironmentMapOptionsInline.h"
+#include "mrvOptions/mrvEnvironmentMapOptionsInline.h"

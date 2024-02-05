@@ -7,9 +7,10 @@
 #include <tlTimeline/BackgroundOptions.h>
 #include <tlTimeline/IRender.h>
 
-#include "mrvCore/mrvStereo3DOptions.h"
-#include "mrvCore/mrvEnvironmentMapOptions.h"
 #include "mrvCore/mrvActionMode.h"
+
+#include "mrvOptions/mrvStereo3DOptions.h"
+#include "mrvOptions/mrvEnvironmentMapOptions.h"
 
 #include "mrvFl/mrvColorAreaInfo.h"
 #include "mrvFl/mrvLaserFadeData.h"
