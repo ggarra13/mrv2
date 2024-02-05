@@ -9,10 +9,9 @@ namespace py = pybind11;
 #include "mrvPy/CmdsAux.h"
 
 #include "mrvCore/mrvI8N.h"
+#include "mrvCore/mrvFile.h"
 
 #include "mrvFl/mrvCallbacks.h"
-
-#include "mrvEdit/mrvEditUtil.h"
 
 #include "mrvApp/mrvFilesModel.h"
 
@@ -35,7 +34,7 @@ namespace mrv2
             for (unsigned i = 0; i < items.size(); ++i)
             {
                 auto path = items[i]->path;
-                if (!isTemporaryEDL(path))
+                if (!mrv::file::isTemporaryEDL(path))
                     continue;
                 out.push_back(items[i]);
             }
@@ -51,7 +50,7 @@ namespace mrv2
             for (unsigned i = 0; i < items.size(); ++i)
             {
                 auto path = items[i]->path;
-                if (!isTemporaryEDL(path))
+                if (!mrv::file::isTemporaryEDL(path))
                     continue;
                 if (item == items[i])
                 {
@@ -74,7 +73,7 @@ namespace mrv2
             for (unsigned i = 0; i < items.size(); ++i)
             {
                 auto path = items[i]->path;
-                if (!isTemporaryEDL(path))
+                if (!mrv::file::isTemporaryEDL(path))
                     continue;
                 if (path.get() == fileName)
                 {
@@ -98,7 +97,7 @@ namespace mrv2
             for (unsigned i = 0; i < items.size(); ++i)
             {
                 auto path = items[i]->path;
-                if (!isTemporaryEDL(path))
+                if (!mrv::file::isTemporaryEDL(path))
                     continue;
                 if (playlistIndex == idx)
                 {
@@ -121,7 +120,7 @@ namespace mrv2
             if (playlistIndex < 0)
                 throw std::runtime_error(_("No playlist selected."));
             auto path = items[playlistIndex]->path;
-            if (!isTemporaryEDL(path))
+            if (!mrv::file::isTemporaryEDL(path))
                 throw std::runtime_error(
                     _("Not an EDL playlist to add clips to."));
             int Aindex = -1;
@@ -148,7 +147,7 @@ namespace mrv2
         void save(const std::string& fileName)
         {
             std::string otioFile = fileName;
-            file::Path otioPath(otioFile);
+            tl::file::Path otioPath(otioFile);
             if (otioPath.getExtension() != ".otio")
                 otioFile += ".otio";
 

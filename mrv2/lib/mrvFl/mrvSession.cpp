@@ -93,7 +93,7 @@ namespace mrv
             {
                 FilesModelItem file = *file_ptr;
                 file::Path path = file.path;
-                if (isTemporaryEDL(path))
+                if (file::isTemporaryEDL(path))
                     continue;
                 file::Path audioPath = file.audioPath;
                 const fs::path sessionPath(fileName);

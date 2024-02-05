@@ -6,14 +6,13 @@
 #include <FL/Fl_Check_Button.H>
 
 #include "mrvCore/mrvHome.h"
+#include "mrvCore/mrvFile.h"
 
 #include "mrvWidgets/mrvClipButton.h"
 #include "mrvWidgets/mrvCollapsibleGroup.h"
 #include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvPopupMenu.h"
-
-#include "mrvEdit/mrvEditUtil.h"
 
 #include "mrvPanels/mrvPanelsAux.h"
 #include "mrvPanels/mrvPanelsCallbacks.h"
@@ -202,7 +201,7 @@ namespace mrv
                 const auto& path = media->path;
 
                 // We skip EDLs created in tmp dir here.
-                const bool isEDL = isTemporaryEDL(path);
+                const bool isEDL = file::isTemporaryEDL(path);
 
                 // When we refresh the .otio for EDL, we get two clips with the
                 // same name, we avoid displaying both with this check.

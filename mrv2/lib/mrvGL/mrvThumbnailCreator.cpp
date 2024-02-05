@@ -16,6 +16,7 @@
 #include <atomic>
 #include <mutex>
 
+#include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvLocale.h"
 #include "mrvCore/mrvSequence.h"
 
@@ -370,7 +371,7 @@ namespace mrv
                     {
                         // We don't print an error for EDLs as the timeline
                         // replacement is not atomic.
-                        if (!isTemporaryEDL(path))
+                        if (!file::isTemporaryEDL(path))
                             LOG_ERROR(e.what());
                         p.running = false;
                         continue;

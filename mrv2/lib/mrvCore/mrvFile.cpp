@@ -153,7 +153,7 @@ namespace mrv
             return out;
         }
 
-        bool isTemporaryNDI(const file::Path& path)
+        bool isTemporaryNDI(const tl::file::Path& path)
         {
             bool out = true;
             
@@ -167,6 +167,21 @@ namespace mrv
                 out = false;
             }
             return out;
+        }
+    
+        bool isTemporaryEDL(const tl::file::Path& path)
+        {
+            const std::string tmpdir = tmppath() + '/';
+            
+            auto dir = path.getDirectory();
+            auto base = path.getBaseName();
+            auto extension = path.getExtension();
+            if (dir != tmpdir || base.substr(0, 5) != "EDL0x" ||
+                extension != ".otio")
+            {
+                return false;
+            }
+            return true;
         }
         
     } // namespace file

@@ -1836,7 +1836,7 @@ namespace mrv
         for (const auto& file : files)
         {
             const file::Path path = file->path;
-            if (isTemporaryEDL(path))
+            if (file::isTemporaryEDL(path))
             {
                 hasEDLs = true;
                 break;

@@ -11,14 +11,13 @@
 #include <FL/Fl_RGB_Image.H>
 
 #include "mrvCore/mrvHome.h"
+#include "mrvCore/mrvFile.h"
 
 #include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvClipButton.h"
 #include "mrvWidgets/mrvButton.h"
 #include "mrvWidgets/mrvCollapsibleGroup.h"
-
-#include "mrvEdit/mrvEditUtil.h"
 
 #include "mrvPanels/mrvPanelsAux.h"
 #include "mrvPanels/mrvComparePanel.h"
@@ -220,7 +219,7 @@ namespace mrv
                 const auto& media = files->getItem(i);
                 const auto& path = media->path;
 
-                const bool isEDL = isTemporaryEDL(path);
+                const bool isEDL = file::isTemporaryEDL(path);
 
                 // When we refresh the .otio for EDL, we get two clips with the
                 // same name, we avoid displaying both with this check.

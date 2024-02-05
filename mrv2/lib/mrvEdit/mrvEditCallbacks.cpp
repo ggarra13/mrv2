@@ -30,6 +30,7 @@ namespace fs = std::filesystem;
 
 #include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvHome.h"
+#include "mrvCore/mrvFile.h"
 
 #include "mrvDraw/Annotation.h"
 
@@ -263,7 +264,7 @@ namespace mrv
             auto audioPath = item->audioPath.isEmpty() ? path : item->audioPath;
             std::string directory, audioDirectory;
 
-            if (isTemporaryEDL(path))
+            if (file::isTemporaryEDL(path))
             {
                 int videoClips = 0;
                 int audioClips = 0;
@@ -467,7 +468,7 @@ namespace mrv
 
             bool create = false;
             std::string otioFile;
-            if (isTemporaryEDL(path))
+            if (file::isTemporaryEDL(path))
             {
                 otioFile = path.get();
             }
@@ -707,7 +708,7 @@ namespace mrv
             auto Aitem = model->observeA()->get();
 
             const file::Path path = Aitem->path;
-            if (!isTemporaryEDL(path))
+            if (!file::isTemporaryEDL(path))
                 return _otioFilename(ui);
 
             return path.get();
@@ -1590,7 +1591,7 @@ namespace mrv
 
         file::Path path = Aitem->path;
         bool makeRelativePaths = false;
-        if (isTemporaryEDL(path))
+        if (file::isTemporaryEDL(path))
         {
             makeRelativePaths = true;
         }
@@ -1973,7 +1974,7 @@ namespace mrv
             return;
         }
 
-        if (!isTemporaryEDL(destItem->path))
+        if (!file::isTemporaryEDL(destItem->path))
         {
             LOG_ERROR(_("You can only add clips to an .otio EDL playlist."));
             return;

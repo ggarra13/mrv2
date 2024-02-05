@@ -13,31 +13,6 @@ namespace fs = std::filesystem;
 namespace mrv
 {
     using namespace tl;
-
-    bool isOtioFile(const file::Path& path)
-    {
-        auto extension = path.getExtension();
-        if (string::compare(
-                ".otio", extension, string::Compare::CaseInsensitive))
-            return true;
-        return false;
-    }
-
-    
-    bool isTemporaryEDL(const file::Path& path)
-    {
-        const std::string tmpdir = tmppath() + '/';
-
-        auto dir = path.getDirectory();
-        auto base = path.getBaseName();
-        auto extension = path.getExtension();
-        if (dir != tmpdir || base.substr(0, 5) != "EDL0x" ||
-            extension != ".otio")
-        {
-            return false;
-        }
-        return true;
-    }
     
     void removeTemporaryEDLs(ViewerUI* ui)
     {

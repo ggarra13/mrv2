@@ -1274,7 +1274,7 @@ namespace mrv
                     }
 
                     // Add the new file to recent files, unless it is an EDL.
-                    if (!isTemporaryEDL(item->path) &&
+                    if (!file::isTemporaryEDL(item->path) &&
                         !file::isTemporaryNDI(item->path))
                     {
                         const std::string& file = item->path.get();

@@ -11,13 +11,12 @@
 #include <FL/Fl_RGB_Image.H>
 
 #include "mrvCore/mrvHome.h"
+#include "mrvCore/mrvFile.h"
 
 #include "mrvWidgets/mrvPack.h"
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvPlaylistButton.h"
 #include "mrvWidgets/mrvButton.h"
-
-#include "mrvEdit/mrvEditUtil.h"
 
 #include "mrvPanels/mrvPlaylistPanel.h"
 #include "mrvPanels/mrvPanelsAux.h"
@@ -203,7 +202,7 @@ namespace mrv
                 const auto& media = files[i];
                 const auto& path = media->path;
 
-                const bool isEDL = isTemporaryEDL(path);
+                const bool isEDL = file::isTemporaryEDL(path);
                 if (!isEDL)
                     continue;
 

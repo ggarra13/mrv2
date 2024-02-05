@@ -7,13 +7,12 @@
 #include <map>
 
 #include "mrvCore/mrvHome.h"
+#include "mrvCore/mrvFile.h"
 
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvPack.h"
 #include "mrvWidgets/mrvFileButton.h"
 #include "mrvWidgets/mrvButton.h"
-
-#include "mrvEdit/mrvEditUtil.h"
 
 #include "mrvPanels/mrvPanelsAux.h"
 #include "mrvPanels/mrvPanelsCallbacks.h"
@@ -237,7 +236,7 @@ namespace mrv
                 const auto& media = files->getItem(i);
                 const auto& path = media->path;
 
-                const bool isEDL = isTemporaryEDL(path);
+                const bool isEDL = file::isTemporaryEDL(path);
 
                 // When we refresh the .otio for EDL, we get two clips with the
                 // same name, we avoid displaying both with this check.

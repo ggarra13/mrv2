@@ -106,6 +106,9 @@ namespace mrv
         //! Returns true or false whether the filename is a temporary NDI file.
         bool isTemporaryNDI(const tl::file::Path& path);
 
+        //! Returns true or false whether the filename is a temporary EDL.
+        bool isTemporaryEDL(const tl::file::Path& path);
+        
     } // namespace file
 
 } // namespace mrv
