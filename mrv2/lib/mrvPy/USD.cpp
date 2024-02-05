@@ -10,7 +10,7 @@ namespace py = pybind11;
 #include "mrvCore/mrvI8N.h"
 
 #ifdef TLRENDER_USD
-#    include "mrvCore/mrvUSD.h"
+#    include "mrvOptions/mrvUSD.h"
 #endif
 
 void mrv2_usd(pybind11::module& m)

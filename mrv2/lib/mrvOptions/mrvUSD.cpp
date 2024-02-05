@@ -6,7 +6,7 @@
 
 #    include <tlCore/StringFormat.h>
 
-#    include "mrvCore/mrvUSD.h"
+#    include "mrvOptions/mrvUSD.h"
 
 #    include "mrvPanels/mrvPanelsCallbacks.h"
 

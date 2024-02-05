@@ -10,7 +10,7 @@
 #    include <FL/Fl_Choice.H>
 #    include <FL/Fl_Spinner.H>
 
-#    include "mrvCore/mrvUSD.h"
+#    include "mrvOptions/mrvUSD.h"
 
 #    include "mrvWidgets/mrvFunctional.h"
 #    include "mrvWidgets/mrvHorSlider.h"

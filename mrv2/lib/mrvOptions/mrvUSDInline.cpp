@@ -4,7 +4,7 @@
 
 #ifdef TLRENDER_USD
 
-#    include <mrvCore/mrvUSD.h>
+#    include <mrvOptions/mrvUSD.h>
 
 namespace mrv
 {
