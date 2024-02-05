@@ -48,7 +48,7 @@
 #include "mrvNetwork/mrvTimelineItemOptions.h"
 
 #include "mrvApp/mrvSettingsObject.h"
-#include "mrvApp/App.h"
+#include "mrvApp/mrvApp.h"
 
 #include "make_ocio_chooser.h"
 #include "mrvSaveImageOptionsUI.h"

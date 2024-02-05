@@ -8,7 +8,7 @@ namespace py = pybind11;
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrvApp/mrvSettingsObject.h"
-#include "mrvApp/App.h"
+#include "mrvApp/mrvApp.h"
 
 #include "mrViewer.h"
 

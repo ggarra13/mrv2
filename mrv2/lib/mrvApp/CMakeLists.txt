@@ -3,7 +3,7 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 set(HEADERS
-    App.h
+    mrvApp.h
     mrvFilesModel.h
     mrvMainControl.h
     mrvOpenSeparateAudioDialog.h
@@ -12,7 +12,7 @@ set(HEADERS
     mrvStdAnyHelper.h
   )
   set(SOURCES
-    App.cpp
+    mrvApp.cpp
     mrvFilesModel.cpp
     mrvMainControl.cpp
     mrvOpenSeparateAudioDialog.cpp

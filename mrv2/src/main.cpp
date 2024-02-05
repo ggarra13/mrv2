@@ -11,6 +11,8 @@
 
 #include <iostream>
 
+#include "tlGL/Init.h"
+
 #include <FL/fl_utf8.h>
 
 #ifdef MRV2_PYBIND11
@@ -22,9 +24,7 @@ namespace py = pybind11;
 
 #include "mrvFl/mrvInit.h"
 
-#include "tlGL/Init.h"
-
-#include "mrvApp/App.h"
+#include "mrvApp/mrvApp.h"
 
 #ifdef MRV2_PYBIND11
 PYBIND11_EMBEDDED_MODULE(mrv2, m)

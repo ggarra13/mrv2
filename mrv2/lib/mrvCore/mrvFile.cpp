@@ -10,7 +10,7 @@ namespace fs = std::filesystem;
 #include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvHome.h"
 
-#include "mrvApp/App.h"
+#include "mrvApp/mrvApp.h"
 
 namespace mrv
 {

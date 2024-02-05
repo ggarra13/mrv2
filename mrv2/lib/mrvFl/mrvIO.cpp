@@ -16,7 +16,7 @@
 
 #include "mrvCore/mrvOS.h"
 
-#include "mrvApp/App.h"
+#include "mrvApp/mrvApp.h"
 
 namespace mrv
 {

@@ -29,7 +29,7 @@ namespace fs = std::filesystem;
 #include "mrvFl/mrvLanguages.h"
 #include "mrvFl/mrvCallbacks.h"
 
-#include "mrvApp/App.h"
+#include "mrvApp/mrvApp.h"
 
 #include "mrvPreferencesUI.h"
 

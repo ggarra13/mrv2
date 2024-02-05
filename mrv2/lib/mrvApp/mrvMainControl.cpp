@@ -12,7 +12,7 @@
 
 #include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/mrvMainControl.h"
-#include "mrvApp/App.h"
+#include "mrvApp/mrvApp.h"
 
 #include <tlCore/File.h>
 #include <tlCore/String.h>

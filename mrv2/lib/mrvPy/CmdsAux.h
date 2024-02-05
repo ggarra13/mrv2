@@ -7,7 +7,7 @@
 #include "mrvApp/mrvSettingsObject.h"
 #include "mrvApp/mrvPlaylistsModel.h"
 #include "mrvApp/mrvFilesModel.h"
-#include "mrvApp/App.h"
+#include "mrvApp/mrvApp.h"
 
 namespace mrv
 {

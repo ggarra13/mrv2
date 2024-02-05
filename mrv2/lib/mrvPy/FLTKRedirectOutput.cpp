@@ -9,7 +9,7 @@
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
-#include "mrvApp/App.h"
+#include "mrvApp/mrvApp.h"
 
 namespace py = pybind11;
 

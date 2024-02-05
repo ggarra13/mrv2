@@ -8,7 +8,7 @@
 
 #include "mrvGL/mrvGLViewport.h"
 
-#include "mrvApp/App.h"
+#include "mrvApp/mrvApp.h"
 #include "mrvApp/mrvSettingsObject.h"
 
 #include "mrViewer.h"

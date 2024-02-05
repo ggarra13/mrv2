@@ -30,7 +30,7 @@ namespace py = pybind11;
 
 #include "mrvPy/PyStdErrOutRedirect.h"
 
-#include "mrvApp/App.h"
+#include "mrvApp/mrvApp.h"
 
 namespace
 {

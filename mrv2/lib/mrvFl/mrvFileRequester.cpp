@@ -25,7 +25,7 @@ namespace fs = std::filesystem;
 
 #include "mrvFLU/Flu_File_Chooser.h"
 
-#include "mrvApp/App.h"
+#include "mrvApp/mrvApp.h"
 
 #include "mrvFl/mrvIO.h"
 

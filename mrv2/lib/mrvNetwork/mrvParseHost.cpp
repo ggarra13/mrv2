@@ -5,7 +5,7 @@
 #include "mrvNetwork/mrvParseHost.h"
 
 #include "mrvApp/mrvSettingsObject.h"
-#include "mrvApp/App.h"
+#include "mrvApp/mrvApp.h"
 #include "mrViewer.h"
 
 namespace mrv

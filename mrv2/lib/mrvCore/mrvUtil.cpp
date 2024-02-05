@@ -12,7 +12,7 @@ namespace fs = std::filesystem;
 #include "mrvCore/mrvSequence.h"
 #include "mrvCore/mrvUtil.h"
 
-#include "mrvApp/App.h"
+#include "mrvApp/mrvApp.h"
 
 namespace mrv
 {

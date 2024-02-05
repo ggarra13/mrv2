@@ -12,7 +12,7 @@
 #include "mrvPanels/mrvPanelsAux.h"
 
 #include "mrvApp/mrvSettingsObject.h"
-#include "mrvApp/App.h"
+#include "mrvApp/mrvApp.h"
 
 namespace
 {

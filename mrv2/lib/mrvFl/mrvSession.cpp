@@ -26,7 +26,7 @@
 
 #include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/mrvSettingsObject.h"
-#include "mrvApp/App.h"
+#include "mrvApp/mrvApp.h"
 
 #include "mrvFl/mrvIO.h"
 

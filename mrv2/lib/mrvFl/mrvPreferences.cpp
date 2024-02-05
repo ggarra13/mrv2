@@ -39,7 +39,7 @@ namespace fs = std::filesystem;
 #include "mrvFLU/Flu_File_Chooser.h"
 
 #include "mrvApp/mrvSettingsObject.h"
-#include "mrvApp/App.h"
+#include "mrvApp/mrvApp.h"
 
 #include "mrvPreferencesUI.h"
 #include "mrvHotkeyUI.h"

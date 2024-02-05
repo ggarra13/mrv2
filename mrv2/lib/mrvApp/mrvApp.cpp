@@ -2,7 +2,6 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include "App.h"
 
 #include <fstream>
 #include <sstream>
@@ -57,6 +56,7 @@ namespace py = pybind11;
 
 #include "mrvEdit/mrvEditUtil.h"
 
+#include "mrvApp/mrvApp.h"
 #include "mrvApp/mrvPlaylistsModel.h"
 #include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/mrvMainControl.h"

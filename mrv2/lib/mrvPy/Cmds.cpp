@@ -7,7 +7,7 @@
 #include <chrono>
 
 #include "mrvApp/mrvFilesModel.h"
-#include "mrvApp/App.h"
+#include "mrvApp/mrvApp.h"
 
 #include "mrvCore/mrvHome.h"
 
