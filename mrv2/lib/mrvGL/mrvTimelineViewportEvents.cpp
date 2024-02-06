@@ -702,10 +702,10 @@ namespace mrv
 
             const auto& pos = _getFocus();
             int dx = pos.x - p.mousePress.x;
+            const float speed = _getZoomSpeedValue();
 
             if (Fl::event_shift())
             {
-                const float speed = _getZoomSpeedValue();
                 auto o = p.environmentMapOptions;
                 o.focalLength += dx * speed;
                 p.mousePress = pos;
@@ -717,9 +717,10 @@ namespace mrv
 
                 if (p.environmentMapOptions.spin)
                 {
-                    p.viewSpin.x = double(-dy) / 360.0; // x takes dy changes
-                    p.viewSpin.y =
-                        double(dx) / 360.0; // while y takes dx changes
+                    // x takes dy changes
+                    p.viewSpin.x = double(-dy * speed) / 360.0; 
+                    // while y takes dx changes
+                    p.viewSpin.y = double(dx * speed) / 360.0; 
 
                     if (p.viewSpin.y > kSpinMaxY)
                         p.viewSpin.y = kSpinMaxY;
@@ -737,9 +738,9 @@ namespace mrv
                 }
                 else
                 {
-                    p.viewSpin.x = double(-dy) / 180.0; // x takes dy changes
+                    p.viewSpin.x = double(-dy * speed) / 180.0; // x takes dy changes
                     p.viewSpin.y =
-                        double(dx) / 90.0; // while y takes dx changes
+                        double(dx * speed) / 90.0; // while y takes dx changes
                     _updateViewRotation(p.viewSpin);
                 }
             }

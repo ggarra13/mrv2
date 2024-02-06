@@ -2,7 +2,8 @@ v1.0.4
 ======
 
 - Code clean up.
-
+- Made Environment Map spin and rotation take into account zoom speed for a
+  more controlable rotation.
 
 
 v1.0.3
