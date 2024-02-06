@@ -940,7 +940,8 @@ namespace mrv
             if (p.actionMode == ActionMode::kScrub ||
                 p.actionMode == ActionMode::kRotate)
             {
-                if (p.lastEvent == FL_DRAG)
+                if (p.lastEvent == FL_DRAG &&
+                    p.actionMode == ActionMode::kScrub)
                 {
                     p.lastEvent = 0;
                     if (p.timelinePlayers.empty())

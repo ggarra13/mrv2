@@ -4,6 +4,8 @@ v1.0.4
 - Code clean up.
 - Made Environment Map spin and rotation take into account zoom speed for a
   more controlable rotation.
+- Fixed spin/rotation of environment map not stop playback of video on middle
+  button release.
 
 
 v1.0.3
