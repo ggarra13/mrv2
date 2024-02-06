@@ -42,10 +42,12 @@ namespace
     const char* kModule = "view";
     const int kCrossSize = 10;
     const float kSpinTimeout = 0.025;
+    const float kSpinSumX = 0.0001;
+    const float kSpinSumY = 0.0001;
     const float kLaserFadeTimeout = 0.01;
     const float kLaserFade = 0.025;
-    const float kSpinMaxY = 0.25;
-    const float kSpinMaxX = 0.25;
+    const float kSpinMaxY = 0.15;
+    const float kSpinMaxX = 0.05;
 
 } // namespace
 
@@ -653,30 +655,28 @@ namespace mrv
     void TimelineViewport::handleViewSpinning() noexcept
     {
         TLRENDER_P();
-        const float sumX = 0.0001;
-        const float sumY = 0.0001;
         bool changed = false;
-        if (p.viewSpin.x >= sumX)
+        if (p.viewSpin.x >= kSpinSumX)
         {
-            p.viewSpin.x -= sumX;
+            p.viewSpin.x -= kSpinSumX;
             changed = true;
         }
-        else if (p.viewSpin.x <= -sumX)
+        else if (p.viewSpin.x <= -kSpinSumX)
         {
-            p.viewSpin.x += sumX;
+            p.viewSpin.x += kSpinSumX;
             changed = true;
         }
         else
             p.viewSpin.x = 0.0;
 
-        if (p.viewSpin.y >= sumY)
+        if (p.viewSpin.y >= kSpinSumY)
         {
-            p.viewSpin.y -= sumY;
+            p.viewSpin.y -= kSpinSumY;
             changed = true;
         }
-        else if (p.viewSpin.y <= -sumY)
+        else if (p.viewSpin.y <= -kSpinSumY)
         {
-            p.viewSpin.y += sumY;
+            p.viewSpin.y += kSpinSumY;
             changed = true;
         }
         else
@@ -718,7 +718,7 @@ namespace mrv
                 if (p.environmentMapOptions.spin)
                 {
                     // x takes dy changes
-                    p.viewSpin.x = double(-dy * speed) / 360.0; 
+                    p.viewSpin.x = double(-dy * speed) / 1024.0; 
                     // while y takes dx changes
                     p.viewSpin.y = double(dx * speed) / 360.0; 
 
@@ -738,7 +738,7 @@ namespace mrv
                 }
                 else
                 {
-                    p.viewSpin.x = double(-dy * speed) / 180.0; // x takes dy changes
+                    p.viewSpin.x = double(-dy * speed) / 360.0; // x takes dy changes
                     p.viewSpin.y =
                         double(dx * speed) / 90.0; // while y takes dx changes
                     _updateViewRotation(p.viewSpin);
@@ -941,6 +941,7 @@ namespace mrv
                 p.actionMode == ActionMode::kRotate)
             {
                 if (p.lastEvent == FL_DRAG &&
+                    Fl::event_button() == FL_LEFT_MOUSE &&
                     p.actionMode == ActionMode::kScrub)
                 {
                     p.lastEvent = 0;
@@ -958,6 +959,7 @@ namespace mrv
                 {
                     if (p.lastEvent == FL_PUSH &&
                         Fl::event_button() == FL_LEFT_MOUSE &&
+                        p.actionMode == ActionMode::kScrub &&
                         p.ui->uiPrefs->uiPrefsSingleClickPlayback->value())
                     {
                         if (p.timelinePlayers.empty())

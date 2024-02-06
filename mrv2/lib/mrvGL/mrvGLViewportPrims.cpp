@@ -102,8 +102,12 @@ namespace mrv
         rotX *= DEG_TO_RAD;
         rotY *= DEG_TO_RAD;
 
-        Imath::V3f rotation(rotX, rotY, 0.F);
-        vm = vm.rotate(rotation);
+        // Avoid gimbal lock
+        Imath::V3f rotationX(rotX, 0, 0.F);
+        vm = vm.rotate(rotationX);
+        
+        Imath::V3f rotationY(0, rotY, 0.F);
+        vm = vm.rotate(rotationY);
 
         float aspect = viewportSize.w / (float)viewportSize.h;
 
