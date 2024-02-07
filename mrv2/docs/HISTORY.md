@@ -9,6 +9,9 @@ v1.0.4
 - Fixed spin/rotation of environment map not stop playback of video on middle
   button release.
 - Avoid gimbal lock on environment map rotations.
+- Added VP9 Profile for saving in FFmpeg.  The VP9 codec is supported by most
+  browsers nowadays and offers a better compression ratio than H264, without
+  any patents or license issues.
 
 v1.0.3
 ======
