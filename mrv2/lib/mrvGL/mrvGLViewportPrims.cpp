@@ -91,16 +91,16 @@ namespace mrv
         float rotX = p.environmentMapOptions.rotateX;
         float rotY = p.environmentMapOptions.rotateY;
         float fov = p.environmentMapOptions.focalLength;
-        fov *= DEG_TO_RAD;
-        const float hAperture = p.environmentMapOptions.horizontalAperture;
-        const float vAperture = p.environmentMapOptions.verticalAperture;
+        rotX *= DEG_TO_RAD;
+
+        // Cubic environment map in OpenEXR is rotated -90 degrees
         if (p.environmentMapOptions.type == EnvironmentMapOptions::kCubic)
         {
-            vm = vm.scale(Imath::V3f(1, -1, 1));
-            rotY += 90;
+            rotY -= 90;
         }
-        rotX *= DEG_TO_RAD;
+        
         rotY *= DEG_TO_RAD;
+        fov *= DEG_TO_RAD;
 
         // Avoid gimbal lock
         Imath::V3f rotationX(rotX, 0, 0.F);
@@ -111,6 +111,8 @@ namespace mrv
 
         float aspect = viewportSize.w / (float)viewportSize.h;
 
+        const float hAperture = p.environmentMapOptions.horizontalAperture;
+        const float vAperture = p.environmentMapOptions.verticalAperture;
         float vAper = vAperture;
         if (vAper == 0.0F)
             vAper = hAperture * aspect;

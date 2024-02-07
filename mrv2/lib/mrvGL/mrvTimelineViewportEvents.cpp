@@ -714,13 +714,15 @@ namespace mrv
             else
             {
                 int dy = pos.y - p.mousePress.y;
+                const auto viewportSize = getViewportSize();
 
                 if (p.environmentMapOptions.spin)
                 {
                     // x takes dy changes
-                    p.viewSpin.x = double(-dy * speed) / 1024.0; 
+                    p.viewSpin.x = double(-dy * speed) / viewportSize.h * 2;
+                    
                     // while y takes dx changes
-                    p.viewSpin.y = double(dx * speed) / 360.0; 
+                    p.viewSpin.y = double(dx * speed) / viewportSize.w * 2; 
 
                     if (p.viewSpin.y > kSpinMaxY)
                         p.viewSpin.y = kSpinMaxY;
@@ -738,9 +740,11 @@ namespace mrv
                 }
                 else
                 {
-                    p.viewSpin.x = double(-dy * speed) / 360.0; // x takes dy changes
-                    p.viewSpin.y =
-                        double(dx * speed) / 90.0; // while y takes dx changes
+                    // x takes dy changes
+                    p.viewSpin.x = double(-dy * speed) / viewportSize.h;
+
+                    // while y takes dx changes
+                    p.viewSpin.y = double(dx * speed) / viewportSize.w;
                     _updateViewRotation(p.viewSpin);
                 }
             }
