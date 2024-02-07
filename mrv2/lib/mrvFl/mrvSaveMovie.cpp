@@ -308,7 +308,7 @@ namespace mrv
             {
 #ifdef TLRENDER_FFMPEG
                 if (static_cast<ffmpeg::AudioCodec>(options.ffmpegAudioCodec) ==
-                    ffmpeg::AudioCodec::None)
+                    ffmpeg::AudioCodec::None || !hasAudio)
                     snprintf(
                         title, 1024,
                         _("Saving Movie without Audio %" PRId64 " - %" PRId64),

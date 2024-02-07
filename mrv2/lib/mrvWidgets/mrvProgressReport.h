@@ -47,7 +47,6 @@ namespace mrv
 
         std::chrono::steady_clock::time_point _startTime;
         std::chrono::steady_clock::time_point _lastFpsFrameTime;
-        std::chrono::steady_clock::time_point _lastTime;
         double _time;
     };
 

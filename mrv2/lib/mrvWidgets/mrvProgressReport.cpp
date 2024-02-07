@@ -61,7 +61,6 @@ namespace mrv
         w->end();
 
         _startTime = std::chrono::steady_clock::now();
-        _lastTime = _startTime;
         _frameDuration = 0;
     }
 
@@ -95,12 +94,6 @@ namespace mrv
         std::chrono::duration<float> diff = now - _startTime;
         _time += diff.count();
 
-        if (_frameDuration <= 0)
-        {
-            std::chrono::duration<double> diff = now - _lastTime;
-            _frameDuration = diff.count() * 1000;
-        }
-
         int hour, min, sec, ms;
         to_hour_min_sec(_time, hour, min, sec, ms);
 
@@ -110,15 +103,13 @@ namespace mrv
 
         double r = 0;
         int64_t frame_diff = _end - _frame;
-        if (frame_diff > 0)
-            r = _frameDuration * frame_diff;
+        if (frame_diff > 0 && _actualFrameRate > 0)
+            r = frame_diff / _actualFrameRate * 1000.0;
 
         to_hour_min_sec(r, hour, min, sec, ms);
 
         snprintf(buf, 120, " %02d:%02d:%02d.%d", hour, min, sec, ms);
         remain->value(buf);
-
-        _lastTime = now;
 
         //
         // Calculate our actual frame rate, averaged over several frames.

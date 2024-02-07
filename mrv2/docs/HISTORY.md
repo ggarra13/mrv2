@@ -8,10 +8,14 @@ v1.0.4
   of zoom speed.
 - Fixed spin/rotation of environment map not stop playback of video on middle
   button release.
-- Avoid gimbal lock on environment map rotations.
+- Mostly avoided gimbal lock on environment map rotations.
 - Added VP9 Profile for saving in FFmpeg.  The VP9 codec is supported by most
   browsers nowadays and offers a better compression ratio than H264, without
   any patents or license issues.
+- Improved remaining time calculation when saving movie files.
+- Fixed message in saving movie of sequences without audio reporting that audio
+  was getting saved.
+  
 
 v1.0.3
 ======
