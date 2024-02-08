@@ -475,13 +475,10 @@ namespace mrv
                 {
                     p.lastEvent = FL_PUSH;
 
-                    if (p.actionMode == ActionMode::kScrub)
+                    p.playbackMode = timeline::Playback::Stop;
+                    if (!p.timelinePlayers.empty())
                     {
-                        p.playbackMode = timeline::Playback::Stop;
-                        if (!p.timelinePlayers.empty())
-                        {
-                            p.playbackMode = p.timelinePlayers[0]->playback();
-                        }
+                        p.playbackMode = p.timelinePlayers[0]->playback();
                     }
                     return;
                 }
@@ -992,8 +989,7 @@ namespace mrv
                 p.rotDir.x = p.rotDir.y = 0;
                 
                 if (p.lastEvent == FL_DRAG &&
-                    Fl::event_button() == FL_LEFT_MOUSE &&
-                    p.actionMode == ActionMode::kScrub)
+                    Fl::event_button() == FL_LEFT_MOUSE)
                 {
                     p.lastEvent = 0;
                     if (p.timelinePlayers.empty())
