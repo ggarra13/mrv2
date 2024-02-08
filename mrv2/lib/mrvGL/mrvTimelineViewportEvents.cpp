@@ -56,6 +56,20 @@ namespace
 namespace mrv
 {
 
+    namespace
+    {
+        inline int signbit(int num)
+        {
+            int sign = 0;           
+            if (num > 0)
+                sign = 1;
+            else if (num < 0)
+                sign = -1;
+            return sign;
+        }
+    }
+    
+
     void TimelineViewport::laserFade_cb(LaserFadeData* data)
     {
         TimelineViewport* view = data->view;
@@ -706,7 +720,7 @@ namespace mrv
             int dx = pos.x - p.mousePress.x;
 
             bool changed = false;
-            if (std::signbit(dx) != std::signbit(p.rotDir.x) &&
+            if (signbit(dx) != signbit(p.rotDir.x) &&
                 p.rotDir.x != 0)
             {
                 p.rotDir.x = 0;
@@ -730,7 +744,7 @@ namespace mrv
             {
                 int dy = pos.y - p.mousePress.y;
 
-                if (std::signbit(dy) != std::signbit(p.rotDir.y) &&
+                if (signbit(dy) != signbit(p.rotDir.y) &&
                     p.rotDir.y != 0)
                 {
                     p.rotDir.y = 0;
