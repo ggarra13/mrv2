@@ -760,10 +760,10 @@ namespace mrv
                 if (p.environmentMapOptions.spin)
                 {
                     // x takes dy changes
-                    p.viewSpin.x += double(-dy * speed) / viewportSize.h;
+                    p.viewSpin.x += double(-dy * speed) / viewportSize.h * 2;
                     
                     // while y takes dx changes
-                    p.viewSpin.y += double(dx * speed) / viewportSize.w; 
+                    p.viewSpin.y += double(dx * speed) / viewportSize.w * 2; 
 
                     if (p.viewSpin.y > kSpinMaxY)
                         p.viewSpin.y = kSpinMaxY;
@@ -786,10 +786,10 @@ namespace mrv
                 else
                 {
                     // x takes dy changes
-                    p.viewSpin.x = double(-dy * speed) / viewportSize.h;
+                    p.viewSpin.x = double(-dy * speed) / viewportSize.h * 2;
 
                     // while y takes dx changes
-                    p.viewSpin.y = double(dx * speed) / viewportSize.w;
+                    p.viewSpin.y = double(dx * speed) / viewportSize.w * 2;
                     _updateViewRotation(p.viewSpin);
                 }
             }
