@@ -12,8 +12,6 @@ v1.0.4
 - Added VP9 Profile for saving in FFmpeg.  The VP9 codec is supported by most
   browsers nowadays and offers a better compression ratio than H264, without
   any patents or license issues.
-- VP9 Profile will now try to encode with your graphics card if possible.  This
-  achieves 15 FPS encoding on my current machine.
 - Improved remaining time calculation when saving movie files.
 - Fixed message in saving movie of sequences without audio reporting that audio
   was getting saved.
