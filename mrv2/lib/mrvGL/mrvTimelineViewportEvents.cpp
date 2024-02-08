@@ -41,13 +41,15 @@ namespace
 {
     const char* kModule = "view";
     const int kCrossSize = 10;
+
     const float kSpinTimeout = 0.025;
-    const float kSpinSumX = 0.0001;
-    const float kSpinSumY = 0.0001;
+    const float kSpinSumX = 0.05;
+    const float kSpinSumY = 0.05;
+    const float kSpinMaxY = 2.0;
+    const float kSpinMaxX = 1.0;
+    
     const float kLaserFadeTimeout = 0.01;
     const float kLaserFade = 0.025;
-    const float kSpinMaxY = 0.15;
-    const float kSpinMaxX = 0.05;
 
 } // namespace
 
@@ -702,10 +704,23 @@ namespace mrv
 
             const auto& pos = _getFocus();
             int dx = pos.x - p.mousePress.x;
+
+            bool changed = false;
+            if (std::signbit(dx) != std::signbit(p.rotDir.x) &&
+                p.rotDir.x != 0)
+            {
+                p.rotDir.x = 0;
+                p.mousePress.x = pos.x;
+                changed = true;
+            }
+            
             const float speed = _getZoomSpeedValue();
 
             if (Fl::event_shift())
             {
+                if (changed)
+                    return;
+                
                 auto o = p.environmentMapOptions;
                 o.focalLength += dx * speed;
                 p.mousePress = pos;
@@ -714,6 +729,18 @@ namespace mrv
             else
             {
                 int dy = pos.y - p.mousePress.y;
+
+                if (std::signbit(dy) != std::signbit(p.rotDir.y) &&
+                    p.rotDir.y != 0)
+                {
+                    p.rotDir.y = 0;
+                    p.mousePress.y = pos.y;
+                    changed = true;
+                }
+
+                if (changed)
+                    return;
+            
                 const auto viewportSize = getViewportSize();
 
                 if (p.environmentMapOptions.spin)
@@ -734,9 +761,13 @@ namespace mrv
                     else if (p.viewSpin.x < -kSpinMaxX)
                         p.viewSpin.x = -kSpinMaxX;
 
-                    Fl::add_timeout(
-                        kSpinTimeout,
-                        (Fl_Timeout_Handler)_handleViewSpinning_cb, this);
+                    if (!Fl::has_timeout(
+                            (Fl_Timeout_Handler)_handleViewSpinning_cb, this))
+                    {
+                        Fl::add_timeout(
+                            kSpinTimeout,
+                            (Fl_Timeout_Handler)_handleViewSpinning_cb, this);
+                    }
                 }
                 else
                 {
@@ -944,6 +975,8 @@ namespace mrv
             if (p.actionMode == ActionMode::kScrub ||
                 p.actionMode == ActionMode::kRotate)
             {
+                p.rotDir.x = p.rotDir.y = 0;
+                
                 if (p.lastEvent == FL_DRAG &&
                     Fl::event_button() == FL_LEFT_MOUSE &&
                     p.actionMode == ActionMode::kScrub)

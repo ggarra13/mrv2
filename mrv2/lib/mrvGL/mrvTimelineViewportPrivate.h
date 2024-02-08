@@ -42,6 +42,9 @@ namespace mrv
         //! Used to handle spinning in environment map mode.
         math::Vector2f viewSpin;
 
+        //! Last environment map rotation in x and y (dx and dy)
+        math::Vector2i rotDir;
+
         //! Used to handle play/stop with a single quick click in the
         //! view window.
         int lastEvent = 0;
