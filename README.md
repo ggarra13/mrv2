@@ -242,6 +242,7 @@ brew install git swig subversion cmake ninja gettext openssl readline sqlite3 xz
 - [MSYS2](https://www.msys2.org/)
 - [Git](https://git-scm.com/downloads)
 - [CMake 3.26.2 or later](https://cmake.org/download/)
+- [meson 1.3.1 or later](https://github.com/mesonbuild/meson/releases/tag/1.3.1)
 - [NSIS Installer for Packaging](https://nsis.sourceforge.io/Download) - Optional
 
 Additional dependencies are downloaded and built automatically by the CMake

@@ -28,10 +28,20 @@ if [[ $KERNEL != *Msys* ]]; then
     exit 1
 fi
 
+#
+# Latest TAGS of all libraries
+#
 LIBVPX_TAG=v1.12.0
-X264_TAG=master
+DAV1D_TAG=1.3.0
+SVTAV1_TAG=v1.8.0
+X264_TAG=stable
 FFMPEG_TAG=n6.0
 
+SVTAV1_REPO=https://gitlab.com/AOMediaCodec/SVT-AV1.git
+
+#
+# Some auxiliary variables
+#
 MRV2_ROOT=$PWD
 ROOT_DIR=$PWD/$BUILD_DIR/tlRender/etc/SuperBuild/FFmpeg
 INSTALL_DIR=$PWD/$BUILD_DIR/install
@@ -41,6 +51,7 @@ if [[ $FFMPEG_GPL == GPL || $FFMPEG_GPL == LGPL ]]; then
 else
     echo
     echo "No --gpl or --lgpl flag provided to compile FFmpeg.  Choosing --lgpl."
+    echo
     export FFMPEG_GPL=LGPL
 fi
 
@@ -50,13 +61,65 @@ fi
 #
 MSYS_LIBS=1
 
+
+if [[ $MSYS_LIBS == 1 ]]; then
+    pacman -Sy --noconfirm
+
+    # pacman -Sy meson --noconfirm  # @bug: broken
+    
+    pacman -Sy make wget diffutils yasm nasm pkg-config --noconfirm
+fi
+    
+
+has_meson=0
+if type -P meson &> /dev/null; then
+    has_meson=1
+fi
+has_cmake=0
+if type -P cmake &> /dev/null; then
+    has_cmake=1
+fi
+
+echo
+echo "Installing packages needed to build:"
+echo
+echo "libvpx"
+if [[ $has_meson == 1 ]]; then
+    echo "libdav1d"
+fi
+if [[ $has_cmake == 1 ]]; then
+    echo "libSvtAV1"
+fi
+if [[ $FFMPEG_GPL == GPL ]]; then
+    echo "libx264"
+fi
+echo "FFmpeg"
+echo
+    
+
+    
+
 #
 # Build with libvpx (webm) movies.
 #
 BUILD_LIBVPX=1
 
 #
-# Build wiht h264 encoding.
+# Build with libdav1d decoder and SVT-AV1 encoder.
+#
+BUILD_LIBDAV1D=1
+if [[ $has_meson == 0 ]]; then
+    echo "Please install meson from https://github.com/mesonbuild/meson/releases"
+    BUILD_LIBDAV1D=0
+fi
+
+BUILD_LIBSVTAV1=1
+if [[ $has_cmake == 0 ]]; then
+    BUILD_LIBSVTAV1=0
+fi
+
+#
+# Build with h264 encoding.
 #
 BUILD_LIBX264=1
 if [[ $FFMPEG_GPL == LGPL ]]; then
@@ -76,25 +139,6 @@ BUILD_FFMPEG=1
 
 
 
-if [[ $MSYS_LIBS == 1 ]]; then
-    pacman -Sy --noconfirm
-
-    #
-    # This is for libx264 and ffmpeg
-    #
-    if [[ $FFMPEG_GPL == GPL ]]; then
-	echo
-	echo "Installing packages needed to build libvpx, libx264 and FFmpeg..."
-    else
-	echo
-	echo "Installing packages needed to build libvpx and FFmpeg..."
-    fi
-    echo
-    
-    pacman -Sy make diffutils yasm nasm pkg-config --noconfirm
-
-fi
-
 mkdir -p $ROOT_DIR
 
 cd    $ROOT_DIR
@@ -107,6 +151,104 @@ mkdir -p build
 #############
 ## BUILDING #
 #############
+
+
+#
+# Build libdav1d decoder
+#
+ENABLE_LIBDAV1D=""
+if [[ $BUILD_LIBDAV1D == 1 ]]; then
+    
+    cd $ROOT_DIR/sources
+
+    if [[ ! -d dav1d ]]; then
+	git clone --depth 1 https://code.videolan.org/videolan/dav1d.git --branch ${DAV1D_TAG} 2> /dev/null
+    fi
+
+    if [[ ! -e $INSTALL_DIR/lib/dav1d.lib ]]; then
+	echo
+	echo "Compiling libdav1d......"
+	echo
+	cd dav1d
+	export CC=cl.exe
+	meson setup -Denable_tools=false -Denable_tests=false --default-library=static -Dlibdir=$INSTALL_DIR/lib --prefix=$INSTALL_DIR build
+	cd build
+	ninja -j ${CPU_CORES}
+	ninja install
+	run_cmd mv $INSTALL_DIR/lib/libdav1d.a $INSTALL_DIR/lib/dav1d.lib 
+    fi
+    
+    ENABLE_LIBDAV1D="--enable-libdav1d"
+fi
+
+#
+# Build libSvt-AV1 encoder
+#
+ENABLE_LIBSVTAV1=""
+if [[ $BUILD_LIBSVTAV1 == 1 ]]; then
+    
+    cd $ROOT_DIR/sources
+
+    if [[ ! -d SVT-AV1 ]]; then
+	echo "Cloning ${SVTAV1_REPO}"
+	git clone --depth 1 ${SVTAV1_REPO} --branch ${SVTAV1_TAG} 2> /dev/null
+
+	# We need to download a win64 specific yasm, not msys64 one
+	wget -c http://www.tortall.net/projects/yasm/releases/yasm-1.3.0-win64.exe
+	mv yasm-1.3.0-win64.exe yasm.exe
+	
+    fi
+
+    if [[ ! -e $INSTALL_DIR/lib/SvtAV1Enc.lib ]]; then
+	echo "Building SvtAV1Enc.lib"
+	cd SVT-AV1
+	export OLD_PATH=$PATH
+
+	export PATH=$ROOT_DIR/sources:$PATH
+	
+	cd Build/windows
+	cmd //c build.bat 2019 release static no-dec no-apps
+
+	export PATH=$OLD_PATH
+
+	cd -
+	
+	cp Bin/Release/SvtAv1Enc.lib $INSTALL_DIR/lib
+
+	mkdir -p $INSTALL_DIR/include/svt-av1
+	cp Source/API/*.h $INSTALL_DIR/include/svt-av1
+	
+	cd $ROOT_DIR/sources
+	rm yasm.exe
+    fi
+
+    if [[ ! -e $INSTALL_DIR/lib/pkgconfig/SvtAv1Enc.pc ]]; then
+
+	mkdir -p $INSTALL_DIR/lib/pkgconfig
+	cd $INSTALL_DIR/lib/pkgconfig
+	
+	cat <<EOF > SvtAv1Enc.pc
+prefix=$INSTALL_DIR
+includedir=\${prefix}/include
+libdir=\${prefix}/lib
+
+Name: SvtAv1Enc
+Description: SVT (Scalable Video Technology) for AV1 encoder library
+Version: 1.8.0
+Libs: -L\${libdir} -lSvtAv1Enc
+Cflags: -I\${includedir}/svt-av1
+Cflags.private: -UEB_DLL
+EOF
+
+	sed -i -e 's#([A-Z])\:#/\\1/#' SvtAv1Enc.pc
+
+	cd $ROOT_DIR/sources
+    fi
+    
+    ENABLE_LIBSVTAV1="--enable-libsvtav1"
+fi
+
+
 #
 # Build x264
 #
@@ -143,6 +285,7 @@ else
 	run_cmd rm -f $INSTALL_DIR/lib/libx264.lib
     fi
 fi
+
 
 ## Build libvpx
 ENABLE_LIBVPX=""
@@ -229,7 +372,6 @@ if [[ $BUILD_FFMPEG == 1 ]]; then
     if [[ ! -d ffmpeg ]]; then
 	echo "Cloning ffmpeg repository..."
 	git clone --depth 1 --branch ${FFMPEG_TAG} https://git.ffmpeg.org/ffmpeg.git 2> /dev/null
-	echo "Cloned!"
     fi
 
     lgpl_ffmpeg=""
@@ -267,6 +409,7 @@ if [[ $BUILD_FFMPEG == 1 ]]; then
 	# -wd4101 disables local variable without reference
 	./../../sources/ffmpeg/configure \
             --prefix=$INSTALL_DIR \
+	    --pkg-config-flags=--static \
             --disable-programs \
             --disable-doc \
             --disable-postproc \
@@ -317,6 +460,8 @@ if [[ $BUILD_FFMPEG == 1 ]]; then
             --enable-swresample \
             $ENABLE_OPENSSL \
             $ENABLE_LIBX264 \
+            $ENABLE_LIBDAV1D \
+            $ENABLE_LIBSVTAV1 \
             $ENABLE_LIBVPX \
             --extra-ldflags="-LIBPATH:$INSTALL_DIR/lib/" \
             --extra-cflags="-I$INSTALL_DIR/include/ -MD -wd4828 -wd4101"
@@ -335,7 +480,21 @@ fi
 
 
 if [[ $MSYS_LIBS == 1 ]]; then
-    echo "Removing packages used to build libx264 and FFmpeg..."
+    echo
+    echo "Removing packages used to build:"
+    echo
+    echo "libvpx"
+    if [[ $has_meson == 1 ]]; then
+	echo "libdav1d"
+    fi
+    if [[ $has_cmake == 1 ]]; then
+	echo "libSvtAV1"
+    fi
+    if [[ $FFMPEG_GPL == GPL ]]; then
+	echo "libx264"
+    fi
+    echo "FFmpeg"
+    echo
     pacman -R yasm nasm --noconfirm
 fi
 

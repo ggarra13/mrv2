@@ -412,7 +412,7 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
   }
 }
 
-widget_class TimelineClass {
+widget_class TimelineClass {open
   xywh {685 527 690 29} box NO_BOX resizable
   class Fl_Double_Window visible
 } {
@@ -553,8 +553,8 @@ ui->uiMain->fill_menu( ui->uiMenuBar );
 auto player = ui->uiView->getTimelinePlayer();
 if( !player ) return;
 
-player->setLoop( loop );}
-            xywh {309 3 24 24} labelcolor 19
+player->setLoop( loop );} selected
+            tooltip {Looping mode (Loop, Once, Ping-Pong)} xywh {309 3 24 24} labelcolor 19
             code0 {o->image( mrv::load_svg( "LoopMode.svg" ) );}
             class {mrv::StateButton}
           }
@@ -786,8 +786,7 @@ ui->uiView->take_focus();}
   }
 }
 
-class ViewerUI {open
-} {
+class ViewerUI {} {
   decl {static mrv::App* app;} {public local
   }
   decl {static PreferencesUI* uiPrefs;} {public local
@@ -798,7 +797,7 @@ class ViewerUI {open
   }
   decl {mrv::SecondaryWindow* uiSecondary;} {public local
   }
-  Function {make_window()} {open private
+  Function {make_window()} {private
   } {
     code {uiPrefs = new PreferencesUI( this );
 uiHotkey = new HotkeyUI( this );
@@ -989,7 +988,7 @@ Value is:  pow( 2, 1/x );} xywh {616 27 35 23} selection_color 0 maximum 64 valu
             Fl_Slider uiGamma {
               user_data this user_data_type {ViewerUI*}
               callback {uiGammaInput->value( o->value() );
-uiView->updateDisplayOptions();} selected
+uiView->updateDisplayOptions();}
               tooltip {Allows you to adjust gamma curve for display.
 Value is:  pow( 2, 1/x );} xywh {651 26 35 25} type {Horz Knob} maximum 4 step 0.01 value 1
               class {mrv::Slider}

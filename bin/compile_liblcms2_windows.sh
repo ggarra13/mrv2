@@ -42,11 +42,6 @@ if [[ ! -e $INSTALLDIR/lib/liblcms2.lib ]]; then
     # Install development tools
     #
     pacman -Sy --noconfirm
-
-    #
-    # Remove gcc
-    #
-    pacman -R gcc --noconfirm
     
     # pacman -Sy mingw-w64-x86_64-toolchain --noconfirm
     
@@ -63,7 +58,7 @@ if [[ ! -e $INSTALLDIR/lib/liblcms2.lib ]]; then
     # Run configure
     #
     cd LCMS2
-    run_cmd ./configure --enable-shared --disable-static --prefix=$INSTALLDIR
+    CC=cl ./configure --enable-shared --disable-static --prefix=$INSTALLDIR
     
     #
     # Compile and install the library

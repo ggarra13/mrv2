@@ -56,6 +56,10 @@ if [ -z "$TLRENDER_ASAN" ]; then
     export TLRENDER_ASAN=OFF # asan memory debugging (not yet working)
 fi
 
+if [ -z "$TLRENDER_AV1" ]; then
+    export TLRENDER_AV1=ON
+fi
+
 if [ -z "$TLRENDER_FFMPEG" ]; then
     export TLRENDER_FFMPEG=ON
 fi
@@ -102,6 +106,7 @@ cmd="cmake -G '${CMAKE_GENERATOR}' \
 	   -D MRV2_PYBIND11=${MRV2_PYBIND11} \
 	   -D MRV2_PDF=${MRV2_PDF} \
            -D TLRENDER_ASAN=${TLRENDER_ASAN} \
+           -D TLRENDER_AV1=${TLRENDER_AV1} \
            -D TLRENDER_FFMPEG=${TLRENDER_FFMPEG} \
 	   -D TLRENDER_NDI=${TLRENDER_NDI} \
 	   -D TLRENDER_NDI_SDK=${TLRENDER_NDI_SDK} \
