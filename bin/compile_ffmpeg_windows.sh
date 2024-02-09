@@ -71,10 +71,16 @@ if [[ $MSYS_LIBS == 1 ]]; then
 fi
     
 
+has_pip3=0
+if type -P pip3 &> /dev/null; then
+    has_pip3=1
+fi
+
 has_meson=0
 if type -P meson &> /dev/null; then
     has_meson=1
 fi
+
 has_cmake=0
 if type -P cmake &> /dev/null; then
     has_cmake=1
@@ -109,8 +115,12 @@ BUILD_LIBVPX=1
 #
 BUILD_LIBDAV1D=1
 if [[ $has_meson == 0 ]]; then
-    echo "Please install meson from https://github.com/mesonbuild/meson/releases"
-    BUILD_LIBDAV1D=0
+    if [[ $has_pip3 == 1 ]]; then
+	pip3 install meson
+    else
+	echo "Please install meson from https://github.com/mesonbuild/meson/releases"
+	BUILD_LIBDAV1D=0
+    fi
 fi
 
 BUILD_LIBSVTAV1=1
@@ -158,6 +168,11 @@ mkdir -p build
 #
 ENABLE_LIBDAV1D=""
 if [[ $BUILD_LIBDAV1D == 1 ]]; then
+
+
+    
+    pip3 install meson
+    
     
     cd $ROOT_DIR/sources
 

@@ -103,9 +103,6 @@ jobs:
 
     - name: Setup environment
       run: mkdir -p ssh
-
-    - name: Install meson
-      run: pip3 install meson
       
     - name: Decode SSH key
       run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ssh/id_rsa
