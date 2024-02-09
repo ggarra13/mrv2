@@ -60,7 +60,7 @@ namespace mrv
 
         void logbuffer::open_log_panel()
         {
-            if (!App::ui)
+            if (!App::ui || !App::app->isRunning())
                 return;
 
             if (Flu_File_Chooser::window)
