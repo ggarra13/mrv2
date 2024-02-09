@@ -41,7 +41,7 @@ Contents:
 
 # Pre-built binaries
 
-If you are looking for pre-built binaries for Windows, Linux or macOS (Intel), they can be found in:
+If you are looking for pre-built binaries for Windows, Linux or macOS, they can be found in:
 
 [GitHub](https://github.com/ggarra13/mrv2/releases)
 
