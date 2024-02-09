@@ -239,7 +239,7 @@ xcode-select --install
 #
 # Install dependencies
 #
-brew install git swig subversion cmake ninja gettext openssl readline sqlite3 xz zlib
+brew install git swig subversion meson cmake ninja gettext openssl readline sqlite3 xz zlib
 
 ```
 
