@@ -90,7 +90,7 @@ echo
 echo "Installing packages needed to build:"
 echo
 echo "libvpx"
-if [[ $has_meson == 1 ]]; then
+if [[ $has_meson == 1 || $has_pip3 ]]; then
     echo "libdav1d"
 fi
 if [[ $has_cmake == 1 ]]; then
@@ -115,13 +115,8 @@ BUILD_LIBVPX=1
 #
 BUILD_LIBDAV1D=1
 if [[ $has_meson == 0 ]]; then
-    if [[ $has_pip3 == 1 ]]; then
-	pip3 install meson
-	has_meson=1
-    else
-	echo "Please install meson from https://github.com/mesonbuild/meson/releases"
-	BUILD_LIBDAV1D=0
-    fi
+    echo "Please install meson from https://github.com/mesonbuild/meson/releases"
+    BUILD_LIBDAV1D=0
 fi
 
 BUILD_LIBSVTAV1=1
@@ -164,11 +159,63 @@ mkdir -p build
 #############
 
 
+## Build libvpx
+ENABLE_LIBVPX=""
+if [[ $BUILD_LIBVPX == 1 ]]; then
+    cd $ROOT_DIR/sources
+    if [[ ! -d libvpx ]]; then
+	git clone --depth 1 --branch ${LIBVPX_TAG} https://chromium.googlesource.com/webm/libvpx 2> /dev/null
+    fi
+    
+    if [[ ! -e $INSTALL_DIR/lib/vpx.lib ]]; then
+	cd $ROOT_DIR/build
+	mkdir -p libvpx
+	cd libvpx
+    
+	echo
+	echo "Compiling libvpx......"
+	echo
+
+	
+	# ./../../sources/libvpx/configure --prefix=$INSTALL_DIR \
+	# 				 --target=x86_64-win64-vs16 \
+	# 				 --disable-examples \
+	# 				 --disable-docs \
+	# 				 --disable-unit-tests \
+	# 				 --disable-debug \
+	# 				 --log=no \
+	# 				 --disable-debug-libs \
+	# 				 --disable-dependency-tracking
+
+	unset CC
+	unset CXX
+	unset LD
+	./../../sources/libvpx/configure --prefix=$INSTALL_DIR \
+					 --target=x86_64-win64-vs16 \
+					 --enable-vp9-highbitdepth \
+					 --disable-unit-tests \
+					 --disable-examples \
+					 --disable-docs
+	make -j ${CPU_CORES}
+	make install
+	run_cmd mv $INSTALL_DIR/lib/x64/vpxmd.lib $INSTALL_DIR/lib/vpx.lib
+	run_cmd rm -rf $INSTALL_DIR/lib/x64/
+    fi
+    
+    ENABLE_LIBVPX='--enable-libvpx --extra-libs=vpx.lib --extra-libs=kernel32.lib --extra-libs=user32.lib --extra-libs=gdi32.lib --extra-libs=winspool.lib --extra-libs=shell32.lib --extra-libs=ole32.lib --extra-libs=oleaut32.lib --extra-libs=uuid.lib --extra-libs=comdlg32.lib --extra-libs=advapi32.lib --extra-libs=msvcrt.lib'
+fi
+
+
 #
 # Build libdav1d decoder
 #
 ENABLE_LIBDAV1D=""
 if [[ $BUILD_LIBDAV1D == 1 ]]; then
+
+    if [[ $has_pip3 == 1 ]]; then
+	pip3 install meson
+	has_meson=1
+    fi
     
     cd $ROOT_DIR/sources
 
@@ -295,50 +342,6 @@ else
 	run_cmd rm -f $INSTALL_DIR/bin/libx264*.dll
 	run_cmd rm -f $INSTALL_DIR/lib/libx264.lib
     fi
-fi
-
-
-## Build libvpx
-ENABLE_LIBVPX=""
-if [[ $BUILD_LIBVPX == 1 ]]; then
-    cd $ROOT_DIR/sources
-    if [[ ! -d libvpx ]]; then
-	git clone --depth 1 --branch ${LIBVPX_TAG} https://chromium.googlesource.com/webm/libvpx 2> /dev/null
-    fi
-    
-    if [[ ! -e $INSTALL_DIR/lib/vpx.lib ]]; then
-	cd $ROOT_DIR/build
-	mkdir -p libvpx
-	cd libvpx
-    
-	echo
-	echo "Compiling libvpx......"
-	echo
-
-	
-	# ./../../sources/libvpx/configure --prefix=$INSTALL_DIR \
-	# 				 --target=x86_64-win64-vs16 \
-	# 				 --disable-examples \
-	# 				 --disable-docs \
-	# 				 --disable-unit-tests \
-	# 				 --disable-debug \
-	# 				 --log=no \
-	# 				 --disable-debug-libs \
-	# 				 --disable-dependency-tracking
-	
-	./../../sources/libvpx/configure --prefix=$INSTALL_DIR \
-					 --target=x86_64-win64-vs16 \
-					 --enable-vp9-highbitdepth \
-					 --disable-unit-tests \
-					 --disable-examples \
-					 --disable-docs
-	make -j ${CPU_CORES}
-	make install
-	run_cmd mv $INSTALL_DIR/lib/x64/vpxmd.lib $INSTALL_DIR/lib/vpx.lib
-	run_cmd rm -rf $INSTALL_DIR/lib/x64/
-    fi
-    
-    ENABLE_LIBVPX='--enable-libvpx --extra-libs=vpx.lib --extra-libs=kernel32.lib --extra-libs=user32.lib --extra-libs=gdi32.lib --extra-libs=winspool.lib --extra-libs=shell32.lib --extra-libs=ole32.lib --extra-libs=oleaut32.lib --extra-libs=uuid.lib --extra-libs=comdlg32.lib --extra-libs=advapi32.lib --extra-libs=msvcrt.lib'
 fi
 
 
