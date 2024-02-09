@@ -1,0 +1,199 @@
+name: FLTK Builds
+
+on: [push]
+
+jobs:
+  linux-python-build:
+    runs-on: ubuntu-20.04
+
+    steps:
+    
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+        
+    - name: Update
+      run: sudo apt-get update
+
+    - name: Install OpenGL dev
+      run: sudo apt-get install -y xorg-dev libglu1-mesa-dev mesa-common-dev
+
+    - name: Install X11 dev
+      run: sudo apt-get install -y libx11-dev libxcursor-dev libxinerama-dev
+
+    - name: Install ALSA dev
+      run: sudo apt-get install -y libasound2-dev
+
+    - name: Install PulseAudio dev
+      run: sudo apt-get install -y libpulse-dev
+
+    - name: Install Pango dev
+      run: sudo apt-get install -y libpango1.0-dev
+
+    - name: Install Wayland
+      run: sudo apt-get install -y libwayland-dev wayland-protocols libdbus-1-dev libxkbcommon-dev libegl-dev libgtk-3-dev
+
+    - name: Install openssl
+      run: sudo apt-get install -y openssl libunistring-dev 
+      
+    - name: Install ninja-build
+      run: sudo apt-get install -y ninja-build
+      
+    - name: Install gettext
+      run: sudo apt-get install -y gettext
+      
+    - name: Install python dependencies
+      run: sudo apt-get install -y libssl-dev libffi-dev
+      
+    - name: Setup environment
+      run: mkdir -p ssh
+
+    - name: Decode SSH key
+      run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ssh/id_rsa
+      shell: bash
+  
+    - name: Set permissions on SSH key
+      run: chmod 600 ssh/id_rsa
+
+    - name: Set executable permissions
+      run: |
+        chmod +x ./*.sh ./bin/*.sh ./etc/*.sh 
+
+    - name: Build mrv2
+      run: |
+        ./runme_nolog.sh -D MRV2_PYFLTK=ON -D TLRENDER_USD=OFF -D TLRENDER_FFMPEG=OFF -D MRV2_PDF=OFF -D MRV2_NETWORK=OFF -D MRV2_PYBIND11=OFF -D BUILD_PYTHON=OFF -D TLRENDER_EXR=OFF -D TLRENDER_RAW=OFF -D TLRENDER_TIFF=OFF
+
+    # - name: Upload binaries
+    #   run: |
+    #     ./bin/upload_sourceforge.sh
+
+
+  windows-python-build:
+    runs-on: windows-2019
+
+    defaults:
+      run:
+        shell: msys2 {0}
+
+    steps:
+
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Setup environment
+      uses: ilammy/msvc-dev-cmd@v1
+
+    - name: Setup MSYS
+      uses: msys2/setup-msys2@v2
+      with:
+        update: true
+        path-type: inherit
+
+    - name: Setup environment
+      run: mkdir -p ssh
+
+    - name: Decode SSH key
+      run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ssh/id_rsa
+      shell: bash
+
+    - name: Set permissions on SSH key
+      shell: cmd
+      run: |
+        icacls "ssh\id_rsa" /inheritance:r /grant:r "%USERNAME%:R"
+      
+    - name: Build mrv2
+      run: |
+        ./runme_nolog.sh -D MRV2_PYFLTK=ON -D TLRENDER_USD=OFF -D TLRENDER_FFMPEG=OFF -D MRV2_PDF=OFF -D MRV2_NETWORK=OFF -D MRV2_PYBIND11=ON -D BUILD_PYTHON=ON -D TLRENDER_EXR=OFF -D TLRENDER_RAW=OFF -D TLRENDER_TIFF=OFF
+      
+    # - name: Upload binaries
+    #   run: |
+    #     ./bin/upload_sourceforge.sh
+
+
+  macos-python-build:
+    runs-on: macos-11
+
+    steps:
+    
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Install ninja-build
+      run: brew install ninja
+      
+    - name: Install automake
+      run: brew install automake
+
+    - name: Install GNU sed
+      run: brew install gnu-sed
+      
+    - name: Install Python dependencies
+      run: brew install libffi openssl readline sqlite3 xz zlib
+
+    - name: Setup environment
+      run: mkdir -p ssh
+
+    - name: Decode SSH key
+      run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ssh/id_rsa
+      shell: bash
+  
+    - name: Set permissions on SSH key
+      run: chmod 600 ssh/id_rsa
+      
+    - name: Set executable permissions
+      run: |
+        chmod +x ./*.sh ./bin/*.sh ./etc/*.sh 
+
+    - name: Build mrv2
+      shell: bash
+      run:
+        ./runme_nolog.sh -D MRV2_PYFLTK=ON -D TLRENDER_USD=OFF -D TLRENDER_FFMPEG=OFF -D MRV2_PDF=OFF -D MRV2_NETWORK=OFF -D MRV2_PYBIND11=ON -D BUILD_PYTHON=ON -D TLRENDER_EXR=OFF -D TLRENDER_RAW=OFF -D TLRENDER_TIFF=OFF
+
+    # - name: Upload binaries
+    #   run: |
+    #     ./bin/upload_sourceforge.sh
+
+
+  macos-m1-python-build:
+    runs-on: macos-14
+  
+    steps:
+   
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+  
+    - name: Install ninja-build
+      run: brew install ninja
+    
+    - name: Install automake
+      run: brew install automake
+  
+    - name: Install GNU sed
+      run: brew install gnu-sed
+     
+    - name: Install Python dependencies
+      run: brew install libffi openssl readline sqlite3 xz zlib
+  
+    - name: Setup environment
+      run: mkdir -p ssh
+  
+    - name: Decode SSH key
+      run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ssh/id_rsa
+      shell: bash
+  
+    - name: Set permissions on SSH key
+      run: chmod 600 ssh/id_rsa
+  
+    - name: Set executable permissions
+      run: |
+        chmod +x ./*.sh ./bin/*.sh ./etc/*.sh
+       
+    - name: Build mrv2
+      shell: bash
+      run: |
+        ./runme_nolog.sh -D MRV2_PYFLTK=ON -D TLRENDER_USD=OFF -D TLRENDER_FFMPEG=OFF -D MRV2_PDF=OFF -D MRV2_NETWORK=OFF -D MRV2_PYBIND11=ON -D BUILD_PYTHON=ON -D TLRENDER_EXR=OFF -D TLRENDER_RAW=OFF -D TLRENDER_TIFF=OFF
+
+
