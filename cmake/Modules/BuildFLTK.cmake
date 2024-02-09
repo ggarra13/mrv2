@@ -6,8 +6,8 @@ include( ExternalProject )
 
 #set( FLTK_TAG master )
 # Stable TAG
-set(FLTK_TAG 6ea31316fb64f64d346dc4a3a30984048f5df4cd) # Stable TAG
-#set(FLTK_TAG 3b1ea22d1de7fe9e55414bfa6e3d8461e49cf0c3) # Jan 04 2024 - fails Win32 with arm compilation error
+set(FLTK_TAG a1d3bf182e6c085779b6e7e7315bf15f384f7112)
+#set(FLTK_TAG 6ea31316fb64f64d346dc4a3a30984048f5df4cd) # Stable TAG
 
 set( FLTK_BUILD_SHARED_LIBS ON )  # We no longer compile static.
 
@@ -21,7 +21,6 @@ set( FLTK_C_COMPILER ${CMAKE_C_COMPILER})
 set( FLTK_C_FLAGS ${CMAKE_C_FLAGS} )
 
 if (APPLE)
-    # set(FLTK_PATCH cmake -E copy_if_different "${PROJECT_SOURCE_DIR}/cmake/patches/FLTK-patch/Fl_Cocoa_Gl_Window_Driver.mm" "${CMAKE_BINARY_DIR}/FLTK-prefix/src/FLTK/src/drivers/Cocoa")
     if(CMAKE_OSX_DEPLOYMENT_TARGET)
 	set( FLTK_C_FLAGS
 	    -mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}
@@ -43,8 +42,7 @@ if (APPLE OR WIN32)
     set( FLTK_WAYLAND OFF )
     set( FLTK_PANGO   OFF )
 else()
-    set( FLTK_WAYLAND  ON ) # we'll leave it on, but it is way
-		       # buggy with, at least, Nvidia cards.
+    set( FLTK_WAYLAND  ON )
     set( FLTK_PANGO    ON )
 endif()
 
@@ -52,7 +50,6 @@ ExternalProject_Add(
     FLTK
     GIT_REPOSITORY "https://github.com/fltk/fltk.git"
     GIT_TAG ${FLTK_TAG}
-    PATCH_COMMAND ${FLTK_PATCH}
     CMAKE_ARGS
     -DCMAKE_C_COMPILER=${FLTK_C_COMPILER}
     -DCMAKE_CXX_COMPILER=${FLTK_CXX_COMPILER}
@@ -68,12 +65,11 @@ ExternalProject_Add(
     -DCMAKE_INSTALL_MESSAGE=${CMAKE_INSTALL_MESSAGE}
     -DFLTK_BUILD_EXAMPLES=OFF
     -DFLTK_BUILD_TEST=OFF
-    -DOPTION_BUILD_SHARED_LIBS=${FLTK_BUILD_SHARED_LIBS}
-    -DOPTION_USE_SYSTEM_ZLIB=0
-    -DOPTION_USE_SYSTEM_LIBJPEG=0
-    -DOPTION_USE_SYSTEM_LIBPNG=0
-    -DOPTION_USE_FLTK_PANGO=${FLTK_PANGO}
-    -DOPTION_USE_FLTK_WAYLAND=${FLTK_WAYLAND}
+    -DFLTK_BUILD_SHARED_LIBS=${FLTK_BUILD_SHARED_LIBS}
+    -DFLTK_USE_SYSTEM_ZLIB=0
+    -DFLTK_USE_SYSTEM_LIBJPEG=0
+    -DFLTK_USE_SYSTEM_LIBPNG=0
+    -DFLTK_USE_PANGO=${FLTK_PANGO}
 )
 
 if(WIN32)

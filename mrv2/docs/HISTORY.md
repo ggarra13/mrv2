@@ -15,7 +15,11 @@ v1.0.4
 - Improved remaining time calculation when saving movie files.
 - Fixed message in saving movie of sequences without audio reporting that audio
   was getting saved.
-  
+- Added support for AV1 codec decoding (libdav1d codec).
+- Added AV1 Profile for saving with AV1 codec in FFmpeg (SVT-AV1 encoder).
+- Fixed a number of movies which would not play in mrv2 due to the number of
+  threads and codec.
+
 
 v1.0.3
 ======

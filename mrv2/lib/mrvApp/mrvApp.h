@@ -28,7 +28,6 @@ namespace mrv
     class OutputDevice;
 
     struct Playlist;
-    // struct FilesModelItem;
 
     class TimeObject;
     class DevicesModel;
@@ -83,6 +82,9 @@ namespace mrv
         //! Run the application.
         int run();
 
+        //! Whether FLTK is running.
+        bool isRunning() const;
+        
     public:
         //! Open a file (with optional audio) or directory.
         void open(const std::string&, const std::string& = std::string());

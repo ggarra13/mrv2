@@ -912,6 +912,12 @@ namespace mrv
         return Fl::run();
     }
 
+    bool App::isRunning() const
+    {
+        TLRENDER_P();
+        return p.running;
+    }
+
     void
     App::open(const std::string& fileName, const std::string& audioFileName)
     {

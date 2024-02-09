@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2024-02-04 09:25-0300\n"
+"POT-Creation-Date: 2024-02-08 05:22-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -532,31 +532,31 @@ msgstr ""
 "        return menus\n"
 "\n"
 
-#: mrvPy/Playlist.cpp:63
+#: mrvPy/Playlist.cpp:62
 msgid "No playlist matched item."
 msgstr "Ninguna lista de reproducción es igual al item"
 
-#: mrvPy/Playlist.cpp:86
+#: mrvPy/Playlist.cpp:85
 msgid "No playlist matched file name."
 msgstr "Ninguna lista de reproducción es igual al nombre dado."
 
-#: mrvPy/Playlist.cpp:111
+#: mrvPy/Playlist.cpp:110
 msgid "No playlist loaded."
 msgstr "No hay ninguna lista de reproducción cargada."
 
-#: mrvPy/Playlist.cpp:122
+#: mrvPy/Playlist.cpp:121
 msgid "No playlist selected."
 msgstr "Ninguna lista de reproducción seleccionada."
 
-#: mrvPy/Playlist.cpp:126
+#: mrvPy/Playlist.cpp:125
 msgid "Not an EDL playlist to add clips to."
 msgstr "No es un archivo EDL para agregar clips."
 
-#: mrvPy/Playlist.cpp:138
+#: mrvPy/Playlist.cpp:137
 msgid "Could not find clip in loaded clips."
 msgstr "No pude encontrar clip en items cargados."
 
-#: mrvPy/Playlist.cpp:166
+#: mrvPy/Playlist.cpp:165
 msgid ""
 "\n"
 "Playlist module.\n"
@@ -569,27 +569,27 @@ msgstr ""
 "Contiene todas las clases y enums relacionados con las listas "
 "dereproducción.\n"
 
-#: mrvPy/Playlist.cpp:172
+#: mrvPy/Playlist.cpp:171
 msgid "List playlist items."
 msgstr "Lista de items de lista de reproducción."
 
-#: mrvPy/Playlist.cpp:178
+#: mrvPy/Playlist.cpp:177
 msgid "Select a playlist by FileModelItem."
 msgstr "Seleccionar una lista de reproducción con FileModelItem."
 
-#: mrvPy/Playlist.cpp:183
+#: mrvPy/Playlist.cpp:182
 msgid "Select a playlist by fileName."
 msgstr "Seleccionar una lista de reproducción con el nombre de archivo dado."
 
-#: mrvPy/Playlist.cpp:187
+#: mrvPy/Playlist.cpp:186
 msgid "Select a playlist by index."
 msgstr "Seleccionar una lista de reproducción con el índice dado."
 
-#: mrvPy/Playlist.cpp:191
+#: mrvPy/Playlist.cpp:190
 msgid "Add a clip to currently selected Playlist EDL."
 msgstr "Agregar clip a la lista de reproducción (EDL) seleccionada."
 
-#: mrvPy/Playlist.cpp:195
+#: mrvPy/Playlist.cpp:194
 msgid "Save current .otio file with relative paths."
 msgstr "Grabe una list de reproducción .otio con caminos relativos a ella."
 
@@ -1148,15 +1148,15 @@ msgstr "Vector de 4 elementos de comas flotantes."
 msgid "Size of 2 integers."
 msgstr "Tamaño de 2 enteros."
 
-#: mrvPy/Image.cpp:185
+#: mrvPy/Image.cpp:186
 msgid "OCIO config file cannot be empty."
 msgstr "El archivo config de OCIO no puede estar vacío."
 
-#: mrvPy/Image.cpp:189
+#: mrvPy/Image.cpp:190
 msgid "OCIO config '{0}' does not exist or is not readable."
 msgstr "Config de OCIO '{0}' no existe o no es leíble."
 
-#: mrvPy/Image.cpp:273
+#: mrvPy/Image.cpp:274
 msgid ""
 "\n"
 "Image module.\n"
@@ -1168,327 +1168,327 @@ msgstr ""
 "\n"
 "Contiene todas las classes y enums relativas a los controles de imagen.\n"
 
-#: mrvPy/Image.cpp:283
+#: mrvPy/Image.cpp:284
 msgid "Red Channel."
 msgstr "Canal Rojo."
 
-#: mrvPy/Image.cpp:284
+#: mrvPy/Image.cpp:285
 msgid "Green Channel."
 msgstr "Canal Verde."
 
-#: mrvPy/Image.cpp:285
+#: mrvPy/Image.cpp:286
 msgid "Blue Channel."
 msgstr "Canal Azul."
 
-#: mrvPy/Image.cpp:286
+#: mrvPy/Image.cpp:287
 msgid "Alpha Channel."
 msgstr "Canal Alfa."
 
-#: mrvPy/Image.cpp:295 mrvPy/Image.cpp:309
+#: mrvPy/Image.cpp:296 mrvPy/Image.cpp:310
 msgid "Image mirroring."
 msgstr "Espejado de la imagen."
 
-#: mrvPy/Image.cpp:299
+#: mrvPy/Image.cpp:300
 msgid "Flip image on X."
 msgstr "Voltear imagen en X."
 
-#: mrvPy/Image.cpp:300
+#: mrvPy/Image.cpp:301
 msgid "Flip image on Y."
 msgstr "Voltear imagen en Y."
 
-#: mrvPy/Image.cpp:322 mrvPy/Image.cpp:360
+#: mrvPy/Image.cpp:323 mrvPy/Image.cpp:361
 msgid "Enabled Levels."
 msgstr "Active transformaciones de niveles."
 
-#: mrvPy/Image.cpp:325
+#: mrvPy/Image.cpp:326
 msgid "Add a :class:`mrv2.math.Vector3f` to image."
 msgstr "Agregar un :class:`mrv2.math.Vector3f` a la imagen."
 
-#: mrvPy/Image.cpp:328
+#: mrvPy/Image.cpp:329
 msgid "Change a :class:`mrv2.math.Vector3f` of brightness to image."
 msgstr "Cambiar un :class:`mrv2.math.Vector3f` de brillo a la imagen."
 
-#: mrvPy/Image.cpp:332
+#: mrvPy/Image.cpp:333
 msgid "Change a :class:`mrv2.math.Vector3f` of contrast to image."
 msgstr "Cambiar un :class:`mrv2.math.Vector3f` de contraste a la imagen."
 
-#: mrvPy/Image.cpp:336
+#: mrvPy/Image.cpp:337
 msgid "Change a :class:`mrv2.math.Vector3f` of saturation to image."
 msgstr "Cambiar un :class:`mrv2.math.Vector3f` de saturación a la imagen."
 
-#: mrvPy/Image.cpp:340
+#: mrvPy/Image.cpp:341
 msgid "Change tint of image to image between 0 and 1."
 msgstr "Cambiar el tinte de la imagen entre 0 y 1."
 
-#: mrvPy/Image.cpp:342
+#: mrvPy/Image.cpp:343
 msgid "Invert the color values."
 msgstr "Invertir valores de color."
 
-#: mrvPy/Image.cpp:351
+#: mrvPy/Image.cpp:352
 msgid "Color values."
 msgstr "Valores de color."
 
-#: mrvPy/Image.cpp:362
+#: mrvPy/Image.cpp:363
 msgid "In Low Level value."
 msgstr "Valor de nivel bajo de entrada."
 
-#: mrvPy/Image.cpp:364
+#: mrvPy/Image.cpp:365
 msgid "In High Level value."
 msgstr "Valor de nivel alto de entrada."
 
-#: mrvPy/Image.cpp:366
+#: mrvPy/Image.cpp:367
 msgid "Gamma Level value."
 msgstr "Valor de nivel de gama."
 
-#: mrvPy/Image.cpp:368
+#: mrvPy/Image.cpp:369
 msgid "Out Low Level value."
 msgstr "Valor de nivel bajo de salida."
 
-#: mrvPy/Image.cpp:370
+#: mrvPy/Image.cpp:371
 msgid "Out High Level value."
 msgstr "Valor de nivel alto de salida."
 
-#: mrvPy/Image.cpp:379
+#: mrvPy/Image.cpp:380
 msgid "Levels values."
 msgstr "Valores de niveles"
 
-#: mrvPy/Image.cpp:389
+#: mrvPy/Image.cpp:390
 msgid "Enabled EXR display."
 msgstr "Active Display EXR."
 
-#: mrvPy/Image.cpp:391
+#: mrvPy/Image.cpp:392
 msgid "Exposure value."
 msgstr "Valor Exposición"
 
-#: mrvPy/Image.cpp:392
+#: mrvPy/Image.cpp:393
 msgid "Defog value."
 msgstr "Valor de desempañar."
 
-#: mrvPy/Image.cpp:394
+#: mrvPy/Image.cpp:395
 msgid "kneeLow value."
 msgstr "Valor de nivel bajo de rodilla."
 
-#: mrvPy/Image.cpp:396
+#: mrvPy/Image.cpp:397
 msgid "kneeHigh value."
 msgstr "Valor de nivel alto de rodilla."
 
-#: mrvPy/Image.cpp:405
+#: mrvPy/Image.cpp:406
 msgid "EXR display values."
 msgstr "Valores de display de EXR."
 
-#: mrvPy/Image.cpp:412
+#: mrvPy/Image.cpp:413
 msgid "Enabled Soft Clip."
 msgstr "Active Soft Clip."
 
-#: mrvPy/Image.cpp:414 mrvPy/Image.cpp:423
+#: mrvPy/Image.cpp:415 mrvPy/Image.cpp:424
 msgid "Soft clip value."
 msgstr "Valor de soft clip."
 
-#: mrvPy/Image.cpp:433
+#: mrvPy/Image.cpp:434
 msgid "Minify filter :class:`mrv2.image.ImageFilter`."
 msgstr "Filtro de minificación :class:`mrv2.image.ImageFilter`."
 
-#: mrvPy/Image.cpp:436
+#: mrvPy/Image.cpp:437
 msgid "Magnify filter :class:`mrv2.image.ImageFilter`."
 msgstr "Filtro de magnificación :class:`mrv2.image.ImageFilter`."
 
-#: mrvPy/Image.cpp:445
+#: mrvPy/Image.cpp:446
 msgid "Image filters."
 msgstr "Filtros de imagen."
 
-#: mrvPy/Image.cpp:460
+#: mrvPy/Image.cpp:461
 msgid "Color channels :class:`mrv2.image.Channels`."
 msgstr "Canales de color :class:`mrv2.image.Channels`."
 
-#: mrvPy/Image.cpp:463
+#: mrvPy/Image.cpp:464
 msgid "Mirror on X, Y or both :class:`mrv2.image.Mirror`."
 msgstr "Espejar en X, Y o ambos :class:`mrv2.image.Mirror`."
 
-#: mrvPy/Image.cpp:466
+#: mrvPy/Image.cpp:467
 msgid "Color options :class:`mrv2.image.Color`."
 msgstr "Opciones de color :class:`mrv2.image.Color`."
 
-#: mrvPy/Image.cpp:469
+#: mrvPy/Image.cpp:470
 msgid "Levels options :class:`mrv2.image.Levels`."
 msgstr "Opciones de niveles :class:`mrv2.image.Levels`."
 
-#: mrvPy/Image.cpp:472
+#: mrvPy/Image.cpp:473
 msgid "EXR Display options :class:`mrv2.image.EXRDisplay`.."
 msgstr "Opciones de EXR Display  :class:`mrv2.image.EXRDisplay`.."
 
-#: mrvPy/Image.cpp:475
+#: mrvPy/Image.cpp:476
 msgid "Soft Clip options :class:`mrv2.image.SoftClip`.."
 msgstr "Opciones de Soft Clip  :class:`mrv2.image.SoftClip`.."
 
-#: mrvPy/Image.cpp:484
+#: mrvPy/Image.cpp:485
 msgid "Display options."
 msgstr "Opciones de display."
 
-#: mrvPy/Image.cpp:493
+#: mrvPy/Image.cpp:494
 msgid "LUT enabled."
 msgstr "LUT activado."
 
-#: mrvPy/Image.cpp:495
+#: mrvPy/Image.cpp:496
 msgid "LUT filename."
 msgstr "Nombre del archivo LUT."
 
-#: mrvPy/Image.cpp:498
+#: mrvPy/Image.cpp:499
 msgid "LUT transformation order."
 msgstr "Orden de operación del LUT."
 
-#: mrvPy/Image.cpp:507
+#: mrvPy/Image.cpp:508
 msgid "LUT options."
 msgstr "Opciones del LUT."
 
-#: mrvPy/Image.cpp:519
+#: mrvPy/Image.cpp:520
 msgid "Video Levels."
 msgstr "Niveles de Vídeo."
 
-#: mrvPy/Image.cpp:522
+#: mrvPy/Image.cpp:523
 msgid "Alpha blending algorithm"
 msgstr "Algoritmo de mezcla de alfa."
 
-#: mrvPy/Image.cpp:525
+#: mrvPy/Image.cpp:526
 msgid "Image Filters"
 msgstr "Filtros de imagen."
 
-#: mrvPy/Image.cpp:534
+#: mrvPy/Image.cpp:535
 msgid "Image options."
 msgstr "Opciones de imagen."
 
-#: mrvPy/Image.cpp:550
+#: mrvPy/Image.cpp:551
 msgid "Environment Map type."
 msgstr "Tipo de Mapa del Entorno"
 
-#: mrvPy/Image.cpp:554
+#: mrvPy/Image.cpp:555
 msgid "Horizontal aperture"
 msgstr "Aberturna Horizontal de la Proyeccion."
 
-#: mrvPy/Image.cpp:557
+#: mrvPy/Image.cpp:558
 msgid "Vertical aperture"
 msgstr "Abertura Vertical de la Proyección."
 
-#: mrvPy/Image.cpp:560 mrvPanels/mrvEnvironmentMapPanel.cpp:242
+#: mrvPy/Image.cpp:561 mrvPanels/mrvEnvironmentMapPanel.cpp:242
 msgid "Focal Length"
 msgstr "Distancia Focal"
 
-#: mrvPy/Image.cpp:562
+#: mrvPy/Image.cpp:563
 msgid "Rotation on X"
 msgstr "Rotación en X"
 
-#: mrvPy/Image.cpp:564
+#: mrvPy/Image.cpp:565
 msgid "Rotation on Y"
 msgstr "Rotación en Y"
 
-#: mrvPy/Image.cpp:567
+#: mrvPy/Image.cpp:568
 msgid "Subdivision on X"
 msgstr "Subdivisiones en X"
 
-#: mrvPy/Image.cpp:570
+#: mrvPy/Image.cpp:571
 msgid "Subdivision on Y"
 msgstr "Subdivisiones en Y"
 
-#: mrvPy/Image.cpp:571 mrvPanels/mrvEnvironmentMapPanel.cpp:295
+#: mrvPy/Image.cpp:572 mrvPanels/mrvEnvironmentMapPanel.cpp:295
 msgid "Spin"
 msgstr "Giro"
 
-#: mrvPy/Image.cpp:580
+#: mrvPy/Image.cpp:581
 msgid "EnvironmentMap options."
 msgstr "Opciones de mapa de entorno."
 
-#: mrvPy/Image.cpp:590
+#: mrvPy/Image.cpp:591
 msgid "Stereo 3d input :class:`mrv2.image.StereoInput`.."
 msgstr "Opciones de entrada estéreo 3D :class:`mrv2.image.StereoInput`."
 
-#: mrvPy/Image.cpp:593
+#: mrvPy/Image.cpp:594
 msgid "Stereo 3d output :class:`mrv2.image.StereoOutput`.."
 msgstr "Opciones de salida estéreo 3D :class:`mrv2.image.StereoOutput`."
 
-#: mrvPy/Image.cpp:596
+#: mrvPy/Image.cpp:597
 msgid "Separation between left and right eye."
 msgstr "Separación del ojo izquierdo y del derecho."
 
-#: mrvPy/Image.cpp:599
+#: mrvPy/Image.cpp:600
 msgid "Swap left and right eye"
 msgstr "Intercambiar ojos izquierdo por derecho."
 
-#: mrvPy/Image.cpp:608
+#: mrvPy/Image.cpp:609
 msgid "Stereo3D options."
 msgstr "Opciones de estéreo 3D."
 
-#: mrvPy/Image.cpp:623
+#: mrvPy/Image.cpp:624
 msgid "Background type :class:`mrv2.image.Background`.."
 msgstr "Tipo de fondo :class:`mrv2.image.Background`.."
 
-#: mrvPy/Image.cpp:626
+#: mrvPy/Image.cpp:627
 msgid "Solid Color :class:`mrv2.image.Color4f`.."
 msgstr "Opciones de Color Sólido :class:`mrv2.image.Color4f`.."
 
-#: mrvPy/Image.cpp:629
+#: mrvPy/Image.cpp:630
 msgid "Checkers Color0 :class:`mrv2.image.Color4f`.."
 msgstr "Opciones de Color0 del cuadriculado :class:`mrv2.image.Color4f`."
 
-#: mrvPy/Image.cpp:632
+#: mrvPy/Image.cpp:633
 msgid "Checkers Color1 :class:`mrv2.image.Color4f`.."
 msgstr "Opciones de Color1 del cuadriculado :class:`mrv2.image.Color4f`."
 
-#: mrvPy/Image.cpp:635
+#: mrvPy/Image.cpp:636
 msgid "Checkers Size :class:`mrv2.math.Size2i`.."
 msgstr "Tamaño del Cuadriculado :class:`mrv2.math.Size2i`.."
 
-#: mrvPy/Image.cpp:644
+#: mrvPy/Image.cpp:645
 msgid "Background options."
 msgstr "Opciones de Fondo."
 
-#: mrvPy/Image.cpp:648
+#: mrvPy/Image.cpp:649
 msgid "Gets the current background options."
 msgstr "Retorna las opciones actual del fondo."
 
-#: mrvPy/Image.cpp:652
+#: mrvPy/Image.cpp:653
 msgid "Sets the current background options."
 msgstr "Setea las opciones de fondo."
 
-#: mrvPy/Image.cpp:656
+#: mrvPy/Image.cpp:657
 msgid "Gets the current OCIO config file."
 msgstr "Obtiene el archivo config de OCIO actual."
 
-#: mrvPy/Image.cpp:660
+#: mrvPy/Image.cpp:661
 msgid "Sets the current OCIO config file."
 msgstr "Setea el archivo de config de OCIO."
 
-#: mrvPy/Image.cpp:664
+#: mrvPy/Image.cpp:665
 msgid "Gets the current input color space."
 msgstr "Obtiene el Espacio de Entrada de Color actual."
 
-#: mrvPy/Image.cpp:668
+#: mrvPy/Image.cpp:669
 msgid "Gets a list of all input color spaces."
 msgstr "Obtiene un listado de todos los Espacios de Entrada de Color."
 
-#: mrvPy/Image.cpp:671
+#: mrvPy/Image.cpp:672
 msgid "Set the input color space."
 msgstr "Setea el Espacio de Entrada de Color."
 
-#: mrvPy/Image.cpp:675
+#: mrvPy/Image.cpp:676
 msgid "Gets the current Display/View."
 msgstr "Retorna la Display/View de OCIO actual."
 
-#: mrvPy/Image.cpp:679
+#: mrvPy/Image.cpp:680
 msgid "Gets the list of Displays/Views."
 msgstr "Retorna la list ade Displays/Views de OCIO."
 
-#: mrvPy/Image.cpp:682
+#: mrvPy/Image.cpp:683
 msgid "Set an OCIO Display/View."
 msgstr "Setea la OCIO Display/Vista."
 
-#: mrvPy/Image.cpp:686
+#: mrvPy/Image.cpp:687
 msgid "Gets the current OCIO look."
 msgstr "Obtiene el look de OCIO actual."
 
-#: mrvPy/Image.cpp:690
+#: mrvPy/Image.cpp:691
 msgid "Gets a list of all OCIO looks."
 msgstr "Obtiene un listado de todos los looks de OCIO."
 
-#: mrvPy/Image.cpp:694
+#: mrvPy/Image.cpp:695
 msgid "Set the OCIO look by name."
 msgstr "Setear el look de OCIO por nombre."
 
@@ -1835,149 +1835,149 @@ msgstr "Cancelar"
 msgid "Mute"
 msgstr "Mudo"
 
-#: mrvApp/App.cpp:265
+#: mrvApp/mrvApp.cpp:265
 msgid "Play timelines, movies, and image sequences."
 msgstr "Reproducir líneas de tiempo, películas y secuencias de imágenes."
 
-#: mrvApp/App.cpp:268
+#: mrvApp/mrvApp.cpp:268
 msgid "Timelines, movies, image sequences, or folders."
 msgstr "Líneas de tiempo, película, secuencia de imágenes o carpeta."
 
-#: mrvApp/App.cpp:273
+#: mrvApp/mrvApp.cpp:273
 msgid "Debug verbosity."
 msgstr "Verbosidad de depurado."
 
-#: mrvApp/App.cpp:276
+#: mrvApp/mrvApp.cpp:276
 msgid "Audio file name."
 msgstr "Nombre del archivo de Audio"
 
-#: mrvApp/App.cpp:279
+#: mrvApp/mrvApp.cpp:279
 msgid "A/B comparison \"B\" file name."
 msgstr "Comparación A/B, archivo \"B\"."
 
-#: mrvApp/App.cpp:282
+#: mrvApp/mrvApp.cpp:282
 msgid "A/B comparison mode."
 msgstr "Modo de comparación A/B."
 
-#: mrvApp/App.cpp:287
+#: mrvApp/mrvApp.cpp:287
 msgid "A/B comparison wipe center."
 msgstr "Centro del limpiaparabrisas de la comparación A/B."
 
-#: mrvApp/App.cpp:291
+#: mrvApp/mrvApp.cpp:291
 msgid "A/B comparison wipe rotation."
 msgstr "Rotación del limpiaparabrisas de la comparación A/B."
 
-#: mrvApp/App.cpp:295
+#: mrvApp/mrvApp.cpp:295
 msgid "OpenTimelineIO Edit mode."
 msgstr "Modo de Edición de OpenTimelineIO."
 
-#: mrvApp/App.cpp:297
+#: mrvApp/mrvApp.cpp:297
 msgid "Playback speed."
 msgstr "Velocidad de reproducción."
 
-#: mrvApp/App.cpp:300
+#: mrvApp/mrvApp.cpp:300
 msgid "Playback mode."
 msgstr "Modo de reproducción."
 
-#: mrvApp/App.cpp:304
+#: mrvApp/mrvApp.cpp:304
 msgid "Playback loop mode."
 msgstr "Modo de reproducción en bucle."
 
-#: mrvApp/App.cpp:309
+#: mrvApp/mrvApp.cpp:309
 msgid "Seek to the given time."
 msgstr "Saltar al tiempo dado."
 
-#: mrvApp/App.cpp:312
+#: mrvApp/mrvApp.cpp:312
 msgid "Set the in/out points range."
 msgstr "Setear el range de entrada/salida."
 
-#: mrvApp/App.cpp:315
+#: mrvApp/mrvApp.cpp:315
 msgid "LUT file name."
 msgstr "Nombre del archivo LUT."
 
-#: mrvApp/App.cpp:318
+#: mrvApp/mrvApp.cpp:318
 msgid "LUT operation order."
 msgstr "Orden de operación del LUT."
 
-#: mrvApp/App.cpp:324
+#: mrvApp/mrvApp.cpp:324
 msgid "Python Script to run and exit."
 msgstr "Script de Python para ejecutar y salir."
 
-#: mrvApp/App.cpp:328
+#: mrvApp/mrvApp.cpp:328
 msgid "Reset settings to defaults."
 msgstr "Resetar seteos a su valor por defecto."
 
-#: mrvApp/App.cpp:331
+#: mrvApp/mrvApp.cpp:331
 msgid "Reset hotkeys to defaults."
 msgstr "Resetar teclas a los valores por defecto."
 
-#: mrvApp/App.cpp:368
+#: mrvApp/mrvApp.cpp:368
 msgid "Start a server.  Use -port to specify a port number."
 msgstr "Cree un servidor.  Use -port para especificar un número de puerto."
 
-#: mrvApp/App.cpp:372
+#: mrvApp/mrvApp.cpp:372
 msgid "Connect to a server at <value>.  Use -port to specify a port number."
 msgstr ""
 "Connectese a un servidor en <value>.  Use -port para especificar un número "
 "de puerto."
 
-#: mrvApp/App.cpp:376
+#: mrvApp/mrvApp.cpp:376
 msgid ""
 "Port number for the server to listen to or for the client to connect to."
 msgstr ""
 "Número de puerto en el servidor para escuchar o en el cliente para "
 "conectarse."
 
-#: mrvApp/App.cpp:384
+#: mrvApp/mrvApp.cpp:384
 msgid "Return the version and exit."
 msgstr "Retorna la versión y termina."
 
-#: mrvApp/App.cpp:424
+#: mrvApp/mrvApp.cpp:424
 msgid "Could not read python script '{0}'"
 msgstr "No pude leer script de python '{0}'"
 
-#: mrvApp/App.cpp:431
+#: mrvApp/mrvApp.cpp:431
 msgid "Running python script '{0}'"
 msgstr "Ejecutando script de python '{0}'..."
 
-#: mrvApp/App.cpp:443
+#: mrvApp/mrvApp.cpp:443
 msgid "Python Error: "
 msgstr "Error de Python:"
 
-#: mrvApp/App.cpp:462
+#: mrvApp/mrvApp.cpp:462
 msgid "Cannot create window"
 msgstr "No puedo crear ventana"
 
-#: mrvApp/App.cpp:477 mrvUI/mrvMenus.cpp:1225
+#: mrvApp/mrvApp.cpp:477 mrvUI/mrvMenus.cpp:1225
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:23
 msgid "About mrv2"
 msgstr "Acerca de mrv2"
 
-#: mrvApp/App.cpp:479 mrvUI/mrvMenus.cpp:1227
+#: mrvApp/mrvApp.cpp:479 mrvUI/mrvMenus.cpp:1227
 msgid "Hide mrv2"
 msgstr "Ocultar mrv2"
 
-#: mrvApp/App.cpp:480 mrvUI/mrvMenus.cpp:1228
+#: mrvApp/mrvApp.cpp:480 mrvUI/mrvMenus.cpp:1228
 msgid "Hide Others"
 msgstr "Ocultar Otros"
 
-#: mrvApp/App.cpp:481 mrvUI/mrvMenus.cpp:1229
+#: mrvApp/mrvApp.cpp:481 mrvUI/mrvMenus.cpp:1229
 msgid "Services"
 msgstr "Servicios"
 
-#: mrvApp/App.cpp:482
+#: mrvApp/mrvApp.cpp:482
 msgid "Show All"
 msgstr "Mostrar Todos"
 
-#: mrvApp/App.cpp:483 mrvUI/mrvMenus.cpp:1230
+#: mrvApp/mrvApp.cpp:483 mrvUI/mrvMenus.cpp:1230
 msgid "Quit mrv2"
 msgstr "Salir de mrv2"
 
-#: mrvApp/App.cpp:579
+#: mrvApp/mrvApp.cpp:579
 msgid "Could not initialize NDI"
 msgstr "No pude inicializar NDI"
 
-#: mrvApp/App.cpp:936
+#: mrvApp/mrvApp.cpp:936
 msgid "Filename '{0}' does not exist or does not have read permissions."
 msgstr "Archivo '{0}' no existe o no es leíble."
 
@@ -1999,7 +1999,7 @@ msgstr "Lista de Reproducción"
 msgid "Network"
 msgstr "Red"
 
-#: mrvPanels/mrvPanelsAux.h:21 mrvPanels/mrvStereo3DPanel.cpp:303
+#: mrvPanels/mrvPanelsAux.h:21 mrvPanels/mrvStereo3DPanel.cpp:302
 #: mrvFl/mrvCallbacks.cpp:102 mrvUI/mrvMenus.cpp:479
 msgid "Stereo 3D"
 msgstr "Estéreo 3D"
@@ -2161,16 +2161,16 @@ msgstr "No"
 msgid "Yes"
 msgstr "Sí"
 
-#: mrvPanels/mrvPythonPanel.cpp:491 mrvFl/mrvSession.cpp:332
+#: mrvPanels/mrvPythonPanel.cpp:491 mrvFl/mrvSession.cpp:333
 msgid "Failed to open the file for writing."
 msgstr "Fallé en abrir el archivo para escribir."
 
-#: mrvPanels/mrvPythonPanel.cpp:500 mrvFl/mrvSession.cpp:340
+#: mrvPanels/mrvPythonPanel.cpp:500 mrvFl/mrvSession.cpp:341
 msgid "Failed to write to the file."
 msgstr "Fallé en excribir al archivo."
 
-#: mrvPanels/mrvPythonPanel.cpp:506 mrvFl/mrvSession.cpp:345
-#: mrvFl/mrvSession.cpp:391
+#: mrvPanels/mrvPythonPanel.cpp:506 mrvFl/mrvSession.cpp:346
+#: mrvFl/mrvSession.cpp:392
 msgid "The stream is in an unrecoverable error state."
 msgstr "El flujo esta en un estado de error irrecuperable."
 
@@ -2215,7 +2215,7 @@ msgstr ""
 "bien en 1.  Para mayores resoluciones y canales de audio, puede que quiera "
 "incrementarlo a 3 o mayor para un buen sincronismo de audio."
 
-#: mrvPanels/mrvNDIPanel.cpp:357 mrvGL/mrvTimelineViewportEvents.cpp:966
+#: mrvPanels/mrvNDIPanel.cpp:357 mrvGL/mrvTimelineViewportEvents.cpp:1017
 msgid "Play"
 msgstr "Reproducir"
 
@@ -2252,8 +2252,8 @@ msgstr "USD"
 msgid "Renderer"
 msgstr "Renderer"
 
-#: mrvPanels/mrvUSDPanel.cpp:125 mrvPanels/mrvStereo3DPanel.cpp:336
-#: mrvPanels/mrvStereo3DPanel.cpp:338 mrvPanels/mrvEnvironmentMapPanel.cpp:116
+#: mrvPanels/mrvUSDPanel.cpp:125 mrvPanels/mrvStereo3DPanel.cpp:335
+#: mrvPanels/mrvStereo3DPanel.cpp:337 mrvPanels/mrvEnvironmentMapPanel.cpp:116
 #: mrvFl/mrvPreferences.cpp:1922 mrvFl/mrvPreferences.cpp:2068
 #: mrvFl/mrvPreferences.cpp:2080 mrvGL/mrvTimelineViewport.cpp:1567
 #: mrvGL/mrvTimelineViewport.cpp:1636
@@ -2279,61 +2279,61 @@ msgstr "Cache del Escenario"
 msgid "Disk Cache in GB"
 msgstr "Cache en Disco en GB"
 
-#: mrvPanels/mrvStereo3DPanel.cpp:223
+#: mrvPanels/mrvStereo3DPanel.cpp:222
 msgid "Toggle other eye stereo image."
 msgstr "Alternar el otro ojo de la imagen estéreo."
 
-#: mrvPanels/mrvStereo3DPanel.cpp:332
+#: mrvPanels/mrvStereo3DPanel.cpp:331
 msgid "Input"
 msgstr "Entrada"
 
-#: mrvPanels/mrvStereo3DPanel.cpp:339
+#: mrvPanels/mrvStereo3DPanel.cpp:338
 msgid "Image"
 msgstr "Imagen"
 
-#: mrvPanels/mrvStereo3DPanel.cpp:357
+#: mrvPanels/mrvStereo3DPanel.cpp:356
 msgid "Output"
 msgstr "Salida"
 
-#: mrvPanels/mrvStereo3DPanel.cpp:361 mrvPanels/mrvStereo3DPanel.cpp:363
+#: mrvPanels/mrvStereo3DPanel.cpp:360 mrvPanels/mrvStereo3DPanel.cpp:362
 msgid "Anaglyph"
 msgstr "Anáglifo"
 
-#: mrvPanels/mrvStereo3DPanel.cpp:364
+#: mrvPanels/mrvStereo3DPanel.cpp:363
 msgid "Scanlines"
 msgstr "Lineas"
 
-#: mrvPanels/mrvStereo3DPanel.cpp:365
+#: mrvPanels/mrvStereo3DPanel.cpp:364
 msgid "Columns"
 msgstr "Columnas"
 
-#: mrvPanels/mrvStereo3DPanel.cpp:366
+#: mrvPanels/mrvStereo3DPanel.cpp:365
 msgid "Checkerboard"
 msgstr "Cuadriculado"
 
-#: mrvPanels/mrvStereo3DPanel.cpp:369
+#: mrvPanels/mrvStereo3DPanel.cpp:368
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1689
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1878
 msgid "OpenGL"
 msgstr "OpenGL"
 
-#: mrvPanels/mrvStereo3DPanel.cpp:389
+#: mrvPanels/mrvStereo3DPanel.cpp:388
 msgid "Adjustments"
 msgstr "Ajustes"
 
-#: mrvPanels/mrvStereo3DPanel.cpp:416
+#: mrvPanels/mrvStereo3DPanel.cpp:415
 msgid "Eye Separation"
 msgstr "Separación de Ojos"
 
-#: mrvPanels/mrvStereo3DPanel.cpp:418
+#: mrvPanels/mrvStereo3DPanel.cpp:417
 msgid "Separation of left and right eye."
 msgstr "Separación del ojo izquierdo y del derecho."
 
-#: mrvPanels/mrvStereo3DPanel.cpp:436
+#: mrvPanels/mrvStereo3DPanel.cpp:435
 msgid "Swap Eyes"
 msgstr "Intercambiar Ojos"
 
-#: mrvPanels/mrvStereo3DPanel.cpp:438
+#: mrvPanels/mrvStereo3DPanel.cpp:437
 msgid "Swap left and right eyes."
 msgstr "Intercambiar ojos izquierdo por derecho."
 
@@ -2439,26 +2439,26 @@ msgstr "Teclas por Defecto"
 msgid "Default Settings"
 msgstr "Seteos por Defecto"
 
-#: mrvPanels/mrvPlaylistPanel.cpp:279
+#: mrvPanels/mrvPlaylistPanel.cpp:278
 msgid "Drop a clip here to create a playlist."
 msgstr "LLeve un clip aquí para crear una lista de reproducción."
 
-#: mrvPanels/mrvPlaylistPanel.cpp:296
+#: mrvPanels/mrvPlaylistPanel.cpp:295
 msgid "Create an empty timeline with a video and audio track."
 msgstr "Crear una línear de tiempo vacía con una pista de vídeo y de audio."
 
-#: mrvPanels/mrvPlaylistPanel.cpp:303
+#: mrvPanels/mrvPlaylistPanel.cpp:302
 msgid "Create a timeline from the selected clip."
 msgstr "Crear una línea de tiempo desde el clip seleccionado."
 
-#: mrvPanels/mrvPlaylistPanel.cpp:316
+#: mrvPanels/mrvPlaylistPanel.cpp:315
 msgid ""
 "Save current EDL to a permanent location, making paths relative if possible."
 msgstr ""
 "Grabar el EDL actual a un lugar permanente, haciendo las rutas relativas si "
 "es posible."
 
-#: mrvPanels/mrvPlaylistPanel.cpp:325
+#: mrvPanels/mrvPlaylistPanel.cpp:324
 msgid "Close current EDL."
 msgstr "Cerrar EDL Actual."
 
@@ -2514,7 +2514,7 @@ msgstr ""
 "Distancia Focal de la Proyección. Use Shift + botón izquierdo del ratón para "
 "cambiar o la rueda del ratón."
 
-#: mrvPanels/mrvEnvironmentMapPanel.cpp:267 mrvPanels/mrvComparePanel.cpp:564
+#: mrvPanels/mrvEnvironmentMapPanel.cpp:267 mrvPanels/mrvComparePanel.cpp:563
 msgid "Rotation"
 msgstr "Rotación"
 
@@ -3115,51 +3115,51 @@ msgstr "Azul"
 msgid "Lumma"
 msgstr "Lumma"
 
-#: mrvPanels/mrvFilesPanel.cpp:264
+#: mrvPanels/mrvFilesPanel.cpp:263
 msgid "Select main A image."
 msgstr "Seleccione la imagen A principal."
 
-#: mrvPanels/mrvFilesPanel.cpp:355
+#: mrvPanels/mrvFilesPanel.cpp:354
 msgid "Open a filename"
 msgstr "Abir un archivo"
 
-#: mrvPanels/mrvFilesPanel.cpp:363
+#: mrvPanels/mrvFilesPanel.cpp:362
 msgid "Open a filename with audio"
 msgstr "Abrir un archivo con audio"
 
-#: mrvPanels/mrvFilesPanel.cpp:371
+#: mrvPanels/mrvFilesPanel.cpp:370
 msgid "Close current filename"
 msgstr "Cerrar archivo actual"
 
-#: mrvPanels/mrvFilesPanel.cpp:379
+#: mrvPanels/mrvFilesPanel.cpp:378
 msgid "Close all filenames"
 msgstr "Cerrar todos los archivos"
 
-#: mrvPanels/mrvFilesPanel.cpp:387 mrvPanels/mrvComparePanel.cpp:467
+#: mrvPanels/mrvFilesPanel.cpp:386 mrvPanels/mrvComparePanel.cpp:466
 msgid "Previous filename"
 msgstr "Archivo previo"
 
-#: mrvPanels/mrvFilesPanel.cpp:395 mrvPanels/mrvComparePanel.cpp:480
+#: mrvPanels/mrvFilesPanel.cpp:394 mrvPanels/mrvComparePanel.cpp:479
 msgid "Next filename"
 msgstr "Pròximo archivo"
 
-#: mrvPanels/mrvFilesPanel.cpp:405
+#: mrvPanels/mrvFilesPanel.cpp:404
 msgid "Filter EDLs"
 msgstr "Filtrar EDLs"
 
-#: mrvPanels/mrvComparePanel.cpp:241
+#: mrvPanels/mrvComparePanel.cpp:240
 msgid "Select one or more B images."
 msgstr "Seleccione una o más imágenes B."
 
-#: mrvPanels/mrvComparePanel.cpp:335
+#: mrvPanels/mrvComparePanel.cpp:334
 msgid "Compare A"
 msgstr "Comparar A"
 
-#: mrvPanels/mrvComparePanel.cpp:349
+#: mrvPanels/mrvComparePanel.cpp:348
 msgid "Compare B"
 msgstr "Comparar B"
 
-#: mrvPanels/mrvComparePanel.cpp:366
+#: mrvPanels/mrvComparePanel.cpp:365
 msgid ""
 "Wipe between the A and B files\n"
 "\n"
@@ -3170,7 +3170,7 @@ msgstr ""
 "Use la tecla Opción + botón izquierdo del ratón para mover el "
 "limpiaparabrisas en X o en Y."
 
-#: mrvPanels/mrvComparePanel.cpp:371
+#: mrvPanels/mrvComparePanel.cpp:370
 msgid ""
 "Wipe between the A and B files\n"
 "\n"
@@ -3181,71 +3181,71 @@ msgstr ""
 "Use la tecla Alt + botón izquierdo del ratón para mover el limpiaparabrisas "
 "en X o en Y."
 
-#: mrvPanels/mrvComparePanel.cpp:392
+#: mrvPanels/mrvComparePanel.cpp:391
 msgid "Overlay the A and B files with optional transparencyy"
 msgstr "Superponer los archivos A y B con transparencia opcional"
 
-#: mrvPanels/mrvComparePanel.cpp:407
+#: mrvPanels/mrvComparePanel.cpp:406
 msgid "Difference the A and B files"
 msgstr "Diferencia entre los archivos A y B"
 
-#: mrvPanels/mrvComparePanel.cpp:422
+#: mrvPanels/mrvComparePanel.cpp:421
 msgid "Compare the A and B files side by side"
 msgstr "Comparar los archivos A y B de lado"
 
-#: mrvPanels/mrvComparePanel.cpp:437
+#: mrvPanels/mrvComparePanel.cpp:436
 msgid "Show the A file above the B file"
 msgstr "Mueste el archivo A sobre el B"
 
-#: mrvPanels/mrvComparePanel.cpp:452
+#: mrvPanels/mrvComparePanel.cpp:451
 msgid "Tile the A and B files"
 msgstr "Ponga en Mosaico los archivos A y B"
 
-#: mrvPanels/mrvComparePanel.cpp:492
+#: mrvPanels/mrvComparePanel.cpp:491
 msgid "Wipe"
 msgstr "Limpiaparabrisas"
 
-#: mrvPanels/mrvComparePanel.cpp:522
+#: mrvPanels/mrvComparePanel.cpp:521
 msgid "Use the Option key + left mouse button to move the wipe in X."
 msgstr ""
 "Use la tecla Opción + el botón izquierdo del ratón para mover la comparación "
 "en X."
 
-#: mrvPanels/mrvComparePanel.cpp:525
+#: mrvPanels/mrvComparePanel.cpp:524
 msgid "Use the Alt key + left mouse button to move the wipe in X."
 msgstr ""
 "Use la tecla Alt + el botón izquierdo del ratón para mover la comparación en "
 "X."
 
-#: mrvPanels/mrvComparePanel.cpp:545
+#: mrvPanels/mrvComparePanel.cpp:544
 msgid "Use the Option key + left mouse button to move the wipe in Y."
 msgstr ""
 "Use la tecla Opción + el botón izquierdo del ratón para mover la comparación "
 "en Y."
 
-#: mrvPanels/mrvComparePanel.cpp:548
+#: mrvPanels/mrvComparePanel.cpp:547
 msgid "Use the Alt key + left mouse button to move the wipe in Y."
 msgstr ""
 "Use la tecla Alt + el botón izquierdo del ratón para mover la comparación en "
 "Y."
 
-#: mrvPanels/mrvComparePanel.cpp:567
+#: mrvPanels/mrvComparePanel.cpp:566
 msgid "Wipe Rotation.  Use Shift + left mouse button along X to rotate wipe."
 msgstr ""
 "Rotación del limpiaparabrisas.  Use Shift + botón izquierdo del ratón a lo "
 "largo de X para rotar la comparación."
 
-#: mrvPanels/mrvComparePanel.cpp:588 mrvPanels/mrvComparePanel.cpp:614
+#: mrvPanels/mrvComparePanel.cpp:587 mrvPanels/mrvComparePanel.cpp:613
 msgid "Overlay"
 msgstr "Superponer"
 
-#: mrvPanels/mrvComparePanel.cpp:622
+#: mrvPanels/mrvComparePanel.cpp:621
 msgid "Use the Option key + left mouse button to change transparency."
 msgstr ""
 "Use la tecla Opción + el botón izquierdo del ratón para cambiar la "
 "transparencia."
 
-#: mrvPanels/mrvComparePanel.cpp:625
+#: mrvPanels/mrvComparePanel.cpp:624
 msgid "Use the Alt key + left mouse button to change transparency."
 msgstr ""
 "Use la tecla Alt + el botón izquierdo del ratón para cambiar la "
@@ -3464,39 +3464,39 @@ msgstr "Hace la siguiente anotación presente en todos los cuadros."
 msgid "Notes"
 msgstr "Notas"
 
-#: mrvEdit/mrvEditCallbacks.cpp:174
+#: mrvEdit/mrvEditCallbacks.cpp:175
 msgid "Invalid index for add clip to timeline."
 msgstr "Índice inválido para agregar clip a la linea de tiempo."
 
-#: mrvEdit/mrvEditCallbacks.cpp:307 mrvEdit/mrvEditCallbacks.cpp:1991
+#: mrvEdit/mrvEditCallbacks.cpp:308 mrvEdit/mrvEditCallbacks.cpp:1992
 msgid "Could not get current path."
 msgstr "No pude obtener el camino actual."
 
-#: mrvEdit/mrvEditCallbacks.cpp:690
+#: mrvEdit/mrvEditCallbacks.cpp:691
 msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
 msgstr "Item de EDL '{0}' ya no está cargado.  No puedo deshacer ni rehacer."
 
-#: mrvEdit/mrvEditCallbacks.cpp:992
+#: mrvEdit/mrvEditCallbacks.cpp:993
 msgid "Could not paste {0}.  Error {1}."
 msgstr "No pude pegar {0}.  Error {1}."
 
-#: mrvEdit/mrvEditCallbacks.cpp:1547
+#: mrvEdit/mrvEditCallbacks.cpp:1548
 msgid "Could not save .otio file: {0}"
 msgstr "No pude grabar el archivo .otio: {0}"
 
-#: mrvEdit/mrvEditCallbacks.cpp:1571
+#: mrvEdit/mrvEditCallbacks.cpp:1572
 msgid "Error saving {0}. {1}"
 msgstr "Error grabando {0}. {1}"
 
-#: mrvEdit/mrvEditCallbacks.cpp:1601
+#: mrvEdit/mrvEditCallbacks.cpp:1602
 msgid "Empty EDL file.  Not saving."
 msgstr "Archivo EDL vacío.  No grabando."
 
-#: mrvEdit/mrvEditCallbacks.cpp:1972
+#: mrvEdit/mrvEditCallbacks.cpp:1973
 msgid "Destination file is invalid."
 msgstr "Archivo de destino es inválido."
 
-#: mrvEdit/mrvEditCallbacks.cpp:1978
+#: mrvEdit/mrvEditCallbacks.cpp:1979
 msgid "You can only add clips to an .otio EDL playlist."
 msgstr "Sólo puede agregar clips a una lista de reproduccion (EDL) de .otio."
 
@@ -3606,15 +3606,15 @@ msgstr "Ejemplo:  gizmo_v003.0001.exr"
 msgid "Annotation already existed at this time"
 msgstr "Anotación ya existía en este tiempo"
 
-#: mrvFl/mrvSession.cpp:353
+#: mrvFl/mrvSession.cpp:354
 msgid "Session saved to \"{0}\"."
 msgstr "Sesión grabada a \"{0}\"."
 
-#: mrvFl/mrvSession.cpp:371
+#: mrvFl/mrvSession.cpp:372
 msgid "Failed to open the file for reading."
 msgstr "Fallé en abrir el archivo para leer."
 
-#: mrvFl/mrvSession.cpp:385
+#: mrvFl/mrvSession.cpp:386
 msgid "Failed to load the file."
 msgstr "Fallé en cargar al archivo."
 
@@ -4122,11 +4122,11 @@ msgstr "Render/Filtro Minificación/Linear"
 msgid "Render/Magnify Filter/Linear"
 msgstr "Render/Filtro Magnificación/Linear"
 
-#: mrvGL/mrvTimelineViewportEvents.cpp:321
+#: mrvGL/mrvTimelineViewportEvents.cpp:339
 msgid "Unknown action mode in "
 msgstr "Modo de acción desconocido en "
 
-#: mrvGL/mrvTimelineViewportEvents.cpp:509
+#: mrvGL/mrvTimelineViewportEvents.cpp:524
 msgid ""
 "Cannot create an annotation here for all frames.  A current frame annotation "
 "already exists."
@@ -4134,7 +4134,7 @@ msgstr ""
 "No puedo crear una anotación aquí para todos los cuadros.  Una anotación "
 "para el cuadro ya existe."
 
-#: mrvGL/mrvTimelineViewportEvents.cpp:517
+#: mrvGL/mrvTimelineViewportEvents.cpp:532
 msgid ""
 "Cannot create an annotation here for current frame.  An all frames "
 "annotation already exists."
@@ -4142,7 +4142,7 @@ msgstr ""
 "No puedo crear una anotación aquí para el cuadro actual.  Una anotación para "
 "todos los cuadros ya existe."
 
-#: mrvGL/mrvTimelineViewportEvents.cpp:970
+#: mrvGL/mrvTimelineViewportEvents.cpp:1021
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:182
 #: mrvCore/mrvHotkey.cpp:392
 msgid "Stop"
@@ -6770,206 +6770,206 @@ msgstr "Acepte el archivo OCIO seleccionado."
 msgid "Cancel the OCIO selection and don't change anything."
 msgstr "Cancele la selección de OCIO y no cambie nada."
 
-#: mrvFLU/Flu_File_Chooser.cpp:510
+#: mrvFLU/Flu_File_Chooser.cpp:511
 msgid "3GP Movie"
 msgstr "Película 3GP"
 
-#: mrvFLU/Flu_File_Chooser.cpp:511
+#: mrvFLU/Flu_File_Chooser.cpp:512
 msgid "Advanced Systems Format Media"
 msgstr "Advanced Systems Format Media"
 
-#: mrvFLU/Flu_File_Chooser.cpp:512 mrvFLU/Flu_File_Chooser.cpp:513
-#: mrvFLU/Flu_File_Chooser.cpp:518 mrvFLU/Flu_File_Chooser.cpp:519
-#: mrvFLU/Flu_File_Chooser.cpp:533
+#: mrvFLU/Flu_File_Chooser.cpp:513 mrvFLU/Flu_File_Chooser.cpp:514
+#: mrvFLU/Flu_File_Chooser.cpp:519 mrvFLU/Flu_File_Chooser.cpp:520
+#: mrvFLU/Flu_File_Chooser.cpp:534
 msgid "AVCHD Video"
 msgstr "Video AVCHD"
 
-#: mrvFLU/Flu_File_Chooser.cpp:514
+#: mrvFLU/Flu_File_Chooser.cpp:515
 msgid "AVI Movie"
 msgstr "Película AVI"
 
-#: mrvFLU/Flu_File_Chooser.cpp:515
+#: mrvFLU/Flu_File_Chooser.cpp:516
 msgid "DIVX Movie"
 msgstr "Película DIVX"
 
-#: mrvFLU/Flu_File_Chooser.cpp:516
+#: mrvFLU/Flu_File_Chooser.cpp:517
 msgid "Digital Video"
 msgstr "Vídeo Digital"
 
-#: mrvFLU/Flu_File_Chooser.cpp:517
+#: mrvFLU/Flu_File_Chooser.cpp:518
 msgid "Flash Movie"
 msgstr "Película Flash"
 
-#: mrvFLU/Flu_File_Chooser.cpp:520
+#: mrvFLU/Flu_File_Chooser.cpp:521
 msgid "Apple's M4V Movie"
 msgstr "Película M4V de Apple"
 
-#: mrvFLU/Flu_File_Chooser.cpp:521
+#: mrvFLU/Flu_File_Chooser.cpp:522
 msgid "Matroska Movie"
 msgstr "Película Matroska"
 
-#: mrvFLU/Flu_File_Chooser.cpp:522 mrvFLU/Flu_File_Chooser.cpp:531
+#: mrvFLU/Flu_File_Chooser.cpp:523 mrvFLU/Flu_File_Chooser.cpp:532
 msgid "Quicktime Movie"
 msgstr "Película Quicktime"
 
-#: mrvFLU/Flu_File_Chooser.cpp:523
+#: mrvFLU/Flu_File_Chooser.cpp:524
 msgid "MP4 Movie"
 msgstr "Película MP4"
 
-#: mrvFLU/Flu_File_Chooser.cpp:524 mrvFLU/Flu_File_Chooser.cpp:525
+#: mrvFLU/Flu_File_Chooser.cpp:525 mrvFLU/Flu_File_Chooser.cpp:526
 msgid "MPEG Movie"
 msgstr "Película MPEG"
 
-#: mrvFLU/Flu_File_Chooser.cpp:526
+#: mrvFLU/Flu_File_Chooser.cpp:527
 msgid "MXF Movie"
 msgstr "Película MXF"
 
-#: mrvFLU/Flu_File_Chooser.cpp:527
+#: mrvFLU/Flu_File_Chooser.cpp:528
 msgid "Ogg Movie"
 msgstr "Película Ogg"
 
-#: mrvFLU/Flu_File_Chooser.cpp:528
+#: mrvFLU/Flu_File_Chooser.cpp:529
 msgid "Ogg Video"
 msgstr "Vídeo Ogg"
 
-#: mrvFLU/Flu_File_Chooser.cpp:529
+#: mrvFLU/Flu_File_Chooser.cpp:530
 msgid "OpenTimelineIO EDL"
 msgstr "LDE de OpenTimelineIO."
 
-#: mrvFLU/Flu_File_Chooser.cpp:530
+#: mrvFLU/Flu_File_Chooser.cpp:531
 msgid "OpenTimelineIO Zipped EDL"
 msgstr "Zip LDE de OpenTimelineIO."
 
-#: mrvFLU/Flu_File_Chooser.cpp:532
+#: mrvFLU/Flu_File_Chooser.cpp:533
 msgid "Real Media Movie"
 msgstr "Película Real Media"
 
-#: mrvFLU/Flu_File_Chooser.cpp:534
+#: mrvFLU/Flu_File_Chooser.cpp:535
 msgid "VOB Movie"
 msgstr "Película VOB"
 
-#: mrvFLU/Flu_File_Chooser.cpp:535
+#: mrvFLU/Flu_File_Chooser.cpp:536
 msgid "WebM Movie"
 msgstr "Película WebM"
 
-#: mrvFLU/Flu_File_Chooser.cpp:536
+#: mrvFLU/Flu_File_Chooser.cpp:537
 msgid "WMV Movie"
 msgstr "Película WMV"
 
-#: mrvFLU/Flu_File_Chooser.cpp:538
+#: mrvFLU/Flu_File_Chooser.cpp:539
 msgid "Bitmap Picture"
 msgstr "Película Bitmap"
 
-#: mrvFLU/Flu_File_Chooser.cpp:539
+#: mrvFLU/Flu_File_Chooser.cpp:540
 msgid "Cineon Picture"
 msgstr "Dibujo Cineon"
 
-#: mrvFLU/Flu_File_Chooser.cpp:540
+#: mrvFLU/Flu_File_Chooser.cpp:541
 msgid "Canon Raw Picture"
 msgstr "Dibujo Canon Raw"
 
-#: mrvFLU/Flu_File_Chooser.cpp:541
+#: mrvFLU/Flu_File_Chooser.cpp:542
 msgid "Kodak Digital Negative"
 msgstr "Negativo Digital de Kodac"
 
-#: mrvFLU/Flu_File_Chooser.cpp:542
+#: mrvFLU/Flu_File_Chooser.cpp:543
 msgid "DPX Picture"
 msgstr "Dibujo DPX"
 
-#: mrvFLU/Flu_File_Chooser.cpp:543
+#: mrvFLU/Flu_File_Chooser.cpp:544
 msgid "EXR Picture"
 msgstr "Dibujo EXR"
 
-#: mrvFLU/Flu_File_Chooser.cpp:544
+#: mrvFLU/Flu_File_Chooser.cpp:545
 msgid "HDRI Picture"
 msgstr "Dibujo HDRI"
 
-#: mrvFLU/Flu_File_Chooser.cpp:545 mrvFLU/Flu_File_Chooser.cpp:554
-#: mrvFLU/Flu_File_Chooser.cpp:555
+#: mrvFLU/Flu_File_Chooser.cpp:546 mrvFLU/Flu_File_Chooser.cpp:555
+#: mrvFLU/Flu_File_Chooser.cpp:556
 msgid "TIFF Picture"
 msgstr "Dibujo TIFF"
 
-#: mrvFLU/Flu_File_Chooser.cpp:546
+#: mrvFLU/Flu_File_Chooser.cpp:547
 msgid "IFF Picture"
 msgstr "Dibujo IFF"
 
-#: mrvFLU/Flu_File_Chooser.cpp:547 mrvFLU/Flu_File_Chooser.cpp:548
+#: mrvFLU/Flu_File_Chooser.cpp:548 mrvFLU/Flu_File_Chooser.cpp:549
 msgid "JPEG Picture"
 msgstr "Dibujo JPEG"
 
-#: mrvFLU/Flu_File_Chooser.cpp:549
+#: mrvFLU/Flu_File_Chooser.cpp:550
 msgid "Map Picture"
 msgstr "Dibujo Map"
 
-#: mrvFLU/Flu_File_Chooser.cpp:550
+#: mrvFLU/Flu_File_Chooser.cpp:551
 msgid "GIF Picture"
 msgstr "Dibujo GIF"
 
-#: mrvFLU/Flu_File_Chooser.cpp:551
+#: mrvFLU/Flu_File_Chooser.cpp:552
 msgid "Softimage Picture"
 msgstr "Dibujo Softimage"
 
-#: mrvFLU/Flu_File_Chooser.cpp:552
+#: mrvFLU/Flu_File_Chooser.cpp:553
 msgid "PNG Picture"
 msgstr "Dibujo PNG"
 
-#: mrvFLU/Flu_File_Chooser.cpp:553
+#: mrvFLU/Flu_File_Chooser.cpp:554
 msgid "RGB Picture"
 msgstr "Dibujo RGB"
 
-#: mrvFLU/Flu_File_Chooser.cpp:557
+#: mrvFLU/Flu_File_Chooser.cpp:558
 msgid "MP3 music"
 msgstr "Música MP3"
 
-#: mrvFLU/Flu_File_Chooser.cpp:558
+#: mrvFLU/Flu_File_Chooser.cpp:559
 msgid "OGG Vorbis music"
 msgstr "Música OGG Vorbis"
 
-#: mrvFLU/Flu_File_Chooser.cpp:559
+#: mrvFLU/Flu_File_Chooser.cpp:560
 msgid "Wave music"
 msgstr "Múscia Wave"
 
-#: mrvFLU/Flu_File_Chooser.cpp:3504
+#: mrvFLU/Flu_File_Chooser.cpp:3505
 msgid "Jan"
 msgstr "Ene"
 
-#: mrvFLU/Flu_File_Chooser.cpp:3506
+#: mrvFLU/Flu_File_Chooser.cpp:3507
 msgid "Feb"
 msgstr "Feb"
 
-#: mrvFLU/Flu_File_Chooser.cpp:3508
+#: mrvFLU/Flu_File_Chooser.cpp:3509
 msgid "Mar"
 msgstr "Mar"
 
-#: mrvFLU/Flu_File_Chooser.cpp:3510
+#: mrvFLU/Flu_File_Chooser.cpp:3511
 msgid "Apr"
 msgstr "Abr"
 
-#: mrvFLU/Flu_File_Chooser.cpp:3512
+#: mrvFLU/Flu_File_Chooser.cpp:3513
 msgid "May"
 msgstr "May"
 
-#: mrvFLU/Flu_File_Chooser.cpp:3514
+#: mrvFLU/Flu_File_Chooser.cpp:3515
 msgid "Jun"
 msgstr "Jun"
 
-#: mrvFLU/Flu_File_Chooser.cpp:3516
+#: mrvFLU/Flu_File_Chooser.cpp:3517
 msgid "Jul"
 msgstr "Jul"
 
-#: mrvFLU/Flu_File_Chooser.cpp:3518
+#: mrvFLU/Flu_File_Chooser.cpp:3519
 msgid "Aug"
 msgstr "Ago"
 
-#: mrvFLU/Flu_File_Chooser.cpp:3520
+#: mrvFLU/Flu_File_Chooser.cpp:3521
 msgid "Sep"
 msgstr "Sep"
 
-#: mrvFLU/Flu_File_Chooser.cpp:3522
+#: mrvFLU/Flu_File_Chooser.cpp:3523
 msgid "Oct"
 msgstr "Oct"
 
-#: mrvFLU/Flu_File_Chooser.cpp:3524
+#: mrvFLU/Flu_File_Chooser.cpp:3525
 msgid "Nov"
 msgstr "Nov"
 

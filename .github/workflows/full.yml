@@ -44,6 +44,9 @@ jobs:
     - name: Install ninja-build
       run: sudo apt-get install -y ninja-build
       
+    - name: Install meson
+      run: sudo apt-get install meson
+      
     - name: Install gettext
       run: sudo apt-get install -y gettext
       
@@ -100,7 +103,7 @@ jobs:
 
     - name: Setup environment
       run: mkdir -p ssh
-
+      
     - name: Decode SSH key
       run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ssh/id_rsa
       shell: bash
@@ -193,6 +196,9 @@ jobs:
     - name: Install automake
       run: brew install automake
 
+    - name: Install meson
+      run: brew install meson
+      
     - name: Install GNU sed
       run: brew install gnu-sed
       

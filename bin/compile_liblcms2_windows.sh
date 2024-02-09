@@ -23,7 +23,7 @@ fi
 #
 # Set the main tag to compile
 #
-LCMS_BRANCH=lcms2.15
+LCMS_BRANCH=lcms2.16
 
 if [[ $KERNEL != *Msys* ]]; then
     echo
@@ -43,12 +43,7 @@ if [[ ! -e $INSTALLDIR/lib/liblcms2.lib ]]; then
     #
     pacman -Sy --noconfirm
 
-    #
-    # Remove gcc
-    #
-    pacman -R gcc --noconfirm
-    
-    # pacman -Sy mingw-w64-x86_64-toolchain --noconfirm
+    pacman -Sy binutils --noconfirm
     
     #
     # Clone the repository
@@ -63,16 +58,26 @@ if [[ ! -e $INSTALLDIR/lib/liblcms2.lib ]]; then
     # Run configure
     #
     cd LCMS2
-    run_cmd ./configure --enable-shared --disable-static --prefix=$INSTALLDIR
+    
+    export CC=cl
+    export CXX=cl
+    export LD=link
+    run_cmd ./configure --build=mingw64 --enable-shared --disable-static --prefix=$INSTALLDIR
     
     #
     # Compile and install the library
     #
     make -j ${CPU_CORES} install
 
-    run_cmd mv $INSTALLDIR/lib/liblcms2.a $INSTALLDIR/lib/liblcms2.lib
+    echo "Compiled result:"
+    echo
+    ls $INSTALLDIR/lib/*lcms2*
+    echo
+    
+    run_cmd mv $INSTALLDIR/lib/lcms2.dll.lib $INSTALLDIR/lib/liblcms2.lib
     
     cd $MRV2_ROOT
 else
     echo "liblcms2 already installed."
 fi
+
