@@ -44,6 +44,9 @@ jobs:
     - name: Install ninja-build
       run: sudo apt-get install -y ninja-build
       
+    - name: Install meson
+      run: sudo apt-get install meson
+      
     - name: Install gettext
       run: sudo apt-get install -y gettext
       
@@ -124,7 +127,7 @@ jobs:
       
     - name: Build mrv2
       run: |
-        ./runme_nolog.sh -t package -D TLRENDER_USD=OFF
+        ./runme_nolog.sh -t package -D TLRENDER_USD=OFF -D TLRENDER_AV1=OFF
       
     - name: Upload binaries
       run: |
@@ -193,6 +196,9 @@ jobs:
     - name: Install automake
       run: brew install automake
 
+    - name: Install meson
+      run: brew install meson
+      
     - name: Install GNU sed
       run: brew install gnu-sed
       
