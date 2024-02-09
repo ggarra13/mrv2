@@ -42,6 +42,8 @@ if [[ ! -e $INSTALLDIR/lib/liblcms2.lib ]]; then
     # Install development tools
     #
     pacman -Sy --noconfirm
+
+    pacman -Sy binutils --noconfirm
     
     #
     # Clone the repository
