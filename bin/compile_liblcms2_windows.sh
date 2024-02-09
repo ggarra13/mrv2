@@ -62,7 +62,7 @@ if [[ ! -e $INSTALLDIR/lib/liblcms2.lib ]]; then
     export CC=cl
     export CXX=cl
     export LD=link
-    ./configure --enable-shared --disable-static --prefix=$INSTALLDIR
+    run_cmd ./configure --build=mingw64 --enable-shared --disable-static --prefix=$INSTALLDIR
     
     #
     # Compile and install the library
@@ -70,11 +70,14 @@ if [[ ! -e $INSTALLDIR/lib/liblcms2.lib ]]; then
     make -j ${CPU_CORES} install
 
     echo "Compiled result:"
+    echo
     ls $INSTALLDIR/lib/*lcms2*
+    echo
     
-    run_cmd mv $INSTALLDIR/lib/liblcms2.a $INSTALLDIR/lib/liblcms2.lib
+    run_cmd mv $INSTALLDIR/lib/lcms2.dll.lib $INSTALLDIR/lib/liblcms2.lib
     
     cd $MRV2_ROOT
 else
     echo "liblcms2 already installed."
 fi
+
