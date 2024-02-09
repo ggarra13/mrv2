@@ -3,7 +3,7 @@ name: FLTK Builds
 on: [push]
 
 jobs:
-  linux-python-build:
+  linux-fltk-build:
     runs-on: ubuntu-20.04
 
     steps:
@@ -68,7 +68,7 @@ jobs:
     #     ./bin/upload_sourceforge.sh
 
 
-  windows-python-build:
+  windows-fltk-build:
     runs-on: windows-2019
 
     defaults:
@@ -111,7 +111,7 @@ jobs:
     #     ./bin/upload_sourceforge.sh
 
 
-  macos-python-build:
+  macos-fltk-build:
     runs-on: macos-11
 
     steps:
@@ -156,7 +156,7 @@ jobs:
     #     ./bin/upload_sourceforge.sh
 
 
-  macos-m1-python-build:
+  macos-m1-fltk-build:
     runs-on: macos-14
   
     steps:
