@@ -42,6 +42,8 @@ if [[ ! -e $INSTALLDIR/lib/liblcms2.lib ]]; then
     # Install development tools
     #
     pacman -Sy --noconfirm
+
+    pacman -R gcc g++
     
     # pacman -Sy mingw-w64-x86_64-toolchain --noconfirm
     
