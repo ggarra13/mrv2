@@ -82,6 +82,10 @@ for i in "$@"; do
 	    export MRV2_DIST_RELEASE=1
 	    shift
 	    ;;
+	--rocky|-rocky)
+	    shift
+	    BUILD_ROOT=${BUILD_ROOT}-rocky
+	    ;;
 	--ndi|-ndi)
 	    shift
 	    BUILD_ROOT=${BUILD_ROOT}-ndi

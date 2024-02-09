@@ -180,7 +180,11 @@ sudo dnf -y groupinstall "Development Tools" \
 
 # Install IPC::Cmd non-interactively
 sudo cpan App::cpanminus && cpanm --notest IPC::Cmd
-    
+
+# Install python3 and meson
+sudo dnf -y install python3
+sudo pip3 install meson
+
 #
 # Install dependencies
 #

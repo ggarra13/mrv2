@@ -40,6 +40,11 @@ RUN dnf -y install git wget cmake pango-devel gettext ninja-build \
 RUN dnf -y install python39 libXt-devel
 
 #
+# Install meson for dav1d codec
+#
+RUN pip3 install meson
+
+#
 # Install Wayland dependencies (currently broken in NVIDIA driver)
 #
 RUN dnf -y install autoconf wayland-devel wayland-protocols-devel cairo-devel \
