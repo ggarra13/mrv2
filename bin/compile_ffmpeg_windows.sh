@@ -117,6 +117,7 @@ BUILD_LIBDAV1D=1
 if [[ $has_meson == 0 ]]; then
     if [[ $has_pip3 == 1 ]]; then
 	pip3 install meson
+	has_meson=1
     else
 	echo "Please install meson from https://github.com/mesonbuild/meson/releases"
 	BUILD_LIBDAV1D=0
@@ -168,11 +169,6 @@ mkdir -p build
 #
 ENABLE_LIBDAV1D=""
 if [[ $BUILD_LIBDAV1D == 1 ]]; then
-
-
-    
-    pip3 install meson
-    
     
     cd $ROOT_DIR/sources
 
