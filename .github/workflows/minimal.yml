@@ -159,41 +159,41 @@ jobs:
     #     ./bin/upload_sourceforge.sh
 
 
-  # macos-m1-minimal-build:
-  #   runs-on: macos-13-xlarge
+  macos-m1-minimal-build:
+    runs-on: macos-14
 
-  #   steps:
+    steps:
     
-  #   - uses: actions/checkout@v4
-  #     with:
-  #       submodules: recursive
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
 
-  #   - name: Install ninja-build
-  #     run: brew install ninja
+    - name: Install ninja-build
+      run: brew install ninja
       
-  #   - name: Install automake
-  #     run: brew install automake
+    - name: Install automake
+      run: brew install automake
 
-  #   - name: Install GNU sed
-  #     run: brew install gnu-sed
+    - name: Install GNU sed
+      run: brew install gnu-sed
       
-  #   - name: Install Python dependencies
-  #     run: brew install libffi openssl readline sqlite3 xz zlib
+    - name: Install Python dependencies
+      run: brew install libffi openssl readline sqlite3 xz zlib
 
-  #   - name: Setup environment
-  #     run: mkdir -p ssh
+    - name: Setup environment
+      run: mkdir -p ssh
 
-  #   - name: Decode SSH key
-  #     run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ssh/id_rsa
-  #     shell: bash
+    - name: Decode SSH key
+      run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ssh/id_rsa
+      shell: bash
   
-  #   - name: Set permissions on SSH key
-  #     run: chmod 600 ssh/id_rsa
+    - name: Set permissions on SSH key
+      run: chmod 600 ssh/id_rsa
 
-  #   - name: Build mrv2
-  #     run: |
-  #       ./runme_nolog.sh -D TLRENDER_USD=OFF -D TLRENDER_FFMPEG=OFF -D MRV2_PDF=OFF -D MRV2_NETWORK=OFF -D MRV2_PYBIND11=OFF -D MRV2_PYFLTK=OFF -D BUILD_PYTHON=OFF -D TLRENDER_EXR=OFF -D TLRENDER_RAW=OFF -D TLRENDER_NET=OFF -D TLRENDER_TIFF=OFF
+    - name: Build mrv2
+      run: |
+        ./runme_nolog.sh -D TLRENDER_USD=OFF -D TLRENDER_FFMPEG=OFF -D MRV2_PDF=OFF -D MRV2_NETWORK=OFF -D MRV2_PYBIND11=OFF -D MRV2_PYFLTK=OFF -D BUILD_PYTHON=OFF -D TLRENDER_EXR=OFF -D TLRENDER_RAW=OFF -D TLRENDER_NET=OFF -D TLRENDER_TIFF=OFF
 
-  # #   - name: Upload binaries
-  # #      run: |
-  # #        ./bin/upload_sourceforge.sh
+  #   - name: Upload binaries
+  #      run: |
+  #        ./bin/upload_sourceforge.sh
