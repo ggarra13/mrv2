@@ -3389,11 +3389,6 @@ Flu_File_Chooser::toTLRenderTime(const Flu_File_Chooser::Entry* e)
         int64_t frame = atoi(number.c_str());
         time = otime::RationalTime(frame, 24.0);
     }
-    else if (e->type == ENTRY_FILE)
-    {
-        time = otime::RationalTime(0.0, 24.0);
-    }
-
     return time;
 }
 

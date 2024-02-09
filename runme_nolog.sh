@@ -64,12 +64,22 @@ if [ -z "$TLRENDER_FFMPEG" ]; then
     export TLRENDER_FFMPEG=ON
 fi
 
-if [ -z "$TLRENDER_NDI" ]; then
-    export TLRENDER_NDI=OFF
+if [ -z "$TLRENDER_NDI_SDK" ]; then
+    if [[ $KERNEL == *Linux* ]]; then
+	export TLRENDER_NDI_SDK="/home/gga/code/lib/NDI\ SDK\ for\ Linux/"
+    elif [[ $KERNEL == *Msys* ]]; then
+	export TLRENDER_NDI_SDK="C:/Program\ Files/NDI/NDI\ 5\ SDK/"
+    else
+	export TLRENDER_NDI_SDK="/Library/NDI\ SDK\ for\ Apple/"
+    fi
 fi
 
-if [ -z "$TLRENDER_NDI_SDK" ]; then
-    export TLRENDER_NDI_SDK=""
+if [ -z "$TLRENDER_NDI" ]; then
+    if [[ -d "$TLRENDER_NDI_SDK" ]]; then
+	export TLRENDER_NDI=ON
+    else
+	export TLRENDER_NDI=OFF
+    fi
 fi
 
 if [ -z "$TLRENDER_NET" ]; then
