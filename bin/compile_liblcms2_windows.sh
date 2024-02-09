@@ -58,6 +58,7 @@ if [[ ! -e $INSTALLDIR/lib/liblcms2.lib ]]; then
     cd LCMS2
     export CC=cl
     export CXX=cl
+    export LD=/usr/bin/ld
     ./configure --enable-shared --disable-static --prefix=$INSTALLDIR
     
     #
