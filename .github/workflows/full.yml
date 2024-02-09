@@ -104,6 +104,9 @@ jobs:
     - name: Setup environment
       run: mkdir -p ssh
 
+    - name: Install meson
+      run: pip3 install meson
+      
     - name: Decode SSH key
       run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ssh/id_rsa
       shell: bash
@@ -127,7 +130,7 @@ jobs:
       
     - name: Build mrv2
       run: |
-        ./runme_nolog.sh -t package -D TLRENDER_USD=OFF -D TLRENDER_AV1=OFF
+        ./runme_nolog.sh -t package -D TLRENDER_USD=OFF
       
     - name: Upload binaries
       run: |
