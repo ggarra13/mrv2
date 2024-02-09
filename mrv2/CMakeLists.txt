@@ -33,21 +33,19 @@ if ( UNIX )
     link_directories(${CMAKE_INSTALL_PREFIX}/lib)
 endif()
 
-set( FLTK_INCLUDE_DIR ${CMAKE_PREFIX_PATH}/include )
-
 find_package(FLTK CONFIG REQUIRED)
 
-set(FLTK_LIBRARIES fltk::fltk fltk::images-shared )
-set(FLTK_gl_LIBRARY fltk::gl-shared)
+if(MSVC)
+    set(FLTK_LIBRARIES fltk::fltk-shared )
+    set(FLTK_gl_LIBRARY )
+else()
+    set(FLTK_LIBRARIES fltk::images-shared )
+    set(FLTK_gl_LIBRARY fltk::gl-shared)
+endif()
 
 #
 # Make sure we use our own recently compiled fluid executable
 #
-if( WIN32 )
-    set( FLTK_FLUID_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/fluid-cmd.exe)
-else()
-    set( FLTK_FLUID_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/fluid)
-endif()
 message( STATUS "Found FLTK: ${FLTK_INCLUDE_DIR}" )
 message( STATUS "FLTK LIBRARIES: ${FLTK_gl_LIBRARY} ${FLTK_LIBRARIES}" )
 message( STATUS "FLTK_FLUID_EXECUTABLE: ${FLTK_FLUID_EXECUTABLE}" )
