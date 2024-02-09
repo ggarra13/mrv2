@@ -58,9 +58,10 @@ if [[ ! -e $INSTALLDIR/lib/liblcms2.lib ]]; then
     # Run configure
     #
     cd LCMS2
+    
     export CC=cl
     export CXX=cl
-    export LD=/usr/bin/ld
+    export LD=link
     ./configure --enable-shared --disable-static --prefix=$INSTALLDIR
     
     #
@@ -69,7 +70,7 @@ if [[ ! -e $INSTALLDIR/lib/liblcms2.lib ]]; then
     make -j ${CPU_CORES} install
 
     echo "Compiled result:"
-    ls $INSTALLDIR/lib/liblcms2*
+    ls $INSTALLDIR/lib/*lcms2*
     
     run_cmd mv $INSTALLDIR/lib/liblcms2.a $INSTALLDIR/lib/liblcms2.lib
     
