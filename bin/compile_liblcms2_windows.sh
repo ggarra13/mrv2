@@ -23,7 +23,7 @@ fi
 #
 # Set the main tag to compile
 #
-LCMS_BRANCH=lcms2.15
+LCMS_BRANCH=lcms2.16
 
 if [[ $KERNEL != *Msys* ]]; then
     echo
@@ -42,10 +42,6 @@ if [[ ! -e $INSTALLDIR/lib/liblcms2.lib ]]; then
     # Install development tools
     #
     pacman -Sy --noconfirm
-
-    pacman -R gcc g++
-    
-    # pacman -Sy mingw-w64-x86_64-toolchain --noconfirm
     
     #
     # Clone the repository
@@ -60,13 +56,17 @@ if [[ ! -e $INSTALLDIR/lib/liblcms2.lib ]]; then
     # Run configure
     #
     cd LCMS2
-    CC=cl ./configure --enable-shared --disable-static --prefix=$INSTALLDIR
+    export CC=cl
+    ./configure --enable-shared --disable-static --prefix=$INSTALLDIR
     
     #
     # Compile and install the library
     #
     make -j ${CPU_CORES} install
 
+    echo "Compiled result:"
+    ls $INSTALLDIR/lib/liblcms2*
+    
     run_cmd mv $INSTALLDIR/lib/liblcms2.a $INSTALLDIR/lib/liblcms2.lib
     
     cd $MRV2_ROOT
