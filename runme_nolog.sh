@@ -75,6 +75,7 @@ if [ -z "$TLRENDER_NDI_SDK" ]; then
 fi
 
 if [ -z "$TLRENDER_NDI" ]; then
+    echo "Checking $TLRENDER_NDI_SDK for NDI..."
     if [[ -d "$TLRENDER_NDI_SDK" ]]; then
 	export TLRENDER_NDI=ON
     else

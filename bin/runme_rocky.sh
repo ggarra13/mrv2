@@ -31,7 +31,5 @@ export BUILD_DIR=BUILD-$KERNEL-$ARCH-rocky/Release
 
 mkdir -p $BUILD_DIR
 
-export TLRENDER_NDI=ON
-
 cmd="./runme_nolog.sh -rocky $params 2>&1 | tee $BUILD_DIR/compile.log"
 run_cmd $cmd
