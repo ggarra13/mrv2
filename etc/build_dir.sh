@@ -83,8 +83,10 @@ fi
 
 if [[ $RUNME == 1 && $0 != *runme.sh* && $0 != runme_minimal.sh ]]; then
 
-    if [[ ! -e $BUILD_DIR/install/bin/cmake ]]; then
-	./etc/install_cmake.sh
+    if [[ $KERNEL == *Linux* ]]; then
+	if [[ ! -e $BUILD_DIR/install/bin/cmake ]]; then
+	    ./etc/install_cmake.sh
+	fi
     fi
     
     echo "Build directory is ${BUILD_DIR}"
