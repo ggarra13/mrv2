@@ -175,8 +175,8 @@ sudo dnf makecache --refresh
 #
 # Install bundles
 #
-sudo dnf -y groupinstall "Development Tools" \
-    && dnf -y install perl perl-CPAN
+sudo dnf -y groupinstall "Development Tools"
+sudo dnf -y install perl perl-CPAN
 
 # Install IPC::Cmd non-interactively
 sudo cpan App::cpanminus && cpanm --notest IPC::Cmd
