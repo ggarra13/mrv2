@@ -82,6 +82,11 @@ if [[ $KERNEL == *Msys* ]]; then
 fi
 
 if [[ $RUNME == 1 && $0 != *runme.sh* && $0 != runme_minimal.sh ]]; then
+
+    if [[ ! -e $BUILD_DIR/install/bin/cmake ]]; then
+	./etc/install_cmake.sh
+    fi
+    
     echo "Build directory is ${BUILD_DIR}"
     echo "Version to build is v${mrv2_VERSION}"
     echo "Architecture is ${ARCH}"
