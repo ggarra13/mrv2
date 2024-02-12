@@ -2,6 +2,7 @@ v1.0.4
 ======
 
 - Code clean up.
+- Made build system on Linux download and install a compatible cmake.
 - Made Environment Map spin and rotation take into account zoom speed for a
   more controlable rotation.
 - Made spin and rotation of environment maps much more controlable, regardless
