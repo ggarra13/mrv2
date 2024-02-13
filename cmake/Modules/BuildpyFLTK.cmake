@@ -35,22 +35,12 @@ elseif(APPLE)
     if(CMAKE_OSX_DEPLOYMENT_TARGET)
 	list(APPEND pyFLTK_CXX_FLAGS "-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}")
     endif()
-    set(pyFLTK_ENV ${CMAKE_COMMAND} -E env CXXFLAGS=${pyFLTK_CXX_FLAGS} -- )
+    set(pyFLTK_ENV ${CMAKE_COMMAND} -E env FLTK_HOME=${FLTK_HOME} CXXFLAGS=${pyFLTK_CXX_FLAGS} -- )
 else()
-    set(pyFLTK_CHECKOUT_CMD ${CMAKE_COMMAND} -E env LD_LIBRARY_PATH="${pyFLTK_LD_LIBRARY_PATH}" svn checkout ${pyFLTK_SVN_REVISION_ARG} ${pyFLTK_SVN_REPOSITORY} pyFLTK)
+    set(pyFLTK_CHECKOUT_CMD ${CMAKE_COMMAND} -E env FLTK_HOME=${FLTK_HOME} LD_LIBRARY_PATH="${pyFLTK_LD_LIBRARY_PATH}" svn checkout ${pyFLTK_SVN_REVISION_ARG} ${pyFLTK_SVN_REPOSITORY} pyFLTK)
 endif()
 
 
-
-#
-# Install steps
-#
-# set(pyFLTK_PIP_INSTALL_WHEEL   ${PYTHON_EXECUTABLE} -m pip install wheel )
-# set(pyFLTK_CREATE_WHEELS ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} setup.py bdist_wheel)
-# set(pyFLTK_INSTALL_WHEELS ${CMAKE_COMMAND}
-#     -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}
-#     -DWHL_DIRECTORY=${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK/dist
-#     -P "${CMAKE_SOURCE_DIR}/cmake/install_whl_files.cmake" )
 
 #
 # Commands
