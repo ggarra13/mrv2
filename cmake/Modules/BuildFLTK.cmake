@@ -72,8 +72,4 @@ ExternalProject_Add(
     -DFLTK_USE_PANGO=${FLTK_PANGO}
 )
 
-if(WIN32)
-    set(FLTK_HOME ${CMAKE_INSTALL_PREFIX})
-endif()
-
 set(FLTK_DEP FLTK)
