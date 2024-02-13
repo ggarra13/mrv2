@@ -106,6 +106,7 @@ namespace mrv
             file::Path path(file);
             const std::string& extension = path.getExtension();
 
+#ifdef TLRENDER_FFMPEG
             const std::string& profile = getLabel(options.ffmpegProfile);
             if (profile == "VP9")
             {
@@ -126,6 +127,7 @@ namespace mrv
                     return;
                 }
             }
+#endif
 
             bool saveEXR = string::compare(
                 extension, ".exr", string::Compare::CaseInsensitive);
