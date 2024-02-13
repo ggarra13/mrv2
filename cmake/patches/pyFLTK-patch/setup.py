@@ -1,6 +1,10 @@
-import setuptools
+from setuptools import setup
+from distutils.core import setup, Extension
+from distutils.sysconfig import get_python_version
+import distutils.cmd
+import distutils.log
 import subprocess
-import os, sys, string, platform
+import os, sys, string, platform, shutil, glob
 
 # these settings will read setup information from the environment.
 # instead of this, the relevant paths can be set directly here:
@@ -71,7 +75,7 @@ if sys.platform == 'win32':
     print("Building for MS Windows, using Visual C++")
     opengl_lib_dir = os.path.join(opengl_dir, 'lib')
     def_list = [('WIN32', '1'),('FL_INTERNALS','1')]
-    compile_arg_list=['/GR', '/wd4101']
+    compile_arg_list= ['/GR', '/wd4101']
     lib_dir_list = [fltk_lib_dir, opengl_lib_dir]
     win32_lib_list = ["kernel32", "user32", "gdi32", "winspool", "comdlg32", "Comctl32", "advapi32", "shell32", "ole32", "oleaut32", "uuid", "odbc32", "odbccp32", "wsock32", "gdiplus", "glu32", "opengl32"]
     static_lib_list = [ "fltk", "fltk_images", "fltk_forms", "fltk_gl", "opengl32", "fltk_jpeg", "fltk_png", "fltk_z"] + win32_lib_list
@@ -195,7 +199,7 @@ def fltk_config(dir):
                 needed_directories.append(lib[2:])
         print("fltk-config link paths: ", needed_directories)
         print("fltk-config link libraries: ", needed_libraries)
-
+                
     return (needed_libraries, needed_directories, needed_includes)
 
 ###########################################################################
@@ -265,10 +269,11 @@ if not (sys.platform == 'win32'):
     # add all the library paths
     lib_dir_list = additional_dirs+lib_dir_list
 
+    print("done")
 
 ###########################################################################
 
-class PySwigCommand(setuptools.Command):
+class PySwigCommand(distutils.cmd.Command):
   """A custom command to run swig on the interface files."""
   description = 'run swig on the interface files'
   user_options = [
@@ -318,16 +323,17 @@ class PySwigCommand(setuptools.Command):
     command[pos:pos] = self.include
     self.announce(
         'Running command: %s' % str(command),
-        #level=distutils.log.INFO
-    )
+        level=distutils.log.INFO)
     #subprocess.check_call(command, cwd='python')
     subprocess.check_call(command)
 
+    #shutil.copy('fltk.py', "./fltk/fltk.py")
+
 if cxx_flags != '':
     compile_arg_list.append(cxx_flags)
-    
+
 # module declarations
-module1 = setuptools.Extension(name='fltk14._fltk14',
+module1 = Extension(name='fltk14._fltk14',
 		    define_macros=def_list,
 		    include_dirs = all_include_dirs+UserIncludeDirs,
                     sources = ['./fltk14/fltk_wrap.cpp',
@@ -340,7 +346,7 @@ module1 = setuptools.Extension(name='fltk14._fltk14',
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
-setuptools.setup (cmdclass={
+setup (cmdclass={
         'swig': PySwigCommand,
        },
        name = 'pyFltk1.4',
