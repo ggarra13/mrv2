@@ -106,6 +106,27 @@ namespace mrv
             file::Path path(file);
             const std::string& extension = path.getExtension();
 
+            const std::string& profile = getLabel(options.ffmpegProfile);
+            if (profile == "VP9")
+            {
+                if (!string::compare(
+                        extension, ".mp4", string::Compare::CaseInsensitive))
+                {
+                    LOG_ERROR("VP9 profile needs a .mp4 movie extension");
+                    return;
+                }
+            }
+
+            if (profile == "AV1")
+            {
+                if (!string::compare(
+                        extension, ".mp4", string::Compare::CaseInsensitive))
+                {
+                    LOG_ERROR("AV1 profile needs a .mp4 movie extension");
+                    return;
+                }
+            }
+
             bool saveEXR = string::compare(
                 extension, ".exr", string::Compare::CaseInsensitive);
             bool saveHDR = string::compare(
@@ -308,7 +329,8 @@ namespace mrv
             {
 #ifdef TLRENDER_FFMPEG
                 if (static_cast<ffmpeg::AudioCodec>(options.ffmpegAudioCodec) ==
-                    ffmpeg::AudioCodec::None || !hasAudio)
+                        ffmpeg::AudioCodec::None ||
+                    !hasAudio)
                     snprintf(
                         title, 1024,
                         _("Saving Movie without Audio %" PRId64 " - %" PRId64),
