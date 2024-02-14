@@ -37,6 +37,13 @@ SUPERBUILD=$PWD/$BUILD_DIR/tlRender/etc/SuperBuild
 INSTALLDIR=$PWD/$BUILD_DIR/install
 
 if [[ ! -e $INSTALLDIR/lib/liblcms2.lib ]]; then
+
+    #
+    # Install development tools
+    #
+    pacman -Sy --noconfirm
+
+    pacman -Sy binutils --noconfirm
     
     has_pip3=0
     if type -P pip3 &> /dev/null; then
@@ -61,12 +68,23 @@ if [[ ! -e $INSTALLDIR/lib/liblcms2.lib ]]; then
     # Run configure
     #
     cd LCMS2
+    
+    export CC=cl
+    export CXX=cl
+    export LD=link
+    run_cmd ./configure --build=mingw64 --enable-shared --disable-static --prefix=$INSTALLDIR
+    
+    #
+    # Compile and install the library
+    #
+    make -j ${CPU_CORES} install
 
-    mkdir -p build
-    meson setup build --prefix=$PWD/$BUILD_DIR/install
-    cd build
-    ninja -j ${CPU_CORES}
-    ninja install
+    echo "Compiled result:"
+    echo
+    ls $INSTALLDIR/lib/*lcms2*
+    echo
+    
+    run_cmd mv $INSTALLDIR/lib/lcms2.dll.lib $INSTALLDIR/lib/liblcms2.lib
     
     cd $MRV2_ROOT
 else
