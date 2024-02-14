@@ -286,7 +286,7 @@ class PySwigCommand(setuptools.Command):
 
   def finalize_options(self):
     """Post-process options."""
-    add_incl = ['-I/usr/include']
+    add_incl = []
     try:
         fltk_dir = os.environ['FLTK_HOME']
         if (sys.platform == 'win32'):
@@ -303,9 +303,10 @@ class PySwigCommand(setuptools.Command):
             for item in p_inc:
                 #if string.find(item, '-I') == 0:
                 if item.find('-I') == 0:
-                    add_incl.insert(0, item)
+                    add_incl.append(item)
         else:
             print("FLTK not found!")
+    add_incl.append('-I/usr/include')
     self.include = add_incl
 
   def run(self):
@@ -320,7 +321,7 @@ class PySwigCommand(setuptools.Command):
     command[pos:pos] = self.include
     self.announce(
         'Running command: %s' % str(command),
-        #level=distutils.log.INFO
+        level=3
     )
     #subprocess.check_call(command, cwd='python')
     subprocess.check_call(command)

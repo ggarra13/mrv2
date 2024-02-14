@@ -97,7 +97,7 @@ set(pyFLTK_INSTALL ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} setup.py install --enable-
 # Output the commands
 #
 message(STATUS "pyFLTK_CONFIGURE=${pyFLTK_CONFIGURE}")
-message(STATUS "pyFLTK_BUIILD=${pyFLTK_BUILD}")
+message(STATUS "pyFLTK_BUILD=${pyFLTK_BUILD}")
 message(STATUS "pyFLTK_INSTALL=${pyFLTK_INSTALL}")
 
 
