@@ -4,6 +4,8 @@ v1.0.5
 - Code clean up.
 - Fixed Windows' Python compilation screwing up if some other Python version
   was installed.
+- Fixed Python and pyFLTK PATH and LD_LIBRARY_PATH set ups.
+- LCMS2 on Windows now builds with meson.  Much faster and much more compatible.
 
 
 v1.0.4
