@@ -132,6 +132,9 @@ jobs:
     - name: Install Python dependencies
       run: brew install libffi openssl readline sqlite3 xz zlib
 
+    - name: Install pyFLTK dependencies
+      run: brew install subversion swig
+      
     - name: Setup environment
       run: mkdir -p ssh
 
@@ -177,6 +180,9 @@ jobs:
     - name: Install Python dependencies
       run: brew install libffi openssl readline sqlite3 xz zlib
   
+    - name: Install pyFLTK dependencies
+      run: brew install subversion swig
+      
     - name: Setup environment
       run: mkdir -p ssh
   

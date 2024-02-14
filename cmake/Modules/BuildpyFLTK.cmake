@@ -22,21 +22,40 @@ endif()
 # Environment setup
 #
 set(pyFLTK_CXX_FLAGS ${CMAKE_CXX_FLAGS} )
-set(pyFLTK_LD_LIBRARY_PATH $ENV{OLD_LD_LIBRARY_PATH})
 
+set(pyFLTK_OLD_LD_LIBRARY_PATH $ENV{OLD_LD_LIBRARY_PATH})
+set(pyFLTK_OLD_DYLD_LIBRARY_PATH $ENV{OLD_DYLD_LIBRARY_PATH})
 
-set(pyFLTK_ENV ${CMAKE_COMMAND} -E env FLTK_HOME=${CMAKE_INSTALL_PREFIX} CXXFLAGS=${pyFLTK_CXX_FLAGS} -- )
+set(pyFLTK_LD_LIBRARY_PATH $ENV{LD_LIBRARY_PATH})
+set(pyFLTK_DYLD_LIBRARY_PATH $ENV{DYLD_LIBRARY_PATH})
 
+set(pyFLTK_PATH $ENV{PATH})
 if(WIN32)
-    set(pyFLTK_CHECKOUT_CMD ${CMAKE_COMMAND} -E env -- svn checkout ${pyFLTK_SVN_REVISION_ARG} ${pyFLTK_SVN_REPOSITORY} pyFLTK)
-elseif(APPLE)
-    set(pyFLTK_DYLD_LIBRARY_PATH $ENV{OLD_DYLD_LIBRARY_PATH})
-    set(pyFLTK_CHECKOUT_CMD  ${CMAKE_COMMAND} -E env DYLD_LIBRARY_PATH=${pyFLTK_DYLD_LIBRARY_PATH} -- svn checkout ${pyFLTK_SVN_REVISION_ARG} ${pyFLTK_SVN_REPOSITORY} pyFLTK)
+    string(REPLACE ";" "|" pyFLTK_PATH "$ENV{PATH}")
+endif()
+
+#
+# Handle macOS min version.
+#
+if(APPLE)
     if(CMAKE_OSX_DEPLOYMENT_TARGET)
-	list(APPEND pyFLTK_CXX_FLAGS "-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}")
+	set(pyFLTK_CXX_FLAGS "-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET} ${pyFLTK_CXX_FLAGS}")
     endif()
+endif()
+
+
+#
+# Old environment and checkout command
+#
+if(WIN32)
+    set(pyFLTK_OLD_ENV ${CMAKE_COMMAND} -E env -- )
+    set(pyFLTK_CHECKOUT_CMD ${pyFLTK_OLD_ENV} svn checkout ${pyFLTK_SVN_REVISION_ARG} ${pyFLTK_SVN_REPOSITORY} pyFLTK)
+elseif(APPLE)
+    set(pyFLTK_OLD_ENV ${CMAKE_COMMAND} -E env DYLD_LIBRARY_PATH="${pyFLTK_OLD_DYLD_LIBRARY_PATH}" -- )
+    set(pyFLTK_CHECKOUT_CMD ${pyFLTK_OLD_ENV} svn checkout ${pyFLTK_SVN_REVISION_ARG} ${pyFLTK_SVN_REPOSITORY} pyFLTK)
 else()
-    set(pyFLTK_CHECKOUT_CMD ${CMAKE_COMMAND} -E env LD_LIBRARY_PATH=${pyFLTK_LD_LIBRARY_PATH} svn checkout ${pyFLTK_SVN_REVISION_ARG} ${pyFLTK_SVN_REPOSITORY} pyFLTK)
+    set(pyFLTK_OLD_ENV ${CMAKE_COMMAND} -E env LD_LIBRARY_PATH="${pyFLTK_OLD_LD_LIBRARY_PATH}" -- )
+    set(pyFLTK_CHECKOUT_CMD ${pyFLTK_OLD_ENV} svn checkout ${pyFLTK_SVN_REVISION_ARG} ${pyFLTK_SVN_REPOSITORY} pyFLTK)
 endif()
 
 
@@ -52,12 +71,34 @@ set(pyFLTK_PATCH
     COMMAND
     ${CMAKE_COMMAND} -E copy_if_different
     "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/swig/WindowShowTypemap.i"
-    "${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK/swig/")
+    "${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK/swig/"
+    COMMAND
+    ${CMAKE_COMMAND} -E copy_if_different
+    "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/fltk14/test/exceptions.py"
+    "${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK/fltk14/test")
+
+# Environment setup for configure, building and installing
+set(pyFLTK_ENV ${CMAKE_COMMAND} -E env CXXFLAGS=${pyFLTK_CXX_FLAGS} )
+if(WIN32)
+    set(pyFLTK_ENV ${pyFLTK_ENV} "PATH=${pyFLTK_PATH}" FLTK_HOME=${CMAKE_INSTALL_PREFIX} --) 
+elseif(APPLE)
+    set(pyFLTK_ENV ${pyFLTK_ENV} "PATH=${pyFLTK_PATH}" DYLD_LIBRARY_PATH=${pyFLTK_DYLD_LIBRARY_PATH} -- )
+else()
+    set(pyFLTK_ENV ${pyFLTK_ENV} "PATH=${pyFLTK_PATH}" LD_LIBRARY_PATH=${pyFLTK_LD_LIBRARY_PATH} -- )
+endif()
+
+
+# Commands for configure, build and install
 set(pyFLTK_CONFIGURE ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} setup.py swig --enable-shared)
 set(pyFLTK_BUILD     ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} setup.py build --enable-shared)
 set(pyFLTK_INSTALL ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} setup.py install --enable-shared)
 
-
+#
+# Output the commands
+#
+message(STATUS "pyFLTK_CONFIGURE=${pyFLTK_CONFIGURE}")
+message(STATUS "pyFLTK_BUIILD=${pyFLTK_BUILD}")
+message(STATUS "pyFLTK_INSTALL=${pyFLTK_INSTALL}")
 
 
 ExternalProject_Add(
@@ -66,12 +107,13 @@ ExternalProject_Add(
     #       so we need to DOWNLOAD_COMMAND for checking out the repository.
     # SVN_REPOSITORY ${pyFLTK_SVN_REPOSITORY}
     # SVN_REVISION ${pyFLTK_SVN_REVISION}
-    DEPENDS ${PYTHON_DEP} ${FLTK_DEP} ${SVN_DEP}
-    DOWNLOAD_COMMAND  ${pyFLTK_CHECKOUT_CMD}
+    DEPENDS ${PYTHON_DEP} ${FLTK_DEP}
+    DOWNLOAD_COMMAND  "${pyFLTK_CHECKOUT_CMD}"
     PATCH_COMMAND     ${pyFLTK_PATCH}
     CONFIGURE_COMMAND "${pyFLTK_CONFIGURE}"
     BUILD_COMMAND     "${pyFLTK_BUILD}"
-    INSTALL_COMMAND   ${pyFLTK_INSTALL}
+    INSTALL_COMMAND   "${pyFLTK_INSTALL}"
+    LIST_SEPARATOR |
     BUILD_IN_SOURCE 1
 )
 

@@ -148,14 +148,14 @@ def fltk_config(dir):
         fltk_dir = os.environ['FLTK_HOME']
         if isVerbose:
             print(f"FLTK_HOME={fltk_dir}")
-        ver_cmd = f"sh {fltk_dir}/bin/fltk-config --version"
-        inc_cmd = f"sh {fltk_dir}/bin/fltk-config --cxxflags {var_string}"
-        #lib_cmd = f"sh {fltk_dir}/bin/fltk-config --use-gl --use-glut --use-images --use-forms --ldflags"
-        lib_cmd = f"sh {fltk_dir}/bin/fltk-config --ldflags {var_string}"
+        ver_cmd = f"sh {fltk_dir}/fltk-config --version"
+        inc_cmd = f"sh {fltk_dir}/fltk-config --cxxflags {var_string}"
+        #lib_cmd = f"sh {fltk_dir}/fltk-config --use-gl --use-glut --use-images --use-forms --ldflags"
+        lib_cmd = f"sh {fltk_dir}/fltk-config --ldflags {var_string}"
     except:
         if isVerbose:
             print("Checking fltk-config using default installation")
-
+        
         ver_cmd = "fltk-config --version"
         inc_cmd = f"fltk-config --cxxflags {var_string}"
         lib_cmd = f"fltk-config --ldflags {var_string}"
@@ -289,7 +289,10 @@ class PySwigCommand(setuptools.Command):
     add_incl = ['-I/usr/include']
     try:
         fltk_dir = os.environ['FLTK_HOME']
-        add_incl.insert(0, f"-I{fltk_dir}/include")
+        if (sys.platform == 'win32'):
+            add_incl.insert(0, f"-I{fltk_dir}/include")
+        else:
+            add_incl.insert(0, f"-I{fltk_dir}")
     except:
         print("Using default location for FLTK!")
         result = os.popen('fltk-config --cxxflags').readlines()

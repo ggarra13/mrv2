@@ -2,6 +2,8 @@ v1.0.5
 ======
 
 - Code clean up.
+- Fixed Windows' Python compilation screwing up if some other Python version
+  was installed.
 
 
 v1.0.4

@@ -153,8 +153,11 @@ jobs:
       run: brew install gnu-sed
       
     - name: Install Python dependencies
-      run: brew install swig subversion libffi openssl readline sqlite3 xz zlib
+      run: brew install libffi openssl readline sqlite3 xz zlib
         
+    - name: Install pyFLTK dependencies
+      run: brew install subversion swig
+      
     - name: Setup environment
       run: mkdir -p ssh
 
@@ -203,8 +206,11 @@ jobs:
       run: brew install gnu-sed
       
     - name: Install Python dependencies
-      run: brew install swig subversion libffi openssl readline sqlite3 xz zlib
+      run: brew install libffi openssl readline sqlite3 xz zlib
         
+    - name: Install pyFLTK dependencies
+      run: brew install subversion swig
+      
     - name: Setup environment
       run: mkdir -p ssh
 
