@@ -421,6 +421,9 @@ if [[ $BUILD_FFMPEG == 1 ]]; then
 
 	# -wd4828 disables non UTF-8 characters found on non-English MSVC
 	# -wd4101 disables local variable without reference
+	# -wd4267 disables conversion from size_t to int, possible loss of data
+	# -wd4334 '<<': result of 32-bit shift implicitly converted to 64 bits
+	# -wd4090 'function': different 'const' qualifiers
 	./../../sources/ffmpeg/configure \
             --prefix=$INSTALL_DIR \
 	    --pkg-config-flags=--static \
@@ -478,7 +481,7 @@ if [[ $BUILD_FFMPEG == 1 ]]; then
             $ENABLE_LIBSVTAV1 \
             $ENABLE_LIBVPX \
             --extra-ldflags="-LIBPATH:$INSTALL_DIR/lib/" \
-            --extra-cflags="-I$INSTALL_DIR/include/ -MD -wd4828 -wd4101"
+            --extra-cflags="-I$INSTALL_DIR/include/ -MD -wd4828 -wd4101 -wd4267 -wd4334 -wd4090"
 
         make -j ${CPU_CORES}
         make install
