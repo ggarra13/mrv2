@@ -38,6 +38,16 @@ INSTALLDIR=$PWD/$BUILD_DIR/install
 
 if [[ ! -e $INSTALLDIR/lib/liblcms2.lib ]]; then
     
+    has_pip3=0
+    if type -P pip3 &> /dev/null; then
+	has_pip3=1
+    fi
+    
+    if [[ $has_pip3 == 1 ]]; then
+	pip3 install meson
+	has_meson=1
+    fi
+    
     #
     # Clone the repository
     #
