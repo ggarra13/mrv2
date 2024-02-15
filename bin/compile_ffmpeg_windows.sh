@@ -390,13 +390,14 @@ if [[ $TLRENDER_NET == ON || $TLRENDER_NET == 1 ]]; then
     ENABLE_OPENSSL="--enable-openssl --extra-libs=crypto.lib"
 fi
 
-echo "Preparing to build FFmpeg...."
-
 #
 # Build FFmpeg
 #
 
 if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
+
+    echo "Preparing to build FFmpeg...."
+    
     cd $ROOT_DIR/sources
 
     if [[ ! -d ffmpeg ]]; then
