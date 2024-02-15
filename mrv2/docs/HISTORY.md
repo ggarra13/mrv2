@@ -7,6 +7,7 @@ v1.0.5
 - Fixed pyFLTK compilation on macOS and Linux having swig not use the right
   path includes.
 - Fixed NDI compilation which had gotten broken.
+- Fixed listing of movie files when they were named as sequences. 
 
 
 v1.0.4
