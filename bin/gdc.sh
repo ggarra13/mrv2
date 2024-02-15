@@ -16,11 +16,9 @@ if [[ ! -e etc/build_dir.sh ]]; then
     exit 1
 fi
 
-export OLD_LD_LIBRARY_PATH=$LD_LIBRARY_PATH
-
 . etc/build_dir.sh
 
-export LD_LIBRARY_PATH=$BUILD_DIR/install/lib64/:$BUILD_DIR/install/lib/:$OLD_LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$OLD_LD_LIBRARY_PATH
 
 site_dir=$BUILD_DIR/install/lib/python${PYTHON_VERSION}/site-packages/requests
 if [[ $KERNEL == *Msys* ]]; then
