@@ -61,7 +61,7 @@ fi
 
 if [ -z "$TLRENDER_NDI_SDK" ]; then
     if [[ $KERNEL == *Linux* ]]; then
-	export TLRENDER_NDI_SDK="/home/gga/code/lib/NDI SDK for Linux/"
+	export TLRENDER_NDI_SDK="$HOME/code/lib/NDI SDK for Linux/"
     elif [[ $KERNEL == *Msys* ]]; then
 	export TLRENDER_NDI_SDK="C:/Program Files/NDI/NDI 5 SDK/"
     else
