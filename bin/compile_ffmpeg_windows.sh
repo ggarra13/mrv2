@@ -59,6 +59,8 @@ if [ -z "$TLRENDER_FFMPEG" ]; then
     export TLRENDER_FFMPEG=ON
 fi
 
+BUILD_FFMPEG=$TLRENDER_FFMPEG
+
 lgpl_ffmpeg=""
 if [[ -e $INSTALL_DIR/lib/avformat.lib ]]; then
     avformat_dll=`ls $INSTALL_DIR/bin/avformat*.dll`
@@ -71,12 +73,12 @@ if [[ "$lgpl_ffmpeg" != "" ]]; then
 	run_cmd rm -rf $INSTALL_DIR/lib/avformat.lib
     else
 	echo "Compatible FFmpeg already installed."
-	export TLRENDER_FFMPEG=OFF
+	export BUILD_FFMPEG=OFF
     fi
 fi
 
     
-if [[ $TLRENDER_FFMPEG == ON || $TLRENDER_FFMPEG == 1 ]]; then
+if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
     pacman -Sy make wget diffutils yasm nasm pkg-config --noconfirm
 fi
     
@@ -116,7 +118,7 @@ if [[ $FFMPEG_GPL == LGPL ]]; then
     BUILD_LIBX264=OFF
 fi
 
-if [[ $TLRENDER_FFMPEG == OFF || $TLRENDER_FFMPEG == 0 ]]; then
+if [[ $BUILD_FFMPEG == OFF || $BUILD_FFMPEG == 0 ]]; then
     export TLRENDER_VPX=OFF
     export TLRENDER_AV1=OFF
     export TLRENDER_NET=OFF
@@ -394,7 +396,7 @@ echo "Preparing to build FFmpeg...."
 # Build FFmpeg
 #
 
-if [[ $TLRENDER_FFMPEG == ON || $TLRENDER_FFMPEG == 1 ]]; then
+if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
     cd $ROOT_DIR/sources
 
     if [[ ! -d ffmpeg ]]; then
@@ -495,7 +497,7 @@ if [[ $TLRENDER_FFMPEG == ON || $TLRENDER_FFMPEG == 1 ]]; then
 fi
 
 
-if [[ $TLRENDER_FFMPEG == ON || $TLRENDER_FFMPEG == 1 ]]; then
+if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
     echo
     echo "Removing packages used to build:"
     echo
