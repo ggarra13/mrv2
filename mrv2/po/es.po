@@ -1,4 +1,5 @@
 Cleaning /D/code/applications/mrv2/mrv2/po/es.po
+Cleaning /D/code/applications/mrv2/mrv2/po/es.po
 # Spanish translations for mrv2 package
 # Traducciones al español para el paquete mrv2.
 # Copyright (C) 2023 Contributors\ to\ the\ mrv2\ Project
