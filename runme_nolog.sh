@@ -20,8 +20,6 @@ if [[ !$RUNME ]]; then
     . $PWD/etc/build_dir.sh
 fi
 
-sleep 10
-
 #
 # These are some of the expensive mrv2 options
 #
@@ -102,6 +100,39 @@ fi
 if [ -z "$TLRENDER_YASM" ]; then
     export TLRENDER_YASM=ON
 fi
+
+echo
+echo
+echo "Building summary"
+echo "================"
+echo
+echo "Common options"
+echo
+echo "Wayland support .................... ${TLRENDER_WAYLAND}"
+echo
+echo "mrv2 Options"
+echo 
+echo "Build Python........................ ${BUILD_PYTHON}"
+echo "Build pyFLTK........................ ${MRV2_PYFLTK}"
+echo "Build embedded Python............... ${MRV2_PYBIND11}"
+echo "Build mrv2 Network connections...... ${MRV2_NETWORK}"
+echo "Build PDF........................... ${MRV2_PDF}"
+echo
+echo "tlRender Options"
+echo
+echo "FFmpeg network support ............. ${TLRENDER_NET}"
+echo "FFmpeg support ..................... ${TLRENDER_FFMPEG}"
+echo "AV1 codec support .................. ${TLRENDER_AV1}"
+echo "VPX codec support .................. ${TLRENDER_VPX}"
+echo "YASM assembler ..................... ${TLRENDER_YASM}"
+echo
+echo "NDI support ........................ ${TLRENDER_NDI}"
+echo "NDI SDK ... ${TLRENDER_NDI_SDK}"
+echo
+echo "LibRaw support ..................... ${TLRENDER_RAW}"
+echo "USD support ........................ ${TLRENDER_USD}"
+
+sleep 10
 
 mkdir -p $BUILD_DIR
 cd $BUILD_DIR
