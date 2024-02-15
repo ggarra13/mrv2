@@ -7,6 +7,8 @@ v1.0.5
 - Fixed pyFLTK compilation on macOS and Linux having swig not use the right
   path includes.
 - Fixed NDI compilation which had gotten broken.
+- Allowed saving movie files with the speed (FPS) as set in the playback
+  toolbar as long as you are not saving audio.
 
 
 v1.0.4
