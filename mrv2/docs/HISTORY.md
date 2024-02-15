@@ -8,6 +8,8 @@ v1.0.5
   path includes.
 - Fixed NDI compilation which had gotten broken.
 - Fixed listing of movie files when they were named as sequences. 
+- Allowed saving movie files with the speed (FPS) as set in the playback
+  toolbar as long as you are not saving audio.
 
 
 v1.0.4

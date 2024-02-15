@@ -67,6 +67,20 @@ namespace mrv
 #ifdef TLRENDER_FFMPEG
             ioOptions["FFmpeg/WriteProfile"] = getLabel(options.ffmpegProfile);
             ioOptions["FFmpeg/AudioCodec"] = getLabel(options.ffmpegAudioCodec);
+
+            // If we are not saving a movie, take speed from the player's
+            // current speed.
+            {
+                const auto& model = ui->app->filesModel();
+                const auto& Aitem = model->observeA()->get();
+                const auto& extension = Aitem->path.getExtension();
+                if ( ! file::isMovie(extension))
+                {
+                    auto speed = player->speed();
+                    ioOptions["FFmpeg/Speed"] =
+                        string::Format("{0}").arg(speed);
+                }
+            }
 #endif
 
 #ifdef TLRENDER_EXR
