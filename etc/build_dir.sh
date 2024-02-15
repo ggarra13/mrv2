@@ -31,16 +31,17 @@ extract_python_version
 get_cmake_version
 
 #
-# Extract compiler version
-#
-get_compiler_version
-
-#
 # Determine OS Kernel, OS CPU architecture
 #
 . etc/parse_args.sh
 
 . etc/build_cores.sh
+
+#
+# Extract compiler version
+#
+get_compiler_version
+
 
 export OSX_TARGET=11.0
 
