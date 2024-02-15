@@ -62,6 +62,14 @@ if [[ ! -e $INSTALLDIR/lib/liblcms2.lib ]]; then
     export CC=cl
     export CXX=cl
     export LD=link
+
+    #
+    # Remove some cl.exe compile warnings
+    #
+    sed -i -e 's#-fvisibility=hidden##' ./configure
+    sed -i -e 's#CFLAGS="-g"#CFLAGS=""#' ./configure
+    sed -i -e 's#CXXFLAGS="-g"#CXXFLAGS=""#' ./configure
+    
     run_cmd ./configure --build=mingw64 --enable-shared --disable-static --prefix=$INSTALLDIR
     
     #
