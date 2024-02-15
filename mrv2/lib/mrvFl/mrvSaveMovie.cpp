@@ -79,7 +79,6 @@ namespace mrv
                     auto speed = player->speed();
                     ioOptions["FFmpeg/Speed"] =
                         string::Format("{0}").arg(speed);
-                    std::cerr << "FFmpeg/Speed is " << speed << std::endl;
                 }
             }
 #endif
