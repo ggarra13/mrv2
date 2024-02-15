@@ -22,9 +22,6 @@ fi
 
 sleep 10
 
-mkdir -p $BUILD_DIR
-cd $BUILD_DIR
-
 #
 # These are some of the expensive mrv2 options
 #
@@ -66,11 +63,11 @@ fi
 
 if [ -z "$TLRENDER_NDI_SDK" ]; then
     if [[ $KERNEL == *Linux* ]]; then
-	export TLRENDER_NDI_SDK=/home/gga/code/lib/NDI\ SDK\ for\ Linux/
+	export TLRENDER_NDI_SDK="/code/lib/NDI SDK for Linux/"
     elif [[ $KERNEL == *Msys* ]]; then
-	export TLRENDER_NDI_SDK=C:/Program\ Files/NDI/NDI\ 5\ SDK/
+	export TLRENDER_NDI_SDK="C:/Program\ Files/NDI/NDI\ 5\ SDK/"
     else
-	export TLRENDER_NDI_SDK=/Library/NDI\ SDK\ for\ Apple/
+	export TLRENDER_NDI_SDK="/Library/NDI\ SDK\ for\ Apple/"
     fi
 fi
 
@@ -80,7 +77,6 @@ if [ -z "$TLRENDER_NDI" ]; then
     else
 	export TLRENDER_NDI=OFF
     fi
-    echo "TLRENDER_NDI=${TLRENDER_NDI}"
 fi
 
 if [ -z "$TLRENDER_NET" ]; then
@@ -107,6 +103,9 @@ if [ -z "$TLRENDER_YASM" ]; then
     export TLRENDER_YASM=ON
 fi
 
+mkdir -p $BUILD_DIR
+cd $BUILD_DIR
+
 cmd="cmake -G '${CMAKE_GENERATOR}' \
 	   -D CMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE \
 	   -D CMAKE_INSTALL_PREFIX=$PWD/install \
@@ -120,7 +119,7 @@ cmd="cmake -G '${CMAKE_GENERATOR}' \
            -D TLRENDER_AV1=${TLRENDER_AV1} \
            -D TLRENDER_FFMPEG=${TLRENDER_FFMPEG} \
 	   -D TLRENDER_NDI=${TLRENDER_NDI} \
-	   -D TLRENDER_NDI_SDK=${TLRENDER_NDI_SDK} \
+	   -D TLRENDER_NDI_SDK=\"${TLRENDER_NDI_SDK}\" \
 	   -D TLRENDER_NET=${TLRENDER_NET} \
 	   -D TLRENDER_NFD=OFF \
 	   -D TLRENDER_RAW=${TLRENDER_RAW} \
