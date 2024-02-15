@@ -30,6 +30,7 @@ Here are some key features:
   - Native .otio playback support allows playing back OpenTimelineIO timelines
     with dissolves.
   - Pixar's USD (Universal Scene Description) support in OpenGL.
+  - NDI network communication.
 
 **Playlists**
 
