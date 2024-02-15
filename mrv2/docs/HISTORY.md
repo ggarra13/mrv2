@@ -4,6 +4,8 @@ v1.0.5
 - Code clean up.
 - Fixed Windows' Python compilation screwing up if some other Python version
   was installed.
+- Fixed pyFLTK compilation on macOS and Linux having swig not use the right
+  path includes.
 
 
 v1.0.4
