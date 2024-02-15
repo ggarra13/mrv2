@@ -10,6 +10,12 @@ if(APPLE)
     message( STATUS "-------------------------------------------------" )
 endif()
 
+if(TLRENDER_NDI)
+    if(NOT EXISTS "${TLRENDER_NDI_SDK}")
+	message(FATAL_ERROR "TLRENDER_NDI is ON but TLRENDER_NDI_SDK does not exist!\n${TLRENDER_NDI_SDK}") 
+    endif()
+endif()
+
 
 cmake_policy(SET CMP0091 NEW)
 cmake_policy(SET CMP0114 NEW)

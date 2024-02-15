@@ -59,6 +59,23 @@ if [ -z "$TLRENDER_FFMPEG" ]; then
     export TLRENDER_FFMPEG=ON
 fi
 
+lgpl_ffmpeg=""
+if [[ -e $INSTALL_DIR/lib/avformat.lib ]]; then
+    avformat_dll=`ls $INSTALL_DIR/bin/avformat*.dll`
+    lgpl_ffmpeg=`strings $avformat_dll | findstr "LGPL" | grep -o "LGPL"`
+fi
+
+if [[ "$lgpl_ffmpeg" != "" ]]; then
+    if [[ $lgpl_ffmpeg != $FFMPEG_GPL ]]; then
+	echo "Incompatible FFmpeg already installed.  Installed is $lgpl_ffmpeg, want $FMMPEG_GPL."
+	run_cmd rm -rf $INSTALL_DIR/lib/avformat.lib
+    else
+	echo "Compatible FFmpeg already installed."
+	export TLRENDER_FFMPEG=OFF
+    fi
+fi
+
+    
 if [[ $TLRENDER_FFMPEG == ON || $TLRENDER_FFMPEG == 1 ]]; then
     pacman -Sy make wget diffutils yasm nasm pkg-config --noconfirm
 fi
@@ -383,22 +400,6 @@ if [[ $TLRENDER_FFMPEG == ON || $TLRENDER_FFMPEG == 1 ]]; then
     if [[ ! -d ffmpeg ]]; then
 	echo "Cloning ffmpeg repository..."
 	git clone --depth 1 --branch ${FFMPEG_TAG} https://git.ffmpeg.org/ffmpeg.git 2> /dev/null
-    fi
-
-    lgpl_ffmpeg=""
-    if [[ -e $INSTALL_DIR/lib/avformat.lib ]]; then
-	avformat_dll=`ls $INSTALL_DIR/bin/avformat*.dll`
-	lgpl_ffmpeg=`strings $avformat_dll | findstr "LGPL" | grep -o "LGPL"`
-    fi
-
-    if [[ "$lgpl_ffmpeg" != "" ]]; then
-	if [[ $lgpl_ffmpeg != $FFMPEG_GPL ]]; then
-	    echo "Incompatible FFmpeg already installed.  Installed is $lgpl_ffmpeg, want $FMMPEG_GPL."
-	    run_cmd rm -rf $INSTALL_DIR/lib/avformat.lib
-	else
-	    echo "Compatible FFmpeg already installed."
-	    export TLRENDER_FFMPEG=OFF
-	fi
     fi
     
     if [[ ! -e $INSTALL_DIR/lib/avformat.lib ]]; then
