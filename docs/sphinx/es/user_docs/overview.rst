@@ -11,7 +11,7 @@ mrv2 es un flipbook profesional y herramienta de revisión de código abierto pa
 mrv2 puede manejar colecciones de medios rápidamente, carga una multitud de formatos de imagen y video especializados y muestra la imágenes con manejo de color. Los usuarios pueden importar, organizar y agrupar medios en listas de reproducción de OTIO, reproduciendo items y agregando notas de revisiones y anotaciones dibujadas, permitiendo visualizar el contenido en forma interactiva y colaborativa.  Esto permite el flujo que es esencial para los equipos de efectos visuales, animación y otras actividades de post-production que necesitan ver, en demanda, el arte que ellos y sus colegas están creando.  Por ejemplo, uno puede cambiar de fuente de medios instantáneamente, inspeccionar pixels de cerca, hacer comparaciones cuadro a cuadro a través de multiple fuentes de medios, anotar los medios con dibujos y texto o agregar notas para compartir con otros.
 
 
-Versión Actual: v1.0.0 - Descripción General
+Versión Actual: v1.0.5 - Descripción General
 ********************************************
 
 Esta versión de la aplicación es una solución de revisión sólida y robusta. mrv2 ha sido desplegado en múltiples estudios y es usado por múltiples individuos diariamente desde Augosto del 2022.

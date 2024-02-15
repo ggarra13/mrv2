@@ -10,6 +10,7 @@ v1.0.5
 - Fixed listing of movie files when they were named as sequences. 
 - Allowed saving movie files with the speed (FPS) as set in the playback
   toolbar as long as you are not saving audio.
+- Updated version in web page docs.
 
 
 v1.0.4
