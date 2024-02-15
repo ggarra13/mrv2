@@ -4,4 +4,5 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 filename="$PWD/$1"
+echo "Cleaning $filename"
 sed -e '/^#: /d' "$filename"
