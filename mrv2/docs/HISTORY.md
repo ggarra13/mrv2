@@ -6,6 +6,7 @@ v1.0.5
   was installed.
 - Fixed pyFLTK compilation on macOS and Linux having swig not use the right
   path includes.
+- Fixed NDI compilation which had gotten broken.
 
 
 v1.0.4
