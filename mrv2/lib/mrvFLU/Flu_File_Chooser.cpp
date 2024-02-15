@@ -4542,7 +4542,6 @@ void Flu_File_Chooser::cd(const char* path)
     {
         int i;
 
-        std::string croot, cview, cext;
         for (i = 0; i < num; i++)
         {
             name = e[i]->d_name;
@@ -4661,29 +4660,13 @@ void Flu_File_Chooser::cd(const char* path)
                 }
                 else
                 {
-                    if (compact_files() && root == croot && ext == cext &&
-                        view == cview)
-                    {
-                        continue;
-                    }
-
                     if (root == "")
                     {
                         files.push_back(name);
                         continue;
                     }
 
-                    croot = root;
-                    cext = ext;
-                    cview = view;
-
-                    std::string tmp = root + view + frame + ext;
-                    // int pos = -1;
-                    // while ( pos = tmp.find('@', pos+1) != std::string::npos )
-                    // {
-                    //     tmp = tmp.substr( 0, pos ) + '@' +
-                    //           tmp.substr( pos, tmp.size() );
-                    // }
+                    std::string tmp = root + frame + ext;
                     files.push_back(tmp);
                 }
             }
