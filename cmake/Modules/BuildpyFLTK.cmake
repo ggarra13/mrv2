@@ -111,13 +111,6 @@ else()
 	COMMAND "${pyFLTK_INSTALL_WHEELS}")
 endif()
 
-#
-# Output the commands
-#
-message(STATUS "pyFLTK_CONFIGURE=${pyFLTK_CONFIGURE}")
-message(STATUS "pyFLTK_BUILD=${pyFLTK_BUILD}")
-message(STATUS "pyFLTK_INSTALL=${pyFLTK_INSTALL}")
-
 
 ExternalProject_Add(
     pyFLTK

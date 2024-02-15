@@ -6,23 +6,17 @@
 . $PWD/etc/windows_prepare.sh
 
 #
-# Install libintl, libiconv and gettext
+# Install libintl, iconv and gettext, subversion, libsqlite
+# from MSys repositories
 #
-if [[ $RUNME_NOLOG == 1 ]]; then
+bin/install_libintl_windows.sh
 
-    #
-    # Install libintl, iconv and gettext from MSys repositories
-    #
-    bin/install_libintl_windows.sh
+#
+# Deal with libcms2 (compile from source)
+#
+bin/compile_liblcms2_windows.sh
 
-    #
-    # Deal with libcms2 (compile from source)
-    #
-    bin/compile_liblcms2_windows.sh
-    
-    #
-    # Deal with FFmpeg next (compile from source)
-    #
-    . bin/compile_ffmpeg_windows.sh 
-
-fi
+#
+# Deal with FFmpeg next (compile from source)
+#
+. bin/compile_ffmpeg_windows.sh 

@@ -55,14 +55,11 @@ else
     export FFMPEG_GPL=LGPL
 fi
 
-#
-# This configures the environment for compilation.  It also cleans at the
-# end to leave it ready for mrv2 build.
-#
-MSYS_LIBS=1
+if [ -z "$TLRENDER_FFMPEG" ]; then
+    export TLRENDER_FFMPEG=ON
+fi
 
-
-if [[ $MSYS_LIBS == 1 ]]; then
+if [[ $TLRENDER_FFMPEG == ON || $TLRENDER_FFMPEG == 1 ]]; then
     pacman -Sy make wget diffutils yasm nasm pkg-config --noconfirm
 fi
     
@@ -84,10 +81,6 @@ fi
 
 if [ -z "$TLRENDER_AV1" ]; then
     export TLRENDER_AV1=ON
-fi
-
-if [ -z "$TLRENDER_FFMPEG" ]; then
-    export TLRENDER_FFMPEG=ON
 fi
 
 if [ -z "$TLRENDER_NET" ]; then
@@ -404,6 +397,7 @@ if [[ $TLRENDER_FFMPEG == ON || $TLRENDER_FFMPEG == 1 ]]; then
 	    run_cmd rm -rf $INSTALL_DIR/lib/avformat.lib
 	else
 	    echo "Compatible FFmpeg already installed."
+	    export TLRENDER_FFMPEG=OFF
 	fi
     fi
     
@@ -500,16 +494,20 @@ if [[ $TLRENDER_FFMPEG == ON || $TLRENDER_FFMPEG == 1 ]]; then
 fi
 
 
-if [[ $MSYS_LIBS == 1 ]]; then
+if [[ $TLRENDER_FFMPEG == ON || $TLRENDER_FFMPEG == 1 ]]; then
     echo
     echo "Removing packages used to build:"
     echo
-    echo "libvpx"
-    if [[ $has_meson == 1 ]]; then
-	echo "libdav1d"
+    if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 ]]; then
+	echo "libvpx"
     fi
-    if [[ $has_cmake == 1 ]]; then
-	echo "libSvtAV1"
+    if [[ $TLRENDER_AV1 == ON || $TLRENDER_AV1 == 1 ]]; then
+	if [[ $has_meson == 1 || $has_pip3 ]]; then
+	    echo "libdav1d"
+	fi
+	if [[ $has_cmake == 1 ]]; then
+	    echo "libSvtAV1"
+	fi
     fi
     if [[ $FFMPEG_GPL == GPL ]]; then
 	echo "libx264"

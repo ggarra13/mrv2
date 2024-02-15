@@ -26,6 +26,16 @@ extract_version
 extract_python_version
 
 #
+# Extract cmake version
+#
+get_cmake_version
+
+#
+# Extract compiler version
+#
+get_compiler_version
+
+#
 # Determine OS Kernel, OS CPU architecture
 #
 . etc/parse_args.sh

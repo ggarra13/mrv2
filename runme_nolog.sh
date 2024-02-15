@@ -109,10 +109,10 @@ echo
 echo "Build directory is ${BUILD_DIR}"
 echo "Version to build is v${mrv2_VERSION}"
 echo "Architecture is ${ARCH}"
-echo "Building with ${CPU_CORES} cores"
+echo "Building with ${COMPILER_VERSION}, ${CPU_CORES} cores"
 echo "Compiler flags are ${FLAGS}"
-echo 
-cmake --version
+echo "$CMAKE_VERSION"
+echo
 
 
 mkdir -p $BUILD_DIR/install
@@ -147,7 +147,7 @@ echo
 
 echo "NDI support ........................ ${TLRENDER_NDI} 	(TLRENDER_NDI)"
 if [[ $TLRENDER_NDI == ON || $TLRENDER_NDI == 1 ]]; then
-    echo "NDI SDK ... ${TLRENDER_NDI_SDK} (TLRENDER_NDI_SDK}"
+    echo "NDI SDK ... ${TLRENDER_NDI_SDK} 	(TLRENDER_NDI_SDK}"
 fi
 
 echo

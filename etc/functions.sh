@@ -52,6 +52,23 @@ get_msvc_version()
     export MSVC_VERSION=`echo $VCINSTALLDIR | grep -o '2[0-9]\+'`
 }
 
+get_cmake_version()
+{
+    export CMAKE_VERSION=`cmake --version | grep version`
+}
+
+get_compiler_version()
+{
+    if [[ $KERNEL == *Msys* ]]; then
+	get_msvc_version
+	export COMPILER_VERSION="MSVC ${MSVC_VERSION}"
+    elif [[ $KERNEL == *Linux* ]]; then
+	export COMPILER_VERSION=`gcc --version | grep version`
+    else
+	export COMPILER_VERSION=`clang --version | grep version`
+    fi
+}
+
 
 #
 # Extract version from cmake/version.cmake
