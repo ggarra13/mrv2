@@ -63,10 +63,6 @@ MSYS_LIBS=1
 
 
 if [[ $MSYS_LIBS == 1 ]]; then
-    pacman -Sy --noconfirm
-
-    # pacman -Sy meson --noconfirm  # @bug: broken
-    
     pacman -Sy make wget diffutils yasm nasm pkg-config --noconfirm
 fi
     
@@ -86,42 +82,20 @@ if type -P cmake &> /dev/null; then
     has_cmake=1
 fi
 
-echo
-echo "Installing packages needed to build:"
-echo
-echo "libvpx"
-if [[ $has_meson == 1 || $has_pip3 ]]; then
-    echo "libdav1d"
-fi
-if [[ $has_cmake == 1 ]]; then
-    echo "libSvtAV1"
-fi
-if [[ $FFMPEG_GPL == GPL ]]; then
-    echo "libx264"
-fi
-echo "FFmpeg"
-echo
-    
-
-    
-
-#
-# Build with libvpx (webm) movies.
-#
-BUILD_LIBVPX=1
-
-#
-# Build with libdav1d decoder and SVT-AV1 encoder.
-#
-BUILD_LIBDAV1D=1
-if [[ $has_meson == 0 ]]; then
-    echo "Please install meson from https://github.com/mesonbuild/meson/releases"
-    BUILD_LIBDAV1D=0
+if [ -z "$TLRENDER_AV1" ]; then
+    export TLRENDER_AV1=ON
 fi
 
-BUILD_LIBSVTAV1=1
-if [[ $has_cmake == 0 ]]; then
-    BUILD_LIBSVTAV1=0
+if [ -z "$TLRENDER_FFMPEG" ]; then
+    export TLRENDER_FFMPEG=ON
+fi
+
+if [ -z "$TLRENDER_NET" ]; then
+    export TLRENDER_NET=ON
+fi
+
+if [ -z "$TLRENDER_VPX" ]; then
+    export TLRENDER_VPX=ON
 fi
 
 #
@@ -129,21 +103,51 @@ fi
 #
 BUILD_LIBX264=1
 if [[ $FFMPEG_GPL == LGPL ]]; then
-    BUILD_LIBX264=0
+    BUILD_LIBX264=OFF
+fi
+
+if [[ $TLRENDER_FFMPEG == OFF || $TLRENDER_FFMPEG == 0 ]]; then
+    export TLRENDER_VPX=OFF
+    export TLRENDER_AV1=OFF
+    export TLRENDER_NET=OFF
+    export BUILD_LIBX264=OFF
+else
+    echo
+    echo "Installing packages needed to build:"
+    echo
+    if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 ]]; then
+	echo "libvpx"
+    fi
+    if [[ $TLRENDER_AV1 == ON || $TLRENDER_AV1 == 1 ]]; then
+	if [[ $has_meson == 1 || $has_pip3 ]]; then
+	    echo "libdav1d"
+	fi
+	if [[ $has_cmake == 1 ]]; then
+	    echo "libSvtAV1"
+	fi
+    fi
+    if [[ $FFMPEG_GPL == GPL ]]; then
+	echo "libx264"
+    fi
+    echo "FFmpeg"
+    echo
 fi
 
 #
-# Build with openssl and libcrypto support
-# 
-BUILD_SSL=1
-
-
+# Build with libdav1d decoder and SVT-AV1 encoder.
 #
-# Build FFMPEG with the GPL libraries specified above.
-#
-BUILD_FFMPEG=1
+if [[ $TLRENDER_AV1 == ON || $TLRENDER_AV1 == 1 ]]; then
+    BUILD_LIBDAV1D=1
+    if [[ $has_meson == 0 ]]; then
+	echo "Please install meson from https://github.com/mesonbuild/meson/releases"
+	BUILD_LIBDAV1D=0
+    fi
 
-
+    BUILD_LIBSVTAV1=1
+    if [[ $has_cmake == 0 ]]; then
+	BUILD_LIBSVTAV1=0
+    fi
+fi
 
 mkdir -p $ROOT_DIR
 
@@ -161,7 +165,7 @@ mkdir -p build
 
 ## Build libvpx
 ENABLE_LIBVPX=""
-if [[ $BUILD_LIBVPX == 1 ]]; then
+if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 ]]; then
     cd $ROOT_DIR/sources
     if [[ ! -d libvpx ]]; then
 	git clone --depth 1 --branch ${LIBVPX_TAG} https://chromium.googlesource.com/webm/libvpx 2> /dev/null
@@ -333,7 +337,7 @@ if [[ $BUILD_LIBX264 == 1 ]]; then
     fi
     
     ENABLE_LIBX264="--enable-libx264 --enable-gpl"
-    if [[ $BUILD_SSL == 1 ]]; then
+    if [[ $TLRENDER_NET == 1 ]]; then
 	ENABLE_LIBX264="${ENABLE_LIBX264} --enable-version3"
     fi
 else
@@ -349,7 +353,7 @@ fi
 # Install openssl and libcrypto
 #
 ENABLE_OPENSSL=""
-if [[ $BUILD_SSL == 1 ]]; then
+if [[ $TLRENDER_NET == ON || $TLRENDER_NET == 1 ]]; then
     if [[ ! -e $BUILD_DIR/install/lib/ssl.lib ]]; then
 	
 	if [[ ! -e /mingw64/lib/libssl.dll.a ]]; then
@@ -380,7 +384,7 @@ echo "Preparing to build FFmpeg...."
 # Build FFmpeg
 #
 
-if [[ $BUILD_FFMPEG == 1 ]]; then
+if [[ $TLRENDER_FFMPEG == ON || $TLRENDER_FFMPEG == 1 ]]; then
     cd $ROOT_DIR/sources
 
     if [[ ! -d ffmpeg ]]; then

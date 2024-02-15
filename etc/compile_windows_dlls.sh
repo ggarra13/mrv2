@@ -8,7 +8,7 @@
 #
 # Install libintl, libiconv and gettext
 #
-if [[ $RUNME == 1 ]]; then
+if [[ $RUNME_NOLOG == 1 ]]; then
 
     #
     # Install libintl, iconv and gettext from MSys repositories

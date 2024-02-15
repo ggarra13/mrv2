@@ -34,7 +34,7 @@ parse_option()
     if [[ "$input" =~ ^(-D)?(.+)=(.+)$ ]]; then
         local option="${BASH_REMATCH[2]}"
         local value="${BASH_REMATCH[3]}"
-	export CMAKE_FLAGS="-D $option=$value ${CMAKE_FLAGS}"
+	export "$option=$value"
     else
         echo "Invalid option format: $input"
         exit 1
@@ -46,9 +46,13 @@ parse_option()
 #
 get_kernel
 
+export RUNME_NOLOG=0
 export RUNME=0
 if [[ $0 == *runme.sh* || $0 == *runme_nolog.sh* ]]; then
     RUNME=1
+    if [[ $0 == *runme_nolog.sh* ]]; then
+	RUNME_NOLOG=1
+    fi
 fi
 
 BUILD_ROOT=BUILD-$KERNEL-$ARCH

@@ -25,29 +25,10 @@ if [[ ! -e /mingw64/bin/gettext.exe ||
     pacman -Syu --noconfirm
 fi
 
-
-#
-# Install git (breaks BuildpyFLTK)
-#
-# if [[ ! -e /mingw64/bin/git.exe ]]; then
-#     pacman -Sy git --noconfirm
-# fi
-
 #
 # Install subversion
 #
-pacman -Sy libsqlite  --noconfirm
-pacman -Sy subversion --noconfirm
-
-#
-# Install swig
-#
-pacman -Sy swig --noconfirm
-
-#
-# Install gettext
-#
-pacman -Sy mingw-w64-x86_64-gettext --noconfirm
+pacman -Sy libsqlite subversion swig mingw-w64-x86_64-gettext --noconfirm
 
 mkdir -p $BUILD_DIR/install/bin
 mkdir -p $BUILD_DIR/install/lib

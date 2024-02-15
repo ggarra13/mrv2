@@ -64,6 +64,9 @@ if [[ $CLEAN_DIR == 1 && $0 == *runme.sh* ]]; then
     fi
 fi
 
+if [[ $FFMPEG_GPL == "" ]]; then
+    FFMPEG_GPL=LGPL
+fi
 
 export PATH="$PWD/${BUILD_DIR}/install/bin:$PWD/$BUILD_DIR/install/bin/Scripts:${PATH}"
 if [ -z "$OLD_LD_LIBRARY_PATH" ]; then
@@ -79,28 +82,4 @@ export PYTHONPATH="$PWD/${BUILD_DIR}/install/lib/python${PYTHON_VERSION}:$PWD/${
 export PYTHONEXE="$PWD/${BUILD_DIR}/install/bin/python${PYTHON_VERSION}"
 if [[ $KERNEL == *Msys* ]]; then
     export PYTHONEXE="$PWD/${BUILD_DIR}/install/bin/python.exe"
-fi
-
-if [[ $RUNME == 1 && $0 != *runme.sh* && $0 != runme_minimal.sh ]]; then
-    echo "Build directory is ${BUILD_DIR}"
-    echo "Version to build is v${mrv2_VERSION}"
-    echo "Architecture is ${ARCH}"
-    echo "Building with ${CPU_CORES} cores"
-    if [[ $FFMPEG_GPL == "" ]]; then
-	FFMPEG_GPL=LGPL
-    fi
-    echo "FFmpeg will be built as ${FFMPEG_GPL}"
-    echo "CMake flags are ${CMAKE_FLAGS}"
-    echo "Compiler flags are ${FLAGS}"
-    cmake --version
-
-
-    mkdir -p $BUILD_DIR/install
-    
-fi
-
-if [[ $RUNME == 1 && $0 == *runme_nolog.sh* ]]; then
-    if [[ $KERNEL == *Msys* ]]; then
-	. $PWD/etc/compile_windows_dlls.sh
-    fi
 fi

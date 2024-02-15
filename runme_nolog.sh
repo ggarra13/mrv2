@@ -106,36 +106,68 @@ echo
 echo "Building summary"
 echo "================"
 echo
-echo "Common options"
-echo
-echo "Wayland support .................... ${TLRENDER_WAYLAND}"
-echo
+echo "Build directory is ${BUILD_DIR}"
+echo "Version to build is v${mrv2_VERSION}"
+echo "Architecture is ${ARCH}"
+echo "Building with ${CPU_CORES} cores"
+echo "Compiler flags are ${FLAGS}"
+echo 
+cmake --version
+
+
+mkdir -p $BUILD_DIR/install
+
+if [[ $KERNEL == *Linux* ]]; then
+    echo "Common options"
+    echo
+    echo "Wayland support .................... ${TLRENDER_WAYLAND} 	(TLRENDER_WAYLAND)"
+    echo
+fi
+
 echo "mrv2 Options"
 echo 
-echo "Build Python........................ ${BUILD_PYTHON}"
-echo "Build pyFLTK........................ ${MRV2_PYFLTK}"
-echo "Build embedded Python............... ${MRV2_PYBIND11}"
-echo "Build mrv2 Network connections...... ${MRV2_NETWORK}"
-echo "Build PDF........................... ${MRV2_PDF}"
+echo "Build Python........................ ${BUILD_PYTHON} 	(BUILD_PYTHON)"
+echo "Build pyFLTK........................ ${MRV2_PYFLTK} 	(MRV2_PYFLTK)"
+echo "Build embedded Python............... ${MRV2_PYBIND11} 	(MRV2_PYBIND11)"
+echo "Build mrv2 Network connections...... ${MRV2_NETWORK} 	(MRV2_NETWORK)"
+echo "Build PDF........................... ${MRV2_PDF} 	(MRV2_PDF)"
 echo
 echo "tlRender Options"
 echo
-echo "FFmpeg network support ............. ${TLRENDER_NET}"
-echo "FFmpeg support ..................... ${TLRENDER_FFMPEG}"
-echo "AV1 codec support .................. ${TLRENDER_AV1}"
-echo "VPX codec support .................. ${TLRENDER_VPX}"
-echo "YASM assembler ..................... ${TLRENDER_YASM}"
+
+echo "FFmpeg support ..................... ${TLRENDER_FFMPEG} 	(TLRENDER_FFMPEG)"
+if [[ $TLRENDER_FFMPEG == ON || $TLRENDER_FFMPEG == 1 ]]; then
+    echo "FFmpeg GPL ......................... ${FFMPEG_GPL} 	(-gpl flag)"
+    echo "FFmpeg network support ............. ${TLRENDER_NET} 	(TLRENDER_NET)"
+    echo "AV1 codec support .................. ${TLRENDER_AV1} 	(TLRENDER_AV1)"
+    echo "VPX codec support .................. ${TLRENDER_VPX} 	(TLRENDER_VPX)"
+    echo "YASM assembler ..................... ${TLRENDER_YASM} 	(TLRENDER_YASM)"
+fi
 echo
-echo "NDI support ........................ ${TLRENDER_NDI}"
-echo "NDI SDK ... ${TLRENDER_NDI_SDK}"
+
+echo "NDI support ........................ ${TLRENDER_NDI} 	(TLRENDER_NDI)"
+if [[ $TLRENDER_NDI == ON || $TLRENDER_NDI == 1 ]]; then
+    echo "NDI SDK ... ${TLRENDER_NDI_SDK} (TLRENDER_NDI_SDK}"
+fi
+
 echo
-echo "LibRaw support ..................... ${TLRENDER_RAW}"
-echo "USD support ........................ ${TLRENDER_USD}"
+echo "LibRaw support ..................... ${TLRENDER_RAW} 	(TLRENDER_RAW)"
+echo "USD support ........................ ${TLRENDER_USD} 	(TLRENDER_USD)"
 
 sleep 10
 
-mkdir -p $BUILD_DIR
+mkdir -p $BUILD_DIR/install
+
+#
+# Handle Windows pre-flight compiles
+#
+if [[ $KERNEL == *Msys* ]]; then
+    . $PWD/etc/compile_windows_dlls.sh
+fi
+
+
 cd $BUILD_DIR
+
 
 cmd="cmake -G '${CMAKE_GENERATOR}' \
 	   -D CMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE \
