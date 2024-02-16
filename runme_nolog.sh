@@ -93,6 +93,10 @@ if [ -z "$TLRENDER_VPX" ]; then
     export TLRENDER_VPX=ON
 fi
 
+if [ -z "$TLRENDER_X264" ]; then
+    export TLRENDER_X264=OFF
+fi
+
 if [ -z "$TLRENDER_WAYLAND" ]; then
     export TLRENDER_WAYLAND=ON
 fi
@@ -137,10 +141,11 @@ echo
 
 echo "FFmpeg support ..................... ${TLRENDER_FFMPEG} 	(TLRENDER_FFMPEG)"
 if [[ $TLRENDER_FFMPEG == ON || $TLRENDER_FFMPEG == 1 ]]; then
-    echo "FFmpeg GPL ......................... ${FFMPEG_GPL} 	(-gpl flag)"
+    echo "FFmpeg GPL ......................... ${FFMPEG_GPL} 	(Use -gpl flag)"
     echo "FFmpeg network support ............. ${TLRENDER_NET} 	(TLRENDER_NET)"
     echo "AV1 codec support .................. ${TLRENDER_AV1} 	(TLRENDER_AV1)"
     echo "VPX codec support .................. ${TLRENDER_VPX} 	(TLRENDER_VPX)"
+    echo "X264 codec support ................. ${TLRENDER_X264} 	(TLRENDER_X264)"
     echo "YASM assembler ..................... ${TLRENDER_YASM} 	(TLRENDER_YASM)"
 fi
 echo
@@ -189,6 +194,7 @@ cmd="cmake -G '${CMAKE_GENERATOR}' \
 	   -D TLRENDER_USD=${TLRENDER_USD} \
 	   -D TLRENDER_VPX=${TLRENDER_VPX} \
 	   -D TLRENDER_WAYLAND=${TLRENDER_WAYLAND} \
+           -D TLRENDER_X264=${TLRENDER_X264} \
 	   -D TLRENDER_YASM=${TLRENDER_YASM} \
 	   -D TLRENDER_PROGRAMS=OFF \
 	   -D TLRENDER_EXAMPLES=FALSE \

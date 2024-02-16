@@ -27,6 +27,7 @@ params=$*
 #
 . etc/build_dir.sh
 
+export BUILD_DIR=$BUILD_DIR-minimal
 mkdir -p $BUILD_DIR
 
 
@@ -61,24 +62,7 @@ export TLRENDER_VPX=OFF
 export TLRENDER_WAYLAND=ON
 export TLRENDER_YASM=OFF
 
-cmd="./runme_nolog.sh 
-           --minimal
-	   -D BUILD_PYTHON=${BUILD_PYTHON} \
-	   -D MRV2_PYFLTK=${MRV2_PYFLTK} \
-	   -D MRV2_PYBIND11=${MRV2_PYBIND11} \
-	   -D MRV2_NETWORK=${MRV2_NETWORK} \
-	   -D MRV2_PDF=${MRV2_PDF} \
-	   -D TLRENDER_USD=${TLRENDER_USD} \
-	   -D TLRENDER_VPX=${TLRENDER_VPX} \
-	   -D TLRENDER_YASM=${TLRENDER_YASM} \
-	   -D TLRENDER_RAW=${TLRENDER_RAW} \
-	   -D TLRENDER_WAYLAND=${TLRENDER_WAYLAND} \
-	   -D TLRENDER_NET=${TLRENDER_NET} \
-	   -D TLRENDER_NFD=OFF \
-	   -D TLRENDER_PROGRAMS=OFF \
-	   -D TLRENDER_EXAMPLES=FALSE \
-	   -D TLRENDER_TESTS=FALSE \
-	   -D TLRENDER_QT6=OFF \
-	   -D TLRENDER_QT5=OFF \
-            $params 2>&1 | tee $BUILD_DIR/compile.log"
+echo
+echo "Saving compile log to $BUILD_DIR/compile.log ..."
+cmd="./runme_nolog.sh --minimal $params 2>&1 | tee $BUILD_DIR/compile.log"
 run_cmd $cmd

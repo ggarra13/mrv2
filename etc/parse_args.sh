@@ -7,7 +7,7 @@
 
 show_help()
 {
-    if [[ $RUNME == 1 ]]; then
+    if [[ $RUNME == 1 || $RUNME_NOLOG == 1 ]]; then
 	echo "$0 [debug] [clean] [dist] [-v] [-j <num>] [-lgpl] [-gpl] [-D VAR=VALUE] [-t <target>] [-help]"
 	echo ""
 	echo "* debug builds a debug build."
@@ -42,31 +42,36 @@ parse_option()
 }
 
 #
+# Set RUNME and RUNME_NOLOG variables
+#
+export RUNME_NOLOG=0
+export RUNME=0
+if [[ $0 == *runme.sh* ]]; then
+    RUNME=1
+fi
+if [[ $0 == *runme_nolog.sh* ]]; then
+    RUNME_NOLOG=1
+fi
+
+
+#
 # Get the KERNEL and ARCH variables
 #
 get_kernel
 
-export RUNME_NOLOG=0
-export RUNME=0
-if [[ $0 == *runme.sh* || $0 == *runme_nolog.sh* ]]; then
-    RUNME=1
-    if [[ $0 == *runme_nolog.sh* ]]; then
-	RUNME_NOLOG=1
-    fi
-fi
-
+#
+# With KERNEL and ARCH, build root dir
+#
 BUILD_ROOT=BUILD-$KERNEL-$ARCH
 
-# if [[ $KERNEL == *Msys* ]]; then
-#     get_msvc_version
-#     echo "MSVC_VERSION=$MSVC_VERSION"
-#     BUILD_ROOT=$BUILD_ROOT-$MSVC_VERSION
-# fi
-
-export MRV2_DIST_RELEASE=0
-export FFMPEG_GPL=$FFMPEG_GPL
+#
+# Set up parse variables' default values
+#
+export FFMPEG_GPL=LGPL
+export TLRENDER_X264=OFF
 CLEAN_DIR=0
 export CMAKE_OSX_ARCHITECTURES=""
+export CMAKE_VERBOSE_MAKEFILE=OFF
 export CMAKE_BUILD_TYPE="Release"
 export CMAKE_GENERATOR="Ninja"
 export CMAKE_TARGET=""
@@ -82,18 +87,6 @@ for i in "$@"; do
 	    export CMAKE_FLAGS=" -DTLRENDER_API=GL_4_1_Debug"
 	    shift
 	    ;;
-	dist)
-	    export MRV2_DIST_RELEASE=1
-	    shift
-	    ;;
-	--rocky|-rocky)
-	    shift
-	    BUILD_ROOT=${BUILD_ROOT}-rocky
-	    ;;
-	--ndi|-ndi)
-	    shift
-	    BUILD_ROOT=${BUILD_ROOT}-ndi
-	    ;;
 	--minimal|-minimal)
 	    shift
 	    BUILD_ROOT=${BUILD_ROOT}-minimal
@@ -105,7 +98,7 @@ for i in "$@"; do
 	    ;;
 	clean)
 	    CLEAN_DIR=1
-	    if [[ $RUNME == 0 ]]; then
+	    if [[ $RUNME == 0 && $RUNME_NOLOG == 0 ]]; then
 		echo $0
 		echo "clean option can only be run with the runme.sh script"
 		exit 1
@@ -114,12 +107,12 @@ for i in "$@"; do
 	    ;;
 	-lgpl|--lgpl)
 	    export FFMPEG_GPL=LGPL
-	    export CMAKE_FLAGS="-D TLRENDER_X264=OFF ${CMAKE_FLAGS}"
+	    export TLRENDER_X264=OFF
 	    shift
 	    ;;
 	-gpl|--gpl)
 	    export FFMPEG_GPL=GPL
-	    export CMAKE_FLAGS="-D TLRENDER_X264=ON ${CMAKE_FLAGS}"
+	    export TLRENDER_X264=ON
 	    shift
 	    ;;
 	-dir|--dir|-build-dir|--build-dir|-root|--root-dir)
@@ -128,7 +121,7 @@ for i in "$@"; do
 	    shift
 	    ;;
 	-v)
-	    export CMAKE_FLAGS="-D CMAKE_VERBOSE_MAKEFILE=ON ${CMAKE_FLAGS}"
+	    export CMAKE_VERBOSE_MAKEFILE=ON
 	    export FLAGS="-v ${FLAGS}"
 	    shift
 	    ;;
@@ -147,7 +140,7 @@ for i in "$@"; do
 	    ;;
 	-G)
 	    shift
-	    if [[ $RUNME == 0 ]]; then
+	    if [[ $RUNME == 0 && $RUNME_NOLOG == 0 ]]; then
 		echo $0
 		echo "Cmake generator can only be run with the runme.sh script"
 		exit 1

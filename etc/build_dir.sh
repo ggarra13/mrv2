@@ -35,6 +35,24 @@ get_cmake_version
 #
 . etc/parse_args.sh
 
+#
+# Build a build directory with that information
+#
+export BUILD_DIR=$BUILD_ROOT/${CMAKE_BUILD_TYPE}
+
+#
+# Clean the directory if we were asked to.
+#
+if [[ $CLEAN_DIR == 1 && $RUNME == 1 ]]; then
+    if [[ -d ${BUILD_DIR} ]]; then
+	echo "Cleaning ${BUILD_DIR}.  Please wait..."
+	run_cmd rm -rf $BUILD_DIR
+    fi
+fi
+
+#
+# Get the number of CPU cores for maximum efficiency
+#
 . etc/build_cores.sh
 
 #
@@ -42,25 +60,19 @@ get_cmake_version
 #
 get_compiler_version
 
-
+#
+# For Darwin, when building amd64, we make it compatible with macOS 11.0
+#
 export OSX_TARGET=11.0
-
-# Build a build directory with that information
-export BUILD_DIR=$BUILD_ROOT/${CMAKE_BUILD_TYPE}
 
 
 if [[ $KERNEL == *Darwin* ]]; then
     export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:${PATH}"
     if [[ $ARCH == arm64 ]]; then
 	export CMAKE_OSX_ARCHITECTURES=$ARCH
-    fi
-    if [[ $MRV2_DIST_RELEASE == 1 ]]; then
+    else
 	export CMAKE_FLAGS="-DCMAKE_OSX_DEPLOYMENT_TARGET=${OSX_TARGET} ${CMAKE_FLAGS}"
     fi
-fi
-
-if [[ $MRV2_DIST_RELEASE == 1 ]]; then
-    export CMAKE_FLAGS="-D MRV2_DIST_RELEASE=ON ${CMAKE_FLAGS}"
 fi
 
 if [[ $FLAGS == "" ]]; then
@@ -68,29 +80,50 @@ if [[ $FLAGS == "" ]]; then
 fi
 export FLAGS="${FLAGS} $*"
 
-if [[ $CLEAN_DIR == 1 && $0 == *runme.sh* ]]; then
-    if [[ -d ${BUILD_DIR} ]]; then
-	echo "Cleaning ${BUILD_DIR}.  Please wait..."
-	run_cmd rm -rf $BUILD_DIR
-    fi
-fi
-
-if [[ $FFMPEG_GPL == "" ]]; then
-    FFMPEG_GPL=LGPL
-fi
-
-export PATH="$PWD/${BUILD_DIR}/install/bin:$PWD/$BUILD_DIR/install/bin/Scripts:${PATH}"
+#
+# Store old LD_LIBRARY_PATH
+#
 if [ -z "$OLD_LD_LIBRARY_PATH" ]; then
     export OLD_LD_LIBRARY_PATH=${LD_LIBRARY_PATH}
 fi
-export LD_LIBRARY_PATH="$PWD/${BUILD_DIR}/install/lib64:$PWD/${BUILD_DIR}/install/lib:${LD_LIBRARY_PATH}"
+
 if [ -z "$OLD_DYLD_LIBRARY_PATH" ]; then
+    # On macOS, sqlite which is used by subversion does not get linked into
+    # /usr/local to not shadow the one in /usr/lib
     export OLD_DYLD_LIBRARY_PATH="/usr/local/opt/sqlite/lib:${DYLD_LIBRARY_PATH}"
 fi
+
+#
+# Set environment variables to point to install directory
+#
+export PATH="$PWD/${BUILD_DIR}/install/bin:$PWD/$BUILD_DIR/install/bin/Scripts:${PATH}"
+
+#
+# We set both lib64 and lib to handle differences in Linux RH and Ubuntu
+#
+export LD_LIBRARY_PATH="$PWD/${BUILD_DIR}/install/lib64:$PWD/${BUILD_DIR}/install/lib:${LD_LIBRARY_PATH}"
+
 export DYLD_LIBRARY_PATH="$PWD/${BUILD_DIR}/install/lib:${DYLD_LIBRARY_PATH}"
+
+#
+# We set both lib64 and lib to handle differences in Linux RH and Ubuntu
+#
 export PKG_CONFIG_PATH="$PWD/${BUILD_DIR}/install/lib64/pkgconfig:$PWD/${BUILD_DIR}/install/lib/pkgconfig:${PKG_CONFIG_PATH}"
-export PYTHONPATH="$PWD/${BUILD_DIR}/install/lib/python${PYTHON_VERSION}:$PWD/${BUILD_DIR}/install/lib/python${PYTHON_VERSION}/site-packages:${PYTHONPATH}"
-export PYTHONEXE="$PWD/${BUILD_DIR}/install/bin/python${PYTHON_VERSION}"
+
+##########
+# Python #
+##########
+
+#
+# Set the name of python executable we build
+#
 if [[ $KERNEL == *Msys* ]]; then
     export PYTHONEXE="$PWD/${BUILD_DIR}/install/bin/python.exe"
+else
+    export PYTHONEXE="$PWD/${BUILD_DIR}/install/bin/python${PYTHON_VERSION}"
 fi
+
+#
+# Set PYTHONPATH
+#
+export PYTHONPATH="$PWD/${BUILD_DIR}/install/lib/python${PYTHON_VERSION}:$PWD/${BUILD_DIR}/install/lib/python${PYTHON_VERSION}/site-packages:${PYTHONPATH}"

@@ -15,7 +15,7 @@ if [[ ! -e etc/build_dir.sh ]]; then
     exit 1
 fi
 
-if [[ ! $RUNME ]]; then
+if [[ ! $RUNME && ! $RUNME_NOLOG ]]; then
     . etc/build_dir.sh
 else
     . etc/functions.sh
@@ -37,7 +37,14 @@ SVTAV1_TAG=v1.8.0
 X264_TAG=stable
 FFMPEG_TAG=n6.0
 
+#
+# Repositories
+#
 SVTAV1_REPO=https://gitlab.com/AOMediaCodec/SVT-AV1.git
+LIBVPX_REPO=https://chromium.googlesource.com/webm/libvpx.git
+LIBDAV1D_REPO=https://code.videolan.org/videolan/dav1d.git 
+LIBX264_REPO=https://code.videolan.org/videolan/x264.git
+FFMPEG_REPO=https://git.ffmpeg.org/ffmpeg.git
 
 #
 # Some auxiliary variables
@@ -113,16 +120,16 @@ fi
 #
 # Build with h264 encoding.
 #
-BUILD_LIBX264=1
+TLRENDER_X264=ON
 if [[ $FFMPEG_GPL == LGPL ]]; then
-    BUILD_LIBX264=OFF
+    TLRENDER_X264=OFF
 fi
 
 if [[ $BUILD_FFMPEG == OFF || $BUILD_FFMPEG == 0 ]]; then
     export TLRENDER_VPX=OFF
     export TLRENDER_AV1=OFF
     export TLRENDER_NET=OFF
-    export BUILD_LIBX264=OFF
+    export TLRENDER_X264=OFF
 else
     echo
     echo "Installing packages needed to build:"
@@ -138,7 +145,7 @@ else
 	    echo "libSvtAV1"
 	fi
     fi
-    if [[ $FFMPEG_GPL == GPL ]]; then
+    if [[ $TLRENDER_X264 == ON || $TLRENDER_X264 == 1 ]]; then
 	echo "libx264"
     fi
     echo "FFmpeg"
@@ -180,7 +187,7 @@ ENABLE_LIBVPX=""
 if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 ]]; then
     cd $ROOT_DIR/sources
     if [[ ! -d libvpx ]]; then
-	git clone --depth 1 --branch ${LIBVPX_TAG} https://chromium.googlesource.com/webm/libvpx 2> /dev/null
+	git clone --depth 1 --branch ${LIBVPX_TAG} ${LIBVPX_REPO} 2> /dev/null
     fi
     
     if [[ ! -e $INSTALL_DIR/lib/vpx.lib ]]; then
@@ -193,16 +200,6 @@ if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 ]]; then
 	echo
 
 	
-	# ./../../sources/libvpx/configure --prefix=$INSTALL_DIR \
-	# 				 --target=x86_64-win64-vs16 \
-	# 				 --disable-examples \
-	# 				 --disable-docs \
-	# 				 --disable-unit-tests \
-	# 				 --disable-debug \
-	# 				 --log=no \
-	# 				 --disable-debug-libs \
-	# 				 --disable-dependency-tracking
-
 	unset CC
 	unset CXX
 	unset LD
@@ -236,7 +233,7 @@ if [[ $BUILD_LIBDAV1D == 1 ]]; then
     cd $ROOT_DIR/sources
 
     if [[ ! -d dav1d ]]; then
-	git clone --depth 1 https://code.videolan.org/videolan/dav1d.git --branch ${DAV1D_TAG} 2> /dev/null
+	git clone --depth 1 ${LIBDAV1D_REPO} --branch ${DAV1D_TAG} 2> /dev/null
     fi
 
     if [[ ! -e $INSTALL_DIR/lib/dav1d.lib ]]; then
@@ -327,17 +324,17 @@ fi
 # Build x264
 #
 ENABLE_LIBX264=""
-if [[ $BUILD_LIBX264 == 1 ]]; then
+if [[ $TLRENDER_X264 == ON || $TLRENDER_X264 == 1 ]]; then
     
     cd $ROOT_DIR/sources
 
     if [[ ! -d x264 ]]; then
-	git clone --depth 1 https://code.videolan.org/videolan/x264.git --branch ${X264_TAG} 2> /dev/null
+	git clone --depth 1 ${LIBX264_REPO} --branch ${X264_TAG} 2> /dev/null
     fi
 
     if [[ ! -e $INSTALL_DIR/lib/libx264.lib ]]; then
 	echo
-	echo "Compiling libx264 as $FFMPEG_GPL......"
+	echo "Compiling libx264 as GPL......"
 	echo
 	cd $ROOT_DIR/build
 	mkdir -p x264
@@ -402,7 +399,7 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
 
     if [[ ! -d ffmpeg ]]; then
 	echo "Cloning ffmpeg repository..."
-	git clone --depth 1 --branch ${FFMPEG_TAG} https://git.ffmpeg.org/ffmpeg.git 2> /dev/null
+	git clone --depth 1 --branch ${FFMPEG_TAG} ${FFMPEG_REPO} 2> /dev/null
     fi
     
     if [[ ! -e $INSTALL_DIR/lib/avformat.lib ]]; then
@@ -513,7 +510,7 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
 	    echo "libSvtAV1"
 	fi
     fi
-    if [[ $FFMPEG_GPL == GPL ]]; then
+    if [[ $TLRENDER_X264 == ON || $TLRENDER_X264 == 1 ]]; then
 	echo "libx264"
     fi
     echo "FFmpeg"
