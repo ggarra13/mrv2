@@ -158,7 +158,12 @@ fi
 if [[ $TLRENDER_AV1 == ON || $TLRENDER_AV1 == 1 ]]; then
     BUILD_LIBDAV1D=1
     if [[ $has_meson == 0 ]]; then
-	echo "Please install meson from https://github.com/mesonbuild/meson/releases"
+	if [[ $has_pip3 == 1 ]]; then
+	    pip3 install meson
+	    has_meson=1
+	else
+	    echo "Please install meson from https://github.com/mesonbuild/meson/releases"
+	fi
 	BUILD_LIBDAV1D=0
     fi
 
@@ -224,11 +229,6 @@ fi
 #
 ENABLE_LIBDAV1D=""
 if [[ $BUILD_LIBDAV1D == 1 ]]; then
-
-    if [[ $has_pip3 == 1 ]]; then
-	pip3 install meson
-	has_meson=1
-    fi
     
     cd $ROOT_DIR/sources
 
