@@ -138,7 +138,7 @@ else
 	echo "libvpx"
     fi
     if [[ $TLRENDER_AV1 == ON || $TLRENDER_AV1 == 1 ]]; then
-	if [[ $has_meson == 1 || $has_pip3 ]]; then
+	if [[ $has_meson || $has_pip3 ]]; then
 	    echo "libdav1d"
 	fi
 	if [[ $has_cmake == 1 ]]; then
@@ -161,10 +161,11 @@ if [[ $TLRENDER_AV1 == ON || $TLRENDER_AV1 == 1 ]]; then
 	if [[ $has_pip3 == 1 ]]; then
 	    pip3 install meson
 	    has_meson=1
+	    BUILD_LIBDAV1D=1
 	else
 	    echo "Please install meson from https://github.com/mesonbuild/meson/releases"
+	    BUILD_LIBDAV1D=0
 	fi
-	BUILD_LIBDAV1D=0
     fi
 
     BUILD_LIBSVTAV1=1
