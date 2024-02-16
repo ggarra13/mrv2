@@ -18,7 +18,7 @@ fi
 
 . etc/build_dir.sh
 
-export LD_LIBRARY_PATH=$OLD_LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$OLD_LD_LIBRARY_PATH:$BUILD_DIR/install/lib64:$BUILD_DIR/install/lib
 
 site_dir=$BUILD_DIR/install/lib/python${PYTHON_VERSION}/site-packages/requests
 if [[ $KERNEL == *Msys* ]]; then
