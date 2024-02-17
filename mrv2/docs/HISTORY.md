@@ -3,6 +3,7 @@ v1.0.5
 
 - Code clean up.
 - Build system cleamup and consolidation with environment variables.
+- Improved building speed on all platforms.
 - Fixed Windows' Python compilation screwing up if some other Python version
   was installed.
 - Fixed pyFLTK compilation on macOS and Linux having swig not use the right
@@ -14,6 +15,7 @@ v1.0.5
 - Updated version in web page docs.
 - Added FFmpeg presets for saving codecs.  Currently we ship vp9 and av1
   presets, but you are free to create your own.
+- Switched to building with gcc-12 on Rocky Linux 8.9 (not in Docker).
 
 
 v1.0.4
