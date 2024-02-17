@@ -148,6 +148,9 @@ jobs:
       
     - name: Install automake
       run: brew install automake
+      
+    - name: Install meson
+      run: brew install meson
 
     - name: Install GNU sed
       run: brew install gnu-sed
@@ -181,7 +184,7 @@ jobs:
         ./bin/upload_sourceforge.sh
 
 
-  macos-m1-full-build:
+  macos-14-full-build:
     runs-on: macos-14
 
     env:

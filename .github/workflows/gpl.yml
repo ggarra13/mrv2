@@ -136,6 +136,9 @@ jobs:
       
     - name: Install automake
       run: brew install automake
+      
+    - name: Install meson
+      run: brew install meson
 
     - name: Install GNU sed
       run: brew install gnu-sed
@@ -164,3 +167,56 @@ jobs:
     # - name: Upload binaries
     #   run: |
     #     ./bin/upload_sourceforge.sh
+
+  macos-14-gpl-build:
+    runs-on: macos-14
+
+    env:
+      CMAKE_OSX_DEPLOYMENT_TARGET: 14.0
+      
+    steps:
+    
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Install ninja-build
+      run: brew install ninja
+      
+    - name: Install automake
+      run: brew install automake
+
+    - name: Install meson
+      run: brew install meson
+      
+    - name: Install GNU sed
+      run: brew install gnu-sed
+      
+    - name: Install Python dependencies
+      run: brew install libffi openssl readline sqlite3 xz zlib
+        
+    - name: Install pyFLTK dependencies
+      run: brew install subversion swig
+      
+    - name: Setup environment
+      run: mkdir -p ssh
+
+    - name: Decode SSH key
+      run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ssh/id_rsa
+      shell: bash
+  
+    - name: Set permissions on SSH key
+      run: chmod 600 ssh/id_rsa
+      
+    - name: Set executable permissions
+      run: |
+        chmod +x ./*.sh ./bin/*.sh ./etc/*.sh
+
+    - name: Build mrv2
+      run: |
+        ./runme_nolog.sh -gpl -t package
+
+    - name: Upload binaries
+      run: |
+        ./bin/upload_sourceforge.sh
+
