@@ -18,6 +18,13 @@ endif()
 message(STATUS "Checking for wheel files ${WHL_DIRECTORY}/*.whl")
 file(GLOB whl_files "${WHL_DIRECTORY}/*.whl")
 
+# Upgrade pip to latest one
+execute_process(
+    COMMAND
+    ${PYTHON_EXECUTABLE} -m pip install --upgrade pip
+    WORKING_DIRECTORY ${WHL_DIRECTORY}
+)
+    
 # Install the found .whl files
 foreach(whl_file ${whl_files})
     
