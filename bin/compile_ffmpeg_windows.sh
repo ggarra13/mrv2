@@ -430,7 +430,6 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
             --disable-programs \
             --disable-doc \
             --disable-postproc \
-            --disable-avfilter \
             --disable-hwaccels \
             --disable-devices \
             --disable-filters \
@@ -466,6 +465,7 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
             --disable-vaapi \
             --disable-vdpau \
             --disable-videotoolbox \
+	    --enable-filter=scale \
             --enable-pic \
             --toolchain=msvc \
             --target-os=win64 \

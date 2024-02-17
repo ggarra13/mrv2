@@ -1,6 +1,7 @@
 # These settings were mostly taken from:
 # https://www.reddit.com/r/AV1/comments/k7colv/encoder_tuning_part_1_tuning_libvpxvp9_be_more/
 deadline:good
+speed:2
 tile-columns:1
 tile-rows:0
 webm:
