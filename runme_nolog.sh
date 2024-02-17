@@ -145,7 +145,7 @@ if [[ $TLRENDER_FFMPEG == ON || $TLRENDER_FFMPEG == 1 ]]; then
     echo "FFmpeg network support ............. ${TLRENDER_NET} 	(TLRENDER_NET)"
     echo "AV1 codec support .................. ${TLRENDER_AV1} 	(TLRENDER_AV1)"
     echo "VPX codec support .................. ${TLRENDER_VPX} 	(TLRENDER_VPX)"
-    echo "X264 codec support ................. ${TLRENDER_X264} 	(TLRENDER_X264)"
+    echo "X264 codec support ................. ${TLRENDER_X264} 	(Use -gpl flag)"
     echo "YASM assembler ..................... ${TLRENDER_YASM} 	(TLRENDER_YASM)"
 fi
 echo

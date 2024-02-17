@@ -10,6 +10,7 @@ ExternalProject_Add(
     GIT_REPOSITORY "https://github.com/pybind/pybind11"
     GIT_TAG v2.10.3
     GIT_PROGRESS 1
+    GIT_SHALLOW 1
     DEPENDS ${PYTHON_DEP}
     CMAKE_ARGS
     -DCMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHIECTURES}

@@ -15,6 +15,7 @@ ExternalProject_Add(
     LibHaru
     GIT_REPOSITORY "https://github.com/libharu/libharu.git"
     GIT_TAG ${LibHaru_TAG}
+    GIT_SHALLOW 1
     PATCH_COMMAND ${patch_cmd}
     CMAKE_ARGS
     -DCMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHIECTURES}
