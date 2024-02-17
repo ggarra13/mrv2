@@ -4,10 +4,8 @@
 
 include( ExternalProject )
 
-#set( FLTK_TAG master )
-# Stable TAG
-set(FLTK_TAG a1d3bf182e6c085779b6e7e7315bf15f384f7112)
-#set(FLTK_TAG 6ea31316fb64f64d346dc4a3a30984048f5df4cd) # Stable TAG
+#set( FLTK_GIT_TAG master )
+set(FLTK_GIT_TAG a1d3bf182e6c085779b6e7e7315bf15f384f7112) # Stable TAG
 
 set( FLTK_BUILD_SHARED_LIBS ON )  # We no longer compile static.
 
@@ -49,8 +47,7 @@ endif()
 ExternalProject_Add(
     FLTK
     GIT_REPOSITORY "https://github.com/fltk/fltk.git"
-    GIT_TAG ${FLTK_TAG}
-    GIT_SHALLOW 1
+    GIT_TAG ${FLTK_GIT_TAG}
     CMAKE_ARGS
     -DCMAKE_C_COMPILER=${FLTK_C_COMPILER}
     -DCMAKE_CXX_COMPILER=${FLTK_CXX_COMPILER}

@@ -4,19 +4,13 @@
 
 include( ExternalProject )
 
-# Stable TAG
-set( LibHaru_TAG v2.4.3 )
-#set( LibHaru_TAG master )
-
-set( patch_cmd )
-
+set( LibHaru_GIT_TAG v2.4.3 )
 
 ExternalProject_Add(
     LibHaru
     GIT_REPOSITORY "https://github.com/libharu/libharu.git"
-    GIT_TAG ${LibHaru_TAG}
+    GIT_TAG ${LibHaru_GIT_TAG}
     GIT_SHALLOW 1
-    PATCH_COMMAND ${patch_cmd}
     CMAKE_ARGS
     -DCMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHIECTURES}
     -DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET}

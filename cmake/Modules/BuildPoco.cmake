@@ -6,7 +6,7 @@ include( ExternalProject )
 
 # Stable TAG
 set( POCO_REPOSITORY "https://github.com/pocoproject/poco.git" )
-set( POCO_TAG poco-1.12.4-release )
+set( POCO_GIT_TAG poco-1.12.4-release )
 
 set( POCO_SHARED_LIBS OFF )
 set( POCO_OPENSSL OFF )
@@ -19,7 +19,7 @@ endif()
 ExternalProject_Add(
     POCO
     GIT_REPOSITORY ${POCO_REPOSITORY}
-    GIT_TAG ${POCO_TAG}
+    GIT_TAG ${POCO_GIT_TAG}
     GIT_PROGRESS 1
     GIT_SHALLOW 1
     PATCH_COMMAND ${POCO_PATCH}

@@ -4,11 +4,12 @@
 
 include( ExternalProject )
 
+set(pybind11_GIT_TAG v2.10.3)
 
 ExternalProject_Add(
     pybind11
     GIT_REPOSITORY "https://github.com/pybind/pybind11"
-    GIT_TAG v2.10.3
+    GIT_TAG ${pybind11_GIT_TAG}
     GIT_PROGRESS 1
     GIT_SHALLOW 1
     DEPENDS ${PYTHON_DEP}
