@@ -148,9 +148,6 @@ jobs:
       
     - name: Install automake
       run: brew install automake
-
-    - name: Install curl with openssl
-      run: brew reinstall curl --with-libssh2 --with-openssl
       
     - name: Install meson
       run: brew install meson
