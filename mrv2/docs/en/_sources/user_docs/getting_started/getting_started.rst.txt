@@ -44,7 +44,7 @@ located in the bin/ subdirectory.
 Wayland support
 ---------------
 
-The binary distribution of mrv2, which was compiled for Rocky Linux 8.8, has Wayland support but it may have problems starting up on newer distros.  It is recommended you build it from source.
+The binary distribution of mrv2, which was compiled for Rocky Linux 8.9, has Wayland support but it may have problems starting up on newer distros.  It is recommended you build it from source.
 
 If building from source is not an option, and you get an error like:
 

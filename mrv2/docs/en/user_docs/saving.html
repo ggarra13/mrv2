@@ -104,20 +104,42 @@
 <p class="topic-title">Save Annotations</p>
 <p>When this option is on, annotations in the video will get saved.</p>
 </aside>
-<aside class="topic">
-<p class="topic-title">Video Options</p>
 <ul>
 <li><p>Profile</p>
-<p>With the Profile option, you can select the basic codec used when</p>
+<p>With the Profile option, you can select the basic codec used when saving the movie.  Currently these can be “None”, “H264”, “ProRes”, “ProRes_Proxy”, “ProRes_LT”, “ProRes_HQ”, “ProRes_4444” or “ProRes_XQ”.</p>
 </li>
 </ul>
-</aside>
-<p>saving the movie.  Currently these can be “None”, “H264”, “ProRes”, “ProRes_Proxy”, “ProRes_LT”, “ProRes_HQ”, “ProRes_4444” or “ProRes_XQ”.
-Note that the most compatible codec (“H264”) requires a license from VideoLAN for encoding or to compile mrv2 in GPL mode.
+<p>Note that the most compatible codec (“H264”) requires a license from VideoLAN for encoding or to compile mrv2 in GPL mode.
 Please refer to the compilation instructions of mrv2 at:</p>
 <blockquote>
 <div><p><a class="reference external" href="https:://github.com/ggarra13/mrv2">https:://github.com/ggarra13/mrv2</a></p>
 </div></blockquote>
+<ul>
+<li><p>Preset</p>
+<p>With the Preset selection, you can choose the quality of encoding with the selected codec.  Currently, we ship presets for vp9 and av1.
+You can place them in $STUDIOPATH/presets or in the presets
+directory of the mrv2 installation.</p>
+<p>The presets should be named like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">codec_presetname</span><span class="o">.</span><span class="n">pst</span>
+</pre></div>
+</div>
+<p>For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vp9_good</span><span class="o">.</span><span class="n">pst</span>
+</pre></div>
+</div>
+<p>These presets will be listed in the Save Options when the
+proper video codec is used.  Note that the codec name is
+lowercase.</p>
+<p>The preset file is a colon separated file of parameters, like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># This is a comment</span>
+<span class="n">deadline</span><span class="p">:</span><span class="n">good</span>      <span class="c1"># this is another comment</span>
+<span class="n">webm</span><span class="p">:</span>              <span class="c1"># flag with no parameters</span>
+<span class="n">tile</span><span class="o">-</span><span class="n">column</span><span class="p">:</span><span class="mi">1</span>      <span class="c1"># integer flag</span>
+<span class="n">cq</span><span class="o">-</span><span class="n">level</span><span class="p">:</span><span class="mi">25</span>
+</pre></div>
+</div>
+</li>
+</ul>
 <aside class="topic">
 <p class="topic-title">Audio Options</p>
 <ul>

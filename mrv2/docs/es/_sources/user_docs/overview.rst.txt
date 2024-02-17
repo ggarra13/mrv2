@@ -26,6 +26,7 @@ Aquí está un resumen de ellas:
   - Reproducción de audio para fuentes con una pista de audio es provista con fregado y playback en reverso.
   - Soporte nativo de .otio permite reproducir líneas de tiempo de OpenTimelineIO con fundidos.
   - Soporte de USD (Universal Scene Description) de Pixar en OpenGL.
+  - Comunicación en red de NDI.
 
 **Listas de reproducción**
 

@@ -24,6 +24,35 @@ Por favor referirse a las instrucciones de compilación de mrv2 en:
 	      
               https:://github.com/ggarra13/mrv2
 
+	   * Preseteo
+
+	     Con la selección de preseteo, puede elegir la cualidad de
+	     codificación del codec seleccionado.  Actualmente, incluímos
+	     preseteos para vp9 y av1.
+	     Puede ponerlos en $STUDIOPATH/presets or en el directorio presets
+	     de la instalación de mrv2.
+
+	     Los preseteos deben ser llamados como::
+	      
+	       codec_nombrepreseteo.pst
+
+	     Por ejemplo::
+
+	       vp9_bueno.pst
+
+	     Estos preseteos serán listados en la opción de grabar películas
+	     cuando el codec apropiado es usado.  Note que el nombre del codec
+	     es en minúsculas.
+
+	     El archivo de preseteo es uno con parametros separados por dos
+	     puntos, como::
+
+	       # This is a comment
+	       deadline:good      # this is another comment
+	       webm:              # flag with no parameters
+	       tile-column:1      # integer flag
+	       cq-level:25
+	      
 .. topic:: Optiones de Audio
 
 	   * Codec

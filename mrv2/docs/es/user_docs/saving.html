@@ -116,7 +116,38 @@
 <p>Note que el codec más compabile («H264») requiere una licencia de VideoLAN para encodificar o que compile mrv2 en modo GPL.
 Por favor referirse a las instrucciones de compilación de mrv2 en:</p>
 <blockquote>
+<div><blockquote>
 <div><p><a class="reference external" href="https:://github.com/ggarra13/mrv2">https:://github.com/ggarra13/mrv2</a></p>
+</div></blockquote>
+<ul>
+<li><p>Preseteo</p>
+<p>Con la selección de preseteo, puede elegir la cualidad de
+codificación del codec seleccionado.  Actualmente, incluímos
+preseteos para vp9 y av1.
+Puede ponerlos en $STUDIOPATH/presets or en el directorio presets
+de la instalación de mrv2.</p>
+<p>Los preseteos deben ser llamados como:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">codec_nombrepreseteo</span><span class="o">.</span><span class="n">pst</span>
+</pre></div>
+</div>
+<p>Por ejemplo:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vp9_bueno</span><span class="o">.</span><span class="n">pst</span>
+</pre></div>
+</div>
+<p>Estos preseteos serán listados en la opción de grabar películas
+cuando el codec apropiado es usado.  Note que el nombre del codec
+es en minúsculas.</p>
+<p>El archivo de preseteo es uno con parametros separados por dos
+puntos, como:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># This is a comment</span>
+<span class="n">deadline</span><span class="p">:</span><span class="n">good</span>      <span class="c1"># this is another comment</span>
+<span class="n">webm</span><span class="p">:</span>              <span class="c1"># flag with no parameters</span>
+<span class="n">tile</span><span class="o">-</span><span class="n">column</span><span class="p">:</span><span class="mi">1</span>      <span class="c1"># integer flag</span>
+<span class="n">cq</span><span class="o">-</span><span class="n">level</span><span class="p">:</span><span class="mi">25</span>
+</pre></div>
+</div>
+</li>
+</ul>
 </div></blockquote>
 <aside class="topic">
 <p class="topic-title">Optiones de Audio</p>

@@ -12,6 +12,8 @@ v1.0.5
 - Allowed saving movie files with the speed (FPS) as set in the playback
   toolbar as long as you are not saving audio.
 - Updated version in web page docs.
+- Added FFmpeg presets for saving codecs.  Currently we ship vp9 and av1
+  presets, but you are free to create your own.
 
 
 v1.0.4
