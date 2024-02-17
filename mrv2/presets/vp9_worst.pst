@@ -1,0 +1,4 @@
+# These settings were mostly taken from:
+deadline:realtime
+speed:8
+crf:63

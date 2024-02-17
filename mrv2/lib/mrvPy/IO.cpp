@@ -23,7 +23,9 @@ void mrv2_io(py::module& m)
                 bool
 #ifdef TLRENDER_FFMPEG
                 ,
-                tl::ffmpeg::Profile, tl::ffmpeg::AudioCodec
+                tl::ffmpeg::Profile,
+                std::string,
+                tl::ffmpeg::AudioCodec
 #endif
 #ifdef TLRENDER_EXR
                 ,
@@ -34,6 +36,7 @@ void mrv2_io(py::module& m)
 #ifdef TLRENDER_FFMPEG
             ,
             py::arg("ffmpegProfile") = tl::ffmpeg::Profile::None,
+            py::arg("ffmpegPreset") = "",
             py::arg("ffmpegAudioCodec") = tl::ffmpeg::AudioCodec::None
 #endif
 #ifdef TLRENDER_EXR

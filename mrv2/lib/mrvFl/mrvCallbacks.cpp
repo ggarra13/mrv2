@@ -380,6 +380,23 @@ namespace mrv
             value = saveOptions.Profile->value();
             options.ffmpegProfile = static_cast<tl::ffmpeg::Profile>(value);
 
+            std::string preset;
+            value = saveOptions.Preset->value();
+            if (value >= 0)
+            {
+                const Fl_Menu_Item* item = &saveOptions.Preset->menu()[value];
+                if (item->label())
+                {
+                    auto entries = tl::ffmpeg::getProfileLabels();
+                    std::string profileName =
+                        entries[(int)options.ffmpegProfile];
+                    preset = tl::string::toLower(profileName) +
+                             "_" + item->label() + ".pst";
+                    options.ffmpegPreset = presetspath() + preset;
+                    LOG_INFO("Using profile " << profileName
+                             << " with preset " << options.ffmpegPreset );
+                }
+            }
             value = saveOptions.AudioCodec->value();
             options.ffmpegAudioCodec =
                 static_cast<tl::ffmpeg::AudioCodec>(value);

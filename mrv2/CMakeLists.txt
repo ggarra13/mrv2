@@ -199,7 +199,7 @@ include_directories( ${mrv2_INCLUDE_DIRS} )
 #
 # Install mrv2's auxiliary directories
 #
-install( DIRECTORY colors docs fonts icons ocio python share
+install( DIRECTORY colors docs fonts icons ocio presets python share
     DESTINATION .
     COMPONENT applications )
 

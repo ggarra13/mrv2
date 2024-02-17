@@ -167,6 +167,14 @@ namespace mrv
         path += "/python/demos/";
         return path;
     }
+    
+    std::string presetspath()
+    {
+        std::string path = studiopath();
+        if (path.empty()) path = mrv::rootpath();
+        path += "/presets/";
+        return path;
+    }
 
     std::vector<std::string> python_plugin_paths()
     {

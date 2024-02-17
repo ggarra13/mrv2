@@ -10,24 +10,77 @@ code_name {.cxx}
 decl {\#include <string>} {public global
 }
 
+decl {\#include <filesystem>} {public global
+}
+
+decl {namespace fs = std::filesystem;} {public global
+}
+
 decl {\#include "tlIO/FFmpeg.h"} {public global
 }
 
+decl {\#include "tlCore/String.h"} {public global
+}
+
 decl {\#include "mrvCore/mrvI8N.h"} {public global
+}
+
+decl {\#include "mrvCore/mrvHome.h"} {public global
 }
 
 class SaveMovieOptionsUI {open
 } {
   decl {bool cancel = false;} {public local
   }
+  Function {add_presets(Fl_Choice* o, Fl_Choice* v)} {open
+  } {
+    code {const Fl_Menu_Item* item = &o->menu()[o->value()];
+if (!item || !item->label()) return;
+
+std::string codec = tl::string::toLower(item->label());
+codec += "_";
+
+std::string directoryPath = mrv::presetspath();
+
+// Open the directory
+v->clear();
+fs::directory_iterator dirIter(directoryPath);
+for (const auto& entry : dirIter)
+{
+   // Check if the entry is a regular file, starts with "codec_", and ends with ".pst"
+   std::string filename = entry.path().filename().string();
+        
+   // Check if the entry is a regular file and starts with "vp9_"
+   if (fs::is_regular_file(entry) && 
+       filename.find(codec) == 0 &&
+       filename.size() > 4 && 
+       filename.substr(filename.size() - 4) == ".pst")
+   {
+       std::string preset = filename.substr(codec.size(),
+                                           filename.size()-4-codec.size());
+       v->add(preset.c_str());
+   }
+}
+
+if (v->size() > 0)
+  v->value(0);} {selected
+    }
+  }
+  Function {add_profiles(Fl_Choice* o)} {open
+  } {
+    code {auto entries = tl::ffmpeg::getProfileLabels();
+for (auto entry : entries)
+   o->add(gettext(entry.c_str()));
+o->value(0);} {}
+  }
   Function {SaveMovieOptionsUI(bool hasAudio = true, bool audioOnly = false)} {open
   } {
     Fl_Window uiMain {
       label {Save Movie Options} open
-      xywh {838 262 473 399} type Double align 0 hide modal
+      xywh {838 262 473 495} type Double align 0 modal visible
     } {
       Fl_Group {} {
-        label {Common Settings} open
+        label {Common Settings}
         xywh {48 38 376 42} box ROUNDED_FRAME color 56
       } {
         Fl_Check_Button Annotations {
@@ -37,24 +90,32 @@ class SaveMovieOptionsUI {open
       }
       Fl_Group VideoOptions {
         label {Video Options} open
-        xywh {48 111 375 69} box ROUNDED_FRAME color 56
+        xywh {53 111 370 118} box ROUNDED_FRAME color 56
       } {
-        Fl_Choice Profile {
-          label Profile open
-          tooltip {FFMpeg's Profile settings.} xywh {150 131 170 29} down_box BORDER_BOX
+        Fl_Choice Preset {
+          label Preset open
+          tooltip {FFMpeg's Preset setting for the codec selected.} xywh {151 176 170 29} down_box BORDER_BOX
           code0 {auto entries = tl::ffmpeg::getProfileLabels();}
           code1 {for (auto entry : entries)}
           code2 {o->add(gettext(entry.c_str()));}
           code3 {o->value(0);}
         } {}
+        Fl_Choice Profile {
+          label Profile
+          user_data Preset user_data_type {Fl_Choice*}
+          callback {add_presets(o, v);} open
+          tooltip {FFMpeg's Profile settings.} xywh {150 131 170 29} down_box BORDER_BOX
+          code0 {add_profiles(o);}
+          code1 {add_presets(o, Preset);}
+        } {}
       }
       Fl_Group AudioOptions {
-        label {Audio Options} open
-        xywh {43 206 380 132} box ROUNDED_FRAME color 56
+        label {Audio Options}
+        xywh {43 263 380 132} box ROUNDED_FRAME color 56
       } {
         Fl_Choice AudioCodec {
           label Codec open
-          tooltip {FFMpeg's Audio Codec settings.} xywh {150 230 170 29} down_box BORDER_BOX
+          tooltip {FFMpeg's Audio Codec settings.} xywh {150 287 170 29} down_box BORDER_BOX
           code0 {auto entries = tl::ffmpeg::getAudioCodecLabels();}
           code1 {for (auto entry : entries)}
           code2 {o->add(gettext(entry.c_str()));}
@@ -62,24 +123,24 @@ class SaveMovieOptionsUI {open
         } {}
         Fl_Box {} {
           label {Note that while saving with audio, the audio will not be heard.}
-          xywh {66 268 335 60} labelsize 12 align 144
+          xywh {66 325 335 60} labelsize 12 align 144
         }
       }
       Fl_Group {} {open
-        xywh {114 355 244 34}
+        xywh {114 412 244 34}
       } {
         Fl_Button {} {
           label Ok
           user_data uiMain user_data_type {Fl_Double_Window*}
           callback {v->hide();}
-          xywh {114 355 90 34}
+          xywh {114 412 90 34}
         }
         Fl_Button {} {
           label Cancel
           user_data uiMain user_data_type {Fl_Double_Window*}
           callback {cancel = true;
 v->hide();}
-          xywh {268 355 90 34}
+          xywh {268 412 90 34}
         }
       }
     }

@@ -81,6 +81,12 @@ namespace mrv
                         string::Format("{0}").arg(speed);
                 }
             }
+
+            // If we have a preset, send it over.
+            if (!options.ffmpegPreset.empty())
+            {
+                ioOptions["FFmpeg/PresetFile"] = options.ffmpegPreset;
+            }
 #endif
 
 #ifdef TLRENDER_EXR
@@ -125,9 +131,12 @@ namespace mrv
             if (profile == "VP9")
             {
                 if (!string::compare(
-                        extension, ".mp4", string::Compare::CaseInsensitive))
+                        extension, ".mp4", string::Compare::CaseInsensitive) &&
+                    !string::compare(
+                        extension, ".webm", string::Compare::CaseInsensitive))
                 {
-                    LOG_ERROR("VP9 profile needs a .mp4 movie extension");
+                    LOG_ERROR(
+                        "VP9 profile needs a .mp4 or .webm movie extension");
                     return;
                 }
             }

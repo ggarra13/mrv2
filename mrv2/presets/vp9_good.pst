@@ -1,0 +1,13 @@
+# These settings were mostly taken from:
+# https://www.reddit.com/r/AV1/comments/k7colv/encoder_tuning_part_1_tuning_libvpxvp9_be_more/
+deadline:good
+tile-columns:1
+tile-rows:0
+webm:
+aq-mode:2
+row-mt:1
+lag-in-frames:25
+auto-alt-ref:1
+arnr-maxframes:7
+arnr-strength:4
+enable-tpl:1
