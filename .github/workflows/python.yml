@@ -112,7 +112,7 @@ jobs:
 
 
   macos-python-build:
-    runs-on: macos-12
+    runs-on: macos-11
 
     steps:
     

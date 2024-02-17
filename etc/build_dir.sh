@@ -97,12 +97,6 @@ fi
 # Set environment variables to point to install directory
 #
 
-#
-# Fix curl certificate issues.
-#
-export HOMEBREW_FORCE_BREWED_CURL=1
-
-
 export PATH="$PWD/${BUILD_DIR}/install/bin:$PWD/$BUILD_DIR/install/bin/Scripts:${PATH}"
 
 #
