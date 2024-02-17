@@ -63,7 +63,7 @@ get_compiler_version()
 	get_msvc_version
 	export COMPILER_VERSION="MSVC ${MSVC_VERSION}"
     elif [[ $KERNEL == *Linux* ]]; then
-	export COMPILER_VERSION=`gcc --version | grep version`
+	export COMPILER_VERSION=`gcc --version | grep gcc`
     else
 	export COMPILER_VERSION=`clang --version | grep version`
     fi
@@ -108,5 +108,19 @@ send_to_packages()
 	fi
     else
 	echo "CMAKE_TARGET is empty.  Will not copy packages."
+    fi
+}
+
+
+#
+# Auxiliary function to ask to continue (y/n)
+#
+ask_to_continue()
+{
+    echo ""
+    echo "Are you sure you want to continue? (y/n)"
+    read input
+    if [[ $input == n* || $input == N* ]]; then
+	exit 0
     fi
 }

@@ -55,6 +55,14 @@ if [ -z "$TLRENDER_AV1" ]; then
     export TLRENDER_AV1=ON
 fi
 
+if [ -z "$TLRENDER_EXR" ]; then
+    export TLRENDER_EXR=ON
+fi
+
+if [ -z "$TLRENDER_JPEG" ]; then
+    export TLRENDER_JPEG=ON
+fi
+
 if [ -z "$TLRENDER_FFMPEG" ]; then
     export TLRENDER_FFMPEG=ON
 fi
@@ -85,6 +93,14 @@ if [ -z "$TLRENDER_RAW" ]; then
     export TLRENDER_RAW=ON
 fi
 
+if [ -z "$TLRENDER_STB" ]; then
+    export TLRENDER_STB=ON
+fi
+
+if [ -z "$TLRENDER_TIFF" ]; then
+    export TLRENDER_TIFF=ON
+fi
+
 if [ -z "$TLRENDER_USD" ]; then
     export TLRENDER_USD=ON
 fi
@@ -111,7 +127,7 @@ echo "Building summary"
 echo "================"
 echo
 echo "Build directory is ${BUILD_DIR}"
-echo "Version to build is v${mrv2_VERSION}"
+echo "mrv2 version to build is v${mrv2_VERSION}"
 echo "Architecture is ${ARCH}"
 echo "Building with ${COMPILER_VERSION}, ${CPU_CORES} cores"
 echo "Compiler flags are ${FLAGS}"
@@ -141,25 +157,33 @@ echo
 
 echo "FFmpeg support ..................... ${TLRENDER_FFMPEG} 	(TLRENDER_FFMPEG)"
 if [[ $TLRENDER_FFMPEG == ON || $TLRENDER_FFMPEG == 1 ]]; then
-    echo "FFmpeg GPL ......................... ${FFMPEG_GPL} 	(Use -gpl flag)"
-    echo "FFmpeg network support ............. ${TLRENDER_NET} 	(TLRENDER_NET)"
-    echo "AV1 codec support .................. ${TLRENDER_AV1} 	(TLRENDER_AV1)"
-    echo "VPX codec support .................. ${TLRENDER_VPX} 	(TLRENDER_VPX)"
-    echo "X264 codec support ................. ${TLRENDER_X264} 	(Use -gpl flag)"
-    echo "YASM assembler ..................... ${TLRENDER_YASM} 	(TLRENDER_YASM)"
+    echo "FFmpeg License ..................... ${FFMPEG_GPL} 	(Use -gpl flag)"
+    echo "    FFmpeg network support ......... ${TLRENDER_NET} 	(TLRENDER_NET)"
+    echo "    AV1 codec support .............. ${TLRENDER_AV1} 	(TLRENDER_AV1)"
+    echo "    VPX codec support .............. ${TLRENDER_VPX} 	(TLRENDER_VPX)"
+    echo "    X264 codec support ............. ${TLRENDER_X264} 	(Use -gpl flag)"
+    echo "    YASM assembler ................. ${TLRENDER_YASM} 	(TLRENDER_YASM)"
 fi
 echo
 
 echo "NDI support ........................ ${TLRENDER_NDI} 	(TLRENDER_NDI)"
 if [[ $TLRENDER_NDI == ON || $TLRENDER_NDI == 1 ]]; then
-    echo "NDI SDK ... ${TLRENDER_NDI_SDK} 	(TLRENDER_NDI_SDK}"
+    echo "NDI SDK ${TLRENDER_NDI_SDK} 	(TLRENDER_NDI_SDK}"
 fi
 
 echo
+echo "JPEG   support ..................... ${TLRENDER_JPEG} 	(TLRENDER_JPEG)"
 echo "LibRaw support ..................... ${TLRENDER_RAW} 	(TLRENDER_RAW)"
+echo "OpenEXR support .................... ${TLRENDER_EXR} 	(TLRENDER_EXR)"
+echo "STB support (TGA, BMP, PSD) ........ ${TLRENDER_STB} 	(TLRENDER_STB)"
+echo "TIFF support ....................... ${TLRENDER_TIFF} 	(TLRENDER_TIFF)"
 echo "USD support ........................ ${TLRENDER_USD} 	(TLRENDER_USD)"
 
-sleep 10
+
+if [[ $ASK_TO_CONTINUE == 1 ]]; then
+    ask_to_continue
+fi
+
 
 mkdir -p $BUILD_DIR/install
 
@@ -185,12 +209,16 @@ cmd="cmake -G '${CMAKE_GENERATOR}' \
 	   -D MRV2_PDF=${MRV2_PDF} \
            -D TLRENDER_ASAN=${TLRENDER_ASAN} \
            -D TLRENDER_AV1=${TLRENDER_AV1} \
+           -D TLRENDER_EXR=${TLRENDER_EXR} \
+           -D TLRENDER_JPEG=${TLRENDER_JPEG} \
            -D TLRENDER_FFMPEG=${TLRENDER_FFMPEG} \
 	   -D TLRENDER_NDI=${TLRENDER_NDI} \
 	   -D TLRENDER_NDI_SDK=\"${TLRENDER_NDI_SDK}\" \
 	   -D TLRENDER_NET=${TLRENDER_NET} \
 	   -D TLRENDER_NFD=OFF \
 	   -D TLRENDER_RAW=${TLRENDER_RAW} \
+           -D TLRENDER_STB=${TLRENDER_STB} \
+	   -D TLRENDER_TIFF=${TLRENDER_TIFF} \
 	   -D TLRENDER_USD=${TLRENDER_USD} \
 	   -D TLRENDER_VPX=${TLRENDER_VPX} \
 	   -D TLRENDER_WAYLAND=${TLRENDER_WAYLAND} \

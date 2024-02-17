@@ -40,7 +40,7 @@ if (APPLE OR WIN32)
     set( FLTK_WAYLAND OFF )
     set( FLTK_PANGO   OFF )
 else()
-    set( FLTK_WAYLAND  ON )
+    set( FLTK_WAYLAND  ${TLRENDER_WAYLAND} )
     set( FLTK_PANGO    ON )
 endif()
 

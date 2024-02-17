@@ -75,6 +75,7 @@ export CMAKE_VERBOSE_MAKEFILE=OFF
 export CMAKE_BUILD_TYPE="Release"
 export CMAKE_GENERATOR="Ninja"
 export CMAKE_TARGET=""
+ASK_TO_CONTINUE=0
 
 for i in "$@"; do
     case $i in
@@ -86,6 +87,10 @@ for i in "$@"; do
 	    export CMAKE_BUILD_TYPE="Debug"
 	    export CMAKE_FLAGS=" -DTLRENDER_API=GL_4_1_Debug"
 	    shift
+	    ;;
+	--ask|-ask)
+	    shift
+	    ASK_TO_CONTINUE=1
 	    ;;
 	--minimal|-minimal)
 	    shift

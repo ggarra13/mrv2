@@ -53,8 +53,6 @@ export MRV2_PDF=OFF
 #
 # These are some of the expensive TLRENDER options
 #
-
-export TLRENDER_ASAN=OFF # asan memory debugging (not yet working)
 export TLRENDER_NET=OFF
 export TLRENDER_RAW=OFF
 export TLRENDER_USD=OFF
