@@ -402,11 +402,8 @@ namespace mrv
             }
 
             {
-                std::string msg = tl::string::Format(
-                                      _("OpenGL info: {0} format={1} type={2}"))
-                                      .arg(offscreenBufferOptions.colorType)
-                                      .arg(format)
-                                      .arg(type);
+                std::string msg = tl::string::Format(_("OpenGL info: {0}"))
+                                      .arg(offscreenBufferOptions.colorType);
                 LOG_INFO(msg);
             }
 
@@ -421,6 +418,16 @@ namespace mrv
 
             if (hasVideo)
             {
+                auto entries = tl::ffmpeg::getProfileLabels();
+                std::string profileName =
+                    entries[(int)options.ffmpegProfile];
+
+                std::string msg =
+                    tl::string::Format(_("Using profile {0} with preset {1}."))
+                        .arg(profileName)
+                        .arg(options.ffmpegPreset);
+                LOG_INFO(msg);
+                    
                 view->make_current();
                 gl::initGLAD();
                 buffer = gl::OffscreenBuffer::create(

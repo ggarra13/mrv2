@@ -32,12 +32,12 @@ class SaveMovieOptionsUI {open
 } {
   decl {bool cancel = false;} {public local
   }
-  Function {add_color_spaces(Fl_Choice* o, Fl_Choice* v)} {open selected
+  Function {add_pixel_formats(Fl_Choice* o, Fl_Choice* v)} {open
   } {
     code {const Fl_Menu_Item* item = &o->menu()[o->value()];
 if (!item || !item->label()) return;
 
-std::string codec = tl::string::toLower(item->label());
+std::string codec = item->label();
 
 v->clear();
 v->add("YUV420P");
@@ -73,7 +73,8 @@ else if (codec == "AV1")
 }
 
 if (v->size() > 0)
-  v->value(0);} {}
+  v->value(0);} {selected
+    }
   }
   Function {add_presets(Fl_Choice* o, Fl_Choice* v)} {open
   } {
@@ -146,11 +147,11 @@ o->value(0);} {}
           label Profile
           user_data this user_data_type {SaveMovieOptionsUI*}
           callback {add_presets(o, v->Preset);
-add_color_spaces(o, v->PixelFormat);} open
+add_pixel_formats(o, v->PixelFormat);} open
           tooltip {FFMpeg's Profile settings.} xywh {170 131 170 29} down_box BORDER_BOX
           code0 {add_profiles(o);}
           code1 {add_presets(o, Preset);}
-          code2 {add_color_spaces(o, PixelFormat);}
+          code2 {add_pixel_formats(o, PixelFormat);}
         } {}
       }
       Fl_Group AudioOptions {

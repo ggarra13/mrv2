@@ -393,8 +393,6 @@ namespace mrv
                     preset = tl::string::toLower(profileName) +
                              "_" + item->label() + ".pst";
                     options.ffmpegPreset = presetspath() + preset;
-                    LOG_INFO("Using profile " << profileName
-                             << " with preset " << options.ffmpegPreset );
                 }
             }
             value = saveOptions.AudioCodec->value();
