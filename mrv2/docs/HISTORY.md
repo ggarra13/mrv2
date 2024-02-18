@@ -15,7 +15,11 @@ v1.0.5
 - Updated version in web page docs.
 - Added FFmpeg presets for saving codecs.  Currently we ship vp9 and av1
   presets, but you are free to create your own.
-- Switched to building with gcc-12 on Rocky Linux 8.9 (not in Docker).
+- Switched to building with gcc-12 on Rocky Linux 8.9 (not in Dockerfile or
+  Github builds).
+- Fixed encoding of movie files' YUV conversion.  Now the movie file is much
+  more accurate.
+- Added pixel formats currently supported for each codec.
 
 
 v1.0.4

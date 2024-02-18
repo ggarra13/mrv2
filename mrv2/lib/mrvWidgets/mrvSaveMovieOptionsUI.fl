@@ -32,6 +32,65 @@ class SaveMovieOptionsUI {open
 } {
   decl {bool cancel = false;} {public local
   }
+  Function {add_pixel_formats(Fl_Choice* o, Fl_Choice* v)} {open
+  } {
+    code {const Fl_Menu_Item* item = &o->menu()[o->value()];
+if (!item || !item->label()) return;
+
+std::string codec = item->label();
+
+v->clear();
+v->add("YUV420P");
+
+if (codec == "None" || codec == "MJPEG")
+{
+   v->add("YUV422P");
+   v->add("YUV444P");
+}
+else if (codec == "H264")
+{ 
+   v->add("YUV422P");
+   v->add("YUV444P");
+   v->add("YUV420P10LE");
+   v->add("YUV422P10LE");
+   v->add("YUV444P10LE");
+}
+else if (codec == "ProRes")
+{   
+   v->add("YUV422P");
+   v->add("YUV444P");
+}
+else if (codec == "VP9")
+{   
+   v->add("YUVA420P");
+   
+   v->add("YUV422P");
+   v->add("YUV440P");
+   v->add("YUV444P");   
+   
+   v->add("YUV420P10LE");
+   v->add("YUV422P10LE");
+   v->add("YUV440P10LE");
+   v->add("YUV444P10LE");
+   
+   v->add("YUV420P12LE");
+   v->add("YUV422P12LE");
+   v->add("YUV440P12LE");
+   v->add("YUV444P12LE");
+   
+   v->add("GBRP");
+   v->add("GBRP10LE");
+   v->add("GBRP12LE");
+}
+else if (codec == "AV1")
+{
+   v->add("YUV420P10LE");
+}
+
+if (v->size() > 0)
+  v->value(0);} {selected
+    }
+  }
   Function {add_presets(Fl_Choice* o, Fl_Choice* v)} {open
   } {
     code {const Fl_Menu_Item* item = &o->menu()[o->value()];
@@ -63,8 +122,7 @@ for (const auto& entry : dirIter)
 }
 
 if (v->size() > 0)
-  v->value(0);} {selected
-    }
+  v->value(0);} {}
   }
   Function {add_profiles(Fl_Choice* o)} {open
   } {
@@ -77,45 +135,47 @@ o->value(0);} {}
   } {
     Fl_Window uiMain {
       label {Save Movie Options} open
-      xywh {838 262 473 495} type Double align 0 modal visible
+      xywh {17 120 465 537} type Double align 0 modal visible
     } {
       Fl_Group {} {
         label {Common Settings}
-        xywh {48 38 376 42} box ROUNDED_FRAME color 56
+        xywh {34 38 390 44} box ROUNDED_FRAME color 56
       } {
         Fl_Check_Button Annotations {
           label {Save Annotations}
-          tooltip {Save Annotations burned into the movie or sequence.  It also allows saving OpenEXRs from an 8-bit movie and changing OpenEXR's pixel type.} xywh {160 48 25 25} down_box DOWN_BOX
+          tooltip {Save Annotations burned into the movie or sequence.  It also allows saving OpenEXRs from an 8-bit movie and changing OpenEXR's pixel type.} xywh {160 48 25 18} down_box DOWN_BOX
         }
       }
       Fl_Group VideoOptions {
         label {Video Options} open
-        xywh {53 111 370 118} box ROUNDED_FRAME color 56
+        xywh {34 111 390 188} box ROUNDED_FRAME color 56
       } {
+        Fl_Choice PixelFormat {
+          label {Pixel Format} open
+          tooltip {FFMpeg's Pixel Format for the codec selected} xywh {170 222 170 29} down_box BORDER_BOX
+        } {}
         Fl_Choice Preset {
           label Preset open
-          tooltip {FFMpeg's Preset setting for the codec selected.} xywh {151 176 170 29} down_box BORDER_BOX
-          code0 {auto entries = tl::ffmpeg::getProfileLabels();}
-          code1 {for (auto entry : entries)}
-          code2 {o->add(gettext(entry.c_str()));}
-          code3 {o->value(0);}
+          tooltip {FFMpeg's Preset setting for the codec selected.} xywh {171 176 170 29} down_box BORDER_BOX
         } {}
         Fl_Choice Profile {
           label Profile
-          user_data Preset user_data_type {Fl_Choice*}
-          callback {add_presets(o, v);} open
-          tooltip {FFMpeg's Profile settings.} xywh {150 131 170 29} down_box BORDER_BOX
+          user_data this user_data_type {SaveMovieOptionsUI*}
+          callback {add_presets(o, v->Preset);
+add_pixel_formats(o, v->PixelFormat);} open
+          tooltip {FFMpeg's Profile settings.} xywh {170 131 170 29} down_box BORDER_BOX
           code0 {add_profiles(o);}
           code1 {add_presets(o, Preset);}
+          code2 {add_pixel_formats(o, PixelFormat);}
         } {}
       }
       Fl_Group AudioOptions {
         label {Audio Options}
-        xywh {43 263 380 132} box ROUNDED_FRAME color 56
+        xywh {34 322 394 132} box ROUNDED_FRAME color 56
       } {
         Fl_Choice AudioCodec {
           label Codec open
-          tooltip {FFMpeg's Audio Codec settings.} xywh {150 287 170 29} down_box BORDER_BOX
+          tooltip {FFMpeg's Audio Codec settings.} xywh {172 346 170 29} down_box BORDER_BOX
           code0 {auto entries = tl::ffmpeg::getAudioCodecLabels();}
           code1 {for (auto entry : entries)}
           code2 {o->add(gettext(entry.c_str()));}
@@ -123,24 +183,24 @@ o->value(0);} {}
         } {}
         Fl_Box {} {
           label {Note that while saving with audio, the audio will not be heard.}
-          xywh {66 325 335 60} labelsize 12 align 144
+          xywh {57 384 335 60} labelsize 12 align 144
         }
       }
       Fl_Group {} {open
-        xywh {114 412 244 34}
+        xywh {105 471 244 29}
       } {
         Fl_Button {} {
           label Ok
           user_data uiMain user_data_type {Fl_Double_Window*}
           callback {v->hide();}
-          xywh {114 412 90 34}
+          xywh {105 471 90 29}
         }
         Fl_Button {} {
           label Cancel
           user_data uiMain user_data_type {Fl_Double_Window*}
           callback {cancel = true;
 v->hide();}
-          xywh {268 412 90 34}
+          xywh {259 471 90 29}
         }
       }
     }

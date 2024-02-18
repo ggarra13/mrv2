@@ -87,6 +87,8 @@ namespace mrv
             {
                 ioOptions["FFmpeg/PresetFile"] = options.ffmpegPreset;
             }
+
+            ioOptions["FFmpeg/PixelFormat"] = options.ffmpegPixelFormat;
 #endif
 
 #ifdef TLRENDER_EXR
@@ -400,11 +402,8 @@ namespace mrv
             }
 
             {
-                std::string msg = tl::string::Format(
-                                      _("OpenGL info: {0} format={1} type={2}"))
-                                      .arg(offscreenBufferOptions.colorType)
-                                      .arg(format)
-                                      .arg(type);
+                std::string msg = tl::string::Format(_("OpenGL info: {0}"))
+                                      .arg(offscreenBufferOptions.colorType);
                 LOG_INFO(msg);
             }
 
@@ -419,6 +418,22 @@ namespace mrv
 
             if (hasVideo)
             {
+                auto entries = tl::ffmpeg::getProfileLabels();
+                std::string profileName =
+                    entries[(int)options.ffmpegProfile];
+
+                std::string msg = tl::string::Format(
+                                      _("Using profile {0}, pixel format {1}."))
+                                      .arg(profileName)
+                                      .arg(options.ffmpegPixelFormat);
+                LOG_INFO(msg);
+                if (!options.ffmpegPreset.empty())
+                {
+                    msg = tl::string::Format(_("Using preset {0}."))
+                          .arg(options.ffmpegPreset);
+                    LOG_INFO(msg);
+                }
+                
                 view->make_current();
                 gl::initGLAD();
                 buffer = gl::OffscreenBuffer::create(
