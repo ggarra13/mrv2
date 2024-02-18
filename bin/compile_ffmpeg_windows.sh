@@ -385,7 +385,7 @@ if [[ $TLRENDER_NET == ON || $TLRENDER_NET == 1 ]]; then
 	run_cmd cp /mingw64/lib/pkgconfig/libcrypto.pc $INSTALL_DIR/lib/pkgconfig/
 	run_cmd sed -i -e "s#=/mingw64#=$INSTALL_DIR#" $INSTALL_DIR/lib/pkgconfig/libcrypto.pc
     fi
-    ENABLE_OPENSSL="--enable-openssl --extra-libs=crypto.lib"
+    ENABLE_OPENSSL="--enable-openssl --extra-libs=crypto.lib --enable-version3"
 fi
 
 #
