@@ -4,8 +4,8 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #
-# This script compiles a GPL or BSD version of ffmpeg. The GPL version has
-# libx264 encoding and libvpx support.  The LGPL version does not have libx264.
+# This script compiles a GPL or LGPL version of ffmpeg. The GPL version has
+# libx264 encoding support.  The LGPL version does not have libx264.
 #
 if [[ ! -e etc/build_dir.sh ]]; then
     echo "You must run this script from the root of mrv2 directory like:"
@@ -466,7 +466,6 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
             --disable-vaapi \
             --disable-vdpau \
             --disable-videotoolbox \
-	    --enable-filter=scale \
             --enable-pic \
             --toolchain=msvc \
             --target-os=win64 \

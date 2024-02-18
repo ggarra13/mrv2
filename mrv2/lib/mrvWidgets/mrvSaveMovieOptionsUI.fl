@@ -62,10 +62,25 @@ else if (codec == "ProRes")
 }
 else if (codec == "VP9")
 {   
+   v->add("YUVA420P");
+   
    v->add("YUV422P");
-   v->add("RGB");
-   v->add("RGB10");
-   v->add("RGB12");
+   v->add("YUV440P");
+   v->add("YUV444P");   
+   
+   v->add("YUV420P10LE");
+   v->add("YUV422P10LE");
+   v->add("YUV440P10LE");
+   v->add("YUV444P10LE");
+   
+   v->add("YUV420P12LE");
+   v->add("YUV422P12LE");
+   v->add("YUV440P12LE");
+   v->add("YUV444P12LE");
+   
+   v->add("GBRP");
+   v->add("GBRP10LE");
+   v->add("GBRP12LE");
 }
 else if (codec == "AV1")
 {
@@ -120,7 +135,7 @@ o->value(0);} {}
   } {
     Fl_Window uiMain {
       label {Save Movie Options} open
-      xywh {837 261 465 537} type Double align 0 modal visible
+      xywh {17 120 465 537} type Double align 0 modal visible
     } {
       Fl_Group {} {
         label {Common Settings}

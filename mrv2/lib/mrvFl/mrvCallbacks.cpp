@@ -395,6 +395,18 @@ namespace mrv
                     options.ffmpegPreset = presetspath() + preset;
                 }
             }
+
+            std::string pixelFormat;
+            value = saveOptions.PixelFormat->value();
+            if (value >= 0)
+            {
+                const Fl_Menu_Item* item =
+                    &saveOptions.PixelFormat->menu()[value];
+                if (item->label())
+                {
+                    options.ffmpegPixelFormat = item->label();
+                }
+            }
             value = saveOptions.AudioCodec->value();
             options.ffmpegAudioCodec =
                 static_cast<tl::ffmpeg::AudioCodec>(value);
