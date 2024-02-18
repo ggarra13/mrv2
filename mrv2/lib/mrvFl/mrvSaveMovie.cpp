@@ -87,6 +87,8 @@ namespace mrv
             {
                 ioOptions["FFmpeg/PresetFile"] = options.ffmpegPreset;
             }
+
+            ioOptions["FFmpeg/PixelFormat"] = options.ffmpegPixelFormat;
 #endif
 
 #ifdef TLRENDER_EXR

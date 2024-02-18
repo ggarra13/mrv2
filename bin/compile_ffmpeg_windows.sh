@@ -428,6 +428,7 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
             --prefix=$INSTALL_DIR \
 	    --pkg-config-flags=--static \
             --disable-programs \
+	    --disable-avfilter \
             --disable-doc \
             --disable-postproc \
             --disable-hwaccels \

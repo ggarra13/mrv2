@@ -25,6 +25,7 @@ void mrv2_io(py::module& m)
                 ,
                 tl::ffmpeg::Profile,
                 std::string,
+                std::string,
                 tl::ffmpeg::AudioCodec
 #endif
 #ifdef TLRENDER_EXR
@@ -37,6 +38,7 @@ void mrv2_io(py::module& m)
             ,
             py::arg("ffmpegProfile") = tl::ffmpeg::Profile::None,
             py::arg("ffmpegPreset") = "",
+            py::arg("ffmpegColorSpace") = "YUV420P",
             py::arg("ffmpegAudioCodec") = tl::ffmpeg::AudioCodec::None
 #endif
 #ifdef TLRENDER_EXR

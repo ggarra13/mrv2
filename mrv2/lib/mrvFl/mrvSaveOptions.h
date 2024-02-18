@@ -21,6 +21,7 @@ namespace mrv
 #ifdef TLRENDER_FFMPEG
         tl::ffmpeg::Profile ffmpegProfile = tl::ffmpeg::Profile::None;
         std::string ffmpegPreset;
+        std::string ffmpegPixelFormat;
         tl::ffmpeg::AudioCodec ffmpegAudioCodec = tl::ffmpeg::AudioCodec::AAC;
 #endif
 
