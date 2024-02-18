@@ -179,7 +179,6 @@ echo "STB support (TGA, BMP, PSD) ........ ${TLRENDER_STB} 	(TLRENDER_STB)"
 echo "TIFF support ....................... ${TLRENDER_TIFF} 	(TLRENDER_TIFF)"
 echo "USD support ........................ ${TLRENDER_USD} 	(TLRENDER_USD)"
 
-
 if [[ $ASK_TO_CONTINUE == 1 ]]; then
     ask_to_continue
 fi

@@ -27,24 +27,41 @@ include( cmake/version.cmake )
 include( cmake/options.cmake )
 include( cmake/functions.cmake )
 
-set( mrv_FLTK_FLUID_WIDGETS ${CMAKE_CURRENT_BINARY_DIR}/mrv2/lib/mrvWidgets )
+if (APPLE)
+    message(STATUS "OLD_DYLD_LIBRARY_PATH=$ENV{OLD_DYLD_LIBRARY_PATH}")
+    message( STATUS "-------------------------------------------------" )
+    message(STATUS "DYLD_LIBRARY_PATH=$ENV{DYLD_LIBRARY_PATH}")
+    message( STATUS "-------------------------------------------------" )
+elseif(UNIX)
+    message(STATUS "OLD_LD_LIBRARY_PATH=$ENV{OLD_LD_LIBRARY_PATH}")
+    message( STATUS "-------------------------------------------------" )
+    message(STATUS "LD_LIBRARY_PATH=$ENV{LD_LIBRARY_PATH}")
+    message( STATUS "-------------------------------------------------" )
+else()
+    message(STATUS "OLD_PATH=$ENV{OLD_PATH}")
+    message( STATUS "-------------------------------------------------" )
+    message(STATUS "PATH=$ENV{PATH}")
+    message( STATUS "-------------------------------------------------" )
+endif()
 
-set( include_dirs
-    ${CMAKE_PREFIX_PATH}/include
-    ${CMAKE_PREFIX_PATH}/include/OpenEXR
-    ${CMAKE_PREFIX_PATH}/include/Imath
-    ${CMAKE_PREFIX_PATH}/include/opentimelineio/deps
-    ${CMAKE_CURRENT_SOURCE_DIR}/mrv2/lib
-    ${CMAKE_CURRENT_SOURCE_DIR}/tlRender/deps
-    ${CMAKE_CURRENT_SOURCE_DIR}/tlRender/lib
-    ${CMAKE_CURRENT_SOURCE_DIR}/tlRender/etc
-    ${CMAKE_CURRENT_SOURCE_DIR}/tlRender/tests
-    ${mrv_FLTK_FLUID_WIDGETS}
-)
+# set( mrv_FLTK_FLUID_WIDGETS ${CMAKE_CURRENT_BINARY_DIR}/mrv2/lib/mrvWidgets )
 
-include_directories(
-    ${include_dirs}
-)
+# set( include_dirs
+#     ${CMAKE_PREFIX_PATH}/include
+#     ${CMAKE_PREFIX_PATH}/include/OpenEXR
+#     ${CMAKE_PREFIX_PATH}/include/Imath
+#     ${CMAKE_PREFIX_PATH}/include/opentimelineio/deps
+#     ${CMAKE_CURRENT_SOURCE_DIR}/mrv2/lib
+#     ${CMAKE_CURRENT_SOURCE_DIR}/tlRender/deps
+#     ${CMAKE_CURRENT_SOURCE_DIR}/tlRender/lib
+#     ${CMAKE_CURRENT_SOURCE_DIR}/tlRender/etc
+#     ${CMAKE_CURRENT_SOURCE_DIR}/tlRender/tests
+#     ${mrv_FLTK_FLUID_WIDGETS}
+# )
+
+# include_directories(
+#     ${include_dirs}
+# )
 
 
 #
