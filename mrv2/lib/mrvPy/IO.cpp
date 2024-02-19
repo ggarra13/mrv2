@@ -23,9 +23,7 @@ void mrv2_io(py::module& m)
                 bool
 #ifdef TLRENDER_FFMPEG
                 ,
-                tl::ffmpeg::Profile,
-                std::string,
-                std::string,
+                tl::ffmpeg::Profile, std::string, std::string,
                 tl::ffmpeg::AudioCodec
 #endif
 #ifdef TLRENDER_EXR
@@ -38,7 +36,7 @@ void mrv2_io(py::module& m)
             ,
             py::arg("ffmpegProfile") = tl::ffmpeg::Profile::None,
             py::arg("ffmpegPreset") = "",
-            py::arg("ffmpegColorSpace") = "YUV420P",
+            py::arg("ffmpegPixelFormat") = "YUV420P",
             py::arg("ffmpegAudioCodec") = tl::ffmpeg::AudioCodec::None
 #endif
 #ifdef TLRENDER_EXR
@@ -56,6 +54,12 @@ void mrv2_io(py::module& m)
         .def_readwrite(
             "ffmpegProfile", &mrv::SaveOptions::ffmpegProfile,
             _("FFmpeg Profile."))
+        .def_readwrite(
+            "ffmpegPreset", &mrv::SaveOptions::ffmpegPreset,
+            _("FFmpeg Preset."))
+        .def_readwrite(
+            "ffmpegPixelFormat", &mrv::SaveOptions::ffmpegPixelFormat,
+            _("FFmpeg Pixel Format."))
         .def_readwrite(
             "ffmpegAudioCodec", &mrv::SaveOptions::ffmpegAudioCodec,
             _("FFmpeg Audio Codec."))

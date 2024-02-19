@@ -40,15 +40,17 @@ if (!item || !item->label()) return;
 std::string codec = item->label();
 
 v->clear();
-v->add("YUV420P");
+
 
 if (codec == "None" || codec == "MJPEG")
-{
+{ 
+   v->add("YUV420P");
    v->add("YUV422P");
    v->add("YUV444P");
 }
 else if (codec == "H264")
-{ 
+{    
+   v->add("YUV420P");
    v->add("YUV422P");
    v->add("YUV444P");
    v->add("YUV420P10LE");
@@ -57,11 +59,27 @@ else if (codec == "H264")
 }
 else if (codec == "ProRes")
 {   
-   v->add("YUV422P");
-   v->add("YUV444P");
+   v->add("YUV422P10LE");
+ }
+else if (codec == "ProRes_Proxy")
+{   
+   v->add("YUV422P10LE");
+}
+else if (codec == "ProRes_LT")
+{   
+   v->add("YUV422P10LE");
+}
+else if (codec == "ProRes_XQ")
+{   
+   v->add("YUV422P10LE");
+ }
+else if (codec == "ProRes_4444")
+{   
+   v->add("YUV444P10LE");
 }
 else if (codec == "VP9")
-{   
+{ 
+   v->add("YUV420P");
    v->add("YUVA420P");
    
    v->add("YUV422P");
@@ -83,7 +101,8 @@ else if (codec == "VP9")
    v->add("GBRP12LE");
 }
 else if (codec == "AV1")
-{
+{  
+   v->add("YUV420P");
    v->add("YUV420P10LE");
 }
 
@@ -135,7 +154,7 @@ o->value(0);} {}
   } {
     Fl_Window uiMain {
       label {Save Movie Options} open
-      xywh {17 120 465 537} type Double align 0 modal visible
+      xywh {1136 505 465 537} type Double align 0 modal visible
     } {
       Fl_Group {} {
         label {Common Settings}
