@@ -44,68 +44,68 @@ v->clear();
 
 if (codec == "None" || codec == "MJPEG")
 { 
-   v->add("YUV420P");
-   v->add("YUV422P");
-   v->add("YUV444P");
+   v->add("YUV_420P");
+   v->add("YUV_422P");
+   v->add("YUV_444P");
 }
 else if (codec == "H264")
 {    
-   v->add("YUV420P");
-   v->add("YUV422P");
-   v->add("YUV444P");
-   v->add("YUV420P10LE");
-   v->add("YUV422P10LE");
-   v->add("YUV444P10LE");
+   v->add("YUV_420P");
+   v->add("YUV_422P");
+   v->add("YUV_444P");
+   v->add("YUV_420P_10LE");
+   v->add("YUV_422P_10LE");
+   v->add("YUV_444P_10LE");
 }
 else if (codec == "ProRes")
 {   
-   v->add("YUV422P10LE");
+   v->add("YUV_422P_10LE");
  }
 else if (codec == "ProRes_Proxy")
 {   
-   v->add("YUV422P10LE");
+   v->add("YUV_422P_10LE");
 }
 else if (codec == "ProRes_LT")
 {   
-   v->add("YUV422P10LE");
+   v->add("YUV_422P_10LE");
 }
 else if (codec == "ProRes_XQ")
 {   
-   v->add("YUV444P10LE");
-   v->add("YUVA444P10LE");
+   v->add("YUV_444P_10LE");
+   v->add("YUVA_444P_16LE");
  }
 else if (codec == "ProRes_4444")
 {   
-   v->add("YUV444P10LE");
-   v->add("YUVA444P16LE");
+   v->add("YUV_444P_10LE");
+   v->add("YUVA_444P_16LE");
 }
 else if (codec == "VP9")
 { 
-   v->add("YUV420P");
-   v->add("YUVA420P");
+   v->add("YUV_420P");
+   v->add("YUVA_420P");
    
-   v->add("YUV422P");
-   v->add("YUV440P");
-   v->add("YUV444P");   
+   v->add("YUV_422P");
+   v->add("YUV_440P");
+   v->add("YUV_444P");   
    
-   v->add("YUV420P10LE");
-   v->add("YUV422P10LE");
-   v->add("YUV440P10LE");
-   v->add("YUV444P10LE");
+   v->add("YUV_420P_10LE");
+   v->add("YUV_422P_10LE");
+   v->add("YUV_440P_10LE");
+   v->add("YUV_444P_10LE");
    
-   v->add("YUV420P12LE");
-   v->add("YUV422P12LE");
-   v->add("YUV440P12LE");
-   v->add("YUV444P12LE");
+   v->add("YUV_420P_12LE");
+   v->add("YUV_422P_12LE");
+   v->add("YUV_440P_12LE");
+   v->add("YUV_444P_12LE");
    
    v->add("GBRP");
-   v->add("GBRP10LE");
-   v->add("GBRP12LE");
+   v->add("GBRP_10LE");
+   v->add("GBRP_12LE");
 }
 else if (codec == "AV1")
 {  
-   v->add("YUV420P");
-   v->add("YUV420P10LE");
+   v->add("YUV_420P");
+   v->add("YUV_420P_10LE");
 }
 
 if (v->size() > 0)
