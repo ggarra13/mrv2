@@ -3,6 +3,8 @@ v1.0.5
 
 - Code clean up.
 - Build system cleamup and consolidation with environment variables.
+- Fixed building pyFLTK on Linux which could fail if LD_LIBRARY_PATH was not
+  set.
 - Improved building speed on all platforms.
 - Fixed Windows' Python compilation screwing up if some other Python version
   was installed.
@@ -20,10 +22,11 @@ v1.0.5
 - Fixed encoding of movie files' YUV conversion.  Now the movie file is much
   more accurate.
 - Added pixel formats currently supported for each codec.
-- Added saving alpha channel in ProRes_4444 and ProRes_XQ when YUVA_4444_16LE
+- Added saving alpha channel in ProRes_4444 and ProRes_XQ when YUVA_4444P_16LE
   pixel format is selected.
-- Added saving alpha channel in VP9 when YUVA_420 is selected and the container
+- Added saving alpha channel in VP9 when YUVA_420P is selected and the container
   is a Matroska file.
+- Added HISTORY.md file to the Web docs.
 
 
 v1.0.4
