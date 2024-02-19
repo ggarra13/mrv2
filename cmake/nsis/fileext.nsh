@@ -153,6 +153,8 @@ System::Free $9
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".dv" "Digital Video Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".flv" "Flash Video Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".m4v" "Apple M4V Format" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".mk3d" "Matroska Stereoscopic 3D Video Format" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".mka" "Matroska Audio Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".mkv" "Matroska Video Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".mov" "Apple's Quicktime Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".mp4" "MPEG4 Format" 1

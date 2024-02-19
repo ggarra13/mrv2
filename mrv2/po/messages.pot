@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.0.5\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2024-02-16 22:01-0300\n"
+"POT-Creation-Date: 2024-02-19 06:29-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1338,22 +1338,30 @@ msgid "FFmpeg Profile."
 msgstr ""
 
 #: mrvPy/IO.cpp:59
+msgid "FFmpeg Preset."
+msgstr ""
+
+#: mrvPy/IO.cpp:62
+msgid "FFmpeg Pixel Format."
+msgstr ""
+
+#: mrvPy/IO.cpp:65
 msgid "FFmpeg Audio Codec."
 msgstr ""
 
-#: mrvPy/IO.cpp:64
+#: mrvPy/IO.cpp:70
 msgid "OpenEXR's Compression."
 msgstr ""
 
-#: mrvPy/IO.cpp:67
+#: mrvPy/IO.cpp:73
 msgid "OpenEXR's Pixel Type."
 msgstr ""
 
-#: mrvPy/IO.cpp:70
+#: mrvPy/IO.cpp:76
 msgid "OpenEXR's Zip Compression Level."
 msgstr ""
 
-#: mrvPy/IO.cpp:73
+#: mrvPy/IO.cpp:79
 msgid "OpenEXR's DWA Compression Level."
 msgstr ""
 
@@ -1508,7 +1516,7 @@ msgstr ""
 
 #: mrvApp/mrvOpenSeparateAudioDialog.cpp:52 mrvPanels/mrvNDIPanel.cpp:353
 #: mrvPanels/mrvSettingsPanel.cpp:190 mrvPanels/mrvImageInfoPanel.cpp:477
-#: mrvFl/mrvCallbacks.cpp:1799 mrvFl/mrvCallbacks.cpp:1837
+#: mrvFl/mrvCallbacks.cpp:1809 mrvFl/mrvCallbacks.cpp:1847
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:137
 msgid "Audio"
 msgstr ""
@@ -1519,7 +1527,7 @@ msgid "OK"
 msgstr ""
 
 #: mrvApp/mrvOpenSeparateAudioDialog.cpp:63 mrvWidgets/mrvPythonEditor.cpp:127
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:126
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:207
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:203
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/PathMappingUI.cxx:43
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/keyboard_ui.cxx:111
@@ -1836,7 +1844,7 @@ msgstr ""
 
 #: mrvPanels/mrvPythonPanel.cpp:483 mrvPanels/mrvImageInfoPanel.cpp:1654
 #: mrvFl/mrvLanguages.cpp:136 mrvFl/mrvHotkey.cpp:99
-#: mrvFl/mrvCallbacks.cpp:1869
+#: mrvFl/mrvCallbacks.cpp:1879
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:397
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:404
 msgid "No"
@@ -1844,7 +1852,7 @@ msgstr ""
 
 #: mrvPanels/mrvPythonPanel.cpp:483 mrvPanels/mrvImageInfoPanel.cpp:1654
 #: mrvFl/mrvLanguages.cpp:136 mrvFl/mrvHotkey.cpp:99
-#: mrvFl/mrvCallbacks.cpp:1869
+#: mrvFl/mrvCallbacks.cpp:1879
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:405
 msgid "Yes"
 msgstr ""
@@ -2463,7 +2471,7 @@ msgstr ""
 
 #: mrvPanels/mrvImageInfoPanel.cpp:1805 mrvPanels/mrvImageInfoPanel.cpp:1810
 #: mrvPanels/mrvImageInfoPanel.cpp:2072 mrvPanels/mrvImageInfoPanel.cpp:2148
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:108
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:189
 msgid "Codec"
 msgstr ""
 
@@ -3256,58 +3264,78 @@ msgstr ""
 msgid "Failed to load the file."
 msgstr ""
 
-#: mrvFl/mrvSaveMovie.cpp:231
+#: mrvFl/mrvSaveMovie.cpp:142
+msgid "VP9 profile needs a .mp4, .mkv or .webm movie extension"
+msgstr ""
+
+#: mrvFl/mrvSaveMovie.cpp:156
+msgid "AV1 profile needs a .mp4 or .mkv movie extension"
+msgstr ""
+
+#: mrvFl/mrvSaveMovie.cpp:238
 msgid "{0}: Cannot open writer plugin."
 msgstr ""
 
-#: mrvFl/mrvSaveMovie.cpp:247 mrvFl/mrvSaveImage.cpp:133
+#: mrvFl/mrvSaveMovie.cpp:254 mrvFl/mrvSaveImage.cpp:133
 msgid "Image info: {0} {1}"
 msgstr ""
 
-#: mrvFl/mrvSaveMovie.cpp:307 mrvFl/mrvSaveImage.cpp:181
+#: mrvFl/mrvSaveMovie.cpp:314 mrvFl/mrvSaveImage.cpp:181
 #: mrvPDF/mrvPDFCreator.cpp:277
 msgid "Image too big.  Will save the viewport size."
 msgstr ""
 
-#: mrvFl/mrvSaveMovie.cpp:313 mrvFl/mrvSaveImage.cpp:186
+#: mrvFl/mrvSaveMovie.cpp:320 mrvFl/mrvSaveImage.cpp:186
 #: mrvPDF/mrvPDFCreator.cpp:282
 msgid "Viewport Size: {0}  Render Size: {1}"
 msgstr ""
 
-#: mrvFl/mrvSaveMovie.cpp:325 mrvFl/mrvSaveImage.cpp:210
+#: mrvFl/mrvSaveMovie.cpp:332 mrvFl/mrvSaveImage.cpp:210
 msgid "Output info: {0} {1}"
 msgstr ""
 
-#: mrvFl/mrvSaveMovie.cpp:361
+#: mrvFl/mrvSaveMovie.cpp:368
 #, c-format
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
 msgstr ""
 
-#: mrvFl/mrvSaveMovie.cpp:366
+#: mrvFl/mrvSaveMovie.cpp:373
 #, c-format
 msgid "Saving Movie with Audio %<PRId64> - %<PRId64>"
 msgstr ""
 
-#: mrvFl/mrvSaveMovie.cpp:371
+#: mrvFl/mrvSaveMovie.cpp:378
 #, c-format
 msgid "Saving Pictures without Audio %<PRId64> - %<PRId64>"
 msgstr ""
 
-#: mrvFl/mrvSaveMovie.cpp:378
+#: mrvFl/mrvSaveMovie.cpp:385
 #, c-format
 msgid "Saving Audio %<PRId64> - %<PRId64>"
 msgstr ""
 
-#: mrvFl/mrvSaveMovie.cpp:397
+#: mrvFl/mrvSaveMovie.cpp:404
 msgid "{0}: Invalid OpenGL format and type"
 msgstr ""
 
-#: mrvFl/mrvSaveMovie.cpp:404 mrvFl/mrvSaveImage.cpp:241
-msgid "OpenGL info: {0} format={1} type={2}"
+#: mrvFl/mrvSaveMovie.cpp:410
+msgid "OpenGL info: {0}"
 msgstr ""
 
-#: mrvFl/mrvSaveMovie.cpp:535
+#: mrvFl/mrvSaveMovie.cpp:431
+msgid "Using profile {0}, pixel format {1}."
+msgstr ""
+
+#: mrvFl/mrvSaveMovie.cpp:437
+msgid "Using preset {0}."
+msgstr ""
+
+#: mrvFl/mrvSaveMovie.cpp:555
 msgid "Empty video data at time {0}."
+msgstr ""
+
+#: mrvFl/mrvSaveImage.cpp:241
+msgid "OpenGL info: {0} format={1} type={2}"
 msgstr ""
 
 #: mrvFl/mrvPreferences.cpp:134
@@ -3539,8 +3567,8 @@ msgstr ""
 msgid "Default"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:78 mrvFl/mrvCallbacks.cpp:1795
-#: mrvFl/mrvCallbacks.cpp:1833 mrvUI/mrvMenus.cpp:422
+#: mrvFl/mrvCallbacks.cpp:78 mrvFl/mrvCallbacks.cpp:1805
+#: mrvFl/mrvCallbacks.cpp:1843 mrvUI/mrvMenus.cpp:422
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1661
 msgid "Annotations"
 msgstr ""
@@ -3550,8 +3578,8 @@ msgstr ""
 msgid "Background"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:80 mrvFl/mrvCallbacks.cpp:1787
-#: mrvFl/mrvCallbacks.cpp:1825 mrvGL/mrvTimelineViewport.cpp:1776
+#: mrvFl/mrvCallbacks.cpp:80 mrvFl/mrvCallbacks.cpp:1797
+#: mrvFl/mrvCallbacks.cpp:1835 mrvGL/mrvTimelineViewport.cpp:1776
 #: mrvGL/mrvTimelineViewport.cpp:1778 mrvGL/mrvTimelineViewport.cpp:1780
 #: mrvUI/mrvMenus.cpp:373
 msgid "Color"
@@ -3594,18 +3622,18 @@ msgstr ""
 msgid "Vectorscope"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:107 mrvFl/mrvCallbacks.cpp:826 mrvUI/mrvMenus.cpp:508
+#: mrvFl/mrvCallbacks.cpp:107 mrvFl/mrvCallbacks.cpp:836 mrvUI/mrvMenus.cpp:508
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvHotkeyUI.cxx:68
 msgid "Hotkeys"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:108 mrvFl/mrvCallbacks.cpp:824 mrvUI/mrvMenus.cpp:508
+#: mrvFl/mrvCallbacks.cpp:108 mrvFl/mrvCallbacks.cpp:834 mrvUI/mrvMenus.cpp:508
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:474
 msgid "Preferences"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:109 mrvFl/mrvCallbacks.cpp:828
-#: mrvFl/mrvCallbacks.cpp:862 mrvUI/mrvMenus.cpp:509
+#: mrvFl/mrvCallbacks.cpp:109 mrvFl/mrvCallbacks.cpp:838
+#: mrvFl/mrvCallbacks.cpp:872 mrvUI/mrvMenus.cpp:509
 msgid "About"
 msgstr ""
 
@@ -3621,34 +3649,34 @@ msgstr ""
 msgid "Saving video but with an audio extension."
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:1159
+#: mrvFl/mrvCallbacks.cpp:1169
 msgid "View/Mask"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:1634
+#: mrvFl/mrvCallbacks.cpp:1644
 msgid "Pick Color"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:1648
+#: mrvFl/mrvCallbacks.cpp:1658
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2715
 msgid "Pick Draw Color and Alpha"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:1775 mrvFl/mrvCallbacks.cpp:1813
+#: mrvFl/mrvCallbacks.cpp:1785 mrvFl/mrvCallbacks.cpp:1823
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1596
 msgid "Media"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:1779 mrvFl/mrvCallbacks.cpp:1817
+#: mrvFl/mrvCallbacks.cpp:1789 mrvFl/mrvCallbacks.cpp:1827
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:842
 msgid "UI"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:1783 mrvFl/mrvCallbacks.cpp:1821
+#: mrvFl/mrvCallbacks.cpp:1793 mrvFl/mrvCallbacks.cpp:1831
 msgid "Pan And Zoom"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:1791 mrvFl/mrvCallbacks.cpp:1829
+#: mrvFl/mrvCallbacks.cpp:1801 mrvFl/mrvCallbacks.cpp:1839
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:569
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1170
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1635
@@ -3656,17 +3684,17 @@ msgstr ""
 msgid "Timeline"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:1866
+#: mrvFl/mrvCallbacks.cpp:1876
 msgid ""
 "You have EDLs in the current session.  These will not be saved in the "
 "session file.  Do you want to continue?"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:1987
+#: mrvFl/mrvCallbacks.cpp:1997
 msgid "Edit Text Annotation"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:2162
+#: mrvFl/mrvCallbacks.cpp:2172
 msgid "No item selected"
 msgstr ""
 
@@ -4412,59 +4440,67 @@ msgstr ""
 msgid "Mean"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:72
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:152
 msgid "Save Movie Options"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:75
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:155
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:96
 msgid "Common Settings"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:78
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:158
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:99
 msgid "Save Annotations"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:79
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:159
 msgid ""
 "Save Annotations burned into the movie or sequence.  It also allows saving "
 "OpenEXRs from an 8-bit movie and changing OpenEXR's pixel type."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:85
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:165
 msgid "Video Options"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:88
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:168
+msgid "Pixel Format"
+msgstr ""
+
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:169
+msgid "FFMpeg's Pixel Format for the codec selected"
+msgstr ""
+
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:172
 msgid "Preset"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:89
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:173
 msgid "FFMpeg's Preset setting for the codec selected."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:96
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:176
 msgid "Profile"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:97
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:177
 msgid "FFMpeg's Profile settings."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:105
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:186
 msgid "Audio Options"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:109
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:190
 msgid "FFMpeg's Audio Codec settings."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:116
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:197
 msgid "Note that while saving with audio, the audio will not be heard."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:123
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:204
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:200
 msgid "Ok"
 msgstr ""

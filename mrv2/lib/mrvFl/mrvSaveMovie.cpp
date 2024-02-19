@@ -135,10 +135,12 @@ namespace mrv
                 if (!string::compare(
                         extension, ".mp4", string::Compare::CaseInsensitive) &&
                     !string::compare(
-                        extension, ".webm", string::Compare::CaseInsensitive))
+                        extension, ".webm", string::Compare::CaseInsensitive) &&
+                    !string::compare(
+                        extension, ".mkv", string::Compare::CaseInsensitive))
                 {
-                    LOG_ERROR(
-                        "VP9 profile needs a .mp4 or .webm movie extension");
+                    LOG_ERROR(_("VP9 profile needs a .mp4, .mkv or .webm movie "
+                                "extension"));
                     return;
                 }
             }
@@ -146,9 +148,12 @@ namespace mrv
             if (profile == "AV1")
             {
                 if (!string::compare(
-                        extension, ".mp4", string::Compare::CaseInsensitive))
+                        extension, ".mp4", string::Compare::CaseInsensitive) &&
+                    !string::compare(
+                        extension, ".mkv", string::Compare::CaseInsensitive))
                 {
-                    LOG_ERROR("AV1 profile needs a .mp4 movie extension");
+                    LOG_ERROR(
+                        _("AV1 profile needs a .mp4 or .mkv movie extension"));
                     return;
                 }
             }

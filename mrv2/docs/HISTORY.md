@@ -20,8 +20,10 @@ v1.0.5
 - Fixed encoding of movie files' YUV conversion.  Now the movie file is much
   more accurate.
 - Added pixel formats currently supported for each codec.
-- Added saving alpha channel in ProRes_4444 and ProRes_XQ when YUVA444416LE
+- Added saving alpha channel in ProRes_4444 and ProRes_XQ when YUVA_4444_16LE
   pixel format is selected.
+- Added saving alpha channel in VP9 when YUVA_420 is selected and the container
+  is a Matroska file.
 
 
 v1.0.4

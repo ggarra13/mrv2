@@ -67,6 +67,8 @@ Pop $0
 !insertmacro BorrarKey '.otio'
 !insertmacro BorrarKey '.otioz'
 !insertmacro BorrarKey '.m4v'
+!insertmacro BorrarKey '.mk3d'
+!insertmacro BorrarKey '.mka'
 !insertmacro BorrarKey '.mkv'
 !insertmacro BorrarKey '.mov'
 !insertmacro BorrarKey '.mpg'
