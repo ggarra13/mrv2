@@ -1,0 +1,4 @@
+# These settings were provided by ChatGPT
+preset:slower
+movflags:faststart
+crf:23

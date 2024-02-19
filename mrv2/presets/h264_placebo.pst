@@ -1,0 +1,4 @@
+# These settings were provided by ChatGPT
+preset:placebo
+qp:1
+x264-params:keyint=15:no-deblock=1
