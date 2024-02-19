@@ -71,11 +71,13 @@ else if (codec == "ProRes_LT")
 }
 else if (codec == "ProRes_XQ")
 {   
-   v->add("YUV422P10LE");
+   v->add("YUV444P10LE");
+   v->add("YUVA444P10LE");
  }
 else if (codec == "ProRes_4444")
 {   
    v->add("YUV444P10LE");
+   v->add("YUVA444P16LE");
 }
 else if (codec == "VP9")
 { 
@@ -154,7 +156,7 @@ o->value(0);} {}
   } {
     Fl_Window uiMain {
       label {Save Movie Options} open
-      xywh {1136 505 465 537} type Double align 0 modal visible
+      xywh {1136 483 465 537} type Double align 0 modal visible
     } {
       Fl_Group {} {
         label {Common Settings}
