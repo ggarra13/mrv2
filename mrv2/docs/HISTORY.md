@@ -1,3 +1,9 @@
+v1.0.6
+======
+
+- Darby fixed Render->Alpha Blend modes which were partially broken.
+
+
 v1.0.5
 ======
 

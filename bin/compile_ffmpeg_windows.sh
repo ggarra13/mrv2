@@ -347,9 +347,6 @@ if [[ $TLRENDER_X264 == ON || $TLRENDER_X264 == 1 ]]; then
     fi
     
     ENABLE_LIBX264="--enable-libx264 --enable-gpl"
-    if [[ $TLRENDER_NET == 1 ]]; then
-	ENABLE_LIBX264="${ENABLE_LIBX264} --enable-version3"
-    fi
 else
     # Remove unused libx264
     if [[ -e $INSTALL_DIR/lib/libx264.lib ]]; then
