@@ -8,11 +8,10 @@
 show_help()
 {
     if [[ $RUNME == 1 || $RUNME_NOLOG == 1 ]]; then
-	echo "$0 [debug] [clean] [dist] [-v] [-j <num>] [-lgpl] [-gpl] [-D VAR=VALUE] [-t <target>] [-help]"
+	echo "$0 [debug] [clean] [-v] [-j <num>] [-lgpl] [-gpl] [-D VAR=VALUE] [-t <target>] [-help]"
 	echo ""
 	echo "* debug builds a debug build."
 	echo "* clean clears the directory before building -- use only with runme.sh"
-	echo "* dist builds a Mojave compatible distribution (macOS)."
 	echo "* -j <num>  controls the threads to use when compiling. [default=$CPU_CORES]"
 	echo "* -v builds verbosely. [default=off]"
 	echo "* -D sets cmake variables, like -D TLRENDER_USD=OFF."

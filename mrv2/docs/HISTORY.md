@@ -2,7 +2,7 @@ v1.0.5
 ======
 
 - Code clean up.
-- Build system cleamup and consolidation with environment variables.
+- Build system clean up and consolidation with environment variables.
 - Fixed building pyFLTK on Linux which could fail if LD_LIBRARY_PATH was not
   set.
 - Improved building speed on all platforms.
