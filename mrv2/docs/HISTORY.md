@@ -1,7 +1,7 @@
 v1.0.6
 ======
 
-- Fixed Render->Alpha Blend modes which were broken.
+- Darby fixed Render->Alpha Blend modes which were partially broken.
 
 
 v1.0.5
