@@ -1,3 +1,9 @@
+v1.0.6
+======
+
+- Fixed Render->Alpha Blend modes which were broken.
+
+
 v1.0.5
 ======
 
