@@ -24,10 +24,6 @@ namespace mrv
     {
         struct BackgroundPanel::Private
         {
-            // Fl_Choice* type   = nullptr;
-            // Fl_Button* color0 = nullptr;
-            // Fl_Button* color1 = nullptr;
-            // HorSlider* sizeSlider = nullptr;
         };
 
         BackgroundPanel::BackgroundPanel(ViewerUI* ui) :
@@ -113,7 +109,7 @@ namespace mrv
                 b->tooltip(_("Selects the solid color."));
                 b->box(FL_EMBOSSED_BOX);
                 b->align(FL_ALIGN_LEFT);
-                Fl_Color color = to_fltk_color(options.solidColor);
+                Fl_Color color = to_fltk_color(options.color0);
                 b->color(color);
                 b->labelsize(11);
                 bW->callback(
@@ -122,13 +118,13 @@ namespace mrv
                         auto color = get_color_cb(o->color(), p.ui);
                         Fl_Color c = to_fltk_color(color);
                         settings->setValue(
-                            "Background/SolidColor", static_cast<int>(c));
+                            "Background/color0", static_cast<int>(c));
                         o->color(c);
                         o->redraw();
                         auto view = p.ui->uiView;
                         auto options = view->getBackgroundOptions();
-                        options.solidColor = color;
-                        options.solidColor.a = 1;
+                        options.color0 = color;
+                        options.color0.a = 1;
                         view->setBackgroundOptions(options);
                         view->redrawWindows();
                     });
@@ -136,7 +132,7 @@ namespace mrv
             }
             else if (options.type == tl::timeline::Background::Checkers)
             {
-                bg = new Fl_Group(X, Y, g->w(), 80);
+                bg = new Fl_Group(X, Y, g->w(), 55);
                 bg->begin();
 
                 Y += 10;
@@ -163,13 +159,22 @@ namespace mrv
 
                 Y += 25;
 
+                bg->end();
+            }
+
+            if (options.type == tl::timeline::Background::Checkers ||
+                options.type == tl::timeline::Background::Gradient)
+            {
+                bg = new Fl_Group(X, Y, g->w(), 80);
+                bg->begin();
+                
                 auto bW = new Widget< Fl_Button >(
                     X + 100, Y, 25, 25, _("First Color:"));
                 b = bW;
                 b->tooltip(_("Selects the first color."));
                 b->box(FL_EMBOSSED_BOX);
                 b->align(FL_ALIGN_LEFT);
-                Fl_Color color = to_fltk_color(options.checkersColor1);
+                Fl_Color color = to_fltk_color(options.color1);
                 b->color(color);
                 b->labelsize(11);
                 bW->callback(
@@ -183,7 +188,7 @@ namespace mrv
                         o->redraw();
                         auto view = p.ui->uiView;
                         auto options = view->getBackgroundOptions();
-                        options.checkersColor1 = color;
+                        options.color1 = color;
                         view->setBackgroundOptions(options);
                         view->redrawWindows();
                     });
@@ -196,7 +201,7 @@ namespace mrv
                 b->tooltip(_("Selects the second color in Checkers."));
                 b->box(FL_EMBOSSED_BOX);
                 b->align(FL_ALIGN_LEFT);
-                color = to_fltk_color(options.checkersColor0);
+                color = to_fltk_color(options.color0);
                 b->color(color);
                 b->labelsize(11);
                 bW->callback(
@@ -210,7 +215,7 @@ namespace mrv
                         o->redraw();
                         auto view = p.ui->uiView;
                         auto options = view->getBackgroundOptions();
-                        options.checkersColor0 = color;
+                        options.color0 = color;
                         view->setBackgroundOptions(options);
                         view->redrawWindows();
                     });

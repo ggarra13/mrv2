@@ -891,17 +891,15 @@ namespace mrv
         backgroundOptions.type = static_cast<timeline::Background>(
             settings->getValue<int>("Background/Type"));
 
-        int color = settings->getValue<int>("Background/SolidColor");
-        backgroundOptions.solidColor = from_fltk_color(color);
-
+        Fl_Color color;
         int size = settings->getValue<int>("Background/CheckersSize");
         backgroundOptions.checkersSize = math::Size2i(size, size);
 
         color = settings->getValue<int>("Background/CheckersColor0");
-        backgroundOptions.checkersColor0 = from_fltk_color(color);
+        backgroundOptions.color0 = from_fltk_color(color);
 
         color = settings->getValue<int>("Background/CheckersColor1");
-        backgroundOptions.checkersColor1 = from_fltk_color(color);
+        backgroundOptions.color1 = from_fltk_color(color);
 
         ui->uiView->setBackgroundOptions(backgroundOptions);
 
