@@ -164,7 +164,7 @@ namespace mrv
         ui->app->open(file);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
-    
+
     void open_cb(Fl_Widget* w, ViewerUI* ui)
     {
         const std::vector<std::string>& files = open_image_file(NULL, true);
@@ -390,8 +390,8 @@ namespace mrv
                     auto entries = tl::ffmpeg::getProfileLabels();
                     std::string profileName =
                         entries[(int)options.ffmpegProfile];
-                    preset = tl::string::toLower(profileName) +
-                             "_" + item->label() + ".pst";
+                    preset = tl::string::toLower(profileName) + "_" +
+                             item->label() + ".pst";
                     options.ffmpegPreset = presetspath() + preset;
                 }
             }
@@ -588,7 +588,7 @@ namespace mrv
 #endif
 
         // Close all files
-        //close_all_cb(w, ui);  // takes too long to exit .ndi files
+        // close_all_cb(w, ui);  // takes too long to exit .ndi files
 
         // Hide any GL Window (needed in Windows)
         Fl_Window* pw = Fl::first_window();
@@ -1155,7 +1155,7 @@ namespace mrv
         clone_and_replace_cb(m, ui);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
-    
+
     void display_window_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
@@ -1637,14 +1637,14 @@ namespace mrv
 
     image::Color4f get_color_cb(Fl_Color c, ViewerUI* ui)
     {
-        uint8_t r, g, b;
+        uint8_t r, g, b, a = 255;
         Fl::get_color(c, r, g, b);
         image::Color4f color = image::Color4f(r / 255.F, g / 255.F, b / 255.F);
 
-        if (!fl_color_chooser(_("Pick Color"), r, g, b))
+        if (!flmm_color_a_chooser(_("Pick Color"), r, g, b, a))
             return color;
 
-        color = image::Color4f(r / 255.F, g / 255.F, b / 255.F);
+        color = image::Color4f(r / 255.F, g / 255.F, b / 255.F, a / 255.F);
         return color;
     }
 
