@@ -2,7 +2,7 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <tlUI/DrawUtil.h>
+#include <tlCore/Mesh.h>
 #include <tlGL/Util.h>
 
 #include "mrvCore/mrvLocale.h"
@@ -259,7 +259,8 @@ namespace mrv
                     {p.videoData[left]},
                     timeline::getBoxes(
                         timeline::CompareMode::A, p.timelineSizes),
-                    p.imageOptions, p.displayOptions);
+                    p.imageOptions, p.displayOptions, p.compareOptions,
+                    p.backgroundOptions);
             }
 
             _drawOverlays(renderSize);
@@ -333,7 +334,8 @@ namespace mrv
         gl.render->drawVideo(
             {p.lastVideoData},
             timeline::getBoxes(p.compareOptions.mode, p.timelineSizes),
-            p.imageOptions, p.displayOptions, p.compareOptions);
+            p.imageOptions, p.displayOptions, p.compareOptions,
+            p.backgroundOptions);
 
         if (p.missingFrameType == MissingFrameType::kScratchedFrame)
         {
@@ -1207,40 +1209,4 @@ namespace mrv
         gl.render->end();
     }
 
-    void Viewport::_drawBackground() const noexcept
-    {
-        MRV2_GL();
-        TLRENDER_P();
-        const auto renderSize = getRenderSize();
-        if (!renderSize.isValid())
-            return;
-
-        switch (p.backgroundOptions.type)
-        {
-        case timeline::Background::Solid:
-            gl.render->clearViewport(p.backgroundOptions.solidColor);
-            break;
-        case timeline::Background::Checkers:
-            // @bug macOS has problems using drawColorMesh.
-#ifdef USE_GL_DRAW_COLOR_MESH
-            gl.render->drawColorMesh(
-                ui::checkers(
-                    math::Box2i(0, 0, renderSize.w, renderSize.h),
-                    p.backgroundOptions.checkersColor0,
-                    p.backgroundOptions.checkersColor1,
-                    p.backgroundOptions.checkersSize),
-                math::Vector2i(), image::Color4f(1.F, 1.F, 1.F));
-#else
-            gl.render->clearViewport(p.backgroundOptions.checkersColor0);
-            gl.render->drawMesh(
-                checkers(
-                    math::Box2i(0, 0, renderSize.w, renderSize.h),
-                    p.backgroundOptions.checkersSize),
-                math::Vector2i(), p.backgroundOptions.checkersColor1);
-#endif
-            break;
-        default:
-            break;
-        }
-    }
 } // namespace mrv
