@@ -116,10 +116,9 @@ namespace tl
         operator<<(std::ostream& s, const BackgroundOptions& o)
         {
             s << "<mrv2.image.BackgroundOptions type=" << o.type
-              << " solidColor=" << o.solidColor
               << " checkersSize=" << o.checkersSize
-              << " checkersColor0=" << o.checkersColor0
-              << " checkersColor1=" << o.checkersColor1 << ">";
+              << " color0=" << o.color0
+              << " color1=" << o.color1 << ">";
             return s;
         }
 
@@ -612,10 +611,9 @@ Contains all classes and enums related to image controls.
         .def(py::init<>())
         .def(
             py::init<
-                timeline::Background, image::Color4f, image::Color4f,
+                timeline::Background, image::Color4f,
                 image::Color4f, math::Size2i>(),
             py::arg("type") = timeline::Background::Transparent,
-            py::arg("solidColor") = image::Color4f(0.F, 0.F, 0.F),
             py::arg("checkersColor0") = image::Color4f(1.F, 1.F, 1.F),
             py::arg("checkersColor1") = image::Color4f(0.5F, 0.5F, 0.5F),
             py::arg("checkersSize") = math::Size2i(100, 100))
@@ -623,13 +621,10 @@ Contains all classes and enums related to image controls.
             "type", &timeline::BackgroundOptions::type,
             _("Background type :class:`mrv2.image.Background`.."))
         .def_readwrite(
-            "solidColor", &timeline::BackgroundOptions::solidColor,
-            _("Solid Color :class:`mrv2.image.Color4f`.."))
-        .def_readwrite(
-            "checkersColor0", &timeline::BackgroundOptions::checkersColor0,
+            "checkersColor0", &timeline::BackgroundOptions::color0,
             _("Checkers Color0 :class:`mrv2.image.Color4f`.."))
         .def_readwrite(
-            "checkersColor1", &timeline::BackgroundOptions::checkersColor1,
+            "checkersColor1", &timeline::BackgroundOptions::color1,
             _("Checkers Color1 :class:`mrv2.image.Color4f`.."))
         .def_readwrite(
             "checkersSize", &timeline::BackgroundOptions::checkersSize,

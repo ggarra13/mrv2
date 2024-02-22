@@ -89,9 +89,7 @@ namespace mrv
         void _readPixel(image::Color4f& rgba) const noexcept override;
 
         void _drawHelpText() const noexcept;
-
-        void _drawBackground() const noexcept;
-
+        
         void _drawRectangleOutline(
             const math::Box2i& box, const image::Color4f& color,
             const math::Matrix4x4f& mvp) const noexcept;

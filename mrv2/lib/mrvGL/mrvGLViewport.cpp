@@ -285,19 +285,6 @@ namespace mrv
                 gl.stereoBuffer.reset();
             }
 
-            if (gl.background && !transparent)
-            {
-                gl::OffscreenBufferBinding binding(gl.background);
-
-                locale::SetAndRestore saved;
-
-                gl.render->begin(renderSize);
-                gl.render->setOCIOOptions(p.ocioOptions);
-                gl.render->setLUTOptions(p.lutOptions);
-                _drawBackground();
-                gl.render->end();
-            }
-
             if (gl.buffer && gl.render)
             {
                 if (p.stereo3DOptions.output == Stereo3DOutput::OpenGL &&
@@ -341,7 +328,8 @@ namespace mrv
                                     timeline::getBoxes(
                                         p.compareOptions.mode, p.timelineSizes),
                                     p.imageOptions, p.displayOptions,
-                                    p.compareOptions);
+                                    p.compareOptions,
+                                    p.backgroundOptions);
                                 CHECK_GL;
                             }
                         }
