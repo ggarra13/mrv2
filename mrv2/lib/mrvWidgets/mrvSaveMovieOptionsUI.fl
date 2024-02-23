@@ -75,9 +75,15 @@ else if (codec == "ProRes_XQ")
    v->add("YUVA_444P_16LE");
  }
 else if (codec == "ProRes_4444")
-{   
+{      
+   v->add("YUV_422P_10LE");
    v->add("YUV_444P_10LE");
-   v->add("YUVA_444P_16LE");
+   v->add("YUVA_444P_10LE");
+\#ifdef __APPLE__
+   v->add("YUV_422P_12LE");
+   v->add("YUV_444P_12LE");
+   v->add("YUVA_444P_12LE");
+\#endif
 }
 else if (codec == "VP9")
 { 
@@ -156,7 +162,7 @@ o->value(0);} {}
   } {
     Fl_Window uiMain {
       label {Save Movie Options} open
-      xywh {1136 483 465 537} type Double align 0 modal visible
+      xywh {946 313 465 537} type Double align 0 hide modal
     } {
       Fl_Group {} {
         label {Common Settings}
