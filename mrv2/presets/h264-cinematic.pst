@@ -1,4 +1,5 @@
 # https://academysoftwarefoundation.github.io/EncodingGuidelines/Encodeh264.html#x264
 crf:18
 preset:slow
-tune:animation
+tune:film
+movflags:faststart

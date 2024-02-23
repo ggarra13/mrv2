@@ -390,9 +390,13 @@ namespace mrv
                     auto entries = tl::ffmpeg::getProfileLabels();
                     std::string profileName =
                         entries[(int)options.ffmpegProfile];
-                    preset = tl::string::toLower(profileName) + "_" +
+                    preset = tl::string::toLower(profileName) + "-" +
                              item->label() + ".pst";
                     options.ffmpegPreset = presetspath() + preset;
+                    if (!file::isReadable(options.ffmpegPreset))
+                    {
+                        options.ffmpegPreset = "";
+                    }
                 }
             }
 

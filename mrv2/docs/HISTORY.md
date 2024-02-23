@@ -6,6 +6,9 @@ v1.0.6
 - Darby added gradient background and moved it to draw video.
 - Made Background colors use Flmm's color chooser with alpha (alpha is
   current discarded, thou).
+- Added printing out of audio and video codec names when saving with FFmpeg.
+- Fixed presets names.  Instead of using '_' we now use '-'.
+- Added last successful saved movie to recent files for easy checking it back.
 
 
 v1.0.5

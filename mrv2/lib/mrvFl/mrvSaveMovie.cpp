@@ -27,6 +27,8 @@
 #include "mrvFl/mrvSaveOptions.h"
 #include "mrvFl/mrvIO.h"
 
+#include "mrvApp/mrvSettingsObject.h"
+
 #include "mrViewer.h"
 
 namespace
@@ -634,6 +636,13 @@ namespace mrv
         ui->uiTimeline->valid(0); // needed
         ui->uiTimeline->redraw();
         tcp->unlock();
+
+        auto settings = ui->app->settings();
+        if (file::isReadable(file))
+        {
+            settings->addRecentFile(file);
+            ui->uiMain->fill_menu(ui->uiMenuBar);
+        }
     }
 
 } // namespace mrv

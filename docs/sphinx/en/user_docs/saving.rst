@@ -32,11 +32,11 @@ Please refer to the compilation instructions of mrv2 at:
 
   The presets should be named like::
 	      
-    codec_presetname.pst
+    codec-presetname.pst
 
   For example::
 
-    vp9_good.pst
+    vp9-good.pst
 
   These presets will be listed in the Save Options when the
   proper video codec is used.  Note that the codec name is

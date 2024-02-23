@@ -34,11 +34,11 @@ Por favor referirse a las instrucciones de compilación de mrv2 en:
 
 	     Los preseteos deben ser llamados como::
 	      
-	       codec_nombrepreseteo.pst
+	       codec-nombrepreseteo.pst
 
 	     Por ejemplo::
 
-	       vp9_bueno.pst
+	       vp9-bueno.pst
 
 	     Estos preseteos serán listados en la opción de grabar películas
 	     cuando el codec apropiado es usado.  Note que el nombre del codec

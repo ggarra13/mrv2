@@ -124,7 +124,7 @@ if (v->size() > 0)
 if (!item || !item->label()) return;
 
 std::string codec = tl::string::toLower(item->label());
-codec += "_";
+codec += "-";
 
 std::string directoryPath = mrv::presetspath();
 
@@ -133,10 +133,10 @@ v->clear();
 fs::directory_iterator dirIter(directoryPath);
 for (const auto& entry : dirIter)
 {
-   // Check if the entry is a regular file, starts with "codec_", and ends with ".pst"
+   // Check if the entry is a regular file, starts with "codec-", and ends with ".pst"
    std::string filename = entry.path().filename().string();
         
-   // Check if the entry is a regular file and starts with "vp9_"
+   // Check if the entry is a regular file and starts with say "vp9-"
    if (fs::is_regular_file(entry) && 
        filename.find(codec) == 0 &&
        filename.size() > 4 && 
@@ -149,7 +149,16 @@ for (const auto& entry : dirIter)
 }
 
 if (v->size() > 0)
-  v->value(0);} {}
+{
+  v->value(0);
+  v->activate();
+}
+else
+{
+  v->deactivate();
+}
+
+} {}
   }
   Function {add_profiles(Fl_Choice* o)} {open
   } {
