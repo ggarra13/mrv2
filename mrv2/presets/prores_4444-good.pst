@@ -1,3 +1,4 @@
 # These settings were provided by https://academysoftwarefoundation.github.io/EncodingGuidelines/EncodeProres.html
 vendor:apl0
 qscale:11
+quant_mat:hq

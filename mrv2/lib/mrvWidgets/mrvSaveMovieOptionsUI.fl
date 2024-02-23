@@ -156,9 +156,7 @@ if (v->size() > 0)
 else
 {
   v->deactivate();
-}
-
-} {}
+}} {}
   }
   Function {add_profiles(Fl_Choice* o)} {open
   } {
