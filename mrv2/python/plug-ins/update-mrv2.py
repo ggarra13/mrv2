@@ -292,7 +292,7 @@ class UpdatePlugin(plugin.Plugin):
         elif os == 'Linux':
             return self.check_linux_flavor()
         elif os == 'Darwin':
-            return '.dmg'
+            return 'amd64.dmg'
         else:
             return 'Unknown operating system'
 
@@ -308,6 +308,7 @@ class UpdatePlugin(plugin.Plugin):
         Returns:
             None 
         """
+        Fl.check()
         download_file = os.path.join(tempfile.gettempdir(), name)
         print(f"Downloading: {name} ...")
         Fl.check()

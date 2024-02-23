@@ -4,13 +4,15 @@ v1.0.6
 - Darby fixed Render->Alpha Blend modes which were partially broken.
 - Darby fixed macOS checkers drawing.
 - Darby added gradient background and moved it to draw video.
+- Made Background colors use Flmm's color chooser with alpha (alpha is
+  current discarded, thou).
 
 
 v1.0.5
 ======
 
 - Code clean up.
-- Build system cleamup and consolidation with environment variables.
+- Build system clean up and consolidation with environment variables.
 - Fixed building pyFLTK on Linux which could fail if LD_LIBRARY_PATH was not
   set.
 - Improved building speed on all platforms.
