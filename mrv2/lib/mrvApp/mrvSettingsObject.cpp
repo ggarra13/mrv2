@@ -123,7 +123,7 @@ namespace mrv
         p.defaultValues["NDI/Preroll"] = 3;
         p.defaultValues["NDI/Audio"] = 0;
 #endif
-        
+
         p.defaultValues[kTextFont] = 0;
         p.defaultValues[kFontSize] = 52;
 
@@ -146,18 +146,19 @@ namespace mrv
 
         p.defaultValues[kAllFrames] = 0;
 
-
         // Image saving
         p.defaultValues["SaveImage/Annotations"] = 0;
         p.defaultValues["SaveImage/Compression"] = std::string("ZIPS");
         p.defaultValues["SaveImage/PixelType"] = std::string("Half");
-        
+
         // Movie saving
         p.defaultValues["SaveMovie/Annotations"] = 0;
         p.defaultValues["SaveMovie/Profile"] = std::string("ProRes_4444");
         p.defaultValues["SaveMovie/PixelFormat"] =
             std::string("YUVA_444P_LE10");
         p.defaultValues["SaveMovie/Preset"] = std::string("good");
+
+        p.defaultValues["SaveMovie/AudioCodec"] = std::string("AAC");
     }
 
     SettingsObject::~SettingsObject() {}

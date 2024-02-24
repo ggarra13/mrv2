@@ -38,8 +38,7 @@ class SaveMovieOptionsUI {open
 } {
   decl {bool cancel = false;} {public local
   }
-  Function {add_pixel_formats(Fl_Choice* o, Fl_Choice* v)} {open
-  } {
+  Function {add_pixel_formats(Fl_Choice* o, Fl_Choice* v)} {} {
     code {const Fl_Menu_Item* item = &o->menu()[o->value()];
 if (!item || !item->label()) return;
 
@@ -140,8 +139,7 @@ if (v->size() > 0)
     v->value(0);
 }} {}
   }
-  Function {add_presets(Fl_Choice* o, Fl_Choice* v)} {open
-  } {
+  Function {add_presets(Fl_Choice* o, Fl_Choice* v)} {} {
     code {const Fl_Menu_Item* item = &o->menu()[o->value()];
 if (!item || !item->label()) return;
 
@@ -194,8 +192,7 @@ else
   v->deactivate();
 }} {}
   }
-  Function {add_profiles(Fl_Choice* o)} {open
-  } {
+  Function {add_profiles(Fl_Choice* o)} {} {
     code {auto entries = tl::ffmpeg::getProfileLabels();
     for (auto entry : entries)
         o->add(gettext(entry.c_str()));
@@ -221,6 +218,31 @@ else
     }
     o->value(0);} {}
   }
+  Function {add_audio_codecs(Fl_Choice* o)} {open
+  } {
+    code {auto entries = tl::ffmpeg::getAudioCodecLabels();
+ for (auto entry : entries)
+    o->add(gettext(entry.c_str()));
+
+if (o->size() > 0)
+{
+    auto settings = mrv::App::app->settings();
+    const std::string& saved = settings->getValue<std::string>("SaveMovie/AudioCodec");
+    for (int i = 0; i < o->size(); ++i)
+    {
+        const Fl_Menu_Item* const item = &o->menu()[i];
+        if (!item->label())
+            continue;
+        const std::string& codec = item->label();
+        if (saved == codec)
+        {
+            o->value(i);
+            return;
+        }
+    }
+}
+o->value(0);} {}
+  }
   Function {SaveMovieOptionsUI(bool hasAudio = true, bool audioOnly = false)} {open
   } {
     Fl_Window uiMain {
@@ -234,7 +256,7 @@ else
         Fl_Check_Button Annotations {
           label {Save Annotations}
           callback {auto settings = mrv::App::app->settings();
-settings->setValue("SaveMovie/Annoations", static_cast<int>(o->value()));} selected
+settings->setValue("SaveMovie/Annoations", static_cast<int>(o->value()));}
           tooltip {Save Annotations burned into the movie or sequence.  It also allows saving OpenEXRs from an 8-bit movie and changing OpenEXR's pixel type.} xywh {160 48 25 18} down_box DOWN_BOX
           code0 {auto settings = mrv::App::app->settings();}
           code1 {int value = settings->getValue<int>("SaveMovie/Annoations");}
@@ -278,16 +300,17 @@ settings->setValue("SaveMovie/Profile", std::string(item->label()));} open
         } {}
       }
       Fl_Group AudioOptions {
-        label {Audio Options}
+        label {Audio Options} open
         xywh {34 322 394 132} box ROUNDED_FRAME color 56
       } {
         Fl_Choice AudioCodec {
-          label Codec open
+          label Codec
+          callback {const Fl_Menu_Item* item = o->mvalue();
+if (!item) return;
+auto settings = mrv::App::app->settings();
+settings->setValue("SaveMovie/AudioCodec", std::string(item->label()));} open selected
           tooltip {FFMpeg's Audio Codec settings.} xywh {172 346 170 29} down_box BORDER_BOX
-          code0 {auto entries = tl::ffmpeg::getAudioCodecLabels();}
-          code1 {for (auto entry : entries)}
-          code2 {o->add(gettext(entry.c_str()));}
-          code3 {o->value(1);}
+          code0 {add_audio_codecs(o);}
         } {}
         Fl_Box {} {
           label {Note that while saving with audio, the audio will not be heard.}
