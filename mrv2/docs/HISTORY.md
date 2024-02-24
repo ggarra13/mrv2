@@ -17,6 +17,7 @@ v1.0.6
 - Made mrv2 remember the save movie and image settings for easy saving of
   multiple movie or image files.
 - Made FFmpeg errors be reported to the console immediately.
+- Fixed macOS VideoToolbox's hardware encoding not working when busy.
 
 
 v1.0.5

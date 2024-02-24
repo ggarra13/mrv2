@@ -2,3 +2,4 @@
 vendor:apl0
 qscale:11
 quant_mat:hq
+allow_sw:1
