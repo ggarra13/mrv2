@@ -42,7 +42,7 @@ v1.0.6
 - Made mrv2 remember the save movie and image settings for easy saving of
   multiple movie or image files.
 - Made FFmpeg errors be reported to the console immediately.
-- Fixed macOS VideoToolbox's hardware encoding not working when busy.
+- Fixed macOS VideoToolbox's hardware encoding not working.
 - Fixed Windows' presets not being read due to spaces in the installed
   directory.
 - Fixed a long standing bug of gamma (when changed in the top bar slider)
