@@ -3,3 +3,5 @@ crf:18
 preset:slow
 tune:film
 movflags:faststart
+allow_sw:1
+

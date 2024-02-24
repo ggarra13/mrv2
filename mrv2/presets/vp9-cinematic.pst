@@ -5,3 +5,4 @@ filmgrain:1
 deblock-strength:0
 aq-mode:0
 rc_lookahead:25
+allow_sw:1

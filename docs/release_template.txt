@@ -21,6 +21,7 @@ In v1.0.6, we have several important fixes to the new save dialog.  Minor fixes 
 - Made mrv2 remember the save movie and image settings for easy saving of
   multiple movie or image files.
 - Made FFmpeg errors be reported to the console immediately.
+- Fixed macOS VideoToolbox's hardware encoding not working when busy.
 
 Main Web page:
 https://mrv2.sourceforge.io
@@ -31,4 +32,4 @@ https://www.github.com/ggarra13/mrv2
 Binaries:
 https://sourceforge.net/projects/mrv2/files/v1.0.5/
 
-#vr #player #movie #flipbook #usd #openusd #opentimelineio #mrv2 #mrViewer #vp9 #av1 #h264 #mp4 #mov #avi #webm #prores #prores4444 #vfx #animation #games #filmmaking #opensource
+#vr #player #movie #flipbook #usd #openusd #opentimelineio #mrv2 #mrViewer #vp9 #av1 #h264 #mp4 #mov #avi #webm #prores #prores4444 #vfx #animation #games #filmmaking #opensource #environmentmaps #stereo 

@@ -2,3 +2,4 @@
 preset:slower
 movflags:faststart
 crf:23
+allow_sw:1

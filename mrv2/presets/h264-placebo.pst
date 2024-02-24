@@ -2,3 +2,4 @@
 preset:placebo
 qp:1
 x264-params:keyint=15:no-deblock=1
+allow_sw:1

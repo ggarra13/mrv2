@@ -1,3 +1,5 @@
 # These settings were mostly taken from:
 # https://trac.ffmpeg.org/wiki/Encode/VP9
 lossless:1
+allow_sw:1
+

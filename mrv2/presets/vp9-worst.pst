@@ -2,3 +2,5 @@
 deadline:realtime
 speed:8
 crf:63
+allow_sw:1
+
