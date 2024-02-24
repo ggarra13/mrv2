@@ -21,6 +21,8 @@ v1.0.6
 - Fixed macOS VideoToolbox's hardware encoding not working when busy.
 - Fixed Windows' presets not being read due to spaces in the installed
   directory.
+- Fixed a long standing bug of gamma (when changed in the top bar slider)
+  not being reapplied when changing from one clip to another.
 
 
 v1.0.5

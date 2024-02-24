@@ -350,6 +350,7 @@ namespace mrv
         view->setStereo3DOptions(p.stereo3DOptions);
         view->setTimelinePlayers(p.timelinePlayers);
         view->updatePlaybackButtons();
+        view->updateDisplayOptions();
         view->redraw();
 
         p.ui->uiTimeline->setOCIOOptions(p.ocioOptions);
@@ -395,6 +396,7 @@ namespace mrv
             view->setCompareOptions(p.compareOptions);
             view->setStereo3DOptions(p.stereo3DOptions);
             view->setTimelinePlayers(p.timelinePlayers);
+            view->updateDisplayOptions();
             view->redraw();
         }
 
