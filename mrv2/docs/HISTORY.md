@@ -16,6 +16,7 @@ v1.0.6
   tlRender's source code.  mrv2 currently does not yet use them.
 - Made mrv2 remember the save movie and image settings for easy saving of
   multiple movie or image files.
+- Made FFmpeg errors be reported to the console immediately.
 
 
 v1.0.5
