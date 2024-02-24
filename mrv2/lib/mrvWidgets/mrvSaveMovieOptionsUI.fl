@@ -263,25 +263,9 @@ settings->setValue("SaveMovie/Annoations", static_cast<int>(o->value()));}
         }
       }
       Fl_Group VideoOptions {
-        label {Video Options}
+        label {Video Options} open selected
         xywh {34 111 390 188} box ROUNDED_FRAME color 56
       } {
-        Fl_Choice PixelFormat {
-          label {Pixel Format}
-          callback {const Fl_Menu_Item* item = o->mvalue();
-if (!item) return;
-auto settings = mrv::App::app->settings();
-settings->setValue("SaveMovie/PixelFormat", std::string(item->label()));} open
-          tooltip {FFMpeg's Pixel Format for the codec selected} xywh {170 126 170 29} down_box BORDER_BOX
-        } {}
-        Fl_Choice Preset {
-          label Preset
-          callback {const Fl_Menu_Item* item = o->mvalue();
-if (!item) return;
-auto settings = mrv::App::app->settings();
-settings->setValue("SaveMovie/Preset", std::string(item->label()));} open
-          tooltip {FFMpeg's Preset setting for the codec selected.} xywh {171 170 170 29} down_box BORDER_BOX
-        } {}
         Fl_Choice Profile {
           label Profile
           user_data this user_data_type {SaveMovieOptionsUI*}
@@ -292,10 +276,26 @@ const Fl_Menu_Item* item = o->mvalue();
 if (!item) return;
 auto settings = mrv::App::app->settings();
 settings->setValue("SaveMovie/Profile", std::string(item->label()));} open
-          tooltip {FFMpeg's Profile settings.} xywh {170 214 170 29} down_box BORDER_BOX
+          tooltip {FFMpeg's Profile settings.} xywh {170 131 170 29} down_box BORDER_BOX
           code0 {add_profiles(o);}
           code1 {add_presets(o, Preset);}
           code2 {add_pixel_formats(o, PixelFormat);}
+        } {}
+        Fl_Choice Preset {
+          label Preset
+          callback {const Fl_Menu_Item* item = o->mvalue();
+if (!item) return;
+auto settings = mrv::App::app->settings();
+settings->setValue("SaveMovie/Preset", std::string(item->label()));} open
+          tooltip {FFMpeg's Preset setting for the codec selected.} xywh {171 173 170 29} down_box BORDER_BOX
+        } {}
+        Fl_Choice PixelFormat {
+          label {Pixel Format}
+          callback {const Fl_Menu_Item* item = o->mvalue();
+if (!item) return;
+auto settings = mrv::App::app->settings();
+settings->setValue("SaveMovie/PixelFormat", std::string(item->label()));} open
+          tooltip {FFMpeg's Pixel Format for the codec selected} xywh {170 211 170 29} down_box BORDER_BOX
         } {}
         Fl_Button {} {
           label {Advanced Settings}
@@ -543,7 +543,7 @@ v->hide();}
           label Cancel
           user_data uiAdvancedSettings user_data_type {Fl_Double_Window*}
           callback {Override->value(0);
-v->hide();} selected
+v->hide();}
           xywh {239 242 90 29}
         }
       }
