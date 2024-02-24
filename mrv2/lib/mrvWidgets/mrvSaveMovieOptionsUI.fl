@@ -263,7 +263,7 @@ settings->setValue("SaveMovie/Annoations", static_cast<int>(o->value()));}
         }
       }
       Fl_Group VideoOptions {
-        label {Video Options} open selected
+        label {Video Options} open
         xywh {34 111 390 188} box ROUNDED_FRAME color 56
       } {
         Fl_Choice Profile {
@@ -275,11 +275,8 @@ add_pixel_formats(o, v->PixelFormat);
 const Fl_Menu_Item* item = o->mvalue();
 if (!item) return;
 auto settings = mrv::App::app->settings();
-settings->setValue("SaveMovie/Profile", std::string(item->label()));} open
+settings->setValue("SaveMovie/Profile", std::string(item->label()));} open selected
           tooltip {FFMpeg's Profile settings.} xywh {170 131 170 29} down_box BORDER_BOX
-          code0 {add_profiles(o);}
-          code1 {add_presets(o, Preset);}
-          code2 {add_pixel_formats(o, PixelFormat);}
         } {}
         Fl_Choice Preset {
           label Preset
@@ -346,7 +343,7 @@ v->hide();}
       }
     }
     Fl_Window uiAdvancedSettings {
-      label {Advanced Settings} open
+      label {Advanced Settings}
       xywh {720 371 411 310} type Double hotspot modal visible
     } {
       Fl_Check_Button Override {
@@ -556,6 +553,12 @@ if (audioOnly)
 {
   Annotations->deactivate();
   VideoOptions->deactivate();
+}
+else
+{
+   add_profiles(Profile);
+   add_presets(Profile, Preset);
+   add_pixel_formats(Profile, PixelFormat);
 }
 uiAdvancedSettings->hide();
 uiMain->show();

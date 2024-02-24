@@ -585,7 +585,11 @@ namespace mrv
                             render->drawVideo(
                                 {videoData},
                                 {math::Box2i(
-                                    0, 0, renderSize.w, renderSize.h)});
+                                        0, 0, renderSize.w, renderSize.h)},
+                                {timeline::ImageOptions()},
+                                {timeline::DisplayOptions()},
+                                timeline::CompareOptions(),
+                                 ui->uiView->getBackgroundOptions());
                             render->end();
                         }
 

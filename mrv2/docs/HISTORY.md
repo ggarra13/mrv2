@@ -19,6 +19,8 @@ v1.0.6
   multiple movie or image files.
 - Made FFmpeg errors be reported to the console immediately.
 - Fixed macOS VideoToolbox's hardware encoding not working when busy.
+- Fixed Windows' presets not being read due to spaces in the installed
+  directory.
 
 
 v1.0.5

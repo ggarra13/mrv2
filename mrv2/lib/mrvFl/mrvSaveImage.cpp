@@ -288,11 +288,14 @@ namespace mrv
                     render->setOCIOOptions(view->getOCIOOptions());
                     render->setLUTOptions(view->lutOptions());
                     CHECK_GL;
-                    // glClearColor(1.0, .0, .0, 1.0);
-                    // glClear(GL_COLOR_BUFFER_BIT);
                     render->drawVideo(
                         {videoData},
-                        {math::Box2i(0, 0, renderSize.w, renderSize.h)});
+                        {math::Box2i(
+                                0, 0, renderSize.w, renderSize.h)},
+                        {timeline::ImageOptions()},
+                        {timeline::DisplayOptions()},
+                        timeline::CompareOptions(),
+                        ui->uiView->getBackgroundOptions());
                     CHECK_GL;
                     render->end();
                 }
