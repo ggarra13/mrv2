@@ -28,6 +28,12 @@ decl {\#include "mrvCore/mrvI8N.h"} {public global
 decl {\#include "mrvCore/mrvHome.h"} {public global
 }
 
+decl {\#include "mrvApp/mrvSettingsObject.h"} {public global
+}
+
+decl {\#include "mrViewer.h"} {public global
+}
+
 class SaveMovieOptionsUI {open
 } {
   decl {bool cancel = false;} {public local
@@ -115,8 +121,24 @@ else if (codec == "AV1")
 }
 
 if (v->size() > 0)
-  v->value(0);} {selected
+{
+    auto settings = mrv::App::app->settings();
+    const std::string& saved =
+        settings->getValue<std::string>("SaveMovie/PixelFormat");
+    for (int i = 0; i < v->size(); ++i)
+    {
+        const Fl_Menu_Item* const item = &v->menu()[i];
+        if (!item->label())
+            continue;
+        const std::string& fmt = item->label();
+        if (saved == fmt)
+        {
+            v->value(i);
+            return;
+        }
     }
+    v->value(0);
+}} {}
   }
   Function {add_presets(Fl_Choice* o, Fl_Choice* v)} {open
   } {
@@ -143,13 +165,27 @@ for (const auto& entry : dirIter)
        filename.substr(filename.size() - 4) == ".pst")
    {
        std::string preset = filename.substr(codec.size(),
-                                           filename.size()-4-codec.size());
+                                            filename.size()-4-codec.size());
        v->add(preset.c_str());
    }
 }
 
 if (v->size() > 0)
 {
+  auto settings = mrv::App::app->settings();
+  const std::string& saved = settings->getValue<std::string>("SaveMovie/Preset");
+  for (int i = 0; i < v->size(); ++i)
+  {
+     const Fl_Menu_Item* const item = &v->menu()[i];	
+     if (!item->label()) continue;
+     const std::string& preset = item->label();
+     if (saved == preset)
+     {
+         v->value(i);
+         v->activate();
+         return;
+     }
+  }
   v->value(0);
   v->activate();
 }
@@ -161,9 +197,29 @@ else
   Function {add_profiles(Fl_Choice* o)} {open
   } {
     code {auto entries = tl::ffmpeg::getProfileLabels();
-for (auto entry : entries)
-   o->add(gettext(entry.c_str()));
-o->value(0);} {}
+    for (auto entry : entries)
+        o->add(gettext(entry.c_str()));
+
+    if (o->size() > 0)
+    {
+        auto settings = mrv::App::app->settings();
+        const std::string& saved =
+            settings->getValue<std::string>("SaveMovie/Profile");
+        for (int i = 0; i < o->size(); ++i)
+        {
+            const Fl_Menu_Item* const item = &o->menu()[i];
+            if (!item->label())
+                continue;
+            const std::string& profile = item->label();
+            if (saved == profile)
+            {
+                o->value(i);
+                o->activate();
+                return;
+            }
+        }
+    }
+    o->value(0);} {}
   }
   Function {SaveMovieOptionsUI(bool hasAudio = true, bool audioOnly = false)} {open
   } {
@@ -172,12 +228,17 @@ o->value(0);} {}
       xywh {946 313 465 537} type Double align 0 hide modal
     } {
       Fl_Group {} {
-        label {Common Settings}
+        label {Common Settings} open
         xywh {34 38 390 44} box ROUNDED_FRAME color 56
       } {
         Fl_Check_Button Annotations {
           label {Save Annotations}
+          callback {auto settings = mrv::App::app->settings();
+settings->setValue("SaveMovie/Annoations", static_cast<int>(o->value()));} selected
           tooltip {Save Annotations burned into the movie or sequence.  It also allows saving OpenEXRs from an 8-bit movie and changing OpenEXR's pixel type.} xywh {160 48 25 18} down_box DOWN_BOX
+          code0 {auto settings = mrv::App::app->settings();}
+          code1 {int value = settings->getValue<int>("SaveMovie/Annoations");}
+          code2 {o->value(value);}
         }
       }
       Fl_Group VideoOptions {
@@ -185,18 +246,31 @@ o->value(0);} {}
         xywh {34 111 390 188} box ROUNDED_FRAME color 56
       } {
         Fl_Choice PixelFormat {
-          label {Pixel Format} open
+          label {Pixel Format}
+          callback {const Fl_Menu_Item* item = o->mvalue();
+if (!item) return;
+auto settings = mrv::App::app->settings();
+settings->setValue("SaveMovie/PixelFormat", std::string(item->label()));} open
           tooltip {FFMpeg's Pixel Format for the codec selected} xywh {170 222 170 29} down_box BORDER_BOX
         } {}
         Fl_Choice Preset {
-          label Preset open
+          label Preset
+          callback {const Fl_Menu_Item* item = o->mvalue();
+if (!item) return;
+auto settings = mrv::App::app->settings();
+settings->setValue("SaveMovie/Preset", std::string(item->label()));} open
           tooltip {FFMpeg's Preset setting for the codec selected.} xywh {171 176 170 29} down_box BORDER_BOX
         } {}
         Fl_Choice Profile {
           label Profile
           user_data this user_data_type {SaveMovieOptionsUI*}
           callback {add_presets(o, v->Preset);
-add_pixel_formats(o, v->PixelFormat);} open
+add_pixel_formats(o, v->PixelFormat);
+
+const Fl_Menu_Item* item = o->mvalue();
+if (!item) return;
+auto settings = mrv::App::app->settings();
+settings->setValue("SaveMovie/Profile", std::string(item->label()));} open
           tooltip {FFMpeg's Profile settings.} xywh {170 131 170 29} down_box BORDER_BOX
           code0 {add_profiles(o);}
           code1 {add_presets(o, Preset);}

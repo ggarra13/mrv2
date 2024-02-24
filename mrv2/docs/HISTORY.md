@@ -14,6 +14,8 @@ v1.0.6
 - Fixed Prores color shifting due to bad unneeded use of libswscale API.
 - Added options for color_range, colorspace, color_primaries and color_trc in
   tlRender's source code.  mrv2 currently does not yet use them.
+- Made mrv2 remember the save movie and image settings for easy saving of
+  multiple movie or image files.
 
 
 v1.0.5

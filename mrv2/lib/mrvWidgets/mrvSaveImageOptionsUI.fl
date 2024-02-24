@@ -13,6 +13,12 @@ decl {\#include <string>} {public global
 decl {\#include "mrvCore/mrvFile.h"} {public global
 }
 
+decl {\#include "mrvApp/mrvSettingsObject.h"} {public global
+}
+
+decl {\#include "mrViewer.h"} {public global
+}
+
 class SaveImageOptionsUI {open
 } {
   decl {bool cancel = false;} {public local
@@ -20,6 +26,40 @@ class SaveImageOptionsUI {open
   decl {bool valid_for_exr = false;} {private local
   }
   decl {std::string extension;} {private local
+  }
+  Function {select_pixel_type(Fl_Choice* o)} {open
+  } {
+    code {auto settings = mrv::App::app->settings();
+const std::string& saved =
+        settings->getValue<std::string>("SaveImage/PixelType");
+for (int i = 0; i < o->size(); ++i)
+{
+   const Fl_Menu_Item* const item = &o->menu()[i];
+   const std::string& type = item->label();
+   if (saved == type)
+   {
+       o->value(i);
+       return;
+    }
+}
+o->value(0);} {}
+  }
+  Function {select_compression(Fl_Choice* o)} {open
+  } {
+    code {auto settings = mrv::App::app->settings();
+const std::string& saved =
+        settings->getValue<std::string>("SaveImage/Compression");
+for (int i = 0; i < o->size(); ++i)
+{
+   const Fl_Menu_Item* const item = &o->menu()[i];
+   const std::string& type = item->label();
+   if (saved == type)
+   {
+       o->value(i);
+       return;
+    }
+}
+o->value(0);} {}
   }
   Function {SaveImageOptionsUI(const std::string ext, const bool exr_valid)} {open
   } {
@@ -32,8 +72,13 @@ class SaveImageOptionsUI {open
         xywh {80 38 376 42} box ROUNDED_FRAME color 56
       } {
         Fl_Check_Button Annotations {
-          label {Save Annotations} selected
+          label {Save Annotations}
+          callback {auto settings = mrv::App::app->settings();
+settings->setValue("SaveImage/Annoations", static_cast<int>(o->value()));} selected
           tooltip {Save Annotations burned into the movie or sequence.} xywh {192 46 25 25} down_box DOWN_BOX
+          code0 {auto settings = mrv::App::app->settings();}
+          code1 {int value = settings->getValue<int>("SaveImage/Annoations");}
+          code2 {o->value(value);}
         }
       }
       Fl_Group OpenEXROptions {
@@ -42,6 +87,7 @@ class SaveImageOptionsUI {open
       } {
         Fl_Choice Compression {
           label Compression
+          user_data this user_data_type {SaveImageOptionsUI*}
           callback {const Fl_Menu_Item* item = o->mvalue();
 DWACompressionGroup->deactivate();
 ZipCompressionGroup->deactivate();
@@ -53,7 +99,9 @@ if (label == "ZIP" || label == "ZIPS")
 else if (label == "DWAA" || label == "DWAB")
 {
      DWACompressionGroup->activate();
-}}
+}
+auto settings = mrv::App::app->settings();
+settings->setValue("SaveImage/Compression", label);}
           tooltip {OpenEXR's Compression Type} xywh {221 143 170 29} down_box BORDER_BOX
         } {
           MenuItem {} {
@@ -99,6 +147,10 @@ else if (label == "DWAA" || label == "DWAB")
         }
         Fl_Choice PixelType {
           label {Pixel Type}
+          callback {const Fl_Menu_Item* item = o->mvalue();
+const std::string& label = item->label();
+auto settings = mrv::App::app->settings();
+settings->setValue("SaveImage/PixelType", label);}
           tooltip {OpenEXR's Pixel Type} xywh {221 184 170 29} down_box BORDER_BOX
         } {
           MenuItem {} {
@@ -116,12 +168,16 @@ else if (label == "DWAA" || label == "DWAB")
           Fl_Value_Input ZipCompressionLevel {
             label {ZIP Compression}
             user_data this user_data_type {SaveImageOptionsUI*}
-            callback {v->ZipCompressionSlider->value(o->value());}
+            callback {v->ZipCompressionSlider->value(o->value());
+
+auto settings = mrv::App::app->settings();
+settings->setValue("SaveImage/ZipCompressionLevel", o->value());}
             xywh {223 230 64 26} color -1733777408 minimum 1 maximum 9 step 1 value 4 textcolor 56
           }
           Fl_Slider ZipCompressionSlider {
             user_data ZipCompressionLevel user_data_type {Fl_Value_Input*}
             callback {v->value(o->value());
+v->do_callback();
 v->redraw();}
             xywh {287 230 104 26} type {Horz Knob} minimum 1 maximum 9 step 1 value 4 slider_size 0.1
           }
@@ -132,12 +188,16 @@ v->redraw();}
           Fl_Value_Input DWACompressionLevel {
             label {DWA Compression}
             user_data this user_data_type {SaveImageOptionsUI*}
-            callback {v->DWACompressionSlider->value(o->value());}
+            callback {v->DWACompressionSlider->value(o->value());
+
+auto settings = mrv::App::app->settings();
+settings->setValue("SaveImage/DWACompressionLevel", o->value());}
             xywh {223 268 64 26} color -1733777408 maximum 1e+06 step 0.1 value 45 textcolor 56
           }
           Fl_Slider DWACompressionSlider {
             user_data DWACompressionLevel user_data_type {Fl_Value_Input*}
             callback {v->value(o->value());
+v->do_callback();
 v->redraw();}
             xywh {287 268 104 26} type {Horz Knob} maximum 1e+06 step 2 value 45 slider_size 0.1
           }
@@ -167,6 +227,8 @@ valid_for_exr = exr_valid;
 if (ext == ".exr" && exr_valid)
 {
    OpenEXROptions->activate();
+   select_pixel_type(PixelType);   
+   select_compression(Compression);
 }
 uiMain->show();
 while (uiMain->visible())

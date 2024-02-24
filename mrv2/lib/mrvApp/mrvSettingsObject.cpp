@@ -145,6 +145,19 @@ namespace mrv
         p.defaultValues[kGhostNext] = 15;
 
         p.defaultValues[kAllFrames] = 0;
+
+
+        // Image saving
+        p.defaultValues["SaveImage/Annotations"] = 0;
+        p.defaultValues["SaveImage/Compression"] = std::string("ZIPS");
+        p.defaultValues["SaveImage/PixelType"] = std::string("Half");
+        
+        // Movie saving
+        p.defaultValues["SaveMovie/Annotations"] = 0;
+        p.defaultValues["SaveMovie/Profile"] = std::string("ProRes_4444");
+        p.defaultValues["SaveMovie/PixelFormat"] =
+            std::string("YUVA_444P_LE10");
+        p.defaultValues["SaveMovie/Preset"] = std::string("good");
     }
 
     SettingsObject::~SettingsObject() {}
