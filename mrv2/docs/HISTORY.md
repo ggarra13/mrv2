@@ -1,3 +1,23 @@
+v1.0.7
+======
+
+- Code clean up.
+- Added optional components installation on Windows.  Currently,
+  you can install:
+  
+      * mrv2 application
+      * mrv2 documentation
+      * mrv2 OpenColorIO configs
+      * mrv2 Python demos
+      * mrv2 Python libraries
+      * mrv2 USD components
+
+   If you choose to install ONLY the application, its size is 392Mb.
+
+- Changed name of install directory of mrv2 on Windows from "mrv2 vX.X.X" to
+  "mrv2-vX.X.X" to avoid spaces.
+
+
 v1.0.6
 ======
 

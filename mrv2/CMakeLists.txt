@@ -171,6 +171,8 @@ else()
    set(tlRender_glad "${CMAKE_CURRENT_SOURCE_DIR}/../tlRender/deps/glad_GL_4_1")
 endif()
 
+file(GLOB mrv2_BOOST_DIRS "${CMAKE_INSTALL_PREFIX}/include/boost*")
+
 set( mrv2_INCLUDE_DIRS
     ${CMAKE_CURRENT_SOURCE_DIR}/lib   # for mrv2 includes (search here first)
     ${mrv2_FLUID_INCLUDE_DIR}         # for mrv2 .fl converted files next
@@ -178,8 +180,7 @@ set( mrv2_INCLUDE_DIRS
     ${CMAKE_PREFIX_PATH}/include/OpenEXR
     ${CMAKE_PREFIX_PATH}/include/Imath
     ${CMAKE_PREFIX_PATH}/include/opentimelineio/deps
-    ${CMAKE_PREFIX_PATH}/include/boost-1_78
-    ${CMAKE_PREFIX_PATH}/include/boost-1_76
+    ${mrv2_BOOST_DIRS}
     ${CMAKE_PREFIX_PATH}/include/tlRender
     ${CMAKE_PREFIX_PATH}/include
     ${tlRender_INCLUDE_DIRS}
@@ -197,12 +198,34 @@ set( mrv2_INCLUDE_DIRS
 include_directories( ${mrv2_INCLUDE_DIRS} )
 
 #
-# Install mrv2's auxiliary directories
+# Remove all .mo files from install for clean distribution.
 #
-install( DIRECTORY colors docs fonts icons ocio presets python share
+file(GLOB mrv2_MO_FILES
+    "${CMAKE_INSTALL_PREFIX}/share/locale/es/LC_MESSAGES/*.mo")
+if (DEFINED ${mrv2_MO_FILES})
+    file(REMOVE ${mrv2_MO_FILES})
+endif()
+
+#
+# Install mrv2's auxiliary application directories
+#
+install( DIRECTORY colors fonts icons ocio presets share 
     DESTINATION .
     COMPONENT applications )
 
+#
+# Install mrv2's documentation
+#
+install( DIRECTORY docs
+    DESTINATION .
+    COMPONENT documentation )
+
+#
+# Install mrv2's python demos
+#
+install( DIRECTORY python
+    DESTINATION .
+    COMPONENT python_demos )
 
 #
 # These two variables will contain the sources for .po tranalation.

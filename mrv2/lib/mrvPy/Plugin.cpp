@@ -111,7 +111,8 @@ namespace mrv
         std::vector<std::string> paths = python_plugin_paths();
 
         std::string installed_plugins = mrv::rootpath() + "/python/plug-ins";
-        paths.push_back(installed_plugins);
+        if (fs::exists(installed_plugins))
+            paths.push_back(installed_plugins);
 
         // Create a set to store unique elements.
         std::set<std::string> uniquePaths;

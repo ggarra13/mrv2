@@ -43,7 +43,7 @@ endif()
 
 set( mrv2ShortName "mrv2-v${mrv2_VERSION}-${CMAKE_SYSTEM_NAME}-${MRV2_OS_BITS}" )
 set( CPACK_PACKAGE_NAME mrv2 )
-set( CPACK_PACKAGE_VENDOR "Film Aura, LLC" )
+set( CPACK_PACKAGE_VENDOR "Film Aura, S.A." )
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY
     "mrv2 - A professional flipbook and movie player.")
 set( CPACK_PACKAGE_INSTALL_DIRECTORY ${mrv2ShortName} )
@@ -125,8 +125,8 @@ elseif(UNIX)
     set(CPACK_DEBIAN_PACKAGE_NAME ${PROJECT_NAME}-v${mrv2_VERSION})
     set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE ${MRV2_ARCHITECTURE})
     set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA
-	${PROJECT_BINARY_DIR}/etc/Linux/postinst
-	${PROJECT_BINARY_DIR}/etc/Linux/postrm)
+	"${PROJECT_BINARY_DIR}/etc/Linux/postinst"
+	"${PROJECT_BINARY_DIR}/etc/Linux/postrm")
 
     set(CPACK_DEBIAN_FILE_NAME	"${CPACK_PACKAGE_FILE_NAME}.deb" )
 
@@ -134,6 +134,8 @@ elseif(UNIX)
     
 else()
 
+    set(CPACK_PACKAGE_INSTALL_DIRECTORY "mrv2-v${mrv2_VERSION}" )
+    
     # There is a bug in NSIS that does not handle full unix paths properly. Make
     # sure there is at least one set of four (4) backlasshes.
     set(CPACK_NSIS_MODIFY_PATH ON)
@@ -150,19 +152,43 @@ else()
 	set( CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES64" )
     endif()
 
-    set( CPACK_NSIS_DISPLAY_NAME "mrv2-${MRV2_OS_BITS} v${mrv2_VERSION}" )
-    set( CPACK_NSIS_PACKAGE_NAME "mrv2" )
-    set( CPACK_PACKAGE_VENDOR "FilmAura" )
-    set( CPACK_PACKAGE_INSTALL_DIRECTORY ${mrv2PackageName})
-    set( CPACK_PACKAGE_EXECUTABLES "mrv2" "mrv2-${MRV2_OS_BITS} v${mrv2_VERSION}" )
-    set( CPACK_CREATE_DESKTOP_LINKS "mrv2" "mrv2-${MRV2_OS_BITS} v${mrv2_VERSION}" )
+    set(mrv2_DISPLAY_NAME "mrv2-${MRV2_OS_BITS} v${mrv2_VERSION}")
+    set(CPACK_NSIS_DISPLAY_NAME "${mrv2_DISPLAY_NAME}" )
+    set(CPACK_NSIS_PACKAGE_NAME "mrv2" )
+    set(CPACK_PACKAGE_EXECUTABLES "mrv2" "${mrv2_DISPLAY_NAME}")
+    set(CPACK_CREATE_DESKTOP_LINKS "mrv2" "${mrv2_DISPLAY_NAME}")
 
-    set( CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON )
+    set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON )
 
-    include( ${ROOT_DIR}/../cmake/nsis/NSISRegistry.cmake )
+    include("${ROOT_DIR}/../cmake/nsis/NSISRegistry.cmake")
 
 endif()
 
-set(CPACK_COMPONENTS_ALL applications )
+set(mrv2_COMPONENTS
+    applications
+    documentation
+)
+
+if(BUILD_PYTHON)
+    list(APPEND mrv2_COMPONENTS 
+	python_demos
+	python_tk
+    )
+endif()
+
+if(TLRENDER_USD)
+    list(APPEND mrv2_COMPONENTS usd)
+endif()
+
+set(CPACK_COMPONENTS_ALL ${mrv2_COMPONENTS})
 set(CPACK_COMPONENT_APPLICATIONS_DISPLAY_NAME "mrv2 Application")
+set(CPACK_COMPONENT_DOCUMENTATION_DISPLAY_NAME "mrv2 Documentation")
+if(TLRENDER_USD)
+    set(CPACK_COMPONENT_USD_DISPLAY_NAME "mrv2 OpenUSD components")
+endif()
+if(BUILD_PYTHON)
+    set(CPACK_COMPONENT_PYTHON_DEMOS_DISPLAY_NAME "mrv2 Python Demos")
+    set(CPACK_COMPONENT_PYTHON_TK_DISPLAY_NAME "mrv2 Python TK Libraries")
+    set(CPACK_COMPONENT_PYFLTK_DISPLAY_NAME "mrv2 Python FLTK Libraries")
+endif()
 include(CPack)

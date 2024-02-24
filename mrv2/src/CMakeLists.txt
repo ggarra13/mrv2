@@ -38,7 +38,7 @@ if(UNIX AND NOT APPLE)
 	message( STATUS "Old g++ compiler detected.  Will link to stdc++fs")
 	list( APPEND LIBRARIES "stdc++fs" )
     endif()
-    # Needed for python3.10 on Rocky and Ubuntu 20.04
+# Needed for python3.10 on Rocky and Ubuntu 20.04
     list( APPEND LIBRARIES "util" "c" )
 endif()
 
@@ -163,13 +163,13 @@ elseif ( UNIX )
     endif()
     
     # Install all .so in CMAKE_INSTALL_PREFIX/lib
-    file( GLOB MRV2_LIB_DSOS ${CMAKE_INSTALL_PREFIX}/lib/*.so* )
+    file( GLOB MRV2_LIB_DSOS "${CMAKE_INSTALL_PREFIX}/lib/*.so*" )
     install( FILES ${MRV2_LIB_DSOS}
 	DESTINATION lib
 	COMPONENT applications )
   
     # For RedHat and Rocky Linux, we must install also lib64
-    file( GLOB MRV2_LIB64_DSOS ${CMAKE_INSTALL_PREFIX}/lib64/*.so* )
+    file( GLOB MRV2_LIB64_DSOS "${CMAKE_INSTALL_PREFIX}/lib64/*.so*" )
     install( FILES ${MRV2_LIB64_DSOS}
       DESTINATION lib64
       COMPONENT applications )
@@ -183,34 +183,59 @@ elseif(WIN32)
 	if (MRV2_PYFLTK)
 	    # Get rid of the pyFLTK demos as they don't work properly on an
 	    # embedded python
-	    file( REMOVE_RECURSE ${CMAKE_INSTALL_PREFIX}/bin/Lib/site-packages/fltk14/test )
+	    file( REMOVE_RECURSE "${CMAKE_INSTALL_PREFIX}/bin/Lib/site-packages/fltk14/test" )
 	endif()
     
 	# Install the main python executable
-	install( FILES ${CMAKE_INSTALL_PREFIX}/bin/python.exe
+	install( FILES "${CMAKE_INSTALL_PREFIX}/bin/python.exe"
 	    DESTINATION bin/
 	    COMPONENT applications )
 	
 	# Install all .dll in CMAKE_INSTALL_PREFIX/bin
-	file( GLOB MRV_PYLib ${CMAKE_INSTALL_PREFIX}/bin/Lib )
-	file( GLOB MRV_PYDLLs ${CMAKE_INSTALL_PREFIX}/bin/DLLs )
-	file( GLOB MRV_PYTCL ${CMAKE_INSTALL_PREFIX}/bin/tcl  )
-	install( DIRECTORY ${MRV_PYLib}
+	file( GLOB MRV2_PYLib "${CMAKE_INSTALL_PREFIX}/bin/Lib" )
+	file( GLOB MRV2_PYDLLs "${CMAKE_INSTALL_PREFIX}/bin/DLLs" )
+	file( GLOB MRV2_PYTCL "${CMAKE_INSTALL_PREFIX}/bin/tcl"  )
+	file( GLOB MRV2_PY_SITE_LIBS
+	    "${CMAKE_INSTALL_PREFIX}/bin/Lib/site-packages/sphinx*"
+	    "${CMAKE_INSTALL_PREFIX}/bin/Lib/site-packages/jinja2*"
+	    "${CMAKE_INSTALL_PREFIX}/bin/Lib/site-packages/JinJa2*") 
+	file(REMOVE_RECURSE "${MRV2_PY_SITE_LIBS}")
+	
+	install( DIRECTORY ${MRV2_PYLib}
 	    DESTINATION bin/
 	    COMPONENT applications )
-	install( DIRECTORY ${MRV_PYDLLs}
+	install( DIRECTORY ${MRV2_PYDLLs}
 	    DESTINATION bin/
 	    COMPONENT applications )
-	install( DIRECTORY ${MRV_PYTCL}
+	install( DIRECTORY ${MRV2_PYTCL}
 	    DESTINATION bin/
-	    COMPONENT applications )
+	    COMPONENT python_tk )
     endif()
 
-    # For Python, Poco and FFmpeg
-    file( GLOB MRV_DLLS ${CMAKE_INSTALL_PREFIX}/bin/*.dll  )
-    install( FILES ${MRV_DLLS}
+    # For Python, Poco, USD, FLTK, NDI, MSVC runtimes and FFmpeg
+    file(GLOB MRV2_DLLS "${CMAKE_INSTALL_PREFIX}/bin/*.dll"  )
+    
+    if(TLRENDER_USD)
+	file(GLOB TBB_DLLS "${CMAKE_INSTALL_PREFIX}/bin/*tbb*.dll" )
+	file(GLOB BOOST_DLLS "${CMAKE_INSTALL_PREFIX}/bin/*boost_*.dll" )
+	file(GLOB USD_DLLS "${CMAKE_INSTALL_PREFIX}/bin/*usd_*.dll" )
+	file(GLOB MATERIALX_DLLS "${CMAKE_INSTALL_PREFIX}/bin/*MaterialX*.dll" )
+	set(MRV2_USD_DLLS
+	    ${USD_DLLS}
+	    ${MATERIALX_DLLS}
+	    ${BOOST_DLLS}
+	    ${TBB_DLLS})
+	list(REMOVE_ITEM MRV2_DLLS ${MRV2_USD_DLLS})
+    endif()
+    
+    install(FILES ${MRV2_DLLS}
     	DESTINATION bin/
 	COMPONENT applications )
+    
+    install(FILES ${MRV2_USD_DLLS}
+    	DESTINATION bin/
+	COMPONENT usd )
+    
 	    
 endif()
 
@@ -256,14 +281,14 @@ if ( NOT WIN32 )
 	install( DIRECTORY
 	    ${CMAKE_INSTALL_PREFIX}/lib/usd
 	    DESTINATION lib
-	    COMPONENT applications)
+	    COMPONENT usd)
     endif()
 else()
     if(TLRENDER_USD)
 	install( DIRECTORY
 	    ${CMAKE_INSTALL_PREFIX}/bin/usd
 	    DESTINATION bin
-	    COMPONENT applications)
+	    COMPONENT usd)
     endif()
 endif()
 
@@ -273,10 +298,10 @@ endif()
 #
 if(TLRENDER_USD)
     install( DIRECTORY
-        ${CMAKE_INSTALL_PREFIX}/plugin
-        ${CMAKE_INSTALL_PREFIX}/libraries
-        ${CMAKE_INSTALL_PREFIX}/resources
+        "${CMAKE_INSTALL_PREFIX}/plugin"
+        "${CMAKE_INSTALL_PREFIX}/libraries"
+        "${CMAKE_INSTALL_PREFIX}/resources"
         DESTINATION .
-        COMPONENT applications)
+        COMPONENT usd)
 endif()
 
