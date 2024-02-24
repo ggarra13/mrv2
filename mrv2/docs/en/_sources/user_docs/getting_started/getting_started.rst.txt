@@ -46,23 +46,6 @@ Wayland support
 
 The binary distribution of mrv2, which was compiled for Rocky Linux 8.9, has Wayland support but it may have problems starting up on newer distros.  It is recommended you build it from source.
 
-If building from source is not an option, and you get an error like:
-
-```
-(mrv2:540344): GLib-GIO-ERROR **: 20:47:45.978: Settings schema 'org.gnome.settings-daemon.plugins.xsettings' does not contain a key named 'antialiasing'
-Trace/breakpoint trap (core dumped)
-```
-
-To fix it, you may need to do a hack, like:
-```
-$ sudo cp /usr/share/glib-2.0/schemas/org.gnome.settings-daemon.plugins.xsettings.gschema.xml /usr/share/glib-2.0/schemas/org.gnome.settings-daemon.plugins.xsettings.gschema.xml.bad
-$ sudo nano /usr/share/glib-2.0/schemas/org.gnome.settings-daemon.plugins.xsettings.gschema.xml
-    (remove lines 19 and 20)
-	 <   </schema>
-	 <   <schema id="org.gnome.settings-daemon.plugins.xsettings.deprecated">
-$ sudo glib-compile-schemas /usr/share/glib-2.0/schemas
-```
-
 Launching mrv2
 --------------
 

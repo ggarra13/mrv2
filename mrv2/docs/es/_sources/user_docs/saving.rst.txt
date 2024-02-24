@@ -18,9 +18,7 @@ Cuando se graba una película desde Archivo->Grabar Película o Secuencia y escr
 
 	   * Perfil
 
-	     Con la opción de Perfil, puede elegir el codec básico usado al grabar la película.  Actualmente, estos pueden ser "Ninguno", "H264", "ProRes", "ProRes_Proxy", "ProRes_LT", "ProRes_HQ", "ProRes_4444" o "ProRes_XQ".
-Note que el codec más compabile ("H264") requiere una licencia de VideoLAN para encodificar o que compile mrv2 en modo GPL.
-Por favor referirse a las instrucciones de compilación de mrv2 en:
+	     Con la opción de Perfil, puede elegir el codec básico usado al grabar la película.  Actualmente, estos pueden ser "Ninguno", "H264", "ProRes", "ProRes_Proxy", "ProRes_LT", "ProRes_HQ", "ProRes_4444" o "ProRes_XQ".  Note que el codec más compabile ("H264") requiere una licencia de VideoLAN para encodificar o que compile mrv2 en modo GPL.  Por favor referirse a las instrucciones de compilación de mrv2 en:
 	      
               https:://github.com/ggarra13/mrv2
 

@@ -16,15 +16,13 @@ When saving a movie from the menu File->Save Movie or Sequence and typing in the
 
 .. topic:: Video Options
 
-* Profile
+	   * Profile
 
-  With the Profile option, you can select the basic codec used when saving the movie.  Currently these can be "None", "H264", "ProRes", "ProRes_Proxy", "ProRes_LT", "ProRes_HQ", "ProRes_4444" or "ProRes_XQ".
-Note that the most compatible codec ("H264") requires a license from VideoLAN for encoding or to compile mrv2 in GPL mode.
-Please refer to the compilation instructions of mrv2 at:
+  With the Profile option, you can select the basic codec used when saving the movie.  Currently these can be "None", "H264", "ProRes", "ProRes_Proxy", "ProRes_LT", "ProRes_HQ", "ProRes_4444" or "ProRes_XQ".  Note that the most compatible codec ("H264") requires a license from VideoLAN for encoding or to compile mrv2 in GPL mode.  Please refer to the compilation instructions of mrv2 at:
 	      
              https:://github.com/ggarra13/mrv2
 
-* Preset
+	     * Preset
 
   With the Preset selection, you can choose the quality of encoding with the selected codec.  Currently, we ship presets for vp9 and av1.
   You can place them in $STUDIOPATH/presets or in the presets

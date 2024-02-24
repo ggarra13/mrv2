@@ -137,24 +137,6 @@
 <section id="wayland-support">
 <h2>Wayland support<a class="headerlink" href="#wayland-support" title="Link to this heading"></a></h2>
 <p>The binary distribution of mrv2, which was compiled for Rocky Linux 8.9, has Wayland support but it may have problems starting up on newer distros.  It is recommended you build it from source.</p>
-<p>If building from source is not an option, and you get an error like:</p>
-<p><code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">(mrv2:540344):</span> <span class="pre">GLib-GIO-ERROR</span> <span class="pre">**:</span> <span class="pre">20:47:45.978:</span> <span class="pre">Settings</span> <span class="pre">schema</span> <span class="pre">'org.gnome.settings-daemon.plugins.xsettings'</span> <span class="pre">does</span> <span class="pre">not</span> <span class="pre">contain</span> <span class="pre">a</span> <span class="pre">key</span> <span class="pre">named</span> <span class="pre">'antialiasing'</span>
-<span class="pre">Trace/breakpoint</span> <span class="pre">trap</span> <span class="pre">(core</span> <span class="pre">dumped)</span>
-<span class="pre">`</span></code></p>
-<p>To fix it, you may need to do a hack, like:
-<a href="#id2"><span class="problematic" id="id3">``</span></a>`
-$ sudo cp /usr/share/glib-2.0/schemas/org.gnome.settings-daemon.plugins.xsettings.gschema.xml /usr/share/glib-2.0/schemas/org.gnome.settings-daemon.plugins.xsettings.gschema.xml.bad
-$ sudo nano /usr/share/glib-2.0/schemas/org.gnome.settings-daemon.plugins.xsettings.gschema.xml</p>
-<blockquote>
-<div><dl class="simple">
-<dt>(remove lines 19 and 20)</dt><dd><p>&lt;   &lt;/schema&gt;
-&lt;   &lt;schema id=”org.gnome.settings-daemon.plugins.xsettings.deprecated”&gt;</p>
-</dd>
-</dl>
-</div></blockquote>
-<p>$ sudo glib-compile-schemas /usr/share/glib-2.0/schemas
-<a href="#id4"><span class="problematic" id="id5">``</span></a><a href="#id6"><span class="problematic" id="id7">`</span></a></p>
 </section>
 <section id="launching-mrv2">
 <h2>Launching mrv2<a class="headerlink" href="#launching-mrv2" title="Link to this heading"></a></h2>
