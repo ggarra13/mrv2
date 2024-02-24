@@ -20,7 +20,6 @@ In v1.0.6, we have several important fixes to the new save dialog.  Minor fixes 
   tlRender's source code.  mrv2 currently does not yet use them.
 - Made mrv2 remember the save movie and image settings for easy saving of
   multiple movie or image files.
-- Added a pre-flight check to macOS native Apple Prores encoder. 
 - Made FFmpeg errors be reported to the console immediately.
 
 Main Web page:

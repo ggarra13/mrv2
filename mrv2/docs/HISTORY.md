@@ -10,7 +10,7 @@ v1.0.6
 - Fixed presets names.  Instead of using '_' we now use '-'.
 - Added last successful saved movie to recent files for easy checking it back.
 - Fixed pixel format selection in VP9 codec not working properly due to
-  profile being set to 0.
+  profile being set to 0, which would prevent saving with 10 or 12 bits.
 - Fixed Prores color shifting due to bad unneeded use of libswscale API.
 - Added options for color_range, colorspace, color_primaries and color_trc in
   tlRender's source code.  mrv2 currently does not yet use them.
