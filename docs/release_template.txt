@@ -1,0 +1,35 @@
+mrv2 v1.0.6
+===========
+
+mrv2 is an open source professional player and review tool for vfx, animation and computer graphics for Windows, Linux and macOS.
+
+In v1.0.6, we have several important fixes to the new save dialog.  Minor fixes in tlRender and a more user friendly Save Image / Save Movie dialog box.
+
+- Darby fixed Render->Alpha Blend modes which were partially broken.
+- Darby fixed macOS checkers drawing.
+- Darby added gradient background and moved it to draw video.
+- Made Background colors use Flmm's color chooser with alpha (alpha is
+  current discarded, thou).
+- Added printing out of audio and video codec names when saving with FFmpeg.
+- Fixed presets names.  Instead of using '_' we now use '-'.
+- Added last successful saved movie to recent files for easy checking it back.
+- Fixed pixel format selection in VP9 codec not working properly due to
+  profile being set to 0, which would prevent saving with 10 or 12 bits.
+- Fixed Prores color shifting due to bad unneeded use of libswscale API.
+- Added options for color_range, colorspace, color_primaries and color_trc in
+  tlRender's source code.  mrv2 currently does not yet use them.
+- Made mrv2 remember the save movie and image settings for easy saving of
+  multiple movie or image files.
+- Added a pre-flight check to macOS native Apple Prores encoder. 
+- Made FFmpeg errors be reported to the console immediately.
+
+Main Web page:
+https://mrv2.sourceforge.io
+
+Source code and build instructions:
+https://www.github.com/ggarra13/mrv2
+
+Binaries:
+https://sourceforge.net/projects/mrv2/files/v1.0.5/
+
+#vr #player #movie #flipbook #usd #openusd #opentimelineio #mrv2 #mrViewer #vp9 #av1 #h264 #mp4 #mov #avi #webm #prores #prores4444 #vfx #animation #games #filmmaking #opensource
