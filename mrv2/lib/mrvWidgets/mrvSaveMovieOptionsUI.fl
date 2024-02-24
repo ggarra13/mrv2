@@ -263,7 +263,7 @@ settings->setValue("SaveMovie/Annoations", static_cast<int>(o->value()));}
         }
       }
       Fl_Group VideoOptions {
-        label {Video Options} open
+        label {Video Options}
         xywh {34 111 390 188} box ROUNDED_FRAME color 56
       } {
         Fl_Choice PixelFormat {
@@ -302,7 +302,10 @@ settings->setValue("SaveMovie/Profile", std::string(item->label()));} open
           callback {if (!uiAdvancedSettings->visible())
    uiAdvancedSettings->show();
 else
-   uiAdvancedSettings->hide();}
+   uiAdvancedSettings->hide();
+
+while (uiAdvancedSettings->visible())
+  Fl::check();}
           xywh {171 258 170 28}
         }
       }
@@ -342,13 +345,17 @@ v->hide();}
         }
       }
     }
-    Fl_Window {uiAdvancedSettings} {
+    Fl_Window uiAdvancedSettings {
       label {Advanced Settings} open
-      xywh {720 371 411 281} type Double hide
+      xywh {720 371 411 310} type Double hotspot modal visible
     } {
+      Fl_Check_Button Override {
+        label Override
+        xywh {129 20 78 22} down_box DOWN_BOX
+      }
       Fl_Choice ColorRange {
         label {Color Range}
-        tooltip {FFMpeg's Pixel Format for the codec selected} xywh {134 72 170 29} down_box BORDER_BOX
+        tooltip {FFMpeg's Pixel Format for the codec selected} xywh {130 60 170 29} down_box BORDER_BOX
       } {
         MenuItem {} {
           label TV
@@ -361,7 +368,7 @@ v->hide();}
       }
       Fl_Choice ColorSpace {
         label {Color Space}
-        tooltip {FFMpeg's Pixel Format for the codec selected} xywh {133 114 170 29} down_box BORDER_BOX
+        tooltip {FFMpeg's Pixel Format for the codec selected} xywh {129 102 170 29} down_box BORDER_BOX
       } {
         MenuItem {} {
           label sRGB
@@ -397,8 +404,8 @@ v->hide();}
         }
       }
       Fl_Choice ColorPrimaries {
-        label {Color Primaries} open
-        tooltip {FFMpeg's Preset setting for the codec selected.} xywh {134 158 170 29} down_box BORDER_BOX
+        label {Color Primaries}
+        tooltip {FFMpeg's Preset setting for the codec selected.} xywh {130 146 170 29} down_box BORDER_BOX
       } {
         MenuItem {} {
           label bt709
@@ -445,14 +452,14 @@ v->hide();}
           xywh {70 70 100 20}
         }
         MenuItem {} {
-          label EBU3213 selected
+          label EBU3213
           xywh {80 80 100 20}
         }
       }
       Fl_Choice ColorTRC {
         label {Color TRC}
         user_data this user_data_type {SaveMovieOptionsUI*}
-        tooltip {FFMpeg's Profile settings.} xywh {133 202 170 29} down_box BORDER_BOX
+        tooltip {FFMpeg's Profile settings.} xywh {129 190 170 29} down_box BORDER_BOX
       } {
         MenuItem {} {
           label bt709
@@ -523,9 +530,22 @@ v->hide();}
           xywh {160 160 100 20}
         }
       }
-      Fl_Check_Button {Override} {
-        label Override
-        xywh {129 20 78 22} down_box DOWN_BOX
+      Fl_Group {} {open
+        xywh {85 242 244 29}
+      } {
+        Fl_Button {} {
+          label Ok
+          user_data uiAdvancedSettings user_data_type {Fl_Double_Window*}
+          callback {v->hide();}
+          xywh {85 242 90 29}
+        }
+        Fl_Button {} {
+          label Cancel
+          user_data uiAdvancedSettings user_data_type {Fl_Double_Window*}
+          callback {Override->value(0);
+v->hide();} selected
+          xywh {239 242 90 29}
+        }
       }
     }
     code {if (!hasAudio)
