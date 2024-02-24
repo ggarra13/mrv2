@@ -218,8 +218,7 @@ else
     }
     o->value(0);} {}
   }
-  Function {add_audio_codecs(Fl_Choice* o)} {open
-  } {
+  Function {add_audio_codecs(Fl_Choice* o)} {} {
     code {auto entries = tl::ffmpeg::getAudioCodecLabels();
  for (auto entry : entries)
     o->add(gettext(entry.c_str()));
@@ -247,10 +246,10 @@ o->value(0);} {}
   } {
     Fl_Window uiMain {
       label {Save Movie Options} open
-      xywh {946 313 465 537} type Double align 0 hide modal
+      xywh {946 313 465 537} type Double align 0 modal visible
     } {
       Fl_Group {} {
-        label {Common Settings} open
+        label {Common Settings}
         xywh {34 38 390 44} box ROUNDED_FRAME color 56
       } {
         Fl_Check_Button Annotations {
@@ -273,7 +272,7 @@ settings->setValue("SaveMovie/Annoations", static_cast<int>(o->value()));}
 if (!item) return;
 auto settings = mrv::App::app->settings();
 settings->setValue("SaveMovie/PixelFormat", std::string(item->label()));} open
-          tooltip {FFMpeg's Pixel Format for the codec selected} xywh {170 222 170 29} down_box BORDER_BOX
+          tooltip {FFMpeg's Pixel Format for the codec selected} xywh {170 126 170 29} down_box BORDER_BOX
         } {}
         Fl_Choice Preset {
           label Preset
@@ -281,7 +280,7 @@ settings->setValue("SaveMovie/PixelFormat", std::string(item->label()));} open
 if (!item) return;
 auto settings = mrv::App::app->settings();
 settings->setValue("SaveMovie/Preset", std::string(item->label()));} open
-          tooltip {FFMpeg's Preset setting for the codec selected.} xywh {171 176 170 29} down_box BORDER_BOX
+          tooltip {FFMpeg's Preset setting for the codec selected.} xywh {171 170 170 29} down_box BORDER_BOX
         } {}
         Fl_Choice Profile {
           label Profile
@@ -293,14 +292,22 @@ const Fl_Menu_Item* item = o->mvalue();
 if (!item) return;
 auto settings = mrv::App::app->settings();
 settings->setValue("SaveMovie/Profile", std::string(item->label()));} open
-          tooltip {FFMpeg's Profile settings.} xywh {170 131 170 29} down_box BORDER_BOX
+          tooltip {FFMpeg's Profile settings.} xywh {170 214 170 29} down_box BORDER_BOX
           code0 {add_profiles(o);}
           code1 {add_presets(o, Preset);}
           code2 {add_pixel_formats(o, PixelFormat);}
         } {}
+        Fl_Button {} {
+          label {Advanced Settings}
+          callback {if (!uiAdvancedSettings->visible())
+   uiAdvancedSettings->show();
+else
+   uiAdvancedSettings->hide();}
+          xywh {171 258 170 28}
+        }
       }
       Fl_Group AudioOptions {
-        label {Audio Options} open
+        label {Audio Options}
         xywh {34 322 394 132} box ROUNDED_FRAME color 56
       } {
         Fl_Choice AudioCodec {
@@ -308,7 +315,7 @@ settings->setValue("SaveMovie/Profile", std::string(item->label()));} open
           callback {const Fl_Menu_Item* item = o->mvalue();
 if (!item) return;
 auto settings = mrv::App::app->settings();
-settings->setValue("SaveMovie/AudioCodec", std::string(item->label()));} open selected
+settings->setValue("SaveMovie/AudioCodec", std::string(item->label()));} open
           tooltip {FFMpeg's Audio Codec settings.} xywh {172 346 170 29} down_box BORDER_BOX
           code0 {add_audio_codecs(o);}
         } {}
@@ -317,7 +324,7 @@ settings->setValue("SaveMovie/AudioCodec", std::string(item->label()));} open se
           xywh {57 384 335 60} labelsize 12 align 144
         }
       }
-      Fl_Group {} {open
+      Fl_Group {} {
         xywh {105 471 244 29}
       } {
         Fl_Button {} {
@@ -335,6 +342,192 @@ v->hide();}
         }
       }
     }
+    Fl_Window {uiAdvancedSettings} {
+      label {Advanced Settings} open
+      xywh {720 371 411 281} type Double hide
+    } {
+      Fl_Choice ColorRange {
+        label {Color Range}
+        tooltip {FFMpeg's Pixel Format for the codec selected} xywh {134 72 170 29} down_box BORDER_BOX
+      } {
+        MenuItem {} {
+          label TV
+          xywh {0 0 100 20}
+        }
+        MenuItem {} {
+          label PC
+          xywh {10 10 100 20}
+        }
+      }
+      Fl_Choice ColorSpace {
+        label {Color Space}
+        tooltip {FFMpeg's Pixel Format for the codec selected} xywh {133 114 170 29} down_box BORDER_BOX
+      } {
+        MenuItem {} {
+          label sRGB
+          xywh {0 0 100 20}
+        }
+        MenuItem {} {
+          label bt709
+          xywh {10 10 100 20}
+        }
+        MenuItem {} {
+          label FCC
+          xywh {20 20 100 20}
+        }
+        MenuItem {} {
+          label SMPTE240m
+          xywh {30 30 100 20}
+        }
+        MenuItem {} {
+          label bt601
+          xywh {40 40 100 20}
+        }
+        MenuItem {} {
+          label bt2020
+          xywh {50 50 100 20}
+        }
+        MenuItem {} {
+          label unspecified
+          xywh {60 60 100 20}
+        }
+        MenuItem {} {
+          label reserved
+          xywh {70 70 100 20}
+        }
+      }
+      Fl_Choice ColorPrimaries {
+        label {Color Primaries} open
+        tooltip {FFMpeg's Preset setting for the codec selected.} xywh {134 158 170 29} down_box BORDER_BOX
+      } {
+        MenuItem {} {
+          label bt709
+          xywh {0 0 100 20}
+        }
+        MenuItem {} {
+          label unspecified
+          xywh {10 10 100 20}
+        }
+        MenuItem {} {
+          label reserved
+          xywh {20 20 100 20}
+        }
+        MenuItem {} {
+          label bt470m
+          xywh {30 30 100 20}
+        }
+        MenuItem {} {
+          label SMPTE170m
+          xywh {40 40 100 20}
+        }
+        MenuItem {} {
+          label SMPTE240m
+          xywh {50 50 100 20}
+        }
+        MenuItem {} {
+          label Film
+          xywh {60 60 100 20}
+        }
+        MenuItem {} {
+          label bt2020
+          xywh {70 70 100 20}
+        }
+        MenuItem {} {
+          label SMPTE428
+          xywh {50 50 100 20}
+        }
+        MenuItem {} {
+          label SMPTE431
+          xywh {60 60 100 20}
+        }
+        MenuItem {} {
+          label SMPTE432
+          xywh {70 70 100 20}
+        }
+        MenuItem {} {
+          label EBU3213 selected
+          xywh {80 80 100 20}
+        }
+      }
+      Fl_Choice ColorTRC {
+        label {Color TRC}
+        user_data this user_data_type {SaveMovieOptionsUI*}
+        tooltip {FFMpeg's Profile settings.} xywh {133 202 170 29} down_box BORDER_BOX
+      } {
+        MenuItem {} {
+          label bt709
+          xywh {10 10 100 20}
+        }
+        MenuItem {} {
+          label unspecified
+          xywh {20 20 100 20}
+        }
+        MenuItem {} {
+          label reserved
+          xywh {30 30 100 20}
+        }
+        MenuItem {} {
+          label gamma22
+          xywh {40 40 100 20}
+        }
+        MenuItem {} {
+          label gamma28
+          xywh {50 50 100 20}
+        }
+        MenuItem {} {
+          label bt601
+          xywh {60 60 100 20}
+        }
+        MenuItem {} {
+          label smpte240m
+          xywh {70 70 100 20}
+        }
+        MenuItem {} {
+          label linear
+          xywh {80 80 100 20}
+        }
+        MenuItem {} {
+          label log
+          xywh {90 90 100 20}
+        }
+        MenuItem {} {
+          label logsqrt
+          xywh {100 100 100 20}
+        }
+        MenuItem {} {
+          label {iec61966-2-4}
+          xywh {110 110 100 20}
+        }
+        MenuItem {} {
+          label bt1361
+          xywh {120 120 100 20}
+        }
+        MenuItem {} {
+          label {iec61966-2-1}
+          xywh {120 120 100 20}
+        }
+        MenuItem {} {
+          label {bt2020-10}
+          xywh {130 130 100 20}
+        }
+        MenuItem {} {
+          label {bt2020-12}
+          xywh {140 140 100 20}
+        }
+        MenuItem {} {
+          label smpte2084
+          xywh {150 150 100 20}
+        }
+        MenuItem {} {
+          label {arib-std-b67}
+          xywh {160 160 100 20}
+        }
+      }
+      Fl_Check_Button {Override} {
+        label Override
+        xywh {129 20 78 22} down_box DOWN_BOX
+      }
+    }
     code {if (!hasAudio)
 {
   AudioOptions->deactivate();
@@ -344,6 +537,7 @@ if (audioOnly)
   Annotations->deactivate();
   VideoOptions->deactivate();
 }
+uiAdvancedSettings->hide();
 uiMain->show();
 while (uiMain->visible())
   Fl::check();} {}

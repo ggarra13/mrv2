@@ -13,7 +13,8 @@ v1.0.6
   profile being set to 0, which would prevent saving with 10 or 12 bits.
 - Fixed Prores color shifting due to bad unneeded use of libswscale API.
 - Added options for color_range, colorspace, color_primaries and color_trc in
-  tlRender's source code.  mrv2 currently does not yet use them.
+  tlRender's source code.  mrv2 can set them if you open the window called
+  Advanced Settings in the Save Movie dialog.
 - Made mrv2 remember the save movie and image settings for easy saving of
   multiple movie or image files.
 - Made FFmpeg errors be reported to the console immediately.

@@ -23,6 +23,11 @@ namespace mrv
         std::string ffmpegPreset;
         std::string ffmpegPixelFormat;
         tl::ffmpeg::AudioCodec ffmpegAudioCodec = tl::ffmpeg::AudioCodec::AAC;
+        bool ffmpegOverride;
+        std::string ffmpegColorRange;
+        std::string ffmpegColorSpace;
+        std::string ffmpegColorPrimaries;
+        std::string ffmpegColorTRC;
 #endif
 
 #ifdef TLRENDER_EXR

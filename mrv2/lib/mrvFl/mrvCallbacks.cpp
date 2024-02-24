@@ -414,6 +414,28 @@ namespace mrv
             value = saveOptions.AudioCodec->value();
             options.ffmpegAudioCodec =
                 static_cast<tl::ffmpeg::AudioCodec>(value);
+
+            options.ffmpegOverride = saveOptions.Override->value();
+            if (options.ffmpegOverride)
+            {
+                const Fl_Menu_Item* item;
+
+                item = &saveOptions.ColorRange
+                            ->menu()[saveOptions.ColorRange->value()];
+                options.ffmpegColorRange = item->label();
+
+                item = &saveOptions.ColorSpace
+                            ->menu()[saveOptions.ColorSpace->value()];
+                options.ffmpegColorSpace = item->label();
+
+                item = &saveOptions.ColorPrimaries
+                            ->menu()[saveOptions.ColorPrimaries->value()];
+                options.ffmpegColorPrimaries = item->label();
+
+                item = &saveOptions.ColorTRC
+                            ->menu()[saveOptions.ColorTRC->value()];
+                options.ffmpegColorTRC = item->label();
+            }
         }
         else
 #endif

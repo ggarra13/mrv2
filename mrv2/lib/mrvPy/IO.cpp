@@ -24,7 +24,8 @@ void mrv2_io(py::module& m)
 #ifdef TLRENDER_FFMPEG
                 ,
                 tl::ffmpeg::Profile, std::string, std::string,
-                tl::ffmpeg::AudioCodec
+                tl::ffmpeg::AudioCodec,
+                bool, std::string, std::string, std::string, std::string
 #endif
 #ifdef TLRENDER_EXR
                 ,
@@ -37,6 +38,11 @@ void mrv2_io(py::module& m)
             py::arg("ffmpegProfile") = tl::ffmpeg::Profile::None,
             py::arg("ffmpegPreset") = "",
             py::arg("ffmpegPixelFormat") = "YUV420P",
+            py::arg("ffmpegOverride") = false,
+            py::arg("ffmpegColorRange") = "PC",
+            py::arg("ffmpegColorSpace") = "bt709",
+            py::arg("ffmpegColorPrimaries") = "bt709",
+            py::arg("ffmpegColorTRC") = "bt709",
             py::arg("ffmpegAudioCodec") = tl::ffmpeg::AudioCodec::None
 #endif
 #ifdef TLRENDER_EXR
@@ -60,6 +66,21 @@ void mrv2_io(py::module& m)
         .def_readwrite(
             "ffmpegPixelFormat", &mrv::SaveOptions::ffmpegPixelFormat,
             _("FFmpeg Pixel Format."))
+        .def_readwrite(
+            "ffmpegOverride", &mrv::SaveOptions::ffmpegOverride,
+            _("FFmpeg Override color characteristics."))
+        .def_readwrite(
+            "ffmpegColorRange", &mrv::SaveOptions::ffmpegColorRange,
+            _("FFmpeg Color Range."))
+        .def_readwrite(
+            "ffmpegColorSpace", &mrv::SaveOptions::ffmpegColorSpace,
+            _("FFmpeg Color Space."))
+        .def_readwrite(
+            "ffmpegColorPrimaries", &mrv::SaveOptions::ffmpegColorPrimaries,
+            _("FFmpeg Color Primaries."))
+        .def_readwrite(
+            "ffmpegColorTRC", &mrv::SaveOptions::ffmpegColorTRC,
+            _("FFmpeg Color Transfer Characteristics."))
         .def_readwrite(
             "ffmpegAudioCodec", &mrv::SaveOptions::ffmpegAudioCodec,
             _("FFmpeg Audio Codec."))

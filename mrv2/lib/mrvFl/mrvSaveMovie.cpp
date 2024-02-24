@@ -91,6 +91,18 @@ namespace mrv
             }
 
             ioOptions["FFmpeg/PixelFormat"] = options.ffmpegPixelFormat;
+
+            if (options.ffmpegOverride)
+            {
+                ioOptions["FFmpeg/ColorRange"] =
+                    string::toLower(options.ffmpegColorRange);
+                ioOptions["FFmpeg/ColorSpace"] =
+                    string::toLower(options.ffmpegColorSpace);
+                ioOptions["FFmpeg/ColorPrimaries"] =
+                    string::toLower(options.ffmpegColorPrimaries);
+                ioOptions["FFmpeg/ColorTRC"] =
+                    string::toLower(options.ffmpegColorTRC);
+            }
 #endif
 
 #ifdef TLRENDER_EXR
