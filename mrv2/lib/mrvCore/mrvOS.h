@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <string>
+
 #ifdef _WIN32
 
 #    include <direct.h>
@@ -54,3 +56,8 @@
 #    define chdir _chdir
 
 #endif // _WIN32
+
+namespace mrv
+{
+    std::string get_os_version();
+}

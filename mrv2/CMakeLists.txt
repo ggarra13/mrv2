@@ -202,7 +202,7 @@ include_directories( ${mrv2_INCLUDE_DIRS} )
 #
 file(GLOB mrv2_MO_FILES
     "${CMAKE_INSTALL_PREFIX}/share/locale/es/LC_MESSAGES/*.mo")
-if (DEFINED ${mrv2_MO_FILES})
+if (NOT "${mrv2_MO_FILES}" STREQUAL "")
     file(REMOVE ${mrv2_MO_FILES})
 endif()
 

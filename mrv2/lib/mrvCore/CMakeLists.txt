@@ -39,6 +39,7 @@ set(SOURCES
   mrvMedia.cpp
   mrvMemory.cpp
   mrvMesh.cpp
+  mrvOS.cpp
   mrvPathMapping.cpp
   mrvRoot.cpp
   mrvSequence.cpp

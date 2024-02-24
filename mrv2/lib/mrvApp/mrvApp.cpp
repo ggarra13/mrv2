@@ -410,6 +410,7 @@ namespace mrv
             std::cout << std::endl
                       << "mrv2 v" << mrv::version() << " " << mrv::build_date()
                       << std::endl
+                      << mrv::get_os_version()
                       << std::endl;
             return;
         }
@@ -502,6 +503,9 @@ namespace mrv
         version += mrv::version();
         version += " ";
         version += mrv::build_date();
+        LOG_INFO(version);
+
+        version = mrv::get_os_version();
         LOG_INFO(version);
 
         LOG_INFO(msg);

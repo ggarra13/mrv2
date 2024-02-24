@@ -5,6 +5,7 @@
 #include <string>
 #include <sstream>
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <algorithm>
 
@@ -145,6 +146,7 @@ extern "C"
 #    include <psapi.h>
 #endif
 
+#include "mrvCore/mrvOS.h"
 #include "mrvCore/mrvI8N.h"
 
 #include "mrvFl/mrvIO.h"
@@ -227,7 +229,7 @@ namespace mrv
     {
         return kBuild;
     }
-
+    
     void ffmpeg_formats(mrv::Browser& browser)
     {
         using namespace std;
@@ -613,6 +615,8 @@ namespace mrv
 #endif
           << "(C) 2022-Present" << endl
           << "Gonzalo Garramuño & others" << endl
+          << endl
+          << mrv::get_os_version() << endl
           << endl
           << _("mrv2 depends on:") << endl
           << endl;
