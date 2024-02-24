@@ -94,14 +94,11 @@ namespace mrv
 
             if (options.ffmpegOverride)
             {
-                ioOptions["FFmpeg/ColorRange"] =
-                    string::toLower(options.ffmpegColorRange);
-                ioOptions["FFmpeg/ColorSpace"] =
-                    string::toLower(options.ffmpegColorSpace);
+                ioOptions["FFmpeg/ColorRange"] = options.ffmpegColorRange;
+                ioOptions["FFmpeg/ColorSpace"] = options.ffmpegColorSpace;
                 ioOptions["FFmpeg/ColorPrimaries"] =
-                    string::toLower(options.ffmpegColorPrimaries);
-                ioOptions["FFmpeg/ColorTRC"] =
-                    string::toLower(options.ffmpegColorTRC);
+                    options.ffmpegColorPrimaries;
+                ioOptions["FFmpeg/ColorTRC"] = options.ffmpegColorTRC;
             }
 #endif
 
