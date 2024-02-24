@@ -11,6 +11,7 @@ v1.0.6
 - Added last successful saved movie to recent files for easy checking it back.
 - Fixed pixel format selection in VP9 codec not working properly due to
   profile being set to 0.
+- Fixed Prores color shifting due to bad unneeded use of libswscale API.
 - Added options for color_range, colorspace, color_primaries and color_trc in
   tlRender's source code.  mrv2 currently does not yet use them.
 
