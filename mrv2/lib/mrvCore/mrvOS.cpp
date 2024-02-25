@@ -2,6 +2,10 @@
 #include <fstream>
 #include <algorithm>
 
+#ifdef __APPLE__
+#    include <sys/sysctl.h>
+#endif
+
 #include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvOS.h"
 
