@@ -2,7 +2,7 @@ v1.0.7
 ======
 
 - Code clean up.
-- Added optional component installation on Windows.  Currently,
+- Added optional component installation on Windows's .exr installer.  Currently,
   you can install:
   
       * mrv2 application (obviously)
@@ -12,7 +12,7 @@ v1.0.7
       * mrv2 USD components
 
    If you choose to install ONLY the application, its size is 392Mb, instead
-   of the whole 650Mb.
+   of the whole 600Mb.
 
 - Changed name of install directory of mrv2 on Windows from "mrv2 vX.X.X" to
   "mrv2-vX.X.X" to avoid spaces for easier scripting.
