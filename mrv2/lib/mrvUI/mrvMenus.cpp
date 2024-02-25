@@ -6,7 +6,6 @@
 #include <locale>
 #include <string> // Add this include for string-related functionality
 
-
 #include <tlCore/StringFormat.h>
 
 #include "mrvCore/mrvI8N.h"
@@ -216,14 +215,14 @@ namespace mrv
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (ui->uiView->getDataWindow())
             item->set();
-        
+
         idx = menu->add(
             _("View/Display Window"), kDisplayWindow.hotkey(),
             (Fl_Callback*)display_window_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (ui->uiView->getDisplayWindow())
             item->set();
-        
+
         idx = menu->add(
             _("View/Ignore Display Window"), kIgnoreDisplayWindow.hotkey(),
             (Fl_Callback*)ignore_display_window_cb, ui, mode);
@@ -295,14 +294,13 @@ namespace mrv
         {
             panelsMap.insert(std::make_pair(_(wc->name), wc->name));
         }
-        
+
         // Copy key-value pairs from the map to a vector
         std::vector<std::pair<std::string, std::string>> vec(
             panelsMap.begin(), panelsMap.end());
 
-        
         // Sort the vector in ascending order based on the keys
-        std::locale loc("");
+        std::locale loc;
         std::sort(
             vec.begin(), vec.end(),
             [&loc](const auto& a, const auto& b)
@@ -310,9 +308,8 @@ namespace mrv
                 return std::lexicographical_compare(
                     a.first.begin(), a.first.end(), b.first.begin(),
                     b.first.end(),
-                    [&loc](const auto& ch1, const auto& ch2){
-                        return std::tolower(ch1, loc) <
-                               std::tolower(ch2, loc);
+                    [&loc](const auto& ch1, const auto& ch2) {
+                        return std::tolower(ch1, loc) < std::tolower(ch2, loc);
                     });
             });
 
