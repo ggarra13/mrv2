@@ -415,6 +415,7 @@ namespace mrv
             options.ffmpegAudioCodec =
                 static_cast<tl::ffmpeg::AudioCodec>(value);
 
+            options.ffmpegHardwareEncode = saveOptions.Hardware->value();
             options.ffmpegOverride = saveOptions.Override->value();
             if (options.ffmpegOverride)
             {

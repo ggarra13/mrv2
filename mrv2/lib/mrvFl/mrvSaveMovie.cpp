@@ -91,7 +91,8 @@ namespace mrv
             }
 
             ioOptions["FFmpeg/PixelFormat"] = options.ffmpegPixelFormat;
-            ioOptions["FFmpeg/HardwareEncode"] = options.ffmpegHardwareEncode;
+            ioOptions["FFmpeg/HardwareEncode"] =
+                string::Format("{0}").arg(options.ffmpegHardwareEncode);
             if (options.ffmpegOverride)
             {
                 ioOptions["FFmpeg/ColorRange"] = options.ffmpegColorRange;
@@ -348,6 +349,23 @@ namespace mrv
                 outputImage = image::Image::create(outputInfo);
                 ioInfo.videoTime = videoTime;
                 ioInfo.video.push_back(outputInfo);
+
+#ifdef TLRENDER_FFMPEG
+                auto entries = tl::ffmpeg::getProfileLabels();
+                std::string profileName = entries[(int)options.ffmpegProfile];
+
+                msg = tl::string::Format(
+                          _("Using profile {0}, pixel format {1}."))
+                          .arg(profileName)
+                          .arg(options.ffmpegPixelFormat);
+                LOG_INFO(msg);
+                if (!options.ffmpegPreset.empty())
+                {
+                    msg = tl::string::Format(_("Using preset {0}."))
+                              .arg(options.ffmpegPreset);
+                    LOG_INFO(msg);
+                }
+#endif
             }
 
             if (hasAudio)
@@ -434,23 +452,6 @@ namespace mrv
 
             if (hasVideo)
             {
-#ifdef TLRENDER_FFMPEG
-                auto entries = tl::ffmpeg::getProfileLabels();
-                std::string profileName = entries[(int)options.ffmpegProfile];
-
-                std::string msg = tl::string::Format(
-                                      _("Using profile {0}, pixel format {1}."))
-                                      .arg(profileName)
-                                      .arg(options.ffmpegPixelFormat);
-                LOG_INFO(msg);
-                if (!options.ffmpegPreset.empty())
-                {
-                    msg = tl::string::Format(_("Using preset {0}."))
-                              .arg(options.ffmpegPreset);
-                    LOG_INFO(msg);
-                }
-#endif
-
                 view->make_current();
                 gl::initGLAD();
                 buffer = gl::OffscreenBuffer::create(

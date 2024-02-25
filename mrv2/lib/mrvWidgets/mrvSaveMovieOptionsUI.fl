@@ -38,7 +38,7 @@ class SaveMovieOptionsUI {open
 } {
   decl {bool cancel = false;} {public local
   }
-  Function {add_hardware(Fl_Choice* o, Fl_Check_Button* v)} {open selected
+  Function {add_hardware(Fl_Choice* o, Fl_Check_Button* v)} {open
   } {
     code {const Fl_Menu_Item* item = &o->menu()[o->value()];
 if (!item || !item->label()) return;
@@ -93,7 +93,8 @@ auto settings = mrv::App::app->settings();
 const bool value = settings->getValue<int>("SaveMovie/HardwareEncode");
 v->value(value);} {}
   }
-  Function {add_pixel_formats(Fl_Choice* o, Fl_Choice* v)} {} {
+  Function {add_pixel_formats(Fl_Choice* o, Fl_Choice* v)} {open
+  } {
     code {const Fl_Menu_Item* item = &o->menu()[o->value()];
 if (!item || !item->label()) return;
 
@@ -120,19 +121,32 @@ else if (codec == "H264")
 else if (codec == "ProRes")
 {   
    v->add("YUV_422P_10LE");
- }
+\#ifdef __APPLE__
+   v->add("P210_LE");
+\#endif
+
+}
 else if (codec == "ProRes_Proxy")
 {   
    v->add("YUV_422P_10LE");
+\#ifdef __APPLE__
+   v->add("P210_LE");
+\#endif
 }
 else if (codec == "ProRes_LT")
 {   
    v->add("YUV_422P_10LE");
+\#ifdef __APPLE__
+   v->add("P210_LE");
+\#endif
 }
 else if (codec == "ProRes_XQ")
 {   
    v->add("YUV_444P_10LE");
    v->add("YUVA_444P_16LE");
+\#ifdef __APPLE__
+   v->add("P210_LE");
+\#endif
  }
 else if (codec == "ProRes_4444")
 {      
@@ -140,6 +154,7 @@ else if (codec == "ProRes_4444")
    v->add("YUV_444P_10LE");
    v->add("YUVA_444P_10LE");
 \#ifdef __APPLE__
+   v->add("P210_LE");
    v->add("YUV_422P_12LE");
    v->add("YUV_444P_12LE");
    v->add("YUVA_444P_12LE");
@@ -192,7 +207,8 @@ if (v->size() > 0)
         }
     }
     v->value(0);
-}} {}
+}} {selected
+    }
   }
   Function {add_presets(Fl_Choice* o, Fl_Choice* v)} {} {
     code {const Fl_Menu_Item* item = &o->menu()[o->value()];
@@ -621,6 +637,7 @@ else
    add_profiles(Profile);
    add_presets(Profile, Preset);
    add_pixel_formats(Profile, PixelFormat);
+   add_hardware(Profile, Hardware);
 }
 uiAdvancedSettings->hide();
 uiMain->show();
