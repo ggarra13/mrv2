@@ -24,6 +24,8 @@ v1.0.7
 - Made panels be listed alphabetically, regardless of Natural Language.
 - Automated version update in docs.
 - Removed view sources from html docs to save space on disk.
+- Cleaned up docs directory before building docs.
+- Sped up creation of docs in build system.
 
 
 v1.0.6

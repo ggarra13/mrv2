@@ -9,14 +9,14 @@ file( REAL_PATH ${RELATIVE_ROOT_DIR} ROOT_DIR )
 
 
 # Point to Sphinx directory 
-set( SPHINX_DIR ${ROOT_DIR}/docs/sphinx )
+set(SPHINX_DIR ${ROOT_DIR}/docs/sphinx )
 
-set( MRV2_COMMAND mrv2 )
+set(MRV2_COMMAND mrv2 )
 if (UNIX)
-    set( MRV2_COMMAND mrv2.sh )
+    set(MRV2_COMMAND mrv2.sh )
 endif()
-set( DOCUMENTATION_TARGETS )
-
+set(DOCUMENTATION_TARGETS )
+set(CLEAN_DOC_TARGETS )
 
 foreach( LANGUAGE ${LANGUAGES} )
     
@@ -54,17 +54,30 @@ foreach( LANGUAGE ${LANGUAGES} )
         GROUP_READ GROUP_EXECUTE
         WORLD_READ WORLD_EXECUTE)
     
-    set( DOC_TARGET doc_${LANGUAGE} )
+    set(DOC_TARGET doc_${LANGUAGE} )
     list( APPEND DOCUMENTATION_TARGETS ${DOC_TARGET} )
-    
+
+    set(CLEAN_DOC_TARGET clean_doc_dir_${LANGUAGE})
+    add_custom_target(${CLEAN_DOC_TARGET}
+	COMMAND ${CMAKE_COMMAND} -E remove_directory
+	${ROOT_DIR}/mrv2/docs/${LANGUAGE}
+	)
+    list( APPEND CLEAN_DOC_TARGETS ${CLEAN_DOC_TARGET} )
+
     add_custom_target( ${DOC_TARGET}
 	COMMAND ${CMAKE_COMMAND} -E env LANGUAGE=${LANGUAGE} LANG=en_US.UTF-8 LANGUAGE_CODE=${LANGUAGE} ${CMAKE_INSTALL_PREFIX}/bin/${MRV2_COMMAND} -pythonScript ${CMAKE_INSTALL_PREFIX}/sphinx/${LANGUAGE}/document.py
-	DEPENDS install ${DOCUMENT_OUT} ${CONFFILE_OUT}
+	COMMAND ${CMAKE_COMMAND} -E echo "Documented ${LANGUAGE} language."
+	DEPENDS ${DOCUMENT_OUT} ${CONFFILE_OUT}
 	)
     
 endforeach()
 
+add_custom_target( clean_doc
+    COMMAND ${CMAKE_COMMAND} -E echo "Cleaned all languages documentations."
+    DEPENDS ${CLEAN_DOC_TARGETS} 
+)
+
 add_custom_target( doc
     COMMAND ${CMAKE_COMMAND} -E echo "Documented all languages."
-    DEPENDS ${DOCUMENTATION_TARGETS}
+    DEPENDS ${DOCUMENTATION_TARGETS} clean_doc
     )

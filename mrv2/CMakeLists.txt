@@ -198,15 +198,6 @@ set( mrv2_INCLUDE_DIRS
 include_directories( ${mrv2_INCLUDE_DIRS} )
 
 #
-# Remove all .mo files from install for clean distribution.
-#
-file(GLOB mrv2_MO_FILES
-    "${CMAKE_INSTALL_PREFIX}/share/locale/es/LC_MESSAGES/*.mo")
-if (NOT "${mrv2_MO_FILES}" STREQUAL "")
-    file(REMOVE ${mrv2_MO_FILES})
-endif()
-
-#
 # Install mrv2's auxiliary application directories
 #
 install( DIRECTORY colors fonts icons ocio presets share 

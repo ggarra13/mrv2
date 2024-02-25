@@ -38,7 +38,6 @@ if [[ $CMAKE_TARGET == doc* || $CMAKE_TARGET == "install" ||
     #
     cd $dir
     run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t mo
-
     run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
     cd -
 fi
@@ -52,7 +51,7 @@ if [[ $CMAKE_TARGET == doc* ]]; then
     #
     cd $dir
     run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t doc
-    run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
+    export CMAKE_TARGET=install
     cd -
 fi
 
