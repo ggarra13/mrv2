@@ -38,281 +38,6 @@ class SaveMovieOptionsUI {open
 } {
   decl {bool cancel = false;} {public local
   }
-  Function {add_hardware(Fl_Choice* o, Fl_Check_Button* v)} {open
-  } {
-    code {const Fl_Menu_Item* item = &o->menu()[o->value()];
-if (!item || !item->label()) return;
-const std::string codec = item->label();
-
-v->deactivate();
-
-if (codec == "H264")
-{    
-\#ifdef __APPLE__
-   v->activate();
-\#endif
-}
-else if (codec == "ProRes")
-{
-\#ifdef __APPLE__
-   v->activate();
-\#endif   
-}
-else if (codec == "ProRes_Proxy")
-{
-\#ifdef __APPLE__
-   v->activate();
-\#endif
-}
-else if (codec == "ProRes_LT")
-{
-\#ifdef __APPLE__
-   v->activate();
-\#endif
-}
-else if (codec == "ProRes_XQ")
-{   
-\#ifdef __APPLE__
-   v->activate();
-\#endif
-}
-else if (codec == "ProRes_4444")
-{
-\#ifdef __APPLE__
-   v->activate();
-\#endif
-}
-else if (codec == "VP9")
-{
-\#ifdef __APPLE__
-   v->activate();
-\#endif
-}
-
-auto settings = mrv::App::app->settings();
-const bool value = settings->getValue<int>("SaveMovie/HardwareEncode");
-v->value(value);} {}
-  }
-  Function {add_pixel_formats(Fl_Choice* o, Fl_Choice* v)} {open
-  } {
-    code {const Fl_Menu_Item* item = &o->menu()[o->value()];
-if (!item || !item->label()) return;
-
-std::string codec = item->label();
-
-v->clear();
-
-
-if (codec == "None" || codec == "MJPEG")
-{ 
-   v->add("YUV_420P");
-   v->add("YUV_422P");
-   v->add("YUV_444P");
-}
-else if (codec == "H264")
-{    
-   v->add("YUV_420P");
-   v->add("YUV_422P");
-   v->add("YUV_444P");
-   v->add("YUV_420P_10LE");
-   v->add("YUV_422P_10LE");
-   v->add("YUV_444P_10LE");
-}
-else if (codec == "ProRes")
-{   
-   v->add("YUV_422P_10LE");
-\#ifdef __APPLE__
-   v->add("P210_LE");
-\#endif
-
-}
-else if (codec == "ProRes_Proxy")
-{   
-   v->add("YUV_422P_10LE");
-\#ifdef __APPLE__
-   v->add("P210_LE");
-\#endif
-}
-else if (codec == "ProRes_LT")
-{   
-   v->add("YUV_422P_10LE");
-\#ifdef __APPLE__
-   v->add("P210_LE");
-\#endif
-}
-else if (codec == "ProRes_XQ")
-{   
-   v->add("YUV_444P_10LE");
-   v->add("YUVA_444P_16LE");
-\#ifdef __APPLE__
-   v->add("P210_LE");
-\#endif
- }
-else if (codec == "ProRes_4444")
-{      
-   v->add("YUV_422P_10LE");
-   v->add("YUV_444P_10LE");
-   v->add("YUVA_444P_10LE");
-\#ifdef __APPLE__
-   v->add("P210_LE");
-   v->add("YUV_422P_12LE");
-   v->add("YUV_444P_12LE");
-   v->add("YUVA_444P_12LE");
-\#endif
-}
-else if (codec == "VP9")
-{ 
-   v->add("YUV_420P");
-   v->add("YUVA_420P");
-   
-   v->add("YUV_422P");
-   v->add("YUV_440P");
-   v->add("YUV_444P");   
-   
-   v->add("YUV_420P_10LE");
-   v->add("YUV_422P_10LE");
-   v->add("YUV_440P_10LE");
-   v->add("YUV_444P_10LE");
-   
-   v->add("YUV_420P_12LE");
-   v->add("YUV_422P_12LE");
-   v->add("YUV_440P_12LE");
-   v->add("YUV_444P_12LE");
-   
-   v->add("GBRP");
-   v->add("GBRP_10LE");
-   v->add("GBRP_12LE");
-}
-else if (codec == "AV1")
-{  
-   v->add("YUV_420P");
-   v->add("YUV_420P_10LE");
-}
-
-if (v->size() > 0)
-{
-    auto settings = mrv::App::app->settings();
-    const std::string& saved =
-        settings->getValue<std::string>("SaveMovie/PixelFormat");
-    for (int i = 0; i < v->size(); ++i)
-    {
-        const Fl_Menu_Item* const item = &v->menu()[i];
-        if (!item->label())
-            continue;
-        const std::string& fmt = item->label();
-        if (saved == fmt)
-        {
-            v->value(i);
-            return;
-        }
-    }
-    v->value(0);
-}} {selected
-    }
-  }
-  Function {add_presets(Fl_Choice* o, Fl_Choice* v)} {} {
-    code {const Fl_Menu_Item* item = &o->menu()[o->value()];
-if (!item || !item->label()) return;
-
-std::string codec = tl::string::toLower(item->label());
-codec += "-";
-
-std::string directoryPath = mrv::presetspath();
-
-// Open the directory
-v->clear();
-fs::directory_iterator dirIter(directoryPath);
-for (const auto& entry : dirIter)
-{
-   // Check if the entry is a regular file, starts with "codec-", and ends with ".pst"
-   std::string filename = entry.path().filename().string();
-        
-   // Check if the entry is a regular file and starts with say "vp9-"
-   if (fs::is_regular_file(entry) && 
-       filename.find(codec) == 0 &&
-       filename.size() > 4 && 
-       filename.substr(filename.size() - 4) == ".pst")
-   {
-       std::string preset = filename.substr(codec.size(),
-                                            filename.size()-4-codec.size());
-       v->add(preset.c_str());
-   }
-}
-
-if (v->size() > 0)
-{
-  auto settings = mrv::App::app->settings();
-  const std::string& saved = settings->getValue<std::string>("SaveMovie/Preset");
-  for (int i = 0; i < v->size(); ++i)
-  {
-     const Fl_Menu_Item* const item = &v->menu()[i];	
-     if (!item->label()) continue;
-     const std::string& preset = item->label();
-     if (saved == preset)
-     {
-         v->value(i);
-         v->activate();
-         return;
-     }
-  }
-  v->value(0);
-  v->activate();
-}
-else
-{
-  v->deactivate();
-}} {}
-  }
-  Function {add_profiles(Fl_Choice* o)} {} {
-    code {auto entries = tl::ffmpeg::getProfileLabels();
-    for (auto entry : entries)
-        o->add(gettext(entry.c_str()));
-
-    if (o->size() > 0)
-    {
-        auto settings = mrv::App::app->settings();
-        const std::string& saved =
-            settings->getValue<std::string>("SaveMovie/Profile");
-        for (int i = 0; i < o->size(); ++i)
-        {
-            const Fl_Menu_Item* const item = &o->menu()[i];
-            if (!item->label())
-                continue;
-            const std::string& profile = item->label();
-            if (saved == profile)
-            {
-                o->value(i);
-                o->activate();
-                return;
-            }
-        }
-    }
-    o->value(0);} {}
-  }
-  Function {add_audio_codecs(Fl_Choice* o)} {} {
-    code {auto entries = tl::ffmpeg::getAudioCodecLabels();
- for (auto entry : entries)
-    o->add(gettext(entry.c_str()));
-
-if (o->size() > 0)
-{
-    auto settings = mrv::App::app->settings();
-    const std::string& saved = settings->getValue<std::string>("SaveMovie/AudioCodec");
-    for (int i = 0; i < o->size(); ++i)
-    {
-        const Fl_Menu_Item* const item = &o->menu()[i];
-        if (!item->label())
-            continue;
-        const std::string& codec = item->label();
-        if (saved == codec)
-        {
-            o->value(i);
-            return;
-        }
-    }
-}
-o->value(0);} {}
-  }
   Function {SaveMovieOptionsUI(bool hasAudio = true, bool audioOnly = false)} {open
   } {
     Fl_Window uiMain {
@@ -339,7 +64,10 @@ settings->setValue("SaveMovie/Annoations", static_cast<int>(o->value()));}
       } {
         Fl_Check_Button Hardware {
           label {Hardware Codec}
-          callback {auto settings = mrv::App::app->settings();
+          user_data this user_data_type {SaveMovieOptionsUI*}
+          callback {add_pixel_formats(v->Profile, v->PixelFormat);
+
+auto settings = mrv::App::app->settings();
 settings->setValue("SaveMovie/HardwareEncode", int(o->value()));}
           xywh {166 121 78 22} down_box DOWN_BOX
         }
@@ -369,7 +97,7 @@ settings->setValue("SaveMovie/Preset", std::string(item->label()));} open
           callback {const Fl_Menu_Item* item = o->mvalue();
 if (!item) return;
 auto settings = mrv::App::app->settings();
-settings->setValue("SaveMovie/PixelFormat", std::string(item->label()));} open
+settings->setValue("SaveMovie/PixelFormat", std::string(item->label()));} open selected
           tooltip {FFMpeg's Pixel Format for the codec selected} xywh {170 238 170 29} down_box BORDER_BOX
         } {}
         Fl_Button {} {
@@ -643,5 +371,265 @@ uiAdvancedSettings->hide();
 uiMain->show();
 while (uiMain->visible())
   Fl::check();} {}
+  }
+  Function {add_hardware(Fl_Choice* o, Fl_Check_Button* v)} {} {
+    code {const Fl_Menu_Item* item = &o->menu()[o->value()];
+if (!item || !item->label()) return;
+const std::string codec = item->label();
+
+v->deactivate();
+
+if (codec == "H264")
+{    
+\#ifdef __APPLE__
+   v->activate();
+\#endif
+}
+else if (codec == "ProRes")
+{
+\#ifdef __APPLE__
+   v->activate();
+\#endif   
+}
+else if (codec == "ProRes_Proxy")
+{
+\#ifdef __APPLE__
+   v->activate();
+\#endif
+}
+else if (codec == "ProRes_LT")
+{
+\#ifdef __APPLE__
+   v->activate();
+\#endif
+}
+else if (codec == "ProRes_XQ")
+{   
+\#ifdef __APPLE__
+   v->activate();
+\#endif
+}
+else if (codec == "ProRes_4444")
+{
+\#ifdef __APPLE__
+   v->activate();
+\#endif
+}
+else if (codec == "VP9")
+{
+\#ifdef __APPLE__
+   v->activate();
+\#endif
+}
+
+auto settings = mrv::App::app->settings();
+const bool value = settings->getValue<int>("SaveMovie/HardwareEncode");
+v->value(value);} {}
+  }
+  Function {add_pixel_formats(Fl_Choice* o, Fl_Choice* v)} {open
+  } {
+    code {const Fl_Menu_Item* item = &o->menu()[o->value()];
+if (!item || !item->label()) return;
+
+std::string codec = item->label();
+
+v->clear();
+
+
+if (codec == "None" || codec == "MJPEG")
+{ 
+   v->add("YUV_420P");
+   v->add("YUV_422P");
+   v->add("YUV_444P");
+}
+else if (codec == "H264")
+{    
+   v->add("YUV_420P");
+   v->add("YUV_422P");
+   v->add("YUV_444P");
+   v->add("YUV_420P_10LE");
+   v->add("YUV_422P_10LE");
+   v->add("YUV_444P_10LE");
+}
+else if (codec == "ProRes")
+{   
+   v->add("YUV_422P_10LE");
+
+}
+else if (codec == "ProRes_Proxy")
+{   
+   v->add("YUV_422P_10LE");
+}
+else if (codec == "ProRes_LT")
+{   
+   v->add("YUV_422P_10LE");
+}
+else if (codec == "ProRes_XQ")
+{   
+   v->add("YUV_444P_10LE");
+   v->add("YUVA_444P_16LE");
+ }
+else if (codec == "ProRes_4444")
+{      
+   v->add("YUV_422P_10LE");
+   v->add("YUV_444P_10LE");
+   v->add("YUVA_444P_10LE");
+\#ifdef __APPLE__
+   v->add("YUV_422P_12LE");
+   v->add("YUV_444P_12LE");
+   v->add("YUVA_444P_12LE");
+\#endif
+}
+else if (codec == "VP9")
+{ 
+   v->add("YUV_420P");
+   v->add("YUVA_420P");
+   
+   v->add("YUV_422P");
+   v->add("YUV_440P");
+   v->add("YUV_444P");   
+   
+   v->add("YUV_420P_10LE");
+   v->add("YUV_422P_10LE");
+   v->add("YUV_440P_10LE");
+   v->add("YUV_444P_10LE");
+   
+   v->add("YUV_420P_12LE");
+   v->add("YUV_422P_12LE");
+   v->add("YUV_440P_12LE");
+   v->add("YUV_444P_12LE");
+   
+   v->add("GBRP");
+   v->add("GBRP_10LE");
+   v->add("GBRP_12LE");
+}
+else if (codec == "AV1")
+{  
+   v->add("YUV_420P");
+   v->add("YUV_420P_10LE");
+}
+
+if (v->size() > 0)
+{
+    auto settings = mrv::App::app->settings();
+    const std::string& saved =
+        settings->getValue<std::string>("SaveMovie/PixelFormat");
+    for (int i = 0; i < v->size(); ++i)
+    {
+        const Fl_Menu_Item* const item = &v->menu()[i];
+        if (!item->label())
+            continue;
+        const std::string& fmt = item->label();
+        if (saved == fmt)
+        {
+            v->value(i);
+            return;
+        }
+    }
+    v->value(0);
+}} {}
+  }
+  Function {add_presets(Fl_Choice* o, Fl_Choice* v)} {} {
+    code {const Fl_Menu_Item* item = &o->menu()[o->value()];
+if (!item || !item->label()) return;
+
+std::string codec = tl::string::toLower(item->label());
+codec += "-";
+
+std::string directoryPath = mrv::presetspath();
+
+// Open the directory
+v->clear();
+fs::directory_iterator dirIter(directoryPath);
+for (const auto& entry : dirIter)
+{
+   // Check if the entry is a regular file, starts with "codec-", and ends with ".pst"
+   std::string filename = entry.path().filename().string();
+        
+   // Check if the entry is a regular file and starts with say "vp9-"
+   if (fs::is_regular_file(entry) && 
+       filename.find(codec) == 0 &&
+       filename.size() > 4 && 
+       filename.substr(filename.size() - 4) == ".pst")
+   {
+       std::string preset = filename.substr(codec.size(),
+                                            filename.size()-4-codec.size());
+       v->add(preset.c_str());
+   }
+}
+
+if (v->size() > 0)
+{
+  auto settings = mrv::App::app->settings();
+  const std::string& saved = settings->getValue<std::string>("SaveMovie/Preset");
+  for (int i = 0; i < v->size(); ++i)
+  {
+     const Fl_Menu_Item* const item = &v->menu()[i];	
+     if (!item->label()) continue;
+     const std::string& preset = item->label();
+     if (saved == preset)
+     {
+         v->value(i);
+         v->activate();
+         return;
+     }
+  }
+  v->value(0);
+  v->activate();
+}
+else
+{
+  v->deactivate();
+}} {}
+  }
+  Function {add_profiles(Fl_Choice* o)} {} {
+    code {auto entries = tl::ffmpeg::getProfileLabels();
+    for (auto entry : entries)
+        o->add(gettext(entry.c_str()));
+
+    if (o->size() > 0)
+    {
+        auto settings = mrv::App::app->settings();
+        const std::string& saved =
+            settings->getValue<std::string>("SaveMovie/Profile");
+        for (int i = 0; i < o->size(); ++i)
+        {
+            const Fl_Menu_Item* const item = &o->menu()[i];
+            if (!item->label())
+                continue;
+            const std::string& profile = item->label();
+            if (saved == profile)
+            {
+                o->value(i);
+                o->activate();
+                return;
+            }
+        }
+    }
+    o->value(0);} {}
+  }
+  Function {add_audio_codecs(Fl_Choice* o)} {} {
+    code {auto entries = tl::ffmpeg::getAudioCodecLabels();
+ for (auto entry : entries)
+    o->add(gettext(entry.c_str()));
+
+if (o->size() > 0)
+{
+    auto settings = mrv::App::app->settings();
+    const std::string& saved = settings->getValue<std::string>("SaveMovie/AudioCodec");
+    for (int i = 0; i < o->size(); ++i)
+    {
+        const Fl_Menu_Item* const item = &o->menu()[i];
+        if (!item->label())
+            continue;
+        const std::string& codec = item->label();
+        if (saved == codec)
+        {
+            o->value(i);
+            return;
+        }
+    }
+}
+o->value(0);} {}
   }
 }
