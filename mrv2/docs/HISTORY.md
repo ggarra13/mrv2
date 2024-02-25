@@ -18,7 +18,7 @@ v1.0.7
   "mrv2-vX.X.X" to avoid spaces for easier scripting.
 - Fixed image sequence detection that could happen randomly depending on how
   the filesystem returned the order of files.
-- Added listing the OS, distro and service pack versions at the start of mrv2
+- Added listing the OS and distro versions at the start and in About of mrv2
   for debugging purposes.
 
 

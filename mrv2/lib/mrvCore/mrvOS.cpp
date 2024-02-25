@@ -32,7 +32,7 @@ namespace mrv
             }
             os_release.close();
         }
-        if (os_version.empty()
+        if (os_version.empty())
             os_version = info.name;
 #else
         os_version = info.name;
