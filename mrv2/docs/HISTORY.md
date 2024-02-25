@@ -29,6 +29,8 @@ v1.0.7
 - Updated Python API with FFmpeg and Background changes.
 - Fixed reading permissions on files as they were broken!  I did not notice
   as I was using an NTFS drive which sets umask 0022 by default.
+- Made reading session more robust to handle missing files or wrong settings.
+- Made checking for readable files faster.
 
 
 v1.0.6

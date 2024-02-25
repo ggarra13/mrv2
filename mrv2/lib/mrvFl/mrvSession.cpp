@@ -431,6 +431,9 @@ namespace mrv
 
                     // Copy annotations to both item and player
                     auto Aitem = model->observeA()->get();
+                    if (!Aitem)
+                        continue;
+
                     Aitem->annotations = item.annotations;
                     Aitem->videoLayer = item.videoLayer;
                     Aitem->currentTime = item.currentTime;
@@ -471,8 +474,11 @@ namespace mrv
                     // Handle color channel layer
                     //
                     int layer = session["layer"];
-                    ui->uiColorChannel->value(layer);
-                    ui->uiColorChannel->do_callback();
+                    if (layer < ui->uiColorChannel->size())
+                    {
+                        ui->uiColorChannel->value(layer);
+                        ui->uiColorChannel->do_callback();
+                    }
 
                     //
                     // Handle OCIO
@@ -636,13 +642,18 @@ namespace mrv
                 {
                     ui->uiPrefs->uiPrefsAutoPlayback->value(autoplayback);
 
+                    unsigned numFiles = model->observeFiles()->getSize();
                     int Aindex = session["Aindex"];
-                    model->setA(Aindex);
+                    if (Aindex < numFiles)
+                        model->setA(Aindex);
 
                     std::vector<int> Bindexes = session["Bindexes"];
                     model->clearB();
                     for (auto i : Bindexes)
-                        model->setB(i, true);
+                    {
+                        if (i < numFiles)
+                            model->setB(i, true);
+                    }
 
                     Message j = session["timeline"];
 

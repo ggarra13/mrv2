@@ -2,6 +2,7 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <fstream>
 #include <filesystem>
 namespace fs = std::filesystem;
 
@@ -115,31 +116,30 @@ namespace mrv
 
         bool isReadable(const fs::path& p)
         {
-            const std::string fileName = p.generic_string();
-            if (fileName.substr(0, 5) == "http:" ||
-                fileName.substr(0, 6) == "https:" ||
-                fileName.substr(0, 5) == "rtmp:" ||
-                fileName.substr(0, 4) == "rtp:")
+            const std::string filePath = p.generic_string();
+            if (filePath.empty())
+                return false;
+
+            if (filePath.substr(0, 5) == "http:" ||
+                filePath.substr(0, 6) == "https:" ||
+                filePath.substr(0, 5) == "rtmp:" ||
+                filePath.substr(0, 4) == "rtp:")
             {
                 return true;
             }
 
-            std::error_code ec; // For noexcept overload usage.
-            if (!fs::exists(p, ec) || fileName.empty())
-                return false;
-            auto perms = fs::status(p, ec).permissions();
-            if ((perms & fs::perms::owner_read) != fs::perms::none ||
-                (perms & fs::perms::group_read) != fs::perms::none ||
-                (perms & fs::perms::others_read) != fs::perms::none)
+            std::ifstream f(filePath);
+            if (f.is_open())
             {
+                f.close();
                 return true;
             }
+
             return false;
         }
 
-
         static size_t ndiIndex = 1;
-    
+
         std::string NDI(ViewerUI* ui)
         {
             char buf[256];
@@ -156,8 +156,8 @@ namespace mrv
         bool isTemporaryNDI(const tl::file::Path& path)
         {
             bool out = true;
-            
-            const std::string tmpdir = tmppath() + '/';            
+
+            const std::string tmpdir = tmppath() + '/';
             auto dir = path.getDirectory();
             auto base = path.getBaseName();
             auto extension = path.getExtension();
@@ -168,11 +168,11 @@ namespace mrv
             }
             return out;
         }
-    
+
         bool isTemporaryEDL(const tl::file::Path& path)
         {
             const std::string tmpdir = tmppath() + '/';
-            
+
             auto dir = path.getDirectory();
             auto base = path.getBaseName();
             auto extension = path.getExtension();
@@ -183,6 +183,6 @@ namespace mrv
             }
             return true;
         }
-        
+
     } // namespace file
 } // namespace mrv

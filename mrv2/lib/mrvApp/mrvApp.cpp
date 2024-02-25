@@ -2,7 +2,6 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-
 #include <fstream>
 #include <sstream>
 
@@ -410,8 +409,7 @@ namespace mrv
             std::cout << std::endl
                       << "mrv2 v" << mrv::version() << " " << mrv::build_date()
                       << std::endl
-                      << mrv::get_os_version()
-                      << std::endl;
+                      << mrv::get_os_version() << std::endl;
             return;
         }
 
@@ -627,7 +625,6 @@ namespace mrv
                 }
             });
 
-
         p.logObserver = observer::ListObserver<log::Item>::create(
             ui->app->getContext()->getLogSystem()->observeLog(),
             [this](const std::vector<log::Item>& value)
@@ -654,7 +651,6 @@ namespace mrv
                 }
             });
 
-
         DBG;
         cacheUpdate();
         _audioUpdate();
@@ -666,8 +662,6 @@ namespace mrv
             bool foundAudio = false;
             for (const auto& fileName : p.options.fileNames)
             {
-                if (fileName.empty())
-                    continue;
                 if (file::isSequence(fileName) && !foundAudio)
                 {
                     open(fileName, p.options.audioFileName);
@@ -1443,8 +1437,8 @@ namespace mrv
             auto Aitem = p.filesModel->observeA()->get();
             if (Aitem && file::isTemporaryNDI(Aitem->path))
             {
-                uint64_t NDIGbytes =
-                    static_cast<uint64_t>(p.settings->getValue<int>("NDI/GBytes"));           
+                uint64_t NDIGbytes = static_cast<uint64_t>(
+                    p.settings->getValue<int>("NDI/GBytes"));
                 bytes = NDIGbytes * memory::gigabyte;
             }
             // Update the I/O cache.
