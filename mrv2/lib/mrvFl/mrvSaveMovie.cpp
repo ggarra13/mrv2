@@ -76,7 +76,7 @@ namespace mrv
                 const auto& model = ui->app->filesModel();
                 const auto& Aitem = model->observeA()->get();
                 const auto& extension = Aitem->path.getExtension();
-                if ( ! file::isMovie(extension))
+                if (!file::isMovie(extension))
                 {
                     auto speed = player->speed();
                     ioOptions["FFmpeg/Speed"] =
@@ -434,9 +434,9 @@ namespace mrv
 
             if (hasVideo)
             {
+#ifdef TLRENDER_FFMPEG
                 auto entries = tl::ffmpeg::getProfileLabels();
-                std::string profileName =
-                    entries[(int)options.ffmpegProfile];
+                std::string profileName = entries[(int)options.ffmpegProfile];
 
                 std::string msg = tl::string::Format(
                                       _("Using profile {0}, pixel format {1}."))
@@ -446,10 +446,11 @@ namespace mrv
                 if (!options.ffmpegPreset.empty())
                 {
                     msg = tl::string::Format(_("Using preset {0}."))
-                          .arg(options.ffmpegPreset);
+                              .arg(options.ffmpegPreset);
                     LOG_INFO(msg);
                 }
-                
+#endif
+
                 view->make_current();
                 gl::initGLAD();
                 buffer = gl::OffscreenBuffer::create(
@@ -584,12 +585,11 @@ namespace mrv
                             render->setLUTOptions(view->lutOptions());
                             render->drawVideo(
                                 {videoData},
-                                {math::Box2i(
-                                        0, 0, renderSize.w, renderSize.h)},
+                                {math::Box2i(0, 0, renderSize.w, renderSize.h)},
                                 {timeline::ImageOptions()},
                                 {timeline::DisplayOptions()},
                                 timeline::CompareOptions(),
-                                 ui->uiView->getBackgroundOptions());
+                                ui->uiView->getBackgroundOptions());
                             render->end();
                         }
 
