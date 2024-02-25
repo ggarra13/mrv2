@@ -91,7 +91,7 @@ namespace mrv
             }
 
             ioOptions["FFmpeg/PixelFormat"] = options.ffmpegPixelFormat;
-
+            ioOptions["FFmpeg/HardwareEncode"] = options.ffmpegHardwareEncode;
             if (options.ffmpegOverride)
             {
                 ioOptions["FFmpeg/ColorRange"] = options.ffmpegColorRange;

@@ -23,6 +23,7 @@ namespace mrv
         std::string ffmpegPreset;
         std::string ffmpegPixelFormat;
         tl::ffmpeg::AudioCodec ffmpegAudioCodec = tl::ffmpeg::AudioCodec::AAC;
+        bool ffmpegHardwareEncode = false;
         bool ffmpegOverride = false;
         std::string ffmpegColorRange;
         std::string ffmpegColorSpace;
