@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v1.0.6\n"
+"Project-Id-Version: mrv2 v1.0.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2024-02-22 15:07-0300\n"
+"POT-Creation-Date: 2024-02-25 05:39-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -342,29 +342,29 @@ msgstr ""
 msgid "Save a session file."
 msgstr ""
 
-#: mrvPy/Plugin.cpp:147
+#: mrvPy/Plugin.cpp:148
 msgid "Duplicated Python plugin {0} in {1} and {2}."
 msgstr ""
 
-#: mrvPy/Plugin.cpp:205
+#: mrvPy/Plugin.cpp:206
 msgid ""
 "Expected a tuple containing a Python function and a string with menu options "
 "in it."
 msgstr ""
 
-#: mrvPy/Plugin.cpp:212
+#: mrvPy/Plugin.cpp:213
 msgid ""
 "Expected a handle to a Python function or to a tuple containing a Python "
 "function and a string with menu options in it."
 msgstr ""
 
-#: mrvPy/Plugin.cpp:232
+#: mrvPy/Plugin.cpp:233
 msgid ""
 "Please override the menus method by returning a valid dict of key menus, "
 "values methods."
 msgstr ""
 
-#: mrvPy/Plugin.cpp:252
+#: mrvPy/Plugin.cpp:253
 msgid ""
 "\n"
 "Plugin module.\n"
@@ -373,12 +373,12 @@ msgid ""
 "\n"
 msgstr ""
 
-#: mrvPy/Plugin.cpp:264
+#: mrvPy/Plugin.cpp:265
 msgid ""
 "Whether a plugin is active or not.  If not overriden, the default is True."
 msgstr ""
 
-#: mrvPy/Plugin.cpp:266
+#: mrvPy/Plugin.cpp:267
 msgid ""
 "\n"
 "Dictionary of menu entries with callbacks, like:\n"
@@ -389,7 +389,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: mrvPy/Plugin.cpp:274
+#: mrvPy/Plugin.cpp:275
 msgid ""
 "\n"
 "\n"
@@ -1325,39 +1325,59 @@ msgstr ""
 msgid "Class used to hold a media item."
 msgstr ""
 
-#: mrvPy/IO.cpp:52
+#: mrvPy/IO.cpp:58
 msgid "Save annotations."
 msgstr ""
 
-#: mrvPy/IO.cpp:56
+#: mrvPy/IO.cpp:62
 msgid "FFmpeg Profile."
 msgstr ""
 
-#: mrvPy/IO.cpp:59
+#: mrvPy/IO.cpp:65
 msgid "FFmpeg Preset."
 msgstr ""
 
-#: mrvPy/IO.cpp:62
+#: mrvPy/IO.cpp:68
 msgid "FFmpeg Pixel Format."
 msgstr ""
 
-#: mrvPy/IO.cpp:65
+#: mrvPy/IO.cpp:71
+msgid "FFmpeg Override color characteristics."
+msgstr ""
+
+#: mrvPy/IO.cpp:74
+msgid "FFmpeg Color Range."
+msgstr ""
+
+#: mrvPy/IO.cpp:77
+msgid "FFmpeg Color Space."
+msgstr ""
+
+#: mrvPy/IO.cpp:80
+msgid "FFmpeg Color Primaries."
+msgstr ""
+
+#: mrvPy/IO.cpp:83
+msgid "FFmpeg Color Transfer Characteristics."
+msgstr ""
+
+#: mrvPy/IO.cpp:86
 msgid "FFmpeg Audio Codec."
 msgstr ""
 
-#: mrvPy/IO.cpp:70
+#: mrvPy/IO.cpp:91
 msgid "OpenEXR's Compression."
 msgstr ""
 
-#: mrvPy/IO.cpp:73
+#: mrvPy/IO.cpp:94
 msgid "OpenEXR's Pixel Type."
 msgstr ""
 
-#: mrvPy/IO.cpp:76
+#: mrvPy/IO.cpp:97
 msgid "OpenEXR's Zip Compression Level."
 msgstr ""
 
-#: mrvPy/IO.cpp:79
+#: mrvPy/IO.cpp:100
 msgid "OpenEXR's DWA Compression Level."
 msgstr ""
 
@@ -1512,7 +1532,7 @@ msgstr ""
 
 #: mrvApp/mrvOpenSeparateAudioDialog.cpp:52 mrvPanels/mrvNDIPanel.cpp:353
 #: mrvPanels/mrvSettingsPanel.cpp:190 mrvPanels/mrvImageInfoPanel.cpp:477
-#: mrvFl/mrvCallbacks.cpp:1809 mrvFl/mrvCallbacks.cpp:1847
+#: mrvFl/mrvCallbacks.cpp:1835 mrvFl/mrvCallbacks.cpp:1873
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:137
 msgid "Audio"
 msgstr ""
@@ -1523,8 +1543,9 @@ msgid "OK"
 msgstr ""
 
 #: mrvApp/mrvOpenSeparateAudioDialog.cpp:63 mrvWidgets/mrvPythonEditor.cpp:127
-#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:207
-#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:203
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:426
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:582
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:270
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/PathMappingUI.cxx:43
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/keyboard_ui.cxx:111
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/make_ocio_chooser.cxx:57
@@ -1628,75 +1649,75 @@ msgstr ""
 msgid "Return the version and exit."
 msgstr ""
 
-#: mrvApp/mrvApp.cpp:424
+#: mrvApp/mrvApp.cpp:425
 msgid "Could not read python script '{0}'"
 msgstr ""
 
-#: mrvApp/mrvApp.cpp:431
+#: mrvApp/mrvApp.cpp:432
 msgid "Running python script '{0}'"
 msgstr ""
 
-#: mrvApp/mrvApp.cpp:443
+#: mrvApp/mrvApp.cpp:444
 msgid "Python Error: "
 msgstr ""
 
-#: mrvApp/mrvApp.cpp:462
+#: mrvApp/mrvApp.cpp:463
 msgid "Cannot create window"
 msgstr ""
 
-#: mrvApp/mrvApp.cpp:477 mrvUI/mrvMenus.cpp:1225
+#: mrvApp/mrvApp.cpp:478 mrvUI/mrvMenus.cpp:1257
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:23
 msgid "About mrv2"
 msgstr ""
 
-#: mrvApp/mrvApp.cpp:479 mrvUI/mrvMenus.cpp:1227
+#: mrvApp/mrvApp.cpp:480 mrvUI/mrvMenus.cpp:1259
 msgid "Hide mrv2"
 msgstr ""
 
-#: mrvApp/mrvApp.cpp:480 mrvUI/mrvMenus.cpp:1228
+#: mrvApp/mrvApp.cpp:481 mrvUI/mrvMenus.cpp:1260
 msgid "Hide Others"
 msgstr ""
 
-#: mrvApp/mrvApp.cpp:481 mrvUI/mrvMenus.cpp:1229
+#: mrvApp/mrvApp.cpp:482 mrvUI/mrvMenus.cpp:1261
 msgid "Services"
 msgstr ""
 
-#: mrvApp/mrvApp.cpp:482
+#: mrvApp/mrvApp.cpp:483
 msgid "Show All"
 msgstr ""
 
-#: mrvApp/mrvApp.cpp:483 mrvUI/mrvMenus.cpp:1230
+#: mrvApp/mrvApp.cpp:484 mrvUI/mrvMenus.cpp:1262
 msgid "Quit mrv2"
 msgstr ""
 
-#: mrvApp/mrvApp.cpp:579
+#: mrvApp/mrvApp.cpp:583
 msgid "Could not initialize NDI"
 msgstr ""
 
-#: mrvApp/mrvApp.cpp:942
+#: mrvApp/mrvApp.cpp:946
 msgid "Filename '{0}' does not exist or does not have read permissions."
 msgstr ""
 
-#: mrvPanels/mrvPanelsAux.h:19 mrvFl/mrvCallbacks.cpp:87 mrvUI/mrvMenus.cpp:366
+#: mrvPanels/mrvPanelsAux.h:19 mrvFl/mrvCallbacks.cpp:87 mrvUI/mrvMenus.cpp:398
 msgid "Files"
 msgstr ""
 
-#: mrvPanels/mrvPanelsAux.h:19 mrvFl/mrvCallbacks.cpp:82 mrvUI/mrvMenus.cpp:401
+#: mrvPanels/mrvPanelsAux.h:19 mrvFl/mrvCallbacks.cpp:82 mrvUI/mrvMenus.cpp:433
 msgid "Compare"
 msgstr ""
 
-#: mrvPanels/mrvPanelsAux.h:20 mrvFl/mrvCallbacks.cpp:97 mrvUI/mrvMenus.cpp:408
+#: mrvPanels/mrvPanelsAux.h:20 mrvFl/mrvCallbacks.cpp:97 mrvUI/mrvMenus.cpp:440
 msgid "Playlist"
 msgstr ""
 
-#: mrvPanels/mrvPanelsAux.h:20 mrvFl/mrvCallbacks.cpp:92 mrvUI/mrvMenus.cpp:461
+#: mrvPanels/mrvPanelsAux.h:20 mrvFl/mrvCallbacks.cpp:92 mrvUI/mrvMenus.cpp:493
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1586
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1877
 msgid "Network"
 msgstr ""
 
 #: mrvPanels/mrvPanelsAux.h:21 mrvPanels/mrvStereo3DPanel.cpp:302
-#: mrvFl/mrvCallbacks.cpp:102 mrvUI/mrvMenus.cpp:479
+#: mrvFl/mrvCallbacks.cpp:102 mrvUI/mrvMenus.cpp:511
 msgid "Stereo 3D"
 msgstr ""
 
@@ -1840,7 +1861,7 @@ msgstr ""
 
 #: mrvPanels/mrvPythonPanel.cpp:483 mrvPanels/mrvImageInfoPanel.cpp:1654
 #: mrvFl/mrvLanguages.cpp:136 mrvFl/mrvHotkey.cpp:99
-#: mrvFl/mrvCallbacks.cpp:1879
+#: mrvFl/mrvCallbacks.cpp:1905
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:397
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:404
 msgid "No"
@@ -1848,7 +1869,7 @@ msgstr ""
 
 #: mrvPanels/mrvPythonPanel.cpp:483 mrvPanels/mrvImageInfoPanel.cpp:1654
 #: mrvFl/mrvLanguages.cpp:136 mrvFl/mrvHotkey.cpp:99
-#: mrvFl/mrvCallbacks.cpp:1879
+#: mrvFl/mrvCallbacks.cpp:1905
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:405
 msgid "Yes"
 msgstr ""
@@ -1881,7 +1902,7 @@ msgid "No Source"
 msgstr ""
 
 #: mrvPanels/mrvNDIPanel.cpp:257 mrvFl/mrvCallbacks.cpp:95
-#: mrvUI/mrvMenus.cpp:452
+#: mrvUI/mrvMenus.cpp:484
 msgid "NDI"
 msgstr ""
 
@@ -1931,7 +1952,7 @@ msgid "Everything OK."
 msgstr ""
 
 #: mrvPanels/mrvUSDPanel.cpp:71 mrvFl/mrvCallbacks.cpp:104
-#: mrvUI/mrvMenus.cpp:470
+#: mrvUI/mrvMenus.cpp:502
 msgid "USD"
 msgstr ""
 
@@ -1944,7 +1965,7 @@ msgstr ""
 #: mrvFl/mrvPreferences.cpp:1920 mrvFl/mrvPreferences.cpp:2066
 #: mrvFl/mrvPreferences.cpp:2078 mrvGL/mrvTimelineViewport.cpp:1567
 #: mrvGL/mrvTimelineViewport.cpp:1636
-#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:28
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:38
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:44
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:195
 msgid "None"
@@ -2467,13 +2488,13 @@ msgstr ""
 
 #: mrvPanels/mrvImageInfoPanel.cpp:1805 mrvPanels/mrvImageInfoPanel.cpp:1810
 #: mrvPanels/mrvImageInfoPanel.cpp:2072 mrvPanels/mrvImageInfoPanel.cpp:2148
-#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:189
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:410
 msgid "Codec"
 msgstr ""
 
 #: mrvPanels/mrvImageInfoPanel.cpp:1810 mrvPanels/mrvImageInfoPanel.cpp:1822
-#: mrvWidgets/mrvVersion.cpp:887 mrvWidgets/mrvVersion.cpp:891
-#: mrvWidgets/mrvVersion.cpp:895
+#: mrvWidgets/mrvVersion.cpp:891 mrvWidgets/mrvVersion.cpp:895
+#: mrvWidgets/mrvVersion.cpp:899
 msgid "Unknown"
 msgstr ""
 
@@ -2605,7 +2626,7 @@ msgid "Line order in file"
 msgstr ""
 
 #: mrvPanels/mrvImageInfoPanel.cpp:1957
-#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:108
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:174
 msgid "Compression"
 msgstr ""
 
@@ -3260,73 +3281,73 @@ msgstr ""
 msgid "Failed to load the file."
 msgstr ""
 
-#: mrvFl/mrvSaveMovie.cpp:142
+#: mrvFl/mrvSaveMovie.cpp:153
 msgid "VP9 profile needs a .mp4, .mkv or .webm movie extension"
 msgstr ""
 
-#: mrvFl/mrvSaveMovie.cpp:156
+#: mrvFl/mrvSaveMovie.cpp:167
 msgid "AV1 profile needs a .mp4 or .mkv movie extension"
 msgstr ""
 
-#: mrvFl/mrvSaveMovie.cpp:238
+#: mrvFl/mrvSaveMovie.cpp:249
 msgid "{0}: Cannot open writer plugin."
 msgstr ""
 
-#: mrvFl/mrvSaveMovie.cpp:254 mrvFl/mrvSaveImage.cpp:133
+#: mrvFl/mrvSaveMovie.cpp:265 mrvFl/mrvSaveImage.cpp:133
 msgid "Image info: {0} {1}"
 msgstr ""
 
-#: mrvFl/mrvSaveMovie.cpp:314 mrvFl/mrvSaveImage.cpp:181
+#: mrvFl/mrvSaveMovie.cpp:325 mrvFl/mrvSaveImage.cpp:181
 #: mrvPDF/mrvPDFCreator.cpp:277
 msgid "Image too big.  Will save the viewport size."
 msgstr ""
 
-#: mrvFl/mrvSaveMovie.cpp:320 mrvFl/mrvSaveImage.cpp:186
+#: mrvFl/mrvSaveMovie.cpp:331 mrvFl/mrvSaveImage.cpp:186
 #: mrvPDF/mrvPDFCreator.cpp:282
 msgid "Viewport Size: {0}  Render Size: {1}"
 msgstr ""
 
-#: mrvFl/mrvSaveMovie.cpp:332 mrvFl/mrvSaveImage.cpp:210
+#: mrvFl/mrvSaveMovie.cpp:343 mrvFl/mrvSaveImage.cpp:210
 msgid "Output info: {0} {1}"
 msgstr ""
 
-#: mrvFl/mrvSaveMovie.cpp:368
+#: mrvFl/mrvSaveMovie.cpp:379
 #, c-format
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
 msgstr ""
 
-#: mrvFl/mrvSaveMovie.cpp:373
+#: mrvFl/mrvSaveMovie.cpp:384
 #, c-format
 msgid "Saving Movie with Audio %<PRId64> - %<PRId64>"
 msgstr ""
 
-#: mrvFl/mrvSaveMovie.cpp:378
+#: mrvFl/mrvSaveMovie.cpp:389
 #, c-format
 msgid "Saving Pictures without Audio %<PRId64> - %<PRId64>"
 msgstr ""
 
-#: mrvFl/mrvSaveMovie.cpp:385
+#: mrvFl/mrvSaveMovie.cpp:396
 #, c-format
 msgid "Saving Audio %<PRId64> - %<PRId64>"
 msgstr ""
 
-#: mrvFl/mrvSaveMovie.cpp:404
+#: mrvFl/mrvSaveMovie.cpp:415
 msgid "{0}: Invalid OpenGL format and type"
 msgstr ""
 
-#: mrvFl/mrvSaveMovie.cpp:410
+#: mrvFl/mrvSaveMovie.cpp:421
 msgid "OpenGL info: {0}"
 msgstr ""
 
-#: mrvFl/mrvSaveMovie.cpp:431
+#: mrvFl/mrvSaveMovie.cpp:442
 msgid "Using profile {0}, pixel format {1}."
 msgstr ""
 
-#: mrvFl/mrvSaveMovie.cpp:437
+#: mrvFl/mrvSaveMovie.cpp:448
 msgid "Using preset {0}."
 msgstr ""
 
-#: mrvFl/mrvSaveMovie.cpp:555
+#: mrvFl/mrvSaveMovie.cpp:567
 msgid "Empty video data at time {0}."
 msgstr ""
 
@@ -3563,73 +3584,73 @@ msgstr ""
 msgid "Default"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:78 mrvFl/mrvCallbacks.cpp:1805
-#: mrvFl/mrvCallbacks.cpp:1843 mrvUI/mrvMenus.cpp:422
+#: mrvFl/mrvCallbacks.cpp:78 mrvFl/mrvCallbacks.cpp:1831
+#: mrvFl/mrvCallbacks.cpp:1869 mrvUI/mrvMenus.cpp:454
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1661
 msgid "Annotations"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:79 mrvUI/mrvMenus.cpp:500
+#: mrvFl/mrvCallbacks.cpp:79 mrvUI/mrvMenus.cpp:532
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:888
 msgid "Background"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:80 mrvFl/mrvCallbacks.cpp:1797
-#: mrvFl/mrvCallbacks.cpp:1835 mrvGL/mrvTimelineViewport.cpp:1776
+#: mrvFl/mrvCallbacks.cpp:80 mrvFl/mrvCallbacks.cpp:1823
+#: mrvFl/mrvCallbacks.cpp:1861 mrvGL/mrvTimelineViewport.cpp:1776
 #: mrvGL/mrvTimelineViewport.cpp:1778 mrvGL/mrvTimelineViewport.cpp:1780
-#: mrvUI/mrvMenus.cpp:373
+#: mrvUI/mrvMenus.cpp:405
 msgid "Color"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:81 mrvUI/mrvMenus.cpp:380
+#: mrvFl/mrvCallbacks.cpp:81 mrvUI/mrvMenus.cpp:412
 msgid "Color Area"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:84 mrvUI/mrvMenus.cpp:415
+#: mrvFl/mrvCallbacks.cpp:84 mrvUI/mrvMenus.cpp:447
 msgid "Devices"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:86 mrvUI/mrvMenus.cpp:493
+#: mrvFl/mrvCallbacks.cpp:86 mrvUI/mrvMenus.cpp:525
 msgid "Environment Map"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:88 mrvUI/mrvMenus.cpp:387
+#: mrvFl/mrvCallbacks.cpp:88 mrvUI/mrvMenus.cpp:419
 msgid "Histogram"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:89 mrvUI/mrvMenus.cpp:436
+#: mrvFl/mrvCallbacks.cpp:89 mrvUI/mrvMenus.cpp:468
 msgid "Logs"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:90 mrvUI/mrvMenus.cpp:486
+#: mrvFl/mrvCallbacks.cpp:90 mrvUI/mrvMenus.cpp:518
 msgid "Media Information"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:99 mrvUI/mrvMenus.cpp:444
+#: mrvFl/mrvCallbacks.cpp:99 mrvUI/mrvMenus.cpp:476
 msgid "Python"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:101 mrvUI/mrvMenus.cpp:429
+#: mrvFl/mrvCallbacks.cpp:101 mrvUI/mrvMenus.cpp:461
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:478
 msgid "Settings"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:106 mrvUI/mrvMenus.cpp:394
+#: mrvFl/mrvCallbacks.cpp:106 mrvUI/mrvMenus.cpp:426
 msgid "Vectorscope"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:107 mrvFl/mrvCallbacks.cpp:836 mrvUI/mrvMenus.cpp:508
+#: mrvFl/mrvCallbacks.cpp:107 mrvFl/mrvCallbacks.cpp:862 mrvUI/mrvMenus.cpp:540
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvHotkeyUI.cxx:68
 msgid "Hotkeys"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:108 mrvFl/mrvCallbacks.cpp:834 mrvUI/mrvMenus.cpp:508
+#: mrvFl/mrvCallbacks.cpp:108 mrvFl/mrvCallbacks.cpp:860 mrvUI/mrvMenus.cpp:540
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:474
 msgid "Preferences"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:109 mrvFl/mrvCallbacks.cpp:838
-#: mrvFl/mrvCallbacks.cpp:872 mrvUI/mrvMenus.cpp:509
+#: mrvFl/mrvCallbacks.cpp:109 mrvFl/mrvCallbacks.cpp:864
+#: mrvFl/mrvCallbacks.cpp:898 mrvUI/mrvMenus.cpp:541
 msgid "About"
 msgstr ""
 
@@ -3645,34 +3666,34 @@ msgstr ""
 msgid "Saving video but with an audio extension."
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:1169
+#: mrvFl/mrvCallbacks.cpp:1195
 msgid "View/Mask"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:1644
+#: mrvFl/mrvCallbacks.cpp:1670
 msgid "Pick Color"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:1658
+#: mrvFl/mrvCallbacks.cpp:1684
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2715
 msgid "Pick Draw Color and Alpha"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:1785 mrvFl/mrvCallbacks.cpp:1823
+#: mrvFl/mrvCallbacks.cpp:1811 mrvFl/mrvCallbacks.cpp:1849
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1596
 msgid "Media"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:1789 mrvFl/mrvCallbacks.cpp:1827
+#: mrvFl/mrvCallbacks.cpp:1815 mrvFl/mrvCallbacks.cpp:1853
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:842
 msgid "UI"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:1793 mrvFl/mrvCallbacks.cpp:1831
+#: mrvFl/mrvCallbacks.cpp:1819 mrvFl/mrvCallbacks.cpp:1857
 msgid "Pan And Zoom"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:1801 mrvFl/mrvCallbacks.cpp:1839
+#: mrvFl/mrvCallbacks.cpp:1827 mrvFl/mrvCallbacks.cpp:1865
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:569
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1170
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1635
@@ -3680,17 +3701,17 @@ msgstr ""
 msgid "Timeline"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:1876
+#: mrvFl/mrvCallbacks.cpp:1902
 msgid ""
 "You have EDLs in the current session.  These will not be saved in the "
 "session file.  Do you want to continue?"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:1997
+#: mrvFl/mrvCallbacks.cpp:2023
 msgid "Edit Text Annotation"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:2172
+#: mrvFl/mrvCallbacks.cpp:2198
 msgid "No item selected"
 msgstr ""
 
@@ -3767,12 +3788,12 @@ msgid "(no image)"
 msgstr ""
 
 #: mrvGL/mrvTimelineViewport.cpp:1531 mrvGL/mrvTimelineViewport.cpp:1740
-#: mrvUI/mrvMenus.cpp:661
+#: mrvUI/mrvMenus.cpp:693
 msgid "Render/Minify Filter/Linear"
 msgstr ""
 
 #: mrvGL/mrvTimelineViewport.cpp:1536 mrvGL/mrvTimelineViewport.cpp:1745
-#: mrvUI/mrvMenus.cpp:684
+#: mrvUI/mrvMenus.cpp:716
 msgid "Render/Magnify Filter/Linear"
 msgstr ""
 
@@ -3837,449 +3858,449 @@ msgstr ""
 msgid "Could not convert message to shape: "
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:74
+#: mrvUI/mrvMenus.cpp:79
 msgid "File/Open/Movie or Sequence"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:78
+#: mrvUI/mrvMenus.cpp:83
 msgid "File/Open/With Separate Audio"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:82
+#: mrvUI/mrvMenus.cpp:87
 msgid "File/Open/Directory"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:86
+#: mrvUI/mrvMenus.cpp:91
 msgid "File/Open/Session"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:94
+#: mrvUI/mrvMenus.cpp:99
 msgid "File/Save/Movie or Sequence"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:97
+#: mrvUI/mrvMenus.cpp:102
 msgid "File/Save/Single Frame"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:100
+#: mrvUI/mrvMenus.cpp:105
 msgid "File/Save/Frames to Folder"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:104
+#: mrvUI/mrvMenus.cpp:109
 msgid "File/Save/OTIO EDL Timeline"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:107
+#: mrvUI/mrvMenus.cpp:112
 msgid "File/Save/PDF Document"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:110
+#: mrvUI/mrvMenus.cpp:115
 msgid "File/Save/Session"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:113
+#: mrvUI/mrvMenus.cpp:118
 msgid "File/Save/Session As"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:117
+#: mrvUI/mrvMenus.cpp:122
 msgid "File/Close Current"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:121
+#: mrvUI/mrvMenus.cpp:126
 msgid "File/Close All"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:133
+#: mrvUI/mrvMenus.cpp:138
 #, c-format
 msgid "File/Recent/%s"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:138
+#: mrvUI/mrvMenus.cpp:143
 msgid "File/Quit"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:141
+#: mrvUI/mrvMenus.cpp:146
 msgid "Window/Presentation"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:157
+#: mrvUI/mrvMenus.cpp:162
 msgid "Window/Full Screen"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:169
+#: mrvUI/mrvMenus.cpp:174
 msgid "Window/Float On Top"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:179
+#: mrvUI/mrvMenus.cpp:184
 msgid "Window/Secondary"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:188
+#: mrvUI/mrvMenus.cpp:193
 msgid "Window/Secondary Float On Top"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:202
+#: mrvUI/mrvMenus.cpp:207
 msgid "View/Safe Areas"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:209
+#: mrvUI/mrvMenus.cpp:214
 msgid "View/Data Window"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:216
+#: mrvUI/mrvMenus.cpp:221
 msgid "View/Display Window"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:223
+#: mrvUI/mrvMenus.cpp:228
 msgid "View/Ignore Display Window"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:229
+#: mrvUI/mrvMenus.cpp:234
 msgid "View/Toggle Menu bar"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:237
+#: mrvUI/mrvMenus.cpp:242
 msgid "View/Toggle Top bar"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:245
+#: mrvUI/mrvMenus.cpp:250
 msgid "View/Toggle Pixel bar"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:253
+#: mrvUI/mrvMenus.cpp:258
 msgid "View/Toggle Timeline"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:261
+#: mrvUI/mrvMenus.cpp:266
 msgid "View/Toggle Status Bar"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:269
+#: mrvUI/mrvMenus.cpp:274
 msgid "View/Toggle Action Dock"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:278
+#: mrvUI/mrvMenus.cpp:283
 msgid "Panel/One Panel Only"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:287
+#: mrvUI/mrvMenus.cpp:319
 msgid "Panel/"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:288
+#: mrvUI/mrvMenus.cpp:320
 msgid "Window/"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:515
+#: mrvUI/mrvMenus.cpp:547
 msgid "Unknown menu entry "
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:534
+#: mrvUI/mrvMenus.cpp:566
 msgid "Render/Color Channel"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:543
+#: mrvUI/mrvMenus.cpp:575
 msgid "Render/Red Channel"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:552
+#: mrvUI/mrvMenus.cpp:584
 msgid "Render/Green Channel "
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:561
+#: mrvUI/mrvMenus.cpp:593
 msgid "Render/Blue Channel"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:570
+#: mrvUI/mrvMenus.cpp:602
 msgid "Render/Alpha Channel"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:580
+#: mrvUI/mrvMenus.cpp:612
 msgid "Render/Mirror X"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:590
+#: mrvUI/mrvMenus.cpp:622
 msgid "Render/Mirror Y"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:596
+#: mrvUI/mrvMenus.cpp:628
 msgid "Render/Video Levels/From File"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:603
+#: mrvUI/mrvMenus.cpp:635
 msgid "Render/Video Levels/Legal Range"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:610
+#: mrvUI/mrvMenus.cpp:642
 msgid "Render/Video Levels/Full Range"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:620
+#: mrvUI/mrvMenus.cpp:652
 msgid "Render/Alpha Blend/None"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:627
+#: mrvUI/mrvMenus.cpp:659
 msgid "Render/Alpha Blend/Straight"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:634
+#: mrvUI/mrvMenus.cpp:666
 msgid "Render/Alpha Blend/Premultiplied"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:653
+#: mrvUI/mrvMenus.cpp:685
 msgid "Render/Minify Filter/Nearest"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:676
+#: mrvUI/mrvMenus.cpp:708
 msgid "Render/Magnify Filter/Nearest"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:702
+#: mrvUI/mrvMenus.cpp:734
 msgid "Playback/Stop"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:709
+#: mrvUI/mrvMenus.cpp:741
 msgid "Playback/Forwards"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:716
+#: mrvUI/mrvMenus.cpp:748
 msgid "Playback/Backwards"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:726
+#: mrvUI/mrvMenus.cpp:758
 msgid "Playback/Toggle Playback"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:737
+#: mrvUI/mrvMenus.cpp:769
 msgid "Playback/Toggle In Point"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:743
+#: mrvUI/mrvMenus.cpp:775
 msgid "Playback/Toggle Out Point"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:761
+#: mrvUI/mrvMenus.cpp:793
 msgid "Playback/Loop Playback"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:767
+#: mrvUI/mrvMenus.cpp:799
 msgid "Playback/Playback Once"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:773
+#: mrvUI/mrvMenus.cpp:805
 msgid "Playback/Playback Ping Pong"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:784
+#: mrvUI/mrvMenus.cpp:816
 msgid "Playback/Go to/Start"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:787
+#: mrvUI/mrvMenus.cpp:819
 msgid "Playback/Go to/End"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:791
+#: mrvUI/mrvMenus.cpp:823
 msgid "Playback/Go to/Previous Frame"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:794
+#: mrvUI/mrvMenus.cpp:826
 msgid "Playback/Go to/Next Frame"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:811
+#: mrvUI/mrvMenus.cpp:843
 msgid "Playback/Go to/Previous Clip"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:815
+#: mrvUI/mrvMenus.cpp:847
 msgid "Playback/Go to/Next Clip"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:824
+#: mrvUI/mrvMenus.cpp:856
 msgid "Playback/Go to/Previous Annotation"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:828
+#: mrvUI/mrvMenus.cpp:860
 msgid "Playback/Go to/Next Annotation"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:834
+#: mrvUI/mrvMenus.cpp:866
 msgid "Playback/Annotation/Clear"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:837
+#: mrvUI/mrvMenus.cpp:869
 msgid "Playback/Annotation/Clear All"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:854
+#: mrvUI/mrvMenus.cpp:886
 #, c-format
 msgid "View/Mask/%s"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:866
+#: mrvUI/mrvMenus.cpp:898
 msgid "View/Hud"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:880
+#: mrvUI/mrvMenus.cpp:912
 msgid "Timeline/Editable"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:888
+#: mrvUI/mrvMenus.cpp:920
 msgid "Timeline/Edit Associated Clips"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:907
+#: mrvUI/mrvMenus.cpp:939
 msgid "Timeline/Thumbnails/None"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:913
+#: mrvUI/mrvMenus.cpp:945
 msgid "Timeline/Thumbnails/Small"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:919
+#: mrvUI/mrvMenus.cpp:951
 msgid "Timeline/Thumbnails/Medium"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:925
+#: mrvUI/mrvMenus.cpp:957
 msgid "Timeline/Thumbnails/Large"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:935
+#: mrvUI/mrvMenus.cpp:967
 msgid "Timeline/Transitions"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:941
+#: mrvUI/mrvMenus.cpp:973
 msgid "Timeline/Markers"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:958
+#: mrvUI/mrvMenus.cpp:990
 msgid "Image/Version/First"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:961
+#: mrvUI/mrvMenus.cpp:993
 msgid "Image/Version/Last"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:964
+#: mrvUI/mrvMenus.cpp:996
 msgid "Image/Version/Previous"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:967
+#: mrvUI/mrvMenus.cpp:999
 msgid "Image/Version/Next"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:972
+#: mrvUI/mrvMenus.cpp:1004
 msgid "Edit/Frame/Cut"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:975
+#: mrvUI/mrvMenus.cpp:1007
 msgid "Edit/Frame/Copy"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:978
+#: mrvUI/mrvMenus.cpp:1010
 msgid "Edit/Frame/Paste"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:981
+#: mrvUI/mrvMenus.cpp:1013
 msgid "Edit/Frame/Insert"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:985
+#: mrvUI/mrvMenus.cpp:1017
 msgid "Edit/Audio Gap/Insert"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:988
+#: mrvUI/mrvMenus.cpp:1020
 msgid "Edit/Audio Gap/Remove"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:992
+#: mrvUI/mrvMenus.cpp:1024
 msgid "Edit/Slice"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:995
+#: mrvUI/mrvMenus.cpp:1027
 msgid "Edit/Remove"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:999
+#: mrvUI/mrvMenus.cpp:1031
 msgid "Edit/Undo"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1002
+#: mrvUI/mrvMenus.cpp:1034
 msgid "Edit/Redo"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1041
+#: mrvUI/mrvMenus.cpp:1073
 msgid "Sync/Send/Media"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1052
+#: mrvUI/mrvMenus.cpp:1084
 msgid "Sync/Send/UI"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1060
+#: mrvUI/mrvMenus.cpp:1092
 msgid "Sync/Send/Pan And Zoom"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1068
+#: mrvUI/mrvMenus.cpp:1100
 msgid "Sync/Send/Color"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1076
+#: mrvUI/mrvMenus.cpp:1108
 msgid "Sync/Send/Timeline"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1084
+#: mrvUI/mrvMenus.cpp:1116
 msgid "Sync/Send/Annotations"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1092
+#: mrvUI/mrvMenus.cpp:1124
 msgid "Sync/Send/Audio"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1104
+#: mrvUI/mrvMenus.cpp:1136
 msgid "Sync/Accept/Media"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1115
+#: mrvUI/mrvMenus.cpp:1147
 msgid "Sync/Accept/UI"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1123
+#: mrvUI/mrvMenus.cpp:1155
 msgid "Sync/Accept/Pan And Zoom"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1131
+#: mrvUI/mrvMenus.cpp:1163
 msgid "Sync/Accept/Color"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1139
+#: mrvUI/mrvMenus.cpp:1171
 msgid "Sync/Accept/Timeline"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1147
+#: mrvUI/mrvMenus.cpp:1179
 msgid "Sync/Accept/Annotations"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1155
+#: mrvUI/mrvMenus.cpp:1187
 msgid "Sync/Accept/Audio"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1173
+#: mrvUI/mrvMenus.cpp:1205
 msgid ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
 "function and a string with menu options in it."
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1198
+#: mrvUI/mrvMenus.cpp:1230
 msgid ""
 "In '{0}' expected a function a tuple containing a Python function and a "
 "string with menu options in it."
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1213
+#: mrvUI/mrvMenus.cpp:1245
 msgid "Help/Documentation"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1216
+#: mrvUI/mrvMenus.cpp:1248
 msgid "Help/About"
 msgstr ""
 
@@ -4303,35 +4324,35 @@ msgstr ""
 msgid "Replace Next"
 msgstr ""
 
-#: mrvWidgets/mrvVersion.cpp:608
+#: mrvWidgets/mrvVersion.cpp:610
 msgid "With gcc "
 msgstr ""
 
-#: mrvWidgets/mrvVersion.cpp:610
+#: mrvWidgets/mrvVersion.cpp:612
 msgid "With clang "
 msgstr ""
 
-#: mrvWidgets/mrvVersion.cpp:612
+#: mrvWidgets/mrvVersion.cpp:614
 msgid "With msvc "
 msgstr ""
 
-#: mrvWidgets/mrvVersion.cpp:617
+#: mrvWidgets/mrvVersion.cpp:621
 msgid "mrv2 depends on:"
 msgstr ""
 
-#: mrvWidgets/mrvVersion.cpp:897
+#: mrvWidgets/mrvVersion.cpp:901
 msgid "Vendor:\t"
 msgstr ""
 
-#: mrvWidgets/mrvVersion.cpp:898
+#: mrvWidgets/mrvVersion.cpp:902
 msgid "Renderer:\t"
 msgstr ""
 
-#: mrvWidgets/mrvVersion.cpp:899
+#: mrvWidgets/mrvVersion.cpp:903
 msgid "Version:\t"
 msgstr ""
 
-#: mrvWidgets/mrvVersion.cpp:905
+#: mrvWidgets/mrvVersion.cpp:909
 msgid "Max. Texture Size:\t"
 msgstr ""
 
@@ -4436,69 +4457,228 @@ msgstr ""
 msgid "Mean"
 msgstr ""
 
-#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:152
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:89
+msgid "TV"
+msgstr ""
+
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:90
+msgid "PC"
+msgstr ""
+
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:95
+msgid "sRGB"
+msgstr ""
+
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:96
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:107
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:123
+msgid "bt709"
+msgstr ""
+
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:97
+msgid "FCC"
+msgstr ""
+
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:98
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:112
+msgid "SMPTE240m"
+msgstr ""
+
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:99
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:128
+msgid "bt601"
+msgstr ""
+
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:100
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:114
+msgid "bt2020"
+msgstr ""
+
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:101
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:108
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:124
+msgid "unspecified"
+msgstr ""
+
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:102
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:109
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:125
+msgid "reserved"
+msgstr ""
+
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:110
+msgid "bt470m"
+msgstr ""
+
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:111
+msgid "SMPTE170m"
+msgstr ""
+
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:113
+msgid "Film"
+msgstr ""
+
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:115
+msgid "SMPTE428"
+msgstr ""
+
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:116
+msgid "SMPTE431"
+msgstr ""
+
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:117
+msgid "SMPTE432"
+msgstr ""
+
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:118
+msgid "EBU3213"
+msgstr ""
+
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:126
+msgid "gamma22"
+msgstr ""
+
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:127
+msgid "gamma28"
+msgstr ""
+
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:129
+msgid "smpte240m"
+msgstr ""
+
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:130
+msgid "linear"
+msgstr ""
+
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:131
+msgid "log"
+msgstr ""
+
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:132
+msgid "logsqrt"
+msgstr ""
+
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:133
+msgid "iec61966-2-4"
+msgstr ""
+
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:134
+msgid "bt1361"
+msgstr ""
+
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:135
+msgid "iec61966-2-1"
+msgstr ""
+
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:136
+msgid "bt2020-10"
+msgstr ""
+
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:137
+msgid "bt2020-12"
+msgstr ""
+
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:138
+msgid "smpte2084"
+msgstr ""
+
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:139
+msgid "arib-std-b67"
+msgstr ""
+
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:367
 msgid "Save Movie Options"
 msgstr ""
 
-#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:155
-#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:96
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:370
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:158
 msgid "Common Settings"
 msgstr ""
 
-#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:158
-#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:99
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:373
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:161
 msgid "Save Annotations"
 msgstr ""
 
-#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:159
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:374
 msgid ""
 "Save Annotations burned into the movie or sequence.  It also allows saving "
 "OpenEXRs from an 8-bit movie and changing OpenEXR's pixel type."
 msgstr ""
 
-#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:165
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:384
 msgid "Video Options"
 msgstr ""
 
-#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:168
-msgid "Pixel Format"
-msgstr ""
-
-#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:169
-msgid "FFMpeg's Pixel Format for the codec selected"
-msgstr ""
-
-#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:172
-msgid "Preset"
-msgstr ""
-
-#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:173
-msgid "FFMpeg's Preset setting for the codec selected."
-msgstr ""
-
-#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:176
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:387
 msgid "Profile"
 msgstr ""
 
-#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:177
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:388
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:522
 msgid "FFMpeg's Profile settings."
 msgstr ""
 
-#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:186
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:392
+msgid "Preset"
+msgstr ""
+
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:393
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:481
+msgid "FFMpeg's Preset setting for the codec selected."
+msgstr ""
+
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:397
+msgid "Pixel Format"
+msgstr ""
+
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:398
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:441
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:452
+msgid "FFMpeg's Pixel Format for the codec selected"
+msgstr ""
+
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:402
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:434
+msgid "Advanced Settings"
+msgstr ""
+
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:407
 msgid "Audio Options"
 msgstr ""
 
-#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:190
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:411
 msgid "FFMpeg's Audio Codec settings."
 msgstr ""
 
-#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:197
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:416
 msgid "Note that while saving with audio, the audio will not be heard."
 msgstr ""
 
-#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:204
-#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:200
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:423
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:579
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:267
 msgid "Ok"
+msgstr ""
+
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:437
+msgid "Override"
+msgstr ""
+
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:440
+msgid "Color Range"
+msgstr ""
+
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:451
+msgid "Color Space"
+msgstr ""
+
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:480
+msgid "Color Primaries"
+msgstr ""
+
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:521
+msgid "Color TRC"
 msgstr ""
 
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:35
@@ -5072,79 +5252,79 @@ msgstr ""
 msgid "Current tool being used."
 msgstr ""
 
-#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:29
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:39
 msgid "RLE"
 msgstr ""
 
-#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:30
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:40
 msgid "ZIPS"
 msgstr ""
 
-#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:31
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:41
 msgid "ZIP"
 msgstr ""
 
-#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:32
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:42
 msgid "PIZ"
 msgstr ""
 
-#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:33
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:43
 msgid "PXR24"
 msgstr ""
 
-#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:34
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:44
 msgid "B44"
 msgstr ""
 
-#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:35
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:45
 msgid "B44A"
 msgstr ""
 
-#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:36
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:46
 msgid "DWAA"
 msgstr ""
 
-#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:37
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:47
 msgid "DWAB"
 msgstr ""
 
-#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:42
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:62
 msgid "Half"
 msgstr ""
 
-#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:43
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:63
 msgid "Float"
 msgstr ""
 
-#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:93
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:155
 msgid "Save Image Options"
 msgstr ""
 
-#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:100
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:162
 msgid "Save Annotations burned into the movie or sequence."
 msgstr ""
 
-#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:105
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:171
 msgid "OpenEXR Options"
 msgstr ""
 
-#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:109
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:175
 msgid "OpenEXR's Compression Type"
 msgstr ""
 
-#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:144
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:210
 msgid "Pixel Type"
 msgstr ""
 
-#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:145
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:211
 msgid "OpenEXR's Pixel Type"
 msgstr ""
 
-#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:157
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:224
 msgid "ZIP Compression"
 msgstr ""
 
-#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:179
+#: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:246
 msgid "DWA Compression"
 msgstr ""
 
@@ -6707,6 +6887,10 @@ msgstr ""
 
 #: mrvCore/mrvPathMapping.cpp:26
 msgid "@B12@C7@b@.Remote\t@B12@C7@b@.Local"
+msgstr ""
+
+#: mrvCore/mrvOS.cpp:40
+msgid "Running on: "
 msgstr ""
 
 #: mrvCore/mrvMemory.cpp:182

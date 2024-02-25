@@ -22,6 +22,7 @@ v1.0.7
 - Added listing the OS and distro versions at the start and in About of mrv2
   for debugging purposes.
 - Made panels be listed alphabetically, regardless of Natural Language.
+- Automated version update in docs.
 
 
 v1.0.6
