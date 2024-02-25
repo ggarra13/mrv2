@@ -2,6 +2,11 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <algorithm>
+#include <locale>
+#include <string> // Add this include for string-related functionality
+
+
 #include <tlCore/StringFormat.h>
 
 #include "mrvCore/mrvI8N.h"
@@ -284,12 +289,39 @@ namespace mrv
         else
             item->clear();
 
-        std::string menu_panel_root = _("Panel/");
-        std::string menu_window_root = _("Window/");
+        std::unordered_map<std::string, std::string > panelsMap;
         const WindowCallback* wc = kWindowCallbacks;
         for (; wc->name; ++wc)
         {
-            std::string tmp = wc->name;
+            panelsMap.insert(std::make_pair(_(wc->name), wc->name));
+        }
+        
+        // Copy key-value pairs from the map to a vector
+        std::vector<std::pair<std::string, std::string>> vec(
+            panelsMap.begin(), panelsMap.end());
+
+        
+        // Sort the vector in ascending order based on the keys
+        std::locale loc("");
+        std::sort(
+            vec.begin(), vec.end(),
+            [&loc](const auto& a, const auto& b)
+            {
+                return std::lexicographical_compare(
+                    a.first.begin(), a.first.end(), b.first.begin(),
+                    b.first.end(),
+                    [&loc](const auto& ch1, const auto& ch2){
+                        return std::tolower(ch1, loc) <
+                               std::tolower(ch2, loc);
+                    });
+            });
+
+        const std::string menu_panel_root = _("Panel/");
+        const std::string menu_window_root = _("Window/");
+
+        for (const auto& pair : vec)
+        {
+            std::string tmp = pair.second;
             std::string menu_root = menu_panel_root;
 
             mode = FL_MENU_TOGGLE;
@@ -358,7 +390,7 @@ namespace mrv
                 continue; // Unknown window check
             }
 
-            tmp = _(wc->name);
+            tmp = pair.first;
             std::string menu_name = menu_root + tmp + "\t";
             int idx = menu->add(
                 menu_name.c_str(), hotkey, (Fl_Callback*)window_cb, ui, mode);

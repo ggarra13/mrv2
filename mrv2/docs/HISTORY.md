@@ -2,7 +2,8 @@ v1.0.7
 ======
 
 - Code clean up.
-- Added optional component installation on Windows's .exr installer.  Currently,
+- Faster windows minimal compilations for quickly checking on GitHub.
+- Added optional component installation on Windows's .exe installer.  Currently,
   you can install:
   
       * mrv2 application (obviously)
@@ -11,7 +12,7 @@ v1.0.7
       * mrv2 Python libraries
       * mrv2 USD components
 
-   If you choose to install ONLY the application, its size is 392Mb, instead
+   If you choose to install ONLY the application, its size is 395Mb, instead
    of the whole 600Mb.
 
 - Changed name of install directory of mrv2 on Windows from "mrv2 vX.X.X" to
@@ -20,6 +21,7 @@ v1.0.7
   the filesystem returned the order of files.
 - Added listing the OS and distro versions at the start and in About of mrv2
   for debugging purposes.
+- Made panels be listed alphabetically, regardless of Natural Language.
 
 
 v1.0.6
