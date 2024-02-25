@@ -23,6 +23,7 @@ v1.0.7
   for debugging purposes.
 - Made panels be listed alphabetically, regardless of Natural Language.
 - Automated version update in docs.
+- Removed view sources from html docs to save space on disk.
 
 
 v1.0.6
