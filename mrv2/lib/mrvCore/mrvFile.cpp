@@ -128,8 +128,8 @@ namespace mrv
             if (!fs::exists(p, ec) || fileName.empty())
                 return false;
             auto perms = fs::status(p, ec).permissions();
-            if ((perms & fs::perms::owner_read) != fs::perms::none &&
-                (perms & fs::perms::group_read) != fs::perms::none &&
+            if ((perms & fs::perms::owner_read) != fs::perms::none ||
+                (perms & fs::perms::group_read) != fs::perms::none ||
                 (perms & fs::perms::others_read) != fs::perms::none)
             {
                 return true;

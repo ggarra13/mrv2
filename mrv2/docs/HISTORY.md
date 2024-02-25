@@ -26,6 +26,9 @@ v1.0.7
 - Removed view sources from html docs to save space on disk.
 - Cleaned up docs directory before building docs.
 - Sped up creation of docs in build system.
+- Updated Python API with FFmpeg and Background changes.
+- Fixed reading permissions on files as they were broken!  I did not notice
+  as I was using an NTFS drive which sets umask 0022 by default.
 
 
 v1.0.6
