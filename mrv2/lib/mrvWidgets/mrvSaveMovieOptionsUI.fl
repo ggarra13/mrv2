@@ -38,6 +38,61 @@ class SaveMovieOptionsUI {open
 } {
   decl {bool cancel = false;} {public local
   }
+  Function {add_hardware(Fl_Choice* o, Fl_Check_Button* v)} {open selected
+  } {
+    code {const Fl_Menu_Item* item = &o->menu()[o->value()];
+if (!item || !item->label()) return;
+const std::string codec = item->label();
+
+v->deactivate();
+
+if (codec == "H264")
+{    
+\#ifdef __APPLE__
+   v->activate();
+\#endif
+}
+else if (codec == "ProRes")
+{
+\#ifdef __APPLE__
+   v->activate();
+\#endif   
+}
+else if (codec == "ProRes_Proxy")
+{
+\#ifdef __APPLE__
+   v->activate();
+\#endif
+}
+else if (codec == "ProRes_LT")
+{
+\#ifdef __APPLE__
+   v->activate();
+\#endif
+}
+else if (codec == "ProRes_XQ")
+{   
+\#ifdef __APPLE__
+   v->activate();
+\#endif
+}
+else if (codec == "ProRes_4444")
+{
+\#ifdef __APPLE__
+   v->activate();
+\#endif
+}
+else if (codec == "VP9")
+{
+\#ifdef __APPLE__
+   v->activate();
+\#endif
+}
+
+auto settings = mrv::App::app->settings();
+const bool value = settings->getValue<int>("SaveMovie/HardwareEncode");
+v->value(value);} {}
+  }
   Function {add_pixel_formats(Fl_Choice* o, Fl_Choice* v)} {} {
     code {const Fl_Menu_Item* item = &o->menu()[o->value()];
 if (!item || !item->label()) return;
@@ -246,7 +301,7 @@ o->value(0);} {}
   } {
     Fl_Window uiMain {
       label {Save Movie Options} open
-      xywh {946 313 465 537} type Double align 0 modal visible
+      xywh {729 146 465 537} type Double align 0 modal visible
     } {
       Fl_Group {} {
         label {Common Settings}
@@ -264,19 +319,26 @@ settings->setValue("SaveMovie/Annoations", static_cast<int>(o->value()));}
       }
       Fl_Group VideoOptions {
         label {Video Options} open
-        xywh {34 111 390 188} box ROUNDED_FRAME color 56
+        xywh {34 111 390 216} box ROUNDED_FRAME color 56
       } {
+        Fl_Check_Button Hardware {
+          label {Hardware Codec}
+          callback {auto settings = mrv::App::app->settings();
+settings->setValue("SaveMovie/HardwareEncode", int(o->value()));}
+          xywh {166 121 78 22} down_box DOWN_BOX
+        }
         Fl_Choice Profile {
           label Profile
           user_data this user_data_type {SaveMovieOptionsUI*}
           callback {add_presets(o, v->Preset);
 add_pixel_formats(o, v->PixelFormat);
+add_hardware(o, v->Hardware);
 
 const Fl_Menu_Item* item = o->mvalue();
 if (!item) return;
 auto settings = mrv::App::app->settings();
-settings->setValue("SaveMovie/Profile", std::string(item->label()));} open selected
-          tooltip {FFMpeg's Profile settings.} xywh {170 131 170 29} down_box BORDER_BOX
+settings->setValue("SaveMovie/Profile", std::string(item->label()));} open
+          tooltip {FFMpeg's Profile settings.} xywh {170 158 170 29} down_box BORDER_BOX
         } {}
         Fl_Choice Preset {
           label Preset
@@ -284,7 +346,7 @@ settings->setValue("SaveMovie/Profile", std::string(item->label()));} open selec
 if (!item) return;
 auto settings = mrv::App::app->settings();
 settings->setValue("SaveMovie/Preset", std::string(item->label()));} open
-          tooltip {FFMpeg's Preset setting for the codec selected.} xywh {171 173 170 29} down_box BORDER_BOX
+          tooltip {FFMpeg's Preset setting for the codec selected.} xywh {171 200 170 29} down_box BORDER_BOX
         } {}
         Fl_Choice PixelFormat {
           label {Pixel Format}
@@ -292,7 +354,7 @@ settings->setValue("SaveMovie/Preset", std::string(item->label()));} open
 if (!item) return;
 auto settings = mrv::App::app->settings();
 settings->setValue("SaveMovie/PixelFormat", std::string(item->label()));} open
-          tooltip {FFMpeg's Pixel Format for the codec selected} xywh {170 211 170 29} down_box BORDER_BOX
+          tooltip {FFMpeg's Pixel Format for the codec selected} xywh {170 238 170 29} down_box BORDER_BOX
         } {}
         Fl_Button {} {
           label {Advanced Settings}
@@ -303,12 +365,12 @@ else
 
 while (uiAdvancedSettings->visible())
   Fl::check();}
-          xywh {171 258 170 28}
+          xywh {171 288 170 28}
         }
       }
       Fl_Group AudioOptions {
         label {Audio Options}
-        xywh {34 322 394 132} box ROUNDED_FRAME color 56
+        xywh {34 351 394 132} box ROUNDED_FRAME color 56
       } {
         Fl_Choice AudioCodec {
           label Codec
@@ -316,35 +378,35 @@ while (uiAdvancedSettings->visible())
 if (!item) return;
 auto settings = mrv::App::app->settings();
 settings->setValue("SaveMovie/AudioCodec", std::string(item->label()));} open
-          tooltip {FFMpeg's Audio Codec settings.} xywh {172 346 170 29} down_box BORDER_BOX
+          tooltip {FFMpeg's Audio Codec settings.} xywh {172 375 170 29} down_box BORDER_BOX
           code0 {add_audio_codecs(o);}
         } {}
         Fl_Box {} {
           label {Note that while saving with audio, the audio will not be heard.}
-          xywh {57 384 335 60} labelsize 12 align 144
+          xywh {57 413 335 60} labelsize 12 align 144
         }
       }
       Fl_Group {} {
-        xywh {105 471 244 29}
+        xywh {105 500 244 29}
       } {
         Fl_Button {} {
           label Ok
           user_data uiMain user_data_type {Fl_Double_Window*}
           callback {v->hide();}
-          xywh {105 471 90 29}
+          xywh {105 500 90 29}
         }
         Fl_Button {} {
           label Cancel
           user_data uiMain user_data_type {Fl_Double_Window*}
           callback {cancel = true;
 v->hide();}
-          xywh {259 471 90 29}
+          xywh {259 500 90 29}
         }
       }
     }
     Fl_Window uiAdvancedSettings {
       label {Advanced Settings}
-      xywh {720 371 411 310} type Double hotspot modal visible
+      xywh {720 371 411 310} type Double hide hotspot modal
     } {
       Fl_Check_Button Override {
         label Override
