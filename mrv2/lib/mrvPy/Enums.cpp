@@ -126,6 +126,7 @@ void mrv2_enums(py::module& m)
         .value("Transparent", timeline::Background::Transparent)
         .value("Solid", timeline::Background::Solid)
         .value("Checkers", timeline::Background::Checkers)
+        .value("Gradient", timeline::Background::Gradient)
         .export_values();
 
     // We cannot export this one as Color conflicts with Color class
