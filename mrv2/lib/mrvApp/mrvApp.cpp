@@ -645,6 +645,19 @@ namespace mrv
                         LOG_ERROR(msg);
                         break;
                     }
+                    case log::Type::Warning:
+                    {
+                        const std::string& msg = i.message;
+                        ui->uiStatusBar->copy_label(msg.c_str());
+                        LOG_WARNING(msg);
+                        break;
+                    }
+                    case log::Type::Status:
+                    {
+                        const std::string& msg = i.message;
+                        LOG_INFO(msg);
+                        break;
+                    }
                     default:
                         break;
                     }

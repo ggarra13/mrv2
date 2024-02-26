@@ -34,7 +34,14 @@ v1.0.7
 - Fixed saving large images/movies with annotations on work properly.
 - Improved memory consumption of saving movies, particularly large ones like
   4K.
-  
+- Improved logging system logging the tlRender warnings.
+- Improved logging system adding a Status mode to report information right
+  away.
+- Made macOS hardware prores and hardware vp9 not fall back to software, as they
+  use FFmpeg's defaults, which may not match.
+- Improved movie save reporting of parameters.
+- Fixed saving a movie with annotations when the movie is bigger than the viewport.
+
 
 v1.0.6
 ======

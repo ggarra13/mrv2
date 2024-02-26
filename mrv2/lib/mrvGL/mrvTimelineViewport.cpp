@@ -716,7 +716,7 @@ namespace mrv
     {
         return _p->displayWindow;
     }
-    
+
     bool TimelineViewport::getIgnoreDisplayWindow() const noexcept
     {
         return _p->ignoreDisplayWindow;
@@ -1975,6 +1975,8 @@ namespace mrv
         const auto& info = player->player()->getIOInfo();
 
         const auto& videos = info.video;
+        if (videos.empty())
+            return;
 
         int layer = p.ui->uiColorChannel->value();
         if (layer < 0)
@@ -2723,7 +2725,7 @@ namespace mrv
             pen_size = 2.0F;
         return pen_size;
     }
-    
+
     float TimelineViewport::_getZoomSpeedValue() const noexcept
     {
         int idx = _p->ui->uiPrefs->uiPrefsZoomSpeed->value();
