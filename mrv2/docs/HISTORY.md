@@ -31,7 +31,10 @@ v1.0.7
   as I was using an NTFS drive which sets umask 0022 by default.
 - Made reading session more robust to handle missing files or wrong settings.
 - Made checking for readable files faster.
-
+- Fixed saving large images/movies with annotations on work properly.
+- Improved memory consumption of saving movies, particularly large ones like
+  4K.
+  
 
 v1.0.6
 ======
