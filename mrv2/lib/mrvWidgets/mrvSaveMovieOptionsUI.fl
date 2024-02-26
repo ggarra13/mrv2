@@ -59,7 +59,7 @@ settings->setValue("SaveMovie/Annoations", static_cast<int>(o->value()));}
         }
       }
       Fl_Group VideoOptions {
-        label {Video Options} open
+        label {Video Options}
         xywh {34 111 390 216} box ROUNDED_FRAME color 56
       } {
         Fl_Check_Button Hardware {
@@ -69,7 +69,7 @@ settings->setValue("SaveMovie/Annoations", static_cast<int>(o->value()));}
 
 auto settings = mrv::App::app->settings();
 settings->setValue("SaveMovie/HardwareEncode", int(o->value()));}
-          xywh {166 121 78 22} down_box DOWN_BOX
+          xywh {166 121 174 24} down_box DOWN_BOX
         }
         Fl_Choice Profile {
           label Profile
@@ -97,7 +97,7 @@ settings->setValue("SaveMovie/Preset", std::string(item->label()));} open
           callback {const Fl_Menu_Item* item = o->mvalue();
 if (!item) return;
 auto settings = mrv::App::app->settings();
-settings->setValue("SaveMovie/PixelFormat", std::string(item->label()));} open selected
+settings->setValue("SaveMovie/PixelFormat", std::string(item->label()));} open
           tooltip {FFMpeg's Pixel Format for the codec selected} xywh {170 238 170 29} down_box BORDER_BOX
         } {}
         Fl_Button {} {
@@ -364,9 +364,9 @@ else
 {
    add_profiles(Profile);
    add_presets(Profile, Preset);
-   add_pixel_formats(Profile, PixelFormat);
    add_hardware(Profile, Hardware);
-}
+   add_pixel_formats(Profile, PixelFormat);
+ }
 uiAdvancedSettings->hide();
 uiMain->show();
 while (uiMain->visible())
@@ -426,6 +426,14 @@ auto settings = mrv::App::app->settings();
 const bool value = settings->getValue<int>("SaveMovie/HardwareEncode");
 v->value(value);} {}
   }
+  Function {add_h264_sw_formats(Fl_Choice* v)} {} {
+    code {v->add("YUV_420P");
+v->add("YUV_422P");
+v->add("YUV_444P");
+v->add("YUV_420P_10LE");
+v->add("YUV_422P_10LE");
+v->add("YUV_444P_10LE");} {}
+  }
   Function {add_pixel_formats(Fl_Choice* o, Fl_Choice* v)} {open
   } {
     code {const Fl_Menu_Item* item = &o->menu()[o->value()];
@@ -444,12 +452,18 @@ if (codec == "None" || codec == "MJPEG")
 }
 else if (codec == "H264")
 {    
-   v->add("YUV_420P");
-   v->add("YUV_422P");
-   v->add("YUV_444P");
-   v->add("YUV_420P_10LE");
-   v->add("YUV_422P_10LE");
-   v->add("YUV_444P_10LE");
+\#ifdef __APPLE__
+   if (Hardware->value())
+   {
+       v->add("NV12");
+   }
+   else
+   {      
+      add_h264_sw_formats(v);   
+   }
+\#else   
+   add_h264_sw_formats(v);
+\#endif
 }
 else if (codec == "ProRes")
 {   
@@ -475,9 +489,12 @@ else if (codec == "ProRes_4444")
    v->add("YUV_444P_10LE");
    v->add("YUVA_444P_10LE");
 \#ifdef __APPLE__
-   v->add("YUV_422P_12LE");
-   v->add("YUV_444P_12LE");
-   v->add("YUVA_444P_12LE");
+   if (Hardware->value())
+   {
+       v->add("YUV_422P_12LE");
+       v->add("YUV_444P_12LE");
+       v->add("YUVA_444P_12LE");
+   }
 \#endif
 }
 else if (codec == "VP9")
@@ -527,7 +544,8 @@ if (v->size() > 0)
         }
     }
     v->value(0);
-}} {}
+}} {selected
+    }
   }
   Function {add_presets(Fl_Choice* o, Fl_Choice* v)} {} {
     code {const Fl_Menu_Item* item = &o->menu()[o->value()];
