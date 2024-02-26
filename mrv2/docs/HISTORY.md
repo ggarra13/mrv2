@@ -40,7 +40,9 @@ v1.0.7
 - Made macOS hardware prores and hardware vp9 not fall back to software, as they
   use FFmpeg's defaults, which may not match.
 - Improved movie save reporting of parameters.
-- Fixed saving a movie with annotations when the movie is bigger than the viewport.
+- Fixed saving a movie with annotations when the movie is bigger than the
+  viewport.
+- Added GBR8/9/10/12 reading support for VPX.
 
 
 v1.0.6
