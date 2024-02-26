@@ -61,6 +61,16 @@ namespace mrv
         auto mute = player->isMuted();
         player->setMute(true);
 
+
+        auto context = ui->app->getContext();
+
+        // Get I/O cache and store its size.
+        auto ioSystem = context->getSystem<io::System>();
+        auto cache = ioSystem->getCache();
+ 
+        size_t oldCacheSize = cache->getMax();
+
+            
         try
         {
 
@@ -117,8 +127,12 @@ namespace mrv
                 ioOptions["OpenEXR/DWACompressionLevel"] = s.str();
             }
 #endif
+            
 
-            auto context = ui->app->getContext();
+             // Make I/O cache be 1Gb to deal with long movies fine.
+            size_t bytes = memory::gigabyte;
+            cache->setMax(bytes);
+                
             auto timeline = player->timeline();
 
             auto startTimeOpt = timeline->getTimeline()->global_start_time();
@@ -241,8 +255,7 @@ namespace mrv
             offscreenBufferOptions.colorType = image::PixelType::RGBA_F32;
 
             // Create the writer.
-            auto writerPlugin =
-                context->getSystem<io::System>()->getPlugin(path);
+            auto writerPlugin = ioSystem->getPlugin(path);
 
             if (!writerPlugin)
             {
@@ -267,34 +280,7 @@ namespace mrv
                                       .arg(outputInfo.size)
                                       .arg(outputInfo.pixelType);
                 LOG_INFO(msg);
-
-                outputInfo = writerPlugin->getWriteInfo(outputInfo);
-                if (image::PixelType::None == outputInfo.pixelType)
-                {
-                    outputInfo.pixelType = image::PixelType::RGB_U8;
-                    offscreenBufferOptions.colorType = image::PixelType::RGB_U8;
-#ifdef TLRENDER_EXR
-                    if (saveEXR)
-                    {
-                        offscreenBufferOptions.colorType =
-                            image::PixelType::RGB_F32;
-                    }
-#endif
-                }
-
-#ifdef TLRENDER_EXR
-                if (saveEXR)
-                {
-                    outputInfo.pixelType = options.exrPixelType;
-                }
-#endif
-                if (saveHDR)
-                {
-                    outputInfo.pixelType = image::PixelType::RGB_F32;
-                    offscreenBufferOptions.colorType =
-                        image::PixelType::RGB_F32;
-                }
-
+                
                 if (annotations)
                 {
                     view->setActionMode(ActionMode::kScrub);
@@ -323,6 +309,7 @@ namespace mrv
                         view->frameView();
                         renderSize.w = viewportSize.w;
                         renderSize.h = viewportSize.h;
+                        outputInfo.size = renderSize;
                         LOG_WARNING(_("Image too big.  "
                                       "Will save the viewport size."));
                     }
@@ -340,6 +327,34 @@ namespace mrv
                               .arg(Y);
                     LOG_INFO(msg);
                 }
+
+                outputInfo = writerPlugin->getWriteInfo(outputInfo);
+                if (image::PixelType::None == outputInfo.pixelType)
+                {
+                    outputInfo.pixelType = image::PixelType::RGB_U8;
+                    offscreenBufferOptions.colorType = image::PixelType::RGB_U8;
+#ifdef TLRENDER_EXR
+                    if (saveEXR)
+                    {
+                        offscreenBufferOptions.colorType =
+                            image::PixelType::RGB_F32;
+                    }
+#endif
+                }
+
+#ifdef TLRENDER_EXR
+                if (saveEXR)
+                {
+                    outputInfo.pixelType = options.exrPixelType;
+                }
+#endif
+                if (saveHDR)
+                {
+                    outputInfo.pixelType = image::PixelType::RGB_F32;
+                    offscreenBufferOptions.colorType =
+                        image::PixelType::RGB_F32;
+                }
+
 
                 msg = tl::string::Format(_("Output info: {0} {1}"))
                           .arg(outputInfo.size)
@@ -657,6 +672,8 @@ namespace mrv
             settings->addRecentFile(file);
             ui->uiMain->fill_menu(ui->uiMenuBar);
         }
+        
+        cache->setMax(oldCacheSize);
     }
 
 } // namespace mrv
