@@ -953,8 +953,29 @@ namespace mrv
                             p.lastVideoData = value;
                         }
                     }
+
+                
                 }
 
+                // Refresh media info panel if there's data window present
+                if (panel::imageInfoPanel && !p.videoData.empty() &&
+                    !p.videoData[0].layers.empty() &&
+                    p.videoData[0].layers[0].image)
+                {
+                    bool refresh = false;
+                    if (sender->playback() == timeline::Playback::Stop)
+                        refresh = true;
+
+                    const auto& tags =
+                        p.videoData[0].layers[0].image->getTags();
+                    image::Tags::const_iterator i = tags.find("Data Window");
+                    if (i != tags.end())
+                        refresh = true;
+
+                    if (refresh)
+                        panel::imageInfoPanel->refresh();
+                }
+                    
                 if (p.selection.max.x != -1)
                 {
                     if (!value.layers.empty())
@@ -1130,9 +1151,6 @@ namespace mrv
         {
             posX = (int)uiPrefs->uiWindowXPosition->value();
             posY = (int)uiPrefs->uiWindowYPosition->value();
-
-            maxW = maxW - posX + minx;
-            maxH = maxH - posY + miny;
         }
         else
         {

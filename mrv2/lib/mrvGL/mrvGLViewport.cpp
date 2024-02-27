@@ -560,18 +560,6 @@ namespace mrv
                     CHECK_GL;
                 }
 
-                // Refresh media info panel if there's data window present
-                if (panel::imageInfoPanel && !p.videoData.empty() &&
-                    !p.videoData[0].layers.empty() &&
-                    p.videoData[0].layers[0].image)
-                {
-                    const auto& tags =
-                        p.videoData[0].layers[0].image->getTags();
-                    image::Tags::const_iterator i = tags.find("Data Window");
-                    if (i != tags.end())
-                        panel::imageInfoPanel->refresh();
-                }
-
                 if (p.dataWindow)
                     _drawDataWindow();
                 CHECK_GL;

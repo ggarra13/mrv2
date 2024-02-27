@@ -1686,7 +1686,6 @@ namespace mrv
             char buf[1024];
             m_curr = add_browser(m_image);
 
-            DBGM1("m_curr=" << m_curr);
             const auto tplayer = player->player();
             if (!tplayer)
                 return;
@@ -1695,7 +1694,7 @@ namespace mrv
 
             const auto path = player->path();
             const auto directory = path.getDirectory();
-
+            
             const auto audioPath = player->audioPath();
             const otime::RationalTime& time = player->currentTime();
 
@@ -1793,7 +1792,7 @@ namespace mrv
                     const auto& size = video.size;
 
                     add_text(_("Name"), _("Name"), video.name);
-
+                    
                     if (videoData.size() > i && !videoData[i].layers.empty() &&
                         videoData[i].layers[0].image)
                     {
