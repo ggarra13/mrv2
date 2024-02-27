@@ -10,6 +10,7 @@ namespace fs = std::filesystem;
 
 #ifdef __linux__
 #    include <FL/platform.H> // for fl_wl_display
+#    undef Status
 #    undef None
 #endif
 
