@@ -45,6 +45,9 @@ v1.0.7
 - Fixed image panel not refreshing its information when changing images and
   the playback was stopped.
 - Fixed Preferences->Positioning->Position/Size when both were used.
+- Saving of .otio files as movies when the first clip did not start at 0 now
+  works properly.
+- Upgraded to RtAudio v5.2.0 on all platforms.
 
 
 v1.0.6

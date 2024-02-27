@@ -61,16 +61,14 @@ namespace mrv
         auto mute = player->isMuted();
         player->setMute(true);
 
-
         auto context = ui->app->getContext();
 
         // Get I/O cache and store its size.
         auto ioSystem = context->getSystem<io::System>();
         auto cache = ioSystem->getCache();
- 
+
         size_t oldCacheSize = cache->getMax();
 
-            
         try
         {
 
@@ -79,6 +77,8 @@ namespace mrv
 #ifdef TLRENDER_FFMPEG
             ioOptions["FFmpeg/WriteProfile"] = getLabel(options.ffmpegProfile);
             ioOptions["FFmpeg/AudioCodec"] = getLabel(options.ffmpegAudioCodec);
+            ioOptions["FFmpeg/ThreadCount"] =
+                string::Format("{0}").arg(ffmpeg::threadCount);
 
             // If we are not saving a movie, take speed from the player's
             // current speed.
@@ -127,13 +127,21 @@ namespace mrv
                 ioOptions["OpenEXR/DWACompressionLevel"] = s.str();
             }
 #endif
-            
+            auto model = ui->app->filesModel();
+            auto Aitem = model->observeA()->get();
+            if (!Aitem)
+                return;
 
-             // Make I/O cache be 1Gb to deal with long movies fine.
+            std::string inputFile = Aitem->path.get();
+
+            // Make I/O cache be 1Gb to deal with long movies fine.
             size_t bytes = memory::gigabyte;
             cache->setMax(bytes);
-                
-            auto timeline = player->timeline();
+
+            timeline::Options timelineOptions;
+            timelineOptions.ioOptions = ioOptions;
+            std::shared_ptr<timeline::Timeline> timeline =
+                timeline::Timeline::create(inputFile, context, timelineOptions);
 
             auto startTimeOpt = timeline->getTimeline()->global_start_time();
             if (startTime.value() > 0.0 || startTimeOpt.has_value())
@@ -197,7 +205,8 @@ namespace mrv
 
             const bool hasVideo = !info.video.empty();
 
-            if (player->timeRange() != timeRange)
+            if (player->timeRange() != timeRange ||
+                info.videoTime.start_time() != timeRange.start_time())
             {
                 double videoRate = info.videoTime.duration().rate();
                 videoTime = otime::TimeRange(
@@ -280,7 +289,7 @@ namespace mrv
                                       .arg(outputInfo.size)
                                       .arg(outputInfo.pixelType);
                 LOG_INFO(msg);
-                
+
                 if (annotations)
                 {
                     view->setActionMode(ActionMode::kScrub);
@@ -311,13 +320,11 @@ namespace mrv
 
                         view->frameView();
 
-
                         double viewportRatio =
                             viewportSize.w /
                             static_cast<double>(viewportSize.h);
                         double imageRatio =
-                            renderSize.w /
-                            static_cast<double>(renderSize.h);
+                            renderSize.w / static_cast<double>(renderSize.h);
 
                         if (imageRatio < viewportRatio)
                         {
@@ -336,17 +343,15 @@ namespace mrv
                             outputInfo.size.w = viewportSize.w;
                         }
                     }
-                    
+
                     X = (viewportSize.w - outputInfo.size.w) / 2;
                     Y = (viewportSize.h - outputInfo.size.h) / 2;
 
                     std::string msg =
-                        tl::string::Format(
-                            _("Viewport Size: {0} "))
+                        tl::string::Format(_("Viewport Size: {0} "))
                             .arg(viewportSize);
                     LOG_INFO(msg);
                 }
-
 
                 msg = tl::string::Format(_("Output info: {0} {1}"))
                           .arg(outputInfo.size)
@@ -499,7 +504,7 @@ namespace mrv
             while (running)
             {
                 context->tick();
-                
+
                 // If progress window is closed, exit loop.
                 if (!progress.tick())
                     break;
@@ -597,7 +602,8 @@ namespace mrv
                         // Get the videoData
                         const auto videoData =
                             timeline->getVideo(currentTime).get();
-                        if (videoData.layers.empty())
+                        if (videoData.layers.empty() ||
+                            !videoData.layers[0].image)
                         {
                             std::string err =
                                 string::Format(
@@ -610,6 +616,11 @@ namespace mrv
                         view->make_current();
                         view->currentVideoCallback(videoData, player);
                         view->flush();
+
+                        // back to conventional pixel operation
+                        glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
+                        // CHECK_GL;
+                        glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
 
                         gl::initGLAD();
 
@@ -630,16 +641,13 @@ namespace mrv
                             render->end();
                         }
 
-                        // back to conventional pixel operation
-                        // glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
-                        // CHECK_GL;
-                        glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
-
                         glPixelStorei(
                             GL_PACK_ALIGNMENT, outputInfo.layout.alignment);
+#if defined(TLRENDER_API_GL_4_1)
                         glPixelStorei(
                             GL_PACK_SWAP_BYTES,
                             outputInfo.layout.endian != memory::getEndian());
+#endif // TLRENDER_API_GL_4_1
 
                         glReadPixels(
                             0, 0, outputInfo.size.w, outputInfo.size.h, format,
@@ -693,7 +701,7 @@ namespace mrv
             settings->addRecentFile(file);
             ui->uiMain->fill_menu(ui->uiMenuBar);
         }
-        
+
         cache->setMax(oldCacheSize);
     }
 
