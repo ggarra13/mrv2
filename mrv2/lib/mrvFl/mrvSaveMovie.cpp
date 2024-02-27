@@ -291,6 +291,7 @@ namespace mrv
                     view->flush();
                     Fl::check();
                     const auto& viewportSize = view->getViewportSize();
+                    math::Size2i outputSize;
                     if (viewportSize.w >= renderSize.w &&
                         viewportSize.h >= renderSize.h)
                     {
@@ -301,32 +302,56 @@ namespace mrv
                         // flush is needed
                         Fl::flush();
 
-                        X = (viewportSize.w - renderSize.w) / 2;
-                        Y = (viewportSize.h - renderSize.h) / 2;
+                        outputInfo.size = renderSize;
                     }
                     else
                     {
+                        LOG_WARNING(_("Image too big for annotations.  "
+                                      "Will scale to the viewport size."));
+
                         view->frameView();
-                        renderSize.w = viewportSize.w;
-                        renderSize.h = viewportSize.h;
-                        outputInfo.size = renderSize;
-                        LOG_WARNING(_("Image too big.  "
-                                      "Will save the viewport size."));
+
+
+                        double viewportRatio =
+                            viewportSize.w /
+                            static_cast<double>(viewportSize.h);
+                        double imageRatio =
+                            renderSize.w /
+                            static_cast<double>(renderSize.h);
+
+                        if (imageRatio < viewportRatio)
+                        {
+                            double factor = viewportSize.h /
+                                            static_cast<double>(renderSize.h);
+                            outputInfo.size.w =
+                                std::round(renderSize.w * factor);
+                            outputInfo.size.h = viewportSize.h;
+                        }
+                        else
+                        {
+                            double factor = viewportSize.w /
+                                            static_cast<double>(renderSize.w);
+                            outputInfo.size.h =
+                                std::round(renderSize.h * factor);
+                            outputInfo.size.w = viewportSize.w;
+                        }
                     }
+                    
+                    X = (viewportSize.w - outputInfo.size.w) / 2;
+                    Y = (viewportSize.h - outputInfo.size.h) / 2;
 
                     std::string msg =
                         tl::string::Format(
-                            _("Viewport Size: {0}  Render Size: {1}"))
-                            .arg(viewportSize)
-                            .arg(renderSize);
-                    LOG_INFO(msg);
-
-                    msg = tl::string::Format("viewZoom: {2} X: {3} Y: {4}")
-                              .arg(view->viewZoom())
-                              .arg(X)
-                              .arg(Y);
+                            _("Viewport Size: {0} "))
+                            .arg(viewportSize);
                     LOG_INFO(msg);
                 }
+
+
+                msg = tl::string::Format(_("Output info: {0} {1}"))
+                          .arg(outputInfo.size)
+                          .arg(outputInfo.pixelType);
+                LOG_INFO(msg);
 
                 outputInfo = writerPlugin->getWriteInfo(outputInfo);
                 if (image::PixelType::None == outputInfo.pixelType)
@@ -354,12 +379,6 @@ namespace mrv
                     offscreenBufferOptions.colorType =
                         image::PixelType::RGB_F32;
                 }
-
-
-                msg = tl::string::Format(_("Output info: {0} {1}"))
-                          .arg(outputInfo.size)
-                          .arg(outputInfo.pixelType);
-                LOG_INFO(msg);
 
                 outputImage = image::Image::create(outputInfo);
                 ioInfo.videoTime = videoTime;
@@ -479,6 +498,8 @@ namespace mrv
 
             while (running)
             {
+                context->tick();
+                
                 // If progress window is closed, exit loop.
                 if (!progress.tick())
                     break;

@@ -97,8 +97,7 @@ namespace mrv
          *
          * @return true if it exists and is readable, false if not.
          */
-        bool isReadable(const fs::path& p);
-        
+        bool isReadable(const fs::path& path);
         
         //! Returns an NDI filename for the current process
         std::string NDI(ViewerUI* ui);

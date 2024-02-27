@@ -38,8 +38,7 @@ class SaveMovieOptionsUI {open
 } {
   decl {bool cancel = false;} {public local
   }
-  Function {SaveMovieOptionsUI(bool hasAudio = true, bool audioOnly = false)} {open
-  } {
+  Function {SaveMovieOptionsUI(bool hasAudio = true, bool audioOnly = false)} {} {
     Fl_Window uiMain {
       label {Save Movie Options} open
       xywh {729 146 465 537} type Double align 0 modal visible
@@ -444,11 +443,9 @@ std::string codec = item->label();
 v->clear();
 
 
-if (codec == "None" || codec == "MJPEG")
+if (codec == "None" || codec == "MPEG4")
 { 
    v->add("YUV_420P");
-   v->add("YUV_422P");
-   v->add("YUV_444P");
 }
 else if (codec == "H264")
 {    
