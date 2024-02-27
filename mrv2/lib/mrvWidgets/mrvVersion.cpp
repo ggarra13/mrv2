@@ -18,6 +18,7 @@
 #    include <string.h>
 
 #    include <FL/platform.H>
+#    undef Status
 #    undef None
 
 #endif
@@ -63,7 +64,6 @@
 #ifdef TLRENDER_NDI
 #    include <Processing.NDI.Lib.h>
 #endif
-
 
 #ifdef TLRENDER_AUDIO
 #    include <rtaudio/RtAudio.h>
@@ -123,7 +123,7 @@ extern "C"
 }
 #else
 #    define AV_STRINGIFY(s) AV_TOSTRING(s)
-#    define AV_TOSTRING(s) #    s
+#    define AV_TOSTRING(s) #s
 #endif
 
 #ifdef _WIN32
@@ -229,7 +229,7 @@ namespace mrv
     {
         return kBuild;
     }
-    
+
     void ffmpeg_formats(mrv::Browser& browser)
     {
         using namespace std;

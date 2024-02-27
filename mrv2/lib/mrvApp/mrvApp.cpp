@@ -72,6 +72,7 @@ namespace py = pybind11;
 
 #ifdef __linux__
 #    undef None // macro defined in X11 config files
+#    undef Status
 #endif
 
 #include "mrvFl/mrvIO.h"
