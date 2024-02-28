@@ -68,8 +68,8 @@ v1.0.7
 - mrv2's tlRender library now reads the video and audio stream metadata.
 - When there's no audio metadata there's no longer the titles of
   Attribute/Value used at the end of the Metadata tab in the Media Info Panel.
-- Metadata is now sorted and stripped of repeated data.
-- Metadata folder now remembers to be opened.
+- Metadata in Media Info Panel is now sorted and stripped of repeated data.
+- Media Info Panel's tabs now remember whether they were opened and closed.
 
 
 v1.0.6
