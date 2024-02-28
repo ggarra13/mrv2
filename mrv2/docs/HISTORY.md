@@ -70,6 +70,10 @@ v1.0.7
   Attribute/Value used at the end of the Metadata tab in the Media Info Panel.
 - Metadata in Media Info Panel is now sorted and stripped of repeated data.
 - Media Info Panel's tabs now remember whether they were opened and closed.
+- Added GoPro Cineform codec to the list of profiles you can use to encode.
+  The biggest benefit is that it can encode at GBRP_12LE and GBRAP_12LE (ie.
+  RGB and RGBA at 12 bits with alpha) for a replacement to Apple's proprietary
+  ProRes4444 codec.
 
 
 v1.0.6
