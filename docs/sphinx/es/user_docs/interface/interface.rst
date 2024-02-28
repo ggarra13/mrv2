@@ -128,19 +128,33 @@ Menú de Vista
 
 El menú de Vista provee controles para modificar la apariencia y comportamiento del visor:
 
-.. topic:: Safe Areas
+.. topic:: Autoencuadre
+
+   El switch de Autoencuadre maneja cómo mrv2 se comporta al cambiar de clips,
+   o al redimensionar las ventanas.  Si el Autoencuadre está acivo, la imagen
+   siempre se reposicionar para entrar en la vista.  Cuando está apagada,
+   el facto de zoom se mantiene al cambiar de un clip a otro.
+   
+.. topic:: Áreas Seguras
 
    Alternar Áreas Seguras permite mostrar las áreas seguras de film y video.
     
-.. topic:: Data Window
+.. topic:: Ventana de Datos
 
    Seleccionar esto mostrará o ocultará la Ventana de Datos de OpenEXR.
    
-.. topic:: Display Window
+.. topic:: Ventana de Display
 
    Seleccionar esto mostrará o ocultará la Ventana de Display de OpenEXR.
 	   
-.. topic:: Mask
+.. topic:: Ignorar Ventana de Display
+
+   Por defecto, mrv2 recorta los OpenEXRs a la Ventana de Display establecida
+   en el archivo.
+   Sin embargo, si la Ventana de Datos es más *grande* que la Ventana de
+   Display esto puede no ser deseado.
+   
+.. topic:: Máscara
 
    La máscara permite dibujar una máscara negra que recorta la imágen hasta darle un aspecto cinematográfico determinado.
 

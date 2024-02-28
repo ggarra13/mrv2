@@ -127,6 +127,13 @@ View Menu
 
 The view menu provides controls for modifying the appearance and behaviour of the viewer:
 
+.. topic:: Auto Frame
+
+   The Auto Frame toggle handles how mrv2 behaves when switching from one clip
+   to the next, or when resizing the windows.  If auto frame is on, the image
+   is always set to fit the area.  When it is off, the zoom factor is kept
+   between changing each clip.
+   
 .. topic:: Safe Areas
 
    The Safe Areas toggle allows you to display the film and video safe areas.
@@ -138,7 +145,13 @@ The view menu provides controls for modifying the appearance and behaviour of th
 .. topic:: Display Window
 
    Toggling this on will show or hide the OpenEXR's Display Window.	
-	   
+
+.. topic:: Ignore Display Window
+
+   By default, mrv2 will crop OpenEXRs to the display window set in the file.
+   However, if the Data Window is *bigger* than the display window, this may
+   not be desired.
+   
 .. topic:: Mask
 
    The mask allows drawing a black mask cropping your picture to a certain film aspect.

@@ -241,6 +241,13 @@ When showing the pictures, you can zoom in and out with the mousewheel.</p>
 <h2>View Menu<a class="headerlink" href="#view-menu" title="Link to this heading"></a></h2>
 <p>The view menu provides controls for modifying the appearance and behaviour of the viewer:</p>
 <aside class="topic">
+<p class="topic-title">Auto Frame</p>
+<p>The Auto Frame toggle handles how mrv2 behaves when switching from one clip
+to the next, or when resizing the windows.  If auto frame is on, the image
+is always set to fit the area.  When it is off, the zoom factor is kept
+between changing each clip.</p>
+</aside>
+<aside class="topic">
 <p class="topic-title">Safe Areas</p>
 <p>The Safe Areas toggle allows you to display the film and video safe areas.</p>
 </aside>
@@ -251,6 +258,12 @@ When showing the pictures, you can zoom in and out with the mousewheel.</p>
 <aside class="topic">
 <p class="topic-title">Display Window</p>
 <p>Toggling this on will show or hide the OpenEXR’s Display Window.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Ignore Display Window</p>
+<p>By default, mrv2 will crop OpenEXRs to the display window set in the file.
+However, if the Data Window is <em>bigger</em> than the display window, this may
+not be desired.</p>
 </aside>
 <aside class="topic">
 <p class="topic-title">Mask</p>
