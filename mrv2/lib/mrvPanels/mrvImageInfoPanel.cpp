@@ -1914,27 +1914,23 @@ namespace mrv
 
                     ++group;
 
-                    std::string format = tl::image::getLabel(pixelType);
+                    std::string format;
+                    auto it = info.tags.find("FFmpeg Pixel Format");
+                    if (it != info.tags.end())
+                        add_text(
+                            _("FFmpeg Pixel Format"), _("FFmpeg Pixel Format"),
+                            it->second);
+                    
+                    format = tl::image::getLabel(pixelType);
 
                     add_text(
                         _("Render Pixel Format"), _("Render Pixel Format"),
-                        format.c_str());
+                        format);
                 }
 
                 m_video->show();
 
-#if 0
-                add_ocio_ics( _("Input Color Space"),
-                              _("OCIO Input Color Space"),
-                              img->ocio_input_color_space().c_str() );
-
-                
-                ++group;
-#endif
-
-#if 0
-
-                
+#if 0           
                 if ( !img->has_video() )
                 {
                     add_text( _("Line Order"), _("Line order in file"),

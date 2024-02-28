@@ -41,7 +41,7 @@ class SaveMovieOptionsUI {open
   Function {SaveMovieOptionsUI(bool hasAudio = true, bool audioOnly = false)} {} {
     Fl_Window uiMain {
       label {Save Movie Options} open
-      xywh {729 146 465 537} type Double align 0 modal visible
+      xywh {810 162 465 537} type Double align 0 modal visible
     } {
       Fl_Group {} {
         label {Common Settings}
@@ -516,6 +516,12 @@ else if (codec == "VP9")
    v->add("GBRP");
    v->add("GBRP_10LE");
    v->add("GBRP_12LE");
+}
+else if (codec == "GoPro_Cineform")
+{ 
+    v->add("YUV_422P_10LE");    
+    v->add("GBRP_12LE");
+    v->add("GBRAP_12LE");
 }
 else if (codec == "AV1")
 {  
