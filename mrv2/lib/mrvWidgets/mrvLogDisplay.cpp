@@ -26,7 +26,7 @@ namespace mrv
         // FONT COLOR       FONT FACE   SIZE  ATTR
         // --------------- ------------ ---- ------
         {FL_BLACK, FL_HELVETICA, 14, 0},       // A - Info
-        {FL_DARK_YELLOW, FL_HELVETICA, 14, 0}, // B - Warning
+        {0x80400000, FL_HELVETICA, 14, 0},     // B - Warning (Orange)
         {FL_RED, FL_HELVETICA, 14, 0},         // C - Error
     };
 
@@ -126,9 +126,14 @@ namespace mrv
 
     inline void LogDisplay::print(const char* x, const char style)
     {
-        if (style == 'C' && App::ui)
-            App::ui->uiStatusBar->copy_label(x);
-
+        if (App::ui)
+        {
+            if (style == 'C')
+                App::ui->uiStatusBar->error(x);
+            else if (style == 'B')
+                App::ui->uiStatusBar->warning(x);
+        }
+        
         LogData* data = new LogData(this, x, style);
         if (main_thread != std::this_thread::get_id())
         {

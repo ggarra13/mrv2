@@ -34,7 +34,10 @@ namespace mrv
         //! Clear the status bar and restore the colors
         void clear();
 
-        //! Store a message in the satatus bar (am FLTK label)
-        void copy_label(const char* msg);
+        //! Store a message in the status bar (a FLTK label)
+        void error(const char* msg);
+
+        //! Store a warning message in the status nar (a FLTK label)
+        void warning(const char* msg);
     };
 } // namespace mrv

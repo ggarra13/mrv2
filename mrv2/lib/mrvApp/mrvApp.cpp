@@ -642,14 +642,12 @@ namespace mrv
                         if (msg == lastMessage)
                             return;
                         lastMessage = msg;
-                        ui->uiStatusBar->copy_label(msg.c_str());
                         LOG_ERROR(msg);
                         break;
                     }
                     case log::Type::Warning:
                     {
                         const std::string& msg = i.message;
-                        ui->uiStatusBar->copy_label(msg.c_str());
                         LOG_WARNING(msg);
                         break;
                     }

@@ -1,6 +1,7 @@
 mrv2 v1.0.7
 ===========
-- Code clean up.
+
+- Slow code clean up.
 - Faster windows minimal compilations for quickly checking on GitHub.
 - Added optional component installation on Windows's .exe installer.  Currently,
   you can install:
@@ -16,7 +17,7 @@ mrv2 v1.0.7
 
 - Changed name of install directory of mrv2 on Windows from "mrv2 vX.X.X" to
   "mrv2-vX.X.X" to avoid spaces for easier scripting.
-- Fixed image sequence detection that could fail randomly depending on how
+- Fixed image sequence detection that could happen randomly depending on how
   the filesystem returned the order of files.
 - Added listing the OS and distro versions at the start and in About of mrv2
   for debugging purposes.
@@ -36,6 +37,8 @@ mrv2 v1.0.7
 - Improved logging system logging the tlRender warnings.
 - Improved logging system adding a Status mode to report information right
   away.
+- FFmpeg's logging now prints out the codec/module where the error was
+  generated.
 - Improved movie save reporting of parameters.
 - Fixed saving a movie with annotations when the movie is bigger than the
   viewport.
@@ -47,8 +50,17 @@ mrv2 v1.0.7
 - Saving of .otio files as movies when the first clip did not start at 0 now
   works properly.
 - Upgraded to RtAudio v5.2.0 on all platforms.
-- Added a View/Auto Frame to turn off auto framing of the view when changing
+- Added a "View/Auto Frame" to turn off auto framing of the view when changing
   from one clip to another.
+- Added User Interface->View->Auto Frame to preferences. 
+- Made saving a VP9 or AV1 with the wrong extension not fail.  Instead, they
+  are renamed to .mp4 and a warning is sent to the logs.
+- Made mrv2's file requester favorites listing automatically remove
+  non-existent directories.
+- When saving a sequence of OpenEXR, we encode the speed in the actual
+  image file, as taken from the playback tool bar.  This value will take
+  precedence over the Sequence Default speed as set in Preferences->Playback.
+
 
 
 Main Web page:

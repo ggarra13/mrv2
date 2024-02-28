@@ -1,7 +1,7 @@
 v1.0.7
 ======
 
-- Code clean up.
+- Slow code clean up.
 - Faster windows minimal compilations for quickly checking on GitHub.
 - Added optional component installation on Windows's .exe installer.  Currently,
   you can install:
@@ -37,6 +37,8 @@ v1.0.7
 - Improved logging system logging the tlRender warnings.
 - Improved logging system adding a Status mode to report information right
   away.
+- FFmpeg's logging now prints out the codec/module where the error was
+  generated.
 - Improved movie save reporting of parameters.
 - Fixed saving a movie with annotations when the movie is bigger than the
   viewport.
@@ -58,6 +60,7 @@ v1.0.7
 - When saving a sequence of OpenEXR, we encode the speed in the actual
   image file, as taken from the playback tool bar.  This value will take
   precedence over the Sequence Default speed as set in Preferences->Playback.
+- Made warnings also show up in the status bar, but with an orange background.
 
 
 

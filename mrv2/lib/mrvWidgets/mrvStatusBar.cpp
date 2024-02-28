@@ -42,7 +42,7 @@ namespace mrv
         restore_colors();
     }
 
-    void StatusBar::copy_label(const char* msg)
+    void StatusBar::error(const char* msg)
     {
         // Mark the message on a red background
         if (strlen(msg) == 0)
@@ -52,6 +52,23 @@ namespace mrv
         else
         {
             color(0xFF000000);
+            labelcolor(FL_BLACK);
+        }
+        Fl_Group::copy_label(msg);
+        redraw();
+        Fl::add_timeout(seconds_, (Fl_Timeout_Handler)clear_cb, this);
+    }
+
+    void StatusBar::warning(const char* msg)
+    {
+        // Mark the message on an orange background
+        if (strlen(msg) == 0)
+        {
+            restore_colors();
+        }
+        else
+        {
+            color(0xFF800000);
             labelcolor(FL_BLACK);
         }
         Fl_Group::copy_label(msg);
