@@ -66,7 +66,7 @@ namespace mrv
     float TimelineViewport::Private::helpTextFade;
     bool TimelineViewport::Private::hudActive = true;
     HudDisplay TimelineViewport::Private::hud = HudDisplay::kNone;
-    std::map<std::string, std::string, CaseInsensitiveCompare>
+    std::map<std::string, std::string, string::CaseInsensitiveCompare>
         TimelineViewport::Private::tagData;
 
     static void drawTimeoutText_cb(TimelineViewport* view)

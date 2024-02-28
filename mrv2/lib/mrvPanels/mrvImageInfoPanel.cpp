@@ -16,6 +16,7 @@
 #include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvUtil.h"
 #include "mrvCore/mrvSequence.h"
+#include "mrvCore/mrvString.h"
 #include "mrvCore/mrvMath.h"
 
 #include "mrvFl/mrvHotkey.h"
@@ -446,8 +447,7 @@ namespace mrv
 
             std::string prefix = tab_prefix();
             std::string key = prefix + "Main";
-            std_any value = settings->getValue<std::any>(key);
-            int open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
+            int open = settings->getValue<int>(key);
             if (!open)
                 m_image->close();
 
@@ -468,14 +468,12 @@ namespace mrv
                 m_video);
 
             key = prefix + "Video";
-            value = settings->getValue<std::any>(key);
-            open = std_any_empty(value) ? 0 : std_any_cast<int>(value);
+            open = settings->getValue<int>(key);
             if (!open)
                 m_video->close();
 
             Y += m_video->h();
             m_audio = new CollapsibleGroup(g->x(), Y, W, 400, _("Audio"));
-            m_audio->close();
             m_audio->end();
             b = m_audio->button();
             b->callback(
@@ -491,14 +489,14 @@ namespace mrv
                 m_audio);
 
             key = prefix + "Audio";
-            value = settings->getValue<std::any>(key);
-            open = std_any_empty(value) ? 0 : std_any_cast<int>(value);
+            open = settings->getValue<int>(key);
             if (!open)
                 m_audio->close();
 
             Y += m_audio->h();
+
+            
             m_subtitle = new CollapsibleGroup(g->x(), Y, W, 400, _("Subtitle"));
-            m_subtitle->close();
             m_subtitle->end();
             b = m_subtitle->button();
             b->callback(
@@ -514,15 +512,13 @@ namespace mrv
                 m_subtitle);
 
             key = prefix + "Subtitle";
-            value = settings->getValue<std::any>(key);
-            open = std_any_empty(value) ? 0 : std_any_cast<int>(value);
+            open = settings->getValue<int>(key);
             if (!open)
                 m_subtitle->close();
 
             Y += m_subtitle->h();
             m_attributes =
                 new CollapsibleGroup(g->x(), Y, W, 400, _("Metadata"));
-            m_attributes->close();
             m_attributes->end();
             b = m_attributes->button();
             b->callback(
@@ -704,7 +700,7 @@ namespace mrv
             m_subtitle->hide();
             m_attributes->hide();
 
-            DBG3;
+            
         }
 
         void ImageInfoPanel::set_tabs() const
@@ -754,17 +750,17 @@ namespace mrv
 
             fill_data();
 
-            m_image->end();
             m_attributes->end();
-            m_video->end();
-            m_audio->end();
             m_subtitle->end();
+            m_audio->end();
+            m_video->end();
+            m_image->end();
             
 
             if (player)
                 g->end();
 
-            DBG3;
+            
         }
 
         Table*
@@ -1932,13 +1928,13 @@ namespace mrv
                               _("OCIO Input Color Space"),
                               img->ocio_input_color_space().c_str() );
 
-                DBG3;
+                
                 ++group;
 #endif
 
 #if 0
 
-                DBG3;
+                
                 if ( !img->has_video() )
                 {
                     add_text( _("Line Order"), _("Line order in file"),
@@ -1951,7 +1947,7 @@ namespace mrv
                 {
                     ++group;
 
-                    DBG3;
+                    
 
                     add_text( _("Compression"), _("Clip Compression"), img->compression() );
 
@@ -1965,7 +1961,7 @@ namespace mrv
 #if 0
 
 
-            DBG3;
+            
             const char* space_type = nullptr;
             double memory_space = double( to_memory( (long double)img->memory(),
                                                      space_type ) );
@@ -1973,7 +1969,7 @@ namespace mrv
             add_text( _("Memory"), _("Memory without Compression"), buf );
 
 
-            DBG3;
+            
             if ( img->disk_space() >= 0 )
             {
 
@@ -1984,7 +1980,7 @@ namespace mrv
                                                  (long double) img->memory() ) );
 
 
-                DBG3;
+                
                 snprintf( buf, 256, _("%.3f %s  (%.2f %% of memory size)"),
                           disk_space, space_type, pct );
 
@@ -2003,49 +1999,21 @@ namespace mrv
             }
 
 
-            DBG3;
+            
 
             ++group;
             add_text( _("Creation Date"), _("Creation Date"), img->creation_date() );
 
 
-            DBG3;
+            
 
 
-            DBG3;
+            
 #endif
 
-            DBG3;
+            
 
             g->tooltip(nullptr);
-
-            image::Tags tags;
-            if (!videoData.empty() && !videoData[0].layers.empty() &&
-                videoData[0].layers[0].image)
-            {
-                {
-                    m_curr = add_browser(m_attributes);
-                    tags = videoData[0].layers[0].image->getTags();
-                    for (const auto& tag : tags)
-                    {
-                        add_text(_(tag.first.c_str()), "", tag.second);
-                    }
-
-                    m_attributes->show();
-                }
-            }
-
-            m_curr = add_browser(m_attributes);
-
-            for (const auto& tag : info.tags)
-            {
-                auto it = tags.find(tag.first);
-                if (it != tags.end())
-                    continue;
-                add_text(_(tag.first.c_str()), "", tag.second);
-            }
-
-            m_attributes->show();
 
             if (num_audio_streams > 0)
             {
@@ -2108,9 +2076,6 @@ namespace mrv
 
                     ++group;
 
-                    add_text(_("Language"), _("Language if known"), audio.name);
-                    ++group;
-
 #if 0
                     add_text( _("Disposition"), _("Disposition of Track"),
                               s.disposition);
@@ -2171,6 +2136,47 @@ namespace mrv
                 m_subtitle->show();
             }
 #endif
+
+            std::map<std::string, std::string,
+                     string::CaseInsensitiveCompare> tagData;
+            image::Tags tags;
+
+            // First, add global tags
+            for (const auto& tag : info.tags)
+            {
+                tagData[tag.first] = tag.second;
+            }
+            
+            // Then add image tags
+            if (!videoData.empty() && !videoData[0].layers.empty() &&
+                videoData[0].layers[0].image)
+            {
+                m_curr = add_browser(m_attributes);
+                tags = videoData[0].layers[0].image->getTags();
+                for (const auto& tag : tags)
+                {
+                    tagData[tag.first] = tag.second;
+                }
+            }
+
+            for (const auto& item : tagData)
+            {
+                bool skip = false;
+                if (item.first.substr(0, 5) == "Video" ||
+                    item.first.substr(0, 5) == "Audio")
+                {
+                    if (item.first.substr(0, 12) != "Video Stream" &&
+                        item.first.substr(0, 12) != "Audio Stream")
+                        skip = true;
+                }
+                if (skip)
+                {
+                    continue;
+                }
+                add_text( _(item.first.c_str()), "", _(item.second.c_str()));
+            }
+
+            m_attributes->show();
 
             // Call g->end() so we refresh the pack/scroll sizes
             // g->end();

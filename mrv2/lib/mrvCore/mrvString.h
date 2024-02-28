@@ -115,6 +115,15 @@ namespace mrv
             double toDouble() const;
         };
 
+        struct CaseInsensitiveCompare
+        {
+            inline bool operator()(const std::string& a,
+                                   const std::string& b) const
+                {
+                    return string::toLower(a) < string::toLower(b);
+                }
+        };
+        
     } // namespace string
 
 } // namespace mrv

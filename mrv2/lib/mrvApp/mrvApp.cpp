@@ -634,26 +634,24 @@ namespace mrv
                 const char* kModule = "";
                 for (const auto& i : value)
                 {
+                    const std::string& msg = i.message;
+                    if (msg == lastMessage)
+                        return;
+                    lastMessage = msg;
                     switch (i.type)
                     {
                     case log::Type::Error:
                     {
-                        const std::string& msg = i.message;
-                        if (msg == lastMessage)
-                            return;
-                        lastMessage = msg;
                         LOG_ERROR(msg);
                         break;
                     }
                     case log::Type::Warning:
                     {
-                        const std::string& msg = i.message;
                         LOG_WARNING(msg);
                         break;
                     }
                     case log::Type::Status:
                     {
-                        const std::string& msg = i.message;
                         LOG_INFO(msg);
                         break;
                     }

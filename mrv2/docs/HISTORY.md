@@ -64,7 +64,12 @@ v1.0.7
 - Made warnings also show up in the status bar, but with an orange background.
 - Improved HUD Attributes.  They are now listed alphabetically and they are not
   repeated.  Also, they refresh properly.
-
+- Fixed Media Information panel not refreshing properly when changing images.
+- mrv2's tlRender library now reads the video and audio stream metadata.
+- When there's no audio metadata there's no longer the titles of
+  Attribute/Value used at the end of the Metadata tab in the Media Info Panel.
+- Metadata is now sorted and stripped of repeated data.
+- Metadata folder now remembers to be opened.
 
 
 v1.0.6
