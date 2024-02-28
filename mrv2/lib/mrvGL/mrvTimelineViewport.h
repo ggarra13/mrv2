@@ -424,6 +424,8 @@ namespace mrv
 
         float _getZoomSpeedValue() const noexcept;
         
+        void _getTags() const noexcept;
+
         TLRENDER_PRIVATE();
     };
 } // namespace mrv

@@ -62,6 +62,8 @@ v1.0.7
   image file, as taken from the playback tool bar.  This value will take
   precedence over the Sequence Default speed as set in Preferences->Playback.
 - Made warnings also show up in the status bar, but with an orange background.
+- Improved HUD Attributes.  They are now listed alphabetically and they are not
+  repeated.  Also, they refresh properly.
 
 
 

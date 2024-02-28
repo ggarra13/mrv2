@@ -66,6 +66,8 @@ namespace mrv
     float TimelineViewport::Private::helpTextFade;
     bool TimelineViewport::Private::hudActive = true;
     HudDisplay TimelineViewport::Private::hud = HudDisplay::kNone;
+    std::map<std::string, std::string, CaseInsensitiveCompare>
+        TimelineViewport::Private::tagData;
 
     static void drawTimeoutText_cb(TimelineViewport* view)
     {
@@ -665,7 +667,7 @@ namespace mrv
         }
 
         p.ui->uiColorChannel->redraw();
-
+        
         refreshWindows(); // needed - do not remove.
     }
 
@@ -902,6 +904,7 @@ namespace mrv
             p.videoData[index] = value;
             if (index == 0)
             {
+                _getTags();
                 int layerId = sender->videoLayer();
                 p.missingFrame = false;
                 if (p.missingFrameType != MissingFrameType::kBlackFrame &&
@@ -963,9 +966,15 @@ namespace mrv
                     p.videoData[0].layers[0].image)
                 {
                     bool refresh = false;
-                    if (sender->playback() == timeline::Playback::Stop)
+
+                    // If timeline is stopped or has a single frame,
+                    // refresh the media info panel.
+                    if (sender->playback() == timeline::Playback::Stop ||
+                        sender->timeRange().duration().value() == 1.0)
                         refresh = true;
 
+                    // If timeline has a Data Window (it is an OpenEXR)
+                    // we also refresh the media info panel.
                     const auto& tags =
                         p.videoData[0].layers[0].image->getTags();
                     image::Tags::const_iterator i = tags.find("Data Window");
@@ -973,7 +982,9 @@ namespace mrv
                         refresh = true;
 
                     if (refresh)
+                    {
                         panel::imageInfoPanel->refresh();
+                    }
                 }
                     
                 if (p.selection.max.x != -1)
@@ -2751,4 +2762,40 @@ namespace mrv
         return speedValues[idx];
     }
 
+    void TimelineViewport::_getTags() const noexcept
+    {
+        TLRENDER_P();
+        
+        p.tagData.clear();
+
+        if (p.timelinePlayers.empty())
+            return;
+
+        auto sender = p.timelinePlayers[0];
+        
+        char buf[1024];
+        
+        const auto& player = sender->player();
+        const auto& info = player->getIOInfo();
+        for (const auto& tag : info.tags)
+        {
+            const std::string& key = tag.first;
+            const std::string rendererKey = "Renderer ";
+            if (key.compare(0, rendererKey.size(),
+                            rendererKey) == 0)
+                continue;
+            p.tagData[key] = tag.second;
+        }
+
+        if (!p.videoData.empty() && !p.videoData[0].layers.empty() &&
+            p.videoData[0].layers[0].image)
+        {
+            const auto& tags =
+                p.videoData[0].layers[0].image->getTags();
+            for (const auto& tag : tags)
+            {
+                p.tagData[tag.first] = tag.second;
+            }
+        }
+    }
 } // namespace mrv

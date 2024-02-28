@@ -2,6 +2,7 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <tlCore/String.h>
 #include <tlCore/Mesh.h>
 #include <tlGL/Util.h>
 
@@ -868,7 +869,7 @@ namespace mrv
             {
                 const auto& info = inPlayer->getIOInfo();
                 const auto& video = info.video[0];
-                if (video.size.pixelAspectRatio != 1.0)
+                if (video.size.pixelAspectRatio != 1.F)
                 {
                     int width = video.size.w * video.size.pixelAspectRatio;
                     snprintf(
@@ -1049,38 +1050,14 @@ namespace mrv
 
         if (p.hud & HudDisplay::kAttributes)
         {
-            image::Tags tags;
-            if (!p.videoData.empty() && !p.videoData[0].layers.empty())
-            {
-                if (p.videoData[0].layers[0].image)
-                {
-                    tags = p.videoData[0].layers[0].image->getTags();
-                    for (const auto& tag : tags)
-                    {
-                        if (pos.y > viewportSize.h)
-                            return;
-                        snprintf(
-                            buf, 512, "%s = %s", tag.first.c_str(),
-                            tag.second.c_str());
-                        _drawText(
-                            p.fontSystem->getGlyphs(buf, fontInfo), pos,
-                            lineHeight, labelColor);
-                    }
-                }
-            }
-            const auto& inPlayer = player->player();
-            if (!inPlayer)
-                return;
-            const auto& info = inPlayer->getIOInfo();
-            for (const auto& tag : info.tags)
+            for (const auto& tag : p.tagData)
             {
                 if (pos.y > viewportSize.h)
-                    return;
-                const std::string& key = tag.first;
-                const std::string rendererKey = "Renderer ";
-                if (key.compare(0, rendererKey.size(), rendererKey) == 0)
-                    continue;
-                snprintf(buf, 512, "%s = %s", key.c_str(), tag.second.c_str());
+                    break;
+
+                snprintf(
+                    buf, 512, "%s = %s", tag.first.c_str(), tag.second.c_str());
+
                 _drawText(
                     p.fontSystem->getGlyphs(buf, fontInfo), pos, lineHeight,
                     labelColor);

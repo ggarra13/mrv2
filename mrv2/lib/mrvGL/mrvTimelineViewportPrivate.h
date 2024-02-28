@@ -16,10 +16,20 @@ class Fl_Menu_Button;
 
 namespace mrv
 {
+    struct CaseInsensitiveCompare
+    {
+        inline bool operator()(const std::string& a, const std::string& b) const
+            {
+                return tl::string::toLower(a) < tl::string::toLower(b);
+            }
+    };
 
     struct TimelineViewport::Private
     {
+        static std::map<std::string, std::string,
+                        CaseInsensitiveCompare> tagData;
         static timeline::BackgroundOptions backgroundOptions;
+        
         timeline::OCIOOptions ocioOptions;
         timeline::LUTOptions lutOptions;
         std::vector<tl::timeline::ImageOptions> imageOptions;
