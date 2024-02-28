@@ -949,6 +949,10 @@ Flu_File_Chooser::Flu_File_Chooser(
                     }
                     if (!duplicate)
                     {
+                        fs::path p(buf);
+                        if (!fs::exists(p))
+                            continue;
+                        
                         favoritesList->add(buf);
                         std::string favs = "/";
                         favs += _(favoritesTxt.c_str());

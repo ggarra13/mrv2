@@ -48,8 +48,17 @@ v1.0.7
 - Saving of .otio files as movies when the first clip did not start at 0 now
   works properly.
 - Upgraded to RtAudio v5.2.0 on all platforms.
-- Added a View/Auto Frame to turn off auto framing of the view when changing
+- Added a "View/Auto Frame" to turn off auto framing of the view when changing
   from one clip to another.
+- Added User Interface->View->Auto Frame to preferences. 
+- Made saving a VP9 or AV1 with the wrong extension not fail.  Instead, they
+  are renamed to .mp4.
+- Made mrv2's file requester favorites listing automatically remove
+  non-existent directories.
+- When saving a sequence of OpenEXR, we encode the speed in the actual
+  image file, as taken from the playback tool bar.  This value will take
+  precedence over the Sequence Default speed as set in Preferences->Playback.
+
 
 
 v1.0.6

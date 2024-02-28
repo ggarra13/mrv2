@@ -54,6 +54,7 @@ namespace mrv
 
         // Time range.
         auto timeRange = player->inOutRange();
+        auto speed = player->speed();
         auto startTime = timeRange.start_time();
         auto endTime = timeRange.end_time_inclusive();
         auto currentTime = startTime;
@@ -69,6 +70,10 @@ namespace mrv
 
         size_t oldCacheSize = cache->getMax();
 
+        
+        file::Path path(file);
+
+            
         try
         {
 
@@ -88,7 +93,6 @@ namespace mrv
                 const auto& extension = Aitem->path.getExtension();
                 if (!file::isMovie(extension))
                 {
-                    auto speed = player->speed();
                     ioOptions["FFmpeg/Speed"] =
                         string::Format("{0}").arg(speed);
                 }
@@ -126,22 +130,25 @@ namespace mrv
                 s << options.dwaCompressionLevel;
                 ioOptions["OpenEXR/DWACompressionLevel"] = s.str();
             }
+
+            {
+                std::stringstream s;
+                s << speed;
+                ioOptions["OpenEXR/Speed"] = s.str();
+            }
 #endif
+
+
             auto model = ui->app->filesModel();
             auto Aitem = model->observeA()->get();
-            if (!Aitem)
-                return;
-
             std::string inputFile = Aitem->path.get();
 
             // Make I/O cache be 1Gb to deal with long movies fine.
             size_t bytes = memory::gigabyte;
             cache->setMax(bytes);
 
-            timeline::Options timelineOptions;
-            timelineOptions.ioOptions = ioOptions;
-            std::shared_ptr<timeline::Timeline> timeline =
-                timeline::Timeline::create(inputFile, context, timelineOptions);
+            auto context = ui->app->getContext();
+            auto timeline = player->timeline();
 
             auto startTimeOpt = timeline->getTimeline()->global_start_time();
             if (startTime.value() > 0.0 || startTimeOpt.has_value())
@@ -159,11 +166,14 @@ namespace mrv
                 }
             }
 
-            file::Path path(file);
+            const std::string& directory = path.getDirectory();
+            const std::string& baseName  = path.getBaseName();
             const std::string& extension = path.getExtension();
 
 #ifdef TLRENDER_FFMPEG
             const std::string& profile = getLabel(options.ffmpegProfile);
+
+            bool changeToMp4 = false;
             if (profile == "VP9")
             {
                 if (!string::compare(
@@ -173,9 +183,10 @@ namespace mrv
                     !string::compare(
                         extension, ".mkv", string::Compare::CaseInsensitive))
                 {
-                    LOG_ERROR(_("VP9 profile needs a .mp4, .mkv or .webm movie "
-                                "extension"));
-                    return;
+                    LOG_WARNING(
+                        _("VP9 profile needs a .mp4, .mkv or .webm movie "
+                          "extension.  Changing it to .mp4"));
+                    changeToMp4 = true;
                 }
             }
 
@@ -186,10 +197,16 @@ namespace mrv
                     !string::compare(
                         extension, ".mkv", string::Compare::CaseInsensitive))
                 {
-                    LOG_ERROR(
-                        _("AV1 profile needs a .mp4 or .mkv movie extension"));
-                    return;
+                    LOG_WARNING(_("AV1 profile needs a .mp4 or .mkv movie "
+                                  "extension.  Changing it to .mp4"));
+                    changeToMp4 = true;
                 }
+            }
+
+            if (changeToMp4)
+            {
+                std::string newName = directory + baseName + ".mp4";
+                path = file::Path(newName);
             }
 #endif
 
@@ -220,7 +237,9 @@ namespace mrv
             if (hasAudio)
             {
                 audioTime = info.audioTime;
-                if (player->timeRange() != timeRange)
+                if (player->timeRange() != timeRange ||
+                    audioTime.start_time() !=
+                        timeRange.start_time().rescaled_to(sampleRate))
                 {
                     audioTime = otime::TimeRange(
                         timeRange.start_time().rescaled_to(sampleRate),
@@ -353,11 +372,6 @@ namespace mrv
                     LOG_INFO(msg);
                 }
 
-                msg = tl::string::Format(_("Output info: {0} {1}"))
-                          .arg(outputInfo.size)
-                          .arg(outputInfo.pixelType);
-                LOG_INFO(msg);
-
                 outputInfo = writerPlugin->getWriteInfo(outputInfo);
                 if (image::PixelType::None == outputInfo.pixelType)
                 {
@@ -385,6 +399,12 @@ namespace mrv
                         image::PixelType::RGB_F32;
                 }
 
+
+                msg = tl::string::Format(_("Output info: {0} {1}"))
+                          .arg(outputInfo.size)
+                          .arg(outputInfo.pixelType);
+                LOG_INFO(msg);
+                
                 outputImage = image::Image::create(outputInfo);
                 ioInfo.videoTime = videoTime;
                 ioInfo.video.push_back(outputInfo);
@@ -698,7 +718,7 @@ namespace mrv
         auto settings = ui->app->settings();
         if (file::isReadable(file))
         {
-            settings->addRecentFile(file);
+            settings->addRecentFile(path.get());
             ui->uiMain->fill_menu(ui->uiMenuBar);
         }
 

@@ -372,6 +372,9 @@ namespace mrv
         view.get("gamma", tmpF, 1.0f);
         uiPrefs->uiPrefsViewGamma->value(tmpF);
 
+        view.get("auto_frame", tmp, 1);
+        uiPrefs->uiPrefsAutoFrame->value((bool)tmp);
+        
         view.get("safe_areas", tmp, 0);
         uiPrefs->uiPrefsSafeAreas->value((bool)tmp);
 
@@ -1201,6 +1204,7 @@ namespace mrv
         view.set("gain", uiPrefs->uiPrefsViewGain->value());
         view.set("gamma", uiPrefs->uiPrefsViewGamma->value());
 
+        view.set("auto_frame", uiPrefs->uiPrefsAutoFrame->value());
         view.set("safe_areas", uiPrefs->uiPrefsSafeAreas->value());
         view.set("video_levels", uiPrefs->uiPrefsVideoLevels->value());
         view.set("alpha_blend", uiPrefs->uiPrefsAlphaBlend->value());

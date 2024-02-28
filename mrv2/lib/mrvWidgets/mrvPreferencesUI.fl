@@ -164,11 +164,11 @@ If you try to open several mrv2s with different images, all these images will be
             }
           }
           Fl_Group {} {
-            label {View Window}
-            xywh {288 35 555 349} box EMBOSSED_BOX align 5 hide
+            label {View Window} open
+            xywh {288 35 555 349} box EMBOSSED_BOX align 5
           } {
             Fl_Group {} {
-              label Defaults
+              label Defaults open
               xywh {298 65 531 162} box ROUNDED_BOX
             } {
               Fl_Value_Input uiPrefsViewGain {
@@ -246,10 +246,15 @@ If you try to open several mrv2s with different images, all these images will be
                   xywh {5 5 100 20}
                 }
               }
+              Fl_Check_Button uiPrefsAutoFrame {
+                label {Auto Frame}
+                user_data this user_data_type {PreferencesUI*} selected
+                tooltip {When this is on, View/Auto Frame will be active.} xywh {685 124 20 20} box UP_BOX down_box DOWN_BOX align 4
+              }
               Fl_Check_Button uiPrefsSafeAreas {
                 label {Safe Areas}
                 user_data this user_data_type {PreferencesUI*}
-                tooltip {When mrv2 starts, the safe area display will be active by default.} xywh {685 131 20 20} box UP_BOX down_box DOWN_BOX align 4
+                tooltip {When mrv2 starts, the safe area display will be active by default.} xywh {685 164 20 20} box UP_BOX down_box DOWN_BOX align 4
               }
               Fl_Choice uiPrefsZoomSpeed {
                 label {Zoom Speed}
@@ -610,7 +615,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
           }
           Fl_Group {} {
             label Playback open
-            xywh {299 34 530 362} box EMBOSSED_BOX align 5
+            xywh {299 34 530 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {
               label Defaults open
@@ -621,7 +626,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                 tooltip {Start Playback when opening files.} xywh {497 111 25 25} box UP_BOX down_box DOWN_BOX align 4
               }
               Fl_Check_Button uiPrefsScrubAutoPlay {
-                label {Auto Scrub Playback} selected
+                label {Auto Scrub Playback}
                 tooltip {Start playback when scrubbing so that audio can be heard.} xywh {572 347 25 25} box UP_BOX down_box DOWN_BOX value 1 align 4
               }
               Fl_Check_Button uiPrefsSingleClickPlayback {
