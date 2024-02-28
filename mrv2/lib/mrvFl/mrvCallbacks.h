@@ -87,6 +87,9 @@ namespace mrv
     void window_cb(Fl_Menu_* w, ViewerUI* ui);
     void show_window_cb(const std::string& label, ViewerUI* ui);
 
+    //! Auto Frame view callback
+    void frame_view_cb(Fl_Menu_* w, ViewerUI* ui);
+
     //! Safe Areas callback
     void safe_areas_cb(Fl_Menu_* w, ViewerUI* ui);
 
@@ -95,7 +98,7 @@ namespace mrv
 
     //! Display Window callback
     void display_window_cb(Fl_Menu_* w, ViewerUI* ui);
-    
+
     //! Ignore Display Window callback
     void ignore_display_window_cb(Fl_Menu_* w, ViewerUI* ui);
 

@@ -203,6 +203,13 @@ namespace mrv
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
         idx = menu->add(
+            _("View/Auto Frame"), kFrameView.hotkey(),
+            (Fl_Callback*)frame_view_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (ui->uiView->hasFrameView())
+            item->set();
+
+        idx = menu->add(
             _("View/Safe Areas"), kSafeAreas.hotkey(),
             (Fl_Callback*)safe_areas_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);

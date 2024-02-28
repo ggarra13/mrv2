@@ -1161,6 +1161,13 @@ namespace mrv
         }
     }
 
+    void frame_view_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
+        ui->uiView->setFrameView(item->checked());
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
     void safe_areas_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());

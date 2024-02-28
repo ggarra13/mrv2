@@ -48,6 +48,8 @@ v1.0.7
 - Saving of .otio files as movies when the first clip did not start at 0 now
   works properly.
 - Upgraded to RtAudio v5.2.0 on all platforms.
+- Added a View/Auto Frame to turn off auto framing of the view when changing
+  from one clip to another.
 
 
 v1.0.6

@@ -122,6 +122,7 @@ namespace mrv
 
     extern Hotkey kToggleShowAnnotations;
 
+    extern Hotkey kFrameView;
     extern Hotkey kSafeAreas;
 
     extern Hotkey kIgnoreDisplayWindow;
