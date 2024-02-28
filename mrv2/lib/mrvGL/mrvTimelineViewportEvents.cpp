@@ -996,11 +996,7 @@ namespace mrv
                         return 0;
                     auto player = p.timelinePlayers[0];
                     player->setPlayback(p.playbackMode);
-
-                    if (panel::filesPanel)
-                        panel::filesPanel->redraw();
-                    if (panel::comparePanel)
-                        panel::comparePanel->redraw();
+                    panel::redrawThumbnails();
                 }
                 else
                 {

@@ -336,7 +336,8 @@ namespace mrv
         {
             _p->isStepping = false;
             // Send a seek request to make sure we are at the right time
-            seek(currentTime());
+            pushMessage("seek", currentTime());
+            panel::redrawThumbnails();
         }
     }
 
@@ -376,8 +377,6 @@ namespace mrv
     {
         pushMessage("seek", value);
         _p->player->seek(value);
-        if (playback() == timeline::Playback::Stop)
-            panel::redrawThumbnails();
         if (timelineViewport)
             timelineViewport->updateUndoRedoButtons();
     }

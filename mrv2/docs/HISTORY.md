@@ -44,6 +44,7 @@ v1.0.7
   viewport.
 - Added GBR8/9/10/12 reading support for VPX.
 - Fixed start and end timeline buttons not refreshing thumbnails in the Panels.
+- Fixed seeking not updating the thumbnails in the Panels.
 - Fixed image panel not refreshing its information when changing images and
   the playback was stopped.
 - Fixed Preferences->Positioning->Position/Size when both were used.
