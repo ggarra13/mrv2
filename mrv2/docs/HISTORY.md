@@ -108,6 +108,7 @@ v1.0.5
 - Added saving alpha channel in VP9 when YUVA_420P is selected and the container
   is a Matroska file.
 - Added HISTORY.md file to the Web docs.
+- Added reporting of FFmpeg module that raised the callback.
 
 
 v1.0.4
