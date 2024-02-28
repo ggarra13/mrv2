@@ -1,27 +1,55 @@
-mrv2 v1.0.6
+mrv2 v1.0.7
 ===========
+- Code clean up.
+- Faster windows minimal compilations for quickly checking on GitHub.
+- Added optional component installation on Windows's .exe installer.  Currently,
+  you can install:
+  
+      * mrv2 application (obviously)
+      * mrv2 documentation
+      * mrv2 Python demos
+      * mrv2 Python libraries
+      * mrv2 USD components
 
-mrv2 is an open source professional player and review tool for vfx, animation and computer graphics for Windows, Linux and macOS.
+   If you choose to install ONLY the application, its size is 395Mb, instead
+   of the whole 600Mb.
 
-In v1.0.6, we have several important fixes to the new save dialog.  Minor fixes in tlRender and a more user friendly Save Image / Save Movie dialog box.
+- Changed name of install directory of mrv2 on Windows from "mrv2 vX.X.X" to
+  "mrv2-vX.X.X" to avoid spaces for easier scripting.
+- Fixed image sequence detection that could fail randomly depending on how
+  the filesystem returned the order of files.
+- Added listing the OS and distro versions at the start and in About of mrv2
+  for debugging purposes.
+- Made panels be listed alphabetically, regardless of Natural Language.
+- Automated version update in docs.
+- Removed view sources from html docs to save space on disk.
+- Cleaned up docs directory before building docs.
+- Sped up creation of docs in build system.
+- Updated Python API with FFmpeg and Background changes.
+- Fixed reading permissions on files as they were broken!  I did not notice
+  as I was using an NTFS drive which sets umask 0022 by default.
+- Made reading session more robust to handle missing files or wrong settings.
+- Made checking for readable files faster.
+- Fixed saving large images/movies with annotations on work properly.
+- Improved memory consumption of saving movies, particularly large ones like
+  4K.
+- Improved logging system logging the tlRender warnings.
+- Improved logging system adding a Status mode to report information right
+  away.
+- Improved movie save reporting of parameters.
+- Fixed saving a movie with annotations when the movie is bigger than the
+  viewport.
+- Added GBR8/9/10/12 reading support for VPX.
+- Fixed start and end timeline buttons not refreshing thumbnails in the Panels.
+- Fixed image panel not refreshing its information when changing images and
+  the playback was stopped.
+- Fixed Preferences->Positioning->Position/Size when both were used.
+- Saving of .otio files as movies when the first clip did not start at 0 now
+  works properly.
+- Upgraded to RtAudio v5.2.0 on all platforms.
+- Added a View/Auto Frame to turn off auto framing of the view when changing
+  from one clip to another.
 
-- Darby fixed Render->Alpha Blend modes which were partially broken.
-- Darby fixed macOS checkers drawing.
-- Darby added gradient background and moved it to draw video.
-- Made Background colors use Flmm's color chooser with alpha (alpha is
-  current discarded, thou).
-- Added printing out of audio and video codec names when saving with FFmpeg.
-- Fixed presets names.  Instead of using '_' we now use '-'.
-- Added last successful saved movie to recent files for easy checking it back.
-- Fixed pixel format selection in VP9 codec not working properly due to
-  profile being set to 0, which would prevent saving with 10 or 12 bits.
-- Fixed Prores color shifting due to bad unneeded use of libswscale API.
-- Added options for color_range, colorspace, color_primaries and color_trc in
-  tlRender's source code.  mrv2 currently does not yet use them.
-- Made mrv2 remember the save movie and image settings for easy saving of
-  multiple movie or image files.
-- Made FFmpeg errors be reported to the console immediately.
-- Fixed macOS VideoToolbox's hardware encoding not working when busy.
 
 Main Web page:
 https://mrv2.sourceforge.io
@@ -30,6 +58,6 @@ Source code and build instructions:
 https://www.github.com/ggarra13/mrv2
 
 Binaries:
-https://sourceforge.net/projects/mrv2/files/v1.0.5/
+https://sourceforge.net/projects/mrv2/files/v1.0.7/
 
 #vr #player #movie #flipbook #usd #openusd #opentimelineio #mrv2 #mrViewer #vp9 #av1 #h264 #mp4 #mov #avi #webm #prores #prores4444 #vfx #animation #games #filmmaking #opensource #environmentmaps #stereo 
