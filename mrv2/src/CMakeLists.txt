@@ -215,26 +215,9 @@ elseif(WIN32)
     # For Python, Poco, USD, FLTK, NDI, MSVC runtimes and FFmpeg
     file(GLOB MRV2_DLLS "${CMAKE_INSTALL_PREFIX}/bin/*.dll"  )
     
-    if(TLRENDER_USD)
-	file(GLOB TBB_DLLS "${CMAKE_INSTALL_PREFIX}/bin/*tbb*.dll" )
-	file(GLOB BOOST_DLLS "${CMAKE_INSTALL_PREFIX}/bin/*boost_*.dll" )
-	file(GLOB USD_DLLS "${CMAKE_INSTALL_PREFIX}/bin/*usd_*.dll" )
-	file(GLOB MATERIALX_DLLS "${CMAKE_INSTALL_PREFIX}/bin/*MaterialX*.dll" )
-	set(MRV2_USD_DLLS
-	    ${USD_DLLS}
-	    ${MATERIALX_DLLS}
-	    ${BOOST_DLLS}
-	    ${TBB_DLLS})
-	list(REMOVE_ITEM MRV2_DLLS ${MRV2_USD_DLLS})
-    endif()
-    
     install(FILES ${MRV2_DLLS}
     	DESTINATION bin/
 	COMPONENT applications )
-    
-    install(FILES ${MRV2_USD_DLLS}
-    	DESTINATION bin/
-	COMPONENT usd )
     
 	    
 endif()
@@ -281,14 +264,14 @@ if ( NOT WIN32 )
 	install( DIRECTORY
 	    ${CMAKE_INSTALL_PREFIX}/lib/usd
 	    DESTINATION lib
-	    COMPONENT usd)
+	    COMPONENT applications)
     endif()
 else()
     if(TLRENDER_USD)
 	install( DIRECTORY
 	    ${CMAKE_INSTALL_PREFIX}/bin/usd
 	    DESTINATION bin
-	    COMPONENT usd)
+	    COMPONENT applications)
     endif()
 endif()
 
@@ -302,6 +285,6 @@ if(TLRENDER_USD)
         "${CMAKE_INSTALL_PREFIX}/libraries"
         "${CMAKE_INSTALL_PREFIX}/resources"
         DESTINATION .
-        COMPONENT usd)
+        COMPONENT applications)
 endif()
 

@@ -1,6 +1,16 @@
 mrv2 v1.0.7
 ===========
 
+
+mrv2 is an open source professional player and review tool for vfx, animation and computer graphics for Windows, Linux and macOS.
+
+v1.0.7 bringsa alarge set of bug fixes (two major ones at least) and
+enhancement to movie saving.
+There's also python updates, UI improvements, Windows installer developments,
+etc.
+
+Here's the full list:
+
 - Slow code clean up.
 - Faster windows minimal compilations for quickly checking on GitHub.
 - Added optional component installation on Windows's .exe installer.  Currently,
@@ -10,7 +20,6 @@ mrv2 v1.0.7
       * mrv2 documentation
       * mrv2 Python demos
       * mrv2 Python libraries
-      * mrv2 USD components
 
    If you choose to install ONLY the application, its size is 395Mb, instead
    of the whole 600Mb.
@@ -62,7 +71,6 @@ mrv2 v1.0.7
   precedence over the Sequence Default speed as set in Preferences->Playback.
 
 
-
 Main Web page:
 https://mrv2.sourceforge.io
 
@@ -72,4 +80,4 @@ https://www.github.com/ggarra13/mrv2
 Binaries:
 https://sourceforge.net/projects/mrv2/files/v1.0.7/
 
-#vr #player #movie #flipbook #usd #openusd #opentimelineio #mrv2 #mrViewer #vp9 #av1 #h264 #mp4 #mov #avi #webm #prores #prores4444 #vfx #animation #games #filmmaking #opensource #environmentmaps #stereo 
+#vr #player #movie #flipbook #usd #openusd #opentimelineio #mrv2 #mrViewer #mrViewer2 #vp9 #av1 #h264 #mp4 #mov #avi #webm #prores #prores4444 #cfhd #cineform #gopro #vpx #vfx #animation #games #filmmaking #opensource #environmentmaps #stereo 
