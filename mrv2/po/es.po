@@ -2852,14 +2852,18 @@ msgstr "Fallé en cargar al archivo."
 
 msgid ""
 "VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to .mp4"
-msgstr "Perfil VP9 necesita una extensión de película .mp4, .mkv o .webm.  Cambieando a .mp4."
+msgstr ""
+"Perfil VP9 necesita una extensión de película .mp4, .mkv o .webm.  "
+"Cambieando a .mp4."
 
 msgid "AV1 profile needs a .mp4 or .mkv movie extension.  Changing it to .mp4"
-msgstr "Perfil AV1 necesita una extension de película .mp4 o .mkv.  Cambiando a .mp4."
+msgstr ""
+"Perfil AV1 necesita una extension de película .mp4 o .mkv.  Cambiando a .mp4."
 
 msgid ""
 "GoPro Cineform profile needs a .mkv movie extension.  Changing it to .mkv"
-msgstr "Perfil AV1 necesita una extension de película .mp4 o .mkv.  Cambiando a .mp4."
+msgstr ""
+"Perfil AV1 necesita una extension de película .mp4 o .mkv.  Cambiando a .mp4."
 
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "El archivo {0} ya existe.  Por seguridad, no lo sobreescribiré."
