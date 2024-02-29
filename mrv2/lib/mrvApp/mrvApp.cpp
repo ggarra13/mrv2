@@ -631,10 +631,10 @@ namespace mrv
             [this](const std::vector<log::Item>& value)
             {
                 static std::string lastMessage;
-                const char* kModule = "";
                 for (const auto& i : value)
                 {
                     const std::string& msg = i.message;
+                    const std::string& kModule = i.module;
                     if (msg == lastMessage)
                         return;
                     lastMessage = msg;
