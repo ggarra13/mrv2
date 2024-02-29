@@ -381,9 +381,9 @@ If you pass -gpl or -lpgl to the runme.sh script, like:
 ./runme.sh -gpl
 ```
 
-The build system will compile FFmpeg as GPL or LGPL on all platforms.  The default is to build a LGPL version of FFmpeg as that complies with the BSD binary distribution license.  The LGPL version of FFmpeg, however, does not come with libx264, which means you cannot save movie files with the H264 codec on Windows and Linux.
+The build system will compile FFmpeg as GPL or LGPL on all platforms.  The default is to build a LGPL version of FFmpeg as that complies with the BSD binary distribution license.  The LGPL version of FFmpeg, however, does not come with libx264, which means you cannot save movie files with the H264 codec on Windows and Linux.  It also does not support GoPro Cineform files with alpha.
 
-The GPL version of FFmpeg does not have that restriction and it will compile libx264 on all platforms.
+The GPL version of FFmpeg does not have that restriction and it will compile libx264 on all platforms and work GoPro Cineform with alpha.
 
 # Running mrv2
 

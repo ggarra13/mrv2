@@ -70,10 +70,14 @@ namespace mrv
 
         size_t oldCacheSize = cache->getMax();
 
-        
         file::Path path(file);
 
-            
+        const std::string& directory = path.getDirectory();
+        const std::string& baseName = path.getBaseName();
+        const std::string& extension = path.getExtension();
+
+        std::string newFile = directory + baseName + extension;
+
         try
         {
 
@@ -138,7 +142,6 @@ namespace mrv
             }
 #endif
 
-
             auto model = ui->app->filesModel();
             auto Aitem = model->observeA()->get();
             std::string inputFile = Aitem->path.get();
@@ -166,14 +169,10 @@ namespace mrv
                 }
             }
 
-            const std::string& directory = path.getDirectory();
-            const std::string& baseName  = path.getBaseName();
-            const std::string& extension = path.getExtension();
-
 #ifdef TLRENDER_FFMPEG
             const std::string& profile = getLabel(options.ffmpegProfile);
 
-            bool changeToMp4 = false;
+            std::string newExtension = extension;
             if (profile == "VP9")
             {
                 if (!string::compare(
@@ -186,11 +185,10 @@ namespace mrv
                     LOG_WARNING(
                         _("VP9 profile needs a .mp4, .mkv or .webm movie "
                           "extension.  Changing it to .mp4"));
-                    changeToMp4 = true;
+                    newExtension = ".mp4";
                 }
             }
-
-            if (profile == "AV1")
+            else if (profile == "AV1")
             {
                 if (!string::compare(
                         extension, ".mp4", string::Compare::CaseInsensitive) &&
@@ -199,15 +197,31 @@ namespace mrv
                 {
                     LOG_WARNING(_("AV1 profile needs a .mp4 or .mkv movie "
                                   "extension.  Changing it to .mp4"));
-                    changeToMp4 = true;
+                    newExtension = ".mp4";
+                }
+            }
+            else if (profile == "GoPro_Cineform")
+            {
+                if (!string::compare(
+                        extension, ".mkv", string::Compare::CaseInsensitive))
+                {
+                    LOG_WARNING(_("GoPro Cineform profile needs a .mkv movie "
+                                  "extension.  Changing it to .mkv"));
+                    newExtension = ".mkv";
                 }
             }
 
-            if (changeToMp4)
+            if (newFile != file)
             {
-                std::string newName = directory + baseName + ".mp4";
-                path = file::Path(newName);
+                if (fs::exists(newFile))
+                    throw(string::Format(_("New file {0} already exist!  "
+                                           "Cannot overwrite it."))
+                              .arg(newFile));
+
+                newFile = directory + baseName + newExtension;
             }
+
+            path = file::Path(newFile);
 #endif
 
             bool saveEXR = string::compare(
@@ -399,12 +413,11 @@ namespace mrv
                         image::PixelType::RGB_F32;
                 }
 
-
                 msg = tl::string::Format(_("Output info: {0} {1}"))
                           .arg(outputInfo.size)
                           .arg(outputInfo.pixelType);
                 LOG_INFO(msg);
-                
+
                 outputImage = image::Image::create(outputInfo);
                 ioInfo.videoTime = videoTime;
                 ioInfo.video.push_back(outputInfo);
@@ -716,7 +729,7 @@ namespace mrv
         tcp->unlock();
 
         auto settings = ui->app->settings();
-        if (file::isReadable(file))
+        if (file::isReadable(newFile))
         {
             settings->addRecentFile(path.get());
             ui->uiMain->fill_menu(ui->uiMenuBar);
