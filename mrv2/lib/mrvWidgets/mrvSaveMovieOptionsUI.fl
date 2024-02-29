@@ -38,10 +38,11 @@ class SaveMovieOptionsUI {open
 } {
   decl {bool cancel = false;} {public local
   }
-  Function {SaveMovieOptionsUI(bool hasAudio = true, bool audioOnly = false)} {} {
+  Function {SaveMovieOptionsUI(bool hasAudio = true, bool audioOnly = false)} {open
+  } {
     Fl_Window uiMain {
       label {Save Movie Options} open
-      xywh {810 162 465 537} type Double align 0 modal visible
+      xywh {834 81 465 537} type Double align 0 hide modal
     } {
       Fl_Group {} {
         label {Common Settings}
@@ -58,7 +59,7 @@ settings->setValue("SaveMovie/Annoations", static_cast<int>(o->value()));}
         }
       }
       Fl_Group VideoOptions {
-        label {Video Options}
+        label {Video Options} open
         xywh {34 111 390 216} box ROUNDED_FRAME color 56
       } {
         Fl_Check_Button Hardware {
@@ -83,22 +84,37 @@ auto settings = mrv::App::app->settings();
 settings->setValue("SaveMovie/Profile", std::string(item->label()));} open
           tooltip {FFMpeg's Profile settings.} xywh {170 158 170 29} down_box BORDER_BOX
         } {}
-        Fl_Choice Preset {
-          label Preset
-          callback {const Fl_Menu_Item* item = o->mvalue();
-if (!item) return;
-auto settings = mrv::App::app->settings();
-settings->setValue("SaveMovie/Preset", std::string(item->label()));} open
-          tooltip {FFMpeg's Preset setting for the codec selected.} xywh {171 200 170 29} down_box BORDER_BOX
-        } {}
+        Fl_Button {} {
+          label {?}
+          callback {help_profile_cb();}
+          tooltip {Help on Profile} xywh {351 158 24 29}
+        }
         Fl_Choice PixelFormat {
           label {Pixel Format}
           callback {const Fl_Menu_Item* item = o->mvalue();
 if (!item) return;
 auto settings = mrv::App::app->settings();
 settings->setValue("SaveMovie/PixelFormat", std::string(item->label()));} open
-          tooltip {FFMpeg's Pixel Format for the codec selected} xywh {170 238 170 29} down_box BORDER_BOX
+          tooltip {FFMpeg's Pixel Format for the codec selected} xywh {170 200 170 29} down_box BORDER_BOX
         } {}
+        Fl_Button {} {
+          label {?}
+          callback {help_pixel_format_cb();}
+          tooltip {Help on Pixel Format} xywh {351 200 24 29}
+        }
+        Fl_Choice Preset {
+          label Preset
+          callback {const Fl_Menu_Item* item = o->mvalue();
+if (!item) return;
+auto settings = mrv::App::app->settings();
+settings->setValue("SaveMovie/Preset", std::string(item->label()));} open
+          tooltip {FFMpeg's Preset setting for the codec selected.} xywh {171 242 170 29} down_box BORDER_BOX
+        } {}
+        Fl_Button {} {
+          label {?}
+          callback {help_preset_cb();}
+          tooltip {Help on Preset} xywh {351 242 24 29}
+        }
         Fl_Button {} {
           label {Advanced Settings}
           callback {if (!uiAdvancedSettings->visible())
@@ -109,6 +125,11 @@ else
 while (uiAdvancedSettings->visible())
   Fl::check();}
           xywh {171 288 170 28}
+        }
+        Fl_Button {} {
+          label {?}
+          callback {help_advanced_settings_cb();}
+          tooltip {Help on Advance Settings} xywh {351 287 24 29}
         }
       }
       Fl_Group AudioOptions {
@@ -145,6 +166,17 @@ settings->setValue("SaveMovie/AudioCodec", std::string(item->label()));} open
 v->hide();}
           xywh {259 500 90 29}
         }
+      }
+    }
+    Fl_Window uiHelpWindow {
+      label {Help Window} open
+      xywh {696 505 638 327} type Double resizable modal visible
+    } {
+      Fl_Text_Display uiHelp {
+        xywh {37 29 563 268} textfont 4 resizable
+        code0 {Fl_Text_Buffer* b = new Fl_Text_Buffer;}
+        code1 {o->buffer(b);}
+        code2 {o->textcolor(FL_BLACK);}
       }
     }
     Fl_Window uiAdvancedSettings {
@@ -366,10 +398,150 @@ else
    add_hardware(Profile, Hardware);
    add_pixel_formats(Profile, PixelFormat);
  }
+uiHelpWindow->hide();
 uiAdvancedSettings->hide();
 uiMain->show();
 while (uiMain->visible())
   Fl::check();} {}
+  }
+  Function {help_profile_cb()} {open
+  } {
+    code {uiHelpWindow->label(_("Profile Help"));
+auto buffer = uiHelp->buffer();
+buffer->text(_(R"(
+The Profile setting allows you to select
+the codec and profile for video saving.
+
+Each profile has its benefits and drawbacks.
+
+None - This is mpeg4 compatible with DVD movies.
+H264 - Only if mrv2 has been compiled as GPL.  One
+       of the most popular codecs, but it is now
+       becoming obsolete.
+ProRes - ProRes is a family of codecs developed by 
+         Apple.
+         They only maintain color fidelity on macOS.
+         
+         The Normal version strikes a balance 
+         between quality and file size.  
+ProRes_Proxy - Most compressed ProRes, offering the
+               smallest file size.  
+               Good for offline editing.
+ProRes_LT - More compressed than normal ProRes but 
+            less than Proxy.  Good for offline 
+            editing.
+ProRes_HQ - Less compressed then normal ProRes.  
+            Often used for mastering and final 
+            delivery.
+ProRes_4444 - Highest quality ProRes format, 
+              offering full 4:4:4
+              chroma sampling (color information 
+              for each pixel).
+              Preserves the most detail and color 
+              accuracy, ideal for high-end workflows 
+              like color grading and visual effects.
+              Supports alpha channels for 
+              compositing graphics with 
+              transparency.
+ProRes_XQ - Highest quality version of ProRes 4444, 
+            designed for high-dynamic-range (HDR) 
+            imagery.
+VP9 - Codec developed by Google.  High compression 
+      ratio.
+      It supports a whole range of pixel formats to
+      balance disk space vs. quality.
+      Good for high-end delivery for either Web or 
+      online review.
+Cineform - codec developed by GoPro, that rivals 
+           ProRes in features, except for HDR.  
+           It was discontinued in 2021, but most 
+           packages may support it.
+           It does not compress as well as ProRes 
+           or VP9.
+           It supports alpha channels for 
+           compositing graphics with transparency.
+AV1 - New generation codec which is gaining support from
+      Google, Netflix and Amazon.  Compresses better than VP9 
+      or H264 for the same quality but requires more computer
+      resources.  Optimal for video reviews.
+
+Hardware encoding is only supported on newer MacBook
+Pro with M1 or newer chips.  H264, Prores, VP9 and
+AV1 are supported or soon will be.
+)"));
+uiHelpWindow->show();} {}
+  }
+  Function {help_pixel_format_cb()} {open
+  } {
+    code {uiHelpWindow->label(_("Pixel Format Help"));
+auto buffer = uiHelp->buffer();
+buffer->text(_(R"(
+The Pixel Format specifies how the video is encoded in the
+file.  Each codec and profile has a number of pixel formats 
+it supports.
+There are two main types of pixel formats supported:
+
+    - YUV (Luminance, Cr, Cb)
+    - BGR (RGB with reversed channels)
+
+In addition, some codecs support alpha channel (transparency),
+like BGRA.
+
+The other element of the codec is the 'P' which indicates the
+channels are stored in planar order, instead of each component
+interleaved.
+
+Finally, the number in the pixel format name indicates the
+number of bits the pixel format uses to encode.  
+Normal values for that are 8, 10, 12 and 16.
+
+)"));
+uiHelpWindow->show();} {}
+  }
+  Function {help_preset_cb()} {open
+  } {
+    code {uiHelpWindow->label(_("Preset Help"));
+auto buffer = uiHelp->buffer();
+buffer->text(_(R"(
+
+The Preset setting allows you to store and pass
+flags to FFmpeg (the video engine that mrv2 uses) to 
+easily control the quality and size of the video besides
+the pixel format.
+
+When choosing the quality you should set in this order:
+  - Profile
+  - Pixel Format
+  - Preset
+
+The preset files are stored in the presets/ directory of the 
+mrv2 install but you can configure the directory by using the
+environment variable $STUDIOPATH/presets.
+
+The naming of the files is the name of the profile-preset.pst.
+
+The format is very simple, with comments and colon separated 
+options.
+)"));
+uiHelpWindow->show();} {selected
+    }
+  }
+  Function {help_advanced_settings_cb()} {open
+  } {
+    code {uiHelpWindow->label(_("Advanced Settings Help"));
+auto buffer = uiHelp->buffer();
+buffer->text(_(R"(
+
+The Advanced Settings allows you store 
+metadata in the movie file to determine where 
+and how it was created.  Useful to indicate, 
+for example, if a set of 8-bit images were 
+sRGB or Rec709.
+
+If you don't know what those settings do, 
+DON'T MESS WITH THEM!
+)"));
+uiHelpWindow->show();} {}
   }
   Function {add_hardware(Fl_Choice* o, Fl_Check_Button* v)} {} {
     code {const Fl_Menu_Item* item = &o->menu()[o->value()];
@@ -433,8 +605,7 @@ v->add("YUV_420P_10LE");
 v->add("YUV_422P_10LE");
 v->add("YUV_444P_10LE");} {}
   }
-  Function {add_pixel_formats(Fl_Choice* o, Fl_Choice* v)} {open
-  } {
+  Function {add_pixel_formats(Fl_Choice* o, Fl_Choice* v)} {} {
     code {const Fl_Menu_Item* item = &o->menu()[o->value()];
 if (!item || !item->label()) return;
 
@@ -547,8 +718,7 @@ if (v->size() > 0)
         }
     }
     v->value(0);
-}} {selected
-    }
+}} {}
   }
   Function {add_presets(Fl_Choice* o, Fl_Choice* v)} {} {
     code {const Fl_Menu_Item* item = &o->menu()[o->value()];

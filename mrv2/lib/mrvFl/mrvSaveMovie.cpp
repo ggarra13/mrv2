@@ -42,6 +42,7 @@ namespace mrv
     void
     save_movie(const std::string& file, const ViewerUI* ui, SaveOptions options)
     {
+        std::string msg;
         Viewport* view = ui->uiView;
         bool presentation = view->getPresentationMode();
 
@@ -211,14 +212,13 @@ namespace mrv
                 }
             }
 
+            newFile = directory + baseName + newExtension;
             if (newFile != file)
             {
                 if (fs::exists(newFile))
                     throw(string::Format(_("New file {0} already exist!  "
                                            "Cannot overwrite it."))
                               .arg(newFile));
-
-                newFile = directory + baseName + newExtension;
             }
 
             path = file::Path(newFile);
@@ -228,6 +228,16 @@ namespace mrv
                 extension, ".exr", string::Compare::CaseInsensitive);
             bool saveHDR = string::compare(
                 extension, ".hdr", string::Compare::CaseInsensitive);
+
+            if (file::isMovie(extension))
+            {
+                msg = string::Format(_("Saving movie to {0}.")).arg(newFile);
+            }
+            else
+            {
+                msg = string::Format(_("Saving pictures to {0}.")).arg(newFile);
+            }
+            LOG_INFO(msg);
 
             // Render information.
             const auto& info = player->ioInfo();
@@ -318,9 +328,9 @@ namespace mrv
             {
                 outputInfo.pixelType = info.video[layerId].pixelType;
 
-                std::string msg = tl::string::Format(_("Image info: {0} {1}"))
-                                      .arg(outputInfo.size)
-                                      .arg(outputInfo.pixelType);
+                msg = tl::string::Format(_("Image info: {0} {1}"))
+                          .arg(outputInfo.size)
+                          .arg(outputInfo.pixelType);
                 LOG_INFO(msg);
 
                 if (annotations)
@@ -380,9 +390,8 @@ namespace mrv
                     X = (viewportSize.w - outputInfo.size.w) / 2;
                     Y = (viewportSize.h - outputInfo.size.h) / 2;
 
-                    std::string msg =
-                        tl::string::Format(_("Viewport Size: {0} "))
-                            .arg(viewportSize);
+                    msg = tl::string::Format(_("Viewport Size: {0} "))
+                              .arg(viewportSize);
                     LOG_INFO(msg);
                 }
 
@@ -507,11 +516,9 @@ namespace mrv
                 }
             }
 
-            {
-                std::string msg = tl::string::Format(_("OpenGL info: {0}"))
-                                      .arg(offscreenBufferOptions.colorType);
-                LOG_INFO(msg);
-            }
+            msg = tl::string::Format(_("OpenGL info: {0}"))
+                      .arg(offscreenBufferOptions.colorType);
+            LOG_INFO(msg);
 
             player->start();
 
