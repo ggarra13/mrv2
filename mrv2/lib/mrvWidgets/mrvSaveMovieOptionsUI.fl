@@ -688,7 +688,7 @@ else if (codec == "VP9")
    v->add("GBRP_10LE");
    v->add("GBRP_12LE");
 }
-else if (codec == "GoPro_Cineform")
+else if (codec == "Cineform")
 { 
     v->add("YUV_422P_10LE");    
     v->add("GBRP_12LE");

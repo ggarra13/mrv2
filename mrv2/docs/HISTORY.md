@@ -1,3 +1,8 @@
+v1.0.8
+======
+
+- Removed the GoPro prefix name from Cineform when saving.
+
 v1.0.7
 ======
 

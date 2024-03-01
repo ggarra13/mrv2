@@ -2850,7 +2850,6 @@ msgstr "Fallé en abrir el archivo para leer."
 msgid "Failed to load the file."
 msgstr "Fallé en cargar al archivo."
 
-#, fuzzy
 msgid ""
 "VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to ."
 "webm"

@@ -201,7 +201,7 @@ namespace mrv
                     newExtension = ".mp4";
                 }
             }
-            else if (profile == "GoPro_Cineform")
+            else if (profile == "Cineform")
             {
                 if (!string::compare(
                         extension, ".mkv", string::Compare::CaseInsensitive))
