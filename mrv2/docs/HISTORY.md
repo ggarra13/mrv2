@@ -2,6 +2,8 @@ v1.0.8
 ======
 
 - Removed the GoPro prefix name from Cineform when saving.
+- Fixed saving of EXR movies to movie files being just RGBA_U8 instead of
+  RGBA_U16.
 
 v1.0.7
 ======
