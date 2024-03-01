@@ -1,10 +1,9 @@
 mrv2 v1.0.7
 ===========
 
-
 mrv2 is an open source professional player and review tool for vfx, animation and computer graphics for Windows, Linux and macOS.
 
-v1.0.7 bringsa alarge set of bug fixes (two major ones at least) and
+v1.0.7 brings a large set of bug fixes (two major ones at least) and
 enhancement to movie saving.
 There's also python updates, UI improvements, Windows installer developments,
 etc.
@@ -20,9 +19,6 @@ Here's the full list:
       * mrv2 documentation
       * mrv2 Python demos
       * mrv2 Python libraries
-
-   If you choose to install ONLY the application, its size is 395Mb, instead
-   of the whole 600Mb.
 
 - Changed name of install directory of mrv2 on Windows from "mrv2 vX.X.X" to
   "mrv2-vX.X.X" to avoid spaces for easier scripting.

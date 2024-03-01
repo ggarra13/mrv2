@@ -10,10 +10,6 @@ v1.0.7
       * mrv2 documentation
       * mrv2 Python demos
       * mrv2 Python libraries
-      * mrv2 USD components
-
-   If you choose to install ONLY the application, its size is 395Mb, instead
-   of the whole 600Mb.
 
 - Changed name of install directory of mrv2 on Windows from "mrv2 vX.X.X" to
   "mrv2-vX.X.X" to avoid spaces for easier scripting.

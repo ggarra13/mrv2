@@ -283,7 +283,6 @@ if(TLRENDER_USD)
     install( DIRECTORY
         "${CMAKE_INSTALL_PREFIX}/plugin"
         "${CMAKE_INSTALL_PREFIX}/libraries"
-        "${CMAKE_INSTALL_PREFIX}/resources"
         DESTINATION .
         COMPONENT applications)
 endif()
