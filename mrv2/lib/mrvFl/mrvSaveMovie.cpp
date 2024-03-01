@@ -398,6 +398,7 @@ namespace mrv
                 outputInfo = writerPlugin->getWriteInfo(outputInfo);
                 if (image::PixelType::None == outputInfo.pixelType)
                 {
+                    LOG_INFO(_("Writer plugin did not get output info.  Defaulting to RGB_U8"));
                     outputInfo.pixelType = image::PixelType::RGB_U8;
                     offscreenBufferOptions.colorType = image::PixelType::RGB_U8;
 #ifdef TLRENDER_EXR

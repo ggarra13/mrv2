@@ -237,11 +237,8 @@ namespace mrv
             }
 
             {
-                std::string msg = tl::string::Format(
-                                      _("OpenGL info: {0} format={1} type={2}"))
-                                      .arg(offscreenBufferOptions.colorType)
-                                      .arg(format)
-                                      .arg(type);
+                std::string msg = tl::string::Format(_("OpenGL info: {0}"))
+                                      .arg(offscreenBufferOptions.colorType);
                 LOG_INFO(msg);
             }
 
