@@ -75,9 +75,10 @@ namespace mrv
 
         const std::string& directory = path.getDirectory();
         const std::string& baseName = path.getBaseName();
+        const std::string& number   = path.getNumber();
         const std::string& extension = path.getExtension();
 
-        std::string newFile = directory + baseName + extension;
+        std::string newFile = directory + baseName + number + extension;
 
         try
         {
@@ -212,7 +213,7 @@ namespace mrv
                 }
             }
 
-            newFile = directory + baseName + newExtension;
+            newFile = directory + baseName + number + newExtension;
             if (newFile != file)
             {
                 if (fs::exists(newFile))
