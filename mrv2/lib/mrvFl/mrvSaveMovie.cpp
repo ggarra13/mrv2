@@ -185,8 +185,8 @@ namespace mrv
                 {
                     LOG_WARNING(
                         _("VP9 profile needs a .mp4, .mkv or .webm movie "
-                          "extension.  Changing it to .mp4"));
-                    newExtension = ".mp4";
+                          "extension.  Changing it to .webm"));
+                    newExtension = ".webm";
                 }
             }
             else if (profile == "AV1")
