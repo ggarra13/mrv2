@@ -1,10 +1,3 @@
-v1.0.8
-======
-
-- Removed the GoPro prefix name from Cineform when saving.
-- Fixed saving of EXR movies to movie files being just RGBA_U8 instead of
-  RGBA_U16.
-
 v1.0.7
 ======
 
@@ -77,6 +70,9 @@ v1.0.7
   The biggest benefit is that it can encode at GBRP_12LE and GBRAP_12LE (ie.
   RGB and RGBA at 12 bits with alpha) for a replacement to Apple's proprietary
   ProRes4444 codec.
+- Removed the GoPro prefix name from Cineform when saving.
+- Fixed saving of EXR movies to movie files being just RGBA_U8 instead of
+  RGBA_U16.
 
 
 v1.0.6
