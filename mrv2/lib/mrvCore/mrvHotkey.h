@@ -147,6 +147,9 @@ namespace mrv
     extern Hotkey kFlipX;
     extern Hotkey kFlipY;
 
+    extern Hotkey kRotatePlus90;
+    extern Hotkey kRotateMinus90;
+    
     extern Hotkey kShapeFrameStepBack;
     extern Hotkey kShapeFrameStepFwd;
 

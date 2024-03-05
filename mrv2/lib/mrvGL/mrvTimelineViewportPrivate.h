@@ -24,6 +24,7 @@ namespace mrv
         static std::map<std::string, std::string,
                         string::CaseInsensitiveCompare> tagData;
         static timeline::BackgroundOptions backgroundOptions;
+        static float rotation;
         
         timeline::OCIOOptions ocioOptions;
         timeline::LUTOptions lutOptions;
@@ -39,6 +40,8 @@ namespace mrv
         math::Vector2i viewPos;
         float viewZoom = 1.F;
         bool frameView = false;
+        
+        
         int event_x, event_y, last_x;
         math::Vector2i mousePos;
         math::Vector2i mousePress;

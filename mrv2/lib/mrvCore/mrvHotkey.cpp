@@ -79,6 +79,7 @@ namespace mrv
 
     Hotkey kFlipX(false, false, false, false, 'x');
     Hotkey kFlipY(false, false, false, false, 'y');
+
     Hotkey kCenterImage(false, false, false, false, 'h');
 
     Hotkey kShapeFrameStepBack(false, false, false, true, FL_Left, "");
@@ -216,8 +217,8 @@ namespace mrv
     Hotkey kEditUndo(false, false, false, false, ';');
     Hotkey kEditRedo(false, false, false, false, ':');
 
-    Hotkey kRotatePlus90;  //( false, false, false, false, '+' );
-    Hotkey kRotateMinus90; //( false, false, false, false, '-' );
+    Hotkey kRotatePlus90( false, false, false, false, '+' );
+    Hotkey kRotateMinus90( false, false, false, false, '-' );
 
     inline bool has_shift(unsigned rawkey)
     {
@@ -376,6 +377,9 @@ namespace mrv
         HotkeyEntry(_("Alpha Channel"), &kAlphaChannel),
         HotkeyEntry(_("Flip X"), &kFlipX),
         HotkeyEntry(_("Flip Y"), &kFlipY),
+        
+        HotkeyEntry(_("Rotate Images +90 Degrees"), &kRotatePlus90),
+        HotkeyEntry(_("Rotate Images -90 Degrees"), &kRotateMinus90),
 
         HotkeyEntry(_("Annotation Clear Frame"), &kShapeFrameClear),
         HotkeyEntry(_("Annotation Clear All Frames"), &kShapeFrameClearAll),
@@ -499,8 +503,6 @@ namespace mrv
 
         HotkeyEntry(_("Toggle Hotkeys Window"), &kToggleHotkeys),
         HotkeyEntry(_("Toggle About Window"), &kToggleAbout),
-        // HotkeyEntry( _("Rotate Image +90 Degrees"), &kRotatePlus90),
-        // HotkeyEntry( _("Rotate Image -90 Degrees"), &kRotateMinus90),
         HotkeyEntry("END", nullptr),
     };
 

@@ -625,7 +625,19 @@ namespace mrv
         idx = menu->add(
             _("Render/Mirror Y"), kFlipY.hotkey(), (Fl_Callback*)mirror_y_cb,
             ui, FL_MENU_DIVIDER | mode);
+            
+        mode = 0;
+        if (numFiles == 0)
+            mode |= FL_MENU_INACTIVE;
+        idx = menu->add(
+            _("Render/Rotate/-90 Degrees"), kRotateMinus90.hotkey(),
+            (Fl_Callback*)rotate_minus_90_cb, ui, mode);
+        
+        idx = menu->add(
+            _("Render/Rotate/+90 Degrees"), kRotatePlus90.hotkey(),
+            (Fl_Callback*)rotate_plus_90_cb, ui, mode);
 
+        
         mode = FL_MENU_RADIO;
 
         idx = menu->add(

@@ -1,3 +1,10 @@
+v1.0.8
+======
+
+- Added rotation of the images +90 and -90 with automatic framing if
+  "View->Auto Frame" is on.
+  
+
 v1.0.7
 ======
 

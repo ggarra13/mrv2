@@ -66,6 +66,9 @@ namespace mrv
 
     void mirror_x_cb(Fl_Menu_* m, ViewerUI* ui);
     void mirror_y_cb(Fl_Menu_* m, ViewerUI* ui);
+    
+    void rotate_plus_90_cb(Fl_Menu_* m, ViewerUI* ui);
+    void rotate_minus_90_cb(Fl_Menu_* m, ViewerUI* ui);
 
     //! Channel callbacks
     void toggle_red_channel_cb(Fl_Menu_* m, ViewerUI* ui);

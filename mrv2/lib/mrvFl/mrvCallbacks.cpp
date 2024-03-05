@@ -688,6 +688,24 @@ namespace mrv
         ui->uiMain->fill_menu(ui->uiMenuBar);
         ui->uiView->redraw();
     }
+    
+    void rotate_plus_90_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        float r = ui->uiView->getRotation();
+        r += 90.F;
+        if (r == 270.F) r = -90.F;
+        ui->uiView->setRotation(r);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+    
+    void rotate_minus_90_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        float r = ui->uiView->getRotation();
+        r -= 90.F;
+        if (r == -270.F) r = 90.F;
+        ui->uiView->setRotation(r);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
 
     static void toggle_channel(ViewerUI* ui, const timeline::Channels channel)
     {

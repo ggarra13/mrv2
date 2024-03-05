@@ -57,7 +57,7 @@ namespace mrv
     float TimelineViewport::Private::masking = 0.F;
     otio::RationalTime TimelineViewport::Private::lastTime;
     uint64_t TimelineViewport::Private::skippedFrames = 0;
-
+    float    TimelineViewport::Private::rotation = 0.F;
     bool TimelineViewport::Private::safeAreas = false;
     bool TimelineViewport::Private::dataWindow = false;
     bool TimelineViewport::Private::displayWindow = false;
@@ -1085,6 +1085,20 @@ namespace mrv
             _p->compareOptions.mode, _p->timelineSizes);
     }
 
+    float TimelineViewport::getRotation() const noexcept
+    {
+        return _p->rotation;
+    }
+    
+    void TimelineViewport::setRotation(float x) noexcept
+    {
+        TLRENDER_P();
+        
+        p.rotation = x;
+        if (p.frameView)
+            frameView();
+    }
+    
     math::Vector2i TimelineViewport::_getViewportCenter() const noexcept
     {
         const auto viewportSize = getViewportSize();
@@ -1122,17 +1136,29 @@ namespace mrv
         }
         const auto viewportSize = getViewportSize();
         const auto renderSize = getRenderSize();
+        float zoom;
 
-        float zoom = viewportSize.w / static_cast<float>(renderSize.w);
-        if (zoom * renderSize.h > viewportSize.h)
+        if (p.rotation == 90.F || p.rotation == -90.F)
+        {
+            zoom = viewportSize.h / static_cast<float>(renderSize.w);
+            if (zoom * renderSize.h > viewportSize.w)
+            {
+                zoom = viewportSize.w / static_cast<float>(renderSize.h);
+            }
+        }
+        else
         {
             zoom = viewportSize.h / static_cast<float>(renderSize.h);
+            if (zoom * renderSize.w > viewportSize.w)
+            {
+                zoom = viewportSize.w / static_cast<float>(renderSize.w);
+            }
         }
+        
         const math::Vector2i c(renderSize.w / 2, renderSize.h / 2);
-
-        math::Vector2i pos;
-        pos.x = viewportSize.w / 2.F - c.x * zoom;
-        pos.y = viewportSize.h / 2.F - c.y * zoom;
+        const math::Vector2i pos(
+            viewportSize.w / 2.F - c.x * zoom,
+            viewportSize.h / 2.F - c.y * zoom);
         setViewPosAndZoom(pos, zoom);
 
         p.mousePos = _getFocus();

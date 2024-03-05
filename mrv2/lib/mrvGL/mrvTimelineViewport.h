@@ -347,6 +347,12 @@ namespace mrv
         //! Toggle the pixel tool bar if the preference option for it is set.
         void togglePixelBar() const noexcept;
 
+        //! Return the image rotation.
+        float getRotation() const noexcept;
+        
+        //! Set the image rotation.
+        void setRotation(float) noexcept;
+        
     protected:
         virtual void _readPixel(image::Color4f& rgba) const noexcept = 0;
         math::Vector2i _getViewportCenter() const noexcept;
