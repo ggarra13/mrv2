@@ -476,9 +476,7 @@ ui->uiView->take_focus();}
           Fl_Button {} {
             label {@|<}
             user_data this user_data_type {ViewerUI*}
-            callback {const auto& player = ui->uiView->getTimelinePlayer();
-if (!player) return;
-player->start();}
+            callback {ui->uiView->startFrame()}
             tooltip {Go to the beginning of the sequence.} xywh {102 3 28 24} labelcolor 19
             class {mrv::Button}
           }
@@ -520,9 +518,7 @@ player->start();}
           Fl_Button {} {
             label {@>|}
             user_data this user_data_type {ViewerUI*}
-            callback {const auto& player = ui->uiView->getTimelinePlayer();
-if (!player) return;
-player->end();} selected
+            callback {ui->uiView->endFrame();} selected
             tooltip {Go to the end of the sequence.} xywh {270 3 28 24} labelcolor 19
             class {mrv::Button}
           }

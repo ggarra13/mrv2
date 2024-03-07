@@ -11,6 +11,8 @@ v1.0.8
 - Made H264 entry in Save Movie Options panel not show when FFmpeg was built
   as LGPL.
 - Updated OpenUSD to v24.03.
+- Fixed <| (go to start) and |> (go to end) buttons not refreshing the button
+  status on playback.
   
 
 v1.0.7
