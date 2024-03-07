@@ -13,7 +13,9 @@ v1.0.8
 - Updated OpenUSD to v24.03.
 - Fixed <| (go to start) and |> (go to end) buttons not refreshing the button
   status on playback.
-  
+ - Added -ics (-ocioInput), -od (ocioDisplay), -ov (-ocioView) and
+   -ol (-ocioLook) command-line flags to override the default settings.
+   Note that -ocioDisplay and -ocioView must be used together.
 
 v1.0.7
 ======

@@ -29,11 +29,11 @@ namespace py = pybind11;
 #include "mrvCore/mrvRoot.h"
 #include "mrvCore/mrvSignalHandler.h"
 
-#include "mrvFl/mrvSession.h"
 #include "mrvFl/mrvContextObject.h"
-#include "mrvFl/mrvTimelinePlayer.h"
-#include "mrvFl/mrvPreferences.h"
 #include "mrvFl/mrvLanguages.h"
+#include "mrvFl/mrvPreferences.h"
+#include "mrvFl/mrvSession.h"
+#include "mrvFl/mrvTimelinePlayer.h"
 
 #include "mrvWidgets/mrvLogDisplay.h"
 
@@ -64,6 +64,9 @@ namespace py = pybind11;
 
 #include "mrvPreferencesUI.h"
 #include "mrViewer.h"
+
+// we include it here to avoid tl::image and mrv::image clashes
+#include "mrvFl/mrvOCIO.h" 
 
 #include <FL/platform.H>
 #include <FL/filename.H>
@@ -135,6 +138,7 @@ namespace mrv
         otime::RationalTime seek = time::invalidTime;
         otime::TimeRange inOutRange = time::invalidTimeRange;
 
+        timeline::OCIOOptions ocioOptions;
         timeline::LUTOptions lutOptions;
 
         bool hud = true;
@@ -310,6 +314,22 @@ namespace mrv
                     app::CmdLineValueOption<otime::TimeRange>::create(
                         p.options.inOutRange, {"-inOutRange"},
                         _("Set the in/out points range.")),
+                    app::CmdLineValueOption<std::string>::create(
+                        p.options.ocioOptions.input,
+                        { "-ocioInput", "-ics", "-oi" },
+                        _("OpenColorIO input color space.")),
+                    app::CmdLineValueOption<std::string>::create(
+                        p.options.ocioOptions.display,
+                        { "-ocioDisplay", "-od" },
+                        _("OpenColorIO display name.")),
+                    app::CmdLineValueOption<std::string>::create(
+                        p.options.ocioOptions.view,
+                        { "-ocioView", "-ov" },
+                        _("OpenColorIO view name.")),
+                    app::CmdLineValueOption<std::string>::create(
+                        p.options.ocioOptions.look,
+                        { "-ocioLook", "-ol" },
+                        _("OpenColorIO look name.")),
                     app::CmdLineValueOption<std::string>::create(
                         p.options.lutOptions.fileName, {"-lut"},
                         _("LUT file name.")),
@@ -1381,6 +1401,22 @@ namespace mrv
 
                 Preferences::updateICS();
 
+                if (!p.options.ocioOptions.input.empty())
+                    image::setOcioIcs(p.options.ocioOptions.input);
+                
+                if (!p.options.ocioOptions.look.empty())
+                    image::setOcioLook(p.options.ocioOptions.look);
+                
+                if (!p.options.ocioOptions.display.empty() &&
+                    !p.options.ocioOptions.view.empty())
+                {
+                    const std::string& merged =
+                        image::ocioDisplayViewShortened
+                        (p.options.ocioOptions.display,
+                         p.options.ocioOptions.view);
+                    image::setOcioView(merged);
+                }
+                
                 if (p.running)
                 {
                     panel::redrawThumbnails();
@@ -1474,7 +1510,7 @@ namespace mrv
             {
                 const auto& video = ioInfo.video[0];
                 auto pixelType = video.pixelType;
-                std::size_t size = image::getDataByteCount(video);
+                std::size_t size = tl::image::getDataByteCount(video);
                 double frames = bytes / static_cast<double>(size);
                 seconds = frames / player->defaultSpeed();
             }
