@@ -5,13 +5,6 @@
 #include <fstream>
 #include <sstream>
 
-#ifdef MRV2_PYBIND11
-#    include <pybind11/embed.h>
-namespace py = pybind11;
-#    include "mrvPy/Cmds.h"
-#    include "mrvPy/PyStdErrOutRedirect.h"
-#endif
-
 #include <tlIO/System.h>
 #if defined(TLRENDER_USD)
 #    include <tlIO/USD.h>
@@ -20,6 +13,14 @@ namespace py = pybind11;
 #include <tlCore/StringFormat.h>
 
 #include <tlTimeline/Util.h>
+
+
+#ifdef MRV2_PYBIND11
+#    include <pybind11/embed.h>
+namespace py = pybind11;
+#    include "mrvPy/Cmds.h"
+#    include "mrvPy/PyStdErrOutRedirect.h"
+#endif
 
 #include "mrvCore/mrvOS.h" // do not move up
 #include "mrvCore/mrvMemory.h"
