@@ -420,6 +420,8 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
 	if [[ $TLRENDER_FFMPEG_MINIMAL == ON || $TLRENDER_FFMPEG_MINIMAL == 1 ]]
 	then
 	    ENABLE_MINIMAL="
+	    --disable-audiotoolbox
+	    --disable-videotoolbox
             --disable-decoders
             --enable-decoder=aac
             --enable-decoder=ac3
@@ -437,10 +439,9 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
             --enable-decoder=mjpeg
             --enable-decoder=mp3
             --enable-decoder=mpeg2video
-            --enable-decoder=mpeg4
+            --enable-decoder=mpeg
             --enable-decoder=opus
             --enable-decoder=pcm_alaw
-            --enable-decoder=pcm_alaw_at
             --enable-decoder=pcm_bluray
             --enable-decoder=pcm_dvd
             --enable-decoder=pcm_f16le
@@ -451,7 +452,6 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
             --enable-decoder=pcm_f64le
             --enable-decoder=pcm_lxf
             --enable-decoder=pcm_mulaw
-            --enable-decoder=pcm_mulaw_at
             --enable-decoder=pcm_s16be
             --enable-decoder=pcm_s16be_planar
             --enable-decoder=pcm_s16le
@@ -483,6 +483,7 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
             --enable-decoder=v308
             --enable-decoder=v408
             --enable-decoder=v410
+            --enable-decoder=vorbis
             --enable-decoder=vp9
             --enable-decoder=yuv4
             --enable-decoder=wmv1
@@ -503,7 +504,6 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
             --enable-encoder=mpeg4
             --enable-encoder=opus
             --enable-encoder=pcm_alaw
-            --enable-encoder=pcm_alaw_at
             --enable-encoder=pcm_bluray
             --enable-encoder=pcm_dvd
             --enable-encoder=pcm_f32be
@@ -511,7 +511,6 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
             --enable-encoder=pcm_f64be
             --enable-encoder=pcm_f64le
             --enable-encoder=pcm_mulaw
-            --enable-encoder=pcm_mulaw_at
             --enable-encoder=pcm_s16be
             --enable-encoder=pcm_s16be_planar
             --enable-encoder=pcm_s16le
@@ -543,6 +542,7 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
             --enable-encoder=v408
             --enable-encoder=v410
             --enable-encoder=yuv4
+            --enable-encoder=vorbis
             --enable-encoder=wmv1
             --enable-encoder=wmv2
             --disable-demuxers
@@ -557,7 +557,6 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
             --enable-demuxer=flac
             --enable-demuxer=h264
             --enable-demuxer=hevc
-            --enable-demuxer=imf
             --enable-demuxer=m4v
             --enable-demuxer=matroska
             --enable-demuxer=mjpeg
@@ -565,7 +564,6 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
             --enable-demuxer=mp3
             --enable-demuxer=mxf
             --enable-demuxer=ogg
-            --enable-demuxer=opus
             --enable-demuxer=pcm_alaw
             --enable-demuxer=pcm_f32be
             --enable-demuxer=pcm_f32le
@@ -591,7 +589,6 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
             --enable-demuxer=truehd
             --enable-demuxer=v210
             --enable-demuxer=v210x
-            --enable-demuxer=vorbis
             --enable-demuxer=wav
             --enable-demuxer=yuv4mpegpipe
             --disable-muxers
@@ -636,7 +633,6 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
             --enable-muxer=rawvideo
             --enable-muxer=truehd
             --enable-muxer=vorbis
-            --enable-muxer=vp9
             --enable-muxer=wav
             --enable-muxer=yuv4mpegpipe
             --disable-parsers
@@ -653,10 +649,8 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
             --enable-parser=mpegaudio
             --enable-parser=mpegvideo
             --enable-parser=opus
-            --enable-parser=truehd
             --enable-parser=vorbis
             --enable-parser=vp9
-            --enable-parser=wav
             --disable-protocols
             --enable-protocol=crypto
             --enable-protocol=file
