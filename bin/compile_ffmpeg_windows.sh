@@ -221,7 +221,23 @@ if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 ]]; then
 	run_cmd rm -rf $INSTALL_DIR/lib/x64/
     fi
     
-    ENABLE_LIBVPX='--enable-libvpx --extra-libs=vpx.lib --extra-libs=kernel32.lib --extra-libs=user32.lib --extra-libs=gdi32.lib --extra-libs=winspool.lib --extra-libs=shell32.lib --extra-libs=ole32.lib --extra-libs=oleaut32.lib --extra-libs=uuid.lib --extra-libs=comdlg32.lib --extra-libs=advapi32.lib --extra-libs=msvcrt.lib'
+    ENABLE_LIBVPX='--enable-libvpx 
+            --enable-decoder=libvpx_vp8
+            --enable-decoder=libvpx_vp9
+            --enable-encoder=libvpx_vp8
+            --enable-encoder=libvpx_vp9
+            --extra-libs=vpx.lib 
+            --extra-libs=kernel32.lib 
+            --extra-libs=user32.lib
+            --extra-libs=gdi32.lib 
+            --extra-libs=winspool.lib
+            --extra-libs=shell32.lib
+            --extra-libs=ole32.lib
+            --extra-libs=oleaut32.lib
+            --extra-libs=uuid.lib
+            --extra-libs=comdlg32.lib
+            --extra-libs=advapi32.lib
+            --extra-libs=msvcrt.lib'
 fi
 
 
@@ -250,7 +266,7 @@ if [[ $BUILD_LIBDAV1D == 1 ]]; then
 	run_cmd mv $INSTALL_DIR/lib/libdav1d.a $INSTALL_DIR/lib/dav1d.lib 
     fi
     
-    ENABLE_LIBDAV1D="--enable-libdav1d"
+    ENABLE_LIBDAV1D="--enable-libdav1d--enable-decoder=libdav1d"
 fi
 
 #
@@ -317,7 +333,7 @@ EOF
 	cd $ROOT_DIR/sources
     fi
     
-    ENABLE_LIBSVTAV1="--enable-libsvtav1"
+    ENABLE_LIBSVTAV1="--enable-libsvtav1 --enable-encoder=libsvtav1"
 fi
 
 
@@ -346,7 +362,10 @@ if [[ $TLRENDER_X264 == ON || $TLRENDER_X264 == 1 ]]; then
 	run_cmd mv $INSTALL_DIR/lib/libx264.dll.lib $INSTALL_DIR/lib/libx264.lib
     fi
     
-    ENABLE_LIBX264="--enable-libx264 --enable-gpl"
+    ENABLE_LIBX264="--enable-libx264 
+                    --enable-decoder=libx264
+                    --enable-encoder=libx264
+                    --enable-gpl"
 else
     # Remove unused libx264
     if [[ -e $INSTALL_DIR/lib/libx264.lib ]]; then
@@ -433,9 +452,6 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
             --enable-decoder=flac
             --enable-decoder=h264
             --enable-decoder=hevc
-            --enable-decoder=libdav1d
-            --enable-decoder=libvpx_vp8
-            --enable-decoder=libvpx_vp9
             --enable-decoder=mjpeg
             --enable-decoder=mp3
             --enable-decoder=mpeg2video
@@ -496,9 +512,6 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
             --enable-encoder=cfhd
             --enable-encoder=dnxhd
             --enable-encoder=eac3
-            --enable-encoder=libsvtav1
-            --enable-encoder=libvpx_vp8
-            --enable-encoder=libvpx_vp9
             --enable-encoder=mjpeg
             --enable-encoder=mpeg2video
             --enable-encoder=mpeg4
