@@ -59,7 +59,7 @@ settings->setValue("SaveMovie/Annoations", static_cast<int>(o->value()));}
         }
       }
       Fl_Group VideoOptions {
-        label {Video Options} open
+        label {Video Options}
         xywh {34 111 390 216} box ROUNDED_FRAME color 56
       } {
         Fl_Check_Button Hardware {
@@ -81,7 +81,7 @@ add_hardware(o, v->Hardware);
 const Fl_Menu_Item* item = o->mvalue();
 if (!item) return;
 auto settings = mrv::App::app->settings();
-settings->setValue("SaveMovie/Profile", std::string(item->label()));} open
+settings->setValue("SaveMovie/Profile", std::string(item->label()));}
           tooltip {FFMpeg's Profile settings.} xywh {170 158 170 29} down_box BORDER_BOX
         } {}
         Fl_Button {} {
@@ -170,7 +170,7 @@ v->hide();}
     }
     Fl_Window uiHelpWindow {
       label {Help Window} open
-      xywh {696 505 638 327} type Double resizable modal visible
+      xywh {696 505 638 327} type Double hide resizable modal
     } {
       Fl_Text_Display uiHelp {
         xywh {37 29 563 268} textfont 4 resizable
@@ -523,8 +523,7 @@ The naming of the files is the name of the profile-preset.pst.
 The format is very simple, with comments and colon separated 
 options.
 )"));
-uiHelpWindow->show();} {selected
-    }
+uiHelpWindow->show();} {}
   }
   Function {help_advanced_settings_cb()} {open
   } {
@@ -773,11 +772,17 @@ else
   v->deactivate();
 }} {}
   }
-  Function {add_profiles(Fl_Choice* o)} {} {
+  Function {add_profiles(Fl_Choice* o)} {open
+  } {
     code {auto entries = tl::ffmpeg::getProfileLabels();
-    for (auto entry : entries)
-        o->add(gettext(entry.c_str()));
-
+for (auto entry : entries)
+{
+\#ifndef TLRENDER_X264
+   if (entry == "H264")
+      continue;
+\#endif
+    o->add(gettext(entry.c_str()));
+}
     if (o->size() > 0)
     {
         auto settings = mrv::App::app->settings();
@@ -797,7 +802,8 @@ else
             }
         }
     }
-    o->value(0);} {}
+    o->value(0);} {selected
+    }
   }
   Function {add_audio_codecs(Fl_Choice* o)} {} {
     code {auto entries = tl::ffmpeg::getAudioCodecLabels();

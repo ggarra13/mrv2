@@ -378,7 +378,25 @@ namespace mrv
 
             int value;
             value = saveOptions.Profile->value();
-            options.ffmpegProfile = static_cast<tl::ffmpeg::Profile>(value);
+
+            const Fl_Menu_Item* item = &saveOptions.Profile->menu()[value];
+
+
+            // We need to iterate through all the profiles, as some profiles
+            // may be hidden from the UI due to FFmpeg being compiled as
+            // LGPL.
+            int index = 0;
+            auto entries = tl::ffmpeg::getProfileLabels();
+            for (auto entry : entries)
+            {
+                if (entry == item->label())
+                {
+                    options.ffmpegProfile =
+                        static_cast<tl::ffmpeg::Profile>(index);
+                }
+                ++index;
+            }
+            
 
             std::string preset;
             value = saveOptions.Preset->value();

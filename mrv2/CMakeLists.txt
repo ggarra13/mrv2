@@ -135,6 +135,11 @@ if(TLRENDER_USD)
     endif()
 endif()
 
+if(TLRENDER_X264)
+    add_definitions(-DTLRENDER_X264)
+endif()
+
+
 if(MRV2_PYBIND11)
     add_definitions(-DMRV2_PYBIND11)
     find_package(pybind11 REQUIRED)

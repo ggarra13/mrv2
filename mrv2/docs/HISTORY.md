@@ -8,6 +8,8 @@ v1.0.8
   a faster compilation and program start up.
 - Made Help->Documentation point to the online docs if the local docs are not
   installed.
+- Made H264 entry in Save Movie Options panel not show when FFmpeg was built
+  as LGPL.
   
 
 v1.0.7
@@ -20,8 +22,8 @@ v1.0.7
   
       * mrv2 application (obviously)
       * mrv2 documentation
+      * mrv2 Python TK libraries
       * mrv2 Python demos
-      * mrv2 Python libraries
 
 - Changed name of install directory of mrv2 on Windows from "mrv2 vX.X.X" to
   "mrv2-vX.X.X" to avoid spaces for easier scripting.
