@@ -3,6 +3,8 @@ v1.0.8
 
 - Added rotation of the images +90 and -90 with automatic framing if
   "View->Auto Frame" is on.
+- I have enabled TLRENDER_FFMPEG_MINIMAL as a default to compile FFmpeg with
+  less muxers, demuxers, parsers and protocols.
   
 
 v1.0.7

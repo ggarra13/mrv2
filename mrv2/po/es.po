@@ -2888,7 +2888,8 @@ msgid "Viewport Size: {0} "
 msgstr "Tamaño de la Ventana: {0}"
 
 msgid "Writer plugin did not get output info.  Defaulting to RGB_U8"
-msgstr "El agregado de Escritura no obtuvo información de salida.  Usando RGB_U8."
+msgstr ""
+"El agregado de Escritura no obtuvo información de salida.  Usando RGB_U8."
 
 msgid "Output info: {0} {1}"
 msgstr "Información de Salida: {0} {1}"
