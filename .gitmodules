@@ -2,3 +2,4 @@
 	path = tlRender
 	url = https://github.com/ggarra13/tlRender.git
         pushURL = git@github.com:ggarra13/tlRender.git
+	ignore = untracked
