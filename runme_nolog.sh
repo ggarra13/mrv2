@@ -67,6 +67,10 @@ if [ -z "$TLRENDER_FFMPEG" ]; then
     export TLRENDER_FFMPEG=ON
 fi
 
+if [ -z "$TLRENDER_FFMPEG_MINIMAL" ]; then
+    export TLRENDER_FFMPEG_MINIMAL=ON
+fi
+
 if [ -z "$TLRENDER_NDI_SDK" ]; then
     if [[ $KERNEL == *Linux* ]]; then
 	export TLRENDER_NDI_SDK="$HOME/code/lib/NDI SDK for Linux/"
@@ -158,6 +162,7 @@ echo
 echo "FFmpeg support ..................... ${TLRENDER_FFMPEG} 	(TLRENDER_FFMPEG)"
 if [[ $TLRENDER_FFMPEG == ON || $TLRENDER_FFMPEG == 1 ]]; then
     echo "FFmpeg License ..................... ${FFMPEG_GPL} 	(Use -gpl flag)"
+    echo "    FFmpeg minimal.................. ${TLRENDER_FFMPEG_MINIMAL}         (TLRENDER_FFMPEG_MINIMAL)"
     echo "    FFmpeg network support ......... ${TLRENDER_NET} 	(TLRENDER_NET)"
     echo "    AV1 codec support .............. ${TLRENDER_AV1} 	(TLRENDER_AV1)"
     echo "    VPX codec support .............. ${TLRENDER_VPX} 	(TLRENDER_VPX)"

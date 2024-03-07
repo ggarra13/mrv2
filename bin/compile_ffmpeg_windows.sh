@@ -416,6 +416,12 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
 	export CC=cl
 	export PKG_CONFIG_PATH=$INSTALL_DIR/lib/pkgconfig
 
+	ENABLE_MINIMAL=""
+	if [[ $TLRENDER_FFMPEG_MINIMAL == ON || $TLRENDER_FFMPEG_MINIMAL == 1 ]]
+	then
+	    ENABLE_MINIMAL=""
+	fi
+	      
 	# -wd4828 disables non UTF-8 characters found on non-English MSVC
 	# -wd4101 disables local variable without reference
 	# -wd4267 disables conversion from size_t to int, possible loss of data
@@ -472,6 +478,7 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
             --enable-shared \
             --disable-static \
             --enable-swresample \
+	    $ENABLE_MINIMAL \
             $ENABLE_OPENSSL \
             $ENABLE_LIBX264 \
             $ENABLE_LIBDAV1D \
