@@ -438,6 +438,7 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
             --enable-decoder=mp3
             --enable-decoder=mpeg2video
             --enable-decoder=mpeg4
+            --enable-decoder=opus
             --enable-decoder=pcm_alaw
             --enable-decoder=pcm_alaw_at
             --enable-decoder=pcm_bluray
@@ -500,6 +501,7 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
             --enable-encoder=mjpeg
             --enable-encoder=mpeg2video
             --enable-encoder=mpeg4
+            --enable-encoder=opus
             --enable-encoder=pcm_alaw
             --enable-encoder=pcm_alaw_at
             --enable-encoder=pcm_bluray
@@ -563,6 +565,7 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
             --enable-demuxer=mp3
             --enable-demuxer=mxf
             --enable-demuxer=ogg
+            --enable-demuxer=opus
             --enable-demuxer=pcm_alaw
             --enable-demuxer=pcm_f32be
             --enable-demuxer=pcm_f32le
@@ -588,6 +591,7 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
             --enable-demuxer=truehd
             --enable-demuxer=v210
             --enable-demuxer=v210x
+            --enable-demuxer=vorbis
             --enable-demuxer=wav
             --enable-demuxer=yuv4mpegpipe
             --disable-muxers
@@ -607,6 +611,7 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
             --enable-muxer=mpeg2video
             --enable-muxer=mxf
             --enable-muxer=ogg
+            --enable-muxer=opus
             --enable-muxer=pcm_alaw
             --enable-muxer=pcm_f32be
             --enable-muxer=pcm_f32le
@@ -630,6 +635,8 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
             --enable-muxer=pcm_vidc
             --enable-muxer=rawvideo
             --enable-muxer=truehd
+            --enable-muxer=vorbis
+            --enable-muxer=vp9
             --enable-muxer=wav
             --enable-muxer=yuv4mpegpipe
             --disable-parsers
@@ -649,6 +656,7 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
             --enable-parser=truehd
             --enable-parser=vorbis
             --enable-parser=vp9
+            --enable-parser=wav
             --disable-protocols
             --enable-protocol=crypto
             --enable-protocol=file
