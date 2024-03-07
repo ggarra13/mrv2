@@ -266,7 +266,7 @@ if [[ $BUILD_LIBDAV1D == 1 ]]; then
 	run_cmd mv $INSTALL_DIR/lib/libdav1d.a $INSTALL_DIR/lib/dav1d.lib 
     fi
     
-    ENABLE_LIBDAV1D="--enable-libdav1d--enable-decoder=libdav1d"
+    ENABLE_LIBDAV1D="--enable-libdav1d --enable-decoder=libdav1d"
 fi
 
 #
