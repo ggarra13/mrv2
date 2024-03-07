@@ -784,6 +784,29 @@ namespace mrv
             // We raise the secondary window last, so it shows at front
             ui->uiSecondary->window()->show();
         }
+
+        try
+        {
+            if (!p.options.ocioOptions.input.empty())
+                image::setOcioIcs(p.options.ocioOptions.input);
+                
+            if (!p.options.ocioOptions.look.empty())
+                image::setOcioLook(p.options.ocioOptions.look);
+                
+            if (!p.options.ocioOptions.display.empty() &&
+                !p.options.ocioOptions.view.empty())
+            {
+                const std::string& merged =
+                    image::ocioDisplayViewShortened
+                    (p.options.ocioOptions.display,
+                     p.options.ocioOptions.view);
+                image::setOcioView(merged);
+            }
+        }
+        catch (const std::exception& e)
+        {
+            LOG_ERROR(e.what());
+        }
     }
 
     void App::cleanResources()
@@ -1401,22 +1424,6 @@ namespace mrv
                 }
 
                 Preferences::updateICS();
-
-                if (!p.options.ocioOptions.input.empty())
-                    image::setOcioIcs(p.options.ocioOptions.input);
-                
-                if (!p.options.ocioOptions.look.empty())
-                    image::setOcioLook(p.options.ocioOptions.look);
-                
-                if (!p.options.ocioOptions.display.empty() &&
-                    !p.options.ocioOptions.view.empty())
-                {
-                    const std::string& merged =
-                        image::ocioDisplayViewShortened
-                        (p.options.ocioOptions.display,
-                         p.options.ocioOptions.view);
-                    image::setOcioView(merged);
-                }
                 
                 if (p.running)
                 {
