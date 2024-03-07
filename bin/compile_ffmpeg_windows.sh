@@ -455,7 +455,7 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
             --enable-decoder=mjpeg
             --enable-decoder=mp3
             --enable-decoder=mpeg2video
-            --enable-decoder=mpeg
+            --enable-decoder=mpeg4
             --enable-decoder=opus
             --enable-decoder=pcm_alaw
             --enable-decoder=pcm_bluray
@@ -645,7 +645,6 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
             --enable-muxer=pcm_vidc
             --enable-muxer=rawvideo
             --enable-muxer=truehd
-            --enable-muxer=vorbis
             --enable-muxer=wav
             --enable-muxer=yuv4mpegpipe
             --disable-parsers
