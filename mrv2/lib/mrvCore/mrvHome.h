@@ -19,6 +19,10 @@ namespace mrv
     //! Path to a temporary directory (without a trailing slash)
     std::string tmppath();
 
+    //! Path to the mrv2 documentation.  If not installed, it will point to
+    //! the online documentation.
+    std::string docspath();
+    
     //! Path to a studio defined directory
     std::string studiopath();
 

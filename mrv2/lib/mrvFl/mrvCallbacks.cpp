@@ -1811,15 +1811,7 @@ namespace mrv
 
     void help_documentation_cb(Fl_Menu_*, ViewerUI* ui)
     {
-        const char* language = getenv("LANGUAGE");
-        if (!language || strlen(language) == 0)
-            language = "en";
-
-        std::string code = language;
-        code = code.substr(0, 2);
-
-        std::string docs =
-            "file://" + mrv::rootpath() + "/docs/" + code + "/index.html";
+        const std::string& docs = docspath();
         fl_open_uri(docs.c_str());
     }
 

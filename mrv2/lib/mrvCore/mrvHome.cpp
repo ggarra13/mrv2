@@ -10,6 +10,8 @@ namespace fs = std::filesystem;
 #include <FL/fl_utf8.h>
 
 #include "mrvCore/mrvHome.h"
+#include "mrvCore/mrvFile.h"
+#include "mrvCore/mrvString.h"
 
 #if defined(_WIN32) && !defined(_WIN64_)
 #    include <windows.h>
@@ -19,7 +21,6 @@ namespace fs = std::filesystem;
 #    include <pwd.h>
 #endif
 
-#include "mrvCore/mrvString.h"
 
 namespace mrv
 {
@@ -191,4 +192,31 @@ namespace mrv
         return out;
     }
 
+    std::string docspath()
+    {
+        std::string docs;
+
+        
+        const char* language = getenv("LANGUAGE");
+        if (!language || strlen(language) == 0)
+            language = "en";
+
+        // Just the language code "es" without the "es_AR.UTF-8" if any.
+        std::string code = language;
+        code = code.substr(0, 2);
+
+        std::string local_docs =
+            mrv::rootpath() + "/docs/" + code + "/index.html";
+        if (file::isReadable(local_docs))
+        {
+            docs = "file://" + local_docs;
+        }
+        else
+        {
+            std::string online_docs =
+                "mrv2.sourceforge.io/docs/" + code + "/index.html";
+            docs = "https://" + online_docs;
+        }
+        return docs;
+    }
 } // namespace mrv
