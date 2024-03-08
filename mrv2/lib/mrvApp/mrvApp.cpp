@@ -657,7 +657,7 @@ namespace mrv
                     const std::string& msg = i.message;
                     const std::string& kModule = i.module;
                     if (msg == lastMessage)
-                        return;
+                        continue;
                     lastMessage = msg;
                     switch (i.type)
                     {

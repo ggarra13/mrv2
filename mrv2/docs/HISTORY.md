@@ -18,6 +18,10 @@ v1.0.8
    Note that -ocioDisplay and -ocioView must be used together.
  - Made OCIO Input Color Space be stored with the image, except when doing
    comparisons in which the first image's Input Color Space is used.
+ - Made OCIO Input Color Space for each image be stored in session files.
+ - Made FFmpeg's repeated warnings and errors only show up once in the status
+   bar and the logs.
+   
 
 v1.0.7
 ======

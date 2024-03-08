@@ -35,6 +35,8 @@
 
 #include "mrvSession.h"
 
+#include "mrvFl/mrvOCIO.h"
+
 namespace
 {
     const char* kModule = "mrv2s";
@@ -434,6 +436,8 @@ namespace mrv
                     if (!Aitem)
                         continue;
 
+                    Aitem->ocioIcs = item.ocioIcs;
+                    mrv::image::setOcioIcs(Aitem->ocioIcs);
                     Aitem->annotations = item.annotations;
                     Aitem->videoLayer = item.videoLayer;
                     Aitem->currentTime = item.currentTime;
@@ -467,6 +471,9 @@ namespace mrv
                     toggle_secondary_cb(nullptr, ui);
                 }
 
+                
+                unsigned numFiles = model->observeFiles()->getSize();
+
                 // Decode ICS
                 if (version >= 2)
                 {
@@ -493,8 +500,24 @@ namespace mrv
 
                     Preferences::OCIO(ui);
 
-                    int value = j["ics"];
-                    ui->uiICS->value(value);
+                    int Aindex = session["Aindex"];
+                    if (Aindex < numFiles)
+                        model->setA(Aindex);
+
+                    int value;
+                    auto Aitem = model->observeA()->get();
+                    if (Aitem && !Aitem->ocioIcs.empty())
+                    {
+                        std::cerr << Aindex
+                                  << " set ocioIcs to " << Aitem->ocioIcs
+                                  << std::endl;
+                        mrv::image::setOcioIcs(Aitem->ocioIcs);
+                    }
+                    else
+                    {
+                        value = j["ics"];
+                        ui->uiICS->value(value);
+                    }
                     value = j["view"];
                     ui->OCIOView->value(value);
                     ui->uiView->updateOCIOOptions();
@@ -641,11 +664,6 @@ namespace mrv
                 if (version >= 2)
                 {
                     ui->uiPrefs->uiPrefsAutoPlayback->value(autoplayback);
-
-                    unsigned numFiles = model->observeFiles()->getSize();
-                    int Aindex = session["Aindex"];
-                    if (Aindex < numFiles)
-                        model->setA(Aindex);
 
                     std::vector<int> Bindexes = session["Bindexes"];
                     model->clearB();
