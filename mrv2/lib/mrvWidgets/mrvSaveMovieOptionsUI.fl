@@ -51,7 +51,7 @@ class SaveMovieOptionsUI {open
         Fl_Check_Button Annotations {
           label {Save Annotations}
           callback {auto settings = mrv::App::app->settings();
-settings->setValue("SaveMovie/Annoations", static_cast<int>(o->value()));}
+settings->setValue("SaveMovie/Annotations", static_cast<int>(o->value()));}
           tooltip {Save Annotations burned into the movie or sequence.  It also allows saving OpenEXRs from an 8-bit movie and changing OpenEXR's pixel type.} xywh {160 48 25 18} down_box DOWN_BOX
           code0 {auto settings = mrv::App::app->settings();}
           code1 {int value = settings->getValue<int>("SaveMovie/Annotations");}
