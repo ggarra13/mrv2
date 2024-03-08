@@ -20,7 +20,8 @@ void mrv2_io(py::module& m)
     py::class_<mrv::SaveOptions>(io, "SaveOptions")
         .def(
             py::init<
-                bool
+            bool,
+            mrv::SaveResolution
 #ifdef TLRENDER_FFMPEG
                 ,
                 tl::ffmpeg::Profile, std::string, std::string,
@@ -32,7 +33,8 @@ void mrv2_io(py::module& m)
                 tl::exr::Compression, tl::image::PixelType, int, float
 #endif
                 >(),
-            py::arg("annotations") = false
+            py::arg("annotations") = false,
+            py::arg("resolution") = mrv::SaveResolution::kSameSize
 #ifdef TLRENDER_FFMPEG
             ,
             py::arg("ffmpegProfile") = tl::ffmpeg::Profile::None,
@@ -57,6 +59,9 @@ void mrv2_io(py::module& m)
         .def_readwrite(
             "annotations", &mrv::SaveOptions::annotations,
             _("Save annotations."))
+        .def_readwrite(
+            "resolution", &mrv::SaveOptions::resolution,
+            _("Save resolution."))
 #ifdef TLRENDER_FFMPEG
         .def_readwrite(
             "ffmpegProfile", &mrv::SaveOptions::ffmpegProfile,

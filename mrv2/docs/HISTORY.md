@@ -21,6 +21,12 @@ v1.0.8
  - Made OCIO Input Color Space for each image be stored in session files.
  - Made FFmpeg's repeated warnings and errors only show up once in the status
    bar and the logs.
+ - Added a Resolution parameter to the Save Movie options.  You can save:
+   	 * Same Size
+	 * Half Size
+	 * Quarter Size
+- Fixed a focus issue on Linux, which would raise the mrv2 window whenever the
+  timeline bar was entered.
    
 
 v1.0.7

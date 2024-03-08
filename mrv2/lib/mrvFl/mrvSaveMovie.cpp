@@ -291,6 +291,7 @@ namespace mrv
 
             bool annotations = false;
 
+            
             gl::OffscreenBufferOptions offscreenBufferOptions;
             std::shared_ptr<timeline_gl::Render> render;
             image::Size renderSize;
@@ -302,8 +303,21 @@ namespace mrv
             }
 
             if (hasVideo)
+            {
+                const SaveResolution resolution = options.resolution;
                 renderSize = info.video[layerId].size;
-
+                if (resolution == SaveResolution::kHalfSize)
+                {
+                    renderSize.w /= 2;
+                    renderSize.h /= 2;
+                }
+                else if (resolution == SaveResolution::kQuarterSize)
+                {
+                    renderSize.w /= 4;
+                    renderSize.h /= 4;
+                }
+            }
+            
             // Create the renderer.
             render = timeline_gl::Render::create(context);
             offscreenBufferOptions.colorType = image::PixelType::RGBA_F32;

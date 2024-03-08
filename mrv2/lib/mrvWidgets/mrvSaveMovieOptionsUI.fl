@@ -42,7 +42,7 @@ class SaveMovieOptionsUI {open
   } {
     Fl_Window uiMain {
       label {Save Movie Options} open
-      xywh {834 81 465 537} type Double align 0 hide modal
+      xywh {834 81 465 613} type Double align 0 modal visible
     } {
       Fl_Group {} {
         label {Common Settings}
@@ -54,14 +54,36 @@ class SaveMovieOptionsUI {open
 settings->setValue("SaveMovie/Annoations", static_cast<int>(o->value()));}
           tooltip {Save Annotations burned into the movie or sequence.  It also allows saving OpenEXRs from an 8-bit movie and changing OpenEXR's pixel type.} xywh {160 48 25 18} down_box DOWN_BOX
           code0 {auto settings = mrv::App::app->settings();}
-          code1 {int value = settings->getValue<int>("SaveMovie/Annoations");}
+          code1 {int value = settings->getValue<int>("SaveMovie/Annotations");}
           code2 {o->value(value);}
         }
       }
       Fl_Group VideoOptions {
-        label {Video Options}
-        xywh {34 111 390 216} box ROUNDED_FRAME color 56
+        label {Video Options} open
+        xywh {34 114 390 280} box ROUNDED_FRAME color 56
       } {
+        Fl_Choice Resolution {
+          label Resolution
+          user_data this user_data_type {SaveMovieOptionsUI*}
+          callback {int value = o->value();
+
+auto settings = mrv::App::app->settings();
+settings->setValue("SaveMovie/Resolution", value);} open selected
+          tooltip {Resolution of movie to save.} xywh {170 137 170 29} down_box BORDER_BOX
+        } {
+          MenuItem {} {
+            label {Same Size}
+            xywh {0 0 100 20}
+          }
+          MenuItem {} {
+            label {Half Size}
+            xywh {10 10 100 20}
+          }
+          MenuItem {} {
+            label {Quarter Size}
+            xywh {20 20 100 20}
+          }
+        }
         Fl_Check_Button Hardware {
           label {Hardware Codec}
           user_data this user_data_type {SaveMovieOptionsUI*}
@@ -69,7 +91,7 @@ settings->setValue("SaveMovie/Annoations", static_cast<int>(o->value()));}
 
 auto settings = mrv::App::app->settings();
 settings->setValue("SaveMovie/HardwareEncode", int(o->value()));}
-          xywh {166 121 174 24} down_box DOWN_BOX
+          xywh {166 188 174 24} down_box DOWN_BOX
         }
         Fl_Choice Profile {
           label Profile
@@ -82,12 +104,12 @@ const Fl_Menu_Item* item = o->mvalue();
 if (!item) return;
 auto settings = mrv::App::app->settings();
 settings->setValue("SaveMovie/Profile", std::string(item->label()));}
-          tooltip {FFMpeg's Profile settings.} xywh {170 158 170 29} down_box BORDER_BOX
+          tooltip {FFMpeg's Profile settings.} xywh {170 225 170 29} down_box BORDER_BOX
         } {}
         Fl_Button {} {
           label {?}
           callback {help_profile_cb();}
-          tooltip {Help on Profile} xywh {351 158 24 29}
+          tooltip {Help on Profile} xywh {351 225 24 29}
         }
         Fl_Choice PixelFormat {
           label {Pixel Format}
@@ -95,12 +117,12 @@ settings->setValue("SaveMovie/Profile", std::string(item->label()));}
 if (!item) return;
 auto settings = mrv::App::app->settings();
 settings->setValue("SaveMovie/PixelFormat", std::string(item->label()));} open
-          tooltip {FFMpeg's Pixel Format for the codec selected} xywh {170 200 170 29} down_box BORDER_BOX
+          tooltip {FFMpeg's Pixel Format for the codec selected} xywh {170 267 170 29} down_box BORDER_BOX
         } {}
         Fl_Button {} {
           label {?}
           callback {help_pixel_format_cb();}
-          tooltip {Help on Pixel Format} xywh {351 200 24 29}
+          tooltip {Help on Pixel Format} xywh {351 267 24 29}
         }
         Fl_Choice Preset {
           label Preset
@@ -108,12 +130,12 @@ settings->setValue("SaveMovie/PixelFormat", std::string(item->label()));} open
 if (!item) return;
 auto settings = mrv::App::app->settings();
 settings->setValue("SaveMovie/Preset", std::string(item->label()));} open
-          tooltip {FFMpeg's Preset setting for the codec selected.} xywh {171 242 170 29} down_box BORDER_BOX
+          tooltip {FFMpeg's Preset setting for the codec selected.} xywh {171 309 170 29} down_box BORDER_BOX
         } {}
         Fl_Button {} {
           label {?}
           callback {help_preset_cb();}
-          tooltip {Help on Preset} xywh {351 242 24 29}
+          tooltip {Help on Preset} xywh {351 309 24 29}
         }
         Fl_Button {} {
           label {Advanced Settings}
@@ -124,17 +146,17 @@ else
 
 while (uiAdvancedSettings->visible())
   Fl::check();}
-          xywh {171 288 170 28}
+          xywh {171 355 170 28}
         }
         Fl_Button {} {
           label {?}
           callback {help_advanced_settings_cb();}
-          tooltip {Help on Advance Settings} xywh {351 287 24 29}
+          tooltip {Help on Advance Settings} xywh {351 354 24 29}
         }
       }
       Fl_Group AudioOptions {
         label {Audio Options}
-        xywh {34 351 394 132} box ROUNDED_FRAME color 56
+        xywh {34 420 394 132} box ROUNDED_FRAME color 56
       } {
         Fl_Choice AudioCodec {
           label Codec
@@ -142,29 +164,29 @@ while (uiAdvancedSettings->visible())
 if (!item) return;
 auto settings = mrv::App::app->settings();
 settings->setValue("SaveMovie/AudioCodec", std::string(item->label()));} open
-          tooltip {FFMpeg's Audio Codec settings.} xywh {172 375 170 29} down_box BORDER_BOX
+          tooltip {FFMpeg's Audio Codec settings.} xywh {172 444 170 29} down_box BORDER_BOX
           code0 {add_audio_codecs(o);}
         } {}
         Fl_Box {} {
           label {Note that while saving with audio, the audio will not be heard.}
-          xywh {57 413 335 60} labelsize 12 align 144
+          xywh {57 482 335 60} labelsize 12 align 144
         }
       }
       Fl_Group {} {
-        xywh {105 500 244 29}
+        xywh {105 569 244 29}
       } {
         Fl_Button {} {
           label Ok
           user_data uiMain user_data_type {Fl_Double_Window*}
           callback {v->hide();}
-          xywh {105 500 90 29}
+          xywh {105 569 90 29}
         }
         Fl_Button {} {
           label Cancel
           user_data uiMain user_data_type {Fl_Double_Window*}
           callback {cancel = true;
 v->hide();}
-          xywh {259 500 90 29}
+          xywh {259 569 90 29}
         }
       }
     }
@@ -392,7 +414,8 @@ if (audioOnly)
   VideoOptions->deactivate();
 }
 else
-{
+{   
+   add_resolution(Resolution);
    add_profiles(Profile);
    add_presets(Profile, Preset);
    add_hardware(Profile, Hardware);
@@ -802,8 +825,14 @@ for (auto entry : entries)
             }
         }
     }
-    o->value(0);} {selected
-    }
+    o->value(0);} {}
+  }
+  Function {add_resolution(Fl_Choice* o)} {open
+  } {
+    code {
+const auto& settings = mrv::App::app->settings();
+const int value = settings->getValue<int>("SaveMovie/Resolution");
+o->value(value);} {}
   }
   Function {add_audio_codecs(Fl_Choice* o)} {} {
     code {auto entries = tl::ffmpeg::getAudioCodecLabels();

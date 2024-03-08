@@ -38,17 +38,27 @@ void mrv2_enums(py::module& m)
     using namespace tl;
 
     py::module io = m.def_submodule("io");
+    
+    py::enum_<mrv::SaveResolution>(io, "Resolution")
+        .value("Same_Size", mrv::SaveResolution::kSameSize)
+        .value("Half_Size", mrv::SaveResolution::kHalfSize)
+        .value("Quarter_Size", mrv::SaveResolution::kQuarterSize);
 
 #ifdef TLRENDER_FFMPEG
     py::enum_<ffmpeg::Profile>(io, "Profile")
         .value("kNone", ffmpeg::Profile::None)
+#ifdef TLRENDER_X264
         .value("H264", ffmpeg::Profile::H264)
+#endif
         .value("ProRes", ffmpeg::Profile::ProRes)
         .value("ProRes_Proxy", ffmpeg::Profile::ProRes_Proxy)
         .value("ProRes_LT", ffmpeg::Profile::ProRes_LT)
         .value("ProRes_HQ", ffmpeg::Profile::ProRes_HQ)
         .value("ProRes_4444", ffmpeg::Profile::ProRes_4444)
-        .value("ProRes_XQ", ffmpeg::Profile::ProRes_XQ);
+        .value("ProRes_XQ", ffmpeg::Profile::ProRes_XQ)
+        .value("VP9", ffmpeg::Profile::VP9)
+        .value("Cineform", ffmpeg::Profile::Cineform)
+        .value("AV1", ffmpeg::Profile::AV1);
 
     py::enum_<ffmpeg::AudioCodec>(io, "AudioCodec")
         .value("kNone", ffmpeg::AudioCodec::None)

@@ -14,9 +14,18 @@
 
 namespace mrv
 {
+    enum class SaveResolution
+    {
+        kSameSize,
+        kHalfSize,
+        kQuarterSize
+    };
+    
     struct SaveOptions
     {
         bool annotations = false;
+
+        SaveResolution resolution = SaveResolution::kSameSize;
 
 #ifdef TLRENDER_FFMPEG
         tl::ffmpeg::Profile ffmpegProfile = tl::ffmpeg::Profile::None;

@@ -155,6 +155,7 @@ namespace mrv
         p.defaultValues["SaveMovie/Annotations"] = 0;
         p.defaultValues["SaveMovie/HardwareEncode"] = 0;
         p.defaultValues["SaveMovie/Profile"] = std::string("ProRes_4444");
+        p.defaultValues["SaveMovie/Resolution"] = 0;
         p.defaultValues["SaveMovie/PixelFormat"] =
             std::string("YUVA_444P_LE10");
         p.defaultValues["SaveMovie/Preset"] = std::string("good");

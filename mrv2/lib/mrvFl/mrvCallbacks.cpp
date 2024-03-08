@@ -375,6 +375,8 @@ namespace mrv
 
             options.annotations =
                 static_cast<bool>(saveOptions.Annotations->value());
+            options.resolution =
+                static_cast<SaveResolution>(saveOptions.Resolution->value());
 
             int value;
             value = saveOptions.Profile->value();
