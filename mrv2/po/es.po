@@ -3779,7 +3779,6 @@ msgstr "Prom."
 msgid "Same Size"
 msgstr "Mismo Tamaño"
 
-#, fuzzy
 msgid "Half Size"
 msgstr "Mitad de Tamaño"
 
