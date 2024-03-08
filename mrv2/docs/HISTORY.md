@@ -25,8 +25,6 @@ v1.0.8
    	 * Same Size
 	 * Half Size
 	 * Quarter Size
-- Fixed a focus issue on Linux, which would raise the mrv2 window whenever the
-  timeline bar was entered.
    
 
 v1.0.7
