@@ -3,6 +3,7 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #include <cstring> // for strcpy
+#include <regex>
 
 #include "mrvCore/mrvHome.h"
 
@@ -20,6 +21,14 @@
 
 namespace mrv
 {
+    namespace
+    {
+        bool contains_ffmpeg(const std::string& text) {
+            std::regex pattern("\\[ffmpeg\\]");
+            return std::regex_search(text, pattern);
+        }
+    }
+    
     namespace
     {
         static void open_log_panel_cb(ViewerUI* ui)
@@ -135,9 +144,7 @@ namespace mrv
         void errorbuffer::print(const char* c)
         {
             std::cerr << c;
-            const std::string& error = c;
-            std::cerr << error.substr(8, 6) << std::endl;
-            if (error.substr(8, 6) == "ffmpeg")
+            if (contains_ffmpeg(c))
                 open_ffmpeg_log_panel();
             else
                 open_log_panel();
