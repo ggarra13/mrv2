@@ -107,13 +107,34 @@
 </aside>
 <aside class="topic">
 <p class="topic-title">Opciones de Vídeo</p>
-<ul>
+<blockquote>
+<div><ul class="simple">
+<li><p>Resolución</p></li>
+</ul>
+</div></blockquote>
+<p>Con el menu de Resolución puedes elegir si grabar la pelicula al tamaño real,
+a la mitad de tamaño o a un cuarto del mismo.</p>
+<blockquote>
+<div><ul>
 <li><p>Perfil</p>
 <p>Con la opción de Perfil, puede elegir el codec básico usado al grabar la película.  Actualmente, estos pueden ser «Ninguno», «H264», «ProRes», «ProRes_Proxy», «ProRes_LT», «ProRes_HQ», «ProRes_4444» o «ProRes_XQ».  Note que el codec más compabile («H264») requiere una licencia de VideoLAN para encodificar o que compile mrv2 en modo GPL.  Por favor referirse a las instrucciones de compilación de mrv2 en:</p>
 <blockquote>
 <div><p><a class="reference external" href="https:://github.com/ggarra13/mrv2">https:://github.com/ggarra13/mrv2</a></p>
 </div></blockquote>
+<ul class="simple">
+<li><p>Formato de Pixel</p></li>
+</ul>
 </li>
+</ul>
+</div></blockquote>
+<p>Dependiendo del Perfil elegido, los formatos de pixel para grabar la
+película pueden cambiar.  Formatos de YUV comprimen mejor mientras que
+los de GBRA preservan la calidad mejor.
+El sufijo 10LE or 12LE indican el número de bits usado (8-bits, 10-bits o
+12bits).  A más altos bits, mejor la calidad, pero más tamaño en el disco
+y más dificultoso la reproducción a tiempo real.</p>
+<blockquote>
+<div><ul>
 <li><p>Preseteo</p>
 <p>Con la selección de preseteo, puede elegir la cualidad de
 codificación del codec seleccionado.  Actualmente, incluímos
@@ -142,6 +163,7 @@ puntos, como:</p>
 </div>
 </li>
 </ul>
+</div></blockquote>
 </aside>
 <aside class="topic">
 <p class="topic-title">Optiones de Audio</p>

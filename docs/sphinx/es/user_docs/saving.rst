@@ -16,12 +16,26 @@ Cuando se graba una película desde Archivo->Grabar Película o Secuencia y escr
 
 .. topic:: Opciones de Vídeo
 
+	   * Resolución
+
+  Con el menu de Resolución puedes elegir si grabar la pelicula al tamaño real,
+  a la mitad de tamaño o a un cuarto del mismo.
+  
 	   * Perfil
 
 	     Con la opción de Perfil, puede elegir el codec básico usado al grabar la película.  Actualmente, estos pueden ser "Ninguno", "H264", "ProRes", "ProRes_Proxy", "ProRes_LT", "ProRes_HQ", "ProRes_4444" o "ProRes_XQ".  Note que el codec más compabile ("H264") requiere una licencia de VideoLAN para encodificar o que compile mrv2 en modo GPL.  Por favor referirse a las instrucciones de compilación de mrv2 en:
 	      
               https:://github.com/ggarra13/mrv2
 
+	     * Formato de Pixel
+
+  Dependiendo del Perfil elegido, los formatos de pixel para grabar la
+  película pueden cambiar.  Formatos de YUV comprimen mejor mientras que
+  los de GBRA preservan la calidad mejor.
+  El sufijo 10LE or 12LE indican el número de bits usado (8-bits, 10-bits o
+  12bits).  A más altos bits, mejor la calidad, pero más tamaño en el disco
+  y más dificultoso la reproducción a tiempo real.
+  
 	   * Preseteo
 
 	     Con la selección de preseteo, puede elegir la cualidad de

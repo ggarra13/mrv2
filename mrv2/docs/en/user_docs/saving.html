@@ -108,13 +108,30 @@
 <p class="topic-title">Video Options</p>
 <blockquote>
 <div><ul class="simple">
+<li><p>Resolution</p></li>
+</ul>
+</div></blockquote>
+<p>With the Resolution pulldown you can choose to save the clip at the same
+size, at half size or at quarter size.</p>
+<blockquote>
+<div><ul class="simple">
 <li><p>Profile</p></li>
 </ul>
 </div></blockquote>
-<p>With the Profile option, you can select the basic codec used when saving the movie.  Currently these can be “None”, “H264”, “ProRes”, “ProRes_Proxy”, “ProRes_LT”, “ProRes_HQ”, “ProRes_4444” or “ProRes_XQ”.  Note that the most compatible codec (“H264”) requires a license from VideoLAN for encoding or to compile mrv2 in GPL mode.  Please refer to the compilation instructions of mrv2 at:</p>
+<p>With the Profile option, you can select the basic codec used when saving the movie.  Currently these can be “None”, “H264”, “ProRes”, “ProRes_Proxy”, “ProRes_LT”, “ProRes_HQ”, “ProRes_4444”, “ProRes_XQ”, “VP9”, “Cineform” or “AV1”.  Note that the most compatible codec (“H264”) requires a license from VideoLAN for encoding or to compile mrv2 in GPL mode.  Please refer to the compilation instructions of mrv2 at:</p>
 <blockquote>
 <div><p><a class="reference external" href="https:://github.com/ggarra13/mrv2">https:://github.com/ggarra13/mrv2</a></p>
 <ul class="simple">
+<li><p>Pixel Format</p></li>
+</ul>
+</div></blockquote>
+<p>Depending on the Profile chosen, the pixel formats supported to save the
+movie can change.  YUV pixel formats compress better while GBRA formats
+preserve the quality better.  The 10LE or 12LE indicate the number of bytes
+used (8-bits, 10-bits or 12bits).  The higher the number of bits, the better
+the quality, but the bigger the image size.</p>
+<blockquote>
+<div><ul class="simple">
 <li><p>Preset</p></li>
 </ul>
 </div></blockquote>

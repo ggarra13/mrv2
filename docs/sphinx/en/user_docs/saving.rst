@@ -16,12 +16,25 @@ When saving a movie from the menu File->Save Movie or Sequence and typing in the
 
 .. topic:: Video Options
 
+	   * Resolution
+
+  With the Resolution pulldown you can choose to save the clip at the same
+  size, at half size or at quarter size.
+  
 	   * Profile
 
-  With the Profile option, you can select the basic codec used when saving the movie.  Currently these can be "None", "H264", "ProRes", "ProRes_Proxy", "ProRes_LT", "ProRes_HQ", "ProRes_4444" or "ProRes_XQ".  Note that the most compatible codec ("H264") requires a license from VideoLAN for encoding or to compile mrv2 in GPL mode.  Please refer to the compilation instructions of mrv2 at:
+  With the Profile option, you can select the basic codec used when saving the movie.  Currently these can be "None", "H264", "ProRes", "ProRes_Proxy", "ProRes_LT", "ProRes_HQ", "ProRes_4444", "ProRes_XQ", "VP9", "Cineform" or "AV1".  Note that the most compatible codec ("H264") requires a license from VideoLAN for encoding or to compile mrv2 in GPL mode.  Please refer to the compilation instructions of mrv2 at:
 	      
              https:://github.com/ggarra13/mrv2
 
+	     * Pixel Format
+
+  Depending on the Profile chosen, the pixel formats supported to save the
+  movie can change.  YUV pixel formats compress better while GBRA formats
+  preserve the quality better.  The 10LE or 12LE indicate the number of bytes
+  used (8-bits, 10-bits or 12bits).  The higher the number of bits, the better
+  the quality, but the bigger the image size.
+	     
 	     * Preset
 
   With the Preset selection, you can choose the quality of encoding with the selected codec.  Currently, we ship presets for vp9 and av1.
