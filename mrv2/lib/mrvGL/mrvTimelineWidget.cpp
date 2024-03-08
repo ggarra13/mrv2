@@ -699,6 +699,16 @@ namespace mrv
     int TimelineWidget::enterEvent()
     {
         TLRENDER_P();
+
+        bool takeFocus = true;
+        Fl_Widget* focusWidget = Fl::focus();
+        TimelineClass* c = p.ui->uiTimeWindow;
+        if (focusWidget == c->uiFrame || focusWidget == c->uiStartFrame ||
+            focusWidget == c->uiEndFrame)
+            takeFocus = false;
+        // if (Fl::focus() == nullptr)
+        if (takeFocus)
+            take_focus();
         p.timelineWindow->cursorEnter(true);
         return 1;
     }
