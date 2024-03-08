@@ -1,3 +1,9 @@
+v1.0.9
+======
+
+- Added a preference setting on Preferences->Errors to control what to do
+  on FFmpeg errors.
+
 v1.0.8
 ======
 

@@ -33,6 +33,8 @@ namespace mrv
     static const int kMaxLines = 300;
 
     LogDisplay::ShowPreferences LogDisplay::prefs = LogDisplay::kDockOnError;
+    LogDisplay::ShowPreferences LogDisplay::ffmpegPrefs =
+        LogDisplay::kNoRaise;
 
     class LogData
     {

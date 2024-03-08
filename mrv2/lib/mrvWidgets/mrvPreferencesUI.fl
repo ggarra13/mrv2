@@ -165,7 +165,7 @@ If you try to open several mrv2s with different images, all these images will be
           }
           Fl_Group {} {
             label {View Window} open
-            xywh {288 35 555 349} box EMBOSSED_BOX align 5
+            xywh {288 35 555 349} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {
               label Defaults open
@@ -248,7 +248,7 @@ If you try to open several mrv2s with different images, all these images will be
               }
               Fl_Check_Button uiPrefsAutoFrame {
                 label {Auto Frame}
-                user_data this user_data_type {PreferencesUI*} selected
+                user_data this user_data_type {PreferencesUI*}
                 tooltip {When this is on, View/Auto Frame will be active.} xywh {685 124 20 20} box UP_BOX down_box DOWN_BOX align 4
               }
               Fl_Check_Button uiPrefsSafeAreas {
@@ -614,7 +614,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
             }
           }
           Fl_Group {} {
-            label Playback open
+            label Playback
             xywh {299 34 530 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {
@@ -1323,12 +1323,30 @@ v->uiOCIO_Look->do_callback();}
             }
           }
           Fl_Group {} {
-            label Errors
-            xywh {303 39 532 362} box EMBOSSED_BOX align 5 hide
+            label Errors open
+            xywh {303 39 532 362} box EMBOSSED_BOX align 5
           } {
             Fl_Group {} {open
               xywh {341 39 446 313}
             } {
+              Fl_Choice uiPrefsRaiseLogWindowOnFFmpegError {
+                label {On FFmpeg Error} open selected
+                tooltip {Adjusts how Log Window behaves in case of an FFmpeg error.} xywh {493 128 255 25} down_box BORDER_BOX align 132 textcolor 32
+                class {mrv::Choice}
+              } {
+                MenuItem {} {
+                  label {Do Nothing}
+                  xywh {30 30 100 20}
+                }
+                MenuItem {} {
+                  label {Open Logs on Dock}
+                  xywh {30 30 100 20}
+                }
+                MenuItem {} {
+                  label {Open Logs on Window}
+                  xywh {40 40 100 20}
+                }
+              }
               Fl_Choice uiPrefsRaiseLogWindowOnError {
                 label {On Error} open
                 tooltip {Adjusts how Log Window behaves in case of error.} xywh {493 173 255 25} down_box BORDER_BOX align 132 textcolor 32

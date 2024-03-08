@@ -31,6 +31,7 @@ namespace mrv
             logbuffer();
             virtual ~logbuffer();
 
+            void open_ffmpeg_log_panel();
             void open_log_panel();
 
             //! from basic_streambuf, stl function used to sync stream

@@ -58,6 +58,32 @@ namespace mrv
                 out.close();
         };
 
+        void logbuffer::open_ffmpeg_log_panel()
+        {
+            if (!App::ui || !App::app->isRunning())
+                return;
+
+            if (Flu_File_Chooser::window)
+                return;
+
+            bool local = std::this_thread::get_id() == mainThread;
+
+            if (LogDisplay::ffmpegPrefs == LogDisplay::kDockOnError)
+            {
+                if (local)
+                    open_log_panel_cb(App::ui);
+                else
+                    Fl::awake((Fl_Awake_Handler)open_log_panel_cb, App::ui);
+            }
+            else if (LogDisplay::ffmpegPrefs == LogDisplay::kWindowOnError)
+            {
+                if (local)
+                    open_log_window_cb(App::ui);
+                else
+                    Fl::awake((Fl_Awake_Handler)open_log_window_cb, App::ui);
+            }
+        }
+        
         void logbuffer::open_log_panel()
         {
             if (!App::ui || !App::app->isRunning())
@@ -109,7 +135,12 @@ namespace mrv
         void errorbuffer::print(const char* c)
         {
             std::cerr << c;
-            open_log_panel();
+            const std::string& error = c;
+            std::cerr << error.substr(8, 6) << std::endl;
+            if (error.substr(8, 6) == "ffmpeg")
+                open_ffmpeg_log_panel();
+            else
+                open_log_panel();
             if (uiLogDisplay)
                 uiLogDisplay->error(c);
         }

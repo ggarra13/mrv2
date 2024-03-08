@@ -809,6 +809,10 @@ namespace mrv
 
         uiPrefs->uiPrefsRaiseLogWindowOnError->value(tmp);
         LogDisplay::prefs = (LogDisplay::ShowPreferences)tmp;
+        
+        errors.get("ffmpeg_log_display", tmp, 0);
+        uiPrefs->uiPrefsRaiseLogWindowOnFFmpegError->value(tmp);
+        LogDisplay::ffmpegPrefs = (LogDisplay::ShowPreferences)tmp;
 
         Fl_Preferences opengl(base, "opengl");
 
@@ -1414,6 +1418,9 @@ namespace mrv
         Fl_Preferences errors(base, "errors");
         errors.set(
             "log_display", (int)uiPrefs->uiPrefsRaiseLogWindowOnError->value());
+        errors.set(
+            "ffmpeg_log_display",
+            (int)uiPrefs->uiPrefsRaiseLogWindowOnFFmpegError->value());
 
         Fl_Preferences opengl(base, "opengl");
         opengl.set("vsync", (int)uiPrefs->uiPrefsOpenGLVsync->value());
@@ -1746,6 +1753,9 @@ namespace mrv
 
         LogDisplay::prefs = (LogDisplay::ShowPreferences)
                                 uiPrefs->uiPrefsRaiseLogWindowOnError->value();
+        LogDisplay::ffmpegPrefs =
+            (LogDisplay::ShowPreferences)
+                uiPrefs->uiPrefsRaiseLogWindowOnFFmpegError->value();
 
         Fl_Round_Button* r;
         r = (Fl_Round_Button*)uiPrefs->uiPrefsOpenMode->child(1);

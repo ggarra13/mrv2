@@ -21,7 +21,8 @@ namespace mrv
         };
 
         static ShowPreferences prefs;
-
+        static ShowPreferences ffmpegPrefs;
+        
     public:
         LogDisplay(int x, int y, int w, int h, const char* l = 0);
         ~LogDisplay();
