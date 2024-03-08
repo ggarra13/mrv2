@@ -24,6 +24,7 @@ namespace mrv
         j["volume"] = value.volume;
         j["mute"] = value.mute;
         j["audioOffset"] = value.audioOffset;
+        j["ocioIcs"] = value.ocioIcs;
         std::vector< draw::Annotation > annotations;
         for (const auto& annotation : value.annotations)
         {
@@ -65,6 +66,8 @@ namespace mrv
         j.at("volume").get_to(value.volume);
         j.at("mute").get_to(value.mute);
         j.at("audioOffset").get_to(value.audioOffset);
+        if (j.contains("ocioIcs"))
+            j.at("ocioIcs").get_to(value.ocioIcs);
         const nlohmann::json& annotations = j["annotations"];
         for (const auto& annotation : annotations)
         {

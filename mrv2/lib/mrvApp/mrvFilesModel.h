@@ -48,6 +48,8 @@ namespace mrv
         bool mute = false;
         double audioOffset = 0.0;
 
+        std::string ocioIcs;
+        
         std::vector<std::shared_ptr<draw::Annotation > > annotations;
     };
 

@@ -16,6 +16,8 @@ v1.0.8
  - Added -ics (-ocioInput), -od (ocioDisplay), -ov (-ocioView) and
    -ol (-ocioLook) command-line flags to override the default settings.
    Note that -ocioDisplay and -ocioView must be used together.
+ - Made OCIO Input Color Space be stored with the image, except when doing
+   comparisons in which the first image's Input Color Space is used.
 
 v1.0.7
 ======

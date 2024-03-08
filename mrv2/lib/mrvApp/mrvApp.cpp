@@ -1259,6 +1259,7 @@ namespace mrv
             p.active[0]->audioOffset = p.timelinePlayers[0]->audioOffset();
             p.active[0]->annotations =
                 p.timelinePlayers[0]->getAllAnnotations();
+            p.active[0]->ocioIcs = image::ocioIcs();
         }
 
         std::vector<TimelinePlayer*> newTimelinePlayers;
@@ -1423,7 +1424,10 @@ namespace mrv
                         set_edit_mode_cb(EditMode::kFull, ui);
                 }
 
-                Preferences::updateICS();
+                if (p.active[0]->ocioIcs.empty())
+                    Preferences::updateICS();
+                else
+                    image::setOcioIcs(p.active[0]->ocioIcs);
                 
                 if (p.running)
                 {
