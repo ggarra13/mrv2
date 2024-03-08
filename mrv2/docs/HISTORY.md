@@ -3,6 +3,7 @@ v1.0.9
 
 - Added a preference setting on Preferences->Errors to control what to do
   on FFmpeg errors.
+- Made the panel drag bar a tad more grey.
 
 v1.0.8
 ======

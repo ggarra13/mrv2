@@ -364,6 +364,7 @@ namespace mrv
         dragger->clear_visible_focus();
         dragger->align(
             FL_ALIGN_CENTER | FL_ALIGN_INSIDE | FL_ALIGN_IMAGE_NEXT_TO_TEXT);
+        dragger->color(fl_lighter(dragger->color()));
         dragger->when(FL_WHEN_CHANGED);
 
         group = new Fl_Group(x(), 23, w(), 30, "Group");
