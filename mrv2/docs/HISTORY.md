@@ -5,6 +5,9 @@ v1.0.9
   on FFmpeg errors.
 - Made the panel drag bar a tad more grey, for a nicer look and more clear
   distinction when several panels are stacked on the dockbar.
+- Fixed a thumbnail refresh issue on mrv2's custom file requester which would
+  show when we save over a previous file.  tlRender would cache the file and
+  would display the previous thumbnail before saving.  Now it is fixed.
   
 
 v1.0.8

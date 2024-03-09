@@ -56,6 +56,8 @@
 #include <FL/Fl_Rect.H>
 #include <FL/Fl_Shared_Image.H>
 
+#include <tlIO/System.h>
+
 #include <tlCore/Path.h>
 #include <tlCore/String.h>
 
@@ -316,6 +318,7 @@ void Flu_File_Chooser::previewCB()
 
     if (previewBtn->value() && thumbnailsFileReq)
     {
+        
         for (int i = 0; i < c; ++i)
         {
             Entry* e = (Entry*)g->child(i);
@@ -4081,8 +4084,6 @@ void Flu_File_Chooser::cd(const char* path)
 
     cancelThumbnailRequests();
 
-    DBGM1("cd to " << (path ? path : "null"));
-
     if (!path || path[0] == '\0')
     {
         path = getcwd(cwd, 1024);
@@ -5035,6 +5036,15 @@ static const char* _flu_file_chooser(
         Flu_File_Chooser::window->value(retname.c_str());
     }
     // Refresh thumbnails in case we saved a frame last time
+
+    // Clear tlRender's cache
+
+    
+    auto ioSystem = context->getSystem<io::System>();
+    auto cache = ioSystem->getCache();
+    uint64_t bytes = cache->getMax();
+    cache->setMax(0);
+        
     Flu_File_Chooser::window->previewCB(); 
     Flu_File_Chooser::window->set_modal();
     Flu_File_Chooser::window->show();
@@ -5044,6 +5054,8 @@ static const char* _flu_file_chooser(
 
     Fl_Group::current(0);
 
+    cache->setMax(bytes);
+    
     if (Flu_File_Chooser::window->value())
     {
         if (Flu_File_Chooser::window->count() == 1)
