@@ -535,6 +535,10 @@ namespace mrv
                     CHECK_GL;
                 }
 
+                if (p.environmentMapOptions.type ==
+                    EnvironmentMapOptions::kNone)
+                    mvp = _notRotatedMatrix();
+                
                 if (p.showAnnotations && gl.annotation)
                 {
                     CHECK_GL;

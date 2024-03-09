@@ -48,6 +48,8 @@ namespace mrv
         math::Matrix4x4f _createEnvironmentMap();
 
         math::Matrix4x4f _createTexturedRectangle();
+        
+        math::Matrix4x4f _notRotatedMatrix();
 
         void _calculateColorArea(mrv::area::Info& info);
 
