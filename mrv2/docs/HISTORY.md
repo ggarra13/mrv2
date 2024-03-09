@@ -3,7 +3,9 @@ v1.0.9
 
 - Added a preference setting on Preferences->Errors to control what to do
   on FFmpeg errors.
-- Made the panel drag bar a tad more grey.
+- Made the panel drag bar a tad more grey, for a nicer look and more clear
+  distinction when several panels are stacked on the dockbar.
+  
 
 v1.0.8
 ======

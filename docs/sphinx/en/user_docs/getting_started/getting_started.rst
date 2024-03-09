@@ -23,17 +23,17 @@ Installing mrv2
 
 On Debian (Ubuntu, etc) systems, you would install with::
 
-  sudo dpkg -i mrv2-v1.0.8-amd64.tar.gz
+  sudo dpkg -i mrv2-v1.0.9-amd64.tar.gz
   
 On Red Hat (Rocky Linux, etc), you would install it with::
 
-  sudo rpm -i mrv2-v1.0.8-amd64.tar.gz
+  sudo rpm -i mrv2-v1.0.9-amd64.tar.gz
 
 Once you install it, you can run mrv2 by just typing mrv2 in the shell, as a symlink to the executable is placed in /usr/bin. The installers will also associate file extensions and install an icon for easy starting up in the Desktop icon of the user that installed it. For running mrv2 with the icon, you need to select it and use the right mouse button to open the menu and choose Allow Launch.
 
 If you lack sudo permissions in your organization, you should download the .tar.gz file and you can uncompress it with::
 
-  tar -xf mrv2-v1.0.8-amd64.tar.gz
+  tar -xf mrv2-v1.0.9-amd64.tar.gz
   
 That will create a folder in the direcory you uncompress it from. You can then run mrv2 by using the bash script::
 
