@@ -80,4 +80,4 @@ Binaries:
 https://github.com/ggarra13/mrv2/releases/tag/v1.0.8
 https://sourceforge.net/projects/mrv2/files/v1.0.8/
 
-#player #movie #flipbook #usd #openusd #opentimelineio #mrv2 #mrViewer #mrViewer2 #vp9 #av1 #h264 #mp4 #mov #avi #webm #prores #prores4444 #cfhd #cineform #gopro #vpx #vfx #vr #animation #games #filmmaking #opensource #environmentmaps #stereo 
+#player #movie #flipbook #usd #openusd #opentimelineio #mrv2 #mrViewer #mrViewer2 #vp9 #av1 #h264 #mp4 #mov #avi #webm #prores #prores4444 #cfhd #cineform #gopro #vpx #vfx #vr #animation #games #filmmaking #opensource #environmentmaps #stereo #windows macos #linux

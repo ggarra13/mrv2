@@ -28,6 +28,10 @@ namespace mrv
             o.drawMode = static_cast<tl::usd::DrawMode>(
                 settings->getValue<int>("USD/drawMode"));
             o.enableLighting = settings->getValue<bool>("USD/enableLighting");
+            o.enableSceneLights =
+                settings->getValue<bool>("USD/enableSceneLights");
+            o.enableSceneMaterials =
+                settings->getValue<bool>("USD/enableSceneMaterials");
             o.sRGB = settings->getValue<bool>("USD/sRGB");
             o.stageCache = settings->getValue<int>("USD/stageCache");
             o.diskCache = settings->getValue<int>("USD/diskCache");
@@ -47,6 +51,9 @@ namespace mrv
             settings->setValue("USD/complexity", o.complexity);
             settings->setValue("USD/drawMode", o.drawMode);
             settings->setValue("USD/enableLighting", o.enableLighting);
+            settings->setValue("USD/enableSceneLights", o.enableSceneLights);
+            settings->setValue(
+                "USD/enableSceneMaterials", o.enableSceneMaterials);
             settings->setValue("USD/sRGB", o.sRGB);
             settings->setValue("USD/stageCache", o.stageCache);
             settings->setValue("USD/diskCache", o.diskCache);

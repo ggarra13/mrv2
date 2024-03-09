@@ -8,6 +8,9 @@ v1.0.9
 - Fixed a thumbnail refresh issue on mrv2's custom file requester which would
   show when we save over a previous file.  tlRender would cache the file and
   would display the previous thumbnail before saving.  Now it is fixed.
+- Removed mrvSequence.cpp which was empty.
+- Added Global USD Render Option parameters which were missing.
+- Fixed overlapping of audio labels in Edit window.
   
 
 v1.0.8

@@ -95,7 +95,7 @@ namespace mrv
             cg->begin();
 
             Y += 30;
-            bg = new Fl_Group(g->x(), Y, g->w(), 22 * 8);
+            bg = new Fl_Group(g->x(), Y, g->w(), 22 * 10);
             bg->box(FL_NO_BOX);
             bg->begin();
 
@@ -216,6 +216,38 @@ namespace mrv
                 {
                     int v = w->value();
                     settings->setValue("USD/enableLighting", v);
+                    _update();
+                });
+
+            Y += 22;
+
+            cV = new Widget< Fl_Check_Button >(
+                g->x() + 90, Y, g->w(), 20, _("Enable Scene Lights"));
+            c = cV;
+            c->labelsize(12);
+            c->value(settings->getValue<bool>("USD/enableSceneLigths"));
+
+            cV->callback(
+                [=](auto w)
+                {
+                    int v = w->value();
+                    settings->setValue("USD/enableSceneLights", v);
+                    _update();
+                });
+
+            Y += 22;
+
+            cV = new Widget< Fl_Check_Button >(
+                g->x() + 90, Y, g->w(), 20, _("Enable Scene Materials"));
+            c = cV;
+            c->labelsize(12);
+            c->value(settings->getValue<bool>("USD/enableSceneMaterials"));
+
+            cV->callback(
+                [=](auto w)
+                {
+                    int v = w->value();
+                    settings->setValue("USD/enableSceneMaterials", v);
                     _update();
                 });
 

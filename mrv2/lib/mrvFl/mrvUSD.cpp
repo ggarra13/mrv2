@@ -37,6 +37,10 @@ namespace mrv
             }
             ioOptions["USD/enableLighting"] =
                 string::Format("{0}").arg(o.enableLighting);
+            ioOptions["USD/enableSceneLights"] =
+                string::Format("{0}").arg(o.enableSceneLights);
+            ioOptions["USD/enableSceneMaterials"] =
+                string::Format("{0}").arg(o.enableSceneMaterials);
             ioOptions["USD/sRGB"] = string::Format("{0}").arg(o.sRGB);
             ioOptions["USD/stageCacheCount"] =
                 string::Format("{0}").arg(o.stageCache);
