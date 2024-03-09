@@ -6,6 +6,7 @@ v1.0.9
 - Made the panel drag bar a tad more grey, for a nicer look and more clear
   distinction when several panels are stacked on the dockbar.
 - Removed mrvSequence.cpp which was empty.
+- Added Global USD Render Option parameters which were missing.
   
 
 v1.0.8
