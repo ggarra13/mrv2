@@ -5,6 +5,7 @@ v1.0.9
   on FFmpeg errors.
 - Made the panel drag bar a tad more grey, for a nicer look and more clear
   distinction when several panels are stacked on the dockbar.
+- Removed mrvSequence.cpp which was empty.
   
 
 v1.0.8
