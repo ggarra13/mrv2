@@ -502,9 +502,11 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
             --enable-decoder=vorbis
             --enable-decoder=vp9
             --enable-decoder=yuv4
+            --enable-decoder=wmav1
+            --enable-decoder=wmav2
             --enable-decoder=wmv1
             --enable-decoder=wmv2
-            --enable-decoder=wmv3
+
             --disable-encoders
             --enable-encoder=aac
             --enable-encoder=ac3
@@ -556,8 +558,11 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
             --enable-encoder=v410
             --enable-encoder=yuv4
             --enable-encoder=vorbis
+            --enable-encoder=wmav1
+            --enable-encoder=wmav2
             --enable-encoder=wmv1
             --enable-encoder=wmv2
+
             --disable-demuxers
             --enable-demuxer=aac
             --enable-demuxer=ac3
@@ -604,6 +609,7 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
             --enable-demuxer=v210x
             --enable-demuxer=wav
             --enable-demuxer=yuv4mpegpipe
+
             --disable-muxers
             --enable-muxer=ac3
             --enable-muxer=aiff
@@ -647,6 +653,7 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
             --enable-muxer=truehd
             --enable-muxer=wav
             --enable-muxer=yuv4mpegpipe
+
             --disable-parsers
             --enable-parser=aac
             --enable-parser=ac3
@@ -663,6 +670,7 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
             --enable-parser=opus
             --enable-parser=vorbis
             --enable-parser=vp9
+
             --disable-protocols
             --enable-protocol=crypto
             --enable-protocol=file
