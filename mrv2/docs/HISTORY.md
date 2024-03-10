@@ -13,7 +13,7 @@ v1.0.9
 - Fixed overlapping of audio labels in Edit window.
 - Fixed rotation inverting the coordinates of the annotations.
 - Fixed the pixel coordinate information when flipped or rotated.
-- Fixed the pixel color bar displaya and information when rotated.
+- Fixed the pixel color bar display and information when rotated.
 - Made arrow head size be proportional to the line size.
 - Made drawing cursor be drawn with float coordinates.
 - Made circle's center also be drawn with float coordinates.
