@@ -877,7 +877,7 @@ namespace mrv
 #endif
             _updateCursor();
             _updatePixelBar();
-            _updateCoords();
+            updateCoords();
             redraw();
             return 1;
             break;
@@ -948,7 +948,7 @@ namespace mrv
         }
         case FL_MOVE:
         {
-            _updateCoords();
+            updateCoords();
             // If we are drawing or erasing, draw the cursor
             if (p.actionMode != ActionMode::kScrub &&
                 p.actionMode != ActionMode::kSelection &&
@@ -1093,7 +1093,7 @@ namespace mrv
                     setViewZoom(zoom, p.mousePress);
                 }
             }
-            _updateCoords();
+            updateCoords();
             redrawWindows();
             return 1;
         }

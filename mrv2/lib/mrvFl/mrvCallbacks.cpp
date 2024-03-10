@@ -697,6 +697,7 @@ namespace mrv
         o.mirror.x ^= 1;
         ui->app->setDisplayOptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
+        ui->uiView->updateCoords();
         ui->uiView->redraw();
     }
 
@@ -706,6 +707,7 @@ namespace mrv
         o.mirror.y ^= 1;
         ui->app->setDisplayOptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
+        ui->uiView->updateCoords();
         ui->uiView->redraw();
     }
     

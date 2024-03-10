@@ -535,10 +535,6 @@ namespace mrv
                     CHECK_GL;
                 }
 
-                if (p.environmentMapOptions.type ==
-                    EnvironmentMapOptions::kNone)
-                    mvp = _projectionWithoutRotationMatrix();
-                
                 if (p.selection.max.x >= 0)
                 {
                     Fl_Color c = p.ui->uiPrefs->uiPrefsViewSelection->color();
@@ -556,6 +552,10 @@ namespace mrv
                     _drawRectangleOutline(selection, color, mvp);
                     CHECK_GL;
                 }
+                
+                // if (p.environmentMapOptions.type ==
+                //     EnvironmentMapOptions::kNone)
+                //     mvp = _projectionWithoutRotationMatrix();
                 
                 if (p.showAnnotations && gl.annotation)
                 {
@@ -866,7 +866,7 @@ namespace mrv
         TLRENDER_P();
         MRV2_GL();
 
-        math::Vector2i pos = _getRotatedRaster();
+        math::Vector2i pos = _getRaster();
 
         if (p.ui->uiPixelWindow->uiPixelValue->value() != PixelValue::kFull)
         {

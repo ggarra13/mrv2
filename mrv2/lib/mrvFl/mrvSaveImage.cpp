@@ -17,8 +17,9 @@ namespace fs = std::filesystem;
 #include <tlGL/Util.h>
 #include <tlTimelineGL/Render.h>
 
-#include "mrvCore/mrvUtil.h"
 #include "mrvCore/mrvLocale.h"
+#include "mrvCore/mrvMath.h"
+#include "mrvCore/mrvUtil.h"
 
 #include "mrvWidgets/mrvProgressReport.h"
 
@@ -126,6 +127,15 @@ namespace mrv
             int X = 0, Y = 0;
 
             image::Info outputInfo;
+
+            auto rotation = ui->uiView->getRotation();
+            if (options.annotations && rotationSign(rotation) != 0)
+            {
+                size_t tmp = renderSize.w;
+                renderSize.w = renderSize.h;
+                renderSize.h = tmp;
+            }
+                
             outputInfo.size = renderSize;
             outputInfo.pixelType = info.video[layerId].pixelType;
 
@@ -159,6 +169,8 @@ namespace mrv
                 Fl::flush();
                 view->flush();
                 Fl::check();
+
+            
                 const auto& viewportSize = view->getViewportSize();
                 if (viewportSize.w >= renderSize.w &&
                     viewportSize.h >= renderSize.h)
@@ -172,6 +184,8 @@ namespace mrv
 
                     X = (viewportSize.w - renderSize.w) / 2;
                     Y = (viewportSize.h - renderSize.h) / 2;
+                    
+                    outputInfo.size = renderSize;
                 }
                 else
                 {

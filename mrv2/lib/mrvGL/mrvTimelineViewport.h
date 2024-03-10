@@ -309,17 +309,6 @@ namespace mrv
         //! Refresh both the primary and secondary windows by clearing the
         //! associated resources.
         void refreshWindows();
-
-
-        //! Get the full projection matrix.
-        math::Matrix4x4f _projectionMatrix() const noexcept;
-        
-        //! Get the matrix to pixel coordinates of image.
-        math::Matrix4x4f _pixelMatrix() const noexcept;
-        
-        //! Get the projection matrix without the rotation.
-        math::Matrix4x4f _projectionWithoutRotationMatrix() const noexcept;
-
         
         //! Refresh window by clearing the associated resources.
         virtual void refresh(){};
@@ -363,19 +352,25 @@ namespace mrv
         
         //! Set the image rotation.
         void setRotation(float) noexcept;
+
+        //! Update the coordinates.
+        void updateCoords() const noexcept;
         
     protected:
         virtual void _readPixel(image::Color4f& rgba) const noexcept = 0;
         math::Vector2i _getViewportCenter() const noexcept;
         math::Vector2i _getFocus(int X, int Y) const noexcept;
         math::Vector2i _getFocus() const noexcept;
-        math::Vector2i _getRaster(int X, int Y) const noexcept;
         math::Vector2i _getRaster() const noexcept;
-        math::Vector2i _getRotatedRaster(int X, int Y) const noexcept;
-        math::Vector2i _getRotatedRaster() const noexcept;
         math::Vector2f _getRasterf(int X, int Y) const noexcept;
         math::Vector2f _getRasterf() const noexcept;
 
+        //! Get the full projection matrix.
+        math::Matrix4x4f _projectionMatrix() const noexcept;
+        
+        //! Get the matrix to pixel (raster) coordinates of image.
+        math::Matrix4x4f _pixelMatrix() const noexcept;
+        
         //! Handle the selection area position taking into account
         //! rotation.
         void _handleSelectionArea(math::Vector2i& pos) const noexcept;
@@ -398,7 +393,6 @@ namespace mrv
         bool _isEnvironmentMap() const noexcept;
         void _updateZoom() const noexcept;
 
-        void _updateCoords() const noexcept;
         void _updatePixelBar() const noexcept;
         void _updatePixelBar(image::Color4f& rgba) const noexcept;
         bool _shouldUpdatePixelBar() const noexcept;

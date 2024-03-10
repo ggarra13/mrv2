@@ -44,24 +44,6 @@ namespace
     const float kHelpTextFade = 1.5F; // 1.5 Seconds
 } // namespace
 
-namespace
-{
-    int rotation_sign(float angle)
-    {
-        int sign = 1;
-        // Cast to integer and normalize to the range [0, 360)
-        int normalized_angle = static_cast<int>(angle) % 360;
-        if (normalized_angle < 0) {
-            normalized_angle += 360;
-            sign = -1;
-        }
-
-        // Check for specific multiples of 90
-        return (normalized_angle == 90 || normalized_angle == 270) * sign;
-    }
-
-
-}
 
 namespace mrv
 {
@@ -899,7 +881,7 @@ namespace mrv
         _frameView();
         _refresh();
         _updateZoom();
-        _updateCoords();
+        updateCoords();
     }
 
     void TimelineViewport::viewZoom1To1() noexcept
@@ -1107,13 +1089,16 @@ namespace mrv
     }
 
     float TimelineViewport::getRotation() const noexcept
-    {
+    {                     
         return _p->rotation;
     }
     
     void TimelineViewport::setRotation(float x) noexcept
     {
         TLRENDER_P();
+
+        if (x == p.rotation)
+            return;
         
         p.rotation = x;
         if (p.frameView)
@@ -1121,7 +1106,7 @@ namespace mrv
         else
             redrawWindows();
         updatePixelBar();
-        _updateCoords();
+        updateCoords();
     }
     
     math::Vector2i TimelineViewport::_getViewportCenter() const noexcept
@@ -1142,7 +1127,7 @@ namespace mrv
         setViewPosAndZoom(pos, p.viewZoom);
         p.mousePos = _getFocus();
         _refresh();
-        _updateCoords();
+        updateCoords();
     }
 
     bool TimelineViewport::_isEnvironmentMap() const noexcept
@@ -1333,13 +1318,14 @@ namespace mrv
     {
         return _getFocus(_p->event_x, _p->event_y);
     }
-
-    math::Vector2f TimelineViewport::_getRasterf(int X, int Y) const noexcept
+    
+    math::Vector2f
+    TimelineViewport::_getRasterf(int X, int Y) const noexcept
     {
-        TLRENDER_P();
-        math::Vector2f pos(
-            (X - p.viewPos.x) / p.viewZoom, (Y - p.viewPos.y) / p.viewZoom);
-        return pos;
+        const auto& pm = _pixelMatrix();
+        math::Vector3f pos(X, Y, 1.F);
+        pos = pm * pos;
+        return math::Vector2f(pos.x, pos.y);
     }
 
     math::Vector2f TimelineViewport::_getRasterf() const noexcept
@@ -1347,31 +1333,11 @@ namespace mrv
         return _getRasterf(_p->mousePos.x, _p->mousePos.y);
     }
 
-    math::Vector2i TimelineViewport::_getRaster(int X, int Y) const noexcept
-    {
-        TLRENDER_P();
-        math::Vector2i pos(
-            (X - p.viewPos.x) / p.viewZoom, (Y - p.viewPos.y) / p.viewZoom);
-        return pos;
-    }
 
     math::Vector2i TimelineViewport::_getRaster() const noexcept
     {
-        return _getRaster(_p->mousePos.x, _p->mousePos.y);
-    }
-
-    math::Vector2i
-    TimelineViewport::_getRotatedRaster(int X, int Y) const noexcept
-    {
-        const auto& pm = _pixelMatrix();
-        math::Vector3f pos(X, Y, 1.F);
-        pos = pm * pos;
+        const auto& pos = _getRasterf(_p->mousePos.x, _p->mousePos.y);
         return math::Vector2i(pos.x, pos.y);
-    }
-
-    math::Vector2i TimelineViewport::_getRotatedRaster() const noexcept
-    {
-        return _getRotatedRaster(_p->mousePos.x, _p->mousePos.y);
     }
 
     void TimelineViewport::_updateZoom() const noexcept
@@ -1386,7 +1352,7 @@ namespace mrv
         c->uiZoom->copy_label(label);
     }
 
-    void TimelineViewport::_updateCoords() const noexcept
+    void TimelineViewport::updateCoords() const noexcept
     {
         TLRENDER_P();
         char buf[40];
@@ -1396,7 +1362,17 @@ namespace mrv
         if (p.environmentMapOptions.type == EnvironmentMapOptions::kNone)
         {
             p.mousePos = _getFocus();
-            pos = _getRotatedRaster();
+            pos = _getRaster();
+
+            // If we have Mirror X or Mirror Y on, flip the coordinates
+            const auto o = p.ui->app->displayOptions();
+            TimelineViewport* self = const_cast< TimelineViewport* >(this);
+            const float devicePixelRatio = self->pixels_per_unit();
+            const auto& renderSize = getRenderSize();
+            if (o.mirror.x)
+                pos.x = (renderSize.w - 1 - pos.x) * devicePixelRatio;
+            if (o.mirror.y)
+                pos.y = (renderSize.h - 1 - pos.y) * devicePixelRatio;
         }
         else
         {
@@ -1555,7 +1531,7 @@ namespace mrv
         constexpr float NaN = std::numeric_limits<float>::quiet_NaN();
         image::Color4f rgba(NaN, NaN, NaN, NaN);
         bool inside = true;
-        const auto& pos = _getRotatedRaster();
+        const auto& pos = _getRaster();
         if (p.environmentMapOptions.type == EnvironmentMapOptions::kNone &&
             (pos.x < 0 || pos.x >= r.w || pos.y < 0 || pos.y >= r.h))
             inside = false;
@@ -2949,21 +2925,4 @@ namespace mrv
         return vm;
     }
 
-    math::Matrix4x4f
-    TimelineViewport::_projectionWithoutRotationMatrix() const noexcept
-    {
-        TLRENDER_P();
-        
-        const auto& viewportSize = getViewportSize();
-        
-        const math::Matrix4x4f& vm =
-            math::translate(math::Vector3f(p.viewPos.x, p.viewPos.y, 0.F)) *
-            math::scale(math::Vector3f(p.viewZoom, p.viewZoom, 1.F));
-        
-        const auto pm = math::ortho(
-            0.F, static_cast<float>(viewportSize.w), 0.F,
-            static_cast<float>(viewportSize.h), -1.F, 1.F);
-
-        return pm * vm;
-    }
 } // namespace mrv

@@ -15,8 +15,9 @@
 #include <tlGL/Util.h>
 #include <tlTimelineGL/Render.h>
 
-#include "mrvCore/mrvUtil.h"
 #include "mrvCore/mrvLocale.h"
+#include "mrvCore/mrvMath.h"
+#include "mrvCore/mrvUtil.h"
 
 #include "mrvWidgets/mrvProgressReport.h"
 
@@ -35,6 +36,11 @@ namespace
 {
     const char* kModule = "save";
 }
+
+namespace
+{
+}
+
 
 namespace mrv
 {
@@ -306,6 +312,13 @@ namespace mrv
             {
                 const SaveResolution resolution = options.resolution;
                 renderSize = info.video[layerId].size;
+                auto rotation = ui->uiView->getRotation();
+                if (options.annotations && rotationSign(rotation) != 0)
+                {
+                    size_t tmp = renderSize.w;
+                    renderSize.w = renderSize.h;
+                    renderSize.h = tmp;
+                }
                 if (resolution == SaveResolution::kHalfSize)
                 {
                     renderSize.w /= 2;
