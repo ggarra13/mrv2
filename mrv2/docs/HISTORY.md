@@ -23,6 +23,8 @@ v1.0.9
   to Media Info Panel's video.
 - Fixed FFmpeg reader to take color coefficients.  Now the gray ramp of
   Sam Richards is the same.
+- Fixed a bug in session loading when there was no Input Color Space specified
+  in the image, which got introduced in v1.0.8.
 
 
 v1.0.8

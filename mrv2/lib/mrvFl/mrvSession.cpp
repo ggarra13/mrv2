@@ -437,7 +437,8 @@ namespace mrv
                         continue;
 
                     Aitem->ocioIcs = item.ocioIcs;
-                    mrv::image::setOcioIcs(Aitem->ocioIcs);
+                    if (!Aitem->ocioIcs.empty())
+                        mrv::image::setOcioIcs(Aitem->ocioIcs);
                     Aitem->annotations = item.annotations;
                     Aitem->videoLayer = item.videoLayer;
                     Aitem->currentTime = item.currentTime;
@@ -508,9 +509,6 @@ namespace mrv
                     auto Aitem = model->observeA()->get();
                     if (Aitem && !Aitem->ocioIcs.empty())
                     {
-                        std::cerr << Aindex
-                                  << " set ocioIcs to " << Aitem->ocioIcs
-                                  << std::endl;
                         mrv::image::setOcioIcs(Aitem->ocioIcs);
                     }
                     else
