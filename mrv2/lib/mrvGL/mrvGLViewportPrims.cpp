@@ -177,8 +177,6 @@ namespace mrv
 
         const auto& renderSize = getRenderSize();
         const float renderAspect = renderSize.getAspect();
-        const auto& viewportSize = getViewportSize();
-        const float viewportAspect = viewportSize.getAspect();
 
         const auto& mesh =
             geom::box(math::Box2i(0, 0, renderSize.w, renderSize.h));
@@ -202,51 +200,8 @@ namespace mrv
             CHECK_GL;
         }
 
-        image::Size transformSize;
-        math::Vector2f transformOffset;
-        if (viewportAspect > 1.F)
-        {
-            transformOffset.x = renderSize.w / 2.F;
-            transformOffset.y = renderSize.w / renderAspect / 2.F;
-        }
-        else
-        {
-            transformOffset.x = renderSize.h * renderAspect / 2.F;
-            transformOffset.y = renderSize.h / 2.F;
-        }
-
-                
-        const math::Matrix4x4f& vm =
-            math::translate(math::Vector3f(p.viewPos.x, p.viewPos.y, 0.F)) *
-            math::scale(math::Vector3f(p.viewZoom, p.viewZoom, 1.F));
-        const auto& rm = math::rotateZ(p.rotation);
-        const math::Matrix4x4f& tm = math::translate(
-            math::Vector3f(-renderSize.w / 2, -renderSize.h / 2, 0.F));
-        const math::Matrix4x4f& to = math::translate(
-            math::Vector3f(transformOffset.x, transformOffset.y, 0.F));
-        
-        const auto pm = math::ortho(
-            0.F, static_cast<float>(viewportSize.w), 0.F,
-            static_cast<float>(viewportSize.h), -1.F, 1.F);
-
-        return pm * vm * to * rm * tm;
+        return _projectionMatrix();
     }
 
-    math::Matrix4x4f Viewport::_notRotatedMatrix()
-    {
-        TLRENDER_P();
-        
-        const auto& viewportSize = getViewportSize();
-        
-        const math::Matrix4x4f& vm =
-            math::translate(math::Vector3f(p.viewPos.x, p.viewPos.y, 0.F)) *
-            math::scale(math::Vector3f(p.viewZoom, p.viewZoom, 1.F));
-        
-        const auto pm = math::ortho(
-            0.F, static_cast<float>(viewportSize.w), 0.F,
-            static_cast<float>(viewportSize.h), -1.F, 1.F);
-
-        return pm * vm;
-    }
     
 } // namespace mrv

@@ -6,6 +6,8 @@
 #include <cmath>
 #include <algorithm>
 
+#include <tlCore/Matrix.h>
+
 #include "mrViewer.h"
 
 #include "mrvPanels/mrvAnnotationsPanel.h"
@@ -41,6 +43,25 @@ namespace
     const float kHelpTimeout = 0.1F;
     const float kHelpTextFade = 1.5F; // 1.5 Seconds
 } // namespace
+
+namespace
+{
+    int rotation_sign(float angle)
+    {
+        int sign = 1;
+        // Cast to integer and normalize to the range [0, 360)
+        int normalized_angle = static_cast<int>(angle) % 360;
+        if (normalized_angle < 0) {
+            normalized_angle += 360;
+            sign = -1;
+        }
+
+        // Check for specific multiples of 90
+        return (normalized_angle == 90 || normalized_angle == 270) * sign;
+    }
+
+
+}
 
 namespace mrv
 {
@@ -1097,6 +1118,10 @@ namespace mrv
         p.rotation = x;
         if (p.frameView)
             frameView();
+        else
+            redrawWindows();
+        updatePixelBar();
+        _updateCoords();
     }
     
     math::Vector2i TimelineViewport::_getViewportCenter() const noexcept
@@ -1335,6 +1360,20 @@ namespace mrv
         return _getRaster(_p->mousePos.x, _p->mousePos.y);
     }
 
+    math::Vector2i
+    TimelineViewport::_getRotatedRaster(int X, int Y) const noexcept
+    {
+        const auto& pm = _pixelMatrix();
+        math::Vector3f pos(X, Y, 1.F);
+        pos = pm * pos;
+        return math::Vector2i(pos.x, pos.y);
+    }
+
+    math::Vector2i TimelineViewport::_getRotatedRaster() const noexcept
+    {
+        return _getRotatedRaster(_p->mousePos.x, _p->mousePos.y);
+    }
+
     void TimelineViewport::_updateZoom() const noexcept
     {
         TLRENDER_P();
@@ -1352,9 +1391,13 @@ namespace mrv
         TLRENDER_P();
         char buf[40];
 
+        
         math::Vector2i pos;
         if (p.environmentMapOptions.type == EnvironmentMapOptions::kNone)
-            pos = _getRaster();
+        {
+            p.mousePos = _getFocus();
+            pos = _getRotatedRaster();
+        }
         else
         {
             pos.x = Fl::event_x();
@@ -1512,7 +1555,7 @@ namespace mrv
         constexpr float NaN = std::numeric_limits<float>::quiet_NaN();
         image::Color4f rgba(NaN, NaN, NaN, NaN);
         bool inside = true;
-        const auto& pos = _getRaster();
+        const auto& pos = _getRotatedRaster();
         if (p.environmentMapOptions.type == EnvironmentMapOptions::kNone &&
             (pos.x < 0 || pos.x >= r.w || pos.y < 0 || pos.y >= r.h))
             inside = false;
@@ -2823,5 +2866,99 @@ namespace mrv
                 p.tagData[tag.first] = tag.second;
             }
         }
+    }
+    
+    math::Matrix4x4f TimelineViewport::_projectionMatrix() const noexcept
+    {
+        TLRENDER_P();
+        
+        const auto& renderSize = getRenderSize();
+        const auto  renderAspect = renderSize.getAspect();
+        const auto& viewportSize = getViewportSize();
+        const auto  viewportAspect = viewportSize.getAspect();
+        
+        image::Size transformSize;
+        math::Vector2f transformOffset;
+        if (viewportAspect > 1.F)
+        {
+            transformOffset.x = renderSize.w / 2.F;
+            transformOffset.y = renderSize.w / renderAspect / 2.F;
+        }
+        else
+        {
+            transformOffset.x = renderSize.h * renderAspect / 2.F;
+            transformOffset.y = renderSize.h / 2.F;
+        }
+
+                
+        const math::Matrix4x4f& vm =
+            math::translate(math::Vector3f(p.viewPos.x, p.viewPos.y, 0.F)) *
+            math::scale(math::Vector3f(p.viewZoom, p.viewZoom, 1.F));
+        const auto& rm = math::rotateZ(p.rotation);
+        const math::Matrix4x4f& tm = math::translate(
+            math::Vector3f(-renderSize.w / 2, -renderSize.h / 2, 0.F));
+        const math::Matrix4x4f& to = math::translate(
+            math::Vector3f(transformOffset.x, transformOffset.y, 0.F));
+        
+        const auto pm = math::ortho(
+            0.F, static_cast<float>(viewportSize.w), 0.F,
+            static_cast<float>(viewportSize.h), -1.F, 1.F);
+
+        return pm * vm * to * rm * tm;
+    }
+
+    
+    math::Matrix4x4f TimelineViewport::_pixelMatrix() const noexcept
+    {
+        TLRENDER_P();
+        
+        const auto& renderSize = getRenderSize();
+        const auto  renderAspect = renderSize.getAspect();
+        const auto& viewportSize = getViewportSize();
+        const auto  viewportAspect = viewportSize.getAspect();
+        
+        image::Size transformSize;
+        math::Vector2f transformOffset;
+        if (viewportAspect > 1.F)
+        {
+            transformOffset.x = renderSize.w / 2.F;
+            transformOffset.y = renderSize.w / renderAspect / 2.F;
+        }
+        else
+        {
+            transformOffset.x = renderSize.h * renderAspect / 2.F;
+            transformOffset.y = renderSize.h / 2.F;
+        }
+
+        // Create transformation matrices
+        math::Matrix4x4f translation =
+            math::translate(math::Vector3f(-p.viewPos.x, -p.viewPos.y, 0.F));
+        math::Matrix4x4f zoom= math::scale(
+            math::Vector3f(1.F/p.viewZoom, 1.F/p.viewZoom, 1.F));
+        const auto& rotation = math::rotateZ(p.rotation);
+
+        const math::Matrix4x4f tm = math::translate(math::Vector3f(-renderSize.w / 2, -renderSize.h / 2, 0.F));
+        const math::Matrix4x4f to = math::translate(math::Vector3f(transformOffset.x, transformOffset.y, 0.F));
+        // Combined transformation matrix
+        const math::Matrix4x4f& vm = tm * rotation * to * zoom * translation;
+        return vm;
+    }
+
+    math::Matrix4x4f
+    TimelineViewport::_projectionWithoutRotationMatrix() const noexcept
+    {
+        TLRENDER_P();
+        
+        const auto& viewportSize = getViewportSize();
+        
+        const math::Matrix4x4f& vm =
+            math::translate(math::Vector3f(p.viewPos.x, p.viewPos.y, 0.F)) *
+            math::scale(math::Vector3f(p.viewZoom, p.viewZoom, 1.F));
+        
+        const auto pm = math::ortho(
+            0.F, static_cast<float>(viewportSize.w), 0.F,
+            static_cast<float>(viewportSize.h), -1.F, 1.F);
+
+        return pm * vm;
     }
 } // namespace mrv

@@ -537,15 +537,8 @@ namespace mrv
 
                 if (p.environmentMapOptions.type ==
                     EnvironmentMapOptions::kNone)
-                    mvp = _notRotatedMatrix();
+                    mvp = _projectionWithoutRotationMatrix();
                 
-                if (p.showAnnotations && gl.annotation)
-                {
-                    CHECK_GL;
-                    _drawAnnotations(mvp);
-                    CHECK_GL;
-                }
-
                 if (p.selection.max.x >= 0)
                 {
                     Fl_Color c = p.ui->uiPrefs->uiPrefsViewSelection->color();
@@ -563,6 +556,14 @@ namespace mrv
                     _drawRectangleOutline(selection, color, mvp);
                     CHECK_GL;
                 }
+                
+                if (p.showAnnotations && gl.annotation)
+                {
+                    CHECK_GL;
+                    _drawAnnotations(mvp);
+                    CHECK_GL;
+                }
+
 
                 if (p.dataWindow)
                     _drawDataWindow();
@@ -865,9 +866,7 @@ namespace mrv
         TLRENDER_P();
         MRV2_GL();
 
-        math::Vector2i pos;
-        pos.x = (p.mousePos.x - p.viewPos.x) / p.viewZoom;
-        pos.y = (p.mousePos.y - p.viewPos.y) / p.viewZoom;
+        math::Vector2i pos = _getRotatedRaster();
 
         if (p.ui->uiPixelWindow->uiPixelValue->value() != PixelValue::kFull)
         {

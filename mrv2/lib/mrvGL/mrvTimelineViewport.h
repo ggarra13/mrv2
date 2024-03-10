@@ -310,6 +310,17 @@ namespace mrv
         //! associated resources.
         void refreshWindows();
 
+
+        //! Get the full projection matrix.
+        math::Matrix4x4f _projectionMatrix() const noexcept;
+        
+        //! Get the matrix to pixel coordinates of image.
+        math::Matrix4x4f _pixelMatrix() const noexcept;
+        
+        //! Get the projection matrix without the rotation.
+        math::Matrix4x4f _projectionWithoutRotationMatrix() const noexcept;
+
+        
         //! Refresh window by clearing the associated resources.
         virtual void refresh(){};
 
@@ -360,9 +371,15 @@ namespace mrv
         math::Vector2i _getFocus() const noexcept;
         math::Vector2i _getRaster(int X, int Y) const noexcept;
         math::Vector2i _getRaster() const noexcept;
+        math::Vector2i _getRotatedRaster(int X, int Y) const noexcept;
+        math::Vector2i _getRotatedRaster() const noexcept;
         math::Vector2f _getRasterf(int X, int Y) const noexcept;
         math::Vector2f _getRasterf() const noexcept;
 
+        //! Handle the selection area position taking into account
+        //! rotation.
+        void _handleSelectionArea(math::Vector2i& pos) const noexcept;
+        
         //! Call redraw and a flush to force a redraw.
         void _refresh() noexcept;
 

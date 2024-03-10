@@ -154,15 +154,8 @@ namespace mrv
         p.lastEvent = FL_DRAG;
         p.mousePos = _getFocus();
         math::Vector2i pos = _getRaster();
-        if (pos.x < 0)
-            pos.x = 0;
-        if (pos.y < 0)
-            pos.y = 0;
-        const auto& renderSize = getRenderSize();
-        if (pos.x >= renderSize.w)
-            pos.x = renderSize.w - 1;
-        if (pos.y >= renderSize.h)
-            pos.y = renderSize.h - 1;
+        
+        _handleSelectionArea(pos);
 
         math::Box2i area = p.selection;
         area.max = pos;
@@ -451,16 +444,8 @@ namespace mrv
                 p.lastEvent = FL_DRAG;
                 p.mousePos = _getFocus();
                 math::Vector2i pos = _getRaster();
-                if (pos.x < 0)
-                    pos.x = 0;
-                if (pos.y < 0)
-                    pos.y = 0;
-                const auto& renderSize = getRenderSize();
-                if (pos.x >= renderSize.w)
-                    pos.x = renderSize.w - 1;
-                if (pos.y >= renderSize.h)
-                    pos.y = renderSize.h - 1;
 
+                _handleSelectionArea(pos);
                 math::Box2i area;
                 area.min = pos;
                 area.max = pos;
@@ -1517,6 +1502,23 @@ namespace mrv
 
         p.ui->uiTimeline->redraw();
         redrawWindows();
+    }
+
+    void
+    TimelineViewport::_handleSelectionArea(math::Vector2i& pos) const noexcept
+    {
+        TLRENDER_P();
+
+        auto renderSize = getRenderSize();
+        if (pos.x < 0)
+            pos.x = 0;
+        if (pos.y < 0)
+            pos.y = 0;
+
+        if (pos.x >= renderSize.w)
+            pos.x = renderSize.w - 1;
+        if (pos.y >= renderSize.h)
+            pos.y = renderSize.h - 1;
     }
 
 } // namespace mrv
