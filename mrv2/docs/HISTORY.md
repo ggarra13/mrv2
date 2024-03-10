@@ -11,6 +11,9 @@ v1.0.9
 - Removed mrvSequence.cpp which was empty.
 - Added Global USD Render Option parameters which were missing.
 - Fixed overlapping of audio labels in Edit window.
+- Fixed rotation inverting the coordinates of the annotations.
+- Fixed the pixel coordinate information when flipped or rotated.
+- Fixed the pixel color bar displaya and information when rotated,
   
 
 v1.0.8
