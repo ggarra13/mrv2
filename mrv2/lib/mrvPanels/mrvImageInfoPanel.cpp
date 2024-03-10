@@ -1912,6 +1912,28 @@ namespace mrv
                         _("Video Levels"), _("Video Levels"),
                         getLabel(video.videoLevels), videoLevels, false);
 
+                    if (videoData.size() > i && !videoData[i].layers.empty() &&
+                        videoData[i].layers[0].image)
+                    {
+                        const auto& tags =
+                            videoData[i].layers[0].image->getTags();
+                        auto it = tags.find("Video Color Primaries");
+                        if (it != tags.end())
+                        {
+                            add_text(_("Color Primaries"), _("Color Primaries"), it->second);
+                        }
+                        it = tags.find("Video Color TRC");
+                        if (it != tags.end())
+                        {
+                            add_text(_("Color TRC"), _("Color Transfer Characteristics"), it->second);
+                        }
+                        it = tags.find("Video Color Space");
+                        if (it != tags.end())
+                        {
+                            add_text(_("Color Space"), _("Color Transfer Space"), it->second);
+                        }
+                    }
+
                     ++group;
 
                     std::string format;
