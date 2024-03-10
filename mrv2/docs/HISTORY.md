@@ -25,6 +25,7 @@ v1.0.9
   Sam Richards is the same.
 - Fixed a bug in session loading when there was no Input Color Space specified
   in the image, which got introduced in v1.0.8.
+- Made pen size be able to be 1 pixel making the cursor one line only.
 
 
 v1.0.8

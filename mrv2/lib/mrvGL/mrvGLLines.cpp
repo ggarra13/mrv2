@@ -286,7 +286,10 @@ namespace mrv
             const math::Vector2f& center, const float radius,
             const image::Color4f& color)
         {
-            drawCircle(render, center, radius, 2.0, color, false);
+            float lineWidth = 2.0;
+            if (radius <= 2.0)
+                lineWidth = 1.0f;
+            drawCircle(render, center, radius, lineWidth, color, false);
             image::Color4f black(0.F, 0.F, 0.F, 1.F);
             if (radius > 2.0F)
                 drawCircle(render, center, radius - 2.0F, 2.0, black, false);
