@@ -51,14 +51,14 @@ namespace mrv
             //! Draw a circle.
             void drawCircle(
                 const std::shared_ptr<timeline::IRender>& render,
-                const math::Vector2i& center, const float radius,
+                const math::Vector2f& center, const float radius,
                 const float width, const image::Color4f& color,
                 const bool soft = false);
 
             //! Draw drawing cursor (two circles, one white, one black).
             void drawCursor(
                 const std::shared_ptr<timeline::IRender>& render,
-                const math::Vector2i& center, const float radius,
+                const math::Vector2f& center, const float radius,
                 const image::Color4f& color);
 
         private:

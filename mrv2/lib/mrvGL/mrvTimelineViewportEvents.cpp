@@ -275,18 +275,18 @@ namespace mrv
                     Imath::V2d p1 = shape->pts[0];
                     Imath::V2d lineVector = pnt - p1;
                     double lineLength = lineVector.length();
-
-                    const auto& renderSize = getRenderSize();
+                    
                     const float theta = 45 * M_PI / 180;
-                    const int nWidth = 35 * renderSize.w / 1024;
+                    const double nWidth = lineLength * 0.2;
+                    
+                    const double tPointOnLine =
+                        nWidth / (2 * (tan(theta) / 2) * lineLength);
+                    const Imath::V2d& pointOnLine = pnt + -tPointOnLine *
+                                                    lineVector;
 
-                    double tPointOnLine =
-                        nWidth / (2 * (tanf(theta) / 2) * lineLength);
-                    Imath::V2d pointOnLine = pnt + -tPointOnLine * lineVector;
+                    const Imath::V2d normalVector(-lineVector.y, lineVector.x);
 
-                    Imath::V2d normalVector(-lineVector.y, lineVector.x);
-
-                    double tNormal = nWidth / (2 * lineLength);
+                    const double tNormal = nWidth / (2 * lineLength);
                     Imath::V2d tmp = pointOnLine + tNormal * normalVector;
 
                     shape->pts[1] = pnt;
@@ -571,7 +571,7 @@ namespace mrv
                     shape->soft = softBrush;
                     shape->color = color;
                     shape->laser = laser;
-                    shape->center = _getRaster();
+                    shape->center = _getRasterf();
                     shape->radius = 0;
 
                     annotation->push_back(shape);

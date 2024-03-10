@@ -280,7 +280,7 @@ namespace mrv
 
             sV = new Widget< HorSlider >(X, Y + 40, g->w(), 20, _("Pen Size:"));
             s = sV;
-            s->range(2, 150);
+            s->range(1, 150);
             s->step(1);
             s->tooltip(_("Selects the current pen size."));
             s->default_value(settings->getValue<int>(kPenSize));

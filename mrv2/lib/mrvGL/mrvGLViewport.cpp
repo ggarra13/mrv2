@@ -550,34 +550,23 @@ namespace mrv
                         selection.max.y++;
                     }
                     _drawRectangleOutline(selection, color, mvp);
-                    CHECK_GL;
                 }
-                
-                // if (p.environmentMapOptions.type ==
-                //     EnvironmentMapOptions::kNone)
-                //     mvp = _projectionWithoutRotationMatrix();
                 
                 if (p.showAnnotations && gl.annotation)
                 {
-                    CHECK_GL;
                     _drawAnnotations(mvp);
-                    CHECK_GL;
                 }
 
 
                 if (p.dataWindow)
                     _drawDataWindow();
-                CHECK_GL;
                 if (p.displayWindow)
                     _drawDisplayWindow();
-                CHECK_GL;
 
                 if (p.safeAreas)
                     _drawSafeAreas();
-                CHECK_GL;
 
                 _drawCursor(mvp);
-                CHECK_GL;
             }
 
             if (p.hudActive && p.hud != HudDisplay::kNone)

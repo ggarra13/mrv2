@@ -259,7 +259,7 @@ namespace mrv
 
         void Lines::drawCircle(
             const std::shared_ptr<timeline::IRender>& render,
-            const math::Vector2i& center, const float radius, const float width,
+            const math::Vector2f& center, const float radius, const float width,
             const image::Color4f& color, const bool soft)
         {
             const int triangleAmount = 30;
@@ -283,7 +283,7 @@ namespace mrv
 
         void Lines::drawCursor(
             const std::shared_ptr<timeline::IRender>& render,
-            const math::Vector2i& center, const float radius,
+            const math::Vector2f& center, const float radius,
             const image::Color4f& color)
         {
             drawCircle(render, center, radius, 2.0, color, false);

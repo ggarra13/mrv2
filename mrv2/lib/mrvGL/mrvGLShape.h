@@ -50,7 +50,7 @@ namespace mrv
             const std::shared_ptr<timeline::IRender>&,
             const std::shared_ptr<opengl::Lines>&) override;
 
-        math::Vector2i center;
+        math::Vector2f center;
         double radius;
         opengl::Lines lines;
     };

@@ -364,7 +364,7 @@ namespace mrv
                 1.0F + (2.5F * (p.actionMode == ActionMode::kErase));
             const float pen_size = _getPenSize() * multiplier;
             p.mousePos = _getFocus();
-            const auto& pos = _getRaster();
+            const auto& pos = _getRasterf();
             gl.render->setTransform(mvp);
             gl.lines->drawCursor(gl.render, pos, pen_size / 2.0, color);
         }
