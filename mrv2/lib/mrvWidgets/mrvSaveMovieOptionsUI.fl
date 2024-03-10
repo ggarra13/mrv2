@@ -59,7 +59,7 @@ settings->setValue("SaveMovie/Annotations", static_cast<int>(o->value()));}
         }
       }
       Fl_Group VideoOptions {
-        label {Video Options} open
+        label {Video Options}
         xywh {34 114 390 280} box ROUNDED_FRAME color 56
       } {
         Fl_Choice Resolution {
@@ -68,7 +68,7 @@ settings->setValue("SaveMovie/Annotations", static_cast<int>(o->value()));}
           callback {int value = o->value();
 
 auto settings = mrv::App::app->settings();
-settings->setValue("SaveMovie/Resolution", value);} open selected
+settings->setValue("SaveMovie/Resolution", value);}
           tooltip {Resolution of movie to save.} xywh {170 137 170 29} down_box BORDER_BOX
         } {
           MenuItem {} {
@@ -103,7 +103,7 @@ add_hardware(o, v->Hardware);
 const Fl_Menu_Item* item = o->mvalue();
 if (!item) return;
 auto settings = mrv::App::app->settings();
-settings->setValue("SaveMovie/Profile", std::string(item->label()));}
+settings->setValue("SaveMovie/Profile", std::string(item->label()));} open
           tooltip {FFMpeg's Profile settings.} xywh {170 225 170 29} down_box BORDER_BOX
         } {}
         Fl_Button {} {
@@ -443,8 +443,6 @@ H264 - Only if mrv2 has been compiled as GPL.  One
        becoming obsolete.
 ProRes - ProRes is a family of codecs developed by 
          Apple.
-         They only maintain color fidelity on macOS.
-         
          The Normal version strikes a balance 
          between quality and file size.  
 ProRes_Proxy - Most compressed ProRes, offering the
@@ -492,7 +490,8 @@ Hardware encoding is only supported on newer MacBook
 Pro with M1 or newer chips.  H264, Prores, VP9 and
 AV1 are supported or soon will be.
 )"));
-uiHelpWindow->show();} {}
+uiHelpWindow->show();} {selected
+    }
   }
   Function {help_pixel_format_cb()} {open
   } {
@@ -829,8 +828,7 @@ for (auto entry : entries)
   }
   Function {add_resolution(Fl_Choice* o)} {open
   } {
-    code {
-const auto& settings = mrv::App::app->settings();
+    code {const auto& settings = mrv::App::app->settings();
 const int value = settings->getValue<int>("SaveMovie/Resolution");
 o->value(value);} {}
   }
