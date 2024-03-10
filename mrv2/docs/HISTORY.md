@@ -18,6 +18,7 @@ v1.0.9
 - Made drawing cursor be drawn with float coordinates.
 - Made circle's center also be drawn with float coordinagtes.
 - Made pen size go to 1 as minimum.
+- Added back .wmv/a decoders and asf demuxer from TLRENDER_FFMPEG_MINIMAL.
 
 
 v1.0.8
