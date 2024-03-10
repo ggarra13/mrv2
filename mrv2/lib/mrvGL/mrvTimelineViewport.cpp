@@ -2933,12 +2933,17 @@ namespace mrv
         // Create transformation matrices
         math::Matrix4x4f translation =
             math::translate(math::Vector3f(-p.viewPos.x, -p.viewPos.y, 0.F));
-        math::Matrix4x4f zoom= math::scale(
+        math::Matrix4x4f zoom = math::scale(
             math::Vector3f(1.F/p.viewZoom, 1.F/p.viewZoom, 1.F));
-        const auto& rotation = math::rotateZ(p.rotation);
+        const auto& rotation = math::rotateZ(-p.rotation);
 
-        const math::Matrix4x4f tm = math::translate(math::Vector3f(-renderSize.w / 2, -renderSize.h / 2, 0.F));
-        const math::Matrix4x4f to = math::translate(math::Vector3f(transformOffset.x, transformOffset.y, 0.F));
+        const math::Matrix4x4f tm =
+            math::translate(math::Vector3f(renderSize.w / 2,
+                                           renderSize.h / 2,
+                                           0.F));
+        const math::Matrix4x4f to =
+            math::translate(math::Vector3f(-transformOffset.x,
+                                           -transformOffset.y, 0.F));
         // Combined transformation matrix
         const math::Matrix4x4f& vm = tm * rotation * to * zoom * translation;
         return vm;
