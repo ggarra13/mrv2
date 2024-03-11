@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2024-03-09 01:54-0300\n"
+"POT-Creation-Date: 2024-03-11 11:34-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -45,6 +45,12 @@ msgstr "Modo de dibujo :class:`mrv2.usd.DrawMode`."
 
 msgid "Enable Lighting"
 msgstr "Activar Iluminación"
+
+msgid "Enable Scene Lights"
+msgstr "Activar Luces de la Escena"
+
+msgid "Enable Scene Materials"
+msgstr "Activar Materiales de la Escena"
 
 msgid "Enable sRGB"
 msgstr "Habilitar sRGB"
@@ -2172,10 +2178,6 @@ msgid "Pick"
 msgstr "Elegir"
 
 #, c-format
-msgid "Frame %<PRId64> "
-msgstr "Cuadro %<PRId64> "
-
-#, c-format
 msgid "%.3g seconds "
 msgstr "%.3g segundos "
 
@@ -2245,6 +2247,21 @@ msgstr "Velocidad Actual"
 msgid "Current Speed (Frames Per Second)"
 msgstr "Velocidad Actual (Cuadros Por Segundo)"
 
+msgid "Disk space"
+msgstr "Espacio en Disco"
+
+msgid "Creation Date"
+msgstr "Fecha de Creación"
+
+msgid "Creation date of file"
+msgstr "Fecha de Creación del Archivo"
+
+msgid "Modified Date"
+msgstr "Fecha de Modificación"
+
+msgid "Last modified date of file"
+msgstr "Última fecha de modificación del archivo"
+
 #, c-format
 msgid "Video Stream #%d"
 msgstr "Pista de Vídeo #%d"
@@ -2282,8 +2299,14 @@ msgstr "Radio de Pixel"
 msgid "Pixel ratio of clip"
 msgstr "Radio de pixel del clip"
 
+msgid "Video Rotation"
+msgstr "Rotación del Video"
+
 msgid "unsigned byte (8-bits per channel)"
 msgstr "byte sin signo (8-bits por canal)"
+
+msgid "(10-bits per channel)"
+msgstr "(10-bits por canal)"
 
 msgid "(12-bits per channel)"
 msgstr "(12-bits por canal)"
@@ -2336,46 +2359,26 @@ msgstr "Coefficients de YUV usados para conversion de vídeo"
 msgid "Video Levels"
 msgstr "Niveles de Vídeo"
 
+msgid "Color Primaries"
+msgstr "Primarias de Color"
+
+msgid "Color TRC"
+msgstr "TRC de Color"
+
+msgid "Color Transfer Characteristics"
+msgstr "Características de Transferencia de Color de FFmpeg"
+
+msgid "Color Space"
+msgstr "Espacio de Color"
+
+msgid "Color Transfer Space"
+msgstr "Espacio de Transferencia del Color"
+
 msgid "FFmpeg Pixel Format"
 msgstr "Formato de Pixel de FFmpeg."
 
 msgid "Render Pixel Format"
 msgstr "Formato de Pixel de Render"
-
-msgid "Line Order"
-msgstr "Orden de Líneas"
-
-msgid "Line order in file"
-msgstr "Orden de Líneas en archivo"
-
-msgid "Compression"
-msgstr "Compresión"
-
-msgid "Clip Compression"
-msgstr "Compresión del Clip"
-
-msgid "Memory"
-msgstr "Memoria"
-
-msgid "Memory without Compression"
-msgstr "Memoria sin Compresión"
-
-#, c-format
-msgid "%.3f %s  (%.2f %% of memory size)"
-msgstr "%.3f %s  (%.2f %% del tamaño de memoria)"
-
-msgid "Disk space"
-msgstr "Espacio en Disco"
-
-#, c-format
-msgid "%4.8g %%"
-msgstr "%4.8g %%"
-
-msgid "Compression Ratio"
-msgstr "Radio de Compresión"
-
-msgid "Creation Date"
-msgstr "Fecha de Creación"
 
 #, c-format
 msgid "Audio Stream #%d"
@@ -2890,6 +2893,12 @@ msgstr "Grando película a {0}."
 msgid "Saving pictures to {0}."
 msgstr "Grabando imágenes a {0}."
 
+msgid "Rotated image info: {0}"
+msgstr "Información de Imagen Rotada: {0}"
+
+msgid "Scaled image info: {0}"
+msgstr "Información de Imagen Escalada: {0}"
+
 msgid "{0}: Cannot open writer plugin."
 msgstr "{0}: No puedo abrir plugin de escritura."
 
@@ -2899,8 +2908,8 @@ msgstr "Información de Imagen: {0} {1}"
 msgid "Image too big for annotations.  Will scale to the viewport size."
 msgstr "Imagen demasiado grande.  Grabaré el tamaño de la vista."
 
-msgid "Viewport Size: {0} "
-msgstr "Tamaño de la Ventana: {0}"
+msgid "Viewport Size: {0} - X={1}, Y={2}"
+msgstr "Tamaño de la Ventana: {0} - X={1}, Y={2}"
 
 msgid "Writer plugin did not get output info.  Defaulting to RGB_U8"
 msgstr ""
@@ -3960,15 +3969,6 @@ msgstr "Reemplazar"
 msgid "Color Range"
 msgstr "Rango de Color"
 
-msgid "Color Space"
-msgstr "Espacio de Color"
-
-msgid "Color Primaries"
-msgstr "Primarias de Color"
-
-msgid "Color TRC"
-msgstr "TRC de Color"
-
 msgid "Profile Help"
 msgstr "Ayuda de Perfil"
 
@@ -3985,8 +3985,6 @@ msgid ""
 "         becoming obsolete.\n"
 "  ProRes - ProRes is a family of codecs developed by \n"
 "           Apple.\n"
-"           They only maintain color fidelity on macOS.\n"
-"           \n"
 "           The Normal version strikes a balance \n"
 "           between quality and file size.  \n"
 "  ProRes_Proxy - Most compressed ProRes, offering the\n"
@@ -4047,9 +4045,6 @@ msgstr ""
 "         quadando obsoleto.\n"
 "  ProRes - ProRes es una familia de codecs desarrollado\n"
 "           por Apple.\n"
-"           En su formato 4444 sólo mantiene fidelidad\n"
-"           de color en macOS.\n"
-"           \n"
 "           La version Normal mantiene un buen balance \n"
 "           entre calidad y tamaño de archivo.  \n"
 "  ProRes_Proxy - El ProRes más comprimido, ofreciendo el\n"
@@ -4690,6 +4685,9 @@ msgstr "Grabar anotaciones fijas en la película o secuencia."
 msgid "OpenEXR Options"
 msgstr "Opciones de OpenEXR"
 
+msgid "Compression"
+msgstr "Compresión"
+
 msgid "OpenEXR's Compression Type"
 msgstr "Tipo de Compresión de OpenEXR"
 
@@ -5048,6 +5046,9 @@ msgstr "Rango de Cuadros"
 
 msgid "Frame Count"
 msgstr "Conteo de Cuadros"
+
+msgid "Memory"
+msgstr "Memoria"
 
 msgid "Attributes"
 msgstr "Atributos"
@@ -6376,6 +6377,33 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
+
+#, c-format
+#~ msgid "Frame %<PRId64> "
+#~ msgstr "Cuadro %<PRId64> "
+
+#~ msgid "Line Order"
+#~ msgstr "Orden de Líneas"
+
+#~ msgid "Line order in file"
+#~ msgstr "Orden de Líneas en archivo"
+
+#~ msgid "Clip Compression"
+#~ msgstr "Compresión del Clip"
+
+#~ msgid "Memory without Compression"
+#~ msgstr "Memoria sin Compresión"
+
+#, c-format
+#~ msgid "%.3f %s  (%.2f %% of memory size)"
+#~ msgstr "%.3f %s  (%.2f %% del tamaño de memoria)"
+
+#, c-format
+#~ msgid "%4.8g %%"
+#~ msgstr "%4.8g %%"
+
+#~ msgid "Compression Ratio"
+#~ msgstr "Radio de Compresión"
 
 #~ msgid "OpenGL info: {0} format={1} type={2}"
 #~ msgstr "OpenGL info: {0} format={1} type={2}"

@@ -3,10 +3,14 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #include <cinttypes>
+#include <locale>
 
-#include <iostream>
 #include <algorithm>
+#include <ctime>
+#include <iostream>
+#include <filesystem>
 #include <regex>
+namespace fs = std::filesystem;
 
 #include <FL/Fl_Pack.H>
 #include <FL/Fl_Flex.H>
@@ -640,33 +644,34 @@ namespace mrv
         }
 
         double
-        ImageInfoPanel::to_memory(long double value, const char*& extension)
+        ImageInfoPanel::to_memory(std::uintmax_t value, const char*& extension)
         {
+            double out = value;
             if (value >= 1099511627776)
             {
-                value /= 1099511627776;
+                out /= 1099511627776.F;
                 extension = "Tb";
             }
             else if (value >= 1073741824)
             {
-                value /= 1073741824;
+                out /= 1073741824.F;
                 extension = "Gb";
             }
             else if (value >= 1048576)
             {
-                value /= 1048576;
+                out /= 1048576.F;
                 extension = "Mb";
             }
             else if (value >= 1024)
             {
-                value /= 1024;
+                out /= 1024.F;
                 extension = "Kb";
             }
             else
             {
                 extension = "bytes";
             }
-            return value;
+            return out;
         }
 
         ImageInfoPanel::~ImageInfoPanel()
@@ -1381,14 +1386,9 @@ namespace mrv
         {
             char buf[128];
 
-            int64_t frame = content.to_frames();
-
-            snprintf(buf, 128, _("Frame %" PRId64 " "), frame);
-
-            std::string text = buf;
-
+            std::string text;
+            
             double seconds = content.to_seconds();
-
             snprintf(buf, 128, _("%.3g seconds "), seconds);
             text += buf;
 
@@ -1620,6 +1620,16 @@ namespace mrv
             m_curr->end();
         }
 
+        void ImageInfoPanel::add_memory(
+            const char* name, const char* tooltip, const std::uintmax_t content)
+        {
+            char buf[256];
+            const char* space_type = nullptr;
+            const double memory_space = to_memory( content, space_type );
+            snprintf( buf, 256, "%.3f %s", memory_space, space_type );
+            add_text( name, tooltip, buf );
+        }
+        
         void ImageInfoPanel::add_bool(
             const char* name, const char* tooltip, const bool content,
             const bool editable, Fl_Callback* callback)
@@ -1686,15 +1696,15 @@ namespace mrv
             if (!tplayer)
                 return;
 
-            const auto info = tplayer->getIOInfo();
+            const auto& info = tplayer->getIOInfo();
 
-            const auto path = player->path();
-            const auto directory = path.getDirectory();
+            const auto& path = player->path();
+            const auto& directory = path.getDirectory();
             
-            const auto audioPath = player->audioPath();
+            const auto& audioPath = player->audioPath();
             const otime::RationalTime& time = player->currentTime();
 
-            std::string fullname = createStringFromPathAndTime(path, time);
+            const auto& fullname = createStringFromPathAndTime(path, time);
 
             add_text(
                 _("Directory"), _("Directory where clip resides"), directory);
@@ -1762,6 +1772,32 @@ namespace mrv
 
             ++group;
 
+            struct stat file_stat;
+            const std::string& filename = directory + fullname;
+            
+            if (stat(filename.c_str(), &file_stat) == 0)
+            {
+                // Get file size
+                std::uintmax_t filesize = fs::file_size(filename);
+                add_memory(_("Disk space"), _("Disk space"), filesize );
+                
+                // Retrieve last modification time
+                time_t mod_time = file_stat.st_mtime;
+                time_t creation_time = file_stat.st_ctime;
+        
+                // Format time according to current locale
+                strftime(buf, sizeof(buf), "%c", localtime(&creation_time));
+                add_text(_("Creation Date"), _("Creation date of file"),
+                         buf);
+                
+                // Format time according to current locale
+                strftime(buf, sizeof(buf), "%c", localtime(&mod_time));
+                add_text(_("Modified Date"), _("Last modified date of file"),
+                         buf);
+            }
+
+            ++group;
+            
             m_image->show();
 
             const auto view = _p->ui->uiView;
@@ -1788,7 +1824,11 @@ namespace mrv
                     const auto& size = video.size;
 
                     add_text(_("Name"), _("Name"), video.name);
-                    
+
+                    float rotation = 0.F;
+                    std::string colorPrimaries;
+                    std::string colorTRC;
+                    std::string colorSpace;
                     if (videoData.size() > i && !videoData[i].layers.empty() &&
                         videoData[i].layers[0].image)
                     {
@@ -1798,6 +1838,27 @@ namespace mrv
                         if (it != tags.end())
                         {
                             add_text(_("Codec"), _("Codec"), it->second);
+                        }
+                        it = tags.find("Video Rotation");
+                        if (it != tags.end())
+                        {
+                            std::stringstream s(it->second);
+                            s >> rotation;
+                        }
+                        it = tags.find("Video Color Primaries");
+                        if (it != tags.end())
+                        {
+                            colorPrimaries = it->second;
+                        }
+                        it = tags.find("Video Color TRC");
+                        if (it != tags.end())
+                        {
+                            colorTRC = it->second;
+                        }
+                        it = tags.find("Video Color Space");
+                        if (it != tags.end())
+                        {
+                            colorSpace = it->second;
                         }
                     }
                     else
@@ -1834,6 +1895,9 @@ namespace mrv
                         _("Pixel Ratio"), _("Pixel ratio of clip"),
                         size.pixelAspectRatio, false, true);
 
+                    if (rotation != 0.F)
+                        add_float(_("Rotation"), _("Video Rotation"), rotation);
+                    
                     ++group;
 
                     tl::image::PixelType pixelType = video.pixelType;
@@ -1846,6 +1910,9 @@ namespace mrv
                     {
                     case 8:
                         depth = _("unsigned byte (8-bits per channel)");
+                        break;
+                    case 10:
+                        depth = _("(10-bits per channel)");
                         break;
                     case 12:
                         depth = _("(12-bits per channel)");
@@ -1912,26 +1979,23 @@ namespace mrv
                         _("Video Levels"), _("Video Levels"),
                         getLabel(video.videoLevels), videoLevels, false);
 
-                    if (videoData.size() > i && !videoData[i].layers.empty() &&
-                        videoData[i].layers[0].image)
+                    if (!colorPrimaries.empty())
                     {
-                        const auto& tags =
-                            videoData[i].layers[0].image->getTags();
-                        auto it = tags.find("Video Color Primaries");
-                        if (it != tags.end())
-                        {
-                            add_text(_("Color Primaries"), _("Color Primaries"), it->second);
-                        }
-                        it = tags.find("Video Color TRC");
-                        if (it != tags.end())
-                        {
-                            add_text(_("Color TRC"), _("Color Transfer Characteristics"), it->second);
-                        }
-                        it = tags.find("Video Color Space");
-                        if (it != tags.end())
-                        {
-                            add_text(_("Color Space"), _("Color Transfer Space"), it->second);
-                        }
+                        add_text(
+                            _("Color Primaries"), _("Color Primaries"),
+                            colorPrimaries);
+                    }
+                    if (!colorTRC.empty())
+                    {
+                        add_text(
+                            _("Color TRC"), _("Color Transfer Characteristics"),
+                            colorTRC);
+                    }
+                    if (!colorSpace.empty())
+                    {
+                        add_text(
+                            _("Color Space"), _("Color Transfer Space"),
+                            colorSpace);
                     }
 
                     ++group;
@@ -1951,88 +2015,8 @@ namespace mrv
                 }
 
                 m_video->show();
-
-#if 0           
-                if ( !img->has_video() )
-                {
-                    add_text( _("Line Order"), _("Line order in file"),
-                              img->line_order() );
-                }
-
-
-
-                if ( !img->has_video() )
-                {
-                    ++group;
-
-                    
-
-                    add_text( _("Compression"), _("Clip Compression"), img->compression() );
-
-
-                }
-
-                ++group;
-#endif
             }
-
-#if 0
-
-
             
-            const char* space_type = nullptr;
-            double memory_space = double( to_memory( (long double)img->memory(),
-                                                     space_type ) );
-            snprintf( buf, 256, "%.3f %s", memory_space, space_type );
-            add_text( _("Memory"), _("Memory without Compression"), buf );
-
-
-            
-            if ( img->disk_space() >= 0 )
-            {
-
-                double disk_space = double( to_memory( (long double)img->disk_space(),
-                                                       space_type ) );
-
-                double pct   = double( 100.0 * ( (long double) img->disk_space() /
-                                                 (long double) img->memory() ) );
-
-
-                
-                snprintf( buf, 256, _("%.3f %s  (%.2f %% of memory size)"),
-                          disk_space, space_type, pct );
-
-                add_text( _("Disk space"), _("Disk space"), buf );
-
-
-
-                if ( !img->has_video() )
-                {
-                    double ratio = 100.0 - double(pct);
-                    snprintf( buf, 256, _("%4.8g %%"), ratio );
-
-                    add_text( _("Compression Ratio"), _("Compression Ratio"), buf );
-                }
-
-            }
-
-
-            
-
-            ++group;
-            add_text( _("Creation Date"), _("Creation Date"), img->creation_date() );
-
-
-            
-
-
-            
-#endif
-
-            
-
-            g->tooltip(nullptr);
-
             if (num_audio_streams > 0)
             {
                 for (int i = 0; i < num_audio_streams; ++i)
@@ -2195,9 +2179,6 @@ namespace mrv
             }
 
             m_attributes->show();
-
-            // Call g->end() so we refresh the pack/scroll sizes
-            // g->end();
         }
 
     } // namespace panel

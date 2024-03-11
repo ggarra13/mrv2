@@ -32,6 +32,7 @@ v1.0.9
 - Fixed Darby's BT2020 (Ultra HD) coefficients, which I think were wrong.
 - Improved rotation speed of movies from cell phones, by doing it in OpenGL
   with metadata instead of with a C++ function.
+- Added Creation, Modified Date and Disk Space to Media Info Panel.
 
 
 v1.0.8

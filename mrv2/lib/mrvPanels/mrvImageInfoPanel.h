@@ -75,7 +75,7 @@ namespace mrv
             static void int_slider_cb(Fl_Slider* w, void* data);
             static void float_slider_cb(Fl_Slider* w, void* data);
 
-            double to_memory(long double value, const char*& extension);
+            double to_memory(std::uintmax_t value, const char*& extension);
 
             Table* add_browser(mrv::CollapsibleGroup* g);
             Table* add_browser(mrv::CollapsibleGroup* g, const char* label);
@@ -143,7 +143,11 @@ namespace mrv
                 const char* name, const char* tooltip, const bool content,
                 const bool editable = false, Fl_Callback* callback = NULL);
 
-            void add_controls() override;
+            void add_memory(
+                const char* name, const char* tooltip,
+                const std::uintmax_t content);
+
+                void add_controls() override;
             void fill_data();
 
         public:

@@ -255,7 +255,7 @@ namespace mrv
         }
         if (!language || strncmp(language, langcode, 2) != 0)
         {
-            setenv("LANGUAGE", langcode, 1);
+            setenv("LANGUAGE", langcode, 1)
             win32_execv();
             exit(0);
         }
@@ -304,7 +304,7 @@ namespace mrv
 #endif
         if (language)
         {
-            // THis is for Apple mainly, as it we just set LC_MESSAGES only
+            // This is for Apple mainly, as it we just set LC_MESSAGES only
             // and not the numeric locale, which we must set separately for
             // those locales that use periods in their floating point.
             if (strcmp(language, "C") == 0 || strncmp(language, "ar", 2) == 0 ||
@@ -316,6 +316,7 @@ namespace mrv
         }
 
         setlocale(LC_NUMERIC, numericLocale);
+        setlocale(LC_TIME, numericLocale);
 
         // Create and install global locale
         // On Ubuntu and Debian the locales are not fully built. As root:
@@ -331,17 +332,7 @@ namespace mrv
         // $ update-locale LANG=en_US.UTF-8
         // $ reboot
         //
-
-        try
-        {
-            // This is broken.
-            // fs::path::imbue(std::locale());
-        }
-        catch (const std::runtime_error& e)
-        {
-            LOG_ERROR(e.what());
-        }
-
+        
         std::string path = mrv::rootpath();
         path += "/share/locale/";
 
