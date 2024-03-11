@@ -35,7 +35,7 @@ LIBVPX_TAG=v1.12.0
 DAV1D_TAG=1.3.0
 SVTAV1_TAG=v1.8.0
 X264_TAG=stable
-FFMPEG_TAG=n6.0
+FFMPEG_TAG=n6.1.1
 
 #
 # Repositories
