@@ -360,18 +360,8 @@ The main runme.sh script supports passing CMake flags to it and allows turning o
 
 -D TLRENDER_USD=OFF
 
-Currently, the main flags supported (that have an effect on how long it takes to compile) are:
-
-| Name              | Description                                       | Default   |
-| ----------------- | ------------------------------------------------- | --------- |
-| BUILD_FLTK        | Toggles FLTK building (currently needed)          | TRUE      |
-| BUILD_PYTHON      | Toggles Python building or system installed.      | TRUE      |
-| MRV2_PYBIND11     | Toggles Python support in mrv2.                   | TRUE      |
-| MRV2_NETWORK      | Toggles Network and Single Instance.              | TRUE      |
-| MRV2_PDF          | Toggles PDF Saving and Creation.                  | TRUE      |
-| TLRENDER_USD      | Toggles support for USD                           | TRUE      |
-| TLRENDER_NET      | Toggles support for Network playback              | TRUE      |
-| TLRENDER_RAW      | Toggles support for RAW Camera formats            | TRUE      |
+The flags are listed when you start the runme.sh script.  If you want to make some change to the flags permanent, you should change them
+in runme_nolog.sh or create a wrapper script that calls runme.sh.
 
 ## Building FFmpeg as GPL or LGPL
 
