@@ -1427,8 +1427,16 @@ namespace mrv
                 if (p.active[0]->ocioIcs.empty())
                     Preferences::updateICS();
                 else
-                    image::setOcioIcs(p.active[0]->ocioIcs);
-                
+                {
+                    try
+                    {
+                        image::setOcioIcs(p.active[0]->ocioIcs);
+                    }
+                    catch (const std::exception& e)
+                    {
+                        LOG_ERROR(e.what());
+                    }
+                }
                 if (p.running)
                 {
                     panel::redrawThumbnails();

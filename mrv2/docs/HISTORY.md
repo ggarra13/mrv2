@@ -28,6 +28,8 @@ v1.0.9
 - Made pen size be able to be 1 pixel making the cursor one line only.
 - Made Prores_ks (FFmpeg's native encoder) match Apple's Prores one at
   4444p10le.
+- Upgraded to FFmpeg v6.1.1.
+- Fixed Darby's BT2020 (Ultra HD) coefficients, which I think were wrong.
 
 
 v1.0.8
