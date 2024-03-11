@@ -507,11 +507,7 @@ namespace mrv
 
                     int value;
                     auto Aitem = model->observeA()->get();
-                    if (Aitem && !Aitem->ocioIcs.empty())
-                    {
-                        mrv::image::setOcioIcs(Aitem->ocioIcs);
-                    }
-                    else
+                    if (!Aitem || Aitem->ocioIcs.empty())
                     {
                         value = j["ics"];
                         ui->uiICS->value(value);
