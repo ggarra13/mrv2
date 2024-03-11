@@ -10,6 +10,8 @@ namespace mrv
 {
     namespace image
     {
+        extern std::string ocioDefault; 
+        
         int ocioIcsIndex(const std::string&);
         std::string ocioIcs();
         void setOcioIcs(const std::string&);

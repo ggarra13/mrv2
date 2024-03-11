@@ -66,14 +66,12 @@ namespace mrv
         char buf[256];
 
         const auto model = ui->app->filesModel();
-        const auto& files = model->observeFiles()->get();
-        size_t numFiles = files.size();
+        const size_t numFiles = model->observeFiles()->getSize();
 
         menu->clear();
 
         int idx;
 
-        DBG3;
         menu->add(
             _("File/Open/Movie or Sequence"), kOpenImage.hotkey(),
             (Fl_Callback*)open_cb, ui);
@@ -995,6 +993,7 @@ namespace mrv
         const int aIndex = model->observeAIndex()->get();
         if (numFiles > 0 && aIndex >= 0 && aIndex < numFiles)
         {
+            const auto& files = model->observeFiles()->get();
             std::string fileName = files[aIndex]->path.get(-1);
 
             const std::regex& regex = version_regex(ui, false);
@@ -1291,7 +1290,6 @@ namespace mrv
 #endif
 
         menu->redraw();
-        DBG3;
     }
 
 } // namespace mrv

@@ -26,13 +26,30 @@ v1.0.9
 - Fixed a bug in session loading when there was no Input Color Space specified
   in the image, which got introduced in v1.0.8.
 - Made pen size be able to be 1 pixel making the cursor one line only.
-- Made Prores_ks (FFmpeg's native encoder) match Apple's Prores one at
-  4444p10le.
+- Made prores_ks (FFmpeg's native encoder) match Apple's ProRes one at
+  4444p10le.  It is now possible to take ProRes4444 encoded files to video
+  editors.
 - Upgraded to FFmpeg v6.1.1.
-- Fixed Darby's BT2020 (Ultra HD) coefficients, which I think were wrong.
 - Improved rotation speed of movies from cell phones, by doing it in OpenGL
   with metadata instead of with a C++ function.
 - Added Creation, Modified Date and Disk Space to Media Info Panel.
+- Removed Frame information from Start/End Time in Image Tab of Media Info
+  Panel.
+- Made Start/End Time in Image Tab of Media Info Panel not use scientific
+  notation for seconds.
+- Fixed changing frame rate from the Timeline toolbar not updating the FPS
+  indicator in the Image Tab of the Media Info Panel.
+- Improved the performance of Media Info Panel when playing a sequence and
+  the Image tab was closed.
+- Removed Default Speed information from Video Tab and moved it to Image Tab.
+- Improved colors of deactivated enums showing too dark to read the black
+  text by default.
+- It is now possible to use OpenColorIO's built-in configs.  That is, those
+  stating with ocio://.
+- Added a Choice menu in Preferences->OCIO to select any of the three built-in
+  OCIO configs.
+- Set ocio default config to the built-in:
+      ocio://default
 
 
 v1.0.8

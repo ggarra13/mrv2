@@ -255,7 +255,7 @@ namespace mrv
         }
         if (!language || strncmp(language, langcode, 2) != 0)
         {
-            setenv("LANGUAGE", langcode, 1)
+            setenv("LANGUAGE", langcode, 1);
             win32_execv();
             exit(0);
         }

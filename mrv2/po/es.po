@@ -2327,7 +2327,7 @@ msgid "Unknown bit depth"
 msgstr "Profundid de bits desconocida"
 
 msgid "Depth"
-msgstr "Profudidas"
+msgstr "Profundidad"
 
 msgid "Bit depth of clip"
 msgstr "Profundidad en bits"

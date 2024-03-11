@@ -12,6 +12,8 @@ namespace mrv
 {
     namespace image
     {
+        std::string ocioDefault = "ocio://default";
+        
         std::string ocioIcs()
         {
             auto uiICS = App::ui->uiICS;

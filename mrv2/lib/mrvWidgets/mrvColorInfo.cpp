@@ -214,8 +214,8 @@ namespace mrv
         tooltip(_("Mark an area in the image with SHIFT + the left mouse "
                   "button"));
 
-        Fl_Group* g = new Fl_Group(X + 8, Y + 10, 32, 32);
-        dcol = new ColorWidget(X + 8, Y + 10, 32, 32);
+        Fl_Group* g = new Fl_Group(X + 4, Y + 10, 32, 32);
+        dcol = new ColorWidget(X + 4, Y + 10, 32, 32);
         g->resizable(0);
         g->end();
 

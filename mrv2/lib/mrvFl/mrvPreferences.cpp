@@ -530,36 +530,21 @@ namespace mrv
 #ifdef TLRENDER_OCIO
         // Check OCIO variable first, then saved prefs and finally if nothing,
         // use this default.
-        std::string ocioDefault =
-            root + "/ocio/cg-config/cg-config-v1.0.0_aces-v1.3_ocio-v2.1.ocio";
         static std::string old_ocio;
 
-        const char* var = getenv("OCIO");
+        const char* var = fl_getenv("OCIO");
         if (!var || strlen(var) == 0)
         {
             ocio.get("config", tmpS, "", 2048);
 
             if (strlen(tmpS) != 0)
             {
-                if (file::isReadable(tmpS))
+                if (image::ocioDefault != tmpS)
                 {
                     mrvLOG_INFO(
                         "ocio", _("Setting OCIO config from preferences.")
-                                    << std::endl);
-                    uiPrefs->uiPrefsOCIOConfig->value(tmpS);
-                    var = uiPrefs->uiPrefsOCIOConfig->value();
-                }
-                else
-                {
-                    std::string root = tmpS;
-                    if (root.find("mrv2") != std::string::npos)
-                    {
-                        mrvLOG_INFO(
-                            "ocio", _("Setting OCIO config to default.")
-                                        << std::endl);
-                        uiPrefs->uiPrefsOCIOConfig->value(ocioDefault.c_str());
-                        var = uiPrefs->uiPrefsOCIOConfig->value();
-                    }
+                        << std::endl);
+                    setOcioConfig(tmpS);
                 }
             }
         }
@@ -568,15 +553,14 @@ namespace mrv
             mrvLOG_INFO(
                 "ocio", _("Setting OCIO config from OCIO "
                           "environment variable.")
-                            << std::endl);
-            uiPrefs->uiPrefsOCIOConfig->value(var);
+                << std::endl);
+            setOcioConfig(var);
         }
 
+        var = uiPrefs->uiPrefsOCIOConfig->value();
         if (!var || strlen(var) == 0 || resetSettings)
         {
-            mrvLOG_INFO(
-                "ocio", _("Setting OCIO config to default.") << std::endl);
-            uiPrefs->uiPrefsOCIOConfig->value(ocioDefault.c_str());
+            setOcioConfig(image::ocioDefault);
         }
 
         ocio.get("use_active_views", tmp, 1);
@@ -1900,6 +1884,47 @@ namespace mrv
     //////////////////////////////////////////////////////
     // OCIO
     /////////////////////////////////////////////////////
+    void Preferences::setOcioConfig(std::string configName)
+    {
+        static std::string oldConfigName;
+        static const char* kModule = "ocio";
+
+        if (oldConfigName == configName)
+            return;
+
+        PreferencesUI* uiPrefs = App::ui->uiPrefs;
+        if (configName.substr(0, 7) != "ocio://")
+        {
+            if (file::isReadable(configName))
+            {
+                LOG_INFO(_("OCIO config is now:"));
+            }
+            else
+            {
+                std::string msg =
+                    tl::string::Format(
+                        _("OCIO file \"{0}\" not found or not readable."))
+                    .arg(configName);
+                LOG_ERROR(msg);
+                LOG_INFO(_("Setting OCIO config to default:"));
+                configName = image::ocioDefault;
+            }
+        }
+        else if (configName == image::ocioDefault)
+        {
+            LOG_INFO(_("Setting OCIO config to default:"));
+            configName = image::ocioDefault;
+        }
+        else
+        {
+            LOG_INFO(_("Setting OCIO config to built-in:"));
+        }
+
+        LOG_INFO(configName);
+        uiPrefs->uiPrefsOCIOConfig->value(configName.c_str());
+        oldConfigName = configName;
+    }
+    
     void Preferences::OCIO(ViewerUI* ui)
     {
 #ifdef TLRENDER_OCIO
@@ -1908,24 +1933,8 @@ namespace mrv
         static std::string old_ocio;
         const char* var = uiPrefs->uiPrefsOCIOConfig->value();
         if (var && strlen(var) > 0)
-        {
-
-            if (old_ocio != var)
-            {
-                old_ocio = var;
-                mrvLOG_INFO("ocio", _("OCIO config is now:") << std::endl);
-                mrvLOG_INFO("ocio", var << std::endl);
-            }
-
-            std::string parsed = expandVariables(var, "%", '%');
-            parsed = expandVariables(parsed, "${", '}');
-            if (old_ocio != parsed)
-            {
-                mrvLOG_INFO("ocio", _("Expanded OCIO config to:") << std::endl);
-                mrvLOG_INFO("ocio", parsed << std::endl);
-            }
-
-            uiPrefs->uiPrefsOCIOConfig->value(var);
+        {   
+            setOcioConfig(var);
 
             // First, remove all additional defaults if any from pulldown
             // menu
@@ -1936,8 +1945,8 @@ namespace mrv
 
             try
             {
-
-                config = OCIO::Config::CreateFromFile(parsed.c_str());
+                const char* configName = uiPrefs->uiPrefsOCIOConfig->value();
+                config = OCIO::Config::CreateFromFile(configName);
 
                 uiPrefs->uiPrefsOCIOConfig->tooltip(config->getDescription());
 

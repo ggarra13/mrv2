@@ -211,9 +211,12 @@ namespace mrv
 
             std::string config = ui->uiPrefs->uiPrefsOCIOConfig->value();
 
-            file::Path path(config);
-            config = getRelativePath(path, fileName).get();
-
+            if (config.substr(0, 7) != "ocio://")
+            {
+                file::Path path(config);
+                config = getRelativePath(path, fileName).get();
+            }
+            
             int ics = ui->uiICS->value();
             int view = ui->OCIOView->value();
             int layer = ui->uiColorChannel->value();
@@ -494,10 +497,17 @@ namespace mrv
                     j = session["ocio"];
                     std::string config = j["config"];
 
-                    replace_path(config);
+                    if (config.substr(0, 7) != "ocio://")
+                    {
+                        replace_path(config);
 
-                    if (file::isReadable(config))
+                        if (file::isReadable(config))
+                            ui->uiPrefs->uiPrefsOCIOConfig->value(config.c_str());
+                    }
+                    else
+                    {
                         ui->uiPrefs->uiPrefsOCIOConfig->value(config.c_str());
+                    }
 
                     Preferences::OCIO(ui);
 

@@ -3,8 +3,8 @@ version 1.0400
 i18n_type 1
 i18n_include {<libintl.h>}
 i18n_conditional {}
-i18n_gnu_function gettext
-i18n_gnu_static_function gettext_noop
+i18n_gnu_function _
+i18n_gnu_static_function _
 header_name {.h}
 code_name {.cxx}
 decl {\#include <FL/Fl_Color_Chooser.H>} {public global
@@ -164,7 +164,7 @@ If you try to open several mrv2s with different images, all these images will be
             }
           }
           Fl_Group {} {
-            label {View Window} open
+            label {View Window}
             xywh {288 35 555 349} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {
@@ -916,16 +916,50 @@ v->uiPrefsFPS->value( g );}
             }
           }
           Fl_Group {} {
-            label OCIO
-            xywh {293 34 542 362} box EMBOSSED_BOX align 5 hide
+            label OCIO open
+            xywh {293 34 542 362} box EMBOSSED_BOX align 5
           } {
             Fl_Group {} {open
-              xywh {303 113 523 204}
+              xywh {302 93 523 168}
             } {
               Fl_Input uiPrefsOCIOConfig {
                 label {OCIO Config File}
                 user_data main user_data_type {ViewerUI*}
-                tooltip {This is the path to your config.ocio file.  It can be set with the environment variable OCIO, which takes precedence over any saved setting.} xywh {388 180 305 30} color 20 align 1 when 11 textcolor 56
+                tooltip {This is the path to your config.ocio file.  It can be set with the environment variable OCIO, which takes precedence over any saved setting.} xywh {312 180 435 31} color 20 align 1 when 11 textcolor 56
+              }
+              Fl_Choice {} {
+                label {Built-in Configs}
+                user_data this user_data_type {PreferencesUI*}
+                callback {const Fl_Menu_Item* item = o->mvalue();
+if (!item || !item->label()) return;
+
+const std::string entry = item->label();
+if (entry == _("Default"))
+{
+   v->uiPrefsOCIOConfig->value("ocio://default");
+}
+else if (entry == _("CG"))
+{
+   v->uiPrefsOCIOConfig->value("ocio://cg-config-v1.0.0_aces-v1.3_ocio-v2.1");
+}
+else if (entry == _("Studio"))
+{
+   v->uiPrefsOCIOConfig->value("ocio://studio-config-v1.0.0_aces-v1.3_ocio-v2.1");
+}} open selected
+                xywh {477 99 119 32} down_box BORDER_BOX
+              } {
+                MenuItem {} {
+                  label Default user_data_type {void*}
+                  xywh {20 20 100 20}
+                }
+                MenuItem {} {
+                  label CG user_data_type {void*}
+                  xywh {10 10 100 20}
+                }
+                MenuItem {} {
+                  label Studio user_data_type {void*}
+                  xywh {0 0 100 20}
+                }
               }
               Fl_Button {} {
                 label Pick
@@ -936,7 +970,7 @@ if ( r.empty() ) return;
 
 unsetenv( "OCIO" );
 uiPrefs->uiPrefsOCIOConfig->value( r.c_str() );}
-                tooltip {Pick a config.ocio file from disk.} xywh {693 180 55 31}
+                tooltip {Pick a config.ocio file from disk.} xywh {751 180 55 31}
               }
             }
           }
@@ -1324,13 +1358,13 @@ v->uiOCIO_Look->do_callback();}
           }
           Fl_Group {} {
             label Errors open
-            xywh {303 39 532 362} box EMBOSSED_BOX align 5
+            xywh {303 39 532 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {open
               xywh {341 39 446 313}
             } {
               Fl_Choice uiPrefsRaiseLogWindowOnFFmpegError {
-                label {On FFmpeg Error} open selected
+                label {On FFmpeg Error} open
                 tooltip {Adjusts how Log Window behaves in case of an FFmpeg error.} xywh {493 128 255 25} down_box BORDER_BOX align 132 textcolor 32
                 class {mrv::Choice}
               } {

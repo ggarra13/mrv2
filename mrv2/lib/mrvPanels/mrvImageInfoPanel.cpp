@@ -1223,11 +1223,6 @@ namespace mrv
                 widget->labelcolor(FL_BLACK);
                 widget->textsize(12);
                 widget->textcolor(FL_BLACK);
-                for (size_t i = 0; i < num; ++i)
-                {
-                    widget->add(_(options[i]));
-                }
-                widget->value(unsigned(content));
                 widget->labelsize(kLabelSize);
                 widget->copy_label(_(options[content]));
                 if (tooltip)
@@ -1238,11 +1233,16 @@ namespace mrv
 
                 if (!editable)
                 {
-                    widget->deactivate();
+                    //widget->deactivate();
                     widget->box(FL_FLAT_BOX);
                 }
                 else
                 {
+                    for (size_t i = 0; i < num; ++i)
+                    {
+                        widget->add(_(options[i]));
+                    }
+                    widget->value(unsigned(content));
                     if (callback)
                         widget->callback(callback, this);
                 }
@@ -1389,7 +1389,7 @@ namespace mrv
             std::string text;
             
             double seconds = content.to_seconds();
-            snprintf(buf, 128, _("%.3g seconds "), seconds);
+            snprintf(buf, 128, _("%.3f seconds "), seconds);
             text += buf;
 
             text += content.to_timecode();
@@ -1695,111 +1695,135 @@ namespace mrv
             const auto tplayer = player->player();
             if (!tplayer)
                 return;
-
-            const auto& info = tplayer->getIOInfo();
-
-            const auto& path = player->path();
-            const auto& directory = path.getDirectory();
             
-            const auto& audioPath = player->audioPath();
-            const otime::RationalTime& time = player->currentTime();
-
-            const auto& fullname = createStringFromPathAndTime(path, time);
-
-            add_text(
-                _("Directory"), _("Directory where clip resides"), directory);
-
-            add_text(_("Filename"), _("Filename of the clip"), fullname);
-
-            if (!audioPath.isEmpty() && path != audioPath)
-            {
-                add_text(
-                    _("Audio Directory"),
-                    _("Directory where audio clip resides"),
-                    audioPath.getDirectory());
-
-                add_text(
-                    _("Audio Filename"), _("Filename of the audio clip"),
-                    audioPath.get(-1, tl::file::PathType::FileName));
-            }
-
-            ++group;
-
-            DBGM1("m_curr=" << m_curr);
-
+            const auto& info = tplayer->getIOInfo();
             unsigned num_video_streams = info.video.size();
             // @todo: tlRender does not handle multiple audio tracks
             unsigned num_audio_streams = info.audio.isValid();
             // @todo: tlRender does not handle subtitle tracks
             unsigned num_subtitle_streams = 0;
 
-            add_int(
-                _("Video Streams"), _("Number of video streams in file"),
-                num_video_streams);
-            add_int(
-                _("Audio Streams"), _("Number of audio streams in file"),
-                num_audio_streams);
-            // add_int( _("Subtitle Streams"),
-            //          _("Number of subtitle streams in file"),
-            //          num_subtitle_streams );
-
-            const auto& range = player->timeRange();
-            const auto& startTime = range.start_time();
-            const auto& endTime = range.end_time_inclusive();
-            add_time(
-                _("Start Time"), _("Beginning frame of clip"), startTime,
-                false);
-            add_time(_("End Time"), _("Ending frame of clip"), endTime, false);
-
-            const otime::TimeRange& iorange = player->inOutRange();
-            int64_t first = iorange.start_time().to_frames();
-            int64_t last = iorange.end_time_inclusive().to_frames();
-
-            add_int(
-                _("First Frame"), _("First frame of clip - User selected"),
-                (int)first, true, true, (Fl_Callback*)change_first_frame_cb,
-                first, last);
-            add_int(
-                _("Last Frame"), _("Last frame of clip - User selected"),
-                (int)last, true, true, (Fl_Callback*)change_last_frame_cb, 2,
-                last);
-
-            float fps = player->speed();
-            add_float(
-                _("Current Speed"), _("Current Speed (Frames Per Second)"), fps,
-                true, true, (Fl_Callback*)change_fps_cb, 1.0f, 60.0f,
-                FL_WHEN_CHANGED);
-
-            ++group;
-
-            struct stat file_stat;
-            const std::string& filename = directory + fullname;
-            
-            if (stat(filename.c_str(), &file_stat) == 0)
+            if (m_image->is_open())
             {
-                // Get file size
-                std::uintmax_t filesize = fs::file_size(filename);
-                add_memory(_("Disk space"), _("Disk space"), filesize );
-                
-                // Retrieve last modification time
-                time_t mod_time = file_stat.st_mtime;
-                time_t creation_time = file_stat.st_ctime;
-        
-                // Format time according to current locale
-                strftime(buf, sizeof(buf), "%c", localtime(&creation_time));
-                add_text(_("Creation Date"), _("Creation date of file"),
-                         buf);
-                
-                // Format time according to current locale
-                strftime(buf, sizeof(buf), "%c", localtime(&mod_time));
-                add_text(_("Modified Date"), _("Last modified date of file"),
-                         buf);
-            }
+                const auto& path = player->path();
+                const auto& directory = path.getDirectory();
+            
+                const auto& audioPath = player->audioPath();
+                const otime::RationalTime& time = player->currentTime();
 
-            ++group;
+                const auto& fullname = createStringFromPathAndTime(path, time);
+
+                add_text(
+                    _("Directory"), _("Directory where clip resides"), directory);
+
+                add_text(_("Filename"), _("Filename of the clip"), fullname);
+
+                if (!audioPath.isEmpty() && path != audioPath)
+                {
+                    add_text(
+                        _("Audio Directory"),
+                        _("Directory where audio clip resides"),
+                        audioPath.getDirectory());
+
+                    add_text(
+                        _("Audio Filename"), _("Filename of the audio clip"),
+                        audioPath.get(-1, tl::file::PathType::FileName));
+                }
+
+                ++group;
+
+                add_int(
+                    _("Video Streams"), _("Number of video streams in file"),
+                    num_video_streams);
+                add_int(
+                    _("Audio Streams"), _("Number of audio streams in file"),
+                    num_audio_streams);
+                // add_int( _("Subtitle Streams"),
+                //          _("Number of subtitle streams in file"),
+                //          num_subtitle_streams );
+
+                const auto& range = player->timeRange();
+                const auto& startTime = range.start_time();
+                const auto& endTime = range.end_time_inclusive();
+                add_time(
+                    _("Start Time"), _("Beginning frame of clip"), startTime,
+                    false);
+                add_time(_("End Time"), _("Ending frame of clip"), endTime, false);
+
+                const otime::TimeRange& iorange = player->inOutRange();
+                int64_t first = iorange.start_time().to_frames();
+                int64_t last = iorange.end_time_inclusive().to_frames();
+
+                add_int(
+                    _("First Frame"), _("First frame of clip - User selected"),
+                    (int)first, true, true, (Fl_Callback*)change_first_frame_cb,
+                    first, last);
+                add_int(
+                    _("Last Frame"), _("Last frame of clip - User selected"),
+                    (int)last, true, true, (Fl_Callback*)change_last_frame_cb, 2,
+                    last);
+
+
+                const char* name = "";
+                double fps = player->defaultSpeed();
+
+                if (is_equal(fps, 29.97))
+                    name = "(NTSC)";
+                else if (is_equal(fps, 30.0))
+                    name = "(60hz HDTV)";
+                else if (is_equal(fps, 25.0))
+                    name = "(PAL)";
+                else if (is_equal(fps, 24.0))
+                    name = "(Film)";
+                else if (is_equal(fps, 50.0))
+                    name = _("(PAL Fields)");
+                else if (is_equal(fps, 59.940059))
+                    name = _("(NTSC Fields)");
+
+                snprintf(buf, 256, "%g %s", fps, name);
+
+                add_text(
+                    _("Default Speed"),
+                    _("Default Speed in Frames per Second"), buf);
+                    
+                fps = player->speed();
+                add_float(
+                    _("Current Speed"),
+                    _("Current Speed (Frames Per Second)"), fps,
+                    true, true, (Fl_Callback*)change_fps_cb, 1.0f, 60.0f,
+                    FL_WHEN_CHANGED);
+
+                ++group;
+
+                struct stat file_stat;
+                const std::string& filename = directory + fullname;
+            
+                if (stat(filename.c_str(), &file_stat) == 0)
+                {
+                    // Get file size
+                    std::uintmax_t filesize = fs::file_size(filename);
+                    add_memory(_("Disk space"), _("Disk space"), filesize );
+                
+                    // Retrieve last modification time
+                    time_t mod_time = file_stat.st_mtime;
+                    time_t creation_time = file_stat.st_ctime;
+        
+                    // Format time according to current locale
+                    strftime(buf, sizeof(buf), "%c", localtime(&creation_time));
+                    add_text(_("Creation Date"), _("Creation date of file"),
+                             buf);
+                
+                    // Format time according to current locale
+                    strftime(buf, sizeof(buf), "%c", localtime(&mod_time));
+                    add_text(_("Modified Date"), _("Last modified date of file"),
+                             buf);
+                }
+
+                ++group;
+            }
             
             m_image->show();
-
+            
             const auto view = _p->ui->uiView;
             const auto& videoData = view->getVideoData();
 
@@ -1878,12 +1902,12 @@ namespace mrv
                     const char* name = _("Unknown");
                     int num = sizeof(kAspectRatioNames) / sizeof(AspectName);
                     constexpr double fuzz = 0.001;
-                    for (int i = 0; i < num; ++i)
+                    for (int j = 0; j < num; ++j)
                     {
                         if (mrv::is_equal(
-                                aspect_ratio, kAspectRatioNames[i].ratio, fuzz))
+                                aspect_ratio, kAspectRatioNames[j].ratio, fuzz))
                         {
-                            name = _(kAspectRatioNames[i].name);
+                            name = _(kAspectRatioNames[j].name);
                             break;
                         }
                     }
@@ -1943,28 +1967,6 @@ namespace mrv
                     add_int(
                         _("Image Channels"), _("Number of channels in clip"),
                         channelCount, false);
-
-                    name = "";
-                    double fps = player->defaultSpeed();
-
-                    if (is_equal(fps, 29.97))
-                        name = "(NTSC)";
-                    else if (is_equal(fps, 30.0))
-                        name = "(60hz HDTV)";
-                    else if (is_equal(fps, 25.0))
-                        name = "(PAL)";
-                    else if (is_equal(fps, 24.0))
-                        name = "(Film)";
-                    else if (is_equal(fps, 50.0))
-                        name = _("(PAL Fields)");
-                    else if (is_equal(fps, 59.940059))
-                        name = _("(NTSC Fields)");
-
-                    snprintf(buf, 256, "%g %s", fps, name);
-
-                    add_text(
-                        _("Default Speed"),
-                        _("Default Speed in Frames per Second"), buf);
 
                     std::vector< std::string > yuvCoeffs =
                         tl::image::getYUVCoefficientsLabels();

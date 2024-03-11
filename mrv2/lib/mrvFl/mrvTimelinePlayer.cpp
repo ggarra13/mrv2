@@ -324,6 +324,9 @@ namespace mrv
         pushMessage("setSpeed", value);
 
         _p->player->setSpeed(value);
+
+        if (panel::imageInfoPanel)
+            panel::imageInfoPanel->refresh();
     }
 
     void TimelinePlayer::setPlayback(timeline::Playback value)
