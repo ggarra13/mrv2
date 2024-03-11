@@ -35,7 +35,7 @@ To modify a sketch, you have the arrows of Undo and Redo.  You can also use the 
 Navigating Notes
 ----------------
 
-The presence of a note is indicated by a light yellow verical bar in the timeline. 
+The presence of a note is indicated by a light yellow vertical bar in the timeline. 
 The Shift + Left Arrow and Shift + Right Arrow keys on your keyboard will jump the to the previous or next note on the timeline.
 
 Drawing Annotations
@@ -48,4 +48,4 @@ Drawings are 'vector based' (rather than rasterised pixels) and they are rendere
 
 The 'Laser' mode (set on the Annotation Panel) is provided so that you can draw non-persistent strokes that fade until they disappear over a couple of seconds. This can be useful for highlighting an area of the image to colleagues present in a review without you needing to continually erase or undo your strokes.
 
-To enter a text caption, select the 'Text' tool, click in the viewport to place the caption and start typing. While still typing, you can click or drag the box around.  You can change the font from the Annotation Panel.  Once you are happy with the text, you can "paste" it by clicking on the green cross.  If you want to discard it, you can hit Escape key, or clean the text and click on the red cross.
+To enter a text caption, select the 'Text' tool, click in the viewport to place the caption and start typing. While still typing, you can click or drag the box around.  You can change the font from the Annotation Panel.  Once you are happy with the text, you can "paste" it by clicking on the green cross or pressing SHIFT + Enter.  If you want to discard it, you can hit Escape key, or clean the text and click on the red cross.
