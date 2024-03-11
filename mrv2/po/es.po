@@ -2822,7 +2822,7 @@ msgid "ERROR: "
 msgstr "ERROR: "
 
 msgid "WARN : "
-msgstr "AVISO : "
+msgstr "AVISO: "
 
 msgid ""
 "Regular expression created from {0}.  It is:\n"

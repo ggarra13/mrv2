@@ -35,7 +35,7 @@
 #include "mrvCore/mrvUtil.h"
 #include "mrvFl/mrvIO.h"
 
-// #define DEBUG_EVENTS
+//#define DEBUG_EVENTS
 
 namespace
 {
@@ -841,11 +841,11 @@ namespace mrv
         if (p.ui->uiSecondary && p.ui->uiSecondary->viewport() == this)
             primary = false;
 
-        if (event != FL_MOVE)
+        if (event != FL_MOVE && event != FL_NO_EVENT)
         {
-            DBGM0("EVENT=" << fl_eventnames[event]);
-            DBGM0("FOCUS=" << Fl::focus());
-            DBGM0("BELOWMOUSE? " << (Fl::belowmouse() == this));
+            LOG_INFO("EVENT=" << fl_eventnames[event]);
+            LOG_INFO("FOCUS=" << Fl::focus());
+            LOG_INFO("BELOWMOUSE? " << (Fl::belowmouse() == this));
         }
 #endif
 
@@ -854,6 +854,7 @@ namespace mrv
              (event == FL_PUSH && ret == 1)) &&
             Fl::focus() != this)
         {
+            p.lastEvent = 0;
             return ret;
         }
 
@@ -866,10 +867,11 @@ namespace mrv
             return 1;
         case FL_ENTER:
         {
-            bool takeFocus = true;
-            if (this == p.ui->uiView)
-                takeFocus = false;
-            if (!children() && takeFocus)
+            p.lastEvent = 0;
+
+            // We have children if we are editing a text widget, so we do not
+            // grab focus in that case.
+            if (!children())
                 take_focus();
 #ifdef __APPLE__
             if (p.ui->uiMenuBar && p.ui->uiPrefs->uiPrefsMacOSMenus->value())
@@ -884,6 +886,8 @@ namespace mrv
         }
         case FL_LEAVE:
         {
+            p.lastEvent = 0;
+            
             cursor(FL_CURSOR_DEFAULT);
             constexpr float NaN = std::numeric_limits<float>::quiet_NaN();
             image::Color4f rgba(NaN, NaN, NaN, NaN);
@@ -978,7 +982,7 @@ namespace mrv
                 {
                     p.lastEvent = 0;
                     if (p.timelinePlayers.empty())
-                        return 0;
+                        return 1;
                     auto player = p.timelinePlayers[0];
                     player->setPlayback(p.playbackMode);
                     panel::redrawThumbnails();
@@ -990,8 +994,9 @@ namespace mrv
                         p.actionMode == ActionMode::kScrub &&
                         p.ui->uiPrefs->uiPrefsSingleClickPlayback->value())
                     {
+                        p.lastEvent = 0;
                         if (p.timelinePlayers.empty())
-                            return 0;
+                            return 1;
 
                         if (_isPlaybackStopped())
                         {
@@ -1013,18 +1018,20 @@ namespace mrv
             {
                 auto player = getTimelinePlayer();
                 if (!player)
-                    return 0;
+                    return 1;
 
                 auto annotation = player->getAnnotation();
                 if (p.actionMode != kScrub && !annotation)
-                    return 0;
+                    return 1;
 
                 std::shared_ptr< draw::Shape > s;
                 if (annotation)
                     s = annotation->lastShape();
 
+                p.lastEvent = 0;
+                    
                 if (!s->laser)
-                    return 0;
+                    return 1;
 
                 tcp->pushMessage("Laser Fade", 0);
 
@@ -1113,7 +1120,7 @@ namespace mrv
                 if (Fl::event_ctrl())
                 {
                     if (p.timelinePlayers.empty())
-                        return 0;
+                        return 1;
                     _scrub(-dy);
                 }
                 else

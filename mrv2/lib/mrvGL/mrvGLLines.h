@@ -34,13 +34,13 @@ namespace mrv
             void drawLine(
                 const std::shared_ptr<timeline::IRender>& render,
                 const math::Vector2i& start, const math::Vector2i& end,
-                const image::Color4f& color, const int width);
+                const image::Color4f& color, const float width);
 
             //! Draw a set of connected line segments.
             void drawLines(
                 const std::shared_ptr<timeline::IRender>& render,
                 const draw::PointList& pts, const image::Color4f& color,
-                const int width, const bool soft = false,
+                const float width, const bool soft = false,
                 const draw::Polyline2D::JointStyle jointStyle =
                     draw::Polyline2D::JointStyle::MITER,
                 const draw::Polyline2D::EndCapStyle endStyle =

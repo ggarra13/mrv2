@@ -47,7 +47,7 @@ namespace mrv
         void Lines::drawLines(
             const std::shared_ptr<timeline::IRender>& render,
             const draw::PointList& pts, const image::Color4f& color,
-            const int width, const bool soft,
+            const float width, const bool soft,
             const draw::Polyline2D::JointStyle jointStyle,
             const draw::Polyline2D::EndCapStyle endStyle,
             const bool catmullRomSpline, const bool allowOverlap)
@@ -208,7 +208,7 @@ namespace mrv
         void Lines::drawLine(
             const std::shared_ptr<timeline::IRender>& render,
             const math::Vector2i& start, const math::Vector2i& end,
-            const image::Color4f& color, const int width)
+            const image::Color4f& color, const float width)
         {
             using namespace mrv::draw;
 

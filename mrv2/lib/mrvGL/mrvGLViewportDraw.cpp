@@ -366,7 +366,7 @@ namespace mrv
             p.mousePos = _getFocus();
             const auto& pos = _getRasterf();
             gl.render->setTransform(mvp);
-            gl.lines->drawCursor(gl.render, pos, pen_size / 2.0, color);
+            gl.lines->drawCursor(gl.render, pos, pen_size, color);
         }
     }
 
