@@ -184,8 +184,6 @@ namespace mrv
 
                     X = (viewportSize.w - renderSize.w) / 2;
                     Y = (viewportSize.h - renderSize.h) / 2;
-                    
-                    outputInfo.size = renderSize;
                 }
                 else
                 {
@@ -195,6 +193,8 @@ namespace mrv
                     LOG_WARNING(_("Image too big.  "
                                   "Will save the viewport size."));
                 }
+                    
+                outputInfo.size = renderSize;
 
                 std::string msg = tl::string::Format(
                                       _("Viewport Size: {0}  Render Size: {1}"))
