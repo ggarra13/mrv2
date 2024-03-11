@@ -854,7 +854,6 @@ namespace mrv
              (event == FL_PUSH && ret == 1)) &&
             Fl::focus() != this)
         {
-            p.lastEvent = 0;
             return ret;
         }
 
