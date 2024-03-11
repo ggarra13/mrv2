@@ -243,6 +243,13 @@ namespace mrv
                 accept();                   // With no text accept will return 0
                 return 1;
             }
+            else if ((rawkey == FL_KP_Enter ||
+                      rawkey == FL_Enter) && Fl::event_shift())
+            {
+                Fl_Widget_Tracker wp(this); // watch myself
+                accept();
+                return 1;
+            }
             recalc();
             return ret;
         }
