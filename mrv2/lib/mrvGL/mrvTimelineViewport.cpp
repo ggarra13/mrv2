@@ -980,7 +980,15 @@ namespace mrv
                     // we also refresh the media info panel.
                     const auto& tags =
                         p.videoData[0].layers[0].image->getTags();
-                    image::Tags::const_iterator i = tags.find("Data Window");
+
+                    auto i = tags.find("Video Rotation");
+                    if (i != tags.end())
+                    {
+                        std::stringstream s(i->second);
+                        s >> p.videoRotation;
+                    }
+                    
+                    i = tags.find("Data Window");
                     if (i != tags.end())
                         refresh = true;
 
@@ -1146,9 +1154,11 @@ namespace mrv
         }
         const auto viewportSize = getViewportSize();
         const auto renderSize = getRenderSize();
+        const float rotation = p.rotation + p.videoRotation;
+        
         float zoom;
 
-        if (p.rotation == 90.F || p.rotation == -90.F)
+        if (rotation == 90.F || rotation == -90.F)
         {
             zoom = viewportSize.h / static_cast<float>(renderSize.w);
             if (zoom * renderSize.h > viewportSize.w)
@@ -2870,7 +2880,7 @@ namespace mrv
         const math::Matrix4x4f& vm =
             math::translate(math::Vector3f(p.viewPos.x, p.viewPos.y, 0.F)) *
             math::scale(math::Vector3f(p.viewZoom, p.viewZoom, 1.F));
-        const auto& rm = math::rotateZ(p.rotation);
+        const auto& rm = math::rotateZ(p.rotation + p.videoRotation);
         const math::Matrix4x4f& tm = math::translate(
             math::Vector3f(-renderSize.w / 2, -renderSize.h / 2, 0.F));
         const math::Matrix4x4f& to = math::translate(
@@ -2911,7 +2921,7 @@ namespace mrv
             math::translate(math::Vector3f(-p.viewPos.x, -p.viewPos.y, 0.F));
         math::Matrix4x4f zoom = math::scale(
             math::Vector3f(1.F/p.viewZoom, 1.F/p.viewZoom, 1.F));
-        const auto& rotation = math::rotateZ(-p.rotation);
+        const auto& rotation = math::rotateZ(-p.rotation - p.videoRotation);
 
         const math::Matrix4x4f tm =
             math::translate(math::Vector3f(renderSize.w / 2,

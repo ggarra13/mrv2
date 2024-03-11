@@ -34,6 +34,7 @@ namespace mrv
         Stereo3DOptions stereo3DOptions;
         static EnvironmentMapOptions environmentMapOptions;
 
+        float       videoRotation = 0.F;
         std::vector<TimelinePlayer*> timelinePlayers;
         std::vector<image::Size> timelineSizes;
 

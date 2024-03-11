@@ -30,6 +30,8 @@ v1.0.9
   4444p10le.
 - Upgraded to FFmpeg v6.1.1.
 - Fixed Darby's BT2020 (Ultra HD) coefficients, which I think were wrong.
+- Improved rotation speed of movies from cell phones, by doing it in OpenGL
+  with metadata instead of with a C++ function.
 
 
 v1.0.8
