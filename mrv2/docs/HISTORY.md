@@ -14,10 +14,10 @@ v1.0.9
 - Fixed rotation inverting the coordinates of the annotations.
 - Fixed the pixel coordinate information when flipped or rotated.
 - Fixed the pixel color bar display and information when rotated.
+- Fixed text tool incorrect positioning when image was rotated.
 - Made arrow head size be proportional to the line size.
 - Made drawing cursor be drawn with float coordinates.
 - Made circle's center also be drawn with float coordinates.
-- Made pen size go to 1 as minimum.
 - Added back .wmv/a decoders and asf demuxer in TLRENDER_FFMPEG_MINIMAL.
 - Added Video Color Primaries, Color TRC and Color Space FFmpeg information
   to Media Info Panel's video.
