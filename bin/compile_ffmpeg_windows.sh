@@ -672,6 +672,7 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
             --enable-parser=dnxhd
             --enable-parser=dolby_e
             --enable-parser=flac
+            --enable-parser=gif
             --enable-parser=h264
             --enable-parser=hevc
             --enable-parser=mjpeg
