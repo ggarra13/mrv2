@@ -55,7 +55,7 @@ namespace mrv
         std::shared_ptr<observer::ValueObserver<otime::TimeRange> >
             inOutRangeObserver;
         std::shared_ptr<observer::ValueObserver<size_t> > videoLayerObserver;
-        std::shared_ptr<observer::ValueObserver<timeline::VideoData> >
+        std::shared_ptr<observer::ListObserver<timeline::VideoData> >
             currentVideoObserver;
         std::shared_ptr<observer::ValueObserver<float> > volumeObserver;
         std::shared_ptr<observer::ValueObserver<bool> > muteObserver;
@@ -115,9 +115,9 @@ namespace mrv
                 { inOutRangeChanged(value); });
 
         p.currentVideoObserver =
-            observer::ValueObserver<timeline::VideoData>::create(
+            observer::ListObserver<timeline::VideoData>::create(
                 p.player->observeCurrentVideo(),
-                [this](const timeline::VideoData& value)
+                [this](const std::vector<timeline::VideoData>& value)
                 { currentVideoChanged(value); },
                 observer::CallbackAction::Suppress);
 
@@ -258,19 +258,9 @@ namespace mrv
         return _p->player->observeInOutRange()->get();
     }
 
-    tl::io::Options TimelinePlayer::getIOOptions() const
+    const std::vector<timeline::VideoData>& TimelinePlayer::currentVideo() const
     {
-        return _p->player->getIOOptions();
-    }
-
-    void TimelinePlayer::setIOOptions(const io::Options& value)
-    {
-        _p->player->setIOOptions(value);
-    }
-
-    const timeline::VideoData& TimelinePlayer::currentVideo() const
-    {
-        return _p->player->observeCurrentVideo()->get();
+        return _p->player->getCurrentVideo();
     }
 
     float TimelinePlayer::volume() const
@@ -551,17 +541,35 @@ namespace mrv
             return 0;
         return Aitem->videoLayer;
     }
+    
+    void TimelinePlayer::setIOOptions(const io::Options& value)
+    {
+        _p->player->setIOOptions(value);
+    }
+
+    void TimelinePlayer::setCompare(const std::vector<std::shared_ptr<timeline::Timeline> >& value)
+    {
+        _p->player->setCompare(value);
+    }
+    
+    void TimelinePlayer::setCompareTime(timeline::CompareTimeMode value)
+    {
+        _p->player->setCompareTime(value);
+    }
 
     void TimelinePlayer::setVideoLayer(int value)
     {
         pushMessage("setVideoLayer", value);
-        auto model = App::app->filesModel();
-        auto Aitem = model->observeA()->get();
-        if (!Aitem)
-            return;
-        model->setLayer(Aitem, value);
+        _p->player->setVideoLayer(value);
     }
 
+    void TimelinePlayer::setCompareVideoLayers(const std::vector<int>& value)
+    {
+        //pushMessage("setCompareVideoLayer", value);
+        _p->player->setCompareVideoLayers(value);
+    }
+
+    
     void TimelinePlayer::setVolume(float value)
     {
         _p->player->setVolume(value);
@@ -640,7 +648,8 @@ namespace mrv
     }
 
     //! This signal is emitted when the video is changed.
-    void TimelinePlayer::currentVideoChanged(const tl::timeline::VideoData& v)
+    void TimelinePlayer::currentVideoChanged(
+        const std::vector<tl::timeline::VideoData>& v)
     {
         if (!timelineViewport)
             return;

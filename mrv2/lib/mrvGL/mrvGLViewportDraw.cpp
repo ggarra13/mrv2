@@ -755,10 +755,10 @@ namespace mrv
     void Viewport::_drawSafeAreas() const noexcept
     {
         TLRENDER_P();
-        if (p.timelinePlayers.empty())
+        if (!p.player)
             return;
-        const auto& player = p.timelinePlayers[0];
-        const auto& info = player->player()->getIOInfo();
+
+        const auto& info = p.player->player()->getIOInfo();
         const auto& video = info.video[0];
         const auto pr = video.size.pixelAspectRatio;
 
@@ -830,9 +830,9 @@ namespace mrv
         auto lineHeight = fontMetrics.lineHeight;
         math::Vector2i pos(20, lineHeight * 2);
 
-        if (p.timelinePlayers.empty())
+        if (!p.player)
             return;
-        const auto& player = p.timelinePlayers[0];
+        const auto player = p.player;
 
         const auto& path = player->path();
         const otime::RationalTime& time = p.videoData[0].time;
@@ -1137,7 +1137,7 @@ namespace mrv
     void Viewport::_drawHelpText() const noexcept
     {
         TLRENDER_P();
-        if (p.timelinePlayers.empty())
+        if (!p.player)
             return;
         if (!p.fontSystem)
             return;

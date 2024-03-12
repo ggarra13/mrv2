@@ -64,6 +64,7 @@ v1.0.9
   a line can be cut in half.
 - Fixed gcc version information in mrv2's About Window.  It was showing the
   __GLIBCXX__ instead.
+- Darby simplified and fixed the A/B comparison sometimes getting out of sync.
 
 
 v1.0.8

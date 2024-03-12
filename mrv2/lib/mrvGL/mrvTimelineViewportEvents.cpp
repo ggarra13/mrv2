@@ -468,10 +468,10 @@ namespace mrv
                     p.lastEvent = FL_PUSH;
 
                     p.playbackMode = timeline::Playback::Stop;
-                    if (!p.timelinePlayers.empty())
-                    {
-                        p.playbackMode = p.timelinePlayers[0]->playback();
-                    }
+
+                    if (p.player)
+                        p.playbackMode = p.player->playback();
+                   
                     return;
                 }
 
@@ -987,10 +987,9 @@ namespace mrv
                     Fl::event_button() == FL_LEFT_MOUSE)
                 {
                     p.lastEvent = 0;
-                    if (p.timelinePlayers.empty())
+                    if (!p.player)
                         return 1;
-                    auto player = p.timelinePlayers[0];
-                    player->setPlayback(p.playbackMode);
+                    p.player->setPlayback(p.playbackMode);
                     panel::redrawThumbnails();
                 }
                 else
@@ -1001,7 +1000,7 @@ namespace mrv
                         p.ui->uiPrefs->uiPrefsSingleClickPlayback->value())
                     {
                         p.lastEvent = 0;
-                        if (p.timelinePlayers.empty())
+                        if (!p.player)
                             return 1;
 
                         if (_isPlaybackStopped())
@@ -1125,7 +1124,7 @@ namespace mrv
             {
                 if (Fl::event_ctrl())
                 {
-                    if (p.timelinePlayers.empty())
+                    if (!p.player)
                         return 1;
                     _scrub(-dy);
                 }

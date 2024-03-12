@@ -363,7 +363,7 @@ namespace mrv
                                         ? i
                                         : request.timeline->getTimeRange()
                                               .start_time(),
-                                    ioOptions));
+                                    ioOptions).future);
                         }
                         p.requestsInProgress.push_back(std::move(request));
                     }

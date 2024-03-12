@@ -132,21 +132,20 @@ namespace mrv
 
         void clear_timeline_player(ViewerUI* ui, TimelinePlayer* player)
         {
-            std::vector<TimelinePlayer*> players;
-            ui->uiView->setTimelinePlayers(players);
+            ui->uiView->setTimelinePlayer(nullptr);
             if (ui->uiSecondary && ui->uiSecondary->window()->visible())
-                ui->uiSecondary->viewport()->setTimelinePlayers(players, false);
+                ui->uiSecondary->viewport()->setTimelinePlayer(nullptr, false);
             player->setTimeline(nullptr);
         }
 
-        void set_timeline_players(
-            const ViewerUI* ui, const std::vector<TimelinePlayer*>& players,
+        void set_timeline_player(
+            const ViewerUI* ui, TimelinePlayer* player,
             const otio::SerializableObject::Retainer<otio::Timeline>& timeline)
         {
-            players[0]->setTimeline(timeline);
-            ui->uiView->setTimelinePlayers(players);
+            player->setTimeline(timeline);
+            ui->uiView->setTimelinePlayer(player);
             if (ui->uiSecondary && ui->uiSecondary->window()->visible())
-                ui->uiSecondary->viewport()->setTimelinePlayers(players, false);
+                ui->uiSecondary->viewport()->setTimelinePlayer(player, false);
         }
     } // namespace
 
@@ -837,19 +836,13 @@ namespace mrv
             view->setContext(app->getContext());
             view->setOCIOOptions(ui->uiView->getOCIOOptions());
             view->setLUTOptions(app->lutOptions());
-            std::vector< timeline::ImageOptions > imageOptions;
-            std::vector< timeline::DisplayOptions > displayOptions;
-            const auto& players = ui->uiView->getTimelinePlayers();
-            for (const auto& p : players)
-            {
-                imageOptions.push_back(app->imageOptions());
-                displayOptions.push_back(app->displayOptions());
-            }
-            view->setImageOptions(imageOptions);
-            view->setDisplayOptions(displayOptions);
+            timeline::ImageOptions imageOptions = app->imageOptions();
+            timeline::DisplayOptions displayOptions = app->displayOptions();
+            view->setImageOptions({imageOptions});
+            view->setDisplayOptions({displayOptions});
             auto model = app->filesModel();
             view->setCompareOptions(model->observeCompareOptions()->get());
-            view->setTimelinePlayers(players, false);
+            view->setTimelinePlayer(ui->uiView->getTimelinePlayer(), false);
             window->show();
 
             bool value = ui->uiPrefs->uiPrefsSecondaryOnTop->value();
