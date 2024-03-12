@@ -414,6 +414,7 @@ namespace mrv
             shape->fontFamily = w->fontFamily;
             shape->fontSize = w->textsize() / p.viewZoom * pixels_unit;
 
+            // @bug: this is broken on image rotations
             shape->pts[0].x += offset.x;
             shape->pts[0].y -= offset.y;
             shape->pts[0].y = -shape->pts[0].y;

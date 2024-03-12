@@ -55,6 +55,7 @@ v1.0.9
   draw tool, but continue its trace.
 - Entering a Text annotation on the viewport can be confirmed by doing
   SHIFT + Enter.
+- Added FFmpeg's actual version information, not just each library.
 
 
 v1.0.8

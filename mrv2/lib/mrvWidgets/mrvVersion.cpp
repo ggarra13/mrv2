@@ -642,7 +642,7 @@ namespace mrv
           << endl;
 #endif
 #ifdef TLRENDER_FFMPEG
-        o << "FFmpeg" << endl
+        o << "FFmpeg " << av_version_info() << endl
           << "libavutil          v" << AV_STRINGIFY(LIBAVUTIL_VERSION) << endl
           << "libavcodec      v" << AV_STRINGIFY(LIBAVCODEC_VERSION) << endl
           << "libavformat     v" << AV_STRINGIFY(LIBAVFORMAT_VERSION) << endl
