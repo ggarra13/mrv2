@@ -568,7 +568,13 @@ namespace mrv
     if (nb_codecs < 0)
         return;
 
-    char buf[256];
+    browser.add("D\t\t\t\t\t=\tDecoding supported");
+    browser.add("\tE\t\t\t\t=\tEncoding supported");
+    browser.add("\t\tI\t\t\t=\tIntra frame-only codec");
+    browser.add("\t\t\tL\t\t=\tLossy compression");
+    browser.add("\t\t\t\tS\t=\tLossless compression");
+    browser.add("--------------------------------------------------------------------------------------------------------------------------------------");
+    
     for (i = 0; i < nb_codecs; i++) {
         const AVCodecDescriptor *desc = codecs[i];
         const AVCodec *codec;
@@ -641,7 +647,7 @@ namespace mrv
     void ffmpeg_subtitle_codecs(mrv::Browser& browser)
     {
 #ifdef TLRENDER_FFMPEG
-        return ffmpeg_codecs(browser, AVMEDIA_TYPE_SUBTITLE);
+        //return ffmpeg_codecs(browser, AVMEDIA_TYPE_SUBTITLE);
 #endif
     }
 
