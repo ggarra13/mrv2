@@ -293,7 +293,9 @@ namespace mrv
         return kBuild;
     }
 
-    void ffmpeg_formats(mrv::TextBrowser* browser)
+    static int ffmpeg_format_widths[] = { 20, 20, 20, 130, 80, 150, 0 };
+    
+    void ffmpeg_formats(mrv::TextBrowser* b)
     {
         using namespace std;
 #ifdef TLRENDER_FFMPEG
@@ -545,6 +547,7 @@ namespace mrv
         {
             FormatList::const_iterator i = formats.begin();
             FormatList::const_iterator e = formats.end();
+            b->column_widths(ffmpeg_format_widths);
             for (; i != e; ++i)
             {
                 f = *i;
@@ -552,7 +555,7 @@ namespace mrv
                 o << (f->decode ? "D\t" : " \t") << (f->encode ? "E\t" : " \t")
                   << (f->blob ? "B\t" : " \t") << f->name << "\t" << f->module
                   << "\t" << f->description;
-                browser->add(o.str().c_str());
+                b->add(o.str().c_str());
                 delete f;
             }
         }

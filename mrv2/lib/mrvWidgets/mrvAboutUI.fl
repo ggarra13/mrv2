@@ -82,11 +82,11 @@ for (; i != e; ++i )
           }
           Fl_Group {} {
             label Video open
-            xywh {0 24 535 370} hide
+            xywh {0 24 535 370}
           } {
             Fl_Browser {} {
-              label Codecs
-              xywh {20 53 495 100} color 49 textcolor 32 deactivate
+              label Codecs selected
+              xywh {20 53 495 100} color 49 align 1 textcolor 32 deactivate
               code0 {mrv::ffmpeg_codec_information(o);}
               class {mrv::TextBrowser}
             }
@@ -102,7 +102,7 @@ for (; i != e; ++i )
           } {
             Fl_Browser {} {
               label Codecs
-              xywh {20 53 495 100} color 49 textcolor 32 deactivate
+              xywh {20 53 495 100} color 49 align 1 textcolor 32 deactivate
               code0 {mrv::ffmpeg_codec_information(o);}
               class {mrv::TextBrowser}
             }
@@ -114,11 +114,11 @@ for (; i != e; ++i )
           }
           Fl_Group {} {
             label Subtitles open
-            xywh {0 24 535 370}
+            xywh {0 24 535 370} hide
           } {
             Fl_Browser {} {
-              label Codecs selected
-              xywh {20 53 495 100} color 49 textcolor 32 deactivate
+              label Codecs
+              xywh {20 53 495 100} color 49 align 1 textcolor 32 deactivate
               code0 {mrv::ffmpeg_codec_information(o);}
               class {mrv::TextBrowser}
             }
