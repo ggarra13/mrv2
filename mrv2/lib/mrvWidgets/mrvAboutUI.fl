@@ -7,11 +7,6 @@ i18n_gnu_function gettext
 i18n_gnu_static_function gettext_noop
 header_name {.h}
 code_name {.cxx}
-snap {
-  ver 1
-  current_suite FLTK
-  current_preset 0
-}
 decl {\#include "string"} {public local
 }
 
@@ -32,8 +27,8 @@ class AboutUI {open
   Function {make_window(ViewerUI* main)} {open private
   } {
     Fl_Window uiMain {
-      label {About mrv2} open selected
-      xywh {740 284 535 395} type Double resizable
+      label {About mrv2} open
+      xywh {1336 308 535 395} type Double resizable
       code0 {//main->uiMain->add(o);} modal visible
     } {
       Fl_Group {} {open
@@ -115,8 +110,8 @@ o->value(-1);}
             }
           }
           Fl_Group {} {
-            label Codecs
-            xywh {5 25 530 370} hide
+            label Codecs open
+            xywh {5 25 530 370}
           } {
             Fl_Browser {} {
               label Video
@@ -128,12 +123,12 @@ o->value(-1);}
             Fl_Browser {} {
               label Audio
               xywh {20 200 500 110} color 49 align 1 textcolor 32
-              code0 {static int widths[] = { 20, 20, 20, 20, 150, 0 }; o->column_widths( widths ); mrv::ffmpeg_audio_codecs(*o);
+              code0 {static int widths[] = { 20, 20, 20, 20, 20, 150, 0 }; o->column_widths( widths ); mrv::ffmpeg_audio_codecs(*o);
 o->value(-1);}
               class {mrv::Browser}
             }
             Fl_Browser {} {
-              label Subtitles
+              label Subtitles selected
               xywh {20 330 500 55} color 49 align 1 textcolor 32
               code0 {mrv::ffmpeg_subtitle_codecs(*o);
 o->value(-1);}
@@ -141,19 +136,19 @@ o->value(-1);}
             }
           }
           Fl_Group {} {
-            label Protocols
+            label Protocols open
             xywh {5 30 530 365} hide
           } {
             Fl_Browser {} {
               xywh {20 45 500 320} color 49 textcolor 32
-              code0 {o->add( mrv::ffmpeg_protocols().c_str() );
+              code0 {mrv::ffmpeg_protocols(*o);
 o->value(-1);}
               class {mrv::Browser}
             }
           }
           Fl_Group {} {
-            label {Motion Estimation Methods}
-            xywh {5 30 530 365}
+            label {Motion Estimation Methods} open
+            xywh {5 30 530 365} hide
           } {
             Fl_Browser {} {
               xywh {20 41 495 334} color 49 textcolor 32

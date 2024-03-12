@@ -15,7 +15,7 @@ namespace mrv
     void ffmpeg_video_codecs(mrv::Browser& b);
     void ffmpeg_audio_codecs(mrv::Browser& b);
     void ffmpeg_subtitle_codecs(mrv::Browser& b);
-    std::string ffmpeg_protocols();
+    void ffmpeg_protocols(mrv::Browser& b);
     void ffmpeg_motion_estimation_methods(mrv::Browser* b);
 
     const char* version();

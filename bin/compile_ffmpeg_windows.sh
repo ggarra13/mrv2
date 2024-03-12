@@ -450,6 +450,7 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
             --enable-decoder=dnxhd
             --enable-decoder=eac3
             --enable-decoder=flac
+            --enable-decoder=gif
             --enable-decoder=h264
             --enable-decoder=hevc
             --enable-decoder=mjpeg
@@ -519,6 +520,7 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
             --enable-encoder=cfhd
             --enable-encoder=dnxhd
             --enable-encoder=eac3
+            --enable-encoder=gif
             --enable-encoder=mjpeg
             --enable-encoder=mpeg2video
             --enable-encoder=mpeg4
@@ -579,6 +581,7 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
             --enable-demuxer=dtshd
             --enable-demuxer=eac3
             --enable-demuxer=flac
+            --enable-demuxer=gif
             --enable-demuxer=h264
             --enable-demuxer=hevc
             --enable-demuxer=m4v
@@ -624,6 +627,7 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
             --enable-muxer=dts
             --enable-muxer=eac3
             --enable-muxer=flac
+            --enable-muxer=gif
             --enable-muxer=h264
             --enable-muxer=hevc
             --enable-muxer=m4v

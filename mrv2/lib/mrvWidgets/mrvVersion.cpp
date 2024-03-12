@@ -130,6 +130,8 @@ extern "C"
 #    pragma warning(disable : 4275)
 #endif
 
+#include <tlCore/String.h>
+
 #include "mrvCore/mrvOS.h"
 
 #include "mrvCore/mrvCPU.h"
@@ -177,6 +179,67 @@ namespace mrv
                 o << "Release level: Unknown";
             o << " (" << std::hex << release_level << ")" << std::dec;
         }
+        
+
+#ifdef TLRENDER_FFMPEG
+        const AVCodec* next_codec_for_id(enum AVCodecID id, void **iter,
+                                         int encoder)
+        {
+            const AVCodec* c = nullptr;
+            while ((c = av_codec_iterate(iter)))
+            {
+                if (c->id == id &&
+                    (encoder ? av_codec_is_encoder(c) : av_codec_is_decoder(c)))
+                    return c;
+            }
+            return NULL;
+        }
+        
+        void print_codecs_for_id(std::ostringstream& o,
+                                 enum AVCodecID id, int encoder)
+        {
+            void *iter = NULL;
+            const AVCodec *codec;
+
+            o << " (" << (encoder ? "encoders" : "decoders") << ":";
+        
+            while ((codec = next_codec_for_id(id, &iter, encoder)))
+                o << ' ' << codec->name;
+
+            o << ')';
+        }
+
+        int compare_codec_desc(const void *a, const void *b)
+        {
+            const AVCodecDescriptor * const *da = (const AVCodecDescriptor* const *) a;
+            const AVCodecDescriptor * const *db = (const AVCodecDescriptor* const *) b;
+
+            return (
+                (*da)->type != (*db)->type
+                    ? FFDIFFSIGN((*da)->type, (*db)->type)
+                    : strcmp((*da)->name, (*db)->name));
+        }
+
+        int get_codecs_sorted(const AVCodecDescriptor ***rcodecs)
+        {
+            const AVCodecDescriptor *desc = NULL;
+            const AVCodecDescriptor **codecs;
+            unsigned nb_codecs = 0, i = 0;
+
+            while ((desc = avcodec_descriptor_next(desc)))
+                nb_codecs++;
+            if (!(codecs = (const AVCodecDescriptor**)av_calloc(
+                      nb_codecs, sizeof(*codecs))))
+                return AVERROR(ENOMEM);
+            desc = NULL;
+            while ((desc = avcodec_descriptor_next(desc)))
+                codecs[i++] = desc;
+            qsort(codecs, nb_codecs, sizeof(*codecs), compare_codec_desc);
+            *rcodecs = codecs;
+            return nb_codecs;
+        }
+#endif
+    
     } // namespace
 
     const char* kVersion = MRV2_VERSION;
@@ -198,7 +261,7 @@ namespace mrv
             encode(enc),
             decode(dec),
             blob(blo),
-            name(n),
+            name(string::toLower(n)),
             module(mod),
             description(desc)
         {
@@ -449,6 +512,8 @@ namespace mrv
                     long_name = ofmt->long_name;
                     encode = true;
                 }
+                if (name && strcmp(ofmt->name, name) == 0)
+                    encode = true;
             }
             opaque = NULL;
             while ((ifmt = av_demuxer_iterate(&opaque)))
@@ -458,7 +523,7 @@ namespace mrv
                 {
                     name = ifmt->name;
                     long_name = ifmt->long_name;
-                    encode = true;
+                    decode = true;
                 }
                 if (name && strcmp(ifmt->name, name) == 0)
                     decode = true;
@@ -469,7 +534,7 @@ namespace mrv
             last_name = name;
 
             f = new FormatInfo(
-                decode, encode, false, name, "FFMPEG", long_name);
+                decode, encode, false, name, "FFmpeg", long_name);
             formats.push_back(f);
         }
 #endif
@@ -496,50 +561,66 @@ namespace mrv
     static void ffmpeg_codecs(mrv::Browser& browser, int type)
     {
 #ifdef TLRENDER_FFMPEG
-        const AVCodec* p;
-        const AVCodec* p2;
-        const char* last_name;
+    const AVCodecDescriptor **codecs;
+    unsigned i;
+    int nb_codecs = get_codecs_sorted(&codecs);
+
+    if (nb_codecs < 0)
+        return;
+
+    char buf[256];
+    for (i = 0; i < nb_codecs; i++) {
+        const AVCodecDescriptor *desc = codecs[i];
+        const AVCodec *codec;
+        void *iter = NULL;
+
+        if (desc->type != type)
+            continue;
+        
+        if (strstr(desc->name, "_deprecated"))
+            continue;
+
+        bool decode = avcodec_find_decoder(desc->id);
+        bool encode = avcodec_find_encoder(desc->id);
+        if (!decode && !encode)
+            continue;
 
         std::ostringstream o;
-        last_name = "000";
-        for (;;)
-        {
-            int decode = 0;
-            int encode = 0;
-            int cap = 0;
+        o << (decode ? 'D' : ' ')
+          << '\t'
+          << (encode ? 'E' : ' ')
+          << '\t'
+          << ((desc->props & AV_CODEC_PROP_INTRA_ONLY) ? 'I' : ' ')
+          << '\t'
+          << ((desc->props & AV_CODEC_PROP_LOSSY)      ? 'L' : ' ')
+          << '\t'
+          << ((desc->props & AV_CODEC_PROP_LOSSLESS)   ? 'S' : ' ')
+          << '\t'
+          << desc->name
+          << '\t'
+          << (desc->long_name ? desc->long_name : "");
 
-            p2 = NULL;
-            void* opaque = NULL;
-            while ((p = av_codec_iterate(&opaque)))
-            {
-                if ((p2 == NULL || strcmp(p->name, p2->name) < 0) &&
-                    strcmp(p->name, last_name) > 0)
-                {
-                    p2 = p;
-                    decode = encode = cap = 0;
-                }
-                if (p2 && strcmp(p->name, p2->name) == 0)
-                {
-                    encode = av_codec_is_encoder(p);
-                    decode = av_codec_is_decoder(p);
-                    cap |= p->capabilities;
-                }
-            }
-
-            if (p2 == NULL)
+        /* print decoders/encoders when there's more than one or their
+         * names are different from codec name */
+        while ((codec = next_codec_for_id(desc->id, &iter, 0))) {
+            if (strcmp(codec->name, desc->name)) {
+                print_codecs_for_id(o, desc->id, 0);
                 break;
-            last_name = p2->name;
-
-            if (p2->type != type)
-                continue;
-
-            std::ostringstream o;
-            o << (decode ? "D\t" : " \t") << (encode ? "E\t" : " \t") << "\t"
-              << (cap & AV_CODEC_CAP_DRAW_HORIZ_BAND ? "S\t" : " \t")
-              << (cap & AV_CODEC_CAP_DR1 ? "D\t" : " \t") << p2->name;
-
-            browser.add(o.str().c_str());
+            }
         }
+        iter = NULL;
+        while ((codec = next_codec_for_id(desc->id, &iter, 1))) {
+            if (strcmp(codec->name, desc->name)) {
+                print_codecs_for_id(o, desc->id, 1);
+                break;
+            }
+        }
+        
+        
+        browser.add(o.str().c_str());
+    }
+    
+    av_free(codecs);
 #endif
     }
 
@@ -564,19 +645,19 @@ namespace mrv
 #endif
     }
 
-    std::string ffmpeg_protocols()
+    void ffmpeg_protocols(mrv::Browser& b)
     {
-        std::ostringstream o;
 #ifdef TLRENDER_FFMPEG
         void* opaque = NULL;
         const char* up;
         for (up = avio_enum_protocols(&opaque, 0); up;
              up = avio_enum_protocols(&opaque, 0))
         {
+            std::ostringstream o;
             o << " " << up << ":";
+            b.add(o.str().c_str());
         }
 #endif
-        return o.str();
     }
 
     void ffmpeg_motion_estimation_methods(mrv::Browser* b)
