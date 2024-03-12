@@ -594,7 +594,7 @@ from mrv2 import playlist, timeline, usd, session, settings
                     return;
                 const char* copy = buffer->selection_text();
                 if (*copy)
-                    Fl::copy(copy, (int)strlen(copy), 1);
+                    Fl::copy(copy, (int)strlen(copy), 2);
                 free((void*)copy);
             }
             else

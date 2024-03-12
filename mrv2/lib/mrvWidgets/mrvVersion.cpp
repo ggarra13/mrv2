@@ -158,7 +158,7 @@ namespace mrv
     namespace
     {
         void
-        semantic_versioning(std::ostringstream& o, const unsigned version_hex)
+        semantic_versioning(std::stringstream& o, const unsigned version_hex)
         {
             unsigned int major = (version_hex >> 24) & 0xFF;
             unsigned int minor = (version_hex >> 16) & 0xFF;
@@ -293,7 +293,7 @@ namespace mrv
         return kBuild;
     }
 
-    void ffmpeg_formats(mrv::Browser& browser)
+    void ffmpeg_formats(mrv::TextBrowser* browser)
     {
         using namespace std;
 #ifdef TLRENDER_FFMPEG
@@ -552,106 +552,114 @@ namespace mrv
                 o << (f->decode ? "D\t" : " \t") << (f->encode ? "E\t" : " \t")
                   << (f->blob ? "B\t" : " \t") << f->name << "\t" << f->module
                   << "\t" << f->description;
-                browser.add(o.str().c_str());
+                browser->add(o.str().c_str());
                 delete f;
             }
         }
     }
 
-    static void ffmpeg_codecs(mrv::Browser& browser, int type)
+    static int ffmpeg_codec_widths[] = { 20, 20, 20, 20, 20, 150, 0 };
+    
+    void ffmpeg_codec_information(mrv::TextBrowser* b)
     {
 #ifdef TLRENDER_FFMPEG
-    const AVCodecDescriptor **codecs;
-    unsigned i;
-    int nb_codecs = get_codecs_sorted(&codecs);
-
-    if (nb_codecs < 0)
-        return;
-
-    browser.add(_("D\t\t\t\t\t=\tDecoding supported"));
-    browser.add(_("\tE\t\t\t\t=\tEncoding supported"));
-    browser.add(_("\t\tI\t\t\t=\tIntra frame-only codec"));
-    browser.add(_("\t\t\tL\t\t=\tLossy compression"));
-    browser.add(_("\t\t\t\tS\t=\tLossless compression"));
-    browser.add("--------------------------------------------------------------------------------------------------------------------------------------");
-    
-    for (i = 0; i < nb_codecs; i++) {
-        const AVCodecDescriptor *desc = codecs[i];
-        const AVCodec *codec;
-        void *iter = NULL;
-
-        if (desc->type != type)
-            continue;
-        
-        if (strstr(desc->name, "_deprecated"))
-            continue;
-
-        bool decode = avcodec_find_decoder(desc->id);
-        bool encode = avcodec_find_encoder(desc->id);
-        if (!decode && !encode)
-            continue;
-
-        std::ostringstream o;
-        o << (decode ? 'D' : ' ')
-          << '\t'
-          << (encode ? 'E' : ' ')
-          << '\t'
-          << ((desc->props & AV_CODEC_PROP_INTRA_ONLY) ? 'I' : ' ')
-          << '\t'
-          << ((desc->props & AV_CODEC_PROP_LOSSY)      ? 'L' : ' ')
-          << '\t'
-          << ((desc->props & AV_CODEC_PROP_LOSSLESS)   ? 'S' : ' ')
-          << '\t'
-          << desc->name
-          << '\t'
-          << (desc->long_name ? desc->long_name : "");
-
-        /* print decoders/encoders when there's more than one or their
-         * names are different from codec name */
-        while ((codec = next_codec_for_id(desc->id, &iter, 0))) {
-            if (strcmp(codec->name, desc->name)) {
-                print_codecs_for_id(o, desc->id, 0);
-                break;
-            }
-        }
-        iter = NULL;
-        while ((codec = next_codec_for_id(desc->id, &iter, 1))) {
-            if (strcmp(codec->name, desc->name)) {
-                print_codecs_for_id(o, desc->id, 1);
-                break;
-            }
-        }
-        
-        
-        browser.add(o.str().c_str());
+        b->column_widths(ffmpeg_codec_widths);
+        b->add(_("D\t\t\t\t\t=\tDecoding supported"));
+        b->add(_("\tE\t\t\t\t=\tEncoding supported"));
+        b->add(_("\t\tI\t\t\t=\tIntra frame-only codec"));
+        b->add(_("\t\t\tL\t\t=\tLossy compression")); 
+        b->add(_("\t\t\t\tS\t=\tLossless compression"));
+#endif
     }
     
-    av_free(codecs);
+    static void ffmpeg_codecs(mrv::TextBrowser* b, int type)
+    {
+#ifdef TLRENDER_FFMPEG
+        b->column_widths(ffmpeg_codec_widths);
+        const AVCodecDescriptor **codecs;
+        unsigned i;
+        int nb_codecs = get_codecs_sorted(&codecs);
+
+        if (nb_codecs < 0)
+            return;
+
+        for (i = 0; i < nb_codecs; i++) {
+            const AVCodecDescriptor *desc = codecs[i];
+            const AVCodec *codec;
+            void *iter = NULL;
+
+            if (desc->type != type)
+                continue;
+        
+            if (strstr(desc->name, "_deprecated"))
+                continue;
+
+            bool decode = avcodec_find_decoder(desc->id);
+            bool encode = avcodec_find_encoder(desc->id);
+            if (!decode && !encode)
+                continue;
+
+            std::ostringstream o;
+            o << (decode ? 'D' : ' ')
+              << '\t'
+              << (encode ? 'E' : ' ')
+              << '\t'
+              << ((desc->props & AV_CODEC_PROP_INTRA_ONLY) ? 'I' : ' ')
+              << '\t'
+              << ((desc->props & AV_CODEC_PROP_LOSSY)      ? 'L' : ' ')
+              << '\t'
+              << ((desc->props & AV_CODEC_PROP_LOSSLESS)   ? 'S' : ' ')
+              << '\t'
+              << desc->name
+              << '\t'
+              << (desc->long_name ? desc->long_name : "");
+
+            /* print decoders/encoders when there's more than one or their
+             * names are different from codec name */
+            while ((codec = next_codec_for_id(desc->id, &iter, 0))) {
+                if (strcmp(codec->name, desc->name)) {
+                    print_codecs_for_id(o, desc->id, 0);
+                    break;
+                }
+            }
+            iter = NULL;
+            while ((codec = next_codec_for_id(desc->id, &iter, 1))) {
+                if (strcmp(codec->name, desc->name)) {
+                    print_codecs_for_id(o, desc->id, 1);
+                    break;
+                }
+            }
+        
+        
+            b->add(o.str().c_str());
+        }
+    
+        av_free(codecs);
 #endif
     }
 
-    void ffmpeg_audio_codecs(mrv::Browser& browser)
+    void ffmpeg_audio_codecs(mrv::TextBrowser* browser)
     {
 #ifdef TLRENDER_FFMPEG
         return ffmpeg_codecs(browser, AVMEDIA_TYPE_AUDIO);
 #endif
     }
 
-    void ffmpeg_video_codecs(mrv::Browser& browser)
+    void ffmpeg_video_codecs(mrv::TextBrowser* browser)
     {
 #ifdef TLRENDER_FFMPEG
         return ffmpeg_codecs(browser, AVMEDIA_TYPE_VIDEO);
 #endif
     }
 
-    void ffmpeg_subtitle_codecs(mrv::Browser& browser)
+    void ffmpeg_subtitle_codecs(mrv::TextBrowser* browser)
     {
 #ifdef TLRENDER_FFMPEG
-        //return ffmpeg_codecs(browser, AVMEDIA_TYPE_SUBTITLE);
+        return ffmpeg_codecs(browser, AVMEDIA_TYPE_SUBTITLE);
 #endif
     }
 
-    void ffmpeg_protocols(mrv::Browser& b)
+    void ffmpeg_protocols(mrv::TextBrowser* b)
     {
 #ifdef TLRENDER_FFMPEG
         void* opaque = NULL;
@@ -661,27 +669,12 @@ namespace mrv
         {
             std::ostringstream o;
             o << " " << up << ":";
-            b.add(o.str().c_str());
+            b->add(o.str().c_str());
         }
 #endif
     }
 
-    void ffmpeg_motion_estimation_methods(mrv::Browser* b)
-    {
-        static const char* motion_str[] = {
-            "zero", "esa",   "tss",  "tdls", "ntss", "fss",
-            "ds",   "hexds", "epzs", "umh",  NULL,
-        };
-
-        const char** pp = motion_str;
-        while (*pp)
-        {
-            b->add(*pp);
-            pp++;
-        }
-    }
-
-    std::string about_message()
+    void about_message(mrv::TextBrowser* b)
     {
         using namespace std;
 
@@ -689,7 +682,7 @@ namespace mrv
         avformat_network_init();
 #endif
 
-        std::ostringstream o;
+        std::stringstream o;
 
         o << "mrv2 " << kArch << " bits - v" << kVersion << " " << kBuild
           << endl
@@ -954,18 +947,30 @@ namespace mrv
         o << "A big thank you goes to Greg Ercolano who helped with" << endl
           << "the fltk1.4 porting and with the color schemes.";
 
-        return o.str();
+        std::string line;
+        while (std::getline(o, line, '\n'))
+        {
+            b->add(line.c_str());
+        }
     }
 
-    std::string cpu_information()
+    void cpu_information(mrv::TextBrowser* b)
     {
-        return GetCpuCaps(&gCpuCaps);
+        const std::string& lines = GetCpuCaps(&gCpuCaps);
+
+        std::stringstream o(lines);
+        
+        std::string line;
+        while (std::getline(o, line, '\n'))
+        {
+            b->add(line.c_str());
+        }
     }
 
     std::string gpu_information(ViewerUI* ui)
     {
         using std::endl;
-        std::ostringstream o;
+        std::stringstream o;
 
         int num_monitors = Fl::screen_count();
         o << "Monitors:\t" << num_monitors << endl << endl;

@@ -58,6 +58,10 @@ v1.0.9
 - Added FFmpeg's actual version information, not just each library.
 - Fixed listing of codecs in the About Window.
 - Added missing .gif decoder and encoder.
+- Added mrv::TextBrowser to allow copying the text in them with a RMB context
+  menu. This is useful, for example, in the About Window for the GPU or codec
+  information, as the full lines get copied, unlike a Fl_Text_Display in which
+  a line can be cut in half.
 
 
 v1.0.8

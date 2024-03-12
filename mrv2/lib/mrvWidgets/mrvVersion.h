@@ -6,24 +6,24 @@
 
 #include <string>
 
-#include "mrvWidgets/mrvBrowser.h"
+#include "mrvWidgets/mrvTextBrowser.h"
 
 namespace mrv
 {
 
-    void ffmpeg_formats(mrv::Browser& b);
-    void ffmpeg_video_codecs(mrv::Browser& b);
-    void ffmpeg_audio_codecs(mrv::Browser& b);
-    void ffmpeg_subtitle_codecs(mrv::Browser& b);
-    void ffmpeg_protocols(mrv::Browser& b);
-    void ffmpeg_motion_estimation_methods(mrv::Browser* b);
+    void ffmpeg_formats(mrv::TextBrowser* b);
+    void ffmpeg_video_codecs(mrv::TextBrowser* b);
+    void ffmpeg_audio_codecs(mrv::TextBrowser* b);
+    void ffmpeg_subtitle_codecs(mrv::TextBrowser* b);
+    void ffmpeg_protocols(mrv::TextBrowser* b);
+    void ffmpeg_codec_information(mrv::TextBrowser* b);
 
     const char* version();
     const char* build_date();
 
-    std::string about_message();
+    void about_message(mrv::TextBrowser* b);
 
-    std::string cpu_information();
+    void cpu_information(mrv::TextBrowser* b);
     std::string gpu_information(ViewerUI* uiMain);
 
 } // namespace mrv

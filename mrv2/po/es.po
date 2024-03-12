@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2024-03-12 08:22-0300\n"
+"POT-Creation-Date: 2024-03-12 10:15-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -3803,6 +3803,9 @@ msgstr "Rango"
 msgid "Mean"
 msgstr "Prom."
 
+msgid "&Copy"
+msgstr "&Copiar"
+
 msgid "Same Size"
 msgstr "Mismo Tamaño"
 
@@ -5667,9 +5670,6 @@ msgstr "Subtítulos"
 msgid "Protocols"
 msgstr "Protocolos"
 
-msgid "Motion Estimation Methods"
-msgstr "Métodos de Estimación de Moviento"
-
 msgid "Hotkey for..."
 msgstr "Tecla de Manejo para...."
 
@@ -6404,6 +6404,9 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
+
+#~ msgid "Motion Estimation Methods"
+#~ msgstr "Métodos de Estimación de Moviento"
 
 #~ msgid "Expanded OCIO config to:"
 #~ msgstr "Config OCIO expandida a:"

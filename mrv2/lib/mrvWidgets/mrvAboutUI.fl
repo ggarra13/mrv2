@@ -7,13 +7,10 @@ i18n_gnu_function gettext
 i18n_gnu_static_function gettext_noop
 header_name {.h}
 code_name {.cxx}
-decl {\#include "string"} {public local
+decl {\#include <string>} {public local
 }
 
-decl {\#include "mrvWidgets/mrvBrowser.h"} {public global
-}
-
-decl {\#include "mrvWidgets/mrvTextDisplay.h"} {public global
+decl {\#include "mrvWidgets/mrvTextBrowser.h"} {public global
 }
 
 decl {\#include "mrvWidgets/mrvVersion.h"} {public global
@@ -28,11 +25,11 @@ class AboutUI {open
   } {
     Fl_Window uiMain {
       label {About mrv2} open
-      xywh {1336 308 535 395} type Double resizable
+      xywh {1065 256 535 395} type Double resizable
       code0 {//main->uiMain->add(o);} modal visible
     } {
       Fl_Group {} {open
-        xywh {0 0 535 400} box FLAT_BOX color 51 resizable
+        xywh {0 0 535 395} box FLAT_BOX color 51 resizable
       } {
         Fl_Tabs uiAboutTabs {
           user_data main user_data_type {ViewerUI*}
@@ -43,117 +40,102 @@ std::vector<std::string>::iterator i = a.begin();
 std::vector<std::string>::iterator e = a.end();
 for (; i != e; ++i )
 	v->uiAbout->uiGPUInfo->add( (*i).c_str() );} open
-          xywh {5 4 530 396}
+          xywh {0 0 535 395}
         } {
           Fl_Group uiAbout {
-            label mrv2
-            xywh {5 29 520 366} hide
+            label mrv2 open
+            xywh {2 29 530 362} hide
           } {
-            Fl_Text_Display {} {
-              xywh {22 38 493 338} color 49 textcolor 32
-              code0 {o->insert( mrv::about_message().c_str() );}
-              class {mrv::TextDisplay}
+            Fl_Browser {} {
+              xywh {20 38 494 338} color 49 textcolor 32
+              code0 {mrv::about_message(o);}
+              class {mrv::TextBrowser}
             }
           }
           Fl_Group {} {
-            label HW
-            xywh {5 29 510 362} hide
+            label HW open
+            xywh {2 29 530 362} hide
           } {
-            Fl_Text_Display uiCPUInfo {
+            Fl_Browser uiCPUInfo {
               label {CPU Information}
-              xywh {20 53 495 84} color 49 textcolor 32
-              code0 {o->insert( mrv::cpu_information().c_str() );}
-              class {mrv::TextDisplay}
+              xywh {19 53 495 92} color 49 align 1 textcolor 32
+              code0 {mrv::cpu_information(o);}
+              class {mrv::TextBrowser}
             }
             Fl_Browser uiGPUInfo {
               label {GPU Information}
-              xywh {21 151 494 205} color 49 textcolor 32
+              xywh {19 171 494 205} color 49 align 1 textcolor 32
               code0 {static int widths[] = {160,o->w()-160,0};}
               code1 {o->column_widths( widths );}
-              code2 {o->type( FL_MULTI_BROWSER );}
-              code3 {o->value(-1);}
-              class {mrv::Browser}
+              class {mrv::TextBrowser}
             }
           }
           Fl_Group {} {
-            label Formats
-            xywh {5 30 530 365} hide
+            label Formats open
+            xywh {0 24 535 370} hide
           } {
             Fl_Browser {} {
-              xywh {20 42 495 323} color 49 textcolor 32
-              code0 {static const char* col_labels[] = {
-"",
-"",
-"",
-"Extension",
-"Handler",
-"Format Name",
-0
-};
-
-static int col_widths[] = {
-20,
-20,
-20,
-120,
-120,
-300,
-0
-};
-o->column_labels( col_labels );
-o->column_widths( col_widths );
-
-
-mrv::ffmpeg_formats(*o);
-o->value(-1);}
-              class {mrv::Browser}
+              xywh {10 44 514 336} color 49 textcolor 32
+              code0 {ffmpeg_formats(o);}
+              class {mrv::TextBrowser}
             }
           }
           Fl_Group {} {
-            label Codecs open
-            xywh {5 25 530 370}
+            label Video open
+            xywh {0 24 535 370} hide
           } {
             Fl_Browser {} {
-              label Video
-              xywh {20 50 500 130} color 49 align 1 textcolor 32
-              code0 {static int widths[] = { 20, 20, 20, 20, 20, 150, 0 }; o->column_widths(widths); mrv::ffmpeg_video_codecs(*o);
-o->value(-1);}
-              class {mrv::Browser}
+              label Codecs
+              xywh {20 53 495 100} color 49 textcolor 32 deactivate
+              code0 {mrv::ffmpeg_codec_information(o);}
+              class {mrv::TextBrowser}
             }
             Fl_Browser {} {
-              label Audio
-              xywh {20 200 500 110} color 49 align 1 textcolor 32
-              code0 {static int widths[] = { 20, 20, 20, 20, 20, 150, 0 }; o->column_widths( widths ); mrv::ffmpeg_audio_codecs(*o);
-o->value(-1);}
-              class {mrv::Browser}
+              xywh {20 161 495 216} color 49 align 1 textcolor 32
+              code0 {mrv::ffmpeg_video_codecs(o);}
+              class {mrv::TextBrowser}
+            }
+          }
+          Fl_Group {} {
+            label Audio open
+            xywh {0 24 535 370} hide
+          } {
+            Fl_Browser {} {
+              label Codecs
+              xywh {20 53 495 100} color 49 textcolor 32 deactivate
+              code0 {mrv::ffmpeg_codec_information(o);}
+              class {mrv::TextBrowser}
             }
             Fl_Browser {} {
-              label Subtitles selected
-              xywh {20 330 500 55} color 49 align 1 textcolor 32
-              code0 {mrv::ffmpeg_subtitle_codecs(*o);
-o->value(-1);}
-              class {mrv::Browser}
+              xywh {20 161 495 216} color 49 align 1 textcolor 32
+              code0 {mrv::ffmpeg_audio_codecs(o);}
+              class {mrv::TextBrowser}
+            }
+          }
+          Fl_Group {} {
+            label Subtitles open
+            xywh {0 24 535 370}
+          } {
+            Fl_Browser {} {
+              label Codecs selected
+              xywh {20 53 495 100} color 49 textcolor 32 deactivate
+              code0 {mrv::ffmpeg_codec_information(o);}
+              class {mrv::TextBrowser}
+            }
+            Fl_Browser {} {
+              xywh {20 161 495 216} color 49 align 1 textcolor 32
+              code0 {mrv::ffmpeg_subtitle_codecs(o);}
+              class {mrv::TextBrowser}
             }
           }
           Fl_Group {} {
             label Protocols open
-            xywh {5 30 530 365} hide
+            xywh {0 24 535 370} hide
           } {
             Fl_Browser {} {
-              xywh {20 45 500 320} color 49 textcolor 32
-              code0 {mrv::ffmpeg_protocols(*o);
-o->value(-1);}
-              class {mrv::Browser}
-            }
-          }
-          Fl_Group {} {
-            label {Motion Estimation Methods} open
-            xywh {5 30 530 365} hide
-          } {
-            Fl_Browser {} {
-              xywh {20 41 495 334} color 49 textcolor 32
-              code0 {mrv::ffmpeg_motion_estimation_methods(o); o->value(-1);}
-              class {mrv::Browser}
+              xywh {10 41 514 336} color 49 textcolor 32
+              code0 {mrv::ffmpeg_protocols(o);}
+              class {mrv::TextBrowser}
             }
           }
         }

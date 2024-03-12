@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.0.9\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2024-03-12 08:22-0300\n"
+"POT-Creation-Date: 2024-03-12 10:15-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1542,14 +1542,14 @@ msgstr ""
 
 #: mrvApp/mrvOpenSeparateAudioDialog.cpp:43 mrvPanels/mrvImageInfoPanel.cpp:459
 #: mrvPanels/mrvImageInfoPanel.cpp:553
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:122
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:120
 msgid "Video"
 msgstr ""
 
 #: mrvApp/mrvOpenSeparateAudioDialog.cpp:52 mrvPanels/mrvNDIPanel.cpp:353
 #: mrvPanels/mrvSettingsPanel.cpp:190 mrvPanels/mrvImageInfoPanel.cpp:480
 #: mrvFl/mrvCallbacks.cpp:1875 mrvFl/mrvCallbacks.cpp:1913
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:136
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:150
 msgid "Audio"
 msgstr ""
 
@@ -1872,7 +1872,7 @@ msgstr ""
 msgid "Editor/Toggle &Line Numbers"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:325 mrvPanels/mrvPythonPanel.cpp:859
+#: mrvPanels/mrvPythonPanel.cpp:325 mrvPanels/mrvPythonPanel.cpp:862
 msgid "Scripts/Add To Script List"
 msgstr ""
 
@@ -1919,11 +1919,11 @@ msgstr ""
 msgid "The stream is in an unrecoverable error state."
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:704
+#: mrvPanels/mrvPythonPanel.cpp:707
 msgid "Search String:"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:735
+#: mrvPanels/mrvPythonPanel.cpp:738
 #, c-format
 msgid "No occurrences of '%s' found!"
 msgstr ""
@@ -2557,8 +2557,8 @@ msgid "Codec"
 msgstr ""
 
 #: mrvPanels/mrvImageInfoPanel.cpp:1890 mrvPanels/mrvImageInfoPanel.cpp:1902
-#: mrvWidgets/mrvVersion.cpp:978 mrvWidgets/mrvVersion.cpp:982
-#: mrvWidgets/mrvVersion.cpp:986
+#: mrvWidgets/mrvVersion.cpp:973 mrvWidgets/mrvVersion.cpp:977
+#: mrvWidgets/mrvVersion.cpp:981
 msgid "Unknown"
 msgstr ""
 
@@ -4399,55 +4399,55 @@ msgstr ""
 msgid "Replace Next"
 msgstr ""
 
-#: mrvWidgets/mrvVersion.cpp:571
+#: mrvWidgets/mrvVersion.cpp:567
 msgid "D\t\t\t\t\t=\tDecoding supported"
 msgstr ""
 
-#: mrvWidgets/mrvVersion.cpp:572
+#: mrvWidgets/mrvVersion.cpp:568
 msgid "\tE\t\t\t\t=\tEncoding supported"
 msgstr ""
 
-#: mrvWidgets/mrvVersion.cpp:573
+#: mrvWidgets/mrvVersion.cpp:569
 msgid "\t\tI\t\t\t=\tIntra frame-only codec"
 msgstr ""
 
-#: mrvWidgets/mrvVersion.cpp:574
+#: mrvWidgets/mrvVersion.cpp:570
 msgid "\t\t\tL\t\t=\tLossy compression"
 msgstr ""
 
-#: mrvWidgets/mrvVersion.cpp:575
+#: mrvWidgets/mrvVersion.cpp:571
 msgid "\t\t\t\tS\t=\tLossless compression"
 msgstr ""
 
-#: mrvWidgets/mrvVersion.cpp:697
+#: mrvWidgets/mrvVersion.cpp:692
 msgid "With gcc "
 msgstr ""
 
-#: mrvWidgets/mrvVersion.cpp:699
+#: mrvWidgets/mrvVersion.cpp:694
 msgid "With clang "
 msgstr ""
 
-#: mrvWidgets/mrvVersion.cpp:701
+#: mrvWidgets/mrvVersion.cpp:696
 msgid "With msvc "
 msgstr ""
 
-#: mrvWidgets/mrvVersion.cpp:708
+#: mrvWidgets/mrvVersion.cpp:703
 msgid "mrv2 depends on:"
 msgstr ""
 
-#: mrvWidgets/mrvVersion.cpp:988
+#: mrvWidgets/mrvVersion.cpp:983
 msgid "Vendor:\t"
 msgstr ""
 
-#: mrvWidgets/mrvVersion.cpp:989
+#: mrvWidgets/mrvVersion.cpp:984
 msgid "Renderer:\t"
 msgstr ""
 
-#: mrvWidgets/mrvVersion.cpp:990
+#: mrvWidgets/mrvVersion.cpp:985
 msgid "Version:\t"
 msgstr ""
 
-#: mrvWidgets/mrvVersion.cpp:996
+#: mrvWidgets/mrvVersion.cpp:991
 msgid "Max. Texture Size:\t"
 msgstr ""
 
@@ -4550,6 +4550,10 @@ msgstr ""
 
 #: mrvWidgets/mrvColorInfo.cpp:350 mrvWidgets/mrvColorInfo.cpp:441
 msgid "Mean"
+msgstr ""
+
+#: mrvWidgets/mrvBrowser.cpp:87
+msgid "&Copy"
 msgstr ""
 
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:28
@@ -6752,32 +6756,30 @@ msgstr ""
 msgid "HW"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:49
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:48
 msgid "CPU Information"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:62
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:61
 msgid "GPU Information"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:80
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:79
 msgid "Formats"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:121
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:122
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:152
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:182
 msgid "Codecs"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:150
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:180
 msgid "Subtitles"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:166
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:210
 msgid "Protocols"
-msgstr ""
-
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:184
-msgid "Motion Estimation Methods"
 msgstr ""
 
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/keyboard_ui.cxx:71
