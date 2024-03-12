@@ -231,23 +231,25 @@ namespace mrv
             return 1;
         }
 
+        int rawkey = Fl::event_key();
+        if (e == FL_KEYBOARD &&
+            ((rawkey == FL_KP_Enter ||
+              rawkey == FL_Enter) && Fl::event_shift()))
+        {
+            Fl_Widget_Tracker wp(this); // watch myself
+            accept();
+            return 1;
+        }
+        
         const int ret = Fl_Multiline_Input::handle(e);
         if (e == FL_KEYBOARD)
         {
-            int rawkey = Fl::event_key();
             // If user pressed ESC, cancel the text input.
             if (rawkey == FL_Escape)
             {
                 value("");
                 Fl_Widget_Tracker wp(this); // watch myself
                 accept();                   // With no text accept will return 0
-                return 1;
-            }
-            else if ((rawkey == FL_KP_Enter ||
-                      rawkey == FL_Enter) && Fl::event_shift())
-            {
-                Fl_Widget_Tracker wp(this); // watch myself
-                accept();
                 return 1;
             }
             recalc();
