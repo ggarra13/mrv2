@@ -56,7 +56,8 @@ v1.0.9
 - Entering a Text annotation on the viewport can be confirmed by doing
   SHIFT + Enter.
 - Added FFmpeg's actual version information, not just each library.
-- Fixed listing of codecs in the About Window
+- Fixed listing of codecs in the About Window.
+- Added missing .gif decoder and encoder.
 
 
 v1.0.8
