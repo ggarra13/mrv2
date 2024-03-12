@@ -401,7 +401,13 @@ namespace mrv
             shape->fontSize = w->textsize() / p.viewZoom * pixels_unit;
             auto pos = math::Vector2i(w->x() + offset.x, w->y() + offset.y);
             pos = _getFocus(pos.x, pos.y);
+            float rotation = p.rotation;
+            float videoRotation = p.videoRotation;
+            p.rotation = 0.F;
+            p.videoRotation = 0.F;
             pnt = _getRasterf(pos.x, pos.y);
+            p.rotation = rotation;
+            p.videoRotation = videoRotation;
             shape->pts[0].x = pnt.x;
             shape->pts[0].y = pnt.y;
 #else
