@@ -690,7 +690,7 @@ namespace mrv
         o << "mrv2 " << kArch << " bits - v" << kVersion << " " << kBuild
           << endl
 #ifdef __GLIBCXX__
-          << _("With gcc ") << __GLIBCXX__ << endl
+          << _("With gcc ") << __GNUC__ << endl
 #elif __clang__
           << _("With clang ") << __clang__ << " " << __llvm__ << endl
 #else

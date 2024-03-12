@@ -62,6 +62,8 @@ v1.0.9
   menu. This is useful, for example, in the About Window for the GPU or codec
   information, as the full lines get copied, unlike a Fl_Text_Display in which
   a line can be cut in half.
+- Fixed gcc version information in mrv2's About Window.  It was showing the
+  __GLIBCXX__ instead.
 
 
 v1.0.8
