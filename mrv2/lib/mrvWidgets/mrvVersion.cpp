@@ -568,11 +568,11 @@ namespace mrv
     if (nb_codecs < 0)
         return;
 
-    browser.add("D\t\t\t\t\t=\tDecoding supported");
-    browser.add("\tE\t\t\t\t=\tEncoding supported");
-    browser.add("\t\tI\t\t\t=\tIntra frame-only codec");
-    browser.add("\t\t\tL\t\t=\tLossy compression");
-    browser.add("\t\t\t\tS\t=\tLossless compression");
+    browser.add(_("D\t\t\t\t\t=\tDecoding supported"));
+    browser.add(_("\tE\t\t\t\t=\tEncoding supported"));
+    browser.add(_("\t\tI\t\t\t=\tIntra frame-only codec"));
+    browser.add(_("\t\t\tL\t\t=\tLossy compression"));
+    browser.add(_("\t\t\t\tS\t=\tLossless compression"));
     browser.add("--------------------------------------------------------------------------------------------------------------------------------------");
     
     for (i = 0; i < nb_codecs; i++) {

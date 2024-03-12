@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.0.9\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2024-03-11 11:34-0300\n"
+"POT-Creation-Date: 2024-03-12 08:22-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1542,19 +1542,19 @@ msgstr ""
 
 #: mrvApp/mrvOpenSeparateAudioDialog.cpp:43 mrvPanels/mrvImageInfoPanel.cpp:459
 #: mrvPanels/mrvImageInfoPanel.cpp:553
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:123
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:122
 msgid "Video"
 msgstr ""
 
 #: mrvApp/mrvOpenSeparateAudioDialog.cpp:52 mrvPanels/mrvNDIPanel.cpp:353
 #: mrvPanels/mrvSettingsPanel.cpp:190 mrvPanels/mrvImageInfoPanel.cpp:480
 #: mrvFl/mrvCallbacks.cpp:1875 mrvFl/mrvCallbacks.cpp:1913
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:137
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:136
 msgid "Audio"
 msgstr ""
 
 #: mrvApp/mrvOpenSeparateAudioDialog.cpp:60
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1871
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1914
 msgid "OK"
 msgstr ""
 
@@ -1697,20 +1697,20 @@ msgstr ""
 msgid "Cannot create window"
 msgstr ""
 
-#: mrvApp/mrvApp.cpp:498 mrvUI/mrvMenus.cpp:1273
+#: mrvApp/mrvApp.cpp:498 mrvUI/mrvMenus.cpp:1272
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:23
 msgid "About mrv2"
 msgstr ""
 
-#: mrvApp/mrvApp.cpp:500 mrvUI/mrvMenus.cpp:1275
+#: mrvApp/mrvApp.cpp:500 mrvUI/mrvMenus.cpp:1274
 msgid "Hide mrv2"
 msgstr ""
 
-#: mrvApp/mrvApp.cpp:501 mrvUI/mrvMenus.cpp:1276
+#: mrvApp/mrvApp.cpp:501 mrvUI/mrvMenus.cpp:1275
 msgid "Hide Others"
 msgstr ""
 
-#: mrvApp/mrvApp.cpp:502 mrvUI/mrvMenus.cpp:1277
+#: mrvApp/mrvApp.cpp:502 mrvUI/mrvMenus.cpp:1276
 msgid "Services"
 msgstr ""
 
@@ -1718,7 +1718,7 @@ msgstr ""
 msgid "Show All"
 msgstr ""
 
-#: mrvApp/mrvApp.cpp:504 mrvUI/mrvMenus.cpp:1278
+#: mrvApp/mrvApp.cpp:504 mrvUI/mrvMenus.cpp:1277
 msgid "Quit mrv2"
 msgstr ""
 
@@ -1730,26 +1730,26 @@ msgstr ""
 msgid "Filename '{0}' does not exist or does not have read permissions."
 msgstr ""
 
-#: mrvPanels/mrvPanelsAux.h:19 mrvFl/mrvCallbacks.cpp:87 mrvUI/mrvMenus.cpp:402
+#: mrvPanels/mrvPanelsAux.h:19 mrvFl/mrvCallbacks.cpp:87 mrvUI/mrvMenus.cpp:400
 msgid "Files"
 msgstr ""
 
-#: mrvPanels/mrvPanelsAux.h:19 mrvFl/mrvCallbacks.cpp:82 mrvUI/mrvMenus.cpp:437
+#: mrvPanels/mrvPanelsAux.h:19 mrvFl/mrvCallbacks.cpp:82 mrvUI/mrvMenus.cpp:435
 msgid "Compare"
 msgstr ""
 
-#: mrvPanels/mrvPanelsAux.h:20 mrvFl/mrvCallbacks.cpp:97 mrvUI/mrvMenus.cpp:444
+#: mrvPanels/mrvPanelsAux.h:20 mrvFl/mrvCallbacks.cpp:97 mrvUI/mrvMenus.cpp:442
 msgid "Playlist"
 msgstr ""
 
-#: mrvPanels/mrvPanelsAux.h:20 mrvFl/mrvCallbacks.cpp:92 mrvUI/mrvMenus.cpp:497
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1601
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1915
+#: mrvPanels/mrvPanelsAux.h:20 mrvFl/mrvCallbacks.cpp:92 mrvUI/mrvMenus.cpp:495
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1643
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1958
 msgid "Network"
 msgstr ""
 
 #: mrvPanels/mrvPanelsAux.h:21 mrvPanels/mrvStereo3DPanel.cpp:302
-#: mrvFl/mrvCallbacks.cpp:102 mrvUI/mrvMenus.cpp:515
+#: mrvFl/mrvCallbacks.cpp:102 mrvUI/mrvMenus.cpp:513
 msgid "Stereo 3D"
 msgstr ""
 
@@ -1894,28 +1894,28 @@ msgstr ""
 #: mrvPanels/mrvPythonPanel.cpp:483 mrvPanels/mrvImageInfoPanel.cpp:1660
 #: mrvFl/mrvLanguages.cpp:136 mrvFl/mrvHotkey.cpp:99
 #: mrvFl/mrvCallbacks.cpp:1945
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:397
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:404
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:426
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:433
 msgid "No"
 msgstr ""
 
 #: mrvPanels/mrvPythonPanel.cpp:483 mrvPanels/mrvImageInfoPanel.cpp:1660
 #: mrvFl/mrvLanguages.cpp:136 mrvFl/mrvHotkey.cpp:99
 #: mrvFl/mrvCallbacks.cpp:1945
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:405
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:434
 msgid "Yes"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:491 mrvFl/mrvSession.cpp:335
+#: mrvPanels/mrvPythonPanel.cpp:491 mrvFl/mrvSession.cpp:338
 msgid "Failed to open the file for writing."
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:500 mrvFl/mrvSession.cpp:343
+#: mrvPanels/mrvPythonPanel.cpp:500 mrvFl/mrvSession.cpp:346
 msgid "Failed to write to the file."
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:506 mrvFl/mrvSession.cpp:348
-#: mrvFl/mrvSession.cpp:394
+#: mrvPanels/mrvPythonPanel.cpp:506 mrvFl/mrvSession.cpp:351
+#: mrvFl/mrvSession.cpp:397
 msgid "The stream is in an unrecoverable error state."
 msgstr ""
 
@@ -1934,7 +1934,7 @@ msgid "No Source"
 msgstr ""
 
 #: mrvPanels/mrvNDIPanel.cpp:257 mrvFl/mrvCallbacks.cpp:95
-#: mrvUI/mrvMenus.cpp:488
+#: mrvUI/mrvMenus.cpp:486
 msgid "NDI"
 msgstr ""
 
@@ -1957,7 +1957,7 @@ msgid ""
 "this to 3 or higher for proper audio sync."
 msgstr ""
 
-#: mrvPanels/mrvNDIPanel.cpp:357 mrvGL/mrvTimelineViewportEvents.cpp:998
+#: mrvPanels/mrvNDIPanel.cpp:357 mrvGL/mrvTimelineViewportEvents.cpp:1009
 msgid "Play"
 msgstr ""
 
@@ -1984,7 +1984,7 @@ msgid "Everything OK."
 msgstr ""
 
 #: mrvPanels/mrvUSDPanel.cpp:71 mrvFl/mrvCallbacks.cpp:104
-#: mrvUI/mrvMenus.cpp:506
+#: mrvUI/mrvMenus.cpp:504
 msgid "USD"
 msgstr ""
 
@@ -1994,8 +1994,8 @@ msgstr ""
 
 #: mrvPanels/mrvUSDPanel.cpp:125 mrvPanels/mrvStereo3DPanel.cpp:335
 #: mrvPanels/mrvStereo3DPanel.cpp:337 mrvPanels/mrvEnvironmentMapPanel.cpp:116
-#: mrvFl/mrvPreferences.cpp:1935 mrvFl/mrvPreferences.cpp:2081
-#: mrvFl/mrvPreferences.cpp:2093 mrvGL/mrvTimelineViewport.cpp:1651
+#: mrvFl/mrvPreferences.cpp:1944 mrvFl/mrvPreferences.cpp:2090
+#: mrvFl/mrvPreferences.cpp:2102 mrvGL/mrvTimelineViewport.cpp:1651
 #: mrvGL/mrvTimelineViewport.cpp:1720
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:38
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:44
@@ -2052,8 +2052,8 @@ msgid "Checkerboard"
 msgstr ""
 
 #: mrvPanels/mrvStereo3DPanel.cpp:368
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1704
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1916
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1746
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1959
 msgid "OpenGL"
 msgstr ""
 
@@ -2078,7 +2078,7 @@ msgid "Swap left and right eyes."
 msgstr ""
 
 #: mrvPanels/mrvSettingsPanel.cpp:65
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:780
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:809
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvHUDUI.cxx:186
 msgid "Cache"
 msgstr ""
@@ -2245,7 +2245,7 @@ msgid ""
 msgstr ""
 
 #: mrvPanels/mrvEnvironmentMapPanel.cpp:267
-#: mrvPanels/mrvImageInfoPanel.cpp:1899 mrvPanels/mrvComparePanel.cpp:563
+#: mrvPanels/mrvImageInfoPanel.cpp:1923 mrvPanels/mrvComparePanel.cpp:563
 msgid "Rotation"
 msgstr ""
 
@@ -2397,405 +2397,405 @@ msgid "1:16"
 msgstr ""
 
 #: mrvPanels/mrvImageInfoPanel.cpp:1011
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1387
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1415
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1431
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1447
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1463
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1479
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1496
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1511
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1429
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1457
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1473
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1489
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1505
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1521
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1538
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1553
 msgid "Pick"
 msgstr ""
 
 #: mrvPanels/mrvImageInfoPanel.cpp:1392
 #, c-format
-msgid "%.3g seconds "
+msgid "%.3f seconds "
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1710
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:732
+#: mrvPanels/mrvImageInfoPanel.cpp:1717
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:761
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvHUDUI.cxx:130
 msgid "Directory"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1710
+#: mrvPanels/mrvImageInfoPanel.cpp:1717
 msgid "Directory where clip resides"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1712 mrvPanels/mrvColorPanel.cpp:315
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:726
+#: mrvPanels/mrvImageInfoPanel.cpp:1719 mrvPanels/mrvColorPanel.cpp:315
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:755
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvHUDUI.cxx:123
 msgid "Filename"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1712
+#: mrvPanels/mrvImageInfoPanel.cpp:1719
 msgid "Filename of the clip"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1717
+#: mrvPanels/mrvImageInfoPanel.cpp:1724
 msgid "Audio Directory"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1718
+#: mrvPanels/mrvImageInfoPanel.cpp:1725
 msgid "Directory where audio clip resides"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1722
+#: mrvPanels/mrvImageInfoPanel.cpp:1729
 msgid "Audio Filename"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1722
+#: mrvPanels/mrvImageInfoPanel.cpp:1729
 msgid "Filename of the audio clip"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1737
+#: mrvPanels/mrvImageInfoPanel.cpp:1736
 msgid "Video Streams"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1737
+#: mrvPanels/mrvImageInfoPanel.cpp:1736
 msgid "Number of video streams in file"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1740
+#: mrvPanels/mrvImageInfoPanel.cpp:1739
 msgid "Audio Streams"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1740
+#: mrvPanels/mrvImageInfoPanel.cpp:1739
 msgid "Number of audio streams in file"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1750
+#: mrvPanels/mrvImageInfoPanel.cpp:1749
 msgid "Start Time"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1750
+#: mrvPanels/mrvImageInfoPanel.cpp:1749
 msgid "Beginning frame of clip"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1752
+#: mrvPanels/mrvImageInfoPanel.cpp:1751
 msgid "End Time"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1752
+#: mrvPanels/mrvImageInfoPanel.cpp:1751
 msgid "Ending frame of clip"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1759 mrvCore/mrvHotkey.cpp:399
+#: mrvPanels/mrvImageInfoPanel.cpp:1758 mrvCore/mrvHotkey.cpp:399
 msgid "First Frame"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1759
+#: mrvPanels/mrvImageInfoPanel.cpp:1758
 msgid "First frame of clip - User selected"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1763 mrvCore/mrvHotkey.cpp:400
+#: mrvPanels/mrvImageInfoPanel.cpp:1762 mrvCore/mrvHotkey.cpp:400
 msgid "Last Frame"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1763
+#: mrvPanels/mrvImageInfoPanel.cpp:1762
 msgid "Last frame of clip - User selected"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1769
+#: mrvPanels/mrvImageInfoPanel.cpp:1779
+msgid "(PAL Fields)"
+msgstr ""
+
+#: mrvPanels/mrvImageInfoPanel.cpp:1781
+msgid "(NTSC Fields)"
+msgstr ""
+
+#: mrvPanels/mrvImageInfoPanel.cpp:1786
+msgid "Default Speed"
+msgstr ""
+
+#: mrvPanels/mrvImageInfoPanel.cpp:1787
+msgid "Default Speed in Frames per Second"
+msgstr ""
+
+#: mrvPanels/mrvImageInfoPanel.cpp:1791
 msgid "Current Speed"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1769
+#: mrvPanels/mrvImageInfoPanel.cpp:1792
 msgid "Current Speed (Frames Per Second)"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1782
+#: mrvPanels/mrvImageInfoPanel.cpp:1805
 msgid "Disk space"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1790
+#: mrvPanels/mrvImageInfoPanel.cpp:1813
 msgid "Creation Date"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1790
+#: mrvPanels/mrvImageInfoPanel.cpp:1813
 msgid "Creation date of file"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1795
+#: mrvPanels/mrvImageInfoPanel.cpp:1818
 msgid "Modified Date"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1795
+#: mrvPanels/mrvImageInfoPanel.cpp:1818
 msgid "Last modified date of file"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1815
+#: mrvPanels/mrvImageInfoPanel.cpp:1839
 #, c-format
 msgid "Video Stream #%d"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1826
+#: mrvPanels/mrvImageInfoPanel.cpp:1850
 msgid "Name"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1840 mrvPanels/mrvImageInfoPanel.cpp:1866
-#: mrvPanels/mrvImageInfoPanel.cpp:2041 mrvPanels/mrvImageInfoPanel.cpp:2114
+#: mrvPanels/mrvImageInfoPanel.cpp:1864 mrvPanels/mrvImageInfoPanel.cpp:1890
+#: mrvPanels/mrvImageInfoPanel.cpp:2043 mrvPanels/mrvImageInfoPanel.cpp:2116
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:293
 msgid "Codec"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1866 mrvPanels/mrvImageInfoPanel.cpp:1878
-#: mrvWidgets/mrvVersion.cpp:891 mrvWidgets/mrvVersion.cpp:895
-#: mrvWidgets/mrvVersion.cpp:899
+#: mrvPanels/mrvImageInfoPanel.cpp:1890 mrvPanels/mrvImageInfoPanel.cpp:1902
+#: mrvWidgets/mrvVersion.cpp:978 mrvWidgets/mrvVersion.cpp:982
+#: mrvWidgets/mrvVersion.cpp:986
 msgid "Unknown"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1870
+#: mrvPanels/mrvImageInfoPanel.cpp:1894
 msgid "Width"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1870
+#: mrvPanels/mrvImageInfoPanel.cpp:1894
 msgid "Width of clip"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1873
+#: mrvPanels/mrvImageInfoPanel.cpp:1897
 msgid "Height"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1873
+#: mrvPanels/mrvImageInfoPanel.cpp:1897
 msgid "Height of clip"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1892
+#: mrvPanels/mrvImageInfoPanel.cpp:1916
 msgid "Aspect Ratio"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1892
+#: mrvPanels/mrvImageInfoPanel.cpp:1916
 msgid "Aspect ratio of clip"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1895
+#: mrvPanels/mrvImageInfoPanel.cpp:1919
 msgid "Pixel Ratio"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1895
+#: mrvPanels/mrvImageInfoPanel.cpp:1919
 msgid "Pixel ratio of clip"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1899
+#: mrvPanels/mrvImageInfoPanel.cpp:1923
 msgid "Video Rotation"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1912
+#: mrvPanels/mrvImageInfoPanel.cpp:1936
 msgid "unsigned byte (8-bits per channel)"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1915
+#: mrvPanels/mrvImageInfoPanel.cpp:1939
 msgid "(10-bits per channel)"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1918
+#: mrvPanels/mrvImageInfoPanel.cpp:1942
 msgid "(12-bits per channel)"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1921
+#: mrvPanels/mrvImageInfoPanel.cpp:1945
 msgid "unsigned short (16-bits per channel)"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1926
+#: mrvPanels/mrvImageInfoPanel.cpp:1950
 msgid "half float (16-bits per channel)"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1929
+#: mrvPanels/mrvImageInfoPanel.cpp:1953
 msgid "unsigned int (32-bits per channel)"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1934
+#: mrvPanels/mrvImageInfoPanel.cpp:1958
 msgid "float (32-bits per channel)"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1937
+#: mrvPanels/mrvImageInfoPanel.cpp:1961
 msgid "Unknown bit depth"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1941
+#: mrvPanels/mrvImageInfoPanel.cpp:1965
 msgid "Depth"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1941
+#: mrvPanels/mrvImageInfoPanel.cpp:1965
 msgid "Bit depth of clip"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1944
+#: mrvPanels/mrvImageInfoPanel.cpp:1968
 msgid "Image Channels"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1944
+#: mrvPanels/mrvImageInfoPanel.cpp:1968
 msgid "Number of channels in clip"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1959
-msgid "(PAL Fields)"
-msgstr ""
-
-#: mrvPanels/mrvImageInfoPanel.cpp:1961
-msgid "(NTSC Fields)"
-msgstr ""
-
-#: mrvPanels/mrvImageInfoPanel.cpp:1966
-msgid "Default Speed"
-msgstr ""
-
-#: mrvPanels/mrvImageInfoPanel.cpp:1967
-msgid "Default Speed in Frames per Second"
-msgstr ""
-
-#: mrvPanels/mrvImageInfoPanel.cpp:1972
+#: mrvPanels/mrvImageInfoPanel.cpp:1974
 msgid "YUV Coefficients"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1973
+#: mrvPanels/mrvImageInfoPanel.cpp:1975
 msgid "YUV Coefficients used for video conversion"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1979
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:802
+#: mrvPanels/mrvImageInfoPanel.cpp:1981
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:831
 msgid "Video Levels"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1985
+#: mrvPanels/mrvImageInfoPanel.cpp:1987
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:375
 msgid "Color Primaries"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1991
+#: mrvPanels/mrvImageInfoPanel.cpp:1993
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:416
 msgid "Color TRC"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1991
+#: mrvPanels/mrvImageInfoPanel.cpp:1993
 msgid "Color Transfer Characteristics"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1997
+#: mrvPanels/mrvImageInfoPanel.cpp:1999
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:346
 msgid "Color Space"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:1997
+#: mrvPanels/mrvImageInfoPanel.cpp:1999
 msgid "Color Transfer Space"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:2007
+#: mrvPanels/mrvImageInfoPanel.cpp:2009
 msgid "FFmpeg Pixel Format"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:2013
+#: mrvPanels/mrvImageInfoPanel.cpp:2015
 msgid "Render Pixel Format"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:2028
+#: mrvPanels/mrvImageInfoPanel.cpp:2030
 #, c-format
 msgid "Audio Stream #%d"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:2044 mrvPanels/mrvImageInfoPanel.cpp:2115
+#: mrvPanels/mrvImageInfoPanel.cpp:2046 mrvPanels/mrvImageInfoPanel.cpp:2117
 msgid "FourCC"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:2044 mrvPanels/mrvImageInfoPanel.cpp:2115
+#: mrvPanels/mrvImageInfoPanel.cpp:2046 mrvPanels/mrvImageInfoPanel.cpp:2117
 msgid "Four letter ID"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:2067
+#: mrvPanels/mrvImageInfoPanel.cpp:2069
 msgid "Channels"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:2067
+#: mrvPanels/mrvImageInfoPanel.cpp:2069
 msgid "Number of audio channels"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:2070
+#: mrvPanels/mrvImageInfoPanel.cpp:2072
 msgid "Format"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:2071
+#: mrvPanels/mrvImageInfoPanel.cpp:2073
 #, c-format
 msgid "%d Hz."
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:2072
+#: mrvPanels/mrvImageInfoPanel.cpp:2074
 msgid "Frequency"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:2072
+#: mrvPanels/mrvImageInfoPanel.cpp:2074
 msgid "Frequency of audio"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:2075 mrvPanels/mrvImageInfoPanel.cpp:2120
+#: mrvPanels/mrvImageInfoPanel.cpp:2077 mrvPanels/mrvImageInfoPanel.cpp:2122
 #, c-format
 msgid "%d kb/s"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:2076
+#: mrvPanels/mrvImageInfoPanel.cpp:2078
 msgid "Max. Bitrate"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:2082 mrvPanels/mrvImageInfoPanel.cpp:2126
+#: mrvPanels/mrvImageInfoPanel.cpp:2084 mrvPanels/mrvImageInfoPanel.cpp:2128
 msgid "Disposition"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:2082 mrvPanels/mrvImageInfoPanel.cpp:2126
+#: mrvPanels/mrvImageInfoPanel.cpp:2084 mrvPanels/mrvImageInfoPanel.cpp:2128
 msgid "Disposition of Track"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:2086 mrvPanels/mrvImageInfoPanel.cpp:2130
+#: mrvPanels/mrvImageInfoPanel.cpp:2088 mrvPanels/mrvImageInfoPanel.cpp:2132
 msgid "Start"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:2086
+#: mrvPanels/mrvImageInfoPanel.cpp:2088
 msgid "Start of Audio"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:2087 mrvPanels/mrvImageInfoPanel.cpp:2131
+#: mrvPanels/mrvImageInfoPanel.cpp:2089 mrvPanels/mrvImageInfoPanel.cpp:2133
 msgid "Duration"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:2087
+#: mrvPanels/mrvImageInfoPanel.cpp:2089
 msgid "Duration of Audio"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:2104
+#: mrvPanels/mrvImageInfoPanel.cpp:2106
 #, c-format
 msgid "Subtitle Stream #%d"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:2114
+#: mrvPanels/mrvImageInfoPanel.cpp:2116
 msgid "Codec Name"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:2116
+#: mrvPanels/mrvImageInfoPanel.cpp:2118
 msgid "Closed Captions"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:2116
+#: mrvPanels/mrvImageInfoPanel.cpp:2118
 msgid "Video has Closed Captions"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:2121
+#: mrvPanels/mrvImageInfoPanel.cpp:2123
 msgid "Avg. Bitrate"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:2124
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:858
+#: mrvPanels/mrvImageInfoPanel.cpp:2126
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:887
 msgid "Language"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:2124
+#: mrvPanels/mrvImageInfoPanel.cpp:2126
 msgid "Language if known"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:2130
+#: mrvPanels/mrvImageInfoPanel.cpp:2132
 msgid "Start of Subtitle"
 msgstr ""
 
-#: mrvPanels/mrvImageInfoPanel.cpp:2131
+#: mrvPanels/mrvImageInfoPanel.cpp:2133
 msgid "Duration of Subtitle"
 msgstr ""
 
@@ -2949,8 +2949,8 @@ msgstr ""
 
 #: mrvPanels/mrvColorPanel.cpp:110
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2492
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1373
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1911
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1402
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1954
 msgid "OCIO"
 msgstr ""
 
@@ -3004,7 +3004,7 @@ msgid "In High"
 msgstr ""
 
 #: mrvPanels/mrvColorPanel.cpp:573
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:625
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:654
 msgid "Gamma"
 msgstr ""
 
@@ -3289,19 +3289,19 @@ msgstr ""
 msgid "Example:  gizmo_v003.0001.exr"
 msgstr ""
 
-#: mrvFl/mrvTimelinePlayer.cpp:780
+#: mrvFl/mrvTimelinePlayer.cpp:783
 msgid "Annotation already existed at this time"
 msgstr ""
 
-#: mrvFl/mrvSession.cpp:356
+#: mrvFl/mrvSession.cpp:359
 msgid "Session saved to \"{0}\"."
 msgstr ""
 
-#: mrvFl/mrvSession.cpp:374
+#: mrvFl/mrvSession.cpp:377
 msgid "Failed to open the file for reading."
 msgstr ""
 
-#: mrvFl/mrvSession.cpp:388
+#: mrvFl/mrvSession.cpp:391
 msgid "Failed to load the file."
 msgstr ""
 
@@ -3429,48 +3429,52 @@ msgstr ""
 msgid "Loaded color themes from \"{0}\"."
 msgstr ""
 
-#: mrvFl/mrvPreferences.cpp:547
+#: mrvFl/mrvPreferences.cpp:545
 msgid "Setting OCIO config from preferences."
 msgstr ""
 
-#: mrvFl/mrvPreferences.cpp:558 mrvFl/mrvPreferences.cpp:578
-msgid "Setting OCIO config to default."
-msgstr ""
-
-#: mrvFl/mrvPreferences.cpp:569
+#: mrvFl/mrvPreferences.cpp:554
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr ""
 
-#: mrvFl/mrvPreferences.cpp:758
+#: mrvFl/mrvPreferences.cpp:742
 msgid "Path mappings have been loaded from \"{0}mrv2.paths.prefs\"."
 msgstr ""
 
-#: mrvFl/mrvPreferences.cpp:841
+#: mrvFl/mrvPreferences.cpp:825
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr ""
 
-#: mrvFl/mrvPreferences.cpp:848
+#: mrvFl/mrvPreferences.cpp:832
 msgid "Reseting hotkeys to default."
 msgstr ""
 
-#: mrvFl/mrvPreferences.cpp:1385
+#: mrvFl/mrvPreferences.cpp:1369
 msgid "Path mappings have been saved to \"{0}mrv2.paths.prefs\"."
 msgstr ""
 
-#: mrvFl/mrvPreferences.cpp:1441
+#: mrvFl/mrvPreferences.cpp:1425
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr ""
 
-#: mrvFl/mrvPreferences.cpp:1449
+#: mrvFl/mrvPreferences.cpp:1433
 msgid "Preferences have been saved to: \"{0}mrv2.prefs\"."
 msgstr ""
 
-#: mrvFl/mrvPreferences.cpp:1916
+#: mrvFl/mrvPreferences.cpp:1900
 msgid "OCIO config is now:"
 msgstr ""
 
-#: mrvFl/mrvPreferences.cpp:1924
-msgid "Expanded OCIO config to:"
+#: mrvFl/mrvPreferences.cpp:1906
+msgid "OCIO file \"{0}\" not found or not readable."
+msgstr ""
+
+#: mrvFl/mrvPreferences.cpp:1909 mrvFl/mrvPreferences.cpp:1915
+msgid "Setting OCIO config to default:"
+msgstr ""
+
+#: mrvFl/mrvPreferences.cpp:1920
+msgid "Setting OCIO config to built-in:"
 msgstr ""
 
 #: mrvFl/mrvPathMapping.cpp:131
@@ -3481,15 +3485,15 @@ msgstr ""
 msgid "Found a match.  File is now {0}"
 msgstr ""
 
-#: mrvFl/mrvOCIO.cpp:58
+#: mrvFl/mrvOCIO.cpp:60
 msgid "Invalid OCIO Ics '{0}'."
 msgstr ""
 
-#: mrvFl/mrvOCIO.cpp:127
+#: mrvFl/mrvOCIO.cpp:129
 msgid "Invalid OCIO Look '{0}'."
 msgstr ""
 
-#: mrvFl/mrvOCIO.cpp:201
+#: mrvFl/mrvOCIO.cpp:203
 msgid "Invalid OCIO Display/View '{0}'."
 msgstr ""
 
@@ -3638,76 +3642,78 @@ msgstr ""
 
 #: mrvFl/mrvColorSchemes.cpp:111
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:595
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:242
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:260
 msgid "Default"
 msgstr ""
 
 #: mrvFl/mrvCallbacks.cpp:78 mrvFl/mrvCallbacks.cpp:1871
-#: mrvFl/mrvCallbacks.cpp:1909 mrvUI/mrvMenus.cpp:458
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1676
+#: mrvFl/mrvCallbacks.cpp:1909 mrvUI/mrvMenus.cpp:456
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1718
 msgid "Annotations"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:79 mrvUI/mrvMenus.cpp:536
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:902
+#: mrvFl/mrvCallbacks.cpp:79 mrvUI/mrvMenus.cpp:534
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:931
 msgid "Background"
 msgstr ""
 
 #: mrvFl/mrvCallbacks.cpp:80 mrvFl/mrvCallbacks.cpp:1863
 #: mrvFl/mrvCallbacks.cpp:1901 mrvGL/mrvTimelineViewport.cpp:1860
 #: mrvGL/mrvTimelineViewport.cpp:1862 mrvGL/mrvTimelineViewport.cpp:1864
-#: mrvUI/mrvMenus.cpp:409
+#: mrvUI/mrvMenus.cpp:407
 msgid "Color"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:81 mrvUI/mrvMenus.cpp:416
+#: mrvFl/mrvCallbacks.cpp:81 mrvUI/mrvMenus.cpp:414
 msgid "Color Area"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:84 mrvUI/mrvMenus.cpp:451
+#: mrvFl/mrvCallbacks.cpp:84 mrvUI/mrvMenus.cpp:449
 msgid "Devices"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:86 mrvUI/mrvMenus.cpp:529
+#: mrvFl/mrvCallbacks.cpp:86 mrvUI/mrvMenus.cpp:527
 msgid "Environment Map"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:88 mrvUI/mrvMenus.cpp:423
+#: mrvFl/mrvCallbacks.cpp:88 mrvUI/mrvMenus.cpp:421
 msgid "Histogram"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:89 mrvUI/mrvMenus.cpp:472
+#: mrvFl/mrvCallbacks.cpp:89 mrvUI/mrvMenus.cpp:470
 msgid "Logs"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:90 mrvUI/mrvMenus.cpp:522
+#: mrvFl/mrvCallbacks.cpp:90 mrvUI/mrvMenus.cpp:520
 msgid "Media Information"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:99 mrvUI/mrvMenus.cpp:480
+#: mrvFl/mrvCallbacks.cpp:99 mrvUI/mrvMenus.cpp:478
 msgid "Python"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:101 mrvUI/mrvMenus.cpp:465
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:485
+#: mrvFl/mrvCallbacks.cpp:101 mrvUI/mrvMenus.cpp:463
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:514
 msgid "Settings"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:106 mrvUI/mrvMenus.cpp:430
+#: mrvFl/mrvCallbacks.cpp:106 mrvUI/mrvMenus.cpp:428
 msgid "Vectorscope"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:107 mrvFl/mrvCallbacks.cpp:903 mrvUI/mrvMenus.cpp:544
+#: mrvFl/mrvCallbacks.cpp:107 mrvFl/mrvCallbacks.cpp:903 mrvUI/mrvMenus.cpp:542
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvHotkeyUI.cxx:68
 msgid "Hotkeys"
 msgstr ""
 
-#: mrvFl/mrvCallbacks.cpp:108 mrvFl/mrvCallbacks.cpp:901 mrvUI/mrvMenus.cpp:544
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:481
+#: mrvFl/mrvCallbacks.cpp:108 mrvFl/mrvCallbacks.cpp:901 mrvUI/mrvMenus.cpp:542
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:510
 msgid "Preferences"
 msgstr ""
 
 #: mrvFl/mrvCallbacks.cpp:109 mrvFl/mrvCallbacks.cpp:905
-#: mrvFl/mrvCallbacks.cpp:939 mrvUI/mrvMenus.cpp:545
+#: mrvFl/mrvCallbacks.cpp:939 mrvUI/mrvMenus.cpp:543
 msgid "About"
 msgstr ""
 
@@ -3737,12 +3743,12 @@ msgid "Pick Draw Color and Alpha"
 msgstr ""
 
 #: mrvFl/mrvCallbacks.cpp:1851 mrvFl/mrvCallbacks.cpp:1889
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1611
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1653
 msgid "Media"
 msgstr ""
 
 #: mrvFl/mrvCallbacks.cpp:1855 mrvFl/mrvCallbacks.cpp:1893
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:856
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:885
 msgid "UI"
 msgstr ""
 
@@ -3751,10 +3757,10 @@ msgid "Pan And Zoom"
 msgstr ""
 
 #: mrvFl/mrvCallbacks.cpp:1867 mrvFl/mrvCallbacks.cpp:1905
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:576
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1185
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1650
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1909
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:605
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1214
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1692
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1952
 msgid "Timeline"
 msgstr ""
 
@@ -3791,7 +3797,7 @@ msgid "Scrub"
 msgstr ""
 
 #: mrvGL/mrvTimelineViewport.cpp:214
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:916
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:945
 msgid "Selection"
 msgstr ""
 
@@ -3845,12 +3851,12 @@ msgid "(no image)"
 msgstr ""
 
 #: mrvGL/mrvTimelineViewport.cpp:1615 mrvGL/mrvTimelineViewport.cpp:1824
-#: mrvUI/mrvMenus.cpp:709
+#: mrvUI/mrvMenus.cpp:707
 msgid "Render/Minify Filter/Linear"
 msgstr ""
 
 #: mrvGL/mrvTimelineViewport.cpp:1620 mrvGL/mrvTimelineViewport.cpp:1829
-#: mrvUI/mrvMenus.cpp:732
+#: mrvUI/mrvMenus.cpp:730
 msgid "Render/Magnify Filter/Linear"
 msgstr ""
 
@@ -3858,19 +3864,19 @@ msgstr ""
 msgid "Unknown action mode in "
 msgstr ""
 
-#: mrvGL/mrvTimelineViewportEvents.cpp:509
+#: mrvGL/mrvTimelineViewportEvents.cpp:516
 msgid ""
 "Cannot create an annotation here for all frames.  A current frame annotation "
 "already exists."
 msgstr ""
 
-#: mrvGL/mrvTimelineViewportEvents.cpp:517
+#: mrvGL/mrvTimelineViewportEvents.cpp:524
 msgid ""
 "Cannot create an annotation here for current frame.  An all frames "
 "annotation already exists."
 msgstr ""
 
-#: mrvGL/mrvTimelineViewportEvents.cpp:1002
+#: mrvGL/mrvTimelineViewportEvents.cpp:1013
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:182
 #: mrvCore/mrvHotkey.cpp:398
 msgid "Stop"
@@ -3915,461 +3921,461 @@ msgstr ""
 msgid "Could not convert message to shape: "
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:78
+#: mrvUI/mrvMenus.cpp:76
 msgid "File/Open/Movie or Sequence"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:82
+#: mrvUI/mrvMenus.cpp:80
 msgid "File/Open/With Separate Audio"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:86
+#: mrvUI/mrvMenus.cpp:84
 msgid "File/Open/Directory"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:90
+#: mrvUI/mrvMenus.cpp:88
 msgid "File/Open/Session"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:98
+#: mrvUI/mrvMenus.cpp:96
 msgid "File/Save/Movie or Sequence"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:101
+#: mrvUI/mrvMenus.cpp:99
 msgid "File/Save/Single Frame"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:104
+#: mrvUI/mrvMenus.cpp:102
 msgid "File/Save/Frames to Folder"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:108
+#: mrvUI/mrvMenus.cpp:106
 msgid "File/Save/OTIO EDL Timeline"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:111
+#: mrvUI/mrvMenus.cpp:109
 msgid "File/Save/PDF Document"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:114
+#: mrvUI/mrvMenus.cpp:112
 msgid "File/Save/Session"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:117
+#: mrvUI/mrvMenus.cpp:115
 msgid "File/Save/Session As"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:121
+#: mrvUI/mrvMenus.cpp:119
 msgid "File/Close Current"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:125
+#: mrvUI/mrvMenus.cpp:123
 msgid "File/Close All"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:137
+#: mrvUI/mrvMenus.cpp:135
 #, c-format
 msgid "File/Recent/%s"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:142
+#: mrvUI/mrvMenus.cpp:140
 msgid "File/Quit"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:145
+#: mrvUI/mrvMenus.cpp:143
 msgid "Window/Presentation"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:161
+#: mrvUI/mrvMenus.cpp:159
 msgid "Window/Full Screen"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:173
+#: mrvUI/mrvMenus.cpp:171
 msgid "Window/Float On Top"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:183
+#: mrvUI/mrvMenus.cpp:181
 msgid "Window/Secondary"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:192
+#: mrvUI/mrvMenus.cpp:190
 msgid "Window/Secondary Float On Top"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:206
+#: mrvUI/mrvMenus.cpp:204
 msgid "View/Auto Frame"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:213
+#: mrvUI/mrvMenus.cpp:211
 msgid "View/Safe Areas"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:220
+#: mrvUI/mrvMenus.cpp:218
 msgid "View/Data Window"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:227
+#: mrvUI/mrvMenus.cpp:225
 msgid "View/Display Window"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:234
+#: mrvUI/mrvMenus.cpp:232
 msgid "View/Ignore Display Window"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:240
+#: mrvUI/mrvMenus.cpp:238
 msgid "View/Toggle Menu bar"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:248
+#: mrvUI/mrvMenus.cpp:246
 msgid "View/Toggle Top bar"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:256
+#: mrvUI/mrvMenus.cpp:254
 msgid "View/Toggle Pixel bar"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:264
+#: mrvUI/mrvMenus.cpp:262
 msgid "View/Toggle Timeline"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:272
+#: mrvUI/mrvMenus.cpp:270
 msgid "View/Toggle Status Bar"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:280
+#: mrvUI/mrvMenus.cpp:278
 msgid "View/Toggle Action Dock"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:289
+#: mrvUI/mrvMenus.cpp:287
 msgid "Panel/One Panel Only"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:323
+#: mrvUI/mrvMenus.cpp:321
 msgid "Panel/"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:324
+#: mrvUI/mrvMenus.cpp:322
 msgid "Window/"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:551
+#: mrvUI/mrvMenus.cpp:549
 msgid "Unknown menu entry "
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:570
+#: mrvUI/mrvMenus.cpp:568
 msgid "Render/Color Channel"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:579
+#: mrvUI/mrvMenus.cpp:577
 msgid "Render/Red Channel"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:588
+#: mrvUI/mrvMenus.cpp:586
 msgid "Render/Green Channel "
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:597
+#: mrvUI/mrvMenus.cpp:595
 msgid "Render/Blue Channel"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:606
+#: mrvUI/mrvMenus.cpp:604
 msgid "Render/Alpha Channel"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:616
+#: mrvUI/mrvMenus.cpp:614
 msgid "Render/Mirror X"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:626
+#: mrvUI/mrvMenus.cpp:624
 msgid "Render/Mirror Y"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:633
+#: mrvUI/mrvMenus.cpp:631
 msgid "Render/Rotate/-90 Degrees"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:637
+#: mrvUI/mrvMenus.cpp:635
 msgid "Render/Rotate/+90 Degrees"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:644
+#: mrvUI/mrvMenus.cpp:642
 msgid "Render/Video Levels/From File"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:651
+#: mrvUI/mrvMenus.cpp:649
 msgid "Render/Video Levels/Legal Range"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:658
+#: mrvUI/mrvMenus.cpp:656
 msgid "Render/Video Levels/Full Range"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:668
+#: mrvUI/mrvMenus.cpp:666
 msgid "Render/Alpha Blend/None"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:675
+#: mrvUI/mrvMenus.cpp:673
 msgid "Render/Alpha Blend/Straight"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:682
+#: mrvUI/mrvMenus.cpp:680
 msgid "Render/Alpha Blend/Premultiplied"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:701
+#: mrvUI/mrvMenus.cpp:699
 msgid "Render/Minify Filter/Nearest"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:724
+#: mrvUI/mrvMenus.cpp:722
 msgid "Render/Magnify Filter/Nearest"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:750
+#: mrvUI/mrvMenus.cpp:748
 msgid "Playback/Stop"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:757
+#: mrvUI/mrvMenus.cpp:755
 msgid "Playback/Forwards"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:764
+#: mrvUI/mrvMenus.cpp:762
 msgid "Playback/Backwards"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:774
+#: mrvUI/mrvMenus.cpp:772
 msgid "Playback/Toggle Playback"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:785
+#: mrvUI/mrvMenus.cpp:783
 msgid "Playback/Toggle In Point"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:791
+#: mrvUI/mrvMenus.cpp:789
 msgid "Playback/Toggle Out Point"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:809
+#: mrvUI/mrvMenus.cpp:807
 msgid "Playback/Loop Playback"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:815
+#: mrvUI/mrvMenus.cpp:813
 msgid "Playback/Playback Once"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:821
+#: mrvUI/mrvMenus.cpp:819
 msgid "Playback/Playback Ping Pong"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:832
+#: mrvUI/mrvMenus.cpp:830
 msgid "Playback/Go to/Start"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:835
+#: mrvUI/mrvMenus.cpp:833
 msgid "Playback/Go to/End"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:839
+#: mrvUI/mrvMenus.cpp:837
 msgid "Playback/Go to/Previous Frame"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:842
+#: mrvUI/mrvMenus.cpp:840
 msgid "Playback/Go to/Next Frame"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:859
+#: mrvUI/mrvMenus.cpp:857
 msgid "Playback/Go to/Previous Clip"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:863
+#: mrvUI/mrvMenus.cpp:861
 msgid "Playback/Go to/Next Clip"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:872
+#: mrvUI/mrvMenus.cpp:870
 msgid "Playback/Go to/Previous Annotation"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:876
+#: mrvUI/mrvMenus.cpp:874
 msgid "Playback/Go to/Next Annotation"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:882
+#: mrvUI/mrvMenus.cpp:880
 msgid "Playback/Annotation/Clear"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:885
+#: mrvUI/mrvMenus.cpp:883
 msgid "Playback/Annotation/Clear All"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:902
+#: mrvUI/mrvMenus.cpp:900
 #, c-format
 msgid "View/Mask/%s"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:914
+#: mrvUI/mrvMenus.cpp:912
 msgid "View/Hud"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:928
+#: mrvUI/mrvMenus.cpp:926
 msgid "Timeline/Editable"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:936
+#: mrvUI/mrvMenus.cpp:934
 msgid "Timeline/Edit Associated Clips"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:955
+#: mrvUI/mrvMenus.cpp:953
 msgid "Timeline/Thumbnails/None"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:961
+#: mrvUI/mrvMenus.cpp:959
 msgid "Timeline/Thumbnails/Small"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:967
+#: mrvUI/mrvMenus.cpp:965
 msgid "Timeline/Thumbnails/Medium"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:973
+#: mrvUI/mrvMenus.cpp:971
 msgid "Timeline/Thumbnails/Large"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:983
+#: mrvUI/mrvMenus.cpp:981
 msgid "Timeline/Transitions"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:989
+#: mrvUI/mrvMenus.cpp:987
 msgid "Timeline/Markers"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1006
+#: mrvUI/mrvMenus.cpp:1005
 msgid "Image/Version/First"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1009
+#: mrvUI/mrvMenus.cpp:1008
 msgid "Image/Version/Last"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1012
+#: mrvUI/mrvMenus.cpp:1011
 msgid "Image/Version/Previous"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1015
+#: mrvUI/mrvMenus.cpp:1014
 msgid "Image/Version/Next"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1020
+#: mrvUI/mrvMenus.cpp:1019
 msgid "Edit/Frame/Cut"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1023
+#: mrvUI/mrvMenus.cpp:1022
 msgid "Edit/Frame/Copy"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1026
+#: mrvUI/mrvMenus.cpp:1025
 msgid "Edit/Frame/Paste"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1029
+#: mrvUI/mrvMenus.cpp:1028
 msgid "Edit/Frame/Insert"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1033
+#: mrvUI/mrvMenus.cpp:1032
 msgid "Edit/Audio Gap/Insert"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1036
+#: mrvUI/mrvMenus.cpp:1035
 msgid "Edit/Audio Gap/Remove"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1040
+#: mrvUI/mrvMenus.cpp:1039
 msgid "Edit/Slice"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1043
+#: mrvUI/mrvMenus.cpp:1042
 msgid "Edit/Remove"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1047
+#: mrvUI/mrvMenus.cpp:1046
 msgid "Edit/Undo"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1050
+#: mrvUI/mrvMenus.cpp:1049
 msgid "Edit/Redo"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1089
+#: mrvUI/mrvMenus.cpp:1088
 msgid "Sync/Send/Media"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1100
+#: mrvUI/mrvMenus.cpp:1099
 msgid "Sync/Send/UI"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1108
+#: mrvUI/mrvMenus.cpp:1107
 msgid "Sync/Send/Pan And Zoom"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1116
+#: mrvUI/mrvMenus.cpp:1115
 msgid "Sync/Send/Color"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1124
+#: mrvUI/mrvMenus.cpp:1123
 msgid "Sync/Send/Timeline"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1132
+#: mrvUI/mrvMenus.cpp:1131
 msgid "Sync/Send/Annotations"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1140
+#: mrvUI/mrvMenus.cpp:1139
 msgid "Sync/Send/Audio"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1152
+#: mrvUI/mrvMenus.cpp:1151
 msgid "Sync/Accept/Media"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1163
+#: mrvUI/mrvMenus.cpp:1162
 msgid "Sync/Accept/UI"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1171
+#: mrvUI/mrvMenus.cpp:1170
 msgid "Sync/Accept/Pan And Zoom"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1179
+#: mrvUI/mrvMenus.cpp:1178
 msgid "Sync/Accept/Color"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1187
+#: mrvUI/mrvMenus.cpp:1186
 msgid "Sync/Accept/Timeline"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1195
+#: mrvUI/mrvMenus.cpp:1194
 msgid "Sync/Accept/Annotations"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1203
+#: mrvUI/mrvMenus.cpp:1202
 msgid "Sync/Accept/Audio"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1221
+#: mrvUI/mrvMenus.cpp:1220
 msgid ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
 "function and a string with menu options in it."
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1246
+#: mrvUI/mrvMenus.cpp:1245
 msgid ""
 "In '{0}' expected a function a tuple containing a Python function and a "
 "string with menu options in it."
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1261
+#: mrvUI/mrvMenus.cpp:1260
 msgid "Help/Documentation"
 msgstr ""
 
-#: mrvUI/mrvMenus.cpp:1264
+#: mrvUI/mrvMenus.cpp:1263
 msgid "Help/About"
 msgstr ""
 
@@ -4393,35 +4399,55 @@ msgstr ""
 msgid "Replace Next"
 msgstr ""
 
-#: mrvWidgets/mrvVersion.cpp:610
+#: mrvWidgets/mrvVersion.cpp:571
+msgid "D\t\t\t\t\t=\tDecoding supported"
+msgstr ""
+
+#: mrvWidgets/mrvVersion.cpp:572
+msgid "\tE\t\t\t\t=\tEncoding supported"
+msgstr ""
+
+#: mrvWidgets/mrvVersion.cpp:573
+msgid "\t\tI\t\t\t=\tIntra frame-only codec"
+msgstr ""
+
+#: mrvWidgets/mrvVersion.cpp:574
+msgid "\t\t\tL\t\t=\tLossy compression"
+msgstr ""
+
+#: mrvWidgets/mrvVersion.cpp:575
+msgid "\t\t\t\tS\t=\tLossless compression"
+msgstr ""
+
+#: mrvWidgets/mrvVersion.cpp:697
 msgid "With gcc "
 msgstr ""
 
-#: mrvWidgets/mrvVersion.cpp:612
+#: mrvWidgets/mrvVersion.cpp:699
 msgid "With clang "
 msgstr ""
 
-#: mrvWidgets/mrvVersion.cpp:614
+#: mrvWidgets/mrvVersion.cpp:701
 msgid "With msvc "
 msgstr ""
 
-#: mrvWidgets/mrvVersion.cpp:621
+#: mrvWidgets/mrvVersion.cpp:708
 msgid "mrv2 depends on:"
 msgstr ""
 
-#: mrvWidgets/mrvVersion.cpp:901
+#: mrvWidgets/mrvVersion.cpp:988
 msgid "Vendor:\t"
 msgstr ""
 
-#: mrvWidgets/mrvVersion.cpp:902
+#: mrvWidgets/mrvVersion.cpp:989
 msgid "Renderer:\t"
 msgstr ""
 
-#: mrvWidgets/mrvVersion.cpp:903
+#: mrvWidgets/mrvVersion.cpp:990
 msgid "Version:\t"
 msgstr ""
 
-#: mrvWidgets/mrvVersion.cpp:909
+#: mrvWidgets/mrvVersion.cpp:996
 msgid "Max. Texture Size:\t"
 msgstr ""
 
@@ -4440,8 +4466,8 @@ msgstr ""
 
 #: mrvWidgets/mrvProgressReport.cpp:53
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:928
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:768
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1098
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:797
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1127
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvHUDUI.cxx:172
 msgid "FPS"
 msgstr ""
@@ -4692,7 +4718,7 @@ msgid "Video Options"
 msgstr ""
 
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:235
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:756
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:785
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvHUDUI.cxx:158
 msgid "Resolution"
 msgstr ""
@@ -5195,7 +5221,7 @@ msgstr ""
 
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:482
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:190
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:762
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:791
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvHUDUI.cxx:165
 msgid "Timecode"
 msgstr ""
@@ -5420,7 +5446,7 @@ msgid "Allows you to adjust the gain or exposure of the image."
 msgstr ""
 
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2474
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1402
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1444
 msgid "Input Color Space"
 msgstr ""
 
@@ -5765,733 +5791,747 @@ msgstr ""
 msgid "CIE xyY"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:376
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1547
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:246
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:261
+msgid "CG"
+msgstr ""
+
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:250
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:262
+msgid "Studio"
+msgstr ""
+
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:405
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1589
 msgid "Black Frame"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:377
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:406
 msgid "Repeat  Frame"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:378
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:407
 msgid "Scratched  Frame"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:398
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:427
 msgid "Always"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:399
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:428
 msgid "Presentation Mode"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:410
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:417
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:439
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:446
 msgid "Do Nothing"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:411
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:418
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:440
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:447
 msgid "Open Logs on Dock"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:412
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:419
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:441
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:448
 msgid "Open Logs on Window"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:424
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:453
 msgid "On Demand From Help Menu"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:425
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:454
 msgid "At Start Up"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:449
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:478
 msgid "Could not match "
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:450
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:479
 msgid "Wizard labels are:"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:488
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1901
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:517
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1944
 msgid "User Interface"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:492
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:521
 msgid "Window Behavior"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:494
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:523
 msgid "Always on Top"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:495
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:502
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:524
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:531
 msgid ""
 "When selected, mrv2's window will always show up on top of other windows on "
 "the desktop."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:501
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:530
 msgid "Secondary on Top"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:508
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:537
 msgid "Single Instance"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:509
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:538
 msgid ""
 "When selected, only a single mrv2 instance is allowed.\n"
 "If you try to open several mrv2s with different images, all these images "
 "will be sent to the already open mrv2."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:516
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:545
 msgid "Auto Refit Image"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:517
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:546
 msgid ""
 "When selected, mrv2 will apply a fit image operation on each video played.  "
 "This effectly means the video will be resized automatically based on the "
 "size of the window."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:527
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:556
 msgid "Normal"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:528
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:557
 msgid "When selected, mrv2 will resize its window to the first image."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:535
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:564
 msgid "Fullscreen"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:536
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:565
 msgid "When selected, mrv2 will start in full screen mode."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:542
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:571
 msgid "Presentation"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:543
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:572
 msgid "When selected, mrv2 will start in presentation mode."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:553
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:582
 msgid "UI Elements"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:555
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:584
 msgid "Menu Bar"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:556
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:585
 msgid "When selected, mrv2 will start with the menu bar already shown."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:562
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:591
 msgid "Topbar"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:563
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:592
 msgid ""
 "When selected, mrv2 will start with its channel, gain, gamma toolbar visible."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:569
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1271
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1910
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:598
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1300
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1953
 msgid "Pixel Toolbar"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:570
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:599
 msgid "When selected, mrv2 will start with the pixel toolbar shown."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:577
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:606
 msgid "When selected, mrv2 will start with the timeline shown."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:583
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:612
 msgid "Status Bar"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:584
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:613
 msgid "When selected, mrv2 will start with the status bar visible."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:590
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:619
 msgid "macOS Menus"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:591
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:620
 msgid ""
 "This is a macOS setting only.  When selected the menus will appear on the "
 "system toolbar instead of the mrv2 toolbar."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:597
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:626
 msgid "Tool Dock"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:598
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:627
 msgid "When selected, mrv2 will start with the action tool dock already open."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:603
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:632
 msgid "Only One Panel"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:604
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:633
 msgid "When selected, mrv2 will start with the only one panel option selected."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:613
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:642
 msgid "View Window"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:617
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1055
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:646
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1084
 msgid "Defaults"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:619
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:648
 msgid "Gain"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:620
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:649
 msgid "Sets the default gain when mrv2 starts."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:626
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:655
 msgid "Sets the default gamma when mrv2 starts."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:631
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:660
 msgid "Crop"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:632
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:661
 msgid "Allows you to select a standard cropping area around image."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:691
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:720
 msgid "Auto Frame"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:692
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:721
 msgid "When this is on, View/Auto Frame will be active."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:698
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:727
 #: mrvCore/mrvHotkey.cpp:363
 msgid "Safe Areas"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:699
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:728
 msgid "When mrv2 starts, the safe area display will be active by default."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:705
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:734
 msgid "Zoom Speed"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:721
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:923
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:750
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:952
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvHUDUI.cxx:108
 msgid "HUD"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:722
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:751
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvHUDUI.cxx:119
 msgid ""
 "This area specifies which elements should be shown as a HUD overlay on the "
 "view screen."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:738
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:767
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvHUDUI.cxx:137
 msgid "Frame"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:744
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:773
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvHUDUI.cxx:144
 msgid "Frame Range"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:750
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:779
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvHUDUI.cxx:151
 msgid "Frame Count"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:774
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:803
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvHUDUI.cxx:179
 msgid "Memory"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:786
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:815
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvHUDUI.cxx:193
 msgid "Attributes"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:796
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:825
 msgid "Render"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:815
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:844
 msgid "Alpha Blend"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:828
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:857
 msgid "Minify Filter"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:838
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:867
 msgid "Magnify Filter"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:852
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:881
 msgid "Language and Colors"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:868
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:897
 msgid "Scheme"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:889
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:918
 msgid "Color Theme"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:894
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:923
 msgid "Reload Theme"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:895
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:924
 msgid ""
 "Reload color theme from mrv2.colors file again to refresh change in colors"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:900
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:929
 msgid "View"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:903
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:932
 msgid "Selects the background color of areas outside the current image."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:909
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:938
 msgid "Text Overlay"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:910
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:939
 msgid "Selects the color of text overlays printed over the current image."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:917
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:946
 msgid "Selects the color of the selection rectangle over the current image."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:924
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:953
 msgid "Selects the color of HUD overlays."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:933
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:937
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:962
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:966
 msgid "Fonts"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:940
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:969
 msgid "Menus"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:941
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:970
 msgid "Sets the font to use in menus."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:947
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:976
 msgid "Panels"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:948
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:977
 msgid "Sets the font to use in panels. (Not yet working)"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:960
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:989
 msgid "Positioning"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:963
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:992
 msgid "Always Save on Exit"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:964
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:993
 msgid ""
 "When this option is set, mrv2 will save its position and size upon exiting "
 "the program."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:972
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1001
 msgid "Fixed Position"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:973
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1002
 msgid ""
 "When this option is set, mrv2 will open in the position you set here (except "
 "if the window goes out of the Desktop).  If Akways Save on Exit is on, the "
 "values are recakculated upon exiting the program."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:980
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1009
 msgid "X:"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:983
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1012
 msgid "Y:"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:990
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1019
 msgid "Fixed Size"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:991
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1020
 msgid ""
 "When this option is on, mrv2 will always open to the size you set in W and "
 "H.  If Always Save on Exit is on, the values are recalculated upon exiting "
 "the program."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:998
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1027
 msgid "W:"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1005
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1034
 msgid "H:"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1014
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1043
 msgid "Take Current Window Values"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1020
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1049
 msgid "File Requester"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1024
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1053
 msgid "Single Click to Travel Drawers"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1025
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1054
 msgid ""
 "When using mrv2's file chooser, a single click on a folder will open it."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1030
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1059
 msgid "Thumbnails Active"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1031
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1060
 msgid "Show thumbnails for known files."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1036
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1065
 msgid "USD Thumbnails"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1037
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1066
 msgid "Show Thumbnails for USD files (can be slow if they are big)"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1042
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1071
 msgid "Use Native File Chooser"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1043
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1072
 msgid ""
 "If selected, the natlve file chooser will be used.  If unselected, mrv2's "
 "standard file chooser will be used."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1051
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1908
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1080
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1951
 msgid "Playback"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1058
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1087
 msgid "Auto Playback"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1059
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1088
 msgid "Start Playback when opening files."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1064
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1093
 msgid "Auto Scrub Playback"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1065
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1094
 msgid "Start playback when scrubbing so that audio can be heard."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1071
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1100
 msgid "Single Click Playback"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1072
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1101
 msgid ""
 "Start Playback when single clicking the left mouse button on the view window"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1077
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1106
 msgid "Auto Hide Pixel Bar"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1078
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1107
 msgid ""
 "The Pixel Bar can slow down playback at high resolutions.  When this option "
 "is on, the pixel toolbar will be hidden automatically."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1086
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1115
 msgid "Sequences"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1090
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1119
 msgid "Speed"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1091
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1120
 msgid "Frames Per Second value for sequences that don't have embedded speed."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1146
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1175
 msgid "Looping Mode"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1147
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1176
 msgid "Select default looping mode in timeline."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1171
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1200
 msgid "Scrub Sensitivity"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1172
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1201
 msgid ""
 "This setting controls the sensitivity of scrubbing (SHIFT and then the mouse "
 "right and left).  Smaller values make the mouse move jump more frames while "
 "higher values does the opposite."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1189
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1218
 msgid "Display"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1190
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1219
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1248
 msgid "How to display timeline by default."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1205
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1234
 msgid "Preview Thumbnails"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1206
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1235
 msgid "Thumbnails above timeline (does not work on Wayland)"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1210
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1239
 msgid "Remove EDLs in Temporary Folder on Exit"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1211
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1240
 msgid ""
 "When selected, temporary EDLs (Playlists) will be removed from the temporary "
 "folder."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1216
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1245
 msgid "Edit Viewport"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1218
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1247
 msgid "Thumbnails"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1237
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1266
 msgid "Show Transitions"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1238
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1267
 msgid "Show Transitions in Edit Viewport"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1243
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1272
 msgid "Show Markers"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1244
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1273
 msgid "Show Markers in Edit Viewport"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1249
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1278
 msgid "Editable"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1250
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1279
 msgid "Editable Timeline Viewport."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1255
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1284
 msgid "Edit Associated Clips"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1256
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1285
 msgid "Edit Associated Clips."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1261
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1290
 msgid "Start in Edit mode"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1262
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1291
 msgid "Editing viewport will be visible at start up."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1276
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1305
 msgid "RGBA Display"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1290
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1319
 msgid "Pixel Values"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1301
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1330
 msgid "Secondary Display"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1347
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1376
 msgid "Luminance"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1378
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1406
 msgid "OCIO Config File"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1379
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1407
 msgid ""
 "This is the path to your config.ocio file.  It can be set with the "
 "environment variable OCIO, which takes precedence over any saved setting."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1388
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1415
+msgid "Built-in Configs"
+msgstr ""
+
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1430
 msgid "Pick a config.ocio file from disk."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1395
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1912
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1437
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1955
 msgid "OCIO Defaults"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1398
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1440
 msgid "Use Active Views and Active Displays"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1399
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1441
 msgid ""
 "When this option is off, OCIO files with active_views: and active_displays: "
 "are not taken into account."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1405
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1447
 msgid "8-bits"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1406
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1448
 msgid ""
 "The name of the OCIO default image color space for 8 bit images (jpg, bmp, "
 "etc)\n"
 "(Environment variable: MRV_OCIO_8bits_ICS)"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1421
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1463
 msgid "16-bits"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1422
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1464
 msgid ""
 "The name of the OCIO default image color space for 16-bit images (cin, tiff, "
 "etc)\n"
 "(Environment variable: MRV_OCIO_16bits_ICS)"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1437
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1479
 msgid "32-bits"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1438
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1480
 msgid ""
 "The name of the OCIO default image color space for 32-bit int images "
 "(openexr integers, etc)\n"
 "(Environment variable: MRV_OCIO_32bits_ICS)"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1453
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1495
 msgid "half"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1454
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1496
 msgid ""
 "The name of the OCIO default image color space for OpenEXR half images\n"
 "(Environment variable: MRV_OCIO_half_ICS)"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1469
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1511
 msgid "float"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1470
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1512
 msgid ""
 "The name of the OCIO default image color space for half and float images "
 "(OpenEXR, dpx, etc)\n"
 "(Environment variable: MRV_OCIO_float_ICS)"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1487
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1529
 msgid "Display / View"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1488
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1530
 msgid "Default Display / View"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1502
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1544
 msgid "Look"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1503
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1545
 msgid "Default Look"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1518
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1913
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1560
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1956
 msgid "Loading"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1522
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1564
 msgid "Version Regex"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1523
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1565
 msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
@@ -6500,165 +6540,165 @@ msgid ""
 "gizmo_v001.0001.exr"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1531
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1573
 msgid "Maximum Images Apart"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1532
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1574
 msgid ""
 "When searching for a version, this value is the maximum version apart from "
 "each other when searching the first or last version."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1545
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1587
 msgid "Missing Frame"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1573
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1914
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1615
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1957
 msgid "Path Mappings"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1576
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1618
 msgid ""
 "Use Up and Down arrows to move the selected line up and down.  Double click "
 "to change item.  Click on an empty area to unselect."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1591
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1633
 msgid "Add Paths"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1592
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1634
 msgid "Add a new remote mapping."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1595
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1637
 msgid "Remove Paths"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1596
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1638
 msgid "Remove the currently selected path mapping."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1605
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1647
 msgid "Send"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1607
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1649
 #: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/make_ocio_chooser.cxx:53
 msgid "Accept"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1624
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1666
 msgid "UI Control"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1637
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1679
 msgid "Pan and Zoom"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1663
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1705
 msgid "Color Control"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1689
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1731
 msgid "Audio Control"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1709
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1751
 msgid "Monitor VSync"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1710
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1752
 msgid ""
 "Turns on and off Monitor's Vsync.  VSync off can display movies faster, at "
 "the cost of potential tearing in the image."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1734
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1776
 msgid "Blit Timeline"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1735
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1777
 msgid ""
 "Timeline can be drawn with blitting or with OpenGL shaders.  Depending on "
 "graphics card and OS one can perform better then the other."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1760
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1917
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1802
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1960
 msgid "Errors"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1764
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1807
 msgid "On FFmpeg Error"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1765
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1808
 msgid "Adjusts how Log Window behaves in case of an FFmpeg error."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1788
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1831
 msgid "On Error"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1789
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1832
 msgid "Adjusts how Log Window behaves in case of error."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1816
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1918
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1859
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1961
 msgid "Behavior"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1821
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1864
 msgid "Check for Updates"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1822
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1865
 msgid "Allows you to automatically download updates of mrv2 when it starts up."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1850
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1893
 msgid "Module"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1867
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1910
 msgid "Revert"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1868
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1911
 msgid "Revert settings to last saved preferences."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1872
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1915
 msgid ""
 "Accept settings but don't save.  They will get saved when exiting the "
 "program."
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1902
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1945
 msgid "User Interface/View Window"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1903
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1946
 msgid "User Interface/View Window/Language and Colors"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1904
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1947
 msgid "User Interface/Render"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1905
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1948
 msgid "User Interface/Fonts"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1906
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1949
 msgid "User Interface/Positioning"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1907
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1950
 msgid "User Interface/File Requester"
 msgstr ""
 
@@ -6728,15 +6768,15 @@ msgstr ""
 msgid "Codecs"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:151
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:150
 msgid "Subtitles"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:167
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:166
 msgid "Protocols"
 msgstr ""
 
-#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:185
+#: /media/gga/datos/code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:184
 msgid "Motion Estimation Methods"
 msgstr ""
 
