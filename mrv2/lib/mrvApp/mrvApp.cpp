@@ -1263,7 +1263,7 @@ namespace mrv
             
             if (!p.activeFiles.empty() && activeFiles[0] == p.activeFiles[0])
             {
-                // Intentionally left blanck
+                player = p.player;
             }
             else
             {
@@ -1472,8 +1472,6 @@ namespace mrv
             if (totalPhysMem < Gbytes)
                 Gbytes = totalPhysMem / 2;
 
-            const size_t activeCount = p.filesModel->observeActive()->getSize();
-            
             uint64_t bytes = Gbytes * memory::gigabyte;
 
             // Check if an NDI movie and set cache to 1 gigabyte
@@ -1484,9 +1482,10 @@ namespace mrv
                     p.settings->getValue<int>("NDI/GBytes"));
                 bytes = NDIGbytes * memory::gigabyte;
             }
+            
             // Update the I/O cache.
             auto ioSystem = _context->getSystem<io::System>();
-            ioSystem->getCache()->setMax(bytes);
+            ioSystem->getCache()->setMax(1.0 * memory::gigabyte);
 
             const auto timeline = p.player->timeline();
             const auto ioInfo = timeline->getIOInfo();
@@ -1497,7 +1496,9 @@ namespace mrv
                 auto pixelType = video.pixelType;
                 std::size_t size = tl::image::getDataByteCount(video);
                 double frames = bytes / static_cast<double>(size);
+                std::cerr << "frames    = " << frames << std::endl;
                 seconds = frames / p.player->defaultSpeed();
+                std::cerr << "seconds   = " << seconds << std::endl;
             }
             
             if (ioInfo.audio.isValid())
@@ -1510,16 +1511,35 @@ namespace mrv
                 seconds -= size / 1024.0 / 1024.0;
             }
 
-            constexpr double defaultReadAhead =
-                timeline::PlayerCacheOptions().readAhead.value();
-            constexpr double defaultReadBehind =
-                timeline::PlayerCacheOptions().readBehind.value();
-            constexpr double totalTime = defaultReadAhead + defaultReadBehind;
-            double readAhead = defaultReadAhead / totalTime;
-            double readBehind = defaultReadBehind / totalTime;
 
-            readAhead *= seconds / static_cast<double>(activeCount);
-            readBehind *= seconds / static_cast<double>(activeCount);
+
+            double readAhead = options.readAhead.value();
+            double readBehind = options.readBehind.value();
+            
+            const double totalTime = readAhead + readBehind;
+            const double readAheadPct = readAhead / totalTime;
+            const double readBehindPct = readBehind / totalTime;
+            std::cerr << "readAheadPct  = " << readAheadPct << std::endl;
+            std::cerr << "readBehindPct = " << readBehindPct << std::endl;
+            
+            readAhead = seconds * readAheadPct;
+            readBehind = seconds * readBehindPct;
+            std::cerr << "readAhead  mem= " << readAhead << std::endl;
+            std::cerr << "readBehind mem= " << readBehind << std::endl;
+
+
+            const auto& timeRange = p.player->inOutRange();
+            const auto duration = timeRange.duration().to_seconds();
+            std::cerr << "clip duration = " << duration << std::endl;
+
+            if (readAhead > duration * readAheadPct)
+                readAhead = duration * readAheadPct;
+            if (readBehind > duration * readBehindPct)
+                readBehind = duration * readBehindPct;
+            
+            
+            std::cerr << "readAhead  MAX= " << readAhead << std::endl;
+            std::cerr << "readBehind MAX= " << readBehind << std::endl;
 
             options.readAhead = otime::RationalTime(readAhead, 1.0);
             options.readBehind = otime::RationalTime(readBehind, 1.0);

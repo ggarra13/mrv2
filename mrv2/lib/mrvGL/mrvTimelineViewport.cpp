@@ -621,15 +621,10 @@ namespace mrv
             return;
 
         p.player = player;
-        
-        if (primary && player)
-        {
-            p.ui->uiTimeline->setTimelinePlayer(player);
-        }
+
+        updateVideoLayers();
 
         p.videoData.clear();
-        
-        updateVideoLayers();
         
         if (player)
         {
@@ -637,10 +632,12 @@ namespace mrv
                 player->setTimelineViewport(this);
             else
                 player->setSecondaryViewport(this);
+
             p.videoData = player->currentVideo();
         }
         
-        refreshWindows(); // needed - do not remove.
+        refreshWindows(); // needed We need to refresh, as the new
+                          // video data may have different sizes.
     }
 
     mrv::TimelinePlayer* TimelineViewport::getTimelinePlayer() const noexcept
@@ -861,8 +858,8 @@ namespace mrv
     {
         TLRENDER_P();
         p.videoData = values;
-        if (p.videoData.empty())
-            return;
+        std::cerr << "Callback videoData.size=" << values.size()
+                  << std::endl;
 
         _getTags();
         int layerId = sender->videoLayer();
@@ -921,6 +918,7 @@ namespace mrv
 
         // If we have a Video Rotation Metadata, extract its value from it.
         auto i = p.tagData.find("Video Rotation");
+        p.videoRotation = 0.F;
         if (i != p.tagData.end())
         {
             std::stringstream s(i->second);

@@ -225,6 +225,8 @@ namespace mrv
         bool transparent =
             p.backgroundOptions.type == timeline::Background::Transparent;
 
+        std::cerr << "---------------------- DRAW " << std::endl;
+        
         try
         {
             if (renderSize.isValid())
