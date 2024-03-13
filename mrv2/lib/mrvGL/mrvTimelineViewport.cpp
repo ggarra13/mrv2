@@ -1810,8 +1810,11 @@ bool TimelineViewport::_isPlaybackStopped() const noexcept
         for (const auto& video : videos)
         {
             name = video.name;
-            if (name == "Default")
+            
+            if (name == "B,G,R" || name == "R,G,B" || name == "Default")
                 name = _("Color");
+            else if (name == "A,B,G,R")
+                name = "R,G,B,A";
 
             p.ui->uiColorChannel->add(name.c_str());
         }
@@ -2014,8 +2017,10 @@ bool TimelineViewport::_isPlaybackStopped() const noexcept
             layer = 0;
 
         std::string name = videos[layer].name;
-        if (name == "A,B,G,R" || name == "B,G,R" || name == "Default")
+        if (name == "B,G,R" || name == "R,G,B" || name == "Default")
             name = "Color";
+        else if (name == "A,B,G,R")
+            name = "R,G,B,A";
 
         switch (d.channels)
         {
