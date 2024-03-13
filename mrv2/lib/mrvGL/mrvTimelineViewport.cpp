@@ -919,6 +919,14 @@ namespace mrv
                    
         }
 
+        // If we have a Video Rotation Metadata, extract its value from it.
+        auto i = p.tagData.find("Video Rotation");
+        if (i != p.tagData.end())
+        {
+            std::stringstream s(i->second);
+            s >> p.videoRotation;
+        }
+            
         // Refresh media info panel if there's data window present
         if (panel::imageInfoPanel)
         {
@@ -929,16 +937,9 @@ namespace mrv
             if (sender->playback() == timeline::Playback::Stop ||
                 sender->timeRange().duration().value() == 1.0)
                 refresh = true;
-
+            
             // If timeline has a Data Window (it is an OpenEXR)
             // we also refresh the media info panel.
-            auto i = p.tagData.find("Video Rotation");
-            if (i != p.tagData.end())
-            {
-                std::stringstream s(i->second);
-                s >> p.videoRotation;
-            }
-            
             i = p.tagData.find("Data Window");
             if (i != p.tagData.end())
                 refresh = true;
