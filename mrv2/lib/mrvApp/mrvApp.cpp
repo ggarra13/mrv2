@@ -197,7 +197,7 @@ namespace mrv
         bool mute = false;
         std::shared_ptr<observer::ListObserver<log::Item> > logObserver;
 
-        TimelinePlayer* player = nullptr;
+        std::shared_ptr<TimelinePlayer> player;
 
         MainControl* mainControl = nullptr;
 
@@ -538,8 +538,6 @@ namespace mrv
 
         store_default_hotkeys();
 
-        std_any value;
-
         Preferences prefs(
             ui->uiPrefs, p.options.resetSettings, p.options.resetHotkeys);
 
@@ -682,11 +680,6 @@ namespace mrv
                 }
             });
 
-        DBG;
-        cacheUpdate();
-        _audioUpdate();
-
-        DBG;
         // Open the input files.
         if (!p.options.fileNames.empty())
         {
@@ -745,7 +738,6 @@ namespace mrv
                 model->setA(0);
         }
 
-        DBG;
 #ifdef MRV2_NETWORK
         if (p.options.server)
         {
@@ -817,6 +809,7 @@ namespace mrv
         // Not required, but nice
         NDIlib_destroy();
 #endif
+        p.mainControl->setPlayer(nullptr);
 
         delete p.mainControl;
         p.mainControl = nullptr;
@@ -1255,7 +1248,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        TimelinePlayer* player = nullptr;
+        std::shared_ptr<TimelinePlayer> player;
         if (!activeFiles.empty())
         {
             if (!p.activeFiles.empty() && activeFiles[0] == p.activeFiles[0])
@@ -1283,10 +1276,11 @@ namespace mrv
                         timeline::PlayerOptions playerOptions;
                         _playerOptions(playerOptions, item);
                         auto timeline = p.timelines[i - p.files.begin()];
-                        player = new TimelinePlayer(
-                            timeline::Player::create(timeline, _context,
-                                                     playerOptions),
-                            _context);
+                        player.reset(new TimelinePlayer(
+                                         timeline::Player::create(timeline,
+                                                                  _context,
+                                                                  playerOptions),
+                                         _context));
                         
                         item->timeRange = player->timeRange();
                         item->ioInfo = player->ioInfo();
@@ -1353,7 +1347,7 @@ namespace mrv
             
         if (p.mainControl)
         {
-            p.mainControl->setPlayer(player);
+            p.mainControl->setPlayer(player.get());
         }
 
         p.activeFiles = activeFiles;
@@ -1395,7 +1389,6 @@ namespace mrv
                         set_edit_mode_cb(EditMode::kFull, ui);
                 }
 
-                std::cerr << "NOW is " << player << " " << __LINE__ << std::endl;
                 if (!activeFiles.empty() && activeFiles[0]->ocioIcs.empty())
                     Preferences::updateICS();
                 else
@@ -1408,13 +1401,11 @@ namespace mrv
                     {
                         LOG_ERROR(e.what());
                     }
-                    std::cerr << "NOW is " << player << " " << __LINE__ << std::endl;
                 }
                 if (p.running)
                 {
                     panel::redrawThumbnails();
                 }
-                std::cerr << "NOW is " << player << " " << __LINE__ << std::endl;
             }
         }
 

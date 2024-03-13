@@ -809,7 +809,7 @@ namespace mrv
         TLRENDER_P();
         MRV2_GL();
 
-        if (!p.fontSystem)
+        if (!p.fontSystem || p.videoData.empty() || !p.player)
             return;
 
         const auto& viewportSize = getViewportSize();
@@ -830,8 +830,6 @@ namespace mrv
         auto lineHeight = fontMetrics.lineHeight;
         math::Vector2i pos(20, lineHeight * 2);
 
-        if (!p.player)
-            return;
         const auto player = p.player;
 
         const auto& path = player->path();
