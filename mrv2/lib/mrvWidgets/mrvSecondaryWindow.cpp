@@ -86,18 +86,16 @@ namespace mrv
 
         SettingsObject* settings = p.ui->app->settings();
 
-        const auto& player = p.viewport->getTimelinePlayer();
+        auto player = p.viewport->getTimelinePlayer();
         timeline::Playback playback = timeline::Playback::Forward;
         if (player)
             playback = player->playback();
 
         p.viewport->stop();
-        auto& players = p.viewport->getTimelinePlayers();
-        for (auto& player : players)
-        {
+        player = p.viewport->getTimelinePlayer();
+        if (player)
             player->setPlayback(playback);
-        }
-
+        
         delete p.mainWindow;
         p.mainWindow = nullptr;
         p.viewport = nullptr;

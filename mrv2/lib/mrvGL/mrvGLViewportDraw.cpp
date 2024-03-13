@@ -40,7 +40,7 @@ namespace mrv
 
         gl.render->drawVideo(
             {p.videoData[left]},
-            timeline::getBoxes(timeline::CompareMode::A, p.timelineSizes),
+            timeline::getBoxes(timeline::CompareMode::A, p.player->sizes()),
             p.imageOptions, p.displayOptions);
 
         if (p.stereo3DOptions.eyeSeparation != 0.F)
@@ -54,7 +54,7 @@ namespace mrv
         glColorMask(GL_FALSE, GL_TRUE, GL_TRUE, GL_TRUE);
         gl.render->drawVideo(
             {p.videoData[right]},
-            timeline::getBoxes(timeline::CompareMode::A, p.timelineSizes),
+            timeline::getBoxes(timeline::CompareMode::A, p.player->sizes()),
             p.imageOptions, p.displayOptions);
 
         glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
@@ -70,7 +70,7 @@ namespace mrv
 
         gl.render->drawVideo(
             {p.videoData[left]},
-            timeline::getBoxes(timeline::CompareMode::A, p.timelineSizes),
+            timeline::getBoxes(timeline::CompareMode::A, p.player->sizes()),
             p.imageOptions, p.displayOptions);
 
         glEnable(GL_STENCIL_TEST);
@@ -107,7 +107,7 @@ namespace mrv
 
         gl.render->drawVideo(
             {p.videoData[right]},
-            timeline::getBoxes(timeline::CompareMode::A, p.timelineSizes),
+            timeline::getBoxes(timeline::CompareMode::A, p.player->sizes()),
             p.imageOptions, p.displayOptions);
 
         glDisable(GL_STENCIL_TEST);
@@ -123,7 +123,7 @@ namespace mrv
 
         gl.render->drawVideo(
             {p.videoData[left]},
-            timeline::getBoxes(timeline::CompareMode::A, p.timelineSizes),
+            timeline::getBoxes(timeline::CompareMode::A, p.player->sizes()),
             p.imageOptions, p.displayOptions);
 
         glEnable(GL_STENCIL_TEST);
@@ -168,7 +168,7 @@ namespace mrv
 
         gl.render->drawVideo(
             {p.videoData[right]},
-            timeline::getBoxes(timeline::CompareMode::A, p.timelineSizes),
+            timeline::getBoxes(timeline::CompareMode::A, p.player->sizes()),
             p.imageOptions, p.displayOptions);
 
         glDisable(GL_STENCIL_TEST);
@@ -184,7 +184,7 @@ namespace mrv
 
         gl.render->drawVideo(
             {p.videoData[left]},
-            timeline::getBoxes(timeline::CompareMode::A, p.timelineSizes),
+            timeline::getBoxes(timeline::CompareMode::A, p.player->sizes()),
             p.imageOptions, p.displayOptions);
 
         glEnable(GL_STENCIL_TEST);
@@ -221,7 +221,7 @@ namespace mrv
 
         gl.render->drawVideo(
             {p.videoData[right]},
-            timeline::getBoxes(timeline::CompareMode::A, p.timelineSizes),
+            timeline::getBoxes(timeline::CompareMode::A, p.player->sizes()),
             p.imageOptions, p.displayOptions);
 
         glDisable(GL_STENCIL_TEST);
@@ -259,7 +259,7 @@ namespace mrv
                 gl.render->drawVideo(
                     {p.videoData[left]},
                     timeline::getBoxes(
-                        timeline::CompareMode::A, p.timelineSizes),
+                        timeline::CompareMode::A, p.player->sizes()),
                     p.imageOptions, p.displayOptions, p.compareOptions,
                     p.backgroundOptions);
             }
@@ -287,7 +287,7 @@ namespace mrv
 
             gl.render->drawVideo(
                 {p.videoData[right]},
-                timeline::getBoxes(timeline::CompareMode::A, p.timelineSizes),
+                timeline::getBoxes(timeline::CompareMode::A, p.player->sizes()),
                 p.imageOptions, p.displayOptions);
 
             _drawOverlays(renderSize);
@@ -334,7 +334,7 @@ namespace mrv
 
         gl.render->drawVideo(
             {p.lastVideoData},
-            timeline::getBoxes(p.compareOptions.mode, p.timelineSizes),
+            timeline::getBoxes(p.compareOptions.mode, p.player->sizes()),
             p.imageOptions, p.displayOptions, p.compareOptions,
             p.backgroundOptions);
 
@@ -755,10 +755,10 @@ namespace mrv
     void Viewport::_drawSafeAreas() const noexcept
     {
         TLRENDER_P();
-        if (p.timelinePlayers.empty())
+        if (!p.player)
             return;
-        const auto& player = p.timelinePlayers[0];
-        const auto& info = player->player()->getIOInfo();
+
+        const auto& info = p.player->player()->getIOInfo();
         const auto& video = info.video[0];
         const auto pr = video.size.pixelAspectRatio;
 
@@ -809,7 +809,7 @@ namespace mrv
         TLRENDER_P();
         MRV2_GL();
 
-        if (!p.fontSystem)
+        if (!p.fontSystem || p.videoData.empty() || !p.player)
             return;
 
         const auto& viewportSize = getViewportSize();
@@ -830,9 +830,7 @@ namespace mrv
         auto lineHeight = fontMetrics.lineHeight;
         math::Vector2i pos(20, lineHeight * 2);
 
-        if (p.timelinePlayers.empty())
-            return;
-        const auto& player = p.timelinePlayers[0];
+        const auto player = p.player;
 
         const auto& path = player->path();
         const otime::RationalTime& time = p.videoData[0].time;
@@ -1137,7 +1135,7 @@ namespace mrv
     void Viewport::_drawHelpText() const noexcept
     {
         TLRENDER_P();
-        if (p.timelinePlayers.empty())
+        if (!p.player)
             return;
         if (!p.fontSystem)
             return;

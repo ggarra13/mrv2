@@ -53,6 +53,8 @@ v1.0.9
 - Fixed a focus issue on Linux when using a draw tool, then typing into one
   input widget in the toolbar and going back to the view window not ending the
   draw tool, but continue its trace.
+- Fixed Text annotations when image was rotated jumping to the wrong location
+  on confirmation.
 - Entering a Text annotation on the viewport can be confirmed by doing
   SHIFT + Enter.
 - Added FFmpeg's actual version information, not just each library.
@@ -64,6 +66,7 @@ v1.0.9
   a line can be cut in half.
 - Fixed gcc version information in mrv2's About Window.  It was showing the
   __GLIBCXX__ instead.
+- Darby simplified and fixed the A/B comparison sometimes getting out of sync.
 - Improved the look of HorSlider widget.  Now the X to reset to defaults is
   a tad to the right.
 - Fixed selection of Wipe mode which would not work after scrolling in the

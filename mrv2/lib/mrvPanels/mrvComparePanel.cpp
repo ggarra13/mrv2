@@ -7,7 +7,7 @@
 #include <map>
 
 #include <FL/Fl_Button.H>
-#include <FL/Fl_Pack.H>
+#include <FL/Fl_Group.H>
 #include <FL/Fl_RGB_Image.H>
 
 #include "mrvCore/mrvHome.h"
@@ -213,6 +213,7 @@ namespace mrv
             const image::Size size(128, 64);
 
             file::Path lastPath;
+            int Y = g->y();
 
             for (size_t i = 0; i < numFiles; ++i)
             {
@@ -317,16 +318,18 @@ namespace mrv
                     catch (const std::exception&)
                     {
                     }
+
+                    Y += size.h;
                 }
             }
 
-            Fl_Pack* bg =
-                new Fl_Pack(g->x(), g->y() + 20 + numFiles * 64, g->w(), 30);
-            bg->type(Fl_Pack::HORIZONTAL);
+            int X = g->x();
+
+            Fl_Group* bg = new Fl_Group(X, Y, g->w(), 30);
             bg->begin();
 
             Fl_Button* b;
-            auto bW = new Widget< Button >(g->x(), 90, 30, 30);
+            auto bW = new Widget< Button >(X, Y, 30, 30);
             b = bW;
             Fl_SVG_Image* svg = load_svg("CompareA.svg");
             b->image(svg);
@@ -340,7 +343,7 @@ namespace mrv
                     model->setCompareOptions(o);
                 });
 
-            bW = new Widget< Button >(g->x(), 90, 30, 30);
+            bW = new Widget< Button >(X + 30, Y, 30, 30);
             b = bW;
             svg = load_svg("CompareB.svg");
             b->image(svg);
@@ -355,7 +358,7 @@ namespace mrv
                     model->setCompareOptions(o);
                 });
 
-            bW = new Widget< Button >(g->x(), 90, 30, 30);
+            bW = new Widget< Button >(X + 60, Y, 30, 30);
             b = bW;
             svg = load_svg("CompareWipe.svg");
             b->image(svg);
@@ -382,7 +385,7 @@ namespace mrv
                     model->setCompareOptions(o);
                 });
 
-            bW = new Widget< Button >(g->x(), 90, 30, 30);
+            bW = new Widget< Button >(X + 90, Y, 30, 30);
             b = bW;
             svg = load_svg("CompareOverlay.svg");
             b->image(svg);
@@ -398,7 +401,7 @@ namespace mrv
                     model->setCompareOptions(o);
                 });
 
-            bW = new Widget< Button >(g->x(), 90, 30, 30);
+            bW = new Widget< Button >(X + 120, Y, 30, 30);
             b = bW;
             svg = load_svg("CompareDifference.svg");
             b->image(svg);
@@ -413,7 +416,7 @@ namespace mrv
                     model->setCompareOptions(o);
                 });
 
-            bW = new Widget< Button >(g->x(), 90, 30, 30);
+            bW = new Widget< Button >(X + 150, Y, 30, 30);
             b = bW;
             svg = load_svg("CompareHorizontal.svg");
             b->image(svg);
@@ -428,7 +431,7 @@ namespace mrv
                     model->setCompareOptions(o);
                 });
 
-            bW = new Widget< Button >(g->x(), 90, 30, 30);
+            bW = new Widget< Button >(X + 180, Y, 30, 30);
             b = bW;
             svg = load_svg("CompareVertical.svg");
             b->image(svg);
@@ -443,7 +446,7 @@ namespace mrv
                     model->setCompareOptions(o);
                 });
 
-            bW = new Widget< Button >(g->x(), 90, 30, 30);
+            bW = new Widget< Button >(X + 210, Y, 30, 30);
             b = bW;
             svg = load_svg("CompareTile.svg");
             b->image(svg);
@@ -458,7 +461,7 @@ namespace mrv
                     model->setCompareOptions(o);
                 });
 
-            bW = new Widget< Button >(g->x() + 120, 90, 30, 30);
+            bW = new Widget< Button >(X + 240, Y, 30, 30);
             b = bW;
             svg = load_svg("Prev.svg");
             b->image(svg);
@@ -471,7 +474,7 @@ namespace mrv
                         p.ui->app->filesModel()->prevB();
                 });
 
-            bW = new Widget< Button >(g->x() + 150, 90, 30, 30);
+            bW = new Widget< Button >(X + 270, Y, 30, 30);
             b = bW;
             svg = load_svg("Next.svg");
             b->image(svg);
@@ -484,6 +487,7 @@ namespace mrv
                         p.ui->app->filesModel()->nextB();
                 });
 
+            bg->resizable(0);
             bg->end();
 
             HorSlider* s;

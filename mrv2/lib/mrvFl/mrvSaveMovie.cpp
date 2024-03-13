@@ -595,7 +595,8 @@ namespace mrv
                 if (hasAudio)
                 {
                     const double seconds = currentTime.to_seconds();
-                    const auto audioData = timeline->getAudio(seconds).get();
+                    const auto audioData =
+                        timeline->getAudio(seconds).future.get();
                     if (!audioData.layers.empty())
                     {
                         bool skip = false;
@@ -684,7 +685,7 @@ namespace mrv
                     {
                         // Get the videoData
                         const auto videoData =
-                            timeline->getVideo(currentTime).get();
+                            timeline->getVideo(currentTime).future.get();
                         if (videoData.layers.empty() ||
                             !videoData.layers[0].image)
                         {
@@ -697,7 +698,7 @@ namespace mrv
 
                         // This refreshes the view window
                         view->make_current();
-                        view->currentVideoCallback(videoData, player);
+                        view->currentVideoCallback({videoData}, player);
                         view->flush();
 
                         // back to conventional pixel operation

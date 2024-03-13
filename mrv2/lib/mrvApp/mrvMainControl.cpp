@@ -20,9 +20,6 @@
 
 namespace mrv
 {
-    namespace
-    {
-    }
 
     namespace
     {
@@ -35,7 +32,7 @@ namespace mrv
     {
         ViewerUI* ui = nullptr;
 
-        std::vector<mrv::TimelinePlayer*> timelinePlayers;
+        TimelinePlayer* player = nullptr;
         bool floatOnTop = false;
         bool secondaryFloatOnTop = false;
         timeline::OCIOOptions ocioOptions;
@@ -165,13 +162,14 @@ namespace mrv
 
     MainControl::~MainControl() {}
 
-    void MainControl::setTimelinePlayers(
-        const std::vector<mrv::TimelinePlayer*>& timelinePlayers)
+    void MainControl::setPlayer(TimelinePlayer* player)
     {
         TLRENDER_P();
-
-        p.timelinePlayers = timelinePlayers;
-
+        
+        if (p.player == player)
+            return;
+        
+        p.player = player;
         _timelinePlayersUpdate();
         _widgetUpdate();
     }
@@ -206,14 +204,13 @@ namespace mrv
     void MainControl::_timelinePlayersUpdate()
     {
         TLRENDER_P();
-        p.ui->uiView->setTimelinePlayers(p.timelinePlayers);
-        p.ui->uiTimeline->setTimelinePlayer(
-            !p.timelinePlayers.empty() ? p.timelinePlayers[0] : nullptr);
+        p.ui->uiView->setTimelinePlayer(p.player);
+        p.ui->uiTimeline->setTimelinePlayer(p.player);
 
         if (p.ui->uiSecondary)
         {
             auto view = p.ui->uiSecondary->viewport();
-            view->setTimelinePlayers(p.timelinePlayers, false);
+            view->setTimelinePlayer(p.player, false);
         }
     }
 
@@ -258,11 +255,9 @@ namespace mrv
             c->uiTimecodeSwitch->deactivate();
         }
 
-        TimelinePlayer* player = nullptr;
-
-        if (!p.timelinePlayers.empty())
+        auto player = p.player;
+        if (player)
         {
-            player = p.timelinePlayers[0];
             c->uiFPS->value(player->speed());
 
             const auto inOutRange = player->inOutRange();
@@ -337,18 +332,11 @@ namespace mrv
 
         p.ocioOptions = view->getOCIOOptions();
         view->setLUTOptions(p.lutOptions);
-        std::vector<timeline::ImageOptions> imageOptions;
-        std::vector<timeline::DisplayOptions> displayOptions;
-        for (const auto& i : p.timelinePlayers)
-        {
-            imageOptions.push_back(p.imageOptions);
-            displayOptions.push_back(p.displayOptions);
-        }
-        view->setImageOptions(imageOptions);
-        view->setDisplayOptions(displayOptions);
+        view->setImageOptions({p.imageOptions});
+        view->setDisplayOptions({p.displayOptions});
         view->setCompareOptions(p.compareOptions);
         view->setStereo3DOptions(p.stereo3DOptions);
-        view->setTimelinePlayers(p.timelinePlayers);
+        view->setTimelinePlayer(p.player);
         view->updatePlaybackButtons();
         view->updateDisplayOptions();
         view->redraw();
@@ -391,11 +379,11 @@ namespace mrv
             view = p.ui->uiSecondary->viewport();
             view->setOCIOOptions(p.ocioOptions);
             view->setLUTOptions(p.lutOptions);
-            view->setImageOptions(imageOptions);
-            view->setDisplayOptions(displayOptions);
+            view->setImageOptions({p.imageOptions});
+            view->setDisplayOptions({p.displayOptions});
             view->setCompareOptions(p.compareOptions);
             view->setStereo3DOptions(p.stereo3DOptions);
-            view->setTimelinePlayers(p.timelinePlayers);
+            view->setTimelinePlayer(p.player);
             view->updateDisplayOptions();
             view->redraw();
         }
@@ -410,7 +398,7 @@ namespace mrv
         }
         p.app->outputDevice()->setDisplayOptions(displayOptions);
         p.app->outputDevice()->setCompareOptions(p.compareOptions);
-        p.app->outputDevice()->setTimelinePlayers(p.timelinePlayers);
+        p.app->outputDevice()->setTimelinePlayer(p.player);
 #endif
 
         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);

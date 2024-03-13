@@ -27,9 +27,17 @@ namespace mrv
      */
     struct FilesModelItem
     {
+        // These are Darby's elements
         tl::file::Path path;
         tl::file::Path audioPath;
 
+        // Video layers, we keep an array of names and an index.
+        std::vector<std::string> videoLayers;
+        size_t videoLayer = 0;
+
+
+        // These are my own elements to keep state info.
+        
         bool init = false;
 
         otime::TimeRange timeRange = time::invalidTimeRange;
@@ -41,8 +49,6 @@ namespace mrv
         otime::RationalTime currentTime = time::invalidTime;
         otime::TimeRange inOutRange = time::invalidTimeRange;
 
-        std::vector<std::string> videoLayers;
-        size_t videoLayer = 0;
 
         float volume = 0.F;
         bool mute = false;
@@ -160,11 +166,23 @@ namespace mrv
 
         //! Set the A file layer to the previous layer.
         void prevLayer();
+        
+        //! Get the compare options.
+        const timeline::CompareOptions& getCompareOptions() const;
 
         //! Observe the compare options.
         std::shared_ptr<observer::IValue<timeline::CompareOptions> >
         observeCompareOptions() const;
 
+        //! Set the compare time mode.
+        void setCompareTime(timeline::CompareTimeMode);
+        
+        //! Get the compare time mode.
+        timeline::CompareTimeMode getCompareTime() const;
+        
+        //! Observe the compare time mode.
+        std::shared_ptr<observer::IValue<timeline::CompareTimeMode> > observeCompareTime() const;
+        
         //! Set the compare options.
         void setCompareOptions(const timeline::CompareOptions&);
 

@@ -158,16 +158,18 @@ namespace mrv
     private:
         void _settingsCallback();
 
-    private:
         io::Options _getIOOptions() const;
 
         otime::RationalTime _cacheReadAhead() const;
         otime::RationalTime _cacheReadBehind() const;
 
         void
-        _filesCallback(const std::vector<std::shared_ptr<FilesModelItem> >&);
+        _filesUpdate(const std::vector<std::shared_ptr<FilesModelItem> >&);
+
         void
-        _activeCallback(const std::vector<std::shared_ptr<FilesModelItem> >&);
+        _activeUpdate(const std::vector<std::shared_ptr<FilesModelItem> >&);
+        
+        void _layersUpdate(const std::vector<int>& value);
 
         void _audioUpdate();
 

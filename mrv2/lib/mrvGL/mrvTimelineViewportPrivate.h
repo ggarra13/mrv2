@@ -35,8 +35,7 @@ namespace mrv
         static EnvironmentMapOptions environmentMapOptions;
 
         float       videoRotation = 0.F;
-        std::vector<TimelinePlayer*> timelinePlayers;
-        std::vector<image::Size> timelineSizes;
+        TimelinePlayer* player = nullptr;
 
         math::Vector2i viewPos;
         float viewZoom = 1.F;

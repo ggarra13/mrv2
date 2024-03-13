@@ -326,7 +326,8 @@ namespace mrv
                                 gl.render->drawVideo(
                                     p.videoData,
                                     timeline::getBoxes(
-                                        p.compareOptions.mode, p.timelineSizes),
+                                        p.compareOptions.mode,
+                                        p.player->sizes()),
                                     p.imageOptions, p.displayOptions,
                                     p.compareOptions,
                                     p.backgroundOptions);

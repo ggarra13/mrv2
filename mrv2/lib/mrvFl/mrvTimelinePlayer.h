@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include <tlTimeline/Timeline.h>
 #include <tlTimeline/Player.h>
 
 namespace mrv
@@ -31,7 +30,7 @@ namespace mrv
             const std::shared_ptr<timeline::Player>&,
             const std::shared_ptr<system::Context>&);
 
-        ~TimelinePlayer();
+        virtual ~TimelinePlayer();
 
         //! Get the context.
         const std::weak_ptr<system::Context>& context() const;
@@ -64,6 +63,9 @@ namespace mrv
         //! the first clip in the timeline.
         const tl::io::Info& ioInfo() const;
 
+        //! Get the timeline sizes.
+        std::vector<image::Size> sizes() const;
+        
         ///@}
 
         //! \name Playback
@@ -105,8 +107,6 @@ namespace mrv
         //! \name I/O Options
         ///@{
 
-        tl::io::Options getIOOptions() const;
-        void setIOOptions(const tl::io::Options&);
 
         ///@}
 
@@ -117,7 +117,7 @@ namespace mrv
         int videoLayer() const;
 
         //! Get the video.
-        const timeline::VideoData& currentVideo() const;
+        const std::vector<timeline::VideoData>& currentVideo() const;
 
         ///@}
 
@@ -220,11 +220,34 @@ namespace mrv
 
         ///@}
 
+        //! \name I/O
+        ///@{
+        
+        //! Set the I/O options.
+        void setIOOptions(const tl::io::Options&);
+
+        ///@}
+
+        //! \name Comparison
+        ///@{
+
+        //! Set the timelines for comparison.
+        void setCompare(const std::vector<std::shared_ptr<timeline::Timeline> >&);
+
+        //! Set the comparison time mode.
+        void setCompareTime(timeline::CompareTimeMode);
+
+        ///@}
+
+        
         //! \name Video
         ///@{
 
         //! Set the current video layer.
         void setVideoLayer(int);
+        
+        //! Set the comparison video layers.
+        void setCompareVideoLayers(const std::vector<int>&);
 
         ///@}
 
@@ -274,7 +297,7 @@ namespace mrv
         ///@{
 
         //! This signal is emitted when the video is changed.
-        void currentVideoChanged(const tl::timeline::VideoData&);
+        void currentVideoChanged(const std::vector<tl::timeline::VideoData>&);
 
         //! This signal is emitted when the audio is changed.
         void

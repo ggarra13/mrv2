@@ -285,7 +285,8 @@ namespace mrv
             else
             {
                 // Get the videoData
-                const auto& videoData = timeline->getVideo(currentTime).get();
+                const auto& videoData =
+                    timeline->getVideo(currentTime).future.get();
 
                 view->make_current();
                 gl::initGLAD();
@@ -301,8 +302,7 @@ namespace mrv
                     CHECK_GL;
                     render->drawVideo(
                         {videoData},
-                        {math::Box2i(
-                                0, 0, renderSize.w, renderSize.h)},
+                        {math::Box2i(0, 0, renderSize.w, renderSize.h)},
                         {timeline::ImageOptions()},
                         {timeline::DisplayOptions()},
                         timeline::CompareOptions(),

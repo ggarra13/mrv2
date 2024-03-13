@@ -15,6 +15,7 @@ namespace mrv
 
     int Button::handle(int e)
     {
+        int ret = Fl_Button::handle(e);
         switch (e)
         {
         case FL_ENTER:
@@ -29,10 +30,7 @@ namespace mrv
             color(default_color);
             redraw();
             return 1;
-        case FL_KEYBOARD:
-            return 0;
         }
-        int ret = Fl_Button::handle(e);
         return ret;
     }
 

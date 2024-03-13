@@ -145,11 +145,11 @@ namespace mrv
     {
         TLRENDER_P();
 
-        const auto player = getTimelinePlayer();
-        if (!player)
+        if (!p.player)
             return;
 
-        player->undoAnnotation();
+        p.player->undoAnnotation();
+
         tcp->pushMessage("undo", 0);
         redrawWindows();
 
@@ -160,11 +160,10 @@ namespace mrv
     {
         TLRENDER_P();
 
-        const auto player = getTimelinePlayer();
-        if (!player)
+        if (!p.player)
             return;
 
-        player->redoAnnotation();
+        p.player->redoAnnotation();
         tcp->pushMessage("redo", 0);
         redrawWindows();
 
@@ -274,7 +273,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        const auto player = p.timelinePlayers[0];
+        const auto player = p.player;
         const auto& t = player->currentTime();
         const auto& time = t + otime::RationalTime(dx, t.rate());
         if (!player->isMuted() && p.ui->uiPrefs->uiPrefsScrubAutoPlay->value())
@@ -295,7 +294,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        if (p.timelinePlayers.empty())
+        if (!p.player)
             return;
 
         const int X = Fl::event_x() * pixels_per_unit();
@@ -326,7 +325,7 @@ namespace mrv
 
         TimelineClass* c = p.ui->uiTimeWindow;
 
-        if (p.timelinePlayers.empty())
+        if (!p.player)
         {
             c->uiPlayForwards->color(FL_BACKGROUND_COLOR);
             c->uiPlayBackwards->color(FL_BACKGROUND_COLOR);
@@ -341,7 +340,7 @@ namespace mrv
         c->uiPlayBackwards->color(FL_BACKGROUND_COLOR);
         c->uiStop->color(FL_BACKGROUND_COLOR);
         Fl_Color color = FL_YELLOW;
-        switch (p.timelinePlayers[0]->playback())
+        switch (p.player->playback())
         {
         case timeline::Playback::Forward:
             p.startTime = std::chrono::high_resolution_clock::now();
@@ -367,55 +366,58 @@ namespace mrv
     void TimelineViewport::startFrame() noexcept
     {
         TLRENDER_P();
-        for (const auto& i : p.timelinePlayers)
-        {
-            i->start();
-        }
-        updatePlaybackButtons();
+
         p.skippedFrames = 0;
+        
+        if (!p.player) return;
+
+        p.player->start();
+        updatePlaybackButtons();
     }
 
     void TimelineViewport::framePrev() noexcept
     {
         TLRENDER_P();
-        for (const auto& i : p.timelinePlayers)
-        {
-            i->framePrev();
-        }
-        updatePlaybackButtons();
         p.skippedFrames = 0;
+        
+        if (!p.player) return;
+
+        p.player->framePrev();
+        updatePlaybackButtons();
     }
 
     void TimelineViewport::frameNext() noexcept
     {
         TLRENDER_P();
-        for (const auto& i : p.timelinePlayers)
-        {
-            i->frameNext();
-        }
-        updatePlaybackButtons();
         p.skippedFrames = 0;
+        
+        if (!p.player) return;
+
+        p.player->frameNext();
+        updatePlaybackButtons();
     }
 
     void TimelineViewport::endFrame() noexcept
     {
         TLRENDER_P();
-        for (const auto& i : p.timelinePlayers)
-        {
-            i->end();
-        }
-        updatePlaybackButtons();
         p.skippedFrames = 0;
+        
+        if (!p.player)
+            return;
+
+        p.player->end();
+        updatePlaybackButtons();
     }
 
     void TimelineViewport::playBackwards() noexcept
     {
         TLRENDER_P();
         p.skippedFrames = 0;
-        for (const auto& i : p.timelinePlayers)
-        {
-            i->setPlayback(timeline::Playback::Reverse);
-        }
+
+        if (!p.player)
+            return;
+        
+        p.player->setPlayback(timeline::Playback::Reverse);
         togglePixelBar();
         updatePlaybackButtons();
         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
@@ -425,10 +427,11 @@ namespace mrv
     {
         TLRENDER_P();
         p.skippedFrames = 0;
-        for (const auto& i : p.timelinePlayers)
-        {
-            i->setPlayback(timeline::Playback::Stop);
-        }
+        if (!p.player)
+            return;
+        
+        p.player->setPlayback(timeline::Playback::Stop);
+        
         togglePixelBar();
         updatePlaybackButtons();
         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
@@ -438,10 +441,12 @@ namespace mrv
     {
         TLRENDER_P();
         p.skippedFrames = 0;
-        for (const auto& i : p.timelinePlayers)
-        {
-            i->setPlayback(timeline::Playback::Forward);
-        }
+
+        if (!p.player)
+            return;
+
+        p.player->setPlayback(timeline::Playback::Forward);
+        
         togglePixelBar();
         updatePlaybackButtons();
         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
@@ -451,12 +456,12 @@ namespace mrv
     {
         TLRENDER_P();
 
-        if (p.timelinePlayers.empty() ||
+        if (!p.player ||
             !p.ui->uiPrefs->uiPrefsAutoHidePixelBar->value() ||
             !p.ui->uiPrefs->uiPrefsPixelToolbar->value() || p.presentation)
             return;
 
-        auto playback = p.timelinePlayers[0]->playback();
+        auto playback = p.player->playback();
         if (playback == timeline::Playback::Stop)
         {
             if (!p.ui->uiPixelBar->visible())
@@ -473,10 +478,12 @@ namespace mrv
     {
         TLRENDER_P();
         p.skippedFrames = 0;
-        for (const auto& i : p.timelinePlayers)
-        {
-            i->togglePlayback();
-        }
+
+        if (!p.player)
+            return;
+        
+        p.player->togglePlayback();
+        
         togglePixelBar();
         updatePlaybackButtons();
         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
@@ -523,19 +530,6 @@ namespace mrv
             return;
 
         p.ocioOptions = value;
-
-#if 0
-        std::cerr << "p.ocioOptions.fileName="
-                  << p.ocioOptions.fileName << "." << std::endl
-                  << "p.ocioOptions.input="
-                  << p.ocioOptions.input << "." << std::endl
-                  << "p.ocioOptions.display="
-                  << p.ocioOptions.display << "." << std::endl
-                  << "p.ocioOptions.view="
-                  << p.ocioOptions.view << "." << std::endl
-                  << "p.ocioOptions.look="
-                  << p.ocioOptions.look << "." << std::endl;
-#endif
 
         p.ui->uiICS->copy_label(value.input.c_str());
         p.ui->OCIOView->copy_label(value.view.c_str());
@@ -602,7 +596,9 @@ namespace mrv
         TLRENDER_P();
         if (value == p.compareOptions)
             return;
+
         p.compareOptions = value;
+        
         redraw();
     }
 
@@ -616,65 +612,37 @@ namespace mrv
         redraw();
     }
 
-    void TimelineViewport::setTimelinePlayers(
-        const std::vector<TimelinePlayer*>& value, const bool primary) noexcept
+    void TimelineViewport::setTimelinePlayer(
+        TimelinePlayer* player, const bool primary) noexcept
     {
         TLRENDER_P();
 
-        if (p.timelinePlayers == value)
+        if (p.player == player)
             return;
 
-        p.timelinePlayers = value;
-        if (primary && !value.empty())
-        {
-            p.ui->uiTimeline->setTimelinePlayer(value[0]);
-        }
+        p.player = player;
 
         updateVideoLayers();
-        p.timelineSizes.clear();
-        p.videoData.resize(value.size());
-        int index = 0;
-        for (const auto player : p.timelinePlayers)
+
+        p.videoData.clear();
+        
+        if (player)
         {
-            if (player)
-            {
-                if (primary)
-                    player->setTimelineViewport(this);
-                else
-                    player->setSecondaryViewport(this);
-                const auto video = player->currentVideo();
-                if (time::isValid(video.time))
-                {
-                    p.videoData[index] = video;
-                }
-                ++index;
-                const auto& ioInfo = player->ioInfo();
-                if (!ioInfo.video.empty())
-                {
-                    p.timelineSizes.push_back(ioInfo.video[0].size);
-                }
-            }
-        }
-        if (p.frameView)
-        {
-            _getTags();
-            frameView();
+            if (primary)
+                player->setTimelineViewport(this);
+            else
+                player->setSecondaryViewport(this);
+
+            p.videoData = player->currentVideo();
         }
         
-        refreshWindows(); // needed - do not remove.
+        refreshWindows(); // needed We need to refresh, as the new
+                          // video data may have different sizes.
     }
 
     mrv::TimelinePlayer* TimelineViewport::getTimelinePlayer() const noexcept
     {
-        if (_p->timelinePlayers.empty())
-            return nullptr;
-        return _p->timelinePlayers[0];
-    }
-
-    std::vector< mrv::TimelinePlayer* >&
-    TimelineViewport::getTimelinePlayers() const noexcept
-    {
-        return _p->timelinePlayers;
+        return _p->player;
     }
 
     const math::Vector2i& TimelineViewport::viewPos() const noexcept
@@ -818,7 +786,7 @@ namespace mrv
             Fl_Widget* widget = Fl::belowmouse();
             if (widget != primary && (secondary && widget != secondary))
                 return;
-            if (!p.timelinePlayers.empty())
+            if (p.player)
                 cursor(FL_CURSOR_NONE);
         }
     }
@@ -886,133 +854,133 @@ namespace mrv
     }
 
     void TimelineViewport::currentVideoCallback(
-        const timeline::VideoData& value, const TimelinePlayer* sender) noexcept
+        const std::vector<timeline::VideoData>& values, const TimelinePlayer* sender) noexcept
     {
         TLRENDER_P();
-        const auto i = std::find(
-            p.timelinePlayers.begin(), p.timelinePlayers.end(), sender);
-        if (i != p.timelinePlayers.end())
+        p.videoData = values;
+
+        _getTags();
+        int layerId = sender->videoLayer();
+        p.missingFrame = false;
+        if (p.missingFrameType != MissingFrameType::kBlackFrame &&
+            !values[0].layers.empty())
         {
-            const size_t index = i - p.timelinePlayers.begin();
-            p.videoData[index] = value;
-            if (index == 0)
+            const auto& image = values[0].layers[0].image;
+            const auto& imageB = values[0].layers[0].imageB;
+            if ((!image || !image->isValid()) &&
+                (!imageB || !imageB->isValid()))
             {
-                _getTags();
-                    
-                int layerId = sender->videoLayer();
-                p.missingFrame = false;
-                if (p.missingFrameType != MissingFrameType::kBlackFrame &&
-                    !value.layers.empty())
+                p.missingFrame = true;
+                if (sender->playback() != timeline::Playback::Forward)
                 {
-                    const auto& image = value.layers[0].image;
-                    const auto& imageB = value.layers[0].imageB;
-                    if ((!image || !image->isValid()) &&
-                        (!imageB || !imageB->isValid()))
+                    io::Options ioOptions;
                     {
-                        p.missingFrame = true;
-                        if (sender->playback() != timeline::Playback::Forward)
-                        {
-                            io::Options ioOptions;
-                            {
-                                std::stringstream s;
-                                s << layerId;
-                                ioOptions["Layer"] = s.str();
-                            }
-                            const auto& timeline = sender->timeline();
-                            const auto& inOutRange = sender->inOutRange();
-                            auto currentTime = value.time;
-                            // Seek until we find a previous frame or reach
-                            // the beginning of the inOutRange.
-                            while (1)
-                            {
-                                currentTime -=
-                                    otio::RationalTime(1, currentTime.rate());
-                                const auto& videoData =
-                                    timeline->getVideo(currentTime, ioOptions)
-                                        .get();
-                                if (videoData.layers.empty())
-                                    continue;
-                                const auto& image = videoData.layers[0].image;
-                                if (image && image->isValid())
-                                {
-                                    p.lastVideoData = videoData;
-                                    break;
-                                }
-                                if (currentTime <= inOutRange.start_time())
-                                    break;
-                            }
-                        }
+                        std::stringstream s;
+                        s << layerId;
+                        ioOptions["Layer"] = s.str();
                     }
-                    else
+                    const auto& timeline = sender->timeline();
+                    const auto& inOutRange = sender->inOutRange();
+                    auto currentTime = values[0].time;
+                    // Seek until we find a previous frame or reach
+                    // the beginning of the inOutRange.
+                    while (1)
                     {
-                        if (sender->playback() == timeline::Playback::Forward)
-                        {
-                            p.lastVideoData = value;
-                        }
-                    }
-
-                
-                }
-
-                // Refresh media info panel if there's data window present
-                if (panel::imageInfoPanel)
-                {
-                    bool refresh = false;
-
-                    // If timeline is stopped or has a single frame,
-                    // refresh the media info panel.
-                    if (sender->playback() == timeline::Playback::Stop ||
-                        sender->timeRange().duration().value() == 1.0)
-                        refresh = true;
-                    
-                    // If timeline has a Data Window (it is an OpenEXR)
-                    // we also refresh the media info panel.
-                    auto i = p.tagData.find("Data Window");
-                    if (i != p.tagData.end())
-                        refresh = true;
-
-                    if (refresh)
-                    {
-                        panel::imageInfoPanel->refresh();
-                    }
-                }
-                    
-                if (p.selection.max.x != -1)
-                {
-                    if (!value.layers.empty())
-                    {
-                        const auto& image = value.layers[0].image;
+                        currentTime -=
+                            otio::RationalTime(1, currentTime.rate());
+                        const auto& videoData =
+                            timeline->getVideo(currentTime, ioOptions)
+                                .future.get();
+                        if (videoData.layers.empty())
+                            continue;
+                        const auto& image = videoData.layers[0].image;
                         if (image && image->isValid())
                         {
-                            const auto& videoSize = image->getSize();
-                            if (p.videoSize != videoSize)
-                            {
-                                math::Box2i area;
-                                area.max.x = -1;
-                                setSelectionArea(area);
-                                p.videoSize = videoSize;
-                            }
+                            p.lastVideoData = videoData;
+                            break;
                         }
+                        if (currentTime <= inOutRange.start_time())
+                            break;
                     }
                 }
-                if (p.ui->uiBottomBar->visible())
+            }
+            else
+            {
+                if (sender->playback() == timeline::Playback::Forward)
                 {
-                    TimelineClass* c = p.ui->uiTimeWindow;
-                    c->uiFrame->setTime(value.time);
-                    p.ui->uiTimeline->redraw();
+                    p.lastVideoData = values[0];
                 }
             }
-            redraw();
+                   
         }
+
+        // If we have a Video Rotation Metadata, extract its value from it.
+        auto i = p.tagData.find("Video Rotation");
+        p.videoRotation = 0.F;
+        if (i != p.tagData.end())
+        {
+            std::stringstream s(i->second);
+            s >> p.videoRotation;
+        }
+            
+        // Refresh media info panel if there's data window present
+        if (panel::imageInfoPanel)
+        {
+            bool refresh = false;
+            
+            // If timeline is stopped or has a single frame,
+            // refresh the media info panel.
+            if (sender->playback() == timeline::Playback::Stop ||
+                sender->timeRange().duration().value() == 1.0)
+                refresh = true;
+            
+            // If timeline has a Data Window (it is an OpenEXR)
+            // we also refresh the media info panel.
+            i = p.tagData.find("Data Window");
+            if (i != p.tagData.end())
+                refresh = true;
+
+            if (refresh)
+            {
+                panel::imageInfoPanel->refresh();
+            }
+        }
+                    
+        if (p.selection.max.x != -1)
+        {
+            if (!values[0].layers.empty())
+            {
+                const auto& image = values[0].layers[0].image;
+                if (image && image->isValid())
+                {
+                    const auto& videoSize = image->getSize();
+                    if (p.videoSize != videoSize)
+                    {
+                        math::Box2i area;
+                        area.max.x = -1;
+                        setSelectionArea(area);
+                        p.videoSize = videoSize;
+                    }
+                }
+            }
+        }
+        if (p.ui->uiBottomBar->visible())
+        {
+            TimelineClass* c = p.ui->uiTimeWindow;
+            c->uiFrame->setTime(values[0].time);
+            p.ui->uiTimeline->redraw();
+        }
+    
+        redraw();
     }
 
-    bool TimelineViewport::_isPlaybackStopped() const noexcept
+bool TimelineViewport::_isPlaybackStopped() const noexcept
     {
         TLRENDER_P();
         bool stopped = false;
-        if (!p.timelinePlayers.empty())
+        if (p.player)
         {
-            auto player = p.timelinePlayers[0];
+            const auto player = p.player;
             stopped = (player->playback() == timeline::Playback::Stop) ||
                       player->isStepping();
         }
@@ -1024,13 +992,11 @@ namespace mrv
         TLRENDER_P();
 
         bool single = false;
-        if (!p.timelinePlayers.empty())
+        if (p.player)
         {
-            auto player = p.timelinePlayers[0];
-
             // However, if the movie is a single frame long, we need to
             // update it
-            if (player->inOutRange().duration().to_frames() == 1)
+            if (p.player->inOutRange().duration().to_frames() == 1)
                 single = true;
         }
         return single;
@@ -1071,8 +1037,14 @@ namespace mrv
 
     math::Size2i TimelineViewport::getRenderSize() const noexcept
     {
-        return timeline::getRenderSize(
-            _p->compareOptions.mode, _p->timelineSizes);
+        TLRENDER_P();
+        math::Size2i out;
+        if (p.player)
+        {
+            out = timeline::getRenderSize(
+                p.compareOptions.mode, p.player->sizes());
+        }
+        return out;
     }
 
     float TimelineViewport::getRotation() const noexcept
@@ -1088,10 +1060,8 @@ namespace mrv
             return;
         
         p.rotation = x;
-        if (p.frameView)
-            frameView();
-        else
-            redrawWindows();
+        
+        redrawWindows();
         updatePixelBar();
         updateCoords();
     }
@@ -1135,30 +1105,37 @@ namespace mrv
         const auto renderSize = getRenderSize();
         const float rotation = p.rotation + p.videoRotation;
         
-        float zoom;
+        float zoom = 1.0;
 
         if (rotation == 90.F || rotation == -90.F)
         {
-            zoom = viewportSize.h / static_cast<float>(renderSize.w);
-            if (zoom * renderSize.h > viewportSize.w)
+            if (renderSize.w > 0)
             {
-                zoom = viewportSize.w / static_cast<float>(renderSize.h);
+                zoom = viewportSize.h / static_cast<float>(renderSize.w);
+                if (renderSize.h > 0 && zoom * renderSize.h > viewportSize.w)
+                {
+                    zoom = viewportSize.w / static_cast<float>(renderSize.h);
+                }
             }
         }
         else
         {
-            zoom = viewportSize.h / static_cast<float>(renderSize.h);
-            if (zoom * renderSize.w > viewportSize.w)
+            if (renderSize.h > 0)
             {
-                zoom = viewportSize.w / static_cast<float>(renderSize.w);
+                zoom = viewportSize.h / static_cast<float>(renderSize.h);
+                if (renderSize.w > 0 && zoom * renderSize.w > viewportSize.w)
+                {
+                    zoom = viewportSize.w / static_cast<float>(renderSize.w);
+                }
             }
         }
         
+        
         const math::Vector2i c(renderSize.w / 2, renderSize.h / 2);
-        const math::Vector2i pos(
+        const math::Vector2i viewPos(
             viewportSize.w / 2.F - c.x * zoom,
             viewportSize.h / 2.F - c.y * zoom);
-        setViewPosAndZoom(pos, zoom);
+        setViewPosAndZoom(viewPos, zoom);
 
         p.mousePos = _getFocus();
         redraw();
@@ -1210,7 +1187,7 @@ namespace mrv
         // Take into account the different UI bars
         if (p.ui->uiMenuGroup->visible())
             H += p.ui->uiMenuGroup->h();
-
+        
         if (p.ui->uiTopBar->visible())
             H += p.ui->uiTopBar->h();
 
@@ -1285,12 +1262,6 @@ namespace mrv
         mw->resize(posX, posY, W, H);
 
         p.ui->uiRegion->layout();
-
-        if (p.frameView)
-        {
-            frameView();
-            p.frameView = alwaysFrameView;
-        }
     }
 
     math::Vector2i TimelineViewport::_getFocus(int X, int Y) const noexcept
@@ -1835,8 +1806,11 @@ namespace mrv
         for (const auto& video : videos)
         {
             name = video.name;
-            if (name == "Default")
+            
+            if (name == "B,G,R" || name == "R,G,B" || name == "Default")
                 name = _("Color");
+            else if (name == "A,B,G,R")
+                name = "R,G,B,A";
 
             p.ui->uiColorChannel->add(name.c_str());
         }
@@ -1940,13 +1914,6 @@ namespace mrv
         if (p.presentation == active)
             return;
 
-#if 0
-        std::cerr << std::endl
-                  << __FUNCTION__ << " active=" << active << std::endl
-                  << "p.fullScreen=" << p.fullScreen << std::endl
-                  << "p.presentation=" << p.presentation << std::endl;
-#endif
-
         if (!active)
         {
             if (!p.fullScreen)
@@ -1989,13 +1956,6 @@ namespace mrv
     void TimelineViewport::setFullScreenMode(bool active) noexcept
     {
         TLRENDER_P();
-
-#if 0
-        std::cerr << std::endl
-                  << __FUNCTION__ << " active=" << active << std::endl
-                  << "p.fullScreen=" << p.fullScreen << std::endl
-                  << "p.presentation=" << p.presentation << std::endl;
-#endif
 
         MainWindow* w = p.ui->uiMain;
         if (!active)
@@ -2053,8 +2013,10 @@ namespace mrv
             layer = 0;
 
         std::string name = videos[layer].name;
-        if (name == "A,B,G,R" || name == "B,G,R" || name == "Default")
+        if (name == "B,G,R" || name == "R,G,B" || name == "Default")
             name = "Color";
+        else if (name == "A,B,G,R")
+            name = "R,G,B,A";
 
         switch (d.channels)
         {
@@ -2809,14 +2771,12 @@ namespace mrv
         
         p.tagData.clear();
 
-        if (p.timelinePlayers.empty())
+        if (!p.player)
             return;
-
-        auto sender = p.timelinePlayers[0];
         
         char buf[1024];
         
-        const auto& player = sender->player();
+        const auto& player = p.player->player();
         const auto& info = player->getIOInfo();
         for (const auto& tag : info.tags)
         {

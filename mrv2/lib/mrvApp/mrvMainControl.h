@@ -19,7 +19,7 @@ namespace mrv
         ~MainControl();
 
         //! Set the timeline players.
-        void setTimelinePlayers(const std::vector<mrv::TimelinePlayer*>&);
+        void setPlayer(mrv::TimelinePlayer*);
 
         void setLUTOptions(const timeline::LUTOptions& value);
         void setDisplayOptions(const timeline::DisplayOptions& value);

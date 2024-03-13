@@ -123,15 +123,11 @@ namespace mrv
         void setStereo3DOptions(const Stereo3DOptions&) noexcept;
 
         //! Set the timeline players.
-        void setTimelinePlayers(
-            const std::vector<TimelinePlayer*>&,
-            const bool primary = true) noexcept;
+        void
+        setTimelinePlayer(TimelinePlayer*, const bool primary = true) noexcept;
 
         //! Get one of the timeline players.  Index is not checked.
         mrv::TimelinePlayer* getTimelinePlayer() const noexcept;
-
-        //! Return all timeline playrers associatied to this view.
-        std::vector<mrv::TimelinePlayer*>& getTimelinePlayers() const noexcept;
 
         //! Return if safe areas are active
         bool getSafeAreas() const noexcept;
@@ -255,7 +251,7 @@ namespace mrv
         void currentTimeChanged(const otime::RationalTime&) const noexcept;
 
         void currentVideoCallback(
-            const tl::timeline::VideoData&,
+            const std::vector<tl::timeline::VideoData>&,
             const TimelinePlayer* sender) noexcept;
 
         //! Set the OCIO configuration from the GUI.
