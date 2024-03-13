@@ -1496,9 +1496,7 @@ namespace mrv
                 auto pixelType = video.pixelType;
                 std::size_t size = tl::image::getDataByteCount(video);
                 double frames = bytes / static_cast<double>(size);
-                std::cerr << "frames    = " << frames << std::endl;
                 seconds = frames / p.player->defaultSpeed();
-                std::cerr << "seconds   = " << seconds << std::endl;
             }
             
             if (ioInfo.audio.isValid())
@@ -1519,27 +1517,18 @@ namespace mrv
             const double totalTime = readAhead + readBehind;
             const double readAheadPct = readAhead / totalTime;
             const double readBehindPct = readBehind / totalTime;
-            std::cerr << "readAheadPct  = " << readAheadPct << std::endl;
-            std::cerr << "readBehindPct = " << readBehindPct << std::endl;
             
             readAhead = seconds * readAheadPct;
             readBehind = seconds * readBehindPct;
-            std::cerr << "readAhead  mem= " << readAhead << std::endl;
-            std::cerr << "readBehind mem= " << readBehind << std::endl;
 
 
             const auto& timeRange = p.player->inOutRange();
             const auto duration = timeRange.duration().to_seconds();
-            std::cerr << "clip duration = " << duration << std::endl;
 
             if (readAhead > duration * readAheadPct)
                 readAhead = duration * readAheadPct;
             if (readBehind > duration * readBehindPct)
                 readBehind = duration * readBehindPct;
-            
-            
-            std::cerr << "readAhead  MAX= " << readAhead << std::endl;
-            std::cerr << "readBehind MAX= " << readBehind << std::endl;
 
             options.readAhead = otime::RationalTime(readAhead, 1.0);
             options.readBehind = otime::RationalTime(readBehind, 1.0);

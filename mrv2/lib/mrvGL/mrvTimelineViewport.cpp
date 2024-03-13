@@ -858,8 +858,6 @@ namespace mrv
     {
         TLRENDER_P();
         p.videoData = values;
-        std::cerr << "Callback videoData.size=" << values.size()
-                  << std::endl;
 
         _getTags();
         int layerId = sender->videoLayer();
