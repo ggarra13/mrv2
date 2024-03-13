@@ -1346,13 +1346,14 @@ namespace mrv
             }
             player->setCompare(compare);
             player->setCompareTime(p.filesModel->getCompareTime());
-            if (ui->uiView->hasFrameView())
-                ui->uiView->frameView();
         }
-        
+            
         if (p.mainControl)
         {
             p.mainControl->setPlayer(player.get());
+        
+            if (ui->uiView->hasFrameView())
+                ui->uiView->frameView();
         }
 
         p.activeFiles = activeFiles;
