@@ -952,9 +952,7 @@ namespace mrv
         }
 
         // Refresh media info panel if there's data window present
-        if (panel::imageInfoPanel && !p.videoData.empty() &&
-            !p.videoData[0].layers.empty() &&
-            p.videoData[0].layers[0].image)
+        if (panel::imageInfoPanel)
         {
             bool refresh = false;
             
@@ -966,18 +964,15 @@ namespace mrv
 
             // If timeline has a Data Window (it is an OpenEXR)
             // we also refresh the media info panel.
-            const auto& tags =
-                p.videoData[0].layers[0].image->getTags();
-            
-            auto i = tags.find("Video Rotation");
-            if (i != tags.end())
+            auto i = p.tagData.find("Video Rotation");
+            if (i != p.tagData.end())
             {
                 std::stringstream s(i->second);
                 s >> p.videoRotation;
             }
             
-            i = tags.find("Data Window");
-            if (i != tags.end())
+            i = p.tagData.find("Data Window");
+            if (i != p.tagData.end())
                 refresh = true;
 
             if (refresh)
