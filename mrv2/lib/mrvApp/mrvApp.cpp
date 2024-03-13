@@ -130,9 +130,9 @@ namespace mrv
         unsigned port = 55150;
 #endif
 
-        timeline::CompareMode compareMode = timeline::CompareMode::A;
-        math::Vector2f wipeCenter = math::Vector2f(.5F, .5F);
-        float wipeRotation = 0.F;
+        timeline::CompareOptions compareOptions;
+
+        
         double speed = 0.0;
         timeline::Playback playback = timeline::Playback::Count;
         timeline::Loop loop = timeline::Loop::Count;
@@ -286,18 +286,23 @@ namespace mrv
                         p.options.compareFileName, {"-compare", "-b"},
                         _("A/B comparison \"B\" file name.")),
                     app::CmdLineValueOption<timeline::CompareMode>::create(
-                        p.options.compareMode, {"-compareMode", "-c"},
-                        _("A/B comparison mode."),
-                        string::Format("{0}").arg(p.options.compareMode),
+                        p.options.compareOptions.mode,
+                        {"-compareMode", "-c"}, _("A/B comparison mode."),
+                        string::Format("{0}").arg(
+                            p.options.compareOptions.mode),
                         string::join(timeline::getCompareModeLabels(), ", ")),
                     app::CmdLineValueOption<math::Vector2f>::create(
-                        p.options.wipeCenter, {"-wipeCenter", "-wc"},
+                        p.options.compareOptions.wipeCenter,
+                        {"-wipeCenter", "-wc"},
                         _("A/B comparison wipe center."),
-                        string::Format("{0}").arg(p.options.wipeCenter)),
+                        string::Format("{0}").arg(
+                            p.options.compareOptions.wipeCenter)),
                     app::CmdLineValueOption<float>::create(
-                        p.options.wipeRotation, {"-wipeRotation", "-wr"},
+                        p.options.compareOptions.wipeRotation,
+                        {"-wipeRotation", "-wr"},
                         _("A/B comparison wipe rotation."),
-                        string::Format("{0}").arg(p.options.wipeRotation)),
+                        string::Format("{0}").arg(
+                            p.options.compareOptions.wipeRotation)),
                     app::CmdLineFlagOption::create(
                         p.options.otioEditMode, {"-editMode", "-e"},
                         _("OpenTimelineIO Edit mode.")),
@@ -320,19 +325,16 @@ namespace mrv
                         _("Set the in/out points range.")),
                     app::CmdLineValueOption<std::string>::create(
                         p.options.ocioOptions.input,
-                        { "-ocioInput", "-ics", "-oi" },
+                        {"-ocioInput", "-ics", "-oi"},
                         _("OpenColorIO input color space.")),
                     app::CmdLineValueOption<std::string>::create(
-                        p.options.ocioOptions.display,
-                        { "-ocioDisplay", "-od" },
+                        p.options.ocioOptions.display, {"-ocioDisplay", "-od"},
                         _("OpenColorIO display name.")),
                     app::CmdLineValueOption<std::string>::create(
-                        p.options.ocioOptions.view,
-                        { "-ocioView", "-ov" },
+                        p.options.ocioOptions.view, {"-ocioView", "-ov"},
                         _("OpenColorIO view name.")),
                     app::CmdLineValueOption<std::string>::create(
-                        p.options.ocioOptions.look,
-                        { "-ocioLook", "-ol" },
+                        p.options.ocioOptions.look, {"-ocioLook", "-ol"},
                         _("OpenColorIO look name.")),
                     app::CmdLineValueOption<std::string>::create(
                         p.options.lutOptions.fileName, {"-lut"},
@@ -639,9 +641,9 @@ namespace mrv
             p.filesModel->observeCompareTime(),
             [this](timeline::CompareTimeMode value)
             {
-                if (_p->player)
+                if (auto player = _p->player.get())
                 {
-                    _p->player->setCompareTime(value);
+                    player->setCompareTime(value);
                 }
             });
         
@@ -697,36 +699,30 @@ namespace mrv
                 }
             }
 
-            if (p.player)
+            if (auto player = p.player.get())
             {
                 if (p.options.speed > 0.0)
                 {
-                    p.player->setSpeed(p.options.speed);
+                    player->setSpeed(p.options.speed);
                 }
                 if (time::isValid(p.options.inOutRange))
                 {
-                    p.player->setInOutRange(p.options.inOutRange);
-                    p.player->seek(
-                        p.options.inOutRange.start_time());
+                    player->setInOutRange(p.options.inOutRange);
+                    player->seek(p.options.inOutRange.start_time());
                 }
                 if (time::isValid(p.options.seek))
                 {
-                    p.player->seek(p.options.seek);
+                    player->seek(p.options.seek);
                 }
                 if (p.options.loop != timeline::Loop::Count)
-                    p.player->setLoop(p.options.loop);
+                    player->setLoop(p.options.loop);
             }
         }
 
         if (!p.options.compareFileName.empty())
         {
-            timeline::CompareOptions compareOptions;
-            compareOptions.mode = p.options.compareMode;
-            compareOptions.wipeCenter = p.options.wipeCenter;
-            compareOptions.wipeRotation = p.options.wipeRotation;
-            p.filesModel->setCompareOptions(compareOptions);
             open(p.options.compareFileName);
-
+            p.filesModel->setCompareOptions(p.options.compareOptions);
             size_t numFiles = p.filesModel->observeFiles()->getSize();
             p.filesModel->setB(numFiles - 1, true);
         }
@@ -1251,7 +1247,7 @@ namespace mrv
         std::shared_ptr<TimelinePlayer> player;
         if (!activeFiles.empty())
         {
-            if (!p.activeFiles.empty() && activeFiles[0] == p.activeFiles[0])
+            if (!p.activeFiles.empty() && p.player)
             {
                 player = p.player;
                 
@@ -1263,6 +1259,11 @@ namespace mrv
                 p.activeFiles[0]->audioOffset = player->audioOffset();
                 p.activeFiles[0]->annotations = player->getAllAnnotations();
                 p.activeFiles[0]->ocioIcs = image::ocioIcs();
+            }
+            
+            if (!p.activeFiles.empty() && activeFiles[0] == p.activeFiles[0])
+            {
+                // Intentionally left blanck
             }
             else
             {
@@ -1318,6 +1319,7 @@ namespace mrv
                             player->setMute(p.mute);
                             player->setAudioOffset(item->audioOffset);
                             player->setAllAnnotations(item->annotations);
+                            player->seek(item->currentTime);
                             player->setPlayback(item->playback);
                         }
                     }
@@ -1338,13 +1340,16 @@ namespace mrv
                 if (j != p.files.end())
                 {
                     auto timeline = p.timelines[j - p.files.begin()];
+                    auto info = timeline->getIOInfo();
                     compare.push_back(timeline);
                 }
             }
             player->setCompare(compare);
             player->setCompareTime(p.filesModel->getCompareTime());
+            if (ui->uiView->hasFrameView())
+                ui->uiView->frameView();
         }
-            
+        
         if (p.mainControl)
         {
             p.mainControl->setPlayer(player.get());

@@ -2,6 +2,8 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <iostream>
+
 #include "mrvButton.h"
 
 namespace mrv
@@ -15,6 +17,7 @@ namespace mrv
 
     int Button::handle(int e)
     {
+        int ret = Fl_Button::handle(e);
         switch (e)
         {
         case FL_ENTER:
@@ -29,10 +32,7 @@ namespace mrv
             color(default_color);
             redraw();
             return 1;
-        case FL_KEYBOARD:
-            return 0;
         }
-        int ret = Fl_Button::handle(e);
         return ret;
     }
 

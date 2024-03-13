@@ -531,19 +531,6 @@ namespace mrv
 
         p.ocioOptions = value;
 
-#if 0
-        std::cerr << "p.ocioOptions.fileName="
-                  << p.ocioOptions.fileName << "." << std::endl
-                  << "p.ocioOptions.input="
-                  << p.ocioOptions.input << "." << std::endl
-                  << "p.ocioOptions.display="
-                  << p.ocioOptions.display << "." << std::endl
-                  << "p.ocioOptions.view="
-                  << p.ocioOptions.view << "." << std::endl
-                  << "p.ocioOptions.look="
-                  << p.ocioOptions.look << "." << std::endl;
-#endif
-
         p.ui->uiICS->copy_label(value.input.c_str());
         p.ui->OCIOView->copy_label(value.view.c_str());
 
@@ -609,7 +596,9 @@ namespace mrv
         TLRENDER_P();
         if (value == p.compareOptions)
             return;
+
         p.compareOptions = value;
+        
         redraw();
     }
 
@@ -639,7 +628,6 @@ namespace mrv
         }
 
         updateVideoLayers();
-        p.timelineSizes.clear();
         p.videoData.clear();
         int index = 0;
         if (player)
@@ -648,18 +636,9 @@ namespace mrv
                 player->setTimelineViewport(this);
             else
                 player->setSecondaryViewport(this);
-            const auto video = player->currentVideo();
-            p.videoData = video;
-            const auto& ioInfo = player->ioInfo();
-            if (!ioInfo.video.empty())
-            {
-                p.timelineSizes.push_back(ioInfo.video[0].size);
-            }
+            p.videoData = player->currentVideo();
         }
-        if (p.frameView)
-        {
-            frameView();
-        }
+        
         if (p.ui->uiColorChannel->children() == 0)
         {
             p.ui->uiColorChannel->copy_label(_("(no image)"));
@@ -895,7 +874,7 @@ namespace mrv
         p.videoData = values;
         if (p.videoData.empty())
             return;
-        
+
         _getTags();
         int layerId = sender->videoLayer();
         p.missingFrame = false;
@@ -1072,8 +1051,14 @@ bool TimelineViewport::_isPlaybackStopped() const noexcept
 
     math::Size2i TimelineViewport::getRenderSize() const noexcept
     {
-        return timeline::getRenderSize(
-            _p->compareOptions.mode, _p->timelineSizes);
+        TLRENDER_P();
+        math::Size2i out;
+        if (p.player)
+        {
+            out = timeline::getRenderSize(
+                p.compareOptions.mode, p.player->sizes());
+        }
+        return out;
     }
 
     float TimelineViewport::getRotation() const noexcept
@@ -1089,10 +1074,8 @@ bool TimelineViewport::_isPlaybackStopped() const noexcept
             return;
         
         p.rotation = x;
-        if (p.frameView)
-            frameView();
-        else
-            redrawWindows();
+        
+        redrawWindows();
         updatePixelBar();
         updateCoords();
     }
@@ -1136,30 +1119,37 @@ bool TimelineViewport::_isPlaybackStopped() const noexcept
         const auto renderSize = getRenderSize();
         const float rotation = p.rotation + p.videoRotation;
         
-        float zoom;
+        float zoom = 1.0;
 
         if (rotation == 90.F || rotation == -90.F)
         {
-            zoom = viewportSize.h / static_cast<float>(renderSize.w);
-            if (zoom * renderSize.h > viewportSize.w)
+            if (renderSize.w > 0)
             {
-                zoom = viewportSize.w / static_cast<float>(renderSize.h);
+                zoom = viewportSize.h / static_cast<float>(renderSize.w);
+                if (renderSize.h > 0 && zoom * renderSize.h > viewportSize.w)
+                {
+                    zoom = viewportSize.w / static_cast<float>(renderSize.h);
+                }
             }
         }
         else
         {
-            zoom = viewportSize.h / static_cast<float>(renderSize.h);
-            if (zoom * renderSize.w > viewportSize.w)
+            if (renderSize.h > 0)
             {
-                zoom = viewportSize.w / static_cast<float>(renderSize.w);
+                zoom = viewportSize.h / static_cast<float>(renderSize.h);
+                if (renderSize.w > 0 && zoom * renderSize.w > viewportSize.w)
+                {
+                    zoom = viewportSize.w / static_cast<float>(renderSize.w);
+                }
             }
         }
         
+        
         const math::Vector2i c(renderSize.w / 2, renderSize.h / 2);
-        const math::Vector2i pos(
+        const math::Vector2i viewPos(
             viewportSize.w / 2.F - c.x * zoom,
             viewportSize.h / 2.F - c.y * zoom);
-        setViewPosAndZoom(pos, zoom);
+        setViewPosAndZoom(viewPos, zoom);
 
         p.mousePos = _getFocus();
         redraw();
@@ -1286,12 +1276,6 @@ bool TimelineViewport::_isPlaybackStopped() const noexcept
         mw->resize(posX, posY, W, H);
 
         p.ui->uiRegion->layout();
-
-        if (p.frameView)
-        {
-            frameView();
-            p.frameView = alwaysFrameView;
-        }
     }
 
     math::Vector2i TimelineViewport::_getFocus(int X, int Y) const noexcept
@@ -1934,13 +1918,6 @@ bool TimelineViewport::_isPlaybackStopped() const noexcept
         if (p.presentation == active)
             return;
 
-#if 0
-        std::cerr << std::endl
-                  << __FUNCTION__ << " active=" << active << std::endl
-                  << "p.fullScreen=" << p.fullScreen << std::endl
-                  << "p.presentation=" << p.presentation << std::endl;
-#endif
-
         if (!active)
         {
             if (!p.fullScreen)
@@ -1983,13 +1960,6 @@ bool TimelineViewport::_isPlaybackStopped() const noexcept
     void TimelineViewport::setFullScreenMode(bool active) noexcept
     {
         TLRENDER_P();
-
-#if 0
-        std::cerr << std::endl
-                  << __FUNCTION__ << " active=" << active << std::endl
-                  << "p.fullScreen=" << p.fullScreen << std::endl
-                  << "p.presentation=" << p.presentation << std::endl;
-#endif
 
         MainWindow* w = p.ui->uiMain;
         if (!active)

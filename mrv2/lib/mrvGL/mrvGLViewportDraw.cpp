@@ -40,7 +40,7 @@ namespace mrv
 
         gl.render->drawVideo(
             {p.videoData[left]},
-            timeline::getBoxes(timeline::CompareMode::A, p.timelineSizes),
+            timeline::getBoxes(timeline::CompareMode::A, p.player->sizes()),
             p.imageOptions, p.displayOptions);
 
         if (p.stereo3DOptions.eyeSeparation != 0.F)
@@ -54,7 +54,7 @@ namespace mrv
         glColorMask(GL_FALSE, GL_TRUE, GL_TRUE, GL_TRUE);
         gl.render->drawVideo(
             {p.videoData[right]},
-            timeline::getBoxes(timeline::CompareMode::A, p.timelineSizes),
+            timeline::getBoxes(timeline::CompareMode::A, p.player->sizes()),
             p.imageOptions, p.displayOptions);
 
         glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
@@ -70,7 +70,7 @@ namespace mrv
 
         gl.render->drawVideo(
             {p.videoData[left]},
-            timeline::getBoxes(timeline::CompareMode::A, p.timelineSizes),
+            timeline::getBoxes(timeline::CompareMode::A, p.player->sizes()),
             p.imageOptions, p.displayOptions);
 
         glEnable(GL_STENCIL_TEST);
@@ -107,7 +107,7 @@ namespace mrv
 
         gl.render->drawVideo(
             {p.videoData[right]},
-            timeline::getBoxes(timeline::CompareMode::A, p.timelineSizes),
+            timeline::getBoxes(timeline::CompareMode::A, p.player->sizes()),
             p.imageOptions, p.displayOptions);
 
         glDisable(GL_STENCIL_TEST);
@@ -123,7 +123,7 @@ namespace mrv
 
         gl.render->drawVideo(
             {p.videoData[left]},
-            timeline::getBoxes(timeline::CompareMode::A, p.timelineSizes),
+            timeline::getBoxes(timeline::CompareMode::A, p.player->sizes()),
             p.imageOptions, p.displayOptions);
 
         glEnable(GL_STENCIL_TEST);
@@ -168,7 +168,7 @@ namespace mrv
 
         gl.render->drawVideo(
             {p.videoData[right]},
-            timeline::getBoxes(timeline::CompareMode::A, p.timelineSizes),
+            timeline::getBoxes(timeline::CompareMode::A, p.player->sizes()),
             p.imageOptions, p.displayOptions);
 
         glDisable(GL_STENCIL_TEST);
@@ -184,7 +184,7 @@ namespace mrv
 
         gl.render->drawVideo(
             {p.videoData[left]},
-            timeline::getBoxes(timeline::CompareMode::A, p.timelineSizes),
+            timeline::getBoxes(timeline::CompareMode::A, p.player->sizes()),
             p.imageOptions, p.displayOptions);
 
         glEnable(GL_STENCIL_TEST);
@@ -221,7 +221,7 @@ namespace mrv
 
         gl.render->drawVideo(
             {p.videoData[right]},
-            timeline::getBoxes(timeline::CompareMode::A, p.timelineSizes),
+            timeline::getBoxes(timeline::CompareMode::A, p.player->sizes()),
             p.imageOptions, p.displayOptions);
 
         glDisable(GL_STENCIL_TEST);
@@ -259,7 +259,7 @@ namespace mrv
                 gl.render->drawVideo(
                     {p.videoData[left]},
                     timeline::getBoxes(
-                        timeline::CompareMode::A, p.timelineSizes),
+                        timeline::CompareMode::A, p.player->sizes()),
                     p.imageOptions, p.displayOptions, p.compareOptions,
                     p.backgroundOptions);
             }
@@ -287,7 +287,7 @@ namespace mrv
 
             gl.render->drawVideo(
                 {p.videoData[right]},
-                timeline::getBoxes(timeline::CompareMode::A, p.timelineSizes),
+                timeline::getBoxes(timeline::CompareMode::A, p.player->sizes()),
                 p.imageOptions, p.displayOptions);
 
             _drawOverlays(renderSize);
@@ -334,7 +334,7 @@ namespace mrv
 
         gl.render->drawVideo(
             {p.lastVideoData},
-            timeline::getBoxes(p.compareOptions.mode, p.timelineSizes),
+            timeline::getBoxes(p.compareOptions.mode, p.player->sizes()),
             p.imageOptions, p.displayOptions, p.compareOptions,
             p.backgroundOptions);
 

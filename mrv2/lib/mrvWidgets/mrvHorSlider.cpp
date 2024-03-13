@@ -45,7 +45,9 @@ namespace mrv
             X + Xoffset + 50, Y, W - Xoffset - 50 - 13, H);
         uiSlider = uiSliderW;
         uiSlider->when(FL_WHEN_CHANGED);
-        auto uiResetW = new Widget<Fl_Button>(X + W - 13, Y, 10, H, "@-31+");
+
+        X = uiSlider->x() + uiSlider->w() + 3;
+        auto uiResetW = new Widget<Fl_Button>(X, Y, 10, H, "@-31+");
         uiReset = uiResetW;
         uiReset->box(FL_NO_BOX);
         uiReset->tooltip(_("Reset to default value"));

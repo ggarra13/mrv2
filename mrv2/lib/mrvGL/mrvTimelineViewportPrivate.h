@@ -36,7 +36,6 @@ namespace mrv
 
         float       videoRotation = 0.F;
         TimelinePlayer* player = nullptr;
-        std::vector<image::Size> timelineSizes;
 
         math::Vector2i viewPos;
         float viewZoom = 1.F;

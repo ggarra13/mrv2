@@ -228,6 +228,11 @@ namespace mrv
         return _p->player->getIOInfo();
     }
 
+    std::vector<image::Size> TimelinePlayer::sizes() const
+    {
+        return _p->player->getSizes();
+    }
+
     double TimelinePlayer::defaultSpeed() const
     {
         return _p->player->getDefaultSpeed();
@@ -549,11 +554,15 @@ namespace mrv
 
     void TimelinePlayer::setCompare(const std::vector<std::shared_ptr<timeline::Timeline> >& value)
     {
+        // @todo: network check
+        // pushMessage("setCompare", value);
         _p->player->setCompare(value);
     }
     
     void TimelinePlayer::setCompareTime(timeline::CompareTimeMode value)
     {
+        // @todo: network check
+        // pushMessage("setCompareTime", value);
         _p->player->setCompareTime(value);
     }
 
@@ -565,7 +574,8 @@ namespace mrv
 
     void TimelinePlayer::setCompareVideoLayers(const std::vector<int>& value)
     {
-        //pushMessage("setCompareVideoLayer", value);
+        // @todo: network check
+        pushMessage("setCompareVideoLayer", value);
         _p->player->setCompareVideoLayers(value);
     }
 

@@ -516,6 +516,11 @@ namespace mrv
         }
     }
 
+    const timeline::CompareOptions& FilesModel::getCompareOptions() const
+    {
+        return _p->compareOptions->get();
+    }
+    
     std::shared_ptr<observer::IValue<timeline::CompareOptions> >
     FilesModel::observeCompareOptions() const
     {
@@ -557,22 +562,6 @@ namespace mrv
         }
     }
 
-    std::shared_ptr<observer::IValue<Stereo3DOptions> >
-    FilesModel::observeStereo3DOptions() const
-    {
-        return _p->stereo3DOptions;
-    }
-
-    void FilesModel::setStereo3DOptions(const Stereo3DOptions& value)
-    {
-        TLRENDER_P();
-        if (p.stereo3DOptions->setIfChanged(value))
-        {
-            p.active->setIfChanged(_getActive());
-            p.layers->setIfChanged(_getLayers());
-        }
-    }
-
     std::shared_ptr<observer::IValue<FilesPanelOptions> >
     FilesModel::observeFilesPanelOptions() const
     {
@@ -600,6 +589,22 @@ namespace mrv
     {
         TLRENDER_P();
         p.compareTime->setIfChanged(value);
+    }
+    
+    std::shared_ptr<observer::IValue<Stereo3DOptions> >
+    FilesModel::observeStereo3DOptions() const
+    {
+        return _p->stereo3DOptions;
+    }
+
+    void FilesModel::setStereo3DOptions(const Stereo3DOptions& value)
+    {
+        TLRENDER_P();
+        if (p.stereo3DOptions->setIfChanged(value))
+        {
+            p.active->setIfChanged(_getActive());
+            p.layers->setIfChanged(_getLayers());
+        }
     }
     
     int FilesModel::_index(const std::shared_ptr<FilesModelItem>& item) const

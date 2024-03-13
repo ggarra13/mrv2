@@ -63,6 +63,9 @@ namespace mrv
         //! the first clip in the timeline.
         const tl::io::Info& ioInfo() const;
 
+        //! Get the timeline sizes.
+        std::vector<image::Size> sizes() const;
+        
         ///@}
 
         //! \name Playback
