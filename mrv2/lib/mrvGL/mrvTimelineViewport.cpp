@@ -657,6 +657,7 @@ namespace mrv
         }
         if (p.frameView)
         {
+            _getTags();
             frameView();
         }
         
@@ -897,14 +898,6 @@ namespace mrv
             if (index == 0)
             {
                 _getTags();
-
-                auto i = p.tagData.find("Video Rotation");
-                p.videoRotation = 0.F;
-                if (i != p.tagData.end())
-                {
-                    std::stringstream s(i->second);
-                    s >> p.videoRotation;
-                }
                     
                 int layerId = sender->videoLayer();
                 p.missingFrame = false;
@@ -974,7 +967,7 @@ namespace mrv
                     
                     // If timeline has a Data Window (it is an OpenEXR)
                     // we also refresh the media info panel.
-                    i = p.tagData.find("Data Window");
+                    auto i = p.tagData.find("Data Window");
                     if (i != p.tagData.end())
                         refresh = true;
 
@@ -2844,6 +2837,14 @@ namespace mrv
             {
                 p.tagData[tag.first] = tag.second;
             }
+        }
+
+        auto i = p.tagData.find("Video Rotation");
+        p.videoRotation = 0.F;
+        if (i != p.tagData.end())
+        {
+            std::stringstream s(i->second);
+            s >> p.videoRotation;
         }
     }
     
