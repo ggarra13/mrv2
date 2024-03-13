@@ -53,6 +53,8 @@ v1.0.9
 - Fixed a focus issue on Linux when using a draw tool, then typing into one
   input widget in the toolbar and going back to the view window not ending the
   draw tool, but continue its trace.
+- Fixed Text annotations when image was rotated jumping to the wrong location
+  on confirmation.
 - Entering a Text annotation on the viewport can be confirmed by doing
   SHIFT + Enter.
 - Added FFmpeg's actual version information, not just each library.
