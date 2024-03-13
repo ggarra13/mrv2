@@ -11,16 +11,8 @@
 // tlRender's OpenGL 3 freetype routines
 #define USE_OPENGL2 1
 
-#define USE_GL_DRAW_COLOR_MESH 1
-
-// macOS seems to have a problem with drawColorMesh resulting in meshes
-// not being colored.
-#ifdef __APPLE__
-#    undef USE_GL_DRAW_COLOR_MESH
-#endif
-
 // Set it to debug OpenGL issues with the CHECK_GL macro.
-// #define USE_GL_CHECKS 1
+//#define USE_GL_CHECKS 1
 
 // On debug builds, we always use GL checks.
 #ifndef NDEBUG

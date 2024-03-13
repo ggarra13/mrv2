@@ -280,7 +280,6 @@ namespace mrv
             delete p.box->image();
             p.box->image(nullptr);
         }
-        make_current();
     }
 
     bool TimelineWidget::isEditable() const

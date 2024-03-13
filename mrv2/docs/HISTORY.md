@@ -64,6 +64,15 @@ v1.0.9
   a line can be cut in half.
 - Fixed gcc version information in mrv2's About Window.  It was showing the
   __GLIBCXX__ instead.
+- Improved the look of HorSlider widget.  Now the X to reset to defaults is
+  a tad to the right.
+- Fixed selection of Wipe mode which would not work after scrolling in the
+  docker (FLTK bug?).
+- Made Compare options automatically frame the view if View->Auto Frame is
+  on.
+- Improved the playback performance of the viewer a tad.
+- Fixed an OpenGL flickering of the timeline and sometimes of the main viewport
+  when the secondary window was opened and then closed.
 
 
 v1.0.8
@@ -1128,6 +1137,9 @@ v0.6.3
 - Fixed scratched frames showing up on .otio files with gaps in them.
 - Fixed preferences not hiding the different bars anymore (regression in
   v0.6.2).
+- Fixed Layer menu popup displaying "Default" for movies instead of "Color".
+- Fixed Layer menu popup allowing you to change the layer when a single layer
+  was available.
 
 
 v0.6.2

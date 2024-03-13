@@ -830,6 +830,13 @@ namespace mrv
         {
             window->hide();
             ui->uiView->take_focus();
+
+            // These are needed to clean the resources and avoid
+            // OpenGL flickering.
+            ui->uiView->refresh();
+            ui->uiView->valid(0);
+            ui->uiTimeline->refresh();
+            ui->uiTimeline->valid(0);
         }
         else
         {

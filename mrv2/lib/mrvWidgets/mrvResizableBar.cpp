@@ -8,8 +8,6 @@
 //     https://www.fltk.org/bugs.php
 //
 
-#include <iostream>
-
 #include <FL/Fl.H>
 #include <FL/Fl_Scroll.H>
 #include <FL/Fl_Box.H>
