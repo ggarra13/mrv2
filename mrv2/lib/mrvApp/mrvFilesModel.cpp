@@ -660,26 +660,9 @@ namespace mrv
     {
         TLRENDER_P();
         std::vector<int> out;
-        if (p.a->get())
+        for (const auto& f : p.files->get())
         {
-            out.push_back(p.a->get()->videoLayer);
-        }
-        switch (p.compareOptions->get().mode)
-        {
-        case timeline::CompareMode::B:
-        case timeline::CompareMode::Wipe:
-        case timeline::CompareMode::Overlay:
-        case timeline::CompareMode::Difference:
-        case timeline::CompareMode::Horizontal:
-        case timeline::CompareMode::Vertical:
-        case timeline::CompareMode::Tile:
-            for (const auto& b : p.b->get())
-            {
-                out.push_back(b->videoLayer);
-            }
-            break;
-        default:
-            break;
+            out.push_back(f->videoLayer);
         }
         return out;
     }

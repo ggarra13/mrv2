@@ -1351,9 +1351,15 @@ namespace mrv
         if (p.mainControl)
         {
             p.mainControl->setPlayer(player.get());
-        
-            if (ui->uiView->hasFrameView())
-                ui->uiView->frameView();
+
+            auto view = ui->uiView;
+            if (view->hasFrameView())
+                view->frameView();
+
+            if (ui->uiSecondary && ui->uiSecondary->viewport())
+                view = ui->uiSecondary->viewport();
+            if (view->hasFrameView())
+                view->frameView();
         }
 
         p.activeFiles = activeFiles;

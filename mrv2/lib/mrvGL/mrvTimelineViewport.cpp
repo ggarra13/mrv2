@@ -1201,7 +1201,7 @@ bool TimelineViewport::_isPlaybackStopped() const noexcept
         // Take into account the different UI bars
         if (p.ui->uiMenuGroup->visible())
             H += p.ui->uiMenuGroup->h();
-
+        
         if (p.ui->uiTopBar->visible())
             H += p.ui->uiTopBar->h();
 
