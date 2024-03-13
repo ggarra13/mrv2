@@ -2,8 +2,6 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <iostream>
-
 #include <FL/Fl_Window.H>
 #include <FL/fl_draw.H>
 #include <FL/Fl.H>

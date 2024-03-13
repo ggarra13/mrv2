@@ -6,9 +6,6 @@
 #include <cstdlib>
 #include <cstdio>
 
-#include <iostream>
-using namespace std;
-
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Window.H>
 #include <FL/fl_draw.H>

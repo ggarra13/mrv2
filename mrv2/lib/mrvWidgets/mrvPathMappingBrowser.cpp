@@ -2,9 +2,6 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <iostream>
-
-#include <FL/names.h>
 #include <FL/Fl.H>
 #include <FL/Fl_Double_Window.H>
 

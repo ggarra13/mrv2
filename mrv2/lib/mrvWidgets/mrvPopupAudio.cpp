@@ -2,10 +2,9 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <iostream>
+#include <FL/Fl_Menu_Item.H>
 
 #include "mrvWidgets/mrvPopupAudio.h"
-#include <FL/Fl_Menu_Item.H>
 
 namespace mrv
 {

@@ -3,7 +3,6 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #include <cmath>
-#include <iostream>
 #include <iomanip>
 #include <sstream>
 

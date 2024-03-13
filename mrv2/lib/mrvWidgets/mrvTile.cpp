@@ -70,7 +70,6 @@
   See also the complete example program in test/tile.cxx.
 */
 
-#include <iostream>
 #include <vector>
 
 #include <mrvWidgets/mrvTile.h>

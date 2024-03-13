@@ -15,7 +15,7 @@ extern Fl_Widget* fl_did_clipping;
 namespace mrv
 {
 
-    static mrv::PopupMenu* pressed_menu_button_ = NULL;
+    static PopupMenu* pressed_menu_button_ = NULL;
 
     /*! The little down-arrow indicator can be replaced by setting a new
       glyph() function and making it draw whatever you want.
@@ -76,6 +76,10 @@ namespace mrv
     const Fl_Menu_Item* PopupMenu::popup()
     {
         menu_end();
+        
+        if (children() <= 2)
+            return nullptr;
+        
         const Fl_Menu_Item* m;
         pressed_menu_button_ = this;
         redraw();

@@ -13,10 +13,7 @@
 // them on each redraw (only if box() is zero)
 // Bugs: ?
 
-#include <iostream>
-
 #include <FL/Fl.H>
-#include <FL/names.h>
 #include <FL/fl_draw.H>
 
 #include "mrvPack.h"

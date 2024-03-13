@@ -627,9 +627,10 @@ namespace mrv
             p.ui->uiTimeline->setTimelinePlayer(player);
         }
 
-        updateVideoLayers();
         p.videoData.clear();
-        int index = 0;
+        
+        updateVideoLayers();
+        
         if (player)
         {
             if (primary)
@@ -638,18 +639,6 @@ namespace mrv
                 player->setSecondaryViewport(this);
             p.videoData = player->currentVideo();
         }
-        
-        if (p.ui->uiColorChannel->children() == 0)
-        {
-            p.ui->uiColorChannel->copy_label(_("(no image)"));
-        }
-        else
-        {
-            const Fl_Menu_Item* m = p.ui->uiColorChannel->child(0);
-            p.ui->uiColorChannel->copy_label(m->text);
-        }
-
-        p.ui->uiColorChannel->redraw();
         
         refreshWindows(); // needed - do not remove.
     }
@@ -1820,17 +1809,24 @@ bool TimelineViewport::_isPlaybackStopped() const noexcept
         for (const auto& video : videos)
         {
             name = video.name;
-            if ((pos = name.find("A,B,G,R")) != std::string::npos)
-                name.replace(pos, 7, _("Color"));
-            else if ((pos = name.find("B,G,R")) != std::string::npos)
-                name.replace(pos, 5, _("Color"));
-            else if (name == "Default")
+            if (name == "Default")
                 name = _("Color");
 
             p.ui->uiColorChannel->add(name.c_str());
         }
 
         p.ui->uiColorChannel->menu_end();
+
+        
+        if (p.ui->uiColorChannel->children() == 0)
+        {
+            p.ui->uiColorChannel->copy_label(_("(no image)"));
+        }
+        else
+        {
+            const Fl_Menu_Item* item = p.ui->uiColorChannel->child(idx);
+            p.ui->uiColorChannel->copy_label(item->label());
+        }
     }
 
     // This function is needed to force the repositioning of the window/view
@@ -2017,7 +2013,7 @@ bool TimelineViewport::_isPlaybackStopped() const noexcept
             layer = 0;
 
         std::string name = videos[layer].name;
-        if (name == "A,B,G,R" || name == "B,G,R")
+        if (name == "A,B,G,R" || name == "B,G,R" || name == "Default")
             name = "Color";
 
         switch (d.channels)

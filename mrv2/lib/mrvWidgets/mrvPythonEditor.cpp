@@ -4,7 +4,6 @@
 
 #include <cstring>
 
-#include <iostream>
 #include <string>
 
 #include "mrvFl/mrvIO.h"

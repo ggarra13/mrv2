@@ -18,7 +18,7 @@ namespace mrv
     public:
         GLWindow(int X, int Y, int W, int H, const char* L = 0);
         GLWindow(int W, int H, const char* L = 0);
-
+        
         void make_current();
     };
 } // namespace mrv
