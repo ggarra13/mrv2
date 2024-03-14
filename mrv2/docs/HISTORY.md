@@ -79,6 +79,8 @@ v1.0.9
 - Fixed cursor not showing in panels when drawing was enabled.
 - Improved the performance of adding clips to an EDL Playlist.  There's no more
   flickering.
+- Fixed thumbnails in the Files and Stereo panels resetting to their
+  start time, instead of showing their current time.
 
 
 v1.0.8

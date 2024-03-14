@@ -468,8 +468,6 @@ namespace mrv
             otio::RationalTime time = otio::RationalTime(0.0, 1.0);
 
             const auto player = p.ui->uiView->getTimelinePlayer();
-            if (player)
-                time = player->currentTime();
 
             image::Size size(128, 64);
 
@@ -508,7 +506,9 @@ namespace mrv
                     b->value(1);
                 }
 
-                if (!found)
+                if (found && player)
+                    time = player->currentTime();
+                else
                     time = media->currentTime;
 
                 const std::string& layer = getLayerName(media, layerId);

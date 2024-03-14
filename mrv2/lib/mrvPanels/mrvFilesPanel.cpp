@@ -479,12 +479,12 @@ namespace mrv
                 else
                 {
                     b->value(1);
+                    if (player)
+                    {
+                        time = player->currentTime();
+                    }
                 }
 
-                if (player)
-                {
-                    time = player->currentTime();
-                }
                 layerId = p.ui->uiColorChannel->value();
 
                 if (auto context = _r->context.lock())
