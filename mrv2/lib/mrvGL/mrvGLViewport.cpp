@@ -44,15 +44,6 @@
 #include <FL/platform.H>
 #undef None
 
-#ifdef FLTK_USE_X11
-#    include <X11/Xlib.h>
-#    include <GL/glx.h>
-#endif
-
-#ifdef FLTK_USE_WAYLAND
-#    include <EGL/egl.h>
-#endif
-
 namespace
 {
     const char* kModule = "view";

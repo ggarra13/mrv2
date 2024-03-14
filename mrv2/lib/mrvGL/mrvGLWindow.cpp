@@ -5,7 +5,6 @@
 #include <FL/platform.H>
 
 #ifdef FLTK_USE_X11
-#    include <X11/Xlib.h>
 #    include <GL/glx.h>
 #endif
 
