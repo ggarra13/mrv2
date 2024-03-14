@@ -800,7 +800,6 @@ namespace mrv
         // Not required, but nice
         NDIlib_destroy();
 #endif
-        p.mainControl->setPlayer(nullptr);
 
         delete p.mainControl;
         p.mainControl = nullptr;
