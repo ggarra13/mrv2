@@ -1247,26 +1247,27 @@ namespace mrv
         std::shared_ptr<TimelinePlayer> player;
         if (!activeFiles.empty())
         {
-            if (!p.activeFiles.empty() && p.player)
-            {
-                player = p.player;
                 
-                p.activeFiles[0]->speed = player->speed();
-                p.activeFiles[0]->playback = player->playback();
-                p.activeFiles[0]->loop = player->loop();
-                p.activeFiles[0]->currentTime = player->currentTime();
-                p.activeFiles[0]->inOutRange = player->inOutRange();
-                p.activeFiles[0]->audioOffset = player->audioOffset();
-                p.activeFiles[0]->annotations = player->getAllAnnotations();
-                p.activeFiles[0]->ocioIcs = image::ocioIcs();
-            }
-            
             if (!p.activeFiles.empty() && activeFiles[0] == p.activeFiles[0])
             {
                 player = p.player;
             }
             else
-            {
+            {   
+                if (!p.activeFiles.empty() && p.player)
+                {
+                    player = p.player;
+                    
+                    p.activeFiles[0]->speed = player->speed();
+                    p.activeFiles[0]->playback = player->playback();
+                    p.activeFiles[0]->loop = player->loop();
+                    p.activeFiles[0]->currentTime = player->currentTime();
+                    p.activeFiles[0]->inOutRange = player->inOutRange();
+                    p.activeFiles[0]->audioOffset = player->audioOffset();
+                    p.activeFiles[0]->annotations = player->getAllAnnotations();
+                    p.activeFiles[0]->ocioIcs = image::ocioIcs();
+                }
+            
                 auto i = std::find(p.files.begin(), p.files.end(),
                                    activeFiles[0]);
                 if (i != p.files.end())
@@ -1302,7 +1303,8 @@ namespace mrv
                                 player->setPlayback(timeline::Playback::Forward);
                             }
                     
-                            // Add the new file to recent files, unless it is an EDL.
+                            // Add the new file to recent files, unless it is
+                            // an EDL.
                             if (!file::isTemporaryEDL(item->path) &&
                                 !file::isTemporaryNDI(item->path))
                             {
@@ -1485,7 +1487,7 @@ namespace mrv
             
             // Update the I/O cache.
             auto ioSystem = _context->getSystem<io::System>();
-            ioSystem->getCache()->setMax(1.0 * memory::gigabyte);
+            ioSystem->getCache()->setMax(bytes);
 
             const auto timeline = p.player->timeline();
             const auto ioInfo = timeline->getIOInfo();
@@ -1509,26 +1511,15 @@ namespace mrv
                 seconds -= size / 1024.0 / 1024.0;
             }
 
+            double ahead = timeline::PlayerCacheOptions().readAhead.value();
+            double behind = timeline::PlayerCacheOptions().readBehind.value();
 
-
-            double readAhead = options.readAhead.value();
-            double readBehind = options.readBehind.value();
+            const double totalTime = ahead + behind;
+            const double readAheadPct = ahead / totalTime;
+            const double readBehindPct = behind / totalTime;
             
-            const double totalTime = readAhead + readBehind;
-            const double readAheadPct = readAhead / totalTime;
-            const double readBehindPct = readBehind / totalTime;
-            
-            readAhead = seconds * readAheadPct;
-            readBehind = seconds * readBehindPct;
-
-
-            const auto& timeRange = p.player->inOutRange();
-            const auto duration = timeRange.duration().to_seconds();
-
-            if (readAhead > duration * readAheadPct)
-                readAhead = duration * readAheadPct;
-            if (readBehind > duration * readBehindPct)
-                readBehind = duration * readBehindPct;
+            const double readAhead = seconds * readAheadPct;
+            const double readBehind = seconds * readBehindPct;
 
             options.readAhead = otime::RationalTime(readAhead, 1.0);
             options.readBehind = otime::RationalTime(readBehind, 1.0);
