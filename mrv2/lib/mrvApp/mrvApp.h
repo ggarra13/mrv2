@@ -24,7 +24,7 @@ class ViewerUI;
 namespace mrv
 {
     using namespace tl;
-    
+
     class OutputDevice;
 
     struct Playlist;
@@ -84,7 +84,7 @@ namespace mrv
 
         //! Whether FLTK is running.
         bool isRunning() const;
-        
+
     public:
         //! Open a file (with optional audio) or directory.
         void open(const std::string&, const std::string& = std::string());
@@ -163,18 +163,21 @@ namespace mrv
         otime::RationalTime _cacheReadAhead() const;
         otime::RationalTime _cacheReadBehind() const;
 
-        void
-        _filesUpdate(const std::vector<std::shared_ptr<FilesModelItem> >&);
+        void _filesUpdate(const std::vector<std::shared_ptr<FilesModelItem> >&);
 
         void
         _activeUpdate(const std::vector<std::shared_ptr<FilesModelItem> >&);
-        
+
         void _layersUpdate(const std::vector<int>& value);
 
         void _audioUpdate();
 
-        void _playerOptions(timeline::PlayerOptions& playerOptions,
-                            const std::shared_ptr<FilesModelItem>& item);
+        std::shared_ptr<timeline::Timeline>
+        _createTimeline(const std::shared_ptr<FilesModelItem>& item);
+
+        void _playerOptions(
+            timeline::PlayerOptions& playerOptions,
+            const std::shared_ptr<FilesModelItem>& item);
 
         TLRENDER_PRIVATE();
     };
