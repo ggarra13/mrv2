@@ -76,6 +76,8 @@ v1.0.9
 - Improved the playback performance of the viewer a tad.
 - Fixed an OpenGL flickering of the timeline and sometimes of the main viewport
   when the secondary window was opened and then closed.
+- Improved the performance of adding clips to an EDL Playlist.  There's no more
+  flickering.
 
 
 v1.0.8
