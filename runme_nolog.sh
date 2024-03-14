@@ -121,6 +121,10 @@ if [ -z "$TLRENDER_WAYLAND" ]; then
     export TLRENDER_WAYLAND=ON
 fi
 
+if [ -z "$TLRENDER_X11" ]; then
+    export TLRENDER_X11=ON
+fi
+
 if [ -z "$TLRENDER_YASM" ]; then
     export TLRENDER_YASM=ON
 fi
@@ -141,12 +145,13 @@ echo
 
 mkdir -p $BUILD_DIR/install
 
-if [[ $KERNEL == *Linux* ]]; then
+#if [[ $KERNEL == *Linux* ]]; then
     echo "Common options"
     echo
     echo "Wayland support .................... ${TLRENDER_WAYLAND} 	(TLRENDER_WAYLAND)"
+    echo "X11 support ........................ ${TLRENDER_X11}     	(TLRENDER_X11)"
     echo
-fi
+#fi
 
 echo "mrv2 Options"
 echo 
