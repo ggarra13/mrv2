@@ -59,7 +59,7 @@ namespace mrv
         void debug(const char* text) const;
 
         int handle(int e) override;
-        
+
         // Get the toolwindow or null if docked
         DragButton* get_dragger() const { return dragger; }
         Fl_Group* get_group() const { return group; }
@@ -99,7 +99,7 @@ namespace mrv
         inline void clear() { pack->clear(); }
         inline void begin() { pack->begin(); }
         void end();
-        void resize(int X, int Y, int W, int H);
+        void resize(int X, int Y, int W, int H) FL_OVERRIDE;
         inline void resizable(Fl_Widget* box) { pack->resizable(box); }
         inline void resizable(Fl_Widget& box) { pack->resizable(box); }
         inline Fl_Widget* resizable() const { return pack->resizable(); }
