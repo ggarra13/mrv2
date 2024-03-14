@@ -58,6 +58,8 @@ namespace mrv
         // Debug element sizes
         void debug(const char* text) const;
 
+        int handle(int e) override;
+        
         // Get the toolwindow or null if docked
         DragButton* get_dragger() const { return dragger; }
         Fl_Group* get_group() const { return group; }

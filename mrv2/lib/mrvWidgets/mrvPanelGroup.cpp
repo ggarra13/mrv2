@@ -431,5 +431,14 @@ namespace mrv
     {
         PanelWindow::hide_all();
     }
+    
+    //! hide all the active floating windows
+    int PanelGroup::handle(int e)
+    {
+        int ret = Fl_Group::handle(e);
+        auto win = window();
+        if (win) win->cursor(FL_CURSOR_DEFAULT);
+        return ret;
+    }
 
 } // namespace mrv
