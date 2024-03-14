@@ -14,7 +14,6 @@
 
 #include <tlTimeline/Util.h>
 
-
 #ifdef MRV2_PYBIND11
 #    include <pybind11/embed.h>
 namespace py = pybind11;
@@ -67,7 +66,7 @@ namespace py = pybind11;
 #include "mrViewer.h"
 
 // we include it here to avoid tl::image and mrv::image clashes
-#include "mrvFl/mrvOCIO.h" 
+#include "mrvFl/mrvOCIO.h"
 
 #include <FL/platform.H>
 #include <FL/filename.H>
@@ -132,7 +131,6 @@ namespace mrv
 
         timeline::CompareOptions compareOptions;
 
-        
         double speed = 0.0;
         timeline::Playback playback = timeline::Playback::Count;
         timeline::Loop loop = timeline::Loop::Count;
@@ -189,7 +187,8 @@ namespace mrv
         std::vector<std::shared_ptr<timeline::Timeline> > timelines;
 
         std::shared_ptr<observer::ListObserver<int> > layersObserver;
-        std::shared_ptr<observer::ValueObserver<timeline::CompareTimeMode> > compareTimeObserver;
+        std::shared_ptr<observer::ValueObserver<timeline::CompareTimeMode> >
+            compareTimeObserver;
         timeline::LUTOptions lutOptions;
         timeline::ImageOptions imageOptions;
         timeline::DisplayOptions displayOptions;
@@ -286,8 +285,8 @@ namespace mrv
                         p.options.compareFileName, {"-compare", "-b"},
                         _("A/B comparison \"B\" file name.")),
                     app::CmdLineValueOption<timeline::CompareMode>::create(
-                        p.options.compareOptions.mode,
-                        {"-compareMode", "-c"}, _("A/B comparison mode."),
+                        p.options.compareOptions.mode, {"-compareMode", "-c"},
+                        _("A/B comparison mode."),
                         string::Format("{0}").arg(
                             p.options.compareOptions.mode),
                         string::join(timeline::getCompareModeLabels(), ", ")),
@@ -632,21 +631,19 @@ namespace mrv
 
         p.layersObserver = observer::ListObserver<int>::create(
             p.filesModel->observeLayers(),
-            [this](const std::vector<int>& value)
-            {
-                _layersUpdate(value);
-            });
-        
-        p.compareTimeObserver = observer::ValueObserver<timeline::CompareTimeMode>::create(
-            p.filesModel->observeCompareTime(),
-            [this](timeline::CompareTimeMode value)
-            {
-                if (auto player = _p->player.get())
+            [this](const std::vector<int>& value) { _layersUpdate(value); });
+
+        p.compareTimeObserver =
+            observer::ValueObserver<timeline::CompareTimeMode>::create(
+                p.filesModel->observeCompareTime(),
+                [this](timeline::CompareTimeMode value)
                 {
-                    player->setCompareTime(value);
-                }
-            });
-        
+                    if (auto player = _p->player.get())
+                    {
+                        player->setCompareTime(value);
+                    }
+                });
+
         p.logObserver = observer::ListObserver<log::Item>::create(
             ui->app->getContext()->getLogSystem()->observeLog(),
             [this](const std::vector<log::Item>& value)
@@ -777,17 +774,15 @@ namespace mrv
         {
             if (!p.options.ocioOptions.input.empty())
                 image::setOcioIcs(p.options.ocioOptions.input);
-                
+
             if (!p.options.ocioOptions.look.empty())
                 image::setOcioLook(p.options.ocioOptions.look);
-                
+
             if (!p.options.ocioOptions.display.empty() &&
                 !p.options.ocioOptions.view.empty())
             {
-                const std::string& merged =
-                    image::ocioDisplayViewShortened
-                    (p.options.ocioOptions.display,
-                     p.options.ocioOptions.view);
+                const std::string& merged = image::ocioDisplayViewShortened(
+                    p.options.ocioOptions.display, p.options.ocioOptions.view);
                 image::setOcioView(merged);
             }
         }
@@ -1167,7 +1162,7 @@ namespace mrv
                 timelines[i] = p.timelines[j - p.files.begin()];
             }
         }
-            
+
         for (size_t i = 0; i < files.size(); ++i)
         {
             if (!timelines[i])
@@ -1175,41 +1170,11 @@ namespace mrv
                 const auto& item = files[i];
                 try
                 {
-                    timeline::Options options;
-                        
-                    options.fileSequenceAudio =
-                        static_cast<timeline::FileSequenceAudio>(
-                            p.settings->getValue<int>("FileSequence/Audio"));
-                    options.fileSequenceAudioFileName =
-                        p.settings->getValue<std::string>(
-                            "FileSequence/AudioFileName");
-                    options.fileSequenceAudioDirectory =
-                        p.settings->getValue<std::string>(
-                            "FileSequence/AudioDirectory");
-
-                    options.videoRequestCount =
-                        p.settings->getValue<int>("Performance/VideoRequestCount");
-                    options.audioRequestCount =
-                        p.settings->getValue<int>("Performance/AudioRequestCount");
-
-                    options.ioOptions = _getIOOptions();
-                    options.pathOptions.maxNumberDigits = std::min(
-                        p.settings->getValue<int>("Misc/MaxFileSequenceDigits"),
-                        255);
-                        
-                    auto otioTimeline =
-                        item->audioPath.isEmpty()
-                        ? timeline::create(item->path, _context, options)
-                        : timeline::create(
-                            item->path, item->audioPath, _context, options);
-                        
-                    timelines[i] =
-                        timeline::Timeline::create(otioTimeline, _context, options);
+                    timelines[i] = _createTimeline(item);
                     for (const auto& video : timelines[i]->getIOInfo().video)
                     {
                         files[i]->videoLayers.push_back(video.name);
                     }
-
                 }
                 catch (const std::exception& e)
                 {
@@ -1218,9 +1183,9 @@ namespace mrv
             }
         }
 
-        p.files     = files;
+        p.files = files;
         p.timelines = timelines;
-            
+
         panel::refreshThumbnails();
     }
 
@@ -1239,6 +1204,38 @@ namespace mrv
             p.settings->getValue<int>("Performance/AudioBufferFrameCount");
     }
 
+    std::shared_ptr<timeline::Timeline>
+    App::_createTimeline(const std::shared_ptr<FilesModelItem>& item)
+    {
+        TLRENDER_P();
+
+        timeline::Options options;
+
+        options.fileSequenceAudio = static_cast<timeline::FileSequenceAudio>(
+            p.settings->getValue<int>("FileSequence/Audio"));
+        options.fileSequenceAudioFileName =
+            p.settings->getValue<std::string>("FileSequence/AudioFileName");
+        options.fileSequenceAudioDirectory =
+            p.settings->getValue<std::string>("FileSequence/AudioDirectory");
+
+        options.videoRequestCount =
+            p.settings->getValue<int>("Performance/VideoRequestCount");
+        options.audioRequestCount =
+            p.settings->getValue<int>("Performance/AudioRequestCount");
+
+        options.ioOptions = _getIOOptions();
+        options.pathOptions.maxNumberDigits = std::min(
+            p.settings->getValue<int>("Misc/MaxFileSequenceDigits"), 255);
+
+        auto otioTimeline =
+            item->audioPath.isEmpty()
+                ? timeline::create(item->path, _context, options)
+                : timeline::create(
+                      item->path, item->audioPath, _context, options);
+
+        return timeline::Timeline::create(otioTimeline, _context, options);
+    }
+
     void App::_activeUpdate(
         const std::vector<std::shared_ptr<FilesModelItem> >& activeFiles)
     {
@@ -1247,17 +1244,17 @@ namespace mrv
         std::shared_ptr<TimelinePlayer> player;
         if (!activeFiles.empty())
         {
-                
+
             if (!p.activeFiles.empty() && activeFiles[0] == p.activeFiles[0])
             {
                 player = p.player;
             }
             else
-            {   
+            {
                 if (!p.activeFiles.empty() && p.player)
                 {
                     player = p.player;
-                    
+
                     p.activeFiles[0]->speed = player->speed();
                     p.activeFiles[0]->playback = player->playback();
                     p.activeFiles[0]->loop = player->loop();
@@ -1267,9 +1264,9 @@ namespace mrv
                     p.activeFiles[0]->annotations = player->getAllAnnotations();
                     p.activeFiles[0]->ocioIcs = image::ocioIcs();
                 }
-            
-                auto i = std::find(p.files.begin(), p.files.end(),
-                                   activeFiles[0]);
+
+                auto i =
+                    std::find(p.files.begin(), p.files.end(), activeFiles[0]);
                 if (i != p.files.end())
                 {
                     const auto& item = *i;
@@ -1277,13 +1274,22 @@ namespace mrv
                     {
                         timeline::PlayerOptions playerOptions;
                         _playerOptions(playerOptions, item);
-                        auto timeline = p.timelines[i - p.files.begin()];
+
+                        bool isEDL = file::isTemporaryEDL(item->path);
+                        size_t idx = i - p.files.begin();
+
+                        if (isEDL)
+                        {
+                            p.timelines[i - p.files.begin()] =
+                                _createTimeline(item);
+                        }
+
+                        auto timeline = p.timelines[idx];
                         player.reset(new TimelinePlayer(
-                                         timeline::Player::create(timeline,
-                                                                  _context,
-                                                                  playerOptions),
-                                         _context));
-                        
+                            timeline::Player::create(
+                                timeline, _context, playerOptions),
+                            _context));
+
                         item->timeRange = player->timeRange();
                         item->ioInfo = player->ioInfo();
                         if (!item->init)
@@ -1295,14 +1301,15 @@ namespace mrv
                             item->currentTime = player->currentTime();
                             item->inOutRange = player->inOutRange();
                             item->audioOffset = player->audioOffset();
-                            
+
                             bool autoPlayback =
                                 ui->uiPrefs->uiPrefsAutoPlayback->value();
                             if (autoPlayback)
                             {
-                                player->setPlayback(timeline::Playback::Forward);
+                                player->setPlayback(
+                                    timeline::Playback::Forward);
                             }
-                    
+
                             // Add the new file to recent files, unless it is
                             // an EDL.
                             if (!file::isTemporaryEDL(item->path) &&
@@ -1338,7 +1345,8 @@ namespace mrv
             std::vector<std::shared_ptr<timeline::Timeline> > compare;
             for (size_t i = 1; i < activeFiles.size(); ++i)
             {
-                auto j = std::find(p.files.begin(), p.files.end(), activeFiles[i]);
+                auto j =
+                    std::find(p.files.begin(), p.files.end(), activeFiles[i]);
                 if (j != p.files.end())
                 {
                     auto timeline = p.timelines[j - p.files.begin()];
@@ -1349,7 +1357,7 @@ namespace mrv
             player->setCompare(compare);
             player->setCompareTime(p.filesModel->getCompareTime());
         }
-            
+
         if (p.mainControl)
         {
             p.mainControl->setPlayer(player.get());
@@ -1368,7 +1376,7 @@ namespace mrv
         p.player = player;
 
         _layersUpdate(p.filesModel->observeLayers()->get());
-            
+
         if (ui)
         {
             if (player)
@@ -1484,7 +1492,7 @@ namespace mrv
                     p.settings->getValue<int>("NDI/GBytes"));
                 bytes = NDIGbytes * memory::gigabyte;
             }
-            
+
             // Update the I/O cache.
             auto ioSystem = _context->getSystem<io::System>();
             ioSystem->getCache()->setMax(bytes);
@@ -1500,7 +1508,7 @@ namespace mrv
                 double frames = bytes / static_cast<double>(size);
                 seconds = frames / p.player->defaultSpeed();
             }
-            
+
             if (ioInfo.audio.isValid())
             {
                 const auto& audio = ioInfo.audio;
@@ -1517,14 +1525,14 @@ namespace mrv
             const double totalTime = ahead + behind;
             const double readAheadPct = ahead / totalTime;
             const double readBehindPct = behind / totalTime;
-            
+
             const double readAhead = seconds * readAheadPct;
             const double readBehind = seconds * readBehindPct;
 
             options.readAhead = otime::RationalTime(readAhead, 1.0);
             options.readBehind = otime::RationalTime(readBehind, 1.0);
         }
-        
+
         p.player->setCacheOptions(options);
     }
 
@@ -1537,7 +1545,7 @@ namespace mrv
             p.player->setVolume(p.volume);
             p.player->setMute(p.mute);
         }
-        
+
 #ifdef TLRENDER_BMD
         if (p.outputDevice)
         {
@@ -1548,7 +1556,7 @@ namespace mrv
         }
 #endif
     }
-    
+
     void App::_layersUpdate(const std::vector<int>& value)
     {
         TLRENDER_P();
@@ -1556,19 +1564,23 @@ namespace mrv
         {
             int videoLayer = 0;
             std::vector<int> compareVideoLayers;
-            if (!value.empty() && value.size() == p.files.size() && !p.activeFiles.empty())
+            if (!value.empty() && value.size() == p.files.size() &&
+                !p.activeFiles.empty())
             {
-                auto i = std::find(p.files.begin(), p.files.end(), p.activeFiles.front());
+                auto i = std::find(
+                    p.files.begin(), p.files.end(), p.activeFiles.front());
                 if (i != p.files.end())
                 {
                     videoLayer = value[i - p.files.begin()];
                 }
                 for (size_t j = 1; j < p.activeFiles.size(); ++j)
                 {
-                    i = std::find(p.files.begin(), p.files.end(), p.activeFiles[j]);
+                    i = std::find(
+                        p.files.begin(), p.files.end(), p.activeFiles[j]);
                     if (i != p.files.end())
                     {
-                        compareVideoLayers.push_back(value[i - p.files.begin()]);
+                        compareVideoLayers.push_back(
+                            value[i - p.files.begin()]);
                     }
                 }
             }

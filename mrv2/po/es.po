@@ -6411,7 +6411,6 @@ msgstr "Alternar Ventana de Acerca de mrv2"
 #~ msgid "Expanded OCIO config to:"
 #~ msgstr "Config OCIO expandida a:"
 
-#, c-format
 #~ msgid "Frame %<PRId64> "
 #~ msgstr "Cuadro %<PRId64> "
 
@@ -6427,11 +6426,9 @@ msgstr "Alternar Ventana de Acerca de mrv2"
 #~ msgid "Memory without Compression"
 #~ msgstr "Memoria sin Compresión"
 
-#, c-format
 #~ msgid "%.3f %s  (%.2f %% of memory size)"
 #~ msgstr "%.3f %s  (%.2f %% del tamaño de memoria)"
 
-#, c-format
 #~ msgid "%4.8g %%"
 #~ msgstr "%4.8g %%"
 

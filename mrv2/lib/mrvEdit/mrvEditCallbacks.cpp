@@ -2045,8 +2045,6 @@ namespace mrv
             destItem->inOutRange = timeRange;
             destItem->speed = videoRate;
 
-            clone_and_replace_cb(nullptr, ui);
-
             ui->uiView->valid(0); // needed
             ui->uiView->redraw(); // needed
 
