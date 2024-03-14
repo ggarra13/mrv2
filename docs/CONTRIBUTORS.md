@@ -9,4 +9,5 @@ Manolo Guoy <manolo.gouy@gmail.com>
 Matthias Melcher
 MoAlyousef <may642.2000@gmail.com>
 Roy Nieterau
+Sam Richards <sam.richards@taurich.org>
 Todica Ionut
