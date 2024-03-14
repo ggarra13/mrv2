@@ -437,7 +437,8 @@ namespace mrv
     {
         int ret = Fl_Group::handle(e);
         auto win = window();
-        if (win) win->cursor(FL_CURSOR_DEFAULT);
+        if (win && ret == 0)
+            win->cursor(FL_CURSOR_DEFAULT);
         return ret;
     }
 
