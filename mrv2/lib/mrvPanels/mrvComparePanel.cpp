@@ -255,8 +255,6 @@ namespace mrv
                     if (Bindex == i)
                     {
                         b->value(1);
-                        if (player)
-                            time = player->currentTime();
                         break;
                     }
                 }
@@ -654,7 +652,7 @@ namespace mrv
             const auto player = p.ui->uiView->getTimelinePlayer();
             if (!player)
                 return;
-            otio::RationalTime time = player->currentTime();
+            otio::RationalTime time;
 
             const image::Size size(128, 64);
 
@@ -687,7 +685,6 @@ namespace mrv
                     b->value(0);
                     found = true;
                     layerId = p.ui->uiColorChannel->value();
-                    time = player->currentTime();
                 }
 
                 for (auto Bindex : Bindices)
@@ -696,11 +693,14 @@ namespace mrv
                     {
                         found = true;
                         b->value(1);
-                        time = player->currentTime();
                         break;
                     }
                 }
-                if (!found)
+                if (found)
+                {
+                    time = player->currentTime();
+                }
+                else
                 {
                     b->value(0);
                     time = media->currentTime;

@@ -424,6 +424,8 @@ namespace mrv
             otio::RationalTime time = otio::RationalTime(0.0, 1.0);
 
             const auto player = p.ui->uiView->getTimelinePlayer();
+            if (!player)
+                return;
 
             image::Size size(128, 64);
 
@@ -437,11 +439,11 @@ namespace mrv
                 const auto& media = files->getItem(i);
                 const auto& path = media->path;
 
-                const std::string protocol = path.getProtocol();
+                const std::string& protocol = path.getProtocol();
                 const std::string& dir = path.getDirectory();
                 const std::string file =
                     path.getBaseName() + path.getNumber() + path.getExtension();
-                const std::string fullfile = protocol + dir + file;
+                const std::string& fullfile = protocol + dir + file;
                 FileButton* b = m.second;
 
                 uint16_t layerId = media->videoLayer;
@@ -455,34 +457,11 @@ namespace mrv
                 if (Aindex != i)
                 {
                     b->value(0);
-                    auto bIndexes = model->observeBIndexes()->get();
-                    auto stereoIndex = model->observeStereoIndex()->get();
-
-                    bool doThumbnail = false;
-                    for (const auto& bIndex : bIndexes)
-                    {
-                        if (bIndex == i)
-                        {
-                            doThumbnail = true;
-                            break;
-                        }
-                    }
-
-                    if (i == stereoIndex)
-                    {
-                        doThumbnail = true;
-                    }
-
-                    if (!doThumbnail)
-                        continue;
                 }
                 else
                 {
                     b->value(1);
-                    if (player)
-                    {
-                        time = player->currentTime();
-                    }
+                    time = player->currentTime();
                 }
 
                 layerId = p.ui->uiColorChannel->value();

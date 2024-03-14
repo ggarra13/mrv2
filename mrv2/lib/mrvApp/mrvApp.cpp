@@ -1242,28 +1242,26 @@ namespace mrv
         TLRENDER_P();
 
         std::shared_ptr<TimelinePlayer> player;
+        if (!p.activeFiles.empty() && p.player)
+        {
+            p.activeFiles[0]->speed = p.player->speed();
+            p.activeFiles[0]->playback = p.player->playback();
+            p.activeFiles[0]->loop = p.player->loop();
+            p.activeFiles[0]->currentTime = p.player->currentTime();
+            p.activeFiles[0]->inOutRange = p.player->inOutRange();
+            p.activeFiles[0]->audioOffset = p.player->audioOffset();
+            p.activeFiles[0]->annotations = p.player->getAllAnnotations();
+            p.activeFiles[0]->ocioIcs = image::ocioIcs();
+        }
+
         if (!activeFiles.empty())
         {
-
             if (!p.activeFiles.empty() && activeFiles[0] == p.activeFiles[0])
             {
                 player = p.player;
             }
             else
             {
-                if (!p.activeFiles.empty() && p.player)
-                {
-                    player = p.player;
-
-                    p.activeFiles[0]->speed = player->speed();
-                    p.activeFiles[0]->playback = player->playback();
-                    p.activeFiles[0]->loop = player->loop();
-                    p.activeFiles[0]->currentTime = player->currentTime();
-                    p.activeFiles[0]->inOutRange = player->inOutRange();
-                    p.activeFiles[0]->audioOffset = player->audioOffset();
-                    p.activeFiles[0]->annotations = player->getAllAnnotations();
-                    p.activeFiles[0]->ocioIcs = image::ocioIcs();
-                }
 
                 auto i =
                     std::find(p.files.begin(), p.files.end(), activeFiles[0]);
