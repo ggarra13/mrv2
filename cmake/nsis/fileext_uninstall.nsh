@@ -64,6 +64,7 @@ Pop $0
 !insertmacro BorrarKey '.divx'
 !insertmacro BorrarKey '.dv'
 !insertmacro BorrarKey '.flv'
+!insertmacro BorrarKey '.gif'
 !insertmacro BorrarKey '.otio'
 !insertmacro BorrarKey '.otioz'
 !insertmacro BorrarKey '.m4v'

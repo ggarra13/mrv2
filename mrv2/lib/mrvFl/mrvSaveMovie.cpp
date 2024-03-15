@@ -56,6 +56,14 @@ namespace mrv
         if (!player)
             return; // should never happen
 
+        file::Path path(file);
+
+        if (file::isTemporaryEDL(path))
+        {
+            LOG_ERROR(_("Cannot save an NDI stream"));
+            return;
+        }
+
         // Stop the playback
         player->stop();
 
@@ -76,9 +84,7 @@ namespace mrv
         auto cache = ioSystem->getCache();
 
         size_t oldCacheSize = cache->getMax();
-
-        file::Path path(file);
-
+        
         const std::string& directory = path.getDirectory();
         const std::string& baseName = path.getBaseName();
         const std::string&   number  = path.getNumber();

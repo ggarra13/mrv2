@@ -51,13 +51,20 @@ namespace mrv
         if (!player)
             return -1; // should never happen
 
+        file::Path path(file);
+
+        if (file::isTemporaryEDL(path))
+        {
+            LOG_ERROR(_("Cannot save an NDI stream"));
+            return -1;
+        }
+        
         // Stop the playback
         player->stop();
 
         // Time range.
         auto currentTime = player->currentTime();
 
-        file::Path path(file);
         const std::string& extension = path.getExtension();
 
         bool saveEXR = string::compare(
