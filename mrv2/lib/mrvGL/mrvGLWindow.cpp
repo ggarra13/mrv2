@@ -8,9 +8,19 @@
 #    include <GL/glx.h>
 #endif
 
-#ifdef FLTK_USE_WAYLAND
-#    include <EGL/egl.h>
-#endif
+extern "C"
+{
+    typedef unsigned int EGLBoolean;
+    typedef void *EGLDisplay;
+    typedef void *EGLSurface;
+    typedef void *EGLContext;
+    
+    extern EGLContext eglGetCurrentContext();
+    extern EGLBoolean eglMakeCurrent( EGLDisplay display,
+                                      EGLSurface draw,
+                                      EGLSurface read,
+                                      EGLContext context);
+}
 
 #include "mrvGL/mrvGLWindow.h"
 
@@ -71,7 +81,7 @@ namespace mrv
         if (dpy)
         {
             // Get the current OpenGL context
-            GLXContext currentContext = glXGetCurrentContext();
+            auto currentContext = fl_x11_glcontext(ctx);
             if (currentContext == ctx)
                 return;
 
