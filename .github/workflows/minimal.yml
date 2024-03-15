@@ -60,8 +60,19 @@ jobs:
       run: chmod 600 ssh/id_rsa
   
     - name: Build mrv2
-      run:
-        bash ./runme_nolog.sh -D TLRENDER_USD=OFF -D TLRENDER_FFMPEG=OFF -D MRV2_PDF=OFF -D MRV2_NETWORK=OFF -D MRV2_PYBIND11=OFF -D MRV2_PYFLTK=OFF -D BUILD_PYTHON=OFF -D TLRENDER_EXR=OFF -D TLRENDER_NDI=OFF -D TLRENDER_RAW=OFF -D TLRENDER_NET=OFF -D TLRENDER_TIFF=OFF
+      run: |
+        ./runme_nolog.sh \
+        -D MRV2_PDF=OFF \
+        -D MRV2_NETWORK=OFF \
+        -D MRV2_PYBIND11=OFF \
+        -D MRV2_PYFLTK=OFF \
+        -D TLRENDER_EXR=OFF \
+        -D TLRENDER_FFMPEG=OFF \
+        -D TLRENDER_NDI=OFF \
+        -D TLRENDER_NET=OFF \
+        -D TLRENDER_RAW=OFF \
+        -D TLRENDER_TIFF=OFF \
+        -D TLRENDER_USD=OFF
 
     # - name: Upload binaries
     #   run: |
@@ -111,8 +122,19 @@ jobs:
         icacls "ssh\id_rsa" /inheritance:r /grant:r "%USERNAME%:R"
       
     - name: Build mrv2
-      run:
-        bash ./runme_nolog.sh -D TLRENDER_USD=OFF -D TLRENDER_FFMPEG=OFF -D MRV2_PDF=OFF -D MRV2_NETWORK=OFF -D MRV2_PYBIND11=OFF -D MRV2_PYFLTK=OFF -D BUILD_PYTHON=OFF -D TLRENDER_EXR=OFF -D TLRENDER_RAW=OFF -D TLRENDER_NET=OFF -D TLRENDER_TIFF=OFF
+      run: |
+        ./runme_nolog.sh \
+        -D MRV2_PDF=OFF \
+        -D MRV2_NETWORK=OFF \
+        -D MRV2_PYBIND11=OFF \
+        -D MRV2_PYFLTK=OFF \
+        -D TLRENDER_EXR=OFF \
+        -D TLRENDER_FFMPEG=OFF \
+        -D TLRENDER_NDI=OFF \
+        -D TLRENDER_NET=OFF \
+        -D TLRENDER_RAW=OFF \
+        -D TLRENDER_TIFF=OFF \
+        -D TLRENDER_USD=OFF
       
     # - name: Upload binaries
     #   run: |
@@ -151,8 +173,19 @@ jobs:
       run: chmod 600 ssh/id_rsa
 
     - name: Build mrv2
-      run:
-        bash ./runme_nolog.sh -D TLRENDER_USD=OFF -D TLRENDER_FFMPEG=OFF -D MRV2_PDF=OFF -D MRV2_NETWORK=OFF -D MRV2_PYBIND11=OFF -D MRV2_PYFLTK=OFF -D BUILD_PYTHON=OFF -D TLRENDER_EXR=OFF -D TLRENDER_RAW=OFF -D TLRENDER_NET=OFF -D TLRENDER_TIFF=OFF
+      run: |
+        ./runme_nolog.sh \
+        -D MRV2_PDF=OFF \
+        -D MRV2_NETWORK=OFF \
+        -D MRV2_PYBIND11=OFF \
+        -D MRV2_PYFLTK=OFF \
+        -D TLRENDER_EXR=OFF \
+        -D TLRENDER_FFMPEG=OFF \
+        -D TLRENDER_NDI=OFF \
+        -D TLRENDER_NET=OFF \
+        -D TLRENDER_RAW=OFF \
+        -D TLRENDER_TIFF=OFF \
+        -D TLRENDER_USD=OFF
 
     # - name: Upload binaries
     #   run: |
@@ -192,7 +225,18 @@ jobs:
 
     - name: Build mrv2
       run: |
-        ./runme_nolog.sh  -D BUILD_PYTHON=OFF -D TLRENDER_USD=OFF -D TLRENDER_FFMPEG=OFF -D MRV2_PDF=OFF -D MRV2_NETWORK=OFF -D MRV2_PYBIND11=OFF -D MRV2_PYFLTK=OFF-D TLRENDER_EXR=OFF  -D TLRENDER_NDI=OFF -D TLRENDER_RAW=OFF -D TLRENDER_NET=OFF -D TLRENDER_TIFF=OFF
+        ./runme_nolog.sh \
+        -D MRV2_PDF=OFF \
+        -D MRV2_NETWORK=OFF \
+        -D MRV2_PYBIND11=OFF \
+        -D MRV2_PYFLTK=OFF \
+        -D TLRENDER_EXR=OFF \
+        -D TLRENDER_FFMPEG=OFF \
+        -D TLRENDER_NDI=OFF \
+        -D TLRENDER_NET=OFF \
+        -D TLRENDER_RAW=OFF \
+        -D TLRENDER_TIFF=OFF \
+        -D TLRENDER_USD=OFF
 
   #   - name: Upload binaries
   #      run: |
