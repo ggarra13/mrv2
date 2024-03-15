@@ -49,7 +49,7 @@ namespace mrv
         // Restore screensaver/black screen
 #if defined(FLTK_USE_X11)
         if (fl_x11_display())
-            XScreenSaverSuspend(fl_display, False);
+            XScreenSaverSuspend(fl_x11_display(), False);
 #elif defined(_WIN32)
         SetThreadExecutionState(ES_CONTINUOUS);
 #elif defined(__APPLE__)
@@ -88,9 +88,9 @@ namespace mrv
         {
             int event_base, error_base;
             Bool ok = XScreenSaverQueryExtension(
-                fl_display, &event_base, &error_base);
+                fl_x11_display(), &event_base, &error_base);
             if (ok == True)
-                XScreenSaverSuspend(fl_display, True);
+                XScreenSaverSuspend(fl_x11_display(), True);
         }
 #elif defined(_WIN32)
         SetThreadExecutionState(
@@ -148,7 +148,7 @@ namespace mrv
                 "_NET_WM_STATE", "_NET_WM_STATE_ABOVE"};
             Atom atoms[2];
             fl_open_display();
-            XInternAtoms(fl_display, (char**)names, 2, False, atoms);
+            XInternAtoms(fl_x11_display(), (char**)names, 2, False, atoms);
             Atom net_wm_state = atoms[0];
             Atom net_wm_state_above = atoms[1];
             ev.type = ClientMessage;
@@ -159,7 +159,7 @@ namespace mrv
             ev.xclient.data.l[1] = net_wm_state_above;
             ev.xclient.data.l[2] = 0;
             XSendEvent(
-                fl_display, DefaultRootWindow(fl_display), False,
+                fl_x11_display(), DefaultRootWindow(fl_display), False,
                 SubstructureNotifyMask | SubstructureRedirectMask, &ev);
         }
 #    endif
