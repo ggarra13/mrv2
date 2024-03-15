@@ -44,20 +44,23 @@ echo "Saving compile log to $BUILD_DIR/compile.log ..."
 #
 # These are some of the expensive mrv2 options
 #
-export BUILD_PYTHON=ON
-export MRV2_PYFLTK=ON
-export MRV2_PYBIND11=ON
+export BUILD_PYTHON=OFF
+export MRV2_PYFLTK=OFF
+export MRV2_PYBIND11=OFF
 export MRV2_NETWORK=OFF
 export MRV2_PDF=OFF
 
 #
 # These are some of the expensive TLRENDER options
 #
+export TLRENDER_FFMPEG=OFF
+export TLRENDER_NDI=OFF
 export TLRENDER_NET=OFF
 export TLRENDER_RAW=OFF
 export TLRENDER_USD=OFF
 export TLRENDER_VPX=OFF
 export TLRENDER_WAYLAND=ON
+export TLRENDER_X11=ON
 export TLRENDER_YASM=OFF
 
 echo

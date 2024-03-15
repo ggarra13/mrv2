@@ -84,7 +84,11 @@ fi
 if [ -z "$TLRENDER_NDI" ]; then
     if [ -d "${TLRENDER_NDI_SDK}" ]; then
 	export TLRENDER_NDI=ON
-    else
+    fi
+fi
+
+if [[ $TLRENDER_NDI == ON || $TLRENDER_NDI == 1 ]]; then
+    if [[ $TLRENDER_FFMPEG != ON && $TLRENDER_FFMPEG != 1 ]]; then
 	export TLRENDER_NDI=OFF
     fi
 fi
@@ -122,7 +126,7 @@ if [ -z "$TLRENDER_WAYLAND" ]; then
 fi
 
 if [ -z "$TLRENDER_X11" ]; then
-    export TLRENDER_X11=ON
+    export TLRENDER_X11=ON  # Not yet possible to turn it off
 fi
 
 if [ -z "$TLRENDER_YASM" ]; then
@@ -145,13 +149,13 @@ echo
 
 mkdir -p $BUILD_DIR/install
 
-#if [[ $KERNEL == *Linux* ]]; then
+if [[ $KERNEL == *Linux* ]]; then
     echo "Common options"
     echo
     echo "Wayland support .................... ${TLRENDER_WAYLAND} 	(TLRENDER_WAYLAND)"
-    echo "X11 support ........................ ${TLRENDER_X11}     	(TLRENDER_X11)"
+    #echo "X11 support ........................ ${TLRENDER_X11}     	(TLRENDER_X11)"
     echo
-#fi
+fi
 
 echo "mrv2 Options"
 echo 
