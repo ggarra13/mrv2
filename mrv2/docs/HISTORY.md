@@ -5,6 +5,9 @@ v1.1.0
 - Made mrv2's custom file requester list presumed sequences of a single frame
   as a file instead of a custom sequence name display.
 - Matched NDI colors.
+- Fixed file associations on Windows as mrv2 was using Windows Vista/7 registry
+  keys.
+- Fixed slow playback of 4K movies.
 
 v1.0.9
 ======
