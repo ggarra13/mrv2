@@ -200,6 +200,8 @@ namespace mrv
                 const auto& media = files->getItem(i);
                 const auto& path = media->path;
 
+                const bool isNDI = file::isTemporaryNDI(path);
+                
                 // We skip EDLs created in tmp dir here.
                 const bool isEDL = file::isTemporaryEDL(path);
 
@@ -249,6 +251,13 @@ namespace mrv
                 const std::string& layer = getLayerName(media, layerId);
                 std::string text = protocol + dir + "\n" + file + layer;
                 b->copy_label(text.c_str());
+
+                if (isNDI)
+                {
+                    Fl_SVG_Image* svg = load_svg("NDI.svg");
+                    b->image(svg);
+                    continue;
+                }
 
                 if (auto context = _r->context.lock())
                 {
@@ -483,6 +492,7 @@ namespace mrv
                 size_t i = m.first;
                 const auto& media = files->getItem(i);
                 const auto& path = media->path;
+                const bool isNDI = file::isTemporaryNDI(path);
 
                 const std::string& protocol = path.getProtocol();
                 const std::string& dir = path.getDirectory();
@@ -517,6 +527,13 @@ namespace mrv
                 std::string text = protocol + dir + "\n" + file + layer;
                 b->copy_label(text.c_str());
                 b->labelcolor(FL_WHITE);
+
+                if (isNDI)
+                {
+                    Fl_SVG_Image* svg = load_svg("NDI.svg");
+                    b->image(svg);
+                    continue;
+                }
 
                 if (auto context = _r->context.lock())
                 {
