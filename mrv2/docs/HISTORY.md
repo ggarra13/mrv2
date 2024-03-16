@@ -1,3 +1,10 @@
+v1.1.0
+======
+
+- Made mrv2's custom file requester list presumed sequences of a single frame
+  as a file instead of a custom sequence name display.
+- Matched NDI colors.
+
 v1.0.9
 ======
 

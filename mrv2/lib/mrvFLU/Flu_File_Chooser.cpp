@@ -4793,23 +4793,35 @@ void Flu_File_Chooser::cd(const char* path)
 
             mrv::SequenceList::const_iterator i = seqs.begin();
             mrv::SequenceList::const_iterator e = seqs.end();
-            for (; i != e; ++i)
+            for (const auto& i : seqs)
             {
-                entry = new Entry(
-                    (*i).root.c_str(), ENTRY_SEQUENCE, fileDetailsBtn->value(),
-                    this);
-                entry->isize =
-                    1 + (atoi((*i).ext.c_str()) - atoi((*i).number.c_str()));
-                entry->altname = (*i).root.c_str();
-
-                entry->filesize = (*i).number;
-                if (entry->isize > 1)
+                int numFrames =
+                    1 + (atoi(i.ext.c_str()) - atoi(i.number.c_str()));
+                if (numFrames == 1)
                 {
-                    entry->filesize += "-";
-                    // entry->filesize += (*i).view;
-                    entry->filesize += (*i).ext;
+                    int number = atoi(i.number.c_str());
+                    char buf[1024];
+                    snprintf(buf, 1024, i.root.c_str(), number);
+                    entry = new Entry(
+                        buf, ENTRY_FILE, fileDetailsBtn->value(), this);
                 }
+                else
+                {
 
+                    entry = new Entry(
+                        i.root.c_str(), ENTRY_SEQUENCE, fileDetailsBtn->value(),
+                        this);
+                    entry->isize = numFrames;
+                    entry->altname = i.root.c_str();
+
+                    entry->filesize = i.number;
+                    if (entry->isize > 1)
+                    {
+                        entry->filesize += "-";
+                        entry->filesize += i.ext;
+                    }
+                }
+                
                 entry->updateSize();
                 entry->updateIcon();
 
