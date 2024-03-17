@@ -1,14 +1,15 @@
 !include LogicLib.nsh
 !include FileAssociation.nsh
+!include "FileFunc.nsh"
 
 ${FileAssociation_VERBOSE} 4   # all verbosity
 !insertmacro UnRegisterExtension
-${FileAssociation_VERBOSE} 4   # all verbosity
+${FileAssociation_VERBOSE} 3   # no script
 
 Function un.BorrarKey
 Pop $1
 
-${unregisterExtension} "$1" "$1 File"
+${unregisterExtension} "$1" "${mrv2_KEY}"
 
 FunctionEnd
 
@@ -95,9 +96,10 @@ Pop $0
 !insertmacro BorrarKey '.usdc'
 !insertmacro BorrarKey '.usdz'
 
+# IMPORTANT: Notify Windows of Change.
+${RefreshShellIcons}
 
 
-Delete $INSTDIR\fileext.ini
 SetOutPath $TEMP
 RMDir $INSTDIR
 

@@ -192,14 +192,9 @@ elseif(WIN32)
 	    COMPONENT applications )
 	
 	# Install all .dll in CMAKE_INSTALL_PREFIX/bin
-	file( GLOB MRV2_PYLib "${CMAKE_INSTALL_PREFIX}/bin/Lib" )
-	file( GLOB MRV2_PYDLLs "${CMAKE_INSTALL_PREFIX}/bin/DLLs" )
-	file( GLOB MRV2_PYTCL "${CMAKE_INSTALL_PREFIX}/bin/tcl"  )
-	file( GLOB MRV2_PY_SITE_LIBS
-	    "${CMAKE_INSTALL_PREFIX}/bin/Lib/site-packages/sphinx*"
-	    "${CMAKE_INSTALL_PREFIX}/bin/Lib/site-packages/jinja2*"
-	    "${CMAKE_INSTALL_PREFIX}/bin/Lib/site-packages/JinJa2*") 
-	file(REMOVE_RECURSE "${MRV2_PY_SITE_LIBS}")
+	set( MRV2_PYLib "${CMAKE_INSTALL_PREFIX}/bin/Lib" )
+	set( MRV2_PYDLLs "${CMAKE_INSTALL_PREFIX}/bin/DLLs" )
+	set( MRV2_PYTCL "${CMAKE_INSTALL_PREFIX}/bin/tcl"  )
 	
 	install( DIRECTORY ${MRV2_PYLib}
 	    DESTINATION bin/
