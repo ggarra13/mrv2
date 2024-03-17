@@ -1,12 +1,14 @@
 !include LogicLib.nsh
+!include FileAssociation.nsh
+
+${FileAssociation_VERBOSE} 4   # all verbosity
+!insertmacro UnRegisterExtension
+${FileAssociation_VERBOSE} 4   # all verbosity
 
 Function un.BorrarKey
 Pop $1
 
-ReadINIStr $0 '$INSTDIR\\fileext.ini' ext $1
-${If} $0 <> ""
-   DeleteRegKey HKCR $1
-${EndIf}
+${unregisterExtension} "$1" "$1 File"
 
 FunctionEnd
 
@@ -78,6 +80,7 @@ Pop $0
 !insertmacro BorrarKey '.mpeg3'
 !insertmacro BorrarKey '.mpeg4'
 !insertmacro BorrarKey '.mp4'
+!insertmacro BorrarKey '.mp4v'
 !insertmacro BorrarKey '.mxf'
 !insertmacro BorrarKey '.qt'
 !insertmacro BorrarKey '.rm'
