@@ -9,7 +9,9 @@ Var hListCtl
 Var bCheckAll
 Var bUnCheckAll
 
-!include mrv2_translations.nsh
+!include "mrv2_translations.nsh"
+!include "FileAssociation.nsh"
+!include "FileFunc.nsh"
 
 Page Custom LVPageCreate LVPageLeave
 
@@ -159,6 +161,7 @@ System::Free $9
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".mkv" "Matroska Video Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".mov" "Apple's Quicktime Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".mp4" "MPEG4 Format" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".mp4v" "MPEG4 Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".mpg" "MPEG Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".mpeg" "MPEG Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".mpeg2" "MPEG2 Format" 1
@@ -210,12 +213,15 @@ ${DoWhile} $0 < $1
     ${If} $2 <> 0
 	SendMessage $hListCtl ${LVM_GETITEMTEXT} $0 $9 $2
 	System::Call '*$8(&t${NSIS_MAX_STRLEN}.r7)'
-	DeleteRegKey HKCR '$7'
-	WriteRegStr HKCR '$7' '' 'mrv2'
-	WriteINIStr '$INSTDIR\\fileext.ini' ext '$7' 1
+
+	${registerExtension} "$INSTDIR\\bin\\mrv2.exe" "$7" "$7 File"
     ${EndIf}
+
     IntOp $0 $0 + 1
 ${Loop}
 System::Free $8
 System::Free $9
+
+# IMPORTANT: Notify Windows of Change.
+${RefreshShellIcons}
 FunctionEnd
