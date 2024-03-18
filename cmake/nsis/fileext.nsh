@@ -214,7 +214,7 @@ ${DoWhile} $0 < $1
 	SendMessage $hListCtl ${LVM_GETITEMTEXT} $0 $9 $2
 	System::Call '*$8(&t${NSIS_MAX_STRLEN}.r7)'
 
-	${registerExtension} "$INSTDIR\\bin\\mrv2.exe" "$7" "$7 File"
+	${registerExtension} "${mrv2_KEY}" "$7" "$7 File"
     ${EndIf}
 
     IntOp $0 $0 + 1

@@ -5,6 +5,20 @@ v1.1.0
 - Made mrv2's custom file requester list presumed sequences of a single frame
   as a file instead of a custom sequence name display.
 - Matched NDI colors.
+- Made NDI streams not display thumbnails in any of the panels, as it would
+  looked like mrv2 had hanged.
+- Made installed size and installer smaller, by removing some unneeded python
+  libraries used for documenting mrv2.
+- Added tkinter to Windows' Python's Tk libraries. 
+- Made installed size and installer smaller, by removing Python's unittests.
+- Made default Windows' installer not install Python's Tk libraries by default.
+- Overall, the Windows installed size is now almost 150Mb smaller, now at 300Mb.
+- Made Windows installer create a registry entry backup for the file
+  associations, instead of using an .ini file which was worse.  On uninstall,
+  the original file association is restored or the registry entry is deleted.
+- Added a friendlier name to Windows' Open With RMB menu.  Now the version is
+  listed, instead of just "mrv2.exe".  Also the name in English is provided.
+  
 
 v1.0.9
 ======

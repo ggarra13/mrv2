@@ -28,11 +28,16 @@ message( STATUS "cmake/prepackage.cmake has ROOT_DIR=${ROOT_DIR}" )
 include( "${ROOT_DIR}/cmake/functions.cmake" )
 
 
-#
-# @bug: UNIX CMAKE_INSTALL_PREFIX is broken!!!
-#
 if( UNIX AND NOT APPLE )
-    set( CPACK_PREPACKAGE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_PREFIX}" )
+    #
+    # @bug: Linux CMAKE_INSTALL_PREFIX is broken and not pointing to
+    #       pre-packaging directory!!!
+    #
+    if (EXISTS "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_PREFIX}")
+	set( CPACK_PREPACKAGE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_PREFIX}" )
+    else()
+	set( CPACK_PREPACKAGE "${CMAKE_INSTALL_PREFIX}" )
+    endif()
 else()
     set( CPACK_PREPACKAGE "${CMAKE_INSTALL_PREFIX}" )
 endif()
@@ -77,24 +82,43 @@ if( UNIX)
 	message( NOTICE "${linux_lib64_dir} does not exist...")
     endif()
 	
-    set( exes "${CPACK_PREPACKAGE}/bin/mrv2" )
-    if ( APPLE )
-	get_macos_runtime_dependencies( "${exes}" DEPENDENCIES )
-    else()
-	#
-	# Glob python directory as we don't know the version of directory
-	#
-	file(GLOB MRV2_PYTHON_DIR "${CPACK_PREPACKAGE}/lib/python*")
-	set(MRV2_PYTHON_LIBDIR "${MRV2_PYTHON_DIR}/lib-dynload")
+    #
+    # Glob python directories as we don't know the version of python in this
+    # script, as it does not inherit variables from the main CMakeLists.
+    #
+    file(GLOB MRV2_PYTHON_LIB_DIRS "${CPACK_PREPACKAGE}/lib/python*")
 
+    #
+    # Grab the last version, in case there are several
+    #
+    list(GET MRV2_PYTHON_LIB_DIRS -1 MRV2_PYTHON_LIB_DIR)
+
+    
+    set(MRV2_PYTHON_SITE_PACKAGES_DIR "${MRV2_PYTHON_LIB_DIR}/site-packages")
+	
+    set( MRV2_EXES "${CPACK_PREPACKAGE}/bin/mrv2" )
+    
+    if ( APPLE )
+	#
+	# Get DYLIB dependencies of componenets
+	#
+	get_macos_runtime_dependencies( "${MRV2_EXES}" DEPENDENCIES )
+    else()
+
+	
 	#
 	# We need to get the dependencies of the python DSOs to avoid
 	# issues like openssl and libcrypto changing between Rocky Linux 8.1
 	# and Ubuntu 22.04.5.
 	#
-	file(GLOB python_dsos "${MRV2_PYTHON_LIBDIR}/*.so")
-	list(APPEND exes ${python_dsos} )
-	get_runtime_dependencies( "${exes}" DEPENDENCIES )
+	set(MRV2_PYTHON_LIB_DIR "${MRV2_PYTHON_LIB_DIR}/lib-dynload")
+	file(GLOB python_dsos "${MRV2_PYTHON_LIB_DIR}/*.so")
+	list(APPEND MRV2_EXES ${python_dsos} )
+
+	#
+	# Get DSO dependencies of componenets
+	#
+	get_runtime_dependencies( "${MRV2_EXES}" DEPENDENCIES )
     endif()
     file( COPY ${DEPENDENCIES} DESTINATION "${CPACK_PREPACKAGE}/lib/" )
 elseif(WIN32)
@@ -102,4 +126,81 @@ elseif(WIN32)
     # Remove usd directory from lib/ directory on Windows
     #
     file( REMOVE_RECURSE "${CPACK_PREPACKAGE}/lib/usd" )
+    
+    #
+    # Set python's site-packages dir for .exe installer.
+    #
+    # When building an .exe installer on Windows, the site-packages will
+    # be inside an applications component directory.
+    #
+    set(MRV2_PYTHON_APP_DIR "${CPACK_PREPACKAGE}/applications")
+    set(MRV2_PYTHON_APP_LIB_DIR "${MRV2_PYTHON_APP_DIR}/bin/Lib/")
+    set(MRV2_PYTHON_SITE_PACKAGES_DIR
+	"${MRV2_PYTHON_APP_LIB_DIR}/site-packages")
+    
+    #
+    # Don't pack sphinx and other auxiliary documentation libs
+    #
+    file(GLOB MRV2_UNUSED_PYTHON_DIRS
+    "${MRV2_PYTHON_APP_LIB_DIR}/test*"
+    "${MRV2_PYTHON_APP_LIB_DIR}/ctypes/test*"
+    "${MRV2_PYTHON_APP_LIB_DIR}/distutils/test*"
+    "${MRV2_PYTHON_APP_LIB_DIR}/idlelib/idle_test*"
+    "${MRV2_PYTHON_APP_LIB_DIR}/lib2to3/test*"
+    "${MRV2_PYTHON_APP_LIB_DIR}/sqlite3/test*"
+    "${MRV2_PYTHON_APP_LIB_DIR}/tkinter/test*"
+    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/alabaster*"
+    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/babel*"
+    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/colorama*"
+    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/docutils*"
+    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/imagesize*"
+    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/Jinja*"
+    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/MarkupSafe*"
+    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/Pygments*"
+    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/snowballstemmer*"
+    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/sphinx*"
+    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/unittest*")
+
+	
+    if ( NOT "${MRV2_UNUSED_PYTHON_DIRS}" STREQUAL "" )
+	file( REMOVE_RECURSE ${MRV2_UNUSED_PYTHON_DIRS} )
+    endif()
+
+    #
+    # Set python's site-packages dir for .zip.
+    #
+    # When building an .exe on Windows, the site-packages will
+    # be inside an application directory.
+    #
+    set(MRV2_PYTHON_SITE_PACKAGES_DIR
+	"${CPACK_PREPACKAGE}/bin/Lib/site-packages")
+endif()
+
+
+#
+# Don't pack sphinx and other auxiliary documentation libs
+#
+file(GLOB MRV2_UNUSED_PYTHON_DIRS
+    "${MRV2_PYTHON_LIB_DIR}/test*"
+    "${MRV2_PYTHON_LIB_DIR}/ctypes/test*"
+    "${MRV2_PYTHON_LIB_DIR}/distutils/test*"
+    "${MRV2_PYTHON_LIB_DIR}/idlelib/idle_test*"
+    "${MRV2_PYTHON_LIB_DIR}/lib2to3/test*"
+    "${MRV2_PYTHON_LIB_DIR}/sqlite3/test*"
+    "${MRV2_PYTHON_LIB_DIR}/tkinter/test*"
+    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/alabaster*"
+    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/babel*"
+    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/colorama*"
+    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/docutils*"
+    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/imagesize*"
+    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/Jinja*"
+    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/MarkupSafe*"
+    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/Pygments*"
+    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/snowballstemmer*"
+    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/sphinx*"
+    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/unittest*")
+
+	
+if ( NOT "${MRV2_UNUSED_PYTHON_DIRS}" STREQUAL "" )
+    file( REMOVE_RECURSE ${MRV2_UNUSED_PYTHON_DIRS} )
 endif()
