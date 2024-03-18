@@ -215,6 +215,7 @@ ${DoWhile} $0 < $1
 	System::Call '*$8(&t${NSIS_MAX_STRLEN}.r7)'
 
 	${registerExtension} "${mrv2_KEY}" "$7" "$7 File"
+	${registerExtension} "${mrv2_EXE}" "$7" "$7 File"
     ${EndIf}
 
     IntOp $0 $0 + 1

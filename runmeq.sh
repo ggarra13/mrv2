@@ -27,11 +27,13 @@ if [[ ! -d $dir ]]; then
     exit 1
 fi
 
-if [[ "$CMAKE_TARGET" == "" || "$CMAKE_TARGET" == "package" ]]; then
-    CMAKE_TARGET=install
-    
+if [[ "$CMAKE_TARGET" == "" || "$CMAKE_TARGET" == "package" ]]; then  
     # Needed to to force a relink and update build info.
     touch mrv2/lib/mrvWidgets/mrvVersion.cpp
+fi
+
+if [[ "$CMAKE_TARGET" == "" ]]; then
+    CMAKE_TARGET=install
 fi
 
 if [[ $CMAKE_TARGET == doc* || $CMAKE_TARGET == "install" ||

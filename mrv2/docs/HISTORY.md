@@ -18,7 +18,12 @@ v1.1.0
   the original file association is restored or the registry entry is deleted.
 - Added a friendlier name to Windows' Open With RMB menu.  Now the version is
   listed, instead of just "mrv2.exe".  Also the name in English is provided.
+- Added a latest version to Windows' Open With RMB menu.  If used, it will
+  associate the latest version installed with the file.  Upgrading won't
+  require you to reset file associations like before.
 - Fixed rotations not framing the image even when View->Auto Frame was on.
+- Added hard-links on Windows .exe installer, so that it works more like Unix.
+  You can use mrv2-v1.1.0.exe to call a specific version of the viewer.  
   
 
 v1.0.9

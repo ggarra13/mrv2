@@ -10,6 +10,7 @@ Function un.BorrarKey
 Pop $1
 
 ${unregisterExtension} "$1" "${mrv2_KEY}"
+${unregisterExtension} "$1" "${mrv2_EXE}"
 
 FunctionEnd
 

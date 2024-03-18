@@ -6,6 +6,7 @@
 # message( STATUS "CMAKE_CURRENT_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}" )
 # message( STATUS "CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}" )
 
+
 #
 # bug:
 #
@@ -23,8 +24,7 @@ endif()
 file(REAL_PATH ${ROOT_DIR} ROOT_DIR )
 
 
-message( STATUS "cmake/prepackage.cmake has ROOT_DIR=${ROOT_DIR}" )
-
+include( "${ROOT_DIR}/cmake/version.cmake" )
 include( "${ROOT_DIR}/cmake/functions.cmake" )
 
 
@@ -42,6 +42,7 @@ else()
     set( CPACK_PREPACKAGE "${CMAKE_INSTALL_PREFIX}" )
 endif()
 
+message( STATUS "mrv2 ROOT_DIR=${ROOT_DIR}" )
 message( STATUS "CPACK_PREPACKAGE=${CPACK_PREPACKAGE}" )
 
 #
@@ -137,8 +138,15 @@ elseif(WIN32)
     # When building an .exe installer on Windows, the site-packages will
     # be inside an applications component directory.
     #
-    set(MRV2_PYTHON_APP_DIR "${CPACK_PREPACKAGE}/applications")
-    set(MRV2_PYTHON_APP_LIB_DIR "${MRV2_PYTHON_APP_DIR}/bin/Lib/")
+    set(MRV2_APP_DIR "${CPACK_PREPACKAGE}/applications")
+
+    if (EXISTS "${MRV2_APP_DIR}/bin/mrv2.exe")
+	file(CREATE_LINK
+	    "${MRV2_APP_DIR}/bin/mrv2.exe"
+	    "${MRV2_APP_DIR}/bin/mrv2-v${mrv2_VERSION}.exe") 
+    endif()
+    
+    set(MRV2_PYTHON_APP_LIB_DIR "${MRV2_APP_DIR}/bin/Lib/")
     set(MRV2_PYTHON_SITE_PACKAGES_DIR
 	"${MRV2_PYTHON_APP_LIB_DIR}/site-packages")
     

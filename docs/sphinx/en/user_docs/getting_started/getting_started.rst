@@ -18,6 +18,12 @@ Installing mrv2
 - On macOS you install it by opening the .dmg file, and dragging the mrv2 icon to the Applications directory. If there's already an mrv2 version, we recommend you overwrite it. The macOS application is currently not notarized, so when you launch it you will not be able to run it as macOS will warn you that the file is not secure as it was downloaded from internet. To avoid that, you need to open the Finder, go to the Applications directory and CTRL + Left mouse click on the mrv2 application. That will bring up the same warning, but this time it will have a button that will allow you to open it. You only need to do this once.
 
 - Windows and Chrome, like macOS, also protect you from installing files from the Internet. When you first download it with Chrome it may warn you that it is not an usual archive to be downloaded. Make sure to click on the right up arrow menu to Save it anyway. You cannot open the .exe from Chrome directly. You will need to open Windows Explorer and go to the Downloads directory. You should then run it from there. Then Windows will popup a Blue box telling you Windows SmartScreen prevented the start of an unknown aplication and that you can place your PC at risk. Click on the More Information text and a Button that says Run anyway or similar should appear. Click on it and follow the standard instructions to any Windows installer.
+  
+For file associations, you have to manually select the file and use
+RMB->Open With.  If you installed the application with the .exe installer,
+you can associate the files with a specific version you have installed or
+with the latest version (so you won't have to keep updating the file
+association).
 
 - On Linux, in order to install the .rpm or .deb packages requires your user to have sudo permissions.
 

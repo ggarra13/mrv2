@@ -18,6 +18,11 @@ Instalando mrv2
 - En macOS usted lo instala abriendo el archivo .dmg, y llevando el ícono de mrv2 icon al directorio de Aplicaciones. Si ya hay una versión de mrv2, le recomendamos que la sobreescriba. La aplicación de macOS actualmente no está notarizada, por lo que cuando la ejecute macOS le avisará que el archivo no es seguro porque fue bajado de la internet. Para evitar eso, necesita abrir el Finder, ir al directorio de Aplicaciones y presionar CTRL + boton izquierdo del ratón sobre la aplicación mrv2. Esta acción traerá la misma advertencia, pero esta vez tendrá un botón que le permitirá abrirlo. Necesitará hacer esto sólo una vez.
 
 - Windows y Chrome, como macOS, también te protejen de instalar archivos de Internet. Cuando lo baja con Chrome puede que le avise que no es un archivo usual para ser bajado. Asegúrese de cliquear en el menu de la flecha derecha arriba para seleccionar "Grabar de todas formas". No puede ejecutar un .exe directo de Chrome. Tendra que abrir la carpeta contenedora o usar Windows Explorer e ir al directorio de Descargas. Luego deberá correrlo desde ahí. Windows le abrirá un mensaje Azul avisándole que SmartScreen previno el arranque de una aplicación desconocidas y que puede poner a su PC en peligro. Cliquée en Más Informacion y un botón que dice Correr de todas formas o similar aparecerá. Cliquee en él y siga las intruciones usuales del instalador de Windows.
+Para asociar los archivos, tiene que manualmente seleccionar el tipo de
+archivo y usar BDR->Abrir Con.  Si instaló mrv2 con el instalador .exe,
+puede asociar los archivos a una version específica que tenga instalada o bien
+a la última versión (Lo recomendable, así no tendrá que re-asociar los archivos
+cada vez que descarga una nueva versión).
 
 - En Linux, para instalar los paquetes .rpm o .deb requiere que su usuario tenga permisos de administrador (sudo).
 
