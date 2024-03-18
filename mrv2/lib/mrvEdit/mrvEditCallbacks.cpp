@@ -2253,11 +2253,10 @@ namespace mrv
     int calculate_edit_viewport_size(ViewerUI* ui)
     {
         // Some constants, as Darby does not expose this in tlRender.
-        const int kTrackTitleHeight = 24;
-        const int kTrackBottomHeight = 20;
-        const int kTransitionsHeight = 20;
+        const int kTrackTitleHeight = 42;
+        const int kTransitionsHeight = 30;
         const int kAudioGapOnlyHeight = 20;
-        const int kMarkerHeight = 20;
+        const int kMarkerHeight = 24;
 
         int H = kMinEditModeH; // timeline height
         if (editMode == EditMode::kTimeline)
@@ -2277,24 +2276,44 @@ namespace mrv
         int markersHeight = 0;
         int transitionsHeight = 0;
 
+        const int editView = ui->uiPrefs->uiPrefsEditView->value();
+
         // Shift the view up to see the video thumbnails and audio waveforms
         const double pixelRatio = ui->uiTimeline->pixels_per_unit();
         const int maxTileHeight = tileH - 20;
         const timelineui::ItemOptions options =
             ui->uiTimeline->getItemOptions();
         auto timeline = player->getTimeline();
+
+        // Check first if the timeline is an audio only timeline.
+        bool audioOnly = true;
         for (const auto& child : timeline->tracks()->children())
         {
             if (const auto* track = dynamic_cast<otio::Track*>(child.value))
             {
                 if (otio::Track::Kind::video == track->kind())
                 {
+                    audioOnly = false;
+                    break;
+                }
+            }
+        }
+        
+        for (const auto& child : timeline->tracks()->children())
+        {
+            if (const auto* track = dynamic_cast<otio::Track*>(child.value))
+            {
+                bool visibleTrack = false;
+                if (otio::Track::Kind::video == track->kind())
+                {
                     videoHeight += kTrackTitleHeight;
                     if (options.thumbnails)
-                        videoHeight += options.thumbnailHeight / pixelRatio;
-                    videoHeight += kTrackBottomHeight;
+                        videoHeight += options.thumbnailHeight;
+                    visibleTrack = true;
                 }
-                else if (otio::Track::Kind::audio == track->kind())
+                else if (
+                    otio::Track::Kind::audio == track->kind() &&
+                    (editView >= 1 || audioOnly))
                 {
                     if (track->children().size() > 0)
                     {
@@ -2314,15 +2333,15 @@ namespace mrv
                             }
                         }
                         if (hasWaveform)
-                            audioHeight += options.waveformHeight / pixelRatio;
+                            audioHeight += options.waveformHeight;
                         else
-                            audioHeight += kAudioGapOnlyHeight / pixelRatio;
+                            audioHeight += kAudioGapOnlyHeight;
 
-                        audioHeight += kTrackBottomHeight;
+                        visibleTrack = true;
                     }
                 }
                 // Handle Markers
-                if (options.showMarkers)
+                if (options.showMarkers && visibleTrack)
                 {
                     int markerSizeForTrack = 0;
                     for (const auto& child : track->children())
@@ -2339,10 +2358,10 @@ namespace mrv
                         if (markerSizeForItem > markerSizeForTrack)
                             markerSizeForTrack = markerSizeForItem;
                     }
-                    markersHeight += markerSizeForTrack / pixelRatio;
+                    markersHeight += markerSizeForTrack;
                 }
                 // Handle transitions
-                if (options.showTransitions)
+                if (options.showTransitions && visibleTrack)
                 {
                     bool found = false;
                     for (const auto& child : track->children())
@@ -2355,15 +2374,19 @@ namespace mrv
                         }
                     }
                     if (found)
-                        transitionsHeight += kTransitionsHeight / pixelRatio;
+                    {
+                        transitionsHeight += kTransitionsHeight;
+                    }
                 }
             }
         }
 
-        H += videoHeight + audioHeight + markersHeight + transitionsHeight;
+        H += (videoHeight + audioHeight + markersHeight + transitionsHeight) / pixelRatio;
 
         if (H >= maxTileHeight)
+        {
             H = maxTileHeight;
+        }
         return H;
     }
 
