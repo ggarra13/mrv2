@@ -33,10 +33,10 @@ if( UNIX AND NOT APPLE )
     # @bug: Linux CMAKE_INSTALL_PREFIX is broken and not pointing to
     #       pre-packaging directory!!!
     #
-    if (FILE EXISTS "${CMAKE_INSTALL_PREFIX}")
-	set( CPACK_PREPACKAGE "${CMAKE_INSTALL_PREFIX}" )
-    else()
+    if (EXISTS "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_PREFIX}")
 	set( CPACK_PREPACKAGE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_PREFIX}" )
+    else()
+	set( CPACK_PREPACKAGE "${CMAKE_INSTALL_PREFIX}" )
     endif()
 else()
     set( CPACK_PREPACKAGE "${CMAKE_INSTALL_PREFIX}" )
