@@ -23,6 +23,11 @@ set(mrv2_EXE "mrv2.exe" )
 
 # Extra install commands for NSIS
 set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
+        #
+        # Remove v1.0.9 and older registry entry
+        #
+	DeleteRegKey HKCR 'mrv2'
+        
 	#
         # Write out a friendly name with the version number besides the opening
         # command and the icon.
@@ -32,6 +37,17 @@ set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
 	WriteRegStr HKCR 'Applications\\\\${mrv2_KEY}\\\\shell\\\\Open' '' 'Play with ${mrv2_VERSION_NAME}'
 	WriteRegStr HKCR 'Applications\\\\${mrv2_KEY}\\\\shell\\\\Open\\\\command' '' '$INSTDIR\\\\bin\\\\${mrv2_KEY} \\\"%1\\\"'
 
+        #
+        # This create the actual file association command.
+        #
+	DeleteRegKey HKCR '${mrv2_KEY}'
+        WriteRegStr HKCR '${mrv2_KEY}\\\\shell\\\\open\\\\command' '' '$INSTDIR\\\\bin\\\\${mrv2_KEY} \\\"%1\\\"'
+
+
+
+	#
+        # Write out a friendly name for 'latest' version.
+        #
 	WriteRegStr HKCR 'Applications\\\\${mrv2_EXE}' 'FriendlyAppName' '${mrv2_LATEST_NAME}'
 	WriteRegStr HKCR 'Applications\\\\${mrv2_EXE}\\\\shell' '' ''
 	WriteRegStr HKCR 'Applications\\\\${mrv2_EXE}\\\\shell\\\\Open' '' 'Play with ${mrv2_LATEST_NAME}'
@@ -40,11 +56,12 @@ set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
         #
         # This create the actual file association command.
         #
-	DeleteRegKey HKCR '${mrv2_KEY}'
-        WriteRegStr HKCR '${mrv2_KEY}\\\\shell\\\\open\\\\command' '' '$INSTDIR\\\\bin\\\\${mrv2_KEY} \\\"%1\\\"'
-
 	DeleteRegKey HKCR '${mrv2_EXE}'
         WriteRegStr HKCR '${mrv2_EXE}\\\\shell\\\\open\\\\command' '' '$INSTDIR\\\\bin\\\\${mrv2_EXE} \\\"%1\\\"'
+
+        #
+        # Create a hard-link 
+        #
 
 	SectionEnd
 	!addincludedir ${PROJECT_SOURCE_DIR}/../cmake/nsis
@@ -58,9 +75,11 @@ set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
 
 # Extra uninstall commands for NSIS
 set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "
+
+        # Delete the versioned application and file association entry.
 	DeleteRegKey HKCR 'Applications\\\\${mrv2_KEY}'
-	DeleteRegKey HKCR 'Applications\\\\${mrv2_EXE}'
 	DeleteRegKey HKCR '${mrv2_KEY}'
+
 	SectionEnd
 	!addincludedir ${PROJECT_SOURCE_DIR}/../cmake/nsis
 	!include fileext_uninstall.nsh
