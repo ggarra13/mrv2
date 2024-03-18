@@ -45,6 +45,18 @@ namespace
 } // namespace
 
 
+namespace
+{
+    int normalizeAngle0to360(float angle) {
+        int out = static_cast<int>(std::fmod(angle, 360.0f));
+        if (out < 0)
+        {
+            out += 360;
+        }
+        return out;
+    }
+}
+
 namespace mrv
 {
     using namespace tl;
@@ -911,15 +923,6 @@ namespace mrv
             }
                    
         }
-
-        // If we have a Video Rotation Metadata, extract its value from it.
-        auto i = p.tagData.find("Video Rotation");
-        p.videoRotation = 0.F;
-        if (i != p.tagData.end())
-        {
-            std::stringstream s(i->second);
-            s >> p.videoRotation;
-        }
             
         // Refresh media info panel if there's data window present
         if (panel::imageInfoPanel)
@@ -934,7 +937,7 @@ namespace mrv
             
             // If timeline has a Data Window (it is an OpenEXR)
             // we also refresh the media info panel.
-            i = p.tagData.find("Data Window");
+            auto i = p.tagData.find("Data Window");
             if (i != p.tagData.end())
                 refresh = true;
 
@@ -1059,6 +1062,11 @@ bool TimelineViewport::_isPlaybackStopped() const noexcept
         
         p.rotation = x;
         
+        if (hasFrameView())
+        {
+            _frameView();
+        }
+        
         redrawWindows();
         updatePixelBar();
         updateCoords();
@@ -1101,11 +1109,12 @@ bool TimelineViewport::_isPlaybackStopped() const noexcept
         }
         const auto viewportSize = getViewportSize();
         const auto renderSize = getRenderSize();
-        const float rotation = p.rotation + p.videoRotation;
-        
+        const float rotation =
+            normalizeAngle0to360(p.rotation + p.videoRotation);
+
         float zoom = 1.0;
 
-        if (rotation == 90.F || rotation == -90.F)
+        if (rotation == 90.F || rotation == 270.F)
         {
             if (renderSize.w > 0)
             {
@@ -2763,7 +2772,7 @@ bool TimelineViewport::_isPlaybackStopped() const noexcept
         return speedValues[idx];
     }
 
-    void TimelineViewport::_getTags() const noexcept
+    void TimelineViewport::_getTags() noexcept
     {
         TLRENDER_P();
         
@@ -2797,12 +2806,18 @@ bool TimelineViewport::_isPlaybackStopped() const noexcept
             }
         }
 
+
+        // If we have a Video Rotation Metadata, extract its value from it.
         auto i = p.tagData.find("Video Rotation");
         p.videoRotation = 0.F;
         if (i != p.tagData.end())
         {
             std::stringstream s(i->second);
             s >> p.videoRotation;
+            if (hasFrameView())
+            {
+                _frameView();
+            }
         }
     }
     

@@ -18,6 +18,7 @@ v1.1.0
   the original file association is restored or the registry entry is deleted.
 - Added a friendlier name to Windows' Open With RMB menu.  Now the version is
   listed, instead of just "mrv2.exe".  Also the name in English is provided.
+- Fixed rotations not framing the image even when View->Auto Frame was on.
   
 
 v1.0.9

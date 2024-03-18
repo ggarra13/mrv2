@@ -437,7 +437,7 @@ namespace mrv
 
         float _getZoomSpeedValue() const noexcept;
         
-        void _getTags() const noexcept;
+        void _getTags() noexcept;
 
         TLRENDER_PRIVATE();
     };
