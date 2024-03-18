@@ -66,6 +66,10 @@ file( REMOVE_RECURSE "${CPACK_PREPACKAGE}/include" )
 #
 if( UNIX)
 
+    #
+    # Under Rocky Linux, DSOs sometimes go to lib64/.
+    # Copy them to lib/ directory
+    #
     set(linux_lib64_dir "${CPACK_PREPACKAGE}/lib64")
     if (EXISTS "${linux_lib64_dir}" )
 	# For pyFLTK we need to install all libfltk DSOs including those we
@@ -95,7 +99,7 @@ if( UNIX)
 
     
     set(MRV2_PYTHON_SITE_PACKAGES_DIR "${MRV2_PYTHON_LIB_DIR}/site-packages")
-	
+
     set( MRV2_EXES "${CPACK_PREPACKAGE}/bin/mrv2" )
     
     if ( APPLE )
@@ -111,8 +115,8 @@ if( UNIX)
 	# issues like openssl and libcrypto changing between Rocky Linux 8.1
 	# and Ubuntu 22.04.5.
 	#
-	set(MRV2_PYTHON_LIB_DIR "${MRV2_PYTHON_LIB_DIR}/lib-dynload")
-	file(GLOB python_dsos "${MRV2_PYTHON_LIB_DIR}/*.so")
+	set(MRV2_PYTHON_DSO_DIR "${MRV2_PYTHON_DSO_DIR}/lib-dynload")
+	file(GLOB python_dsos "${MRV2_PYTHON_DSO_DIR}/*.so")
 	list(APPEND MRV2_EXES ${python_dsos} )
 
 	#
@@ -139,7 +143,7 @@ elseif(WIN32)
 	"${MRV2_PYTHON_APP_LIB_DIR}/site-packages")
     
     #
-    # Don't pack sphinx and other auxiliary documentation libs
+    # Don't pack sphinx and other auxiliary documentation libs in .exe
     #
     file(GLOB MRV2_UNUSED_PYTHON_DIRS
     "${MRV2_PYTHON_APP_LIB_DIR}/test*"
@@ -178,7 +182,8 @@ endif()
 
 
 #
-# Don't pack sphinx and other auxiliary documentation libs
+# Don't pack sphinx and other auxiliary documentation libs nor the tests
+# for the libraries.
 #
 file(GLOB MRV2_UNUSED_PYTHON_DIRS
     "${MRV2_PYTHON_LIB_DIR}/test*"
@@ -194,13 +199,15 @@ file(GLOB MRV2_UNUSED_PYTHON_DIRS
     "${MRV2_PYTHON_SITE_PACKAGES_DIR}/docutils*"
     "${MRV2_PYTHON_SITE_PACKAGES_DIR}/imagesize*"
     "${MRV2_PYTHON_SITE_PACKAGES_DIR}/Jinja*"
+    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/jinja2*"
+    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/markupsafe*"
     "${MRV2_PYTHON_SITE_PACKAGES_DIR}/MarkupSafe*"
+    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/pygments*"
     "${MRV2_PYTHON_SITE_PACKAGES_DIR}/Pygments*"
     "${MRV2_PYTHON_SITE_PACKAGES_DIR}/snowballstemmer*"
     "${MRV2_PYTHON_SITE_PACKAGES_DIR}/sphinx*"
     "${MRV2_PYTHON_SITE_PACKAGES_DIR}/unittest*")
 
-	
 if ( NOT "${MRV2_UNUSED_PYTHON_DIRS}" STREQUAL "" )
     file( REMOVE_RECURSE ${MRV2_UNUSED_PYTHON_DIRS} )
 endif()

@@ -8,6 +8,7 @@
 #    include <GL/glx.h>
 #endif
 
+#ifdef FLTK_USE_WAYLAND
 extern "C"
 {
     typedef unsigned int EGLBoolean;
@@ -21,6 +22,7 @@ extern "C"
                                       EGLSurface read,
                                       EGLContext context);
 }
+#endif
 
 #include "mrvGL/mrvGLWindow.h"
 
