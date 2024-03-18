@@ -10,7 +10,6 @@ Function un.BorrarKey
 Pop $1
 
 ${unregisterExtension} "$1" "${mrv2_KEY}"
-${unregisterExtension} "$1" "${mrv2_EXE}"
 
 FunctionEnd
 
@@ -92,6 +91,8 @@ Pop $0
 !insertmacro BorrarKey '.webm'
 !insertmacro BorrarKey '.wmv'
 
+!insertmacro BorrarKey '.mrv2s'
+
 !insertmacro BorrarKey '.usd'
 !insertmacro BorrarKey '.usda'
 !insertmacro BorrarKey '.usdc'
@@ -99,7 +100,7 @@ Pop $0
 
 # IMPORTANT: Notify Windows of Change.
 ${RefreshShellIcons}
-
+	
 
 SetOutPath $TEMP
 RMDir $INSTDIR

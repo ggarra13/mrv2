@@ -12,6 +12,7 @@ Var bUnCheckAll
 !include "mrv2_translations.nsh"
 !include "FileAssociation.nsh"
 !include "FileFunc.nsh"
+!include "Junction.nsh"
 
 Page Custom LVPageCreate LVPageLeave
 
@@ -66,6 +67,12 @@ Call AddCheckedListViewItemWith1SubItem
 !macroend
 
 Function LVPageCreate
+
+;
+; Create link to .exe
+;
+${CreateLinkFile} "$INSTDIR\bin\${mrv2_KEY}" "$INSTDIR\bin\${mrv2_EXE}" "$bCheckAll"
+
 ; MessageBox MB_YESNO "Do you want to set file associations?" IDYES yes
 ;      Abort
 ; yes:
@@ -182,6 +189,10 @@ System::Free $9
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".webm" "WebM Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".wmv" "Windows Media Video" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".y4m" "YUV4MPEG2 Format" 1
+
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".mrv2s" "YUV4MPEG2 Format" 1
+
+
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".mp3" "MPEG1/2 Audio Layer III" 0
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".ogg" "Ogg Audio Format" 0
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".vorbis" "Ogg Vorbis Audio Format" 0
