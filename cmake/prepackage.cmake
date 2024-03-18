@@ -6,6 +6,7 @@
 # message( STATUS "CMAKE_CURRENT_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}" )
 # message( STATUS "CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}" )
 
+
 #
 # bug:
 #
@@ -23,8 +24,7 @@ endif()
 file(REAL_PATH ${ROOT_DIR} ROOT_DIR )
 
 
-message( STATUS "cmake/prepackage.cmake has ROOT_DIR=${ROOT_DIR}" )
-
+include( "${ROOT_DIR}/cmake/version.cmake" )
 include( "${ROOT_DIR}/cmake/functions.cmake" )
 
 
@@ -42,6 +42,7 @@ else()
     set( CPACK_PREPACKAGE "${CMAKE_INSTALL_PREFIX}" )
 endif()
 
+message( STATUS "mrv2 ROOT_DIR=${ROOT_DIR}" )
 message( STATUS "CPACK_PREPACKAGE=${CPACK_PREPACKAGE}" )
 
 #
@@ -66,6 +67,10 @@ file( REMOVE_RECURSE "${CPACK_PREPACKAGE}/include" )
 #
 if( UNIX)
 
+    #
+    # Under Rocky Linux, DSOs sometimes go to lib64/.
+    # Copy them to lib/ directory
+    #
     set(linux_lib64_dir "${CPACK_PREPACKAGE}/lib64")
     if (EXISTS "${linux_lib64_dir}" )
 	# For pyFLTK we need to install all libfltk DSOs including those we
@@ -95,7 +100,7 @@ if( UNIX)
 
     
     set(MRV2_PYTHON_SITE_PACKAGES_DIR "${MRV2_PYTHON_LIB_DIR}/site-packages")
-	
+
     set( MRV2_EXES "${CPACK_PREPACKAGE}/bin/mrv2" )
     
     if ( APPLE )
@@ -111,8 +116,8 @@ if( UNIX)
 	# issues like openssl and libcrypto changing between Rocky Linux 8.1
 	# and Ubuntu 22.04.5.
 	#
-	set(MRV2_PYTHON_LIB_DIR "${MRV2_PYTHON_LIB_DIR}/lib-dynload")
-	file(GLOB python_dsos "${MRV2_PYTHON_LIB_DIR}/*.so")
+	set(MRV2_PYTHON_DSO_DIR "${MRV2_PYTHON_DSO_DIR}/lib-dynload")
+	file(GLOB python_dsos "${MRV2_PYTHON_DSO_DIR}/*.so")
 	list(APPEND MRV2_EXES ${python_dsos} )
 
 	#
@@ -133,13 +138,20 @@ elseif(WIN32)
     # When building an .exe installer on Windows, the site-packages will
     # be inside an applications component directory.
     #
-    set(MRV2_PYTHON_APP_DIR "${CPACK_PREPACKAGE}/applications")
-    set(MRV2_PYTHON_APP_LIB_DIR "${MRV2_PYTHON_APP_DIR}/bin/Lib/")
+    set(MRV2_APP_DIR "${CPACK_PREPACKAGE}/applications")
+
+    if (EXISTS "${MRV2_APP_DIR}/bin/mrv2.exe")
+	file(CREATE_LINK
+	    "${MRV2_APP_DIR}/bin/mrv2.exe"
+	    "${MRV2_APP_DIR}/bin/mrv2-v${mrv2_VERSION}.exe") 
+    endif()
+    
+    set(MRV2_PYTHON_APP_LIB_DIR "${MRV2_APP_DIR}/bin/Lib/")
     set(MRV2_PYTHON_SITE_PACKAGES_DIR
 	"${MRV2_PYTHON_APP_LIB_DIR}/site-packages")
     
     #
-    # Don't pack sphinx and other auxiliary documentation libs
+    # Don't pack sphinx and other auxiliary documentation libs in .exe
     #
     file(GLOB MRV2_UNUSED_PYTHON_DIRS
     "${MRV2_PYTHON_APP_LIB_DIR}/test*"
@@ -178,7 +190,8 @@ endif()
 
 
 #
-# Don't pack sphinx and other auxiliary documentation libs
+# Don't pack sphinx and other auxiliary documentation libs nor the tests
+# for the libraries.
 #
 file(GLOB MRV2_UNUSED_PYTHON_DIRS
     "${MRV2_PYTHON_LIB_DIR}/test*"
@@ -190,17 +203,20 @@ file(GLOB MRV2_UNUSED_PYTHON_DIRS
     "${MRV2_PYTHON_LIB_DIR}/tkinter/test*"
     "${MRV2_PYTHON_SITE_PACKAGES_DIR}/alabaster*"
     "${MRV2_PYTHON_SITE_PACKAGES_DIR}/babel*"
+    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/Babel*"
     "${MRV2_PYTHON_SITE_PACKAGES_DIR}/colorama*"
     "${MRV2_PYTHON_SITE_PACKAGES_DIR}/docutils*"
     "${MRV2_PYTHON_SITE_PACKAGES_DIR}/imagesize*"
     "${MRV2_PYTHON_SITE_PACKAGES_DIR}/Jinja*"
+    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/jinja2*"
+    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/markupsafe*"
     "${MRV2_PYTHON_SITE_PACKAGES_DIR}/MarkupSafe*"
+    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/pygments*"
     "${MRV2_PYTHON_SITE_PACKAGES_DIR}/Pygments*"
     "${MRV2_PYTHON_SITE_PACKAGES_DIR}/snowballstemmer*"
     "${MRV2_PYTHON_SITE_PACKAGES_DIR}/sphinx*"
     "${MRV2_PYTHON_SITE_PACKAGES_DIR}/unittest*")
 
-	
 if ( NOT "${MRV2_UNUSED_PYTHON_DIRS}" STREQUAL "" )
     file( REMOVE_RECURSE ${MRV2_UNUSED_PYTHON_DIRS} )
 endif()
