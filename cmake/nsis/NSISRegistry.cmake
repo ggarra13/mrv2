@@ -61,7 +61,6 @@ set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "
 	DeleteRegKey HKCR 'Applications\\\\${mrv2_KEY}'
 	DeleteRegKey HKCR 'Applications\\\\${mrv2_EXE}'
 	DeleteRegKey HKCR '${mrv2_KEY}'
-	DeleteRegKey HKCR '${mrv2_EXE}'
 	SectionEnd
 	!addincludedir ${PROJECT_SOURCE_DIR}/../cmake/nsis
 	!include fileext_uninstall.nsh
