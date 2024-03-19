@@ -28,7 +28,7 @@ namespace mrv
         {FL_BLACK, FL_HELVETICA, 14, 0},       // A - Info
         {FL_DARK_YELLOW, FL_HELVETICA, 14, 0}, // B - Output
         {0x80400000, FL_HELVETICA, 14, 0},     // C - Warning (Orange)
-        {FL_RED, FL_HELVETICA, 14, 0},         // D - Error
+        {FL_RED, FL_HELVETICA, 14, 0}          // D - Error
     };
 
     static const int kMaxLines = 300;
@@ -91,7 +91,7 @@ namespace mrv
         delete mStyleBuffer;
         mBuffer = new Fl_Text_Buffer();
         mStyleBuffer = new Fl_Text_Buffer();
-        highlight_data(mStyleBuffer, kLogStyles, 3, 'A', 0, 0);
+        highlight_data(mStyleBuffer, kLogStyles, 4, 'A', 0, 0);
 
         main_thread = std::this_thread::get_id();
     }
@@ -150,6 +150,7 @@ namespace mrv
             trim();
         }
     }
+
     void LogDisplay::info(const char* x)
     {
         print(x, 'A');
