@@ -42,7 +42,7 @@ set(SOURCES
   mrvOS.cpp
   mrvPathMapping.cpp
   mrvRoot.cpp
-  mrvSequence.cpp
+  #mrvSequence.cpp
   mrvString.cpp
   mrvTimeObject.cpp
   mrvUtil.cpp

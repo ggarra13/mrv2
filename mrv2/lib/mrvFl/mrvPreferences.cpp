@@ -210,7 +210,6 @@ namespace mrv
             }
         }
 
-        DBG3;
         Fl_Preferences recent_hosts(base, "recentHosts");
         num = recent_hosts.entries();
         settings->addRecentHost("localhost");
@@ -230,7 +229,6 @@ namespace mrv
             }
         }
 
-        DBG3;
         Fl_Preferences python_scripts(base, "pythonScripts");
         num = python_scripts.entries();
         for (unsigned i = num; i > 0; --i)
@@ -254,7 +252,14 @@ namespace mrv
             settings->reset();
         }
 
-        DBG3;
+        int rgb =
+            settings->getValue<int>("Performance/FFmpegYUVToRGBConversion");
+        if (rgb)
+        {
+            LOG_WARNING(_("FFmpeg YUV to RGB Conversion is on in Settings "
+                          "Panel.  mrv2 will play back movies slower."));
+        }
+
         //
         // Get ui preferences
         //
@@ -308,7 +313,7 @@ namespace mrv
 
         gui.get("timeline_edit_view", tmp, 0);
         uiPrefs->uiPrefsEditView->value(tmp);
-        
+
         gui.get("timeline_edit_thumbnails", tmp, 1);
         uiPrefs->uiPrefsEditThumbnails->value(tmp);
 
@@ -377,7 +382,7 @@ namespace mrv
 
         view.get("auto_frame", tmp, 1);
         uiPrefs->uiPrefsAutoFrame->value((bool)tmp);
-        
+
         view.get("safe_areas", tmp, 0);
         uiPrefs->uiPrefsSafeAreas->value((bool)tmp);
 
@@ -546,7 +551,7 @@ namespace mrv
                 {
                     mrvLOG_INFO(
                         "ocio", _("Setting OCIO config from preferences.")
-                        << std::endl);
+                                    << std::endl);
                     setOcioConfig(tmpS);
                 }
             }
@@ -556,7 +561,7 @@ namespace mrv
             mrvLOG_INFO(
                 "ocio", _("Setting OCIO config from OCIO "
                           "environment variable.")
-                << std::endl);
+                            << std::endl);
             setOcioConfig(var);
         }
 
@@ -796,7 +801,7 @@ namespace mrv
 
         uiPrefs->uiPrefsRaiseLogWindowOnError->value(tmp);
         LogDisplay::prefs = (LogDisplay::ShowPreferences)tmp;
-        
+
         errors.get("ffmpeg_log_display", tmp, 0);
         uiPrefs->uiPrefsRaiseLogWindowOnFFmpegError->value(tmp);
         LogDisplay::ffmpegPrefs = (LogDisplay::ShowPreferences)tmp;
@@ -1908,7 +1913,7 @@ namespace mrv
                 std::string msg =
                     tl::string::Format(
                         _("OCIO file \"{0}\" not found or not readable."))
-                    .arg(configName);
+                        .arg(configName);
                 LOG_ERROR(msg);
                 LOG_INFO(_("Setting OCIO config to default:"));
                 configName = image::ocioDefault;
@@ -1928,7 +1933,7 @@ namespace mrv
         uiPrefs->uiPrefsOCIOConfig->value(configName.c_str());
         oldConfigName = configName;
     }
-    
+
     void Preferences::OCIO(ViewerUI* ui)
     {
 #ifdef TLRENDER_OCIO
@@ -1937,7 +1942,7 @@ namespace mrv
         static std::string old_ocio;
         const char* var = uiPrefs->uiPrefsOCIOConfig->value();
         if (var && strlen(var) > 0)
-        {   
+        {
             setOcioConfig(var);
 
             // First, remove all additional defaults if any from pulldown
