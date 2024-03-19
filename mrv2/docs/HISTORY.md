@@ -9,10 +9,10 @@ v1.1.0
   looked like mrv2 had hanged.
 - Made installed size and installer smaller, by removing some unneeded python
   libraries used for documenting mrv2.
-- Added tkinter to Windows' Python's Tk libraries. 
 - Made installed size and installer smaller, by removing Python's unittests.
 - Made default Windows' installer not install Python's Tk libraries by default.
-- Overall, the Windows installed size is now almost 150Mb smaller, now at 300Mb.
+- Made default Windows' installer not install IDLE nor turtledemo.
+- Overall, the Windows installed size is now almost 150Mb smaller, now at 325Mb.
 - Made Windows installer create a registry entry backup for the file
   associations, instead of using an .ini file which was worse.  On uninstall,
   the original file association is restored or the registry entry is deleted.
@@ -22,11 +22,13 @@ v1.1.0
   associate the latest version installed with the file.  Upgrading won't
   require you to reset file associations like before.
 - Fixed rotations not framing the image even when View->Auto Frame was on.
-- Added hard-links on Windows .exe installer, so that it works more like Unix.
-  You can use mrv2-v1.1.0.exe to call a specific version of the viewer.
-- Split Timeline and Edit Preferences in Preferences Window.
-- Added Default Edit View to select what gets displayed when you hit the Edit
-  button ("Video Only" or "Video and Audio").
+- Added symbolic links on Windows .exe installer, so that it works more like
+  Unix.
+  You can use mrv2-v1.1.0.exe to call a specific version of the viewer for
+  example.
+- Split Timeline into "Timeline" and "Edit" Preferences in Preferences Window.
+- Added Default View to "Edit" to select what gets displayed when you hit the
+  Edit button ("Video Only" or "Video and Audio").
 - Fixed Edit Viewport size when transitions were present.  
   
 

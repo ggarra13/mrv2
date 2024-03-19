@@ -192,18 +192,56 @@ elseif(WIN32)
 	    COMPONENT applications )
 	
 	# Install all .dll in CMAKE_INSTALL_PREFIX/bin
-	set( MRV2_PYLib "${CMAKE_INSTALL_PREFIX}/bin/Lib" )
+	file( GLOB MRV2_PYLibs "${CMAKE_INSTALL_PREFIX}/bin/Lib/*" )
 	set( MRV2_PYDLLs "${CMAKE_INSTALL_PREFIX}/bin/DLLs" )
 	set( MRV2_PYTCL "${CMAKE_INSTALL_PREFIX}/bin/tcl"  )
+	set( MRV2_TK_LIBS
+	    "${CMAKE_INSTALL_PREFIX}/bin/Lib/tkinter" 
+	    "${CMAKE_INSTALL_PREFIX}/bin/Lib/idlelib" 
+	    "${CMAKE_INSTALL_PREFIX}/bin/Lib/turtledemo" )
+
+	set(MRV2_PYLIB_DIRECTORIES "")
+	set(MRV2_PYLIB_FILES "")
+
+	foreach(item ${MRV2_PYLibs})
+	    set(_ignore FALSE)
+	    # Skip Tk libs and demos
+	    foreach(ignore ${MRV2_TK_LIBS})
+		if("${item}" MATCHES "${ignore}")
+		    set(_ignore TRUE)
+		    break()
+		endif()
+	    endforeach()
+	    if ("${_ignore}")
+		continue()
+	    endif()
+	    if (IS_DIRECTORY "${item}")
+		# Add directory to directories list
+		list(APPEND MRV2_PYLIB_DIRECTORIES "${item}")
+	    else()    
+		list(APPEND MRV2_PYLIB_FILES "${item}")
+	    endif()
+	endforeach()
+
 	
-	install( DIRECTORY ${MRV2_PYLib}
-	    DESTINATION bin/
+	install( DIRECTORY ${MRV2_PYLIB_DIRECTORIES}
+	    DESTINATION bin/Lib
 	    COMPONENT applications )
+
+	install( FILES ${MRV2_PYLIB_FILES}
+	    DESTINATION bin/Lib
+	    COMPONENT applications )
+
 	install( DIRECTORY ${MRV2_PYDLLs}
 	    DESTINATION bin/
 	    COMPONENT applications )
+
 	install( DIRECTORY ${MRV2_PYTCL}
 	    DESTINATION bin/
+	    COMPONENT python_tk )
+	
+	install( DIRECTORY ${MRV2_TK_LIBS}
+	    DESTINATION bin/Lib
 	    COMPONENT python_tk )
     endif()
 
