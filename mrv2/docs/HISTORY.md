@@ -36,6 +36,7 @@ v1.1.0
 - Fixed a redraw issue on Python's Panel output, at least on Linux.
 - Made View pull-down menu display the full name of the display / view.
 - Made UI topbar resize a tad nicer.
+- Fixed Python Output in Python Panel which was not refreshing properly.
   
 
 v1.0.9

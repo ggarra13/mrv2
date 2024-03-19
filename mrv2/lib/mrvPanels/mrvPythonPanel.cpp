@@ -436,7 +436,6 @@ from mrv2 import playlist, timeline, usd, session, settings
             {
                 outputDisplay->output(eval.c_str());
             }
-            outputDisplay->redraw();
             try
             {
                 py::exec(code);
@@ -449,8 +448,8 @@ from mrv2 import playlist, timeline, usd, session, settings
             catch (const std::exception& e)
             {
                 outputDisplay->error(e.what());
-                outputDisplay->redraw();
             }
+            outputDisplay->redraw();
         }
 
         void PythonPanel::open_python_file(const std::string& file)
