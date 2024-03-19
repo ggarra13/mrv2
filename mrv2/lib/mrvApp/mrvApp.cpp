@@ -773,17 +773,17 @@ namespace mrv
         try
         {
             if (!p.options.ocioOptions.input.empty())
-                image::setOcioIcs(p.options.ocioOptions.input);
+                ocio::setOcioIcs(p.options.ocioOptions.input);
 
             if (!p.options.ocioOptions.look.empty())
-                image::setOcioLook(p.options.ocioOptions.look);
+                ocio::setOcioLook(p.options.ocioOptions.look);
 
             if (!p.options.ocioOptions.display.empty() &&
                 !p.options.ocioOptions.view.empty())
             {
-                const std::string& merged = image::ocioDisplayViewShortened(
+                const std::string& merged = ocio::ocioDisplayViewShortened(
                     p.options.ocioOptions.display, p.options.ocioOptions.view);
-                image::setOcioView(merged);
+                ocio::setOcioView(merged);
             }
         }
         catch (const std::exception& e)
@@ -1250,7 +1250,7 @@ namespace mrv
             p.activeFiles[0]->inOutRange = p.player->inOutRange();
             p.activeFiles[0]->audioOffset = p.player->audioOffset();
             p.activeFiles[0]->annotations = p.player->getAllAnnotations();
-            p.activeFiles[0]->ocioIcs = image::ocioIcs();
+            p.activeFiles[0]->ocioIcs = ocio::ocioIcs();
         }
 
         if (!activeFiles.empty())
@@ -1414,7 +1414,7 @@ namespace mrv
                 {
                     try
                     {
-                        image::setOcioIcs(p.activeFiles[0]->ocioIcs);
+                        ocio::setOcioIcs(p.activeFiles[0]->ocioIcs);
                     }
                     catch (const std::exception& e)
                     {

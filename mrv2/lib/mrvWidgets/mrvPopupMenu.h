@@ -35,9 +35,9 @@ namespace mrv
 
         virtual int handle(int e) override;
 
-    protected:
         virtual void draw() override;
 
+    protected:
         bool _enable_glyph, _enable_label, _disable_submenus;
     };
 

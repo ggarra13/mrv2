@@ -26,15 +26,15 @@ namespace mrv
         // FONT COLOR       FONT FACE   SIZE  ATTR
         // --------------- ------------ ---- ------
         {FL_BLACK, FL_HELVETICA, 14, 0},       // A - Info
-        {0x80400000, FL_HELVETICA, 14, 0},     // B - Warning (Orange)
-        {FL_RED, FL_HELVETICA, 14, 0},         // C - Error
+        {FL_DARK_YELLOW, FL_HELVETICA, 14, 0}, // B - Output
+        {0x80400000, FL_HELVETICA, 14, 0},     // C - Warning (Orange)
+        {FL_RED, FL_HELVETICA, 14, 0},         // D - Error
     };
 
     static const int kMaxLines = 300;
 
     LogDisplay::ShowPreferences LogDisplay::prefs = LogDisplay::kDockOnError;
-    LogDisplay::ShowPreferences LogDisplay::ffmpegPrefs =
-        LogDisplay::kNoRaise;
+    LogDisplay::ShowPreferences LogDisplay::ffmpegPrefs = LogDisplay::kNoRaise;
 
     class LogData
     {
@@ -130,12 +130,12 @@ namespace mrv
     {
         if (App::ui)
         {
-            if (style == 'C')
+            if (style == 'D')
                 App::ui->uiStatusBar->error(x);
-            else if (style == 'B')
+            else if (style == 'C')
                 App::ui->uiStatusBar->warning(x);
         }
-        
+
         LogData* data = new LogData(this, x, style);
         if (main_thread != std::this_thread::get_id())
         {
@@ -155,14 +155,19 @@ namespace mrv
         print(x, 'A');
     }
 
-    void LogDisplay::warning(const char* x)
+    void LogDisplay::output(const char* x)
     {
         print(x, 'B');
     }
 
-    void LogDisplay::error(const char* x)
+    void LogDisplay::warning(const char* x)
     {
         print(x, 'C');
+    }
+
+    void LogDisplay::error(const char* x)
+    {
+        print(x, 'D');
     }
 
     int LogDisplay::handle(int e)

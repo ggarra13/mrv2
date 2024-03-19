@@ -216,7 +216,7 @@ namespace mrv
                 file::Path path(config);
                 config = getRelativePath(path, fileName).get();
             }
-            
+
             int ics = ui->uiICS->value();
             int view = ui->OCIOView->value();
             int layer = ui->uiColorChannel->value();
@@ -441,7 +441,7 @@ namespace mrv
 
                     Aitem->ocioIcs = item.ocioIcs;
                     if (!Aitem->ocioIcs.empty())
-                        mrv::image::setOcioIcs(Aitem->ocioIcs);
+                        ocio::setOcioIcs(Aitem->ocioIcs);
                     Aitem->annotations = item.annotations;
                     Aitem->videoLayer = item.videoLayer;
                     Aitem->currentTime = item.currentTime;
@@ -475,7 +475,6 @@ namespace mrv
                     toggle_secondary_cb(nullptr, ui);
                 }
 
-                
                 unsigned numFiles = model->observeFiles()->getSize();
 
                 // Decode ICS
@@ -502,7 +501,8 @@ namespace mrv
                         replace_path(config);
 
                         if (file::isReadable(config))
-                            ui->uiPrefs->uiPrefsOCIOConfig->value(config.c_str());
+                            ui->uiPrefs->uiPrefsOCIOConfig->value(
+                                config.c_str());
                     }
                     else
                     {

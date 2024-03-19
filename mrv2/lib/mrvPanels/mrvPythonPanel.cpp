@@ -67,8 +67,9 @@ namespace mrv
             // FONT COLOR       FONT FACE   SIZE  ATTR
             // --------------- ------------ ---- ------
             {FL_BLACK, FL_HELVETICA, 14, 0},       // A - Info
-            {FL_DARK_YELLOW, FL_HELVETICA, 14, 0}, // B - Warning
-            {FL_RED, FL_HELVETICA, 14, 0}          // C - Error
+            {FL_DARK_YELLOW, FL_HELVETICA, 14, 0}, // B - Output
+            {FL_DARK_YELLOW, FL_HELVETICA, 14, 0}, // C - Warning
+            {FL_RED, FL_HELVETICA, 14, 0},         // D - Error
         };
 
         //! We keep this global so the content won't be erased when the user
@@ -430,11 +431,12 @@ from mrv2 import playlist, timeline, usd, session, settings
             const std::string& eval = e->eval();
             const std::string& var = e->variable();
 
-            outputDisplay->warning(code.c_str());
+            outputDisplay->output(code.c_str());
             if (!eval.empty() && eval != var)
             {
-                outputDisplay->warning(eval.c_str());
+                outputDisplay->output(eval.c_str());
             }
+            outputDisplay->redraw();
             try
             {
                 py::exec(code);
@@ -447,6 +449,7 @@ from mrv2 import playlist, timeline, usd, session, settings
             catch (const std::exception& e)
             {
                 outputDisplay->error(e.what());
+                outputDisplay->redraw();
             }
         }
 

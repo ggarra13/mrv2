@@ -17,6 +17,7 @@
 #include "mrvGL/mrvTimelineViewportPrivate.h"
 
 #include "mrvFl/mrvCallbacks.h"
+#include "mrvFl/mrvOCIO.h"
 #include "mrvFl/mrvTimelinePlayer.h"
 
 #include "mrvCore/mrvUtil.h"
@@ -538,13 +539,20 @@ namespace mrv
         if (value == p.ocioOptions)
             return;
 
-        if (value.input.empty() || value.view.empty())
+        std::string input, view;
+
+        input = value.input;
+        if (input.empty())
+            input = _("None");
+
+        view = value.view;
+        if (view.empty())
             return;
 
         p.ocioOptions = value;
 
-        p.ui->uiICS->copy_label(value.input.c_str());
-        p.ui->OCIOView->copy_label(value.view.c_str());
+        ocio::setOcioIcs(input);
+        ocio::setOcioView(ocio::ocioDisplayViewShortened(value.display, view));
 
         if (panel::colorPanel)
         {
@@ -1650,6 +1658,9 @@ namespace mrv
             {
                 o.view = lbl;
             }
+
+            const std::string& fullname = o.display + " / " + o.view;
+            menu->copy_label(fullname.c_str());
         }
         else
         {
@@ -1661,9 +1672,9 @@ namespace mrv
             o.view = view.substr(0, pos - 1);
             pos = display.find(')');
             o.display = display.substr(0, pos);
-        }
 
-        menu->copy_label(o.view.c_str());
+            menu->copy_label(o.view.c_str());
+        }
 
         PopupMenu* lookMenu = p.ui->OCIOLook;
 

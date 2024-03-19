@@ -542,7 +542,7 @@ namespace mrv
 
             if (strlen(tmpS) != 0)
             {
-                if (image::ocioDefault != tmpS)
+                if (ocio::ocioDefault != tmpS)
                 {
                     mrvLOG_INFO(
                         "ocio", _("Setting OCIO config from preferences.")
@@ -563,7 +563,7 @@ namespace mrv
         var = uiPrefs->uiPrefsOCIOConfig->value();
         if (!var || strlen(var) == 0 || resetSettings)
         {
-            setOcioConfig(image::ocioDefault);
+            setOcioConfig(ocio::ocioDefault);
         }
 
         ocio.get("use_active_views", tmp, 1);
@@ -1911,13 +1911,13 @@ namespace mrv
                         .arg(configName);
                 LOG_ERROR(msg);
                 LOG_INFO(_("Setting OCIO config to default:"));
-                configName = image::ocioDefault;
+                configName = ocio::ocioDefault;
             }
         }
-        else if (configName == image::ocioDefault)
+        else if (configName == ocio::ocioDefault)
         {
             LOG_INFO(_("Setting OCIO config to default:"));
-            configName = image::ocioDefault;
+            configName = ocio::ocioDefault;
         }
         else
         {
@@ -2101,9 +2101,9 @@ namespace mrv
                 try
                 {
                     if (!look.empty())
-                        image::setOcioLook(look);
+                        ocio::setOcioLook(look);
                     else
-                        image::setOcioLook(_("None"));
+                        ocio::setOcioLook(_("None"));
                 }
                 catch (const std::exception& e)
                 {
@@ -2115,7 +2115,7 @@ namespace mrv
                 try
                 {
                     if (!display_view.empty())
-                        image::setOcioView(display_view);
+                        ocio::setOcioView(display_view);
                 }
                 catch (const std::exception& e)
                 {

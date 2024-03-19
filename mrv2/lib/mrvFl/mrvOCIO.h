@@ -8,10 +8,13 @@
 
 namespace mrv
 {
-    namespace image
+    namespace ocio
     {
-        extern std::string ocioDefault; 
-        
+        extern std::string ocioDefault;
+
+        std::string ocioConfig();
+        void setOcioConfig(const std::string config);
+
         int ocioIcsIndex(const std::string&);
         std::string ocioIcs();
         void setOcioIcs(const std::string&);
@@ -28,5 +31,9 @@ namespace mrv
         std::string ocioView();
         void setOcioView(const std::string&);
 
-    } // namespace image
+        std::vector<std::string> ocioIcsList();
+        std::vector<std::string> ocioLookList();
+        std::vector<std::string> ocioViewList();
+
+    } // namespace ocio
 } // namespace mrv

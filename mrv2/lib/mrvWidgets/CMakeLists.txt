@@ -50,6 +50,7 @@ set(HEADERS
     mrvPanelWindow.h
     mrvPlaylistButton.h
     mrvPopupAudio.h
+    mrvPopupLook.h
     mrvPopupMenu.h
     mrvPreferencesTree.h
     mrvProgressReport.h
@@ -99,6 +100,7 @@ set(SOURCES
     mrvPanelWindow.cpp
     mrvPlaylistButton.cpp
     mrvPopupAudio.cpp
+    mrvPopupLook.cpp
     mrvPopupMenu.cpp
     mrvPreferencesTree.cpp
     mrvProgressReport.cpp

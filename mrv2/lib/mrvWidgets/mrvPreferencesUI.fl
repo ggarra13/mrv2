@@ -1119,7 +1119,7 @@ v->uiOCIO_float_ics->do_callback();}
                 user_data this user_data_type {PreferencesUI*}
                 callback {try
 {
-  mrv::image::setOcioView(o->value());
+  mrv::ocio::setOcioView(o->value());
 }
 catch(const std::exception& e)
 {
@@ -1144,7 +1144,7 @@ v->uiOCIO_Display_View->do_callback();}
                 user_data this user_data_type {PreferencesUI*}
                 callback {try
 {
-  mrv::image::setOcioLook(o->value());
+  mrv::ocio::setOcioLook(o->value());
 }
 catch(const std::exception& e)
 {

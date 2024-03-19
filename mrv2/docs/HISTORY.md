@@ -29,7 +29,13 @@ v1.1.0
 - Split Timeline into "Timeline" and "Edit" Preferences in Preferences Window.
 - Added Default View to "Edit" to select what gets displayed when you hit the
   Edit button ("Video Only" or "Video and Audio").
-- Fixed Edit Viewport size when transitions were present.  
+- Fixed Edit Viewport size when transitions were present.
+- Fixed a potential crash when switching to nuke's ocio config.
+- Made Python's setOcioConfig accept ocio::// configurations.
+- Fixed colors on Python commands being orange instead of dark yellow as before.
+- Fixed a redraw issue on Python's Panel output, at least on Linux.
+- Made View pull-down menu display the full name of the display / view.
+- Made UI topbar resize a tad nicer.
   
 
 v1.0.9

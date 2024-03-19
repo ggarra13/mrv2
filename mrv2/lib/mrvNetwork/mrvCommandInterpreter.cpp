@@ -514,15 +514,15 @@ namespace mrv
                     }
                 }
 
-                int index = mrv::image::ocioIcsIndex(o.input);
+                int index = mrv::ocio::ocioIcsIndex(o.input);
                 ui->uiICS->value(index);
 
                 std::string mergedView =
-                    mrv::image::ocioDisplayViewShortened(o.display, o.view);
-                index = mrv::image::ocioViewIndex(mergedView);
+                    mrv::ocio::ocioDisplayViewShortened(o.display, o.view);
+                index = mrv::ocio::ocioViewIndex(mergedView);
                 ui->OCIOView->value(index);
 
-                index = mrv::image::ocioLookIndex(o.look);
+                index = mrv::ocio::ocioLookIndex(o.look);
                 ui->OCIOLook->value(index);
 
                 view->setOCIOOptions(o);

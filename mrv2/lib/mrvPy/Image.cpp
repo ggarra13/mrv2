@@ -116,8 +116,7 @@ namespace tl
         operator<<(std::ostream& s, const BackgroundOptions& o)
         {
             s << "<mrv2.image.BackgroundOptions type=" << o.type
-              << " checkersSize=" << o.checkersSize
-              << " color0=" << o.color0
+              << " checkersSize=" << o.checkersSize << " color0=" << o.color0
               << " color1=" << o.color1 << ">";
             return s;
         }
@@ -163,103 +162,6 @@ namespace mrv
         {
             ViewerUI* ui = App::ui;
             ui->uiView->setBackgroundOptions(value);
-        }
-
-        std::string ocioConfig()
-        {
-            ViewerUI* ui = App::ui;
-            PreferencesUI* uiPrefs = ui->uiPrefs;
-            const char* out = uiPrefs->uiPrefsOCIOConfig->value();
-            if (!out)
-                return "";
-            return out;
-        }
-
-        void setOcioConfig(const std::string config)
-        {
-            ViewerUI* ui = App::ui;
-            PreferencesUI* uiPrefs = ui->uiPrefs;
-            if (config.empty())
-            {
-                throw std::runtime_error(
-                    _("OCIO config file cannot be empty."));
-            }
-            if (!file::isReadable(config))
-            {
-                std::string err = string::Format(_("OCIO config '{0}' does not "
-                                                   "exist or is not readable."))
-                                      .arg(config);
-                throw std::runtime_error(err);
-            }
-
-            const char* oldconfig = uiPrefs->uiPrefsOCIOConfig->value();
-            if (oldconfig && strlen(oldconfig) > 0)
-            {
-                // Same config file.  Nothing to do.
-                if (config == oldconfig)
-                    return;
-            }
-
-            uiPrefs->uiPrefsOCIOConfig->value(config.c_str());
-            Preferences::OCIO(ui);
-        }
-
-        std::vector<std::string> ocioIcsList()
-        {
-            auto uiICS = App::ui->uiICS;
-            std::vector<std::string> out;
-            for (int i = 0; i < uiICS->children(); ++i)
-            {
-                const Fl_Menu_Item* item = uiICS->child(i);
-                if (!item || !item->label() || item->flags & FL_SUBMENU)
-                    continue;
-
-                char pathname[1024];
-                int ret = uiICS->item_pathname(pathname, 1024, item);
-                if (ret != 0)
-                    continue;
-
-                if (pathname[0] == '/')
-                    out.push_back(item->label());
-                else
-                    out.push_back(pathname);
-            }
-            return out;
-        }
-
-        std::vector<std::string> ocioLookList()
-        {
-            auto OCIOLook = App::ui->OCIOLook;
-            std::vector<std::string> out;
-            for (int i = 0; i < OCIOLook->children(); ++i)
-            {
-                const Fl_Menu_Item* item = OCIOLook->child(i);
-                if (!item || !item->label())
-                    continue;
-
-                out.push_back(item->label());
-            }
-            return out;
-        }
-
-        std::vector<std::string> ocioViewList()
-        {
-            auto uiOCIOView = App::ui->OCIOView;
-            std::vector<std::string> out;
-            for (int i = 0; i < uiOCIOView->children(); ++i)
-            {
-                const Fl_Menu_Item* item = uiOCIOView->child(i);
-                if (!item || !item->label() || (item->flags & FL_SUBMENU))
-                    continue;
-
-                char pathname[1024];
-                int ret = uiOCIOView->item_pathname(pathname, 1024, item);
-                if (ret != 0)
-                    continue;
-
-                out.push_back(pathname);
-            }
-            return out;
         }
 
     } // namespace image
@@ -611,8 +513,8 @@ Contains all classes and enums related to image controls.
         .def(py::init<>())
         .def(
             py::init<
-                timeline::Background, image::Color4f,
-                image::Color4f, math::Size2i>(),
+                timeline::Background, image::Color4f, image::Color4f,
+                math::Size2i>(),
             py::arg("type") = timeline::Background::Transparent,
             py::arg("checkersColor0") = image::Color4f(1.F, 1.F, 1.F),
             py::arg("checkersColor1") = image::Color4f(0.5F, 0.5F, 0.5F),
@@ -648,44 +550,44 @@ Contains all classes and enums related to image controls.
         _("Sets the current background options."));
 
     image.def(
-        "ocioConfig", &mrv::image::ocioConfig,
+        "ocioConfig", &mrv::ocio::ocioConfig,
         _("Gets the current OCIO config file."));
 
     image.def(
-        "setOcioConfig", &mrv::image::setOcioConfig,
+        "setOcioConfig", &mrv::ocio::setOcioConfig,
         _("Sets the current OCIO config file."));
 
     image.def(
-        "ocioIcs", &mrv::image::ocioIcs,
+        "ocioIcs", &mrv::ocio::ocioIcs,
         _("Gets the current input color space."));
 
     image.def(
-        "ocioIcsList", &mrv::image::ocioIcsList,
+        "ocioIcsList", &mrv::ocio::ocioIcsList,
         _("Gets a list of all input color spaces."));
 
     image.def(
-        "setOcioIcs", &mrv::image::setOcioIcs, _("Set the input color space."),
+        "setOcioIcs", &mrv::ocio::setOcioIcs, _("Set the input color space."),
         py::arg("ics"));
 
     image.def(
-        "ocioView", &mrv::image::ocioView, _("Gets the current Display/View."));
+        "ocioView", &mrv::ocio::ocioView, _("Gets the current Display/View."));
 
     image.def(
-        "ocioViewList", &mrv::image::ocioViewList,
+        "ocioViewList", &mrv::ocio::ocioViewList,
         _("Gets the list of Displays/Views."));
 
     image.def(
-        "setOcioView", &mrv::image::setOcioView, _("Set an OCIO Display/View."),
+        "setOcioView", &mrv::ocio::setOcioView, _("Set an OCIO Display/View."),
         py::arg("view"));
 
     image.def(
-        "ocioLook", &mrv::image::ocioLook, _("Gets the current OCIO look."));
+        "ocioLook", &mrv::ocio::ocioLook, _("Gets the current OCIO look."));
 
     image.def(
-        "ocioLookList", &mrv::image::ocioLookList,
+        "ocioLookList", &mrv::ocio::ocioLookList,
         _("Gets a list of all OCIO looks."));
 
     image.def(
-        "setOcioLook", &mrv::image::setOcioLook,
-        _("Set the OCIO look by name."), py::arg("look"));
+        "setOcioLook", &mrv::ocio::setOcioLook, _("Set the OCIO look by name."),
+        py::arg("look"));
 }

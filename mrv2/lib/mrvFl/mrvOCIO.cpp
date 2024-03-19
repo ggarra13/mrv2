@@ -5,15 +5,60 @@
 #include <tlCore/StringFormat.h>
 
 #include "mrvCore/mrvI8N.h"
+#include "mrvCore/mrvFile.h"
 
 #include "mrViewer.h"
 
 namespace mrv
 {
-    namespace image
+    namespace ocio
     {
         std::string ocioDefault = "ocio://default";
-        
+
+        std::string ocioConfig()
+        {
+            ViewerUI* ui = App::ui;
+            PreferencesUI* uiPrefs = ui->uiPrefs;
+            const char* out = uiPrefs->uiPrefsOCIOConfig->value();
+            if (!out)
+                return "";
+            return out;
+        }
+
+        void setOcioConfig(const std::string config)
+        {
+            ViewerUI* ui = App::ui;
+            PreferencesUI* uiPrefs = ui->uiPrefs;
+            if (config.empty())
+            {
+                throw std::runtime_error(
+                    _("OCIO config file cannot be empty."));
+            }
+
+            if (config.substr(0, 7) != "ocio://")
+            {
+                if (!file::isReadable(config))
+                {
+                    std::string err =
+                        string::Format(_("OCIO config '{0}' does not "
+                                         "exist or is not readable."))
+                            .arg(config);
+                    throw std::runtime_error(err);
+                }
+            }
+
+            const char* oldconfig = uiPrefs->uiPrefsOCIOConfig->value();
+            if (oldconfig && strlen(oldconfig) > 0)
+            {
+                // Same config file.  Nothing to do.
+                if (config == oldconfig)
+                    return;
+            }
+
+            uiPrefs->uiPrefsOCIOConfig->value(config.c_str());
+            Preferences::OCIO(ui);
+        }
+
         std::string ocioIcs()
         {
             auto uiICS = App::ui->uiICS;
@@ -203,7 +248,6 @@ namespace mrv
                     string::Format(_("Invalid OCIO Display/View '{0}'."))
                         .arg(name);
                 throw std::runtime_error(err);
-                return;
             }
             uiOCIOView->value(value);
             uiOCIOView->do_callback();
@@ -234,7 +278,7 @@ namespace mrv
             }
             else
             {
-                out = view + '(' + display + ')';
+                out = view + " (" + display + ')';
             }
             return out;
         }
@@ -262,5 +306,63 @@ namespace mrv
             }
             return value;
         }
-    } // namespace image
+        std::vector<std::string> ocioIcsList()
+        {
+            auto uiICS = App::ui->uiICS;
+            std::vector<std::string> out;
+            for (int i = 0; i < uiICS->children(); ++i)
+            {
+                const Fl_Menu_Item* item = uiICS->child(i);
+                if (!item || !item->label() || item->flags & FL_SUBMENU)
+                    continue;
+
+                char pathname[1024];
+                int ret = uiICS->item_pathname(pathname, 1024, item);
+                if (ret != 0)
+                    continue;
+
+                if (pathname[0] == '/')
+                    out.push_back(item->label());
+                else
+                    out.push_back(pathname);
+            }
+            return out;
+        }
+
+        std::vector<std::string> ocioLookList()
+        {
+            auto OCIOLook = App::ui->OCIOLook;
+            std::vector<std::string> out;
+            for (int i = 0; i < OCIOLook->children(); ++i)
+            {
+                const Fl_Menu_Item* item = OCIOLook->child(i);
+                if (!item || !item->label())
+                    continue;
+
+                out.push_back(item->label());
+            }
+            return out;
+        }
+
+        std::vector<std::string> ocioViewList()
+        {
+            auto uiOCIOView = App::ui->OCIOView;
+            std::vector<std::string> out;
+            for (int i = 0; i < uiOCIOView->children(); ++i)
+            {
+                const Fl_Menu_Item* item = uiOCIOView->child(i);
+                if (!item || !item->label() || (item->flags & FL_SUBMENU))
+                    continue;
+
+                char pathname[1024];
+                int ret = uiOCIOView->item_pathname(pathname, 1024, item);
+                if (ret != 0)
+                    continue;
+
+                out.push_back(pathname);
+            }
+            return out;
+        }
+
+    } // namespace ocio
 } // namespace mrv
