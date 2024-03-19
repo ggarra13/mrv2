@@ -63,7 +63,6 @@ set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
         # Create a hard-link 
         #
 
->>>>>>> 8c5075120dc3093f91d2717d3da439df89ce029b
 	SectionEnd
 	!addincludedir ${PROJECT_SOURCE_DIR}/../cmake/nsis
         !define  mrv2_KEY ${mrv2_KEY}
