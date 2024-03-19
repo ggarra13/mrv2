@@ -210,7 +210,6 @@ namespace mrv
             }
         }
 
-        DBG3;
         Fl_Preferences recent_hosts(base, "recentHosts");
         num = recent_hosts.entries();
         settings->addRecentHost("localhost");
@@ -230,7 +229,6 @@ namespace mrv
             }
         }
 
-        DBG3;
         Fl_Preferences python_scripts(base, "pythonScripts");
         num = python_scripts.entries();
         for (unsigned i = num; i > 0; --i)
@@ -254,7 +252,14 @@ namespace mrv
             settings->reset();
         }
 
-        DBG3;
+        int rgb =
+            settings->getValue<int>("Performance/FFmpegYUVToRGBConversion");
+        if (rgb)
+        {
+            LOG_WARNING(_("FFmpeg YUV to RGB Conversion is on in Settings "
+                          "Panel.  mrv2 will play back movies slower."));
+        }
+
         //
         // Get ui preferences
         //
