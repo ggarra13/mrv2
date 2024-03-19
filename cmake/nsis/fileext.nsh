@@ -9,9 +9,10 @@ Var hListCtl
 Var bCheckAll
 Var bUnCheckAll
 
-!include mrv2_translations.nsh
+!include "mrv2_translations.nsh"
 !include "FileAssociation.nsh"
-
+!include "FileFunc.nsh"
+!include "Junction.nsh"
 
 Page Custom LVPageCreate LVPageLeave
 
@@ -66,6 +67,12 @@ Call AddCheckedListViewItemWith1SubItem
 !macroend
 
 Function LVPageCreate
+
+;
+; Create link to .exe
+;
+${CreateLinkFile} "$INSTDIR\bin\${mrv2_KEY}" "$INSTDIR\bin\${mrv2_EXE}" "$bCheckAll"
+
 ; MessageBox MB_YESNO "Do you want to set file associations?" IDYES yes
 ;      Abort
 ; yes:
@@ -182,6 +189,10 @@ System::Free $9
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".webm" "WebM Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".wmv" "Windows Media Video" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".y4m" "YUV4MPEG2 Format" 1
+
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".mrv2s" "YUV4MPEG2 Format" 1
+
+
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".mp3" "MPEG1/2 Audio Layer III" 0
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".ogg" "Ogg Audio Format" 0
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".vorbis" "Ogg Vorbis Audio Format" 0
@@ -213,10 +224,17 @@ ${DoWhile} $0 < $1
     ${If} $2 <> 0
 	SendMessage $hListCtl ${LVM_GETITEMTEXT} $0 $9 $2
 	System::Call '*$8(&t${NSIS_MAX_STRLEN}.r7)'
-	${registerExtension} "$INSTDIR\bin\mrv2.exe" "$7" "$7 File"
+	
+	${registerExtension} "${mrv2_KEY}" "$7" "$7 File"
+	${registerExtension} "${mrv2_EXE}" "$7" "$7 File"
+	
     ${EndIf}
+
     IntOp $0 $0 + 1
 ${Loop}
 System::Free $8
 System::Free $9
+
+# IMPORTANT: Notify Windows of Change.
+${RefreshShellIcons}
 FunctionEnd

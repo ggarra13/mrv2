@@ -1,10 +1,14 @@
 !include LogicLib.nsh
-!include "FileAssociation.nsh"
+!include FileAssociation.nsh
+!include "FileFunc.nsh"
+
+${FileAssociation_VERBOSE} 4   # all verbosity
+!insertmacro UnRegisterExtension
+${FileAssociation_VERBOSE} 3   # no script
 
 Function un.BorrarKey
 
-Pop $1
-${unregisterExtension} "$1" "$1 File"
+${unregisterExtension} "$1" "${mrv2_KEY}"
 
 FunctionEnd
 
@@ -86,13 +90,21 @@ Pop $0
 !insertmacro BorrarKey '.webm'
 !insertmacro BorrarKey '.wmv'
 
+!insertmacro BorrarKey '.mrv2s'
+
 !insertmacro BorrarKey '.usd'
 !insertmacro BorrarKey '.usda'
 !insertmacro BorrarKey '.usdc'
 !insertmacro BorrarKey '.usdz'
 
+# IMPORTANT: Notify Windows of Change.
+${RefreshShellIcons}
+	
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 8c5075120dc3093f91d2717d3da439df89ce029b
 SetOutPath $TEMP
 RMDir $INSTDIR
 

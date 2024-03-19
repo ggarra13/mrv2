@@ -5,9 +5,32 @@ v1.1.0
 - Made mrv2's custom file requester list presumed sequences of a single frame
   as a file instead of a custom sequence name display.
 - Matched NDI colors.
-- Fixed file associations on Windows as mrv2 was using Windows Vista/7 registry
-  keys.
-- Fixed slow playback of 4K movies.
+- Made NDI streams not display thumbnails in any of the panels, as it would
+  looked like mrv2 had hanged.
+- Made installed size and installer smaller, by removing some unneeded python
+  libraries used for documenting mrv2.
+- Made installed size and installer smaller, by removing Python's unittests.
+- Made default Windows' installer not install Python's Tk libraries by default.
+- Made default Windows' installer not install IDLE nor turtledemo.
+- Overall, the Windows installed size is now almost 150Mb smaller, now at 325Mb.
+- Made Windows installer create a registry entry backup for the file
+  associations, instead of using an .ini file which was worse.  On uninstall,
+  the original file association is restored or the registry entry is deleted.
+- Added a friendlier name to Windows' Open With RMB menu.  Now the version is
+  listed, instead of just "mrv2.exe".  Also the name in English is provided.
+- Added a latest version to Windows' Open With RMB menu.  If used, it will
+  associate the latest version installed with the file.  Upgrading won't
+  require you to reset file associations like before.
+- Fixed rotations not framing the image even when View->Auto Frame was on.
+- Added symbolic links on Windows .exe installer, so that it works more like
+  Unix.
+  You can use mrv2-v1.1.0.exe to call a specific version of the viewer for
+  example.
+- Split Timeline into "Timeline" and "Edit" Preferences in Preferences Window.
+- Added Default View to "Edit" to select what gets displayed when you hit the
+  Edit button ("Video Only" or "Video and Audio").
+- Fixed Edit Viewport size when transitions were present.  
+  
 
 v1.0.9
 ======

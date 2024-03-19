@@ -137,7 +137,7 @@ namespace mrv
 
         //! Return if display window is active
         bool getDisplayWindow() const noexcept;
-        
+
         //! Return if ignoring display window is active
         bool getIgnoreDisplayWindow() const noexcept;
 
@@ -149,7 +149,7 @@ namespace mrv
 
         //! Set display window
         void setDisplayWindow(bool) noexcept;
-        
+
         //! Set ignore of display window
         void setIgnoreDisplayWindow(bool) noexcept;
 
@@ -305,7 +305,7 @@ namespace mrv
         //! Refresh both the primary and secondary windows by clearing the
         //! associated resources.
         void refreshWindows();
-        
+
         //! Refresh window by clearing the associated resources.
         virtual void refresh(){};
 
@@ -345,13 +345,13 @@ namespace mrv
 
         //! Return the image rotation.
         float getRotation() const noexcept;
-        
+
         //! Set the image rotation.
         void setRotation(float) noexcept;
 
         //! Update the coordinates.
         void updateCoords() const noexcept;
-        
+
     protected:
         virtual void _readPixel(image::Color4f& rgba) const noexcept = 0;
         math::Vector2i _getViewportCenter() const noexcept;
@@ -363,14 +363,14 @@ namespace mrv
 
         //! Get the full projection matrix.
         math::Matrix4x4f _projectionMatrix() const noexcept;
-        
+
         //! Get the matrix to pixel (raster) coordinates of image.
         math::Matrix4x4f _pixelMatrix() const noexcept;
-        
+
         //! Handle the selection area position taking into account
         //! rotation.
         void _handleSelectionArea(math::Vector2i& pos) const noexcept;
-        
+
         //! Call redraw and a flush to force a redraw.
         void _refresh() noexcept;
 
@@ -436,8 +436,8 @@ namespace mrv
         bool _hasSecondaryViewport() const noexcept;
 
         float _getZoomSpeedValue() const noexcept;
-        
-        void _getTags() const noexcept;
+
+        void _getTags() noexcept;
 
         TLRENDER_PRIVATE();
     };

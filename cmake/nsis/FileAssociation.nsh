@@ -119,6 +119,7 @@ _____________________________________________________________________________
  
   ReadRegStr $1 HKCR $R1 ""  ; read current file association
   StrCmp "$1" "" NoBackup  ; is it empty
+<<<<<<< HEAD
   StrCmp "$1" "$R0" NoBackup  ; is it our own
     WriteRegStr HKCR $R1 "backup_val" "$1"  ; backup current value
 NoBackup:
@@ -133,6 +134,12 @@ Skip:
   WriteRegStr HKCR "$R0\shell\open\command" "" '"$R2" "%1"'
   WriteRegStr HKCR "$R0\shell\edit" "" "Edit $R0"
   WriteRegStr HKCR "$R0\shell\edit\command" "" '"$R2" "%1"'
+=======
+  StrCmp "$1" "$R2" NoBackup  ; is it our own
+    WriteRegStr HKCR $R1 "backup_val" "$1"  ; backup current value
+NoBackup:
+  WriteRegStr HKCR $R1 "" "$R2"  ; set our file association
+>>>>>>> 8c5075120dc3093f91d2717d3da439df89ce029b
  
   Pop $1
   Pop $0

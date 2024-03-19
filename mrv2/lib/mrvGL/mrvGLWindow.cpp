@@ -8,19 +8,20 @@
 #    include <GL/glx.h>
 #endif
 
+#ifdef FLTK_USE_WAYLAND
 extern "C"
 {
     typedef unsigned int EGLBoolean;
-    typedef void *EGLDisplay;
-    typedef void *EGLSurface;
-    typedef void *EGLContext;
-    
+    typedef void* EGLDisplay;
+    typedef void* EGLSurface;
+    typedef void* EGLContext;
+
     extern EGLContext eglGetCurrentContext();
-    extern EGLBoolean eglMakeCurrent( EGLDisplay display,
-                                      EGLSurface draw,
-                                      EGLSurface read,
-                                      EGLContext context);
+    extern EGLBoolean eglMakeCurrent(
+        EGLDisplay display, EGLSurface draw, EGLSurface read,
+        EGLContext context);
 }
+#endif
 
 #include "mrvGL/mrvGLWindow.h"
 

@@ -306,6 +306,9 @@ namespace mrv
         gui.get("timeline_edit_mode", tmp, 0);
         uiPrefs->uiPrefsEditMode->value(tmp);
 
+        gui.get("timeline_edit_view", tmp, 0);
+        uiPrefs->uiPrefsEditView->value(tmp);
+
         gui.get("timeline_edit_thumbnails", tmp, 1);
         uiPrefs->uiPrefsEditThumbnails->value(tmp);
 
@@ -374,7 +377,7 @@ namespace mrv
 
         view.get("auto_frame", tmp, 1);
         uiPrefs->uiPrefsAutoFrame->value((bool)tmp);
-        
+
         view.get("safe_areas", tmp, 0);
         uiPrefs->uiPrefsSafeAreas->value((bool)tmp);
 
@@ -543,7 +546,7 @@ namespace mrv
                 {
                     mrvLOG_INFO(
                         "ocio", _("Setting OCIO config from preferences.")
-                        << std::endl);
+                                    << std::endl);
                     setOcioConfig(tmpS);
                 }
             }
@@ -553,7 +556,7 @@ namespace mrv
             mrvLOG_INFO(
                 "ocio", _("Setting OCIO config from OCIO "
                           "environment variable.")
-                << std::endl);
+                            << std::endl);
             setOcioConfig(var);
         }
 
@@ -793,7 +796,7 @@ namespace mrv
 
         uiPrefs->uiPrefsRaiseLogWindowOnError->value(tmp);
         LogDisplay::prefs = (LogDisplay::ShowPreferences)tmp;
-        
+
         errors.get("ffmpeg_log_display", tmp, 0);
         uiPrefs->uiPrefsRaiseLogWindowOnFFmpegError->value(tmp);
         LogDisplay::ffmpegPrefs = (LogDisplay::ShowPreferences)tmp;
@@ -1173,6 +1176,7 @@ namespace mrv
             "timeline_thumbnails", uiPrefs->uiPrefsTimelineThumbnails->value());
         gui.set("remove_edls", uiPrefs->uiPrefsRemoveEDLs->value());
         gui.set("timeline_edit_mode", uiPrefs->uiPrefsEditMode->value());
+        gui.set("timeline_edit_view", uiPrefs->uiPrefsEditView->value());
         gui.set(
             "timeline_edit_thumbnails",
             uiPrefs->uiPrefsEditThumbnails->value());
@@ -1904,7 +1908,7 @@ namespace mrv
                 std::string msg =
                     tl::string::Format(
                         _("OCIO file \"{0}\" not found or not readable."))
-                    .arg(configName);
+                        .arg(configName);
                 LOG_ERROR(msg);
                 LOG_INFO(_("Setting OCIO config to default:"));
                 configName = image::ocioDefault;
@@ -1924,7 +1928,7 @@ namespace mrv
         uiPrefs->uiPrefsOCIOConfig->value(configName.c_str());
         oldConfigName = configName;
     }
-    
+
     void Preferences::OCIO(ViewerUI* ui)
     {
 #ifdef TLRENDER_OCIO
@@ -1933,7 +1937,7 @@ namespace mrv
         static std::string old_ocio;
         const char* var = uiPrefs->uiPrefsOCIOConfig->value();
         if (var && strlen(var) > 0)
-        {   
+        {
             setOcioConfig(var);
 
             // First, remove all additional defaults if any from pulldown
