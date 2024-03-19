@@ -101,10 +101,6 @@ Pop $0
 ${RefreshShellIcons}
 	
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 8c5075120dc3093f91d2717d3da439df89ce029b
 SetOutPath $TEMP
 RMDir $INSTDIR
 
