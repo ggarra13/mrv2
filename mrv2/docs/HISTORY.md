@@ -6,7 +6,7 @@ v1.1.0
   as a file instead of a custom sequence name display.
 - Matched NDI colors.
 - Made NDI streams not display thumbnails in any of the panels, as it would
-  looked like mrv2 had hanged.
+  look like mrv2 had hanged.
 - Made installed size and installer smaller, by removing some unneeded python
   libraries used for documenting mrv2.
 - Made installed size and installer smaller, by removing Python's unittests.
@@ -38,6 +38,7 @@ v1.1.0
 - Made UI topbar resize a tad nicer.
 - Fixed Python Output in Python Panel which was not refreshing at all due to
   my misuse of the FLTK API since v0.9.3.
+- Fixed a stray menu bar on Python Panel on closing it.
   
 
 v1.0.9
