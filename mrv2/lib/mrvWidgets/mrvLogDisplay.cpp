@@ -80,18 +80,16 @@ namespace mrv
         Fl_Text_Display(x, y, w, h, l),
         maxLines(kMaxLines)
     {
-
         color(FL_GRAY0);
 
         scrollbar_align(FL_ALIGN_BOTTOM | FL_ALIGN_RIGHT);
 
         wrap_mode(WRAP_AT_BOUNDS, 80);
 
-        delete mBuffer;
-        delete mStyleBuffer;
-        mBuffer = new Fl_Text_Buffer();
-        mStyleBuffer = new Fl_Text_Buffer();
-        highlight_data(mStyleBuffer, kLogStyles, 4, 'A', 0, 0);
+        Fl_Text_Buffer* buf = new Fl_Text_Buffer();
+        buffer(buf);
+        Fl_Text_Buffer* style = new Fl_Text_Buffer();
+        highlight_data(style, kLogStyles, 4, 'A', 0, 0);
 
         main_thread = std::this_thread::get_id();
     }
@@ -147,7 +145,8 @@ namespace mrv
             buffer()->append(data->message);
             scroll(buffer()->length(), 0);
             delete data;
-            trim();
+            // trim();
+            redraw();
         }
     }
 

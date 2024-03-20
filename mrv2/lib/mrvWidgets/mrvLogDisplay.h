@@ -29,8 +29,6 @@ namespace mrv
 
         int handle(int event) override;
 
-        void create_menu();
-
         void clear();
 
         void setMaxLines(unsigned lines) { maxLines = lines; }
