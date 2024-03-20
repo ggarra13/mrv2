@@ -343,6 +343,7 @@ namespace mrv
             Fl_Tile* tile;
             _r->tile = tile = new Fl_Tile(g->x(), g->y() + Y, g->w(), H - 3);
             tile->labeltype(FL_NO_LABEL);
+            tile->begin();
 
             int dx = 20, dy = 20; // border width of resizable() - see below
             Fl_Box r(
