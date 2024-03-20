@@ -7,6 +7,7 @@
 #include <tlCore/StringFormat.h>
 
 #include <FL/Fl.H>
+#include <FL/Fl_Menu_.H>
 
 #include "mrvPanelGroup.h"
 
@@ -74,7 +75,11 @@ namespace mrv
         {
             Fl_Widget*  w = pack->child(i);
             PanelGroup* g = dynamic_cast<PanelGroup*>(w);
-            if (!g)
+            if (dynamic_cast<Fl_Menu_*>(w))
+            {
+                out.push_back("A menu bar");
+            }   
+            else if (!g)
             {
                 const std::string lbl = w->label() ? w->label() : "unknown";
                 const std::string msg =

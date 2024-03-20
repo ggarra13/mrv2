@@ -202,17 +202,15 @@ namespace mrv
 
         PythonPanel::~PythonPanel()
         {
-#if __APPLE__
+#ifdef __APPLE__
             TLRENDER_P();
             if (!p.ui->uiPrefs->uiPrefsMacOSMenus->value())
             {
-                g->remove(_r->menu);
                 if (_r->menu)
                     g->remove(_r->menu);
                 _r->menu = nullptr;
             }
 #else
-            _r->menu = new Fl_Menu_Bar(g->x(), g->y() + 20, g->w(), 20);
             if (_r->menu)
                 g->remove(_r->menu);
             _r->menu = nullptr;
@@ -225,7 +223,7 @@ namespace mrv
         {
             TLRENDER_P();
 
-#if __APPLE__
+#ifdef __APPLE__
             if (p.ui->uiPrefs->uiPrefsMacOSMenus->value())
             {
                 _r->menu = p.ui->uiMenuBar;
