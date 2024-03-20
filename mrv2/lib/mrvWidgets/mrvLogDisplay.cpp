@@ -145,7 +145,7 @@ namespace mrv
             buffer()->append(data->message);
             scroll(buffer()->length(), 0);
             delete data;
-            // trim();
+            trim();
             redraw();
         }
     }
