@@ -39,6 +39,13 @@ v1.1.0
 - Fixed Python Output in Python Panel which was not refreshing at all due to
   my misuse of the FLTK API since v0.9.3.
 - Fixed a stray menu bar on Python Panel on closing it.
+- Improved performance of package creation using multithreading when possible
+  with cpack's generators.
+- Added support for NDI's BT601 and BT2020.
+- Added support for NDI's alpha channel.
+- Added support for saving PNG and TIFF with alpha channel when saving a half
+  or float OpenEXR image.  TIFFs will get saved in float.  PNG in 16-bits.
+- Eliminated duplicated error and warning messages from the logs.
   
 
 v1.0.9

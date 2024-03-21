@@ -648,32 +648,50 @@ namespace mrv
             ui->app->getContext()->getLogSystem()->observeLog(),
             [this](const std::vector<log::Item>& value)
             {
-                static std::string lastMessage;
+                static std::string lastStatusMessage;
+                static std::string lastWarningMessage;
+                static std::string lastErrorMessage;
                 for (const auto& i : value)
                 {
                     const std::string& msg = i.message;
                     const std::string& kModule = i.module;
-                    if (msg == lastMessage)
-                        continue;
-                    lastMessage = msg;
                     switch (i.type)
                     {
                     case log::Type::Error:
                     {
+                        if (msg == lastErrorMessage)
+                            continue;
+                    
+                        lastErrorMessage = msg;
+                        
                         LOG_ERROR(msg);
                         break;
                     }
                     case log::Type::Warning:
                     {
+                        if (msg == lastWarningMessage)
+                            continue;
+                        
+                        lastWarningMessage = msg;
+                        
                         LOG_WARNING(msg);
                         break;
                     }
                     case log::Type::Status:
                     {
+                        if (msg == lastStatusMessage)
+                            continue;
+                        
+                        lastStatusMessage = msg;
+                        
                         LOG_INFO(msg);
                         break;
                     }
                     default:
+                        if (_options.log)
+                        {
+                            uiLogDisplay->info(msg.c_str());
+                        }
                         break;
                     }
                 }
