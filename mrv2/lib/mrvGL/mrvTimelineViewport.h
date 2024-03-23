@@ -257,9 +257,6 @@ namespace mrv
         //! Set the OCIO configuration from the GUI.
         void updateOCIOOptions() noexcept;
 
-        //! Updatee the image options from the GUI.
-        void updateImageOptions() noexcept;
-
         //! Update the display options from the GUI.
         void updateDisplayOptions() noexcept;
 
@@ -411,8 +408,7 @@ namespace mrv
         void _updateViewRotation(const math::Vector2f& spin) noexcept;
 
         void _updateDisplayOptions(const timeline::DisplayOptions& d) noexcept;
-        void _updateImageOptions(const timeline::ImageOptions& d) noexcept;
-
+ 
         void _pushColorMessage(const std::string& command, float value);
 
         void _mallocBuffer() const noexcept;

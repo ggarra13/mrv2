@@ -308,7 +308,6 @@ namespace mrv
                             p.videoData.size() > 1)
                         {
                             _drawStereo3D();
-                            CHECK_GL;
                         }
                         else
                         {
@@ -320,14 +319,11 @@ namespace mrv
                                         p.compareOptions.mode, p.videoData),
                                     p.imageOptions, p.displayOptions,
                                     p.compareOptions, p.backgroundOptions);
-                                CHECK_GL;
                             }
                         }
                     }
                     _drawOverlays(renderSize);
-                    CHECK_GL;
                     gl.render->end();
-                    CHECK_GL;
                 }
             }
         }
