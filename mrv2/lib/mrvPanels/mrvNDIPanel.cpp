@@ -48,6 +48,7 @@ namespace mrv
 
         struct NDIPanel::Private
         {
+            
             PopupMenu* source = nullptr;
             Fl_Choice* noAudio = nullptr;
             HorSlider* preroll = nullptr;
@@ -59,7 +60,13 @@ namespace mrv
             std::atomic<bool> has_awake = false;
             static std::string lastStream;
 
-            std::thread playThread;
+            struct PlayThread
+            {
+                bool        found = false;
+                std::thread thread;
+            };
+            
+            PlayThread play;
 
             std::thread findThread;
             std::atomic<bool> running = false;
@@ -322,33 +329,6 @@ namespace mrv
 
             Y += 30;
 
-            uint64_t totalVirtualMem, virtualMemUsed, virtualMemUsedByMe,
-                totalPhysMem, physMemUsed, physMemUsedByMe;
-
-            memory_information(
-                totalVirtualMem, virtualMemUsed, virtualMemUsedByMe,
-                totalPhysMem, physMemUsed, physMemUsedByMe);
-
-            totalPhysMem /= 1024;
-
-            auto sV =
-                new Widget< HorSlider >(g->x(), Y, g->w(), 20, _("Gigabytes"));
-            s = sV;
-            s->tooltip(
-                _("Cache in Gigabytes for NDI streams.  For most HD streams, "
-                  "this should be set to 1.  For higher resolutions and audio "
-                  "channels, you might want to increase this to 3 or higher "
-                  "for proper audio sync."));
-            s->step(1.0);
-            s->range(1.f, static_cast<double>(totalPhysMem));
-            s->default_value(1.0f);
-            s->value(settings->getValue<int>("NDI/GBytes"));
-            sV->callback(
-                [=](auto w)
-                { settings->setValue("NDI/GBytes", (int)w->value()); });
-
-            Y += 30;
-
             auto cW = new Widget< Fl_Choice >(
                 g->x() + LM, Y, g->w() - LM, 20, _("Audio"));
             Fl_Choice* c = _r->noAudio = cW;
@@ -429,64 +409,78 @@ namespace mrv
             open_file_cb(ndiFile, p.ui);
 
             auto player = p.ui->uiView->getTimelinePlayer();
+            
             if (player)
             {
-                int noAudio = r.noAudio->value();
+                
+                int hasAudio = !r.noAudio->value();
 
                 int seconds = 0;
-                if (!noAudio)
+                if (hasAudio)
                 {
                     LOG_INFO(_("Waiting for player cache to fill up..."));
                     p.ui->uiStatusBar->label(
                         _("Waiting for player cache to fill up..."));
                     player->stop();
                     seconds = r.preroll->value();
+                    
+                    // timeline::PlayerCacheOptions cacheOptions;
+                    // player->setCacheOptions(cacheOptions);
                 }
 
-                r.playThread = std::thread(
-                    [this, player, seconds, noAudio]
+                
+                r.play.thread = std::thread(
+                    [this, player, seconds, options, hasAudio]
                     {
                         MRV2_R();
 
-                        if (!noAudio)
+                        if (hasAudio)
                         {
                             auto start = std::chrono::steady_clock::now();
                             auto startTime = player->currentTime();
-                            auto endTime =
-                                startTime +
-                                otime::RationalTime(2.0, 1.0).rescaled_to(
-                                    startTime.rate());
+                            auto endTime = startTime +
+                                           options.audioBufferSize.rescaled_to(
+                                               startTime.rate());
 
-                            bool found = false;
-                            while (!found &&
+                            while (!r.play.found &&
                                    std::chrono::steady_clock::now() - start <=
                                        std::chrono::seconds(seconds))
                             {
-                                const auto observer = player->player()->observeCacheInfo();
-                                const auto cache = observer->get();
                                 
-                                // Make a copy of the audioFrames vector
-                                // to avoid concurrent issues.
-                                const auto audioFramesCopy = cache.audioFrames;
+                                // try
+                                // {
+                                //     const auto observer = player->player()->observeCacheInfo();
+                                //     const auto cache = observer->get();
+
+                                //     // Make a copy of the audioFrames vector
+                                //     // to avoid concurrent issues.  We can still get
+                                //     // an exception or undefined behavior thou.
+                                //     const auto audioFramesCopy = cache.audioFrames;
                                 
-                                for (const auto& t : audioFramesCopy)
-                                {
-                                    if (t.start_time() <= startTime &&
-                                        t.end_time_exclusive() >= endTime)
-                                    {
-                                        found = true;
-                                        break;
-                                    }
-                                }
+                                //     for (const auto& t : audioFramesCopy)
+                                //     {
+                                //         if (t.start_time() <= startTime &&
+                                //             t.end_time_exclusive() >= endTime)
+                                //         {
+                                //             r.play.found = true;
+                                //             break;
+                                //         }
+                                        
+                                //     }
+                                // }
+                                // catch(const std::exception& e)
+                                // {
+                                // }
                             }
                         }
-                        // player->start();
                         LOG_INFO(_("Starting playback..."));
                         player->forward();
+                        LOG_INFO("Exiting thread...");
                     });
-                r.playThread.detach();
+                r.play.thread.detach();
             }
             p.ui->uiStatusBar->label(_("Everything OK."));
+            
         }
 
     } // namespace panel

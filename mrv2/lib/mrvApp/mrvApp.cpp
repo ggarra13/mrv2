@@ -1473,14 +1473,20 @@ namespace mrv
         TLRENDER_P();
         if (!p.player)
             return;
+        
+        uint64_t Gbytes =
+            static_cast<uint64_t>(p.settings->getValue<int>("Cache/GBytes"));
 
         timeline::PlayerCacheOptions options;
         options.readAhead = _cacheReadAhead();
         options.readBehind = _cacheReadBehind();
 
-        uint64_t Gbytes =
-            static_cast<uint64_t>(p.settings->getValue<int>("Cache/GBytes"));
-        if (Gbytes > 0)
+        if (file::isTemporaryNDI(p.player->path()))
+        {
+            options.readAhead = otime::RationalTime(4.0, 1.0);
+            options.readBehind = otime::RationalTime(0.5, 1.0);
+        }
+        else if (Gbytes > 0)
         {
             // Do some sanity checking in case the user is using several mrv2
             // instances and cache would not fit.
@@ -1498,15 +1504,6 @@ namespace mrv
                 Gbytes = totalPhysMem / 2;
 
             uint64_t bytes = Gbytes * memory::gigabyte;
-
-            // Check if an NDI movie and set cache to 1 gigabyte
-            auto Aitem = p.filesModel->observeA()->get();
-            if (Aitem && file::isTemporaryNDI(Aitem->path))
-            {
-                uint64_t NDIGbytes = static_cast<uint64_t>(
-                    p.settings->getValue<int>("NDI/GBytes"));
-                bytes = NDIGbytes * memory::gigabyte;
-            }
 
             // Update the I/O cache.
             auto ioSystem = _context->getSystem<io::System>();
@@ -1547,6 +1544,9 @@ namespace mrv
             options.readAhead = otime::RationalTime(readAhead, 1.0);
             options.readBehind = otime::RationalTime(readBehind, 1.0);
         }
+
+        // std::cerr << "readAhead=" << options.readAhead << std::endl;
+        // std::cerr << "readBehind=" << options.readBehind << std::endl;
 
         p.player->setCacheOptions(options);
     }
