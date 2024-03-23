@@ -74,6 +74,7 @@ namespace mrv
     otio::RationalTime TimelineViewport::Private::lastTime;
     uint64_t TimelineViewport::Private::skippedFrames = 0;
     float TimelineViewport::Private::rotation = 0.F;
+    bool TimelineViewport::Private::resizeWindow = true;
     bool TimelineViewport::Private::safeAreas = false;
     bool TimelineViewport::Private::dataWindow = false;
     bool TimelineViewport::Private::displayWindow = false;
@@ -924,6 +925,12 @@ namespace mrv
         TLRENDER_P();
         p.videoData = values;
 
+        if (p.resizeWindow)
+        {
+            p.resizeWindow = false;
+            resizeWindow();
+        }
+        
         _getTags();
         int layerId = sender->videoLayer();
         p.missingFrame = false;

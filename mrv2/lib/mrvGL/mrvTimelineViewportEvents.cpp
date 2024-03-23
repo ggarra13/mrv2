@@ -787,7 +787,6 @@ namespace mrv
         }
         else
         {
-            setFrameView(false);
             math::Vector2i pos;
             pos.x = p.viewPosMousePress.x + (p.mousePos.x - p.mousePress.x);
             pos.y = p.viewPosMousePress.y + (p.mousePos.y - p.mousePress.y);

@@ -1413,7 +1413,6 @@ namespace mrv
                         if (p.options.otioEditMode || ui->uiEdit->value() ||
                             ui->uiPrefs->uiPrefsEditMode->value())
                             editMode = EditMode::kFull;
-                        ui->uiView->resizeWindow();
                         if (p.options.otioEditMode || ui->uiEdit->value() ||
                             ui->uiPrefs->uiPrefsEditMode->value())
                             set_edit_mode_cb(EditMode::kFull, ui);
