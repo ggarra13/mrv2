@@ -1164,23 +1164,23 @@ namespace mrv
 
         if (rotation == 90.F || rotation == 270.F)
         {
-            if (renderSize.w > 0)
-            {
-                zoom = viewportSize.h / static_cast<float>(renderSize.w);
-                if (renderSize.h > 0 && zoom * renderSize.h > viewportSize.w)
-                {
-                    zoom = viewportSize.w / static_cast<float>(renderSize.h);
-                }
-            }
-        }
-        else
-        {
             if (renderSize.h > 0)
             {
                 zoom = viewportSize.h / static_cast<float>(renderSize.h);
                 if (renderSize.w > 0 && zoom * renderSize.w > viewportSize.w)
                 {
                     zoom = viewportSize.w / static_cast<float>(renderSize.w);
+                }
+            }
+        }
+        else
+        {
+            if (renderSize.w > 0)
+            {
+                zoom = viewportSize.w / static_cast<float>(renderSize.w);
+                if (renderSize.h > 0 && zoom * renderSize.h > viewportSize.h)
+                {
+                    zoom = viewportSize.h / static_cast<float>(renderSize.h);
                 }
             }
         }
@@ -2857,10 +2857,10 @@ namespace mrv
         {
             std::stringstream s(i->second);
             s >> p.videoRotation;
-            if (hasFrameView())
-            {
-                _frameView();
-            }
+        }
+        if (hasFrameView())
+        {
+            _frameView();
         }
     }
 
