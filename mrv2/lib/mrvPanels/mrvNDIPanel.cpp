@@ -283,8 +283,9 @@ namespace mrv
 
             cg->begin();
             
-            Fl_Box* title = new Fl_Box(g->x() + 10, Y, g->w() - 20, 20, _("NDI Stream"));
+            Fl_Box* title = new Fl_Box(g->x() + 10, Y, g->w() - 20, 20, _("NDI Connection"));
             title->align(FL_ALIGN_CENTER);
+            title->labelsize(12);
 
             auto mW = new Widget< PopupMenu >(
                 g->x() + 10, Y, g->w() - 20, 20, _("None"));
