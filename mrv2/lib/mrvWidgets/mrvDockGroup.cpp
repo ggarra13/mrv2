@@ -4,7 +4,10 @@
 
 #include <cassert>
 
+#include <tlCore/StringFormat.h>
+
 #include <FL/Fl.H>
+#include <FL/Fl_Menu_.H>
 
 #include "mrvPanelGroup.h"
 
@@ -70,9 +73,19 @@ namespace mrv
         std::vector<std::string> out;
         for (int i = 0; i < pack->children(); ++i)
         {
-            PanelGroup* g = dynamic_cast<PanelGroup*>(pack->child(i));
-            if (!g)
-                out.push_back("Not a Panel");
+            Fl_Widget*  w = pack->child(i);
+            PanelGroup* g = dynamic_cast<PanelGroup*>(w);
+            if (dynamic_cast<Fl_Menu_*>(w))
+            {
+                out.push_back("A menu bar");
+            }   
+            else if (!g)
+            {
+                const std::string lbl = w->label() ? w->label() : "unknown";
+                const std::string msg =
+                    tl::string::Format("Not a Panel {0}").arg(lbl);
+                out.push_back(msg);
+            }
             else if (!g->label().empty())
                 out.push_back(g->label().c_str());
             else

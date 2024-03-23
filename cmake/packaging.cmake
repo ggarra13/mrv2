@@ -2,6 +2,9 @@
 # mrv2 (mrv2)
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#
+# Common CPACK options to all generators
+#
 set( CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/../LICENSE" )
 set( CPACK_PACKAGE_VERSION_MAJOR "${mrv2_VERSION_MAJOR}" )
 set( CPACK_PACKAGE_VERSION_MINOR "${mrv2_VERSION_MINOR}" )
@@ -9,7 +12,11 @@ set( CPACK_PACKAGE_VERSION_PATCH "${mrv2_VERSION_PATCH}" )
 set( CPACK_PACKAGE_VERSION "${mrv2_VERSION}")
 set( CPACK_PACKAGE_CONTACT "ggarra13@gmail.com")
 
-set( CPACK_THREADS 4 )
+
+#
+# Experimental support in CPack for multithreading. 0 uses all cores.
+#
+set( CPACK_THREADS 0 )
 
 set( MRV2_OS_BITS 32 )
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm" OR CMAKE_SYSTEM_PROCESSOR MATCHES "aarch")
@@ -44,8 +51,7 @@ endif()
 set( mrv2ShortName "mrv2-v${mrv2_VERSION}-${CMAKE_SYSTEM_NAME}-${MRV2_OS_BITS}" )
 set( CPACK_PACKAGE_NAME mrv2 )
 set( CPACK_PACKAGE_VENDOR "Film Aura, S.A." )
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY
-    "mrv2 - A professional flipbook and movie player.")
+set( CPACK_PACKAGE_DESCRIPTION_SUMMARY "Professional media player.")
 set( CPACK_PACKAGE_INSTALL_DIRECTORY ${mrv2ShortName} )
 set( CPACK_PACKAGE_FILE_NAME ${CPACK_PACKAGE_NAME}-v${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_NAME}-${MRV2_ARCHITECTURE} )
 
@@ -54,6 +60,7 @@ set( ROOT_DIR ${CMAKE_SOURCE_DIR} )
 #
 # This dummy (empty) install script is needed so variables get passed to
 # the CPACK_PRE_BUILD_SCRIPTS. @bug: cmake 3.21 at least
+#
 set( CPACK_INSTALL_SCRIPT ${CMAKE_SOURCE_DIR}/../cmake/dummy.cmake )
 set( CPACK_PRE_BUILD_SCRIPTS ${CMAKE_SOURCE_DIR}/../cmake/prepackage.cmake )
 
@@ -73,7 +80,14 @@ if( APPLE )
     set(CPACK_BUNDLE_STARTUP_COMMAND ${ROOT_DIR}/etc/macOS/startup.sh)
 elseif(UNIX)
 
-
+    #
+    # Linux generators
+    #
+    set(CPACK_GENERATOR DEB RPM TGZ )
+    
+    #
+    # Linux icon and .desktop shortcut
+    #
     configure_file( ${ROOT_DIR}/etc/Linux/mrv2.desktop.in
 	"${PROJECT_BINARY_DIR}/etc/mrv2-v${mrv2_VERSION}.desktop" )
 
@@ -82,9 +96,12 @@ elseif(UNIX)
     install(FILES ${ROOT_DIR}/etc/mrv2.png
 	DESTINATION share/icons/hicolor/32x32/apps COMPONENT applications)
 
-    set(CPACK_GENERATOR DEB RPM TGZ )
     set(CPACK_INSTALL_PREFIX /usr/local/${mrv2ShortName})
 
+    #
+    # Linux post-install and post-remove scripts to handle versioning and
+    # installation of .desktop shortcut on the user's Desktop.
+    #
     configure_file(
 	${ROOT_DIR}/etc/Linux/postinst.in
 	${PROJECT_BINARY_DIR}/etc/Linux/postinst
@@ -94,8 +111,9 @@ elseif(UNIX)
 	${PROJECT_BINARY_DIR}/etc/Linux/postrm
 	@ONLY)
 
+    #
     # Set RPM options.
-
+    #
     set(CPACK_RPM_PACKAGE_NAME ${PROJECT_NAME}-${mrv2_VERSION})
 
     set(CPACK_RPM_PACKAGE_RELOCATABLE true)
@@ -146,11 +164,7 @@ else()
     set(CPACK_NSIS_MUI_ICON "${ROOT_DIR}/src/mrv2.ico")
     set(CPACK_NSIS_MUI_UNICON "${ROOT_DIR}/src/mrv2.ico")
 
-    if (MRV2_OS_BITS EQUAL 32)
-	set( CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES" )
-    else()
-	set( CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES64" )
-    endif()
+    set( CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES64" )
 
     set(mrv2_DISPLAY_NAME "mrv2-${MRV2_OS_BITS} v${mrv2_VERSION}")
     set(CPACK_NSIS_DISPLAY_NAME "${mrv2_DISPLAY_NAME}" )
@@ -164,6 +178,9 @@ else()
 
 endif()
 
+#
+# For Windows installer, handle the components
+#
 set(mrv2_COMPONENTS
     applications
     documentation
@@ -181,8 +198,13 @@ set(CPACK_COMPONENT_APPLICATIONS_DISPLAY_NAME "mrv2 Application")
 set(CPACK_COMPONENT_DOCUMENTATION_DISPLAY_NAME "mrv2 Documentation")
 if(BUILD_PYTHON)
     set(CPACK_COMPONENT_PYTHON_DEMOS_DISPLAY_NAME "mrv2 Python Demos")
-    set(CPACK_COMPONENT_PYTHON_TK_DISPLAY_NAME "mrv2 Python TK Libraries")
+    set(CPACK_COMPONENT_PYTHON_TK_DISPLAY_NAME "Python TK Libraries")
     set(CPACK_COMPONENT_PYTHON_TK_DISABLED TRUE)
 endif()
+
+
+#
+# Create the 'package' target
+#
 include(CPack)
 

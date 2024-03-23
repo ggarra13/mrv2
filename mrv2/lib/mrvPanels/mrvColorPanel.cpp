@@ -165,7 +165,7 @@ namespace mrv
 
             br->end();
             brW->callback([=](auto o)
-                          { mrv::image::setOcioIcs(o->text(o->value())); });
+                          { ocio::setOcioIcs(o->text(o->value())); });
 
             gb->end();
 
@@ -209,7 +209,7 @@ namespace mrv
                     int idx = o->value();
                     if (idx < 1)
                         idx = 1;
-                    mrv::image::setOcioView(o->text(idx));
+                    ocio::setOcioView(o->text(idx));
                 });
 
             gb->end();
@@ -238,7 +238,7 @@ namespace mrv
             br->value(selected);
             br->end();
             brW->callback([=](auto o)
-                          { mrv::image::setOcioLook(o->text(o->value())); });
+                          { ocio::setOcioLook(o->text(o->value())); });
 
             gb->end();
 

@@ -28,13 +28,13 @@ decl {\#include "mrvWidgets/mrvFPSInput.h"} {public global
 decl {\#include "mrvWidgets/mrvMainWindow.h"} {public global
 }
 
-decl {\#include "mrvWidgets/mrvPopupMenu.h"} {public global
+decl {\#include "mrvWidgets/mrvMenuBar.h"} {public global
 }
 
 decl {\#include "mrvWidgets/mrvPopupAudio.h"} {public global
 }
 
-decl {\#include "mrvWidgets/mrvSlider.h"} {public global
+decl {\#include "mrvWidgets/mrvPopupMenu.h"} {public global
 }
 
 decl {\#include "mrvWidgets/mrvVolumeSlider.h"} {public global
@@ -43,13 +43,16 @@ decl {\#include "mrvWidgets/mrvVolumeSlider.h"} {public global
 decl {\#include "mrvWidgets/mrvResizableBar.h"} {public global
 }
 
+decl {\#include "mrvWidgets/mrvSecondaryWindow.h"} {public global
+}
+
+decl {\#include "mrvWidgets/mrvSlider.h"} {public global
+}
+
 decl {\#include "mrvWidgets/mrvStateButton.h"} {public global
 }
 
 decl {\#include "mrvWidgets/mrvStatusBar.h"} {public global
-}
-
-decl {\#include "mrvWidgets/mrvSecondaryWindow.h"} {public global
 }
 
 decl {\#include "mrvWidgets/mrvTile.h"} {public global
@@ -59,9 +62,6 @@ decl {\#include "mrvWidgets/mrvTimecode.h"} {public global
 }
 
 decl {\#include "mrvWidgets/mrvTimelineGroup.h"} {public global
-}
-
-decl {\#include "mrvWidgets/mrvMenuBar.h"} {public global
 }
 
 decl {\#include "mrvFl/mrvLanguages.h"} {public global
@@ -473,7 +473,7 @@ ui->uiView->take_focus();}
         Fl_Group {} {open
           xywh {99 3 240 26}
         } {
-          Fl_Button {} {
+          Fl_Button uiPlayStart {
             label {@|<}
             user_data this user_data_type {ViewerUI*}
             callback {ui->uiView->startFrame()}
@@ -487,7 +487,7 @@ ui->uiView->take_focus();}
             tooltip {Play sequence backwards.} xywh {130 3 28 24} labelcolor 19
             class {mrv::Button}
           }
-          Fl_Button {} {
+          Fl_Button uiStepBackwards {
             label {@<|}
             user_data this user_data_type {ViewerUI*}
             callback {ui->uiView->framePrev();}
@@ -501,7 +501,7 @@ ui->uiView->take_focus();}
             tooltip {Stop playback.} xywh {186 3 28 24} labelcolor 19
             class {mrv::Button}
           }
-          Fl_Button {} {
+          Fl_Button uiStepForwards {
             label {@|>}
             user_data this user_data_type {ViewerUI*}
             callback {ui->uiView->frameNext();}
@@ -515,10 +515,10 @@ ui->uiView->take_focus();}
             tooltip {Play sequence forward.} xywh {242 3 28 24} down_box DOWN_BOX labelcolor 19
             class {mrv::Button}
           }
-          Fl_Button {} {
+          Fl_Button uiPlayEnd {
             label {@>|}
             user_data this user_data_type {ViewerUI*}
-            callback {ui->uiView->endFrame();} selected
+            callback {ui->uiView->endFrame();}
             tooltip {Go to the end of the sequence.} xywh {270 3 28 24} labelcolor 19
             class {mrv::Button}
           }
@@ -553,7 +553,7 @@ player->setLoop( loop );}
             class {mrv::StateButton}
           }
         }
-        Fl_Group {} {
+        Fl_Group {} {open
           xywh {341 1 86 28}
         } {
           Fl_Menu_Button fpsDefaults {
@@ -562,7 +562,7 @@ player->setLoop( loop );}
             callback {int idx = o->value();
 double speed = atof( o->text( idx ) );
 uiFPS->value( speed );
-uiFPS->do_callback();}
+uiFPS->do_callback();} selected
             tooltip {Some default frame rate settings.} xywh {341 3 40 24} labelsize 10 align 16
             code0 {o->disable_label();}
             class {mrv::PopupMenu}
@@ -682,7 +682,7 @@ ui->app->setVolume(value);}
           }
         }
       }
-      Fl_Group {} {
+      Fl_Group {} {open
         xywh {501 3 189 26}
       } {
         Fl_Button uiStartButton {
@@ -780,7 +780,8 @@ ui->uiView->take_focus();}
   }
 }
 
-class ViewerUI {} {
+class ViewerUI {open
+} {
   decl {static mrv::App* app;} {public local
   }
   decl {static PreferencesUI* uiPrefs;} {public local
@@ -791,7 +792,7 @@ class ViewerUI {} {
   }
   decl {mrv::SecondaryWindow* uiSecondary;} {public local
   }
-  Function {make_window()} {private
+  Function {make_window()} {open private
   } {
     code {uiPrefs = new PreferencesUI( this );
 uiHotkey = new HotkeyUI( this );
@@ -803,8 +804,8 @@ uiSecondary = nullptr;} {}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
     exit_cb( o, v );} open
-      xywh {728 116 690 602} type Double align 80 resizable
-      class {mrv::MainWindow} size_range {690 602 0 0} visible
+      xywh {728 116 690 602} type Double align 80 hide resizable
+      class {mrv::MainWindow} size_range {690 602 0 0}
     } {
       Fl_Pack uiRegion {open
         xywh {0 0 690 602} box FLAT_BOX resizable
@@ -851,38 +852,52 @@ mrv::set_edit_mode_cb(mode, v);}
         Fl_Group uiTopBar {open
           xywh {0 25 690 28} box ENGRAVED_BOX
         } {
-          Fl_Group {} {open
-            xywh {3 26 122 26} color 1397969664
+          Fl_Group {} {
+            label {Layers, Exposure and Gain}
+            xywh {0 25 277 27} labeltype NO_LABEL
           } {
-            Fl_Menu_Button uiColorChannel {
-              label {(no image)}
-              user_data this user_data_type {ViewerUI*}
-              callback {const auto& player = uiView->getTimelinePlayer();
+            Fl_Group {} {
+              label Layers
+              xywh {0 26 129 26} color 1397969664 labeltype NO_LABEL
+            } {
+              Fl_Menu_Button uiColorChannel {
+                label {(no image)}
+                user_data this user_data_type {ViewerUI*}
+                callback {const auto& player = uiView->getTimelinePlayer();
 if (!player) return;
 
 player->setVideoLayer( o->value() );
 auto model = v->app->filesModel();
 auto item = model->observeA()->get();
-model->setLayer(item, o->value());} open
-              tooltip {Allows you to select different image channels or layers.} xywh {3 26 122 25} down_box DOWN_BOX labelsize 12
-              class {mrv::PopupMenu}
-            } {}
-          }
-          Fl_Group {} {open
-            xywh {125 25 295 26} color 1397969664
-          } {
-            Fl_Button uiExposureLess {
-              label {@<}
-              callback {const float inc = sqrtf( 2.0f );
+model->setLayer(item, o->value());}
+                tooltip {Allows you to select different image channels or layers.} xywh {0 26 129 25} down_box DOWN_BOX labelsize 10 resizable
+                class {mrv::PopupMenu}
+              } {}
+            }
+            Fl_Group {} {
+              label {Exposure and Gain}
+              xywh {129 25 148 26} labeltype NO_LABEL
+            } {
+              Fl_Group {} {
+                label {Resizable Control Group} open
+                xywh {129 25 120 26} labeltype NO_LABEL hide resizable
+              } {}
+              Fl_Group {} {
+                label Exposure
+                xywh {129 25 49 26} labeltype NO_LABEL
+              } {
+                Fl_Button uiExposureLess {
+                  label {@<}
+                  callback {const float inc = sqrtf( 2.0f );
 float gain = uiGain->value();
 gain /= inc;
 uiGain->value( gain );
 uiGain->do_callback();}
-              tooltip {Reduce gain 1/2 stop (divide by sqrt(2)).} xywh {129 26 12 25} labelsize 10
-            }
-            Fl_Button uiFStop {
-              label {f/8}
-              callback {static float old_gain = 1.0f;
+                  tooltip {Reduce gain 1/2 stop (divide by sqrt(2)).} xywh {129 26 12 25} labelsize 10
+                }
+                Fl_Button uiFStop {
+                  label {f/8}
+                  callback {static float old_gain = 1.0f;
 float gain = uiGain->value();
 if ( gain == 1.0f )
 {
@@ -894,68 +909,96 @@ else
    uiGain->value( 1.0f );
 }
 uiGain->do_callback();}
-              tooltip {Toggle gain between 1 and the previous setting.} xywh {141 26 25 25}
-            }
-            Fl_Button uiExposureMore {
-              label {@>}
-              callback {const float inc = sqrtf( 2.0f );
+                  tooltip {Toggle gain between 1 and the previous setting.} xywh {141 26 25 25}
+                }
+                Fl_Button uiExposureMore {
+                  label {@>}
+                  callback {const float inc = sqrtf( 2.0f );
 float gain = uiGain->value();
 gain *= inc;
 uiGain->value( gain );
 uiGain->do_callback();}
-              tooltip {Increase gain 1/2 stop (multiply by sqrt(2)).} xywh {166 26 12 25} labelsize 10
-            }
-            Fl_Value_Input uiGainInput {
-              user_data this user_data_type {ViewerUI*}
-              callback {uiGain->value( o->value() );
+                  tooltip {Increase gain 1/2 stop (multiply by sqrt(2)).} xywh {166 26 12 25} labelsize 10
+                }
+              }
+              Fl_Group {} {
+                label Gain open
+                xywh {178 25 99 26} labeltype NO_LABEL
+              } {
+                Fl_Value_Input uiGainInput {
+                  user_data this user_data_type {ViewerUI*}
+                  callback {uiGain->value( o->value() );
 uiView->updateDisplayOptions();}
-              tooltip {Gain image value.  A simple multiplier of the image pixel values.} xywh {180 27 35 23} selection_color 0 maximum 64 value 1
-              code0 {o->textsize(12);}
-              code1 {o->textcolor( FL_BLACK );}
-            }
-            Fl_Slider uiGain {
-              user_data this user_data_type {ViewerUI*}
-              callback {uiGainInput->value( o->value() );
+                  tooltip {Gain image value.  A simple multiplier of the image pixel values.} xywh {178 25 37 26} selection_color 0 maximum 64 step 0.02 value 1
+                  code0 {o->textsize(12);}
+                  code1 {o->textcolor( FL_BLACK );}
+                }
+                Fl_Slider uiGain {
+                  user_data this user_data_type {ViewerUI*}
+                  callback {uiGainInput->value( o->value() );
 uiView->updateDisplayOptions();}
-              tooltip {Allows you to adjust the gain or exposure of the image.} xywh {215 27 59 23} type {Horz Knob} maximum 64 value 1
-              code0 {o->minimum( 0.02 );}
-              code1 {o->maximum( 64.0 ); o->step( 0.1 );}
-              code2 {o->value( 1.0 );}
-              code3 {o->slider_type( mrv::Slider::kLOG );}
-              class {mrv::Slider}
+                  tooltip {Allows you to adjust the gain or exposure of the image.} xywh {215 25 59 26} type {Horz Knob} labelsize 10 align 0 maximum 64 value 1 resizable
+                  code0 {o->minimum( 0.02 );}
+                  code1 {o->maximum( 64.0 ); o->step( 0.1 );}
+                  code2 {o->value( 1.0 );}
+                  code3 {o->slider_type( mrv::Slider::kLOG );}
+                  class {mrv::Slider}
+                }
+              }
             }
-            Fl_Menu_Button uiICS {
-              label {Input Color Space}
-              user_data this user_data_type {ViewerUI*}
-              callback {uiView->updateOCIOOptions();} open
-              tooltip {OCIO input color space for the image} xywh {277 26 143 25} down_box DOWN_BOX labelsize 10 align 96
-              code0 {o->disable_submenus();}
-              class {mrv::PopupMenu}
-            } {}
           }
-          Fl_Group {} {open
-            xywh {421 25 268 27}
+          Fl_Group {} {
+            label {ICS, View, Look and Gamma} open
+            xywh {277 25 413 28} labeltype NO_LABEL
           } {
-            Fl_Menu_Button OCIOView {
-              label OCIO
-              user_data this user_data_type {ViewerUI*}
-              callback {uiView->updateOCIOOptions();} open
-              tooltip {OCIO Display/View} xywh {421 26 150 25} down_box DOWN_BOX labelsize 12 align 80
-              code0 {o->disable_submenus();}
-              class {mrv::PopupMenu}
-            } {}
-            Fl_Menu_Button OCIOLook {
-              label L
-              user_data this user_data_type {ViewerUI*}
-              callback {uiView->updateOCIOOptions();} open
-              tooltip {OCIO Looks} xywh {572 26 22 25} down_box DOWN_BOX labelsize 12 align 80
-              code0 {o->disable_label();}
-              code1 {o->disable_glyph();}
-              class {mrv::PopupMenu}
-            } {}
-            Fl_Button uiGammaSwitch {
-              label Y
-              callback {static float old_gamma = 2.2f;
+            Fl_Group {} {open
+              xywh {277 25 317 26}
+            } {
+              Fl_Group {} {
+                label {Resizable Control Group} open
+                xywh {360 25 234 26} labeltype NO_LABEL hide resizable
+              } {}
+              Fl_Menu_Button uiICS {
+                label {Input Color Space}
+                user_data this user_data_type {ViewerUI*}
+                callback {uiView->updateOCIOOptions();} open
+                tooltip {OCIO input color space for the image} xywh {277 25 143 26} down_box DOWN_BOX labelsize 10 align 112
+                code0 {o->disable_submenus();}
+                class {mrv::PopupMenu}
+              } {}
+              Fl_Group {} {
+                label {View and Look} open
+                xywh {420 25 174 26} labeltype NO_LABEL
+              } {
+                Fl_Menu_Button OCIOView {
+                  label OCIO
+                  user_data this user_data_type {ViewerUI*}
+                  callback {uiView->updateOCIOOptions();}
+                  tooltip {OCIO Display/View} xywh {420 25 144 26} down_box DOWN_BOX labelsize 10 align 80
+                  code0 {o->disable_submenus();}
+                  class {mrv::PopupMenu}
+                } {}
+                Fl_Menu_Button OCIOLook {
+                  label Look
+                  user_data this user_data_type {ViewerUI*}
+                  callback {uiView->updateOCIOOptions();} open
+                  tooltip {OCIO Looks} xywh {564 25 30 26} down_box DOWN_BOX labelsize 10 align 80
+                  code1 {o->disable_glyph();}
+                  class {mrv::PopupMenu}
+                } {}
+                Fl_Group {} {
+                  label {Resizable Control Group}
+                  xywh {520 25 74 26} labeltype NO_LABEL hide resizable
+                } {}
+              }
+            }
+            Fl_Group {} {
+              label Gamma
+              xywh {594 25 96 26} labeltype NO_LABEL
+            } {
+              Fl_Button uiGammaSwitch {
+                label Y
+                callback {static float old_gamma = 2.2f;
 float gamma = uiGamma->value();
 if ( gamma == 1.0f )
 {
@@ -967,27 +1010,44 @@ else
    uiGamma->value( 1.0f );
 }
 uiGamma->do_callback();}
-              tooltip {Toggle gamma between 1 and the previous setting.} xywh {594 26 22 25}
-            }
-            Fl_Value_Input uiGammaInput {
-              user_data this user_data_type {ViewerUI*}
-              callback {uiGamma->value( o->value() );
+                tooltip {Toggle gamma between 1 and the previous setting.} xywh {594 26 22 25}
+              }
+              Fl_Group {} {
+                label {Resizable Control Group} open
+                xywh {610 25 62 26} hide resizable
+              } {}
+              Fl_Group {} {
+                label {Gamma Input}
+                xywh {616 25 74 26} labeltype NO_LABEL
+              } {
+                Fl_Value_Input uiGammaInput {
+                  user_data this user_data_type {ViewerUI*}
+                  callback {uiGamma->value( o->value() );
 uiView->updateDisplayOptions();}
-              tooltip {Allows you to adjust gamma curve for display.
-Value is:  pow( 2, 1/x );} xywh {616 27 35 23} selection_color 0 maximum 64 value 1
-              code0 {o->textsize(12);}
-              code1 {o->textcolor( FL_BLACK );}
-              code2 {o->color((Fl_Color)0xf98a8a800);}
-            }
-            Fl_Slider uiGamma {
-              user_data this user_data_type {ViewerUI*}
-              callback {uiGammaInput->value( o->value() );
+                  tooltip {Allows you to adjust gamma curve for display.
+Value is:  pow( 2, 1/x );} xywh {616 25 35 26} selection_color 0 maximum 64 value 1
+                  code0 {o->textsize(12);}
+                  code1 {o->textcolor( FL_BLACK );}
+                  code2 {o->color((Fl_Color)0xf98a8a800);}
+                }
+                Fl_Slider uiGamma {
+                  user_data this user_data_type {ViewerUI*}
+                  callback {uiGammaInput->value( o->value() );
 uiView->updateDisplayOptions();}
-              tooltip {Allows you to adjust gamma curve for display.
-Value is:  pow( 2, 1/x );} xywh {651 26 35 25} type {Horz Knob} maximum 4 step 0.01 value 1
-              class {mrv::Slider}
+                  tooltip {Allows you to adjust gamma curve for display.
+Value is:  pow( 2, 1/x );} xywh {651 26 39 25} type {Horz Knob} labelsize 10 maximum 4 step 0.01 value 1
+                  class {mrv::Slider}
+                }
+              }
             }
+            Fl_Group {} {
+              label {Resizable Control Group} open
+              xywh {277 25 370 26} hide resizable
+            } {}
           }
+          Fl_Group {} {
+            xywh {120 25 570 26} hide resizable
+          } {}
         }
         Fl_Tile uiTileGroup {
           xywh {0 53 690 465}

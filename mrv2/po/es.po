@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2024-03-12 10:15-0300\n"
+"POT-Creation-Date: 2024-03-23 10:24-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -1009,12 +1009,6 @@ msgstr "Vector de 4 elementos de comas flotantes."
 msgid "Size of 2 integers."
 msgstr "Tamaño de 2 enteros."
 
-msgid "OCIO config file cannot be empty."
-msgstr "El archivo config de OCIO no puede estar vacío."
-
-msgid "OCIO config '{0}' does not exist or is not readable."
-msgstr "Config de OCIO '{0}' no existe o no es leíble."
-
 msgid ""
 "\n"
 "Image module.\n"
@@ -1815,60 +1809,20 @@ msgstr "Buscar Texto:"
 msgid "No occurrences of '%s' found!"
 msgstr "¡Ninguna ocurrencia de '%s' encontrado!"
 
-msgid "No Source"
-msgstr "Ninguna Fuente"
+msgid "None"
+msgstr "Ninguno"
 
-msgid "NDI"
-msgstr "NDI"
+msgid "Input"
+msgstr "Entrada"
 
-msgid "Preroll"
-msgstr "Preroll"
-
-msgid "Preroll in seconds to synchronize audio."
-msgstr "Preroll en segundos para sincronizar audio."
-
-msgid "Gigabytes"
-msgstr "Gigabytes"
-
-msgid ""
-"Cache in Gigabytes for NDI streams.  For most HD streams, this should be set "
-"to 1.  For higher resolutions and audio channels, you might want to increase "
-"this to 3 or higher for proper audio sync."
-msgstr ""
-"Cache en Gigabytes para fuentes NDI.  Para fuentes HD o 2K, este seteo está "
-"bien en 1.  Para mayores resoluciones y canales de audio, puede que quiera "
-"incrementarlo a 3 o mayor para un buen sincronismo de audio."
-
-msgid "Play"
-msgstr "Reproducir"
-
-msgid "Ignore"
-msgstr "Ignorar"
-
-msgid ""
-"Whether to ignore or play the stream with audio if it has at least one audio "
-"track."
-msgstr ""
-"Ignorar o reproducir la fuente con audio si tiene al menos una pista de "
-"audio."
-
-msgid "Waiting for player cache to fill up..."
-msgstr "Esperando que el cache del reproductor se llene..."
-
-msgid "Starting playback..."
-msgstr "Empezando reproducción..."
-
-msgid "Everything OK."
-msgstr "Todo Bien."
+msgid "NDI Connection"
+msgstr "Conexión NDI"
 
 msgid "USD"
 msgstr "USD"
 
 msgid "Renderer"
 msgstr "Renderer"
-
-msgid "None"
-msgstr "Ninguno"
 
 msgid "Complexity"
 msgstr "Complejidad"
@@ -1884,9 +1838,6 @@ msgstr "Cache en Disco en GB"
 
 msgid "Toggle other eye stereo image."
 msgstr "Alternar el otro ojo de la imagen estéreo."
-
-msgid "Input"
-msgstr "Entrada"
 
 msgid "Image"
 msgstr "Imagen"
@@ -2868,6 +2819,9 @@ msgstr "Fallé en abrir el archivo para leer."
 msgid "Failed to load the file."
 msgstr "Fallé en cargar al archivo."
 
+msgid "Cannot save an NDI stream"
+msgstr "No puedo grabar un flujo de NDI."
+
 msgid ""
 "VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to ."
 "webm"
@@ -2961,6 +2915,13 @@ msgstr "Leyendo preferencias desde \"{0}mrv2.prefs\"."
 msgid "Failed to retrieve {0}."
 msgstr "Fallé en recuperar {0}."
 
+msgid ""
+"FFmpeg YUV to RGB Conversion is on in Settings Panel.  mrv2 will play back "
+"movies slower."
+msgstr ""
+"Conversiòn FFmpeg de YUV a RGB esta activado en el Panel de Seteos.  mrv2 "
+"reproducirá las películas más lentamente."
+
 msgid "Could not open color theme from \"{0}\"."
 msgstr "No pude abrir tema de color desde \"{0}\"."
 
@@ -3008,6 +2969,12 @@ msgstr "Comparando {0} a prefijo {1}"
 
 msgid "Found a match.  File is now {0}"
 msgstr "Encontre una equivalencia.  El archivo es ahora {0}"
+
+msgid "OCIO config file cannot be empty."
+msgstr "El archivo config de OCIO no puede estar vacío."
+
+msgid "OCIO config '{0}' does not exist or is not readable."
+msgstr "Config de OCIO '{0}' no existe o no es leíble."
 
 msgid "Invalid OCIO Ics '{0}'."
 msgstr "Espacio de Entrada de Color de OCIO inválido para '{0}'."
@@ -3159,6 +3126,9 @@ msgstr "Bitácora"
 msgid "Media Information"
 msgstr "Información del Medio"
 
+msgid "NDI"
+msgstr "NDI"
+
 msgid "Python"
 msgstr "Python"
 
@@ -3269,14 +3239,14 @@ msgstr "Ondulación"
 msgid "Roll"
 msgstr "Rodar"
 
-msgid "(no image)"
-msgstr "(sin imagen)"
-
 msgid "Render/Minify Filter/Linear"
 msgstr "Render/Filtro Minificación/Linear"
 
 msgid "Render/Magnify Filter/Linear"
 msgstr "Render/Filtro Magnificación/Linear"
+
+msgid "(no image)"
+msgstr "(sin imagen)"
 
 msgid "Unknown action mode in "
 msgstr "Modo de acción desconocido en "
@@ -3294,6 +3264,9 @@ msgid ""
 msgstr ""
 "No puedo crear una anotación aquí para el cuadro actual.  Una anotación para "
 "todos los cuadros ya existe."
+
+msgid "Play"
+msgstr "Reproducir"
 
 msgid "Stop"
 msgstr "Parar"
@@ -3734,6 +3707,9 @@ msgstr "Max. Tamaño Texture:\t"
 msgid "Mark an area in the image with SHIFT + the left mouse button"
 msgstr "Marque un área de la imagen con SHIFT + el botón izquierdo del ratón"
 
+msgid "&Copy"
+msgstr "&Copiar"
+
 msgid "Elapsed"
 msgstr "Transcurrido"
 
@@ -3802,9 +3778,6 @@ msgstr "Rango"
 
 msgid "Mean"
 msgstr "Prom."
-
-msgid "&Copy"
-msgstr "&Copiar"
 
 msgid "Same Size"
 msgstr "Mismo Tamaño"
@@ -4569,8 +4542,23 @@ msgstr "Alternar Modo de Edición"
 msgid "Fit Window to Image"
 msgstr "Ajustar Ventana a la Imagen"
 
+msgid "Layers, Exposure and Gain"
+msgstr "Capas, Exposición y Ganancia"
+
+msgid "Layers"
+msgstr "Capas"
+
 msgid "Allows you to select different image channels or layers."
 msgstr "Permite seleccionar diferente canales de la imagen o capas."
+
+msgid "Exposure and Gain"
+msgstr "Exposición y Ganancia"
+
+msgid "Resizable Control Group"
+msgstr "Grupo de Control de Ajuste"
+
+msgid "Exposure"
+msgstr "Exposición"
 
 msgid "Reduce gain 1/2 stop (divide by sqrt(2))."
 msgstr "Reducir ganancia 1/2 stop (dividir por raiz cuadrada de 2)."
@@ -4584,6 +4572,9 @@ msgstr "Intercambia ganancia enter 1 y el seteo previo."
 msgid "Increase gain 1/2 stop (multiply by sqrt(2))."
 msgstr "Incrementar la ganancia 1/2 stop (multiplicar por raiz cuadrada de 2)."
 
+msgid "Gain"
+msgstr "Ganancia"
+
 msgid "Gain image value.  A simple multiplier of the image pixel values."
 msgstr ""
 "Valor de ganancia de la imagen.  Un simple multiplicador de los valores de "
@@ -4592,23 +4583,32 @@ msgstr ""
 msgid "Allows you to adjust the gain or exposure of the image."
 msgstr "Te permite ajustar la ganancia o exposición de la imagen."
 
+msgid "ICS, View, Look and Gamma"
+msgstr "ICS, Vista, Look y Gama"
+
 msgid "Input Color Space"
 msgstr "Espacio de Entrada de Color"
 
 msgid "OCIO input color space for the image"
 msgstr "OCIO espacio de color para la imagen"
 
+msgid "View and Look"
+msgstr "Vista y Look"
+
 msgid "OCIO Display/View"
 msgstr "OCIO Display/Vista"
 
-msgid "L"
-msgstr "L"
+msgid "Look"
+msgstr "Look"
 
 msgid "OCIO Looks"
 msgstr "Looks de OCIO"
 
 msgid "Toggle gamma between 1 and the previous setting."
 msgstr "Intercambia gama enter 1 y el seteo previo."
+
+msgid "Gamma Input"
+msgstr "Entrada de Gama"
 
 msgid ""
 "Allows you to adjust gamma curve for display.\n"
@@ -4826,6 +4826,12 @@ msgstr "Bucle"
 msgid "Ping Pong"
 msgstr "Ping Pong"
 
+msgid "Video Only"
+msgstr "Sólo Vídeo"
+
+msgid "Video and Audio"
+msgstr "Video y Audio"
+
 msgid "Small"
 msgstr "Pequeño"
 
@@ -5021,9 +5027,6 @@ msgstr "Ventana de Vista"
 
 msgid "Defaults"
 msgstr "Valores por Defecto"
-
-msgid "Gain"
-msgstr "Ganancia"
 
 msgid "Sets the default gain when mrv2 starts."
 msgstr "Establece la ganancia por defecto cuando mrv2 comienza."
@@ -5300,6 +5303,12 @@ msgstr "Display"
 msgid "How to display timeline by default."
 msgstr "Como mostrar la línea de tiempo por defecto."
 
+msgid "Start in Edit mode"
+msgstr "Comenzar en Modo de Edición"
+
+msgid "Editing viewport will be visible at start up."
+msgstr "Ventana de Edición será visible al comenzar."
+
 msgid "Preview Thumbnails"
 msgstr "Vista Previa de Miniaturas"
 
@@ -5319,6 +5328,9 @@ msgstr ""
 msgid "Edit Viewport"
 msgstr "Ventana de Edición"
 
+msgid "Default View"
+msgstr "Vista por Defecto"
+
 msgid "Thumbnails"
 msgstr "Vista Previa de Miniaturas"
 
@@ -5334,11 +5346,8 @@ msgstr "Mostrar Marcadores"
 msgid "Show Markers in Edit Viewport"
 msgstr "Mostrar Marcadores en la Ventana de Edición"
 
-msgid "Editable"
-msgstr "Editable"
-
-msgid "Editable Timeline Viewport."
-msgstr "Ventana de Edición Editable."
+msgid "Behavior"
+msgstr "Comportamiento"
 
 msgid "Edit Associated Clips"
 msgstr "Editar Clips Asociados"
@@ -5346,11 +5355,11 @@ msgstr "Editar Clips Asociados"
 msgid "Edit Associated Clips."
 msgstr "Editar Clips Asociados."
 
-msgid "Start in Edit mode"
-msgstr "Comenzar en Modo de Edición"
+msgid "Editable"
+msgstr "Editable"
 
-msgid "Editing viewport will be visible at start up."
-msgstr "Ventana de Edición será visible al comenzar."
+msgid "Editable Timeline Viewport."
+msgstr "Ventana de Edición Editable."
 
 msgid "RGBA Display"
 msgstr "Display RGBA"
@@ -5457,9 +5466,6 @@ msgstr "Display / Vista"
 
 msgid "Default Display / View"
 msgstr "Display / Vista por Defecto"
-
-msgid "Look"
-msgstr "Look"
 
 msgid "Default Look"
 msgstr "Look por Defecto"
@@ -5572,9 +5578,6 @@ msgstr "En Error"
 
 msgid "Adjusts how Log Window behaves in case of error."
 msgstr "Ajusta cómo se comporta la Bitácore en caso de error."
-
-msgid "Behavior"
-msgstr "Comportamiento"
 
 msgid "Check for Updates"
 msgstr "Actualizaciones"
@@ -6405,6 +6408,49 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
 
+#~ msgid "No Source"
+#~ msgstr "Ninguna Fuente"
+
+#~ msgid "Preroll"
+#~ msgstr "Preroll"
+
+#~ msgid "Preroll in seconds to synchronize audio."
+#~ msgstr "Preroll en segundos para sincronizar audio."
+
+#~ msgid "Gigabytes"
+#~ msgstr "Gigabytes"
+
+#~ msgid ""
+#~ "Cache in Gigabytes for NDI streams.  For most HD streams, this should be "
+#~ "set to 1.  For higher resolutions and audio channels, you might want to "
+#~ "increase this to 3 or higher for proper audio sync."
+#~ msgstr ""
+#~ "Cache en Gigabytes para fuentes NDI.  Para fuentes HD o 2K, este seteo "
+#~ "está bien en 1.  Para mayores resoluciones y canales de audio, puede que "
+#~ "quiera incrementarlo a 3 o mayor para un buen sincronismo de audio."
+
+#~ msgid "Ignore"
+#~ msgstr "Ignorar"
+
+#~ msgid ""
+#~ "Whether to ignore or play the stream with audio if it has at least one "
+#~ "audio track."
+#~ msgstr ""
+#~ "Ignorar o reproducir la fuente con audio si tiene al menos una pista de "
+#~ "audio."
+
+#~ msgid "Waiting for player cache to fill up..."
+#~ msgstr "Esperando que el cache del reproductor se llene..."
+
+#~ msgid "Starting playback..."
+#~ msgstr "Empezando reproducción..."
+
+#~ msgid "Everything OK."
+#~ msgstr "Todo Bien."
+
+#~ msgid "L"
+#~ msgstr "L"
+
 #~ msgid "Motion Estimation Methods"
 #~ msgstr "Métodos de Estimación de Moviento"
 
@@ -6704,9 +6750,6 @@ msgstr "Alternar Ventana de Acerca de mrv2"
 
 #~ msgid "Toggle Show Annotations"
 #~ msgstr "Alternar Mostrar Anotaciones"
-
-#~ msgid "Default Volume"
-#~ msgstr "Volúmen por Defecto"
 
 #~ msgid "Select Audio Track"
 #~ msgstr "Seleccionar Pista de Audio"

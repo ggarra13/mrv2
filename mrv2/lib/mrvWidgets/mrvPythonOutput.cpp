@@ -13,9 +13,11 @@ namespace mrv
     PythonOutput::PythonOutput(int X, int Y, int W, int H, const char* L) :
         LogDisplay(X, Y, W, H, L)
     {
+        label("Python Output");
+        labeltype(FL_NO_LABEL);
         setMaxLines(0); // make output infinite
         box(FL_DOWN_BOX);
-        wrap_mode(WRAP_NONE, 80);
+        wrap_mode(WRAP_NONE, 0);
     }
 
     int PythonOutput::handle(int e)

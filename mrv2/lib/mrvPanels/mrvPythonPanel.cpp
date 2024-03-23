@@ -62,15 +62,6 @@ namespace mrv
             {FL_DARK_GREEN, FL_COURIER_BOLD, FL_NORMAL_SIZE} // H - Functions
         };
 
-        // Style table
-        static Fl_Text_Display::Style_Table_Entry kLogStyles[] = {
-            // FONT COLOR       FONT FACE   SIZE  ATTR
-            // --------------- ------------ ---- ------
-            {FL_BLACK, FL_HELVETICA, 14, 0},       // A - Info
-            {FL_DARK_YELLOW, FL_HELVETICA, 14, 0}, // B - Warning
-            {FL_RED, FL_HELVETICA, 14, 0}          // C - Error
-        };
-
         //! We keep this global so the content won't be erased when the user
         //! closes the Python Panel
         static Fl_Text_Buffer* textBuffer = nullptr;
@@ -193,14 +184,6 @@ namespace mrv
             _r(new Private),
             PanelWidget(ui)
         {
-
-            if (!textBuffer)
-            {
-                styleBuffer = new Fl_Text_Buffer;
-                textBuffer = new Fl_Text_Buffer;
-                outputDisplay = new PythonOutput(0, 0, 100, 100);
-            }
-
             add_group("Python");
 
             Fl_SVG_Image* svg = load_svg("Python.svg");
@@ -219,17 +202,15 @@ namespace mrv
 
         PythonPanel::~PythonPanel()
         {
-#if __APPLE__
+#ifdef __APPLE__
             TLRENDER_P();
             if (!p.ui->uiPrefs->uiPrefsMacOSMenus->value())
             {
-                g->remove(_r->menu);
                 if (_r->menu)
                     g->remove(_r->menu);
                 _r->menu = nullptr;
             }
 #else
-            _r->menu = new Fl_Menu_Bar(g->x(), g->y() + 20, g->w(), 20);
             if (_r->menu)
                 g->remove(_r->menu);
             _r->menu = nullptr;
@@ -242,7 +223,7 @@ namespace mrv
         {
             TLRENDER_P();
 
-#if __APPLE__
+#ifdef __APPLE__
             if (p.ui->uiPrefs->uiPrefsMacOSMenus->value())
             {
                 _r->menu = p.ui->uiMenuBar;
@@ -357,22 +338,35 @@ namespace mrv
             int Y = 20;
             int M = (H - Y) / 2;
 
-            _r->tile = new Fl_Tile(g->x(), g->y() + Y, g->w(), H - 3);
-            _r->tile->labeltype(FL_NO_LABEL);
+            Fl_Tile* tile;
+            _r->tile = tile = new Fl_Tile(g->x(), g->y() + Y, g->w(), H - 3);
+            tile->labeltype(FL_NO_LABEL);
+            tile->begin();
 
             int dx = 20, dy = 20; // border width of resizable() - see below
             Fl_Box r(
-                _r->tile->x() + dx, _r->tile->y() + dy, _r->tile->w() - 2 * dx,
-                _r->tile->h() - 2 * dy);
+                tile->x() + dx, tile->y() + dy, tile->w() - 2 * dx,
+                tile->h() - 2 * dy);
             r.clear_visible();
-            _r->tile->resizable(r);
+            tile->resizable(r);
 
-            _r->tile->add(outputDisplay);
-            outputDisplay->resize(g->x(), _r->tile->y(), g->w(), M);
+            if (!textBuffer)
+            {
+                styleBuffer = new Fl_Text_Buffer;
+                textBuffer = new Fl_Text_Buffer;
+                outputDisplay =
+                    new PythonOutput(tile->x(), tile->y(), tile->w(), M);
+            }
+            else
+            {
+                outputDisplay->resize(tile->x(), tile->y(), tile->w(), M);
+            }
+
+            tile->add(outputDisplay);
 
             PythonEditor* e;
             _r->pythonEditor = e = new PythonEditor(
-                g->x(), _r->tile->y() + M, g->w(), _r->tile->h() - M);
+                tile->x(), tile->y() + M, tile->w(), tile->h() - M);
             e->box(FL_DOWN_BOX);
             e->textfont(FL_COURIER);
             e->textcolor(FL_BLACK);
@@ -401,13 +395,13 @@ from mrv2 import playlist, timeline, usd, session, settings
 )PYTHON");
             }
 
-            _r->tile->end();
+            tile->end();
 
             // Create the pack...
             g->clear();
             g->begin();
             create_menu();
-            g->add(_r->tile);
+            g->add(tile);
             g->end();
 
             auto w = g->get_window();
@@ -430,10 +424,10 @@ from mrv2 import playlist, timeline, usd, session, settings
             const std::string& eval = e->eval();
             const std::string& var = e->variable();
 
-            outputDisplay->warning(code.c_str());
+            outputDisplay->output(code.c_str());
             if (!eval.empty() && eval != var)
             {
-                outputDisplay->warning(eval.c_str());
+                outputDisplay->output(eval.c_str());
             }
             try
             {

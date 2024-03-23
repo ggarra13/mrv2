@@ -22,14 +22,12 @@ namespace mrv
 
         static ShowPreferences prefs;
         static ShowPreferences ffmpegPrefs;
-        
+
     public:
         LogDisplay(int x, int y, int w, int h, const char* l = 0);
         ~LogDisplay();
 
         int handle(int event) override;
-
-        void create_menu();
 
         void clear();
 
@@ -39,6 +37,7 @@ namespace mrv
         void print(const char* x, const char style);
 
         void info(const char* x);
+        void output(const char* x);
         void warning(const char* x);
         void error(const char* x);
 

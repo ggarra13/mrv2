@@ -98,6 +98,9 @@ namespace mrv
     PythonEditor::PythonEditor(int X, int Y, int W, int H, const char* L) :
         Fl_Text_Editor(X, Y, W, H, L)
     {
+        label("Python Editor");
+        labeltype(FL_NO_LABEL);
+        
         wrap_mode(WRAP_NONE, 80);
         tab_nav(0);
         cursor_style(HEAVY_CURSOR);

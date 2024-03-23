@@ -189,7 +189,7 @@ namespace mrv
                     {
                         p = printtick(buffer, v);
                         x = x1 + dx * t + 1;
-                        y = yt + dy * t;
+                        y = yt + dy * t + fl_descent();
                         if (dx && (x < r.x() + 3 * min_spacing ||
                                    x >= r.max.x - 5 * min_spacing))
                             ;
@@ -213,7 +213,7 @@ namespace mrv
                     {
                         p = printtick(buffer, v);
                         x = x1 + dx * t + 1;
-                        y = yt + dy * t;
+                        y = yt + dy * t + fl_descent();
                         if (dx && (x < r.x() + 3 * min_spacing ||
                                    x >= r.max.x - 5 * min_spacing))
                             ;
@@ -239,7 +239,7 @@ namespace mrv
         fl_line(x1 + dx * t, y1 + dy * t, x2 + dx * t, y2 + dy * t);
         p = printtick(buffer, v);
         x = x1 + dx * t + 1;
-        y = yt + dy * t;
+        y = yt + dy * t + fl_descent();
         fl_color(textcolor);
         fl_draw(p, x, y);
         fl_color(linecolor);
@@ -255,9 +255,7 @@ namespace mrv
             if (x + w > r.max.x)
                 x -= 2 + w;
         }
-        y = yt + dy * t;
-        if (dy)
-            y += fl_size();
+        y = yt + dy * t + fl_descent();
         fl_color(textcolor);
         fl_draw(p, x, y);
 
@@ -537,7 +535,6 @@ namespace mrv
         int Y = r.y();
         int W = 10;
         int H = r.h();
-        // Fl_Color c = fl_rgb_color(255, 255, 255); // fl_lighter(color());
         Fl_Color c = fl_lighter(color());
         draw_box(FL_EMBOSSED_BOX, X, Y, W, H, c);
         clear_damage();

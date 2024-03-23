@@ -2,6 +2,8 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <string>
+
 #include <FL/Fl_Box.H>
 #include <FL/fl_draw.H>
 #include <FL/Fl_Menu_Item.H>
@@ -76,10 +78,12 @@ namespace mrv
     const Fl_Menu_Item* PopupMenu::popup()
     {
         menu_end();
-        
+
+        // If there's only one item (and the nullptr terminator) don't allow
+        // picking.
         if (children() <= 2)
             return nullptr;
-        
+
         const Fl_Menu_Item* m;
         pressed_menu_button_ = this;
         redraw();
@@ -96,7 +100,36 @@ namespace mrv
         if (_disable_submenus && m && (m->flags & FL_SUBMENU))
             return nullptr;
         if (m && _enable_label)
-            copy_label(m->text);
+        {
+            const std::string& label = m->label();
+            int numFound = 0;
+            for (int t = 0; t < size(); t++)
+            {
+                const Fl_Menu_Item& item = menu()[t];
+                if (!item.label())
+                    continue;
+                if (label == item.label())
+                {
+                    ++numFound;
+                    if (numFound > 1)
+                        break;
+                }
+            }
+
+            if (numFound > 1)
+            {
+                char name[1024];
+                int ok = item_pathname(name, sizeof(name) - 1, m);
+                if (ok == 0)
+                {
+                    copy_label(name);
+                }
+            }
+            else
+            {
+                copy_label(m->label());
+            }
+        }
         picked(m);
         pressed_menu_button_ = 0;
         if (mb.exists())

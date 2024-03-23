@@ -26,15 +26,15 @@ namespace mrv
         // FONT COLOR       FONT FACE   SIZE  ATTR
         // --------------- ------------ ---- ------
         {FL_BLACK, FL_HELVETICA, 14, 0},       // A - Info
-        {0x80400000, FL_HELVETICA, 14, 0},     // B - Warning (Orange)
-        {FL_RED, FL_HELVETICA, 14, 0},         // C - Error
+        {FL_DARK_YELLOW, FL_HELVETICA, 14, 0}, // B - Output
+        {0x80400000, FL_HELVETICA, 14, 0},     // C - Warning (Orange)
+        {FL_RED, FL_HELVETICA, 14, 0}          // D - Error
     };
 
     static const int kMaxLines = 300;
 
     LogDisplay::ShowPreferences LogDisplay::prefs = LogDisplay::kDockOnError;
-    LogDisplay::ShowPreferences LogDisplay::ffmpegPrefs =
-        LogDisplay::kNoRaise;
+    LogDisplay::ShowPreferences LogDisplay::ffmpegPrefs = LogDisplay::kNoRaise;
 
     class LogData
     {
@@ -80,18 +80,16 @@ namespace mrv
         Fl_Text_Display(x, y, w, h, l),
         maxLines(kMaxLines)
     {
-
         color(FL_GRAY0);
 
         scrollbar_align(FL_ALIGN_BOTTOM | FL_ALIGN_RIGHT);
 
         wrap_mode(WRAP_AT_BOUNDS, 80);
 
-        delete mBuffer;
-        delete mStyleBuffer;
-        mBuffer = new Fl_Text_Buffer();
-        mStyleBuffer = new Fl_Text_Buffer();
-        highlight_data(mStyleBuffer, kLogStyles, 3, 'A', 0, 0);
+        Fl_Text_Buffer* buf = new Fl_Text_Buffer();
+        buffer(buf);
+        Fl_Text_Buffer* style = new Fl_Text_Buffer();
+        highlight_data(style, kLogStyles, 4, 'A', 0, 0);
 
         main_thread = std::this_thread::get_id();
     }
@@ -130,12 +128,12 @@ namespace mrv
     {
         if (App::ui)
         {
-            if (style == 'C')
+            if (style == 'D')
                 App::ui->uiStatusBar->error(x);
-            else if (style == 'B')
+            else if (style == 'C')
                 App::ui->uiStatusBar->warning(x);
         }
-        
+
         LogData* data = new LogData(this, x, style);
         if (main_thread != std::this_thread::get_id())
         {
@@ -148,21 +146,28 @@ namespace mrv
             scroll(buffer()->length(), 0);
             delete data;
             trim();
+            redraw();
         }
     }
+
     void LogDisplay::info(const char* x)
     {
         print(x, 'A');
     }
 
-    void LogDisplay::warning(const char* x)
+    void LogDisplay::output(const char* x)
     {
         print(x, 'B');
     }
 
-    void LogDisplay::error(const char* x)
+    void LogDisplay::warning(const char* x)
     {
         print(x, 'C');
+    }
+
+    void LogDisplay::error(const char* x)
+    {
+        print(x, 'D');
     }
 
     int LogDisplay::handle(int e)

@@ -7,7 +7,6 @@ ${FileAssociation_VERBOSE} 4   # all verbosity
 ${FileAssociation_VERBOSE} 3   # no script
 
 Function un.BorrarKey
-Pop $1
 
 ${unregisterExtension} "$1" "${mrv2_KEY}"
 

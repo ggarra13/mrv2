@@ -480,6 +480,8 @@ namespace mrv
         Fl::use_high_res_GL(true);
         Fl::set_fonts("-*");
 
+        Fl::lock(); // needed for NDI and multithreaded logging
+
         // Create the window.
         ui = new ViewerUI();
         if (!ui)
@@ -648,32 +650,50 @@ namespace mrv
             ui->app->getContext()->getLogSystem()->observeLog(),
             [this](const std::vector<log::Item>& value)
             {
-                static std::string lastMessage;
+                static std::string lastStatusMessage;
+                static std::string lastWarningMessage;
+                static std::string lastErrorMessage;
                 for (const auto& i : value)
                 {
                     const std::string& msg = i.message;
                     const std::string& kModule = i.module;
-                    if (msg == lastMessage)
-                        continue;
-                    lastMessage = msg;
                     switch (i.type)
                     {
                     case log::Type::Error:
                     {
+                        if (msg == lastErrorMessage)
+                            continue;
+                    
+                        lastErrorMessage = msg;
+                        
                         LOG_ERROR(msg);
                         break;
                     }
                     case log::Type::Warning:
                     {
+                        if (msg == lastWarningMessage)
+                            continue;
+                        
+                        lastWarningMessage = msg;
+                        
                         LOG_WARNING(msg);
                         break;
                     }
                     case log::Type::Status:
                     {
+                        if (msg == lastStatusMessage)
+                            continue;
+                        
+                        lastStatusMessage = msg;
+                        
                         LOG_INFO(msg);
                         break;
                     }
                     default:
+                        if (_options.log)
+                        {
+                            uiLogDisplay->info(msg.c_str());
+                        }
                         break;
                     }
                 }
@@ -773,17 +793,17 @@ namespace mrv
         try
         {
             if (!p.options.ocioOptions.input.empty())
-                image::setOcioIcs(p.options.ocioOptions.input);
+                ocio::setOcioIcs(p.options.ocioOptions.input);
 
             if (!p.options.ocioOptions.look.empty())
-                image::setOcioLook(p.options.ocioOptions.look);
+                ocio::setOcioLook(p.options.ocioOptions.look);
 
             if (!p.options.ocioOptions.display.empty() &&
                 !p.options.ocioOptions.view.empty())
             {
-                const std::string& merged = image::ocioDisplayViewShortened(
+                const std::string& merged = ocio::ocioDisplayViewShortened(
                     p.options.ocioOptions.display, p.options.ocioOptions.view);
-                image::setOcioView(merged);
+                ocio::setOcioView(merged);
             }
         }
         catch (const std::exception& e)
@@ -1250,7 +1270,7 @@ namespace mrv
             p.activeFiles[0]->inOutRange = p.player->inOutRange();
             p.activeFiles[0]->audioOffset = p.player->audioOffset();
             p.activeFiles[0]->annotations = p.player->getAllAnnotations();
-            p.activeFiles[0]->ocioIcs = image::ocioIcs();
+            p.activeFiles[0]->ocioIcs = ocio::ocioIcs();
         }
 
         if (!activeFiles.empty())
@@ -1414,7 +1434,7 @@ namespace mrv
                 {
                     try
                     {
-                        image::setOcioIcs(p.activeFiles[0]->ocioIcs);
+                        ocio::setOcioIcs(p.activeFiles[0]->ocioIcs);
                     }
                     catch (const std::exception& e)
                     {
@@ -1455,14 +1475,20 @@ namespace mrv
         TLRENDER_P();
         if (!p.player)
             return;
+        
+        uint64_t Gbytes =
+            static_cast<uint64_t>(p.settings->getValue<int>("Cache/GBytes"));
 
         timeline::PlayerCacheOptions options;
         options.readAhead = _cacheReadAhead();
         options.readBehind = _cacheReadBehind();
 
-        uint64_t Gbytes =
-            static_cast<uint64_t>(p.settings->getValue<int>("Cache/GBytes"));
-        if (Gbytes > 0)
+        if (file::isTemporaryNDI(p.player->path()))
+        {
+            options.readAhead = otime::RationalTime(4.0, 1.0);
+            options.readBehind = otime::RationalTime(0.5, 1.0);
+        }
+        else if (Gbytes > 0)
         {
             // Do some sanity checking in case the user is using several mrv2
             // instances and cache would not fit.
@@ -1480,15 +1506,6 @@ namespace mrv
                 Gbytes = totalPhysMem / 2;
 
             uint64_t bytes = Gbytes * memory::gigabyte;
-
-            // Check if an NDI movie and set cache to 1 gigabyte
-            auto Aitem = p.filesModel->observeA()->get();
-            if (Aitem && file::isTemporaryNDI(Aitem->path))
-            {
-                uint64_t NDIGbytes = static_cast<uint64_t>(
-                    p.settings->getValue<int>("NDI/GBytes"));
-                bytes = NDIGbytes * memory::gigabyte;
-            }
 
             // Update the I/O cache.
             auto ioSystem = _context->getSystem<io::System>();
@@ -1529,6 +1546,9 @@ namespace mrv
             options.readAhead = otime::RationalTime(readAhead, 1.0);
             options.readBehind = otime::RationalTime(readBehind, 1.0);
         }
+
+        // std::cerr << "readAhead=" << options.readAhead << std::endl;
+        // std::cerr << "readBehind=" << options.readBehind << std::endl;
 
         p.player->setCacheOptions(options);
     }

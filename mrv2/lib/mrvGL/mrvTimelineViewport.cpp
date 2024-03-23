@@ -17,6 +17,7 @@
 #include "mrvGL/mrvTimelineViewportPrivate.h"
 
 #include "mrvFl/mrvCallbacks.h"
+#include "mrvFl/mrvOCIO.h"
 #include "mrvFl/mrvTimelinePlayer.h"
 
 #include "mrvCore/mrvUtil.h"
@@ -44,10 +45,10 @@ namespace
     const float kHelpTextFade = 1.5F; // 1.5 Seconds
 } // namespace
 
-
 namespace
 {
-    int normalizeAngle0to360(float angle) {
+    int normalizeAngle0to360(float angle)
+    {
         int out = static_cast<int>(std::fmod(angle, 360.0f));
         if (out < 0)
         {
@@ -55,7 +56,7 @@ namespace
         }
         return out;
     }
-}
+} // namespace
 
 namespace mrv
 {
@@ -72,7 +73,7 @@ namespace mrv
     float TimelineViewport::Private::masking = 0.F;
     otio::RationalTime TimelineViewport::Private::lastTime;
     uint64_t TimelineViewport::Private::skippedFrames = 0;
-    float    TimelineViewport::Private::rotation = 0.F;
+    float TimelineViewport::Private::rotation = 0.F;
     bool TimelineViewport::Private::safeAreas = false;
     bool TimelineViewport::Private::dataWindow = false;
     bool TimelineViewport::Private::displayWindow = false;
@@ -284,6 +285,9 @@ namespace mrv
         TLRENDER_P();
 
         const auto player = p.player;
+        if (file::isTemporaryNDI(player->path()))
+            return;
+        
         const auto& t = player->currentTime();
         const auto& time = t + otime::RationalTime(dx, t.rate());
         if (!player->isMuted() && p.ui->uiPrefs->uiPrefsScrubAutoPlay->value())
@@ -346,6 +350,47 @@ namespace mrv
             return;
         }
 
+        bool isNDI = file::isTemporaryNDI(p.player->path());
+        if (isNDI)
+        {
+            c->uiFrame->deactivate();
+            c->uiStartFrame->deactivate();
+            c->uiEndFrame->deactivate();
+            c->uiStartButton->deactivate();
+            c->uiEndButton->deactivate();
+
+            c->uiLoopMode->deactivate();
+            
+            c->uiPlayEnd->deactivate();
+            c->uiPlayStart->deactivate();
+            c->uiPlayBackwards->deactivate();
+            c->uiStepForwards->deactivate();
+            c->uiStepBackwards->deactivate();
+            
+            c->uiFPS->deactivate();
+            c->fpsDefaults->deactivate();
+        }
+        else
+        {
+            c->uiFrame->activate();
+            
+            c->uiStartFrame->activate();
+            c->uiEndFrame->activate();
+            c->uiStartButton->activate();
+            c->uiEndButton->activate();
+            
+            c->uiLoopMode->activate();
+            
+            c->uiPlayEnd->activate();
+            c->uiPlayStart->activate();
+            c->uiPlayBackwards->activate();
+            c->uiStepForwards->activate();
+            c->uiStepBackwards->activate();
+            
+            c->uiFPS->activate();
+            c->fpsDefaults->activate();
+        }
+
         c->uiPlayForwards->color(FL_BACKGROUND_COLOR);
         c->uiPlayBackwards->color(FL_BACKGROUND_COLOR);
         c->uiStop->color(FL_BACKGROUND_COLOR);
@@ -378,8 +423,9 @@ namespace mrv
         TLRENDER_P();
 
         p.skippedFrames = 0;
-        
-        if (!p.player) return;
+
+        if (!p.player)
+            return;
 
         p.player->start();
         updatePlaybackButtons();
@@ -389,8 +435,9 @@ namespace mrv
     {
         TLRENDER_P();
         p.skippedFrames = 0;
-        
-        if (!p.player) return;
+
+        if (!p.player)
+            return;
 
         p.player->framePrev();
         updatePlaybackButtons();
@@ -400,8 +447,9 @@ namespace mrv
     {
         TLRENDER_P();
         p.skippedFrames = 0;
-        
-        if (!p.player) return;
+
+        if (!p.player)
+            return;
 
         p.player->frameNext();
         updatePlaybackButtons();
@@ -411,7 +459,7 @@ namespace mrv
     {
         TLRENDER_P();
         p.skippedFrames = 0;
-        
+
         if (!p.player)
             return;
 
@@ -426,7 +474,7 @@ namespace mrv
 
         if (!p.player)
             return;
-        
+
         p.player->setPlayback(timeline::Playback::Reverse);
         togglePixelBar();
         updatePlaybackButtons();
@@ -439,9 +487,9 @@ namespace mrv
         p.skippedFrames = 0;
         if (!p.player)
             return;
-        
+
         p.player->setPlayback(timeline::Playback::Stop);
-        
+
         togglePixelBar();
         updatePlaybackButtons();
         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
@@ -456,7 +504,7 @@ namespace mrv
             return;
 
         p.player->setPlayback(timeline::Playback::Forward);
-        
+
         togglePixelBar();
         updatePlaybackButtons();
         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
@@ -466,8 +514,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        if (!p.player ||
-            !p.ui->uiPrefs->uiPrefsAutoHidePixelBar->value() ||
+        if (!p.player || !p.ui->uiPrefs->uiPrefsAutoHidePixelBar->value() ||
             !p.ui->uiPrefs->uiPrefsPixelToolbar->value() || p.presentation)
             return;
 
@@ -491,9 +538,9 @@ namespace mrv
 
         if (!p.player)
             return;
-        
+
         p.player->togglePlayback();
-        
+
         togglePixelBar();
         updatePlaybackButtons();
         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
@@ -536,13 +583,20 @@ namespace mrv
         if (value == p.ocioOptions)
             return;
 
-        if (value.input.empty() || value.view.empty())
+        std::string input, view;
+
+        input = value.input;
+        if (input.empty())
+            input = _("None");
+
+        view = value.view;
+        if (view.empty())
             return;
 
         p.ocioOptions = value;
 
-        p.ui->uiICS->copy_label(value.input.c_str());
-        p.ui->OCIOView->copy_label(value.view.c_str());
+        ocio::setOcioIcs(input);
+        ocio::setOcioView(ocio::ocioDisplayViewShortened(value.display, view));
 
         if (panel::colorPanel)
         {
@@ -608,7 +662,7 @@ namespace mrv
             return;
 
         p.compareOptions = value;
-        
+
         redraw();
     }
 
@@ -635,7 +689,7 @@ namespace mrv
         updateVideoLayers();
 
         p.videoData.clear();
-        
+
         if (player)
         {
             if (primary)
@@ -645,7 +699,7 @@ namespace mrv
 
             p.videoData = player->currentVideo();
         }
-        
+
         refreshWindows(); // needed We need to refresh, as the new
                           // video data may have different sizes.
     }
@@ -864,7 +918,8 @@ namespace mrv
     }
 
     void TimelineViewport::currentVideoCallback(
-        const std::vector<timeline::VideoData>& values, const TimelinePlayer* sender) noexcept
+        const std::vector<timeline::VideoData>& values,
+        const TimelinePlayer* sender) noexcept
     {
         TLRENDER_P();
         p.videoData = values;
@@ -921,20 +976,19 @@ namespace mrv
                     p.lastVideoData = values[0];
                 }
             }
-                   
         }
-            
+
         // Refresh media info panel if there's data window present
         if (panel::imageInfoPanel)
         {
             bool refresh = false;
-            
+
             // If timeline is stopped or has a single frame,
             // refresh the media info panel.
             if (sender->playback() == timeline::Playback::Stop ||
                 sender->timeRange().duration().value() == 1.0)
                 refresh = true;
-            
+
             // If timeline has a Data Window (it is an OpenEXR)
             // we also refresh the media info panel.
             auto i = p.tagData.find("Data Window");
@@ -946,7 +1000,7 @@ namespace mrv
                 panel::imageInfoPanel->refresh();
             }
         }
-                    
+
         if (p.selection.max.x != -1)
         {
             if (!values[0].layers.empty())
@@ -971,11 +1025,11 @@ namespace mrv
             c->uiFrame->setTime(values[0].time);
             p.ui->uiTimeline->redraw();
         }
-    
+
         redraw();
     }
 
-bool TimelineViewport::_isPlaybackStopped() const noexcept
+    bool TimelineViewport::_isPlaybackStopped() const noexcept
     {
         TLRENDER_P();
         bool stopped = false;
@@ -1049,29 +1103,29 @@ bool TimelineViewport::_isPlaybackStopped() const noexcept
     }
 
     float TimelineViewport::getRotation() const noexcept
-    {                     
+    {
         return _p->rotation;
     }
-    
+
     void TimelineViewport::setRotation(float x) noexcept
     {
         TLRENDER_P();
 
         if (x == p.rotation)
             return;
-        
+
         p.rotation = x;
-        
+
         if (hasFrameView())
         {
             _frameView();
         }
-        
+
         redrawWindows();
         updatePixelBar();
         updateCoords();
     }
-    
+
     math::Vector2i TimelineViewport::_getViewportCenter() const noexcept
     {
         const auto viewportSize = getViewportSize();
@@ -1136,8 +1190,7 @@ bool TimelineViewport::_isPlaybackStopped() const noexcept
                 }
             }
         }
-        
-        
+
         const math::Vector2i c(renderSize.w / 2, renderSize.h / 2);
         const math::Vector2i viewPos(
             viewportSize.w / 2.F - c.x * zoom,
@@ -1194,7 +1247,7 @@ bool TimelineViewport::_isPlaybackStopped() const noexcept
         // Take into account the different UI bars
         if (p.ui->uiMenuGroup->visible())
             H += p.ui->uiMenuGroup->h();
-        
+
         if (p.ui->uiTopBar->visible())
             H += p.ui->uiTopBar->h();
 
@@ -1285,9 +1338,8 @@ bool TimelineViewport::_isPlaybackStopped() const noexcept
     {
         return _getFocus(_p->event_x, _p->event_y);
     }
-    
-    math::Vector2f
-    TimelineViewport::_getRasterf(int X, int Y) const noexcept
+
+    math::Vector2f TimelineViewport::_getRasterf(int X, int Y) const noexcept
     {
         const auto& pm = _pixelMatrix();
         math::Vector3f pos(X, Y, 1.F);
@@ -1299,7 +1351,6 @@ bool TimelineViewport::_isPlaybackStopped() const noexcept
     {
         return _getRasterf(_p->mousePos.x, _p->mousePos.y);
     }
-
 
     math::Vector2i TimelineViewport::_getRaster() const noexcept
     {
@@ -1324,7 +1375,6 @@ bool TimelineViewport::_isPlaybackStopped() const noexcept
         TLRENDER_P();
         char buf[40];
 
-        
         math::Vector2i pos;
         if (p.environmentMapOptions.type == EnvironmentMapOptions::kNone)
         {
@@ -1652,6 +1702,9 @@ bool TimelineViewport::_isPlaybackStopped() const noexcept
             {
                 o.view = lbl;
             }
+
+            const std::string& fullname = o.display + " / " + o.view;
+            menu->copy_label(fullname.c_str());
         }
         else
         {
@@ -1663,9 +1716,9 @@ bool TimelineViewport::_isPlaybackStopped() const noexcept
             o.view = view.substr(0, pos - 1);
             pos = display.find(')');
             o.display = display.substr(0, pos);
-        }
 
-        menu->copy_label(o.view.c_str());
+            menu->copy_label(o.view.c_str());
+        }
 
         PopupMenu* lookMenu = p.ui->OCIOLook;
 
@@ -1813,7 +1866,7 @@ bool TimelineViewport::_isPlaybackStopped() const noexcept
         for (const auto& video : videos)
         {
             name = video.name;
-            
+
             if (name == "B,G,R" || name == "R,G,B" || name == "Default")
                 name = _("Color");
             else if (name == "A,B,G,R")
@@ -1824,7 +1877,6 @@ bool TimelineViewport::_isPlaybackStopped() const noexcept
 
         p.ui->uiColorChannel->menu_end();
 
-        
         if (p.ui->uiColorChannel->children() == 0)
         {
             p.ui->uiColorChannel->copy_label(_("(no image)"));
@@ -2775,22 +2827,21 @@ bool TimelineViewport::_isPlaybackStopped() const noexcept
     void TimelineViewport::_getTags() noexcept
     {
         TLRENDER_P();
-        
+
         p.tagData.clear();
 
         if (!p.player)
             return;
-        
+
         char buf[1024];
-        
+
         const auto& player = p.player->player();
         const auto& info = player->getIOInfo();
         for (const auto& tag : info.tags)
         {
             const std::string& key = tag.first;
             const std::string rendererKey = "Renderer ";
-            if (key.compare(0, rendererKey.size(),
-                            rendererKey) == 0)
+            if (key.compare(0, rendererKey.size(), rendererKey) == 0)
                 continue;
             p.tagData[key] = tag.second;
         }
@@ -2798,14 +2849,12 @@ bool TimelineViewport::_isPlaybackStopped() const noexcept
         if (!p.videoData.empty() && !p.videoData[0].layers.empty() &&
             p.videoData[0].layers[0].image)
         {
-            const auto& tags =
-                p.videoData[0].layers[0].image->getTags();
+            const auto& tags = p.videoData[0].layers[0].image->getTags();
             for (const auto& tag : tags)
             {
                 p.tagData[tag.first] = tag.second;
             }
         }
-
 
         // If we have a Video Rotation Metadata, extract its value from it.
         auto i = p.tagData.find("Video Rotation");
@@ -2820,16 +2869,16 @@ bool TimelineViewport::_isPlaybackStopped() const noexcept
             }
         }
     }
-    
+
     math::Matrix4x4f TimelineViewport::_projectionMatrix() const noexcept
     {
         TLRENDER_P();
-        
+
         const auto& renderSize = getRenderSize();
-        const auto  renderAspect = renderSize.getAspect();
+        const auto renderAspect = renderSize.getAspect();
         const auto& viewportSize = getViewportSize();
-        const auto  viewportAspect = viewportSize.getAspect();
-        
+        const auto viewportAspect = viewportSize.getAspect();
+
         image::Size transformSize;
         math::Vector2f transformOffset;
         if (viewportAspect > 1.F)
@@ -2843,7 +2892,6 @@ bool TimelineViewport::_isPlaybackStopped() const noexcept
             transformOffset.y = renderSize.h / 2.F;
         }
 
-                
         const math::Matrix4x4f& vm =
             math::translate(math::Vector3f(p.viewPos.x, p.viewPos.y, 0.F)) *
             math::scale(math::Vector3f(p.viewZoom, p.viewZoom, 1.F));
@@ -2852,7 +2900,7 @@ bool TimelineViewport::_isPlaybackStopped() const noexcept
             math::Vector3f(-renderSize.w / 2, -renderSize.h / 2, 0.F));
         const math::Matrix4x4f& to = math::translate(
             math::Vector3f(transformOffset.x, transformOffset.y, 0.F));
-        
+
         const auto pm = math::ortho(
             0.F, static_cast<float>(viewportSize.w), 0.F,
             static_cast<float>(viewportSize.h), -1.F, 1.F);
@@ -2860,16 +2908,15 @@ bool TimelineViewport::_isPlaybackStopped() const noexcept
         return pm * vm * to * rm * tm;
     }
 
-    
     math::Matrix4x4f TimelineViewport::_pixelMatrix() const noexcept
     {
         TLRENDER_P();
-        
+
         const auto& renderSize = getRenderSize();
-        const auto  renderAspect = renderSize.getAspect();
+        const auto renderAspect = renderSize.getAspect();
         const auto& viewportSize = getViewportSize();
-        const auto  viewportAspect = viewportSize.getAspect();
-        
+        const auto viewportAspect = viewportSize.getAspect();
+
         image::Size transformSize;
         math::Vector2f transformOffset;
         if (viewportAspect > 1.F)
@@ -2887,16 +2934,13 @@ bool TimelineViewport::_isPlaybackStopped() const noexcept
         math::Matrix4x4f translation =
             math::translate(math::Vector3f(-p.viewPos.x, -p.viewPos.y, 0.F));
         math::Matrix4x4f zoom = math::scale(
-            math::Vector3f(1.F/p.viewZoom, 1.F/p.viewZoom, 1.F));
+            math::Vector3f(1.F / p.viewZoom, 1.F / p.viewZoom, 1.F));
         const auto& rotation = math::rotateZ(-p.rotation - p.videoRotation);
 
-        const math::Matrix4x4f tm =
-            math::translate(math::Vector3f(renderSize.w / 2,
-                                           renderSize.h / 2,
-                                           0.F));
-        const math::Matrix4x4f to =
-            math::translate(math::Vector3f(-transformOffset.x,
-                                           -transformOffset.y, 0.F));
+        const math::Matrix4x4f tm = math::translate(
+            math::Vector3f(renderSize.w / 2, renderSize.h / 2, 0.F));
+        const math::Matrix4x4f to = math::translate(
+            math::Vector3f(-transformOffset.x, -transformOffset.y, 0.F));
         // Combined transformation matrix
         const math::Matrix4x4f& vm = tm * rotation * to * zoom * translation;
         return vm;

@@ -731,12 +731,12 @@ v->uiPrefsFPS->value( g );}
             }
           }
           Fl_Group {} {
-            label Timeline
+            label Timeline open
             xywh {305 34 530 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Choice uiPrefsTimelineDisplay {
               label Display
-              tooltip {How to display timeline by default.} xywh {397 44 405 27} box THIN_DOWN_BOX down_box BORDER_BOX
+              tooltip {How to display timeline by default.} xywh {397 143 405 27} box THIN_DOWN_BOX down_box BORDER_BOX
               code0 {o->value(0);}
             } {
               MenuItem {} {
@@ -752,59 +752,88 @@ v->uiPrefsFPS->value( g );}
                 xywh {15 15 100 20}
               }
             }
+            Fl_Check_Button uiPrefsEditMode {
+              label {Start in Edit mode}
+              tooltip {Editing viewport will be visible at start up.} xywh {397 252 15 20} down_box DOWN_BOX align 8
+            }
             Fl_Check_Button uiPrefsTimelineThumbnails {
               label {Preview Thumbnails}
-              tooltip {Thumbnails above timeline (does not work on Wayland)} xywh {397 88 63 20} down_box DOWN_BOX value 1
+              tooltip {Thumbnails above timeline (does not work on Wayland)} xywh {397 187 370 20} down_box DOWN_BOX value 1
             }
             Fl_Check_Button uiPrefsRemoveEDLs {
               label {Remove EDLs in Temporary Folder on Exit}
-              tooltip {When selected, temporary EDLs (Playlists) will be removed from the temporary folder.} xywh {397 120 73 20} down_box DOWN_BOX value 1
+              tooltip {When selected, temporary EDLs (Playlists) will be removed from the temporary folder.} xywh {397 219 370 20} down_box DOWN_BOX value 1
             }
+          }
+          Fl_Group {} {
+            label Edit open
+            xywh {315 44 530 362} box EMBOSSED_BOX align 5
+          } {
             Fl_Group {} {
               label {Edit Viewport} open
-              xywh {328 171 480 200} box ROUNDED_BOX
+              xywh {338 69 480 312} box ROUNDED_BOX
             } {
-              Fl_Choice uiPrefsEditThumbnails {
-                label Thumbnails
-                tooltip {How to display timeline by default.} xywh {565 271 210 26} box THIN_DOWN_BOX down_box BORDER_BOX
-                code0 {o->value(1);}
+              Fl_Group {} {
+                label Display open
+                xywh {368 102 420 144} box BORDER_BOX
               } {
-                MenuItem {} {
-                  label None
-                  xywh {25 25 100 20}
+                Fl_Choice uiPrefsEditView {
+                  label {Default View} open selected
+                  tooltip {How to display timeline by default.} xywh {560 113 210 26} box THIN_DOWN_BOX down_box BORDER_BOX
+                  code0 {o->value(0);}
+                } {
+                  MenuItem {} {
+                    label {Video Only}
+                    xywh {45 45 100 20}
+                  }
+                  MenuItem {} {
+                    label {Video and Audio}
+                    xywh {45 45 100 20}
+                  }
                 }
-                MenuItem {} {
-                  label Small
-                  xywh {25 25 100 20}
+                Fl_Choice uiPrefsEditThumbnails {
+                  label Thumbnails
+                  tooltip {How to display timeline by default.} xywh {560 153 210 26} box THIN_DOWN_BOX down_box BORDER_BOX
+                  code0 {o->value(1);}
+                } {
+                  MenuItem {} {
+                    label None
+                    xywh {35 35 100 20}
+                  }
+                  MenuItem {} {
+                    label Small
+                    xywh {35 35 100 20}
+                  }
+                  MenuItem {} {
+                    label Medium
+                    xywh {35 35 100 20}
+                  }
+                  MenuItem {} {
+                    label Large
+                    xywh {45 45 100 20}
+                  }
                 }
-                MenuItem {} {
-                  label Medium
-                  xywh {25 25 100 20}
+                Fl_Check_Button uiPrefsShowTransitions {
+                  label {Show Transitions}
+                  tooltip {Show Transitions in Edit Viewport} xywh {560 187 15 20} down_box DOWN_BOX value 1 align 8
                 }
-                MenuItem {} {
-                  label Large
-                  xywh {35 35 100 20}
+                Fl_Check_Button uiPrefsShowMarkers {
+                  label {Show Markers}
+                  tooltip {Show Markers in Edit Viewport} xywh {560 216 15 20} down_box DOWN_BOX value 1 align 8
                 }
               }
-              Fl_Check_Button uiPrefsShowTransitions {
-                label {Show Transitions}
-                tooltip {Show Transitions in Edit Viewport} xywh {565 309 15 20} down_box DOWN_BOX value 1 align 4
-              }
-              Fl_Check_Button uiPrefsShowMarkers {
-                label {Show Markers}
-                tooltip {Show Markers in Edit Viewport} xywh {565 338 15 20} down_box DOWN_BOX value 1 align 4
-              }
-              Fl_Check_Button uiPrefsTimelineEditable {
-                label Editable
-                tooltip {Editable Timeline Viewport.} xywh {565 213 15 20} down_box DOWN_BOX value 1 align 4
-              }
-              Fl_Check_Button uiPrefsEditAssociatedClips {
-                label {Edit Associated Clips}
-                tooltip {Edit Associated Clips.} xywh {565 243 15 20} down_box DOWN_BOX value 1 align 4
-              }
-              Fl_Check_Button uiPrefsEditMode {
-                label {Start in Edit mode}
-                tooltip {Editing viewport will be visible at start up.} xywh {565 181 63 24} down_box DOWN_BOX value 1 align 4
+              Fl_Group {} {
+                label Behavior
+                xywh {368 275 420 88} box BORDER_BOX
+              } {
+                Fl_Check_Button uiPrefsEditAssociatedClips {
+                  label {Edit Associated Clips}
+                  tooltip {Edit Associated Clips.} xywh {563 320 214 36} down_box DOWN_BOX value 1 align 4
+                }
+                Fl_Check_Button uiPrefsTimelineEditable {
+                  label Editable
+                  tooltip {Editable Timeline Viewport.} xywh {563 282 214 36} down_box DOWN_BOX value 1 align 4
+                }
               }
             }
           }
@@ -916,8 +945,8 @@ v->uiPrefsFPS->value( g );}
             }
           }
           Fl_Group {} {
-            label OCIO open
-            xywh {293 34 542 362} box EMBOSSED_BOX align 5
+            label OCIO
+            xywh {293 34 542 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {open
               xywh {302 93 523 168}
@@ -945,7 +974,7 @@ else if (entry == _("CG"))
 else if (entry == _("Studio"))
 {
    v->uiPrefsOCIOConfig->value("ocio://studio-config-v1.0.0_aces-v1.3_ocio-v2.1");
-}} open selected
+}} open
                 xywh {477 99 119 32} down_box BORDER_BOX
               } {
                 MenuItem {} {
@@ -1090,7 +1119,7 @@ v->uiOCIO_float_ics->do_callback();}
                 user_data this user_data_type {PreferencesUI*}
                 callback {try
 {
-  mrv::image::setOcioView(o->value());
+  mrv::ocio::setOcioView(o->value());
 }
 catch(const std::exception& e)
 {
@@ -1115,7 +1144,7 @@ v->uiOCIO_Display_View->do_callback();}
                 user_data this user_data_type {PreferencesUI*}
                 callback {try
 {
-  mrv::image::setOcioLook(o->value());
+  mrv::ocio::setOcioLook(o->value());
 }
 catch(const std::exception& e)
 {
@@ -1357,7 +1386,7 @@ v->uiOCIO_Look->do_callback();}
             }
           }
           Fl_Group {} {
-            label Errors open
+            label Errors
             xywh {303 39 532 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {open
@@ -1425,7 +1454,7 @@ v->uiOCIO_Look->do_callback();}
             }
           }
         }
-        Fl_Group {} {open
+        Fl_Group {} {
           xywh {9 0 270 447} box PLASTIC_UP_BOX
         } {
           Fl_Tree {} {
@@ -1507,6 +1536,7 @@ o->add( _("User Interface/Positioning") );
 o->add( _("User Interface/File Requester") );
 o->add( _("Playback") );
 o->add( _("Timeline") );
+o->add( _("Edit") );
 o->add( _("Pixel Toolbar") );
 o->add( _("OCIO") );
 o->add( _("OCIO Defaults") );
