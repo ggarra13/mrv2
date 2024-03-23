@@ -25,6 +25,7 @@ namespace mrv
                         string::CaseInsensitiveCompare> tagData;
         static timeline::BackgroundOptions backgroundOptions;
         static float rotation;
+        static bool resizeWindow;
         
         timeline::OCIOOptions ocioOptions;
         timeline::LUTOptions lutOptions;

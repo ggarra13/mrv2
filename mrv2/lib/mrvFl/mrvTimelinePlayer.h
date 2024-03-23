@@ -62,9 +62,6 @@ namespace mrv
         //! Get the I/O information. This information is retreived from
         //! the first clip in the timeline.
         const tl::io::Info& ioInfo() const;
-
-        //! Get the timeline sizes.
-        std::vector<image::Size> sizes() const;
         
         ///@}
 

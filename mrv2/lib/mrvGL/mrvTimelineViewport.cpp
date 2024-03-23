@@ -74,6 +74,7 @@ namespace mrv
     otio::RationalTime TimelineViewport::Private::lastTime;
     uint64_t TimelineViewport::Private::skippedFrames = 0;
     float TimelineViewport::Private::rotation = 0.F;
+    bool TimelineViewport::Private::resizeWindow = true;
     bool TimelineViewport::Private::safeAreas = false;
     bool TimelineViewport::Private::dataWindow = false;
     bool TimelineViewport::Private::displayWindow = false;
@@ -924,6 +925,12 @@ namespace mrv
         TLRENDER_P();
         p.videoData = values;
 
+        if (p.resizeWindow)
+        {
+            p.resizeWindow = false;
+            resizeWindow();
+        }
+        
         _getTags();
         int layerId = sender->videoLayer();
         p.missingFrame = false;
@@ -1093,13 +1100,7 @@ namespace mrv
     math::Size2i TimelineViewport::getRenderSize() const noexcept
     {
         TLRENDER_P();
-        math::Size2i out;
-        if (p.player)
-        {
-            out = timeline::getRenderSize(
-                p.compareOptions.mode, p.player->sizes());
-        }
-        return out;
+        return timeline::getRenderSize(p.compareOptions.mode, p.videoData);
     }
 
     float TimelineViewport::getRotation() const noexcept
@@ -1170,23 +1171,23 @@ namespace mrv
 
         if (rotation == 90.F || rotation == 270.F)
         {
-            if (renderSize.w > 0)
-            {
-                zoom = viewportSize.h / static_cast<float>(renderSize.w);
-                if (renderSize.h > 0 && zoom * renderSize.h > viewportSize.w)
-                {
-                    zoom = viewportSize.w / static_cast<float>(renderSize.h);
-                }
-            }
-        }
-        else
-        {
             if (renderSize.h > 0)
             {
                 zoom = viewportSize.h / static_cast<float>(renderSize.h);
                 if (renderSize.w > 0 && zoom * renderSize.w > viewportSize.w)
                 {
                     zoom = viewportSize.w / static_cast<float>(renderSize.w);
+                }
+            }
+        }
+        else
+        {
+            if (renderSize.w > 0)
+            {
+                zoom = viewportSize.w / static_cast<float>(renderSize.w);
+                if (renderSize.h > 0 && zoom * renderSize.h > viewportSize.h)
+                {
+                    zoom = viewportSize.h / static_cast<float>(renderSize.h);
                 }
             }
         }
@@ -1322,6 +1323,8 @@ namespace mrv
         mw->resize(posX, posY, W, H);
 
         p.ui->uiRegion->layout();
+
+        set_edit_mode_cb(editMode, p.ui);
     }
 
     math::Vector2i TimelineViewport::_getFocus(int X, int Y) const noexcept
@@ -1608,42 +1611,6 @@ namespace mrv
             view->valid(0);
             view->redraw();
         }
-    }
-
-    void TimelineViewport::updateImageOptions() noexcept
-    {
-        TLRENDER_P();
-
-        timeline::ImageOptions o = p.imageOptions[0];
-
-        // @tood. get this from menus, gui or preferences
-        // o.alphaBlend = Straight;   // Straight or Premultiplied
-        const Fl_Menu_Item* item =
-            p.ui->uiMenuBar->find_item(_("Render/Minify Filter/Linear"));
-        timeline::ImageFilter min_filter = timeline::ImageFilter::Nearest;
-        if (item->value())
-            min_filter = timeline::ImageFilter::Linear;
-
-        item = p.ui->uiMenuBar->find_item(_("Render/Magnify Filter/Linear"));
-        timeline::ImageFilter mag_filter = timeline::ImageFilter::Nearest;
-        if (item->value())
-            mag_filter = timeline::ImageFilter::Linear;
-
-        o.imageFilters.minify = min_filter;
-        o.imageFilters.magnify = mag_filter;
-
-        _updateImageOptions(o);
-    }
-
-    void TimelineViewport::_updateImageOptions(
-        const timeline::ImageOptions& o) noexcept
-    {
-        TLRENDER_P();
-        for (auto& imageOptions : p.imageOptions)
-        {
-            imageOptions = o;
-        }
-        redraw();
     }
 
     void TimelineViewport::updateOCIOOptions() noexcept
@@ -2863,10 +2830,10 @@ namespace mrv
         {
             std::stringstream s(i->second);
             s >> p.videoRotation;
-            if (hasFrameView())
-            {
-                _frameView();
-            }
+        }
+        if (hasFrameView())
+        {
+            _frameView();
         }
     }
 
