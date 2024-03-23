@@ -46,7 +46,10 @@ v1.1.0
 - Added support for saving PNG and TIFF with alpha channel when saving a half
   or float OpenEXR image.  TIFFs will get saved in float.  PNG in 16-bits.
 - Eliminated duplicated error and warning messages from the logs.
-  
+- Improved start up time and sync issues with NDI streams.
+- Simplified all parameters in NDI stream to just selecting the source.
+- Allowed NDI streams to change size, pixel aspect or color space.
+
 
 v1.0.9
 ======
