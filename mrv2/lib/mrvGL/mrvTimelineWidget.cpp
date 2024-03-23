@@ -20,6 +20,7 @@
 #include <tlGL/OffscreenBuffer.h>
 #include <tlGL/Shader.h>
 
+#include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvHotkey.h"
 #include "mrvCore/mrvTimeObject.h"
 
@@ -766,6 +767,11 @@ namespace mrv
     {
         TLRENDER_P();
         take_focus();
+
+        bool isNDI = file::isTemporaryNDI(p.player->path());
+        if (isNDI)
+            return 0;
+        
         int button = -1;
         int modifiers = fromFLTKModifiers();
         if (Fl::event_button1())
@@ -795,6 +801,10 @@ namespace mrv
     int TimelineWidget::mouseDragEvent(const int X, const int Y)
     {
         TLRENDER_P();
+        bool isNDI = file::isTemporaryNDI(p.player->path());
+        if (isNDI)
+            return 0;
+        
         int modifiers = fromFLTKModifiers();
         if (Fl::event_button1())
         {
@@ -821,6 +831,11 @@ namespace mrv
         const int X, const int Y, int button, bool on, int modifiers)
     {
         TLRENDER_P();
+
+        bool isNDI = file::isTemporaryNDI(p.player->path());
+        if (isNDI)
+            return 0;
+        
         if (button == 1)
         {
             int ok = _seek();

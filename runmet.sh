@@ -37,7 +37,7 @@ cd -
 dir=$BUILD_DIR/mrv2/src/mrv2-build
 
 # Needed to to force a relink and update build info.
-touch mrv2/lib/mrvWidgets/mrvVersion.cpp
+rm $dir/src/mrv2
 
 if [[ "$CMAKE_TARGET" == "" ]]; then
     CMAKE_TARGET=install

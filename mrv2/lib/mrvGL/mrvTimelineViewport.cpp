@@ -285,6 +285,9 @@ namespace mrv
         TLRENDER_P();
 
         const auto player = p.player;
+        if (file::isTemporaryNDI(player->path()))
+            return;
+        
         const auto& t = player->currentTime();
         const auto& time = t + otime::RationalTime(dx, t.rate());
         if (!player->isMuted() && p.ui->uiPrefs->uiPrefsScrubAutoPlay->value())
@@ -345,6 +348,47 @@ namespace mrv
             c->uiPlayBackwards->redraw();
             c->uiStop->redraw();
             return;
+        }
+
+        bool isNDI = file::isTemporaryNDI(p.player->path());
+        if (isNDI)
+        {
+            c->uiFrame->deactivate();
+            c->uiStartFrame->deactivate();
+            c->uiEndFrame->deactivate();
+            c->uiStartButton->deactivate();
+            c->uiEndButton->deactivate();
+
+            c->uiLoopMode->deactivate();
+            
+            c->uiPlayEnd->deactivate();
+            c->uiPlayStart->deactivate();
+            c->uiPlayBackwards->deactivate();
+            c->uiStepForwards->deactivate();
+            c->uiStepBackwards->deactivate();
+            
+            c->uiFPS->deactivate();
+            c->fpsDefaults->deactivate();
+        }
+        else
+        {
+            c->uiFrame->activate();
+            
+            c->uiStartFrame->activate();
+            c->uiEndFrame->activate();
+            c->uiStartButton->activate();
+            c->uiEndButton->activate();
+            
+            c->uiLoopMode->activate();
+            
+            c->uiPlayEnd->activate();
+            c->uiPlayStart->activate();
+            c->uiPlayBackwards->activate();
+            c->uiStepForwards->activate();
+            c->uiStepBackwards->activate();
+            
+            c->uiFPS->activate();
+            c->fpsDefaults->activate();
         }
 
         c->uiPlayForwards->color(FL_BACKGROUND_COLOR);
