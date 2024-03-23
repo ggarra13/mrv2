@@ -83,6 +83,7 @@ if( UNIX)
 	    FOLLOW_SYMLINK_CHAIN
 	    FILES ${fltk_dsos}
 	)
+	file(REMOVE_RECURSE ${linux_lib64_dir})
     else()
 	message( NOTICE "${linux_lib64_dir} does not exist...")
     endif()
