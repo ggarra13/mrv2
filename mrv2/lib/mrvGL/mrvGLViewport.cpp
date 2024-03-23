@@ -317,11 +317,9 @@ namespace mrv
                                 gl.render->drawVideo(
                                     p.videoData,
                                     timeline::getBoxes(
-                                        p.compareOptions.mode,
-                                        p.player->sizes()),
+                                        p.compareOptions.mode, p.videoData),
                                     p.imageOptions, p.displayOptions,
-                                    p.compareOptions,
-                                    p.backgroundOptions);
+                                    p.compareOptions, p.backgroundOptions);
                                 CHECK_GL;
                             }
                         }

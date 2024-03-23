@@ -1093,13 +1093,7 @@ namespace mrv
     math::Size2i TimelineViewport::getRenderSize() const noexcept
     {
         TLRENDER_P();
-        math::Size2i out;
-        if (p.player)
-        {
-            out = timeline::getRenderSize(
-                p.compareOptions.mode, p.player->sizes());
-        }
-        return out;
+        return timeline::getRenderSize(p.compareOptions.mode, p.videoData);
     }
 
     float TimelineViewport::getRotation() const noexcept
