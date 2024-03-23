@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2024-03-19 03:52-0300\n"
+"POT-Creation-Date: 2024-03-23 10:24-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -302,6 +302,7 @@ msgstr "Abrir una Sesión"
 msgid "Save a session file."
 msgstr "Grabar Sesión."
 
+#, c++-format
 msgid "Duplicated Python plugin {0} in {1} and {2}."
 msgstr "Plugin de Python duplicado {0} en {1} y {2}."
 
@@ -501,6 +502,7 @@ msgstr "Agregar clip a la lista de reproducción (EDL) seleccionada."
 msgid "Save current .otio file with relative paths."
 msgstr "Grabe una list de reproducción .otio con caminos relativos a ella."
 
+#, c++-format
 msgid "unsupported operand type(s) for {0}: RationalTime and {1}"
 msgstr "tipo(s) de operaciones no soportadas para {0}: RationalTime y {1}"
 
@@ -1008,12 +1010,6 @@ msgstr "Vector de 4 elementos de comas flotantes."
 
 msgid "Size of 2 integers."
 msgstr "Tamaño de 2 enteros."
-
-msgid "OCIO config file cannot be empty."
-msgstr "El archivo config de OCIO no puede estar vacío."
-
-msgid "OCIO config '{0}' does not exist or is not readable."
-msgstr "Config de OCIO '{0}' no existe o no es leíble."
 
 msgid ""
 "\n"
@@ -1634,9 +1630,11 @@ msgstr ""
 msgid "Return the version and exit."
 msgstr "Retorna la versión y termina."
 
+#, c++-format
 msgid "Could not read python script '{0}'"
 msgstr "No pude leer script de python '{0}'"
 
+#, c++-format
 msgid "Running python script '{0}'"
 msgstr "Ejecutando script de python '{0}'..."
 
@@ -1667,6 +1665,7 @@ msgstr "Salir de mrv2"
 msgid "Could not initialize NDI"
 msgstr "No pude inicializar NDI"
 
+#, c++-format
 msgid "Filename '{0}' does not exist or does not have read permissions."
 msgstr "Archivo '{0}' no existe o no es leíble."
 
@@ -1790,6 +1789,7 @@ msgstr ""
 "Tipeé su código python aquí.  Seleccione una area para ejecutar sólo una "
 "porción del mismo.  Presione Enter en el teclado numérico para ejecutarlo."
 
+#, c++-format
 msgid "Python file {0} already exists.  Do you want to overwrite it?"
 msgstr "El archivo python {0} ya existe. ¿Quiere sobreescribirlo?"
 
@@ -1815,60 +1815,20 @@ msgstr "Buscar Texto:"
 msgid "No occurrences of '%s' found!"
 msgstr "¡Ninguna ocurrencia de '%s' encontrado!"
 
-msgid "No Source"
-msgstr "Ninguna Fuente"
+msgid "None"
+msgstr "Ninguno"
 
-msgid "NDI"
-msgstr "NDI"
+msgid "Input"
+msgstr "Entrada"
 
-msgid "Preroll"
-msgstr "Preroll"
-
-msgid "Preroll in seconds to synchronize audio."
-msgstr "Preroll en segundos para sincronizar audio."
-
-msgid "Gigabytes"
-msgstr "Gigabytes"
-
-msgid ""
-"Cache in Gigabytes for NDI streams.  For most HD streams, this should be set "
-"to 1.  For higher resolutions and audio channels, you might want to increase "
-"this to 3 or higher for proper audio sync."
-msgstr ""
-"Cache en Gigabytes para fuentes NDI.  Para fuentes HD o 2K, este seteo está "
-"bien en 1.  Para mayores resoluciones y canales de audio, puede que quiera "
-"incrementarlo a 3 o mayor para un buen sincronismo de audio."
-
-msgid "Play"
-msgstr "Reproducir"
-
-msgid "Ignore"
-msgstr "Ignorar"
-
-msgid ""
-"Whether to ignore or play the stream with audio if it has at least one audio "
-"track."
-msgstr ""
-"Ignorar o reproducir la fuente con audio si tiene al menos una pista de "
-"audio."
-
-msgid "Waiting for player cache to fill up..."
-msgstr "Esperando que el cache del reproductor se llene..."
-
-msgid "Starting playback..."
-msgstr "Empezando reproducción..."
-
-msgid "Everything OK."
-msgstr "Todo Bien."
+msgid "NDI Connection"
+msgstr "Conexión NDI"
 
 msgid "USD"
 msgstr "USD"
 
 msgid "Renderer"
 msgstr "Renderer"
-
-msgid "None"
-msgstr "Ninguno"
 
 msgid "Complexity"
 msgstr "Complejidad"
@@ -1884,9 +1844,6 @@ msgstr "Cache en Disco en GB"
 
 msgid "Toggle other eye stereo image."
 msgstr "Alternar el otro ojo de la imagen estéreo."
-
-msgid "Input"
-msgstr "Entrada"
 
 msgid "Image"
 msgstr "Imagen"
@@ -2756,15 +2713,19 @@ msgstr "Índice inválido para agregar clip a la linea de tiempo."
 msgid "Could not get current path."
 msgstr "No pude obtener el camino actual."
 
+#, c++-format
 msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
 msgstr "Item de EDL '{0}' ya no está cargado.  No puedo deshacer ni rehacer."
 
+#, c++-format
 msgid "Could not paste {0}.  Error {1}."
 msgstr "No pude pegar {0}.  Error {1}."
 
+#, c++-format
 msgid "Could not save .otio file: {0}"
 msgstr "No pude grabar el archivo .otio: {0}"
 
+#, c++-format
 msgid "Error saving {0}. {1}"
 msgstr "Error grabando {0}. {1}"
 
@@ -2777,38 +2738,47 @@ msgstr "Archivo de destino es inválido."
 msgid "You can only add clips to an .otio EDL playlist."
 msgstr "Sólo puede agregar clips a una lista de reproduccion (EDL) de .otio."
 
+#, c++-format
 msgid "Server started at port {0}."
 msgstr "Servidor corriendo en puerto {0}."
 
 msgid "Server stopped."
 msgstr "Servidor detenido."
 
+#, c++-format
 msgid "A client connected from {0}"
 msgstr "Un cliente se conectó desde {0}."
 
+#, c++-format
 msgid "Client at {0} disconnected."
 msgstr "Cliente en {0} desconectado."
 
+#, c++-format
 msgid "Server protocol version is {0}.  Client protocol version is {1}"
 msgstr ""
 "Versión del protocolo del Servidor es {0}.  Version del protocolo del "
 "cliente es {1}."
 
+#, c++-format
 msgid "Remote file {0} does not exist on local filesystem."
 msgstr "Archivo remoto {0} no existe en el systema de archivos local."
 
 msgid "Remote files are less than local files."
 msgstr "Archivos remotos son menos que los archivos locales."
 
+#, c++-format
 msgid "Remote file {0} matches file name {1} but not path."
 msgstr "Archivo remoto {0} iguala nombra base {1} pero no la carpeta."
 
+#, c++-format
 msgid "Remote file {0} does not match local filename."
 msgstr "Archivo remoto {0} no es igual al archivo local."
 
+#, c++-format
 msgid "Removing {0} from message publisher."
 msgstr "Removiendo {0} del publicador de mensajes."
 
+#, c++-format
 msgid "Connected to server at {0}, port {1}"
 msgstr "Conectado al servidor en {0}, puerto {1}"
 
@@ -2824,6 +2794,7 @@ msgstr "ERROR: "
 msgid "WARN : "
 msgstr "AVISO: "
 
+#, c++-format
 msgid ""
 "Regular expression created from {0}.  It is:\n"
 "{1}"
@@ -2831,18 +2802,23 @@ msgstr ""
 "Expression regular creada desde {0}.  Es:\n"
 "{1}"
 
+#, c++-format
 msgid "Regular expression error: {0}"
 msgstr "Error de expression regular: {0}"
 
+#, c++-format
 msgid "Iteration {0} matched prefix={1}"
 msgstr "Iteración {0} encontró prefijo={1}"
 
+#, c++-format
 msgid "Iteration {0} matched version={1}"
 msgstr "Iteración {0} encontró versión={1}"
 
+#, c++-format
 msgid "Iteration {0} matched suffix={1}"
 msgstr "Iteración {0} encontró sufijo={1}"
 
+#, c++-format
 msgid "Iteration {0} will check version={1}"
 msgstr "Iteración {0} encontró versión={1}"
 
@@ -2859,6 +2835,7 @@ msgstr "Ejemplo:  gizmo_v003.0001.exr"
 msgid "Annotation already existed at this time"
 msgstr "Anotación ya existía en este tiempo"
 
+#, c++-format
 msgid "Session saved to \"{0}\"."
 msgstr "Sesión grabada a \"{0}\"."
 
@@ -2887,30 +2864,38 @@ msgid ""
 msgstr ""
 "Perfil AV1 necesita una extension de película .mp4 o .mkv.  Cambiando a .mp4."
 
+#, c++-format
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "El archivo {0} ya existe.  Por seguridad, no lo sobreescribiré."
 
+#, c++-format
 msgid "Saving movie to {0}."
 msgstr "Grando película a {0}."
 
+#, c++-format
 msgid "Saving pictures to {0}."
 msgstr "Grabando imágenes a {0}."
 
+#, c++-format
 msgid "Rotated image info: {0}"
 msgstr "Información de Imagen Rotada: {0}"
 
+#, c++-format
 msgid "Scaled image info: {0}"
 msgstr "Información de Imagen Escalada: {0}"
 
+#, c++-format
 msgid "{0}: Cannot open writer plugin."
 msgstr "{0}: No puedo abrir plugin de escritura."
 
+#, c++-format
 msgid "Image info: {0} {1}"
 msgstr "Información de Imagen: {0} {1}"
 
 msgid "Image too big for annotations.  Will scale to the viewport size."
 msgstr "Imagen demasiado grande.  Grabaré el tamaño de la vista."
 
+#, c++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "Tamaño de la Ventana: {0} - X={1}, Y={2}"
 
@@ -2918,12 +2903,15 @@ msgid "Writer plugin did not get output info.  Defaulting to RGB_U8"
 msgstr ""
 "El agregado de Escritura no obtuvo información de salida.  Usando RGB_U8."
 
+#, c++-format
 msgid "Output info: {0} {1}"
 msgstr "Información de Salida: {0} {1}"
 
+#, c++-format
 msgid "Using profile {0}, pixel format {1}."
 msgstr "Usando perfil {0}, formato de pixel {1}."
 
+#, c++-format
 msgid "Using preset {0}."
 msgstr "Usando preseteo {0}."
 
@@ -2943,24 +2931,30 @@ msgstr "Grabando Película sin Audio %<PRId64> - %<PRId64>"
 msgid "Saving Audio %<PRId64> - %<PRId64>"
 msgstr "Grabando Audio %<PRId64> - %<PRId64>"
 
+#, c++-format
 msgid "{0}: Invalid OpenGL format and type"
 msgstr "{0}: Formato y tipo de OpenGL inválidos"
 
+#, c++-format
 msgid "OpenGL info: {0}"
 msgstr "Información de OpenGL: {0}"
 
+#, c++-format
 msgid "Empty video data at time {0}."
 msgstr "Datos de vídeo vacios en {0}."
 
 msgid "Image too big.  Will save the viewport size."
 msgstr "Imagen demasiado grande.  Grabaré el tamaño de la vista."
 
+#, c++-format
 msgid "Viewport Size: {0}  Render Size: {1}"
 msgstr "Tamaño de la Ventana: {0}  Tamaño del Render {1}"
 
+#, c++-format
 msgid "Reading preferences from \"{0}mrv2.prefs\"."
 msgstr "Leyendo preferencias desde \"{0}mrv2.prefs\"."
 
+#, c++-format
 msgid "Failed to retrieve {0}."
 msgstr "Fallé en recuperar {0}."
 
@@ -2971,9 +2965,11 @@ msgstr ""
 "Conversiòn FFmpeg de YUV a RGB esta activado en el Panel de Seteos.  mrv2 "
 "reproducirá las películas más lentamente."
 
+#, c++-format
 msgid "Could not open color theme from \"{0}\"."
 msgstr "No pude abrir tema de color desde \"{0}\"."
 
+#, c++-format
 msgid "Loaded color themes from \"{0}\"."
 msgstr "Cargué tema de color desde \"{0}\"."
 
@@ -2983,27 +2979,33 @@ msgstr "Seteando OCIO config desde preferencias."
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr "Seteando OCIO config de la variable de entorno OCIO."
 
+#, c++-format
 msgid "Path mappings have been loaded from \"{0}mrv2.paths.prefs\"."
 msgstr "Mapeo de carpetas ha sido cargado de \"{0}mrv2.paths.prefs\"."
 
+#, c++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Cargué teclas de manejo desde \"{0}{1}.prefs\"."
 
 msgid "Reseting hotkeys to default."
 msgstr "Reseteando teclas a los valores por defecto."
 
+#, c++-format
 msgid "Path mappings have been saved to \"{0}mrv2.paths.prefs\"."
 msgstr "Mapeo de carpetas ha sido grabado en \"{0}mrv2.paths.prefs\"."
 
+#, c++-format
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "Teclas han sido grabadas en: \"{0}{1}.prefs\"."
 
+#, c++-format
 msgid "Preferences have been saved to: \"{0}mrv2.prefs\"."
 msgstr "Preferencias han sido grabadas en: \"{0}mrv2.prefs\"."
 
 msgid "OCIO config is now:"
 msgstr "OCIO config es ahora:"
 
+#, c++-format
 msgid "OCIO file \"{0}\" not found or not readable."
 msgstr "Config de OCIO \"{0}\" no existe o no es leíble."
 
@@ -3013,18 +3015,30 @@ msgstr "Seteando OCIO config a defecto:"
 msgid "Setting OCIO config to built-in:"
 msgstr "Seteando OCIO config a incorporada:"
 
+#, c++-format
 msgid "Comparing {0} to prefix {1}"
 msgstr "Comparando {0} a prefijo {1}"
 
+#, c++-format
 msgid "Found a match.  File is now {0}"
 msgstr "Encontre una equivalencia.  El archivo es ahora {0}"
 
+msgid "OCIO config file cannot be empty."
+msgstr "El archivo config de OCIO no puede estar vacío."
+
+#, c++-format
+msgid "OCIO config '{0}' does not exist or is not readable."
+msgstr "Config de OCIO '{0}' no existe o no es leíble."
+
+#, c++-format
 msgid "Invalid OCIO Ics '{0}'."
 msgstr "Espacio de Entrada de Color de OCIO inválido para '{0}'."
 
+#, c++-format
 msgid "Invalid OCIO Look '{0}'."
 msgstr "Look de OCIO inválido para '{0}'."
 
+#, c++-format
 msgid "Invalid OCIO Display/View '{0}'."
 msgstr "Display/View de OCIO inválido para '{0}'."
 
@@ -3040,6 +3054,7 @@ msgstr ""
 "Necesito rebootear mrv2 para cambiar lenguaje.  ¿Está seguro que quiere "
 "continuar?"
 
+#, c++-format
 msgid "Set Language to {0}, Numbers to {1}"
 msgstr "Seteando el lenguaje a {0}, Números a {1}"
 
@@ -3054,6 +3069,7 @@ msgstr ""
 "Tecla de manejo \"%s\" ya usada en \"%s\".\n"
 "¿Quiere anularla?"
 
+#, c++-format
 msgid ""
 "Corruption in hotkeys preferences. Hotkey '{0}' for {1} will not be "
 "available.  Already used in {2}."
@@ -3169,6 +3185,9 @@ msgstr "Bitácora"
 msgid "Media Information"
 msgstr "Información del Medio"
 
+msgid "NDI"
+msgstr "NDI"
+
 msgid "Python"
 msgstr "Python"
 
@@ -3237,6 +3256,7 @@ msgstr "Tipografía no encontrada.  No usaré UTF-8."
 msgid "%s - Page %d"
 msgstr "%s - Página %d"
 
+#, c++-format
 msgid "Frame {0} - Timecode: {1} - {2} Secs."
 msgstr "Cuadro {0} - Timecode: {1} - {2} Segs."
 
@@ -3304,6 +3324,9 @@ msgid ""
 msgstr ""
 "No puedo crear una anotación aquí para el cuadro actual.  Una anotación para "
 "todos los cuadros ya existe."
+
+msgid "Play"
+msgstr "Reproducir"
 
 msgid "Stop"
 msgstr "Parar"
@@ -3667,6 +3690,7 @@ msgstr "Sincronizar/Aceptar/Anotaciones"
 msgid "Sync/Accept/Audio"
 msgstr "Sincronizar/Aceptar/Audio"
 
+#, c++-format
 msgid ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
 "function and a string with menu options in it."
@@ -3674,6 +3698,7 @@ msgstr ""
 "En '{0}' experaba una función como valor o un tuple conteniendo una función "
 "de Python y una cadena de texto con opciones de menu en ella."
 
+#, c++-format
 msgid ""
 "In '{0}' expected a function a tuple containing a Python function and a "
 "string with menu options in it."
@@ -4579,8 +4604,23 @@ msgstr "Alternar Modo de Edición"
 msgid "Fit Window to Image"
 msgstr "Ajustar Ventana a la Imagen"
 
+msgid "Layers, Exposure and Gain"
+msgstr "Capas, Exposición y Ganancia"
+
+msgid "Layers"
+msgstr "Capas"
+
 msgid "Allows you to select different image channels or layers."
 msgstr "Permite seleccionar diferente canales de la imagen o capas."
+
+msgid "Exposure and Gain"
+msgstr "Exposición y Ganancia"
+
+msgid "Resizable Control Group"
+msgstr "Grupo de Control de Ajuste"
+
+msgid "Exposure"
+msgstr "Exposición"
 
 msgid "Reduce gain 1/2 stop (divide by sqrt(2))."
 msgstr "Reducir ganancia 1/2 stop (dividir por raiz cuadrada de 2)."
@@ -4594,6 +4634,9 @@ msgstr "Intercambia ganancia enter 1 y el seteo previo."
 msgid "Increase gain 1/2 stop (multiply by sqrt(2))."
 msgstr "Incrementar la ganancia 1/2 stop (multiplicar por raiz cuadrada de 2)."
 
+msgid "Gain"
+msgstr "Ganancia"
+
 msgid "Gain image value.  A simple multiplier of the image pixel values."
 msgstr ""
 "Valor de ganancia de la imagen.  Un simple multiplicador de los valores de "
@@ -4602,23 +4645,32 @@ msgstr ""
 msgid "Allows you to adjust the gain or exposure of the image."
 msgstr "Te permite ajustar la ganancia o exposición de la imagen."
 
+msgid "ICS, View, Look and Gamma"
+msgstr "ICS, Vista, Look y Gama"
+
 msgid "Input Color Space"
 msgstr "Espacio de Entrada de Color"
 
 msgid "OCIO input color space for the image"
 msgstr "OCIO espacio de color para la imagen"
 
+msgid "View and Look"
+msgstr "Vista y Look"
+
 msgid "OCIO Display/View"
 msgstr "OCIO Display/Vista"
 
-msgid "L"
-msgstr "L"
+msgid "Look"
+msgstr "Look"
 
 msgid "OCIO Looks"
 msgstr "Looks de OCIO"
 
 msgid "Toggle gamma between 1 and the previous setting."
 msgstr "Intercambia gama enter 1 y el seteo previo."
+
+msgid "Gamma Input"
+msgstr "Entrada de Gama"
 
 msgid ""
 "Allows you to adjust gamma curve for display.\n"
@@ -5037,9 +5089,6 @@ msgstr "Ventana de Vista"
 
 msgid "Defaults"
 msgstr "Valores por Defecto"
-
-msgid "Gain"
-msgstr "Ganancia"
 
 msgid "Sets the default gain when mrv2 starts."
 msgstr "Establece la ganancia por defecto cuando mrv2 comienza."
@@ -5479,9 +5528,6 @@ msgstr "Display / Vista"
 
 msgid "Default Display / View"
 msgstr "Display / Vista por Defecto"
-
-msgid "Look"
-msgstr "Look"
 
 msgid "Default Look"
 msgstr "Look por Defecto"
@@ -6423,6 +6469,49 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
+
+#~ msgid "No Source"
+#~ msgstr "Ninguna Fuente"
+
+#~ msgid "Preroll"
+#~ msgstr "Preroll"
+
+#~ msgid "Preroll in seconds to synchronize audio."
+#~ msgstr "Preroll en segundos para sincronizar audio."
+
+#~ msgid "Gigabytes"
+#~ msgstr "Gigabytes"
+
+#~ msgid ""
+#~ "Cache in Gigabytes for NDI streams.  For most HD streams, this should be "
+#~ "set to 1.  For higher resolutions and audio channels, you might want to "
+#~ "increase this to 3 or higher for proper audio sync."
+#~ msgstr ""
+#~ "Cache en Gigabytes para fuentes NDI.  Para fuentes HD o 2K, este seteo "
+#~ "está bien en 1.  Para mayores resoluciones y canales de audio, puede que "
+#~ "quiera incrementarlo a 3 o mayor para un buen sincronismo de audio."
+
+#~ msgid "Ignore"
+#~ msgstr "Ignorar"
+
+#~ msgid ""
+#~ "Whether to ignore or play the stream with audio if it has at least one "
+#~ "audio track."
+#~ msgstr ""
+#~ "Ignorar o reproducir la fuente con audio si tiene al menos una pista de "
+#~ "audio."
+
+#~ msgid "Waiting for player cache to fill up..."
+#~ msgstr "Esperando que el cache del reproductor se llene..."
+
+#~ msgid "Starting playback..."
+#~ msgstr "Empezando reproducción..."
+
+#~ msgid "Everything OK."
+#~ msgstr "Todo Bien."
+
+#~ msgid "L"
+#~ msgstr "L"
 
 #~ msgid "Motion Estimation Methods"
 #~ msgstr "Métodos de Estimación de Moviento"

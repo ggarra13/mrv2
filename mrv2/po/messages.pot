@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.1.0\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2024-03-19 03:52-0300\n"
+"POT-Creation-Date: 2024-03-23 10:24-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -871,16 +871,7 @@ msgstr ""
 msgid "Size of 2 integers."
 msgstr ""
 
-#: mrvPy/Image.cpp:185
-msgid "OCIO config file cannot be empty."
-msgstr ""
-
-#: mrvPy/Image.cpp:189
-#, c++-format
-msgid "OCIO config '{0}' does not exist or is not readable."
-msgstr ""
-
-#: mrvPy/Image.cpp:273
+#: mrvPy/Image.cpp:175
 msgid ""
 "\n"
 "Image module.\n"
@@ -888,323 +879,323 @@ msgid ""
 "Contains all classes and enums related to image controls. \n"
 msgstr ""
 
-#: mrvPy/Image.cpp:283
+#: mrvPy/Image.cpp:185
 msgid "Red Channel."
 msgstr ""
 
-#: mrvPy/Image.cpp:284
+#: mrvPy/Image.cpp:186
 msgid "Green Channel."
 msgstr ""
 
-#: mrvPy/Image.cpp:285
+#: mrvPy/Image.cpp:187
 msgid "Blue Channel."
 msgstr ""
 
-#: mrvPy/Image.cpp:286
+#: mrvPy/Image.cpp:188
 msgid "Alpha Channel."
 msgstr ""
 
-#: mrvPy/Image.cpp:295 mrvPy/Image.cpp:309
+#: mrvPy/Image.cpp:197 mrvPy/Image.cpp:211
 msgid "Image mirroring."
 msgstr ""
 
-#: mrvPy/Image.cpp:299
+#: mrvPy/Image.cpp:201
 msgid "Flip image on X."
 msgstr ""
 
-#: mrvPy/Image.cpp:300
+#: mrvPy/Image.cpp:202
 msgid "Flip image on Y."
 msgstr ""
 
-#: mrvPy/Image.cpp:322 mrvPy/Image.cpp:360
+#: mrvPy/Image.cpp:224 mrvPy/Image.cpp:262
 msgid "Enabled Levels."
 msgstr ""
 
-#: mrvPy/Image.cpp:325
+#: mrvPy/Image.cpp:227
 msgid "Add a :class:`mrv2.math.Vector3f` to image."
 msgstr ""
 
-#: mrvPy/Image.cpp:328
+#: mrvPy/Image.cpp:230
 msgid "Change a :class:`mrv2.math.Vector3f` of brightness to image."
 msgstr ""
 
-#: mrvPy/Image.cpp:332
+#: mrvPy/Image.cpp:234
 msgid "Change a :class:`mrv2.math.Vector3f` of contrast to image."
 msgstr ""
 
-#: mrvPy/Image.cpp:336
+#: mrvPy/Image.cpp:238
 msgid "Change a :class:`mrv2.math.Vector3f` of saturation to image."
 msgstr ""
 
-#: mrvPy/Image.cpp:340
+#: mrvPy/Image.cpp:242
 msgid "Change tint of image to image between 0 and 1."
 msgstr ""
 
-#: mrvPy/Image.cpp:342
+#: mrvPy/Image.cpp:244
 msgid "Invert the color values."
 msgstr ""
 
-#: mrvPy/Image.cpp:351
+#: mrvPy/Image.cpp:253
 msgid "Color values."
 msgstr ""
 
-#: mrvPy/Image.cpp:362
+#: mrvPy/Image.cpp:264
 msgid "In Low Level value."
 msgstr ""
 
-#: mrvPy/Image.cpp:364
+#: mrvPy/Image.cpp:266
 msgid "In High Level value."
 msgstr ""
 
-#: mrvPy/Image.cpp:366
+#: mrvPy/Image.cpp:268
 msgid "Gamma Level value."
 msgstr ""
 
-#: mrvPy/Image.cpp:368
+#: mrvPy/Image.cpp:270
 msgid "Out Low Level value."
 msgstr ""
 
-#: mrvPy/Image.cpp:370
+#: mrvPy/Image.cpp:272
 msgid "Out High Level value."
 msgstr ""
 
-#: mrvPy/Image.cpp:379
+#: mrvPy/Image.cpp:281
 msgid "Levels values."
 msgstr ""
 
-#: mrvPy/Image.cpp:389
+#: mrvPy/Image.cpp:291
 msgid "Enabled EXR display."
 msgstr ""
 
-#: mrvPy/Image.cpp:391
+#: mrvPy/Image.cpp:293
 msgid "Exposure value."
 msgstr ""
 
-#: mrvPy/Image.cpp:392
+#: mrvPy/Image.cpp:294
 msgid "Defog value."
 msgstr ""
 
-#: mrvPy/Image.cpp:394
+#: mrvPy/Image.cpp:296
 msgid "kneeLow value."
 msgstr ""
 
-#: mrvPy/Image.cpp:396
+#: mrvPy/Image.cpp:298
 msgid "kneeHigh value."
 msgstr ""
 
-#: mrvPy/Image.cpp:405
+#: mrvPy/Image.cpp:307
 msgid "EXR display values."
 msgstr ""
 
-#: mrvPy/Image.cpp:412
+#: mrvPy/Image.cpp:314
 msgid "Enabled Soft Clip."
 msgstr ""
 
-#: mrvPy/Image.cpp:414 mrvPy/Image.cpp:423
+#: mrvPy/Image.cpp:316 mrvPy/Image.cpp:325
 msgid "Soft clip value."
 msgstr ""
 
-#: mrvPy/Image.cpp:433
+#: mrvPy/Image.cpp:335
 msgid "Minify filter :class:`mrv2.image.ImageFilter`."
 msgstr ""
 
-#: mrvPy/Image.cpp:436
+#: mrvPy/Image.cpp:338
 msgid "Magnify filter :class:`mrv2.image.ImageFilter`."
 msgstr ""
 
-#: mrvPy/Image.cpp:445
+#: mrvPy/Image.cpp:347
 msgid "Image filters."
 msgstr ""
 
-#: mrvPy/Image.cpp:460
+#: mrvPy/Image.cpp:362
 msgid "Color channels :class:`mrv2.image.Channels`."
 msgstr ""
 
-#: mrvPy/Image.cpp:463
+#: mrvPy/Image.cpp:365
 msgid "Mirror on X, Y or both :class:`mrv2.image.Mirror`."
 msgstr ""
 
-#: mrvPy/Image.cpp:466
+#: mrvPy/Image.cpp:368
 msgid "Color options :class:`mrv2.image.Color`."
 msgstr ""
 
-#: mrvPy/Image.cpp:469
+#: mrvPy/Image.cpp:371
 msgid "Levels options :class:`mrv2.image.Levels`."
 msgstr ""
 
-#: mrvPy/Image.cpp:472
+#: mrvPy/Image.cpp:374
 msgid "EXR Display options :class:`mrv2.image.EXRDisplay`.."
 msgstr ""
 
-#: mrvPy/Image.cpp:475
+#: mrvPy/Image.cpp:377
 msgid "Soft Clip options :class:`mrv2.image.SoftClip`.."
 msgstr ""
 
-#: mrvPy/Image.cpp:484
+#: mrvPy/Image.cpp:386
 msgid "Display options."
 msgstr ""
 
-#: mrvPy/Image.cpp:493
+#: mrvPy/Image.cpp:395
 msgid "LUT enabled."
 msgstr ""
 
-#: mrvPy/Image.cpp:495
+#: mrvPy/Image.cpp:397
 msgid "LUT filename."
 msgstr ""
 
-#: mrvPy/Image.cpp:498
+#: mrvPy/Image.cpp:400
 msgid "LUT transformation order."
 msgstr ""
 
-#: mrvPy/Image.cpp:507
+#: mrvPy/Image.cpp:409
 msgid "LUT options."
 msgstr ""
 
-#: mrvPy/Image.cpp:519
+#: mrvPy/Image.cpp:421
 msgid "Video Levels."
 msgstr ""
 
-#: mrvPy/Image.cpp:522
+#: mrvPy/Image.cpp:424
 msgid "Alpha blending algorithm"
 msgstr ""
 
-#: mrvPy/Image.cpp:525
+#: mrvPy/Image.cpp:427
 msgid "Image Filters"
 msgstr ""
 
-#: mrvPy/Image.cpp:534
+#: mrvPy/Image.cpp:436
 msgid "Image options."
 msgstr ""
 
-#: mrvPy/Image.cpp:550
+#: mrvPy/Image.cpp:452
 msgid "Environment Map type."
 msgstr ""
 
-#: mrvPy/Image.cpp:554
+#: mrvPy/Image.cpp:456
 msgid "Horizontal aperture"
 msgstr ""
 
-#: mrvPy/Image.cpp:557
+#: mrvPy/Image.cpp:459
 msgid "Vertical aperture"
 msgstr ""
 
-#: mrvPy/Image.cpp:560 mrvPanels/mrvEnvironmentMapPanel.cpp:242
+#: mrvPy/Image.cpp:462 mrvPanels/mrvEnvironmentMapPanel.cpp:242
 msgid "Focal Length"
 msgstr ""
 
-#: mrvPy/Image.cpp:562
+#: mrvPy/Image.cpp:464
 msgid "Rotation on X"
 msgstr ""
 
-#: mrvPy/Image.cpp:564
+#: mrvPy/Image.cpp:466
 msgid "Rotation on Y"
 msgstr ""
 
-#: mrvPy/Image.cpp:567
+#: mrvPy/Image.cpp:469
 msgid "Subdivision on X"
 msgstr ""
 
-#: mrvPy/Image.cpp:570
+#: mrvPy/Image.cpp:472
 msgid "Subdivision on Y"
 msgstr ""
 
-#: mrvPy/Image.cpp:571 mrvPanels/mrvEnvironmentMapPanel.cpp:295
+#: mrvPy/Image.cpp:473 mrvPanels/mrvEnvironmentMapPanel.cpp:295
 msgid "Spin"
 msgstr ""
 
-#: mrvPy/Image.cpp:580
+#: mrvPy/Image.cpp:482
 msgid "EnvironmentMap options."
 msgstr ""
 
-#: mrvPy/Image.cpp:590
+#: mrvPy/Image.cpp:492
 msgid "Stereo 3d input :class:`mrv2.image.StereoInput`.."
 msgstr ""
 
-#: mrvPy/Image.cpp:593
+#: mrvPy/Image.cpp:495
 msgid "Stereo 3d output :class:`mrv2.image.StereoOutput`.."
 msgstr ""
 
-#: mrvPy/Image.cpp:596
+#: mrvPy/Image.cpp:498
 msgid "Separation between left and right eye."
 msgstr ""
 
-#: mrvPy/Image.cpp:599
+#: mrvPy/Image.cpp:501
 msgid "Swap left and right eye"
 msgstr ""
 
-#: mrvPy/Image.cpp:608
+#: mrvPy/Image.cpp:510
 msgid "Stereo3D options."
 msgstr ""
 
-#: mrvPy/Image.cpp:622
+#: mrvPy/Image.cpp:524
 msgid "Background type :class:`mrv2.image.Background`.."
 msgstr ""
 
-#: mrvPy/Image.cpp:625
+#: mrvPy/Image.cpp:527
 msgid "Checkers Color0 :class:`mrv2.image.Color4f`.."
 msgstr ""
 
-#: mrvPy/Image.cpp:628
+#: mrvPy/Image.cpp:530
 msgid "Checkers Color1 :class:`mrv2.image.Color4f`.."
 msgstr ""
 
-#: mrvPy/Image.cpp:631
+#: mrvPy/Image.cpp:533
 msgid "Checkers Size :class:`mrv2.math.Size2i`.."
 msgstr ""
 
-#: mrvPy/Image.cpp:640
+#: mrvPy/Image.cpp:542
 msgid "Background options."
 msgstr ""
 
-#: mrvPy/Image.cpp:644
+#: mrvPy/Image.cpp:546
 msgid "Gets the current background options."
 msgstr ""
 
-#: mrvPy/Image.cpp:648
+#: mrvPy/Image.cpp:550
 msgid "Sets the current background options."
 msgstr ""
 
-#: mrvPy/Image.cpp:652
+#: mrvPy/Image.cpp:554
 msgid "Gets the current OCIO config file."
 msgstr ""
 
-#: mrvPy/Image.cpp:656
+#: mrvPy/Image.cpp:558
 msgid "Sets the current OCIO config file."
 msgstr ""
 
-#: mrvPy/Image.cpp:660
+#: mrvPy/Image.cpp:562
 msgid "Gets the current input color space."
 msgstr ""
 
-#: mrvPy/Image.cpp:664
+#: mrvPy/Image.cpp:566
 msgid "Gets a list of all input color spaces."
 msgstr ""
 
-#: mrvPy/Image.cpp:667
+#: mrvPy/Image.cpp:569
 msgid "Set the input color space."
 msgstr ""
 
-#: mrvPy/Image.cpp:671
+#: mrvPy/Image.cpp:573
 msgid "Gets the current Display/View."
 msgstr ""
 
-#: mrvPy/Image.cpp:675
+#: mrvPy/Image.cpp:577
 msgid "Gets the list of Displays/Views."
 msgstr ""
 
-#: mrvPy/Image.cpp:678
+#: mrvPy/Image.cpp:580
 msgid "Set an OCIO Display/View."
 msgstr ""
 
-#: mrvPy/Image.cpp:682
+#: mrvPy/Image.cpp:584
 msgid "Gets the current OCIO look."
 msgstr ""
 
-#: mrvPy/Image.cpp:686
+#: mrvPy/Image.cpp:588
 msgid "Gets a list of all OCIO looks."
 msgstr ""
 
-#: mrvPy/Image.cpp:690
+#: mrvPy/Image.cpp:591
 msgid "Set the OCIO look by name."
 msgstr ""
 
@@ -1549,9 +1540,9 @@ msgstr ""
 msgid "Video"
 msgstr ""
 
-#: mrvApp/mrvOpenSeparateAudioDialog.cpp:52 mrvPanels/mrvNDIPanel.cpp:353
-#: mrvPanels/mrvSettingsPanel.cpp:190 mrvPanels/mrvImageInfoPanel.cpp:480
-#: mrvFl/mrvCallbacks.cpp:1881 mrvFl/mrvCallbacks.cpp:1919
+#: mrvApp/mrvOpenSeparateAudioDialog.cpp:52 mrvPanels/mrvSettingsPanel.cpp:190
+#: mrvPanels/mrvImageInfoPanel.cpp:480 mrvFl/mrvCallbacks.cpp:1881
+#: mrvFl/mrvCallbacks.cpp:1919
 #: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:125
 msgid "Audio"
 msgstr ""
@@ -1561,7 +1552,7 @@ msgstr ""
 msgid "OK"
 msgstr ""
 
-#: mrvApp/mrvOpenSeparateAudioDialog.cpp:63 mrvWidgets/mrvPythonEditor.cpp:126
+#: mrvApp/mrvOpenSeparateAudioDialog.cpp:63 mrvWidgets/mrvPythonEditor.cpp:129
 #: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:309
 #: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveMovieOptionsUI.cxx:477
 #: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:270
@@ -1698,40 +1689,40 @@ msgstr ""
 msgid "Python Error: "
 msgstr ""
 
-#: mrvApp/mrvApp.cpp:487
+#: mrvApp/mrvApp.cpp:489
 msgid "Cannot create window"
 msgstr ""
 
-#: mrvApp/mrvApp.cpp:502 mrvUI/mrvMenus.cpp:1272
+#: mrvApp/mrvApp.cpp:504 mrvUI/mrvMenus.cpp:1272
 #: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvAboutUI.cxx:23
 msgid "About mrv2"
 msgstr ""
 
-#: mrvApp/mrvApp.cpp:504 mrvUI/mrvMenus.cpp:1274
+#: mrvApp/mrvApp.cpp:506 mrvUI/mrvMenus.cpp:1274
 msgid "Hide mrv2"
 msgstr ""
 
-#: mrvApp/mrvApp.cpp:505 mrvUI/mrvMenus.cpp:1275
+#: mrvApp/mrvApp.cpp:507 mrvUI/mrvMenus.cpp:1275
 msgid "Hide Others"
 msgstr ""
 
-#: mrvApp/mrvApp.cpp:506 mrvUI/mrvMenus.cpp:1276
+#: mrvApp/mrvApp.cpp:508 mrvUI/mrvMenus.cpp:1276
 msgid "Services"
 msgstr ""
 
-#: mrvApp/mrvApp.cpp:507
+#: mrvApp/mrvApp.cpp:509
 msgid "Show All"
 msgstr ""
 
-#: mrvApp/mrvApp.cpp:508 mrvUI/mrvMenus.cpp:1277
+#: mrvApp/mrvApp.cpp:510 mrvUI/mrvMenus.cpp:1277
 msgid "Quit mrv2"
 msgstr ""
 
-#: mrvApp/mrvApp.cpp:605
+#: mrvApp/mrvApp.cpp:607
 msgid "Could not initialize NDI"
 msgstr ""
 
-#: mrvApp/mrvApp.cpp:977
+#: mrvApp/mrvApp.cpp:997
 #, c++-format
 msgid "Filename '{0}' does not exist or does not have read permissions."
 msgstr ""
@@ -1810,95 +1801,95 @@ msgstr ""
 msgid "Shutdown"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:268
+#: mrvPanels/mrvPythonPanel.cpp:249
 msgid "&File/&Open"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:271
+#: mrvPanels/mrvPythonPanel.cpp:252
 msgid "&File/&Save"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:274
+#: mrvPanels/mrvPythonPanel.cpp:255
 msgid "&Edit/&Undo"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:276
+#: mrvPanels/mrvPythonPanel.cpp:257
 msgid "&Edit/Cu&t"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:279
+#: mrvPanels/mrvPythonPanel.cpp:260
 msgid "&Edit/&Copy"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:282
+#: mrvPanels/mrvPythonPanel.cpp:263
 msgid "&Edit/&Paste"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:285
+#: mrvPanels/mrvPythonPanel.cpp:266
 msgid "&Edit/&Delete"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:288
+#: mrvPanels/mrvPythonPanel.cpp:269
 msgid "&Edit/&Comment Selection"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:291
+#: mrvPanels/mrvPythonPanel.cpp:272
 msgid "&Edit/&Uncomment Selection"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:295
+#: mrvPanels/mrvPythonPanel.cpp:276
 msgid "&Search/&Find..."
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:298
+#: mrvPanels/mrvPythonPanel.cpp:279
 msgid "&Search/F&ind Again"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:301
+#: mrvPanels/mrvPythonPanel.cpp:282
 msgid "&Search/&Replace"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:304
+#: mrvPanels/mrvPythonPanel.cpp:285
 msgid "&Search/&Replace Again"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:313
+#: mrvPanels/mrvPythonPanel.cpp:294
 msgid "Clear/&Output"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:316
+#: mrvPanels/mrvPythonPanel.cpp:297
 msgid "Clear/&Editor"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:319
+#: mrvPanels/mrvPythonPanel.cpp:300
 msgid "Editor/&Run Code"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:322
+#: mrvPanels/mrvPythonPanel.cpp:303
 msgid "Editor/Toggle &Line Numbers"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:325 mrvPanels/mrvPythonPanel.cpp:859
+#: mrvPanels/mrvPythonPanel.cpp:306 mrvPanels/mrvPythonPanel.cpp:853
 msgid "Scripts/Add To Script List"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:337
+#: mrvPanels/mrvPythonPanel.cpp:318
 #, c-format
 msgid "Scripts/%s"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:380
+#: mrvPanels/mrvPythonPanel.cpp:374
 msgid ""
 "Type in your python code here.  Select an area to execute just a portion of "
 "it.  Press Keypad Enter to run it."
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:480
+#: mrvPanels/mrvPythonPanel.cpp:474
 #, c++-format
 msgid "Python file {0} already exists.  Do you want to overwrite it?"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:483 mrvPanels/mrvImageInfoPanel.cpp:1660
+#: mrvPanels/mrvPythonPanel.cpp:477 mrvPanels/mrvImageInfoPanel.cpp:1660
 #: mrvFl/mrvLanguages.cpp:136 mrvFl/mrvHotkey.cpp:99
 #: mrvFl/mrvCallbacks.cpp:1951
 #: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:432
@@ -1906,88 +1897,54 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:483 mrvPanels/mrvImageInfoPanel.cpp:1660
+#: mrvPanels/mrvPythonPanel.cpp:477 mrvPanels/mrvImageInfoPanel.cpp:1660
 #: mrvFl/mrvLanguages.cpp:136 mrvFl/mrvHotkey.cpp:99
 #: mrvFl/mrvCallbacks.cpp:1951
 #: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:440
 msgid "Yes"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:491 mrvFl/mrvSession.cpp:338
+#: mrvPanels/mrvPythonPanel.cpp:485 mrvFl/mrvSession.cpp:338
 msgid "Failed to open the file for writing."
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:500 mrvFl/mrvSession.cpp:346
+#: mrvPanels/mrvPythonPanel.cpp:494 mrvFl/mrvSession.cpp:346
 msgid "Failed to write to the file."
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:506 mrvFl/mrvSession.cpp:351
+#: mrvPanels/mrvPythonPanel.cpp:500 mrvFl/mrvSession.cpp:351
 #: mrvFl/mrvSession.cpp:397
 msgid "The stream is in an unrecoverable error state."
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:704
+#: mrvPanels/mrvPythonPanel.cpp:698
 msgid "Search String:"
 msgstr ""
 
-#: mrvPanels/mrvPythonPanel.cpp:735
+#: mrvPanels/mrvPythonPanel.cpp:729
 #, c-format
 msgid "No occurrences of '%s' found!"
 msgstr ""
 
-#: mrvPanels/mrvNDIPanel.cpp:131 mrvPanels/mrvNDIPanel.cpp:292
-#: mrvPanels/mrvNDIPanel.cpp:410
-msgid "No Source"
+#: mrvPanels/mrvNDIPanel.cpp:141 mrvPanels/mrvNDIPanel.cpp:291
+#: mrvPanels/mrvNDIPanel.cpp:353 mrvPanels/mrvUSDPanel.cpp:125
+#: mrvPanels/mrvStereo3DPanel.cpp:344 mrvPanels/mrvStereo3DPanel.cpp:346
+#: mrvPanels/mrvEnvironmentMapPanel.cpp:116 mrvFl/mrvPreferences.cpp:1953
+#: mrvFl/mrvPreferences.cpp:2099 mrvFl/mrvPreferences.cpp:2111
+#: mrvGL/mrvTimelineViewport.cpp:590 mrvGL/mrvTimelineViewport.cpp:1658
+#: mrvGL/mrvTimelineViewport.cpp:1730
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:38
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:44
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:201
+msgid "None"
 msgstr ""
 
-#: mrvPanels/mrvNDIPanel.cpp:257 mrvFl/mrvCallbacks.cpp:95
-#: mrvUI/mrvMenus.cpp:486
-msgid "NDI"
+#: mrvPanels/mrvNDIPanel.cpp:262 mrvPanels/mrvStereo3DPanel.cpp:340
+msgid "Input"
 msgstr ""
 
-#: mrvPanels/mrvNDIPanel.cpp:312
-msgid "Preroll"
-msgstr ""
-
-#: mrvPanels/mrvNDIPanel.cpp:317
-msgid "Preroll in seconds to synchronize audio."
-msgstr ""
-
-#: mrvPanels/mrvNDIPanel.cpp:335
-msgid "Gigabytes"
-msgstr ""
-
-#: mrvPanels/mrvNDIPanel.cpp:338
-msgid ""
-"Cache in Gigabytes for NDI streams.  For most HD streams, this should be set "
-"to 1.  For higher resolutions and audio channels, you might want to increase "
-"this to 3 or higher for proper audio sync."
-msgstr ""
-
-#: mrvPanels/mrvNDIPanel.cpp:357 mrvGL/mrvTimelineViewportEvents.cpp:1008
-msgid "Play"
-msgstr ""
-
-#: mrvPanels/mrvNDIPanel.cpp:358
-msgid "Ignore"
-msgstr ""
-
-#: mrvPanels/mrvNDIPanel.cpp:359
-msgid ""
-"Whether to ignore or play the stream with audio if it has at least one audio "
-"track."
-msgstr ""
-
-#: mrvPanels/mrvNDIPanel.cpp:439 mrvPanels/mrvNDIPanel.cpp:441
-msgid "Waiting for player cache to fill up..."
-msgstr ""
-
-#: mrvPanels/mrvNDIPanel.cpp:484
-msgid "Starting playback..."
-msgstr ""
-
-#: mrvPanels/mrvNDIPanel.cpp:489
-msgid "Everything OK."
+#: mrvPanels/mrvNDIPanel.cpp:286
+msgid "NDI Connection"
 msgstr ""
 
 #: mrvPanels/mrvUSDPanel.cpp:71 mrvFl/mrvCallbacks.cpp:104
@@ -1997,17 +1954,6 @@ msgstr ""
 
 #: mrvPanels/mrvUSDPanel.cpp:103
 msgid "Renderer"
-msgstr ""
-
-#: mrvPanels/mrvUSDPanel.cpp:125 mrvPanels/mrvStereo3DPanel.cpp:344
-#: mrvPanels/mrvStereo3DPanel.cpp:346 mrvPanels/mrvEnvironmentMapPanel.cpp:116
-#: mrvFl/mrvPreferences.cpp:1952 mrvFl/mrvPreferences.cpp:2098
-#: mrvFl/mrvPreferences.cpp:2110 mrvGL/mrvTimelineViewport.cpp:1608
-#: mrvGL/mrvTimelineViewport.cpp:1677
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:38
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:44
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:201
-msgid "None"
 msgstr ""
 
 #: mrvPanels/mrvUSDPanel.cpp:166
@@ -2028,10 +1974,6 @@ msgstr ""
 
 #: mrvPanels/mrvStereo3DPanel.cpp:224
 msgid "Toggle other eye stereo image."
-msgstr ""
-
-#: mrvPanels/mrvStereo3DPanel.cpp:340
-msgid "Input"
 msgstr ""
 
 #: mrvPanels/mrvStereo3DPanel.cpp:347
@@ -2955,7 +2897,7 @@ msgid "Use the Alt key + left mouse button to change transparency."
 msgstr ""
 
 #: mrvPanels/mrvColorPanel.cpp:110
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2492
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2524
 #: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1433
 #: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1987
 msgid "OCIO"
@@ -3011,6 +2953,7 @@ msgid "In High"
 msgstr ""
 
 #: mrvPanels/mrvColorPanel.cpp:573
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2564
 #: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:660
 msgid "Gamma"
 msgstr ""
@@ -3063,7 +3006,7 @@ msgstr ""
 msgid "Selects the second color in Checkers."
 msgstr ""
 
-#: mrvPanels/mrvAnnotationsPanel.cpp:71 mrvGL/mrvTimelineViewport.cpp:249
+#: mrvPanels/mrvAnnotationsPanel.cpp:71 mrvGL/mrvTimelineViewport.cpp:250
 #: mrvGL/mrvGLTextEdit.cpp:99
 msgid "Text"
 msgstr ""
@@ -3469,73 +3412,73 @@ msgstr ""
 msgid "Failed to retrieve {0}."
 msgstr ""
 
-#: mrvFl/mrvPreferences.cpp:258
+#: mrvFl/mrvPreferences.cpp:259
 msgid ""
 "FFmpeg YUV to RGB Conversion is on in Settings Panel.  mrv2 will play back "
 "movies slower."
 msgstr ""
 
-#: mrvFl/mrvPreferences.cpp:441
+#: mrvFl/mrvPreferences.cpp:442
 #, c++-format
 msgid "Could not open color theme from \"{0}\"."
 msgstr ""
 
-#: mrvFl/mrvPreferences.cpp:451
+#: mrvFl/mrvPreferences.cpp:452
 #, c++-format
 msgid "Loaded color themes from \"{0}\"."
 msgstr ""
 
-#: mrvFl/mrvPreferences.cpp:552
+#: mrvFl/mrvPreferences.cpp:553
 msgid "Setting OCIO config from preferences."
 msgstr ""
 
-#: mrvFl/mrvPreferences.cpp:561
+#: mrvFl/mrvPreferences.cpp:562
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr ""
 
-#: mrvFl/mrvPreferences.cpp:749
+#: mrvFl/mrvPreferences.cpp:750
 #, c++-format
 msgid "Path mappings have been loaded from \"{0}mrv2.paths.prefs\"."
 msgstr ""
 
-#: mrvFl/mrvPreferences.cpp:832
+#: mrvFl/mrvPreferences.cpp:833
 #, c++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr ""
 
-#: mrvFl/mrvPreferences.cpp:839
+#: mrvFl/mrvPreferences.cpp:840
 msgid "Reseting hotkeys to default."
 msgstr ""
 
-#: mrvFl/mrvPreferences.cpp:1377
+#: mrvFl/mrvPreferences.cpp:1378
 #, c++-format
 msgid "Path mappings have been saved to \"{0}mrv2.paths.prefs\"."
 msgstr ""
 
-#: mrvFl/mrvPreferences.cpp:1433
+#: mrvFl/mrvPreferences.cpp:1434
 #, c++-format
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr ""
 
-#: mrvFl/mrvPreferences.cpp:1441
+#: mrvFl/mrvPreferences.cpp:1442
 #, c++-format
 msgid "Preferences have been saved to: \"{0}mrv2.prefs\"."
 msgstr ""
 
-#: mrvFl/mrvPreferences.cpp:1908
+#: mrvFl/mrvPreferences.cpp:1909
 msgid "OCIO config is now:"
 msgstr ""
 
-#: mrvFl/mrvPreferences.cpp:1914
+#: mrvFl/mrvPreferences.cpp:1915
 #, c++-format
 msgid "OCIO file \"{0}\" not found or not readable."
 msgstr ""
 
-#: mrvFl/mrvPreferences.cpp:1917 mrvFl/mrvPreferences.cpp:1923
+#: mrvFl/mrvPreferences.cpp:1918 mrvFl/mrvPreferences.cpp:1924
 msgid "Setting OCIO config to default:"
 msgstr ""
 
-#: mrvFl/mrvPreferences.cpp:1928
+#: mrvFl/mrvPreferences.cpp:1929
 msgid "Setting OCIO config to built-in:"
 msgstr ""
 
@@ -3549,17 +3492,26 @@ msgstr ""
 msgid "Found a match.  File is now {0}"
 msgstr ""
 
-#: mrvFl/mrvOCIO.cpp:60
+#: mrvFl/mrvOCIO.cpp:35
+msgid "OCIO config file cannot be empty."
+msgstr ""
+
+#: mrvFl/mrvOCIO.cpp:43
+#, c++-format
+msgid "OCIO config '{0}' does not exist or is not readable."
+msgstr ""
+
+#: mrvFl/mrvOCIO.cpp:105
 #, c++-format
 msgid "Invalid OCIO Ics '{0}'."
 msgstr ""
 
-#: mrvFl/mrvOCIO.cpp:129
+#: mrvFl/mrvOCIO.cpp:174
 #, c++-format
 msgid "Invalid OCIO Look '{0}'."
 msgstr ""
 
-#: mrvFl/mrvOCIO.cpp:203
+#: mrvFl/mrvOCIO.cpp:248
 #, c++-format
 msgid "Invalid OCIO Display/View '{0}'."
 msgstr ""
@@ -3728,7 +3680,7 @@ msgid "Background"
 msgstr ""
 
 #: mrvFl/mrvCallbacks.cpp:80 mrvFl/mrvCallbacks.cpp:1869
-#: mrvFl/mrvCallbacks.cpp:1907 mrvGL/mrvTimelineViewport.cpp:1818
+#: mrvFl/mrvCallbacks.cpp:1907 mrvGL/mrvTimelineViewport.cpp:1871
 #: mrvUI/mrvMenus.cpp:407
 msgid "Color"
 msgstr ""
@@ -3755,6 +3707,10 @@ msgstr ""
 
 #: mrvFl/mrvCallbacks.cpp:90 mrvUI/mrvMenus.cpp:520
 msgid "Media Information"
+msgstr ""
+
+#: mrvFl/mrvCallbacks.cpp:95 mrvUI/mrvMenus.cpp:486
+msgid "NDI"
 msgstr ""
 
 #: mrvFl/mrvCallbacks.cpp:99 mrvUI/mrvMenus.cpp:478
@@ -3806,7 +3762,7 @@ msgid "Pick Color"
 msgstr ""
 
 #: mrvFl/mrvCallbacks.cpp:1738
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2709
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2773
 msgid "Pick Draw Color and Alpha"
 msgstr ""
 
@@ -3860,72 +3816,72 @@ msgstr ""
 msgid "Frame {0} - Timecode: {1} - {2} Secs."
 msgstr ""
 
-#: mrvGL/mrvTimelineViewport.cpp:221
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2914
+#: mrvGL/mrvTimelineViewport.cpp:222
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2978
 msgid "Scrub"
 msgstr ""
 
-#: mrvGL/mrvTimelineViewport.cpp:225
+#: mrvGL/mrvTimelineViewport.cpp:226
 #: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:951
 msgid "Selection"
 msgstr ""
 
-#: mrvGL/mrvTimelineViewport.cpp:229
+#: mrvGL/mrvTimelineViewport.cpp:230
 msgid "Draw"
 msgstr ""
 
-#: mrvGL/mrvTimelineViewport.cpp:233
+#: mrvGL/mrvTimelineViewport.cpp:234
 msgid "Erase"
 msgstr ""
 
-#: mrvGL/mrvTimelineViewport.cpp:237
+#: mrvGL/mrvTimelineViewport.cpp:238
 msgid "Circle"
 msgstr ""
 
-#: mrvGL/mrvTimelineViewport.cpp:241
+#: mrvGL/mrvTimelineViewport.cpp:242
 msgid "Rectangle"
 msgstr ""
 
-#: mrvGL/mrvTimelineViewport.cpp:245
+#: mrvGL/mrvTimelineViewport.cpp:246
 msgid "Arrow"
 msgstr ""
 
-#: mrvGL/mrvTimelineViewport.cpp:252
+#: mrvGL/mrvTimelineViewport.cpp:253
 msgid "Rotate"
 msgstr ""
 
-#: mrvGL/mrvTimelineViewport.cpp:255
+#: mrvGL/mrvTimelineViewport.cpp:256
 msgid "Trim"
 msgstr ""
 
-#: mrvGL/mrvTimelineViewport.cpp:258
+#: mrvGL/mrvTimelineViewport.cpp:259
 msgid "Slip"
 msgstr ""
 
-#: mrvGL/mrvTimelineViewport.cpp:261
+#: mrvGL/mrvTimelineViewport.cpp:262
 msgid "Slide"
 msgstr ""
 
-#: mrvGL/mrvTimelineViewport.cpp:264
+#: mrvGL/mrvTimelineViewport.cpp:265
 msgid "Ripple"
 msgstr ""
 
-#: mrvGL/mrvTimelineViewport.cpp:267
+#: mrvGL/mrvTimelineViewport.cpp:268
 msgid "Roll"
 msgstr ""
 
-#: mrvGL/mrvTimelineViewport.cpp:1572 mrvGL/mrvTimelineViewport.cpp:1781
+#: mrvGL/mrvTimelineViewport.cpp:1622 mrvGL/mrvTimelineViewport.cpp:1834
 #: mrvUI/mrvMenus.cpp:707
 msgid "Render/Minify Filter/Linear"
 msgstr ""
 
-#: mrvGL/mrvTimelineViewport.cpp:1577 mrvGL/mrvTimelineViewport.cpp:1786
+#: mrvGL/mrvTimelineViewport.cpp:1627 mrvGL/mrvTimelineViewport.cpp:1839
 #: mrvUI/mrvMenus.cpp:730
 msgid "Render/Magnify Filter/Linear"
 msgstr ""
 
-#: mrvGL/mrvTimelineViewport.cpp:1830
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2413
+#: mrvGL/mrvTimelineViewport.cpp:1882
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2416
 msgid "(no image)"
 msgstr ""
 
@@ -3943,6 +3899,10 @@ msgstr ""
 msgid ""
 "Cannot create an annotation here for current frame.  An all frames "
 "annotation already exists."
+msgstr ""
+
+#: mrvGL/mrvTimelineViewportEvents.cpp:1008
+msgid "Play"
 msgstr ""
 
 #: mrvGL/mrvTimelineViewportEvents.cpp:1012
@@ -4450,23 +4410,23 @@ msgstr ""
 msgid "Help/About"
 msgstr ""
 
-#: mrvWidgets/mrvPythonEditor.cpp:120
+#: mrvWidgets/mrvPythonEditor.cpp:123
 msgid "Replace"
 msgstr ""
 
-#: mrvWidgets/mrvPythonEditor.cpp:121
+#: mrvWidgets/mrvPythonEditor.cpp:124
 msgid "Find:"
 msgstr ""
 
-#: mrvWidgets/mrvPythonEditor.cpp:122
+#: mrvWidgets/mrvPythonEditor.cpp:125
 msgid "Replace:"
 msgstr ""
 
-#: mrvWidgets/mrvPythonEditor.cpp:123
+#: mrvWidgets/mrvPythonEditor.cpp:126
 msgid "Replace All"
 msgstr ""
 
-#: mrvWidgets/mrvPythonEditor.cpp:125
+#: mrvWidgets/mrvPythonEditor.cpp:128
 msgid "Replace Next"
 msgstr ""
 
@@ -4563,7 +4523,7 @@ msgstr ""
 msgid "Session: "
 msgstr ""
 
-#: mrvWidgets/mrvLogDisplay.cpp:178
+#: mrvWidgets/mrvLogDisplay.cpp:183
 msgid "Edit/&Copy"
 msgstr ""
 
@@ -5266,7 +5226,7 @@ msgid ""
 msgstr ""
 
 #: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:413
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2523
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2566
 msgid "Y"
 msgstr ""
 
@@ -5389,7 +5349,7 @@ msgid "Go to the beginning of the sequence."
 msgstr ""
 
 #: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:832
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2431
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2443
 msgid "@<"
 msgstr ""
 
@@ -5422,7 +5382,7 @@ msgid "Advance one frame."
 msgstr ""
 
 #: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:884
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2440
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2452
 msgid "@>"
 msgstr ""
 
@@ -5494,123 +5454,165 @@ msgstr ""
 msgid "Fit Window to Image"
 msgstr ""
 
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2414
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2411
+msgid "Layers, Exposure and Gain"
+msgstr ""
+
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2413
+msgid "Layers"
+msgstr ""
+
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2417
 msgid "Allows you to select different image channels or layers."
 msgstr ""
 
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2432
-msgid "Reduce gain 1/2 stop (divide by sqrt(2))."
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2433
+msgid "Exposure and Gain"
 msgstr ""
 
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2436
-msgid "f/8"
-msgstr ""
-
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2437
-msgid "Toggle gain between 1 and the previous setting."
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2435
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2501
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2554
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2570
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2608
+msgid "Resizable Control Group"
 msgstr ""
 
 #: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2441
+msgid "Exposure"
+msgstr ""
+
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2444
+msgid "Reduce gain 1/2 stop (divide by sqrt(2))."
+msgstr ""
+
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2448
+msgid "f/8"
+msgstr ""
+
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2449
+msgid "Toggle gain between 1 and the previous setting."
+msgstr ""
+
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2453
 msgid "Increase gain 1/2 stop (multiply by sqrt(2))."
 msgstr ""
 
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2446
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2459
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:654
+msgid "Gain"
+msgstr ""
+
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2462
 msgid "Gain image value.  A simple multiplier of the image pixel values."
 msgstr ""
 
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2455
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2472
 msgid "Allows you to adjust the gain or exposure of the image."
 msgstr ""
 
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2474
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2498
+msgid "ICS, View, Look and Gamma"
+msgstr ""
+
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2507
 #: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1476
 msgid "Input Color Space"
 msgstr ""
 
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2475
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2508
 msgid "OCIO input color space for the image"
 msgstr ""
 
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2493
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2522
+msgid "View and Look"
+msgstr ""
+
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2525
 msgid "OCIO Display/View"
 msgstr ""
 
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2507
-msgid "L"
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2539
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1576
+msgid "Look"
 msgstr ""
 
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2508
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2540
 msgid "OCIO Looks"
 msgstr ""
 
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2524
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2567
 msgid "Toggle gamma between 1 and the previous setting."
 msgstr ""
 
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2528
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2538
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2575
+msgid "Gamma Input"
+msgstr ""
+
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2578
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2588
 msgid ""
 "Allows you to adjust gamma curve for display.\n"
 "Value is:  pow( 2, 1/x );"
 msgstr ""
 
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2588
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2652
 msgid "Scrubbing Tool"
 msgstr ""
 
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2604
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2668
 msgid "Area Select Tool"
 msgstr ""
 
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2619
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2683
 msgid "Freehand Drawing Tool"
 msgstr ""
 
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2634
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2698
 msgid "Eraser Tool"
 msgstr ""
 
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2649
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2713
 msgid "Circle Tool"
 msgstr ""
 
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2664
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2728
 msgid "Rectangle Tool"
 msgstr ""
 
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2679
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2743
 msgid "Arrow Tool"
 msgstr ""
 
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2694
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2758
 msgid "Text Tool.   Right click to edit previously stamped text."
 msgstr ""
 
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2720
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2784
 msgid "Old Color Used.  Click on the Arrow to alternate."
 msgstr ""
 
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2731
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2795
 msgid "Switch Colors"
 msgstr ""
 
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2745
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2809
 msgid "Opacity of pen stroke"
 msgstr ""
 
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2753
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2817
 msgid "Undo Last Shape Drawn in Current Frame."
 msgstr ""
 
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2768
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2832
 msgid "Redo Previous Shape Drawn in Current Frame."
 msgstr ""
 
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2904
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2968
 msgid "Everything OK.  "
 msgstr ""
 
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2915
+#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2979
 msgid "Current tool being used."
 msgstr ""
 
@@ -6084,10 +6086,6 @@ msgstr ""
 #: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:652
 #: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1090
 msgid "Defaults"
-msgstr ""
-
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:654
-msgid "Gain"
 msgstr ""
 
 #: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:655
@@ -6609,10 +6607,6 @@ msgstr ""
 
 #: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1562
 msgid "Default Display / View"
-msgstr ""
-
-#: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1576
-msgid "Look"
 msgstr ""
 
 #: /Users/gga/code/applications/mrv2/BUILD-Darwin-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1577
