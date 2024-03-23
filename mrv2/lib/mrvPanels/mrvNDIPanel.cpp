@@ -11,7 +11,7 @@
 #    include <atomic>
 
 #    include <tlCore/StringFormat.h>
-#    include <tlCore/NDI.h>
+#    include <tlCore/NDIOptions.h>
 
 #    include <FL/Fl_Choice.H>
 #    include <FL/Fl_Check_Button.H>
