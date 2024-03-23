@@ -210,6 +210,9 @@ jobs:
       
     - name: Install Python dependencies
       run: brew install libffi openssl readline sqlite3 xz zlib
+      
+    - name: Reinstall xz to avoid broken macOS 14
+      run: brew reinstall xz
         
     - name: Install pyFLTK dependencies
       run: brew install subversion swig
