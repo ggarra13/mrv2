@@ -49,6 +49,10 @@ v1.1.0
 - Improved start up time and sync issues with NDI streams.
 - Simplified all parameters in NDI stream to just selecting the source.
 - Allowed NDI streams to change size, pixel aspect or color space.
+- You currently cannot mix two NDI streams, one with audio and one without.  Only
+  the first one information will be used.
+- You also cannot stream two clips through NDI with different audio frequencies or
+  channels.
 
 
 v1.0.9

@@ -480,6 +480,8 @@ namespace mrv
         Fl::use_high_res_GL(true);
         Fl::set_fonts("-*");
 
+        Fl::lock(); // needed for NDI and multithreaded logging
+
         // Create the window.
         ui = new ViewerUI();
         if (!ui)
