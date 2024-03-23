@@ -374,7 +374,7 @@ namespace mrv
             if (!player)
                 return;
 
-            int seconds = 3;
+            int seconds = 4;
             r.play.found = false;
             player->stop();
 
@@ -394,6 +394,7 @@ namespace mrv
                             if (t.start_time() <= startTime &&
                                 t.end_time_exclusive() >= endTime)
                             {
+                                LOG_INFO("Exiting due to audio");
                                 r.play.found = true;
                                 break;
                             }
@@ -413,6 +414,8 @@ namespace mrv
                                 
                         }
                         r.cacheInfoObserver.reset();
+                        if (!r.play.found)
+                            LOG_INFO("Exiting due to seconds");
                         player->forward();
                     });
             
