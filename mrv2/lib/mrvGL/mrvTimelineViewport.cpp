@@ -2830,10 +2830,10 @@ namespace mrv
         {
             std::stringstream s(i->second);
             s >> p.videoRotation;
-        }
-        if (hasFrameView())
-        {
-            _frameView();
+            if (hasFrameView())
+            {
+                _frameView();
+            }
         }
     }
 

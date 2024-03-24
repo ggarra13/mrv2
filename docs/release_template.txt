@@ -1,67 +1,9 @@
 mrv2 v1.1.0
-===========
+========
 
 mrv2 is an open source professional player and review tool for vfx, animation and computer graphics for Windows, Linux and macOS.
 
-Numerous improvements to NDI, Windows installer. Also Python Panel and saving format fixes.
-
-Full list of changes:
-
-- Build fixes.
-- Made mrv2's custom file requester list presumed sequences of a single frame
-  as a file instead of a custom sequence name display.
-- Matched NDI colors.
-- Made NDI streams not display thumbnails in any of the panels, as it would
-  look like mrv2 had hanged.
-- Made installed size and installer smaller, by removing some unneeded python
-  libraries used for documenting mrv2.
-- Made installed size and installer smaller, by removing Python's unittests.
-- Made default Windows' installer not install Python's Tk libraries by default.
-- Made default Windows' installer not install IDLE nor turtledemo.
-- Overall, the Windows installed size is now almost 150Mb smaller, now at 325Mb.
-- Made Windows installer create a registry entry backup for the file
-  associations, instead of using an .ini file which was worse.  On uninstall,
-  the original file association is restored or the registry entry is deleted.
-- Added a friendlier name to Windows' Open With RMB menu.  Now the version is
-  listed, instead of just "mrv2.exe".  Also the name in English is provided.
-- Added a latest version to Windows' Open With RMB menu.  If used, it will
-  associate the latest version installed with the file.  Upgrading won't
-  require you to reset file associations like before.
-- Fixed rotations not framing the image even when View->Auto Frame was on.
-- Added symbolic links on Windows .exe installer, so that it works more like
-  Unix.
-  You can use mrv2-v1.1.0.exe to call a specific version of the viewer for
-  example.
-- Split Timeline into "Timeline" and "Edit" Preferences in Preferences Window.
-- Added Default View to "Edit" to select what gets displayed when you hit the
-  Edit button ("Video Only" or "Video and Audio").
-- Fixed Edit Viewport size when transitions were present.
-- Fixed a potential crash when switching to nuke's ocio config.
-- Made Python's setOcioConfig accept ocio::// configurations.
-- Fixed colors on Python commands being orange instead of dark yellow as before.
-- Fixed a redraw issue on Python's Panel output, at least on Linux.
-- Made View pull-down menu display the full name of the display / view.
-- Made UI topbar resize a tad nicer.
-- Fixed Python Output in Python Panel which was not refreshing at all due to
-  my misuse of the FLTK API since v0.9.3.
-- Fixed a stray menu bar on Python Panel on closing it.
-- Improved performance of package creation using multithreading when possible
-  with cpack's generators.
-- Added support for NDI's BT601 and BT2020.
-- Added support for NDI's alpha channel.
-- Added support for saving PNG and TIFF with alpha channel when saving a half
-  or float OpenEXR image.  TIFFs will get saved in float.  PNG in 16-bits.
-- Eliminated duplicated error and warning messages from the logs.
-- Improved start up time and sync issues with NDI streams.
-- Simplified all parameters in NDI stream to just selecting the source.
-- Allowed NDI streams to change size, pixel aspect or color space.
-- You currently cannot mix two NDI streams, one with audio and one without.
-  Only the first one information will be used.
-- You also cannot stream two clips through NDI with different audio
-  frequencies or channels.
-- Streaming two clips through the same connection after stopping for a while
-  can lead to audio stuttering.  Either stream them one after the other or
-  open a new connection.
+Numerous improvements to NDI and Windows installer. Also a huge Python Panel bug fix and saving format fixes for TIFF and PNG.  Smaller footprint of installers and installed size and quicker packaging for those compiling from source.
   
 
 Main Web page:
