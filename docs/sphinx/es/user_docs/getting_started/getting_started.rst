@@ -28,11 +28,11 @@ cada vez que descarga una nueva versión).
 
 En Debian (Ubuntu, etc), lo instalaría con::
 
-  sudo dpkg -i mrv2-v1.0.9-amd64.tar.gz
+  sudo dpkg -i mrv2-v1.1.0-amd64.tar.gz
   
 En Red Hat (Rocky Linux, etc), lo instalaría con::
 
-  sudo rpm -i mrv2-v1.0.9-amd64.tar.gz
+  sudo rpm -i mrv2-v1.1.0-amd64.tar.gz
 
 Una vez que lo instala, puede correr mrv2 tipeando::
 
@@ -44,7 +44,7 @@ Para correr mrv2 con el ícono, necesita seleccionarlo y usar el botón derecho 
 
 Si no tiene permisos de super usuario en su organización, debería bajar el archivo .tar.gz y descomprimirlo con::
 
-  tar -xf mrv2-v1.0.9-amd64.tar.gz
+  tar -xf mrv2-v1.1.0-amd64.tar.gz
   
 Eso creará una carpeta en el directorio desde donde lo descomprimió. Podrá correr mrv2 usando el script de bash::
 
