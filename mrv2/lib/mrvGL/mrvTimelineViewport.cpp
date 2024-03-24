@@ -288,7 +288,7 @@ namespace mrv
         const auto player = p.player;
         if (file::isTemporaryNDI(player->path()))
             return;
-        
+
         const auto& t = player->currentTime();
         const auto& time = t + otime::RationalTime(dx, t.rate());
         if (!player->isMuted() && p.ui->uiPrefs->uiPrefsScrubAutoPlay->value())
@@ -361,33 +361,33 @@ namespace mrv
             c->uiEndButton->deactivate();
 
             c->uiLoopMode->deactivate();
-            
+
             c->uiPlayEnd->deactivate();
             c->uiPlayStart->deactivate();
             c->uiPlayBackwards->deactivate();
             c->uiStepForwards->deactivate();
             c->uiStepBackwards->deactivate();
-            
+
             c->uiFPS->deactivate();
             c->fpsDefaults->deactivate();
         }
         else
         {
             c->uiFrame->activate();
-            
+
             c->uiStartFrame->activate();
             c->uiEndFrame->activate();
             c->uiStartButton->activate();
             c->uiEndButton->activate();
-            
+
             c->uiLoopMode->activate();
-            
+
             c->uiPlayEnd->activate();
             c->uiPlayStart->activate();
             c->uiPlayBackwards->activate();
             c->uiStepForwards->activate();
             c->uiStepBackwards->activate();
-            
+
             c->uiFPS->activate();
             c->fpsDefaults->activate();
         }
@@ -930,7 +930,7 @@ namespace mrv
             p.resizeWindow = false;
             resizeWindow();
         }
-        
+
         _getTags();
         int layerId = sender->videoLayer();
         p.missingFrame = false;
@@ -1171,23 +1171,23 @@ namespace mrv
 
         if (rotation == 90.F || rotation == 270.F)
         {
-            if (renderSize.h > 0)
+            if (renderSize.w > 0)
             {
-                zoom = viewportSize.h / static_cast<float>(renderSize.h);
-                if (renderSize.w > 0 && zoom * renderSize.w > viewportSize.w)
+                zoom = viewportSize.h / static_cast<float>(renderSize.w);
+                if (renderSize.h > 0 && zoom * renderSize.h > viewportSize.w)
                 {
-                    zoom = viewportSize.w / static_cast<float>(renderSize.w);
+                    zoom = viewportSize.w / static_cast<float>(renderSize.h);
                 }
             }
         }
         else
         {
-            if (renderSize.w > 0)
+            if (renderSize.h > 0)
             {
-                zoom = viewportSize.w / static_cast<float>(renderSize.w);
-                if (renderSize.h > 0 && zoom * renderSize.h > viewportSize.h)
+                zoom = viewportSize.h / static_cast<float>(renderSize.h);
+                if (renderSize.w > 0 && zoom * renderSize.w > viewportSize.w)
                 {
-                    zoom = viewportSize.h / static_cast<float>(renderSize.h);
+                    zoom = viewportSize.h / static_cast<float>(renderSize.w);
                 }
             }
         }
