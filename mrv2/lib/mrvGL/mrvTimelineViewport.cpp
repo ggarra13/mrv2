@@ -1187,7 +1187,7 @@ namespace mrv
                 zoom = viewportSize.h / static_cast<float>(renderSize.h);
                 if (renderSize.w > 0 && zoom * renderSize.w > viewportSize.w)
                 {
-                    zoom = viewportSize.h / static_cast<float>(renderSize.w);
+                    zoom = viewportSize.w / static_cast<float>(renderSize.w);
                 }
             }
         }
