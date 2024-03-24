@@ -934,7 +934,7 @@ namespace mrv
         }
         else if (p.frameView && p.switchClip)
         {
-            _frameView();
+            frameView();
             p.switchClip = false;
         }
 
