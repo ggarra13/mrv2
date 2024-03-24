@@ -23,7 +23,6 @@ set( _absPotFile "${ROOT_DIR}/po/messages.pot" )
 
 set( mo_files ${_absPotFile} )
 
-
 foreach( lang ${LANGUAGES} )
     # We skip English translation for now
     if ( lang STREQUAL "en" )
@@ -40,7 +39,7 @@ foreach( lang ${LANGUAGES} )
 	    msginit --input=${_absPotFile} --locale=${lang} --output=${_poFile} )
     endif()
 
-    set( mo_files ${mo_files} ${_poFile} ${_moFile} )
+    list(APPEND mo_files ${_poFile} )
 
     file( REMOVE_RECURSE "${_moDir}" ) # Remove dir to remove old .mo files
     file( MAKE_DIRECTORY "${_moDir}" ) # Recreate dir to place new .mo file

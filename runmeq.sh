@@ -36,8 +36,7 @@ if [[ "$CMAKE_TARGET" == "" ]]; then
     CMAKE_TARGET=install
 fi
 
-if [[ $CMAKE_TARGET == doc* || $CMAKE_TARGET == "install" ||
-	  $CMAKE_TARGET == "package" ]]; then
+if [[ $CMAKE_TARGET == doc* || $CMAKE_TARGET == "package" ]]; then
     #
     # First, generate the translations and install them
     #

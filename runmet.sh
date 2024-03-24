@@ -17,6 +17,9 @@ fi
 
 cd $dir
 
+#
+#  Rebuild tlRender
+#
 cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
 
 cd -
@@ -30,6 +33,9 @@ fi
 
 cd $dir
 
+#
+#  Rebuild FLTK
+#
 cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
 
 cd -
