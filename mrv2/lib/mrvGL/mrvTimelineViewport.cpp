@@ -2825,16 +2825,26 @@ namespace mrv
 
         // If we have a Video Rotation Metadata, extract its value from it.
         auto i = p.tagData.find("Video Rotation");
-        p.videoRotation = 0.F;
+        float videoRotation = 0.F;
         if (i != p.tagData.end())
         {
             std::stringstream s(i->second);
-            s >> p.videoRotation;
-            if (hasFrameView())
-            {
-                _frameView();
-            }
+            s >> videoRotation;
         }
+        _setVideoRotation(videoRotation);
+    }
+
+    void TimelineViewport::_setVideoRotation(float value) noexcept
+    {
+        TLRENDER_P();
+
+        if (p.videoRotation == value)
+            return;
+
+        p.videoRotation = value;
+
+        if (hasFrameView())
+            _frameView();
     }
 
     math::Matrix4x4f TimelineViewport::_projectionMatrix() const noexcept

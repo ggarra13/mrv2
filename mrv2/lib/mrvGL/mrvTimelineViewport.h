@@ -392,6 +392,7 @@ namespace mrv
         bool _isPlaybackStopped() const noexcept;
         bool _isSingleFrame() const noexcept;
 
+        void _setVideoRotation(float value) noexcept;
         void _frameView() noexcept;
         void _handleCompareWipe() noexcept;
         void _handleCompareOverlay() noexcept;
@@ -408,7 +409,7 @@ namespace mrv
         void _updateViewRotation(const math::Vector2f& spin) noexcept;
 
         void _updateDisplayOptions(const timeline::DisplayOptions& d) noexcept;
- 
+
         void _pushColorMessage(const std::string& command, float value);
 
         void _mallocBuffer() const noexcept;
