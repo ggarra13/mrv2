@@ -699,7 +699,9 @@ namespace mrv
                 player->setSecondaryViewport(this);
 
             p.videoData = player->currentVideo();
+            p.switchClip = true;
         }
+
 
         refreshWindows(); // needed We need to refresh, as the new
                           // video data may have different sizes.
@@ -927,8 +929,13 @@ namespace mrv
 
         if (p.resizeWindow)
         {
-            p.resizeWindow = false;
+            p.resizeWindow = p.switchClip = false;
             resizeWindow();
+        }
+        else if (p.frameView && p.switchClip)
+        {
+            _frameView();
+            p.switchClip = false;
         }
 
         _getTags();

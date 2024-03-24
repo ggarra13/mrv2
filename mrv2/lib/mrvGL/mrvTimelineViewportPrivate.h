@@ -41,6 +41,7 @@ namespace mrv
         math::Vector2i viewPos;
         float viewZoom = 1.F;
         bool frameView = false;
+        bool switchClip = true;
         
         
         int event_x, event_y, last_x;
