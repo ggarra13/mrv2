@@ -2,6 +2,9 @@ v1.1.1
 ======
 
 - Added keyboard shortcuts for Render/Video Levels and Render/Alpha Blend.
+- Added support for multiple audio tracks.  You can switch from one to the
+  other by selecting the Audio button (the mute volume control) with the
+  Right Mouse Button and select a track.
 
 
 v1.1.0

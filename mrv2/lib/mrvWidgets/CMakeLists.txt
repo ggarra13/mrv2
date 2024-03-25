@@ -21,6 +21,7 @@ endif()
 FLTK_WRAP_UI( mrvWidgets ${FL_SOURCES} )
 
 set(HEADERS
+    mrvAudioButton.h
     mrvButton.h
     mrvBrowser.h
     mrvChoice.h
@@ -49,7 +50,6 @@ set(HEADERS
     mrvPanelGroup.h
     mrvPanelWindow.h
     mrvPlaylistButton.h
-    mrvPopupAudio.h
     mrvPopupMenu.h
     mrvPreferencesTree.h
     mrvProgressReport.h
@@ -73,6 +73,7 @@ set(HEADERS
 set(SOURCES
     ${mrvWidgets_FLTK_UI_SRCS}
 
+    mrvAudioButton.cpp
     mrvBrowser.cpp
     mrvButton.cpp
     mrvChoice.cpp
@@ -98,7 +99,6 @@ set(SOURCES
     mrvPanelGroup.cpp
     mrvPanelWindow.cpp
     mrvPlaylistButton.cpp
-    mrvPopupAudio.cpp
     mrvPopupMenu.cpp
     mrvPreferencesTree.cpp
     mrvProgressReport.cpp

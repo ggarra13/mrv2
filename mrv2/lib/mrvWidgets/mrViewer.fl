@@ -16,6 +16,9 @@ decl {\#include "mrvCore/mrvColorSpaces.h"} {public global
 decl {\#include "mrvCore/mrvI8N.h"} {public global
 }
 
+decl {\#include "mrvWidgets/mrvAudioButton.h"} {public global
+}
+
 decl {\#include "mrvWidgets/mrvButton.h"} {public global
 }
 
@@ -29,9 +32,6 @@ decl {\#include "mrvWidgets/mrvMainWindow.h"} {public global
 }
 
 decl {\#include "mrvWidgets/mrvMenuBar.h"} {public global
-}
-
-decl {\#include "mrvWidgets/mrvPopupAudio.h"} {public global
 }
 
 decl {\#include "mrvWidgets/mrvPopupMenu.h"} {public global
@@ -562,7 +562,7 @@ player->setLoop( loop );}
             callback {int idx = o->value();
 double speed = atof( o->text( idx ) );
 uiFPS->value( speed );
-uiFPS->do_callback();} selected
+uiFPS->do_callback();}
             tooltip {Some default frame rate settings.} xywh {341 3 40 24} labelsize 10 align 16
             code0 {o->disable_label();}
             class {mrv::PopupMenu}
@@ -669,9 +669,10 @@ else
 {   
    o->image( mrv::load_svg( "Audio.svg" ) );
 }
-o->redraw();}
+o->redraw();} selected
             tooltip {Mute audio.} xywh {427 3 20 24} type Toggle labelsize 10 align 80
             code1 {o->image( mrv::load_svg( "Audio.svg" ) );}
+            class {mrv::AudioButton}
           }
           Fl_Slider uiVolume {
             user_data this user_data_type {ViewerUI*}
@@ -780,8 +781,7 @@ ui->uiView->take_focus();}
   }
 }
 
-class ViewerUI {open
-} {
+class ViewerUI {} {
   decl {static mrv::App* app;} {public local
   }
   decl {static PreferencesUI* uiPrefs;} {public local
@@ -803,7 +803,7 @@ uiSecondary = nullptr;} {}
       user_data this user_data_type {ViewerUI*}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
-    exit_cb( o, v );} open
+    exit_cb( o, v );}
       xywh {728 116 690 602} type Double align 80 hide resizable
       class {mrv::MainWindow} size_range {690 602 0 0}
     } {
@@ -948,7 +948,7 @@ uiView->updateDisplayOptions();}
             }
           }
           Fl_Group {} {
-            label {ICS, View, Look and Gamma} open
+            label {ICS, View, Look and Gamma}
             xywh {277 25 413 28} labeltype NO_LABEL
           } {
             Fl_Group {} {open

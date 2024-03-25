@@ -1138,6 +1138,10 @@ namespace mrv
             p.settings->getValue<int>("Performance/FFmpegYUVToRGBConversion"));
         out["FFmpeg/ThreadCount"] = string::Format("{0}").arg(
             p.settings->getValue<int>("Performance/FFmpegThreadCount"));
+
+        TimelineClass* c = ui->uiTimeWindow;
+        int idx = c->uiAudioTracks->current_track();
+        out["FFmpeg/AudioTrack"] = string::Format("{0}").arg(idx);
 #endif // TLRENDER_FFMPEG
 
 #if defined(TLRENDER_USD)

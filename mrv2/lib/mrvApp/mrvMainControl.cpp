@@ -275,15 +275,14 @@ namespace mrv
             const auto audio = ioinfo.audio;
             if (audio.isValid())
             {
-#if 0
-                // This is code to add a pulldown to audio menu.
-                const auto name = audio.name;
-                int mode = FL_MENU_RADIO;
-                c->uiAudioTracks->add(_("Mute"), 0, 0, 0, mode);
-                int idx = c->uiAudioTracks->add(
-                    name.c_str(), 0, 0, 0, mode | FL_MENU_VALUE);
-#endif
+                int audio_track = c->uiAudioTracks->current_track();
+                c->uiAudioTracks->clear_tracks();
+                for (unsigned int i = 0; i < audio.trackCount; ++i)
+                    c->uiAudioTracks->add_track();
 
+                if (audio_track < audio.trackCount)
+                    c->uiAudioTracks->current_track(audio_track);
+                
                 c->uiVolume->activate();
                 c->uiAudioTracks->activate();
 
