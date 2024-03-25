@@ -109,33 +109,26 @@ namespace mrv
         {
 
             gl.render = timeline_gl::Render::create(context);
-            CHECK_GL;
 
             glGenBuffers(2, gl.pboIds);
-            CHECK_GL;
 
             p.fontSystem = image::FontSystem::create(context);
-            CHECK_GL;
 
 #ifdef USE_ONE_PIXEL_LINES
             gl.outline = std::make_shared<opengl::Outline>();
 #endif
 
             gl.lines = std::make_shared<opengl::Lines>();
-            CHECK_GL;
 
             try
             {
                 const std::string& vertexSource = timeline_gl::vertexSource();
                 gl.shader =
                     gl::Shader::create(vertexSource, textureFragmentSource());
-                CHECK_GL;
                 gl.stereoShader =
                     gl::Shader::create(vertexSource, stereoFragmentSource());
-                CHECK_GL;
                 gl.annotationShader = gl::Shader::create(
                     vertexSource, annotationFragmentSource());
-                CHECK_GL;
             }
             catch (const std::exception& e)
             {
@@ -336,7 +329,7 @@ namespace mrv
 
         CHECK_GL;
 
-        float r = 0.F, g = 0.F, b = 0.F, a = 1.F;
+        float r = 0.F, g = 0.F, b = 0.F, a = 0.F;
         if (!p.presentation)
         {
             uint8_t ur, ug, ub;
@@ -518,7 +511,6 @@ namespace mrv
                 {
                     gl.annotation = gl::OffscreenBuffer::create(
                         viewportSize, offscreenBufferOptions);
-                    CHECK_GL;
                 }
 
                 if (p.selection.max.x >= 0)
@@ -557,11 +549,9 @@ namespace mrv
 
             if (p.hudActive && p.hud != HudDisplay::kNone)
                 _drawHUD();
-            CHECK_GL;
 
             if (!p.helpText.empty())
                 _drawHelpText();
-            CHECK_GL;
         }
 
         MultilineInput* w = getMultilineInput();
@@ -598,15 +588,11 @@ namespace mrv
 
 #ifdef USE_OPENGL2
         Fl_Gl_Window::draw_begin(); // Set up 1:1 projectionç
-        CHECK_GL;
         Fl_Window::draw(); // Draw FLTK children
-        CHECK_GL;
         glViewport(0, 0, viewportSize.w, viewportSize.h);
-        CHECK_GL;
         if (p.showAnnotations)
             _drawGL2TextShapes();
         Fl_Gl_Window::draw_end(); // Restore GL state
-        CHECK_GL;
 #else
         Fl_Gl_Window::draw();
 #endif
@@ -769,9 +755,7 @@ namespace mrv
                 if (!p.image)
                     return;
                 glBindFramebuffer(GL_FRAMEBUFFER, 0);
-                CHECK_GL;
                 glReadBuffer(GL_FRONT);
-                CHECK_GL;
                 glReadPixels(
                     0, 0, renderSize.w, renderSize.h, format, type, p.image);
                 return;
@@ -782,20 +766,16 @@ namespace mrv
                 // read pixels from framebuffer to PBO
                 // glReadPixels() should return immediately.
                 glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.index]);
-                CHECK_GL;
 
                 glReadPixels(0, 0, renderSize.w, renderSize.h, format, type, 0);
-                CHECK_GL;
 
                 // map the PBO to process its data by CPU
                 glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.nextIndex]);
-                CHECK_GL;
 
                 // We are stopped, read the first PBO.
                 if (stopped)
                 {
                     glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.index]);
-                    CHECK_GL;
                 }
             }
 
@@ -806,7 +786,6 @@ namespace mrv
             }
 
             p.image = (float*)glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_ONLY);
-            CHECK_GL;
             p.rawImage = false;
         }
         else
@@ -824,7 +803,6 @@ namespace mrv
             if (!p.rawImage)
             {
                 glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
-                CHECK_GL;
                 p.image = nullptr;
                 p.rawImage = true;
             }
@@ -832,7 +810,6 @@ namespace mrv
 
         // back to conventional pixel operation
         glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
-        CHECK_GL;
     }
 
     void Viewport::_readPixel(image::Color4f& rgba) const noexcept
@@ -920,16 +897,12 @@ namespace mrv
                 }
                 else
                 {
-                    CHECK_GL;
                     Viewport* self = const_cast<Viewport*>(this);
                     self->make_current();
-                    CHECK_GL;
                     gl::OffscreenBufferBinding binding(gl.buffer);
-                    CHECK_GL;
                     assert(pos.x < gl.buffer->getSize().w);
                     assert(pos.y < gl.buffer->getSize().h);
                     glReadPixels(pos.x, pos.y, 1, 1, GL_RGBA, type, &rgba);
-                    CHECK_GL;
                     return;
                 }
             }

@@ -314,9 +314,9 @@ namespace mrv
                 layerId = ui->uiColorChannel->value();
             }
 
+            const SaveResolution resolution = options.resolution;
             if (hasVideo)
             {
-                const SaveResolution resolution = options.resolution;
                 renderSize = info.video[layerId].size;
                 auto rotation = ui->uiView->getRotation();
                 if (options.annotations && rotationSign(rotation) != 0)
@@ -393,7 +393,12 @@ namespace mrv
                         viewportSize.h >= renderSize.h)
                     {
                         view->setFrameView(false);
-                        view->setViewZoom(1.0);
+                        if (resolution == SaveResolution::kHalfSize)
+                            view->setViewZoom(0.5);
+                        else if (resolution == SaveResolution::kQuarterSize)
+                            view->setViewZoom(0.25);
+                        else
+                            view->setViewZoom(1.0);
                         view->centerView();
                         view->redraw();
                         // flush is needed

@@ -4,13 +4,15 @@ v1.1.1
 - Added keyboard shortcuts for Render/Video Levels and Render/Alpha Blend.
 - Added support for multiple audio tracks.  You can switch from one to the
   other by selecting the Audio button (the mute volume control) with the
-  Right Mouse Button and select a track.
+  Right Mouse Button and selecting a track.
 - Fixed audio metadata in audio section of Media Info Panel for each audio
   stream.
 - Added missing video metadata in video section of Media Info Panel.
 - Improved speed of refreshing of a clip (when switching audio tracks or using
   View->Ignore Display Window).
 - Made movies longer than 30 minutes, use a short read ahead / read behind.
+- Fixed saving movies with annotations and with an alpha channel.
+- Fixed saving movies with annotations at half or quarter resolution.
 
 
 v1.1.0
