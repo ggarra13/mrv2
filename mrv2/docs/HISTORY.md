@@ -5,6 +5,9 @@ v1.1.1
 - Added support for multiple audio tracks.  You can switch from one to the
   other by selecting the Audio button (the mute volume control) with the
   Right Mouse Button and select a track.
+- Fixed audio metadata in audio section of Media Info Panel for each audio
+  stream.
+- Added missing video metadata in video section of Media Info Panel.
 
 
 v1.1.0

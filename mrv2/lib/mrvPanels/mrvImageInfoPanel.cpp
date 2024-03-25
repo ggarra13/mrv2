@@ -1699,7 +1699,11 @@ namespace mrv
             const auto& info = tplayer->getIOInfo();
             unsigned num_video_streams = info.video.size();
             // @todo: tlRender does not handle multiple audio tracks
-            unsigned num_audio_streams = info.audio.isValid();
+            unsigned num_audio_streams = 0;
+
+            if (info.audio.isValid())
+                num_audio_streams = info.audio.trackCount;
+            
             // @todo: tlRender does not handle subtitle tracks
             unsigned num_subtitle_streams = 0;
 
@@ -1827,6 +1831,30 @@ namespace mrv
             const auto view = _p->ui->uiView;
             const auto& videoData = view->getVideoData();
 
+            // First, check the metadata
+            std::map<std::string, std::string,
+                     string::CaseInsensitiveCompare> tagData;
+            image::Tags tags;
+
+            // First, add global tags
+            for (const auto& tag : info.tags)
+            {
+                tagData[tag.first] = tag.second;
+            }
+            
+                
+            // Then add image tags
+            if (!videoData.empty() && !videoData[0].layers.empty() &&
+                videoData[0].layers[0].image)
+            {
+                tags = videoData[0].layers[0].image->getTags();
+                for (const auto& tag : tags)
+                {
+                    tagData[tag.first] = tag.second;
+                }
+            }
+
+            
             if (num_video_streams > 0)
             {
 
@@ -1853,34 +1881,31 @@ namespace mrv
                     std::string colorPrimaries;
                     std::string colorTRC;
                     std::string colorSpace;
-                    if (videoData.size() > i && !videoData[i].layers.empty() &&
-                        videoData[i].layers[0].image)
+                    if (!tagData.empty())
                     {
-                        const auto& tags =
-                            videoData[i].layers[0].image->getTags();
-                        auto it = tags.find("Video Codec");
-                        if (it != tags.end())
+                        auto it = tagData.find("Video Codec");
+                        if (it != tagData.end())
                         {
                             add_text(_("Codec"), _("Codec"), it->second);
                         }
-                        it = tags.find("Video Rotation");
-                        if (it != tags.end())
+                        it = tagData.find("Video Rotation");
+                        if (it != tagData.end())
                         {
                             std::stringstream s(it->second);
                             s >> rotation;
                         }
-                        it = tags.find("Video Color Primaries");
-                        if (it != tags.end())
+                        it = tagData.find("Video Color Primaries");
+                        if (it != tagData.end())
                         {
                             colorPrimaries = it->second;
                         }
-                        it = tags.find("Video Color TRC");
-                        if (it != tags.end())
+                        it = tagData.find("Video Color TRC");
+                        if (it != tagData.end())
                         {
                             colorTRC = it->second;
                         }
-                        it = tags.find("Video Color Space");
-                        if (it != tags.end())
+                        it = tagData.find("Video Color Space");
+                        if (it != tagData.end())
                         {
                             colorSpace = it->second;
                         }
@@ -2014,6 +2039,22 @@ namespace mrv
                     add_text(
                         _("Render Pixel Format"), _("Render Pixel Format"),
                         format);
+                    
+                    snprintf(buf, 256, "Video Stream #%d:", i + 1);
+                    const std::string& match = buf;
+                    if (!tagData.empty())
+                    {
+                        for (const auto& tag : tagData)
+                        {
+                            std::string key = tag.first;
+                            auto i = key.find(match);
+                            if (i != std::string::npos)
+                            {
+                                key = key.replace(i, match.size(), "");
+                                add_text(key.c_str(), key.c_str(), tag.second);
+                            }
+                        }
+                    }
                 }
 
                 m_video->show();
@@ -2023,11 +2064,13 @@ namespace mrv
             {
                 for (int i = 0; i < num_audio_streams; ++i)
                 {
+                    char buf_english[256];
                     char buf[256];
 
+                    snprintf(buf_english, 256, "Audio Stream #%d:", i + 1);
+                    snprintf(buf, 256, _("Audio Stream #%d"), i + 1);
                     if (num_audio_streams > 1)
                     {
-                        snprintf(buf, 256, _("Audio Stream #%d"), i + 1);
                         m_curr = add_browser(m_audio, buf);
                     }
                     else
@@ -2035,9 +2078,17 @@ namespace mrv
                         m_curr = add_browser(m_audio);
                     }
 
-                    // @todo: tlRender handles only one audio track per clip
-                    const auto& audio = info.audio;
-
+                    // tlRender handles only one audio track per clip.
+                    // But we added support in FFmpegReadAudio to get the info
+                    // of all audio tracks which we store in info.audioInfo.
+                    //
+                    // Switching from one track to another currently involves
+                    // cloning and reopening the movie unfortunately.
+                    //
+                    auto audio = info.audio;
+                    if (i > 0)
+                        audio = info.audio.audioInfo[i];
+                    
                     auto it = info.tags.find("Audio Codec");
                     if (it != info.tags.end())
                         add_text(_("Codec"), _("Codec"), it->second);
@@ -2089,6 +2140,21 @@ namespace mrv
                     add_time( _("Duration"), _("Duration of Audio"),
                               s.duration, fps );
 #endif
+
+                    if (!tagData.empty())
+                    {
+                        const std::string& match = buf_english;
+                        for (const auto& tag : tagData)
+                        {
+                            std::string key = tag.first;
+                            auto i = key.find(match);
+                            if (i != std::string::npos)
+                            {
+                                key = key.replace(i, match.size(), "");
+                                add_text(key.c_str(), key.c_str(), tag.second);
+                            }
+                        }
+                    }
                 }
 
                 m_audio->show();
@@ -2141,37 +2207,16 @@ namespace mrv
             }
 #endif
 
-            std::map<std::string, std::string,
-                     string::CaseInsensitiveCompare> tagData;
-            image::Tags tags;
-
-            // First, add global tags
-            for (const auto& tag : info.tags)
-            {
-                tagData[tag.first] = tag.second;
-            }
-            
-            // Then add image tags
-            if (!videoData.empty() && !videoData[0].layers.empty() &&
-                videoData[0].layers[0].image)
-            {
+            if (!tagData.empty())
                 m_curr = add_browser(m_attributes);
-                tags = videoData[0].layers[0].image->getTags();
-                for (const auto& tag : tags)
-                {
-                    tagData[tag.first] = tag.second;
-                }
-            }
-
             for (const auto& item : tagData)
             {
                 bool skip = false;
                 if (item.first.substr(0, 5) == "Video" ||
-                    item.first.substr(0, 5) == "Audio")
+                    item.first.substr(0, 5) == "Audio" ||
+                    item.first.substr(0, 19) == "FFmpeg Pixel Format")
                 {
-                    if (item.first.substr(0, 12) != "Video Stream" &&
-                        item.first.substr(0, 12) != "Audio Stream")
-                        skip = true;
+                    skip = true;
                 }
                 if (skip)
                 {
