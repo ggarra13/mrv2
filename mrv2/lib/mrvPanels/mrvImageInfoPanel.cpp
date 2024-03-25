@@ -2039,11 +2039,13 @@ namespace mrv
                     add_text(
                         _("Render Pixel Format"), _("Render Pixel Format"),
                         format);
-                    
-                    snprintf(buf, 256, "Video Stream #%d:", i + 1);
-                    const std::string& match = buf;
+
+                    ++group;
                     if (!tagData.empty())
                     {
+                        snprintf(buf, 256, "Video Stream #%d:", i + 1);
+                        const std::string& match = buf;
+                    
                         for (const auto& tag : tagData)
                         {
                             std::string key = tag.first;
@@ -2143,6 +2145,7 @@ namespace mrv
 
                     if (!tagData.empty())
                     {
+                        ++group;
                         const std::string& match = buf_english;
                         for (const auto& tag : tagData)
                         {
