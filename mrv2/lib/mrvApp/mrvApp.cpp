@@ -1483,7 +1483,14 @@ namespace mrv
         options.readAhead = _cacheReadAhead();
         options.readBehind = _cacheReadBehind();
 
-        if (file::isTemporaryNDI(p.player->path()))
+        bool movieIsLong = false;
+
+        // If movie is longer than 30 minutes, use a short readAhead/readBehind
+        auto timeRange = p.player->inOutRange();
+        if (timeRange.duration().to_seconds() > 60 * 30)
+            movieIsLong = true;
+
+        if (file::isTemporaryNDI(p.player->path()) || movieIsLong)
         {
             options.readAhead = otime::RationalTime(4.0, 1.0);
             options.readBehind = otime::RationalTime(0.5, 1.0);

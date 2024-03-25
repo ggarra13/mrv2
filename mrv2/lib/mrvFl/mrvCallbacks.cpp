@@ -1232,7 +1232,7 @@ namespace mrv
     {
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
         ui->uiView->setIgnoreDisplayWindow(item->checked());
-        clone_and_replace_cb(m, ui);
+        refresh_media_cb(m, ui);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
@@ -1803,7 +1803,7 @@ namespace mrv
         item->audioOffset = media->audioOffset;
         item->videoLayer = media->videoLayer;
         item->loop = media->loop;
-        item->playback = media->playback;
+        item->playback = player->playback();
         item->currentTime = time;
         model->replace(Aindex, item);
 
@@ -2142,20 +2142,34 @@ namespace mrv
         panel::redrawThumbnails();
     }
 
-    void clone_and_replace_cb(Fl_Menu_* m, void* d)
+    void refresh_media_cb(Fl_Menu_* m, void* d)
     {
         auto app = App::app;
         auto model = app->filesModel();
-        if (model->observeFiles()->getSize() < 1)
+        auto files = model->observeFiles()->get();
+        if (files.size() < 1)
             return;
+        
+        auto player = app->ui->uiView->getTimelinePlayer();
+        const auto& time = player->currentTime();
 
         auto origIndex = model->observeAIndex()->get();
+        const auto& media = files[origIndex];
 
-        clone_file_cb(m, d);
+        auto item = std::make_shared<FilesModelItem>();
+        item->init = true;
+        item->path = media->path;
+        item->audioPath = media->audioPath;
+        item->inOutRange = media->inOutRange;
+        item->speed = media->speed;
+        item->audioOffset = media->audioOffset;
+        item->videoLayer = media->videoLayer;
+        item->loop = media->loop;
+        item->playback = player->playback();
+        item->currentTime = time;
+        model->replace(origIndex, item);
 
         auto newIndex = model->observeAIndex()->get();
-        model->setA(origIndex);
-        model->close();
         model->setA(newIndex);
     }
 

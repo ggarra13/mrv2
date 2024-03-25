@@ -23,7 +23,7 @@ namespace mrv
 
         audioButton->current_track(idx);
         
-        clone_and_replace_cb(o, d);
+        refresh_media_cb(o, d);
     }
     
     AudioButton::AudioButton(int X, int Y, int W, int H, const char* l) :

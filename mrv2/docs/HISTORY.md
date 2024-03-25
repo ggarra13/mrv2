@@ -8,6 +8,9 @@ v1.1.1
 - Fixed audio metadata in audio section of Media Info Panel for each audio
   stream.
 - Added missing video metadata in video section of Media Info Panel.
+- Improved speed of refreshing of a clip (when switching audio tracks or using
+  View->Ignore Display Window).
+- Made movies longer than 30 minutes, use a short read ahead / read behind.
 
 
 v1.1.0
