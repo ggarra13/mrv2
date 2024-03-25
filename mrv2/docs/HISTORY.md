@@ -13,6 +13,8 @@ v1.1.1
 - Made movies longer than 30 minutes, use a short read ahead / read behind.
 - Fixed saving movies with annotations and with an alpha channel.
 - Fixed saving movies with annotations at half or quarter resolution.
+- Fixed an ugly bug on Linux when saving movies with annotations repeating
+  every other frame (ie. saving on two's).
 
 
 v1.1.0

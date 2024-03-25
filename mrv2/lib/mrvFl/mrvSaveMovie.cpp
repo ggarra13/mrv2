@@ -683,14 +683,12 @@ namespace mrv
                     {
                         view->redraw();
                         view->flush();
-                        Fl::check();
 
+                        view->make_current();
                         glReadBuffer(GL_FRONT);
-                        CHECK_GL;
                         glReadPixels(
                             X, Y, outputInfo.size.w, outputInfo.size.h, format,
                             type, outputImage->getData());
-                        CHECK_GL;
                     }
                     else
                     {
