@@ -87,7 +87,7 @@ Loading Media (command line)
 
 Media can be loaded using the mrv2 command line from a terminal window which will be convenient and powerful for users familiar with shell syntax.
 
-mrv2 supports various modes for loading sequences and movies.  You can mix different modes as required up to three clips::
+mrv2 supports various modes for loading sequences and movies.  You can mix different modes as required::
 
     mrv2 /path/to/test.mov /path/to/frames.0001.exr /path/to/edit.otio
 

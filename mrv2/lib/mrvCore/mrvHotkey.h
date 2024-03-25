@@ -150,6 +150,14 @@ namespace mrv
     extern Hotkey kRotatePlus90;
     extern Hotkey kRotateMinus90;
     
+    extern Hotkey kVideoLevelsFile;
+    extern Hotkey kVideoLevelsLegalRange;
+    extern Hotkey kVideoLevelsFullRange;
+    
+    extern Hotkey kAlphaBlendNone;
+    extern Hotkey kAlphaBlendStraight;
+    extern Hotkey kAlphaBlendPremultiplied;
+    
     extern Hotkey kShapeFrameStepBack;
     extern Hotkey kShapeFrameStepFwd;
 

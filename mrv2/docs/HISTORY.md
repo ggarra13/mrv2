@@ -1,3 +1,9 @@
+v1.1.1
+======
+
+- Added keyboard shortcuts for Render/Video Levels and Render/Alpha Blend.
+
+
 v1.1.0
 ======
 

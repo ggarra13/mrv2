@@ -639,21 +639,22 @@ namespace mrv
         mode = FL_MENU_RADIO;
 
         idx = menu->add(
-            _("Render/Video Levels/From File"), 0,
+            _("Render/Video Levels/From File"), kVideoLevelsFile.hotkey(),
             (Fl_Callback*)video_levels_from_file_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (imageOptions.videoLevels == timeline::InputVideoLevels::FromFile)
             item->set();
 
         idx = menu->add(
-            _("Render/Video Levels/Legal Range"), 0,
+            _("Render/Video Levels/Legal Range"),
+            kVideoLevelsLegalRange.hotkey(),
             (Fl_Callback*)video_levels_legal_range_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (imageOptions.videoLevels == timeline::InputVideoLevels::LegalRange)
             item->set();
 
         idx = menu->add(
-            _("Render/Video Levels/Full Range"), 0,
+            _("Render/Video Levels/Full Range"), kVideoLevelsFullRange.hotkey(),
             (Fl_Callback*)video_levels_full_range_cb, ui,
             FL_MENU_DIVIDER | mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
@@ -663,21 +664,22 @@ namespace mrv
         mode = FL_MENU_RADIO;
 
         idx = menu->add(
-            _("Render/Alpha Blend/None"), 0, (Fl_Callback*)alpha_blend_none_cb,
-            ui, mode);
+            _("Render/Alpha Blend/None"), kAlphaBlendNone.hotkey(),
+            (Fl_Callback*)alpha_blend_none_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (imageOptions.alphaBlend == timeline::AlphaBlend::None)
             item->set();
 
         idx = menu->add(
-            _("Render/Alpha Blend/Straight"), 0,
+            _("Render/Alpha Blend/Straight"), kAlphaBlendStraight.hotkey(),
             (Fl_Callback*)alpha_blend_straight_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (imageOptions.alphaBlend == timeline::AlphaBlend::Straight)
             item->set();
 
         idx = menu->add(
-            _("Render/Alpha Blend/Premultiplied"), 0,
+            _("Render/Alpha Blend/Premultiplied"),
+            kAlphaBlendPremultiplied.hotkey(),
             (Fl_Callback*)alpha_blend_premultiplied_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (imageOptions.alphaBlend == timeline::AlphaBlend::Premultiplied)

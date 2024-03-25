@@ -220,6 +220,15 @@ namespace mrv
     Hotkey kRotatePlus90( false, false, false, false, '+' );
     Hotkey kRotateMinus90( false, false, false, false, '-' );
 
+    Hotkey kVideoLevelsFile( false, false, false, false, 0 );
+    Hotkey kVideoLevelsLegalRange( false, false, false, false, 0 );
+    Hotkey kVideoLevelsFullRange( false, false, false, false, 0 );
+    
+    Hotkey kAlphaBlendNone( false, false, false, false, 0 );
+    Hotkey kAlphaBlendStraight( false, false, false, false, 0 );
+    Hotkey kAlphaBlendPremultiplied( false, false, false, false, 0 );
+
+    
     inline bool has_shift(unsigned rawkey)
     {
         return Fl::event_key(FL_Shift_L) || Fl::event_key(FL_Shift_R);
@@ -381,6 +390,14 @@ namespace mrv
         HotkeyEntry(_("Rotate Images +90 Degrees"), &kRotatePlus90),
         HotkeyEntry(_("Rotate Images -90 Degrees"), &kRotateMinus90),
 
+        HotkeyEntry(_("Video Levels from File"), &kVideoLevelsFile),
+        HotkeyEntry(_("Video Levels Legal Range"), &kVideoLevelsLegalRange),
+        HotkeyEntry(_("Video Levels Full Range"), &kVideoLevelsFullRange),
+    
+        HotkeyEntry(_("Alpha Blend None"), &kAlphaBlendNone),
+        HotkeyEntry(_("Alpha Blend Straight"), &kAlphaBlendStraight),
+        HotkeyEntry(_("Alpha Blend Premultiplied"), &kAlphaBlendPremultiplied),
+    
         HotkeyEntry(_("Annotation Clear Frame"), &kShapeFrameClear),
         HotkeyEntry(_("Annotation Clear All Frames"), &kShapeFrameClearAll),
         HotkeyEntry(_("Annotation Frame Step Backwards"), &kShapeFrameStepBack),
