@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-   Copyright (c) 2024 Gonzalo Garramuño
+   Copyright (c) 2016 Gonzalo Garramuño
    All rights reserved.
 
    Redistribution and use in source and binary forms, with or without
@@ -41,7 +41,10 @@ a img     { border: none; }
 
 body
 {
+    margin:  0;
     padding: 0;
+
+    color:      #ffffff;
     background: #404040;
 }
 
@@ -58,71 +61,62 @@ h2
     margin:  0;
     padding: 0;
     color: #f0f0f0;
-    background: #000000;
     font-size: 16;
 }
 
 h3
 {
     color: #e0e020;
-    padding-top: 0px;
-    padding-right: 2%;
-    padding-bottom: 0px;
 }
 
 .header {
-    /* Your header styles */
     text-align: center;
 }
-
 
 /*
 The bar where the stats are.
 */
-
-.topbar {
-    background: #000000
-}
-
-.content-wrapper {
-}
-
-.sidebar-cell,
-.content-cell {
-    vertical-align: top;
-}
-
-.sidebar-cell {
-    padding-top: 2%;
-    padding-left: 2%;
-    font-size: 0.9vw;
-    width: 15%;
-    background: #000000
-}
-
-.sidebar-cell li {
-    color: #f0f080;
-    font-size: 0.8vw;
-    padding-bottom: 2%;
-}
-
-.content-cell {
-    float: left;
-}
-
-.image-container {
-    text-align: center;
-    height: 100%;
-}
-
-.image-container img {
-  width: 92%;
-  height: auto;
-  object-fit: cover;
-}
-
-.share {
-    margin: 0 auto;
-    width: fit-content;
+.topbar
+{
     height: 20px;
+    padding: 0
+    font-size: 20;
+    
+    color:      #ffffff;
+    background: #000000;
+}
+
+.sidebar
+{
+    width: 15%;
+
+    background: #000000;
+
+    font-size: 100%;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-left: 1.0%;
+    
+
+}
+
+.sidebar li
+{
+    font-size: 90%;
+    padding-top: 1%;
+}
+
+.content
+{
+    color: #f0f0f0;
+    background: #505050;
+
+    width: 85%;
+    
+    padding: 0;
+}
+
+.content img {
+    width: 90%;
+    height: auto;
 }
