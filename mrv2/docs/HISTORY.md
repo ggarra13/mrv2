@@ -15,6 +15,10 @@ v1.1.1
 - Fixed saving movies with annotations at half or quarter resolution.
 - Fixed an ugly bug on Linux when saving movies with annotations repeating
   every other frame (ie. saving on two's).
+- Fixed message that said it was saving a movie without audio when saving
+  a sequence of frames.
+- Fixed reading of FPS from OpenEXR frames as they are now rational instead of
+  a double.
 
 
 v1.1.0

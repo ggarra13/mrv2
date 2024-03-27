@@ -153,6 +153,7 @@ namespace mrv
                 std::stringstream s;
                 s << speed;
                 ioOptions["OpenEXR/Speed"] = s.str();
+                LOG_INFO("OpenEXR Speed=" << speed);
             }
 #endif
 
@@ -180,6 +181,49 @@ namespace mrv
                 {
                     s << timecode;
                     ioOptions["timecode"] = s.str();
+                }
+            }
+
+            bool isMovie = file::isMovie(extension);
+            if (isMovie)
+            {
+                msg = string::Format(_("Saving movie to {0}.")).arg(newFile);
+            }
+            else
+            {
+                msg = string::Format(_("Saving pictures to {0}.")).arg(newFile);
+            }
+            LOG_INFO(msg);
+
+            // Render information.
+            const auto& info = player->ioInfo();
+
+            auto videoTime = info.videoTime;
+
+            const bool hasVideo = !info.video.empty();
+
+            if (player->timeRange() != timeRange ||
+                info.videoTime.start_time() != timeRange.start_time())
+            {
+                double videoRate = info.videoTime.duration().rate();
+                videoTime = otime::TimeRange(
+                    timeRange.start_time().rescaled_to(videoRate),
+                    timeRange.duration().rescaled_to(videoRate));
+            }
+
+            auto audioTime = time::invalidTimeRange;
+            const double sampleRate = info.audio.sampleRate;
+            const bool hasAudio = info.audio.isValid();
+            if (hasAudio)
+            {
+                audioTime = info.audioTime;
+                if (player->timeRange() != timeRange ||
+                    audioTime.start_time() !=
+                        timeRange.start_time().rescaled_to(sampleRate))
+                {
+                    audioTime = otime::TimeRange(
+                        timeRange.start_time().rescaled_to(sampleRate),
+                        timeRange.duration().rescaled_to(sampleRate));
                 }
             }
 
@@ -243,47 +287,6 @@ namespace mrv
             bool saveHDR = string::compare(
                 extension, ".hdr", string::Compare::CaseInsensitive);
 
-            if (file::isMovie(extension))
-            {
-                msg = string::Format(_("Saving movie to {0}.")).arg(newFile);
-            }
-            else
-            {
-                msg = string::Format(_("Saving pictures to {0}.")).arg(newFile);
-            }
-            LOG_INFO(msg);
-
-            // Render information.
-            const auto& info = player->ioInfo();
-
-            auto videoTime = info.videoTime;
-
-            const bool hasVideo = !info.video.empty();
-
-            if (player->timeRange() != timeRange ||
-                info.videoTime.start_time() != timeRange.start_time())
-            {
-                double videoRate = info.videoTime.duration().rate();
-                videoTime = otime::TimeRange(
-                    timeRange.start_time().rescaled_to(videoRate),
-                    timeRange.duration().rescaled_to(videoRate));
-            }
-
-            auto audioTime = time::invalidTimeRange;
-            const double sampleRate = info.audio.sampleRate;
-            const bool hasAudio = info.audio.isValid();
-            if (hasAudio)
-            {
-                audioTime = info.audioTime;
-                if (player->timeRange() != timeRange ||
-                    audioTime.start_time() !=
-                        timeRange.start_time().rescaled_to(sampleRate))
-                {
-                    audioTime = otime::TimeRange(
-                        timeRange.start_time().rescaled_to(sampleRate),
-                        timeRange.duration().rescaled_to(sampleRate));
-                }
-            }
 
             if (time::compareExact(videoTime, time::invalidTimeRange))
                 videoTime = audioTime;
@@ -521,7 +524,7 @@ namespace mrv
 
             char title[1024];
 
-            if (hasVideo)
+            if (hasVideo && isMovie)
             {
 #ifdef TLRENDER_FFMPEG
                 if (static_cast<ffmpeg::AudioCodec>(options.ffmpegAudioCodec) ==
@@ -541,6 +544,7 @@ namespace mrv
                     title, 1024,
                     _("Saving Pictures without Audio %" PRId64 " - %" PRId64),
                     startFrame, endFrame);
+                hasAudio = false;
 #endif
             }
             else
