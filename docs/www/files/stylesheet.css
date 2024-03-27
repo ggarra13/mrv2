@@ -87,8 +87,11 @@ The bar where the stats are.
     background: #000000;
 }
 
-.sidebar
-{
+.table {
+    width: auto;
+}
+
+.sidebar {
     width: 15%;
 
     background: #000000;
@@ -96,18 +99,14 @@ The bar where the stats are.
     padding-top: 0;
     padding-bottom: 0;
     padding-left: 1.0%;
-    
-
 }
 
-.sidebar li
-{
+.sidebar li {
     font-size: 0.9vw;
     padding-top: 0.1vw;
 }
 
-.content
-{
+.content {
     color: #f0f0f0;
     background: #505050;
 
@@ -117,6 +116,5 @@ The bar where the stats are.
 }
 
 .content img {
-    width: 90%;
-    height: auto;
+    max-width: 100%;
 }
