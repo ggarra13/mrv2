@@ -53,7 +53,7 @@ h1
     margin:  0;
     padding: 0;
     color: #ffffff;
-    font-size: 24;
+    font-size: 1.6vw;
 }
 
 h2
@@ -61,12 +61,13 @@ h2
     margin:  0;
     padding: 0;
     color: #f0f0f0;
-    font-size: 16;
+    font-size: 1.2vw;
 }
 
 h3
 {
     color: #e0e020;
+    font-size: 1.0vw;
 }
 
 .header {
@@ -80,7 +81,7 @@ The bar where the stats are.
 {
     height: 20px;
     padding: 0
-    font-size: 20;
+    font-size: 2vw;
     
     color:      #ffffff;
     background: #000000;
@@ -92,7 +93,6 @@ The bar where the stats are.
 
     background: #000000;
 
-    font-size: 100%;
     padding-top: 0;
     padding-bottom: 0;
     padding-left: 1.0%;
@@ -102,8 +102,8 @@ The bar where the stats are.
 
 .sidebar li
 {
-    font-size: 90%;
-    padding-top: 1%;
+    font-size: 0.9vw;
+    padding-top: 0.1vw;
 }
 
 .content
