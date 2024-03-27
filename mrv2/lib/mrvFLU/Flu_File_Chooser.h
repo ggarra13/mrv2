@@ -610,7 +610,6 @@ public:
     Fl_Group* getEntryGroup();
     Fl_Group* getEntryContainer();
     std::string toTLRenderFilename(const Entry* e);
-    otime::RationalTime toTLRenderTime(const Entry* e);
 
     void win2unix(std::string& s);
 

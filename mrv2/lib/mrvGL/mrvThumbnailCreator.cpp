@@ -421,7 +421,6 @@ namespace mrv
                                             offscreenBufferOptions);
                                 }
 
-                                timeline::ImageOptions i;
                                 timeline::DisplayOptions d;
                                 d.mirror.y = true; // images in GL are flipped
 
@@ -439,7 +438,7 @@ namespace mrv
                                         {videoData},
                                         {math::Box2i(
                                             0, 0, info.size.w, info.size.h)},
-                                        {i}, {d});
+                                        {}, {d});
                                     render->end();
                                 }
 

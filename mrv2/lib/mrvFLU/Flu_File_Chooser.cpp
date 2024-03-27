@@ -290,7 +290,7 @@ void Flu_File_Chooser::createdThumbnail(
     ThumbnailData* data)
 {
     TLRENDER_P();
-    const std::lock_guard<std::mutex> lock(p.thumbnailMutex);
+    std::lock_guard<std::mutex> lock(p.thumbnailMutex);
     if (p.thumbnailIds.find(id) != p.thumbnailIds.end())
     {
         for (const auto& i : thumbnails)
@@ -348,8 +348,7 @@ void Flu_File_Chooser::previewCB()
                 std::string fullname = toTLRenderFilename(e);
 
                 // Show the frame at the beginning
-                otio::RationalTime time(0.0, 1.0);
-                time = toTLRenderTime(e);
+                otio::RationalTime time = time::invalidTime;
 
                 image::Size size(128, 64);
 
@@ -3384,21 +3383,6 @@ void Flu_File_Chooser::value(const char* v)
     }
 }
 
-otime::RationalTime
-Flu_File_Chooser::toTLRenderTime(const Flu_File_Chooser::Entry* e)
-{
-    otime::RationalTime time = tl::time::invalidTime;
-    if (e->type == ENTRY_SEQUENCE)
-    {
-        std::string number = e->filesize;
-        std::size_t pos = number.find(' ');
-        number = number.substr(0, pos);
-        int64_t frame = atoi(number.c_str());
-        time = otime::RationalTime(frame, 24.0);
-    }
-    return time;
-}
-
 std::string
 Flu_File_Chooser::toTLRenderFilename(const Flu_File_Chooser::Entry* e)
 {
@@ -3409,9 +3393,9 @@ Flu_File_Chooser::toTLRenderFilename(const Flu_File_Chooser::Entry* e)
         std::string number = e->filesize;
         std::size_t pos = number.find(' ');
         number = number.substr(0, pos);
-        int64_t frame = atoi(number.c_str());
+        int frame = atoi(number.c_str());
         char tmp[1024];
-        // Note: fullname is a valid C sequence, like picture.%04d.exr
+        // Note: fullname is a valid C format sequence, like picture.%04d.exr
         snprintf(tmp, 1024, fullname.c_str(), frame);
         fullname = tmp;
     }

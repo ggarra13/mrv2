@@ -19,6 +19,10 @@ v1.1.1
   a sequence of frames.
 - Fixed reading of FPS from OpenEXR frames as they are now rational instead of
   a double.
+- Fixed thumbnail of image sequences in mrv2's custom file requester when the
+  sequence did not start at 0.
+- Fixed a minor bug using snprintf of int64_t with an int specifier.
+- Improved the main web page for mrv2.
 
 
 v1.1.0
