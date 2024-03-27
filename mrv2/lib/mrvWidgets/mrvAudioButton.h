@@ -24,7 +24,6 @@ namespace mrv
         
         void clear_tracks();
         void add_track(const std::string& name);
-        void add_track();
 
     protected:
         int currentTrack = -1;

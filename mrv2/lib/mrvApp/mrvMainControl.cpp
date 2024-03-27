@@ -276,9 +276,11 @@ namespace mrv
             if (audio.isValid())
             {
                 int audio_track = c->uiAudioTracks->current_track();
+
+                // Add all the audio tracks
                 c->uiAudioTracks->clear_tracks();
                 for (unsigned int i = 0; i < audio.trackCount; ++i)
-                    c->uiAudioTracks->add_track();
+                    c->uiAudioTracks->add_track(audio.audioInfo[i].name);
 
                 if (audio_track < audio.trackCount)
                     c->uiAudioTracks->current_track(audio_track);

@@ -39,7 +39,7 @@ foreach( lang ${LANGUAGES} )
 	    msginit --input=${_absPotFile} --locale=${lang} --output=${_poFile} )
     endif()
 
-    list(APPEND mo_files ${_poFile} )
+    list(APPEND mo_files ${_moFile} )
 
     file( REMOVE_RECURSE "${_moDir}" ) # Remove dir to remove old .mo files
     file( MAKE_DIRECTORY "${_moDir}" ) # Recreate dir to place new .mo file
