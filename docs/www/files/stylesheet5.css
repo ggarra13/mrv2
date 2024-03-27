@@ -37,51 +37,48 @@
 a:link    { color: #44bbdd; text-decoration: none; }
 a:visited { color: #44bbdd; text-decoration: none; }
 a:hover   { color: #d0d0f0; text-decoration: none; }
-a img     { border: none; }
 
-body
-{
-    margin:  0;
-    padding: 0;
-
-    color:      #ffffff;
+body {
+    margin-top: 0.2vh;
+    margin-bottom: 0;
     background: #404040;
 }
 
-h1
+#header {
+    text-align: center;
+}
+
+#logo
 {
-    margin:  0;
-    padding: 0;
+}
+
+#title {
+    margin: 0;
     color: #ffffff;
-    font-size: 1.6vw;
+    font-size: 1.4vw;
+    text-align: center;
 }
 
-h2
-{
-    margin:  0;
-    padding: 0;
-    color: #f0f0f0;
-    font-size: 1.2vw;
-}
 
-h3
-{
-    color: #e0e020;
-    font-size: 1.0vw;
-}
-
-.header {
+#subtitle {
+    margin: 0;
+    color: #d0d000;
+    background: #202020;
+    font-size: 1.1vw;
     text-align: center;
 }
 
 /*
 The bar where the stats are.
 */
-.topbar
+#topbar
 {
+    width:  100%;
     height: 20px;
     padding: 0
     font-size: 2vw;
+    text-align: center;
+    vertical-align: top;
     
     color:      #ffffff;
     background: #000000;
@@ -91,30 +88,50 @@ The bar where the stats are.
     width: auto;
 }
 
-.sidebar {
-    width: 15%;
 
+.sidebar {
+    width: 10%;
+
+    color:      #d0d040;
     background: #000000;
 
+    vertical-align: top;
+    
+    margin: 0;
+    font-size: 0.9vw;
+    
     padding-top: 0;
     padding-bottom: 0;
     padding-left: 1.0%;
 }
 
+.sidebar a {
+    font-size: 0.8vw;
+}
+
 .sidebar li {
-    font-size: 0.9vw;
-    padding-top: 0.1vw;
+    color:      #ffffff;
+    font-size: 0.8vw;
+    padding-left: 10.0%;
 }
 
 .content {
-    color: #f0f0f0;
+    color: #e000f0;
     background: #505050;
 
-    width: 85%;
+    width: 90%;
+    text-align: center;
     
+    margin: 0;
     padding: 0;
 }
 
-.content img {
-    max-width: 100%;
+.image-container {
+    width: auto
+    height: 85vh;
+    overflow: hidden;
+}
+
+.image-container img {
+    object-fit: cover;
 }
