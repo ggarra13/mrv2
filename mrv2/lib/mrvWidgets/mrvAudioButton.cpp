@@ -2,7 +2,6 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-
 #include <FL/Fl_Menu_Button.H>
 
 #include "mrvCore/mrvI8N.h"
@@ -22,45 +21,48 @@ namespace mrv
         int idx = o->value();
 
         audioButton->current_track(idx);
-        
+
         refresh_media_cb(o, d);
     }
-    
+
     AudioButton::AudioButton(int X, int Y, int W, int H, const char* l) :
         Fl_Button(X, Y, W, H, l)
     {
     }
-    
+
     int AudioButton::current_track() const
     {
         return currentTrack;
     }
-    
+
     void AudioButton::current_track(int idx)
     {
         currentTrack = idx;
     }
-    
+
     int AudioButton::handle(int e)
     {
         switch (e)
         {
         case FL_PUSH:
-            if (Fl::event_button3() && audioTracks.size() > 1)
+            if (Fl::event_button3())
             {
-                Fl_Menu_Button menu(0, 0, 0, 0);
-                menu.type(Fl_Menu_Button::POPUP3);
-                menu.clear();
-
-                for (const auto& track : audioTracks)
+                if (audioTracks.size() > 1)
                 {
-                    menu.add(
-                        track.c_str(), 0, (Fl_Callback*)change_audio_track_cb,
-                        this);
-                }
-                menu.menu_end();
+                    Fl_Menu_Button menu(0, 0, 0, 0);
+                    menu.type(Fl_Menu_Button::POPUP3);
+                    menu.clear();
 
-                menu.popup();
+                    for (const auto& track : audioTracks)
+                    {
+                        menu.add(
+                            track.c_str(), 0,
+                            (Fl_Callback*)change_audio_track_cb, this);
+                    }
+                    menu.menu_end();
+
+                    menu.popup();
+                }
                 return 1;
             }
             break;
@@ -73,18 +75,13 @@ namespace mrv
         currentTrack = -1;
         audioTracks.clear();
     }
-    
+
     void AudioButton::add_track(const std::string& name)
-    {
-        audioTracks.push_back(name);
-    }
-    
-    void AudioButton::add_track()
     {
         char buf[256];
         unsigned idx = audioTracks.size() + 1;
-        snprintf(buf, 256, _("Track #%d"), idx);
-        add_track(buf);
+        snprintf(buf, 256, _("Track #%d - %s"), idx, name.c_str());
+        audioTracks.push_back(buf);
     }
-    
+
 } // namespace mrv

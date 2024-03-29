@@ -142,32 +142,33 @@ std::string Flu_File_Chooser::renameErrTxt = "Unable to rename '%s' to '%s'";
 
 #define DEFAULT_ENTRY_WIDTH 235
 
-Fl_Pixmap up_folder_img((char*const*)big_folder_up_xpm),
-    trash((char*const*)trash_xpm), new_folder((char*const*)big_folder_new_xpm),
-    reload((char*const*)reload_xpm), preview_img((char*const*)monalisa_xpm),
-    file_list_img((char*const*)filelist_xpm),
-    file_listwide_img((char*const*)filelistwide_xpm),
-    fileDetails((char*const*)filedetails_xpm),
-    add_to_favorite_folder((char*const*)folder_favorite_xpm),
-    home((char*const*)bighome_xpm), favorites((char*const*)bigfavorites_xpm),
-    desktop((char*const*)desktop_xpm),
-    folder_closed((char*const*)folder_closed_xpm),
-    default_file((char*const*)textdoc_xpm),
-    my_computer((char*const*)my_computer_xpm),
-    computer((char*const*)computer_xpm),
-    disk_drive((char*const*)disk_drive_xpm),
-    cd_drive((char*const*)cd_drive_xpm),
-    floppy_drive((char*const*)floppy_drive_xpm),
-    removable_drive((char*const*)removable_drive_xpm),
-    ram_drive((char*const*)ram_drive_xpm),
-    network_drive((char*const*)network_drive_xpm),
-    documents((char*const*)filled_folder_xpm),
-    littlehome((char*const*)home_xpm),
-    little_favorites((char*const*)mini_folder_favorites_xpm),
-    little_desktop((char*const*)mini_desktop_xpm),
-    bigdocuments((char*const*)bigdocuments_xpm),
-    bigtemporary((char*const*)bigtemporary_xpm), reel((char*const*)reel_xpm),
-    picture((char*const*)image_xpm), music((char*const*)music_xpm);
+Fl_Pixmap up_folder_img((char* const*)big_folder_up_xpm),
+    trash((char* const*)trash_xpm),
+    new_folder((char* const*)big_folder_new_xpm),
+    reload((char* const*)reload_xpm), preview_img((char* const*)monalisa_xpm),
+    file_list_img((char* const*)filelist_xpm),
+    file_listwide_img((char* const*)filelistwide_xpm),
+    fileDetails((char* const*)filedetails_xpm),
+    add_to_favorite_folder((char* const*)folder_favorite_xpm),
+    home((char* const*)bighome_xpm), favorites((char* const*)bigfavorites_xpm),
+    desktop((char* const*)desktop_xpm),
+    folder_closed((char* const*)folder_closed_xpm),
+    default_file((char* const*)textdoc_xpm),
+    my_computer((char* const*)my_computer_xpm),
+    computer((char* const*)computer_xpm),
+    disk_drive((char* const*)disk_drive_xpm),
+    cd_drive((char* const*)cd_drive_xpm),
+    floppy_drive((char* const*)floppy_drive_xpm),
+    removable_drive((char* const*)removable_drive_xpm),
+    ram_drive((char* const*)ram_drive_xpm),
+    network_drive((char* const*)network_drive_xpm),
+    documents((char* const*)filled_folder_xpm),
+    littlehome((char* const*)home_xpm),
+    little_favorites((char* const*)mini_folder_favorites_xpm),
+    little_desktop((char* const*)mini_desktop_xpm),
+    bigdocuments((char* const*)bigdocuments_xpm),
+    bigtemporary((char* const*)bigtemporary_xpm), reel((char* const*)reel_xpm),
+    picture((char* const*)image_xpm), music((char* const*)music_xpm);
 
 #define streq(a, b) (strcmp(a, b) == 0)
 
@@ -290,7 +291,7 @@ void Flu_File_Chooser::createdThumbnail(
     ThumbnailData* data)
 {
     TLRENDER_P();
-    const std::lock_guard<std::mutex> lock(p.thumbnailMutex);
+    std::lock_guard<std::mutex> lock(p.thumbnailMutex);
     if (p.thumbnailIds.find(id) != p.thumbnailIds.end())
     {
         for (const auto& i : thumbnails)
@@ -318,7 +319,7 @@ void Flu_File_Chooser::previewCB()
 
     if (previewBtn->value() && thumbnailsFileReq)
     {
-        
+
         for (int i = 0; i < c; ++i)
         {
             Entry* e = (Entry*)g->child(i);
@@ -348,8 +349,7 @@ void Flu_File_Chooser::previewCB()
                 std::string fullname = toTLRenderFilename(e);
 
                 // Show the frame at the beginning
-                otio::RationalTime time(0.0, 1.0);
-                time = toTLRenderTime(e);
+                otio::RationalTime time = time::invalidTime;
 
                 image::Size size(128, 64);
 
@@ -955,7 +955,7 @@ Flu_File_Chooser::Flu_File_Chooser(
                         fs::path p(buf);
                         if (!fs::exists(p))
                             continue;
-                        
+
                         favoritesList->add(buf);
                         std::string favs = "/";
                         favs += _(favoritesTxt.c_str());
@@ -3384,21 +3384,6 @@ void Flu_File_Chooser::value(const char* v)
     }
 }
 
-otime::RationalTime
-Flu_File_Chooser::toTLRenderTime(const Flu_File_Chooser::Entry* e)
-{
-    otime::RationalTime time = tl::time::invalidTime;
-    if (e->type == ENTRY_SEQUENCE)
-    {
-        std::string number = e->filesize;
-        std::size_t pos = number.find(' ');
-        number = number.substr(0, pos);
-        int64_t frame = atoi(number.c_str());
-        time = otime::RationalTime(frame, 24.0);
-    }
-    return time;
-}
-
 std::string
 Flu_File_Chooser::toTLRenderFilename(const Flu_File_Chooser::Entry* e)
 {
@@ -3409,9 +3394,9 @@ Flu_File_Chooser::toTLRenderFilename(const Flu_File_Chooser::Entry* e)
         std::string number = e->filesize;
         std::size_t pos = number.find(' ');
         number = number.substr(0, pos);
-        int64_t frame = atoi(number.c_str());
+        int frame = atoi(number.c_str());
         char tmp[1024];
-        // Note: fullname is a valid C sequence, like picture.%04d.exr
+        // Note: fullname is a valid C format sequence, like picture.%04d.exr
         snprintf(tmp, 1024, fullname.c_str(), frame);
         fullname = tmp;
     }
@@ -4821,7 +4806,7 @@ void Flu_File_Chooser::cd(const char* path)
                         entry->filesize += i.ext;
                     }
                 }
-                
+
                 entry->updateSize();
                 entry->updateIcon();
 
@@ -5051,13 +5036,12 @@ static const char* _flu_file_chooser(
 
     // Clear tlRender's cache
 
-    
     auto ioSystem = context->getSystem<io::System>();
     auto cache = ioSystem->getCache();
     uint64_t bytes = cache->getMax();
     cache->setMax(0);
-        
-    Flu_File_Chooser::window->previewCB(); 
+
+    Flu_File_Chooser::window->previewCB();
     Flu_File_Chooser::window->set_modal();
     Flu_File_Chooser::window->show();
 
@@ -5067,7 +5051,7 @@ static const char* _flu_file_chooser(
     Fl_Group::current(0);
 
     cache->setMax(bytes);
-    
+
     if (Flu_File_Chooser::window->value())
     {
         if (Flu_File_Chooser::window->count() == 1)

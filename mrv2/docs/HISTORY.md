@@ -3,7 +3,7 @@ v1.1.1
 
 - Added keyboard shortcuts for Render/Video Levels and Render/Alpha Blend.
 - Added support for multiple audio tracks.  You can switch from one to the
-  other by selecting the Audio button (the mute volume control) with the
+  other by selecting the Audio button (the speaker icon) with the
   Right Mouse Button and selecting a track.
 - Fixed audio metadata in audio section of Media Info Panel for each audio
   stream.
@@ -31,6 +31,14 @@ v1.1.1
   Visual editors are given preference over terminal editors.
 - Fixed Python error reporting in the Python Output of the Python Panel for
   mrv2 python plug-ins.
+- Fixed message that said it was saving a movie without audio when saving
+  a sequence of frames.
+- Fixed reading of FPS from OpenEXR frames as they are now rational instead of
+  a double.
+- Fixed thumbnail of image sequences in mrv2's custom file requester when the
+  sequence did not start at 0.
+- Fixed a minor bug using snprintf of int64_t with an int specifier.
+- Improved the main web page for mrv2.
 
 
 v1.1.0

@@ -41,7 +41,6 @@ namespace
 {
 }
 
-
 namespace mrv
 {
 
@@ -84,10 +83,10 @@ namespace mrv
         auto cache = ioSystem->getCache();
 
         size_t oldCacheSize = cache->getMax();
-        
+
         const std::string& directory = path.getDirectory();
         const std::string& baseName = path.getBaseName();
-        const std::string&   number  = path.getNumber();
+        const std::string& number = path.getNumber();
         const std::string& extension = path.getExtension();
 
         std::string newFile = directory + baseName + number + extension;
@@ -153,6 +152,7 @@ namespace mrv
                 std::stringstream s;
                 s << speed;
                 ioOptions["OpenEXR/Speed"] = s.str();
+                LOG_INFO("OpenEXR Speed=" << speed);
             }
 #endif
 
@@ -180,6 +180,49 @@ namespace mrv
                 {
                     s << timecode;
                     ioOptions["timecode"] = s.str();
+                }
+            }
+
+            bool isMovie = file::isMovie(extension);
+            if (isMovie)
+            {
+                msg = string::Format(_("Saving movie to {0}.")).arg(newFile);
+            }
+            else
+            {
+                msg = string::Format(_("Saving pictures to {0}.")).arg(newFile);
+            }
+            LOG_INFO(msg);
+
+            // Render information.
+            const auto& info = player->ioInfo();
+
+            auto videoTime = info.videoTime;
+
+            const bool hasVideo = !info.video.empty();
+
+            if (player->timeRange() != timeRange ||
+                info.videoTime.start_time() != timeRange.start_time())
+            {
+                double videoRate = info.videoTime.duration().rate();
+                videoTime = otime::TimeRange(
+                    timeRange.start_time().rescaled_to(videoRate),
+                    timeRange.duration().rescaled_to(videoRate));
+            }
+
+            auto audioTime = time::invalidTimeRange;
+            const double sampleRate = info.audio.sampleRate;
+            const bool hasAudio = info.audio.isValid();
+            if (hasAudio)
+            {
+                audioTime = info.audioTime;
+                if (player->timeRange() != timeRange ||
+                    audioTime.start_time() !=
+                        timeRange.start_time().rescaled_to(sampleRate))
+                {
+                    audioTime = otime::TimeRange(
+                        timeRange.start_time().rescaled_to(sampleRate),
+                        timeRange.duration().rescaled_to(sampleRate));
                 }
             }
 
@@ -226,7 +269,7 @@ namespace mrv
             }
 
             newFile = directory + baseName + number + newExtension;
-        
+
             if (newFile != file)
             {
                 if (fs::exists(newFile))
@@ -242,48 +285,6 @@ namespace mrv
                 extension, ".exr", string::Compare::CaseInsensitive);
             bool saveHDR = string::compare(
                 extension, ".hdr", string::Compare::CaseInsensitive);
-
-            if (file::isMovie(extension))
-            {
-                msg = string::Format(_("Saving movie to {0}.")).arg(newFile);
-            }
-            else
-            {
-                msg = string::Format(_("Saving pictures to {0}.")).arg(newFile);
-            }
-            LOG_INFO(msg);
-
-            // Render information.
-            const auto& info = player->ioInfo();
-
-            auto videoTime = info.videoTime;
-
-            const bool hasVideo = !info.video.empty();
-
-            if (player->timeRange() != timeRange ||
-                info.videoTime.start_time() != timeRange.start_time())
-            {
-                double videoRate = info.videoTime.duration().rate();
-                videoTime = otime::TimeRange(
-                    timeRange.start_time().rescaled_to(videoRate),
-                    timeRange.duration().rescaled_to(videoRate));
-            }
-
-            auto audioTime = time::invalidTimeRange;
-            const double sampleRate = info.audio.sampleRate;
-            const bool hasAudio = info.audio.isValid();
-            if (hasAudio)
-            {
-                audioTime = info.audioTime;
-                if (player->timeRange() != timeRange ||
-                    audioTime.start_time() !=
-                        timeRange.start_time().rescaled_to(sampleRate))
-                {
-                    audioTime = otime::TimeRange(
-                        timeRange.start_time().rescaled_to(sampleRate),
-                        timeRange.duration().rescaled_to(sampleRate));
-                }
-            }
 
             if (time::compareExact(videoTime, time::invalidTimeRange))
                 videoTime = audioTime;
@@ -303,7 +304,6 @@ namespace mrv
 
             bool annotations = false;
 
-            
             gl::OffscreenBufferOptions offscreenBufferOptions;
             std::shared_ptr<timeline_gl::Render> render;
             image::Size renderSize;
@@ -324,9 +324,9 @@ namespace mrv
                     size_t tmp = renderSize.w;
                     renderSize.w = renderSize.h;
                     renderSize.h = tmp;
-                    
+
                     msg = tl::string::Format(_("Rotated image info: {0}"))
-                          .arg(renderSize);
+                              .arg(renderSize);
                     LOG_INFO(msg);
                 }
                 if (resolution == SaveResolution::kHalfSize)
@@ -334,7 +334,7 @@ namespace mrv
                     renderSize.w /= 2;
                     renderSize.h /= 2;
                     msg = tl::string::Format(_("Scaled image info: {0}"))
-                          .arg(renderSize);
+                              .arg(renderSize);
                     LOG_INFO(msg);
                 }
                 else if (resolution == SaveResolution::kQuarterSize)
@@ -342,11 +342,11 @@ namespace mrv
                     renderSize.w /= 4;
                     renderSize.h /= 4;
                     msg = tl::string::Format(_("Scaled image info: {0}"))
-                          .arg(renderSize);
+                              .arg(renderSize);
                     LOG_INFO(msg);
                 }
             }
-            
+
             // Create the renderer.
             render = timeline_gl::Render::create(context);
             offscreenBufferOptions.colorType = image::PixelType::RGBA_F32;
@@ -442,16 +442,17 @@ namespace mrv
 
                     msg = tl::string::Format(_("Viewport Size: {0} - "
                                                "X={1}, Y={2}"))
-                          .arg(viewportSize)
-                          .arg(X)
-                          .arg(Y);
+                              .arg(viewportSize)
+                              .arg(X)
+                              .arg(Y);
                     LOG_INFO(msg);
                 }
 
                 outputInfo = writerPlugin->getWriteInfo(outputInfo);
                 if (image::PixelType::None == outputInfo.pixelType)
                 {
-                    LOG_INFO(_("Writer plugin did not get output info.  Defaulting to RGB_U8"));
+                    LOG_INFO(_("Writer plugin did not get output info.  "
+                               "Defaulting to RGB_U8"));
                     outputInfo.pixelType = image::PixelType::RGB_U8;
                     offscreenBufferOptions.colorType = image::PixelType::RGB_U8;
 #ifdef TLRENDER_EXR
@@ -521,7 +522,7 @@ namespace mrv
 
             char title[1024];
 
-            if (hasVideo)
+            if (hasVideo && isMovie)
             {
 #ifdef TLRENDER_FFMPEG
                 if (static_cast<ffmpeg::AudioCodec>(options.ffmpegAudioCodec) ==
@@ -541,6 +542,7 @@ namespace mrv
                     title, 1024,
                     _("Saving Pictures without Audio %" PRId64 " - %" PRId64),
                     startFrame, endFrame);
+                hasAudio = false;
 #endif
             }
             else

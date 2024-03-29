@@ -49,7 +49,7 @@ namespace mrv
     struct ThumbnailCreator::Private
     {
         std::weak_ptr<system::Context> context;
-        
+
         struct Request
         {
             int64_t id;
@@ -251,7 +251,7 @@ namespace mrv
         std::unique_lock<std::mutex> lock(p.mutex);
         p.requestTimeout = std::chrono::milliseconds(value > 0 ? value : 0);
     }
-    
+
     void ThumbnailCreator::clearCache()
     {
         TLRENDER_P();
@@ -346,7 +346,7 @@ namespace mrv
                         options.ioOptions["clearCache"] =
                             string::Format("{0}").arg(rand());
                     }
-                    
+
                     file::Path path(request.fileName);
                     try
                     {
@@ -358,12 +358,14 @@ namespace mrv
                             ioOptions["Layer"] =
                                 string::Format("{0}").arg(request.layer);
                             request.futures.push_back(
-                                request.timeline->getVideo(
-                                    time::isValid(i)
-                                        ? i
-                                        : request.timeline->getTimeRange()
-                                              .start_time(),
-                                    ioOptions).future);
+                                request.timeline
+                                    ->getVideo(
+                                        time::isValid(i)
+                                            ? i
+                                            : request.timeline->getTimeRange()
+                                                  .start_time(),
+                                        ioOptions)
+                                    .future);
                         }
                         p.requestsInProgress.push_back(std::move(request));
                     }
@@ -421,7 +423,6 @@ namespace mrv
                                             offscreenBufferOptions);
                                 }
 
-                                timeline::ImageOptions i;
                                 timeline::DisplayOptions d;
                                 d.mirror.y = true; // images in GL are flipped
 
@@ -439,7 +440,7 @@ namespace mrv
                                         {videoData},
                                         {math::Box2i(
                                             0, 0, info.size.w, info.size.h)},
-                                        {i}, {d});
+                                        {}, {d});
                                     render->end();
                                 }
 

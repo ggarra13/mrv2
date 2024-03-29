@@ -470,7 +470,7 @@ ui->uiView->take_focus();}
       Fl_Group {} {open
         xywh {99 1 402 28}
       } {
-        Fl_Group {} {open
+        Fl_Group {} {
           xywh {99 3 240 26}
         } {
           Fl_Button uiPlayStart {
@@ -553,7 +553,7 @@ player->setLoop( loop );}
             class {mrv::StateButton}
           }
         }
-        Fl_Group {} {open
+        Fl_Group {} {
           xywh {341 1 86 28}
         } {
           Fl_Menu_Button fpsDefaults {
@@ -670,7 +670,7 @@ else
    o->image( mrv::load_svg( "Audio.svg" ) );
 }
 o->redraw();} selected
-            tooltip {Mute audio.} xywh {427 3 20 24} type Toggle labelsize 10 align 80
+            tooltip {Mute audio or switch audio tracks with the right mouse button.} xywh {427 3 20 24} type Toggle labelsize 10 align 80
             code1 {o->image( mrv::load_svg( "Audio.svg" ) );}
             class {mrv::AudioButton}
           }
@@ -683,7 +683,7 @@ ui->app->setVolume(value);}
           }
         }
       }
-      Fl_Group {} {open
+      Fl_Group {} {
         xywh {501 3 189 26}
       } {
         Fl_Button uiStartButton {
@@ -792,7 +792,7 @@ class ViewerUI {} {
   }
   decl {mrv::SecondaryWindow* uiSecondary;} {public local
   }
-  Function {make_window()} {open private
+  Function {make_window()} {private
   } {
     code {uiPrefs = new PreferencesUI( this );
 uiHotkey = new HotkeyUI( this );

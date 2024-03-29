@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2024-03-23 10:24-0300\n"
+"POT-Creation-Date: 2024-03-27 03:21-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -1539,9 +1539,6 @@ msgstr "OK"
 msgid "Cancel"
 msgstr "Cancelar"
 
-msgid "Mute"
-msgstr "Mudo"
-
 msgid "Play timelines, movies, and image sequences."
 msgstr "Reproducir líneas de tiempo, películas y secuencias de imágenes."
 
@@ -2822,6 +2819,12 @@ msgstr "Fallé en cargar al archivo."
 msgid "Cannot save an NDI stream"
 msgstr "No puedo grabar un flujo de NDI."
 
+msgid "Saving movie to {0}."
+msgstr "Grando película a {0}."
+
+msgid "Saving pictures to {0}."
+msgstr "Grabando imágenes a {0}."
+
 msgid ""
 "VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to ."
 "webm"
@@ -2840,12 +2843,6 @@ msgstr ""
 
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "El archivo {0} ya existe.  Por seguridad, no lo sobreescribiré."
-
-msgid "Saving movie to {0}."
-msgstr "Grando película a {0}."
-
-msgid "Saving pictures to {0}."
-msgstr "Grabando imágenes a {0}."
 
 msgid "Rotated image info: {0}"
 msgstr "Información de Imagen Rotada: {0}"
@@ -3779,6 +3776,10 @@ msgstr "Rango"
 msgid "Mean"
 msgstr "Prom."
 
+#, c-format
+msgid "Track #%d - %s"
+msgstr "Pista #%d - %s"
+
 msgid "Same Size"
 msgstr "Mismo Tamaño"
 
@@ -4512,8 +4513,8 @@ msgstr "Algunos seteos por defector de cuadros por segundo."
 msgid "Allows you to adjust frame rate playback."
 msgstr "Te permite ajustar la velocidad de reprodución."
 
-msgid "Mute audio."
-msgstr "Silencie el audio."
+msgid "Mute audio or switch audio tracks with the right mouse button."
+msgstr "Silenciar audio o cambiar de pista con el botón derecho del ratón."
 
 msgid "Audio Volume"
 msgstr "Volúmen del Audio"
@@ -6117,6 +6118,24 @@ msgstr "Rotar las imágenes +90 grados"
 msgid "Rotate Images -90 Degrees"
 msgstr "Rotar las imágenes -90 grados"
 
+msgid "Video Levels from File"
+msgstr "Niveles de Vídeo Del Archivo"
+
+msgid "Video Levels Legal Range"
+msgstr "Niveles de Vídeo de Rango Legal"
+
+msgid "Video Levels Full Range"
+msgstr "Niveles de Vídeo de Rango Completo"
+
+msgid "Alpha Blend None"
+msgstr "Mezcla Alfa Ninguna"
+
+msgid "Alpha Blend Straight"
+msgstr "Mezcla Alfa Derecha"
+
+msgid "Alpha Blend Premultiplied"
+msgstr "Mezcla Alfa Premultiplicada"
+
 msgid "Annotation Clear Frame"
 msgstr "Borrar el Cuadro de Anotación"
 
@@ -6407,6 +6426,12 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
+
+#~ msgid "Mute"
+#~ msgstr "Mudo"
+
+#~ msgid "Mute audio."
+#~ msgstr "Silencie el audio."
 
 #~ msgid "No Source"
 #~ msgstr "Ninguna Fuente"
