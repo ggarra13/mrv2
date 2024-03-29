@@ -183,13 +183,13 @@ namespace mrv
                 }
             }
 
-            const bool isMovie = file::isMovie(extension);
-            const bool isAudio = file::isAudio(extension);
-            if (isMovie)
+            const bool savingMovie = file::isMovie(extension);
+            const bool savingAudio = file::isAudio(extension);
+            if (savingMovie)
             {
                 msg = string::Format(_("Saving movie to {0}.")).arg(newFile);
             }
-            else if (isAudio)
+            else if (savingAudio)
             {
                 msg = string::Format(_("Saving audio to {0}.")).arg(newFile);
             }
@@ -528,7 +528,7 @@ namespace mrv
             char title[1024];
 
 #ifdef TLRENDER_FFMPEG
-            if (hasVideo && isMovie)
+            if (hasVideo && savingMovie)
             {
                 if (static_cast<ffmpeg::AudioCodec>(options.ffmpegAudioCodec) ==
                         ffmpeg::AudioCodec::None ||
@@ -543,7 +543,7 @@ namespace mrv
                         _("Saving Movie with Audio %" PRId64 " - %" PRId64),
                         startFrame, endFrame);
             }
-            else if (hasAudio && isAudio)
+            else if (hasAudio && savingAudio)
             {
                 snprintf(
                     title, 1024, _("Saving Audio %" PRId64 " - %" PRId64),
@@ -551,7 +551,7 @@ namespace mrv
             }
             else
 #endif
-                if (hasVideo && !isMovie && !isAudio)
+                if (hasVideo && !savingMovie && !savingAudio)
             {
                 snprintf(
                     title, 1024,
