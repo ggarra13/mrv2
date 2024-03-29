@@ -490,17 +490,6 @@ import mrv2
 from mrv2 import annotations, cmd, math, image, io, media
 from mrv2 import playlist, timeline, usd, session, settings
 
-class A:
-    def __init__(self):
-        self.out = 'aaa'
-        self.output()
-
-    def output(self):
-        print(self.out)
-        print(self.nothing)
-
-a = A()
-
 )PYTHON");
             }
 
