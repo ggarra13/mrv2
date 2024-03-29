@@ -529,12 +529,11 @@ namespace mrv
                     }
                     _drawRectangleOutline(selection, color, mvp);
                 }
-                
+
                 if (p.showAnnotations && gl.annotation)
                 {
                     _drawAnnotations(mvp);
                 }
-
 
                 if (p.dataWindow)
                     _drawDataWindow();
@@ -587,14 +586,14 @@ namespace mrv
         }
 
 #ifdef USE_OPENGL2
-        Fl_Gl_Window::draw_begin(); // Set up 1:1 projectionç
-        Fl_Window::draw(); // Draw FLTK children
+        Fl_Gl_Window::draw_begin(); // Set up 1:1 projection
+        Fl_Window::draw();          // Draw FLTK children
         glViewport(0, 0, viewportSize.w, viewportSize.h);
         if (p.showAnnotations)
             _drawGL2TextShapes();
         Fl_Gl_Window::draw_end(); // Restore GL state
 #else
-#    ifndef NO_GL_WINDOW_CHILDREN 
+#    ifndef NO_GL_WINDOW_CHILDREN
         Fl_Gl_Window::draw();
 #    endif
 #endif
