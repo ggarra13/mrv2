@@ -436,7 +436,7 @@ namespace mrv
             std::cout << std::endl
                       << "mrv2 v" << mrv::version() << " " << mrv::build_date()
                       << std::endl
-                      << mrv::get_os_version() << std::endl;
+                      << mrv::os::getVersion() << std::endl;
             return;
         }
 
@@ -532,10 +532,14 @@ namespace mrv
         version += mrv::build_date();
         LOG_INFO(version);
 
-        version = mrv::get_os_version();
+        version = mrv::os::getVersion();
         LOG_INFO(version);
 
         LOG_INFO(msg);
+
+        LOG_INFO(
+            "Default Editor: "
+            << p.settings->getDefaultValue<std::string>("Python/Editor"));
 
         // Create the main control.
         p.mainControl = new MainControl(ui);

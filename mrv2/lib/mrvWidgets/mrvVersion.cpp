@@ -178,11 +178,10 @@ namespace mrv
                 o << "Release level: Unknown";
             o << " (" << std::hex << release_level << ")" << std::dec;
         }
-        
 
 #ifdef TLRENDER_FFMPEG
-        const AVCodec* next_codec_for_id(enum AVCodecID id, void **iter,
-                                         int encoder)
+        const AVCodec*
+        next_codec_for_id(enum AVCodecID id, void** iter, int encoder)
         {
             const AVCodec* c = nullptr;
             while ((c = av_codec_iterate(iter)))
@@ -193,25 +192,27 @@ namespace mrv
             }
             return NULL;
         }
-        
-        void print_codecs_for_id(std::ostringstream& o,
-                                 enum AVCodecID id, int encoder)
+
+        void print_codecs_for_id(
+            std::ostringstream& o, enum AVCodecID id, int encoder)
         {
-            void *iter = NULL;
-            const AVCodec *codec;
+            void* iter = NULL;
+            const AVCodec* codec;
 
             o << " (" << (encoder ? "encoders" : "decoders") << ":";
-        
+
             while ((codec = next_codec_for_id(id, &iter, encoder)))
                 o << ' ' << codec->name;
 
             o << ')';
         }
 
-        int compare_codec_desc(const void *a, const void *b)
+        int compare_codec_desc(const void* a, const void* b)
         {
-            const AVCodecDescriptor * const *da = (const AVCodecDescriptor* const *) a;
-            const AVCodecDescriptor * const *db = (const AVCodecDescriptor* const *) b;
+            const AVCodecDescriptor* const* da =
+                (const AVCodecDescriptor* const*)a;
+            const AVCodecDescriptor* const* db =
+                (const AVCodecDescriptor* const*)b;
 
             return (
                 (*da)->type != (*db)->type
@@ -219,10 +220,10 @@ namespace mrv
                     : strcmp((*da)->name, (*db)->name));
         }
 
-        int get_codecs_sorted(const AVCodecDescriptor ***rcodecs)
+        int get_codecs_sorted(const AVCodecDescriptor*** rcodecs)
         {
-            const AVCodecDescriptor *desc = NULL;
-            const AVCodecDescriptor **codecs;
+            const AVCodecDescriptor* desc = NULL;
+            const AVCodecDescriptor** codecs;
             unsigned nb_codecs = 0, i = 0;
 
             while ((desc = avcodec_descriptor_next(desc)))
@@ -238,7 +239,7 @@ namespace mrv
             return nb_codecs;
         }
 #endif
-    
+
     } // namespace
 
     const char* kVersion = MRV2_VERSION;
@@ -292,8 +293,8 @@ namespace mrv
         return kBuild;
     }
 
-    static int ffmpeg_format_widths[] = { 20, 20, 20, 130, 80, 150, 0 };
-    
+    static int ffmpeg_format_widths[] = {20, 20, 20, 130, 80, 150, 0};
+
     void ffmpeg_formats(mrv::TextBrowser* b)
     {
         using namespace std;
@@ -560,8 +561,8 @@ namespace mrv
         }
     }
 
-    static int ffmpeg_codec_widths[] = { 20, 20, 20, 20, 20, 150, 0 };
-    
+    static int ffmpeg_codec_widths[] = {20, 20, 20, 20, 20, 150, 0};
+
     void ffmpeg_codec_information(mrv::TextBrowser* b)
     {
 #ifdef TLRENDER_FFMPEG
@@ -569,30 +570,31 @@ namespace mrv
         b->add(_("D\t\t\t\t\t=\tDecoding supported"));
         b->add(_("\tE\t\t\t\t=\tEncoding supported"));
         b->add(_("\t\tI\t\t\t=\tIntra frame-only codec"));
-        b->add(_("\t\t\tL\t\t=\tLossy compression")); 
+        b->add(_("\t\t\tL\t\t=\tLossy compression"));
         b->add(_("\t\t\t\tS\t=\tLossless compression"));
 #endif
     }
-    
+
     static void ffmpeg_codecs(mrv::TextBrowser* b, int type)
     {
 #ifdef TLRENDER_FFMPEG
         b->column_widths(ffmpeg_codec_widths);
-        const AVCodecDescriptor **codecs;
+        const AVCodecDescriptor** codecs;
         unsigned i;
         int nb_codecs = get_codecs_sorted(&codecs);
 
         if (nb_codecs < 0)
             return;
 
-        for (i = 0; i < nb_codecs; i++) {
-            const AVCodecDescriptor *desc = codecs[i];
-            const AVCodec *codec;
-            void *iter = NULL;
+        for (i = 0; i < nb_codecs; i++)
+        {
+            const AVCodecDescriptor* desc = codecs[i];
+            const AVCodec* codec;
+            void* iter = NULL;
 
             if (desc->type != type)
                 continue;
-        
+
             if (strstr(desc->name, "_deprecated"))
                 continue;
 
@@ -602,40 +604,35 @@ namespace mrv
                 continue;
 
             std::ostringstream o;
-            o << (decode ? 'D' : ' ')
-              << '\t'
-              << (encode ? 'E' : ' ')
-              << '\t'
-              << ((desc->props & AV_CODEC_PROP_INTRA_ONLY) ? 'I' : ' ')
-              << '\t'
-              << ((desc->props & AV_CODEC_PROP_LOSSY)      ? 'L' : ' ')
-              << '\t'
-              << ((desc->props & AV_CODEC_PROP_LOSSLESS)   ? 'S' : ' ')
-              << '\t'
-              << desc->name
-              << '\t'
-              << (desc->long_name ? desc->long_name : "");
+            o << (decode ? 'D' : ' ') << '\t' << (encode ? 'E' : ' ') << '\t'
+              << ((desc->props & AV_CODEC_PROP_INTRA_ONLY) ? 'I' : ' ') << '\t'
+              << ((desc->props & AV_CODEC_PROP_LOSSY) ? 'L' : ' ') << '\t'
+              << ((desc->props & AV_CODEC_PROP_LOSSLESS) ? 'S' : ' ') << '\t'
+              << desc->name << '\t' << (desc->long_name ? desc->long_name : "");
 
             /* print decoders/encoders when there's more than one or their
              * names are different from codec name */
-            while ((codec = next_codec_for_id(desc->id, &iter, 0))) {
-                if (strcmp(codec->name, desc->name)) {
+            while ((codec = next_codec_for_id(desc->id, &iter, 0)))
+            {
+                if (strcmp(codec->name, desc->name))
+                {
                     print_codecs_for_id(o, desc->id, 0);
                     break;
                 }
             }
             iter = NULL;
-            while ((codec = next_codec_for_id(desc->id, &iter, 1))) {
-                if (strcmp(codec->name, desc->name)) {
+            while ((codec = next_codec_for_id(desc->id, &iter, 1)))
+            {
+                if (strcmp(codec->name, desc->name))
+                {
                     print_codecs_for_id(o, desc->id, 1);
                     break;
                 }
             }
-        
-        
+
             b->add(o.str().c_str());
         }
-    
+
         av_free(codecs);
 #endif
     }
@@ -690,7 +687,7 @@ namespace mrv
           << endl
 #ifdef __GLIBCXX__
           << _("With gcc ") << __GNUC__ << endl
-#elif __clang__
+#elif defined(__clang__)
           << _("With clang ") << __clang__ << " " << __llvm__ << endl
 #else
           << _("With msvc ") << _MSC_VER << endl
@@ -698,7 +695,7 @@ namespace mrv
           << "(C) 2022-Present" << endl
           << "Gonzalo Garramuño & others" << endl
           << endl
-          << mrv::get_os_version() << endl
+          << mrv::os::getVersion() << endl
           << endl
           << _("mrv2 depends on:") << endl
           << endl;
@@ -961,7 +958,7 @@ namespace mrv
         const std::string& lines = GetCpuCaps(&gCpuCaps);
 
         std::stringstream o(lines);
-        
+
         std::string line;
         while (std::getline(o, line, '\n'))
         {

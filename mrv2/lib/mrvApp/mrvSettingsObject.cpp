@@ -17,6 +17,8 @@ namespace fs = std::filesystem;
 
 #include <FL/Fl.H>
 
+#include "mrvCore/mrvOS.h"
+#include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvMemory.h"
 
 #include "mrvFl/mrvIO.h"
@@ -36,6 +38,10 @@ namespace mrv
         const int kRecentHostsMax = 10;
         const int kRecentPythonScriptsMax = 10;
     } // namespace
+
+    namespace
+    {
+    }
 
     struct SettingsObject::Private
     {
@@ -161,23 +167,48 @@ namespace mrv
 
         p.defaultValues["SaveMovie/AudioCodec"] = std::string("AAC");
 
+        bool has_terminal = os::runningInTerminal();
+
         std::string command = "vim"; // Use vim as default
         char* editor = fl_getenv("EDITOR");
-        if (editor)
+        if (editor && file::isInPath(editor))
+
         {
             command = editor;
         }
         else
         {
 #ifdef _WIN32
-            command = "notepad++";
-#else
+            command = "notepad++.exe";
+            if (!file::isInPath(command))
+                command = "notepad.exe";
+#elif defined(__linux__)
             command = "emacs";
+            if (!file::isInPath(command))
+                command = "gvim";
+            if (!file::isInPath(command))
+                command = "code";
+            if (!file::isInPath(command) && has_terminal)
+            {
+                command = "vim";
+                if (!file::isInPath(command))
+                    command = "nano";
+            }
+#elif defined(__APPLE__)
+            command = "emacs";
+            if (!file::isInPath(command))
+                command = "code";
+            if (!file::isInPath(command) && has_terminal)
+            {
+                command = "vim";
+            }
+#else
+#    error Unknown OS to set editor
 #endif
         }
 
         if (command.substr(0, 5) == "emacs" || command.substr(0, 3) == "vim" ||
-            command.substr(0, 4) == "nano")
+            command.substr(0, 4) == "nano" || command.substr(0, 4) == "gvim")
         {
             command += " +{0} '{1}'";
         }
@@ -192,6 +223,10 @@ namespace mrv
         else if (command.substr(0, 7) == "pycharm")
         {
             command += " --line {0} '{1}'";
+        }
+        else if (command.substr(0, 7) == "notepad")
+        {
+            command += " '{1}'";
         }
 
         p.defaultValues["Python/Editor"] = command;
@@ -397,6 +432,130 @@ namespace mrv
                     "For " << name << " should be double " << e.what() << " is "
                            << anyName(value));
             }
+        }
+        return out;
+    }
+
+    //
+    // Get default values
+    //
+    template < typename T >
+    T SettingsObject::getDefaultValue(const std::string& name)
+    {
+        T out;
+        std::any value = _defaultValue(name);
+        try
+        {
+            out = std::any_cast<T>(value);
+        }
+        catch (const std::bad_any_cast& e)
+        {
+            LOG_ERROR(
+                "For " << name << " " << e.what() << " is " << anyName(value));
+        }
+        return out;
+    }
+
+    template <>
+    std::string SettingsObject::getDefaultValue(const std::string& name)
+    {
+        std::string out;
+        std::any value = _defaultValue(name);
+        try
+        {
+            out = std::any_cast<std::string>(value);
+        }
+        catch (const std::bad_any_cast& e)
+        {
+            LOG_ERROR(
+                "For " << name << " " << e.what() << " should be string is "
+                       << anyName(value));
+            setValue(name, out);
+        }
+        return out;
+    }
+
+    template <>
+    std::any SettingsObject::getDefaultValue(const std::string& name)
+    {
+        return _defaultValue(name);
+    }
+
+    template <> bool SettingsObject::getDefaultValue(const std::string& name)
+    {
+        bool out = false;
+        std_any value = _defaultValue(name);
+        try
+        {
+            out = std_any_empty(value) ? false : std::any_cast<bool>(value);
+        }
+        catch (const std::bad_any_cast& e)
+        {
+            try
+            {
+                out = static_cast<bool>(std::any_cast<int>(value));
+            }
+            catch (const std::bad_any_cast& e)
+            {
+                LOG_ERROR(
+                    "For " << name << " " << e.what() << " should be bool is "
+                           << anyName(value));
+                setDefaultValue(name, out);
+            }
+        }
+        return out;
+    }
+
+    template <> int SettingsObject::getDefaultValue(const std::string& name)
+    {
+        int out = 0;
+        std_any value;
+        try
+        {
+            value = _defaultValue(name);
+            out = std_any_empty(value) ? 0 : std::any_cast<int>(value);
+        }
+        catch (const std::bad_any_cast& e)
+        {
+            LOG_ERROR(
+                "For " << name << " should be int " << e.what() << " is "
+                       << anyName(value));
+        }
+        return out;
+    }
+
+    template <> float SettingsObject::getDefaultValue(const std::string& name)
+    {
+        float out = 0.F;
+        std_any value;
+        try
+        {
+            value = _defaultValue(name);
+            out = std_any_empty(value) ? 0 : std::any_cast<float>(value);
+        }
+        catch (const std::bad_any_cast& e)
+        {
+            LOG_ERROR(
+                "For " << name << " should be float " << e.what() << " is "
+                       << anyName(value));
+        }
+        return out;
+    }
+
+    template <> double SettingsObject::getDefaultValue(const std::string& name)
+    {
+        double out = 0.F;
+        std_any value;
+        try
+        {
+            value = _defaultValue(name);
+            out = std_any_empty(value) ? 0 : std::any_cast<double>(value);
+        }
+        catch (const std::bad_any_cast& e)
+        {
+            LOG_ERROR(
+                "For " << name << " should be double " << e.what() << " is "
+                       << anyName(value));
         }
         return out;
     }

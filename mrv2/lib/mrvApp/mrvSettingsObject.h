@@ -57,6 +57,9 @@ namespace mrv
         //! Get a value safely.
         template < typename T > T getValue(const std::string&);
 
+        //! Get default value safely.
+        template < typename T > T getDefaultValue(const std::string&);
+
         //! Get the list of recent files.
         const std::vector<std::string>& recentFiles() const;
 

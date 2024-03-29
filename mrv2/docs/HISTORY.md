@@ -17,9 +17,20 @@ v1.1.1
   every other frame (ie. saving on two's).
 - Fixed line error reporting in Python's Output (pybind11 bug).
 - Added Editor/Jump to Error to Python Panel.  You can select the line of the
-  error in the Python output and the Editor will jump to it.  If you don't
-  select anything in the Python output, it will jump to the last error counting
-  from the bottom.
+  error in the Python output and the Editor will jump to the offending line.
+  If you don't select anything in the Python output, it will jump to the last error
+  counting from the bottom.
+  It will skip errors from files that are <frozen ...>, like importlib.
+  If the error is on a file and not from the Python Editor, mrv2 will try to open
+  an external editor and jump to the line of it.
+  The editor to use is taken from the EDITOR environment variable first.
+  If not set, mrv2 will try to use one of the popular editors.  Its defaults
+  supports the syntax for emacs, gvim, vim, VS Code, notepad++ and nano.
+  The preferred editor is checked at start up based on what you have installed
+  on your PATH and whether you are running interactively or also have a terminal.
+  Visual editors are given preference over terminal editors.
+- Fixed Python error reporting in the Python Output of the Python Panel for
+  mrv2 python plug-ins.
 
 
 v1.1.0

@@ -1,3 +1,7 @@
+#ifndef _WIN32
+#    include <unistd.h>
+#endif
+
 #include <fstream>
 #include <string>
 #include <algorithm>
@@ -8,36 +12,54 @@
 
 namespace mrv
 {
-    std::string get_os_version()
+    namespace os
     {
-        tl::os::SystemInfo info = tl::os::getSystemInfo();
-        std::string os_version;
-#ifdef __linux__
-        std::ifstream os_release("/etc/os-release");
-        std::string line;
 
-        if (os_release.is_open())
+        std::string getVersion()
         {
-            while (std::getline(os_release, line))
+            tl::os::SystemInfo info = tl::os::getSystemInfo();
+            std::string os_version;
+#ifdef __linux__
+            std::ifstream os_release("/etc/os-release");
+            std::string line;
+
+            if (os_release.is_open())
             {
-                if (line.find("PRETTY_NAME=") != std::string::npos)
+                while (std::getline(os_release, line))
                 {
-                    os_version = line.substr(line.find("=") + 1);
-                    // Remove quotes from the version string
-                    os_version.erase(
-                        std::remove(os_version.begin(), os_version.end(), '"'),
-                        os_version.end());
-                    break;
+                    if (line.find("PRETTY_NAME=") != std::string::npos)
+                    {
+                        os_version = line.substr(line.find("=") + 1);
+                        // Remove quotes from the version string
+                        os_version.erase(
+                            std::remove(
+                                os_version.begin(), os_version.end(), '"'),
+                            os_version.end());
+                        break;
+                    }
                 }
+                os_release.close();
             }
-            os_release.close();
-        }
-        if (os_version.empty())
-            os_version = info.name;
+            if (os_version.empty())
+                os_version = info.name;
 #else
-        os_version = info.name;
+            os_version = info.name;
 #endif
-        os_version = _("Running on: ") + os_version;
-        return os_version;
-    }
+            os_version = _("Running on: ") + os_version;
+            return os_version;
+        }
+
+        bool runningInTerminal()
+        {
+#ifdef _WIN32
+            char* term = fl_getenv("TERM");
+            if (!term)
+                return false;
+            return true;
+#else
+            return (isatty(fileno(stdout)));
+#endif
+        }
+    } // namespace os
+
 } // namespace mrv

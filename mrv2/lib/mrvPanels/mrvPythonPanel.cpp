@@ -48,26 +48,35 @@ namespace
 {
     const char* kModule = "pypanel";
 
-    // // Regex to parse python error lines (works but catches frozen
+    // Regex to parse python error lines
     const std::regex kRE_PYTHON_ERROR(
         R"(\s*<?(?:([^>\(]+)>?)?(,\s+line\s+)?(?:\(?(\d+)\)))");
-
-    // const std::regex
-    //        kRE_PYTHON_ERROR(R"(<(?:([^>\(]+)>?)?(,\s+line\s+)?(?:\(?(\d+)\)))");
 
 } // namespace
 
 namespace
 {
 
+    bool ignorePythonFilename(const std::string& filename)
+    {
+        bool out = true;
+        if (filename.substr(0, 6) == "frozen")
+            out = false;
+        return out;
+    }
+
     std::pair<std::string, int> getFileInfoFromError(const std::string& error)
     {
         std::smatch match;
+        int line_number = -1;
         if (std::regex_search(error, match, kRE_PYTHON_ERROR))
         {
             // Extract relevant information
             std::string filename = match[1].matched ? match[1].str() : "";
-            int line_number = match[3].matched ? std::stoi(match[3].str()) : -1;
+            if (ignorePythonFilename(filename))
+            {
+                line_number = match[3].matched ? std::stoi(match[3].str()) : -1;
+            }
             return {filename, line_number};
         }
         else
@@ -82,7 +91,6 @@ namespace
     std::string fixPyBind11LineError(const std::string& error)
     {
         std::string out = error;
-        std::cerr << "fix: " << error << std::endl;
         std::regex_iterator<std::string::const_iterator> rit(
             out.begin(), out.end(), kRE_PYTHON_ERROR);
         std::regex_iterator<std::string::const_iterator> rend;
@@ -95,21 +103,29 @@ namespace
             // Extract information
             std::string filename = match[1].str();
             std::string linestr = match[2].matched ? match[2].str() : "";
-            int line_number =
-                match[3].matched ? std::stoi(match[3].str()) - 1 : -1;
-
-            // Construct the replacement string with modified line number
-            std::string replacement;
-            if (linestr.empty())
-                replacement =
-                    "<" + filename + ">(" + std::to_string(line_number) + ")";
+            if (ignorePythonFilename(filename))
+            {
+                offset += rit->position() + rit->length();
+            }
             else
-                replacement = "<" + filename + ">" + linestr +
-                              std::to_string(line_number) + ")";
+            {
+                int line_number =
+                    match[3].matched ? std::stoi(match[3].str()) - 1 : -1;
 
-            // Perform the replacement
-            out.replace(rit->position() + offset, rit->length(), replacement);
-            offset += rit->position() + replacement.size();
+                // Construct the replacement string with modified line number
+                std::string replacement;
+                if (linestr.empty())
+                    replacement = "<" + filename + ">(" +
+                                  std::to_string(line_number) + ")";
+                else
+                    replacement = "<" + filename + ">" + linestr +
+                                  std::to_string(line_number) + ")";
+
+                // Perform the replacement
+                out.replace(
+                    rit->position() + offset, rit->length(), replacement);
+                offset += rit->position() + replacement.size();
+            }
 
             // Update iterator to search from the end of the replaced match
             rit = std::regex_iterator<std::string::const_iterator>(
@@ -618,11 +634,15 @@ a = A()
 
         void PythonPanel::external_editor()
         {
-            std::cerr << "external editor" << std::endl;
             Fl_Group::current(0);
-            Fl_Double_Window win(500, 80, _("Type your editor command"));
+            Fl_Double_Window win(500, 100, _("Type your editor command"));
             win.begin();
-            Fl_Input input(10, 10, win.w() - 20, win.h() - 20);
+            Fl_Box b(
+                10, 10, win.w() - 20, 20,
+                _("{0} will be replaced with the line number.  {1} with the "
+                  "file name"));
+            b.align(FL_ALIGN_WRAP | FL_ALIGN_INSIDE | FL_ALIGN_LEFT);
+            Fl_Input input(10, 40, win.w() - 20, win.h() - 20 - 40);
             auto settings = App::app->settings();
             auto editor = settings->getValue<std::string>("Python/Editor");
             input.textcolor(FL_BLACK);
@@ -631,6 +651,8 @@ a = A()
             win.show();
             while (win.shown())
                 Fl::check();
+
+            settings->setValue("Python/Editor", std::string(input.value()));
         }
 
         void PythonPanel::jump_to_error()
@@ -685,6 +707,9 @@ a = A()
             if (!text || strlen(text) == 0)
                 return;
 
+            outputDisplay->redraw();
+            Fl::check();
+
             try
             {
                 auto [file, line] = getFileInfoFromError(text);
@@ -703,7 +728,7 @@ a = A()
                     end = buffer->line_end(start);
                     buffer->select(start, end);
                 }
-                else
+                else if (line > 0)
                 {
                     auto settings = App::app->settings();
                     auto editor =

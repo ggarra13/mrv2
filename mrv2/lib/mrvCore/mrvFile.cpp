@@ -8,10 +8,18 @@ namespace fs = std::filesystem;
 
 #include <tlIO/System.h>
 
+#include <FL/Fl.H>
+
 #include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvHome.h"
 
 #include "mrvApp/mrvApp.h"
+
+#ifdef _WIN32
+#    include <process.h>
+#else
+#    include <unistd.h> // For access()
+#endif
 
 namespace mrv
 {
@@ -183,7 +191,41 @@ namespace mrv
             }
             return true;
         }
-        
+
+        bool isInPath(const std::string& command)
+        {
+#ifdef _WIN32
+            char full_path[_MAX_PATH];
+            if (_searchenv(command.c_str(), full_path, _MAX_PATH) == 0)
+            {
+                return true; // Command found in path
+            }
+            else
+            {
+                return false; // Command not found
+            }
+#else
+            const char* path = fl_getenv("PATH");
+            if (path == NULL)
+            {
+                return false; // Error: PATH not found
+            }
+
+            auto dirs = string::split(path, ':');
+            for (const auto& current_dir : dirs)
+            {
+                char full_path[PATH_MAX];
+                snprintf(
+                    full_path, PATH_MAX, "%s/%s", current_dir.c_str(),
+                    command.c_str());
+                if (access(full_path, X_OK) == 0)
+                {
+                    return true; // Command found
+                }
+            }
+            return false; // Command not found in path
+#endif
+        }
     } // namespace file
-    
+
 } // namespace mrv

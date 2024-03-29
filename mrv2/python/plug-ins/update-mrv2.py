@@ -3,8 +3,6 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 
-import crap
-
 #
 # Standard libs
 #

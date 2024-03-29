@@ -59,5 +59,12 @@
 
 namespace mrv
 {
-    std::string get_os_version();
-}
+    namespace os
+    {
+
+        std::string getVersion();
+
+        bool runningInTerminal();
+    } // namespace os
+
+} // namespace mrv

@@ -114,7 +114,7 @@ namespace mrv
         {
 #    ifdef __linux__
             return nautilus_file_manager(file);
-#    elif _WIN32
+#    elif defined(_WIN32)
             return explorer_file_manager(file);
 #    endif
         }
