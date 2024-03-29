@@ -441,6 +441,7 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
 	    ENABLE_MINIMAL="
 	    --disable-audiotoolbox
 	    --disable-videotoolbox
+
             --disable-decoders
             --enable-decoder=aac
             --enable-decoder=ac3

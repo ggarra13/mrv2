@@ -23,12 +23,13 @@ namespace mrv
 {
     namespace
     {
-        bool contains_ffmpeg(const std::string& text) {
+        bool contains_ffmpeg(const std::string& text)
+        {
             std::regex pattern("\\[ffmpeg\\]");
             return std::regex_search(text, pattern);
         }
-    }
-    
+    } // namespace
+
     namespace
     {
         static void open_log_panel_cb(ViewerUI* ui)
@@ -72,9 +73,6 @@ namespace mrv
             if (!App::ui || !App::app->isRunning())
                 return;
 
-            if (Flu_File_Chooser::window)
-                return;
-
             bool local = std::this_thread::get_id() == mainThread;
 
             if (LogDisplay::ffmpegPrefs == LogDisplay::kDockOnError)
@@ -92,13 +90,10 @@ namespace mrv
                     Fl::awake((Fl_Awake_Handler)open_log_window_cb, App::ui);
             }
         }
-        
+
         void logbuffer::open_log_panel()
         {
             if (!App::ui || !App::app->isRunning())
-                return;
-
-            if (Flu_File_Chooser::window)
                 return;
 
             bool local = std::this_thread::get_id() == mainThread;
@@ -143,9 +138,14 @@ namespace mrv
 
         void errorbuffer::print(const char* c)
         {
+            if (Flu_File_Chooser::window)
+                return;
+
             std::cerr << c;
             if (contains_ffmpeg(c))
+            {
                 open_ffmpeg_log_panel();
+            }
             else
                 open_log_panel();
             if (uiLogDisplay)
@@ -154,6 +154,9 @@ namespace mrv
 
         void warnbuffer::print(const char* c)
         {
+            if (Flu_File_Chooser::window)
+                return;
+
             std::cerr << c;
             if (uiLogDisplay)
                 uiLogDisplay->warning(c);

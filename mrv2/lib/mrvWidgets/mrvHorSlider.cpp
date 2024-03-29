@@ -3,6 +3,7 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #include <cmath>
+#include <iostream>
 
 #include <FL/fl_draw.H>
 #include <FL/Fl_Input_.H>
@@ -40,8 +41,10 @@ namespace mrv
         uiValue->textcolor(FL_BLACK);
         uiValue->cursor_color(FL_RED);
         uiValue->labelsize(12);
-        auto uiSliderW = new Widget<Fl_Hor_Slider>(
-            X + Xoffset + 50, Y, W - Xoffset - 50 - 13, H);
+
+        int sliderW = W - Xoffset - 50 - 13;
+        auto uiSliderW =
+            new Widget<Fl_Hor_Slider>(X + Xoffset + 50, Y, sliderW, H);
         uiSlider = uiSliderW;
         uiSlider->when(FL_WHEN_CHANGED);
 
@@ -78,6 +81,12 @@ namespace mrv
 
         range(0.F, 10.F);
         step(0.1F);
+    }
+
+    void HorSlider::when(uchar i)
+    {
+        uiValue->when(i);
+        uiSlider->when(i);
     }
 
     void HorSlider::format_value(double v) noexcept
@@ -120,9 +129,10 @@ namespace mrv
         if (mn < -1000 || mx > 1000)
         {
             uiValue->size(70, uiValue->h());
-            uiSlider->resize(
-                x() + uiValue->x() + 70, uiSlider->y(),
-                w() - 70 - 13 - uiValue->x(), uiSlider->h());
+
+            int sliderX = uiValue->x() + uiValue->w();
+            int sliderW = w() - uiValue->w() - uiReset->w();
+            uiSlider->resize(sliderX, uiSlider->y(), sliderW, uiSlider->h());
         }
     }
 

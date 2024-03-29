@@ -991,26 +991,39 @@ namespace mrv
             }
         }
 
-        // Refresh media info panel if there's data window present
         if (panel::imageInfoPanel)
         {
-            bool refresh = false;
+            bool imageRefresh = false;
+            bool metadataRefresh = false;
+            bool fullRefresh = false;
+
+            // If the file is an image sequence, we refresh the main
+            // image information.
+            if (!file::isMovie(sender->path().getExtension()))
+                imageRefresh = true;
 
             // If timeline is stopped or has a single frame,
-            // refresh the media info panel.
+            // refresh the media info panel, sa
             if (sender->playback() == timeline::Playback::Stop ||
                 sender->timeRange().duration().value() == 1.0)
-                refresh = true;
+                fullRefresh = true;
 
             // If timeline has a Data Window (it is an OpenEXR)
-            // we also refresh the media info panel.
+            // we also refresh the metadata.
             auto i = p.tagData.find("Data Window");
             if (i != p.tagData.end())
-                refresh = true;
+                metadataRefresh = true;
 
-            if (refresh)
+            if (fullRefresh)
             {
                 panel::imageInfoPanel->refresh();
+            }
+            else
+            {
+                if (imageRefresh)
+                    panel::imageInfoPanel->imageRefresh();
+                if (metadataRefresh)
+                    panel::imageInfoPanel->metadataRefresh();
             }
         }
 

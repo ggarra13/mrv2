@@ -1276,11 +1276,6 @@ void Flu_File_Chooser::recursiveScan(const char* dir, FluStringVector* files)
     char* name;
     std::string fullpath;
     int num = fl_filename_list(dir, &e);
-    if (num < 0)
-    {
-        // LOG_ERROR( _("Listing of directory \"") << dir << _("\" failed! Check
-        // permissions and use the native requester." ) );
-    }
     for (int i = 0; i < num; i++)
     {
         name = e[i]->d_name;
@@ -3808,10 +3803,6 @@ void Flu_File_Chooser::buildLocationCombo()
     dirent** e;
     char* name;
     int num = fl_filename_list("/Volumes/", &e);
-    if (num < 0)
-    {
-        // LOG_ERROR( _("Listing of directory \"/Volumes/\" failed!" ) );
-    }
     if (num > 0)
     {
         for (i = 0; i < num; i++)
@@ -4522,12 +4513,6 @@ void Flu_File_Chooser::cd(const char* path)
     dirent** e;
     char* name;
     int num = fl_filename_list(pathbase.c_str(), &e);
-    if (num < 0)
-    {
-        // LOG_ERROR( _("Listing of directory \"") << pathbase << _("\" failed
-        // with error: ") << strerror(errno) << "!" );
-    }
-
     if (num > 0)
     {
         int i;

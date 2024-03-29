@@ -5,7 +5,9 @@
 #pragma once
 
 #include <cinttypes> // for PRId64
+#include <map>
 #include <memory>
+#include <string>
 
 #include <tlCore/Util.h>
 #include <tlCore/Box.h>
@@ -47,6 +49,10 @@ namespace mrv
             ~ImageInfoPanel();
 
             void refresh();
+
+            void imageRefresh();
+
+            void metadataRefresh();
 
             TimelinePlayer* timelinePlayer() const;
             void setTimelinePlayer(TimelinePlayer* p);
@@ -104,8 +110,7 @@ namespace mrv
                 const char* name, const char* tooltip, const float content,
                 const bool editable = false, const bool active = false,
                 Fl_Callback* callback = NULL, const float minV = 0.0f,
-                const float maxV = 1.0f, const int when = FL_WHEN_RELEASE,
-                const mrv::Slider::SliderType type = mrv::Slider::kNORMAL);
+                const float maxV = 1.0f, const int when = FL_WHEN_RELEASE);
             void add_rect(
                 const char* name, const char* tooltip,
                 const tl::math::Box2i& content, const bool editable = false,
@@ -133,7 +138,7 @@ namespace mrv
                 const char* name, const char* tooltip, const int content,
                 const bool editable = false, const bool active = true,
                 Fl_Callback* callback = NULL, const int minV = 0,
-                const int maxV = 10, const int when = FL_WHEN_RELEASE);
+                const int maxV = 10, const int when = FL_WHEN_CHANGED);
             void add_int(
                 const char* name, const char* tooltip,
                 const unsigned int content, const bool editable = false,
@@ -147,8 +152,13 @@ namespace mrv
                 const char* name, const char* tooltip,
                 const std::uintmax_t content);
 
-                void add_controls() override;
+            void add_controls() override;
             void fill_data();
+
+            void fill_image_data();
+            void fill_metadata();
+
+            void _getTags();
 
         public:
             Fl_Flex* flex;
@@ -168,6 +178,8 @@ namespace mrv
             unsigned int row;
             unsigned int X, Y, W, H;
             TimelinePlayer* player = nullptr;
+            std::map<std::string, std::string, string::CaseInsensitiveCompare>
+                tagData;
 
         public:
             Fl_Menu_Button* menu = nullptr;

@@ -598,49 +598,32 @@ namespace mrv
             return true;
         }
 
-        static void change_first_frame_cb(IntInput* w, ImageInfoPanel* info)
+        static void change_first_frame_cb(HorSlider* w, ImageInfoPanel* info)
         {
-            int first = atoi(w->value());
-            const auto& player = info->timelinePlayer();
-            auto range = player->inOutRange();
-            auto start = range.start_time();
-            const auto& end_time = range.end_time_inclusive();
-            start = otime::RationalTime(first, start.rate());
-            range = otime::TimeRange::range_from_start_end_time_inclusive(
-                start, end_time);
+            double f = w->value();
             ViewerUI* ui = info->main();
             TimelineClass* c = ui->uiTimeWindow;
-            c->uiStartFrame->value(w->value());
-            ui->uiTimeline->redraw();
+            c->uiStartFrame->value(f);
+            c->uiStartFrame->do_callback();
         }
 
-        static void change_last_frame_cb(IntInput* w, ImageInfoPanel* info)
+        static void change_last_frame_cb(HorSlider* w, ImageInfoPanel* info)
         {
-            int last = atoi(w->value());
-            const auto& player = info->timelinePlayer();
-            auto range = player->inOutRange();
-            const auto& start_time = range.start_time();
-            auto end = range.end_time_inclusive();
-            end = otime::RationalTime(last, end.rate());
-            range = otime::TimeRange::range_from_start_end_time_inclusive(
-                start_time, end);
-            player->setInOutRange(range);
+            double f = w->value();
             ViewerUI* ui = info->main();
             TimelineClass* c = ui->uiTimeWindow;
-            c->uiEndFrame->value(w->value());
-            ui->uiTimeline->redraw();
+            c->uiEndFrame->value(f);
+            c->uiEndFrame->do_callback();
         }
 
         static void change_fps_cb(HorSlider* w, ImageInfoPanel* info)
         {
-            float f = w->value();
-            const auto player = info->timelinePlayer();
-            if (!player)
-                return;
-            player->setSpeed(f);
+            double f = w->value();
             ViewerUI* ui = info->main();
             TimelineClass* c = ui->uiTimeWindow;
             c->uiFPS->value(f);
+            auto player = ui->uiView->getTimelinePlayer();
+            player->setSpeed(f);
         }
 
         double
@@ -740,8 +723,24 @@ namespace mrv
             set_tabs();
         }
 
+        void ImageInfoPanel::imageRefresh()
+        {
+            Fl_Group* orig = Fl_Group::current();
+            fill_image_data();
+            Fl_Group::current(orig);
+        }
+
+        void ImageInfoPanel::metadataRefresh()
+        {
+            Fl_Group* orig = Fl_Group::current();
+            _getTags();
+            fill_metadata();
+            Fl_Group::current(orig);
+        }
+
         void ImageInfoPanel::refresh()
         {
+            Fl_Group* orig = Fl_Group::current();
 
             hide_tabs();
 
@@ -759,8 +758,11 @@ namespace mrv
             m_video->end();
             m_image->end();
 
+            // Needed to resize the panels
             if (player)
                 g->end();
+
+            Fl_Group::current(orig);
         }
 
         Table*
@@ -772,10 +774,7 @@ namespace mrv
             X = 0;
             Y = g->y() + kLineHeight;
 
-            Fl_Box* box = new Fl_Box(0, Y, g->w(), 20);
-            g->add(box);
-
-            Table* table = new Table(0, Y + box->h(), g->w(), 20);
+            Table* table = new Table(0, Y, g->w(), 20);
             table->column_separator(true);
             // table->auto_resize( true );
             //  table->labeltype(FL_NO_LABEL);
@@ -1109,72 +1108,42 @@ namespace mrv
             m_curr->add(g);
 
             {
-                char buf[64];
                 Fl_Group* p = new Fl_Group(kMiddle, Y, kMiddle, hh);
-                p->end();
                 p->box(FL_FLAT_BOX);
-                // p->set_horizontal();
                 p->begin();
 
-                if (!editable)
-                {
-                    IntInput* widget = new IntInput(kMiddle, Y, p->w(), hh);
-                    snprintf(buf, 64, "% 9d", content);
-                    widget->value(buf);
-                    widget->align(FL_ALIGN_LEFT);
-                    widget->deactivate();
-                    widget->box(FL_FLAT_BOX);
-                    if (tooltip)
-                        widget->tooltip(tooltip);
-                    else
-                        widget->tooltip(lbl->label());
-                }
+                HorSlider* widget = new HorSlider(kMiddle, Y, p->w(), hh);
+                if (tooltip)
+                    widget->tooltip(tooltip);
                 else
-                {
-                    IntInput* widget = new IntInput(kMiddle, Y, 50, hh);
-                    snprintf(buf, 64, "% 9d", content);
-                    widget->value(buf);
-                    widget->align(FL_ALIGN_LEFT);
-                    if (tooltip)
-                        widget->tooltip(tooltip);
-                    else
-                        widget->tooltip(lbl->label());
+                    widget->tooltip(lbl->label());
 
-                    if (callback)
-                        widget->callback(callback, this);
+                widget->step(1.0F);
+                double maxS = maxV;
+                if (content > 100000 && maxV <= 100000)
+                    maxS = 1000000;
+                else if (content > 10000 && maxV <= 10000)
+                    maxS = 100000;
+                else if (content > 1000 && maxV <= 1000)
+                    maxS = 10000;
+                else if (content > 100 && maxV <= 100)
+                    maxS = 1000;
+                else if (content > 10 && maxV <= 10)
+                    maxS = 100;
+                else if (content > maxS)
+                    maxS = content + 50;
+                widget->range(minV, maxS);
 
-                    Fl_Slider* slider =
-                        new Fl_Slider(kMiddle + 50, Y, p->w() - 40, hh);
-                    // slider->type(Fl_Slider::TICK_ABOVE);
-                    // slider->linesize(1);
-                    slider->type(FL_HORIZONTAL);
-                    slider->minimum(minV);
-                    int maxS = maxV;
+                widget->value(content);
+                widget->default_value(content);
+                widget->align(FL_ALIGN_LEFT);
+                widget->color(colB);
+                widget->setEnabled(editable);
+                widget->when(when);
 
-                    if (content > 100000 && maxV <= 100000)
-                        maxS = 1000000;
-                    else if (content > 10000 && maxV <= 10000)
-                        maxS = 100000;
-                    else if (content > 1000 && maxV <= 1000)
-                        maxS = 10000;
-                    else if (content > 100 && maxV <= 100)
-                        maxS = 1000;
-                    else if (content > maxS)
-                        maxS = content + 50;
-                    slider->maximum(maxS);
+                if (callback)
+                    widget->callback(callback, this);
 
-                    slider->value(content);
-                    slider->step(1.0);
-                    // slider->slider_size(10);
-                    if (tooltip)
-                        slider->tooltip(tooltip);
-                    else
-                        slider->tooltip(lbl->label());
-                    slider->when(when);
-                    slider->callback((Fl_Callback*)int_slider_cb, widget);
-
-                    p->resizable(slider);
-                }
                 p->end();
                 m_curr->add(p);
                 if (!active)
@@ -1352,7 +1321,7 @@ namespace mrv
 
                     slider->maximum(maxS);
                     slider->value(content);
-                    slider->step(1.0);
+                    slider->step(1.0F);
                     if (tooltip)
                         slider->tooltip(tooltip);
                     else
@@ -1544,8 +1513,7 @@ namespace mrv
         void ImageInfoPanel::add_float(
             const char* name, const char* tooltip, const float content,
             const bool editable, const bool active, Fl_Callback* callback,
-            const float minV, float maxV, const int when,
-            const mrv::Slider::SliderType type)
+            const float minV, float maxV, const int when)
         {
 
             Fl_Color colA = get_title_color();
@@ -1596,6 +1564,7 @@ namespace mrv
 
                 widget->range(minV, maxS);
                 widget->setEnabled(editable);
+                widget->when(when);
 
                 if (tooltip)
                     widget->tooltip(tooltip);
@@ -1675,6 +1644,143 @@ namespace mrv
             m_curr->end();
         }
 
+        void ImageInfoPanel::fill_image_data()
+        {
+            m_image->hide();
+
+            if (!m_image->is_open())
+            {
+                m_image->show();
+                return;
+            }
+
+            m_image->clear();
+
+            char buf[1024];
+            m_curr = add_browser(m_image);
+
+            const auto info = player->ioInfo();
+            unsigned num_video_streams = info.video.size();
+
+            unsigned num_audio_streams = 0;
+            if (info.audio.isValid())
+                num_audio_streams = info.audio.trackCount;
+
+            const auto& path = player->path();
+            const auto& directory = path.getDirectory();
+
+            const auto& audioPath = player->audioPath();
+            const otime::RationalTime& time = player->currentTime();
+
+            const auto& fullname = createStringFromPathAndTime(path, time);
+
+            add_text(
+                _("Directory"), _("Directory where clip resides"), directory);
+
+            add_text(_("Filename"), _("Filename of the clip"), fullname);
+
+            if (!audioPath.isEmpty() && path != audioPath)
+            {
+                add_text(
+                    _("Audio Directory"),
+                    _("Directory where audio clip resides"),
+                    audioPath.getDirectory());
+
+                add_text(
+                    _("Audio Filename"), _("Filename of the audio clip"),
+                    audioPath.get(-1, tl::file::PathType::FileName));
+            }
+
+            ++group;
+
+            add_int(
+                _("Video Streams"), _("Number of video streams in file"),
+                num_video_streams);
+            add_int(
+                _("Audio Streams"), _("Number of audio streams in file"),
+                num_audio_streams);
+            // add_int( _("Subtitle Streams"),
+            //          _("Number of subtitle streams in file"),
+            //          num_subtitle_streams );
+
+            const auto& range = player->timeRange();
+            const auto& startTime = range.start_time();
+            const auto& endTime = range.end_time_inclusive();
+            add_time(
+                _("Start Time"), _("Beginning frame of clip"), startTime,
+                false);
+            add_time(_("End Time"), _("Ending frame of clip"), endTime, false);
+
+            const otime::TimeRange& iorange = player->inOutRange();
+            int64_t first = iorange.start_time().to_frames();
+            int64_t last = iorange.end_time_inclusive().to_frames();
+
+            add_int(
+                _("First Frame"), _("First frame of clip - User selected"),
+                (int)first, true, true, (Fl_Callback*)change_first_frame_cb,
+                first, last);
+            add_int(
+                _("Last Frame"), _("Last frame of clip - User selected"),
+                (int)last, true, true, (Fl_Callback*)change_last_frame_cb,
+                first, last);
+
+            const char* name = "";
+            double fps = player->defaultSpeed();
+
+            if (is_equal(fps, 29.97))
+                name = "(NTSC)";
+            else if (is_equal(fps, 30.0))
+                name = "(60hz HDTV)";
+            else if (is_equal(fps, 25.0))
+                name = "(PAL)";
+            else if (is_equal(fps, 24.0))
+                name = "(Film)";
+            else if (is_equal(fps, 50.0))
+                name = _("(PAL Fields)");
+            else if (is_equal(fps, 59.940059))
+                name = _("(NTSC Fields)");
+
+            snprintf(buf, 256, "%g %s", fps, name);
+
+            add_text(
+                _("Default Speed"), _("Default Speed in Frames per Second"),
+                buf);
+
+            fps = player->speed();
+            add_float(
+                _("Current Speed"), _("Current Speed (Frames Per Second)"), fps,
+                true, true, (Fl_Callback*)change_fps_cb, 1.0f, 60.0f,
+                FL_WHEN_RELEASE);
+
+            ++group;
+
+            struct stat file_stat;
+            const std::string& filename = directory + fullname;
+
+            if (stat(filename.c_str(), &file_stat) == 0)
+            {
+                // Get file size
+                std::uintmax_t filesize = fs::file_size(filename);
+                add_memory(_("Disk space"), _("Disk space"), filesize);
+
+                // Retrieve last modification time
+                time_t mod_time = file_stat.st_mtime;
+                time_t creation_time = file_stat.st_ctime;
+
+                // Format time according to current locale
+                strftime(buf, sizeof(buf), "%c", localtime(&creation_time));
+                add_text(_("Creation Date"), _("Creation date of file"), buf);
+
+                // Format time according to current locale
+                strftime(buf, sizeof(buf), "%c", localtime(&mod_time));
+                add_text(
+                    _("Modified Date"), _("Last modified date of file"), buf);
+            }
+
+            m_image->end();
+            m_image->show();
+        }
+
         void ImageInfoPanel::fill_data()
         {
             if (!player)
@@ -1684,170 +1790,21 @@ namespace mrv
 
             kMiddle = g->w() / 2;
 
-            char buf[1024];
-            m_curr = add_browser(m_image);
-
-            const auto tplayer = player->player();
-            if (!tplayer)
-                return;
-
-            const auto& info = tplayer->getIOInfo();
+            const auto& info = player->ioInfo();
             unsigned num_video_streams = info.video.size();
-            // @todo: tlRender does not handle multiple audio tracks
-            unsigned num_audio_streams = 0;
 
+            unsigned num_audio_streams = 0;
             if (info.audio.isValid())
                 num_audio_streams = info.audio.trackCount;
 
             // @todo: tlRender does not handle subtitle tracks
             unsigned num_subtitle_streams = 0;
 
-            if (m_image->is_open())
-            {
-                const auto& path = player->path();
-                const auto& directory = path.getDirectory();
-
-                const auto& audioPath = player->audioPath();
-                const otime::RationalTime& time = player->currentTime();
-
-                const auto& fullname = createStringFromPathAndTime(path, time);
-
-                add_text(
-                    _("Directory"), _("Directory where clip resides"),
-                    directory);
-
-                add_text(_("Filename"), _("Filename of the clip"), fullname);
-
-                if (!audioPath.isEmpty() && path != audioPath)
-                {
-                    add_text(
-                        _("Audio Directory"),
-                        _("Directory where audio clip resides"),
-                        audioPath.getDirectory());
-
-                    add_text(
-                        _("Audio Filename"), _("Filename of the audio clip"),
-                        audioPath.get(-1, tl::file::PathType::FileName));
-                }
-
-                ++group;
-
-                add_int(
-                    _("Video Streams"), _("Number of video streams in file"),
-                    num_video_streams);
-                add_int(
-                    _("Audio Streams"), _("Number of audio streams in file"),
-                    num_audio_streams);
-                // add_int( _("Subtitle Streams"),
-                //          _("Number of subtitle streams in file"),
-                //          num_subtitle_streams );
-
-                const auto& range = player->timeRange();
-                const auto& startTime = range.start_time();
-                const auto& endTime = range.end_time_inclusive();
-                add_time(
-                    _("Start Time"), _("Beginning frame of clip"), startTime,
-                    false);
-                add_time(
-                    _("End Time"), _("Ending frame of clip"), endTime, false);
-
-                const otime::TimeRange& iorange = player->inOutRange();
-                int64_t first = iorange.start_time().to_frames();
-                int64_t last = iorange.end_time_inclusive().to_frames();
-
-                add_int(
-                    _("First Frame"), _("First frame of clip - User selected"),
-                    (int)first, true, true, (Fl_Callback*)change_first_frame_cb,
-                    first, last);
-                add_int(
-                    _("Last Frame"), _("Last frame of clip - User selected"),
-                    (int)last, true, true, (Fl_Callback*)change_last_frame_cb,
-                    2, last);
-
-                const char* name = "";
-                double fps = player->defaultSpeed();
-
-                if (is_equal(fps, 29.97))
-                    name = "(NTSC)";
-                else if (is_equal(fps, 30.0))
-                    name = "(60hz HDTV)";
-                else if (is_equal(fps, 25.0))
-                    name = "(PAL)";
-                else if (is_equal(fps, 24.0))
-                    name = "(Film)";
-                else if (is_equal(fps, 50.0))
-                    name = _("(PAL Fields)");
-                else if (is_equal(fps, 59.940059))
-                    name = _("(NTSC Fields)");
-
-                snprintf(buf, 256, "%g %s", fps, name);
-
-                add_text(
-                    _("Default Speed"), _("Default Speed in Frames per Second"),
-                    buf);
-
-                fps = player->speed();
-                add_float(
-                    _("Current Speed"), _("Current Speed (Frames Per Second)"),
-                    fps, true, true, (Fl_Callback*)change_fps_cb, 1.0f, 60.0f,
-                    FL_WHEN_CHANGED);
-
-                ++group;
-
-                struct stat file_stat;
-                const std::string& filename = directory + fullname;
-
-                if (stat(filename.c_str(), &file_stat) == 0)
-                {
-                    // Get file size
-                    std::uintmax_t filesize = fs::file_size(filename);
-                    add_memory(_("Disk space"), _("Disk space"), filesize);
-
-                    // Retrieve last modification time
-                    time_t mod_time = file_stat.st_mtime;
-                    time_t creation_time = file_stat.st_ctime;
-
-                    // Format time according to current locale
-                    strftime(buf, sizeof(buf), "%c", localtime(&creation_time));
-                    add_text(
-                        _("Creation Date"), _("Creation date of file"), buf);
-
-                    // Format time according to current locale
-                    strftime(buf, sizeof(buf), "%c", localtime(&mod_time));
-                    add_text(
-                        _("Modified Date"), _("Last modified date of file"),
-                        buf);
-                }
-
-                ++group;
-            }
-
-            m_image->show();
-
-            const auto view = _p->ui->uiView;
-            const auto& videoData = view->getVideoData();
+            fill_image_data();
 
             // First, check the metadata
-            std::map<std::string, std::string, string::CaseInsensitiveCompare>
-                tagData;
-            image::Tags tags;
 
-            // First, add global tags
-            for (const auto& tag : info.tags)
-            {
-                tagData[tag.first] = tag.second;
-            }
-
-            // Then add image tags
-            if (!videoData.empty() && !videoData[0].layers.empty() &&
-                videoData[0].layers[0].image)
-            {
-                tags = videoData[0].layers[0].image->getTags();
-                for (const auto& tag : tags)
-                {
-                    tagData[tag.first] = tag.second;
-                }
-            }
+            _getTags();
 
             if (num_video_streams > 0)
             {
@@ -2196,17 +2153,32 @@ namespace mrv
                     add_time( _("Start"), _("Start of Subtitle"), s.start, img->fps() );
                     add_time( _("Duration"), _("Duration of Subtitle"),
                               s.duration, img->fps() );
-
-                    //    m_curr->layout();
-                    //     m_curr->parent()->layout();
                 }
 
                 m_subtitle->show();
             }
 #endif
 
-            if (!tagData.empty())
-                m_curr = add_browser(m_attributes);
+            fill_metadata();
+        }
+
+        void ImageInfoPanel::fill_metadata()
+        {
+            m_attributes->hide();
+
+            if (tagData.empty())
+                return;
+
+            if (!m_attributes->is_open())
+            {
+                m_attributes->show();
+                return;
+            }
+
+            m_attributes->clear();
+
+            m_curr = add_browser(m_attributes);
+
             for (const auto& item : tagData)
             {
                 bool skip = false;
@@ -2224,8 +2196,36 @@ namespace mrv
             }
 
             m_attributes->show();
+            m_attributes->end();
         }
 
+        void ImageInfoPanel::_getTags()
+        {
+            tagData.clear();
+
+            const auto& info = player->ioInfo();
+
+            // First, add global tags
+            for (const auto& tag : info.tags)
+            {
+                tagData[tag.first] = tag.second;
+            }
+
+            const auto view = _p->ui->uiView;
+            const auto videoData = view->getVideoData();
+
+            // Then add image tags
+            if (!videoData.empty() && !videoData[0].layers.empty() &&
+                videoData[0].layers[0].image)
+            {
+                const image::Tags& tags =
+                    videoData[0].layers[0].image->getTags();
+                for (const auto& tag : tags)
+                {
+                    tagData[tag.first] = tag.second;
+                }
+            }
+        }
     } // namespace panel
 
 } // namespace mrv

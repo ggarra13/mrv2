@@ -34,6 +34,8 @@ namespace mrv
         void value(double x) noexcept;
         double value() const noexcept;
 
+        void when(uchar i);
+
         void textcolor(Fl_Color c) { uiValue->textcolor(c); }
         void textsize(int x) { uiValue->textsize(x); }
         void tooltip(const char* t);

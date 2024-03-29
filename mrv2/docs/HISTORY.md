@@ -18,17 +18,19 @@ v1.1.1
 - Fixed line error reporting in Python's Output (pybind11 bug).
 - Added Editor/Jump to Error to Python Panel.  You can select the line of the
   error in the Python output and the Editor will jump to the offending line.
-  If you don't select anything in the Python output, it will jump to the last error
-  counting from the bottom.
+  If you don't select anything in the Python output, it will jump to the last
+  error counting from the bottom.
   It will skip errors from files that are <frozen ...>, like importlib.
-  If the error is on a file and not from the Python Editor, mrv2 will try to open
-  an external editor and jump to the line of it.
+  If the error is on a file and not from the Python Editor, mrv2 will try to
+  open an external editor and jump to the line of it.
   The editor to use is taken from the EDITOR environment variable first.
   If not set, mrv2 will try to use one of the popular editors.  Its defaults
   supports the syntax for emacs, gvim, vim, VS Code, notepad++ and nano.
   The preferred editor is checked at start up based on what you have installed
-  on your PATH and whether you are running interactively or also have a terminal.
+  on your PATH and whether you are running interactively or also have a
+  terminal.
   Visual editors are given preference over terminal editors.
+  Of course, you can edit the editor with Python Panel->Editor/External Editor.
 - Fixed Python error reporting in the Python Output of the Python Panel for
   mrv2 python plug-ins.
 - Fixed message that said it was saving a movie without audio when saving
@@ -41,8 +43,18 @@ v1.1.1
 - Improved the main web page for mrv2.
 - Fixed translation of "Color" in Panels.  Of course, since English and
   Spanish use the same word, this still makes no difference :D!
+- Fixed the name of the video stream in the Media Info Panel to be like the
+  layer name listed in the Panels and in the Color Channel pull down.
 - Added back truehd decoder and encoder which were removed from
   TLRENDER_FFMPEG_MINIMAL compilations.
+- Sped up redrawing when the Media Info Panel was open, as we know refresh
+  only the tabs that change.
+- Fixed changing the first and last frames from the Media Info Panel.
+- Modified int sliders to use HorSlider instead to make it consistant.
+- Fixed (very slow) changing speed from the Media Info Panel.
+- Fixed HorSlider resizing improperly when values were bigger than 10000 or
+  smaller than -10000.
+ 
 
 
 v1.1.0
