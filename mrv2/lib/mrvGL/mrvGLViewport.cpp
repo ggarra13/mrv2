@@ -594,7 +594,9 @@ namespace mrv
             _drawGL2TextShapes();
         Fl_Gl_Window::draw_end(); // Restore GL state
 #else
+#    ifndef NO_GL_WINDOW_CHILDREN 
         Fl_Gl_Window::draw();
+#    endif
 #endif
 
 #ifdef DEBUG_SPEED

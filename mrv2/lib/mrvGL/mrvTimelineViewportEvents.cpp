@@ -385,6 +385,7 @@ namespace mrv
             draw::Point pnt(_getRasterf());
 
             shape->pts.push_back(pnt); // needed
+
             annotation->push_back(shape);
             // Calculate offset from corner due to cross and the bottom of
             // the font.
@@ -1471,6 +1472,9 @@ namespace mrv
         const auto& renderSize = getRenderSize();
         float pct = renderSize.h / 1024.F;
 
+        const math::Vector2i offset(
+            kCrossSize + 2, kCrossSize + fl_height() - fl_descent());
+        
 #ifdef USE_OPENGL2
         auto shape = dynamic_cast<GL2TextShape*>(s.get());
         if (!shape)
@@ -1481,8 +1485,6 @@ namespace mrv
             shape->fontSize * shape->viewZoom / devicePixelRatio;
         fl_font(shape->font, fontsize);
 
-        const math::Vector2i offset(
-            kCrossSize + 2, kCrossSize + fl_height() - fl_descent());
         math::Vector2i pos(
             shape->pts[0].x * shape->viewZoom + p.viewPos.x,
             shape->pts[0].y * shape->viewZoom + p.viewPos.y);
@@ -1495,6 +1497,23 @@ namespace mrv
         auto w = new MultilineInput(pos.x, pos.y, 20, 30 * pct * p.viewZoom);
         w->take_focus();
         w->textfont(shape->font);
+        w->textsize(shape->fontSize);
+        w->value(shape->text.c_str(), shape->text.size());
+        w->recalc();
+#else
+        auto shape = dynamic_cast<GLTextShape*>(s.get());
+        if (!shape)
+            return;
+
+        math::Vector2i pos(
+            shape->pts[0].x + p.viewPos.x, -shape->pts[0].y - p.viewPos.y);
+
+        pos.x -= offset.x;
+        pos.y -= offset.y;
+
+        auto w = new MultilineInput(pos.x, pos.y, 20, 30 * pct * p.viewZoom);
+        w->take_focus();
+        w->fontFamily = shape->fontFamily;
         w->textsize(shape->fontSize);
         w->value(shape->text.c_str(), shape->text.size());
         w->recalc();
