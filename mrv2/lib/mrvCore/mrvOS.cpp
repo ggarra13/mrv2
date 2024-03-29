@@ -1,5 +1,7 @@
 #ifndef _WIN32
 #    include <unistd.h>
+#else
+#    include <FL/Fl.H>
 #endif
 
 #include <fstream>
