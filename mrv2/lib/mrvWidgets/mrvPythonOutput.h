@@ -15,4 +15,6 @@ namespace mrv
 
         int handle(int e) override;
     };
+
+    extern PythonOutput* outputDisplay;
 } // namespace mrv

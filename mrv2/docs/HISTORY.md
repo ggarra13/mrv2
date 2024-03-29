@@ -15,6 +15,11 @@ v1.1.1
 - Fixed saving movies with annotations at half or quarter resolution.
 - Fixed an ugly bug on Linux when saving movies with annotations repeating
   every other frame (ie. saving on two's).
+- Fixed line error reporting in Python's Output (pybind11 bug).
+- Added Editor/Jump to Error to Python Panel.  You can select the line of the
+  error in the Python output and the Editor will jump to it.  If you don't
+  select anything in the Python output, it will jump to the last error counting
+  from the bottom.
 
 
 v1.1.0

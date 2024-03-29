@@ -36,6 +36,7 @@ namespace py = pybind11;
 #include "mrvFl/mrvTimelinePlayer.h"
 
 #include "mrvWidgets/mrvLogDisplay.h"
+#include "mrvWidgets/mrvPythonOutput.h"
 
 #include "mrvGL/mrvGLViewport.h"
 
@@ -572,14 +573,17 @@ namespace mrv
         Preferences::run(ui);
 
 #ifdef MRV2_PYBIND11
+        // Create Python's output window
+        outputDisplay = new PythonOutput(0, 0, 400, 400);
+
+        // Redirect Python's stdout/stderr to my own class
+        p.pythonStdErrOutRedirect.reset(new PyStdErrOutStreamRedirect);
+
         // Import the mrv2 python module so we read all python
         // plug-ins.
         py::module::import("mrv2");
 
-        // Redirect stdout/stderr to my own class
-        p.pythonStdErrOutRedirect.reset(new PyStdErrOutStreamRedirect);
-
-        // Discover python plugins
+        // Discover Python plugins
         mrv2_discover_python_plugins();
 #endif
 
@@ -663,9 +667,9 @@ namespace mrv
                     {
                         if (msg == lastErrorMessage)
                             continue;
-                    
+
                         lastErrorMessage = msg;
-                        
+
                         LOG_ERROR(msg);
                         break;
                     }
@@ -673,9 +677,9 @@ namespace mrv
                     {
                         if (msg == lastWarningMessage)
                             continue;
-                        
+
                         lastWarningMessage = msg;
-                        
+
                         LOG_WARNING(msg);
                         break;
                     }
@@ -683,9 +687,9 @@ namespace mrv
                     {
                         if (msg == lastStatusMessage)
                             continue;
-                        
+
                         lastStatusMessage = msg;
-                        
+
                         LOG_INFO(msg);
                         break;
                     }
@@ -1475,7 +1479,7 @@ namespace mrv
         TLRENDER_P();
         if (!p.player)
             return;
-        
+
         uint64_t Gbytes =
             static_cast<uint64_t>(p.settings->getValue<int>("Cache/GBytes"));
 

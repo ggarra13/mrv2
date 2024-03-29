@@ -10,9 +10,12 @@
 #include <FL/Fl_Box.H>
 #include <FL/fl_ask.H>
 
+#include <cstdlib>
 #include <iostream>
 #include <fstream>
+#include <regex>
 #include <sstream>
+#include <string>
 #include <filesystem>
 namespace fs = std::filesystem;
 
@@ -38,13 +41,92 @@ namespace py = pybind11;
 
 #include "mrViewer.h"
 
+#define PYBIND11_LINE_BUG // Line numbers reported by pybind11 can be off by one
+                          // +.
+
 namespace
 {
     const char* kModule = "pypanel";
-}
+
+    // // Regex to parse python error lines (works but catches frozen
+    const std::regex kRE_PYTHON_ERROR(
+        R"(\s*<?(?:([^>\(]+)>?)?(,\s+line\s+)?(?:\(?(\d+)\)))");
+
+    // const std::regex
+    //        kRE_PYTHON_ERROR(R"(<(?:([^>\(]+)>?)?(,\s+line\s+)?(?:\(?(\d+)\)))");
+
+} // namespace
+
+namespace
+{
+
+    std::pair<std::string, int> getFileInfoFromError(const std::string& error)
+    {
+        std::smatch match;
+        if (std::regex_search(error, match, kRE_PYTHON_ERROR))
+        {
+            // Extract relevant information
+            std::string filename = match[1].matched ? match[1].str() : "";
+            int line_number = match[3].matched ? std::stoi(match[3].str()) : -1;
+            return {filename, line_number};
+        }
+        else
+        {
+            // Handle cases where the regex doesn't match (e.g., different error
+            // format)
+            return {"", -1};
+        }
+    }
+
+#ifdef PYBIND11_LINE_BUG
+    std::string fixPyBind11LineError(const std::string& error)
+    {
+        std::string out = error;
+        std::cerr << "fix: " << error << std::endl;
+        std::regex_iterator<std::string::const_iterator> rit(
+            out.begin(), out.end(), kRE_PYTHON_ERROR);
+        std::regex_iterator<std::string::const_iterator> rend;
+
+        size_t offset = 0; // start offset
+        while (rit != rend)
+        {
+            const std::smatch& match = *rit;
+
+            // Extract information
+            std::string filename = match[1].str();
+            std::string linestr = match[2].matched ? match[2].str() : "";
+            int line_number =
+                match[3].matched ? std::stoi(match[3].str()) - 1 : -1;
+
+            // Construct the replacement string with modified line number
+            std::string replacement;
+            if (linestr.empty())
+                replacement =
+                    "<" + filename + ">(" + std::to_string(line_number) + ")";
+            else
+                replacement = "<" + filename + ">" + linestr +
+                              std::to_string(line_number) + ")";
+
+            // Perform the replacement
+            out.replace(rit->position() + offset, rit->length(), replacement);
+            offset += rit->position() + replacement.size();
+
+            // Update iterator to search from the end of the replaced match
+            rit = std::regex_iterator<std::string::const_iterator>(
+                out.begin() + offset, out.end(), kRE_PYTHON_ERROR);
+        }
+
+        return out;
+    }
+#endif
+
+} // namespace
 
 namespace mrv
 {
+
+    PythonOutput* outputDisplay = nullptr;
+
     namespace panel
     {
 
@@ -66,7 +148,6 @@ namespace mrv
         //! closes the Python Panel
         static Fl_Text_Buffer* textBuffer = nullptr;
         static Fl_Text_Buffer* styleBuffer = nullptr;
-        static PythonOutput* outputDisplay = nullptr;
 
         struct PythonPanel::Private
         {
@@ -271,7 +352,6 @@ namespace mrv
             menu->add(
                 _("&Edit/&Uncomment Selection"), FL_F + 11,
                 (Fl_Callback*)uncomment_text_cb, this);
-            // @todo: add search/replace
             menu->add(
                 _("&Search/&Find..."), FL_COMMAND + 'f', (Fl_Callback*)find_cb,
                 _r->pythonEditor);
@@ -302,6 +382,12 @@ namespace mrv
             menu->add(
                 _("Editor/Toggle &Line Numbers"), 0,
                 (Fl_Callback*)toggle_line_numbers_cb, this, FL_MENU_TOGGLE);
+            menu->add(
+                _("Editor/&Jump to Error"), FL_COMMAND + 'j',
+                (Fl_Callback*)jump_to_error_cb, this, FL_MENU_DIVIDER);
+            menu->add(
+                _("Editor/&External Editor"), 0,
+                (Fl_Callback*)external_editor_cb, this, FL_MENU_DIVIDER);
             menu->add(
                 _("Scripts/Add To Script List"), 0,
                 (Fl_Callback*)add_to_script_list_cb, this, FL_MENU_DIVIDER);
@@ -354,13 +440,9 @@ namespace mrv
             {
                 styleBuffer = new Fl_Text_Buffer;
                 textBuffer = new Fl_Text_Buffer;
-                outputDisplay =
-                    new PythonOutput(tile->x(), tile->y(), tile->w(), M);
             }
-            else
-            {
-                outputDisplay->resize(tile->x(), tile->y(), tile->w(), M);
-            }
+
+            outputDisplay->resize(tile->x(), tile->y(), tile->w(), M);
 
             tile->add(outputDisplay);
 
@@ -391,6 +473,17 @@ namespace mrv
 import mrv2
 from mrv2 import annotations, cmd, math, image, io, media
 from mrv2 import playlist, timeline, usd, session, settings
+
+class A:
+    def __init__(self):
+        self.out = 'aaa'
+        self.output()
+
+    def output(self):
+        print(self.out)
+        print(self.nothing)
+
+a = A()
 
 )PYTHON");
             }
@@ -424,6 +517,10 @@ from mrv2 import playlist, timeline, usd, session, settings
             const std::string& eval = e->eval();
             const std::string& var = e->variable();
 
+            // Clear the output display selection
+            Fl_Text_Buffer* buffer = outputDisplay->buffer();
+            buffer->select(0, 0);
+
             outputDisplay->output(code.c_str());
             if (!eval.empty() && eval != var)
             {
@@ -440,7 +537,12 @@ from mrv2 import playlist, timeline, usd, session, settings
             }
             catch (const std::exception& e)
             {
-                outputDisplay->error(e.what());
+#ifdef PYBIND11_LINE_BUG
+                const std::string& error = fixPyBind11LineError(e.what());
+#else
+                const std::string& error = e.what();
+#endif
+                outputDisplay->error(error.c_str());
             }
         }
 
@@ -514,6 +616,115 @@ from mrv2 import playlist, timeline, usd, session, settings
             buffer->remove(0, buffer->length());
         }
 
+        void PythonPanel::external_editor()
+        {
+            std::cerr << "external editor" << std::endl;
+            Fl_Group::current(0);
+            Fl_Double_Window win(500, 80, _("Type your editor command"));
+            win.begin();
+            Fl_Input input(10, 10, win.w() - 20, win.h() - 20);
+            auto settings = App::app->settings();
+            auto editor = settings->getValue<std::string>("Python/Editor");
+            input.textcolor(FL_BLACK);
+            input.value(editor.c_str());
+            win.set_modal();
+            win.show();
+            while (win.shown())
+                Fl::check();
+        }
+
+        void PythonPanel::jump_to_error()
+        {
+            Fl_Text_Buffer* buffer = outputDisplay->buffer();
+            Fl_Text_Selection* selection = buffer->primary_selection();
+
+            int start = selection->start();
+            int end = selection->end();
+
+            char* text = nullptr;
+            if (!selection->selected())
+            {
+                // Nothing selected, look in outputDisplay for last error.
+                end = buffer->length();
+                start = buffer->line_start(end);
+                try
+                {
+                    while (start > 0)
+                    {
+                        end = buffer->line_end(start);
+                        text = buffer->line_text(start);
+                        if (text && strlen(text) > 0)
+                        {
+                            auto [file, line] = getFileInfoFromError(text);
+                            if (line > 0)
+                            {
+                                break;
+                            }
+                        }
+                        start = buffer->rewind_lines(end, 1);
+                        free(text);
+                        text = nullptr;
+                    }
+                }
+                catch (const std::regex_error& e)
+                {
+                    std::string msg =
+                        tl::string::Format(_("Regular expression error: {0}"))
+                            .arg(e.what());
+                    LOG_ERROR(msg);
+                }
+            }
+            else
+            {
+                start = buffer->line_start(start);
+                end = buffer->line_end(end);
+            }
+
+            buffer->select(start, end);
+            text = buffer->selection_text();
+            if (!text || strlen(text) == 0)
+                return;
+
+            try
+            {
+                auto [file, line] = getFileInfoFromError(text);
+                if (file == "string" && line > 0)
+                {
+                    buffer = _r->pythonEditor->buffer();
+
+                    --line; // lines in buffer begin at 0
+
+                    // Sanity check just in case....
+                    int numLines = buffer->count_lines(0, buffer->length());
+                    if (line > numLines)
+                        line = numLines;
+
+                    start = buffer->skip_lines(0, line);
+                    end = buffer->line_end(start);
+                    buffer->select(start, end);
+                }
+                else
+                {
+                    auto settings = App::app->settings();
+                    auto editor =
+                        settings->getValue<std::string>("Python/Editor");
+                    std::string command =
+                        string::Format(editor).arg(line).arg(file);
+                    LOG_INFO(command);
+                    std::system(command.c_str());
+                }
+            }
+            catch (const std::regex_error& e)
+            {
+                std::string msg =
+                    tl::string::Format(_("Regular expression error: {0}"))
+                        .arg(e.what());
+                LOG_ERROR(msg);
+            }
+
+            free(text);
+        }
+
         void PythonPanel::toggle_line_numbers(Fl_Menu_* m)
         {
             const Fl_Menu_Item* i = m->mvalue();
@@ -569,6 +780,16 @@ from mrv2 import playlist, timeline, usd, session, settings
         void PythonPanel::toggle_line_numbers_cb(Fl_Menu_* m, PythonPanel* o)
         {
             o->toggle_line_numbers(m);
+        }
+
+        void PythonPanel::jump_to_error_cb(Fl_Menu_* m, PythonPanel* o)
+        {
+            o->jump_to_error();
+        }
+
+        void PythonPanel::external_editor_cb(Fl_Menu_* m, PythonPanel* o)
+        {
+            o->external_editor();
         }
 
         void PythonPanel::cut_text()

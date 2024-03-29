@@ -102,6 +102,7 @@ namespace mrv
         catch (const std::exception& e)
         {
             LOG_ERROR(e.what());
+            outputDisplay->error(e.what());
         }
     }
 

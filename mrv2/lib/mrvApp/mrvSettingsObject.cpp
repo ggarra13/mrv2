@@ -160,6 +160,41 @@ namespace mrv
         p.defaultValues["SaveMovie/Preset"] = std::string("good");
 
         p.defaultValues["SaveMovie/AudioCodec"] = std::string("AAC");
+
+        std::string command = "vim"; // Use vim as default
+        char* editor = fl_getenv("EDITOR");
+        if (editor)
+        {
+            command = editor;
+        }
+        else
+        {
+#ifdef _WIN32
+            command = "notepad++";
+#else
+            command = "emacs";
+#endif
+        }
+
+        if (command.substr(0, 5) == "emacs" || command.substr(0, 3) == "vim" ||
+            command.substr(0, 4) == "nano")
+        {
+            command += " +{0} '{1}'";
+        }
+        else if (command.substr(0, 9) == "notepad++")
+        {
+            command += " -n{0} '{1}'";
+        }
+        else if (command.substr(0, 4) == "code")
+        {
+            command += " '{1}:{0}'";
+        }
+        else if (command.substr(0, 7) == "pycharm")
+        {
+            command += " --line {0} '{1}'";
+        }
+
+        p.defaultValues["Python/Editor"] = command;
     }
 
     SettingsObject::~SettingsObject() {}
