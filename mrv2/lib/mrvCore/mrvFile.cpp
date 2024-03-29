@@ -196,7 +196,7 @@ namespace mrv
         {
 #ifdef _WIN32
             char full_path[_MAX_PATH];
-            if (_searchenv(command.c_str(), full_path, _MAX_PATH) == 0)
+            if (_searchenv(command.c_str(), "PATH", full_path) == 0)
             {
                 return true; // Command found in path
             }

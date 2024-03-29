@@ -179,7 +179,11 @@ namespace mrv
         else
         {
 #ifdef _WIN32
-            command = "notepad++.exe";
+            command = "emacs.exe";
+            if (!file::isInPath(command))
+                command = "gvim.exe";
+            if (!file::isInPath(command))
+                command = "notepad++.exe";
             if (!file::isInPath(command))
                 command = "notepad.exe";
 #elif defined(__linux__)
