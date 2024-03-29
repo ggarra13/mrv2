@@ -212,7 +212,7 @@ namespace mrv
 
             auto audioTime = time::invalidTimeRange;
             const double sampleRate = info.audio.sampleRate;
-            const bool hasAudio = info.audio.isValid();
+            bool hasAudio = info.audio.isValid();
             if (hasAudio)
             {
                 audioTime = info.audioTime;
