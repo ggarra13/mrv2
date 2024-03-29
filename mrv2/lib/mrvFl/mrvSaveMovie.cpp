@@ -183,10 +183,15 @@ namespace mrv
                 }
             }
 
-            bool isMovie = file::isMovie(extension);
+            const bool isMovie = file::isMovie(extension);
+            const bool isAudio = file::isAudio(extension);
             if (isMovie)
             {
                 msg = string::Format(_("Saving movie to {0}.")).arg(newFile);
+            }
+            else if (isAudio)
+            {
+                msg = string::Format(_("Saving audio to {0}.")).arg(newFile);
             }
             else
             {
@@ -522,9 +527,9 @@ namespace mrv
 
             char title[1024];
 
+#ifdef TLRENDER_FFMPEG
             if (hasVideo && isMovie)
             {
-#ifdef TLRENDER_FFMPEG
                 if (static_cast<ffmpeg::AudioCodec>(options.ffmpegAudioCodec) ==
                         ffmpeg::AudioCodec::None ||
                     !hasAudio)
@@ -537,19 +542,28 @@ namespace mrv
                         title, 1024,
                         _("Saving Movie with Audio %" PRId64 " - %" PRId64),
                         startFrame, endFrame);
-#else
+            }
+            else if (hasAudio && isAudio)
+            {
+                snprintf(
+                    title, 1024, _("Saving Audio %" PRId64 " - %" PRId64),
+                    startFrame, endFrame);
+            }
+            else
+#endif
+                if (hasVideo && !isMovie && !isAudio)
+            {
                 snprintf(
                     title, 1024,
                     _("Saving Pictures without Audio %" PRId64 " - %" PRId64),
                     startFrame, endFrame);
                 hasAudio = false;
-#endif
             }
             else
             {
-                snprintf(
-                    title, 1024, _("Saving Audio %" PRId64 " - %" PRId64),
-                    startFrame, endFrame);
+                LOG_ERROR(
+                    _("Audio only in timeline, but not trying to save audio."));
+                return;
             }
 
             ProgressReport progress(ui->uiMain, startFrame, endFrame, title);
