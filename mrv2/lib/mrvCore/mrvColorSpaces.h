@@ -146,6 +146,9 @@ namespace mrv
         void
         checkLevels(image::Color4f& rgba, const image::VideoLevels videoLevels);
 
+        //! Convert tlRender's layer to more human readable ones.
+        std::string layer(const std::string tlRenderLayer);
+
     } // namespace color
 
 } // namespace mrv

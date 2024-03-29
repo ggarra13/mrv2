@@ -17,6 +17,7 @@ namespace fs = std::filesystem;
 #include <FL/Fl_Int_Input.H>
 #include <FL/fl_draw.H>
 
+#include "mrvCore/mrvColorSpaces.h"
 #include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvUtil.h"
 #include "mrvCore/mrvSequence.h"
@@ -499,7 +500,6 @@ namespace mrv
 
             Y += m_audio->h();
 
-            
             m_subtitle = new CollapsibleGroup(g->x(), Y, W, 400, _("Subtitle"));
             m_subtitle->end();
             b = m_subtitle->button();
@@ -704,8 +704,6 @@ namespace mrv
             m_audio->hide();
             m_subtitle->hide();
             m_attributes->hide();
-
-            
         }
 
         void ImageInfoPanel::set_tabs() const
@@ -744,7 +742,7 @@ namespace mrv
 
         void ImageInfoPanel::refresh()
         {
-            
+
             hide_tabs();
 
             m_image->clear();
@@ -760,12 +758,9 @@ namespace mrv
             m_audio->end();
             m_video->end();
             m_image->end();
-            
 
             if (player)
                 g->end();
-
-            
         }
 
         Table*
@@ -1233,7 +1228,7 @@ namespace mrv
 
                 if (!editable)
                 {
-                    //widget->deactivate();
+                    // widget->deactivate();
                     widget->box(FL_FLAT_BOX);
                 }
                 else
@@ -1387,7 +1382,7 @@ namespace mrv
             char buf[128];
 
             std::string text;
-            
+
             double seconds = content.to_seconds();
             snprintf(buf, 128, _("%.3f seconds "), seconds);
             text += buf;
@@ -1625,11 +1620,11 @@ namespace mrv
         {
             char buf[256];
             const char* space_type = nullptr;
-            const double memory_space = to_memory( content, space_type );
-            snprintf( buf, 256, "%.3f %s", memory_space, space_type );
-            add_text( name, tooltip, buf );
+            const double memory_space = to_memory(content, space_type);
+            snprintf(buf, 256, "%.3f %s", memory_space, space_type);
+            add_text(name, tooltip, buf);
         }
-        
+
         void ImageInfoPanel::add_bool(
             const char* name, const char* tooltip, const bool content,
             const bool editable, Fl_Callback* callback)
@@ -1695,7 +1690,7 @@ namespace mrv
             const auto tplayer = player->player();
             if (!tplayer)
                 return;
-            
+
             const auto& info = tplayer->getIOInfo();
             unsigned num_video_streams = info.video.size();
             // @todo: tlRender does not handle multiple audio tracks
@@ -1703,7 +1698,7 @@ namespace mrv
 
             if (info.audio.isValid())
                 num_audio_streams = info.audio.trackCount;
-            
+
             // @todo: tlRender does not handle subtitle tracks
             unsigned num_subtitle_streams = 0;
 
@@ -1711,14 +1706,15 @@ namespace mrv
             {
                 const auto& path = player->path();
                 const auto& directory = path.getDirectory();
-            
+
                 const auto& audioPath = player->audioPath();
                 const otime::RationalTime& time = player->currentTime();
 
                 const auto& fullname = createStringFromPathAndTime(path, time);
 
                 add_text(
-                    _("Directory"), _("Directory where clip resides"), directory);
+                    _("Directory"), _("Directory where clip resides"),
+                    directory);
 
                 add_text(_("Filename"), _("Filename of the clip"), fullname);
 
@@ -1752,7 +1748,8 @@ namespace mrv
                 add_time(
                     _("Start Time"), _("Beginning frame of clip"), startTime,
                     false);
-                add_time(_("End Time"), _("Ending frame of clip"), endTime, false);
+                add_time(
+                    _("End Time"), _("Ending frame of clip"), endTime, false);
 
                 const otime::TimeRange& iorange = player->inOutRange();
                 int64_t first = iorange.start_time().to_frames();
@@ -1764,9 +1761,8 @@ namespace mrv
                     first, last);
                 add_int(
                     _("Last Frame"), _("Last frame of clip - User selected"),
-                    (int)last, true, true, (Fl_Callback*)change_last_frame_cb, 2,
-                    last);
-
+                    (int)last, true, true, (Fl_Callback*)change_last_frame_cb,
+                    2, last);
 
                 const char* name = "";
                 double fps = player->defaultSpeed();
@@ -1787,53 +1783,53 @@ namespace mrv
                 snprintf(buf, 256, "%g %s", fps, name);
 
                 add_text(
-                    _("Default Speed"),
-                    _("Default Speed in Frames per Second"), buf);
-                    
+                    _("Default Speed"), _("Default Speed in Frames per Second"),
+                    buf);
+
                 fps = player->speed();
                 add_float(
-                    _("Current Speed"),
-                    _("Current Speed (Frames Per Second)"), fps,
-                    true, true, (Fl_Callback*)change_fps_cb, 1.0f, 60.0f,
+                    _("Current Speed"), _("Current Speed (Frames Per Second)"),
+                    fps, true, true, (Fl_Callback*)change_fps_cb, 1.0f, 60.0f,
                     FL_WHEN_CHANGED);
 
                 ++group;
 
                 struct stat file_stat;
                 const std::string& filename = directory + fullname;
-            
+
                 if (stat(filename.c_str(), &file_stat) == 0)
                 {
                     // Get file size
                     std::uintmax_t filesize = fs::file_size(filename);
-                    add_memory(_("Disk space"), _("Disk space"), filesize );
-                
+                    add_memory(_("Disk space"), _("Disk space"), filesize);
+
                     // Retrieve last modification time
                     time_t mod_time = file_stat.st_mtime;
                     time_t creation_time = file_stat.st_ctime;
-        
+
                     // Format time according to current locale
                     strftime(buf, sizeof(buf), "%c", localtime(&creation_time));
-                    add_text(_("Creation Date"), _("Creation date of file"),
-                             buf);
-                
+                    add_text(
+                        _("Creation Date"), _("Creation date of file"), buf);
+
                     // Format time according to current locale
                     strftime(buf, sizeof(buf), "%c", localtime(&mod_time));
-                    add_text(_("Modified Date"), _("Last modified date of file"),
-                             buf);
+                    add_text(
+                        _("Modified Date"), _("Last modified date of file"),
+                        buf);
                 }
 
                 ++group;
             }
-            
+
             m_image->show();
-            
+
             const auto view = _p->ui->uiView;
             const auto& videoData = view->getVideoData();
 
             // First, check the metadata
-            std::map<std::string, std::string,
-                     string::CaseInsensitiveCompare> tagData;
+            std::map<std::string, std::string, string::CaseInsensitiveCompare>
+                tagData;
             image::Tags tags;
 
             // First, add global tags
@@ -1841,8 +1837,7 @@ namespace mrv
             {
                 tagData[tag.first] = tag.second;
             }
-            
-                
+
             // Then add image tags
             if (!videoData.empty() && !videoData[0].layers.empty() &&
                 videoData[0].layers[0].image)
@@ -1854,7 +1849,6 @@ namespace mrv
                 }
             }
 
-            
             if (num_video_streams > 0)
             {
 
@@ -1875,7 +1869,8 @@ namespace mrv
                     const auto& video = info.video[i];
                     const auto& size = video.size;
 
-                    add_text(_("Name"), _("Name"), video.name);
+                    add_text(
+                        _("Name"), _("Name"), mrv::color::layer(video.name));
 
                     float rotation = 0.F;
                     std::string colorPrimaries;
@@ -1946,7 +1941,7 @@ namespace mrv
 
                     if (rotation != 0.F)
                         add_float(_("Rotation"), _("Video Rotation"), rotation);
-                    
+
                     ++group;
 
                     tl::image::PixelType pixelType = video.pixelType;
@@ -2033,7 +2028,7 @@ namespace mrv
                         add_text(
                             _("FFmpeg Pixel Format"), _("FFmpeg Pixel Format"),
                             it->second);
-                    
+
                     format = tl::image::getLabel(pixelType);
 
                     add_text(
@@ -2045,7 +2040,7 @@ namespace mrv
                     {
                         snprintf(buf, 256, "Video Stream #%d:", i + 1);
                         const std::string& match = buf;
-                    
+
                         for (const auto& tag : tagData)
                         {
                             std::string key = tag.first;
@@ -2061,7 +2056,7 @@ namespace mrv
 
                 m_video->show();
             }
-            
+
             if (num_audio_streams > 0)
             {
                 for (int i = 0; i < num_audio_streams; ++i)
@@ -2090,7 +2085,7 @@ namespace mrv
                     auto audio = info.audio;
                     if (i > 0)
                         audio = info.audio.audioInfo[i];
-                    
+
                     auto it = info.tags.find("Audio Codec");
                     if (it != info.tags.end())
                         add_text(_("Codec"), _("Codec"), it->second);
@@ -2225,7 +2220,7 @@ namespace mrv
                 {
                     continue;
                 }
-                add_text( _(item.first.c_str()), "", _(item.second.c_str()));
+                add_text(_(item.first.c_str()), "", _(item.second.c_str()));
             }
 
             m_attributes->show();

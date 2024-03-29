@@ -495,6 +495,7 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
             --enable-decoder=pcm_vidc
             --enable-decoder=prores
             --enable-decoder=rawvideo
+            --enable-decoder=truehd
             --enable-decoder=v210
             --enable-decoder=v210x
             --enable-decoder=v308
@@ -559,6 +560,7 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
             --enable-encoder=prores
             --enable-encoder=prores_ks
             --enable-encoder=rawvideo
+            --enable-encoder=truehd
             --enable-encoder=v210
             --enable-encoder=v308
             --enable-encoder=v408

@@ -8,6 +8,7 @@
 
 #include <Imath/ImathFun.h>
 
+#include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvColorSpaces.h"
 
 using tl::image::Color4f;
@@ -59,8 +60,8 @@ namespace
         if (v > 0.20689303448275862068965517241379f)
             return v * v * v;
         else if (v > 16.0f / 116.0f)
-            return (
-                float)((v - 16.0f / 116.0f) / 7.787037037037037037037037037037f);
+            return (float)((v - 16.0f / 116.0f) /
+                           7.787037037037037037037037037037f);
         else
             return 0.0f;
     }
@@ -479,6 +480,18 @@ namespace mrv
                 rgba.b =
                     (rgba.b - (16.0 / 255.0)) * (255.0 / (240.0 - 16.0)) - 0.5;
             }
+        }
+
+        //! Convert tlRender's layer names to more human readable ones.
+        std::string layer(const std::string layerName)
+        {
+            std::string out = layerName;
+            if (layerName == "B,G,R" || layerName == "R,G,B" ||
+                layerName == "Default")
+                out = _("Color");
+            else if (layerName == "A,B,G,R")
+                out = "R,G,B,A";
+            return out;
         }
 
     } // namespace color

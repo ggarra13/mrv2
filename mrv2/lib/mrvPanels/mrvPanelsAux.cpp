@@ -2,6 +2,8 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include "mrvCore/mrvColorSpaces.h"
+
 #include "mrvPanelsAux.h"
 
 namespace mrv
@@ -15,9 +17,8 @@ namespace mrv
             if (!item || layerId >= item->videoLayers.size())
                 return "";
 
-            std::string layer = item->videoLayers[layerId];
-            if (layer == "Default" || layer == "A,B,G,R" || layer == "B,G,R")
-                layer = "Color";
+            const std::string& layer =
+                mrv::color::layer(item->videoLayers[layerId]);
             return "\n" + layer;
         }
 

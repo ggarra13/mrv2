@@ -702,7 +702,6 @@ namespace mrv
             p.switchClip = true;
         }
 
-
         refreshWindows(); // needed We need to refresh, as the new
                           // video data may have different sizes.
     }
@@ -1839,13 +1838,7 @@ namespace mrv
         size_t pos;
         for (const auto& video : videos)
         {
-            name = video.name;
-
-            if (name == "B,G,R" || name == "R,G,B" || name == "Default")
-                name = _("Color");
-            else if (name == "A,B,G,R")
-                name = "R,G,B,A";
-
+            name = mrv::color::layer(video.name);
             p.ui->uiColorChannel->add(name.c_str());
         }
 
@@ -2045,11 +2038,7 @@ namespace mrv
         if (layer < 0)
             layer = 0;
 
-        std::string name = videos[layer].name;
-        if (name == "B,G,R" || name == "R,G,B" || name == "Default")
-            name = "Color";
-        else if (name == "A,B,G,R")
-            name = "R,G,B,A";
+        std::string name = mrv::color::layer(videos[layer].name);
 
         switch (d.channels)
         {

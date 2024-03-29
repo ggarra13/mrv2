@@ -39,6 +39,10 @@ v1.1.1
   sequence did not start at 0.
 - Fixed a minor bug using snprintf of int64_t with an int specifier.
 - Improved the main web page for mrv2.
+- Fixed translation of "Color" in Panels.  Of course, since English and
+  Spanish use the same word, this still makes no difference :D!
+- Added back truehd decoder and encoder which were removed from
+  TLRENDER_FFMPEG_MINIMAL compilations.
 
 
 v1.1.0
