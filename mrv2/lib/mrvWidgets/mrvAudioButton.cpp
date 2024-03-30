@@ -2,6 +2,7 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <FL/Fl_Group.H>
 #include <FL/Fl_Menu_Button.H>
 
 #include "mrvCore/mrvI8N.h"
@@ -49,6 +50,8 @@ namespace mrv
             {
                 if (audioTracks.size() > 1)
                 {
+                    Fl_Group::current(0);
+
                     Fl_Menu_Button menu(0, 0, 0, 0);
                     menu.type(Fl_Menu_Button::POPUP3);
                     menu.clear();
