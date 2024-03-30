@@ -3,7 +3,12 @@ mrv2 v1.1.0
 
 mrv2 is an open source professional player and review tool for vfx, animation and computer graphics for Windows, Linux and macOS.
 
-Numerous improvements to NDI and Windows installer. Also a huge Python Panel bug fix and saving format fixes for TIFF and PNG.  Smaller footprint of installers and installed size and quicker packaging for those compiling from source.
+mrv2 now supports multiple audio tracks in movies, just like mrViewer.  You can change tracks from the speaker icon with the Right Mouse Button.
+Movies longer than 30 minutes now use a more limited cache, as switching
+audio tracks for them would take too long otherwise.
+In addtion, there's numerous speed improvements and bug fixes to the Media Information Panel, a serious bug fix when saving movies with Annotations on Linux, improvements to the Python Panel and its error reporting.
+The main web page of mrv2 has also received a minor facelift to make it
+readable at different resolutions. 
   
 
 Main Web page:
@@ -16,8 +21,8 @@ Source code and build instructions:
 https://www.github.com/ggarra13/mrv2
 
 Binaries:
-https://github.com/ggarra13/mrv2/releases/tag/v1.1.0
-https://sourceforge.net/projects/mrv2/files/v1.1.0/
+https://github.com/ggarra13/mrv2/releases/tag/v1.1.1
+https://sourceforge.net/projects/mrv2/files/v1.1.1/
 
 #player #movie #flipbook #usd #openusd #opentimelineio #mrv2 #mrViewer #mrViewer2 #vp9 #av1 #h264 #mp4 #mov #avi #webm #prores #prores4444 #cfhd #cineform #gopro #vpx #vfx #vr #animation #games #filmmaking #opensource #environmentmaps #stereo #windows #macos #linux
 
@@ -36,4 +41,4 @@ Source:
 https://github.com/ggarra13/mrv2/
 
 Binaries:
-https://github.com/ggarra13/mrv2/releases/tag/v1.1.0
+https://github.com/ggarra13/mrv2/releases/tag/v1.1.1
