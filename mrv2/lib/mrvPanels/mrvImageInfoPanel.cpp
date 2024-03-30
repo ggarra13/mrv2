@@ -774,7 +774,12 @@ namespace mrv
             X = 0;
             Y = g->y() + kLineHeight;
 
-            Table* table = new Table(0, Y, g->w(), 20);
+            // Box is needed to leave a space for Table's title like
+            // "Audio Stream #2".
+            Fl_Box* box = new Fl_Box(0, Y, g->w(), 20);
+            g->add(box);
+
+            Table* table = new Table(0, Y + box->h(), g->w(), 20);
             table->column_separator(true);
             // table->auto_resize( true );
             //  table->labeltype(FL_NO_LABEL);
