@@ -10,7 +10,8 @@ v1.1.1
 - Added missing video metadata in video section of Media Info Panel.
 - Improved speed of refreshing of a clip (when switching audio tracks or using
   View->Ignore Display Window).
-- Made movies longer than 30 minutes, use a short read ahead / read behind.
+- Made movies longer than 30 minutes with multiple audio tracks, use a short
+  read ahead / read behind or switching audio would be too slow.
 - Fixed saving movies with annotations and with an alpha channel.
 - Fixed saving movies with annotations at half or quarter resolution.
 - Fixed an ugly bug on Linux when saving movies with annotations repeating
