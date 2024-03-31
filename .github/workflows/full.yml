@@ -106,7 +106,6 @@ jobs:
         
     - name: Get machine name
       run: echo "Machine name: $RUNNER_NAME"
-      shell: bash
 
     - name: Setup environment
       run: mkdir -p ssh
