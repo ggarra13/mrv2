@@ -12,6 +12,9 @@ namespace mrv
     class App;
     class PopupMenu;
     std::string setLanguageLocale();
+
+    std::string codeToLanguage(const std::string& code);
+
 } // namespace mrv
 
 struct LanguageTable

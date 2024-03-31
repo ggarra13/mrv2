@@ -279,8 +279,20 @@ namespace mrv
 
                 // Add all the audio tracks
                 c->uiAudioTracks->clear_tracks();
+
                 for (unsigned int i = 0; i < audio.trackCount; ++i)
-                    c->uiAudioTracks->add_track(audio.audioInfo[i].name);
+                {
+                    const auto& info = audio.audioInfo[i];
+                    const std::string& name = codeToLanguage(info.name);
+                    const std::string& trackName =
+                        string::Format(_("{0} - Channels: {1} {2} {3}"))
+                            .arg(_(name.c_str()))
+                            .arg(info.channelCount)
+                            .arg(info.dataType)
+                            .arg(info.sampleRate);
+
+                    c->uiAudioTracks->add_track(trackName);
+                }
 
                 if (audio_track < audio.trackCount)
                     c->uiAudioTracks->current_track(audio_track);

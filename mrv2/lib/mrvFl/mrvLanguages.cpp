@@ -332,7 +332,7 @@ namespace mrv
         // $ update-locale LANG=en_US.UTF-8
         // $ reboot
         //
-        
+
         std::string path = mrv::rootpath();
         path += "/share/locale/";
 
@@ -348,6 +348,46 @@ namespace mrv
                 .arg(numericLocale);
 
         return msg;
+    }
+
+    LanguageTable kAudioLanguage[] = {
+        {_("Arabic"), "ar"},     {_("Armenian"), "hy"},
+        {_("Basque"), "eu"},     {_("Belarusian"), "be"},
+        {_("Bengali"), "bn"},    {_("Bulgarian"), "bg"},
+        {_("Catalan"), "ca"},    {_("Chinese"), "zh"},
+        {_("Czech"), "cs"},      {_("Danish"), "da"},
+        {_("Dutch"), "nl"},      {_("English"), "en"},
+        {_("Finnish"), "fi"},    {_("French"), "fr"},
+        {_("Galician"), "gl"},   {_("German"), "de"},
+        {_("Greek"), "el"},      {_("Hebrew"), "he"},
+        {_("Hindi"), "hi"},      {_("Icelandic"), "is"},
+        {_("Indonesian"), "id"}, {_("Italian"), "it"},
+        {_("Irish"), "ga"},      {_("Japanese"), "ja"},
+        {_("Korean"), "ko"},     {_("Norwegan"), "no"},
+        {_("Persian"), "fa"},    {_("Polish"), "pl"},
+        {_("Portuguese"), "pt"}, {_("Spanish"), "es"},
+        {_("Tibetan"), "to"},    {_("Romanian"), "ro"},
+        {_("Russian"), "ru"},    {_("Serbian"), "sr"},
+        {_("Slovenian"), "sl"},  {_("Swedish"), "sv"},
+        {_("Thai"), "th"},       {_("Tibetan"), "bo"},
+        {_("Turkish"), "tr"},    {_("Vietnamese"), "vi"},
+        {_("Welsh"), "cy"},      {_("Yiddish"), "yi"},
+        {_("Zulu"), "zu"},
+    };
+
+    std::string codeToLanguage(const std::string& code)
+    {
+        std::string out = code;
+        std::string id = code.substr(0, 2);
+        for (int i = 0; i < sizeof(kAudioLanguage) / sizeof(LanguageTable); ++i)
+        {
+            if (id == kAudioLanguage[i].code)
+            {
+                out = _(kAudioLanguage[i].name);
+                break;
+            }
+        }
+        return out;
     }
 
 } // namespace mrv
