@@ -18,7 +18,8 @@ jobs:
         submodules: recursive
 
     - name: Get machine name
-      run: echo "Machine name: $RUNNER_NAME"
+      run: |
+        echo "Machine name: $RUNNER_NAME"
 
     - name: Update
       run: sudo apt-get update
@@ -66,7 +67,7 @@ jobs:
     - name: Decode SSH key
       run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ssh/id_rsa
       shell: bash
-  
+      
     - name: Set permissions on SSH key
       run: chmod 600 ssh/id_rsa
       
@@ -105,7 +106,8 @@ jobs:
         path-type: inherit
         
     - name: Get machine name
-      run: echo "Machine name: $RUNNER_NAME"
+      run: |
+        echo "Machine name: $RUNNER_NAME"
 
     - name: Setup environment
       run: mkdir -p ssh
@@ -150,7 +152,8 @@ jobs:
         submodules: recursive
         
     - name: Get machine name
-      run: echo "Machine name: $RUNNER_NAME"
+      run: |
+        echo "Machine name: $RUNNER_NAME"
 
     - name: Install ninja-build
       run: brew install ninja
@@ -206,7 +209,8 @@ jobs:
         submodules: recursive
         
     - name: Get machine name
-      run: echo "Machine name: $RUNNER_NAME"
+      run: |
+        echo "Machine name: $RUNNER_NAME"
 
     - name: Install ninja-build
       run: brew install ninja
