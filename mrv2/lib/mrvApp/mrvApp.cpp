@@ -537,10 +537,6 @@ namespace mrv
 
         LOG_INFO(msg);
 
-        LOG_INFO(
-            "Default Editor: "
-            << p.settings->getDefaultValue<std::string>("Python/Editor"));
-
         // Create the main control.
         p.mainControl = new MainControl(ui);
 
