@@ -352,9 +352,12 @@ namespace mrv
     protected:
         virtual void _readPixel(image::Color4f& rgba) const noexcept = 0;
         math::Vector2i _getViewportCenter() const noexcept;
+
         math::Vector2i _getFocus(int X, int Y) const noexcept;
         math::Vector2i _getFocus() const noexcept;
         math::Vector2i _getRaster() const noexcept;
+
+        math::Vector2f _getFocusf(int X, int Y) const noexcept;
         math::Vector2f _getRasterf(int X, int Y) const noexcept;
         math::Vector2f _getRasterf() const noexcept;
 

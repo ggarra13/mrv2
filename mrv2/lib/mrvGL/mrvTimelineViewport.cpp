@@ -1361,6 +1361,16 @@ namespace mrv
         return _getFocus(_p->event_x, _p->event_y);
     }
 
+    math::Vector2f TimelineViewport::_getFocusf(int X, int Y) const noexcept
+    {
+        TimelineViewport* self = const_cast< TimelineViewport* >(this);
+        math::Vector2f pos;
+        const float devicePixelRatio = self->pixels_per_unit();
+        pos.x = X * devicePixelRatio;
+        pos.y = (h() - 1 - Y) * devicePixelRatio;
+        return pos;
+    }
+
     math::Vector2f TimelineViewport::_getRasterf(int X, int Y) const noexcept
     {
         const auto& pm = _pixelMatrix();
