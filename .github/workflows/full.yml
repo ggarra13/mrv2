@@ -16,6 +16,9 @@ jobs:
     - uses: actions/checkout@v4
       with:
         submodules: recursive
+
+    - name: Get machine name
+      run: echo "Machine name: $RUNNER_NAME"
         
     - name: Update
       run: sudo apt-get update
@@ -100,6 +103,10 @@ jobs:
       with:
         update: true
         path-type: inherit
+        
+    - name: Get machine name
+      run: echo "Machine name: $RUNNER_NAME"
+      shell: bash
 
     - name: Setup environment
       run: mkdir -p ssh
@@ -135,13 +142,16 @@ jobs:
 
 
   macos-full-build:
-    runs-on: macos-11
+    runs-on: macos-12
 
     steps:
     
     - uses: actions/checkout@v4
       with:
         submodules: recursive
+        
+    - name: Get machine name
+      run: echo "Machine name: $RUNNER_NAME"
 
     - name: Install ninja-build
       run: brew install ninja
@@ -195,6 +205,9 @@ jobs:
     - uses: actions/checkout@v4
       with:
         submodules: recursive
+        
+    - name: Get machine name
+      run: echo "Machine name: $RUNNER_NAME"
 
     - name: Install ninja-build
       run: brew install ninja
