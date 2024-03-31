@@ -35,7 +35,7 @@ v1.1.1
   mrv2 python plug-ins.
 - Fixed message that said it was saving a movie without audio when saving
   a sequence of frames.
-- Fixed reading of FPS from OpenEXR frames as they are now rational instead of
+- Fixed reading of FPS from OpenEXR images as they are now rational instead of
   a double.
 - Fixed thumbnail of image sequences in mrv2's custom file requester when the
   sequence did not start at 0.
@@ -54,6 +54,8 @@ v1.1.1
 - Fixed (very slow) changing speed from the Media Info Panel.
 - Fixed HorSlider resizing improperly when values were bigger than 10000 or
   smaller than -10000.
+- Improved precision when accepting or editing text with a zoom factor or
+  pixels_per_unit different than 1.
  
 
 

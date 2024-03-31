@@ -2,6 +2,8 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <cmath>
+
 #include <FL/Fl.H>
 #include <FL/gl.h>
 #include <FL/fl_draw.H>
@@ -47,7 +49,8 @@ namespace mrv
         const std::shared_ptr<timeline::IRender>& render,
         const std::shared_ptr<opengl::Lines>& lines)
     {
-        int textSize = int(fontSize * viewZoom / pixels_per_unit);
+        float textSizeFloat = fontSize * viewZoom / pixels_per_unit;
+        int textSize = std::round(textSizeFloat);
         if (text.empty() || textSize < 1)
             return;
 

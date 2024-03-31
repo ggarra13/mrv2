@@ -35,7 +35,7 @@
 #include "mrvCore/mrvUtil.h"
 #include "mrvFl/mrvIO.h"
 
-//#define DEBUG_EVENTS
+// #define DEBUG_EVENTS
 
 namespace
 {
@@ -47,7 +47,7 @@ namespace
     const float kSpinSumY = 0.05;
     const float kSpinMaxY = 2.0;
     const float kSpinMaxX = 1.0;
-    
+
     const float kLaserFadeTimeout = 0.01;
     const float kLaserFade = 0.025;
 
@@ -60,15 +60,14 @@ namespace mrv
     {
         inline int signbit(int num)
         {
-            int sign = 0;           
+            int sign = 0;
             if (num > 0)
                 sign = 1;
             else if (num < 0)
                 sign = -1;
             return sign;
         }
-    }
-    
+    } // namespace
 
     void TimelineViewport::laserFade_cb(LaserFadeData* data)
     {
@@ -154,7 +153,7 @@ namespace mrv
         p.lastEvent = FL_DRAG;
         p.mousePos = _getFocus();
         math::Vector2i pos = _getRaster();
-        
+
         _handleSelectionArea(pos);
 
         math::Box2i area = p.selection;
@@ -275,14 +274,14 @@ namespace mrv
                     Imath::V2d p1 = shape->pts[0];
                     Imath::V2d lineVector = pnt - p1;
                     double lineLength = lineVector.length();
-                    
+
                     const float theta = 45 * M_PI / 180;
                     const double nWidth = lineLength * 0.2;
-                    
+
                     const double tPointOnLine =
                         nWidth / (2 * (tan(theta) / 2) * lineLength);
-                    const Imath::V2d& pointOnLine = pnt + -tPointOnLine *
-                                                    lineVector;
+                    const Imath::V2d& pointOnLine =
+                        pnt + -tPointOnLine * lineVector;
 
                     const Imath::V2d normalVector(-lineVector.y, lineVector.x);
 
@@ -383,10 +382,10 @@ namespace mrv
 #endif
 
             draw::Point pnt(_getRasterf());
-
-            shape->pts.push_back(pnt); // needed
+            shape->pts.push_back(pnt); // we'll change it later...
 
             annotation->push_back(shape);
+
             // Calculate offset from corner due to cross and the bottom of
             // the font.
             const math::Vector2i offset(
@@ -395,20 +394,28 @@ namespace mrv
             shape->text = text;
             shape->color = color;
 
-            float pixels_unit = pixels_per_unit();
+            const float pixels_unit = pixels_per_unit();
 
 #ifdef USE_OPENGL2
             shape->font = w->textfont();
             shape->fontSize = w->textsize() / p.viewZoom * pixels_unit;
+
             auto pos = math::Vector2i(w->x() + offset.x, w->y() + offset.y);
-            pos = _getFocus(pos.x, pos.y);
+            pnt = _getFocusf(pos.x, pos.y);
+
+            // Store rotation
             float rotation = p.rotation;
             float videoRotation = p.videoRotation;
+
             p.rotation = 0.F;
             p.videoRotation = 0.F;
-            pnt = _getRasterf(pos.x, pos.y);
+            pnt = _getRasterf(pnt.x, pnt.y);
+
+            // Restore rotation
             p.rotation = rotation;
             p.videoRotation = videoRotation;
+
+            // Save new shape position
             shape->pts[0].x = pnt.x;
             shape->pts[0].y = pnt.y;
 #else
@@ -472,7 +479,7 @@ namespace mrv
 
                     if (p.player)
                         p.playbackMode = p.player->playback();
-                   
+
                     return;
                 }
 
@@ -710,21 +717,20 @@ namespace mrv
             int dx = pos.x - p.mousePress.x;
 
             bool changed = false;
-            if (signbit(dx) != signbit(p.rotDir.x) &&
-                p.rotDir.x != 0)
+            if (signbit(dx) != signbit(p.rotDir.x) && p.rotDir.x != 0)
             {
                 p.rotDir.x = 0;
                 p.mousePress.x = pos.x;
                 changed = true;
             }
-            
+
             const float speed = _getZoomSpeedValue();
 
             if (Fl::event_shift())
             {
                 if (changed)
                     return;
-                
+
                 auto o = p.environmentMapOptions;
                 o.focalLength += dx * speed;
                 p.mousePress = pos;
@@ -734,8 +740,7 @@ namespace mrv
             {
                 int dy = pos.y - p.mousePress.y;
 
-                if (signbit(dy) != signbit(p.rotDir.y) &&
-                    p.rotDir.y != 0)
+                if (signbit(dy) != signbit(p.rotDir.y) && p.rotDir.y != 0)
                 {
                     p.rotDir.y = 0;
                     p.mousePress.y = pos.y;
@@ -744,16 +749,16 @@ namespace mrv
 
                 if (changed)
                     return;
-            
+
                 const auto viewportSize = getViewportSize();
 
                 if (p.environmentMapOptions.spin)
                 {
                     // x takes dy changes
                     p.viewSpin.x += double(-dy * speed) / viewportSize.h * 2;
-                    
+
                     // while y takes dx changes
-                    p.viewSpin.y += double(dx * speed) / viewportSize.w * 2; 
+                    p.viewSpin.y += double(dx * speed) / viewportSize.w * 2;
 
                     if (p.viewSpin.y > kSpinMaxY)
                         p.viewSpin.y = kSpinMaxY;
@@ -894,7 +899,7 @@ namespace mrv
         case FL_LEAVE:
         {
             p.lastEvent = 0;
-            
+
             cursor(FL_CURSOR_DEFAULT);
             constexpr float NaN = std::numeric_limits<float>::quiet_NaN();
             image::Color4f rgba(NaN, NaN, NaN, NaN);
@@ -983,7 +988,7 @@ namespace mrv
                 p.actionMode == ActionMode::kRotate)
             {
                 p.rotDir.x = p.rotDir.y = 0;
-                
+
                 if (p.lastEvent == FL_DRAG &&
                     Fl::event_button() == FL_LEFT_MOUSE)
                 {
@@ -1035,7 +1040,7 @@ namespace mrv
                     s = annotation->lastShape();
 
                 p.lastEvent = 0;
-                    
+
                 if (!s->laser)
                     return 1;
 
@@ -1082,9 +1087,9 @@ namespace mrv
                     int dx = p.last_x - p.event_x;
                     if (abs(dx) < step)
                         return 1;
-                    
+
                     p.last_x = p.event_x;
-                    
+
                     float change = 1.0F;
                     float factor = dx * speed;
                     if (dx > 0)
@@ -1102,7 +1107,7 @@ namespace mrv
                         zoom = 0.01F;
                     else if (zoom > 120.F)
                         zoom = 120.F;
-                    
+
                     setViewZoom(zoom, p.mousePress);
                 }
             }
@@ -1472,24 +1477,25 @@ namespace mrv
         const auto& renderSize = getRenderSize();
         float pct = renderSize.h / 1024.F;
 
-        const math::Vector2i offset(
-            kCrossSize + 2, kCrossSize + fl_height() - fl_descent());
-        
+        const float devicePixelRatio = pixels_per_unit();
+
 #ifdef USE_OPENGL2
         auto shape = dynamic_cast<GL2TextShape*>(s.get());
         if (!shape)
             return;
 
-        const float devicePixelRatio = pixels_per_unit();
         const int fontsize =
             shape->fontSize * shape->viewZoom / devicePixelRatio;
         fl_font(shape->font, fontsize);
 
-        math::Vector2i pos(
+        const math::Vector2i offset(
+            kCrossSize + 2, kCrossSize + fl_height() - fl_descent());
+
+        math::Vector2f pos(
             shape->pts[0].x * shape->viewZoom + p.viewPos.x,
             shape->pts[0].y * shape->viewZoom + p.viewPos.y);
         pos.x = pos.x / devicePixelRatio;
-        pos.y = h() - pos.y / devicePixelRatio;
+        pos.y = h() - 1 - pos.y / devicePixelRatio;
 
         pos.x -= offset.x;
         pos.y -= offset.y;
@@ -1504,6 +1510,13 @@ namespace mrv
         auto shape = dynamic_cast<GLTextShape*>(s.get());
         if (!shape)
             return;
+
+        const int fontsize =
+            shape->fontSize * shape->viewZoom / devicePixelRatio;
+        fl_font(shape->font, fontsize);
+
+        const math::Vector2i offset(
+            kCrossSize + 2, kCrossSize + fl_height() - fl_descent());
 
         math::Vector2i pos(
             shape->pts[0].x + p.viewPos.x, -shape->pts[0].y - p.viewPos.y);

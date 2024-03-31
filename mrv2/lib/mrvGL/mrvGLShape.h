@@ -146,7 +146,7 @@ namespace mrv
         std::string txt; // Copy of text as we are processing it.
         std::string text;
         Fl_Font font;
-        uint16_t fontSize = 30;
+        float fontSize = 30;
         int w;
         int h;
         double pixels_per_unit = 1.F;
