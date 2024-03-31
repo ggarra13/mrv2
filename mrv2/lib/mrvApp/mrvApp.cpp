@@ -1487,12 +1487,17 @@ namespace mrv
         options.readAhead = _cacheReadAhead();
         options.readBehind = _cacheReadBehind();
 
-        bool movieIsLong = false;
+        const auto& info = p.player->ioInfo();
 
-        // If movie is longer than 30 minutes, use a short readAhead/readBehind
-        auto timeRange = p.player->inOutRange();
-        if (timeRange.duration().to_seconds() > 60 * 30)
-            movieIsLong = true;
+        bool movieIsLong = false;
+        if (info.audio.trackCount > 1)
+        {
+            // If movie is longer than 30 minutes, and has multiple audio tracks
+            // use a short readAhead/readBehind
+            auto timeRange = p.player->inOutRange();
+            if (timeRange.duration().to_seconds() > 60 * 30)
+                movieIsLong = true;
+        }
 
         if (file::isTemporaryNDI(p.player->path()) || movieIsLong)
         {
