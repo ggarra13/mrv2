@@ -44,19 +44,25 @@ body {
     background: #404040;
 }
 
-#header {
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.header .logo-title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     text-align: center;
-}
-
-#logo
-{
-}
-
-#title {
-    margin: 0;
     color: #ffffff;
     font-size: 1.4vw;
-    text-align: center;
+}
+
+.header .header-right {
+    margin-left: auto;
 }
 
 
@@ -90,7 +96,7 @@ The bar where the stats are.
 
 
 .sidebar {
-    width: 10%;
+    width: 15%;
 
     color:      #d0d040;
     background: #000000;
@@ -102,16 +108,18 @@ The bar where the stats are.
     
     padding-top: 0;
     padding-bottom: 0;
-    padding-left: 1.0%;
+    padding-left: 3.0%;
 }
 
+/* This controls the actual menus font */
 .sidebar a {
-    font-size: 0.8vw;
+    font-size: 1.0vw;
 }
 
+/* This controls the dots in the menus */
 .sidebar li {
     color:      #ffffff;
-    font-size: 0.8vw;
+    font-size: 0.85vw;
     padding-left: 10.0%;
 }
 
@@ -119,7 +127,7 @@ The bar where the stats are.
     color: #e000f0;
     background: #505050;
 
-    width: 90%;
+    width: 85%;
     text-align: center;
     
     margin: 0;
