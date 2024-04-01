@@ -35,5 +35,8 @@ if [[ "$TAG" == "" ]]; then
     export TAG=`git ls-remote --tags --refs | tail -n1 | cut -d/ -f3`
 fi
 
-date
+date_created=`git for-each-ref --format="%(creatordate:iso)" refs/tags/$TAG`
+today=`date -d now +'%F %T'`
+echo "DATE CREATED: ${date_created}"
+echo "NOW         : ${today}"
 $PYTHONEXE bin/python/github-download-count.py ggarra13 mrv2 $TAG
