@@ -22,6 +22,8 @@ try:
 except ImportError:
     from io import StringIO
 
+from format_number import *
+
 def dict_to_object(d):
     if '__class__' in d:
         class_name = d.pop('__class__')
@@ -102,4 +104,36 @@ for full_name in full_names:
         print('Exception while fetching releases for repo %s: %s') % (full_name,
                                                                       e)
 
-    print('%d\tTotal Downloads for repo %s' % (total_count, full_name))
+    formatted_total = format_number(total_count, 5)
+    print(f'{formatted_total}\tTotal Downloads for repo {full_name}')
+
+from datetime import date
+    
+today = date.today()
+formatted_date = today.strftime("%Y-%m-%d")
+
+project_name = sys.argv[2]
+folder_name = sys.argv[3]
+
+# Base URL for the project downloads page
+base_url = f"https://sourceforge.net/projects/{project_name}/files/{folder_name}/stats/json?start_date=2014-10-29&end_date={formatted_date}"
+
+# Send request to download page
+response = requests.get(base_url)
+try:
+    r = response.json()
+except Exception as e:
+    base_url = f"https://sourceforge.net/projects/{project_name}/files/archive/{folder_name}/stats/json?start_date=2014-10-29&end_date={formatted_date}"
+    response = requests.get(base_url)
+    r = response.json()
+    
+total = 0
+for item in r['oses']:
+    num=int(item[1])
+    print(f'\tOS: {item[0]}\tCount: {num}')
+    total += num
+
+formatted_total = format_number(total, 5)
+print(f'{formatted_total}\tTotal Downloads for sourceforge {project_name}')
+formatted_total = format_number(total + total_count, 5)
+print(f'{formatted_total}\tGrand Total')
