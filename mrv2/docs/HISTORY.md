@@ -2,6 +2,7 @@ v1.1.2
 ======
 
 - Windows version of mrv2 is now compiled with MSVC 2022.
+- Fixed opening directories from within the command-line.
 
 v1.1.1
 ======
