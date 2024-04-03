@@ -1,5 +1,3 @@
-// $Id: Flu_File_Chooser.cpp,v 1.98 2004/11/02 00:33:31 jbryan Exp $
-
 /***************************************************************
  *                FLU - FLTK Utility Widgets
  *  Copyright (C) 2002 Ohio Supercomputer Center, Ohio State University
@@ -9,7 +7,7 @@
  * If not, please contact the Ohio Supercomputer Center immediately:
  * Attn: Jason Bryan Re: FLU 1224 Kinnear Rd, Columbus, Ohio 43212
  *
- * Licnese is like FLTK.
+ * License is like FLTK.
  ***************************************************************/
 
 #ifdef _WIN32
@@ -346,10 +344,10 @@ void Flu_File_Chooser::previewCB()
                 if (!requestIcon)
                     continue;
 
-                std::string fullname = toTLRenderFilename(e);
+                const std::string& fullname = toTLRenderFilename(e);
 
                 // Show the frame at the beginning
-                otio::RationalTime time = time::invalidTime;
+                const otio::RationalTime& time = time::invalidTime;
 
                 image::Size size(128, 64);
 
