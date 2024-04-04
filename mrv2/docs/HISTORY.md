@@ -4,7 +4,7 @@ v1.1.2
 - Windows version of mrv2 is now compiled with MSVC 2022.
 - Fixed opening directories from within the command-line.
 - Fixed stopping of playback when playing and selecting an area with
-  Shift + Left Mouse Button drag or panning with Ctrl + Dra
+  Shift + Left Mouse Button drag or panning with Ctrl + Drag.
 - Made status bar report "Everything OK." after 10 seconds without further
   errors.
 
