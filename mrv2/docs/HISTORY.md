@@ -7,6 +7,7 @@ v1.1.2
   Shift + Left Mouse Button drag or panning with Ctrl + Drag.
 - Made status bar report "Everything OK." after 10 seconds without further
   errors.
+- Removed -debug flag from command-line as it only works on debug builds.
 
 
 v1.1.1

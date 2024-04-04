@@ -276,9 +276,11 @@ namespace mrv
                 _("Timelines, movies, image sequences, or folders."), true,
                 true)},
             {
+#ifdef DEBUG
                 app::CmdLineValueOption<int>::create(
                     Preferences::debug, {"-debug", "-d"},
                     _("Debug verbosity.")),
+#endif
                     app::CmdLineValueOption<std::string>::create(
                         p.options.audioFileName, {"-audio", "-a"},
                         _("Audio file name.")),
