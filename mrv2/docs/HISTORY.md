@@ -8,6 +8,7 @@ v1.1.2
 - Made status bar report "Everything OK." after 10 seconds without further
   errors.
 - Removed -debug flag from command-line as it only works on debug builds.
+- Made Metadata tab not appear if all metadata is shown in video/audio tabs.
 
 
 v1.1.1

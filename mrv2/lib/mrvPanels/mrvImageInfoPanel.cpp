@@ -2176,13 +2176,33 @@ namespace mrv
 
             if (!m_attributes->is_open())
             {
-                m_attributes->show();
+                bool found_data = false;
+
+                for (const auto& item : tagData)
+                {
+                    bool skip = false;
+                    if (item.first.substr(0, 5) == "Video" ||
+                        item.first.substr(0, 5) == "Audio" ||
+                        item.first.substr(0, 19) == "FFmpeg Pixel Format")
+                    {
+                        skip = true;
+                    }
+                    if (skip)
+                    {
+                        continue;
+                    }
+                    found_data = true;
+                }
+                if (found_data)
+                    m_attributes->show();
                 return;
             }
 
             m_attributes->clear();
 
             m_curr = add_browser(m_attributes);
+
+            bool found_data = false;
 
             for (const auto& item : tagData)
             {
@@ -2197,11 +2217,14 @@ namespace mrv
                 {
                     continue;
                 }
+                found_data = true;
                 add_text(_(item.first.c_str()), "", _(item.second.c_str()));
             }
 
-            m_attributes->show();
             m_attributes->end();
+
+            if (found_data)
+                m_attributes->show();
         }
 
         void ImageInfoPanel::_getTags()
