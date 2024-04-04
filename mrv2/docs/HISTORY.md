@@ -9,6 +9,8 @@ v1.1.2
   errors.
 - Removed -debug flag from command-line as it only works on debug builds.
 - Made Metadata tab not appear if all metadata is shown in video/audio tabs.
+- Fixed Right Mouse Button toggling off the audio when there had been a drag
+  action with some other button before.
 
 
 v1.1.1
