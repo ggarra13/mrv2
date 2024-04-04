@@ -444,6 +444,11 @@ namespace mrv
     {
         TLRENDER_P();
 
+        p.playbackMode = timeline::Playback::Stop;
+
+        if (p.player)
+            p.playbackMode = p.player->playback();
+
         if (p.compareOptions.mode == timeline::CompareMode::Wipe)
         {
             _handleCompareWipe();
@@ -474,12 +479,6 @@ namespace mrv
                     p.actionMode == ActionMode::kRotate)
                 {
                     p.lastEvent = FL_PUSH;
-
-                    p.playbackMode = timeline::Playback::Stop;
-
-                    if (p.player)
-                        p.playbackMode = p.player->playback();
-
                     return;
                 }
 

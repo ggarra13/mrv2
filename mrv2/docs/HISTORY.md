@@ -4,7 +4,7 @@ v1.1.2
 - Windows version of mrv2 is now compiled with MSVC 2022.
 - Fixed opening directories from within the command-line.
 - Fixed stopping of playback when playing and selecting an area with
-  Shift + Left Mouse Button drag.
+  Shift + Left Mouse Button drag or panning with Ctrl + Dra
 - Made status bar report "Everything OK." after 10 seconds without further
   errors.
 
@@ -59,7 +59,7 @@ v1.1.1
   layer name listed in the Panels and in the Color Channel pull down.
 - Added back truehd decoder and encoder which were removed from
   TLRENDER_FFMPEG_MINIMAL compilations.
-- Sped up redrawing when the Media Info Panel was open, as we know refresh
+- Sped up redrawing when the Media Info Panel was open, as we now refresh
   only the tabs that change.
 - Fixed changing the first and last frames from the Media Info Panel.
 - Modified int sliders to use HorSlider instead to make it consistant.
