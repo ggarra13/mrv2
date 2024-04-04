@@ -18,6 +18,7 @@ namespace mrv
         Fl_Color color_;
 
         static void clear_cb(StatusBar* o);
+        static void all_ok_cb(StatusBar* o);
 
     public:
         StatusBar(int X, int Y, int W, int H, const char* L = 0);

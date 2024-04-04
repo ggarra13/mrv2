@@ -990,7 +990,7 @@ namespace mrv
                 p.rotDir.x = p.rotDir.y = 0;
 
                 if (p.lastEvent == FL_DRAG &&
-                    Fl::event_button() == FL_LEFT_MOUSE)
+                    Fl::event_button() == FL_LEFT_MOUSE && !Fl::event_shift())
                 {
                     p.lastEvent = 0;
                     if (!p.player)
