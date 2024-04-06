@@ -1,4 +1,4 @@
-name: MacOS 14 Full Builds
+name: Full Builds MacOS 14
 
 on: [push]
 

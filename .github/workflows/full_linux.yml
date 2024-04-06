@@ -1,4 +1,4 @@
-name: Linux Full Builds
+name: Full Builds Linux
 
 on: [push]
 
