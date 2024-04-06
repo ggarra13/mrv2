@@ -1,4 +1,4 @@
-name: Full Builds
+name: Win64 Full Builds
 
 on: [push]
 
