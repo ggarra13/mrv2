@@ -1,0 +1,85 @@
+name: Full Builds
+
+on: [push]
+
+jobs:
+  ###################################
+  #                                 #
+  # FULL BUILDS                     #
+  #                                 #
+  ###################################
+  linux-full-build:
+    runs-on: ubuntu-20.04
+
+    steps:
+    
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Get machine name
+      run: |
+        echo "Machine name: $RUNNER_NAME"
+
+    - name: Update
+      run: sudo apt-get update
+      
+    - name: Install OpenGL dev
+      run: sudo apt-get install -y xorg-dev libglu1-mesa-dev mesa-common-dev
+
+    - name: Install X11 dev
+      run: sudo apt-get install -y libx11-dev libxcursor-dev libxinerama-dev
+
+    - name: Install ALSA dev
+      run: sudo apt-get install -y libasound2-dev
+
+    - name: Install PulseAudio dev
+      run: sudo apt-get install -y libpulse-dev
+
+    - name: Install Pango dev
+      run: sudo apt-get install -y libpango1.0-dev
+
+    - name: Install Wayland
+      run: sudo apt-get install -y libwayland-dev wayland-protocols libdbus-1-dev libxkbcommon-dev libegl-dev libgtk-3-dev
+
+    - name: Install openssl
+      run: sudo apt-get install -y openssl libunistring-dev
+      
+    - name: Install ninja-build
+      run: sudo apt-get install -y ninja-build
+      
+    - name: Install meson
+      run: sudo apt-get install meson
+      
+    - name: Install gettext
+      run: sudo apt-get install -y gettext
+      
+    - name: Install python dependencies
+      run: sudo apt-get install -y libssl-dev libffi-dev
+
+    - name: Synchronize clock
+      run: |
+        sudo apt-get install -y ntp
+
+    - name: Setup environment
+      run: mkdir -p ssh
+
+    - name: Decode SSH key
+      run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ssh/id_rsa
+      shell: bash
+      
+    - name: Set permissions on SSH key
+      run: chmod 600 ssh/id_rsa
+      
+    - name: Set executable permissions
+      run: |
+        chmod +x ./*.sh ./bin/*.sh ./etc/*.sh
+  
+    - name: Build mrv2
+      run: |
+        ./runme_nolog.sh -t package
+
+    - name: Upload binaries
+      run: |
+        ./bin/upload_sourceforge.sh
+
