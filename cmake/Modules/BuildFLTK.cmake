@@ -48,6 +48,7 @@ ExternalProject_Add(
     FLTK
     GIT_REPOSITORY "https://github.com/fltk/fltk.git"
     GIT_TAG ${FLTK_GIT_TAG}
+    DEPENDS ${FLTK_DEP}
     CMAKE_ARGS
     -DCMAKE_C_COMPILER=${FLTK_C_COMPILER}
     -DCMAKE_CXX_COMPILER=${FLTK_CXX_COMPILER}
