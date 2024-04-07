@@ -1,5 +1,8 @@
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
-[![Build Status](https://github.com/ggarra13/mrv2/actions/workflows/full.yml/badge.svg)](https://github.com/ggarra13/mrv2/actions/workflows/full.yml)
+[![Build Status](https://github.com/ggarra13/mrv2/actions/workflows/full_linux.yml/badge.svg)](https://github.com/ggarra13/mrv2/actions/workflows/full_linux.yml)
+[![Build Status](https://github.com/ggarra13/mrv2/actions/workflows/full_macos12.yml/badge.svg)](https://github.com/ggarra13/mrv2/actions/workflows/full_macos12.yml)
+[![Build Status](https://github.com/ggarra13/mrv2/actions/workflows/full_win64.yml/badge.svg)](https://github.com/ggarra13/mrv2/actions/workflows/full_win64.yml)
+[![Build Status](https://github.com/ggarra13/mrv2/actions/workflows/full_macos14.yml/badge.svg)](https://github.com/ggarra13/mrv2/actions/workflows/full_macos14.yml)
 [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=679N8GWCNDFSJ)
 [![Sponsor](https://img.shields.io/badge/Sponsor-ggarra13-blue.svg)](https://github.com/sponsors/ggarra13)
 
