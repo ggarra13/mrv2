@@ -75,7 +75,7 @@ if sys.platform == 'win32':
     lib_dir_list = [fltk_lib_dir, opengl_lib_dir]
     win32_lib_list = ["kernel32", "user32", "gdi32", "winspool", "comdlg32", "Comctl32", "advapi32", "shell32", "ole32", "oleaut32", "uuid", "odbc32", "odbccp32", "wsock32", "gdiplus", "glu32", "opengl32"]
     static_lib_list = [ "fltk", "fltk_images", "fltk_forms", "fltk_gl", "opengl32", "fltk_jpeg", "fltk_png", "fltk_z"] + win32_lib_list
-    shared_lib_list = ["fltk_dll", "fltk_jpeg_dll", "fltk_png_dll", "fltk_z_dll"] + win32_lib_list
+    shared_lib_list = ["fltk_dll"] + win32_lib_list
     if doShared:
         def_list = def_list + [('FL_DLL', 1)]
         lib_list = shared_lib_list

@@ -725,7 +725,15 @@ from mrv2 import playlist, timeline, usd, session, settings
                     std::string command =
                         string::Format(editor).arg(line).arg(file);
                     LOG_INFO(command);
-                    std::system(command.c_str());
+                    int ret = std::system(command.c_str());
+                    if (ret != 0)
+                    {
+                        const std::string msg =
+                            tl::string::Format(
+                                _("Could not open python editor: {0}"))
+                                .arg(command);
+                        LOG_ERROR(msg);
+                    }
                 }
             }
             catch (const std::regex_error& e)
