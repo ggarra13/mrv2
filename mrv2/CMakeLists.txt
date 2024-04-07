@@ -39,7 +39,7 @@ if(MSVC)
     set(FLTK_LIBRARIES fltk::fltk-shared )
     set(FLTK_gl_LIBRARY )
 else()
-    set(FLTK_LIBRARIES fltk::images-shared )
+    set(FLTK_LIBRARIES fltk::fltk-shared fltk_images.a fltk_z.a )
     set(FLTK_gl_LIBRARY fltk::gl-shared)
 endif()
 
