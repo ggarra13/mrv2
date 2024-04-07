@@ -9,6 +9,8 @@ v1.1.2
   errors.
 - Removed -debug flag from command-line as it only works on debug builds.
 - Made Metadata tab not appear if all metadata is shown in video/audio tabs.
+- Fixed a compilation issue between FLTK's JPEG libraries and those of
+  libjpeg-turbo on Linux.
 
 
 v1.1.1
