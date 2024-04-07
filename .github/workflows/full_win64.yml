@@ -1,0 +1,68 @@
+name: Full Builds Win64
+
+on: [push]
+
+jobs:
+  ###################################
+  #                                 #
+  # FULL BUILDS                     #
+  #                                 #
+  ###################################
+  windows-full-build:
+    runs-on: windows-2019
+
+    defaults:
+      run:
+        shell: msys2 {0}
+
+    steps:
+
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Setup environment
+      uses: ilammy/msvc-dev-cmd@v1
+
+    - name: Setup MSYS
+      uses: msys2/setup-msys2@v2
+      with:
+        update: true
+        path-type: inherit
+        
+    - name: Get machine name
+      run: |
+        echo "Machine name: $RUNNER_NAME"
+
+    - name: Setup environment
+      run: mkdir -p ssh
+      
+    - name: Decode SSH key
+      run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ssh/id_rsa
+      shell: bash
+
+    - name: Synchronize clock
+      shell: cmd
+      run: |
+        w32tm /config /manualpeerlist:time.windows.com /syncfromflags:manual /reliable:YES /update
+        net stop w32time
+        net start w32time
+        w32tm /resync /rediscover
+
+    - name: Set permissions on SSH key
+      shell: cmd
+      run: |
+        icacls "ssh\id_rsa" /inheritance:r /grant:r "%USERNAME%:R"
+        
+    - name: Set executable permissions
+      run: |
+        chmod +x ./*.sh ./bin/*.sh ./etc/*.sh
+      
+    - name: Build mrv2
+      run: |
+        ./runme_nolog.sh -t package -D TLRENDER_USD=OFF
+      
+    - name: Upload binaries
+      run: |
+        ./bin/upload_sourceforge.sh
+

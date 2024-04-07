@@ -45,6 +45,8 @@ namespace mrv
     {
         switch (e)
         {
+        case FL_RELEASE:
+        case FL_DRAG:
         case FL_PUSH:
             if (Fl::event_button3())
             {

@@ -8,9 +8,11 @@ v1.1.2
 - Made status bar report "Everything OK." after 10 seconds without further
   errors.
 - Removed -debug flag from command-line as it only works on debug builds.
-- Made Metadata tab not appear if all metadata is shown in video/audio tabs.
+- Made Metadata tab not appear if all metadata is shown in video/audio 
 - Fixed a compilation issue between FLTK's JPEG libraries and those of
   libjpeg-turbo on Linux.
+- Fixed Right Mouse Button toggling off the audio when there had been a drag
+  action with some other button before.
 
 
 v1.1.1
