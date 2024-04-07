@@ -39,7 +39,9 @@ if(MSVC)
     set(FLTK_LIBRARIES fltk::fltk-shared )
     set(FLTK_gl_LIBRARY )
 else()
-    set(FLTK_LIBRARIES fltk::fltk-shared fltk_images.a fltk_z.a )
+    # fltk::images must *NOT* be shared or jpeg library enters in conflict
+    # with tlRender's libjpeg-turbo.
+    set(FLTK_LIBRARIES fltk::fltk-shared fltk::images )
     set(FLTK_gl_LIBRARY fltk::gl-shared)
 endif()
 
