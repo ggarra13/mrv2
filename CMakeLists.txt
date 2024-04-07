@@ -108,10 +108,6 @@ elseif(APPLE)
     endif()
 endif()
 
-set(FLTK_DEP )
-if( BUILD_FLTK )
-    include( cmake/Modules/BuildFLTK.cmake )
-endif()
 
 set( PYBIND11_DEP )
 if( MRV2_PYBIND11 )
@@ -120,6 +116,10 @@ endif()
 
 add_subdirectory( tlRender/etc/SuperBuild )
 
+set(FLTK_DEP tlIO )
+if( BUILD_FLTK )
+    include( cmake/Modules/BuildFLTK.cmake )
+endif()
 
 if(BUILD_PYTHON AND TLRENDER_USD)
     add_dependencies( USD ${PYTHON_DEP} )
