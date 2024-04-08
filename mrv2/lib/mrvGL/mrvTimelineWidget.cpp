@@ -597,9 +597,10 @@ namespace mrv
             {
                 p.annotationTimes = times;
                 std::vector<int> markers;
+                markers.reserve(times.size());
                 for (const auto& time : times)
                 {
-                    markers.push_back(time.value());
+                    markers.push_back(std::round(time.value()));
                 }
                 p.timelineWidget->setFrameMarkers(markers);
             }
