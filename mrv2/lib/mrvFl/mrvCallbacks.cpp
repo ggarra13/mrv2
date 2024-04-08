@@ -382,7 +382,6 @@ namespace mrv
 
             const Fl_Menu_Item* item = &saveOptions.Profile->menu()[value];
 
-
             // We need to iterate through all the profiles, as some profiles
             // may be hidden from the UI due to FFmpeg being compiled as
             // LGPL.
@@ -397,7 +396,6 @@ namespace mrv
                 }
                 ++index;
             }
-            
 
             std::string preset;
             value = saveOptions.Preset->value();
@@ -709,21 +707,23 @@ namespace mrv
         ui->uiView->updateCoords();
         ui->uiView->redraw();
     }
-    
+
     void rotate_plus_90_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         float r = ui->uiView->getRotation();
         r += 90.F;
-        if (r == 270.F) r = -90.F;
+        if (r == 270.F)
+            r = -90.F;
         ui->uiView->setRotation(r);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
-    
+
     void rotate_minus_90_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         float r = ui->uiView->getRotation();
         r -= 90.F;
-        if (r == -270.F) r = 90.F;
+        if (r == -270.F)
+            r = 90.F;
         ui->uiView->setRotation(r);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
@@ -1500,15 +1500,16 @@ namespace mrv
         const auto& player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
-        auto currentTime = player->currentTime();
+        auto currentTime = time::round(player->currentTime());
         std::vector< otime::RationalTime > times = player->getAnnotationTimes();
         std::sort(
             times.begin(), times.end(), std::greater<otime::RationalTime>());
         for (const auto& time : times)
         {
-            if (time::floor(time) < time::floor(currentTime))
+            const auto& roundedTime = time::round(time);
+            if (roundedTime < currentTime)
             {
-                player->seek(time);
+                player->seek(roundedTime);
                 return;
             }
         }
@@ -1519,14 +1520,15 @@ namespace mrv
         const auto& player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
-        auto currentTime = player->currentTime();
+        auto currentTime = time::round(player->currentTime());
         std::vector< otime::RationalTime > times = player->getAnnotationTimes();
         std::sort(times.begin(), times.end());
         for (const auto& time : times)
         {
-            if (time::floor(time) > time::floor(currentTime))
+            const auto& roundedTime = time::round(time);
+            if (roundedTime > currentTime)
             {
-                player->seek(time);
+                player->seek(roundedTime);
                 return;
             }
         }
@@ -2149,7 +2151,7 @@ namespace mrv
         auto files = model->observeFiles()->get();
         if (files.size() < 1)
             return;
-        
+
         auto player = app->ui->uiView->getTimelinePlayer();
         const auto& time = player->currentTime();
 

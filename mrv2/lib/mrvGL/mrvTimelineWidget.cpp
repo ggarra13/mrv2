@@ -37,6 +37,8 @@
 
 #include "mrViewer.h"
 
+// #define USE_INT64_FRAME_MARKERS
+
 namespace mrv
 {
     namespace
@@ -196,6 +198,7 @@ namespace mrv
 
         bool dragging = false;
 
+        std::vector<otime::RationalTime> annotationTimes;
         otime::TimeRange timeRange = time::invalidTimeRange;
     };
 
@@ -589,13 +592,26 @@ namespace mrv
         }
         CHECK_GL;
 
-        bool annotationMarks = false;
-        if (p.player)
+        if (p.player && p.player->hasAnnotations())
         {
-            annotationMarks = p.player->hasAnnotations();
+            const auto& times = p.player->getAnnotationTimes();
+            if (p.annotationTimes != times)
+            {
+                p.annotationTimes = times;
+#ifdef USE_INT64_FRAME_MARKERS
+                std::vector<int64_t> markers;
+                for (const auto& time : times)
+                {
+                    markers.push_back(time.value());
+                }
+                p.timelineWidget->setFrameMarkers(markers);
+#else
+                p.timelineWidget->setFrameMarkers(times);
+#endif
+            }
         }
 
-        if (_getDrawUpdate(p.timelineWindow) || annotationMarks || !p.buffer)
+        if (_getDrawUpdate(p.timelineWindow) || !p.buffer)
         {
             try
             {
@@ -631,8 +647,6 @@ namespace mrv
                     _drawEvent(
                         p.timelineWindow, math::Box2i(renderSize), drawEvent);
                     p.render->setClipRectEnabled(false);
-                    if (annotationMarks)
-                        _drawAnnotationMarks();
                     p.render->end();
                 }
             }
@@ -771,7 +785,7 @@ namespace mrv
         bool isNDI = file::isTemporaryNDI(p.player->path());
         if (isNDI)
             return 0;
-        
+
         int button = -1;
         int modifiers = fromFLTKModifiers();
         if (Fl::event_button1())
@@ -804,7 +818,7 @@ namespace mrv
         bool isNDI = file::isTemporaryNDI(p.player->path());
         if (isNDI)
             return 0;
-        
+
         int modifiers = fromFLTKModifiers();
         if (Fl::event_button1())
         {
@@ -835,7 +849,7 @@ namespace mrv
         bool isNDI = file::isTemporaryNDI(p.player->path());
         if (isNDI)
             return 0;
-        
+
         if (button == 1)
         {
             int ok = _seek();
@@ -1432,38 +1446,6 @@ namespace mrv
         else if (key == kFitAll.hotkey())
             key = '0'; // Darby uses 0 to frame view
         return key;
-    }
-
-    //! Draw annotation marks on timeline
-    void TimelineWidget::_drawAnnotationMarks() const noexcept
-    {
-        TLRENDER_P();
-
-        const auto& duration = p.timeRange.duration();
-        const auto& color = image::Color4f(1, 1, 0, 0.25);
-        TimelineWidget* self = const_cast<TimelineWidget*>(this);
-        const float devicePixelRatio = self->pixels_per_unit();
-        const auto& times = p.player->getAnnotationTimes();
-        for (const auto time : times)
-        {
-            double X = _timeToPos(time::floor(time));
-            math::Box2i bbox(X, 0, 2, 20 * devicePixelRatio);
-            p.render->drawRect(bbox, color);
-        }
-    }
-
-    int
-    TimelineWidget::_timeToPos(const otime::RationalTime& value) const noexcept
-    {
-        TLRENDER_P();
-        if (!p.player || !p.timelineWidget)
-            return 0;
-
-        const math::Box2i& geometry =
-            p.timelineWidget->getTimelineItemGeometry();
-        const double scale = p.timelineWidget->getScale();
-        const otime::RationalTime t = value - p.timeRange.start_time();
-        return geometry.min.x + t.rescaled_to(1.0).value() * scale;
     }
 
     void TimelineWidget::_styleUpdate()

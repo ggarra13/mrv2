@@ -13,6 +13,10 @@ v1.1.2
   libjpeg-turbo on Linux.
 - Fixed Right Mouse Button toggling off the audio when there had been a drag
   action with some other button before.
+- Fixed a precision problem when shifting annotations at the beginning of a
+  clip due to a following clip being dragged to the same place as the
+  annotation.
+- Improved performance of timeline drawing when annotations are present.
 
 
 v1.1.1
