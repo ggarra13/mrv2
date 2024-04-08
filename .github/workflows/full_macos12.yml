@@ -55,7 +55,7 @@ jobs:
 
     - name: Build mrv2
       run: |
-        ./runme_nolog.sh -j 3 -t package
+        ./runme_nolog.sh -j 1 -t package
 
     - name: Upload binaries
       run: |
