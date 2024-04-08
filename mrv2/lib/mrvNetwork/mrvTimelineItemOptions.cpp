@@ -15,8 +15,8 @@ namespace tl
             j["thumbnailHeight"] = value.thumbnailHeight;
             j["waveformWidth"] = value.waveformHeight;
             j["waveformHeight"] = value.waveformHeight;
-            j["showTransitions"] = value.showTransitions;
-            j["showMarkers"] = value.showMarkers;
+            j["showTransitions"] = value.transitions;
+            j["showMarkers"] = value.markers;
         }
 
         void from_json(const nlohmann::json& j, ItemOptions& value)
@@ -26,8 +26,8 @@ namespace tl
             j.at("thumbnailHeight").get_to(value.thumbnailHeight);
             j.at("waveformWidth").get_to(value.waveformWidth);
             j.at("waveformHeight").get_to(value.waveformHeight);
-            j.at("showTransitions").get_to(value.showTransitions);
-            j.at("showMarkers").get_to(value.showMarkers);
+            j.at("showTransitions").get_to(value.transitions);
+            j.at("showMarkers").get_to(value.markers);
         }
     }; // namespace timelineui
 

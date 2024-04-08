@@ -1605,7 +1605,7 @@ namespace mrv
     {
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
         auto options = ui->uiTimeline->getItemOptions();
-        options.showMarkers = item->checked();
+        options.markers = item->checked();
         Message msg;
         msg["command"] = "setTimelineItemOptions";
         msg["value"] = options;
@@ -1621,7 +1621,7 @@ namespace mrv
     {
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
         auto options = ui->uiTimeline->getItemOptions();
-        options.showTransitions = item->checked();
+        options.transitions = item->checked();
         Message msg;
         msg["command"] = "setTimelineItemOptions";
         msg["value"] = options;

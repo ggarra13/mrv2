@@ -2350,7 +2350,7 @@ namespace mrv
                     }
                 }
                 // Handle Markers
-                if (options.showMarkers && visibleTrack)
+                if (options.markers && visibleTrack)
                 {
                     int markerSizeForTrack = 0;
                     for (const auto& child : track->children())
@@ -2370,7 +2370,7 @@ namespace mrv
                     markersHeight += markerSizeForTrack;
                 }
                 // Handle transitions
-                if (options.showTransitions && visibleTrack)
+                if (options.transitions && visibleTrack)
                 {
                     bool found = false;
                     for (const auto& child : track->children())

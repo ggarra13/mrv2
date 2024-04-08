@@ -37,8 +37,6 @@
 
 #include "mrViewer.h"
 
-// #define USE_INT64_FRAME_MARKERS
-
 namespace mrv
 {
     namespace
@@ -598,16 +596,12 @@ namespace mrv
             if (p.annotationTimes != times)
             {
                 p.annotationTimes = times;
-#ifdef USE_INT64_FRAME_MARKERS
-                std::vector<int64_t> markers;
+                std::vector<int> markers;
                 for (const auto& time : times)
                 {
                     markers.push_back(time.value());
                 }
                 p.timelineWidget->setFrameMarkers(markers);
-#else
-                p.timelineWidget->setFrameMarkers(times);
-#endif
             }
         }
 
