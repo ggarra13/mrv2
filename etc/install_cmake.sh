@@ -3,26 +3,47 @@
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
-echo "Getting latest release of cmake"
+CMAKE_RELEASE=3.29.0
+CMAKE_PLATFORM=macos-universal
+CMAKE_EXT=tar.gz
 
+echo "Getting latest release of cmake"
 . ./etc/build_dir.sh
 
 echo "Will install it in $PWD/$BUILD_DIR/install.."
+if [[ $KERNEL == *Linux* ]]; then
+    CMAKE_PLATFORM=linux-x86_64
+    CMAKE_EXT=tar.gz
+elif [[ $KERNEL == *Msys* ]]; then
+    CMAKE_PLATFORM=windows-x86_64
+    CMAKE_EXT=zip
+fi
 
 echo "Downloading cmake..."
-wget -c -q https://github.com/Kitware/CMake/releases/download/v3.26.3/cmake-3.26.3-linux-x86_64.tar.gz
+wget -c -q https://github.com/Kitware/CMake/releases/download/v${CMAKE_RELEASE}/cmake-${CMAKE_RELEASE}-${CMAKE_PLATFORM}.${CMAKE_EXT}
 
-echo "Decompressing archive..."
-tar -xf cmake-3.26.3-linux-x86_64.tar.gz
-
-echo "Installing..."
+echo "Creating install dir..."
 if [[ ! -d $PWD/$BUILD_DIR/install/ ]]; then
     mkdir -p $PWD/$BUILD_DIR/install/
 fi
-mv -f cmake-3.26.3-linux-x86_64/* $PWD/$BUILD_DIR/install/
+    
+echo "Decompressing archive..."
+if [[ $KERNEL != *Msys* ]]; then
+    tar -xf cmake-${CMAKE_RELEASE}-${CMAKE_PLATFORM}.${CMAKE_EXT}
+else
+    unzip cmake-${CMAKE_RELEASE}-${CMAKE_PLATFORM}.${CMAKE_EXT}
+fi
+
+if [[ $KERNEL != *Darwin* ]]; then
+    mv -f cmake-${CMAKE_RELEASE}-${CMAKE_PLATFORM}/* $PWD/$BUILD_DIR/install/
+elif [[ $KERNEL == *Darwin* ]]; then
+    mv -f cmake-${CMAKE_RELEASE}-${CMAKE_PLATFORM}/CMake.app/Contents/* $PWD/$BUILD_DIR/install/
+fi
+
 
 echo "Cleaning up..."
-rm -rf cmake-3.26.3-linux-x86_64*
+rm -rf cmake-${CMAKE_RELEASE}-${CMAKE_PLATFORM}*
+
 
 echo "Checking executable is there:"
 ls  $BUILD_DIR/install/bin

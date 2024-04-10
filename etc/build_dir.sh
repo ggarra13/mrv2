@@ -26,11 +26,6 @@ extract_version
 extract_python_version
 
 #
-# Extract cmake version
-#
-get_cmake_version
-
-#
 # Determine OS Kernel, OS CPU architecture
 #
 . etc/parse_args.sh
@@ -98,6 +93,11 @@ fi
 #
 
 export PATH="$PWD/${BUILD_DIR}/install/bin:$PWD/$BUILD_DIR/install/bin/Scripts:${PATH}"
+
+#
+# Extract cmake version
+#
+get_cmake_version
 
 #
 # We set both lib64 and lib to handle differences in Linux RH and Ubuntu
