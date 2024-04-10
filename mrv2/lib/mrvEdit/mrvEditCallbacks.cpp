@@ -1507,7 +1507,8 @@ namespace mrv
                 if (skipAnnotations.find(annotation) != skipAnnotations.end())
                     continue;
 
-                if (annotation->time > insertTime && annotation->time < endTime)
+                if (annotation->time >= insertTime &&
+                    annotation->time < endTime)
                 {
                     annotation->time += range.duration();
                 }
@@ -2114,7 +2115,13 @@ namespace mrv
                 if (!item)
                     continue;
 
+                auto rate = track->trimmed_range().duration().rate();
+
                 auto oldRange = item->trimmed_range_in_parent().value();
+
+                oldRange = otime::TimeRange(
+                    oldRange.start_time().rescaled_to(rate),
+                    oldRange.duration().rescaled_to(rate));
 
                 if (auto track = otio::dynamic_retainer_cast<otio::Track>(
                         tracks[move.toTrack]))
@@ -2136,6 +2143,8 @@ namespace mrv
                     {
                         insertTime = insertRange.start_time();
                     }
+
+                    insertTime = insertTime.rescaled_to(rate);
 
                     //
                     // Shift annotations
@@ -2341,7 +2350,7 @@ namespace mrv
                     }
                 }
                 // Handle Markers
-                if (options.showMarkers && visibleTrack)
+                if (options.markers && visibleTrack)
                 {
                     int markerSizeForTrack = 0;
                     for (const auto& child : track->children())
@@ -2361,7 +2370,7 @@ namespace mrv
                     markersHeight += markerSizeForTrack;
                 }
                 // Handle transitions
-                if (options.showTransitions && visibleTrack)
+                if (options.transitions && visibleTrack)
                 {
                     bool found = false;
                     for (const auto& child : track->children())

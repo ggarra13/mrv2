@@ -1533,8 +1533,8 @@ namespace mrv
         // Edit mode options
         //
         auto options = ui->uiTimeline->getItemOptions();
-        options.showTransitions = uiPrefs->uiPrefsShowTransitions->value();
-        options.showMarkers = uiPrefs->uiPrefsShowMarkers->value();
+        options.transitions = uiPrefs->uiPrefsShowTransitions->value();
+        options.markers = uiPrefs->uiPrefsShowMarkers->value();
         ui->uiTimeline->setEditable(uiPrefs->uiPrefsTimelineEditable->value());
         int thumbnails = uiPrefs->uiPrefsEditThumbnails->value();
         options.thumbnails = true;

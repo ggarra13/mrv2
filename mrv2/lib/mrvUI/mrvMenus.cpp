@@ -623,19 +623,18 @@ namespace mrv
         idx = menu->add(
             _("Render/Mirror Y"), kFlipY.hotkey(), (Fl_Callback*)mirror_y_cb,
             ui, FL_MENU_DIVIDER | mode);
-            
+
         mode = 0;
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
         idx = menu->add(
             _("Render/Rotate/-90 Degrees"), kRotateMinus90.hotkey(),
             (Fl_Callback*)rotate_minus_90_cb, ui, mode);
-        
+
         idx = menu->add(
             _("Render/Rotate/+90 Degrees"), kRotatePlus90.hotkey(),
             (Fl_Callback*)rotate_plus_90_cb, ui, mode);
 
-        
         mode = FL_MENU_RADIO;
 
         idx = menu->add(
@@ -983,13 +982,13 @@ namespace mrv
             _("Timeline/Transitions"), kToggleTimelineTransitions.hotkey(),
             (Fl_Callback*)toggle_timeline_transitions_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (options.showTransitions)
+        if (options.transitions)
             item->set();
         idx = menu->add(
             _("Timeline/Markers"), kToggleTimelineMarkers.hotkey(),
             (Fl_Callback*)toggle_timeline_markers_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (options.showMarkers)
+        if (options.markers)
             item->set();
 
         const int aIndex = model->observeAIndex()->get();

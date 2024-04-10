@@ -178,10 +178,8 @@ namespace mrv
         math::Vector2i _fromUI(const math::Vector2i&) const;
 
         unsigned _changeKey(unsigned key);
-        void _drawAnnotationMarks() const noexcept;
 
         otime::RationalTime _posToTime(int) const noexcept;
-        int _timeToPos(const otime::RationalTime&) const noexcept;
 
         //! Function used to send a seek to the network.
         int _seek();
