@@ -20,6 +20,12 @@ jobs:
     - name: Get machine name
       run: |
         echo "Machine name: $RUNNER_NAME"
+        
+    - name: Remove cmake 3.29.1
+      run: |
+        brew remove cmake
+        brew install cmake@3.29
+        brew link cmake@3.29 --force
 
     - name: Install ninja-build
       run: brew install ninja
