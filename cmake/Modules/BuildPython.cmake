@@ -9,7 +9,7 @@ include(ProcessorCount)
 ProcessorCount(NPROCS)
 
 
-set( Python_VERSION 3.10 )
+set( Python_VERSION 3.11 )
 set( Python_TINY   9 )
 set( Python_URL https://www.python.org/ftp/python/${Python_VERSION}.${Python_TINY}/Python-${Python_VERSION}.${Python_TINY}.tar.xz )
 
@@ -29,8 +29,8 @@ if(APPLE)
     
     set( Python_CONFIGURE ${CMAKE_COMMAND} -E env "CFLAGS=${Python_C_FLAGS}" "CPPFLAGS=${Python_C_FLAGS}" "CXXFLAGS=${Python_CXX_FLAGS}" "LDFLAGS=${Python_LD_FLAGS}" -- ${CMAKE_CURRENT_BINARY_DIR}/configure-macos-python.sh --prefix=${CMAKE_INSTALL_PREFIX}
     )
-    set( Python_BUILD    )
-    set( Python_INSTALL  make -j ${NPROCS} altinstall )
+    set( Python_BUILD  make -j ${NPROCS} )
+    set( Python_INSTALL  make -j ${NPROCS} install )
 
 elseif(UNIX)
 
@@ -43,8 +43,8 @@ elseif(UNIX)
 	--enable-shared
         --prefix=${CMAKE_INSTALL_PREFIX}
     )
-    set( Python_BUILD    )
-    set( Python_INSTALL  make -j ${NPROCS} altinstall )
+    set( Python_BUILD   make -j ${NPROCS} )
+    set( Python_INSTALL  make -j ${NPROCS} install )
 else()
 
     set( platform x64 )

@@ -66,7 +66,7 @@ namespace mrv
 
     void mirror_x_cb(Fl_Menu_* m, ViewerUI* ui);
     void mirror_y_cb(Fl_Menu_* m, ViewerUI* ui);
-    
+
     void rotate_plus_90_cb(Fl_Menu_* m, ViewerUI* ui);
     void rotate_minus_90_cb(Fl_Menu_* m, ViewerUI* ui);
 
@@ -218,6 +218,7 @@ namespace mrv
     void edit_text_shape_cb(ViewerUI* ui);
 
     // Panel callbacks
+    void refresh_file_cache_cb(Fl_Menu_* m, void* d);
     void clone_file_cb(Fl_Menu_* m, void* d);
     void refresh_media_cb(Fl_Menu_* m, void* d);
     void set_stereo_cb(Fl_Menu_* m, void* d);

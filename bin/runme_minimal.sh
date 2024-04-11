@@ -44,7 +44,7 @@ echo "Saving compile log to $BUILD_DIR/compile.log ..."
 #
 # These are some of the expensive mrv2 options
 #
-export BUILD_PYTHON=OFF
+export BUILD_PYTHON=ON
 export MRV2_PYFLTK=OFF
 export MRV2_PYBIND11=OFF
 export MRV2_NETWORK=OFF

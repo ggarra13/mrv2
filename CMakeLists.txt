@@ -67,11 +67,6 @@ if(NOT DEFINED CMAKE_INSTALL_MESSAGE)
     set(CMAKE_INSTALL_MESSAGE "LAZY")
 endif()
 
-
-if(NOT MRV2_PYBIND11 AND BUILD_PYTHON)
-    set(BUILD_PYTHON OFF)
-endif()
-
 #
 # Python cannot be built with asan dependencies
 #

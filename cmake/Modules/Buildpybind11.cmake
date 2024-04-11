@@ -4,7 +4,7 @@
 
 include( ExternalProject )
 
-set(pybind11_GIT_TAG v2.10.3)
+set(pybind11_GIT_TAG v2.12.0)
 
 ExternalProject_Add(
     pybind11

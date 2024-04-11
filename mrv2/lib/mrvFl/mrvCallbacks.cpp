@@ -6,6 +6,8 @@
 #include <fstream>
 #include <iomanip>
 
+#include <tlIO/System.h>
+
 #include <tlCore/StringFormat.h>
 
 #include <FL/filename.H> // for fl_open_uri()
@@ -2232,6 +2234,13 @@ namespace mrv
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
+
+        auto app = App::app;
+
+        // Update the I/O cache.
+        auto ioSystem = app->getContext()->getSystem<io::System>();
+        ioSystem->getCache()->clear();
+
         player->clearCache();
     }
 
