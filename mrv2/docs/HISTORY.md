@@ -21,6 +21,7 @@ v1.1.2
   they were added.  It used to work in v1.0.0 but a change in tlRender broke
   it.
 - Updated mrv2 to Python 3.11.
+- Python 3.11 on Windows is now built with optimizations on.
 
 
 v1.1.1
