@@ -59,6 +59,10 @@ jobs:
       run: |
         chmod +x ./*.sh ./bin/*.sh ./etc/*.sh 
 
+    - name: Install cmake
+      run: |
+        ./etc/install_cmake.sh
+
     - name: Build mrv2
       run: |
         ./runme_nolog.sh -D TLRENDER_USD=OFF -D TLRENDER_FFMPEG=OFF -D MRV2_PDF=OFF -D MRV2_NETWORK=OFF -D MRV2_PYBIND11=ON -D BUILD_PYTHON=ON -D TLRENDER_EXR=OFF -D TLRENDER_RAW=OFF -D TLRENDER_TIFF=OFF -D TLRENDER_NET=OFF
@@ -102,6 +106,10 @@ jobs:
       run: |
         icacls "ssh\id_rsa" /inheritance:r /grant:r "%USERNAME%:R"
       
+    - name: Install cmake
+      run: |
+        ./etc/install_cmake.sh
+        
     - name: Build mrv2
       run: |
         ./runme_nolog.sh -D TLRENDER_USD=OFF -D TLRENDER_FFMPEG=OFF -D MRV2_PDF=OFF -D MRV2_NETWORK=OFF -D MRV2_PYBIND11=ON -D BUILD_PYTHON=ON -D TLRENDER_EXR=OFF -D TLRENDER_RAW=OFF -D TLRENDER_TIFF=OFF -D TLRENDER_NET=OFF
@@ -112,7 +120,7 @@ jobs:
 
 
   macos-python-build:
-    runs-on: macos-11
+    runs-on: macos-12
 
     steps:
     
@@ -151,6 +159,10 @@ jobs:
     - name: Set executable permissions
       run: |
         chmod +x ./*.sh ./bin/*.sh ./etc/*.sh 
+
+    - name: Install cmake
+      run: |
+        ./etc/install_cmake.sh
 
     - name: Build mrv2
       shell: bash
@@ -199,6 +211,10 @@ jobs:
     - name: Set executable permissions
       run: |
         chmod +x ./*.sh ./bin/*.sh ./etc/*.sh
+
+    - name: Install cmake
+      run: |
+        ./etc/install_cmake.sh
        
     - name: Build mrv2
       shell: bash
