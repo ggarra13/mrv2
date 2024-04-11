@@ -20,7 +20,7 @@ v1.1.2
 - Fixed refreshing of image sequences when there were missing frames and later
   they were added.  It used to work in v1.0.0 but a change in tlRender broke
   it.
-- Updated mrv2 to Python 3.11.
+- Updated mrv2 to Python 3.11 to conform to the VFX 2024 Platform.
 - Python 3.11 on Windows is now built with optimizations on.
 
 
