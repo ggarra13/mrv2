@@ -22,6 +22,9 @@ v1.1.2
   it.
 - Updated mrv2 to Python 3.11.
 - Python 3.11 on Windows is now built with optimizations on.
+- Updated mrv2's glfw3 to 3.4.
+- Updated mrv2's FLTK build to use the system libdecor
+  (needs v0.2.2 at least).
 
 
 v1.1.1
