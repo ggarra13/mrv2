@@ -27,7 +27,7 @@ params=$*
 #
 . etc/build_dir.sh
 
-export BUILD_DIR=$BUILD_DIR-minimal
+export BUILD_DIR=BUILD-$KERNEL-$ARCH-minimal/${CMAKE_BUILD_TYPE}
 mkdir -p $BUILD_DIR
 
 
@@ -44,7 +44,7 @@ echo "Saving compile log to $BUILD_DIR/compile.log ..."
 #
 # These are some of the expensive mrv2 options
 #
-export BUILD_PYTHON=ON
+export BUILD_PYTHON=OFF
 export MRV2_PYFLTK=OFF
 export MRV2_PYBIND11=OFF
 export MRV2_NETWORK=OFF
