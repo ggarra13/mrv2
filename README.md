@@ -18,7 +18,6 @@ Contents:
     - [Notes on Installation](#notes-on-installation)
 - [Features](#features)
 - [Building](#building)
-    - [Building with Docker](#building-with-docker)
     - [Dependencies](#dependencies)
       - [RedHat](#redhat)
       - [Ubuntu](#ubuntu)
@@ -146,17 +145,6 @@ Currently supported:
 - PDF Exporting of Annotations and Notes
 
 # Building
-
-## Building with Docker
-
-On Linux, if you have Docker installed with your user as part of the docker
-group, you can just build mrv2 with:
-
-```
-./runme_docker.sh
-```
-The resulting installers will be placed in a new packages/ directory of the
-root of mrv2.  The docker images are compatible with RedHat 8.9 and Ubuntu 20.04, but have issues with Wayland on more modern distros.
 
 ## Dependencies
 
