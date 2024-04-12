@@ -31,7 +31,6 @@ Contents:
 - [Running mrv2](#running-mrv2)
     - [macOS and Linux](#macos-and-linux)
     - [Windows](#windows)
-    - [Linux Wayland](#linux-wayland)
 - [Tutorials](#tutorials)
 - [Documenting](#documenting)
 - [Translating](#translating)
