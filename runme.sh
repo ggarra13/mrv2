@@ -16,6 +16,7 @@
 # It will also log the compilation on $BUILD_DIR/compile.log
 #
 
+
 #
 # Store the parameters for passing them later
 #
@@ -30,10 +31,11 @@ mkdir -p $BUILD_DIR
 
 
 #
-# Clear the flags, as they will be set by runme_nolog.sh.
+# Clear the flags, as they will be set again by runme_nolog.sh.
 #
 export FLAGS=""
 export CMAKE_FLAGS=""
+export PATH="$OLD_PATH"
 
 
 echo

@@ -88,6 +88,10 @@ if [ -z "$OLD_DYLD_LIBRARY_PATH" ]; then
     export OLD_DYLD_LIBRARY_PATH="/usr/local/opt/sqlite/lib:${DYLD_LIBRARY_PATH}"
 fi
 
+if [ -z "$OLD_PATH" ]; then
+    export OLD_PATH="$PATH"
+fi
+
 #
 # Set environment variables to point to install directory
 #
