@@ -81,13 +81,3 @@ ExternalProject_Add(
 
 set( PYTHON_DEP Python )
 
-#
-# This is needed for our own tlRender's USD building
-#
-if(UNIX)
-    set( Python_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/python${Python_VERSION} )
-else()
-    set( Python_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/python.exe )
-endif()
-
-set(PYTHON_EXECUTABLE ${Python_EXECUTABLE} )

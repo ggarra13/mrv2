@@ -1,3 +1,9 @@
+v1.1.3
+======
+
+- pyFLTK build improvements (removal of warnings).
+
+
 v1.1.2
 ======
 
