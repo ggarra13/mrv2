@@ -22,6 +22,6 @@ sign_installer() {
 }
 
 # Call the function to sign the NSIS installer
-if [[ "$USER" == "User-PC" ]]; then
+if [[ "$USER" == "User-PC" && -e "${NSIS_INSTALLER}" ]]; then
     sign_installer
 fi

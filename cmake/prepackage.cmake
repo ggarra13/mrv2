@@ -65,7 +65,7 @@ file( REMOVE_RECURSE "${CPACK_PREPACKAGE}/include" )
 #
 # Install system .SO dependencies
 #
-if( UNIX)
+if(UNIX)
 
     #
     # Under Rocky Linux, DSOs sometimes go to lib64/.
@@ -147,7 +147,7 @@ elseif(WIN32)
 	    "${MRV2_APP_DIR}/bin/mrv2-v${mrv2_VERSION}.exe") 
     endif()
     
-    set(MRV2_PYTHON_APP_LIB_DIR "${MRV2_APP_DIR}/bin/Lib/")
+    set(MRV2_PYTHON_APP_LIB_DIR "${MRV2_APP_DIR}/bin/Lib")
     set(MRV2_PYTHON_SITE_PACKAGES_DIR
 	"${MRV2_PYTHON_APP_LIB_DIR}/site-packages")
     
@@ -162,10 +162,13 @@ elseif(WIN32)
     "${MRV2_PYTHON_APP_LIB_DIR}/lib2to3/test*"
     "${MRV2_PYTHON_APP_LIB_DIR}/sqlite3/test*"
     "${MRV2_PYTHON_APP_LIB_DIR}/tkinter/test*"
+    "${MRV2_PYTHON_APP_LIB_DIR}/unittest*"
     "${MRV2_PYTHON_SITE_PACKAGES_DIR}/alabaster*"
     "${MRV2_PYTHON_SITE_PACKAGES_DIR}/babel*"
     "${MRV2_PYTHON_SITE_PACKAGES_DIR}/colorama*"
     "${MRV2_PYTHON_SITE_PACKAGES_DIR}/docutils*"
+    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/fltk14/*.cpp"
+    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/fltk14/*.h"
     "${MRV2_PYTHON_SITE_PACKAGES_DIR}/imagesize*"
     "${MRV2_PYTHON_SITE_PACKAGES_DIR}/Jinja*"
     "${MRV2_PYTHON_SITE_PACKAGES_DIR}/MarkupSafe*"
@@ -176,15 +179,19 @@ elseif(WIN32)
 
 	
     if ( NOT "${MRV2_UNUSED_PYTHON_DIRS}" STREQUAL "" )
+	foreach( dir ${MRV2_UNUSED_PYTHON_DIRS})
+	    message(STATUS "First Removing ${dir}")
+	endforeach()
 	file( REMOVE_RECURSE ${MRV2_UNUSED_PYTHON_DIRS} )
     endif()
 
     #
-    # Set python's site-packages dir for .zip.
+    # Set python's site-packages and lid dir for .zip.
     #
     # When building an .exe on Windows, the site-packages will
     # be inside an application directory.
     #
+    set(MRV2_PYTHON_LIB_DIR "${CPACK_PREPACKAGE}/bin/Lib")
     set(MRV2_PYTHON_SITE_PACKAGES_DIR
 	"${CPACK_PREPACKAGE}/bin/Lib/site-packages")
 endif()
@@ -207,6 +214,8 @@ file(GLOB MRV2_UNUSED_PYTHON_DIRS
     "${MRV2_PYTHON_SITE_PACKAGES_DIR}/Babel*"
     "${MRV2_PYTHON_SITE_PACKAGES_DIR}/colorama*"
     "${MRV2_PYTHON_SITE_PACKAGES_DIR}/docutils*"
+    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/fltk14/*.cpp"
+    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/fltk14/*.h"
     "${MRV2_PYTHON_SITE_PACKAGES_DIR}/imagesize*"
     "${MRV2_PYTHON_SITE_PACKAGES_DIR}/Jinja*"
     "${MRV2_PYTHON_SITE_PACKAGES_DIR}/jinja2*"
@@ -219,5 +228,8 @@ file(GLOB MRV2_UNUSED_PYTHON_DIRS
     "${MRV2_PYTHON_SITE_PACKAGES_DIR}/unittest*")
 
 if ( NOT "${MRV2_UNUSED_PYTHON_DIRS}" STREQUAL "" )
+    foreach( dir ${MRV2_UNUSED_PYTHON_DIRS})
+	message(STATUS "Second Removing ${dir}")
+    endforeach()
     file( REMOVE_RECURSE ${MRV2_UNUSED_PYTHON_DIRS} )
 endif()
