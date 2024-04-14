@@ -179,9 +179,6 @@ elseif(WIN32)
 
 	
     if ( NOT "${MRV2_UNUSED_PYTHON_DIRS}" STREQUAL "" )
-	foreach( dir ${MRV2_UNUSED_PYTHON_DIRS})
-	    message(STATUS "First Removing ${dir}")
-	endforeach()
 	file( REMOVE_RECURSE ${MRV2_UNUSED_PYTHON_DIRS} )
     endif()
 
@@ -228,8 +225,5 @@ file(GLOB MRV2_UNUSED_PYTHON_DIRS
     "${MRV2_PYTHON_SITE_PACKAGES_DIR}/unittest*")
 
 if ( NOT "${MRV2_UNUSED_PYTHON_DIRS}" STREQUAL "" )
-    foreach( dir ${MRV2_UNUSED_PYTHON_DIRS})
-	message(STATUS "Second Removing ${dir}")
-    endforeach()
     file( REMOVE_RECURSE ${MRV2_UNUSED_PYTHON_DIRS} )
 endif()
