@@ -4,8 +4,6 @@
 
 #ifndef _WIN32
 #    include <unistd.h>
-#else
-#    include <FL/Fl.H>
 #endif
 
 #include <fstream>
@@ -14,12 +12,32 @@
 
 #include <tlCore/OS.h>
 
+#include <FL/Fl.H>
+
 #include "mrvCore/mrvI8N.h"
 
 namespace mrv
 {
     namespace os
     {
+        std::string getDesktop()
+        {
+            std::string out = "Unknown";
+            const char* env = fl_getenv("XDG_SESSION_DESKTOP");
+            if (env && strlen(env) > 0)
+            {
+                out = env;
+            }
+            else
+            {
+                env = fl_getenv("DESKTOP_SESSION");
+                if (env && strlen(env) > 0)
+                {
+                    out = env;
+                }
+            }
+            return out;
+        }
 
         std::string getVersion()
         {
