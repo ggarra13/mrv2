@@ -3,6 +3,7 @@ v1.1.3
 
 - pyFLTK build improvements (removal of warnings).
 - Made Windows .zip file smaller by removing unit tests.
+- Added Linux Desktop name to About Window.
 
 
 v1.1.2

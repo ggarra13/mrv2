@@ -697,7 +697,7 @@ namespace mrv
           << endl
           << mrv::os::getVersion() << endl
 #ifdef __linux__
-          << _("Desktop: ") << mrv::os::getDesktop() << endl
+          << mrv::os::getDesktop() << endl
 #endif
           << endl
           << _("mrv2 depends on:") << endl

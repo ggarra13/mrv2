@@ -36,6 +36,7 @@ namespace mrv
                     out = env;
                 }
             }
+            out = _("Desktop: ") + out;
             return out;
         }
 

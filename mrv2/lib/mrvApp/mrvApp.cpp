@@ -439,6 +439,9 @@ namespace mrv
                       << "mrv2 v" << mrv::version() << " " << mrv::build_date()
                       << std::endl
                       << mrv::os::getVersion() << std::endl;
+#ifdef __linux__
+            std::cout << mrv::os::getDesktop() << std::endl;
+#endif
             return;
         }
 
