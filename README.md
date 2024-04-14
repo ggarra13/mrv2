@@ -282,7 +282,7 @@ directory where all files shall reside.
 
 Make sure you meet the basic dependencies for your platform.  See [Dependencies](#dependencies).
 
-The runme.sh sript will output its progress to the terminal and also save itt
+The runme.sh sript will output its progress to the terminal and also save it
 in:
 ````
 BUILD-KERNEL-ARCH/BUILDTYPE/compile.log.
