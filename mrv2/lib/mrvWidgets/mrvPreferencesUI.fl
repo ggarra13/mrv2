@@ -13,6 +13,9 @@ decl {\#include <FL/Fl_Color_Chooser.H>} {public global
 decl {\#include "mrViewer.h"} {public global
 }
 
+decl {\#include "tlCore/Time.h"} {selected public global
+}
+
 decl {\#include "mrvCore/mrvEnv.h"} {public global
 }
 
@@ -778,7 +781,7 @@ v->uiPrefsFPS->value( g );}
                 xywh {368 102 420 144} box BORDER_BOX
               } {
                 Fl_Choice uiPrefsEditView {
-                  label {Default View} open selected
+                  label {Default View} open
                   tooltip {How to display timeline by default.} xywh {560 113 210 26} box THIN_DOWN_BOX down_box BORDER_BOX
                   code0 {o->value(0);}
                 } {
@@ -1454,7 +1457,7 @@ v->uiOCIO_Look->do_callback();}
             }
           }
         }
-        Fl_Group {} {
+        Fl_Group {} {open
           xywh {9 0 270 447} box PLASTIC_UP_BOX
         } {
           Fl_Tree {} {
@@ -1463,33 +1466,41 @@ v->uiOCIO_Look->do_callback();}
             callback {Fl_Tree_Item* t = o->callback_item();
 if ( !t || !t->label() ) return;
 
-bool found = false;
-for ( int i = 0; i < v->uiWizard->children(); ++i )
-{
-    Fl_Widget* w = v->uiWizard->child(i);
-    if ( !w->label() ) continue;
 
-    if ( strcmp( w->label(), t->label() ) == 0 )
+Fl_Wizard* wiz = v->uiWizard;
+
+bool found = false;
+const std::string& treeLabel = t->label(); 
+for ( int i = 0; i < wiz->children(); ++i )
+{
+    Fl_Widget* w = wiz->child(i);
+    if ( !w || !w->label() ) continue;
+
+    if ( treeLabel == w->label() )
 	{
+#ifdef __linux__
+	     // @bug: work-around gnome-shell Ubuntu 22.04.4 LTS bug.
+	     std::cerr << " " << "\x1B[1D";
+#endif
+	     wiz->value( w );
 	     found = true;
-	     v->uiWizard->value( w );
 	     break;
 	 }
 }
 
 if (!found)
 {
-  std::cerr <<_("Could not match ") << t->label() << std::endl;
+  std::cerr << _("Could not match ") << treeLabel << std::endl;
   std::cerr << _("Wizard labels are:") << std::endl;
-  for ( int i = 0; i < v->uiWizard->children(); ++i )
+  for ( int i = 0; i < wiz->children(); ++i )
   {
-    Fl_Widget* w = v->uiWizard->child(i);
+    Fl_Widget* w = wiz->child(i);
     if ( !w->label() ) continue;
     
     std::cerr << w->label() << std::endl;
  }
 }}
-            xywh {9 21 270 423} color 20
+            xywh {9 21 270 423} color 20 when 4
             code0 {fill_tree(o);}
             code1 {o->showroot(false);}
             class {mrv::PreferencesTree}
