@@ -62,7 +62,9 @@ class UpdatePlugin(plugin.Plugin):
         if kernel == 'Linux':
             exe = f'/usr/local/mrv2-v{version}-Linux-64/bin/mrv2.sh'
         elif kernel == 'Windows':
-            exe = f'C:/Program Files/mrv2 {version}/bin/mrv2.exe'
+            exe = f'C:/Program Files/mrv2-{version}/bin/mrv2.exe'
+            if not os.path.exists(exe):
+                exe = f'C:/Program Files/mrv2 {version}/bin/mrv2.exe'
         elif kernel == 'Darwin':
             exe = f'/Applications/mrv2.app/Contents/MacOS/mrv2'
         else:
