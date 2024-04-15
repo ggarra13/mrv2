@@ -1478,10 +1478,6 @@ for ( int i = 0; i < wiz->children(); ++i )
 
     if ( treeLabel == w->label() )
 	{
-#ifdef __linux__
-	     // @bug: work-around gnome-shell Ubuntu 22.04.4 LTS bug.
-	     std::cerr << " " << "\x1B[1D";
-#endif
 	     wiz->value( w );
 	     found = true;
 	     break;
