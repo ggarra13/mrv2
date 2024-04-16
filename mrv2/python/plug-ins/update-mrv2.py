@@ -62,7 +62,29 @@ class UpdatePlugin(plugin.Plugin):
         if kernel == 'Linux':
             exe = f'/usr/local/mrv2-v{version}-Linux-64/bin/mrv2.sh'
         elif kernel == 'Windows':
-            exe = f'C:/Program Files/mrv2-{version}/bin/mrv2.exe'
+            import winreg
+            exe = 'C:/Program Files/mrv2/bin/mrv2.exe'
+            try:
+                key_path = r"Applications\mrv2.exe\shell\Open\command"
+                key = winreg.OpenKey(winreg.HKEY_CLASSES_ROOT,
+                                     key_path)
+                value, reg_type = winreg.QueryValueEx(key, '')
+                exe = f'{value[:-5]}'
+                exe = exe.replace('\\', '/')
+                print(f'Install Location: {exe}')
+            except WindowsError as e:
+                print(f'Error retrieving value: {e}')
+            finally:
+                # Always close the opened key
+                winreg.CloseKey(key)
+
+            #
+            # Look for default install locations
+            #
+            if not os.path.exists(exe):
+                exe = f'C:/Program Files/mrv2-v{version}/bin/mrv2.exe'
+            if not os.path.exists(exe):
+                exe = f'C:/Program Files/mrv2 v{version}/bin/mrv2.exe'
             if not os.path.exists(exe):
                 exe = f'C:/Program Files/mrv2 {version}/bin/mrv2.exe'
         elif kernel == 'Darwin':

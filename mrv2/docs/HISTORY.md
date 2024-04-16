@@ -4,7 +4,9 @@ v1.1.3
 - pyFLTK build improvements (removal of warnings).
 - Made Windows .zip file smaller by removing unit tests.
 - Added Linux Desktop name to About Window.
-- Fixed update-mrv2.py plug-in for Windows.
+- Fixed update-mrv2.py plug-in for Windows.  The install location is now
+  retrieved from the registry.  Only if not found it looks in hard-coded
+  paths.
 
 
 v1.1.2
