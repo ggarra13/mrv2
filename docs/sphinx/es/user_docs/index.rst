@@ -1,7 +1,7 @@
 .. _user_docs:
 
 ########################
-Guía del Usuario de mrv2
+Gu�a del Usuario de mrv2
 ########################
 
 .. toctree::
@@ -18,3 +18,4 @@ Guía del Usuario de mrv2
    preferences
    saving
    videos
+   faq

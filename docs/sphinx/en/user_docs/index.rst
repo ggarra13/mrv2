@@ -18,3 +18,4 @@ mrv2 User Guide
    preferences
    saving
    videos
+   faq

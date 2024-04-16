@@ -6,15 +6,18 @@
 #
 # Standard libs
 #
-import importlib, os, platform, re, tempfile, subprocess, sys, requests, time
+import os, platform, re, tempfile, subprocess, sys, requests, time
 
 #
 # mrv2 imports
 #
 import mrv2
 from mrv2 import cmd, plugin, settings
-from fltk14 import *
 
+try:
+    from fltk14 import *
+except ImportError:
+    pass
 
 class UpdatePlugin(plugin.Plugin):
     """

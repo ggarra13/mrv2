@@ -539,6 +539,9 @@ namespace mrv
 
         version = mrv::os::getVersion();
         LOG_INFO(version);
+#ifdef __linux__
+        LOG_INFO(mrv::os::getDesktop());
+#endif
 
         LOG_INFO(msg);
 

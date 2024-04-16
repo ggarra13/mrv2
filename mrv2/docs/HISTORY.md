@@ -7,6 +7,9 @@ v1.1.3
 - Fixed update-mrv2.py plug-in for Windows.  The install location is now
   retrieved from the registry.  Only if not found it looks in hard-coded
   paths.
+- Install update-mrv2.py always, instead of removing it when python demos
+  was not installed.
+- Added instructions on Windows on how to retrieve the Explorer thumbnails.
 
 
 v1.1.2

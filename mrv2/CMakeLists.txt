@@ -207,8 +207,15 @@ include_directories( ${mrv2_INCLUDE_DIRS} )
 #
 # Install mrv2's auxiliary application directories
 #
-install( DIRECTORY colors fonts icons ocio presets share 
+install( DIRECTORY colors fonts icons ocio presets share
     DESTINATION .
+    COMPONENT applications )
+
+#
+# Install update-mrv2 plugin
+#
+install( FILES python/plug-ins/update-mrv2.py
+    DESTINATION python/plug-ins
     COMPONENT applications )
 
 #
@@ -221,8 +228,12 @@ install( DIRECTORY docs
 #
 # Install mrv2's python demos
 #
-install( DIRECTORY python
-    DESTINATION .
+install( DIRECTORY python/demos
+    DESTINATION python
+    COMPONENT python_demos )
+
+install( DIRECTORY python/plug-ins/demos
+    DESTINATION python/plug-ins
     COMPONENT python_demos )
 
 #
