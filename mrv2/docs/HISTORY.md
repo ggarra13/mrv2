@@ -12,6 +12,7 @@ v1.1.3
 - Added instructions on Windows on how to retrieve the Explorer thumbnails.
 - Darby has been busy!  He added automatic scrolling of the timeline when
   playing and ability to toggle track and clip info.
+- New action icons, which should display properly at high resolutions.
 
 
 v1.1.2
