@@ -2262,7 +2262,8 @@ namespace mrv
     int calculate_edit_viewport_size(ViewerUI* ui)
     {
         // Some constants, as Darby does not expose this in tlRender.
-        const int kTrackTitleHeight = 42;
+        const int kTrackInfoHeight = 21;
+        const int kClipInfoHeight = 21;
         const int kTransitionsHeight = 30;
         const int kAudioGapOnlyHeight = 20;
         const int kMarkerHeight = 24;
@@ -2315,7 +2316,10 @@ namespace mrv
                 bool visibleTrack = false;
                 if (otio::Track::Kind::video == track->kind())
                 {
-                    videoHeight += kTrackTitleHeight;
+                    if (options.trackInfo)
+                        videoHeight += kTrackInfoHeight;
+                    if (options.clipInfo)
+                        videoHeight += kClipInfoHeight;
                     if (options.thumbnails)
                         videoHeight += options.thumbnailHeight;
                     visibleTrack = true;
@@ -2326,7 +2330,10 @@ namespace mrv
                 {
                     if (track->children().size() > 0)
                     {
-                        audioHeight += kTrackTitleHeight;
+                        if (options.trackInfo)
+                            audioHeight += kTrackInfoHeight;
+                        if (options.clipInfo)
+                            audioHeight += kClipInfoHeight;
                         bool hasWaveform = false;
                         if (options.thumbnails)
                         {

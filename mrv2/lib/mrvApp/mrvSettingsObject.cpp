@@ -69,7 +69,10 @@ namespace mrv
         totalPhysMem /= 1024;
 
         p.defaultValues["Timeline/Editable"] = true;
-        p.defaultValues["Timeline/StopOnScrub"] = 0;
+        p.defaultValues["Timeline/FrameView"] = true;
+        p.defaultValues["Timeline/ScrollToCurrentFrame"] = true;
+        p.defaultValues["Timeline/StopOnScrub"] = true;
+        p.defaultValues["Timeline/FirstTrack"] = false;
         p.defaultValues["Audio/Volume"] = 1.0F;
         p.defaultValues["Audio/Mute"] = false;
         p.defaultValues["Cache/GBytes"] = static_cast<int>(totalPhysMem / 2);

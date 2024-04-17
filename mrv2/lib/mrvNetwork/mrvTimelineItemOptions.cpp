@@ -11,23 +11,27 @@ namespace tl
         void to_json(nlohmann::json& j, const ItemOptions& value)
         {
             j["editAssociatedClips"] = value.editAssociatedClips;
+            j["trackInfo"] = value.trackInfo;
+            j["clipInfo"] = value.clipInfo;
             j["thumbnails"] = value.thumbnails;
             j["thumbnailHeight"] = value.thumbnailHeight;
             j["waveformWidth"] = value.waveformHeight;
             j["waveformHeight"] = value.waveformHeight;
-            j["showTransitions"] = value.transitions;
-            j["showMarkers"] = value.markers;
+            j["transitions"] = value.transitions;
+            j["markers"] = value.markers;
         }
 
         void from_json(const nlohmann::json& j, ItemOptions& value)
         {
             j.at("editAssociatedClips").get_to(value.editAssociatedClips);
+            j.at("trackInfo").get_to(value.trackInfo);
+            j.at("clipInfo").get_to(value.clipInfo);
             j.at("thumbnails").get_to(value.thumbnails);
             j.at("thumbnailHeight").get_to(value.thumbnailHeight);
             j.at("waveformWidth").get_to(value.waveformWidth);
             j.at("waveformHeight").get_to(value.waveformHeight);
-            j.at("showTransitions").get_to(value.transitions);
-            j.at("showMarkers").get_to(value.markers);
+            j.at("transitions").get_to(value.transitions);
+            j.at("markers").get_to(value.markers);
         }
     }; // namespace timelineui
 

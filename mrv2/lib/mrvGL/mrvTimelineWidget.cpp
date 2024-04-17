@@ -35,6 +35,8 @@
 
 #include "mrvNetwork/mrvTCP.h"
 
+#include "mrvApp/mrvSettingsObject.h"
+
 #include "mrViewer.h"
 
 namespace mrv
@@ -222,6 +224,8 @@ namespace mrv
 
         p.ui = ui;
 
+        auto settings = ui->app->settings();
+
         p.style = ui::Style::create(context);
         p.iconLibrary = ui::IconLibrary::create(context);
         p.fontSystem = image::FontSystem::create(context);
@@ -232,9 +236,13 @@ namespace mrv
         p.timelineWidget->setEditable(false);
         p.timelineWidget->setFrameView(true);
         p.timelineWidget->setScrollBarsVisible(false);
-        p.timelineWidget->setStopOnScrub(false);
         p.timelineWidget->setMoveCallback(std::bind(
             &mrv::TimelineWidget::moveCallback, this, std::placeholders::_1));
+
+        timelineui::ItemOptions itemOptions;
+        itemOptions.trackInfo = settings->getValue<bool>("Timeline/TrackInfo");
+        itemOptions.clipInfo = settings->getValue<bool>("Timeline/ClipInfo");
+        p.timelineWidget->setItemOptions(itemOptions);
 
         p.timelineWindow = TimelineWindow::create(context);
         p.timelineWindow->setClipboard(p.clipboard);
@@ -292,6 +300,16 @@ namespace mrv
     void TimelineWidget::setEditable(bool value)
     {
         _p->timelineWidget->setEditable(value);
+    }
+
+    void TimelineWidget::setScrollBarsVisible(bool value)
+    {
+        _p->timelineWidget->setScrollBarsVisible(value);
+    }
+
+    void TimelineWidget::setScrollToCurrentFrame(bool value)
+    {
+        _p->timelineWidget->setScrollToCurrentFrame(value);
     }
 
     int TimelineWidget::_seek()
@@ -455,11 +473,6 @@ namespace mrv
     void TimelineWidget::setFrameView(bool value)
     {
         _p->timelineWidget->setFrameView(value);
-    }
-
-    void TimelineWidget::setScrollBarsVisible(bool value)
-    {
-        _p->timelineWidget->setScrollBarsVisible(value);
     }
 
     void TimelineWidget::setScrollKeyModifier(ui::KeyModifier value)

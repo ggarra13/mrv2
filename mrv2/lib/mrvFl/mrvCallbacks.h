@@ -164,6 +164,10 @@ namespace mrv
     void timeline_thumbnails_large_cb(Fl_Menu_*, ViewerUI* ui);
     void toggle_timeline_editable_cb(Fl_Menu_*, ViewerUI* ui);
     void toggle_timeline_edit_associated_clips_cb(Fl_Menu_*, ViewerUI* ui);
+    void toggle_timeline_frame_view_cb(Fl_Menu_*, ViewerUI* ui);
+    void toggle_timeline_scroll_to_current_frame_cb(Fl_Menu_*, ViewerUI* ui);
+    void toggle_timeline_track_info_cb(Fl_Menu_*, ViewerUI* ui);
+    void toggle_timeline_clip_info_cb(Fl_Menu_*, ViewerUI* ui);
 
     // OCIO callbacks
     void attach_ocio_ics_cb(Fl_Menu_*, ViewerUI* ui);
