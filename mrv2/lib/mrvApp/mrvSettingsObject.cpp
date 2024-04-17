@@ -15,6 +15,8 @@ namespace fs = std::filesystem;
 #include <tlTimeline/Player.h>
 #include <tlTimeline/Timeline.h>
 
+#include <tlTimelineUI/IItem.h>
+
 #include <FL/Fl.H>
 
 #include "mrvCore/mrvOS.h"
@@ -70,6 +72,10 @@ namespace mrv
 
         p.defaultValues["Timeline/Editable"] = true;
         p.defaultValues["Timeline/FrameView"] = true;
+        p.defaultValues["Timeline/TrackInfo"] =
+            timelineui::ItemOptions().trackInfo;
+        p.defaultValues["Timeline/ClipInfo"] =
+            timelineui::ItemOptions().clipInfo;
         p.defaultValues["Timeline/ScrollToCurrentFrame"] = true;
         p.defaultValues["Timeline/StopOnScrub"] = true;
         p.defaultValues["Timeline/FirstTrack"] = false;

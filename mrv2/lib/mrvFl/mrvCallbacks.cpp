@@ -1628,6 +1628,8 @@ namespace mrv
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
         auto options = ui->uiTimeline->getItemOptions();
         options.trackInfo = item->checked();
+        auto settings = ui->app->settings();
+        settings->setValue("Timeline/TrackInfo", options.trackInfo);
         Message msg;
         msg["command"] = "setTimelineItemOptions";
         msg["value"] = options;
@@ -1644,6 +1646,8 @@ namespace mrv
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
         auto options = ui->uiTimeline->getItemOptions();
         options.clipInfo = item->checked();
+        auto settings = ui->app->settings();
+        settings->setValue("Timeline/ClipInfo", options.clipInfo);
         Message msg;
         msg["command"] = "setTimelineItemOptions";
         msg["value"] = options;
