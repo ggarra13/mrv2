@@ -18,7 +18,8 @@ if(TLRENDER_FFMPEG)
     list(APPEND FL_SOURCES mrvSaveMovieOptionsUI.fl)
 endif()
 
-FLTK_WRAP_UI( mrvWidgets ${FL_SOURCES} )
+FLTK_RUN_FLUID( mrvWidgets_FLTK_UI_SRCS "${FL_SOURCES}" )
+
 
 set(HEADERS
     mrvAudioButton.h
