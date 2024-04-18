@@ -203,7 +203,7 @@ namespace mrv
 
     Hotkey kToggleTimelineEditable(false, false, false, false, 0);
     Hotkey kToggleEditAssociatedClips(false, false, false, false, 0);
-    Hotkey kToggleTimelineFrameView(false, false, false, false, 'f');
+    Hotkey kToggleTimelineFrameView(false, false, false, false, 0);
     Hotkey kToggleTimelineScrollToCurrentFrame(false, false, false, false, 0);
     Hotkey kToggleTimelineTrackInfo(false, false, false, false, 0);
     Hotkey kToggleTimelineClipInfo(false, false, false, false, 0);
