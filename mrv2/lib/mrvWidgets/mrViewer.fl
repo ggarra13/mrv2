@@ -413,7 +413,7 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
 }
 
 widget_class TimelineClass {
-  xywh {32 356 690 29} box NO_BOX resizable
+  xywh {685 527 690 29} box NO_BOX resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {open
@@ -1070,7 +1070,8 @@ Value is:  pow( 2, 1/x );} xywh {651 26 39 25} type {Horz Knob} labelsize 10 max
               Fl_Button uiScrub {
                 user_data this user_data_type {ViewerUI*}
                 callback {uiView->setActionMode( mrv::ActionMode::kScrub );}
-                tooltip {Scrubbing Tool} image {../../icons/Scrub.svg} compress_image 1 xywh {2 53 40 35} down_box DOWN_BOX value 1 selection_color 95
+                tooltip {Scrubbing Tool} xywh {2 53 40 35} down_box DOWN_BOX value 1 selection_color 95
+                code0 {o->image(mrv::load_svg("Scrub.svg"));}
                 class {mrv::Button}
               }
               Fl_Button uiSelection {
@@ -1082,7 +1083,8 @@ if (Fl::event_clicks() >= 1)
    mrv::panel::color_area_panel_cb( nullptr, v);
    Fl::event_clicks(0);
 }}
-                tooltip {Area Select Tool} image {../../icons/Selection.svg} compress_image 1 xywh {2 88 40 35} down_box DOWN_BOX selection_color 95
+                tooltip {Area Select Tool} xywh {2 88 40 35} down_box DOWN_BOX selection_color 95
+                code0 {o->image(mrv::load_svg("Selection.svg"));}
                 class {mrv::Button}
               }
               Fl_Button uiDraw {
@@ -1094,7 +1096,8 @@ if (Fl::event_clicks() >= 1)
    mrv::panel::annotations_panel_cb( nullptr, v);
    Fl::event_clicks(0);
 }}
-                tooltip {Freehand Drawing Tool} image {../../icons/Draw.svg} compress_image 1 xywh {2 123 40 35} down_box DOWN_BOX selection_color 95
+                tooltip {Freehand Drawing Tool} xywh {2 123 40 35} down_box DOWN_BOX selection_color 95
+                code0 {o->image(mrv::load_svg("Draw.svg"));}
                 class {mrv::Button}
               }
               Fl_Button uiErase {
@@ -1105,8 +1108,9 @@ if (Fl::event_clicks() >= 1)
 {
    mrv::panel::annotations_panel_cb( nullptr, v);
    Fl::event_clicks(0);
-}}
-                tooltip {Eraser Tool} image {../../icons/Erase.svg} compress_image 1 xywh {2 158 40 35} down_box DOWN_BOX selection_color 95
+}} selected
+                tooltip {Eraser Tool} xywh {2 158 40 35} down_box DOWN_BOX selection_color 95
+                code0 {o->image(mrv::load_svg("Erase.svg"));}
                 class {mrv::Button}
               }
               Fl_Button uiCircle {
@@ -1118,7 +1122,8 @@ if (Fl::event_clicks() >= 1)
    mrv::panel::annotations_panel_cb( nullptr, v);
    Fl::event_clicks(0);
 }}
-                tooltip {Circle Tool} image {../../icons/Circle.svg} compress_image 1 xywh {2 193 40 35} down_box DOWN_BOX selection_color 95
+                tooltip {Circle Tool} xywh {2 193 40 35} down_box DOWN_BOX selection_color 95
+                code0 {o->image(mrv::load_svg("Circle.svg"));}
                 class {mrv::Button}
               }
               Fl_Button uiRectangle {
@@ -1130,7 +1135,8 @@ if (Fl::event_clicks() >= 1)
    mrv::panel::annotations_panel_cb( nullptr, v);
    Fl::event_clicks(0);
 }}
-                tooltip {Rectangle Tool} image {../../icons/Rectangle.svg} compress_image 1 xywh {2 228 40 35} down_box DOWN_BOX selection_color 95
+                tooltip {Rectangle Tool} xywh {2 228 40 35} down_box DOWN_BOX selection_color 95
+                code0 {o->image(mrv::load_svg("Rectangle.svg"));}
                 class {mrv::Button}
               }
               Fl_Button uiArrow {
@@ -1142,7 +1148,8 @@ if (Fl::event_clicks() >= 1)
    mrv::panel::annotations_panel_cb( nullptr, v);
    Fl::event_clicks(0);
 }}
-                tooltip {Arrow Tool} image {../../icons/Arrow.svg} compress_image 1 xywh {2 263 40 35} down_box DOWN_BOX selection_color 95
+                tooltip {Arrow Tool} xywh {2 263 40 35} down_box DOWN_BOX selection_color 95
+                code0 {o->image(mrv::load_svg("Arrow.svg"));}
                 class {mrv::Button}
               }
               Fl_Button uiText {
@@ -1161,7 +1168,8 @@ if (Fl::event_clicks() >= 1)
    mrv::panel::annotations_panel_cb( nullptr, v);
    Fl::event_clicks(0);
 }}
-                tooltip {Text Tool.   Right click to edit previously stamped text.} image {../../icons/Text.svg} compress_image 1 xywh {2 298 40 35} down_box DOWN_BOX selection_color 95 labelfont 8 labelsize 24 labelcolor 7
+                tooltip {Text Tool.   Right click to edit previously stamped text.} xywh {1 298 40 35} down_box DOWN_BOX selection_color 95 labelfont 8 labelsize 24 labelcolor 7
+                code0 {o->image(mrv::load_svg("Text.svg"));}
                 class {mrv::Button}
               }
               Fl_Button uiPenColor {
@@ -1190,14 +1198,16 @@ settings->setValue( mrv::kPenColorA, a);}
               } {
                 Fl_Button uiUndoDraw {
                   user_data this user_data_type {ViewerUI*}
-                  callback {uiView->undo();} selected
-                  tooltip {Undo Last Shape Drawn in Current Frame.} image {../../icons/Undo.svg} compress_image 1 xywh {0 396 40 35} deactivate
+                  callback {uiView->undo();}
+                  tooltip {Undo Last Shape Drawn in Current Frame.} xywh {0 396 40 35} deactivate
+                  code0 {o->image(mrv::load_svg("Undo.svg"));}
                   class {mrv::Button}
                 }
                 Fl_Button uiRedoDraw {
                   user_data this user_data_type {ViewerUI*}
                   callback {uiView->redo();}
-                  tooltip {Redo Previous Shape Drawn in Current Frame.} image {../../icons/Redo.svg} compress_image 1 xywh {0 431 40 36} deactivate
+                  tooltip {Redo Previous Shape Drawn in Current Frame.} xywh {0 431 40 36} deactivate
+                  code0 {o->image(mrv::load_svg("Redo.svg"));}
                   class {mrv::Button}
                 }
               }

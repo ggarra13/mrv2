@@ -6,7 +6,8 @@
 # Function used to take .fl files (GUI creator into .cxx / .h files.
 #
 function (FLTK_RUN_FLUID TARGET SOURCES)
-    set (CXX_FILES )
+    set (CXX_FILES)
+    message( "CURRENT_BINARY_DIR=${CMAKE_CURRENT_BINARY_DIR}" )
     foreach (src ${SOURCES})
 	if ("${src}" MATCHES "\\.fl$")
 	    string(REGEX REPLACE "(.*/)?(.*).fl" \\2 basename ${src})
@@ -19,7 +20,7 @@ function (FLTK_RUN_FLUID TARGET SOURCES)
 		)
 	    set( _cxx_file "${CMAKE_CURRENT_BINARY_DIR}/${basename}.cxx" )
 	    list (APPEND CXX_FILES ${_cxx_file} )
-	endif()
+	endif ("${src}" MATCHES "\\.fl$")
     endforeach ()
     set (${TARGET} ${CXX_FILES} PARENT_SCOPE)
 endfunction()
