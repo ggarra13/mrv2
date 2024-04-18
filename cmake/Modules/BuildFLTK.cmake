@@ -5,8 +5,8 @@
 include( ExternalProject )
 
 #set( FLTK_GIT_TAG master )
-#set(FLTK_GIT_TAG 26f5b38a0113be817d13193387913580b5996d77) # Previous stable TAG
 set(FLTK_GIT_TAG 265e5cd77b30581e7701927930d8fa887e0361df) # has paths to libs
+#set(FLTK_GIT_TAG 15d9a350bf715357dec12810dcfe51ba8defbd5d) # does not fix libdecor
 
 set( FLTK_BUILD_SHARED_LIBS ON )  # We no longer compile static.
 

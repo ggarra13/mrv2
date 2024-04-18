@@ -5,13 +5,14 @@
 #
 # Function used to take .fl files (GUI creator into .cxx / .h files.
 #
+# Call like FLTK_RUN_FLUID( output_var ".fl SOURCES" )
+#
+#
 function (FLTK_RUN_FLUID TARGET SOURCES)
     set (CXX_FILES)
-    message( "CURRENT_BINARY_DIR=${CMAKE_CURRENT_BINARY_DIR}" )
     foreach (src ${SOURCES})
 	if ("${src}" MATCHES "\\.fl$")
 	    string(REGEX REPLACE "(.*/)?(.*).fl" \\2 basename ${src})
-	    message( "Running: cd ${CMAKE_CURRENT_BINARY_DIR} &&  ${FLTK_FLUID_EXECUTABLE} -c ${CMAKE_CURRENT_SOURCE_DIR}/${src}" )
 	    add_custom_command(
 		OUTPUT "${basename}.cxx" "${basename}.h"
 		COMMAND cd ${CMAKE_CURRENT_BINARY_DIR} && ${FLTK_FLUID_EXECUTABLE} -c "${CMAKE_CURRENT_SOURCE_DIR}/${src}"
