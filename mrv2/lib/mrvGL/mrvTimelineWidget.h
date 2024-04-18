@@ -62,6 +62,9 @@ namespace mrv
         //! Set the timeline player.
         void setTimelinePlayer(TimelinePlayer*);
 
+        //! Get whether the view is framed automatically.
+        bool hasFrameView() const;
+
         //! Set whether the to frame the view.
         void setFrameView(bool);
 

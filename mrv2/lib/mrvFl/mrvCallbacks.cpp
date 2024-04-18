@@ -1603,13 +1603,9 @@ namespace mrv
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
-    void toggle_timeline_frame_view_cb(Fl_Menu_* m, ViewerUI* ui)
+    void timeline_frame_view_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
-        bool value = item->checked();
-        auto settings = ui->app->settings();
-        settings->setValue("Timeline/FrameView", value);
-        ui->uiTimeline->setFrameView(value);
+        ui->uiTimeline->frameView();
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 

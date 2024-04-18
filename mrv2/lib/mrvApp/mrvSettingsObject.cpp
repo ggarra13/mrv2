@@ -71,7 +71,6 @@ namespace mrv
         totalPhysMem /= 1024;
 
         p.defaultValues["Timeline/Editable"] = true;
-        p.defaultValues["Timeline/FrameView"] = true;
         p.defaultValues["Timeline/TrackInfo"] =
             timelineui::ItemOptions().trackInfo;
         p.defaultValues["Timeline/ClipInfo"] =

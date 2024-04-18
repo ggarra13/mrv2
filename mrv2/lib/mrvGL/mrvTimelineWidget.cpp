@@ -470,6 +470,11 @@ namespace mrv
         p.ocioOptions = value;
     }
 
+    bool TimelineWidget::hasFrameView() const
+    {
+        return _p->timelineWidget->hasFrameView();
+    }
+
     void TimelineWidget::setFrameView(bool value)
     {
         _p->timelineWidget->setFrameView(value);

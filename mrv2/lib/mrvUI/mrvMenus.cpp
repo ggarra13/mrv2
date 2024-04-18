@@ -939,20 +939,25 @@ namespace mrv
         if (options.editAssociatedClips)
             item->set();
 
+        mode = 0;
+        if (numFiles == 0)
+            mode |= FL_MENU_INACTIVE;
+
         idx = menu->add(
             _("Timeline/Frame View"), kToggleTimelineFrameView.hotkey(),
-            (Fl_Callback*)toggle_timeline_frame_view_cb, ui, mode);
-        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        bool boolValue = settings->getValue<bool>("Timeline/FrameView");
-        if (boolValue)
-            item->set();
+            (Fl_Callback*)timeline_frame_view_cb, ui, mode);
+
+        mode = FL_MENU_TOGGLE;
+        if (numFiles == 0)
+            mode |= FL_MENU_INACTIVE;
 
         idx = menu->add(
             _("Timeline/Scroll To Current Frame"),
             kToggleTimelineScrollToCurrentFrame.hotkey(),
             (Fl_Callback*)toggle_timeline_scroll_to_current_frame_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        boolValue = settings->getValue<bool>("Timeline/ScrollToCurrentFrame");
+        bool boolValue =
+            settings->getValue<bool>("Timeline/ScrollToCurrentFrame");
         if (boolValue)
             item->set();
 
