@@ -14,6 +14,7 @@ v1.1.3
   playing and ability to toggle track and clip info.
 - New action icons, which should display properly at high resolutions.
 - Sped up comparison wipes with Alt and Shift dragging.
+- Sped up color corrections from the Color Panel.
 
 
 v1.1.2
