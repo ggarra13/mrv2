@@ -470,7 +470,7 @@ namespace mrv
         HotkeyEntry(_("Toggle Timeline Editable"), &kToggleTimelineEditable),
         HotkeyEntry(
             _("Toggle Edit Associated Clips"), &kToggleEditAssociatedClips),
-        HotkeyEntry(_("Toggle Timeline Frame View"), &kToggleTimelineFrameView),
+        HotkeyEntry(_("Timeline Frame View"), &kToggleTimelineFrameView),
         HotkeyEntry(
             _("Toggle Timeline Scroll To Current Frame"),
             &kToggleTimelineScrollToCurrentFrame),
