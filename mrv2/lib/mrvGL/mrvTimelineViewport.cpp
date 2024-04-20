@@ -1250,7 +1250,7 @@ namespace mrv
             posX = mw->x();
             posY = mw->y();
         }
-
+        
         int decW = mw->decorated_w();
         int decH = mw->decorated_h();
 
@@ -1263,7 +1263,7 @@ namespace mrv
 #ifdef _WIN32
         miny += dH - dW / 2;
 #endif
-
+        
         // Take into account the different UI bars
         if (p.ui->uiMenuGroup->visible())
             H += p.ui->uiMenuGroup->h();
@@ -1287,7 +1287,7 @@ namespace mrv
 
         if (p.ui->uiDockGroup->visible())
             W += p.ui->uiDockGroup->w();
-
+        
         bool alwaysFrameView = (bool)uiPrefs->uiPrefsAutoFitImage->value();
         p.frameView = alwaysFrameView;
 
@@ -1333,14 +1333,19 @@ namespace mrv
             if (H > maxH)
                 H = maxH;
         }
-
+        
         if (posX + W > maxW)
             posX = minx;
         if (posY + W > maxH)
             posY = miny;
-
+        
         mw->resize(posX, posY, W, H);
 
+#ifdef FLTK_USE_WAYLAND
+        if (fl_wl_display())
+            Fl::check();
+#endif
+        
         p.ui->uiRegion->layout();
 
         set_edit_mode_cb(editMode, p.ui);
