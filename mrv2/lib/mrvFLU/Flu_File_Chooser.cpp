@@ -687,7 +687,7 @@ Flu_File_Chooser::Flu_File_Chooser(
 #ifdef _WIN32
         Flu_Label* l =
             new Flu_Label(5, 222, 100, 20, _(myDocumentsTxt.c_str()));
-        documentsBtn->image(&bigdocuments);
+        documentsBtn->image(mrv::load_svg("Documents.svg"));
 #else
         Flu_Label* l =
             new Flu_Label(5, 222, 100, 20, _(myDocumentsTxt.c_str()));
