@@ -1343,7 +1343,7 @@ namespace mrv
 
 #ifdef FLTK_USE_WAYLAND
         if (fl_wl_display())
-            Fl::check();
+            Fl::flush();
 #endif
         
         p.ui->uiRegion->layout();
