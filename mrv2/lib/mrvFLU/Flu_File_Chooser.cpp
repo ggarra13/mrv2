@@ -67,6 +67,7 @@
 #include "mrvFl/mrvPreferences.h"
 
 #include "mrvUI/mrvAsk.h"
+#include "mrvUI/mrvUtil.h"
 
 #include "mrvFLU/flu_pixmaps.h"
 #include "mrvFLU/flu_file_chooser_pixmaps.h"
@@ -690,7 +691,7 @@ Flu_File_Chooser::Flu_File_Chooser(
 #else
         Flu_Label* l =
             new Flu_Label(5, 222, 100, 20, _(myDocumentsTxt.c_str()));
-        documentsBtn->image(&bigtemporary);
+        documentsBtn->image(mrv::load_svg("TemporaryButton.svg"));
 #endif
         l->labelcolor(fl_contrast(FL_WHITE, l->color()));
         l->align(FL_ALIGN_CENTER);
@@ -698,7 +699,7 @@ Flu_File_Chooser::Flu_File_Chooser(
 
     Flu_Button* favoritesBtn = new Flu_Button(30, 258, 50, 48);
     favoritesBtn->box(FL_FLAT_BOX);
-    favoritesBtn->image(favorites);
+    favoritesBtn->image(mrv::load_svg("FavoritesButton.svg"));
     favoritesBtn->enter_box(FL_THIN_UP_BOX);
     favoritesBtn->color(FL_DARK3);
     favoritesBtn->callback(_favoritesCB, this);
@@ -764,7 +765,7 @@ Flu_File_Chooser::Flu_File_Chooser(
     forwardBtn->tooltip(forwardTTxt.c_str());
 
     upDirBtn = new Flu_Button(335, 43, 25, 25);
-    upDirBtn->image(up_folder_img);
+    upDirBtn->image(mrv::load_svg("UpFolder.svg"));
     upDirBtn->box(FL_FLAT_BOX);
     upDirBtn->enter_box(FL_THIN_UP_BOX);
     upDirBtn->callback(upDirCB, this);
@@ -780,25 +781,26 @@ Flu_File_Chooser::Flu_File_Chooser(
     {
         Flu_Separator* sep = new Flu_Separator(385, 42, 10, 28);
         sep->type(Flu_Separator::VERTICAL);
-        sep->box(FL_ENGRAVED_BOX);
+        sep->color(FL_WHITE);
+        sep->box(FL_FLAT_BOX);
     }
 
     trashBtn = new Flu_Button(395, 43, 25, 25);
-    trashBtn->image(trash);
+    trashBtn->image(mrv::load_svg("Trashcan.svg"));
     trashBtn->box(FL_FLAT_BOX);
     trashBtn->enter_box(FL_THIN_UP_BOX);
     trashBtn->callback(_trashCB, this);
     trashBtn->tooltip(trashTTxt.c_str());
 
     newDirBtn = new Flu_Button(420, 43, 25, 25);
-    newDirBtn->image(new_folder);
+    newDirBtn->image(mrv::load_svg("NewFolder.svg"));
     newDirBtn->box(FL_FLAT_BOX);
     newDirBtn->enter_box(FL_THIN_UP_BOX);
     newDirBtn->callback(_newFolderCB, this);
     newDirBtn->tooltip(newDirTTxt.c_str());
 
     addFavoriteBtn = new Flu_Button(445, 43, 25, 25);
-    addFavoriteBtn->image(add_to_favorite_folder);
+    addFavoriteBtn->image(mrv::load_svg("FavoritesFolders.svg"));
     addFavoriteBtn->box(FL_FLAT_BOX);
     addFavoriteBtn->enter_box(FL_THIN_UP_BOX);
     addFavoriteBtn->callback(_addToFavoritesCB, this);
@@ -807,7 +809,8 @@ Flu_File_Chooser::Flu_File_Chooser(
     {
         Flu_Separator* sep = new Flu_Separator(470, 42, 10, 28);
         sep->type(Flu_Separator::VERTICAL);
-        sep->box(FL_ENGRAVED_BOX);
+        sep->color(FL_WHITE);
+        sep->box(FL_FLAT_BOX);
     }
 
     previewBtn = new Flu_Button(482, 43, 23, 25);
