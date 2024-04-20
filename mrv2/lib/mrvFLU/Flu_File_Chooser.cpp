@@ -671,7 +671,7 @@ Flu_File_Chooser::Flu_File_Chooser(
         homeBtn->image(my_computer);
 #else
         Flu_Label* l = new Flu_Label(5, 142, 100, 20, _(myComputerTxt.c_str()));
-        homeBtn->image(home);
+        homeBtn->image(mrv::load_svg("Home.svg"));
 #endif
         l->labelcolor(fl_contrast(FL_WHITE, l->color()));
         l->align(FL_ALIGN_CENTER);
@@ -772,7 +772,7 @@ Flu_File_Chooser::Flu_File_Chooser(
     upDirBtn->tooltip(upTTxt.c_str());
 
     reloadBtn = new Flu_Button(360, 43, 25, 25);
-    reloadBtn->image(reload);
+    reloadBtn->image(mrv::load_svg("RefreshDir.svg"));
     reloadBtn->box(FL_FLAT_BOX);
     reloadBtn->enter_box(FL_THIN_UP_BOX);
     reloadBtn->callback(reloadCB, this);
