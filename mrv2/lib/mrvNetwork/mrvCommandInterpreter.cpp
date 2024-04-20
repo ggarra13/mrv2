@@ -1298,6 +1298,27 @@ namespace mrv
                 timelineui::ItemOptions value = message["value"];
                 ui->uiTimeline->setItemOptions(value);
             }
+            else if (c == "Timeline/FrameView")
+            {
+                bool receive = prefs->ReceiveUI->value();
+                if (!receive)
+                {
+                    tcp->unlock();
+                    return;
+                }
+                ui->uiTimeline->frameView();
+            }
+            else if (c == "Timeline/ScrollToCurrentFrame")
+            {
+                bool receive = prefs->ReceiveUI->value();
+                if (!receive)
+                {
+                    tcp->unlock();
+                    return;
+                }
+                bool value = message["value"];
+                ui->uiTimeline->setScrollToCurrentFrame(value);
+            }
             else if (c == "setTimelineEditable")
             {
                 bool receive = prefs->ReceiveUI->value();
