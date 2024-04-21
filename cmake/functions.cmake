@@ -26,6 +26,7 @@ function (FLTK_RUN_FLUID TARGET SOURCES)
     set (${TARGET} ${CXX_FILES} PARENT_SCOPE)
 endfunction()
 
+
 #
 # Function used to discard system DSOS or those already installed
 #
@@ -34,6 +35,12 @@ function( is_macos_system_lib TARGET ISSYSLIB )
 
     set( ${ISSYSLIB} 0 PARENT_SCOPE)
 
+    if ("${TARGET}" MATCHES "/mrv2")
+        # local library
+	set( ${ISSYSLIB} 1 PARENT_SCOPE)
+	return()
+    endif()
+    
     if ("${TARGET}" MATCHES "/mrv2")
         # local library
 	set( ${ISSYSLIB} 1 PARENT_SCOPE)

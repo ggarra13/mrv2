@@ -143,11 +143,24 @@ if ( APPLE )
 	    COMPONENT applications )
     endif()
     
-    # Install all.dylibs in CMAKE_INSTALL_PREFIX / lib
-    file( GLOB MRV2_DYLIBS ${CMAKE_INSTALL_PREFIX}/lib/*.dylib* )
+    # Install all .dylibs in CMAKE_INSTALL_PREFIX / lib
+    file( GLOB MRV2_DYLIBS
+	${CMAKE_INSTALL_PREFIX}/lib/*.dylib*
+    )
     install( FILES ${MRV2_DYLIBS}
 	DESTINATION lib
 	COMPONENT applications )
+
+    # Install all .frameworks in CMAKE_INSTALL_PREFIX / lib
+    file( GLOB MRV2_FRAMEWORKS
+	${CMAKE_INSTALL_PREFIX}/lib/*.framework* )
+
+    foreach( framework ${MRV2_FRAMEWORKS} )
+	install( DIRECTORY ${framework}
+	    DESTINATION lib
+	    COMPONENT applications )
+    endforeach()
+    
 elseif ( UNIX )
 
     if(MRV2_PYBIND11)
