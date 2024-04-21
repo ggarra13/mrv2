@@ -1,11 +1,3 @@
-v1.1.4
-======
-
-- Fixed libdecor incompatibility with older libdecor plug-ins.
-- Fixed + and - signs rotating the image when using one of the draw tools and
-  not just the pencil tool.  With all of them now the pencil size is changed.
-
-
 v1.1.3
 ======
 
@@ -24,6 +16,9 @@ v1.1.3
 - New action icons, which should display properly at high resolutions.
 - Sped up comparison wipes with Alt and Shift dragging.
 - Sped up color corrections from the Color Panel.
+- Fixed libdecor incompatibility with older libdecor plug-ins.
+- Fixed + and - signs rotating the image when using one of the draw tools and
+  not just the pencil tool.  With all of them now the pencil size is changed.
 
 
 v1.1.2
