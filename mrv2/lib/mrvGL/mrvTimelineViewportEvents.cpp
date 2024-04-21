@@ -1270,7 +1270,10 @@ namespace mrv
                 return 1;
             }
             else if (
-                p.actionMode == ActionMode::kDraw && kPenSizeMore.match(rawkey))
+                (p.actionMode != ActionMode::kScrub &&
+                 p.actionMode != ActionMode::kSelection &&
+                 p.actionMode != ActionMode::kText) &&
+                kPenSizeMore.match(rawkey))
             {
                 auto settings = p.ui->app->settings();
                 std_any value;
@@ -1282,7 +1285,10 @@ namespace mrv
                 return 1;
             }
             else if (
-                p.actionMode == ActionMode::kDraw && kPenSizeLess.match(rawkey))
+                (p.actionMode != ActionMode::kScrub &&
+                 p.actionMode != ActionMode::kSelection &&
+                 p.actionMode != ActionMode::kText) &&
+                kPenSizeLess.match(rawkey))
             {
                 auto settings = p.ui->app->settings();
                 std_any value;
