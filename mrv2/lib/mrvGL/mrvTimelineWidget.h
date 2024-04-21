@@ -62,23 +62,29 @@ namespace mrv
         //! Set the timeline player.
         void setTimelinePlayer(TimelinePlayer*);
 
+        //! Get whether the view is framed automatically.
+        bool hasFrameView() const;
+
         //! Set whether the to frame the view.
         void setFrameView(bool);
 
         //! Set whether the scroll bars are visible.
         void setScrollBarsVisible(bool);
 
+        //! Set whether to automatically scroll to the current frame.
+        void setScrollToCurrentFrame(bool);
+
         //! Set the mouse scroll key modifier.
         void setScrollKeyModifier(ui::KeyModifier);
-
-        //! Set whether to stop playback when scrubbing.
-        void setStopOnScrub(bool);
 
         //! Set whether thumbnails are enabled.
         void setThumbnails(bool);
 
         //! Set the mouse wheel scale.
         void setMouseWheelScale(float);
+
+        //! Set whether to stop playback when scrubbing.
+        void setStopOnScrub(bool);
 
         //! Set the item options.
         void setItemOptions(const timelineui::ItemOptions&);

@@ -123,7 +123,7 @@ namespace mrv
             _("File/Close All"), kCloseAll.hotkey(), (Fl_Callback*)close_all_cb,
             ui, mode);
 
-        std_any value;
+        // std_any value;
         SettingsObject* settings = ui->app->settings();
         const std::vector< std::string >& recentFiles = settings->recentFiles();
 
@@ -937,6 +937,42 @@ namespace mrv
             (Fl_Callback*)toggle_timeline_edit_associated_clips_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (options.editAssociatedClips)
+            item->set();
+
+        mode = 0;
+        if (numFiles == 0)
+            mode |= FL_MENU_INACTIVE;
+
+        idx = menu->add(
+            _("Timeline/Frame View"), kToggleTimelineFrameView.hotkey(),
+            (Fl_Callback*)timeline_frame_view_cb, ui, mode);
+
+        mode = FL_MENU_TOGGLE;
+        if (numFiles == 0)
+            mode |= FL_MENU_INACTIVE;
+
+        idx = menu->add(
+            _("Timeline/Scroll To Current Frame"),
+            kToggleTimelineScrollToCurrentFrame.hotkey(),
+            (Fl_Callback*)toggle_timeline_scroll_to_current_frame_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        bool boolValue =
+            settings->getValue<bool>("Timeline/ScrollToCurrentFrame");
+        if (boolValue)
+            item->set();
+
+        idx = menu->add(
+            _("Timeline/Track Info"), kToggleTimelineTrackInfo.hotkey(),
+            (Fl_Callback*)toggle_timeline_track_info_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (options.trackInfo)
+            item->set();
+
+        idx = menu->add(
+            _("Timeline/Clip Info"), kToggleTimelineClipInfo.hotkey(),
+            (Fl_Callback*)toggle_timeline_clip_info_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (options.clipInfo)
             item->set();
 
         mode = FL_MENU_RADIO;

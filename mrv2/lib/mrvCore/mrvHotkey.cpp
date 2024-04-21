@@ -203,6 +203,10 @@ namespace mrv
 
     Hotkey kToggleTimelineEditable(false, false, false, false, 0);
     Hotkey kToggleEditAssociatedClips(false, false, false, false, 0);
+    Hotkey kToggleTimelineFrameView(false, false, false, false, 0);
+    Hotkey kToggleTimelineScrollToCurrentFrame(false, false, false, false, 0);
+    Hotkey kToggleTimelineTrackInfo(false, false, false, false, 0);
+    Hotkey kToggleTimelineClipInfo(false, false, false, false, 0);
 
     Hotkey kEditCutFrame(true, false, false, false, 'x');
     Hotkey kEditCopyFrame(true, false, false, false, 'c');
@@ -217,18 +221,17 @@ namespace mrv
     Hotkey kEditUndo(false, false, false, false, ';');
     Hotkey kEditRedo(false, false, false, false, ':');
 
-    Hotkey kRotatePlus90( false, false, false, false, '+' );
-    Hotkey kRotateMinus90( false, false, false, false, '-' );
+    Hotkey kRotatePlus90(false, false, false, false, '+');
+    Hotkey kRotateMinus90(false, false, false, false, '-');
 
-    Hotkey kVideoLevelsFile( false, false, false, false, 0 );
-    Hotkey kVideoLevelsLegalRange( false, false, false, false, 0 );
-    Hotkey kVideoLevelsFullRange( false, false, false, false, 0 );
-    
-    Hotkey kAlphaBlendNone( false, false, false, false, 0 );
-    Hotkey kAlphaBlendStraight( false, false, false, false, 0 );
-    Hotkey kAlphaBlendPremultiplied( false, false, false, false, 0 );
+    Hotkey kVideoLevelsFile(false, false, false, false, 0);
+    Hotkey kVideoLevelsLegalRange(false, false, false, false, 0);
+    Hotkey kVideoLevelsFullRange(false, false, false, false, 0);
 
-    
+    Hotkey kAlphaBlendNone(false, false, false, false, 0);
+    Hotkey kAlphaBlendStraight(false, false, false, false, 0);
+    Hotkey kAlphaBlendPremultiplied(false, false, false, false, 0);
+
     inline bool has_shift(unsigned rawkey)
     {
         return Fl::event_key(FL_Shift_L) || Fl::event_key(FL_Shift_R);
@@ -386,18 +389,18 @@ namespace mrv
         HotkeyEntry(_("Alpha Channel"), &kAlphaChannel),
         HotkeyEntry(_("Flip X"), &kFlipX),
         HotkeyEntry(_("Flip Y"), &kFlipY),
-        
+
         HotkeyEntry(_("Rotate Images +90 Degrees"), &kRotatePlus90),
         HotkeyEntry(_("Rotate Images -90 Degrees"), &kRotateMinus90),
 
         HotkeyEntry(_("Video Levels from File"), &kVideoLevelsFile),
         HotkeyEntry(_("Video Levels Legal Range"), &kVideoLevelsLegalRange),
         HotkeyEntry(_("Video Levels Full Range"), &kVideoLevelsFullRange),
-    
+
         HotkeyEntry(_("Alpha Blend None"), &kAlphaBlendNone),
         HotkeyEntry(_("Alpha Blend Straight"), &kAlphaBlendStraight),
         HotkeyEntry(_("Alpha Blend Premultiplied"), &kAlphaBlendPremultiplied),
-    
+
         HotkeyEntry(_("Annotation Clear Frame"), &kShapeFrameClear),
         HotkeyEntry(_("Annotation Clear All Frames"), &kShapeFrameClearAll),
         HotkeyEntry(_("Annotation Frame Step Backwards"), &kShapeFrameStepBack),
@@ -464,6 +467,15 @@ namespace mrv
         HotkeyEntry(_("Toggle USD"), &kToggleUSD),
         HotkeyEntry(_("Toggle Stereo 3D"), &kToggleStereo3D),
         HotkeyEntry(_("Toggle Edit Mode"), &kToggleEditMode),
+        HotkeyEntry(_("Toggle Timeline Editable"), &kToggleTimelineEditable),
+        HotkeyEntry(
+            _("Toggle Edit Associated Clips"), &kToggleEditAssociatedClips),
+        HotkeyEntry(_("Timeline Frame View"), &kToggleTimelineFrameView),
+        HotkeyEntry(
+            _("Toggle Timeline Scroll To Current Frame"),
+            &kToggleTimelineScrollToCurrentFrame),
+        HotkeyEntry(_("Toggle Timeline Track Info"), &kToggleTimelineTrackInfo),
+        HotkeyEntry(_("Toggle Timeline Clip Info"), &kToggleTimelineClipInfo),
         HotkeyEntry(
             _("Toggle Timeline Thumbnails"), &kToggleTimelineThumbnails),
         HotkeyEntry(

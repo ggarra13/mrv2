@@ -28,6 +28,8 @@ namespace mrv
     private:
         void _timelinePlayersUpdate();
         void _widgetUpdate();
+        void _compareUpdate();
+        void _displayUpdate();
 
         TLRENDER_PRIVATE();
     };

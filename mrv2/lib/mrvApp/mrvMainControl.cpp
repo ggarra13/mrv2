@@ -126,7 +126,7 @@ namespace mrv
                     msg["value"] = opts;
                     tcp->pushMessage(msg);
 
-                    _widgetUpdate();
+                    _compareUpdate();
                 });
 
         p.stereo3DOptionsObserver =
@@ -189,7 +189,7 @@ namespace mrv
 
         p.displayOptions = value;
 
-        _widgetUpdate();
+        _displayUpdate();
     }
 
     void MainControl::setImageOptions(const timeline::ImageOptions& value)
@@ -214,6 +214,45 @@ namespace mrv
         }
     }
 
+    void MainControl::_displayUpdate()
+    {
+        TLRENDER_P();
+        
+        Viewport* view = p.ui->uiView;
+        view->setLUTOptions(p.lutOptions);
+        view->setDisplayOptions({p.displayOptions});
+        if (p.ui->uiSecondary)
+        {
+            view = p.ui->uiSecondary->viewport();
+            view->setLUTOptions(p.lutOptions);
+            view->setDisplayOptions({p.displayOptions});
+        }
+        
+        if (panel::colorPanel)
+        {
+            panel::colorPanel->setLUTOptions(p.lutOptions);
+            panel::colorPanel->setDisplayOptions(p.displayOptions);
+        }
+    }
+    
+    void MainControl::_compareUpdate()
+    {
+        TLRENDER_P();
+        
+        Viewport* view = p.ui->uiView;
+        view->setCompareOptions(p.compareOptions);
+        if (p.ui->uiSecondary)
+        {
+            view = p.ui->uiSecondary->viewport();
+            view->setCompareOptions(p.compareOptions);
+        }
+        
+        if (panel::comparePanel)
+        {
+            panel::comparePanel->setCompareOptions(p.compareOptions);
+        }
+    }
+    
     void MainControl::_widgetUpdate()
     {
         TLRENDER_P();
@@ -342,12 +381,13 @@ namespace mrv
         }
 
         Viewport* view = p.ui->uiView;
+        view->setCompareOptions(p.compareOptions);
 
         p.ocioOptions = view->getOCIOOptions();
         view->setLUTOptions(p.lutOptions);
         view->setImageOptions({p.imageOptions});
-        view->setDisplayOptions({p.displayOptions});
         view->setCompareOptions(p.compareOptions);
+        view->setDisplayOptions({p.displayOptions});
         view->setStereo3DOptions(p.stereo3DOptions);
         view->setTimelinePlayer(p.player);
         view->updatePlaybackButtons();

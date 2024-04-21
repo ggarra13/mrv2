@@ -330,6 +330,12 @@ namespace mrv
         CHECK_GL;
 
         float r = 0.F, g = 0.F, b = 0.F, a = 0.F;
+
+#ifdef FLTK_USE_WAYLAND
+        if (fl_wl_display())
+            a = 1.F;
+#endif
+        
         if (!p.presentation)
         {
             uint8_t ur, ug, ub;

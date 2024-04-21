@@ -297,12 +297,6 @@ namespace mrv
         uiPrefs->uiPrefsTimelineDisplay->value(tmp);
 
         gui.get("timeline_thumbnails", tmp, 1);
-#ifdef FLTK_USE_WAYLAND
-        if (fl_wl_display())
-        {
-            tmp = 0;
-        }
-#endif
         uiPrefs->uiPrefsTimelineThumbnails->value(tmp);
 
         gui.get("remove_edls", tmp, 1);

@@ -15,6 +15,8 @@ namespace fs = std::filesystem;
 #include <tlTimeline/Player.h>
 #include <tlTimeline/Timeline.h>
 
+#include <tlTimelineUI/IItem.h>
+
 #include <FL/Fl.H>
 
 #include "mrvCore/mrvOS.h"
@@ -69,7 +71,13 @@ namespace mrv
         totalPhysMem /= 1024;
 
         p.defaultValues["Timeline/Editable"] = true;
-        p.defaultValues["Timeline/StopOnScrub"] = 0;
+        p.defaultValues["Timeline/TrackInfo"] =
+            timelineui::ItemOptions().trackInfo;
+        p.defaultValues["Timeline/ClipInfo"] =
+            timelineui::ItemOptions().clipInfo;
+        p.defaultValues["Timeline/ScrollToCurrentFrame"] = true;
+        p.defaultValues["Timeline/StopOnScrub"] = true;
+        p.defaultValues["Timeline/FirstTrack"] = false;
         p.defaultValues["Audio/Volume"] = 1.0F;
         p.defaultValues["Audio/Mute"] = false;
         p.defaultValues["Cache/GBytes"] = static_cast<int>(totalPhysMem / 2);

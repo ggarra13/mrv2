@@ -1603,6 +1603,67 @@ namespace mrv
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
+    void timeline_frame_view_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        Message msg;
+        msg["command"] = "Timeline/FrameView";
+        if (ui->uiPrefs->SendUI->value())
+            tcp->pushMessage(msg);
+        ui->uiTimeline->frameView();
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
+    void toggle_timeline_scroll_to_current_frame_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
+        bool value = item->checked();
+        auto settings = ui->app->settings();
+        Message msg;
+        msg["command"] = "Timeline/ScrollToCurrentFrame";
+        msg["value"] = value;
+        if (ui->uiPrefs->SendUI->value())
+            tcp->pushMessage(msg);
+        settings->setValue("Timeline/ScrollToCurrentFrame", value);
+        ui->uiTimeline->setScrollToCurrentFrame(value);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
+    void toggle_timeline_track_info_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
+        auto options = ui->uiTimeline->getItemOptions();
+        options.trackInfo = item->checked();
+        auto settings = ui->app->settings();
+        settings->setValue("Timeline/TrackInfo", options.trackInfo);
+        Message msg;
+        msg["command"] = "setTimelineItemOptions";
+        msg["value"] = options;
+        if (ui->uiPrefs->SendUI->value())
+            tcp->pushMessage(msg);
+        ui->uiTimeline->setItemOptions(options);
+        if (editMode != EditMode::kTimeline)
+            set_edit_mode_cb(EditMode::kFull, ui);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
+    void toggle_timeline_clip_info_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
+        auto options = ui->uiTimeline->getItemOptions();
+        options.clipInfo = item->checked();
+        auto settings = ui->app->settings();
+        settings->setValue("Timeline/ClipInfo", options.clipInfo);
+        Message msg;
+        msg["command"] = "setTimelineItemOptions";
+        msg["value"] = options;
+        if (ui->uiPrefs->SendUI->value())
+            tcp->pushMessage(msg);
+        ui->uiTimeline->setItemOptions(options);
+        if (editMode != EditMode::kTimeline)
+            set_edit_mode_cb(EditMode::kFull, ui);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
     void toggle_timeline_markers_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());

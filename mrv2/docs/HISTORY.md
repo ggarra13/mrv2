@@ -10,6 +10,12 @@ v1.1.3
 - Install update-mrv2.py always, instead of removing it when python demos
   was not installed.
 - Added instructions on Windows on how to retrieve the Explorer thumbnails.
+- Darby has been busy!  He added automatic scrolling of the timeline when
+  playing and ability to toggle track and clip info.
+- Added Darby's new options to Network connections.
+- New action icons, which should display properly at high resolutions.
+- Sped up comparison wipes with Alt and Shift dragging.
+- Sped up color corrections from the Color Panel.
 
 
 v1.1.2

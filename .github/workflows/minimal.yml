@@ -62,6 +62,7 @@ jobs:
     - name: Build mrv2
       run: |
         ./runme_nolog.sh \
+        -D BUILD_PYTHON=OFF \
         -D MRV2_PDF=OFF \
         -D MRV2_NETWORK=OFF \
         -D MRV2_PYBIND11=OFF \
@@ -124,6 +125,7 @@ jobs:
     - name: Build mrv2
       run: |
         ./runme_nolog.sh \
+        -D BUILD_PYTHON=OFF \
         -D MRV2_PDF=OFF \
         -D MRV2_NETWORK=OFF \
         -D MRV2_PYBIND11=OFF \
@@ -175,6 +177,7 @@ jobs:
     - name: Build mrv2
       run: |
         ./runme_nolog.sh \
+        -D BUILD_PYTHON=OFF \
         -D MRV2_PDF=OFF \
         -D MRV2_NETWORK=OFF \
         -D MRV2_PYBIND11=OFF \
@@ -226,6 +229,7 @@ jobs:
     - name: Build mrv2
       run: |
         ./runme_nolog.sh \
+        -D BUILD_PYTHON=OFF \
         -D MRV2_PDF=OFF \
         -D MRV2_NETWORK=OFF \
         -D MRV2_PYBIND11=OFF \
