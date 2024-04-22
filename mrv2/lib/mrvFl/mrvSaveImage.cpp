@@ -32,6 +32,9 @@ namespace fs = std::filesystem;
 
 #include "mrViewer.h"
 
+#include <FL/platform.H>
+#undef None
+
 namespace
 {
     const char* kModule = "save";
@@ -314,12 +317,18 @@ namespace mrv
                 view->redraw();
                 view->flush();
 
-#ifdef OLD
-                glReadBuffer(GL_FRONT);
-#else
-                glReadBuffer(GL_BACK);
-#endif
+                GLenum imageBuffer = GL_FRONT;
 
+#ifdef FLTK_USE_WAYLAND
+                if (fl_wl_display())
+                {
+                    imageBuffer = GL_BACK;
+                }
+#else
+                view->make_current();
+#endif
+                glReadBuffer(imageBuffer);
+                
                 CHECK_GL;
                 glReadPixels(
                     X, Y, outputInfo.size.w, outputInfo.size.h, format, type,

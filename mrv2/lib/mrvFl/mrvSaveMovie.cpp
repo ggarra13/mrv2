@@ -32,6 +32,9 @@
 
 #include "mrViewer.h"
 
+#include <FL/platform.H>
+#undef None
+
 namespace
 {
     const char* kModule = "save";
@@ -702,12 +705,17 @@ namespace mrv
                     {
                         view->redraw();
                         view->flush();
-                        
-#ifdef OLD
-                        glReadBuffer(GL_FRONT);
-#else
-                        glReadBuffer(GL_BACK);
+
+                        GLenum buffer = GL_FRONT;
+
+#ifdef FLTK_USE_WAYLAND
+                        if (fl_wl_display())
+                        {
+                            buffer = GL_BACK;
+                        }
 #endif
+                        
+                        glReadBuffer(buffer);
 
                         glReadBuffer(GL_FRONT);
                         glReadPixels(
