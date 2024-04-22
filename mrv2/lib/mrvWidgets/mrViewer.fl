@@ -413,7 +413,7 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
 }
 
 widget_class TimelineClass {
-  xywh {685 527 690 29} box NO_BOX resizable
+  xywh {0 0 690 29} box NO_BOX resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {open
@@ -805,7 +805,7 @@ uiSecondary = nullptr;} {}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
     exit_cb( o, v );} open
-      xywh {728 116 690 602} type Double align 80 resizable
+      xywh {0 0 690 602} type Double align 80 resizable
       class {mrv::MainWindow} size_range {690 602 0 0} visible
     } {
       Fl_Pack uiRegion {open
@@ -1059,12 +1059,12 @@ Value is:  pow( 2, 1/x );} xywh {651 26 39 25} type {Horz Knob} labelsize 10 max
             xywh {0 80 690 408} labeltype NO_LABEL hide resizable
           } {}
           Fl_Pack uiViewGroup {open
-            xywh {0 53 690 435} type HORIZONTAL
+            xywh {0 53 690 435} type HORIZONTAL box FLAT_BOX
             code0 {o->fixed( uiToolsGroup, uiToolsGroup->w() );}
             code1 {uiMain->workspace = uiViewGroup;}
             class Fl_Flex
           } {
-            Fl_Group uiToolsGroup {open
+            Fl_Group uiToolsGroup {
               xywh {0 53 42 435} box FLAT_BOX
             } {
               Fl_Button uiScrub {
@@ -1196,14 +1196,14 @@ settings->setValue( mrv::kPenColorA, a);}
                 }
                 Fl_Button uiRedoDraw {
                   user_data this user_data_type {ViewerUI*}
-                  callback {uiView->redo();} selected
+                  callback {uiView->redo();}
                   tooltip {Redo Previous Shape Drawn in Current Frame.} image {../../icons/Redo.svg} compress_image 1 xywh {0 431 40 36} deactivate
                   class {mrv::Button}
                 }
               }
             }
-            Fl_Group uiView {open
-              xywh {42 53 378 435} labeltype NO_LABEL resizable
+            Fl_Group uiView {open selected
+              xywh {42 53 378 435} color 56 labeltype NO_LABEL resizable
               code0 {o->main( this );}
               class {mrv::Viewport}
             } {}

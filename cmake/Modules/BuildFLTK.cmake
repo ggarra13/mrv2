@@ -6,7 +6,7 @@ include( ExternalProject )
 
 #set( FLTK_GIT_TAG master )
 #set(FLTK_GIT_TAG d2bd3c62408945227bb13133ad6ce270851b4872) # stable
-set(FLTK_GIT_TAG 7ec6f96d9c53f23e9137a2deea2cbf71f959534e)
+set(FLTK_GIT_TAG 5ec7176e81e6951ffa8360bc41a4e953de2b2070)  # fixes Wayland alpha
 
 set( FLTK_BUILD_SHARED_LIBS ON )  # We no longer compile static.
 

@@ -62,8 +62,7 @@ namespace mrv
 #ifdef __APPLE__
         fl_double = 0;
 #endif
-        // if (can_do(FL_STEREO))
-        //     stereo = FL_STEREO;
+        
         mode(FL_RGB | fl_double | FL_ALPHA | FL_STENCIL | FL_OPENGL3 | stereo);
     }
 
@@ -330,11 +329,6 @@ namespace mrv
         CHECK_GL;
 
         float r = 0.F, g = 0.F, b = 0.F, a = 0.F;
-
-#ifdef FLTK_USE_WAYLAND
-        if (fl_wl_display())
-            a = 1.F;
-#endif
         
         if (!p.presentation)
         {
@@ -343,6 +337,14 @@ namespace mrv
             r = ur / 255.0f;
             g = ug / 255.0f;
             b = ub / 255.0f;
+
+#ifdef FLTK_USE_WAYLAND
+            if (fl_wl_display())
+            {
+                p.ui->uiViewGroup->color(fl_rgb_color(ur, ug, ub));
+                p.ui->uiViewGroup->redraw();
+            }
+#endif
         }
         else
         {
