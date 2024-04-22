@@ -312,11 +312,10 @@ namespace mrv
             gl::OffscreenBufferOptions offscreenBufferOptions;
             std::shared_ptr<timeline_gl::Render> render;
             image::Size renderSize;
-            int layerId = 0;
+            int layerId = ui->uiColorChannel->value();
             if (options.annotations)
             {
                 annotations = true;
-                layerId = ui->uiColorChannel->value();
             }
 
             const SaveResolution resolution = options.resolution;
@@ -324,7 +323,7 @@ namespace mrv
             {
                 renderSize = info.video[layerId].size;
                 auto rotation = ui->uiView->getRotation();
-                if (options.annotations && rotationSign(rotation) != 0)
+                if (annotations && rotationSign(rotation) != 0)
                 {
                     size_t tmp = renderSize.w;
                     renderSize.w = renderSize.h;
@@ -373,10 +372,11 @@ namespace mrv
 
             outputInfo.size = renderSize;
             std::shared_ptr<image::Image> outputImage;
+            
+            outputInfo.pixelType = info.video[layerId].pixelType;
 
             if (hasVideo)
             {
-                outputInfo.pixelType = info.video[layerId].pixelType;
 
                 msg = tl::string::Format(_("Image info: {0} {1}"))
                           .arg(outputInfo.size)
@@ -456,8 +456,6 @@ namespace mrv
                 outputInfo = writerPlugin->getWriteInfo(outputInfo);
                 if (image::PixelType::None == outputInfo.pixelType)
                 {
-                    LOG_INFO(_("Writer plugin did not get output info.  "
-                               "Defaulting to RGB_U8"));
                     outputInfo.pixelType = image::PixelType::RGB_U8;
                     offscreenBufferOptions.colorType = image::PixelType::RGB_U8;
 #ifdef TLRENDER_EXR
@@ -467,6 +465,11 @@ namespace mrv
                             image::PixelType::RGB_F32;
                     }
 #endif
+                    msg = tl::string::Format(
+                        _("Writer plugin did not get output info.  "
+                          "Defaulting to {0}"))
+                          .arg(offscreenBufferOptions.colorType);
+                    LOG_INFO(msg);
                 }
 
 #ifdef TLRENDER_EXR
@@ -699,8 +702,13 @@ namespace mrv
                     {
                         view->redraw();
                         view->flush();
+                        
+#ifdef OLD
+                        glReadBuffer(GL_FRONT);
+#else
+                        glReadBuffer(GL_BACK);
+#endif
 
-                        view->make_current();
                         glReadBuffer(GL_FRONT);
                         glReadPixels(
                             X, Y, outputInfo.size.w, outputInfo.size.h, format,
