@@ -106,6 +106,15 @@ if(UNIX)
     
     if ( APPLE )
 	#
+	# We need to get the dependencies of the python DSOs to avoid
+	# issues like openssl and libcrypto changing between Rocky Linux 8.1
+	# and Ubuntu 22.04.5.
+	#
+	set(MRV2_PYTHON_DSO_DIR "${MRV2_PYTHON_LIB_DIR}/lib-dynload")
+	file(GLOB python_dylibs "${MRV2_PYTHON_DSO_DIR}/*.dylib")
+	list(APPEND MRV2_EXES ${python_dylibs} )
+	
+	#
 	# Get DYLIB dependencies of componenets
 	#
 	get_macos_runtime_dependencies( "${MRV2_EXES}" DEPENDENCIES )
@@ -117,7 +126,7 @@ if(UNIX)
 	# issues like openssl and libcrypto changing between Rocky Linux 8.1
 	# and Ubuntu 22.04.5.
 	#
-	set(MRV2_PYTHON_DSO_DIR "${MRV2_PYTHON_DSO_DIR}/lib-dynload")
+	set(MRV2_PYTHON_DSO_DIR "${MRV2_PYTHON_LIB_DIR}/lib-dynload")
 	file(GLOB python_dsos "${MRV2_PYTHON_DSO_DIR}/*.so")
 	list(APPEND MRV2_EXES ${python_dsos} )
 

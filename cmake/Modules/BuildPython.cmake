@@ -17,7 +17,6 @@ set( Python_PATCH )
 set( Python_ENV )
 set( Python_PATH $ENV{PATH} )
 if(APPLE)
-    set( Python_PATCH ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/etc/configure-macos-python.sh ${CMAKE_CURRENT_BINARY_DIR}/ )
 
     set(Python_C_FLAGS "${CMAKE_C_FLAGS}" )
     set(Python_CXX_FLAGS "${CMAKE_CXX_FLAGS}" )
@@ -27,7 +26,7 @@ if(APPLE)
 	set( Python_C_FLAGS "-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET} ${CMAKE_C_FLAGS}")
     endif()
     
-    set( Python_CONFIGURE ${CMAKE_COMMAND} -E env "CFLAGS=${Python_C_FLAGS}" "CPPFLAGS=${Python_C_FLAGS}" "CXXFLAGS=${Python_CXX_FLAGS}" "LDFLAGS=${Python_LD_FLAGS}" -- ${CMAKE_CURRENT_BINARY_DIR}/configure-macos-python.sh --prefix=${CMAKE_INSTALL_PREFIX}
+    set( Python_CONFIGURE ${CMAKE_COMMAND} -E env "CFLAGS=${Python_C_FLAGS}" "CPPFLAGS=${Python_C_FLAGS}" "CXXFLAGS=${Python_CXX_FLAGS}" "LDFLAGS=${Python_LD_FLAGS}" -- ./configure --enable-optimizations --enable-shared --with-openssl=${CMAKE_PREFIX_PATH} --prefix=${CMAKE_INSTALL_PREFIX}
     )
     set( Python_BUILD  make -j ${NPROCS} )
     set( Python_INSTALL  make -j ${NPROCS} install )
