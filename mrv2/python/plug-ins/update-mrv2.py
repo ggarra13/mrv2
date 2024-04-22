@@ -6,7 +6,7 @@
 #
 # Standard libs
 #
-import os, platform, re, tempfile, subprocess, sys, requests, time
+import os, platform, re, tempfile, subprocess, sys, time
 
 #
 # mrv2 imports
@@ -453,6 +453,7 @@ class UpdatePlugin(plugin.Plugin):
         Returns:
             None
         """
+        import requests
         url = f"https://api.github.com/repos/{user}/{project}/releases/latest"
         response = requests.get(url)
         data = response.json()
