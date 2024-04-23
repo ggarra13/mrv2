@@ -1,3 +1,12 @@
+v1.1.4
+======
+
+- Fixed macOS build issues (fixed in v1.1.3 re-release actually).
+- Prevented a macOS issue with Python 3.11.
+- Fixed Wayland support on Ubuntu 22.04.3 LTS and later.
+  Still pending is how to support Clip dragging.
+
+
 v1.1.3
 ======
 

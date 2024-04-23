@@ -32,6 +32,9 @@
 
 #include "mrViewer.h"
 
+#include <FL/platform.H>
+#undef None
+
 namespace
 {
     const char* kModule = "save";
@@ -307,17 +310,10 @@ namespace mrv
                         .arg(file));
             }
 
-            bool annotations = false;
-
             gl::OffscreenBufferOptions offscreenBufferOptions;
             std::shared_ptr<timeline_gl::Render> render;
             image::Size renderSize;
-            int layerId = 0;
-            if (options.annotations)
-            {
-                annotations = true;
-                layerId = ui->uiColorChannel->value();
-            }
+            int layerId = ui->uiColorChannel->value();
 
             const SaveResolution resolution = options.resolution;
             if (hasVideo)
@@ -373,17 +369,18 @@ namespace mrv
 
             outputInfo.size = renderSize;
             std::shared_ptr<image::Image> outputImage;
+            
+            outputInfo.pixelType = info.video[layerId].pixelType;
 
             if (hasVideo)
             {
-                outputInfo.pixelType = info.video[layerId].pixelType;
 
                 msg = tl::string::Format(_("Image info: {0} {1}"))
                           .arg(outputInfo.size)
                           .arg(outputInfo.pixelType);
                 LOG_INFO(msg);
 
-                if (annotations)
+                if (options.annotations)
                 {
                     view->setActionMode(ActionMode::kScrub);
                     view->setPresentationMode(true);
@@ -413,7 +410,7 @@ namespace mrv
                     }
                     else
                     {
-                        LOG_WARNING(_("Image too big for annotations.  "
+                        LOG_WARNING(_("Image too big for options.annotations.  "
                                       "Will scale to the viewport size."));
 
                         view->frameView();
@@ -456,8 +453,6 @@ namespace mrv
                 outputInfo = writerPlugin->getWriteInfo(outputInfo);
                 if (image::PixelType::None == outputInfo.pixelType)
                 {
-                    LOG_INFO(_("Writer plugin did not get output info.  "
-                               "Defaulting to RGB_U8"));
                     outputInfo.pixelType = image::PixelType::RGB_U8;
                     offscreenBufferOptions.colorType = image::PixelType::RGB_U8;
 #ifdef TLRENDER_EXR
@@ -467,6 +462,11 @@ namespace mrv
                             image::PixelType::RGB_F32;
                     }
 #endif
+                    msg = tl::string::Format(
+                        _("Writer plugin did not get output info.  "
+                          "Defaulting to {0}"))
+                          .arg(offscreenBufferOptions.colorType);
+                    LOG_INFO(msg);
                 }
 
 #ifdef TLRENDER_EXR
@@ -695,12 +695,25 @@ namespace mrv
 
                 if (hasVideo)
                 {
-                    if (annotations)
+                    if (options.annotations)
                     {
                         view->redraw();
                         view->flush();
 
-                        view->make_current();
+                        GLenum imageBuffer = GL_FRONT;
+
+#ifdef FLTK_USE_WAYLAND
+                        // @note: Wayland does not work like Windows, macOS or
+                        //        X11.  The compositor does not immediately
+                        //        swap buffers when calling view->flush().
+                        if (fl_wl_display())
+                        {
+                            imageBuffer = GL_BACK;
+                        }
+#endif
+                        
+                        glReadBuffer(imageBuffer);
+
                         glReadBuffer(GL_FRONT);
                         glReadPixels(
                             X, Y, outputInfo.size.w, outputInfo.size.h, format,
@@ -781,9 +794,9 @@ namespace mrv
                 {
                     // We need to use frameNext instead of seeking as large
                     // movies can lag behind the seek
-                    // When saving video and not annotations, we cannot use
+                    // When saving video and not options.annotations, we cannot use
                     // seek as it corrupts the timeline.
-                    if (annotations && hasVideo)
+                    if (options.annotations && hasVideo)
                         player->frameNext();
                     else if (!hasVideo)
                         player->seek(currentTime);

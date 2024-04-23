@@ -32,6 +32,9 @@ namespace fs = std::filesystem;
 
 #include "mrViewer.h"
 
+#include <FL/platform.H>
+#undef None
+
 namespace
 {
     const char* kModule = "save";
@@ -43,6 +46,8 @@ namespace mrv
     int save_single_frame(
         const std::string& file, const ViewerUI* ui, SaveOptions options)
     {
+        std::string msg;
+        
         int ret = 0;
         Viewport* view = ui->uiView;
         bool presentation = view->getPresentationMode();
@@ -91,7 +96,7 @@ namespace mrv
             }
 #endif
 
-            otime::TimeRange timeRange(
+            otime::TimeRange oneFrameTimeRange(
                 currentTime, otime::RationalTime(1, currentTime.rate()));
 
             auto context = ui->app->getContext();
@@ -104,21 +109,31 @@ namespace mrv
                 throw std::runtime_error("No video information");
             }
 
-            int layerId = 0;
-            bool annotations = false;
-            if (options.annotations)
-            {
-                annotations = true;
-                layerId = ui->uiColorChannel->value();
-            }
-
-            auto renderSize = info.video[layerId].size;
-
-            // Create the renderer.
-            auto render = timeline_gl::Render::create(context);
-
             gl::OffscreenBufferOptions offscreenBufferOptions;
+            std::shared_ptr<timeline_gl::Render> render;
+            image::Size renderSize;
+            
+            int layerId = ui->uiColorChannel->value();
+            if (layerId < 0) layerId = 0;
+            
 
+            {
+                renderSize = info.video[layerId].size;
+                auto rotation = ui->uiView->getRotation();
+                if (options.annotations && rotationSign(rotation) != 0)
+                {
+                    size_t tmp = renderSize.w;
+                    renderSize.w = renderSize.h;
+                    renderSize.h = tmp;
+
+                    msg = tl::string::Format(_("Rotated image info: {0}"))
+                              .arg(renderSize);
+                    LOG_INFO(msg);
+                }
+            }
+            
+            // Create the renderer.
+            render = timeline_gl::Render::create(context);
             offscreenBufferOptions.colorType = image::PixelType::RGBA_F32;
 
             // Create the writer.
@@ -128,22 +143,18 @@ namespace mrv
             if (!writerPlugin)
             {
                 throw std::runtime_error(
-                    string::Format("{0}: Cannot open").arg(file));
+                    string::Format("{0}: Cannot open writer plugin.")
+                        .arg(file));
             }
 
             int X = 0, Y = 0;
 
+            io::Info ioInfo;
             image::Info outputInfo;
-
-            auto rotation = ui->uiView->getRotation();
-            if (options.annotations && rotationSign(rotation) != 0)
-            {
-                size_t tmp = renderSize.w;
-                renderSize.w = renderSize.h;
-                renderSize.h = tmp;
-            }
-                
+            
             outputInfo.size = renderSize;
+            std::shared_ptr<image::Image> outputImage;
+            
             outputInfo.pixelType = info.video[layerId].pixelType;
 
             {
@@ -151,6 +162,71 @@ namespace mrv
                                       .arg(outputInfo.size)
                                       .arg(outputInfo.pixelType);
                 LOG_INFO(msg);
+                
+                if (options.annotations)
+                {
+                    view->setActionMode(ActionMode::kScrub);
+                    view->setPresentationMode(true);
+                    view->redraw();
+                    // flush is needed
+                    Fl::flush();
+                    view->flush();
+                    Fl::check();
+                    const auto& viewportSize = view->getViewportSize();
+                    math::Size2i outputSize;
+                    if (viewportSize.w >= renderSize.w &&
+                        viewportSize.h >= renderSize.h)
+                    {
+                        view->setFrameView(false);
+                        view->setViewZoom(1.0);
+                        view->centerView();
+                        view->redraw();
+                        // flush is needed
+                        Fl::flush();
+
+                        outputInfo.size = renderSize;
+                    }
+                    else
+                    {
+                        LOG_WARNING(_("Image too big for options.annotations.  "
+                                      "Will scale to the viewport size."));
+
+                        view->frameView();
+
+                        double viewportRatio =
+                            viewportSize.w /
+                            static_cast<double>(viewportSize.h);
+                        double imageRatio =
+                            renderSize.w / static_cast<double>(renderSize.h);
+
+                        if (imageRatio < viewportRatio)
+                        {
+                            double factor = viewportSize.h /
+                                            static_cast<double>(renderSize.h);
+                            outputInfo.size.w =
+                                std::round(renderSize.w * factor);
+                            outputInfo.size.h = viewportSize.h;
+                        }
+                        else
+                        {
+                            double factor = viewportSize.w /
+                                            static_cast<double>(renderSize.w);
+                            outputInfo.size.h =
+                                std::round(renderSize.h * factor);
+                            outputInfo.size.w = viewportSize.w;
+                        }
+                    }
+
+                    X = (viewportSize.w - outputInfo.size.w) / 2;
+                    Y = (viewportSize.h - outputInfo.size.h) / 2;
+
+                    msg = tl::string::Format(_("Viewport Size: {0} - "
+                                               "X={1}, Y={2}"))
+                              .arg(viewportSize)
+                              .arg(X)
+                              .arg(Y);
+                    LOG_INFO(msg);
+                }
             }
 
             outputInfo = writerPlugin->getWriteInfo(outputInfo);
@@ -165,57 +241,13 @@ namespace mrv
                         image::PixelType::RGB_F32;
                 }
 #endif
+                msg = tl::string::Format(
+                    _("Writer plugin did not get output info.  "
+                      "Defaulting to {0}"))
+                      .arg(offscreenBufferOptions.colorType);
+                LOG_INFO(msg);
             }
-
-            if (annotations)
-            {
-                view->setActionMode(ActionMode::kScrub);
-                view->setPresentationMode(true);
-                view->redraw();
-                // flush is needed
-                Fl::flush();
-                view->flush();
-                Fl::check();
-
             
-                const auto& viewportSize = view->getViewportSize();
-                if (viewportSize.w >= renderSize.w &&
-                    viewportSize.h >= renderSize.h)
-                {
-                    view->setFrameView(false);
-                    view->setViewZoom(1.0);
-                    view->centerView();
-                    view->redraw();
-                    // flush is needed
-                    Fl::flush();
-
-                    X = (viewportSize.w - renderSize.w) / 2;
-                    Y = (viewportSize.h - renderSize.h) / 2;
-                }
-                else
-                {
-                    view->frameView();
-                    renderSize.w = viewportSize.w;
-                    renderSize.h = viewportSize.h;
-                    LOG_WARNING(_("Image too big.  "
-                                  "Will save the viewport size."));
-                }
-                    
-                outputInfo.size = renderSize;
-
-                std::string msg = tl::string::Format(
-                                      _("Viewport Size: {0}  Render Size: {1}"))
-                                      .arg(viewportSize)
-                                      .arg(renderSize);
-                LOG_INFO(msg);
-
-                msg = tl::string::Format("viewZoom: {2} X: {3} Y: {4}")
-                          .arg(view->viewZoom())
-                          .arg(X)
-                          .arg(Y);
-                LOG_INFO(msg);
-            }
-
 #ifdef TLRENDER_EXR
             if (saveEXR)
             {
@@ -233,11 +265,9 @@ namespace mrv
                                   .arg(outputInfo.pixelType);
             LOG_INFO(msg);
 
-            auto outputImage = image::Image::create(outputInfo);
-
-            io::Info ioInfo;
+            outputImage = image::Image::create(outputInfo);
             ioInfo.video.push_back(outputInfo);
-            ioInfo.videoTime = timeRange;
+            ioInfo.videoTime = oneFrameTimeRange;
 
             auto writer = writerPlugin->write(path, ioInfo, ioOptions);
             if (!writer)
@@ -275,14 +305,27 @@ namespace mrv
             auto buffer = gl::OffscreenBuffer::create(
                 offscreenBufferSize, offscreenBufferOptions);
 
-            if (annotations)
+            if (options.annotations)
             {
                 // Refresh the view (so we turn off the HUD, for example).
                 view->redraw();
                 view->flush();
-                Fl::check();
 
-                glReadBuffer(GL_FRONT);
+                GLenum imageBuffer = GL_FRONT;
+
+#ifdef FLTK_USE_WAYLAND
+                // @note: Wayland does not work like Windows, macOS or
+                //        X11.  The compositor does not immediately
+                //        swap buffers when calling view->flush().
+                if (fl_wl_display())
+                {
+                    imageBuffer = GL_BACK;
+                }
+#else
+                view->make_current();
+#endif
+                glReadBuffer(imageBuffer);
+                
                 CHECK_GL;
                 glReadPixels(
                     X, Y, outputInfo.size.w, outputInfo.size.h, format, type,

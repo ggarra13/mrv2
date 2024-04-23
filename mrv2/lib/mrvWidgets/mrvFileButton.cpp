@@ -25,6 +25,8 @@
 
 #include "mrViewer.h"
 
+#include <FL/platform.H>
+
 namespace
 {
     const char* kModule = "filebutton";
@@ -173,7 +175,14 @@ namespace mrv
                     int X = Fl::event_x_root();
                     int Y = Fl::event_y_root();
                     auto window = p.drag->window();
-                    window->position(X, Y);
+#ifdef FLTK_USE_WAYLAND
+                    std::cerr << X << " " << Y << std::endl;
+                    if (fl_wl_display())
+                        window->resize(X, Y, window->w(), window->h());
+                    else
+#else
+                        window->position(X, Y);
+#endif
                     return 1;
                 }
             }
