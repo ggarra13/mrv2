@@ -31,6 +31,7 @@ namespace mrv
         std::shared_ptr<tl::gl::OffscreenBuffer> annotation = nullptr;
         std::shared_ptr<timeline_gl::Render> render = nullptr;
         std::shared_ptr<gl::Shader> shader = nullptr;
+        std::shared_ptr<gl::Shader> ocioShader = nullptr;
         std::shared_ptr<gl::Shader> annotationShader = nullptr;
         std::shared_ptr<gl::Shader> stereoShader = nullptr;
         int index = 0;

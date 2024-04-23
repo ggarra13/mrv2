@@ -2128,6 +2128,13 @@ namespace mrv
                     spaces.push_back(csname);
                 }
 
+                if (std::find(
+                        spaces.begin(), spaces.end(),
+                        OCIO::ROLE_SCENE_LINEAR) == spaces.end())
+                {
+                    spaces.push_back(OCIO::ROLE_SCENE_LINEAR);
+                }
+
                 mrv::PopupMenu* w = ui->uiICS;
                 std::sort(spaces.begin(), spaces.end());
                 size_t idx = 0;

@@ -62,7 +62,7 @@ namespace mrv
 #ifdef __APPLE__
         fl_double = 0;
 #endif
-        
+
         mode(FL_RGB | fl_double | FL_ALPHA | FL_STENCIL | FL_OPENGL3 | stereo);
     }
 
@@ -329,7 +329,7 @@ namespace mrv
         CHECK_GL;
 
         float r = 0.F, g = 0.F, b = 0.F, a = 0.F;
-        
+
         if (!p.presentation)
         {
             uint8_t ur, ug, ub;
