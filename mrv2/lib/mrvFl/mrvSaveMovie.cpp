@@ -310,23 +310,17 @@ namespace mrv
                         .arg(file));
             }
 
-            bool annotations = false;
-
             gl::OffscreenBufferOptions offscreenBufferOptions;
             std::shared_ptr<timeline_gl::Render> render;
             image::Size renderSize;
             int layerId = ui->uiColorChannel->value();
-            if (options.annotations)
-            {
-                annotations = true;
-            }
 
             const SaveResolution resolution = options.resolution;
             if (hasVideo)
             {
                 renderSize = info.video[layerId].size;
                 auto rotation = ui->uiView->getRotation();
-                if (annotations && rotationSign(rotation) != 0)
+                if (options.annotations && rotationSign(rotation) != 0)
                 {
                     size_t tmp = renderSize.w;
                     renderSize.w = renderSize.h;
@@ -386,7 +380,7 @@ namespace mrv
                           .arg(outputInfo.pixelType);
                 LOG_INFO(msg);
 
-                if (annotations)
+                if (options.annotations)
                 {
                     view->setActionMode(ActionMode::kScrub);
                     view->setPresentationMode(true);
@@ -416,7 +410,7 @@ namespace mrv
                     }
                     else
                     {
-                        LOG_WARNING(_("Image too big for annotations.  "
+                        LOG_WARNING(_("Image too big for options.annotations.  "
                                       "Will scale to the viewport size."));
 
                         view->frameView();
@@ -701,21 +695,24 @@ namespace mrv
 
                 if (hasVideo)
                 {
-                    if (annotations)
+                    if (options.annotations)
                     {
                         view->redraw();
                         view->flush();
 
-                        GLenum buffer = GL_FRONT;
+                        GLenum imageBuffer = GL_FRONT;
 
 #ifdef FLTK_USE_WAYLAND
+                        // @note: Wayland does not work like Windows, macOS or
+                        //        X11.  The compositor does not immediately
+                        //        swap buffers when calling view->flush().
                         if (fl_wl_display())
                         {
-                            buffer = GL_BACK;
+                            imageBuffer = GL_BACK;
                         }
 #endif
                         
-                        glReadBuffer(buffer);
+                        glReadBuffer(imageBuffer);
 
                         glReadBuffer(GL_FRONT);
                         glReadPixels(
@@ -797,9 +794,9 @@ namespace mrv
                 {
                     // We need to use frameNext instead of seeking as large
                     // movies can lag behind the seek
-                    // When saving video and not annotations, we cannot use
+                    // When saving video and not options.annotations, we cannot use
                     // seek as it corrupts the timeline.
-                    if (annotations && hasVideo)
+                    if (options.annotations && hasVideo)
                         player->frameNext();
                     else if (!hasVideo)
                         player->seek(currentTime);

@@ -109,8 +109,6 @@ namespace mrv
                 throw std::runtime_error("No video information");
             }
 
-            bool annotations = false;
-
             gl::OffscreenBufferOptions offscreenBufferOptions;
             std::shared_ptr<timeline_gl::Render> render;
             image::Size renderSize;
@@ -118,15 +116,11 @@ namespace mrv
             int layerId = ui->uiColorChannel->value();
             if (layerId < 0) layerId = 0;
             
-            if (options.annotations)
-            {
-                annotations = true;
-            }
 
             {
                 renderSize = info.video[layerId].size;
                 auto rotation = ui->uiView->getRotation();
-                if (annotations && rotationSign(rotation) != 0)
+                if (options.annotations && rotationSign(rotation) != 0)
                 {
                     size_t tmp = renderSize.w;
                     renderSize.w = renderSize.h;
@@ -169,7 +163,7 @@ namespace mrv
                                       .arg(outputInfo.pixelType);
                 LOG_INFO(msg);
                 
-                if (annotations)
+                if (options.annotations)
                 {
                     view->setActionMode(ActionMode::kScrub);
                     view->setPresentationMode(true);
@@ -194,7 +188,7 @@ namespace mrv
                     }
                     else
                     {
-                        LOG_WARNING(_("Image too big for annotations.  "
+                        LOG_WARNING(_("Image too big for options.annotations.  "
                                       "Will scale to the viewport size."));
 
                         view->frameView();
@@ -311,7 +305,7 @@ namespace mrv
             auto buffer = gl::OffscreenBuffer::create(
                 offscreenBufferSize, offscreenBufferOptions);
 
-            if (annotations)
+            if (options.annotations)
             {
                 // Refresh the view (so we turn off the HUD, for example).
                 view->redraw();
@@ -320,6 +314,9 @@ namespace mrv
                 GLenum imageBuffer = GL_FRONT;
 
 #ifdef FLTK_USE_WAYLAND
+                // @note: Wayland does not work like Windows, macOS or
+                //        X11.  The compositor does not immediately
+                //        swap buffers when calling view->flush().
                 if (fl_wl_display())
                 {
                     imageBuffer = GL_BACK;
