@@ -4,7 +4,7 @@ import os
 import sys
 import itertools
 import re
-from datetime import date
+from datetime import datetime
 from functions import *
 
 if (len(sys.argv) < 2):
@@ -115,7 +115,7 @@ for full_name in full_names:
     formatted_total = format_number(total_count, 5)
     print(f'{formatted_total}\tTotal Downloads for repo {full_name}')
     
-today = date.today()
+today = datetime.utcnow()
 formatted_date = today.strftime("%Y-%m-%d")
 
 folder_name = sys.argv[3]
