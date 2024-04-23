@@ -102,10 +102,11 @@ endif()
 # Install python's requests library
 #
 if (MRV2_PYBIND11)
+    execute_process( COMMAND ${PYTHON_EXECUTABLE} -m pip install --upgrade pip --no-cache-dir )
     if(UNIX)
-	execute_process( COMMAND ${PYTHON_EXECUTABLE} -m pip install --target ${CMAKE_INSTALL_PREFIX}/lib/python${MRV2_PYTHON_VERSION}/site-packages requests )
+	execute_process( COMMAND ${PYTHON_EXECUTABLE} -m pip install --target ${CMAKE_INSTALL_PREFIX}/lib/python${MRV2_PYTHON_VERSION}/site-packages --upgrade requests --no-cache-dir )
     else()
-	execute_process( COMMAND ${PYTHON_EXECUTABLE} -m pip install --target ${CMAKE_INSTALL_PREFIX}/bin/Lib/site-packages requests )
+	execute_process( COMMAND ${PYTHON_EXECUTABLE} -m pip install --upgrade --target ${CMAKE_INSTALL_PREFIX}/bin/Lib/site-packages requests  --no-cache-dir )
     endif()
 endif()
     
