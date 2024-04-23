@@ -104,38 +104,27 @@ if(UNIX)
 
     set( MRV2_EXES "${CPACK_PREPACKAGE}/bin/mrv2" )
     
-    if ( APPLE )
-	#
-	# We need to get the dependencies of the python DSOs to avoid
-	# issues like openssl and libcrypto changing between Rocky Linux 8.1
-	# and Ubuntu 22.04.5.
-	#
-	set(MRV2_PYTHON_DSO_DIR "${MRV2_PYTHON_LIB_DIR}/lib-dynload")
-	file(GLOB python_dylibs "${MRV2_PYTHON_DSO_DIR}/*.dylib")
-	list(APPEND MRV2_EXES ${python_dylibs} )
 	
+    #
+    # We need to get the dependencies of the python DSOs to avoid
+    # issues like openssl and libcrypto changing between Rocky Linux 8.1
+    # and Ubuntu 22.04.5 or macOS's libb2.
+    #
+    set(MRV2_PYTHON_DSO_DIR "${MRV2_PYTHON_LIB_DIR}/lib-dynload")
+    file(GLOB python_dsos "${MRV2_PYTHON_DSO_DIR}/*.so")
+    list(APPEND MRV2_EXES ${python_dsos} )
+	
+    if ( APPLE )
 	#
 	# Get DYLIB dependencies of componenets
 	#
-	get_macos_runtime_dependencies( "${MRV2_EXES}" DEPENDENCIES )
+	get_macos_runtime_dependencies( "${MRV2_EXES}" )
     else()
-
-	
-	#
-	# We need to get the dependencies of the python DSOs to avoid
-	# issues like openssl and libcrypto changing between Rocky Linux 8.1
-	# and Ubuntu 22.04.5.
-	#
-	set(MRV2_PYTHON_DSO_DIR "${MRV2_PYTHON_LIB_DIR}/lib-dynload")
-	file(GLOB python_dsos "${MRV2_PYTHON_DSO_DIR}/*.so")
-	list(APPEND MRV2_EXES ${python_dsos} )
-
 	#
 	# Get DSO dependencies of componenets
 	#
-	get_runtime_dependencies( "${MRV2_EXES}" DEPENDENCIES )
+	get_runtime_dependencies( "${MRV2_EXES}" )
     endif()
-    file( COPY ${DEPENDENCIES} DESTINATION "${CPACK_PREPACKAGE}/lib/" )
 elseif(WIN32)
     #
     # Remove usd directory from lib/ directory on Windows

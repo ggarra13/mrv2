@@ -34,12 +34,6 @@ function( is_macos_system_lib TARGET ISSYSLIB )
 
 
     set( ${ISSYSLIB} 0 PARENT_SCOPE)
-
-    if ("${TARGET}" MATCHES "/mrv2")
-        # local library
-	set( ${ISSYSLIB} 1 PARENT_SCOPE)
-	return()
-    endif()
     
     if ("${TARGET}" MATCHES "/mrv2")
         # local library
@@ -155,9 +149,7 @@ endfunction()
 # Function used to get runtime dependencies as cmake GET_RUNTIME_DEPENDENCIES is
 # broken.
 #
-function( get_runtime_dependencies TARGET DEPENDENCIES )
-
-    message( NOTICE "LD_LIBRARY_PATH=$ENV{LD_LIBRARY_PATH}")
+function( get_runtime_dependencies TARGET )
 
     foreach (exe ${TARGET})
 	if ( EXISTS ${exe} )
@@ -170,10 +162,7 @@ function( get_runtime_dependencies TARGET DEPENDENCIES )
 		if (IS_ABSOLUTE ${dep_filename})
 		    is_system_lib (${dep_filename} sys_lib)
 		    if (sys_lib EQUAL 0 OR INSTALL_SYSLIBS STREQUAL "true")
-			list (FIND dependencies ${dep_filename} found)
-			if (found LESS 0)
-			    install_library_with_deps( ${dep_filename} )
-			endif()
+			install_library_with_deps( ${dep_filename} )
 		    endif()
 		else()
 		    is_system_lib (${dep_filename} sys_lib)
@@ -187,20 +176,17 @@ function( get_runtime_dependencies TARGET DEPENDENCIES )
 	endif()
     endforeach()
 
-    # Use LIST(REMOVE_DUPLICATES) to make the list unique
-    list(REMOVE_DUPLICATES DEPENDENCIES)
 endfunction()
 
 #
 # Function used to get runtime dependencies as cmake GET_RUNTIME_DEPENDENCIES is
 # broken.
 #
-function( get_macos_runtime_dependencies TARGET DEPENDENCIES )
+function( get_macos_runtime_dependencies TARGET )
 
     set(DEPENDENCIES  )
     foreach (exe ${TARGET})
 	if ( EXISTS ${exe} )
-	    message( STATUS "PARSING ${exe} for DYLIBS...." )
 	    execute_process(COMMAND otool -L ${exe} OUTPUT_VARIABLE ldd_out)
 	    string (REPLACE "\n" ";" ldd_out_lines ${ldd_out})
 	    foreach (line ${ldd_out_lines})
@@ -210,8 +196,7 @@ function( get_macos_runtime_dependencies TARGET DEPENDENCIES )
 		    is_macos_system_lib (${dep_filename} sys_lib)
 		    if (sys_lib EQUAL 0 OR INSTALL_SYSLIBS STREQUAL "true")
                         string( REGEX REPLACE ".framework/.*$" ".framework" framework ${dep_filename} )
-			message( STATUS "${framework} must be installed" )
-                        set( DEPENDENCIES ${framework} ${DEPENDENCIES} PARENT_SCOPE)
+			install_library_with_deps( ${framework} )
 		    endif()
 		endif()
 	    endforeach()
