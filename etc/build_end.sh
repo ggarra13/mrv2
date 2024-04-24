@@ -4,9 +4,9 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 
-if [[ $CMAKE_BUILD_TYPE == Release && "$CMAKE_TARGET" == "package" ]]; then
+if [[ "$CMAKE_TARGET" == "package" ]]; then
 
-    echo "Target is package and Release build.  Will copy packages..."
+    echo "Target is package build.  Will copy packages..."
 
     #
     # Here we move the installers to the packages location.
