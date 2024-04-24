@@ -86,7 +86,6 @@ namespace mrv
 #ifdef USE_ONE_PIXEL_LINES
         gl.outline.reset();
 #endif
-        gl.background.reset();
         gl.buffer.reset();
         gl.annotation.reset();
         gl.shader.reset();
@@ -141,7 +140,7 @@ namespace mrv
         MRV2_GL();
         gl::initGLAD();
 
-#ifdef TLRENDER_API_GL_4_1_Debug
+#ifdef MRV2_DEBUG_GL
         if (!gl.init_debug)
         {
             gl.init_debug = true;
@@ -214,13 +213,6 @@ namespace mrv
             {
                 gl::OffscreenBufferOptions offscreenBufferOptions;
                 offscreenBufferOptions.colorType = image::PixelType::RGBA_F32;
-                if (gl::doCreate(
-                        gl.background, renderSize, offscreenBufferOptions))
-                {
-                    gl.background = gl::OffscreenBuffer::create(
-                        renderSize, offscreenBufferOptions);
-                }
-
                 if (!p.displayOptions.empty())
                 {
                     offscreenBufferOptions.colorFilters =
@@ -263,7 +255,6 @@ namespace mrv
             }
             else
             {
-                gl.background.reset();
                 gl.buffer.reset();
                 gl.stereoBuffer.reset();
             }
@@ -369,30 +360,6 @@ namespace mrv
         CHECK_GL;
         glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
         CHECK_GL;
-
-        if (gl.background && !transparent && !p.presentation)
-        {
-            math::Matrix4x4f mvp;
-            mvp = _createTexturedRectangle();
-
-            gl.shader->bind();
-            CHECK_GL;
-            gl.shader->setUniform("transform.mvp", mvp);
-            CHECK_GL;
-
-            glActiveTexture(GL_TEXTURE0);
-            CHECK_GL;
-            glBindTexture(GL_TEXTURE_2D, gl.background->getColorID());
-            CHECK_GL;
-
-            if (gl.vao && gl.vbo)
-            {
-                gl.vao->bind();
-                CHECK_GL;
-                gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
-                CHECK_GL;
-            }
-        }
 
         if (gl.buffer && gl.shader)
         {
@@ -522,7 +489,7 @@ namespace mrv
                 }
 
                 if (p.selection.max.x >= 0)
-                {
+                {                   
                     Fl_Color c = p.ui->uiPrefs->uiPrefsViewSelection->color();
                     uint8_t r, g, b;
                     Fl::get_color(c, r, g, b);

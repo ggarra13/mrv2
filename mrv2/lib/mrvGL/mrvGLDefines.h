@@ -22,3 +22,6 @@
 #    undef USE_GL_CHECKS
 #    define USE_GL_CHECKS 1
 #endif
+
+
+//#define MRV2_DEBUG_GL 1  // Set this to debug OpenGL errors with a callback

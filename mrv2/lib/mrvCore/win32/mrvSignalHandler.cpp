@@ -49,16 +49,12 @@ namespace mrv
 
     void SignalHandler::install_signal_handler()
     {
-#ifdef NDEBUG
         // Set up exception handler
         SetUnhandledExceptionFilter(exceptionHandler);
 
         // Set up signal handlers
         std::signal(SIGSEGV, callback);
-#    if 1
         std::signal(SIGABRT, callback);
-#    endif
-#endif
     }
 
     void SignalHandler::restore_signal_handler() {}

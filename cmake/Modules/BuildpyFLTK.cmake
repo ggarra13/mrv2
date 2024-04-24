@@ -87,29 +87,15 @@ else()
     set(pyFLTK_ENV ${pyFLTK_ENV} "PATH=${pyFLTK_PATH}" LD_LIBRARY_PATH=${pyFLTK_LD_LIBRARY_PATH} -- )
 endif()
 
-
+set(pyFLTK_DEBUG )
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(pyFLTK_DEBUG --debug )
+endif()
 
 # Commands for configure, build and install
-set(pyFLTK_CONFIGURE ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} setup.py swig --enable-shared)
-set(pyFLTK_BUILD     ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} setup.py build --enable-shared)
-
-#
-# Install steps (on Windows, we can just use setup.py install.
-#                on other platforms we can't, we install a wheel file)
-#
-
+set(pyFLTK_CONFIGURE ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} setup.py swig --enable-shared ${pyFLTK_DEBUG})
+set(pyFLTK_BUILD     ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} setup.py build --enable-shared ${pyFLTK_DEBUG})
 set(pyFLTK_INSTALL ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} -m pip install . )
-
-# set(pyFLTK_PIP_INSTALL_WHEEL   ${PYTHON_EXECUTABLE} -m pip install wheel )
-# set(pyFLTK_CREATE_WHEELS ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} setup.py bdist_wheel)
-# set(pyFLTK_INSTALL_WHEELS ${CMAKE_COMMAND}
-#     -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}
-#     -DWHL_DIRECTORY=${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK/dist
-#     -P "${CMAKE_SOURCE_DIR}/cmake/install_whl_files.cmake" )
-# set(pyFLTK_INSTALL "${pyFLTK_PIP_INSTALL_WHEEL}"
-#     COMMAND "${pyFLTK_CREATE_WHEELS}"
-#     COMMAND "${pyFLTK_INSTALL_WHEELS}")
-
 
 ExternalProject_Add(
     pyFLTK
