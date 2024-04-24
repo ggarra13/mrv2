@@ -6,8 +6,8 @@ v1.1.4
 - Fixed Wayland support on Ubuntu 22.04.3 LTS and later.
   Still pending is how to support Clip dragging.
 - Improved performance of OpenGL drawing a tad.
-- Fixed Render->Alpha Blend->None.
-
+- Added Windows' stack traces with line numbers on debug builds.
+- Allowed pyFLTK be able to compile in Debug.
 
 
 v1.1.3

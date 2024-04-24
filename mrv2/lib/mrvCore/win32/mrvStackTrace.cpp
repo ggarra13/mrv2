@@ -12,7 +12,6 @@
 
 void printStackTrace()
 {
-
     // Set up the symbol options so that we can gather information from the
     // current executable's PDB files, as well as the Microsoft symbol servers.
     // We also want to undecorate the symbol names we're returned.
@@ -32,14 +31,33 @@ void printStackTrace()
         (SYMBOL_INFO*)calloc(sizeof(SYMBOL_INFO) + 256 * sizeof(char), 1);
     symbol->MaxNameLen = 255;
     symbol->SizeOfStruct = sizeof(SYMBOL_INFO);
+
     for (int i = 0; i < frames; i++)
     {
         DWORD64 address = (DWORD64)(stack_addrs[i]);
-        SymFromAddr(GetCurrentProcess(), address, nullptr, symbol);
-        std::cout << i << ": " << symbol->Name << " - 0x" << symbol->Address
-                  << std::endl;
-    }
-    free(symbol);
 
-    ::SymCleanup(::GetCurrentProcess());
+        // Get symbol name
+        SymFromAddr(GetCurrentProcess(), address, nullptr, symbol);
+
+        // Print information with or without line number
+        // Attempt to get line number information
+        DWORD displacement;
+        IMAGEHLP_LINE64 line;
+        line.SizeOfStruct = sizeof(IMAGEHLP_LINE64);
+        if (SymGetLineFromAddr64(
+                GetCurrentProcess(), address, &displacement, &line))
+        {
+            std::cout << i << ": " << symbol->Name << " - 0x" << symbol->Address
+                      << " (" << line.FileName << ":" << line.LineNumber << ")"
+                      << std::endl;
+        }
+        else
+        {
+            std::cout << i << ": " << symbol->Name << " - 0x" << symbol->Address
+                      << " (line number unavailable)" << std::endl;
+        }
+    }
+
+    free(symbol);
+    ::SymCleanup(GetCurrentProcess());
 }

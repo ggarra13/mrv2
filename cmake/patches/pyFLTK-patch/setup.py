@@ -24,6 +24,7 @@ UserIncludeDirs = []
 ###########################################################################
 # command line configurations
 # --enable-shared   (for Windows distributions that ship a single DLL)
+# --debug           (for Windows distributions that change DLL name)
 # --disable-gl
 # --disable-forms
 ##########################################################################
@@ -33,7 +34,7 @@ isVerbose = True
 
 doMulti = False
 doOpenGL = False
-doForms = False
+doForms  = False
 doShared = False
 
 # debug flag
@@ -74,8 +75,14 @@ if sys.platform == 'win32':
     compile_arg_list=['/GR', '/wd4101']
     lib_dir_list = [fltk_lib_dir, opengl_lib_dir]
     win32_lib_list = ["kernel32", "user32", "gdi32", "winspool", "comdlg32", "Comctl32", "advapi32", "shell32", "ole32", "oleaut32", "uuid", "odbc32", "odbccp32", "wsock32", "gdiplus", "glu32", "opengl32"]
-    static_lib_list = [ "fltk", "fltk_images", "fltk_forms", "fltk_gl", "opengl32", "fltk_jpeg", "fltk_png", "fltk_z"] + win32_lib_list
-    shared_lib_list = ["fltk_dll"] + win32_lib_list
+    if doDebug:
+        static_lib_list = ["fltkd", "fltk_imagesd", "fltk_formsd", "fltk_gld"]
+        shared_lib_list = ["fltk_dlld"]
+    else:
+        static_lib_list = ["fltk", "fltk_images", "fltk_forms", "fltk_gl"]
+        shared_lib_list = ["fltk_dll"]
+    static_lib_list += win32_lib_list
+    shared_lib_list += win32_lib_list
     if doShared:
         def_list = def_list + [('FL_DLL', 1)]
         lib_list = shared_lib_list

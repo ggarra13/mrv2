@@ -143,7 +143,7 @@ namespace mrv
         MRV2_GL();
         gl::initGLAD();
 
-#ifdef TLRENDER_API_GL_4_1_Debug
+#ifdef MRV2_DEBUG_GL
         if (!gl.init_debug)
         {
             gl.init_debug = true;
