@@ -86,10 +86,10 @@ namespace mrv
 #ifdef USE_ONE_PIXEL_LINES
         gl.outline.reset();
 #endif
-        gl.background.reset();
         gl.buffer.reset();
         gl.annotation.reset();
         gl.shader.reset();
+        gl.noAlphaBlendShader.reset();
         gl.stereoShader.reset();
         gl.annotationShader.reset();
         gl.vbo.reset();
@@ -124,6 +124,8 @@ namespace mrv
                 const std::string& vertexSource = timeline_gl::vertexSource();
                 gl.shader =
                     gl::Shader::create(vertexSource, textureFragmentSource());
+                gl.noAlphaBlendShader =
+                    gl::Shader::create(vertexSource, noBlendFragmentSource());
                 gl.stereoShader =
                     gl::Shader::create(vertexSource, stereoFragmentSource());
                 gl.annotationShader = gl::Shader::create(
@@ -214,13 +216,6 @@ namespace mrv
             {
                 gl::OffscreenBufferOptions offscreenBufferOptions;
                 offscreenBufferOptions.colorType = image::PixelType::RGBA_F32;
-                if (gl::doCreate(
-                        gl.background, renderSize, offscreenBufferOptions))
-                {
-                    gl.background = gl::OffscreenBuffer::create(
-                        renderSize, offscreenBufferOptions);
-                }
-
                 if (!p.displayOptions.empty())
                 {
                     offscreenBufferOptions.colorFilters =
@@ -263,7 +258,6 @@ namespace mrv
             }
             else
             {
-                gl.background.reset();
                 gl.buffer.reset();
                 gl.stereoBuffer.reset();
             }
@@ -370,30 +364,6 @@ namespace mrv
         glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
         CHECK_GL;
 
-        if (gl.background && !transparent && !p.presentation)
-        {
-            math::Matrix4x4f mvp;
-            mvp = _createTexturedRectangle();
-
-            gl.shader->bind();
-            CHECK_GL;
-            gl.shader->setUniform("transform.mvp", mvp);
-            CHECK_GL;
-
-            glActiveTexture(GL_TEXTURE0);
-            CHECK_GL;
-            glBindTexture(GL_TEXTURE_2D, gl.background->getColorID());
-            CHECK_GL;
-
-            if (gl.vao && gl.vbo)
-            {
-                gl.vao->bind();
-                CHECK_GL;
-                gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
-                CHECK_GL;
-            }
-        }
-
         if (gl.buffer && gl.shader)
         {
             math::Matrix4x4f mvp;
@@ -407,10 +377,20 @@ namespace mrv
                 mvp = _createTexturedRectangle();
             }
 
-            gl.shader->bind();
-            CHECK_GL;
-            gl.shader->setUniform("transform.mvp", mvp);
-            CHECK_GL;
+            if (p.imageOptions[0].alphaBlend == timeline::AlphaBlend::None)
+            {
+                gl.noAlphaBlendShader->bind();
+                CHECK_GL;
+                gl.noAlphaBlendShader->setUniform("transform.mvp", mvp);
+                CHECK_GL;
+            }
+            else
+            {
+                gl.shader->bind();
+                CHECK_GL;
+                gl.shader->setUniform("transform.mvp", mvp);
+                CHECK_GL;
+            }
 
             glActiveTexture(GL_TEXTURE0);
             CHECK_GL;

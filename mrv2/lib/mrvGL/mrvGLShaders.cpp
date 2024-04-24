@@ -102,19 +102,18 @@ namespace mrv
                "}\n";
     }
 
-    std::string ocioFragmentSource()
+    std::string noBlendFragmentSource()
     {
         return "#version 410\n"
                "\n"
                "in vec2 fTexture;\n"
-               "out vec3 fColor;\n"
                "\n"
                "uniform sampler2D textureSampler;\n"
                "\n"
                "void main()\n"
                "{\n"
                "   vec4 texColor = texture(textureSampler, fTexture);\n"
-               "   fColor = vec3(texColor.rgb); // Use only the RGB channels\n"
+               "   gl_FragColor = texColor;\n"
                "}\n";
     }
 

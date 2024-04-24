@@ -5,7 +5,9 @@ v1.1.4
 - Prevented a macOS python plug-in issue with Python 3.11.
 - Fixed Wayland support on Ubuntu 22.04.3 LTS and later.
   Still pending is how to support Clip dragging.
+- Improved performance of OpenGL drawing a tad.
 - Fixed Render->Alpha Blend->None.
+
 
 
 v1.1.3

@@ -900,7 +900,7 @@ namespace mrv
             p.lastEvent = 0;
 
             cursor(FL_CURSOR_DEFAULT);
-            constexpr float NaN = std::numeric_limits<float>::quiet_NaN();
+            const float NaN = std::numeric_limits<float>::quiet_NaN();
             image::Color4f rgba(NaN, NaN, NaN, NaN);
             _updatePixelBar(rgba);
             redraw(); // to clear the drawing cursor
