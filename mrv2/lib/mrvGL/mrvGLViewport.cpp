@@ -277,8 +277,11 @@ namespace mrv
                     CHECK_GL;
 
                     locale::SetAndRestore saved;
+                    timeline::RenderOptions renderOptions;
+                    renderOptions.offscreenColorType =
+                        image::PixelType::RGBA_F32;
 
-                    gl.render->begin(renderSize);
+                    gl.render->begin(renderSize, renderOptions);
                     gl.render->setOCIOOptions(p.ocioOptions);
                     gl.render->setLUTOptions(p.lutOptions);
                     CHECK_GL;
@@ -297,15 +300,12 @@ namespace mrv
                         }
                         else
                         {
-                            if (!p.videoData.empty())
-                            {
-                                gl.render->drawVideo(
-                                    p.videoData,
-                                    timeline::getBoxes(
-                                        p.compareOptions.mode, p.videoData),
-                                    p.imageOptions, p.displayOptions,
-                                    p.compareOptions, p.backgroundOptions);
-                            }
+                            gl.render->drawVideo(
+                                p.videoData,
+                                timeline::getBoxes(
+                                    p.compareOptions.mode, p.videoData),
+                                p.imageOptions, p.displayOptions,
+                                p.compareOptions, p.backgroundOptions);
                         }
                     }
                     _drawOverlays(renderSize);
@@ -737,6 +737,7 @@ namespace mrv
 
             // If we are a single frame, we do a normal ReadPixels of front
             // buffer.
+
             if (single_frame)
             {
                 _unmapBuffer();
@@ -889,8 +890,6 @@ namespace mrv
                     Viewport* self = const_cast<Viewport*>(this);
                     self->make_current();
                     gl::OffscreenBufferBinding binding(gl.buffer);
-                    assert(pos.x < gl.buffer->getSize().w);
-                    assert(pos.y < gl.buffer->getSize().h);
                     glReadPixels(pos.x, pos.y, 1, 1, GL_RGBA, type, &rgba);
                     return;
                 }
