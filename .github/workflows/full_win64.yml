@@ -66,7 +66,15 @@ jobs:
       run: |
         ./runme_nolog.sh -t package -D TLRENDER_USD=OFF
       
-    - name: Upload binaries
-      run: |
-        ./bin/upload_sourceforge.sh
-
+    - name: Get repository owner  # Name of the step
+      run: |  # Multi-line command definition
+        owner_name=${{ github.repository.owner.login }}
+        echo "The repository owner is: $owner_name"
+      
+    - name: Upload binaries  # Conditional step
+      run: |  # Multi-line command definition
+        if [[ $owner_name == 'ggarra13' ]]; then
+          # Your commands to be executed only for ggarra13
+          ./bin/upload_sourceforge.sh
+        fi
+      shell: bash 

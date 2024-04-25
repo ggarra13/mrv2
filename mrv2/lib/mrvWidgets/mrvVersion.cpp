@@ -816,6 +816,12 @@ namespace mrv
 #ifdef TLRENDER_TIFF
         o << TIFFLIB_VERSION_STR << endl << endl;
 #endif
+#ifdef __linux__
+        o << "libbacktrace v1.0" << endl
+          << "Copyright (C) 2012-2021 Free Software Foundation, Inc." << endl
+          << "Written by Ian Lance Taylor, Google." << endl
+          << endl;
+#endif
         o << "LibVPX" << endl
           << "Copyright (c) 2010, The WebM Project authors. All rights "
              "reserved."

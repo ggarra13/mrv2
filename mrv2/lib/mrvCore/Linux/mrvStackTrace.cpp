@@ -1,39 +1,53 @@
 
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <backtrace.h>
 
-#include <execinfo.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <iostream>
+
+void error_callback(void* data, const char* msg, int errnum)
+{
+    fprintf(stderr, "%s - Error %d\n", msg, errnum);
+}
+
+int full_callback(
+    void* data, uintptr_t pc, const char* filename, int lineno,
+    const char* function)
+{
+    char demangled_name[1024];
+    demangled_name[0] = '\0';
+
+    
+    char buffer[512];
+    if (!filename || !function || strcmp(function, "(null)") == 0)
+        return 0;
+    
+    snprintf(buffer, sizeof(buffer), "c++filt %s", function);
+    FILE* pipe = popen(buffer, "r");
+    if (!pipe) {
+        perror("popen");
+        return 1;
+    }
+    fgets(demangled_name, sizeof(demangled_name), pipe);
+    pclose(pipe);
+    
+    size_t len = strlen(demangled_name);
+    if (len > 0)
+        demangled_name[len-1] = '\0';
+
+    printf("0x%lx %s (%s:%d)\n", pc, demangled_name, filename, lineno);
+    return 0;
+}
 
 void printStackTrace()
 {
-    void* callstack[128];
-    int frames = backtrace(callstack, 128);
-    char** symbols = backtrace_symbols(callstack, frames);
+  // MRV2_ROOT contains the root path of the executable.
+  char exe[1024];
+  snprintf(exe, 1024, "%s/bin/mrv2", getenv("MRV2_ROOT"));
 
-    // Skip first frame which is this stack trace function
-    for (int i = 1; i < frames; i++)
-    {
-        printf("frame %d: ", i);
-
-        // Use addr2line and c++filt to get the demangled symbol and line number
-        char exe[256];
-        snprintf(exe, 256, "%s/bin/mrv2", getenv("MRV2_ROOT"));
-
-        char command[1024];
-        snprintf(
-            command, sizeof(command), "addr2line -e %s %p | c++filt", exe,
-            callstack[i]);
-        FILE* fp = popen(command, "r");
-
-        char output[512];
-        if (fgets(output, sizeof(output), fp) != nullptr)
-            printf("%s", output);
-
-        pclose(fp);
-
-        // Print the raw symbol as well
-        printf("         %s\n", symbols[i]);
-    }
-
-    free(symbols);
+  auto state = backtrace_create_state(exe, 1, error_callback, nullptr);
+  int ret = backtrace_full(state, 0, full_callback, error_callback, nullptr);
+  
 }
+

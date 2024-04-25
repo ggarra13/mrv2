@@ -71,7 +71,8 @@ export TLRENDER_X264=OFF
 CLEAN_DIR=0
 export CMAKE_OSX_ARCHITECTURES=""
 export CMAKE_VERBOSE_MAKEFILE=OFF
-export CMAKE_BUILD_TYPE="Release"
+export BUILD_TYPE_DIR="Release"
+export CMAKE_BUILD_TYPE="RelWithDebInfo"
 export CMAKE_GENERATOR="Ninja"
 export CMAKE_TARGET=""
 ASK_TO_CONTINUE=0
@@ -79,11 +80,13 @@ ASK_TO_CONTINUE=0
 for i in "$@"; do
     case $i in
 	release|Release)
-	    export CMAKE_BUILD_TYPE="Release"
+	    export CMAKE_BUILD_TYPE="RelWithDebInfo"
+	    export BUILD_TYPE_DIR="Release"
 	    shift
 	    ;;
 	debug|Debug)		
 	    export CMAKE_BUILD_TYPE="Debug"
+	    export BUILD_TYPE_DIR="Debug"
 	    export CMAKE_FLAGS=" -DTLRENDER_API=GL_4_1_Debug"
 	    shift
 	    ;;

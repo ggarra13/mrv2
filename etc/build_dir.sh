@@ -33,7 +33,7 @@ extract_python_version
 #
 # Build a build directory with that information
 #
-export BUILD_DIR=$BUILD_ROOT/${CMAKE_BUILD_TYPE}
+export BUILD_DIR=$BUILD_ROOT/${BUILD_TYPE_DIR}
 
 #
 # Clean the directory if we were asked to.

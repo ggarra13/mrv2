@@ -41,16 +41,4 @@ ExternalProject_Add(
     BUILD_IN_SOURCE 1
 )
 
-
-# ExternalProject_Add(
-#      GETTEXT
-#      URL "https://ftp.gnu.org/gnu/gettext/gettext-0.21.1.tar.gz"
-#      CONFIGURE_COMMAND ""
-#      BUILD_COMMAND ""
-#      INSTALL_COMMAND "true"
-#      BUILD_IN_SOURCE 1
-# )
-
-
-
 set( Gettext GETTEXT )

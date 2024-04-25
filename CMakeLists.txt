@@ -90,8 +90,7 @@ else()
     endif()
 endif()
 
-
-    set(PYTHON_EXECUTABLE ${Python_EXECUTABLE} )
+set(PYTHON_EXECUTABLE ${Python_EXECUTABLE} )
 
 if(CMAKE_BUILD_TYPE MATCHES "^Debug$")
     # Check for Clang or GCC compiler  (@todo: add Microsoft support)
@@ -121,6 +120,10 @@ elseif(APPLE)
     endif()
 endif()
 
+set(libbacktrace_DEP )
+if(UNIX AND NOT APPLE)
+    include( cmake/Modules/Buildlibbacktrace.cmake )
+endif()
 
 set( PYBIND11_DEP )
 if( MRV2_PYBIND11 )

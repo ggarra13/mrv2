@@ -79,6 +79,10 @@ if( MRV2_PDF )
     add_definitions( -DMRV2_PDF )
 endif()
 
+if(UNIX AND NOT APPLE)
+    find_library(backtrace NAMES backtrace)
+endif()
+
 if(TLRENDER_BMD)
     add_definitions(-DTLRENDER_BMD)
 endif()

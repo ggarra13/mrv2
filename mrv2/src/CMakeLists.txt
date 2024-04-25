@@ -53,7 +53,7 @@ if(WIN32)
 elseif(APPLE)
     set(PRUNE_SYMBOLS "-Wl,-dead_strip")
 else(UNIX)
-    set(PRUNE_SYMBOLS "-Wl,--gc-sections")
+    #set(PRUNE_SYMBOLS "-Wl,--gc-sections")
 endif()
 
 target_link_options(mrv2 PRIVATE ${PRUNE_SYMBOLS})

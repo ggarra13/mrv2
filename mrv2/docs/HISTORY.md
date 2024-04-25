@@ -15,6 +15,7 @@ v1.1.4
 - Fixed floating values not respecting float values below 0 or higher than 1.
 - Improved the performance of OpenGL drawing on Windows and Linux by using
   blitting.
+- Added Linux's stack traces with line numbers by relying on libbacktrace.
 
 
 v1.1.3

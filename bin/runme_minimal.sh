@@ -27,7 +27,7 @@ params=$*
 #
 . etc/build_dir.sh
 
-export BUILD_DIR=BUILD-$KERNEL-$ARCH-minimal/${CMAKE_BUILD_TYPE}
+export BUILD_DIR=BUILD-$KERNEL-$ARCH-minimal/${BUILD_TYPE_DIR}
 mkdir -p $BUILD_DIR
 
 

@@ -69,10 +69,11 @@ elseif( APPLE )
     # 	macOS/mrvStackTrace.cpp 
     # 	macOS/mrvSignalHandler.cpp)
 else()
-    list( APPEND SOURCES
+    list(APPEND SOURCES
         mrvFileManager.cpp
 	Linux/mrvStackTrace.cpp 
 	Linux/mrvSignalHandler.cpp)
+    list(APPEND LIBRARIES_PRIVATE backtrace)
 endif()
 
 add_library(mrvCore ${SOURCES} ${HEADERS})
