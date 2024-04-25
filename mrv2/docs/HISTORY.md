@@ -8,6 +8,7 @@ v1.1.4
 - Improved performance of OpenGL drawing a tad.
 - Added Windows' stack traces with line numbers on debug builds.
 - Allowed pyFLTK be able to compile in Debug.
+- Fixed floating values not respecting float values below 0 or higher than 1.
 
 
 v1.1.3
