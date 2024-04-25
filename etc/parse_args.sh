@@ -8,9 +8,11 @@
 show_help()
 {
     if [[ $RUNME == 1 || $RUNME_NOLOG == 1 ]]; then
-	echo "$0 [debug] [clean] [-v] [-j <num>] [-lgpl] [-gpl] [-D VAR=VALUE] [-t <target>] [-help]"
+	echo "$0 [debug|release|reldeb] [clean] [-v] [-j <num>] [-lgpl] [-gpl] [-D VAR=VALUE] [-t <target>] [-help]"
 	echo ""
 	echo "* debug builds a debug build."
+	echo "* release builds a release build. (default)"
+	echo "* reldeb  builds a release build with debugging symbols."
 	echo "* clean clears the directory before building -- use only with runme.sh"
 	echo "* -j <num>  controls the threads to use when compiling. [default=$CPU_CORES]"
 	echo "* -v builds verbosely. [default=off]"
@@ -19,9 +21,11 @@ show_help()
 	echo "* -lgpl builds FFmpeg as a LGPL version of it."
 	echo "* -t <target> sets the cmake target to run. [default=none]"
     else
-	echo "$0 [debug] [-j <num>] [-help]"
+	echo "$0 [debug|release|reldeb] [-j <num>] [-help]"
 	echo ""
 	echo "* debug builds a debug build."
+	echo "* release builds a release build. (default)"
+	echo "* reldeb  builds a release build with debugging symbols."
 	echo "* -j <num>  controls the threads to use when compiling. [default=$CPU_CORES]"
     fi
 }
@@ -72,13 +76,18 @@ CLEAN_DIR=0
 export CMAKE_OSX_ARCHITECTURES=""
 export CMAKE_VERBOSE_MAKEFILE=OFF
 export BUILD_TYPE_DIR="Release"
-export CMAKE_BUILD_TYPE="RelWithDebInfo"
+export CMAKE_BUILD_TYPE="Release"
 export CMAKE_GENERATOR="Ninja"
 export CMAKE_TARGET=""
 ASK_TO_CONTINUE=0
 
 for i in "$@"; do
     case $i in
+	reldeb|RelWithDebInfo)
+	    export CMAKE_BUILD_TYPE="RelWithDebInfo"
+	    export BUILD_TYPE_DIR="RelWithDebInfo"
+	    shift
+	    ;;
 	release|Release)
 	    export CMAKE_BUILD_TYPE="RelWithDebInfo"
 	    export BUILD_TYPE_DIR="Release"
@@ -87,7 +96,6 @@ for i in "$@"; do
 	debug|Debug)		
 	    export CMAKE_BUILD_TYPE="Debug"
 	    export BUILD_TYPE_DIR="Debug"
-	    export CMAKE_FLAGS=" -DTLRENDER_API=GL_4_1_Debug"
 	    shift
 	    ;;
 	--ask|-ask)
