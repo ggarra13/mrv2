@@ -13,7 +13,7 @@ decl {\#include <FL/Fl_Color_Chooser.H>} {public global
 decl {\#include "mrViewer.h"} {public global
 }
 
-decl {\#include "tlCore/Time.h"} {selected public global
+decl {\#include "tlCore/Time.h"} {public global
 }
 
 decl {\#include "mrvCore/mrvEnv.h"} {public global
@@ -734,7 +734,7 @@ v->uiPrefsFPS->value( g );}
             }
           }
           Fl_Group {} {
-            label Timeline open
+            label Timeline
             xywh {305 34 530 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Choice uiPrefsTimelineDisplay {
@@ -769,8 +769,8 @@ v->uiPrefsFPS->value( g );}
             }
           }
           Fl_Group {} {
-            label Edit open
-            xywh {315 44 530 362} box EMBOSSED_BOX align 5
+            label Edit
+            xywh {315 44 530 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {
               label {Edit Viewport} open
@@ -1348,8 +1348,8 @@ v->uiOCIO_Look->do_callback();}
             }
           }
           Fl_Group {} {
-            label OpenGL
-            xywh {291 36 532 362} box EMBOSSED_BOX align 5 hide
+            label OpenGL open
+            xywh {291 36 532 362} box EMBOSSED_BOX align 5
           } {
             Fl_Group {} {open
               xywh {329 36 446 313}
@@ -1372,9 +1372,9 @@ v->uiOCIO_Look->do_callback();}
                   xywh {40 40 100 20}
                 }
               }
-              Fl_Choice uiPrefsBlitTimeline {
-                label {Blit Timeline} open
-                tooltip {Timeline can be drawn with blitting or with OpenGL shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {480 223 255 25} down_box BORDER_BOX align 132 textcolor 32
+              Fl_Choice uiPrefsBlitViewports {
+                label {Blit Viewports} open selected
+                tooltip {Viewports can be drawn with blitting or with OpenGL shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {480 223 255 25} down_box BORDER_BOX align 132 textcolor 32
                 class {mrv::Choice}
               } {
                 MenuItem {} {
@@ -1384,6 +1384,20 @@ v->uiOCIO_Look->do_callback();}
                 MenuItem {} {
                   label Yes
                   xywh {40 40 100 20}
+                }
+              }
+              Fl_Choice uiPrefsBlitTimeline {
+                label {Blit Timeline} open
+                tooltip {Timeline can be drawn with blitting or with OpenGL shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {481 271 255 25} down_box BORDER_BOX align 132 textcolor 32
+                class {mrv::Choice}
+              } {
+                MenuItem {} {
+                  label No
+                  xywh {50 50 100 20}
+                }
+                MenuItem {} {
+                  label Yes
+                  xywh {50 50 100 20}
                 }
               }
             }

@@ -203,16 +203,19 @@ mkdir -p $BUILD_DIR/install
 #
 # Handle Windows pre-flight compiles
 #
+export ACTUAL_BUILD_TYPE=${CMAKE_BUILD_TYPE}
 if [[ $KERNEL == *Msys* ]]; then
     . $PWD/etc/compile_windows_dlls.sh
+    if [[ $CMAKE_BUILD_TYPE == Release ]]; then 
+	export ACTUAL_BUILD_TYPE=RelWithDebInfo
+    fi
 fi
 
 
 cd $BUILD_DIR
 
-
 cmd="cmake -G '${CMAKE_GENERATOR}' \
-	   -D CMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE \
+	   -D CMAKE_BUILD_TYPE=${ACTUAL_BUILD_TYPE} \
 	   -D CMAKE_INSTALL_PREFIX=$PWD/install \
 	   -D CMAKE_PREFIX_PATH=$PWD/install \
 	   -D BUILD_PYTHON=${BUILD_PYTHON} \

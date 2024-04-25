@@ -806,6 +806,14 @@ namespace mrv
         uiPrefs->uiPrefsOpenGLVsync->value(tmp);
 
 #if defined(__linux__) || defined(_WIN32)
+        opengl.get("blit_viewports", tmp, 1);
+#else
+        // macOS seems to work better with shaders than with blitting.
+        opengl.get("blit_viewports", tmp, 0);
+#endif
+        uiPrefs->uiPrefsBlitViewports->value(tmp);
+        
+#if defined(__linux__) || defined(_WIN32)
         opengl.get("blit_timeline", tmp, 1);
 #else
         // macOS seems to work better with shaders than with blitting.
@@ -1411,6 +1419,8 @@ namespace mrv
 
         Fl_Preferences opengl(base, "opengl");
         opengl.set("vsync", (int)uiPrefs->uiPrefsOpenGLVsync->value());
+        opengl.set(
+            "blit_viewports", (int)uiPrefs->uiPrefsBlitViewports->value());
         opengl.set("blit_timeline", (int)uiPrefs->uiPrefsBlitTimeline->value());
 
         Fl_Preferences behavior(base, "behavior");

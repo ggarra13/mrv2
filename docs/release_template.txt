@@ -28,7 +28,7 @@ https://sourceforge.net/projects/mrv2/files/v1.1.2/
 -------------------------------------------------------------------------------
 
 
-mrv2 v1.1.2
+mrv2 v1.1.3
 
 mrv2, an open source professional player and review tool for vfx, animation and computer graphics for Windows, Linux and macOS has a new version.
 
@@ -39,4 +39,4 @@ Source:
 https://github.com/ggarra13/mrv2/
 
 Binaries:
-https://github.com/ggarra13/mrv2/releases/tag/v1.1.2
+https://github.com/ggarra13/mrv2/releases/tag/v1.1.3

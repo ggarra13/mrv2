@@ -6,9 +6,15 @@ v1.1.4
 - Fixed Wayland support on Ubuntu 22.04.3 LTS and later.
   Still pending is how to support Clip dragging.
 - Improved performance of OpenGL drawing a tad.
-- Added Windows' stack traces with line numbers on debug builds.
+- Added option to select blitting of main viewports for potentially
+  faster OpenGL drawing (mainly Windows and Linux).
+- Added Windows' stack traces with line numbers for easy debugging.
+- Added Windows' stack traces to be saved into tmppath().  That is:
+     %TMP%/mrv2.crash.log.
 - Allowed pyFLTK be able to compile in Debug.
 - Fixed floating values not respecting float values below 0 or higher than 1.
+- Improved the performance of OpenGL drawing on Windows and Linux by using
+  blitting.
 
 
 v1.1.3

@@ -197,7 +197,6 @@ namespace mrv
             else
                 swap_interval(1);
 
-            CHECK_GL;
             valid(1);
         }
 
@@ -227,21 +226,15 @@ namespace mrv
                 {
                     gl.buffer = gl::OffscreenBuffer::create(
                         renderSize, offscreenBufferOptions);
-                    CHECK_GL;
                     unsigned dataSize =
                         renderSize.w * renderSize.h * 4 * sizeof(GLfloat);
                     glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[0]);
-                    CHECK_GL;
                     glBufferData(
                         GL_PIXEL_PACK_BUFFER, dataSize, 0, GL_STREAM_READ);
-                    CHECK_GL;
                     glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[1]);
-                    CHECK_GL;
                     glBufferData(
                         GL_PIXEL_PACK_BUFFER, dataSize, 0, GL_STREAM_READ);
-                    CHECK_GL;
                     glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
-                    CHECK_GL;
                 }
 
                 if (can_do(FL_STEREO))
@@ -252,7 +245,6 @@ namespace mrv
                     {
                         gl.stereoBuffer = gl::OffscreenBuffer::create(
                             renderSize, offscreenBufferOptions);
-                        CHECK_GL;
                     }
                 }
             }
@@ -269,12 +261,10 @@ namespace mrv
                     p.videoData.size() > 1)
                 {
                     _drawStereoOpenGL();
-                    CHECK_GL;
                 }
                 else
                 {
                     gl::OffscreenBufferBinding binding(gl.buffer);
-                    CHECK_GL;
 
                     locale::SetAndRestore saved;
                     timeline::RenderOptions renderOptions;
@@ -284,12 +274,10 @@ namespace mrv
                     gl.render->begin(renderSize, renderOptions);
                     gl.render->setOCIOOptions(p.ocioOptions);
                     gl.render->setLUTOptions(p.lutOptions);
-                    CHECK_GL;
                     if (p.missingFrame &&
                         p.missingFrameType != MissingFrameType::kBlackFrame)
                     {
                         _drawMissingFrame(renderSize);
-                        CHECK_GL;
                     }
                     else
                     {
@@ -319,8 +307,6 @@ namespace mrv
             gl.buffer.reset();
             gl.stereoBuffer.reset();
         }
-
-        CHECK_GL;
 
         float r = 0.F, g = 0.F, b = 0.F, a = 0.F;
 
@@ -356,183 +342,216 @@ namespace mrv
         glDrawBuffer(GL_BACK_LEFT);
 
         glViewport(0, 0, GLsizei(viewportSize.w), GLsizei(viewportSize.h));
-        CHECK_GL;
         glClearStencil(0);
-        CHECK_GL;
         glClearColor(r, g, b, a);
-        CHECK_GL;
         glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-        CHECK_GL;
 
         if (gl.buffer && gl.shader)
         {
             math::Matrix4x4f mvp;
-
-            if (p.environmentMapOptions.type != EnvironmentMapOptions::kNone)
+                
+            if (!p.ui->uiPrefs->uiPrefsBlitViewports->value() ||
+                p.environmentMapOptions.type != EnvironmentMapOptions::kNone)
             {
-                mvp = _createEnvironmentMap();
-            }
-            else
-            {
-                mvp = _createTexturedRectangle();
-            }
-
-            if (p.imageOptions[0].alphaBlend == timeline::AlphaBlend::None)
-            {
-                gl.noAlphaBlendShader->bind();
-                CHECK_GL;
-                gl.noAlphaBlendShader->setUniform("transform.mvp", mvp);
-                CHECK_GL;
-            }
-            else
-            {
-                gl.shader->bind();
-                CHECK_GL;
-                gl.shader->setUniform("transform.mvp", mvp);
-                CHECK_GL;
-            }
-
-            glActiveTexture(GL_TEXTURE0);
-            CHECK_GL;
-            glBindTexture(GL_TEXTURE_2D, gl.buffer->getColorID());
-            CHECK_GL;
-
-            if (gl.vao && gl.vbo)
-            {
-                gl.vao->bind();
-                CHECK_GL;
-                gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
-                CHECK_GL;
-            }
-
-            if (p.stereo3DOptions.output == Stereo3DOutput::OpenGL &&
-                p.stereo3DOptions.input == Stereo3DInput::Image &&
-                p.videoData.size() > 1)
-            {
-                gl.shader->bind();
-                CHECK_GL;
-                gl.shader->setUniform("transform.mvp", mvp);
-                CHECK_GL;
-
-                glActiveTexture(GL_TEXTURE0);
-                CHECK_GL;
-                glBindTexture(GL_TEXTURE_2D, gl.stereoBuffer->getColorID());
-                CHECK_GL;
-
-                if (gl.vao && gl.vbo)
+                if (p.environmentMapOptions.type !=
+                    EnvironmentMapOptions::kNone)
                 {
-                    glDrawBuffer(GL_BACK_RIGHT);
-                    CHECK_GL;
-                    gl.vao->bind();
-                    CHECK_GL;
-                    gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
-                    CHECK_GL;
+                    mvp = _createEnvironmentMap();
                 }
-            }
-
-            if (gl.vao && gl.vbo)
-            {
-                math::Box2i selection = p.colorAreaInfo.box = p.selection;
-                if (selection.max.x >= 0)
+                else
                 {
-                    // Check min < max
-                    if (selection.min.x > selection.max.x)
-                    {
-                        int tmp = selection.max.x;
-                        selection.max.x = selection.min.x;
-                        selection.min.x = tmp;
-                    }
-                    if (selection.min.y > selection.max.y)
-                    {
-                        int tmp = selection.max.y;
-                        selection.max.y = selection.min.y;
-                        selection.min.y = tmp;
-                    }
-                    // Copy it again in case it changed
-                    p.colorAreaInfo.box = selection;
+                    mvp = _createTexturedRectangle();
+                }
 
-                    _mapBuffer();
+                if (p.imageOptions[0].alphaBlend == timeline::AlphaBlend::None)
+                {
+                    gl.noAlphaBlendShader->bind();
+                    CHECK_GL;
+                    gl.noAlphaBlendShader->setUniform("transform.mvp", mvp);
                     CHECK_GL;
                 }
                 else
                 {
-                    p.image = nullptr;
-                }
-                if (panel::colorAreaPanel)
-                {
-                    _calculateColorArea(p.colorAreaInfo);
-                    panel::colorAreaPanel->update(p.colorAreaInfo);
-                }
-                if (panel::histogramPanel)
-                {
-                    panel::histogramPanel->update(p.colorAreaInfo);
-                }
-                if (panel::vectorscopePanel)
-                {
-                    panel::vectorscopePanel->update(p.colorAreaInfo);
+                    gl.shader->bind();
+                    CHECK_GL;
+                    gl.shader->setUniform("transform.mvp", mvp);
+                    CHECK_GL;
                 }
 
-                // Update the pixel bar from here only if we are playing a movie
-                // and one that is not 1 frames long.
-                bool update = !_shouldUpdatePixelBar();
-                if (update)
-                    updatePixelBar();
+                glActiveTexture(GL_TEXTURE0);
+                glBindTexture(GL_TEXTURE_2D, gl.buffer->getColorID());
 
-                _unmapBuffer();
-                CHECK_GL;
-
-                update = _isPlaybackStopped() || _isSingleFrame();
-                if (update)
-                    updatePixelBar();
-
-                gl::OffscreenBufferOptions offscreenBufferOptions;
-                offscreenBufferOptions.colorType = image::PixelType::RGBA_U8;
-                if (!p.displayOptions.empty())
+                if (gl.vao && gl.vbo)
                 {
-                    offscreenBufferOptions.colorFilters =
-                        p.displayOptions[0].imageFilters;
-                }
-                offscreenBufferOptions.depth = gl::OffscreenDepth::None;
-                offscreenBufferOptions.stencil = gl::OffscreenStencil::None;
-                if (gl::doCreate(
-                        gl.annotation, viewportSize, offscreenBufferOptions))
-                {
-                    gl.annotation = gl::OffscreenBuffer::create(
-                        viewportSize, offscreenBufferOptions);
+                    gl.vao->bind();
+                    gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
                 }
 
-                if (p.selection.max.x >= 0)
+                if (p.stereo3DOptions.output == Stereo3DOutput::OpenGL &&
+                    p.stereo3DOptions.input == Stereo3DInput::Image)
                 {
-                    Fl_Color c = p.ui->uiPrefs->uiPrefsViewSelection->color();
-                    uint8_t r, g, b;
-                    Fl::get_color(c, r, g, b);
+                    gl.shader->bind();
+                    gl.shader->setUniform("transform.mvp", mvp);
 
-                    const image::Color4f color(r / 255.F, g / 255.F, b / 255.F);
+                    glActiveTexture(GL_TEXTURE0);
+                    glBindTexture(GL_TEXTURE_2D, gl.stereoBuffer->getColorID());
 
-                    math::Box2i selection = p.selection;
-                    if (selection.min == selection.max)
+                    if (gl.vao && gl.vbo)
                     {
-                        selection.max.x++;
-                        selection.max.y++;
+                        glDrawBuffer(GL_BACK_RIGHT);
+                        gl.vao->bind();
+                        gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
                     }
-                    _drawRectangleOutline(selection, color, mvp);
                 }
-
-                if (p.showAnnotations && gl.annotation)
-                {
-                    _drawAnnotations(mvp);
-                }
-
-                if (p.dataWindow)
-                    _drawDataWindow();
-                if (p.displayWindow)
-                    _drawDisplayWindow();
-
-                if (p.safeAreas)
-                    _drawSafeAreas();
-
-                _drawCursor(mvp);
             }
+            else
+            {
+                mvp = _projectionMatrix();
+                
+                const GLint viewportX = p.viewPos.x; 
+                const GLint viewportY = p.viewPos.y;
+                const GLsizei sizeW = renderSize.w * p.viewZoom;
+                const GLsizei sizeH = renderSize.h * p.viewZoom;
+                if (sizeW > 0 && sizeH > 0)
+                {
+                    glViewport(viewportX, viewportY, sizeW, sizeH);
+
+                    glBindFramebuffer(GL_READ_FRAMEBUFFER, gl.buffer->getID());
+                    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); // 0 is screen
+
+                    // Blit the offscreen buffer contents to the viewport
+                    GLenum filter = GL_NEAREST;
+                    if (!p.displayOptions.empty())
+                    {
+                        const auto& filters = p.displayOptions[0].imageFilters;
+                        if (p.viewZoom < 1.0f &&
+                            filters.minify == timeline::ImageFilter::Linear)
+                            filter = GL_LINEAR;
+                        else if (
+                            p.viewZoom > 1.0f &&
+                            filters.magnify == timeline::ImageFilter::Linear)
+                            filter = GL_LINEAR;
+                    }
+                    glBlitFramebuffer(
+                        0, 0, renderSize.w, renderSize.h, viewportX, viewportY,
+                        sizeW + viewportX, sizeH + viewportY,
+                        GL_COLOR_BUFFER_BIT, filter);
+                    
+                    if (p.stereo3DOptions.output == Stereo3DOutput::OpenGL &&
+                        p.stereo3DOptions.input == Stereo3DInput::Image)
+                    {
+                        glBindFramebuffer(GL_READ_FRAMEBUFFER,
+                                          gl.stereoBuffer->getID());
+                        glBindFramebuffer(
+                            GL_DRAW_FRAMEBUFFER, 0); // 0 is screen
+                        glDrawBuffer(GL_BACK_RIGHT);
+                        glBlitFramebuffer(
+                            0, 0, renderSize.w, renderSize.h,
+                            viewportX, viewportY,
+                            sizeW + viewportX, sizeH + viewportY,
+                            GL_COLOR_BUFFER_BIT, filter);
+                    }
+                }
+            }
+            
+            math::Box2i selection = p.colorAreaInfo.box = p.selection;
+            if (selection.max.x >= 0)
+            {
+                // Check min < max
+                if (selection.min.x > selection.max.x)
+                {
+                    int tmp = selection.max.x;
+                    selection.max.x = selection.min.x;
+                    selection.min.x = tmp;
+                }
+                if (selection.min.y > selection.max.y)
+                {
+                    int tmp = selection.max.y;
+                    selection.max.y = selection.min.y;
+                    selection.min.y = tmp;
+                }
+                // Copy it again in case it changed
+                p.colorAreaInfo.box = selection;
+
+                _mapBuffer();
+            }
+            else
+            {
+                p.image = nullptr;
+            }
+            if (panel::colorAreaPanel)
+            {
+                _calculateColorArea(p.colorAreaInfo);
+                panel::colorAreaPanel->update(p.colorAreaInfo);
+            }
+            if (panel::histogramPanel)
+            {
+                panel::histogramPanel->update(p.colorAreaInfo);
+            }
+            if (panel::vectorscopePanel)
+            {
+                panel::vectorscopePanel->update(p.colorAreaInfo);
+            }
+
+            // Update the pixel bar from here only if we are playing a movie
+            // and one that is not 1 frames long.
+            bool update = !_shouldUpdatePixelBar();
+            if (update)
+                updatePixelBar();
+
+            _unmapBuffer();
+
+            update = _isPlaybackStopped() || _isSingleFrame();
+            if (update)
+                updatePixelBar();
+
+            gl::OffscreenBufferOptions offscreenBufferOptions;
+            offscreenBufferOptions.colorType = image::PixelType::RGBA_U8;
+            if (!p.displayOptions.empty())
+            {
+                offscreenBufferOptions.colorFilters =
+                    p.displayOptions[0].imageFilters;
+            }
+            offscreenBufferOptions.depth = gl::OffscreenDepth::None;
+            offscreenBufferOptions.stencil = gl::OffscreenStencil::None;
+            if (gl::doCreate(
+                    gl.annotation, viewportSize, offscreenBufferOptions))
+            {
+                gl.annotation = gl::OffscreenBuffer::create(
+                    viewportSize, offscreenBufferOptions);
+            }
+
+            if (p.selection.max.x >= 0)
+            {
+                Fl_Color c = p.ui->uiPrefs->uiPrefsViewSelection->color();
+                uint8_t r, g, b;
+                Fl::get_color(c, r, g, b);
+
+                const image::Color4f color(r / 255.F, g / 255.F, b / 255.F);
+
+                math::Box2i selection = p.selection;
+                if (selection.min == selection.max)
+                {
+                    selection.max.x++;
+                    selection.max.y++;
+                }
+                _drawRectangleOutline(selection, color, mvp);
+            }
+
+            if (p.showAnnotations && gl.annotation)
+            {
+                _drawAnnotations(mvp);
+            }
+
+            if (p.dataWindow)
+                _drawDataWindow();
+            if (p.displayWindow)
+                _drawDisplayWindow();
+
+            if (p.safeAreas)
+                _drawSafeAreas();
+
+            _drawCursor(mvp);
 
             if (p.hudActive && p.hud != HudDisplay::kNone)
                 _drawHUD();
@@ -551,25 +570,6 @@ namespace mrv
             double fontSize = font_size * pct * p.viewZoom / pixels_unit;
             w->textsize(fontSize);
             math::Vector2i pos(w->pos.x, w->pos.y);
-            // This works to pan without a change in zoom!
-            // pos.x = pos.x + p.viewPos.x / p.viewZoom
-            //         - w->viewPos.x / w->viewZoom;
-            // pos.y = pos.y - p.viewPos.y / p.viewZoom
-            //         - w->viewPos.y / w->viewZoom;
-            // cur.x = (cur.x - p.viewPos.x / pixels_unit) / p.viewZoom;
-            // cur.y = (cur.y - p.viewPos.y / pixels_unit) / p.viewZoom;
-
-            // pos.x = (pos.x - w->viewPos.x / pixels_unit) /
-            //         w->viewZoom;
-            // pos.y = (pos.y - w->viewPos.y / pixels_unit) /
-            //         w->viewZoom;
-
-            // pos.x += cur.x;
-            // pos.y -= cur.y;
-
-            // std::cerr << "pos=" << pos << std::endl;
-            // std::cerr << "p.viewPos=" << p.viewPos << std::endl;
-            // std::cerr << "END " << pos << std::endl;
             w->Fl_Widget::position(pos.x, pos.y);
         }
 
