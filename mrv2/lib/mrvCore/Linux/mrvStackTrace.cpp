@@ -29,12 +29,8 @@ int full_callback(
         perror("popen");
         return 1;
     }
-    fgets(demangled_name, sizeof(demangled_name), pipe);
+    char* ret = fgets(demangled_name, sizeof(demangled_name), pipe);
     pclose(pipe);
-    
-    size_t len = strlen(demangled_name);
-    if (len > 0)
-        demangled_name[len-1] = '\0';
 
     printf("0x%lx %s (%s:%d)\n", pc, demangled_name, filename, lineno);
     return 0;
