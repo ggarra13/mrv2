@@ -77,6 +77,12 @@ export CMAKE_OSX_ARCHITECTURES=""
 export CMAKE_VERBOSE_MAKEFILE=OFF
 export BUILD_TYPE_DIR="Release"
 export CMAKE_BUILD_TYPE="Release"
+
+if [[ $KERNEL == *Msys* ]]; then
+    export BUILD_TYPE_DIR="Release"
+    export CMAKE_BUILD_TYPE="RelWithDebInfo"
+fi
+
 export CMAKE_GENERATOR="Ninja"
 export CMAKE_TARGET=""
 ASK_TO_CONTINUE=0
