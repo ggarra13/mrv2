@@ -5,8 +5,7 @@
 include( ExternalProject )
 
 #set( FLTK_GIT_TAG master )
-#set(FLTK_GIT_TAG d2bd3c62408945227bb13133ad6ce270851b4872) # stable
-set(FLTK_GIT_TAG 5ec7176e81e6951ffa8360bc41a4e953de2b2070)  # fixes Wayland alpha
+set(FLTK_GIT_TAG 5ec7176e81e6951ffa8360bc41a4e953de2b2070)  # stable
 
 set( FLTK_BUILD_SHARED_LIBS ON )  # We no longer compile static.
 
@@ -36,7 +35,16 @@ else()
     list(APPEND FLTK_CXX_FLAGS -fPIC)
 endif()
 
+# These two are always built by tlRender
+set(FLTK_USE_SYSTEM_ZLIB TRUE)
+set(FLTK_USE_SYSTEM_LIBPNG TRUE)
 
+# This one may be turned off
+set(FLTK_USE_SYSTEM_LIBJPEG FALSE)
+if(TLRENDER_JPEG)
+    set(FLTK_USE_SYSTEM_LIBJPEG TRUE)
+endif()
+    
 if (APPLE OR WIN32)
     set( FLTK_WAYLAND OFF )
     set( FLTK_PANGO   OFF )
@@ -69,9 +77,9 @@ ExternalProject_Add(
     -DFLTK_BUILD_TEST=OFF
     -DFLTK_BUILD_SHARED_LIBS=${FLTK_BUILD_SHARED_LIBS}
     -DFLTK_USE_SYSTEM_LIBDECOR=0
-    -DFLTK_USE_SYSTEM_ZLIB=1
-    -DFLTK_USE_SYSTEM_LIBJPEG=1
-    -DFLTK_USE_SYSTEM_LIBPNG=1
+    -DFLTK_USE_SYSTEM_ZLIB=${FLTK_USE_SYSTEM_ZLIB}
+    -DFLTK_USE_SYSTEM_LIBJPEG=${FLTK_USE_SYSTEM_LIBJPEG}
+    -DFLTK_USE_SYSTEM_LIBPNG=${FLTK_USE_SYSTEM_LIBPNG}
     -DFLTK_USE_PANGO=${FLTK_PANGO}
 )
 
