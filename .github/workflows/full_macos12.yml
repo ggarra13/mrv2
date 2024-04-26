@@ -59,7 +59,7 @@ jobs:
 
     - name: Build mrv2
       run: |
-        ./runme_nolog.sh -j 1 -t package
+        ./runme_nolog.sh -t package
 
     - name: Get repository owner  # Name of the step
       run: |  # Multi-line command definition
