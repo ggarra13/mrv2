@@ -76,7 +76,7 @@ class PreferencesUI {open
     Fl_Window uiMain {
       label Preferences
       user_data this user_data_type {PreferencesUI*} open
-      xywh {673 230 847 466} type Double resizable
+      xywh {497 230 847 466} type Double resizable
       code0 {main = m;} modal visible
     } {
       Fl_Group {} {open
@@ -1373,8 +1373,8 @@ v->uiOCIO_Look->do_callback();}
                 }
               }
               Fl_Choice uiPrefsColorAccuracy {
-                label {Color Accuracy} open selected
-                tooltip {Color Buffers can be accurate or fast.  This is particularly noticeable on macOS.} xywh {473 163 255 25} down_box BORDER_BOX align 132 textcolor 32
+                label {Color Buffers' Accuracy} open selected
+                tooltip {Color Buffers can be accurate or fast.  Accurate preserves all float information, while Fast works in 8-bits.} xywh {473 163 255 25} down_box BORDER_BOX align 132 textcolor 32
                 class {mrv::Choice}
               } {
                 MenuItem {} {

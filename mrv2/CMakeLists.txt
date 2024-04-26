@@ -54,6 +54,11 @@ else()
     set(FLTK_FLUID_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/fluid)
 endif()
 
+if(WIN32 AND FLTK_BUIKD_SHARED_LIBS)
+    add_definitions(-D FL_DLL)
+endif()
+
+
 message( STATUS "Found FLTK: ${FLTK_INCLUDE_DIR}" )
 message( STATUS "FLTK LIBRARIES: ${FLTK_gl_LIBRARY} ${FLTK_LIBRARIES}" )
 message( STATUS "FLTK_FLUID_EXECUTABLE: ${FLTK_FLUID_EXECUTABLE}" )
@@ -77,6 +82,11 @@ if( MRV2_PDF )
 	list(APPEND LibHaru m)
     endif()
     add_definitions( -DMRV2_PDF )
+endif()
+
+# Pass flags for CMAKE_BUILD_TYPE
+if (CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
+    add_definitions( -D MRV2_RelWithDebInfo )
 endif()
 
 if(UNIX AND NOT APPLE)

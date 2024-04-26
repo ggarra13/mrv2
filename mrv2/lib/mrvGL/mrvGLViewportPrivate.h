@@ -25,6 +25,7 @@ namespace mrv
 
         // GL variables
         //! OpenGL Offscreen buffers
+        image::PixelType colorBufferType = image::PixelType::RGBA_F32;
         std::shared_ptr<tl::gl::OffscreenBuffer> buffer;
         std::shared_ptr<tl::gl::OffscreenBuffer> stereoBuffer;
         std::shared_ptr<tl::gl::OffscreenBuffer> annotation;

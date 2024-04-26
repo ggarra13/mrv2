@@ -70,7 +70,17 @@ namespace mrv
 #else
             os_version = info.name;
 #endif
-            os_version = _("Running on: ") + os_version;
+
+            // Output also ocmpile type
+            std::string compile = "Debug Compile";
+#ifdef NDEBUG
+#    ifdef MRV2_RelWithDebInfo
+            compile = "RelWithDebInfo";
+#    else
+            compile = "Release";
+#    endif
+#endif
+            os_version = _("Running on: ") + os_version + " " + compile;
             return os_version;
         }
 

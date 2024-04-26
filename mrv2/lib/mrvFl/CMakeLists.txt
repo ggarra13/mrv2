@@ -66,10 +66,6 @@ if (WIN32)
     list(APPEND LIBRARIES comsuppw)
 endif()
 
-if(WIN32 AND FLTK_BUILD_SHARED_LIBS)
-    target_compile_definitions(mrvFl PUBLIC FL_DLL)
-endif()
-
 target_link_libraries(mrvFl PUBLIC ${LIBRARIES} )
 set_target_properties(mrvFl PROPERTIES FOLDER lib)
 

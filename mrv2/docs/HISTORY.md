@@ -1,21 +1,28 @@
 v1.1.4
 ======
 
+- Simplified build scripts.
 - Fixed macOS build issues (fixed in v1.1.3 re-release actually).
 - Prevented a macOS python plug-in issue with Python 3.11.
 - Fixed Wayland support on Ubuntu 22.04.3 LTS and later.
-  Still pending is how to support Clip dragging.
+  Still pending is how to support Clip dragging as Wayland does not support
+  speicifying window positions when showing them.
 - Improved performance of OpenGL drawing a tad.
+- Added Preferences->OpenGL->Color Buffer Accuracy to select between float
+  or 8-bit buffers for speeding up movies or using a float pipeline.  Note that
+  using OpenColorIO automatically switches to a float pipeline.
 - Added option to select blitting of main viewports for potentially
-  faster OpenGL drawing (mainly Windows and Linux).
+  faster OpenGL drawing.
 - Added Windows' stack traces with line numbers for easy debugging.
 - Added Windows' stack traces to be saved into tmppath().  That is:
      %TMP%/mrv2.crash.log.
 - Allowed pyFLTK be able to compile in Debug.
 - Fixed floating values not respecting float values below 0 or higher than 1.
-- Improved the performance of OpenGL drawing on Windows and Linux by using
-  blitting.
+- Improved the performanc of OpenGL by avoiding OpenGL context switching when
+  not needed (you don't have a text input widget, nor a text annotations
+  showing).
 - Added Linux's stack traces with line numbers by relying on libbacktrace.
+
 
 
 v1.1.3

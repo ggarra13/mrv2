@@ -156,10 +156,6 @@ if( WIN32 )
     list(APPEND LIBRARIES Crypt32.lib)
 endif()
 
-if(WIN32 AND FLTK_BUILD_SHARED_LIBS)
-    target_compile_definitions(mrvWidgets PUBLIC FL_DLL)
-endif()
-
 target_link_libraries(mrvWidgets PUBLIC ${LIBRARIES} )
 set_target_properties(mrvWidgets PROPERTIES FOLDER lib)
 

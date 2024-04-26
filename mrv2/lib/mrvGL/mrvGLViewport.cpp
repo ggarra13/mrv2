@@ -184,6 +184,17 @@ namespace mrv
 
         make_current(); // needed to work with GLFW
 
+        image::PixelType colorBufferType = image::PixelType::RGBA_U8;
+        if ((p.ui->uiPrefs->uiPrefsColorAccuracy->value() == 0) ||
+            p.ocioOptions.enabled == true)
+            colorBufferType = image::PixelType::RGBA_F32;
+
+        if (gl.colorBufferType != colorBufferType)
+        {
+            gl.colorBufferType = colorBufferType;
+            valid(0);
+        }
+
         if (!valid())
         {
             _initializeGL();
@@ -206,22 +217,12 @@ namespace mrv
         bool transparent =
             p.backgroundOptions.type == timeline::Background::Transparent;
 
-        bool accurate = false;
-        if ((p.ui->uiPrefs->uiPrefsColorAccuracy->value() == 0) ||
-            p.ocioOptions.enabled == true)
-            accurate = true;
-
         try
         {
             if (renderSize.isValid())
             {
                 gl::OffscreenBufferOptions offscreenBufferOptions;
-                if (accurate)
-                    offscreenBufferOptions.colorType =
-                        image::PixelType::RGBA_F32;
-                else
-                    offscreenBufferOptions.colorType =
-                        image::PixelType::RGBA_U8;
+                offscreenBufferOptions.colorType = gl.colorBufferType;
 
                 if (!p.displayOptions.empty())
                 {
@@ -276,13 +277,7 @@ namespace mrv
 
                     locale::SetAndRestore saved;
                     timeline::RenderOptions renderOptions;
-
-                    if (accurate)
-                        renderOptions.offscreenColorType =
-                            image::PixelType::RGBA_F32;
-                    else
-                        renderOptions.offscreenColorType =
-                            image::PixelType::RGBA_U8;
+                    renderOptions.offscreenColorType = gl.colorBufferType;
 
                     gl.render->begin(renderSize, renderOptions);
                     gl.render->setOCIOOptions(p.ocioOptions);
@@ -592,13 +587,18 @@ namespace mrv
         const auto& annotations =
             player->getAnnotations(p.ghostPrevious, p.ghostNext);
 
-        for (const auto& shape : annotations->shapes)
+        for (const auto& annotation : annotations)
         {
-            if (dynamic_cast<GLTextShape*>(shape->get()))
+            for (const auto& shape : annotation->shapes)
             {
-                draw_opengl1 = true;
-                break;
+                if (dynamic_cast<GLTextShape*>(shape.get()))
+                {
+                    draw_opengl1 = true;
+                    break;
+                }
             }
+            if (draw_opengl1 == true)
+                break;
         }
 
         if (!draw_opengl1)
