@@ -1372,8 +1372,8 @@ v->uiOCIO_Look->do_callback();}
                   xywh {40 40 100 20}
                 }
               }
-              Fl_Choice uiPrefsColorBufferDepth {
-                label {Color Buffer Depth} open selected
+              Fl_Choice uiPrefsColorAccuracy {
+                label {Color Accuracy} open selected
                 tooltip {Color Buffers can be accurate or fast.  This is particularly noticeable on macOS.} xywh {473 163 255 25} down_box BORDER_BOX align 132 textcolor 32
                 class {mrv::Choice}
               } {

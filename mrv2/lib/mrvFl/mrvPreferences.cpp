@@ -805,6 +805,9 @@ namespace mrv
         opengl.get("vsync", tmp, 1);
         uiPrefs->uiPrefsOpenGLVsync->value(tmp);
 
+        opengl.get("color_accuracy", tmp, 1);
+        uiPrefs->uiPrefsColorAccuracy->value(tmp);
+
 #if defined(__linux__) || defined(_WIN32)
         opengl.get("blit_viewports", tmp, 1);
 #else
@@ -812,7 +815,7 @@ namespace mrv
         opengl.get("blit_viewports", tmp, 0);
 #endif
         uiPrefs->uiPrefsBlitViewports->value(tmp);
-        
+
 #if defined(__linux__) || defined(_WIN32)
         opengl.get("blit_timeline", tmp, 1);
 #else
@@ -1419,6 +1422,8 @@ namespace mrv
 
         Fl_Preferences opengl(base, "opengl");
         opengl.set("vsync", (int)uiPrefs->uiPrefsOpenGLVsync->value());
+        opengl.set(
+            "color_accuracy", (int)uiPrefs->uiPrefsColorAccuracy->value());
         opengl.set(
             "blit_viewports", (int)uiPrefs->uiPrefsBlitViewports->value());
         opengl.set("blit_timeline", (int)uiPrefs->uiPrefsBlitTimeline->value());

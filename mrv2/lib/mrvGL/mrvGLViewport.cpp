@@ -211,7 +211,14 @@ namespace mrv
             if (renderSize.isValid())
             {
                 gl::OffscreenBufferOptions offscreenBufferOptions;
-                offscreenBufferOptions.colorType = image::PixelType::RGBA_F32;
+                if (p.ui->uiPrefs->uiPrefsColorAccuracy->value() ||
+                    p.ocioOptions.enabled == true)
+                    offscreenBufferOptions.colorType =
+                        image::PixelType::RGBA_F32;
+                else
+                    offscreenBufferOptions.colorType =
+                        image::PixelType::RGBA_U8;
+
                 if (!p.displayOptions.empty())
                 {
                     offscreenBufferOptions.colorFilters =
@@ -265,8 +272,13 @@ namespace mrv
 
                     locale::SetAndRestore saved;
                     timeline::RenderOptions renderOptions;
-                    renderOptions.offscreenColorType =
-                        image::PixelType::RGBA_F32;
+
+                    if (p.ui->uiPrefs->uiPrefsColorAccuracy->value())
+                        renderOptions.offscreenColorType =
+                            image::PixelType::RGBA_F32;
+                    else
+                        renderOptions.offscreenColorType =
+                            image::PixelType::RGBA_U8;
 
                     gl.render->begin(renderSize, renderOptions);
                     gl.render->setOCIOOptions(p.ocioOptions);
