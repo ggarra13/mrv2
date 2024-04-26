@@ -65,9 +65,6 @@ elseif( APPLE )
     list( APPEND SOURCES
         mrvFileManager.mm
         )
-    # list( APPEND SOURCES
-    # 	macOS/mrvStackTrace.cpp 
-    # 	macOS/mrvSignalHandler.cpp)
 else()
     list(APPEND SOURCES
         mrvFileManager.cpp
