@@ -1352,11 +1352,11 @@ v->uiOCIO_Look->do_callback();}
             xywh {291 36 532 362} box EMBOSSED_BOX align 5
           } {
             Fl_Group {} {open
-              xywh {329 36 446 313}
+              xywh {323 52 446 313}
             } {
               Fl_Choice uiPrefsOpenGLVsync {
-                label {Monitor VSync} open
-                tooltip {Turns on and off Monitor's Vsync.  VSync off can display movies faster, at the cost of potential tearing in the image.} xywh {480 170 255 25} down_box BORDER_BOX align 132 textcolor 32
+                label {Monitor VSync}
+                tooltip {Turns on and off Monitor's Vsync.  VSync off can display movies faster, at the cost of potential tearing in the image.} xywh {471 99 255 25} down_box BORDER_BOX align 132 textcolor 32
                 class {mrv::Choice}
               } {
                 MenuItem {} {
@@ -1372,9 +1372,23 @@ v->uiOCIO_Look->do_callback();}
                   xywh {40 40 100 20}
                 }
               }
+              Fl_Choice uiPrefsColorBufferDepth {
+                label {Color Buffer Depth} open selected
+                tooltip {Color Buffers can be accurate or fast.  This is particularly noticeable on macOS.} xywh {473 163 255 25} down_box BORDER_BOX align 132 textcolor 32
+                class {mrv::Choice}
+              } {
+                MenuItem {} {
+                  label Accurate
+                  xywh {50 50 100 20}
+                }
+                MenuItem {} {
+                  label Fast
+                  xywh {50 50 100 20}
+                }
+              }
               Fl_Choice uiPrefsBlitViewports {
-                label {Blit Viewports} open selected
-                tooltip {Viewports can be drawn with blitting or with OpenGL shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {480 223 255 25} down_box BORDER_BOX align 132 textcolor 32
+                label {Blit Viewports}
+                tooltip {Viewports can be drawn with blitting or with OpenGL shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {475 239 255 25} down_box BORDER_BOX align 132 textcolor 32
                 class {mrv::Choice}
               } {
                 MenuItem {} {
@@ -1387,8 +1401,8 @@ v->uiOCIO_Look->do_callback();}
                 }
               }
               Fl_Choice uiPrefsBlitTimeline {
-                label {Blit Timeline} open
-                tooltip {Timeline can be drawn with blitting or with OpenGL shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {481 271 255 25} down_box BORDER_BOX align 132 textcolor 32
+                label {Blit Timeline}
+                tooltip {Timeline can be drawn with blitting or with OpenGL shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {477 287 255 25} down_box BORDER_BOX align 132 textcolor 32
                 class {mrv::Choice}
               } {
                 MenuItem {} {
