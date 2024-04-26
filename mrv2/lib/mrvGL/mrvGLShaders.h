@@ -11,7 +11,6 @@ namespace mrv
     std::string softFragmentSource();
     std::string hardFragmentSource();
     std::string textureFragmentSource();
-    std::string noBlendFragmentSource();
     std::string stereoFragmentSource();
     std::string annotationFragmentSource();
 } // namespace mrv

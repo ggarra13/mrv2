@@ -102,21 +102,6 @@ namespace mrv
                "}\n";
     }
 
-    std::string noBlendFragmentSource()
-    {
-        return "#version 410\n"
-               "\n"
-               "in vec2 fTexture;\n"
-               "\n"
-               "uniform sampler2D textureSampler;\n"
-               "\n"
-               "void main()\n"
-               "{\n"
-               "   vec4 texColor = texture(textureSampler, fTexture);\n"
-               "   gl_FragColor = texColor;\n"
-               "}\n";
-    }
-
     std::string stereoFragmentSource()
     {
         return tl::string::Format(

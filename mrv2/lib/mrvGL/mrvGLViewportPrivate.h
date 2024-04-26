@@ -25,14 +25,13 @@ namespace mrv
 
         // GL variables
         //! OpenGL Offscreen buffers
-        std::shared_ptr<tl::gl::OffscreenBuffer> buffer = nullptr;
-        std::shared_ptr<tl::gl::OffscreenBuffer> stereoBuffer = nullptr;
-        std::shared_ptr<tl::gl::OffscreenBuffer> annotation = nullptr;
-        std::shared_ptr<timeline_gl::Render> render = nullptr;
-        std::shared_ptr<gl::Shader> shader = nullptr;
-        std::shared_ptr<gl::Shader> noAlphaBlendShader = nullptr;
-        std::shared_ptr<gl::Shader> annotationShader = nullptr;
-        std::shared_ptr<gl::Shader> stereoShader = nullptr;
+        std::shared_ptr<tl::gl::OffscreenBuffer> buffer;
+        std::shared_ptr<tl::gl::OffscreenBuffer> stereoBuffer;
+        std::shared_ptr<tl::gl::OffscreenBuffer> annotation;
+        std::shared_ptr<timeline_gl::Render> render;
+        std::shared_ptr<gl::Shader> shader;
+        std::shared_ptr<gl::Shader> annotationShader;
+        std::shared_ptr<gl::Shader> stereoShader;
         int index = 0;
         int nextIndex = 1;
         GLuint pboIds[2];

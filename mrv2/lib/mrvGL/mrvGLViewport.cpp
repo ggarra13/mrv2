@@ -89,7 +89,6 @@ namespace mrv
         gl.buffer.reset();
         gl.annotation.reset();
         gl.shader.reset();
-        gl.noAlphaBlendShader.reset();
         gl.stereoShader.reset();
         gl.annotationShader.reset();
         gl.vbo.reset();
@@ -124,8 +123,6 @@ namespace mrv
                 const std::string& vertexSource = timeline_gl::vertexSource();
                 gl.shader =
                     gl::Shader::create(vertexSource, textureFragmentSource());
-                gl.noAlphaBlendShader =
-                    gl::Shader::create(vertexSource, noBlendFragmentSource());
                 gl.stereoShader =
                     gl::Shader::create(vertexSource, stereoFragmentSource());
                 gl.annotationShader = gl::Shader::create(
@@ -349,7 +346,7 @@ namespace mrv
         if (gl.buffer && gl.shader)
         {
             math::Matrix4x4f mvp;
-                
+
             if (!p.ui->uiPrefs->uiPrefsBlitViewports->value() ||
                 p.environmentMapOptions.type != EnvironmentMapOptions::kNone)
             {
@@ -365,18 +362,11 @@ namespace mrv
 
                 if (p.imageOptions[0].alphaBlend == timeline::AlphaBlend::None)
                 {
-                    gl.noAlphaBlendShader->bind();
-                    CHECK_GL;
-                    gl.noAlphaBlendShader->setUniform("transform.mvp", mvp);
-                    CHECK_GL;
+                    glDisable(GL_BLEND);
                 }
-                else
-                {
-                    gl.shader->bind();
-                    CHECK_GL;
-                    gl.shader->setUniform("transform.mvp", mvp);
-                    CHECK_GL;
-                }
+
+                gl.shader->bind();
+                gl.shader->setUniform("transform.mvp", mvp);
 
                 glActiveTexture(GL_TEXTURE0);
                 glBindTexture(GL_TEXTURE_2D, gl.buffer->getColorID());
@@ -403,12 +393,17 @@ namespace mrv
                         gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
                     }
                 }
+
+                if (p.imageOptions[0].alphaBlend == timeline::AlphaBlend::None)
+                {
+                    glEnable(GL_BLEND);
+                }
             }
             else
             {
                 mvp = _projectionMatrix();
-                
-                const GLint viewportX = p.viewPos.x; 
+
+                const GLint viewportX = p.viewPos.x;
                 const GLint viewportY = p.viewPos.y;
                 const GLsizei sizeW = renderSize.w * p.viewZoom;
                 const GLsizei sizeH = renderSize.h * p.viewZoom;
@@ -436,24 +431,23 @@ namespace mrv
                         0, 0, renderSize.w, renderSize.h, viewportX, viewportY,
                         sizeW + viewportX, sizeH + viewportY,
                         GL_COLOR_BUFFER_BIT, filter);
-                    
+
                     if (p.stereo3DOptions.output == Stereo3DOutput::OpenGL &&
                         p.stereo3DOptions.input == Stereo3DInput::Image)
                     {
-                        glBindFramebuffer(GL_READ_FRAMEBUFFER,
-                                          gl.stereoBuffer->getID());
+                        glBindFramebuffer(
+                            GL_READ_FRAMEBUFFER, gl.stereoBuffer->getID());
                         glBindFramebuffer(
                             GL_DRAW_FRAMEBUFFER, 0); // 0 is screen
                         glDrawBuffer(GL_BACK_RIGHT);
                         glBlitFramebuffer(
-                            0, 0, renderSize.w, renderSize.h,
-                            viewportX, viewportY,
-                            sizeW + viewportX, sizeH + viewportY,
+                            0, 0, renderSize.w, renderSize.h, viewportX,
+                            viewportY, sizeW + viewportX, sizeH + viewportY,
                             GL_COLOR_BUFFER_BIT, filter);
                     }
                 }
             }
-            
+
             math::Box2i selection = p.colorAreaInfo.box = p.selection;
             if (selection.max.x >= 0)
             {
