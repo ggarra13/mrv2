@@ -20,26 +20,22 @@ if(MRV2_PYBIND11)
     list(APPEND LIBRARIES mrvPy)
 endif()
 
-list( APPEND LIBRARIES
+list(APPEND LIBRARIES
     mrvApp
     ${Intl_LIBRARIES}
     ${FLTK_LIBRARIES})
 
 
 if( APPLE )
-    set( OSX_FRAMEWORKS "-framework IOKit" )
-    list( APPEND LIBRARIES ${OSX_FRAMEWORKS} )
+    set(OSX_FRAMEWORKS "-framework IOKit")
+    list(APPEND LIBRARIES ${OSX_FRAMEWORKS})
     set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
     set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib;/usr/local/lib")
 endif()
 
 if(UNIX AND NOT APPLE)
-    if ( CMAKE_CXX_COMPILER_VERSION MATCHES "^8.*" )
-	message( STATUS "Old g++ compiler detected.  Will link to stdc++fs")
-	list( APPEND LIBRARIES "stdc++fs" )
-    endif()
-    # Needed for python3.10 on Rocky and Ubuntu 20.04
-    list( APPEND LIBRARIES "util" "c" )
+    # Needed for python3.11 on Rocky and Ubuntu 20.04
+    list(APPEND LIBRARIES "util" "c" )
 endif()
 
 add_executable(mrv2 WIN32 ${SOURCES} ${HEADERS})
@@ -53,7 +49,7 @@ if(WIN32)
 elseif(APPLE)
     set(PRUNE_SYMBOLS "-Wl,-dead_strip")
 else(UNIX)
-    #set(PRUNE_SYMBOLS "-Wl,--gc-sections")
+    set(PRUNE_SYMBOLS "-Wl,--gc-sections")
 endif()
 
 target_link_options(mrv2 PRIVATE ${PRUNE_SYMBOLS})
