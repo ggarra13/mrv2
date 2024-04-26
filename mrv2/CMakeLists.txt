@@ -54,8 +54,8 @@ else()
     set(FLTK_FLUID_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/fluid)
 endif()
 
-if(WIN32 AND FLTK_BUIKD_SHARED_LIBS)
-    add_definitions(-D FL_DLL)
+if(WIN32 AND FLTK_BUILD_SHARED_LIBS)
+    add_definitions(-DFL_DLL)
 endif()
 
 
