@@ -206,13 +206,17 @@ namespace mrv
         bool transparent =
             p.backgroundOptions.type == timeline::Background::Transparent;
 
+        bool accurate = false;
+        if ((p.ui->uiPrefs->uiPrefsColorAccuracy->value() == 0) ||
+            p.ocioOptions.enabled == true)
+            accurate = true;
+
         try
         {
             if (renderSize.isValid())
             {
                 gl::OffscreenBufferOptions offscreenBufferOptions;
-                if (p.ui->uiPrefs->uiPrefsColorAccuracy->value() ||
-                    p.ocioOptions.enabled == true)
+                if (accurate)
                     offscreenBufferOptions.colorType =
                         image::PixelType::RGBA_F32;
                 else
@@ -273,7 +277,7 @@ namespace mrv
                     locale::SetAndRestore saved;
                     timeline::RenderOptions renderOptions;
 
-                    if (p.ui->uiPrefs->uiPrefsColorAccuracy->value())
+                    if (accurate)
                         renderOptions.offscreenColorType =
                             image::PixelType::RGBA_F32;
                     else
@@ -580,16 +584,36 @@ namespace mrv
         }
 
 #ifdef USE_OPENGL2
+        const auto& player = getTimelinePlayer();
+        if (!player)
+            return;
+
+        bool draw_opengl1 = static_cast<bool>(w) & p.showAnnotations;
+        const auto& annotations =
+            player->getAnnotations(p.ghostPrevious, p.ghostNext);
+
+        for (const auto& shape : annotations->shapes)
+        {
+            if (dynamic_cast<GLTextShape*>(shape->get()))
+            {
+                draw_opengl1 = true;
+                break;
+            }
+        }
+
+        if (!draw_opengl1)
+            return;
+
         Fl_Gl_Window::draw_begin(); // Set up 1:1 projection
-        Fl_Window::draw();          // Draw FLTK children
+        if (w)
+            Fl_Window::draw(); // Draw FLTK children
         glViewport(0, 0, viewportSize.w, viewportSize.h);
         if (p.showAnnotations)
             _drawGL2TextShapes();
         Fl_Gl_Window::draw_end(); // Restore GL state
 #else
-#    ifndef NO_GL_WINDOW_CHILDREN
-        Fl_Gl_Window::draw();
-#    endif
+        if (w)
+            Fl_Gl_Window::draw();
 #endif
 
 #ifdef DEBUG_SPEED
