@@ -61,23 +61,7 @@ jobs:
   
     - name: Build mrv2
       run: |
-        ./runme_nolog.sh \
-        -D BUILD_PYTHON=OFF \
-        -D MRV2_PDF=OFF \
-        -D MRV2_NETWORK=OFF \
-        -D MRV2_PYBIND11=OFF \
-        -D MRV2_PYFLTK=OFF \
-        -D TLRENDER_EXR=OFF \
-        -D TLRENDER_FFMPEG=OFF \
-        -D TLRENDER_NDI=OFF \
-        -D TLRENDER_NET=OFF \
-        -D TLRENDER_RAW=OFF \
-        -D TLRENDER_TIFF=OFF \
-        -D TLRENDER_USD=OFF
-
-    # - name: Upload binaries
-    #   run: |
-    #     ./bin/upload_sourceforge.sh
+        ./bin/runme_minimal.sh
 
 
   windows-minimal-build:
@@ -124,23 +108,7 @@ jobs:
       
     - name: Build mrv2
       run: |
-        ./runme_nolog.sh \
-        -D BUILD_PYTHON=OFF \
-        -D MRV2_PDF=OFF \
-        -D MRV2_NETWORK=OFF \
-        -D MRV2_PYBIND11=OFF \
-        -D MRV2_PYFLTK=OFF \
-        -D TLRENDER_EXR=OFF \
-        -D TLRENDER_FFMPEG=OFF \
-        -D TLRENDER_NDI=OFF \
-        -D TLRENDER_NET=OFF \
-        -D TLRENDER_RAW=OFF \
-        -D TLRENDER_TIFF=OFF \
-        -D TLRENDER_USD=OFF
-      
-    # - name: Upload binaries
-    #   run: |
-    #     ./bin/upload_sourceforge.sh
+        ./bin/runme_minimal.sh
 
 
   macos-minimal-build:
@@ -176,23 +144,7 @@ jobs:
 
     - name: Build mrv2
       run: |
-        ./runme_nolog.sh \
-        -D BUILD_PYTHON=OFF \
-        -D MRV2_PDF=OFF \
-        -D MRV2_NETWORK=OFF \
-        -D MRV2_PYBIND11=OFF \
-        -D MRV2_PYFLTK=OFF \
-        -D TLRENDER_EXR=OFF \
-        -D TLRENDER_FFMPEG=OFF \
-        -D TLRENDER_NDI=OFF \
-        -D TLRENDER_NET=OFF \
-        -D TLRENDER_RAW=OFF \
-        -D TLRENDER_TIFF=OFF \
-        -D TLRENDER_USD=OFF
-
-    # - name: Upload binaries
-    #   run: |
-    #     ./bin/upload_sourceforge.sh
+        ./bin/runme_minimal.sh
 
 
   macos-m1-minimal-build:
@@ -228,20 +180,4 @@ jobs:
 
     - name: Build mrv2
       run: |
-        ./runme_nolog.sh \
-        -D BUILD_PYTHON=OFF \
-        -D MRV2_PDF=OFF \
-        -D MRV2_NETWORK=OFF \
-        -D MRV2_PYBIND11=OFF \
-        -D MRV2_PYFLTK=OFF \
-        -D TLRENDER_EXR=OFF \
-        -D TLRENDER_FFMPEG=OFF \
-        -D TLRENDER_NDI=OFF \
-        -D TLRENDER_NET=OFF \
-        -D TLRENDER_RAW=OFF \
-        -D TLRENDER_TIFF=OFF \
-        -D TLRENDER_USD=OFF
-
-  #   - name: Upload binaries
-  #      run: |
-  #        ./bin/upload_sourceforge.sh
+        ./bin/runme_minimal.sh
