@@ -77,15 +77,30 @@ export CMAKE_OSX_ARCHITECTURES=""
 export CMAKE_VERBOSE_MAKEFILE=OFF
 export BUILD_TYPE_DIR="Release"
 export CMAKE_BUILD_TYPE="Release"
-
-if [[ $KERNEL == *Msys* ]]; then
-    export BUILD_TYPE_DIR="Release"
-    export CMAKE_BUILD_TYPE="RelWithDebInfo"
-fi
-
 export CMAKE_GENERATOR="Ninja"
 export CMAKE_TARGET=""
 ASK_TO_CONTINUE=0
+
+
+#
+# In Windows, we always build with RelWithDebInfo so that we can check for
+# crashes.  On Linux and macOS we build with symbols when I am the user
+# compiling it locally as GitHub Actions runs out of disk space.
+#
+build_with_symbols=0
+if [[ $KERNEL == *Msys* ]]; then
+    build_with_symbols=1
+else
+    username=$(whoami)
+    if [[ $username == gga ]]; then
+	build_with_symbols=1
+    fi
+fi
+
+if [[ $build_with_symbols == 1 ]]; then
+    export BUILD_TYPE_DIR="Release"
+    export CMAKE_BUILD_TYPE="RelWithDebInfo"
+fi
 
 for i in "$@"; do
     case $i in
