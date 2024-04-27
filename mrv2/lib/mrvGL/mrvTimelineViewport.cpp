@@ -1195,6 +1195,11 @@ namespace mrv
         return isEnvironment;
     }
 
+    float TimelineViewport::_getRotation() const noexcept
+    {
+        return normalizeAngle0to360(_p->rotation + _p->videoRotation);
+    }
+    
     void TimelineViewport::_frameView() noexcept
     {
         TLRENDER_P();
@@ -1204,8 +1209,7 @@ namespace mrv
         }
         const auto viewportSize = getViewportSize();
         const auto renderSize = getRenderSize();
-        const float rotation =
-            normalizeAngle0to360(p.rotation + p.videoRotation);
+        const float rotation = _getRotation();
 
         float zoom = 1.0;
 

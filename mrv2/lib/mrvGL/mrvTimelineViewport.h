@@ -358,6 +358,10 @@ namespace mrv
         math::Vector2f _getRasterf(int X, int Y) const noexcept;
         math::Vector2f _getRasterf() const noexcept;
 
+        //! Get the normalized rotation between 0 and 360
+        //! full rotation of the image (user rotation + video rotation)
+        float _getRotation() const noexcept;
+        
         //! Get the full projection matrix.
         math::Matrix4x4f _projectionMatrix() const noexcept;
 

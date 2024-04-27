@@ -383,8 +383,10 @@ namespace mrv
         {
             math::Matrix4x4f mvp;
 
+            const float rotation = _getRotation();
             if (!p.ui->uiPrefs->uiPrefsBlitViewports->value() ||
-                p.environmentMapOptions.type != EnvironmentMapOptions::kNone)
+                p.environmentMapOptions.type != EnvironmentMapOptions::kNone ||
+                rotation != 0.F)
             {
                 if (p.environmentMapOptions.type !=
                     EnvironmentMapOptions::kNone)
