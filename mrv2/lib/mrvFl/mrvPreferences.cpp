@@ -677,7 +677,7 @@ namespace mrv
         playback.get("single_click_playback", tmp, 0);
         uiPrefs->uiPrefsSingleClickPlayback->value(tmp);
 
-        playback.get("auto_hide_pixel_bar", tmp, 0);
+        playback.get("auto_hide_pixel_bar", tmp, 1);
         uiPrefs->uiPrefsAutoHidePixelBar->value(tmp);
 
         playback.get("fps", tmpF, 24.0);
@@ -808,20 +808,10 @@ namespace mrv
         opengl.get("color_accuracy", tmp, 1);
         uiPrefs->uiPrefsColorAccuracy->value(tmp);
 
-#if defined(__linux__) || defined(_WIN32)
         opengl.get("blit_viewports", tmp, 1);
-#else
-        // macOS seems to work better with shaders than with blitting.
-        opengl.get("blit_viewports", tmp, 0);
-#endif
         uiPrefs->uiPrefsBlitViewports->value(tmp);
 
-#if defined(__linux__) || defined(_WIN32)
         opengl.get("blit_timeline", tmp, 1);
-#else
-        // macOS seems to work better with shaders than with blitting.
-        opengl.get("blit_timeline", tmp, 0);
-#endif
         uiPrefs->uiPrefsBlitTimeline->value(tmp);
 
         Fl_Preferences behavior(base, "behavior");

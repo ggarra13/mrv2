@@ -184,17 +184,6 @@ namespace mrv
 
         make_current(); // needed to work with GLFW
 
-        image::PixelType colorBufferType = image::PixelType::RGBA_U8;
-        if ((p.ui->uiPrefs->uiPrefsColorAccuracy->value() == 0) ||
-            p.ocioOptions.enabled == true)
-            colorBufferType = image::PixelType::RGBA_F32;
-
-        if (gl.colorBufferType != colorBufferType)
-        {
-            gl.colorBufferType = colorBufferType;
-            valid(0);
-        }
-
         if (!valid())
         {
             _initializeGL();
@@ -221,6 +210,14 @@ namespace mrv
         {
             if (renderSize.isValid())
             {
+                image::PixelType colorBufferType = image::PixelType::RGBA_U8;
+                if ((p.ui->uiPrefs->uiPrefsColorAccuracy->value() == 0) ||
+                    p.ocioOptions.enabled == true)
+                    colorBufferType = image::PixelType::RGBA_F32;
+
+                if (gl.colorBufferType != colorBufferType)
+                    gl.colorBufferType = colorBufferType;
+
                 gl::OffscreenBufferOptions offscreenBufferOptions;
                 offscreenBufferOptions.colorType = gl.colorBufferType;
 
@@ -480,24 +477,33 @@ namespace mrv
                 // Copy it again in case it changed
                 p.colorAreaInfo.box = selection;
 
-                _mapBuffer();
+                if (panel::colorAreaPanel || panel::histogramPanel ||
+                    panel::vectorscopePanel)
+                {
+                    _mapBuffer();
+
+                    if (panel::colorAreaPanel)
+                    {
+                        _calculateColorArea(p.colorAreaInfo);
+                        panel::colorAreaPanel->update(p.colorAreaInfo);
+                    }
+                    if (panel::histogramPanel)
+                    {
+                        panel::histogramPanel->update(p.colorAreaInfo);
+                    }
+                    if (panel::vectorscopePanel)
+                    {
+                        panel::vectorscopePanel->update(p.colorAreaInfo);
+                    }
+                }
+                else
+                {
+                    p.image = nullptr;
+                }
             }
             else
             {
                 p.image = nullptr;
-            }
-            if (panel::colorAreaPanel)
-            {
-                _calculateColorArea(p.colorAreaInfo);
-                panel::colorAreaPanel->update(p.colorAreaInfo);
-            }
-            if (panel::histogramPanel)
-            {
-                panel::histogramPanel->update(p.colorAreaInfo);
-            }
-            if (panel::vectorscopePanel)
-            {
-                panel::vectorscopePanel->update(p.colorAreaInfo);
             }
 
             // Update the pixel bar from here only if we are playing a movie
