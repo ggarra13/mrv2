@@ -42,9 +42,7 @@ if(FLTK_BUILD_SHARED_LIBS)
 	set(FLTK_LIBRARIES fltk::fltk-shared )
 	set(FLTK_gl_LIBRARY )
     else()
-	# fltk::images must *NOT* be shared or jpeg library enters in conflict
-	# with tlRender's libjpeg-turbo.
-	set(FLTK_LIBRARIES fltk::fltk-shared fltk::images )
+	set(FLTK_LIBRARIES fltk::fltk-shared fltk::images-shared )
 	set(FLTK_gl_LIBRARY fltk::gl-shared)
     endif()
 else()

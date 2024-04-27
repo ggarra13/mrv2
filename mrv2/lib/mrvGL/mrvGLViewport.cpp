@@ -210,9 +210,35 @@ namespace mrv
         {
             if (renderSize.isValid())
             {
+                bool isFloatImage = p.ocioOptions.enabled;
+                int accuracy = p.ui->uiPrefs->uiPrefsColorAccuracy->value();
+                if (accuracy == 0)
+                    isFloatImage = true;
+
+                if (accuracy == 2 && !p.videoData[0].layers.empty() &&
+                    p.videoData[0].layers[0].image->isValid())
+                {
+                    const auto& pixelType =
+                        p.videoData[0].layers[0].image->getPixelType();
+                    switch (pixelType)
+                    {
+                    case image::PixelType::RGBA_F32:
+                    case image::PixelType::RGB_F32:
+                    case image::PixelType::RGBA_F16:
+                    case image::PixelType::RGB_F16:
+                    case image::PixelType::L_F32:
+                    case image::PixelType::LA_F32:
+                    case image::PixelType::L_F16:
+                    case image::PixelType::LA_F16:
+                        isFloatImage = true;
+                        break;
+                    default:
+                        break;
+                    }
+                }
+
                 image::PixelType colorBufferType = image::PixelType::RGBA_U8;
-                if ((p.ui->uiPrefs->uiPrefsColorAccuracy->value() == 0) ||
-                    p.ocioOptions.enabled == true)
+                if (isFloatImage)
                     colorBufferType = image::PixelType::RGBA_F32;
 
                 if (gl.colorBufferType != colorBufferType)

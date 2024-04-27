@@ -1374,12 +1374,16 @@ v->uiOCIO_Look->do_callback();}
               }
               Fl_Choice uiPrefsColorAccuracy {
                 label {Color Buffers' Accuracy} open selected
-                tooltip {Color Buffers can be accurate or fast.  Accurate preserves all float information, while Fast works in 8-bits.} xywh {473 163 255 25} down_box BORDER_BOX align 132 textcolor 32
+                tooltip {Color Buffers can be Accurate, Fast or Automatic.  Accurate preserves all float information, while Fast works in 8-bits.  Automatic selects the accuracy baed on image depth and OCIO use.} xywh {473 163 255 25} down_box BORDER_BOX align 132 textcolor 32
                 class {mrv::Choice}
               } {
                 MenuItem {} {
-                  label Accurate
+                  label Automatic
                   xywh {50 50 100 20}
+                }
+                MenuItem {} {
+                  label Accurate
+                  xywh {60 60 100 20}
                 }
                 MenuItem {} {
                   label Fast
