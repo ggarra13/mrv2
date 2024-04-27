@@ -22,7 +22,8 @@ v1.1.4
   not needed (you don't have a text input widget, nor a text annotations
   showing).
 - Added Linux's stack traces with line numbers by relying on libbacktrace.
-
+- Improved performance of OpenGL dramatically, particularly on macOS.
+- Improved performance of drawing OpenGL annotations (drawings).
 
 
 v1.1.3

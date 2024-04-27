@@ -5,9 +5,16 @@
 include( ExternalProject )
 
 #set( FLTK_GIT_TAG master )
-set(FLTK_GIT_TAG 5ec7176e81e6951ffa8360bc41a4e953de2b2070)  # stable
+set(FLTK_GIT_TAG eeed39524606f1717dd2634ffe52e4640a606841)  # stable
 
-set( FLTK_BUILD_SHARED_LIBS ON )  # We no longer compile static.
+if(MRV2_PYFLTK)
+    # If we are building pyFLTK compile shared
+    set( FLTK_BUILD_SHARED_LIBS ON )  
+else()
+    # else compile static
+    set( FLTK_BUILD_SHARED_LIBS OFF ) 
+endif()
+
 
 set( FLTK_PATCH )
 set( FLTK_BUILD_TYPE ${CMAKE_BUILD_TYPE} )
@@ -18,19 +25,10 @@ set( FLTK_CXX_FLAGS ${CMAKE_CXX_FLAGS} )
 set( FLTK_C_COMPILER ${CMAKE_C_COMPILER})
 set( FLTK_C_FLAGS ${CMAKE_C_FLAGS} )
 
-if (APPLE)
-    if(CMAKE_OSX_DEPLOYMENT_TARGET)
-	set( FLTK_C_FLAGS
-	    -mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}
-	    ${FLTK_C_FLAGS} )
-	set( FLTK_CXX_FLAGS
-	    -mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}
-	    ${FLTK_CXX_FLAGS} )
-    endif()
-elseif(WIN32)
+if(WIN32)
     set(FLTK_C_COMPILER cl)
     set(FLTK_CXX_COMPILER cl)
-else()
+elseif(UNIX AND NOT APPLE)
     list(APPEND FLTK_C_FLAGS -fPIC)
     list(APPEND FLTK_CXX_FLAGS -fPIC)
 endif()

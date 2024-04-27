@@ -71,8 +71,8 @@ namespace mrv
     timeline::Playback TimelineViewport::Private::playbackMode =
         timeline::Playback::Stop;
     float TimelineViewport::Private::masking = 0.F;
-    otio::RationalTime TimelineViewport::Private::lastTime;
-    uint64_t TimelineViewport::Private::skippedFrames = 0;
+    int64_t TimelineViewport::Private::lastFrame;
+    uint64_t TimelineViewport::Private::droppedFrames = 0;
     float TimelineViewport::Private::rotation = 0.F;
     bool TimelineViewport::Private::resizeWindow = true;
     bool TimelineViewport::Private::safeAreas = false;
@@ -423,7 +423,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        p.skippedFrames = 0;
+        p.droppedFrames = 0;
 
         if (!p.player)
             return;
@@ -435,7 +435,7 @@ namespace mrv
     void TimelineViewport::framePrev() noexcept
     {
         TLRENDER_P();
-        p.skippedFrames = 0;
+        p.droppedFrames = 0;
 
         if (!p.player)
             return;
@@ -447,7 +447,7 @@ namespace mrv
     void TimelineViewport::frameNext() noexcept
     {
         TLRENDER_P();
-        p.skippedFrames = 0;
+        p.droppedFrames = 0;
 
         if (!p.player)
             return;
@@ -459,7 +459,7 @@ namespace mrv
     void TimelineViewport::endFrame() noexcept
     {
         TLRENDER_P();
-        p.skippedFrames = 0;
+        p.droppedFrames = 0;
 
         if (!p.player)
             return;
@@ -471,7 +471,7 @@ namespace mrv
     void TimelineViewport::playBackwards() noexcept
     {
         TLRENDER_P();
-        p.skippedFrames = 0;
+        p.droppedFrames = 0;
 
         if (!p.player)
             return;
@@ -485,7 +485,7 @@ namespace mrv
     void TimelineViewport::stop() noexcept
     {
         TLRENDER_P();
-        p.skippedFrames = 0;
+        p.droppedFrames = 0;
         if (!p.player)
             return;
 
@@ -499,7 +499,7 @@ namespace mrv
     void TimelineViewport::playForwards() noexcept
     {
         TLRENDER_P();
-        p.skippedFrames = 0;
+        p.droppedFrames = 0;
 
         if (!p.player)
             return;
@@ -535,7 +535,7 @@ namespace mrv
     void TimelineViewport::togglePlayback() noexcept
     {
         TLRENDER_P();
-        p.skippedFrames = 0;
+        p.droppedFrames = 0;
 
         if (!p.player)
             return;
@@ -1250,7 +1250,7 @@ namespace mrv
             posX = mw->x();
             posY = mw->y();
         }
-        
+
         int decW = mw->decorated_w();
         int decH = mw->decorated_h();
 
@@ -1263,7 +1263,7 @@ namespace mrv
 #ifdef _WIN32
         miny += dH - dW / 2;
 #endif
-        
+
         // Take into account the different UI bars
         if (p.ui->uiMenuGroup->visible())
             H += p.ui->uiMenuGroup->h();
@@ -1287,7 +1287,7 @@ namespace mrv
 
         if (p.ui->uiDockGroup->visible())
             W += p.ui->uiDockGroup->w();
-        
+
         bool alwaysFrameView = (bool)uiPrefs->uiPrefsAutoFitImage->value();
         p.frameView = alwaysFrameView;
 
@@ -1333,19 +1333,19 @@ namespace mrv
             if (H > maxH)
                 H = maxH;
         }
-        
+
         if (posX + W > maxW)
             posX = minx;
         if (posY + W > maxH)
             posY = miny;
-        
+
         mw->resize(posX, posY, W, H);
 
 #ifdef FLTK_USE_WAYLAND
         if (fl_wl_display())
             Fl::flush();
 #endif
-        
+
         p.ui->uiRegion->layout();
 
         set_edit_mode_cb(editMode, p.ui);

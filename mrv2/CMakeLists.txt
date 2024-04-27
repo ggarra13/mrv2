@@ -35,14 +35,21 @@ endif()
 
 find_package(FLTK CONFIG REQUIRED)
 
-if(MSVC)
-    set(FLTK_LIBRARIES fltk::fltk-shared )
-    set(FLTK_gl_LIBRARY )
+
+if(FLTK_BUILD_SHARED_LIBS)
+    if(MSVC)
+	add_definitions(-D FL_DLL)
+	set(FLTK_LIBRARIES fltk::fltk-shared )
+	set(FLTK_gl_LIBRARY )
+    else()
+	# fltk::images must *NOT* be shared or jpeg library enters in conflict
+	# with tlRender's libjpeg-turbo.
+	set(FLTK_LIBRARIES fltk::fltk-shared fltk::images )
+	set(FLTK_gl_LIBRARY fltk::gl-shared)
+    endif()
 else()
-    # fltk::images must *NOT* be shared or jpeg library enters in conflict
-    # with tlRender's libjpeg-turbo.
-    set(FLTK_LIBRARIES fltk::fltk-shared fltk::images )
-    set(FLTK_gl_LIBRARY fltk::gl-shared)
+    set(FLTK_LIBRARIES fltk::fltk fltk::images )
+    set(FLTK_gl_LIBRARY fltk::gl )
 endif()
 
 #
@@ -52,10 +59,6 @@ if(MSVC)
     set(FLTK_FLUID_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/fluid-cmd.exe)
 else()
     set(FLTK_FLUID_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/fluid)
-endif()
-
-if(WIN32 AND FLTK_BUIKD_SHARED_LIBS)
-    add_definitions(-D FL_DLL)
 endif()
 
 

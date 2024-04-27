@@ -287,8 +287,8 @@ namespace mrv
 
             gl.render->drawVideo(
                 {p.videoData[right]},
-                timeline::getBoxes(timeline::CompareMode::A,
-                                   {p.videoData[right]}),
+                timeline::getBoxes(
+                    timeline::CompareMode::A, {p.videoData[right]}),
                 p.imageOptions, p.displayOptions);
 
             _drawOverlays(renderSize);
@@ -355,20 +355,14 @@ namespace mrv
     {
         MRV2_GL();
         TLRENDER_P();
-        if (p.actionMode != ActionMode::kScrub &&
-            p.actionMode != ActionMode::kText &&
-            p.actionMode != ActionMode::kSelection &&
-            p.actionMode != ActionMode::kRotate && Fl::belowmouse() == this)
-        {
-            const image::Color4f color(1.F, 1.F, 1.F, 1.0F);
-            const float multiplier =
-                1.0F + (2.5F * (p.actionMode == ActionMode::kErase));
-            const float pen_size = _getPenSize() * multiplier;
-            p.mousePos = _getFocus();
-            const auto& pos = _getRasterf();
-            gl.render->setTransform(mvp);
-            gl.lines->drawCursor(gl.render, pos, pen_size, color);
-        }
+        const image::Color4f color(1.F, 1.F, 1.F, 1.0F);
+        const float multiplier =
+            1.0F + (2.5F * (p.actionMode == ActionMode::kErase));
+        const float pen_size = _getPenSize() * multiplier;
+        p.mousePos = _getFocus();
+        const auto& pos = _getRasterf();
+        gl.render->setTransform(mvp);
+        gl.lines->drawCursor(gl.render, pos, pen_size, color);
     }
 
     void Viewport::_drawRectangleOutline(
@@ -532,26 +526,12 @@ namespace mrv
         }
     }
 
-    void Viewport::_drawAnnotations(const math::Matrix4x4f& mvp)
+    void Viewport::_drawAnnotations(
+        const math::Matrix4x4f& mvp, const otime::RationalTime& time,
+        const std::vector<std::shared_ptr<draw::Annotation>>& annotations)
     {
         TLRENDER_P();
         MRV2_GL();
-
-        const auto& player = getTimelinePlayer();
-        if (!player)
-            return;
-
-        const otime::RationalTime& time = player->currentTime();
-
-        if (panel::annotationsPanel)
-        {
-            panel::annotationsPanel->notes->value("");
-        }
-
-        const auto annotations =
-            player->getAnnotations(p.ghostPrevious, p.ghostNext);
-        if (annotations.empty())
-            return;
 
         const auto& renderSize = getRenderSize();
         const auto& viewportSize = getViewportSize();
@@ -730,7 +710,7 @@ namespace mrv
         box.max.y = -Y;
 
         int width = 2 / _p->viewZoom; //* renderSize.w / viewportSize.w;
-        
+
 #ifdef USE_ONE_PIXEL_LINES
         gl.outline->drawRect(box, color, mvp);
 #else
@@ -840,8 +820,8 @@ namespace mrv
         timeline::RenderOptions renderOptions;
         renderOptions.clear = false;
         gl.render->begin(viewportSize, renderOptions);
-        gl.render->setOCIOOptions(timeline::OCIOOptions());
-        gl.render->setLUTOptions(timeline::LUTOptions());
+        // gl.render->setOCIOOptions(timeline::OCIOOptions());
+        // gl.render->setLUTOptions(timeline::LUTOptions());
 
         char buf[512];
         if (p.hud & HudDisplay::kDirectory)
@@ -916,10 +896,9 @@ namespace mrv
                 (p.actionMode != ActionMode::kScrub || p.lastEvent != FL_DRAG))
             {
                 // Calculate skipped frames
-                int64_t frame_diff = (time.value() - p.lastTime.value());
-                int64_t absdiff = std::abs(frame_diff);
+                int64_t absdiff = std::abs(time.value() - p.lastFrame);
                 if (absdiff > 1 && absdiff < 60)
-                    p.skippedFrames += absdiff - 1;
+                    p.droppedFrames += absdiff - 1;
 
                 // Calculate elapsed time
                 auto currentTime = std::chrono::high_resolution_clock::now();
@@ -945,7 +924,7 @@ namespace mrv
                 const double fps = 1.0 / averageFrameTime;
 
                 snprintf(
-                    buf, 512, "SF: %" PRIu64 " FPS: %.2f/%.3f", p.skippedFrames,
+                    buf, 512, "DF: %" PRIu64 " FPS: %.2f/%.3f", p.droppedFrames,
                     fps, player->speed());
 
                 tmp += buf;
@@ -953,7 +932,7 @@ namespace mrv
             }
         }
 
-        p.lastTime = time;
+        p.lastFrame = time.value();
 
         if (!tmp.empty())
             _drawText(
@@ -1089,8 +1068,8 @@ namespace mrv
         auto mvp = pm * vm;
         mvp = mvp * math::scale(math::Vector3f(1.F, -1.F, 1.F));
 #ifdef USE_ONE_PIXEL_LINES
-        _drawRectangleOutline( box, color, mvp );
-#else        
+        _drawRectangleOutline(box, color, mvp);
+#else
         gl.render->setTransform(mvp);
         drawRectOutline(gl.render, box, color, 2);
 #endif

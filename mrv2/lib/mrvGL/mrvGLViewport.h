@@ -78,7 +78,9 @@ namespace mrv
 
         void _drawCursor(const math::Matrix4x4f& mvp) const noexcept;
 
-        void _drawAnnotations(const math::Matrix4x4f& mvp);
+        void _drawAnnotations(
+            const math::Matrix4x4f& mvp, const otime::RationalTime& time,
+            const std::vector<std::shared_ptr<draw::Annotation>>& annotations);
 
 #ifdef USE_OPENGL2
         void _drawGL2TextShapes();
@@ -89,7 +91,7 @@ namespace mrv
         void _readPixel(image::Color4f& rgba) const noexcept override;
 
         void _drawHelpText() const noexcept;
-        
+
         void _drawRectangleOutline(
             const math::Box2i& box, const image::Color4f& color,
             const math::Matrix4x4f& mvp) const noexcept;

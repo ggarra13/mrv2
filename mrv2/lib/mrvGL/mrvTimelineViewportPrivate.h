@@ -21,12 +21,13 @@ namespace mrv
 
     struct TimelineViewport::Private
     {
-        static std::map<std::string, std::string,
-                        string::CaseInsensitiveCompare> tagData;
+        static std::map<
+            std::string, std::string, string::CaseInsensitiveCompare>
+            tagData;
         static timeline::BackgroundOptions backgroundOptions;
         static float rotation;
         static bool resizeWindow;
-        
+
         timeline::OCIOOptions ocioOptions;
         timeline::LUTOptions lutOptions;
         std::vector<tl::timeline::ImageOptions> imageOptions;
@@ -35,15 +36,14 @@ namespace mrv
         Stereo3DOptions stereo3DOptions;
         static EnvironmentMapOptions environmentMapOptions;
 
-        float       videoRotation = 0.F;
+        float videoRotation = 0.F;
         TimelinePlayer* player = nullptr;
 
         math::Vector2i viewPos;
         float viewZoom = 1.F;
         bool frameView = false;
         bool switchClip = true;
-        
-        
+
         int event_x, event_y, last_x;
         math::Vector2i mousePos;
         math::Vector2i mousePress;
@@ -111,18 +111,18 @@ namespace mrv
 
         //! Display Window
         static bool displayWindow;
-        
+
         //! Ignore Display Window
         static bool ignoreDisplayWindow;
 
         //! Masking
         static float masking;
 
-        //! Last time shown
-        static otio::RationalTime lastTime;
+        //! Last frame shown
+        static int64_t lastFrame;
 
         //! Skipped frames
-        static uint64_t skippedFrames;
+        static uint64_t droppedFrames;
 
         //! We store really image::Color4f but since we need to reverse
         //! the R and B channels (as they are read in BGR order), we process

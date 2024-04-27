@@ -253,8 +253,6 @@ namespace mrv
         setStopOnScrub(false);
 
         _styleUpdate();
-
-        Fl::add_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
     }
 
     ThumbnailCreator* TimelineWidget::thumbnailCreator()
@@ -1316,9 +1314,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        //! \bug This guard is needed since the timer event can be called during
-        //! destruction?
-        if (_p)
+        if (visible_r())
         {
             ui::TickEvent tickEvent(p.style, p.iconLibrary, p.fontSystem);
             _tickEvent(p.timelineWindow, true, true, tickEvent);
@@ -1340,8 +1336,9 @@ namespace mrv
             {
                 redraw();
             }
+            Fl::repeat_timeout(
+                kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
         }
-        Fl::repeat_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
     }
 
     int TimelineWidget::handle(int event)
@@ -1349,6 +1346,9 @@ namespace mrv
         TLRENDER_P();
         switch (event)
         {
+        case FL_SHOW:
+            Fl::add_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
+            break;
         case FL_FOCUS:
         case FL_UNFOCUS:
             return 1;
@@ -1398,6 +1398,7 @@ namespace mrv
             return keyReleaseEvent();
         case FL_HIDE:
         {
+            Fl::remove_timeout((Fl_Timeout_Handler)timerEvent_cb, this);
             if (p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
             {
                 if (p.thumbnailCreator && p.thumbnailRequestId)

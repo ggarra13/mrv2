@@ -354,6 +354,8 @@ namespace mrv
         glClearColor(r, g, b, a);
         glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
+        std::vector<std::shared_ptr<draw::Annotation>> annotations;
+
         if (gl.buffer && gl.shader)
         {
             math::Matrix4x4f mvp;
@@ -510,22 +512,6 @@ namespace mrv
             if (update)
                 updatePixelBar();
 
-            gl::OffscreenBufferOptions offscreenBufferOptions;
-            offscreenBufferOptions.colorType = image::PixelType::RGBA_U8;
-            if (!p.displayOptions.empty())
-            {
-                offscreenBufferOptions.colorFilters =
-                    p.displayOptions[0].imageFilters;
-            }
-            offscreenBufferOptions.depth = gl::OffscreenDepth::None;
-            offscreenBufferOptions.stencil = gl::OffscreenStencil::None;
-            if (gl::doCreate(
-                    gl.annotation, viewportSize, offscreenBufferOptions))
-            {
-                gl.annotation = gl::OffscreenBuffer::create(
-                    viewportSize, offscreenBufferOptions);
-            }
-
             if (p.selection.max.x >= 0)
             {
                 Fl_Color c = p.ui->uiPrefs->uiPrefsViewSelection->color();
@@ -543,9 +529,34 @@ namespace mrv
                 _drawRectangleOutline(selection, color, mvp);
             }
 
-            if (p.showAnnotations && gl.annotation)
+            const auto& player = getTimelinePlayer();
+            if (!player)
+                return;
+            annotations = player->getAnnotations(p.ghostPrevious, p.ghostNext);
+
+            if (p.showAnnotations && !annotations.empty())
             {
-                _drawAnnotations(mvp);
+                gl::OffscreenBufferOptions offscreenBufferOptions;
+                offscreenBufferOptions.colorType = image::PixelType::RGBA_U8;
+                if (!p.displayOptions.empty())
+                {
+                    offscreenBufferOptions.colorFilters =
+                        p.displayOptions[0].imageFilters;
+                }
+                offscreenBufferOptions.depth = gl::OffscreenDepth::None;
+                offscreenBufferOptions.stencil = gl::OffscreenStencil::None;
+                if (gl::doCreate(
+                        gl.annotation, viewportSize, offscreenBufferOptions))
+                {
+                    gl.annotation = gl::OffscreenBuffer::create(
+                        viewportSize, offscreenBufferOptions);
+                }
+
+                if (panel::annotationsPanel)
+                {
+                    panel::annotationsPanel->notes->value("");
+                }
+                _drawAnnotations(mvp, player->currentTime(), annotations);
             }
 
             if (p.dataWindow)
@@ -556,7 +567,13 @@ namespace mrv
             if (p.safeAreas)
                 _drawSafeAreas();
 
-            _drawCursor(mvp);
+            if (p.actionMode != ActionMode::kScrub &&
+                p.actionMode != ActionMode::kText &&
+                p.actionMode != ActionMode::kSelection &&
+                p.actionMode != ActionMode::kRotate && Fl::belowmouse() == this)
+            {
+                _drawCursor(mvp);
+            }
 
             if (p.hudActive && p.hud != HudDisplay::kNone)
                 _drawHUD();
@@ -579,13 +596,8 @@ namespace mrv
         }
 
 #ifdef USE_OPENGL2
-        const auto& player = getTimelinePlayer();
-        if (!player)
-            return;
 
         bool draw_opengl1 = static_cast<bool>(w) & p.showAnnotations;
-        const auto& annotations =
-            player->getAnnotations(p.ghostPrevious, p.ghostNext);
 
         for (const auto& annotation : annotations)
         {
