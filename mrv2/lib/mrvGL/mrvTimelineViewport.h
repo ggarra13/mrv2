@@ -337,9 +337,6 @@ namespace mrv
         //! Update the playback buttons.
         void updatePlaybackButtons() const noexcept;
 
-        //! Toggle the pixel tool bar if the preference option for it is set.
-        void togglePixelBar() const noexcept;
-
         //! Return the image rotation.
         float getRotation() const noexcept;
 
@@ -388,6 +385,9 @@ namespace mrv
 
         bool _isEnvironmentMap() const noexcept;
         void _updateZoom() const noexcept;
+
+        void _showPixelBar() const noexcept;
+        void _togglePixelBar() const noexcept;
 
         void _updatePixelBar() const noexcept;
         void _updatePixelBar(image::Color4f& rgba) const noexcept;

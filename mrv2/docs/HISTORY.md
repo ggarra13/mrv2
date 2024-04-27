@@ -24,6 +24,8 @@ v1.1.4
 - Added Linux's stack traces with line numbers by relying on libbacktrace.
 - Improved performance of OpenGL dramatically, particularly on macOS.
 - Improved performance of drawing OpenGL annotations (drawings).
+- Renamed skipped frames as drop frames.
+- Fixed drop frames incrementing due to lag when hiding the pixel bar.
 
 
 v1.1.3

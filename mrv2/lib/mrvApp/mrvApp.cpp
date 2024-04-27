@@ -242,7 +242,7 @@ namespace mrv
         _p(new Private)
     {
         TLRENDER_P();
-        
+
         // Establish MRV2_ROOT environment variable
         set_root_path(argc, argv);
 
@@ -1014,7 +1014,7 @@ namespace mrv
         }
 
         for (const auto& path :
-                 timeline::getPaths(filePath, pathOptions, _context))
+             timeline::getPaths(filePath, pathOptions, _context))
         {
             auto item = std::make_shared<FilesModelItem>();
             item->path = path;
@@ -1430,7 +1430,6 @@ namespace mrv
                             ui->uiPrefs->uiPrefsEditMode->value())
                             editMode = EditMode::kFull;
                     }
-                    ui->uiView->togglePixelBar();
                     ui->uiView->take_focus();
                 }
                 else

@@ -471,47 +471,64 @@ namespace mrv
     void TimelineViewport::playBackwards() noexcept
     {
         TLRENDER_P();
-        p.droppedFrames = 0;
 
         if (!p.player)
             return;
 
+        _togglePixelBar();
+        p.droppedFrames = 0;
+
         p.player->setPlayback(timeline::Playback::Reverse);
-        togglePixelBar();
+
         updatePlaybackButtons();
+
         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
     }
 
     void TimelineViewport::stop() noexcept
     {
         TLRENDER_P();
-        p.droppedFrames = 0;
         if (!p.player)
             return;
 
         p.player->setPlayback(timeline::Playback::Stop);
 
-        togglePixelBar();
+        _showPixelBar();
+        p.droppedFrames = 0;
+
         updatePlaybackButtons();
+
         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
     }
 
     void TimelineViewport::playForwards() noexcept
     {
         TLRENDER_P();
-        p.droppedFrames = 0;
 
         if (!p.player)
             return;
 
+        _togglePixelBar();
+        p.droppedFrames = 0;
+
         p.player->setPlayback(timeline::Playback::Forward);
 
-        togglePixelBar();
         updatePlaybackButtons();
         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
     }
 
-    void TimelineViewport::togglePixelBar() const noexcept
+    void TimelineViewport::_showPixelBar() const noexcept
+    {
+        TLRENDER_P();
+
+        if (!p.ui->uiPrefs->uiPrefsPixelToolbar->value() || p.presentation)
+            return;
+
+        if (!p.ui->uiPixelBar->visible())
+            toggle_pixel_bar(nullptr, p.ui);
+    }
+
+    void TimelineViewport::_togglePixelBar() const noexcept
     {
         TLRENDER_P();
 
@@ -522,12 +539,15 @@ namespace mrv
         auto playback = p.player->playback();
         if (playback == timeline::Playback::Stop)
         {
-            if (!p.ui->uiPixelBar->visible())
+            if (p.ui->uiPixelBar->visible())
+            {
                 toggle_pixel_bar(nullptr, p.ui);
+                Fl::flush();
+            }
         }
         else
         {
-            if (p.ui->uiPixelBar->visible())
+            if (!p.ui->uiPixelBar->visible())
                 toggle_pixel_bar(nullptr, p.ui);
         }
     }
@@ -535,14 +555,15 @@ namespace mrv
     void TimelineViewport::togglePlayback() noexcept
     {
         TLRENDER_P();
-        p.droppedFrames = 0;
 
         if (!p.player)
             return;
 
+        _togglePixelBar();
+        p.droppedFrames = 0;
+
         p.player->togglePlayback();
 
-        togglePixelBar();
         updatePlaybackButtons();
         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
     }
