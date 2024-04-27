@@ -11,11 +11,11 @@ namespace mrv
     class DummyClient : public TCP
     {
     public:
-        DummyClient(){};
-        virtual ~DummyClient(){};
+        DummyClient() {};
+        virtual ~DummyClient() {};
 
-        void pushMessage(const Message&) override{};
-        void sendMessages() override{};
-        void receiveMessages() override{};
+        void pushMessage(const Message&) override {};
+        void sendMessages() override {};
+        void receiveMessages() override {};
     };
 } // namespace mrv

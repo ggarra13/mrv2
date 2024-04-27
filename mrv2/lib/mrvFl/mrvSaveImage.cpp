@@ -47,7 +47,7 @@ namespace mrv
         const std::string& file, const ViewerUI* ui, SaveOptions options)
     {
         std::string msg;
-        
+
         int ret = 0;
         Viewport* view = ui->uiView;
         bool presentation = view->getPresentationMode();
@@ -63,7 +63,7 @@ namespace mrv
             LOG_ERROR(_("Cannot save an NDI stream"));
             return -1;
         }
-        
+
         // Stop the playback
         player->stop();
 
@@ -112,10 +112,10 @@ namespace mrv
             gl::OffscreenBufferOptions offscreenBufferOptions;
             std::shared_ptr<timeline_gl::Render> render;
             image::Size renderSize;
-            
+
             int layerId = ui->uiColorChannel->value();
-            if (layerId < 0) layerId = 0;
-            
+            if (layerId < 0)
+                layerId = 0;
 
             {
                 renderSize = info.video[layerId].size;
@@ -131,7 +131,7 @@ namespace mrv
                     LOG_INFO(msg);
                 }
             }
-            
+
             // Create the renderer.
             render = timeline_gl::Render::create(context);
             offscreenBufferOptions.colorType = image::PixelType::RGBA_F32;
@@ -151,10 +151,10 @@ namespace mrv
 
             io::Info ioInfo;
             image::Info outputInfo;
-            
+
             outputInfo.size = renderSize;
             std::shared_ptr<image::Image> outputImage;
-            
+
             outputInfo.pixelType = info.video[layerId].pixelType;
 
             {
@@ -162,7 +162,7 @@ namespace mrv
                                       .arg(outputInfo.size)
                                       .arg(outputInfo.pixelType);
                 LOG_INFO(msg);
-                
+
                 if (options.annotations)
                 {
                     view->setActionMode(ActionMode::kScrub);
@@ -242,12 +242,12 @@ namespace mrv
                 }
 #endif
                 msg = tl::string::Format(
-                    _("Writer plugin did not get output info.  "
-                      "Defaulting to {0}"))
-                      .arg(offscreenBufferOptions.colorType);
+                          _("Writer plugin did not get output info.  "
+                            "Defaulting to {0}"))
+                          .arg(offscreenBufferOptions.colorType);
                 LOG_INFO(msg);
             }
-            
+
 #ifdef TLRENDER_EXR
             if (saveEXR)
             {
@@ -325,7 +325,7 @@ namespace mrv
                 view->make_current();
 #endif
                 glReadBuffer(imageBuffer);
-                
+
                 CHECK_GL;
                 glReadPixels(
                     X, Y, outputInfo.size.w, outputInfo.size.h, format, type,

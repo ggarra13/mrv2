@@ -520,8 +520,8 @@ public:
     class EntryArray : public std::vector< Entry* >
     {
     public:
-        EntryArray(){};
-        ~EntryArray(){};
+        EntryArray() {};
+        ~EntryArray() {};
 
         void push_back(Entry* e)
         {

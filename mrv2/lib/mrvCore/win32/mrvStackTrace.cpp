@@ -37,7 +37,7 @@ void printStackTrace()
 
     // Crashes saved to %TMP%.  Usually C:\Users\%User%\AppData\Local\Temp
     std::ofstream file(mrv::tmppath() + "/mrv2.crash.log");
-    
+
     for (int i = 0; i < frames; i++)
     {
         DWORD64 address = (DWORD64)(stack_addrs[i]);
@@ -68,7 +68,7 @@ void printStackTrace()
                  << " (line number unavailable)" << std::endl;
         }
     }
-    
+
     file.close();
 
     free(symbol);

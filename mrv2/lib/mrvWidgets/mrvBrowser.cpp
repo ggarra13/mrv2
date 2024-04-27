@@ -7,7 +7,6 @@
 
 #include "mrvWidgets/mrvBrowser.h"
 
-
 namespace mrv
 {
 
@@ -45,12 +44,12 @@ namespace mrv
         {
             change_cursor(
                 (which_col_near_mouse() >= 0) ? FL_CURSOR_WE
-                : FL_CURSOR_DEFAULT);
+                                              : FL_CURSOR_DEFAULT);
             ret = 1;
             break;
         }
         case FL_PUSH:
-        {   
+        {
             int whichcol = which_col_near_mouse();
             if (whichcol >= 0)
             {
@@ -58,7 +57,7 @@ namespace mrv
                 _drag_col = whichcol;
                 change_cursor(FL_CURSOR_DEFAULT);
                 return 1; // eclipse event from Fl_Browser's handle()
-            }             // (prevents FL_PUSH from selecting item)
+            } // (prevents FL_PUSH from selecting item)
 
             break;
         }
@@ -101,7 +100,7 @@ namespace mrv
         }
         return (Fl_Browser::handle(e) ? 1 : ret);
     }
-    
+
     void Browser::draw()
     {
         // DRAW BROWSER}

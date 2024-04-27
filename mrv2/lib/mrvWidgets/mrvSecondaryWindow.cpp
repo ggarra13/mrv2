@@ -95,7 +95,7 @@ namespace mrv
         player = p.viewport->getTimelinePlayer();
         if (player)
             player->setPlayback(playback);
-        
+
         delete p.mainWindow;
         p.mainWindow = nullptr;
         p.viewport = nullptr;

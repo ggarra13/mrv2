@@ -38,7 +38,7 @@ namespace mrv
             alt(a),
             shift(s),
             key(k),
-            text(t){};
+            text(t) {};
 
         Hotkey(const Hotkey& h) :
             ctrl(h.ctrl),
@@ -46,7 +46,7 @@ namespace mrv
             alt(h.alt),
             shift(h.shift),
             key(h.key),
-            text(h.text){};
+            text(h.text) {};
 
         void clear()
         {
@@ -325,7 +325,7 @@ namespace mrv
          */
         HotkeyEntry() :
             force(false),
-            hotkey(nullptr){};
+            hotkey(nullptr) {};
 
         /**
          * HotkeyEntry constructor.
@@ -338,14 +338,12 @@ namespace mrv
         HotkeyEntry(const std::string n, Hotkey* h, bool f = false) :
             force(f),
             name(n),
-            hotkey(h){
+            hotkey(h) {
                 // if (h)
                 //     hotkey = new Hotkey(*h);
             };
 
-        ~HotkeyEntry()
-        { /*delete hotkey;*/
-        }
+        ~HotkeyEntry() { /*delete hotkey;*/ }
 
         bool force;
         std::string name;

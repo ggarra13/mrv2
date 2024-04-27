@@ -38,7 +38,7 @@ void mrv2_enums(py::module& m)
     using namespace tl;
 
     py::module io = m.def_submodule("io");
-    
+
     py::enum_<mrv::SaveResolution>(io, "Resolution")
         .value("Same_Size", mrv::SaveResolution::kSameSize)
         .value("Half_Size", mrv::SaveResolution::kHalfSize)
@@ -47,9 +47,9 @@ void mrv2_enums(py::module& m)
 #ifdef TLRENDER_FFMPEG
     py::enum_<ffmpeg::Profile>(io, "Profile")
         .value("kNone", ffmpeg::Profile::None)
-#ifdef TLRENDER_X264
+#    ifdef TLRENDER_X264
         .value("H264", ffmpeg::Profile::H264)
-#endif
+#    endif
         .value("ProRes", ffmpeg::Profile::ProRes)
         .value("ProRes_Proxy", ffmpeg::Profile::ProRes_Proxy)
         .value("ProRes_LT", ffmpeg::Profile::ProRes_LT)

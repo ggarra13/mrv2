@@ -59,7 +59,7 @@ namespace mrv
             virtual void dock();
             virtual void undock();
 
-            virtual void add_static_controls(){};
+            virtual void add_static_controls() {};
             virtual void add_controls() = 0;
 
             std::string tab_prefix() const { return "gui/" + label + "/Tab/"; }

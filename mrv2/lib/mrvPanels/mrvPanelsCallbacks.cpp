@@ -477,7 +477,6 @@ namespace mrv
             ui->uiMain->fill_menu(ui->uiMenuBar);
         }
 
-
         void ndi_panel_cb(Fl_Widget* w, ViewerUI* ui)
         {
 #ifdef TLRENDER_NDI

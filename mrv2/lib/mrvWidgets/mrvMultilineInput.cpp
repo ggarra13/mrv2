@@ -231,14 +231,14 @@ namespace mrv
 
         int rawkey = Fl::event_key();
         if (e == FL_KEYBOARD &&
-            ((rawkey == FL_KP_Enter ||
-              rawkey == FL_Enter) && Fl::event_shift()))
+            ((rawkey == FL_KP_Enter || rawkey == FL_Enter) &&
+             Fl::event_shift()))
         {
             Fl_Widget_Tracker wp(this); // watch myself
             accept();
             return 1;
         }
-        
+
         const int ret = Fl_Multiline_Input::handle(e);
         if (e == FL_KEYBOARD)
         {

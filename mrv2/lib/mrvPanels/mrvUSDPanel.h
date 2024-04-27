@@ -17,7 +17,7 @@ namespace mrv
         {
         public:
             USDPanel(ViewerUI* ui);
-            virtual ~USDPanel(){};
+            virtual ~USDPanel() {};
 
             void add_controls() override;
 
@@ -25,6 +25,6 @@ namespace mrv
             void _update();
         };
 
-    }  // namespace panel
+    } // namespace panel
 #endif // TLRENDER_USD
 } // namespace mrv

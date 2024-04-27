@@ -48,7 +48,7 @@ namespace mrv
         static bool set_transforms();
 
         static void setOcioConfig(std::string config);
-        
+
     public:
         static ColorSchemes schemes;
         static bool native_file_chooser;

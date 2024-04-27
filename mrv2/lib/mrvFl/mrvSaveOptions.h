@@ -14,13 +14,8 @@
 
 namespace mrv
 {
-    enum class SaveResolution
-    {
-        kSameSize,
-        kHalfSize,
-        kQuarterSize
-    };
-    
+    enum class SaveResolution { kSameSize, kHalfSize, kQuarterSize };
+
     struct SaveOptions
     {
         bool annotations = false;

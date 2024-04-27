@@ -20,7 +20,8 @@ namespace mrv
         int sign = 1;
         // Cast to integer and normalize to the range [0, 360)
         int normalized_angle = static_cast<int>(angle) % 360;
-        if (normalized_angle < 0) {
+        if (normalized_angle < 0)
+        {
             normalized_angle += 360;
             sign = -1;
         }
@@ -28,6 +29,5 @@ namespace mrv
         // Check for specific multiples of 90
         return (normalized_angle == 90 || normalized_angle == 270) * sign;
     }
-
 
 } // namespace mrv

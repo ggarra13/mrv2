@@ -22,7 +22,7 @@ namespace mrv
     //! Path to the mrv2 documentation.  If not installed, it will point to
     //! the online documentation.
     std::string docspath();
-    
+
     //! Path to a studio defined directory
     std::string studiopath();
 
@@ -37,7 +37,7 @@ namespace mrv
 
     //! Path to ffmpeg presets
     std::string presetspath();
-    
+
     //! Paths to the built-in python plug-ins
     std::vector<std::string> python_plugin_paths();
 

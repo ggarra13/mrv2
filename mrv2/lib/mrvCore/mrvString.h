@@ -101,7 +101,7 @@ namespace mrv
         {
         public:
             String() :
-                std::string(){};
+                std::string() {};
             String(const std::string& s) :
                 std::string(s)
             {
@@ -117,13 +117,13 @@ namespace mrv
 
         struct CaseInsensitiveCompare
         {
-            inline bool operator()(const std::string& a,
-                                   const std::string& b) const
-                {
-                    return string::toLower(a) < string::toLower(b);
-                }
+            inline bool
+            operator()(const std::string& a, const std::string& b) const
+            {
+                return string::toLower(a) < string::toLower(b);
+            }
         };
-        
+
     } // namespace string
 
 } // namespace mrv

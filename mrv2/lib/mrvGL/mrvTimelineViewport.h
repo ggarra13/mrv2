@@ -304,7 +304,7 @@ namespace mrv
         void refreshWindows();
 
         //! Refresh window by clearing the associated resources.
-        virtual void refresh(){};
+        virtual void refresh() {};
 
         //! FLTK Callback to handle view spinning whne in Environment Map mode.
         static void _handleViewSpinning_cb(TimelineViewport* t) noexcept;

@@ -5,11 +5,11 @@
 #include <map>
 
 #if defined(TLRENDER_BMD)
-#include <tlPlay/BMDDevicesModel.h>
+#    include <tlPlay/BMDDevicesModel.h>
 #endif // TLRENDER_BMD
 
 #if defined(TLRENDER_BMD)
-#include <tlDevice/BMDOutputDevice.h>
+#    include <tlDevice/BMDOutputDevice.h>
 #endif // TLRENDER_BMD
 
 #include <FL/Fl_Choice.H>
@@ -39,7 +39,8 @@ namespace mrv
             Fl_Choice* pixelTypeComboBox = nullptr;
             Fl_Choice* videoLevelsComboBox = nullptr;
             Fl_Choice* hdrModeComboBox = nullptr;
-            std::vector<std::pair<DoubleSpinner*, DoubleSpinner*> >primariesSpinBoxes;
+            std::vector<std::pair<DoubleSpinner*, DoubleSpinner*> >
+                primariesSpinBoxes;
             std::pair<DoubleSpinner*, DoubleSpinner*>
                 masteringLuminanceSpinBoxes = std::make_pair(nullptr, nullptr);
             HorSlider* maxCLLSlider = nullptr;
@@ -195,27 +196,20 @@ namespace mrv
                 box = new Fl_Box(X, Y, 120, 20, _(primariesLabels.c_str()));
                 box->labelsize(12);
                 box->align(FL_ALIGN_LEFT | FL_ALIGN_INSIDE);
-            
+
                 auto min = new Widget< DoubleSpinner >(X, Y, 50, 25);
                 min->range(0.0, 1.0);
                 min->step(0.01);
-                min->callback(
-                    [=](auto o)
-                        {
-                        });
+                min->callback([=](auto o) {});
                 auto max = new Widget< DoubleSpinner >(X, Y, 50, 25);
                 max->range(0.0, 1.0);
                 max->step(0.01);
-                max->callback(
-                    [=](auto o)
-                        {
-                        });
+                max->callback([=](auto o) {});
                 p.primariesSpinBoxes.push_back(std::make_pair(min, max));
                 sg->end();
-                
+
                 Y += 75;
             }
-
 
             sg = new Pack(g->x(), Y, g->w(), 25);
             sg->type(Pack::HORIZONTAL);
@@ -336,7 +330,6 @@ namespace mrv
 
             g->end();
 #endif
-            
         }
 
     } // namespace panel

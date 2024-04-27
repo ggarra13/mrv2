@@ -66,7 +66,7 @@ namespace mrv
 
         //! Clear the thumbnail cache.
         void clearCache();
-        
+
         static void timerEvent_cb(void*);
 
     protected:

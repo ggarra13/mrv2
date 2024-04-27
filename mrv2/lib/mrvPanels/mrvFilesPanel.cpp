@@ -148,9 +148,8 @@ namespace mrv
                     observer::CallbackAction::Suppress);
 
             _r->aIndexObserver = observer::ValueObserver<int>::create(
-                ui->app->filesModel()->observeAIndex(),
-                [this](int value) { redraw(); },
-                observer::CallbackAction::Suppress);
+                ui->app->filesModel()->observeAIndex(), [this](int value)
+                { redraw(); }, observer::CallbackAction::Suppress);
 
             _r->layerObserver = observer::ListObserver<int>::create(
                 ui->app->filesModel()->observeLayers(),
@@ -293,7 +292,6 @@ namespace mrv
                 const std::string layer = getLayerName(media, layerId);
                 std::string text = protocol + dir + "\n" + file + layer;
                 b->copy_label(text.c_str());
-
 
                 if (isNDI)
                 {
@@ -475,7 +473,7 @@ namespace mrv
                 }
 
                 layerId = p.ui->uiColorChannel->value();
-                
+
                 if (isNDI)
                 {
                     Fl_SVG_Image* svg = load_svg("NDI.svg");

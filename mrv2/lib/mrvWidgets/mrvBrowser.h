@@ -76,7 +76,7 @@ namespace mrv
 
         void draw() override;
         int handle(int e) override;
-        
+
         // GET/SET COLUMN SEPARATOR LINE COLOR
         Fl_Color colsepcolor() const { return (_colsepcolor); }
         void colsepcolor(Fl_Color val) { _colsepcolor = val; }

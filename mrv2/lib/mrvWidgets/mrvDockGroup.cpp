@@ -73,12 +73,12 @@ namespace mrv
         std::vector<std::string> out;
         for (int i = 0; i < pack->children(); ++i)
         {
-            Fl_Widget*  w = pack->child(i);
+            Fl_Widget* w = pack->child(i);
             PanelGroup* g = dynamic_cast<PanelGroup*>(w);
             if (dynamic_cast<Fl_Menu_*>(w))
             {
                 out.push_back("A menu bar");
-            }   
+            }
             else if (!g)
             {
                 const std::string lbl = w->label() ? w->label() : "unknown";

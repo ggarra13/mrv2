@@ -14,7 +14,7 @@ namespace mrv
     {
     public:
         PopupMenu(int, int, int, int, const char* = 0);
-        virtual ~PopupMenu(){};
+        virtual ~PopupMenu() {};
 
         unsigned children() { return size(); }
         const Fl_Menu_Item* child(int i);

@@ -48,7 +48,7 @@ namespace mrv
 
         struct NDIPanel::Private
         {
-            
+
             PopupMenu* sourceMenu = nullptr;
 
             uint32_t no_sources = 0;
@@ -61,9 +61,9 @@ namespace mrv
 
             struct PlayThread
             {
-                std::atomic<bool>  found = false;
+                std::atomic<bool> found = false;
                 std::thread thread;
-            };            
+            };
             PlayThread play;
 
             struct FindThread
@@ -74,7 +74,7 @@ namespace mrv
                 std::thread thread;
             };
             FindThread find;
-            
+
             std::atomic<bool> running = false;
         };
 
@@ -241,7 +241,6 @@ namespace mrv
                 NDIlib_find_destroy(r.find.NDI);
                 r.find.NDI = nullptr;
             }
-
         }
 
         void NDIPanel::add_controls()
@@ -282,8 +281,9 @@ namespace mrv
                 cg);
 
             cg->begin();
-            
-            Fl_Box* title = new Fl_Box(g->x() + 10, Y, g->w() - 20, 20, _("NDI Connection"));
+
+            Fl_Box* title = new Fl_Box(
+                g->x() + 10, Y, g->w() - 20, 20, _("NDI Connection"));
             title->align(FL_ALIGN_CENTER);
             title->labelsize(12);
 
@@ -340,16 +340,15 @@ namespace mrv
                     model->close();
             }
 
-
             // Windows has weird items called REMOTE CONNECTION.
             // We don't allow selecting them.
             const std::regex pattern(
                 "remote connection", std::regex_constants::icase);
             if (std::regex_search(sourceName, pattern))
                 return;
-            
+
             r.lastStream = sourceName;
-            
+
             if (sourceName == _("None"))
                 return;
 
@@ -381,13 +380,14 @@ namespace mrv
             r.cacheInfoObserver =
                 observer::ValueObserver<timeline::PlayerCacheInfo>::create(
                     player->player()->observeCacheInfo(),
-                    [this, player, options](const timeline::PlayerCacheInfo& value)
+                    [this, player,
+                     options](const timeline::PlayerCacheInfo& value)
                     {
                         MRV2_R();
                         auto startTime = player->currentTime();
-                        auto endTime = startTime +
-                                       options.audioBufferSize.rescaled_to(
-                                           startTime.rate());
+                        auto endTime =
+                            startTime + options.audioBufferSize.rescaled_to(
+                                            startTime.rate());
 
                         for (const auto& t : value.audioFrames)
                         {
@@ -403,21 +403,19 @@ namespace mrv
 
             r.play.thread = std::thread(
                 [this, player, seconds]
-                    {
-                        MRV2_R();
-                        auto start = std::chrono::steady_clock::now();
-                        while (!r.play.found &&
-                               std::chrono::steady_clock::now() - start <=
+                {
+                    MRV2_R();
+                    auto start = std::chrono::steady_clock::now();
+                    while (!r.play.found &&
+                           std::chrono::steady_clock::now() - start <=
                                std::chrono::seconds(seconds))
-                        {
-                                
-                        }
-                        r.cacheInfoObserver.reset();
-                        player->forward();
-                    });
-            
+                    {
+                    }
+                    r.cacheInfoObserver.reset();
+                    player->forward();
+                });
+
             r.play.thread.detach();
-            
         }
 
     } // namespace panel

@@ -201,7 +201,7 @@ namespace mrv
                 const auto& path = media->path;
 
                 const bool isNDI = file::isTemporaryNDI(path);
-                
+
                 // We skip EDLs created in tmp dir here.
                 const bool isEDL = file::isTemporaryEDL(path);
 

@@ -98,14 +98,14 @@ namespace mrv
         {
             rotY -= 90;
         }
-        
+
         rotY *= DEG_TO_RAD;
         fov *= DEG_TO_RAD;
 
         // Avoid gimbal lock
         Imath::V3f rotationX(rotX, 0, 0.F);
         vm = vm.rotate(rotationX);
-        
+
         Imath::V3f rotationY(0, rotY, 0.F);
         vm = vm.rotate(rotationY);
 
@@ -203,5 +203,4 @@ namespace mrv
         return _projectionMatrix();
     }
 
-    
 } // namespace mrv

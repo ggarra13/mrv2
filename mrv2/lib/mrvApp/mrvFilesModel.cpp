@@ -30,8 +30,6 @@ namespace mrv
         std::shared_ptr<observer::Value<Stereo3DOptions> > stereo3DOptions;
 
         std::shared_ptr<observer::Value<FilesPanelOptions> > filesPanelOptions;
-
-        
     };
 
     void FilesModel::_init(const std::shared_ptr<system::Context>& context)
@@ -520,7 +518,7 @@ namespace mrv
     {
         return _p->compareOptions->get();
     }
-    
+
     std::shared_ptr<observer::IValue<timeline::CompareOptions> >
     FilesModel::observeCompareOptions() const
     {
@@ -580,7 +578,8 @@ namespace mrv
         return _p->compareTime->get();
     }
 
-    std::shared_ptr<observer::IValue<timeline::CompareTimeMode> > FilesModel::observeCompareTime() const
+    std::shared_ptr<observer::IValue<timeline::CompareTimeMode> >
+    FilesModel::observeCompareTime() const
     {
         return _p->compareTime;
     }
@@ -590,7 +589,7 @@ namespace mrv
         TLRENDER_P();
         p.compareTime->setIfChanged(value);
     }
-    
+
     std::shared_ptr<observer::IValue<Stereo3DOptions> >
     FilesModel::observeStereo3DOptions() const
     {
@@ -606,7 +605,7 @@ namespace mrv
             p.layers->setIfChanged(_getLayers());
         }
     }
-    
+
     int FilesModel::_index(const std::shared_ptr<FilesModelItem>& item) const
     {
         TLRENDER_P();

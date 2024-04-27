@@ -17,7 +17,7 @@ namespace tl
     {
         extern std::string vertexSource();
         extern std::string meshFragmentSource();
-    } // namespace timeline
+    } // namespace timeline_gl
 } // namespace tl
 
 namespace mrv

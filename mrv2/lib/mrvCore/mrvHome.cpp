@@ -21,7 +21,6 @@ namespace fs = std::filesystem;
 #    include <pwd.h>
 #endif
 
-
 namespace mrv
 {
 
@@ -168,11 +167,12 @@ namespace mrv
         path += "/python/demos/";
         return path;
     }
-    
+
     std::string presetspath()
     {
         std::string path = studiopath();
-        if (path.empty()) path = mrv::rootpath();
+        if (path.empty())
+            path = mrv::rootpath();
         path += "/presets/";
         return path;
     }
@@ -196,7 +196,6 @@ namespace mrv
     {
         std::string docs;
 
-        
         const char* language = getenv("LANGUAGE");
         if (!language || strlen(language) == 0)
             language = "en";

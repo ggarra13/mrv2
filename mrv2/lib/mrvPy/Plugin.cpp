@@ -225,8 +225,8 @@ namespace mrv
     class Plugin
     {
     public:
-        Plugin(){};
-        virtual ~Plugin(){};
+        Plugin() {};
+        virtual ~Plugin() {};
         virtual bool active() const { return true; };
         virtual py::dict menus() const
         {

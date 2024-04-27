@@ -80,7 +80,7 @@ namespace mrv
     /**
      * @Brief Destructor
      */
-    ConnectionHandler::~ConnectionHandler(){};
+    ConnectionHandler::~ConnectionHandler() {};
 
     /**
      * @Brief Event Handler when Socket becomes Readable, i.e: there is data

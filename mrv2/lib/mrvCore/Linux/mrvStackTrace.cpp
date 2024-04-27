@@ -18,14 +18,14 @@ int full_callback(
     char demangled_name[1024];
     demangled_name[0] = '\0';
 
-    
     char buffer[512];
     if (!filename || !function || strcmp(function, "(null)") == 0)
         return 0;
-    
+
     snprintf(buffer, sizeof(buffer), "c++filt %s", function);
     FILE* pipe = popen(buffer, "r");
-    if (!pipe) {
+    if (!pipe)
+    {
         perror("popen");
         return 1;
     }
@@ -38,12 +38,10 @@ int full_callback(
 
 void printStackTrace()
 {
-  // MRV2_ROOT contains the root path of the executable.
-  char exe[1024];
-  snprintf(exe, 1024, "%s/bin/mrv2", getenv("MRV2_ROOT"));
+    // MRV2_ROOT contains the root path of the executable.
+    char exe[1024];
+    snprintf(exe, 1024, "%s/bin/mrv2", getenv("MRV2_ROOT"));
 
-  auto state = backtrace_create_state(exe, 1, error_callback, nullptr);
-  int ret = backtrace_full(state, 0, full_callback, error_callback, nullptr);
-  
+    auto state = backtrace_create_state(exe, 1, error_callback, nullptr);
+    int ret = backtrace_full(state, 0, full_callback, error_callback, nullptr);
 }
-

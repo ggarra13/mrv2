@@ -217,7 +217,7 @@ namespace mrv
     void MainControl::_displayUpdate()
     {
         TLRENDER_P();
-        
+
         Viewport* view = p.ui->uiView;
         view->setLUTOptions(p.lutOptions);
         view->setDisplayOptions({p.displayOptions});
@@ -227,18 +227,18 @@ namespace mrv
             view->setLUTOptions(p.lutOptions);
             view->setDisplayOptions({p.displayOptions});
         }
-        
+
         if (panel::colorPanel)
         {
             panel::colorPanel->setLUTOptions(p.lutOptions);
             panel::colorPanel->setDisplayOptions(p.displayOptions);
         }
     }
-    
+
     void MainControl::_compareUpdate()
     {
         TLRENDER_P();
-        
+
         Viewport* view = p.ui->uiView;
         view->setCompareOptions(p.compareOptions);
         if (p.ui->uiSecondary)
@@ -246,13 +246,13 @@ namespace mrv
             view = p.ui->uiSecondary->viewport();
             view->setCompareOptions(p.compareOptions);
         }
-        
+
         if (panel::comparePanel)
         {
             panel::comparePanel->setCompareOptions(p.compareOptions);
         }
     }
-    
+
     void MainControl::_widgetUpdate()
     {
         TLRENDER_P();

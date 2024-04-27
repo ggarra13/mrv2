@@ -369,7 +369,7 @@ namespace mrv
 
             outputInfo.size = renderSize;
             std::shared_ptr<image::Image> outputImage;
-            
+
             outputInfo.pixelType = info.video[layerId].pixelType;
 
             if (hasVideo)
@@ -463,9 +463,9 @@ namespace mrv
                     }
 #endif
                     msg = tl::string::Format(
-                        _("Writer plugin did not get output info.  "
-                          "Defaulting to {0}"))
-                          .arg(offscreenBufferOptions.colorType);
+                              _("Writer plugin did not get output info.  "
+                                "Defaulting to {0}"))
+                              .arg(offscreenBufferOptions.colorType);
                     LOG_INFO(msg);
                 }
 
@@ -711,7 +711,7 @@ namespace mrv
                             imageBuffer = GL_BACK;
                         }
 #endif
-                        
+
                         glReadBuffer(imageBuffer);
 
                         glReadBuffer(GL_FRONT);
@@ -794,8 +794,8 @@ namespace mrv
                 {
                     // We need to use frameNext instead of seeking as large
                     // movies can lag behind the seek
-                    // When saving video and not options.annotations, we cannot use
-                    // seek as it corrupts the timeline.
+                    // When saving video and not options.annotations, we cannot
+                    // use seek as it corrupts the timeline.
                     if (options.annotations && hasVideo)
                         player->frameNext();
                     else if (!hasVideo)

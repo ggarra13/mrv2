@@ -27,7 +27,7 @@ namespace mrv
 
         public:
             AnnotationsPanel(ViewerUI* ui);
-            virtual ~AnnotationsPanel(){};
+            virtual ~AnnotationsPanel() {};
 
             void add_controls() override;
 

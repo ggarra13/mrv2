@@ -181,9 +181,9 @@ namespace mrv
                         window->resize(X, Y, window->w(), window->h());
                     else
 #else
-                        window->position(X, Y);
+                    window->position(X, Y);
 #endif
-                    return 1;
+                        return 1;
                 }
             }
             break;

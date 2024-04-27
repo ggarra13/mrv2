@@ -19,7 +19,7 @@ namespace mrv
             type(FL_HORIZONTAL);
         }
 
-        virtual ~VolumeSlider(){};
+        virtual ~VolumeSlider() {};
 
         int handle(int e) override;
     };

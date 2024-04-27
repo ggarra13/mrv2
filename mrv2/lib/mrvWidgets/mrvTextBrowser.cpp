@@ -20,18 +20,20 @@ namespace
 
         const int* column_widths = o->column_widths();
         int font_size = o->textsize();
-        
+
         for (char c : str)
         {
             if (c == '\t')
             {
                 int width = column_widths[column] / font_size;
-                if (width <= 0) continue;
-                
+                if (width <= 0)
+                    continue;
+
                 // Calculate spaces needed to reach the column
                 int spaces_to_add = width - spaces_used + 1;
-                if (spaces_to_add <= 0) continue;
-                
+                if (spaces_to_add <= 0)
+                    continue;
+
                 out.append(spaces_to_add, ' ');
                 spaces_used = 0; // Reset counter for next word
                 ++column;
@@ -45,7 +47,7 @@ namespace
 
         return out;
     }
-    
+
     void copy_text_cb(Fl_Menu_* m, mrv::TextBrowser* o)
     {
         std::string buffer;
@@ -54,7 +56,8 @@ namespace
             if (o->selected(i))
             {
                 const char* linestr = o->text(i);
-                if (!linestr) continue;
+                if (!linestr)
+                    continue;
                 const std::string& line = linestr;
                 buffer += replaceTabsAndAlign(line, o);
                 buffer += "\n";
@@ -62,12 +65,10 @@ namespace
         }
         Fl::copy(buffer.c_str(), buffer.size(), 2);
     }
-}
-
+} // namespace
 
 namespace mrv
 {
-    
 
     // CTOR
     TextBrowser::TextBrowser(int X, int Y, int W, int H, const char* L) :
@@ -83,18 +84,18 @@ namespace mrv
             if (Fl::event_button3())
             {
                 Fl_Menu_Button* menu = new Fl_Menu_Button(0, 0, 0, 0);
-                
+
                 menu->type(Fl_Menu_Button::POPUP3);
                 menu->add(
                     _("&Copy"), FL_COMMAND + 'c', (Fl_Callback*)copy_text_cb,
                     this);
                 menu->popup();
-                
+
                 delete menu;
                 return 1;
             }
         }
-            
+
         return (Fl_Select_Browser::handle(e));
     }
 } // namespace mrv

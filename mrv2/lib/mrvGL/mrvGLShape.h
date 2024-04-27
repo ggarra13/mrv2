@@ -31,7 +31,7 @@ namespace mrv
             draw::Shape()
         {
         }
-        virtual ~GLShape(){};
+        virtual ~GLShape() {};
 
         virtual void draw(
             const std::shared_ptr<timeline::IRender>&,
@@ -43,8 +43,8 @@ namespace mrv
     public:
         GLCircleShape() :
             GLShape(),
-            radius(1.0){};
-        virtual ~GLCircleShape(){};
+            radius(1.0) {};
+        virtual ~GLCircleShape() {};
 
         void draw(
             const std::shared_ptr<timeline::IRender>&,
@@ -62,8 +62,8 @@ namespace mrv
     {
     public:
         GLPathShape() :
-            draw::PathShape(){};
-        virtual ~GLPathShape(){};
+            draw::PathShape() {};
+        virtual ~GLPathShape() {};
 
         void draw(
             const std::shared_ptr<timeline::IRender>&,
@@ -78,8 +78,8 @@ namespace mrv
     {
     public:
         GLArrowShape() :
-            GLPathShape(){};
-        virtual ~GLArrowShape(){};
+            GLPathShape() {};
+        virtual ~GLArrowShape() {};
 
         void draw(
             const std::shared_ptr<timeline::IRender>&,
@@ -93,11 +93,11 @@ namespace mrv
     {
     public:
         GLRectangleShape() :
-            GLPathShape(){};
+            GLPathShape() {};
         void draw(
             const std::shared_ptr<timeline::IRender>&,
             const std::shared_ptr<opengl::Lines>&) override;
-        virtual ~GLRectangleShape(){};
+        virtual ~GLRectangleShape() {};
     };
 
     void to_json(nlohmann::json& json, const GLRectangleShape& value);
@@ -109,8 +109,8 @@ namespace mrv
         GLTextShape(const std::shared_ptr<image::FontSystem> f) :
             GLPathShape(),
             fontSize(30),
-            fontSystem(f){};
-        virtual ~GLTextShape(){};
+            fontSystem(f) {};
+        virtual ~GLTextShape() {};
 
         void draw(
             const std::shared_ptr<timeline::IRender>&,
@@ -132,8 +132,8 @@ namespace mrv
     {
     public:
         GL2TextShape() :
-            GLPathShape(){};
-        virtual ~GL2TextShape(){};
+            GLPathShape() {};
+        virtual ~GL2TextShape() {};
 
         //! Auxiliary function to set the raster coordinates with no clipping
         bool setRasterPos(double x, double y, size_t textLength);
@@ -162,8 +162,8 @@ namespace mrv
     {
     public:
         GLErasePathShape() :
-            GLPathShape(){};
-        virtual ~GLErasePathShape(){};
+            GLPathShape() {};
+        virtual ~GLErasePathShape() {};
 
         void draw(
             const std::shared_ptr<timeline::IRender>&,

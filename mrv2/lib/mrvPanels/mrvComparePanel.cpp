@@ -278,14 +278,14 @@ namespace mrv
                 const std::string& layer = getLayerName(media, layerId);
                 std::string text = protocol + dir + "\n" + file + layer;
                 b->copy_label(text.c_str());
-                
+
                 if (isNDI)
                 {
                     Fl_SVG_Image* svg = load_svg("NDI.svg");
                     b->image(svg);
                     continue;
                 }
-                
+
                 if (auto context = _r->context.lock())
                 {
                     ThumbnailData* data = new ThumbnailData;
@@ -719,7 +719,7 @@ namespace mrv
                 const std::string& layer = getLayerName(media, layerId);
                 std::string text = protocol + dir + "\n" + file + layer;
                 b->copy_label(text.c_str());
-                
+
                 if (isNDI)
                 {
                     Fl_SVG_Image* svg = load_svg("NDI.svg");

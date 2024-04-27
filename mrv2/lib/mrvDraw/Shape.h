@@ -33,9 +33,9 @@ namespace mrv
                 soft(false),
                 laser(false),
                 fade(1.0F),
-                pen_size(5){};
+                pen_size(5) {};
 
-            virtual ~Shape(){};
+            virtual ~Shape() {};
 
             virtual void draw(
                 const std::shared_ptr<tl::timeline::IRender>&,
@@ -54,8 +54,8 @@ namespace mrv
         {
         public:
             PathShape() :
-                Shape(){};
-            virtual ~PathShape(){};
+                Shape() {};
+            virtual ~PathShape() {};
 
             virtual void draw(
                 const std::shared_ptr<tl::timeline::IRender>&,
@@ -68,12 +68,12 @@ namespace mrv
         {
         public:
             NoteShape() :
-                Shape(){};
-            virtual ~NoteShape(){};
+                Shape() {};
+            virtual ~NoteShape() {};
 
             void draw(
                 const std::shared_ptr<tl::timeline::IRender>&,
-                const std::shared_ptr<opengl::Lines>&) override{};
+                const std::shared_ptr<opengl::Lines>&) override {};
 
         public:
             std::string text;

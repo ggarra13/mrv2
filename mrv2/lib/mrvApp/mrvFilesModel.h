@@ -19,7 +19,7 @@
 namespace mrv
 {
     using namespace tl;
-    
+
     /**
      * \struct mrv::FilesModelItem
      * \brief This class models a media file item.
@@ -35,9 +35,8 @@ namespace mrv
         std::vector<std::string> videoLayers;
         size_t videoLayer = 0;
 
-
         // These are my own elements to keep state info.
-        
+
         bool init = false;
 
         otime::TimeRange timeRange = time::invalidTimeRange;
@@ -49,13 +48,12 @@ namespace mrv
         otime::RationalTime currentTime = time::invalidTime;
         otime::TimeRange inOutRange = time::invalidTimeRange;
 
-
         float volume = 0.F;
         bool mute = false;
         double audioOffset = 0.0;
 
         std::string ocioIcs;
-        
+
         std::vector<std::shared_ptr<draw::Annotation > > annotations;
     };
 
@@ -166,7 +164,7 @@ namespace mrv
 
         //! Set the A file layer to the previous layer.
         void prevLayer();
-        
+
         //! Get the compare options.
         const timeline::CompareOptions& getCompareOptions() const;
 
@@ -176,13 +174,14 @@ namespace mrv
 
         //! Set the compare time mode.
         void setCompareTime(timeline::CompareTimeMode);
-        
+
         //! Get the compare time mode.
         timeline::CompareTimeMode getCompareTime() const;
-        
+
         //! Observe the compare time mode.
-        std::shared_ptr<observer::IValue<timeline::CompareTimeMode> > observeCompareTime() const;
-        
+        std::shared_ptr<observer::IValue<timeline::CompareTimeMode> >
+        observeCompareTime() const;
+
         //! Set the compare options.
         void setCompareOptions(const timeline::CompareOptions&);
 

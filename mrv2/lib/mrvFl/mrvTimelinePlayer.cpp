@@ -541,17 +541,18 @@ namespace mrv
             return 0;
         return Aitem->videoLayer;
     }
-    
+
     void TimelinePlayer::setIOOptions(const io::Options& value)
     {
         _p->player->setIOOptions(value);
     }
 
-    void TimelinePlayer::setCompare(const std::vector<std::shared_ptr<timeline::Timeline> >& value)
+    void TimelinePlayer::setCompare(
+        const std::vector<std::shared_ptr<timeline::Timeline> >& value)
     {
         _p->player->setCompare(value);
     }
-    
+
     void TimelinePlayer::setCompareTime(timeline::CompareTimeMode value)
     {
         _p->player->setCompareTime(value);
@@ -568,7 +569,6 @@ namespace mrv
         _p->player->setCompareVideoLayers(value);
     }
 
-    
     void TimelinePlayer::setVolume(float value)
     {
         _p->player->setVolume(value);

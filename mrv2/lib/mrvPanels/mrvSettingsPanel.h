@@ -18,7 +18,7 @@ namespace mrv
         {
         public:
             SettingsPanel(ViewerUI* ui);
-            virtual ~SettingsPanel(){};
+            virtual ~SettingsPanel() {};
 
             void add_controls() override;
 

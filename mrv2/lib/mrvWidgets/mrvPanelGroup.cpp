@@ -431,7 +431,7 @@ namespace mrv
     {
         PanelWindow::hide_all();
     }
-    
+
     //! hide all the active floating windows
     int PanelGroup::handle(int e)
     {

@@ -16,7 +16,7 @@ namespace mrv
     {
     public:
         AudioButton(int, int, int, int, const char* = 0);
-        virtual ~AudioButton(){};
+        virtual ~AudioButton() {};
         virtual int handle(int e) override;
 
         int current_track() const;

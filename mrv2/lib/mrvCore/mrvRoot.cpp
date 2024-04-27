@@ -154,7 +154,7 @@ namespace
 #endif /* APPLE */
 
         return -1; /* Path Lookup Failed */
-    }              /* where_do_I_live */
+    } /* where_do_I_live */
 } // namespace
 
 namespace mrv

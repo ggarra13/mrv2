@@ -167,7 +167,7 @@ namespace mrv
             {
                 bg = new Fl_Group(X, Y, g->w(), 80);
                 bg->begin();
-                
+
                 auto bW = new Widget< Fl_Button >(
                     X + 100, Y, 25, 25, _("First Color:"));
                 b = bW;

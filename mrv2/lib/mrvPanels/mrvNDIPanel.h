@@ -32,6 +32,6 @@ namespace mrv
             MRV2_PRIVATE();
         };
 
-    }  // namespace panel
+    } // namespace panel
 #endif // TLRENDER_NDI
 } // namespace mrv

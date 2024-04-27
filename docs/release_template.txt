@@ -1,13 +1,9 @@
-mrv2 v1.1.2
+mrv2 v1.1.4
 ========
 
 mrv2 is an open source professional player and review tool for vfx, animation and computer graphics for Windows, Linux and macOS.
 
-mrv2 updates Python to 3.11.9 to be in sync with VFX 2024 platform.  It fixes
-a JPEG incompatibility on Linux, improves the speed of drawing the timeline,
-fixes some precision issues with annotations on the timeline and fixes the
-refreshing of the cache to re-load frames as they are being rendered which had
-gotten broken.
+mrv2 is a major update on performance.  Video playback performance has been sped up by about 120%, avoiding dropped frames.  OpenColorIO or OpenEXRs with out-of-bounds values no longer clamp.  Panning, zooming and annotations have also been improved in their performance.
 
 Main Web page:
 https://mrv2.sourceforge.io
@@ -19,8 +15,8 @@ Source code and build instructions:
 https://www.github.com/ggarra13/mrv2
 
 Binaries:
-https://github.com/ggarra13/mrv2/releases/tag/v1.1.2
-https://sourceforge.net/projects/mrv2/files/v1.1.2/
+https://github.com/ggarra13/mrv2/releases/tag/v1.1.4
+https://sourceforge.net/projects/mrv2/files/v1.1.4/
 
 #player #movie #flipbook #usd #openusd #opentimelineio #mrv2 #mrViewer #mrViewer2 #vp9 #av1 #h264 #mp4 #mov #avi #webm #prores #prores4444 #cfhd #cineform #gopro #vpx #vfx #vr #animation #games #filmmaking #opensource #environmentmaps #stereo #windows #macos #linux
 
@@ -28,7 +24,7 @@ https://sourceforge.net/projects/mrv2/files/v1.1.2/
 -------------------------------------------------------------------------------
 
 
-mrv2 v1.1.3
+mrv2 v1.1.4
 
 mrv2, an open source professional player and review tool for vfx, animation and computer graphics for Windows, Linux and macOS has a new version.
 
@@ -39,4 +35,4 @@ Source:
 https://github.com/ggarra13/mrv2/
 
 Binaries:
-https://github.com/ggarra13/mrv2/releases/tag/v1.1.3
+https://github.com/ggarra13/mrv2/releases/tag/v1.1.4

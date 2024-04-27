@@ -20,7 +20,7 @@ namespace mrv
         class Annotation
         {
         public:
-            Annotation(){};
+            Annotation() {};
             Annotation(const otime::RationalTime& frame, const bool allFrames);
             ~Annotation();
 

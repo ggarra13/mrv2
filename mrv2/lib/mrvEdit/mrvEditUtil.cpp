@@ -13,7 +13,7 @@ namespace fs = std::filesystem;
 namespace mrv
 {
     using namespace tl;
-    
+
     void removeTemporaryEDLs(ViewerUI* ui)
     {
         const std::string directory = tmppath();

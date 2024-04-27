@@ -100,7 +100,7 @@ namespace mrv
     {
         label("Python Editor");
         labeltype(FL_NO_LABEL);
-        
+
         wrap_mode(WRAP_NONE, 80);
         tab_nav(0);
         cursor_style(HEAVY_CURSOR);
