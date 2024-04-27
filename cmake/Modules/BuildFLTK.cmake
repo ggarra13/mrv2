@@ -5,8 +5,7 @@
 include( ExternalProject )
 
 #set( FLTK_GIT_TAG master )
-set(FLTK_GIT_TAG 5ec7176e81e6951ffa8360bc41a4e953de2b2070)  # stable
-#set(FLTK_GIT_TAG eeed39524606f1717dd2634ffe52e4640a606841)  # groken egl
+set(FLTK_GIT_TAG eeed39524606f1717dd2634ffe52e4640a606841)
 
 if(MRV2_PYFLTK)
     # If we are building pyFLTK compile shared
