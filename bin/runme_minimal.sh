@@ -54,7 +54,7 @@ export MRV2_PDF=OFF
 # These are some of the expensive TLRENDER options
 #
 export TLRENDER_AV1=OFF
-export TLRENDER_FFMPEG=ON
+export TLRENDER_FFMPEG=OFF
 export TLRENDER_FFMPEG_MINIMAL=ON
 export TLRENDER_NDI=OFF
 export TLRENDER_NET=OFF
