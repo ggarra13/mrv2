@@ -39,12 +39,11 @@
 
 #include "mrViewer.h"
 
-
 namespace mrv
 {
     namespace
     {
-        const double kTimeout = 0.005;
+        const double kTimeout = 0.0; // 05;
         const char* kModule = "timelineui";
     } // namespace
 
@@ -68,10 +67,12 @@ namespace mrv
             }
             return out;
         }
-    } // namespace
-      /////
+    }
+    
     namespace
     {
+        // These classes (TimelineWindow and Clipboard) are needed to act
+        // from FLTK to Darby's UI translations.
         class TimelineWindow : public ui::IWindow
         {
             TLRENDER_NON_COPYABLE(TimelineWindow);
@@ -254,6 +255,8 @@ namespace mrv
         setStopOnScrub(false);
 
         _styleUpdate();
+
+        Fl::add_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
     }
 
     ThumbnailCreator* TimelineWidget::thumbnailCreator()
@@ -342,7 +345,11 @@ namespace mrv
 
         if (!p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
         {
-            hideThumbnail();
+            if (!Fl::has_timeout((Fl_Timeout_Handler)hideThumbnail_cb, this))
+            {
+                Fl::add_timeout(
+                    0.005, (Fl_Timeout_Handler)hideThumbnail_cb, this);
+            }
             return 0;
         }
 
@@ -375,16 +382,15 @@ namespace mrv
             p.thumbnailWindow->end();
             p.thumbnailWindow->show();
         }
-#ifdef _WIN32
-        // Without this, the window would not show on Windows
         if (fetch)
         {
             p.thumbnailWindow->resize(X, Y, W, H);
             p.thumbnailWindow->show();
         }
-#else
-        p.thumbnailWindow->resize(X, Y, W, H);
-#endif
+        else
+        {
+            p.thumbnailWindow->resize(X, Y, W, H);
+        }
 
         file::Path path;
         auto model = p.ui->app->filesModel();
@@ -1311,7 +1317,9 @@ namespace mrv
     {
         TLRENDER_P();
 
-        if (visible_r())
+        //! \bug This guard is needed since the timer event can be called during
+        //! destruction?
+        if (_p)
         {
             ui::TickEvent tickEvent(p.style, p.iconLibrary, p.fontSystem);
             _tickEvent(p.timelineWindow, true, true, tickEvent);
@@ -1333,9 +1341,8 @@ namespace mrv
             {
                 redraw();
             }
-            Fl::repeat_timeout(
-                kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
         }
+        Fl::repeat_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
     }
 
     int TimelineWidget::handle(int event)
@@ -1343,24 +1350,16 @@ namespace mrv
         TLRENDER_P();
         switch (event)
         {
-        case FL_SHOW:
-            Fl::add_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
-            if (p.thumbnailWindow &&
-                p.ui->uiPrefs->uiPrefsTimelineThumbnails->value() &&
-                Fl::belowmouse() == this)
-            {
-                _requestThumbnail(true);
-            }
-            break;
         case FL_FOCUS:
         case FL_UNFOCUS:
             return 1;
         case FL_ENTER:
             cursor(FL_CURSOR_DEFAULT);
-            if (p.thumbnailWindow &&
+            if (p.thumbnailWindow && p.player &&
                 p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
             {
-                _requestThumbnail(true);
+                p.thumbnailWindow->show();
+                _requestThumbnail();
             }
             return enterEvent();
         case FL_LEAVE:
@@ -1368,7 +1367,12 @@ namespace mrv
             {
                 if (p.thumbnailCreator && p.thumbnailRequestId)
                     p.thumbnailCreator->cancelRequests(p.thumbnailRequestId);
-                hideThumbnail();
+                if (!Fl::has_timeout(
+                        (Fl_Timeout_Handler)hideThumbnail_cb, this))
+                {
+                    Fl::add_timeout(
+                        0.005, (Fl_Timeout_Handler)hideThumbnail_cb, this);
+                }
             }
             return leaveEvent();
         case FL_PUSH:
@@ -1387,18 +1391,24 @@ namespace mrv
             return wheelEvent();
         case FL_KEYDOWN:
         {
+            // @todo: ask darby for a return code from key press
+            // int ret = p.ui->uiView->handle(event);
             return keyPressEvent();
         }
         case FL_KEYUP:
             return keyReleaseEvent();
         case FL_HIDE:
         {
-            Fl::remove_timeout((Fl_Timeout_Handler)timerEvent_cb, this);
             if (p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
             {
                 if (p.thumbnailCreator && p.thumbnailRequestId)
                     p.thumbnailCreator->cancelRequests(p.thumbnailRequestId);
-                hideThumbnail();
+                if (!Fl::has_timeout(
+                        (Fl_Timeout_Handler)hideThumbnail_cb, this))
+                {
+                    Fl::add_timeout(
+                        0.005, (Fl_Timeout_Handler)hideThumbnail_cb, this);
+                }
             }
             refresh();
             valid(0);
