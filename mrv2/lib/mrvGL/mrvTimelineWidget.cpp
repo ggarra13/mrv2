@@ -281,7 +281,11 @@ namespace mrv
         if (!p.thumbnailWindow)
             return;
 
-        p.thumbnailWindow->hide();
+        // Make sure we are still hiding it after the timeout
+        if (Fl::belowmouse() != this)
+        {
+            p.thumbnailWindow->hide();
+        }
     }
 
     TimelineWidget::~TimelineWidget()
@@ -335,7 +339,7 @@ namespace mrv
         }
     }
 
-    int TimelineWidget::_requestThumbnail(bool fetch)
+    int TimelineWidget::_requestThumbnail(bool fetch, bool show)
     {
         TLRENDER_P();
         if (!p.player)
@@ -382,15 +386,11 @@ namespace mrv
             p.thumbnailWindow->end();
             p.thumbnailWindow->show();
         }
-        if (fetch)
-        {
-            p.thumbnailWindow->resize(X, Y, W, H);
+
+        p.thumbnailWindow->resize(X, Y, W, H);
+        
+        if (show)
             p.thumbnailWindow->show();
-        }
-        else
-        {
-            p.thumbnailWindow->resize(X, Y, W, H);
-        }
 
         file::Path path;
         auto model = p.ui->app->filesModel();
@@ -1358,8 +1358,7 @@ namespace mrv
             if (p.thumbnailWindow && p.player &&
                 p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
             {
-                p.thumbnailWindow->show();
-                _requestThumbnail();
+                _requestThumbnail(true, true);
             }
             return enterEvent();
         case FL_LEAVE:
@@ -1377,7 +1376,7 @@ namespace mrv
             return leaveEvent();
         case FL_PUSH:
             if (p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
-                _requestThumbnail(true);
+                _requestThumbnail(true, false);
             return mousePressEvent();
         case FL_DRAG:
             return mouseDragEvent(Fl::event_x(), Fl::event_y());
@@ -1385,14 +1384,12 @@ namespace mrv
             panel::redrawThumbnails();
             return mouseReleaseEvent();
         case FL_MOVE:
-            _requestThumbnail();
+            _requestThumbnail(true, false);
             return mouseMoveEvent();
         case FL_MOUSEWHEEL:
             return wheelEvent();
         case FL_KEYDOWN:
         {
-            // @todo: ask darby for a return code from key press
-            // int ret = p.ui->uiView->handle(event);
             return keyPressEvent();
         }
         case FL_KEYUP:
@@ -1416,10 +1413,6 @@ namespace mrv
         }
         }
         int out = Fl_Gl_Window::handle(event);
-        // if (event->type() == QEvent::StyleChange)
-        // {
-        //     _styleUpdate();
-        // }
         return out;
     }
 

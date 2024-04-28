@@ -38,6 +38,7 @@ namespace mrv
 
     struct FileButton::Private
     {
+        bool isXWayland = false;
         size_t index = 0;
         FileDragger* drag = nullptr;
         math::Vector2i push;
@@ -149,7 +150,7 @@ namespace mrv
         case FL_DRAG:
         {
             math::Vector2i cursorPos(Fl::event_x_root(), Fl::event_y_root());
-            if (std::abs(cursorPos.y - p.push.y) < 2)
+            if (!p.isXWayland && std::abs(cursorPos.y - p.push.y) < 2)
             {
                 return 1;
             }
@@ -175,15 +176,23 @@ namespace mrv
                     int X = Fl::event_x_root();
                     int Y = Fl::event_y_root();
                     auto window = p.drag->window();
+#ifdef __linux__
 #ifdef FLTK_USE_WAYLAND
-                    std::cerr << X << " " << Y << std::endl;
                     if (fl_wl_display())
+                    {
                         window->resize(X, Y, window->w(), window->h());
+                    }
                     else
+                    {
+                        window->position(X, Y);
+                    }
 #else
                     window->position(X, Y);
 #endif
-                        return 1;
+#else
+                    window->position(X, Y);
+#endif
+                    return 1;
                 }
             }
             break;

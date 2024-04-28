@@ -808,7 +808,29 @@ namespace mrv
         opengl.get("color_buffers_accuracy", tmp, 0);
         uiPrefs->uiPrefsColorAccuracy->value(tmp);
 
+        
         opengl.get("blit_viewports", tmp, 1);
+
+#ifdef __linux__
+#ifdef FLTK_USE_X11
+        if (fl_x11_display())
+        {
+            // Check if running under XWayland (we assume if FLTK_BACKEND is
+            // set, we are).
+            if (tmp)
+            {
+                const char* backend = fl_getenv("FLTK_BACKEND");
+                if (backend && strcmp(backend, "x11") == 0)
+                {
+                    LOG_WARNING(_("Running under XWayland.  Cannot use "
+                                  "Viewport blitting"));
+                    tmp = 0;
+                }
+            }
+        }
+#endif
+#endif
+
         uiPrefs->uiPrefsBlitViewports->value(tmp);
 
         opengl.get("blit_timeline", tmp, 1);

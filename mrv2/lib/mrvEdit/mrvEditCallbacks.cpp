@@ -484,7 +484,9 @@ namespace mrv
             destItem->path = file::Path(otioFile);
 
             if (refreshCache)
+            {
                 refresh_file_cache_cb(nullptr, ui);
+            }
             else if (create)
             {
                 panel::refreshThumbnails();
@@ -1954,7 +1956,7 @@ namespace mrv
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
-
+        
         auto destTimeline = player->getTimeline();
 
         auto time = getTime(player);
@@ -1968,6 +1970,7 @@ namespace mrv
 
         auto sourceItem = sourceItems[index];
 
+        auto destItemIndex = model->observeAIndex()->get();
         auto destItem = model->observeA()->get();
         if (!destItem)
         {
@@ -2029,6 +2032,8 @@ namespace mrv
                 player->getAllAnnotations(), sourceItem->inOutRange,
                 sourceItem->annotations);
 
+            bool emptyTracks = hasEmptyTracks(destTimeline->tracks());
+            
             addClipToTimeline(index, destTimeline, ui);
 
             //
@@ -2046,13 +2051,22 @@ namespace mrv
             destItem->inOutRange = timeRange;
             destItem->speed = videoRate;
 
+            if (emptyTracks)
+            {
+                model->setA(index);
+                model->setA(destItemIndex);
+            }
+            
             ui->uiView->valid(0); // needed
             ui->uiView->redraw(); // needed
 
             player = ui->uiView->getTimelinePlayer();
             if (!player)
+            {
+                LOG_ERROR("No destination player");
                 return;
-
+            }
+            
             auto time = timelineDuration.rescaled_to(videoRate) +
                         sourceItem->currentTime.rescaled_to(videoRate);
             updateTimeline(destTimeline, time, ui);

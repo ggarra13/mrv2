@@ -31,6 +31,8 @@ v1.1.4
   and around 300Mb of disk space for it.
 - Fixed Preview thumbnails above the Timeline crashing the viewer on all
   platforms.
+- Fixed Playlist creation showing an empty view for the first clip loaded.
+  (regression of v1.1.2).
 
 
 v1.1.3

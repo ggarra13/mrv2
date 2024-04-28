@@ -27,7 +27,7 @@ namespace mrv
         MainWindow* window() const;
 
         void image(Fl_Image*);
-
+        
     private:
         TLRENDER_PRIVATE();
     };
