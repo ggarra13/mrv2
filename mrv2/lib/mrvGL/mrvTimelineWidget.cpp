@@ -39,6 +39,9 @@
 
 #include "mrViewer.h"
 
+
+//#define NO_TIMEOUT 1
+
 namespace mrv
 {
     namespace
@@ -341,11 +344,15 @@ namespace mrv
 
         if (!p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
         {
+#ifdef NO_TIMEOUT
+            hideThumbnail();
+#else
             if (!Fl::has_timeout((Fl_Timeout_Handler)hideThumbnail_cb, this))
             {
                 Fl::add_timeout(
                     0.005, (Fl_Timeout_Handler)hideThumbnail_cb, this);
             }
+#endif
             return 0;
         }
 
@@ -1366,12 +1373,16 @@ namespace mrv
             {
                 if (p.thumbnailCreator && p.thumbnailRequestId)
                     p.thumbnailCreator->cancelRequests(p.thumbnailRequestId);
+#ifdef NO_TIMEOUT
+            hideThumbnail();
+#else
                 if (!Fl::has_timeout(
                         (Fl_Timeout_Handler)hideThumbnail_cb, this))
                 {
                     Fl::add_timeout(
                         0.005, (Fl_Timeout_Handler)hideThumbnail_cb, this);
                 }
+#endif
             }
             return leaveEvent();
         case FL_PUSH:
@@ -1403,12 +1414,16 @@ namespace mrv
             {
                 if (p.thumbnailCreator && p.thumbnailRequestId)
                     p.thumbnailCreator->cancelRequests(p.thumbnailRequestId);
+#ifdef NO_TIMEOUT
+                hideThumbnail();
+#else
                 if (!Fl::has_timeout(
                         (Fl_Timeout_Handler)hideThumbnail_cb, this))
                 {
                     Fl::add_timeout(
                         0.005, (Fl_Timeout_Handler)hideThumbnail_cb, this);
                 }
+#endif
             }
             refresh();
             valid(0);

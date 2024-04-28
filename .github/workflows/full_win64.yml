@@ -65,7 +65,10 @@ jobs:
     - name: Build mrv2
       run: |
         ./runme_nolog.sh -t package -D TLRENDER_USD=OFF
-      
+
+    - name: Zip pdb files
+        ./bin/zip_pdb.sh
+        
     - name: Upload binaries  # Conditional step
       run: |
         ./bin/upload_sourceforge.sh
