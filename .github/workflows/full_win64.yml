@@ -67,6 +67,7 @@ jobs:
         ./runme_nolog.sh -t package -D TLRENDER_USD=OFF
 
     - name: Zip pdb files
+      run: |
         ./bin/zip_pdb.sh
         
     - name: Upload binaries  # Conditional step
