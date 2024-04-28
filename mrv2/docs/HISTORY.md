@@ -28,7 +28,9 @@ v1.1.4
 - Fixed drop frames incrementing due to lag when hiding the pixel bar.
 - Beta builds now have a mrv2_Windows_v1.1.4_pdb_files.zip with the Windows
   .pdb files to get useful stack traces.  Note that you need a D: drive for it
-  and around 300Mb of disk space in it.
+  and around 300Mb of disk space for it.
+- Fixed Preview thumbnails above the Timeline crashing the viewer on all
+  platforms.
 
 
 v1.1.3

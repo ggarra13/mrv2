@@ -40,13 +40,11 @@
 #include "mrViewer.h"
 
 
-//#define NO_TIMEOUT 1
-
 namespace mrv
 {
     namespace
     {
-        const double kTimeout = 0.0; // 05;
+        const double kTimeout = 0.005;
         const char* kModule = "timelineui";
     } // namespace
 
@@ -344,15 +342,7 @@ namespace mrv
 
         if (!p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
         {
-#ifdef NO_TIMEOUT
             hideThumbnail();
-#else
-            if (!Fl::has_timeout((Fl_Timeout_Handler)hideThumbnail_cb, this))
-            {
-                Fl::add_timeout(
-                    0.005, (Fl_Timeout_Handler)hideThumbnail_cb, this);
-            }
-#endif
             return 0;
         }
 
@@ -1355,17 +1345,22 @@ namespace mrv
         {
         case FL_SHOW:
             Fl::add_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
+            if (p.thumbnailWindow &&
+                p.ui->uiPrefs->uiPrefsTimelineThumbnails->value() &&
+                Fl::belowmouse() == this)
+            {
+                _requestThumbnail(true);
+            }
             break;
         case FL_FOCUS:
         case FL_UNFOCUS:
             return 1;
         case FL_ENTER:
             cursor(FL_CURSOR_DEFAULT);
-            if (p.thumbnailWindow && p.player &&
+            if (p.thumbnailWindow &&
                 p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
             {
-                p.thumbnailWindow->show();
-                _requestThumbnail();
+                _requestThumbnail(true);
             }
             return enterEvent();
         case FL_LEAVE:
@@ -1373,16 +1368,7 @@ namespace mrv
             {
                 if (p.thumbnailCreator && p.thumbnailRequestId)
                     p.thumbnailCreator->cancelRequests(p.thumbnailRequestId);
-#ifdef NO_TIMEOUT
-            hideThumbnail();
-#else
-                if (!Fl::has_timeout(
-                        (Fl_Timeout_Handler)hideThumbnail_cb, this))
-                {
-                    Fl::add_timeout(
-                        0.005, (Fl_Timeout_Handler)hideThumbnail_cb, this);
-                }
-#endif
+                hideThumbnail();
             }
             return leaveEvent();
         case FL_PUSH:
@@ -1401,8 +1387,6 @@ namespace mrv
             return wheelEvent();
         case FL_KEYDOWN:
         {
-            // @todo: ask darby for a return code from key press
-            // int ret = p.ui->uiView->handle(event);
             return keyPressEvent();
         }
         case FL_KEYUP:
@@ -1414,16 +1398,7 @@ namespace mrv
             {
                 if (p.thumbnailCreator && p.thumbnailRequestId)
                     p.thumbnailCreator->cancelRequests(p.thumbnailRequestId);
-#ifdef NO_TIMEOUT
                 hideThumbnail();
-#else
-                if (!Fl::has_timeout(
-                        (Fl_Timeout_Handler)hideThumbnail_cb, this))
-                {
-                    Fl::add_timeout(
-                        0.005, (Fl_Timeout_Handler)hideThumbnail_cb, this);
-                }
-#endif
             }
             refresh();
             valid(0);
