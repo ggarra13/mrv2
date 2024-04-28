@@ -90,13 +90,6 @@ ASK_TO_CONTINUE=0
 build_with_symbols=0
 if [[ $KERNEL == *Msys* ]]; then
     build_with_symbols=1
-else
-    if [[ $KERNEL == *Linux* ]]; then
-	username=$(whoami)
-	if [[ $username == gga ]]; then
-	    build_with_symbols=1
-	fi
-    fi
 fi
 
 if [[ $build_with_symbols == 1 ]]; then
