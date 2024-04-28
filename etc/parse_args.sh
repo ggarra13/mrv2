@@ -11,8 +11,8 @@ show_help()
 	echo "$0 [debug|release|reldeb] [clean] [-v] [-j <num>] [-lgpl] [-gpl] [-D VAR=VALUE] [-t <target>] [-help]"
 	echo ""
 	echo "* debug builds a debug build."
-	echo "* release builds a release build. (default)"
-	echo "* reldeb  builds a release build with debugging symbols."
+	echo "* release builds a release build. (default on Linux and macOS)"
+	echo "* reldeb  builds a release build with debugging symbols. (default on Windows)"
 	echo "* clean clears the directory before building -- use only with runme.sh"
 	echo "* -j <num>  controls the threads to use when compiling. [default=$CPU_CORES]"
 	echo "* -v builds verbosely. [default=off]"
@@ -90,13 +90,6 @@ ASK_TO_CONTINUE=0
 build_with_symbols=0
 if [[ $KERNEL == *Msys* ]]; then
     build_with_symbols=1
-else
-    if [[ $KERNEL == *Linux* ]]; then
-	username=$(whoami)
-	if [[ $username == gga ]]; then
-	    build_with_symbols=1
-	fi
-    fi
 fi
 
 if [[ $build_with_symbols == 1 ]]; then

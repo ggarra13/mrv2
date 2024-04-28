@@ -483,6 +483,9 @@ namespace mrv
                             viewportY, sizeW + viewportX, sizeH + viewportY,
                             GL_COLOR_BUFFER_BIT, filter);
                     }
+
+                    glViewport(
+                        0, 0, GLsizei(viewportSize.w), GLsizei(viewportSize.h));
                 }
             }
 

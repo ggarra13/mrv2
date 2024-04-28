@@ -4,12 +4,12 @@
 
 # Install zip just in case
 
+pacman -Sy zip --noconfirm
+
 
 
 # Output zip file name
 ZIPFILE="packages/mrv2_Windows_v${mrv2_VERSION}_Debugging_pdb_files.zip"
-
-pacman -Sy zip --noconfirm
 
 find "$BUILD_DIR" -type f -name "*.pdb" -exec zip -v9 $ZIPFILE {} +
 
