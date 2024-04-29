@@ -948,7 +948,7 @@ namespace mrv
         TLRENDER_P();
         p.videoData = values;
 
-        if (p.resizeWindow && p.presentation)
+        if (p.resizeWindow)
         {
             p.resizeWindow = p.switchClip = false;
             if (!p.presentation)
