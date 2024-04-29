@@ -38,8 +38,8 @@ namespace mrv
             X -= p.parent->x();
             Y -= p.parent->y();
         }
-#endif
         else
+#endif
         {
             Fl_Group::current(0);
         }

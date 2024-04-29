@@ -383,6 +383,7 @@ namespace mrv
         int X, Y;
         _getThumbnailPosition(X, Y);
         p.thumbnailWindow->resize(X, Y, kTHUMB_WIDTH, kTHUMB_HEIGHT);
+        p.thumbnailWindow->show();
     }
 
     int TimelineWidget::_requestThumbnail(bool fetch)
