@@ -694,7 +694,7 @@ namespace mrv
             }
         }
 
-        if (!p.ui->uiPrefs->uiPrefsBlitTimeline->value())
+        if (p.ui->uiPrefs->uiPrefsBlitTimeline->value() == kNoBlit)
         {
             glViewport(0, 0, renderSize.w, renderSize.h);
             glClearColor(0.F, 0.F, 0.F, 0.F);

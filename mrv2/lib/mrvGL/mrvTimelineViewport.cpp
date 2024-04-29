@@ -718,9 +718,10 @@ namespace mrv
                 player->setTimelineViewport(this);
             else
                 player->setSecondaryViewport(this);
-
+            
             p.videoData = player->currentVideo();
             p.switchClip = true;
+
         }
 
         refreshWindows(); // needed We need to refresh, as the new
@@ -947,10 +948,13 @@ namespace mrv
         TLRENDER_P();
         p.videoData = values;
 
-        if (p.resizeWindow)
+        if (p.resizeWindow && p.presentation)
         {
             p.resizeWindow = p.switchClip = false;
-            resizeWindow();
+            if (!p.presentation)
+                resizeWindow();
+            else
+                frameView();
         }
         else if (p.frameView && p.switchClip)
         {

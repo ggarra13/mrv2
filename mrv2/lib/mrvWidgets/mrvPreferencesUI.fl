@@ -1352,11 +1352,11 @@ v->uiOCIO_Look->do_callback();}
             xywh {291 36 532 362} box EMBOSSED_BOX align 5
           } {
             Fl_Group {} {open
-              xywh {323 52 446 313}
+              xywh {323 52 478 314}
             } {
               Fl_Choice uiPrefsOpenGLVsync {
                 label {Monitor VSync}
-                tooltip {Turns on and off Monitor's Vsync.  VSync off can display movies faster, at the cost of potential tearing in the image.} xywh {471 99 255 25} down_box BORDER_BOX align 132 textcolor 32
+                tooltip {Turns on and off Monitor's Vsync.  VSync off can display movies faster, at the cost of potential tearing in the image.} xywh {509 95 140 22} down_box BORDER_BOX align 132 textcolor 32
                 class {mrv::Choice}
               } {
                 MenuItem {} {
@@ -1373,8 +1373,8 @@ v->uiOCIO_Look->do_callback();}
                 }
               }
               Fl_Choice uiPrefsColorAccuracy {
-                label {Color Buffers' Accuracy} open selected
-                tooltip {Color Buffers can be Accurate, Fast or Automatic.  Accurate preserves all float information, while Fast works in 8-bits.  Automatic selects the accuracy baed on image depth and OCIO use.} xywh {473 163 255 25} down_box BORDER_BOX align 132 textcolor 32
+                label {Color Buffers' Accuracy} open
+                tooltip {Color Buffers can be Accurate, Fast or Automatic.  Accurate preserves all float information, while Fast works in 8-bits.  Automatic selects the accuracy baed on image depth and OCIO use.} xywh {511 159 140 25} down_box BORDER_BOX align 132 textcolor 32
                 class {mrv::Choice}
               } {
                 MenuItem {} {
@@ -1382,8 +1382,12 @@ v->uiOCIO_Look->do_callback();}
                   xywh {50 50 100 20}
                 }
                 MenuItem {} {
-                  label Accurate
+                  label {Half Float}
                   xywh {60 60 100 20}
+                }
+                MenuItem {} {
+                  label {Full Float (Accurate)}
+                  xywh {70 70 100 20}
                 }
                 MenuItem {} {
                   label Fast
@@ -1391,8 +1395,8 @@ v->uiOCIO_Look->do_callback();}
                 }
               }
               Fl_Choice uiPrefsBlitViewports {
-                label {Blit Viewports}
-                tooltip {Viewports can be drawn with blitting or with OpenGL shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {475 239 255 25} down_box BORDER_BOX align 132 textcolor 32
+                label {Blit Viewports} open selected
+                tooltip {Viewports can be drawn with blitting or with OpenGL shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {513 235 140 25} down_box BORDER_BOX align 132 textcolor 32
                 class {mrv::Choice}
               } {
                 MenuItem {} {
@@ -1406,7 +1410,7 @@ v->uiOCIO_Look->do_callback();}
               }
               Fl_Choice uiPrefsBlitTimeline {
                 label {Blit Timeline}
-                tooltip {Timeline can be drawn with blitting or with OpenGL shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {477 287 255 25} down_box BORDER_BOX align 132 textcolor 32
+                tooltip {Timeline can be drawn with blitting or with OpenGL shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {515 283 140 25} down_box BORDER_BOX align 132 textcolor 32
                 class {mrv::Choice}
               } {
                 MenuItem {} {

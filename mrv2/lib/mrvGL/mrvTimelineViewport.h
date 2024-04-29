@@ -29,29 +29,6 @@ namespace mrv
 
     class MultilineInput;
 
-    enum MonitorVSync { kVSyncNone, kVSyncAlways, kVSyncPresentationOnly };
-
-    enum PixelDisplay { kRGBA_Float, kRGBA_Hex, kRGBA_Decimal };
-
-    enum PixelValue { kFull, kOriginal };
-
-    enum HudDisplay {
-        kNone = 0,
-        kFilename = 1 << 0,
-        kDirectory = 1 << 1,
-        kFrame = 1 << 2,
-        kFrameRange = 1 << 3,
-        kFrameCount = 1 << 4,
-        kResolution = 1 << 5,
-        kTimecode = 1 << 6,
-        kFPS = 1 << 7,
-        kMemory = 1 << 8,
-        kCache = 1 << 9,
-        kAttributes = 1 << 10,
-    };
-
-    enum MissingFrameType { kBlackFrame, kRepeatFrame, kScratchedFrame };
-
     class TimelinePlayer;
 
     class TimelineViewport : public Fl_SuperClass
