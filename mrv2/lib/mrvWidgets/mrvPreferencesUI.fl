@@ -1373,8 +1373,8 @@ v->uiOCIO_Look->do_callback();}
                 }
               }
               Fl_Choice uiPrefsColorAccuracy {
-                label {Color Buffers' Accuracy} open
-                tooltip {Color Buffers can be Accurate, Fast or Automatic.  Accurate preserves all float information, while Fast works in 8-bits.  Automatic selects the accuracy baed on image depth and OCIO use.} xywh {511 159 140 25} down_box BORDER_BOX align 132 textcolor 32
+                label {Color Buffers' Accuracy} open selected
+                tooltip {Color Buffers can be Float, Half Float, Fast or Automatic.  Float preserves all float information, Half Float preserves most float information and Fast works in 8-bits.  Automatic selects the accuracy baed on image depth and OCIO use.} xywh {511 159 140 25} down_box BORDER_BOX align 132 textcolor 32
                 class {mrv::Choice}
               } {
                 MenuItem {} {
@@ -1395,7 +1395,7 @@ v->uiOCIO_Look->do_callback();}
                 }
               }
               Fl_Choice uiPrefsBlitViewports {
-                label {Blit Viewports} open selected
+                label {Blit Viewports} open
                 tooltip {Viewports can be drawn with blitting or with OpenGL shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {513 235 140 25} down_box BORDER_BOX align 132 textcolor 32
                 class {mrv::Choice}
               } {
