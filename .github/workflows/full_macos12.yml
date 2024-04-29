@@ -53,12 +53,10 @@ jobs:
       run: |
         chmod +x ./*.sh ./bin/*.sh ./etc/*.sh
 
-    - uses: nick-fields/retry@v3
-      with:
-        timeout_minutes: 400
-        max_attempts: 10
-        command: ./runme_nolog.sh -t package
+    - uses: Build mrv2
+      run: |
+        ./runme_nolog.sh -D TLRENDER_USD=OFF -t package
       
-    - name: Upload binaries  # Conditional step
+    - name: Upload binaries
       run: |
         ./bin/upload_sourceforge.sh
