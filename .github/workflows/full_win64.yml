@@ -68,7 +68,7 @@ jobs:
 
     - name: Zip pdb files
       run: |
-        ./bin/zip_pdb.sh
+        ./bin/zip_pdb.sh reldeb
         
     - name: Upload binaries  # Conditional step
       run: |
