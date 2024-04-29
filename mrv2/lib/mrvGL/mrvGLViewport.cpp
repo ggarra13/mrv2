@@ -207,46 +207,40 @@ namespace mrv
             if (renderSize.isValid())
             {
                 image::PixelType colorBufferType = image::PixelType::RGBA_U8;
-                
-                if (p.ocioOptions.enabled)
-                    colorBufferType = image::PixelType::RGBA_F32;
-                else
+                int accuracy = p.ui->uiPrefs->uiPrefsColorAccuracy->value();
+                switch (accuracy)
                 {
-                    int accuracy = p.ui->uiPrefs->uiPrefsColorAccuracy->value();
-                    switch(accuracy)
+                case kAccuracyFloat32:
+                    colorBufferType = image::PixelType::RGBA_F32;
+                    break;
+                case kAccuracyFloat16:
+                    colorBufferType = image::PixelType::RGBA_F16;
+                    break;
+                case kAccuracyAuto:
+                    if (!p.videoData[0].layers.empty() &&
+                        p.videoData[0].layers[0].image->isValid())
                     {
-                    case kAccuracyFloat32:
-                        colorBufferType = image::PixelType::RGBA_F32;
-                        break;
-                    case kAccuracyFloat16:
-                        colorBufferType = image::PixelType::RGBA_F16;
-                        break;
-                    case kAccuracyAuto:
-                        if (!p.videoData[0].layers.empty() &&
-                            p.videoData[0].layers[0].image->isValid())
+                        const auto& pixelType =
+                            p.videoData[0].layers[0].image->getPixelType();
+                        switch (pixelType)
                         {
-                            const auto& pixelType =
-                                p.videoData[0].layers[0].image->getPixelType();
-                            switch (pixelType)
-                            {
-                            case image::PixelType::RGBA_F32:
-                            case image::PixelType::RGB_F32:
-                            case image::PixelType::L_F32:
-                            case image::PixelType::LA_F32:
-                                colorBufferType = image::PixelType::RGBA_F32;
-                                break;
-                            case image::PixelType::RGBA_F16:
-                            case image::PixelType::RGB_F16:
-                            case image::PixelType::L_F16:
-                            case image::PixelType::LA_F16:
-                                colorBufferType = image::PixelType::RGBA_F16;
-                                break;
-                            default:
-                                break;
-                            }
+                        case image::PixelType::RGBA_F32:
+                        case image::PixelType::RGB_F32:
+                        case image::PixelType::L_F32:
+                        case image::PixelType::LA_F32:
+                            colorBufferType = image::PixelType::RGBA_F32;
+                            break;
+                        case image::PixelType::RGBA_F16:
+                        case image::PixelType::RGB_F16:
+                        case image::PixelType::L_F16:
+                        case image::PixelType::LA_F16:
+                            colorBufferType = image::PixelType::RGBA_F16;
+                            break;
+                        default:
+                            break;
                         }
-                        break;
                     }
+                    break;
                 }
 
                 if (gl.colorBufferType != colorBufferType)
@@ -385,7 +379,7 @@ namespace mrv
         glClearStencil(0);
         glClearColor(r, g, b, a);
         glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-        
+
         const auto& player = getTimelinePlayer();
         if (!player)
             return;
@@ -578,7 +572,7 @@ namespace mrv
                 }
                 _drawRectangleOutline(selection, color, mvp);
             }
-            
+
             annotations = player->getAnnotations(p.ghostPrevious, p.ghostNext);
 
             if (p.showAnnotations && !annotations.empty())
