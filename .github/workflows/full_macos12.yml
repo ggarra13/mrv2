@@ -53,7 +53,7 @@ jobs:
       run: |
         chmod +x ./*.sh ./bin/*.sh ./etc/*.sh
 
-    - uses: Build mrv2
+    - name: Build mrv2
       run: |
         ./runme_nolog.sh -D TLRENDER_USD=OFF -t package
       
