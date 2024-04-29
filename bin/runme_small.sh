@@ -70,5 +70,5 @@ export TLRENDER_YASM=OFF
 
 echo
 echo "Saving compile log to $BUILD_DIR/compile.log ..."
-cmd="./runme_nolog.sh --build-dir ${build_root} $params 2>&1 | tee $BUILD_DIR/compile.log"
+cmd="./runme_nolog.sh --build-dir ${build_root} --ask $params 2>&1 | tee $BUILD_DIR/compile.log"
 run_cmd $cmd
