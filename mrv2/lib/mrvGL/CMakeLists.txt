@@ -4,6 +4,7 @@
 
 set(HEADERS
     mrvGLDefines.h
+    mrvEnums.h
     mrvGLErrors.h
     mrvGLJson.h
     mrvGLLines.h
