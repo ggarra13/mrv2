@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2024-04-19 19:03-0300\n"
+"POT-Creation-Date: 2024-04-29 11:32-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -2877,15 +2877,15 @@ msgstr "{0}: No puedo abrir plugin de escritura."
 msgid "Image info: {0} {1}"
 msgstr "Información de Imagen: {0} {1}"
 
-msgid "Image too big for annotations.  Will scale to the viewport size."
+msgid ""
+"Image too big for options.annotations.  Will scale to the viewport size."
 msgstr "Imagen demasiado grande.  Grabaré el tamaño de la vista."
 
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "Tamaño de la Ventana: {0} - X={1}, Y={2}"
 
-msgid "Writer plugin did not get output info.  Defaulting to RGB_U8"
-msgstr ""
-"El agregado de Escritura no obtuvo información de salida.  Usando RGB_U8."
+msgid "Writer plugin did not get output info.  Defaulting to {0}"
+msgstr "El plugin de Escritura no obtuvo información de salida.  Usando {0}."
 
 msgid "Output info: {0} {1}"
 msgstr "Información de Salida: {0} {1}"
@@ -2924,12 +2924,6 @@ msgstr "Información de OpenGL: {0}"
 msgid "Empty video data at time {0}."
 msgstr "Datos de vídeo vacios en {0}."
 
-msgid "Image too big.  Will save the viewport size."
-msgstr "Imagen demasiado grande.  Grabaré el tamaño de la vista."
-
-msgid "Viewport Size: {0}  Render Size: {1}"
-msgstr "Tamaño de la Ventana: {0}  Tamaño del Render {1}"
-
 msgid "Reading preferences from \"{0}mrv2.prefs\"."
 msgstr "Leyendo preferencias desde \"{0}mrv2.prefs\"."
 
@@ -2957,6 +2951,9 @@ msgstr "Seteando OCIO config de la variable de entorno OCIO."
 
 msgid "Path mappings have been loaded from \"{0}mrv2.paths.prefs\"."
 msgstr "Mapeo de carpetas ha sido cargado de \"{0}mrv2.paths.prefs\"."
+
+msgid "Running under XWayland.  Cannot use Viewport blitting"
+msgstr "Corriendo bajo XWayland.  No puedo usar Copia de Vistas."
 
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Cargué teclas de manejo desde \"{0}{1}.prefs\"."
@@ -3340,6 +3337,12 @@ msgstr "%s - Página %d"
 
 msgid "Frame {0} - Timecode: {1} - {2} Secs."
 msgstr "Cuadro {0} - Timecode: {1} - {2} Segs."
+
+msgid "Image too big.  Will save the viewport size."
+msgstr "Imagen demasiado grande.  Grabaré el tamaño de la vista."
+
+msgid "Viewport Size: {0}  Render Size: {1}"
+msgstr "Tamaño de la Ventana: {0}  Tamaño del Render {1}"
 
 msgid "Scrub"
 msgstr "Fregar"
@@ -5040,6 +5043,15 @@ msgstr "Siempre"
 msgid "Presentation Mode"
 msgstr "Modo de Presentación"
 
+msgid "Automatic"
+msgstr "Automático"
+
+msgid "Half Float"
+msgstr "Media Coma Flotante"
+
+msgid "Full Float (Accurate)"
+msgstr "Coma Flotante (Preciso)"
+
 msgid "Do Nothing"
 msgstr "Hacer Nada"
 
@@ -5712,6 +5724,32 @@ msgid ""
 msgstr ""
 "Prende y apaga el sincronismo vertical (VSync) del monitor.  VSync apagado "
 "puede mostrar películas más rapido, al costo de 'desgarros' en la imagen."
+
+msgid "Color Buffers' Accuracy"
+msgstr "Precision del Color"
+
+msgid ""
+"Color Buffers can be Float, Half Float, Fast or Automatic.  Float preserves "
+"all float information, Half Float preserves most float information and Fast "
+"works in 8-bits.  Automatic selects the accuracy baed on image depth and "
+"OCIO use."
+msgstr ""
+"Los búferes de color pueden ser Coma Flotante, Media Coma Flotante, Rápidos "
+"o Automáticos.  Coma Flotante preserve toda la información, Media Coma "
+"Flotante preserve la mayoría de ella, y Rápido trabaja en 8-bits.  "
+"Automático selecciona la precisión basada en profundidad de imagen y uso de "
+"OpenColorIO."
+
+msgid "Blit Viewports"
+msgstr "Copia de Vistas"
+
+msgid ""
+"Viewports can be drawn with blitting or with OpenGL shaders.  Depending on "
+"graphics card and OS one can perform better then the other."
+msgstr ""
+"Las vistas pueden ser dibujada con blitting (transferencia) o con shaders de "
+"OpenGL.  Dependiendo en tu tarjeta gráfica y sistema operativo una u otra "
+"puede desempeñarse mejor que la otra."
 
 msgid "Blit Timeline"
 msgstr "Transferir Línea de Tiempo"

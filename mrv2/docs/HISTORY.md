@@ -34,6 +34,7 @@ v1.1.4
 - Hide Preview thumbnails when going fullscreen or presentation.
 - Fixed Playlist creation showing an empty view for the first clip loaded.
   (regression of v1.1.2).
+- Several fixes to Presentation Mode.
 
 
 v1.1.3

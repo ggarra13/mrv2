@@ -945,6 +945,9 @@ namespace mrv
                     return 1;
                 }
 
+                auto time = std::chrono::high_resolution_clock::now();
+                p.presentationTime = time;
+                
                 cursor(FL_CURSOR_DEFAULT);
 
                 Fl_Group::current(0);

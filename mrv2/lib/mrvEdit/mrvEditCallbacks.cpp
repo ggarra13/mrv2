@@ -2423,6 +2423,9 @@ namespace mrv
 
     void set_edit_mode_cb(EditMode mode, ViewerUI* ui)
     {
+        if (ui->uiView->getPresentationMode())
+            return;
+                                
         Fl_Button* b = ui->uiEdit;
 
         bool active = (mode == EditMode::kFull || mode == EditMode::kSaved);
@@ -2449,12 +2452,13 @@ namespace mrv
         int tileH = tile->h();
         int H = kMinEditModeH; // timeline height
         int viewH = H;
+        bool showTimeline = ui->uiMain->visible() &&
+                            mode != EditMode::kNone;
         auto player = ui->uiView->getTimelinePlayer();
         if (mode == EditMode::kFull && player)
         {
-            timeline->show();
-            if (ui->uiMain->visible())
-                ui->uiTimeline->show();
+            if (showTimeline)
+                timeline->show();
             editMode = mode;
             H = calculate_edit_viewport_size(ui);
             editModeH = viewH = H;
@@ -2462,9 +2466,8 @@ namespace mrv
         else if (mode == EditMode::kSaved)
         {
             H = viewH = editModeH;
-            timeline->show();
-            if (ui->uiMain->visible())
-                ui->uiTimeline->show();
+            if (showTimeline)
+                timeline->show();
         }
         else if (mode == EditMode::kNone)
         {
@@ -2478,11 +2481,13 @@ namespace mrv
             viewH = editModeH = H;
 
             // EditMode::kTimeline
-            timeline->show();
-            if (ui->uiMain->visible())
-                ui->uiTimeline->show();
+            if (showTimeline)
+                timeline->show();
         }
 
+        if (showTimeline)
+            ui->uiTimeline->show();
+            
         int newY = tileY + tileH - H;
 
         view->resize(view->x(), view->y(), view->w(), tileH - viewH);

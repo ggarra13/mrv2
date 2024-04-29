@@ -1508,6 +1508,8 @@ namespace mrv
         }
 #endif
 
+        
+        
         SettingsObject* settings = ViewerUI::app->settings();
 
         //
@@ -1771,7 +1773,14 @@ namespace mrv
             (LogDisplay::ShowPreferences)
                 uiPrefs->uiPrefsRaiseLogWindowOnFFmpegError->value();
 
+
+        bool hasPresentation = view->getPresentationMode();
+        
         Fl_Round_Button* r;
+
+        r = (Fl_Round_Button*)uiPrefs->uiPrefsOpenMode->child(1);
+        int normal = r->value();
+        
         r = (Fl_Round_Button*)uiPrefs->uiPrefsOpenMode->child(1);
         int fullscreen = r->value();
         if (fullscreen)
@@ -1782,7 +1791,7 @@ namespace mrv
         if (presentation)
             view->setPresentationMode(true);
 
-        if (!fullscreen && !presentation)
+        if (normal)
             view->setFullScreenMode(false);
 
         bool value = uiPrefs->uiPrefsAlwaysOnTop->value();
@@ -1791,8 +1800,6 @@ namespace mrv
         {
             ui->uiMain->always_on_top(value);
         }
-
-        DBG3;
 
         SecondaryWindow* secondary = ui->uiSecondary;
         if (secondary)

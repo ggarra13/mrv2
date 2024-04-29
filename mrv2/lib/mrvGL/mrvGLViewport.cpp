@@ -197,10 +197,6 @@ namespace mrv
             valid(1);
         }
 
-#ifdef DEBUG_SPEED
-        auto start_time = std::chrono::high_resolution_clock::now();
-#endif
-
         const auto& viewportSize = getViewportSize();
         const auto& renderSize = getRenderSize();
         bool transparent =
@@ -210,36 +206,48 @@ namespace mrv
         {
             if (renderSize.isValid())
             {
-                bool isFloatImage = p.ocioOptions.enabled;
-                int accuracy = p.ui->uiPrefs->uiPrefsColorAccuracy->value();
-                if (accuracy == 0)
-                    isFloatImage = true;
-
-                if (accuracy == 2 && !p.videoData[0].layers.empty() &&
-                    p.videoData[0].layers[0].image->isValid())
+                image::PixelType colorBufferType = image::PixelType::RGBA_U8;
+                
+                if (p.ocioOptions.enabled)
+                    colorBufferType = image::PixelType::RGBA_F32;
+                else
                 {
-                    const auto& pixelType =
-                        p.videoData[0].layers[0].image->getPixelType();
-                    switch (pixelType)
+                    int accuracy = p.ui->uiPrefs->uiPrefsColorAccuracy->value();
+                    switch(accuracy)
                     {
-                    case image::PixelType::RGBA_F32:
-                    case image::PixelType::RGB_F32:
-                    case image::PixelType::RGBA_F16:
-                    case image::PixelType::RGB_F16:
-                    case image::PixelType::L_F32:
-                    case image::PixelType::LA_F32:
-                    case image::PixelType::L_F16:
-                    case image::PixelType::LA_F16:
-                        isFloatImage = true;
+                    case kAccuracyFloat32:
+                        colorBufferType = image::PixelType::RGBA_F32;
                         break;
-                    default:
+                    case kAccuracyFloat16:
+                        colorBufferType = image::PixelType::RGBA_F16;
+                        break;
+                    case kAccuracyAuto:
+                        if (!p.videoData[0].layers.empty() &&
+                            p.videoData[0].layers[0].image->isValid())
+                        {
+                            const auto& pixelType =
+                                p.videoData[0].layers[0].image->getPixelType();
+                            switch (pixelType)
+                            {
+                            case image::PixelType::RGBA_F32:
+                            case image::PixelType::RGB_F32:
+                            case image::PixelType::L_F32:
+                            case image::PixelType::LA_F32:
+                                colorBufferType = image::PixelType::RGBA_F32;
+                                break;
+                            case image::PixelType::RGBA_F16:
+                            case image::PixelType::RGB_F16:
+                            case image::PixelType::L_F16:
+                            case image::PixelType::LA_F16:
+                                colorBufferType = image::PixelType::RGBA_F16;
+                                break;
+                            default:
+                                break;
+                            }
+                        }
                         break;
                     }
                 }
-
-                image::PixelType colorBufferType = image::PixelType::RGBA_U8;
-                if (isFloatImage)
-                    colorBufferType = image::PixelType::RGBA_F32;
 
                 if (gl.colorBufferType != colorBufferType)
                     gl.colorBufferType = colorBufferType;
@@ -367,6 +375,7 @@ namespace mrv
             if (elapsedTime >= 3000)
             {
                 window()->cursor(FL_CURSOR_NONE);
+                p.presentationTime = time;
             }
         }
 
@@ -376,6 +385,10 @@ namespace mrv
         glClearStencil(0);
         glClearColor(r, g, b, a);
         glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+        
+        const auto& player = getTimelinePlayer();
+        if (!player)
+            return;
 
         std::vector<std::shared_ptr<draw::Annotation>> annotations;
 
@@ -384,7 +397,7 @@ namespace mrv
             math::Matrix4x4f mvp;
 
             const float rotation = _getRotation();
-            if (!p.ui->uiPrefs->uiPrefsBlitViewports->value() ||
+            if (p.ui->uiPrefs->uiPrefsBlitViewports->value() == kNoBlit ||
                 p.environmentMapOptions.type != EnvironmentMapOptions::kNone ||
                 rotation != 0.F)
             {
@@ -565,10 +578,7 @@ namespace mrv
                 }
                 _drawRectangleOutline(selection, color, mvp);
             }
-
-            const auto& player = getTimelinePlayer();
-            if (!player)
-                return;
+            
             annotations = player->getAnnotations(p.ghostPrevious, p.ghostNext);
 
             if (p.showAnnotations && !annotations.empty())
@@ -663,12 +673,6 @@ namespace mrv
 #else
         if (w)
             Fl_Gl_Window::draw();
-#endif
-
-#ifdef DEBUG_SPEED
-        auto end_time = std::chrono::high_resolution_clock::now();
-        std::chrono::duration<double> diff = end_time - start_time;
-        std::cout << "GL::draw() duration " << diff.count() << std::endl;
 #endif
     }
 
