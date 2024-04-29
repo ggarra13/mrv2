@@ -8,10 +8,15 @@
 #include "mrvWidgets/mrvMainWindow.h"
 #include "mrvWidgets/mrvFileDragger.h"
 
+#include "mrViewer.h"
+
+#include <FL/platform.H>
+
 namespace mrv
 {
     struct FileDragger::Private
     {
+        MainWindow* parent;
         MainWindow* window;
         Fl_Box* box;
     };
@@ -23,10 +28,25 @@ namespace mrv
 
         int X = Fl::event_x_root();
         int Y = Fl::event_y_root();
-        int W = 128;
-        int H = 80;
+#ifdef FLTK_USE_WAYLAND
+        if (fl_wl_display())
+        {
+            p.parent = App::ui->uiMain;
 
-        Fl_Group::current(0);
+            Fl_Group::current(p.parent);
+
+            X -= p.parent->x();
+            Y -= p.parent->y();
+        }
+#endif
+        else
+        {
+            Fl_Group::current(0);
+        }
+
+        const int W = 128;
+        const int H = 80;
+
         p.window = new MainWindow(X, Y, W, H);
         p.window->border(0);
         p.window->begin();

@@ -192,7 +192,7 @@ namespace mrv
 
         void _styleUpdate();
 
-        int _requestThumbnail(bool fetch = true);
+        int _requestThumbnail(bool fetch = true, bool show = false);
         void _deleteThumbnails();
         void _thumbnailsUpdate();
 

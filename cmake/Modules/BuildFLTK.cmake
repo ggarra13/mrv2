@@ -16,7 +16,13 @@ else()
 endif()
 
 
-set( FLTK_PATCH )
+set( FLTK_PATCH
+    COMMAND
+    ${CMAKE_COMMAND} -E copy_if_different
+    "${PROJECT_SOURCE_DIR}/cmake/patches/FLTK-patch/src/Fl_Window.cxx"
+    "${CMAKE_BINARY_DIR}/FLTK-prefix/src/FLTK/src/" )
+
+
 set( FLTK_BUILD_TYPE ${CMAKE_BUILD_TYPE} )
 
 set( FLTK_CXX_COMPILER ${CMAKE_CXX_COMPILER})
@@ -56,6 +62,7 @@ ExternalProject_Add(
     GIT_REPOSITORY "https://github.com/fltk/fltk.git"
     GIT_TAG ${FLTK_GIT_TAG}
     DEPENDS ${FLTK_DEP}
+    PATCH_COMMAND ${FLTK_PATCH}
     CMAKE_ARGS
     -DCMAKE_C_COMPILER=${FLTK_C_COMPILER}
     -DCMAKE_CXX_COMPILER=${FLTK_CXX_COMPILER}

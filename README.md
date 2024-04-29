@@ -565,3 +565,13 @@ This utility verifies previous to a commit that all the C++ formatting follows t
 
 You might also want to get Doxygen so as to get the source code documentation in docs/Doxygen.
 
+
+To get useful debug stack traces for mrv2, you need to mimic the build
+directories of the compilation:
+
+${PWD}
+
+and unzip there this file, so that you get:
+
+${PWD}/${BUILD_DIR}
+
