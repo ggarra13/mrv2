@@ -64,7 +64,7 @@ jobs:
 
     - name: Build mrv2
       run: |
-        ./runme_nolog.sh -t package -D TLRENDER_USD=OFF
+        ./runme_nolog.sh reldeb -t package -D TLRENDER_USD=OFF
 
     - name: Zip pdb files
       run: |

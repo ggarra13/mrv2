@@ -11,8 +11,8 @@ show_help()
 	echo "$0 [debug|release|reldeb] [clean] [-v] [-j <num>] [-lgpl] [-gpl] [-D VAR=VALUE] [-t <target>] [-help]"
 	echo ""
 	echo "* debug builds a debug build."
-	echo "* release builds a release build. (default on Linux and macOS)"
-	echo "* reldeb  builds a release build with debugging symbols. (default on Windows)"
+	echo "* release builds a release build. (default)"
+	echo "* reldeb  builds a release build with debugging symbols."
 	echo "* clean clears the directory before building -- use only with runme.sh"
 	echo "* -j <num>  controls the threads to use when compiling. [default=$CPU_CORES]"
 	echo "* -v builds verbosely. [default=off]"
@@ -82,21 +82,6 @@ export CMAKE_TARGET=""
 ASK_TO_CONTINUE=0
 
 
-#
-# In Windows, we always build with RelWithDebInfo so that we can check for
-# crashes.  On Linux and macOS we build with symbols when I am the user
-# compiling it locally as GitHub Actions runs out of disk space.
-#
-build_with_symbols=0
-if [[ $KERNEL == *Msys* ]]; then
-    build_with_symbols=1
-fi
-
-if [[ $build_with_symbols == 1 ]]; then
-    export BUILD_TYPE_DIR="Release"
-    export CMAKE_BUILD_TYPE="RelWithDebInfo"
-fi
-
 for i in "$@"; do
     case $i in
 	reldeb|RelWithDebInfo)
@@ -105,7 +90,7 @@ for i in "$@"; do
 	    shift
 	    ;;
 	release|Release)
-	    export CMAKE_BUILD_TYPE="RelWithDebInfo"
+	    export CMAKE_BUILD_TYPE="Release"
 	    export BUILD_TYPE_DIR="Release"
 	    shift
 	    ;;
