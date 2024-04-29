@@ -22,6 +22,8 @@
 
 #include "icons/viewer16.xpm"
 
+#include "mrViewer.h"
+
 #include "mrvFl/mrvIO.h"
 
 namespace
@@ -172,6 +174,16 @@ namespace mrv
         return Fl_Double_Window::iconize();
     }
 
+    int MainWindow::handle(int e)
+    {
+        if (e == FL_FULLSCREEN)
+        {
+            App::ui->uiTimeline->requestThumbnail();
+        }
+        
+        return DropWindow::handle(e);
+    }
+    
     //! Resize override to handle tile
     void MainWindow::resize(int X, int Y, int W, int H)
     {

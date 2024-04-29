@@ -112,9 +112,11 @@ namespace mrv
         //! again.
         void hideThumbnail();
 
-        //! @bug: A static one time timeout callback used to avoid a bug
-        //! FLTK when hiding a window from an event of another widget.
-        static void hideThumbnail_cb(TimelineWidget* t);
+        //! Request a new thumbnail and reposition on timeline.
+        int requestThumbnail(bool fetch = true);
+
+        //! Reposition timeline based on last event or hide it.
+        void repositionThumbnail();
 
         //! Get the thumbnail creator
         ThumbnailCreator* thumbnailCreator();
@@ -161,7 +163,6 @@ namespace mrv
     private:
         void _createThumbnailWindow();
         void _getThumbnailPosition(int& X, int& Y);
-        void _repositionThumbnail();
 
         void _setTimeUnits(tl::timeline::TimeUnits);
 
@@ -196,7 +197,6 @@ namespace mrv
 
         void _styleUpdate();
 
-        int _requestThumbnail(bool fetch = true);
         void _deleteThumbnails();
         void _thumbnailsUpdate();
 

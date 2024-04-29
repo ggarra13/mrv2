@@ -51,8 +51,11 @@ namespace mrv
         //! Iconize all windows
         void iconize_all();
 
-        //! Resize override to handle tile
-        void resize(int X, int Y, int W, int H) override;
+        //! Handle ovveride.
+        int handle(int e) FL_OVERRIDE;
+        
+        //! Resize override to handle tile.
+        void resize(int X, int Y, int W, int H) FL_OVERRIDE;
 
     protected:
 #ifdef __APPLE__

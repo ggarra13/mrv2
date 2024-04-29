@@ -275,11 +275,6 @@ namespace mrv
         _styleUpdate();
     }
 
-    void TimelineWidget::hideThumbnail_cb(TimelineWidget* t)
-    {
-        t->hideThumbnail();
-    }
-
     void TimelineWidget::hideThumbnail()
     {
         TLRENDER_P();
@@ -377,16 +372,23 @@ namespace mrv
         Y = y_root() - p.topWindow->y_root() - 20 - kTHUMB_HEIGHT;
     }
 
-    void TimelineWidget::_repositionThumbnail()
+    void TimelineWidget::repositionThumbnail()
     {
         TLRENDER_P();
-        int X, Y;
-        _getThumbnailPosition(X, Y);
-        p.thumbnailWindow->resize(X, Y, kTHUMB_WIDTH, kTHUMB_HEIGHT);
-        p.thumbnailWindow->show(); // needed for Windows
+        if (Fl::belowmouse() == this)
+        {
+            int X, Y;
+            _getThumbnailPosition(X, Y);
+            p.thumbnailWindow->resize(X, Y, kTHUMB_WIDTH, kTHUMB_HEIGHT);
+            p.thumbnailWindow->show(); // needed for Windows
+        }
+        else
+        {
+            hideThumbnail();
+        }
     }
 
-    int TimelineWidget::_requestThumbnail(bool fetch)
+    int TimelineWidget::requestThumbnail(bool fetch)
     {
         TLRENDER_P();
         if (!p.player)
@@ -408,7 +410,7 @@ namespace mrv
             _createThumbnailWindow();
         }
 
-        _repositionThumbnail();
+        repositionThumbnail();
 
         file::Path path;
         auto model = p.ui->app->filesModel();
@@ -614,7 +616,7 @@ namespace mrv
 
         if (p.thumbnailWindow)
         {
-            _repositionThumbnail();
+            repositionThumbnail();
         }
     }
 
@@ -1381,7 +1383,7 @@ namespace mrv
             if (p.thumbnailWindow && p.player &&
                 p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
             {
-                _requestThumbnail(true);
+                requestThumbnail(true);
                 p.thumbnailWindow->show();
             }
             return enterEvent();
@@ -1395,7 +1397,7 @@ namespace mrv
             return leaveEvent();
         case FL_PUSH:
             if (p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
-                _requestThumbnail(true);
+                requestThumbnail(true);
             return mousePressEvent();
         case FL_DRAG:
             return mouseDragEvent(Fl::event_x(), Fl::event_y());
@@ -1403,7 +1405,7 @@ namespace mrv
             panel::redrawThumbnails();
             return mouseReleaseEvent();
         case FL_MOVE:
-            _requestThumbnail(true);
+            requestThumbnail(true);
             return mouseMoveEvent();
         case FL_MOUSEWHEEL:
             return wheelEvent();

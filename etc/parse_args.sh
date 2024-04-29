@@ -136,7 +136,7 @@ for i in "$@"; do
 	    BUILD_ROOT=$1
 	    shift
 	    ;;
-	-v)
+	-v|--v|--verbose)
 	    export CMAKE_VERBOSE_MAKEFILE=ON
 	    export FLAGS="-v ${FLAGS}"
 	    shift
