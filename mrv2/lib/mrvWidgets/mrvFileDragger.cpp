@@ -53,6 +53,7 @@ namespace mrv
         p.box = new Fl_Box(0, 0, W, H);
         p.window->end();
         p.window->show();
+        Fl_Group::current(0);
     }
 
     FileDragger::~FileDragger()
