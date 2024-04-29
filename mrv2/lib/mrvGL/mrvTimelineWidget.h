@@ -159,6 +159,10 @@ namespace mrv
         void timerEvent();
 
     private:
+        void _createThumbnailWindow();
+        void _getThumbnailPosition(int& X, int& Y);
+        void _repositionThumbnail();
+
         void _setTimeUnits(tl::timeline::TimeUnits);
 
         void _tickEvent(
@@ -192,7 +196,7 @@ namespace mrv
 
         void _styleUpdate();
 
-        int _requestThumbnail(bool fetch = true, bool show = false);
+        int _requestThumbnail(bool fetch = true);
         void _deleteThumbnails();
         void _thumbnailsUpdate();
 
