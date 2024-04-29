@@ -8,9 +8,9 @@ v1.1.4
   Still pending is how to support Clip dragging as Wayland does not support
   speicifying window positions when showing them.
 - Improved performance of OpenGL drawing a tad.
-- Added Preferences->OpenGL->Color Buffer Accuracy to select between float
-  or 8-bit buffers for speeding up movies or using a float pipeline.  Note that
-  using OpenColorIO automatically switches to a float pipeline.
+- Added Preferences->OpenGL->Color Buffer Accuracy to select between automatic,
+  float or 8-bit buffers for speeding up movies or getting more accurate color
+  precision.
 - Added option to select blitting of main viewports for potentially
   faster OpenGL drawing.
 - Added Windows' stack traces with line numbers for easy debugging.
