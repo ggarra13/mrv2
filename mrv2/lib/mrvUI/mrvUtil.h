@@ -11,4 +11,5 @@
 namespace mrv
 {
     Fl_SVG_Image* load_svg(const std::string& file);
+    bool          runningUnderXWayland();
 } // namespace mrv

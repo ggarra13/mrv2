@@ -33,6 +33,11 @@ if ( UNIX )
     link_directories(${CMAKE_INSTALL_PREFIX}/lib)
 endif()
 
+#
+# Use GLVND if possible to achieve OpenGL and best EGL driver on Wayland.
+#
+set(OpenGL_GL_PREFERENCE GLVND)
+
 find_package(FLTK CONFIG REQUIRED)
 
 
@@ -68,17 +73,12 @@ message( STATUS "Found FLTK: ${FLTK_INCLUDE_DIR}" )
 message( STATUS "FLTK LIBRARIES: ${FLTK_gl_LIBRARY} ${FLTK_LIBRARIES}" )
 message( STATUS "FLTK_FLUID_EXECUTABLE: ${FLTK_FLUID_EXECUTABLE}" )
 
-#
-# Use GLVND if possible to achieve OpenGL and best EGL driver on Wayland.
-#
-set(OpenGL_GL_PREFERENCE GLVND)
 
 find_package(Intl)
 find_package(tlRender REQUIRED)
 find_package(nlohmann_json REQUIRED)
 find_package(glfw3 REQUIRED)
 find_package(minizip REQUIRED)
-find_package(OpenGL REQUIRED)
 
 if( MRV2_NETWORK )
     find_package(Poco REQUIRED Net Foundation)
