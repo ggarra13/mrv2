@@ -2,6 +2,35 @@
 Preguntas Frecuentes
 ####################
 
+All Platforms
+=============
+
+- Mi reproducción es lenta.  ¿Cómo puedo mejorarla?
+
+  Chequée que tengas:
+  
+    * Ventana->Preferencias
+
+      - OpenGL
+	
+	Precisión de Color seteado a Automático (preferido) o Rápido.
+
+      - Línea de Tiempo
+
+	Vista Previa de Miniaturas apagado.
+
+      - Reproducción
+
+	Auto Ocultar Barra de Pixel checked
+	o optionalmente ocular la barra de pixel en la Interfaz o
+	establecer modo de Presentación.
+
+    * Panel->Settings
+      
+      - Cache Gigabytes
+
+	Seteado a 4GB por lo menos (por defecto es la mitad de tu memoria)
+
 
 Windows
 =======

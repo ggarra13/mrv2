@@ -2,6 +2,34 @@
 FAQ
 ###
 
+All Platforms
+=============
+
+- My plaback is too slow.  How can I improve it?
+
+  Check that you have:
+  
+    * Window->Preferences
+
+      - OpenGL
+	
+	Color Buffers' Accuracy set to Automatic (preferred) or Fast.
+
+      - Timeline
+
+	Preview Thumbnails off.
+
+      - Playback
+
+	Auto Hide Pixel Bar checked
+	or optionally hide the pixel bar or set the UI to presentation mode.
+
+    * Panel->Settings
+      
+      - Cache Gigabytes
+
+	Set to 4GB at least (the default is half your memory)
+
 
 Windows
 =======
