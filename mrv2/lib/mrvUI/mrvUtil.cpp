@@ -45,17 +45,21 @@ namespace mrv
         return svg;
     }
 
-    bool          runningUnderXWayland()
+    bool runningUnderXWayland()
     {
         bool out = false;
 #ifdef __linux__
 #    ifdef FLTK_USE_X11
         if (fl_x11_display())
         {
-            const char* backend = fl_getenv("FLTK_BACKEND");
-            if (backend && strcmp(backend, "x11") == 0)
+            const char* session = fl_getenv("XDG_SESSION_TYPE");
+            if (session && strcmp(session, "wayland") == 0)
             {
-                out = true;
+                const char* backend = fl_getenv("FLTK_BACKEND");
+                if (backend && strcmp(backend, "x11") == 0)
+                {
+                    out = true;
+                }
             }
         }
 #    endif
