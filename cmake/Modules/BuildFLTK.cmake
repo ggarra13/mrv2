@@ -5,7 +5,7 @@
 include( ExternalProject )
 
 #set( FLTK_GIT_TAG master )
-set(FLTK_GIT_TAG eeed39524606f1717dd2634ffe52e4640a606841)
+set(FLTK_GIT_TAG b402b6a8397f9fc13157813d39d505ea9ead00f0)
 
 if(MRV2_PYFLTK)
     # If we are building pyFLTK compile shared
@@ -14,14 +14,6 @@ else()
     # else compile static
     set( FLTK_BUILD_SHARED_LIBS OFF ) 
 endif()
-
-
-set( FLTK_PATCH
-    COMMAND
-    ${CMAKE_COMMAND} -E copy_if_different
-    "${PROJECT_SOURCE_DIR}/cmake/patches/FLTK-patch/src/Fl_Window.cxx"
-    "${CMAKE_BINARY_DIR}/FLTK-prefix/src/FLTK/src/" )
-
 
 set( FLTK_BUILD_TYPE ${CMAKE_BUILD_TYPE} )
 
@@ -50,11 +42,9 @@ if(TLRENDER_JPEG)
 endif()
     
 if (APPLE OR WIN32)
-    set( FLTK_WAYLAND OFF )
-    set( FLTK_PANGO   OFF )
-else()
-    set( FLTK_WAYLAND  ${TLRENDER_WAYLAND} )
-    set( FLTK_PANGO    ON )
+    set(TLRENDER_X11 OFF)
+    set(TLRENDER_WAYLAND OFF )
+    set(FLTK_PANGO   OFF )
 endif()
 
 ExternalProject_Add(
@@ -81,6 +71,8 @@ ExternalProject_Add(
     -DFLTK_BUILD_HTML_DOCS=OFF
     -DFLTK_BUILD_TEST=OFF
     -DFLTK_BUILD_SHARED_LIBS=${FLTK_BUILD_SHARED_LIBS}
+    -DFLTK_USE_WAYLAND=${TLRENDER_WAYLAND}
+    -DFLTK_USE_X11=${TLRENDER_X11}
     -DFLTK_USE_SYSTEM_LIBDECOR=0
     -DFLTK_USE_SYSTEM_ZLIB=${FLTK_USE_SYSTEM_ZLIB}
     -DFLTK_USE_SYSTEM_LIBJPEG=${FLTK_USE_SYSTEM_LIBJPEG}
