@@ -65,11 +65,13 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#ventana-de-vista">Ventana de Vista</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#languaje-y-colores">Languaje y Colores</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#render">Render</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tipografias">Tipografías</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#posicionado">Posicionado</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#buscador-de-arhivos">Buscador de Arhivos</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#reproducir">Reproducir</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#linea-de-tiempo">Línea de Tiempo</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#ventana-de-edicion">Ventana de Edición</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#edicion">Edición</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#barra-de-pixel">Barra de Pixel</a></li>
@@ -78,7 +80,9 @@
 <li class="toctree-l3"><a class="reference internal" href="#cargando">Cargando</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mapeo-de-carpetas">Mapeo de Carpetas</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#red">Red</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#opengl">OpenGL</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#errores">Errores</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#comportamiento">Comportamiento</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="saving.html">Grabando</a></li>
@@ -252,6 +256,73 @@ Recomendamos que use Black.</p>
 <p>Puede establecer los colores del fondo, el del rectángulo de selección, la superposición de texto (unused) y del HUD.</p>
 </aside>
 </section>
+<section id="render">
+<h2>Render<a class="headerlink" href="#render" title="Link to this heading"></a></h2>
+<img alt="../_images/preferences-15.png" class="align-center" src="../_images/preferences-15.png" />
+<aside class="topic">
+<p class="topic-title">Niveles de Vídeo</p>
+<ul>
+<li><p>Del Archivo</p>
+<p>Se extrae el valor de la película o imágen si está presente.</p>
+</li>
+<li><p>Rango Legal</p>
+<p>Rango válido para Vídeo.</p>
+</li>
+<li><p>Rango Completo</p>
+<p>Rango Completo (0…255).</p>
+</li>
+</ul>
+</aside>
+<aside class="topic">
+<p class="topic-title">Mezcla Alfa</p>
+<ul>
+<li><p>Ninguna</p>
+<p>El canal alfa no se considera para componer.</p>
+</li>
+<li><p>Derecho</p>
+<p>El canal alfa se considera derecho.  Se necesita para fundidos de
+OTIO.</p>
+</li>
+<li><p>Premultiplicado</p>
+<p>El color y el canal alfa se asumen premultiplicados.</p>
+</li>
+</ul>
+</aside>
+<aside class="topic">
+<p class="topic-title">Filtro de Minificación</p>
+<ul>
+<li><p>Lineal</p>
+<p>Filtro lineal al achicar.</p>
+</li>
+<li><p>Más Cercano</p>
+<p>Sin filtro.</p>
+</li>
+</ul>
+</aside>
+<aside class="topic">
+<p class="topic-title">Filtro de Magnificación</p>
+<ul>
+<li><p>Lineal</p>
+<p>Filtro lineal al agrandar.</p>
+</li>
+<li><p>Más Cercano</p>
+<p>Sin filtro.</p>
+</li>
+</ul>
+</aside>
+</section>
+<section id="tipografias">
+<h2>Tipografías<a class="headerlink" href="#tipografias" title="Link to this heading"></a></h2>
+<img alt="../_images/preferences-16.png" class="align-center" src="../_images/preferences-16.png" />
+<aside class="topic">
+<p class="topic-title">Menus</p>
+<p>Tipografía de los menúes.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Panels</p>
+<p>No funciona.</p>
+</aside>
+</section>
 <section id="posicionado">
 <h2>Posicionado<a class="headerlink" href="#posicionado" title="Link to this heading"></a></h2>
 <img alt="../_images/preferences-04.png" class="align-center" src="../_images/preferences-04.png" />
@@ -333,11 +404,23 @@ ratón the mouse funciona cuando este fregando.</p>
 <p class="topic-title">Vista Previa de Miniaturas</p>
 <p>Miniaturas sobre la línea de tiempo cuando se mueve o arrastra el ratón.  No funciona en Wayland.</p>
 </aside>
-<section id="ventana-de-edicion">
-<h3>Ventana de Edición<a class="headerlink" href="#ventana-de-edicion" title="Link to this heading"></a></h3>
+<aside class="topic">
+<p class="topic-title">Remover EDLs en Carpeta Temporaria</p>
+<p>Cuando se crean listas de reproducción (EDLs), archivos .otio son
+grabados en tu carpeta temporaria.
+Seleccionando esto, los archivos serán borrados al salir del
+programa.</p>
+</aside>
 <aside class="topic">
 <p class="topic-title">Comenzar en Modo de Edición</p>
-<p>Selccionada, la interfaz comenzará en modo de Edición por defecto.</p>
+<p>Al seleccionarlo, el programa comenzará en modo de edición.</p>
+</aside>
+<section id="edicion">
+<h3>Edición<a class="headerlink" href="#edicion" title="Link to this heading"></a></h3>
+<img alt="../_images/preferences-18.png" class="align-center" src="../_images/preferences-18.png" />
+<aside class="topic">
+<p class="topic-title">Vista por Defecto</p>
+<p>Mostrar vídeos solamente o videos y audio.</p>
 </aside>
 <aside class="topic">
 <p class="topic-title">Vista Previa de Miniaturas</p>
@@ -350,6 +433,15 @@ ratón the mouse funciona cuando este fregando.</p>
 <aside class="topic">
 <p class="topic-title">Mostrar Marcadores</p>
 <p>Mostrar Marcadores como una barra en el modo de Edición.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Editable</p>
+<p>Si la vista de edición es Editable o no.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Edit Associated Clips</p>
+<p>Si los clips de Vídeo y Audio con <em>exactamente</em> igual comienzo
+y duración pueden moverse juntos.</p>
 </aside>
 </section>
 </section>
@@ -462,10 +554,74 @@ cruz roja).</p>
 <img alt="../_images/preferences-13.png" class="align-center" src="../_images/preferences-13.png" />
 <p>Las preferencias de Red permiten establecer que seteos son enviados y recibidos por la máquina local cuando está conectada en una red a otro servidor o cliente.</p>
 </section>
+<section id="opengl">
+<h2>OpenGL<a class="headerlink" href="#opengl" title="Link to this heading"></a></h2>
+<img alt="../_images/preferences-19.png" class="align-center" src="../_images/preferences-19.png" />
+<p>OpenGL is the default API used for 3D rendering in the timeline and viewports.</p>
+<aside class="topic">
+<p class="topic-title">Monitor VSync</p>
+<p>Siempre por Defecto.  Se sugiere no modificar.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Precisión de Color</p>
+<p>Controla la profundida y precision de los buffers de OpenGL.</p>
+<ul class="simple">
+<li><p>Automático: Defecto, que seteará los buffers de acuerdo a la
+precisión de la imagen.</p></li>
+<li><p>Media Como Flotante: Seteará los buffers como media coma.
+Mantendra la mitad de información de coma flotante.</p></li>
+<li><p>Float: Preservará la información de coma flotante precisamente.</p></li>
+<li><p>Rápida: Trabajará en 8-bits.</p></li>
+</ul>
+</aside>
+<aside class="topic">
+<p class="topic-title">Copia de Vistas</p>
+<p>Asumiendo que tu Escritorio lo permita, copiar será usado para mover
+y panear en las vistas, lo que usualmenter es más rápido.
+De otra forma, un shader deberá ser usado.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Copia de Línea de Tiempo</p>
+<p>Asumiendo que tu Escritorio lo permita, copiar será usado para mover
+y panear en la línea de tiempo, lo que usualmenter es más rápido.
+De otra forma, un shader deberá ser usado.</p>
+</aside>
+</section>
 <section id="errores">
 <h2>Errores<a class="headerlink" href="#errores" title="Link to this heading"></a></h2>
-<img alt="../_images/preferences-14.png" class="align-center" src="../_images/preferences-14.png" />
-<p>La Preferencias de  Errores permite establecer que hacer en caso de un error. Podés elegir entre Hacer Nada, Abrir Bitácora en el Muelle o Abrir Bitácora en la Ventana (por defecto).</p>
+<img alt="../_images/preferences-20.png" class="align-center" src="../_images/preferences-20.png" />
+<p>La Preferencias de  Errores permite establecer que hacer en caso de un error.</p>
+<p>Podés elegir entre Hacer Nada (por defecto), Abrir Bitácora en el Muelle o Abrir Bitácora en la Ventana.</p>
+<p>Podés elegir entre Hacer Nada, Abrir Bitácora en el Muelle o Abrir Bitácora en la Ventana (por defecto).</p>
+</section>
+<section id="comportamiento">
+<h2>Comportamiento<a class="headerlink" href="#comportamiento" title="Link to this heading"></a></h2>
+<img alt="../_images/preferences-21.png" class="align-center" src="../_images/preferences-21.png" />
+<p>Esta ventana te permite controlar el comportamiento del visor.</p>
+<aside class="topic">
+<p class="topic-title">Actualizaciones.</p>
+<p>mrv2 puede automáticamente chequear por actualizaciones, bajarlas
+e instalarlas asumiendo que tengas permisos administrativos.
+Necesitarás una conexión de internet y haber compilar mrv2 con
+soporte de Python.
+Una vez bajada, deberás seguir las instrucciones estándares para
+instalar en tu plataforma.
+Si la instalación es exitosa, el nuevo mrv2 se lanzará.</p>
+<ul>
+<li><p>En Demanda del Menú de Ayuda.</p>
+<p>Las actualizaciones son manejadas manualmente, solo cuando
+seleccionas Ayuda-&gt;Actualizar mrv2.</p>
+</li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li><p>Al Comenzar</p></li>
+</ul>
+<blockquote>
+<div><p>Las actualizaciones son chequeadas automáticamente al comenzar.</p>
+</div></blockquote>
+</div></blockquote>
+</aside>
 </section>
 </section>
 

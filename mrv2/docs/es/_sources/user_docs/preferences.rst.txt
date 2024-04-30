@@ -153,6 +153,75 @@ Acá puede customizar los colores y el lenguaje natural usado en mrv2.
 
 	   Puede establecer los colores del fondo, el del rectángulo de selección, la superposición de texto (unused) y del HUD.
 
+Render
+======
+
+.. image:: ./images/preferences-15.png
+   :align: center
+	   
+.. topic:: Niveles de Vídeo
+
+	   - Del Archivo
+
+	     Se extrae el valor de la película o imágen si está presente.
+
+	   - Rango Legal
+
+	     Rango válido para Vídeo.
+
+	   - Rango Completo
+
+	     Rango Completo (0...255).
+	     
+.. topic:: Mezcla Alfa
+
+	   - Ninguna
+
+	     El canal alfa no se considera para componer.
+
+	   - Derecho
+
+	     El canal alfa se considera derecho.  Se necesita para fundidos de
+	     OTIO.
+
+	   - Premultiplicado
+
+	     El color y el canal alfa se asumen premultiplicados.
+	     
+.. topic:: Filtro de Minificación
+
+	   - Lineal
+
+	     Filtro lineal al achicar.
+
+	   - Más Cercano
+
+	     Sin filtro.
+	     
+.. topic:: Filtro de Magnificación
+
+	   - Lineal
+
+	     Filtro lineal al agrandar.
+
+	   - Más Cercano
+
+	     Sin filtro.
+
+Tipografías
+===========
+
+.. image:: ./images/preferences-16.png
+   :align: center
+
+.. topic:: Menus
+
+	   Tipografía de los menúes.
+
+.. topic:: Panels
+
+	   No funciona.
+
 Posicionado
 ===========
 
@@ -245,13 +314,27 @@ Línea de Tiempo
 .. topic:: Vista Previa de Miniaturas
 
 	   Miniaturas sobre la línea de tiempo cuando se mueve o arrastra el ratón.  No funciona en Wayland.
+	   
+.. topic:: Remover EDLs en Carpeta Temporaria
 
-Ventana de Edición
-++++++++++++++++++
+	   Cuando se crean listas de reproducción (EDLs), archivos .otio son
+	   grabados en tu carpeta temporaria.
+	   Seleccionando esto, los archivos serán borrados al salir del
+	   programa.
 
 .. topic:: Comenzar en Modo de Edición
 
-	   Selccionada, la interfaz comenzará en modo de Edición por defecto.
+	   Al seleccionarlo, el programa comenzará en modo de edición.
+
+Edición
++++++++
+
+.. image:: ./images/preferences-18.png
+   :align: center
+
+.. topic:: Vista por Defecto
+
+	   Mostrar vídeos solamente o videos y audio.
 
 .. topic:: Vista Previa de Miniaturas
 
@@ -264,6 +347,15 @@ Ventana de Edición
 .. topic:: Mostrar Marcadores
 
 	   Mostrar Marcadores como una barra en el modo de Edición.
+
+.. topic:: Editable
+
+	   Si la vista de edición es Editable o no.
+
+.. topic:: Edit Associated Clips
+
+	   Si los clips de Vídeo y Audio con *exactamente* igual comienzo
+	   y duración pueden moverse juntos.
 
 	   
 Barra de Pixel
@@ -394,11 +486,83 @@ Red
 
 Las preferencias de Red permiten establecer que seteos son enviados y recibidos por la máquina local cuando está conectada en una red a otro servidor o cliente.
 
+OpenGL
+======
+
+.. image:: ./images/preferences-19.png
+   :align: center
+
+OpenGL is the default API used for 3D rendering in the timeline and viewports.
+
+.. topic:: Monitor VSync
+
+	   Siempre por Defecto.  Se sugiere no modificar.
+
+.. topic:: Precisión de Color
+
+	   Controla la profundida y precision de los buffers de OpenGL.
+
+	   - Automático: Defecto, que seteará los buffers de acuerdo a la
+	     precisión de la imagen.
+	   - Media Como Flotante: Seteará los buffers como media coma.
+	     Mantendra la mitad de información de coma flotante.
+	   - Float: Preservará la información de coma flotante precisamente.
+	   - Rápida: Trabajará en 8-bits.
+	   
+.. topic:: Copia de Vistas
+
+	   Asumiendo que tu Escritorio lo permita, copiar será usado para mover
+	   y panear en las vistas, lo que usualmenter es más rápido.
+	   De otra forma, un shader deberá ser usado.
+	   
+.. topic:: Copia de Línea de Tiempo 
+
+	   Asumiendo que tu Escritorio lo permita, copiar será usado para mover
+	   y panear en la línea de tiempo, lo que usualmenter es más rápido.
+	   De otra forma, un shader deberá ser usado.
+	   
 Errores
 =======
 
-.. image:: ./images/preferences-14.png
+.. image:: ./images/preferences-20.png
    :align: center
 
 
-La Preferencias de  Errores permite establecer que hacer en caso de un error. Podés elegir entre Hacer Nada, Abrir Bitácora en el Muelle o Abrir Bitácora en la Ventana (por defecto).
+La Preferencias de  Errores permite establecer que hacer en caso de un error.
+
+
+.. topic:: Error en FFmpeg
+
+Podés elegir entre Hacer Nada (por defecto), Abrir Bitácora en el Muelle o Abrir Bitácora en la Ventana.
+
+.. topic:: Errores
+
+Podés elegir entre Hacer Nada, Abrir Bitácora en el Muelle o Abrir Bitácora en la Ventana (por defecto).
+
+Comportamiento
+===============
+
+.. image:: ./images/preferences-21.png
+   :align: center
+
+
+Esta ventana te permite controlar el comportamiento del visor.
+
+.. topic:: Actualizaciones.
+
+	   mrv2 puede automáticamente chequear por actualizaciones, bajarlas
+	   e instalarlas asumiendo que tengas permisos administrativos.
+	   Necesitarás una conexión de internet y haber compilar mrv2 con
+	   soporte de Python.
+	   Una vez bajada, deberás seguir las instrucciones estándares para
+	   instalar en tu plataforma.
+	   Si la instalación es exitosa, el nuevo mrv2 se lanzará.
+	   
+	   - En Demanda del Menú de Ayuda.
+
+	     Las actualizaciones son manejadas manualmente, solo cuando
+	     seleccionas Ayuda->Actualizar mrv2.
+
+	    - Al Comenzar
+	      
+	     Las actualizaciones son chequeadas automáticamente al comenzar.

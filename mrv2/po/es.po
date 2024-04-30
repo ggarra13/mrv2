@@ -3741,7 +3741,7 @@ msgid "Timeline/Frame View"
 msgstr "Línea de Tiempo/Enmarcar Vista"
 
 msgid "Timeline/Scroll To Current Frame"
-msgstr "Timeline/Panear al Cuadro Actual"
+msgstr "Línea de Tiempo/Panear al Cuadro Actual"
 
 msgid "Timeline/Track Info"
 msgstr "Línea de Tiempo/Info de Pista"

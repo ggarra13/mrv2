@@ -50,3 +50,5 @@ packages
 *#
 *~
 .git
+.DS_Store
+

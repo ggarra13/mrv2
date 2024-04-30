@@ -158,12 +158,70 @@ Render
 
 .. image:: ./images/preferences-15.png
    :align: center
+	   
+.. topic:: Vídeo Levels
+
+	   - From File
+
+	     The value is extracted from the movie or image if present.
+
+	   - Legal Range
+
+	     Valid range for Video.
+	     
+	   - Full Range
+
+	     All 8 bit values (0...255).
+	     
+.. topic:: Alpha Blend
+
+	   - None
+
+	     The alpha channel is not considered for compositing.
+
+	   - Straight
+
+	     The alpha chnnael is considered straight.  It is needed for
+	     dissolves in OTIO.
+
+	   - Premultiplied
+
+	     Color and alpha are considered premultiplied.
+	     
+.. topic:: Minify Fukter
+
+	   - Linear
+
+	     Linear when downsizing.
+
+	   - Nearest
+
+	     No filter.
+	     
+.. topic:: Magnify Fukter
+
+	   - Linear
+
+	     Linear when upsizing.
+
+	   - Nearest
+
+	     No filter.
+	     
 
 Fonts
 =====
 
 .. image:: ./images/preferences-16.png
    :align: center
+	   
+.. topic:: Menus
+
+	   Font for menus.
+
+.. topic:: Panels
+
+	   Not functional.
 
 	   
 Positioning
@@ -274,8 +332,8 @@ Timeline
 	   When selected, the UI will start in Edit mode by default.
 	   
 
-Edit Viewport
-+++++++++++++
+Edit
+++++
 
 .. image:: ./images/preferences-18.png
    :align: center
