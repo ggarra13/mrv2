@@ -64,6 +64,8 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#view-window">View Window</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#language-and-colors">Language and Colors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#render">Render</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fonts">Fonts</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#positioning">Positioning</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#file-requester">File Requester</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#playback">Playback</a></li>
@@ -77,7 +79,9 @@
 <li class="toctree-l3"><a class="reference internal" href="#loading">Loading</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#path-mapping">Path Mapping</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#network">Network</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#opengl">OpenGL</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#errors">Errors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#behavior">Behavior</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="saving.html">Saving</a></li>
@@ -249,6 +253,14 @@ We recommend you stick with the Black Color scheme.</p>
 <p>You can establish the colors for the background, the selection rectangle, the text overlay (unused) and the HUD.</p>
 </aside>
 </section>
+<section id="render">
+<h2>Render<a class="headerlink" href="#render" title="Link to this heading"></a></h2>
+<img alt="../_images/preferences-15.png" class="align-center" src="../_images/preferences-15.png" />
+</section>
+<section id="fonts">
+<h2>Fonts<a class="headerlink" href="#fonts" title="Link to this heading"></a></h2>
+<img alt="../_images/preferences-16.png" class="align-center" src="../_images/preferences-16.png" />
+</section>
 <section id="positioning">
 <h2>Positioning<a class="headerlink" href="#positioning" title="Link to this heading"></a></h2>
 <img alt="../_images/preferences-04.png" class="align-center" src="../_images/preferences-04.png" />
@@ -325,7 +337,7 @@ a tad slower.</p>
 </section>
 <section id="timeline">
 <h2>Timeline<a class="headerlink" href="#timeline" title="Link to this heading"></a></h2>
-<img alt="../_images/preferences-07.png" class="align-center" src="../_images/preferences-07.png" />
+<img alt="../_images/preferences-17.png" class="align-center" src="../_images/preferences-17.png" />
 <aside class="topic">
 <p class="topic-title">Display</p>
 <p>Whether to show the time as Frames, Seconds or Timecode.</p>
@@ -334,11 +346,23 @@ a tad slower.</p>
 <p class="topic-title">Preview Thumbnails</p>
 <p>Whether to show a thumbnail above the timeline when moving or dragging on the timeline.</p>
 </aside>
-<section id="edit-viewport">
-<h3>Edit Viewport<a class="headerlink" href="#edit-viewport" title="Link to this heading"></a></h3>
+<aside class="topic">
+<p class="topic-title">Remove EDLs in Temporary Folder</p>
+<p>When creating playlists (EDLs), .otio files are saved in your
+temporary folder.  Selecting this will remove those files on
+program exit.</p>
+</aside>
 <aside class="topic">
 <p class="topic-title">Start in Edit mode</p>
 <p>When selected, the UI will start in Edit mode by default.</p>
+</aside>
+<section id="edit-viewport">
+<h3>Edit Viewport<a class="headerlink" href="#edit-viewport" title="Link to this heading"></a></h3>
+<img alt="../_images/preferences-18.png" class="align-center" src="../_images/preferences-18.png" />
+<aside class="topic">
+<p class="topic-title">Default View</p>
+<p>Whether to show Video Only or Video and Audio in the Edit
+Viewport.</p>
 </aside>
 <aside class="topic">
 <p class="topic-title">Thumbnails</p>
@@ -351,6 +375,15 @@ a tad slower.</p>
 <aside class="topic">
 <p class="topic-title">Show Markers</p>
 <p>Whether Markers are shown as a bar in Edit mode.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Editable</p>
+<p>Whether the Edit viewport is editable by default.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Edit Associated Clips</p>
+<p>Whether Video and Audio clips with <em>exactly</em> equal start times
+and durations can be moved together by default.</p>
 </aside>
 </section>
 </section>
@@ -462,10 +495,87 @@ cross).</p>
 <img alt="../_images/preferences-13.png" class="align-center" src="../_images/preferences-13.png" />
 <p>The Network preferences allows you to set what settings are sent and received by the local machine when connected on a network to another server or client.</p>
 </section>
+<section id="opengl">
+<h2>OpenGL<a class="headerlink" href="#opengl" title="Link to this heading"></a></h2>
+<img alt="../_images/preferences-19.png" class="align-center" src="../_images/preferences-19.png" />
+<p>OpenGL is the default API used for 3D rendering in the timeline and viewports.</p>
+<aside class="topic">
+<p class="topic-title">Monitor VSync</p>
+<p>Defaults to Always.  It allows drawings to wait for the monitor sync
+to avoid tearing.  You can set it to No or to Presentation.
+Turning off Monitor Vsync will improve performance, but will probably
+result in tearing.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Color Buffers’ Accuracy</p>
+<p>Controls the quality used in the calculations of OpenGL.</p>
+<ul class="simple">
+<li><p>Automatic: Default, which will set the buffers to
+be equal to the bit depth of the image.</p></li>
+<li><p>Half Float: It will set the bit depth to half float.  It will
+keep most floating point information with some precision errors.</p></li>
+<li><p>Float: It will preserve floating point information accurately.</p></li>
+<li><p>Fast: It will work in 8-bits.</p></li>
+</ul>
+</aside>
+<aside class="topic">
+<p class="topic-title">Blit Viewports</p>
+<p>Assuming your Desktop system allows it, blitting will be used to
+moving and panning in the image, which is usually faster.  Otherwise
+a shader must be used.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Blit Timeline</p>
+<p>Assuming your Desktop system allows it, blitting will be used to
+moving and panning in the timeline, which is usually faster.
+Otherwise a shader must be used.</p>
+</aside>
+</section>
 <section id="errors">
 <h2>Errors<a class="headerlink" href="#errors" title="Link to this heading"></a></h2>
-<img alt="../_images/preferences-14.png" class="align-center" src="../_images/preferences-14.png" />
-<p>The Errors preferences allows you to establish what to do in case of an error.  You can choose to Do Nothing, Open Logs on Dock or Open Logs on Window (Default).</p>
+<img alt="../_images/preferences-20.png" class="align-center" src="../_images/preferences-20.png" />
+<p>The Errors preferences allows you to establish what to do in case of an error.</p>
+<aside class="topic">
+<p class="topic-title">On FFmpeg Error</p>
+<p>You can choose to Do Nothing (Default), Open Logs on Dock or Open
+Logs on Window.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">On Error</p>
+<p>You can choose to Do Nothing (Default), Open Logs on Dock or Open
+Logs on Window (Default).</p>
+</aside>
+</section>
+<section id="behavior">
+<h2>Behavior<a class="headerlink" href="#behavior" title="Link to this heading"></a></h2>
+<img alt="../_images/preferences-21.png" class="align-center" src="../_images/preferences-21.png" />
+<p>The Behavior Window allows you to control the behavior aspects of the viewer.</p>
+<aside class="topic">
+<p class="topic-title">Check for Updates.</p>
+<p>mrv2 can automatically check for updates, download and install a
+new version assuming you have administrative privileges.
+You need of course an internet connection and have compiled mrv2
+with Python support.
+Once downloaded, you will need to follow the standard procedures
+for an install on your platform.
+If the install is successful, the new mrv2 should start
+automatically.</p>
+<ul>
+<li><p>On Demand From Help Menu.</p>
+<p>Updates are handled manually, only when selecting
+Help-&gt;Update mrv2.</p>
+</li>
+</ul>
+<blockquote>
+<div><ul>
+<li><p>At Start Up</p>
+<p>Updates are checked automatically at Start up.  If there’s an
+update, a Window will open for you to update, reinstall or maybe
+downgrade if you have a beta version.</p>
+</li>
+</ul>
+</div></blockquote>
+</aside>
 </section>
 </section>
 
