@@ -108,7 +108,7 @@ ${date}.
 It does not support NDI® on any platform.
 
 It works on Windows 8.1+ (without USD support), Ubuntu 20.04 LTS+,
-macOS 11 (amd64) and macOS M1/M2/M3 (arm64). 
+macOS 12 (amd64 also without USD support) and macOS M1/M2/M3 (arm64). 
 
 It may contain bugs, new untested features and more.
 
@@ -118,7 +118,7 @@ You can extract it to compile yourself with:
    git clone https://github.com/ggarra13/mrv2.git
    cd mrv2
    git checkout ${git_hash}
-   ./runme.sh
+   ./runme.sh clean
 \`\`\`
 
 

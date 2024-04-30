@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.23)
+cmake_minimum_required(VERSION 3.25)
 
 
 
@@ -10,9 +10,20 @@ if(APPLE)
     message( STATUS "-------------------------------------------------" )
 endif()
 
+#
+# Sanity checks
+#
 if(TLRENDER_NDI)
     if(NOT EXISTS "${TLRENDER_NDI_SDK}")
 	message(FATAL_ERROR "TLRENDER_NDI is ON but TLRENDER_NDI_SDK does not exist!\n${TLRENDER_NDI_SDK}") 
+    endif()
+endif()
+
+if(MSVC)
+    if (CMAKE_BUILD_TYPE STREQUAL "Debug" OR
+	    CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
+	message(STATUS "Embedding Debug information into executable.")
+	set(CMAKE_MSVC_DEBUG_INFORMATION TRUE)
     endif()
 endif()
 
@@ -29,19 +40,17 @@ include( cmake/functions.cmake )
 
 if (APPLE)
     message(STATUS "OLD_DYLD_LIBRARY_PATH=$ENV{OLD_DYLD_LIBRARY_PATH}")
-    message( STATUS "-------------------------------------------------" )
+    message(STATUS "-------------------------------------------------")
     message(STATUS "DYLD_LIBRARY_PATH=$ENV{DYLD_LIBRARY_PATH}")
-    message( STATUS "-------------------------------------------------" )
+    message(STATUS "-------------------------------------------------")
 elseif(UNIX)
     message(STATUS "OLD_LD_LIBRARY_PATH=$ENV{OLD_LD_LIBRARY_PATH}")
-    message( STATUS "-------------------------------------------------" )
     message(STATUS "LD_LIBRARY_PATH=$ENV{LD_LIBRARY_PATH}")
-    message( STATUS "-------------------------------------------------" )
+    message(STATUS "-------------------------------------------------")
 else()
     message(STATUS "OLD_PATH=$ENV{OLD_PATH}")
-    message( STATUS "-------------------------------------------------" )
     message(STATUS "PATH=$ENV{PATH}")
-    message( STATUS "-------------------------------------------------" )
+    message(STATUS "-------------------------------------------------")
 endif()
 
 
@@ -115,7 +124,8 @@ elseif(APPLE)
 	# brew .dylibs are compiled only for the current version of the OS.
 	#
 	# We distribute libintl dylib compatible with v10.5
-	file(COPY precompiled/macOS/v10.5/ DESTINATION ${CMAKE_INSTALL_PREFIX}/
+	file(COPY
+	    precompiled/macOS/v10.5/ DESTINATION ${CMAKE_INSTALL_PREFIX}/
 	    FOLLOW_SYMLINK_CHAIN)
     endif()
 endif()
