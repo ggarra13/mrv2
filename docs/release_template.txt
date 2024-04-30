@@ -3,7 +3,8 @@ mrv2 v1.1.4
 
 mrv2 is an open source professional player and review tool for vfx, animation and computer graphics for Windows, Linux and macOS.
 
-mrv2 is a major update on performance.  Video playback performance has been sped up by about 120%, avoiding dropped frames.  OpenColorIO or OpenEXRs with out-of-bounds values no longer clamp.  Panning, zooming and annotations have also been improved in their performance.
+mrv2 is a major update on performance and color pipeline fixes.  Video playback performance has been sped up between 20% and 150%, avoiding dropped frames.  OpenColorIO or OpenEXRs with out-of-bounds values no longer clamp.  Panning, zooming and annotations have also been improved in their performance.
+For those building from source, stack traces with line numbers are now provided on all platforms.
 
 Main Web page:
 https://mrv2.sourceforge.io

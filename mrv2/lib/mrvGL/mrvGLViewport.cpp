@@ -61,6 +61,13 @@ namespace mrv
         int fl_double = FL_DOUBLE;
 #ifdef __APPLE__
         fl_double = 0;
+#elif __linux__
+#    ifdef FLTK_USE_WAYLAND
+        if (fl_wl_display())
+        {
+            fl_double = 0;
+        }
+#    endif  
 #endif
 
         mode(FL_RGB | fl_double | FL_ALPHA | FL_STENCIL | FL_OPENGL3 | stereo);
