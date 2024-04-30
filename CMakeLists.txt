@@ -23,7 +23,7 @@ if(MSVC)
     if (CMAKE_BUILD_TYPE STREQUAL "Debug" OR
 	    CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
 	message(STATUS "Embedding Debug information into executable.")
-	set(CMAKE_MSVC_DEBUG_INFORMATION TRUE)
+	set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT Embedded)
     endif()
 endif()
 
