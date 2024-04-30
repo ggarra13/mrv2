@@ -1017,6 +1017,17 @@ namespace mrv
             p.filesModel->add(item);
         }
 
+
+        // If we have autoplayback on and auto hide pixel bar, do so here.
+        const bool autoHide = ui->uiPrefs->uiPrefsAutoHidePixelBar->value();
+        const bool autoPlayback = ui->uiPrefs->uiPrefsAutoPlayback->value();
+        const bool pixelToolbar = ui->uiPixelBar->visible();
+        if (autoPlayback && autoHide && pixelToolbar)
+        {
+            toggle_pixel_bar(nullptr, ui);
+            Fl::flush();
+        }
+
         if (ui->uiPrefs->SendMedia->value())
         {
             Message msg;
