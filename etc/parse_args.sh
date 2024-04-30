@@ -103,7 +103,7 @@ for i in "$@"; do
 	    shift
 	    ASK_TO_CONTINUE=1
 	    ;;
-	--minimal|-minimal)
+	--minimal|-minimal|--min|-min)
 	    shift
 	    BUILD_ROOT=${BUILD_ROOT}-minimal
 	    ;;
