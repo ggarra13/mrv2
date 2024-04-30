@@ -13,7 +13,7 @@ namespace mrv
     //! Name of user running mrv2
     std::string username();
 
-    //! Path to a temporary directory
+    //! Path to a root of installed directory.
     std::string rootpath();
 
     //! Path to a temporary directory (without a trailing slash)

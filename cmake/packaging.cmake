@@ -152,6 +152,13 @@ elseif(UNIX)
     
 else()
 
+    # Create debug directory for .pdb files
+    if (CMAKE_BUILD_TYPE STREQUAL "Debug" OR
+	    CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
+	list(PREPEND CPACK_PRE_BUILD_SCRIPTS ${CMAKE_SOURCE_DIR}/../cmake/copy_pdbs.cmake )
+    endif()
+
+    
     set(CPACK_PACKAGE_INSTALL_DIRECTORY "mrv2-v${mrv2_VERSION}" )
     
     # There is a bug in NSIS that does not handle full unix paths properly. Make
@@ -160,6 +167,7 @@ else()
 
     set(CPACK_GENERATOR NSIS ZIP)
 
+    
     set(CPACK_NSIS_INSTALLED_ICON_NAME "bin/mrv2.exe")
     set(CPACK_NSIS_MUI_ICON "${ROOT_DIR}/src/mrv2.ico")
     set(CPACK_NSIS_MUI_UNICON "${ROOT_DIR}/src/mrv2.ico")

@@ -2,13 +2,14 @@
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
-# message( STATUS "CMAKE_CURRENT_BINARY_DIR=${CMAKE_CURRENT_BINARY_DIR}" )
-# message( STATUS "CMAKE_CURRENT_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}" )
-# message( STATUS "CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}" )
+message( STATUS "----------------------------------------prepackage------------------------------------" )
+message( STATUS "CMAKE_CURRENT_BINARY_DIR=${CMAKE_CURRENT_BINARY_DIR}" )
+message( STATUS "CMAKE_CURRENT_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}" )
+message( STATUS "CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}" )
 
 
 #
-# bug:
+# \@bug:
 #
 # According to the CMAKE docs CMAKE_INSTALL_PREFIX should point to the
 # install directory, but on Linux, macOS and Windows each path is different.
@@ -22,6 +23,7 @@ else()
 endif()
 
 file(REAL_PATH ${ROOT_DIR} ROOT_DIR )
+message( STATUS "ROOT_DIR=${ROOT_DIR}" )
 
 
 include( "${ROOT_DIR}/cmake/version.cmake" )
@@ -126,6 +128,7 @@ if(UNIX)
 	get_runtime_dependencies( "${MRV2_EXES}" )
     endif()
 elseif(WIN32)
+    
     #
     # Remove usd directory from lib/ directory on Windows
     #

@@ -10,21 +10,44 @@
 
 #include <iostream>
 #include <fstream>
+#include <string>
 
 #include "mrvCore/mrvHome.h"
 
 void printStackTrace()
 {
+    // Crashes saved to %TMP%.  Usually C:\Users\%User%\AppData\Local\Temp
+    std::ofstream file(mrv::tmppath() + "/mrv2.crash.log");
+    
     // Set up the symbol options so that we can gather information from the
     // current executable's PDB files, as well as the Microsoft symbol servers.
     // We also want to undecorate the symbol names we're returned.
 
+    HANDLE hProcess = GetCurrentProcess();
+ 
     ::SymSetOptions(
         SYMOPT_DEFERRED_LOADS | SYMOPT_INCLUDE_32BIT_MODULES | SYMOPT_UNDNAME);
     if (!::SymInitialize(
-            ::GetCurrentProcess(), "http://msdl.microsoft.com/download/symbols",
-            TRUE))
+            hProcess, "http://msdl.microsoft.com/download/symbols", TRUE))
+    {
+        // Handle error
+        DWORD error = GetLastError();
+        std::cerr << "SymInitialize returned error: " << error << std::endl;
+        file << "SymInitialize returned error: " << error << std::endl;
+        file.close();
         return;
+    }
+    
+    const std::string pdb_dir = mrv::rootpath() + "/debug";
+    if (!::SymSetSearchPath(hProcess, pdb_dir.c_str()))
+    {
+        // Handle error
+        DWORD error = GetLastError();
+        std::cerr << "SymSetSearchPath returned error: " << error << std::endl;
+        file << "SymSetSearchPath returned error: " << error << std::endl;
+        file.close();
+        return;
+    }
 
     const int max_depth = 32;
     void* stack_addrs[max_depth];
@@ -34,9 +57,6 @@ void printStackTrace()
         (SYMBOL_INFO*)calloc(sizeof(SYMBOL_INFO) + 256 * sizeof(char), 1);
     symbol->MaxNameLen = 255;
     symbol->SizeOfStruct = sizeof(SYMBOL_INFO);
-
-    // Crashes saved to %TMP%.  Usually C:\Users\%User%\AppData\Local\Temp
-    std::ofstream file(mrv::tmppath() + "/mrv2.crash.log");
 
     for (int i = 0; i < frames; i++)
     {

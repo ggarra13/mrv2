@@ -21,7 +21,9 @@ fi
 dir=$BUILD_DIR/mrv2/src/mrv2-build
 
 if [[ ! -d $dir ]]; then
-    echo "mrv2 build directory does not exist."
+    echo "mrv2 build directory:"
+    echo $dir
+    echo "does not exist."
     echo "Please run:"
     echo " $ runme.sh [sameflags]"
     exit 1

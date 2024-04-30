@@ -10,7 +10,9 @@
 
 dir=$BUILD_DIR/tlRender/etc/SuperBuild/tlRender/src/tlRender-build/
 if [[ ! -d $dir ]]; then
-    echo "tlRender directory does not exist. Please run:"
+    echo "tlRender directory:"
+    echo $dir
+    echo "does not exist. Please run:"
     echo " $ runme.sh [sameflags]"
     exit 1
 fi
@@ -26,7 +28,9 @@ cd -
 
 dir=$BUILD_DIR/FLTK-prefix/src/FLTK-build/
 if [[ ! -d $dir ]]; then
-    echo "FLTK directory does not exist. Please run:"
+    echo "FLTK directory"
+    echo $dir
+    echo "does not exist. Please run:"
     echo " $ runme.sh [sameflags]"
     exit 1
 fi
