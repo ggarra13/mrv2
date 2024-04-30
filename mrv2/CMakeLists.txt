@@ -68,6 +68,9 @@ message( STATUS "Found FLTK: ${FLTK_INCLUDE_DIR}" )
 message( STATUS "FLTK LIBRARIES: ${FLTK_gl_LIBRARY} ${FLTK_LIBRARIES}" )
 message( STATUS "FLTK_FLUID_EXECUTABLE: ${FLTK_FLUID_EXECUTABLE}" )
 
+#
+# Use GLVND if possible to achieve OpenGL and best EGL driver on Wayland.
+#
 set(OpenGL_GL_PREFERENCE GLVND)
 
 find_package(Intl)
