@@ -154,7 +154,7 @@ if [[ $KERNEL == *Linux* ]]; then
     echo "Common options"
     echo
     echo "Wayland support .................... ${TLRENDER_WAYLAND} 	(TLRENDER_WAYLAND)"
-    #echo "X11 support ........................ ${TLRENDER_X11}     	(TLRENDER_X11)"
+    echo "X11 support ........................ ${TLRENDER_X11}     	(TLRENDER_X11)"
     echo
 fi
 
@@ -237,6 +237,7 @@ cmd="cmake -G '${CMAKE_GENERATOR}' \
 	   -D TLRENDER_USD=${TLRENDER_USD} \
 	   -D TLRENDER_VPX=${TLRENDER_VPX} \
 	   -D TLRENDER_WAYLAND=${TLRENDER_WAYLAND} \
+           -D TLRENDER_X11=${TLRENDER_X11} \
            -D TLRENDER_X264=${TLRENDER_X264} \
 	   -D TLRENDER_YASM=${TLRENDER_YASM} \
 	   -D TLRENDER_PROGRAMS=OFF \
