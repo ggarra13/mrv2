@@ -35,6 +35,8 @@ v1.1.4
 - Fixed Playlist creation showing an empty view for the first clip loaded.
   (regression of v1.1.2).
 - Several fixes to Presentation Mode.
+- From now on, Windows' beta releases on sourceforge have debugging
+  information.
 
 
 v1.1.3
