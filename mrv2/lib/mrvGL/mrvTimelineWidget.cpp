@@ -213,6 +213,9 @@ namespace mrv
         _p(new Private)
     {
         int fl_double = FL_DOUBLE;
+
+        // Do not use FL_DOUBLE on Linux or APPLE as it makes
+        // playback slow
 #if defined(__APPLE__) || defined(__linux__)
         fl_double = 0;
 #endif
