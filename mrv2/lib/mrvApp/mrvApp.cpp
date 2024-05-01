@@ -906,26 +906,15 @@ namespace mrv
 
     struct PlaybackData
     {
-        TimelineViewport* view;
+        std::shared_ptr<mrv::TimelinePlayer> player;
         timeline::Playback playback;
     };
 
     static void start_playback(void* data)
     {
         PlaybackData* p = (PlaybackData*)data;
-        auto view = p->view;
-        switch (p->playback)
-        {
-        case timeline::Playback::Forward:
-            view->playForwards();
-            break;
-        case timeline::Playback::Reverse:
-            view->playBackwards();
-            break;
-        default:
-            view->stop();
-            break;
-        }
+        auto player = p->player;
+        player->setPlayback(p->playback);
         delete p;
     }
 
@@ -964,7 +953,7 @@ namespace mrv
             // We use a timeout to start playback of the loaded video to
             // make sure to show all frames
             PlaybackData* data = new PlaybackData;
-            data->view = ui->uiView;
+            data->player = p.player;
             data->playback = p.options.playback == timeline::Playback::Count
                                  ? timeline::Playback::Forward
                                  : p.options.playback;
