@@ -8,6 +8,24 @@
 . $PWD/etc/build_dir.sh
 
 
+dir=$BUILD_DIR/tlRender/etc/SuperBuild/glfw3/src/glfw3-build/
+if [[ ! -d $dir ]]; then
+    echo "glfw3 directory:"
+    echo $dir
+    echo "does not exist. Please run:"
+    echo " $ runme.sh [sameflags]"
+    exit 1
+fi
+
+cd $dir
+
+#
+#  Rebuild glfw3
+#
+cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
+
+cd -
+
 dir=$BUILD_DIR/tlRender/etc/SuperBuild/tlRender/src/tlRender-build/
 if [[ ! -d $dir ]]; then
     echo "tlRender directory:"
