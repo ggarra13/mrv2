@@ -368,6 +368,7 @@ namespace mrv
         void _updateZoom() const noexcept;
 
         void _showPixelBar() const noexcept;
+        void _hidePixelBar() const noexcept;
         void _togglePixelBar() const noexcept;
 
         void _updatePixelBar() const noexcept;

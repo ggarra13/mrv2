@@ -475,7 +475,7 @@ namespace mrv
         if (!p.player)
             return;
 
-        _togglePixelBar();
+        _hidePixelBar();
         p.droppedFrames = 0;
 
         p.player->setPlayback(timeline::Playback::Reverse);
@@ -508,7 +508,7 @@ namespace mrv
         if (!p.player)
             return;
 
-        _togglePixelBar();
+        _hidePixelBar();
         p.droppedFrames = 0;
 
         p.player->setPlayback(timeline::Playback::Forward);
@@ -528,6 +528,30 @@ namespace mrv
             toggle_pixel_bar(nullptr, p.ui);
     }
 
+    void TimelineViewport::_hidePixelBar() const noexcept
+    {
+        TLRENDER_P();
+
+        if (!p.player || !p.ui->uiPrefs->uiPrefsAutoHidePixelBar->value() ||
+            !p.ui->uiPrefs->uiPrefsPixelToolbar->value() || p.presentation)
+            return;
+
+        auto playback = p.player->playback();
+        if (playback == timeline::Playback::Stop)
+        {
+            if (!p.ui->uiPixelBar->visible())
+            {
+                toggle_pixel_bar(nullptr, p.ui);
+                Fl::flush();
+            }
+        }
+        else
+        {
+            if (p.ui->uiPixelBar->visible())
+                toggle_pixel_bar(nullptr, p.ui);
+        }
+    }
+    
     void TimelineViewport::_togglePixelBar() const noexcept
     {
         TLRENDER_P();
