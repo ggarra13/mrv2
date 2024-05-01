@@ -158,6 +158,14 @@ if(TLRENDER_USD)
     endif()
 endif()
 
+if(TLRENDER_WAYLAND)
+    add_definitions(-DTLRENDER_WAYLAND -DFLTK_USE_WAYLAND)
+endif()
+
+if(TLRENDER_X11)
+    add_definitions(-DTLRENDER_X11 -DFLTK_USE_X11)
+endif()
+
 if(TLRENDER_X264)
     add_definitions(-DTLRENDER_X264)
 endif()

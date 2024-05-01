@@ -1499,7 +1499,8 @@ namespace mrv
 
     void previous_annotation_cb(Fl_Menu_*, ViewerUI* ui)
     {
-        const auto& player = ui->uiView->getTimelinePlayer();
+        const auto& view = ui->uiView;
+        const auto& player = view->getTimelinePlayer();
         if (!player)
             return;
         auto currentTime = time::round(player->currentTime());
@@ -1511,6 +1512,7 @@ namespace mrv
             const auto& roundedTime = time::round(time);
             if (roundedTime < currentTime)
             {
+                view->stop();
                 player->seek(roundedTime);
                 return;
             }
@@ -1519,10 +1521,11 @@ namespace mrv
 
     void next_annotation_cb(Fl_Menu_*, ViewerUI* ui)
     {
-        const auto& player = ui->uiView->getTimelinePlayer();
+        const auto& view = ui->uiView;
+        const auto& player = view->getTimelinePlayer();
         if (!player)
             return;
-        auto currentTime = time::round(player->currentTime());
+        const auto& currentTime = time::round(player->currentTime());
         std::vector< otime::RationalTime > times = player->getAnnotationTimes();
         std::sort(times.begin(), times.end());
         for (const auto& time : times)
@@ -1530,6 +1533,7 @@ namespace mrv
             const auto& roundedTime = time::round(time);
             if (roundedTime > currentTime)
             {
+                view->stop();
                 player->seek(roundedTime);
                 return;
             }
