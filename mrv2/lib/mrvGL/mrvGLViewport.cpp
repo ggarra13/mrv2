@@ -384,7 +384,7 @@ namespace mrv
         if (!player)
             return;
 
-        std::vector<std::shared_ptr<draw::Annotation>> annotations;
+        auto annotations = player->getAnnotations(p.ghostPrevious, p.ghostNext);
 
         if (gl.buffer && gl.shader)
         {
@@ -446,7 +446,10 @@ namespace mrv
             }
             else
             {
-                mvp = _projectionMatrix();
+                if (annotations.empty())
+                    mvp = _projectionMatrix();
+                else
+                    mvp = _createTexturedRectangle();
 
                 const GLint viewportX = p.viewPos.x;
                 const GLint viewportY = p.viewPos.y;
@@ -572,8 +575,6 @@ namespace mrv
                 }
                 _drawRectangleOutline(selection, color, mvp);
             }
-
-            annotations = player->getAnnotations(p.ghostPrevious, p.ghostNext);
 
             if (p.showAnnotations && !annotations.empty())
             {

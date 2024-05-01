@@ -1,13 +1,15 @@
 v1.1.4
 ======
+v1.1.4
+=====
+
+This is a major release with big speed improvements and fixes to the color pipeline.
 
 - Simplified build scripts.
 - Fixed macOS build issues (fixed in v1.1.3 re-release actually).
 - Prevented a macOS python plug-in issue with Python 3.11.
 - Fixed Wayland support on Ubuntu 22.04.3 LTS and later.
-  Still pending is how to support Clip dragging as Wayland does not support
-  speicifying window positions when showing them.
-- Improved performance of OpenGL drawing a tad.
+- Improved performance of OpenGL drawing between 20% and 150%. macOS has seen the most benefit going from playing videos at 4K at 15FPS to 60FPS.
 - Added Preferences->OpenGL->Color Buffer Accuracy to select between automatic,
   float or 8-bit buffers for speeding up movies or getting more accurate color
   precision.
@@ -18,24 +20,23 @@ v1.1.4
      %TMP%/mrv2.crash.log.
 - Allowed pyFLTK be able to compile in Debug.
 - Fixed floating values not respecting float values below 0 or higher than 1.
-- Improved the performanc of OpenGL by avoiding OpenGL context switching when
+- Improved the performance of OpenGL by avoiding OpenGL context switching when
   not needed (you don't have a text input widget, nor a text annotations
   showing).
 - Added Linux's stack traces with line numbers by relying on libbacktrace.
 - Improved performance of OpenGL dramatically, particularly on macOS.
 - Improved performance of drawing OpenGL annotations (drawings).
 - Renamed skipped frames as drop frames.
-- Fixed drop frames incrementing due to lag when hiding the pixel bar.
-- Beta builds now have a mrv2_Windows_v1.1.4_pdb_files.zip with the Windows
-  .pdb files to get useful stack traces.  Note that you need a D: drive for it
-  and around 300Mb of disk space for it.
 - Fixed Preview thumbnails above the Timeline crashing the viewer on all
   platforms.
 - Hide Preview thumbnails when going fullscreen or presentation.
 - Fixed Playlist creation showing an empty view for the first clip loaded.
   (regression of v1.1.2).
 - Several fixes to Presentation Mode.
-
+- On a re-release of v1.1.4 improved OpenGL performance as soon as a clip is
+  loaded and starts playing, when
+  Window->Preferences->Playback->Auto Playback and
+  Window->Preferences->Playback->Auto Hide Pixel Bar are active.
 
 v1.1.3
 ======
