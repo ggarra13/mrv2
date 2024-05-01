@@ -428,7 +428,20 @@ namespace mrv
         if (!p.player)
             return;
 
+        const timeline::Playback playback = p.player->playback();
+
         p.player->start();
+
+        switch (playback)
+        {
+        case timeline::Playback::Stop:
+        {
+            _showPixelBar();
+            break;
+        }
+        default:
+            p.player->setPlayback(playback);
+        }
         updatePlaybackButtons();
     }
 
@@ -441,6 +454,8 @@ namespace mrv
             return;
 
         p.player->framePrev();
+
+        _showPixelBar();
         updatePlaybackButtons();
     }
 
@@ -453,6 +468,8 @@ namespace mrv
             return;
 
         p.player->frameNext();
+
+        _showPixelBar();
         updatePlaybackButtons();
     }
 
@@ -464,7 +481,20 @@ namespace mrv
         if (!p.player)
             return;
 
+        const timeline::Playback playback = p.player->playback();
+
         p.player->end();
+
+        switch (playback)
+        {
+        case timeline::Playback::Stop:
+        {
+            _showPixelBar();
+            break;
+        }
+        default:
+            p.player->setPlayback(playback);
+        }
         updatePlaybackButtons();
     }
 
@@ -521,49 +551,47 @@ namespace mrv
     {
         TLRENDER_P();
 
-        if (!p.ui->uiPrefs->uiPrefsPixelToolbar->value() || p.presentation)
+        const bool autoHide = p.ui->uiPrefs->uiPrefsAutoHidePixelBar->value();
+        const bool visiblePixelBar = p.ui->uiPixelBar->visible_r();
+
+        if (visiblePixelBar || !autoHide || p.presentation)
             return;
 
-        if (!p.ui->uiPixelBar->visible())
-            toggle_pixel_bar(nullptr, p.ui);
+        toggle_pixel_bar(nullptr, p.ui);
+        Fl::flush();
     }
 
     void TimelineViewport::_hidePixelBar() const noexcept
     {
         TLRENDER_P();
 
-        if (!p.player || !p.ui->uiPrefs->uiPrefsAutoHidePixelBar->value() ||
-            !p.ui->uiPrefs->uiPrefsPixelToolbar->value() || p.presentation)
+        const bool autoHide = p.ui->uiPrefs->uiPrefsAutoHidePixelBar->value();
+        const bool visiblePixelBar = p.ui->uiPixelBar->visible_r();
+
+        if (!visiblePixelBar || !autoHide)
             return;
 
-        auto playback = p.player->playback();
-        if (playback == timeline::Playback::Stop)
-        {
-            if (!p.ui->uiPixelBar->visible())
-            {
-                toggle_pixel_bar(nullptr, p.ui);
-                Fl::flush();
-            }
-        }
-        else
-        {
-            if (p.ui->uiPixelBar->visible())
-                toggle_pixel_bar(nullptr, p.ui);
-        }
+        toggle_pixel_bar(nullptr, p.ui);
+        Fl::flush();
     }
-    
+
     void TimelineViewport::_togglePixelBar() const noexcept
     {
         TLRENDER_P();
 
-        if (!p.player || !p.ui->uiPrefs->uiPrefsAutoHidePixelBar->value() ||
-            !p.ui->uiPrefs->uiPrefsPixelToolbar->value() || p.presentation)
+        const bool autoHide = p.ui->uiPrefs->uiPrefsAutoHidePixelBar->value();
+        const bool hasPixelBar = p.ui->uiPrefs->uiPrefsPixelToolbar->value();
+        const bool visiblePixelBar = p.ui->uiPixelBar->visible_r();
+
+        if (hasPixelBar && (!autoHide || p.presentation))
             return;
 
-        auto playback = p.player->playback();
+        // This is called *before* the togglePlayback begins, so we need
+        // to check for Stop instead of playing.
+        const auto playback = p.player->playback();
         if (playback == timeline::Playback::Stop)
         {
-            if (p.ui->uiPixelBar->visible())
+            if (visiblePixelBar)
             {
                 toggle_pixel_bar(nullptr, p.ui);
                 Fl::flush();
@@ -571,8 +599,11 @@ namespace mrv
         }
         else
         {
-            if (!p.ui->uiPixelBar->visible())
+            if (!visiblePixelBar)
+            {
                 toggle_pixel_bar(nullptr, p.ui);
+                Fl::flush();
+            }
         }
     }
 
@@ -742,10 +773,9 @@ namespace mrv
                 player->setTimelineViewport(this);
             else
                 player->setSecondaryViewport(this);
-            
+
             p.videoData = player->currentVideo();
             p.switchClip = true;
-
         }
 
         refreshWindows(); // needed We need to refresh, as the new
@@ -1227,7 +1257,7 @@ namespace mrv
     {
         return normalizeAngle0to360(_p->rotation + _p->videoRotation);
     }
-    
+
     void TimelineViewport::_frameView() noexcept
     {
         TLRENDER_P();
