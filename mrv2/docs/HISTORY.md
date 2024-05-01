@@ -11,7 +11,8 @@ This is a bug fix release for the regressions in v1.1.4:
   Playback->Auto Playback was on.
 - Fixed not hiding of the pixel bar when the image was open from the
   recent menus or from the command-line.
-- Fixed color buffers not taking full advantage of OpenGL improvements.
+- Fixed color buffers not taking full advantage of OpenGL improvements on
+  Windows mainly.
 
 
 v1.1.4
