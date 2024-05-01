@@ -3,7 +3,7 @@ v1.1.5
 
 This is a bug fix release for the regressions in v1.1.4:
 
-- A last minute change on Linux mad OpenGL slower, not faster.
+- A last minute change on Linux made OpenGL slower, not faster.
 - Fixed annotations not showing when Blit Viewports was on.
 - Fixed hiding of pixel bar sometimes failing even when
   Playback->Auto Hide Pixel Bar
@@ -11,9 +11,11 @@ This is a bug fix release for the regressions in v1.1.4:
   Playback->Auto Playback was on.
 - Fixed not hiding of the pixel bar when the image was open from the
   recent menus or from the command-line.
+- Fixed color buffers not taking full advantage of OpenGL improvements.
+
 
 v1.1.4
-=====
+======
 
 This is a major release with big speed improvements and fixes to the color pipeline.
 
