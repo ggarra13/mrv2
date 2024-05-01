@@ -17,10 +17,7 @@
 // Set it to debug OpenGL issues with the CHECK_GL macro.
 // #define USE_GL_CHECKS 1
 
-// On debug builds, we always use GL checks.
-#ifndef NDEBUG
-#    undef USE_GL_CHECKS
-#    define USE_GL_CHECKS 1
-#endif
+// Use GL checks.
+// #define USE_GL_CHECKS 1
 
 // #define MRV2_DEBUG_GL 1  // Set this to debug OpenGL errors with a callback

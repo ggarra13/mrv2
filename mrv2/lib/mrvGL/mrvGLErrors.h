@@ -22,6 +22,7 @@ void glDebugOutput(
     const GLchar* message, const void* userParam);
 #endif
 
+#ifdef USE_GL_CHECKS
 inline void glPrintError(const char* file, const unsigned line)
 {
     GLenum error = glGetError();
@@ -54,3 +55,4 @@ inline void glPrintError(const char* file, const unsigned line)
     std::cerr << " (" << error << ") at " << file << " (" << line << ")"
               << std::endl;
 }
+#endif
