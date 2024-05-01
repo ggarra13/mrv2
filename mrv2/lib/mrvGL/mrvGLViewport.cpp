@@ -60,6 +60,8 @@ namespace mrv
         int stereo = 0;
         int fl_double = FL_DOUBLE;
 #ifdef __APPLE__
+        // \bug: Do not use FL_DOUBLE on Linux or APPLE as it makes
+        // playback slow
         fl_double = 0;
 #endif
 
