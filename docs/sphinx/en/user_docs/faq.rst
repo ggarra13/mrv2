@@ -31,6 +31,13 @@ All Platforms
 	Set to 4GB at least (the default is half your memory)
 
 
+-  Seeking on 4K or 8K movies is too slow.  How can I improve it?
+
+   Use a small Settings Cache Read Ahead and Read Behind with 0 Gigabytes.
+   You will not be able to scrub as nicely, but jumping between frames will
+   be really fast.
+
+  
 Windows
 =======
 
