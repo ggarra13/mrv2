@@ -213,7 +213,7 @@ namespace mrv
         _p(new Private)
     {
         int fl_double = FL_DOUBLE;
-#if defined(__APPLE__)
+#if defined(__APPLE__) || defined(__linux__)
         fl_double = 0;
 #endif
         mode(FL_RGB | FL_ALPHA | FL_STENCIL | fl_double | FL_OPENGL3);
