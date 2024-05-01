@@ -1,6 +1,4 @@
 v1.1.4
-======
-v1.1.4
 =====
 
 This is a major release with big speed improvements and fixes to the color pipeline.
