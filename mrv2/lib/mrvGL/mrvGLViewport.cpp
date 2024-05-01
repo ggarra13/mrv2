@@ -384,7 +384,8 @@ namespace mrv
         if (!player)
             return;
 
-        auto annotations = player->getAnnotations(p.ghostPrevious, p.ghostNext);
+        const auto& annotations =
+            player->getAnnotations(p.ghostPrevious, p.ghostNext);
 
         if (gl.buffer && gl.shader)
         {
