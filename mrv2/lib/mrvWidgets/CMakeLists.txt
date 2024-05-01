@@ -121,7 +121,6 @@ set(SOURCES
 list( APPEND LIBRARIES mrvFlmm mrvFLU mrvCore ${FLTK_LIBRARIES} ${FLTK_gl_LIBRARIES} ${JASPER_LIBRARIES} MINIZIP::minizip)
 
 if(UNIX AND NOT APPLE)
-    find_package(OpenGL REQUIRED)
     list(APPEND LIBRARIES OpenGL::OpenGL OpenGL::EGL)
 endif()
 
@@ -146,7 +145,7 @@ endif()
 add_library(mrvWidgets ${SOURCES} ${HEADERS})
 
 
-if (UNIX)
+if (UNIX AND NOT APPLE)
     if (TLRENDER_X11)
 	list(APPEND LIBRARIES Xss )
     endif()

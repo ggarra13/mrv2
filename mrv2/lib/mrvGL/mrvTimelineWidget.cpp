@@ -657,7 +657,7 @@ namespace mrv
                 {
                     gl::OffscreenBufferOptions offscreenBufferOptions;
                     offscreenBufferOptions.colorType =
-                        image::PixelType::RGBA_F32;
+                        image::PixelType::RGBA_U8;
                     if (gl::doCreate(
                             p.buffer, renderSize, offscreenBufferOptions))
                     {
