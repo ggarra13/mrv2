@@ -29,6 +29,8 @@
 
 #include "mrvFl/mrvIO.h"
 
+#include "mrvUI/mrvUtil.h"
+
 #include "mrvGL/mrvThumbnailCreator.h"
 #include "mrvGL/mrvTimelineWidget.h"
 #include "mrvGL/mrvGLErrors.h"
@@ -218,6 +220,8 @@ namespace mrv
         // playback slow
 #if defined(__APPLE__) || defined(__linux__)
         fl_double = 0;
+        if (runningUnderXWayland())
+            fl_double = FL_DOUBLE;
 #endif
         mode(FL_RGB | FL_ALPHA | FL_STENCIL | fl_double | FL_OPENGL3);
     }
