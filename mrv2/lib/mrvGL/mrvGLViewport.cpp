@@ -206,15 +206,15 @@ namespace mrv
         {
             if (renderSize.isValid())
             {
-                image::PixelType colorBufferType = image::PixelType::RGBA_U8;
+                gl.colorBufferType = image::PixelType::RGBA_U8;
                 int accuracy = p.ui->uiPrefs->uiPrefsColorAccuracy->value();
                 switch (accuracy)
                 {
                 case kAccuracyFloat32:
-                    colorBufferType = image::PixelType::RGBA_F32;
+                    gl.colorBufferType = image::PixelType::RGBA_F32;
                     break;
                 case kAccuracyFloat16:
-                    colorBufferType = image::PixelType::RGBA_F16;
+                    gl.colorBufferType = image::PixelType::RGBA_F16;
                     break;
                 case kAccuracyAuto:
                     if (!p.videoData[0].layers.empty() &&
@@ -228,13 +228,19 @@ namespace mrv
                         case image::PixelType::RGB_F32:
                         case image::PixelType::L_F32:
                         case image::PixelType::LA_F32:
-                            colorBufferType = image::PixelType::RGBA_F32;
+                            gl.colorBufferType = image::PixelType::RGBA_F32;
                             break;
                         case image::PixelType::RGBA_F16:
                         case image::PixelType::RGB_F16:
                         case image::PixelType::L_F16:
                         case image::PixelType::LA_F16:
-                            colorBufferType = image::PixelType::RGBA_F16;
+                            gl.colorBufferType = image::PixelType::RGBA_F16;
+                            break;
+                        case image::PixelType::RGBA_U16:
+                        case image::PixelType::RGB_U16:
+                        case image::PixelType::L_U16:
+                        case image::PixelType::LA_U16:
+                            gl.colorBufferType = image::PixelType::RGBA_U16;
                             break;
                         default:
                             break;
@@ -242,9 +248,6 @@ namespace mrv
                     }
                     break;
                 }
-
-                if (gl.colorBufferType != colorBufferType)
-                    gl.colorBufferType = colorBufferType;
 
                 gl::OffscreenBufferOptions offscreenBufferOptions;
                 offscreenBufferOptions.colorType = gl.colorBufferType;
