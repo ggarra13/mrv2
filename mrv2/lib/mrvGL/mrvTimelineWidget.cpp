@@ -214,7 +214,7 @@ namespace mrv
         Fl_SuperClass(X, Y, W, H, L),
         _p(new Private)
     {
-        int fl_double = FL_DOUBLE;
+        int fl_double = FL_DOUBLE;  // _WIN32 needs this
 
         // Do not use FL_DOUBLE on Linux or APPLE as it makes
         // playback slow

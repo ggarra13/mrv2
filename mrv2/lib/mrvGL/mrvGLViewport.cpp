@@ -58,8 +58,8 @@ namespace mrv
         _gl(new GLPrivate)
     {
         int stereo = 0;
-        int fl_double = FL_DOUBLE;
-#ifdef __APPLE__
+        int fl_double = FL_DOUBLE;  // needed on Linux and _WIN32
+#if defined(__APPLE__)
         // \bug: Do not use FL_DOUBLE on APPLE as it makes
         // playback slow
         fl_double = 0;
