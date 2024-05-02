@@ -3,7 +3,8 @@ v1.1.5
 
 This is a bug fix release for the regressions in v1.1.4:
 
-- A last minute change on Linux made OpenGL slower, not faster.
+- Added a FAQ on the documentation about Linux XWayland and Wayland on
+  why it could make playback slow if your OS was not configured properly.
 - Fixed annotations not showing when Blit Viewports was on.
 - Fixed hiding of pixel bar sometimes failing even when
   Playback->Auto Hide Pixel Bar

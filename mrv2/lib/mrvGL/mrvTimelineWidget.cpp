@@ -216,14 +216,9 @@ namespace mrv
     {
         int fl_double = FL_DOUBLE;  // _WIN32 needs this
 
-        // Do not use FL_DOUBLE on Linux or APPLE as it makes
-        // playback slow
-#if defined(__APPLE__) // || defined(__linux__)
+        // Do not use FL_DOUBLE on APPLE as it makes playback slow
+#if defined(__APPLE__)
         fl_double = 0;
-        if (desktop::XWayland())
-        {
-            fl_double = FL_DOUBLE;
-        }
 #endif
         mode(FL_RGB | FL_ALPHA | FL_STENCIL | fl_double | FL_OPENGL3);
     }

@@ -25,7 +25,7 @@ class AboutUI {open
   } {
     Fl_Window uiMain {
       label {About mrv2} open
-      xywh {1065 256 535 395} type Double resizable
+      xywh {0 0 535 395} type Double resizable
       code0 {//main->uiMain->add(o);} modal visible
     } {
       Fl_Group {} {open
@@ -39,12 +39,12 @@ auto a = mrv::string::split( s, '\\n' );
 std::vector<std::string>::iterator i = a.begin();
 std::vector<std::string>::iterator e = a.end();
 for (; i != e; ++i )
-	v->uiAbout->uiGPUInfo->add( (*i).c_str() );} open
-          xywh {0 0 535 395}
+	v->uiAbout->uiGPUInfo->add( (*i).c_str() );} open selected
+          xywh {0 0 535 395} selection_color 7
         } {
           Fl_Group uiAbout {
             label mrv2 open
-            xywh {2 29 530 362} hide
+            xywh {2 29 530 362}
           } {
             Fl_Browser {} {
               xywh {20 38 494 338} color 49 textcolor 32
@@ -82,10 +82,10 @@ for (; i != e; ++i )
           }
           Fl_Group {} {
             label Video open
-            xywh {0 24 535 370}
+            xywh {0 24 535 370} hide
           } {
             Fl_Browser {} {
-              label Codecs selected
+              label Codecs
               xywh {20 53 495 100} color 49 align 1 textcolor 32 deactivate
               code0 {mrv::ffmpeg_codec_information(o);}
               class {mrv::TextBrowser}

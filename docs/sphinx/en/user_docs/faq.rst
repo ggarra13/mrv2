@@ -8,6 +8,23 @@ All Platforms
 - My plaback is too slow.  How can I improve it?
 
   Check that you have:
+
+    * Help->About
+
+      - Go to the HW tab.
+
+	Check the GPU information and make sure that Vendor/Renderer is not
+	Mesa, but the appropriate for your graphics card.  For example:
+	
+	Vendor:     NVIDIA Corporation
+	Renderer:   NVIDIA GeForce RTX 3080/PCIe/SSE2
+	Version:    4.6.0 NVIDIA 535.171.04
+
+	Max. Texture Size:32768 x 32768
+
+	If it is using Mesa, you may need to configure XWayland/Wayland
+	correctly for your OS and graphics card.
+	Or use mrv2 not on Wayland but on X11/Xorg.
   
     * Window->Preferences
 

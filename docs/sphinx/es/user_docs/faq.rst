@@ -9,6 +9,23 @@ All Platforms
 
   Chequée que tengas:
   
+    * Ayuda->Acerca
+
+      - Vaya a la pestaña HW.
+
+	Chequée la información de GPU y asegúrese que Vendedor/Renderer no sea
+	Mesa, pero el apropiado para su tarjeta gráfica.  Por ejemplo:
+	
+	Vendedor:   NVIDIA Corporation
+	Renderer:   NVIDIA GeForce RTX 3080/PCIe/SSE2
+	Versión:    4.6.0 NVIDIA 535.171.04
+
+	Max. Tamaño Textura:32768 x 32768
+
+	Si está usando Mesa, puede que necesite configurar XWayland/Wayland
+	correctamente para su OS y tarjeta gráfica.
+	O usar mrv2 no en Wayland pero en X11/Xorg.
+  
     * Ventana->Preferencias
 
       - OpenGL

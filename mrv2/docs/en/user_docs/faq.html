@@ -104,6 +104,21 @@
 <p>Check that you have:</p>
 <blockquote>
 <div><ul>
+<li><p>Help-&gt;About</p>
+<ul>
+<li><p>Go to the HW tab.</p>
+<p>Check the GPU information and make sure that Vendor/Renderer is not
+Mesa, but the appropriate for your graphics card.  For example:</p>
+<p>Vendor:     NVIDIA Corporation
+Renderer:   NVIDIA GeForce RTX 3080/PCIe/SSE2
+Version:    4.6.0 NVIDIA 535.171.04</p>
+<p>Max. Texture Size:32768 x 32768</p>
+<p>If it is using Mesa, you may need to configure XWayland/Wayland
+correctly for your OS and graphics card.
+Or use mrv2 not on Wayland but on X11/Xorg.</p>
+</li>
+</ul>
+</li>
 <li><p>Window-&gt;Preferences</p>
 <ul>
 <li><p>OpenGL</p>

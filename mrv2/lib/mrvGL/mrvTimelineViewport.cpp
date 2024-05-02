@@ -1004,7 +1004,7 @@ namespace mrv
 
         if (p.resizeWindow)
         {
-            p.resizeWindow = p.switchClip = false;
+            p.switchClip = false;
             if (!p.presentation)
                 resizeWindow();
             else
@@ -1307,8 +1307,8 @@ namespace mrv
     void TimelineViewport::resizeWindow() noexcept
     {
         TLRENDER_P();
-        auto renderSize = getRenderSize();
-
+        const auto& renderSize = getRenderSize();
+        
         if (!renderSize.isValid())
             return;
 
@@ -1321,9 +1321,15 @@ namespace mrv
 
         int minx, miny, maxW, maxH, posX, posY;
         Fl::screen_work_area(minx, miny, maxW, maxH, screen);
-
+        
         PreferencesUI* uiPrefs = p.ui->uiPrefs;
-        if (uiPrefs->uiWindowFixedPosition->value())
+        bool wayland = false;
+#ifdef __linux__
+#    ifdef FLTK_USE_WAYLAND
+        wayland = fl_wl_display();
+#    endif
+#endif
+        if (!wayland && uiPrefs->uiWindowFixedPosition->value())
         {
             posX = (int)uiPrefs->uiWindowXPosition->value();
             posY = (int)uiPrefs->uiWindowYPosition->value();
@@ -1339,7 +1345,7 @@ namespace mrv
 
         int dW = decW - mw->w();
         int dH = decH - mw->h();
-
+        
         maxW -= dW;
         maxH -= dH;
         posX += dW / 2;
@@ -1417,9 +1423,18 @@ namespace mrv
                 H = maxH;
         }
 
+
+        //
+        // Final sanity checks.
+        //
+        if (W > maxW)
+            W = maxW;
+        if (H > maxH)
+            H = maxH;
+
         if (posX + W > maxW)
             posX = minx;
-        if (posY + W > maxH)
+        if (posY + H > maxH)
             posY = miny;
 
         mw->resize(posX, posY, W, H);
@@ -1432,6 +1447,8 @@ namespace mrv
         p.ui->uiRegion->layout();
 
         set_edit_mode_cb(editMode, p.ui);
+
+        p.resizeWindow = false; 
     }
 
     math::Vector2i TimelineViewport::_getFocus(int X, int Y) const noexcept
