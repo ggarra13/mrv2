@@ -27,7 +27,8 @@ params=$*
 #
 . etc/build_dir.sh
 
-export BUILD_DIR=BUILD-$KERNEL-$ARCH-minimal/${BUILD_TYPE_DIR}
+export build_root=BUILD-$KERNEL-$ARCH-python
+export BUILD_DIR=${build_root}/${BUILD_TYPE_DIR}
 mkdir -p $BUILD_DIR
 
 
@@ -44,9 +45,9 @@ echo "Saving compile log to $BUILD_DIR/compile.log ..."
 #
 # These are some of the expensive mrv2 options
 #
-export BUILD_PYTHON=OFF
+export BUILD_PYTHON=ON
 export MRV2_PYFLTK=OFF
-export MRV2_PYBIND11=OFF
+export MRV2_PYBIND11=ON
 export MRV2_NETWORK=OFF
 export MRV2_PDF=OFF
 
@@ -55,8 +56,7 @@ export MRV2_PDF=OFF
 #
 export TLRENDER_AV1=OFF
 export TLRENDER_FFMPEG=OFF
-export TLRENDER_FFMPEG_MINIMAL=ON
-export TLRENDER_JPEG=OFF
+export TLRENDER_FFMPEG_MINIMAL=OFF
 export TLRENDER_NDI=OFF
 export TLRENDER_NET=OFF
 export TLRENDER_RAW=OFF
@@ -71,5 +71,5 @@ export TLRENDER_YASM=OFF
 
 echo
 echo "Saving compile log to $BUILD_DIR/compile.log ..."
-cmd="./runme_nolog.sh --minimal $params 2>&1 | tee $BUILD_DIR/compile.log"
+cmd="./runme_nolog.sh --build-dir ${build_root} --ask $params 2>&1 | tee $BUILD_DIR/compile.log"
 run_cmd $cmd

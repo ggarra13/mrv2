@@ -18,15 +18,12 @@ fi
 
 . etc/build_dir.sh
 
+locate_python
+
 export LD_LIBRARY_PATH=$OLD_LD_LIBRARY_PATH:$BUILD_DIR/install/lib64:$BUILD_DIR/install/lib
 
-site_dir=$BUILD_DIR/install/lib/python${PYTHON_VERSION}/site-packages/requests
-if [[ $KERNEL == *Msys* ]]; then
-    site_dir=$BUILD_DIR/install/bin/Lib/site-packages/requests
-fi
-
-if [[ ! -d $site_dir ]]; then
-    $PYTHONEXE -m pip install requests
+if [[ ! -d $PYTHON_SITEDIR/requests ]]; then
+    $PYTHON -m pip install requests
 fi
 
 export TAG=$1
@@ -39,4 +36,4 @@ date_created=`git for-each-ref --format="%(creatordate:iso)" refs/tags/$TAG`
 today=`date +'%F %T'`
 echo "DATE CREATED: ${date_created}"
 echo "NOW         : ${today}"
-$PYTHONEXE bin/python/github-download-count.py ggarra13 mrv2 $TAG
+$PYTHON bin/python/github-download-count.py ggarra13 mrv2 $TAG

@@ -121,12 +121,20 @@ if [ -z "$TLRENDER_X264" ]; then
     export TLRENDER_X264=OFF
 fi
 
+if [ -z "$BUILD_WAYLAND" ]; then
+    export BUILD_WAYLAND=ON
+fi
+
+if [ -z "$BUILD_X11" ]; then
+    export BUILD_X11=ON
+fi
+
 if [ -z "$TLRENDER_WAYLAND" ]; then
-    export TLRENDER_WAYLAND=ON
+    export TLRENDER_WAYLAND=${BUILD_WAYLAND}
 fi
 
 if [ -z "$TLRENDER_X11" ]; then
-    export TLRENDER_X11=ON  # Not yet possible to turn it off
+    export TLRENDER_X11=${BUILD_X11}
 fi
 
 if [ -z "$TLRENDER_YASM" ]; then
@@ -153,8 +161,8 @@ mkdir -p $BUILD_DIR/install
 if [[ $KERNEL == *Linux* ]]; then
     echo "Common options"
     echo
-    echo "Wayland support .................... ${TLRENDER_WAYLAND} 	(TLRENDER_WAYLAND)"
-    echo "X11 support ........................ ${TLRENDER_X11}     	(TLRENDER_X11)"
+    echo "Wayland support .................... ${TLRENDER_WAYLAND} 	(BUILD_WAYLAND)"
+    echo "X11 support ........................ ${TLRENDER_X11}     	(BUILD_X11)"
     echo
 fi
 

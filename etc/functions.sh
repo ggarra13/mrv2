@@ -92,6 +92,86 @@ extract_python_version()
 }
 
 #
+# Function to locate python.  Returns:
+# PYTHONDIR        - directory of python executable
+# PYTHONEXE        - name of python executable
+# PYTHON           - full path to python executable
+# PYTHON_VERSION   - full version of python executable, like 3.11
+# PYTHON_SITEDIR   - directory of python site libraries
+# PYTHON_LIBDIR    - directory of python dynamic libraries
+#
+locate_python()
+{
+    export PYTHONEXE=""
+    local locations="${BUILD_DIR}/install/bin/ /usr/local/bin /usr/bin"
+    for location in $locations; do
+	export PYTHONEXE=$(ls ${location}/python* 2> /dev/null) || PYTHON=""
+	if [[ "$PYTHONEXE" != "" ]]; then
+	    export PYTHONDIR=$location
+	    export PYTHONEXE=`echo "$PYTHONEXE" | grep -o '/python.*' | head -1`
+	    export PYTHON=$PYTHONDIR/$PYTHONEXE
+	    if [[ $KERNEL != *Msys* ]]; then
+		while true; do
+		    if [[ -L $PYTHON ]]; then
+			export PYTHONEXE=`readlink ${PYTHON}`
+			export PYTHON=$PYTHONDIR/$PYTHONEXE
+		    else
+			break
+		    fi
+		done
+	    fi
+	    break
+	fi
+    done
+
+    if [[ "$PYTHON" == "" ]]; then
+	echo "No python found!!! Please install it in your PATH"
+	exit 1
+    fi
+
+    local lib_dirs="${PYTHONDIR}/../lib/${PYTHONEXE} ${PYTHONDIR}/Lib/"
+    export PYTHON_LIBDIR=""
+    export PYTHON_SITEDIR=""
+    for PYTHON_LIBDIR in $lib_dirs; do
+	if [[ $KERNEL != *Msys* ]]; then
+	    export PYTHON_LIBDIR=`readlink -f "${PYTHON_LIBDIR}"`
+	fi
+	if [[ -d "${PYTHON_LIBDIR}" ]]; then
+	    export PYTHON_SITEDIR="${PYTHON_LIBDIR}/site-packages"
+	    break
+	fi
+    done
+
+    if [[ ! -d "${PYTHON_SITEDIR}" ]]; then
+	echo "Python site-packages could not be determined!"
+	echo "PYTHON_LIBDIR=${PYTHON_LIBDIR}"
+	echo "PYTHON_SITEDIR=${PYTHON_SITEDIR}"
+	exit 1
+    fi
+
+    if [[ $KERNEL == *Msys* ]]; then
+	local python_dlls=`ls ${PYTHONDIR}/python*.dll`
+	local python_dll=`echo "$python_dlls" | grep -o '/python.*' | head -1`
+
+	local full=`echo "${python_dll}" | sed -e 's#.*/python##' | sed -e 's#.dll##'`
+	local major=`echo $full | sed -e 's#[0-9][0-9]$##'`
+	local minor=`echo $full | sed -e 's#^[0-9]##'`
+	export PYTHON_VERSION="${major}.${minor}"
+    else
+	export PYTHON_VERSION=`echo "${PYTHON_LIBDIR}" | sed -e 's#.*/python##'`
+    fi
+
+    #
+    # If python version failed, get it from the cmake script.
+    #
+    if [[ "$PYTHON_VERSION" == "" || "$PYTHON_VERSION" == "." ]]; then
+	extract_python_version
+    fi
+    
+}
+
+
+#
 # Auxiliary function to send from the staging location to the packages/
 #
 send_to_packages()

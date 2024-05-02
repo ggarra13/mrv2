@@ -95,7 +95,6 @@ fi
 #
 # Set environment variables to point to install directory
 #
-
 export PATH="$PWD/${BUILD_DIR}/install/bin:$PWD/$BUILD_DIR/install/bin/Scripts:${PATH}"
 
 #
@@ -122,13 +121,9 @@ export PKG_CONFIG_PATH="$PWD/${BUILD_DIR}/install/lib64/pkgconfig:$PWD/${BUILD_D
 #
 # Set the name of python executable we build
 #
-if [[ $KERNEL == *Msys* ]]; then
-    export PYTHONEXE="$PWD/${BUILD_DIR}/install/bin/python.exe"
-else
-    export PYTHONEXE="$PWD/${BUILD_DIR}/install/bin/python${PYTHON_VERSION}"
-fi
+locate_python
 
 #
 # Set PYTHONPATH
 #
-export PYTHONPATH="$PWD/${BUILD_DIR}/install/lib/python${PYTHON_VERSION}:$PWD/${BUILD_DIR}/install/lib/python${PYTHON_VERSION}/site-packages:${PYTHONPATH}"
+export PYTHONPATH="${PYTHON_LIBDIR}:${PYTHON_SITEDIR}:${PYTHONPATH}"

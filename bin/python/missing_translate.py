@@ -31,7 +31,6 @@ def search_untranslated_strings(langs):
         po_file_path = os.path.join(root, lang + ".po")
 
         if not os.path.exists(po_file_path):
-            print(po_file_path, "does not exist.")
             continue
 
         with open(po_file_path, "r", encoding="utf-8") as fp:

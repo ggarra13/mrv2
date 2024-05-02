@@ -17,6 +17,7 @@ else
     . etc/functions.sh
 fi
 
+echo "BUILD_DIR=${BUILD_DIR}"
 
 dir=$BUILD_DIR/mrv2/src/mrv2-build
 
@@ -38,7 +39,8 @@ if [[ "$CMAKE_TARGET" == "" ]]; then
     CMAKE_TARGET=install
 fi
 
-if [[ $CMAKE_TARGET == doc* || $CMAKE_TARGET == "package" ]]; then
+
+if [[ $CMAKE_TARGET == "package" || $CMAKE_TARGET == "install" ]]; then
     #
     # First, generate the translations and install them
     #
@@ -48,19 +50,17 @@ if [[ $CMAKE_TARGET == doc* || $CMAKE_TARGET == "package" ]]; then
     cd -
 fi
 
-if [[ $CMAKE_TARGET == doc* ]]; then
+if [[ "$CMAKE_TARGET" == doc* ]]; then
     
     . ./etc/sphinx_install.sh # Install Sphinx python modules
-
-    #
-    # Second, generate the documentation and install them
-    #
+    
     cd $dir
+
     run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t doc
     export CMAKE_TARGET=install
+
     cd -
 fi
-
 
 cd $dir
 

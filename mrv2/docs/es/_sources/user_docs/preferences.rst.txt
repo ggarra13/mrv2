@@ -533,11 +533,11 @@ La Preferencias de  Errores permite establecer que hacer en caso de un error.
 
 .. topic:: Error en FFmpeg
 
-Podés elegir entre Hacer Nada (por defecto), Abrir Bitácora en el Muelle o Abrir Bitácora en la Ventana.
+	   Podés elegir entre Hacer Nada (por defecto), Abrir Bitácora en el Muelle o Abrir Bitácora en la Ventana.
 
 .. topic:: Errores
 
-Podés elegir entre Hacer Nada, Abrir Bitácora en el Muelle o Abrir Bitácora en la Ventana (por defecto).
+	   Podés elegir entre Hacer Nada, Abrir Bitácora en el Muelle o Abrir Bitácora en la Ventana (por defecto).
 
 Comportamiento
 ===============

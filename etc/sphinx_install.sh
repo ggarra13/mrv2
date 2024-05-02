@@ -7,8 +7,10 @@
 # This script installs with pip the needed modules for documentation
 #
 
-export PYTHON=`ls $BUILD_DIR/install/bin/python* | grep -o 'python.*' | head -1 `
-if [[ ! -d $BUILD_DIR/install/lib/$PYTHON/site-packages/sphinx ]]; then
-    run_cmd $BUILD_DIR/install/bin/$PYTHON -m pip install --upgrade pip --no-cache-dir
-    run_cmd $BUILD_DIR/install/bin/$PYTHON -m pip install --upgrade sphinx sphinx_rtd_theme requests urllib3 --no-cache-dir
+locate_python
+
+export PYTHONPATH=$PYTHON_SITEDIR:$PYTHON_PATH
+if [[ ! -d ${SITE_DIR}/sphinx ]]; then
+    run_cmd $PYTHON -m pip install --upgrade pip --no-cache-dir
+    run_cmd $PYTHON -m pip install --upgrade sphinx sphinx_rtd_theme requests urllib3 --no-cache-dir
 fi
