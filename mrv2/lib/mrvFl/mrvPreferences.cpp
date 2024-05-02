@@ -810,15 +810,9 @@ namespace mrv
 
         opengl.get("blit_viewports", tmp, 1);
 
-        if (runningUnderXWayland())
-            tmp = 0;
-
         uiPrefs->uiPrefsBlitViewports->value(tmp);
 
         opengl.get("blit_timeline", tmp, 1);
-        
-        if (runningUnderXWayland())
-            tmp = 0;
         
         uiPrefs->uiPrefsBlitTimeline->value(tmp);
 
