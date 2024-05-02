@@ -25,6 +25,12 @@ All Platforms
 	If it is using Mesa, you may need to configure XWayland/Wayland
 	correctly for your OS and graphics card.
 	Or use mrv2 not on Wayland but on X11/Xorg.
+
+	On Ubuntu 22.04.4 LTS, you should install the proprietary NVidia
+	drivers 535 at least and do::
+
+	  sudo apt install libnvidia-egl-wayland1
+	
   
     * Window->Preferences
 

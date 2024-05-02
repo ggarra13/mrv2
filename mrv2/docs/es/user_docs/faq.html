@@ -117,6 +117,11 @@ Versión:    4.6.0 NVIDIA 535.171.04</p>
 <p>Si está usando Mesa, puede que necesite configurar XWayland/Wayland
 correctamente para su OS y tarjeta gráfica.
 O usar mrv2 no en Wayland pero en X11/Xorg.</p>
+<p>En Ubuntu 22.04.4 LTS, deberás instalar los drivers privativos de
+NVidia 535 por lo menos y hacer:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="n">libnvidia</span><span class="o">-</span><span class="n">egl</span><span class="o">-</span><span class="n">wayland1</span>
+</pre></div>
+</div>
 </li>
 </ul>
 </li>

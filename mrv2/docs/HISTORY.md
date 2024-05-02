@@ -5,11 +5,15 @@ This is a bug fix release for the regressions in v1.1.4:
 
 - Added a FAQ on the documentation about Linux XWayland and Wayland on
   why it could make playback slow if your OS was not configured properly.
+  I added current instructions on Ubuntu 22.04.4 LTS to get full Wayland
+  support working properly.
+- This is the first version that supports Wayland fully.  The warning about
+  Wayland being in beta will probably be removed soon.
 - Fixed annotations not showing when Blit Viewports was on.
-- Fixed hiding of pixel bar sometimes failing even when
-  Playback->Auto Hide Pixel Bar
+- Fixed hiding of pixel bar sometimes failing even when:
+      Playback->Auto Hide Pixel Bar
   and:
-  Playback->Auto Playback was on.
+      Playback->Auto Playback was on.
 - Fixed not hiding of the pixel bar when the image was open from the
   recent menus or from the command-line.
 - Fixed color buffers not taking full advantage of OpenGL improvements on
