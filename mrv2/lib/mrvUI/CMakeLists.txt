@@ -4,12 +4,14 @@
 
 set(HEADERS
     mrvAsk.h
+    mrvDesktop.h
     mrvMenus.h
     mrvUtil.h
 )
 
 set(SOURCES
     mrvAsk.cpp
+    mrvDesktop.cpp
     mrvMenus.cpp
     mrvUtil.cpp
 )

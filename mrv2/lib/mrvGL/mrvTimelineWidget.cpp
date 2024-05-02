@@ -29,7 +29,7 @@
 
 #include "mrvFl/mrvIO.h"
 
-#include "mrvUI/mrvUtil.h"
+#include "mrvUI/mrvDesktop.h"
 
 #include "mrvGL/mrvThumbnailCreator.h"
 #include "mrvGL/mrvTimelineWidget.h"
@@ -86,7 +86,7 @@ namespace mrv
             void _init(const std::shared_ptr<system::Context>& context)
             {
                 IWindow::_init(
-                    "tl::qtwidget::TimelineWindow", context, nullptr);
+                    "tl::anonymous::TimelineWindow", context, nullptr);
             }
 
             TimelineWindow() {}
@@ -218,8 +218,12 @@ namespace mrv
 
         // Do not use FL_DOUBLE on Linux or APPLE as it makes
         // playback slow
-#if defined(__APPLE__) || defined(__linux__)
+#if defined(__APPLE__) // || defined(__linux__)
         fl_double = 0;
+        if (desktop::XWayland())
+        {
+            fl_double = FL_DOUBLE;
+        }
 #endif
         mode(FL_RGB | FL_ALPHA | FL_STENCIL | fl_double | FL_OPENGL3);
     }
