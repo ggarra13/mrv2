@@ -249,7 +249,7 @@ namespace mrv
 #ifdef __linux__
 
 #    ifdef FLTK_USE_X11
-        if (!fl_wl_display())
+        if (fl_x11_display())
         {
             int ok = XInitThreads();
             if (!ok)
