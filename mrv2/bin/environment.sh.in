@@ -40,19 +40,11 @@ export DYLD_FALLBACK_LIBRARY_PATH="${LD_LIBRARY_PATH}"
 export PYTHONPATH="${dir}/lib/python@MRV2_PYTHON_VERSION@:${dir}/lib/python@MRV2_PYTHON_VERSION@/lib-dynload:${dir}/lib/python@MRV2_PYTHON_VERSION@/site-packages:${HOME}/.local/lib/python@MRV2_PYTHON_VERSION@/site_packages:${PYTHONPATH}"
 
 #
-# For Linux, when running on Wayland we switch it to run on X11 emulation,
-# as Wayland is still too buggy.
+# For Linux, we now default to Wayland that rocks!
 #
 if [[ "$XDG_SESSION_TYPE" == "wayland" && "$FLTK_BACKEND" == "" ]]; then
-    echo " Wayland support is currently beta."
-    echo " If you still want to run FLTK applications with Wayland,"
-    echo " set the environment variable FLTK_BACKEND to wayland, like:"
+    echo "Running under Wayland.  To run under XWayland, set:"
     echo ""
-    echo "   export FLTK_BACKEND=wayland"
+    echo "   export FLTK_BACKEND=x11"
     echo ""
-    if [[ "$FLTK_BACKEND" == "" ]]; then
-	echo " Setting the environment variable FLTK_BACKEND=x11."
-	echo ""
-	export FLTK_BACKEND=x11
-    fi
 fi

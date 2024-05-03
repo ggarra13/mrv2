@@ -9,8 +9,8 @@ It is a bug fix release for the regressions in v1.1.4 which was rushed:
   I added current instructions on Ubuntu 22.04.4 LTS to get full NVidia
   support working properly on both XWayland and Wayland (yeah!).
 - This is the first version that supports Wayland and XWayland.
-  XWayland is solid.  Wayland currently hangs if you move the timeline outside
-  of the screen (ie. cutting its OpenGL window).
+  For instructions on how to set XWayland and Wayland on Ubuntu 22.04.4 LTS
+  with NVidia drivers, please see Help->Documentation the FAQ section.
 - Fixed annotations not showing when Blit Viewports was on.
 - Fixed hiding of pixel bar sometimes failing even when:
       Playback->Auto Hide Pixel Bar
