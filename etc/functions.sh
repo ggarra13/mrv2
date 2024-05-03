@@ -103,7 +103,7 @@ extract_python_version()
 locate_python()
 {
     export PYTHONEXE=""
-    local locations="${BUILD_DIR}/install/bin /usr/local/bin /usr/bin ${PATH}"
+    local locations="${BUILD_DIR}/install/bin ${PATH} /usr/local/bin /usr/bin"
     if [[ $KERNEL == *Msys* ]]; then
 	locations=`echo "${locations}" | sed -e 's/;/ /g'`
     else
