@@ -13,6 +13,8 @@
 #include "mrvPanels/mrvAnnotationsPanel.h"
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
+#include "mrvUI/mrvDesktop.h"
+
 #include "mrvGL/mrvTimelineViewport.h"
 #include "mrvGL/mrvTimelineViewportPrivate.h"
 
@@ -1323,13 +1325,7 @@ namespace mrv
         Fl::screen_work_area(minx, miny, maxW, maxH, screen);
         
         PreferencesUI* uiPrefs = p.ui->uiPrefs;
-        bool wayland = false;
-#ifdef __linux__
-#    ifdef FLTK_USE_WAYLAND
-        wayland = fl_wl_display();
-#    endif
-#endif
-        if (!wayland && uiPrefs->uiWindowFixedPosition->value())
+        if (!desktop::Wayland() && uiPrefs->uiWindowFixedPosition->value())
         {
             posX = (int)uiPrefs->uiWindowXPosition->value();
             posY = (int)uiPrefs->uiWindowYPosition->value();
@@ -1436,13 +1432,8 @@ namespace mrv
             posX = minx;
         if (posY + H > maxH)
             posY = miny;
-
+        
         mw->resize(posX, posY, W, H);
-
-#ifdef FLTK_USE_WAYLAND
-        if (fl_wl_display())
-            Fl::flush();
-#endif
 
         p.ui->uiRegion->layout();
 

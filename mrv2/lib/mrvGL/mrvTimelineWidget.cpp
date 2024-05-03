@@ -222,7 +222,7 @@ namespace mrv
 #if defined(__APPLE__) || defined(__linux__)
         fl_double = 0;
 #    ifdef FLTK_USE_WAYLAND
-        // Wayland has all windows being double
+        // \@bug: Wayland has all windows being double (at least with NVidia)
         if (fl_wl_display())
         {
             fl_double = FL_DOUBLE;

@@ -1731,18 +1731,10 @@ namespace mrv
         //
         // Handle fullscreen and presentation mode
         //
-        if (uiPrefs->uiWindowFixedPosition->value())
+        if (uiPrefs->uiWindowFixedPosition->value() ||
+            uiPrefs->uiWindowFixedSize->value())
         {
-            int x = int(uiPrefs->uiWindowXPosition->value());
-            int y = int(uiPrefs->uiWindowYPosition->value());
-            ui->uiMain->position(x, y);
-        }
-
-        if (uiPrefs->uiWindowFixedSize->value())
-        {
-            int w = int(uiPrefs->uiWindowXSize->value());
-            int h = int(uiPrefs->uiWindowYSize->value());
-            ui->uiMain->resize(ui->uiMain->x(), ui->uiMain->y(), w, h);
+            ui->uiView->resizeWindow();
         }
 
         bool frameView = (bool)uiPrefs->uiPrefsAutoFitImage->value();

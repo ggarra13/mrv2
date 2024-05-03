@@ -10,6 +10,8 @@
 
 #include "mrvPreferencesUI.h"
 
+#include "mrvUI/mrvDesktop.h"
+
 #include <FL/platform.H>
 #include <FL/fl_utf8.h>
 #include <FL/Enumerations.H>
