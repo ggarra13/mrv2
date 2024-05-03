@@ -1006,7 +1006,6 @@ namespace mrv
 
         if (p.resizeWindow)
         {
-            p.switchClip = false;
             if (!p.presentation)
                 resizeWindow();
             else
@@ -1015,9 +1014,14 @@ namespace mrv
         else if (p.frameView && p.switchClip)
         {
             frameView();
-            p.switchClip = false;
         }
 
+        if (p.switchClip)
+        {
+            p.switchClip = false;
+            p.droppedFrames = 0;
+        }
+        
         _getTags();
         int layerId = sender->videoLayer();
         p.missingFrame = false;
