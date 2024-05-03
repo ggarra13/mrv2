@@ -41,6 +41,8 @@
 
 #include "mrViewer.h"
 
+#include <FL/platform.H>
+
 namespace mrv
 {
     namespace
@@ -214,11 +216,18 @@ namespace mrv
         Fl_SuperClass(X, Y, W, H, L),
         _p(new Private)
     {
-        int fl_double = FL_DOUBLE;  // _WIN32 needs this
+        int fl_double = FL_DOUBLE; // _WIN32 needs this
 
         // Do not use FL_DOUBLE on APPLE as it makes playback slow
-#if defined(__APPLE__)
+#if defined(__APPLE__) || defined(__linux__)
         fl_double = 0;
+#    ifdef FLTK_USE_WAYLAND
+        // Wayland has all windows being double
+        if (fl_wl_display())
+        {
+            fl_double = FL_DOUBLE;
+        }
+#    endif
 #endif
         mode(FL_RGB | FL_ALPHA | FL_STENCIL | fl_double | FL_OPENGL3);
     }
