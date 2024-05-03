@@ -5,7 +5,8 @@
 include( ExternalProject )
 
 #set( FLTK_GIT_TAG master )
-set(FLTK_GIT_TAG b402b6a8397f9fc13157813d39d505ea9ead00f0)
+#set(FLTK_GIT_TAG b402b6a8397f9fc13157813d39d505ea9ead00f0) # previous stable
+set(FLTK_GIT_TAG b726211b9b9eefeaabf5ba366565792e943a18b6)  # fixes Wayland issue
 
 if(MRV2_PYFLTK)
     # If we are building pyFLTK compile shared

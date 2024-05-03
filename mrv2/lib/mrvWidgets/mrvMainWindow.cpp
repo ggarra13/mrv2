@@ -10,6 +10,8 @@
 
 #include "mrvPreferencesUI.h"
 
+#include "mrvUI/mrvDesktop.h"
+
 #include <FL/platform.H>
 #include <FL/fl_utf8.h>
 #include <FL/Enumerations.H>
@@ -180,10 +182,10 @@ namespace mrv
         {
             App::ui->uiTimeline->requestThumbnail();
         }
-        
+
         return DropWindow::handle(e);
     }
-    
+
     //! Resize override to handle tile
     void MainWindow::resize(int X, int Y, int W, int H)
     {

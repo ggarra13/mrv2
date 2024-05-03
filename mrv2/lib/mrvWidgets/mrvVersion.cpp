@@ -52,7 +52,11 @@
 #endif
 
 #include <Imath/ImathConfig.h>
-#include <jconfig.h>
+
+#ifdef TLRENDER_JPEG
+#    include <jconfig.h>
+#endif
+
 #include <libintl.h>
 #include <libpng16/png.h>
 #include <mz.h>

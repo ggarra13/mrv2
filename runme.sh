@@ -22,6 +22,10 @@
 #
 params=$*
 
+# Reset library paths
+export LD_LIBRARY_PATH="/usr/local/lib/x86_64-linux-gnu:/usr/local/lib64:/usr/local/lib:/usr/lib/x86_64-linux-gnu:/usr/lib64:/usr/lib"
+export DYLD_LIBRARY_PATH="/usr/local/lib:/usr/lib"
+
 #
 # Find out our build dir
 #
@@ -35,7 +39,6 @@ mkdir -p $BUILD_DIR
 #
 export FLAGS=""
 export CMAKE_FLAGS=""
-export PATH="$OLD_PATH"
 
 
 echo

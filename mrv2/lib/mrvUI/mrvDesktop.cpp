@@ -24,6 +24,20 @@ namespace mrv
 
     namespace desktop
     {
+        bool Wayland()
+        {
+            bool out = false;
+#ifdef __linux__
+#    ifdef FLTK_USE_WAYLAND
+            if (fl_wl_display())
+            {
+                out = true;
+            }
+#    endif
+#endif
+            return out;
+        }
+
         bool XWayland()
         {
             bool out = false;
@@ -47,6 +61,6 @@ namespace mrv
 #endif
             return out;
         }
-        
-    }  // desktop
+
+    } // namespace desktop
 } // namespace mrv

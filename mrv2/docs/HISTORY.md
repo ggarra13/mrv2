@@ -6,11 +6,11 @@ It is a bug fix release for the regressions in v1.1.4 which was rushed:
 
 - Added a FAQ on the documentation about Linux XWayland and Wayland on
   why it could make playback slow if your OS was not configured properly.
-  I added current instructions on Ubuntu 22.04.4 LTS to get full Wayland
+  I added current instructions on Ubuntu 22.04.4 LTS to get full NVidia
   support working properly on both XWayland and Wayland (yeah!).
-- This is the first version that supports Wayland fully.  The warning about
-  Wayland being in beta has been removed.  If you find Wayland bugs, be sure
-  to report them!
+- This is the first version that supports Wayland and XWayland.
+  For instructions on how to set XWayland and Wayland on Ubuntu 22.04.4 LTS
+  with NVidia drivers, please see Help->Documentation the FAQ section.
 - Fixed annotations not showing when Blit Viewports was on.
 - Fixed hiding of pixel bar sometimes failing even when:
       Playback->Auto Hide Pixel Bar
@@ -22,8 +22,8 @@ It is a bug fix release for the regressions in v1.1.4 which was rushed:
   Windows mainly.
 - Fixed incorrect positioning and resizing of the images on loading
   which would crash Wayland.
-- mrv2 can now be build with the pre-installed python, without having to
-  build python.  Of course, in that case, mrv2 cannot be re-distributed.
+- mrv2 can now be built with the pre-installed python, without having to
+  build python itself.  Of course, in that case, mrv2 cannot be re-distributed.
 
 
 v1.1.4

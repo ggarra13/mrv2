@@ -38,3 +38,13 @@ dir=${dir%/*}
 export LD_LIBRARY_PATH="${dir}/lib64:${dir}/lib:${LD_LIBRARY_PATH}:/usr/lib64:/usr/lib"
 export DYLD_FALLBACK_LIBRARY_PATH="${LD_LIBRARY_PATH}"
 export PYTHONPATH="${dir}/lib/python@MRV2_PYTHON_VERSION@:${dir}/lib/python@MRV2_PYTHON_VERSION@/lib-dynload:${dir}/lib/python@MRV2_PYTHON_VERSION@/site-packages:${HOME}/.local/lib/python@MRV2_PYTHON_VERSION@/site_packages:${PYTHONPATH}"
+
+#
+# For Linux, we now default to Wayland that rocks!
+#
+if [[ "$XDG_SESSION_TYPE" == "wayland" && "$FLTK_BACKEND" == "" ]]; then
+    echo "Running under Wayland.  To run under XWayland, set:"
+    echo ""
+    echo "   export FLTK_BACKEND=x11"
+    echo ""
+fi

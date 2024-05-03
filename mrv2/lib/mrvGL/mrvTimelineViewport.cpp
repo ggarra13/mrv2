@@ -13,6 +13,8 @@
 #include "mrvPanels/mrvAnnotationsPanel.h"
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
+#include "mrvUI/mrvDesktop.h"
+
 #include "mrvGL/mrvTimelineViewport.h"
 #include "mrvGL/mrvTimelineViewportPrivate.h"
 
@@ -1308,7 +1310,7 @@ namespace mrv
     {
         TLRENDER_P();
         const auto& renderSize = getRenderSize();
-        
+
         if (!renderSize.isValid())
             return;
 
@@ -1321,15 +1323,9 @@ namespace mrv
 
         int minx, miny, maxW, maxH, posX, posY;
         Fl::screen_work_area(minx, miny, maxW, maxH, screen);
-        
+
         PreferencesUI* uiPrefs = p.ui->uiPrefs;
-        bool wayland = false;
-#ifdef __linux__
-#    ifdef FLTK_USE_WAYLAND
-        wayland = fl_wl_display();
-#    endif
-#endif
-        if (!wayland && uiPrefs->uiWindowFixedPosition->value())
+        if (!desktop::Wayland() && uiPrefs->uiWindowFixedPosition->value())
         {
             posX = (int)uiPrefs->uiWindowXPosition->value();
             posY = (int)uiPrefs->uiWindowYPosition->value();
@@ -1345,7 +1341,7 @@ namespace mrv
 
         int dW = decW - mw->w();
         int dH = decH - mw->h();
-        
+
         maxW -= dW;
         maxH -= dH;
         posX += dW / 2;
@@ -1423,7 +1419,6 @@ namespace mrv
                 H = maxH;
         }
 
-
         //
         // Final sanity checks.
         //
@@ -1439,16 +1434,11 @@ namespace mrv
 
         mw->resize(posX, posY, W, H);
 
-#ifdef FLTK_USE_WAYLAND
-        if (fl_wl_display())
-            Fl::flush();
-#endif
-
         p.ui->uiRegion->layout();
 
         set_edit_mode_cb(editMode, p.ui);
 
-        p.resizeWindow = false; 
+        p.resizeWindow = false;
     }
 
     math::Vector2i TimelineViewport::_getFocus(int X, int Y) const noexcept

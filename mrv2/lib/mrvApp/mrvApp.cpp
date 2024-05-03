@@ -537,7 +537,7 @@ namespace mrv
 #ifdef __linux__
         LOG_INFO(mrv::os::getDesktop());
 #endif
-
+        LOG_INFO(_("Running from ") << mrv::rootpath());
         LOG_INFO(msg);
 
         // Create the main control.
@@ -1005,7 +1005,6 @@ namespace mrv
             item->audioPath = file::Path(audioFileName);
             p.filesModel->add(item);
         }
-
 
         // If we have autoplayback on and auto hide pixel bar, do so here.
         const bool autoHide = ui->uiPrefs->uiPrefsAutoHidePixelBar->value();

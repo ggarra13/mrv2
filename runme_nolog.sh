@@ -226,7 +226,6 @@ if [[ $KERNEL == *Msys* ]]; then
     . $PWD/etc/compile_windows_dlls.sh
 fi
 
-
 cd $BUILD_DIR
 
 cmd="cmake -G '${CMAKE_GENERATOR}' \

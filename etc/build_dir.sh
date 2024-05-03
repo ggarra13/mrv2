@@ -79,7 +79,7 @@ export FLAGS="${FLAGS} $*"
 # Store old LD_LIBRARY_PATH
 #
 if [ -z "$OLD_LD_LIBRARY_PATH" ]; then
-    export OLD_LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/lib/x86_64-linux-gnu/:/lib/x86_64-linux-gnu/:/usr/lib64/:/usr/lib:/lib64:/lib:"
+    export OLD_LD_LIBRARY_PATH="${LD_LIBRARY_PATH}"
 fi
 
 if [ -z "$OLD_DYLD_LIBRARY_PATH" ]; then
@@ -106,7 +106,6 @@ get_cmake_version
 # We set both lib64 and lib to handle differences in Linux RH and Ubuntu
 #
 export LD_LIBRARY_PATH="$PWD/${BUILD_DIR}/install/lib64:$PWD/${BUILD_DIR}/install/lib:${LD_LIBRARY_PATH}"
-
 export DYLD_LIBRARY_PATH="$PWD/${BUILD_DIR}/install/lib:${DYLD_LIBRARY_PATH}"
 
 #
@@ -121,9 +120,19 @@ export PKG_CONFIG_PATH="$PWD/${BUILD_DIR}/install/lib64/pkgconfig:$PWD/${BUILD_D
 #
 # Set the name of python executable we build
 #
-locate_python
+if [[ ! $RUNME || ${BUILD_PYTHON} == OFF || ${BUILD_PYTHON} == 0 ]]; then
+    locate_python
+    #
+    # Set PYTHONPATH
+    #
+    export PYTHONPATH="${PYTHON_LIBDIR}:${PYTHON_SITEDIR}:${PYTHONPATH}"
+else
+    export PYTHONEXE="$PWD/${BUILD_DIR}/install/bin/python${PYTHON_VERSION}"
+    #
+    # Set PYTHONPATH
+    #
+    export PYTHONPATH="$PWD/${BUILD_DIR}/install/lib/python${PYTHON_VERSION}:$PWD/${BUILD_DIR}/install/lib/python${PYTHON_VERSION}/site-packages:${PYTHONPATH}"
+fi
+ 
 
-#
-# Set PYTHONPATH
-#
-export PYTHONPATH="${PYTHON_LIBDIR}:${PYTHON_SITEDIR}:${PYTHONPATH}"
+
