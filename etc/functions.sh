@@ -103,14 +103,13 @@ extract_python_version()
 locate_python()
 {
     export PYTHONEXE=""
-    local locations="${BUILD_DIR}/install/bin/ /usr/local/bin /usr/bin ${PATH}"
+    local locations="${BUILD_DIR}/install/bin /usr/local/bin /usr/bin ${PATH}"
     if [[ $KERNEL == *Msys* ]]; then
 	locations=`echo "${locations}" | sed -e 's/;/ /g'`
     else
 	locations=`echo "${locations}" | sed -e 's/:/ /g'`
     fi
 
-    echo $locations
     for location in $locations; do
 	export pythons=$(ls ${location}/python* 2> /dev/null) || PYTHON=""
 	if [[ "$pythons" != "" ]]; then
@@ -136,9 +135,8 @@ locate_python()
 	echo "No python found!!! Please install it in your PATH"
     fi
 
-    
     export PYTHON_LIBDIR="-unknown-"
-    local lib_dirs="~/.local/lib/${PYTHONEXE} ${PYTHONDIR}/../lib/${PYTHONEXE} ${PYTHONDIR}/Lib/"
+    local lib_dirs="~/.local/lib/${PYTHONEXE} ${PYTHONDIR}/../lib/${PYTHONEXE} ${PYTHONDIR}/Lib"
     for python_libdir in $lib_dirs; do
 	if [[ $KERNEL != *Msys* ]]; then
 	    if [[ -d "${python_libdir}" ]]; then
@@ -154,7 +152,6 @@ locate_python()
     local site_dirs="${HOME}/.local/lib/${PYTHONEXE} ${PYTHON_LIBDIR}"
     export PYTHON_SITEDIR="-unknown-"
     for python_sitedir in $site_dirs; do
-	echo $python_sitedir
 	if [[ -d "${python_sitedir}/site-packages" ]]; then
 	    export PYTHON_SITEDIR="${python_sitedir}/site-packages"
 	    break
