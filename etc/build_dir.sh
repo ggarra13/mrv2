@@ -79,7 +79,7 @@ export FLAGS="${FLAGS} $*"
 # Store old LD_LIBRARY_PATH
 #
 if [ -z "$OLD_LD_LIBRARY_PATH" ]; then
-    export OLD_LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/lib/x86_64-linux-gnu/:/lib/x86_64-linux-gnu/:/usr/lib64/:/usr/lib:/lib64:/lib:"
+    export OLD_LD_LIBRARY_PATH="${LD_LIBRARY_PATH}"
 fi
 
 if [ -z "$OLD_DYLD_LIBRARY_PATH" ]; then

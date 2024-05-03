@@ -22,6 +22,10 @@
 #
 params=$*
 
+# Sanity checks
+unset LD_LIBRARY_PATH
+unset DYLD_LIBRARY_PATH
+
 #
 # Find out our build dir
 #

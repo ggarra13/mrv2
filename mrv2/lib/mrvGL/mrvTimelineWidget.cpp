@@ -227,6 +227,10 @@ namespace mrv
         {
             fl_double = FL_DOUBLE;
         }
+        if (desktop::XWayland())
+        {
+            fl_double = FL_DOUBLE;
+        }
 #    endif
 #endif
         mode(FL_RGB | FL_ALPHA | FL_STENCIL | fl_double | FL_OPENGL3);

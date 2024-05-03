@@ -93,6 +93,7 @@ function( is_system_lib TARGET ISSYSLIB )
 	libpulse
 	libpulse-simple
 	librt
+	libwayland
 	libxcb
 	libxshmfence
 	libstdc

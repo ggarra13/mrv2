@@ -537,7 +537,7 @@ namespace mrv
 #ifdef __linux__
         LOG_INFO(mrv::os::getDesktop());
 #endif
-
+        LOG_INFO(_("Running from ") << mrv::rootpath());
         LOG_INFO(msg);
 
         // Create the main control.

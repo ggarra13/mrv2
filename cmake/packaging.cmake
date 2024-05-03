@@ -79,7 +79,7 @@ if( APPLE )
     set(CPACK_BUNDLE_PLIST ${PROJECT_BINARY_DIR}/Info.plist )
     set(CPACK_BUNDLE_STARTUP_COMMAND ${ROOT_DIR}/etc/macOS/startup.sh)
 elseif(UNIX)
-
+    
     #
     # Linux generators
     #

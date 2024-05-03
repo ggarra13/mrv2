@@ -226,6 +226,9 @@ if [[ $KERNEL == *Msys* ]]; then
     . $PWD/etc/compile_windows_dlls.sh
 fi
 
+# Sanity checks
+unset LD_LIBRARY_PATH
+unset DYLD_LIBRARY_PATH
 
 cd $BUILD_DIR
 
