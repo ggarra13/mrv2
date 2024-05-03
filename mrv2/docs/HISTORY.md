@@ -6,11 +6,11 @@ It is a bug fix release for the regressions in v1.1.4 which was rushed:
 
 - Added a FAQ on the documentation about Linux XWayland and Wayland on
   why it could make playback slow if your OS was not configured properly.
-  I added current instructions on Ubuntu 22.04.4 LTS to get full Wayland
+  I added current instructions on Ubuntu 22.04.4 LTS to get full NVidia
   support working properly on both XWayland and Wayland (yeah!).
-- This is the first version that supports Wayland and XWayland fully.
-  However, you may need to compile from source for it to work (the timeline
-  may show black otherwise with the Rocky Linux pre-compiled versions).
+- This is the first version that supports Wayland and XWayland.
+  XWayland is solid.  Wayland currently hangs if you move the timeline outside
+  of the screen (ie. cutting its OpenGL window).
 - Fixed annotations not showing when Blit Viewports was on.
 - Fixed hiding of pixel bar sometimes failing even when:
       Playback->Auto Hide Pixel Bar
