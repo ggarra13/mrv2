@@ -99,6 +99,10 @@ for i in "$@"; do
 	    export BUILD_TYPE_DIR="Debug"
 	    shift
 	    ;;
+	-y|-yes|--y|--yes)
+	    shift
+	    ASK_TO_CONTINUE=0
+	    ;;
 	--ask|-ask)
 	    shift
 	    ASK_TO_CONTINUE=1

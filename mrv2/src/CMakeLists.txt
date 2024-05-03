@@ -131,7 +131,7 @@ if ( APPLE )
     if(MRV2_PYBIND11)
 	# Install the main python executable
 	install( FILES
-	    ${CMAKE_INSTALL_PREFIX}/bin/python${MRV2_PYTHON_VERSION}
+	    ${PYTHON_EXECUTABLE}
 	    DESTINATION bin/
             PERMISSIONS 
             OWNER_READ OWNER_WRITE OWNER_EXECUTE
@@ -163,7 +163,7 @@ elseif ( UNIX )
     if(MRV2_PYBIND11)
 	# Install the main python executable
 	install( FILES
-	    ${CMAKE_INSTALL_PREFIX}/bin/python${MRV2_PYTHON_VERSION}
+	    ${PYTHON_EXECUTABLE}
 	    DESTINATION bin/
             PERMISSIONS 
             OWNER_READ OWNER_WRITE OWNER_EXECUTE
@@ -197,7 +197,7 @@ elseif(WIN32)
 	endif()
     
 	# Install the main python executable
-	install( FILES "${CMAKE_INSTALL_PREFIX}/bin/python.exe"
+	install( FILES "${PYTHON_EXECUTABLE}"
 	    DESTINATION bin/
 	    COMPONENT applications )
 	

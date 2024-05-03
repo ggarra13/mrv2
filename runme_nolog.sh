@@ -43,6 +43,13 @@ if [ -z "$MRV2_PDF" ]; then
     export MRV2_PDF=ON
 fi
 
+if [ -z "$MRV2_PYTHON" ]; then
+    export MRV2_PYTHON=$PYTHON
+    export TLRENDER_PYTHON=$PYTHON
+else
+    export TLRENDER_PYTHON=$MRV2_PYTHON
+fi
+
 #
 # These are some of the expensive TLRENDER options
 #
@@ -169,6 +176,9 @@ fi
 echo "mrv2 Options"
 echo 
 echo "Build Python........................ ${BUILD_PYTHON} 	(BUILD_PYTHON)"
+if [[ ${BUILD_PYTHON} == OFF || ${BUILD_PYTHON} == 0 ]]; then
+    echo "Python location: ${MRV2_PYTHON}"
+fi
 echo "Build pyFLTK........................ ${MRV2_PYFLTK} 	(MRV2_PYFLTK)"
 echo "Build embedded Python............... ${MRV2_PYBIND11} 	(MRV2_PYBIND11)"
 echo "Build mrv2 Network connections...... ${MRV2_NETWORK} 	(MRV2_NETWORK)"

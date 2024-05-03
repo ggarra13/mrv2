@@ -6,14 +6,7 @@ include( ExternalProject )
 
 set(pybind11_GIT_TAG v2.12.0)
 
-ExternalProject_Add(
-    pybind11
-    GIT_REPOSITORY "https://github.com/pybind/pybind11"
-    GIT_TAG ${pybind11_GIT_TAG}
-    GIT_PROGRESS 1
-    GIT_SHALLOW 1
-    DEPENDS ${PYTHON_DEP}
-    CMAKE_ARGS
+set(pybind11_ARGS
     -DCMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHIECTURES}
     -DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET}
     -DCMAKE_VERBOSE_MAKEFILE=${CMAKE_VERBOSE_MAKEFILE}
@@ -23,9 +16,23 @@ ExternalProject_Add(
     -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}
     -DCMAKE_C_FLAGS=${CMAKE_C_FLAGS}
     -DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
+    -DPYBIND11_TEST:BOOL=OFF
+)
+
+list(APPEND pybind11_ARGS
     -DPython_EXECUTABLE=${Python_EXECUTABLE}
     -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}
-    -DPYBIND11_TEST:BOOL=OFF
+)
+
+ExternalProject_Add(
+    pybind11
+    GIT_REPOSITORY "https://github.com/pybind/pybind11"
+    GIT_TAG ${pybind11_GIT_TAG}
+    GIT_PROGRESS 1
+    GIT_SHALLOW 1
+    DEPENDS ${PYTHON_DEP}
+    CMAKE_ARGS
+    ${pybind11_ARGS}
 )
 
 set( PYBIND11_DEP pybind11 )

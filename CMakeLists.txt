@@ -73,10 +73,6 @@ endif()
 set( PYTHON_DEP )
 if( BUILD_PYTHON )
     include( cmake/Modules/BuildPython.cmake )
-    
-    #
-    # This is needed for our own tlRender's USD building
-    #
     if(UNIX)
 	set( Python_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/python${Python_VERSION} )
     else()
@@ -84,7 +80,10 @@ if( BUILD_PYTHON )
     endif()
 else()
     set(Python_EXECUTABLE "$ENV{PYTHON}")
-    if (NOT ${Python_EXECUTABLE} OR NOT DEFINED ${Python_EXECUTABLE})
+    set(Python_VERSION "$ENV{PYTHON_VERSION}")
+    message(STATUS "Python EXECUTABLE=${Python_EXECUTABLE}")
+    if (NOT Python_EXECUTABLE)
+	# As a last resort...
 	if (UNIX)
 	    set(Python_EXECUTABLE python3)
 	else()
@@ -94,6 +93,7 @@ else()
 endif()
 
 set(PYTHON_EXECUTABLE ${Python_EXECUTABLE} )
+
 
 if(CMAKE_BUILD_TYPE MATCHES "^Debug$")
     # Check for Clang or GCC compiler  (@todo: add Microsoft support)

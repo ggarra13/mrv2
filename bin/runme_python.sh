@@ -22,6 +22,7 @@
 #
 params=$*
 
+
 #
 # Find out our build dir
 #
@@ -37,19 +38,22 @@ mkdir -p $BUILD_DIR
 #
 export FLAGS=""
 export CMAKE_FLAGS=""
+unset PYTHONEXE
+unset PYTHON
+unset PYTHONDIR
+unset PYTHON_SITEDIR
+unset PYTHON_VERSION
 
-
-echo
-echo "Saving compile log to $BUILD_DIR/compile.log ..."
 
 #
 # These are some of the expensive mrv2 options
 #
-export BUILD_PYTHON=ON
+export BUILD_PYTHON=OFF
 export MRV2_PYFLTK=OFF
 export MRV2_PYBIND11=ON
 export MRV2_NETWORK=OFF
 export MRV2_PDF=OFF
+export MRV2_PYTHON=/usr/bin/python3.11
 
 #
 # These are some of the expensive TLRENDER options
@@ -71,5 +75,6 @@ export TLRENDER_YASM=OFF
 
 echo
 echo "Saving compile log to $BUILD_DIR/compile.log ..."
+echo
 cmd="./runme_nolog.sh --build-dir ${build_root} --ask $params 2>&1 | tee $BUILD_DIR/compile.log"
 run_cmd $cmd
