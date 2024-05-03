@@ -134,7 +134,6 @@ locate_python()
 
     if [[ "$PYTHON" == "" ]]; then
 	echo "No python found!!! Please install it in your PATH"
-	exit 1
     fi
 
     
@@ -165,7 +164,6 @@ locate_python()
     if [[ ! -d "${PYTHON_LIBDIR}" ]]; then
 	echo "Python libdir could not be determined!"
 	echo "PYTHON_LIBDIR=${PYTHON_LIBDIR}"
-	exit 1
     fi
 
     if [[ ! -d "${PYTHON_SITEDIR}" ]]; then
