@@ -1,0 +1,113 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2024-05-04 09:55-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+
+
+msgid "No file matching"
+msgstr "No archivo que corresponda"
+
+msgid "was found"
+msgstr "fue encontrada"
+
+msgid "No match found"
+msgstr "No se encontró una versión que corresponda."
+
+msgid "Install Location:"
+msgstr "Lugar de Instalación:"
+
+msgid "Error retrieving value:"
+msgstr "Error obteniendo valor:"
+
+msgid "Unknown platform"
+msgstr "Plataforma desconocida"
+
+msgid "Standard Output:"
+msgstr "Salida Estándar:"
+
+msgid "Standard Error:"
+msgstr "Error Estándar:"
+
+msgid "Starting"
+msgstr "Comenzando"
+
+msgid "An unexpected error occurred:"
+msgstr "Un error inesperado ocurrío:"
+
+msgid "Trying to install"
+msgstr "Tratando de instalar"
+
+msgid "Removed temporary \""
+msgstr "Removí temporaria \""
+
+msgid "The new version of mrv2 was installed."
+msgstr "La nueva version de mrv2 fue instalada."
+
+msgid "Removed temporary"
+msgstr "Removí temporaria"
+
+msgid ""
+"Could not locate mrv2 in:\n"
+msgstr ""
+"No pude encontrar mrv2 en:\n"
+
+msgid "Maybe you installed it in a non-default location."
+msgstr "Tal vez lo instalaste en una ubicación especial."
+
+msgid "Something failed installing mrv2 - It is not in \""
+msgstr "Also falló instalando mrv2 - Es no está en \""
+
+msgid "Something failed installing mrv2 - Return error was: "
+msgstr "Algo falló al instalar mrv2 - El código de error fue: "
+
+msgid "Enter Sudo Password"
+msgstr "Entre la Clave del Administrador"
+
+msgid "Password"
+msgstr "Clave"
+
+msgid "Unable to determine Linux flavor"
+msgstr "No pude determinar el tipo de Linux"
+
+msgid "Downloading:"
+msgstr "Descargando:"
+
+msgid "Download complete:"
+msgstr "Descarga completa:"
+
+msgid "Current version is v"
+msgstr "Version actual es v"
+
+msgid ""
+"\n"
+"Latest at Github is v"
+msgstr ""
+"\n"
+"Última en Github es v"
+
+msgid "Update anyway"
+msgstr "Actualizar igual"
+
+msgid "Downgrade"
+msgstr "Degradar"
+
+msgid "Upgrade"
+msgstr "Actualice"
+
+msgid "No release files found."
+msgstr "No archivos para distribuir encontrados."
+
+msgid "Help/Update mrv2"
+msgstr "Ayuda/Actualizar mrv2"
+

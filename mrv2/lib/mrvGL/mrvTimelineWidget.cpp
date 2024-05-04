@@ -50,7 +50,7 @@ namespace mrv
         const int kTHUMB_WIDTH = 128;
         const int kTHUMB_HEIGHT = 80;
 
-        const double kTimeout = 0.005;
+        const double kTimeout = 0.008;  // 120 fps
         const char* kModule = "timelineui";
     } // namespace
 
@@ -221,17 +221,16 @@ namespace mrv
         // Do not use FL_DOUBLE on APPLE as it makes playback slow
 #if defined(__APPLE__) || defined(__linux__)
         fl_double = 0;
-#    ifdef FLTK_USE_WAYLAND
-        // \@bug: Wayland has all windows being double (at least with NVidia)
-        if (fl_wl_display())
+        if (desktop::Wayland())
+        {
+            // For faster playback, we won't set this window to FL_DOUBLE.
+            // FLTK's EGL Wayland already uses two buffers.
+            //fl_double = FL_DOUBLE;
+        }
+        else if (desktop::XWayland())
         {
             fl_double = FL_DOUBLE;
         }
-        if (desktop::XWayland())
-        {
-            fl_double = FL_DOUBLE;
-        }
-#    endif
 #endif
         mode(FL_RGB | FL_ALPHA | FL_STENCIL | fl_double | FL_OPENGL3);
     }
@@ -408,17 +407,15 @@ namespace mrv
     int TimelineWidget::requestThumbnail(bool fetch)
     {
         TLRENDER_P();
-        if (!p.player)
-            return 0;
 
-        const auto player = p.player->player();
-
-        if (!p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
+        if (!p.player || !p.ui->uiPrefs->uiPrefsTimelineThumbnails->value() ||
+            desktop::Wayland())
         {
             hideThumbnail();
             return 0;
         }
 
+        const auto player = p.player->player();
         p.timeRange = player->getTimeRange();
 
         char buffer[64];
@@ -1380,7 +1377,16 @@ namespace mrv
 
             if (_getDrawUpdate(p.timelineWindow))
             {
+#ifdef DEBUG_TIMELINE_CALLBACK 
+                std::cerr << "R" << std::endl;
                 redraw();
+#endif
+            }
+            else
+            {
+#ifdef DEBUG_TIMELINE_CALLBACK 
+                std::cerr << "." << std::endl;
+#endif
             }
         }
         Fl::repeat_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);

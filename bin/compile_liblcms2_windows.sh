@@ -14,7 +14,7 @@ if [[ ! -e etc/build_dir.sh ]]; then
     exit 1
 fi
 
-if [[ ! $RUNME && ! $RUNME_NOLOG ]]; then
+if [[ ! $RUNME ]]; then
     . etc/build_dir.sh
 else
     . etc/functions.sh

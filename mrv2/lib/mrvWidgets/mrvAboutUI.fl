@@ -40,7 +40,7 @@ std::vector<std::string>::iterator i = a.begin();
 std::vector<std::string>::iterator e = a.end();
 for (; i != e; ++i )
 	v->uiAbout->uiGPUInfo->add( (*i).c_str() );} open selected
-          xywh {0 0 535 395} selection_color 7
+          xywh {0 0 535 395} selection_color 13
         } {
           Fl_Group uiAbout {
             label mrv2 open

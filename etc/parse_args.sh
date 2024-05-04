@@ -7,7 +7,7 @@
 
 show_help()
 {
-    if [[ $RUNME == 1 || $RUNME_NOLOG == 1 ]]; then
+    if [[ $RUNME == 1 ]]; then
 	echo "$0 [debug|release|reldeb] [clean] [-v] [-j <num>] [-lgpl] [-gpl] [-D VAR=VALUE] [-t <target>] [-help]"
 	echo ""
 	echo "* debug builds a debug build."
@@ -45,15 +45,16 @@ parse_option()
 }
 
 #
-# Set RUNME and RUNME_NOLOG variables
+# Set RUNME variable
 #
-export RUNME_NOLOG=0
 export RUNME=0
-if [[ $0 == *runme.sh* ]]; then
-    RUNME=1
-fi
-if [[ $0 == *runme_nolog.sh* ]]; then
-    RUNME_NOLOG=1
+if [[ $0 == *runme*.sh ]]; then
+    if [[ $0 == *runmet.sh* || $0 == *runmeq.sh* ||
+	      $0 == *runme_nolog.sh* ]]; then
+	RUNME=0
+    else
+	RUNME=1
+    fi
 fi
 
 
@@ -63,9 +64,9 @@ fi
 get_kernel
 
 #
-# With KERNEL and ARCH, build root dir
+# With KERNEL and ARCH, build default root dir
 #
-BUILD_ROOT=BUILD-$KERNEL-$ARCH
+default_build_root=BUILD-$KERNEL-$ARCH
 
 #
 # Set up parse variables' default values
@@ -107,13 +108,9 @@ for i in "$@"; do
 	    shift
 	    ASK_TO_CONTINUE=1
 	    ;;
-	--minimal|-minimal|--min|-min)
-	    shift
-	    BUILD_ROOT=${BUILD_ROOT}-minimal
-	    ;;
 	--build-dir|-build-dir|--dir|-dir|--root|-root)
 	    shift
-	    BUILD_ROOT=$1
+	    export BUILD_ROOT=$1
 	    shift
 	    ;;
 	clean)
@@ -133,11 +130,6 @@ for i in "$@"; do
 	-gpl|--gpl)
 	    export FFMPEG_GPL=GPL
 	    export TLRENDER_X264=ON
-	    shift
-	    ;;
-	-dir|--dir|-build-dir|--build-dir|-root|--root-dir)
-	    shift
-	    BUILD_ROOT=$1
 	    shift
 	    ;;
 	-v|--v|--verbose)
@@ -160,7 +152,7 @@ for i in "$@"; do
 	    ;;
 	-G)
 	    shift
-	    if [[ $RUNME == 0 && $RUNME_NOLOG == 0 ]]; then
+	    if [[ $RUNME == 0 ]]; then
 		echo $0
 		echo "Cmake generator can only be run with the runme.sh script"
 		exit 1

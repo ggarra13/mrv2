@@ -15,9 +15,85 @@ import mrv2
 from mrv2 import cmd, plugin, settings
 
 try:
-    from fltk14 import *
-except ImportError:
-    pass
+    import gettext
+    
+    locales = cmd.rootPath() + '/python/plug-ins/locales'
+
+    language = cmd.getLanguage()
+
+    # Set the domain (name for your translations) and directory
+    translator = gettext.translation('update-mrv2', localedir=locales,
+                                     languages=[language])
+
+    # Mark strings for translation using the _() function
+    _ = translator.gettext
+except Exception as e:
+    print(e)
+    def _gettext(text):
+        return text
+    _ = _gettext
+
+
+
+def _get_password_cb(widget, args):
+    """FLTK callback to get the secret password, hide the parent window and
+    run the command to install the downloaded file with the sudo password.
+    
+    Args:
+        widget (Fl_Widget): FLTK's secret input widget.
+        args (list): [self, command, download_file]
+    """
+    this    = args[0]
+    command = args[1]
+    download_file = args[2]
+    password = widget.value()
+    widget.parent().hide()
+    Fl.check()
+    this.run_as_admin(command, download_file, password)
+
+
+def _ignore_cb(widget, args):
+    """FLTK callback to ignore the upgrade and continue with the
+    current version.
+
+    Args:
+        widget (Fl_Widget): FLTK widget that triggered the callback
+        args (list): None
+
+    Returns:
+        None
+    """
+    from fltk14 import Fl
+    widget.parent().hide()
+    Fl.check()
+        
+def _get_latest_release_cb(widget, args):
+    """FLTK callback to start the download of the latest release for
+    the current platform.  Hides the widget's parent window when done.
+
+    Args:
+        widget (Fl_Widget): FLTK widget that triggered the callback
+        args (list): [self, github data for the latest release in a map.]
+
+    Returns:
+        None
+    """
+    from fltk14 import Fl
+    this = args[0]
+    data = args[1]
+    extension = this.get_download_extension()
+    widget.parent().hide()
+    Fl.check()
+    found = False
+    for asset in data['assets']:
+        name = asset['name']
+        if name.endswith(extension):
+            this.download_version(name, asset['browser_download_url'])
+            found = True
+            break
+    if not found:
+        print(_('No file matching'),extension,_('was found'))
+
 
 class UpdatePlugin(plugin.Plugin):
     """
@@ -46,7 +122,7 @@ class UpdatePlugin(plugin.Plugin):
         if match:
             return match.group(1)
         else:
-            return "No match found"
+            return _("No match found")
         
     def get_installed_executable(self, download_file):
         """
@@ -74,9 +150,9 @@ class UpdatePlugin(plugin.Plugin):
                 value, reg_type = winreg.QueryValueEx(key, '')
                 exe = f'{value[:-5]}'
                 exe = exe.replace('\\', '/')
-                print(f'Install Location: {exe}')
+                print(_('Install Location:'),exe)
             except WindowsError as e:
-                print(f'Error retrieving value: {e}')
+                print(_('Error retrieving value:'),e)
             finally:
                 # Always close the opened key
                 winreg.CloseKey(key)
@@ -93,7 +169,7 @@ class UpdatePlugin(plugin.Plugin):
         elif kernel == 'Darwin':
             exe = f'/Applications/mrv2.app/Contents/MacOS/mrv2'
         else:
-            print(f'Unknown platform "{kernel}"')
+            print(_('Unknown platform'),kernel)
         return exe
         
     def run_command(self, cmd):
@@ -103,8 +179,8 @@ class UpdatePlugin(plugin.Plugin):
         Returns:
           int: Exit code of the process.
         """
-
-        print(f"Running:\n{cmd}")
+        # Don't print out the command as that will print out the sudo password
+        print('Running:\n',cmd)
         
         # Run the command and capture stdout, stderr, and the exit code
         process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE,
@@ -117,10 +193,10 @@ class UpdatePlugin(plugin.Plugin):
         exit_code = process.returncode
 
         # Print or handle the captured stdout and stderr
-        print("Standard Output:")
+        print(_("Standard Output:"))
         print(stdout.decode('utf-8'))
 
-        print("Standard Error:")
+        print(_("Standard Error:"))
         print(stderr.decode('utf-8'))
 
         return exit_code
@@ -137,10 +213,10 @@ class UpdatePlugin(plugin.Plugin):
             quoted_exe = exe
 
         try:
-            print(f'Starting {exe}...')
+            print(_('Starting'),exe,'...')
             os.execv(exe, [quoted_exe])
         except Exception as e:
-            print(f"An unexpected error occurred: {e}")
+            print(_('An unexpected error occurred:'),e)
             return
 
     def run_as_admin(self, command, download_file, password = None):
@@ -160,7 +236,7 @@ class UpdatePlugin(plugin.Plugin):
             None
         """
         cmd = None
-        print(f'Trying to install "{download_file}"...')
+        print(_('Trying to install'),download_file,'...')
         Fl.check()
         kernel = platform.system()
         if kernel == 'Windows':
@@ -173,7 +249,7 @@ class UpdatePlugin(plugin.Plugin):
         elif kernel == 'Darwin':
             cmd = command
         else:
-            print("Unknown platform")
+            print(_('Unknown platform'))
             return
 
         ret = self.run_command(cmd)
@@ -188,7 +264,7 @@ class UpdatePlugin(plugin.Plugin):
                 while os.path.exists(download_file):
                     try:
                         os.remove(download_file)
-                        print(f"Removed temporary {download_file}.")
+                        print(_('Removed temporary "') + download_file + '.')
                         Fl.check()
                     except:
                         time.sleep(2) # Wait 2 seconds before trying again. 
@@ -196,39 +272,24 @@ class UpdatePlugin(plugin.Plugin):
 
             exe = self.get_installed_executable(download_file)
             if os.path.exists(exe):
-                print("The new version of mrv2 was installed.")
+                print(_('The new version of mrv2 was installed.'))
                 Fl.check()
                 if os.path.exists(download_file):
                     os.remove(download_file)
-                    print(f"Removed temporary {download_file}.")
+                    print(_('Removed temporary'),download_file,'.')
                     Fl.check()
                 self.start_new_mrv2(download_file, kernel)
             else:
                 if kernel == 'Windows':
-                    print(f'Could not locate mrv2 in "{exe}".  '
-                          f'Maybe you installed it in a non-default location.')
+                    print(_('Could not locate mrv2 in:\n') + exe + '.\n' +
+                          _('Maybe you installed it in a non-default location.'))
                     return
-                print(f'Something failed installing mrv2 - It is not in "{exe}"')
+                print(_('Something failed installing mrv2 - It is not in "') +
+                      exe + '"')
         else:
-            print(f"Something failed installing mrv2 - Return error was {ret}")
+            print(_('Something failed installing mrv2 - Return error was: ') +
+                    ret)
             
-
-    @staticmethod
-    def get_password_cb(widget, args):
-        """FLTK callback to get the secret password, hide the parent window and
-        run the command to install the downloaded file with the sudo password.
-    
-        Args:
-            widget (Fl_Widget): FLTK's secret input widget.
-            args (list): [self, command, download_file]
-        """
-        this    = args[0]
-        command = args[1]
-        download_file = args[2]
-        password = widget.value()
-        widget.parent().hide()
-        Fl.check()
-        this.run_as_admin(command, download_file, password)
 
 
     def ask_for_password(self, command, download_file):
@@ -242,12 +303,12 @@ class UpdatePlugin(plugin.Plugin):
         Returns:
            None
         """
-        win = Fl_Window(320, 100, "Enter Sudo Password")
-        pwd = Fl_Secret_Input(20, 40, win.w() - 40, 40, "Password")
+        win = Fl_Window(320, 100, _('Enter Sudo Password'))
+        pwd = Fl_Secret_Input(20, 40, win.w() - 40, 40, _('Password'))
         pwd.textcolor(fl_rgb_color(0, 0, 0 ))
         pwd.align(FL_ALIGN_TOP)
         pwd.when(FL_WHEN_ENTER_KEY | FL_WHEN_NOT_CHANGED)
-        pwd.callback(UpdatePlugin.get_password_cb, [self, command, download_file])
+        pwd.callback(_get_password_cb, [self, command, download_file])
         win.end()
         win.set_non_modal()
         win.show()
@@ -300,7 +361,7 @@ class UpdatePlugin(plugin.Plugin):
         elif os.system('which pacman > /dev/null') == 0:
             return '.tar.gz'
         else:
-            print('Unable to determine Linux flavor')
+            print(_('Unable to determine Linux flavor'))
             return '.tar.gz'
 
 
@@ -335,58 +396,14 @@ class UpdatePlugin(plugin.Plugin):
         """
         Fl.check()
         download_file = os.path.join(tempfile.gettempdir(), name)
-        print(f"Downloading: {name} ...")
+        print(_('Downloading:'),name,'...')
         Fl.check()
         download_response = requests.get(download_url)
         with open(download_file, 'wb') as f:
             f.write(download_response.content)
-        print(f"Download complete: {download_file}")
+        print(_('Download complete:'),download_file)
         if os.path.exists(download_file):
             self.install_download(download_file)
-
-                
-    @staticmethod
-    def ignore_cb(widget, args):
-        """FLTK callback to ignore the upgrade and continue with the
-        current version.
-
-        Args:
-            widget (Fl_Widget): FLTK widget that triggered the callback
-            args (list): None
-
-        Returns:
-            None
-        """
-        widget.parent().hide()
-        Fl.check()
-                
-    @staticmethod
-    def get_latest_release_cb(widget, args):
-        """FLTK callback to start the download of the latest release for
-        the current platform.  Hides the widget's parent window when done.
-
-        Args:
-            widget (Fl_Widget): FLTK widget that triggered the callback
-            args (list): [self, github data for the latest release in a map.]
-
-        Returns:
-            None
-        """
-        this = args[0]
-        data = args[1]
-        extension = this.get_download_extension()
-        widget.parent().hide()
-        Fl.check()
-        found = False
-        for asset in data['assets']:
-            name = asset['name']
-            if name.endswith(extension):
-                this.download_version(name, asset['browser_download_url'])
-                found = True
-                break
-        if not found:
-            print(f"No file matching {extension} was found")
-
 
     def ask_to_update(self, current_version, latest_version, title, data):
         """Open an FLTK window to allow the user to update mrv2.
@@ -399,14 +416,15 @@ class UpdatePlugin(plugin.Plugin):
         Returns:
             None
         """
+        from fltk14 import Fl, Fl_Window, Fl_Box, Fl_Button
         win = Fl_Window(320, 200)
         box = Fl_Box(20, 20, win.w() - 40, 60)
-        box.copy_label(f"Current version is v{current_version},\n"
-                       f"Latest at Github is v{latest_version}.")
+        box.copy_label(_('Current version is v') + current_version + 
+                       _('\nLatest at Github is v') + latest_version + '.')
         update = Fl_Button(20, 100, 130, 40, title)
-        update.callback(UpdatePlugin.get_latest_release_cb, [self, data])
-        ignore = Fl_Button(update.w() + 40, 100, 130, 40, "Ignore")
-        ignore.callback(UpdatePlugin.ignore_cb, None)
+        update.callback(_get_latest_release_cb, [self, data])
+        ignore = Fl_Button(update.w() + 40, 100, 130, 40, _("Ignore"))
+        ignore.callback(_ignore_cb, None)
         win.end()
         win.set_non_modal()
         win.show()
@@ -468,30 +486,27 @@ class UpdatePlugin(plugin.Plugin):
             if result == 0:
                 if not UpdatePlugin.startup:
                     self.ask_to_update(current_version, version,
-                                       'Update anyway', data)
+                                       _('Update anyway'), data)
                 return
             elif result == 1:
                 if not UpdatePlugin.startup:
-                    self.ask_to_update(current_version, version, 'Downgrade',
+                    self.ask_to_update(current_version, version,
+                                       _('Downgrade'),
                                        data)
                 return
             else:
-                self.ask_to_update(current_version, version, 'Upgrade', data)
+                self.ask_to_update(current_version, version,
+                                   _('Upgrade'), data)
             
         else:
-            print("No release files found.")
+            print(_('No release files found.'))
 
 
     def run(self):
         self.check_latest_release("ggarra13", "mrv2")
 
     def menus(self):
-        menu_entry = "Help/Update mrv2"
-        try:
-            if re.search('es', cmd.getLanguage()):
-                menu_entry = "Ayuda/Actualizar mrv2"
-        except:
-            pass
+        menu_entry = _("Help/Update mrv2")
         menus = {
             # Call a method and place a divider line after the menu
             menu_entry : (self.run, '__divider__')

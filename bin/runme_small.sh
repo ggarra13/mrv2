@@ -27,16 +27,17 @@ params=$*
 #
 . etc/build_dir.sh
 
-export build_root=BUILD-$KERNEL-$ARCH-small
-export BUILD_DIR=${build_root}/${BUILD_TYPE_DIR}
-mkdir -p $BUILD_DIR
-
 
 #
 # Clear the flags, as they will be set by runme_nolog.sh.
 #
 export FLAGS=""
 export CMAKE_FLAGS=""
+
+#
+# Common flags
+#
+export BUILD_PYTHON=OFF
 
 #
 # These are some of the expensive mrv2 options
@@ -53,6 +54,8 @@ export MRV2_PDF=OFF
 export TLRENDER_AV1=OFF
 export TLRENDER_FFMPEG=ON
 export TLRENDER_FFMPEG_MINIMAL=ON
+export TLRENDER_EXR=OFF
+export TLRENDER_JPEG=OFF
 export TLRENDER_NDI=OFF
 export TLRENDER_NET=OFF
 export TLRENDER_RAW=OFF
@@ -68,5 +71,5 @@ export TLRENDER_YASM=OFF
 echo
 echo "Saving compile log to $BUILD_DIR/compile.log ..."
 echo
-cmd="./runme_nolog.sh --build-dir ${build_root} --ask $params 2>&1 | tee $BUILD_DIR/compile.log"
+cmd="./runme_nolog.sh --ask $params 2>&1 | tee $BUILD_DIR/compile.log"
 run_cmd $cmd

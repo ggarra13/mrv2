@@ -3,8 +3,6 @@
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#!/usr/bin/emv bash
-
 export CPU_CORES=4
 
 #

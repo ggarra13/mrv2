@@ -33,7 +33,11 @@ extract_python_version
 #
 # Build a build directory with that information
 #
-export BUILD_DIR=$BUILD_ROOT/${BUILD_TYPE_DIR}
+if [[ -z $BUILD_ROOT ]]; then
+    export BUILD_DIR=$default_build_root/${BUILD_TYPE_DIR}
+else
+    export BUILD_DIR=$BUILD_ROOT/${BUILD_TYPE_DIR}
+fi
 
 #
 # Clean the directory if we were asked to.
@@ -44,6 +48,11 @@ if [[ $CLEAN_DIR == 1 && $RUNME == 1 ]]; then
 	run_cmd rm -rf $BUILD_DIR
     fi
 fi
+
+#
+# Recreate the build directory
+#
+run_cmd mkdir -p $BUILD_DIR
 
 #
 # Get the number of CPU cores for maximum efficiency
@@ -85,7 +94,7 @@ fi
 if [ -z "$OLD_DYLD_LIBRARY_PATH" ]; then
     # On macOS, sqlite which is used by subversion does not get linked into
     # /usr/local to not shadow the one in /usr/lib
-    export OLD_DYLD_LIBRARY_PATH="/usr/local/opt/sqlite/lib:${DYLD_LIBRARY_PATH}"
+    export OLD_DYLD_LIBRARY_PATH="/usr/local/opt/sqlite/lib"
 fi
 
 if [ -z "$OLD_PATH" ]; then

@@ -27,7 +27,6 @@ params=$*
 #
 . etc/build_dir.sh
 
-export BUILD_DIR=BUILD-$KERNEL-$ARCH-minimal/${BUILD_TYPE_DIR}
 mkdir -p $BUILD_DIR
 
 
@@ -53,6 +52,7 @@ export MRV2_PDF=OFF
 export TLRENDER_AV1=OFF
 export TLRENDER_FFMPEG=OFF
 export TLRENDER_FFMPEG_MINIMAL=ON
+export TLRENDER_EXR=OFF
 export TLRENDER_JPEG=OFF
 export TLRENDER_NDI=OFF
 export TLRENDER_NET=OFF
@@ -69,5 +69,5 @@ export TLRENDER_YASM=OFF
 echo
 echo "Saving compile log to $BUILD_DIR/compile.log ..."
 echo
-cmd="./runme_nolog.sh --minimal $params 2>&1 | tee $BUILD_DIR/compile.log"
+cmd="./runme_nolog.sh $params 2>&1 | tee $BUILD_DIR/compile.log"
 run_cmd $cmd

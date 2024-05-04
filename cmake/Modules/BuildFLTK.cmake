@@ -4,11 +4,16 @@
 
 include( ExternalProject )
 
+# The cutting EDGE!
 #set( FLTK_GIT_TAG master )
-#set(FLTK_GIT_TAG b402b6a8397f9fc13157813d39d505ea9ead00f0) # previous stable
-set(FLTK_GIT_TAG b726211b9b9eefeaabf5ba366565792e943a18b6)  # fixes Wayland issue
 
-if(MRV2_PYFLTK)
+# Playback works fine but moving the window off the scren hangs the viewer.
+#set(FLTK_GIT_TAG b402b6a8397f9fc13157813d39d505ea9ead00f0)
+
+# fixes Wayland hang, but makes playback randomly stop
+set(FLTK_GIT_TAG b726211b9b9eefeaabf5ba366565792e943a18b6) 
+
+if(MRV2_PYFLTK OR FLTK_BUILD_SHARED)
     # If we are building pyFLTK compile shared
     set( FLTK_BUILD_SHARED_LIBS ON )  
 else()
