@@ -6,8 +6,6 @@ It is a bug fix release for the regressions in v1.1.4 which was rushed:
 
 - Added a FAQ on the documentation about Linux XWayland and Wayland on
   why it could make playback slow if your OS was not configured properly.
-  I added current instructions on Ubuntu 22.04.4 LTS to get full NVidia
-  support working properly on both XWayland and Wayland (yeah!).
 - This is the first version that supports Wayland and XWayland.
   For instructions on how to set XWayland and Wayland on Ubuntu 22.04.4 LTS
   with NVidia drivers, please see Help->Documentation the FAQ section.
