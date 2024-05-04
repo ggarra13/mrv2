@@ -42,6 +42,7 @@ export BUILD_PYTHON=OFF
 #
 # These are some of the expensive mrv2 options
 #
+export BUILD_PYTHON=OFF
 export MRV2_PYFLTK=OFF
 export MRV2_PYBIND11=OFF
 export MRV2_NETWORK=OFF

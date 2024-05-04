@@ -24,6 +24,9 @@ It is a bug fix release for the regressions in v1.1.4 which was rushed:
   which would crash Wayland.
 - mrv2 can now be built with the pre-installed python, without having to
   build python itself.  Of course, in that case, mrv2 cannot be re-distributed.
+- Added a python translating system for plug-ins.
+- Translated all update-mrv2.py strings into Spanish.
+
 
 
 v1.1.4

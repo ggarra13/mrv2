@@ -50,6 +50,11 @@ if [[ $CLEAN_DIR == 1 && $RUNME == 1 ]]; then
 fi
 
 #
+# Recreate the build directory
+#
+run_cmd mkdir -p $BUILD_DIR
+
+#
 # Get the number of CPU cores for maximum efficiency
 #
 . etc/build_cores.sh
