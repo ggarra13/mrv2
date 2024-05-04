@@ -15,17 +15,15 @@ import mrv2
 from mrv2 import cmd, plugin, settings
 
 try:
-    import locale
     import gettext
     
     locales = cmd.rootPath() + '/python/plug-ins/locales'
 
     language = cmd.getLanguage()
-    langCode = language[0:2];
-    locale.setlocale(locale.LC_ALL, langCode)  # Replace 'es' with your desired locale code
 
     # Set the domain (name for your translations) and directory
-    translator = gettext.translation('update-mrv2', localedir=locales)
+    translator = gettext.translation('update-mrv2', localedir=locales,
+                                     languages=[language])
 
     # Mark strings for translation using the _() function
     _ = translator.gettext
