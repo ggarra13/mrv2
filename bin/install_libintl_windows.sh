@@ -9,7 +9,7 @@
 # Script used to install libiconv and libintl on windows through Msys.
 #
 
-if [[ ! $RUNME && ! $RUNME_NOLOG ]]; then
+if [[ ! $RUNME && ]]; then
     . etc/build_dir.sh
 else
     . etc/functions.sh

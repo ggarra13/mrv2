@@ -7,7 +7,7 @@
 
 show_help()
 {
-    if [[ $RUNME == 1 || $RUNME_NOLOG == 1 ]]; then
+    if [[ $RUNME == 1 ]]; then
 	echo "$0 [debug|release|reldeb] [clean] [-v] [-j <num>] [-lgpl] [-gpl] [-D VAR=VALUE] [-t <target>] [-help]"
 	echo ""
 	echo "* debug builds a debug build."
@@ -45,15 +45,15 @@ parse_option()
 }
 
 #
-# Set RUNME and RUNME_NOLOG variables
+# Set RUNME variable
 #
-export RUNME_NOLOG=0
 export RUNME=0
-if [[ $0 == *runme.sh* ]]; then
-    RUNME=1
-fi
-if [[ $0 == *runme_nolog.sh* ]]; then
-    RUNME_NOLOG=1
+if [[ $0 == *runme*.sh ]]; then
+    if [[ $0 == *runmet.sh* || $0 == *runmeq.sh* ]]; then
+	RUNME=0
+    else
+	RUNME=1
+    fi
 fi
 
 
@@ -160,7 +160,7 @@ for i in "$@"; do
 	    ;;
 	-G)
 	    shift
-	    if [[ $RUNME == 0 && $RUNME_NOLOG == 0 ]]; then
+	    if [[ $RUNME == 0 ]]; then
 		echo $0
 		echo "Cmake generator can only be run with the runme.sh script"
 		exit 1
