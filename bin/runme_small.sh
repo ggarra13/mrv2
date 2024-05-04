@@ -52,7 +52,7 @@ export MRV2_PDF=OFF
 #
 # These are some of the expensive TLRENDER options
 #
-export TLRENDER_AV1=OFF
+export TLRENDER_AV1=ON
 export TLRENDER_FFMPEG=ON
 export TLRENDER_FFMPEG_MINIMAL=ON
 export TLRENDER_EXR=OFF
@@ -64,10 +64,10 @@ export TLRENDER_SGI=OFF
 export TLRENDER_STB=OFF
 export TLRENDER_TIFF=OFF
 export TLRENDER_USD=OFF
-export TLRENDER_VPX=OFF
+export TLRENDER_VPX=ON
 export TLRENDER_WAYLAND=ON
 export TLRENDER_X11=ON
-export TLRENDER_YASM=OFF
+export TLRENDER_YASM=ON
 
 echo
 echo "Saving compile log to $BUILD_DIR/compile.log ..."
