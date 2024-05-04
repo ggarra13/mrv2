@@ -85,7 +85,7 @@ fi
 if [ -z "$OLD_DYLD_LIBRARY_PATH" ]; then
     # On macOS, sqlite which is used by subversion does not get linked into
     # /usr/local to not shadow the one in /usr/lib
-    export OLD_DYLD_LIBRARY_PATH="/usr/local/opt/sqlite/lib:${DYLD_LIBRARY_PATH}"
+    export OLD_DYLD_LIBRARY_PATH="/usr/local/opt/sqlite/lib"
 fi
 
 if [ -z "$OLD_PATH" ]; then
