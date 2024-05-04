@@ -7,7 +7,6 @@
 #
 set( LANGUAGES en es )
 
-
 #
 # This file creates the .pot / .po / .mo language translations
 #
@@ -59,17 +58,39 @@ foreach( lang ${LANGUAGES} )
 
 	message( STATUS "check ${_poFile}")
 	if (NOT	EXISTS ${_poFile})
-	    execute_process( COMMAND
-		${CMAKE_COMMAND} -E make_directory ${_moDir}
-		COMMAND
-		${CMAKE_COMMAND} -E echo "pygettext3 -d ${py_basename} -o ${_poFile} ${_full_path}"
-		COMMAND
-		pygettext3 -d ${_py_basename} -o ${_poFile} ${_full_path} )
+	    message(STATUS "Does not exist ${_poFile}")
+	    set(_pyscript_dir "${CMAKE_BINARY_DIR}/../../../Python-prefix/src/Python/Tools/i18n" )
+
+	    
+	    set(_py_gettext_script
+		"${_pyscript_dir}/pygettext.py")
+
+	    if (NOT EXISTS ${_py_gettext_script})
+		find_program(_py_gettext_cmd NAMES pygettext3 pygettext)
+	    else()
+		set(_py_gettext_cmd ${PYTHON_EXECUTABLE} )
+	    endif()
+	    
+	    set(_py_gettext_args ${_py_gettext_script}
+		-d ${_py_basename} -o ${_poFile} ${_full_path} )
+
+	    if (NOT DEFINED _py_gettext_cmd OR
+		    "${_py_gettext_cmd}" STREQUAL "")
+		message(FATAL_ERROR "Did not create ${_poFile}")
+	    else()
+		execute_process(
+		    COMMAND ${CMAKE_COMMAND} -E echo Running: ${_py_gettext_cmd}
+		    OUTPUT_VARIABLE echo_output)
+	    
+		execute_process(COMMAND
+		    ${CMAKE_COMMAND} -E make_directory ${_moDir}
+		    COMMAND ${_py_gettext_cmd} ${_py_gettext_args})
+	    endif()
 	endif()
 	
 	add_custom_command( OUTPUT "${_moFile}"
 	    COMMAND msgfmt -v "${_poFile}" -o "${_moFile}"
-	    DEPENDS ${_poFile} ${_full_path}
+	    DEPENDS ${_full_path}
 	)
 	
 	list(APPEND mo_files ${_moFile} )
