@@ -13,7 +13,7 @@ include( ExternalProject )
 # fixes Wayland hang, but makes playback randomly stop
 set(FLTK_GIT_TAG b726211b9b9eefeaabf5ba366565792e943a18b6) 
 
-if(MRV2_PYFLTK)
+if(MRV2_PYFLTK OR FLTK_BUILD_SHARED)
     # If we are building pyFLTK compile shared
     set( FLTK_BUILD_SHARED_LIBS ON )  
 else()
