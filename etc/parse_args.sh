@@ -64,9 +64,9 @@ fi
 get_kernel
 
 #
-# With KERNEL and ARCH, build root dir
+# With KERNEL and ARCH, build default root dir
 #
-BUILD_ROOT=BUILD-$KERNEL-$ARCH
+default_build_root=BUILD-$KERNEL-$ARCH
 
 #
 # Set up parse variables' default values
@@ -108,13 +108,9 @@ for i in "$@"; do
 	    shift
 	    ASK_TO_CONTINUE=1
 	    ;;
-	--minimal|-minimal|--min|-min)
-	    shift
-	    BUILD_ROOT=${BUILD_ROOT}-minimal
-	    ;;
 	--build-dir|-build-dir|--dir|-dir|--root|-root)
 	    shift
-	    BUILD_ROOT=$1
+	    export BUILD_ROOT=$1
 	    shift
 	    ;;
 	clean)
@@ -134,11 +130,6 @@ for i in "$@"; do
 	-gpl|--gpl)
 	    export FFMPEG_GPL=GPL
 	    export TLRENDER_X264=ON
-	    shift
-	    ;;
-	-dir|--dir|-build-dir|--build-dir|-root|--root-dir)
-	    shift
-	    BUILD_ROOT=$1
 	    shift
 	    ;;
 	-v|--v|--verbose)

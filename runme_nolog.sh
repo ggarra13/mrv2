@@ -187,6 +187,7 @@ if [[ ${BUILD_PYTHON} == OFF || ${BUILD_PYTHON} == 0 ]]; then
     echo "Python location: ${MRV2_PYTHON}"
 fi
 echo "Build pyFLTK........................ ${MRV2_PYFLTK} 	(MRV2_PYFLTK)"
+echo "Build FLTK shared................... ${FLTK_BUILD_SHARED} 	(FLTK_BUILD_SHARED)"
 echo "Build embedded Python............... ${MRV2_PYBIND11} 	(MRV2_PYBIND11)"
 echo "Build mrv2 Network connections...... ${MRV2_NETWORK} 	(MRV2_NETWORK)"
 echo "Build PDF........................... ${MRV2_PDF} 	(MRV2_PDF)"

@@ -33,7 +33,11 @@ extract_python_version
 #
 # Build a build directory with that information
 #
-export BUILD_DIR=$BUILD_ROOT/${BUILD_TYPE_DIR}
+if [[ -z $BUILD_ROOT ]]; then
+    export BUILD_DIR=$default_build_root/${BUILD_TYPE_DIR}
+else
+    export BUILD_DIR=$BUILD_ROOT/${BUILD_TYPE_DIR}
+fi
 
 #
 # Clean the directory if we were asked to.
