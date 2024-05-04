@@ -27,8 +27,10 @@ params=$*
 #
 . etc/build_dir.sh
 
-export build_root=BUILD-$KERNEL-$ARCH-small
-export BUILD_DIR=${build_root}/${BUILD_TYPE_DIR}
+if [[ -z $BUILD_ROOT ]]; then
+    export BUILD_ROOT=BUILD-$KERNEL-$ARCH-small
+fi
+export BUILD_DIR=${BUILD_ROOT}/${BUILD_TYPE_DIR}
 mkdir -p $BUILD_DIR
 
 
@@ -68,5 +70,5 @@ export TLRENDER_YASM=OFF
 echo
 echo "Saving compile log to $BUILD_DIR/compile.log ..."
 echo
-cmd="./runme_nolog.sh --build-dir ${build_root} --ask $params 2>&1 | tee $BUILD_DIR/compile.log"
+cmd="./runme_nolog.sh --build-dir ${BUILD_ROOT} --ask $params 2>&1 | tee $BUILD_DIR/compile.log"
 run_cmd $cmd
