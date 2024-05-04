@@ -49,7 +49,8 @@ parse_option()
 #
 export RUNME=0
 if [[ $0 == *runme*.sh ]]; then
-    if [[ $0 == *runmet.sh* || $0 == *runmeq.sh* ]]; then
+    if [[ $0 == *runmet.sh* || $0 == *runmeq.sh* ||
+	      $0 == *runme_nolog.sh* ]]; then
 	RUNME=0
     else
 	RUNME=1
