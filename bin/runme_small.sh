@@ -6,9 +6,17 @@
 
 #
 #
-# Minimal build script for mrv2.  It builds all dependencies and will install
+# Small build script for mrv2.  Run it from the root of the mrv2 dir, like:
+#
+# ./bin/runme_small.sh
+#
+# It builds all dependencies and will install
 # the main executable on BUILD_DIR (by default
 #                                   BUILD-OS-ARCH/BUILD_TYPE/install/bin).
+#
+# The small build does not have Python, USD, PDF, NDI or NETWORK support.
+# It is intended for solo artists.
+# 
 #
 # On Linux and macOS, it will also create a mrv2 or mrv2-dbg symbolic link
 # in $HOME/bin if the directory exists.
@@ -51,22 +59,22 @@ export MRV2_PDF=OFF
 #
 # These are some of the expensive TLRENDER options
 #
-export TLRENDER_AV1=OFF
+export TLRENDER_AV1=ON
 export TLRENDER_FFMPEG=ON
 export TLRENDER_FFMPEG_MINIMAL=ON
-export TLRENDER_EXR=OFF
-export TLRENDER_JPEG=OFF
+export TLRENDER_EXR=ON
+export TLRENDER_JPEG=ON
 export TLRENDER_NDI=OFF
 export TLRENDER_NET=OFF
-export TLRENDER_RAW=OFF
-export TLRENDER_SGI=OFF
-export TLRENDER_STB=OFF
-export TLRENDER_TIFF=OFF
+export TLRENDER_RAW=ON
+export TLRENDER_SGI=ON
+export TLRENDER_STB=ON
+export TLRENDER_TIFF=ON
 export TLRENDER_USD=OFF
-export TLRENDER_VPX=OFF
+export TLRENDER_VPX=ON
 export TLRENDER_WAYLAND=ON
 export TLRENDER_X11=ON
-export TLRENDER_YASM=OFF
+export TLRENDER_YASM=ON
 
 echo
 echo "Saving compile log to $BUILD_DIR/compile.log ..."
