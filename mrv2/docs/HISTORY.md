@@ -8,6 +8,9 @@ v1.1.6
   default.
 - Cleaned up source code of passing ui pointer to several classes, using
   App::ui instead.
+- Removed .po python plug-in files from distribution.
+- Improved missing_translate.py script and added searching for plug-in
+  translations too.
 
 v1.1.5
 ======
