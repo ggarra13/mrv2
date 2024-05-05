@@ -1,10 +1,32 @@
-mrv2 v1.1.4
+mrv2 v1.1.5
 ========
 
 mrv2 is an open source professional player and review tool for vfx, animation and computer graphics for Windows, Linux and macOS.
 
-mrv2 is a major update on performance and color pipeline fixes.  Video playback performance has been sped up between 20% and 150%, avoiding dropped frames.  OpenColorIO or OpenEXRs with out-of-bounds values no longer clamp.  Panning, zooming and annotations have also been improved in their performance.
-For those building from source, stack traces with line numbers are now provided on all platforms.
+This is a critical update for Windows and more importantly Linux users.
+It is a bug fix release for the regressions in v1.1.4 which was rushed:
+
+- Added a FAQ on the documentation about Linux XWayland and Wayland on
+  why it could make playback slow if your OS was not configured properly.
+- This is the first version that supports Wayland and XWayland.
+  For instructions on how to set XWayland and Wayland on Ubuntu 22.04.4 LTS
+  with NVidia drivers, please see Help->Documentation the FAQ section.
+- Fixed annotations not showing when Blit Viewports was on.
+- Fixed hiding of pixel bar sometimes failing even when:
+      Playback->Auto Hide Pixel Bar
+  and:
+      Playback->Auto Playback was on.
+- Fixed not hiding of the pixel bar when the image was open from the
+  recent menus or from the command-line.
+- Fixed color buffers not taking full advantage of OpenGL improvements on
+  Windows mainly.
+- Fixed incorrect positioning and resizing of the images on loading
+  which would crash Wayland.
+- mrv2 can now be built with the pre-installed python, without having to
+  build python itself.  Of course, in that case, mrv2 cannot be re-distributed.
+  Tested on Linux only for now.
+- Added a python translating system for plug-ins.
+- Translated all update-mrv2.py strings into Spanish.
 
 Main Web page:
 https://mrv2.sourceforge.io
@@ -16,8 +38,8 @@ Source code and build instructions:
 https://www.github.com/ggarra13/mrv2
 
 Binaries:
-https://github.com/ggarra13/mrv2/releases/tag/v1.1.4
-https://sourceforge.net/projects/mrv2/files/v1.1.4/
+https://github.com/ggarra13/mrv2/releases/tag/v1.1.5
+https://sourceforge.net/projects/mrv2/files/v1.1.5/
 
 #player #movie #flipbook #usd #openusd #opentimelineio #mrv2 #mrViewer #mrViewer2 #vp9 #av1 #h264 #mp4 #mov #avi #webm #prores #prores4444 #cfhd #cineform #gopro #vpx #vfx #vr #animation #games #filmmaking #opensource #environmentmaps #stereo #windows #macos #linux
 
@@ -25,7 +47,7 @@ https://sourceforge.net/projects/mrv2/files/v1.1.4/
 -------------------------------------------------------------------------------
 
 
-mrv2 v1.1.4
+mrv2 v1.1.5
 
 mrv2, an open source professional player and review tool for vfx, animation and computer graphics for Windows, Linux and macOS has a new version.
 
@@ -36,4 +58,4 @@ Source:
 https://github.com/ggarra13/mrv2/
 
 Binaries:
-https://github.com/ggarra13/mrv2/releases/tag/v1.1.4
+https://github.com/ggarra13/mrv2/releases/tag/v1.1.5

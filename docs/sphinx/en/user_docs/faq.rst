@@ -5,7 +5,36 @@ FAQ
 All Platforms
 =============
 
-- My plaback is too slow.  How can I improve it?
+- My playback is too slow.  How can I improve it?
+	
+  Check that you have:
+  
+    * Window->Preferences
+
+      - OpenGL
+	
+	Color Buffers' Accuracy set to Automatic (preferred) or Fast.
+
+      - Timeline
+
+	Preview Thumbnails off.
+
+      - Playback
+
+	Auto Hide Pixel Bar checked
+	or optionally hide the pixel bar or set the UI to presentation mode.
+
+    * Panel->Settings
+      
+      - Cache Gigabytes
+
+	Set to 4GB at least (the default is half your memory)
+
+
+Linux
+=====
+
+- My playback is too slow.  How can I improve it?	
 
   Check that you have:
 
@@ -30,28 +59,6 @@ All Platforms
 	drivers 535 at least and do::
 
 	  sudo apt install libnvidia-egl-wayland1
-	
-  
-    * Window->Preferences
-
-      - OpenGL
-	
-	Color Buffers' Accuracy set to Automatic (preferred) or Fast.
-
-      - Timeline
-
-	Preview Thumbnails off.
-
-      - Playback
-
-	Auto Hide Pixel Bar checked
-	or optionally hide the pixel bar or set the UI to presentation mode.
-
-    * Panel->Settings
-      
-      - Cache Gigabytes
-
-	Set to 4GB at least (the default is half your memory)
 
 
 -  Seeking on 4K or 8K movies is too slow.  How can I improve it?
