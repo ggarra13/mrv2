@@ -288,7 +288,7 @@ in:
 BUILD-KERNEL-ARCH/BUILDTYPE/compile.log.
 ````
 The default is to build with all cores in all the Operating Systems.
-Currently, the build with all settings on takes about 25 mins. on 16 cores.
+Currently, the build with all settings on takes about 39 minutes on 16 cores.
 
 If you want more or less cores pass another number to any of
 the runme*.sh scripts.  For example, to build with 4 cores, you can do:
@@ -310,6 +310,8 @@ Later, to just build FLTK, tlRender and mrv2  (runme three mnemonic), run;
 ```
 ./runmet.sh
 ```
+
+Also, look in the bin/ directory for other runme.sh scripts which compile  a quicker version of mrv2 without features like USD, python or networking.
 
 ## Debug builds
 
