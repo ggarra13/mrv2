@@ -56,12 +56,10 @@ foreach( lang ${LANGUAGES} )
 	set( _moFile "${_moDir}/${_py_basename}.mo" )
 	set( _poFile "${_moDir}/${_py_basename}.po" )
 
-	message( STATUS "check ${_poFile}")
 	if (NOT	EXISTS ${_poFile})
-	    message(STATUS "Does not exist ${_poFile}")
+	    message(STATUS "Does not exist .po file ${_poFile}")
 	    set(_pyscript_dir "${CMAKE_BINARY_DIR}/../../../Python-prefix/src/Python/Tools/i18n" )
 
-	    
 	    set(_py_gettext_script
 		"${_pyscript_dir}/pygettext.py")
 
@@ -76,12 +74,14 @@ foreach( lang ${LANGUAGES} )
 
 	    if (NOT DEFINED _py_gettext_cmd OR
 		    "${_py_gettext_cmd}" STREQUAL "")
-		message(FATAL_ERROR "Did not create ${_poFile}")
+		message(FATAL_ERROR "Did not create .po file ${_poFile}")
 	    else()
 		execute_process(
 		    COMMAND ${CMAKE_COMMAND} -E echo Running: ${_py_gettext_cmd}
 		    OUTPUT_VARIABLE echo_output)
-	    
+
+		message(FATAL_ERROR "echo_output=${echo_output}")
+		
 		execute_process(COMMAND
 		    ${CMAKE_COMMAND} -E make_directory ${_moDir}
 		    COMMAND ${_py_gettext_cmd} ${_py_gettext_args})
@@ -89,6 +89,7 @@ foreach( lang ${LANGUAGES} )
 	endif()
 	
 	add_custom_command( OUTPUT "${_moFile}"
+	    COMMAND ${CMAKE_COMMAND} -E echo Running msgfmt for ${_moFile}
 	    COMMAND msgfmt -v "${_poFile}" -o "${_moFile}"
 	    DEPENDS ${_full_path}
 	)
@@ -103,7 +104,7 @@ endforeach()
 
 add_custom_target(
     pot
-    COMMAND echo xgettext
+    COMMAND ${CMAKE_COMMAND} -E echo Running xgettext for pot target
     COMMAND xgettext --package-name=mrv2 --package-version="v${mrv2_VERSION}" --copyright-holder="Contributors to the mrv2 Project" --msgid-bugs-address="ggarra13@gmail.com" -d mrv2 -c++ -k_ ${PO_SOURCES} -o "${_absPotFile}"
     WORKING_DIRECTORY "${ROOT_DIR}/lib"
     # No dependency on any sources, so we don't update on any file change
