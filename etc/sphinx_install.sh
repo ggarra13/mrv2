@@ -11,6 +11,6 @@ locate_python
 
 export PYTHONPATH=$PYTHON_SITEDIR:$PYTHON_PATH
 if [[ ! -d ${SITE_DIR}/sphinx ]]; then
-    run_cmd $PYTHON -m pip install --upgrade pip --no-cache-dir
-    run_cmd $PYTHON -m pip install --upgrade sphinx sphinx_rtd_theme requests urllib3 --no-cache-dir
+    run_cmd $PYTHON -m pip install --upgrade pip
+    run_cmd $PYTHON -m pip install --upgrade sphinx sphinx_rtd_theme requests urllib3
 fi
