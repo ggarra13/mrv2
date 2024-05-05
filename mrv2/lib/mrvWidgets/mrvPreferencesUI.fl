@@ -7,6 +7,9 @@ i18n_gnu_function _
 i18n_gnu_static_function _
 header_name {.h}
 code_name {.cxx}
+decl {\#include <FL/fl_ask.H>} {public global
+}
+
 decl {\#include <FL/Fl_Color_Chooser.H>} {public global
 }
 
@@ -69,900 +72,903 @@ decl {\#include "make_ocio_chooser.h"} {public global
 
 class PreferencesUI {open
 } {
-  decl {ViewerUI* main;} {public local
+  decl {ViewerUI* main;} {private local
   }
   Function {make_window(ViewerUI* m)} {open private
   } {
     Fl_Window uiMain {
       label Preferences
       user_data this user_data_type {PreferencesUI*} open
-      xywh {0 0 847 466} type Double resizable
+      xywh {0 53 847 466} type Double resizable
       code0 {main = m;} modal visible
     } {
       Fl_Group {} {open
         xywh {0 0 847 466} box FLAT_BOX
       } {
-        Fl_Wizard uiWizard {
-          label Settings open
-          xywh {283 26 564 380} box PLASTIC_UP_BOX labelcolor 32
+        Fl_Group {} {open
+          xywh {283 26 564 428}
         } {
-          Fl_Group {} {
-            label {User Interface}
-            xywh {288 49 554 349} box EMBOSSED_BOX align 5 hide
+          Fl_Wizard uiWizard {
+            label Settings
+            xywh {283 26 564 380} box PLASTIC_UP_BOX labelcolor 32
           } {
             Fl_Group {} {
-              label {Window Behavior}
-              xywh {293 53 545 144} box ROUNDED_BOX
+              label {User Interface}
+              xywh {288 49 554 349} box EMBOSSED_BOX align 5 hide
             } {
-              Fl_Check_Button uiPrefsAlwaysOnTop {
-                label {Always on Top}
-                tooltip {When selected, mrv2's window will always show up on top of other windows on the desktop.} xywh {317 67 25 25} box UP_BOX down_box DOWN_BOX align 8
-              }
-              Fl_Check_Button uiPrefsSecondaryOnTop {
-                label {Secondary on Top}
-                tooltip {When selected, mrv2's window will always show up on top of other windows on the desktop.} xywh {317 97 25 25} box UP_BOX down_box DOWN_BOX align 8
-              }
-              Fl_Check_Button uiPrefsSingleInstance {
-                label {Single Instance}
-                tooltip {When selected, only a single mrv2 instance is allowed.
+              Fl_Group {} {
+                label {Window Behavior}
+                xywh {293 53 545 144} box ROUNDED_BOX
+              } {
+                Fl_Check_Button uiPrefsAlwaysOnTop {
+                  label {Always on Top}
+                  tooltip {When selected, mrv2's window will always show up on top of other windows on the desktop.} xywh {317 67 25 25} box UP_BOX down_box DOWN_BOX align 8
+                }
+                Fl_Check_Button uiPrefsSecondaryOnTop {
+                  label {Secondary on Top}
+                  tooltip {When selected, mrv2's window will always show up on top of other windows on the desktop.} xywh {317 97 25 25} box UP_BOX down_box DOWN_BOX align 8
+                }
+                Fl_Check_Button uiPrefsSingleInstance {
+                  label {Single Instance}
+                  tooltip {When selected, only a single mrv2 instance is allowed.
 If you try to open several mrv2s with different images, all these images will be sent to the already open mrv2.} xywh {317 127 25 25} box UP_BOX down_box DOWN_BOX align 8
+                }
+                Fl_Check_Button uiPrefsAutoFitImage {
+                  label {Auto Refit Image}
+                  tooltip {When selected, mrv2 will apply a fit image operation on each video played.  This effectly means the video will be resized automatically based on the size of the window.} xywh {317 157 25 25} box UP_BOX down_box DOWN_BOX value 1 align 8
+                }
+                Fl_Group uiPrefsOpenMode {open
+                  xywh {608 66 195 95} box UP_BOX
+                } {
+                  Fl_Round_Button {} {
+                    label Normal
+                    tooltip {When selected, mrv2 will resize its window to the first image.} xywh {613 72 25 26} type Radio box ROUND_UP_BOX down_box ROUND_DOWN_BOX value 1 align 8
+                  }
+                  Fl_Round_Button {} {
+                    label Fullscreen
+                    tooltip {When selected, mrv2 will start in full screen mode.} xywh {613 100 25 26} type Radio box ROUND_UP_BOX down_box ROUND_DOWN_BOX align 8
+                  }
+                  Fl_Round_Button {} {
+                    label Presentation
+                    tooltip {When selected, mrv2 will start in presentation mode.} xywh {613 129 25 26} type Radio box ROUND_UP_BOX down_box ROUND_DOWN_BOX align 8
+                  }
+                }
               }
-              Fl_Check_Button uiPrefsAutoFitImage {
-                label {Auto Refit Image}
-                tooltip {When selected, mrv2 will apply a fit image operation on each video played.  This effectly means the video will be resized automatically based on the size of the window.} xywh {317 157 25 25} box UP_BOX down_box DOWN_BOX value 1 align 8
-              }
-              Fl_Group uiPrefsOpenMode {open
-                xywh {608 66 195 95} box UP_BOX
+              Fl_Group {} {
+                label {UI Elements}
+                xywh {288 228 550 164} box ROUNDED_BOX
               } {
-                Fl_Round_Button {} {
-                  label Normal
-                  tooltip {When selected, mrv2 will resize its window to the first image.} xywh {613 72 25 26} type Radio box ROUND_UP_BOX down_box ROUND_DOWN_BOX value 1 align 8
+                Fl_Check_Button uiPrefsMenuBar {
+                  label {Menu Bar}
+                  tooltip {When selected, mrv2 will start with the menu bar already shown.} xywh {418 242 25 25} box UP_BOX down_box DOWN_BOX value 1 align 8
                 }
-                Fl_Round_Button {} {
-                  label Fullscreen
-                  tooltip {When selected, mrv2 will start in full screen mode.} xywh {613 100 25 26} type Radio box ROUND_UP_BOX down_box ROUND_DOWN_BOX align 8
+                Fl_Check_Button uiPrefsTopbar {
+                  label Topbar
+                  tooltip {When selected, mrv2 will start with its channel, gain, gamma toolbar visible.} xywh {419 270 25 25} box UP_BOX down_box DOWN_BOX value 1 align 8
                 }
-                Fl_Round_Button {} {
-                  label Presentation
-                  tooltip {When selected, mrv2 will start in presentation mode.} xywh {613 129 25 26} type Radio box ROUND_UP_BOX down_box ROUND_DOWN_BOX align 8
+                Fl_Check_Button uiPrefsPixelToolbar {
+                  label {Pixel Toolbar}
+                  tooltip {When selected, mrv2 will start with the pixel toolbar shown.} xywh {419 300 25 25} box UP_BOX down_box DOWN_BOX value 1 align 8
+                }
+                Fl_Check_Button uiPrefsTimeline {
+                  label Timeline
+                  tooltip {When selected, mrv2 will start with the timeline shown.} xywh {419 328 25 25} box UP_BOX down_box DOWN_BOX value 1 align 136
+                }
+                Fl_Check_Button uiPrefsStatusBar {
+                  label {Status Bar}
+                  tooltip {When selected, mrv2 will start with the status bar visible.} xywh {418 356 25 25} box UP_BOX down_box DOWN_BOX value 1 align 136
+                }
+                Fl_Check_Button uiPrefsMacOSMenus {
+                  label {macOS Menus}
+                  tooltip {This is a macOS setting only.  When selected the menus will appear on the system toolbar instead of the mrv2 toolbar.} xywh {593 241 25 25} box UP_BOX down_box DOWN_BOX align 8
+                }
+                Fl_Check_Button uiPrefsToolBar {
+                  label {Tool Dock}
+                  tooltip {When selected, mrv2 will start with the action tool dock already open.} xywh {593 272 25 25} box UP_BOX down_box DOWN_BOX align 136
+                }
+                Fl_Check_Button uiPrefsOnePanelOnly {
+                  label {Only One Panel}
+                  tooltip {When selected, mrv2 will start with the only one panel option selected.} xywh {594 328 25 25} box UP_BOX down_box DOWN_BOX align 136
                 }
               }
             }
             Fl_Group {} {
-              label {UI Elements}
-              xywh {288 228 550 164} box ROUNDED_BOX
+              label {View Window}
+              xywh {288 35 555 349} box EMBOSSED_BOX align 5 hide
             } {
-              Fl_Check_Button uiPrefsMenuBar {
-                label {Menu Bar}
-                tooltip {When selected, mrv2 will start with the menu bar already shown.} xywh {418 242 25 25} box UP_BOX down_box DOWN_BOX value 1 align 8
+              Fl_Group {} {
+                label Defaults open
+                xywh {298 65 531 162} box ROUNDED_BOX
+              } {
+                Fl_Value_Input uiPrefsViewGain {
+                  label Gain
+                  tooltip {Sets the default gain when mrv2 starts.} xywh {403 82 80 25} maximum 64 value 1 textcolor 56
+                }
+                Fl_Value_Input uiPrefsViewGamma {
+                  label Gamma
+                  tooltip {Sets the default gamma when mrv2 starts.} xywh {685 82 60 25} maximum 4 value 1 textcolor 56
+                }
+                Fl_Choice uiPrefsCropArea {
+                  label Crop
+                  user_data this user_data_type {PreferencesUI*}
+                  tooltip {Allows you to select a standard cropping area around image.} xywh {333 131 155 25} box THIN_DOWN_BOX down_box BORDER_BOX align 1
+                  class {mrv::Choice}
+                } {
+                  MenuItem {} {
+                    label {0.00 None}
+                    xywh {5 5 100 20}
+                  }
+                  MenuItem {} {
+                    label {1.00 Square}
+                    xywh {5 5 100 20}
+                  }
+                  MenuItem {} {
+                    label {1.19 Movietone}
+                    xywh {5 5 100 20}
+                  }
+                  MenuItem {} {
+                    label {1.37 Academy (Full Frame)}
+                    xywh {5 5 100 20}
+                  }
+                  MenuItem {} {
+                    label {1.50 Still Photo}
+                    xywh {5 5 100 20}
+                  }
+                  MenuItem {} {
+                    label {1.56 STV - HDTV (14:9)}
+                    xywh {5 5 100 20}
+                  }
+                  MenuItem {} {
+                    label {1.66 European Widescreen}
+                    xywh {5 5 100 20}
+                  }
+                  MenuItem {} {
+                    label {1.77 HDTV (16:9)}
+                    xywh {5 5 100 20}
+                  }
+                  MenuItem {} {
+                    label {1.85 Widescreen (3-perf)}
+                    xywh {5 5 100 20}
+                  }
+                  MenuItem {} {
+                    label {2.00 Univisium}
+                    xywh {5 5 100 20}
+                  }
+                  MenuItem {} {
+                    label {2.10 VistaVision}
+                    xywh {15 15 100 20}
+                  }
+                  MenuItem {} {
+                    label {2.20 70mm}
+                    xywh {5 5 100 20}
+                  }
+                  MenuItem {} {
+                    label {2.35 CinemaScope (old 2.35)}
+                    xywh {5 5 100 20}
+                  }
+                  MenuItem {} {
+                    label {2.39 Panavision (new 2.35)}
+                    xywh {5 5 100 20}
+                  }
+                  MenuItem {} {
+                    label {4.00 Polyvision}
+                    xywh {5 5 100 20}
+                  }
+                }
+                Fl_Check_Button uiPrefsAutoFrame {
+                  label {Auto Frame}
+                  user_data this user_data_type {PreferencesUI*}
+                  tooltip {When this is on, View/Auto Frame will be active.} xywh {685 124 20 20} box UP_BOX down_box DOWN_BOX align 4
+                }
+                Fl_Check_Button uiPrefsSafeAreas {
+                  label {Safe Areas}
+                  user_data this user_data_type {PreferencesUI*}
+                  tooltip {When mrv2 starts, the safe area display will be active by default.} xywh {685 164 20 20} box UP_BOX down_box DOWN_BOX align 4
+                }
+                Fl_Choice uiPrefsZoomSpeed {
+                  label {Zoom Speed}
+                  xywh {358 186 90 25} down_box BORDER_BOX align 1
+                } {
+                  MenuItem {} {
+                    label Slow
+                    xywh {10 10 30 20}
+                  }
+                  MenuItem {} {
+                    label Medium
+                    xywh {20 20 30 20}
+                  }
+                  MenuItem {} {
+                    label Fast
+                    xywh {30 30 30 20}
+                  }
+                }
               }
-              Fl_Check_Button uiPrefsTopbar {
-                label Topbar
-                tooltip {When selected, mrv2 will start with its channel, gain, gamma toolbar visible.} xywh {419 270 25 25} box UP_BOX down_box DOWN_BOX value 1 align 8
-              }
-              Fl_Check_Button uiPrefsPixelToolbar {
-                label {Pixel Toolbar}
-                tooltip {When selected, mrv2 will start with the pixel toolbar shown.} xywh {419 300 25 25} box UP_BOX down_box DOWN_BOX value 1 align 8
-              }
-              Fl_Check_Button uiPrefsTimeline {
-                label Timeline
-                tooltip {When selected, mrv2 will start with the timeline shown.} xywh {419 328 25 25} box UP_BOX down_box DOWN_BOX value 1 align 136
-              }
-              Fl_Check_Button uiPrefsStatusBar {
-                label {Status Bar}
-                tooltip {When selected, mrv2 will start with the status bar visible.} xywh {418 356 25 25} box UP_BOX down_box DOWN_BOX value 1 align 136
-              }
-              Fl_Check_Button uiPrefsMacOSMenus {
-                label {macOS Menus}
-                tooltip {This is a macOS setting only.  When selected the menus will appear on the system toolbar instead of the mrv2 toolbar.} xywh {593 241 25 25} box UP_BOX down_box DOWN_BOX align 8
-              }
-              Fl_Check_Button uiPrefsToolBar {
-                label {Tool Dock}
-                tooltip {When selected, mrv2 will start with the action tool dock already open.} xywh {593 272 25 25} box UP_BOX down_box DOWN_BOX align 136
-              }
-              Fl_Check_Button uiPrefsOnePanelOnly {
-                label {Only One Panel}
-                tooltip {When selected, mrv2 will start with the only one panel option selected.} xywh {594 328 25 25} box UP_BOX down_box DOWN_BOX align 136
+              Fl_Group uiPrefsHud {
+                label HUD
+                user_data this user_data_type {PreferencesUI*}
+                tooltip {This area specifies which elements should be shown as a HUD overlay on the view screen.} xywh {303 247 524 126} box UP_BOX
+              } {
+                Fl_Check_Button uiPrefsHudFilename {
+                  label Filename
+                  user_data this user_data_type {PreferencesUI*}
+                  xywh {338 287 20 20} box UP_BOX down_box DOWN_BOX align 8
+                }
+                Fl_Check_Button uiPrefsHudDirectory {
+                  label Directory
+                  user_data this user_data_type {PreferencesUI*}
+                  xywh {338 257 20 20} box UP_BOX down_box DOWN_BOX align 8
+                }
+                Fl_Check_Button uiPrefsHudFrame {
+                  label Frame
+                  user_data this user_data_type {PreferencesUI*}
+                  xywh {338 317 20 20} box UP_BOX down_box DOWN_BOX align 8
+                }
+                Fl_Check_Button uiPrefsHudFrameRange {
+                  label {Frame Range}
+                  user_data this user_data_type {PreferencesUI*}
+                  xywh {483 317 20 20} box UP_BOX down_box DOWN_BOX align 8
+                }
+                Fl_Check_Button uiPrefsHudFrameCount {
+                  label {Frame Count}
+                  user_data this user_data_type {PreferencesUI*}
+                  xywh {653 287 20 20} box UP_BOX down_box DOWN_BOX align 8
+                }
+                Fl_Check_Button uiPrefsHudResolution {
+                  label Resolution
+                  user_data this user_data_type {PreferencesUI*}
+                  xywh {483 257 20 20} box UP_BOX down_box DOWN_BOX align 8
+                }
+                Fl_Check_Button uiPrefsHudTimecode {
+                  label Timecode
+                  user_data this user_data_type {PreferencesUI*}
+                  xywh {653 319 20 18} box UP_BOX down_box DOWN_BOX align 8
+                }
+                Fl_Check_Button uiPrefsHudFPS {
+                  label FPS
+                  user_data this user_data_type {PreferencesUI*}
+                  xywh {483 287 20 20} box UP_BOX down_box DOWN_BOX align 8
+                }
+                Fl_Check_Button uiPrefsHudMemory {
+                  label Memory
+                  user_data this user_data_type {PreferencesUI*}
+                  xywh {337 345 20 20} box UP_BOX down_box DOWN_BOX align 8
+                }
+                Fl_Check_Button uiPrefsHudCache {
+                  label Cache
+                  user_data this user_data_type {PreferencesUI*}
+                  xywh {483 346 20 20} box UP_BOX down_box DOWN_BOX align 8
+                }
+                Fl_Check_Button uiPrefsHudAttributes {
+                  label Attributes
+                  user_data this user_data_type {PreferencesUI*}
+                  xywh {653 257 20 20} box UP_BOX down_box DOWN_BOX align 8
+                }
               }
             }
-          }
-          Fl_Group {} {
-            label {View Window}
-            xywh {288 35 555 349} box EMBOSSED_BOX align 5 hide
-          } {
             Fl_Group {} {
-              label Defaults open
-              xywh {298 65 531 162} box ROUNDED_BOX
+              label Render
+              xywh {291 45 549 349} box EMBOSSED_BOX align 5 hide
             } {
-              Fl_Value_Input uiPrefsViewGain {
-                label Gain
-                tooltip {Sets the default gain when mrv2 starts.} xywh {403 82 80 25} maximum 64 value 1 textcolor 56
-              }
-              Fl_Value_Input uiPrefsViewGamma {
-                label Gamma
-                tooltip {Sets the default gamma when mrv2 starts.} xywh {685 82 60 25} maximum 4 value 1 textcolor 56
-              }
-              Fl_Choice uiPrefsCropArea {
-                label Crop
-                user_data this user_data_type {PreferencesUI*}
-                tooltip {Allows you to select a standard cropping area around image.} xywh {333 131 155 25} box THIN_DOWN_BOX down_box BORDER_BOX align 1
-                class {mrv::Choice}
+              Fl_Group {} {open
+                xywh {301 75 531 170} box ROUNDED_BOX
               } {
-                MenuItem {} {
-                  label {0.00 None}
-                  xywh {5 5 100 20}
+                Fl_Choice uiPrefsVideoLevels {
+                  label {Video Levels}
+                  xywh {513 89 135 25} down_box BORDER_BOX
+                } {
+                  MenuItem {} {
+                    label {From File}
+                    xywh {20 20 100 20}
+                  }
+                  MenuItem {} {
+                    label {Legal Range}
+                    xywh {30 30 100 20}
+                  }
+                  MenuItem {} {
+                    label {Full Range}
+                    xywh {40 40 100 20}
+                  }
                 }
-                MenuItem {} {
-                  label {1.00 Square}
-                  xywh {5 5 100 20}
+                Fl_Choice uiPrefsAlphaBlend {
+                  label {Alpha Blend}
+                  xywh {513 119 135 25} down_box BORDER_BOX
+                } {
+                  MenuItem {} {
+                    label None
+                    xywh {10 10 100 20}
+                  }
+                  MenuItem {} {
+                    label Straight
+                    xywh {20 20 100 20}
+                  }
+                  MenuItem {} {
+                    label Premultiplied
+                    xywh {30 30 100 20}
+                  }
                 }
-                MenuItem {} {
-                  label {1.19 Movietone}
-                  xywh {5 5 100 20}
+                Fl_Choice uiPrefsMinifyFilter {
+                  label {Minify Filter}
+                  xywh {513 172 135 25} down_box BORDER_BOX
+                } {
+                  MenuItem {} {
+                    label Nearest
+                    xywh {30 30 100 20}
+                  }
+                  MenuItem {} {
+                    label Linear
+                    xywh {40 40 100 20}
+                  }
                 }
-                MenuItem {} {
-                  label {1.37 Academy (Full Frame)}
-                  xywh {5 5 100 20}
-                }
-                MenuItem {} {
-                  label {1.50 Still Photo}
-                  xywh {5 5 100 20}
-                }
-                MenuItem {} {
-                  label {1.56 STV - HDTV (14:9)}
-                  xywh {5 5 100 20}
-                }
-                MenuItem {} {
-                  label {1.66 European Widescreen}
-                  xywh {5 5 100 20}
-                }
-                MenuItem {} {
-                  label {1.77 HDTV (16:9)}
-                  xywh {5 5 100 20}
-                }
-                MenuItem {} {
-                  label {1.85 Widescreen (3-perf)}
-                  xywh {5 5 100 20}
-                }
-                MenuItem {} {
-                  label {2.00 Univisium}
-                  xywh {5 5 100 20}
-                }
-                MenuItem {} {
-                  label {2.10 VistaVision}
-                  xywh {15 15 100 20}
-                }
-                MenuItem {} {
-                  label {2.20 70mm}
-                  xywh {5 5 100 20}
-                }
-                MenuItem {} {
-                  label {2.35 CinemaScope (old 2.35)}
-                  xywh {5 5 100 20}
-                }
-                MenuItem {} {
-                  label {2.39 Panavision (new 2.35)}
-                  xywh {5 5 100 20}
-                }
-                MenuItem {} {
-                  label {4.00 Polyvision}
-                  xywh {5 5 100 20}
-                }
-              }
-              Fl_Check_Button uiPrefsAutoFrame {
-                label {Auto Frame}
-                user_data this user_data_type {PreferencesUI*}
-                tooltip {When this is on, View/Auto Frame will be active.} xywh {685 124 20 20} box UP_BOX down_box DOWN_BOX align 4
-              }
-              Fl_Check_Button uiPrefsSafeAreas {
-                label {Safe Areas}
-                user_data this user_data_type {PreferencesUI*}
-                tooltip {When mrv2 starts, the safe area display will be active by default.} xywh {685 164 20 20} box UP_BOX down_box DOWN_BOX align 4
-              }
-              Fl_Choice uiPrefsZoomSpeed {
-                label {Zoom Speed}
-                xywh {358 186 90 25} down_box BORDER_BOX align 1
-              } {
-                MenuItem {} {
-                  label Slow
-                  xywh {10 10 30 20}
-                }
-                MenuItem {} {
-                  label Medium
-                  xywh {20 20 30 20}
-                }
-                MenuItem {} {
-                  label Fast
-                  xywh {30 30 30 20}
+                Fl_Choice uiPrefsMagnifyFilter {
+                  label {Magnify Filter}
+                  xywh {513 205 135 25} down_box BORDER_BOX
+                } {
+                  MenuItem {} {
+                    label Nearest
+                    xywh {40 40 100 20}
+                  }
+                  MenuItem {} {
+                    label Linear
+                    xywh {50 50 100 20}
+                  }
                 }
               }
             }
-            Fl_Group uiPrefsHud {
-              label HUD
-              user_data this user_data_type {PreferencesUI*}
-              tooltip {This area specifies which elements should be shown as a HUD overlay on the view screen.} xywh {303 247 524 126} box UP_BOX
-            } {
-              Fl_Check_Button uiPrefsHudFilename {
-                label Filename
-                user_data this user_data_type {PreferencesUI*}
-                xywh {338 287 20 20} box UP_BOX down_box DOWN_BOX align 8
-              }
-              Fl_Check_Button uiPrefsHudDirectory {
-                label Directory
-                user_data this user_data_type {PreferencesUI*}
-                xywh {338 257 20 20} box UP_BOX down_box DOWN_BOX align 8
-              }
-              Fl_Check_Button uiPrefsHudFrame {
-                label Frame
-                user_data this user_data_type {PreferencesUI*}
-                xywh {338 317 20 20} box UP_BOX down_box DOWN_BOX align 8
-              }
-              Fl_Check_Button uiPrefsHudFrameRange {
-                label {Frame Range}
-                user_data this user_data_type {PreferencesUI*}
-                xywh {483 317 20 20} box UP_BOX down_box DOWN_BOX align 8
-              }
-              Fl_Check_Button uiPrefsHudFrameCount {
-                label {Frame Count}
-                user_data this user_data_type {PreferencesUI*}
-                xywh {653 287 20 20} box UP_BOX down_box DOWN_BOX align 8
-              }
-              Fl_Check_Button uiPrefsHudResolution {
-                label Resolution
-                user_data this user_data_type {PreferencesUI*}
-                xywh {483 257 20 20} box UP_BOX down_box DOWN_BOX align 8
-              }
-              Fl_Check_Button uiPrefsHudTimecode {
-                label Timecode
-                user_data this user_data_type {PreferencesUI*}
-                xywh {653 319 20 18} box UP_BOX down_box DOWN_BOX align 8
-              }
-              Fl_Check_Button uiPrefsHudFPS {
-                label FPS
-                user_data this user_data_type {PreferencesUI*}
-                xywh {483 287 20 20} box UP_BOX down_box DOWN_BOX align 8
-              }
-              Fl_Check_Button uiPrefsHudMemory {
-                label Memory
-                user_data this user_data_type {PreferencesUI*}
-                xywh {337 345 20 20} box UP_BOX down_box DOWN_BOX align 8
-              }
-              Fl_Check_Button uiPrefsHudCache {
-                label Cache
-                user_data this user_data_type {PreferencesUI*}
-                xywh {483 346 20 20} box UP_BOX down_box DOWN_BOX align 8
-              }
-              Fl_Check_Button uiPrefsHudAttributes {
-                label Attributes
-                user_data this user_data_type {PreferencesUI*}
-                xywh {653 257 20 20} box UP_BOX down_box DOWN_BOX align 8
-              }
-            }
-          }
-          Fl_Group {} {
-            label Render
-            xywh {291 45 549 349} box EMBOSSED_BOX align 5 hide
-          } {
-            Fl_Group {} {open
-              xywh {301 75 531 170} box ROUNDED_BOX
-            } {
-              Fl_Choice uiPrefsVideoLevels {
-                label {Video Levels}
-                xywh {513 89 135 25} down_box BORDER_BOX
-              } {
-                MenuItem {} {
-                  label {From File}
-                  xywh {20 20 100 20}
-                }
-                MenuItem {} {
-                  label {Legal Range}
-                  xywh {30 30 100 20}
-                }
-                MenuItem {} {
-                  label {Full Range}
-                  xywh {40 40 100 20}
-                }
-              }
-              Fl_Choice uiPrefsAlphaBlend {
-                label {Alpha Blend}
-                xywh {513 119 135 25} down_box BORDER_BOX
-              } {
-                MenuItem {} {
-                  label None
-                  xywh {10 10 100 20}
-                }
-                MenuItem {} {
-                  label Straight
-                  xywh {20 20 100 20}
-                }
-                MenuItem {} {
-                  label Premultiplied
-                  xywh {30 30 100 20}
-                }
-              }
-              Fl_Choice uiPrefsMinifyFilter {
-                label {Minify Filter}
-                xywh {513 172 135 25} down_box BORDER_BOX
-              } {
-                MenuItem {} {
-                  label Nearest
-                  xywh {30 30 100 20}
-                }
-                MenuItem {} {
-                  label Linear
-                  xywh {40 40 100 20}
-                }
-              }
-              Fl_Choice uiPrefsMagnifyFilter {
-                label {Magnify Filter}
-                xywh {513 205 135 25} down_box BORDER_BOX
-              } {
-                MenuItem {} {
-                  label Nearest
-                  xywh {40 40 100 20}
-                }
-                MenuItem {} {
-                  label Linear
-                  xywh {50 50 100 20}
-                }
-              }
-            }
-          }
-          Fl_Group {} {
-            label {Language and Colors}
-            xywh {288 35 555 349} box EMBOSSED_BOX align 5 hide
-          } {
             Fl_Group {} {
-              label UI
-              xywh {360 56 403 199} box ROUNDED_BOX
+              label {Language and Colors}
+              xywh {288 35 555 349} box EMBOSSED_BOX align 5 hide
             } {
-              Fl_Choice uiLanguage {
-                label Language open
-                xywh {508 76 160 25} down_box BORDER_BOX
+              Fl_Group {} {
+                label UI
+                xywh {360 56 403 199} box ROUNDED_BOX
               } {
-                MenuItem {} {
-                  label English
-                  xywh {35 35 100 20}
+                Fl_Choice uiLanguage {
+                  label Language open
+                  xywh {508 76 160 25} down_box BORDER_BOX
+                } {
+                  MenuItem {} {
+                    label English
+                    xywh {35 35 100 20}
+                  }
+                  MenuItem {} {
+                    label Spanish
+                    xywh {25 25 100 20}
+                  }
                 }
-                MenuItem {} {
-                  label Spanish
-                  xywh {25 25 100 20}
+                Fl_Choice uiScheme {
+                  label Scheme
+                  callback {Fl::scheme( o->mvalue()->text );} open
+                  xywh {522 129 100 25} down_box BORDER_BOX align 1
+                } {
+                  MenuItem {} {
+                    label base
+                    xywh {5 5 36 21}
+                  }
+                  MenuItem {} {
+                    label plastic
+                    xywh {15 15 36 21}
+                  }
+                  MenuItem {} {
+                    label {gtk+}
+                    xywh {25 25 36 21}
+                  }
+                  MenuItem {} {
+                    label gleam
+                    xywh {35 35 36 21}
+                  }
+                  MenuItem {} {
+                    label oxy
+                    xywh {45 45 36 21}
+                  }
                 }
-              }
-              Fl_Choice uiScheme {
-                label Scheme
-                callback {Fl::scheme( o->mvalue()->text );} open
-                xywh {522 129 100 25} down_box BORDER_BOX align 1
-              } {
-                MenuItem {} {
-                  label base
-                  xywh {5 5 36 21}
-                }
-                MenuItem {} {
-                  label plastic
-                  xywh {15 15 36 21}
-                }
-                MenuItem {} {
-                  label {gtk+}
-                  xywh {25 25 36 21}
-                }
-                MenuItem {} {
-                  label gleam
-                  xywh {35 35 36 21}
-                }
-                MenuItem {} {
-                  label oxy
-                  xywh {45 45 36 21}
-                }
-              }
-              Fl_Choice uiColorTheme {
-                label {Color Theme}
-                user_data m user_data_type {ViewerUI*}
-                callback {if (!o->mvalue() || !o->mvalue()->text ) return;
+                Fl_Choice uiColorTheme {
+                  label {Color Theme}
+                  user_data m user_data_type {ViewerUI*}
+                  callback {if (!o->mvalue() || !o->mvalue()->text ) return;
 	      mrv::Preferences::schemes.apply_colors( o->mvalue()->text );
 	      v->refresh();} open
-                xywh {502 176 150 25} down_box BORDER_BOX align 1
-              } {}
-              Fl_Button {} {
-                label {Reload Theme}
-                user_data m user_data_type {ViewerUI*}
-                callback {const Fl_Menu_Item* item = v->uiPrefs->uiColorTheme->mvalue();
+                  xywh {502 176 150 25} down_box BORDER_BOX align 1
+                } {}
+                Fl_Button {} {
+                  label {Reload Theme}
+                  user_data m user_data_type {ViewerUI*}
+                  callback {const Fl_Menu_Item* item = v->uiPrefs->uiColorTheme->mvalue();
 mrv::Preferences::schemes.reload_theme( item->text );
 v->refresh();}
-                tooltip {Reload color theme from mrv2.colors file again to refresh change in colors} xywh {512 206 135 30}
+                  tooltip {Reload color theme from mrv2.colors file again to refresh change in colors} xywh {512 206 135 30}
+                }
               }
-            }
-            Fl_Group {} {
-              label View
-              xywh {358 283 410 88} box ROUNDED_BOX
-            } {
-              Fl_Button uiPrefsViewBG {
-                label Background
-                callback {uchar r, g, b;
+              Fl_Group {} {
+                label View
+                xywh {358 283 410 88} box ROUNDED_BOX
+              } {
+                Fl_Button uiPrefsViewBG {
+                  label Background
+                  callback {uchar r, g, b;
 Fl::get_color(o->color(),r,g,b);
 if (!fl_color_chooser("Pick View Background Color", r,g,b)) return;
 o->color( fl_rgb_color( r, g, b ) );
 o->redraw();}
-                tooltip {Selects the background color of areas outside the current image.} xywh {535 299 25 20} box EMBOSSED_BOX labelsize 11 align 4
-              }
-              Fl_Button uiPrefsViewTextOverlay {
-                label {Text Overlay}
-                user_data this user_data_type {PreferencesUI*}
-                callback {uchar r, g, b;
+                  tooltip {Selects the background color of areas outside the current image.} xywh {535 299 25 20} box EMBOSSED_BOX labelsize 11 align 4
+                }
+                Fl_Button uiPrefsViewTextOverlay {
+                  label {Text Overlay}
+                  user_data this user_data_type {PreferencesUI*}
+                  callback {uchar r, g, b;
 Fl::get_color(o->color(),r,g,b);
 if (!fl_color_chooser("Pick View Text Overlay Color", r,g,b)) return;
 o->color( fl_rgb_color( r, g, b ) );
 o->redraw();}
-                tooltip {Selects the color of text overlays printed over the current image.} xywh {535 336 25 20} box EMBOSSED_BOX labelsize 11 align 4
-              }
-              Fl_Button uiPrefsViewSelection {
-                label Selection
-                user_data this user_data_type {PreferencesUI*}
-                callback {uchar r, g, b;
+                  tooltip {Selects the color of text overlays printed over the current image.} xywh {535 336 25 20} box EMBOSSED_BOX labelsize 11 align 4
+                }
+                Fl_Button uiPrefsViewSelection {
+                  label Selection
+                  user_data this user_data_type {PreferencesUI*}
+                  callback {uchar r, g, b;
 Fl::get_color(o->color(),r,g,b);
 if (!fl_color_chooser("Pick View Selection Color", r,g,b)) return;
 o->color( fl_rgb_color( r, g, b ) );
 o->redraw();}
-                tooltip {Selects the color of the selection rectangle over the current image.} xywh {650 299 25 20} box EMBOSSED_BOX labelsize 11 align 4
-              }
-              Fl_Button uiPrefsViewHud {
-                label HUD
-                user_data this user_data_type {PreferencesUI*}
-                callback {uchar r, g, b;
+                  tooltip {Selects the color of the selection rectangle over the current image.} xywh {650 299 25 20} box EMBOSSED_BOX labelsize 11 align 4
+                }
+                Fl_Button uiPrefsViewHud {
+                  label HUD
+                  user_data this user_data_type {PreferencesUI*}
+                  callback {uchar r, g, b;
 Fl::get_color(o->color(),r,g,b);
 if (!fl_color_chooser("Pick HUD Color", r,g,b)) return;
 o->color( fl_rgb_color( r, g, b ) );
 o->redraw();}
-                tooltip {Selects the color of HUD overlays.} xywh {654 336 21 20} box EMBOSSED_BOX align 4
+                  tooltip {Selects the color of HUD overlays.} xywh {654 336 21 20} box EMBOSSED_BOX align 4
+                }
               }
             }
-          }
-          Fl_Group {} {
-            label Fonts
-            xywh {293 45 547 349} box EMBOSSED_BOX align 5 hide
-          } {
             Fl_Group {} {
-              label Fonts open
-              xywh {364 100 403 199} box ROUNDED_BOX
+              label Fonts
+              xywh {293 45 547 349} box EMBOSSED_BOX align 5 hide
             } {
-              Fl_Group {} {open
-                xywh {485 162 160 75}
+              Fl_Group {} {
+                label Fonts open
+                xywh {364 100 403 199} box ROUNDED_BOX
               } {
-                Fl_Choice uiFontMenus {
-                  label Menus open
-                  tooltip {Sets the font to use in menus.} xywh {485 162 160 25} down_box BORDER_BOX
-                  code0 {const auto& fonts = mrv::fonts::list();}
-                  code1 {for (const auto& font : fonts)}
-                  code2 {o->add(font.c_str());}
-                } {}
-                Fl_Choice uiFontPanels {
-                  label Panels open
-                  tooltip {Sets the font to use in panels. (Not yet working)} xywh {485 212 160 25} down_box BORDER_BOX
-                  code0 {const auto& fonts = mrv::fonts::list();}
-                  code1 {for (const auto& font : fonts)}
-                  code2 {o->add(font.c_str());}
-                } {}
+                Fl_Group {} {open
+                  xywh {485 162 160 75}
+                } {
+                  Fl_Choice uiFontMenus {
+                    label Menus open
+                    tooltip {Sets the font to use in menus.} xywh {485 162 160 25} down_box BORDER_BOX
+                    code0 {const auto& fonts = mrv::fonts::list();}
+                    code1 {for (const auto& font : fonts)}
+                    code2 {o->add(font.c_str());}
+                  } {}
+                  Fl_Choice uiFontPanels {
+                    label Panels open
+                    tooltip {Sets the font to use in panels. (Not yet working)} xywh {485 212 160 25} down_box BORDER_BOX
+                    code0 {const auto& fonts = mrv::fonts::list();}
+                    code1 {for (const auto& font : fonts)}
+                    code2 {o->add(font.c_str());}
+                  } {}
+                }
               }
             }
-          }
-          Fl_Group {} {
-            label Positioning
-            xywh {300 34 530 362} box EMBOSSED_BOX hide
-          } {
-            Fl_Check_Button uiAlwaysSaveOnExit {
-              label {Always Save on Exit}
-              tooltip {When this option is set, mrv2 will save its position and size upon exiting the program.} xywh {458 73 215 25} box UP_BOX down_box DOWN_BOX align 16
-            }
-            Fl_Group {} {open
-              xywh {337 115 451 48} box ROUNDED_BOX
+            Fl_Group {} {
+              label Positioning
+              xywh {300 34 530 362} box EMBOSSED_BOX hide
             } {
-              Fl_Check_Button uiWindowFixedPosition {
-                label {Fixed Position}
-                tooltip {When this option is set, mrv2 will open in the position you set here (except if the window goes out of the Desktop).  If Akways Save on Exit is on, the values are recakculated upon exiting the program.} xywh {348 126 215 25} box UP_BOX down_box DOWN_BOX align 16
+              Fl_Check_Button uiAlwaysSaveOnExit {
+                label {Always Save on Exit}
+                tooltip {When this option is set, mrv2 will save its position and size upon exiting the program.} xywh {458 73 215 25} box UP_BOX down_box DOWN_BOX align 16
               }
-              Fl_Value_Input uiWindowXPosition {
-                label {X:}
-                xywh {593 126 60 25} textcolor 56
+              Fl_Group {} {open
+                xywh {337 115 451 48} box ROUNDED_BOX
+              } {
+                Fl_Check_Button uiWindowFixedPosition {
+                  label {Fixed Position}
+                  tooltip {When this option is set, mrv2 will open in the position you set here (except if the window goes out of the Desktop).  If Akways Save on Exit is on, the values are recakculated upon exiting the program.} xywh {348 126 215 25} box UP_BOX down_box DOWN_BOX align 16
+                }
+                Fl_Value_Input uiWindowXPosition {
+                  label {X:}
+                  xywh {593 126 60 25} textcolor 56
+                }
+                Fl_Value_Input uiWindowYPosition {
+                  label {Y:}
+                  xywh {673 126 60 25} textcolor 56
+                }
               }
-              Fl_Value_Input uiWindowYPosition {
-                label {Y:}
-                xywh {673 126 60 25} textcolor 56
+              Fl_Group {} {open
+                xywh {337 213 451 43} box ROUNDED_BOX
+              } {
+                Fl_Check_Button uiWindowFixedSize {
+                  label {Fixed Size}
+                  tooltip {When this option is on, mrv2 will always open to the size you set in W and H.  If Always Save on Exit is on, the values are recalculated upon exiting the program.} xywh {348 221 215 25} box UP_BOX down_box DOWN_BOX align 16
+                }
+                Fl_Value_Input uiWindowXSize {
+                  label {W:}
+                  xywh {600 221 60 25} minimum 640 maximum 4096 step 1 value 640 textcolor 56
+                }
+                Fl_Value_Input uiWindowYSize {
+                  label {H:}
+                  xywh {680 221 60 25} minimum 480 maximum 3680 step 1 value 480 textcolor 56
+                }
               }
-            }
-            Fl_Group {} {open
-              xywh {337 213 451 43} box ROUNDED_BOX
-            } {
-              Fl_Check_Button uiWindowFixedSize {
-                label {Fixed Size}
-                tooltip {When this option is on, mrv2 will always open to the size you set in W and H.  If Always Save on Exit is on, the values are recalculated upon exiting the program.} xywh {348 221 215 25} box UP_BOX down_box DOWN_BOX align 16
-              }
-              Fl_Value_Input uiWindowXSize {
-                label {W:}
-                xywh {600 221 60 25} minimum 640 maximum 4096 step 1 value 640 textcolor 56
-              }
-              Fl_Value_Input uiWindowYSize {
-                label {H:}
-                xywh {680 221 60 25} minimum 480 maximum 3680 step 1 value 480 textcolor 56
-              }
-            }
-            Fl_Button {} {
-              label {Take Current Window Values}
-              user_data this user_data_type {PreferencesUI*}
-              callback {v->uiWindowXPosition->value( v->main->uiMain->x() );
+              Fl_Button {} {
+                label {Take Current Window Values}
+                user_data this user_data_type {PreferencesUI*}
+                callback {v->uiWindowXPosition->value( v->main->uiMain->x() );
 v->uiWindowYPosition->value( v->main->uiMain->y() );
 v->uiWindowXSize->value( v->main->uiMain->w() );
 v->uiWindowYSize->value( v->main->uiMain->h() );}
-              xywh {343 311 445 40} align 128
+                xywh {343 311 445 40} align 128
+              }
             }
-          }
-          Fl_Group {} {
-            label {File Requester}
-            xywh {300 34 530 362} box EMBOSSED_BOX align 5 hide
-          } {
-            Fl_Check_Button uiPrefsFileReqFolder {
-              label {Single Click to Travel Drawers}
-              tooltip {When using mrv2's file chooser, a single click on a folder will open it.} xywh {358 57 25 27} box UP_BOX down_box DOWN_BOX align 136
-            }
-            Fl_Check_Button uiPrefsFileReqThumbnails {
-              label {Thumbnails Active}
-              tooltip {Show thumbnails for known files.} xywh {358 100 25 27} box UP_BOX down_box DOWN_BOX align 136
-            }
-            Fl_Check_Button uiPrefsUSDThumbnails {
-              label {USD Thumbnails}
-              tooltip {Show Thumbnails for USD files (can be slow if they are big)} xywh {358 143 25 27} box UP_BOX down_box DOWN_BOX align 136
-            }
-            Fl_Check_Button uiPrefsNativeFileChooser {
-              label {Use Native File Chooser}
-              tooltip {If selected, the natlve file chooser will be used.  If unselected, mrv2's standard file chooser will be used.} xywh {358 186 25 27} box UP_BOX down_box DOWN_BOX align 136
-            }
-          }
-          Fl_Group {} {
-            label Playback
-            xywh {299 34 530 362} box EMBOSSED_BOX align 5 hide
-          } {
             Fl_Group {} {
-              label Defaults open
-              xywh {310 69 500 312} box ROUNDED_BOX align 5
+              label {File Requester}
+              xywh {300 34 530 362} box EMBOSSED_BOX align 5 hide
             } {
-              Fl_Check_Button uiPrefsAutoPlayback {
-                label {Auto Playback}
-                tooltip {Start Playback when opening files.} xywh {497 111 25 25} box UP_BOX down_box DOWN_BOX align 4
+              Fl_Check_Button uiPrefsFileReqFolder {
+                label {Single Click to Travel Drawers}
+                tooltip {When using mrv2's file chooser, a single click on a folder will open it.} xywh {358 57 25 27} box UP_BOX down_box DOWN_BOX align 136
               }
-              Fl_Check_Button uiPrefsScrubAutoPlay {
-                label {Auto Scrub Playback}
-                tooltip {Start playback when scrubbing so that audio can be heard.} xywh {572 347 25 25} box UP_BOX down_box DOWN_BOX value 1 align 4
+              Fl_Check_Button uiPrefsFileReqThumbnails {
+                label {Thumbnails Active}
+                tooltip {Show thumbnails for known files.} xywh {358 100 25 27} box UP_BOX down_box DOWN_BOX align 136
               }
-              Fl_Check_Button uiPrefsSingleClickPlayback {
-                label {Single Click Playback}
-                tooltip {Start Playback when single clicking the left mouse button on the view window} xywh {701 111 25 25} box UP_BOX down_box DOWN_BOX align 4
+              Fl_Check_Button uiPrefsUSDThumbnails {
+                label {USD Thumbnails}
+                tooltip {Show Thumbnails for USD files (can be slow if they are big)} xywh {358 143 25 27} box UP_BOX down_box DOWN_BOX align 136
               }
-              Fl_Check_Button uiPrefsAutoHidePixelBar {
-                label {Auto Hide Pixel Bar}
-                tooltip {The Pixel Bar can slow down playback at high resolutions.  When this option is on, the pixel toolbar will be hidden automatically.} xywh {701 77 25 25} box UP_BOX down_box DOWN_BOX align 4
+              Fl_Check_Button uiPrefsNativeFileChooser {
+                label {Use Native File Chooser}
+                tooltip {If selected, the natlve file chooser will be used.  If unselected, mrv2's standard file chooser will be used.} xywh {358 186 25 27} box UP_BOX down_box DOWN_BOX align 136
               }
-              Fl_Group {} {open
-                xywh {332 157 450 152} box ROUNDED_BOX
+            }
+            Fl_Group {} {
+              label Playback
+              xywh {299 34 530 362} box EMBOSSED_BOX align 5 hide
+            } {
+              Fl_Group {} {
+                label Defaults open
+                xywh {310 69 500 312} box ROUNDED_BOX align 5
               } {
-                Fl_Group {} {
-                  label Sequences open
-                  xywh {347 180 415 92} box ROUNDED_FRAME color 35
+                Fl_Check_Button uiPrefsAutoPlayback {
+                  label {Auto Playback}
+                  tooltip {Start Playback when opening files.} xywh {497 111 25 25} box UP_BOX down_box DOWN_BOX align 4
+                }
+                Fl_Check_Button uiPrefsScrubAutoPlay {
+                  label {Auto Scrub Playback}
+                  tooltip {Start playback when scrubbing so that audio can be heard.} xywh {572 347 25 25} box UP_BOX down_box DOWN_BOX value 1 align 4
+                }
+                Fl_Check_Button uiPrefsSingleClickPlayback {
+                  label {Single Click Playback}
+                  tooltip {Start Playback when single clicking the left mouse button on the view window} xywh {701 111 25 25} box UP_BOX down_box DOWN_BOX align 4
+                }
+                Fl_Check_Button uiPrefsAutoHidePixelBar {
+                  label {Auto Hide Pixel Bar}
+                  tooltip {The Pixel Bar can slow down playback at high resolutions.  When this option is on, the pixel toolbar will be hidden automatically.} xywh {701 77 25 25} box UP_BOX down_box DOWN_BOX align 4
+                }
+                Fl_Group {} {open
+                  xywh {332 157 450 152} box ROUNDED_BOX
                 } {
-                  Fl_Group {} {open
-                    xywh {372 215 390 57}
+                  Fl_Group {} {
+                    label Sequences open
+                    xywh {347 180 415 92} box ROUNDED_FRAME color 35
                   } {
-                    Fl_Value_Input uiPrefsFPS {
-                      label Speed
-                      tooltip {Frames Per Second value for sequences that don't have embedded speed.} xywh {462 222 80 25} color 20 selection_color 0 maximum 120 value 24 textcolor 56
-                    }
-                    Fl_Menu_Button {} {
-                      label FPS
-                      user_data this user_data_type {PreferencesUI*}
-                      callback {int idx = o->value();
+                    Fl_Group {} {open
+                      xywh {372 215 390 57}
+                    } {
+                      Fl_Value_Input uiPrefsFPS {
+                        label Speed
+                        tooltip {Frames Per Second value for sequences that don't have embedded speed.} xywh {462 222 80 25} color 20 selection_color 0 maximum 120 value 24 textcolor 56
+                      }
+                      Fl_Menu_Button {} {
+                        label FPS
+                        user_data this user_data_type {PreferencesUI*}
+                        callback {int idx = o->value();
 const char* t = o->text(idx);
 float g = (float) atof( t );
 v->uiPrefsFPS->value( g );}
-                      xywh {544 222 75 25}
-                      code0 {o->disable_label();}
-                      class {mrv::PopupMenu}
-                    } {
-                      MenuItem {} {
-                        label 60
-                        xywh {10 10 100 20}
-                      }
-                      MenuItem {} {
-                        label {59.94}
-                        xywh {10 10 100 20}
-                      }
-                      MenuItem {} {
-                        label 50
-                        xywh {10 10 100 20}
-                      }
-                      MenuItem {} {
-                        label 30
-                        xywh {10 10 100 20}
-                      }
-                      MenuItem {} {
-                        label {29.97}
-                        xywh {10 10 100 20}
-                      }
-                      MenuItem {} {
-                        label 25
-                        xywh {10 10 100 20}
-                      }
-                      MenuItem {} {
-                        label 24
-                        xywh {10 10 100 20}
-                      }
-                      MenuItem {} {
-                        label {14.985}
-                        xywh {10 10 100 20}
-                      }
-                      MenuItem {} {
-                        label {12.5}
-                        xywh {10 10 100 20}
-                      }
-                      MenuItem {} {
-                        label 12
-                        xywh {10 10 100 20}
+                        xywh {544 222 75 25}
+                        code0 {o->disable_label();}
+                        class {mrv::PopupMenu}
+                      } {
+                        MenuItem {} {
+                          label 60
+                          xywh {10 10 100 20}
+                        }
+                        MenuItem {} {
+                          label {59.94}
+                          xywh {10 10 100 20}
+                        }
+                        MenuItem {} {
+                          label 50
+                          xywh {10 10 100 20}
+                        }
+                        MenuItem {} {
+                          label 30
+                          xywh {10 10 100 20}
+                        }
+                        MenuItem {} {
+                          label {29.97}
+                          xywh {10 10 100 20}
+                        }
+                        MenuItem {} {
+                          label 25
+                          xywh {10 10 100 20}
+                        }
+                        MenuItem {} {
+                          label 24
+                          xywh {10 10 100 20}
+                        }
+                        MenuItem {} {
+                          label {14.985}
+                          xywh {10 10 100 20}
+                        }
+                        MenuItem {} {
+                          label {12.5}
+                          xywh {10 10 100 20}
+                        }
+                        MenuItem {} {
+                          label 12
+                          xywh {10 10 100 20}
+                        }
                       }
                     }
                   }
+                  Fl_Choice uiPrefsLoopMode {
+                    label {Looping Mode}
+                    tooltip {Select default looping mode in timeline.} xywh {542 275 90 28} box THIN_DOWN_BOX down_box BORDER_BOX
+                    class {mrv::Choice}
+                  } {
+                    MenuItem {} {
+                      label Loop
+                      xywh {10 10 100 20}
+                    }
+                    MenuItem {} {
+                      label Stop
+                      xywh {10 10 100 20}
+                    }
+                    MenuItem {} {
+                      label {Ping Pong}
+                      xywh {10 10 100 20}
+                    }
+                  }
                 }
-                Fl_Choice uiPrefsLoopMode {
-                  label {Looping Mode}
-                  tooltip {Select default looping mode in timeline.} xywh {542 275 90 28} box THIN_DOWN_BOX down_box BORDER_BOX
+                Fl_Value_Input uiPrefsScrubbingSensitivity {
+                  label {Scrub Sensitivity}
+                  tooltip {This setting controls the sensitivity of scrubbing (SHIFT and then the mouse right and left).  Smaller values make the mouse move jump more frames while higher values does the opposite.} xywh {572 317 60 22} minimum 2 maximum 50 step 1 value 5 textcolor 56
+                }
+              }
+            }
+            Fl_Group {} {
+              label Timeline open
+              xywh {305 34 530 362} box EMBOSSED_BOX align 5
+            } {
+              Fl_Choice uiPrefsTimelineDisplay {
+                label Display
+                tooltip {How to display timeline by default.} xywh {397 143 405 27} box THIN_DOWN_BOX down_box BORDER_BOX
+                code0 {o->value(0);}
+              } {
+                MenuItem {} {
+                  label Frames
+                  xywh {15 15 100 20}
+                }
+                MenuItem {} {
+                  label Seconds
+                  xywh {15 15 100 20}
+                }
+                MenuItem {} {
+                  label Timecode
+                  xywh {15 15 100 20}
+                }
+              }
+              Fl_Check_Button uiPrefsEditMode {
+                label {Start in Edit mode}
+                tooltip {Editing viewport will be visible at start up.} xywh {397 252 15 20} down_box DOWN_BOX align 8
+              }
+              Fl_Check_Button uiPrefsTimelineThumbnails {
+                label {Preview Thumbnails}
+                tooltip {Thumbnails above timeline} xywh {397 187 370 20} down_box DOWN_BOX value 1
+              }
+              Fl_Check_Button uiPrefsRemoveEDLs {
+                label {Remove EDLs in Temporary Folder on Exit}
+                tooltip {When selected, temporary EDLs (Playlists) will be removed from the temporary folder.} xywh {397 219 370 20} down_box DOWN_BOX value 1
+              }
+            }
+            Fl_Group {} {
+              label Edit
+              xywh {315 44 530 362} box EMBOSSED_BOX align 5 hide
+            } {
+              Fl_Group {} {
+                label {Edit Viewport} open
+                xywh {338 69 480 312} box ROUNDED_BOX
+              } {
+                Fl_Group {} {
+                  label Display open
+                  xywh {368 102 420 144} box BORDER_BOX
+                } {
+                  Fl_Choice uiPrefsEditView {
+                    label {Default View} open
+                    tooltip {How to display timeline by default.} xywh {560 113 210 26} box THIN_DOWN_BOX down_box BORDER_BOX
+                    code0 {o->value(0);}
+                  } {
+                    MenuItem {} {
+                      label {Video Only}
+                      xywh {45 45 100 20}
+                    }
+                    MenuItem {} {
+                      label {Video and Audio}
+                      xywh {45 45 100 20}
+                    }
+                  }
+                  Fl_Choice uiPrefsEditThumbnails {
+                    label Thumbnails
+                    tooltip {How to display timeline by default.} xywh {560 153 210 26} box THIN_DOWN_BOX down_box BORDER_BOX
+                    code0 {o->value(1);}
+                  } {
+                    MenuItem {} {
+                      label None
+                      xywh {35 35 100 20}
+                    }
+                    MenuItem {} {
+                      label Small
+                      xywh {35 35 100 20}
+                    }
+                    MenuItem {} {
+                      label Medium
+                      xywh {35 35 100 20}
+                    }
+                    MenuItem {} {
+                      label Large
+                      xywh {45 45 100 20}
+                    }
+                  }
+                  Fl_Check_Button uiPrefsShowTransitions {
+                    label {Show Transitions}
+                    tooltip {Show Transitions in Edit Viewport} xywh {560 187 15 20} down_box DOWN_BOX value 1 align 8
+                  }
+                  Fl_Check_Button uiPrefsShowMarkers {
+                    label {Show Markers}
+                    tooltip {Show Markers in Edit Viewport} xywh {560 216 15 20} down_box DOWN_BOX value 1 align 8
+                  }
+                }
+                Fl_Group {} {
+                  label Behavior
+                  xywh {368 275 420 88} box BORDER_BOX
+                } {
+                  Fl_Check_Button uiPrefsEditAssociatedClips {
+                    label {Edit Associated Clips}
+                    tooltip {Edit Associated Clips.} xywh {563 320 214 36} down_box DOWN_BOX value 1 align 4
+                  }
+                  Fl_Check_Button uiPrefsTimelineEditable {
+                    label Editable
+                    tooltip {Editable Timeline Viewport.} xywh {563 282 214 36} down_box DOWN_BOX value 1 align 4
+                  }
+                }
+              }
+            }
+            Fl_Group {} {
+              label {Pixel Toolbar}
+              xywh {303 34 532 362} box EMBOSSED_BOX align 5 hide
+            } {
+              Fl_Group {} {open
+                xywh {341 34 446 313}
+              } {
+                Fl_Choice uiPrefsPixelRGBA {
+                  label {RGBA Display}
+                  xywh {493 100 255 25} down_box BORDER_BOX align 132
+                } {
+                  MenuItem {} {
+                    label {Float Values}
+                    xywh {5 5 100 20}
+                  }
+                  MenuItem {} {
+                    label {Hex Values}
+                    xywh {5 5 100 20}
+                  }
+                  MenuItem {} {
+                    label {8-bit Values}
+                    xywh {5 5 100 20}
+                  }
+                }
+                Fl_Choice uiPrefsPixelValues {
+                  label {Pixel Values}
+                  xywh {493 168 255 25} down_box BORDER_BOX align 132
+                } {
+                  MenuItem {} {
+                    label {Full Lut, Gamma and Gain}
+                    xywh {5 5 100 20}
+                  }
+                  MenuItem {} {
+                    label {Original without Gamma, Gain or Lut}
+                    xywh {5 5 100 20}
+                  }
+                }
+                Fl_Choice uiPrefsPixelHSV {
+                  label {Secondary Display}
+                  xywh {493 243 255 23} down_box BORDER_BOX align 132
                   class {mrv::Choice}
                 } {
                   MenuItem {} {
-                    label Loop
-                    xywh {10 10 100 20}
+                    label HSV
+                    xywh {5 5 100 20}
                   }
                   MenuItem {} {
-                    label Stop
-                    xywh {10 10 100 20}
+                    label HSL
+                    xywh {5 5 100 20}
                   }
                   MenuItem {} {
-                    label {Ping Pong}
-                    xywh {10 10 100 20}
+                    label {CIE XYZ}
+                    xywh {5 5 100 20}
+                  }
+                  MenuItem {} {
+                    label {CIE xyY}
+                    xywh {5 5 100 20}
+                  }
+                  MenuItem {} {
+                    label {Lab CIELAB (L*a*b*)}
+                    xywh {5 5 100 20} align 172
+                  }
+                  MenuItem {} {
+                    label {Luv CIELUV (L*u*v*)}
+                    xywh {5 5 100 20} align 172
+                  }
+                  MenuItem {} {
+                    label {YUV (Analog PAL)}
+                    xywh {5 5 100 20} align 172
+                  }
+                  MenuItem {} {
+                    label {YDbDr (Analog SECAM/PAL-N)}
+                    xywh {5 5 100 20} align 172
+                  }
+                  MenuItem {} {
+                    label {YIQ (Analog NTSC)}
+                    xywh {5 5 100 20} align 172
+                  }
+                  MenuItem {} {
+                    label {ITU-601 (Digital PAL/NTSC YCbCr)}
+                    xywh {5 5 100 20} align 172
+                  }
+                  MenuItem {} {
+                    label {ITU-709 (Digital HDTV YCbCr)}
+                    xywh {5 5 100 20} align 172
+                  }
+                }
+                Fl_Choice uiPrefsPixelLumma {
+                  label Luminance
+                  xywh {493 303 255 25} down_box BORDER_BOX align 132
+                  class {mrv::Choice}
+                } {
+                  MenuItem {} {
+                    label {Y (Luminance)}
+                    xywh {5 5 100 20}
+                  }
+                  MenuItem {} {
+                    label {Y' (Lumma)}
+                    xywh {5 5 100 20}
+                  }
+                  MenuItem {} {
+                    label {L (Lightness)}
+                    xywh {5 5 100 20}
                   }
                 }
               }
-              Fl_Value_Input uiPrefsScrubbingSensitivity {
-                label {Scrub Sensitivity}
-                tooltip {This setting controls the sensitivity of scrubbing (SHIFT and then the mouse right and left).  Smaller values make the mouse move jump more frames while higher values does the opposite.} xywh {572 317 60 22} minimum 2 maximum 50 step 1 value 5 textcolor 56
-              }
             }
-          }
-          Fl_Group {} {
-            label Timeline open
-            xywh {305 34 530 362} box EMBOSSED_BOX align 5
-          } {
-            Fl_Choice uiPrefsTimelineDisplay {
-              label Display
-              tooltip {How to display timeline by default.} xywh {397 143 405 27} box THIN_DOWN_BOX down_box BORDER_BOX
-              code0 {o->value(0);}
-            } {
-              MenuItem {} {
-                label Frames
-                xywh {15 15 100 20}
-              }
-              MenuItem {} {
-                label Seconds
-                xywh {15 15 100 20}
-              }
-              MenuItem {} {
-                label Timecode
-                xywh {15 15 100 20}
-              }
-            }
-            Fl_Check_Button uiPrefsEditMode {
-              label {Start in Edit mode}
-              tooltip {Editing viewport will be visible at start up.} xywh {397 252 15 20} down_box DOWN_BOX align 8
-            }
-            Fl_Check_Button uiPrefsTimelineThumbnails {
-              label {Preview Thumbnails} selected
-              tooltip {Thumbnails above timeline} xywh {397 187 370 20} down_box DOWN_BOX value 1
-            }
-            Fl_Check_Button uiPrefsRemoveEDLs {
-              label {Remove EDLs in Temporary Folder on Exit}
-              tooltip {When selected, temporary EDLs (Playlists) will be removed from the temporary folder.} xywh {397 219 370 20} down_box DOWN_BOX value 1
-            }
-          }
-          Fl_Group {} {
-            label Edit
-            xywh {315 44 530 362} box EMBOSSED_BOX align 5 hide
-          } {
             Fl_Group {} {
-              label {Edit Viewport} open
-              xywh {338 69 480 312} box ROUNDED_BOX
+              label OCIO
+              xywh {293 34 542 362} box EMBOSSED_BOX align 5 hide
             } {
-              Fl_Group {} {
-                label Display open
-                xywh {368 102 420 144} box BORDER_BOX
+              Fl_Group {} {open
+                xywh {302 93 523 168}
               } {
-                Fl_Choice uiPrefsEditView {
-                  label {Default View} open
-                  tooltip {How to display timeline by default.} xywh {560 113 210 26} box THIN_DOWN_BOX down_box BORDER_BOX
-                  code0 {o->value(0);}
-                } {
-                  MenuItem {} {
-                    label {Video Only}
-                    xywh {45 45 100 20}
-                  }
-                  MenuItem {} {
-                    label {Video and Audio}
-                    xywh {45 45 100 20}
-                  }
+                Fl_Input uiPrefsOCIOConfig {
+                  label {OCIO Config File}
+                  user_data main user_data_type {ViewerUI*}
+                  tooltip {This is the path to your config.ocio file.  It can be set with the environment variable OCIO, which takes precedence over any saved setting.} xywh {312 180 435 31} color 20 align 1 when 11 textcolor 56
                 }
-                Fl_Choice uiPrefsEditThumbnails {
-                  label Thumbnails
-                  tooltip {How to display timeline by default.} xywh {560 153 210 26} box THIN_DOWN_BOX down_box BORDER_BOX
-                  code0 {o->value(1);}
-                } {
-                  MenuItem {} {
-                    label None
-                    xywh {35 35 100 20}
-                  }
-                  MenuItem {} {
-                    label Small
-                    xywh {35 35 100 20}
-                  }
-                  MenuItem {} {
-                    label Medium
-                    xywh {35 35 100 20}
-                  }
-                  MenuItem {} {
-                    label Large
-                    xywh {45 45 100 20}
-                  }
-                }
-                Fl_Check_Button uiPrefsShowTransitions {
-                  label {Show Transitions}
-                  tooltip {Show Transitions in Edit Viewport} xywh {560 187 15 20} down_box DOWN_BOX value 1 align 8
-                }
-                Fl_Check_Button uiPrefsShowMarkers {
-                  label {Show Markers}
-                  tooltip {Show Markers in Edit Viewport} xywh {560 216 15 20} down_box DOWN_BOX value 1 align 8
-                }
-              }
-              Fl_Group {} {
-                label Behavior
-                xywh {368 275 420 88} box BORDER_BOX
-              } {
-                Fl_Check_Button uiPrefsEditAssociatedClips {
-                  label {Edit Associated Clips}
-                  tooltip {Edit Associated Clips.} xywh {563 320 214 36} down_box DOWN_BOX value 1 align 4
-                }
-                Fl_Check_Button uiPrefsTimelineEditable {
-                  label Editable
-                  tooltip {Editable Timeline Viewport.} xywh {563 282 214 36} down_box DOWN_BOX value 1 align 4
-                }
-              }
-            }
-          }
-          Fl_Group {} {
-            label {Pixel Toolbar}
-            xywh {303 34 532 362} box EMBOSSED_BOX align 5 hide
-          } {
-            Fl_Group {} {open
-              xywh {341 34 446 313}
-            } {
-              Fl_Choice uiPrefsPixelRGBA {
-                label {RGBA Display}
-                xywh {493 100 255 25} down_box BORDER_BOX align 132
-              } {
-                MenuItem {} {
-                  label {Float Values}
-                  xywh {5 5 100 20}
-                }
-                MenuItem {} {
-                  label {Hex Values}
-                  xywh {5 5 100 20}
-                }
-                MenuItem {} {
-                  label {8-bit Values}
-                  xywh {5 5 100 20}
-                }
-              }
-              Fl_Choice uiPrefsPixelValues {
-                label {Pixel Values}
-                xywh {493 168 255 25} down_box BORDER_BOX align 132
-              } {
-                MenuItem {} {
-                  label {Full Lut, Gamma and Gain}
-                  xywh {5 5 100 20}
-                }
-                MenuItem {} {
-                  label {Original without Gamma, Gain or Lut}
-                  xywh {5 5 100 20}
-                }
-              }
-              Fl_Choice uiPrefsPixelHSV {
-                label {Secondary Display}
-                xywh {493 243 255 23} down_box BORDER_BOX align 132
-                class {mrv::Choice}
-              } {
-                MenuItem {} {
-                  label HSV
-                  xywh {5 5 100 20}
-                }
-                MenuItem {} {
-                  label HSL
-                  xywh {5 5 100 20}
-                }
-                MenuItem {} {
-                  label {CIE XYZ}
-                  xywh {5 5 100 20}
-                }
-                MenuItem {} {
-                  label {CIE xyY}
-                  xywh {5 5 100 20}
-                }
-                MenuItem {} {
-                  label {Lab CIELAB (L*a*b*)}
-                  xywh {5 5 100 20} align 172
-                }
-                MenuItem {} {
-                  label {Luv CIELUV (L*u*v*)}
-                  xywh {5 5 100 20} align 172
-                }
-                MenuItem {} {
-                  label {YUV (Analog PAL)}
-                  xywh {5 5 100 20} align 172
-                }
-                MenuItem {} {
-                  label {YDbDr (Analog SECAM/PAL-N)}
-                  xywh {5 5 100 20} align 172
-                }
-                MenuItem {} {
-                  label {YIQ (Analog NTSC)}
-                  xywh {5 5 100 20} align 172
-                }
-                MenuItem {} {
-                  label {ITU-601 (Digital PAL/NTSC YCbCr)}
-                  xywh {5 5 100 20} align 172
-                }
-                MenuItem {} {
-                  label {ITU-709 (Digital HDTV YCbCr)}
-                  xywh {5 5 100 20} align 172
-                }
-              }
-              Fl_Choice uiPrefsPixelLumma {
-                label Luminance
-                xywh {493 303 255 25} down_box BORDER_BOX align 132
-                class {mrv::Choice}
-              } {
-                MenuItem {} {
-                  label {Y (Luminance)}
-                  xywh {5 5 100 20}
-                }
-                MenuItem {} {
-                  label {Y' (Lumma)}
-                  xywh {5 5 100 20}
-                }
-                MenuItem {} {
-                  label {L (Lightness)}
-                  xywh {5 5 100 20}
-                }
-              }
-            }
-          }
-          Fl_Group {} {
-            label OCIO
-            xywh {293 34 542 362} box EMBOSSED_BOX align 5 hide
-          } {
-            Fl_Group {} {open
-              xywh {302 93 523 168}
-            } {
-              Fl_Input uiPrefsOCIOConfig {
-                label {OCIO Config File}
-                user_data main user_data_type {ViewerUI*}
-                tooltip {This is the path to your config.ocio file.  It can be set with the environment variable OCIO, which takes precedence over any saved setting.} xywh {312 180 435 31} color 20 align 1 when 11 textcolor 56
-              }
-              Fl_Choice {} {
-                label {Built-in Configs}
-                user_data this user_data_type {PreferencesUI*}
-                callback {const Fl_Menu_Item* item = o->mvalue();
+                Fl_Choice {} {
+                  label {Built-in Configs}
+                  user_data this user_data_type {PreferencesUI*}
+                  callback {const Fl_Menu_Item* item = o->mvalue();
 if (!item || !item->label()) return;
 
 const std::string entry = item->label();
@@ -978,149 +984,149 @@ else if (entry == _("Studio"))
 {
    v->uiPrefsOCIOConfig->value("ocio://studio-config-v1.0.0_aces-v1.3_ocio-v2.1");
 }} open
-                xywh {477 99 119 32} down_box BORDER_BOX
-              } {
-                MenuItem {} {
-                  label Default user_data_type {void*}
-                  xywh {20 20 100 20}
+                  xywh {477 99 119 32} down_box BORDER_BOX
+                } {
+                  MenuItem {} {
+                    label Default user_data_type {void*}
+                    xywh {20 20 100 20}
+                  }
+                  MenuItem {} {
+                    label CG user_data_type {void*}
+                    xywh {10 10 100 20}
+                  }
+                  MenuItem {} {
+                    label Studio user_data_type {void*}
+                    xywh {0 0 100 20}
+                  }
                 }
-                MenuItem {} {
-                  label CG user_data_type {void*}
-                  xywh {10 10 100 20}
-                }
-                MenuItem {} {
-                  label Studio user_data_type {void*}
-                  xywh {0 0 100 20}
-                }
-              }
-              Fl_Button {} {
-                label Pick
-                user_data m user_data_type {ViewerUI*}
-                callback {PreferencesUI* uiPrefs = v->uiPrefs;
+                Fl_Button {} {
+                  label Pick
+                  user_data m user_data_type {ViewerUI*}
+                  callback {PreferencesUI* uiPrefs = v->uiPrefs;
 std::string r = mrv::open_ocio_config(uiPrefs->uiPrefsOCIOConfig->value());
 if ( r.empty() ) return;
 
 unsetenv( "OCIO" );
 uiPrefs->uiPrefsOCIOConfig->value( r.c_str() );}
-                tooltip {Pick a config.ocio file from disk.} xywh {751 180 55 31}
+                  tooltip {Pick a config.ocio file from disk.} xywh {751 180 55 31}
+                }
               }
             }
-          }
-          Fl_Group {} {
-            label {OCIO Defaults}
-            xywh {303 34 532 362} align 5 hide
-          } {
-            Fl_Light_Button uiOCIOUseActiveViews {
-              label {Use Active Views and Active Displays}
-              tooltip {When this option is off, OCIO files with active_views: and active_displays: are not taken into account.} xywh {417 38 288 24}
-            }
-            Fl_Group uiOCIO_ICS {
-              label {Input Color Space} open
-              xywh {317 83 500 220} box ROUNDED_BOX
+            Fl_Group {} {
+              label {OCIO Defaults}
+              xywh {303 34 532 362} align 5 hide
             } {
-              Fl_Group {} {
-                xywh {365 91 411 34}
+              Fl_Light_Button uiOCIOUseActiveViews {
+                label {Use Active Views and Active Displays}
+                tooltip {When this option is off, OCIO files with active_views: and active_displays: are not taken into account.} xywh {417 38 288 24}
+              }
+              Fl_Group uiOCIO_ICS {
+                label {Input Color Space} open
+                xywh {317 83 500 220} box ROUNDED_BOX
               } {
-                Fl_Input uiOCIO_8bits_ics {
-                  label {8-bits}
-                  user_data this user_data_type {PreferencesUI*}
-                  callback {mrv::Media::ocio_8bits_ics = o->value();}
-                  tooltip {The name of the OCIO default image color space for 8 bit images (jpg, bmp, etc)
+                Fl_Group {} {
+                  xywh {365 91 411 34}
+                } {
+                  Fl_Input uiOCIO_8bits_ics {
+                    label {8-bits}
+                    user_data this user_data_type {PreferencesUI*}
+                    callback {mrv::Media::ocio_8bits_ics = o->value();}
+                    tooltip {The name of the OCIO default image color space for 8 bit images (jpg, bmp, etc)
 (Environment variable: MRV_OCIO_8bits_ICS)} xywh {400 95 283 25} box THIN_DOWN_BOX color 20 labelsize 11 align 132 textcolor 56
-                }
-                Fl_Button {} {
-                  label Pick
-                  user_data this user_data_type {PreferencesUI*}
-                  callback {std::string c = make_ocio_chooser(v->uiOCIO_8bits_ics->value(), mrv::OCIOBrowser::kInputColorSpace);
+                  }
+                  Fl_Button {} {
+                    label Pick
+                    user_data this user_data_type {PreferencesUI*}
+                    callback {std::string c = make_ocio_chooser(v->uiOCIO_8bits_ics->value(), mrv::OCIOBrowser::kInputColorSpace);
 v->uiOCIO_8bits_ics->value(c.c_str());
 v->uiOCIO_8bits_ics->do_callback();}
-                  xywh {688 95 88 25}
+                    xywh {688 95 88 25}
+                  }
                 }
-              }
-              Fl_Group {} {
-                xywh {373 131 403 32}
-              } {
-                Fl_Input uiOCIO_16bits_ics {
-                  label {16-bits}
-                  user_data this user_data_type {PreferencesUI*}
-                  callback {mrv::Media::ocio_16bits_ics = o->value();}
-                  tooltip {The name of the OCIO default image color space for 16-bit images (cin, tiff, etc)
+                Fl_Group {} {
+                  xywh {373 131 403 32}
+                } {
+                  Fl_Input uiOCIO_16bits_ics {
+                    label {16-bits}
+                    user_data this user_data_type {PreferencesUI*}
+                    callback {mrv::Media::ocio_16bits_ics = o->value();}
+                    tooltip {The name of the OCIO default image color space for 16-bit images (cin, tiff, etc)
 (Environment variable: MRV_OCIO_16bits_ICS)} xywh {400 135 283 25} box THIN_DOWN_BOX color 20 labelsize 11 align 132 textcolor 56
-                }
-                Fl_Button {} {
-                  label Pick
-                  user_data this user_data_type {PreferencesUI*}
-                  callback {std::string c = make_ocio_chooser(v->uiOCIO_16bits_ics->value(), mrv::OCIOBrowser::kInputColorSpace);
+                  }
+                  Fl_Button {} {
+                    label Pick
+                    user_data this user_data_type {PreferencesUI*}
+                    callback {std::string c = make_ocio_chooser(v->uiOCIO_16bits_ics->value(), mrv::OCIOBrowser::kInputColorSpace);
 v->uiOCIO_16bits_ics->value(c.c_str());
 v->uiOCIO_16bits_ics->do_callback();}
-                  xywh {688 135 88 25}
+                    xywh {688 135 88 25}
+                  }
                 }
-              }
-              Fl_Group {} {
-                xywh {373 173 403 39}
-              } {
-                Fl_Input uiOCIO_32bits_ics {
-                  label {32-bits}
-                  user_data this user_data_type {PreferencesUI*}
-                  callback {mrv::Media::ocio_32bits_ics = o->value();}
-                  tooltip {The name of the OCIO default image color space for 32-bit int images (openexr integers, etc)
+                Fl_Group {} {
+                  xywh {373 173 403 39}
+                } {
+                  Fl_Input uiOCIO_32bits_ics {
+                    label {32-bits}
+                    user_data this user_data_type {PreferencesUI*}
+                    callback {mrv::Media::ocio_32bits_ics = o->value();}
+                    tooltip {The name of the OCIO default image color space for 32-bit int images (openexr integers, etc)
 (Environment variable: MRV_OCIO_32bits_ICS)} xywh {400 178 283 24} box THIN_DOWN_BOX color 20 labelsize 11 align 132 textcolor 56
-                }
-                Fl_Button {} {
-                  label Pick
-                  user_data this user_data_type {PreferencesUI*}
-                  callback {std::string c = make_ocio_chooser(v->uiOCIO_32bits_ics->value(), mrv::OCIOBrowser::kInputColorSpace);
+                  }
+                  Fl_Button {} {
+                    label Pick
+                    user_data this user_data_type {PreferencesUI*}
+                    callback {std::string c = make_ocio_chooser(v->uiOCIO_32bits_ics->value(), mrv::OCIOBrowser::kInputColorSpace);
 v->uiOCIO_32bits_ics->value(c.c_str());
 v->uiOCIO_32bits_ics->do_callback();}
-                  xywh {688 178 88 25}
+                    xywh {688 178 88 25}
+                  }
                 }
-              }
-              Fl_Group {} {
-                xywh {370 218 406 33}
-              } {
-                Fl_Input uiOCIO_half_ics {
-                  label half
-                  user_data this user_data_type {PreferencesUI*}
-                  callback {mrv::Media::ocio_half_ics = o->value();}
-                  tooltip {The name of the OCIO default image color space for OpenEXR half images
+                Fl_Group {} {
+                  xywh {370 218 406 33}
+                } {
+                  Fl_Input uiOCIO_half_ics {
+                    label half
+                    user_data this user_data_type {PreferencesUI*}
+                    callback {mrv::Media::ocio_half_ics = o->value();}
+                    tooltip {The name of the OCIO default image color space for OpenEXR half images
 (Environment variable: MRV_OCIO_half_ICS)} xywh {399 222 284 25} box THIN_DOWN_BOX color 20 labelsize 11 align 132 textcolor 56
-                }
-                Fl_Button {} {
-                  label Pick
-                  user_data this user_data_type {PreferencesUI*}
-                  callback {std::string c = make_ocio_chooser(v->uiOCIO_half_ics->value(), mrv::OCIOBrowser::kInputColorSpace);
+                  }
+                  Fl_Button {} {
+                    label Pick
+                    user_data this user_data_type {PreferencesUI*}
+                    callback {std::string c = make_ocio_chooser(v->uiOCIO_half_ics->value(), mrv::OCIOBrowser::kInputColorSpace);
 v->uiOCIO_half_ics->value(c.c_str());
 v->uiOCIO_half_ics->do_callback();}
-                  xywh {688 222 88 25}
+                    xywh {688 222 88 25}
+                  }
                 }
-              }
-              Fl_Group {} {
-                xywh {368 261 406 33}
-              } {
-                Fl_Input uiOCIO_float_ics {
-                  label float
-                  user_data this user_data_type {PreferencesUI*}
-                  callback {mrv::Media::ocio_float_ics = o->value();}
-                  tooltip {The name of the OCIO default image color space for half and float images (OpenEXR, dpx, etc)
+                Fl_Group {} {
+                  xywh {368 261 406 33}
+                } {
+                  Fl_Input uiOCIO_float_ics {
+                    label float
+                    user_data this user_data_type {PreferencesUI*}
+                    callback {mrv::Media::ocio_float_ics = o->value();}
+                    tooltip {The name of the OCIO default image color space for half and float images (OpenEXR, dpx, etc)
 (Environment variable: MRV_OCIO_float_ICS)} xywh {397 265 284 25} box THIN_DOWN_BOX color 20 labelsize 11 align 132 textcolor 56
-                }
-                Fl_Button {} {
-                  label Pick
-                  user_data this user_data_type {PreferencesUI*}
-                  callback {std::string c = make_ocio_chooser(v->uiOCIO_float_ics->value(), mrv::OCIOBrowser::kInputColorSpace);
+                  }
+                  Fl_Button {} {
+                    label Pick
+                    user_data this user_data_type {PreferencesUI*}
+                    callback {std::string c = make_ocio_chooser(v->uiOCIO_float_ics->value(), mrv::OCIOBrowser::kInputColorSpace);
 v->uiOCIO_float_ics->value(c.c_str());
 v->uiOCIO_float_ics->do_callback();}
-                  xywh {686 265 88 25}
+                    xywh {686 265 88 25}
+                  }
                 }
               }
-            }
-            Fl_Group {} {open
-              xywh {307 349 500 35}
-            } {
-              Fl_Input uiOCIO_Display_View {
-                label {Display / View}
-                user_data this user_data_type {PreferencesUI*}
-                callback {try
+              Fl_Group {} {open
+                xywh {307 349 500 35}
+              } {
+                Fl_Input uiOCIO_Display_View {
+                  label {Display / View}
+                  user_data this user_data_type {PreferencesUI*}
+                  callback {try
 {
   mrv::ocio::setOcioView(o->value());
 }
@@ -1128,24 +1134,24 @@ catch(const std::exception& e)
 {
   o->value("");
 }}
-                tooltip {Default Display / View} xywh {398 354 283 25} box THIN_DOWN_BOX color 20 labelsize 11 align 132 textcolor 56
-              }
-              Fl_Button {} {
-                label Pick
-                user_data this user_data_type {PreferencesUI*}
-                callback {std::string c = make_ocio_chooser(v->uiOCIO_Display_View->value(), mrv::OCIOBrowser::kDisplay_And_View);
+                  tooltip {Default Display / View} xywh {398 354 283 25} box THIN_DOWN_BOX color 20 labelsize 11 align 132 textcolor 56
+                }
+                Fl_Button {} {
+                  label Pick
+                  user_data this user_data_type {PreferencesUI*}
+                  callback {std::string c = make_ocio_chooser(v->uiOCIO_Display_View->value(), mrv::OCIOBrowser::kDisplay_And_View);
 v->uiOCIO_Display_View->value(c.c_str());
 v->uiOCIO_Display_View->do_callback();}
-                xywh {686 354 88 25}
+                  xywh {686 354 88 25}
+                }
               }
-            }
-            Fl_Group {} {open
-              xywh {313 310 480 34}
-            } {
-              Fl_Input uiOCIO_Look {
-                label Look
-                user_data this user_data_type {PreferencesUI*}
-                callback {try
+              Fl_Group {} {open
+                xywh {313 310 480 34}
+              } {
+                Fl_Input uiOCIO_Look {
+                  label Look
+                  user_data this user_data_type {PreferencesUI*}
+                  callback {try
 {
   mrv::ocio::setOcioLook(o->value());
 }
@@ -1153,343 +1159,378 @@ catch(const std::exception& e)
 {
   o->value("");
 }}
-                tooltip {Default Look} xywh {398 314 283 25} box THIN_DOWN_BOX color 20 labelsize 11 align 132 textcolor 56
-              }
-              Fl_Button {} {
-                label Pick
-                user_data this user_data_type {PreferencesUI*}
-                callback {std::string c = make_ocio_chooser(v->uiOCIO_Look->value(), mrv::OCIOBrowser::kLook);
+                  tooltip {Default Look} xywh {398 314 283 25} box THIN_DOWN_BOX color 20 labelsize 11 align 132 textcolor 56
+                }
+                Fl_Button {} {
+                  label Pick
+                  user_data this user_data_type {PreferencesUI*}
+                  callback {std::string c = make_ocio_chooser(v->uiOCIO_Look->value(), mrv::OCIOBrowser::kLook);
 v->uiOCIO_Look->value(c.c_str());
 v->uiOCIO_Look->do_callback();}
-                xywh {686 314 88 25}
-              }
-            }
-          }
-          Fl_Group {} {
-            label Loading
-            xywh {297 34 543 362} align 5 hide
-          } {
-            Fl_Group {} {open
-              xywh {324 137 494 240}
-            } {
-              Fl_Input uiPrefsVersionRegex {
-                label {Version Regex}
-                tooltip {Regular Expression used to match clip versions.  Must group three things (prefix, number and suffix). If left on its default value (_v), it will automatically be created a regular expression to match verisions defined with _v in the name of the file, directory or both. For example: gizmo_v001.0001.exr} xywh {443 161 345 30} color 20 textcolor 56
-                code0 {o->value( "_v" );}
-              }
-              Fl_Spinner uiPrefsMaxImagesApart {
-                label {Maximum Images Apart}
-                tooltip {When searching for a version, this value is the maximum version apart from each other when searching the first or last version.} xywh {593 241 60 25} box DOWN_BOX color 20 selection_color 15 minimum 10 maximum 50 value 10 textcolor 56
+                  xywh {686 314 88 25}
+                }
               }
             }
             Fl_Group {} {
-              xywh {380 70 412 34}
+              label Loading
+              xywh {297 34 543 362} align 5 hide
             } {
-              Fl_Box {} {
-                label {Missing Frame}
-                xywh {380 70 158 34}
-              }
-              Fl_Menu_Button uiMissingFrameType {
-                label {Black Frame}
-                xywh {545 70 247 34}
-                code0 {o->enable_glyph();}
-                class {mrv::PopupMenu}
+              Fl_Group {} {open
+                xywh {324 137 494 240}
               } {
-                MenuItem {} {
+                Fl_Input uiPrefsVersionRegex {
+                  label {Version Regex}
+                  tooltip {Regular Expression used to match clip versions.  Must group three things (prefix, number and suffix). If left on its default value (_v), it will automatically be created a regular expression to match verisions defined with _v in the name of the file, directory or both. For example: gizmo_v001.0001.exr} xywh {443 161 345 30} color 20 textcolor 56
+                  code0 {o->value( "_v" );}
+                }
+                Fl_Spinner uiPrefsMaxImagesApart {
+                  label {Maximum Images Apart}
+                  tooltip {When searching for a version, this value is the maximum version apart from each other when searching the first or last version.} xywh {593 241 60 25} box DOWN_BOX color 20 selection_color 15 minimum 10 maximum 50 value 10 textcolor 56
+                }
+              }
+              Fl_Group {} {
+                xywh {380 70 412 34}
+              } {
+                Fl_Box {} {
+                  label {Missing Frame}
+                  xywh {380 70 158 34}
+                }
+                Fl_Menu_Button uiMissingFrameType {
                   label {Black Frame}
-                  xywh {0 0 100 20}
+                  xywh {545 70 247 34}
+                  code0 {o->enable_glyph();}
+                  class {mrv::PopupMenu}
+                } {
+                  MenuItem {} {
+                    label {Black Frame}
+                    xywh {0 0 100 20}
+                  }
+                  MenuItem {} {
+                    label {Repeat  Frame}
+                    xywh {10 10 100 20}
+                  }
+                  MenuItem {} {
+                    label {Scratched  Frame}
+                    xywh {20 20 100 20}
+                  }
                 }
-                MenuItem {} {
-                  label {Repeat  Frame}
-                  xywh {10 10 100 20}
+              }
+            }
+            Fl_Group {} {
+              label {Path Mappings}
+              xywh {304 45 533 354} hide
+            } {
+              Fl_Browser PathMappings {
+                tooltip {Use Up and Down arrows to move the selected line up and down.  Double click to change item.  Click on an empty area to unselect.} xywh {329 91 476 282} type Hold color 20 textcolor 56
+                code0 {mrv::fill_path_mappings(o);}
+                class {mrv::PathMappingBrowser}
+              }
+              Fl_Button {} {
+                label {Add Paths}
+                user_data PathMappings user_data_type {mrv::Browser*}
+                callback {mrv::add_path_mapping(v);}
+                tooltip {Add a new remote mapping.} xywh {336 48 185 36}
+              }
+              Fl_Button {} {
+                label {Remove Paths}
+                user_data PathMappings user_data_type {mrv::Browser*}
+                callback {mrv::remove_path_mapping(v);}
+                tooltip {Remove the currently selected path mapping.} xywh {596 48 185 36}
+              }
+            }
+            Fl_Group {} {
+              label Network
+              xywh {303 35 532 366} align 5 hide
+            } {
+              Fl_Group {} {open
+                xywh {320 35 503 365}
+              } {
+                Fl_Box {} {
+                  label Send
+                  xywh {503 36 106 26}
                 }
-                MenuItem {} {
-                  label {Scratched  Frame}
-                  xywh {20 20 100 20}
+                Fl_Box {} {
+                  label Accept
+                  xywh {614 35 105 26}
+                }
+                Fl_Group {} {open
+                  xywh {323 59 500 36} box UP_BOX
+                } {
+                  Fl_Box {} {
+                    label Media
+                    xywh {323 59 142 36} align 24
+                  }
+                  Fl_Check_Button SendMedia {
+                    xywh {544 64 27 26} down_box DOWN_BOX
+                  }
+                  Fl_Check_Button ReceiveMedia {
+                    xywh {659 64 27 26} down_box DOWN_BOX
+                  }
+                }
+                Fl_Group {} {open
+                  xywh {323 109 500 36} box UP_BOX
+                } {
+                  Fl_Box {} {
+                    label {UI Control}
+                    xywh {323 109 142 36} align 24
+                  }
+                  Fl_Check_Button SendUI {
+                    xywh {544 114 27 26} down_box DOWN_BOX
+                  }
+                  Fl_Check_Button ReceiveUI {
+                    xywh {659 114 27 26} down_box DOWN_BOX
+                  }
+                }
+                Fl_Group {} {open
+                  xywh {323 159 500 36} box UP_BOX
+                } {
+                  Fl_Box {} {
+                    label {Pan and Zoom}
+                    xywh {323 159 142 36} align 24
+                  }
+                  Fl_Check_Button SendPanAndZoom {
+                    xywh {544 163 27 26} down_box DOWN_BOX
+                  }
+                  Fl_Check_Button ReceivePanAndZoom {
+                    xywh {659 163 27 26} down_box DOWN_BOX
+                  }
+                }
+                Fl_Group {} {open
+                  xywh {323 209 500 36} box UP_BOX
+                } {
+                  Fl_Box {} {
+                    label Timeline
+                    xywh {323 209 142 36} align 24
+                  }
+                  Fl_Check_Button SendTimeline {
+                    xywh {544 215 27 26} down_box DOWN_BOX
+                  }
+                  Fl_Check_Button ReceiveTimeline {
+                    xywh {659 215 27 26} down_box DOWN_BOX
+                  }
+                }
+                Fl_Group {} {open
+                  xywh {323 259 500 36} box UP_BOX
+                } {
+                  Fl_Box {} {
+                    label {Color Control}
+                    xywh {323 259 142 36} align 24
+                  }
+                  Fl_Check_Button SendColor {
+                    xywh {544 260 27 26} down_box DOWN_BOX
+                  }
+                  Fl_Check_Button ReceiveColor {
+                    xywh {659 260 27 26} down_box DOWN_BOX
+                  }
+                }
+                Fl_Group {} {open
+                  xywh {321 309 502 36} box UP_BOX
+                } {
+                  Fl_Box {} {
+                    label Annotations
+                    xywh {321 309 142 36} align 24
+                  }
+                  Fl_Check_Button SendAnnotations {
+                    xywh {544 314 27 26} down_box DOWN_BOX
+                  }
+                  Fl_Check_Button ReceiveAnnotations {
+                    xywh {659 314 27 26} down_box DOWN_BOX
+                  }
+                }
+                Fl_Group {} {open
+                  xywh {320 359 501 36} box UP_FRAME
+                } {
+                  Fl_Box {} {
+                    label {Audio Control}
+                    xywh {321 359 142 29} align 24
+                  }
+                  Fl_Check_Button SendAudio {
+                    xywh {544 363 27 21} down_box DOWN_BOX
+                  }
+                  Fl_Check_Button ReceiveAudio {
+                    xywh {659 363 27 21} down_box DOWN_BOX
+                  }
+                }
+              }
+            }
+            Fl_Group {} {
+              label OpenGL
+              xywh {291 36 532 362} box EMBOSSED_BOX align 5 hide
+            } {
+              Fl_Group {} {open
+                xywh {323 52 478 314}
+              } {
+                Fl_Choice uiPrefsOpenGLVsync {
+                  label {Monitor VSync}
+                  tooltip {Turns on and off Monitor's Vsync.  VSync off can display movies faster, at the cost of potential tearing in the image.} xywh {509 95 140 22} down_box BORDER_BOX align 132 textcolor 32
+                  class {mrv::Choice}
+                } {
+                  MenuItem {} {
+                    label No
+                    xywh {30 30 100 20}
+                  }
+                  MenuItem {} {
+                    label Always
+                    xywh {30 30 100 20}
+                  }
+                  MenuItem {} {
+                    label {Presentation Mode}
+                    xywh {40 40 100 20}
+                  }
+                }
+                Fl_Choice uiPrefsColorAccuracy {
+                  label {Color Buffers' Accuracy} open
+                  tooltip {Color Buffers can be Float, Half Float, Fast or Automatic.  Float preserves all float information, Half Float preserves most float information and Fast works in 8-bits.  Automatic selects the accuracy baed on image depth.} xywh {511 159 140 25} down_box BORDER_BOX align 132 textcolor 32
+                  class {mrv::Choice}
+                } {
+                  MenuItem {} {
+                    label Automatic
+                    xywh {50 50 100 20}
+                  }
+                  MenuItem {} {
+                    label {Half Float}
+                    xywh {60 60 100 20}
+                  }
+                  MenuItem {} {
+                    label {Full Float (Accurate)}
+                    xywh {70 70 100 20}
+                  }
+                  MenuItem {} {
+                    label Fast
+                    xywh {50 50 100 20}
+                  }
+                }
+                Fl_Choice uiPrefsBlitViewports {
+                  label {Blit Viewports} open
+                  tooltip {Viewports can be drawn with blitting or with OpenGL shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {513 235 140 25} down_box BORDER_BOX align 132 textcolor 32
+                  class {mrv::Choice}
+                } {
+                  MenuItem {} {
+                    label No
+                    xywh {40 40 100 20}
+                  }
+                  MenuItem {} {
+                    label Yes
+                    xywh {40 40 100 20}
+                  }
+                }
+                Fl_Choice uiPrefsBlitTimeline {
+                  label {Blit Timeline}
+                  tooltip {Timeline can be drawn with blitting or with OpenGL shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {515 283 140 25} down_box BORDER_BOX align 132 textcolor 32
+                  class {mrv::Choice}
+                } {
+                  MenuItem {} {
+                    label No
+                    xywh {50 50 100 20}
+                  }
+                  MenuItem {} {
+                    label Yes
+                    xywh {50 50 100 20}
+                  }
+                }
+              }
+            }
+            Fl_Group {} {
+              label Errors
+              xywh {303 39 532 362} box EMBOSSED_BOX align 5 hide
+            } {
+              Fl_Group {} {open
+                xywh {341 39 446 313}
+              } {
+                Fl_Choice uiPrefsRaiseLogWindowOnFFmpegError {
+                  label {On FFmpeg Error} open
+                  tooltip {Adjusts how Log Window behaves in case of an FFmpeg error.} xywh {493 128 255 25} down_box BORDER_BOX align 132 textcolor 32
+                  class {mrv::Choice}
+                } {
+                  MenuItem {} {
+                    label {Do Nothing}
+                    xywh {30 30 100 20}
+                  }
+                  MenuItem {} {
+                    label {Open Logs on Dock}
+                    xywh {30 30 100 20}
+                  }
+                  MenuItem {} {
+                    label {Open Logs on Window}
+                    xywh {40 40 100 20}
+                  }
+                }
+                Fl_Choice uiPrefsRaiseLogWindowOnError {
+                  label {On Error} open
+                  tooltip {Adjusts how Log Window behaves in case of error.} xywh {493 173 255 25} down_box BORDER_BOX align 132 textcolor 32
+                  class {mrv::Choice}
+                } {
+                  MenuItem {} {
+                    label {Do Nothing}
+                    xywh {20 20 100 20}
+                  }
+                  MenuItem {} {
+                    label {Open Logs on Dock}
+                    xywh {20 20 100 20}
+                  }
+                  MenuItem {} {
+                    label {Open Logs on Window}
+                    xywh {30 30 100 20}
+                  }
+                }
+              }
+            }
+            Fl_Group {} {
+              label Behavior
+              xywh {297 36 532 362} box EMBOSSED_BOX align 5 hide
+            } {
+              Fl_Group {} {open
+                xywh {335 36 446 313}
+              } {
+                Fl_Choice uiPrefsCheckForUpdates {
+                  label {Check for Updates} open
+                  tooltip {Allows you to automatically download updates of mrv2 when it starts up.} xywh {487 170 255 25} down_box BORDER_BOX align 132 textcolor 32
+                  class {mrv::Choice}
+                } {
+                  MenuItem {} {
+                    label {On Demand From Help Menu}
+                    xywh {30 30 100 20}
+                  }
+                  MenuItem {} {
+                    label {At Start Up}
+                    xywh {30 30 100 20}
+                  }
                 }
               }
             }
           }
-          Fl_Group {} {
-            label {Path Mappings}
-            xywh {304 45 533 354} hide
+          Fl_Group {} {open
+            xywh {320 410 470 44}
           } {
-            Fl_Browser PathMappings {
-              tooltip {Use Up and Down arrows to move the selected line up and down.  Double click to change item.  Click on an empty area to unselect.} xywh {329 91 476 282} type Hold color 20 textcolor 56
-              code0 {mrv::fill_path_mappings(o);}
-              class {mrv::PathMappingBrowser}
+            Fl_Button {} {
+              label Default
+              user_data this user_data_type {PreferencesUI*}
+              callback {int ok = fl_choice(
+_("This will reset all your preferences" 
+  " to their default values.  "
+  "Are you sure you want to continue?"),
+  _("Yes"), _("No"), NULL, NULL);
+if (ok)
+    return;
+                        
+// reset and reload preferences
+mrv::Preferences::reset();
+mrv::Preferences::load(false, false);} selected
+              tooltip {Reset settings to the default.} xywh {333 416 132 31}
             }
             Fl_Button {} {
-              label {Add Paths}
-              user_data PathMappings user_data_type {mrv::Browser*}
-              callback {mrv::add_path_mapping(v);}
-              tooltip {Add a new remote mapping.} xywh {336 48 185 36}
+              label Revert
+              user_data this user_data_type {PreferencesUI*}
+              callback {// reload preferences
+mrv::Preferences::load(false, false);}
+              tooltip {Revert settings to last saved preferences.} xywh {489 416 132 31}
             }
             Fl_Button {} {
-              label {Remove Paths}
-              user_data PathMappings user_data_type {mrv::Browser*}
-              callback {mrv::remove_path_mapping(v);}
-              tooltip {Remove the currently selected path mapping.} xywh {596 48 185 36}
-            }
-          }
-          Fl_Group {} {
-            label Network
-            xywh {303 35 532 366} align 5 hide
-          } {
-            Fl_Group {} {open
-              xywh {320 35 503 365}
-            } {
-              Fl_Box {} {
-                label Send
-                xywh {503 36 106 26}
-              }
-              Fl_Box {} {
-                label Accept
-                xywh {614 35 105 26}
-              }
-              Fl_Group {} {open
-                xywh {323 59 500 36} box UP_BOX
-              } {
-                Fl_Box {} {
-                  label Media
-                  xywh {323 59 142 36} align 24
-                }
-                Fl_Check_Button SendMedia {
-                  xywh {544 64 27 26} down_box DOWN_BOX
-                }
-                Fl_Check_Button ReceiveMedia {
-                  xywh {659 64 27 26} down_box DOWN_BOX
-                }
-              }
-              Fl_Group {} {open
-                xywh {323 109 500 36} box UP_BOX
-              } {
-                Fl_Box {} {
-                  label {UI Control}
-                  xywh {323 109 142 36} align 24
-                }
-                Fl_Check_Button SendUI {
-                  xywh {544 114 27 26} down_box DOWN_BOX
-                }
-                Fl_Check_Button ReceiveUI {
-                  xywh {659 114 27 26} down_box DOWN_BOX
-                }
-              }
-              Fl_Group {} {open
-                xywh {323 159 500 36} box UP_BOX
-              } {
-                Fl_Box {} {
-                  label {Pan and Zoom}
-                  xywh {323 159 142 36} align 24
-                }
-                Fl_Check_Button SendPanAndZoom {
-                  xywh {544 163 27 26} down_box DOWN_BOX
-                }
-                Fl_Check_Button ReceivePanAndZoom {
-                  xywh {659 163 27 26} down_box DOWN_BOX
-                }
-              }
-              Fl_Group {} {open
-                xywh {323 209 500 36} box UP_BOX
-              } {
-                Fl_Box {} {
-                  label Timeline
-                  xywh {323 209 142 36} align 24
-                }
-                Fl_Check_Button SendTimeline {
-                  xywh {544 215 27 26} down_box DOWN_BOX
-                }
-                Fl_Check_Button ReceiveTimeline {
-                  xywh {659 215 27 26} down_box DOWN_BOX
-                }
-              }
-              Fl_Group {} {open
-                xywh {323 259 500 36} box UP_BOX
-              } {
-                Fl_Box {} {
-                  label {Color Control}
-                  xywh {323 259 142 36} align 24
-                }
-                Fl_Check_Button SendColor {
-                  xywh {544 260 27 26} down_box DOWN_BOX
-                }
-                Fl_Check_Button ReceiveColor {
-                  xywh {659 260 27 26} down_box DOWN_BOX
-                }
-              }
-              Fl_Group {} {open
-                xywh {321 309 502 36} box UP_BOX
-              } {
-                Fl_Box {} {
-                  label Annotations
-                  xywh {321 309 142 36} align 24
-                }
-                Fl_Check_Button SendAnnotations {
-                  xywh {544 314 27 26} down_box DOWN_BOX
-                }
-                Fl_Check_Button ReceiveAnnotations {
-                  xywh {659 314 27 26} down_box DOWN_BOX
-                }
-              }
-              Fl_Group {} {open
-                xywh {320 359 501 36} box UP_FRAME
-              } {
-                Fl_Box {} {
-                  label {Audio Control}
-                  xywh {321 359 142 29} align 24
-                }
-                Fl_Check_Button SendAudio {
-                  xywh {544 363 27 21} down_box DOWN_BOX
-                }
-                Fl_Check_Button ReceiveAudio {
-                  xywh {659 363 27 21} down_box DOWN_BOX
-                }
-              }
-            }
-          }
-          Fl_Group {} {
-            label OpenGL
-            xywh {291 36 532 362} box EMBOSSED_BOX align 5 hide
-          } {
-            Fl_Group {} {open
-              xywh {323 52 478 314}
-            } {
-              Fl_Choice uiPrefsOpenGLVsync {
-                label {Monitor VSync}
-                tooltip {Turns on and off Monitor's Vsync.  VSync off can display movies faster, at the cost of potential tearing in the image.} xywh {509 95 140 22} down_box BORDER_BOX align 132 textcolor 32
-                class {mrv::Choice}
-              } {
-                MenuItem {} {
-                  label No
-                  xywh {30 30 100 20}
-                }
-                MenuItem {} {
-                  label Always
-                  xywh {30 30 100 20}
-                }
-                MenuItem {} {
-                  label {Presentation Mode}
-                  xywh {40 40 100 20}
-                }
-              }
-              Fl_Choice uiPrefsColorAccuracy {
-                label {Color Buffers' Accuracy} open
-                tooltip {Color Buffers can be Float, Half Float, Fast or Automatic.  Float preserves all float information, Half Float preserves most float information and Fast works in 8-bits.  Automatic selects the accuracy baed on image depth.} xywh {511 159 140 25} down_box BORDER_BOX align 132 textcolor 32
-                class {mrv::Choice}
-              } {
-                MenuItem {} {
-                  label Automatic
-                  xywh {50 50 100 20}
-                }
-                MenuItem {} {
-                  label {Half Float}
-                  xywh {60 60 100 20}
-                }
-                MenuItem {} {
-                  label {Full Float (Accurate)}
-                  xywh {70 70 100 20}
-                }
-                MenuItem {} {
-                  label Fast
-                  xywh {50 50 100 20}
-                }
-              }
-              Fl_Choice uiPrefsBlitViewports {
-                label {Blit Viewports} open
-                tooltip {Viewports can be drawn with blitting or with OpenGL shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {513 235 140 25} down_box BORDER_BOX align 132 textcolor 32
-                class {mrv::Choice}
-              } {
-                MenuItem {} {
-                  label No
-                  xywh {40 40 100 20}
-                }
-                MenuItem {} {
-                  label Yes
-                  xywh {40 40 100 20}
-                }
-              }
-              Fl_Choice uiPrefsBlitTimeline {
-                label {Blit Timeline}
-                tooltip {Timeline can be drawn with blitting or with OpenGL shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {515 283 140 25} down_box BORDER_BOX align 132 textcolor 32
-                class {mrv::Choice}
-              } {
-                MenuItem {} {
-                  label No
-                  xywh {50 50 100 20}
-                }
-                MenuItem {} {
-                  label Yes
-                  xywh {50 50 100 20}
-                }
-              }
-            }
-          }
-          Fl_Group {} {
-            label Errors
-            xywh {303 39 532 362} box EMBOSSED_BOX align 5 hide
-          } {
-            Fl_Group {} {open
-              xywh {341 39 446 313}
-            } {
-              Fl_Choice uiPrefsRaiseLogWindowOnFFmpegError {
-                label {On FFmpeg Error} open
-                tooltip {Adjusts how Log Window behaves in case of an FFmpeg error.} xywh {493 128 255 25} down_box BORDER_BOX align 132 textcolor 32
-                class {mrv::Choice}
-              } {
-                MenuItem {} {
-                  label {Do Nothing}
-                  xywh {30 30 100 20}
-                }
-                MenuItem {} {
-                  label {Open Logs on Dock}
-                  xywh {30 30 100 20}
-                }
-                MenuItem {} {
-                  label {Open Logs on Window}
-                  xywh {40 40 100 20}
-                }
-              }
-              Fl_Choice uiPrefsRaiseLogWindowOnError {
-                label {On Error} open
-                tooltip {Adjusts how Log Window behaves in case of error.} xywh {493 173 255 25} down_box BORDER_BOX align 132 textcolor 32
-                class {mrv::Choice}
-              } {
-                MenuItem {} {
-                  label {Do Nothing}
-                  xywh {20 20 100 20}
-                }
-                MenuItem {} {
-                  label {Open Logs on Dock}
-                  xywh {20 20 100 20}
-                }
-                MenuItem {} {
-                  label {Open Logs on Window}
-                  xywh {30 30 100 20}
-                }
-              }
-            }
-          }
-          Fl_Group {} {
-            label Behavior
-            xywh {297 36 532 362} box EMBOSSED_BOX align 5 hide
-          } {
-            Fl_Group {} {open
-              xywh {335 36 446 313}
-            } {
-              Fl_Choice uiPrefsCheckForUpdates {
-                label {Check for Updates} open
-                tooltip {Allows you to automatically download updates of mrv2 when it starts up.} xywh {487 170 255 25} down_box BORDER_BOX align 132 textcolor 32
-                class {mrv::Choice}
-              } {
-                MenuItem {} {
-                  label {On Demand From Help Menu}
-                  xywh {30 30 100 20}
-                }
-                MenuItem {} {
-                  label {At Start Up}
-                  xywh {30 30 100 20}
-                }
-              }
+              label OK
+              user_data m user_data_type {ViewerUI*}
+              callback {v->uiPrefs->uiMain->hide();
+mrv::Preferences::run();}
+              tooltip {Accept settings but don't save.  They will get saved when exiting the program.} xywh {645 416 132 31}
             }
           }
         }
@@ -1538,35 +1579,15 @@ if (!found)
             class {mrv::PreferencesTree}
           }
         }
-        Fl_Group {} {
-          xywh {371 414 407 36}
-        } {
-          Fl_Button {} {
-            label Revert
-            user_data this user_data_type {PreferencesUI*}
-            callback {// reload preferences
-mrv::Preferences prefs(v, false, false);}
-            tooltip {Revert settings to last saved preferences.} xywh {431 416 132 31}
-          }
-          Fl_Button {} {
-            label OK
-            user_data m user_data_type {ViewerUI*}
-            callback {v->uiPrefs->uiMain->hide();
-v->uiPrefs->run(v);}
-            tooltip {Accept settings but don't save.  They will get saved when exiting the program.} xywh {612 416 132 31}
-          }
-        }
       }
     }
   }
-  Function {PreferencesUI(ViewerUI* m)} {} {
+  Function {PreferencesUI(ViewerUI* m)} {open
+  } {
     code {make_window(m);} {}
   }
   Function {~PreferencesUI()} {} {
     code {delete uiMain; uiMain = NULL;} {}
-  }
-  Function {run(ViewerUI* m)} {} {
-    code {mrv::Preferences::run( m );} {}
   }
   Function {fill_tree(mrv::PreferencesTree* o)} {open
   } {

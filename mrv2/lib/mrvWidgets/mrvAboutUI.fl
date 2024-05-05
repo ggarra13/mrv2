@@ -24,9 +24,9 @@ class AboutUI {open
   Function {make_window(ViewerUI* main)} {open private
   } {
     Fl_Window uiMain {
-      label {About mrv2} open
-      xywh {0 0 535 395} type Double resizable
-      code0 {//main->uiMain->add(o);} modal visible
+      label {About mrv2} open selected
+      xywh {0 53 535 395} type Double hide resizable
+      code0 {//main->uiMain->add(o);} modal
     } {
       Fl_Group {} {open
         xywh {0 0 535 395} box FLAT_BOX color 51 resizable
@@ -39,7 +39,7 @@ auto a = mrv::string::split( s, '\\n' );
 std::vector<std::string>::iterator i = a.begin();
 std::vector<std::string>::iterator e = a.end();
 for (; i != e; ++i )
-	v->uiAbout->uiGPUInfo->add( (*i).c_str() );} open selected
+	v->uiAbout->uiGPUInfo->add( (*i).c_str() );} open
           xywh {0 0 535 395} selection_color 13
         } {
           Fl_Group uiAbout {
@@ -143,10 +143,10 @@ for (; i != e; ++i )
     }
     code {uiAboutTabs->value(uiAbout);} {}
   }
-  Function {AboutUI(ViewerUI* m)} {open
+  Function {AboutUI(ViewerUI* ui)} {open
   } {
     code {Fl_Group::current(0);
-    make_window( m );} {}
+make_window(ui);} {}
   }
   Function {~AboutUI()} {open
   } {

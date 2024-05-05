@@ -30,20 +30,20 @@ decl {\#include "mrViewer.h"} {public global
 
 class HotkeyUI {open
 } {
-  decl {ViewerUI* ui;} {private local
+  decl {ViewerUI* main;} {private local
   }
   decl {int type;} {private local
   }
-  Function {make_window()} {open private
+  Function {make_window(ViewerUI* m)} {user_data_type {mrv::Browser*} open private
   } {
     Fl_Window uiMain {
-      label Hotkeys
-      xywh {1023 101 775 644} type Double hide resizable
+      label Hotkeys open
+      xywh {85 131 775 644} type Double resizable visible
     } {
       Fl_Group {} {open
         xywh {0 4 853 640} box PLASTIC_DOWN_BOX resizable
       } {
-        Fl_Group {} {open
+        Fl_Group {} {
           xywh {138 23 550 32}
         } {
           Fl_Input uiSearchInput {
@@ -88,19 +88,30 @@ ui->uiSearchInput->do_callback();}
           code1 {o->textcolor( fl_contrast( FL_WHITE, o->color() ));}
           class {mrv::Browser}
         }
-        Fl_Button {} {
-          label {Reload Hotkeys}
-          user_data uiFunction user_data_type {mrv::Browser*}
-          callback {mrv::load_hotkeys();
+        Fl_Group {} {open selected
+          xywh {88 574 600 42}
+        } {
+          Fl_Button {} {
+            label Reset
+            user_data uiFunction user_data_type {mrv::Browser*}
+            callback {mrv::reset_hotkeys();
 fill_ui_hotkeys(v);}
-          tooltip {Reload hotkeys to last saved file.} xywh {88 579 295 39}
-        }
-        Fl_Button {} {
-          label {Reset Hotkeys}
-          user_data uiFunction user_data_type {mrv::Browser*}
-          callback {mrv::reset_hotkeys();
+            tooltip {Reset hotkeys to mrv2's default configuration.} xywh {94 576 170 38}
+          }
+          Fl_Button {} {
+            label Reload
+            user_data uiFunction user_data_type {mrv::Browser*}
+            callback {mrv::load_hotkeys();
 fill_ui_hotkeys(v);}
-          tooltip {Reset hotkeys to mrv2's default configuration.} xywh {393 579 295 39}
+            tooltip {Reload hotkeys to last saved file.} xywh {303 576 170 38}
+          }
+          Fl_Button {} {
+            label OK
+            user_data this user_data_type {HotkeyUI*}
+            callback {v->uiMain->hide();
+v->main->uiMain->fill_menu(v->main->uiMenuBar);}
+            tooltip {Accept the current hotkeys.} xywh {512 576 170 38}
+          }
         }
       }
     }
@@ -108,12 +119,12 @@ fill_ui_hotkeys(v);}
   Function {HotkeyUI(ViewerUI* m)} {open
   } {
     code {type = 0;
-ui = m;
-make_window();} {}
+main = m;
+make_window(m);} {user_data_type {ViewerUI*}
+    }
   }
   Function {~HotkeyUI()} {open
   } {
-    code {delete uiMain; uiMain = NULL;} {selected
-    }
+    code {delete uiMain; uiMain = NULL;} {}
   }
 }

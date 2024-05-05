@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.1.4\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2024-05-05 12:41-0300\n"
+"POT-Creation-Date: 2024-05-05 15:28-0300\n"
 "PO-Revision-Date: 2024-05-04 10:53-0300\n"
 "Last-Translator: gga <ggarra13@gmail.com>\n"
 "Language-Team: English\n"
@@ -1951,11 +1951,15 @@ msgstr ""
 "any like that, you should set them to 1, press Enter and reload the movie "
 "file."
 
-msgid "Default Hotkeys"
-msgstr "Default Hotkeys"
-
 msgid "Default Settings"
 msgstr "Default Settings"
+
+msgid ""
+"This will reset all your settings to their default.  Are you sure you want "
+"to continue?"
+msgstr ""
+"This will reset all your settings to their default.  Are you sure you want "
+"to continue?"
 
 msgid "Drop a clip here to create a playlist."
 msgstr "Drop a clip here to create a playlist."
@@ -2974,6 +2978,9 @@ msgstr "Hotkeys have been saved to \"{0}{1}.prefs\"."
 #, c++-format
 msgid "Preferences have been saved to: \"{0}mrv2.prefs\"."
 msgstr "Preferences have been saved to: \"{0}mrv2.prefs\"."
+
+msgid "Removing "
+msgstr "Removing "
 
 msgid "OCIO config is now:"
 msgstr "OCIO config is now:"
@@ -5089,6 +5096,13 @@ msgstr "On Demand From Help Menu"
 msgid "At Start Up"
 msgstr "At Start Up"
 
+msgid ""
+"This will reset all your preferences to their default values.  Are you sure "
+"you want to continue?"
+msgstr ""
+"This will reset all your preferences to their default values.  Are you sure "
+"you want to continue?"
+
 msgid "Could not match "
 msgstr "Could not match "
 
@@ -5784,8 +5798,8 @@ msgid "Allows you to automatically download updates of mrv2 when it starts up."
 msgstr ""
 "Allows you to automatically download updates of mrv2 when it starts up."
 
-msgid "Module"
-msgstr "Module"
+msgid "Reset settings to the default."
+msgstr "Reset settings to the default."
 
 msgid "Revert"
 msgstr "Revert"
@@ -5799,6 +5813,9 @@ msgid ""
 msgstr ""
 "Accept settings but don't save.  They will get saved when exiting the "
 "program."
+
+msgid "Module"
+msgstr "Module"
 
 msgid "User Interface/View Window"
 msgstr "User Interface/View Window"
@@ -5839,17 +5856,17 @@ msgstr "Function"
 msgid "Key"
 msgstr "Key"
 
-msgid "Reload Hotkeys"
-msgstr "Reload Hotkeys"
+msgid "Reset hotkeys to mrv2's default configuration."
+msgstr "Reset hotkeys to mrv2's default configuration."
+
+msgid "Reload"
+msgstr "Reload"
 
 msgid "Reload hotkeys to last saved file."
 msgstr "Reload hotkeys to last saved file."
 
-msgid "Reset Hotkeys"
-msgstr "Reset Hotkeys"
-
-msgid "Reset hotkeys to mrv2's default configuration."
-msgstr "Reset hotkeys to mrv2's default configuration."
+msgid "Accept the current hotkeys."
+msgstr "Accept the current hotkeys."
 
 msgid "HW"
 msgstr "HW"
@@ -6645,6 +6662,15 @@ msgstr "Toggle Hotkeys Window"
 
 msgid "Toggle About Window"
 msgstr "Toggle About Window"
+
+#~ msgid "Default Hotkeys"
+#~ msgstr "Default Hotkeys"
+
+#~ msgid "Reload Hotkeys"
+#~ msgstr "Reload Hotkeys"
+
+#~ msgid "Reset Hotkeys"
+#~ msgstr "Reset Hotkeys"
 
 #~ msgid "Thumbnails above timeline (does not work on Wayland)"
 #~ msgstr "Thumbnails above timeline (does not work on Wayland)"

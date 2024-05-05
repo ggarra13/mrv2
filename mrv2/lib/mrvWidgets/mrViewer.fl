@@ -107,7 +107,7 @@ decl {class AboutUI;} {public global
 }
 
 widget_class PixelToolBarClass {
-  xywh {0 0 682 31} resizable
+  xywh {0 53 682 31} resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {open
@@ -413,7 +413,7 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
 }
 
 widget_class TimelineClass {
-  xywh {0 0 690 47} box NO_BOX resizable
+  xywh {29 82 690 47} box NO_BOX resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {
@@ -795,18 +795,19 @@ class ViewerUI {open
   }
   Function {make_window()} {open private
   } {
-    code {uiPrefs = new PreferencesUI( this );
-uiHotkey = new HotkeyUI( this );
-uiAbout = new AboutUI( this );
-uiSecondary = nullptr;} {}
+    code {uiPrefs = new PreferencesUI(this);
+uiHotkey = new HotkeyUI(this);
+uiAbout = new AboutUI(this);
+uiSecondary = nullptr;} {selected
+    }
     Fl_Window uiMain {
       label mrv2
       user_data this user_data_type {ViewerUI*}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
     exit_cb( o, v );} open
-      xywh {0 0 690 602} type Double align 80 resizable
-      class {mrv::MainWindow} size_range {690 602 0 0} visible
+      xywh {58 111 690 602} type Double align 80 hide resizable
+      class {mrv::MainWindow} size_range {690 602 0 0}
     } {
       Fl_Pack uiRegion {open
         xywh {0 0 690 602} box FLAT_BOX resizable
@@ -1233,7 +1234,7 @@ settings->setValue( mrv::kPenColorA, a);}
             } {}
           }
         }
-        Fl_Group uiBottomBar {selected
+        Fl_Group uiBottomBar {
           xywh {0 518 690 29} box FLAT_BOX
         } {
           Fl_Group uiTimeWindow {open

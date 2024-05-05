@@ -1,3 +1,14 @@
+v1.1.6
+======
+
+- Panel->Settings->Default Settings now warns the user about it and asks
+  for confirmation.
+- Moved Panel->Settings->Default Hotkeys to Window->Hotkeys.
+- Added Window->Preferences->Default to reset the user preferences to their
+  default.
+- Cleaned up source code of passing ui pointer to several classes, using
+  App::ui instead.
+
 v1.1.5
 ======
 

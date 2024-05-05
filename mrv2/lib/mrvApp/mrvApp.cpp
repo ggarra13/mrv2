@@ -483,14 +483,14 @@ namespace mrv
 
         Fl::lock(); // needed for NDI and multithreaded logging
 
-        // Create the window.
+        // Create the interface.
         ui = new ViewerUI();
         if (!ui)
         {
             throw std::runtime_error(_("Cannot create window"));
         }
-        ui->uiMain->main(ui);
 
+        // Create the Settings
         p.settings = new SettingsObject();
 
         // Classes used to handle network connections
@@ -543,10 +543,11 @@ namespace mrv
         // Create the main control.
         p.mainControl = new MainControl(ui);
 
+        // Store the default hotkeys, before we override them in the
+        // Preferences.
         store_default_hotkeys();
 
-        Preferences prefs(
-            ui->uiPrefs, p.options.resetSettings, p.options.resetHotkeys);
+        Preferences prefs(p.options.resetSettings, p.options.resetHotkeys);
 
         if (!OSXfiles.empty())
         {
@@ -573,7 +574,7 @@ namespace mrv
         }
 #endif
 
-        Preferences::run(ui);
+        Preferences::run();
 
 #ifdef MRV2_PYBIND11
         // Create Python's output window

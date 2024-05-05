@@ -117,10 +117,15 @@ namespace mrv
             pre + value + post, START_VARIABLE, END_VARIABLE);
     }
 
-    Preferences::Preferences(
-        PreferencesUI* uiPrefs, bool resetSettings, bool resetHotkeys)
+    Preferences::Preferences(bool resetSettings, bool resetHotkeys)
+    {
+        load(resetSettings, resetHotkeys);
+    }
+
+    void Preferences::load(bool resetSettings, bool resetHotkeys)
     {
         ViewerUI* ui = App::ui;
+        PreferencesUI* uiPrefs = ui->uiPrefs;
 
         bool ok;
         int version;
@@ -1456,8 +1461,18 @@ namespace mrv
 
     Preferences::~Preferences() {}
 
-    void Preferences::run(ViewerUI* ui)
+    void Preferences::reset()
     {
+        const std::string prefs = prefspath() + "mrv2.prefs";
+        LOG_INFO(_("Removing ") << prefs);
+        fs::remove(prefs);
+        Preferences::load();
+        Preferences::run();
+    }
+
+    void Preferences::run()
+    {
+        auto ui = App::ui;
         PreferencesUI* uiPrefs = ui->uiPrefs;
         App* app = ui->app;
 
@@ -1585,15 +1600,14 @@ namespace mrv
         {
             ui->uiToolsGroup->show();
             ui->uiToolsGroup->size(45, 433);
-            ui->uiViewGroup->layout();
-            ui->uiViewGroup->init_sizes();
         }
         else
         {
             ui->uiToolsGroup->hide();
-            ui->uiViewGroup->layout();
-            ui->uiViewGroup->init_sizes();
         }
+
+        ui->uiViewGroup->layout();
+        ui->uiViewGroup->init_sizes();
 
         ui->uiRegion->layout();
 

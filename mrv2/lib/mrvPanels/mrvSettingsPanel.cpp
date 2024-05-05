@@ -8,9 +8,11 @@
 #include <FL/Fl_Check_Button.H>
 #include <FL/Fl_Choice.H>
 #include <FL/Fl_Int_Input.H>
+#include "FL/fl_ask.H"
 
 #include "mrViewer.h"
 
+#include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvMemory.h"
 
 #include "mrvWidgets/mrvFunctional.h"
@@ -437,28 +439,41 @@ namespace mrv
             if (!open)
                 cg->close();
 
-            auto bW = new Widget< Fl_Button >(
-                g->x(), g->y(), g->w(), 20, _("Default Hotkeys"));
-            b = bW;
-            b->box(FL_UP_BOX);
-            bW->callback(
-                [=](auto o)
-                {
-                    Preferences prefs(p.ui->uiPrefs, false, true);
-                    p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
-                });
+            // auto bW = new Widget< Fl_Button >(
+            //     g->x(), g->y(), g->w(), 20, _("Default Hotkeys"));
+            // b = bW;
+            // b->box(FL_UP_BOX);
+            // bW->callback(
+            //     [=](auto o)
+            //     {
+            //         int ok = fl_choice(
+            //             _("This will reset all your hotkeys to their default.
+            //             "
+            //               "Are you sure you want to continue?"),
+            //             _("Yes"), _("No"), NULL, NULL);
+            //         if (ok)
+            //             return;
+            //         Preferences::load(false, true);
+            //         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
+            //     });
 
-            // This does not work properly, and it is counter intuitive as
-            // it hides the tool docks.
-            bW = new Widget< Fl_Button >(
+            auto bW = new Widget< Fl_Button >(
                 g->x(), g->y(), g->w(), 20, _("Default Settings"));
             b = bW;
             b->box(FL_UP_BOX);
             bW->callback(
                 [=](auto o)
                 {
-                    settings->reset();
-                    save();
+                    int ok = fl_choice(
+                        _("This will reset all your settings to their "
+                          "default.  "
+                          "Are you sure you want to continue?"),
+                        _("Yes"), _("No"), NULL, NULL);
+                    if (ok)
+                        return;
+
+                    Preferences::load(true, false);
+                    this->save();
                     refresh();
                 });
             // To refresh the timeline caching bars after a reset of settings.
@@ -467,6 +482,7 @@ namespace mrv
 
         void SettingsPanel::refresh()
         {
+
             begin_group();
             add_controls();
             end_group();

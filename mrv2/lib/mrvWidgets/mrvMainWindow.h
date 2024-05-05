@@ -28,9 +28,6 @@ namespace mrv
         MainWindow(int W, int H, const char* L = 0);
         ~MainWindow();
 
-        void main(ViewerUI* m) { ui = m; };
-        ViewerUI* main() const { return ui; }
-
         //! Initialize the window
         void init();
 
@@ -43,6 +40,7 @@ namespace mrv
         //! Make window appear always on top of others
         void always_on_top(int above);
 
+        //! Returns whether the window is on top of all others.
         bool is_on_top() const { return on_top; }
 
         //! Change window's icon to mrViewer's icon
@@ -51,9 +49,9 @@ namespace mrv
         //! Iconize all windows
         void iconize_all();
 
-        //! Handle ovveride.
+        //! Handle override.
         int handle(int e) FL_OVERRIDE;
-        
+
         //! Resize override to handle tile.
         void resize(int X, int Y, int W, int H) FL_OVERRIDE;
 
@@ -63,7 +61,6 @@ namespace mrv
         IOReturn success;
 #endif
         bool on_top = false;
-        ViewerUI* ui = nullptr;
     };
 
 } // namespace mrv

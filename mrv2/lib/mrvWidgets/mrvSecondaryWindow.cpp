@@ -53,13 +53,11 @@ namespace mrv
 
         Fl_Group::current(0);
         p.mainWindow = new MainWindow(X, Y, W, H);
-        p.mainWindow->main(ui);
         p.mainWindow->begin();
 
         p.viewport = new Viewport(0, 0, W, H);
         p.viewport->end();
 
-        p.viewport->main(ui);
         p.viewport->setContext(ui->app->getContext());
         p.viewport->setFrameView(true);
 

@@ -65,6 +65,7 @@ namespace mrv
         int mode = 0;
         char buf[256];
 
+        ViewerUI* ui = App::ui;
         const auto model = ui->app->filesModel();
         const size_t numFiles = model->observeFiles()->getSize();
 

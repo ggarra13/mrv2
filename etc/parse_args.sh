@@ -113,6 +113,14 @@ for i in "$@"; do
 	    export BUILD_ROOT=$1
 	    shift
 	    ;;
+	--small|-small)
+	    shift
+	    export BUILD_ROOT=$default_build_root-small
+	    ;;
+	--minimal|-minimal|--min|-min)
+	    shift
+	    export BUILD_ROOT=$default_build_root-minimal
+	    ;;
 	clean)
 	    CLEAN_DIR=1
 	    if [[ $RUNME == 0 && $RUNME_NOLOG == 0 ]]; then
