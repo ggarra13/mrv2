@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2024-04-30 05:32-0300\n"
+"POT-Creation-Date: 2024-05-05 03:01-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -1658,6 +1658,9 @@ msgstr "Mostrar Todos"
 msgid "Quit mrv2"
 msgstr "Salir de mrv2"
 
+msgid "Running from "
+msgstr "Corriendo en: "
+
 msgid "Could not initialize NDI"
 msgstr "No pude inicializar NDI"
 
@@ -2951,9 +2954,6 @@ msgstr "Seteando OCIO config de la variable de entorno OCIO."
 
 msgid "Path mappings have been loaded from \"{0}mrv2.paths.prefs\"."
 msgstr "Mapeo de carpetas ha sido cargado de \"{0}mrv2.paths.prefs\"."
-
-msgid "Running under XWayland.  Cannot use Viewport blitting"
-msgstr "Corriendo bajo XWayland.  No puedo usar Copia de Vistas."
 
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Cargué teclas de manejo desde \"{0}{1}.prefs\"."
@@ -5484,8 +5484,8 @@ msgstr "Ventana de Edición será visible al comenzar."
 msgid "Preview Thumbnails"
 msgstr "Vista Previa de Miniaturas"
 
-msgid "Thumbnails above timeline (does not work on Wayland)"
-msgstr "Miniaturas sobre la línea de tiempo (no funciona en Wayland)"
+msgid "Thumbnails above timeline"
+msgstr "Miniaturas Activas"
 
 msgid "Remove EDLs in Temporary Folder on Exit"
 msgstr "Remover EDLs en Carpeta Temporaria al Salir"
@@ -6642,6 +6642,13 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
+
+#, fuzzy
+#~ msgid "Thumbnails above timeline (does not work on Wayland)"
+#~ msgstr "Miniaturas sobre la línea de tiempo"
+
+#~ msgid "Running under XWayland.  Cannot use Viewport blitting"
+#~ msgstr "Corriendo bajo XWayland.  No puedo usar Copia de Vistas."
 
 #~ msgid "Toggle Timeline Frame View"
 #~ msgstr "Enmarcar Línea de Tiempo"

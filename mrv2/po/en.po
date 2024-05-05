@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.1.4\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2024-04-30 05:32-0300\n"
+"POT-Creation-Date: 2024-05-05 03:01-0300\n"
 "PO-Revision-Date: 2024-05-04 10:53-0300\n"
 "Last-Translator: gga <ggarra13@gmail.com>\n"
 "Language-Team: English\n"
@@ -1631,6 +1631,10 @@ msgstr "Show All"
 msgid "Quit mrv2"
 msgstr "Quit mrv2"
 
+#, fuzzy
+msgid "Running from "
+msgstr "Running on: "
+
 msgid "Could not initialize NDI"
 msgstr "Could not initialize NDI"
 
@@ -2902,9 +2906,6 @@ msgstr "Setting OCIO config from OCIO environment variable."
 
 msgid "Path mappings have been loaded from \"{0}mrv2.paths.prefs\"."
 msgstr "Path mappings have been loaded from \"{0}mrv2.paths.prefs\"."
-
-msgid "Running under XWayland.  Cannot use Viewport blitting"
-msgstr "Running under XWayland.  Cannot use Viewport blitting"
 
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Loading hotkeys from \"{0}{1}.prefs\"."
@@ -5424,8 +5425,9 @@ msgstr "Editing viewport will be visible at start up."
 msgid "Preview Thumbnails"
 msgstr "Preview Thumbnails"
 
-msgid "Thumbnails above timeline (does not work on Wayland)"
-msgstr "Thumbnails above timeline (does not work on Wayland)"
+#, fuzzy
+msgid "Thumbnails above timeline"
+msgstr "Thumbnails Active"
 
 msgid "Remove EDLs in Temporary Folder on Exit"
 msgstr "Remove EDLs in Temporary Folder on Exit"
@@ -6578,3 +6580,9 @@ msgstr "Toggle Hotkeys Window"
 
 msgid "Toggle About Window"
 msgstr "Toggle About Window"
+
+#~ msgid "Thumbnails above timeline (does not work on Wayland)"
+#~ msgstr "Thumbnails above timeline (does not work on Wayland)"
+
+#~ msgid "Running under XWayland.  Cannot use Viewport blitting"
+#~ msgstr "Running under XWayland.  Cannot use Viewport blitting"

@@ -76,7 +76,7 @@ class PreferencesUI {open
     Fl_Window uiMain {
       label Preferences
       user_data this user_data_type {PreferencesUI*} open
-      xywh {497 230 847 466} type Double resizable
+      xywh {0 0 847 466} type Double resizable
       code0 {main = m;} modal visible
     } {
       Fl_Group {} {open
@@ -734,8 +734,8 @@ v->uiPrefsFPS->value( g );}
             }
           }
           Fl_Group {} {
-            label Timeline
-            xywh {305 34 530 362} box EMBOSSED_BOX align 5 hide
+            label Timeline open
+            xywh {305 34 530 362} box EMBOSSED_BOX align 5
           } {
             Fl_Choice uiPrefsTimelineDisplay {
               label Display
@@ -760,8 +760,8 @@ v->uiPrefsFPS->value( g );}
               tooltip {Editing viewport will be visible at start up.} xywh {397 252 15 20} down_box DOWN_BOX align 8
             }
             Fl_Check_Button uiPrefsTimelineThumbnails {
-              label {Preview Thumbnails}
-              tooltip {Thumbnails above timeline (does not work on Wayland)} xywh {397 187 370 20} down_box DOWN_BOX value 1
+              label {Preview Thumbnails} selected
+              tooltip {Thumbnails above timeline} xywh {397 187 370 20} down_box DOWN_BOX value 1
             }
             Fl_Check_Button uiPrefsRemoveEDLs {
               label {Remove EDLs in Temporary Folder on Exit}
@@ -1348,8 +1348,8 @@ v->uiOCIO_Look->do_callback();}
             }
           }
           Fl_Group {} {
-            label OpenGL open
-            xywh {291 36 532 362} box EMBOSSED_BOX align 5
+            label OpenGL
+            xywh {291 36 532 362} box EMBOSSED_BOX align 5 hide
           } {
             Fl_Group {} {open
               xywh {323 52 478 314}
@@ -1373,7 +1373,7 @@ v->uiOCIO_Look->do_callback();}
                 }
               }
               Fl_Choice uiPrefsColorAccuracy {
-                label {Color Buffers' Accuracy} open selected
+                label {Color Buffers' Accuracy} open
                 tooltip {Color Buffers can be Float, Half Float, Fast or Automatic.  Float preserves all float information, Half Float preserves most float information and Fast works in 8-bits.  Automatic selects the accuracy baed on image depth.} xywh {511 159 140 25} down_box BORDER_BOX align 132 textcolor 32
                 class {mrv::Choice}
               } {

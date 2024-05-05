@@ -24,7 +24,7 @@ set( mo_files ${_absPotFile} )
 
 foreach( lang ${LANGUAGES} )
 
-    set( _moDir "${ROOT_DIR}/share/locale/${lang}/LC_MESSAGES/" )
+    set( _moDir "${ROOT_DIR}/share/locale/${lang}/LC_MESSAGES" )
     set( _moFile "${_moDir}/mrv2-v${mrv2_VERSION}.mo" )
     set( _poFile "${ROOT_DIR}/po/${lang}.po" )
 
