@@ -23,19 +23,22 @@ set( _absPotFile "${ROOT_DIR}/po/messages.pot" )
 set( mo_files ${_absPotFile} )
 
 
-
+#
+# Get all python plug-ins and create output directory for python .pot files
+#
 file(GLOB _py_plugins "${ROOT_DIR}/python/plug-ins/*.py")
 set( _potPythonPluginDir "${ROOT_DIR}/po/python/plug-ins/locales")
+file(MAKE_DIRECTORY ${_potPythonPluginDir})
 
+#
+# Create a .pot file for each python plug-in
+#
 foreach(_full_path ${_py_plugins})
     get_filename_component(_py_plugin ${_full_path} NAME)
     get_filename_component(_py_basename ${_py_plugin} NAME_WLE)
     message( STATUS "Creating .pot file for plug-in ${_py_plugin}")
-    set( _moFile  "${_moDir}/${_py_basename}.mo" )
-    set( _poFile  "${_moDir}/${_py_basename}.po" )
     set( _potFile "${_potPythonPluginDir}/${_py_basename}.pot" )
 
-    message(STATUS "Does not exist .pot file ${_potFile}")
     set(_pyscript_dir "${CMAKE_BINARY_DIR}/../../../Python-prefix/src/Python/Tools/i18n" )
     
     set(_py_gettext_script
@@ -52,8 +55,9 @@ foreach(_full_path ${_py_plugins})
     
     if (NOT DEFINED _py_gettext_cmd OR
 	    "${_py_gettext_cmd}" STREQUAL "")
-	message(FATAL_ERROR "pygettext command missing.  Did not know how to create .pot file ${_potFile}")
-    else()		
+	message(FATAL_ERROR "pygettext command or pygettext.py script missing.  Did not know how to create .pot file ${_potFile}")
+    else()
+	# If we have a pygettext command, create the plugin.pot file target
 	add_custom_command(OUTPUT ${_potFile}
 	    COMMAND ${CMAKE_COMMAND} -E echo ${_py_gettext_cmd} ${_py_gettext_args}
 	    COMMAND ${_py_gettext_cmd} ${_py_gettext_args}
@@ -63,22 +67,29 @@ foreach(_full_path ${_py_plugins})
 	
 endforeach()
 
-	
-    
+
+#
+# Then, create the .po files if they don't exist and add a target for .mo files.
+#	   
 foreach( lang ${LANGUAGES} )
 
     set( _moDir "${ROOT_DIR}/share/locale/${lang}/LC_MESSAGES" )
     set( _moFile "${_moDir}/mrv2-v${mrv2_VERSION}.mo" )
-    set( _poFile "${ROOT_DIR}/po/${lang}.po" )
+    set( _poDir  "${ROOT_DIR}/po" )
+    set( _poFile "${_poDir}/${lang}.po" )
 
     if (NOT EXISTS ${_poFile} )
 	message( STATUS "${_poFile} does not exist.  Calling msginit" )
 	execute_process( COMMAND
-	    msginit --input=${_absPotFile} --locale=${lang} --output=${_poFile} )
+	    msginit --input=${_absPotFile} --no-translator --locale=${lang} --output=${_poFile} )
     endif()
 
     list(APPEND mo_files ${_moFile} )
 
+    #
+    # We remove the mo dir as we version the .mo files, so we don't want to
+    # leave old versions behind.
+    #
     file( REMOVE_RECURSE "${_moDir}" ) # Remove dir to remove old .mo files
     file( MAKE_DIRECTORY "${_moDir}" ) # Recreate dir to place new .mo file
 
@@ -89,23 +100,30 @@ foreach( lang ${LANGUAGES} )
 	DEPENDS ${_poFile} ${_absPotFile}
     )
     
+    #
+    # Create python plugins 
+    #
+    set( _poDir "${ROOT_DIR}/po/python/plug-ins/locales/${lang}/LC_MESSAGES" )
     set( _moDir "${ROOT_DIR}/python/plug-ins/locales/${lang}/LC_MESSAGES" )
-		
-    execute_process(COMMAND
-	${CMAKE_COMMAND} -E make_directory ${_potPythonPluginDir})
+    file( MAKE_DIRECTORY "${_poDir}" ) # Recreate dir to place new .po file
+    file( MAKE_DIRECTORY "${_moDir}" ) # Recreate dir to place new .mo file
 
     foreach(_full_path ${_py_plugins})
 	get_filename_component(_py_plugin ${_full_path} NAME)
 	get_filename_component(_py_basename ${_py_plugin} NAME_WLE)
 	message( STATUS "Translating py plugin ${_py_plugin} into ${lang}")
 	set( _moFile  "${_moDir}/${_py_basename}.mo" )
-	set( _poFile  "${_moDir}/${_py_basename}.po" )
+	set( _poFile  "${_poDir}/${_py_basename}.po" )
+	set( _potFile "${_potPythonPluginDir}/${_py_basename}.pot" )
+
+	if (NOT EXISTS ${_poFile})
+	    message( STATUS "${_poFile} does not exist.  Calling msginit" )
+	    execute_process( COMMAND
+		msginit --input=${_potFile} --no-translator --locale=${lang} --output=${_poFile} )
+	endif()
 	
 	add_custom_command( OUTPUT "${_moFile}"
-	    COMMAND ${CMAKE_COMMAND} -E echo msgmerge --quiet --update --backup=none "${_poFile}" "${_potFile}"
 	    COMMAND msgmerge --lang ${lang} --quiet --update --backup=none "${_poFile}" "${_potFile}"
-	    COMMAND ${CMAKE_COMMAND} -E echo msgfmt -v "${_poFile}" -o "${_moFile}"
-	    COMMAND ${CMAKE_COMMAND} -E make_directory "${_moDir}"
 	    COMMAND msgfmt -v "${_poFile}" -o "${_moFile}"
 	    DEPENDS ${_poFile} ${_potFile}
 	)
