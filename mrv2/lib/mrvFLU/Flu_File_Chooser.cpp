@@ -141,15 +141,10 @@ std::string Flu_File_Chooser::renameErrTxt = "Unable to rename '%s' to '%s'";
 
 #define DEFAULT_ENTRY_WIDTH 235
 
-Fl_Pixmap up_folder_img((char* const*)big_folder_up_xpm),
-    trash((char* const*)trash_xpm),
-    new_folder((char* const*)big_folder_new_xpm),
-    reload((char* const*)reload_xpm), preview_img((char* const*)monalisa_xpm),
+Fl_Pixmap preview_img((char* const*)monalisa_xpm),
     file_list_img((char* const*)filelist_xpm),
     file_listwide_img((char* const*)filelistwide_xpm),
     fileDetails((char* const*)filedetails_xpm),
-    add_to_favorite_folder((char* const*)folder_favorite_xpm),
-    home((char* const*)bighome_xpm), favorites((char* const*)bigfavorites_xpm),
     desktop((char* const*)desktop_xpm),
     folder_closed((char* const*)folder_closed_xpm),
     default_file((char* const*)textdoc_xpm),
@@ -162,12 +157,10 @@ Fl_Pixmap up_folder_img((char* const*)big_folder_up_xpm),
     ram_drive((char* const*)ram_drive_xpm),
     network_drive((char* const*)network_drive_xpm),
     documents((char* const*)filled_folder_xpm),
-    littlehome((char* const*)home_xpm),
     little_favorites((char* const*)mini_folder_favorites_xpm),
     little_desktop((char* const*)mini_desktop_xpm),
-    bigdocuments((char* const*)bigdocuments_xpm),
-    bigtemporary((char* const*)bigtemporary_xpm), reel((char* const*)reel_xpm),
-    picture((char* const*)image_xpm), music((char* const*)music_xpm);
+    reel((char* const*)reel_xpm), picture((char* const*)image_xpm),
+    music((char* const*)music_xpm);
 
 #define streq(a, b) (strcmp(a, b) == 0)
 
