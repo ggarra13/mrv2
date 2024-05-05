@@ -45,16 +45,29 @@ export CMAKE_FLAGS=""
 #
 # Common flags
 #
-export BUILD_PYTHON=OFF
+if [ -z "$BUILD_PYTHON" ]; then
+    export BUILD_PYTHON=OFF
+fi
 
 #
 # These are some of the expensive mrv2 options
 #
-export BUILD_PYTHON=OFF
-export MRV2_PYFLTK=OFF
-export MRV2_PYBIND11=OFF
-export MRV2_NETWORK=OFF
-export MRV2_PDF=OFF
+
+if [ -z "$MRV2_PYFLTK" ]; then
+    export MRV2_PYFLTK=OFF
+fi
+
+if [ -z "$MRV2_PYBIND11" ]; then
+    export MRV2_PYBIND11=OFF
+fi
+
+if [ -z "$MRV2_NETWORK" ]; then
+    export MRV2_NETWORK=OFF
+fi
+
+if [ -z "$MRV2_PDF" ]; then
+    export MRV2_PDF=OFF
+fi
 
 #
 # These are some of the expensive TLRENDER options
