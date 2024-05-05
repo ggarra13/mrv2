@@ -39,10 +39,10 @@ def search_untranslated_strings(pofile):
             line2 = lines[count + 1]
 
             if in_msg_id:
-                msgstr = re.match(r'^msgstr\s+"(.*?)"', line)
+                msgstr = re.match(r'^msgstr\s+"(.*)"$', line)
                 match = msgstr.group(1) if msgstr else None
 
-                text2 = re.match(r'^"(.*?)"', line2)
+                text2 = re.match(r'^"(.*)"$', line2)
                 match2 = text2.group(1) if text2 else None
 
                 if match:
