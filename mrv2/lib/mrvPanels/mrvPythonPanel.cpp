@@ -485,12 +485,16 @@ namespace mrv
             textBuffer->add_modify_callback(style_update_cb, this);
             if (textBuffer->length() == 0)
             {
-                textBuffer->append(R"PYTHON(
+                std::string imports = R"PYTHON(
 import mrv2
 from mrv2 import annotations, cmd, math, image, io, media
-from mrv2 import playlist, timeline, usd, session, settings
+from mrv2 import playlist, timeline, )PYTHON";
 
-)PYTHON");
+#ifdef TLRENDER_USD
+                imports += "usd, ";
+#endif
+                imports += "session, settings";
+                textBuffer->append(imports.c_str());
             }
 
             tile->end();

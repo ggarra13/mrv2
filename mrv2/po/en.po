@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.1.4\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2024-05-05 03:13-0300\n"
+"POT-Creation-Date: 2024-05-05 12:41-0300\n"
 "PO-Revision-Date: 2024-05-04 10:53-0300\n"
 "Last-Translator: gga <ggarra13@gmail.com>\n"
 "Language-Team: English\n"
@@ -288,6 +288,7 @@ msgstr "Open a session file."
 msgid "Save a session file."
 msgstr "Save a session file."
 
+#, c++-format
 msgid "Duplicated Python plugin {0} in {1} and {2}."
 msgstr "Duplicated Python plugin {0} in {1} and {2}."
 
@@ -485,6 +486,7 @@ msgstr "Add a clip to currently selected Playlist EDL."
 msgid "Save current .otio file with relative paths."
 msgstr "Save current .otio file with relative paths."
 
+#, c++-format
 msgid "unsupported operand type(s) for {0}: RationalTime and {1}"
 msgstr "unsupported operand type(s) for {0}: RationalTime and {1}"
 
@@ -1515,6 +1517,7 @@ msgstr "OK"
 msgid "Cancel"
 msgstr "Cancel"
 
+#, c++-format
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr "{0} - Channels: {1} {2} {3}"
 
@@ -1601,9 +1604,11 @@ msgstr ""
 msgid "Return the version and exit."
 msgstr "Return the version and exit."
 
+#, c++-format
 msgid "Could not read python script '{0}'"
 msgstr "Could not read python script '{0}'"
 
+#, c++-format
 msgid "Running python script '{0}'"
 msgstr "Running python script '{0}'"
 
@@ -1631,13 +1636,13 @@ msgstr "Show All"
 msgid "Quit mrv2"
 msgstr "Quit mrv2"
 
-#, fuzzy
 msgid "Running from "
-msgstr "Running on: "
+msgstr "Running from "
 
 msgid "Could not initialize NDI"
 msgstr "Could not initialize NDI"
 
+#, c++-format
 msgid "Filename '{0}' does not exist or does not have read permissions."
 msgstr "Filename '{0}' does not exist or does not have read permissions."
 
@@ -1767,6 +1772,7 @@ msgstr ""
 "Type in your python code here.  Select an area to execute just a portion of "
 "it.  Press Keypad Enter to run it."
 
+#, c++-format
 msgid "Python file {0} already exists.  Do you want to overwrite it?"
 msgstr "Python file {0} already exists.  Do you want to overwrite it?"
 
@@ -1788,12 +1794,15 @@ msgstr "The stream is in an unrecoverable error state."
 msgid "Type your editor command"
 msgstr "Type your editor command"
 
+#, c++-format
 msgid "{0} will be replaced with the line number.  {1} with the file name"
 msgstr "{0} will be replaced with the line number.  {1} with the file name"
 
+#, c++-format
 msgid "Regular expression error: {0}"
 msgstr "Regular expression error: {0}"
 
+#, c++-format
 msgid "Could not open python editor: {0}"
 msgstr "Could not open python editor: {0}"
 
@@ -2682,15 +2691,19 @@ msgstr "Invalid index for add clip to timeline."
 msgid "Could not get current path."
 msgstr "Could not get current path."
 
+#, c++-format
 msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
 msgstr "EDL item '{0}' no longer loaded.  Cannot undo or redo."
 
+#, c++-format
 msgid "Could not paste {0}.  Error {1}."
 msgstr "Could not paste {0}.  Error {1}."
 
+#, c++-format
 msgid "Could not save .otio file: {0}"
 msgstr "Could not save .otio file: {0}"
 
+#, c++-format
 msgid "Error saving {0}. {1}"
 msgstr "Error saving {0}. {1}"
 
@@ -2703,36 +2716,45 @@ msgstr "Destination file is invalid."
 msgid "You can only add clips to an .otio EDL playlist."
 msgstr "You can only add clips to an .otio EDL playlist."
 
+#, c++-format
 msgid "Server started at port {0}."
 msgstr "Server started at port {0}."
 
 msgid "Server stopped."
 msgstr "Server stopped."
 
+#, c++-format
 msgid "A client connected from {0}"
 msgstr "A client connected from {0}"
 
+#, c++-format
 msgid "Client at {0} disconnected."
 msgstr "Client at {0} disconnected."
 
+#, c++-format
 msgid "Server protocol version is {0}.  Client protocol version is {1}"
 msgstr "Server protocol version is {0}.  Client protocol version is {1}"
 
+#, c++-format
 msgid "Remote file {0} does not exist on local filesystem."
 msgstr "Remote file {0} does not exist on local filesystem."
 
 msgid "Remote files are less than local files."
 msgstr "Remote files are less than local files."
 
+#, c++-format
 msgid "Remote file {0} matches file name {1} but not path."
 msgstr "Remote file {0} matches file name {1} but not path."
 
+#, c++-format
 msgid "Remote file {0} does not match local filename."
 msgstr "Remote file {0} does not match local filename."
 
+#, c++-format
 msgid "Removing {0} from message publisher."
 msgstr "Removing {0} from message publisher."
 
+#, c++-format
 msgid "Connected to server at {0}, port {1}"
 msgstr "Connected to server at {0}, port {1}"
 
@@ -2748,6 +2770,7 @@ msgstr "ERROR: "
 msgid "WARN : "
 msgstr "WARN : "
 
+#, c++-format
 msgid ""
 "Regular expression created from {0}.  It is:\n"
 "{1}"
@@ -2755,15 +2778,19 @@ msgstr ""
 "Regular expression created from {0}.  It is:\n"
 "{1}"
 
+#, c++-format
 msgid "Iteration {0} matched prefix={1}"
 msgstr "Iteration {0} matched prefix={1}"
 
+#, c++-format
 msgid "Iteration {0} matched version={1}"
 msgstr "Iteration {0} matched version={1}"
 
+#, c++-format
 msgid "Iteration {0} matched suffix={1}"
 msgstr "Iteration {0} matched suffix={1}"
 
+#, c++-format
 msgid "Iteration {0} will check version={1}"
 msgstr "Iteration {0} will check version={1}"
 
@@ -2780,6 +2807,7 @@ msgstr "Example:  gizmo_v003.0001.exr"
 msgid "Annotation already existed at this time"
 msgstr "Annotation already existed at this time"
 
+#, c++-format
 msgid "Session saved to \"{0}\"."
 msgstr "Session saved to \"{0}\"."
 
@@ -2792,12 +2820,15 @@ msgstr "Failed to load the file."
 msgid "Cannot save an NDI stream"
 msgstr "Cannot save an NDI stream"
 
+#, c++-format
 msgid "Saving movie to {0}."
 msgstr "Saving movie to {0}."
 
+#, c++-format
 msgid "Saving audio to {0}."
 msgstr "Saving audio to {0}."
 
+#, c++-format
 msgid "Saving pictures to {0}."
 msgstr "Saving pictures to {0}."
 
@@ -2816,18 +2847,23 @@ msgid ""
 msgstr ""
 "GoPro Cineform profile needs a .mkv movie extension.  Changing it to .mkv"
 
+#, c++-format
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "New file {0} already exist!  Cannot overwrite it."
 
+#, c++-format
 msgid "Rotated image info: {0}"
 msgstr "Rotated image info: {0}"
 
+#, c++-format
 msgid "Scaled image info: {0}"
 msgstr "Scaled image info: {0}"
 
+#, c++-format
 msgid "{0}: Cannot open writer plugin."
 msgstr "{0}: Cannot open writer plugin."
 
+#, c++-format
 msgid "Image info: {0} {1}"
 msgstr "Image info: {0} {1}"
 
@@ -2836,18 +2872,23 @@ msgid ""
 msgstr ""
 "Image too big for options.annotations.  Will scale to the viewport size."
 
+#, c++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "Viewport Size: {0} - X={1}, Y={2}"
 
+#, c++-format
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
 msgstr "Writer plugin did not get output info.  Defaulting to {0}"
 
+#, c++-format
 msgid "Output info: {0} {1}"
 msgstr "Output info: {0} {1}"
 
+#, c++-format
 msgid "Using profile {0}, pixel format {1}."
 msgstr "Using profile {0}, pixel format {1}."
 
+#, c++-format
 msgid "Using preset {0}."
 msgstr "Using preset {0}."
 
@@ -2870,18 +2911,23 @@ msgstr "Saving Pictures without Audio %<PRId64> - %<PRId64>"
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "Audio only in timeline, but not trying to save audio."
 
+#, c++-format
 msgid "{0}: Invalid OpenGL format and type"
 msgstr "{0}: Invalid OpenGL format and type"
 
+#, c++-format
 msgid "OpenGL info: {0}"
 msgstr "OpenGL info: {0}"
 
+#, c++-format
 msgid "Empty video data at time {0}."
 msgstr "Empty video data at time {0}."
 
+#, c++-format
 msgid "Reading preferences from \"{0}mrv2.prefs\"."
 msgstr "Reading preferences from \"{0}mrv2.prefs\"."
 
+#, c++-format
 msgid "Failed to retrieve {0}."
 msgstr "Failed to retrieve {0}."
 
@@ -2892,9 +2938,11 @@ msgstr ""
 "FFmpeg YUV to RGB Conversion is on in Settings Panel.  mrv2 will play back "
 "movies slower."
 
+#, c++-format
 msgid "Could not open color theme from \"{0}\"."
 msgstr "Could not open color theme from \"{0}\"."
 
+#, c++-format
 msgid "Loaded color themes from \"{0}\"."
 msgstr "Loaded color themes from \"{0}\"."
 
@@ -2904,27 +2952,33 @@ msgstr "Setting OCIO config from preferences."
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr "Setting OCIO config from OCIO environment variable."
 
+#, c++-format
 msgid "Path mappings have been loaded from \"{0}mrv2.paths.prefs\"."
 msgstr "Path mappings have been loaded from \"{0}mrv2.paths.prefs\"."
 
+#, c++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Loading hotkeys from \"{0}{1}.prefs\"."
 
 msgid "Reseting hotkeys to default."
 msgstr "Reseting hotkeys to default."
 
+#, c++-format
 msgid "Path mappings have been saved to \"{0}mrv2.paths.prefs\"."
 msgstr "Path mappings have been saved to \"{0}mrv2.paths.prefs\"."
 
+#, c++-format
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "Hotkeys have been saved to \"{0}{1}.prefs\"."
 
+#, c++-format
 msgid "Preferences have been saved to: \"{0}mrv2.prefs\"."
 msgstr "Preferences have been saved to: \"{0}mrv2.prefs\"."
 
 msgid "OCIO config is now:"
 msgstr "OCIO config is now:"
 
+#, c++-format
 msgid "OCIO file \"{0}\" not found or not readable."
 msgstr "OCIO file \"{0}\" not found or not readable."
 
@@ -2934,24 +2988,30 @@ msgstr "Setting OCIO config to default:"
 msgid "Setting OCIO config to built-in:"
 msgstr "Setting OCIO config to built-in:"
 
+#, c++-format
 msgid "Comparing {0} to prefix {1}"
 msgstr "Comparing {0} to prefix {1}"
 
+#, c++-format
 msgid "Found a match.  File is now {0}"
 msgstr "Found a match.  File is now {0}"
 
 msgid "OCIO config file cannot be empty."
 msgstr "OCIO config file cannot be empty."
 
+#, c++-format
 msgid "OCIO config '{0}' does not exist or is not readable."
 msgstr "OCIO config '{0}' does not exist or is not readable."
 
+#, c++-format
 msgid "Invalid OCIO Ics '{0}'."
 msgstr "Invalid OCIO Ics '{0}'."
 
+#, c++-format
 msgid "Invalid OCIO Look '{0}'."
 msgstr "Invalid OCIO Look '{0}'."
 
+#, c++-format
 msgid "Invalid OCIO Display/View '{0}'."
 msgstr "Invalid OCIO Display/View '{0}'."
 
@@ -2966,6 +3026,7 @@ msgid ""
 msgstr ""
 "Need to reboot mrv2 to change language.  Are you sure you want to continue?"
 
+#, c++-format
 msgid "Set Language to {0}, Numbers to {1}"
 msgstr "Set Language to {0}, Numbers to {1}"
 
@@ -3100,6 +3161,7 @@ msgstr ""
 "Hotkey \"%s\" already used in \"%s\".\n"
 "Do you want to override it?"
 
+#, c++-format
 msgid ""
 "Corruption in hotkeys preferences. Hotkey '{0}' for {1} will not be "
 "available.  Already used in {2}."
@@ -3286,12 +3348,14 @@ msgstr "Font not found.  Will not use UTF-8."
 msgid "%s - Page %d"
 msgstr "%s - Page %d"
 
+#, c++-format
 msgid "Frame {0} - Timecode: {1} - {2} Secs."
 msgstr "Frame {0} - Timecode: {1} - {2} Secs."
 
 msgid "Image too big.  Will save the viewport size."
 msgstr "Image too big.  Will save the viewport size."
 
+#, c++-format
 msgid "Viewport Size: {0}  Render Size: {1}"
 msgstr "Viewport Size: {0}  Render Size: {1}"
 
@@ -3737,6 +3801,7 @@ msgstr "Sync/Accept/Annotations"
 msgid "Sync/Accept/Audio"
 msgstr "Sync/Accept/Audio"
 
+#, c++-format
 msgid ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
 "function and a string with menu options in it."
@@ -3744,6 +3809,7 @@ msgstr ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
 "function and a string with menu options in it."
 
+#, c++-format
 msgid ""
 "In '{0}' expected a function a tuple containing a Python function and a "
 "string with menu options in it."
@@ -5425,9 +5491,8 @@ msgstr "Editing viewport will be visible at start up."
 msgid "Preview Thumbnails"
 msgstr "Preview Thumbnails"
 
-#, fuzzy
 msgid "Thumbnails above timeline"
-msgstr "Thumbnails Active"
+msgstr "Thumbnails above timeline"
 
 msgid "Remove EDLs in Temporary Folder on Exit"
 msgstr "Remove EDLs in Temporary Folder on Exit"
