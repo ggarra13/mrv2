@@ -24,6 +24,9 @@ It is a bug fix release for the regressions in v1.1.4 which was rushed:
   build python itself.  Of course, in that case, mrv2 cannot be re-distributed.
 - Added a python translating system for plug-ins.
 - Translated all update-mrv2.py strings into Spanish.
+- If using blit for the viewports, automatically switches to shaders if
+  Background is transparent and image has transparency, as glBlitFrameBuffers
+  does not support alpha blending.
 
 
 

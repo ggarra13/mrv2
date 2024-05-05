@@ -58,7 +58,7 @@ namespace mrv
         _gl(new GLPrivate)
     {
         int stereo = 0;
-        int fl_double = FL_DOUBLE;  // needed on Linux and _WIN32
+        int fl_double = FL_DOUBLE; // needed on Linux and _WIN32
 #if defined(__APPLE__)
         // \bug: Do not use FL_DOUBLE on APPLE as it makes
         // playback slow
@@ -201,7 +201,8 @@ namespace mrv
 
         const auto& viewportSize = getViewportSize();
         const auto& renderSize = getRenderSize();
-        bool transparent =
+        bool hasAlpha = false;
+        const bool transparent =
             p.backgroundOptions.type == timeline::Background::Transparent;
 
         try
@@ -214,9 +215,11 @@ namespace mrv
                 {
                 case kAccuracyFloat32:
                     gl.colorBufferType = image::PixelType::RGBA_F32;
+                    hasAlpha = true;
                     break;
                 case kAccuracyFloat16:
                     gl.colorBufferType = image::PixelType::RGBA_F16;
+                    hasAlpha = true;
                     break;
                 case kAccuracyAuto:
                     if (!p.videoData[0].layers.empty() &&
@@ -227,22 +230,29 @@ namespace mrv
                         switch (pixelType)
                         {
                         case image::PixelType::RGBA_F32:
+                        case image::PixelType::LA_F32:
+                            hasAlpha = true;
                         case image::PixelType::RGB_F32:
                         case image::PixelType::L_F32:
-                        case image::PixelType::LA_F32:
                             gl.colorBufferType = image::PixelType::RGBA_F32;
                             break;
                         case image::PixelType::RGBA_F16:
+                        case image::PixelType::LA_F16:
+                            hasAlpha = true;
                         case image::PixelType::RGB_F16:
                         case image::PixelType::L_F16:
-                        case image::PixelType::LA_F16:
                             gl.colorBufferType = image::PixelType::RGBA_F16;
                             break;
                         case image::PixelType::RGBA_U16:
+                        case image::PixelType::LA_U16:
+                            hasAlpha = true;
                         case image::PixelType::RGB_U16:
                         case image::PixelType::L_U16:
-                        case image::PixelType::LA_U16:
                             gl.colorBufferType = image::PixelType::RGBA_U16;
+                            break;
+                        case image::PixelType::RGBA_U8:
+                        case image::PixelType::LA_U8:
+                            hasAlpha = true;
                             break;
                         default:
                             break;
@@ -399,7 +409,7 @@ namespace mrv
             const float rotation = _getRotation();
             if (p.ui->uiPrefs->uiPrefsBlitViewports->value() == kNoBlit ||
                 p.environmentMapOptions.type != EnvironmentMapOptions::kNone ||
-                rotation != 0.F)
+                rotation != 0.F || (transparent && hasAlpha))
             {
                 if (p.environmentMapOptions.type !=
                     EnvironmentMapOptions::kNone)
