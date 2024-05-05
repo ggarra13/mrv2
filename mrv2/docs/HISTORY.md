@@ -11,6 +11,9 @@ v1.1.6
 - Removed .po python plug-in files from distribution.
 - Improved missing_translate.py script and added searching for plug-in
   translations too.
+- Removed unused FLU XPM icons from the code, as most have been replaced by
+  .svg icons.
+  
 
 v1.1.5
 ======
