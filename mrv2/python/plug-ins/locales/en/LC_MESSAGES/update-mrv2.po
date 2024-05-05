@@ -5,15 +5,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-05-04 12:03-0300\n"
+"POT-Creation-Date: 2024-05-05 17:25-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
-
 
 msgid "No file matching"
 msgstr ""
@@ -57,8 +57,7 @@ msgstr ""
 msgid "Removed temporary"
 msgstr ""
 
-msgid ""
-"Could not locate mrv2 in:\n"
+msgid "Could not locate mrv2 in:\n"
 msgstr ""
 
 msgid "Maybe you installed it in a non-default location."
@@ -110,4 +109,3 @@ msgstr ""
 
 msgid "Help/Update mrv2"
 msgstr ""
-

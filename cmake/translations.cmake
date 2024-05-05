@@ -22,6 +22,49 @@ set( _absPotFile "${ROOT_DIR}/po/messages.pot" )
 
 set( mo_files ${_absPotFile} )
 
+
+
+file(GLOB _py_plugins "${ROOT_DIR}/python/plug-ins/*.py")
+set( _potPythonPluginDir "${ROOT_DIR}/po/python/plug-ins/locales")
+
+foreach(_full_path ${_py_plugins})
+    get_filename_component(_py_plugin ${_full_path} NAME)
+    get_filename_component(_py_basename ${_py_plugin} NAME_WLE)
+    message( STATUS "Creating .pot file for plug-in ${_py_plugin}")
+    set( _moFile  "${_moDir}/${_py_basename}.mo" )
+    set( _poFile  "${_moDir}/${_py_basename}.po" )
+    set( _potFile "${_potPythonPluginDir}/${_py_basename}.pot" )
+
+    message(STATUS "Does not exist .pot file ${_potFile}")
+    set(_pyscript_dir "${CMAKE_BINARY_DIR}/../../../Python-prefix/src/Python/Tools/i18n" )
+    
+    set(_py_gettext_script
+	"${_pyscript_dir}/pygettext.py")
+    
+    if (NOT EXISTS ${_py_gettext_script})
+	find_program(_py_gettext_cmd NAMES pygettext3 pygettext)
+    else()
+	set(_py_gettext_cmd ${PYTHON_EXECUTABLE} )
+    endif()
+    
+    set(_py_gettext_args ${_py_gettext_script}
+	-d ${_py_basename} -o ${_potFile} ${_full_path} )
+    
+    if (NOT DEFINED _py_gettext_cmd OR
+	    "${_py_gettext_cmd}" STREQUAL "")
+	message(FATAL_ERROR "pygettext command missing.  Did not know how to create .pot file ${_potFile}")
+    else()		
+	add_custom_command(OUTPUT ${_potFile}
+	    COMMAND ${CMAKE_COMMAND} -E echo ${_py_gettext_cmd} ${_py_gettext_args}
+	    COMMAND ${_py_gettext_cmd} ${_py_gettext_args}
+	    DEPENDS ${_fullpath}
+	)
+    endif()
+	
+endforeach()
+
+	
+    
 foreach( lang ${LANGUAGES} )
 
     set( _moDir "${ROOT_DIR}/share/locale/${lang}/LC_MESSAGES" )
@@ -45,53 +88,26 @@ foreach( lang ${LANGUAGES} )
 	COMMAND msgfmt -v "${_poFile}" -o "${_moFile}"
 	DEPENDS ${_poFile} ${_absPotFile}
     )
+    
+    set( _moDir "${ROOT_DIR}/python/plug-ins/locales/${lang}/LC_MESSAGES" )
+		
+    execute_process(COMMAND
+	${CMAKE_COMMAND} -E make_directory ${_potPythonPluginDir})
 
-    file(GLOB _py_plugins "${ROOT_DIR}/python/plug-ins/*.py")
     foreach(_full_path ${_py_plugins})
 	get_filename_component(_py_plugin ${_full_path} NAME)
 	get_filename_component(_py_basename ${_py_plugin} NAME_WLE)
 	message( STATUS "Translating py plugin ${_py_plugin} into ${lang}")
-	
-	set( _moDir "${ROOT_DIR}/python/plug-ins/locales/${lang}/LC_MESSAGES" )
-	set( _moFile "${_moDir}/${_py_basename}.mo" )
-	set( _poFile "${_moDir}/${_py_basename}.po" )
-
-	if (NOT	EXISTS ${_poFile})
-	    message(STATUS "Does not exist .po file ${_poFile}")
-	    set(_pyscript_dir "${CMAKE_BINARY_DIR}/../../../Python-prefix/src/Python/Tools/i18n" )
-
-	    set(_py_gettext_script
-		"${_pyscript_dir}/pygettext.py")
-
-	    if (NOT EXISTS ${_py_gettext_script})
-		find_program(_py_gettext_cmd NAMES pygettext3 pygettext)
-	    else()
-		set(_py_gettext_cmd ${PYTHON_EXECUTABLE} )
-	    endif()
-	    
-	    set(_py_gettext_args ${_py_gettext_script}
-		-d ${_py_basename} -o ${_poFile} ${_full_path} )
-
-	    if (NOT DEFINED _py_gettext_cmd OR
-		    "${_py_gettext_cmd}" STREQUAL "")
-		message(FATAL_ERROR "Did not create .po file ${_poFile}")
-	    else()
-		execute_process(
-		    COMMAND ${CMAKE_COMMAND} -E echo Running: ${_py_gettext_cmd}
-		    OUTPUT_VARIABLE echo_output)
-
-		message(FATAL_ERROR "echo_output=${echo_output}")
-		
-		execute_process(COMMAND
-		    ${CMAKE_COMMAND} -E make_directory ${_moDir}
-		    COMMAND ${_py_gettext_cmd} ${_py_gettext_args})
-	    endif()
-	endif()
+	set( _moFile  "${_moDir}/${_py_basename}.mo" )
+	set( _poFile  "${_moDir}/${_py_basename}.po" )
 	
 	add_custom_command( OUTPUT "${_moFile}"
-	    COMMAND ${CMAKE_COMMAND} -E echo Running msgfmt for ${_moFile}
+	    COMMAND ${CMAKE_COMMAND} -E echo msgmerge --quiet --update --backup=none "${_poFile}" "${_potFile}"
+	    COMMAND msgmerge --lang ${lang} --quiet --update --backup=none "${_poFile}" "${_potFile}"
+	    COMMAND ${CMAKE_COMMAND} -E echo msgfmt -v "${_poFile}" -o "${_moFile}"
+	    COMMAND ${CMAKE_COMMAND} -E make_directory "${_moDir}"
 	    COMMAND msgfmt -v "${_poFile}" -o "${_moFile}"
-	    DEPENDS ${_full_path}
+	    DEPENDS ${_poFile} ${_potFile}
 	)
 	
 	list(APPEND mo_files ${_moFile} )

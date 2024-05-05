@@ -5,15 +5,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-05-04 09:55-0300\n"
+"POT-Creation-Date: 2024-05-05 17:40-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
-
 
 msgid "No file matching"
 msgstr "No archivo que corresponda"
@@ -57,10 +57,8 @@ msgstr "La nueva version de mrv2 fue instalada."
 msgid "Removed temporary"
 msgstr "Removí temporaria"
 
-msgid ""
-"Could not locate mrv2 in:\n"
-msgstr ""
-"No pude encontrar mrv2 en:\n"
+msgid "Could not locate mrv2 in:\n"
+msgstr "No pude encontrar mrv2 en:\n"
 
 msgid "Maybe you installed it in a non-default location."
 msgstr "Tal vez lo instalaste en una ubicación especial."
@@ -96,6 +94,9 @@ msgstr ""
 "\n"
 "Última en Github es v"
 
+msgid "Ignore"
+msgstr "Ignorar"
+
 msgid "Update anyway"
 msgstr "Actualizar igual"
 
@@ -110,4 +111,3 @@ msgstr "No archivos para distribuir encontrados."
 
 msgid "Help/Update mrv2"
 msgstr "Ayuda/Actualizar mrv2"
-
