@@ -38,7 +38,6 @@ namespace mrv
             return out;
         }
 
-        
         bool XWayland()
         {
             bool out = false;
@@ -62,6 +61,6 @@ namespace mrv
 #endif
             return out;
         }
-        
-    }  // desktop
+
+    } // namespace desktop
 } // namespace mrv

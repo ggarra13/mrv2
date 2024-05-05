@@ -54,7 +54,7 @@
 #include <Imath/ImathConfig.h>
 
 #ifdef TLRENDER_JPEG
-#  include <jconfig.h>
+#    include <jconfig.h>
 #endif
 
 #include <libintl.h>

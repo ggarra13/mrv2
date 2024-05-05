@@ -813,7 +813,7 @@ namespace mrv
         uiPrefs->uiPrefsBlitViewports->value(tmp);
 
         opengl.get("blit_timeline", tmp, 1);
-        
+
         uiPrefs->uiPrefsBlitTimeline->value(tmp);
 
         Fl_Preferences behavior(base, "behavior");
@@ -1489,8 +1489,6 @@ namespace mrv
         }
 #endif
 
-        
-        
         SettingsObject* settings = ViewerUI::app->settings();
 
         //
@@ -1746,14 +1744,13 @@ namespace mrv
             (LogDisplay::ShowPreferences)
                 uiPrefs->uiPrefsRaiseLogWindowOnFFmpegError->value();
 
-
         bool hasPresentation = view->getPresentationMode();
-        
+
         Fl_Round_Button* r;
 
         r = (Fl_Round_Button*)uiPrefs->uiPrefsOpenMode->child(1);
         int normal = r->value();
-        
+
         r = (Fl_Round_Button*)uiPrefs->uiPrefsOpenMode->child(1);
         int fullscreen = r->value();
         if (fullscreen)

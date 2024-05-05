@@ -8,7 +8,7 @@ namespace mrv
 {
     namespace desktop
     {
-        bool          Wayland();
-        bool          XWayland();
-    }    
+        bool Wayland();
+        bool XWayland();
+    } // namespace desktop
 } // namespace mrv

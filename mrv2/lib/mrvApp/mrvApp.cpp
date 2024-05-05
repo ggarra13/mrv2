@@ -1006,7 +1006,6 @@ namespace mrv
             p.filesModel->add(item);
         }
 
-
         // If we have autoplayback on and auto hide pixel bar, do so here.
         const bool autoHide = ui->uiPrefs->uiPrefsAutoHidePixelBar->value();
         const bool autoPlayback = ui->uiPrefs->uiPrefsAutoPlayback->value();

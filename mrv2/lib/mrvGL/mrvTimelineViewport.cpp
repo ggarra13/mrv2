@@ -1323,7 +1323,7 @@ namespace mrv
     {
         TLRENDER_P();
         const auto& renderSize = getRenderSize();
-        
+
         if (!renderSize.isValid())
             return;
 
@@ -1336,7 +1336,7 @@ namespace mrv
 
         int minx, miny, maxW, maxH, posX, posY;
         Fl::screen_work_area(minx, miny, maxW, maxH, screen);
-        
+
         PreferencesUI* uiPrefs = p.ui->uiPrefs;
         if (!desktop::Wayland() && uiPrefs->uiWindowFixedPosition->value())
         {
@@ -1354,7 +1354,7 @@ namespace mrv
 
         int dW = decW - mw->w();
         int dH = decH - mw->h();
-        
+
         maxW -= dW;
         maxH -= dH;
         posX += dW / 2;
@@ -1432,7 +1432,6 @@ namespace mrv
                 H = maxH;
         }
 
-
         //
         // Final sanity checks.
         //
@@ -1445,14 +1444,14 @@ namespace mrv
             posX = minx;
         if (posY + H > maxH)
             posY = miny;
-        
+
         mw->resize(posX, posY, W, H);
 
         p.ui->uiRegion->layout();
 
         set_edit_mode_cb(editMode, p.ui);
 
-        p.resizeWindow = false; 
+        p.resizeWindow = false;
     }
 
     math::Vector2i TimelineViewport::_getFocus(int X, int Y) const noexcept

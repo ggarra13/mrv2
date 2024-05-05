@@ -5,15 +5,12 @@
 
 
 #
+# Minimal build script for mrv2.  Run it from the root of the mrv2 dir, like:
 #
-# Minimal build script for mrv2.  It builds all dependencies and will install
-# the main executable on BUILD_DIR (by default
-#                                   BUILD-OS-ARCH/BUILD_TYPE/install/bin).
+# ./bin/runme_minimal.sh
 #
-# On Linux and macOS, it will also create a mrv2 or mrv2-dbg symbolic link
-# in $HOME/bin if the directory exists.
-#
-# It will also log the compilation on $BUILD_DIR/compile.log
+# Intended to make sure cmake files, FLTK and mrv2 compile with no options.
+# You cannot open any image or movie file with this.
 #
 
 
