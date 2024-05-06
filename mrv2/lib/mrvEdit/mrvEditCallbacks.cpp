@@ -2276,8 +2276,9 @@ namespace mrv
     int calculate_edit_viewport_size(ViewerUI* ui)
     {
         // Some constants, as Darby does not expose this in tlRender.
-        const int kTrackInfoHeight = 21;
-        const int kClipInfoHeight = 21;
+        const float pixels_unit = ui->uiTimeline->pixels_per_unit();
+        const int kTrackInfoHeight = 21 * pixels_unit;
+        const int kClipInfoHeight = 21 * pixels_unit;
         const int kTransitionsHeight = 30;
         const int kAudioGapOnlyHeight = 20;
         const int kMarkerHeight = 24;
@@ -2425,7 +2426,7 @@ namespace mrv
     {
         if (ui->uiView->getPresentationMode())
             return;
-                                
+
         Fl_Button* b = ui->uiEdit;
 
         bool active = (mode == EditMode::kFull || mode == EditMode::kSaved);
@@ -2452,8 +2453,7 @@ namespace mrv
         int tileH = tile->h();
         int H = kMinEditModeH; // timeline height
         int viewH = H;
-        bool showTimeline = ui->uiMain->visible() &&
-                            mode != EditMode::kNone;
+        bool showTimeline = ui->uiMain->visible() && mode != EditMode::kNone;
         auto player = ui->uiView->getTimelinePlayer();
         if (mode == EditMode::kFull && player)
         {
@@ -2487,7 +2487,7 @@ namespace mrv
 
         if (showTimeline)
             ui->uiTimeline->show();
-            
+
         int newY = tileY + tileH - H;
 
         view->resize(view->x(), view->y(), view->w(), tileH - viewH);

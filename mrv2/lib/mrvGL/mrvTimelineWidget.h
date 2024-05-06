@@ -145,9 +145,6 @@ namespace mrv
         void moveCallback(const std::vector<tl::timeline::MoveData>&);
 
     protected:
-        void _initializeGL();
-        void _initializeGLResources();
-
         int enterEvent();
         int leaveEvent();
         int mousePressEvent();
@@ -161,19 +158,26 @@ namespace mrv
         void timerEvent();
 
     private:
+        void _initializeGL();
+
         void _createThumbnailWindow();
         void _getThumbnailPosition(int& X, int& Y);
 
         void _setTimeUnits(tl::timeline::TimeUnits);
 
+        void _tickEvent();
         void _tickEvent(
             const std::shared_ptr<ui::IWidget>&, bool visible, bool enabled,
             const ui::TickEvent&);
 
         bool _getSizeUpdate(const std::shared_ptr<ui::IWidget>&) const;
+        void _sizeHintEvent();
         void _sizeHintEvent(
             const std::shared_ptr<ui::IWidget>&, const ui::SizeHintEvent&);
 
+        void _setGeometry();
+
+        void _clipEvent();
         void _clipEvent(
             const std::shared_ptr<ui::IWidget>&, const math::Box2i&,
             bool clipped);
