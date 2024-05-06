@@ -398,6 +398,7 @@ namespace mrv
             int X, Y;
             _getThumbnailPosition(X, Y);
             p.thumbnailWindow->resize(X, Y, kTHUMB_WIDTH, kTHUMB_HEIGHT);
+            p.box->resize(2, 2, kTHUMB_WIDTH - 4, kTHUMB_HEIGHT - 4);
             p.thumbnailWindow->show(); // needed for Windows
         }
         else
