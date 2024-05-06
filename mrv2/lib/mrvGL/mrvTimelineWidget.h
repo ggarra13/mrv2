@@ -145,9 +145,6 @@ namespace mrv
         void moveCallback(const std::vector<tl::timeline::MoveData>&);
 
     protected:
-        void _initializeGL();
-        void _initializeGLResources();
-
         int enterEvent();
         int leaveEvent();
         int mousePressEvent();
@@ -161,6 +158,8 @@ namespace mrv
         void timerEvent();
 
     private:
+        void _initializeGL();
+
         void _createThumbnailWindow();
         void _getThumbnailPosition(int& X, int& Y);
 
