@@ -50,7 +50,7 @@ namespace mrv
         const int kTHUMB_WIDTH = 128;
         const int kTHUMB_HEIGHT = 80;
 
-        const double kTimeout = 0.008;  // 120 fps
+        const double kTimeout = 0.008; // 120 fps
         const char* kModule = "timelineui";
     } // namespace
 
@@ -225,7 +225,7 @@ namespace mrv
         {
             // For faster playback, we won't set this window to FL_DOUBLE.
             // FLTK's EGL Wayland already uses two buffers.
-            //fl_double = FL_DOUBLE;
+            // fl_double = FL_DOUBLE;
         }
         else if (desktop::XWayland())
         {
@@ -381,8 +381,10 @@ namespace mrv
         X = Fl::event_x_root() - p.topWindow->x_root() - kTHUMB_WIDTH / 2;
         if (X < 0)
             X = 0;
-        if (X > p.topWindow->x_root() + p.topWindow->w() - kTHUMB_WIDTH)
-            X = p.topWindow->x_root() + p.topWindow->w() - kTHUMB_WIDTH;
+
+        int maxW = p.topWindow->w() - kTHUMB_WIDTH;
+        if (X > maxW)
+            X = maxW;
 
         // 20 here is the size of the timeline without the pictures
         Y = y_root() - p.topWindow->y_root() - 20 - kTHUMB_HEIGHT;
@@ -396,6 +398,7 @@ namespace mrv
             int X, Y;
             _getThumbnailPosition(X, Y);
             p.thumbnailWindow->resize(X, Y, kTHUMB_WIDTH, kTHUMB_HEIGHT);
+            p.box->resize(2, 2, kTHUMB_WIDTH - 4, kTHUMB_HEIGHT - 4);
             p.thumbnailWindow->show(); // needed for Windows
         }
         else
@@ -1376,14 +1379,14 @@ namespace mrv
 
             if (_getDrawUpdate(p.timelineWindow))
             {
-#ifdef DEBUG_TIMELINE_CALLBACK 
+#ifdef DEBUG_TIMELINE_CALLBACK
                 std::cerr << "R" << std::endl;
                 redraw();
 #endif
             }
             else
             {
-#ifdef DEBUG_TIMELINE_CALLBACK 
+#ifdef DEBUG_TIMELINE_CALLBACK
                 std::cerr << "." << std::endl;
 #endif
             }

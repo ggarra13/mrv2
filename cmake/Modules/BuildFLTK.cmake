@@ -9,6 +9,9 @@ include( ExternalProject )
 
 # fixes Wayland hang.  
 set(FLTK_GIT_TAG dea8a93bc2dc359bbcfd33889592660ee0089075)
+if(APPLE)
+    set(FLTK_GIT_TAG 7ec6f96d9c53f23e9137a2deea2cbf71f959534e)
+endif()
 
 if(MRV2_PYFLTK OR FLTK_BUILD_SHARED)
     # If we are building pyFLTK compile shared
