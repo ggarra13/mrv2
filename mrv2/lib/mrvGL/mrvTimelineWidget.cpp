@@ -339,7 +339,7 @@ namespace mrv
             !p.timelineWidget->isEditable())
         {
             p.timeRange = p.player->player()->getTimeRange();
-            auto time = _posToTime(X);
+            const auto& time = _posToTime(X);
             p.player->seek(time);
             return 1;
         }
@@ -544,9 +544,11 @@ namespace mrv
         _p->timelineWidget->setItemOptions(value);
     }
 
-    void TimelineWidget::_initializeGLResources()
+    void TimelineWidget::_initializeGL()
     {
         TLRENDER_P();
+
+        gl::initGLAD();
 
         if (auto context = p.context.lock())
         {
@@ -592,22 +594,11 @@ namespace mrv
                     "mrv::mrvTimelineWidget", e.what(), log::Type::Error);
             }
 
+            _sizeHintEvent();
             p.vao.reset();
             p.vbo.reset();
             p.buffer.reset();
         }
-    }
-
-    void TimelineWidget::_initializeGL()
-    {
-        gl::initGLAD();
-
-        CHECK_GL;
-        refresh();
-        CHECK_GL;
-
-        _initializeGLResources();
-        CHECK_GL;
     }
 
     void TimelineWidget::resize(int X, int Y, int W, int H)
@@ -616,15 +607,10 @@ namespace mrv
 
         Fl_Gl_Window::resize(X, Y, W, H);
 
-        const float devicePixelRatio = this->pixels_per_unit();
-        ui::SizeHintEvent sizeHintEvent(
-            p.style, p.iconLibrary, p.fontSystem, devicePixelRatio);
-        _sizeHintEvent(p.timelineWindow, sizeHintEvent);
+        _setGeometry();
 
-        const math::Box2i geometry(0, 0, _toUI(W), _toUI(H));
-        p.timelineWindow->setGeometry(geometry);
-
-        _clipEvent(p.timelineWindow, geometry, false);
+        _sizeHintEvent();
+        _clipEvent();
 
         p.vbo.reset();
         p.vao.reset();
@@ -1361,34 +1347,19 @@ namespace mrv
         //! destruction?
         if (_p)
         {
-            ui::TickEvent tickEvent(p.style, p.iconLibrary, p.fontSystem);
-            _tickEvent(p.timelineWindow, true, true, tickEvent);
+            _tickEvent();
 
             if (_getSizeUpdate(p.timelineWindow))
             {
-                const float devicePixelRatio = this->pixels_per_unit();
-                ui::SizeHintEvent sizeHintEvent(
-                    p.style, p.iconLibrary, p.fontSystem, devicePixelRatio);
-                _sizeHintEvent(p.timelineWindow, sizeHintEvent);
-
-                const math::Box2i geometry(0, 0, _toUI(w()), _toUI(h()));
-                p.timelineWindow->setGeometry(geometry);
-
-                _clipEvent(p.timelineWindow, geometry, false);
+                _sizeHintEvent();
+                _setGeometry();
+                _clipEvent();
+                // updateGeometry();  // Qt function?
             }
 
             if (_getDrawUpdate(p.timelineWindow))
             {
-#ifdef DEBUG_TIMELINE_CALLBACK
-                std::cerr << "R" << std::endl;
                 redraw();
-#endif
-            }
-            else
-            {
-#ifdef DEBUG_TIMELINE_CALLBACK
-                std::cerr << "." << std::endl;
-#endif
             }
         }
         Fl::repeat_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
@@ -1570,6 +1541,13 @@ namespace mrv
         edit_move_clip_annotations(moves, p.ui);
     }
 
+    void TimelineWidget::_tickEvent()
+    {
+        TLRENDER_P();
+        ui::TickEvent tickEvent(p.style, p.iconLibrary, p.fontSystem);
+        _tickEvent(_p->timelineWindow, true, true, tickEvent);
+    }
+
     void TimelineWidget::_tickEvent(
         const std::shared_ptr<ui::IWidget>& widget, bool visible, bool enabled,
         const ui::TickEvent& event)
@@ -1603,6 +1581,15 @@ namespace mrv
         return out;
     }
 
+    void TimelineWidget::_sizeHintEvent()
+    {
+        TLRENDER_P();
+        const float devicePixelRatio = this->pixels_per_unit();
+        ui::SizeHintEvent sizeHintEvent(
+            p.style, p.iconLibrary, p.fontSystem, devicePixelRatio);
+        _sizeHintEvent(p.timelineWindow, sizeHintEvent);
+    }
+
     void TimelineWidget::_sizeHintEvent(
         const std::shared_ptr<ui::IWidget>& widget,
         const ui::SizeHintEvent& event)
@@ -1612,6 +1599,20 @@ namespace mrv
             _sizeHintEvent(child, event);
         }
         widget->sizeHintEvent(event);
+    }
+
+    void TimelineWidget::_setGeometry()
+    {
+        TLRENDER_P();
+        const math::Box2i geometry(0, 0, _toUI(w()), _toUI(h()));
+        p.timelineWindow->setGeometry(geometry);
+    }
+
+    void TimelineWidget::_clipEvent()
+    {
+        TLRENDER_P();
+        const math::Box2i geometry(0, 0, _toUI(w()), _toUI(h()));
+        _clipEvent(p.timelineWindow, geometry, false);
     }
 
     void TimelineWidget::_clipEvent(
