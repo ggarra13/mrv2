@@ -1,3 +1,12 @@
+v1.1.6
+======
+
+- Made View Window / Timeline Viewport divider highlight in a grayish color
+  when it can be dragged.
+- Improved performance of dragging Tiles like the main divider, particularly
+  on macOS.
+
+
 v1.1.5
 ======
 

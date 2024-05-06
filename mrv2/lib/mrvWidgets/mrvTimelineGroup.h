@@ -13,7 +13,7 @@ namespace mrv
     {
     public:
         TimelineGroup(int X, int Y, int W, int H, const char* L = 0);
-        void draw() override;
+        void draw() FL_OVERRIDE;
     };
 
 } // namespace mrv

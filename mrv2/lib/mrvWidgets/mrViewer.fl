@@ -798,8 +798,7 @@ class ViewerUI {open
     code {uiPrefs = new PreferencesUI(this);
 uiHotkey = new HotkeyUI(this);
 uiAbout = new AboutUI(this);
-uiSecondary = nullptr;} {selected
-    }
+uiSecondary = nullptr;} {}
     Fl_Window uiMain {
       label mrv2
       user_data this user_data_type {ViewerUI*}
@@ -1056,9 +1055,9 @@ Value is:  pow( 2, 1/x );} xywh {651 26 39 25} type {Horz Knob} labelsize 10 max
           code0 {;}
           class {mrv::Tile}
         } {
-          Fl_Group {} {
+          Fl_Box uiTimelineLimit {
             xywh {0 80 690 408} labeltype NO_LABEL hide resizable
-          } {}
+          }
           Fl_Pack uiViewGroup {
             xywh {0 53 690 435} type HORIZONTAL box FLAT_BOX
             code0 {o->fixed( uiToolsGroup, uiToolsGroup->w() );}
@@ -1224,11 +1223,11 @@ settings->setValue( mrv::kPenColorA, a);}
               } {}
             }
           }
-          Fl_Group uiTimelineGroup {
+          Fl_Group uiTimelineGroup {open
             xywh {0 488 690 30} box FLAT_BOX color 51
             class {mrv::TimelineGroup}
           } {
-            Fl_Group uiTimeline {
+            Fl_Group uiTimeline {open selected
               xywh {0 496 690 22} resizable
               class {mrv::TimelineWidget}
             } {}

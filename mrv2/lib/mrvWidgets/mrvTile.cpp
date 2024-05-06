@@ -74,6 +74,7 @@
 
 #include <mrvWidgets/mrvTile.h>
 #include <FL/Fl_Window.H>
+#include <FL/Fl_Gl_Window.H>
 #include <FL/Fl_Rect.H>
 #include <FL/Fl.H>
 #include <stdlib.h>
@@ -96,6 +97,9 @@ namespace mrv
         std::vector<WidgetData> widgets;
     };
 
+    static Fl_Cursor cursors[4] = {
+        FL_CURSOR_DEFAULT, FL_CURSOR_WE, FL_CURSOR_NS, FL_CURSOR_MOVE};
+
     static void move_cb(void* data)
     {
         MoveData* d = static_cast<MoveData*>(data);
@@ -109,7 +113,6 @@ namespace mrv
             int H = w.H;
             o->damage_resize(X, Y, W, H);
         }
-        // if (d->event == FL_RELEASE)
         d->t->init_sizes();
         delete d;
     }
@@ -136,38 +139,23 @@ namespace mrv
                 continue;
             int X = o->x();
             int R = X + o->w();
-            if (oldx)
-            {
-                int t = p->x();
-                if (t == oldx || (t > oldx && X < newx) ||
-                    (t < oldx && X > newx))
-                    X = newx;
-                t = p->r();
-                if (t == oldx || (t > oldx && R < newx) ||
-                    (t < oldx && R > newx))
-                    R = newx;
-            }
             int Y = o->y();
             int B = Y + o->h();
-            if (oldy)
-            {
-                int t = p->y();
-                if (t == oldy || (t > oldy && Y < newy) ||
-                    (t < oldy && Y > newy))
-                    Y = newy;
-                t = p->b();
-                if (t == oldy || (t > oldy && B < newy) ||
-                    (t < oldy && B > newy))
-                    B = newy;
-            }
+            int t = p->y();
+            if (t == oldy || (t > oldy && Y < newy) || (t < oldy && Y > newy))
+                Y = newy;
+            t = p->b();
+            if (t == oldy || (t > oldy && B < newy) || (t < oldy && B > newy))
+                B = newy;
             WidgetData widget;
             widget.o = o;
             widget.X = X;
             widget.Y = Y;
-            widget.W = R - X;
+            widget.W = R;
             widget.H = B - Y;
             data->widgets.push_back(widget);
         }
+
         Fl::add_timeout(0.0, (Fl_Timeout_Handler)move_cb, data);
     }
 
@@ -184,22 +172,37 @@ namespace mrv
     static void tile_set_cursor(Fl_Tile* t, Fl_Cursor c)
     {
         static Fl_Cursor cursor;
-        if (cursor == c || !t->window())
+        Fl_Window* w = t->window();
+        if (cursor == c || !w)
             return;
         cursor = c;
-#ifdef __sgi
-        t->window()->cursor(c, FL_RED, FL_WHITE);
-#else
-        t->window()->cursor(c);
-#endif
+        w->cursor(c);
+        const int children = t->children();
+        int idx = 0;
+        if (children > 2)
+            idx = 1;
+        Fl_Widget* c1 = t->child(idx);
+        Fl_Widget* c2 = t->child(idx + 1);
+        int color = 51;
+        if (c != FL_CURSOR_DEFAULT)
+        {
+            color = FL_WHITE;
+        }
+        if (!c1->as_gl_window())
+        {
+            c1->color(color);
+            c1->redraw();
+        }
+        if (!c2->as_gl_window())
+        {
+            c2->color(color);
+            c2->redraw();
+        }
     }
-
-    static Fl_Cursor cursors[4] = {
-        FL_CURSOR_DEFAULT, FL_CURSOR_WE, FL_CURSOR_NS, FL_CURSOR_MOVE};
 
     int Tile::handle(int event)
     {
-#if defined(_WIN32)
+#if defined(_WIN32) || defined(__APPLE__)
         static int sdrag;
         static int sdx, sdy;
         static int sx, sy;
@@ -216,62 +219,42 @@ namespace mrv
         case FL_MOVE:
         case FL_ENTER:
         case FL_PUSH:
-            // don't potentially change the mouse cursor if inactive:
-            if (!active())
-                break; // will cascade inherited handle()
+        {
+            int mindx = 100;
+            int mindy = 100;
+            int oldy = 0;
+            Fl_Widget* const* a = array();
+            Fl_Rect* q = bounds();
+            Fl_Rect* p = q + 2;
+            for (int i = children(); i--; p++)
             {
-                int mindx = 100;
-                int mindy = 100;
-                int oldx = 0;
-                int oldy = 0;
-                Fl_Widget* const* a = array();
-                Fl_Rect* q = bounds();
-                Fl_Rect* p = q + 2;
-                for (int i = children(); i--; p++)
+                Fl_Widget* o = *a++;
+                if (o == resizable())
+                    continue;
+                if (p->b() < q->b() && o->x() <= mx + GRABAREA &&
+                    o->x() + o->w() >= mx - GRABAREA)
                 {
-                    Fl_Widget* o = *a++;
-                    if (o == resizable())
-                        continue;
-                    if (p->r() < q->r() && o->y() <= my + GRABAREA &&
-                        o->y() + o->h() >= my - GRABAREA)
+                    int t = my - (o->y() + o->h());
+                    if (abs(t) < mindy)
                     {
-                        int t = mx - (o->x() + o->w());
-                        if (abs(t) < mindx)
-                        {
-                            sdx = t;
-                            mindx = abs(t);
-                            oldx = p->r();
-                        }
-                    }
-                    if (p->b() < q->b() && o->x() <= mx + GRABAREA &&
-                        o->x() + o->w() >= mx - GRABAREA)
-                    {
-                        int t = my - (o->y() + o->h());
-                        if (abs(t) < mindy)
-                        {
-                            sdy = t;
-                            mindy = abs(t);
-                            oldy = p->b();
-                        }
+                        sdy = t;
+                        mindy = abs(t);
+                        oldy = p->b();
                     }
                 }
-                sdrag = 0;
-                sx = sy = 0;
-                if (mindx <= GRABAREA)
-                {
-                    sdrag = DRAGH;
-                    sx = oldx;
-                }
-                if (mindy <= GRABAREA)
-                {
-                    sdrag |= DRAGV;
-                    sy = oldy;
-                }
-                tile_set_cursor(this, cursors[sdrag]);
-                if (sdrag)
-                    return 1;
-                return Fl_Group::handle(event);
             }
+            sdrag = 0;
+            sx = sy = 0;
+            if (mindy <= GRABAREA)
+            {
+                sdrag |= DRAGV;
+                sy = oldy;
+            }
+            tile_set_cursor(this, cursors[sdrag]);
+            if (sdrag)
+                return 1;
+            return Fl_Group::handle(event);
+        }
 
         case FL_LEAVE:
             tile_set_cursor(this, FL_CURSOR_DEFAULT);
@@ -287,17 +270,7 @@ namespace mrv
             Fl_Widget* r = resizable();
             if (!r)
                 r = this;
-            int newx;
-            if (sdrag & DRAGH)
-            {
-                newx = Fl::event_x() - sdx;
-                if (newx < r->x())
-                    newx = r->x();
-                else if (newx > r->x() + r->w())
-                    newx = r->x() + r->w();
-            }
-            else
-                newx = sx;
+            int newx = sx;
             int newy;
             if (sdrag & DRAGV)
             {
@@ -324,6 +297,53 @@ namespace mrv
         }
         return Fl_Group::handle(event);
 #else
+        switch (event)
+        {
+        case FL_ENTER:
+        case FL_MOVE:
+        case FL_ENTER:
+        case FL_PUSH:
+        {
+            int mindx = 100;
+            int mindy = 100;
+            int oldy = 0;
+            Fl_Widget* const* a = array();
+            Fl_Rect* q = bounds();
+            Fl_Rect* p = q + 2;
+            for (int i = children(); i--; p++)
+            {
+                Fl_Widget* o = *a++;
+                if (o == resizable())
+                    continue;
+                if (p->b() < q->b() && o->x() <= mx + GRABAREA &&
+                    o->x() + o->w() >= mx - GRABAREA)
+                {
+                    int t = my - (o->y() + o->h());
+                    if (abs(t) < mindy)
+                    {
+                        sdy = t;
+                        mindy = abs(t);
+                        oldy = p->b();
+                    }
+                }
+            }
+            sdrag = 0;
+            sx = sy = 0;
+            if (mindy <= GRABAREA)
+            {
+                sdrag |= DRAGV;
+                sy = oldy;
+            }
+            tile_set_cursor(this, cursors[sdrag]);
+            if (sdrag)
+                return 1;
+        }
+        break;
+        case FL_LEAVE:
+            tile_set_cursor(this, FL_CURSOR_DEFAULT);
+            break;
+        }
+
         int ret = Fl_Tile::handle(event);
         if (ret && event == FL_RELEASE)
             init_sizes();

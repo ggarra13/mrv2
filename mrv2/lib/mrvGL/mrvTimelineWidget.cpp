@@ -595,9 +595,6 @@ namespace mrv
             }
 
             _sizeHintEvent();
-            p.vao.reset();
-            p.vbo.reset();
-            p.buffer.reset();
         }
     }
 
@@ -608,13 +605,7 @@ namespace mrv
         Fl_Gl_Window::resize(X, Y, W, H);
 
         _setGeometry();
-
-        _sizeHintEvent();
         _clipEvent();
-
-        p.vbo.reset();
-        p.vao.reset();
-        p.buffer.reset();
 
         if (p.thumbnailWindow)
         {
