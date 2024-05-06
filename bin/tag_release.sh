@@ -45,14 +45,14 @@ add_remote_tag()
 {
     input='y'
     export has_tag=`${GIT_EXECUTABLE} ls-remote --tags origin | grep "${tag}"`
-    echo "has_tag?$has_tag"
+    echo "has_tag? $has_tag"
     if [[ $has_tag != "" ]]; then
         echo "-------------------------------------------------------"
         echo "  WARNING! Tag '${tag}' already in remote repository."
         echo ""
         echo "Are you sure you want to continue? (y/n)"
         read input
-        if [[ $input == n* || $input == N* ]]; then
+        if [[ $input != y* && $input != Y* ]]; then
 	    exit 1
         fi
 
@@ -66,7 +66,7 @@ add_remote_tag()
         echo ""
         echo "Are you sure you want to continue? (y/n)"
         read input
-        if [[ $input == n* || $input == N* ]]; then
+        if [[ $input != y* && $input != Y* ]]; then
 	    exit 1
         fi
     fi
@@ -93,21 +93,8 @@ ${GIT_EXECUTABLE} push
 
 
 export tag="v${mrv2_VERSION}"
-echo "--------------------------------"
-echo "  Will release ${tag} in mrv2"
-echo "--------------------------------"
 
-add_local_tag $tag
 
-cd tlRender
-
-echo "-----------------------------------"
-echo "  Will release ${tag} in tlRender"
-echo "-----------------------------------"
-
-add_local_tag $tag
-
-cd ..
 echo "---------------------------------------"
 echo "  Will release remote ${tag} in mrv2"
 echo "---------------------------------------"
@@ -124,3 +111,17 @@ add_remote_tag $tag
 
 cd ..
 
+
+echo "--------------------------------"
+echo "  Will release ${tag} in mrv2"
+echo "--------------------------------"
+
+add_local_tag $tag
+
+cd tlRender
+
+echo "-----------------------------------"
+echo "  Will release ${tag} in tlRender"
+echo "-----------------------------------"
+
+add_local_tag $tag
