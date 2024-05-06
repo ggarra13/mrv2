@@ -1571,6 +1571,8 @@ namespace mrv
             break;
         }
         options.waveformHeight = options.thumbnailHeight / 2;
+        options.trackInfo = settings->getValue<int>("Timeline/TrackInfo");
+        options.clipInfo = settings->getValue<int>("Timeline/ClipInfo");
         ui->uiTimeline->setItemOptions(options);
 
         if (uiPrefs->uiPrefsTimeline->value())

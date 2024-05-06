@@ -8,9 +8,14 @@ v1.1.6
   default.
 - Cleaned up source code of passing ui pointer to several classes, using
   App::ui instead.
-- Removed .po python plug-in files from distribution.
+- Removed .po python plug-in files from package distribution.
 - Improved missing_translate.py script and added searching for plug-in
   translations too.
+- Fixed Edit Viewport Clip Info and Device Info not respecting the device
+  pixel ratio when the Edit button was pressed.
+- Fixed macOS crashes with preview thumbnail.
+- Respect last configuration of Timeline/ClipInfo and Timeline/TrackInfo.
+  
 
 v1.1.5
 ======
