@@ -202,16 +202,17 @@ namespace mrv
 
     int Tile::handle(int event)
     {
-#if defined(_WIN32) || defined(__APPLE__)
         static int sdrag;
         static int sdx, sdy;
         static int sx, sy;
-#    define DRAGH 1
-#    define DRAGV 2
-#    define GRABAREA 4
+#define DRAGH 1
+#define DRAGV 2
+#define GRABAREA 4
 
         int mx = Fl::event_x();
         int my = Fl::event_y();
+
+#if defined(_WIN32) || defined(__APPLE__)
 
         switch (event)
         {
@@ -299,7 +300,6 @@ namespace mrv
 #else
         switch (event)
         {
-        case FL_ENTER:
         case FL_MOVE:
         case FL_ENTER:
         case FL_PUSH:
@@ -352,15 +352,15 @@ namespace mrv
     }
 
     /**
-  Creates a new Tile widget using the given position, size,
-  and label string. The default boxtype is FL_NO_BOX.
+       Creates a new Tile widget using the given position, size,
+       and label string. The default boxtype is FL_NO_BOX.
 
-  The destructor <I>also deletes all the children</I>. This allows a
-  whole tree to be deleted at once, without having to keep a pointer to
-  all the children in the user code. A kludge has been done so the
-  Tile and all of its children can be automatic (local)
-  variables, but you must declare the Tile <I>first</I>, so
-  that it is destroyed last.
+       The destructor <I>also deletes all the children</I>. This allows a
+       whole tree to be deleted at once, without having to keep a pointer to
+       all the children in the user code. A kludge has been done so the
+       Tile and all of its children can be automatic (local)
+       variables, but you must declare the Tile <I>first</I>, so
+       that it is destroyed last.
 
   \see class Fl_Group
 */
