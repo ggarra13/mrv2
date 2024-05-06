@@ -1,24 +1,3 @@
-v1.1.6
-======
-
-- Panel->Settings->Default Settings now warns the user about it and asks
-  for confirmation.
-- Moved Panel->Settings->Default Hotkeys to Window->Hotkeys.
-- Added Window->Preferences->Default to reset the user preferences to their
-  default.
-- Cleaned up source code of passing ui pointer to several classes, using
-  App::ui instead.
-- Removed .po python plug-in files from package distribution.
-- Improved missing_translate.py script and added searching for plug-in
-  translations too.
-- Removed unused FLU XPM icons from the code, as most have been replaced by
-  .svg icons.
-- Fixed Edit Viewport Clip Info and Device Info not respecting the device
-  pixel ratio when the Edit button was pressed.
-- Fixed macOS crashes with preview thumbnail.
-- Respect last configuration of Timeline/ClipInfo and Timeline/TrackInfo.
-  
-
 v1.1.5
 ======
 
@@ -48,7 +27,22 @@ It is a bug fix release for the regressions in v1.1.4 which was rushed:
 - If using blit for the viewports, automatically switches to shaders if
   Background is transparent and image has transparency, as glBlitFrameBuffers
   does not support alpha blending.
-
+- Panel->Settings->Default Settings now warns the user about it and asks
+  for confirmation.
+- Moved Panel->Settings->Default Hotkeys to Window->Hotkeys.
+- Added Window->Preferences->Default to reset the user preferences to their
+  default.
+- Cleaned up source code of passing ui pointer to several classes, using
+  App::ui instead.
+- Removed .po python plug-in files from package distribution.
+- Improved missing_translate.py script and added searching for plug-in
+  translations too.
+- Removed unused FLU XPM icons from the code, as most have been replaced by
+  .svg icons.
+- Fixed Edit Viewport Clip Info and Device Info not respecting the device
+  pixel ratio when the Edit button was pressed.
+- Fixed macOS crashes with preview thumbnail.
+- Respect last configuration of Timeline/ClipInfo and Timeline/TrackInfo.
 
 
 v1.1.4
