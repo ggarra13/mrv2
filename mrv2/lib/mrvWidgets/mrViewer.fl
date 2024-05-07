@@ -107,7 +107,7 @@ decl {class AboutUI;} {public global
 }
 
 widget_class PixelToolBarClass {
-  xywh {0 53 682 31} resizable
+  xywh {1 65 682 31} resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {open
@@ -1227,8 +1227,9 @@ settings->setValue( mrv::kPenColorA, a);}
             xywh {0 488 690 30} box FLAT_BOX color 51
             class {mrv::TimelineGroup}
           } {
-            Fl_Group uiTimeline {open selected
-              xywh {0 496 690 22} resizable
+            Fl_Group uiTimeline {
+              label Timeline open selected
+              xywh {0 496 690 22} labeltype NO_LABEL resizable
               class {mrv::TimelineWidget}
             } {}
           }

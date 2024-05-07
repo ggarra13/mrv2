@@ -57,7 +57,7 @@ namespace mrv
         void redo();
 
         //! Change cursor to another.
-        void cursor(Fl_Cursor x) const noexcept;
+        void set_cursor(Fl_Cursor x) const noexcept;
 
         //! Set the action mode.
         void setActionMode(const ActionMode& mode) noexcept;
@@ -281,7 +281,7 @@ namespace mrv
         void refreshWindows();
 
         //! Refresh window by clearing the associated resources.
-        virtual void refresh() {};
+        virtual void refresh(){};
 
         //! FLTK Callback to handle view spinning whne in Environment Map mode.
         static void _handleViewSpinning_cb(TimelineViewport* t) noexcept;
@@ -338,7 +338,7 @@ namespace mrv
         //! Get the normalized rotation between 0 and 360
         //! full rotation of the image (user rotation + video rotation)
         float _getRotation() const noexcept;
-        
+
         //! Get the full projection matrix.
         math::Matrix4x4f _projectionMatrix() const noexcept;
 

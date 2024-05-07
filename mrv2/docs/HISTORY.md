@@ -3,9 +3,16 @@ v1.1.6
 
 - Made View Window / Timeline Viewport divider highlight in a grayish color
   when it can be dragged.
-- Improved performance of dragging Tiles like the main divider, particularly
-  on macOS.
+- Improved performance of dragging Tile like the main divider between the
+  view and timeline viewport, particularly on macOS.
 - Made switching languages keep the UI preferences.
+- Fixed cross cursor when entering the view area and coming from the draw
+  tools or the drag bar.
+- Made drag bar change color besides changing cursor to indicate you can
+  drag it.
+
+
+
 - This version introduces a *MAJOR* change in the way Cache Settings are used.
   The Settings->Gigabytes and the pair of Settings->ReadAhead and
   Settings->ReadBehind are now decoupled.

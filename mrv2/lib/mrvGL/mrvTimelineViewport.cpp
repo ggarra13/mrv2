@@ -278,9 +278,10 @@ namespace mrv
         redraw();
     }
 
-    void TimelineViewport::cursor(Fl_Cursor x) const noexcept
+    void TimelineViewport::set_cursor(Fl_Cursor n) const noexcept
     {
-        window()->cursor(x);
+        if (window())
+            window()->cursor(n);
     }
 
     void TimelineViewport::_scrub(float dx) noexcept
@@ -912,14 +913,14 @@ namespace mrv
         if (p.actionMode == ActionMode::kScrub ||
             p.actionMode == ActionMode::kSelection ||
             p.actionMode == ActionMode::kRotate)
-            cursor(FL_CURSOR_CROSS);
+            set_cursor(FL_CURSOR_CROSS);
         // else if ( p.actionMode == ActionMode::kRotate )
         //     cursor( FL_CURSOR_MOVE );
         else if (p.actionMode == ActionMode::kText)
-            cursor(FL_CURSOR_INSERT);
+            set_cursor(FL_CURSOR_INSERT);
         else
         {
-            // Only hide the cursor if we are on the view widgets.
+            // Only hide the cursor if we are NOT on the view widgets.
             auto primary = p.ui->uiView;
             Viewport* secondary = nullptr;
             if (_p->ui->uiSecondary && _p->ui->uiSecondary->window()->visible())
@@ -931,7 +932,7 @@ namespace mrv
             if (widget != primary && (secondary && widget != secondary))
                 return;
             if (p.player)
-                cursor(FL_CURSOR_NONE);
+                set_cursor(FL_CURSOR_NONE);
         }
     }
 
@@ -1002,7 +1003,7 @@ namespace mrv
         const TimelinePlayer* sender) noexcept
     {
         TLRENDER_P();
-        
+
 #ifdef DEBUG_VIDEO_CALLBACK
         if (!p.videoData.empty() && !values.empty() &&
             values[0].time != p.videoData[0].time)
@@ -1010,7 +1011,7 @@ namespace mrv
             std::cerr << values[0].time << std::endl;
         }
 #endif
-        
+
         p.videoData = values;
 
         if (p.resizeWindow)
@@ -1030,7 +1031,7 @@ namespace mrv
             p.switchClip = false;
             p.droppedFrames = 0;
         }
-        
+
         _getTags();
         int layerId = sender->videoLayer();
         p.missingFrame = false;
