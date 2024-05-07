@@ -919,11 +919,10 @@ namespace mrv
     static void start_playback(void* data)
     {
         PlaybackData* p = (PlaybackData*)data;
-        auto player = p->player;
-        auto playback = p->playback;
-        std::cerr << "start playback returned=" << player->playback()
-                  << std::endl;
-        player->setPlayback(p->playback);
+        const auto player = p->player;
+        const auto playback = p->playback;
+        player->start();
+        player->setPlayback(playback);
         delete p;
     }
 
@@ -961,6 +960,8 @@ namespace mrv
             // make sure to show all frames
             PlaybackData* data = new PlaybackData;
             data->player = p.player;
+            if (p.options.playback == timeline::Playback::Count)
+                p.options.playback = timeline::Playback::Forward;
             data->playback = p.options.playback;
             Fl::add_timeout(0.005, (Fl_Timeout_Handler)start_playback, data);
         }
@@ -1229,6 +1230,8 @@ namespace mrv
     {
         TLRENDER_P();
 
+        playerOptions.playback = p.options.playback;
+
         playerOptions.cache.readAhead = time::invalidTime;
         playerOptions.cache.readBehind = time::invalidTime;
 
@@ -1342,11 +1345,6 @@ namespace mrv
                                 {
                                     player->setPlayback(
                                         timeline::Playback::Forward);
-                                }
-                                else
-                                {
-                                    p.options.playback =
-                                        timeline::Playback::Forward;
                                 }
                             }
 
@@ -1516,7 +1514,7 @@ namespace mrv
         if (file::isTemporaryNDI(p.player->path()) || movieIsLong)
         {
             options.readAhead = otime::RationalTime(4.0, 1.0);
-            options.readBehind = otime::RationalTime(0.5, 1.0);
+            options.readBehind = otime::RationalTime(0.0, 1.0);
         }
         else if (Gbytes > 0)
         {
