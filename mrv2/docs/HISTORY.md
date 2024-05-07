@@ -5,6 +5,10 @@ v1.1.6
   when it can be dragged.
 - Improved performance of dragging Tiles like the main divider, particularly
   on macOS.
+- Made switching languages keep the UI preferences.
+- This version introduces a *MAJOR* change in the way Cache Settings are used.
+  The Settings->Gigabytes and the pair of Settings->ReadAhead and
+  Settings->ReadBehind are now decoupled.
 
 
 v1.1.5

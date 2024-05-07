@@ -27,7 +27,6 @@ namespace fs = std::filesystem;
 
 #include "mrvFl/mrvCallbacks.h"
 #include "mrvFl/mrvLanguages.h"
-#include "mrvFl/mrvCallbacks.h"
 
 #include "mrvApp/mrvApp.h"
 
@@ -128,11 +127,13 @@ void check_language(PreferencesUI* uiPrefs, int& language_index, mrv::App* app)
             // setenv( "LC_CTYPE", "UTF-8", 1 );
             setenv("LANGUAGE", language, 1);
 
+            // Save ui preferences
+            mrv::Preferences::save();
+
+            // Save ui language
             Fl_Preferences base(
                 mrv::prefspath().c_str(), "filmaura", "mrv2",
                 Fl_Preferences::C_LOCALE);
-
-            // Save ui preferences
             Fl_Preferences ui(base, "ui");
             ui.set("language_code", language);
 
