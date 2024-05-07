@@ -920,6 +920,7 @@ namespace mrv
     {
         PlaybackData* p = (PlaybackData*)data;
         auto player = p->player;
+        auto playback = p->playback;
         std::cerr << "start playback returned=" << player->playback()
                   << std::endl;
         player->setPlayback(p->playback);
@@ -954,17 +955,13 @@ namespace mrv
 
         Fl::flush();
         bool autoPlayback = ui->uiPrefs->uiPrefsAutoPlayback->value();
-        if (p.player &&
-            (p.options.playback != timeline::Playback::Count || autoPlayback) &&
-            !p.session)
+        if (p.player && !p.session)
         {
             // We use a timeout to start playback of the loaded video to
             // make sure to show all frames
             PlaybackData* data = new PlaybackData;
             data->player = p.player;
-            data->playback = p.options.playback == timeline::Playback::Count
-                                 ? timeline::Playback::Forward
-                                 : p.options.playback;
+            data->playback = p.options.playback;
             Fl::add_timeout(0.005, (Fl_Timeout_Handler)start_playback, data);
         }
         p.running = true;
@@ -1346,6 +1343,11 @@ namespace mrv
                                     player->setPlayback(
                                         timeline::Playback::Forward);
                                 }
+                                else
+                                {
+                                    p.options.playback =
+                                        timeline::Playback::Forward;
+                                }
                             }
 
                             // Add the new file to recent files, unless it is
@@ -1539,7 +1541,8 @@ namespace mrv
             auto ioSystem = _context->getSystem<io::System>();
             ioSystem->getCache()->setMax(bytes);
 
-#if 0 // old readAhead/readBehind code
+            // old readAhead/readBehind code
+#if 0
             const auto timeline = p.player->timeline();
             const auto ioInfo = timeline->getIOInfo();
             double seconds = 1.F;
