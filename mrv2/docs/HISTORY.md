@@ -15,6 +15,9 @@ v1.1.6
   a bug in OpenUSD that crashes it.
 - Improved .githook to run dos2unix to avoid dummy commits due to Windows'
   CR returns.
+- Fixed window resizing calculation that had two ugly bugs in it (thanks
+  to ManoloFLTK for having dealt with my ugly code!!!).  Now resizing of
+  the main window takes the dock properly into account.
 - **ATTENTION**:
   This version introduces a change in the way Cache Settings are used.
   The Settings->Gigabytes and the pair of "Settings->Read Ahead" and
