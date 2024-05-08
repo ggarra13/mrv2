@@ -1330,7 +1330,6 @@ namespace mrv
 
         Fl_Double_Window* mw = p.ui->uiMain;
         int screen = mw->screen_num();
-        float scale = Fl::screen_scale(screen);
 
         int W = renderSize.w;
         int H = renderSize.h;
@@ -1396,28 +1395,16 @@ namespace mrv
             H = (int)uiPrefs->uiWindowYSize->value();
         }
 
-        maxW = (int)(maxW / scale);
         if (W < 690)
         {
             p.frameView = true;
             W = 690;
         }
-        else if (W > maxW)
-        {
-            p.frameView = true;
-            W = maxW;
-        }
 
-        maxH = (int)(maxH / scale);
         if (H < 602)
         {
             p.frameView = true;
             H = 602;
-        }
-        else if (H > maxH)
-        {
-            p.frameView = true;
-            H = maxH;
         }
 
         if (W == renderSize.w)
@@ -1441,9 +1428,9 @@ namespace mrv
         if (H > maxH)
             H = maxH;
 
-        if (posX + W > maxW)
+        if (posX + W > minx + maxW)
             posX = minx;
-        if (posY + H > maxH)
+        if (posY + H > miny + maxH)
             posY = miny;
 
         mw->resize(posX, posY, W, H);
