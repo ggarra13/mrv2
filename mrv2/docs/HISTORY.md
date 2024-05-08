@@ -10,7 +10,9 @@ v1.1.6
   tools or the drag bar.
 - Made drag bar change color besides changing cursor to indicate you can
   drag it.
-- Fixed NDI which had gotten broken on v1.1.3.
+- Fixed NDI playback with audio which had gotten broken on v1.1.1.
+- Made build scripts not build USD on Windows on Debug builds as there's
+  a bug in OpenUSD that crashes it.
 - **ATTENTION**:
   This version introduces a change in the way Cache Settings are used.
   The Settings->Gigabytes and the pair of "Settings->Read Ahead" and
