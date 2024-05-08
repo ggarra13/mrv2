@@ -1429,9 +1429,13 @@ namespace mrv
             H = maxH;
 
         if (posX + W > minx + maxW)
-            posX = minx;
+        {
+            W = minx + maxW - posX;
+        }
         if (posY + H > miny + maxH)
-            posY = miny;
+        {
+            H = miny + maxH - posY;
+        }
 
         mw->resize(posX, posY, W, H);
 
