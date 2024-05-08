@@ -10,12 +10,13 @@ v1.1.6
   tools or the drag bar.
 - Made drag bar change color besides changing cursor to indicate you can
   drag it.
-
-
-
-- This version introduces a *MAJOR* change in the way Cache Settings are used.
+- This version introduces a **change** in the way Cache Settings are used.
   The Settings->Gigabytes and the pair of Settings->ReadAhead and
   Settings->ReadBehind are now decoupled.
+  This is to allow better handling of 4K and 8K movies with difficult
+  seeks.
+  Note that the timebar will display the read ahead and read behind
+  preroll, not the cached frames.
 
 
 v1.1.5
