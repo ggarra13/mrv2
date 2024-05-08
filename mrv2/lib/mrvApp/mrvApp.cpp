@@ -281,136 +281,131 @@ namespace mrv
                     Preferences::debug, {"-debug", "-d"},
                     _("Debug verbosity.")),
 #endif
-                    app::CmdLineValueOption<std::string>::create(
-                        p.options.audioFileName, {"-audio", "-a"},
-                        _("Audio file name.")),
-                    app::CmdLineValueOption<std::string>::create(
-                        p.options.compareFileName, {"-compare", "-b"},
-                        _("A/B comparison \"B\" file name.")),
-                    app::CmdLineValueOption<timeline::CompareMode>::create(
-                        p.options.compareOptions.mode, {"-compareMode", "-c"},
-                        _("A/B comparison mode."),
-                        string::Format("{0}").arg(
-                            p.options.compareOptions.mode),
-                        string::join(timeline::getCompareModeLabels(), ", ")),
-                    app::CmdLineValueOption<math::Vector2f>::create(
-                        p.options.compareOptions.wipeCenter,
-                        {"-wipeCenter", "-wc"},
-                        _("A/B comparison wipe center."),
-                        string::Format("{0}").arg(
-                            p.options.compareOptions.wipeCenter)),
-                    app::CmdLineValueOption<float>::create(
-                        p.options.compareOptions.wipeRotation,
-                        {"-wipeRotation", "-wr"},
-                        _("A/B comparison wipe rotation."),
-                        string::Format("{0}").arg(
-                            p.options.compareOptions.wipeRotation)),
-                    app::CmdLineFlagOption::create(
-                        p.options.otioEditMode, {"-editMode", "-e"},
-                        _("OpenTimelineIO Edit mode.")),
-                    app::CmdLineValueOption<double>::create(
-                        p.options.speed, {"-speed"}, _("Playback speed.")),
-                    app::CmdLineValueOption<timeline::Playback>::create(
-                        p.options.playback, {"-playback", "-p"},
-                        _("Playback mode."),
-                        string::Format("{0}").arg(timeline::Playback::Stop),
-                        string::join(timeline::getPlaybackLabels(), ", ")),
-                    app::CmdLineValueOption<timeline::Loop>::create(
-                        p.options.loop, {"-loop"}, _("Playback loop mode."),
-                        string::Format("{0}").arg(timeline::Loop::Loop),
-                        string::join(timeline::getLoopLabels(), ", ")),
-                    app::CmdLineValueOption<otime::RationalTime>::create(
-                        p.options.seek, {"-seek"},
-                        _("Seek to the given time.")),
-                    app::CmdLineValueOption<otime::TimeRange>::create(
-                        p.options.inOutRange, {"-inOutRange"},
-                        _("Set the in/out points range.")),
-                    app::CmdLineValueOption<std::string>::create(
-                        p.options.ocioOptions.input,
-                        {"-ocioInput", "-ics", "-oi"},
-                        _("OpenColorIO input color space.")),
-                    app::CmdLineValueOption<std::string>::create(
-                        p.options.ocioOptions.display, {"-ocioDisplay", "-od"},
-                        _("OpenColorIO display name.")),
-                    app::CmdLineValueOption<std::string>::create(
-                        p.options.ocioOptions.view, {"-ocioView", "-ov"},
-                        _("OpenColorIO view name.")),
-                    app::CmdLineValueOption<std::string>::create(
-                        p.options.ocioOptions.look, {"-ocioLook", "-ol"},
-                        _("OpenColorIO look name.")),
-                    app::CmdLineValueOption<std::string>::create(
-                        p.options.lutOptions.fileName, {"-lut"},
-                        _("LUT file name.")),
-                    app::CmdLineValueOption<timeline::LUTOrder>::create(
-                        p.options.lutOptions.order, {"-lutOrder"},
-                        _("LUT operation order."),
-                        string::Format("{0}").arg(p.options.lutOptions.order),
-                        string::join(timeline::getLUTOrderLabels(), ", ")),
+                app::CmdLineValueOption<std::string>::create(
+                    p.options.audioFileName, {"-audio", "-a"},
+                    _("Audio file name.")),
+                app::CmdLineValueOption<std::string>::create(
+                    p.options.compareFileName, {"-compare", "-b"},
+                    _("A/B comparison \"B\" file name.")),
+                app::CmdLineValueOption<timeline::CompareMode>::create(
+                    p.options.compareOptions.mode, {"-compareMode", "-c"},
+                    _("A/B comparison mode."),
+                    string::Format("{0}").arg(p.options.compareOptions.mode),
+                    string::join(timeline::getCompareModeLabels(), ", ")),
+                app::CmdLineValueOption<math::Vector2f>::create(
+                    p.options.compareOptions.wipeCenter, {"-wipeCenter", "-wc"},
+                    _("A/B comparison wipe center."),
+                    string::Format("{0}").arg(
+                        p.options.compareOptions.wipeCenter)),
+                app::CmdLineValueOption<float>::create(
+                    p.options.compareOptions.wipeRotation,
+                    {"-wipeRotation", "-wr"},
+                    _("A/B comparison wipe rotation."),
+                    string::Format("{0}").arg(
+                        p.options.compareOptions.wipeRotation)),
+                app::CmdLineFlagOption::create(
+                    p.options.otioEditMode, {"-editMode", "-e"},
+                    _("OpenTimelineIO Edit mode.")),
+                app::CmdLineValueOption<double>::create(
+                    p.options.speed, {"-speed"}, _("Playback speed.")),
+                app::CmdLineValueOption<timeline::Playback>::create(
+                    p.options.playback, {"-playback", "-p"},
+                    _("Playback mode."),
+                    string::Format("{0}").arg(timeline::Playback::Stop),
+                    string::join(timeline::getPlaybackLabels(), ", ")),
+                app::CmdLineValueOption<timeline::Loop>::create(
+                    p.options.loop, {"-loop"}, _("Playback loop mode."),
+                    string::Format("{0}").arg(timeline::Loop::Loop),
+                    string::join(timeline::getLoopLabels(), ", ")),
+                app::CmdLineValueOption<otime::RationalTime>::create(
+                    p.options.seek, {"-seek"}, _("Seek to the given time.")),
+                app::CmdLineValueOption<otime::TimeRange>::create(
+                    p.options.inOutRange, {"-inOutRange"},
+                    _("Set the in/out points range.")),
+                app::CmdLineValueOption<std::string>::create(
+                    p.options.ocioOptions.input, {"-ocioInput", "-ics", "-oi"},
+                    _("OpenColorIO input color space.")),
+                app::CmdLineValueOption<std::string>::create(
+                    p.options.ocioOptions.display, {"-ocioDisplay", "-od"},
+                    _("OpenColorIO display name.")),
+                app::CmdLineValueOption<std::string>::create(
+                    p.options.ocioOptions.view, {"-ocioView", "-ov"},
+                    _("OpenColorIO view name.")),
+                app::CmdLineValueOption<std::string>::create(
+                    p.options.ocioOptions.look, {"-ocioLook", "-ol"},
+                    _("OpenColorIO look name.")),
+                app::CmdLineValueOption<std::string>::create(
+                    p.options.lutOptions.fileName, {"-lut"},
+                    _("LUT file name.")),
+                app::CmdLineValueOption<timeline::LUTOrder>::create(
+                    p.options.lutOptions.order, {"-lutOrder"},
+                    _("LUT operation order."),
+                    string::Format("{0}").arg(p.options.lutOptions.order),
+                    string::join(timeline::getLUTOrderLabels(), ", ")),
 #ifdef MRV2_PYBIND11
-                    app::CmdLineValueOption<std::string>::create(
-                        p.options.pythonScript, {"-pythonScript", "-ps"},
-                        _("Python Script to run and exit.")),
+                app::CmdLineValueOption<std::string>::create(
+                    p.options.pythonScript, {"-pythonScript", "-ps"},
+                    _("Python Script to run and exit.")),
 #endif
-                    app::CmdLineFlagOption::create(
-                        p.options.resetSettings, {"-resetSettings"},
-                        _("Reset settings to defaults.")),
-                    app::CmdLineFlagOption::create(
-                        p.options.resetHotkeys, {"-resetHotkeys"},
-                        _("Reset hotkeys to defaults.")),
+                app::CmdLineFlagOption::create(
+                    p.options.resetSettings, {"-resetSettings"},
+                    _("Reset settings to defaults.")),
+                app::CmdLineFlagOption::create(
+                    p.options.resetHotkeys, {"-resetHotkeys"},
+                    _("Reset hotkeys to defaults.")),
 #if defined(TLRENDER_USD)
-                    app::CmdLineValueOption<int>::create(
-                        p.options.usdRenderWidth, {"-usdRenderWidth"},
-                        "USD render width.",
-                        string::Format("{0}").arg(p.options.usdRenderWidth)),
-                    app::CmdLineValueOption<float>::create(
-                        p.options.usdComplexity, {"-usdComplexity"},
-                        "USD render complexity setting.",
-                        string::Format("{0}").arg(p.options.usdComplexity)),
-                    app::CmdLineValueOption<usd::DrawMode>::create(
-                        p.options.usdDrawMode, {"-usdDrawMode"},
-                        "USD render draw mode.",
-                        string::Format("{0}").arg(p.options.usdDrawMode),
-                        string::join(usd::getDrawModeLabels(), ", ")),
-                    app::CmdLineValueOption<bool>::create(
-                        p.options.usdEnableLighting, {"-usdEnableLighting"},
-                        "USD render enable lighting setting.",
-                        string::Format("{0}").arg(p.options.usdEnableLighting)),
-                    app::CmdLineValueOption<bool>::create(
-                        p.options.usdEnableLighting, {"-usdSRGB"},
-                        "USD render SRGB setting.",
-                        string::Format("{0}").arg(p.options.usdSRGB)),
-                    app::CmdLineValueOption<size_t>::create(
-                        p.options.usdStageCache, {"-usdStageCache"},
-                        "USD stage cache size.",
-                        string::Format("{0}").arg(p.options.usdStageCache)),
-                    app::CmdLineValueOption<size_t>::create(
-                        p.options.usdDiskCache, {"-usdDiskCache"},
-                        "USD disk cache size in gigabytes. A size of zero "
-                        "disables the cache.",
-                        string::Format("{0}").arg(p.options.usdDiskCache)),
+                app::CmdLineValueOption<int>::create(
+                    p.options.usdRenderWidth, {"-usdRenderWidth"},
+                    "USD render width.",
+                    string::Format("{0}").arg(p.options.usdRenderWidth)),
+                app::CmdLineValueOption<float>::create(
+                    p.options.usdComplexity, {"-usdComplexity"},
+                    "USD render complexity setting.",
+                    string::Format("{0}").arg(p.options.usdComplexity)),
+                app::CmdLineValueOption<usd::DrawMode>::create(
+                    p.options.usdDrawMode, {"-usdDrawMode"},
+                    "USD render draw mode.",
+                    string::Format("{0}").arg(p.options.usdDrawMode),
+                    string::join(usd::getDrawModeLabels(), ", ")),
+                app::CmdLineValueOption<bool>::create(
+                    p.options.usdEnableLighting, {"-usdEnableLighting"},
+                    "USD render enable lighting setting.",
+                    string::Format("{0}").arg(p.options.usdEnableLighting)),
+                app::CmdLineValueOption<bool>::create(
+                    p.options.usdEnableLighting, {"-usdSRGB"},
+                    "USD render SRGB setting.",
+                    string::Format("{0}").arg(p.options.usdSRGB)),
+                app::CmdLineValueOption<size_t>::create(
+                    p.options.usdStageCache, {"-usdStageCache"},
+                    "USD stage cache size.",
+                    string::Format("{0}").arg(p.options.usdStageCache)),
+                app::CmdLineValueOption<size_t>::create(
+                    p.options.usdDiskCache, {"-usdDiskCache"},
+                    "USD disk cache size in gigabytes. A size of zero "
+                    "disables the cache.",
+                    string::Format("{0}").arg(p.options.usdDiskCache)),
 #endif // TLRENDER_USD
 
 #ifdef MRV2_NETWORK
-                    app::CmdLineFlagOption::create(
-                        p.options.server, {"-server"},
-                        _("Start a server.  Use -port to specify a port "
-                          "number.")),
-                    app::CmdLineValueOption<std::string>::create(
-                        p.options.client, {"-client"},
-                        _("Connect to a server at <value>.  Use -port to "
-                          "specify a port number.")),
-                    app::CmdLineValueOption<unsigned>::create(
-                        p.options.port, {"-port"},
-                        _("Port number for the server to listen to or for the "
-                          "client to connect to."),
-                        string::Format("{0}").arg(p.options.port)),
+                app::CmdLineFlagOption::create(
+                    p.options.server, {"-server"},
+                    _("Start a server.  Use -port to specify a port "
+                      "number.")),
+                app::CmdLineValueOption<std::string>::create(
+                    p.options.client, {"-client"},
+                    _("Connect to a server at <value>.  Use -port to "
+                      "specify a port number.")),
+                app::CmdLineValueOption<unsigned>::create(
+                    p.options.port, {"-port"},
+                    _("Port number for the server to listen to or for the "
+                      "client to connect to."),
+                    string::Format("{0}").arg(p.options.port)),
 #endif
 
-                    app::CmdLineFlagOption::create(
-                        p.options.displayVersion,
-                        {"-version", "--version", "-v", "--v"},
-                        _("Return the version and exit."))
-            });
+                app::CmdLineFlagOption::create(
+                    p.options.displayVersion,
+                    {"-version", "--version", "-v", "--v"},
+                    _("Return the version and exit."))});
 
         const int exitCode = getExit();
         if (exitCode != 0)
@@ -1505,7 +1500,8 @@ namespace mrv
         if (info.audio.trackCount > 1)
         {
             // If movie is longer than 30 minutes, and has multiple audio tracks
-            // use a short readAhead/readBehind
+            // use a short readAhead/readBehind so we can quickly switch among
+            // them.
             auto timeRange = p.player->inOutRange();
             if (timeRange.duration().to_seconds() > 60 * 30)
                 movieIsLong = true;
@@ -1516,7 +1512,12 @@ namespace mrv
             options.readAhead = otime::RationalTime(4.0, 1.0);
             options.readBehind = otime::RationalTime(0.0, 1.0);
         }
-        else if (Gbytes > 0)
+        else if (Gbytes == 0)
+        {
+            Gbytes = 4;
+        }
+
+        if (Gbytes > 0)
         {
             // Do some sanity checking in case the user is using several mrv2
             // instances and cache would not fit.
@@ -1539,43 +1540,48 @@ namespace mrv
             auto ioSystem = _context->getSystem<io::System>();
             ioSystem->getCache()->setMax(bytes);
 
-            // old readAhead/readBehind code
-#if 0
+            // old readAhead/readBehind code used when playing sequences.
             const auto timeline = p.player->timeline();
             const auto ioInfo = timeline->getIOInfo();
-            double seconds = 1.F;
-            if (!ioInfo.video.empty())
+
+            const auto path = p.player->path();
+            const bool isSequence = file::isSequence(path.get());
+            if (isSequence)
             {
-                const auto& video = ioInfo.video[0];
-                auto pixelType = video.pixelType;
-                std::size_t size = tl::image::getDataByteCount(video);
-                double frames = bytes / static_cast<double>(size);
-                seconds = frames / p.player->defaultSpeed();
+                double seconds = 1.F;
+                if (!ioInfo.video.empty())
+                {
+                    const auto& video = ioInfo.video[0];
+                    auto pixelType = video.pixelType;
+                    std::size_t size = tl::image::getDataByteCount(video);
+                    double frames = bytes / static_cast<double>(size);
+                    seconds = frames / p.player->defaultSpeed();
+                }
+
+                if (ioInfo.audio.isValid())
+                {
+                    const auto& audio = ioInfo.audio;
+                    std::size_t channelCount = audio.channelCount;
+                    std::size_t byteCount = audio::getByteCount(audio.dataType);
+                    std::size_t sampleRate = audio.sampleRate;
+                    uint64_t size = sampleRate * byteCount * channelCount;
+                    seconds -= size / 1024.0 / 1024.0;
+                }
+
+                double ahead = timeline::PlayerCacheOptions().readAhead.value();
+                double behind =
+                    timeline::PlayerCacheOptions().readBehind.value();
+
+                const double totalTime = ahead + behind;
+                const double readAheadPct = ahead / totalTime;
+                const double readBehindPct = behind / totalTime;
+
+                const double readAhead = seconds * readAheadPct;
+                const double readBehind = seconds * readBehindPct;
+
+                options.readAhead = otime::RationalTime(readAhead, 1.0);
+                options.readBehind = otime::RationalTime(readBehind, 1.0);
             }
-
-            if (ioInfo.audio.isValid())
-            {
-                const auto& audio = ioInfo.audio;
-                std::size_t channelCount = audio.channelCount;
-                std::size_t byteCount = audio::getByteCount(audio.dataType);
-                std::size_t sampleRate = audio.sampleRate;
-                uint64_t size = sampleRate * byteCount * channelCount;
-                seconds -= size / 1024.0 / 1024.0;
-            }
-
-            double ahead = timeline::PlayerCacheOptions().readAhead.value();
-            double behind = timeline::PlayerCacheOptions().readBehind.value();
-
-            const double totalTime = ahead + behind;
-            const double readAheadPct = ahead / totalTime;
-            const double readBehindPct = behind / totalTime;
-
-            const double readAhead = seconds * readAheadPct;
-            const double readBehind = seconds * readBehindPct;
-
-            options.readAhead = otime::RationalTime(readAhead, 1.0);
-            options.readBehind = otime::RationalTime(readBehind, 1.0);
-#endif
         }
 
         p.player->setCacheOptions(options);
