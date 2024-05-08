@@ -10,12 +10,14 @@ v1.1.6
   tools or the drag bar.
 - Made drag bar change color besides changing cursor to indicate you can
   drag it.
-
-
-
-- This version introduces a *MAJOR* change in the way Cache Settings are used.
-  The Settings->Gigabytes and the pair of Settings->ReadAhead and
-  Settings->ReadBehind are now decoupled.
+- Fixed NDI which had gotten broken on v1.1.3.
+- **ATTENTION**:
+  This version introduces a change in the way Cache Settings are used.
+  The Settings->Gigabytes and the pair of "Settings->Read Ahead" and
+  "Settings->Read Behind" are now decoupled.
+  The Gigabytes setting is still used to cache images and audio, but
+  the timeline will only display the settings for Read Ahead/Behind.
+  The Gigabytes setting of 0 is **NO LONGER USED**.
 
 
 v1.1.5

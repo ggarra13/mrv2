@@ -742,6 +742,7 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
             --disable-v4l2-m2m \
             --disable-vaapi \
             --disable-vdpau \
+	    --disable-large-tests \
             --disable-videotoolbox \
             --enable-pic \
             --toolchain=msvc \
