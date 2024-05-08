@@ -1505,7 +1505,8 @@ namespace mrv
         if (info.audio.trackCount > 1)
         {
             // If movie is longer than 30 minutes, and has multiple audio tracks
-            // use a short readAhead/readBehind
+            // use a short readAhead/readBehind so we can quickly switch among
+            // them.
             auto timeRange = p.player->inOutRange();
             if (timeRange.duration().to_seconds() > 60 * 30)
                 movieIsLong = true;
@@ -1516,7 +1517,12 @@ namespace mrv
             options.readAhead = otime::RationalTime(4.0, 1.0);
             options.readBehind = otime::RationalTime(0.0, 1.0);
         }
-        else if (Gbytes > 0)
+        else if (Gbytes == 0)
+        {
+            Gbytes = 4;
+        }
+
+        if (Gbytes > 0)
         {
             // Do some sanity checking in case the user is using several mrv2
             // instances and cache would not fit.
@@ -1539,43 +1545,48 @@ namespace mrv
             auto ioSystem = _context->getSystem<io::System>();
             ioSystem->getCache()->setMax(bytes);
 
-            // old readAhead/readBehind code
-#if 0
+            // old readAhead/readBehind code used when playing sequences.
             const auto timeline = p.player->timeline();
             const auto ioInfo = timeline->getIOInfo();
-            double seconds = 1.F;
-            if (!ioInfo.video.empty())
+
+            const auto path = p.player->path();
+            const bool isSequence = file::isSequence(path.get());
+            if (isSequence)
             {
-                const auto& video = ioInfo.video[0];
-                auto pixelType = video.pixelType;
-                std::size_t size = tl::image::getDataByteCount(video);
-                double frames = bytes / static_cast<double>(size);
-                seconds = frames / p.player->defaultSpeed();
+                double seconds = 1.F;
+                if (!ioInfo.video.empty())
+                {
+                    const auto& video = ioInfo.video[0];
+                    auto pixelType = video.pixelType;
+                    std::size_t size = tl::image::getDataByteCount(video);
+                    double frames = bytes / static_cast<double>(size);
+                    seconds = frames / p.player->defaultSpeed();
+                }
+
+                if (ioInfo.audio.isValid())
+                {
+                    const auto& audio = ioInfo.audio;
+                    std::size_t channelCount = audio.channelCount;
+                    std::size_t byteCount = audio::getByteCount(audio.dataType);
+                    std::size_t sampleRate = audio.sampleRate;
+                    uint64_t size = sampleRate * byteCount * channelCount;
+                    seconds -= size / 1024.0 / 1024.0;
+                }
+
+                double ahead = timeline::PlayerCacheOptions().readAhead.value();
+                double behind =
+                    timeline::PlayerCacheOptions().readBehind.value();
+
+                const double totalTime = ahead + behind;
+                const double readAheadPct = ahead / totalTime;
+                const double readBehindPct = behind / totalTime;
+
+                const double readAhead = seconds * readAheadPct;
+                const double readBehind = seconds * readBehindPct;
+
+                options.readAhead = otime::RationalTime(readAhead, 1.0);
+                options.readBehind = otime::RationalTime(readBehind, 1.0);
             }
-
-            if (ioInfo.audio.isValid())
-            {
-                const auto& audio = ioInfo.audio;
-                std::size_t channelCount = audio.channelCount;
-                std::size_t byteCount = audio::getByteCount(audio.dataType);
-                std::size_t sampleRate = audio.sampleRate;
-                uint64_t size = sampleRate * byteCount * channelCount;
-                seconds -= size / 1024.0 / 1024.0;
-            }
-
-            double ahead = timeline::PlayerCacheOptions().readAhead.value();
-            double behind = timeline::PlayerCacheOptions().readBehind.value();
-
-            const double totalTime = ahead + behind;
-            const double readAheadPct = ahead / totalTime;
-            const double readBehindPct = behind / totalTime;
-
-            const double readAhead = seconds * readAheadPct;
-            const double readBehind = seconds * readBehindPct;
-
-            options.readAhead = otime::RationalTime(readAhead, 1.0);
-            options.readBehind = otime::RationalTime(readBehind, 1.0);
-#endif
         }
 
         p.player->setCacheOptions(options);

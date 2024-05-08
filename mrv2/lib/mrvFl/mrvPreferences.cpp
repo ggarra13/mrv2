@@ -1534,12 +1534,20 @@ namespace mrv
             ui->uiTopBar->hide();
         }
 
-        if (uiPrefs->uiPrefsPixelToolbar->value())
+        const bool showPixelBar = uiPrefs->uiPrefsPixelToolbar->value();
+        if (showPixelBar)
         {
-            auto player = ui->uiView->getTimelinePlayer();
-            if (!uiPrefs->uiPrefsAutoHidePixelBar->value() || !player ||
+            const auto player = ui->uiView->getTimelinePlayer();
+            const bool autoHide = uiPrefs->uiPrefsAutoHidePixelBar->value();
+            if (!autoHide || !player ||
                 player->playback() == timeline::Playback::Stop)
+            {
                 ui->uiPixelBar->show();
+            }
+            else
+            {
+                ui->uiPixelBar->hide();
+            }
         }
         else
         {

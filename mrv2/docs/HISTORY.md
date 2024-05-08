@@ -10,13 +10,26 @@ v1.1.6
   tools or the drag bar.
 - Made drag bar change color besides changing cursor to indicate you can
   drag it.
-- This version introduces a **change** in the way Cache Settings are used.
-  The Settings->Gigabytes and the pair of Settings->ReadAhead and
-  Settings->ReadBehind are now decoupled.
-  This is to allow better handling of 4K and 8K movies with difficult
-  seeks.
-  Note that the timebar will display the read ahead and read behind
-  preroll, not the cached frames.
+- Fixed NDI playback with audio which had gotten broken on v1.1.1.
+- Improved .githook to run dos2unix to avoid dummy commits due to Windows'
+  CR returns.
+- Fixed window resizing calculation that had two ugly bugs in it (thanks
+  to ManoloFLTK for having dealt with my ugly code!!!).  Now resizing of
+  the main window takes the dock properly into account.
+- Fixed auto hiding of the pixel bar from the preferences switched is changed
+  and okay'ed while the movie is still playing.
+- **ATTENTION**:
+  This version introduces a change in the way Cache Settings are used for
+  movie files.
+  The Settings->Gigabytes and the pair of "Settings->Read Ahead" and
+  "Settings->Read Behind" are now decoupled.
+  In the case of sequences, the Read Ahea and Read Behind will be automatically
+  calculated by the Gigabytes settings as before.
+  However, for movie files the timeline will only display the settings for
+  Read Ahead/Behind, not the actual Gigabytes cache (which can be bigger than
+  the read ahead/behind setting).
+  The Gigabytes setting of 0 is **NO LONGER USED** and will revert to
+  4 Gb if set to 0.
 
 
 v1.1.5
