@@ -13,6 +13,8 @@ v1.1.6
 - Fixed NDI playback with audio which had gotten broken on v1.1.1.
 - Made build scripts not build USD on Windows on Debug builds as there's
   a bug in OpenUSD that crashes it.
+- Improved .githook to run dos2unix to avoid dummy commits due to Windows'
+  CR returns.
 - **ATTENTION**:
   This version introduces a change in the way Cache Settings are used.
   The Settings->Gigabytes and the pair of "Settings->Read Ahead" and
