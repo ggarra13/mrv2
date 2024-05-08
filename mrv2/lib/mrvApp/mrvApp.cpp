@@ -1230,7 +1230,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        playerOptions.playback = p.options.playback;
+        // playerOptions.playback = p.options.playback;
 
         playerOptions.cache.readAhead = time::invalidTime;
         playerOptions.cache.readBehind = time::invalidTime;
