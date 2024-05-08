@@ -7,11 +7,8 @@ include( ExternalProject )
 # The cutting EDGE!
 #set( FLTK_GIT_TAG master )
 
-# fixes Wayland hang.  
-set(FLTK_GIT_TAG dea8a93bc2dc359bbcfd33889592660ee0089075)
-if(APPLE)
-    set(FLTK_GIT_TAG 7ec6f96d9c53f23e9137a2deea2cbf71f959534e)
-endif()
+# fixes Wayland hang and macOS issues.  
+set(FLTK_GIT_TAG 324fcfcb6228aeb24af8c50d548438e5f1d174b7)
 
 if(MRV2_PYFLTK OR FLTK_BUILD_SHARED)
     # If we are building pyFLTK compile shared
