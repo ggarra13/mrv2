@@ -1434,7 +1434,7 @@ namespace mrv
 
         p.ui->uiRegion->layout();
 
-        // set_edit_mode_cb(editMode, p.ui);
+        set_edit_mode_cb(editMode, p.ui);
 
         p.resizeWindow = false;
     }
