@@ -206,8 +206,11 @@ namespace mrv
         std::shared_ptr<gl::VAO> vao;
         std::chrono::steady_clock::time_point mouseWheelTimer;
 
-        bool dragging = false;
+        //! Flags
+        bool draggingClip = false;
+        bool continueReversePlaying = false;
 
+        //! Observers
         std::shared_ptr<observer::ValueObserver<timeline::PlayerCacheInfo> >
             cacheInfoObserver;
 
@@ -341,6 +344,8 @@ namespace mrv
     {
         TLRENDER_P();
 
+        p.continueReversePlaying = true;
+
         //
         // Thie observer will watch the cache and start a reverse playback
         // once it is filled.
@@ -351,7 +356,8 @@ namespace mrv
                 [this](const timeline::PlayerCacheInfo& value)
                 {
                     TLRENDER_P();
-                    if (p.player->playback() != timeline::Playback::Stop)
+                    if (p.player->playback() != timeline::Playback::Stop &&
+                        p.continueReversePlaying)
                         return;
 
                     const auto& cache =
@@ -374,6 +380,7 @@ namespace mrv
                     if (found)
                     {
                         p.player->setPlayback(timeline::Playback::Reverse);
+                        p.continueReversePlaying = false;
                     }
                 },
                 observer::CallbackAction::Suppress);
@@ -385,7 +392,7 @@ namespace mrv
         const int maxY = 48;
         const int Y = _toUI(Fl::event_y());
         const int X = _toUI(Fl::event_x());
-        if ((Y < maxY && !p.timelineWidget->isDragging()) ||
+        if ((Y < maxY && !p.timelineWidget->isDraggingClip()) ||
             !p.timelineWidget->isEditable())
         {
             p.timeRange = p.player->player()->getTimeRange();
@@ -412,7 +419,7 @@ namespace mrv
         }
         else
         {
-            p.dragging = p.timelineWidget->isDragging();
+            p.draggingClip = p.timelineWidget->isDraggingClip();
             return 0;
         }
     }
@@ -867,7 +874,7 @@ namespace mrv
             message["modifiers"] = modifiers;
             tcp->pushMessage(message);
         }
-        if (p.dragging)
+        if (p.draggingClip)
         {
             makePathsAbsolute(p.player, p.ui);
         }
@@ -892,7 +899,7 @@ namespace mrv
             if (modifiers == 0)
             {
                 int ok = _seek();
-                if (!p.dragging && ok)
+                if (!p.draggingClip && ok)
                     return 1;
             }
         }
@@ -923,7 +930,7 @@ namespace mrv
             if (modifiers == 0)
             {
                 int ok = _seek();
-                if (!p.dragging && ok)
+                if (!p.draggingClip && ok)
                     return 1;
             }
         }
@@ -951,17 +958,17 @@ namespace mrv
         if (button == 1)
         {
             int ok = _seek();
-            if (!p.dragging && ok)
+            if (!p.draggingClip && ok)
                 return 1;
         }
         mouseMoveEvent(X, Y);
         mousePressEvent(button, on, modifiers);
-        if (p.dragging)
+        if (p.draggingClip)
         {
             toOtioFile(p.player, p.ui);
             p.ui->uiView->redrawWindows();
             panel::redrawThumbnails();
-            p.dragging = false;
+            p.draggingClip = false;
         }
         bool send = App::ui->uiPrefs->SendTimeline->value();
         if (send)
