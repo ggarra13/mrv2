@@ -681,6 +681,8 @@ namespace mrv
         _setGeometry();
         _clipEvent();
 
+        p.buffer.reset(); // needed
+
         if (p.thumbnailWindow)
         {
             repositionThumbnail();

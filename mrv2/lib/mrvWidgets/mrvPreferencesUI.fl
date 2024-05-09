@@ -505,7 +505,7 @@ o->redraw();}
             }
             Fl_Group {} {
               label {Pixel Toolbar}
-              xywh {288 35 555 360} box EMBOSSED_BOX align 5
+              xywh {288 35 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {open
                 xywh {300 40 530 350}
@@ -966,7 +966,7 @@ v->uiPrefsFPS->value( g );}
             }
             Fl_Group {} {
               label OCIO
-              xywh {288 35 555 360} box EMBOSSED_BOX align 5 hide
+              xywh {288 35 555 360} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {open
                 xywh {302 93 523 168}
