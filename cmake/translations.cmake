@@ -155,18 +155,17 @@ add_custom_target(
     COMMAND ${CMAKE_COMMAND} -E echo Running xgettext for pot target
     COMMAND xgettext --package-name=mrv2 --package-version="v${mrv2_VERSION}" --copyright-holder="Contributors to the mrv2 Project" --msgid-bugs-address="ggarra13@gmail.com" -d mrv2 -c++ -k_ ${PO_SOURCES} -o "${_absPotFile}"
     WORKING_DIRECTORY "${ROOT_DIR}/lib"
-    # No dependency on any sources, so we don't update on any file change
+    DEPENDS mrv2
     )
 
 
 
 add_custom_target(
     po
-    # No dependency on pot please
     )
 
 
 add_custom_target(
     mo
-    DEPENDS ${mo_files}  # No dependency on pot please
+    DEPENDS ${mo_files} po pot
     )

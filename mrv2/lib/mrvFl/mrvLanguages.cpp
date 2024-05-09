@@ -48,6 +48,7 @@ LanguageTable kLanguages[18] = {
 #ifdef _WIN32
 namespace
 {
+
     int win32_execv(const std::string& session = "")
     {
         // Get the full command line string
