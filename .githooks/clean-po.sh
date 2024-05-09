@@ -4,6 +4,6 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 filename="$PWD/$1"
-sed -i -e '/^#: /d' "$filename" 
-sed -i -e 's/^"POT-Creation-Date.*//' "$filename"
-cat "$filename"
+sed -e '/^#: /d' "$filename" > /tmp/no_comments.po
+sed -e 's/^"POT-Creation-Date.*//' /tmp/no_comments.po > /tmp/no_dates.po
+cat /tmp/no_dates.po
