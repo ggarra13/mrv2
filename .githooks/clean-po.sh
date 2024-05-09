@@ -5,6 +5,6 @@
 
 filename="$PWD/$1"
 sed -e '/^#: /d' "$filename" > /tmp/clean.po
-sed -e '/^"POT-Creation-Date.*/d' /tmp/clean.po
-sed -e '/^#, c\+\+-format/d' /tmp/clean.po
+sed -i -e '/^"POT-Creation-Date.*/d' /tmp/clean.po
+sed -i -e '/^#, c\+\+-format/d' /tmp/clean.po
 cat /tmp/clean.po
