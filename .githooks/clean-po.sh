@@ -5,3 +5,4 @@
 
 filename="$PWD/$1"
 sed -e '/^#: /d' "$filename"
+sed -e '/^"POT-Creation-Date:.*"/d' "$filename"
