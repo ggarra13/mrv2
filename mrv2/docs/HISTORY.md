@@ -1,6 +1,7 @@
 v1.1.6
 ======
 
+- Fixed slow seeking on 4K movies.  Now we beat OpenRV on all movies.
 - Made View Window / Timeline Viewport divider highlight in a grayish color
   when it can be dragged.
 - Improved performance of dragging Tile like the main divider between the
@@ -24,12 +25,15 @@ v1.1.6
   The Settings->Gigabytes and the pair of "Settings->Read Ahead" and
   "Settings->Read Behind" are now decoupled.
   In the case of sequences, the Read Ahea and Read Behind will be automatically
-  calculated by the Gigabytes settings as before.
+  calculated from the Gigabytes settings as before.
   However, for movie files the timeline will only display the settings for
   Read Ahead/Behind, not the actual Gigabytes cache (which can be bigger than
-  the read ahead/behind setting).
+  the read ahead/behind setting).  The small Read Ahead and Read Behind is to
+  allow playing 4K movies backwards.
   The Gigabytes setting of 0 is **NO LONGER USED** and will revert to
   4 Gb if set to 0.
+- Fixed starting a movie with loop on and playing stopped and then start playing
+  it backwards.
 
 
 v1.1.5
