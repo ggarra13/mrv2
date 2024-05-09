@@ -79,7 +79,7 @@ class PreferencesUI {open
     Fl_Window uiMain {
       label Preferences
       user_data this user_data_type {PreferencesUI*} open
-      xywh {800 104 847 466} type Double resizable
+      xywh {1072 145 847 466} type Double resizable
       code0 {main = m;} modal visible
     } {
       Fl_Group {} {open
@@ -346,75 +346,6 @@ If you try to open several mrv2s with different images, all these images will be
               }
             }
             Fl_Group {} {
-              label Render
-              xywh {288 35 555 360} box EMBOSSED_BOX align 5 hide
-            } {
-              Fl_Group {} {open
-                xywh {301 75 531 170} box ROUNDED_BOX
-              } {
-                Fl_Choice uiPrefsVideoLevels {
-                  label {Video Levels}
-                  xywh {513 89 135 25} down_box BORDER_BOX
-                } {
-                  MenuItem {} {
-                    label {From File}
-                    xywh {20 20 100 20}
-                  }
-                  MenuItem {} {
-                    label {Legal Range}
-                    xywh {30 30 100 20}
-                  }
-                  MenuItem {} {
-                    label {Full Range}
-                    xywh {40 40 100 20}
-                  }
-                }
-                Fl_Choice uiPrefsAlphaBlend {
-                  label {Alpha Blend}
-                  xywh {513 119 135 25} down_box BORDER_BOX
-                } {
-                  MenuItem {} {
-                    label None
-                    xywh {10 10 100 20}
-                  }
-                  MenuItem {} {
-                    label Straight
-                    xywh {20 20 100 20}
-                  }
-                  MenuItem {} {
-                    label Premultiplied
-                    xywh {30 30 100 20}
-                  }
-                }
-                Fl_Choice uiPrefsMinifyFilter {
-                  label {Minify Filter}
-                  xywh {513 172 135 25} down_box BORDER_BOX
-                } {
-                  MenuItem {} {
-                    label Nearest
-                    xywh {30 30 100 20}
-                  }
-                  MenuItem {} {
-                    label Linear
-                    xywh {40 40 100 20}
-                  }
-                }
-                Fl_Choice uiPrefsMagnifyFilter {
-                  label {Magnify Filter}
-                  xywh {513 205 135 25} down_box BORDER_BOX
-                } {
-                  MenuItem {} {
-                    label Nearest
-                    xywh {40 40 100 20}
-                  }
-                  MenuItem {} {
-                    label Linear
-                    xywh {50 50 100 20}
-                  }
-                }
-              }
-            }
-            Fl_Group {} {
               label {Language and Colors}
               xywh {288 35 555 360} box EMBOSSED_BOX align 5 hide
             } {
@@ -524,6 +455,27 @@ o->redraw();}
               }
             }
             Fl_Group {} {
+              label {File Requester}
+              xywh {288 35 555 360} box EMBOSSED_BOX align 5 hide
+            } {
+              Fl_Check_Button uiPrefsFileReqFolder {
+                label {Single Click to Travel Drawers}
+                tooltip {When using mrv2's file chooser, a single click on a folder will open it.} xywh {358 57 25 27} box UP_BOX down_box DOWN_BOX align 136
+              }
+              Fl_Check_Button uiPrefsFileReqThumbnails {
+                label {Thumbnails Active}
+                tooltip {Show thumbnails for known files.} xywh {358 100 25 27} box UP_BOX down_box DOWN_BOX align 136
+              }
+              Fl_Check_Button uiPrefsUSDThumbnails {
+                label {USD Thumbnails}
+                tooltip {Show Thumbnails for USD files (can be slow if they are big)} xywh {358 143 25 27} box UP_BOX down_box DOWN_BOX align 136
+              }
+              Fl_Check_Button uiPrefsNativeFileChooser {
+                label {Use Native File Chooser}
+                tooltip {If selected, the natlve file chooser will be used.  If unselected, mrv2's standard file chooser will be used.} xywh {358 186 25 27} box UP_BOX down_box DOWN_BOX align 136
+              }
+            }
+            Fl_Group {} {
               label Fonts
               xywh {288 35 555 360} box EMBOSSED_BOX align 5 hide
             } {
@@ -548,6 +500,111 @@ o->redraw();}
                     code1 {for (const auto& font : fonts)}
                     code2 {o->add(font.c_str());}
                   } {}
+                }
+              }
+            }
+            Fl_Group {} {
+              label {Pixel Toolbar}
+              xywh {288 35 555 360} box EMBOSSED_BOX align 5
+            } {
+              Fl_Group {} {open
+                xywh {300 40 530 350}
+              } {
+                Fl_Choice uiPrefsPixelRGBA {
+                  label {RGBA Display}
+                  xywh {487 95 255 25} down_box BORDER_BOX align 132
+                } {
+                  MenuItem {} {
+                    label {Float Values}
+                    xywh {5 5 100 20}
+                  }
+                  MenuItem {} {
+                    label {Hex Values}
+                    xywh {5 5 100 20}
+                  }
+                  MenuItem {} {
+                    label {8-bit Values}
+                    xywh {5 5 100 20}
+                  }
+                }
+                Fl_Choice uiPrefsPixelValues {
+                  label {Pixel Values}
+                  xywh {487 163 255 25} down_box BORDER_BOX align 132
+                } {
+                  MenuItem {} {
+                    label {Full Lut, Gamma and Gain}
+                    xywh {5 5 100 20}
+                  }
+                  MenuItem {} {
+                    label {Original without Gamma, Gain or Lut}
+                    xywh {5 5 100 20}
+                  }
+                }
+                Fl_Choice uiPrefsPixelHSV {
+                  label {Secondary Display}
+                  xywh {487 238 255 23} down_box BORDER_BOX align 132
+                } {
+                  MenuItem {} {
+                    label HSV
+                    xywh {5 5 100 20}
+                  }
+                  MenuItem {} {
+                    label HSL
+                    xywh {5 5 100 20}
+                  }
+                  MenuItem {} {
+                    label {CIE XYZ}
+                    xywh {5 5 100 20}
+                  }
+                  MenuItem {} {
+                    label {CIE xyY}
+                    xywh {5 5 100 20}
+                  }
+                  MenuItem {} {
+                    label {Lab CIELAB (L*a*b*)}
+                    xywh {5 5 100 20} align 172
+                  }
+                  MenuItem {} {
+                    label {Luv CIELUV (L*u*v*)}
+                    xywh {5 5 100 20} align 172
+                  }
+                  MenuItem {} {
+                    label {YUV (Analog PAL)}
+                    xywh {5 5 100 20} align 172
+                  }
+                  MenuItem {} {
+                    label {YDbDr (Analog SECAM/PAL-N)}
+                    xywh {5 5 100 20} align 172
+                  }
+                  MenuItem {} {
+                    label {YIQ (Analog NTSC)}
+                    xywh {5 5 100 20} align 172
+                  }
+                  MenuItem {} {
+                    label {ITU-601 (Digital PAL/NTSC YCbCr)}
+                    xywh {5 5 100 20} align 172
+                  }
+                  MenuItem {} {
+                    label {ITU-709 (Digital HDTV YCbCr)}
+                    xywh {5 5 100 20} align 172
+                  }
+                }
+                Fl_Choice uiPrefsPixelLumma {
+                  label Luminance
+                  xywh {487 298 255 25} down_box BORDER_BOX align 132
+                } {
+                  MenuItem {} {
+                    label {Y (Luminance)}
+                    xywh {5 5 100 20}
+                  }
+                  MenuItem {} {
+                    label {Y' (Lumma)}
+                    xywh {5 5 100 20}
+                  }
+                  MenuItem {} {
+                    label {L (Lightness)}
+                    xywh {5 5 100 20}
+                  }
                 }
               }
             }
@@ -602,41 +659,120 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
               }
             }
             Fl_Group {} {
-              label {File Requester}
+              label Render
               xywh {288 35 555 360} box EMBOSSED_BOX align 5 hide
             } {
-              Fl_Check_Button uiPrefsFileReqFolder {
-                label {Single Click to Travel Drawers}
-                tooltip {When using mrv2's file chooser, a single click on a folder will open it.} xywh {358 57 25 27} box UP_BOX down_box DOWN_BOX align 136
-              }
-              Fl_Check_Button uiPrefsFileReqThumbnails {
-                label {Thumbnails Active}
-                tooltip {Show thumbnails for known files.} xywh {358 100 25 27} box UP_BOX down_box DOWN_BOX align 136
-              }
-              Fl_Check_Button uiPrefsUSDThumbnails {
-                label {USD Thumbnails}
-                tooltip {Show Thumbnails for USD files (can be slow if they are big)} xywh {358 143 25 27} box UP_BOX down_box DOWN_BOX align 136
-              }
-              Fl_Check_Button uiPrefsNativeFileChooser {
-                label {Use Native File Chooser}
-                tooltip {If selected, the natlve file chooser will be used.  If unselected, mrv2's standard file chooser will be used.} xywh {358 186 25 27} box UP_BOX down_box DOWN_BOX align 136
+              Fl_Group {} {open
+                xywh {301 75 531 170} box ROUNDED_BOX
+              } {
+                Fl_Choice uiPrefsVideoLevels {
+                  label {Video Levels}
+                  xywh {513 89 135 25} down_box BORDER_BOX
+                } {
+                  MenuItem {} {
+                    label {From File}
+                    xywh {20 20 100 20}
+                  }
+                  MenuItem {} {
+                    label {Legal Range}
+                    xywh {30 30 100 20}
+                  }
+                  MenuItem {} {
+                    label {Full Range}
+                    xywh {40 40 100 20}
+                  }
+                }
+                Fl_Choice uiPrefsAlphaBlend {
+                  label {Alpha Blend}
+                  xywh {513 119 135 25} down_box BORDER_BOX
+                } {
+                  MenuItem {} {
+                    label None
+                    xywh {10 10 100 20}
+                  }
+                  MenuItem {} {
+                    label Straight
+                    xywh {20 20 100 20}
+                  }
+                  MenuItem {} {
+                    label Premultiplied
+                    xywh {30 30 100 20}
+                  }
+                }
+                Fl_Choice uiPrefsMinifyFilter {
+                  label {Minify Filter}
+                  xywh {513 172 135 25} down_box BORDER_BOX
+                } {
+                  MenuItem {} {
+                    label Nearest
+                    xywh {30 30 100 20}
+                  }
+                  MenuItem {} {
+                    label Linear
+                    xywh {40 40 100 20}
+                  }
+                }
+                Fl_Choice uiPrefsMagnifyFilter {
+                  label {Magnify Filter}
+                  xywh {513 205 135 25} down_box BORDER_BOX
+                } {
+                  MenuItem {} {
+                    label Nearest
+                    xywh {40 40 100 20}
+                  }
+                  MenuItem {} {
+                    label Linear
+                    xywh {50 50 100 20}
+                  }
+                }
               }
             }
             Fl_Group {} {
-              label Thumbnails open
-              xywh {288 35 555 360} box EMBOSSED_BOX align 5
+              label Thumbnails
+              xywh {288 35 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {open
                 xywh {332 57 480 336} box EMBOSSED_BOX align 5
               } {
                 Fl_Check_Button uiPrefsTimelineThumbnails {
-                  label {Preview Thumbnails above Timeline} selected
+                  label {Preview Thumbnails above Timeline}
                   tooltip {Preview Thumbnails in a rectangle above Timeline} xywh {405 191 370 20} down_box DOWN_BOX value 1
                 }
                 Fl_Check_Button uiPrefsPanelThumbnails {
                   label {Preview Thumbnails on Panels}
                   tooltip {Preview Thumbnails in Panels} xywh {405 228 370 20} down_box DOWN_BOX value 1
                 }
+              }
+            }
+            Fl_Group {} {
+              label Timeline
+              xywh {288 35 555 360} box EMBOSSED_BOX align 5 hide
+            } {
+              Fl_Choice uiPrefsTimelineDisplay {
+                label Display
+                tooltip {How to display timeline by default.} xywh {397 143 405 27} box THIN_DOWN_BOX down_box BORDER_BOX
+                code0 {o->value(0);}
+              } {
+                MenuItem {} {
+                  label Frames
+                  xywh {15 15 100 20}
+                }
+                MenuItem {} {
+                  label Seconds
+                  xywh {15 15 100 20}
+                }
+                MenuItem {} {
+                  label Timecode
+                  xywh {15 15 100 20}
+                }
+              }
+              Fl_Check_Button uiPrefsEditMode {
+                label {Start in Edit mode}
+                tooltip {Editing viewport will be visible at start up.} xywh {397 252 15 20} down_box DOWN_BOX align 8
+              }
+              Fl_Check_Button uiPrefsRemoveEDLs {
+                label {Remove EDLs in Temporary Folder on Exit}
+                tooltip {When selected, temporary EDLs (Playlists) will be removed from the temporary folder.} xywh {397 219 370 20} down_box DOWN_BOX value 1
               }
             }
             Fl_Group {} {
@@ -757,37 +893,6 @@ v->uiPrefsFPS->value( g );}
               }
             }
             Fl_Group {} {
-              label Timeline
-              xywh {288 35 555 360} box EMBOSSED_BOX align 5 hide
-            } {
-              Fl_Choice uiPrefsTimelineDisplay {
-                label Display
-                tooltip {How to display timeline by default.} xywh {397 143 405 27} box THIN_DOWN_BOX down_box BORDER_BOX
-                code0 {o->value(0);}
-              } {
-                MenuItem {} {
-                  label Frames
-                  xywh {15 15 100 20}
-                }
-                MenuItem {} {
-                  label Seconds
-                  xywh {15 15 100 20}
-                }
-                MenuItem {} {
-                  label Timecode
-                  xywh {15 15 100 20}
-                }
-              }
-              Fl_Check_Button uiPrefsEditMode {
-                label {Start in Edit mode}
-                tooltip {Editing viewport will be visible at start up.} xywh {397 252 15 20} down_box DOWN_BOX align 8
-              }
-              Fl_Check_Button uiPrefsRemoveEDLs {
-                label {Remove EDLs in Temporary Folder on Exit}
-                tooltip {When selected, temporary EDLs (Playlists) will be removed from the temporary folder.} xywh {397 219 370 20} down_box DOWN_BOX value 1
-              }
-            }
-            Fl_Group {} {
               label Edit
               xywh {288 35 555 360} box EMBOSSED_BOX align 5 hide
             } {
@@ -855,111 +960,6 @@ v->uiPrefsFPS->value( g );}
                   Fl_Check_Button uiPrefsTimelineEditable {
                     label Editable
                     tooltip {Editable Timeline Viewport.} xywh {563 282 214 36} down_box DOWN_BOX value 1 align 4
-                  }
-                }
-              }
-            }
-            Fl_Group {} {
-              label {Pixel Toolbar}
-              xywh {288 35 555 360} box EMBOSSED_BOX align 5 hide
-            } {
-              Fl_Group {} {open
-                xywh {300 40 530 350}
-              } {
-                Fl_Choice uiPrefsPixelRGBA {
-                  label {RGBA Display}
-                  xywh {487 95 255 25} down_box BORDER_BOX align 132
-                } {
-                  MenuItem {} {
-                    label {Float Values}
-                    xywh {5 5 100 20}
-                  }
-                  MenuItem {} {
-                    label {Hex Values}
-                    xywh {5 5 100 20}
-                  }
-                  MenuItem {} {
-                    label {8-bit Values}
-                    xywh {5 5 100 20}
-                  }
-                }
-                Fl_Choice uiPrefsPixelValues {
-                  label {Pixel Values}
-                  xywh {487 163 255 25} down_box BORDER_BOX align 132
-                } {
-                  MenuItem {} {
-                    label {Full Lut, Gamma and Gain}
-                    xywh {5 5 100 20}
-                  }
-                  MenuItem {} {
-                    label {Original without Gamma, Gain or Lut}
-                    xywh {5 5 100 20}
-                  }
-                }
-                Fl_Choice uiPrefsPixelHSV {
-                  label {Secondary Display}
-                  xywh {487 238 255 23} down_box BORDER_BOX align 132
-                } {
-                  MenuItem {} {
-                    label HSV
-                    xywh {5 5 100 20}
-                  }
-                  MenuItem {} {
-                    label HSL
-                    xywh {5 5 100 20}
-                  }
-                  MenuItem {} {
-                    label {CIE XYZ}
-                    xywh {5 5 100 20}
-                  }
-                  MenuItem {} {
-                    label {CIE xyY}
-                    xywh {5 5 100 20}
-                  }
-                  MenuItem {} {
-                    label {Lab CIELAB (L*a*b*)}
-                    xywh {5 5 100 20} align 172
-                  }
-                  MenuItem {} {
-                    label {Luv CIELUV (L*u*v*)}
-                    xywh {5 5 100 20} align 172
-                  }
-                  MenuItem {} {
-                    label {YUV (Analog PAL)}
-                    xywh {5 5 100 20} align 172
-                  }
-                  MenuItem {} {
-                    label {YDbDr (Analog SECAM/PAL-N)}
-                    xywh {5 5 100 20} align 172
-                  }
-                  MenuItem {} {
-                    label {YIQ (Analog NTSC)}
-                    xywh {5 5 100 20} align 172
-                  }
-                  MenuItem {} {
-                    label {ITU-601 (Digital PAL/NTSC YCbCr)}
-                    xywh {5 5 100 20} align 172
-                  }
-                  MenuItem {} {
-                    label {ITU-709 (Digital HDTV YCbCr)}
-                    xywh {5 5 100 20} align 172
-                  }
-                }
-                Fl_Choice uiPrefsPixelLumma {
-                  label Luminance
-                  xywh {487 298 255 25} down_box BORDER_BOX align 132
-                } {
-                  MenuItem {} {
-                    label {Y (Luminance)}
-                    xywh {5 5 100 20}
-                  }
-                  MenuItem {} {
-                    label {Y' (Lumma)}
-                    xywh {5 5 100 20}
-                  }
-                  MenuItem {} {
-                    label {L (Lightness)}
-                    xywh {5 5 100 20}
                   }
                 }
               }
@@ -1604,16 +1604,16 @@ if (!found)
   } {
     code {Fl_Tree_Item* item = o->add( _("User Interface") );
 o->add( _("User Interface/View Window") );
-o->add( _("User Interface/View Window/Language and Colors") );
-o->add( _("User Interface/Render") );
-o->add( _("User Interface/Fonts") );
-o->add( _("User Interface/Positioning") );
 o->add( _("User Interface/File Requester") );
+o->add( _("User Interface/Fonts") );
+o->add( _("User Interface/Language and Colors") );
+o->add( _("User Interface/Pixel Toolbar") );
+o->add( _("User Interface/Positioning") );
+o->add( _("User Interface/Render") );
 o->add( _("User Interface/Thumbnails") );
+o->add( _("User Interface/Timeline") );
 o->add( _("Playback") );
-o->add( _("Timeline") );
 o->add( _("Edit") );
-o->add( _("Pixel Toolbar") );
 o->add( _("OCIO") );
 o->add( _("OCIO Defaults") );
 o->add( _("Loading") );
@@ -1622,6 +1622,7 @@ o->add( _("Network") );
 o->add( _("OpenGL") );
 o->add( _("Errors") );
 o->add( _("Behavior") );
-o->select( item );} {}
+o->select( item );} {selected
+    }
   }
 }

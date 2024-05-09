@@ -805,8 +805,8 @@ uiSecondary = nullptr;} {}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
     exit_cb( o, v );} open
-      xywh {58 111 690 602} type Double align 80 hide resizable
-      class {mrv::MainWindow} size_range {690 602 0 0}
+      xywh {58 111 690 602} type Double align 80 resizable
+      class {mrv::MainWindow} size_range {690 602 0 0} visible
     } {
       Fl_Pack uiRegion {open
         xywh {0 0 690 602} box FLAT_BOX resizable
@@ -1227,8 +1227,7 @@ settings->setValue( mrv::kPenColorA, a);}
             xywh {0 488 690 30} box FLAT_BOX color 51
             class {mrv::TimelineGroup}
           } {
-            Fl_Group uiTimeline {
-              label Timeline open selected
+            Fl_Group uiTimeline {open selected
               xywh {0 496 690 22} labeltype NO_LABEL resizable
               class {mrv::TimelineWidget}
             } {}
@@ -1244,7 +1243,7 @@ settings->setValue( mrv::kPenColorA, a);}
             class TimelineClass
           } {}
         }
-        Fl_Group uiPixelBar {
+        Fl_Group uiPixelBar {open
           xywh {0 547 690 30} box FLAT_BOX color 56 labelcolor 17
         } {
           Fl_Group uiPixelWindow {open

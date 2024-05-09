@@ -44,6 +44,8 @@ This is a release full of goodies.
 - Created Preferences->User Interface/Thumbnails to select the places
   where thumbnails appear.  Currently can be above the Timeline and in the
   Panels.
+- Changing languages now stores and re-loads a session on a temporary location,
+  so the interface does not reset to 0.
 
 
 v1.1.5

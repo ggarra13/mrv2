@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2024-05-09 07:34-0300\n"
+"POT-Creation-Date: 2024-05-09 08:27-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -4944,6 +4944,42 @@ msgstr "Medio"
 msgid "Fast"
 msgstr "Rápido"
 
+msgid "base"
+msgstr "base"
+
+msgid "plastic"
+msgstr "plastic"
+
+msgid "gtk+"
+msgstr "gtk+"
+
+msgid "gleam"
+msgstr "gleam"
+
+msgid "oxy"
+msgstr "oxy"
+
+msgid "Float Values"
+msgstr "Valores Coma Flotante"
+
+msgid "Hex Values"
+msgstr "Valores Hex"
+
+msgid "8-bit Values"
+msgstr "Valores 8-bit"
+
+msgid "Full Lut, Gamma and Gain"
+msgstr "Lut, Gama y Ganancia"
+
+msgid "Original without Gamma, Gain or Lut"
+msgstr "Original sin Gama, Gain o Lut"
+
+msgid "CIE XYZ"
+msgstr "CIE XYZ"
+
+msgid "CIE xyY"
+msgstr "CIE xyY"
+
 msgid "From File"
 msgstr "Del Archivo"
 
@@ -4961,21 +4997,6 @@ msgstr "Premultiplicado"
 
 msgid "Nearest"
 msgstr "Cercanía"
-
-msgid "base"
-msgstr "base"
-
-msgid "plastic"
-msgstr "plastic"
-
-msgid "gtk+"
-msgstr "gtk+"
-
-msgid "gleam"
-msgstr "gleam"
-
-msgid "oxy"
-msgstr "oxy"
 
 msgid "59.94"
 msgstr "59,94"
@@ -5003,27 +5024,6 @@ msgstr "Pequeño"
 
 msgid "Large"
 msgstr "Grande"
-
-msgid "Float Values"
-msgstr "Valores Coma Flotante"
-
-msgid "Hex Values"
-msgstr "Valores Hex"
-
-msgid "8-bit Values"
-msgstr "Valores 8-bit"
-
-msgid "Full Lut, Gamma and Gain"
-msgstr "Lut, Gama y Ganancia"
-
-msgid "Original without Gamma, Gain or Lut"
-msgstr "Original sin Gama, Gain o Lut"
-
-msgid "CIE XYZ"
-msgstr "CIE XYZ"
-
-msgid "CIE xyY"
-msgstr "CIE xyY"
 
 msgid "CG"
 msgstr "CG"
@@ -5265,18 +5265,6 @@ msgstr "Memoria"
 msgid "Attributes"
 msgstr "Atributos"
 
-msgid "Render"
-msgstr "Render"
-
-msgid "Alpha Blend"
-msgstr "Mezcla Alfa"
-
-msgid "Minify Filter"
-msgstr "Filtro Minificación"
-
-msgid "Magnify Filter"
-msgstr "Filtro Magnificación"
-
 msgid "Language and Colors"
 msgstr "Lenguaje y Colores"
 
@@ -5313,6 +5301,41 @@ msgstr "Selecciona el color del rectángulo de selección sobre la imagen."
 msgid "Selects the color of HUD overlays."
 msgstr "Selecciona el color de los sobreimpresos del HUD."
 
+msgid "File Requester"
+msgstr "Buscador de Archivos"
+
+msgid "Single Click to Travel Drawers"
+msgstr "Un Solo Click para Viajar por Carpetas"
+
+msgid ""
+"When using mrv2's file chooser, a single click on a folder will open it."
+msgstr ""
+"Cuando se usa el selector de archivos de mrv2, un solo click en una carpeta "
+"la abrirá."
+
+msgid "Thumbnails Active"
+msgstr "Miniaturas Activas"
+
+msgid "Show thumbnails for known files."
+msgstr "Muestre miniaturas de archivos conocidos."
+
+msgid "USD Thumbnails"
+msgstr "Vista Previa de Miniaturas de USD"
+
+msgid "Show Thumbnails for USD files (can be slow if they are big)"
+msgstr "Mostrar miniaturas para archivos USD (puede ser lento si son grandes)"
+
+msgid "Use Native File Chooser"
+msgstr "Usar el Buscador de Archivos Nativo"
+
+msgid ""
+"If selected, the natlve file chooser will be used.  If unselected, mrv2's "
+"standard file chooser will be used."
+msgstr ""
+"Si está seleccionado, el selector de archivos nativo al sistema operativo "
+"será usado.  Si está sin seleccionar, el selector de archivos estándar de "
+"mrv2 será usado."
+
 msgid "Fonts"
 msgstr "Tipografías"
 
@@ -5327,6 +5350,18 @@ msgstr "Paneles"
 
 msgid "Sets the font to use in panels. (Not yet working)"
 msgstr "Setea la tipografía para usar en los paneles. (No funciona aún)"
+
+msgid "RGBA Display"
+msgstr "Display RGBA"
+
+msgid "Pixel Values"
+msgstr "Valores de Pixel"
+
+msgid "Secondary Display"
+msgstr "Display Secundario"
+
+msgid "Luminance"
+msgstr "Luminancia"
 
 msgid "Positioning"
 msgstr "Posicionado"
@@ -5381,40 +5416,17 @@ msgstr "H:"
 msgid "Take Current Window Values"
 msgstr "Tomar los Valores Actuales de la Ventana"
 
-msgid "File Requester"
-msgstr "Buscador de Archivos"
+msgid "Render"
+msgstr "Render"
 
-msgid "Single Click to Travel Drawers"
-msgstr "Un Solo Click para Viajar por Carpetas"
+msgid "Alpha Blend"
+msgstr "Mezcla Alfa"
 
-msgid ""
-"When using mrv2's file chooser, a single click on a folder will open it."
-msgstr ""
-"Cuando se usa el selector de archivos de mrv2, un solo click en una carpeta "
-"la abrirá."
+msgid "Minify Filter"
+msgstr "Filtro Minificación"
 
-msgid "Thumbnails Active"
-msgstr "Miniaturas Activas"
-
-msgid "Show thumbnails for known files."
-msgstr "Muestre miniaturas de archivos conocidos."
-
-msgid "USD Thumbnails"
-msgstr "Vista Previa de Miniaturas de USD"
-
-msgid "Show Thumbnails for USD files (can be slow if they are big)"
-msgstr "Mostrar miniaturas para archivos USD (puede ser lento si son grandes)"
-
-msgid "Use Native File Chooser"
-msgstr "Usar el Buscador de Archivos Nativo"
-
-msgid ""
-"If selected, the natlve file chooser will be used.  If unselected, mrv2's "
-"standard file chooser will be used."
-msgstr ""
-"Si está seleccionado, el selector de archivos nativo al sistema operativo "
-"será usado.  Si está sin seleccionar, el selector de archivos estándar de "
-"mrv2 será usado."
+msgid "Magnify Filter"
+msgstr "Filtro Magnificación"
 
 msgid "Thumbnails"
 msgstr "Miniaturas"
@@ -5430,6 +5442,28 @@ msgstr "Miniaturas en Paneles"
 
 msgid "Preview Thumbnails in Panels"
 msgstr "Miniaturas en Paneles"
+
+msgid "Display"
+msgstr "Display"
+
+msgid "How to display timeline by default."
+msgstr "Como mostrar la línea de tiempo por defecto."
+
+msgid "Start in Edit mode"
+msgstr "Comenzar en Modo de Edición"
+
+msgid "Editing viewport will be visible at start up."
+msgstr "Ventana de Edición será visible al comenzar."
+
+msgid "Remove EDLs in Temporary Folder on Exit"
+msgstr "Remover EDLs en Carpeta Temporaria al Salir"
+
+msgid ""
+"When selected, temporary EDLs (Playlists) will be removed from the temporary "
+"folder."
+msgstr ""
+"Cuando esta seleccionado, EDLs temporarios (Listas de Reproducción) seran "
+"removidas de la carpeta termporaria."
 
 msgid "Playback"
 msgstr "Reproducir"
@@ -5494,28 +5528,6 @@ msgstr ""
 "left).  Valores menores hacen que el ratón salte más cuadros mientras que "
 "valores más altos hacen lo opuesto."
 
-msgid "Display"
-msgstr "Display"
-
-msgid "How to display timeline by default."
-msgstr "Como mostrar la línea de tiempo por defecto."
-
-msgid "Start in Edit mode"
-msgstr "Comenzar en Modo de Edición"
-
-msgid "Editing viewport will be visible at start up."
-msgstr "Ventana de Edición será visible al comenzar."
-
-msgid "Remove EDLs in Temporary Folder on Exit"
-msgstr "Remover EDLs en Carpeta Temporaria al Salir"
-
-msgid ""
-"When selected, temporary EDLs (Playlists) will be removed from the temporary "
-"folder."
-msgstr ""
-"Cuando esta seleccionado, EDLs temporarios (Listas de Reproducción) seran "
-"removidas de la carpeta termporaria."
-
 msgid "Edit Viewport"
 msgstr "Ventana de Edición"
 
@@ -5548,18 +5560,6 @@ msgstr "Editable"
 
 msgid "Editable Timeline Viewport."
 msgstr "Ventana de Edición Editable."
-
-msgid "RGBA Display"
-msgstr "Display RGBA"
-
-msgid "Pixel Values"
-msgstr "Valores de Pixel"
-
-msgid "Secondary Display"
-msgstr "Display Secundario"
-
-msgid "Luminance"
-msgstr "Luminancia"
 
 msgid "OCIO Config File"
 msgstr "Archivo Config de OCIO"
@@ -5819,23 +5819,29 @@ msgstr "Módulo"
 msgid "User Interface/View Window"
 msgstr "Interfaz del Usuario/Ventana de Vista"
 
-msgid "User Interface/View Window/Language and Colors"
-msgstr "Interfaz del Usuario/Ventana de Vista/Lenguaje y Colores"
-
-msgid "User Interface/Render"
-msgstr "Interfaz del Usuario/Render"
+msgid "User Interface/File Requester"
+msgstr "Interfaz del Usuario/Buscador de Archivos"
 
 msgid "User Interface/Fonts"
 msgstr "Interfaz del Usuario/Tipografías"
 
+msgid "User Interface/Language and Colors"
+msgstr "Interfaz del Usuario/Lenguaje y Colores"
+
+msgid "User Interface/Pixel Toolbar"
+msgstr "Interfaz del Usuario/Barra de Pixel"
+
 msgid "User Interface/Positioning"
 msgstr "Interfaz del Usuario/Posicionado"
 
-msgid "User Interface/File Requester"
-msgstr "Interfaz del Usuario/Buscador de Archivos"
+msgid "User Interface/Render"
+msgstr "Interfaz del Usuario/Render"
 
 msgid "User Interface/Thumbnails"
 msgstr "Interfaz del Usuario/Miniaturas"
+
+msgid "User Interface/Timeline"
+msgstr "Interfaz del Usuario/Línea de Tiempo"
 
 msgid "Remote to Local Path Mapping"
 msgstr "Remota a Local Mapeo de Carpetas"

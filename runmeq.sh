@@ -46,7 +46,6 @@ if [[ $CMAKE_TARGET == "package" || $CMAKE_TARGET == "install" ]]; then
     #
     cd $dir
     run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t mo
-    run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
     cd -
 fi
 

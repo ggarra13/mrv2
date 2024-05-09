@@ -171,5 +171,5 @@ add_custom_target(
 
 add_custom_target(
     mo
-    DEPENDS ${mo_files}
+    DEPENDS ${mo_files} pot mrv2
     )
