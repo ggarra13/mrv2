@@ -4,7 +4,4 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 filename="$PWD/$1"
-sed -e '/^#: /d' "$filename" > /tmp/clean.po
-sed -i -e '/^"POT-Creation-Date.*/d' /tmp/clean.po
-sed -i -e '/^#, c\+\+-format/d' /tmp/clean.po
-cat /tmp/clean.po
+sed -e '/^#: /d' -e '/^"POT-Creation-Date/d' -e '/^#, c\+\+-format/d' "$filename"
