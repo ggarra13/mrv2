@@ -40,6 +40,9 @@ namespace
     const char* kModule = "lang";
 }
 
+
+const char* dummy = _("MY_DUMMY");
+    
 LanguageTable kLanguages[18] = {
     {_("English"), "en.UTF-8"},
     {_("Spanish"), "es.UTF-8"},

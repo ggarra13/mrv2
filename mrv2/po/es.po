@@ -2993,6 +2993,9 @@ msgstr "Look de OCIO inválido para '{0}'."
 msgid "Invalid OCIO Display/View '{0}'."
 msgstr "Display/View de OCIO inválido para '{0}'."
 
+msgid "MY_DUMMY"
+msgstr ""
+
 msgid "English"
 msgstr "Inglés"
 
