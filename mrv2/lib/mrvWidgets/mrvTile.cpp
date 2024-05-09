@@ -96,7 +96,6 @@ namespace mrv
     struct MoveData
     {
         Tile* t;
-        int event;
         std::vector<WidgetData> widgets;
     };
 
@@ -136,7 +135,6 @@ namespace mrv
         p += 2; // skip group & resizable's saved size
         MoveData* data = new MoveData;
         data->t = this;
-        data->event = event;
         for (int i = children(); i--; p++)
         {
             Fl_Widget* o = *a++;
