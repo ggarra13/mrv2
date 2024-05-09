@@ -252,6 +252,13 @@ namespace mrv
                 std::string text = protocol + dir + "\n" + file + layer;
                 b->copy_label(text.c_str());
 
+                if (!p.ui->uiPrefs->uiPrefsPanelThumbnails->value())
+                {
+                    delete b->image();
+                    b->image(nullptr);
+                    continue;
+                }
+
                 if (isNDI)
                 {
                     Fl_SVG_Image* svg = load_svg("NDI.svg");
@@ -527,6 +534,13 @@ namespace mrv
                 std::string text = protocol + dir + "\n" + file + layer;
                 b->copy_label(text.c_str());
                 b->labelcolor(FL_WHITE);
+
+                if (!p.ui->uiPrefs->uiPrefsPanelThumbnails->value())
+                {
+                    delete b->image();
+                    b->image(nullptr);
+                    continue;
+                }
 
                 if (isNDI)
                 {

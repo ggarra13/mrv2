@@ -260,8 +260,7 @@ namespace mrv
 
         case FL_LEAVE:
             tile_set_cursor(this, FL_CURSOR_DEFAULT);
-            break;
-
+            return 1;
         case FL_DRAG:
             // This is necessary if CONSOLIDATE_MOTION in Fl_x.cxx is turned
             // off: if (damage()) return 1; // don't fall behind

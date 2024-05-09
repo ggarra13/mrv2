@@ -1,7 +1,10 @@
 v1.1.6
 ======
 
-- Fixed slow seeking on 4K movies.  Now we beat OpenRV on all movies.
+This is a release full of goodies.
+
+- Fixed slow seeking on 4K movies.  Now we beat OpenRV on **all** movies,
+  seeking and reverse playback too.
 - Made View Window / Timeline Viewport divider highlight in a grayish color
   when it can be dragged.
 - Improved performance of dragging Tile like the main divider between the
@@ -34,8 +37,13 @@ v1.1.6
   allow playing 4K movies backwards.
   The Gigabytes setting of 0 is **NO LONGER USED** and will revert to
   4 Gb if set to 0.
-- Fixed starting a movie with loop on and playing stopped and then start playing
-  it backwards.
+- Fixed starting a movie with loop on and playing stopped and then start
+  playing it backwards.
+- Refactored playback code and fixed playback buttons sometimes getting out of
+  sync compared to the command-line flags passed.
+- Created Preferences->User Interface/Thumbnails to select the places
+  where thumbnails appear.  Currently can be above the Timeline and in the
+  Panels.
 
 
 v1.1.5

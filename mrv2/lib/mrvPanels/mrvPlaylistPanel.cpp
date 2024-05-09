@@ -51,7 +51,7 @@ namespace mrv
             mrv::ThumbnailCreator* thumbnailCreator;
 
             std::map< size_t, PlaylistButton* > map;
-            std::vector< PlaylistButton* > clipButtons;
+            std::vector< PlaylistButton* > playlistButtons;
 
             WidgetIds ids;
             WidgetIndices indices;
@@ -161,7 +161,7 @@ namespace mrv
         void PlaylistPanel::clear_controls()
         {
             _r->map.clear();
-            _r->clipButtons.clear();
+            _r->playlistButtons.clear();
             _r->indices.clear();
         }
 
@@ -217,7 +217,7 @@ namespace mrv
                 auto cbW = new Widget<PlaylistButton>(
                     g->x(), Y + numValidFiles * 68, g->w(), 68);
                 PlaylistButton* b = cbW;
-                _r->clipButtons.push_back(b);
+                _r->playlistButtons.push_back(b);
                 _r->indices[b] = i;
                 cbW->callback(
                     [=](auto b)
@@ -245,6 +245,13 @@ namespace mrv
                     b->value(1);
                 else
                     b->value(0);
+
+                if (!p.ui->uiPrefs->uiPrefsPanelThumbnails->value())
+                {
+                    delete b->image();
+                    b->image(nullptr);
+                    return;
+                }
 
                 if (auto context = _r->context.lock())
                 {
@@ -364,6 +371,14 @@ namespace mrv
                 PlaylistButton* b = m.second;
 
                 b->labelcolor(FL_WHITE);
+
+                if (!p.ui->uiPrefs->uiPrefsPanelThumbnails->value())
+                {
+                    delete b->image();
+                    b->image(nullptr);
+                    return;
+                }
+
                 WidgetIndices::iterator it = _r->indices.find(b);
                 time = media->currentTime;
                 uint16_t layerId = media->videoLayer;
@@ -382,7 +397,6 @@ namespace mrv
                         layerId = p.ui->uiColorChannel->value();
                     }
                 }
-
                 if (auto context = _r->context.lock())
                 {
                     b->createTimeline(context);

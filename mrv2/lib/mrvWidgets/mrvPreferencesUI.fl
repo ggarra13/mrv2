@@ -79,7 +79,7 @@ class PreferencesUI {open
     Fl_Window uiMain {
       label Preferences
       user_data this user_data_type {PreferencesUI*} open
-      xywh {0 53 847 466} type Double resizable
+      xywh {800 104 847 466} type Double resizable
       code0 {main = m;} modal visible
     } {
       Fl_Group {} {open
@@ -89,16 +89,16 @@ class PreferencesUI {open
           xywh {283 26 564 428}
         } {
           Fl_Wizard uiWizard {
-            label Settings
+            label Settings open
             xywh {283 26 564 380} box PLASTIC_UP_BOX labelcolor 32
           } {
             Fl_Group {} {
               label {User Interface}
-              xywh {288 49 554 349} box EMBOSSED_BOX align 5 hide
+              xywh {288 35 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label {Window Behavior}
-                xywh {293 53 545 144} box ROUNDED_BOX
+                xywh {293 60 545 144} box ROUNDED_BOX
               } {
                 Fl_Check_Button uiPrefsAlwaysOnTop {
                   label {Always on Top}
@@ -174,7 +174,7 @@ If you try to open several mrv2s with different images, all these images will be
             }
             Fl_Group {} {
               label {View Window}
-              xywh {288 35 555 349} box EMBOSSED_BOX align 5 hide
+              xywh {288 35 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label Defaults open
@@ -347,7 +347,7 @@ If you try to open several mrv2s with different images, all these images will be
             }
             Fl_Group {} {
               label Render
-              xywh {291 45 549 349} box EMBOSSED_BOX align 5 hide
+              xywh {288 35 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {open
                 xywh {301 75 531 170} box ROUNDED_BOX
@@ -416,7 +416,7 @@ If you try to open several mrv2s with different images, all these images will be
             }
             Fl_Group {} {
               label {Language and Colors}
-              xywh {288 35 555 349} box EMBOSSED_BOX align 5 hide
+              xywh {288 35 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label UI
@@ -525,7 +525,7 @@ o->redraw();}
             }
             Fl_Group {} {
               label Fonts
-              xywh {293 45 547 349} box EMBOSSED_BOX align 5 hide
+              xywh {288 35 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label Fonts open
@@ -553,7 +553,7 @@ o->redraw();}
             }
             Fl_Group {} {
               label Positioning
-              xywh {300 34 530 362} box EMBOSSED_BOX hide
+              xywh {288 35 555 360} box EMBOSSED_BOX hide
             } {
               Fl_Check_Button uiAlwaysSaveOnExit {
                 label {Always Save on Exit}
@@ -603,7 +603,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
             }
             Fl_Group {} {
               label {File Requester}
-              xywh {300 34 530 362} box EMBOSSED_BOX align 5 hide
+              xywh {288 35 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Check_Button uiPrefsFileReqFolder {
                 label {Single Click to Travel Drawers}
@@ -623,8 +623,25 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
               }
             }
             Fl_Group {} {
+              label Thumbnails
+              xywh {288 35 555 360} box EMBOSSED_BOX align 5 hide
+            } {
+              Fl_Group {} {open
+                xywh {332 57 480 336} box EMBOSSED_BOX align 5
+              } {
+                Fl_Check_Button uiPrefsTimelineThumbnails {
+                  label {Preview Thumbnails above Timeline}
+                  tooltip {Thumbnails above timeline} xywh {405 191 370 20} down_box DOWN_BOX value 1
+                }
+                Fl_Check_Button uiPrefsPanelThumbnails {
+                  label {Preview Thumbnails on Panels}
+                  tooltip {Thumbnails above timeline} xywh {405 228 370 20} down_box DOWN_BOX value 1
+                }
+              }
+            }
+            Fl_Group {} {
               label Playback
-              xywh {299 34 530 362} box EMBOSSED_BOX align 5 hide
+              xywh {288 35 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label Defaults open
@@ -740,8 +757,8 @@ v->uiPrefsFPS->value( g );}
               }
             }
             Fl_Group {} {
-              label Timeline open
-              xywh {305 34 530 362} box EMBOSSED_BOX align 5
+              label Timeline
+              xywh {288 35 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Choice uiPrefsTimelineDisplay {
                 label Display
@@ -765,10 +782,6 @@ v->uiPrefsFPS->value( g );}
                 label {Start in Edit mode}
                 tooltip {Editing viewport will be visible at start up.} xywh {397 252 15 20} down_box DOWN_BOX align 8
               }
-              Fl_Check_Button uiPrefsTimelineThumbnails {
-                label {Preview Thumbnails}
-                tooltip {Thumbnails above timeline} xywh {397 187 370 20} down_box DOWN_BOX value 1
-              }
               Fl_Check_Button uiPrefsRemoveEDLs {
                 label {Remove EDLs in Temporary Folder on Exit}
                 tooltip {When selected, temporary EDLs (Playlists) will be removed from the temporary folder.} xywh {397 219 370 20} down_box DOWN_BOX value 1
@@ -776,7 +789,7 @@ v->uiPrefsFPS->value( g );}
             }
             Fl_Group {} {
               label Edit
-              xywh {315 44 530 362} box EMBOSSED_BOX align 5 hide
+              xywh {288 35 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label {Edit Viewport} open
@@ -847,15 +860,15 @@ v->uiPrefsFPS->value( g );}
               }
             }
             Fl_Group {} {
-              label {Pixel Toolbar}
-              xywh {303 34 532 362} box EMBOSSED_BOX align 5 hide
+              label {Pixel Toolbar} open
+              xywh {288 35 555 360} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {open
-                xywh {341 34 446 313}
+                xywh {300 40 530 350}
               } {
                 Fl_Choice uiPrefsPixelRGBA {
-                  label {RGBA Display}
-                  xywh {493 100 255 25} down_box BORDER_BOX align 132
+                  label {RGBA Display} selected
+                  xywh {487 95 255 25} down_box BORDER_BOX align 132
                 } {
                   MenuItem {} {
                     label {Float Values}
@@ -871,8 +884,8 @@ v->uiPrefsFPS->value( g );}
                   }
                 }
                 Fl_Choice uiPrefsPixelValues {
-                  label {Pixel Values}
-                  xywh {493 168 255 25} down_box BORDER_BOX align 132
+                  label {Pixel Values} selected
+                  xywh {487 163 255 25} down_box BORDER_BOX align 132
                 } {
                   MenuItem {} {
                     label {Full Lut, Gamma and Gain}
@@ -884,9 +897,8 @@ v->uiPrefsFPS->value( g );}
                   }
                 }
                 Fl_Choice uiPrefsPixelHSV {
-                  label {Secondary Display}
-                  xywh {493 243 255 23} down_box BORDER_BOX align 132
-                  class {mrv::Choice}
+                  label {Secondary Display} selected
+                  xywh {487 238 255 23} down_box BORDER_BOX align 132
                 } {
                   MenuItem {} {
                     label HSV
@@ -934,9 +946,8 @@ v->uiPrefsFPS->value( g );}
                   }
                 }
                 Fl_Choice uiPrefsPixelLumma {
-                  label Luminance
-                  xywh {493 303 255 25} down_box BORDER_BOX align 132
-                  class {mrv::Choice}
+                  label Luminance selected
+                  xywh {487 298 255 25} down_box BORDER_BOX align 132
                 } {
                   MenuItem {} {
                     label {Y (Luminance)}
@@ -955,7 +966,7 @@ v->uiPrefsFPS->value( g );}
             }
             Fl_Group {} {
               label OCIO
-              xywh {293 34 542 362} box EMBOSSED_BOX align 5 hide
+              xywh {288 35 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {open
                 xywh {302 93 523 168}
@@ -1014,7 +1025,7 @@ uiPrefs->uiPrefsOCIOConfig->value( r.c_str() );}
             }
             Fl_Group {} {
               label {OCIO Defaults}
-              xywh {303 34 532 362} align 5 hide
+              xywh {288 35 555 360} align 5 hide
             } {
               Fl_Light_Button uiOCIOUseActiveViews {
                 label {Use Active Views and Active Displays}
@@ -1173,7 +1184,7 @@ v->uiOCIO_Look->do_callback();}
             }
             Fl_Group {} {
               label Loading
-              xywh {297 34 543 362} align 5 hide
+              xywh {288 35 555 360} align 5 hide
             } {
               Fl_Group {} {open
                 xywh {324 137 494 240}
@@ -1218,7 +1229,7 @@ v->uiOCIO_Look->do_callback();}
             }
             Fl_Group {} {
               label {Path Mappings}
-              xywh {304 45 533 354} hide
+              xywh {288 35 555 360} hide
             } {
               Fl_Browser PathMappings {
                 tooltip {Use Up and Down arrows to move the selected line up and down.  Double click to change item.  Click on an empty area to unselect.} xywh {329 91 476 282} type Hold color 20 textcolor 56
@@ -1240,20 +1251,20 @@ v->uiOCIO_Look->do_callback();}
             }
             Fl_Group {} {
               label Network
-              xywh {303 35 532 366} align 5 hide
+              xywh {288 35 555 360} align 5 hide
             } {
               Fl_Group {} {open
-                xywh {320 35 503 365}
+                xywh {320 35 503 360}
               } {
                 Fl_Box {} {
                   label Send
-                  xywh {503 36 106 26}
+                  xywh {503 35 106 24}
                 }
                 Fl_Box {} {
                   label Accept
-                  xywh {614 35 105 26}
+                  xywh {614 35 105 24}
                 }
-                Fl_Group {} {open
+                Fl_Group {} {
                   xywh {323 59 500 36} box UP_BOX
                 } {
                   Fl_Box {} {
@@ -1267,7 +1278,7 @@ v->uiOCIO_Look->do_callback();}
                     xywh {659 64 27 26} down_box DOWN_BOX
                   }
                 }
-                Fl_Group {} {open
+                Fl_Group {} {
                   xywh {323 109 500 36} box UP_BOX
                 } {
                   Fl_Box {} {
@@ -1281,7 +1292,7 @@ v->uiOCIO_Look->do_callback();}
                     xywh {659 114 27 26} down_box DOWN_BOX
                   }
                 }
-                Fl_Group {} {open
+                Fl_Group {} {
                   xywh {323 159 500 36} box UP_BOX
                 } {
                   Fl_Box {} {
@@ -1295,7 +1306,7 @@ v->uiOCIO_Look->do_callback();}
                     xywh {659 163 27 26} down_box DOWN_BOX
                   }
                 }
-                Fl_Group {} {open
+                Fl_Group {} {
                   xywh {323 209 500 36} box UP_BOX
                 } {
                   Fl_Box {} {
@@ -1309,7 +1320,7 @@ v->uiOCIO_Look->do_callback();}
                     xywh {659 215 27 26} down_box DOWN_BOX
                   }
                 }
-                Fl_Group {} {open
+                Fl_Group {} {
                   xywh {323 259 500 36} box UP_BOX
                 } {
                   Fl_Box {} {
@@ -1323,7 +1334,7 @@ v->uiOCIO_Look->do_callback();}
                     xywh {659 260 27 26} down_box DOWN_BOX
                   }
                 }
-                Fl_Group {} {open
+                Fl_Group {} {
                   xywh {321 309 502 36} box UP_BOX
                 } {
                   Fl_Box {} {
@@ -1337,7 +1348,7 @@ v->uiOCIO_Look->do_callback();}
                     xywh {659 314 27 26} down_box DOWN_BOX
                   }
                 }
-                Fl_Group {} {open
+                Fl_Group {} {
                   xywh {320 359 501 36} box UP_FRAME
                 } {
                   Fl_Box {} {
@@ -1355,7 +1366,7 @@ v->uiOCIO_Look->do_callback();}
             }
             Fl_Group {} {
               label OpenGL
-              xywh {291 36 532 362} box EMBOSSED_BOX align 5 hide
+              xywh {288 35 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {open
                 xywh {323 52 478 314}
@@ -1432,7 +1443,7 @@ v->uiOCIO_Look->do_callback();}
             }
             Fl_Group {} {
               label Errors
-              xywh {303 39 532 362} box EMBOSSED_BOX align 5 hide
+              xywh {288 35 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {open
                 xywh {341 39 446 313}
@@ -1477,7 +1488,7 @@ v->uiOCIO_Look->do_callback();}
             }
             Fl_Group {} {
               label Behavior
-              xywh {297 36 532 362} box EMBOSSED_BOX align 5 hide
+              xywh {288 35 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {open
                 xywh {335 36 446 313}
@@ -1499,7 +1510,7 @@ v->uiOCIO_Look->do_callback();}
               }
             }
           }
-          Fl_Group {} {open
+          Fl_Group {} {
             xywh {320 410 470 44}
           } {
             Fl_Button {} {
@@ -1515,7 +1526,7 @@ if (ok)
                         
 // reset and reload preferences
 mrv::Preferences::reset();
-mrv::Preferences::load(false, false);} selected
+mrv::Preferences::load(false, false);}
               tooltip {Reset settings to the default.} xywh {333 416 132 31}
             }
             Fl_Button {} {
@@ -1598,6 +1609,7 @@ o->add( _("User Interface/Render") );
 o->add( _("User Interface/Fonts") );
 o->add( _("User Interface/Positioning") );
 o->add( _("User Interface/File Requester") );
+o->add( _("User Interface/Thumbnails") );
 o->add( _("Playback") );
 o->add( _("Timeline") );
 o->add( _("Edit") );

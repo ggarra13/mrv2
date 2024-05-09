@@ -148,8 +148,9 @@ namespace mrv
                     observer::CallbackAction::Suppress);
 
             _r->aIndexObserver = observer::ValueObserver<int>::create(
-                ui->app->filesModel()->observeAIndex(), [this](int value)
-                { redraw(); }, observer::CallbackAction::Suppress);
+                ui->app->filesModel()->observeAIndex(),
+                [this](int value) { redraw(); },
+                observer::CallbackAction::Suppress);
 
             _r->layerObserver = observer::ListObserver<int>::create(
                 ui->app->filesModel()->observeLayers(),
@@ -292,6 +293,13 @@ namespace mrv
                 const std::string layer = getLayerName(media, layerId);
                 std::string text = protocol + dir + "\n" + file + layer;
                 b->copy_label(text.c_str());
+
+                if (!p.ui->uiPrefs->uiPrefsPanelThumbnails->value())
+                {
+                    delete b->image();
+                    b->image(nullptr);
+                    continue;
+                }
 
                 if (isNDI)
                 {
@@ -454,7 +462,7 @@ namespace mrv
                 const std::string& fullfile = protocol + dir + file;
                 FileButton* b = m.second;
 
-                uint16_t layerId = media->videoLayer;
+                uint16_t layerId = p.ui->uiColorChannel->value();
                 const std::string layer = getLayerName(media, layerId);
                 std::string text = protocol + dir + "\n" + file + layer;
                 b->copy_label(text.c_str());
@@ -472,7 +480,12 @@ namespace mrv
                     time = player->currentTime();
                 }
 
-                layerId = p.ui->uiColorChannel->value();
+                if (!p.ui->uiPrefs->uiPrefsPanelThumbnails->value())
+                {
+                    delete b->image();
+                    b->image(nullptr);
+                    return;
+                }
 
                 if (isNDI)
                 {

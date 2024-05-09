@@ -379,7 +379,7 @@ namespace mrv
                     }
                     if (found)
                     {
-                        p.player->setPlayback(timeline::Playback::Reverse);
+                        p.ui->uiView->setPlayback(timeline::Playback::Reverse);
                         p.continueReversePlaying = false;
                     }
                 },

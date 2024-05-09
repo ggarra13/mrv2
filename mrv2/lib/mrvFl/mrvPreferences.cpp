@@ -301,8 +301,11 @@ namespace mrv
         gui.get("timeline_display", tmp, 0);
         uiPrefs->uiPrefsTimelineDisplay->value(tmp);
 
-        gui.get("timeline_thumbnails", tmp, 0);
+        gui.get("timeline_thumbnails", tmp, 1);
         uiPrefs->uiPrefsTimelineThumbnails->value(tmp);
+
+        gui.get("panel_thumbnails", tmp, 1);
+        uiPrefs->uiPrefsPanelThumbnails->value(tmp);
 
         gui.get("remove_edls", tmp, 1);
         uiPrefs->uiPrefsRemoveEDLs->value(tmp);
@@ -1181,6 +1184,7 @@ namespace mrv
         gui.set("timeline_display", uiPrefs->uiPrefsTimelineDisplay->value());
         gui.set(
             "timeline_thumbnails", uiPrefs->uiPrefsTimelineThumbnails->value());
+        gui.set("panel_thumbnails", uiPrefs->uiPrefsPanelThumbnails->value());
         gui.set("remove_edls", uiPrefs->uiPrefsRemoveEDLs->value());
         gui.set("timeline_edit_mode", uiPrefs->uiPrefsEditMode->value());
         gui.set("timeline_edit_view", uiPrefs->uiPrefsEditView->value());
@@ -1822,6 +1826,8 @@ namespace mrv
             app->removeListener();
         }
 #endif
+
+        panel::redrawThumbnails();
 
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }

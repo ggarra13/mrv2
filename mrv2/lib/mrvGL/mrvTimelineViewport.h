@@ -5,6 +5,7 @@
 #pragma once
 
 #include <tlTimeline/BackgroundOptions.h>
+#include <tlTimeline/PlayerOptions.h>
 #include <tlTimeline/IRender.h>
 
 #include "mrvCore/mrvActionMode.h"
@@ -206,6 +207,8 @@ namespace mrv
         void togglePlayback() noexcept;
 
         void endFrame() noexcept;
+
+        void setPlayback(const timeline::Playback) noexcept;
 
         //! Set the Annotation previous ghost frames.
         void setGhostPrevious(int);

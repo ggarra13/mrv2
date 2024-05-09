@@ -951,12 +951,9 @@ namespace mrv
         p.player->start();
 
         const timeline::Playback& playback = p.options.playback;
+        ui->uiView->setPlayback(playback);
 
-        if (playback != timeline::Playback::Reverse)
-        {
-            p.player->setPlayback(playback);
-        }
-        else
+        if (playback == timeline::Playback::Reverse)
         {
             p.player->setPlayback(timeline::Playback::Stop);
 

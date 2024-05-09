@@ -501,53 +501,38 @@ namespace mrv
         updatePlaybackButtons();
     }
 
-    void TimelineViewport::playBackwards() noexcept
+    void TimelineViewport::setPlayback(timeline::Playback value) noexcept
     {
         TLRENDER_P();
 
         if (!p.player)
             return;
 
-        _hidePixelBar();
+        if (value == timeline::Playback::Stop)
+            _showPixelBar();
+        else
+            _hidePixelBar();
         p.droppedFrames = 0;
 
-        p.player->setPlayback(timeline::Playback::Reverse);
+        p.player->setPlayback(value);
 
         updatePlaybackButtons();
-
         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
+    }
+
+    void TimelineViewport::playBackwards() noexcept
+    {
+        setPlayback(timeline::Playback::Reverse);
     }
 
     void TimelineViewport::stop() noexcept
     {
-        TLRENDER_P();
-        if (!p.player)
-            return;
-
-        p.player->setPlayback(timeline::Playback::Stop);
-
-        _showPixelBar();
-        p.droppedFrames = 0;
-
-        updatePlaybackButtons();
-
-        p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
+        setPlayback(timeline::Playback::Stop);
     }
 
     void TimelineViewport::playForwards() noexcept
     {
-        TLRENDER_P();
-
-        if (!p.player)
-            return;
-
-        _hidePixelBar();
-        p.droppedFrames = 0;
-
-        p.player->setPlayback(timeline::Playback::Forward);
-
-        updatePlaybackButtons();
-        p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
+        setPlayback(timeline::Playback::Forward);
     }
 
     void TimelineViewport::_showPixelBar() const noexcept
