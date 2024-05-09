@@ -83,7 +83,7 @@ namespace mrv
         }
         
         int getIndex(const otio::SerializableObject::Retainer<otio::Composable>&
-                         composable)
+                     composable)
         {
             int out = -1;
             if (composable && composable->parent())
