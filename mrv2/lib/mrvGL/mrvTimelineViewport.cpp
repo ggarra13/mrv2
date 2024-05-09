@@ -1319,8 +1319,8 @@ namespace mrv
         int W = renderSize.w;
         int H = renderSize.h;
 
-        int minx, miny, maxW, maxH, posX, posY;
-        Fl::screen_work_area(minx, miny, maxW, maxH, screen);
+        int minX, minY, maxW, maxH, posX, posY;
+        Fl::screen_work_area(minX, minY, maxW, maxH, screen);
 
         PreferencesUI* uiPrefs = p.ui->uiPrefs;
         if (!desktop::Wayland() && uiPrefs->uiWindowFixedPosition->value())
@@ -1344,7 +1344,7 @@ namespace mrv
         maxH -= dH;
         posX += dW / 2;
 #ifdef _WIN32
-        miny += dH - dW / 2;
+        minY += dH - dW / 2;
 #endif
 
         // Take into account the different UI bars
@@ -1413,13 +1413,21 @@ namespace mrv
         if (H > maxH)
             H = maxH;
 
-        if (posX + W > minx + maxW)
+        if (posX < minX)
+            posX = minX;
+
+        if (posY < minY)
+            posY = minY;
+
+        if (posX + W > minX + maxW)
         {
-            W = minx + maxW - posX;
+            posX = minX;
+            W = minX + maxW - posX;
         }
-        if (posY + H > miny + maxH)
+        if (posY + H > minY + maxH)
         {
-            H = miny + maxH - posY;
+            posY = minY;
+            H = minY + maxH - posY;
         }
 
         mw->resize(posX, posY, W, H);

@@ -2453,7 +2453,8 @@ namespace mrv
         int tileH = tile->h();
         int H = kMinEditModeH; // timeline height
         int viewH = H;
-        bool showTimeline = ui->uiMain->visible() && mode != EditMode::kNone;
+        const bool showTimeline =
+            ui->uiMain->visible() && mode != EditMode::kNone;
         auto player = ui->uiView->getTimelinePlayer();
         if (mode == EditMode::kFull && player)
         {

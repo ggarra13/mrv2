@@ -1233,7 +1233,7 @@ settings->setValue( mrv::kPenColorA, a);}
             } {}
           }
         }
-        Fl_Group uiBottomBar {
+        Fl_Group uiBottomBar {open
           xywh {0 518 690 29} box FLAT_BOX
         } {
           Fl_Group uiTimeWindow {open

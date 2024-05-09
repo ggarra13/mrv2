@@ -18,12 +18,9 @@ namespace mrv
 
     void TimelineGroup::draw()
     {
-        if (!visible())
-            return;
-
         // Don't fill the whole background, just the dragbar
         fl_color(color());
-        fl_rectf(x(), y(), w(), 22);
+        fl_rectf(x(), y(), w(), 8);
 
         int W = w() / 2 - 20;
         int W2 = w() / 2 + 20;
@@ -44,11 +41,11 @@ namespace mrv
         }
 
         if (!(damage() & FL_DAMAGE_CHILD))
+        {
             return;
+        }
 
         Fl_Widget* timeline = child(0);
-        // if (timeline->label())
-        //     std::cerr << "draw " << timeline->label() << std::endl;
         timeline->redraw();
     }
 

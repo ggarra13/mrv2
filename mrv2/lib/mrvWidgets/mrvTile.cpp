@@ -129,6 +129,9 @@ namespace mrv
     void
     Tile::move_intersection(int oldx, int oldy, int newx, int newy, int event)
     {
+#ifdef __linux__
+        Fl_Tile::move_intersection(oldx, oldy, newx, newy);
+#else
         Fl_Widget* const* a = array();
         Fl_Rect* p = bounds();
         p += 2; // skip group & resizable's saved size
@@ -160,6 +163,7 @@ namespace mrv
         }
 
         Fl::add_timeout(0.0, (Fl_Timeout_Handler)move_cb, data);
+#endif
     }
 
     void Tile::resize(int X, int Y, int W, int H)
@@ -272,17 +276,11 @@ namespace mrv
             if (!r)
                 r = this;
             int newx = sx;
-            int newy;
-            if (sdrag & DRAGV)
-            {
-                newy = Fl::event_y() - sdy;
-                if (newy < r->y())
-                    newy = r->y();
-                else if (newy > r->y() + r->h())
-                    newy = r->y() + r->h();
-            }
-            else
-                newy = sy;
+            int newy = Fl::event_y() - sdy;
+            if (newy < r->y())
+                newy = r->y();
+            else if (newy > r->y() + r->h())
+                newy = r->y() + r->h();
             move_intersection(sx, sy, newx, newy, event);
             if (event == FL_DRAG)
             {
