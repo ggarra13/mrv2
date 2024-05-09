@@ -2,12 +2,21 @@
 // Copyright (c) 2021-2023 Darby Johnston
 // All rights reserved.
 
+#include <memory>
+
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Double_Window.H>
 #include <FL/Fl.H>
 #include <FL/names.h>
 
+#include <tlCore/StringFormat.h>
+
+#include <tlIO/Cache.h>
+
 #include <tlTimelineUI/TimelineWidget.h>
+
+#include <tlGL/GL.h>
+#include <tlGL/GLFWWindow.h>
 
 #include <tlUI/IClipboard.h>
 #include <tlUI/IWindow.h>
@@ -31,7 +40,6 @@
 
 #include "mrvUI/mrvDesktop.h"
 
-#include "mrvGL/mrvThumbnailCreator.h"
 #include "mrvGL/mrvTimelineWidget.h"
 #include "mrvGL/mrvGLErrors.h"
 
@@ -56,6 +64,24 @@ namespace mrv
 
     namespace
     {
+
+        void flipY(const uint8_t* in, const size_t width, const size_t height,
+                   const int depth, uint8_t* out)
+        {
+            // Calculate the size of a row of  (in bytes)
+            const size_t rowSize = width * depth;
+
+            // Loop through half the image height
+            for (size_t y = 0; y < height; ++y)
+            {
+                const size_t inRow = y * rowSize;
+                const size_t outRow = (height - y - 1) * rowSize;
+
+                // Copy a row from top to bottom in the output buffer
+                memcpy(out + outRow, in + inRow, rowSize);
+            }
+        }
+        
         int getIndex(const otio::SerializableObject::Retainer<otio::Composable>&
                          composable)
         {
@@ -182,14 +208,23 @@ namespace mrv
 
         TimelinePlayer* player = nullptr;
 
-        ThumbnailCreator* thumbnailCreator = nullptr;
+        // New thumbnail classes
+        std::vector<tl::file::MemoryRead> memoryRead;
+        std::shared_ptr<ui::ThumbnailGenerator> thumbnailGenerator;
+        std::shared_ptr<gl::GLFWWindow> window;
+        std::map<std::string, std::shared_ptr<image::Image> > thumbnails;
+
+        // Requests classes
+        io::Options ioOptions;
+        ui::InfoRequest infoRequest;
+        std::shared_ptr<io::Info> ioInfo;
+        std::map<otime::RationalTime, ui::ThumbnailRequest> thumbnailRequests;
+        tl::file::Path path;
+        
+        // FLTK classes
         Fl_Double_Window* thumbnailWindow = nullptr; // thumbnail window
-        int64_t thumbnailRequestId = 0;
         Fl_Box* box = nullptr;
-
-        timeline::OCIOOptions ocioOptions;
-        timeline::LUTOptions lutOptions;
-
+        
         mrv::TimeUnits units = mrv::TimeUnits::Timecode;
 
         std::shared_ptr<ui::Style> style;
@@ -277,8 +312,15 @@ namespace mrv
         p.timelineWindow->setClipboard(p.clipboard);
         p.timelineWidget->setParent(p.timelineWindow);
 
-        p.thumbnailCreator = new ThumbnailCreator(context);
-
+        p.window = gl::GLFWWindow::create(
+            "mrv::TimelineWidget::window",
+            math::Size2i(1, 1),
+            context,
+            static_cast<int>(gl::GLFWWindowOptions::None));
+            
+        p.thumbnailGenerator = ui::ThumbnailGenerator::create(context,
+                                                              p.window);
+        
         setStopOnScrub(false);
 
         _styleUpdate();
@@ -286,9 +328,10 @@ namespace mrv
         Fl::add_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
     }
 
-    ThumbnailCreator* TimelineWidget::thumbnailCreator()
+    std::shared_ptr<ui::ThumbnailGenerator>
+    TimelineWidget::thumbnailGenerator() const
     {
-        return _p->thumbnailCreator;
+        return _p->thumbnailGenerator;
     }
 
     void TimelineWidget::setStyle(const std::shared_ptr<ui::Style>& style)
@@ -406,8 +449,7 @@ namespace mrv
             //         on the cache until it is filled and we continue
             //         playing from there.
             //
-            const auto& path = p.player->path();
-            if (file::isMovie(path) &&
+            if (file::isMovie(p.path) &&
                 p.player->playback() == timeline::Playback::Reverse &&
                 !info.video.empty() && info.video[0].size.w > 2048)
             {
@@ -502,34 +544,44 @@ namespace mrv
 
         repositionThumbnail();
 
-        file::Path path;
-        auto model = p.ui->app->filesModel();
-        auto Aitem = model->observeA()->get();
-        if (Aitem)
-            path = Aitem->path;
-        else
-            path = player->getPath();
-        image::Size size(p.box->w(), p.box->h() - 24);
         const auto& time = _posToTime(_toUI(Fl::event_x()));
-
-        if (p.thumbnailCreator)
-        {
-            if (p.thumbnailRequestId)
-            {
-                p.thumbnailCreator->cancelRequests(p.thumbnailRequestId);
-            }
-
-            if (fetch)
-            {
-                uint16_t layerId = p.ui->uiColorChannel->value();
-                p.thumbnailCreator->initThread();
-                p.thumbnailRequestId = p.thumbnailCreator->request(
-                    path.get(), time, size, single_thumbnail_cb, (void*)this,
-                    layerId, p.ocioOptions, p.lutOptions);
-            }
-        }
+        uint16_t layerId = p.ui->uiColorChannel->value();
         timeToText(buffer, time, _p->units);
         p.box->copy_label(buffer);
+        
+        _cancelRequests();
+
+        if (!p.thumbnailGenerator)
+            return 0;
+        
+        if (fetch)
+        {
+            if (!p.ioInfo && !p.infoRequest.future.valid())
+            {
+                p.infoRequest = p.thumbnailGenerator->getInfo(p.path, p.memoryRead);
+            }
+                
+            p.ioOptions["OpenEXR/IgnoreDisplayWindow"] =
+                string::Format("{0}").arg(
+                    App::ui->uiView->getIgnoreDisplayWindow());
+            p.ioOptions["Layer"] =
+                string::Format("{0}").arg(layerId);
+            // @todo: p.ioOptions["USD/cameraName"] = p.clipName;
+            const auto i = p.thumbnails.find(
+                io::getCacheKey(p.path, time, p.ioOptions));
+
+            if (p.ioInfo && !p.ioInfo->video.empty())
+            {
+                const auto k = p.thumbnailRequests.find(time);
+                if (k == p.thumbnailRequests.end())
+                {
+                    p.thumbnailRequests[time] =
+                        p.thumbnailGenerator->getThumbnail(
+                            p.path, p.memoryRead, p.box->h() - 24,
+                            time, p.ioOptions);
+                }
+            }
+        }
         return 1;
     }
 
@@ -550,35 +602,24 @@ namespace mrv
             auto innerPlayer = player->player();
             p.timeRange = innerPlayer->getTimeRange();
             p.timelineWidget->setPlayer(innerPlayer);
+            
+            auto model = p.ui->app->filesModel();
+            auto Aitem = model->observeA()->get();
+            if (Aitem)
+                p.path = Aitem->path;
+            else
+                p.path = player->path();
         }
         else
         {
-            if (p.thumbnailRequestId)
-            {
-                p.thumbnailCreator->cancelRequests(p.thumbnailRequestId);
-                Fl_Image* image = p.box->image();
-                delete image;
-                p.box->image(nullptr);
-            }
+            _cancelRequests();
+            Fl_Image* image = p.box->image();
+            delete image;
+            p.box->image(nullptr);
+            
             p.timeRange = time::invalidTimeRange;
             p.timelineWidget->setPlayer(nullptr);
         }
-    }
-
-    void TimelineWidget::setLUTOptions(const timeline::LUTOptions& lutOptions)
-    {
-        TLRENDER_P();
-        if (lutOptions == p.lutOptions)
-            return;
-        p.lutOptions = lutOptions;
-    }
-
-    void TimelineWidget::setOCIOOptions(const timeline::OCIOOptions& value)
-    {
-        TLRENDER_P();
-        if (p.ocioOptions == value)
-            return;
-        p.ocioOptions = value;
     }
 
     bool TimelineWidget::hasFrameView() const
@@ -746,8 +787,6 @@ namespace mrv
                     renderOptions.clearColor =
                         p.style->getColorRole(ui::ColorRole::Window);
                     p.render->begin(renderSize, renderOptions);
-                    p.render->setOCIOOptions(timeline::OCIOOptions());
-                    p.render->setLUTOptions(timeline::LUTOptions());
                     ui::DrawEvent drawEvent(
                         p.style, p.iconLibrary, p.render, p.fontSystem);
                     p.render->setClipRectEnabled(true);
@@ -1456,8 +1495,7 @@ namespace mrv
         case FL_LEAVE:
             if (p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
             {
-                if (p.thumbnailCreator && p.thumbnailRequestId)
-                    p.thumbnailCreator->cancelRequests(p.thumbnailRequestId);
+                _cancelRequests();
                 hideThumbnail();
             }
             return leaveEvent();
@@ -1485,8 +1523,7 @@ namespace mrv
         {
             if (p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
             {
-                if (p.thumbnailCreator && p.thumbnailRequestId)
-                    p.thumbnailCreator->cancelRequests(p.thumbnailRequestId);
+                _cancelRequests();
                 hideThumbnail();
             }
             refresh();
@@ -1613,11 +1650,56 @@ namespace mrv
         edit_move_clip_annotations(moves, p.ui);
     }
 
+    void TimelineWidget::_thumbnailEvent()
+    {
+        TLRENDER_P();
+        
+        // Check if the I/O information is finished.
+        if (p.infoRequest.future.valid() &&
+            p.infoRequest.future.wait_for(std::chrono::seconds(0)) == std::future_status::ready)
+        {
+            p.ioInfo = std::make_shared<io::Info>(p.infoRequest.future.get());
+        }
+
+        // Check if any thumbnails are finished.
+        auto i = p.thumbnailRequests.begin();
+        while (i != p.thumbnailRequests.end())
+        {
+            if (i->second.future.valid() &&
+                i->second.future.wait_for(std::chrono::seconds(0)) == std::future_status::ready)
+            {
+                const auto image = i->second.future.get();
+                p.thumbnails[io::getCacheKey(p.path, i->first, p.ioOptions)] = image;
+                i = p.thumbnailRequests.erase(i);
+
+                const auto W = image->getWidth();
+                const auto H = image->getHeight();
+                const int bytes = image->getDataByteCount();
+                const int depth = bytes / W / H;
+                const uint8_t* data = image->getData();
+                uint8_t* flipped = new uint8_t[bytes];
+                flipY(data, W, H, depth, flipped);
+                const auto rgbImage = new Fl_RGB_Image(flipped, W, H, depth);
+                            
+                Fl_Image* boxImage = p.box->image();
+                delete boxImage;
+                p.box->image(rgbImage);
+                p.box->redraw();
+            }
+            else
+            {
+                ++i;
+            }
+        }
+    }
+
     void TimelineWidget::_tickEvent()
     {
         TLRENDER_P();
         ui::TickEvent tickEvent(p.style, p.iconLibrary, p.fontSystem);
-        _tickEvent(_p->timelineWindow, true, true, tickEvent);
+        _tickEvent(p.timelineWindow, true, true, tickEvent);
+
+        _thumbnailEvent();
     }
 
     void TimelineWidget::_tickEvent(
@@ -1755,41 +1837,23 @@ namespace mrv
             widget->drawOverlayEvent(drawRect, event);
         }
     }
-
-    void TimelineWidget::single_thumbnail(
-        const int64_t id,
-        const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&
-            thumbnails)
+    
+    void TimelineWidget::_cancelRequests()
     {
         TLRENDER_P();
-
-        if (id == p.thumbnailRequestId)
+        
+        std::vector<uint64_t> ids;
+        if (p.infoRequest.future.valid())
         {
-            for (const auto& i : thumbnails)
-            {
-                Fl_Image* image = p.box->image();
-                delete image;
-                p.box->image(i.second);
-            }
-            p.box->redraw();
+            ids.push_back(p.infoRequest.id);
+            p.infoRequest = ui::InfoRequest();
         }
-        else
+        for (const auto& i : p.thumbnailRequests)
         {
-            for (const auto& i : thumbnails)
-            {
-                delete i.second;
-            }
+            ids.push_back(i.second.id);
         }
-    }
-
-    void TimelineWidget::single_thumbnail_cb(
-        const int64_t id,
-        const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&
-            thumbnails,
-        void* data)
-    {
-        TimelineWidget* self = static_cast< TimelineWidget* >(data);
-        self->single_thumbnail(id, thumbnails);
+        p.thumbnailRequests.clear();
+        p.thumbnailGenerator->cancelRequests(ids);
     }
 
 } // namespace mrv

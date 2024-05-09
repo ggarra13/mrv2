@@ -10,7 +10,7 @@
 
 #include <tlTimeline/CompareOptions.h>
 
-#include "mrvPanelWidget.h"
+#include "mrvPanels/mrvThumbnailPanel.h"
 
 class ViewerUI;
 class Fl_RGB_Image;
@@ -25,7 +25,7 @@ namespace mrv
     {
         using namespace tl;
 
-        class ComparePanel : public PanelWidget
+        class ComparePanel : public ThumbnailPanel
         {
         public:
             HorSlider* wipeX;

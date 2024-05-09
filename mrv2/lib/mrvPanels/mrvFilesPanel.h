@@ -12,7 +12,7 @@
 
 #include "mrvOptions/mrvFilesPanelOptions.h"
 
-#include "mrvPanelWidget.h"
+#include "mrvPanels/mrvThumbnailPanel.h"
 
 class ViewerUI;
 
@@ -25,7 +25,7 @@ namespace mrv
     namespace panel
     {
         using namespace tl;
-        class FilesPanel : public PanelWidget
+        class FilesPanel : public ThumbnailPanel
         {
         public:
             FilesPanel(ViewerUI* ui);

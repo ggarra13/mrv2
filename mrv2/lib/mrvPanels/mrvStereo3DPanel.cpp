@@ -18,8 +18,6 @@
 #include "mrvPanels/mrvPanelsCallbacks.h"
 #include "mrvPanels/mrvStereo3DPanel.h"
 
-#include "mrvGL/mrvThumbnailCreator.h"
-
 #include "mrvApp/mrvSettingsObject.h"
 
 #include "mrViewer.h"
@@ -40,7 +38,6 @@ namespace mrv
             Fl_Check_Button* swapEyes = nullptr;
 
             std::weak_ptr<system::Context> context;
-            mrv::ThumbnailCreator* thumbnailCreator;
 
             std::map< size_t, ClipButton* > map;
             WidgetIds ids;
@@ -102,7 +99,7 @@ namespace mrv
         }
 
         Stereo3DPanel::Stereo3DPanel(ViewerUI* ui) :
-            PanelWidget(ui),
+            ThumbnailPanel(ui),
             _r(new Private)
         {
             _r->context = ui->app->getContext();
@@ -166,8 +163,6 @@ namespace mrv
 
             auto settings = App::app->settings();
             const std::string& prefix = tab_prefix();
-
-            _r->thumbnailCreator = p.ui->uiTimeline->thumbnailCreator();
 
             const auto& model = App::app->filesModel();
 
@@ -266,45 +261,7 @@ namespace mrv
                     continue;
                 }
 
-                if (auto context = _r->context.lock())
-                {
-                    ThumbnailData* data = new ThumbnailData;
-                    data->widget = b;
-
-                    WidgetIds::const_iterator it = _r->ids.find(b);
-                    if (it != _r->ids.end())
-                    {
-                        _r->thumbnailCreator->cancelRequests(it->second);
-                        _r->ids.erase(it);
-                    }
-
-                    try
-                    {
-                        auto timeline =
-                            timeline::Timeline::create(path, context);
-                        auto timeRange = timeline->getTimeRange();
-
-                        if (time::isValid(timeRange))
-                        {
-                            auto startTime = timeRange.start_time();
-                            auto endTime = timeRange.end_time_inclusive();
-
-                            if (time < startTime)
-                                time = startTime;
-                            else if (time > endTime)
-                                time = endTime;
-                        }
-
-                        _r->thumbnailCreator->initThread();
-                        int64_t id = _r->thumbnailCreator->request(
-                            fullfile, time, size, stereo3DThumbnail_cb,
-                            (void*)data, layerId);
-                        _r->ids[b] = id;
-                    }
-                    catch (const std::exception&)
-                    {
-                    }
-                }
+                
             }
 
             Stereo3DOptions o = model->observeStereo3DOptions()->get();
@@ -549,46 +506,6 @@ namespace mrv
                     continue;
                 }
 
-                if (auto context = _r->context.lock())
-                {
-                    ThumbnailData* data = new ThumbnailData;
-                    data->widget = b;
-
-                    WidgetIds::const_iterator it = _r->ids.find(b);
-                    if (it != _r->ids.end())
-                    {
-                        _r->thumbnailCreator->cancelRequests(it->second);
-                        _r->ids.erase(it);
-                    }
-
-                    try
-                    {
-                        auto timeline =
-                            timeline::Timeline::create(path, context);
-                        auto timeRange = timeline->getTimeRange();
-
-                        if (time::isValid(timeRange))
-                        {
-                            auto startTime = timeRange.start_time();
-                            auto endTime = timeRange.end_time_inclusive();
-
-                            if (time < startTime)
-                                time = startTime;
-                            else if (time > endTime)
-                                time = endTime;
-                        }
-
-                        _r->thumbnailCreator->initThread();
-
-                        int64_t id = _r->thumbnailCreator->request(
-                            fullfile, time, size, stereo3DThumbnail_cb,
-                            (void*)data, layerId);
-                        _r->ids[b] = id;
-                    }
-                    catch (const std::exception& e)
-                    {
-                    }
-                }
             }
         }
 
@@ -603,12 +520,7 @@ namespace mrv
 
         void Stereo3DPanel::cancel_thumbnails()
         {
-            for (const auto& it : _r->ids)
-            {
-                _r->thumbnailCreator->cancelRequests(it.second);
-            }
-
-            _r->ids.clear();
+            _cancelRequests();
         }
 
         void Stereo3DPanel::refresh()

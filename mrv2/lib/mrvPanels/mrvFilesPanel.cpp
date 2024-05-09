@@ -18,8 +18,6 @@
 #include "mrvPanels/mrvPanelsCallbacks.h"
 #include "mrvPanels/mrvFilesPanel.h"
 
-#include "mrvGL/mrvThumbnailCreator.h"
-
 #include "mrvNetwork/mrvTCP.h"
 
 #include "mrvApp/mrvFilesModel.h"
@@ -44,7 +42,6 @@ namespace mrv
         struct FilesPanel::Private
         {
             std::weak_ptr<system::Context> context;
-            mrv::ThumbnailCreator* thumbnailCreator;
             App* app;
             std::map< size_t, FileButton* > map;
             WidgetIds ids;
@@ -115,7 +112,7 @@ namespace mrv
 
         FilesPanel::FilesPanel(ViewerUI* ui) :
             _r(new Private),
-            PanelWidget(ui)
+            ThumbnailPanel(ui)
         {
             _r->context = ui->app->getContext();
 
@@ -166,12 +163,6 @@ namespace mrv
 
         void FilesPanel::cancel_thumbnails()
         {
-            for (const auto& it : _r->ids)
-            {
-                _r->thumbnailCreator->cancelRequests(it.second);
-            }
-
-            _r->ids.clear();
         }
 
         void FilesPanel::clear_controls()
@@ -200,12 +191,10 @@ namespace mrv
 
         void FilesPanel::add_controls()
         {
+            MRV2_R();
             TLRENDER_P();
 
             Fl_SVG_Image* svg;
-            _r->thumbnailCreator = p.ui->uiTimeline->thumbnailCreator();
-            if (!_r->thumbnailCreator)
-                return;
 
             g->clear();
 
@@ -308,47 +297,47 @@ namespace mrv
                     continue;
                 }
 
-                if (auto context = _r->context.lock())
-                {
+                // if (auto context = _r->context.lock())
+                // {
 
-                    ThumbnailData* data = new ThumbnailData;
-                    data->widget = b;
+                //     ThumbnailData* data = new ThumbnailData;
+                //     data->widget = b;
 
-                    WidgetIds::const_iterator it = _r->ids.find(b);
-                    if (it != _r->ids.end())
-                    {
-                        _r->thumbnailCreator->cancelRequests(it->second);
-                        _r->ids.erase(it);
-                    }
+                //     WidgetIds::const_iterator it = _r->ids.find(b);
+                //     if (it != _r->ids.end())
+                //     {
+                //         _r->thumbnailCreator->cancelRequests(it->second);
+                //         _r->ids.erase(it);
+                //     }
 
-                    try
-                    {
-                        auto timeline =
-                            timeline::Timeline::create(path, context);
-                        auto timeRange = timeline->getTimeRange();
+                //     try
+                //     {
+                //         auto timeline =
+                //             timeline::Timeline::create(path, context);
+                //         auto timeRange = timeline->getTimeRange();
 
-                        if (time::isValid(timeRange))
-                        {
-                            auto startTime = timeRange.start_time();
-                            auto endTime = timeRange.end_time_inclusive();
+                //         if (time::isValid(timeRange))
+                //         {
+                //             auto startTime = timeRange.start_time();
+                //             auto endTime = timeRange.end_time_inclusive();
 
-                            if (time < startTime)
-                                time = startTime;
-                            else if (time > endTime)
-                                time = endTime;
-                        }
+                //             if (time < startTime)
+                //                 time = startTime;
+                //             else if (time > endTime)
+                //                 time = endTime;
+                //         }
 
-                        _r->thumbnailCreator->initThread();
+                //         _r->thumbnailCreator->initThread();
 
-                        int64_t id = _r->thumbnailCreator->request(
-                            fullfile, time, size, filesThumbnail_cb,
-                            (void*)data, layerId);
-                        _r->ids[b] = id;
-                    }
-                    catch (const std::exception& e)
-                    {
-                    }
-                }
+                //         int64_t id = _r->thumbnailCreator->request(
+                //             fullfile, time, size, filesThumbnail_cb,
+                //             (void*)data, layerId);
+                //         _r->ids[b] = id;
+                //     }
+                //     catch (const std::exception& e)
+                //     {
+                //     }
+                // }
             }
 
             int Y = g->y() + 20 + numFiles * 64;
@@ -494,46 +483,47 @@ namespace mrv
                     continue;
                 }
 
-                if (auto context = _r->context.lock())
-                {
-                    ThumbnailData* data = new ThumbnailData;
-                    data->widget = b;
+            //     if (auto context = _r->context.lock())
+            //     {
+            //         ThumbnailData* data = new ThumbnailData;
+            //         data->widget = b;
 
-                    WidgetIds::const_iterator it = _r->ids.find(b);
-                    if (it != _r->ids.end())
-                    {
-                        _r->thumbnailCreator->cancelRequests(it->second);
-                        _r->ids.erase(it);
-                    }
+            //         WidgetIds::const_iterator it = _r->ids.find(b);
+            //         if (it != _r->ids.end())
+            //         {
+            //             _r->thumbnailCreator->cancelRequests(it->second);
+            //             _r->ids.erase(it);
+            //         }
 
-                    try
-                    {
-                        auto timeline =
-                            timeline::Timeline::create(path, context);
-                        auto timeRange = timeline->getTimeRange();
+            //         try
+            //         {
+            //             auto timeline =
+            //                 timeline::Timeline::create(path, context);
+            //             auto timeRange = timeline->getTimeRange();
 
-                        if (time::isValid(timeRange))
-                        {
-                            auto startTime = timeRange.start_time();
-                            auto endTime = timeRange.end_time_inclusive();
+            //             if (time::isValid(timeRange))
+            //             {
+            //                 auto startTime = timeRange.start_time();
+            //                 auto endTime = timeRange.end_time_inclusive();
 
-                            if (time < startTime)
-                                time = startTime;
-                            else if (time > endTime)
-                                time = endTime;
-                        }
+            //                 if (time < startTime)
+            //                     time = startTime;
+            //                 else if (time > endTime)
+            //                     time = endTime;
+            //             }
 
-                        _r->thumbnailCreator->initThread();
+            //             _r->thumbnailCreator->initThread();
 
-                        int64_t id = _r->thumbnailCreator->request(
-                            fullfile, time, size, filesThumbnail_cb,
-                            (void*)data, layerId);
-                        _r->ids[b] = id;
-                    }
-                    catch (const std::exception& e)
-                    {
-                    }
-                }
+            //             int64_t id = _r->thumbnailCreator->request(
+            //                 fullfile, time, size, filesThumbnail_cb,
+            //                 (void*)data, layerId);
+            //             _r->ids[b] = id;
+            //         }
+            //         catch (const std::exception& e)
+            //         {
+            //         }
+            //     }
+
             }
         }
 

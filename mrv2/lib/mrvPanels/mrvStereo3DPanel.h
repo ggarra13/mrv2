@@ -6,7 +6,7 @@
 
 #include "mrvOptions/mrvStereo3DOptions.h"
 
-#include "mrvPanels/mrvPanelWidget.h"
+#include "mrvPanels/mrvThumbnailPanel.h"
 
 namespace mrv
 {
@@ -15,7 +15,7 @@ namespace mrv
     namespace panel
     {
 
-        class Stereo3DPanel : public PanelWidget
+        class Stereo3DPanel : public ThumbnailPanel
         {
         public:
             Stereo3DPanel(ViewerUI* ui);

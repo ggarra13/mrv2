@@ -28,8 +28,6 @@
 
 #include "mrvUI/mrvAsk.h" // for fl_input
 
-#include "mrvGL/mrvThumbnailCreator.h"
-
 #include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/mrvPlaylistsModel.h"
 #include "mrvApp/mrvApp.h"
@@ -48,7 +46,6 @@ namespace mrv
         struct PlaylistPanel::Private
         {
             std::weak_ptr<system::Context> context;
-            mrv::ThumbnailCreator* thumbnailCreator;
 
             std::map< size_t, PlaylistButton* > map;
             std::vector< PlaylistButton* > playlistButtons;
@@ -116,7 +113,7 @@ namespace mrv
 
         PlaylistPanel::PlaylistPanel(ViewerUI* ui) :
             _r(new Private),
-            PanelWidget(ui)
+            ThumbnailPanel(ui)
         {
             _r->context = ui->app->getContext();
 
@@ -167,12 +164,7 @@ namespace mrv
 
         void PlaylistPanel::cancel_thumbnails()
         {
-            for (const auto& it : _r->ids)
-            {
-                _r->thumbnailCreator->cancelRequests(it.second);
-            }
-
-            _r->ids.clear();
+            _cancelRequests();
         }
 
         void PlaylistPanel::add_controls()
@@ -182,8 +174,6 @@ namespace mrv
             g->clear();
 
             g->begin();
-
-            _r->thumbnailCreator = p.ui->uiTimeline->thumbnailCreator();
 
             int Y = g->y() + 22;
 
@@ -251,29 +241,6 @@ namespace mrv
                     delete b->image();
                     b->image(nullptr);
                     return;
-                }
-
-                if (auto context = _r->context.lock())
-                {
-                    b->createTimeline(context);
-
-                    ThumbnailData* data = new ThumbnailData;
-                    data->widget = b;
-
-                    const auto& timeRange = media->inOutRange;
-                    auto time = timeRange.start_time();
-
-                    _r->thumbnailCreator->initThread();
-                    try
-                    {
-                        int64_t id = _r->thumbnailCreator->request(
-                            fullfile, time, size, playlistThumbnail_cb,
-                            (void*)data);
-                        _r->ids[b] = id;
-                    }
-                    catch (const std::exception&)
-                    {
-                    }
                 }
             }
 
@@ -397,49 +364,50 @@ namespace mrv
                         layerId = p.ui->uiColorChannel->value();
                     }
                 }
-                if (auto context = _r->context.lock())
-                {
-                    b->createTimeline(context);
+                
+                // if (auto context = _r->context.lock())
+                // {
+                //     b->createTimeline(context);
 
-                    ThumbnailData* data = new ThumbnailData;
-                    data->widget = b;
+                //     ThumbnailData* data = new ThumbnailData;
+                //     data->widget = b;
 
-                    WidgetIds::const_iterator it = _r->ids.find(b);
-                    if (it != _r->ids.end())
-                    {
-                        _r->thumbnailCreator->cancelRequests(it->second);
-                        _r->ids.erase(it);
-                    }
+                //     WidgetIds::const_iterator it = _r->ids.find(b);
+                //     if (it != _r->ids.end())
+                //     {
+                //         _r->thumbnailCreator->cancelRequests(it->second);
+                //         _r->ids.erase(it);
+                //     }
 
-                    try
-                    {
-                        file::Path path(fullfile);
-                        auto timeline =
-                            timeline::Timeline::create(path, context);
-                        auto timeRange = timeline->getTimeRange();
+                //     try
+                //     {
+                //         file::Path path(fullfile);
+                //         auto timeline =
+                //             timeline::Timeline::create(path, context);
+                //         auto timeRange = timeline->getTimeRange();
 
-                        if (time::isValid(timeRange))
-                        {
-                            auto startTime = timeRange.start_time();
-                            auto endTime = timeRange.end_time_inclusive();
+                //         if (time::isValid(timeRange))
+                //         {
+                //             auto startTime = timeRange.start_time();
+                //             auto endTime = timeRange.end_time_inclusive();
 
-                            if (time < startTime)
-                                time = startTime;
-                            else if (time > endTime)
-                                time = endTime;
-                        }
+                //             if (time < startTime)
+                //                 time = startTime;
+                //             else if (time > endTime)
+                //                 time = endTime;
+                //         }
 
-                        _r->thumbnailCreator->initThread();
+                //         _r->thumbnailCreator->initThread();
 
-                        int64_t id = _r->thumbnailCreator->request(
-                            fullfile, time, size, playlistThumbnail_cb,
-                            (void*)data, layerId);
-                        _r->ids[b] = id;
-                    }
-                    catch (const std::exception& e)
-                    {
-                    }
-                }
+                //         int64_t id = _r->thumbnailCreator->request(
+                //             fullfile, time, size, playlistThumbnail_cb,
+                //             (void*)data, layerId);
+                //         _r->ids[b] = id;
+                //     }
+                //     catch (const std::exception& e)
+                //     {
+                //     }
+                // }
             }
         }
 

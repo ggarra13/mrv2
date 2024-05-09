@@ -397,10 +397,6 @@ namespace mrv
         view->updateDisplayOptions();
         view->redraw();
 
-        p.ui->uiTimeline->setOCIOOptions(p.ocioOptions);
-        p.ui->uiTimeline->setLUTOptions(p.lutOptions);
-        p.ui->uiTimeline->redraw();
-
         if (panel::comparePanel)
         {
             panel::comparePanel->setCompareOptions(p.compareOptions);

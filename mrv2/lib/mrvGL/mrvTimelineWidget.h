@@ -21,6 +21,11 @@
 
 namespace tl
 {
+    namespace ui
+    {
+        class ThumbnailGenerator;
+    }
+
     namespace timeline
     {
         class Player;
@@ -32,8 +37,6 @@ class ViewerUI;
 namespace mrv
 {
     using namespace tl;
-
-    class ThumbnailCreator;
 
     //! Timeline widget.
     class TimelineWidget : public Fl_SuperClass
@@ -49,12 +52,6 @@ namespace mrv
             const std::shared_ptr<timeline::TimeUnitsModel>&, ViewerUI*);
 
         void setStyle(const std::shared_ptr<ui::Style>& = nullptr);
-
-        //! Set the LUT configuration.
-        void setLUTOptions(const timeline::LUTOptions&);
-
-        //! Set the color configuration.
-        void setOCIOOptions(const timeline::OCIOOptions&);
 
         //! Get timelineUI's timelineWidget item options
         timelineui::ItemOptions getItemOptions() const;
@@ -97,17 +94,7 @@ namespace mrv
         void draw() FL_OVERRIDE;
         int handle(int) FL_OVERRIDE;
         //! @}
-
-        void single_thumbnail(
-            const int64_t,
-            const std::vector<
-                std::pair<otime::RationalTime, Fl_RGB_Image*> >&);
-
-        static void single_thumbnail_cb(
-            const int64_t,
-            const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&,
-            void* data);
-
+        
         //! Hide the thumbnail at least until user enters the timeline slider
         //! again.
         void hideThumbnail();
@@ -118,8 +105,8 @@ namespace mrv
         //! Reposition timeline based on last event or hide it.
         void repositionThumbnail();
 
-        //! Get the thumbnail creator
-        ThumbnailCreator* thumbnailCreator();
+        //! Get the thumbnail generator.
+        std::shared_ptr<ui::ThumbnailGenerator> thumbnailGenerator() const;
 
         //! Set the time units.
         void setUnits(TimeUnits);
@@ -162,6 +149,7 @@ namespace mrv
     private:
         void _initializeGL();
 
+        void _cancelRequests();
         void _createThumbnailWindow();
         void _getThumbnailPosition(int& X, int& Y);
 
@@ -172,6 +160,8 @@ namespace mrv
             const std::shared_ptr<ui::IWidget>&, bool visible, bool enabled,
             const ui::TickEvent&);
 
+        void _thumbnailEvent();
+        
         bool _getSizeUpdate(const std::shared_ptr<ui::IWidget>&) const;
         void _sizeHintEvent();
         void _sizeHintEvent(

@@ -8,7 +8,7 @@
 
 #include <tlCore/Time.h>
 
-#include "mrvPanelWidget.h"
+#include "mrvPanels/mrvThumbnailPanel.h"
 
 class Fl_RGB_Image;
 
@@ -20,7 +20,7 @@ namespace mrv
     {
         using namespace tl;
 
-        class PlaylistPanel : public PanelWidget
+        class PlaylistPanel : public ThumbnailPanel
         {
         public:
             PlaylistPanel(ViewerUI* ui);

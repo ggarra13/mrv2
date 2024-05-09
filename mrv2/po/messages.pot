@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.1.6\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2024-05-09 13:44-0300\n"
+"POT-Creation-Date: 2024-05-09 19:29-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1745,7 +1745,7 @@ msgstr ""
 msgid "Network"
 msgstr ""
 
-#: mrvPanels/mrvPanelsAux.h:21 mrvPanels/mrvStereo3DPanel.cpp:318
+#: mrvPanels/mrvPanelsAux.h:21 mrvPanels/mrvStereo3DPanel.cpp:275
 #: mrvFl/mrvCallbacks.cpp:104 mrvUI/mrvMenus.cpp:514
 msgid "Stereo 3D"
 msgstr ""
@@ -1956,18 +1956,18 @@ msgstr ""
 
 #: mrvPanels/mrvNDIPanel.cpp:141 mrvPanels/mrvNDIPanel.cpp:291
 #: mrvPanels/mrvNDIPanel.cpp:352 mrvPanels/mrvUSDPanel.cpp:125
-#: mrvPanels/mrvStereo3DPanel.cpp:351 mrvPanels/mrvStereo3DPanel.cpp:353
+#: mrvPanels/mrvStereo3DPanel.cpp:308 mrvPanels/mrvStereo3DPanel.cpp:310
 #: mrvPanels/mrvEnvironmentMapPanel.cpp:116 mrvFl/mrvPreferences.cpp:1981
 #: mrvFl/mrvPreferences.cpp:2127 mrvFl/mrvPreferences.cpp:2139
-#: mrvGL/mrvTimelineViewport.cpp:655 mrvGL/mrvTimelineViewport.cpp:1747
-#: mrvGL/mrvTimelineViewport.cpp:1819
+#: mrvGL/mrvTimelineViewport.cpp:655 mrvGL/mrvTimelineViewport.cpp:1745
+#: mrvGL/mrvTimelineViewport.cpp:1817
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:38
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:173
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:236
 msgid "None"
 msgstr ""
 
-#: mrvPanels/mrvNDIPanel.cpp:261 mrvPanels/mrvStereo3DPanel.cpp:347
+#: mrvPanels/mrvNDIPanel.cpp:261 mrvPanels/mrvStereo3DPanel.cpp:304
 msgid "Input"
 msgstr ""
 
@@ -2000,57 +2000,57 @@ msgstr ""
 msgid "Disk Cache in GB"
 msgstr ""
 
-#: mrvPanels/mrvStereo3DPanel.cpp:224
+#: mrvPanels/mrvStereo3DPanel.cpp:219
 msgid "Toggle other eye stereo image."
 msgstr ""
 
-#: mrvPanels/mrvStereo3DPanel.cpp:354
+#: mrvPanels/mrvStereo3DPanel.cpp:311
 msgid "Image"
 msgstr ""
 
-#: mrvPanels/mrvStereo3DPanel.cpp:372
+#: mrvPanels/mrvStereo3DPanel.cpp:329
 msgid "Output"
 msgstr ""
 
-#: mrvPanels/mrvStereo3DPanel.cpp:376 mrvPanels/mrvStereo3DPanel.cpp:378
+#: mrvPanels/mrvStereo3DPanel.cpp:333 mrvPanels/mrvStereo3DPanel.cpp:335
 msgid "Anaglyph"
 msgstr ""
 
-#: mrvPanels/mrvStereo3DPanel.cpp:379
+#: mrvPanels/mrvStereo3DPanel.cpp:336
 msgid "Scanlines"
 msgstr ""
 
-#: mrvPanels/mrvStereo3DPanel.cpp:380
+#: mrvPanels/mrvStereo3DPanel.cpp:337
 msgid "Columns"
 msgstr ""
 
-#: mrvPanels/mrvStereo3DPanel.cpp:381
+#: mrvPanels/mrvStereo3DPanel.cpp:338
 msgid "Checkerboard"
 msgstr ""
 
-#: mrvPanels/mrvStereo3DPanel.cpp:384
+#: mrvPanels/mrvStereo3DPanel.cpp:341
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1814
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:2082
 msgid "OpenGL"
 msgstr ""
 
-#: mrvPanels/mrvStereo3DPanel.cpp:404
+#: mrvPanels/mrvStereo3DPanel.cpp:361
 msgid "Adjustments"
 msgstr ""
 
-#: mrvPanels/mrvStereo3DPanel.cpp:431
+#: mrvPanels/mrvStereo3DPanel.cpp:388
 msgid "Eye Separation"
 msgstr ""
 
-#: mrvPanels/mrvStereo3DPanel.cpp:433
+#: mrvPanels/mrvStereo3DPanel.cpp:390
 msgid "Separation of left and right eye."
 msgstr ""
 
-#: mrvPanels/mrvStereo3DPanel.cpp:451
+#: mrvPanels/mrvStereo3DPanel.cpp:408
 msgid "Swap Eyes"
 msgstr ""
 
-#: mrvPanels/mrvStereo3DPanel.cpp:453
+#: mrvPanels/mrvStereo3DPanel.cpp:410
 msgid "Swap left and right eyes."
 msgstr ""
 
@@ -2150,24 +2150,24 @@ msgid ""
 "to continue?"
 msgstr ""
 
-#: mrvPanels/mrvPlaylistPanel.cpp:285
+#: mrvPanels/mrvPlaylistPanel.cpp:252
 msgid "Drop a clip here to create a playlist."
 msgstr ""
 
-#: mrvPanels/mrvPlaylistPanel.cpp:302
+#: mrvPanels/mrvPlaylistPanel.cpp:269
 msgid "Create an empty timeline with a video and audio track."
 msgstr ""
 
-#: mrvPanels/mrvPlaylistPanel.cpp:309
+#: mrvPanels/mrvPlaylistPanel.cpp:276
 msgid "Create a timeline from the selected clip."
 msgstr ""
 
-#: mrvPanels/mrvPlaylistPanel.cpp:322
+#: mrvPanels/mrvPlaylistPanel.cpp:289
 msgid ""
 "Save current EDL to a permanent location, making paths relative if possible."
 msgstr ""
 
-#: mrvPanels/mrvPlaylistPanel.cpp:331
+#: mrvPanels/mrvPlaylistPanel.cpp:298
 msgid "Close current EDL."
 msgstr ""
 
@@ -2222,7 +2222,7 @@ msgid ""
 msgstr ""
 
 #: mrvPanels/mrvEnvironmentMapPanel.cpp:267
-#: mrvPanels/mrvImageInfoPanel.cpp:1905 mrvPanels/mrvComparePanel.cpp:580
+#: mrvPanels/mrvImageInfoPanel.cpp:1905 mrvPanels/mrvComparePanel.cpp:530
 msgid "Rotation"
 msgstr ""
 
@@ -2811,117 +2811,117 @@ msgstr ""
 msgid "Lumma"
 msgstr ""
 
-#: mrvPanels/mrvFilesPanel.cpp:264
+#: mrvPanels/mrvFilesPanel.cpp:253
 msgid "Select main A image."
 msgstr ""
 
-#: mrvPanels/mrvFilesPanel.cpp:369
+#: mrvPanels/mrvFilesPanel.cpp:358
 msgid "Open a filename"
 msgstr ""
 
-#: mrvPanels/mrvFilesPanel.cpp:377
+#: mrvPanels/mrvFilesPanel.cpp:366
 msgid "Open a filename with audio"
 msgstr ""
 
-#: mrvPanels/mrvFilesPanel.cpp:385
+#: mrvPanels/mrvFilesPanel.cpp:374
 msgid "Close current filename"
 msgstr ""
 
-#: mrvPanels/mrvFilesPanel.cpp:393
+#: mrvPanels/mrvFilesPanel.cpp:382
 msgid "Close all filenames"
 msgstr ""
 
-#: mrvPanels/mrvFilesPanel.cpp:401 mrvPanels/mrvComparePanel.cpp:482
+#: mrvPanels/mrvFilesPanel.cpp:390 mrvPanels/mrvComparePanel.cpp:432
 msgid "Previous filename"
 msgstr ""
 
-#: mrvPanels/mrvFilesPanel.cpp:409 mrvPanels/mrvComparePanel.cpp:495
+#: mrvPanels/mrvFilesPanel.cpp:398 mrvPanels/mrvComparePanel.cpp:445
 msgid "Next filename"
 msgstr ""
 
-#: mrvPanels/mrvFilesPanel.cpp:419
+#: mrvPanels/mrvFilesPanel.cpp:408
 msgid "Filter EDLs"
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:242
+#: mrvPanels/mrvComparePanel.cpp:231
 msgid "Select one or more B images."
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:350
+#: mrvPanels/mrvComparePanel.cpp:300
 msgid "Compare A"
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:364
+#: mrvPanels/mrvComparePanel.cpp:314
 msgid "Compare B"
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:381
+#: mrvPanels/mrvComparePanel.cpp:331
 msgid ""
 "Wipe between the A and B files\n"
 "\n"
 "Use the Option key + left mouse button to move the wipe in X or in Y"
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:386
+#: mrvPanels/mrvComparePanel.cpp:336
 msgid ""
 "Wipe between the A and B files\n"
 "\n"
 "Use the Alt key + left mouse button to move the wipe in X or in Y."
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:407
+#: mrvPanels/mrvComparePanel.cpp:357
 msgid "Overlay the A and B files with optional transparencyy"
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:422
+#: mrvPanels/mrvComparePanel.cpp:372
 msgid "Difference the A and B files"
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:437
+#: mrvPanels/mrvComparePanel.cpp:387
 msgid "Compare the A and B files side by side"
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:452
+#: mrvPanels/mrvComparePanel.cpp:402
 msgid "Show the A file above the B file"
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:467
+#: mrvPanels/mrvComparePanel.cpp:417
 msgid "Tile the A and B files"
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:508
+#: mrvPanels/mrvComparePanel.cpp:458
 msgid "Wipe"
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:538
+#: mrvPanels/mrvComparePanel.cpp:488
 msgid "Use the Option key + left mouse button to move the wipe in X."
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:541
+#: mrvPanels/mrvComparePanel.cpp:491
 msgid "Use the Alt key + left mouse button to move the wipe in X."
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:561
+#: mrvPanels/mrvComparePanel.cpp:511
 msgid "Use the Option key + left mouse button to move the wipe in Y."
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:564
+#: mrvPanels/mrvComparePanel.cpp:514
 msgid "Use the Alt key + left mouse button to move the wipe in Y."
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:583
+#: mrvPanels/mrvComparePanel.cpp:533
 msgid "Wipe Rotation.  Use Shift + left mouse button along X to rotate wipe."
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:604 mrvPanels/mrvComparePanel.cpp:630
+#: mrvPanels/mrvComparePanel.cpp:554 mrvPanels/mrvComparePanel.cpp:580
 msgid "Overlay"
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:638
+#: mrvPanels/mrvComparePanel.cpp:588
 msgid "Use the Option key + left mouse button to change transparency."
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:641
+#: mrvPanels/mrvComparePanel.cpp:591
 msgid "Use the Alt key + left mouse button to change transparency."
 msgstr ""
 
@@ -4014,15 +4014,15 @@ msgstr ""
 msgid "Roll"
 msgstr ""
 
-#: mrvGL/mrvTimelineViewport.cpp:1923 mrvUI/mrvMenus.cpp:709
+#: mrvGL/mrvTimelineViewport.cpp:1921 mrvUI/mrvMenus.cpp:709
 msgid "Render/Minify Filter/Linear"
 msgstr ""
 
-#: mrvGL/mrvTimelineViewport.cpp:1928 mrvUI/mrvMenus.cpp:732
+#: mrvGL/mrvTimelineViewport.cpp:1926 mrvUI/mrvMenus.cpp:732
 msgid "Render/Magnify Filter/Linear"
 msgstr ""
 
-#: mrvGL/mrvTimelineViewport.cpp:1965
+#: mrvGL/mrvTimelineViewport.cpp:1963
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2252
 msgid "(no image)"
 msgstr ""

@@ -17,7 +17,6 @@ set(HEADERS
     mrvGLViewport.h
     mrvGLViewportPrivate.h
     mrvGLWindow.h
-    mrvThumbnailCreator.h
     mrvThumbnailWindow.h
     mrvTimelineViewport.h
     mrvTimelineViewportPrivate.h
@@ -39,7 +38,6 @@ set(SOURCES
     mrvGLViewportDraw.cpp
     mrvGLViewportPrims.cpp
     mrvGLWindow.cpp
-    mrvThumbnailCreator.cpp
     mrvTimelineViewportEvents.cpp
     mrvTimelineViewport.cpp
     mrvTimelineWidget.cpp

@@ -23,8 +23,6 @@
 #include "mrvPanels/mrvComparePanel.h"
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
-#include "mrvGL/mrvThumbnailCreator.h"
-
 #include "mrvApp/mrvSettingsObject.h"
 #include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/mrvApp.h"
@@ -42,7 +40,6 @@ namespace mrv
         struct ComparePanel::Private
         {
             std::weak_ptr<system::Context> context;
-            mrv::ThumbnailCreator* thumbnailCreator;
             std::map< size_t, ClipButton* > map;
             WidgetIds ids;
             WidgetIndices indices;
@@ -108,7 +105,7 @@ namespace mrv
 
         ComparePanel::ComparePanel(ViewerUI* ui) :
             _r(new Private),
-            PanelWidget(ui)
+            ThumbnailPanel(ui)
         {
             _r->context = ui->app->getContext();
 
@@ -179,20 +176,12 @@ namespace mrv
 
         void ComparePanel::cancel_thumbnails()
         {
-            for (const auto& it : _r->ids)
-            {
-                _r->thumbnailCreator->cancelRequests(it.second);
-            }
-
-            _r->ids.clear();
+            _cancelRequests();
         }
 
         void ComparePanel::add_controls()
         {
             TLRENDER_P();
-
-            _r->thumbnailCreator = p.ui->uiTimeline->thumbnailCreator();
-
             auto settings = p.ui->app->settings();
             const std::string& prefix = tab_prefix();
 
@@ -293,47 +282,8 @@ namespace mrv
                     continue;
                 }
 
-                if (auto context = _r->context.lock())
-                {
-                    ThumbnailData* data = new ThumbnailData;
-                    data->widget = b;
-
-                    WidgetIds::const_iterator it = _r->ids.find(b);
-                    if (it != _r->ids.end())
-                    {
-                        _r->thumbnailCreator->cancelRequests(it->second);
-                        _r->ids.erase(it);
-                    }
-
-                    try
-                    {
-                        auto timeline =
-                            timeline::Timeline::create(path, context);
-                        auto timeRange = timeline->getTimeRange();
-
-                        if (time::isValid(timeRange))
-                        {
-                            auto startTime = timeRange.start_time();
-                            auto endTime = timeRange.end_time_inclusive();
-
-                            if (time < startTime)
-                                time = startTime;
-                            else if (time > endTime)
-                                time = endTime;
-                        }
-
-                        _r->thumbnailCreator->initThread();
-                        int64_t id = _r->thumbnailCreator->request(
-                            fullfile, time, size, compareThumbnail_cb,
-                            (void*)data, layerId);
-                        _r->ids[b] = id;
-                    }
-                    catch (const std::exception&)
-                    {
-                    }
-
-                    Y += size.h;
-                }
+                Y += size.h;
+                
             }
 
             int X = g->x();
@@ -739,46 +689,6 @@ namespace mrv
                     Fl_SVG_Image* svg = load_svg("NDI.svg");
                     b->image(svg);
                     continue;
-                }
-
-                if (auto context = _r->context.lock())
-                {
-                    ThumbnailData* data = new ThumbnailData;
-                    data->widget = b;
-
-                    WidgetIds::const_iterator it = _r->ids.find(b);
-                    if (it != _r->ids.end())
-                    {
-                        _r->thumbnailCreator->cancelRequests(it->second);
-                        _r->ids.erase(it);
-                    }
-
-                    try
-                    {
-                        auto timeline =
-                            timeline::Timeline::create(path, context);
-                        auto timeRange = timeline->getTimeRange();
-
-                        if (time::isValid(timeRange))
-                        {
-                            auto startTime = timeRange.start_time();
-                            auto endTime = timeRange.end_time_inclusive();
-
-                            if (time < startTime)
-                                time = startTime;
-                            else if (time > endTime)
-                                time = endTime;
-                        }
-
-                        _r->thumbnailCreator->initThread();
-                        int64_t id = _r->thumbnailCreator->request(
-                            fullfile, time, size, compareThumbnail_cb,
-                            (void*)data, layerId);
-                        _r->ids[b] = id;
-                    }
-                    catch (const std::exception&)
-                    {
-                    }
                 }
             }
         }

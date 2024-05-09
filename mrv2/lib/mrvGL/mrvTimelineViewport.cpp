@@ -673,8 +673,6 @@ namespace mrv
             Viewport* view = p.ui->uiSecondary->viewport();
             view->setOCIOOptions(value);
         }
-        p.ui->uiTimeline->setOCIOOptions(value);
-        p.ui->uiTimeline->redraw(); // to refresh thumbnail
 
         Message msg;
         msg["command"] = "setOCIOOptions";

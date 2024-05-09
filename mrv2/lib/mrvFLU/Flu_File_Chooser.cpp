@@ -246,7 +246,7 @@ struct ThumbnailData
 struct Flu_File_Chooser::Private
 {
     std::weak_ptr<system::Context> context;
-    std::unique_ptr<mrv::ThumbnailCreator> thumbnailCreator;
+    // std::unique_ptr<mrv::ThumbnailCreator> thumbnailGenerator;
     std::set< int64_t > thumbnailIds;
     std::mutex thumbnailMutex;
 };
@@ -256,11 +256,11 @@ void Flu_File_Chooser::setContext(
 {
     TLRENDER_P();
 
-    if (!p.thumbnailCreator)
-    {
-        p.thumbnailCreator = std::make_unique<mrv::ThumbnailCreator>(context);
-        p.thumbnailCreator->initThread();
-    }
+    // if (!p.thumbnailGenerator)
+    // {
+    //     p.thumbnailGenerator = std::make_unique<mrv::ThumbnailCreator>(context);
+    //     p.thumbnailGenerator->initThread();
+    // }
 
     p.context = context;
     previewCB(); // refresh icons
@@ -343,18 +343,18 @@ void Flu_File_Chooser::previewCB()
                 // Show the frame at the beginning
                 const otio::RationalTime& time = time::invalidTime;
 
-                image::Size size(128, 64);
+                // image::Size size(128, 64);
 
-                if (auto context = p.context.lock())
-                {
-                    ThumbnailData* data = new ThumbnailData;
-                    data->chooser = this;
-                    data->entry = e;
-                    p.thumbnailCreator->clearCache();
-                    auto id = p.thumbnailCreator->request(
-                        fullname, time, size, createdThumbnail_cb, (void*)data);
-                    p.thumbnailIds.insert(id);
-                }
+                // if (auto context = p.context.lock())
+                // {
+                //     ThumbnailData* data = new ThumbnailData;
+                //     data->chooser = this;
+                //     data->entry = e;
+                //     p.thumbnailGenerator->clearCache();
+                //     auto id = p.thumbnailGenerator->request(
+                //         fullname, time, size, createdThumbnail_cb, (void*)data);
+                //     p.thumbnailIds.insert(id);
+                // }
             }
         }
     }
@@ -1006,19 +1006,19 @@ void Flu_File_Chooser::hideCB()
 
 void Flu_File_Chooser::cancelThumbnailRequests()
 {
-    TLRENDER_P();
-    if (!p.thumbnailCreator)
-        return;
+    // TLRENDER_P();
+    // if (!p.thumbnailGenerator)
+    //     return;
 
-    const std::lock_guard<std::mutex> lock(p.thumbnailMutex);
-    if (auto context = p.context.lock())
-    {
-        for (auto id : p.thumbnailIds)
-        {
-            p.thumbnailCreator->cancelRequests(id);
-        }
-    }
-    p.thumbnailIds.clear();
+    // const std::lock_guard<std::mutex> lock(p.thumbnailMutex);
+    // if (auto context = p.context.lock())
+    // {
+    //     for (auto id : p.thumbnailIds)
+    //     {
+    //         p.thumbnailGenerator->cancelRequests(id);
+    //     }
+    // }
+    // p.thumbnailIds.clear();
 }
 
 void Flu_File_Chooser::cancelCB()
