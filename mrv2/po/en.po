@@ -2943,9 +2943,6 @@ msgstr "Invalid OCIO Look '{0}'."
 msgid "Invalid OCIO Display/View '{0}'."
 msgstr "Invalid OCIO Display/View '{0}'."
 
-msgid "MY_DUMMY"
-msgstr ""
-
 msgid "English"
 msgstr "English"
 
