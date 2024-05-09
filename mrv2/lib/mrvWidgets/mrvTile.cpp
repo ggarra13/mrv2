@@ -126,10 +126,9 @@ namespace mrv
 
       Pass zero as \p oldx or \p oldy to disable drag in that direction.
     */
-    void
-    Tile::move_intersection(int oldx, int oldy, int newx, int newy, int event)
+    void Tile::move_intersection(int oldx, int oldy, int newx, int newy)
     {
-#ifdef __linux__
+#ifndef _WIN32
         Fl_Tile::move_intersection(oldx, oldy, newx, newy);
 #else
         Fl_Widget* const* a = array();
@@ -198,11 +197,7 @@ namespace mrv
 
     static void tile_set_cursor(Fl_Tile* t, Fl_Cursor c)
     {
-        static Fl_Cursor cursor = FL_CURSOR_WE;
-        Fl_Window* w = t->top_window();
-        if (cursor == c || !w)
-            return;
-        cursor = c;
+        Fl_Window* w = t->window();
         w->cursor(c);
         set_color_dragbar(t, c);
     }
@@ -281,7 +276,7 @@ namespace mrv
                 newy = r->y();
             else if (newy > r->y() + r->h())
                 newy = r->y() + r->h();
-            move_intersection(sx, sy, newx, newy, event);
+            move_intersection(sx, sy, newx, newy);
             if (event == FL_DRAG)
             {
                 set_changed();
