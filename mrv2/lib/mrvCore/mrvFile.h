@@ -26,7 +26,7 @@ namespace mrv
          *
          * @return true if a known file to tlRender, false if not.
          */
-        bool isValidType(const tl::file::Path& path);
+        bool isValidType(const Path& path);
 
         /**
          * Given a filename extension, return whether the extension can
@@ -48,6 +48,11 @@ namespace mrv
          */
         bool isMovie(const std::string& ext);
 
+        inline bool isMovie(const Path& path)
+        {
+            return isMovie(path.getExtension());
+        }
+
         /**
          * Given a lowercase filename extension, return whether the extension is
          * from an audio format.
@@ -57,6 +62,11 @@ namespace mrv
          * @return true if a possible audio file, false if not.
          */
         bool isAudio(const std::string& ext);
+
+        inline bool isAudio(const Path& path)
+        {
+            return isAudio(path.getExtension());
+        }
 
         /**
          * Given a lowercase filename extension, return whether the extension is
@@ -68,6 +78,11 @@ namespace mrv
          */
         bool isSubtitle(const std::string& ext);
 
+        inline bool isSubtitle(const Path& path)
+        {
+            return isSubtitle(path.getExtension());
+        }
+
         /**
          * Given a single image filename, return whether the image is
          * a sequence on disk (ie. there are several images named with a
@@ -78,6 +93,11 @@ namespace mrv
          * @return true if a possible sequence, false if not.
          */
         bool isSequence(const std::string& file);
+
+        inline bool isSequence(const Path& path)
+        {
+            return isSequence(path.get());
+        }
 
         /**
          * Given a single filename, return whether the file is
@@ -102,10 +122,10 @@ namespace mrv
         std::string NDI(ViewerUI* ui);
 
         //! Returns true or false whether the filename is a temporary NDI file.
-        bool isTemporaryNDI(const tl::file::Path& path);
+        bool isTemporaryNDI(const Path& path);
 
         //! Returns true or false whether the filename is a temporary EDL.
-        bool isTemporaryEDL(const tl::file::Path& path);
+        bool isTemporaryEDL(const Path& path);
 
         bool isInPath(const std::string& command);
 

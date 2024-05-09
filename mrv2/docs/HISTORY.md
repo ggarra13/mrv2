@@ -19,6 +19,8 @@ v1.1.6
   the main window takes the dock properly into account.
 - Fixed auto hiding of the pixel bar from the preferences switched is changed
   and okay'ed while the movie is still playing.
+- Fixed seeking on the timeline on Linux sometimes getting the event
+  incorrectly on X.
 - **ATTENTION**:
   This version introduces a change in the way Cache Settings are used for
   movie files.

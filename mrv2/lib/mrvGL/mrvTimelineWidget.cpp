@@ -208,6 +208,9 @@ namespace mrv
 
         bool dragging = false;
 
+        std::shared_ptr<observer::ValueObserver<timeline::PlayerCacheInfo> >
+            cacheInfoObserver;
+
         std::vector<otime::RationalTime> annotationTimes;
         otime::TimeRange timeRange = time::invalidTimeRange;
     };
@@ -329,6 +332,53 @@ namespace mrv
         _p->timelineWidget->setScrollToCurrentFrame(value);
     }
 
+    static void continue_playing_cb(TimelineWidget* t)
+    {
+        t->continuePlaying();
+    }
+
+    void TimelineWidget::continuePlaying()
+    {
+        TLRENDER_P();
+
+        //
+        // Thie observer will watch the cache and start a reverse playback
+        // once it is filled.
+        //
+        p.cacheInfoObserver =
+            observer::ValueObserver<timeline::PlayerCacheInfo>::create(
+                p.player->player()->observeCacheInfo(),
+                [this](const timeline::PlayerCacheInfo& value)
+                {
+                    TLRENDER_P();
+                    if (p.player->playback() != timeline::Playback::Stop)
+                        return;
+
+                    const auto& cache =
+                        p.player->player()->observeCacheOptions()->get();
+                    const auto& readAhead = cache.readAhead;
+                    const auto& readBehind = cache.readBehind;
+                    const auto& endTime = p.player->currentTime() + readBehind;
+                    const auto& startTime = endTime - readAhead;
+
+                    bool found = false;
+                    for (const auto& t : value.videoFrames)
+                    {
+                        if (t.start_time() <= startTime &&
+                            t.end_time_exclusive() >= endTime)
+                        {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (found)
+                    {
+                        p.player->setPlayback(timeline::Playback::Reverse);
+                    }
+                },
+                observer::CallbackAction::Suppress);
+    }
+
     int TimelineWidget::_seek()
     {
         TLRENDER_P();
@@ -339,8 +389,25 @@ namespace mrv
             !p.timelineWidget->isEditable())
         {
             p.timeRange = p.player->player()->getTimeRange();
+            const auto& info = p.player->ioInfo();
             const auto& time = _posToTime(X);
             p.player->seek(time);
+            // \@note: Jumping frames when playin in reverse on 4K movies can
+            //         lead to seeking issues in tlRender when the images are
+            //         not in cache.
+            //         We stop the playbay and set an FLTK timeout to watch
+            //         on the cache until it is filled and we continue
+            //         playing from there.
+            //
+            const auto& path = p.player->path();
+            if (file::isMovie(path) &&
+                p.player->playback() == timeline::Playback::Reverse &&
+                !info.video.empty() && info.video[0].size.w > 2048)
+            {
+                p.player->stop();
+                Fl::add_timeout(
+                    0.005, (Fl_Timeout_Handler)continue_playing_cb, this);
+            }
             return 1;
         }
         else
@@ -1359,7 +1426,8 @@ namespace mrv
     int TimelineWidget::handle(int event)
     {
         TLRENDER_P();
-        // std::cerr << "event=" << fl_eventnames[event] << std::endl;
+        if (!p.player)
+            return 0;
         switch (event)
         {
         case FL_FOCUS:
@@ -1476,13 +1544,15 @@ namespace mrv
           fromQt(palette.color(QPalette::ColorRole::WindowText)));*/
     }
 
-    otime::RationalTime TimelineWidget::_posToTime(int value) const noexcept
+    otime::RationalTime TimelineWidget::_posToTime(int value) noexcept
     {
         TLRENDER_P();
 
         otime::RationalTime out = time::invalidTime;
         if (p.player && p.timelineWidget)
         {
+            _setGeometry(); // needed, as Linux could have issues when
+                            // dragging the window to the borders.
             const math::Box2i& geometry =
                 p.timelineWidget->getTimelineItemGeometry();
             const double normalized =

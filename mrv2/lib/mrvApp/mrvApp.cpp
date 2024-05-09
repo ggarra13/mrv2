@@ -177,32 +177,36 @@ namespace mrv
 
         std::shared_ptr<PlaylistsModel> playlistsModel;
         std::shared_ptr<FilesModel> filesModel;
+        std::vector<std::shared_ptr<FilesModelItem> > files;
+        std::vector<std::shared_ptr<FilesModelItem> > activeFiles;
+        std::vector<std::shared_ptr<timeline::Timeline> > timelines;
+
+        // Observers
         std::shared_ptr<
             observer::ListObserver<std::shared_ptr<FilesModelItem> > >
             filesObserver;
         std::shared_ptr<
             observer::ListObserver<std::shared_ptr<FilesModelItem> > >
             activeObserver;
-        std::vector<std::shared_ptr<FilesModelItem> > files;
-        std::vector<std::shared_ptr<FilesModelItem> > activeFiles;
-        std::vector<std::shared_ptr<timeline::Timeline> > timelines;
-
         std::shared_ptr<observer::ListObserver<int> > layersObserver;
         std::shared_ptr<observer::ValueObserver<timeline::CompareTimeMode> >
             compareTimeObserver;
+        std::shared_ptr<observer::ValueObserver<timeline::PlayerCacheInfo> >
+            cacheInfoObserver;
+        std::shared_ptr<observer::ListObserver<log::Item> > logObserver;
+
+        // Options
         timeline::LUTOptions lutOptions;
         timeline::ImageOptions imageOptions;
         timeline::DisplayOptions displayOptions;
         float volume = 1.F;
         bool mute = false;
-        std::shared_ptr<observer::ListObserver<log::Item> > logObserver;
 
         std::shared_ptr<TimelinePlayer> player;
 
         MainControl* mainControl = nullptr;
 
         bool session = false;
-
         bool running = false;
     };
 
@@ -916,16 +920,6 @@ namespace mrv
         timeline::Playback playback;
     };
 
-    static void start_playback(void* data)
-    {
-        PlaybackData* p = (PlaybackData*)data;
-        const auto player = p->player;
-        const auto playback = p->playback;
-        player->start();
-        player->setPlayback(playback);
-        delete p;
-    }
-
     void App::createListener()
     {
 #ifdef MRV2_NETWORK
@@ -946,24 +940,81 @@ namespace mrv
 #endif
     }
 
+    static void start_playback_cb(App* app)
+    {
+        app->startPlayback();
+    }
+
+    void App::startPlayback()
+    {
+        TLRENDER_P();
+        p.player->start();
+
+        const timeline::Playback& playback = p.options.playback;
+
+        if (playback != timeline::Playback::Reverse)
+        {
+            p.player->setPlayback(playback);
+        }
+        else
+        {
+            p.player->setPlayback(timeline::Playback::Stop);
+
+            //
+            // Thie observer will watch the cache and start a reverse playback
+            // once it is filled.
+            //
+            p.cacheInfoObserver =
+                observer::ValueObserver<timeline::PlayerCacheInfo>::create(
+                    p.player->player()->observeCacheInfo(),
+                    [this](const timeline::PlayerCacheInfo& value)
+                    {
+                        TLRENDER_P();
+                        if (p.player->playback() != timeline::Playback::Stop)
+                            return;
+                        const auto& cache =
+                            p.player->player()->observeCacheOptions()->get();
+                        const auto& readAhead = cache.readAhead;
+                        const auto& readBehind = cache.readBehind;
+                        const auto& timeRange = p.player->timeRange();
+                        const auto& endTime = timeRange.end_time_exclusive();
+                        const auto& startTime = endTime - readBehind;
+
+                        bool found = false;
+                        for (const auto& t : value.videoFrames)
+                        {
+                            if (t.start_time() <= startTime &&
+                                t.end_time_exclusive() >= endTime)
+                            {
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (found)
+                        {
+                            p.player->setPlayback(timeline::Playback::Reverse);
+                        }
+                    },
+                    observer::CallbackAction::Suppress);
+        }
+    }
+
     int App::run()
     {
         TLRENDER_P();
         if (!ui)
             return 0;
 
+        // Open the viewer window by calling Fl::flush
         Fl::flush();
         bool autoPlayback = ui->uiPrefs->uiPrefsAutoPlayback->value();
-        if (p.player && !p.session)
+        if (p.player && !p.session && autoPlayback)
         {
             // We use a timeout to start playback of the loaded video to
             // make sure to show all frames
-            PlaybackData* data = new PlaybackData;
-            data->player = p.player;
             if (p.options.playback == timeline::Playback::Count)
                 p.options.playback = timeline::Playback::Forward;
-            data->playback = p.options.playback;
-            Fl::add_timeout(0.005, (Fl_Timeout_Handler)start_playback, data);
+            Fl::add_timeout(0.005, (Fl_Timeout_Handler)start_playback_cb, this);
         }
         p.running = true;
         return Fl::run();
@@ -1229,8 +1280,6 @@ namespace mrv
         const std::shared_ptr<FilesModelItem>& item)
     {
         TLRENDER_P();
-
-        // playerOptions.playback = p.options.playback;
 
         playerOptions.cache.readAhead = time::invalidTime;
         playerOptions.cache.readBehind = time::invalidTime;

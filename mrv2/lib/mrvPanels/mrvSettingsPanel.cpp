@@ -342,13 +342,14 @@ namespace mrv
             spW = new Widget< Spinner >(
                 g->x() + 160, 318, g->w() - 160, 20, _("Video Requests"));
             sp = spW;
-            // sp->range( 1, 64 );
+            sp->range(1, 64);
             digits = settings->getValue<int>("Performance/VideoRequestCount");
             sp->value(digits);
 
             spW->callback(
                 [=](auto o)
                 {
+                    TLRENDER_P();
                     int requests = static_cast<int>(o->value());
                     settings->setValue(
                         "Performance/VideoRequestCount", requests);
@@ -373,7 +374,7 @@ namespace mrv
             spW = new Widget<Spinner>(
                 g->x() + 160, 366, g->w() - 160, 20, _("Sequence I/O threads"));
             sp = spW;
-            // sp->irange( 1, 64 );
+            sp->range(1, 64);
             digits = settings->getValue<int>("SequenceIO/ThreadCount");
             sp->value(digits);
             spW->callback(

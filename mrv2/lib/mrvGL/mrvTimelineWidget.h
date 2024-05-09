@@ -144,6 +144,8 @@ namespace mrv
 
         void moveCallback(const std::vector<tl::timeline::MoveData>&);
 
+        void continuePlaying();
+
     protected:
         int enterEvent();
         int leaveEvent();
@@ -194,7 +196,7 @@ namespace mrv
 
         unsigned _changeKey(unsigned key);
 
-        otime::RationalTime _posToTime(int) const noexcept;
+        otime::RationalTime _posToTime(int) noexcept;
 
         //! Function used to send a seek to the network.
         int _seek();
