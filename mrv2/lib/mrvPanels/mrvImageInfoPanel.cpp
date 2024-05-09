@@ -1838,7 +1838,6 @@ namespace mrv
                     std::string colorPrimaries;
                     std::string colorTRC;
                     std::string colorSpace;
-                    std::string codecSlowSeek;
                     if (!tagData.empty())
                     {
                         auto it = tagData.find("Video Codec");
@@ -1866,11 +1865,6 @@ namespace mrv
                         if (it != tagData.end())
                         {
                             colorSpace = it->second;
-                        }
-                        it = tagData.find("Video Codec Slow Seek");
-                        if (it != tagData.end())
-                        {
-                            codecSlowSeek = it->second;
                         }
                     }
                     else
@@ -1986,12 +1980,6 @@ namespace mrv
                         add_text(
                             _("Color Space"), _("Color Transfer Space"),
                             colorSpace);
-                    }
-                    if (!codecSlowSeek.empty())
-                    {
-                        add_text(
-                            _("Slow Seek"), _("Codec Slow Seek"),
-                            codecSlowSeek);
                     }
 
                     ++group;

@@ -85,6 +85,10 @@ endif()
 #	   
 foreach( lang ${LANGUAGES} )
 
+    if (lang STREQUAL "en")
+	continue()
+    endif()
+    
     set( _moDir "${ROOT_DIR}/share/locale/${lang}/LC_MESSAGES" )
     set( _moFile "${_moDir}/mrv2-v${mrv2_VERSION}.mo" )
     set( _poDir  "${ROOT_DIR}/po" )
