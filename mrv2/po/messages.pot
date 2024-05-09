@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.1.6\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2024-05-09 12:13-0300\n"
+"POT-Creation-Date: 2024-05-09 12:22-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1897,7 +1897,7 @@ msgid "Python file {0} already exists.  Do you want to overwrite it?"
 msgstr ""
 
 #: mrvPanels/mrvPythonPanel.cpp:588 mrvPanels/mrvSettingsPanel.cpp:471
-#: mrvPanels/mrvImageInfoPanel.cpp:1629 mrvFl/mrvLanguages.cpp:127
+#: mrvPanels/mrvImageInfoPanel.cpp:1629 mrvFl/mrvLanguages.cpp:133
 #: mrvFl/mrvHotkey.cpp:99 mrvFl/mrvCallbacks.cpp:2020
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:432
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:447
@@ -1907,7 +1907,7 @@ msgid "No"
 msgstr ""
 
 #: mrvPanels/mrvPythonPanel.cpp:588 mrvPanels/mrvSettingsPanel.cpp:471
-#: mrvPanels/mrvImageInfoPanel.cpp:1629 mrvFl/mrvLanguages.cpp:127
+#: mrvPanels/mrvImageInfoPanel.cpp:1629 mrvFl/mrvLanguages.cpp:133
 #: mrvFl/mrvHotkey.cpp:99 mrvFl/mrvCallbacks.cpp:2020
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:448
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:454
@@ -3495,182 +3495,182 @@ msgstr ""
 msgid "Invalid OCIO Display/View '{0}'."
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:45 mrvFl/mrvLanguages.cpp:359
+#: mrvFl/mrvLanguages.cpp:44 mrvFl/mrvLanguages.cpp:365
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:37
 msgid "English"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:46 mrvFl/mrvLanguages.cpp:368
+#: mrvFl/mrvLanguages.cpp:45 mrvFl/mrvLanguages.cpp:374
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:38
 msgid "Spanish"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:125
+#: mrvFl/mrvLanguages.cpp:131
 msgid ""
 "Need to reboot mrv2 to change language.  Are you sure you want to continue?"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:346
+#: mrvFl/mrvLanguages.cpp:352
 msgid "Set Language to {0}, Numbers to {1}"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:354
+#: mrvFl/mrvLanguages.cpp:360
 msgid "Arabic"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:354
+#: mrvFl/mrvLanguages.cpp:360
 msgid "Armenian"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:355
+#: mrvFl/mrvLanguages.cpp:361
 msgid "Basque"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:355
+#: mrvFl/mrvLanguages.cpp:361
 msgid "Belarusian"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:356
+#: mrvFl/mrvLanguages.cpp:362
 msgid "Bengali"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:356
+#: mrvFl/mrvLanguages.cpp:362
 msgid "Bulgarian"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:357
+#: mrvFl/mrvLanguages.cpp:363
 msgid "Catalan"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:357
+#: mrvFl/mrvLanguages.cpp:363
 msgid "Chinese"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:358
+#: mrvFl/mrvLanguages.cpp:364
 msgid "Czech"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:358
+#: mrvFl/mrvLanguages.cpp:364
 msgid "Danish"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:359
+#: mrvFl/mrvLanguages.cpp:365
 msgid "Dutch"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:360
+#: mrvFl/mrvLanguages.cpp:366
 msgid "Finnish"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:360
+#: mrvFl/mrvLanguages.cpp:366
 msgid "French"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:361
+#: mrvFl/mrvLanguages.cpp:367
 msgid "Galician"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:361
+#: mrvFl/mrvLanguages.cpp:367
 msgid "German"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:362
+#: mrvFl/mrvLanguages.cpp:368
 msgid "Greek"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:362
+#: mrvFl/mrvLanguages.cpp:368
 msgid "Hebrew"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:363
+#: mrvFl/mrvLanguages.cpp:369
 msgid "Hindi"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:363
+#: mrvFl/mrvLanguages.cpp:369
 msgid "Icelandic"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:364
+#: mrvFl/mrvLanguages.cpp:370
 msgid "Indonesian"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:364
+#: mrvFl/mrvLanguages.cpp:370
 msgid "Italian"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:365
+#: mrvFl/mrvLanguages.cpp:371
 msgid "Irish"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:365
+#: mrvFl/mrvLanguages.cpp:371
 msgid "Japanese"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:366
+#: mrvFl/mrvLanguages.cpp:372
 msgid "Korean"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:366
+#: mrvFl/mrvLanguages.cpp:372
 msgid "Norwegan"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:367
+#: mrvFl/mrvLanguages.cpp:373
 msgid "Persian"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:367
+#: mrvFl/mrvLanguages.cpp:373
 msgid "Polish"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:368
+#: mrvFl/mrvLanguages.cpp:374
 msgid "Portuguese"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:369 mrvFl/mrvLanguages.cpp:372
+#: mrvFl/mrvLanguages.cpp:375 mrvFl/mrvLanguages.cpp:378
 msgid "Tibetan"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:369
+#: mrvFl/mrvLanguages.cpp:375
 msgid "Romanian"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:370
+#: mrvFl/mrvLanguages.cpp:376
 msgid "Russian"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:370
+#: mrvFl/mrvLanguages.cpp:376
 msgid "Serbian"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:371
+#: mrvFl/mrvLanguages.cpp:377
 msgid "Slovenian"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:371
+#: mrvFl/mrvLanguages.cpp:377
 msgid "Swedish"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:372
+#: mrvFl/mrvLanguages.cpp:378
 msgid "Thai"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:373
+#: mrvFl/mrvLanguages.cpp:379
 msgid "Turkish"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:373
+#: mrvFl/mrvLanguages.cpp:379
 msgid "Vietnamese"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:374
+#: mrvFl/mrvLanguages.cpp:380
 msgid "Welsh"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:374
+#: mrvFl/mrvLanguages.cpp:380
 msgid "Yiddish"
 msgstr ""
 
-#: mrvFl/mrvLanguages.cpp:375
+#: mrvFl/mrvLanguages.cpp:381
 msgid "Zulu"
 msgstr ""
 

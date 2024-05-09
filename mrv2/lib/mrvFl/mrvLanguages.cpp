@@ -9,7 +9,6 @@ namespace fs = std::filesystem;
 #    define WIN32_LEAN_AND_MEAN
 #    include <windows.h>
 #    include <shellapi.h>
-#    include <wstring>
 #else
 #    include <unistd.h>
 #endif
@@ -49,7 +48,7 @@ LanguageTable kLanguages[18] = {
 #ifdef _WIN32
 namespace
 {
-    int win32_execv(const std::string& session)
+    int win32_execv(const std::string& session = "")
     {
         // Get the full command line string
         LPWSTR lpCmdLine = GetCommandLineW();
@@ -87,15 +86,22 @@ namespace
             }
         }
 
-        // Create new argv
-        std::wstring wstr(session.begin(), session.end());
-        LPCWSTR wideString = wstr.c_str();
-        LPWSTR newArgv[3] = {argv[0], (LPWSTR)Wsession, NULL};
-
-        // Call _wexecv with the command string and arguments in separate
-        // parameters
-        intptr_t result = _wexecv(cmd, newArgv);
-
+        // Create new argv with a session file
+        intptr_t result;
+        if (session.empty())
+        {
+            result = _wexecv(cmd, argv);
+        }
+        else
+        {
+            std::wstring wstr(session.begin(), session.end());
+            LPCWSTR Wsession = wstr.c_str();
+            LPWSTR newArgv[3] = {argv[0], (LPWSTR)Wsession, NULL};
+            
+            // Call _wexecv with the command string and arguments in separate
+            // parameters
+            result = _wexecv(cmd, newArgv);
+        }
         // Free the array of arguments
         for (int i = 0; i < argc; i++)
         {
