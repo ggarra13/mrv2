@@ -70,11 +70,14 @@
   See also the complete example program in test/tile.cxx.
 */
 
+#include <iostream>
 #include <vector>
 
 #include <mrvWidgets/mrvTile.h>
+#include <mrvWidgets/mrvTimelineGroup.h>
+
+#include <FL/Fl_Flex.H>
 #include <FL/Fl_Window.H>
-#include <FL/Fl_Gl_Window.H>
 #include <FL/Fl_Rect.H>
 #include <FL/Fl.H>
 #include <stdlib.h>
@@ -93,7 +96,6 @@ namespace mrv
     struct MoveData
     {
         Tile* t;
-        int event;
         std::vector<WidgetData> widgets;
     };
 
@@ -123,15 +125,16 @@ namespace mrv
 
       Pass zero as \p oldx or \p oldy to disable drag in that direction.
     */
-    void
-    Tile::move_intersection(int oldx, int oldy, int newx, int newy, int event)
+    void Tile::move_intersection(int oldx, int oldy, int newx, int newy)
     {
+#ifndef _WIN32
+        Fl_Tile::move_intersection(oldx, oldy, newx, newy);
+#else
         Fl_Widget* const* a = array();
         Fl_Rect* p = bounds();
         p += 2; // skip group & resizable's saved size
         MoveData* data = new MoveData;
         data->t = this;
-        data->event = event;
         for (int i = children(); i--; p++)
         {
             Fl_Widget* o = *a++;
@@ -157,6 +160,7 @@ namespace mrv
         }
 
         Fl::add_timeout(0.0, (Fl_Timeout_Handler)move_cb, data);
+#endif
     }
 
     void Tile::resize(int X, int Y, int W, int H)
@@ -169,35 +173,31 @@ namespace mrv
         Fl_Tile::init_sizes();
     }
 
-    static void tile_set_cursor(Fl_Tile* t, Fl_Cursor c)
+    inline void set_color_dragbar(Fl_Tile* t, Fl_Cursor c)
     {
-        static Fl_Cursor cursor;
-        Fl_Window* w = t->window();
-        if (cursor == c || !w)
-            return;
-        cursor = c;
-        w->cursor(c);
         const int children = t->children();
         int idx = 0;
         if (children > 2)
             idx = 1;
         Fl_Widget* c1 = t->child(idx);
         Fl_Widget* c2 = t->child(idx + 1);
-        int color = 51;
+        int color = 51; // gray bar
         if (c != FL_CURSOR_DEFAULT)
         {
             color = FL_WHITE;
         }
-        if (!c1->as_gl_window())
+        if (auto t = dynamic_cast<mrv::TimelineGroup*>(c2))
         {
-            c1->color(color);
-            c1->redraw();
+            t->color(color);
+            t->damage(FL_DAMAGE_USER1);
         }
-        if (!c2->as_gl_window())
-        {
-            c2->color(color);
-            c2->redraw();
-        }
+    }
+
+    static void tile_set_cursor(Fl_Tile* t, Fl_Cursor c)
+    {
+        Fl_Window* w = t->window();
+        w->cursor(c);
+        set_color_dragbar(t, c);
     }
 
     int Tile::handle(int event)
@@ -211,8 +211,6 @@ namespace mrv
 
         int mx = Fl::event_x();
         int my = Fl::event_y();
-
-#if defined(_WIN32) || defined(__APPLE__)
 
         switch (event)
         {
@@ -259,8 +257,7 @@ namespace mrv
 
         case FL_LEAVE:
             tile_set_cursor(this, FL_CURSOR_DEFAULT);
-            break;
-
+            return 1;
         case FL_DRAG:
             // This is necessary if CONSOLIDATE_MOTION in Fl_x.cxx is turned
             // off: if (damage()) return 1; // don't fall behind
@@ -272,18 +269,12 @@ namespace mrv
             if (!r)
                 r = this;
             int newx = sx;
-            int newy;
-            if (sdrag & DRAGV)
-            {
-                newy = Fl::event_y() - sdy;
-                if (newy < r->y())
-                    newy = r->y();
-                else if (newy > r->y() + r->h())
-                    newy = r->y() + r->h();
-            }
-            else
-                newy = sy;
-            move_intersection(sx, sy, newx, newy, event);
+            int newy = Fl::event_y() - sdy;
+            if (newy < r->y())
+                newy = r->y();
+            else if (newy > r->y() + r->h())
+                newy = r->y() + r->h();
+            move_intersection(sx, sy, newx, newy);
             if (event == FL_DRAG)
             {
                 set_changed();
@@ -297,70 +288,18 @@ namespace mrv
         }
         }
         return Fl_Group::handle(event);
-#else
-        switch (event)
-        {
-        case FL_ENTER:
-        case FL_MOVE:
-        case FL_PUSH:
-        {
-            int mindx = 100;
-            int mindy = 100;
-            int oldy = 0;
-            Fl_Widget* const* a = array();
-            Fl_Rect* q = bounds();
-            Fl_Rect* p = q + 2;
-            for (int i = children(); i--; p++)
-            {
-                Fl_Widget* o = *a++;
-                if (o == resizable())
-                    continue;
-                if (p->b() < q->b() && o->x() <= mx + GRABAREA &&
-                    o->x() + o->w() >= mx - GRABAREA)
-                {
-                    int t = my - (o->y() + o->h());
-                    if (abs(t) < mindy)
-                    {
-                        sdy = t;
-                        mindy = abs(t);
-                        oldy = p->b();
-                    }
-                }
-            }
-            sdrag = 0;
-            sx = sy = 0;
-            if (mindy <= GRABAREA)
-            {
-                sdrag |= DRAGV;
-                sy = oldy;
-            }
-            tile_set_cursor(this, cursors[sdrag]);
-            if (sdrag)
-                return 1;
-        }
-        break;
-        case FL_LEAVE:
-            tile_set_cursor(this, FL_CURSOR_DEFAULT);
-            break;
-        }
-
-        int ret = Fl_Tile::handle(event);
-        if (ret && event == FL_RELEASE)
-            init_sizes();
-        return ret;
-#endif
     }
 
     /**
-  Creates a new Tile widget using the given position, size,
-  and label string. The default boxtype is FL_NO_BOX.
+       Creates a new Tile widget using the given position, size,
+       and label string. The default boxtype is FL_NO_BOX.
 
-  The destructor <I>also deletes all the children</I>. This allows a
-  whole tree to be deleted at once, without having to keep a pointer to
-  all the children in the user code. A kludge has been done so the
-  Tile and all of its children can be automatic (local)
-  variables, but you must declare the Tile <I>first</I>, so
-  that it is destroyed last.
+       The destructor <I>also deletes all the children</I>. This allows a
+       whole tree to be deleted at once, without having to keep a pointer to
+       all the children in the user code. A kludge has been done so the
+       Tile and all of its children can be automatic (local)
+       variables, but you must declare the Tile <I>first</I>, so
+       that it is destroyed last.
 
   \see class Fl_Group
 */
