@@ -623,19 +623,19 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
               }
             }
             Fl_Group {} {
-              label Thumbnails
-              xywh {288 35 555 360} box EMBOSSED_BOX align 5 hide
+              label Thumbnails open
+              xywh {288 35 555 360} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {open
                 xywh {332 57 480 336} box EMBOSSED_BOX align 5
               } {
                 Fl_Check_Button uiPrefsTimelineThumbnails {
-                  label {Preview Thumbnails above Timeline}
-                  tooltip {Thumbnails above timeline} xywh {405 191 370 20} down_box DOWN_BOX value 1
+                  label {Preview Thumbnails above Timeline} selected
+                  tooltip {Preview Thumbnails in a rectangle above Timeline} xywh {405 191 370 20} down_box DOWN_BOX value 1
                 }
                 Fl_Check_Button uiPrefsPanelThumbnails {
                   label {Preview Thumbnails on Panels}
-                  tooltip {Thumbnails above timeline} xywh {405 228 370 20} down_box DOWN_BOX value 1
+                  tooltip {Preview Thumbnails in Panels} xywh {405 228 370 20} down_box DOWN_BOX value 1
                 }
               }
             }
@@ -860,14 +860,14 @@ v->uiPrefsFPS->value( g );}
               }
             }
             Fl_Group {} {
-              label {Pixel Toolbar} open
-              xywh {288 35 555 360} box EMBOSSED_BOX align 5
+              label {Pixel Toolbar}
+              xywh {288 35 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {open
                 xywh {300 40 530 350}
               } {
                 Fl_Choice uiPrefsPixelRGBA {
-                  label {RGBA Display} selected
+                  label {RGBA Display}
                   xywh {487 95 255 25} down_box BORDER_BOX align 132
                 } {
                   MenuItem {} {
@@ -884,7 +884,7 @@ v->uiPrefsFPS->value( g );}
                   }
                 }
                 Fl_Choice uiPrefsPixelValues {
-                  label {Pixel Values} selected
+                  label {Pixel Values}
                   xywh {487 163 255 25} down_box BORDER_BOX align 132
                 } {
                   MenuItem {} {
@@ -897,7 +897,7 @@ v->uiPrefsFPS->value( g );}
                   }
                 }
                 Fl_Choice uiPrefsPixelHSV {
-                  label {Secondary Display} selected
+                  label {Secondary Display}
                   xywh {487 238 255 23} down_box BORDER_BOX align 132
                 } {
                   MenuItem {} {
@@ -946,7 +946,7 @@ v->uiPrefsFPS->value( g );}
                   }
                 }
                 Fl_Choice uiPrefsPixelLumma {
-                  label Luminance selected
+                  label Luminance
                   xywh {487 298 255 25} down_box BORDER_BOX align 132
                 } {
                   MenuItem {} {
