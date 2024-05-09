@@ -40,9 +40,6 @@ namespace
     const char* kModule = "lang";
 }
 
-
-const char* dummy = _("MY_DUMMY");
-    
 LanguageTable kLanguages[18] = {
     {_("English"), "en.UTF-8"},
     {_("Spanish"), "es.UTF-8"},
@@ -101,7 +98,7 @@ namespace
             std::wstring wstr(session.begin(), session.end());
             LPCWSTR Wsession = wstr.c_str();
             LPWSTR newArgv[3] = {argv[0], (LPWSTR)Wsession, NULL};
-            
+
             // Call _wexecv with the command string and arguments in separate
             // parameters
             result = _wexecv(cmd, newArgv);

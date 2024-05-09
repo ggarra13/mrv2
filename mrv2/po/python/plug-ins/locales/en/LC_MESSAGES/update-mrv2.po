@@ -1,5 +1,4 @@
 # English translations for mrv package.
-# Copyright (C) 2024 ORGANIZATION
 # Automatically generated, 2024.
 #
 msgid ""

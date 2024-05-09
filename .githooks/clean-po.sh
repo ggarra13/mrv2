@@ -4,4 +4,4 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 filename="$PWD/$1"
-sed -e '/^#: /d' -e '/^"POT-Creation-Date/d' -e '/^#, c.*-format/d' "$filename"
+sed -e '/^#: /d' -e '/^# Copyright/d' -e '/^"POT-Creation-Date/d' -e '/^#, c.*-format/d' "$filename"
