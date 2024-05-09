@@ -127,6 +127,8 @@ namespace mrv
     */
     void Tile::move_intersection(int oldx, int oldy, int newx, int newy)
     {
+        // \@bug: Windows leaves a trailing behind when dragging the separator.
+        //        Doing the rescaling on a timeout works around it.
 #ifndef _WIN32
         Fl_Tile::move_intersection(oldx, oldy, newx, newy);
 #else

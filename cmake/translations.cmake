@@ -162,10 +162,11 @@ add_custom_target(
 
 add_custom_target(
     po
+    # No dependency on pot please
     )
 
 
 add_custom_target(
     mo
-    DEPENDS ${mo_files} pot
+    DEPENDS ${mo_files}  # No dependency on pot please
     )
