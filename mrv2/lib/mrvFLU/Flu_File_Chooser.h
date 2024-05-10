@@ -1,5 +1,3 @@
-// $Id: Flu_File_Chooser.h,v 1.63 2004/10/18 15:14:58 jbryan Exp $
-
 /***************************************************************
  *                FLU - FLTK Utility Widgets
  *  Copyright (C) 2002 Ohio Supercomputer Center, Ohio State University
@@ -38,9 +36,7 @@
 #include "mrvFLU/Flu_Wrap_Group.h"
 #include "mrvFLU/flu_export.h"
 
-
 using namespace tl;
-using namespace tl::ui;
 
 typedef std::vector< std::string > FluStringVector;
 
@@ -147,8 +143,8 @@ public:
     //! is a logical OR of Flu_File_Chooser::SINGLE, Flu_File_Chooser::MULTI,
     //! and Flu_File_Chooser::DIRECTORY
     Flu_File_Chooser(
-        const char* path, const char* pattern, ChooserType type, const char* title,
-        const bool compact = true);
+        const char* path, const char* pattern, ChooserType type,
+        const char* title, const bool compact = true);
 
     //! Destructor
     ~Flu_File_Chooser();
@@ -564,10 +560,9 @@ protected:
     void _tickEvent();
     void
     _updateThumbnail(Flu_Entry* e, const std::shared_ptr<image::Image>& image);
-    void _createThumbnail(Fl_Widget* widget,
-                          const file::Path& path,
-                          const otime::RationalTime& time,
-                          const int height = 64);
+    void _createThumbnail(
+        Fl_Widget* widget, const file::Path& path,
+        const otime::RationalTime& time, const int height = 64);
     void _cancelRequests();
 
 public:

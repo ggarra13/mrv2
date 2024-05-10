@@ -84,6 +84,8 @@
 
 #include "mrViewer.h"
 
+using tl::ui::ThumbnailGenerator;
+
 namespace
 {
     const char* kModule = "flu";
@@ -93,7 +95,6 @@ namespace
 {
     const double kTimeout = 0.005;
 }
-
 
 // set default language strings
 std::string Flu_File_Chooser::favoritesTxt = "Favorites";
@@ -106,7 +107,6 @@ std::string Flu_File_Chooser::myComputerTxt = "Home";
 std::string Flu_File_Chooser::myDocumentsTxt = "Temporary";
 std::string Flu_File_Chooser::desktopTxt = "Desktop";
 #endif
-
 
 std::string Flu_File_Chooser::detailTxt[7] = {
     "Name", "Size", "Date", "Type", "Frames", "Owner", "Permissions"};
@@ -151,7 +151,6 @@ std::string Flu_File_Chooser::renameErrTxt = "Unable to rename '%s' to '%s'";
 
 // just a string that no file could probably ever be called
 #define FAVORITES_UNIQUE_STRING "\t!@#$%^&*(Favorites)-=+"
-
 
 #define streq(a, b) (strcmp(a, b) == 0)
 
@@ -259,19 +258,15 @@ void Flu_File_Chooser::setContext(
     p.context = context;
 
     p.window = gl::GLFWWindow::create(
-        "Flu_File_Chooser::window",
-        math::Size2i(1, 1),
-        context,
+        "Flu_File_Chooser::window", math::Size2i(1, 1), context,
         static_cast<int>(gl::GLFWWindowOptions::None));
 
     p.thumbnailGenerator = ThumbnailGenerator::create(context, p.window);
-    p.ioOptions["OpenEXR/IgnoreDisplayWindow"] =
-        string::Format("{0}").arg(
-            mrv::App::ui->uiView->getIgnoreDisplayWindow());
-        
+    p.ioOptions["OpenEXR/IgnoreDisplayWindow"] = string::Format("{0}").arg(
+        mrv::App::ui->uiView->getIgnoreDisplayWindow());
+
     previewCB(); // refresh icons
 }
-
 
 void Flu_File_Chooser::_createThumbnail(
     Fl_Widget* widget, const file::Path& path,
@@ -283,8 +278,7 @@ void Flu_File_Chooser::_createThumbnail(
     {
         try
         {
-            const auto& timeline =
-                timeline::Timeline::create(path, context);
+            const auto& timeline = timeline::Timeline::create(path, context);
             const auto& timeRange = timeline->getTimeRange();
 
             auto time = currentTime;
@@ -292,26 +286,25 @@ void Flu_File_Chooser::_createThumbnail(
             {
                 const auto& startTime = timeRange.start_time();
                 const auto& endTime = timeRange.end_time_inclusive();
-                
+
                 if (time < startTime)
                     time = startTime;
                 else if (time > endTime)
                     time = endTime;
             }
-            
+
             if (!p.ioInfo && !p.infoRequest.future.valid())
             {
                 p.infoRequest = p.thumbnailGenerator->getInfo(path);
             }
-            
+
             p.ioOptions["OpenEXR/IgnoreDisplayWindow"] =
                 string::Format("{0}").arg(
                     mrv::App::ui->uiView->getIgnoreDisplayWindow());
-            p.ioOptions["Layer"] =
-                string::Format("{0}").arg(0); //layerId);
+            p.ioOptions["Layer"] = string::Format("{0}").arg(0); // layerId);
             // @todo: ioOptions["USD/cameraName"] = clipName;
             const auto& key = io::getCacheKey(path, time, p.ioOptions);
-            
+
             const auto k = p.thumbnailRequests.find(key);
             if (k == p.thumbnailRequests.end())
             {
@@ -321,12 +314,11 @@ void Flu_File_Chooser::_createThumbnail(
                 const int64_t id = p.thumbnailRequests[key].id;
                 auto data = std::make_shared<CallbackData>();
                 data->widget = widget;
-                data->path   = path;
+                data->path = path;
                 p.callbackData[id] = data;
             }
-            
         }
-        catch(const std::exception& e)
+        catch (const std::exception& e)
         {
             // ... no printing of errors to not saturate log.
         }
@@ -365,10 +357,11 @@ void Flu_File_Chooser::timerEvent_cb(void* d)
 void Flu_File_Chooser::_thumbnailEvent()
 {
     TLRENDER_P();
-    
+
     // Check if the I/O information is finished.
     if (p.infoRequest.future.valid() &&
-        p.infoRequest.future.wait_for(std::chrono::seconds(0)) == std::future_status::ready)
+        p.infoRequest.future.wait_for(std::chrono::seconds(0)) ==
+            std::future_status::ready)
     {
         p.ioInfo = std::make_shared<io::Info>(p.infoRequest.future.get());
     }
@@ -378,16 +371,17 @@ void Flu_File_Chooser::_thumbnailEvent()
     while (i != p.thumbnailRequests.end())
     {
         if (i->second.future.valid() &&
-            i->second.future.wait_for(std::chrono::seconds(0)) == std::future_status::ready)
+            i->second.future.wait_for(std::chrono::seconds(0)) ==
+                std::future_status::ready)
         {
             const auto& data = p.callbackData[i->second.id];
             const auto& path = data->path;
             const auto image = i->second.future.get();
             const auto time = i->second.time;
-            
+
             if (image && image->isValid())
             {
-                auto entry  = static_cast<Flu_Entry*>(data->widget);
+                auto entry = static_cast<Flu_Entry*>(data->widget);
                 const auto W = image->getWidth();
                 const auto H = image->getHeight();
                 const auto bytes = image->getDataByteCount();
@@ -395,7 +389,7 @@ void Flu_File_Chooser::_thumbnailEvent()
                 bool bound = false;
                 _updateThumbnail(entry, image);
             }
-            
+
             i = p.thumbnailRequests.erase(i);
         }
         else
@@ -413,9 +407,8 @@ void Flu_File_Chooser::_tickEvent()
 void Flu_File_Chooser::timerEvent()
 {
     _tickEvent();
-    
-    Fl::repeat_timeout(
-        kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
+
+    Fl::repeat_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
 }
 
 void Flu_File_Chooser::previewCB()
@@ -428,9 +421,8 @@ void Flu_File_Chooser::previewCB()
     Fl_Group* g = getEntryGroup();
     int c = g->children();
 
-    
     const image::Size size(128, 64);
-    
+
     if (previewBtn->value() && thumbnailsFileReq)
     {
 
@@ -443,9 +435,10 @@ void Flu_File_Chooser::previewCB()
             if (e->type == ENTRY_SEQUENCE || e->type == ENTRY_FILE)
             {
                 const std::string& fullname = e->toTLRender();
-                
+
                 tl::file::Path path(fullname);
-                const auto& extension = tl::string::toLower(path.getExtension());
+                const auto& extension =
+                    tl::string::toLower(path.getExtension());
                 if (extension == ".otioz")
                     continue;
 
@@ -1245,7 +1238,7 @@ void Flu_File_Chooser::pattern(const char* p)
 int Flu_File_Chooser::handle(int event)
 {
 
-    switch(event)
+    switch (event)
     {
     case FL_SHOW:
         Fl::add_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
@@ -1257,7 +1250,6 @@ int Flu_File_Chooser::handle(int event)
         break;
     }
 
-    
     if (Fl_Double_Window::callback() != _hideCB)
     {
         _callback = Fl_Double_Window::callback();
@@ -1287,7 +1279,7 @@ void Flu_File_Chooser::newFolderCB()
     // start with the name "New Folder". while the name exists, keep appending a
     // number (1..2..etc)
     std::string newName = defaultFolderNameTxt.c_str(),
-                   path = currentDir + newName;
+                path = currentDir + newName;
     int count = 1;
     int i;
     for (;;)
@@ -1320,17 +1312,17 @@ void Flu_File_Chooser::newFolderCB()
 #if (defined _WIN32 || defined MINGW) && !defined CYGWIN
     if (_mkdir(path.c_str()) != 0)
 #else
-        if (mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) != 0)
+    if (mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) != 0)
 #endif
-        {
-            mrv::fl_alert(createFolderErrTxt.c_str(), newName.c_str());
-            return;
-        }
+    {
+        mrv::fl_alert(createFolderErrTxt.c_str(), newName.c_str());
+        return;
+    }
 
     // create a new entry with the name of the new folder. add to either the
     // list or the details at the end of directories and scroll to it.
-    Flu_Entry* entry =
-        new Flu_Entry(newName.c_str(), ENTRY_DIR, fileDetailsBtn->value(), this);
+    Flu_Entry* entry = new Flu_Entry(
+        newName.c_str(), ENTRY_DIR, fileDetailsBtn->value(), this);
 
     i = 0;
     if (fileDetailsBtn->value())
@@ -1691,8 +1683,7 @@ int Flu_File_Chooser::FileInput::handle(int event)
                 if (chooser->getEntryGroup()->children())
                 {
                     Flu_Entry* e =
-                        (Flu_Entry*)chooser->getEntryGroup()
-                        ->child(0);
+                        (Flu_Entry*)chooser->getEntryGroup()->child(0);
                     e->selected = true;
                     chooser->lastSelected = e;
                     e->redraw();
@@ -1933,8 +1924,10 @@ void Flu_File_Chooser::okCB()
     // only hide if the filename is not blank or the user is choosing
     // directories, in which case use the current directory
 
-    if (static_cast<int>(selectionType) & static_cast<int>(ChooserType::DIRECTORY) ||
-        ((static_cast<int>(selectionType) & static_cast<int>(ChooserType::STDFILE)) &&
+    if (static_cast<int>(selectionType) &
+            static_cast<int>(ChooserType::DIRECTORY) ||
+        ((static_cast<int>(selectionType) &
+          static_cast<int>(ChooserType::STDFILE)) &&
          fl_filename_isdir((currentDir + filename.value()).c_str())))
     {
 #ifdef _WIN32
@@ -1944,7 +1937,8 @@ void Flu_File_Chooser::okCB()
             return;
         }
 #endif
-        if (!(static_cast<int>(selectionType) & static_cast<int>(ChooserType::MULTI)))
+        if (!(static_cast<int>(selectionType) &
+              static_cast<int>(ChooserType::MULTI)))
         {
             if (strlen(filename.value()) != 0)
                 cd(filename.value());
@@ -2020,65 +2014,65 @@ void Flu_File_Chooser::desktopCB()
 }
 
 #define QSCANL(field)                                                          \
-    while (((Flu_Entry*)array[left])->field <                    \
-           ((Flu_Entry*)array[pivot])->field)                    \
+    while (((Flu_Entry*)array[left])->field <                                  \
+           ((Flu_Entry*)array[pivot])->field)                                  \
     left++
 #define QSCANR(field)                                                          \
-    while (((Flu_Entry*)array[right])->field >                   \
-           ((Flu_Entry*)array[pivot])->field)                    \
+    while (((Flu_Entry*)array[right])->field >                                 \
+           ((Flu_Entry*)array[pivot])->field)                                  \
     right--
 
 #define RQSCANL(field)                                                         \
-    while (((Flu_Entry*)array[left])->field >                    \
-           ((Flu_Entry*)array[pivot])->field)                    \
+    while (((Flu_Entry*)array[left])->field >                                  \
+           ((Flu_Entry*)array[pivot])->field)                                  \
     left++
 #define RQSCANR(field)                                                         \
-    while (((Flu_Entry*)array[right])->field <                   \
-           ((Flu_Entry*)array[pivot])->field)                    \
+    while (((Flu_Entry*)array[right])->field <                                 \
+           ((Flu_Entry*)array[pivot])->field)                                  \
     right--
 
 #define CASE_QSCANL(field)                                                     \
     while (strcasecmp(                                                         \
-               ((Flu_Entry*)array[left])->field.c_str(),         \
-               ((Flu_Entry*)array[pivot])->field.c_str()) < 0)   \
+               ((Flu_Entry*)array[left])->field.c_str(),                       \
+               ((Flu_Entry*)array[pivot])->field.c_str()) < 0)                 \
     left++
 #define CASE_QSCANR(field)                                                     \
     while (strcasecmp(                                                         \
-               ((Flu_Entry*)array[right])->field.c_str(),        \
-               ((Flu_Entry*)array[pivot])->field.c_str()) > 0)   \
+               ((Flu_Entry*)array[right])->field.c_str(),                      \
+               ((Flu_Entry*)array[pivot])->field.c_str()) > 0)                 \
     right--
 
 #define CASE_RQSCANL(field)                                                    \
     while (strcasecmp(                                                         \
-               ((Flu_Entry*)array[left])->field.c_str(),         \
-               ((Flu_Entry*)array[pivot])->field.c_str()) > 0)   \
+               ((Flu_Entry*)array[left])->field.c_str(),                       \
+               ((Flu_Entry*)array[pivot])->field.c_str()) > 0)                 \
     left++
 #define CASE_RQSCANR(field)                                                    \
     while (strcasecmp(                                                         \
-               ((Flu_Entry*)array[right])->field.c_str(),        \
-               ((Flu_Entry*)array[pivot])->field.c_str()) < 0)   \
+               ((Flu_Entry*)array[right])->field.c_str(),                      \
+               ((Flu_Entry*)array[pivot])->field.c_str()) < 0)                 \
     right--
 
 #define CUSTOM_QSCANL(field)                                                   \
     while (customSort(                                                         \
-               ((Flu_Entry*)array[left])->field,                 \
-               ((Flu_Entry*)array[pivot])->field) < 0)           \
+               ((Flu_Entry*)array[left])->field,                               \
+               ((Flu_Entry*)array[pivot])->field) < 0)                         \
     left++
 #define CUSTOM_QSCANR(field)                                                   \
     while (customSort(                                                         \
-               ((Flu_Entry*)array[right])->field,                \
-               ((Flu_Entry*)array[pivot])->field) > 0)           \
+               ((Flu_Entry*)array[right])->field,                              \
+               ((Flu_Entry*)array[pivot])->field) > 0)                         \
     right--
 
 #define CUSTOM_RQSCANL(field)                                                  \
     while (customSort(                                                         \
-               ((Flu_Entry*)array[left])->field,                 \
-               ((Flu_Entry*)array[pivot])->field) > 0)           \
+               ((Flu_Entry*)array[left])->field,                               \
+               ((Flu_Entry*)array[pivot])->field) > 0)                         \
     left++
 #define CUSTOM_RQSCANR(field)                                                  \
     while (customSort(                                                         \
-               ((Flu_Entry*)array[right])->field,                \
-               ((Flu_Entry*)array[pivot])->field) < 0)           \
+               ((Flu_Entry*)array[right])->field,                              \
+               ((Flu_Entry*)array[pivot])->field) < 0)                         \
     right--
 
 void Flu_File_Chooser::_qSort(
@@ -2537,7 +2531,6 @@ void Flu_File_Chooser::listModeCB()
     // redraw();
 }
 
-
 Fl_Group* Flu_File_Chooser::getEntryGroup()
 {
     return (!fileDetailsBtn->value() || currentDir == FAVORITES_UNIQUE_STRING)
@@ -2698,7 +2691,7 @@ void Flu_Entry::draw()
 
     int iW = 0, W = 0, H = 0;
     if (icon // && !delete_icon
-        )
+    )
     {
         iW = icon->w() + 2;
     }
@@ -2788,7 +2781,8 @@ void Flu_File_Chooser::unselect_all()
 
 void Flu_File_Chooser::select_all()
 {
-    if (!(static_cast<int>(selectionType) & static_cast<int>(ChooserType::MULTI)))
+    if (!(static_cast<int>(selectionType) &
+          static_cast<int>(ChooserType::MULTI)))
         return;
     Fl_Group* g = getEntryGroup();
     Flu_Entry* e;
@@ -2899,8 +2893,7 @@ void Flu_File_Chooser::value(const char* v)
     }
 }
 
-std::string
-Flu_Entry::toTLRender()
+std::string Flu_Entry::toTLRender()
 {
     std::string fullname = chooser->currentDir + filename;
 
@@ -3572,14 +3565,13 @@ void Flu_File_Chooser::statFile(Flu_Entry* entry, const char* file)
     entry->permissions += perms[entry->pO];
 }
 
-    
-void  Flu_File_Chooser::_cancelRequests()
+void Flu_File_Chooser::_cancelRequests()
 {
     TLRENDER_P();
 
     if (!p.thumbnailGenerator)
         return;
-    
+
     std::vector<uint64_t> ids;
     if (p.infoRequest.future.valid())
     {
@@ -4654,7 +4646,7 @@ namespace
         int flags = static_cast<int>(flags1) | static_cast<int>(flags2);
         return static_cast<ChooserType>(flags);
     }
-}
+} // namespace
 
 const char* flu_save_chooser(
     const std::shared_ptr<tl::system::Context>& context, const char* message,
@@ -4663,7 +4655,8 @@ const char* flu_save_chooser(
     FluStringVector filelist;
     return _flu_file_chooser(
         context, message, pattern, filename,
-        combineFlags(ChooserType::SINGLE, ChooserType::SAVING), filelist, compact_files);
+        combineFlags(ChooserType::SINGLE, ChooserType::SAVING), filelist,
+        compact_files);
 }
 
 const char* flu_dir_chooser(

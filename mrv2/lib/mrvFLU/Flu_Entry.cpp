@@ -14,6 +14,7 @@
 #include "mrvUI/mrvAsk.h"
 
 using namespace tl;
+using namespace tl::ui;
 
 Fl_Pixmap preview_img((char* const*)monalisa_xpm),
     file_list_img((char* const*)filelist_xpm),
@@ -48,10 +49,10 @@ struct Flu_Entry::Private
     struct Options
     {
         bool thumbnail = true;
-        int thumbnailHeight =  64;
+        int thumbnailHeight = 64;
     };
     Options options;
-    
+
     struct InfoData
     {
         bool init = true;
@@ -59,7 +60,7 @@ struct Flu_Entry::Private
         std::unique_ptr<io::Info> info;
     };
     InfoData info;
-    
+
     struct ThumbnailData
     {
         bool init = true;
@@ -79,7 +80,7 @@ Flu_Entry::Flu_Entry(
 
     // p.fileInfo           = fileInfo;
     p.thumbnailGenerator = thumbnailGenerator;
-    
+
     resize(0, 0, DEFAULT_ENTRY_WIDTH, 20);
     textsize(12);
     box(FL_BORDER_BOX);
@@ -104,7 +105,6 @@ Flu_Entry::Flu_Entry(
     updateSize();
     updateIcon();
 }
-
 
 void Flu_Entry::updateIcon()
 {
@@ -225,8 +225,8 @@ void Flu_Entry::set_colors()
 int Flu_Entry::handle(int event)
 {
     TLRENDER_P();
-    
-    switch(event)
+
+    switch (event)
     {
     case FL_SHOW:
     {
@@ -552,7 +552,7 @@ void Flu_Entry::updateSize()
             H = icon->h() + 4;
         }
         // if (delete_icon)
-            H += 24;
+        H += 24;
     }
     if (type == ENTRY_FAVORITE || chooser->fileListWideBtn->value())
     {
@@ -643,14 +643,14 @@ void Flu_Entry::updateSize()
 Flu_Entry::~Flu_Entry()
 {
     TLRENDER_P();
-    
+
     if (p.info.request.future.valid())
     {
-        p.thumbnailGenerator->cancelRequests({ p.info.request.id });
+        p.thumbnailGenerator->cancelRequests({p.info.request.id});
     }
     if (p.thumbnail.request.future.valid())
     {
-        p.thumbnailGenerator->cancelRequests({ p.thumbnail.request.id });
+        p.thumbnailGenerator->cancelRequests({p.thumbnail.request.id});
     }
 }
 
