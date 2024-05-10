@@ -177,6 +177,8 @@ namespace mrv
 
             int Y = g->y() + 22;
 
+
+            otio::RationalTime time = otio::RationalTime(0.0, 1.0);
             const auto& model = App::app->filesModel();
             const auto& files = model->observeFiles().get()->get();
             const auto& aIndex = model->observeAIndex()->get();
@@ -235,13 +237,11 @@ namespace mrv
                     b->value(1);
                 else
                     b->value(0);
-
-                if (!p.ui->uiPrefs->uiPrefsPanelThumbnails->value())
-                {
-                    delete b->image();
-                    b->image(nullptr);
-                    return;
-                }
+                
+                time = media->currentTime;
+                
+                b->createTimeline(App::app->getContext());
+                _createThumbnail(b, path, time, 0, size.h);
             }
 
             if (numValidFiles == 0)
@@ -310,7 +310,6 @@ namespace mrv
             bg->end();
 
             Y += 30;
-            // Y += 30 + numFiles * 64;
         }
 
         void PlaylistPanel::redraw()
@@ -339,13 +338,6 @@ namespace mrv
 
                 b->labelcolor(FL_WHITE);
 
-                if (!p.ui->uiPrefs->uiPrefsPanelThumbnails->value())
-                {
-                    delete b->image();
-                    b->image(nullptr);
-                    return;
-                }
-
                 WidgetIndices::iterator it = _r->indices.find(b);
                 time = media->currentTime;
                 uint16_t layerId = media->videoLayer;
@@ -365,49 +357,8 @@ namespace mrv
                     }
                 }
                 
-                // if (auto context = _r->context.lock())
-                // {
-                //     b->createTimeline(context);
-
-                //     ThumbnailData* data = new ThumbnailData;
-                //     data->widget = b;
-
-                //     WidgetIds::const_iterator it = _r->ids.find(b);
-                //     if (it != _r->ids.end())
-                //     {
-                //         _r->thumbnailCreator->cancelRequests(it->second);
-                //         _r->ids.erase(it);
-                //     }
-
-                //     try
-                //     {
-                //         file::Path path(fullfile);
-                //         auto timeline =
-                //             timeline::Timeline::create(path, context);
-                //         auto timeRange = timeline->getTimeRange();
-
-                //         if (time::isValid(timeRange))
-                //         {
-                //             auto startTime = timeRange.start_time();
-                //             auto endTime = timeRange.end_time_inclusive();
-
-                //             if (time < startTime)
-                //                 time = startTime;
-                //             else if (time > endTime)
-                //                 time = endTime;
-                //         }
-
-                //         _r->thumbnailCreator->initThread();
-
-                //         int64_t id = _r->thumbnailCreator->request(
-                //             fullfile, time, size, playlistThumbnail_cb,
-                //             (void*)data, layerId);
-                //         _r->ids[b] = id;
-                //     }
-                //     catch (const std::exception& e)
-                //     {
-                //     }
-                // }
+                b->createTimeline(App::app->getContext());
+                _createThumbnail(b, path, time, 0, size.h);
             }
         }
 

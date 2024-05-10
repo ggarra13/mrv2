@@ -3,7 +3,7 @@ v1.1.6
 
 This is a release full of goodies.
 
-- Fixed slow seeking on 4K movies.  Now we beat OpenRV on **all** movies,
+- Fixed slow seeking on 4K movies.  Now we beat OpenRV on **ALL** movies,
   seeking and reverse playback too.
 - Made View Window / Timeline Viewport divider highlight in a grayish color
   when it can be dragged.
@@ -45,7 +45,11 @@ This is a release full of goodies.
   where thumbnails appear.  Currently can be above the Timeline and in the
   Panels.
 - Changing languages now stores and re-loads a session on a temporary location,
-  so the interface does not reset to 0.
+  so the interface is kept as it was instead of resetting to nothing.
+- Fixed some potential crashes on program exit.
+- Improved the performance and code for all thumbnail generations.
+- Preview thumbnail above the timeline is faster and keeps the aspect ratio
+  of the image.
 
 
 v1.1.5

@@ -30,6 +30,7 @@
 #include <tlGL/Shader.h>
 
 #include "mrvCore/mrvFile.h"
+#include "mrvCore/mrvImage.h"
 #include "mrvCore/mrvHotkey.h"
 #include "mrvCore/mrvTimeObject.h"
 
@@ -64,24 +65,6 @@ namespace mrv
 
     namespace
     {
-
-        void flipY(
-            uint8_t* pixels, const size_t width, const size_t height,
-            const int depth)
-        {
-            const size_t rowSize = width * depth;
-            for (size_t y = 0; y < height / 2; ++y) {
-                size_t topRow = y * rowSize;
-                size_t bottomRow = (height - y - 1) * rowSize;
-
-                for (size_t i = 0; i < rowSize; ++i)
-                {
-                    const uint8_t temp = pixels[topRow + i];
-                    pixels[topRow + i] = pixels[bottomRow + i];
-                    pixels[bottomRow + i] = temp;
-                }
-            }
-        }
         
         int getIndex(const otio::SerializableObject::Retainer<otio::Composable>&
                      composable)
@@ -209,7 +192,8 @@ namespace mrv
 
         TimelinePlayer* player = nullptr;
 
-        // New thumbnail classes
+        // New thumbnail variables
+        int thumbnailWidth = kTHUMB_WIDTH;
         std::vector<tl::file::MemoryRead> memoryRead;
         std::shared_ptr<ui::ThumbnailGenerator> thumbnailGenerator;
         std::shared_ptr<gl::GLFWWindow> window;
@@ -489,11 +473,12 @@ namespace mrv
     void TimelineWidget::_getThumbnailPosition(int& X, int& Y)
     {
         TLRENDER_P();
-        X = Fl::event_x_root() - p.topWindow->x_root() - kTHUMB_WIDTH / 2;
+        X = Fl::event_x_root() - p.topWindow->x_root() -
+            (p.thumbnailWidth + 4) / 2;
         if (X < 0)
             X = 0;
 
-        int maxW = p.topWindow->w() - kTHUMB_WIDTH;
+        int maxW = p.topWindow->w() - p.thumbnailWidth - 4;
         if (X > maxW)
             X = maxW;
 
@@ -508,8 +493,9 @@ namespace mrv
         {
             int X, Y;
             _getThumbnailPosition(X, Y);
-            p.thumbnailWindow->resize(X, Y, kTHUMB_WIDTH, kTHUMB_HEIGHT);
-            p.box->resize(2, 2, kTHUMB_WIDTH - 4, kTHUMB_HEIGHT - 4);
+            p.thumbnailWindow->resize(X, Y, p.thumbnailWidth + 4,
+                                      kTHUMB_HEIGHT);
+            p.box->resize(2, 2, p.thumbnailWidth, kTHUMB_HEIGHT - 4);
             p.thumbnailWindow->show(); // needed for Windows
         }
         else
@@ -529,10 +515,16 @@ namespace mrv
         const int depth = bytes / W / H;
         const uint8_t* data = image->getData();
         const auto rgbImage = new Fl_RGB_Image(data, W, H, depth);
-                            
+
         Fl_Image* boxImage = p.box->image();
         p.box->bind_image(rgbImage);
         p.box->redraw();
+
+        if (p.thumbnailWidth != W)
+        {
+            p.thumbnailWidth = W;
+            repositionThumbnail();
+        }
     }
     
     int TimelineWidget::requestThumbnail(bool fetch)
@@ -1686,7 +1678,7 @@ namespace mrv
                 const int bytes = image->getDataByteCount();
                 const int depth = bytes / W / H;
                 uint8_t* data = image->getData();
-                flipY(data, W, H, depth);
+                flipImageInY(data, W, H, depth);
                 
                 _updateThumbnail(image);
             }

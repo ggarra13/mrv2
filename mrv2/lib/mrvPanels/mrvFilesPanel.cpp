@@ -182,7 +182,7 @@ namespace mrv
                 const std::string fullfile = protocol + dir + file;
 
                 auto bW = new Widget<FileButton>(
-                    g->x(), g->y() + 22 + i * 68, g->w(), 68);
+                    g->x(), g->y() + 22 + i * size.h + 4, g->w(), size.h + 4);
                 FileButton* b = bW;
                 b->setIndex(i);
                 _r->indices[b] = i;
@@ -218,40 +218,8 @@ namespace mrv
                 const std::string layer = getLayerName(media, layerId);
                 std::string text = protocol + dir + "\n" + file + layer;
                 b->copy_label(text.c_str());
-
-                if (!p.ui->uiPrefs->uiPrefsPanelThumbnails->value())
-                {
-                    delete b->image();
-                    b->image(nullptr);
-                    continue;
-                }
-
-                if (isNDI)
-                {
-                    Fl_SVG_Image* svg = load_svg("NDI.svg");
-                    b->image(svg);
-                    continue;
-                }
-
-                if (auto context = _r->context.lock())
-                {
-                    const auto& timeline =
-                        timeline::Timeline::create(path, context);
-                    const auto& timeRange = timeline->getTimeRange();
-
-                    if (time::isValid(timeRange))
-                    {
-                        const auto& startTime = timeRange.start_time();
-                        const auto& endTime = timeRange.end_time_inclusive();
-                        
-                        if (time < startTime)
-                            time = startTime;
-                        else if (time > endTime)
-                            time = endTime;
-                    }
-
-                    _createThumbnail(b, path, time, layerId, size.h);
-                }
+                
+                _createThumbnail(b, path, time, layerId, size.h, isNDI);
             }
 
             int Y = g->y() + 20 + numFiles * 64;
@@ -366,37 +334,7 @@ namespace mrv
                     time = player->currentTime();
                 }
 
-                if (!p.ui->uiPrefs->uiPrefsPanelThumbnails->value())
-                {
-                    b->bind_image(nullptr);
-                    return;
-                }
-
-                if (isNDI)
-                {
-                    b->bind_image(load_svg("NDI.svg"));
-                    continue;
-                }
-
-                if (auto context = _r->context.lock())
-                {
-                    const auto& timeline =
-                        timeline::Timeline::create(path, context);
-                    const auto& timeRange = timeline->getTimeRange();
-
-                    if (time::isValid(timeRange))
-                    {
-                        const auto& startTime = timeRange.start_time();
-                        const auto& endTime = timeRange.end_time_inclusive();
-                        
-                        if (time < startTime)
-                            time = startTime;
-                        else if (time > endTime)
-                            time = endTime;
-                    }
-
-                    _createThumbnail(b, path, time, layerId, size.h);
-                }
+                _createThumbnail(b, path, time, layerId, size.h, isNDI);
             }
         }
 

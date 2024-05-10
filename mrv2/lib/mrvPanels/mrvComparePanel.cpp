@@ -213,7 +213,7 @@ namespace mrv
                 const std::string fullfile = protocol + dir + file;
 
                 auto bW = new Widget<ClipButton>(
-                    g->x(), g->y() + 20 + i * 68, g->w(), 68);
+                    g->x(), g->y() + 20 + i * size.h + 4, g->w(), size.h + 4);
                 ClipButton* b = bW;
                 b->tooltip(_("Select one or more B images."));
                 _r->indices[b] = i;
@@ -255,42 +255,7 @@ namespace mrv
                 std::string text = protocol + dir + "\n" + file + layer;
                 b->copy_label(text.c_str());
 
-                if (!p.ui->uiPrefs->uiPrefsPanelThumbnails->value())
-                {
-                    delete b->image();
-                    b->image(nullptr);
-                    continue;
-                }
-
-                if (isNDI)
-                {
-                    Fl_SVG_Image* svg = load_svg("NDI.svg");
-                    b->image(svg);
-                    continue;
-                }
-                
-                if (auto context = _r->context.lock())
-                {
-                    const auto& timeline =
-                        timeline::Timeline::create(path, context);
-                    const auto& timeRange = timeline->getTimeRange();
-
-                    if (time::isValid(timeRange))
-                    {
-                        const auto& startTime = timeRange.start_time();
-                        const auto& endTime = timeRange.end_time_inclusive();
-                        
-                        if (time < startTime)
-                            time = startTime;
-                        else if (time > endTime)
-                            time = endTime;
-                    }
-
-                    _createThumbnail(b, path, time, layerId, 64);
-                }
-
-                Y += size.h;
-                
+                _createThumbnail(b, path, time, layerId, size.h, isNDI);
             }
 
             int X = g->x();
@@ -674,39 +639,7 @@ namespace mrv
                 std::string text = protocol + dir + "\n" + file + layer;
                 b->copy_label(text.c_str());
 
-                if (!p.ui->uiPrefs->uiPrefsPanelThumbnails->value())
-                {
-                    delete b->image();
-                    b->image(nullptr);
-                    return;
-                }
-
-                if (isNDI)
-                {
-                    Fl_SVG_Image* svg = load_svg("NDI.svg");
-                    b->image(svg);
-                    continue;
-                }
-                
-                if (auto context = _r->context.lock())
-                {
-                    const auto& timeline =
-                        timeline::Timeline::create(path, context);
-                    const auto& timeRange = timeline->getTimeRange();
-
-                    if (time::isValid(timeRange))
-                    {
-                        const auto& startTime = timeRange.start_time();
-                        const auto& endTime = timeRange.end_time_inclusive();
-                        
-                        if (time < startTime)
-                            time = startTime;
-                        else if (time > endTime)
-                            time = endTime;
-                    }
-
-                    _createThumbnail(b, path, time, layerId, size.h);
-                }
+                _createThumbnail(b, path, time, layerId, size.h, isNDI);
             }
         }
 

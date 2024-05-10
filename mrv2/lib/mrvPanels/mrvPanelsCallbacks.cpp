@@ -84,6 +84,19 @@ namespace mrv
                 playlistPanel->refresh();
         }
 
+        void clearCache()
+        {
+            using namespace panel;
+            if (filesPanel)
+                filesPanel->clearCache();
+            if (comparePanel)
+                comparePanel->clearCache();
+            if (stereo3DPanel)
+                stereo3DPanel->clearCache();
+            if (playlistPanel)
+                playlistPanel->clearCache();
+        }
+
         void removePanels(ViewerUI* ui)
         {
             using namespace panel;

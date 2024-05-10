@@ -8,7 +8,6 @@ set(HEADERS
     mrvGLErrors.h
     mrvGLJson.h
     mrvGLLines.h
-    mrvGLOffscreenContext.h
     mrvGLOutline.h
     mrvGLShaders.h
     mrvGLShape.h
@@ -28,7 +27,6 @@ set(SOURCES
     mrvGLErrors.cpp
     mrvGLJson.cpp
     mrvGLLines.cpp
-    mrvGLOffscreenContext.cpp
     mrvGLOutline.cpp
     mrvGLShaders.cpp
     mrvGLShape.cpp
@@ -45,9 +43,8 @@ set(SOURCES
 
 if(APPLE)
     list(APPEND SOURCES mrvGLWindow.mm)
+    add_definitions( -DGL_SILENCE_DEPRECATION )
 endif()
-    
-add_definitions( -DGL_SILENCE_DEPRECATION )
 
 set(LIBRARIES tlGL tlTimeline tlTimelineUI tlUI glfw)
 set(LIBRARIES_PRIVATE )
