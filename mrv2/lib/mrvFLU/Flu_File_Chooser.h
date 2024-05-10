@@ -31,10 +31,11 @@
 #include <FL/Fl_Check_Button.H>
 
 #include "mrvFLU/Flu_Button.h"
-#include "mrvFLU/Flu_Return_Button.h"
-#include "mrvFLU/Flu_Wrap_Group.h"
 #include "mrvFLU/Flu_Combo_Tree.h"
 #include "mrvFLU/Flu_Combo_List.h"
+#include "mrvFLU/Flu_Entry.h"
+#include "mrvFLU/Flu_Return_Button.h"
+#include "mrvFLU/Flu_Wrap_Group.h"
 #include "mrvFLU/flu_export.h"
 
 
@@ -132,32 +133,6 @@ public:
       preview the file and update itself accordingly. If it can preview the
       file, it should return nonzero, else it should return zero.
      */
-    //! File entry type
-    enum {
-        ENTRY_NONE = 1,     /*!< An empty (or non-existant) entry */
-        ENTRY_DIR = 2,      /*!< A directory entry */
-        ENTRY_FILE = 4,     /*!< A file entry */
-        ENTRY_FAVORITE = 8, /*!< A favorite entry */
-        ENTRY_DRIVE = 16,   /*!< An entry that refers to a disk drive */
-        ENTRY_MYDOCUMENTS =
-            32, /*!< The entry referring to the current user's documents */
-        ENTRY_MYCOMPUTER =
-            64, /*!< The entry referring to "My Computer" in Windows */
-        ENTRY_SEQUENCE = 128 /*!< The entry referring to a sequence of frames */
-    };
-
-    //! Chooser type
-    enum {
-        SINGLE = 0,    /*!< Choose a single file or directory */
-        MULTI = 1,     /*!< Choose multiple files or directories */
-        DIRECTORY = 4, /*!< Choose directories (choosing files is implicit if
-                          this bit is clear) */
-        DEACTIVATE_FILES = 8, /*!< When choosing directories, also show the
-                                 files in a deactivated state */
-        SAVING = 16, /*!< When choosing files, whether to keep the current
-                        filename always in the input area */
-        STDFILE = 32 /*!< Choose both files and directories at the same time */
-    };
 
     //! Structure holding the info needed for custom file types
     struct FileTypeInfo
@@ -172,7 +147,7 @@ public:
     //! is a logical OR of Flu_File_Chooser::SINGLE, Flu_File_Chooser::MULTI,
     //! and Flu_File_Chooser::DIRECTORY
     Flu_File_Chooser(
-        const char* path, const char* pattern, int type, const char* title,
+        const char* path, const char* pattern, ChooserType type, const char* title,
         const bool compact = true);
 
     //! Destructor
@@ -291,14 +266,14 @@ public:
     }
 
     //! Set the type of the chooser (see constructor)
-    inline void type(int t)
+    inline void type(ChooserType t)
     {
         selectionType = t;
         rescan();
     }
 
     //! Get the type of the chooser
-    inline int type(int t) const { return selectionType; }
+    inline ChooserType type(int t) const { return selectionType; }
 
     //! Unselect all entries
     void unselect_all();
@@ -479,70 +454,9 @@ public:
     static void
     _qSort(int how, bool caseSort, Fl_Widget** array, int low, int high);
 
-    friend class Entry;
+    friend class Flu_Entry;
 
-    class Entry : public Fl_Input
-    {
-    public:
-        Entry(const char* name, int t, bool d, Flu_File_Chooser* c,
-              const std::shared_ptr<ThumbnailGenerator> thumbnailGenerator = nullptr);
-        ~Entry();
-
-        int handle(int event);
-        void draw();
-
-        void set_colors();
-
-        void updateSize();
-        void updateIcon();
-
-        inline static void _inputCB(Fl_Widget* w, void* arg)
-        {
-            ((Entry*)arg)->inputCB();
-        }
-        void inputCB();
-
-        inline static void _editCB(void* arg) { ((Entry*)arg)->editCB(); }
-        void editCB();
-
-        std::string filename, date, filesize, shortname, owner, description,
-            shortDescription, toolTip, altname;
-        std::string permissions;
-        unsigned char pU, pG, pO; // 3-bit unix style permissions
-        unsigned int type;
-        time_t idate;
-        int64_t isize;
-        bool selected;
-        int editMode;
-        Flu_File_Chooser* chooser;
-        Fl_Image* icon;
-
-        //! Convert our internal information to a tlRender friendly filename.
-        std::string toTLRender();
-        
-        bool details;
-        int nameW, typeW, sizeW, dateW;
-
-        TLRENDER_PRIVATE();
-    };
-
-    class EntryArray : public std::vector< Entry* >
-    {
-    public:
-        EntryArray() {};
-        ~EntryArray() {};
-
-        void push_back(Entry* e)
-        {
-            for (auto x : *this)
-            {
-                if (x == e)
-                    return;
-            }
-
-            std::vector< Entry* >::push_back(e);
-        }
-    };
+    typedef std::vector< Flu_Entry* > EntryArray;
 
     friend class FileList;
     class FileList : public Flu_Wrap_Group
@@ -625,7 +539,7 @@ public:
 
     void updateLocationQJ();
 
-    void statFile(Entry* e, const char* file);
+    void statFile(Flu_Entry* e, const char* file);
 
     void addToHistory();
 
@@ -635,7 +549,7 @@ public:
 
     bool stripPatterns(std::string s, FluStringVector* patterns);
 
-    int popupContextMenu(Entry* entry);
+    int popupContextMenu(Flu_Entry* entry);
 
     std::string commonStr();
 
@@ -661,7 +575,7 @@ public:
     Fl_Group *fileGroup, *locationQuickJump;
     Fl_Menu_Button entryPopup;
     Fl_Image* defaultFileIcon;
-    Entry* lastSelected;
+    Flu_Entry* lastSelected;
     FileList* filelist;
     FileColumns* filecolumns;
     Fl_Group* fileDetailsGroup;
@@ -678,7 +592,7 @@ public:
         *reloadBtn, *previewBtn;
     Fl_Browser* favoritesList;
     Flu_Combo_List* filePattern;
-    int selectionType;
+    ChooserType selectionType;
     bool filenameEnterCallback, filenameTabCallback, walkingHistory, caseSort,
         fileEditing;
     int sortMethod;

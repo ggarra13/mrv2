@@ -11,6 +11,7 @@ set(HEADERS
     Flu_Combo_List.h
     Flu_Combo_Tree.h
     Flu_Enumerations.h
+    Flu_Entry.h
     Flu_Label.h
     Flu_File_Chooser.h
     Flu_Return_Button.h
@@ -25,6 +26,7 @@ set(SOURCES
     Flu_Combo_Box.cpp
     Flu_Combo_List.cpp
     Flu_Combo_Tree.cpp
+    Flu_Entry.cpp
     Flu_Label.cpp
     Flu_File_Chooser.cpp
     Flu_Return_Button.cpp
