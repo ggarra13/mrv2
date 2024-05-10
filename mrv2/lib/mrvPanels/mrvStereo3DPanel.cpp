@@ -22,14 +22,19 @@
 
 #include "mrViewer.h"
 
+
+namespace
+{
+    const tl::image::Size thumbnailSize(128, 64);
+}
+
+
 namespace mrv
 {
     namespace panel
     {
-
-        typedef std::map< ClipButton*, int64_t > WidgetIds;
         typedef std::map< ClipButton*, size_t > WidgetIndices;
-
+        
         struct Stereo3DPanel::Private
         {
             PopupMenu* input = nullptr;
@@ -37,10 +42,7 @@ namespace mrv
             HorSlider* eyeSeparation = nullptr;
             Fl_Check_Button* swapEyes = nullptr;
 
-            std::weak_ptr<system::Context> context;
-
             std::map< size_t, ClipButton* > map;
-            WidgetIds ids;
             WidgetIndices indices;
 
             std::shared_ptr<
@@ -50,59 +52,11 @@ namespace mrv
 
             std::shared_ptr<observer::ListObserver<int> > layerObserver;
         };
-
-        struct ThumbnailData
-        {
-            ClipButton* widget;
-        };
-
-        void stereo3DThumbnail_cb(
-            const int64_t id,
-            const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&
-                thumbnails,
-            void* opaque)
-        {
-            ThumbnailData* data = static_cast< ThumbnailData* >(opaque);
-            ClipButton* w = data->widget;
-            if (stereo3DPanel)
-                stereo3DPanel->stereo3DThumbnail(id, thumbnails, w);
-            delete data;
-        }
-
-        void Stereo3DPanel::stereo3DThumbnail(
-            const int64_t id,
-            const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&
-                thumbnails,
-            ClipButton* w)
-        {
-            WidgetIds::const_iterator it = _r->ids.find(w);
-            if (it == _r->ids.end())
-                return;
-
-            if (it->second == id)
-            {
-                for (const auto& i : thumbnails)
-                {
-                    Fl_Image* img = w->image();
-                    w->image(i.second);
-                    delete img;
-                    w->redraw();
-                }
-            }
-            else
-            {
-                for (const auto& i : thumbnails)
-                {
-                    delete i.second;
-                }
-            }
-        }
-
+        
         Stereo3DPanel::Stereo3DPanel(ViewerUI* ui) :
             ThumbnailPanel(ui),
             _r(new Private)
         {
-            _r->context = ui->app->getContext();
 
             add_group("Stereo 3D");
 
@@ -136,25 +90,6 @@ namespace mrv
 
         Stereo3DPanel::~Stereo3DPanel()
         {
-            TLRENDER_P();
-
-            cancel_thumbnails();
-            clear_controls();
-        }
-
-        void Stereo3DPanel::clear_controls()
-        {
-            for (const auto& i : _r->map)
-            {
-                ClipButton* b = i.second;
-                delete b->image();
-                b->image(nullptr);
-                g->remove(b);
-                delete b;
-            }
-
-            _r->map.clear();
-            _r->indices.clear();
         }
 
         void Stereo3DPanel::add_controls()
@@ -184,8 +119,6 @@ namespace mrv
             if (player)
                 time = player->currentTime();
 
-            image::Size size(128, 64);
-
             file::Path lastPath;
 
             const std::string tmpdir = tmppath() + "/";
@@ -214,7 +147,8 @@ namespace mrv
                 const std::string fullfile = protocol + dir + file;
 
                 auto bW = new Widget<ClipButton>(
-                    g->x(), g->y() + 20 + i * size.h + 4, g->w(), size.h + 4);
+                    g->x(), g->y() + 20 + i * thumbnailSize.h + 4, g->w(),
+                    thumbnailSize.h + 4);
                 ClipButton* b = bW;
                 b->tooltip(_("Toggle other eye stereo image."));
                 _r->indices[b] = i;
@@ -241,13 +175,13 @@ namespace mrv
                         model->setStereo(index);
                     });
 
-                _r->map.insert(std::make_pair(i, b));
-
+                _r->map[i] = b;
+                
                 const std::string& layer = getLayerName(media, layerId);
                 std::string text = protocol + dir + "\n" + file + layer;
                 b->copy_label(text.c_str());
 
-                _createThumbnail(b, path, time, layerId, size.h, isNDI);
+                _createThumbnail(b, path, time, layerId, thumbnailSize.h, isNDI);
             }
 
             Stereo3DOptions o = model->observeStereo3DOptions()->get();
@@ -440,6 +374,8 @@ namespace mrv
             for (auto& m : _r->map)
             {
                 size_t i = m.first;
+                ClipButton* b = m.second;
+
                 const auto& media = files->getItem(i);
                 const auto& path = media->path;
                 const bool isNDI = file::isTemporaryNDI(path);
@@ -449,8 +385,6 @@ namespace mrv
                 const std::string file =
                     path.getBaseName() + path.getNumber() + path.getExtension();
                 const std::string fullfile = protocol + dir + file;
-                ClipButton* b = m.second;
-
                 uint16_t layerId = media->videoLayer;
                 bool found = false;
                 if (aIndex == i)
@@ -459,8 +393,6 @@ namespace mrv
                 if (stereoIndex != i)
                 {
                     b->value(0);
-                    if (b->image())
-                        continue;
                 }
                 else
                 {
@@ -478,7 +410,7 @@ namespace mrv
                 b->copy_label(text.c_str());
                 b->labelcolor(FL_WHITE);
                 
-                _createThumbnail(b, path, time, layerId, size.h, isNDI);
+                _createThumbnail(b, path, time, layerId, thumbnailSize.h, isNDI);
             }
         }
 
@@ -491,15 +423,9 @@ namespace mrv
             r.swapEyes->value(value.swapEyes);
         }
 
-        void Stereo3DPanel::cancel_thumbnails()
-        {
-            _cancelRequests();
-        }
-
         void Stereo3DPanel::refresh()
         {
-            cancel_thumbnails();
-            clear_controls();
+            _cancelRequests();
             add_controls();
             end_group();
         }

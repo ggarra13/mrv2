@@ -11,8 +11,6 @@
 
 #include <tlIO/Cache.h>
 
-#include <tlTimelineUI/TimelineWidget.h>
-
 #include <tlGL/GL.h>
 #include <tlGL/GLFWWindow.h>
 
@@ -58,6 +56,7 @@ namespace mrv
 
         ThumbnailPanel::~ThumbnailPanel()
         {
+            _cancelRequests();
             Fl::remove_timeout((Fl_Timeout_Handler)timerEvent_cb, this);
         }
 
@@ -84,12 +83,22 @@ namespace mrv
         void ThumbnailPanel::_updateThumbnail(
             Fl_Widget* widget, const std::shared_ptr<image::Image>& image)
         {
+            if (!image || !image->isValid())
+            {
+                widget->image(nullptr);
+                widget->redraw();
+                return;
+            }
             const auto W = image->getWidth();
             const auto H = image->getHeight();
+            const auto data = image->getData();
             const auto bytes = image->getDataByteCount();
             const int depth = bytes / W / H;
-            uint8_t* imageData = image->getData();
-            const auto rgbImage = new Fl_RGB_Image(imageData, W, H, depth);
+
+            // flipped is cleaned by FLTK (as we set it as bind_image not image).
+            uint8_t* flipped = new uint8_t[ W * H * depth ];
+            flipImageInY(flipped, data, W, H, depth);
+            const auto rgbImage = new Fl_RGB_Image(flipped, W, H, depth);
             widget->bind_image(rgbImage);
             widget->redraw();
         }
@@ -110,29 +119,26 @@ namespace mrv
                 if (i->second.future.valid() &&
                     i->second.future.wait_for(std::chrono::seconds(0)) == std::future_status::ready)
                 {
-                    const auto& data = _data[i->second.id];
+                    const auto& data = callbackData[i->second.id];
                     auto widget  = data->widget;
                     const auto& path = data->path;
                     const auto image = i->second.future.get();
                     const auto time = i->second.time;
-                    
-                    i = thumbnailRequests.erase(i);
 
                     const auto W = image->getWidth();
                     const auto H = image->getHeight();
                     const auto bytes = image->getDataByteCount();
                     const int depth = bytes / W / H;
-                    uint8_t* imageData = image->getData();
-
+                    bool bound = false;
                     const auto& key = io::getCacheKey(path, time, ioOptions);
-                    const auto t = thumbnails.find(key);
+                    const auto& t = thumbnails.find(key);
                     if (t == thumbnails.end())
                     {
-                        flipImageInY(imageData, W, H, depth);
-                        thumbnails[io::getCacheKey(path, time, ioOptions)] =
-                            image;
+                        thumbnails[io::getCacheKey(path, time, ioOptions)] = image;
                     }
                     _updateThumbnail(widget, image);
+                    
+                    i = thumbnailRequests.erase(i);
                 }
                 else
                 {
@@ -201,7 +207,7 @@ namespace mrv
                     ioOptions["Layer"] =
                         string::Format("{0}").arg(layerId);
                     // @todo: ioOptions["USD/cameraName"] = clipName;
-                    const auto key = io::getCacheKey(path, time, ioOptions);
+                    const auto& key = io::getCacheKey(path, time, ioOptions);
                     const auto i = thumbnails.find(key);
                     if (i != thumbnails.end())
                     {
@@ -219,7 +225,7 @@ namespace mrv
                             auto data = std::make_shared<CallbackData>();
                             data->widget = widget;
                             data->path   = path;
-                            _data[id] = data;
+                            callbackData[id] = data;
                         }
                     }
                 }
@@ -245,7 +251,7 @@ namespace mrv
             thumbnailRequests.clear();
             thumbnailGenerator->cancelRequests(ids);
 
-            _data.clear();
+            callbackData.clear();
         }
 
     } // namespace panel

@@ -37,7 +37,7 @@ namespace mrv
             
         protected:
             void _tickEvent();
-
+            
             void _updateThumbnail(
                 Fl_Widget* widget, const std::shared_ptr<image::Image>& image);
             void _thumbnailEvent();
@@ -74,7 +74,7 @@ namespace mrv
                 Fl_Widget* widget = nullptr;
                 file::Path path;
             };
-            std::map<int64_t, std::shared_ptr<CallbackData>> _data;
+            std::map<int64_t, std::shared_ptr<CallbackData>> callbackData;
         };
 
     } // namespace panel

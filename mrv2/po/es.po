@@ -1835,24 +1835,6 @@ msgstr "Entrada"
 msgid "NDI Connection"
 msgstr "Conexión NDI"
 
-msgid "USD"
-msgstr "USD"
-
-msgid "Renderer"
-msgstr "Renderer"
-
-msgid "Complexity"
-msgstr "Complejidad"
-
-msgid "Draw Mode"
-msgstr "Modo de Dibujar"
-
-msgid "Stage Cache"
-msgstr "Cache del Escenario"
-
-msgid "Disk Cache in GB"
-msgstr "Cache en Disco en GB"
-
 msgid "Toggle other eye stereo image."
 msgstr "Alternar el otro ojo de la imagen estéreo."
 
@@ -3261,6 +3243,9 @@ msgstr "Python"
 msgid "Settings"
 msgstr "Seteos"
 
+msgid "USD"
+msgstr "USD"
+
 msgid "Vectorscope"
 msgstr "Vectorscopio"
 
@@ -3787,6 +3772,156 @@ msgstr "Ayuda/Documentación"
 
 msgid "Help/About"
 msgstr "Ayuda/Acerca"
+
+msgid "3GP Movie"
+msgstr "Película 3GP"
+
+msgid "Advanced Systems Format Media"
+msgstr "Advanced Systems Format Media"
+
+msgid "AVCHD Video"
+msgstr "Video AVCHD"
+
+msgid "AVI Movie"
+msgstr "Película AVI"
+
+msgid "DIVX Movie"
+msgstr "Película DIVX"
+
+msgid "Digital Video"
+msgstr "Vídeo Digital"
+
+msgid "Flash Movie"
+msgstr "Película Flash"
+
+msgid "Apple's M4V Movie"
+msgstr "Película M4V de Apple"
+
+msgid "Matroska Movie"
+msgstr "Película Matroska"
+
+msgid "Quicktime Movie"
+msgstr "Película Quicktime"
+
+msgid "MP4 Movie"
+msgstr "Película MP4"
+
+msgid "MPEG Movie"
+msgstr "Película MPEG"
+
+msgid "MXF Movie"
+msgstr "Película MXF"
+
+msgid "Ogg Movie"
+msgstr "Película Ogg"
+
+msgid "Ogg Video"
+msgstr "Vídeo Ogg"
+
+msgid "OpenTimelineIO EDL"
+msgstr "LDE de OpenTimelineIO."
+
+msgid "OpenTimelineIO Zipped EDL"
+msgstr "Zip LDE de OpenTimelineIO."
+
+msgid "Real Media Movie"
+msgstr "Película Real Media"
+
+msgid "VOB Movie"
+msgstr "Película VOB"
+
+msgid "WebM Movie"
+msgstr "Película WebM"
+
+msgid "WMV Movie"
+msgstr "Película WMV"
+
+msgid "Bitmap Picture"
+msgstr "Película Bitmap"
+
+msgid "Cineon Picture"
+msgstr "Dibujo Cineon"
+
+msgid "Canon Raw Picture"
+msgstr "Dibujo Canon Raw"
+
+msgid "Kodak Digital Negative"
+msgstr "Negativo Digital de Kodac"
+
+msgid "DPX Picture"
+msgstr "Dibujo DPX"
+
+msgid "EXR Picture"
+msgstr "Dibujo EXR"
+
+msgid "HDRI Picture"
+msgstr "Dibujo HDRI"
+
+msgid "TIFF Picture"
+msgstr "Dibujo TIFF"
+
+msgid "IFF Picture"
+msgstr "Dibujo IFF"
+
+msgid "JPEG Picture"
+msgstr "Dibujo JPEG"
+
+msgid "Map Picture"
+msgstr "Dibujo Map"
+
+msgid "GIF Picture"
+msgstr "Dibujo GIF"
+
+msgid "Softimage Picture"
+msgstr "Dibujo Softimage"
+
+msgid "PNG Picture"
+msgstr "Dibujo PNG"
+
+msgid "RGB Picture"
+msgstr "Dibujo RGB"
+
+msgid "MP3 music"
+msgstr "Música MP3"
+
+msgid "OGG Vorbis music"
+msgstr "Música OGG Vorbis"
+
+msgid "Wave music"
+msgstr "Múscia Wave"
+
+msgid "Jan"
+msgstr "Ene"
+
+msgid "Feb"
+msgstr "Feb"
+
+msgid "Mar"
+msgstr "Mar"
+
+msgid "Apr"
+msgstr "Abr"
+
+msgid "May"
+msgstr "May"
+
+msgid "Jun"
+msgstr "Jun"
+
+msgid "Jul"
+msgstr "Jul"
+
+msgid "Aug"
+msgstr "Ago"
+
+msgid "Sep"
+msgstr "Sep"
+
+msgid "Oct"
+msgstr "Oct"
+
+msgid "Nov"
+msgstr "Nov"
 
 msgid "Replace"
 msgstr "Reemplazar"
@@ -5911,156 +6046,6 @@ msgstr "Acepte el archivo OCIO seleccionado."
 msgid "Cancel the OCIO selection and don't change anything."
 msgstr "Cancele la selección de OCIO y no cambie nada."
 
-msgid "3GP Movie"
-msgstr "Película 3GP"
-
-msgid "Advanced Systems Format Media"
-msgstr "Advanced Systems Format Media"
-
-msgid "AVCHD Video"
-msgstr "Video AVCHD"
-
-msgid "AVI Movie"
-msgstr "Película AVI"
-
-msgid "DIVX Movie"
-msgstr "Película DIVX"
-
-msgid "Digital Video"
-msgstr "Vídeo Digital"
-
-msgid "Flash Movie"
-msgstr "Película Flash"
-
-msgid "Apple's M4V Movie"
-msgstr "Película M4V de Apple"
-
-msgid "Matroska Movie"
-msgstr "Película Matroska"
-
-msgid "Quicktime Movie"
-msgstr "Película Quicktime"
-
-msgid "MP4 Movie"
-msgstr "Película MP4"
-
-msgid "MPEG Movie"
-msgstr "Película MPEG"
-
-msgid "MXF Movie"
-msgstr "Película MXF"
-
-msgid "Ogg Movie"
-msgstr "Película Ogg"
-
-msgid "Ogg Video"
-msgstr "Vídeo Ogg"
-
-msgid "OpenTimelineIO EDL"
-msgstr "LDE de OpenTimelineIO."
-
-msgid "OpenTimelineIO Zipped EDL"
-msgstr "Zip LDE de OpenTimelineIO."
-
-msgid "Real Media Movie"
-msgstr "Película Real Media"
-
-msgid "VOB Movie"
-msgstr "Película VOB"
-
-msgid "WebM Movie"
-msgstr "Película WebM"
-
-msgid "WMV Movie"
-msgstr "Película WMV"
-
-msgid "Bitmap Picture"
-msgstr "Película Bitmap"
-
-msgid "Cineon Picture"
-msgstr "Dibujo Cineon"
-
-msgid "Canon Raw Picture"
-msgstr "Dibujo Canon Raw"
-
-msgid "Kodak Digital Negative"
-msgstr "Negativo Digital de Kodac"
-
-msgid "DPX Picture"
-msgstr "Dibujo DPX"
-
-msgid "EXR Picture"
-msgstr "Dibujo EXR"
-
-msgid "HDRI Picture"
-msgstr "Dibujo HDRI"
-
-msgid "TIFF Picture"
-msgstr "Dibujo TIFF"
-
-msgid "IFF Picture"
-msgstr "Dibujo IFF"
-
-msgid "JPEG Picture"
-msgstr "Dibujo JPEG"
-
-msgid "Map Picture"
-msgstr "Dibujo Map"
-
-msgid "GIF Picture"
-msgstr "Dibujo GIF"
-
-msgid "Softimage Picture"
-msgstr "Dibujo Softimage"
-
-msgid "PNG Picture"
-msgstr "Dibujo PNG"
-
-msgid "RGB Picture"
-msgstr "Dibujo RGB"
-
-msgid "MP3 music"
-msgstr "Música MP3"
-
-msgid "OGG Vorbis music"
-msgstr "Música OGG Vorbis"
-
-msgid "Wave music"
-msgstr "Múscia Wave"
-
-msgid "Jan"
-msgstr "Ene"
-
-msgid "Feb"
-msgstr "Feb"
-
-msgid "Mar"
-msgstr "Mar"
-
-msgid "Apr"
-msgstr "Abr"
-
-msgid "May"
-msgstr "May"
-
-msgid "Jun"
-msgstr "Jun"
-
-msgid "Jul"
-msgstr "Jul"
-
-msgid "Aug"
-msgstr "Ago"
-
-msgid "Sep"
-msgstr "Sep"
-
-msgid "Oct"
-msgstr "Oct"
-
-msgid "Nov"
-msgstr "Nov"
-
 msgid "Escape"
 msgstr "Escape"
 
@@ -6550,6 +6535,9 @@ msgstr "Modo de Fregado"
 msgid "Area Selection Mode"
 msgstr "Modo de Selección de Área"
 
+msgid "Draw Mode"
+msgstr "Modo de Dibujar"
+
 msgid "Erase Mode"
 msgstr "Modo de Borrar"
 
@@ -6648,6 +6636,18 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
+
+#~ msgid "Renderer"
+#~ msgstr "Renderer"
+
+#~ msgid "Complexity"
+#~ msgstr "Complejidad"
+
+#~ msgid "Stage Cache"
+#~ msgstr "Cache del Escenario"
+
+#~ msgid "Disk Cache in GB"
+#~ msgstr "Cache en Disco en GB"
 
 #, fuzzy
 #~ msgid "Preview Thumbnails"

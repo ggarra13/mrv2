@@ -29,16 +29,7 @@ namespace mrv
 
             void redraw();
 
-            void stereo3DThumbnail(
-                const int64_t id,
-                const std::vector<
-                    std::pair<otime::RationalTime, Fl_RGB_Image*> >& thumbnails,
-                ClipButton* w);
-
         private:
-            void cancel_thumbnails();
-            void clear_controls();
-
             MRV2_PRIVATE();
         };
 

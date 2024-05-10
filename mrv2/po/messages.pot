@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.1.6\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2024-05-10 07:17-0300\n"
+"POT-Creation-Date: 2024-05-10 12:19-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,7 +30,7 @@ msgstr ""
 msgid "Renderer Name"
 msgstr ""
 
-#: mrvPy/USD.cpp:47 mrvPanels/mrvUSDPanel.cpp:145
+#: mrvPy/USD.cpp:47
 msgid "Render Width"
 msgstr ""
 
@@ -42,19 +42,19 @@ msgstr ""
 msgid "Draw mode  :class:`mrv2.usd.DrawMode`."
 msgstr ""
 
-#: mrvPy/USD.cpp:56 mrvPanels/mrvUSDPanel.cpp:209
+#: mrvPy/USD.cpp:56
 msgid "Enable Lighting"
 msgstr ""
 
-#: mrvPy/USD.cpp:59 mrvPanels/mrvUSDPanel.cpp:225
+#: mrvPy/USD.cpp:59
 msgid "Enable Scene Lights"
 msgstr ""
 
-#: mrvPy/USD.cpp:62 mrvPanels/mrvUSDPanel.cpp:241
+#: mrvPy/USD.cpp:62
 msgid "Enable Scene Materials"
 msgstr ""
 
-#: mrvPy/USD.cpp:63 mrvPanels/mrvUSDPanel.cpp:257
+#: mrvPy/USD.cpp:63
 msgid "Enable sRGB"
 msgstr ""
 
@@ -1745,7 +1745,7 @@ msgstr ""
 msgid "Network"
 msgstr ""
 
-#: mrvPanels/mrvPanelsAux.h:21 mrvPanels/mrvStereo3DPanel.cpp:261
+#: mrvPanels/mrvPanelsAux.h:21 mrvPanels/mrvStereo3DPanel.cpp:195
 #: mrvFl/mrvCallbacks.cpp:104 mrvUI/mrvMenus.cpp:514
 msgid "Stereo 3D"
 msgstr ""
@@ -1955,19 +1955,18 @@ msgid "No occurrences of '%s' found!"
 msgstr ""
 
 #: mrvPanels/mrvNDIPanel.cpp:141 mrvPanels/mrvNDIPanel.cpp:291
-#: mrvPanels/mrvNDIPanel.cpp:352 mrvPanels/mrvUSDPanel.cpp:125
-#: mrvPanels/mrvStereo3DPanel.cpp:294 mrvPanels/mrvStereo3DPanel.cpp:296
-#: mrvPanels/mrvEnvironmentMapPanel.cpp:116 mrvFl/mrvPreferences.cpp:1981
-#: mrvFl/mrvPreferences.cpp:2127 mrvFl/mrvPreferences.cpp:2139
-#: mrvGL/mrvTimelineViewport.cpp:655 mrvGL/mrvTimelineViewport.cpp:1745
-#: mrvGL/mrvTimelineViewport.cpp:1817
+#: mrvPanels/mrvNDIPanel.cpp:352 mrvPanels/mrvStereo3DPanel.cpp:228
+#: mrvPanels/mrvStereo3DPanel.cpp:230 mrvPanels/mrvEnvironmentMapPanel.cpp:116
+#: mrvFl/mrvPreferences.cpp:1981 mrvFl/mrvPreferences.cpp:2127
+#: mrvFl/mrvPreferences.cpp:2139 mrvGL/mrvTimelineViewport.cpp:655
+#: mrvGL/mrvTimelineViewport.cpp:1745 mrvGL/mrvTimelineViewport.cpp:1817
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Debug/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:38
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Debug/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:173
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Debug/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:236
 msgid "None"
 msgstr ""
 
-#: mrvPanels/mrvNDIPanel.cpp:261 mrvPanels/mrvStereo3DPanel.cpp:290
+#: mrvPanels/mrvNDIPanel.cpp:261 mrvPanels/mrvStereo3DPanel.cpp:224
 msgid "Input"
 msgstr ""
 
@@ -1975,82 +1974,57 @@ msgstr ""
 msgid "NDI Connection"
 msgstr ""
 
-#: mrvPanels/mrvUSDPanel.cpp:71 mrvFl/mrvCallbacks.cpp:106
-#: mrvUI/mrvMenus.cpp:505
-msgid "USD"
-msgstr ""
-
-#: mrvPanels/mrvUSDPanel.cpp:103
-msgid "Renderer"
-msgstr ""
-
-#: mrvPanels/mrvUSDPanel.cpp:166
-msgid "Complexity"
-msgstr ""
-
-#: mrvPanels/mrvUSDPanel.cpp:190 mrvCore/mrvHotkey.cpp:496
-msgid "Draw Mode"
-msgstr ""
-
-#: mrvPanels/mrvUSDPanel.cpp:272
-msgid "Stage Cache"
-msgstr ""
-
-#: mrvPanels/mrvUSDPanel.cpp:293
-msgid "Disk Cache in GB"
-msgstr ""
-
-#: mrvPanels/mrvStereo3DPanel.cpp:219
+#: mrvPanels/mrvStereo3DPanel.cpp:153
 msgid "Toggle other eye stereo image."
 msgstr ""
 
-#: mrvPanels/mrvStereo3DPanel.cpp:297
+#: mrvPanels/mrvStereo3DPanel.cpp:231
 msgid "Image"
 msgstr ""
 
-#: mrvPanels/mrvStereo3DPanel.cpp:315
+#: mrvPanels/mrvStereo3DPanel.cpp:249
 msgid "Output"
 msgstr ""
 
-#: mrvPanels/mrvStereo3DPanel.cpp:319 mrvPanels/mrvStereo3DPanel.cpp:321
+#: mrvPanels/mrvStereo3DPanel.cpp:253 mrvPanels/mrvStereo3DPanel.cpp:255
 msgid "Anaglyph"
 msgstr ""
 
-#: mrvPanels/mrvStereo3DPanel.cpp:322
+#: mrvPanels/mrvStereo3DPanel.cpp:256
 msgid "Scanlines"
 msgstr ""
 
-#: mrvPanels/mrvStereo3DPanel.cpp:323
+#: mrvPanels/mrvStereo3DPanel.cpp:257
 msgid "Columns"
 msgstr ""
 
-#: mrvPanels/mrvStereo3DPanel.cpp:324
+#: mrvPanels/mrvStereo3DPanel.cpp:258
 msgid "Checkerboard"
 msgstr ""
 
-#: mrvPanels/mrvStereo3DPanel.cpp:327
+#: mrvPanels/mrvStereo3DPanel.cpp:261
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Debug/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:1814
 #: D:/code/applications/mrv2/BUILD-Msys-amd64/Debug/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:2082
 msgid "OpenGL"
 msgstr ""
 
-#: mrvPanels/mrvStereo3DPanel.cpp:347
+#: mrvPanels/mrvStereo3DPanel.cpp:281
 msgid "Adjustments"
 msgstr ""
 
-#: mrvPanels/mrvStereo3DPanel.cpp:374
+#: mrvPanels/mrvStereo3DPanel.cpp:308
 msgid "Eye Separation"
 msgstr ""
 
-#: mrvPanels/mrvStereo3DPanel.cpp:376
+#: mrvPanels/mrvStereo3DPanel.cpp:310
 msgid "Separation of left and right eye."
 msgstr ""
 
-#: mrvPanels/mrvStereo3DPanel.cpp:394
+#: mrvPanels/mrvStereo3DPanel.cpp:328
 msgid "Swap Eyes"
 msgstr ""
 
-#: mrvPanels/mrvStereo3DPanel.cpp:396
+#: mrvPanels/mrvStereo3DPanel.cpp:330
 msgid "Swap left and right eyes."
 msgstr ""
 
@@ -2222,7 +2196,7 @@ msgid ""
 msgstr ""
 
 #: mrvPanels/mrvEnvironmentMapPanel.cpp:267
-#: mrvPanels/mrvImageInfoPanel.cpp:1905 mrvPanels/mrvComparePanel.cpp:492
+#: mrvPanels/mrvImageInfoPanel.cpp:1905 mrvPanels/mrvComparePanel.cpp:423
 msgid "Rotation"
 msgstr ""
 
@@ -2811,117 +2785,117 @@ msgstr ""
 msgid "Lumma"
 msgstr ""
 
-#: mrvPanels/mrvFilesPanel.cpp:189
+#: mrvPanels/mrvFilesPanel.cpp:169
 msgid "Select main A image."
 msgstr ""
 
-#: mrvPanels/mrvFilesPanel.cpp:235
+#: mrvPanels/mrvFilesPanel.cpp:215
 msgid "Open a filename"
 msgstr ""
 
-#: mrvPanels/mrvFilesPanel.cpp:241
+#: mrvPanels/mrvFilesPanel.cpp:221
 msgid "Open a filename with audio"
 msgstr ""
 
-#: mrvPanels/mrvFilesPanel.cpp:247
+#: mrvPanels/mrvFilesPanel.cpp:227
 msgid "Close current filename"
 msgstr ""
 
-#: mrvPanels/mrvFilesPanel.cpp:253
+#: mrvPanels/mrvFilesPanel.cpp:233
 msgid "Close all filenames"
 msgstr ""
 
-#: mrvPanels/mrvFilesPanel.cpp:259 mrvPanels/mrvComparePanel.cpp:395
+#: mrvPanels/mrvFilesPanel.cpp:239 mrvPanels/mrvComparePanel.cpp:326
 msgid "Previous filename"
 msgstr ""
 
-#: mrvPanels/mrvFilesPanel.cpp:265 mrvPanels/mrvComparePanel.cpp:407
+#: mrvPanels/mrvFilesPanel.cpp:245 mrvPanels/mrvComparePanel.cpp:338
 msgid "Next filename"
 msgstr ""
 
-#: mrvPanels/mrvFilesPanel.cpp:273
+#: mrvPanels/mrvFilesPanel.cpp:253
 msgid "Filter EDLs"
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:218
+#: mrvPanels/mrvComparePanel.cpp:149
 msgid "Select one or more B images."
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:271
+#: mrvPanels/mrvComparePanel.cpp:202
 msgid "Compare A"
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:284
+#: mrvPanels/mrvComparePanel.cpp:215
 msgid "Compare B"
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:300
+#: mrvPanels/mrvComparePanel.cpp:231
 msgid ""
 "Wipe between the A and B files\n"
 "\n"
 "Use the Option key + left mouse button to move the wipe in X or in Y"
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:305
+#: mrvPanels/mrvComparePanel.cpp:236
 msgid ""
 "Wipe between the A and B files\n"
 "\n"
 "Use the Alt key + left mouse button to move the wipe in X or in Y."
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:325
+#: mrvPanels/mrvComparePanel.cpp:256
 msgid "Overlay the A and B files with optional transparencyy"
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:339
+#: mrvPanels/mrvComparePanel.cpp:270
 msgid "Difference the A and B files"
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:353
+#: mrvPanels/mrvComparePanel.cpp:284
 msgid "Compare the A and B files side by side"
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:367
+#: mrvPanels/mrvComparePanel.cpp:298
 msgid "Show the A file above the B file"
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:382
+#: mrvPanels/mrvComparePanel.cpp:313
 msgid "Tile the A and B files"
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:420
+#: mrvPanels/mrvComparePanel.cpp:351
 msgid "Wipe"
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:450
+#: mrvPanels/mrvComparePanel.cpp:381
 msgid "Use the Option key + left mouse button to move the wipe in X."
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:453
+#: mrvPanels/mrvComparePanel.cpp:384
 msgid "Use the Alt key + left mouse button to move the wipe in X."
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:473
+#: mrvPanels/mrvComparePanel.cpp:404
 msgid "Use the Option key + left mouse button to move the wipe in Y."
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:476
+#: mrvPanels/mrvComparePanel.cpp:407
 msgid "Use the Alt key + left mouse button to move the wipe in Y."
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:495
+#: mrvPanels/mrvComparePanel.cpp:426
 msgid "Wipe Rotation.  Use Shift + left mouse button along X to rotate wipe."
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:516 mrvPanels/mrvComparePanel.cpp:542
+#: mrvPanels/mrvComparePanel.cpp:447 mrvPanels/mrvComparePanel.cpp:473
 msgid "Overlay"
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:550
+#: mrvPanels/mrvComparePanel.cpp:481
 msgid "Use the Option key + left mouse button to change transparency."
 msgstr ""
 
-#: mrvPanels/mrvComparePanel.cpp:553
+#: mrvPanels/mrvComparePanel.cpp:484
 msgid "Use the Alt key + left mouse button to change transparency."
 msgstr ""
 
@@ -3860,6 +3834,10 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
+#: mrvFl/mrvCallbacks.cpp:106 mrvUI/mrvMenus.cpp:505
+msgid "USD"
+msgstr ""
+
 #: mrvFl/mrvCallbacks.cpp:108 mrvUI/mrvMenus.cpp:429
 msgid "Vectorscope"
 msgstr ""
@@ -4564,6 +4542,209 @@ msgstr ""
 
 #: mrvUI/mrvMenus.cpp:1301
 msgid "Help/About"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:574
+msgid "3GP Movie"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:575
+msgid "Advanced Systems Format Media"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:576 mrvFLU/Flu_File_Chooser.cpp:577
+#: mrvFLU/Flu_File_Chooser.cpp:582 mrvFLU/Flu_File_Chooser.cpp:583
+#: mrvFLU/Flu_File_Chooser.cpp:597
+msgid "AVCHD Video"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:578
+msgid "AVI Movie"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:579
+msgid "DIVX Movie"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:580
+msgid "Digital Video"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:581
+msgid "Flash Movie"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:584
+msgid "Apple's M4V Movie"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:585
+msgid "Matroska Movie"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:586 mrvFLU/Flu_File_Chooser.cpp:595
+msgid "Quicktime Movie"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:587
+msgid "MP4 Movie"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:588 mrvFLU/Flu_File_Chooser.cpp:589
+msgid "MPEG Movie"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:590
+msgid "MXF Movie"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:591
+msgid "Ogg Movie"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:592
+msgid "Ogg Video"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:593
+msgid "OpenTimelineIO EDL"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:594
+msgid "OpenTimelineIO Zipped EDL"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:596
+msgid "Real Media Movie"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:598
+msgid "VOB Movie"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:599
+msgid "WebM Movie"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:600
+msgid "WMV Movie"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:602
+msgid "Bitmap Picture"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:603
+msgid "Cineon Picture"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:604
+msgid "Canon Raw Picture"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:605
+msgid "Kodak Digital Negative"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:606
+msgid "DPX Picture"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:607
+msgid "EXR Picture"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:608
+msgid "HDRI Picture"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:609 mrvFLU/Flu_File_Chooser.cpp:618
+#: mrvFLU/Flu_File_Chooser.cpp:619
+msgid "TIFF Picture"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:610
+msgid "IFF Picture"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:611 mrvFLU/Flu_File_Chooser.cpp:612
+msgid "JPEG Picture"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:613
+msgid "Map Picture"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:614
+msgid "GIF Picture"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:615
+msgid "Softimage Picture"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:616
+msgid "PNG Picture"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:617
+msgid "RGB Picture"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:621
+msgid "MP3 music"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:622
+msgid "OGG Vorbis music"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:623
+msgid "Wave music"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:3606
+msgid "Jan"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:3608
+msgid "Feb"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:3610
+msgid "Mar"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:3612
+msgid "Apr"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:3614
+msgid "May"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:3616
+msgid "Jun"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:3618
+msgid "Jul"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:3620
+msgid "Aug"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:3622
+msgid "Sep"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:3624
+msgid "Oct"
+msgstr ""
+
+#: mrvFLU/Flu_File_Chooser.cpp:3626
+msgid "Nov"
 msgstr ""
 
 #: mrvWidgets/mrvPythonEditor.cpp:123
@@ -7141,209 +7322,6 @@ msgstr ""
 msgid "Cancel the OCIO selection and don't change anything."
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:506
-msgid "3GP Movie"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:507
-msgid "Advanced Systems Format Media"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:508 mrvFLU/Flu_File_Chooser.cpp:509
-#: mrvFLU/Flu_File_Chooser.cpp:514 mrvFLU/Flu_File_Chooser.cpp:515
-#: mrvFLU/Flu_File_Chooser.cpp:529
-msgid "AVCHD Video"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:510
-msgid "AVI Movie"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:511
-msgid "DIVX Movie"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:512
-msgid "Digital Video"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:513
-msgid "Flash Movie"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:516
-msgid "Apple's M4V Movie"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:517
-msgid "Matroska Movie"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:518 mrvFLU/Flu_File_Chooser.cpp:527
-msgid "Quicktime Movie"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:519
-msgid "MP4 Movie"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:520 mrvFLU/Flu_File_Chooser.cpp:521
-msgid "MPEG Movie"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:522
-msgid "MXF Movie"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:523
-msgid "Ogg Movie"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:524
-msgid "Ogg Video"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:525
-msgid "OpenTimelineIO EDL"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:526
-msgid "OpenTimelineIO Zipped EDL"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:528
-msgid "Real Media Movie"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:530
-msgid "VOB Movie"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:531
-msgid "WebM Movie"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:532
-msgid "WMV Movie"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:534
-msgid "Bitmap Picture"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:535
-msgid "Cineon Picture"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:536
-msgid "Canon Raw Picture"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:537
-msgid "Kodak Digital Negative"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:538
-msgid "DPX Picture"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:539
-msgid "EXR Picture"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:540
-msgid "HDRI Picture"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:541 mrvFLU/Flu_File_Chooser.cpp:550
-#: mrvFLU/Flu_File_Chooser.cpp:551
-msgid "TIFF Picture"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:542
-msgid "IFF Picture"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:543 mrvFLU/Flu_File_Chooser.cpp:544
-msgid "JPEG Picture"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:545
-msgid "Map Picture"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:546
-msgid "GIF Picture"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:547
-msgid "Softimage Picture"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:548
-msgid "PNG Picture"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:549
-msgid "RGB Picture"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:553
-msgid "MP3 music"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:554
-msgid "OGG Vorbis music"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:555
-msgid "Wave music"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:3481
-msgid "Jan"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:3483
-msgid "Feb"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:3485
-msgid "Mar"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:3487
-msgid "Apr"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:3489
-msgid "May"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:3491
-msgid "Jun"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:3493
-msgid "Jul"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:3495
-msgid "Aug"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:3497
-msgid "Sep"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:3499
-msgid "Oct"
-msgstr ""
-
-#: mrvFLU/Flu_File_Chooser.cpp:3501
-msgid "Nov"
-msgstr ""
-
 #: mrvCore/mrvHotkey.h:364
 msgid "Escape"
 msgstr ""
@@ -7994,6 +7972,10 @@ msgstr ""
 
 #: mrvCore/mrvHotkey.cpp:495
 msgid "Area Selection Mode"
+msgstr ""
+
+#: mrvCore/mrvHotkey.cpp:496
+msgid "Draw Mode"
 msgstr ""
 
 #: mrvCore/mrvHotkey.cpp:497

@@ -15,6 +15,13 @@
 #include <string>
 #include <vector>
 
+#include <tlTimelineUI/TimelineWidget.h>
+
+#include <tlIO/Cache.h>
+
+#include <tlGL/GL.h>
+#include <tlGL/GLFWWindow.h>
+
 #include <FL/Fl_Double_Window.H>
 #include <FL/Fl_Input.H>
 #include <FL/Fl_Menu_Button.H>
@@ -30,10 +37,9 @@
 #include "mrvFLU/Flu_Combo_List.h"
 #include "mrvFLU/flu_export.h"
 
-#include "mrvGL/mrvThumbnailCreator.h"
 
-struct ThumbnailData;
 using namespace tl;
+using namespace tl::ui;
 
 typedef std::vector< std::string > FluStringVector;
 
@@ -473,14 +479,13 @@ public:
     static void
     _qSort(int how, bool caseSort, Fl_Widget** array, int low, int high);
 
-    void cancelThumbnailRequests();
-
     friend class Entry;
 
     class Entry : public Fl_Input
     {
     public:
-        Entry(const char* name, int t, bool d, Flu_File_Chooser* c);
+        Entry(const char* name, int t, bool d, Flu_File_Chooser* c,
+              const std::shared_ptr<ThumbnailGenerator> thumbnailGenerator = nullptr);
         ~Entry();
 
         int handle(int event);
@@ -490,6 +495,15 @@ public:
 
         void updateSize();
         void updateIcon();
+
+        inline static void _inputCB(Fl_Widget* w, void* arg)
+        {
+            ((Entry*)arg)->inputCB();
+        }
+        void inputCB();
+
+        inline static void _editCB(void* arg) { ((Entry*)arg)->editCB(); }
+        void editCB();
 
         std::string filename, date, filesize, shortname, owner, description,
             shortDescription, toolTip, altname;
@@ -502,19 +516,14 @@ public:
         int editMode;
         Flu_File_Chooser* chooser;
         Fl_Image* icon;
-        bool delete_icon;
 
-        int nameW, typeW, sizeW, dateW;
+        //! Convert our internal information to a tlRender friendly filename.
+        std::string toTLRender();
+        
         bool details;
+        int nameW, typeW, sizeW, dateW;
 
-        inline static void _inputCB(Fl_Widget* w, void* arg)
-        {
-            ((Entry*)arg)->inputCB();
-        }
-        void inputCB();
-
-        inline static void _editCB(void* arg) { ((Entry*)arg)->editCB(); }
-        void editCB();
+        TLRENDER_PRIVATE();
     };
 
     class EntryArray : public std::vector< Entry* >
@@ -598,18 +607,11 @@ public:
         int W1, W2, W3, W4;
     };
 
-    void createdThumbnail(
-        const int64_t id,
-        const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&
-            thumbnails,
-        ThumbnailData* data);
-
     //! Selection array in the order of elements as they were selected
     EntryArray selection;
 
     Fl_Group* getEntryGroup();
     Fl_Group* getEntryContainer();
-    std::string toTLRenderFilename(const Entry* e);
 
     void win2unix(std::string& s);
 
@@ -639,6 +641,22 @@ public:
 
     static int (*customSort)(const char*, const char*);
 
+    //! FLTK callback
+    static void timerEvent_cb(void*);
+    void timerEvent();
+
+protected:
+    void _thumbnailEvent();
+    void _tickEvent();
+    void _updateThumbnail(
+        Fl_Widget* widget, const std::shared_ptr<image::Image>& image);
+    void _createThumbnail(Fl_Widget* widget,
+                          const file::Path& path,
+                          const otime::RationalTime& time,
+                          const int height = 64);
+    void _cancelRequests();
+
+public:
     Fl_Group* wingrp;
     Fl_Group *fileGroup, *locationQuickJump;
     Fl_Menu_Button entryPopup;

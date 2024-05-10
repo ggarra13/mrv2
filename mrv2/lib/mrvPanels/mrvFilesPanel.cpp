@@ -32,6 +32,11 @@ namespace
     const char* kModule = "files";
 }
 
+namespace
+{
+    const tl::image::Size thumbnailSize(128, 64);
+}
+
 namespace mrv
 {
     namespace panel
@@ -101,29 +106,6 @@ namespace mrv
                 observer::CallbackAction::Suppress);
         }
 
-        FilesPanel::~FilesPanel()
-        {
-            cancel_thumbnails();
-            clear_controls();
-        }
-
-        void FilesPanel::cancel_thumbnails()
-        {
-        }
-
-        void FilesPanel::clear_controls()
-        {
-            for (const auto& i : _r->map)
-            {
-                Fl_Button* b = i.second;
-
-                g->remove(b);
-                delete b;
-            }
-
-            _r->map.clear();
-            _r->indices.clear();
-        }
 
         void FilesPanel::add_controls()
         {
@@ -151,8 +133,6 @@ namespace mrv
             otio::RationalTime time = otio::RationalTime(0.0, 1.0);
             if (player)
                 time = player->currentTime();
-
-            image::Size size(128, 64);
 
             file::Path lastPath;
 
@@ -182,7 +162,7 @@ namespace mrv
                 const std::string fullfile = protocol + dir + file;
 
                 auto bW = new Widget<FileButton>(
-                    g->x(), g->y() + 22 + i * size.h + 4, g->w(), size.h + 4);
+                    g->x(), g->y() + 22 + i * thumbnailSize.h + 4, g->w(), thumbnailSize.h + 4);
                 FileButton* b = bW;
                 b->setIndex(i);
                 _r->indices[b] = i;
@@ -219,7 +199,7 @@ namespace mrv
                 std::string text = protocol + dir + "\n" + file + layer;
                 b->copy_label(text.c_str());
                 
-                _createThumbnail(b, path, time, layerId, size.h, isNDI);
+                _createThumbnail(b, path, time, layerId, thumbnailSize.h, isNDI);
             }
 
             int Y = g->y() + 20 + numFiles * 64;
@@ -296,8 +276,6 @@ namespace mrv
             if (!player)
                 return;
 
-            image::Size size(128, 64);
-
             const auto& model = App::app->filesModel();
             auto Aindex = model->observeAIndex()->get();
             const auto files = model->observeFiles();
@@ -334,7 +312,7 @@ namespace mrv
                     time = player->currentTime();
                 }
 
-                _createThumbnail(b, path, time, layerId, size.h, isNDI);
+                _createThumbnail(b, path, time, layerId, thumbnailSize.h, isNDI);
             }
         }
 
@@ -345,8 +323,7 @@ namespace mrv
 
         void FilesPanel::refresh()
         {
-            cancel_thumbnails();
-            clear_controls();
+            _cancelRequests();
             add_controls();
             end_group();
         }

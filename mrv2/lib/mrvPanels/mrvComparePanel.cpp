@@ -34,14 +34,11 @@ namespace mrv
     namespace panel
     {
 
-        typedef std::map< ClipButton*, int64_t > WidgetIds;
         typedef std::map< ClipButton*, size_t > WidgetIndices;
 
         struct ComparePanel::Private
-        {
-            std::weak_ptr<system::Context> context;
+        {            
             std::map< size_t, ClipButton* > map;
-            WidgetIds ids;
             WidgetIndices indices;
 
             std::shared_ptr<
@@ -55,59 +52,11 @@ namespace mrv
                 compareOptionsObserver;
         };
 
-        struct ThumbnailData
-        {
-            ClipButton* widget;
-        };
-
-        void compareThumbnail_cb(
-            const int64_t id,
-            const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&
-                thumbnails,
-            void* opaque)
-        {
-            ThumbnailData* data = static_cast< ThumbnailData* >(opaque);
-            ClipButton* w = data->widget;
-            if (comparePanel)
-                comparePanel->compareThumbnail(id, thumbnails, w);
-            delete data;
-        }
-
-        void ComparePanel::compareThumbnail(
-            const int64_t id,
-            const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&
-                thumbnails,
-            ClipButton* w)
-        {
-            WidgetIds::const_iterator it = _r->ids.find(w);
-            if (it == _r->ids.end())
-                return;
-
-            if (it->second == id)
-            {
-                for (const auto& i : thumbnails)
-                {
-                    Fl_Image* img = w->image();
-                    w->image(i.second);
-                    delete img;
-                    w->redraw();
-                }
-            }
-            else
-            {
-                for (const auto& i : thumbnails)
-                {
-                    delete i.second;
-                }
-            }
-        }
 
         ComparePanel::ComparePanel(ViewerUI* ui) :
             _r(new Private),
             ThumbnailPanel(ui)
         {
-            _r->context = ui->app->getContext();
-
             add_group("Compare");
 
             Fl_SVG_Image* svg = load_svg("Compare.svg");
@@ -146,24 +95,6 @@ namespace mrv
 
         ComparePanel::~ComparePanel()
         {
-            cancel_thumbnails();
-            clear_controls();
-        }
-
-        void ComparePanel::clear_controls()
-        {
-            for (const auto& i : _r->map)
-            {
-                ClipButton* b = i.second;
-                g->remove(b);
-            }
-            _r->map.clear();
-            _r->indices.clear();
-        }
-
-        void ComparePanel::cancel_thumbnails()
-        {
-            _cancelRequests();
         }
 
         void ComparePanel::add_controls()
@@ -591,8 +522,11 @@ namespace mrv
             auto Bindices = model->observeBIndexes()->get();
             auto o = model->observeCompareOptions()->get();
 
-            for (int i = 0; i < numFiles; ++i)
+            for (auto& m : _r->map)
             {
+                const size_t i = m.first;
+                ClipButton* b = m.second;
+                
                 const auto& media = files->getItem(i);
                 const auto& path = media->path;
                 const bool isNDI = file::isTemporaryNDI(path);
@@ -603,8 +537,6 @@ namespace mrv
                     path.getBaseName() + path.getNumber() + path.getExtension();
                 const std::string fullfile = protocol + dir + file;
 
-                auto m = _r->map.find(i);
-                ClipButton* b = (*m).second;
 
                 uint16_t layerId = media->videoLayer;
                 bool found = false;
@@ -654,8 +586,7 @@ namespace mrv
 
         void ComparePanel::refresh()
         {
-            cancel_thumbnails();
-            clear_controls();
+            _cancelRequests();
             add_controls();
             end_group();
         }

@@ -29,7 +29,6 @@ namespace mrv
         {
         public:
             FilesPanel(ViewerUI* ui);
-            ~FilesPanel();
 
             void clear_controls();
             void add_controls() override;
@@ -39,9 +38,6 @@ namespace mrv
             void redraw();
 
             void refresh();
-
-        protected:
-            void cancel_thumbnails();
 
         private:
             MRV2_PRIVATE();

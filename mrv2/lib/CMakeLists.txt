@@ -4,9 +4,9 @@
 
 add_subdirectory(mrvCore)
 add_subdirectory(mrvOptions)
-add_subdirectory(mrvFLU)
 add_subdirectory(mrvFlmm)
 add_subdirectory(mrvWidgets)
+add_subdirectory(mrvFLU)
 add_subdirectory(mrvUI)
 if(TLRENDER_GL)
     add_subdirectory(mrvGL)
@@ -24,9 +24,6 @@ if(MRV2_PYBIND11)
     add_subdirectory(mrvPy)
 endif()
 
-
-# add_subdirectory(libtest)
-# add_subdirectory(exetest)
 
 
 set( PO_SOURCES ${PO_SOURCES} PARENT_SCOPE)
