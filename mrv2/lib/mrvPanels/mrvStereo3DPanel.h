@@ -19,7 +19,7 @@ namespace mrv
         {
         public:
             Stereo3DPanel(ViewerUI* ui);
-            ~Stereo3DPanel();
+            virtual ~Stereo3DPanel();
 
             void setStereo3DOptions(const Stereo3DOptions& value);
 

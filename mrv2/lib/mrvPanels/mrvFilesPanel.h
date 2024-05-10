@@ -29,7 +29,8 @@ namespace mrv
         {
         public:
             FilesPanel(ViewerUI* ui);
-
+            virtual ~FilesPanel();
+            
             void clear_controls();
             void add_controls() override;
 

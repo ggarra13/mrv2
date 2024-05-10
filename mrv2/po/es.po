@@ -1835,6 +1835,24 @@ msgstr "Entrada"
 msgid "NDI Connection"
 msgstr "Conexión NDI"
 
+msgid "USD"
+msgstr "USD"
+
+msgid "Renderer"
+msgstr "Renderer"
+
+msgid "Complexity"
+msgstr "Complejidad"
+
+msgid "Draw Mode"
+msgstr "Modo de Dibujar"
+
+msgid "Stage Cache"
+msgstr "Cache del Escenario"
+
+msgid "Disk Cache in GB"
+msgstr "Cache en Disco en GB"
+
 msgid "Toggle other eye stereo image."
 msgstr "Alternar el otro ojo de la imagen estéreo."
 
@@ -3242,9 +3260,6 @@ msgstr "Python"
 
 msgid "Settings"
 msgstr "Seteos"
-
-msgid "USD"
-msgstr "USD"
 
 msgid "Vectorscope"
 msgstr "Vectorscopio"
@@ -6535,9 +6550,6 @@ msgstr "Modo de Fregado"
 msgid "Area Selection Mode"
 msgstr "Modo de Selección de Área"
 
-msgid "Draw Mode"
-msgstr "Modo de Dibujar"
-
 msgid "Erase Mode"
 msgstr "Modo de Borrar"
 
@@ -6636,18 +6648,6 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
-
-#~ msgid "Renderer"
-#~ msgstr "Renderer"
-
-#~ msgid "Complexity"
-#~ msgstr "Complejidad"
-
-#~ msgid "Stage Cache"
-#~ msgstr "Cache del Escenario"
-
-#~ msgid "Disk Cache in GB"
-#~ msgstr "Cache en Disco en GB"
 
 #, fuzzy
 #~ msgid "Preview Thumbnails"

@@ -45,8 +45,6 @@ namespace mrv
 
         struct FilesPanel::Private
         {
-            std::weak_ptr<system::Context> context;
-            App* app;
             std::map< size_t, FileButton* > map;
             WidgetIndices indices;
 
@@ -65,8 +63,6 @@ namespace mrv
             _r(new Private),
             ThumbnailPanel(ui)
         {
-            _r->context = ui->app->getContext();
-
             add_group("Files");
 
             Fl_SVG_Image* svg = load_svg("Files.svg");
@@ -106,6 +102,9 @@ namespace mrv
                 observer::CallbackAction::Suppress);
         }
 
+        FilesPanel::~FilesPanel()
+        {
+        }
 
         void FilesPanel::add_controls()
         {

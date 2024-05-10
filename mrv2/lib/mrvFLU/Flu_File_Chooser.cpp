@@ -350,6 +350,7 @@ void Flu_File_Chooser::_updateThumbnail(
     e->icon = rgbImage;
     e->redraw();
     e->chooser->redraw();
+    Fl::check();
 }
 
 void Flu_File_Chooser::timerEvent_cb(void* d)
@@ -370,8 +371,6 @@ void Flu_File_Chooser::_thumbnailEvent()
     }
 
     // Check if any thumbnails are finished.
-    std::cerr << __FUNCTION__ << " requests=" << p.thumbnailRequests.size()
-              << std::endl;
     auto i = p.thumbnailRequests.begin();
     while (i != p.thumbnailRequests.end())
     {
@@ -461,10 +460,7 @@ void Flu_File_Chooser::previewCB()
 
                 auto time = time::invalidTime;
 
-                std::cerr << "create thumbnail for " << path.get() << std::endl;
-                _createThumbnail(e, path, time, 64); 
-
-                Fl::check();
+                _createThumbnail(e, path, time, 64);
             }
         }
     }
@@ -3579,24 +3575,19 @@ void  Flu_File_Chooser::_cancelRequests()
 
     if (!p.thumbnailGenerator)
         return;
-
-    std::cerr << "_cancelling Requests" << std::endl;
     
     std::vector<uint64_t> ids;
     if (p.infoRequest.future.valid())
     {
         ids.push_back(p.infoRequest.id);
         p.infoRequest = ui::InfoRequest();
-        std::cerr << "_cancel infoRequest" << std::endl;
     }
     for (const auto& i : p.thumbnailRequests)
     {
-        std::cerr << "_cancel id " << i.second.id << std::endl;
         ids.push_back(i.second.id);
     }
     p.thumbnailRequests.clear();
     p.thumbnailGenerator->cancelRequests(ids);
-    std::cerr << "DONE CANCELLING" << std::endl;
     
 }
 

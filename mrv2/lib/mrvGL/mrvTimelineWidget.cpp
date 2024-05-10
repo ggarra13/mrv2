@@ -51,6 +51,8 @@
 #include "mrViewer.h"
 
 #include <FL/platform.H>
+#undef None
+
 
 namespace mrv
 {

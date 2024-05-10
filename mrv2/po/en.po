@@ -1808,6 +1808,24 @@ msgstr "Input"
 msgid "NDI Connection"
 msgstr "NDI Connection"
 
+msgid "USD"
+msgstr "USD"
+
+msgid "Renderer"
+msgstr "Renderer"
+
+msgid "Complexity"
+msgstr "Complexity"
+
+msgid "Draw Mode"
+msgstr "Draw Mode"
+
+msgid "Stage Cache"
+msgstr "Stage Cache"
+
+msgid "Disk Cache in GB"
+msgstr "Disk Cache in GB"
+
 msgid "Toggle other eye stereo image."
 msgstr "Toggle other eye stereo image."
 
@@ -3192,9 +3210,6 @@ msgstr "Python"
 
 msgid "Settings"
 msgstr "Settings"
-
-msgid "USD"
-msgstr "USD"
 
 msgid "Vectorscope"
 msgstr "Vectorscope"
@@ -6471,9 +6486,6 @@ msgstr "Scrub Mode"
 msgid "Area Selection Mode"
 msgstr "Area Selection Mode"
 
-msgid "Draw Mode"
-msgstr "Draw Mode"
-
 msgid "Erase Mode"
 msgstr "Erase Mode"
 
@@ -6572,15 +6584,3 @@ msgstr "Toggle Hotkeys Window"
 
 msgid "Toggle About Window"
 msgstr "Toggle About Window"
-
-#~ msgid "Renderer"
-#~ msgstr "Renderer"
-
-#~ msgid "Complexity"
-#~ msgstr "Complexity"
-
-#~ msgid "Stage Cache"
-#~ msgstr "Stage Cache"
-
-#~ msgid "Disk Cache in GB"
-#~ msgstr "Disk Cache in GB"

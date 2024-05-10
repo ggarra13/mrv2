@@ -34,7 +34,7 @@ namespace mrv
 
         public:
             ComparePanel(ViewerUI* ui);
-            ~ComparePanel();
+            virtual ~ComparePanel();
 
             void redraw();
             

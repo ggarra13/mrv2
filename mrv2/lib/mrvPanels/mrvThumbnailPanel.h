@@ -26,7 +26,7 @@ namespace mrv
         {
         public:
             ThumbnailPanel(ViewerUI* ui);
-            ~ThumbnailPanel();
+            virtual ~ThumbnailPanel();
 
             //! Clear our thumbnail cache
             void clearCache();

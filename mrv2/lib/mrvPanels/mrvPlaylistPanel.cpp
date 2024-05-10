@@ -40,17 +40,13 @@ namespace mrv
     namespace panel
     {
 
-        typedef std::map< PlaylistButton*, int64_t > WidgetIds;
         typedef std::map< PlaylistButton*, size_t > WidgetIndices;
 
         struct PlaylistPanel::Private
         {
-            std::weak_ptr<system::Context> context;
-
             std::map< size_t, PlaylistButton* > map;
             std::vector< PlaylistButton* > playlistButtons;
 
-            WidgetIds ids;
             WidgetIndices indices;
 
             std::shared_ptr<
@@ -62,61 +58,11 @@ namespace mrv
             std::shared_ptr<observer::ValueObserver<int> > aIndexObserver;
         };
 
-        struct ThumbnailData
-        {
-            PlaylistButton* widget;
-        };
-
-        void playlistThumbnail_cb(
-            const int64_t id,
-            const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&
-                thumbnails,
-            void* opaque)
-        {
-            ThumbnailData* data = static_cast< ThumbnailData* >(opaque);
-            PlaylistButton* w = data->widget;
-            if (playlistPanel)
-                playlistPanel->playlistThumbnail(id, thumbnails, w);
-            delete data;
-        }
-
-        void PlaylistPanel::playlistThumbnail(
-            const int64_t id,
-            const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&
-                thumbnails,
-            PlaylistButton* w)
-        {
-            WidgetIds::const_iterator it = _r->ids.find(w);
-            if (it == _r->ids.end())
-            {
-                return;
-            }
-
-            if (it->second == id)
-            {
-                for (const auto& i : thumbnails)
-                {
-                    Fl_Image* img = w->image();
-                    w->image(i.second);
-                    delete img;
-                    w->redraw();
-                }
-            }
-            else
-            {
-                for (const auto& i : thumbnails)
-                {
-                    delete i.second;
-                }
-            }
-        }
 
         PlaylistPanel::PlaylistPanel(ViewerUI* ui) :
             _r(new Private),
             ThumbnailPanel(ui)
         {
-            _r->context = ui->app->getContext();
-
             add_group("Playlist");
 
             Fl_SVG_Image* svg = load_svg("Playlist.svg");
@@ -151,8 +97,6 @@ namespace mrv
 
         PlaylistPanel::~PlaylistPanel()
         {
-            cancel_thumbnails();
-            clear_controls();
         }
 
         void PlaylistPanel::clear_controls()
@@ -160,11 +104,6 @@ namespace mrv
             _r->map.clear();
             _r->playlistButtons.clear();
             _r->indices.clear();
-        }
-
-        void PlaylistPanel::cancel_thumbnails()
-        {
-            _cancelRequests();
         }
 
         void PlaylistPanel::add_controls()
@@ -364,8 +303,6 @@ namespace mrv
 
         void PlaylistPanel::refresh()
         {
-            cancel_thumbnails();
-            clear_controls();
             add_controls();
             end_group();
         }
