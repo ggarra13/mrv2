@@ -39,11 +39,6 @@ namespace mrv
             void redraw();
 
             void refresh();
-            void filesThumbnail(
-                const int64_t id,
-                const std::vector<
-                    std::pair<otime::RationalTime, Fl_RGB_Image*> >& thumbnails,
-                FileButton* w);
 
         protected:
             void cancel_thumbnails();

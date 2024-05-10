@@ -43,7 +43,6 @@ namespace mrv
             std::map< size_t, ClipButton* > map;
             WidgetIds ids;
             WidgetIndices indices;
-            std::vector< Fl_Button* > buttons;
 
             std::shared_ptr<
                 observer::ListObserver<std::shared_ptr<FilesModelItem> > >
@@ -156,20 +155,8 @@ namespace mrv
             for (const auto& i : _r->map)
             {
                 ClipButton* b = i.second;
-                delete b->image();
-                b->image(nullptr);
                 g->remove(b);
-                delete b;
             }
-
-            // Clear buttons' SVG images
-            for (const auto& b : _r->buttons)
-            {
-                delete b->image();
-                b->image(nullptr);
-            }
-
-            _r->buttons.clear();
             _r->map.clear();
             _r->indices.clear();
         }
@@ -281,6 +268,26 @@ namespace mrv
                     b->image(svg);
                     continue;
                 }
+                
+                if (auto context = _r->context.lock())
+                {
+                    const auto& timeline =
+                        timeline::Timeline::create(path, context);
+                    const auto& timeRange = timeline->getTimeRange();
+
+                    if (time::isValid(timeRange))
+                    {
+                        const auto& startTime = timeRange.start_time();
+                        const auto& endTime = timeRange.end_time_inclusive();
+                        
+                        if (time < startTime)
+                            time = startTime;
+                        else if (time > endTime)
+                            time = endTime;
+                    }
+
+                    _createThumbnail(b, path, time, layerId, 64);
+                }
 
                 Y += size.h;
                 
@@ -296,7 +303,6 @@ namespace mrv
             b = bW;
             Fl_SVG_Image* svg = load_svg("CompareA.svg");
             b->image(svg);
-            _r->buttons.push_back(b);
             b->tooltip(_("Compare A"));
             bW->callback(
                 [=](auto w)
@@ -310,7 +316,6 @@ namespace mrv
             b = bW;
             svg = load_svg("CompareB.svg");
             b->image(svg);
-            _r->buttons.push_back(b);
             b->tooltip(_("Compare B"));
 
             bW->callback(
@@ -325,7 +330,6 @@ namespace mrv
             b = bW;
             svg = load_svg("CompareWipe.svg");
             b->image(svg);
-            _r->buttons.push_back(b);
             b->tooltip(
 #ifdef __APPLE__
                 _("Wipe between the A and B files\n\n"
@@ -352,7 +356,6 @@ namespace mrv
             b = bW;
             svg = load_svg("CompareOverlay.svg");
             b->image(svg);
-            _r->buttons.push_back(b);
             b->tooltip(
                 _("Overlay the A and B files with optional transparencyy"));
 
@@ -368,7 +371,6 @@ namespace mrv
             b = bW;
             svg = load_svg("CompareDifference.svg");
             b->image(svg);
-            _r->buttons.push_back(b);
             b->tooltip(_("Difference the A and B files"));
 
             bW->callback(
@@ -383,7 +385,6 @@ namespace mrv
             b = bW;
             svg = load_svg("CompareHorizontal.svg");
             b->image(svg);
-            _r->buttons.push_back(b);
             b->tooltip(_("Compare the A and B files side by side"));
 
             bW->callback(
@@ -398,7 +399,6 @@ namespace mrv
             b = bW;
             svg = load_svg("CompareVertical.svg");
             b->image(svg);
-            _r->buttons.push_back(b);
             b->tooltip(_("Show the A file above the B file"));
 
             bW->callback(
@@ -409,13 +409,12 @@ namespace mrv
                     model->setCompareOptions(o);
                 });
 
+            
             bW = new Widget< Button >(X + 210, Y, 30, 30);
             b = bW;
             svg = load_svg("CompareTile.svg");
             b->image(svg);
-            _r->buttons.push_back(b);
             b->tooltip(_("Tile the A and B files"));
-
             bW->callback(
                 [=](auto w)
                 {
@@ -423,12 +422,11 @@ namespace mrv
                     o.mode = timeline::CompareMode::Tile;
                     model->setCompareOptions(o);
                 });
+            
 
-            bW = new Widget< Button >(X + 240, Y, 30, 30);
-            b = bW;
+            b = bW = new Widget< Button >(X + 240, Y, 30, 30);
             svg = load_svg("Prev.svg");
             b->image(svg);
-            _r->buttons.push_back(b);
             b->tooltip(_("Previous filename"));
             bW->callback(
                 [=](auto w)
@@ -441,7 +439,6 @@ namespace mrv
             b = bW;
             svg = load_svg("Next.svg");
             b->image(svg);
-            _r->buttons.push_back(b);
             b->tooltip(_("Next filename"));
             bW->callback(
                 [=](auto w)
@@ -689,6 +686,26 @@ namespace mrv
                     Fl_SVG_Image* svg = load_svg("NDI.svg");
                     b->image(svg);
                     continue;
+                }
+                
+                if (auto context = _r->context.lock())
+                {
+                    const auto& timeline =
+                        timeline::Timeline::create(path, context);
+                    const auto& timeRange = timeline->getTimeRange();
+
+                    if (time::isValid(timeRange))
+                    {
+                        const auto& startTime = timeRange.start_time();
+                        const auto& endTime = timeRange.end_time_inclusive();
+                        
+                        if (time < startTime)
+                            time = startTime;
+                        else if (time > endTime)
+                            time = endTime;
+                    }
+
+                    _createThumbnail(b, path, time, layerId, size.h);
                 }
             }
         }

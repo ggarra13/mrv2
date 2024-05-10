@@ -36,7 +36,6 @@ namespace mrv
 {
     namespace panel
     {
-        typedef std::map< FileButton*, int64_t > WidgetIds;
         typedef std::map< FileButton*, size_t > WidgetIndices;
 
         struct FilesPanel::Private
@@ -44,9 +43,7 @@ namespace mrv
             std::weak_ptr<system::Context> context;
             App* app;
             std::map< size_t, FileButton* > map;
-            WidgetIds ids;
             WidgetIndices indices;
-            std::vector< Fl_Button* > buttons;
 
             std::shared_ptr<
                 observer::ListObserver<std::shared_ptr<FilesModelItem> > >
@@ -58,57 +55,6 @@ namespace mrv
             std::shared_ptr<observer::ValueObserver<int> > aIndexObserver;
             std::shared_ptr<observer::ListObserver<int> > layerObserver;
         };
-
-        struct ThumbnailData
-        {
-            FileButton* widget;
-        };
-
-        void filesThumbnail_cb(
-            const int64_t id,
-            const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&
-                thumbnails,
-            void* opaque)
-        {
-            ThumbnailData* data = static_cast< ThumbnailData* >(opaque);
-            FileButton* w = data->widget;
-            if (filesPanel)
-                filesPanel->filesThumbnail(id, thumbnails, w);
-            delete data;
-        }
-
-        void FilesPanel::filesThumbnail(
-            const int64_t id,
-            const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&
-                thumbnails,
-            FileButton* w)
-        {
-
-            WidgetIds::const_iterator it = _r->ids.find(w);
-            if (it == _r->ids.end())
-                return;
-
-            if (it->second == id)
-            {
-
-                for (const auto& i : thumbnails)
-                {
-                    Fl_Image* img = w->image();
-                    w->image(i.second);
-                    delete img;
-                    w->redraw();
-                }
-            }
-            else
-            {
-
-                for (const auto& i : thumbnails)
-                {
-
-                    delete i.second;
-                }
-            }
-        }
 
         FilesPanel::FilesPanel(ViewerUI* ui) :
             _r(new Private),
@@ -171,20 +117,10 @@ namespace mrv
             {
                 Fl_Button* b = i.second;
 
-                delete b->image();
-                b->image(nullptr);
                 g->remove(b);
                 delete b;
             }
 
-            // Clear buttons' SVG images
-            for (const auto& b : _r->buttons)
-            {
-                delete b->image();
-                b->image(nullptr);
-            }
-
-            _r->buttons.clear();
             _r->map.clear();
             _r->indices.clear();
         }
@@ -297,47 +233,25 @@ namespace mrv
                     continue;
                 }
 
-                // if (auto context = _r->context.lock())
-                // {
+                if (auto context = _r->context.lock())
+                {
+                    const auto& timeline =
+                        timeline::Timeline::create(path, context);
+                    const auto& timeRange = timeline->getTimeRange();
 
-                //     ThumbnailData* data = new ThumbnailData;
-                //     data->widget = b;
+                    if (time::isValid(timeRange))
+                    {
+                        const auto& startTime = timeRange.start_time();
+                        const auto& endTime = timeRange.end_time_inclusive();
+                        
+                        if (time < startTime)
+                            time = startTime;
+                        else if (time > endTime)
+                            time = endTime;
+                    }
 
-                //     WidgetIds::const_iterator it = _r->ids.find(b);
-                //     if (it != _r->ids.end())
-                //     {
-                //         _r->thumbnailCreator->cancelRequests(it->second);
-                //         _r->ids.erase(it);
-                //     }
-
-                //     try
-                //     {
-                //         auto timeline =
-                //             timeline::Timeline::create(path, context);
-                //         auto timeRange = timeline->getTimeRange();
-
-                //         if (time::isValid(timeRange))
-                //         {
-                //             auto startTime = timeRange.start_time();
-                //             auto endTime = timeRange.end_time_inclusive();
-
-                //             if (time < startTime)
-                //                 time = startTime;
-                //             else if (time > endTime)
-                //                 time = endTime;
-                //         }
-
-                //         _r->thumbnailCreator->initThread();
-
-                //         int64_t id = _r->thumbnailCreator->request(
-                //             fullfile, time, size, filesThumbnail_cb,
-                //             (void*)data, layerId);
-                //         _r->ids[b] = id;
-                //     }
-                //     catch (const std::exception& e)
-                //     {
-                //     }
-                // }
+                    _createThumbnail(b, path, time, layerId, size.h);
+                }
             }
 
             int Y = g->y() + 20 + numFiles * 64;
@@ -349,62 +263,45 @@ namespace mrv
             Fl_Button* b;
             auto bW = new Widget< Button >(g->x(), Y, 30, 30);
             b = bW;
-
-            svg = load_svg("FileOpen.svg");
-            b->image(svg);
-
-            _r->buttons.push_back(b);
-
+            b->bind_image(load_svg("FileOpen.svg"));
             b->tooltip(_("Open a filename"));
             bW->callback([=](auto w) { open_cb(w, p.ui); });
 
             bW = new Widget< Button >(g->x() + 30, Y, 30, 30);
             b = bW;
-            svg = load_svg("FileOpenSeparateAudio.svg");
-            b->image(svg);
-            _r->buttons.push_back(b);
+            b->bind_image(load_svg("FileOpenSeparateAudio.svg"));
             b->tooltip(_("Open a filename with audio"));
             bW->callback([=](auto w) { open_separate_audio_cb(w, p.ui); });
 
             bW = new Widget< Button >(g->x() + 60, Y, 30, 30);
             b = bW;
-            svg = load_svg("FileClose.svg");
-            b->image(svg);
-            _r->buttons.push_back(b);
+            b->bind_image(load_svg("FileClose.svg"));
             b->tooltip(_("Close current filename"));
             bW->callback([=](auto w) { close_current_cb(w, p.ui); });
 
             bW = new Widget< Button >(g->x() + 90, Y, 30, 30);
             b = bW;
-            svg = load_svg("FileCloseAll.svg");
-            b->image(svg);
-            _r->buttons.push_back(b);
+            b->bind_image(load_svg("FileCloseAll.svg"));
             b->tooltip(_("Close all filenames"));
             bW->callback([=](auto w) { close_all_cb(w, p.ui); });
 
             bW = new Widget< Button >(g->x() + 120, Y, 30, 30);
             b = bW;
-            svg = load_svg("Prev.svg");
-            b->image(svg);
-            _r->buttons.push_back(b);
+            b->bind_image(load_svg("Prev.svg"));
             b->tooltip(_("Previous filename"));
             bW->callback([=](auto w) { App::app->filesModel()->prev(); });
 
             bW = new Widget< Button >(g->x() + 150, Y, 30, 30);
             b = bW;
-            svg = load_svg("Next.svg");
-            b->image(svg);
-            _r->buttons.push_back(b);
+            b->bind_image(load_svg("Next.svg"));
             b->tooltip(_("Next filename"));
             bW->callback([=](auto w) { App::app->filesModel()->next(); });
 
             auto btW = new Widget< Fl_Button >(g->x() + 150, Y, 30, 30);
             b = btW;
-            svg = load_svg("Filter.svg");
-            b->image(svg);
+            b->bind_image(load_svg("Filter.svg"));
             b->selection_color(FL_YELLOW);
             b->value(o.filterEDL);
-            _r->buttons.push_back(b);
             b->tooltip(_("Filter EDLs"));
             btW->callback(
                 [=](auto w)
@@ -471,59 +368,35 @@ namespace mrv
 
                 if (!p.ui->uiPrefs->uiPrefsPanelThumbnails->value())
                 {
-                    delete b->image();
-                    b->image(nullptr);
+                    b->bind_image(nullptr);
                     return;
                 }
 
                 if (isNDI)
                 {
-                    Fl_SVG_Image* svg = load_svg("NDI.svg");
-                    b->image(svg);
+                    b->bind_image(load_svg("NDI.svg"));
                     continue;
                 }
 
-            //     if (auto context = _r->context.lock())
-            //     {
-            //         ThumbnailData* data = new ThumbnailData;
-            //         data->widget = b;
+                if (auto context = _r->context.lock())
+                {
+                    const auto& timeline =
+                        timeline::Timeline::create(path, context);
+                    const auto& timeRange = timeline->getTimeRange();
 
-            //         WidgetIds::const_iterator it = _r->ids.find(b);
-            //         if (it != _r->ids.end())
-            //         {
-            //             _r->thumbnailCreator->cancelRequests(it->second);
-            //             _r->ids.erase(it);
-            //         }
+                    if (time::isValid(timeRange))
+                    {
+                        const auto& startTime = timeRange.start_time();
+                        const auto& endTime = timeRange.end_time_inclusive();
+                        
+                        if (time < startTime)
+                            time = startTime;
+                        else if (time > endTime)
+                            time = endTime;
+                    }
 
-            //         try
-            //         {
-            //             auto timeline =
-            //                 timeline::Timeline::create(path, context);
-            //             auto timeRange = timeline->getTimeRange();
-
-            //             if (time::isValid(timeRange))
-            //             {
-            //                 auto startTime = timeRange.start_time();
-            //                 auto endTime = timeRange.end_time_inclusive();
-
-            //                 if (time < startTime)
-            //                     time = startTime;
-            //                 else if (time > endTime)
-            //                     time = endTime;
-            //             }
-
-            //             _r->thumbnailCreator->initThread();
-
-            //             int64_t id = _r->thumbnailCreator->request(
-            //                 fullfile, time, size, filesThumbnail_cb,
-            //                 (void*)data, layerId);
-            //             _r->ids[b] = id;
-            //         }
-            //         catch (const std::exception& e)
-            //         {
-            //         }
-            //     }
-
+                    _createThumbnail(b, path, time, layerId, size.h);
+                }
             }
         }
 

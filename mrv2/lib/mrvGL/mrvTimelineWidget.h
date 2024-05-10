@@ -161,6 +161,7 @@ namespace mrv
             const ui::TickEvent&);
 
         void _thumbnailEvent();
+        void _updateThumbnail(const std::shared_ptr<image::Image>&);
         
         bool _getSizeUpdate(const std::shared_ptr<ui::IWidget>&) const;
         void _sizeHintEvent();

@@ -65,20 +65,21 @@ namespace mrv
     namespace
     {
 
-        void flipY(const uint8_t* in, const size_t width, const size_t height,
-                   const int depth, uint8_t* out)
+        void flipY(
+            uint8_t* pixels, const size_t width, const size_t height,
+            const int depth)
         {
-            // Calculate the size of a row of  (in bytes)
             const size_t rowSize = width * depth;
+            for (size_t y = 0; y < height / 2; ++y) {
+                size_t topRow = y * rowSize;
+                size_t bottomRow = (height - y - 1) * rowSize;
 
-            // Loop through half the image height
-            for (size_t y = 0; y < height; ++y)
-            {
-                const size_t inRow = y * rowSize;
-                const size_t outRow = (height - y - 1) * rowSize;
-
-                // Copy a row from top to bottom in the output buffer
-                memcpy(out + outRow, in + inRow, rowSize);
+                for (size_t i = 0; i < rowSize; ++i)
+                {
+                    const uint8_t temp = pixels[topRow + i];
+                    pixels[topRow + i] = pixels[bottomRow + i];
+                    pixels[bottomRow + i] = temp;
+                }
             }
         }
         
@@ -350,12 +351,6 @@ namespace mrv
 
     TimelineWidget::~TimelineWidget()
     {
-        TLRENDER_P();
-        if (p.box)
-        {
-            delete p.box->image();
-            p.box->image(nullptr);
-        }
     }
 
     bool TimelineWidget::isEditable() const
@@ -523,6 +518,23 @@ namespace mrv
         }
     }
 
+    void
+    TimelineWidget::_updateThumbnail(const std::shared_ptr<image::Image>& image)
+    {
+        TLRENDER_P();
+        
+        const auto W = image->getWidth();
+        const auto H = image->getHeight();
+        const int bytes = image->getDataByteCount();
+        const int depth = bytes / W / H;
+        const uint8_t* data = image->getData();
+        const auto rgbImage = new Fl_RGB_Image(data, W, H, depth);
+                            
+        Fl_Image* boxImage = p.box->image();
+        p.box->bind_image(rgbImage);
+        p.box->redraw();
+    }
+    
     int TimelineWidget::requestThumbnail(bool fetch)
     {
         TLRENDER_P();
@@ -550,36 +562,35 @@ namespace mrv
         p.box->copy_label(buffer);
         
         _cancelRequests();
-
-        if (!p.thumbnailGenerator)
-            return 0;
         
-        if (fetch)
+        if (!p.ioInfo && !p.infoRequest.future.valid())
         {
-            if (!p.ioInfo && !p.infoRequest.future.valid())
-            {
-                p.infoRequest = p.thumbnailGenerator->getInfo(p.path, p.memoryRead);
-            }
-                
-            p.ioOptions["OpenEXR/IgnoreDisplayWindow"] =
-                string::Format("{0}").arg(
-                    App::ui->uiView->getIgnoreDisplayWindow());
-            p.ioOptions["Layer"] =
-                string::Format("{0}").arg(layerId);
-            // @todo: p.ioOptions["USD/cameraName"] = p.clipName;
-            const auto i = p.thumbnails.find(
-                io::getCacheKey(p.path, time, p.ioOptions));
+            p.infoRequest = p.thumbnailGenerator->getInfo(p.path, p.memoryRead);
+        }
 
-            if (p.ioInfo && !p.ioInfo->video.empty())
+        if (!fetch) return 1;
+                
+        p.ioOptions["OpenEXR/IgnoreDisplayWindow"] =
+            string::Format("{0}").arg(
+                App::ui->uiView->getIgnoreDisplayWindow());
+        p.ioOptions["Layer"] =
+            string::Format("{0}").arg(layerId);
+        // @todo: p.ioOptions["USD/cameraName"] = p.clipName;
+        const auto i = p.thumbnails.find(
+            io::getCacheKey(p.path, time, p.ioOptions));
+        if (i != p.thumbnails.end())
+        {
+            _updateThumbnail(i->second);
+        }
+        else if (p.ioInfo && !p.ioInfo->video.empty())
+        {
+            const auto k = p.thumbnailRequests.find(time);
+            if (k == p.thumbnailRequests.end())
             {
-                const auto k = p.thumbnailRequests.find(time);
-                if (k == p.thumbnailRequests.end())
-                {
-                    p.thumbnailRequests[time] =
-                        p.thumbnailGenerator->getThumbnail(
-                            p.path, p.memoryRead, p.box->h() - 24,
-                            time, p.ioOptions);
-                }
+                p.thumbnailRequests[time] =
+                    p.thumbnailGenerator->getThumbnail(
+                        p.path, p.memoryRead, p.box->h() - 24,
+                        time, p.ioOptions);
             }
         }
         return 1;
@@ -613,9 +624,7 @@ namespace mrv
         else
         {
             _cancelRequests();
-            Fl_Image* image = p.box->image();
-            delete image;
-            p.box->image(nullptr);
+            p.box->bind_image(nullptr);
             
             p.timeRange = time::invalidTimeRange;
             p.timelineWidget->setPlayer(nullptr);
@@ -1671,20 +1680,15 @@ namespace mrv
                 const auto image = i->second.future.get();
                 p.thumbnails[io::getCacheKey(p.path, i->first, p.ioOptions)] = image;
                 i = p.thumbnailRequests.erase(i);
-
+                
                 const auto W = image->getWidth();
                 const auto H = image->getHeight();
                 const int bytes = image->getDataByteCount();
                 const int depth = bytes / W / H;
-                const uint8_t* data = image->getData();
-                uint8_t* flipped = new uint8_t[bytes];
-                flipY(data, W, H, depth, flipped);
-                const auto rgbImage = new Fl_RGB_Image(flipped, W, H, depth);
-                            
-                Fl_Image* boxImage = p.box->image();
-                delete boxImage;
-                p.box->image(rgbImage);
-                p.box->redraw();
+                uint8_t* data = image->getData();
+                flipY(data, W, H, depth);
+                
+                _updateThumbnail(image);
             }
             else
             {
