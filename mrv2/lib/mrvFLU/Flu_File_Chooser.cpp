@@ -25,6 +25,7 @@
 #include <random>
 #include <iostream>
 #include <algorithm>
+#include <thread>
 #include <mutex>
 #include <set>
 
@@ -245,8 +246,10 @@ struct Flu_File_Chooser::Private
     std::shared_ptr<io::Info> ioInfo;
     std::map<std::string, ui::ThumbnailRequest> thumbnailRequests;
 
-    // Mapping of ids to panel data.
-    std::map<int64_t, std::shared_ptr<CallbackData>> callbackData;    
+    // Mapping of request ids to callback data.
+    std::map<int64_t, std::shared_ptr<CallbackData>> callbackData;
+
+    std::vector<std::thread*> threads;
 };
 
 void Flu_File_Chooser::setContext(
@@ -350,7 +353,7 @@ void Flu_File_Chooser::_updateThumbnail(
     e->icon = rgbImage;
     e->redraw();
     e->chooser->redraw();
-    Fl::check();
+    Fl::flush();
 }
 
 void Flu_File_Chooser::timerEvent_cb(void* d)
@@ -461,6 +464,7 @@ void Flu_File_Chooser::previewCB()
                 auto time = time::invalidTime;
 
                 _createThumbnail(e, path, time, 64);
+                Fl::flush();
             }
         }
     }
@@ -3588,7 +3592,15 @@ void  Flu_File_Chooser::_cancelRequests()
     }
     p.thumbnailRequests.clear();
     p.thumbnailGenerator->cancelRequests(ids);
-    
+
+    for (const auto& thread : p.threads)
+    {
+        if (thread->joinable())
+        {
+            thread->join();
+        }
+    }
+    p.threads.clear();
 }
 
 void Flu_File_Chooser::cd(const char* path)
