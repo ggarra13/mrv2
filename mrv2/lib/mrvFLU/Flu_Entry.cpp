@@ -1,4 +1,6 @@
 
+#include <tlCore/Path.h>
+
 #include <FL/Fl_Pixmap.H>
 
 #include "mrvFLU/flu_pixmaps.h"
@@ -40,6 +42,15 @@ static const int kColorTwo = fl_rgb_color(180, 180, 180);
 struct Flu_Entry::Private
 {
     std::shared_ptr<ThumbnailGenerator> thumbnailGenerator;
+
+    file::FileInfo fileInfo;
+
+    struct Options
+    {
+        bool thumbnail = true;
+        int thumbnailHeight =  64;
+    };
+    Options options;
     
     struct InfoData
     {
@@ -65,7 +76,8 @@ Flu_Entry::Flu_Entry(
     _p(new Private)
 {
     TLRENDER_P();
-    
+
+    // p.fileInfo           = fileInfo;
     p.thumbnailGenerator = thumbnailGenerator;
     
     resize(0, 0, DEFAULT_ENTRY_WIDTH, 20);
@@ -217,20 +229,24 @@ int Flu_Entry::handle(int event)
     switch(event)
     {
     case FL_SHOW:
-        std::cerr << "show " << toTLRender() << std::endl;
-        if (p.info.init)
+    {
+        if (p.thumbnailGenerator)
         {
-            p.info.init = false;
-            // p.info.request = p.thumbnailGenerator->getInfo(p.fileInfo.getPath());
-        }
-        if (p.thumbnail.init)
-        {
-            p.thumbnail.init = false;
-            // p.thumbnail.request = p.thumbnailGenerator->getThumbnail(
-            //     p.fileInfo.getPath(),
-            //     p.options.thumbnailHeight);
+            file::Path path(toTLRender());
+            if (p.info.init)
+            {
+                p.info.init = false;
+                p.info.request = p.thumbnailGenerator->getInfo(path);
+            }
+            if (p.thumbnail.init)
+            {
+                p.thumbnail.init = false;
+                p.thumbnail.request = p.thumbnailGenerator->getThumbnail(
+                    path, p.options.thumbnailHeight);
+            }
         }
         break;
+    }
     case FL_HIDE:
         break;
     default:

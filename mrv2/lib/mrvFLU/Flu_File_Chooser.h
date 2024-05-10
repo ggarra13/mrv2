@@ -562,8 +562,8 @@ public:
 protected:
     void _thumbnailEvent();
     void _tickEvent();
-    void _updateThumbnail(
-        Fl_Widget* widget, const std::shared_ptr<image::Image>& image);
+    void
+    _updateThumbnail(Flu_Entry* e, const std::shared_ptr<image::Image>& image);
     void _createThumbnail(Fl_Widget* widget,
                           const file::Path& path,
                           const otime::RationalTime& time,

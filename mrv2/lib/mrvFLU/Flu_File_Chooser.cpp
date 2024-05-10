@@ -246,7 +246,7 @@ struct Flu_File_Chooser::Private
     std::map<std::string, ui::ThumbnailRequest> thumbnailRequests;
 
     // Mapping of ids to panel data.
-    std::map<int64_t, std::shared_ptr<CallbackData>> _data;    
+    std::map<int64_t, std::shared_ptr<CallbackData>> callbackData;    
 };
 
 void Flu_File_Chooser::setContext(
@@ -275,20 +275,81 @@ void Flu_File_Chooser::_createThumbnail(
     const otime::RationalTime& currentTime, const int height)
 {
     TLRENDER_P();
+
+    if (auto context = mrv::App::app->getContext())
+    {
+        try
+        {
+            const auto& timeline =
+                timeline::Timeline::create(path, context);
+            const auto& timeRange = timeline->getTimeRange();
+
+            auto time = currentTime;
+            if (time::isValid(timeRange))
+            {
+                const auto& startTime = timeRange.start_time();
+                const auto& endTime = timeRange.end_time_inclusive();
+                
+                if (time < startTime)
+                    time = startTime;
+                else if (time > endTime)
+                    time = endTime;
+            }
+            
+            if (!p.ioInfo && !p.infoRequest.future.valid())
+            {
+                p.infoRequest = p.thumbnailGenerator->getInfo(path);
+            }
+            
+            p.ioOptions["OpenEXR/IgnoreDisplayWindow"] =
+                string::Format("{0}").arg(
+                    mrv::App::ui->uiView->getIgnoreDisplayWindow());
+            p.ioOptions["Layer"] =
+                string::Format("{0}").arg(0); //layerId);
+            // @todo: ioOptions["USD/cameraName"] = clipName;
+            const auto& key = io::getCacheKey(path, time, p.ioOptions);
+            
+            const auto k = p.thumbnailRequests.find(key);
+            if (k == p.thumbnailRequests.end())
+            {
+                p.thumbnailRequests[key] = p.thumbnailGenerator->getThumbnail(
+                    path, p.memoryRead, height, time, p.ioOptions);
+
+                const int64_t id = p.thumbnailRequests[key].id;
+                auto data = std::make_shared<CallbackData>();
+                data->widget = widget;
+                data->path   = path;
+                p.callbackData[id] = data;
+            }
+            
+        }
+        catch(const std::exception& e)
+        {
+            // ... no printing of errors to not saturate log.
+        }
+    }
 }
-    
+
 void Flu_File_Chooser::_updateThumbnail(
-    Fl_Widget* widget, const std::shared_ptr<image::Image>& image)
+    Flu_Entry* e, const std::shared_ptr<image::Image>& image)
 {
+    if (!image || !image->isValid())
+    {
+        return;
+    }
     const auto W = image->getWidth();
     const auto H = image->getHeight();
+    const auto data = image->getData();
     const auto bytes = image->getDataByteCount();
     const int depth = bytes / W / H;
-    uint8_t* imageData = image->getData();
-    const auto rgbImage = new Fl_RGB_Image(imageData, W, H, depth);
-    widget->bind_image(rgbImage);
-    widget->redraw();
-    redraw();
+
+    // flipped is cleaned by FLTK (as we set it as bind_image not image).
+    uint8_t* flipped = new uint8_t[W * H * depth];
+    mrv::flipImageInY(flipped, data, W, H, depth);
+    const auto rgbImage = new Fl_RGB_Image(flipped, W, H, depth);
+    e->icon = rgbImage;
+    e->redraw();
+    e->chooser->redraw();
 }
 
 void Flu_File_Chooser::timerEvent_cb(void* d)
@@ -300,6 +361,46 @@ void Flu_File_Chooser::timerEvent_cb(void* d)
 void Flu_File_Chooser::_thumbnailEvent()
 {
     TLRENDER_P();
+    
+    // Check if the I/O information is finished.
+    if (p.infoRequest.future.valid() &&
+        p.infoRequest.future.wait_for(std::chrono::seconds(0)) == std::future_status::ready)
+    {
+        p.ioInfo = std::make_shared<io::Info>(p.infoRequest.future.get());
+    }
+
+    // Check if any thumbnails are finished.
+    std::cerr << __FUNCTION__ << " requests=" << p.thumbnailRequests.size()
+              << std::endl;
+    auto i = p.thumbnailRequests.begin();
+    while (i != p.thumbnailRequests.end())
+    {
+        if (i->second.future.valid() &&
+            i->second.future.wait_for(std::chrono::seconds(0)) == std::future_status::ready)
+        {
+            const auto& data = p.callbackData[i->second.id];
+            const auto& path = data->path;
+            const auto image = i->second.future.get();
+            const auto time = i->second.time;
+            
+            if (image && image->isValid())
+            {
+                auto entry  = static_cast<Flu_Entry*>(data->widget);
+                const auto W = image->getWidth();
+                const auto H = image->getHeight();
+                const auto bytes = image->getDataByteCount();
+                const int depth = bytes / W / H;
+                bool bound = false;
+                _updateThumbnail(entry, image);
+            }
+            
+            i = p.thumbnailRequests.erase(i);
+        }
+        else
+        {
+            ++i;
+        }
+    }
 }
 
 void Flu_File_Chooser::_tickEvent()
@@ -358,7 +459,12 @@ void Flu_File_Chooser::previewCB()
                 if (!requestIcon)
                     continue;
 
-                e->redraw();
+                auto time = time::invalidTime;
+
+                std::cerr << "create thumbnail for " << path.get() << std::endl;
+                _createThumbnail(e, path, time, 64); 
+
+                Fl::check();
             }
         }
     }
@@ -3481,13 +3587,16 @@ void  Flu_File_Chooser::_cancelRequests()
     {
         ids.push_back(p.infoRequest.id);
         p.infoRequest = ui::InfoRequest();
+        std::cerr << "_cancel infoRequest" << std::endl;
     }
     for (const auto& i : p.thumbnailRequests)
     {
+        std::cerr << "_cancel id " << i.second.id << std::endl;
         ids.push_back(i.second.id);
     }
     p.thumbnailRequests.clear();
     p.thumbnailGenerator->cancelRequests(ids);
+    std::cerr << "DONE CANCELLING" << std::endl;
     
 }
 

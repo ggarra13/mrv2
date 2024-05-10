@@ -1,5 +1,6 @@
 #pragma once
 
+#include <tlCore/FileInfo.h>
 
 #include <tlUI/ThumbnailSystem.h>
 
@@ -34,8 +35,7 @@ class Flu_Entry : public Fl_Input
 public:
     Flu_Entry(
         const char* name, int t, bool d, Flu_File_Chooser* c,
-        const std::shared_ptr<ThumbnailGenerator> thumbnailGenerator =
-            nullptr);
+        const std::shared_ptr<ThumbnailGenerator> thumbnailGenerator = nullptr);
     ~Flu_Entry();
 
     int handle(int event);

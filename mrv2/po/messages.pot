@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.1.6\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2024-05-10 14:00-0300\n"
+"POT-Creation-Date: 2024-05-10 16:17-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -4544,206 +4544,206 @@ msgstr ""
 msgid "Help/About"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:509
+#: mrvFLU/Flu_File_Chooser.cpp:615
 msgid "3GP Movie"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:510
+#: mrvFLU/Flu_File_Chooser.cpp:616
 msgid "Advanced Systems Format Media"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:511 mrvFLU/Flu_File_Chooser.cpp:512
-#: mrvFLU/Flu_File_Chooser.cpp:517 mrvFLU/Flu_File_Chooser.cpp:518
-#: mrvFLU/Flu_File_Chooser.cpp:532
+#: mrvFLU/Flu_File_Chooser.cpp:617 mrvFLU/Flu_File_Chooser.cpp:618
+#: mrvFLU/Flu_File_Chooser.cpp:623 mrvFLU/Flu_File_Chooser.cpp:624
+#: mrvFLU/Flu_File_Chooser.cpp:638
 msgid "AVCHD Video"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:513
+#: mrvFLU/Flu_File_Chooser.cpp:619
 msgid "AVI Movie"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:514
+#: mrvFLU/Flu_File_Chooser.cpp:620
 msgid "DIVX Movie"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:515
+#: mrvFLU/Flu_File_Chooser.cpp:621
 msgid "Digital Video"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:516
+#: mrvFLU/Flu_File_Chooser.cpp:622
 msgid "Flash Movie"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:519
+#: mrvFLU/Flu_File_Chooser.cpp:625
 msgid "Apple's M4V Movie"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:520
+#: mrvFLU/Flu_File_Chooser.cpp:626
 msgid "Matroska Movie"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:521 mrvFLU/Flu_File_Chooser.cpp:530
+#: mrvFLU/Flu_File_Chooser.cpp:627 mrvFLU/Flu_File_Chooser.cpp:636
 msgid "Quicktime Movie"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:522
+#: mrvFLU/Flu_File_Chooser.cpp:628
 msgid "MP4 Movie"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:523 mrvFLU/Flu_File_Chooser.cpp:524
+#: mrvFLU/Flu_File_Chooser.cpp:629 mrvFLU/Flu_File_Chooser.cpp:630
 msgid "MPEG Movie"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:525
+#: mrvFLU/Flu_File_Chooser.cpp:631
 msgid "MXF Movie"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:526
+#: mrvFLU/Flu_File_Chooser.cpp:632
 msgid "Ogg Movie"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:527
+#: mrvFLU/Flu_File_Chooser.cpp:633
 msgid "Ogg Video"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:528
+#: mrvFLU/Flu_File_Chooser.cpp:634
 msgid "OpenTimelineIO EDL"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:529
+#: mrvFLU/Flu_File_Chooser.cpp:635
 msgid "OpenTimelineIO Zipped EDL"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:531
+#: mrvFLU/Flu_File_Chooser.cpp:637
 msgid "Real Media Movie"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:533
+#: mrvFLU/Flu_File_Chooser.cpp:639
 msgid "VOB Movie"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:534
+#: mrvFLU/Flu_File_Chooser.cpp:640
 msgid "WebM Movie"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:535
+#: mrvFLU/Flu_File_Chooser.cpp:641
 msgid "WMV Movie"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:537
+#: mrvFLU/Flu_File_Chooser.cpp:643
 msgid "Bitmap Picture"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:538
+#: mrvFLU/Flu_File_Chooser.cpp:644
 msgid "Cineon Picture"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:539
+#: mrvFLU/Flu_File_Chooser.cpp:645
 msgid "Canon Raw Picture"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:540
+#: mrvFLU/Flu_File_Chooser.cpp:646
 msgid "Kodak Digital Negative"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:541
+#: mrvFLU/Flu_File_Chooser.cpp:647
 msgid "DPX Picture"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:542
+#: mrvFLU/Flu_File_Chooser.cpp:648
 msgid "EXR Picture"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:543
+#: mrvFLU/Flu_File_Chooser.cpp:649
 msgid "HDRI Picture"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:544 mrvFLU/Flu_File_Chooser.cpp:553
-#: mrvFLU/Flu_File_Chooser.cpp:554
+#: mrvFLU/Flu_File_Chooser.cpp:650 mrvFLU/Flu_File_Chooser.cpp:659
+#: mrvFLU/Flu_File_Chooser.cpp:660
 msgid "TIFF Picture"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:545
+#: mrvFLU/Flu_File_Chooser.cpp:651
 msgid "IFF Picture"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:546 mrvFLU/Flu_File_Chooser.cpp:547
+#: mrvFLU/Flu_File_Chooser.cpp:652 mrvFLU/Flu_File_Chooser.cpp:653
 msgid "JPEG Picture"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:548
+#: mrvFLU/Flu_File_Chooser.cpp:654
 msgid "Map Picture"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:549
+#: mrvFLU/Flu_File_Chooser.cpp:655
 msgid "GIF Picture"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:550
+#: mrvFLU/Flu_File_Chooser.cpp:656
 msgid "Softimage Picture"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:551
+#: mrvFLU/Flu_File_Chooser.cpp:657
 msgid "PNG Picture"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:552
+#: mrvFLU/Flu_File_Chooser.cpp:658
 msgid "RGB Picture"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:556
+#: mrvFLU/Flu_File_Chooser.cpp:662
 msgid "MP3 music"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:557
+#: mrvFLU/Flu_File_Chooser.cpp:663
 msgid "OGG Vorbis music"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:558
+#: mrvFLU/Flu_File_Chooser.cpp:664
 msgid "Wave music"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:2901
+#: mrvFLU/Flu_File_Chooser.cpp:3007
 msgid "Jan"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:2903
+#: mrvFLU/Flu_File_Chooser.cpp:3009
 msgid "Feb"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:2905
+#: mrvFLU/Flu_File_Chooser.cpp:3011
 msgid "Mar"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:2907
+#: mrvFLU/Flu_File_Chooser.cpp:3013
 msgid "Apr"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:2909
+#: mrvFLU/Flu_File_Chooser.cpp:3015
 msgid "May"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:2911
+#: mrvFLU/Flu_File_Chooser.cpp:3017
 msgid "Jun"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:2913
+#: mrvFLU/Flu_File_Chooser.cpp:3019
 msgid "Jul"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:2915
+#: mrvFLU/Flu_File_Chooser.cpp:3021
 msgid "Aug"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:2917
+#: mrvFLU/Flu_File_Chooser.cpp:3023
 msgid "Sep"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:2919
+#: mrvFLU/Flu_File_Chooser.cpp:3025
 msgid "Oct"
 msgstr ""
 
-#: mrvFLU/Flu_File_Chooser.cpp:2921
+#: mrvFLU/Flu_File_Chooser.cpp:3027
 msgid "Nov"
 msgstr ""
 
