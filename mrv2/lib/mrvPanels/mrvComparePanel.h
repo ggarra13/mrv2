@@ -10,10 +10,9 @@
 
 #include <tlTimeline/CompareOptions.h>
 
-#include "mrvPanelWidget.h"
+#include "mrvPanels/mrvThumbnailPanel.h"
 
 class ViewerUI;
-class Fl_RGB_Image;
 
 namespace mrv
 {
@@ -25,7 +24,7 @@ namespace mrv
     {
         using namespace tl;
 
-        class ComparePanel : public PanelWidget
+        class ComparePanel : public ThumbnailPanel
         {
         public:
             HorSlider* wipeX;
@@ -37,7 +36,6 @@ namespace mrv
             ComparePanel(ViewerUI* ui);
             ~ComparePanel();
 
-            void clear_controls();
             void add_controls() override;
 
             void redraw();
@@ -45,14 +43,6 @@ namespace mrv
             void setCompareOptions(const tl::timeline::CompareOptions&);
 
             void refresh();
-            void compareThumbnail(
-                const int64_t id,
-                const std::vector<
-                    std::pair<otime::RationalTime, Fl_RGB_Image*> >& thumbnails,
-                ClipButton* w);
-
-        protected:
-            void cancel_thumbnails();
 
         private:
             MRV2_PRIVATE();

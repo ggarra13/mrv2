@@ -36,17 +36,12 @@ namespace mrv
     namespace panel
     {
 
-        typedef std::map< ClipButton*, int64_t > WidgetIds;
         typedef std::map< ClipButton*, size_t > WidgetIndices;
 
         struct ComparePanel::Private
         {
-            std::weak_ptr<system::Context> context;
-            mrv::ThumbnailCreator* thumbnailCreator;
             std::map< size_t, ClipButton* > map;
-            WidgetIds ids;
             WidgetIndices indices;
-            std::vector< Fl_Button* > buttons;
 
             std::shared_ptr<
                 observer::ListObserver<std::shared_ptr<FilesModelItem> > >
@@ -59,59 +54,11 @@ namespace mrv
                 compareOptionsObserver;
         };
 
-        struct ThumbnailData
-        {
-            ClipButton* widget;
-        };
-
-        void compareThumbnail_cb(
-            const int64_t id,
-            const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&
-                thumbnails,
-            void* opaque)
-        {
-            ThumbnailData* data = static_cast< ThumbnailData* >(opaque);
-            ClipButton* w = data->widget;
-            if (comparePanel)
-                comparePanel->compareThumbnail(id, thumbnails, w);
-            delete data;
-        }
-
-        void ComparePanel::compareThumbnail(
-            const int64_t id,
-            const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&
-                thumbnails,
-            ClipButton* w)
-        {
-            WidgetIds::const_iterator it = _r->ids.find(w);
-            if (it == _r->ids.end())
-                return;
-
-            if (it->second == id)
-            {
-                for (const auto& i : thumbnails)
-                {
-                    Fl_Image* img = w->image();
-                    w->image(i.second);
-                    delete img;
-                    w->redraw();
-                }
-            }
-            else
-            {
-                for (const auto& i : thumbnails)
-                {
-                    delete i.second;
-                }
-            }
-        }
 
         ComparePanel::ComparePanel(ViewerUI* ui) :
             _r(new Private),
-            PanelWidget(ui)
+            ThumbnailPanel(ui)
         {
-            _r->context = ui->app->getContext();
-
             add_group("Compare");
 
             Fl_SVG_Image* svg = load_svg("Compare.svg");
@@ -150,48 +97,14 @@ namespace mrv
 
         ComparePanel::~ComparePanel()
         {
-            cancel_thumbnails();
-            clear_controls();
-        }
-
-        void ComparePanel::clear_controls()
-        {
-            for (const auto& i : _r->map)
-            {
-                ClipButton* b = i.second;
-                delete b->image();
-                b->image(nullptr);
-                g->remove(b);
-                delete b;
-            }
-
-            // Clear buttons' SVG images
-            for (const auto& b : _r->buttons)
-            {
-                delete b->image();
-                b->image(nullptr);
-            }
-
-            _r->buttons.clear();
-            _r->map.clear();
-            _r->indices.clear();
-        }
-
-        void ComparePanel::cancel_thumbnails()
-        {
-            for (const auto& it : _r->ids)
-            {
-                _r->thumbnailCreator->cancelRequests(it.second);
-            }
-
-            _r->ids.clear();
         }
 
         void ComparePanel::add_controls()
         {
             TLRENDER_P();
 
-            _r->thumbnailCreator = p.ui->uiTimeline->thumbnailCreator();
+            _r->map.clear();
+            _r->indices.clear();
 
             auto settings = p.ui->app->settings();
             const std::string& prefix = tab_prefix();
@@ -237,7 +150,7 @@ namespace mrv
                 const std::string fullfile = protocol + dir + file;
 
                 auto bW = new Widget<ClipButton>(
-                    g->x(), g->y() + 20 + i * 68, g->w(), 68);
+                    g->x(), g->y() + 20 + i * size.h + 4, g->w(), size.h + 4);
                 ClipButton* b = bW;
                 b->tooltip(_("Select one or more B images."));
                 _r->indices[b] = i;
@@ -279,61 +192,9 @@ namespace mrv
                 std::string text = protocol + dir + "\n" + file + layer;
                 b->copy_label(text.c_str());
 
-                if (!p.ui->uiPrefs->uiPrefsPanelThumbnails->value())
-                {
-                    delete b->image();
-                    b->image(nullptr);
-                    continue;
-                }
+                _createThumbnail(b, path, time, layerId, isNDI);
 
-                if (isNDI)
-                {
-                    Fl_SVG_Image* svg = load_svg("NDI.svg");
-                    b->image(svg);
-                    continue;
-                }
-
-                if (auto context = _r->context.lock())
-                {
-                    ThumbnailData* data = new ThumbnailData;
-                    data->widget = b;
-
-                    WidgetIds::const_iterator it = _r->ids.find(b);
-                    if (it != _r->ids.end())
-                    {
-                        _r->thumbnailCreator->cancelRequests(it->second);
-                        _r->ids.erase(it);
-                    }
-
-                    try
-                    {
-                        auto timeline =
-                            timeline::Timeline::create(path, context);
-                        auto timeRange = timeline->getTimeRange();
-
-                        if (time::isValid(timeRange))
-                        {
-                            auto startTime = timeRange.start_time();
-                            auto endTime = timeRange.end_time_inclusive();
-
-                            if (time < startTime)
-                                time = startTime;
-                            else if (time > endTime)
-                                time = endTime;
-                        }
-
-                        _r->thumbnailCreator->initThread();
-                        int64_t id = _r->thumbnailCreator->request(
-                            fullfile, time, size, compareThumbnail_cb,
-                            (void*)data, layerId);
-                        _r->ids[b] = id;
-                    }
-                    catch (const std::exception&)
-                    {
-                    }
-
-                    Y += size.h;
-                }
+                Y += size.h;
             }
 
             int X = g->x();
@@ -344,9 +205,7 @@ namespace mrv
             Fl_Button* b;
             auto bW = new Widget< Button >(X, Y, 30, 30);
             b = bW;
-            Fl_SVG_Image* svg = load_svg("CompareA.svg");
-            b->image(svg);
-            _r->buttons.push_back(b);
+            b->bind_image(load_svg("CompareA.svg"));
             b->tooltip(_("Compare A"));
             bW->callback(
                 [=](auto w)
@@ -358,9 +217,7 @@ namespace mrv
 
             bW = new Widget< Button >(X + 30, Y, 30, 30);
             b = bW;
-            svg = load_svg("CompareB.svg");
-            b->image(svg);
-            _r->buttons.push_back(b);
+            b->bind_image(load_svg("CompareB.svg"));
             b->tooltip(_("Compare B"));
 
             bW->callback(
@@ -373,9 +230,7 @@ namespace mrv
 
             bW = new Widget< Button >(X + 60, Y, 30, 30);
             b = bW;
-            svg = load_svg("CompareWipe.svg");
-            b->image(svg);
-            _r->buttons.push_back(b);
+            b->bind_image(load_svg("CompareWipe.svg"));
             b->tooltip(
 #ifdef __APPLE__
                 _("Wipe between the A and B files\n\n"
@@ -400,9 +255,7 @@ namespace mrv
 
             bW = new Widget< Button >(X + 90, Y, 30, 30);
             b = bW;
-            svg = load_svg("CompareOverlay.svg");
-            b->image(svg);
-            _r->buttons.push_back(b);
+            b->bind_image(load_svg("CompareOverlay.svg"));
             b->tooltip(
                 _("Overlay the A and B files with optional transparencyy"));
 
@@ -416,9 +269,7 @@ namespace mrv
 
             bW = new Widget< Button >(X + 120, Y, 30, 30);
             b = bW;
-            svg = load_svg("CompareDifference.svg");
-            b->image(svg);
-            _r->buttons.push_back(b);
+            b->bind_image(load_svg("CompareDifference.svg"));
             b->tooltip(_("Difference the A and B files"));
 
             bW->callback(
@@ -431,9 +282,7 @@ namespace mrv
 
             bW = new Widget< Button >(X + 150, Y, 30, 30);
             b = bW;
-            svg = load_svg("CompareHorizontal.svg");
-            b->image(svg);
-            _r->buttons.push_back(b);
+            b->bind_image(load_svg("CompareHorizontal.svg"));
             b->tooltip(_("Compare the A and B files side by side"));
 
             bW->callback(
@@ -446,9 +295,7 @@ namespace mrv
 
             bW = new Widget< Button >(X + 180, Y, 30, 30);
             b = bW;
-            svg = load_svg("CompareVertical.svg");
-            b->image(svg);
-            _r->buttons.push_back(b);
+            b->bind_image(load_svg("CompareVertical.svg"));
             b->tooltip(_("Show the A file above the B file"));
 
             bW->callback(
@@ -461,9 +308,7 @@ namespace mrv
 
             bW = new Widget< Button >(X + 210, Y, 30, 30);
             b = bW;
-            svg = load_svg("CompareTile.svg");
-            b->image(svg);
-            _r->buttons.push_back(b);
+            b->bind_image(load_svg("CompareTile.svg"));
             b->tooltip(_("Tile the A and B files"));
 
             bW->callback(
@@ -476,9 +321,7 @@ namespace mrv
 
             bW = new Widget< Button >(X + 240, Y, 30, 30);
             b = bW;
-            svg = load_svg("Prev.svg");
-            b->image(svg);
-            _r->buttons.push_back(b);
+            b->bind_image(load_svg("Prev.svg"));
             b->tooltip(_("Previous filename"));
             bW->callback(
                 [=](auto w)
@@ -489,9 +332,7 @@ namespace mrv
 
             bW = new Widget< Button >(X + 270, Y, 30, 30);
             b = bW;
-            svg = load_svg("Next.svg");
-            b->image(svg);
-            _r->buttons.push_back(b);
+            b->bind_image(load_svg("Next.svg"));
             b->tooltip(_("Next filename"));
             bW->callback(
                 [=](auto w)
@@ -727,59 +568,7 @@ namespace mrv
                 std::string text = protocol + dir + "\n" + file + layer;
                 b->copy_label(text.c_str());
 
-                if (!p.ui->uiPrefs->uiPrefsPanelThumbnails->value())
-                {
-                    delete b->image();
-                    b->image(nullptr);
-                    return;
-                }
-
-                if (isNDI)
-                {
-                    Fl_SVG_Image* svg = load_svg("NDI.svg");
-                    b->image(svg);
-                    continue;
-                }
-
-                if (auto context = _r->context.lock())
-                {
-                    ThumbnailData* data = new ThumbnailData;
-                    data->widget = b;
-
-                    WidgetIds::const_iterator it = _r->ids.find(b);
-                    if (it != _r->ids.end())
-                    {
-                        _r->thumbnailCreator->cancelRequests(it->second);
-                        _r->ids.erase(it);
-                    }
-
-                    try
-                    {
-                        auto timeline =
-                            timeline::Timeline::create(path, context);
-                        auto timeRange = timeline->getTimeRange();
-
-                        if (time::isValid(timeRange))
-                        {
-                            auto startTime = timeRange.start_time();
-                            auto endTime = timeRange.end_time_inclusive();
-
-                            if (time < startTime)
-                                time = startTime;
-                            else if (time > endTime)
-                                time = endTime;
-                        }
-
-                        _r->thumbnailCreator->initThread();
-                        int64_t id = _r->thumbnailCreator->request(
-                            fullfile, time, size, compareThumbnail_cb,
-                            (void*)data, layerId);
-                        _r->ids[b] = id;
-                    }
-                    catch (const std::exception&)
-                    {
-                    }
-                }
+                _createThumbnail(b, path, time, layerId, isNDI);
             }
         }
 
@@ -794,8 +583,7 @@ namespace mrv
 
         void ComparePanel::refresh()
         {
-            cancel_thumbnails();
-            clear_controls();
+            _cancelRequests();
             add_controls();
             end_group();
         }
