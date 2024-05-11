@@ -147,6 +147,8 @@ namespace mrv
         void continuePlaying();
 
     protected:
+        void _initializeGL();
+
         int enterEvent();
         int leaveEvent();
         int mousePressEvent();
@@ -160,7 +162,7 @@ namespace mrv
         void timerEvent();
 
     private:
-        void _initializeGL();
+        void _initializeGLResources();
 
         void _createThumbnailWindow();
         void _getThumbnailPosition(int& X, int& Y, int& W, int& H);

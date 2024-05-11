@@ -43,6 +43,9 @@
 
 #include <FL/platform.H>
 
+
+//#define DEBUG_REDRAWS
+
 namespace mrv
 {
     namespace
@@ -234,7 +237,7 @@ namespace mrv
         {
             // For faster playback, we won't set this window to FL_DOUBLE.
             // FLTK's EGL Wayland already uses two buffers.
-            fl_double = 0;
+            // fl_double = FL_DOUBLE;
         }
         else if (desktop::XWayland())
         {
@@ -310,6 +313,7 @@ namespace mrv
 
     TimelineWidget::~TimelineWidget()
     {
+        Fl::remove_timeout(timerEvent_cb, this);
     }
 
     bool TimelineWidget::isEditable() const
@@ -341,6 +345,8 @@ namespace mrv
     {
         TLRENDER_P();
 
+        std::cerr << "continue playing callback" << std::endl;
+        
         p.continueReversePlaying = true;
 
         //
@@ -656,11 +662,9 @@ namespace mrv
         _p->timelineWidget->setItemOptions(value);
     }
 
-    void TimelineWidget::_initializeGL()
+    void TimelineWidget::_initializeGLResources()
     {
         TLRENDER_P();
-
-        gl::initGLAD();
 
         if (auto context = p.context.lock())
         {
@@ -705,12 +709,18 @@ namespace mrv
                 context->log(
                     "mrv::mrvTimelineWidget", e.what(), log::Type::Error);
             }
-
-            p.vao.reset();
-            p.vbo.reset();
-            p.buffer.reset();
-            _sizeHintEvent();
         }
+    }
+
+    void TimelineWidget::_initializeGL()
+    {
+        gl::initGLAD();
+
+        // Clean up all resources
+        refresh();
+
+        // Reinitialize them
+        _initializeGLResources();
     }
 
     void TimelineWidget::resize(int X, int Y, int W, int H)
@@ -719,10 +729,11 @@ namespace mrv
 
         Fl_Gl_Window::resize(X, Y, W, H);
 
+        _sizeHintEvent();
         _setGeometry();
         _clipEvent();
 
-        p.buffer.reset(); // needed
+        p.buffer.reset();
 
         if (p.thumbnailWindow)
         {
@@ -734,7 +745,7 @@ namespace mrv
     {
         TLRENDER_P();
         const math::Size2i renderSize(pixel_w(), pixel_h());
-
+        
         make_current();
 
         if (!valid())
@@ -803,7 +814,7 @@ namespace mrv
                 LOG_ERROR(e.what());
             }
         }
-            
+
         if (p.ui->uiPrefs->uiPrefsBlitTimeline->value() == kNoBlit)
         {
             glViewport(0, 0, renderSize.w, renderSize.h);
@@ -848,15 +859,12 @@ namespace mrv
         }
         else
         {
-            if (p.buffer)
-            {
-                glBindFramebuffer(GL_READ_FRAMEBUFFER, p.buffer->getID());
-                glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); // 0 is screen
+            glBindFramebuffer(GL_READ_FRAMEBUFFER, p.buffer->getID());
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); // 0 is screen
 
-                glBlitFramebuffer(
-                    0, 0, renderSize.w, renderSize.h, 0, 0, renderSize.w,
-                    renderSize.h, GL_COLOR_BUFFER_BIT, GL_NEAREST);
-            }
+            glBlitFramebuffer(
+                0, 0, renderSize.w, renderSize.h, 0, 0, renderSize.w,
+                renderSize.h, GL_COLOR_BUFFER_BIT, GL_NEAREST);
         }
     }
 
@@ -1453,32 +1461,34 @@ namespace mrv
     {
         TLRENDER_P();
 
-        //! \bug This guard is needed since the timer event can be called during
-        //! destruction?
-        if (_p)
+        _tickEvent();
+
+        if (_getSizeUpdate(p.timelineWindow))
         {
-            _tickEvent();
-
-            if (_getSizeUpdate(p.timelineWindow))
-            {
-                _sizeHintEvent();
-                _setGeometry();
-                _clipEvent();
-            }
-
-            if (_getDrawUpdate(p.timelineWindow))
-            {
-                redraw();
-            }
+            _sizeHintEvent();
+            _setGeometry();
+            _clipEvent();
         }
+
+        if (_getDrawUpdate(p.timelineWindow))
+        {
+#ifdef __linux__
+            //! \@bug: Currently, there seems to be a bug in FLTK's wayland
+            //         where the redraw locks the UI randomly. 
+            if (!desktop::Wayland())
+                redraw();
+#else
+            redraw();
+#endif
+        }
+
         Fl::repeat_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
     }
 
     int TimelineWidget::handle(int event)
     {
         TLRENDER_P();
-        if (!p.player)
-            return 0;
+        // std::cerr << "event=" << fl_eventnames[event] << std::endl;
         switch (event)
         {
         case FL_FOCUS:
