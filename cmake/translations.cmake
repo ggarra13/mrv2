@@ -168,5 +168,5 @@ add_custom_target(
 
 add_custom_target(
     mo
-    DEPENDS ${mo_files} po pot
+    DEPENDS ${mo_files}
     )

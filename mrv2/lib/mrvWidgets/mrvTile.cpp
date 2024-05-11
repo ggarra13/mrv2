@@ -70,6 +70,7 @@
   See also the complete example program in test/tile.cxx.
 */
 
+#include <iostream>
 #include <vector>
 
 #include <mrvWidgets/mrvTile.h>
@@ -80,6 +81,9 @@
 
 namespace mrv
 {
+#    define DRAGV 2
+#    define GRABAREA 4
+    
     struct WidgetData
     {
         Fl_Widget* o;
@@ -178,34 +182,43 @@ namespace mrv
         Fl_Tile::init_sizes();
     }
 
+    static Fl_Cursor cursors[4] = {
+        FL_CURSOR_DEFAULT, FL_CURSOR_WE, FL_CURSOR_NS, FL_CURSOR_MOVE};
+    
+    static void tile_set_dragbar_color(Fl_Tile* t, Fl_Cursor c)
+    {
+        Fl_Widget* tg = t->child(2); // mrv::TimelineGroup
+        if (c != cursors[DRAGV])
+        {
+            tg->color(51);   // default color;
+        }
+        else
+        {
+            tg->color(FL_WHITE);
+        }
+        tg->redraw();
+    }
     static void tile_set_cursor(Fl_Tile* t, Fl_Cursor c)
     {
         static Fl_Cursor cursor;
         if (cursor == c || !t->window())
             return;
         cursor = c;
-#ifdef __sgi
-        t->window()->cursor(c, FL_RED, FL_WHITE);
-#else
         t->window()->cursor(c);
-#endif
+        tile_set_dragbar_color(t, c);
     }
 
-    static Fl_Cursor cursors[4] = {
-        FL_CURSOR_DEFAULT, FL_CURSOR_WE, FL_CURSOR_NS, FL_CURSOR_MOVE};
 
     int Tile::handle(int event)
     {
-#if defined(_WIN32)
         static int sdrag;
         static int sdx, sdy;
         static int sx, sy;
-#    define DRAGH 1
-#    define DRAGV 2
-#    define GRABAREA 4
 
         int mx = Fl::event_x();
         int my = Fl::event_y();
+        
+#if defined(_WIN32)
 
         switch (event)
         {
@@ -254,11 +267,6 @@ namespace mrv
                 }
                 sdrag = 0;
                 sx = sy = 0;
-                if (mindx <= GRABAREA)
-                {
-                    sdrag = DRAGH;
-                    sx = oldx;
-                }
                 if (mindy <= GRABAREA)
                 {
                     sdrag |= DRAGV;
@@ -284,17 +292,7 @@ namespace mrv
             Fl_Widget* r = resizable();
             if (!r)
                 r = this;
-            int newx;
-            if (sdrag & DRAGH)
-            {
-                newx = Fl::event_x() - sdx;
-                if (newx < r->x())
-                    newx = r->x();
-                else if (newx > r->x() + r->w())
-                    newx = r->x() + r->w();
-            }
-            else
-                newx = sx;
+            int newx = sx;
             int newy;
             if (sdrag & DRAGV)
             {
@@ -319,17 +317,63 @@ namespace mrv
             return 1;
         }
         }
-        int ret = Fl_Tile::handle(event);
-        if (ret && event == FL_RELEASE)
-            init_sizes();
-        return ret;
-        //return Fl_Group::handle(event);
 #else
+        switch (event)
+        {
+
+        case FL_MOVE:
+        case FL_ENTER:
+        case FL_PUSH:
+            // don't potentially change the mouse cursor if inactive:
+            if (!active())
+                break; // will cascade inherited handle()
+            {
+                int mindy = 100;
+                int oldy = 0;
+                Fl_Widget* const* a = array();
+                Fl_Rect* q = bounds();
+                Fl_Rect* p = q + 2;
+                for (int i = children(); i--; p++)
+                {
+                    Fl_Widget* o = *a++;
+                    if (o == resizable())
+                        continue;
+                    if (p->b() < q->b() && o->x() <= mx + GRABAREA &&
+                        o->x() + o->w() >= mx - GRABAREA)
+                    {
+                        int t = my - (o->y() + o->h());
+                        if (abs(t) < mindy)
+                        {
+                            sdy = t;
+                            mindy = abs(t);
+                            oldy = p->b();
+                        }
+                    }
+                }
+                sdrag = 0;
+                sx = sy = 0;
+                if (mindy <= GRABAREA)
+                {
+                    sdrag |= DRAGV;
+                    sy = oldy;
+                }
+                tile_set_dragbar_color(this, cursors[sdrag]);
+            }
+
+        case FL_LEAVE:
+            break;
+
+        case FL_DRAG:
+            tile_set_dragbar_color(this, cursors[sdrag]);
+            break;
+        default:
+            break;
+        }
+#endif
         int ret = Fl_Tile::handle(event);
         if (ret && event == FL_RELEASE)
             init_sizes();
         return ret;
-#endif
     }
 
     /**

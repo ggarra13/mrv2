@@ -1470,10 +1470,22 @@ namespace mrv
         if (_getDrawUpdate(p.timelineWindow))
         {
 #ifdef __linux__
-            //! \@bug: Currently, there seems to be a bug in FLTK's wayland
-            //         where the redraw locks the UI randomly. 
-            if (!desktop::Wayland())
+            // \@bug: Currently, there seems to be a bug in FLTK's wayland
+            //        where the redraw locks the UI randomly when it has been
+            //        callled twice. 
+            if (desktop::Wayland())
+            {
+                if (p.player)
+                {
+                    auto playback = p.player->playback();
+                    if (playback == timeline::Playback::Stop)
+                        redraw();
+                }
+            }
+            else
+            {
                 redraw();
+            }
 #else
             redraw();
 #endif
@@ -1492,7 +1504,7 @@ namespace mrv
         case FL_UNFOCUS:
             return 1;
         case FL_ENTER:
-            // cursor(FL_CURSOR_DEFAULT);
+            cursor(FL_CURSOR_DEFAULT);
             if (p.thumbnailWindow && p.player &&
                 p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
             {
