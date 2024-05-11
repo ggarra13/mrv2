@@ -13,3 +13,8 @@ if [[ $KERNEL == *Darwin* ]]; then
 else
     export CPU_CORES=$(grep -c ^processor /proc/cpuinfo)
 fi
+
+#
+# Ninja uses CPU_CORES + 2, but that creates network issues on my network.
+#
+export CPU_CORES=$((CPU_CORES - 2))
