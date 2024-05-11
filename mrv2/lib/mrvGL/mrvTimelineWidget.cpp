@@ -234,7 +234,7 @@ namespace mrv
         {
             // For faster playback, we won't set this window to FL_DOUBLE.
             // FLTK's EGL Wayland already uses two buffers.
-            fl_double = FL_DOUBLE;
+            fl_double = 0;
         }
         else if (desktop::XWayland())
         {
@@ -803,11 +803,10 @@ namespace mrv
                 LOG_ERROR(e.what());
             }
         }
-
-        glViewport(0, 0, renderSize.w, renderSize.h);
             
         if (p.ui->uiPrefs->uiPrefsBlitTimeline->value() == kNoBlit)
         {
+            glViewport(0, 0, renderSize.w, renderSize.h);
             glClearColor(0.F, 0.F, 0.F, 0.F);
             glClear(GL_COLOR_BUFFER_BIT);
 
