@@ -432,8 +432,10 @@ namespace mrv
     {
         TLRENDER_P();
 
-        int X, Y, W, H;
-        _getThumbnailPosition(X, Y, W, H);
+        int X = kWINDOW_BORDERS;
+        int Y = kWINDOW_BORDERS;
+        int W = kTHUMB_WIDTH;
+        int H = kTHUMB_HEIGHT;
 
         // Open a thumbnail window just above the timeline
         Fl_Group::current(p.topWindow);
@@ -459,6 +461,7 @@ namespace mrv
         p.box->labelcolor(fl_contrast(p.box->labelcolor(), p.box->color()));
         p.thumbnailWindow->end();
         p.thumbnailWindow->resizable(0);
+        p.thumbnailWindow->hide();
         Fl_Group::current(nullptr);
     }
 
@@ -502,7 +505,7 @@ namespace mrv
     void TimelineWidget::repositionThumbnail()
     {
         TLRENDER_P();
-        if (Fl::belowmouse() == this)
+        if (Fl::belowmouse() == this && p.player)
         {
             int X, Y, W, H;
             _getThumbnailPosition(X, Y, W, H);
@@ -1509,7 +1512,6 @@ namespace mrv
                 p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
             {
                 requestThumbnail(true);
-                p.thumbnailWindow->show();
             }
             return enterEvent();
         case FL_LEAVE:
