@@ -223,6 +223,7 @@ namespace mrv
                     break;
                 case kAccuracyAuto:
                     if (!p.videoData[0].layers.empty() &&
+                        p.videoData[0].layers[0].image &&
                         p.videoData[0].layers[0].image->isValid())
                     {
                         const auto& pixelType =

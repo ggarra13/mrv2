@@ -1,7 +1,21 @@
 v1.1.6
 ======
 
-This is a release full of goodies.
+This is a release full of goodies and bug fixes.
+
+- **ATTENTION**:
+  This version introduces a change in the way Cache Settings are used for
+  movie files.
+  The Settings->Gigabytes and the pair of "Settings->Read Ahead" and
+  "Settings->Read Behind" are now decoupled.
+  In the case of sequences, the Read Ahea and Read Behind will be automatically
+  calculated from the Gigabytes settings as before.
+  However, for movie files the timeline will only display the settings for
+  Read Ahead/Behind, not the actual Gigabytes cache (which can be bigger than
+  the read ahead/behind setting).  The small Read Ahead and Read Behind is to
+  allow playing 4K movies backwards.
+  The Gigabytes setting of 0 is **NO LONGER USED** and will revert to
+  4 Gb if set to 0.
 
 - Fixed slow seeking on 4K movies.  Now we beat OpenRV on **all** movies,
   seeking and reverse playback too.
@@ -24,19 +38,6 @@ This is a release full of goodies.
   and okay'ed while the movie is still playing.
 - Fixed seeking on the timeline on Linux sometimes getting the event
   incorrectly on X.
-- **ATTENTION**:
-  This version introduces a change in the way Cache Settings are used for
-  movie files.
-  The Settings->Gigabytes and the pair of "Settings->Read Ahead" and
-  "Settings->Read Behind" are now decoupled.
-  In the case of sequences, the Read Ahea and Read Behind will be automatically
-  calculated from the Gigabytes settings as before.
-  However, for movie files the timeline will only display the settings for
-  Read Ahead/Behind, not the actual Gigabytes cache (which can be bigger than
-  the read ahead/behind setting).  The small Read Ahead and Read Behind is to
-  allow playing 4K movies backwards.
-  The Gigabytes setting of 0 is **NO LONGER USED** and will revert to
-  4 Gb if set to 0.
 - Fixed starting a movie with loop on and playing stopped and then start
   playing it backwards.
 - Refactored playback code and fixed playback buttons sometimes getting out of
@@ -46,7 +47,9 @@ This is a release full of goodies.
   Panels.
 - Changing languages now stores and re-loads a session on a temporary location,
   so the interface does not reset to 0.
-- Made the timeline thumbnails a tad smaller and more polished.
+- Made the timeline thumbnail a tad smaller and more polished.
+- Fixed a potentially nullptr pointer de-referencing when OpenGL accuracy was
+  set to Automatic.
 
 
 v1.1.5
