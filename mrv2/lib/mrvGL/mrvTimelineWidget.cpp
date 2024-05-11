@@ -532,7 +532,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        if (!p.player || !p.ui->uiPrefs->uiPrefsTimelineThumbnails->value() ||)
+        if (!p.player || !p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
         {
             hideThumbnail();
             return 0;

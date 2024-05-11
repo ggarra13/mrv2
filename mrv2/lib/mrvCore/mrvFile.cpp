@@ -107,7 +107,7 @@ namespace mrv
         {
             auto context = App::app->getContext();
             auto ioSystem = context->getSystem<tl::io::System>();
-                
+
             const file::Path path(filename);
             const std::string& extension = path.getExtension();
             switch (ioSystem->getFileType(extension))
@@ -116,17 +116,18 @@ namespace mrv
             case tl::io::FileType::Audio:
                 return false;
                 break;
+            default:
+                if (extension == ".mrv2s" || extension == ".otio" ||
+                    extension == ".prefs" || extension == ".json")
+                    return false;
+                break;
             };
-            if (extension == ".mrv2s" || extension == ".otio" ||
-                extension == ".prefs" || extension == ".json")
-                return false;
-            
             const std::string baseName = path.getBaseName();
             // \@todo: add view to tlRender's file::Path class.
             // const std::string view = path.getView();
             const std::string number = path.getNumber();
-            bool ok = (!baseName.empty() && !number.empty() &&
-                       !extension.empty());
+            bool ok =
+                (!baseName.empty() && !number.empty() && !extension.empty());
             return ok;
         }
 
