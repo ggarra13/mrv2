@@ -43,8 +43,7 @@
 
 #include <FL/platform.H>
 
-
-//#define DEBUG_REDRAWS
+// #define DEBUG_REDRAWS
 
 namespace mrv
 {
@@ -259,6 +258,11 @@ namespace mrv
         p.ui = ui;
         p.topWindow = ui->uiMain;
 
+        if (!p.thumbnailWindow)
+        {
+            _createThumbnailWindow();
+        }
+
         auto settings = ui->app->settings();
 
         p.style = ui::Style::create(context);
@@ -344,7 +348,7 @@ namespace mrv
     void TimelineWidget::continuePlaying()
     {
         TLRENDER_P();
-        
+
         p.continueReversePlaying = true;
 
         //
@@ -433,17 +437,19 @@ namespace mrv
 
         // Open a thumbnail window just above the timeline
         Fl_Group::current(p.topWindow);
+        std::cerr << "p.topWindow=" << p.topWindow << std::endl;
 
         const int wX = X - kWINDOW_BORDERS;
         const int wY = Y - kWINDOW_BORDERS;
         const int wW = W + kWINDOW_BORDERS * 2 + kBOX_BORDERS * 2;
-        const int wH = H + kWINDOW_BORDERS * 2 + kBOX_BORDERS * 2 +
-                       kLABEL_SIZE;
+        const int wH = H + kWINDOW_BORDERS * 2 + kBOX_BORDERS * 2 + kLABEL_SIZE;
 
         const int bX = kBOX_BORDERS;
         const int bY = kBOX_BORDERS;
         const int bW = W + kBOX_BORDERS * 2;
         const int bH = H + kBOX_BORDERS * 2 + kLABEL_SIZE;
+
+        std::cerr << wX << ", " << wY << " " << wW << "x" << wH << std::endl;
 
         p.thumbnailWindow = new Fl_Double_Window(wX, wY, wW, wH);
         p.thumbnailWindow->box(FL_FLAT_BOX);
@@ -456,7 +462,6 @@ namespace mrv
         p.box->labelcolor(fl_contrast(p.box->labelcolor(), p.box->color()));
         p.thumbnailWindow->end();
         p.thumbnailWindow->resizable(0);
-        p.thumbnailWindow->show();
         Fl_Group::current(nullptr);
     }
 
@@ -476,22 +481,22 @@ namespace mrv
             }
         }
 
-
-        
         X = Fl::event_x_root() - p.topWindow->x_root() - W / 2;
         if (X < 0)
             X = 0;
 
         int maxW = p.topWindow->w();
-        if (p.thumbnailWindow) maxW -= p.thumbnailWindow->w();
-        
+        if (p.thumbnailWindow)
+            maxW -= p.thumbnailWindow->w();
+
         if (X > maxW)
             X = maxW;
 
         Y = y_root() - p.topWindow->y_root();
 
         // 8 here is the size of the dragbar.
-        if (p.thumbnailWindow) Y -= (p.thumbnailWindow->h() + 8);
+        if (p.thumbnailWindow)
+            Y -= (p.thumbnailWindow->h() + 8);
     }
 
     void TimelineWidget::repositionThumbnail()
@@ -505,14 +510,14 @@ namespace mrv
             const int wX = X - kWINDOW_BORDERS;
             const int wY = Y - kWINDOW_BORDERS;
             const int wW = W + kWINDOW_BORDERS * 2 + kBOX_BORDERS * 2;
-            const int wH = H + kWINDOW_BORDERS * 2 + kBOX_BORDERS * 2 +
-                           kLABEL_SIZE;
+            const int wH =
+                H + kWINDOW_BORDERS * 2 + kBOX_BORDERS * 2 + kLABEL_SIZE;
 
             const int bX = kBOX_BORDERS;
             const int bY = kBOX_BORDERS;
             const int bW = W + kBOX_BORDERS * 2;
             const int bH = H + kBOX_BORDERS * 2 + kLABEL_SIZE;
-            
+
             p.thumbnailWindow->resize(wX, wY, wW, wH);
             p.box->resize(bX, bY, bW, bH);
             p.thumbnailWindow->show(); // needed for Windows
@@ -527,7 +532,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        if (!p.player || !p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
+        if (!p.player || !p.ui->uiPrefs->uiPrefsTimelineThumbnails->value() ||)
         {
             hideThumbnail();
             return 0;
@@ -537,10 +542,6 @@ namespace mrv
         p.timeRange = player->getTimeRange();
 
         char buffer[64];
-        if (!p.thumbnailWindow)
-        {
-            _createThumbnailWindow();
-        }
 
         repositionThumbnail();
 
@@ -742,7 +743,7 @@ namespace mrv
     {
         TLRENDER_P();
         const math::Size2i renderSize(pixel_w(), pixel_h());
-        
+
         make_current();
 
         if (!valid())
@@ -1472,7 +1473,7 @@ namespace mrv
 #ifdef __linux__
             // \@bug: Currently, there seems to be a bug in FLTK's wayland
             //        where the redraw locks the UI randomly when it has been
-            //        callled twice. 
+            //        callled twice.
             if (desktop::Wayland())
             {
                 if (p.player)
@@ -1497,7 +1498,7 @@ namespace mrv
     int TimelineWidget::handle(int event)
     {
         TLRENDER_P();
-        // std::cerr << "event=" << fl_eventnames[event] << std::endl;
+        std::cerr << this << " event=" << fl_eventnames[event] << std::endl;
         switch (event)
         {
         case FL_FOCUS:
