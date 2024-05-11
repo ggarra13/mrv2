@@ -50,6 +50,9 @@ This is a release full of goodies and bug fixes.
 - Made the timeline thumbnail a tad smaller and more polished.
 - Fixed a potentially nullptr pointer de-referencing when OpenGL accuracy was
   set to Automatic.
+- Worked around an UI redraw issue on Wayland.
+- Fixed timeline interaction (dragging clips in .otio timeline) in 1.1.5
+  re-release.
 
 
 v1.1.5
