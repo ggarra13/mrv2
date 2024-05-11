@@ -47,11 +47,14 @@ namespace mrv
 {
     namespace
     {
-        const int kTHUMB_WIDTH = 128;
-        const int kTHUMB_HEIGHT = 80;
+        const int kTHUMB_WIDTH = 96;
+        const int kTHUMB_HEIGHT = 64;
+        const int kLABEL_SIZE = 16;
+        const int kWINDOW_BORDERS = 2;
+        const int kBOX_BORDERS = 2;
 
-        const double kTimeout = 0.008; // 120 fps
-        const char* kModule = "timelineui";
+        const double kTimeout = 0.008; // approx. 120 fps
+        const char* kModule = "timeline";
     } // namespace
 
     namespace
@@ -231,7 +234,7 @@ namespace mrv
         {
             // For faster playback, we won't set this window to FL_DOUBLE.
             // FLTK's EGL Wayland already uses two buffers.
-            // fl_double = FL_DOUBLE;
+            fl_double = FL_DOUBLE;
         }
         else if (desktop::XWayland())
         {
@@ -307,12 +310,6 @@ namespace mrv
 
     TimelineWidget::~TimelineWidget()
     {
-        TLRENDER_P();
-        if (p.box)
-        {
-            delete p.box->image();
-            p.box->image(nullptr);
-        }
     }
 
     bool TimelineWidget::isEditable() const
@@ -428,19 +425,30 @@ namespace mrv
     {
         TLRENDER_P();
 
-        int X, Y;
-        _getThumbnailPosition(X, Y);
+        int X, Y, W, H;
+        _getThumbnailPosition(X, Y, W, H);
 
         // Open a thumbnail window just above the timeline
         Fl_Group::current(p.topWindow);
-        p.thumbnailWindow =
-            new Fl_Double_Window(X, Y, kTHUMB_WIDTH, kTHUMB_HEIGHT);
+
+        const int wX = X - kWINDOW_BORDERS;
+        const int wY = Y - kWINDOW_BORDERS;
+        const int wW = W + kWINDOW_BORDERS * 2 + kBOX_BORDERS * 2;
+        const int wH = H + kWINDOW_BORDERS * 2 + kBOX_BORDERS * 2 +
+                       kLABEL_SIZE;
+
+        const int bX = kBOX_BORDERS;
+        const int bY = kBOX_BORDERS;
+        const int bW = W + kBOX_BORDERS * 2;
+        const int bH = H + kBOX_BORDERS * 2 + kLABEL_SIZE;
+
+        p.thumbnailWindow = new Fl_Double_Window(wX, wY, wW, wH);
         p.thumbnailWindow->box(FL_FLAT_BOX);
         p.thumbnailWindow->color(0xffffffff);
         p.thumbnailWindow->clear_border();
         p.thumbnailWindow->begin();
 
-        p.box = new Fl_Box(2, 2, kTHUMB_WIDTH - 4, kTHUMB_HEIGHT - 4);
+        p.box = new Fl_Box(bX, bY, bW, bH);
         p.box->box(FL_FLAT_BOX);
         p.box->labelcolor(fl_contrast(p.box->labelcolor(), p.box->color()));
         p.thumbnailWindow->end();
@@ -449,19 +457,38 @@ namespace mrv
         Fl_Group::current(nullptr);
     }
 
-    void TimelineWidget::_getThumbnailPosition(int& X, int& Y)
+    void TimelineWidget::_getThumbnailPosition(int& X, int& Y, int& W, int& H)
     {
         TLRENDER_P();
-        X = Fl::event_x_root() - p.topWindow->x_root() - kTHUMB_WIDTH / 2;
+
+        W = kTHUMB_WIDTH;
+        H = kTHUMB_HEIGHT;
+        if (p.box)
+        {
+            Fl_Image* image = p.box->image();
+            if (image)
+            {
+                W = image->w();
+                H = image->h();
+            }
+        }
+
+
+        
+        X = Fl::event_x_root() - p.topWindow->x_root() - W / 2;
         if (X < 0)
             X = 0;
 
-        int maxW = p.topWindow->w() - kTHUMB_WIDTH;
+        int maxW = p.topWindow->w();
+        if (p.thumbnailWindow) maxW -= p.thumbnailWindow->w();
+        
         if (X > maxW)
             X = maxW;
 
-        // 20 here is the size of the timeline without the pictures
-        Y = y_root() - p.topWindow->y_root() - 20 - kTHUMB_HEIGHT;
+        Y = y_root() - p.topWindow->y_root();
+
+        // 8 here is the size of the dragbar.
+        if (p.thumbnailWindow) Y -= (p.thumbnailWindow->h() + 8);
     }
 
     void TimelineWidget::repositionThumbnail()
@@ -469,10 +496,22 @@ namespace mrv
         TLRENDER_P();
         if (Fl::belowmouse() == this)
         {
-            int X, Y;
-            _getThumbnailPosition(X, Y);
-            p.thumbnailWindow->resize(X, Y, kTHUMB_WIDTH, kTHUMB_HEIGHT);
-            p.box->resize(2, 2, kTHUMB_WIDTH - 4, kTHUMB_HEIGHT - 4);
+            int X, Y, W, H;
+            _getThumbnailPosition(X, Y, W, H);
+
+            const int wX = X - kWINDOW_BORDERS;
+            const int wY = Y - kWINDOW_BORDERS;
+            const int wW = W + kWINDOW_BORDERS * 2 + kBOX_BORDERS * 2;
+            const int wH = H + kWINDOW_BORDERS * 2 + kBOX_BORDERS * 2 +
+                           kLABEL_SIZE;
+
+            const int bX = kBOX_BORDERS;
+            const int bY = kBOX_BORDERS;
+            const int bW = W + kBOX_BORDERS * 2;
+            const int bH = H + kBOX_BORDERS * 2 + kLABEL_SIZE;
+            
+            p.thumbnailWindow->resize(wX, wY, wW, wH);
+            p.box->resize(bX, bY, bW, bH);
             p.thumbnailWindow->show(); // needed for Windows
         }
         else
@@ -509,7 +548,8 @@ namespace mrv
             path = Aitem->path;
         else
             path = player->getPath();
-        image::Size size(p.box->w(), p.box->h() - 24);
+
+        const image::Size size(kTHUMB_WIDTH, kTHUMB_HEIGHT);
         const auto& time = _posToTime(_toUI(Fl::event_x()));
 
         if (p.thumbnailCreator)
@@ -556,8 +596,6 @@ namespace mrv
             if (p.thumbnailRequestId)
             {
                 p.thumbnailCreator->cancelRequests(p.thumbnailRequestId);
-                Fl_Image* image = p.box->image();
-                delete image;
                 p.box->image(nullptr);
             }
             p.timeRange = time::invalidTimeRange;
@@ -668,6 +706,9 @@ namespace mrv
                     "mrv::mrvTimelineWidget", e.what(), log::Type::Error);
             }
 
+            p.vao.reset();
+            p.vbo.reset();
+            p.buffer.reset();
             _sizeHintEvent();
         }
     }
@@ -763,9 +804,10 @@ namespace mrv
             }
         }
 
+        glViewport(0, 0, renderSize.w, renderSize.h);
+            
         if (p.ui->uiPrefs->uiPrefsBlitTimeline->value() == kNoBlit)
         {
-            glViewport(0, 0, renderSize.w, renderSize.h);
             glClearColor(0.F, 0.F, 0.F, 0.F);
             glClear(GL_COLOR_BUFFER_BIT);
 
@@ -1423,7 +1465,6 @@ namespace mrv
                 _sizeHintEvent();
                 _setGeometry();
                 _clipEvent();
-                // updateGeometry();  // Qt function?
             }
 
             if (_getDrawUpdate(p.timelineWindow))
@@ -1767,9 +1808,7 @@ namespace mrv
         {
             for (const auto& i : thumbnails)
             {
-                Fl_Image* image = p.box->image();
-                delete image;
-                p.box->image(i.second);
+                p.box->bind_image(i.second);
             }
             p.box->redraw();
         }

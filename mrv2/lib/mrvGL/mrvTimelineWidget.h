@@ -163,7 +163,7 @@ namespace mrv
         void _initializeGL();
 
         void _createThumbnailWindow();
-        void _getThumbnailPosition(int& X, int& Y);
+        void _getThumbnailPosition(int& X, int& Y, int& W, int& H);
 
         void _setTimeUnits(tl::timeline::TimeUnits);
 

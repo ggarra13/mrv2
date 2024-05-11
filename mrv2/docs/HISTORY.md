@@ -46,6 +46,7 @@ This is a release full of goodies.
   Panels.
 - Changing languages now stores and re-loads a session on a temporary location,
   so the interface does not reset to 0.
+- Made the timeline thumbnails a tad smaller and more polished.
 
 
 v1.1.5

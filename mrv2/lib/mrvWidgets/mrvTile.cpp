@@ -129,7 +129,7 @@ namespace mrv
     {
         // \@bug: Windows leaves a trailing behind when dragging the separator.
         //        Doing the rescaling on a timeout works around it.
-#ifndef _WIN32
+#if defined(_WIN32) || defined(__linux__)
         Fl_Tile::move_intersection(oldx, oldy, newx, newy);
 #else
         Fl_Widget* const* a = array();
