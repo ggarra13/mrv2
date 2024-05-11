@@ -437,7 +437,6 @@ namespace mrv
 
         // Open a thumbnail window just above the timeline
         Fl_Group::current(p.topWindow);
-        std::cerr << "p.topWindow=" << p.topWindow << std::endl;
 
         const int wX = X - kWINDOW_BORDERS;
         const int wY = Y - kWINDOW_BORDERS;
@@ -448,8 +447,6 @@ namespace mrv
         const int bY = kBOX_BORDERS;
         const int bW = W + kBOX_BORDERS * 2;
         const int bH = H + kBOX_BORDERS * 2 + kLABEL_SIZE;
-
-        std::cerr << wX << ", " << wY << " " << wW << "x" << wH << std::endl;
 
         p.thumbnailWindow = new Fl_Double_Window(wX, wY, wW, wH);
         p.thumbnailWindow->box(FL_FLAT_BOX);
@@ -497,6 +494,9 @@ namespace mrv
         // 8 here is the size of the dragbar.
         if (p.thumbnailWindow)
             Y -= (p.thumbnailWindow->h() + 8);
+
+        if (Y < 0)
+            Y = 0;
     }
 
     void TimelineWidget::repositionThumbnail()
@@ -1498,7 +1498,6 @@ namespace mrv
     int TimelineWidget::handle(int event)
     {
         TLRENDER_P();
-        std::cerr << this << " event=" << fl_eventnames[event] << std::endl;
         switch (event)
         {
         case FL_FOCUS:
