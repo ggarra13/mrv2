@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.1.6\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2024-05-11 10:46-0300\n"
+"POT-Creation-Date: 2024-05-11 11:44-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -212,7 +212,7 @@ msgstr ""
 msgid "Could not initialize NDI"
 msgstr ""
 
-#: mrvApp/mrvApp.cpp:1047
+#: mrvApp/mrvApp.cpp:1046
 msgid "Filename '{0}' does not exist or does not have read permissions."
 msgstr ""
 

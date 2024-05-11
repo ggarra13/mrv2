@@ -344,8 +344,6 @@ namespace mrv
     void TimelineWidget::continuePlaying()
     {
         TLRENDER_P();
-
-        std::cerr << "continue playing callback" << std::endl;
         
         p.continueReversePlaying = true;
 
@@ -385,8 +383,7 @@ namespace mrv
                         p.ui->uiView->setPlayback(timeline::Playback::Reverse);
                         p.continueReversePlaying = false;
                     }
-                },
-                observer::CallbackAction::Suppress);
+                });
     }
 
     int TimelineWidget::_seek()
