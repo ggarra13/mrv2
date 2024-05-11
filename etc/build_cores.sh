@@ -17,4 +17,6 @@ fi
 #
 # Ninja uses CPU_CORES + 2, but that creates network issues on my network.
 #
-export CPU_CORES=$((CPU_CORES - 2))
+if [[ ! -z "$GITHUB_ACTIONS" ]]; then
+    export CPU_CORES=$((CPU_CORES - 2))
+fi
