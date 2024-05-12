@@ -83,12 +83,14 @@
 
 #include "mrvGL/mrvTimelineViewport.h"
 
+namespace
+{
+    const int kDRAGV = 2;
+    const int kGRABAREA = 4;
+} // namespace
+
 namespace mrv
 {
-#define DRAGV 2
-#define GRABAREA 4
-
-#define CROSS
 
     struct WidgetData
     {
@@ -194,7 +196,7 @@ namespace mrv
     static void tile_set_dragbar_color(Fl_Tile* t, Fl_Cursor c)
     {
         Fl_Widget* tg = t->child(2); // mrv::TimelineGroup
-        if (c != cursors[DRAGV])
+        if (c != cursors[kDRAGV])
         {
             tg->color(51); // default color;
         }
@@ -211,8 +213,8 @@ namespace mrv
         if (cursor == c || !t->window())
             return;
         cursor = c;
-        t->window()->cursor(c);
         tile_set_dragbar_color(t, c);
+        t->window()->cursor(c);
     }
 
     int Tile::handle(int event)
@@ -250,8 +252,8 @@ namespace mrv
                     Fl_Widget* o = *a++;
                     if (o == resizable())
                         continue;
-                    if (p->r() < q->r() && o->y() <= my + GRABAREA &&
-                        o->y() + o->h() >= my - GRABAREA)
+                    if (p->r() < q->r() && o->y() <= my + kGRABAREA &&
+                        o->y() + o->h() >= my - kGRABAREA)
                     {
                         int t = mx - (o->x() + o->w());
                         if (abs(t) < mindx)
@@ -261,8 +263,8 @@ namespace mrv
                             oldx = p->r();
                         }
                     }
-                    if (p->b() < q->b() && o->x() <= mx + GRABAREA &&
-                        o->x() + o->w() >= mx - GRABAREA)
+                    if (p->b() < q->b() && o->x() <= mx + kGRABAREA &&
+                        o->x() + o->w() >= mx - kGRABAREA)
                     {
                         int t = my - (o->y() + o->h());
                         if (abs(t) < mindy)
@@ -275,12 +277,14 @@ namespace mrv
                 }
                 sdrag = 0;
                 sx = sy = 0;
-                if (mindy <= GRABAREA)
+                if (mindy <= kGRABAREA)
                 {
-                    sdrag |= DRAGV;
+                    sdrag |= kDRAGV;
                     sy = oldy;
                 }
-                tile_set_cursor(this, cursors[sdrag]);
+
+                Fl_Cursor cursor = cursors[sdrag];
+                tile_set_cursor(this, cursor);
                 if (sdrag)
                     return 1;
                 return Fl_Group::handle(event);
@@ -302,7 +306,7 @@ namespace mrv
                 r = this;
             int newx = sx;
             int newy;
-            if (sdrag & DRAGV)
+            if (sdrag & kDRAGV)
             {
                 newy = Fl::event_y() - sdy;
                 if (newy < r->y())
@@ -347,8 +351,8 @@ namespace mrv
                     Fl_Widget* o = *a++;
                     if (o == resizable())
                         continue;
-                    if (p->b() < q->b() && o->x() <= mx + GRABAREA &&
-                        o->x() + o->w() >= mx - GRABAREA)
+                    if (p->b() < q->b() && o->x() <= mx + kGRABAREA &&
+                        o->x() + o->w() >= mx - kGRABAREA)
                     {
                         int t = my - (o->y() + o->h());
                         if (abs(t) < mindy)
@@ -361,14 +365,13 @@ namespace mrv
                 }
                 sdrag = 0;
                 sx = sy = 0;
-                if (mindy <= GRABAREA)
+                if (mindy <= kGRABAREA)
                 {
-                    sdrag |= DRAGV;
+                    sdrag |= kDRAGV;
                     sy = oldy;
                 }
 
                 Fl_Cursor cursor = cursors[sdrag];
-
                 tile_set_cursor(this, cursor);
             }
 
