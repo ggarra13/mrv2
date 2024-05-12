@@ -79,7 +79,7 @@ class PreferencesUI {open
     Fl_Window uiMain {
       label Preferences
       user_data this user_data_type {PreferencesUI*} open
-      xywh {1072 145 847 466} type Double resizable
+      xywh {102 145 847 466} type Double resizable
       code0 {main = m;} modal visible
     } {
       Fl_Group {} {open
@@ -776,8 +776,8 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
               }
             }
             Fl_Group {} {
-              label Playback
-              xywh {288 35 555 360} box EMBOSSED_BOX align 5 hide
+              label Playback open
+              xywh {288 35 555 360} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {
                 label Defaults open
@@ -788,8 +788,8 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                   tooltip {Start Playback when opening files.} xywh {497 111 25 25} box UP_BOX down_box DOWN_BOX align 4
                 }
                 Fl_Check_Button uiPrefsScrubAutoPlay {
-                  label {Auto Scrub Playback}
-                  tooltip {Start playback when scrubbing so that audio can be heard.} xywh {572 347 25 25} box UP_BOX down_box DOWN_BOX value 1 align 4
+                  label {Scrub with Audio} selected
+                  tooltip {Start playback when scrubbing so that audio can be heard.  Scrubbing can be less smooth.} xywh {572 347 25 25} box UP_BOX down_box DOWN_BOX value 1 align 4
                 }
                 Fl_Check_Button uiPrefsSingleClickPlayback {
                   label {Single Click Playback}
@@ -966,7 +966,7 @@ v->uiPrefsFPS->value( g );}
             }
             Fl_Group {} {
               label OCIO
-              xywh {288 35 555 360} box EMBOSSED_BOX align 5
+              xywh {288 35 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {open
                 xywh {302 93 523 168}
@@ -1622,7 +1622,6 @@ o->add( _("Network") );
 o->add( _("OpenGL") );
 o->add( _("Errors") );
 o->add( _("Behavior") );
-o->select( item );} {selected
-    }
+o->select( item );} {}
   }
 }

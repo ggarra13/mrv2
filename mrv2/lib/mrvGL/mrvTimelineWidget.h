@@ -149,6 +149,8 @@ namespace mrv
     protected:
         void _initializeGL();
 
+        const float pixelRatio() const;
+
         int enterEvent();
         int leaveEvent();
         int mousePressEvent();

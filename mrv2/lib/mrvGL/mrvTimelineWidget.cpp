@@ -710,6 +710,7 @@ namespace mrv
                 context->log(
                     "mrv::mrvTimelineWidget", e.what(), log::Type::Error);
             }
+            // _sizeHintEvent();
         }
     }
 
@@ -727,6 +728,15 @@ namespace mrv
     void TimelineWidget::resize(int X, int Y, int W, int H)
     {
         TLRENDER_P();
+
+#if 0
+        std::cerr << "\t\ttimeline widget WxH=" << W << "x" << H << std::endl;
+        std::cerr << "\t\t\tpixels_per_unit=" << this->pixels_per_unit()
+                  << std::endl;
+        std::cerr << "\t\t\tuiView pixels_per_unit="
+                  << p.ui->uiView->pixels_per_unit()
+                  << std::endl;
+#endif
 
         Fl_Gl_Window::resize(X, Y, W, H);
 
@@ -1559,31 +1569,39 @@ namespace mrv
         return out;
     }
 
-    int TimelineWidget::_toUI(int value) const
+    const float TimelineWidget::pixelRatio() const
     {
+        TLRENDER_P();
+#if 0
         TimelineWidget* self = const_cast<TimelineWidget*>(this);
         const float devicePixelRatio = self->pixels_per_unit();
+#else
+        const float devicePixelRatio = p.ui->uiView->pixels_per_unit();
+#endif
+        return devicePixelRatio;
+    }
+
+    int TimelineWidget::_toUI(int value) const
+    {
+        const float devicePixelRatio = pixelRatio();
         return value * devicePixelRatio;
     }
 
     math::Vector2i TimelineWidget::_toUI(const math::Vector2i& value) const
     {
-        TimelineWidget* self = const_cast<TimelineWidget*>(this);
-        const float devicePixelRatio = self->pixels_per_unit();
+        const float devicePixelRatio = pixelRatio();
         return value * devicePixelRatio;
     }
 
     int TimelineWidget::_fromUI(int value) const
     {
-        TimelineWidget* self = const_cast<TimelineWidget*>(this);
-        const float devicePixelRatio = self->pixels_per_unit();
+        const float devicePixelRatio = pixelRatio();
         return devicePixelRatio > 0.F ? (value / devicePixelRatio) : 0.F;
     }
 
     math::Vector2i TimelineWidget::_fromUI(const math::Vector2i& value) const
     {
-        TimelineWidget* self = const_cast<TimelineWidget*>(this);
-        const float devicePixelRatio = self->pixels_per_unit();
+        const float devicePixelRatio = pixelRatio();
         return devicePixelRatio > 0.F ? (value / devicePixelRatio)
                                       : math::Vector2i();
     }
@@ -1717,7 +1735,7 @@ namespace mrv
     void TimelineWidget::_sizeHintEvent()
     {
         TLRENDER_P();
-        const float devicePixelRatio = this->pixels_per_unit();
+        const float devicePixelRatio = pixelRatio();
         ui::SizeHintEvent sizeHintEvent(
             p.style, p.iconLibrary, p.fontSystem, devicePixelRatio);
         _sizeHintEvent(p.timelineWindow, sizeHintEvent);

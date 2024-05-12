@@ -53,6 +53,8 @@ This is a release full of goodies and bug fixes.
 - Worked around an UI redraw issue on Wayland.
 - Fixed timeline interaction (dragging clips in .otio timeline) in 1.1.5
   re-release.
+- Fixed macOS issues when showing and hiding the timeline bar.
+  
 
 
 v1.1.5
