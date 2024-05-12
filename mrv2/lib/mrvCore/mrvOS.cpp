@@ -16,27 +16,45 @@
 
 #include "mrvCore/mrvI8N.h"
 
+#include "mrvUI/mrvDesktop.h"
+
 namespace mrv
 {
     namespace os
     {
         std::string getDesktop()
         {
-            std::string out = "Unknown";
-            const char* env = fl_getenv("XDG_SESSION_DESKTOP");
-            if (env && strlen(env) > 0)
+            std::string out = _("Desktop: ");
+            
+#ifdef __linux__
+            if (desktop::XWayland())
             {
-                out = env;
+                out += "XWayland";
             }
             else
             {
-                env = fl_getenv("DESKTOP_SESSION");
+                const char* env = fl_getenv("XDG_SESSION_DESKTOP");
                 if (env && strlen(env) > 0)
                 {
-                    out = env;
+                    out += env;
+                }
+                else
+                {
+                    env = fl_getenv("DESKTOP_SESSION");
+                    if (env && strlen(env) > 0)
+                    {
+                        out += env;
+                    }
                 }
             }
-            out = _("Desktop: ") + out;
+#elif _WIN32
+            out += "Windows (GDI+)";
+#elif __APPLE__
+            out += "macOS (Cocoa)";
+#else
+            out += _("Unknown");
+#endif
+            
             return out;
         }
 

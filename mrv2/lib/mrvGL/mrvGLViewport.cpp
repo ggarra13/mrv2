@@ -25,6 +25,8 @@
 #include "mrvFl/mrvIO.h"
 #include "mrvFl/mrvTimelinePlayer.h"
 
+#include "mrvUI/mrvDesktop.h"
+
 #include "mrvGL/mrvGLViewportPrivate.h"
 #include "mrvGL/mrvGLDefines.h"
 #include "mrvGL/mrvGLErrors.h"
@@ -361,19 +363,66 @@ namespace mrv
 
         if (!p.presentation)
         {
+            Fl_Color c = p.ui->uiPrefs->uiPrefsViewBG->color();
+            
             uint8_t ur, ug, ub;
-            Fl::get_color(p.ui->uiPrefs->uiPrefsViewBG->color(), ur, ug, ub);
+            Fl::get_color(c, ur, ug, ub);
             r = ur / 255.0f;
             g = ug / 255.0f;
             b = ub / 255.0f;
 
-#ifdef FLTK_USE_WAYLAND
-            if (fl_wl_display())
+            p.ui->uiViewGroup->color(fl_rgb_color(ur, ug, ub));
+            p.ui->uiViewGroup->redraw();
+            
+#if 0
+            static bool print = true;
+
+            if (print)
             {
-                p.ui->uiViewGroup->color(fl_rgb_color(ur, ug, ub));
-                p.ui->uiViewGroup->redraw();
+                
+                std::cerr << "Set color index "
+                          << std::hex
+                          << (int)c
+                          << std::dec
+                          << " float = "
+                          << r
+                          << " "
+                          << g
+                          << " "
+                          << b << std::endl;
+                
+                std::cerr << "Set color index "
+                          << std::hex
+                          << (int)c
+                          << std::dec
+                          << " bytes = "
+                          << (int)ur
+                          << " "
+                          << (int)ug
+                          << " "
+                          << (int)ub << std::endl;
+            }
+            
+
+            c = p.ui->uiViewGroup->color();
+            Fl::get_color(c, ur, ug, ub);
+
+            if (print)
+            {
+                std::cerr << "Fl::get_color index "
+                          << std::hex
+                          << (int)c
+                          << std::dec
+                          << " bytes = "
+                          << (int)ur
+                          << " "
+                          << (int)ug
+                          << " "
+                          << (int)ub << std::endl;
+                print = false;
             }
 #endif
+            
         }
         else
         {

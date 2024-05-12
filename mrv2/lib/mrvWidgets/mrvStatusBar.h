@@ -35,6 +35,9 @@ namespace mrv
         //! Clear the status bar and restore the colors
         void clear();
 
+        //! Set up the default status message.
+        void default_message();
+
         //! Store a message in the status bar (a FLTK label)
         void error(const char* msg);
 

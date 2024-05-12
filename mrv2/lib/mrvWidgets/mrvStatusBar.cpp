@@ -3,6 +3,7 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #include "mrvCore/mrvI8N.h"
+#include "mrvCore/mrvOS.h"
 
 #include "mrvWidgets/mrvStatusBar.h"
 
@@ -15,7 +16,7 @@ namespace mrv
 
     void StatusBar::all_ok_cb(StatusBar* o)
     {
-        o->copy_label(_("Everything OK."));
+        o->default_message();
     }
 
     StatusBar::StatusBar(int X, int Y, int W, int H, const char* L) :
@@ -29,6 +30,13 @@ namespace mrv
         seconds_ = seconds;
     }
 
+    void StatusBar::default_message()
+    {
+        std::string label = _("Everything OK. ");
+        label += os::getDesktop();
+        copy_label(label.c_str());
+    }
+    
     void StatusBar::save_colors()
     {
         color_ = color();

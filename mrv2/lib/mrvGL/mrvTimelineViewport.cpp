@@ -988,14 +988,6 @@ namespace mrv
     {
         TLRENDER_P();
 
-#ifdef DEBUG_VIDEO_CALLBACK
-        if (!p.videoData.empty() && !values.empty() &&
-            values[0].time != p.videoData[0].time)
-        {
-            std::cerr << values[0].time << std::endl;
-        }
-#endif
-
         p.videoData = values;
 
         if (p.resizeWindow)
@@ -1320,8 +1312,6 @@ namespace mrv
 
         int minX, minY, maxW, maxH, posX, posY;
         Fl::screen_work_area(minX, minY, maxW, maxH, screen);
-        // std::cerr << "work area=" << minX << " " << minY << " "
-        //           << maxW << "x" << maxH << std::endl;
 
         PreferencesUI* uiPrefs = p.ui->uiPrefs;
         if (!desktop::Wayland() && uiPrefs->uiWindowFixedPosition->value())
@@ -1432,7 +1422,6 @@ namespace mrv
         if (posX + W + dW > minX + maxW)
         {
             p.frameView = true;
-            // posX = minX + dW;
             W = minX + maxW + dW - posX;
             p.frameView = true;
         }
@@ -1442,8 +1431,7 @@ namespace mrv
             H = minY + maxH + dH - posY;
             p.frameView = true;
         }
-        // std::cerr << "mw resize=" << posX << " " << posY << " "
-        //           << W << "x" << H << std::endl;
+        
         mw->resize(posX, posY, W, H);
 
         p.ui->uiRegion->layout();

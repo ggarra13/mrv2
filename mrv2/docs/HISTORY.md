@@ -56,6 +56,8 @@ This is a release full of goodies and bug fixes.
   when it can be dragged.
 - Made Panel divider highlight in a grayish color when it can be dragged.
 - Fixed cursor when dragging on the Panel divider bar.
+- Fixed cursor sometimes switching to the Arrow instead of the Cross cursor.
+  This was maily a Linux issue.
   
 
 

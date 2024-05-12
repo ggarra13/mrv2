@@ -107,7 +107,7 @@ decl {class AboutUI;} {public global
 }
 
 widget_class PixelToolBarClass {
-  xywh {1 65 682 31} resizable
+  xywh {135 199 682 31} resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {open
@@ -413,7 +413,7 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
 }
 
 widget_class TimelineClass {
-  xywh {29 82 690 47} box NO_BOX resizable
+  xywh {180 244 690 47} box NO_BOX resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {
@@ -805,7 +805,7 @@ uiSecondary = nullptr;} {}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
     exit_cb( o, v );} open
-      xywh {58 111 690 602} type Double align 80 resizable
+      xywh {225 289 690 602} type Double align 80 resizable
       class {mrv::MainWindow} size_range {690 602 0 0} visible
     } {
       Fl_Pack uiRegion {open
@@ -1058,7 +1058,7 @@ Value is:  pow( 2, 1/x );} xywh {651 26 39 25} type {Horz Knob} labelsize 10 max
           Fl_Box uiTimelineLimit {
             xywh {0 80 690 408} labeltype NO_LABEL hide resizable
           }
-          Fl_Pack uiViewGroup {
+          Fl_Pack uiViewGroup {open
             xywh {0 53 690 435} type HORIZONTAL box FLAT_BOX
             code0 {o->fixed( uiToolsGroup, uiToolsGroup->w() );}
             code1 {uiMain->workspace = uiViewGroup;}
@@ -1227,7 +1227,7 @@ settings->setValue( mrv::kPenColorA, a);}
             xywh {0 488 690 30} box FLAT_BOX color 51
             class {mrv::TimelineGroup}
           } {
-            Fl_Group uiTimeline {open selected
+            Fl_Group uiTimeline {open
               xywh {0 496 690 22} labeltype NO_LABEL resizable
               class {mrv::TimelineWidget}
             } {}
@@ -1252,13 +1252,13 @@ settings->setValue( mrv::kPenColorA, a);}
             class PixelToolBarClass
           } {}
         }
-        Fl_Group uiStatusGroup {
+        Fl_Group uiStatusGroup {open
           xywh {0 577 690 25} color 0
         } {
-          Fl_Group uiStatusBar {
-            label {Everything OK.  } open
+          Fl_Group uiStatusBar {open selected
             xywh {0 577 690 25} box FLAT_BOX labelsize 10 align 84
             code0 {o->save_colors();}
+            code1 {o->default_message();}
             class {mrv::StatusBar}
           } {
             Fl_Box uiStatus {
