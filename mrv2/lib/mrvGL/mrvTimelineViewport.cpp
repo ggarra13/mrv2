@@ -280,8 +280,7 @@ namespace mrv
 
     void TimelineViewport::set_cursor(Fl_Cursor n) const noexcept
     {
-        if (window())
-            window()->cursor(n);
+        window()->cursor(n);
     }
 
     void TimelineViewport::_scrub(float dx) noexcept
@@ -896,7 +895,9 @@ namespace mrv
         if (p.actionMode == ActionMode::kScrub ||
             p.actionMode == ActionMode::kSelection ||
             p.actionMode == ActionMode::kRotate)
+        {
             set_cursor(FL_CURSOR_CROSS);
+        }
         // else if ( p.actionMode == ActionMode::kRotate )
         //     cursor( FL_CURSOR_MOVE );
         else if (p.actionMode == ActionMode::kText)

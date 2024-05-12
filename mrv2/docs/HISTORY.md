@@ -19,8 +19,6 @@ This is a release full of goodies and bug fixes.
 
 - Fixed slow seeking on 4K movies.  Now we beat OpenRV on **all** movies,
   seeking and reverse playback too.
-- Made View Window / Timeline Viewport divider highlight in a grayish color
-  when it can be dragged.
 - Improved performance of dragging Tile like the main divider between the
   view and timeline viewport, particularly on macOS.
 - Made switching languages keep the UI preferences.
@@ -54,6 +52,10 @@ This is a release full of goodies and bug fixes.
 - Fixed timeline interaction (dragging clips in .otio timeline) in 1.1.5
   re-release.
 - Fixed macOS issues when showing and hiding the timeline bar.
+- Made View Window / Timeline Viewport divider highlight in a grayish color
+  when it can be dragged.
+- Made Panel divider highlight in a grayish color when it can be dragged.
+- Fixed cursor when dragging on the Panel divider bar.
   
 
 

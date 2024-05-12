@@ -73,17 +73,23 @@
 #include <iostream>
 #include <vector>
 
-#include <mrvWidgets/mrvTile.h>
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Rect.H>
 #include <FL/Fl.H>
 #include <stdlib.h>
 
+#include "mrvWidgets/mrvTile.h"
+#include "mrvWidgets/mrvTimelineGroup.h"
+
+#include "mrvGL/mrvTimelineViewport.h"
+
 namespace mrv
 {
-#    define DRAGV 2
-#    define GRABAREA 4
-    
+#define DRAGV 2
+#define GRABAREA 4
+
+#define CROSS
+
     struct WidgetData
     {
         Fl_Widget* o;
@@ -122,8 +128,7 @@ namespace mrv
 
       Pass zero as \p oldx or \p oldy to disable drag in that direction.
     */
-    void
-    Tile::move_intersection(int oldx, int oldy, int newx, int newy)
+    void Tile::move_intersection(int oldx, int oldy, int newx, int newy)
     {
         Fl_Widget* const* a = array();
         Fl_Rect* p = bounds();
@@ -182,15 +187,16 @@ namespace mrv
         Fl_Tile::init_sizes();
     }
 
-    static Fl_Cursor cursors[4] = {
-        FL_CURSOR_DEFAULT, FL_CURSOR_WE, FL_CURSOR_NS, FL_CURSOR_MOVE};
-    
+    static Fl_Cursor cursors[5] = {
+        FL_CURSOR_DEFAULT, FL_CURSOR_WE, FL_CURSOR_NS, FL_CURSOR_MOVE,
+        FL_CURSOR_CROSS};
+
     static void tile_set_dragbar_color(Fl_Tile* t, Fl_Cursor c)
     {
         Fl_Widget* tg = t->child(2); // mrv::TimelineGroup
         if (c != cursors[DRAGV])
         {
-            tg->color(51);   // default color;
+            tg->color(51); // default color;
         }
         else
         {
@@ -198,16 +204,16 @@ namespace mrv
         }
         tg->redraw();
     }
+
     static void tile_set_cursor(Fl_Tile* t, Fl_Cursor c)
     {
-        static Fl_Cursor cursor;
+        static Fl_Cursor cursor = FL_CURSOR_CROSS;
         if (cursor == c || !t->window())
             return;
         cursor = c;
         t->window()->cursor(c);
         tile_set_dragbar_color(t, c);
     }
-
 
     int Tile::handle(int event)
     {
@@ -217,7 +223,9 @@ namespace mrv
 
         int mx = Fl::event_x();
         int my = Fl::event_y();
-        
+
+        // \@bug: Window does not properly refresh the OpenGL timeline.
+        //        So we need to the resize on a timeout.
 #if defined(_WIN32)
 
         switch (event)
@@ -279,7 +287,7 @@ namespace mrv
             }
 
         case FL_LEAVE:
-            tile_set_cursor(this, FL_CURSOR_DEFAULT);
+            tile_set_cursor(this, cursors[sdrag]);
             break;
 
         case FL_DRAG:
@@ -318,6 +326,7 @@ namespace mrv
         }
         }
 #else
+
         switch (event)
         {
 
@@ -357,14 +366,17 @@ namespace mrv
                     sdrag |= DRAGV;
                     sy = oldy;
                 }
-                tile_set_dragbar_color(this, cursors[sdrag]);
+
+                Fl_Cursor cursor = cursors[sdrag];
+
+                tile_set_cursor(this, cursor);
             }
 
         case FL_LEAVE:
             break;
 
         case FL_DRAG:
-            tile_set_dragbar_color(this, cursors[sdrag]);
+            tile_set_cursor(this, cursors[sdrag]);
             break;
         default:
             break;
