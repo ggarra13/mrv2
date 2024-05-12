@@ -838,7 +838,9 @@ if (!presentation)
     uiView->resizeWindow();
 }
 else
-{    
+{   
+    if (value) mrv::editMode = mrv::EditMode::kFull;
+    else       mrv::editMode = mrv::EditMode::kNone;
     mrv::toggle_bottom_bar(nullptr, v);
 }} selected
               tooltip {Toggle Edit Mode} xywh {602 0 58 25} down_box DOWN_BOX selection_color 95 labelsize 12
