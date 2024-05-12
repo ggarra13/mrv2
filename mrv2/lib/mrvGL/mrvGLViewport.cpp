@@ -12,8 +12,9 @@
 #include <tlGL/Init.h>
 #include <tlGL/Util.h>
 
-// mrViewer includes
+// mrViewer .fl includes
 #include "mrViewer.h"
+#include "mrvHotkeyUI.h"
 
 #include "mrvCore/mrvColorSpaces.h"
 #include "mrvCore/mrvLocale.h"
@@ -377,68 +378,11 @@ namespace mrv
                 p.ui->uiViewGroup->color(fl_rgb_color(ur, ug, ub));
                 p.ui->uiViewGroup->redraw();
             }
-            
-#if 0
-            static bool print = true;
-
-            if (print)
-            {
-                
-                std::cerr << "Set color index "
-                          << std::hex
-                          << (int)c
-                          << std::dec
-                          << " float = "
-                          << r
-                          << " "
-                          << g
-                          << " "
-                          << b
-                          << " "
-                          << a
-                          << std::endl;
-                
-                std::cerr << "Set color index "
-                          << std::hex
-                          << (int)c
-                          << std::dec
-                          << " bytes = "
-                          << (int)ur
-                          << " "
-                          << (int)ug
-                          << " "
-                          << (int)ub
-                          << " "
-                          << (int)ua
-                          << std::endl;
-            }
-            
-
-            c = p.ui->uiViewGroup->color();
-            Fl::get_color(c, ur, ug, ub, ua);
-
-            if (print)
-            {
-                std::cerr << "Fl::get_color index "
-                          << std::hex
-                          << (int)c
-                          << std::dec
-                          << " bytes = "
-                          << (int)ur
-                          << " "
-                          << (int)ug
-                          << " "
-                          << (int)ub
-                          << " "
-                          << (int)ua
-                          << std::endl;
-                print = false;
-            }
-#endif
-            
         }
         else
         {
+            // Hide the cursor if in presentation time after 3 seconds of
+            // inactivity.
             auto time = std::chrono::high_resolution_clock::now();
             auto elapsedTime =
                 std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -446,7 +390,17 @@ namespace mrv
                     .count();
             if (elapsedTime >= 3000)
             {
-                window()->cursor(FL_CURSOR_NONE);
+                // If user is changing preferences or hotkeys, keep
+                // the default cursor.
+                if (p.ui->uiPrefs->uiMain->visible() ||
+                    p.ui->uiHotkey->uiMain->visible())
+                {
+                    window()->cursor(FL_CURSOR_DEFAULT);
+                }
+                else
+                {
+                    window()->cursor(FL_CURSOR_NONE);
+                }
                 p.presentationTime = time;
             }
         }

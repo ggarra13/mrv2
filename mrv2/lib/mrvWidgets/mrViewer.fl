@@ -834,9 +834,8 @@ bool presentation = uiView->getPresentationMode();
 if (!presentation)
 {
     if (value) mrv::editMode = mrv::EditMode::kFull;
-    else       mrv::editMode = mrv::EditMode::kTimeline;
-    uiView->resizeWindow();
-}
+    else       mrv::editMode = mrv::EditMode::kSaved;    
+    mrv::toggle_bottom_bar(nullptr, v);}
 else
 {   
     if (value) mrv::editMode = mrv::EditMode::kFull;

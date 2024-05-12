@@ -2507,7 +2507,7 @@ namespace mrv
         int newY = tileGroupY + tileGroupH - H;
         viewGroupH = tileGroupH - viewGroupH;
 
-#if 1
+#if 0
         std::cerr << "------------------------------------------------"
                   << "presentation=" << ui->uiView->getPresentationMode()
                   << " active=" << active << std::endl;
@@ -2522,6 +2522,7 @@ namespace mrv
         std::cerr << "1       oldY=" << oldY - tileGroupY << std::endl;
         std::cerr << "1       newY=" << newY - tileGroupY << std::endl;
         std::cerr << "1 tileGroupH=" << tileGroupH << std::endl;
+        std::cerr << "1  editModeH=" << editModeH << std::endl;
         std::cerr << "1          H=" << H << std::endl;
         assert( viewGroupH + H == tileGroupH );
         assert( viewGroup->y() + viewGroupH == newY );
@@ -2530,7 +2531,7 @@ namespace mrv
         viewGroup->resize(viewGroup->x(), viewGroup->y(), viewGroup->w(), viewGroupH);
         TimelineGroup->resize(TimelineGroup->x(), newY, TimelineGroup->w(), H);
 
-#if 1
+#if 0
         std::cerr << "AFTER RESIZE uiMain->h()="
                   << ui->uiMain->h() << std::endl;
         std::cerr << "AFTER RESIZE viewGroup->x()="
@@ -2582,7 +2583,8 @@ namespace mrv
         }
         else if (ui->uiMain->visible())
         {
-            TimelineGroup->hide();
+            if (ui->uiTimelineGroup->visible())
+                TimelineGroup->hide();
             if (ui->uiTimeline->visible())
             {
                 ui->uiTimeline->hide();
@@ -2592,7 +2594,7 @@ namespace mrv
         
         viewGroup->layout();
         
-#if 1
+#if 0
         std::cerr << "AFTER LAYOUT viewGroup->x()="
                   << viewGroup->x() << std::endl;
         std::cerr << "AFTER LAYOUT viewGroup->y()="
@@ -2613,7 +2615,7 @@ namespace mrv
 
         tileGroup->init_sizes();
         
-#if 1
+#if 0
         std::cerr << "AFTER INIT_SIZES viewGroup->x()="
                   << viewGroup->x() << std::endl;
         std::cerr << "AFTER INIT_SIZES viewGroup->y()="
