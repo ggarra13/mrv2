@@ -232,15 +232,22 @@ namespace mrv
         // Do not use FL_DOUBLE on APPLE as it makes playback slow
 #if defined(__APPLE__) || defined(__linux__)
         fl_double = 0;
-        if (desktop::Wayland())
+        if (desktop::XWayland())
+        {
+            fl_double = FL_DOUBLE;  // needed
+        }
+        else if (desktop::Wayland())
         {
             // For faster playback, we won't set this window to FL_DOUBLE.
             // FLTK's EGL Wayland already uses two buffers.
-            // fl_double = FL_DOUBLE;
+            fl_double = 0;
         }
-        else if (desktop::XWayland())
+        else
         {
-            fl_double = FL_DOUBLE;
+            if (desktop::X11())
+            {
+                fl_double = FL_DOUBLE;
+            }
         }
 #endif
         mode(FL_RGB | FL_ALPHA | FL_STENCIL | fl_double | FL_OPENGL3);

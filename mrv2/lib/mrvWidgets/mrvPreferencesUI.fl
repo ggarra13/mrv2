@@ -79,7 +79,7 @@ class PreferencesUI {open
     Fl_Window uiMain {
       label Preferences
       user_data this user_data_type {PreferencesUI*} open
-      xywh {102 145 847 466} type Double resizable
+      xywh {0 0 847 466} type Double resizable
       code0 {main = m;} modal visible
     } {
       Fl_Group {} {open
@@ -728,7 +728,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
               }
             }
             Fl_Group {} {
-              label Thumbnails
+              label Thumbnails open
               xywh {288 35 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {open
@@ -741,6 +741,28 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                 Fl_Check_Button uiPrefsPanelThumbnails {
                   label {Preview Thumbnails on Panels}
                   tooltip {Preview Thumbnails in Panels} xywh {405 228 370 20} down_box DOWN_BOX value 1
+                }
+                Fl_Choice uiPrefsEditThumbnails {
+                  label {Edit Viewport} open
+                  tooltip {How to display timeline by default.} xywh {405 146 175 28} box THIN_DOWN_BOX down_box BORDER_BOX align 8
+                  code0 {o->value(1);}
+                } {
+                  MenuItem {} {
+                    label None
+                    xywh {35 35 100 20}
+                  }
+                  MenuItem {} {
+                    label Small
+                    xywh {35 35 100 20}
+                  }
+                  MenuItem {} {
+                    label Medium
+                    xywh {35 35 100 20}
+                  }
+                  MenuItem {} {
+                    label Large
+                    xywh {45 45 100 20}
+                  }
                 }
               }
             }
@@ -776,8 +798,8 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
               }
             }
             Fl_Group {} {
-              label Playback open
-              xywh {288 35 555 360} box EMBOSSED_BOX align 5
+              label Playback
+              xywh {288 35 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label Defaults open
@@ -788,7 +810,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                   tooltip {Start Playback when opening files.} xywh {497 111 25 25} box UP_BOX down_box DOWN_BOX align 4
                 }
                 Fl_Check_Button uiPrefsScrubAutoPlay {
-                  label {Scrub with Audio} selected
+                  label {Scrub with Audio}
                   tooltip {Start playback when scrubbing so that audio can be heard.  Scrubbing can be less smooth.} xywh {572 347 25 25} box UP_BOX down_box DOWN_BOX value 1 align 4
                 }
                 Fl_Check_Button uiPrefsSingleClickPlayback {
@@ -893,8 +915,8 @@ v->uiPrefsFPS->value( g );}
               }
             }
             Fl_Group {} {
-              label Edit
-              xywh {288 35 555 360} box EMBOSSED_BOX align 5 hide
+              label Edit open
+              xywh {288 35 555 360} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {
                 label {Edit Viewport} open
@@ -905,8 +927,8 @@ v->uiPrefsFPS->value( g );}
                   xywh {368 102 420 144} box BORDER_BOX
                 } {
                   Fl_Choice uiPrefsEditView {
-                    label {Default View} open
-                    tooltip {How to display timeline by default.} xywh {560 113 210 26} box THIN_DOWN_BOX down_box BORDER_BOX
+                    label {Default View}
+                    tooltip {How to display timeline by default.} xywh {560 125 210 26} box THIN_DOWN_BOX down_box BORDER_BOX
                     code0 {o->value(0);}
                   } {
                     MenuItem {} {
@@ -918,35 +940,13 @@ v->uiPrefsFPS->value( g );}
                       xywh {45 45 100 20}
                     }
                   }
-                  Fl_Choice uiPrefsEditThumbnails {
-                    label Thumbnails
-                    tooltip {How to display timeline by default.} xywh {560 153 210 26} box THIN_DOWN_BOX down_box BORDER_BOX
-                    code0 {o->value(1);}
-                  } {
-                    MenuItem {} {
-                      label None
-                      xywh {35 35 100 20}
-                    }
-                    MenuItem {} {
-                      label Small
-                      xywh {35 35 100 20}
-                    }
-                    MenuItem {} {
-                      label Medium
-                      xywh {35 35 100 20}
-                    }
-                    MenuItem {} {
-                      label Large
-                      xywh {45 45 100 20}
-                    }
-                  }
                   Fl_Check_Button uiPrefsShowTransitions {
                     label {Show Transitions}
-                    tooltip {Show Transitions in Edit Viewport} xywh {560 187 15 20} down_box DOWN_BOX value 1 align 8
+                    tooltip {Show Transitions in Edit Viewport} xywh {560 164 15 20} down_box DOWN_BOX value 1 align 8
                   }
                   Fl_Check_Button uiPrefsShowMarkers {
                     label {Show Markers}
-                    tooltip {Show Markers in Edit Viewport} xywh {560 216 15 20} down_box DOWN_BOX value 1 align 8
+                    tooltip {Show Markers in Edit Viewport} xywh {560 193 15 20} down_box DOWN_BOX value 1 align 8
                   }
                 }
                 Fl_Group {} {
@@ -1541,7 +1541,7 @@ mrv::Preferences::load(false, false);}
               user_data m user_data_type {ViewerUI*}
               callback {v->uiPrefs->uiMain->hide();
 mrv::Preferences::run();}
-              tooltip {Accept settings but don't save.  They will get saved when exiting the program.} xywh {645 416 132 31}
+              tooltip {Accept settings but don't save.  They will get saved when exiting the program.} xywh {648 416 132 31}
             }
           }
         }
@@ -1597,7 +1597,8 @@ if (!found)
   } {
     code {make_window(m);} {}
   }
-  Function {~PreferencesUI()} {} {
+  Function {~PreferencesUI()} {selected
+  } {
     code {delete uiMain; uiMain = NULL;} {}
   }
   Function {fill_tree(mrv::PreferencesTree* o)} {open

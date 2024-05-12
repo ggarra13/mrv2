@@ -1598,8 +1598,6 @@ namespace mrv
             const bool isSequence = file::isSequence(path.get());
             if (isSequence)
             {
-                std::cerr << "using sequence cache" << std::endl;
-                
                 double seconds = 1.F;
                 if (!ioInfo.video.empty())
                 {

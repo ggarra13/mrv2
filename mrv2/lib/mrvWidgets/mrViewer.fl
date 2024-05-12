@@ -107,7 +107,7 @@ decl {class AboutUI;} {public global
 }
 
 widget_class PixelToolBarClass {
-  xywh {135 199 682 31} resizable
+  xywh {0 0 686 31} resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {open
@@ -413,7 +413,7 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
 }
 
 widget_class TimelineClass {
-  xywh {180 244 690 47} box NO_BOX resizable
+  xywh {0 0 690 47} box NO_BOX resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {
@@ -805,7 +805,7 @@ uiSecondary = nullptr;} {}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
     exit_cb( o, v );} open
-      xywh {225 289 690 602} type Double align 80 resizable
+      xywh {0 0 690 602} type Double align 80 resizable
       class {mrv::MainWindow} size_range {690 602 0 0} visible
     } {
       Fl_Pack uiRegion {open
@@ -816,7 +816,7 @@ if (reason == FL_REASON_CLOSED)
         code3 {o->fixed( uiPixelBar, uiPixelBar->h() ); o->fixed( uiStatusGroup, uiStatusGroup->h() );}
         class Fl_Flex
       } {
-        Fl_Group uiMenuGroup {
+        Fl_Group uiMenuGroup {open
           xywh {0 0 690 25} box FLAT_BOX
         } {
           Fl_Group {} {open
@@ -831,15 +831,16 @@ if (reason == FL_REASON_CLOSED)
               user_data this user_data_type {ViewerUI*}
               callback {int value = !o->value();
 bool presentation = uiView->getPresentationMode();
-mrv::EditMode mode = mrv::EditMode::kTimeline;
-if (value)             mode = mrv::EditMode::kFull;
-else if (presentation) mode = mrv::EditMode::kNone;
-mrv::editMode = mode;
 if (!presentation)
 {
+    if (value) mrv::editMode = mrv::EditMode::kFull;
+    else       mrv::editMode = mrv::EditMode::kTimeline;
     uiView->resizeWindow();
 }
-mrv::set_edit_mode_cb(mode, v);}
+else
+{    
+    mrv::toggle_bottom_bar(nullptr, v);
+}} selected
               tooltip {Toggle Edit Mode} xywh {602 0 58 25} down_box DOWN_BOX selection_color 95 labelsize 12
             }
           }
@@ -1050,7 +1051,7 @@ Value is:  pow( 2, 1/x );} xywh {651 26 39 25} type {Horz Knob} labelsize 10 max
             xywh {120 25 570 26} hide resizable
           } {}
         }
-        Fl_Tile uiTileGroup {open
+        Fl_Tile uiTileGroup {
           xywh {0 53 690 465}
           code0 {;}
           class {mrv::Tile}
@@ -1233,7 +1234,7 @@ settings->setValue( mrv::kPenColorA, a);}
             } {}
           }
         }
-        Fl_Group uiBottomBar {open
+        Fl_Group uiBottomBar {
           xywh {0 518 690 29} box FLAT_BOX
         } {
           Fl_Group uiTimeWindow {open
@@ -1243,7 +1244,7 @@ settings->setValue( mrv::kPenColorA, a);}
             class TimelineClass
           } {}
         }
-        Fl_Group uiPixelBar {open
+        Fl_Group uiPixelBar {
           xywh {0 547 690 30} box FLAT_BOX color 56 labelcolor 17
         } {
           Fl_Group uiPixelWindow {open
@@ -1252,10 +1253,10 @@ settings->setValue( mrv::kPenColorA, a);}
             class PixelToolBarClass
           } {}
         }
-        Fl_Group uiStatusGroup {open
+        Fl_Group uiStatusGroup {
           xywh {0 577 690 25} color 0
         } {
-          Fl_Group uiStatusBar {open selected
+          Fl_Group uiStatusBar {open
             xywh {0 577 690 25} box FLAT_BOX labelsize 10 align 84
             code0 {o->save_colors();}
             code1 {o->default_message();}

@@ -365,14 +365,18 @@ namespace mrv
         {
             Fl_Color c = p.ui->uiPrefs->uiPrefsViewBG->color();
             
-            uint8_t ur, ug, ub;
-            Fl::get_color(c, ur, ug, ub);
+            uint8_t ur = 0, ug = 0, ub = 0, ua = 0;
+            Fl::get_color(c, ur, ug, ub, ua);
             r = ur / 255.0f;
             g = ug / 255.0f;
             b = ub / 255.0f;
+            a = ua / 255.0f;
 
-            p.ui->uiViewGroup->color(fl_rgb_color(ur, ug, ub));
-            p.ui->uiViewGroup->redraw();
+            if (desktop::Wayland())
+            {
+                p.ui->uiViewGroup->color(fl_rgb_color(ur, ug, ub));
+                p.ui->uiViewGroup->redraw();
+            }
             
 #if 0
             static bool print = true;
@@ -389,7 +393,10 @@ namespace mrv
                           << " "
                           << g
                           << " "
-                          << b << std::endl;
+                          << b
+                          << " "
+                          << a
+                          << std::endl;
                 
                 std::cerr << "Set color index "
                           << std::hex
@@ -400,12 +407,15 @@ namespace mrv
                           << " "
                           << (int)ug
                           << " "
-                          << (int)ub << std::endl;
+                          << (int)ub
+                          << " "
+                          << (int)ua
+                          << std::endl;
             }
             
 
             c = p.ui->uiViewGroup->color();
-            Fl::get_color(c, ur, ug, ub);
+            Fl::get_color(c, ur, ug, ub, ua);
 
             if (print)
             {
@@ -418,7 +428,10 @@ namespace mrv
                           << " "
                           << (int)ug
                           << " "
-                          << (int)ub << std::endl;
+                          << (int)ub
+                          << " "
+                          << (int)ua
+                          << std::endl;
                 print = false;
             }
 #endif

@@ -948,6 +948,9 @@ namespace mrv
 
     void save_ui_state(ViewerUI* ui, Fl_Group* bar)
     {
+        if (ui->uiView->getPresentationMode())
+            return;
+        
         if (bar == ui->uiMenuGroup)
             has_menu_bar = ui->uiMenuGroup->visible();
         else if (bar == ui->uiTopBar)
@@ -966,6 +969,9 @@ namespace mrv
 
     void save_ui_state(ViewerUI* ui)
     {
+        if (ui->uiView->getPresentationMode())
+            return;
+        
         has_menu_bar = ui->uiMenuGroup->visible();
         has_top_bar = ui->uiTopBar->visible();
         has_bottom_bar = ui->uiBottomBar->visible();

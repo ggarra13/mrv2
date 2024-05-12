@@ -1303,7 +1303,7 @@ namespace mrv
 
         if (!renderSize.isValid())
             return;
-
+        
         Fl_Double_Window* mw = p.ui->uiMain;
         int screen = mw->screen_num();
 
@@ -1376,20 +1376,6 @@ namespace mrv
             p.frameView = true;
         }
 
-        if (p.ui->uiBottomBar->visible())
-        {
-            int timelineSize = calculate_edit_viewport_size(p.ui);
-            H += timelineSize;
-        }
-
-        //
-        // Final sanity checks.
-        //
-        if (W > maxW)
-            W = maxW;
-        if (H > maxH)
-            H = maxH;
-
         if (W < 690)
         {
             p.frameView = true;
@@ -1401,6 +1387,20 @@ namespace mrv
             p.frameView = true;
             H = 602;
         }
+
+        if (p.ui->uiBottomBar->visible())
+        {
+            int timelineHeight = calculate_edit_viewport_size(p.ui);
+            H += timelineHeight; 
+        }
+
+        //
+        // Final sanity checks.
+        //
+        if (W > maxW)
+            W = maxW;
+        if (H > maxH)
+            H = maxH;
 
         if (posX < minX)
             posX = minX;
@@ -1436,13 +1436,13 @@ namespace mrv
 
         p.ui->uiRegion->layout();
 
-        set_edit_mode_cb(editMode, p.ui);
-
         if (p.frameView)
         {
             _frameView();
         }
 
+        set_edit_mode_cb(editMode, p.ui);
+        
         p.resizeWindow = false;
     }
 

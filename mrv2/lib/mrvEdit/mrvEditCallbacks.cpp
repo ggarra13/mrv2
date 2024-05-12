@@ -2297,8 +2297,8 @@ namespace mrv
         const float pixels_unit = ui->uiTimeline->pixels_per_unit();
 
         // Some constants, as Darby does not yet expose this in tlRender.
-        const int kTrackInfoHeight = options.fontSize * pixels_unit * 2;
-        const int kClipInfoHeight = options.fontSize * pixels_unit * 2;
+        const int kTrackInfoHeight = 20 * pixels_unit;
+        const int kClipInfoHeight = 8 * pixels_unit;
         const int kTransitionsHeight = 30;
         const int kAudioGapOnlyHeight = 20;
         const int kMarkerHeight = 24;
@@ -2465,54 +2465,62 @@ namespace mrv
         }
         b->redraw();
 
-        Fl_Tile* tile = ui->uiTileGroup;
+        Fl_Tile* tileGroup = ui->uiTileGroup;
         Fl_Group* TimelineGroup = ui->uiTimelineGroup;
-        Fl_Flex* view = ui->uiViewGroup;
-        int tileY = tile->y();
+        Fl_Flex* viewGroup = ui->uiViewGroup;
+        if (ui->uiBottomBar->visible())
+        {
+            if (!tileGroup->visible())
+                tileGroup->show();
+            if (!viewGroup->visible())
+                viewGroup->show();
+        }
+        
+        int tileGroupY = tileGroup->y();
         int oldY = TimelineGroup->y();
         int timelineH = TimelineGroup->h();
-        int tileH = tile->h();
+        int tileGroupH = tileGroup->h();
         int H = kMinEditModeH; // timeline height
-        int viewH = H;
+        int viewGroupH = H;
         auto player = ui->uiView->getTimelinePlayer();
         if (mode == EditMode::kFull && player)
         {
             editMode = mode;
             H = calculate_edit_viewport_size(ui);
-            editModeH = viewH = H;
+            editModeH = viewGroupH = H;
         }
         else if (mode == EditMode::kSaved)
         {
-            H = viewH = editModeH;
+            H = viewGroupH = editModeH;
         }
         else if (mode == EditMode::kNone)
         {
-            viewH = 0;
+            viewGroupH = 0;
         }
         else
         {
             H = kMinEditModeH; // timeline height
-            viewH = editModeH = H;
+            viewGroupH = editModeH = H;
         }
 
         int oldy = TimelineGroup->y();
-        int newY = tileY + tileH - H;
-        viewH = tileH - viewH;
+        int newY = tileGroupY + tileGroupH - H;
+        viewGroupH = tileGroupH - viewGroupH;
 
 #if 0
         std::cerr << "1 TimelineGroup->visible()="
                   << TimelineGroup->visible() << std::endl;
         std::cerr << "editMode=" << editMode << std::endl;
-        std::cerr << "tileY=" << tileY << std::endl;
-        std::cerr << " oldY=" << oldY - tileY << std::endl;
-        std::cerr << " newY=" << newY - tileY << std::endl;
-        std::cerr << "tileH=" << tileH << std::endl;
+        std::cerr << "tileGroupY=" << tileGroupY << std::endl;
+        std::cerr << " oldY=" << oldY - tileGroupY << std::endl;
+        std::cerr << " newY=" << newY - tileGroupY << std::endl;
+        std::cerr << "tileGroupH=" << tileGroupH << std::endl;
         std::cerr << "    H=" << H << std::endl;
-        assert( viewH + H == tileH );
-        assert( view->y() + viewH == newY );
+        assert( viewGroupH + H == tileGroupH );
+        assert( viewGroup->y() + viewGroupH == newY );
 #endif
 
-        view->resize(view->x(), view->y(), view->w(), viewH);
+        viewGroup->resize(viewGroup->x(), viewGroup->y(), viewGroup->w(), viewGroupH);
         TimelineGroup->resize(TimelineGroup->x(), newY, TimelineGroup->w(), H);
 
 #if 0
@@ -2536,9 +2544,9 @@ namespace mrv
             msg["height"] = H;
             tcp->pushMessage(msg);
         }
-
-        view->layout();
-        tile->init_sizes();
+        
+        viewGroup->layout();
+        tileGroup->init_sizes();
 
         // This mess is to work around macOS issues.  Unhiding TimelineGroup
         // should be enough to also unhide the timeline.

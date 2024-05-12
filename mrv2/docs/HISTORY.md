@@ -58,6 +58,7 @@ This is a release full of goodies and bug fixes.
 - Fixed cursor when dragging on the Panel divider bar.
 - Fixed cursor sometimes switching to the Arrow instead of the Cross cursor.
   This was maily a Linux issue.
+- Fixed background transparent color being lighter on Wayland.
   
 
 
