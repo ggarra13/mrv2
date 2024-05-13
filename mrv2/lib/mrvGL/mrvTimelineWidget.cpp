@@ -1496,26 +1496,7 @@ namespace mrv
 
         if (_getDrawUpdate(p.timelineWindow))
         {
-#ifdef __linux__
-            // \@bug: Currently, there seems to be a bug in FLTK's wayland
-            //        where the redraw locks the UI randomly when it has been
-            //        callled twice.
-            if (desktop::Wayland())
-            {
-                if (p.player)
-                {
-                    auto playback = p.player->playback();
-                    if (playback == timeline::Playback::Stop)
-                        redraw();
-                }
-            }
-            else
-            {
-                redraw();
-            }
-#else
             redraw();
-#endif
         }
 
         Fl::repeat_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
