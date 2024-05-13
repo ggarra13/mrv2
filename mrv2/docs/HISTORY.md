@@ -64,6 +64,9 @@ This is a release full of goodies and bug fixes.
   timeline viewport.
 - Added default sensible Window settings for UI panels when in window mode.
 - Made Window settings for UI panels get saved even if they were in panel mode.
+- Fixed .otio markers display in timeline viewport.
+- Fixed size of Timeline Viewport when in Edit mode on macOS.  Now it resizes
+  properly.
 
 
 v1.1.5
