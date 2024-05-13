@@ -62,6 +62,8 @@ This is a release full of goodies and bug fixes.
 - Added Cache Use and Cache Percentage to HUD's Cache display.
 - Made Edit button turn on/off automatically according to the size of the
   timeline viewport.
+- Added default sensible Window settings for UI panels when in window mode.
+- Made Window settings for UI panels get saved even if they were in panel mode.
 
 
 v1.1.5

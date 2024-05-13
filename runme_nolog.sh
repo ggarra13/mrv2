@@ -172,7 +172,6 @@ echo "Build directory is ${BUILD_DIR}"
 echo "Build type      is ${CMAKE_BUILD_TYPE}"
 echo "Building with ${COMPILER_VERSION}, ${CPU_CORES} cores"
 echo "Compiler flags are ${FLAGS}"
-echo "$CMAKE_VERSION"
 echo
 
 
