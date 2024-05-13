@@ -94,6 +94,11 @@ ${GIT_EXECUTABLE} push
 
 export tag="v${mrv2_VERSION}"
 
+echo "--------------------------------"
+echo "  Will release local ${tag} in mrv2"
+echo "--------------------------------"
+
+add_local_tag $tag
 
 echo "---------------------------------------"
 echo "  Will release remote ${tag} in mrv2"
@@ -102,6 +107,12 @@ echo "---------------------------------------"
 add_remote_tag $tag
 
 cd tlRender
+
+echo "-----------------------------------"
+echo "  Will release local ${tag} in tlRender"
+echo "-----------------------------------"
+
+add_local_tag $tag
 
 echo "------------------------------------------"
 echo "  Will release remote ${tag} in tlRender"
@@ -112,16 +123,3 @@ add_remote_tag $tag
 cd ..
 
 
-echo "--------------------------------"
-echo "  Will release ${tag} in mrv2"
-echo "--------------------------------"
-
-add_local_tag $tag
-
-cd tlRender
-
-echo "-----------------------------------"
-echo "  Will release ${tag} in tlRender"
-echo "-----------------------------------"
-
-add_local_tag $tag
