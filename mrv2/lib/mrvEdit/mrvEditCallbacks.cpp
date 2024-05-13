@@ -2414,10 +2414,27 @@ namespace mrv
                     for (const auto& child : track->children())
                     {
                         if (const auto& transition =
-                                dynamic_cast<otio::Transition*>(child.value))
+                            dynamic_cast<otio::Transition*>(child.value))
                         {
-                            found = true;
-                            break;
+                            bool visibleTrack = false;
+                            if (otio::Track::Kind::video == track->kind())
+                            {
+                                visibleTrack = true;
+                            }
+                            else if (
+                                otio::Track::Kind::audio == track->kind() &&
+                                (editView >= 1 || audioOnly))
+                            {
+                                if (track->children().size() > 0)
+                                {
+                                    visibleTrack = true;
+                                }
+                            }
+                            if (visibleTrack)
+                            {
+                                found = true;
+                                break;
+                            }
                         }
                     }
                     if (found)
