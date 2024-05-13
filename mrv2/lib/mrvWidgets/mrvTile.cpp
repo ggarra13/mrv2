@@ -81,7 +81,9 @@
 #include "mrvWidgets/mrvTile.h"
 #include "mrvWidgets/mrvTimelineGroup.h"
 
-#include "mrvGL/mrvTimelineViewport.h"
+#include "mrvEdit/mrvEditCallbacks.h"
+
+#include "mrViewer.h"
 
 namespace
 {
@@ -297,6 +299,10 @@ namespace mrv
         case FL_DRAG:
             // This is necessary if CONSOLIDATE_MOTION in Fl_x.cxx is turned
             // off: if (damage()) return 1; // don't fall behind
+        {
+            set_edit_button(mrv::EditMode::kSaved, App::ui);
+            tile_set_cursor(this, cursors[sdrag]);
+        }
         case FL_RELEASE:
         {
             if (!sdrag)
@@ -326,6 +332,7 @@ namespace mrv
             {
                 do_callback(FL_REASON_CHANGED);
             }
+            set_edit_button(mrv::EditMode::kSaved, App::ui);
             return 1;
         }
         }
@@ -379,7 +386,11 @@ namespace mrv
             break;
 
         case FL_DRAG:
+            set_edit_button(mrv::EditMode::kSaved, App::ui);
             tile_set_cursor(this, cursors[sdrag]);
+            break;
+        case FL_RELEASE:
+            set_edit_button(mrv::EditMode::kSaved, App::ui);
             break;
         default:
             break;

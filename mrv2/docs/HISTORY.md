@@ -59,7 +59,9 @@ This is a release full of goodies and bug fixes.
 - Fixed cursor sometimes switching to the Arrow instead of the Cross cursor.
   This was maily a Linux issue.
 - Fixed background transparent color being lighter on Wayland.
-- Added Cache Use and Cache Percentage to HUD's Cache display.  
+- Added Cache Use and Cache Percentage to HUD's Cache display.
+- Made Edit button turn on/off automatically according to the size of the
+  timeline viewport.
 
 
 v1.1.5

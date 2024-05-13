@@ -2454,16 +2454,22 @@ namespace mrv
         return H;
     }
 
-    void set_edit_mode_cb(EditMode mode, ViewerUI* ui)
+    void set_edit_button(EditMode mode, ViewerUI* ui)
     {
-        const int kDragBarHeight = 8;
-
         Fl_Button* b = ui->uiEdit;
 
         bool active = (mode == EditMode::kFull || mode == EditMode::kSaved);
         if (mode == EditMode::kSaved && editModeH == kMinEditModeH)
             active = false;
 
+        if (active)
+        {
+            int savedH = calculate_edit_viewport_size(ui);
+            int H = ui->uiTimelineGroup->h();
+            if (H == kMinEditModeH || !ui->uiTimelineGroup->visible())
+                active = false;
+        }
+        
         b->value(active);
         if (active)
         {
@@ -2474,6 +2480,11 @@ namespace mrv
             b->labelcolor(FL_FOREGROUND_COLOR);
         }
         b->redraw();
+    }
+
+    void set_edit_mode_cb(EditMode mode, ViewerUI* ui)
+    {
+        const int kDragBarHeight = 8;
 
         Fl_Tile* tileGroup = ui->uiTileGroup;
         Fl_Group* TimelineGroup = ui->uiTimelineGroup;
@@ -2528,10 +2539,8 @@ namespace mrv
         std::cerr << "1 BottomBar->visible()="
                   << ui->uiBottomBar->visible() << std::endl;
         std::cerr << "1   editMode=" << editMode << std::endl;
-        std::cerr << "1 tileGroupY=" << tileGroupY << std::endl;
         std::cerr << "1       oldY=" << oldY - tileGroupY << std::endl;
         std::cerr << "1       newY=" << newY - tileGroupY << std::endl;
-        std::cerr << "1 tileGroupH=" << tileGroupH << std::endl;
         std::cerr << "1  editModeH=" << editModeH << std::endl;
         std::cerr << "1          H=" << H << std::endl;
         assert( viewGroupH + H == tileGroupH );
@@ -2630,6 +2639,8 @@ namespace mrv
         tileGroup->init_sizes();
 
 #if 0
+        std::cerr << "AFTER INIT tileGroupY=" << tileGroupY << std::endl;
+        std::cerr << "AFTER INIT tileGroupH=" << tileGroupH << std::endl;
         std::cerr << "AFTER INIT_SIZES viewGroup->x()="
                   << viewGroup->x() << std::endl;
         std::cerr << "AFTER INIT_SIZES viewGroup->y()="
@@ -2660,6 +2671,9 @@ namespace mrv
         // toolbar icons.
         TimelineGroup->redraw();
 
+        // Change the edit button status
+        set_edit_button(editMode, ui);
+        
         // EditMode::kNone is used when we go to presentation mode.
         if (mode != EditMode::kNone)
         {
