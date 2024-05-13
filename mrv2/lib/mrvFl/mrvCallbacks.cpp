@@ -783,6 +783,14 @@ namespace mrv
         if (!item->checked())
             active = false;
         ui->uiView->setFullScreenMode(active);
+        
+        // These are needed to clean the resources and avoid
+        // OpenGL flickering.
+        ui->uiView->refresh();
+        ui->uiView->valid(0);
+        ui->uiTimeline->refresh();
+        ui->uiTimeline->valid(0);
+
         bool send = ui->uiPrefs->SendUI->value();
         if (send)
             tcp->pushMessage("Fullscreen", active);
@@ -794,6 +802,13 @@ namespace mrv
         bool presentation = view->getPresentationMode();
         view->setPresentationMode(!presentation);
 
+        // These are needed to clean the resources and avoid
+        // OpenGL flickering.
+        ui->uiView->refresh();
+        ui->uiView->valid(0);
+        ui->uiTimeline->refresh();
+        ui->uiTimeline->valid(0);
+        
         bool send = ui->uiPrefs->SendUI->value();
         if (send)
             tcp->pushMessage("Presentation", !presentation);
