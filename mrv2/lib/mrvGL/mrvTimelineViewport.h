@@ -45,7 +45,8 @@ namespace mrv
         int handle(int event) override;
         void resize(int X, int Y, int W, int H) override;
 
-        //! Store main ui.
+        //! Store main ui.  We need this as the first viewport does not
+        //! yet know about App::ui.
         void main(ViewerUI* m) noexcept;
 
         //! Handle scrubbing.

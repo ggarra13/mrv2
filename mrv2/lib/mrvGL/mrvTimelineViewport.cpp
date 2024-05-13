@@ -98,12 +98,18 @@ namespace mrv
         Fl_SuperClass(X, Y, W, H, L),
         _p(new Private)
     {
+        TLRENDER_P();
+        
+        p.ui = App::ui;
     }
 
     TimelineViewport::TimelineViewport(int W, int H, const char* L) :
         Fl_SuperClass(W, H, L),
         _p(new Private)
     {
+        TLRENDER_P();
+        
+        p.ui = App::ui;
     }
 
     TimelineViewport::~TimelineViewport()
