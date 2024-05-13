@@ -40,7 +40,7 @@ Es importante conocer cada archivo en caso de que algo no funcione bien o quiera
 Interfaz del Usuario
 ====================
 
-.. image:: ./images/preferences-01.png
+.. image:: ./images/preferences/es_UI.png
    :align: center
 	   
 Aquí es donde puede setear las preferencias para la Interfaz del Usuario al arrancar mrv2.
@@ -101,7 +101,7 @@ Elementos de UI
 Ventana de Vista
 ================
 
-.. image:: ./images/preferences-02.png
+.. image:: ./images/preferences/es_view.png
    :align: center
    
 Aquí puede setear los parámetros por defecto de la ventana de vista.
@@ -125,11 +125,56 @@ Aquí puede setear los parámetros por defecto de la ventana de vista.
 .. topic:: HUD
 
 	   El seteo bajo este encabezado establece que parámetros se mostrarán por defecto en el HUD.
+	   
+Buscador de Archivos
+====================
 
-Languaje y Colores
+.. image:: ./images/preferences/es_filereq.png
+   :align: center
+
+Aquí puede establecer el comportamiento del buscador de archivo de mrv2, así como usar el buscador de archivo nativo de su sistema operativo.
+
+.. topic:: Un Solo Click para Viajar por Carpetas
+
+	   Activado, un click en cualquier carpeta la abrirá.  Sino, tendrá que
+	   cliquear dos veces.
+
+.. topic:: Miniaturas Activas
+
+	   Cuando esta prendido, el buscador de mrv2 mostrará miniaturas de las imagenes, películas y activos que reconoce.
+
+.. topic:: Vista Previa de Miniaturas de USD
+
+	   Seleccionada, activos de USD (Pixar's Universal Scene Description) mostrarán miniaturas.  Note que si su activo USD es complejo, puede desaceleara la interfaz dramaticamente.
+
+.. topic:: Usar el Buscador de Archivos Nativo
+
+	   En vez de usar el buscador de archivos propio de mrv2, use el buscador de archivos nativo a su sistema operativo.
+
+.. note::
+
+   Algunas versiones viejas de macOS no permitirían abrir directorios privados como Descargas, Documentos y Escritorio a menos que el Buscador de Archivos Nativo sea usado.
+
+
+Tipografías
+===========
+
+.. image:: ./images/preferences/es_fonts.png
+   :align: center
+
+.. topic:: Menus
+
+	   Tipografía de los menúes.
+
+.. topic:: Panels
+
+	   No funciona.
+
+
+Lenguaje y Colores
 ==================
 
-.. image:: ./images/preferences-03.png
+.. image:: ./images/preferences/es_language.png
    :align: center
 
 
@@ -153,10 +198,83 @@ Acá puede customizar los colores y el lenguaje natural usado en mrv2.
 
 	   Puede establecer los colores del fondo, el del rectángulo de selección, la superposición de texto (unused) y del HUD.
 
+
+	   
+Barra de Pixel
+==============
+
+.. image:: ./images/preferences/es_pixelbar.png
+   :align: center
+
+
+Las preferencias en esta sección permiten controlar cómo se muestran los valores de pixel en la barra de pixel.
+
+.. topic:: Display RGBA
+
+	   Mostrar Valores como Coma Flotante, Hex o Decimal.
+
+.. topic:: Valores de Pixel
+
+	   Mostrar los Valores de Pixel como Lut, Gama y Ganancia o
+	   con los valores originales grabados en la película o imagen sin
+	   procesarlos a través de las transformaciones de color del visor.
+
+.. topic:: Display Secundario
+
+	   Establece como mostrar los valores de display secundario:
+
+	   - HSV
+	   - HSL
+	   - CIE XYZ
+	   - CIE xyY
+	   - Lab CIELAB
+	   - Luv CIELUV
+	   - YUV (Analog PAL)
+	   - YDbDr (Analog SECAM / PAL-N)
+	   - YIQ (Analog NTSC)
+	   - ITU-601 (Digital PAL/NTSC YCbCr)
+	   - ITU-709 (Digital HDTV YCbCr)
+
+.. topic:: Luminancia
+
+	   Mostrar la Luminancia como:
+
+	   - Luminance (Y)
+	   - Lumma (Y')
+	   - Lightness
+	     
+
+Posicionado
+===========
+
+.. image:: ./images/preferences/es_position.png
+   :align: center
+
+
+Aquí controla el tamaño y posición de la Ventana principal.
+
+.. topic:: Siempre Grabe al Salir
+
+	   Cuando está activa, la posición y tamaño de la venta de mrv2 se grabará automáticamente.
+
+.. topic:: Posición Fija
+
+	   Aquí puede establecer la posición en que mrv2 comenzará.
+
+.. topic:: Tamaño Fijo
+
+	   Con esto, puede cambiar el tamaño de la ventana al arrancar.
+
+.. topic:: Tomar los Valores Actuales de la Ventana
+
+	   Cuando se cliquea este botón, los valores de la Posición y Tamaño
+	   Fijos serán rellenados con ls posicion y tamaño actual de la ventana
+	   de mrv2.
+	   
 Render
 ======
 
-.. image:: ./images/preferences-15.png
+.. image:: ./images/preferences/es_render.png
    :align: center
 	   
 .. topic:: Niveles de Vídeo
@@ -208,80 +326,52 @@ Render
 
 	     Sin filtro.
 
-Tipografías
-===========
+Miniaturas
+==========
 
-.. image:: ./images/preferences-16.png
+.. image:: ./images/preferences/es_thumbnails.png
    :align: center
-
-.. topic:: Menus
-
-	   Tipografía de los menúes.
-
-.. topic:: Panels
-
-	   No funciona.
-
-Posicionado
-===========
-
-.. image:: ./images/preferences-04.png
-   :align: center
-
-
-Aquí controla el tamaño y posición de la Ventana principal.
-
-.. topic:: Siempre Grabe al Salir
-
-	   Cuando está activa, la posición y tamaño de la venta de mrv2 se grabará automáticamente.
-
-.. topic:: Posición Fija
-
-	   Aquí puede establecer la posición en que mrv2 comenzará.
-
-.. topic:: Tamaño Fijo
-
-	   Con esto, puede cambiar el tamaño de la ventana al arrancar.
-
-.. topic:: Tomar los Valores Actuales de la Ventana
-
-	   Cuando se cliquea este botón, los valores de la Posición y Tamaño
-	   Fijos serán rellenados con ls posicion y tamaño actual de la ventana
-	   de mrv2.
 	   
-Buscador de Arhivos
-===================
+.. topic:: Vista Previa de Edición
 
-.. image:: ./images/preferences-05.png
+	   El tamaño de las miniaturas o Ninguno sin miniaturas.
+
+.. topic:: Miniaturas sobre la Línea de Tiempo
+
+	   Miniaturas sobre la línea de tiempo cuando se mueve o arrastra el
+	   ratón.
+	   
+.. topic:: Miniaturas en Paneles
+
+	   Miniaturas en los Paneles de Archivos, Comparar, Estéreo 3D y
+	   Lista de Reproducción.
+
+	   
+Línea de Tiempo
+===============
+
+.. image:: ./images/preferences/es_timeline.png
    :align: center
 
-Aquí puede establecer el comportamiento del buscador de archivo de mrv2, así como usar el buscador de archivo nativo de su sistema operativo.
+.. topic:: Display
 
-.. topic:: Un Solo Click para Viajar por Carpetas
-
-	   Activado, un click en cualquier carpeta la abrirá.  Sino, tendrá que
-	   cliquear dos veces.
-
-.. topic:: Miniaturas Activas
-
-	   Cuando esta prendido, el buscador de mrv2 mostrará miniaturas de las imagenes, películas y activos que reconoce.
-
-.. topic:: Vista Previa de Miniaturas de USD
-
-	   Seleccionada, activos de USD (Pixar's Universal Scene Description) mostrarán miniaturas.  Note que si su activo USD es complejo, puede desaceleara la interfaz dramaticamente.
-
-.. topic:: Usar el Buscador de Archivos Nativo
-
-	   En vez de usar el buscador de archivos propio de mrv2, use el buscador de archivos nativo a su sistema operativo.
-
-.. note::
-
-   Algunas versiones viejas de macOS no permitirían abrir directorios privados como Descargas, Documentos y Escritorio a menos que el Buscador de Archivos Nativo sea usado.
+	   Mostrar el tiempo como Cuadros, Segundos o Timecode.
 	   
+.. topic:: Remover EDLs en Carpeta Temporaria
+
+	   Cuando se crean listas de reproducción (EDLs), archivos .otio son
+	   grabados en tu carpeta temporaria.
+	   Seleccionando esto, los archivos serán borrados al salir del
+	   programa.
+
+.. topic:: Comenzar en Modo de Edición
+
+	   Al seleccionarlo, el programa comenzará en modo de edición.
+
 Reproducir
 ==========
 
-.. image:: ./images/preferences-06.png
+.. image:: ./images/preferences/es_playback.png
    :align: center
 
 .. topic:: Auto Reproducir
@@ -307,45 +397,15 @@ Reproducir
 	   para así escuchar el audio.  Nótese que esto puede hacer el fregado
 	   más tembloroso.
 	   
-	   
-Línea de Tiempo
-===============
-
-.. image:: ./images/preferences-07.png
-   :align: center
-
-.. topic:: Display
-
-	   Mostrar el tiempo como Cuadros, Segundos o Timecode.
-
-.. topic:: Vista Previa de Miniaturas
-
-	   Miniaturas sobre la línea de tiempo cuando se mueve o arrastra el ratón.  No funciona en Wayland.
-	   
-.. topic:: Remover EDLs en Carpeta Temporaria
-
-	   Cuando se crean listas de reproducción (EDLs), archivos .otio son
-	   grabados en tu carpeta temporaria.
-	   Seleccionando esto, los archivos serán borrados al salir del
-	   programa.
-
-.. topic:: Comenzar en Modo de Edición
-
-	   Al seleccionarlo, el programa comenzará en modo de edición.
-
 Edición
 +++++++
 
-.. image:: ./images/preferences-18.png
+.. image:: ./images/preferences/es_edit.png
    :align: center
 
 .. topic:: Vista por Defecto
 
 	   Mostrar vídeos solamente o videos y audio.
-
-.. topic:: Vista Previa de Miniaturas
-
-	   El tamaño de las miniaturas o Ninguno sin miniaturas.
 
 .. topic:: Mostrar Transiciones
 
@@ -364,56 +424,16 @@ Edición
 	   Si los clips de Vídeo y Audio con *exactamente* igual comienzo
 	   y duración pueden moverse juntos.
 
-	   
-Barra de Pixel
-==============
-
-.. image:: ./images/preferences-08.png
-   :align: center
-
-
-Las preferencias en esta sección permiten controlar cómo se muestran los valores de pixel en la barra de pixel.
-
-.. topic:: Display RGBA
-
-	   Mostrar Valores como Coma Flotante, Hex o Decimal.
-
-.. topic:: Valores de Pixel
-
-	   Mostrar los Valores de Pixel como Lut, Gama y Ganancia o
-	   con los valores originales grabados en la película o imagen sin
-	   procesarlos a través de las transformaciones de color del visor.
-
-.. topic:: Display Secundario
-
-	   Establece como mostrar los valores de display secundario:
-
-	   - HSV
-	   - HSL
-	   - CIE XYZ
-	   - CIE xyY
-	   - Lab CIELAB
-	   - Luv CIELUV
-	   - YUV (Analog PAL)
-	   - YDbDr (Analog SECAM / PAL-N)
-	   - YIQ (Analog NTSC)
-	   - ITU-601 (Digital PAL/NTSC YCbCr)
-	   - ITU-709 (Digital HDTV YCbCr)
-
-.. topic:: Luminancia
-
-	   Mostrar la Luminancia como:
-
-	   - Luminance (Y)
-	   - Lumma (Y')
-	   - Lightness
-	     
 OCIO
 ====
 
-.. image:: ./images/preferences-09.png
+.. image:: ./images/preferences/es_ocio.png
    :align: center
 
+.. topic:: Built-in Configs
+
+	   OpenColorIO 2.1 has added built-in configs.  Here you can select
+	   them.  They are prefixed by ocio:// and have no config.ocio file.
 	   
 .. topic:: Archivo Config de OCIO
 
@@ -426,7 +446,7 @@ OCIO
 OCIO por Defecto
 ================
 
-.. image:: ./images/preferences-10.png
+.. image:: ./images/preferences/es_ocio_defaults.png
    :align: center
 
 
@@ -442,7 +462,7 @@ OCIO por Defecto
 Cargando
 ========
 
-.. image:: ./images/preferences-11.png
+.. image:: ./images/preferences/es_loading.png
    :align: center
 
 Controlas el comportamiento de cargar películas e imágenes.
@@ -468,7 +488,7 @@ Controlas el comportamiento de cargar películas e imágenes.
 Mapeo de Carpetas
 =================
 
-.. image:: ./images/preferences-12.png
+.. image:: ./images/preferences/es_path_mapping.png
    :align: center
 
 
@@ -487,7 +507,7 @@ Los caminos de mapeo de carpetas son grabados en un simple archivo de texto en t
 Red
 ===
 
-.. image:: ./images/preferences-13.png
+.. image:: ./images/preferences/es_network.png
    :align: center
 
 
@@ -496,7 +516,7 @@ Las preferencias de Red permiten establecer que seteos son enviados y recibidos 
 OpenGL
 ======
 
-.. image:: ./images/preferences-19.png
+.. image:: ./images/preferences/es_opengl.png
    :align: center
 
 OpenGL is the default API used for 3D rendering in the timeline and viewports.
@@ -531,7 +551,7 @@ OpenGL is the default API used for 3D rendering in the timeline and viewports.
 Errores
 =======
 
-.. image:: ./images/preferences-20.png
+.. image:: ./images/preferences/es_errors.png
    :align: center
 
 
@@ -549,7 +569,7 @@ La Preferencias de  Errores permite establecer que hacer en caso de un error.
 Comportamiento
 ===============
 
-.. image:: ./images/preferences-21.png
+.. image:: ./images/preferences/es_behavior.png
    :align: center
 
 

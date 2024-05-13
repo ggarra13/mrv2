@@ -40,7 +40,7 @@ It's important to know each file in case something does not work right or you wa
 User Interface
 ==============
 
-.. image:: ./images/preferences-01.png
+.. image:: ./images/preferences/en_UI.png
    :align: center
 	   
 Here is where you can set the preferences of the User Interface when starting mrv2.
@@ -99,7 +99,7 @@ UI Elements
 View Window
 ===========
 
-.. image:: ./images/preferences-02.png
+.. image:: ./images/preferences/en_view.png
    :align: center
    
 
@@ -125,10 +125,54 @@ Here you can set the default settings for the view window.
 
 	   The settings under this label set what parameters will show by default in the HUD.
 
+Fonts
+=====
+
+.. image:: ./images/preferences/en_fonts.png
+   :align: center
+	   
+.. topic:: Menus
+
+	   Font for menus.
+
+.. topic:: Panels
+
+	   Not functional.
+
+
+File Requester
+==============
+
+.. image:: ./images/preferences/en_filereq.png
+   :align: center
+
+Here you can establish the behavior of mrv2's file requester, as well as use the OS native file requester.
+
+.. topic:: Single Click to Travel Drawers
+
+	   With this on, a single click on any folder will open it.  Otherwise,
+	   you will need to click twice.
+
+.. topic:: Thumbnails Active
+
+	   With this on, mrv2's file requester will show thumbnails for those image, movie and asset formats that it recognizes.
+
+.. topic:: USD Thumbnails
+
+	   With it selected, USD (Pixar's Universal Scene Description) assets will show thumbnails.  Note that if your USD asset is complex, it may slow down the UI dramatically.
+
+.. topic:: Use Native File Chooser
+
+	   Instead of using mrv2's built-in file chooser, use the Native OS file chooser.
+
+.. note::
+
+   Some old versions of macOS would not allow opening private directories like Downloads, Documents and Desktop unless the Native File Chooser was used.
+	   
 Language and Colors
 ===================
 
-.. image:: ./images/preferences-03.png
+.. image:: ./images/preferences/en_language.png
    :align: center
 
 
@@ -152,11 +196,80 @@ Here you can customize the colors and language used in mrv2.
 
 	   You can establish the colors for the background, the selection rectangle, the text overlay (unused) and the HUD.
 	   
+Pixel Toolbar
+=============
+
+.. image:: ./images/preferences/en_pixelbar.png
+   :align: center
+
+
+The preferences in this section allow you to control how are the pixel values show in the pixel toolbar.
+
+.. topic:: RGBA Display
+
+	   Whether to show them as Float, Hex or Decimal values.
+
+.. topic:: Pixel Values
+
+	   Whether to show the pixel values with Full Lut, Gamma and Gain or
+	   with the original values saved in the movie or image without
+	   processing them through mrv2's color transformations.
+
+.. topic:: Secondary Display
+
+	   Whether to show the secondary display of pixel values as:
+
+	   - HSV
+	   - HSL
+	   - CIE XYZ
+	   - CIE xyY
+	   - Lab CIELAB
+	   - Luv CIELUV
+	   - YUV (Analog PAL)
+	   - YDbDr (Analog SECAM / PAL-N)
+	   - YIQ (Analog NTSC)
+	   - ITU-601 (Digital PAL/NTSC YCbCr)
+	   - ITU-709 (Digital HDTV YCbCr)
+
+.. topic:: Luminance
+
+	   Whether to show Luminance as:
+
+	   - Luminance (Y)
+	   - Lumma (Y')
+	   - Lightness
+	     
+Positioning
+===========
+
+.. image:: ./images/preferences/en_position.png
+   :align: center
+
+
+Here you can control the Window's size and positioning.
+
+.. topic:: Always Save on Exit
+
+	   When this is on, mrv2's positioning and size will be saved automatically.
+
+.. topic:: Fixed Position
+
+	   Here you can establish the position where mrv2's window will start.
+
+.. topic:: Fixed Size
+
+	   With this, you can establish the size of mrv2's window at start.
+
+.. topic:: Take Current Window Values
+
+	   When clicked on this button, the Fixed Position and Fixed Size values
+	   will be filled with the current position and size of the mrv2 window.
+
 
 Render
 ======
 
-.. image:: ./images/preferences-15.png
+.. image:: ./images/preferences/en_render.png
    :align: center
 	   
 .. topic:: Vídeo Levels
@@ -208,81 +321,52 @@ Render
 
 	     No filter.
 	     
+Thumbnails
+==========
 
-Fonts
-=====
-
-.. image:: ./images/preferences-16.png
-   :align: center
-	   
-.. topic:: Menus
-
-	   Font for menus.
-
-.. topic:: Panels
-
-	   Not functional.
-
-	   
-Positioning
-===========
-
-.. image:: ./images/preferences-04.png
+.. image:: ./images/preferences/en_thumbnails.png
    :align: center
 
+Here you can select the behavior of thumbnails in all the interface.
 
-Here you can control the Window's size and positioning.
+.. topic:: Edit Viewport
 
-.. topic:: Always Save on Exit
+	   You can select between None, Small, Medium and Large images.
 
-	   When this is on, mrv2's positioning and size will be saved automatically.
+.. topic:: Preview Thumbnails above Timeline
 
-.. topic:: Fixed Position
+	   Whether to show a thumbnail above the timeline when moving or dragging on the timeline.
 
-	   Here you can establish the position where mrv2's window will start.
+.. topic:: Preview Thumbnails on Panels
 
-.. topic:: Fixed Size
+	   Whether to show a thumbnail for each image in the Files, Compare,
+	   Stereo 3D and Playlist Panels.
+	   
+Timeline
+========
 
-	   With this, you can establish the size of mrv2's window at start.
-
-.. topic:: Take Current Window Values
-
-	   When clicked on this button, the Fixed Position and Fixed Size values
-	   will be filled with the current position and size of the mrv2 window.
-
-File Requester
-==============
-
-.. image:: ./images/preferences-05.png
+.. image:: ./images/preferences/en_timeline.png
    :align: center
 
-Here you can establish the behavior of mrv2's file requester, as well as use the OS native file requester.
+.. topic:: Display
 
-.. topic:: Single Click to Travel Drawers
+	   Whether to show the time as Frames, Seconds or Timecode.
 
-	   With this on, a single click on any folder will open it.  Otherwise,
-	   you will need to click twice.
+.. topic:: Remove EDLs in Temporary Folder
 
-.. topic:: Thumbnails Active
+	   When creating playlists (EDLs), .otio files are saved in your
+	   temporary folder.  Selecting this will remove those files on
+	   program exit.
 
-	   With this on, mrv2's file requester will show thumbnails for those image, movie and asset formats that it recognizes.
+.. topic:: Start in Edit mode
 
-.. topic:: USD Thumbnails
-
-	   With it selected, USD (Pixar's Universal Scene Description) assets will show thumbnails.  Note that if your USD asset is complex, it may slow down the UI dramatically.
-
-.. topic:: Use Native File Chooser
-
-	   Instead of using mrv2's built-in file chooser, use the Native OS file chooser.
-
-.. note::
-
-   Some old versions of macOS would not allow opening private directories like Downloads, Documents and Desktop unless the Native File Chooser was used.
+	   When selected, the UI will start in Edit mode by default.
 	   
+	     
 Playback
 ========
 
-.. image:: ./images/preferences-06.png
+.. image:: ./images/preferences/en_playback.png
    :align: center
 
 .. topic:: Auto Playback
@@ -306,46 +390,17 @@ Playback
 	   When this is on, scrubbing will automatically start playback so
 	   that audio can be heard.  Note that this makes scrubbing more
 	   jerky.
-	   
-Timeline
-========
-
-.. image:: ./images/preferences-17.png
-   :align: center
-
-.. topic:: Display
-
-	   Whether to show the time as Frames, Seconds or Timecode.
-
-.. topic:: Preview Thumbnails
-
-	   Whether to show a thumbnail above the timeline when moving or dragging on the timeline.
-	   
-.. topic:: Remove EDLs in Temporary Folder
-
-	   When creating playlists (EDLs), .otio files are saved in your
-	   temporary folder.  Selecting this will remove those files on
-	   program exit.
-
-.. topic:: Start in Edit mode
-
-	   When selected, the UI will start in Edit mode by default.
-	   
 
 Edit
 ++++
 
-.. image:: ./images/preferences-18.png
+.. image:: ./images/preferences/en_edit.png
    :align: center
 
 .. topic:: Default View
 
 	   Whether to show Video Only or Video and Audio in the Edit
 	   Viewport.
-	   
-.. topic:: Thumbnails
-
-	   The size of the thumbnails or None for no thumbnails.
 
 .. topic:: Show Transitions
 
@@ -365,56 +420,18 @@ Edit
 	   and durations can be moved together by default.
 
 	   
-Pixel Toolbar
-=============
-
-.. image:: ./images/preferences-08.png
-   :align: center
-
-
-The preferences in this section allow you to control how are the pixel values show in the pixel toolbar.
-
-.. topic:: RGBA Display
-
-	   Whether to show them as Float, Hex or Decimal values.
-
-.. topic:: Pixel Values
-
-	   Whether to show the pixel values with Full Lut, Gamma and Gain or
-	   with the original values saved in the movie or image without
-	   processing them through mrv2's color transformations.
-
-.. topic:: Secondary Display
-
-	   Whether to show the secondary display of pixel values as:
-
-	   - HSV
-	   - HSL
-	   - CIE XYZ
-	   - CIE xyY
-	   - Lab CIELAB
-	   - Luv CIELUV
-	   - YUV (Analog PAL)
-	   - YDbDr (Analog SECAM / PAL-N)
-	   - YIQ (Analog NTSC)
-	   - ITU-601 (Digital PAL/NTSC YCbCr)
-	   - ITU-709 (Digital HDTV YCbCr)
-
-.. topic:: Luminance
-
-	   Whether to show Luminance as:
-
-	   - Luminance (Y)
-	   - Lumma (Y')
-	   - Lightness
-	     
 OCIO
 ====
 
-.. image:: ./images/preferences-09.png
+.. image:: ./images/preferences/en_ocio.png
    :align: center
 
-	   
+.. topic:: Configs Incorporadas
+
+	   OpenColorIO 2.1 ha agregado configuraciones por defecto.
+	   Aquí podes seleccionarlas.  Tienen el prefijo ocio://
+	   y ningún archivo config.ocio.
+      
 .. topic:: OCIO Config File
 
 	   Configuration Setting for OCIO.
@@ -427,7 +444,7 @@ OCIO
 OCIO Defaults
 =============
 
-.. image:: ./images/preferences-10.png
+.. image:: ./images/preferences/en_ocio_defaults.png
    :align: center
 
 
@@ -442,7 +459,7 @@ OCIO Defaults
 Loading
 =======
 
-.. image:: ./images/preferences-11.png
+.. image:: ./images/preferences/en_loading.png
    :align: center
 
 Controls the behavior of loading movies and images.
@@ -465,14 +482,14 @@ Controls the behavior of loading movies and images.
 
 	   When searching for a previous or next image version, this setting controls how far apart the version numbers can be.
    
-Path Mapping
-============
+Paths Mapping
+=============
 
-.. image:: ./images/preferences-12.png
+.. image:: ./images/preferences/en_path_mapping.png
    :align: center
 
 
-Path Mapping allows you to share images and movies on a network even when the drive and paths do not match.  In the example above, the Remote directory is /Users/gga (a macOS directory), that is mapped to /home/gga (a Unix one).
+Paths Mapping allows you to share images and movies on a network even when the drive and paths do not match.  
 
 The path mapping paths are saved in a simple text file in your .filmaura home directory, as mrv2.paths.prefs.
 
@@ -487,7 +504,7 @@ The path mapping paths are saved in a simple text file in your .filmaura home di
 Network
 =======
 
-.. image:: ./images/preferences-13.png
+.. image:: ./images/preferences/en_network.png
    :align: center
 
 
@@ -496,7 +513,7 @@ The Network preferences allows you to set what settings are sent and received by
 OpenGL
 ======
 
-.. image:: ./images/preferences-19.png
+.. image:: ./images/preferences/en_opengl.png
    :align: center
 
 OpenGL is the default API used for 3D rendering in the timeline and viewports.
@@ -534,7 +551,7 @@ OpenGL is the default API used for 3D rendering in the timeline and viewports.
 Errors
 ======
 
-.. image:: ./images/preferences-20.png
+.. image:: ./images/preferences/en_errors.png
    :align: center
 
 
@@ -553,7 +570,7 @@ The Errors preferences allows you to establish what to do in case of an error.
 Behavior
 ========
 
-.. image:: ./images/preferences-21.png
+.. image:: ./images/preferences/en_behavior.png
    :align: center
 
 
