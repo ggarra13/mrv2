@@ -365,7 +365,7 @@ namespace mrv
         if (!p.presentation)
         {
             Fl_Color c = p.ui->uiPrefs->uiPrefsViewBG->color();
-            
+
             uint8_t ur = 0, ug = 0, ub = 0, ua = 0;
             Fl::get_color(c, ur, ug, ub, ua);
             r = ur / 255.0f;
@@ -393,7 +393,8 @@ namespace mrv
                 // If user is changing preferences or hotkeys, keep
                 // the default cursor.
                 if (p.ui->uiPrefs->uiMain->visible() ||
-                    p.ui->uiHotkey->uiMain->visible())
+                    p.ui->uiHotkey->uiMain->visible() ||
+                    p.ui->uiAbout->uiMain->visible())
                 {
                     window()->cursor(FL_CURSOR_DEFAULT);
                 }

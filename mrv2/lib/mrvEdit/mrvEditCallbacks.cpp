@@ -2294,18 +2294,18 @@ namespace mrv
         // This specifies whether to show Video Only or Video and Audio.
         const int editView = ui->uiPrefs->uiPrefsEditView->value();
 
-        const float pixels_unit = ui->uiTimeline->pixels_per_unit();
+        const float pixels_unit = ui->uiView->pixels_per_unit();
 
         // Some constants, as Darby does not yet expose this in tlRender.
-        const int kTrackInfoHeight = 20 * pixels_unit;
-        const int kClipInfoHeight = 16 * pixels_unit;
+        const int kMargin = 4;
+        const int kTrackInfoHeight = 20 + kMargin;
+        const int kClipInfoHeight = 16 + kMargin;
         const int kTransitionsHeight = 30;
         const int kAudioGapOnlyHeight = 20;
         const int kMarkerHeight = 24;
-        const int kMargin = 4;
 
-        const int kVideoHeight = options.thumbnailHeight + kMargin;
-        const int kAudioHeight = options.waveformHeight  + kMargin;
+        const int kVideoHeight = options.thumbnailHeight;
+        const int kAudioHeight = options.waveformHeight + kMargin;
 
         int H = kMinEditModeH; // timeline height
         if (editMode == EditMode::kTimeline)
@@ -2351,7 +2351,7 @@ namespace mrv
                     if (options.clipInfo)
                         videoHeight += kClipInfoHeight;
                     if (options.thumbnails)
-                        videoHeight += kVideoHeight;
+                        videoHeight += kVideoHeight / pixels_unit;
                     visibleTrack = true;
                 }
                 else if (
@@ -2364,9 +2364,9 @@ namespace mrv
                             audioHeight += kTrackInfoHeight;
                         if (options.clipInfo)
                             audioHeight += kClipInfoHeight;
-                        bool hasWaveform = false;
                         if (options.thumbnails)
                         {
+                            bool hasWaveform = false;
                             for (const auto& trackChild : track->children())
                             {
                                 if (const auto& clip =
@@ -2377,11 +2377,12 @@ namespace mrv
                                     break;
                                 }
                             }
+                            if (hasWaveform)
+                                audioHeight += kAudioHeight / pixels_unit;
+                            else
+                                audioHeight +=
+                                    kAudioGapOnlyHeight / pixels_unit;
                         }
-                        if (hasWaveform)
-                            audioHeight += kAudioHeight;
-                        else
-                            audioHeight += kAudioGapOnlyHeight;
 
                         visibleTrack = true;
                     }
@@ -2427,9 +2428,17 @@ namespace mrv
             }
         }
 
-        // Now add up all heights divided by the pixels unit.
-        H += (videoHeight + audioHeight + markersHeight + transitionsHeight) /
-             pixels_unit;
+        // Now add up all heights.
+        H += videoHeight + audioHeight + markersHeight + transitionsHeight;
+
+#if 0
+        std::cerr << "    kMargin=" << kMargin << std::endl;
+        std::cerr << "videoHeight=" << videoHeight << std::endl;
+        std::cerr << "audioHeight=" << audioHeight << std::endl;
+        std::cerr << "transitionsHeight=" << transitionsHeight << std::endl;
+        std::cerr << "markersHeight=" << markersHeight << std::endl;
+        std::cerr << "FINAL H=" << H << std::endl;
+#endif
 
         // Sanity check... make sure we don't go bigger than the max.
         const Fl_Tile* tile = ui->uiTileGroup;
@@ -2476,7 +2485,7 @@ namespace mrv
             if (!viewGroup->visible())
                 viewGroup->show();
         }
-        
+
         int tileGroupY = tileGroup->y();
         int oldY = TimelineGroup->y();
         int timelineH = TimelineGroup->h();
@@ -2529,7 +2538,8 @@ namespace mrv
         assert( viewGroup->y() + viewGroupH == newY );
 #endif
 
-        viewGroup->resize(viewGroup->x(), viewGroup->y(), viewGroup->w(), viewGroupH);
+        viewGroup->resize(
+            viewGroup->x(), viewGroup->y(), viewGroup->w(), viewGroupH);
         TimelineGroup->resize(TimelineGroup->x(), newY, TimelineGroup->w(), H);
 
 #if 0
@@ -2592,9 +2602,9 @@ namespace mrv
             }
         }
 #endif
-        
+
         viewGroup->layout();
-        
+
 #if 0
         std::cerr << "AFTER LAYOUT viewGroup->x()="
                   << viewGroup->x() << std::endl;
@@ -2615,7 +2625,7 @@ namespace mrv
 #endif
 
         tileGroup->init_sizes();
-        
+
 #if 0
         std::cerr << "AFTER INIT_SIZES viewGroup->x()="
                   << viewGroup->x() << std::endl;

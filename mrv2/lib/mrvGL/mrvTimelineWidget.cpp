@@ -234,7 +234,7 @@ namespace mrv
         fl_double = 0;
         if (desktop::XWayland())
         {
-            fl_double = FL_DOUBLE;  // needed
+            fl_double = FL_DOUBLE; // needed
         }
         else if (desktop::Wayland())
         {
@@ -877,12 +877,15 @@ namespace mrv
         }
         else
         {
-            glBindFramebuffer(GL_READ_FRAMEBUFFER, p.buffer->getID());
-            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); // 0 is screen
+            if (p.buffer)
+            {
+                glBindFramebuffer(GL_READ_FRAMEBUFFER, p.buffer->getID());
+                glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); // 0 is screen
 
-            glBlitFramebuffer(
-                0, 0, renderSize.w, renderSize.h, 0, 0, renderSize.w,
-                renderSize.h, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+                glBlitFramebuffer(
+                    0, 0, renderSize.w, renderSize.h, 0, 0, renderSize.w,
+                    renderSize.h, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+            }
         }
     }
 
