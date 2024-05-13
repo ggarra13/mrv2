@@ -1060,6 +1060,8 @@ namespace mrv
                     p.lastVideoData = values[0];
                 }
             }
+            
+            redraw();
         }
 
         if (panel::imageInfoPanel)
@@ -1115,12 +1117,6 @@ namespace mrv
                     }
                 }
             }
-        }
-        if (p.ui->uiBottomBar->visible())
-        {
-            TimelineClass* c = p.ui->uiTimeWindow;
-            c->uiFrame->setTime(values[0].time);
-            p.ui->uiTimeline->redraw();
         }
 
         redraw();

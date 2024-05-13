@@ -1471,7 +1471,7 @@ namespace mrv
                         {
                             // We need to call it explicitally to handle
                             // audio tracks that don't send a resizeWindow.
-                            ui->uiEdit->do_callback();
+                            set_edit_mode_cb(EditMode::kFull, ui);
                         }
                     }
                     ui->uiView->take_focus();

@@ -619,7 +619,12 @@ namespace mrv
     }
 
     //! This signal is emitted when the current time is changed.
-    void TimelinePlayer::currentTimeChanged(const otime::RationalTime& value) {}
+    void TimelinePlayer::currentTimeChanged(const otime::RationalTime& value)
+    {
+        App::ui->uiTimeline->redraw();
+        TimelineClass* c = App::ui->uiTimeWindow;
+        c->uiFrame->setTime(value);
+    }
 
     //! This signal is emitted when the in/out points range is changed.
     void TimelinePlayer::inOutRangeChanged(const otime::TimeRange& value) {}

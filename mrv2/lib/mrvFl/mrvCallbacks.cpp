@@ -969,6 +969,8 @@ namespace mrv
 
     void save_ui_state(ViewerUI* ui)
     {
+        save_edit_mode_state(ui);
+        
         if (ui->uiView->getPresentationMode())
             return;
         
@@ -979,8 +981,6 @@ namespace mrv
         has_status_bar = ui->uiStatusGroup->visible();
         has_tools_grp = ui->uiToolsGroup->visible();
         has_dock_grp = ui->uiDockGroup->visible();
-
-        save_edit_mode_state(ui);
 
         has_preferences_window = ui->uiPrefs->uiMain->visible();
         has_hotkeys_window = ui->uiHotkey->uiMain->visible();
