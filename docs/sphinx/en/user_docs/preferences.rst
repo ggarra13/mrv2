@@ -301,11 +301,11 @@ Playback
 
 	   How fast or slow does dragging the mouse work when scrubbing.
 	   
-.. topic:: Auto Scrub Playback
+.. topic:: Scrub with Audio
 
 	   When this is on, scrubbing will automatically start playback so
-	   that audio can be heard.  Note that this makes scrubbing start-up
-	   a tad slower.
+	   that audio can be heard.  Note that this makes scrubbing more
+	   jerky.
 	   
 Timeline
 ========

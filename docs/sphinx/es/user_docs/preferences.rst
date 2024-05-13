@@ -299,7 +299,14 @@ Reproducir
 .. topic:: Sensitividad de Fregado
 
 	   Cúan rápido o lento arrastrar con el botón izquierdo del
-	   ratón the mouse funciona cuando este fregando. 
+	   ratón the mouse funciona cuando este fregando.
+	   
+.. topic:: Fregar con Audio
+
+	   Cuando está activado, la reproducción automaticámente arranca
+	   para así escuchar el audio.  Nótese que esto puede hacer el fregado
+	   más tembloroso.
+	   
 	   
 Línea de Tiempo
 ===============
