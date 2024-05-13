@@ -246,7 +246,9 @@ namespace mrv
         {
             if (desktop::X11())
             {
-                fl_double = FL_DOUBLE;
+                // For faster playback, we won't set this window to FL_DOUBLE.
+                // FLTK's X11 already uses two buffers.
+                fl_double = 0;
             }
         }
 #endif
