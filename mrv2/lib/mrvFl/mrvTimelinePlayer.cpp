@@ -33,7 +33,7 @@ namespace
 
 namespace
 {
-    const double kTimeout = 0.005;
+    const double kTimeout = 0.008;
 }
 
 namespace mrv
@@ -621,7 +621,8 @@ namespace mrv
     //! This signal is emitted when the current time is changed.
     void TimelinePlayer::currentTimeChanged(const otime::RationalTime& value)
     {
-        App::ui->uiTimeline->redraw();
+        auto timeline = App::ui->uiTimeline;
+        timeline->redraw();
         TimelineClass* c = App::ui->uiTimeWindow;
         c->uiFrame->setTime(value);
     }

@@ -2656,6 +2656,10 @@ namespace mrv
                   << TimelineGroup->h() << std::endl;
 #endif
 
+        // This is needed as XWayland and Wayland would leave traces of the
+        // toolbar icons.
+        TimelineGroup->redraw();
+
         // EditMode::kNone is used when we go to presentation mode.
         if (mode != EditMode::kNone)
         {
@@ -2665,6 +2669,7 @@ namespace mrv
             msg["height"] = H;
             tcp->pushMessage(msg);
         }
+
     }
 
 } // namespace mrv
