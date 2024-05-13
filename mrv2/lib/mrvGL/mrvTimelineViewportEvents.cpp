@@ -706,7 +706,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        cursor(FL_CURSOR_MOVE);
+        set_cursor(FL_CURSOR_MOVE);
         if (p.actionMode == ActionMode::kRotate ||
             (p.actionMode == ActionMode::kScrub && _isEnvironmentMap()))
         {
@@ -898,8 +898,6 @@ namespace mrv
         case FL_LEAVE:
         {
             p.lastEvent = 0;
-
-            cursor(FL_CURSOR_DEFAULT);
             const float NaN = std::numeric_limits<float>::quiet_NaN();
             image::Color4f rgba(NaN, NaN, NaN, NaN);
             _updatePixelBar(rgba);
@@ -947,8 +945,8 @@ namespace mrv
 
                 auto time = std::chrono::high_resolution_clock::now();
                 p.presentationTime = time;
-                
-                cursor(FL_CURSOR_DEFAULT);
+
+                set_cursor(FL_CURSOR_DEFAULT);
 
                 Fl_Group::current(0);
                 p.popupMenu = new Fl_Menu_Button(0, 0, 0, 0);
@@ -973,14 +971,13 @@ namespace mrv
                 p.actionMode != ActionMode::kText &&
                 p.actionMode != ActionMode::kRotate)
             {
-                _updateCursor();
                 redrawWindows();
             }
             if (p.presentation)
             {
-                _updateCursor();
                 p.presentationTime = std::chrono::high_resolution_clock::now();
             }
+            _updateCursor();
             _updatePixelBar();
             return 1;
         }

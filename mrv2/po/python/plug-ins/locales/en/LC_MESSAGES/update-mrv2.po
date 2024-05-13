@@ -1,12 +1,10 @@
 # English translations for mrv package.
-# Copyright (C) 2024 ORGANIZATION
 # Automatically generated, 2024.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv 2-build\n"
-"POT-Creation-Date: 2024-05-05 17:51-0300\n"
-"PO-Revision-Date: 2024-05-05 17:51-0300\n"
+"PO-Revision-Date: 2024-05-08 15:23-0300\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
 "Language: en\n"

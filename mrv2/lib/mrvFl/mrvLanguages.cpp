@@ -27,7 +27,7 @@ namespace fs = std::filesystem;
 
 #include "mrvFl/mrvCallbacks.h"
 #include "mrvFl/mrvLanguages.h"
-#include "mrvFl/mrvCallbacks.h"
+#include "mrvFl/mrvSession.h"
 
 #include "mrvApp/mrvApp.h"
 
@@ -48,7 +48,8 @@ LanguageTable kLanguages[18] = {
 #ifdef _WIN32
 namespace
 {
-    int win32_execv()
+
+    int win32_execv(const std::string& session = "")
     {
         // Get the full command line string
         LPWSTR lpCmdLine = GetCommandLineW();
@@ -86,10 +87,22 @@ namespace
             }
         }
 
-        // Call _wexecv with the command string and arguments in separate
-        // parameters
-        intptr_t result = _wexecv(cmd, argv);
+        // Create new argv with a session file
+        intptr_t result;
+        if (session.empty())
+        {
+            result = _wexecv(cmd, argv);
+        }
+        else
+        {
+            std::wstring wstr(session.begin(), session.end());
+            LPCWSTR Wsession = wstr.c_str();
+            LPWSTR newArgv[3] = {argv[0], (LPWSTR)Wsession, NULL};
 
+            // Call _wexecv with the command string and arguments in separate
+            // parameters
+            result = _wexecv(cmd, newArgv);
+        }
         // Free the array of arguments
         for (int i = 0; i < argc; i++)
         {
@@ -128,25 +141,34 @@ void check_language(PreferencesUI* uiPrefs, int& language_index, mrv::App* app)
             // setenv( "LC_CTYPE", "UTF-8", 1 );
             setenv("LANGUAGE", language, 1);
 
+            // Save ui preferences
+            mrv::Preferences::save();
+
+            // Save ui language
             Fl_Preferences base(
                 mrv::prefspath().c_str(), "filmaura", "mrv2",
                 Fl_Preferences::C_LOCALE);
-
-            // Save ui preferences
             Fl_Preferences ui(base, "ui");
             ui.set("language_code", language);
 
             base.flush();
 
+            // Save a temporary session file
+            std::string session = mrv::tmppath();
+            session += "/lang.mrv2s";
+
+            mrv::session::save(session);
+
             app->cleanResources();
 
 #ifdef _WIN32
-            win32_execv();
+            win32_execv(session);
 #else
             std::string root = mrv::rootpath();
             root += "/bin/mrv2";
 
-            const char* const parmList[] = {root.c_str(), NULL};
+            const char* const parmList[] = {
+                root.c_str(), session.c_str(), NULL};
             int ret = execv(root.c_str(), (char* const*)parmList);
             if (ret == -1)
             {

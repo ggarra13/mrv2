@@ -113,6 +113,15 @@ namespace mrv
 
             std_any value;
 
+            // If we have window X, Y, W, and H values, use them.
+            key = prefix + "/WindowX";
+            value = settings->getValue<std::any>(key);
+            X = std_any_empty(value) ? X : std_any_cast<int>(value);
+            
+            key = prefix + "/WindowX";
+            value = settings->getValue<std::any>(key);
+            Y = std_any_empty(value) ? Y : std_any_cast<int>(value);
+            
             key = prefix + "/WindowW";
             value = settings->getValue<std::any>(key);
             W = std_any_empty(value) ? W : std_any_cast<int>(value);
@@ -436,9 +445,10 @@ namespace mrv
     int PanelGroup::handle(int e)
     {
         int ret = Fl_Group::handle(e);
-        auto win = window();
-        if (win && ret == 0)
-            win->cursor(FL_CURSOR_DEFAULT);
+        if (e == FL_ENTER)
+        {
+            window()->cursor(FL_CURSOR_DEFAULT);
+        }
         return ret;
     }
 

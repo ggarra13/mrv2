@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Preferences &mdash; mrv2 v1.1.5 documentation</title>
+  <title>Preferences &mdash; mrv2 v1.1.6 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=fd3f3429" />
@@ -16,7 +16,7 @@
   
         <script src="../_static/jquery.js?v=5d32c60e"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../_static/documentation_options.js?v=5f3e0cf0"></script>
+        <script src="../_static/documentation_options.js?v=68c6869a"></script>
         <script src="../_static/doctools.js?v=9a2dae69"></script>
         <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -63,21 +63,22 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#view-window">View Window</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#language-and-colors">Language and Colors</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#render">Render</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fonts">Fonts</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#positioning">Positioning</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#file-requester">File Requester</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#playback">Playback</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#timeline">Timeline</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#language-and-colors">Language and Colors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pixel-toolbar">Pixel Toolbar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#positioning">Positioning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#render">Render</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#thumbnails">Thumbnails</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#timeline">Timeline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#playback">Playback</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#edit">Edit</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#pixel-toolbar">Pixel Toolbar</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#ocio">OCIO</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#ocio-defaults">OCIO Defaults</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#loading">Loading</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#path-mapping">Path Mapping</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#paths-mapping">Paths Mapping</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#network">Network</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#opengl">OpenGL</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#errors">Errors</a></li>
@@ -153,7 +154,7 @@ The preferences of mrv2 are stored in your home directory, inside the .filmaura 
 <p>It’s important to know each file in case something does not work right or you wan to share the preferences between several different machines or users (you can usually copy each file or the whole .filmaura folder).</p>
 <section id="user-interface">
 <h2>User Interface<a class="headerlink" href="#user-interface" title="Link to this heading"></a></h2>
-<img alt="../_images/preferences-01.png" class="align-center" src="../_images/preferences-01.png" />
+<img alt="../_images/en_UI.png" class="align-center" src="../_images/en_UI.png" />
 <p>Here is where you can set the preferences of the User Interface when starting mrv2.
 The Window Behavior section allows you to set how the main and secondary window behave.</p>
 <aside class="topic">
@@ -207,7 +208,7 @@ Firewall.  On Linux or macOS, this is not necessary.</p>
 </section>
 <section id="view-window">
 <h2>View Window<a class="headerlink" href="#view-window" title="Link to this heading"></a></h2>
-<img alt="../_images/preferences-02.png" class="align-center" src="../_images/preferences-02.png" />
+<img alt="../_images/en_view.png" class="align-center" src="../_images/en_view.png" />
 <p>Here you can set the default settings for the view window.</p>
 <aside class="topic">
 <p class="topic-title">Gain and Gamma</p>
@@ -230,9 +231,47 @@ Firewall.  On Linux or macOS, this is not necessary.</p>
 <p>The settings under this label set what parameters will show by default in the HUD.</p>
 </aside>
 </section>
+<section id="fonts">
+<h2>Fonts<a class="headerlink" href="#fonts" title="Link to this heading"></a></h2>
+<img alt="../_images/en_fonts.png" class="align-center" src="../_images/en_fonts.png" />
+<aside class="topic">
+<p class="topic-title">Menus</p>
+<p>Font for menus.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Panels</p>
+<p>Not functional.</p>
+</aside>
+</section>
+<section id="file-requester">
+<h2>File Requester<a class="headerlink" href="#file-requester" title="Link to this heading"></a></h2>
+<img alt="../_images/en_filereq.png" class="align-center" src="../_images/en_filereq.png" />
+<p>Here you can establish the behavior of mrv2’s file requester, as well as use the OS native file requester.</p>
+<aside class="topic">
+<p class="topic-title">Single Click to Travel Drawers</p>
+<p>With this on, a single click on any folder will open it.  Otherwise,
+you will need to click twice.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Thumbnails Active</p>
+<p>With this on, mrv2’s file requester will show thumbnails for those image, movie and asset formats that it recognizes.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">USD Thumbnails</p>
+<p>With it selected, USD (Pixar’s Universal Scene Description) assets will show thumbnails.  Note that if your USD asset is complex, it may slow down the UI dramatically.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Use Native File Chooser</p>
+<p>Instead of using mrv2’s built-in file chooser, use the Native OS file chooser.</p>
+</aside>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Some old versions of macOS would not allow opening private directories like Downloads, Documents and Desktop unless the Native File Chooser was used.</p>
+</div>
+</section>
 <section id="language-and-colors">
 <h2>Language and Colors<a class="headerlink" href="#language-and-colors" title="Link to this heading"></a></h2>
-<img alt="../_images/preferences-03.png" class="align-center" src="../_images/preferences-03.png" />
+<img alt="../_images/en_language.png" class="align-center" src="../_images/en_language.png" />
 <p>Here you can customize the colors and language used in mrv2.</p>
 <aside class="topic">
 <p class="topic-title">Language</p>
@@ -253,9 +292,72 @@ We recommend you stick with the Black Color scheme.</p>
 <p>You can establish the colors for the background, the selection rectangle, the text overlay (unused) and the HUD.</p>
 </aside>
 </section>
+<section id="pixel-toolbar">
+<h2>Pixel Toolbar<a class="headerlink" href="#pixel-toolbar" title="Link to this heading"></a></h2>
+<img alt="../_images/en_pixelbar.png" class="align-center" src="../_images/en_pixelbar.png" />
+<p>The preferences in this section allow you to control how are the pixel values show in the pixel toolbar.</p>
+<aside class="topic">
+<p class="topic-title">RGBA Display</p>
+<p>Whether to show them as Float, Hex or Decimal values.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Pixel Values</p>
+<p>Whether to show the pixel values with Full Lut, Gamma and Gain or
+with the original values saved in the movie or image without
+processing them through mrv2’s color transformations.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Secondary Display</p>
+<p>Whether to show the secondary display of pixel values as:</p>
+<ul class="simple">
+<li><p>HSV</p></li>
+<li><p>HSL</p></li>
+<li><p>CIE XYZ</p></li>
+<li><p>CIE xyY</p></li>
+<li><p>Lab CIELAB</p></li>
+<li><p>Luv CIELUV</p></li>
+<li><p>YUV (Analog PAL)</p></li>
+<li><p>YDbDr (Analog SECAM / PAL-N)</p></li>
+<li><p>YIQ (Analog NTSC)</p></li>
+<li><p>ITU-601 (Digital PAL/NTSC YCbCr)</p></li>
+<li><p>ITU-709 (Digital HDTV YCbCr)</p></li>
+</ul>
+</aside>
+<aside class="topic">
+<p class="topic-title">Luminance</p>
+<p>Whether to show Luminance as:</p>
+<ul class="simple">
+<li><p>Luminance (Y)</p></li>
+<li><p>Lumma (Y’)</p></li>
+<li><p>Lightness</p></li>
+</ul>
+</aside>
+</section>
+<section id="positioning">
+<h2>Positioning<a class="headerlink" href="#positioning" title="Link to this heading"></a></h2>
+<img alt="../_images/en_position.png" class="align-center" src="../_images/en_position.png" />
+<p>Here you can control the Window’s size and positioning.</p>
+<aside class="topic">
+<p class="topic-title">Always Save on Exit</p>
+<p>When this is on, mrv2’s positioning and size will be saved automatically.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Fixed Position</p>
+<p>Here you can establish the position where mrv2’s window will start.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Fixed Size</p>
+<p>With this, you can establish the size of mrv2’s window at start.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Take Current Window Values</p>
+<p>When clicked on this button, the Fixed Position and Fixed Size values
+will be filled with the current position and size of the mrv2 window.</p>
+</aside>
+</section>
 <section id="render">
 <h2>Render<a class="headerlink" href="#render" title="Link to this heading"></a></h2>
-<img alt="../_images/preferences-15.png" class="align-center" src="../_images/preferences-15.png" />
+<img alt="../_images/en_render.png" class="align-center" src="../_images/en_render.png" />
 <aside class="topic">
 <p class="topic-title">Vídeo Levels</p>
 <ul>
@@ -308,69 +410,45 @@ dissolves in OTIO.</p>
 </ul>
 </aside>
 </section>
-<section id="fonts">
-<h2>Fonts<a class="headerlink" href="#fonts" title="Link to this heading"></a></h2>
-<img alt="../_images/preferences-16.png" class="align-center" src="../_images/preferences-16.png" />
+<section id="thumbnails">
+<h2>Thumbnails<a class="headerlink" href="#thumbnails" title="Link to this heading"></a></h2>
+<img alt="../_images/en_thumbnails.png" class="align-center" src="../_images/en_thumbnails.png" />
+<p>Here you can select the behavior of thumbnails in all the interface.</p>
 <aside class="topic">
-<p class="topic-title">Menus</p>
-<p>Font for menus.</p>
+<p class="topic-title">Edit Viewport</p>
+<p>You can select between None, Small, Medium and Large images.</p>
 </aside>
 <aside class="topic">
-<p class="topic-title">Panels</p>
-<p>Not functional.</p>
-</aside>
-</section>
-<section id="positioning">
-<h2>Positioning<a class="headerlink" href="#positioning" title="Link to this heading"></a></h2>
-<img alt="../_images/preferences-04.png" class="align-center" src="../_images/preferences-04.png" />
-<p>Here you can control the Window’s size and positioning.</p>
-<aside class="topic">
-<p class="topic-title">Always Save on Exit</p>
-<p>When this is on, mrv2’s positioning and size will be saved automatically.</p>
+<p class="topic-title">Preview Thumbnails above Timeline</p>
+<p>Whether to show a thumbnail above the timeline when moving or dragging on the timeline.</p>
 </aside>
 <aside class="topic">
-<p class="topic-title">Fixed Position</p>
-<p>Here you can establish the position where mrv2’s window will start.</p>
-</aside>
-<aside class="topic">
-<p class="topic-title">Fixed Size</p>
-<p>With this, you can establish the size of mrv2’s window at start.</p>
-</aside>
-<aside class="topic">
-<p class="topic-title">Take Current Window Values</p>
-<p>When clicked on this button, the Fixed Position and Fixed Size values
-will be filled with the current position and size of the mrv2 window.</p>
+<p class="topic-title">Preview Thumbnails on Panels</p>
+<p>Whether to show a thumbnail for each image in the Files, Compare,
+Stereo 3D and Playlist Panels.</p>
 </aside>
 </section>
-<section id="file-requester">
-<h2>File Requester<a class="headerlink" href="#file-requester" title="Link to this heading"></a></h2>
-<img alt="../_images/preferences-05.png" class="align-center" src="../_images/preferences-05.png" />
-<p>Here you can establish the behavior of mrv2’s file requester, as well as use the OS native file requester.</p>
+<section id="timeline">
+<h2>Timeline<a class="headerlink" href="#timeline" title="Link to this heading"></a></h2>
+<img alt="../_images/en_timeline.png" class="align-center" src="../_images/en_timeline.png" />
 <aside class="topic">
-<p class="topic-title">Single Click to Travel Drawers</p>
-<p>With this on, a single click on any folder will open it.  Otherwise,
-you will need to click twice.</p>
+<p class="topic-title">Display</p>
+<p>Whether to show the time as Frames, Seconds or Timecode.</p>
 </aside>
 <aside class="topic">
-<p class="topic-title">Thumbnails Active</p>
-<p>With this on, mrv2’s file requester will show thumbnails for those image, movie and asset formats that it recognizes.</p>
+<p class="topic-title">Remove EDLs in Temporary Folder</p>
+<p>When creating playlists (EDLs), .otio files are saved in your
+temporary folder.  Selecting this will remove those files on
+program exit.</p>
 </aside>
 <aside class="topic">
-<p class="topic-title">USD Thumbnails</p>
-<p>With it selected, USD (Pixar’s Universal Scene Description) assets will show thumbnails.  Note that if your USD asset is complex, it may slow down the UI dramatically.</p>
+<p class="topic-title">Start in Edit mode</p>
+<p>When selected, the UI will start in Edit mode by default.</p>
 </aside>
-<aside class="topic">
-<p class="topic-title">Use Native File Chooser</p>
-<p>Instead of using mrv2’s built-in file chooser, use the Native OS file chooser.</p>
-</aside>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Some old versions of macOS would not allow opening private directories like Downloads, Documents and Desktop unless the Native File Chooser was used.</p>
-</div>
 </section>
 <section id="playback">
 <h2>Playback<a class="headerlink" href="#playback" title="Link to this heading"></a></h2>
-<img alt="../_images/preferences-06.png" class="align-center" src="../_images/preferences-06.png" />
+<img alt="../_images/en_playback.png" class="align-center" src="../_images/en_playback.png" />
 <aside class="topic">
 <p class="topic-title">Auto Playback</p>
 <p>With this setting, mrv2 will start playing the movie or file sequence as soon as it is loaded.</p>
@@ -388,44 +466,18 @@ you will need to click twice.</p>
 <p>How fast or slow does dragging the mouse work when scrubbing.</p>
 </aside>
 <aside class="topic">
-<p class="topic-title">Auto Scrub Playback</p>
+<p class="topic-title">Scrub with Audio</p>
 <p>When this is on, scrubbing will automatically start playback so
-that audio can be heard.  Note that this makes scrubbing start-up
-a tad slower.</p>
-</aside>
-</section>
-<section id="timeline">
-<h2>Timeline<a class="headerlink" href="#timeline" title="Link to this heading"></a></h2>
-<img alt="../_images/preferences-17.png" class="align-center" src="../_images/preferences-17.png" />
-<aside class="topic">
-<p class="topic-title">Display</p>
-<p>Whether to show the time as Frames, Seconds or Timecode.</p>
-</aside>
-<aside class="topic">
-<p class="topic-title">Preview Thumbnails</p>
-<p>Whether to show a thumbnail above the timeline when moving or dragging on the timeline.</p>
-</aside>
-<aside class="topic">
-<p class="topic-title">Remove EDLs in Temporary Folder</p>
-<p>When creating playlists (EDLs), .otio files are saved in your
-temporary folder.  Selecting this will remove those files on
-program exit.</p>
-</aside>
-<aside class="topic">
-<p class="topic-title">Start in Edit mode</p>
-<p>When selected, the UI will start in Edit mode by default.</p>
+that audio can be heard.  Note that this makes scrubbing more
+jerky.</p>
 </aside>
 <section id="edit">
 <h3>Edit<a class="headerlink" href="#edit" title="Link to this heading"></a></h3>
-<img alt="../_images/preferences-18.png" class="align-center" src="../_images/preferences-18.png" />
+<img alt="../_images/en_edit.png" class="align-center" src="../_images/en_edit.png" />
 <aside class="topic">
 <p class="topic-title">Default View</p>
 <p>Whether to show Video Only or Video and Audio in the Edit
 Viewport.</p>
-</aside>
-<aside class="topic">
-<p class="topic-title">Thumbnails</p>
-<p>The size of the thumbnails or None for no thumbnails.</p>
 </aside>
 <aside class="topic">
 <p class="topic-title">Show Transitions</p>
@@ -446,50 +498,15 @@ and durations can be moved together by default.</p>
 </aside>
 </section>
 </section>
-<section id="pixel-toolbar">
-<h2>Pixel Toolbar<a class="headerlink" href="#pixel-toolbar" title="Link to this heading"></a></h2>
-<img alt="../_images/preferences-08.png" class="align-center" src="../_images/preferences-08.png" />
-<p>The preferences in this section allow you to control how are the pixel values show in the pixel toolbar.</p>
-<aside class="topic">
-<p class="topic-title">RGBA Display</p>
-<p>Whether to show them as Float, Hex or Decimal values.</p>
-</aside>
-<aside class="topic">
-<p class="topic-title">Pixel Values</p>
-<p>Whether to show the pixel values with Full Lut, Gamma and Gain or
-with the original values saved in the movie or image without
-processing them through mrv2’s color transformations.</p>
-</aside>
-<aside class="topic">
-<p class="topic-title">Secondary Display</p>
-<p>Whether to show the secondary display of pixel values as:</p>
-<ul class="simple">
-<li><p>HSV</p></li>
-<li><p>HSL</p></li>
-<li><p>CIE XYZ</p></li>
-<li><p>CIE xyY</p></li>
-<li><p>Lab CIELAB</p></li>
-<li><p>Luv CIELUV</p></li>
-<li><p>YUV (Analog PAL)</p></li>
-<li><p>YDbDr (Analog SECAM / PAL-N)</p></li>
-<li><p>YIQ (Analog NTSC)</p></li>
-<li><p>ITU-601 (Digital PAL/NTSC YCbCr)</p></li>
-<li><p>ITU-709 (Digital HDTV YCbCr)</p></li>
-</ul>
-</aside>
-<aside class="topic">
-<p class="topic-title">Luminance</p>
-<p>Whether to show Luminance as:</p>
-<ul class="simple">
-<li><p>Luminance (Y)</p></li>
-<li><p>Lumma (Y’)</p></li>
-<li><p>Lightness</p></li>
-</ul>
-</aside>
-</section>
 <section id="ocio">
 <h2>OCIO<a class="headerlink" href="#ocio" title="Link to this heading"></a></h2>
-<img alt="../_images/preferences-09.png" class="align-center" src="../_images/preferences-09.png" />
+<img alt="../_images/en_ocio.png" class="align-center" src="../_images/en_ocio.png" />
+<aside class="topic">
+<p class="topic-title">Configs Incorporadas</p>
+<p>OpenColorIO 2.1 ha agregado configuraciones por defecto.
+Aquí podes seleccionarlas.  Tienen el prefijo ocio://
+y ningún archivo config.ocio.</p>
+</aside>
 <aside class="topic">
 <p class="topic-title">OCIO Config File</p>
 <p>Configuration Setting for OCIO.</p>
@@ -501,7 +518,7 @@ processing them through mrv2’s color transformations.</p>
 </section>
 <section id="ocio-defaults">
 <h2>OCIO Defaults<a class="headerlink" href="#ocio-defaults" title="Link to this heading"></a></h2>
-<img alt="../_images/preferences-10.png" class="align-center" src="../_images/preferences-10.png" />
+<img alt="../_images/en_ocio_defaults.png" class="align-center" src="../_images/en_ocio_defaults.png" />
 <aside class="topic">
 <p class="topic-title">Use Active Views and Active Displays</p>
 <p>When selected, if the OCIO config.ocio file has active views or active displays, these will be used (filtered).  Otherwise, they will be ignored.</p>
@@ -513,7 +530,7 @@ processing them through mrv2’s color transformations.</p>
 </section>
 <section id="loading">
 <h2>Loading<a class="headerlink" href="#loading" title="Link to this heading"></a></h2>
-<img alt="../_images/preferences-11.png" class="align-center" src="../_images/preferences-11.png" />
+<img alt="../_images/en_loading.png" class="align-center" src="../_images/en_loading.png" />
 <p>Controls the behavior of loading movies and images.</p>
 <aside class="topic">
 <p class="topic-title">Missing Frame</p>
@@ -535,10 +552,10 @@ cross).</p>
 <p>When searching for a previous or next image version, this setting controls how far apart the version numbers can be.</p>
 </aside>
 </section>
-<section id="path-mapping">
-<h2>Path Mapping<a class="headerlink" href="#path-mapping" title="Link to this heading"></a></h2>
-<img alt="../_images/preferences-12.png" class="align-center" src="../_images/preferences-12.png" />
-<p>Path Mapping allows you to share images and movies on a network even when the drive and paths do not match.  In the example above, the Remote directory is /Users/gga (a macOS directory), that is mapped to /home/gga (a Unix one).</p>
+<section id="paths-mapping">
+<h2>Paths Mapping<a class="headerlink" href="#paths-mapping" title="Link to this heading"></a></h2>
+<img alt="../_images/en_path_mapping.png" class="align-center" src="../_images/en_path_mapping.png" />
+<p>Paths Mapping allows you to share images and movies on a network even when the drive and paths do not match.</p>
 <p>The path mapping paths are saved in a simple text file in your .filmaura home directory, as mrv2.paths.prefs.</p>
 <aside class="topic">
 <p class="topic-title">Add Path</p>
@@ -551,12 +568,12 @@ cross).</p>
 </section>
 <section id="network">
 <h2>Network<a class="headerlink" href="#network" title="Link to this heading"></a></h2>
-<img alt="../_images/preferences-13.png" class="align-center" src="../_images/preferences-13.png" />
+<img alt="../_images/en_network.png" class="align-center" src="../_images/en_network.png" />
 <p>The Network preferences allows you to set what settings are sent and received by the local machine when connected on a network to another server or client.</p>
 </section>
 <section id="opengl">
 <h2>OpenGL<a class="headerlink" href="#opengl" title="Link to this heading"></a></h2>
-<img alt="../_images/preferences-19.png" class="align-center" src="../_images/preferences-19.png" />
+<img alt="../_images/en_opengl.png" class="align-center" src="../_images/en_opengl.png" />
 <p>OpenGL is the default API used for 3D rendering in the timeline and viewports.</p>
 <aside class="topic">
 <p class="topic-title">Monitor VSync</p>
@@ -592,7 +609,7 @@ Otherwise a shader must be used.</p>
 </section>
 <section id="errors">
 <h2>Errors<a class="headerlink" href="#errors" title="Link to this heading"></a></h2>
-<img alt="../_images/preferences-20.png" class="align-center" src="../_images/preferences-20.png" />
+<img alt="../_images/en_errors.png" class="align-center" src="../_images/en_errors.png" />
 <p>The Errors preferences allows you to establish what to do in case of an error.</p>
 <aside class="topic">
 <p class="topic-title">On FFmpeg Error</p>
@@ -607,7 +624,7 @@ Logs on Window (Default).</p>
 </section>
 <section id="behavior">
 <h2>Behavior<a class="headerlink" href="#behavior" title="Link to this heading"></a></h2>
-<img alt="../_images/preferences-21.png" class="align-center" src="../_images/preferences-21.png" />
+<img alt="../_images/en_behavior.png" class="align-center" src="../_images/en_behavior.png" />
 <p>The Behavior Window allows you to control the behavior aspects of the viewer.</p>
 <aside class="topic">
 <p class="topic-title">Check for Updates.</p>

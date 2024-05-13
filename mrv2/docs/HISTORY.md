@@ -1,3 +1,72 @@
+v1.1.6
+======
+
+This is a release full of goodies and bug fixes.
+
+- **ATTENTION**:
+  This version introduces a change in the way Cache Settings are used for
+  movie files.
+  The Settings->Gigabytes and the pair of "Settings->Read Ahead" and
+  "Settings->Read Behind" are now decoupled.
+  In the case of sequences, the Read Ahea and Read Behind will be automatically
+  calculated from the Gigabytes settings as before.
+  However, for movie files the timeline will only display the settings for
+  Read Ahead/Behind, not the actual Gigabytes cache (which can be bigger than
+  the read ahead/behind setting).  The small Read Ahead and Read Behind is to
+  allow playing 4K movies backwards.
+  The Gigabytes setting of 0 is **NO LONGER USED** and will revert to
+  4 Gb if set to 0.
+
+- Fixed slow seeking on 4K movies.  Now we beat OpenRV on **all** movies,
+  seeking and reverse playback too.
+- Improved performance of dragging Tile like the main divider between the
+  view and timeline viewport, particularly on macOS.
+- Made switching languages keep the UI preferences.
+- Fixed cross cursor when entering the view area and coming from the draw
+  tools or the drag bar.
+- Made drag bar change color besides changing cursor to indicate you can
+  drag it.
+- Fixed NDI playback with audio which had gotten broken on v1.1.1.
+- Improved .githook to run dos2unix to avoid dummy commits due to Windows'
+  CR returns.
+- Fixed window resizing calculation that had two ugly bugs in it (thanks
+  to ManoloFLTK for having dealt with my ugly code!!!).  Now resizing of
+  the main window takes the dock properly into account.
+- Fixed auto hiding of the pixel bar from the preferences switched is changed
+  and okay'ed while the movie is still playing.
+- Fixed seeking on the timeline on Linux sometimes getting the event
+  incorrectly on X.
+- Fixed starting a movie with loop on and playing stopped and then start
+  playing it backwards.
+- Refactored playback code and fixed playback buttons sometimes getting out of
+  sync compared to the command-line flags passed.
+- Created Preferences->User Interface/Thumbnails to select the places
+  where thumbnails appear.  Currently can be above the Timeline and in the
+  Panels.
+- Made the thumbnail above the thumbnail a tad smaller and more polished.
+- Fixed a potentially nullptr pointer de-referencing when OpenGL accuracy was
+  set to Automatic.
+- Worked around an UI redraw issue on Wayland.
+- Fixed timeline interaction (dragging clips in .otio timeline) in 1.1.5
+  re-release.
+- Fixed macOS issues when showing and hiding the timeline bar.
+- Made View Window / Timeline Viewport divider highlight in a grayish color
+  when it can be dragged.
+- Made Panel divider highlight in a grayish color when it can be dragged.
+- Fixed cursor when dragging on the Panel divider bar.
+- Fixed cursor sometimes switching to the Arrow instead of the Cross cursor.
+  This was maily a Linux issue.
+- Fixed background transparent color being lighter on Wayland.
+- Added Cache Use and Cache Percentage to HUD's Cache display.
+- Made Edit button turn on/off automatically according to the size of the
+  timeline viewport.
+- Added default sensible Window settings for UI panels when in window mode.
+- Made Window settings for UI panels get saved even if they were in panel mode.
+- Fixed .otio markers display in timeline viewport.
+- Fixed size of Timeline Viewport when in Edit mode on macOS.  Now it resizes
+  properly.
+
+
 v1.1.5
 ======
 

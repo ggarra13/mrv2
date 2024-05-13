@@ -8,9 +8,7 @@
 
 #include <tlCore/Time.h>
 
-#include "mrvPanelWidget.h"
-
-class Fl_RGB_Image;
+#include "mrvPanels/mrvThumbnailPanel.h"
 
 namespace mrv
 {
@@ -18,15 +16,12 @@ namespace mrv
 
     namespace panel
     {
-        using namespace tl;
-
-        class PlaylistPanel : public PanelWidget
+        class PlaylistPanel : public ThumbnailPanel
         {
         public:
             PlaylistPanel(ViewerUI* ui);
             ~PlaylistPanel();
 
-            void clear_controls();
             void add_controls() override;
 
             void
@@ -34,14 +29,6 @@ namespace mrv
 
             void redraw();
             void refresh();
-            void playlistThumbnail(
-                const int64_t id,
-                const std::vector<
-                    std::pair<otime::RationalTime, Fl_RGB_Image*> >& thumbnails,
-                PlaylistButton* w);
-
-        protected:
-            void cancel_thumbnails();
 
         private:
             MRV2_PRIVATE();

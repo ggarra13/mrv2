@@ -145,11 +145,16 @@ namespace mrv
         //! Removes an image listener (closes a socket on localport).
         void removeListener();
 
-        void cacheUpdate();
-
         //! Tries to clean as many resources as possible.  This is usually done
         //! before calling execv(), for example.
         void cleanResources();
+
+        //! Start playback FLTK callback.
+        void startPlayback();
+
+        //! Update the cache (Darby makes this private and uses an observer
+        //! with a string, but I think it is simpler to make it public).
+        void cacheUpdate();
 
     public:
         static ViewerUI* ui;

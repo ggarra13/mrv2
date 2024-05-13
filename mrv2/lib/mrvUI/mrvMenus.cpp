@@ -16,6 +16,7 @@
 #include "mrvFl/mrvCallbacks.h"
 #include "mrvFl/mrvVersioning.h"
 
+#include "mrvUI/mrvDesktop.h"
 #include "mrvUI/mrvMenus.h"
 
 #include "mrvWidgets/mrvMainWindow.h"
@@ -168,6 +169,7 @@ namespace mrv
         else
             item->clear();
 
+        //! @todo: how to support float on top on Wayland
         idx = menu->add(
             _("Window/Float On Top"), kToggleFloatOnTop.hotkey(),
             (Fl_Callback*)toggle_float_on_top_cb, ui,
@@ -177,7 +179,7 @@ namespace mrv
             item->set();
         else
             item->clear();
-
+        
         idx = menu->add(
             _("Window/Secondary"), kToggleSecondary.hotkey(),
             (Fl_Callback*)toggle_secondary_cb, ui, FL_MENU_TOGGLE);
@@ -187,6 +189,7 @@ namespace mrv
         else
             item->clear();
 
+        //! @todo: how to support float on top on Wayland
         idx = menu->add(
             _("Window/Secondary Float On Top"),
             kToggleSecondaryFloatOnTop.hotkey(),
@@ -197,7 +200,7 @@ namespace mrv
             item->set();
         else
             item->clear();
-
+            
         mode = FL_MENU_TOGGLE;
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;

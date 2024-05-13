@@ -5,6 +5,7 @@
 #pragma once
 
 #include <tlTimeline/BackgroundOptions.h>
+#include <tlTimeline/PlayerOptions.h>
 #include <tlTimeline/IRender.h>
 
 #include "mrvCore/mrvActionMode.h"
@@ -44,7 +45,8 @@ namespace mrv
         int handle(int event) override;
         void resize(int X, int Y, int W, int H) override;
 
-        //! Store main ui.
+        //! Store main ui.  We need this as the first viewport does not
+        //! yet know about App::ui.
         void main(ViewerUI* m) noexcept;
 
         //! Handle scrubbing.
@@ -57,7 +59,7 @@ namespace mrv
         void redo();
 
         //! Change cursor to another.
-        void cursor(Fl_Cursor x) const noexcept;
+        void set_cursor(Fl_Cursor x) const noexcept;
 
         //! Set the action mode.
         void setActionMode(const ActionMode& mode) noexcept;
@@ -207,6 +209,8 @@ namespace mrv
 
         void endFrame() noexcept;
 
+        void setPlayback(const timeline::Playback) noexcept;
+
         //! Set the Annotation previous ghost frames.
         void setGhostPrevious(int);
 
@@ -281,7 +285,7 @@ namespace mrv
         void refreshWindows();
 
         //! Refresh window by clearing the associated resources.
-        virtual void refresh() {};
+        virtual void refresh(){};
 
         //! FLTK Callback to handle view spinning whne in Environment Map mode.
         static void _handleViewSpinning_cb(TimelineViewport* t) noexcept;
@@ -338,7 +342,7 @@ namespace mrv
         //! Get the normalized rotation between 0 and 360
         //! full rotation of the image (user rotation + video rotation)
         float _getRotation() const noexcept;
-        
+
         //! Get the full projection matrix.
         math::Matrix4x4f _projectionMatrix() const noexcept;
 

@@ -61,6 +61,8 @@ namespace mrv
 {
     namespace os
     {
+        std::string getGPUVendor();
+        
         std::string getDesktop();
 
         std::string getVersion();

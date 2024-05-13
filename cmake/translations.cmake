@@ -84,7 +84,7 @@ endif()
 # Then, create the .po files if they don't exist and add a target for .mo files.
 #	   
 foreach( lang ${LANGUAGES} )
-
+    
     set( _moDir "${ROOT_DIR}/share/locale/${lang}/LC_MESSAGES" )
     set( _moFile "${_moDir}/mrv2-v${mrv2_VERSION}.mo" )
     set( _poDir  "${ROOT_DIR}/po" )
@@ -155,7 +155,8 @@ add_custom_target(
     COMMAND ${CMAKE_COMMAND} -E echo Running xgettext for pot target
     COMMAND xgettext --package-name=mrv2 --package-version="v${mrv2_VERSION}" --copyright-holder="Contributors to the mrv2 Project" --msgid-bugs-address="ggarra13@gmail.com" -d mrv2 -c++ -k_ ${PO_SOURCES} -o "${_absPotFile}"
     WORKING_DIRECTORY "${ROOT_DIR}/lib"
-    # No dependency on any sources, so we don't update on any file change
+    #  DEPENDS mrv2  # Do not generate pot files automatically, as that messes
+                     # the commits (line changes for example).
     )
 
 

@@ -59,6 +59,18 @@ namespace mrv
     {
         TLRENDER_P();
 
+        // GUI Window defaults
+        p.defaultValues["gui/Files/WindowW"] = 400;
+        p.defaultValues["gui/Compare/WindowW"] = 400;
+        p.defaultValues["gui/Stereo 3D/WindowW"] = 400;
+        
+        p.defaultValues["gui/Logs/WindowW"] = 800;
+        p.defaultValues["gui/Logs/WindowH"] = 400;
+        
+        p.defaultValues["gui/Python/WindowW"] = 640;
+        p.defaultValues["gui/Python/WindowH"] = 400;
+
+        
         uint64_t totalVirtualMem = 0;
         uint64_t virtualMemUsed = 0;
         uint64_t virtualMemUsedByMe = 0;

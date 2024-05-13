@@ -70,16 +70,30 @@
   See also the complete example program in test/tile.cxx.
 */
 
+#include <iostream>
 #include <vector>
 
-#include <mrvWidgets/mrvTile.h>
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Rect.H>
 #include <FL/Fl.H>
 #include <stdlib.h>
 
+#include "mrvWidgets/mrvTile.h"
+#include "mrvWidgets/mrvTimelineGroup.h"
+
+#include "mrvEdit/mrvEditCallbacks.h"
+
+#include "mrViewer.h"
+
+namespace
+{
+    const int kDRAGV = 2;
+    const int kGRABAREA = 4;
+} // namespace
+
 namespace mrv
 {
+
     struct WidgetData
     {
         Fl_Widget* o;
@@ -92,7 +106,6 @@ namespace mrv
     struct MoveData
     {
         Tile* t;
-        int event;
         std::vector<WidgetData> widgets;
     };
 
@@ -109,7 +122,6 @@ namespace mrv
             int H = w.H;
             o->damage_resize(X, Y, W, H);
         }
-        // if (d->event == FL_RELEASE)
         d->t->init_sizes();
         delete d;
     }
@@ -120,15 +132,13 @@ namespace mrv
 
       Pass zero as \p oldx or \p oldy to disable drag in that direction.
     */
-    void
-    Tile::move_intersection(int oldx, int oldy, int newx, int newy, int event)
+    void Tile::move_intersection(int oldx, int oldy, int newx, int newy)
     {
         Fl_Widget* const* a = array();
         Fl_Rect* p = bounds();
         p += 2; // skip group & resizable's saved size
         MoveData* data = new MoveData;
         data->t = this;
-        data->event = event;
         for (int i = children(); i--; p++)
         {
             Fl_Widget* o = *a++;
@@ -181,34 +191,46 @@ namespace mrv
         Fl_Tile::init_sizes();
     }
 
+    static Fl_Cursor cursors[5] = {
+        FL_CURSOR_DEFAULT, FL_CURSOR_WE, FL_CURSOR_NS, FL_CURSOR_MOVE,
+        FL_CURSOR_CROSS};
+
+    static void tile_set_dragbar_color(Fl_Tile* t, Fl_Cursor c)
+    {
+        Fl_Widget* tg = t->child(2); // mrv::TimelineGroup
+        if (c != cursors[kDRAGV])
+        {
+            tg->color(51); // default color;
+        }
+        else
+        {
+            tg->color(FL_WHITE);
+        }
+        tg->redraw();
+    }
+
     static void tile_set_cursor(Fl_Tile* t, Fl_Cursor c)
     {
-        static Fl_Cursor cursor;
+        static Fl_Cursor cursor = FL_CURSOR_CROSS;
         if (cursor == c || !t->window())
             return;
         cursor = c;
-#ifdef __sgi
-        t->window()->cursor(c, FL_RED, FL_WHITE);
-#else
+        tile_set_dragbar_color(t, c);
         t->window()->cursor(c);
-#endif
     }
-
-    static Fl_Cursor cursors[4] = {
-        FL_CURSOR_DEFAULT, FL_CURSOR_WE, FL_CURSOR_NS, FL_CURSOR_MOVE};
 
     int Tile::handle(int event)
     {
-#if defined(_WIN32)
         static int sdrag;
         static int sdx, sdy;
         static int sx, sy;
-#    define DRAGH 1
-#    define DRAGV 2
-#    define GRABAREA 4
 
         int mx = Fl::event_x();
         int my = Fl::event_y();
+
+        // \@bug: Window does not properly refresh the OpenGL timeline.
+        //        So we need to the resize on a timeout.
+#if defined(_WIN32)
 
         switch (event)
         {
@@ -232,8 +254,8 @@ namespace mrv
                     Fl_Widget* o = *a++;
                     if (o == resizable())
                         continue;
-                    if (p->r() < q->r() && o->y() <= my + GRABAREA &&
-                        o->y() + o->h() >= my - GRABAREA)
+                    if (p->r() < q->r() && o->y() <= my + kGRABAREA &&
+                        o->y() + o->h() >= my - kGRABAREA)
                     {
                         int t = mx - (o->x() + o->w());
                         if (abs(t) < mindx)
@@ -243,8 +265,8 @@ namespace mrv
                             oldx = p->r();
                         }
                     }
-                    if (p->b() < q->b() && o->x() <= mx + GRABAREA &&
-                        o->x() + o->w() >= mx - GRABAREA)
+                    if (p->b() < q->b() && o->x() <= mx + kGRABAREA &&
+                        o->x() + o->w() >= mx - kGRABAREA)
                     {
                         int t = my - (o->y() + o->h());
                         if (abs(t) < mindy)
@@ -257,29 +279,30 @@ namespace mrv
                 }
                 sdrag = 0;
                 sx = sy = 0;
-                if (mindx <= GRABAREA)
+                if (mindy <= kGRABAREA)
                 {
-                    sdrag = DRAGH;
-                    sx = oldx;
-                }
-                if (mindy <= GRABAREA)
-                {
-                    sdrag |= DRAGV;
+                    sdrag |= kDRAGV;
                     sy = oldy;
                 }
-                tile_set_cursor(this, cursors[sdrag]);
+
+                Fl_Cursor cursor = cursors[sdrag];
+                tile_set_cursor(this, cursor);
                 if (sdrag)
                     return 1;
                 return Fl_Group::handle(event);
             }
 
         case FL_LEAVE:
-            tile_set_cursor(this, FL_CURSOR_DEFAULT);
+            tile_set_cursor(this, cursors[sdrag]);
             break;
 
         case FL_DRAG:
             // This is necessary if CONSOLIDATE_MOTION in Fl_x.cxx is turned
             // off: if (damage()) return 1; // don't fall behind
+        {
+            set_edit_button(mrv::EditMode::kSaved, App::ui);
+            tile_set_cursor(this, cursors[sdrag]);
+        }
         case FL_RELEASE:
         {
             if (!sdrag)
@@ -287,19 +310,9 @@ namespace mrv
             Fl_Widget* r = resizable();
             if (!r)
                 r = this;
-            int newx;
-            if (sdrag & DRAGH)
-            {
-                newx = Fl::event_x() - sdx;
-                if (newx < r->x())
-                    newx = r->x();
-                else if (newx > r->x() + r->w())
-                    newx = r->x() + r->w();
-            }
-            else
-                newx = sx;
+            int newx = sx;
             int newy;
-            if (sdrag & DRAGV)
+            if (sdrag & kDRAGV)
             {
                 newy = Fl::event_y() - sdy;
                 if (newy < r->y())
@@ -309,7 +322,7 @@ namespace mrv
             }
             else
                 newy = sy;
-            move_intersection(sx, sy, newx, newy, event);
+            move_intersection(sx, sy, newx, newy);
             if (event == FL_DRAG)
             {
                 set_changed();
@@ -319,16 +332,74 @@ namespace mrv
             {
                 do_callback(FL_REASON_CHANGED);
             }
+            set_edit_button(mrv::EditMode::kSaved, App::ui);
             return 1;
         }
         }
-        return Fl_Group::handle(event);
 #else
+
+        switch (event)
+        {
+
+        case FL_MOVE:
+        case FL_ENTER:
+        case FL_PUSH:
+            // don't potentially change the mouse cursor if inactive:
+            if (!active())
+                break; // will cascade inherited handle()
+            {
+                int mindy = 100;
+                int oldy = 0;
+                Fl_Widget* const* a = array();
+                Fl_Rect* q = bounds();
+                Fl_Rect* p = q + 2;
+                for (int i = children(); i--; p++)
+                {
+                    Fl_Widget* o = *a++;
+                    if (o == resizable())
+                        continue;
+                    if (p->b() < q->b() && o->x() <= mx + kGRABAREA &&
+                        o->x() + o->w() >= mx - kGRABAREA)
+                    {
+                        int t = my - (o->y() + o->h());
+                        if (abs(t) < mindy)
+                        {
+                            sdy = t;
+                            mindy = abs(t);
+                            oldy = p->b();
+                        }
+                    }
+                }
+                sdrag = 0;
+                sx = sy = 0;
+                if (mindy <= kGRABAREA)
+                {
+                    sdrag |= kDRAGV;
+                    sy = oldy;
+                }
+
+                Fl_Cursor cursor = cursors[sdrag];
+                tile_set_cursor(this, cursor);
+            }
+
+        case FL_LEAVE:
+            break;
+
+        case FL_DRAG:
+            set_edit_button(mrv::EditMode::kSaved, App::ui);
+            tile_set_cursor(this, cursors[sdrag]);
+            break;
+        case FL_RELEASE:
+            set_edit_button(mrv::EditMode::kSaved, App::ui);
+            break;
+        default:
+            break;
+        }
+#endif
         int ret = Fl_Tile::handle(event);
         if (ret && event == FL_RELEASE)
             init_sizes();
         return ret;
-#endif
     }
 
     /**

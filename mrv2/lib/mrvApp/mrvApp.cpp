@@ -177,32 +177,36 @@ namespace mrv
 
         std::shared_ptr<PlaylistsModel> playlistsModel;
         std::shared_ptr<FilesModel> filesModel;
+        std::vector<std::shared_ptr<FilesModelItem> > files;
+        std::vector<std::shared_ptr<FilesModelItem> > activeFiles;
+        std::vector<std::shared_ptr<timeline::Timeline> > timelines;
+
+        // Observers
         std::shared_ptr<
             observer::ListObserver<std::shared_ptr<FilesModelItem> > >
             filesObserver;
         std::shared_ptr<
             observer::ListObserver<std::shared_ptr<FilesModelItem> > >
             activeObserver;
-        std::vector<std::shared_ptr<FilesModelItem> > files;
-        std::vector<std::shared_ptr<FilesModelItem> > activeFiles;
-        std::vector<std::shared_ptr<timeline::Timeline> > timelines;
-
         std::shared_ptr<observer::ListObserver<int> > layersObserver;
         std::shared_ptr<observer::ValueObserver<timeline::CompareTimeMode> >
             compareTimeObserver;
+        std::shared_ptr<observer::ValueObserver<timeline::PlayerCacheInfo> >
+            cacheInfoObserver;
+        std::shared_ptr<observer::ListObserver<log::Item> > logObserver;
+
+        // Options
         timeline::LUTOptions lutOptions;
         timeline::ImageOptions imageOptions;
         timeline::DisplayOptions displayOptions;
         float volume = 1.F;
         bool mute = false;
-        std::shared_ptr<observer::ListObserver<log::Item> > logObserver;
 
         std::shared_ptr<TimelinePlayer> player;
 
         MainControl* mainControl = nullptr;
 
         bool session = false;
-
         bool running = false;
     };
 
@@ -911,14 +915,6 @@ namespace mrv
         timeline::Playback playback;
     };
 
-    static void start_playback(void* data)
-    {
-        PlaybackData* p = (PlaybackData*)data;
-        auto player = p->player;
-        player->setPlayback(p->playback);
-        delete p;
-    }
-
     void App::createListener()
     {
 #ifdef MRV2_NETWORK
@@ -939,26 +935,77 @@ namespace mrv
 #endif
     }
 
+    static void start_playback_cb(App* app)
+    {
+        app->startPlayback();
+    }
+
+    void App::startPlayback()
+    {
+        TLRENDER_P();
+        p.player->start();
+
+        const timeline::Playback& playback = p.options.playback;
+        ui->uiView->setPlayback(playback);
+
+        if (playback == timeline::Playback::Reverse)
+        {
+            p.player->setPlayback(timeline::Playback::Stop);
+
+            //
+            // Thie observer will watch the cache and start a reverse playback
+            // once it is filled.
+            //
+            p.cacheInfoObserver =
+                observer::ValueObserver<timeline::PlayerCacheInfo>::create(
+                    p.player->player()->observeCacheInfo(),
+                    [this](const timeline::PlayerCacheInfo& value)
+                    {
+                        TLRENDER_P();
+                        if (p.player->playback() != timeline::Playback::Stop)
+                            return;
+                        const auto& cache =
+                            p.player->player()->observeCacheOptions()->get();
+                        const auto& readAhead = cache.readAhead;
+                        const auto& readBehind = cache.readBehind;
+                        const auto& timeRange = p.player->timeRange();
+                        const auto& endTime = timeRange.end_time_exclusive();
+                        const auto& startTime = endTime - readBehind;
+
+                        bool found = false;
+                        for (const auto& t : value.videoFrames)
+                        {
+                            if (t.start_time() <= startTime &&
+                                t.end_time_exclusive() >= endTime)
+                            {
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (found)
+                        {
+                            p.player->setPlayback(timeline::Playback::Reverse);
+                        }
+                    });
+        }
+    }
+
     int App::run()
     {
         TLRENDER_P();
         if (!ui)
             return 0;
 
+        // Open the viewer window by calling Fl::flush
         Fl::flush();
         bool autoPlayback = ui->uiPrefs->uiPrefsAutoPlayback->value();
-        if (p.player &&
-            (p.options.playback != timeline::Playback::Count || autoPlayback) &&
-            !p.session)
+        if (p.player && !p.session && autoPlayback)
         {
             // We use a timeout to start playback of the loaded video to
             // make sure to show all frames
-            PlaybackData* data = new PlaybackData;
-            data->player = p.player;
-            data->playback = p.options.playback == timeline::Playback::Count
-                                 ? timeline::Playback::Forward
-                                 : p.options.playback;
-            Fl::add_timeout(0.005, (Fl_Timeout_Handler)start_playback, data);
+            if (p.options.playback == timeline::Playback::Count)
+                p.options.playback = timeline::Playback::Forward;
+            Fl::add_timeout(0.005, (Fl_Timeout_Handler)start_playback_cb, this);
         }
         p.running = true;
         return Fl::run();
@@ -1334,8 +1381,11 @@ namespace mrv
                                 ui->uiPrefs->uiPrefsAutoPlayback->value();
                             if (autoPlayback)
                             {
-                                player->setPlayback(
-                                    timeline::Playback::Forward);
+                                if (ui->uiMain->visible())
+                                {
+                                    player->setPlayback(
+                                        timeline::Playback::Forward);
+                                }
                             }
 
                             // Add the new file to recent files, unless it is
@@ -1414,16 +1464,15 @@ namespace mrv
                 size_t numFiles = filesModel()->observeFiles()->getSize();
                 if (numFiles == 1)
                 {
-                    // resize the window to the size of the first clip loaded
-                    if (ui->uiView->getPresentationMode())
-                    {
-                        ui->uiView->frameView();
-                    }
-                    else
+                    if (!ui->uiView->getPresentationMode())
                     {
                         if (p.options.otioEditMode || ui->uiEdit->value() ||
                             ui->uiPrefs->uiPrefsEditMode->value())
-                            editMode = EditMode::kFull;
+                        {
+                            // We need to call it explicitally to handle
+                            // audio tracks that don't send a resizeWindow.
+                            set_edit_mode_cb(EditMode::kFull, ui);
+                        }
                     }
                     ui->uiView->take_focus();
                 }
@@ -1495,7 +1544,8 @@ namespace mrv
         if (info.audio.trackCount > 1)
         {
             // If movie is longer than 30 minutes, and has multiple audio tracks
-            // use a short readAhead/readBehind
+            // use a short readAhead/readBehind so we can quickly switch among
+            // them.
             auto timeRange = p.player->inOutRange();
             if (timeRange.duration().to_seconds() > 60 * 30)
                 movieIsLong = true;
@@ -1504,9 +1554,14 @@ namespace mrv
         if (file::isTemporaryNDI(p.player->path()) || movieIsLong)
         {
             options.readAhead = otime::RationalTime(4.0, 1.0);
-            options.readBehind = otime::RationalTime(0.5, 1.0);
+            options.readBehind = otime::RationalTime(0.0, 1.0);
         }
-        else if (Gbytes > 0)
+        else if (Gbytes == 0)
+        {
+            Gbytes = 4;
+        }
+
+        if (Gbytes > 0)
         {
             // Do some sanity checking in case the user is using several mrv2
             // instances and cache would not fit.
@@ -1529,44 +1584,49 @@ namespace mrv
             auto ioSystem = _context->getSystem<io::System>();
             ioSystem->getCache()->setMax(bytes);
 
+            // old readAhead/readBehind code used when playing sequences.
             const auto timeline = p.player->timeline();
             const auto ioInfo = timeline->getIOInfo();
-            double seconds = 1.F;
-            if (!ioInfo.video.empty())
+
+            const auto path = p.player->path();
+            const bool isSequence = file::isSequence(path.get());
+            if (isSequence)
             {
-                const auto& video = ioInfo.video[0];
-                auto pixelType = video.pixelType;
-                std::size_t size = tl::image::getDataByteCount(video);
-                double frames = bytes / static_cast<double>(size);
-                seconds = frames / p.player->defaultSpeed();
+                double seconds = 1.F;
+                if (!ioInfo.video.empty())
+                {
+                    const auto& video = ioInfo.video[0];
+                    auto pixelType = video.pixelType;
+                    std::size_t size = tl::image::getDataByteCount(video);
+                    double frames = bytes / static_cast<double>(size);
+                    seconds = frames / p.player->defaultSpeed();
+                }
+
+                if (ioInfo.audio.isValid())
+                {
+                    const auto& audio = ioInfo.audio;
+                    std::size_t channelCount = audio.channelCount;
+                    std::size_t byteCount = audio::getByteCount(audio.dataType);
+                    std::size_t sampleRate = audio.sampleRate;
+                    uint64_t size = sampleRate * byteCount * channelCount;
+                    seconds -= size / 1024.0 / 1024.0;
+                }
+
+                double ahead = timeline::PlayerCacheOptions().readAhead.value();
+                double behind =
+                    timeline::PlayerCacheOptions().readBehind.value();
+
+                const double totalTime = ahead + behind;
+                const double readAheadPct = ahead / totalTime;
+                const double readBehindPct = behind / totalTime;
+
+                const double readAhead = seconds * readAheadPct;
+                const double readBehind = seconds * readBehindPct;
+
+                options.readAhead = otime::RationalTime(readAhead, 1.0);
+                options.readBehind = otime::RationalTime(readBehind, 1.0);
             }
-
-            if (ioInfo.audio.isValid())
-            {
-                const auto& audio = ioInfo.audio;
-                std::size_t channelCount = audio.channelCount;
-                std::size_t byteCount = audio::getByteCount(audio.dataType);
-                std::size_t sampleRate = audio.sampleRate;
-                uint64_t size = sampleRate * byteCount * channelCount;
-                seconds -= size / 1024.0 / 1024.0;
-            }
-
-            double ahead = timeline::PlayerCacheOptions().readAhead.value();
-            double behind = timeline::PlayerCacheOptions().readBehind.value();
-
-            const double totalTime = ahead + behind;
-            const double readAheadPct = ahead / totalTime;
-            const double readBehindPct = behind / totalTime;
-
-            const double readAhead = seconds * readAheadPct;
-            const double readBehind = seconds * readBehindPct;
-
-            options.readAhead = otime::RationalTime(readAhead, 1.0);
-            options.readBehind = otime::RationalTime(readBehind, 1.0);
         }
-
-        // std::cerr << "readAhead=" << options.readAhead << std::endl;
-        // std::cerr << "readBehind=" << options.readBehind << std::endl;
 
         p.player->setCacheOptions(options);
     }

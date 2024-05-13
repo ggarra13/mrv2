@@ -111,6 +111,9 @@ export PATH="$PWD/${BUILD_DIR}/install/bin:$PWD/$BUILD_DIR/install/bin/Scripts:$
 #
 get_cmake_version
 
+echo "CMake at: ${CMAKE_LOCATION} ${CMAKE_VERSION}"
+
+
 #
 # We set both lib64 and lib to handle differences in Linux RH and Ubuntu
 #

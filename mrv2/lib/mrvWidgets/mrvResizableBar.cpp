@@ -86,10 +86,14 @@ namespace mrv
             break;
         case FL_ENTER:
             window()->cursor(FL_CURSOR_WE);
+            color(FL_WHITE);
+            redraw();
             return 1;
             break;
         case FL_LEAVE:
             window()->cursor(FL_CURSOR_DEFAULT);
+            color(FL_BACKGROUND_COLOR);
+            redraw();
             return 1;
             break;
         case FL_PUSH:
@@ -97,6 +101,7 @@ namespace mrv
             last_x = this_x;
             break;
         case FL_DRAG:
+            window()->cursor(FL_CURSOR_WE);
             HandleDrag(this_x - last_x);
             last_x = this_x;
             ret = 1;

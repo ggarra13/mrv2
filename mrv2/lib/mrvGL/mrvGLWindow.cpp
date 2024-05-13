@@ -2,6 +2,8 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <iostream>
+
 #include <FL/platform.H>
 
 #ifdef FLTK_USE_X11

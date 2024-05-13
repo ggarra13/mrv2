@@ -6,7 +6,7 @@
 
 #include "mrvOptions/mrvStereo3DOptions.h"
 
-#include "mrvPanels/mrvPanelWidget.h"
+#include "mrvPanels/mrvThumbnailPanel.h"
 
 namespace mrv
 {
@@ -15,7 +15,7 @@ namespace mrv
     namespace panel
     {
 
-        class Stereo3DPanel : public PanelWidget
+        class Stereo3DPanel : public ThumbnailPanel
         {
         public:
             Stereo3DPanel(ViewerUI* ui);
@@ -26,19 +26,9 @@ namespace mrv
             void add_controls() override;
 
             void refresh();
-
             void redraw();
 
-            void stereo3DThumbnail(
-                const int64_t id,
-                const std::vector<
-                    std::pair<otime::RationalTime, Fl_RGB_Image*> >& thumbnails,
-                ClipButton* w);
-
         private:
-            void cancel_thumbnails();
-            void clear_controls();
-
             MRV2_PRIVATE();
         };
 

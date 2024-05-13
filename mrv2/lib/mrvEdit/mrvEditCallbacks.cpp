@@ -2274,14 +2274,38 @@ namespace mrv
     }
 
     int calculate_edit_viewport_size(ViewerUI* ui)
-    {
-        // Some constants, as Darby does not expose this in tlRender.
-        const float pixels_unit = ui->uiTimeline->pixels_per_unit();
-        const int kTrackInfoHeight = 21 * pixels_unit;
-        const int kClipInfoHeight = 21 * pixels_unit;
+    { //
+        const timelineui::ItemOptions& options =
+            ui->uiTimeline->getItemOptions();
+
+#if 0
+        std::cerr << " trackInfo=" << options.trackInfo << std::endl;
+        std::cerr << "  clipInfo=" << options.clipInfo << std::endl;
+        std::cerr << "thumbnails=" << options.thumbnails << std::endl;
+        std::cerr << "thumbnailsHeight="
+                  << options.thumbnailHeight << std::endl;
+        std::cerr << "waveformHeight=" << options.waveformHeight << std::endl;
+        std::cerr << "      fontSize=" << options.fontSize << std::endl;
+        std::cerr << " clipRectScale=" << options.clipRectScale << std::endl;
+        std::cerr << "   transitions=" << options.transitions << std::endl;
+        std::cerr << "       markers=" << options.markers << std::endl;
+#endif
+
+        // This specifies whether to show Video Only or Video and Audio.
+        const int editView = ui->uiPrefs->uiPrefsEditView->value();
+
+        const float pixels_unit = ui->uiView->pixels_per_unit();
+
+        // Some constants, as Darby does not yet expose this in tlRender.
+        const int kMargin = 4;
+        const int kTrackInfoHeight = 20 + kMargin;
+        const int kClipInfoHeight = 16 + kMargin;
         const int kTransitionsHeight = 30;
         const int kAudioGapOnlyHeight = 20;
         const int kMarkerHeight = 24;
+
+        const int kVideoHeight = options.thumbnailHeight;
+        const int kAudioHeight = options.waveformHeight + kMargin;
 
         int H = kMinEditModeH; // timeline height
         if (editMode == EditMode::kTimeline)
@@ -2293,21 +2317,12 @@ namespace mrv
         if (!player)
             return H;
 
-        const Fl_Tile* tile = ui->uiTileGroup;
-        const int tileH = tile->h(); // Tile Height (ie. View and Edit viewport)
-
+        // Accumulated variables counting total height of each track.
         int videoHeight = 0;
         int audioHeight = 0;
         int markersHeight = 0;
         int transitionsHeight = 0;
 
-        const int editView = ui->uiPrefs->uiPrefsEditView->value();
-
-        // Shift the view up to see the video thumbnails and audio waveforms
-        const double pixelRatio = ui->uiTimeline->pixels_per_unit();
-        const int maxTileHeight = tileH - 20;
-        const timelineui::ItemOptions options =
-            ui->uiTimeline->getItemOptions();
         auto timeline = player->getTimeline();
 
         // Check first if the timeline is an audio only timeline.
@@ -2336,7 +2351,7 @@ namespace mrv
                     if (options.clipInfo)
                         videoHeight += kClipInfoHeight;
                     if (options.thumbnails)
-                        videoHeight += options.thumbnailHeight;
+                        videoHeight += kVideoHeight / pixels_unit;
                     visibleTrack = true;
                 }
                 else if (
@@ -2349,9 +2364,9 @@ namespace mrv
                             audioHeight += kTrackInfoHeight;
                         if (options.clipInfo)
                             audioHeight += kClipInfoHeight;
-                        bool hasWaveform = false;
                         if (options.thumbnails)
                         {
+                            bool hasWaveform = false;
                             for (const auto& trackChild : track->children())
                             {
                                 if (const auto& clip =
@@ -2362,11 +2377,12 @@ namespace mrv
                                     break;
                                 }
                             }
+                            if (hasWaveform)
+                                audioHeight += kAudioHeight / pixels_unit;
+                            else
+                                audioHeight +=
+                                    kAudioGapOnlyHeight / pixels_unit;
                         }
-                        if (hasWaveform)
-                            audioHeight += options.waveformHeight;
-                        else
-                            audioHeight += kAudioGapOnlyHeight;
 
                         visibleTrack = true;
                     }
@@ -2398,10 +2414,27 @@ namespace mrv
                     for (const auto& child : track->children())
                     {
                         if (const auto& transition =
-                                dynamic_cast<otio::Transition*>(child.value))
+                            dynamic_cast<otio::Transition*>(child.value))
                         {
-                            found = true;
-                            break;
+                            bool visibleTrack = false;
+                            if (otio::Track::Kind::video == track->kind())
+                            {
+                                visibleTrack = true;
+                            }
+                            else if (
+                                otio::Track::Kind::audio == track->kind() &&
+                                (editView >= 1 || audioOnly))
+                            {
+                                if (track->children().size() > 0)
+                                {
+                                    visibleTrack = true;
+                                }
+                            }
+                            if (visibleTrack)
+                            {
+                                found = true;
+                                break;
+                            }
                         }
                     }
                     if (found)
@@ -2412,8 +2445,24 @@ namespace mrv
             }
         }
 
-        H += (videoHeight + audioHeight + markersHeight + transitionsHeight) /
-             pixelRatio;
+        // Now add up all heights.
+        H += videoHeight + audioHeight + markersHeight + transitionsHeight;
+
+#if 0
+        std::cerr << "    kMargin=" << kMargin << std::endl;
+        std::cerr << "videoHeight=" << videoHeight << std::endl;
+        std::cerr << "audioHeight=" << audioHeight << std::endl;
+        std::cerr << "transitionsHeight=" << transitionsHeight << std::endl;
+        std::cerr << "markersHeight=" << markersHeight << std::endl;
+        std::cerr << "FINAL H=" << H << std::endl;
+#endif
+
+        // Sanity check... make sure we don't go bigger than the max.
+        const Fl_Tile* tile = ui->uiTileGroup;
+        const int tileH = tile->h();
+        // Shift the view up to see the video thumbnails and audio waveforms.
+        // We need to substrac dragbar and timeline to leave room.
+        const int maxTileHeight = tileH - kMinEditModeH;
 
         if (H >= maxTileHeight)
         {
@@ -2422,17 +2471,22 @@ namespace mrv
         return H;
     }
 
-    void set_edit_mode_cb(EditMode mode, ViewerUI* ui)
+    void set_edit_button(EditMode mode, ViewerUI* ui)
     {
-        if (ui->uiView->getPresentationMode())
-            return;
-
         Fl_Button* b = ui->uiEdit;
 
         bool active = (mode == EditMode::kFull || mode == EditMode::kSaved);
         if (mode == EditMode::kSaved && editModeH == kMinEditModeH)
             active = false;
 
+        if (active)
+        {
+            int savedH = calculate_edit_viewport_size(ui);
+            int H = ui->uiTimelineGroup->h();
+            if (H == kMinEditModeH || !ui->uiTimelineGroup->visible())
+                active = false;
+        }
+        
         b->value(active);
         if (active)
         {
@@ -2443,57 +2497,201 @@ namespace mrv
             b->labelcolor(FL_FOREGROUND_COLOR);
         }
         b->redraw();
+    }
 
-        Fl_Tile* tile = ui->uiTileGroup;
-        Fl_Group* timeline = ui->uiTimelineGroup;
-        Fl_Flex* view = ui->uiViewGroup;
-        int tileY = tile->y();
-        int oldY = timeline->y();
-        int timelineH = timeline->h();
-        int tileH = tile->h();
+    void set_edit_mode_cb(EditMode mode, ViewerUI* ui)
+    {
+        const int kDragBarHeight = 8;
+
+        Fl_Tile* tileGroup = ui->uiTileGroup;
+        Fl_Group* TimelineGroup = ui->uiTimelineGroup;
+        Fl_Flex* viewGroup = ui->uiViewGroup;
+        if (ui->uiBottomBar->visible())
+        {
+            if (!tileGroup->visible())
+                tileGroup->show();
+            if (!viewGroup->visible())
+                viewGroup->show();
+        }
+
+        int tileGroupY = tileGroup->y();
+        int oldY = TimelineGroup->y();
+        int timelineH = TimelineGroup->h();
+        int tileGroupH = tileGroup->h();
         int H = kMinEditModeH; // timeline height
-        int viewH = H;
-        bool showTimeline = ui->uiMain->visible() && mode != EditMode::kNone;
+        int viewGroupH = H;
         auto player = ui->uiView->getTimelinePlayer();
         if (mode == EditMode::kFull && player)
         {
-            if (showTimeline)
-                timeline->show();
             editMode = mode;
             H = calculate_edit_viewport_size(ui);
-            editModeH = viewH = H;
+            editModeH = viewGroupH = H;
         }
         else if (mode == EditMode::kSaved)
         {
-            H = viewH = editModeH;
-            if (showTimeline)
-                timeline->show();
+            H = viewGroupH = editModeH;
         }
         else if (mode == EditMode::kNone)
         {
-            viewH = 0;
-            ui->uiTimeline->hide();
-            timeline->hide();
+            H = viewGroupH = 0;
         }
         else
         {
             H = kMinEditModeH; // timeline height
-            viewH = editModeH = H;
-
-            // EditMode::kTimeline
-            if (showTimeline)
-                timeline->show();
+            viewGroupH = editModeH = H;
         }
 
-        if (showTimeline)
-            ui->uiTimeline->show();
+        int oldy = TimelineGroup->y();
+        int newY = tileGroupY + tileGroupH - H;
+        viewGroupH = tileGroupH - viewGroupH;
 
-        int newY = tileY + tileH - H;
+#if 0
+        std::cerr << "------------------------------------------------"
+                  << "presentation=" << ui->uiView->getPresentationMode()
+                  << " active=" << active << std::endl;
+        std::cerr << "1 ViewGroup->visible()="
+                  << viewGroup->visible() << std::endl;
+        std::cerr << "1 TimelineGroup->visible()="
+                  << TimelineGroup->visible() << std::endl;
+        std::cerr << "1 BottomBar->visible()="
+                  << ui->uiBottomBar->visible() << std::endl;
+        std::cerr << "1   editMode=" << editMode << std::endl;
+        std::cerr << "1       oldY=" << oldY - tileGroupY << std::endl;
+        std::cerr << "1       newY=" << newY - tileGroupY << std::endl;
+        std::cerr << "1  editModeH=" << editModeH << std::endl;
+        std::cerr << "1          H=" << H << std::endl;
+        assert( viewGroupH + H == tileGroupH );
+        assert( viewGroup->y() + viewGroupH == newY );
+#endif
 
-        view->resize(view->x(), view->y(), view->w(), tileH - viewH);
-        if (timeline->visible())
-            timeline->resize(timeline->x(), newY, timeline->w(), H);
+        viewGroup->resize(
+            viewGroup->x(), viewGroup->y(), viewGroup->w(), viewGroupH);
+        TimelineGroup->resize(TimelineGroup->x(), newY, TimelineGroup->w(), H);
 
+#if 0
+        std::cerr << "AFTER RESIZE uiMain->h()="
+                  << ui->uiMain->h() << std::endl;
+        std::cerr << "AFTER RESIZE viewGroup->x()="
+                  << viewGroup->x() << std::endl;
+        std::cerr << "AFTER RESIZE viewGroup->y()="
+                  << viewGroup->y() << std::endl;
+        std::cerr << "AFTER RESIZE viewGroup->w()="
+                  << viewGroup->w() << std::endl;
+        std::cerr << "AFTER RESIZE viewGroup->h()="
+                  << viewGroup->h() << std::endl;
+        std::cerr << "AFTER RESIZE view->x()="
+                  << ui->uiView->x() << std::endl;
+        std::cerr << "AFTER RESIZE view->y()="
+                  << ui->uiView->y() << std::endl;
+        std::cerr << "AFTER RESIZE view->w()="
+                  << ui->uiView->w() << std::endl;
+        std::cerr << "AFTER RESIZE view->h()="
+                  << ui->uiView->h() << std::endl;
+        std::cerr << "AFTER RESIZE TimelineGroup->x()="
+                  << TimelineGroup->x() << std::endl;
+        std::cerr << "AFTER RESIZE TimelineGroup->y()="
+                  << TimelineGroup->y() << std::endl;
+        std::cerr << "AFTER RESIZE TimelineGroup->w()="
+                  << TimelineGroup->w() << std::endl;
+        std::cerr << "AFTER RESIZE TimelineGroup->h()="
+                  << TimelineGroup->h() << std::endl;
+#endif
+
+        // This mess is to work around macOS issues.  Unhiding TimelineGroup
+        // should be enough to also unhide the timeline.
+#if 0
+        if (ui->uiBottomBar->visible())
+        {
+            TimelineGroup->show();
+        }
+        else if (ui->uiMain->visible())
+        {
+            TimelineGroup->hide();
+        }
+#else
+        if (ui->uiMain->visible())
+        {
+            if (ui->uiBottomBar->visible())
+            {
+                if (!ui->uiTimelineGroup->visible())
+                    TimelineGroup->show();
+                if (!ui->uiTimeline->visible())
+                {
+                    ui->uiTimeline->show();
+                }
+            }
+            else
+            {
+                if (ui->uiTimelineGroup->visible())
+                    TimelineGroup->hide();
+                if (ui->uiTimeline->visible())
+                {
+                    ui->uiTimeline->hide();
+                }
+            }
+        }
+#endif
+
+        viewGroup->layout();
+
+#if 0
+        std::cerr << "AFTER LAYOUT viewGroup->x()="
+                  << viewGroup->x() << std::endl;
+        std::cerr << "AFTER LAYOUT viewGroup->y()="
+                  << viewGroup->y() << std::endl;
+        std::cerr << "AFTER LAYOUT viewlineGroup->w()="
+                  << viewGroup->w() << std::endl;
+        std::cerr << "AFTER LAYOUT viewGroup->h()="
+                  << viewGroup->h() << std::endl;
+        std::cerr << "AFTER LAYOUT view->x()="
+                  << ui->uiView->x() << std::endl;
+        std::cerr << "AFTER LAYOUT view->y()="
+                  << ui->uiView->y() << std::endl;
+        std::cerr << "AFTER LAYOUT view->w()="
+                  << ui->uiView->w() << std::endl;
+        std::cerr << "AFTER LAYOUT view->h()="
+                  << ui->uiView->h() << std::endl;
+#endif
+
+        tileGroup->init_sizes();
+
+#if 0
+        std::cerr << "AFTER INIT tileGroupY=" << tileGroupY << std::endl;
+        std::cerr << "AFTER INIT tileGroupH=" << tileGroupH << std::endl;
+        std::cerr << "AFTER INIT_SIZES viewGroup->x()="
+                  << viewGroup->x() << std::endl;
+        std::cerr << "AFTER INIT_SIZES viewGroup->y()="
+                  << viewGroup->y() << std::endl;
+        std::cerr << "AFTER INIT_SIZES viewlineGroup->w()="
+                  << viewGroup->w() << std::endl;
+        std::cerr << "AFTER INIT_SIZES viewGroup->h()="
+                  << viewGroup->h() << std::endl;
+        std::cerr << "AFTER INIT_SIZES view->x()="
+                  << ui->uiView->x() << std::endl;
+        std::cerr << "AFTER INIT_SIZES view->y()="
+                  << ui->uiView->y() << std::endl;
+        std::cerr << "AFTER INIT_SIZES view->w()="
+                  << ui->uiView->w() << std::endl;
+        std::cerr << "AFTER INIT_SIZES view->h()="
+                  << ui->uiView->h() << std::endl;
+        std::cerr << "AFTER INIT_SIZES TimelineGroup->x()="
+                  << TimelineGroup->x() << std::endl;
+        std::cerr << "AFTER INIT_SIZES TimelineGroup->y()="
+                  << TimelineGroup->y() << std::endl;
+        std::cerr << "AFTER INIT_SIZES TimelineGroup->w()="
+                  << TimelineGroup->w() << std::endl;
+        std::cerr << "AFTER INIT_SIZES TimelineGroup->h()="
+                  << TimelineGroup->h() << std::endl;
+#endif
+
+        // This is needed as XWayland and Wayland would leave traces of the
+        // toolbar icons.
+        TimelineGroup->redraw();
+
+        // Change the edit button status
+        set_edit_button(editMode, ui);
+        
+        // EditMode::kNone is used when we go to presentation mode.
         if (mode != EditMode::kNone)
         {
             Message msg;
@@ -2503,11 +2701,6 @@ namespace mrv
             tcp->pushMessage(msg);
         }
 
-        view->layout();
-        tile->init_sizes();
-
-        if (timeline->visible())
-            timeline->redraw(); // needed
     }
 
 } // namespace mrv

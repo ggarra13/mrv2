@@ -98,12 +98,18 @@ namespace mrv
         Fl_SuperClass(X, Y, W, H, L),
         _p(new Private)
     {
+        TLRENDER_P();
+        
+        p.ui = App::ui;
     }
 
     TimelineViewport::TimelineViewport(int W, int H, const char* L) :
         Fl_SuperClass(W, H, L),
         _p(new Private)
     {
+        TLRENDER_P();
+        
+        p.ui = App::ui;
     }
 
     TimelineViewport::~TimelineViewport()
@@ -278,9 +284,9 @@ namespace mrv
         redraw();
     }
 
-    void TimelineViewport::cursor(Fl_Cursor x) const noexcept
+    void TimelineViewport::set_cursor(Fl_Cursor n) const noexcept
     {
-        window()->cursor(x);
+        window()->cursor(n);
     }
 
     void TimelineViewport::_scrub(float dx) noexcept
@@ -500,53 +506,38 @@ namespace mrv
         updatePlaybackButtons();
     }
 
-    void TimelineViewport::playBackwards() noexcept
+    void TimelineViewport::setPlayback(timeline::Playback value) noexcept
     {
         TLRENDER_P();
 
         if (!p.player)
             return;
 
-        _hidePixelBar();
+        if (value == timeline::Playback::Stop)
+            _showPixelBar();
+        else
+            _hidePixelBar();
         p.droppedFrames = 0;
 
-        p.player->setPlayback(timeline::Playback::Reverse);
+        p.player->setPlayback(value);
 
         updatePlaybackButtons();
-
         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
+    }
+
+    void TimelineViewport::playBackwards() noexcept
+    {
+        setPlayback(timeline::Playback::Reverse);
     }
 
     void TimelineViewport::stop() noexcept
     {
-        TLRENDER_P();
-        if (!p.player)
-            return;
-
-        p.player->setPlayback(timeline::Playback::Stop);
-
-        _showPixelBar();
-        p.droppedFrames = 0;
-
-        updatePlaybackButtons();
-
-        p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
+        setPlayback(timeline::Playback::Stop);
     }
 
     void TimelineViewport::playForwards() noexcept
     {
-        TLRENDER_P();
-
-        if (!p.player)
-            return;
-
-        _hidePixelBar();
-        p.droppedFrames = 0;
-
-        p.player->setPlayback(timeline::Playback::Forward);
-
-        updatePlaybackButtons();
-        p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
+        setPlayback(timeline::Playback::Forward);
     }
 
     void TimelineViewport::_showPixelBar() const noexcept
@@ -596,7 +587,6 @@ namespace mrv
             if (visiblePixelBar)
             {
                 toggle_pixel_bar(nullptr, p.ui);
-                Fl::flush();
             }
         }
         else
@@ -604,7 +594,6 @@ namespace mrv
             if (!visiblePixelBar)
             {
                 toggle_pixel_bar(nullptr, p.ui);
-                Fl::flush();
             }
         }
     }
@@ -912,14 +901,16 @@ namespace mrv
         if (p.actionMode == ActionMode::kScrub ||
             p.actionMode == ActionMode::kSelection ||
             p.actionMode == ActionMode::kRotate)
-            cursor(FL_CURSOR_CROSS);
+        {
+            set_cursor(FL_CURSOR_CROSS);
+        }
         // else if ( p.actionMode == ActionMode::kRotate )
         //     cursor( FL_CURSOR_MOVE );
         else if (p.actionMode == ActionMode::kText)
-            cursor(FL_CURSOR_INSERT);
+            set_cursor(FL_CURSOR_INSERT);
         else
         {
-            // Only hide the cursor if we are on the view widgets.
+            // Only hide the cursor if we are NOT on the view widgets.
             auto primary = p.ui->uiView;
             Viewport* secondary = nullptr;
             if (_p->ui->uiSecondary && _p->ui->uiSecondary->window()->visible())
@@ -931,7 +922,7 @@ namespace mrv
             if (widget != primary && (secondary && widget != secondary))
                 return;
             if (p.player)
-                cursor(FL_CURSOR_NONE);
+                set_cursor(FL_CURSOR_NONE);
         }
     }
 
@@ -1002,15 +993,7 @@ namespace mrv
         const TimelinePlayer* sender) noexcept
     {
         TLRENDER_P();
-        
-#ifdef DEBUG_VIDEO_CALLBACK
-        if (!p.videoData.empty() && !values.empty() &&
-            values[0].time != p.videoData[0].time)
-        {
-            std::cerr << values[0].time << std::endl;
-        }
-#endif
-        
+
         p.videoData = values;
 
         if (p.resizeWindow)
@@ -1030,7 +1013,7 @@ namespace mrv
             p.switchClip = false;
             p.droppedFrames = 0;
         }
-        
+
         _getTags();
         int layerId = sender->videoLayer();
         p.missingFrame = false;
@@ -1083,6 +1066,8 @@ namespace mrv
                     p.lastVideoData = values[0];
                 }
             }
+            
+            redraw();
         }
 
         if (panel::imageInfoPanel)
@@ -1138,12 +1123,6 @@ namespace mrv
                     }
                 }
             }
-        }
-        if (p.ui->uiBottomBar->visible())
-        {
-            TimelineClass* c = p.ui->uiTimeWindow;
-            c->uiFrame->setTime(values[0].time);
-            p.ui->uiTimeline->redraw();
         }
 
         redraw();
@@ -1326,16 +1305,15 @@ namespace mrv
 
         if (!renderSize.isValid())
             return;
-
+        
         Fl_Double_Window* mw = p.ui->uiMain;
         int screen = mw->screen_num();
-        float scale = Fl::screen_scale(screen);
 
         int W = renderSize.w;
         int H = renderSize.h;
 
-        int minx, miny, maxW, maxH, posX, posY;
-        Fl::screen_work_area(minx, miny, maxW, maxH, screen);
+        int minX, minY, maxW, maxH, posX, posY;
+        Fl::screen_work_area(minX, minY, maxW, maxH, screen);
 
         PreferencesUI* uiPrefs = p.ui->uiPrefs;
         if (!desktop::Wayland() && uiPrefs->uiWindowFixedPosition->value())
@@ -1359,7 +1337,7 @@ namespace mrv
         maxH -= dH;
         posX += dW / 2;
 #ifdef _WIN32
-        miny += dH - dW / 2;
+        minY += dH - dW / 2;
 #endif
 
         // Take into account the different UI bars
@@ -1395,41 +1373,27 @@ namespace mrv
             H = (int)uiPrefs->uiWindowYSize->value();
         }
 
-        maxW = (int)(maxW / scale);
-        if (W < 690)
-        {
-            p.frameView = true;
-            W = 690;
-        }
-        else if (W > maxW)
-        {
-            p.frameView = true;
-            W = maxW;
-        }
-
-        maxH = (int)(maxH / scale);
-        if (H < 602)
-        {
-            p.frameView = true;
-            H = 602;
-        }
-        else if (H > maxH)
-        {
-            p.frameView = true;
-            H = maxH;
-        }
-
         if (W == renderSize.w)
         {
             p.frameView = true;
         }
 
+        if (W < 690)
+        {
+            p.frameView = true;
+            W = 690;
+        }
+
+        if (H < 602)
+        {
+            p.frameView = true;
+            H = 602;
+        }
+
         if (p.ui->uiBottomBar->visible())
         {
-            int timelineSize = calculate_edit_viewport_size(p.ui);
-            H += timelineSize;
-            if (H > maxH)
-                H = maxH;
+            int timelineHeight = calculate_edit_viewport_size(p.ui);
+            H += timelineHeight; 
         }
 
         //
@@ -1440,17 +1404,47 @@ namespace mrv
         if (H > maxH)
             H = maxH;
 
-        if (posX + W > maxW)
-            posX = minx;
-        if (posY + H > maxH)
-            posY = miny;
+        if (posX < minX)
+            posX = minX;
 
+        if (posY < minY)
+            posY = minY;
+
+        if (posX + W > minX + maxW)
+        {
+            p.frameView = true;
+            posX = minX;
+        }
+        if (posY + H > minY + maxH)
+        {
+            p.frameView = true;
+            posY = minY;
+        }
+
+        if (posX + W + dW > minX + maxW)
+        {
+            p.frameView = true;
+            W = minX + maxW + dW - posX;
+            p.frameView = true;
+        }
+        if (posY + H + dH > minY + maxH)
+        {
+            posY = minY + dH;
+            H = minY + maxH + dH - posY;
+            p.frameView = true;
+        }
+        
         mw->resize(posX, posY, W, H);
 
         p.ui->uiRegion->layout();
 
-        set_edit_mode_cb(editMode, p.ui);
+        if (p.frameView)
+        {
+            _frameView();
+        }
 
+        set_edit_mode_cb(editMode, p.ui);
+        
         p.resizeWindow = false;
     }
 
@@ -2093,6 +2087,7 @@ namespace mrv
             {
                 hide_ui_state(p.ui);
             }
+            p.ui->uiTimeline->hide();
             _setFullScreen(active);
             p.presentation = true;
             p.presentationTime = std::chrono::high_resolution_clock::now();
