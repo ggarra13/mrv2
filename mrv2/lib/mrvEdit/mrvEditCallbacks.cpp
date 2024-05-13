@@ -2298,13 +2298,14 @@ namespace mrv
 
         // Some constants, as Darby does not yet expose this in tlRender.
         const int kTrackInfoHeight = 20 * pixels_unit;
-        const int kClipInfoHeight = 8 * pixels_unit;
+        const int kClipInfoHeight = 16 * pixels_unit;
         const int kTransitionsHeight = 30;
         const int kAudioGapOnlyHeight = 20;
         const int kMarkerHeight = 24;
+        const int kMargin = 4;
 
-        const int kVideoHeight = options.thumbnailHeight;
-        const int kAudioHeight = options.waveformHeight;
+        const int kVideoHeight = options.thumbnailHeight + kMargin;
+        const int kAudioHeight = options.waveformHeight  + kMargin;
 
         int H = kMinEditModeH; // timeline height
         if (editMode == EditMode::kTimeline)
