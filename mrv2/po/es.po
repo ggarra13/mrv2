@@ -3414,23 +3414,20 @@ msgstr "1,66"
 msgid "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 msgstr "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 
-#, fuzzy
 msgid "Cache:"
-msgstr "Cache"
+msgstr "Cache:"
 
 msgid "    Used: %.2g of %zu Gb"
-msgstr ""
+msgstr "    Usado: %.2g of %zu Gb"
 
-msgid "    Percentage.: %.2g %%"
-msgstr ""
+msgid "    Percentage: %.2g %%"
+msgstr "    Porcentaje: %.2g %%"
 
-#, fuzzy, c-format
 msgid "    Ahead    V: % 4<PRIu64>    A: % 4<PRIu64>"
-msgstr "Adelante    V: % 4<PRIu64>    A: % 4<PRIu64>"
+msgstr "   Adelante V: % 4<PRIu64>    A: % 4<PRIu64>"
 
-#, fuzzy, c-format
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
-msgstr "Atrás          V: % 4<PRIu64>    A: % 4<PRIu64> "
+msgstr "   Atrás    V: % 4<PRIu64>    A: % 4<PRIu64> "
 
 msgid "Edit Text"
 msgstr "Editar Texto"

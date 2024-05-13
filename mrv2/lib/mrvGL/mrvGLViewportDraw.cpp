@@ -1021,14 +1021,14 @@ namespace mrv
                 App::app->getContext()->getSystem<io::System>();
             const auto& cache = ioSystem->getCache();
             const size_t maxCache = cache->getMax() / memory::gigabyte;
-            const float  pctCache = cache->getPercentage();
+            const float pctCache = cache->getPercentage();
             const float usedCache = maxCache * (pctCache / 100.F);
             snprintf(
                 buf, 512, _("    Used: %.2g of %zu Gb"), usedCache, maxCache);
             _drawText(
                 p.fontSystem->getGlyphs(buf, fontInfo), pos, lineHeight,
                 labelColor);
-            snprintf(buf, 512, _("    Percentage.: %.2g %%"), pctCache);
+            snprintf(buf, 512, _("    Percentage: %.2g %%"), pctCache);
             _drawText(
                 p.fontSystem->getGlyphs(buf, fontInfo), pos, lineHeight,
                 labelColor);
@@ -1044,7 +1044,6 @@ namespace mrv
             _drawText(
                 p.fontSystem->getGlyphs(buf, fontInfo), pos, lineHeight,
                 labelColor);
-            
         }
 
         if (p.hud & HudDisplay::kAttributes)
