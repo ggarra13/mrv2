@@ -3370,9 +3370,8 @@ msgstr "Cache:"
 msgid "    Used: %.2g of %zu Gb"
 msgstr "    Used: %.2g of %zu Gb"
 
-#, fuzzy, c-format
 msgid "    Percentage: %.2g %%"
-msgstr "    Percentage.: %.2g %%"
+msgstr "    Percentage: %.2g %%"
 
 msgid "    Ahead    V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "    Ahead    V: % 4<PRIu64>    A: % 4<PRIu64>"
