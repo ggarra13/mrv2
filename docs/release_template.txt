@@ -3,7 +3,7 @@ mrv2 v1.1.6
 
 mrv2 is an open source professional player and review tool for vfx, animation and computer graphics for Windows, Linux and macOS.
 
-This is a major update, improving reverse playback on ALL movies completely beating OpenRV now, fixes NDI playback with audio, added Cache display to the HUD, adds showing .otio markers properly, many fixes to Presentation Mode, etc. 
+This is a major update, improving reverse playback on ALL movies completely beating OpenRV now, fixes NDI playback with audio, added Cache display to the HUD, adds showing .otio markers properly, many fixes to Presentation Mode, and many, many bug fixs. 
 
 Sample mrv2 1.1.6 vs. OpenRV 2.0 Movie comparisons:
 
