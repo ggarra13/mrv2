@@ -1336,9 +1336,6 @@ namespace mrv
         maxW -= dW;
         maxH -= dH;
         posX += dW / 2;
-#ifdef _WIN32
-        minY += dH - dW / 2;
-#endif
 
         // Take into account the different UI bars
         if (p.ui->uiMenuGroup->visible())
