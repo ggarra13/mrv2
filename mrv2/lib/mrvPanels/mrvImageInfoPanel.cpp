@@ -86,11 +86,6 @@ namespace mrv
         static const unsigned int kSizeOfRowColors =
             (sizeof(kRowColors) / sizeof(Fl_Color));
 
-        ViewerUI* ImageInfoPanel::main() const
-        {
-            return _p->ui;
-        }
-
         enum MatchType { kMatchAll, kMatchAttribute, kMatchValue };
 
         int idx = -1;
@@ -601,7 +596,7 @@ namespace mrv
         static void change_first_frame_cb(HorSlider* w, ImageInfoPanel* info)
         {
             double f = w->value();
-            ViewerUI* ui = info->main();
+            ViewerUI* ui = App::ui;
             TimelineClass* c = ui->uiTimeWindow;
             c->uiStartFrame->value(f);
             c->uiStartFrame->do_callback();
@@ -610,7 +605,7 @@ namespace mrv
         static void change_last_frame_cb(HorSlider* w, ImageInfoPanel* info)
         {
             double f = w->value();
-            ViewerUI* ui = info->main();
+            ViewerUI* ui = App::ui;
             TimelineClass* c = ui->uiTimeWindow;
             c->uiEndFrame->value(f);
             c->uiEndFrame->do_callback();
@@ -619,7 +614,7 @@ namespace mrv
         static void change_fps_cb(HorSlider* w, ImageInfoPanel* info)
         {
             double f = w->value();
-            ViewerUI* ui = info->main();
+            ViewerUI* ui = App::ui;
             TimelineClass* c = ui->uiTimeWindow;
             c->uiFPS->value(f);
             auto player = ui->uiView->getTimelinePlayer();

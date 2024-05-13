@@ -2,6 +2,8 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <tlIO/System.h>
+
 #include <tlCore/String.h>
 #include <tlCore/Mesh.h>
 #include <tlGL/Util.h>
@@ -1012,18 +1014,37 @@ namespace mrv
                     behindAudioFrames += frame - i.start_time().to_frames();
                 }
             }
+            _drawText(
+                p.fontSystem->getGlyphs(_("Cache:"), fontInfo), pos, lineHeight,
+                labelColor);
+            const auto ioSystem =
+                App::app->getContext()->getSystem<io::System>();
+            const auto& cache = ioSystem->getCache();
+            const size_t maxCache = cache->getMax() / memory::gigabyte;
+            const float  pctCache = cache->getPercentage();
+            const float usedCache = maxCache * (pctCache / 100.F);
             snprintf(
-                buf, 512, _("Ahead    V: % 4" PRIu64 "    A: % 4" PRIu64),
+                buf, 512, _("    Used: %.2g of %zu Gb"), usedCache, maxCache);
+            _drawText(
+                p.fontSystem->getGlyphs(buf, fontInfo), pos, lineHeight,
+                labelColor);
+            snprintf(buf, 512, _("    Percentage.: %.2g %%"), pctCache);
+            _drawText(
+                p.fontSystem->getGlyphs(buf, fontInfo), pos, lineHeight,
+                labelColor);
+            snprintf(
+                buf, 512, _("    Ahead    V: % 4" PRIu64 "    A: % 4" PRIu64),
                 aheadVideoFrames, aheadAudioFrames);
             _drawText(
                 p.fontSystem->getGlyphs(buf, fontInfo), pos, lineHeight,
                 labelColor);
             snprintf(
-                buf, 512, _("Behind   V: % 4" PRIu64 "    A: % 4" PRIu64),
+                buf, 512, _("    Behind   V: % 4" PRIu64 "    A: % 4" PRIu64),
                 behindVideoFrames, behindAudioFrames);
             _drawText(
                 p.fontSystem->getGlyphs(buf, fontInfo), pos, lineHeight,
                 labelColor);
+            
         }
 
         if (p.hud & HudDisplay::kAttributes)

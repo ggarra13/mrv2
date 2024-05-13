@@ -512,7 +512,8 @@ namespace mrv
     void TimelineWidget::repositionThumbnail()
     {
         TLRENDER_P();
-        if (Fl::belowmouse() == this && p.player)
+        if (Fl::belowmouse() == this && p.player &&
+            p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
         {
             int X, Y, W, H;
             _getThumbnailPosition(X, Y, W, H);
