@@ -16,7 +16,7 @@ namespace mrv
 
     void StatusBar::all_ok_cb(StatusBar* o)
     {
-        o->default_message();
+        o->restore_message();
     }
 
     StatusBar::StatusBar(int X, int Y, int W, int H, const char* L) :
@@ -30,11 +30,19 @@ namespace mrv
         seconds_ = seconds;
     }
 
-    void StatusBar::default_message()
+    void StatusBar::restore_message()
     {
         std::string label = _("Everything OK. ");
         label += os::getDesktop();
+#ifdef TLRENDER_GL
+        label += " - " + os::getGPUVendor();
+#endif
         copy_label(label.c_str());
+    }
+    
+    void StatusBar::default_message()
+    {
+        Fl::add_timeout(0.25, (Fl_Timeout_Handler)all_ok_cb, this);
     }
     
     void StatusBar::save_colors()

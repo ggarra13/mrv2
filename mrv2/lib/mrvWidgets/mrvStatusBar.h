@@ -38,6 +38,9 @@ namespace mrv
         //! Set up the default status message.
         void default_message();
 
+        //! Restore the default status message.
+        void restore_message();
+        
         //! Store a message in the status bar (a FLTK label)
         void error(const char* msg);
 

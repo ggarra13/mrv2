@@ -18,10 +18,31 @@
 
 #include "mrvUI/mrvDesktop.h"
 
+#ifdef TLRENDER_GL
+#    include <tlGL/Init.h>
+#    include <FL/gl.h>
+#endif
+
+
 namespace mrv
 {
     namespace os
     {
+        std::string getGPUVendor()
+        {
+            std::string out = _("Unknown");
+
+            tl::gl::initGLAD();
+
+            // Get OpenGL information
+            const char* vendorString = (char*)glGetString(GL_VENDOR);
+            if (vendorString)
+                out = vendorString;
+
+            out = "GPU: " + out;
+            return out; 
+        }
+        
         std::string getDesktop()
         {
             std::string out = _("Desktop: ");
