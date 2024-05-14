@@ -6,6 +6,7 @@
 #include <tlCore/String.h>
 
 #include <FL/Fl_Pixmap.H>
+#include <FL/fl_utf8.h>
 
 #include "mrvFLU/flu_pixmaps.h"
 #include "mrvFLU/flu_file_chooser_pixmaps.h"
@@ -48,6 +49,35 @@ Fl_Image* usd = nullptr;
 
 static const int kColorOne = fl_rgb_color(200, 200, 200);
 static const int kColorTwo = fl_rgb_color(180, 180, 180);
+
+namespace
+{
+
+    std::string shortenString(const std::string& filename, int maxW)
+    {
+        int H = 0;
+        int W = 0;
+
+        std::string shortened = filename;
+        fl_measure(shortened.c_str(), W, H);
+        
+        const char* start = filename.c_str();
+        const char* end = start + filename.size();
+        const char* pos = end;
+
+        // Loop until target length is reached or beginning is reached
+        while (W > maxW && pos > start) {
+            // Move back one character (considering UTF-8 encoding)
+            pos = fl_utf8back(pos-1, start, pos);
+            shortened = std::string(start, pos) + "...";
+            W = 0;
+            fl_measure(shortened.c_str(), W, H);
+        }
+
+        return shortened;
+    }
+}
+
 
 struct Flu_Entry::Private
 {
@@ -570,28 +600,18 @@ void Flu_Entry::updateSize()
 
     // measure the name and see if we need a truncated version
     int W = 0;
-    H = 0;
     fl_measure(filename.c_str(), W, H);
-    if (W > nameW - iW)
+    const int maxW = nameW - iW;
+    if (W > maxW)
     {
         // progressively strip characters off the end of the name until
         // it fits with "..." at the end
-        if (altname[0] != '\0')
+        if (!altname.empty())
             shortname = altname;
         else
             shortname = filename;
 
-        size_t len = shortname.size();
-        while (W > (nameW - iW) && len > 3)
-        {
-            shortname[len - 3] = '.';
-            shortname[len - 2] = '.';
-            shortname[len - 1] = '.';
-            shortname[len] = '\0';
-            len--;
-            W = 0;
-            fl_measure(shortname.c_str(), W, H);
-        }
+        shortname = shortenString(shortname, maxW);
     }
     else
         shortname = "";
@@ -603,22 +623,12 @@ void Flu_Entry::updateSize()
         W = 0;
         H = 0;
         fl_measure(description.c_str(), W, H);
-        if (W > typeW - 4)
+	const int maxW = typeW - 4;
+        if (W > maxW)
         {
             // progressively strip characters off the end of the description
             // until it fits with "..." at the end
-            shortDescription = description;
-            size_t len = shortDescription.size();
-            while (W > typeW - 4 && len > 3)
-            {
-                shortDescription[len - 3] = '.';
-                shortDescription[len - 2] = '.';
-                shortDescription[len - 1] = '.';
-                shortDescription[len] = '\0';
-                len--;
-                W = 0;
-                fl_measure(shortDescription.c_str(), W, H);
-            }
+            shortDescription = shortenString(description, maxW);
         }
     }
 
@@ -729,29 +739,21 @@ void Flu_Entry::draw()
         iW = icon->w() + 2;
     }
 
+    startRequest();
+    
     fl_font(textfont(), textsize());
-    // fl_color( textcolor() );
-
     fl_measure(filename.c_str(), W, H);
-    if (W > nameW - iW)
+    int maxW = nameW - iW;
+    if (W > maxW)
     {
         // progressively strip characters off the end of the name until
         // it fits with "..." at the end
-        if (altname[0] != '\0')
+        if (!altname.empty())
             shortname = altname;
         else
             shortname = filename;
-        size_t len = shortname.size();
-        while (W > (nameW - iW) && len > 3)
-        {
-            shortname[len - 3] = '.';
-            shortname[len - 2] = '.';
-            shortname[len - 1] = '.';
-            shortname[len] = '\0';
-            len--;
-            W = 0;
-            fl_measure(shortname.c_str(), W, H);
-        }
+        
+        shortname = shortenString(shortname, maxW);
     }
     else
         shortname = filename;
@@ -763,16 +765,16 @@ void Flu_Entry::draw()
                     shortname.substr(pos + 1, shortname.size());
         pos += 2;
     }
+ 
 
     fl_draw(shortname.c_str(), X, Y, nameW, h() - iH, FL_ALIGN_LEFT);
 
-    shortname = filename;
 
     X = x() + 4 + nameW;
 
     if (details)
     {
-        if (shortDescription[0] != '\0')
+        if (!shortDescription.empty())
             fl_draw(
                 shortDescription.c_str(), X, y(), typeW - 4, h(),
                 Fl_Align(FL_ALIGN_LEFT | FL_ALIGN_CLIP));
@@ -793,7 +795,6 @@ void Flu_Entry::draw()
             date.c_str(), X, y(), dateW - 4, h(),
             Fl_Align(FL_ALIGN_LEFT | FL_ALIGN_CLIP));
     }
-    redraw();
 }
 
 void Flu_Entry::startRequest()
@@ -869,10 +870,12 @@ void Flu_Entry::createdThumbnail(
         for (const auto& i : thumbnails)
         {
             icon = i.second;
+            updateSize();
             redraw();
-            Fl_Widget* p;
-            for (p = this; p = p->parent(); ++p)
-                p->redraw();
+            Fl_Group* g = chooser->getEntryGroup();
+            g->redraw();
+            Fl_Window* w = window();
+            w->redraw();
         }
     }
 }
