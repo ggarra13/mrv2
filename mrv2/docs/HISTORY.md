@@ -1,3 +1,16 @@
+v1.1.7
+======
+
+- Made mrv2's custom file requester create thumbnails on demand when they are on
+  view.  This helps for large files like many big USD files on disk or with
+  RAW files which are also slow to load.
+- Fixed mrv2's custom file requester thumbnails being too high.
+- Added custom RAW and several image missing formats to mrv2's custom file
+  requester.
+- Made thumbnail creation rotate the movies when the movie had an embedded
+  rotation tag.
+  
+
 v1.1.6
 ======
 

@@ -13,6 +13,7 @@ extern Fl_Pixmap preview_img, file_list_img, file_listwide_img, fileDetails,
     desktop, folder_closed, default_file, my_computer, computer, disk_drive,
     cd_drive, floppy_drive, removable_drive, ram_drive, network_drive,
     documents, little_favorites, little_desktop, reel, picture, music;
+extern Fl_Image* usd;
 
 class Fl_RGB_Image;
 class Flu_File_Chooser;

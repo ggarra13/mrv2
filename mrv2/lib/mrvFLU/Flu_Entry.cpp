@@ -1,5 +1,9 @@
 
+
+#include <mutex>
+
 #include <tlCore/Path.h>
+#include <tlCore/String.h>
 
 #include <FL/Fl_Pixmap.H>
 
@@ -9,9 +13,11 @@
 #include "mrvFLU/Flu_Entry.h"
 #include "mrvFLU/Flu_File_Chooser.h"
 
+#include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvI8N.h"
 
 #include "mrvUI/mrvAsk.h"
+#include "mrvUI/mrvUtil.h"
 
 #ifdef TLRENDER_GL
 #    include "mrvGL/mrvThumbnailCreator.h"
@@ -37,6 +43,8 @@ Fl_Pixmap preview_img((char* const*)monalisa_xpm),
     little_desktop((char* const*)mini_desktop_xpm),
     reel((char* const*)reel_xpm), picture((char* const*)image_xpm),
     music((char* const*)music_xpm);
+
+Fl_Image* usd = mrv::load_svg("USD.svg");
 
 static const int kColorOne = fl_rgb_color(200, 200, 200);
 static const int kColorTwo = fl_rgb_color(180, 180, 180);
@@ -524,14 +532,12 @@ void Flu_Entry::updateSize()
             (icon == &reel || icon == &picture) &&
             Flu_File_Chooser::thumbnailsFileReq)
         {
-            H = 92; // 68;
+            H = 68;
         }
         else
         {
             H = icon->h() + 4;
         }
-        // if (delete_icon)
-        H += 24;
     }
     if (type == ENTRY_FAVORITE || chooser->fileListWideBtn->value())
     {
@@ -680,6 +686,8 @@ void Flu_Entry::inputCB()
 
 void Flu_Entry::draw()
 {
+    TLRENDER_P();
+    
     if (editMode)
     {
         if (editMode == 2)
@@ -704,16 +712,15 @@ void Flu_Entry::draw()
         fl_color(FL_BLACK);
     }
 
-    int clipped = fl_not_clipped(x(), y(), w(), h());
-    if (clipped == 0)
-    {
-        cancelRequest();
-    }
-    else
+    if (p.id == -1 && icon != &music)
     {
         startRequest();
     }
-
+    else
+    {
+        // std::cerr << "THUMB " << filename << std::endl;
+    }
+    
     int X = x() + 4;
     int Y = y();
     int iH = 0;
@@ -804,6 +811,33 @@ void Flu_Entry::startRequest()
     if (!p.thumbnailCreator || p.id != -1)
         return;
 
+    file::Path path(filename);
+    if (mrv::file::isDirectory(path.get()))
+        return;
+    
+    auto extension = tl::string::toLower(path.getExtension());
+
+    bool requestIcon =
+        mrv::file::isValidType(path) && !mrv::file::isAudio(path) &&
+        extension != ".ndi" && Flu_File_Chooser::thumbnailsFileReq;
+
+    if (!Flu_File_Chooser::thumbnailsUSD)
+    {
+        if (extension == ".usd" || extension == ".usda" ||
+            extension == ".usc" || extension == ".usz")
+        {
+            cancelRequest();
+            return;
+        }
+    }
+
+    if (!requestIcon)
+    {
+        cancelRequest();
+        return;
+    }
+    
+    std::cerr << "START REQUEST " << filename << std::endl;
     p.thumbnailCreator->initThread();
 
     // Show the frame at the beginning
@@ -824,9 +858,14 @@ void Flu_Entry::cancelRequest()
     TLRENDER_P();
     if (!p.thumbnailCreator || p.id == -1)
         return;
+    
+    std::cerr << "CANCEL REQUEST " << filename << std::endl;
 
+    Fl::remove_timeout((Fl_Timeout_Handler)createdThumbnail_cb, this);
+    
     const std::lock_guard<std::mutex> lock(p.thumbnailMutex);
     p.thumbnailCreator->cancelRequests(p.id);
+    p.id = -1;
 }
 
 void Flu_Entry::createdThumbnail(
@@ -844,6 +883,5 @@ void Flu_Entry::createdThumbnail(
             updateSize();
             parent()->redraw();
         }
-        p.id = -1;
     }
 }

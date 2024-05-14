@@ -79,13 +79,8 @@ class PreferencesUI {open
     Fl_Window uiMain {
       label Preferences
       user_data this user_data_type {PreferencesUI*} open
-<<<<<<< HEAD
       xywh {406 349 847 466} type Double hide resizable
       code0 {main = m;} modal
-=======
-      xywh {0 0 847 466} type Double resizable
-      code0 {main = m;} modal visible
->>>>>>> beta
     } {
       Fl_Group {} {open
         xywh {0 0 847 466} box FLAT_BOX

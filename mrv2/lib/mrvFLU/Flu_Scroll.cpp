@@ -19,6 +19,7 @@
 #include <FL/fl_draw.H>
 
 #include "mrvFLU/Flu_Entry.h"
+#include "mrvFLU/Flu_File_Chooser.h"
 #include "mrvFLU/Flu_Scroll.h"
 
 /** Clear all but the scrollbars... */
@@ -644,7 +645,8 @@ void Flu_Scroll::scrollbar_cb(Fl_Widget* o, void*)
   variables, but you must declare the Flu_Scroll <I>first</I>, so
   that it is destroyed last.
 */
-Flu_Scroll::Flu_Scroll(int X, int Y, int W, int H, const char* L) :
+Flu_Scroll::Flu_Scroll(int X, int Y, int W, int H,
+                       Flu_File_Chooser* c, const char* L) :
     Fl_Group(X, Y, W, H, L),
     scrollbar(
         X + W - Fl::scrollbar_size(), Y, Fl::scrollbar_size(),
@@ -654,6 +656,7 @@ Flu_Scroll::Flu_Scroll(int X, int Y, int W, int H, const char* L) :
         Fl::scrollbar_size())
 {
     type(BOTH);
+    chooser_ = c;
     xposition_ = oldx = 0;
     yposition_ = oldy = 0;
     scrollbar_size_ = 0;
@@ -665,5 +668,20 @@ Flu_Scroll::Flu_Scroll(int X, int Y, int W, int H, const char* L) :
 int Flu_Scroll::handle(int event)
 {
     fix_scrollbar_order();
+
+    if (event == FL_DRAG)
+    {
+        std::cerr << "DRAG" << std::endl;
+        Fl_Group* g = chooser_->getEntryGroup();
+        int c = g->children();
+        for (int i = 0; i < c; ++i)
+        {
+            Flu_Entry* e = dynamic_cast<Flu_Entry*>(g->child(0));
+            if (!e) continue;
+            std::cerr << "\tcancelRequest " << e->filename << std::endl;
+            e->cancelRequest();
+        }
+    }
+    
     return Fl_Group::handle(event);
 }

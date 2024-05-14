@@ -25,6 +25,7 @@
 #include "mrvFLU/Flu_Button.h"
 #include "mrvFLU/Flu_Entry.h"
 #include "mrvFLU/Flu_Scroll.h"
+#include "mrvFLU/Flu_Pack.h"
 #include "mrvFLU/Flu_Return_Button.h"
 #include "mrvFLU/Flu_Wrap_Group.h"
 #include "mrvFLU/Flu_Combo_Tree.h"
@@ -559,7 +560,7 @@ public:
     };
 
     friend class FileDetails;
-    class FileDetails : public Fl_Pack
+    class FileDetails : public Flu_Pack
     {
     public:
         FileDetails(int x, int y, int w, int h, Flu_File_Chooser* c);
@@ -598,12 +599,6 @@ public:
         Flu_File_Chooser* chooser;
         int W1, W2, W3, W4;
     };
-
-    void createdThumbnail(
-        const int64_t id,
-        const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&
-            thumbnails,
-        ThumbnailData* data);
 
     //! Selection array in the order of elements as they were selected
     EntryArray selection;

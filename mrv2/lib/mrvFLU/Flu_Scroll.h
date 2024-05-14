@@ -20,6 +20,8 @@
 #ifndef Flu_Scroll_H
 #define Flu_Scroll_H
 
+class Flu_File_Chooser;
+
 #include "FL/Fl_Group.H"
 #include "FL/Fl_Scrollbar.H"
 
@@ -166,7 +168,8 @@ public:
     void resize(int X, int Y, int W, int H) FL_OVERRIDE;
     int handle(int) FL_OVERRIDE;
 
-    Flu_Scroll(int X, int Y, int W, int H, const char* L = 0);
+    Flu_Scroll(int X, int Y, int W, int H, Flu_File_Chooser* c,
+               const char* L = 0);
     virtual ~Flu_Scroll();
 
     enum { // values for type()
@@ -224,6 +227,9 @@ public:
             redraw();
         scrollbar_size_ = newSize;
     }
+
+
+    Flu_File_Chooser* chooser_ = nullptr;
 };
 
 #endif

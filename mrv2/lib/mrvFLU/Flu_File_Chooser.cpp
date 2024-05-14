@@ -242,48 +242,18 @@ void Flu_File_Chooser::previewCB()
     TLRENDER_P();
     bool inFavorites = (currentDir == FAVORITES_UNIQUE_STRING);
     if (inFavorites)
+    {
+        cancelThumbnailRequests();
         return;
+    }
 
+    
     Fl_Group* g = getEntryGroup();
     int c = g->children();
-
-    if (previewBtn->value() && thumbnailsFileReq)
+    for (int i = 0; i < c; ++i)
     {
-        for (int i = 0; i < c; ++i)
-        {
-            Flu_Entry* e = (Flu_Entry*)g->child(i);
-            e->set_colors();
-            e->chooser = this;
-
-            if (e->type == ENTRY_SEQUENCE || e->type == ENTRY_FILE)
-            {
-                tl::file::Path path(e->filename);
-                auto extension = tl::string::toLower(path.getExtension());
-                if (extension == ".otioz" || extension == ".ndi")
-                    continue;
-
-                bool requestIcon = mrv::file::isValidType(path);
-
-                if (!thumbnailsUSD)
-                {
-                    if (extension == ".usd" || extension == ".usda" ||
-                        extension == ".usc" || extension == ".usz")
-                        continue;
-                }
-
-                if (!requestIcon)
-                    continue;
-            }
-        }
-    }
-    else
-    {
-        for (int i = 0; i < c; ++i)
-        {
-            Flu_Entry* e = (Flu_Entry*)g->child(i);
-            e->set_colors();
-            e->updateIcon();
-        }
+        Flu_Entry* e = (Flu_Entry*)g->child(i);
+        e->set_colors();
     }
 }
 
@@ -448,29 +418,76 @@ Flu_File_Chooser::Flu_File_Chooser(
     add_type("webm", _("WebM Movie"), &reel);
     add_type("wmv", _("WMV Movie"), &reel);
 
+    add_type("3fr", _("RAW Picture"), &picture);
+    add_type("arw", _("RAW Picture"), &picture);
+    add_type("bay", _("RAW Picture"), &picture);
     add_type("bmp", _("Bitmap Picture"), &picture);
+    add_type("bmq", _("RAW Picture"), &picture);
+    add_type("cap", _("RAW Picture"), &picture);
     add_type("cin", _("Cineon Picture"), &picture);
+    add_type("cine", _("RAW Picture"), &picture);
+    add_type("cap", _("RAW Picture"), &picture);
     add_type("cr2", _("Canon Raw Picture"), &picture);
+    add_type("cr3", _("Canon Raw Picture"), &picture);
+    add_type("cs1", _("RAW Picture"), &picture);
+    add_type("dcr", _("RAW Picture"), &picture);
     add_type("dng", _("Kodak Digital Negative"), &picture);
     add_type("dpx", _("DPX Picture"), &picture);
+    add_type("drf", _("RAW Picture"), &picture);
+    add_type("dsc", _("RAW Picture"), &picture);
+    add_type("erf", _("RAW Picture"), &picture);
     add_type("exr", _("EXR Picture"), &picture);
+    add_type("fff", _("RAW Picture"), &picture);
+    add_type("gif", _("GIF Picture"), &picture);
     add_type("hdr", _("HDRI Picture"), &picture);
-    add_type("tif", _("TIFF Picture"), &picture);
-    add_type("iff", _("IFF Picture"), &picture);
+    add_type("ia", _("RAW Picture"), &picture);
+    add_type("iiq", _("RAW Picture"), &picture);
     add_type("jpg", _("JPEG Picture"), &picture);
     add_type("jpeg", _("JPEG Picture"), &picture);
-    add_type("map", _("Map Picture"), &picture);
-    add_type("gif", _("GIF Picture"), &picture);
+    add_type("jfif", _("JPEG Picture"), &picture);
+    add_type("kdc", _("RAW Picture"), &picture);
+    add_type("mdc", _("RAW Picture"), &picture);
+    add_type("mef", _("RAW Picture"), &picture);
+    add_type("mos", _("RAW Picture"), &picture);
+    add_type("mrw", _("RAW Picture"), &picture);
+    add_type("nef", _("RAW Picture"), &picture);
+    add_type("nrw", _("RAW Picture"), &picture);
+    add_type("orf", _("RAW Picture"), &picture);
+    add_type("pef", _("RAW Picture"), &picture);
     add_type("pic", _("Softimage Picture"), &picture);
-    add_type("png", _("PNG Picture"), &picture);
-    add_type("rgb", _("RGB Picture"), &picture);
+    add_type("png", _("Portable Network Graphics Picture"), &picture);
+    add_type("ppm", _("Portable Pixmap"), &picture);
+    add_type("psd", _("Photoshop Picture"), &picture);
+    add_type("pxn", _("RAW Picture"), &picture);
+    add_type("qtk", _("RAW Picture"), &picture);
+    add_type("raf", _("RAW Picture"), &picture);
+    add_type("raw", _("RAW Picture"), &picture);
+    add_type("rgb", _("SGI Picture"), &picture);
+    add_type("rgba", _("SGI Picture"), &picture);
+    add_type("rw2", _("RAW Picture"), &picture);
+    add_type("rwl", _("RAW Picture"), &picture);
+    add_type("rwz", _("RAW Picture"), &picture);
+    add_type("sgi", _("SGI Picture"), &picture);
+    add_type("sr2", _("RAW Picture"), &picture);
+    add_type("srf", _("RAW Picture"), &picture);
+    add_type("srw", _("RAW Picture"), &picture);
+    add_type("sti", _("RAW Picture"), &picture);
+    add_type("sxr", _("Stereo OpenEXR Picture"), &picture);
+    add_type("tga", _("TGA Picture"), &picture);
     add_type("tif", _("TIFF Picture"), &picture);
     add_type("tiff", _("TIFF Picture"), &picture);
+    add_type("x3f", _("RAW Picture"), &picture);
+
 
     add_type("mp3", _("MP3 music"), &music);
     add_type("ogg", _("OGG Vorbis music"), &music);
     add_type("wav", _("Wave music"), &music);
 
+    add_type("usd", _("OpenUSD Asset"), usd);
+    add_type("usdz", _("OpenUSD Zipped Asset"), usd);
+    add_type("usdc", _("OpenUSD Compressed Asset"), usd);
+    add_type("usda", _("OpenUSD ASCII Asset"), usd);
+    
     for (int j = 0; j < 4; j++)
     {
         std::string text = _(detailTxt[j].c_str());
@@ -781,7 +798,8 @@ Flu_File_Chooser::Flu_File_Chooser(
             {
                 filescroll = new Flu_Scroll(
                     fileDetailsGroup->x() + 2, fileDetailsGroup->y() + 22,
-                    fileDetailsGroup->w() - 4, fileDetailsGroup->h() - 20 - 4);
+                    fileDetailsGroup->w() - 4, fileDetailsGroup->h() - 20 - 4,
+                    this);
                 filescroll->color(FL_WHITE);
                 filescroll->scrollbar.linesize(20);
                 filescroll->box(FL_FLAT_BOX);
@@ -2034,6 +2052,7 @@ int Flu_File_Chooser::FileList::handle(int event)
 
     if (event == FL_FOCUS || event == FL_UNFOCUS)
         return 1;
+    
     if (Flu_Wrap_Group::handle(event))
         return 1;
 
@@ -2133,7 +2152,7 @@ int Flu_File_Chooser::FileList::handle(int event)
 
 Flu_File_Chooser::FileDetails::FileDetails(
     int x, int y, int w, int h, Flu_File_Chooser* c) :
-    Fl_Pack(x, y, w, h)
+    Flu_Pack(x, y, w, h)
 {
     chooser = c;
     numDirs = 0;
@@ -2215,7 +2234,7 @@ int Flu_File_Chooser::FileDetails::handle(int event)
 
     if (event == FL_FOCUS || event == FL_UNFOCUS)
         return 1;
-    if (Fl_Pack::handle(event))
+    if (Flu_Pack::handle(event))
         return 1;
     else if (event == FL_PUSH)
         return 1;

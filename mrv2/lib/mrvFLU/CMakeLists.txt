@@ -14,6 +14,7 @@ set(HEADERS
     Flu_Entry.h
     Flu_Label.h
     Flu_File_Chooser.h
+    Flu_Pack.h
     Flu_Return_Button.h
     Flu_Scroll.h
     Flu_Separator.h
@@ -30,6 +31,7 @@ set(SOURCES
     Flu_Entry.cpp
     Flu_Label.cpp
     Flu_File_Chooser.cpp
+    Flu_Pack.cpp
     Flu_Return_Button.cpp
     Flu_Scroll.cpp
     Flu_Separator.cpp
