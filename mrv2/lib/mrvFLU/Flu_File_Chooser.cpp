@@ -2231,9 +2231,6 @@ Fl_Widget* Flu_File_Chooser::FileDetails::previous(Fl_Widget* w)
 
 int Flu_File_Chooser::FileDetails::handle(int event)
 {
-
-    if (event == FL_FOCUS || event == FL_UNFOCUS)
-        return 1;
     if (Flu_Pack::handle(event))
         return 1;
     else if (event == FL_PUSH)

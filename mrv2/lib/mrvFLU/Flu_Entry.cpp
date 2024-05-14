@@ -828,7 +828,7 @@ void Flu_Entry::startRequest()
         return;
     }
     
-    std::cerr << "\tSTART REQUEST " << filename << std::endl;
+    // std::cerr << "\t\tSTART REQUEST " << filename << std::endl;
     p.thumbnailCreator->initThread();
 
     // Show the frame at the beginning
@@ -850,6 +850,7 @@ void Flu_Entry::cancelRequest()
     if (!p.thumbnailCreator || p.id == -1)
         return;
     
+    // std::cerr << "\t\tCANCEL REQUEST " << filename << std::endl;
     const std::lock_guard<std::mutex> lock(p.thumbnailMutex);
     p.thumbnailCreator->cancelRequests(p.id);
     p.thumbnailCreator->stopThread();
@@ -869,7 +870,9 @@ void Flu_Entry::createdThumbnail(
         {
             icon = i.second;
             redraw();
-            parent()->redraw();
+            Fl_Widget* p;
+            for (p = this; p = p->parent(); ++p)
+                p->redraw();
         }
     }
 }

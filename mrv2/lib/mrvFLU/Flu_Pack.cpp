@@ -215,9 +215,16 @@ void Flu_Pack::resize(int X, int Y, int W, int H) {
 
 int Flu_Pack::handle(int event)
 {
-    std::cerr << fl_eventnames[event] << std::endl;
+    // std::cerr << "\tFl_Pack=" << fl_eventnames[event] << std::endl;
     int ret = Fl_Group::handle(event);
-    if (event == FL_ENTER)
+    switch(event)
+    {
+    case FL_ENTER:
+    case FL_LEAVE:
         redraw();
+        break;
+    default:
+        break;
+    }
     return ret;
 }

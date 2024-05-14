@@ -17,6 +17,7 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Tiled_Image.H>
 #include <FL/fl_draw.H>
+#include <FL/names.h>
 
 #include "mrvFLU/Flu_Entry.h"
 #include "mrvFLU/Flu_File_Chooser.h"
@@ -668,5 +669,14 @@ Flu_Scroll::Flu_Scroll(int X, int Y, int W, int H,
 int Flu_Scroll::handle(int event)
 {
     fix_scrollbar_order();
+    switch(event)
+    {
+    case FL_MOVE:
+        redraw();
+        break;
+    default:
+        break;
+    }
+    //std::cerr << "Flu_Scroll::handle " << fl_eventnames[event] << std::endl;
     return Fl_Group::handle(event);
 }
