@@ -141,27 +141,6 @@ std::string Flu_File_Chooser::renameErrTxt = "Unable to rename '%s' to '%s'";
 
 #define DEFAULT_ENTRY_WIDTH 235
 
-Fl_Pixmap preview_img((char* const*)monalisa_xpm),
-    file_list_img((char* const*)filelist_xpm),
-    file_listwide_img((char* const*)filelistwide_xpm),
-    fileDetails((char* const*)filedetails_xpm),
-    desktop((char* const*)desktop_xpm),
-    folder_closed((char* const*)folder_closed_xpm),
-    default_file((char* const*)textdoc_xpm),
-    my_computer((char* const*)my_computer_xpm),
-    computer((char* const*)computer_xpm),
-    disk_drive((char* const*)disk_drive_xpm),
-    cd_drive((char* const*)cd_drive_xpm),
-    floppy_drive((char* const*)floppy_drive_xpm),
-    removable_drive((char* const*)removable_drive_xpm),
-    ram_drive((char* const*)ram_drive_xpm),
-    network_drive((char* const*)network_drive_xpm),
-    documents((char* const*)filled_folder_xpm),
-    little_favorites((char* const*)mini_folder_favorites_xpm),
-    little_desktop((char* const*)mini_desktop_xpm),
-    reel((char* const*)reel_xpm), picture((char* const*)image_xpm),
-    music((char* const*)music_xpm);
-
 #define streq(a, b) (strcmp(a, b) == 0)
 
 Flu_File_Chooser::FileTypeInfo* Flu_File_Chooser::types = nullptr;
@@ -2440,36 +2419,6 @@ Fl_Group* Flu_File_Chooser::getEntryContainer()
 
 static const int kColorOne = fl_rgb_color(200, 200, 200);
 static const int kColorTwo = fl_rgb_color(180, 180, 180);
-
-void Flu_Entry::set_colors()
-{
-    Fl_Group* g = chooser->getEntryGroup();
-    if (!g)
-        return;
-    if (selected)
-    {
-        color(FL_DARK_BLUE);
-        return;
-    }
-    unsigned num = g->children();
-    for (unsigned i = 0; i < num; ++i)
-    {
-        Flu_Entry* e = (Flu_Entry*)g->child(i);
-        if (e != this)
-            continue;
-
-        if (i % 2 == 0)
-        {
-            color(kColorOne);
-        }
-        else
-        {
-            color(kColorTwo);
-        }
-        redraw();
-        return;
-    }
-}
 
 int Flu_File_Chooser::popupContextMenu(Flu_Entry* entry)
 {
