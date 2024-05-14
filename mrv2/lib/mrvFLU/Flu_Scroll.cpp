@@ -668,20 +668,5 @@ Flu_Scroll::Flu_Scroll(int X, int Y, int W, int H,
 int Flu_Scroll::handle(int event)
 {
     fix_scrollbar_order();
-
-    if (event == FL_DRAG)
-    {
-        std::cerr << "DRAG" << std::endl;
-        Fl_Group* g = chooser_->getEntryGroup();
-        int c = g->children();
-        for (int i = 0; i < c; ++i)
-        {
-            Flu_Entry* e = dynamic_cast<Flu_Entry*>(g->child(0));
-            if (!e) continue;
-            std::cerr << "\tcancelRequest " << e->filename << std::endl;
-            e->cancelRequest();
-        }
-    }
-    
     return Fl_Group::handle(event);
 }

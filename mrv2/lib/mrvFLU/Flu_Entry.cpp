@@ -711,15 +711,6 @@ void Flu_Entry::draw()
         fl_draw_box(FL_FLAT_BOX, x(), y(), w(), h(), color());
         fl_color(FL_BLACK);
     }
-
-    if (p.id == -1 && icon != &music)
-    {
-        startRequest();
-    }
-    else
-    {
-        // std::cerr << "THUMB " << filename << std::endl;
-    }
     
     int X = x() + 4;
     int Y = y();
@@ -808,7 +799,7 @@ void Flu_Entry::draw()
 void Flu_Entry::startRequest()
 {
     TLRENDER_P();
-    if (!p.thumbnailCreator || p.id != -1)
+    if (!p.thumbnailCreator || p.id != -1 || icon == &music)
         return;
 
     file::Path path(filename);
@@ -837,7 +828,7 @@ void Flu_Entry::startRequest()
         return;
     }
     
-    std::cerr << "START REQUEST " << filename << std::endl;
+    std::cerr << "\tSTART REQUEST " << filename << std::endl;
     p.thumbnailCreator->initThread();
 
     // Show the frame at the beginning
@@ -859,12 +850,9 @@ void Flu_Entry::cancelRequest()
     if (!p.thumbnailCreator || p.id == -1)
         return;
     
-    std::cerr << "CANCEL REQUEST " << filename << std::endl;
-
-    Fl::remove_timeout((Fl_Timeout_Handler)createdThumbnail_cb, this);
-    
     const std::lock_guard<std::mutex> lock(p.thumbnailMutex);
     p.thumbnailCreator->cancelRequests(p.id);
+    p.thumbnailCreator->stopThread();
     p.id = -1;
 }
 
@@ -880,7 +868,7 @@ void Flu_Entry::createdThumbnail(
         for (const auto& i : thumbnails)
         {
             icon = i.second;
-            updateSize();
+            redraw();
             parent()->redraw();
         }
     }
