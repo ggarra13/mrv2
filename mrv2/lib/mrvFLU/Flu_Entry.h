@@ -1,5 +1,7 @@
 #pragma once
 
+#include <tlCore/Time.h>
+
 #include <FL/Fl_Input.H>
 
 namespace mrv
@@ -12,6 +14,7 @@ extern Fl_Pixmap preview_img, file_list_img, file_listwide_img, fileDetails,
     cd_drive, floppy_drive, removable_drive, ram_drive, network_drive,
     documents, little_favorites, little_desktop, reel, picture, music;
 
+class Fl_RGB_Image;
 class Flu_File_Chooser;
 using namespace tl;
 
@@ -20,7 +23,7 @@ class Flu_Entry : public Fl_Input
 public:
     Flu_Entry(
         const char* name, int t, bool d, Flu_File_Chooser* c,
-        mrv::ThumbnailCreator* thumbnailGenerator = nullptr);
+        std::shared_ptr<mrv::ThumbnailCreator> thumbnailGenerator = nullptr);
     virtual ~Flu_Entry();
 
     int handle(int event) FL_OVERRIDE;
@@ -30,6 +33,14 @@ public:
 
     void updateSize();
     void updateIcon();
+
+    void createdThumbnail(
+        const int64_t id,
+        const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&
+            thumbnails);
+
+    void startRequest();
+    void cancelRequest();
 
     inline static void _inputCB(Fl_Widget* w, void* arg)
     {
