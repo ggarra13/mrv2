@@ -13,8 +13,9 @@
 
 #include "mrvUI/mrvAsk.h"
 
-using namespace tl;
-using namespace tl::ui;
+#ifdef TLRENDER_GL
+#    include "mrvGL/mrvThumbnailCreator.h"
+#endif
 
 Fl_Pixmap preview_img((char* const*)monalisa_xpm),
     file_list_img((char* const*)filelist_xpm),
@@ -42,37 +43,19 @@ static const int kColorTwo = fl_rgb_color(180, 180, 180);
 
 struct Flu_Entry::Private
 {
-    std::shared_ptr<ThumbnailGenerator> thumbnailGenerator;
-
-    file::FileInfo fileInfo;
-
-    struct Options
-    {
-        bool thumbnail = true;
-        int thumbnailHeight = 64;
-    };
-    Options options;
-
-    struct InfoData
-    {
-        bool init = true;
-        InfoRequest request;
-        std::unique_ptr<io::Info> info;
-    };
-    InfoData info;
+    mrv::ThumbnailCreator* thumbnailGenerator;
+    int64_t id = -1;
 
     struct ThumbnailData
     {
-        bool init = true;
-        ThumbnailRequest request;
-        std::shared_ptr<image::Image> image;
+        Flu_Entry* e;
     };
     ThumbnailData thumbnail;
 };
 
 Flu_Entry::Flu_Entry(
     const char* name, int t, bool d, Flu_File_Chooser* c,
-    const std::shared_ptr<ThumbnailGenerator> thumbnailGenerator) :
+    mrv::ThumbnailCreator* thumbnailGenerator) :
     Fl_Input(0, 0, 0, 0),
     _p(new Private)
 {
@@ -222,6 +205,25 @@ void Flu_Entry::set_colors()
     }
 }
 
+std::string Flu_Entry::toTLRender()
+{
+    std::string fullname = Flu_File_Chooser::currentDir + filename;
+
+    if (type == ENTRY_SEQUENCE)
+    {
+        std::string number = filesize;
+        std::size_t pos = number.find(' ');
+        number = number.substr(0, pos);
+        int frame = atoi(number.c_str());
+        char tmp[1024];
+        // Note: fullname is a valid C format sequence, like picture.%04d.exr
+        snprintf(tmp, 1024, fullname.c_str(), frame);
+        fullname = tmp;
+    }
+
+    return fullname;
+}
+
 int Flu_Entry::handle(int event)
 {
     TLRENDER_P();
@@ -232,18 +234,6 @@ int Flu_Entry::handle(int event)
     {
         if (p.thumbnailGenerator)
         {
-            file::Path path(toTLRender());
-            if (p.info.init)
-            {
-                p.info.init = false;
-                p.info.request = p.thumbnailGenerator->getInfo(path);
-            }
-            if (p.thumbnail.init)
-            {
-                p.thumbnail.init = false;
-                p.thumbnail.request = p.thumbnailGenerator->getThumbnail(
-                    path, p.options.thumbnailHeight);
-            }
         }
         break;
     }
@@ -643,15 +633,6 @@ void Flu_Entry::updateSize()
 Flu_Entry::~Flu_Entry()
 {
     TLRENDER_P();
-
-    if (p.info.request.future.valid())
-    {
-        p.thumbnailGenerator->cancelRequests({p.info.request.id});
-    }
-    if (p.thumbnail.request.future.valid())
-    {
-        p.thumbnailGenerator->cancelRequests({p.thumbnail.request.id});
-    }
 }
 
 void Flu_Entry::inputCB()
@@ -706,4 +687,122 @@ void Flu_Entry::inputCB()
     {
         chooser->sortCB(this);
     }
+}
+
+void Flu_Entry::draw()
+{
+    if (editMode)
+    {
+        if (editMode == 2)
+        {
+            editMode--;
+            fl_draw_box(FL_FLAT_BOX, x(), y(), w(), h(), FL_WHITE);
+            redraw();
+        }
+        textcolor(fl_rgb_color(0, 0, 0));
+        Fl_Input::draw();
+        return;
+    }
+
+    if (selected)
+    {
+        fl_draw_box(FL_FLAT_BOX, x(), y(), w(), h(), Fl_Color(0x8f8f0000));
+        fl_color(FL_BLACK);
+    }
+    else
+    {
+        fl_draw_box(FL_FLAT_BOX, x(), y(), w(), h(), color());
+        fl_color(FL_BLACK);
+    }
+
+    int X = x() + 4;
+    int Y = y();
+    int iH = 0;
+    if (icon)
+    {
+        // if (delete_icon)
+        // {
+        //     icon->draw(X, y() + 2);
+        //     Y += icon->h() + 2;
+        //     iH = icon->h() + 2;
+        // }
+        // else
+        {
+            icon->draw(X, y() + h() / 2 - icon->h() / 2);
+            X += icon->w() + 2;
+        }
+    }
+
+    int iW = 0, W = 0, H = 0;
+    if (icon // && !delete_icon
+    )
+    {
+        iW = icon->w() + 2;
+    }
+
+    fl_font(textfont(), textsize());
+    // fl_color( textcolor() );
+
+    fl_measure(filename.c_str(), W, H);
+    if (W > nameW - iW)
+    {
+        // progressively strip characters off the end of the name until
+        // it fits with "..." at the end
+        if (altname[0] != '\0')
+            shortname = altname;
+        else
+            shortname = filename;
+        size_t len = shortname.size();
+        while (W > (nameW - iW) && len > 3)
+        {
+            shortname[len - 3] = '.';
+            shortname[len - 2] = '.';
+            shortname[len - 1] = '.';
+            shortname[len] = '\0';
+            len--;
+            W = 0;
+            fl_measure(shortname.c_str(), W, H);
+        }
+    }
+    else
+        shortname = filename;
+
+    size_t pos = 0;
+    while ((pos = shortname.find('@', pos)) != std::string::npos)
+    {
+        shortname = shortname.substr(0, pos + 1) + '@' +
+                    shortname.substr(pos + 1, shortname.size());
+        pos += 2;
+    }
+
+    fl_draw(shortname.c_str(), X, Y, nameW, h() - iH, FL_ALIGN_LEFT);
+
+    shortname = filename;
+
+    X = x() + 4 + nameW;
+
+    if (details)
+    {
+        if (shortDescription[0] != '\0')
+            fl_draw(
+                shortDescription.c_str(), X, y(), typeW - 4, h(),
+                Fl_Align(FL_ALIGN_LEFT | FL_ALIGN_CLIP));
+        else
+            fl_draw(
+                description.c_str(), X, y(), typeW - 4, h(),
+                Fl_Align(FL_ALIGN_LEFT | FL_ALIGN_CLIP));
+
+        X += typeW;
+
+        fl_draw(
+            filesize.c_str(), X, y(), sizeW - 4, h(),
+            Fl_Align(FL_ALIGN_RIGHT | FL_ALIGN_CLIP));
+
+        X += sizeW + 4;
+
+        fl_draw(
+            date.c_str(), X, y(), dateW - 4, h(),
+            Fl_Align(FL_ALIGN_LEFT | FL_ALIGN_CLIP));
+    }
+    redraw();
 }

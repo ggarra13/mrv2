@@ -1,10 +1,11 @@
 #pragma once
 
-#include <tlCore/FileInfo.h>
-
-#include <tlUI/ThumbnailSystem.h>
-
 #include <FL/Fl_Input.H>
+
+namespace mrv
+{
+    class ThumbnailCreator;
+}
 
 extern Fl_Pixmap preview_img, file_list_img, file_listwide_img, fileDetails,
     desktop, folder_closed, default_file, my_computer, computer, disk_drive,
@@ -19,12 +20,11 @@ class Flu_Entry : public Fl_Input
 public:
     Flu_Entry(
         const char* name, int t, bool d, Flu_File_Chooser* c,
-        const std::shared_ptr<ui::ThumbnailGenerator> thumbnailGenerator =
-            nullptr);
-    ~Flu_Entry();
+        mrv::ThumbnailCreator* thumbnailGenerator = nullptr);
+    virtual ~Flu_Entry();
 
-    int handle(int event);
-    void draw();
+    int handle(int event) FL_OVERRIDE;
+    void draw() FL_OVERRIDE;
 
     void set_colors();
 
