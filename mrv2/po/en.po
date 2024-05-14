@@ -3364,11 +3364,20 @@ msgstr "1.66"
 msgid "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 msgstr "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 
-msgid "Ahead    V: % 4<PRIu64>    A: % 4<PRIu64>"
-msgstr "Ahead    V: % 4<PRIu64>    A: % 4<PRIu64>"
+msgid "Cache:"
+msgstr "Cache:"
 
-msgid "Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
-msgstr "Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
+msgid "    Used: %.2g of %zu Gb"
+msgstr "    Used: %.2g of %zu Gb"
+
+msgid "    Percentage: %.2g %%"
+msgstr "    Percentage: %.2g %%"
+
+msgid "    Ahead    V: % 4<PRIu64>    A: % 4<PRIu64>"
+msgstr "    Ahead    V: % 4<PRIu64>    A: % 4<PRIu64>"
+
+msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
+msgstr "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 
 msgid "Edit Text"
 msgstr "Edit Text"
@@ -3738,156 +3747,6 @@ msgstr "Help/Documentation"
 msgid "Help/About"
 msgstr "Help/About"
 
-msgid "3GP Movie"
-msgstr "3GP Movie"
-
-msgid "Advanced Systems Format Media"
-msgstr "Advanced Systems Format Media"
-
-msgid "AVCHD Video"
-msgstr "AVCHD Video"
-
-msgid "AVI Movie"
-msgstr "AVI Movie"
-
-msgid "DIVX Movie"
-msgstr "DIVX Movie"
-
-msgid "Digital Video"
-msgstr "Digital Video"
-
-msgid "Flash Movie"
-msgstr "Flash Movie"
-
-msgid "Apple's M4V Movie"
-msgstr "Apple's M4V Movie"
-
-msgid "Matroska Movie"
-msgstr "Matroska Movie"
-
-msgid "Quicktime Movie"
-msgstr "Quicktime Movie"
-
-msgid "MP4 Movie"
-msgstr "MP4 Movie"
-
-msgid "MPEG Movie"
-msgstr "MPEG Movie"
-
-msgid "MXF Movie"
-msgstr "MXF Movie"
-
-msgid "Ogg Movie"
-msgstr "Ogg Movie"
-
-msgid "Ogg Video"
-msgstr "Ogg Video"
-
-msgid "OpenTimelineIO EDL"
-msgstr "OpenTimelineIO EDL"
-
-msgid "OpenTimelineIO Zipped EDL"
-msgstr "OpenTimelineIO Zipped EDL"
-
-msgid "Real Media Movie"
-msgstr "Real Media Movie"
-
-msgid "VOB Movie"
-msgstr "VOB Movie"
-
-msgid "WebM Movie"
-msgstr "WebM Movie"
-
-msgid "WMV Movie"
-msgstr "WMV Movie"
-
-msgid "Bitmap Picture"
-msgstr "Bitmap Picture"
-
-msgid "Cineon Picture"
-msgstr "Cineon Picture"
-
-msgid "Canon Raw Picture"
-msgstr "Canon Raw Picture"
-
-msgid "Kodak Digital Negative"
-msgstr "Kodak Digital Negative"
-
-msgid "DPX Picture"
-msgstr "DPX Picture"
-
-msgid "EXR Picture"
-msgstr "EXR Picture"
-
-msgid "HDRI Picture"
-msgstr "HDRI Picture"
-
-msgid "TIFF Picture"
-msgstr "TIFF Picture"
-
-msgid "IFF Picture"
-msgstr "IFF Picture"
-
-msgid "JPEG Picture"
-msgstr "JPEG Picture"
-
-msgid "Map Picture"
-msgstr "Map Picture"
-
-msgid "GIF Picture"
-msgstr "GIF Picture"
-
-msgid "Softimage Picture"
-msgstr "Softimage Picture"
-
-msgid "PNG Picture"
-msgstr "PNG Picture"
-
-msgid "RGB Picture"
-msgstr "RGB Picture"
-
-msgid "MP3 music"
-msgstr "MP3 music"
-
-msgid "OGG Vorbis music"
-msgstr "OGG Vorbis music"
-
-msgid "Wave music"
-msgstr "Wave music"
-
-msgid "Jan"
-msgstr "Jan"
-
-msgid "Feb"
-msgstr "Feb"
-
-msgid "Mar"
-msgstr "Mar"
-
-msgid "Apr"
-msgstr "Apr"
-
-msgid "May"
-msgstr "May"
-
-msgid "Jun"
-msgstr "Jun"
-
-msgid "Jul"
-msgstr "Jul"
-
-msgid "Aug"
-msgstr "Aug"
-
-msgid "Sep"
-msgstr "Sep"
-
-msgid "Oct"
-msgstr "Oct"
-
-msgid "Nov"
-msgstr "Nov"
-
 msgid "Replace"
 msgstr "Replace"
 
@@ -3948,8 +3807,8 @@ msgstr "Mark an area in the image with SHIFT + the left mouse button"
 msgid "&Copy"
 msgstr "&Copy"
 
-msgid "Everything OK."
-msgstr "Everything OK."
+msgid "Everything OK. "
+msgstr "Everything OK. "
 
 msgid "Elapsed"
 msgstr "Elapsed"
@@ -4907,9 +4766,6 @@ msgstr "Undo Last Shape Drawn in Current Frame."
 msgid "Redo Previous Shape Drawn in Current Frame."
 msgstr "Redo Previous Shape Drawn in Current Frame."
 
-msgid "Everything OK.  "
-msgstr "Everything OK.  "
-
 msgid "Current tool being used."
 msgstr "Current tool being used."
 
@@ -5081,6 +4937,12 @@ msgstr "Premultiplied"
 msgid "Nearest"
 msgstr "Nearest"
 
+msgid "Small"
+msgstr "Small"
+
+msgid "Large"
+msgstr "Large"
+
 msgid "59.94"
 msgstr "59.94"
 
@@ -5101,12 +4963,6 @@ msgstr "Video Only"
 
 msgid "Video and Audio"
 msgstr "Video and Audio"
-
-msgid "Small"
-msgstr "Small"
-
-msgid "Large"
-msgstr "Large"
 
 msgid "CG"
 msgstr "CG"
@@ -5514,11 +5370,14 @@ msgstr "Preview Thumbnails on Panels"
 msgid "Preview Thumbnails in Panels"
 msgstr "Preview Thumbnails in Panels"
 
-msgid "Display"
-msgstr "Display"
+msgid "Edit Viewport"
+msgstr "Edit Viewport"
 
 msgid "How to display timeline by default."
 msgstr "How to display timeline by default."
+
+msgid "Display"
+msgstr "Display"
 
 msgid "Start in Edit mode"
 msgstr "Start in Edit mode"
@@ -5545,11 +5404,15 @@ msgstr "Auto Playback"
 msgid "Start Playback when opening files."
 msgstr "Start Playback when opening files."
 
-msgid "Auto Scrub Playback"
-msgstr "Auto Scrub Playback"
+msgid "Scrub with Audio"
+msgstr "Scrub with Audio"
 
-msgid "Start playback when scrubbing so that audio can be heard."
-msgstr "Start playback when scrubbing so that audio can be heard."
+msgid ""
+"Start playback when scrubbing so that audio can be heard.  Scrubbing can be "
+"less smooth."
+msgstr ""
+"Start playback when scrubbing so that audio can be heard.  Scrubbing can be "
+"less smooth."
 
 msgid "Single Click Playback"
 msgstr "Single Click Playback"
@@ -5595,9 +5458,6 @@ msgstr ""
 "This setting controls the sensitivity of scrubbing (SHIFT and then the mouse "
 "right and left).  Smaller values make the mouse move jump more frames while "
 "higher values does the opposite."
-
-msgid "Edit Viewport"
-msgstr "Edit Viewport"
 
 msgid "Default View"
 msgstr "Default View"
@@ -5996,6 +5856,156 @@ msgstr "Accept the selected OCIO file."
 
 msgid "Cancel the OCIO selection and don't change anything."
 msgstr "Cancel the OCIO selection and don't change anything."
+
+msgid "3GP Movie"
+msgstr "3GP Movie"
+
+msgid "Advanced Systems Format Media"
+msgstr "Advanced Systems Format Media"
+
+msgid "AVCHD Video"
+msgstr "AVCHD Video"
+
+msgid "AVI Movie"
+msgstr "AVI Movie"
+
+msgid "DIVX Movie"
+msgstr "DIVX Movie"
+
+msgid "Digital Video"
+msgstr "Digital Video"
+
+msgid "Flash Movie"
+msgstr "Flash Movie"
+
+msgid "Apple's M4V Movie"
+msgstr "Apple's M4V Movie"
+
+msgid "Matroska Movie"
+msgstr "Matroska Movie"
+
+msgid "Quicktime Movie"
+msgstr "Quicktime Movie"
+
+msgid "MP4 Movie"
+msgstr "MP4 Movie"
+
+msgid "MPEG Movie"
+msgstr "MPEG Movie"
+
+msgid "MXF Movie"
+msgstr "MXF Movie"
+
+msgid "Ogg Movie"
+msgstr "Ogg Movie"
+
+msgid "Ogg Video"
+msgstr "Ogg Video"
+
+msgid "OpenTimelineIO EDL"
+msgstr "OpenTimelineIO EDL"
+
+msgid "OpenTimelineIO Zipped EDL"
+msgstr "OpenTimelineIO Zipped EDL"
+
+msgid "Real Media Movie"
+msgstr "Real Media Movie"
+
+msgid "VOB Movie"
+msgstr "VOB Movie"
+
+msgid "WebM Movie"
+msgstr "WebM Movie"
+
+msgid "WMV Movie"
+msgstr "WMV Movie"
+
+msgid "Bitmap Picture"
+msgstr "Bitmap Picture"
+
+msgid "Cineon Picture"
+msgstr "Cineon Picture"
+
+msgid "Canon Raw Picture"
+msgstr "Canon Raw Picture"
+
+msgid "Kodak Digital Negative"
+msgstr "Kodak Digital Negative"
+
+msgid "DPX Picture"
+msgstr "DPX Picture"
+
+msgid "EXR Picture"
+msgstr "EXR Picture"
+
+msgid "HDRI Picture"
+msgstr "HDRI Picture"
+
+msgid "TIFF Picture"
+msgstr "TIFF Picture"
+
+msgid "IFF Picture"
+msgstr "IFF Picture"
+
+msgid "JPEG Picture"
+msgstr "JPEG Picture"
+
+msgid "Map Picture"
+msgstr "Map Picture"
+
+msgid "GIF Picture"
+msgstr "GIF Picture"
+
+msgid "Softimage Picture"
+msgstr "Softimage Picture"
+
+msgid "PNG Picture"
+msgstr "PNG Picture"
+
+msgid "RGB Picture"
+msgstr "RGB Picture"
+
+msgid "MP3 music"
+msgstr "MP3 music"
+
+msgid "OGG Vorbis music"
+msgstr "OGG Vorbis music"
+
+msgid "Wave music"
+msgstr "Wave music"
+
+msgid "Jan"
+msgstr "Jan"
+
+msgid "Feb"
+msgstr "Feb"
+
+msgid "Mar"
+msgstr "Mar"
+
+msgid "Apr"
+msgstr "Apr"
+
+msgid "May"
+msgstr "May"
+
+msgid "Jun"
+msgstr "Jun"
+
+msgid "Jul"
+msgstr "Jul"
+
+msgid "Aug"
+msgstr "Aug"
+
+msgid "Sep"
+msgstr "Sep"
+
+msgid "Oct"
+msgstr "Oct"
+
+msgid "Nov"
+msgstr "Nov"
 
 msgid "Escape"
 msgstr "Escape"
@@ -6584,3 +6594,9 @@ msgstr "Toggle Hotkeys Window"
 
 msgid "Toggle About Window"
 msgstr "Toggle About Window"
+
+#~ msgid "Everything OK."
+#~ msgstr "Everything OK."
+
+#~ msgid "Auto Scrub Playback"
+#~ msgstr "Auto Scrub Playback"

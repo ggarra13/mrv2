@@ -23,6 +23,8 @@
 #include "mrvPanels/mrvComparePanel.h"
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
+#include "mrvGL/mrvThumbnailCreator.h"
+
 #include "mrvApp/mrvSettingsObject.h"
 #include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/mrvApp.h"
@@ -37,7 +39,7 @@ namespace mrv
         typedef std::map< ClipButton*, size_t > WidgetIndices;
 
         struct ComparePanel::Private
-        {            
+        {
             std::map< size_t, ClipButton* > map;
             WidgetIndices indices;
 
@@ -51,7 +53,6 @@ namespace mrv
             std::shared_ptr<observer::ValueObserver<timeline::CompareOptions> >
                 compareOptionsObserver;
         };
-
 
         ComparePanel::ComparePanel(ViewerUI* ui) :
             _r(new Private),
@@ -93,13 +94,15 @@ namespace mrv
                     { setCompareOptions(value); });
         }
 
-        ComparePanel::~ComparePanel()
-        {
-        }
+        ComparePanel::~ComparePanel() {}
 
         void ComparePanel::add_controls()
         {
             TLRENDER_P();
+
+            _r->map.clear();
+            _r->indices.clear();
+
             auto settings = p.ui->app->settings();
             const std::string& prefix = tab_prefix();
 
@@ -186,7 +189,9 @@ namespace mrv
                 std::string text = protocol + dir + "\n" + file + layer;
                 b->copy_label(text.c_str());
 
-                _createThumbnail(b, path, time, layerId, size.h, isNDI);
+                _createThumbnail(b, path, time, layerId, isNDI);
+
+                Y += size.h;
             }
 
             int X = g->x();
@@ -197,8 +202,7 @@ namespace mrv
             Fl_Button* b;
             auto bW = new Widget< Button >(X, Y, 30, 30);
             b = bW;
-            Fl_SVG_Image* svg = load_svg("CompareA.svg");
-            b->image(svg);
+            b->bind_image(load_svg("CompareA.svg"));
             b->tooltip(_("Compare A"));
             bW->callback(
                 [=](auto w)
@@ -210,8 +214,7 @@ namespace mrv
 
             bW = new Widget< Button >(X + 30, Y, 30, 30);
             b = bW;
-            svg = load_svg("CompareB.svg");
-            b->image(svg);
+            b->bind_image(load_svg("CompareB.svg"));
             b->tooltip(_("Compare B"));
 
             bW->callback(
@@ -224,8 +227,7 @@ namespace mrv
 
             bW = new Widget< Button >(X + 60, Y, 30, 30);
             b = bW;
-            svg = load_svg("CompareWipe.svg");
-            b->image(svg);
+            b->bind_image(load_svg("CompareWipe.svg"));
             b->tooltip(
 #ifdef __APPLE__
                 _("Wipe between the A and B files\n\n"
@@ -250,8 +252,7 @@ namespace mrv
 
             bW = new Widget< Button >(X + 90, Y, 30, 30);
             b = bW;
-            svg = load_svg("CompareOverlay.svg");
-            b->image(svg);
+            b->bind_image(load_svg("CompareOverlay.svg"));
             b->tooltip(
                 _("Overlay the A and B files with optional transparencyy"));
 
@@ -265,8 +266,7 @@ namespace mrv
 
             bW = new Widget< Button >(X + 120, Y, 30, 30);
             b = bW;
-            svg = load_svg("CompareDifference.svg");
-            b->image(svg);
+            b->bind_image(load_svg("CompareDifference.svg"));
             b->tooltip(_("Difference the A and B files"));
 
             bW->callback(
@@ -279,8 +279,7 @@ namespace mrv
 
             bW = new Widget< Button >(X + 150, Y, 30, 30);
             b = bW;
-            svg = load_svg("CompareHorizontal.svg");
-            b->image(svg);
+            b->bind_image(load_svg("CompareHorizontal.svg"));
             b->tooltip(_("Compare the A and B files side by side"));
 
             bW->callback(
@@ -293,8 +292,7 @@ namespace mrv
 
             bW = new Widget< Button >(X + 180, Y, 30, 30);
             b = bW;
-            svg = load_svg("CompareVertical.svg");
-            b->image(svg);
+            b->bind_image(load_svg("CompareVertical.svg"));
             b->tooltip(_("Show the A file above the B file"));
 
             bW->callback(
@@ -305,12 +303,11 @@ namespace mrv
                     model->setCompareOptions(o);
                 });
 
-            
             bW = new Widget< Button >(X + 210, Y, 30, 30);
             b = bW;
-            svg = load_svg("CompareTile.svg");
-            b->image(svg);
+            b->bind_image(load_svg("CompareTile.svg"));
             b->tooltip(_("Tile the A and B files"));
+
             bW->callback(
                 [=](auto w)
                 {
@@ -318,11 +315,10 @@ namespace mrv
                     o.mode = timeline::CompareMode::Tile;
                     model->setCompareOptions(o);
                 });
-            
 
-            b = bW = new Widget< Button >(X + 240, Y, 30, 30);
-            svg = load_svg("Prev.svg");
-            b->image(svg);
+            bW = new Widget< Button >(X + 240, Y, 30, 30);
+            b = bW;
+            b->bind_image(load_svg("Prev.svg"));
             b->tooltip(_("Previous filename"));
             bW->callback(
                 [=](auto w)
@@ -333,8 +329,7 @@ namespace mrv
 
             bW = new Widget< Button >(X + 270, Y, 30, 30);
             b = bW;
-            svg = load_svg("Next.svg");
-            b->image(svg);
+            b->bind_image(load_svg("Next.svg"));
             b->tooltip(_("Next filename"));
             bW->callback(
                 [=](auto w)
@@ -522,11 +517,8 @@ namespace mrv
             auto Bindices = model->observeBIndexes()->get();
             auto o = model->observeCompareOptions()->get();
 
-            for (auto& m : _r->map)
+            for (int i = 0; i < numFiles; ++i)
             {
-                const size_t i = m.first;
-                ClipButton* b = m.second;
-                
                 const auto& media = files->getItem(i);
                 const auto& path = media->path;
                 const bool isNDI = file::isTemporaryNDI(path);
@@ -537,6 +529,8 @@ namespace mrv
                     path.getBaseName() + path.getNumber() + path.getExtension();
                 const std::string fullfile = protocol + dir + file;
 
+                auto m = _r->map.find(i);
+                ClipButton* b = (*m).second;
 
                 uint16_t layerId = media->videoLayer;
                 bool found = false;
@@ -571,7 +565,7 @@ namespace mrv
                 std::string text = protocol + dir + "\n" + file + layer;
                 b->copy_label(text.c_str());
 
-                _createThumbnail(b, path, time, layerId, size.h, isNDI);
+                _createThumbnail(b, path, time, layerId, isNDI);
             }
         }
 

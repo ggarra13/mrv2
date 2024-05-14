@@ -4,7 +4,6 @@
 
 #pragma once
 
-
 #include <tlIO/Cache.h>
 
 #include <tlCore/Time.h>
@@ -19,6 +18,8 @@ class Fl_Widget;
 
 namespace mrv
 {
+    class ThumbnailCreator;
+
     namespace panel
     {
         using namespace tl;
@@ -28,53 +29,43 @@ namespace mrv
             ThumbnailPanel(ViewerUI* ui);
             virtual ~ThumbnailPanel();
 
-            //! Clear our thumbnail cache
-            void clearCache();
-            
-            //! FLTK callback
-            static void timerEvent_cb(void*);
-            void timerEvent();
-            
-        protected:
-            void _tickEvent();
-            
-            void _updateThumbnail(
-                Fl_Widget* widget, const std::shared_ptr<image::Image>& image);
-            void _thumbnailEvent();
+            //! FLTK callbacks
+            static void updateThumbnail_cb(
+                const int64_t id,
+                const std::vector<
+                    std::pair<otime::RationalTime, Fl_RGB_Image*> >& thumbnails,
+                void* opaque);
 
-            void _createThumbnail(Fl_Widget* widget,
-                                  const file::Path& path,
-                                  const otime::RationalTime& time,
-                                  const int layerId = 0,
-                                  const int height = 64,
-                                  const bool isNDI = false);
-            
+            void updateThumbnail(
+                const int64_t id,
+                const std::vector<
+                    std::pair<otime::RationalTime, Fl_RGB_Image*> >& thumbnails,
+                Fl_Widget* w);
+
+        protected:
+            void _createThumbnail(
+                Fl_Widget* widget, const file::Path& path,
+                const otime::RationalTime& time, const int layerId = 0,
+                const bool isNDI = false);
+
             void _cancelRequests();
 
+            //! Default Thumbnail Size.
+            image::Size size = image::Size(128, 64);
+
         private:
-            
-            std::weak_ptr<system::Context> context;
+            typedef std::map< Fl_Widget*, int64_t > WidgetIds;
+            WidgetIds ids;
 
-            // New thumbnail classes
-            std::vector<tl::file::MemoryRead> memoryRead;
-            std::shared_ptr<ui::ThumbnailGenerator> thumbnailGenerator;
-            std::shared_ptr<gl::GLFWWindow> window;
-            static std::map<std::string, std::shared_ptr<image::Image> > thumbnails;
+            //! Thumbnail creation class.
+            ThumbnailCreator* thumbnailCreator;
 
-            // Requests classes
-            io::Options ioOptions;
-            ui::InfoRequest infoRequest;
-            std::shared_ptr<io::Info> ioInfo;
-            std::map<otime::RationalTime, ui::ThumbnailRequest>
-            thumbnailRequests;
-
-            // Mapping of ids to panel data.
-            struct CallbackData
+            //! Thumbnails callback data.
+            struct ThumbnailData
             {
                 Fl_Widget* widget = nullptr;
-                file::Path path;
+                ThumbnailPanel* panel = nullptr;
             };
-            std::map<int64_t, std::shared_ptr<CallbackData>> callbackData;
         };
 
     } // namespace panel

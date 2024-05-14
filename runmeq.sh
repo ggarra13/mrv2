@@ -40,15 +40,6 @@ if [[ "$CMAKE_TARGET" == "" ]]; then
 fi
 
 
-if [[ $CMAKE_TARGET == "package" || $CMAKE_TARGET == "install" ]]; then
-    #
-    # First, generate the translations and install them
-    #
-    cd $dir
-    run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t mo
-    cd -
-fi
-
 if [[ "$CMAKE_TARGET" == doc* ]]; then
     
     . ./etc/sphinx_install.sh # Install Sphinx python modules
@@ -57,6 +48,17 @@ if [[ "$CMAKE_TARGET" == doc* ]]; then
 
     run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t doc
     export CMAKE_TARGET=install
+
+    cd -
+fi
+
+
+if [[ "$CMAKE_TARGET" == "package" ]]; then
+    
+    cd $dir
+
+    run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t mo
+    run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
 
     cd -
 fi

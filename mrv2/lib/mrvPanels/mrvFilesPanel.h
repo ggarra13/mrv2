@@ -18,8 +18,6 @@ class ViewerUI;
 
 namespace mrv
 {
-
-    class FileButton;
     class FilesPanelOptions;
 
     namespace panel
@@ -29,15 +27,13 @@ namespace mrv
         {
         public:
             FilesPanel(ViewerUI* ui);
-            virtual ~FilesPanel();
-            
-            void clear_controls();
+            ~FilesPanel();
+
             void add_controls() override;
 
             void setFilesPanelOptions(const FilesPanelOptions&);
 
             void redraw();
-
             void refresh();
 
         private:

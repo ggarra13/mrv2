@@ -60,12 +60,12 @@ Linux
 
 	  sudo apt install libnvidia-egl-wayland1
 
+	Note that NVidia's EGL under Wayland seems buggy and may result on
+	random stopping of the playback until you move the mouse.
+	If you run into that, use XWayland or log in onto X11.  To use
+	XWayland, set::
 
--  Seeking on 4K or 8K movies is too slow.  How can I improve it?
-
-   Use a small Settings Cache Read Ahead and Read Behind with 0 Gigabytes.
-   You will not be able to scrub as nicely, but jumping between frames will
-   be really fast.
+	  export FLTK_BACKEND=x11
 
   
 Windows

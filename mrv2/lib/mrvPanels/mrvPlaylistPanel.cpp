@@ -8,7 +8,6 @@
 
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Pack.H>
-#include <FL/Fl_RGB_Image.H>
 
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvFile.h"
@@ -45,7 +44,6 @@ namespace mrv
         struct PlaylistPanel::Private
         {
             std::map< size_t, PlaylistButton* > map;
-            std::vector< PlaylistButton* > playlistButtons;
 
             WidgetIndices indices;
 
@@ -58,15 +56,12 @@ namespace mrv
             std::shared_ptr<observer::ValueObserver<int> > aIndexObserver;
         };
 
-
         PlaylistPanel::PlaylistPanel(ViewerUI* ui) :
             _r(new Private),
             ThumbnailPanel(ui)
         {
             add_group("Playlist");
-
-            Fl_SVG_Image* svg = load_svg("Playlist.svg");
-            g->image(svg);
+            g->image(load_svg("Playlist.svg"));
 
             g->callback(
                 [](Fl_Widget* w, void* d)
@@ -95,20 +90,14 @@ namespace mrv
                 [this](int value) { redraw(); });
         }
 
-        PlaylistPanel::~PlaylistPanel()
-        {
-        }
-
-        void PlaylistPanel::clear_controls()
-        {
-            _r->map.clear();
-            _r->playlistButtons.clear();
-            _r->indices.clear();
-        }
+        PlaylistPanel::~PlaylistPanel() {}
 
         void PlaylistPanel::add_controls()
         {
             TLRENDER_P();
+
+            _r->map.clear();
+            _r->indices.clear();
 
             g->clear();
 
@@ -116,13 +105,13 @@ namespace mrv
 
             int Y = g->y() + 22;
 
-
             otio::RationalTime time = otio::RationalTime(0.0, 1.0);
+            const auto player = p.ui->uiView->getTimelinePlayer();
+
             const auto& model = App::app->filesModel();
             const auto& files = model->observeFiles().get()->get();
             const auto& aIndex = model->observeAIndex()->get();
             const size_t numFiles = files.size();
-            const image::Size size(128, 64);
             const std::string tmpdir = tmppath() + '/';
 
             file::Path lastPath;
@@ -148,7 +137,6 @@ namespace mrv
                 auto cbW = new Widget<PlaylistButton>(
                     g->x(), Y + numValidFiles * 68, g->w(), 68);
                 PlaylistButton* b = cbW;
-                _r->playlistButtons.push_back(b);
                 _r->indices[b] = i;
                 cbW->callback(
                     [=](auto b)
@@ -173,14 +161,20 @@ namespace mrv
                 std::string text = dir + "\n" + file + "\nColor";
                 b->copy_label(text.c_str());
                 if (i == aIndex)
+                {
                     b->value(1);
+                    if (player)
+                    {
+                        time = player->currentTime();
+                    }
+                }
                 else
+                {
                     b->value(0);
-                
-                time = media->currentTime;
-                
-                b->createTimeline(App::app->getContext());
-                _createThumbnail(b, path, time, 0, size.h);
+                    time = media->currentTime;
+                }
+
+                _createThumbnail(b, path, time);
             }
 
             if (numValidFiles == 0)
@@ -259,9 +253,6 @@ namespace mrv
             otio::RationalTime time = otio::RationalTime(0.0, 1.0);
 
             const auto player = p.ui->uiView->getTimelinePlayer();
-
-            image::Size size(128, 64);
-
             const auto& model = App::app->filesModel();
             auto Aindex = model->observeAIndex()->get();
             const auto files = model->observeFiles();
@@ -277,9 +268,7 @@ namespace mrv
 
                 b->labelcolor(FL_WHITE);
 
-                WidgetIndices::iterator it = _r->indices.find(b);
                 time = media->currentTime;
-                uint16_t layerId = media->videoLayer;
                 if (Aindex != i)
                 {
                     b->value(0);
@@ -292,17 +281,18 @@ namespace mrv
                     if (player)
                     {
                         time = player->currentTime();
-                        layerId = p.ui->uiColorChannel->value();
                     }
                 }
-                
+
                 b->createTimeline(App::app->getContext());
-                _createThumbnail(b, path, time, 0, size.h);
+
+                _createThumbnail(b, path, time);
             }
         }
 
         void PlaylistPanel::refresh()
         {
+            _cancelRequests();
             add_controls();
             end_group();
         }

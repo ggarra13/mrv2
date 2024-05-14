@@ -45,7 +45,8 @@ namespace mrv
         int handle(int event) override;
         void resize(int X, int Y, int W, int H) override;
 
-        //! Store main ui.
+        //! Store main ui.  We need this as the first viewport does not
+        //! yet know about App::ui.
         void main(ViewerUI* m) noexcept;
 
         //! Handle scrubbing.
@@ -284,7 +285,7 @@ namespace mrv
         void refreshWindows();
 
         //! Refresh window by clearing the associated resources.
-        virtual void refresh(){};
+        virtual void refresh() {};
 
         //! FLTK Callback to handle view spinning whne in Environment Map mode.
         static void _handleViewSpinning_cb(TimelineViewport* t) noexcept;

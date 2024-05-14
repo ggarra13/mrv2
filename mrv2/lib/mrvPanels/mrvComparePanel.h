@@ -34,11 +34,11 @@ namespace mrv
 
         public:
             ComparePanel(ViewerUI* ui);
-            virtual ~ComparePanel();
+            ~ComparePanel();
+
+            void add_controls() override;
 
             void redraw();
-            
-            void add_controls() override;
 
             void setCompareOptions(const tl::timeline::CompareOptions&);
 

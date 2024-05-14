@@ -1520,110 +1520,116 @@ namespace mrv
 
         Viewport* view = ui->uiView;
 
-        if (uiPrefs->uiPrefsMenuBar->value())
+        // Only redisplay the tool bars if not on Presentation
+        // Mode. (User changed Preferences while on Presentation mode).
+        if (!view->getPresentationMode())
         {
-            ui->uiMenuGroup->show();
-        }
-        else
-        {
-            ui->uiMenuGroup->hide();
-        }
-
-        if (uiPrefs->uiPrefsTopbar->value())
-        {
-            ui->uiTopBar->show();
-        }
-        else
-        {
-            ui->uiTopBar->hide();
-        }
-
-        const bool showPixelBar = uiPrefs->uiPrefsPixelToolbar->value();
-        if (showPixelBar)
-        {
-            const auto player = ui->uiView->getTimelinePlayer();
-            const bool autoHide = uiPrefs->uiPrefsAutoHidePixelBar->value();
-            if (!autoHide || !player ||
-                player->playback() == timeline::Playback::Stop)
+            if (uiPrefs->uiPrefsMenuBar->value())
             {
-                ui->uiPixelBar->show();
+                ui->uiMenuGroup->show();
+            }
+            else
+            {
+                ui->uiMenuGroup->hide();
+            }
+
+            if (uiPrefs->uiPrefsTopbar->value())
+            {
+                ui->uiTopBar->show();
+            }
+            else
+            {
+                ui->uiTopBar->hide();
+            }
+
+            const bool showPixelBar = uiPrefs->uiPrefsPixelToolbar->value();
+            if (showPixelBar)
+            {
+                const auto player = ui->uiView->getTimelinePlayer();
+                const bool autoHide = uiPrefs->uiPrefsAutoHidePixelBar->value();
+                if (!autoHide || !player ||
+                    player->playback() == timeline::Playback::Stop)
+                {
+                    ui->uiPixelBar->show();
+                }
+                else
+                {
+                    ui->uiPixelBar->hide();
+                }
             }
             else
             {
                 ui->uiPixelBar->hide();
             }
-        }
-        else
-        {
-            ui->uiPixelBar->hide();
-        }
 
-        //
-        // Edit mode options
-        //
-        auto options = ui->uiTimeline->getItemOptions();
-        options.transitions = uiPrefs->uiPrefsShowTransitions->value();
-        options.markers = uiPrefs->uiPrefsShowMarkers->value();
-        ui->uiTimeline->setEditable(uiPrefs->uiPrefsTimelineEditable->value());
-        int thumbnails = uiPrefs->uiPrefsEditThumbnails->value();
-        options.thumbnails = true;
-        switch (thumbnails)
-        {
-        case 0:
-            options.thumbnails = false;
-            break;
-        case 1: // Small
-            options.thumbnailHeight = 100;
-            break;
-        case 2: // Medium
-            options.thumbnailHeight = 200;
-            break;
-        case 3: // Large
-            options.thumbnailHeight = 300;
-            break;
-        }
-        options.waveformHeight = options.thumbnailHeight / 2;
-        options.trackInfo = settings->getValue<int>("Timeline/TrackInfo");
-        options.clipInfo = settings->getValue<int>("Timeline/ClipInfo");
-        ui->uiTimeline->setItemOptions(options);
+            //
+            // Edit mode options
+            //
+            auto options = ui->uiTimeline->getItemOptions();
+            options.transitions = uiPrefs->uiPrefsShowTransitions->value();
+            options.markers = uiPrefs->uiPrefsShowMarkers->value();
+            ui->uiTimeline->setEditable(
+                uiPrefs->uiPrefsTimelineEditable->value());
+            int thumbnails = uiPrefs->uiPrefsEditThumbnails->value();
+            options.thumbnails = true;
+            switch (thumbnails)
+            {
+            case 0:
+                options.thumbnails = false;
+                break;
+            case 1: // Small
+                options.thumbnailHeight = 100;
+                break;
+            case 2: // Medium
+                options.thumbnailHeight = 200;
+                break;
+            case 3: // Large
+                options.thumbnailHeight = 300;
+                break;
+            }
+            options.waveformHeight = options.thumbnailHeight / 2;
+            options.trackInfo = settings->getValue<int>("Timeline/TrackInfo");
+            options.clipInfo = settings->getValue<int>("Timeline/ClipInfo");
+            ui->uiTimeline->setItemOptions(options);
 
-        if (uiPrefs->uiPrefsTimeline->value())
-        {
-            ui->uiBottomBar->show();
-            if (ui->uiEdit->value())
-                set_edit_mode_cb(EditMode::kFull, ui);
+            if (uiPrefs->uiPrefsTimeline->value())
+            {
+                ui->uiBottomBar->show();
+                if (ui->uiEdit->value())
+                    set_edit_mode_cb(EditMode::kFull, ui);
+                else
+                    set_edit_mode_cb(EditMode::kSaved, ui);
+            }
             else
-                set_edit_mode_cb(EditMode::kSaved, ui);
-        }
-        else
-        {
-            ui->uiBottomBar->hide();
-            set_edit_mode_cb(EditMode::kNone, ui);
-        }
+            {
+                ui->uiBottomBar->hide();
+                set_edit_mode_cb(EditMode::kNone, ui);
+            }
 
-        if (uiPrefs->uiPrefsStatusBar->value())
-        {
-            ui->uiStatusGroup->show();
-        }
-        else
-        {
-            ui->uiStatusGroup->hide();
-        }
+            if (uiPrefs->uiPrefsStatusBar->value())
+            {
+                ui->uiStatusGroup->show();
+            }
+            else
+            {
+                ui->uiStatusGroup->hide();
+            }
 
-        if (uiPrefs->uiPrefsToolBar->value())
-        {
-            ui->uiToolsGroup->show();
-            ui->uiToolsGroup->size(45, 433);
-        }
-        else
-        {
-            ui->uiToolsGroup->hide();
-        }
+            if (uiPrefs->uiPrefsToolBar->value())
+            {
+                ui->uiToolsGroup->show();
+                ui->uiToolsGroup->size(45, 433);
+            }
+            else
+            {
+                ui->uiToolsGroup->hide();
+            }
 
-        ui->uiViewGroup->layout();
-        ui->uiViewGroup->init_sizes();
+            ui->uiViewGroup->layout();
+            ui->uiViewGroup->init_sizes();
 
-        ui->uiRegion->layout();
+            ui->uiRegion->layout();
+        }
 
         panel::onlyOne((bool)uiPrefs->uiPrefsOnePanelOnly->value());
 

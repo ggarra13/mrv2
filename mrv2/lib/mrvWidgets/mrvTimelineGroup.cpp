@@ -2,8 +2,6 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <iostream>
-
 #include <FL/fl_draw.H>
 
 #include "mrvWidgets/mrvTimelineGroup.h"
@@ -18,35 +16,22 @@ namespace mrv
 
     void TimelineGroup::draw()
     {
-        // Don't fill the whole background, just the dragbar
-        fl_color(color());
-        fl_rectf(x(), y(), w(), 8);
-
+        Fl_Group::draw();
         int W = w() / 2 - 20;
         int W2 = w() / 2 + 20;
-        const int Y = y() + 1;
-
         fl_color(FL_WHITE);
+        const int Y = y() + 1;
         for (int i = W; i <= W2; i += 4)
         {
             const int X = x() + i;
             fl_line(X, Y, X, y() + 6);
         }
-
         fl_color(FL_BLACK);
         for (int i = W; i <= W2; i += 4)
         {
             const int X = x() + i + 1;
             fl_line(X, Y, X, y() + 6);
         }
-
-        if (!(damage() & FL_DAMAGE_CHILD))
-        {
-            return;
-        }
-
-        Fl_Widget* timeline = child(0);
-        timeline->redraw();
     }
 
 } // namespace mrv

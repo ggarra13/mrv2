@@ -2,21 +2,12 @@
 // Copyright (c) 2021-2023 Darby Johnston
 // All rights reserved.
 
-#include <memory>
-
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Double_Window.H>
 #include <FL/Fl.H>
 #include <FL/names.h>
 
-#include <tlCore/StringFormat.h>
-
-#include <tlIO/Cache.h>
-
 #include <tlTimelineUI/TimelineWidget.h>
-
-#include <tlGL/GL.h>
-#include <tlGL/GLFWWindow.h>
 
 #include <tlUI/IClipboard.h>
 #include <tlUI/IWindow.h>
@@ -30,7 +21,6 @@
 #include <tlGL/Shader.h>
 
 #include "mrvCore/mrvFile.h"
-#include "mrvCore/mrvImage.h"
 #include "mrvCore/mrvHotkey.h"
 #include "mrvCore/mrvTimeObject.h"
 
@@ -41,6 +31,7 @@
 
 #include "mrvUI/mrvDesktop.h"
 
+#include "mrvGL/mrvThumbnailCreator.h"
 #include "mrvGL/mrvTimelineWidget.h"
 #include "mrvGL/mrvGLErrors.h"
 
@@ -51,25 +42,27 @@
 #include "mrViewer.h"
 
 #include <FL/platform.H>
-#undef None
 
+// #define DEBUG_REDRAWS
 
 namespace mrv
 {
     namespace
     {
-        const int kTHUMB_WIDTH = 128;
-        const int kTHUMB_HEIGHT = 80;
+        const int kTHUMB_WIDTH = 96;
+        const int kTHUMB_HEIGHT = 64;
+        const int kLABEL_SIZE = 16;
+        const int kWINDOW_BORDERS = 2;
+        const int kBOX_BORDERS = 2;
 
-        const double kTimeout = 0.008; // 120 fps
-        const char* kModule = "timelineui";
+        const double kTimeout = 0.008; // approx. 120 fps
+        const char* kModule = "timeline";
     } // namespace
 
     namespace
     {
-        
         int getIndex(const otio::SerializableObject::Retainer<otio::Composable>&
-                     composable)
+                         composable)
         {
             int out = -1;
             if (composable && composable->parent())
@@ -194,24 +187,14 @@ namespace mrv
 
         TimelinePlayer* player = nullptr;
 
-        // New thumbnail variables
-        int thumbnailWidth = kTHUMB_WIDTH;
-        std::vector<tl::file::MemoryRead> memoryRead;
-        std::shared_ptr<ui::ThumbnailGenerator> thumbnailGenerator;
-        std::shared_ptr<gl::GLFWWindow> window;
-        std::map<std::string, std::shared_ptr<image::Image> > thumbnails;
-
-        // Requests classes
-        io::Options ioOptions;
-        ui::InfoRequest infoRequest;
-        std::shared_ptr<io::Info> ioInfo;
-        std::map<otime::RationalTime, ui::ThumbnailRequest> thumbnailRequests;
-        tl::file::Path path;
-        
-        // FLTK classes
+        ThumbnailCreator* thumbnailCreator = nullptr;
         Fl_Double_Window* thumbnailWindow = nullptr; // thumbnail window
+        int64_t thumbnailRequestId = 0;
         Fl_Box* box = nullptr;
-        
+
+        timeline::OCIOOptions ocioOptions;
+        timeline::LUTOptions lutOptions;
+
         mrv::TimeUnits units = mrv::TimeUnits::Timecode;
 
         std::shared_ptr<ui::Style> style;
@@ -249,15 +232,24 @@ namespace mrv
         // Do not use FL_DOUBLE on APPLE as it makes playback slow
 #if defined(__APPLE__) || defined(__linux__)
         fl_double = 0;
-        if (desktop::Wayland())
+        if (desktop::XWayland())
+        {
+            fl_double = FL_DOUBLE; // needed
+        }
+        else if (desktop::Wayland())
         {
             // For faster playback, we won't set this window to FL_DOUBLE.
             // FLTK's EGL Wayland already uses two buffers.
-            // fl_double = FL_DOUBLE;
+            fl_double = 0;
         }
-        else if (desktop::XWayland())
+        else
         {
-            fl_double = FL_DOUBLE;
+            if (desktop::X11())
+            {
+                // For faster playback, we won't set this window to FL_DOUBLE.
+                // FLTK's X11 already uses two buffers.
+                fl_double = 0;
+            }
         }
 #endif
         mode(FL_RGB | FL_ALPHA | FL_STENCIL | fl_double | FL_OPENGL3);
@@ -274,6 +266,11 @@ namespace mrv
 
         p.ui = ui;
         p.topWindow = ui->uiMain;
+
+        if (!p.thumbnailWindow)
+        {
+            _createThumbnailWindow();
+        }
 
         auto settings = ui->app->settings();
 
@@ -299,15 +296,8 @@ namespace mrv
         p.timelineWindow->setClipboard(p.clipboard);
         p.timelineWidget->setParent(p.timelineWindow);
 
-        p.window = gl::GLFWWindow::create(
-            "mrv::TimelineWidget::window",
-            math::Size2i(1, 1),
-            context,
-            static_cast<int>(gl::GLFWWindowOptions::None));
-            
-        p.thumbnailGenerator = ui::ThumbnailGenerator::create(context,
-                                                              p.window);
-        
+        p.thumbnailCreator = new ThumbnailCreator(context);
+
         setStopOnScrub(false);
 
         _styleUpdate();
@@ -315,10 +305,9 @@ namespace mrv
         Fl::add_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
     }
 
-    std::shared_ptr<ui::ThumbnailGenerator>
-    TimelineWidget::thumbnailGenerator() const
+    ThumbnailCreator* TimelineWidget::thumbnailCreator()
     {
-        return _p->thumbnailGenerator;
+        return _p->thumbnailCreator;
     }
 
     void TimelineWidget::setStyle(const std::shared_ptr<ui::Style>& style)
@@ -337,6 +326,7 @@ namespace mrv
 
     TimelineWidget::~TimelineWidget()
     {
+        Fl::remove_timeout(timerEvent_cb, this);
     }
 
     bool TimelineWidget::isEditable() const
@@ -406,8 +396,7 @@ namespace mrv
                         p.ui->uiView->setPlayback(timeline::Playback::Reverse);
                         p.continueReversePlaying = false;
                     }
-                },
-                observer::CallbackAction::Suppress);
+                });
     }
 
     int TimelineWidget::_seek()
@@ -430,7 +419,8 @@ namespace mrv
             //         on the cache until it is filled and we continue
             //         playing from there.
             //
-            if (file::isMovie(p.path) &&
+            const auto& path = p.player->path();
+            if (file::isMovie(path) &&
                 p.player->playback() == timeline::Playback::Reverse &&
                 !info.video.empty() && info.video[0].size.w > 2048)
             {
@@ -451,53 +441,98 @@ namespace mrv
     {
         TLRENDER_P();
 
-        int X, Y;
-        _getThumbnailPosition(X, Y);
+        int X = kWINDOW_BORDERS;
+        int Y = kWINDOW_BORDERS;
+        int W = kTHUMB_WIDTH;
+        int H = kTHUMB_HEIGHT;
 
         // Open a thumbnail window just above the timeline
         Fl_Group::current(p.topWindow);
-        p.thumbnailWindow =
-            new Fl_Double_Window(X, Y, kTHUMB_WIDTH, kTHUMB_HEIGHT);
+
+        const int wX = X - kWINDOW_BORDERS;
+        const int wY = Y - kWINDOW_BORDERS;
+        const int wW = W + kWINDOW_BORDERS * 2 + kBOX_BORDERS * 2;
+        const int wH = H + kWINDOW_BORDERS * 2 + kBOX_BORDERS * 2 + kLABEL_SIZE;
+
+        const int bX = kBOX_BORDERS;
+        const int bY = kBOX_BORDERS;
+        const int bW = W + kBOX_BORDERS * 2;
+        const int bH = H + kBOX_BORDERS * 2 + kLABEL_SIZE;
+
+        p.thumbnailWindow = new Fl_Double_Window(wX, wY, wW, wH);
         p.thumbnailWindow->box(FL_FLAT_BOX);
         p.thumbnailWindow->color(0xffffffff);
         p.thumbnailWindow->clear_border();
         p.thumbnailWindow->begin();
 
-        p.box = new Fl_Box(2, 2, kTHUMB_WIDTH - 4, kTHUMB_HEIGHT - 4);
+        p.box = new Fl_Box(bX, bY, bW, bH);
         p.box->box(FL_FLAT_BOX);
         p.box->labelcolor(fl_contrast(p.box->labelcolor(), p.box->color()));
         p.thumbnailWindow->end();
         p.thumbnailWindow->resizable(0);
-        p.thumbnailWindow->show();
+        p.thumbnailWindow->hide();
         Fl_Group::current(nullptr);
     }
 
-    void TimelineWidget::_getThumbnailPosition(int& X, int& Y)
+    void TimelineWidget::_getThumbnailPosition(int& X, int& Y, int& W, int& H)
     {
         TLRENDER_P();
-        X = Fl::event_x_root() - p.topWindow->x_root() -
-            (p.thumbnailWidth + 4) / 2;
+
+        W = kTHUMB_WIDTH;
+        H = kTHUMB_HEIGHT;
+        if (p.box)
+        {
+            Fl_Image* image = p.box->image();
+            if (image)
+            {
+                W = image->w();
+                H = image->h();
+            }
+        }
+
+        X = Fl::event_x_root() - p.topWindow->x_root() - W / 2;
         if (X < 0)
             X = 0;
 
-        int maxW = p.topWindow->w() - p.thumbnailWidth - 4;
+        int maxW = p.topWindow->w();
+        if (p.thumbnailWindow)
+            maxW -= p.thumbnailWindow->w();
+
         if (X > maxW)
             X = maxW;
 
-        // 20 here is the size of the timeline without the pictures
-        Y = y_root() - p.topWindow->y_root() - 20 - kTHUMB_HEIGHT;
+        Y = y_root() - p.topWindow->y_root();
+
+        // 8 here is the size of the dragbar.
+        if (p.thumbnailWindow)
+            Y -= (p.thumbnailWindow->h() + 8);
+
+        if (Y < 0)
+            Y = 0;
     }
 
     void TimelineWidget::repositionThumbnail()
     {
         TLRENDER_P();
-        if (Fl::belowmouse() == this)
+        if (Fl::belowmouse() == this && p.player &&
+            p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
         {
-            int X, Y;
-            _getThumbnailPosition(X, Y);
-            p.thumbnailWindow->resize(X, Y, p.thumbnailWidth + 4,
-                                      kTHUMB_HEIGHT);
-            p.box->resize(2, 2, p.thumbnailWidth, kTHUMB_HEIGHT - 4);
+            int X, Y, W, H;
+            _getThumbnailPosition(X, Y, W, H);
+
+            const int wX = X - kWINDOW_BORDERS;
+            const int wY = Y - kWINDOW_BORDERS;
+            const int wW = W + kWINDOW_BORDERS * 2 + kBOX_BORDERS * 2;
+            const int wH =
+                H + kWINDOW_BORDERS * 2 + kBOX_BORDERS * 2 + kLABEL_SIZE;
+
+            const int bX = kBOX_BORDERS;
+            const int bY = kBOX_BORDERS;
+            const int bW = W + kBOX_BORDERS * 2;
+            const int bH = H + kBOX_BORDERS * 2 + kLABEL_SIZE;
+
+            p.thumbnailWindow->resize(wX, wY, wW, wH);
+            p.box->resize(bX, bY, bW, bH);
             p.thumbnailWindow->show(); // needed for Windows
         }
         else
@@ -506,29 +541,6 @@ namespace mrv
         }
     }
 
-    void
-    TimelineWidget::_updateThumbnail(const std::shared_ptr<image::Image>& image)
-    {
-        TLRENDER_P();
-        
-        const auto W = image->getWidth();
-        const auto H = image->getHeight();
-        const int bytes = image->getDataByteCount();
-        const int depth = bytes / W / H;
-        const uint8_t* data = image->getData();
-        const auto rgbImage = new Fl_RGB_Image(data, W, H, depth);
-
-        Fl_Image* boxImage = p.box->image();
-        p.box->bind_image(rgbImage);
-        p.box->redraw();
-
-        if (p.thumbnailWidth != W)
-        {
-            p.thumbnailWidth = W;
-            repositionThumbnail();
-        }
-    }
-    
     int TimelineWidget::requestThumbnail(bool fetch)
     {
         TLRENDER_P();
@@ -543,50 +555,38 @@ namespace mrv
         p.timeRange = player->getTimeRange();
 
         char buffer[64];
-        if (!p.thumbnailWindow)
-        {
-            _createThumbnailWindow();
-        }
 
         repositionThumbnail();
 
-        const auto& time = _posToTime(_toUI(Fl::event_x()));
-        uint16_t layerId = p.ui->uiColorChannel->value();
-        timeToText(buffer, time, _p->units);
-        p.box->copy_label(buffer);
-        
-        _cancelRequests();
-        
-        if (!p.ioInfo && !p.infoRequest.future.valid())
-        {
-            p.infoRequest = p.thumbnailGenerator->getInfo(p.path, p.memoryRead);
-        }
+        file::Path path;
+        auto model = p.ui->app->filesModel();
+        auto Aitem = model->observeA()->get();
+        if (Aitem)
+            path = Aitem->path;
+        else
+            path = player->getPath();
 
-        if (!fetch) return 1;
-                
-        p.ioOptions["OpenEXR/IgnoreDisplayWindow"] =
-            string::Format("{0}").arg(
-                App::ui->uiView->getIgnoreDisplayWindow());
-        p.ioOptions["Layer"] =
-            string::Format("{0}").arg(layerId);
-        // @todo: p.ioOptions["USD/cameraName"] = p.clipName;
-        const auto i = p.thumbnails.find(
-            io::getCacheKey(p.path, time, p.ioOptions));
-        if (i != p.thumbnails.end())
+        const image::Size size(kTHUMB_WIDTH, kTHUMB_HEIGHT);
+        const auto& time = _posToTime(_toUI(Fl::event_x()));
+
+        if (p.thumbnailCreator)
         {
-            _updateThumbnail(i->second);
-        }
-        else if (p.ioInfo && !p.ioInfo->video.empty())
-        {
-            const auto k = p.thumbnailRequests.find(time);
-            if (k == p.thumbnailRequests.end())
+            if (p.thumbnailRequestId)
             {
-                p.thumbnailRequests[time] =
-                    p.thumbnailGenerator->getThumbnail(
-                        p.path, p.memoryRead, p.box->h() - 24,
-                        time, p.ioOptions);
+                p.thumbnailCreator->cancelRequests(p.thumbnailRequestId);
+            }
+
+            if (fetch)
+            {
+                uint16_t layerId = p.ui->uiColorChannel->value();
+                p.thumbnailCreator->initThread();
+                p.thumbnailRequestId = p.thumbnailCreator->request(
+                    path.get(), time, size, single_thumbnail_cb, (void*)this,
+                    layerId, p.ocioOptions, p.lutOptions);
             }
         }
+        timeToText(buffer, time, _p->units);
+        p.box->copy_label(buffer);
         return 1;
     }
 
@@ -607,22 +607,33 @@ namespace mrv
             auto innerPlayer = player->player();
             p.timeRange = innerPlayer->getTimeRange();
             p.timelineWidget->setPlayer(innerPlayer);
-            
-            auto model = p.ui->app->filesModel();
-            auto Aitem = model->observeA()->get();
-            if (Aitem)
-                p.path = Aitem->path;
-            else
-                p.path = player->path();
         }
         else
         {
-            _cancelRequests();
-            p.box->bind_image(nullptr);
-            
+            if (p.thumbnailRequestId)
+            {
+                p.thumbnailCreator->cancelRequests(p.thumbnailRequestId);
+                p.box->image(nullptr);
+            }
             p.timeRange = time::invalidTimeRange;
             p.timelineWidget->setPlayer(nullptr);
         }
+    }
+
+    void TimelineWidget::setLUTOptions(const timeline::LUTOptions& lutOptions)
+    {
+        TLRENDER_P();
+        if (lutOptions == p.lutOptions)
+            return;
+        p.lutOptions = lutOptions;
+    }
+
+    void TimelineWidget::setOCIOOptions(const timeline::OCIOOptions& value)
+    {
+        TLRENDER_P();
+        if (p.ocioOptions == value)
+            return;
+        p.ocioOptions = value;
     }
 
     bool TimelineWidget::hasFrameView() const
@@ -662,11 +673,9 @@ namespace mrv
         _p->timelineWidget->setItemOptions(value);
     }
 
-    void TimelineWidget::_initializeGL()
+    void TimelineWidget::_initializeGLResources()
     {
         TLRENDER_P();
-
-        gl::initGLAD();
 
         if (auto context = p.context.lock())
         {
@@ -711,21 +720,41 @@ namespace mrv
                 context->log(
                     "mrv::mrvTimelineWidget", e.what(), log::Type::Error);
             }
-
-            _sizeHintEvent();
+            // _sizeHintEvent();
         }
+    }
+
+    void TimelineWidget::_initializeGL()
+    {
+        gl::initGLAD();
+
+        // Clean up all resources
+        refresh();
+
+        // Reinitialize them
+        _initializeGLResources();
     }
 
     void TimelineWidget::resize(int X, int Y, int W, int H)
     {
         TLRENDER_P();
 
+#if 0
+        std::cerr << "\t\ttimeline widget WxH=" << W << "x" << H << std::endl;
+        std::cerr << "\t\t\tpixels_per_unit=" << this->pixels_per_unit()
+                  << std::endl;
+        std::cerr << "\t\t\tuiView pixels_per_unit="
+                  << p.ui->uiView->pixels_per_unit()
+                  << std::endl;
+#endif
+
         Fl_Gl_Window::resize(X, Y, W, H);
 
+        _sizeHintEvent();
         _setGeometry();
         _clipEvent();
 
-        p.buffer.reset(); // needed
+        p.buffer.reset();
 
         if (p.thumbnailWindow)
         {
@@ -790,6 +819,8 @@ namespace mrv
                     renderOptions.clearColor =
                         p.style->getColorRole(ui::ColorRole::Window);
                     p.render->begin(renderSize, renderOptions);
+                    p.render->setOCIOOptions(timeline::OCIOOptions());
+                    p.render->setLUTOptions(timeline::LUTOptions());
                     ui::DrawEvent drawEvent(
                         p.style, p.iconLibrary, p.render, p.fontSystem);
                     p.render->setClipRectEnabled(true);
@@ -1454,51 +1485,44 @@ namespace mrv
     {
         TLRENDER_P();
 
-        //! \bug This guard is needed since the timer event can be called during
-        //! destruction?
-        if (_p)
+        _tickEvent();
+
+        if (_getSizeUpdate(p.timelineWindow))
         {
-            _tickEvent();
-
-            if (_getSizeUpdate(p.timelineWindow))
-            {
-                _sizeHintEvent();
-                _setGeometry();
-                _clipEvent();
-                // updateGeometry();  // Qt function?
-            }
-
-            if (_getDrawUpdate(p.timelineWindow))
-            {
-                redraw();
-            }
+            _sizeHintEvent();
+            _setGeometry();
+            _clipEvent();
         }
+
+        if (_getDrawUpdate(p.timelineWindow))
+        {
+            redraw();
+        }
+
         Fl::repeat_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
     }
 
     int TimelineWidget::handle(int event)
     {
         TLRENDER_P();
-        if (!p.player)
-            return 0;
         switch (event)
         {
         case FL_FOCUS:
         case FL_UNFOCUS:
             return 1;
         case FL_ENTER:
-            // cursor(FL_CURSOR_DEFAULT);
+            cursor(FL_CURSOR_DEFAULT);
             if (p.thumbnailWindow && p.player &&
                 p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
             {
                 requestThumbnail(true);
-                p.thumbnailWindow->show();
             }
             return enterEvent();
         case FL_LEAVE:
             if (p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
             {
-                _cancelRequests();
+                if (p.thumbnailCreator && p.thumbnailRequestId)
+                    p.thumbnailCreator->cancelRequests(p.thumbnailRequestId);
                 hideThumbnail();
             }
             return leaveEvent();
@@ -1526,7 +1550,8 @@ namespace mrv
         {
             if (p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
             {
-                _cancelRequests();
+                if (p.thumbnailCreator && p.thumbnailRequestId)
+                    p.thumbnailCreator->cancelRequests(p.thumbnailRequestId);
                 hideThumbnail();
             }
             refresh();
@@ -1538,31 +1563,39 @@ namespace mrv
         return out;
     }
 
-    int TimelineWidget::_toUI(int value) const
+    const float TimelineWidget::pixelRatio() const
     {
+        TLRENDER_P();
+#if 0
         TimelineWidget* self = const_cast<TimelineWidget*>(this);
         const float devicePixelRatio = self->pixels_per_unit();
+#else
+        const float devicePixelRatio = p.ui->uiView->pixels_per_unit();
+#endif
+        return devicePixelRatio;
+    }
+
+    int TimelineWidget::_toUI(int value) const
+    {
+        const float devicePixelRatio = pixelRatio();
         return value * devicePixelRatio;
     }
 
     math::Vector2i TimelineWidget::_toUI(const math::Vector2i& value) const
     {
-        TimelineWidget* self = const_cast<TimelineWidget*>(this);
-        const float devicePixelRatio = self->pixels_per_unit();
+        const float devicePixelRatio = pixelRatio();
         return value * devicePixelRatio;
     }
 
     int TimelineWidget::_fromUI(int value) const
     {
-        TimelineWidget* self = const_cast<TimelineWidget*>(this);
-        const float devicePixelRatio = self->pixels_per_unit();
+        const float devicePixelRatio = pixelRatio();
         return devicePixelRatio > 0.F ? (value / devicePixelRatio) : 0.F;
     }
 
     math::Vector2i TimelineWidget::_fromUI(const math::Vector2i& value) const
     {
-        TimelineWidget* self = const_cast<TimelineWidget*>(this);
-        const float devicePixelRatio = self->pixels_per_unit();
+        const float devicePixelRatio = pixelRatio();
         return devicePixelRatio > 0.F ? (value / devicePixelRatio)
                                       : math::Vector2i();
     }
@@ -1653,51 +1686,11 @@ namespace mrv
         edit_move_clip_annotations(moves, p.ui);
     }
 
-    void TimelineWidget::_thumbnailEvent()
-    {
-        TLRENDER_P();
-        
-        // Check if the I/O information is finished.
-        if (p.infoRequest.future.valid() &&
-            p.infoRequest.future.wait_for(std::chrono::seconds(0)) == std::future_status::ready)
-        {
-            p.ioInfo = std::make_shared<io::Info>(p.infoRequest.future.get());
-        }
-
-        // Check if any thumbnails are finished.
-        auto i = p.thumbnailRequests.begin();
-        while (i != p.thumbnailRequests.end())
-        {
-            if (i->second.future.valid() &&
-                i->second.future.wait_for(std::chrono::seconds(0)) == std::future_status::ready)
-            {
-                const auto image = i->second.future.get();
-                p.thumbnails[io::getCacheKey(p.path, i->first, p.ioOptions)] = image;
-                i = p.thumbnailRequests.erase(i);
-                
-                const auto W = image->getWidth();
-                const auto H = image->getHeight();
-                const int bytes = image->getDataByteCount();
-                const int depth = bytes / W / H;
-                uint8_t* data = image->getData();
-                flipImageInY(data, W, H, depth);
-                
-                _updateThumbnail(image);
-            }
-            else
-            {
-                ++i;
-            }
-        }
-    }
-
     void TimelineWidget::_tickEvent()
     {
         TLRENDER_P();
         ui::TickEvent tickEvent(p.style, p.iconLibrary, p.fontSystem);
-        _tickEvent(p.timelineWindow, true, true, tickEvent);
-
-        _thumbnailEvent();
+        _tickEvent(_p->timelineWindow, true, true, tickEvent);
     }
 
     void TimelineWidget::_tickEvent(
@@ -1736,7 +1729,7 @@ namespace mrv
     void TimelineWidget::_sizeHintEvent()
     {
         TLRENDER_P();
-        const float devicePixelRatio = this->pixels_per_unit();
+        const float devicePixelRatio = pixelRatio();
         ui::SizeHintEvent sizeHintEvent(
             p.style, p.iconLibrary, p.fontSystem, devicePixelRatio);
         _sizeHintEvent(p.timelineWindow, sizeHintEvent);
@@ -1835,23 +1828,39 @@ namespace mrv
             widget->drawOverlayEvent(drawRect, event);
         }
     }
-    
-    void TimelineWidget::_cancelRequests()
+
+    void TimelineWidget::single_thumbnail(
+        const int64_t id,
+        const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&
+            thumbnails)
     {
         TLRENDER_P();
-        
-        std::vector<uint64_t> ids;
-        if (p.infoRequest.future.valid())
+
+        if (id == p.thumbnailRequestId)
         {
-            ids.push_back(p.infoRequest.id);
-            p.infoRequest = ui::InfoRequest();
+            for (const auto& i : thumbnails)
+            {
+                p.box->bind_image(i.second);
+            }
+            p.box->redraw();
         }
-        for (const auto& i : p.thumbnailRequests)
+        else
         {
-            ids.push_back(i.second.id);
+            for (const auto& i : thumbnails)
+            {
+                delete i.second;
+            }
         }
-        p.thumbnailRequests.clear();
-        p.thumbnailGenerator->cancelRequests(ids);
+    }
+
+    void TimelineWidget::single_thumbnail_cb(
+        const int64_t id,
+        const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&
+            thumbnails,
+        void* data)
+    {
+        TimelineWidget* self = static_cast< TimelineWidget* >(data);
+        self->single_thumbnail(id, thumbnails);
     }
 
 } // namespace mrv

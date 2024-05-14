@@ -93,7 +93,6 @@ namespace mrv
         ///@{
         void redrawThumbnails();
         void refreshThumbnails();
-        void clearCache();
         ///@}
 
         //! Sync panels on a network connection.

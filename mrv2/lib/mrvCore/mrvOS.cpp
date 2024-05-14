@@ -16,27 +16,65 @@
 
 #include "mrvCore/mrvI8N.h"
 
+#include "mrvUI/mrvDesktop.h"
+
+#ifdef TLRENDER_GL
+#    include <tlGL/Init.h>
+#    include <FL/gl.h>
+#endif
+
 namespace mrv
 {
     namespace os
     {
+        std::string getGPUVendor()
+        {
+            std::string out = _("Unknown");
+
+            tl::gl::initGLAD();
+
+            // Get OpenGL information
+            const char* vendorString = (char*)glGetString(GL_VENDOR);
+            if (vendorString)
+                out = vendorString;
+
+            out = "GPU: " + out;
+            return out;
+        }
+
         std::string getDesktop()
         {
-            std::string out = "Unknown";
-            const char* env = fl_getenv("XDG_SESSION_DESKTOP");
-            if (env && strlen(env) > 0)
+            std::string out = _("Desktop: ");
+
+#ifdef __linux__
+            if (desktop::XWayland())
             {
-                out = env;
+                out += "XWayland";
             }
             else
             {
-                env = fl_getenv("DESKTOP_SESSION");
+                const char* env = fl_getenv("XDG_SESSION_DESKTOP");
                 if (env && strlen(env) > 0)
                 {
-                    out = env;
+                    out += env;
+                }
+                else
+                {
+                    env = fl_getenv("DESKTOP_SESSION");
+                    if (env && strlen(env) > 0)
+                    {
+                        out += env;
+                    }
                 }
             }
-            out = _("Desktop: ") + out;
+#elif _WIN32
+            out += "Windows (GDI+)";
+#elif __APPLE__
+            out += "macOS (Cocoa)";
+#else
+            out += _("Unknown");
+#endif
+
             return out;
         }
 

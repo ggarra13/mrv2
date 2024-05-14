@@ -3414,11 +3414,20 @@ msgstr "1,66"
 msgid "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 msgstr "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 
-msgid "Ahead    V: % 4<PRIu64>    A: % 4<PRIu64>"
-msgstr "Adelante    V: % 4<PRIu64>    A: % 4<PRIu64>"
+msgid "Cache:"
+msgstr "Cache:"
 
-msgid "Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
-msgstr "Atrás          V: % 4<PRIu64>    A: % 4<PRIu64> "
+msgid "    Used: %.2g of %zu Gb"
+msgstr "    Usado: %.2g of %zu Gb"
+
+msgid "    Percentage: %.2g %%"
+msgstr "    Porcentaje: %.2g %%"
+
+msgid "    Ahead    V: % 4<PRIu64>    A: % 4<PRIu64>"
+msgstr "   Adelante V: % 4<PRIu64>    A: % 4<PRIu64>"
+
+msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
+msgstr "   Atrás    V: % 4<PRIu64>    A: % 4<PRIu64> "
 
 msgid "Edit Text"
 msgstr "Editar Texto"
@@ -3788,156 +3797,6 @@ msgstr "Ayuda/Documentación"
 msgid "Help/About"
 msgstr "Ayuda/Acerca"
 
-msgid "3GP Movie"
-msgstr "Película 3GP"
-
-msgid "Advanced Systems Format Media"
-msgstr "Advanced Systems Format Media"
-
-msgid "AVCHD Video"
-msgstr "Video AVCHD"
-
-msgid "AVI Movie"
-msgstr "Película AVI"
-
-msgid "DIVX Movie"
-msgstr "Película DIVX"
-
-msgid "Digital Video"
-msgstr "Vídeo Digital"
-
-msgid "Flash Movie"
-msgstr "Película Flash"
-
-msgid "Apple's M4V Movie"
-msgstr "Película M4V de Apple"
-
-msgid "Matroska Movie"
-msgstr "Película Matroska"
-
-msgid "Quicktime Movie"
-msgstr "Película Quicktime"
-
-msgid "MP4 Movie"
-msgstr "Película MP4"
-
-msgid "MPEG Movie"
-msgstr "Película MPEG"
-
-msgid "MXF Movie"
-msgstr "Película MXF"
-
-msgid "Ogg Movie"
-msgstr "Película Ogg"
-
-msgid "Ogg Video"
-msgstr "Vídeo Ogg"
-
-msgid "OpenTimelineIO EDL"
-msgstr "LDE de OpenTimelineIO."
-
-msgid "OpenTimelineIO Zipped EDL"
-msgstr "Zip LDE de OpenTimelineIO."
-
-msgid "Real Media Movie"
-msgstr "Película Real Media"
-
-msgid "VOB Movie"
-msgstr "Película VOB"
-
-msgid "WebM Movie"
-msgstr "Película WebM"
-
-msgid "WMV Movie"
-msgstr "Película WMV"
-
-msgid "Bitmap Picture"
-msgstr "Película Bitmap"
-
-msgid "Cineon Picture"
-msgstr "Dibujo Cineon"
-
-msgid "Canon Raw Picture"
-msgstr "Dibujo Canon Raw"
-
-msgid "Kodak Digital Negative"
-msgstr "Negativo Digital de Kodac"
-
-msgid "DPX Picture"
-msgstr "Dibujo DPX"
-
-msgid "EXR Picture"
-msgstr "Dibujo EXR"
-
-msgid "HDRI Picture"
-msgstr "Dibujo HDRI"
-
-msgid "TIFF Picture"
-msgstr "Dibujo TIFF"
-
-msgid "IFF Picture"
-msgstr "Dibujo IFF"
-
-msgid "JPEG Picture"
-msgstr "Dibujo JPEG"
-
-msgid "Map Picture"
-msgstr "Dibujo Map"
-
-msgid "GIF Picture"
-msgstr "Dibujo GIF"
-
-msgid "Softimage Picture"
-msgstr "Dibujo Softimage"
-
-msgid "PNG Picture"
-msgstr "Dibujo PNG"
-
-msgid "RGB Picture"
-msgstr "Dibujo RGB"
-
-msgid "MP3 music"
-msgstr "Música MP3"
-
-msgid "OGG Vorbis music"
-msgstr "Música OGG Vorbis"
-
-msgid "Wave music"
-msgstr "Múscia Wave"
-
-msgid "Jan"
-msgstr "Ene"
-
-msgid "Feb"
-msgstr "Feb"
-
-msgid "Mar"
-msgstr "Mar"
-
-msgid "Apr"
-msgstr "Abr"
-
-msgid "May"
-msgstr "May"
-
-msgid "Jun"
-msgstr "Jun"
-
-msgid "Jul"
-msgstr "Jul"
-
-msgid "Aug"
-msgstr "Ago"
-
-msgid "Sep"
-msgstr "Sep"
-
-msgid "Oct"
-msgstr "Oct"
-
-msgid "Nov"
-msgstr "Nov"
-
 msgid "Replace"
 msgstr "Reemplazar"
 
@@ -3998,8 +3857,8 @@ msgstr "Marque un área de la imagen con SHIFT + el botón izquierdo del ratón"
 msgid "&Copy"
 msgstr "&Copiar"
 
-msgid "Everything OK."
-msgstr "Todo Bien."
+msgid "Everything OK. "
+msgstr "Todo Bien. "
 
 msgid "Elapsed"
 msgstr "Transcurrido"
@@ -4952,9 +4811,6 @@ msgstr "Deshacer la Última Figura Dibujada en Cuadro Actual."
 msgid "Redo Previous Shape Drawn in Current Frame."
 msgstr "Rehacer la Última Figura Dibujada en Cuadro Actual."
 
-msgid "Everything OK.  "
-msgstr "Todo Bien."
-
 msgid "Current tool being used."
 msgstr "Herramienta siendo usada."
 
@@ -5126,6 +4982,12 @@ msgstr "Premultiplicado"
 msgid "Nearest"
 msgstr "Cercanía"
 
+msgid "Small"
+msgstr "Pequeño"
+
+msgid "Large"
+msgstr "Grande"
+
 msgid "59.94"
 msgstr "59,94"
 
@@ -5146,12 +5008,6 @@ msgstr "Sólo Vídeo"
 
 msgid "Video and Audio"
 msgstr "Video y Audio"
-
-msgid "Small"
-msgstr "Pequeño"
-
-msgid "Large"
-msgstr "Grande"
 
 msgid "CG"
 msgstr "CG"
@@ -5571,11 +5427,14 @@ msgstr "Miniaturas en Paneles"
 msgid "Preview Thumbnails in Panels"
 msgstr "Miniaturas en Paneles"
 
-msgid "Display"
-msgstr "Display"
+msgid "Edit Viewport"
+msgstr "Ventana de Edición"
 
 msgid "How to display timeline by default."
 msgstr "Como mostrar la línea de tiempo por defecto."
+
+msgid "Display"
+msgstr "Display"
 
 msgid "Start in Edit mode"
 msgstr "Comenzar en Modo de Edición"
@@ -5602,11 +5461,15 @@ msgstr "Auto Reproducir"
 msgid "Start Playback when opening files."
 msgstr "Comenzar la Reproducción al abrir archivos."
 
-msgid "Auto Scrub Playback"
-msgstr "Auto Reproducir Fregando"
+msgid "Scrub with Audio"
+msgstr "Fregar con Audio"
 
-msgid "Start playback when scrubbing so that audio can be heard."
-msgstr "Empezar la reproducción cuando se friega así el audio puede ser oído."
+msgid ""
+"Start playback when scrubbing so that audio can be heard.  Scrubbing can be "
+"less smooth."
+msgstr ""
+"Empezar la reproducción cuando se friega así el audio puede ser oído.  "
+"Fregar con audio puede ser menos fluído."
 
 msgid "Single Click Playback"
 msgstr "Reproducción con un click."
@@ -5655,9 +5518,6 @@ msgstr ""
 "Este seteo controla la sensibilidad de fregado (left mouse dragright and "
 "left).  Valores menores hacen que el ratón salte más cuadros mientras que "
 "valores más altos hacen lo opuesto."
-
-msgid "Edit Viewport"
-msgstr "Ventana de Edición"
 
 msgid "Default View"
 msgstr "Vista por Defecto"
@@ -6060,6 +5920,156 @@ msgstr "Acepte el archivo OCIO seleccionado."
 
 msgid "Cancel the OCIO selection and don't change anything."
 msgstr "Cancele la selección de OCIO y no cambie nada."
+
+msgid "3GP Movie"
+msgstr "Película 3GP"
+
+msgid "Advanced Systems Format Media"
+msgstr "Advanced Systems Format Media"
+
+msgid "AVCHD Video"
+msgstr "Video AVCHD"
+
+msgid "AVI Movie"
+msgstr "Película AVI"
+
+msgid "DIVX Movie"
+msgstr "Película DIVX"
+
+msgid "Digital Video"
+msgstr "Vídeo Digital"
+
+msgid "Flash Movie"
+msgstr "Película Flash"
+
+msgid "Apple's M4V Movie"
+msgstr "Película M4V de Apple"
+
+msgid "Matroska Movie"
+msgstr "Película Matroska"
+
+msgid "Quicktime Movie"
+msgstr "Película Quicktime"
+
+msgid "MP4 Movie"
+msgstr "Película MP4"
+
+msgid "MPEG Movie"
+msgstr "Película MPEG"
+
+msgid "MXF Movie"
+msgstr "Película MXF"
+
+msgid "Ogg Movie"
+msgstr "Película Ogg"
+
+msgid "Ogg Video"
+msgstr "Vídeo Ogg"
+
+msgid "OpenTimelineIO EDL"
+msgstr "LDE de OpenTimelineIO."
+
+msgid "OpenTimelineIO Zipped EDL"
+msgstr "Zip LDE de OpenTimelineIO."
+
+msgid "Real Media Movie"
+msgstr "Película Real Media"
+
+msgid "VOB Movie"
+msgstr "Película VOB"
+
+msgid "WebM Movie"
+msgstr "Película WebM"
+
+msgid "WMV Movie"
+msgstr "Película WMV"
+
+msgid "Bitmap Picture"
+msgstr "Película Bitmap"
+
+msgid "Cineon Picture"
+msgstr "Dibujo Cineon"
+
+msgid "Canon Raw Picture"
+msgstr "Dibujo Canon Raw"
+
+msgid "Kodak Digital Negative"
+msgstr "Negativo Digital de Kodac"
+
+msgid "DPX Picture"
+msgstr "Dibujo DPX"
+
+msgid "EXR Picture"
+msgstr "Dibujo EXR"
+
+msgid "HDRI Picture"
+msgstr "Dibujo HDRI"
+
+msgid "TIFF Picture"
+msgstr "Dibujo TIFF"
+
+msgid "IFF Picture"
+msgstr "Dibujo IFF"
+
+msgid "JPEG Picture"
+msgstr "Dibujo JPEG"
+
+msgid "Map Picture"
+msgstr "Dibujo Map"
+
+msgid "GIF Picture"
+msgstr "Dibujo GIF"
+
+msgid "Softimage Picture"
+msgstr "Dibujo Softimage"
+
+msgid "PNG Picture"
+msgstr "Dibujo PNG"
+
+msgid "RGB Picture"
+msgstr "Dibujo RGB"
+
+msgid "MP3 music"
+msgstr "Música MP3"
+
+msgid "OGG Vorbis music"
+msgstr "Música OGG Vorbis"
+
+msgid "Wave music"
+msgstr "Múscia Wave"
+
+msgid "Jan"
+msgstr "Ene"
+
+msgid "Feb"
+msgstr "Feb"
+
+msgid "Mar"
+msgstr "Mar"
+
+msgid "Apr"
+msgstr "Abr"
+
+msgid "May"
+msgstr "May"
+
+msgid "Jun"
+msgstr "Jun"
+
+msgid "Jul"
+msgstr "Jul"
+
+msgid "Aug"
+msgstr "Ago"
+
+msgid "Sep"
+msgstr "Sep"
+
+msgid "Oct"
+msgstr "Oct"
+
+msgid "Nov"
+msgstr "Nov"
 
 msgid "Escape"
 msgstr "Escape"
@@ -6648,6 +6658,12 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
+
+#~ msgid "Everything OK."
+#~ msgstr "Todo Bien."
+
+#~ msgid "Auto Scrub Playback"
+#~ msgstr "Auto Reproducir Fregando"
 
 #, fuzzy
 #~ msgid "Preview Thumbnails"

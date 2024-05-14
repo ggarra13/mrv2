@@ -48,10 +48,13 @@ namespace mrv
             ImageInfoPanel(ViewerUI* ui);
             ~ImageInfoPanel();
 
+            //! Refresh all tabs.
             void refresh();
 
+            //! Quicky refresh the image tab if open.
             void imageRefresh();
 
+            //! Quicky refresh the metadata tab if open.
             void metadataRefresh();
 
             TimelinePlayer* timelinePlayer() const;
@@ -62,8 +65,6 @@ namespace mrv
             void scroll_to(int w, int h);
 
             Pack* get_pack() const { return g->get_pack(); };
-
-            ViewerUI* main() const;
 
             void set_tabs() const;
 

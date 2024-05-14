@@ -22,19 +22,13 @@
 
 #include "mrViewer.h"
 
-
-namespace
-{
-    const tl::image::Size thumbnailSize(128, 64);
-}
-
-
 namespace mrv
 {
     namespace panel
     {
+
         typedef std::map< ClipButton*, size_t > WidgetIndices;
-        
+
         struct Stereo3DPanel::Private
         {
             PopupMenu* input = nullptr;
@@ -52,16 +46,13 @@ namespace mrv
 
             std::shared_ptr<observer::ListObserver<int> > layerObserver;
         };
-        
+
         Stereo3DPanel::Stereo3DPanel(ViewerUI* ui) :
             ThumbnailPanel(ui),
             _r(new Private)
         {
-
             add_group("Stereo 3D");
-
-            Fl_SVG_Image* svg = load_svg("Stereo3D.svg");
-            g->image(svg);
+            g->image(load_svg("Stereo3D.svg"));
 
             _r->filesObserver = observer::
                 ListObserver<std::shared_ptr<FilesModelItem> >::create(
@@ -88,13 +79,14 @@ namespace mrv
                 ui);
         }
 
-        Stereo3DPanel::~Stereo3DPanel()
-        {
-        }
+        Stereo3DPanel::~Stereo3DPanel() {}
 
         void Stereo3DPanel::add_controls()
         {
             TLRENDER_P();
+
+            _r->map.clear();
+            _r->indices.clear();
 
             auto settings = App::app->settings();
             const std::string& prefix = tab_prefix();
@@ -118,6 +110,8 @@ namespace mrv
             otio::RationalTime time = otio::RationalTime(0.0, 1.0);
             if (player)
                 time = player->currentTime();
+
+            image::Size size(128, 64);
 
             file::Path lastPath;
 
@@ -147,8 +141,7 @@ namespace mrv
                 const std::string fullfile = protocol + dir + file;
 
                 auto bW = new Widget<ClipButton>(
-                    g->x(), g->y() + 20 + i * thumbnailSize.h + 4, g->w(),
-                    thumbnailSize.h + 4);
+                    g->x(), g->y() + 20 + i * 68, g->w(), 68);
                 ClipButton* b = bW;
                 b->tooltip(_("Toggle other eye stereo image."));
                 _r->indices[b] = i;
@@ -175,13 +168,13 @@ namespace mrv
                         model->setStereo(index);
                     });
 
-                _r->map[i] = b;
-                
+                _r->map.insert(std::make_pair(i, b));
+
                 const std::string& layer = getLayerName(media, layerId);
                 std::string text = protocol + dir + "\n" + file + layer;
                 b->copy_label(text.c_str());
 
-                _createThumbnail(b, path, time, layerId, thumbnailSize.h, isNDI);
+                _createThumbnail(b, path, time, layerId, isNDI);
             }
 
             Stereo3DOptions o = model->observeStereo3DOptions()->get();
@@ -374,8 +367,6 @@ namespace mrv
             for (auto& m : _r->map)
             {
                 size_t i = m.first;
-                ClipButton* b = m.second;
-
                 const auto& media = files->getItem(i);
                 const auto& path = media->path;
                 const bool isNDI = file::isTemporaryNDI(path);
@@ -385,6 +376,8 @@ namespace mrv
                 const std::string file =
                     path.getBaseName() + path.getNumber() + path.getExtension();
                 const std::string fullfile = protocol + dir + file;
+                ClipButton* b = m.second;
+
                 uint16_t layerId = media->videoLayer;
                 bool found = false;
                 if (aIndex == i)
@@ -409,8 +402,8 @@ namespace mrv
                 std::string text = protocol + dir + "\n" + file + layer;
                 b->copy_label(text.c_str());
                 b->labelcolor(FL_WHITE);
-                
-                _createThumbnail(b, path, time, layerId, thumbnailSize.h, isNDI);
+
+                _createThumbnail(b, path, time, layerId, isNDI);
             }
         }
 

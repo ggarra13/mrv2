@@ -48,7 +48,10 @@ namespace mrv
 
     void ContextObject::timerEvent()
     {
-        _p->context->tick();
+        if (_p && _p->context)
+        {
+            _p->context->tick();
+        }
 
         Fl::repeat_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
     }

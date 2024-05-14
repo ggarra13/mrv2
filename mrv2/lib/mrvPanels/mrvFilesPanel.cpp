@@ -32,19 +32,17 @@ namespace
     const char* kModule = "files";
 }
 
-namespace
-{
-    const tl::image::Size thumbnailSize(128, 64);
-}
-
 namespace mrv
 {
     namespace panel
     {
+
         typedef std::map< FileButton*, size_t > WidgetIndices;
 
         struct FilesPanel::Private
         {
+            std::weak_ptr<system::Context> context;
+
             std::map< size_t, FileButton* > map;
             WidgetIndices indices;
 
@@ -64,9 +62,7 @@ namespace mrv
             ThumbnailPanel(ui)
         {
             add_group("Files");
-
-            Fl_SVG_Image* svg = load_svg("Files.svg");
-            g->image(svg);
+            g->image(load_svg("Files.svg"));
 
             g->callback(
                 [](Fl_Widget* w, void* d)
@@ -92,9 +88,8 @@ namespace mrv
                     observer::CallbackAction::Suppress);
 
             _r->aIndexObserver = observer::ValueObserver<int>::create(
-                ui->app->filesModel()->observeAIndex(),
-                [this](int value) { redraw(); },
-                observer::CallbackAction::Suppress);
+                ui->app->filesModel()->observeAIndex(), [this](int value)
+                { redraw(); }, observer::CallbackAction::Suppress);
 
             _r->layerObserver = observer::ListObserver<int>::create(
                 ui->app->filesModel()->observeLayers(),
@@ -102,19 +97,16 @@ namespace mrv
                 observer::CallbackAction::Suppress);
         }
 
-        FilesPanel::~FilesPanel()
-        {
-        }
+        FilesPanel::~FilesPanel() {}
 
         void FilesPanel::add_controls()
         {
-            MRV2_R();
             TLRENDER_P();
 
-            Fl_SVG_Image* svg;
+            _r->map.clear();
+            _r->indices.clear();
 
             g->clear();
-
             g->begin();
 
             const auto model = App::app->filesModel();
@@ -161,7 +153,7 @@ namespace mrv
                 const std::string fullfile = protocol + dir + file;
 
                 auto bW = new Widget<FileButton>(
-                    g->x(), g->y() + 22 + i * thumbnailSize.h + 4, g->w(), thumbnailSize.h + 4);
+                    g->x(), g->y() + 22 + i * size.h + 4, g->w(), size.h + 4);
                 FileButton* b = bW;
                 b->setIndex(i);
                 _r->indices[b] = i;
@@ -197,8 +189,8 @@ namespace mrv
                 const std::string layer = getLayerName(media, layerId);
                 std::string text = protocol + dir + "\n" + file + layer;
                 b->copy_label(text.c_str());
-                
-                _createThumbnail(b, path, time, layerId, thumbnailSize.h, isNDI);
+
+                _createThumbnail(b, path, time, layerId, isNDI);
             }
 
             int Y = g->y() + 20 + numFiles * 64;
@@ -234,6 +226,7 @@ namespace mrv
 
             bW = new Widget< Button >(g->x() + 120, Y, 30, 30);
             b = bW;
+            ;
             b->bind_image(load_svg("Prev.svg"));
             b->tooltip(_("Previous filename"));
             bW->callback([=](auto w) { App::app->filesModel()->prev(); });
@@ -246,7 +239,7 @@ namespace mrv
 
             auto btW = new Widget< Fl_Button >(g->x() + 150, Y, 30, 30);
             b = btW;
-            b->bind_image(load_svg("Filter.svg"));
+            b->image(load_svg("Filter.svg"));
             b->selection_color(FL_YELLOW);
             b->value(o.filterEDL);
             b->tooltip(_("Filter EDLs"));
@@ -311,7 +304,7 @@ namespace mrv
                     time = player->currentTime();
                 }
 
-                _createThumbnail(b, path, time, layerId, thumbnailSize.h, isNDI);
+                _createThumbnail(b, path, time, layerId, isNDI);
             }
         }
 

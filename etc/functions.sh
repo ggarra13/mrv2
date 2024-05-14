@@ -54,7 +54,8 @@ get_msvc_version()
 
 get_cmake_version()
 {
-    export CMAKE_VERSION=`cmake --version | grep version`
+    export CMAKE_LOCATION=`which cmake`
+    export CMAKE_VERSION=`cmake --version | grep -o 'cmake version [0-9.]*' | cut -d' ' -f3`
 }
 
 get_compiler_version()

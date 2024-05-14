@@ -19,14 +19,13 @@ namespace mrv
         {
         public:
             Stereo3DPanel(ViewerUI* ui);
-            virtual ~Stereo3DPanel();
+            ~Stereo3DPanel();
 
             void setStereo3DOptions(const Stereo3DOptions& value);
 
             void add_controls() override;
 
             void refresh();
-
             void redraw();
 
         private:
