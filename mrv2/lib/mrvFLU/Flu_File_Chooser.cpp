@@ -59,9 +59,10 @@
 #include <tlCore/Path.h>
 #include <tlCore/String.h>
 
-#include "mrvCore/mrvHome.h"
-#include "mrvCore/mrvSequence.h"
 #include "mrvCore/mrvFile.h"
+#include "mrvCore/mrvHome.h"
+#include "mrvCore/mrvLocale.h"
+#include "mrvCore/mrvSequence.h"
 #include "mrvCore/mrvUtil.h"
 
 #include "mrvFl/mrvPreferences.h"
@@ -483,6 +484,8 @@ Flu_File_Chooser::Flu_File_Chooser(
     add_type("ogg", _("OGG Vorbis music"), &music);
     add_type("wav", _("Wave music"), &music);
 
+    if (!usd)
+        usd = mrv::load_svg("USD.svg");
     add_type("usd", _("OpenUSD Asset"), usd);
     add_type("usdz", _("OpenUSD Zipped Asset"), usd);
     add_type("usdc", _("OpenUSD Compressed Asset"), usd);
@@ -3710,14 +3713,14 @@ void Flu_File_Chooser::cd(const char* path)
 
     mrv::SequenceList tmpseqs;
 
-    // read the directory
+    // read the directory as UTF-8
     dirent** e;
     char* name;
     int num = fl_filename_list(pathbase.c_str(), &e);
     if (num > 0)
     {
         int i;
-
+            
         for (i = 0; i < num; i++)
         {
             name = e[i]->d_name;
@@ -4052,7 +4055,7 @@ void Flu_File_Chooser::cd(const char* path)
     } // num > 0
 
     fl_filename_free_list(&e, num);
-
+    
     // sort the files: directories first, then files
 
     if (listMode)
@@ -4086,44 +4089,44 @@ void Flu_File_Chooser::cd(const char* path)
 #ifdef _WIN32
             if (filename.value()[1] == ':')
 #else
-            if (filename.value()[0] == '/')
+                if (filename.value()[0] == '/')
 #endif
-            {
-                std::string s = currentDir + lastAddedDir + "/";
-                filename.value(s.c_str());
-            }
-            else
-                filename.value(lastAddedDir);
+                {
+                    std::string s = currentDir + lastAddedDir + "/";
+                    filename.value(s.c_str());
+                }
+                else
+                    filename.value(lastAddedDir);
         }
         else if (numFiles == 1 && numDirs == 0)
         {
 #ifdef _WIN32
             if (filename.value()[1] == ':')
 #else
-            if (filename.value()[0] == '/')
+                if (filename.value()[0] == '/')
 #endif
-            {
-                std::string s = currentDir + lastAddedFile;
-                filename.value(s.c_str());
-            }
-            else
-                filename.value(lastAddedFile);
+                {
+                    std::string s = currentDir + lastAddedFile;
+                    filename.value(s.c_str());
+                }
+                else
+                    filename.value(lastAddedFile);
         }
         else if (prefix.size() >= currentFile.size())
         {
 #ifdef _WIN32
             if (filename.value()[1] == ':')
 #else
-            if (filename.value()[0] == '/')
+                if (filename.value()[0] == '/')
 #endif
-            {
-                std::string s = currentDir + prefix;
-                filename.value(s.c_str());
-            }
-            else
-            {
-                filename.value(prefix.c_str());
-            }
+                {
+                    std::string s = currentDir + prefix;
+                    filename.value(s.c_str());
+                }
+                else
+                {
+                    filename.value(prefix.c_str());
+                }
         }
 
 #ifdef _WIN32

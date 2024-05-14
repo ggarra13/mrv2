@@ -44,7 +44,7 @@ Fl_Pixmap preview_img((char* const*)monalisa_xpm),
     reel((char* const*)reel_xpm), picture((char* const*)image_xpm),
     music((char* const*)music_xpm);
 
-Fl_Image* usd = mrv::load_svg("USD.svg");
+Fl_Image* usd = nullptr;
 
 static const int kColorOne = fl_rgb_color(200, 200, 200);
 static const int kColorTwo = fl_rgb_color(180, 180, 180);

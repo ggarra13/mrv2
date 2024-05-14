@@ -192,6 +192,9 @@ protected:
         ((Flu_Wrap_Group*)arg)->redraw();
     }
 
+    void draw_child(Fl_Widget& o) const;
+    void update_child(Fl_Widget& o) const;
+    
     int layout(bool sbVisible, bool doScrollTo, int* measure = 0);
 
     const Fl_Widget* scrollTo;
