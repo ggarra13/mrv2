@@ -2328,9 +2328,6 @@ namespace mrv
         ioSystem->getCache()->clear();
 
         player->clearCache();
-
-        // Update all panel thumbnail caches
-        panel::clearCache();
     }
 
     void copy_filename_cb(Fl_Menu_* m, void* d)
