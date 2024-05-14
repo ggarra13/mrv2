@@ -43,26 +43,30 @@ static const int kColorTwo = fl_rgb_color(180, 180, 180);
 
 struct Flu_Entry::Private
 {
-    mrv::ThumbnailCreator* thumbnailGenerator;
+    std::shared_ptr<mrv::ThumbnailCreator> thumbnailCreator;
+    std::mutex thumbnailMutex;
     int64_t id = -1;
-
-    struct ThumbnailData
-    {
-        Flu_Entry* e;
-    };
-    ThumbnailData thumbnail;
 };
+
+static void createdThumbnail_cb(
+    const int64_t id,
+    const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&
+        thumbnails,
+    void* opaque)
+{
+    Flu_Entry* entry = static_cast< Flu_Entry* >(opaque);
+    entry->createdThumbnail(id, thumbnails);
+}
 
 Flu_Entry::Flu_Entry(
     const char* name, int t, bool d, Flu_File_Chooser* c,
-    mrv::ThumbnailCreator* thumbnailGenerator) :
+    std::shared_ptr<mrv::ThumbnailCreator> thumbnailCreator) :
     Fl_Input(0, 0, 0, 0),
     _p(new Private)
 {
     TLRENDER_P();
 
-    // p.fileInfo           = fileInfo;
-    p.thumbnailGenerator = thumbnailGenerator;
+    p.thumbnailCreator = thumbnailCreator;
 
     resize(0, 0, DEFAULT_ENTRY_WIDTH, 20);
     textsize(12);
@@ -227,21 +231,6 @@ std::string Flu_Entry::toTLRender()
 int Flu_Entry::handle(int event)
 {
     TLRENDER_P();
-
-    switch (event)
-    {
-    case FL_SHOW:
-    {
-        if (p.thumbnailGenerator)
-        {
-        }
-        break;
-    }
-    case FL_HIDE:
-        break;
-    default:
-        break;
-    }
 
     if (editMode)
     {
@@ -715,18 +704,21 @@ void Flu_Entry::draw()
         fl_color(FL_BLACK);
     }
 
+    int clipped = fl_not_clipped(x(), y(), w(), h());
+    if (clipped == 0)
+    {
+        cancelRequest();
+    }
+    else
+    {
+        startRequest();
+    }
+
     int X = x() + 4;
     int Y = y();
     int iH = 0;
     if (icon)
     {
-        // if (delete_icon)
-        // {
-        //     icon->draw(X, y() + 2);
-        //     Y += icon->h() + 2;
-        //     iH = icon->h() + 2;
-        // }
-        // else
         {
             icon->draw(X, y() + h() / 2 - icon->h() / 2);
             X += icon->w() + 2;
@@ -734,8 +726,7 @@ void Flu_Entry::draw()
     }
 
     int iW = 0, W = 0, H = 0;
-    if (icon // && !delete_icon
-    )
+    if (icon)
     {
         iW = icon->w() + 2;
     }
@@ -805,4 +796,54 @@ void Flu_Entry::draw()
             Fl_Align(FL_ALIGN_LEFT | FL_ALIGN_CLIP));
     }
     redraw();
+}
+
+void Flu_Entry::startRequest()
+{
+    TLRENDER_P();
+    if (!p.thumbnailCreator || p.id != -1)
+        return;
+
+    p.thumbnailCreator->initThread();
+
+    // Show the frame at the beginning
+    const otio::RationalTime& time = time::invalidTime;
+
+    image::Size size(128, 64);
+
+    p.thumbnailCreator->clearCache();
+
+    const std::string& fullname = toTLRender();
+    auto id = p.thumbnailCreator->request(
+        fullname, time, size, createdThumbnail_cb, (void*)this);
+    p.id = id;
+}
+
+void Flu_Entry::cancelRequest()
+{
+    TLRENDER_P();
+    if (!p.thumbnailCreator || p.id == -1)
+        return;
+
+    const std::lock_guard<std::mutex> lock(p.thumbnailMutex);
+    p.thumbnailCreator->cancelRequests(p.id);
+}
+
+void Flu_Entry::createdThumbnail(
+    const int64_t id,
+    const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&
+        thumbnails)
+{
+    TLRENDER_P();
+    std::lock_guard<std::mutex> lock(p.thumbnailMutex);
+    if (id == p.id)
+    {
+        for (const auto& i : thumbnails)
+        {
+            icon = i.second;
+            updateSize();
+            parent()->redraw();
+        }
+        p.id = -1;
+    }
 }

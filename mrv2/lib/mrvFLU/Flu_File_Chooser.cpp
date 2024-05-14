@@ -72,6 +72,7 @@
 #include "mrvFLU/flu_pixmaps.h"
 #include "mrvFLU/flu_file_chooser_pixmaps.h"
 #include "mrvFLU/Flu_Label.h"
+#include "mrvFLU/Flu_Scroll.h"
 #include "mrvFLU/Flu_Separator.h"
 #include "mrvFLU/Flu_Enumerations.h"
 #include "mrvFLU/Flu_File_Chooser.h"
@@ -214,19 +215,10 @@ static std::string flu_get_special_folder(int csidl)
 }
 #endif
 
-// taken explicitly from fltk/src/filename_match.cxx
-// and changed to support case-sensitive matching
-
-struct ThumbnailData
-{
-    Flu_File_Chooser* chooser;
-    Flu_Entry* entry;
-};
-
 struct Flu_File_Chooser::Private
 {
     std::weak_ptr<system::Context> context;
-    std::unique_ptr<mrv::ThumbnailCreator> thumbnailCreator;
+    std::shared_ptr<mrv::ThumbnailCreator> thumbnailCreator;
     std::set< int64_t > thumbnailIds;
     std::mutex thumbnailMutex;
 };
@@ -238,44 +230,11 @@ void Flu_File_Chooser::setContext(
 
     if (!p.thumbnailCreator)
     {
-        p.thumbnailCreator = std::make_unique<mrv::ThumbnailCreator>(context);
-        p.thumbnailCreator->initThread();
+        p.thumbnailCreator = std::make_shared<mrv::ThumbnailCreator>(context);
     }
 
     p.context = context;
     previewCB(); // refresh icons
-}
-
-static void createdThumbnail_cb(
-    const int64_t id,
-    const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&
-        thumbnails,
-    void* opaque)
-{
-    ThumbnailData* data = static_cast< ThumbnailData* >(opaque);
-    data->chooser->createdThumbnail(id, thumbnails, data);
-}
-
-void Flu_File_Chooser::createdThumbnail(
-    const int64_t id,
-    const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&
-        thumbnails,
-    ThumbnailData* data)
-{
-    TLRENDER_P();
-    std::lock_guard<std::mutex> lock(p.thumbnailMutex);
-    if (p.thumbnailIds.find(id) != p.thumbnailIds.end())
-    {
-        for (const auto& i : thumbnails)
-        {
-            auto entry = data->entry;
-            entry->icon = i.second;
-            entry->updateSize();
-            entry->parent()->redraw();
-        }
-        p.thumbnailIds.erase(id);
-    }
-    delete data;
 }
 
 void Flu_File_Chooser::previewCB()
@@ -290,7 +249,6 @@ void Flu_File_Chooser::previewCB()
 
     if (previewBtn->value() && thumbnailsFileReq)
     {
-
         for (int i = 0; i < c; ++i)
         {
             Flu_Entry* e = (Flu_Entry*)g->child(i);
@@ -315,24 +273,6 @@ void Flu_File_Chooser::previewCB()
 
                 if (!requestIcon)
                     continue;
-
-                const std::string& fullname = e->toTLRender();
-
-                // Show the frame at the beginning
-                const otio::RationalTime& time = time::invalidTime;
-
-                image::Size size(128, 64);
-
-                if (auto context = p.context.lock())
-                {
-                    ThumbnailData* data = new ThumbnailData;
-                    data->chooser = this;
-                    data->entry = e;
-                    p.thumbnailCreator->clearCache();
-                    auto id = p.thumbnailCreator->request(
-                        fullname, time, size, createdThumbnail_cb, (void*)data);
-                    p.thumbnailIds.insert(id);
-                }
             }
         }
     }
@@ -839,13 +779,13 @@ Flu_File_Chooser::Flu_File_Chooser(
                 fileGroup->h() - 4);
 
             {
-                filescroll = new Fl_Scroll(
+                filescroll = new Flu_Scroll(
                     fileDetailsGroup->x() + 2, fileDetailsGroup->y() + 22,
                     fileDetailsGroup->w() - 4, fileDetailsGroup->h() - 20 - 4);
                 filescroll->color(FL_WHITE);
                 filescroll->scrollbar.linesize(20);
                 filescroll->box(FL_FLAT_BOX);
-                filescroll->type(Fl_Scroll::BOTH);
+                filescroll->type(Flu_Scroll::BOTH);
                 {
                     filedetails = new FileDetails(
                         filescroll->x() + 2, filescroll->y() + 2,
@@ -984,18 +924,13 @@ void Flu_File_Chooser::hideCB()
 void Flu_File_Chooser::cancelThumbnailRequests()
 {
     TLRENDER_P();
-    if (!p.thumbnailCreator)
-        return;
-
-    const std::lock_guard<std::mutex> lock(p.thumbnailMutex);
-    if (auto context = p.context.lock())
+    Fl_Group* g = getEntryGroup();
+    int c = g->children();
+    for (int i = 0; i < c; ++i)
     {
-        for (auto id : p.thumbnailIds)
-        {
-            p.thumbnailCreator->cancelRequests(id);
-        }
+        Flu_Entry* e = static_cast<Flu_Entry*>(g->child(i));
+        e->cancelRequest();
     }
-    p.thumbnailIds.clear();
 }
 
 void Flu_File_Chooser::cancelCB()
@@ -4023,14 +3958,15 @@ void Flu_File_Chooser::cd(const char* path)
                     char buf[1024];
                     snprintf(buf, 1024, i.root.c_str(), number);
                     entry = new Flu_Entry(
-                        buf, ENTRY_FILE, fileDetailsBtn->value(), this);
+                        buf, ENTRY_FILE, fileDetailsBtn->value(), this,
+                        p.thumbnailCreator);
                 }
                 else
                 {
 
                     entry = new Flu_Entry(
                         i.root.c_str(), ENTRY_SEQUENCE, fileDetailsBtn->value(),
-                        this);
+                        this, p.thumbnailCreator);
                     entry->isize = numFrames;
                     entry->altname = i.root.c_str();
 
@@ -4059,7 +3995,8 @@ void Flu_File_Chooser::cd(const char* path)
             for (; i != e; ++i)
             {
                 entry = new Flu_Entry(
-                    (*i).c_str(), ENTRY_FILE, fileDetailsBtn->value(), this);
+                    (*i).c_str(), ENTRY_FILE, fileDetailsBtn->value(), this,
+                    p.thumbnailCreator);
 
                 if (listMode)
                 {
