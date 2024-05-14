@@ -84,6 +84,8 @@ struct Flu_Entry::Private
     std::shared_ptr<mrv::ThumbnailCreator> thumbnailCreator;
     std::mutex thumbnailMutex;
     int64_t id = -1;
+
+    bool bind_image = false;
 };
 
 static void createdThumbnail_cb(
@@ -638,6 +640,9 @@ void Flu_Entry::updateSize()
 Flu_Entry::~Flu_Entry()
 {
     TLRENDER_P();
+
+    if (p.bind_image)
+        delete icon;
 }
 
 void Flu_Entry::inputCB()
@@ -797,6 +802,15 @@ void Flu_Entry::draw()
     }
 }
 
+void Flu_Entry::bind_image(Fl_RGB_Image* image)
+{
+    TLRENDER_P();
+    if (p.bind_image)
+        delete icon;
+    icon = image;
+    p.bind_image = true;
+}
+
 void Flu_Entry::startRequest()
 {
     TLRENDER_P();
@@ -828,8 +842,10 @@ void Flu_Entry::startRequest()
         cancelRequest();
         return;
     }
-    
+
+#ifdef DEBUG_REQUESTS
     // std::cerr << "\t\tSTART REQUEST " << filename << std::endl;
+#endif
     p.thumbnailCreator->initThread();
 
     // Show the frame at the beginning
@@ -850,8 +866,11 @@ void Flu_Entry::cancelRequest()
     TLRENDER_P();
     if (!p.thumbnailCreator || p.id == -1)
         return;
+
+#ifdef DEBUG_REQUESTS
+    std::cerr << "\t\tCANCEL REQUEST " << filename << std::endl;
+#endif
     
-    // std::cerr << "\t\tCANCEL REQUEST " << filename << std::endl;
     const std::lock_guard<std::mutex> lock(p.thumbnailMutex);
     p.thumbnailCreator->cancelRequests(p.id);
     p.thumbnailCreator->stopThread();
@@ -869,7 +888,7 @@ void Flu_Entry::createdThumbnail(
     {
         for (const auto& i : thumbnails)
         {
-            icon = i.second;
+            bind_image(i.second);
             updateSize();
             redraw();
             Fl_Group* g = chooser->getEntryGroup();

@@ -30,6 +30,8 @@ public:
     int handle(int event) FL_OVERRIDE;
     void draw() FL_OVERRIDE;
 
+    void bind_image(Fl_RGB_Image*);
+    
     void set_colors();
 
     void updateSize();
