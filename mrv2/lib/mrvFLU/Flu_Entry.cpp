@@ -704,18 +704,21 @@ void Flu_Entry::draw()
         fl_color(FL_BLACK);
     }
 
+    int clipped = fl_not_clipped(x(), y(), w(), h());
+    if (clipped == 0)
+    {
+        cancelRequest();
+    }
+    else
+    {
+        startRequest();
+    }
+
     int X = x() + 4;
     int Y = y();
     int iH = 0;
     if (icon)
     {
-        // if (delete_icon)
-        // {
-        //     icon->draw(X, y() + 2);
-        //     Y += icon->h() + 2;
-        //     iH = icon->h() + 2;
-        // }
-        // else
         {
             icon->draw(X, y() + h() / 2 - icon->h() / 2);
             X += icon->w() + 2;
@@ -723,8 +726,7 @@ void Flu_Entry::draw()
     }
 
     int iW = 0, W = 0, H = 0;
-    if (icon // && !delete_icon
-    )
+    if (icon)
     {
         iW = icon->w() + 2;
     }
@@ -799,7 +801,7 @@ void Flu_Entry::draw()
 void Flu_Entry::startRequest()
 {
     TLRENDER_P();
-    if (!p.thumbnailCreator)
+    if (!p.thumbnailCreator || p.id != -1)
         return;
 
     p.thumbnailCreator->initThread();
@@ -820,7 +822,7 @@ void Flu_Entry::startRequest()
 void Flu_Entry::cancelRequest()
 {
     TLRENDER_P();
-    if (!p.thumbnailCreator)
+    if (!p.thumbnailCreator || p.id == -1)
         return;
 
     const std::lock_guard<std::mutex> lock(p.thumbnailMutex);
@@ -842,5 +844,6 @@ void Flu_Entry::createdThumbnail(
             updateSize();
             parent()->redraw();
         }
+        p.id = -1;
     }
 }

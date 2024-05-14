@@ -72,6 +72,7 @@
 #include "mrvFLU/flu_pixmaps.h"
 #include "mrvFLU/flu_file_chooser_pixmaps.h"
 #include "mrvFLU/Flu_Label.h"
+#include "mrvFLU/Flu_Scroll.h"
 #include "mrvFLU/Flu_Separator.h"
 #include "mrvFLU/Flu_Enumerations.h"
 #include "mrvFLU/Flu_File_Chooser.h"
@@ -140,27 +141,6 @@ std::string Flu_File_Chooser::renameErrTxt = "Unable to rename '%s' to '%s'";
 #define FAVORITES_UNIQUE_STRING "\t!@#$%^&*(Favorites)-=+"
 
 #define DEFAULT_ENTRY_WIDTH 235
-
-Fl_Pixmap preview_img((char* const*)monalisa_xpm),
-    file_list_img((char* const*)filelist_xpm),
-    file_listwide_img((char* const*)filelistwide_xpm),
-    fileDetails((char* const*)filedetails_xpm),
-    desktop((char* const*)desktop_xpm),
-    folder_closed((char* const*)folder_closed_xpm),
-    default_file((char* const*)textdoc_xpm),
-    my_computer((char* const*)my_computer_xpm),
-    computer((char* const*)computer_xpm),
-    disk_drive((char* const*)disk_drive_xpm),
-    cd_drive((char* const*)cd_drive_xpm),
-    floppy_drive((char* const*)floppy_drive_xpm),
-    removable_drive((char* const*)removable_drive_xpm),
-    ram_drive((char* const*)ram_drive_xpm),
-    network_drive((char* const*)network_drive_xpm),
-    documents((char* const*)filled_folder_xpm),
-    little_favorites((char* const*)mini_folder_favorites_xpm),
-    little_desktop((char* const*)mini_desktop_xpm),
-    reel((char* const*)reel_xpm), picture((char* const*)image_xpm),
-    music((char* const*)music_xpm);
 
 #define streq(a, b) (strcmp(a, b) == 0)
 
@@ -269,7 +249,6 @@ void Flu_File_Chooser::previewCB()
 
     if (previewBtn->value() && thumbnailsFileReq)
     {
-
         for (int i = 0; i < c; ++i)
         {
             Flu_Entry* e = (Flu_Entry*)g->child(i);
@@ -294,8 +273,6 @@ void Flu_File_Chooser::previewCB()
 
                 if (!requestIcon)
                     continue;
-
-                e->startRequest();
             }
         }
     }
@@ -802,13 +779,13 @@ Flu_File_Chooser::Flu_File_Chooser(
                 fileGroup->h() - 4);
 
             {
-                filescroll = new Fl_Scroll(
+                filescroll = new Flu_Scroll(
                     fileDetailsGroup->x() + 2, fileDetailsGroup->y() + 22,
                     fileDetailsGroup->w() - 4, fileDetailsGroup->h() - 20 - 4);
                 filescroll->color(FL_WHITE);
                 filescroll->scrollbar.linesize(20);
                 filescroll->box(FL_FLAT_BOX);
-                filescroll->type(Fl_Scroll::BOTH);
+                filescroll->type(Flu_Scroll::BOTH);
                 {
                     filedetails = new FileDetails(
                         filescroll->x() + 2, filescroll->y() + 2,
@@ -948,7 +925,8 @@ void Flu_File_Chooser::cancelThumbnailRequests()
 {
     TLRENDER_P();
     Fl_Group* g = getEntryGroup();
-    for (int i = 0; i < g->children(); ++i)
+    int c = g->children();
+    for (int i = 0; i < c; ++i)
     {
         Flu_Entry* e = static_cast<Flu_Entry*>(g->child(i));
         e->cancelRequest();
@@ -2376,36 +2354,6 @@ Fl_Group* Flu_File_Chooser::getEntryContainer()
 
 static const int kColorOne = fl_rgb_color(200, 200, 200);
 static const int kColorTwo = fl_rgb_color(180, 180, 180);
-
-void Flu_Entry::set_colors()
-{
-    Fl_Group* g = chooser->getEntryGroup();
-    if (!g)
-        return;
-    if (selected)
-    {
-        color(FL_DARK_BLUE);
-        return;
-    }
-    unsigned num = g->children();
-    for (unsigned i = 0; i < num; ++i)
-    {
-        Flu_Entry* e = (Flu_Entry*)g->child(i);
-        if (e != this)
-            continue;
-
-        if (i % 2 == 0)
-        {
-            color(kColorOne);
-        }
-        else
-        {
-            color(kColorTwo);
-        }
-        redraw();
-        return;
-    }
-}
 
 int Flu_File_Chooser::popupContextMenu(Flu_Entry* entry)
 {

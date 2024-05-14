@@ -20,11 +20,11 @@
 #include <FL/Fl_Menu_Button.H>
 #include <FL/Fl_Tile.H>
 #include <FL/Fl_Pack.H>
-#include <FL/Fl_Scroll.H>
 #include <FL/Fl_Check_Button.H>
 
 #include "mrvFLU/Flu_Button.h"
 #include "mrvFLU/Flu_Entry.h"
+#include "mrvFLU/Flu_Scroll.h"
 #include "mrvFLU/Flu_Return_Button.h"
 #include "mrvFLU/Flu_Wrap_Group.h"
 #include "mrvFLU/Flu_Combo_Tree.h"
@@ -647,7 +647,7 @@ public:
     FileList* filelist;
     FileColumns* filecolumns;
     Fl_Group* fileDetailsGroup;
-    Fl_Scroll* filescroll;
+    Flu_Scroll* filescroll;
     FileDetails* filedetails;
     Flu_Button *detailNameBtn, *detailTypeBtn, *detailSizeBtn, *detailDateBtn;
     static std::string currentDir;
