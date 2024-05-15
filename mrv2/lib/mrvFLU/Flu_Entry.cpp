@@ -1,4 +1,5 @@
 
+#define DEBUG_REQUESTS 1
 
 #include <mutex>
 
@@ -843,9 +844,6 @@ void Flu_Entry::startRequest()
         return;
     }
 
-#ifdef DEBUG_REQUESTS
-    // std::cerr << "\t\tSTART REQUEST " << filename << std::endl;
-#endif
     p.thumbnailCreator->initThread();
 
     // Show the frame at the beginning
@@ -859,6 +857,9 @@ void Flu_Entry::startRequest()
     auto id = p.thumbnailCreator->request(
         fullname, time, size, createdThumbnail_cb, (void*)this);
     p.id = id;
+#ifdef DEBUG_REQUESTS
+    std::cerr << "\tSTART REQUEST " << id << " for " << filename << std::endl;
+#endif
 }
 
 void Flu_Entry::cancelRequest()
@@ -868,7 +869,8 @@ void Flu_Entry::cancelRequest()
         return;
 
 #ifdef DEBUG_REQUESTS
-    std::cerr << "\t\tCANCEL REQUEST " << filename << std::endl;
+    std::cerr << "\t\tCANCEL REQUEST " << p.id << " for "
+              << filename << std::endl;
 #endif
     
     const std::lock_guard<std::mutex> lock(p.thumbnailMutex);
@@ -888,13 +890,29 @@ void Flu_Entry::createdThumbnail(
     {
         for (const auto& i : thumbnails)
         {
+#ifdef DEBUG_REQUESTS
+            std::cerr << "\t\t\tGot request " << id << " for "
+                      << filename << std::endl;
+#endif
             bind_image(i.second);
             updateSize();
             redraw();
             Fl_Group* g = chooser->getEntryGroup();
+#ifdef DEBUG_REQUESTS
+            std::cerr << "\t\t\tredraw group "
+                      << (g->label() ? g->label() : "nullptr") << std::endl;
+#endif
             g->redraw();
+#ifndef DEBUG_REQUESTS
             Fl_Window* w = window();
+            std::cerr << "\t\t\tredraw window "
+                      << (w->label() ? w->label() : "nullptr") << std::endl;
             w->redraw();
+#endif
+            p.id = -1;
         }
+    }
+    else
+    {
     }
 }

@@ -53,7 +53,7 @@ int Flu_Wrap_Group::Scrollbar::handle(int event)
 Flu_Wrap_Group::Flu_Wrap_Group(int x, int y, int w, int h, const char* l) :
     Fl_Group(x, y, w, h, l),
     scrollbar(x + w - SCROLL_SIZE, y, SCROLL_SIZE, h),
-    group(x, y, w - SCROLL_SIZE, h)
+    group(x, y, w - SCROLL_SIZE, h, "Group inside Flu_Wrap_Group")
 {
     offset(0, 0);
     spacing(0, 0);
@@ -412,34 +412,58 @@ int Flu_Wrap_Group::layout(bool sbVisible, bool doScrollTo, int* measure)
 
 void Flu_Wrap_Group::draw_child(Fl_Widget& widget) const
 {
-    Flu_Entry* e = dynamic_cast<Flu_Entry*>(&widget);
+    Flu_Entry* e = static_cast<Flu_Entry*>(&widget);
     if (widget.visible() && widget.type() < FL_WINDOW &&
         fl_not_clipped(widget.x(), widget.y(), widget.w(), widget.h()))
     {
-        if (e) e->startRequest();
+        std::cerr << "\tnot clipped = "
+                  << fl_not_clipped(widget.x(), widget.y(), widget.w(),
+                                    widget.h())
+                  << " " << e->filename
+                  << std::endl;
+        std::cerr << "\t\t" << widget.x() << " " << widget.y() << " " << widget.w()
+                  << "x" << widget.h()
+                  << std::endl;
+        e->startRequest();
         widget.clear_damage(FL_DAMAGE_ALL);
         widget.draw();
         widget.clear_damage();
     }
     else
     {
-        if (e) e->cancelRequest();
+        // e->cancelRequest();
+        std::cerr << "\t    clipped = "
+                  << fl_not_clipped(widget.x(), widget.y(), widget.w(),
+                                    widget.h())
+                  << " " << e->filename
+                  << std::endl;
+        std::cerr << "\t\t" << widget.x() << " " << widget.y() << " " << widget.w()
+                  << "x" << widget.h()
+                  << std::endl;
     }
 }
 
 void Flu_Wrap_Group::update_child(Fl_Widget& widget) const
 {
-    Flu_Entry* e = dynamic_cast<Flu_Entry*>(&widget);
+    Flu_Entry* e = static_cast<Flu_Entry*>(&widget);
     if (widget.damage() && widget.visible() && widget.type() < FL_WINDOW &&
         fl_not_clipped(widget.x(), widget.y(), widget.w(), widget.h()))
     {
-        if (e) e->startRequest();
+        e->startRequest();
         widget.draw();
         widget.clear_damage();
     }
     else
     {
-        if (e) e->cancelRequest();
+        // e->cancelRequest();
+        std::cerr << "\tnot clipped = "
+                  << fl_not_clipped(widget.x(), widget.y(), widget.w(),
+                                    widget.h())
+                  << " " << e->filename
+                  << std::endl;
+        std::cerr << widget.x() << " " << widget.y() << " " << widget.w()
+                  << "x" << widget.h()
+                  << std::endl;
     }
 }
 
@@ -471,9 +495,11 @@ void Flu_Wrap_Group::draw()
         draw_box();
         draw_label();
     }
+
+    group.init_sizes();
     
     Fl_Widget*const* a = array();
-    
+
     fl_push_clip(x() + Fl::box_dx(box()),
                  y() + Fl::box_dy(box()),
                  w() - Fl::box_dw(box()),
@@ -483,6 +509,7 @@ void Flu_Wrap_Group::draw()
     
     if (damage() & ~FL_DAMAGE_CHILD)
     { // redraw the entire thing:
+        std::cerr << "****** DRAW CHILDREN" << std::endl;
         for (int i=c; i--;)
         {
             Fl_Widget& o = **a++;
@@ -491,11 +518,18 @@ void Flu_Wrap_Group::draw()
         }
     }
     else
-    {      // only redraw the children that need it:
+    {
+        std::cerr << "****** UPDATE CHILDREN" << std::endl;
+        // only redraw the children that need it:
         for (int i=c; i--;) update_child(**a++);
     }
 
-    draw_child(scrollbar);
+    if (scrollbar.visible())
+    {
+        scrollbar.clear_damage(FL_DAMAGE_ALL);
+        scrollbar.draw();
+        scrollbar.clear_damage();
+    }
     
     fl_pop_clip();
 }

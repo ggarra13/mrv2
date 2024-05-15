@@ -49,6 +49,7 @@ public:
     public:
         Scrollbar(int x, int y, int w, int h, const char* l = 0);
         int handle(int event);
+        void draw() FL_OVERRIDE { Fl_Scrollbar::draw(); };
     };
 
     //! Normal FLTK constructor
@@ -189,6 +190,7 @@ public:
 protected:
     inline static void _scrollCB(Fl_Widget*, void* arg)
     {
+        std::cerr << "----------------- Scroll ----------------" << std::endl;
         ((Flu_Wrap_Group*)arg)->redraw();
     }
 

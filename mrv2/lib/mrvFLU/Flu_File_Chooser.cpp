@@ -253,7 +253,7 @@ void Flu_File_Chooser::previewCB()
     int c = g->children();
     for (int i = 0; i < c; ++i)
     {
-        Flu_Entry* e = (Flu_Entry*)g->child(i);
+        Flu_Entry* e = static_cast<Flu_Entry*>(g->child(i));
         e->set_colors();
     }
 }
@@ -358,7 +358,6 @@ Flu_File_Chooser::Flu_File_Chooser(
     const bool compact) :
     Fl_Double_Window(900, 600, title),
     _p(new Private),
-    _compact(compact),
     filename(70, h() - 60, w() - 70 - 85 - 10, 25, "", this),
     ok(w() - 90, h() - 60, 85, 25),
     cancel(w() - 90, h() - 30, 85, 25),
@@ -786,6 +785,8 @@ Flu_File_Chooser::Flu_File_Chooser(
         filelist = new FileList(
             fileGroup->x() + 2, fileGroup->y() + 2, fileGroup->w() - 4,
             fileGroup->h() - 4, this);
+        filelist->copy_label("FileList");
+        filelist->labeltype(FL_NO_LABEL);
         filelist->box(FL_FLAT_BOX);
         filelist->color(FL_WHITE);
         filelist->type(FL_HORIZONTAL);
@@ -811,6 +812,8 @@ Flu_File_Chooser::Flu_File_Chooser(
                     filedetails = new FileDetails(
                         filescroll->x() + 2, filescroll->y() + 2,
                         filescroll->w() - 4, filescroll->h() - 20 - 4, this);
+                    filedetails->copy_label("FileDetails");
+                    filedetails->labeltype(FL_NO_LABEL);
                     filedetails->end();
                 }
                 filescroll->end();
@@ -818,6 +821,8 @@ Flu_File_Chooser::Flu_File_Chooser(
                     filecolumns = new FileColumns(
                         fileGroup->x() + 2, fileGroup->y() + 2,
                         fileGroup->w() - 4, 20, this);
+                    filecolumns->copy_label("FileColumns");
+                    filecolumns->labeltype(FL_NO_LABEL);
                     filecolumns->end();
                 }
             }
@@ -920,6 +925,7 @@ Flu_File_Chooser::Flu_File_Chooser(
 
 Flu_File_Chooser::~Flu_File_Chooser()
 {
+    std::cerr << "***********************EXIT ~Flu_File_Chooser" << std::endl;
     cancelThumbnailRequests();
 
     // Fl::remove_timeout( Flu_Entry::_editCB );
@@ -2330,11 +2336,13 @@ void Flu_File_Chooser::listModeCB()
         !fileDetailsBtn->value() || (currentDir == FAVORITES_UNIQUE_STRING);
     if (listMode)
     {
+        std::cerr << "------------------------ FileList mode" << std::endl;
         while (filedetails->children())
             filelist->add(filedetails->child(0));
     }
     else
     {
+        std::cerr << "------------------------ FileDetails mode" << std::endl;
         while (filelist->children())
             filedetails->add(filelist->child(0));
     }
@@ -2360,7 +2368,7 @@ void Flu_File_Chooser::listModeCB()
 Fl_Group* Flu_File_Chooser::getEntryGroup()
 {
     return (!fileDetailsBtn->value() || currentDir == FAVORITES_UNIQUE_STRING)
-               ? &(filelist->group)
+        ? &(filelist->group)
                : filedetails;
 }
 
