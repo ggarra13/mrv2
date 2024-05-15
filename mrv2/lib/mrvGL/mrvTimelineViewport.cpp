@@ -547,7 +547,7 @@ namespace mrv
         const bool autoHide = p.ui->uiPrefs->uiPrefsAutoHidePixelBar->value();
         const bool hasPixelBar = p.ui->uiPrefs->uiPrefsPixelToolbar->value();
         const bool visiblePixelBar = p.ui->uiPixelBar->visible_r();
-
+        
         if (!hasPixelBar || visiblePixelBar || !autoHide || p.presentation)
             return;
 
@@ -1420,11 +1420,13 @@ namespace mrv
 
         if (posX + W + dW > minX + maxW)
         {
+            p.frameView = true;
             W = minX + maxW + dW - posX;
             p.frameView = true;
         }
         if (posY + H + dH > minY + maxH)
         {
+            posY = minY + dH;
             H = minY + maxH + dH - posY;
             p.frameView = true;
         }
