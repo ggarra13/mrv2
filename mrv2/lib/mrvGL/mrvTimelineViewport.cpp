@@ -547,7 +547,7 @@ namespace mrv
         const bool autoHide = p.ui->uiPrefs->uiPrefsAutoHidePixelBar->value();
         const bool hasPixelBar = p.ui->uiPrefs->uiPrefsPixelToolbar->value();
         const bool visiblePixelBar = p.ui->uiPixelBar->visible_r();
-
+        
         if (!hasPixelBar || visiblePixelBar || !autoHide || p.presentation)
             return;
 
@@ -591,7 +591,7 @@ namespace mrv
         }
         else
         {
-            if (!visiblePixelBar)
+            if (!visiblePixelBar && hasPixelBar)
             {
                 toggle_pixel_bar(nullptr, p.ui);
             }
