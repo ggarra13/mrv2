@@ -48,7 +48,7 @@ public:
     {
     public:
         Scrollbar(int x, int y, int w, int h, const char* l = 0);
-        int handle(int event);
+        int handle(int event) FL_OVERRIDE;
         void draw() FL_OVERRIDE { Fl_Scrollbar::draw(); };
     };
 
@@ -68,7 +68,7 @@ public:
 
     //! Override of Fl_Group::handle()
     int handle(int event) FL_OVERRIDE;
-    
+
     //! \return the widget that is visibly to the left of \b w in the group, or
     //! \c NULL if no such widget exists
     Fl_Widget* left(Fl_Widget* w);
@@ -95,7 +95,7 @@ public:
     Fl_Widget* previous(Fl_Widget* w);
 
     //! Override of Fl_Group::resize()
-    void resize(int x, int y, int w, int h);
+    void resize(int x, int y, int w, int h) FL_OVERRIDE;
 
     //! \return the widget that is visibly to the right of \b w in the group, or
     //! \c NULL if no such widget exists
@@ -198,7 +198,7 @@ protected:
 
     void draw_child(Fl_Widget& o) const;
     void update_child(Fl_Widget& o) const;
-    
+
     int layout(bool sbVisible, bool doScrollTo, int* measure = 0);
 
     const Fl_Widget* scrollTo;
