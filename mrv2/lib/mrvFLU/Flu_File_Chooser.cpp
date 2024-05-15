@@ -232,6 +232,7 @@ void Flu_File_Chooser::setContext(
     if (!p.thumbnailCreator)
     {
         p.thumbnailCreator = std::make_shared<mrv::ThumbnailCreator>(context);
+        p.thumbnailCreator->initThread();
     }
 
     p.context = context;
@@ -1090,11 +1091,26 @@ void Flu_File_Chooser::pattern(const char* p)
 
 int Flu_File_Chooser::handle(int event)
 {
+    TLRENDER_P();
+    
     if (Fl_Double_Window::callback() != _hideCB)
     {
         _callback = Fl_Double_Window::callback();
         _userdata = Fl_Double_Window::user_data();
         Fl_Double_Window::callback(_hideCB, this);
+    }
+
+    if (event == FL_HIDE)
+    {
+        // Stop the p.thumbnailCreator's thread
+        if (p.thumbnailCreator)
+            p.thumbnailCreator->stopThread();
+    }
+    else if (event == FL_SHOW)
+    {
+        // Re-init the p.thumbnailCreator's thread if needed
+        if (p.thumbnailCreator)
+            p.thumbnailCreator->initThread();
     }
 
     if (Fl_Double_Window::handle(event))

@@ -1,5 +1,5 @@
 
-///#define DEBUG_REQUESTS 1
+#define DEBUG_REQUESTS 1
 
 #include <mutex>
 
@@ -108,8 +108,6 @@ Flu_Entry::Flu_Entry(
     TLRENDER_P();
 
     p.thumbnailCreator = thumbnailCreator;
-    if (p.thumbnailCreator)
-        p.thumbnailCreator->initThread();
 
     resize(0, 0, DEFAULT_ENTRY_WIDTH, 20);
     textsize(12);
@@ -643,9 +641,6 @@ void Flu_Entry::updateSize()
 Flu_Entry::~Flu_Entry()
 {
     TLRENDER_P();
-
-    if (p.thumbnailCreator)
-        p.thumbnailCreator->stopThread();
 
     if (p.bind_image)
         delete icon;
