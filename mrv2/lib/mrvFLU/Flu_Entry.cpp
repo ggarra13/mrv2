@@ -1,5 +1,5 @@
 
-#define DEBUG_REQUESTS 1
+///#define DEBUG_REQUESTS 1
 
 #include <mutex>
 
@@ -108,6 +108,8 @@ Flu_Entry::Flu_Entry(
     TLRENDER_P();
 
     p.thumbnailCreator = thumbnailCreator;
+    if (p.thumbnailCreator)
+        p.thumbnailCreator->initThread();
 
     resize(0, 0, DEFAULT_ENTRY_WIDTH, 20);
     textsize(12);
@@ -642,15 +644,11 @@ Flu_Entry::~Flu_Entry()
 {
     TLRENDER_P();
 
+    if (p.thumbnailCreator)
+        p.thumbnailCreator->stopThread();
+
     if (p.bind_image)
-    {
-        std::cerr << "\tDELETE WIDGET " << toTLRender() << std::endl;
         delete icon;
-    }
-    else
-    {
-        std::cerr << "\tNOT DELETE WIDGET " << toTLRender() << std::endl;
-    }
 }
 
 void Flu_Entry::inputCB()
@@ -723,6 +721,8 @@ void Flu_Entry::draw()
         Fl_Input::draw();
         return;
     }
+
+    // startRequest();
 
     if (selected)
     {
@@ -838,19 +838,18 @@ void Flu_Entry::startRequest()
         if (extension == ".usd" || extension == ".usda" ||
             extension == ".usc" || extension == ".usz")
         {
-            // cancelRequest();
+            cancelRequest();
             return;
         }
     }
 
-    // if (!requestIcon)
-    // {
-    //     cancelRequest();
-    //     return;
-    // }
+    if (!requestIcon)
+    {
+        cancelRequest();
+        return;
+    }
 
     const std::lock_guard<std::mutex> lock(p.thumbnailMutex);
-    p.thumbnailCreator->initThread();
 
     // Show the frame at the beginning
     const otio::RationalTime& time = time::invalidTime;
@@ -875,8 +874,6 @@ void Flu_Entry::cancelRequest()
         return;
     
     const std::lock_guard<std::mutex> lock(p.thumbnailMutex);
-    //  p.thumbnailCreator->stopThread();  // we must not stop thread as it
-                                           // is shared by panel and timeline.
     p.thumbnailCreator->cancelRequests(p.id);
 
 #ifdef DEBUG_REQUESTS
@@ -905,12 +902,7 @@ void Flu_Entry::createdThumbnail(
             updateSize();
             redraw();
             Fl_Group* g = chooser->getEntryGroup();
-#ifdef DEBUG_REQUESTS
-            std::cerr << "\t\t\tredraw group "
-                      << (g->label() ? g->label() : "nullptr") << std::endl;
-#endif
             g->redraw();
-            p.id = -1;
         }
     }
 }

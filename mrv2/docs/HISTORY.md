@@ -7,8 +7,9 @@ v1.1.7
 - Fixed mrv2's custom file requester thumbnails being too high.
 - Added custom RAW and several image missing formats to mrv2's custom file
   requester.
-- Made thumbnail creation rotate the movies when the movie had an embedded
-  rotation tag.
+- Cleaned up FLU's code (mrv2 custom file requester).
+- mrv2's v1.1.6 was not respecting the hidden pixel bar on the Preferences
+  Window, always showing it stopping.
   
 
 v1.1.6

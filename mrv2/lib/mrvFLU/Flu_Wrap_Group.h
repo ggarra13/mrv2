@@ -64,8 +64,11 @@ public:
     Fl_Widget* below(Fl_Widget* w);
 
     //! Override of Fl_Group::draw()
-    void draw();
+    void draw() FL_OVERRIDE;
 
+    //! Override of Fl_Group::handle()
+    int handle(int event) FL_OVERRIDE;
+    
     //! \return the widget that is visibly to the left of \b w in the group, or
     //! \c NULL if no such widget exists
     Fl_Widget* left(Fl_Widget* w);
@@ -190,7 +193,6 @@ public:
 protected:
     inline static void _scrollCB(Fl_Widget*, void* arg)
     {
-        std::cerr << "----------------- Scroll ----------------" << std::endl;
         ((Flu_Wrap_Group*)arg)->redraw();
     }
 

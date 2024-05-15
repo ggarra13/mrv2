@@ -925,7 +925,6 @@ Flu_File_Chooser::Flu_File_Chooser(
 
 Flu_File_Chooser::~Flu_File_Chooser()
 {
-    std::cerr << "***********************EXIT ~Flu_File_Chooser" << std::endl;
     cancelThumbnailRequests();
 
     // Fl::remove_timeout( Flu_Entry::_editCB );
@@ -2336,13 +2335,11 @@ void Flu_File_Chooser::listModeCB()
         !fileDetailsBtn->value() || (currentDir == FAVORITES_UNIQUE_STRING);
     if (listMode)
     {
-        std::cerr << "------------------------ FileList mode" << std::endl;
         while (filedetails->children())
             filelist->add(filedetails->child(0));
     }
     else
     {
-        std::cerr << "------------------------ FileDetails mode" << std::endl;
         while (filelist->children())
             filedetails->add(filelist->child(0));
     }
@@ -2771,7 +2768,7 @@ void Flu_File_Chooser::cleanupPath(std::string& s)
             {
                 // erase the last character, which should be a '/'
                 newPos--;
-                newS[newPos] = '\0';
+                newS = newS.substr(0, newPos);
                 // look for the previous '/'
                 char* lastSlash = const_cast<char*>(strrchr(newS.c_str(), '/'));
                 // make the new string position after the slash
@@ -3625,7 +3622,7 @@ void Flu_File_Chooser::cd(const char* path)
 
 #endif
 
-    delayedCd = "./";
+    delayedCd = "./*";
 
 #ifdef _WIN32
     // set the location input value
