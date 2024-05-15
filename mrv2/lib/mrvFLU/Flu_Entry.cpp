@@ -851,6 +851,7 @@ void Flu_Entry::startRequest()
 
     image::Size size(128, 64);
 
+    // Needed to change icon when user saved over the same image name.
     p.thumbnailCreator->clearCache();
 
     auto id = p.thumbnailCreator->request(
