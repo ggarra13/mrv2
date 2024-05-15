@@ -4241,7 +4241,7 @@ static const char* _flu_file_chooser(
     cache->setMax(0);
 
     Flu_File_Chooser::window->previewCB();
-    Flu_File_Chooser::window->set_modal();
+    Flu_File_Chooser::window->set_non_modal();
     Flu_File_Chooser::window->show();
 
     while (Flu_File_Chooser::window->shown())

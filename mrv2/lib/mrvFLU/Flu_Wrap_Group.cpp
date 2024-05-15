@@ -11,8 +11,9 @@
  *
  ***************************************************************/
 
-#include <string.h>
-#include <stdio.h>
+#include <cstring>
+#include <cstdio>
+#include <cmath>
 
 #include <iostream>
 
@@ -20,8 +21,6 @@
 
 #include "mrvFLU/Flu_Wrap_Group.h"
 #include "mrvFLU/Flu_Entry.h"
-
-#define MAX(x, y) ((x) > (y) ? (x) : (y))
 
 #define SCROLL_SIZE 15
 
@@ -37,7 +36,6 @@ int Flu_Wrap_Group::Scrollbar::handle(int event)
     {
     case FL_ENTER:
     case FL_LEAVE:
-    case FL_MOVE:
         redraw();
         break;
     case FL_MOUSEWHEEL:
@@ -53,7 +51,7 @@ int Flu_Wrap_Group::Scrollbar::handle(int event)
 Flu_Wrap_Group::Flu_Wrap_Group(int x, int y, int w, int h, const char* l) :
     Fl_Group(x, y, w, h, l),
     scrollbar(x + w - SCROLL_SIZE, y, SCROLL_SIZE, h),
-    group(x, y, w - SCROLL_SIZE, h, "Group inside Flu_Wrap_Group")
+    group(x, y, w - SCROLL_SIZE, h, "GROP IN Flu_Wrap_Group")
 {
     offset(0, 0);
     spacing(0, 0);
@@ -240,7 +238,7 @@ int Flu_Wrap_Group::layout(bool sbVisible, bool doScrollTo, int* measure)
             c = group.child(i);
             if (!c->visible())
                 continue;
-            H = MAX(H, c->h());
+            H = std::max(H, c->h());
             if (col == 0)
                 maxH += H + _spacing[1];
             if ((X + c->w()) > maxW)
@@ -303,9 +301,9 @@ int Flu_Wrap_Group::layout(bool sbVisible, bool doScrollTo, int* measure)
         else if (maxH > hh)
         {
             scrollbar.range(0, maxH - hh);
-            scrollbar.slider_size(
-                MAX(float(scrollbar.h() - (maxH - hh)) / float(scrollbar.h()),
-                    0.08f));
+            scrollbar.slider_size(std::max(
+                float(scrollbar.h() - (maxH - hh)) / float(scrollbar.h()),
+                0.08f));
             return 1;
         }
         else
@@ -335,7 +333,7 @@ int Flu_Wrap_Group::layout(bool sbVisible, bool doScrollTo, int* measure)
             if (!c->visible())
                 continue;
 
-            W = MAX(W, c->w());
+            W = std::max(W, c->w());
 
             if (row == 0)
                 maxW += W + _spacing[0];
@@ -400,9 +398,9 @@ int Flu_Wrap_Group::layout(bool sbVisible, bool doScrollTo, int* measure)
         else if (maxW > ww)
         {
             scrollbar.range(0, maxW - ww);
-            scrollbar.slider_size(
-                MAX(float(scrollbar.w() - (maxW - ww)) / float(scrollbar.w()),
-                    0.08f));
+            scrollbar.slider_size(std::max(
+                float(scrollbar.w() - (maxW - ww)) / float(scrollbar.w()),
+                0.08f));
             return 1;
         }
         else
@@ -416,14 +414,6 @@ void Flu_Wrap_Group::draw_child(Fl_Widget& widget) const
     if (widget.visible() && widget.type() < FL_WINDOW &&
         fl_not_clipped(widget.x(), widget.y(), widget.w(), widget.h()))
     {
-        std::cerr << "\tnot clipped = "
-                  << fl_not_clipped(widget.x(), widget.y(), widget.w(),
-                                    widget.h())
-                  << " " << e->filename
-                  << std::endl;
-        std::cerr << "\t\t" << widget.x() << " " << widget.y() << " " << widget.w()
-                  << "x" << widget.h()
-                  << std::endl;
         e->startRequest();
         widget.clear_damage(FL_DAMAGE_ALL);
         widget.draw();
@@ -431,15 +421,7 @@ void Flu_Wrap_Group::draw_child(Fl_Widget& widget) const
     }
     else
     {
-        // e->cancelRequest();
-        std::cerr << "\t    clipped = "
-                  << fl_not_clipped(widget.x(), widget.y(), widget.w(),
-                                    widget.h())
-                  << " " << e->filename
-                  << std::endl;
-        std::cerr << "\t\t" << widget.x() << " " << widget.y() << " " << widget.w()
-                  << "x" << widget.h()
-                  << std::endl;
+        e->cancelRequest();
     }
 }
 
@@ -449,21 +431,13 @@ void Flu_Wrap_Group::update_child(Fl_Widget& widget) const
     if (widget.damage() && widget.visible() && widget.type() < FL_WINDOW &&
         fl_not_clipped(widget.x(), widget.y(), widget.w(), widget.h()))
     {
-        e->startRequest();
+        // e->startRequest();
         widget.draw();
         widget.clear_damage();
     }
     else
     {
-        // e->cancelRequest();
-        std::cerr << "\tnot clipped = "
-                  << fl_not_clipped(widget.x(), widget.y(), widget.w(),
-                                    widget.h())
-                  << " " << e->filename
-                  << std::endl;
-        std::cerr << widget.x() << " " << widget.y() << " " << widget.w()
-                  << "x" << widget.h()
-                  << std::endl;
+        e->cancelRequest();
     }
 }
 
@@ -500,16 +474,23 @@ void Flu_Wrap_Group::draw()
     
     Fl_Widget*const* a = array();
 
-    fl_push_clip(x() + Fl::box_dx(box()),
-                 y() + Fl::box_dy(box()),
-                 w() - Fl::box_dw(box()),
-                 h() - Fl::box_dh(box()));
+
+    int X = x() + Fl::box_dx(box());
+    int Y = y() + Fl::box_dy(box());
+    int W = w() - Fl::box_dw(box());
+    int H = h() - Fl::box_dh(box());
+
+    std::cerr << "_________CLIP " << X << " " << Y << " " << W << "x"
+              << H << std::endl;
+    
+    fl_push_clip(X, Y, W, H );
+    draw_children();
 
     int c = children();
     
     if (damage() & ~FL_DAMAGE_CHILD)
     { // redraw the entire thing:
-        std::cerr << "****** DRAW CHILDREN" << std::endl;
+        std::cerr << "****** REQUESTS CHILDREN" << std::endl;
         for (int i=c; i--;)
         {
             Fl_Widget& o = **a++;
@@ -519,7 +500,7 @@ void Flu_Wrap_Group::draw()
     }
     else
     {
-        std::cerr << "****** UPDATE CHILDREN" << std::endl;
+        std::cerr << "****** REQUESTS CHILDREN" << std::endl;
         // only redraw the children that need it:
         for (int i=c; i--;) update_child(**a++);
     }
@@ -532,4 +513,5 @@ void Flu_Wrap_Group::draw()
     }
     
     fl_pop_clip();
+
 }

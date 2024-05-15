@@ -142,6 +142,8 @@ namespace mrv
         if (!p.running)
             return;
 
+        Fl::remove_timeout((Fl_Timeout_Handler)timerEvent_cb, this);
+        
         p.running = false;
         if (p.thread)
         {
@@ -149,8 +151,6 @@ namespace mrv
                 p.thread->join();
             p.thread = nullptr;
         }
-
-        Fl::remove_timeout((Fl_Timeout_Handler)timerEvent_cb, this);
     }
 
     int64_t ThumbnailCreator::request(
@@ -230,6 +230,10 @@ namespace mrv
         {
             if (id == resultIt->id)
             {
+                for (auto& i : resultIt->thumbnails)
+                {
+                    delete i.second;
+                }
                 resultIt = p.results.erase(resultIt);
                 continue;
             }
@@ -513,7 +517,8 @@ namespace mrv
         }
         for (auto& i : results)
         {
-            i.callback(i.id, i.thumbnails, i.callbackData);
+            if (p.running)
+                i.callback(i.id, i.thumbnails, i.callbackData);
         }
         if (p.running)
         {

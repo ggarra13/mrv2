@@ -643,7 +643,14 @@ Flu_Entry::~Flu_Entry()
     TLRENDER_P();
 
     if (p.bind_image)
+    {
+        std::cerr << "\tDELETE WIDGET " << toTLRender() << std::endl;
         delete icon;
+    }
+    else
+    {
+        std::cerr << "\tNOT DELETE WIDGET " << toTLRender() << std::endl;
+    }
 }
 
 void Flu_Entry::inputCB()
@@ -744,8 +751,6 @@ void Flu_Entry::draw()
     {
         iW = icon->w() + 2;
     }
-
-    startRequest();
     
     fl_font(textfont(), textsize());
     fl_measure(filename.c_str(), W, H);
@@ -818,7 +823,7 @@ void Flu_Entry::startRequest()
     if (!p.thumbnailCreator || p.id != -1 || icon == &music)
         return;
 
-    file::Path path(filename);
+    file::Path path(toTLRender());
     if (mrv::file::isDirectory(path.get()))
         return;
     
@@ -833,17 +838,18 @@ void Flu_Entry::startRequest()
         if (extension == ".usd" || extension == ".usda" ||
             extension == ".usc" || extension == ".usz")
         {
-            cancelRequest();
+            // cancelRequest();
             return;
         }
     }
 
-    if (!requestIcon)
-    {
-        cancelRequest();
-        return;
-    }
+    // if (!requestIcon)
+    // {
+    //     cancelRequest();
+    //     return;
+    // }
 
+    const std::lock_guard<std::mutex> lock(p.thumbnailMutex);
     p.thumbnailCreator->initThread();
 
     // Show the frame at the beginning
@@ -853,12 +859,12 @@ void Flu_Entry::startRequest()
 
     p.thumbnailCreator->clearCache();
 
-    const std::string& fullname = toTLRender();
     auto id = p.thumbnailCreator->request(
-        fullname, time, size, createdThumbnail_cb, (void*)this);
+        path.get(), time, size, createdThumbnail_cb, (void*)this);
     p.id = id;
 #ifdef DEBUG_REQUESTS
-    std::cerr << "\tSTART REQUEST " << id << " for " << filename << std::endl;
+    std::cerr << "\tSTART REQUEST " << id << " for " << path.get() << " " << x()
+              << " " << y() << " " << w() << "x" << h() << std::endl;
 #endif
 }
 
@@ -867,15 +873,17 @@ void Flu_Entry::cancelRequest()
     TLRENDER_P();
     if (!p.thumbnailCreator || p.id == -1)
         return;
-
-#ifdef DEBUG_REQUESTS
-    std::cerr << "\t\tCANCEL REQUEST " << p.id << " for "
-              << filename << std::endl;
-#endif
     
     const std::lock_guard<std::mutex> lock(p.thumbnailMutex);
+    //  p.thumbnailCreator->stopThread();  // we must not stop thread as it
+                                           // is shared by panel and timeline.
     p.thumbnailCreator->cancelRequests(p.id);
-    p.thumbnailCreator->stopThread();
+
+#ifdef DEBUG_REQUESTS
+    std::cerr << "\tCANCELED REQUEST " << p.id << " for " << toTLRender() << " "
+              << x() << " " << y() << " " << w() << "x" << h() << std::endl;
+    //abort();
+#endif
     p.id = -1;
 }
 
@@ -885,13 +893,12 @@ void Flu_Entry::createdThumbnail(
         thumbnails)
 {
     TLRENDER_P();
-    std::lock_guard<std::mutex> lock(p.thumbnailMutex);
     if (id == p.id)
     {
         for (const auto& i : thumbnails)
         {
 #ifdef DEBUG_REQUESTS
-            std::cerr << "\t\t\tGot request " << id << " for "
+            std::cerr << "\t\t\tGOT THUMBNAIL " << id << " for "
                       << filename << std::endl;
 #endif
             bind_image(i.second);
@@ -903,16 +910,7 @@ void Flu_Entry::createdThumbnail(
                       << (g->label() ? g->label() : "nullptr") << std::endl;
 #endif
             g->redraw();
-#ifndef DEBUG_REQUESTS
-            Fl_Window* w = window();
-            std::cerr << "\t\t\tredraw window "
-                      << (w->label() ? w->label() : "nullptr") << std::endl;
-            w->redraw();
-#endif
             p.id = -1;
         }
-    }
-    else
-    {
     }
 }
