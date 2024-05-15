@@ -1,5 +1,5 @@
 
-#define DEBUG_REQUESTS 1
+// #define DEBUG_REQUESTS 1
 
 #include <mutex>
 
@@ -61,15 +61,16 @@ namespace
 
         std::string shortened = filename;
         fl_measure(shortened.c_str(), W, H);
-        
+
         const char* start = filename.c_str();
         const char* end = start + filename.size();
         const char* pos = end;
 
         // Loop until target length is reached or beginning is reached
-        while (W > maxW && pos > start) {
+        while (W > maxW && pos > start)
+        {
             // Move back one character (considering UTF-8 encoding)
-            pos = fl_utf8back(pos-1, start, pos);
+            pos = fl_utf8back(pos - 1, start, pos);
             shortened = std::string(start, pos) + "...";
             W = 0;
             fl_measure(shortened.c_str(), W, H);
@@ -77,8 +78,7 @@ namespace
 
         return shortened;
     }
-}
-
+} // namespace
 
 struct Flu_Entry::Private
 {
@@ -626,7 +626,7 @@ void Flu_Entry::updateSize()
         W = 0;
         H = 0;
         fl_measure(description.c_str(), W, H);
-	const int maxW = typeW - 4;
+        const int maxW = typeW - 4;
         if (W > maxW)
         {
             // progressively strip characters off the end of the description
@@ -703,7 +703,7 @@ void Flu_Entry::inputCB()
 void Flu_Entry::draw()
 {
     TLRENDER_P();
-    
+
     if (editMode)
     {
         if (editMode == 2)
@@ -729,7 +729,7 @@ void Flu_Entry::draw()
         fl_draw_box(FL_FLAT_BOX, x(), y(), w(), h(), color());
         fl_color(FL_BLACK);
     }
-    
+
     int X = x() + 4;
     int Y = y();
     int iH = 0;
@@ -746,7 +746,7 @@ void Flu_Entry::draw()
     {
         iW = icon->w() + 2;
     }
-    
+
     fl_font(textfont(), textsize());
     fl_measure(filename.c_str(), W, H);
     int maxW = nameW - iW;
@@ -758,7 +758,7 @@ void Flu_Entry::draw()
             shortname = altname;
         else
             shortname = filename;
-        
+
         shortname = shortenString(shortname, maxW);
     }
     else
@@ -771,10 +771,8 @@ void Flu_Entry::draw()
                     shortname.substr(pos + 1, shortname.size());
         pos += 2;
     }
- 
 
     fl_draw(shortname.c_str(), X, Y, nameW, h() - iH, FL_ALIGN_LEFT);
-
 
     X = x() + 4 + nameW;
 
@@ -821,12 +819,12 @@ void Flu_Entry::startRequest()
     file::Path path(toTLRender());
     if (mrv::file::isDirectory(path.get()))
         return;
-    
+
     auto extension = tl::string::toLower(path.getExtension());
 
-    bool requestIcon =
-        mrv::file::isValidType(path) && !mrv::file::isAudio(path) &&
-        extension != ".ndi" && Flu_File_Chooser::thumbnailsFileReq;
+    bool requestIcon = mrv::file::isValidType(path) &&
+                       !mrv::file::isAudio(path) && extension != ".ndi" &&
+                       Flu_File_Chooser::thumbnailsFileReq;
 
     if (!Flu_File_Chooser::thumbnailsUSD)
     {
@@ -868,14 +866,14 @@ void Flu_Entry::cancelRequest()
     TLRENDER_P();
     if (!p.thumbnailCreator || p.id == -1)
         return;
-    
+
     const std::lock_guard<std::mutex> lock(p.thumbnailMutex);
     p.thumbnailCreator->cancelRequests(p.id);
 
 #ifdef DEBUG_REQUESTS
     std::cerr << "\tCANCELED REQUEST " << p.id << " for " << toTLRender() << " "
               << x() << " " << y() << " " << w() << "x" << h() << std::endl;
-    //abort();
+    // abort();
 #endif
     p.id = -1;
 }
@@ -891,8 +889,8 @@ void Flu_Entry::createdThumbnail(
         for (const auto& i : thumbnails)
         {
 #ifdef DEBUG_REQUESTS
-            std::cerr << "\t\t\tGOT THUMBNAIL " << id << " for "
-                      << filename << std::endl;
+            std::cerr << "\t\t\tGOT THUMBNAIL " << id << " for " << filename
+                      << std::endl;
 #endif
             bind_image(i.second);
             updateSize();
