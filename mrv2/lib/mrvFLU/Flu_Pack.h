@@ -1,24 +1,5 @@
-//
-// Pack header file for the Fast Light Tool Kit (FLTK).
-//
-// Copyright 1998-2020 by Bill Spitzak and others.
-//
-// This library is free software. Distribution and use rights are outlined in
-// the file "COPYING" which should have been included with this file.  If this
-// file is missing or damaged, see the license at:
-//
-//     https://www.fltk.org/COPYING.php
-//
-// Please see the following page on how to report bugs and issues:
-//
-//     https://www.fltk.org/bugs.php
-//
 
-/* \file
-   Flu_Pack widget . */
-
-#ifndef Flu_Pack_H
-#define Flu_Pack_H
+#pragma once
 
 #include <FL/Fl_Group.H>
 
@@ -51,7 +32,7 @@
 
   \see Fl_Group::resizable()
 */
-class FL_EXPORT Flu_Pack : public Fl_Group {
+class Flu_Pack : public Fl_Group {
   int spacing_;
 
 public:
@@ -65,6 +46,7 @@ protected:
 
 public:
   Flu_Pack(int X, int Y, int W, int H, const char *L = 0);
+  ~Flu_Pack();
 
   /**
     Gets the number of extra pixels of blank space that are added
@@ -99,5 +81,3 @@ public:
   void draw_child(Fl_Widget& o) const;
   void update_child(Fl_Widget& o) const;
 };
-
-#endif

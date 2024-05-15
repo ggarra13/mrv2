@@ -1,24 +1,5 @@
-//
-// Flu_Scroll header file for the Fast Light Tool Kit (FLTK).
-//
-// Copyright 1998-2022 by Bill Spitzak and others.
-//
-// This library is free software. Distribution and use rights are outlined in
-// the file "COPYING" which should have been included with this file.  If this
-// file is missing or damaged, see the license at:
-//
-//     https://www.fltk.org/COPYING.php
-//
-// Please see the following page on how to report bugs and issues:
-//
-//     https://www.fltk.org/bugs.php
-//
 
-/* \file
-   Flu_Scroll widget . */
-
-#ifndef Flu_Scroll_H
-#define Flu_Scroll_H
+#pragma once
 
 class Flu_File_Chooser;
 
@@ -99,7 +80,7 @@ class Flu_File_Chooser;
   clipping is not conveyed to it when drawn, and it will draw over the
   scrollbars and neighboring objects.</I>
 */
-class FL_EXPORT Flu_Scroll : public Fl_Group
+class Flu_Scroll : public Fl_Group
 {
 
     int xposition_, yposition_;
@@ -170,7 +151,7 @@ public:
 
     Flu_Scroll(int X, int Y, int W, int H, Flu_File_Chooser* c,
                const char* L = 0);
-    virtual ~Flu_Scroll();
+    ~Flu_Scroll();
 
     enum { // values for type()
         HORIZONTAL = 1,
@@ -231,5 +212,3 @@ public:
 
     Flu_File_Chooser* chooser_ = nullptr;
 };
-
-#endif

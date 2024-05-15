@@ -53,6 +53,9 @@ Flu_Pack::Flu_Pack(int X, int Y, int W, int H, const char *L)
   // type(VERTICAL); // already set like this
 }
 
+Flu_Pack::~Flu_Pack()
+{
+}
 
 /**
   Forces a child to redraw.
