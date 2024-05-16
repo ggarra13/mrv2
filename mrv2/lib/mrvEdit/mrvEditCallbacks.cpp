@@ -2445,7 +2445,7 @@ namespace mrv
             }
         }
 
-        // Now add up all heights.
+        // Now add up all heights divided by the pixels unit.
         H += videoHeight + audioHeight + markersHeight + transitionsHeight;
 
 #if 0
@@ -2473,6 +2473,8 @@ namespace mrv
 
     void set_edit_button(EditMode mode, ViewerUI* ui)
     {
+        const int kDragBarHeight = 8;
+
         Fl_Button* b = ui->uiEdit;
 
         bool active = (mode == EditMode::kFull || mode == EditMode::kSaved);
@@ -2533,7 +2535,7 @@ namespace mrv
         }
         else if (mode == EditMode::kNone)
         {
-            H = viewGroupH = 0;
+            viewGroupH = 0;
         }
         else
         {
@@ -2546,20 +2548,14 @@ namespace mrv
         viewGroupH = tileGroupH - viewGroupH;
 
 #if 0
-        std::cerr << "------------------------------------------------"
-                  << "presentation=" << ui->uiView->getPresentationMode()
-                  << " active=" << active << std::endl;
-        std::cerr << "1 ViewGroup->visible()="
-                  << viewGroup->visible() << std::endl;
         std::cerr << "1 TimelineGroup->visible()="
                   << TimelineGroup->visible() << std::endl;
-        std::cerr << "1 BottomBar->visible()="
-                  << ui->uiBottomBar->visible() << std::endl;
-        std::cerr << "1   editMode=" << editMode << std::endl;
-        std::cerr << "1       oldY=" << oldY - tileGroupY << std::endl;
-        std::cerr << "1       newY=" << newY - tileGroupY << std::endl;
-        std::cerr << "1  editModeH=" << editModeH << std::endl;
-        std::cerr << "1          H=" << H << std::endl;
+        std::cerr << "editMode=" << editMode << std::endl;
+        std::cerr << "tileGroupY=" << tileGroupY << std::endl;
+        std::cerr << " oldY=" << oldY - tileGroupY << std::endl;
+        std::cerr << " newY=" << newY - tileGroupY << std::endl;
+        std::cerr << "tileGroupH=" << tileGroupH << std::endl;
+        std::cerr << "    H=" << H << std::endl;
         assert( viewGroupH + H == tileGroupH );
         assert( viewGroup->y() + viewGroupH == newY );
 #endif
@@ -2569,33 +2565,20 @@ namespace mrv
         TimelineGroup->resize(TimelineGroup->x(), newY, TimelineGroup->w(), H);
 
 #if 0
-        std::cerr << "AFTER RESIZE uiMain->h()="
-                  << ui->uiMain->h() << std::endl;
-        std::cerr << "AFTER RESIZE viewGroup->x()="
-                  << viewGroup->x() << std::endl;
-        std::cerr << "AFTER RESIZE viewGroup->y()="
-                  << viewGroup->y() << std::endl;
-        std::cerr << "AFTER RESIZE viewGroup->w()="
-                  << viewGroup->w() << std::endl;
-        std::cerr << "AFTER RESIZE viewGroup->h()="
-                  << viewGroup->h() << std::endl;
-        std::cerr << "AFTER RESIZE view->x()="
-                  << ui->uiView->x() << std::endl;
-        std::cerr << "AFTER RESIZE view->y()="
-                  << ui->uiView->y() << std::endl;
-        std::cerr << "AFTER RESIZE view->w()="
-                  << ui->uiView->w() << std::endl;
-        std::cerr << "AFTER RESIZE view->h()="
-                  << ui->uiView->h() << std::endl;
-        std::cerr << "AFTER RESIZE TimelineGroup->x()="
+        std::cerr << "2 TimelineGroup->visible()="
+                  << TimelineGroup->visible() << std::endl;
+        std::cerr << "2 TimelineGroup->x()="
                   << TimelineGroup->x() << std::endl;
-        std::cerr << "AFTER RESIZE TimelineGroup->y()="
+        std::cerr << "2 TimelineGroup->y()="
                   << TimelineGroup->y() << std::endl;
-        std::cerr << "AFTER RESIZE TimelineGroup->w()="
+        std::cerr << "2 TimelineGroup->w()="
                   << TimelineGroup->w() << std::endl;
-        std::cerr << "AFTER RESIZE TimelineGroup->h()="
+        std::cerr << "2 TimelineGroup->h()="
                   << TimelineGroup->h() << std::endl;
 #endif
+
+        viewGroup->layout();
+        tileGroup->init_sizes();
 
         // This mess is to work around macOS issues.  Unhiding TimelineGroup
         // should be enough to also unhide the timeline.
@@ -2631,65 +2614,6 @@ namespace mrv
             }
         }
 #endif
-
-        viewGroup->layout();
-
-#if 0
-        std::cerr << "AFTER LAYOUT viewGroup->x()="
-                  << viewGroup->x() << std::endl;
-        std::cerr << "AFTER LAYOUT viewGroup->y()="
-                  << viewGroup->y() << std::endl;
-        std::cerr << "AFTER LAYOUT viewlineGroup->w()="
-                  << viewGroup->w() << std::endl;
-        std::cerr << "AFTER LAYOUT viewGroup->h()="
-                  << viewGroup->h() << std::endl;
-        std::cerr << "AFTER LAYOUT view->x()="
-                  << ui->uiView->x() << std::endl;
-        std::cerr << "AFTER LAYOUT view->y()="
-                  << ui->uiView->y() << std::endl;
-        std::cerr << "AFTER LAYOUT view->w()="
-                  << ui->uiView->w() << std::endl;
-        std::cerr << "AFTER LAYOUT view->h()="
-                  << ui->uiView->h() << std::endl;
-#endif
-
-        tileGroup->init_sizes();
-
-#if 0
-        std::cerr << "AFTER INIT tileGroupY=" << tileGroupY << std::endl;
-        std::cerr << "AFTER INIT tileGroupH=" << tileGroupH << std::endl;
-        std::cerr << "AFTER INIT_SIZES viewGroup->x()="
-                  << viewGroup->x() << std::endl;
-        std::cerr << "AFTER INIT_SIZES viewGroup->y()="
-                  << viewGroup->y() << std::endl;
-        std::cerr << "AFTER INIT_SIZES viewlineGroup->w()="
-                  << viewGroup->w() << std::endl;
-        std::cerr << "AFTER INIT_SIZES viewGroup->h()="
-                  << viewGroup->h() << std::endl;
-        std::cerr << "AFTER INIT_SIZES view->x()="
-                  << ui->uiView->x() << std::endl;
-        std::cerr << "AFTER INIT_SIZES view->y()="
-                  << ui->uiView->y() << std::endl;
-        std::cerr << "AFTER INIT_SIZES view->w()="
-                  << ui->uiView->w() << std::endl;
-        std::cerr << "AFTER INIT_SIZES view->h()="
-                  << ui->uiView->h() << std::endl;
-        std::cerr << "AFTER INIT_SIZES TimelineGroup->x()="
-                  << TimelineGroup->x() << std::endl;
-        std::cerr << "AFTER INIT_SIZES TimelineGroup->y()="
-                  << TimelineGroup->y() << std::endl;
-        std::cerr << "AFTER INIT_SIZES TimelineGroup->w()="
-                  << TimelineGroup->w() << std::endl;
-        std::cerr << "AFTER INIT_SIZES TimelineGroup->h()="
-                  << TimelineGroup->h() << std::endl;
-#endif
-
-        // This is needed as XWayland and Wayland would leave traces of the
-        // toolbar icons.
-        TimelineGroup->redraw();
-
-        // Change the edit button status
-        set_edit_button(editMode, ui);
 
         // EditMode::kNone is used when we go to presentation mode.
         if (mode != EditMode::kNone)
