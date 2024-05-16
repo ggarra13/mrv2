@@ -12,6 +12,7 @@ v1.1.7
   Window, always showing it stopping.
 - Fixed session files starting playback automatically even when the original
   timeline was stopped.
+- Fixed a color discrepancy on YUV420 movies being too saturated.
   
 
 v1.1.6
