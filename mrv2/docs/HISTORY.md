@@ -10,6 +10,11 @@ v1.1.7
 - Cleaned up FLU's code (mrv2 custom file requester).
 - mrv2's v1.1.6 was not respecting the hidden pixel bar on the Preferences
   Window, always showing it stopping.
+- Fixed session files starting playback automatically even when the original
+  timeline was stopped.
+- Fixed a color discrepancy on YUV420 movies being too saturated.
+- Rewrote the algorithm for the scaling of the window when the first image is
+  loaded (or run from the command-line).
   
 
 v1.1.6

@@ -42,7 +42,7 @@ namespace mrv
 
     void StatusBar::default_message()
     {
-        Fl::add_timeout(0.25, (Fl_Timeout_Handler)all_ok_cb, this);
+        Fl::add_timeout(0.5, (Fl_Timeout_Handler)all_ok_cb, this);
     }
 
     void StatusBar::save_colors()

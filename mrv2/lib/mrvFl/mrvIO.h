@@ -25,11 +25,13 @@ namespace mrv
 
         struct logbuffer : public string_stream
         {
-            static std::fstream out;
+            static std::ofstream out;
             static std::thread::id mainThread;
 
             logbuffer();
             virtual ~logbuffer();
+
+            void open_file();
 
             void open_ffmpeg_log_panel();
             void open_log_panel();

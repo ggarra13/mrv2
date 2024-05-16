@@ -52,7 +52,7 @@ namespace mrv
     namespace trace
     {
 
-        std::fstream logbuffer::out;
+        std::ofstream logbuffer::out;
         std::thread::id logbuffer::mainThread;
 
         logbuffer::logbuffer() :
@@ -60,6 +60,7 @@ namespace mrv
         {
             str().reserve(1024);
             mainThread = std::this_thread::get_id();
+            open_file();
         };
 
         logbuffer::~logbuffer()
@@ -67,6 +68,14 @@ namespace mrv
             if (out.is_open())
                 out.close();
         };
+
+        void logbuffer::open_file()
+        {
+            if (out.is_open())
+                return;
+
+            out.open(tmppath() + "debug.log");
+        }
 
         void logbuffer::open_ffmpeg_log_panel()
         {
@@ -142,12 +151,19 @@ namespace mrv
                 return;
 
             std::cerr << c;
+
+            if (out.is_open())
+            {
+                out << c << std::flush;
+            }
+
             if (contains_ffmpeg(c))
             {
                 open_ffmpeg_log_panel();
             }
             else
                 open_log_panel();
+
             if (uiLogDisplay)
                 uiLogDisplay->error(c);
         }
@@ -157,6 +173,11 @@ namespace mrv
             if (Flu_File_Chooser::window)
                 return;
 
+            if (out.is_open())
+            {
+                out << c << std::flush;
+            }
+
             std::cerr << c;
             if (uiLogDisplay)
                 uiLogDisplay->warning(c);
@@ -165,6 +186,12 @@ namespace mrv
         void infobuffer::print(const char* c)
         {
             std::cout << c << std::flush;
+
+            if (out.is_open())
+            {
+                out << c << std::flush;
+            }
+
             if (uiLogDisplay)
                 uiLogDisplay->info(c);
         }
