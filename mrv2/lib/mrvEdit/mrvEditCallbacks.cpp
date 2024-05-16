@@ -2618,6 +2618,13 @@ namespace mrv
         }
 #endif
 
+        // This is needed as XWayland and Wayland would leave traces of the
+        // toolbar icons.
+        TimelineGroup->redraw();
+
+        // Change the edit button status
+        set_edit_button(editMode, ui);
+
         // EditMode::kNone is used when we go to presentation mode.
         if (mode != EditMode::kNone)
         {
