@@ -742,7 +742,7 @@ namespace mrv
                                 j.at("playback").get_to(v);
                                 playback = static_cast<timeline::Playback>(v);
                             }
-                            player->setPlayback(playback);
+                            view->setPlayback(playback);
                         }
                     }
                 }
