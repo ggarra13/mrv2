@@ -15,6 +15,8 @@ v1.1.7
 - Fixed a color discrepancy on YUV420 movies being too saturated.
 - Rewrote the algorithm for the scaling of the window when the first image is
   loaded (or run from the command-line).
+- Fixed a terrible bug on Linux X11 which would sometimes would make the X11
+  server reboot on some Linux distros like Rocky Linux 8.9.
   
 
 v1.1.6
