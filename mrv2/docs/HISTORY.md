@@ -10,6 +10,8 @@ v1.1.7
 - Cleaned up FLU's code (mrv2 custom file requester).
 - mrv2's v1.1.6 was not respecting the hidden pixel bar on the Preferences
   Window, always showing it stopping.
+- Fixed session files starting playback automatically even when the original
+  timeline was stopped.
   
 
 v1.1.6

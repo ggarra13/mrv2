@@ -415,7 +415,7 @@ namespace mrv
                 close_all_cb(nullptr, ui);
 
                 // Turn off auto-playback temporarily
-                bool autoplayback = ui->uiPrefs->uiPrefsAutoPlayback->value();
+                bool autoPlayback = ui->uiPrefs->uiPrefsAutoPlayback->value();
                 ui->uiPrefs->uiPrefsAutoPlayback->value(false);
 
                 for (const auto& j : session["files"])
@@ -459,6 +459,8 @@ namespace mrv
                     }
                 }
 
+                ui->uiPrefs->uiPrefsAutoPlayback->value(autoPlayback);
+                
                 Message j = session["ui"];
 
                 // Decode bars
@@ -667,8 +669,6 @@ namespace mrv
 
                 if (version >= 2)
                 {
-                    ui->uiPrefs->uiPrefsAutoPlayback->value(autoplayback);
-
                     std::vector<int> Bindexes = session["Bindexes"];
                     model->clearB();
                     for (auto i : Bindexes)
@@ -742,8 +742,6 @@ namespace mrv
                                 j.at("playback").get_to(v);
                                 playback = static_cast<timeline::Playback>(v);
                             }
-                            if (ui->uiPrefs->uiPrefsAutoPlayback->value())
-                                playback = timeline::Playback::Forward;
                             player->setPlayback(playback);
                         }
                     }
