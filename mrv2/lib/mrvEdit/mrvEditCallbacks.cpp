@@ -2294,7 +2294,10 @@ namespace mrv
         // This specifies whether to show Video Only or Video and Audio.
         const int editView = ui->uiPrefs->uiPrefsEditView->value();
 
-        const float pixels_unit = ui->uiTimeline->pixels_per_unit();
+        // Timeline's pixels_per_unit would get reset to 1 when timeline was
+        // hidden.
+        // const float pixels_unit = ui->uiTimeline->pixels_per_unit();
+        const float pixels_unit = ui->uiView->pixels_per_unit();
 
         // Some constants, as Darby does not yet expose this in tlRender.
         const int kMargin = 4;
