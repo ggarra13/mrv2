@@ -460,7 +460,7 @@ namespace mrv
                 }
 
                 ui->uiPrefs->uiPrefsAutoPlayback->value(autoPlayback);
-                
+
                 Message j = session["ui"];
 
                 // Decode bars

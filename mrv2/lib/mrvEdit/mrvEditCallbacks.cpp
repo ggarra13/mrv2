@@ -2538,6 +2538,10 @@ namespace mrv
         }
         else if (mode == EditMode::kNone)
         {
+            // \@note:  When going to presentation mode, we set the timeline
+            //          mode to None.  We calculate the viewGroupH (height),
+            //          but we must not calculate H as 0, as that would collapse
+            //          the timeline and can crash the X11 server.
             viewGroupH = 0;
         }
         else
@@ -2563,6 +2567,10 @@ namespace mrv
         assert( viewGroup->y() + viewGroupH == newY );
 #endif
 
+        // \@note: We do a resize instead of a move_intersection as:
+        //         it is faster and we must avoid collapsing the timeline group
+        //         to 0 when going into presentation mode (we internally keep
+        //         it as kMinEditModeH.
         viewGroup->resize(
             viewGroup->x(), viewGroup->y(), viewGroup->w(), viewGroupH);
         TimelineGroup->resize(TimelineGroup->x(), newY, TimelineGroup->w(), H);
@@ -2583,8 +2591,10 @@ namespace mrv
         viewGroup->layout();
         tileGroup->init_sizes();
 
+        // \@bug:
         // This mess is to work around macOS issues.  Unhiding TimelineGroup
-        // should be enough to also unhide the timeline.
+        // should be enough to also unhide the timeline, but it seemed not
+        // to work on macOS.
 #if 0
         if (ui->uiBottomBar->visible())
         {

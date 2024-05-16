@@ -2,10 +2,8 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-
 // Debug scaling of the window to image size.
-//#define DEBUG_SCALING 1
-
+// #define DEBUG_SCALING 1
 
 #include <memory>
 #include <cmath>
@@ -552,7 +550,7 @@ namespace mrv
         const bool autoHide = p.ui->uiPrefs->uiPrefsAutoHidePixelBar->value();
         const bool hasPixelBar = p.ui->uiPrefs->uiPrefsPixelToolbar->value();
         const bool visiblePixelBar = p.ui->uiPixelBar->visible_r();
-        
+
         if (!hasPixelBar || visiblePixelBar || !autoHide || p.presentation)
             return;
 
@@ -1317,12 +1315,12 @@ namespace mrv
         int W = renderSize.w;
         int H = renderSize.h;
         float aspectRatio = static_cast<float>(renderSize.w) / renderSize.h;
-        
-#ifdef DEBUG_SCALING 
+
+#ifdef DEBUG_SCALING
         std::cerr << "renderSize=" << renderSize << std::endl;
         std::cerr << "aspectRatio=" << aspectRatio << std::endl;
 #endif
-        
+
         int minX, minY, maxW, maxH, posX, posY;
         Fl::screen_work_area(minX, minY, maxW, maxH, screen);
 
@@ -1346,7 +1344,6 @@ namespace mrv
         if (posY < minY)
             posY = minY;
 
-        
         int decW = mw->decorated_w();
         int decH = mw->decorated_h();
 
@@ -1356,10 +1353,9 @@ namespace mrv
 #ifdef DEBUG_SCALING
         std::cerr << "DECORATE SIZES " << dW << "x" << dH << std::endl;
 #endif
-        
+
         maxW -= dW;
         maxH -= dH;
-
 
         bool alwaysFrameView = (bool)uiPrefs->uiPrefsAutoFitImage->value();
         p.frameView = alwaysFrameView;
@@ -1376,7 +1372,7 @@ namespace mrv
 
             if (p.ui->uiDockGroup->visible())
                 W += p.ui->uiDockGroup->w();
-        
+
             // Try to adjust sizing first, keeping the pos the same.
             if (aspectRatio > 1)
             {
@@ -1385,8 +1381,8 @@ namespace mrv
                     p.frameView = true;
                     H = minY + maxH - posY + dH;
                     W *= aspectRatio;
-                    
-#ifdef DEBUG_SCALING 
+
+#ifdef DEBUG_SCALING
                     std::cerr << "Adjust sizing on height" << std::endl;
 #endif
                 }
@@ -1398,18 +1394,18 @@ namespace mrv
                     p.frameView = true;
                     W = minX + maxW - posX + dW;
                     H /= aspectRatio;
-                
-#ifdef DEBUG_SCALING 
+
+#ifdef DEBUG_SCALING
                     std::cerr << "Adjust sizing on width" << std::endl;
 #endif
                 }
             }
-        
-#ifdef DEBUG_SCALING 
-            std::cerr << "renderSize rescaled W=" << W
-                      << " H=" << H << std::endl;
+
+#ifdef DEBUG_SCALING
+            std::cerr << "renderSize rescaled W=" << W << " H=" << H
+                      << std::endl;
 #endif
-        
+
             // Take into account the different UI bars
             if (p.ui->uiMenuGroup->visible())
                 H += p.ui->uiMenuGroup->h();
@@ -1427,10 +1423,10 @@ namespace mrv
 
             if (p.ui->uiStatusGroup->visible())
                 H += p.ui->uiStatusGroup->h();
-            
-#ifdef DEBUG_SCALING 
-            std::cerr << "Window size so far W=" << W
-                      << " H=" << H << std::endl;
+
+#ifdef DEBUG_SCALING
+            std::cerr << "Window size so far W=" << W << " H=" << H
+                      << std::endl;
 #endif
         }
 
@@ -1463,10 +1459,9 @@ namespace mrv
             H = 602;
         }
 
-#ifdef DEBUG_SCALING 
+#ifdef DEBUG_SCALING
         std::cerr << "clamped minimum W=" << W << " H=" << H << std::endl;
 #endif
-        
 
         //
         // Final sanity checks.
@@ -1482,7 +1477,7 @@ namespace mrv
         if (posX + W > minX + maxW)
         {
             p.frameView = true;
-            posX = minX + dW / 2; // dW / 2 is needed here! 
+            posX = minX + dW / 2; // dW / 2 is needed here!
             W = maxW;
         }
 
@@ -1490,13 +1485,13 @@ namespace mrv
         if (posY + H > minY + maxH)
         {
             p.frameView = true;
-            posY = minY + dH;  // dH is needed here!
+            posY = minY + dH; // dH is needed here!
             H = maxH;
         }
-        
-#ifdef DEBUG_SCALING 
-        std::cerr << "FINAL Window=" << posX << " " << posY << " " << W
-                  << "x" << H << std::endl;
+
+#ifdef DEBUG_SCALING
+        std::cerr << "FINAL Window=" << posX << " " << posY << " " << W << "x"
+                  << H << std::endl;
 #endif
         mw->resize(posX, posY, W, H);
 

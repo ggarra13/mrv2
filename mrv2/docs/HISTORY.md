@@ -7,7 +7,7 @@ v1.1.7
 - Fixed mrv2's custom file requester thumbnails being too high.
 - Added custom RAW and several image missing formats to mrv2's custom file
   requester.
-- Cleaned up FLU's code (mrv2 custom file requester).
+- Started cleaning up FLU's code (mrv2 custom file requester).
 - mrv2's v1.1.6 was not respecting the hidden pixel bar on the Preferences
   Window, always showing it stopping.
 - Fixed session files starting playback automatically even when the original
@@ -15,6 +15,13 @@ v1.1.7
 - Fixed a color discrepancy on YUV420 movies being too saturated.
 - Rewrote the algorithm for the scaling of the window when the first image is
   loaded (or run from the command-line).
+- Fixed a terrible bug on Linux X11 which would sometimes would make the X11
+  server reboot on some Linux distros like Rocky Linux 8.9.
+- Added OpenRV's license to mrv2 as I took inspiration for their reverse
+  playback.
+- Added what each contributor did so far for the mrv2 project.
+  If you don't want to be listed as contributor, not list your email address,
+  or something else, please let me know.
   
 
 v1.1.6
