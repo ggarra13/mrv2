@@ -518,6 +518,7 @@ int Flu_Wrap_Group::handle(int event)
     case FL_ENTER:
     case FL_LEAVE:
     case FL_MOVE:
+    case FL_SHOW:
         redraw();
         ret = 1;
         break;

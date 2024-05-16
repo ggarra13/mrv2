@@ -224,6 +224,8 @@ int Flu_Pack::handle(int event)
     {
     case FL_ENTER:
     case FL_LEAVE:
+    case FL_MOVE:
+    case FL_SHOW:
         redraw();
         break;
     default:

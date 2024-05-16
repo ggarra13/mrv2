@@ -1444,7 +1444,9 @@ namespace mrv
             int TH = calculate_edit_viewport_size(p.ui);
             H += TH;
 
+#ifdef DEBUG_SCALING 
             std::cerr << "Timeline Height=" << TH << std::endl;
+#endif
         }
 
         // Make sure that we are not less than the minimum window
