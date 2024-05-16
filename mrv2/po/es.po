@@ -3427,7 +3427,7 @@ msgid "    Ahead    V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "   Adelante V: % 4<PRIu64>    A: % 4<PRIu64>"
 
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
-msgstr "   Atrás    V: % 4<PRIu64>    A: % 4<PRIu64> "
+msgstr "   Atrás       V: % 4<PRIu64>    A: % 4<PRIu64> "
 
 msgid "Edit Text"
 msgstr "Editar Texto"
