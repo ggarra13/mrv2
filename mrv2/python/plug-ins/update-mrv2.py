@@ -436,9 +436,11 @@ class UpdatePlugin(plugin.Plugin):
             """Downloads the file in a separate thread and updates progress."""
             from fltk14 import Fl
             import requests
-            print(_(f'Downloading: {name} from {download_url}...'))
+            print(_(f'Downloading: {name} from {download_url}'))
             Fl.check()  # Ensure UI responsiveness
             response = requests.get(download_url, stream=True)
+            print(_(f'Got response...'))
+            Fl.check()  # Ensure UI responsiveness
             response.raise_for_status()  # Raise exception for non-200 status codes
                 
             print("Get total size")
