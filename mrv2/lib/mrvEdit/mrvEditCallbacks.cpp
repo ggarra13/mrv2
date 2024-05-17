@@ -1235,7 +1235,7 @@ namespace mrv
 
             // Append a new audio track
             auto track = new otio::Track(
-                "Audio", otio::nullopt, otio::Track::Kind::audio);
+                "Audio", std::nullopt, otio::Track::Kind::audio);
             stack->append_child(track);
 
             modified = true;
@@ -1528,7 +1528,7 @@ namespace mrv
             new otio::Timeline("EDL");
 
         auto videoTrack =
-            new otio::Track("Video", otio::nullopt, otio::Track::Kind::video);
+            new otio::Track("Video", std::nullopt, otio::Track::Kind::video);
 
         auto stack = new otio::Stack;
         stack->append_child(videoTrack);
@@ -1666,7 +1666,7 @@ namespace mrv
             {
                 // Append a new video track
                 track = new otio::Track(
-                    "Video", otio::nullopt, otio::Track::Kind::video);
+                    "Video", std::nullopt, otio::Track::Kind::video);
                 destStack->append_child(track);
             }
             else
@@ -1818,7 +1818,7 @@ namespace mrv
             {
                 // Append a new audio track
                 track = new otio::Track(
-                    "Audio", otio::nullopt, otio::Track::Kind::audio);
+                    "Audio", std::nullopt, otio::Track::Kind::audio);
                 destStack->append_child(track);
             }
             else
@@ -1920,8 +1920,7 @@ namespace mrv
     }
 
     void addClipToTimeline(
-        const int sourceIndex,
-        const int destIndex,
+        const int sourceIndex, const int destIndex,
         otio::Timeline* destTimeline, ViewerUI* ui)
     {
         auto model = ui->app->filesModel();
@@ -1929,17 +1928,19 @@ namespace mrv
 
         if (sourceIndex < 0 || sourceIndex >= numFiles)
         {
-            LOG_ERROR("Source index out of range" << sourceIndex << " max="
-                      << numFiles);
+            LOG_ERROR(
+                "Source index out of range" << sourceIndex
+                                            << " max=" << numFiles);
             return;
         }
         if (destIndex < 0 || destIndex >= numFiles)
         {
-            LOG_ERROR("Destination index out of range" << destIndex << " max="
-                      << numFiles);
+            LOG_ERROR(
+                "Destination index out of range" << destIndex
+                                                 << " max=" << numFiles);
             return;
         }
-        
+
         model->setA(sourceIndex);
         auto sourceItem = model->observeA()->get();
         if (!sourceItem)
@@ -1962,7 +1963,7 @@ namespace mrv
         // Make a copy of the timeline, so we don't modify the original in
         // place.
         const std::string s = timeline->to_json_string();
-        auto timelineCopy =  
+        auto timelineCopy =
             dynamic_cast<otio::Timeline*>(otio::Timeline::from_json_string(s));
         if (!timelineCopy)
         {
@@ -1974,7 +1975,7 @@ namespace mrv
 
         otio::SerializableObject::Retainer<otio::Timeline> sourceTimeline(
             timelineCopy);
-        
+
         makePathsAbsolute(sourceTimeline, ui);
 
         model->setA(destIndex);
