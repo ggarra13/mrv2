@@ -2386,7 +2386,7 @@ namespace mrv
 
         auto timeline = player->getTimeline();
         if (!timeline)
-            return;
+            return H;
 
         // Check first if the timeline is an audio only timeline.
         bool audioOnly = true;
