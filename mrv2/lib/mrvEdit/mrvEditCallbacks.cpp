@@ -1966,7 +1966,8 @@ namespace mrv
             dynamic_cast<otio::Timeline*>(otio::Timeline::from_json_string(s));
         if (!timelineCopy)
         {
-            LOG_ERROR("Could not copy timeline from .json string:");
+            LOG_ERROR("Could not crete timeline object from this "
+                      ".json string:");
             LOG_ERROR(s);
             return;
         }
