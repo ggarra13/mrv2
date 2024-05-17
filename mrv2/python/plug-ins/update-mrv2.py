@@ -11,11 +11,13 @@ GITHUB_ASSET_TAG  = 'tag_name'
 GITHUB_ASSET_DATE = 'published_at'
 GITHUB_ASSET_URL = 'browser_download_url'
 
+GITHUB_ASSET_RELEASE_DAYS = 5
+
     
 #
 # Standard libs
 #
-import os, platform, re, tempfile, subprocess, sys, time
+import os, platform, re, subprocess, sys, tempfile, threading, time
 
 #
 # mrv2 imports
@@ -52,6 +54,7 @@ def _get_password_cb(widget, args):
         widget (Fl_Widget): FLTK's secret input widget.
         args (list): [self, command, download_file]
     """
+    from fltk14 import Fl
     this    = args[0]
     command = args[1]
     download_file = args[2]
@@ -76,6 +79,36 @@ def _ignore_cb(widget, args):
     widget.parent().hide()
     Fl.check()
         
+
+def _more_than_5_days_elapsed(release_date_iso):   
+    """Compares the release date with the current date and returns True if
+    more than 5 days have elapsed.  This is used for automatic updates to
+    leave a buffer in case some critical bugs in a release are found.
+        
+    Args:
+        release_date_iso (str): The release date in ISO 8601 format 
+                                (YYYY-MM-DD).
+
+    Returns:
+        bool: True if more than 5 days have passed, False otherwise.
+    """
+    try:
+        from datetime import datetime, timedelta
+        # Parse the release date string into a datetime object
+        release_date = datetime.fromisoformat(release_date_iso)
+
+        # Get today's date
+        today = datetime.utcnow().date()
+
+        # Calculate the difference in days between release date and today
+        time_elapsed = today - release_date.date()
+
+        # Check if more than 5 days have passed
+        return time_elapsed.days > GITHUB_ASSET_RELEASE_DAYS
+    except ValueError:
+        print(f_("Invalid ISO 8601 format provided: {release_date_iso}"))
+        return False
+
 def _get_latest_release_cb(widget, args):
     """FLTK callback to start the download of the latest release for
     the current platform.  Hides the widget's parent window when done.
@@ -98,7 +131,7 @@ def _get_latest_release_cb(widget, args):
     if name.endswith(extension):
         this.download_version(name, release_info['download_url'])
     else:
-        print(_('No file matching'),extension,_('was found'))
+        print(_(f'No file matching {extension} was found'))
 
 
 class UpdatePlugin(plugin.Plugin):
@@ -156,9 +189,9 @@ class UpdatePlugin(plugin.Plugin):
                 value, reg_type = winreg.QueryValueEx(key, '')
                 exe = f'{value[:-5]}'
                 exe = exe.replace('\\', '/')
-                print(_('Install Location:'),exe)
+                print(_(f'Install Location: {exe}'))
             except WindowsError as e:
-                print(_('Error retrieving value:'),e)
+                print(_(f'Error retrieving value: {e}'))
             finally:
                 # Always close the opened key
                 winreg.CloseKey(key)
@@ -175,7 +208,7 @@ class UpdatePlugin(plugin.Plugin):
         elif kernel == 'Darwin':
             exe = f'/Applications/mrv2.app/Contents/MacOS/mrv2'
         else:
-            print(_('Unknown platform'),kernel)
+            print(_(f'Unknown platform {kernel}'))
         return exe
         
     def run_command(self, cmd):
@@ -219,7 +252,7 @@ class UpdatePlugin(plugin.Plugin):
             quoted_exe = exe
 
         try:
-            print(_('Starting'),exe,'...')
+            print(_(f'Starting {exe}...'))
             os.execv(exe, [quoted_exe])
         except Exception as e:
             print(_('An unexpected error occurred:'),e)
@@ -242,7 +275,7 @@ class UpdatePlugin(plugin.Plugin):
             None
         """
         cmd = None
-        print(_('Trying to install'),download_file,'...')
+        print(_(f'Trying to install {download_file}...'))
         Fl.check()
         kernel = platform.system()
         if kernel == 'Windows':
@@ -270,7 +303,7 @@ class UpdatePlugin(plugin.Plugin):
                 while os.path.exists(download_file):
                     try:
                         os.remove(download_file)
-                        print(_('Removed temporary "') + download_file + '.')
+                        print(_(f'Removed temporary "{download_file}.'))
                         Fl.check()
                     except:
                         time.sleep(2) # Wait 2 seconds before trying again. 
@@ -282,13 +315,14 @@ class UpdatePlugin(plugin.Plugin):
                 Fl.check()
                 if os.path.exists(download_file):
                     os.remove(download_file)
+                    print(_(f'Removed temporary "{download_file}.'))
                     print(_('Removed temporary'),download_file,'.')
                     Fl.check()
                 self.start_new_mrv2(download_file, kernel)
             else:
                 if kernel == 'Windows':
-                    print(_('Could not locate mrv2 in:\n') + exe + '.\n' +
-                          _('Maybe you installed it in a non-default location.'))
+                    print(_(f'Could not locate mrv2 in:\n{exe}.\n') +
+                          _(f'Maybe you installed it in a non-default location.'))
                     return
                 print(_('Something failed installing mrv2 - It is not in "') +
                       exe + '"')
@@ -388,28 +422,72 @@ class UpdatePlugin(plugin.Plugin):
         else:
             return 'Unknown operating system'
 
-
     def download_version(self, name, download_url):
-        """Download a filename from a download url from github.
-        If successful, tries to install it.
-
+        """Downloads a file from a download URL from GitHub in a separate thread.
+        If successful, tries to install it. Updates UI during download progress.
+            
         Args:
-            name (str): name of the file to download.
+            name (str): Name of the file to download.
             download_url (str): URL for downloading the file.
-    
-        Returns:
-            None 
         """
-        Fl.check()
+
+        def download_file_in_thread(download_url, download_file,
+                                    progress_callback):
+            """Downloads the file in a separate thread and updates progress."""
+            from fltk14 import Fl
+            import requests
+            print(_(f'Downloading: {name} from {download_url}...'))
+            Fl.check()  # Ensure UI responsiveness
+            response = requests.get(download_url, stream=True)
+            response.raise_for_status()  # Raise exception for non-200 status codes
+                
+            print("Get total size")
+            Fl.check()  # Ensure UI responsiveness
+            total_size = int(response.headers.get('content-length', 0))
+            downloaded = 0
+
+            with open(download_file, 'wb') as f:
+                print('#',)
+                Fl.check()  # Ensure UI responsiveness
+                for chunk in response.iter_content(chunk_size=1024):
+                    print('*',)
+                    Fl.check()  # Ensure UI responsiveness
+                    if chunk:  # filter out keep-alive new chunks
+                        downloaded += len(chunk)
+                        f.write(chunk)
+                        progress_callback(downloaded, total_size)  # Update UI with progress
+                        f.flush()
+
+            Fl.check()  # Ensure UI responsiveness
+            print(_(f'Download complete: {download_file}'))
+
+
+        # Define a function to update UI progress
+        def update_progress(downloaded, total_size):
+            from fltk14 import Fl
+            if total_size > 0:
+                progress_percentage = int(downloaded * 100 / total_size)
+                # Update your UI progress bar or indicator here with
+                # `progress_percentage`
+                print(f"Download progress: {progress_percentage}%")
+                Fl.check()
+
+        # Create a temporary download file path
         download_file = os.path.join(tempfile.gettempdir(), name)
-        print(_('Downloading:'),name,'...')
-        Fl.check()
-        download_response = requests.get(download_url)
-        with open(download_file, 'wb') as f:
-            f.write(download_response.content)
-        print(_('Download complete:'),download_file)
+        
+        # Start the download in a separate thread
+        download_thread = threading.Thread(target=download_file_in_thread,
+                                           args=(download_url, download_file,
+                                                 update_progress))
+        download_thread.start()
+
+        # Wait for the download thread to finish
+        download_thread.join()
+
         if os.path.exists(download_file):
             self.install_download(download_file)
+        else:
+            print('Download seems to have failed!')
 
     def fltk_ask_to_update(self, current_version, latest_version, title,
                            release_info):
@@ -427,12 +505,12 @@ class UpdatePlugin(plugin.Plugin):
         date = release_info['published_at']
         win = Fl_Window(320, 200)
         box = Fl_Box(20, 20, win.w() - 40, 60)
-        box.copy_label(_('Current version is v') + current_version + 
-                       _('\nLatest at Github is v') + latest_version + '.' +
-                       _('\nReleased on ') + date)
-        update = Fl_Button(20, 100, 130, 40, title)
-        update.callback(_get_latest_release_cb, [self, data])
-        ignore = Fl_Button(update.w() + 40, 100, 130, 40, _("Ignore"))
+        box.copy_label(_(f'Current version is v{current_version}\n') + 
+                       _(f'\nLatest version at Github is v{latest_version}.') +
+                       _(f'\nReleased on {date}'))
+        update = Fl_Button(20, 120, 130, 40, title)
+        update.callback(_get_latest_release_cb, [self, release_info])
+        ignore = Fl_Button(update.w() + 40, 120, 130, 40, _("Ignore"))
         ignore.callback(_ignore_cb, None)
         win.end()
         win.set_non_modal()
@@ -488,49 +566,59 @@ class UpdatePlugin(plugin.Plugin):
             response = requests.get(url)
             response.raise_for_status()  # Raise an exception for non-200 status codes
             data = response.json()
-            print(data)
-            return {
-                "name": data.get(GITHUB_ASSET_NAME, None),
-                "tag_name": data.get(GITHUB_ASSET_TAG, None),
-                "download_url": data.get(GITHUB_ASSET_URL, None),
-                "published_at": data.get(GITHUB_ASSET_DATE, None)
-            }
         except requests.exceptions.RequestException as e:
             print(f"Error fetching latest release information: {e}")
             return None
-
-    def ask_to_update(self, release, release_version, release_date,
-                      download_url):
         
-        current_version = cmd.getVersion()
+        extension = self.get_download_extension()
+        for asset in data['assets']:
+            name = asset['name']
+            if name.endswith(extension):
+                return {
+                    "name": asset.get(GITHUB_ASSET_NAME, None),
+                    "download_url": asset.get(GITHUB_ASSET_URL, None),
+                    "tag_name": data.get(GITHUB_ASSET_TAG, None),
+                    "published_at": data.get(GITHUB_ASSET_DATE, None)
+                }
+        return None
+        
+    def ask_to_update(self, release_info):
+        release         = release_info['name']
+        release_version = release_info['tag_name']
+        release_date    = release_info['published_at']
+        download_url    = release_info['download_url']
         if release_date:
             # Extract date from 'published_at' in ISO 8601 format
             # (e.g., 2024-05-17T06:50:00Z)
-            release_date = release_info["published_at"].split("T")[0]
+            release_date = release_date.split("T")[0]
+            if UpdatePlugin.startup:
+                if not _more_than_5_days_elapsed(release_date):
+                    print(_(f"There's a new release but it has not been more "
+                            "than 5 days"))
+                    return
         else:
             release_date = _('unknown date.')
-                
-        print('release',release)
-        print('release_version',release_version)
-        print('release_date', release_date)
-        print('download_url', download_url)
-        version = self.match_version(release_version)
+
+            
+        release_info['published_at'] = release_date
+        
+        release_version = self.match_version(release_version)
+        current_version = cmd.getVersion()
 
         result = self.compare_versions(current_version, release_version)
         if result == 0:
-            print(result)
             if not UpdatePlugin.startup:
                 self.fltk_ask_to_update(current_version, release_version,
                                         _('Update anyway'), release_info)
                 return
-            elif result == 1:
-                if not UpdatePlugin.startup:
-                    self.fltk_ask_to_update(current_version, release_version,
-                                            _('Downgrade'),
-                                            release_info)
-            else:
+        elif result == 1:
+            if not UpdatePlugin.startup:
                 self.fltk_ask_to_update(current_version, release_version,
-                                        _('Upgrade'), relese_info)
+                                        _('Downgrade'),
+                                        release_info)
+        else:
+            self.fltk_ask_to_update(current_version, release_version,
+                                    _('Upgrade'), relese_info)
 
     def check_latest_release(self, user, project):
         """Checks for the latest github release for a user and project.
@@ -545,14 +633,9 @@ class UpdatePlugin(plugin.Plugin):
 
         release_info = self.get_latest_release_info(user, project)
         if release_info:
-            
-            release         = release_info['name']
-            release_version = release_info['tag_name']
-            release_date    = release_info['published_at']
-            download_url    = release_info['download_url']
+            download_url = release_info['download_url']
             if download_url:
-                self.ask_to_update(release, release_version,
-                                   release_date, download_url)
+                self.ask_to_update(release_info)
             else:
                 print(_(f'No download url was found for {release}'))
             
