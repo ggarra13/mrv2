@@ -4,6 +4,15 @@
 
 
 #
+# Current github constants
+#
+GITHUB_ASSET_NAME = 'name'
+GITHUB_ASSET_TAG  = 'tag_name'
+GITHUB_ASSET_DATE = 'published_at'
+GITHUB_ASSET_URL = 'browser_download_url'
+
+    
+#
 # Standard libs
 #
 import os, platform, re, tempfile, subprocess, sys, time
@@ -73,25 +82,22 @@ def _get_latest_release_cb(widget, args):
 
     Args:
         widget (Fl_Widget): FLTK widget that triggered the callback
-        args (list): [self, github data for the latest release in a map.]
+        args (list): [self, release_info for the latest release in a map.]
 
     Returns:
         None
     """
     from fltk14 import Fl
     this = args[0]
-    data = args[1]
+    release_info = args[1]
     extension = this.get_download_extension()
     widget.parent().hide()
     Fl.check()
     found = False
-    for asset in data['assets']:
-        name = asset['name']
-        if name.endswith(extension):
-            this.download_version(name, asset['browser_download_url'])
-            found = True
-            break
-    if not found:
+    name = release_info['name']
+    if name.endswith(extension):
+        this.download_version(name, release_info['download_url'])
+    else:
         print(_('No file matching'),extension,_('was found'))
 
 
@@ -405,22 +411,25 @@ class UpdatePlugin(plugin.Plugin):
         if os.path.exists(download_file):
             self.install_download(download_file)
 
-    def ask_to_update(self, current_version, latest_version, title, data):
+    def fltk_ask_to_update(self, current_version, latest_version, title,
+                           release_info):
         """Open an FLTK window to allow the user to update mrv2.
 
         Args:
             current_version (str): The current version that is running.
             latest_version (str): The latest version for upgrade.
-            data (map): github data for the latest release in a map.
+            release_info (map): release_info for the latest release in a map.
 
         Returns:
             None
         """
         from fltk14 import Fl, Fl_Window, Fl_Box, Fl_Button
+        date = release_info['published_at']
         win = Fl_Window(320, 200)
         box = Fl_Box(20, 20, win.w() - 40, 60)
         box.copy_label(_('Current version is v') + current_version + 
-                       _('\nLatest at Github is v') + latest_version + '.')
+                       _('\nLatest at Github is v') + latest_version + '.' +
+                       _('\nReleased on ') + date)
         update = Fl_Button(20, 100, 130, 40, title)
         update.callback(_get_latest_release_cb, [self, data])
         ignore = Fl_Button(update.w() + 40, 100, 130, 40, _("Ignore"))
@@ -459,7 +468,69 @@ class UpdatePlugin(plugin.Plugin):
             return 1  # version1 is longer, hence newer
 
         return 0  # versions are identical
+    
+    def get_latest_release_info(self, user, project):
+        """Fetches details of the latest release from a GitHub repository.
 
+        Args:
+            user (str): The username or organization that owns the repository.
+            project (str): The name of the repository.
+
+        Returns:
+            dict: A dictionary containing information about the latest release,
+                  including the release name, tag name, and published at date
+                  (if available).
+                  Returns None if no releases are found or an error occurs.
+        """
+        import requests
+        url = f"https://api.github.com/repos/{user}/{project}/releases/latest"
+        try:
+            response = requests.get(url)
+            response.raise_for_status()  # Raise an exception for non-200 status codes
+            data = response.json()
+            print(data)
+            return {
+                "name": data.get(GITHUB_ASSET_NAME, None),
+                "tag_name": data.get(GITHUB_ASSET_TAG, None),
+                "download_url": data.get(GITHUB_ASSET_URL, None),
+                "published_at": data.get(GITHUB_ASSET_DATE, None)
+            }
+        except requests.exceptions.RequestException as e:
+            print(f"Error fetching latest release information: {e}")
+            return None
+
+    def ask_to_update(self, release, release_version, release_date,
+                      download_url):
+        
+        current_version = cmd.getVersion()
+        if release_date:
+            # Extract date from 'published_at' in ISO 8601 format
+            # (e.g., 2024-05-17T06:50:00Z)
+            release_date = release_info["published_at"].split("T")[0]
+        else:
+            release_date = _('unknown date.')
+                
+        print('release',release)
+        print('release_version',release_version)
+        print('release_date', release_date)
+        print('download_url', download_url)
+        version = self.match_version(release_version)
+
+        result = self.compare_versions(current_version, release_version)
+        if result == 0:
+            print(result)
+            if not UpdatePlugin.startup:
+                self.fltk_ask_to_update(current_version, release_version,
+                                        _('Update anyway'), release_info)
+                return
+            elif result == 1:
+                if not UpdatePlugin.startup:
+                    self.fltk_ask_to_update(current_version, release_version,
+                                            _('Downgrade'),
+                                            release_info)
+            else:
+                self.fltk_ask_to_update(current_version, release_version,
+                                        _('Upgrade'), relese_info)
 
     def check_latest_release(self, user, project):
         """Checks for the latest github release for a user and project.
@@ -471,35 +542,22 @@ class UpdatePlugin(plugin.Plugin):
         Returns:
             None
         """
-        import requests
-        url = f"https://api.github.com/repos/{user}/{project}/releases/latest"
-        response = requests.get(url)
-        data = response.json()
-        if 'assets' in data:
-        
-            release = data['name']
-        
-            current_version = cmd.getVersion()
-            version = self.match_version(release)
 
-            result = self.compare_versions(current_version, version)
-            if result == 0:
-                if not UpdatePlugin.startup:
-                    self.ask_to_update(current_version, version,
-                                       _('Update anyway'), data)
-                return
-            elif result == 1:
-                if not UpdatePlugin.startup:
-                    self.ask_to_update(current_version, version,
-                                       _('Downgrade'),
-                                       data)
-                return
+        release_info = self.get_latest_release_info(user, project)
+        if release_info:
+            
+            release         = release_info['name']
+            release_version = release_info['tag_name']
+            release_date    = release_info['published_at']
+            download_url    = release_info['download_url']
+            if download_url:
+                self.ask_to_update(release, release_version,
+                                   release_date, download_url)
             else:
-                self.ask_to_update(current_version, version,
-                                   _('Upgrade'), data)
+                print(_(f'No download url was found for {release}'))
             
         else:
-            print(_('No release files found.'))
+            print(_('No releases found for the specified repository.'))
 
 
     def run(self):
