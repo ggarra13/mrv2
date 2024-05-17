@@ -28,7 +28,7 @@ namespace mrv
         restore_signal_handler();
     }
 
-    void callback(int signal)
+    void signal_callback(int signal)
     {
         std::cerr << "GOT SIGNAL " << signal << std::endl;
 
@@ -53,8 +53,11 @@ namespace mrv
         SetUnhandledExceptionFilter(exceptionHandler);
 
         // Set up signal handlers
-        std::signal(SIGSEGV, callback);
-        std::signal(SIGABRT, callback);
+        std::signal(SIGSEGV, signal_callback);
+        std::signal(SIGABRT, signal_callback);
+#ifndef NDEBUG
+        std::signal(SIGINT, signal_callback);
+#endif
     }
 
     void SignalHandler::restore_signal_handler() {}

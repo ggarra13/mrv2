@@ -14,6 +14,14 @@ namespace fs = std::filesystem;
 
 namespace mrv
 {
+    static void signal_callback(int signal)
+    {
+        std::cerr << "GOT SIGNAL " << signal << std::endl;
+
+        printStackTrace();
+
+        exit(1);
+    }
 
     SignalHandler::SignalHandler()
     {
@@ -25,24 +33,15 @@ namespace mrv
         restore_signal_handler();
     }
 
-    void callback(int signal)
-    {
-        std::cerr << "GOT SIGNAL " << signal << std::endl;
-
-        printStackTrace();
-
-        exit(1);
-    }
-
     void SignalHandler::install_signal_handler()
     {
         // Set up signal handlers
-        std::signal(SIGSEGV, callback);
+        std::signal(SIGSEGV, signal_callback);
 
-        std::signal(SIGABRT, callback);
-        std::signal(SIGBUS, callback);
+        std::signal(SIGABRT, signal_callback);
+        std::signal(SIGBUS, signal_callback);
 #ifndef NDEBUG
-        // std::signal(SIGINT, callback);
+        std::signal(SIGINT, signal_callback);
 #endif
     }
 
