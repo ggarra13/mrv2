@@ -1920,12 +1920,27 @@ namespace mrv
     }
 
     void addClipToTimeline(
-        const int sourceIndex, otio::Timeline* destTimeline, ViewerUI* ui)
+        const int sourceIndex,
+        const int destIndex,
+        otio::Timeline* destTimeline, ViewerUI* ui)
     {
         auto model = ui->app->filesModel();
-        auto destIndex = model->observeAIndex()->get();
-        model->setA(sourceIndex);
+        auto numFiles = model->observeFiles()->getSize();
 
+        if (sourceIndex < 0 || sourceIndex >= numFiles)
+        {
+            LOG_ERROR("Source index out of range" << sourceIndex << " max="
+                      << numFiles);
+            return;
+        }
+        if (destIndex < 0 || destIndex >= numFiles)
+        {
+            LOG_ERROR("Destination index out of range" << destIndex << " max="
+                      << numFiles);
+            return;
+        }
+        
+        model->setA(sourceIndex);
         auto sourceItem = model->observeA()->get();
         if (!sourceItem)
             return;
@@ -1938,12 +1953,27 @@ namespace mrv
             return;
 
         auto timeline = player->getTimeline();
+        if (!timeline)
+        {
+            LOG_ERROR("No timeline in player");
+            return;
+        }
 
         // Make a copy of the timeline, so we don't modify the original in
         // place.
-        const std::string& s = timeline->to_json_string();
+        const std::string s = timeline->to_json_string();
+        auto timelineCopy =  
+            dynamic_cast<otio::Timeline*>(otio::Timeline::from_json_string(s));
+        if (!timelineCopy)
+        {
+            LOG_ERROR("Could not copy timeline from .json string:");
+            LOG_ERROR(s);
+            return;
+        }
+
         otio::SerializableObject::Retainer<otio::Timeline> sourceTimeline(
-            dynamic_cast<otio::Timeline*>(otio::Timeline::from_json_string(s)));
+            timelineCopy);
+        
         makePathsAbsolute(sourceTimeline, ui);
 
         model->setA(destIndex);
@@ -1970,7 +2000,7 @@ namespace mrv
 
         auto sourceItem = sourceItems[index];
 
-        auto destItemIndex = model->observeAIndex()->get();
+        auto destIndex = model->observeAIndex()->get();
         auto destItem = model->observeA()->get();
         if (!destItem)
         {
@@ -2034,7 +2064,7 @@ namespace mrv
 
             bool emptyTracks = hasEmptyTracks(destTimeline->tracks());
 
-            addClipToTimeline(index, destTimeline, ui);
+            addClipToTimeline(index, destIndex, destTimeline, ui);
 
             //
             // Sanity check on video and sample rate.
@@ -2054,7 +2084,7 @@ namespace mrv
             if (emptyTracks)
             {
                 model->setA(index);
-                model->setA(destItemIndex);
+                model->setA(destIndex);
             }
 
             ui->uiView->valid(0); // needed
