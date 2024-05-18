@@ -172,7 +172,7 @@ echo "Build directory is ${BUILD_DIR}"
 echo "Build type      is ${CMAKE_BUILD_TYPE}"
 echo "Building with ${COMPILER_VERSION}, ${CPU_CORES} cores"
 if [[ $KERNEL == *Darwin* ]]; then
-    echo "Building on MacOS Machine Brand ${MACOS_BRAND}"
+    echo "Building on MacOS Brand ${MACOS_BRAND}"
 fi
 echo "Compiler flags are ${FLAGS}"
 echo
