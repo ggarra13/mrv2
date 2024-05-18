@@ -299,7 +299,7 @@ class UpdatePlugin(plugin.Plugin):
 
         queue = Queue()
         thread = threading.Thread(target=_run_subprocess,
-                                  args(cmd, queue))
+                                  args=(cmd, queue))
         thread.start()
         exit_code = -1
         while True:
