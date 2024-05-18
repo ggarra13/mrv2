@@ -18,7 +18,6 @@ GITHUB_ASSET_RELEASE_DAYS = 5
 # Standard libs
 #
 import os, platform, re, subprocess, sys, tempfile, threading, time
-from queue import Queue
 
 #
 # mrv2 imports
@@ -26,7 +25,10 @@ from queue import Queue
 import mrv2
 from mrv2 import cmd, plugin, settings
 
-from fltk14 import *
+try:
+    from fltk14 import *
+except Exception as e:
+    pass
         
 try:
     import gettext
@@ -47,13 +49,85 @@ except Exception as e:
         return text
     _ = _gettext
 
+# Global variable to store the result of the subprocess
+subprocess_result = None
+install_progress  = 0
 
-def _run_subprocess(cmd, queue):
-    process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    stdout, stderr = process.communicate()
-    exit_code = process.returncode
-    queue.put((stdout, stderr, exit_code))
+def run_subprocess(command):
+    """
+    Run a command trapping stderr and stdout.
 
+    Returns:
+        int: Exit code of the process.
+    """
+    global subprocess_result
+    try:
+        result = subprocess.run(command, shell=True,
+                                check=True, capture_output=True, text=True)
+        subprocess_result = result.stdout
+    except subprocess.CalledProcessError as e:
+        subprocess_result = f"An error occurred: {e.stderr}"
+
+# 
+def fltk_check_callback(data):
+    """FLTK Function to periodically call Fl.check() and check subprocess status
+
+    Args:
+        data (list): [self, download_file]
+
+    Returns:
+        None
+
+    """
+
+    global subprocess_result, install_progress
+    this = data[0]
+    download_file = data[1]
+    exe = this.get_installed_executable(download_file)
+    print('.', end='', flush=True)
+    install_progress += 1
+    if install_progress > 40:
+        print()
+        install_progress = 0
+    Fl.check()
+    if subprocess_result is None:
+        Fl.repeat_timeout(1.0, fltk_check_callback, data)
+    else:
+        print(f"\n\nInstall completed with output:\n{subprocess_result}")
+
+        kernel = platform.system()
+        
+        # On Windows, the installer runs as a background process, but it
+        # locks the installer file.  We keep trying to remove it until we
+        # can, which means the installer finished
+        if kernel == 'Windows':
+            time.sleep(10) # Wait for the installer to start
+            while os.path.exists(download_file):
+                try:
+                    os.remove(download_file)
+                    print(_(f'Removed temporary "{download_file}.'))
+                    Fl.check()
+                except:
+                    time.sleep(2) # Wait 2 seconds before trying again. 
+                    pass
+
+        if os.path.exists(exe):
+            print(_('The new version of mrv2 was installed.'))
+            Fl.check()
+            if os.path.exists(download_file):
+                os.remove(download_file)
+                print(_(f'Removed temporary "{download_file}.'))
+                Fl.check()
+                this.start_new_mrv2(download_file, kernel)
+            else:
+                if kernel == 'Windows':
+                    print(_(f'Could not locate mrv2 in:\n{exe}.\n') +
+                          _(f'Maybe you installed it in a non-default location.'))
+                    return
+                print(_('Something failed installing mrv2 - It is not in "{exe}"'))
+
+        subprocess_result = None  # Reset for next run
+    
 def _get_password_cb(widget, args):
     """FLTK callback to get the secret password, hide the parent window and
     run the command to install the downloaded file with the sudo password.
@@ -68,7 +142,7 @@ def _get_password_cb(widget, args):
     password = widget.value()
     widget.parent().hide()
     Fl.check()
-    this.run_as_admin(command, download_file, password)
+    this.install_as_admin(command, download_file, password)
 
 
 def _ignore_cb(widget, args):
@@ -134,7 +208,7 @@ def _get_latest_release_cb(widget, args):
     found = False
     name = release_info['name']
     if name.endswith(extension):
-        this.download_version(name, release_info['download_url'])
+        this.download_file(name, release_info['download_url'])
     else:
         print(_(f'No file matching {extension} was found'))
 
@@ -216,35 +290,6 @@ class UpdatePlugin(plugin.Plugin):
             print(_(f'Unknown platform {kernel}'))
         return exe
         
-    def run_command(self, cmd):
-        """
-        Run a command trapping stderr and stdout.
-
-        Returns:
-          int: Exit code of the process.
-        """
-        # Don't print out the command as that will print out the sudo password
-        print('Running:\n',cmd)
-        Fl.check()
-        
-        # Run the command and capture stdout, stderr, and the exit code
-        process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE,
-                                   stderr=subprocess.PIPE)
-        
-        # Wait for the command to complete
-        stdout, stderr = process.communicate()
-
-        # Get the exit code
-        exit_code = process.returncode
-
-        # Print or handle the captured stdout and stderr
-        print(stdout.decode('utf-8'))
-
-        if stderr:
-            print(_("Standard Error:"))
-            print(stderr.decode('utf-8'))
-
-        return exit_code
 
     def start_new_mrv2(self, download_file, kernel):
         """Given a download_file and a platform, create the path to the new
@@ -264,7 +309,15 @@ class UpdatePlugin(plugin.Plugin):
             print(_('An unexpected error occurred:'),e)
             return
 
-    def run_as_admin(self, command, download_file, password = None):
+    # Function to start the subprocess in a thread
+    def start_subprocess_in_thread(self, command, download_file):
+        # Start the timeout callback
+        data = [ self, download_file ]
+        Fl.add_timeout(4.0, fltk_check_callback, data)
+        threading.Thread(target=run_subprocess, args=(command,)).start()
+
+                         
+    def install_as_admin(self, command, download_file, password = None):
         """Given a command, a download file, and an optional password,
         install the download_file by running the command using the provided
         password if needed.
@@ -280,9 +333,10 @@ class UpdatePlugin(plugin.Plugin):
         Returns:
             None
         """
+        global subprocess_result
         cmd = None
         print(_(f'Trying to install {download_file}.'))
-        print(_(f'Please wait...'))
+        print(_(f'Please wait'), end='', flush=True)
         Fl.check()
         kernel = platform.system()
         if kernel == 'Windows':
@@ -298,61 +352,7 @@ class UpdatePlugin(plugin.Plugin):
             print(_('Unknown platform'))
             return
 
-        kernel = platform.system()
-        exit_code = -1
-
-        if kernel == 'Linux':
-            queue = Queue()
-
-            thread = threading.Thread(target=_run_subprocess,
-                                      args=(cmd, queue))
-            thread.start()
-            time.sleep(5)
-            while True:
-                if not queue.empty():
-                    stdout, stderr, exit_code = queue.get()
-                    print(stdout)
-                    print(stderr)
-                    Fl.check()
-        else:
-            exit_code = self.run_command(cmd)
-                
-        if exit_code == 0:
-
-            # On Windows, the installer runs as a background process, but it
-            # locks the installer file.  We keep trying to remove it until we
-            # can, which means the installer finished
-            if kernel == 'Windows':
-                time.sleep(10) # Wait for the installer to start
-                while os.path.exists(download_file):
-                    try:
-                        os.remove(download_file)
-                        print(_(f'Removed temporary "{download_file}.'))
-                        Fl.check()
-                    except:
-                        time.sleep(2) # Wait 2 seconds before trying again. 
-                        pass
-
-            exe = self.get_installed_executable(download_file)
-            if os.path.exists(exe):
-                print(_('The new version of mrv2 was installed.'))
-                Fl.check()
-                if os.path.exists(download_file):
-                    os.remove(download_file)
-                    print(_(f'Removed temporary "{download_file}.'))
-                    Fl.check()
-                self.start_new_mrv2(download_file, kernel)
-            else:
-                if kernel == 'Windows':
-                    print(_(f'Could not locate mrv2 in:\n{exe}.\n') +
-                          _(f'Maybe you installed it in a non-default location.'))
-                    return
-                print(_('Something failed installing mrv2 - It is not in "') +
-                      exe + '"')
-        else:
-            print(_(f'Something failed installing mrv2 - Error: {exit_code}'))
-            
-
+        self.start_subprocess_in_thread(cmd, download_file)
 
     def ask_for_password(self, command, download_file):
         """Open a FLTK window and secret input to enter a password for sudo
@@ -390,20 +390,20 @@ class UpdatePlugin(plugin.Plugin):
         """
         if download_file.endswith('.exe'):
             command = download_file
-            self.run_as_admin(command, download_file)
+            self.install_as_admin(command, download_file)
         elif download_file.endswith('.rpm'):
-            command = f'rpm -i {download_file}'
+            command = f'rpm -i --force {download_file}'
             self.ask_for_password(command, download_file)
         elif download_file.endswith('.deb'):
             command = f'dpkg -i {download_file}'
             self.ask_for_password(command, download_file)
         elif download_file.endswith('.tar.gz'):
             command = f'tar -xzvf {download_file} -C ~/'
-            self.run_as_admin(command, download_file)
+            self.install_as_admin(command, download_file)
         elif download_file.endswith('.dmg'):
             root_dir=cmd.rootPath()
             command = f'{root_dir}/bin/install_dmg.sh {download_file}'
-            self.run_as_admin(command, download_file)
+            self.install_as_admin(command, download_file)
         else:
             print(f'You will need to install file "{download_file}" manually.')
             return
@@ -443,18 +443,9 @@ class UpdatePlugin(plugin.Plugin):
             return 'amd64.dmg'
         else:
             return 'Unknown operating system'
-                
-    def download_version(self, name, download_url):
-        """Downloads a file from a download URL from GitHub in a separate thread.
-        If successful, tries to install it. Updates UI during download progress.
-            
-        Args:
-            name (str): Name of the file to download.
-            download_url (str): URL for downloading the file.
-        """
+
+    def download_file(self, name, download_url):
         import requests
-        print(_(f'Downloading: {name} from {download_url}'))
-        Fl.check()  # Ensure UI responsiveness
         response = requests.get(download_url, stream=True)
         response.raise_for_status()  # Raise exception for non-200 status codes
         total_size = int(response.headers.get('content-length', 0))
@@ -469,10 +460,10 @@ class UpdatePlugin(plugin.Plugin):
         progress.align(FL_ALIGN_TOP)
         window.show()
         Fl.check()  # Ensure UI responsiveness
-        
+
         # Create a temporary download file path
         download_file = os.path.join(tempfile.gettempdir(), name)
-
+        
         downloaded = 0
         with open(download_file, 'wb') as f:
             for chunk in response.iter_content(chunk_size=8192):
@@ -483,21 +474,18 @@ class UpdatePlugin(plugin.Plugin):
                     # Update UI with progress
                     progress.value(downloaded)
                     progress.redraw()
-                    if not window.visible():
-                        break
                     Fl.flush()
                     f.flush()
+                    if not window.visible():
+                        break
+                    
+        window.hide()
 
-            Fl.check()  # Ensure UI responsiveness
-            if downloaded == total_size:
-                print(_(f'Download complete: {download_file}'))
-            window.hide()
-            
-        if os.path.exists(download_file):
-            self.install_download(download_file)
-        else:
-            print('Download seems to have failed!')
-
+        if downloaded != total_size:
+            print(_('Download seems to have failed!'))
+            return False
+        self.install_download(download_file)
+        
     def fltk_ask_to_update(self, current_version, latest_version, title,
                            release_info):
         """Open an FLTK window to allow the user to update mrv2.
