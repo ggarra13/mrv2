@@ -24,11 +24,12 @@ run_cmd()
 }
 
 #
-# Get kernel and architecture
+# Get kernel and architecture and on MacOS, MACOS_BRAND (Intel, M1, M2, etc).
 #
 get_kernel()
 {
     export KERNEL=`uname`
+    export MACOS_BRAND=''
     if [[ $KERNEL == *MSYS* || $KERNEL == *MINGW* ]]; then
 	export KERNEL=Msys
 	export ARCH=`which cl.exe`
@@ -40,6 +41,9 @@ get_kernel()
 
     if [[ $ARCH == arm64 ]]; then
 	export ARCH=arm64
+	if [[ $KERNEL == *Darwin* ]]; then
+	    export MACOS_BRAND=$(sysctl -n machdep.cpu.brand_string
+	fi
     elif [[ $ARCH == *64* ]]; then
 	export ARCH=amd64
     else
