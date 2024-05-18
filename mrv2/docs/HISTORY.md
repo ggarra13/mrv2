@@ -19,6 +19,7 @@ v1.1.7
   server reboot on some Linux distros like Rocky Linux 8.9.
 - Added OpenRV's license to mrv2 as I took inspiration for their reverse
   playback.
+- Update tlRender to use OTIO v0.16.0.
 - Added what each contributor did so far for the mrv2 project.
   If you don't want to be listed as contributor, not list your email address,
   or something else, please let me know.

@@ -748,6 +748,8 @@ namespace mrv
     void edit_store_undo(TimelinePlayer* player, ViewerUI* ui)
     {
         auto timeline = player->getTimeline();
+        if (!timeline)
+            return;
         auto view = ui->uiView;
 
         makePathsAbsolute(timeline, ui);
@@ -790,6 +792,8 @@ namespace mrv
     void edit_store_redo(TimelinePlayer* player, ViewerUI* ui)
     {
         auto timeline = player->getTimeline();
+        if (!timeline)
+            return;
         auto view = ui->uiView;
         const std::string state = timeline->to_json_string();
         if (!redoBuffer.empty())
@@ -824,6 +828,8 @@ namespace mrv
         player->stop();
 
         auto timeline = player->getTimeline();
+        if (!timeline)
+            return;
         makePathsAbsolute(timeline, ui);
 
         const auto time = getTime(player);
@@ -856,6 +862,8 @@ namespace mrv
         edit_copy_frame_cb(m, ui);
 
         auto timeline = player->getTimeline();
+        if (!timeline)
+            return;
         auto tracks = timeline->tracks()->children();
 
         const auto startTime = player->timeRange().start_time();
@@ -929,6 +937,8 @@ namespace mrv
         const auto time = getTime(player);
 
         auto timeline = player->getTimeline();
+        if (!timeline)
+            return;
         auto stack = timeline->tracks();
         if (!stack)
             return;
@@ -1020,6 +1030,8 @@ namespace mrv
         player->stop();
 
         auto timeline = player->getTimeline();
+        if (!timeline)
+            return;
         const auto time = getTime(player);
         auto tracks = timeline->tracks()->children();
 
@@ -1092,6 +1104,8 @@ namespace mrv
         const auto& tracks = getTracks(player);
 
         auto timeline = player->getTimeline();
+        if (!timeline)
+            return;
 
         bool remove_undo = true;
         otio::ErrorStatus errorStatus;
@@ -1136,6 +1150,8 @@ namespace mrv
         const auto& tracks = getTracks(player);
 
         auto timeline = player->getTimeline();
+        if (!timeline)
+            return;
         auto stack = timeline->tracks();
 
         edit_store_undo(player, ui);
@@ -1181,6 +1197,8 @@ namespace mrv
         auto compositions = getTracks(player);
 
         auto timeline = player->getTimeline();
+        if (!timeline)
+            return;
 
         // Find first video clip at current time.
         int clipIndex = -1;
@@ -1235,7 +1253,7 @@ namespace mrv
 
             // Append a new audio track
             auto track = new otio::Track(
-                "Audio", otio::nullopt, otio::Track::Kind::audio);
+                "Audio", std::nullopt, otio::Track::Kind::audio);
             stack->append_child(track);
 
             modified = true;
@@ -1307,6 +1325,9 @@ namespace mrv
         auto compositions = getTracks(player);
 
         auto timeline = player->getTimeline();
+        if (!timeline)
+            return;
+
         edit_store_undo(player, ui);
 
         bool modified = false;
@@ -1528,7 +1549,7 @@ namespace mrv
             new otio::Timeline("EDL");
 
         auto videoTrack =
-            new otio::Track("Video", otio::nullopt, otio::Track::Kind::video);
+            new otio::Track("Video", std::nullopt, otio::Track::Kind::video);
 
         auto stack = new otio::Stack;
         stack->append_child(videoTrack);
@@ -1666,7 +1687,7 @@ namespace mrv
             {
                 // Append a new video track
                 track = new otio::Track(
-                    "Video", otio::nullopt, otio::Track::Kind::video);
+                    "Video", std::nullopt, otio::Track::Kind::video);
                 destStack->append_child(track);
             }
             else
@@ -1818,7 +1839,7 @@ namespace mrv
             {
                 // Append a new audio track
                 track = new otio::Track(
-                    "Audio", otio::nullopt, otio::Track::Kind::audio);
+                    "Audio", std::nullopt, otio::Track::Kind::audio);
                 destStack->append_child(track);
             }
             else
@@ -1920,12 +1941,28 @@ namespace mrv
     }
 
     void addClipToTimeline(
-        const int sourceIndex, otio::Timeline* destTimeline, ViewerUI* ui)
+        const int sourceIndex, const int destIndex,
+        otio::Timeline* destTimeline, ViewerUI* ui)
     {
         auto model = ui->app->filesModel();
-        auto destIndex = model->observeAIndex()->get();
-        model->setA(sourceIndex);
+        auto numFiles = model->observeFiles()->getSize();
 
+        if (sourceIndex < 0 || sourceIndex >= numFiles)
+        {
+            LOG_ERROR(
+                "Source index out of range" << sourceIndex
+                                            << " max=" << numFiles);
+            return;
+        }
+        if (destIndex < 0 || destIndex >= numFiles)
+        {
+            LOG_ERROR(
+                "Destination index out of range" << destIndex
+                                                 << " max=" << numFiles);
+            return;
+        }
+
+        model->setA(sourceIndex);
         auto sourceItem = model->observeA()->get();
         if (!sourceItem)
             return;
@@ -1938,12 +1975,28 @@ namespace mrv
             return;
 
         auto timeline = player->getTimeline();
+        if (!timeline)
+        {
+            LOG_ERROR("No timeline in player");
+            return;
+        }
 
         // Make a copy of the timeline, so we don't modify the original in
         // place.
-        const std::string& s = timeline->to_json_string();
+        const std::string s = timeline->to_json_string();
+        auto timelineCopy =
+            dynamic_cast<otio::Timeline*>(otio::Timeline::from_json_string(s));
+        if (!timelineCopy)
+        {
+            LOG_ERROR("Could not crete timeline object from this "
+                      ".json string:");
+            LOG_ERROR(s);
+            return;
+        }
+
         otio::SerializableObject::Retainer<otio::Timeline> sourceTimeline(
-            dynamic_cast<otio::Timeline*>(otio::Timeline::from_json_string(s)));
+            timelineCopy);
+
         makePathsAbsolute(sourceTimeline, ui);
 
         model->setA(destIndex);
@@ -1958,6 +2011,8 @@ namespace mrv
             return;
 
         auto destTimeline = player->getTimeline();
+        if (!destTimeline)
+            return;
 
         auto time = getTime(player);
 
@@ -1970,7 +2025,7 @@ namespace mrv
 
         auto sourceItem = sourceItems[index];
 
-        auto destItemIndex = model->observeAIndex()->get();
+        auto destIndex = model->observeAIndex()->get();
         auto destItem = model->observeA()->get();
         if (!destItem)
         {
@@ -2034,7 +2089,7 @@ namespace mrv
 
             bool emptyTracks = hasEmptyTracks(destTimeline->tracks());
 
-            addClipToTimeline(index, destTimeline, ui);
+            addClipToTimeline(index, destIndex, destTimeline, ui);
 
             //
             // Sanity check on video and sample rate.
@@ -2054,7 +2109,7 @@ namespace mrv
             if (emptyTracks)
             {
                 model->setA(index);
-                model->setA(destItemIndex);
+                model->setA(destIndex);
             }
 
             ui->uiView->valid(0); // needed
@@ -2089,7 +2144,10 @@ namespace mrv
         if (!player)
             return;
 
-        auto& timeline = player->getTimeline();
+        auto timeline = player->getTimeline();
+        if (!timeline)
+            return;
+
         const auto& startTimeOpt = timeline->global_start_time();
         otime::RationalTime startTime(0.0, timeline->duration().rate());
         if (startTimeOpt.has_value())
@@ -2327,6 +2385,8 @@ namespace mrv
         int transitionsHeight = 0;
 
         auto timeline = player->getTimeline();
+        if (!timeline)
+            return H;
 
         // Check first if the timeline is an audio only timeline.
         bool audioOnly = true;
