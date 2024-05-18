@@ -64,7 +64,7 @@ jobs:
 
     - name: Build mrv2
       run: |
-        ./runme_nolog.sh reldeb -v -t package -D TLRENDER_USD=OFF
+        ./etc/runme_nolog.sh reldeb -v -t package -D TLRENDER_USD=OFF
         
     - name: Upload binaries  # Conditional step
       run: |

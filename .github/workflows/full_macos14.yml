@@ -65,7 +65,7 @@ jobs:
 
     - name: Build mrv2
       run: |
-        ./runme_nolog.sh -t package
+        ./etc/runme_nolog.sh -t package
 
     - name: Upload binaries  # Conditional step
       run: |
