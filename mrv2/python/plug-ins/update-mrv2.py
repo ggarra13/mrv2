@@ -18,6 +18,7 @@ GITHUB_ASSET_RELEASE_DAYS = 5
 # Standard libs
 #
 import os, platform, re, subprocess, sys, tempfile, threading, time
+from queue import Queue
 
 #
 # mrv2 imports
@@ -25,6 +26,8 @@ import os, platform, re, subprocess, sys, tempfile, threading, time
 import mrv2
 from mrv2 import cmd, plugin, settings
 
+from fltk14 import *
+        
 try:
     import gettext
     
@@ -45,6 +48,11 @@ except Exception as e:
     _ = _gettext
 
 
+def _run_subprocess(cmd, queue):
+    process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    stdout, stderr = process.communicate()
+    exit_code = process.returncode
+    queue.put((stdout, stderr, exit_code))
 
 def _get_password_cb(widget, args):
     """FLTK callback to get the secret password, hide the parent window and
@@ -54,7 +62,6 @@ def _get_password_cb(widget, args):
         widget (Fl_Widget): FLTK's secret input widget.
         args (list): [self, command, download_file]
     """
-    from fltk14 import Fl
     this    = args[0]
     command = args[1]
     download_file = args[2]
@@ -75,7 +82,6 @@ def _ignore_cb(widget, args):
     Returns:
         None
     """
-    from fltk14 import Fl
     widget.parent().hide()
     Fl.check()
         
@@ -120,7 +126,6 @@ def _get_latest_release_cb(widget, args):
     Returns:
         None
     """
-    from fltk14 import Fl
     this = args[0]
     release_info = args[1]
     extension = this.get_download_extension()
@@ -220,6 +225,7 @@ class UpdatePlugin(plugin.Plugin):
         """
         # Don't print out the command as that will print out the sudo password
         print('Running:\n',cmd)
+        Fl.check()
         
         # Run the command and capture stdout, stderr, and the exit code
         process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE,
@@ -291,8 +297,18 @@ class UpdatePlugin(plugin.Plugin):
             print(_('Unknown platform'))
             return
 
-        ret = self.run_command(cmd)
-        if ret == 0:
+        queue = Queue()
+        thread = threading.Thread(target=_run_subprocess,
+                                  args(cmd, queue))
+        thread.start()
+        exit_code = -1
+        while True:
+            if not queue.empty():
+                stdout, stderr, exit_code = queue.get()
+                print(stdout)
+                print(stderr)
+                
+        if exit_code == 0:
             kernel = platform.system()
 
             # On Windows, the installer runs as a background process, but it
@@ -421,7 +437,7 @@ class UpdatePlugin(plugin.Plugin):
             return 'amd64.dmg'
         else:
             return 'Unknown operating system'
-
+                
     def download_version(self, name, download_url):
         """Downloads a file from a download URL from GitHub in a separate thread.
         If successful, tries to install it. Updates UI during download progress.
@@ -430,62 +446,47 @@ class UpdatePlugin(plugin.Plugin):
             name (str): Name of the file to download.
             download_url (str): URL for downloading the file.
         """
+        import requests
+        print(_(f'Downloading: {name} from {download_url}'))
+        Fl.check()  # Ensure UI responsiveness
+        response = requests.get(download_url, stream=True)
+        response.raise_for_status()  # Raise exception for non-200 status codes
+        total_size = int(response.headers.get('content-length', 0))
 
-        def download_file_in_thread(download_url, download_file,
-                                    progress_callback):
-            """Downloads the file in a separate thread and updates progress."""
-            from fltk14 import Fl
-            import requests
-            print(_(f'Downloading: {name} from {download_url}'))
-            Fl.check()  # Ensure UI responsiveness
-            response = requests.get(download_url, stream=True)
-            print(_(f'Got response...'))
-            Fl.check()  # Ensure UI responsiveness
-            response.raise_for_status()  # Raise exception for non-200 status codes
-                
-            print("Get total size")
-            Fl.check()  # Ensure UI responsiveness
-            total_size = int(response.headers.get('content-length', 0))
-            downloaded = 0
-
-            with open(download_file, 'wb') as f:
-                print('#',)
-                Fl.check()  # Ensure UI responsiveness
-                for chunk in response.iter_content(chunk_size=1024):
-                    print('*',)
-                    Fl.check()  # Ensure UI responsiveness
-                    if chunk:  # filter out keep-alive new chunks
-                        downloaded += len(chunk)
-                        f.write(chunk)
-                        progress_callback(downloaded, total_size)  # Update UI with progress
-                        f.flush()
-
-            Fl.check()  # Ensure UI responsiveness
-            print(_(f'Download complete: {download_file}'))
-
-
-        # Define a function to update UI progress
-        def update_progress(downloaded, total_size):
-            from fltk14 import Fl
-            if total_size > 0:
-                progress_percentage = int(downloaded * 100 / total_size)
-                # Update your UI progress bar or indicator here with
-                # `progress_percentage`
-                print(f"Download progress: {progress_percentage}%")
-                Fl.check()
-
+        #
+        # Create Progress window with Fl_Progress in it
+        #
+        window = Fl_Window(400, 300)
+        progress = Fl_Progress(10, 50, 390, 60, _("Downloading..."))
+        progress.minimum(0)
+        progress.maximum(total_size)
+        progress.align(FL_ALIGN_TOP)
+        window.show()
+        Fl.check()  # Ensure UI responsiveness
+        
         # Create a temporary download file path
         download_file = os.path.join(tempfile.gettempdir(), name)
-        
-        # Start the download in a separate thread
-        download_thread = threading.Thread(target=download_file_in_thread,
-                                           args=(download_url, download_file,
-                                                 update_progress))
-        download_thread.start()
 
-        # Wait for the download thread to finish
-        download_thread.join()
+        downloaded = 0
+        with open(download_file, 'wb') as f:
+            for chunk in response.iter_content(chunk_size=1024):
+                Fl.check()  # Ensure UI responsiveness
+                if chunk:  # filter out keep-alive new chunks
+                    downloaded += len(chunk)
+                    f.write(chunk)
+                    # Update UI with progress
+                    progress.value(downloaded)
+                    progress.redraw()
+                    if not window.visible():
+                        break
+                    Fl.flush()
+                    f.flush()
 
+            Fl.check()  # Ensure UI responsiveness
+            if downloaded == total_size:
+                print(_(f'Download complete: {download_file}'))
+            window.hide()
+            
         if os.path.exists(download_file):
             self.install_download(download_file)
         else:
@@ -503,7 +504,6 @@ class UpdatePlugin(plugin.Plugin):
         Returns:
             None
         """
-        from fltk14 import Fl, Fl_Window, Fl_Box, Fl_Button
         date = release_info['published_at']
         win = Fl_Window(320, 200)
         box = Fl_Box(20, 20, win.w() - 40, 60)
