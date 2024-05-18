@@ -238,11 +238,11 @@ class UpdatePlugin(plugin.Plugin):
         exit_code = process.returncode
 
         # Print or handle the captured stdout and stderr
-        print(_("Standard Output:"))
         print(stdout.decode('utf-8'))
 
-        print(_("Standard Error:"))
-        print(stderr.decode('utf-8'))
+        if stderr:
+            print(_("Standard Error:"))
+            print(stderr.decode('utf-8'))
 
         return exit_code
 
@@ -281,7 +281,8 @@ class UpdatePlugin(plugin.Plugin):
             None
         """
         cmd = None
-        print(_(f'Trying to install {download_file}...'))
+        print(_(f'Trying to install {download_file}.'))
+        print(_(f'Please wait...'))
         Fl.check()
         kernel = platform.system()
         if kernel == 'Windows':
@@ -297,19 +298,26 @@ class UpdatePlugin(plugin.Plugin):
             print(_('Unknown platform'))
             return
 
-        queue = Queue()
-        thread = threading.Thread(target=_run_subprocess,
-                                  args=(cmd, queue))
-        thread.start()
+        kernel = platform.system()
         exit_code = -1
-        while True:
-            if not queue.empty():
-                stdout, stderr, exit_code = queue.get()
-                print(stdout)
-                print(stderr)
+
+        if kernel == 'Linux':
+            queue = Queue()
+
+            thread = threading.Thread(target=_run_subprocess,
+                                      args=(cmd, queue))
+            thread.start()
+            time.sleep(5)
+            while True:
+                if not queue.empty():
+                    stdout, stderr, exit_code = queue.get()
+                    print(stdout)
+                    print(stderr)
+                    Fl.check()
+        else:
+            exit_code = self.run_command(cmd)
                 
         if exit_code == 0:
-            kernel = platform.system()
 
             # On Windows, the installer runs as a background process, but it
             # locks the installer file.  We keep trying to remove it until we
@@ -332,7 +340,6 @@ class UpdatePlugin(plugin.Plugin):
                 if os.path.exists(download_file):
                     os.remove(download_file)
                     print(_(f'Removed temporary "{download_file}.'))
-                    print(_('Removed temporary'),download_file,'.')
                     Fl.check()
                 self.start_new_mrv2(download_file, kernel)
             else:
@@ -343,8 +350,7 @@ class UpdatePlugin(plugin.Plugin):
                 print(_('Something failed installing mrv2 - It is not in "') +
                       exe + '"')
         else:
-            print(_('Something failed installing mrv2 - Return error was: ') +
-                    ret)
+            print(_(f'Something failed installing mrv2 - Error: {exit_code}'))
             
 
 
@@ -456,8 +462,8 @@ class UpdatePlugin(plugin.Plugin):
         #
         # Create Progress window with Fl_Progress in it
         #
-        window = Fl_Window(400, 300)
-        progress = Fl_Progress(10, 50, 390, 60, _("Downloading..."))
+        window = Fl_Window(400, 120)
+        progress = Fl_Progress(10, 50, 380, 60, _("Downloading..."))
         progress.minimum(0)
         progress.maximum(total_size)
         progress.align(FL_ALIGN_TOP)
@@ -469,7 +475,7 @@ class UpdatePlugin(plugin.Plugin):
 
         downloaded = 0
         with open(download_file, 'wb') as f:
-            for chunk in response.iter_content(chunk_size=1024):
+            for chunk in response.iter_content(chunk_size=8192):
                 Fl.check()  # Ensure UI responsiveness
                 if chunk:  # filter out keep-alive new chunks
                     downloaded += len(chunk)

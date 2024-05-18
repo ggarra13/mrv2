@@ -18,11 +18,12 @@ v1.1.7
 - Fixed a terrible bug on Linux X11 which would sometimes would make the X11
   server reboot on some Linux distros like Rocky Linux 8.9.
 - Added OpenRV's license to mrv2 as I took inspiration for their reverse
-  playback.
+  playback.  I was doing the same on mrViewer, but I had forgotten about it.
 - Update tlRender to use OTIO v0.16.0.
 - Added what each contributor did so far for the mrv2 project.
   If you don't want to be listed as contributor, not list your email address,
   or something else, please let me know.
+- Updated update_mrv2.py script.  Tested on macOS for now.
   
 
 v1.1.6

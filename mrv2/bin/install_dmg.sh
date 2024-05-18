@@ -10,7 +10,7 @@ DMG_NAME="${DMG_BASENAME%.dmg}"
 
 # Open the .dmg file
 echo "Open $DMG_FILE"
-open "$DMG_FILE"
+yes 2> /dev/null | hdiutil attach -noverify "$DMG_FILE"
 
 # Wait for the .dmg to be mounted
 echo "Wait for /Volumes/$DMG_NAME..."
@@ -21,7 +21,7 @@ done
 # Optional: Display a message when the .dmg is mounted
 echo "Disk image mounted. Installing mrv2..."
 
-# Remove any previous install
+# # Remove any previous install
 echo "Removing any old installation..."
 rm -rf /Applications/mrv2.app
 
