@@ -114,7 +114,21 @@ namespace mrv
             return time;
         }
 
-        // @todo: darby needs to provide this from timelineUI
+        const otio::Timeline* createTimelineFromString(const std::string& s)
+        {
+            auto timeline = dynamic_cast<otio::Timeline*>(
+                otio::Timeline::from_json_string(s));
+            if (!timeline)
+            {
+                LOG_ERROR("Could not crete timeline object from this "
+                          ".json string:");
+                LOG_ERROR(s);
+                return nullptr;
+            }
+            return timeline;
+        }
+
+        // \@todo: darby needs to provide this from timelineUI
         std::vector<Item*> getSelectedItems()
         {
             std::vector<Item*> out;
@@ -1398,9 +1412,12 @@ namespace mrv
         player = ui->uiView->getTimelinePlayer();
         edit_store_redo(player, ui);
 
+        const auto otioTimeline = createTimelineFromString(buffer.json);
+        if (!otioTimeline)
+            return;
+
         otio::SerializableObject::Retainer<otio::Timeline> timeline(
-            dynamic_cast<otio::Timeline*>(
-                otio::Timeline::from_json_string(buffer.json)));
+            otioTimeline);
 
         TimeRange timeRange;
         double videoRate = 0.F, sampleRate = 0.F;
@@ -1438,9 +1455,12 @@ namespace mrv
         auto stack = player->getTimeline()->tracks();
         const bool refreshCache = hasEmptyTracks(stack);
 
+        const auto otioTimeline = createTimelineFromString(buffer.json);
+        if (!otioTimeline)
+            return;
+
         otio::SerializableObject::Retainer<otio::Timeline> timeline(
-            dynamic_cast<otio::Timeline*>(
-                otio::Timeline::from_json_string(buffer.json)));
+            otioTimeline);
 
         TimeRange timeRange;
         double videoRate = 0.F, sampleRate = 0.F;
@@ -1583,8 +1603,11 @@ namespace mrv
         bool makeRelativePaths)
     {
         const std::string& s = timeline->to_json_string();
-        otio::SerializableObject::Retainer<otio::Timeline> out(
-            dynamic_cast<otio::Timeline*>(otio::Timeline::from_json_string(s)));
+        const auto otioTimeline = createTimelineFromString(s);
+        if (!otioTimeline)
+            return;
+
+        otio::SerializableObject::Retainer<otio::Timeline> out(otioTimeline);
         makePathsAbsolute(out, App::ui);
         auto stack = out->tracks();
         if (makeRelativePaths)
@@ -1983,19 +2006,13 @@ namespace mrv
 
         // Make a copy of the timeline, so we don't modify the original in
         // place.
-        const std::string s = timeline->to_json_string();
-        auto timelineCopy =
-            dynamic_cast<otio::Timeline*>(otio::Timeline::from_json_string(s));
-        if (!timelineCopy)
-        {
-            LOG_ERROR("Could not crete timeline object from this "
-                      ".json string:");
-            LOG_ERROR(s);
+        const std::string& s = timeline->to_json_string();
+        const auto otioTimeline = createTimelineFromString(s);
+        if (!otioTimeline)
             return;
-        }
 
         otio::SerializableObject::Retainer<otio::Timeline> sourceTimeline(
-            timelineCopy);
+            otioTimeline);
 
         makePathsAbsolute(sourceTimeline, ui);
 
