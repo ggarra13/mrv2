@@ -79,10 +79,10 @@ include(InstallRequiredSystemLibraries)
 #
 # Extract python version
 #
-string( REGEX MATCH "^[0-9]+\\.[0-9]+" MRV2_PYTHON_VERSION "${PYTHON_VERSION}" )
+string( REGEX MATCH "^[0-9]+\\.[0-9]+" MRV2_PYTHON_VERSION "${Python_VERSION}" )
 if(NOT MRV2_PYTHON_VERSION OR MRV2_PYTHON_VERSION STREQUAL "")
     message(FATAL_ERROR "Could not detect python version from "
-	"${PYTHON_VERSION}")
+	"${Python_VERSION}")
 endif()
     
 if (UNIX AND BUILD_PYTHON)
