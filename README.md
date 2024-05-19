@@ -210,6 +210,7 @@ sudo apt -y install build-essential perl git cmake ninja-build libpango1.0-dev \
 sudo cpan App::cpanminus && cpanm --notest IPC::Cmd
 
 # Install meson for dav1d codec
+sudo apt install pip
 sudo pip3 install meson
 
 ```

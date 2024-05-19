@@ -24,7 +24,10 @@ v1.1.7
   If you don't want to be listed as contributor, not list your email address,
   or something else, please let me know.
 - Updated update_mrv2.py script.  Tested on macOS, Windows, Rocky Linux 8.9
-  and Ubuntu 22.04.4 LTS.
+  and Ubuntu 22.04.4 LTS.  From now on, you can rely on automatic upgrades
+  if you go to Window->Preferences->Behavior->Upgrades and set them at Startup.
+  When you start mrv2, it will check to see if there is an upgrade after 5 days
+  of the actual release (so any portential early bugs are squashed).
 - Improved translation CMake scripts.
 - Added documentation on how to get Wayland working almost flawlessly on Ubuntu
   22.04.4 LTS.
