@@ -423,14 +423,27 @@ class UpdatePlugin(plugin.Plugin):
            str: The extension for the Linux flavour, or None if undetermined.
         """
 
-        # Prioritize checking for common package managers using subprocess.run
-        # to capture return codes and avoid potential shell injection
-        # vulnerabilities.
+        #
+        # First, check for common lib databases
+        #
+        databases = [
+            ("/var/lib/rpm", ".rpm"),
+            ("/var/lib/dpkg", ".deb"),
+            ("/etc/pacman.conf", ".tar.gz")
+        ]
+                  
+        for database, extension in databases:
+            if os.path.exists(database):
+                return extension
+        
 
+        # If databases failed, look for common package managers using
+        # subprocess.run to capture return codes and avoid potential shell
+        # injection vulnerabilities.
         package_managers = [
             ("rpm", ".rpm"),
             ("dpkg", ".deb"),
-            ("pacman", ".pkg.tar.xz")  # Updated extension for Arch Linux
+            ("pacman", ".tar.gz")  # Updated extension for Arch Linux
         ]
 
         for manager, extension in package_managers:
