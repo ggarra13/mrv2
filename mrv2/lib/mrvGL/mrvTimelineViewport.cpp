@@ -1471,7 +1471,7 @@ namespace mrv
         //
         if (posY + H + dH > minY + maxH)
         {
-            H = minY + maxH + dH - posY - 1;
+            H = minY + maxH + dH - posY;
             p.frameView = true;
         }
 
@@ -1493,11 +1493,7 @@ namespace mrv
         {
             p.frameView = true;
             posY = minY + dH; // dH is needed here!
-            int offH = 0;
-#ifdef __linux__
-            offH = 4;
-#endif
-            H = maxH - offH;
+            H = maxH;
         }
 
 #ifdef DEBUG_SCALING

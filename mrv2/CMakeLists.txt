@@ -172,7 +172,7 @@ endif()
 
 
 if(MRV2_PYBIND11)
-    set(PYBIND11_FINDPYTHON ON)
+    find_package(Python REQUIRED COMPONENTS Interpreter Development)
     add_definitions(-DMRV2_PYBIND11)
     find_package(pybind11 REQUIRED)
 endif()

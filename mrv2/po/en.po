@@ -4699,6 +4699,10 @@ msgstr "Seconds"
 msgid "Timecode"
 msgstr "Timecode"
 
+#, fuzzy
+msgid "120"
+msgstr "12"
+
 msgid "60"
 msgstr "60"
 

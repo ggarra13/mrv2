@@ -107,7 +107,7 @@ decl {class AboutUI;} {public global
 }
 
 widget_class PixelToolBarClass {
-  xywh {0 0 686 31} resizable
+  xywh {37 101 686 31} resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {open
@@ -412,11 +412,11 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
   }
 }
 
-widget_class TimelineClass {
-  xywh {0 0 690 47} box NO_BOX resizable
+widget_class TimelineClass {open
+  xywh {82 146 690 47} box NO_BOX resizable
   class Fl_Double_Window visible
 } {
-  Fl_Group {} {
+  Fl_Group {} {open
     xywh {0 0 690 29} box FLAT_BOX
   } {
     Fl_Group {} {open
@@ -553,7 +553,7 @@ player->setLoop( loop );}
             class {mrv::StateButton}
           }
         }
-        Fl_Group {} {
+        Fl_Group {} {open
           xywh {341 1 86 28}
         } {
           Fl_Menu_Button fpsDefaults {
@@ -562,7 +562,7 @@ player->setLoop( loop );}
             callback {int idx = o->value();
 double speed = atof( o->text( idx ) );
 uiFPS->value( speed );
-uiFPS->do_callback();}
+uiFPS->do_callback();} open selected
             tooltip {Some default frame rate settings.} xywh {341 3 40 24} labelsize 10 align 16
             code0 {o->disable_label();}
             class {mrv::PopupMenu}
@@ -572,8 +572,12 @@ uiFPS->do_callback();}
               xywh {5 3 100 20}
             }
             MenuItem {} {
-              label 60
+              label 120
               xywh {5 3 100 20}
+            }
+            MenuItem {} {
+              label 60
+              xywh {15 13 100 20}
             }
             MenuItem {} {
               label {59.952}
@@ -781,8 +785,7 @@ ui->uiView->take_focus();}
   }
 }
 
-class ViewerUI {open
-} {
+class ViewerUI {} {
   decl {static mrv::App* app;} {public local
   }
   decl {static PreferencesUI* uiPrefs;} {public local
@@ -805,7 +808,7 @@ uiSecondary = nullptr;} {}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
     exit_cb( o, v );} open
-      xywh {0 0 690 602} type Double align 80 resizable
+      xywh {127 191 690 602} type Double align 80 resizable
       class {mrv::MainWindow} size_range {690 602 0 0} visible
     } {
       Fl_Pack uiRegion {open
@@ -843,7 +846,7 @@ else
     if (value) mrv::editMode = mrv::EditMode::kFull;
     else       mrv::editMode = mrv::EditMode::kNone;
     mrv::toggle_bottom_bar(nullptr, v);
-}} selected
+}}
               tooltip {Toggle Edit Mode} xywh {602 0 58 25} down_box DOWN_BOX selection_color 95 labelsize 12
             }
           }

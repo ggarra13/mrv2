@@ -26,8 +26,10 @@ v1.1.7
 - Updated update_mrv2.py script.  Tested on macOS, Windows, Rocky Linux 8.9
   and Ubuntu 22.04.4 LTS.
 - Improved translation CMake scripts.
-- Added documentation on how to get Wayland working flawylessly on Ubuntu
+- Added documentation on how to get Wayland working almost flawlessly on Ubuntu
   22.04.4 LTS.
+- Added 120 FPS, which drops frames but it is still nice to quickly browse a
+  movie.
   
 
 v1.1.6
