@@ -25,8 +25,11 @@ msgstr "No pude localizar mrv2 en:\n"
 msgid "Maybe you installed it in a non-default location."
 msgstr "Tal vez lo instaló en un lugar no por defecto."
 
-msgid "Something failed installing mrv2 - It is not in \"{exe}\""
-msgstr "Algo falló instalando mrv2 - Es no está en \"{exe}\""
+msgid "Something failed installing mrv2 - It is not in \""
+msgstr "Algo falló instalando mrv2 - Es no está en \""
+
+msgid "Invalid ISO 8601 format provided: "
+msgstr "Formato ISO 8601 provisto inválido: "
 
 msgid "No file matching"
 msgstr "Ningún archivo se parece."
@@ -46,6 +49,9 @@ msgstr "Error obteniendo valor:\n"
 msgid "Unknown platform"
 msgstr "Plataforma desconocida"
 
+msgid "Saving session:"
+msgstr "Grabando sesión:"
+
 msgid "An unexpected error occurred:"
 msgstr "Un error inesperado ocurrío:"
 
@@ -60,9 +66,6 @@ msgstr "Entre la Clave del Administrador"
 
 msgid "Password"
 msgstr "Clave"
-
-msgid "Unable to determine Linux flavor"
-msgstr "No pude determinar el tipo de Linux"
 
 msgid "Downloading..."
 msgstr "Descargando..."
@@ -82,6 +85,9 @@ msgstr "Publicada en "
 msgid "Ignore"
 msgstr "Ignorar"
 
+msgid "Error fetching latest release information:\n"
+msgstr "Error obteniendo última información de la publicación:\n"
+
 msgid "There's a new release but it has not been more than 5 days"
 msgstr "Hay una nueva versión publicada pero no han pasado más de 5 días"
 
@@ -97,8 +103,14 @@ msgstr "Degradar"
 msgid "Upgrade"
 msgstr "Actualice"
 
+msgid "No download url was found for"
+msgstr "Ningún url para bajar fue encontrado para"
+
 msgid "No releases found for the specified repository."
 msgstr "Ningún paquete encontrado para el repositorio especificado."
 
 msgid "Help/Update mrv2"
 msgstr "Ayuda/Actualizar mrv2"
+
+#~ msgid "Unable to determine Linux flavor"
+#~ msgstr "No pude determinar el tipo de Linux"

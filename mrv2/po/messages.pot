@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.1.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2024-05-19 03:46-0300\n"
+"POT-Creation-Date: 2024-05-19 06:17-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1963,8 +1963,8 @@ msgstr ""
 #: mrvPanels/mrvStereo3DPanel.cpp:221 mrvPanels/mrvStereo3DPanel.cpp:223
 #: mrvPanels/mrvEnvironmentMapPanel.cpp:116 mrvFl/mrvPreferences.cpp:1987
 #: mrvFl/mrvPreferences.cpp:2133 mrvFl/mrvPreferences.cpp:2145
-#: mrvGL/mrvTimelineViewport.cpp:661 mrvGL/mrvTimelineViewport.cpp:1815
-#: mrvGL/mrvTimelineViewport.cpp:1887
+#: mrvGL/mrvTimelineViewport.cpp:661 mrvGL/mrvTimelineViewport.cpp:1826
+#: mrvGL/mrvTimelineViewport.cpp:1898
 #: /code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvSaveImageOptionsUI.cxx:38
 #: /code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:173
 #: /code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrvPreferencesUI.cxx:192
@@ -4026,15 +4026,15 @@ msgstr ""
 msgid "Roll"
 msgstr ""
 
-#: mrvGL/mrvTimelineViewport.cpp:1991 mrvUI/mrvMenus.cpp:712
+#: mrvGL/mrvTimelineViewport.cpp:2002 mrvUI/mrvMenus.cpp:712
 msgid "Render/Minify Filter/Linear"
 msgstr ""
 
-#: mrvGL/mrvTimelineViewport.cpp:1996 mrvUI/mrvMenus.cpp:735
+#: mrvGL/mrvTimelineViewport.cpp:2007 mrvUI/mrvMenus.cpp:735
 msgid "Render/Magnify Filter/Linear"
 msgstr ""
 
-#: mrvGL/mrvTimelineViewport.cpp:2033
+#: mrvGL/mrvTimelineViewport.cpp:2044
 #: /code/applications/mrv2/BUILD-Linux-amd64/Release/mrv2/src/mrv2-build/lib/mrvWidgets/mrViewer.cxx:2256
 msgid "(no image)"
 msgstr ""

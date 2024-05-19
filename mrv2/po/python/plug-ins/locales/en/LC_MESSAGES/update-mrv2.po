@@ -26,8 +26,11 @@ msgstr "Could not locate mrv2 in:\n"
 msgid "Maybe you installed it in a non-default location."
 msgstr "Maybe you installed it in a non-default location."
 
-msgid "Something failed installing mrv2 - It is not in \"{exe}\""
-msgstr "Something failed installing mrv2 - It is not in \"{exe}\""
+msgid "Something failed installing mrv2 - It is not in \""
+msgstr "Something failed installing mrv2 - It is not in \""
+
+msgid "Invalid ISO 8601 format provided: "
+msgstr "Invalid ISO 8601 format provided: "
 
 msgid "No file matching"
 msgstr "No match found"
@@ -47,6 +50,9 @@ msgstr "Error retrieving value:\n"
 msgid "Unknown platform"
 msgstr "Unknown platform"
 
+msgid "Saving session:"
+msgstr "Saving session:"
+
 msgid "An unexpected error occurred:"
 msgstr "An unexpected error occurred:"
 
@@ -61,9 +67,6 @@ msgstr "Enter Sudo Password"
 
 msgid "Password"
 msgstr "Password"
-
-msgid "Unable to determine Linux flavor"
-msgstr "Unable to determine Linux flavor"
 
 msgid "Downloading..."
 msgstr "Downloading..."
@@ -83,6 +86,9 @@ msgstr "Released on "
 msgid "Ignore"
 msgstr "Ignore"
 
+msgid "Error fetching latest release information:\n"
+msgstr "Error fetching latest release information:\n"
+
 msgid "There's a new release but it has not been more than 5 days"
 msgstr "There's a new release but it has not been more than 5 days"
 
@@ -98,8 +104,14 @@ msgstr "Downgrade"
 msgid "Upgrade"
 msgstr "Upgrade"
 
+msgid "No download url was found for"
+msgstr "No download url was found for"
+
 msgid "No releases found for the specified repository."
 msgstr "No releases found for the specified repository."
 
 msgid "Help/Update mrv2"
 msgstr "Help/Update mrv2"
+
+#~ msgid "Unable to determine Linux flavor"
+#~ msgstr "Unable to determine Linux flavor"

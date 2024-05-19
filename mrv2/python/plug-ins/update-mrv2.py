@@ -307,7 +307,7 @@ class UpdatePlugin(plugin.Plugin):
         
         try:
             tmp = os.path.join(self.tempdir, "installed.mrv2s")
-            print(_('Saving session:',tmp)
+            print(_('Saving session:'), tmp)
             session.save(tmp)
             cmd.run(exe, tmp)
         except Exception as e:
