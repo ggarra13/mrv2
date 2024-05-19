@@ -109,18 +109,21 @@ if(CMAKE_BUILD_TYPE MATCHES "^Debug$")
 endif()
 
 
-set( Gettext )
+set( Gettext_DEP )
 if( BUILD_GETTEXT )
     include( cmake/Modules/BuildGettext.cmake )
 elseif(APPLE)
-    if (CMAKE_OSX_DEPLOYMENT_TARGET)
-	#
-	# brew .dylibs are compiled only for the current version of the OS.
-	#
-	# We distribute libintl dylib compatible with v10.5
-	file(COPY
-	    precompiled/macOS/v10.5/ DESTINATION ${CMAKE_INSTALL_PREFIX}/
-	    FOLLOW_SYMLINK_CHAIN)
+    if (NOT CMAKE_OSX_ARCHITECTURES OR CMAKE_OSX_ARCHITECTURES STREQUAL "")
+	message(WARNING "Target architecture not specified for macOS deployment")i
+	if(CMAKE_OSX_ARCHITECTURES MATCHES "^x86_64$") 
+	    #
+	    # brew .dylibs are compiled only for the current version of the OS.
+	    #
+	    # We distribute libintl dylib compatible with v10.5 on Intel macOS
+	    file(COPY
+		precompiled/macOS/v10.5/ DESTINATION ${CMAKE_INSTALL_PREFIX}/
+		FOLLOW_SYMLINK_CHAIN)
+	endif()
     endif()
 endif()
 
