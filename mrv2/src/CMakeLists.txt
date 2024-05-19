@@ -80,12 +80,13 @@ include(InstallRequiredSystemLibraries)
 # Extract python version
 #
 string( REGEX MATCH "^[0-9]+\\.[0-9]+" MRV2_PYTHON_VERSION "${Python_VERSION}" )
-if(NOT MRV2_PYTHON_VERSION OR MRV2_PYTHON_VERSION STREQUAL "")
-    message(FATAL_ERROR "Could not detect python version from "
-	"${Python_VERSION}")
-endif()
     
 if (UNIX AND BUILD_PYTHON)
+    if(NOT MRV2_PYTHON_VERSION OR MRV2_PYTHON_VERSION STREQUAL "")
+	message(FATAL_ERROR "Could not detect python version from "
+	    "${Python_VERSION}")
+    endif()
+
     set( MRV2_PYTHON_LIBS ${CMAKE_INSTALL_PREFIX}/lib/python${MRV2_PYTHON_VERSION} )
     if (MRV2_PYFLTK)
 	# Get rid of the pyFLTK demos as they don't work properly on an
