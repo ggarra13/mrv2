@@ -14,47 +14,11 @@ msgstr ""
 "Generated-By: pygettext.py 1.5\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "No file matching"
-msgstr "No file matching"
-
-msgid "was found"
-msgstr "was found"
-
-msgid "No match found"
-msgstr "No match found"
-
-msgid "Install Location:"
-msgstr "Install Location:"
-
-msgid "Error retrieving value:"
-msgstr "Error retrieving value:"
-
-msgid "Unknown platform"
-msgstr "Unknown platform"
-
-msgid "Standard Output:"
-msgstr "Standard Output:"
-
-msgid "Standard Error:"
-msgstr "Standard Error:"
-
-msgid "Starting"
-msgstr "Starting"
-
-msgid "An unexpected error occurred:"
-msgstr "An unexpected error occurred:"
-
-msgid "Trying to install"
-msgstr "Trying to install"
-
 msgid "Removed temporary \""
 msgstr "Removed temporary \""
 
 msgid "The new version of mrv2 was installed."
 msgstr "The new version of mrv2 was installed."
-
-msgid "Removed temporary"
-msgstr "Removed temporary"
 
 msgid "Could not locate mrv2 in:\n"
 msgstr "Could not locate mrv2 in:\n"
@@ -62,11 +26,35 @@ msgstr "Could not locate mrv2 in:\n"
 msgid "Maybe you installed it in a non-default location."
 msgstr "Maybe you installed it in a non-default location."
 
-msgid "Something failed installing mrv2 - It is not in \""
-msgstr "Something failed installing mrv2 - It is not in \""
+msgid "Something failed installing mrv2 - It is not in \"{exe}\""
+msgstr "Something failed installing mrv2 - It is not in \"{exe}\""
 
-msgid "Something failed installing mrv2 - Return error was: "
-msgstr "Something failed installing mrv2 - Return error was: "
+msgid "No file matching"
+msgstr "No match found"
+
+msgid "was found"
+msgstr "was found"
+
+msgid "No match found"
+msgstr "No match found"
+
+msgid "Install Location: "
+msgstr "Install Location: "
+
+msgid "Error retrieving value:\n"
+msgstr "Error retrieving value:\n"
+
+msgid "Unknown platform"
+msgstr "Unknown platform"
+
+msgid "An unexpected error occurred:"
+msgstr "An unexpected error occurred:"
+
+msgid "Trying to install"
+msgstr "Trying to install"
+
+msgid "Please wait"
+msgstr "Please wait"
 
 msgid "Enter Sudo Password"
 msgstr "Enter Sudo Password"
@@ -77,24 +65,29 @@ msgstr "Password"
 msgid "Unable to determine Linux flavor"
 msgstr "Unable to determine Linux flavor"
 
-msgid "Downloading:"
-msgstr "Downloading:"
+msgid "Downloading..."
+msgstr "Downloading..."
 
-msgid "Download complete:"
-msgstr "Download complete:"
+msgid "Download seems to have failed!"
+msgstr "Download seems to have failed!"
 
 msgid "Current version is v"
 msgstr "Current version is v"
 
-msgid ""
-"\n"
-"Latest at Github is v"
-msgstr ""
-"\n"
-"Latest at Github is v"
+msgid "Latest version at Github is v"
+msgstr "Latest version at Github is v"
+
+msgid "Released on "
+msgstr "Released on "
 
 msgid "Ignore"
 msgstr "Ignore"
+
+msgid "There's a new release but it has not been more than 5 days"
+msgstr "There's a new release but it has not been more than 5 days"
+
+msgid "unknown date."
+msgstr "unknown date."
 
 msgid "Update anyway"
 msgstr "Update anyway"
@@ -105,8 +98,8 @@ msgstr "Downgrade"
 msgid "Upgrade"
 msgstr "Upgrade"
 
-msgid "No release files found."
-msgstr "No release files found."
+msgid "No releases found for the specified repository."
+msgstr "No releases found for the specified repository."
 
 msgid "Help/Update mrv2"
 msgstr "Help/Update mrv2"

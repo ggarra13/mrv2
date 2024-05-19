@@ -80,4 +80,26 @@ add_custom_target( clean_doc
 add_custom_target( doc
     COMMAND ${CMAKE_COMMAND} -E echo "Documented all languages."
     DEPENDS ${DOCUMENTATION_TARGETS} clean_doc
+)
+
+
+if(MRV2_PYBIND11)
+    add_custom_target( pip
+	COMMAND ${PYTHON_EXECUTABLE} -m pip install --upgrade pip
     )
+
+    if(UNIX)
+	set(_install_requests_cmd ${PYTHON_EXECUTABLE} -m pip install
+	    --upgrade 
+	    --target
+	    ${CMAKE_INSTALL_PREFIX}/lib/python${MRV2_PYTHON_VERSION}/site-packages
+	    requests)
+    else()
+	set(_install_requests_cmd ${PYTHON_EXECUTABLE} -m pip install --upgrade --target ${CMAKE_INSTALL_PREFIX}/bin/Lib/site-packages requests)
+    endif()
+
+    add_custom_target( requests
+	COMMAND ${_install_requests_cmd}
+	DEPENDS pip mrv2
+    )
+endif()

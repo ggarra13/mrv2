@@ -61,6 +61,9 @@ namespace mrv
 {
     namespace os
     {
+        int execv(const std::string& exe = "",
+                  const std::string& session = "");
+        
         std::string getGPUVendor();
 
         std::string getDesktop();

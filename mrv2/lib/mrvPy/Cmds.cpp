@@ -10,6 +10,7 @@
 #include "mrvApp/mrvApp.h"
 
 #include "mrvCore/mrvHome.h"
+#include "mrvCore/mrvOS.h"
 
 #include "mrvFl/mrvSave.h"
 #include "mrvFl/mrvIO.h"
@@ -353,6 +354,11 @@ namespace mrv2
             save_timeline_to_disk(file);
         }
 
+        void run(const std::string& exe = "", const std::string session = "")
+        {
+            os::execv(exe, session);
+        }
+
 #ifdef MRV2_PDF
         /**
          * \brief Save a PDF document.
@@ -469,6 +475,10 @@ Used to run main commands and get and set the display, image, compare, LUT optio
 
     cmds.def(
         "isMuted", &mrv2::cmd::isMuted, _("Returns true if audio is muted."));
+
+    cmds.def(
+        "run", &mrv2::cmd::run,
+        _("Runs the same or a new mrv2 with a session file."));
 
     cmds.def(
         "setMute", &mrv2::cmd::setMute, _("Set the muting of the audio."),

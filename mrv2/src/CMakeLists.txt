@@ -98,12 +98,7 @@ endif()
 # Install python's requests library
 #
 if (MRV2_PYBIND11)
-    execute_process( COMMAND ${PYTHON_EXECUTABLE} -m pip install --upgrade pip)
-    if(UNIX)
-	execute_process( COMMAND ${PYTHON_EXECUTABLE} -m pip install --target ${CMAKE_INSTALL_PREFIX}/lib/python${MRV2_PYTHON_VERSION}/site-packages --upgrade requests)
-    else()
-	execute_process( COMMAND ${PYTHON_EXECUTABLE} -m pip install --upgrade --target ${CMAKE_INSTALL_PREFIX}/bin/Lib/site-packages requests)
-    endif()
+    execute_process( COMMAND ${PYTHON_EXECUTABLE} -m pip install --upgrade --target ${CMAKE_INSTALL_PREFIX}/bin/Lib/site-packages requests)
 endif()
     
 

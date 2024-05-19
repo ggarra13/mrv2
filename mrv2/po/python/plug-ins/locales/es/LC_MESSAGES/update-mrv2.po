@@ -13,32 +13,38 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
 
+msgid "Removed temporary \""
+msgstr "Removí el archivo temporario \""
+
+msgid "The new version of mrv2 was installed."
+msgstr "La nueva version de mrv2 fue instalada."
+
+msgid "Could not locate mrv2 in:\n"
+msgstr "No pude localizar mrv2 en:\n"
+
+msgid "Maybe you installed it in a non-default location."
+msgstr "Tal vez lo instaló en un lugar no por defecto."
+
+msgid "Something failed installing mrv2 - It is not in \"{exe}\""
+msgstr "Algo falló instalando mrv2 - Es no está en \"{exe}\""
+
 msgid "No file matching"
-msgstr "No archivo que corresponda"
+msgstr "Ningún archivo se parece."
 
 msgid "was found"
-msgstr "fue encontrada"
+msgstr "se encontró"
 
 msgid "No match found"
 msgstr "No se encontró una versión que corresponda."
 
-msgid "Install Location:"
-msgstr "Lugar de Instalación:"
+msgid "Install Location: "
+msgstr "Lugar de Instalación: "
 
-msgid "Error retrieving value:"
-msgstr "Error obteniendo valor:"
+msgid "Error retrieving value:\n"
+msgstr "Error obteniendo valor:\n"
 
 msgid "Unknown platform"
 msgstr "Plataforma desconocida"
-
-msgid "Standard Output:"
-msgstr "Salida Estándar:"
-
-msgid "Standard Error:"
-msgstr "Error Estándar:"
-
-msgid "Starting"
-msgstr "Comenzando"
 
 msgid "An unexpected error occurred:"
 msgstr "Un error inesperado ocurrío:"
@@ -46,26 +52,8 @@ msgstr "Un error inesperado ocurrío:"
 msgid "Trying to install"
 msgstr "Tratando de instalar"
 
-msgid "Removed temporary \""
-msgstr "Removí temporaria \""
-
-msgid "The new version of mrv2 was installed."
-msgstr "La nueva version de mrv2 fue instalada."
-
-msgid "Removed temporary"
-msgstr "Removí temporaria"
-
-msgid "Could not locate mrv2 in:\n"
-msgstr "No pude encontrar mrv2 en:\n"
-
-msgid "Maybe you installed it in a non-default location."
-msgstr "Tal vez lo instalaste en una ubicación especial."
-
-msgid "Something failed installing mrv2 - It is not in \""
-msgstr "Also falló instalando mrv2 - Es no está en \""
-
-msgid "Something failed installing mrv2 - Return error was: "
-msgstr "Algo falló al instalar mrv2 - El código de error fue: "
+msgid "Please wait"
+msgstr "Por favor espere"
 
 msgid "Enter Sudo Password"
 msgstr "Entre la Clave del Administrador"
@@ -76,24 +64,29 @@ msgstr "Clave"
 msgid "Unable to determine Linux flavor"
 msgstr "No pude determinar el tipo de Linux"
 
-msgid "Downloading:"
-msgstr "Descargando:"
+msgid "Downloading..."
+msgstr "Descargando..."
 
-msgid "Download complete:"
-msgstr "Descarga completa:"
+msgid "Download seems to have failed!"
+msgstr "La descarga ha fallado!"
 
 msgid "Current version is v"
-msgstr "Version actual es v"
+msgstr "La version actual es v"
 
-msgid ""
-"\n"
-"Latest at Github is v"
-msgstr ""
-"\n"
-"Última en Github es v"
+msgid "Latest version at Github is v"
+msgstr "La última version en Github es v"
+
+msgid "Released on "
+msgstr "Publicada en "
 
 msgid "Ignore"
 msgstr "Ignorar"
+
+msgid "There's a new release but it has not been more than 5 days"
+msgstr "Hay una nueva versión publicada pero no han pasado más de 5 días"
+
+msgid "unknown date."
+msgstr "fecha desconocida."
 
 msgid "Update anyway"
 msgstr "Actualizar igual"
@@ -104,8 +97,8 @@ msgstr "Degradar"
 msgid "Upgrade"
 msgstr "Actualice"
 
-msgid "No release files found."
-msgstr "No archivos para distribuir encontrados."
+msgid "No releases found for the specified repository."
+msgstr "Ningún paquete encontrado para el repositorio especificado."
 
 msgid "Help/Update mrv2"
 msgstr "Ayuda/Actualizar mrv2"

@@ -17,19 +17,19 @@ GITHUB_ASSET_RELEASE_DAYS = 5
 #
 # Standard libs
 #
-import os, platform, re, subprocess, sys, tempfile, threading, time
+import os, platform, re, inspect, subprocess, sys, tempfile, threading, time
 
 #
 # mrv2 imports
 #
 import mrv2
-from mrv2 import cmd, plugin, settings
+from mrv2 import cmd, plugin, session, settings
 
 try:
     from fltk14 import *
 except Exception as e:
     pass
-        
+
 try:
     import gettext
     
@@ -83,19 +83,22 @@ def fltk_check_callback(data):
     global subprocess_result, install_progress
     this = data[0]
     download_file = data[1]
-    exe = this.get_installed_executable(download_file)
-    print('.', end='', flush=True)
-    install_progress += 1
-    if install_progress > 40:
-        print()
-        install_progress = 0
-    Fl.check()
+
+    #
+    # Linux and Darwin have automatic installers
+    #
+    kernel = platform.system()
+    if kernel != 'Windows':
+        print('.', end='', flush=True)
+        install_progress += 1
+        if install_progress > 40:
+            print()
+            install_progress = 0
+            Fl.check()
     if subprocess_result is None:
         Fl.repeat_timeout(1.0, fltk_check_callback, data)
     else:
         print(f"\n\nInstall completed with output:\n{subprocess_result}")
-
-        kernel = platform.system()
         
         # On Windows, the installer runs as a background process, but it
         # locks the installer file.  We keep trying to remove it until we
@@ -105,29 +108,31 @@ def fltk_check_callback(data):
             while os.path.exists(download_file):
                 try:
                     os.remove(download_file)
-                    print(_(f'Removed temporary "{download_file}.'))
+                    print(_('Removed temporary "') + download_file + '".')
                     Fl.check()
                 except:
                     time.sleep(2) # Wait 2 seconds before trying again. 
                     pass
 
+        exe = this.get_installed_executable(download_file)
         if os.path.exists(exe):
             print(_('The new version of mrv2 was installed.'))
             Fl.check()
             if os.path.exists(download_file):
                 os.remove(download_file)
-                print(_(f'Removed temporary "{download_file}.'))
+                print(_('Removed temporary "') + download_file + '".')
                 Fl.check()
-                this.start_new_mrv2(download_file, kernel)
-            else:
-                if kernel == 'Windows':
-                    print(_(f'Could not locate mrv2 in:\n{exe}.\n') +
-                          _(f'Maybe you installed it in a non-default location.'))
-                    return
-                print(_('Something failed installing mrv2 - It is not in "{exe}"'))
+            this.start_new_mrv2(download_file, kernel)
+        else:
+            if kernel == 'Windows':
+                print(_('Could not locate mrv2 in:\n') + exe + '.\n' +
+                      _('Maybe you installed it in a non-default location.'))
+                return
+            print(_('Something failed installing mrv2 - It is not in "'),
+                  exe,'"')
 
         subprocess_result = None  # Reset for next run
-    
+        
 def _get_password_cb(widget, args):
     """FLTK callback to get the secret password, hide the parent window and
     run the command to install the downloaded file with the sudo password.
@@ -158,7 +163,7 @@ def _ignore_cb(widget, args):
     """
     widget.parent().hide()
     Fl.check()
-        
+    
 
 def _more_than_5_days_elapsed(release_date_iso):   
     """Compares the release date with the current date and returns True if
@@ -186,7 +191,7 @@ def _more_than_5_days_elapsed(release_date_iso):
         # Check if more than 5 days have passed
         return time_elapsed.days > GITHUB_ASSET_RELEASE_DAYS
     except ValueError:
-        print(f_("Invalid ISO 8601 format provided: {release_date_iso}"))
+        print(_("Invalid ISO 8601 format provided: "),release_date_iso)
         return False
 
 def _get_latest_release_cb(widget, args):
@@ -210,7 +215,7 @@ def _get_latest_release_cb(widget, args):
     if name.endswith(extension):
         this.download_file(name, release_info['download_url'])
     else:
-        print(_(f'No file matching {extension} was found'))
+        print(_('No file matching'),extension,_('was found'))
 
 
 class UpdatePlugin(plugin.Plugin):
@@ -226,7 +231,7 @@ class UpdatePlugin(plugin.Plugin):
         if settings.checkForUpdates():
             self.check_latest_release("ggarra13", "mrv2")
         UpdatePlugin.startup = False
-    
+            
     def match_version(self, s):
         """Match a version in a string like v0.8.3.
         
@@ -268,9 +273,9 @@ class UpdatePlugin(plugin.Plugin):
                 value, reg_type = winreg.QueryValueEx(key, '')
                 exe = f'{value[:-5]}'
                 exe = exe.replace('\\', '/')
-                print(_(f'Install Location: {exe}'))
+                print(_('Install Location: ') + exe)
             except WindowsError as e:
-                print(_(f'Error retrieving value: {e}'))
+                print(_('Error retrieving value:\n'),e)
             finally:
                 # Always close the opened key
                 winreg.CloseKey(key)
@@ -279,17 +284,17 @@ class UpdatePlugin(plugin.Plugin):
             # Look for default install locations
             #
             if not os.path.exists(exe):
-                exe = f'C:/Program Files/mrv2-v{version}/bin/mrv2.exe'
+                exe = f'"C:/Program Files/mrv2-v{version}/bin/mrv2.exe"'
             if not os.path.exists(exe):
-                exe = f'C:/Program Files/mrv2 v{version}/bin/mrv2.exe'
+                exe = f'"C:/Program Files/mrv2 v{version}/bin/mrv2.exe"'
             if not os.path.exists(exe):
-                exe = f'C:/Program Files/mrv2 {version}/bin/mrv2.exe'
+                exe = f'"C:/Program Files/mrv2 {version}/bin/mrv2.exe"'
         elif kernel == 'Darwin':
             exe = f'/Applications/mrv2.app/Contents/MacOS/mrv2'
         else:
-            print(_(f'Unknown platform {kernel}'))
+            print(_('Unknown platform'),kernel)
         return exe
-        
+    
 
     def start_new_mrv2(self, download_file, kernel):
         """Given a download_file and a platform, create the path to the new
@@ -297,14 +302,11 @@ class UpdatePlugin(plugin.Plugin):
         """
         version = self.match_version(download_file)
         exe = self.get_installed_executable(download_file)
-        if kernel == 'Windows':
-            quoted_exe = f'"{exe}"'
-        else:
-            quoted_exe = exe
-
+        
         try:
-            print(_(f'Starting {exe}...'))
-            os.execv(exe, [quoted_exe])
+            tmp = os.path.join(tempfile.gettempdir(), "/installed.mrv2s")
+            session.save(tmp)
+            cmd.run(exe, tmp)
         except Exception as e:
             print(_('An unexpected error occurred:'),e)
             return
@@ -335,10 +337,11 @@ class UpdatePlugin(plugin.Plugin):
         """
         global subprocess_result
         cmd = None
-        print(_(f'Trying to install {download_file}.'))
-        print(_(f'Please wait'), end='', flush=True)
-        Fl.check()
+        print(_('Trying to install'),download_file,'.')
         kernel = platform.system()
+        if kernel != 'Windows':
+            print(_('Please wait'), end='', flush=True)
+            Fl.check()
         if kernel == 'Windows':
             cmd = r'Powershell -Command Start-Process "' + command + '" -Verb RunAs'
         elif kernel == 'Linux':
@@ -407,7 +410,7 @@ class UpdatePlugin(plugin.Plugin):
         else:
             print(f'You will need to install file "{download_file}" manually.')
             return
-    
+        
 
     def check_linux_flavor(self):
         """Given a Linux distribution, try to determine what package manager to
@@ -501,9 +504,10 @@ class UpdatePlugin(plugin.Plugin):
         date = release_info['published_at']
         win = Fl_Window(320, 200)
         box = Fl_Box(20, 20, win.w() - 40, 60)
-        box.copy_label(_(f'Current version is v{current_version}\n') + 
-                       _(f'\nLatest version at Github is v{latest_version}.') +
-                       _(f'\nReleased on {date}'))
+        label  = _('Current version is v') + current_version + '\n\n'
+        label += _('Latest version at Github is v') + latest_version + '.\n'
+        label += _('Released on ') + date
+        box.copy_label(label)
         update = Fl_Button(20, 120, 130, 40, title)
         update.callback(_get_latest_release_cb, [self, release_info])
         ignore = Fl_Button(update.w() + 40, 120, 130, 40, _("Ignore"))
@@ -563,7 +567,7 @@ class UpdatePlugin(plugin.Plugin):
             response.raise_for_status()  # Raise an exception for non-200 status codes
             data = response.json()
         except requests.exceptions.RequestException as e:
-            print(f"Error fetching latest release information: {e}")
+            print(_("Error fetching latest release information:\n"),e)
             return None
         
         extension = self.get_download_extension()
@@ -589,7 +593,7 @@ class UpdatePlugin(plugin.Plugin):
             release_date = release_date.split("T")[0]
             if UpdatePlugin.startup:
                 if not _more_than_5_days_elapsed(release_date):
-                    print(_(f"There's a new release but it has not been more "
+                    print(_("There's a new release but it has not been more "
                             "than 5 days"))
                     return
         else:
@@ -600,7 +604,7 @@ class UpdatePlugin(plugin.Plugin):
         
         release_version = self.match_version(release_version)
         current_version = cmd.getVersion()
-
+        
         result = self.compare_versions(current_version, release_version)
         if result == 0:
             if not UpdatePlugin.startup:
@@ -633,7 +637,7 @@ class UpdatePlugin(plugin.Plugin):
             if download_url:
                 self.ask_to_update(release_info)
             else:
-                print(_(f'No download url was found for {release}'))
+                print(_('No download url was found for'),release)
             
         else:
             print(_('No releases found for the specified repository.'))

@@ -335,7 +335,11 @@ namespace mrv
             std::ofstream ofs(fileName);
             if (!ofs.is_open())
             {
-                LOG_ERROR(_("Failed to open the file for writing."));
+                const std::string& err =
+                    string::Format(
+                        _("Failed to open the file {0} for writing."))
+                        .arg(fileName);
+                LOG_ERROR(err);
                 return false;
             }
 
@@ -343,7 +347,10 @@ namespace mrv
 
             if (ofs.fail())
             {
-                LOG_ERROR(_("Failed to write to the file."));
+                const std::string& err =
+                    string::Format(_("Failed to write to the file {0}."))
+                        .arg(fileName);
+                LOG_ERROR(err);
                 return false;
             }
             if (ofs.bad())
@@ -374,7 +381,11 @@ namespace mrv
             std::ifstream ifs(fileName);
             if (!ifs.is_open())
             {
-                LOG_ERROR(_("Failed to open the file for reading."));
+                const std::string& err =
+                    string::Format(
+                        _("Failed to open the file {0} for reading."))
+                        .arg(fileName);
+                LOG_ERROR(err);
                 return false;
             }
 
@@ -388,7 +399,10 @@ namespace mrv
 
                 if (ifs.fail())
                 {
-                    LOG_ERROR(_("Failed to load the file."));
+                    const std::string& err =
+                        string::Format(_("Failed to load the file {0}."))
+                            .arg(fileName);
+                    LOG_ERROR(err);
                     return false;
                 }
                 if (ifs.bad())
