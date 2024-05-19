@@ -20,6 +20,7 @@
 #include <FL/Fl.H>
 
 #include "mrvCore/mrvI8N.h"
+#include "mrvCore/mrvHome.h"
 
 #include "mrvUI/mrvDesktop.h"
 
@@ -41,29 +42,28 @@ namespace mrv
             LPWSTR* newArgv = nullptr;
             std::wstring wExe;
             std::wstring wSession;
-            
+
             if (exe.empty())
             {
                 // Get the full command line string
                 LPWSTR lpCmdLine = GetCommandLineW();
-                
+
                 // Parse the command line string into an array of arguments
                 argv = CommandLineToArgvW(lpCmdLine, &argc);
-                
+
                 if (argv == nullptr)
                 {
                     wprintf(L"Failed to parse command line\n");
                     return EXIT_FAILURE;
                 }
 
-
                 // Allocate new array
                 argc = argc + 2;
-                
+
                 newArgv = new LPWSTR[argc];
                 for (int i = 0; i < argc; ++i)
                     newArgv[i] = nullptr;
-                
+
                 for (int i = 0; i < argc - 1; ++i)
                     newArgv[i] = argv[i];
             }
@@ -72,7 +72,7 @@ namespace mrv
                 wExe = std::wstring(exe.begin(), exe.end());
 
                 // Allocate new array
-                argc    = 3;
+                argc = 3;
                 newArgv = new LPWSTR[argc];
                 newArgv[0] = const_cast<LPWSTR>(wExe.c_str());
                 newArgv[1] = nullptr;
@@ -100,8 +100,9 @@ namespace mrv
             {
                 allocated[i] = false;
                 const LPWSTR arg = newArgv[i];
-                if (arg == nullptr) continue;
-                
+                if (arg == nullptr)
+                    continue;
+
                 if (wcschr(arg, L' ') != NULL)
                 {
                     // 2 for quotes, 1 for null terminator
@@ -109,7 +110,8 @@ namespace mrv
                     LPWSTR quoted_arg = (LPWSTR)malloc(len * sizeof(wchar_t));
                     if (quoted_arg == NULL)
                     {
-                        wprintf(L"Failed to allocate memory for command line\n");
+                        wprintf(
+                            L"Failed to allocate memory for command line\n");
                         return EXIT_FAILURE;
                     }
                     swprintf_s(quoted_arg, len, L"\"%s\"", arg);
@@ -119,7 +121,7 @@ namespace mrv
                     allocated[i] = true;
                 }
             }
-            
+
             // Call _wexecv
             int result;
             result = _wexecv(cmd, newArgv);
@@ -131,9 +133,9 @@ namespace mrv
                     free(newArgv[i]);
                 newArgv[i] = nullptr;
             }
-            delete [] newArgv;
-            delete [] allocated;
-            
+            delete[] newArgv;
+            delete[] allocated;
+
             if (argv)
             {
                 for (int i = 0; i < argc; i++)
@@ -162,7 +164,7 @@ namespace mrv
             }
 
             const char* const newArgv[] = {run.c_str(), session.c_str(), NULL};
-            int ret = execv(run.c_str(), (char* const*)newArgv);
+            int ret = ::execv(run.c_str(), const_cast<char**>(newArgv));
             if (ret == -1)
             {
                 perror("execv failed");
@@ -171,7 +173,7 @@ namespace mrv
 #endif
             return -1;
         }
-    
+
         std::string getGPUVendor()
         {
             std::string out = _("Unknown");
