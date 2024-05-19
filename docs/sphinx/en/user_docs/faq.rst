@@ -15,9 +15,9 @@ All Platforms
 	
 	Color Buffers' Accuracy set to Automatic (preferred) or Fast.
 
-      - Timeline
+      - Thumbnails
 
-	Preview Thumbnails off.
+	Preview Thumbnails Above Timeline off.
 
       - Playback
 
@@ -60,8 +60,12 @@ Linux
 
 	  sudo apt install libnvidia-egl-wayland1
 
-	Note that NVidia's EGL under Wayland seems buggy and may result on
-	random stopping of the playback until you move the mouse.
+	Note that NVidia's EGL under Wayland under Jammy is buggy and may
+	result on random stopping of the playback until you move the mouse.
+	To fix it, install the deb package from Ubuntu Noble::
+
+	  https://www.ubuntuupdates.org/package/core/noble/main/base/libnvidia-egl-wayland1
+	
 	If you run into that, use XWayland or log in onto X11.  To use
 	XWayland, set::
 

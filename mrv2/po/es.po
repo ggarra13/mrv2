@@ -3426,11 +3426,8 @@ msgstr "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 msgid "Cache:"
 msgstr "Cache:"
 
-msgid "    Used: %.2g of %zu Gb"
-msgstr "    Usado: %.2g of %zu Gb"
-
-msgid "    Percentage: %.2g %%"
-msgstr "    Porcentaje: %.2g %%"
+msgid "    Used: %.2g of %zu Gb (%.2g %%)"
+msgstr "    Usado: %.2g of %zu Gb (%.2g %%)"
 
 msgid "    Ahead    V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "   Adelante V: % 4<PRIu64>    A: % 4<PRIu64>"
@@ -4039,6 +4036,9 @@ msgstr "&Copiar"
 
 msgid "Everything OK. "
 msgstr "Todo Bien. "
+
+msgid "GPU: Unknown"
+msgstr "GPU: Desconocida"
 
 msgid "Elapsed"
 msgstr "Transcurrido"
@@ -6688,6 +6688,9 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
+
+#~ msgid "    Percentage: %.2g %%"
+#~ msgstr "    Porcentaje: %.2g %%"
 
 #~ msgid "IFF Picture"
 #~ msgstr "Dibujo IFF"

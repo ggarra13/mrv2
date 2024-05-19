@@ -35,14 +35,18 @@ namespace mrv
         std::string label = _("Everything OK. ");
         label += os::getDesktop();
 #ifdef TLRENDER_GL
-        label += " - " + os::getGPUVendor();
+        const std::string gpu = os::getGPUVendor();
+        label += " - " + gpu;
 #endif
+        if (gpu == _("GPU: Unknown"))
+            Fl::repeat_timeout(1.0, (Fl_Timeout_Handler)all_ok_cb, this);
+            
         copy_label(label.c_str());
     }
 
     void StatusBar::default_message()
     {
-        Fl::add_timeout(0.5, (Fl_Timeout_Handler)all_ok_cb, this);
+        Fl::add_timeout(1.0, (Fl_Timeout_Handler)all_ok_cb, this);
     }
 
     void StatusBar::save_colors()

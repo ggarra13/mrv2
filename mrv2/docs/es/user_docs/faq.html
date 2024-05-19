@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Preguntas Frecuentes &mdash; documentación de mrv2 - v1.1.6</title>
+  <title>Preguntas Frecuentes &mdash; documentación de mrv2 - v1.1.7</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=fd3f3429" />
@@ -16,7 +16,7 @@
   
         <script src="../_static/jquery.js?v=5d32c60e"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../_static/documentation_options.js?v=d3541ad6"></script>
+        <script src="../_static/documentation_options.js?v=772c9ecf"></script>
         <script src="../_static/doctools.js?v=9a2dae69"></script>
         <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="../_static/translations.js?v=efdbd0b9"></script>
@@ -111,8 +111,8 @@
 <li><p>OpenGL</p>
 <p>Precisión de Color seteado a Automático (preferido) o Rápido.</p>
 </li>
-<li><p>Línea de Tiempo</p>
-<p>Vista Previa de Miniaturas apagado.</p>
+<li><p>Miniatures</p>
+<p>Vista Previa sobre la Línea de Tiempo apagado.</p>
 </li>
 <li><p>Reproducción</p>
 <p>Auto Ocultar Barra de Pixel checked
@@ -157,10 +157,14 @@ NVidia 535 por lo menos y hacer:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="n">libnvidia</span><span class="o">-</span><span class="n">egl</span><span class="o">-</span><span class="n">wayland1</span>
 </pre></div>
 </div>
-<p>Note que el EGL de NVidia bajo Wayland parece tener un error y
-puede resultar en detenimiento aleatorio de la reproducción
-hasta que mueva el ratón.
-Si le pasa eso, use XWayland o loggese en X11.  Para usar
+<p>Note que el EGL de NVidia bajo Wayland en Ubuntu 22.04.4 LTS Jammy
+parece tener un error y puede resultar en detenimiento aleatorio de la
+reproducción hasta que mueva el ratón.
+Para arreglarlo, puede instalar el paquete .deb de Ubuntu Noble:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">ubuntuupdates</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">package</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">noble</span><span class="o">/</span><span class="n">main</span><span class="o">/</span><span class="n">base</span><span class="o">/</span><span class="n">libnvidia</span><span class="o">-</span><span class="n">egl</span><span class="o">-</span><span class="n">wayland1</span>
+</pre></div>
+</div>
+<p>Alternativamente, use XWayland o loggese en X11.  Para usar
 XWayland, setée:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">FLTK_BACKEND</span><span class="o">=</span><span class="n">x11</span>
 </pre></div>

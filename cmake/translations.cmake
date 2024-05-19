@@ -122,7 +122,7 @@ foreach( lang ${LANGUAGES} )
 	# Install plugin translation files
 	#
 	install( DIRECTORY ${ROOT_DIR}/python/plug-ins/locale/${lang}
-	    DESTINATION ${CMAKE_INSTALL_PREFIX}/python/plug-ins/locale
+	    DESTINATION python/plug-ins/locale
 	    COMPONENT applications )
 
 	    

@@ -1024,11 +1024,8 @@ namespace mrv
             const float pctCache = cache->getPercentage();
             const float usedCache = maxCache * (pctCache / 100.F);
             snprintf(
-                buf, 512, _("    Used: %.2g of %zu Gb"), usedCache, maxCache);
-            _drawText(
-                p.fontSystem->getGlyphs(buf, fontInfo), pos, lineHeight,
-                labelColor);
-            snprintf(buf, 512, _("    Percentage: %.2g %%"), pctCache);
+                buf, 512, _("    Used: %.2g of %zu Gb (%.2g %%)"),
+                usedCache, maxCache, pctCache);
             _drawText(
                 p.fontSystem->getGlyphs(buf, fontInfo), pos, lineHeight,
                 labelColor);

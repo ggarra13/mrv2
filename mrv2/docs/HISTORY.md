@@ -1,8 +1,8 @@
 v1.1.7
 ======
 
-- Made mrv2's custom file requester create thumbnails on demand when they are on
-  view.  This helps for large files like many big USD files on disk or with
+- Made mrv2's custom file requester create thumbnails on demand when they are
+  on view.  This helps for large files like many big USD files on disk or with
   RAW files which are also slow to load.
 - Fixed mrv2's custom file requester thumbnails being too high.
 - Added custom RAW and several image missing formats to mrv2's custom file
@@ -23,7 +23,11 @@ v1.1.7
 - Added what each contributor did so far for the mrv2 project.
   If you don't want to be listed as contributor, not list your email address,
   or something else, please let me know.
-- Updated update_mrv2.py script.  Tested on macOS for now.
+- Updated update_mrv2.py script.  Tested on macOS, Windows, Rocky Linux 8.9
+  and Ubuntu 22.04.4 LTS.
+- Improved translation CMake scripts.
+- Added documentation on how to get Wayland working flawylessly on Ubuntu
+  22.04.4 LTS.
   
 
 v1.1.6

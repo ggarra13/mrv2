@@ -43,8 +43,7 @@ export PYTHONPATH="${dir}/lib/python@MRV2_PYTHON_VERSION@:${dir}/lib/python@MRV2
 # For Linux, we now default to Wayland that rocks!
 #
 if [[ "$XDG_SESSION_TYPE" == "wayland" && "$FLTK_BACKEND" == "" ]]; then
-    echo "Running under Wayland.  With NVidia acceleration you may have"
-    echo "playback issues.  To run under XWayland, set:"
+    echo "To run under XWayland, set:"
     echo ""
     echo "   export FLTK_BACKEND=x11"
     echo ""

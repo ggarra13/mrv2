@@ -15,9 +15,9 @@ Todas las Plataformas
 	
 	Precisión de Color seteado a Automático (preferido) o Rápido.
 
-      - Línea de Tiempo
+      - Miniatures
 
-	Vista Previa de Miniaturas apagado.
+	Vista Previa sobre la Línea de Tiempo apagado.
 
       - Reproducción
 
@@ -60,10 +60,14 @@ Linux
 
 	  sudo apt install libnvidia-egl-wayland1
 
-	Note que el EGL de NVidia bajo Wayland parece tener un error y
-	puede resultar en detenimiento aleatorio de la reproducción
-	hasta que mueva el ratón.
-	Si le pasa eso, use XWayland o loggese en X11.  Para usar
+	Note que el EGL de NVidia bajo Wayland en Ubuntu 22.04.4 LTS Jammy
+	parece tener un error y puede resultar en detenimiento aleatorio de la
+	reproducción hasta que mueva el ratón.
+	Para arreglarlo, puede instalar el paquete .deb de Ubuntu Noble::
+	  
+	  https://www.ubuntuupdates.org/package/core/noble/main/base/libnvidia-egl-wayland1
+	
+	Alternativamente, use XWayland o loggese en X11.  Para usar
 	XWayland, setée::
 
 	  export FLTK_BACKEND=x11

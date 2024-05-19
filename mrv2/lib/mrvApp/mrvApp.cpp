@@ -1510,19 +1510,15 @@ namespace mrv
     otime::RationalTime App::_cacheReadAhead() const
     {
         TLRENDER_P();
-        const size_t activeCount = p.filesModel->observeActive()->getSize();
         double value = p.settings->getValue<double>("Cache/ReadAhead");
-        return otime::RationalTime(
-            value / static_cast<double>(activeCount), 1.0);
+        return otime::RationalTime(value, 1.0);
     }
 
     otime::RationalTime App::_cacheReadBehind() const
     {
         TLRENDER_P();
-        const size_t activeCount = p.filesModel->observeActive()->getSize();
         double value = p.settings->getValue<double>("Cache/ReadBehind");
-        return otime::RationalTime(
-            value / static_cast<double>(activeCount), 1.0);
+        return otime::RationalTime(value, 1.0);
     }
 
     void App::cacheUpdate()
