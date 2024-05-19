@@ -3,7 +3,7 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 // Debug scaling of the window to image size.
-// #define DEBUG_SCALING 1
+#define DEBUG_SCALING 1
 
 #include <memory>
 #include <cmath>
@@ -1350,6 +1350,9 @@ namespace mrv
         int dW = decW - mw->w();
         int dH = decH - mw->h();
 
+        if (dW == 0)
+            dW = 2;
+
 #ifdef DEBUG_SCALING
         std::cerr << "DECORATE SIZES " << dW << "x" << dH << std::endl;
 #endif
@@ -1376,11 +1379,11 @@ namespace mrv
             // Try to adjust sizing first, keeping the pos the same.
             if (aspectRatio > 1)
             {
-                if (posY + H + dH > minY + maxH)
+                if (posY + H > minY + maxH)
                 {
                     p.frameView = true;
                     H = minY + maxH - posY + dH;
-                    W *= aspectRatio;
+                    W /= aspectRatio;
 
 #ifdef DEBUG_SCALING
                     std::cerr << "Adjust sizing on height" << std::endl;
@@ -1389,7 +1392,7 @@ namespace mrv
             }
             else
             {
-                if (posX + W + dW / 2 > minX + maxW)
+                if (posX + W > minX + maxW)
                 {
                     p.frameView = true;
                     W = minX + maxW - posX + dW;
@@ -1440,7 +1443,7 @@ namespace mrv
             int TH = calculate_edit_viewport_size(p.ui);
             H += TH;
 
-#ifdef DEBUG_SCALING 
+#ifdef DEBUG_SCALING
             std::cerr << "Timeline Height=" << TH << std::endl;
 #endif
         }
@@ -1468,9 +1471,13 @@ namespace mrv
         //
         if (posY + H + dH > minY + maxH)
         {
-            H = minY + maxH + dH - posY;
+            H = minY + maxH + dH - posY - 1;
             p.frameView = true;
         }
+
+#ifdef DEBUG_SCALING
+        std::cerr << "First minimum W=" << W << " H=" << H << std::endl;
+#endif
 
         // Finally, if we are still failing, position the viewer at
         // minX, minY with maxW and maxH.
@@ -1486,12 +1493,16 @@ namespace mrv
         {
             p.frameView = true;
             posY = minY + dH; // dH is needed here!
-            H = maxH;
+            int offH = 0;
+#ifdef __linux__
+            offH = 4;
+#endif
+            H = maxH - offH;
         }
 
 #ifdef DEBUG_SCALING
         std::cerr << "FINAL Window=" << posX << " " << posY << " " << W << "x"
-                  << H << std::endl;
+                  << H << " dW=" << dW << " dH=" << dH << std::endl;
 #endif
         mw->resize(posX, posY, W, H);
 
