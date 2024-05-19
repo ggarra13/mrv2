@@ -68,7 +68,7 @@ def run_subprocess(command):
     except subprocess.CalledProcessError as e:
         subprocess_result = f"An error occurred: {e.stderr}"
 
-# 
+        
 def fltk_check_callback(data):
     """FLTK Function to periodically call Fl.check() and check subprocess status
 
@@ -228,10 +228,12 @@ class UpdatePlugin(plugin.Plugin):
     
     def __init__(self):
         super().__init__()
+        self.tempdir = tempfile.gettempdir()
         if settings.checkForUpdates():
             self.check_latest_release("ggarra13", "mrv2")
         UpdatePlugin.startup = False
-            
+        
+        
     def match_version(self, s):
         """Match a version in a string like v0.8.3.
         
@@ -304,7 +306,8 @@ class UpdatePlugin(plugin.Plugin):
         exe = self.get_installed_executable(download_file)
         
         try:
-            tmp = os.path.join(tempfile.gettempdir(), "/installed.mrv2s")
+            tmp = os.path.join(self.tempdir, "installed.mrv2s")
+            print(_('Saving session:',tmp)
             session.save(tmp)
             cmd.run(exe, tmp)
         except Exception as e:
@@ -337,7 +340,7 @@ class UpdatePlugin(plugin.Plugin):
         """
         global subprocess_result
         cmd = None
-        print(_('Trying to install'),download_file,'.')
+        print(_('Trying to install'),download_file + '.')
         kernel = platform.system()
         if kernel != 'Windows':
             print(_('Please wait'), end='', flush=True)
@@ -417,17 +420,33 @@ class UpdatePlugin(plugin.Plugin):
         use and return the package manager's extension to it.
 
         Returns:
-            str: The extension for the Linux flavour.
+           str: The extension for the Linux flavour, or None if undetermined.
         """
-        if os.system('which dpkg > /dev/null') == 0:
-            return '.deb'
-        elif os.system('which rpm > /dev/null') == 0:
-            return '.rpm'
-        elif os.system('which pacman > /dev/null') == 0:
-            return '.tar.gz'
-        else:
-            print(_('Unable to determine Linux flavor'))
-            return '.tar.gz'
+
+        # Prioritize checking for common package managers using subprocess.run
+        # to capture return codes and avoid potential shell injection
+        # vulnerabilities.
+
+        package_managers = [
+            ("rpm", ".rpm"),
+            ("dpkg", ".deb"),
+            ("pacman", ".pkg.tar.xz")  # Updated extension for Arch Linux
+        ]
+
+        for manager, extension in package_managers:
+            try:
+                result = subprocess.run(["which", manager],
+                                        stdout=subprocess.PIPE,
+                                        stderr=subprocess.DEVNULL)
+                if result.returncode == 0:
+                    return extension
+            except OSError:
+                # Handle potential errors during execution
+                # (e.g., missing 'which' command)
+                pass
+
+        # If common package managers not found, return None for undetermined
+        return ".tar.gz"
 
 
     def get_download_extension(self):
@@ -465,7 +484,7 @@ class UpdatePlugin(plugin.Plugin):
         Fl.check()  # Ensure UI responsiveness
 
         # Create a temporary download file path
-        download_file = os.path.join(tempfile.gettempdir(), name)
+        download_file = os.path.join(self.tempdir, name)
         
         downloaded = 0
         with open(download_file, 'wb') as f:
