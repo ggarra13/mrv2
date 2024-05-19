@@ -97,11 +97,6 @@ endif()
 #
 # Install python's requests library
 #
-if (MRV2_PYBIND11)
-    execute_process( COMMAND ${PYTHON_EXECUTABLE} -m pip install --upgrade --target ${CMAKE_INSTALL_PREFIX}/bin/Lib/site-packages requests)
-endif()
-    
-
 if(TLRENDER_NDI)
     if (WIN32)
 	install( FILES  ${TLRENDER_NDI_SDK}/bin/x64/Processing.NDI.Lib.x64.dll

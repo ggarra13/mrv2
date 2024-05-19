@@ -13,29 +13,38 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
 
+msgid ""
+"\n"
+"\n"
+"Install completed with output:\n"
+msgstr ""
+"\n"
+"\n"
+"Instalación completó con estos mensajes:\n"
+
 msgid "Removed temporary \""
-msgstr "Removí el archivo temporario \""
+msgstr "Removí temporaria \""
 
 msgid "The new version of mrv2 was installed."
 msgstr "La nueva version de mrv2 fue instalada."
 
 msgid "Could not locate mrv2 in:\n"
-msgstr "No pude localizar mrv2 en:\n"
+msgstr "No pude encontrar mrv2 en:\n"
 
 msgid "Maybe you installed it in a non-default location."
-msgstr "Tal vez lo instaló en un lugar no por defecto."
+msgstr "Tal vez lo instalaste en una ubicación especial."
 
 msgid "Something failed installing mrv2 - It is not in \""
-msgstr "Algo falló instalando mrv2 - Es no está en \""
+msgstr "Also falló instalando mrv2 - Es no está en \""
 
 msgid "Invalid ISO 8601 format provided: "
-msgstr "Formato ISO 8601 provisto inválido: "
+msgstr "Formato de fecha ISO 8601 ínvalido provisto: "
 
 msgid "No file matching"
-msgstr "Ningún archivo se parece."
+msgstr "No archivo que corresponda"
 
 msgid "was found"
-msgstr "se encontró"
+msgstr "fue encontrada"
 
 msgid "No match found"
 msgstr "No se encontró una versión que corresponda."
@@ -67,29 +76,38 @@ msgstr "Entre la Clave del Administrador"
 msgid "Password"
 msgstr "Clave"
 
-msgid "Downloading..."
-msgstr "Descargando..."
+msgid "You will need to install file"
+msgstr "Necesitarás instalar el archivo"
+
+msgid "manually."
+msgstr "manualmente."
+
+msgid "Unknown operating system"
+msgstr "Sistema operativo desconocido"
+
+msgid "Downloading "
+msgstr "Descargando "
 
 msgid "Download seems to have failed!"
-msgstr "La descarga ha fallado!"
+msgstr "¡La descarga parece haber fallado!"
 
 msgid "Current version is v"
-msgstr "La version actual es v"
+msgstr "Version actual es v"
 
 msgid "Latest version at Github is v"
 msgstr "La última version en Github es v"
 
 msgid "Released on "
-msgstr "Publicada en "
+msgstr "Publicado en "
 
 msgid "Ignore"
 msgstr "Ignorar"
 
 msgid "Error fetching latest release information:\n"
-msgstr "Error obteniendo última información de la publicación:\n"
+msgstr "Error obteniendo la última información de publicación:\n"
 
 msgid "There's a new release but it has not been more than 5 days"
-msgstr "Hay una nueva versión publicada pero no han pasado más de 5 días"
+msgstr "Hay una nueva versión pero no han pasado más de 5 días"
 
 msgid "unknown date."
 msgstr "fecha desconocida."
@@ -104,13 +122,10 @@ msgid "Upgrade"
 msgstr "Actualice"
 
 msgid "No download url was found for"
-msgstr "Ningún url para bajar fue encontrado para"
+msgstr "Ninguna dirección para bajar fue encontrada para"
 
 msgid "No releases found for the specified repository."
-msgstr "Ningún paquete encontrado para el repositorio especificado."
+msgstr "Ninguna publicación encontrada para el repositorio especificado."
 
 msgid "Help/Update mrv2"
 msgstr "Ayuda/Actualizar mrv2"
-
-#~ msgid "Unable to determine Linux flavor"
-#~ msgstr "No pude determinar el tipo de Linux"

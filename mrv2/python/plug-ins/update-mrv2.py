@@ -25,6 +25,9 @@ import os, platform, re, inspect, subprocess, sys, tempfile, threading, time
 import mrv2
 from mrv2 import cmd, plugin, session, settings
 
+#
+# pyFLTK import (don't fail if it is not installed).
+# 
 try:
     from fltk14 import *
 except Exception as e:
@@ -32,19 +35,21 @@ except Exception as e:
 
 try:
     import gettext
-    
-    locales = cmd.rootPath() + '/python/plug-ins/locales'
+
+    locale = cmd.rootPath() + '/python/plug-ins/locale'
 
     language = cmd.getLanguage()
 
     # Set the domain (name for your translations) and directory
-    translator = gettext.translation('update-mrv2', localedir=locales,
+    translator = gettext.translation('update-mrv2', localedir=locale,
                                      languages=[language])
 
     # Mark strings for translation using the _() function
     _ = translator.gettext
 except Exception as e:
     print(e)
+    print("root",root)
+    print("Looking in " + locale + '/' + language + '/LC_MESSAGES')
     def _gettext(text):
         return text
     _ = _gettext
@@ -98,7 +103,7 @@ def fltk_check_callback(data):
     if subprocess_result is None:
         Fl.repeat_timeout(1.0, fltk_check_callback, data)
     else:
-        print(f"\n\nInstall completed with output:\n{subprocess_result}")
+        print(_("\n\nInstall completed with output:\n"),subprocess_result)
         
         # On Windows, the installer runs as a background process, but it
         # locks the installer file.  We keep trying to remove it until we
@@ -314,7 +319,7 @@ class UpdatePlugin(plugin.Plugin):
             print(_('An unexpected error occurred:'),e)
             return
 
-    # Function to start the subprocess in a thread
+# Function to start the subprocess in a thread
     def start_subprocess_in_thread(self, command, download_file):
         # Start the timeout callback
         data = [ self, download_file ]
@@ -382,7 +387,7 @@ class UpdatePlugin(plugin.Plugin):
         win.show()
         while win.visible():
             Fl.check()
-
+            
 
     def install_download(self, download_file):
         """Given a download file, use the extension name to try to install it.
@@ -411,7 +416,8 @@ class UpdatePlugin(plugin.Plugin):
             command = f'{root_dir}/bin/install_dmg.sh {download_file}'
             self.install_as_admin(command, download_file)
         else:
-            print(f'You will need to install file "{download_file}" manually.')
+            print(_('You will need to install file'),download_file,
+                  _('manually.'))
             return
         
 
@@ -477,7 +483,7 @@ class UpdatePlugin(plugin.Plugin):
         elif os == 'Darwin':
             return 'amd64.dmg'
         else:
-            return 'Unknown operating system'
+            return _('Unknown operating system')
 
     def download_file(self, name, download_url):
         import requests
@@ -489,7 +495,7 @@ class UpdatePlugin(plugin.Plugin):
         # Create Progress window with Fl_Progress in it
         #
         window = Fl_Window(400, 120)
-        progress = Fl_Progress(10, 50, 380, 60, _("Downloading..."))
+        progress = Fl_Progress(10, 50, 380, 60, _("Downloading ") + name)
         progress.minimum(0)
         progress.maximum(total_size)
         progress.align(FL_ALIGN_TOP)

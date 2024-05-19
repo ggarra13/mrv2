@@ -14,6 +14,15 @@ msgstr ""
 "Generated-By: pygettext.py 1.5\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgid ""
+"\n"
+"\n"
+"Install completed with output:\n"
+msgstr ""
+"\n"
+"\n"
+"Install completed with output:\n"
+
 msgid "Removed temporary \""
 msgstr "Removed temporary \""
 
@@ -33,7 +42,7 @@ msgid "Invalid ISO 8601 format provided: "
 msgstr "Invalid ISO 8601 format provided: "
 
 msgid "No file matching"
-msgstr "No match found"
+msgstr "No file matching"
 
 msgid "was found"
 msgstr "was found"
@@ -68,8 +77,17 @@ msgstr "Enter Sudo Password"
 msgid "Password"
 msgstr "Password"
 
-msgid "Downloading..."
-msgstr "Downloading..."
+msgid "You will need to install file"
+msgstr "You will need to install file"
+
+msgid "manually."
+msgstr "manually."
+
+msgid "Unknown operating system"
+msgstr "Unknown operating system"
+
+msgid "Downloading "
+msgstr "Downloading "
 
 msgid "Download seems to have failed!"
 msgstr "Download seems to have failed!"
@@ -112,6 +130,3 @@ msgstr "No releases found for the specified repository."
 
 msgid "Help/Update mrv2"
 msgstr "Help/Update mrv2"
-
-#~ msgid "Unable to determine Linux flavor"
-#~ msgstr "Unable to determine Linux flavor"

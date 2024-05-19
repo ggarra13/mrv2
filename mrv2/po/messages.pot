@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.1.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2024-05-19 06:17-0300\n"
+"POT-Creation-Date: 2024-05-19 09:41-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2540,7 +2540,7 @@ msgstr ""
 
 #: mrvPanels/mrvImageInfoPanel.cpp:1867 mrvPanels/mrvImageInfoPanel.cpp:1879
 #: mrvWidgets/mrvVersion.cpp:995 mrvWidgets/mrvVersion.cpp:999
-#: mrvWidgets/mrvVersion.cpp:1003 mrvCore/mrvOS.cpp:179 mrvCore/mrvOS.cpp:222
+#: mrvWidgets/mrvVersion.cpp:1003 mrvCore/mrvOS.cpp:174 mrvCore/mrvOS.cpp:217
 msgid "Unknown"
 msgstr ""
 
@@ -7594,11 +7594,11 @@ msgstr ""
 msgid "@B12@C7@b@.Remote\t@B12@C7@b@.Local"
 msgstr ""
 
-#: mrvCore/mrvOS.cpp:194
+#: mrvCore/mrvOS.cpp:189
 msgid "Desktop: "
 msgstr ""
 
-#: mrvCore/mrvOS.cpp:268
+#: mrvCore/mrvOS.cpp:263
 msgid "Running on: "
 msgstr ""
 

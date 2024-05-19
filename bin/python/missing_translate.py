@@ -98,7 +98,7 @@ def search_languages(langs):
         basenames = [os.path.basename(os.path.splitext(f)[0]) for f in plugins]
         
         for plugin in basenames:
-            po_file = os.path.join(root, "python", "plug-ins", "locales",
+            po_file = os.path.join(root, "python", "plug-ins", "locale",
                                    lang, "LC_MESSAGES", plugin + ".po")
             po_files += [po_file]
         

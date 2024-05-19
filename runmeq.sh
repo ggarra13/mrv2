@@ -54,6 +54,8 @@ fi
 
 
 if [[ "$CMAKE_TARGET" == "mo" ]]; then
+
+    clean_mo_files
     
     cd $dir
 
@@ -64,6 +66,8 @@ if [[ "$CMAKE_TARGET" == "mo" ]]; then
 fi
 
 if [[ "$CMAKE_TARGET" == "package" ]]; then
+    
+    clean_mo_files
     
     cd $dir
 

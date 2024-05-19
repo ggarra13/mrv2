@@ -1660,7 +1660,7 @@ msgid "Quit mrv2"
 msgstr "Salir de mrv2"
 
 msgid "Running from "
-msgstr "Corriendo en: "
+msgstr "Corriendo desde: "
 
 msgid "Could not initialize NDI"
 msgstr "No pude inicializar NDI"

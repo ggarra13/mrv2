@@ -239,13 +239,6 @@ install( FILES python/plug-ins/update-mrv2.py
     DESTINATION python/plug-ins
     COMPONENT applications )
 
-#
-# Install plugin translation files
-#
-install( DIRECTORY python/plug-ins/locales
-    DESTINATION python/plug-ins
-    COMPONENT applications )
-
 
 #
 # Install mrv2's documentation

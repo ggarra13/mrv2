@@ -229,3 +229,16 @@ ask_to_continue()
 	exit 0
     fi
 }
+
+clean_mo_files()
+{
+    local lcdir
+    local locales_dir
+    echo ""
+    echo "Cleaning .mo files"
+    echo
+    
+    locales_dir="${BUILD_DIR}/install/share/locale/* ${BUILD_DIR}/install/python/plug-ins/locales/*"
+    
+}
+    

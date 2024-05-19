@@ -19,6 +19,7 @@
 
 #include <FL/Fl.H>
 
+#include "mrvCore/mrvEnv.h"
 #include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvHome.h"
 
@@ -36,6 +37,8 @@ namespace mrv
 
         int execv(const std::string& exe, const std::string& session)
         {
+            unsetenv("MRV2_ROOT");
+
 #ifdef _WIN32
             int argc = 2;
             LPWSTR* argv = nullptr;
@@ -83,14 +86,6 @@ namespace mrv
             {
                 wSession = std::wstring(session.begin(), session.end());
                 newArgv[1] = const_cast<LPWSTR>(wSession.c_str());
-
-                for (int i = 0; i < argc; i++)
-                {
-                    if (!newArgv[i])
-                        std::wcerr << i << ") nullptr" << std::endl;
-                    else
-                        std::wcerr << i << ") " << newArgv[i] << std::endl;
-                }
             }
 
             // Enclose argv[0] in double quotes if it contains spaces

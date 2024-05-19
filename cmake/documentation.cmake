@@ -30,7 +30,7 @@ foreach( LANGUAGE ${LANGUAGES} )
     file( REMOVE ${CONFFILE_OUT} )
 
     # Replace variables inside @@ with the current values
-    message( STATUS "Creating ${CONFFILE_OUT}..." )
+    message( DEBUG "Creating ${CONFFILE_OUT}..." )
     configure_file(${CONFFILE_IN} ${CONFFILE_OUT} @ONLY)
     
 
@@ -44,7 +44,7 @@ foreach( LANGUAGE ${LANGUAGES} )
     file( REMOVE ${DOCUMENT_OUT} )
     
     # Replace variables inside @@ with the current values
-    message( STATUS "Creating ${DOCUMENT_OUT}..." )
+    message( DEBUG "Creating ${DOCUMENT_OUT}..." )
     configure_file(${DOCUMENT_IN} ${DOCUMENT_OUT} @ONLY)
 
     # Make sure document.py is executable
