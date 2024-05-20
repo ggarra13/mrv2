@@ -33,6 +33,8 @@ v1.1.7
   22.04.4 LTS.
 - Added 120 FPS, which drops frames but it is still nice to quickly browse a
   movie.
+- Darby's Rec709 coefficients and shaders were incorrect leading to subtle
+  color shifts.  Now they are fixed.
   
 
 v1.1.6
