@@ -1,5 +1,5 @@
 # Prerequisites
-*.d
+  *.d
 
 # Compiled Object files
 *.slo
@@ -38,11 +38,12 @@ Release
 RelWithDebInfo
 doc/doxygen
 examples/mrv2
+*__pycache__
 docs/Doxygen
-mrv2/python/plug-ins/__pycache__
 mrv2/bin/environment.sh
 mrv2/share/locale
 docs/sphinx/doctrees
+docs/sphinx/*/_images
 docs/sphinx/*/_sources
 docs/sphinx/*/conf.py
 docs/sphinx/*/document.py

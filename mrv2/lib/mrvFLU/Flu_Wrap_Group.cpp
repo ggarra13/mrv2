@@ -11,37 +11,43 @@
  *
  ***************************************************************/
 
-#include <string.h>
-#include <stdio.h>
+#include <cstring>
+#include <cstdio>
+#include <cmath>
+
+#include <iostream>
+
+#include <FL/Fl_Window.H>
 
 #include "mrvFLU/Flu_Wrap_Group.h"
-
-#define MAX(x, y) ((x) > (y) ? (x) : (y))
+#include "mrvFLU/Flu_Entry.h"
 
 #define SCROLL_SIZE 15
 
-Flu_Wrap_Group ::Scrollbar ::Scrollbar(
+Flu_Wrap_Group::Scrollbar::Scrollbar(
     int x, int y, int w, int h, const char* l) :
     Fl_Scrollbar(x, y, w, h, l)
 {
 }
 
-int Flu_Wrap_Group ::Scrollbar ::handle(int event)
+int Flu_Wrap_Group::Scrollbar::handle(int event)
 {
-
-    if (event == FL_MOUSEWHEEL)
+    switch(event)
     {
+    case FL_MOUSEWHEEL:
         handle_drag(clamp(value() + linesize() * Fl::e_dy));
+        redraw();
         return 1;
+    default:
+        break;
     }
-    else
-        return Fl_Scrollbar::handle(event);
+    return Fl_Scrollbar::handle(event);
 }
 
-Flu_Wrap_Group ::Flu_Wrap_Group(int x, int y, int w, int h, const char* l) :
+Flu_Wrap_Group::Flu_Wrap_Group(int x, int y, int w, int h, const char* l) :
     Fl_Group(x, y, w, h, l),
     scrollbar(x + w - SCROLL_SIZE, y, SCROLL_SIZE, h),
-    group(x, y, w - SCROLL_SIZE, h)
+    group(x, y, w - SCROLL_SIZE, h, "GROUP IN Flu_Wrap_Group")
 {
     offset(0, 0);
     spacing(0, 0);
@@ -60,7 +66,7 @@ Flu_Wrap_Group ::Flu_Wrap_Group(int x, int y, int w, int h, const char* l) :
     group.begin();
 }
 
-void Flu_Wrap_Group ::resize(int x, int y, int w, int h)
+void Flu_Wrap_Group::resize(int x, int y, int w, int h)
 {
     group.resizable(NULL);
     Fl_Group::resize(x, y, w, h);
@@ -82,29 +88,29 @@ void Flu_Wrap_Group ::resize(int x, int y, int w, int h)
     redraw();
 }
 
-void Flu_Wrap_Group ::scroll_to(const Fl_Widget* w)
+void Flu_Wrap_Group::scroll_to(const Fl_Widget* w)
 {
     scrollTo = w;
     redraw();
 }
 
-void Flu_Wrap_Group ::scroll_to_beginning()
+void Flu_Wrap_Group::scroll_to_beginning()
 {
     ((Fl_Valuator*)&scrollbar)->value(scrollbar.minimum());
 }
 
-void Flu_Wrap_Group ::scroll_to_end()
+void Flu_Wrap_Group::scroll_to_end()
 {
     ((Fl_Valuator*)&scrollbar)->value(scrollbar.maximum());
 }
 
-void Flu_Wrap_Group ::type(int t)
+void Flu_Wrap_Group::type(int t)
 {
     _type = t;
     resize(x(), y(), w(), h());
 }
 
-Fl_Widget* Flu_Wrap_Group ::next(Fl_Widget* w)
+Fl_Widget* Flu_Wrap_Group::next(Fl_Widget* w)
 {
     for (int i = 0; i < group.children() - 1; i++)
     {
@@ -114,7 +120,7 @@ Fl_Widget* Flu_Wrap_Group ::next(Fl_Widget* w)
     return NULL;
 }
 
-Fl_Widget* Flu_Wrap_Group ::previous(Fl_Widget* w)
+Fl_Widget* Flu_Wrap_Group::previous(Fl_Widget* w)
 {
     for (int i = 1; i < group.children(); i++)
     {
@@ -124,7 +130,7 @@ Fl_Widget* Flu_Wrap_Group ::previous(Fl_Widget* w)
     return NULL;
 }
 
-Fl_Widget* Flu_Wrap_Group ::above(Fl_Widget* w)
+Fl_Widget* Flu_Wrap_Group::above(Fl_Widget* w)
 {
     for (int i = 0; i < group.children(); i++)
     {
@@ -143,7 +149,7 @@ Fl_Widget* Flu_Wrap_Group ::above(Fl_Widget* w)
     return NULL;
 }
 
-Fl_Widget* Flu_Wrap_Group ::below(Fl_Widget* w)
+Fl_Widget* Flu_Wrap_Group::below(Fl_Widget* w)
 {
     for (int i = 0; i < group.children(); i++)
     {
@@ -162,7 +168,7 @@ Fl_Widget* Flu_Wrap_Group ::below(Fl_Widget* w)
     return NULL;
 }
 
-Fl_Widget* Flu_Wrap_Group ::left(Fl_Widget* w)
+Fl_Widget* Flu_Wrap_Group::left(Fl_Widget* w)
 {
     for (int i = 0; i < group.children(); i++)
     {
@@ -181,7 +187,7 @@ Fl_Widget* Flu_Wrap_Group ::left(Fl_Widget* w)
     return NULL;
 }
 
-Fl_Widget* Flu_Wrap_Group ::right(Fl_Widget* w)
+Fl_Widget* Flu_Wrap_Group::right(Fl_Widget* w)
 {
     for (int i = 0; i < group.children(); i++)
     {
@@ -200,7 +206,7 @@ Fl_Widget* Flu_Wrap_Group ::right(Fl_Widget* w)
     return NULL;
 }
 
-int Flu_Wrap_Group ::layout(bool sbVisible, bool doScrollTo, int* measure)
+int Flu_Wrap_Group::layout(bool sbVisible, bool doScrollTo, int* measure)
 {
     int xx = x() + Fl::box_dx(box()), yy = y() + Fl::box_dy(box()),
         ww = w() - Fl::box_dw(box()), hh = h() - Fl::box_dh(box());
@@ -228,7 +234,7 @@ int Flu_Wrap_Group ::layout(bool sbVisible, bool doScrollTo, int* measure)
             c = group.child(i);
             if (!c->visible())
                 continue;
-            H = MAX(H, c->h());
+            H = std::max(H, c->h());
             if (col == 0)
                 maxH += H + _spacing[1];
             if ((X + c->w()) > maxW)
@@ -291,9 +297,9 @@ int Flu_Wrap_Group ::layout(bool sbVisible, bool doScrollTo, int* measure)
         else if (maxH > hh)
         {
             scrollbar.range(0, maxH - hh);
-            scrollbar.slider_size(
-                MAX(float(scrollbar.h() - (maxH - hh)) / float(scrollbar.h()),
-                    0.08f));
+            scrollbar.slider_size(std::max(
+                float(scrollbar.h() - (maxH - hh)) / float(scrollbar.h()),
+                0.08f));
             return 1;
         }
         else
@@ -323,7 +329,7 @@ int Flu_Wrap_Group ::layout(bool sbVisible, bool doScrollTo, int* measure)
             if (!c->visible())
                 continue;
 
-            W = MAX(W, c->w());
+            W = std::max(W, c->w());
 
             if (row == 0)
                 maxW += W + _spacing[0];
@@ -388,9 +394,9 @@ int Flu_Wrap_Group ::layout(bool sbVisible, bool doScrollTo, int* measure)
         else if (maxW > ww)
         {
             scrollbar.range(0, maxW - ww);
-            scrollbar.slider_size(
-                MAX(float(scrollbar.w() - (maxW - ww)) / float(scrollbar.w()),
-                    0.08f));
+            scrollbar.slider_size(std::max(
+                float(scrollbar.w() - (maxW - ww)) / float(scrollbar.w()),
+                0.08f));
             return 1;
         }
         else
@@ -398,7 +404,45 @@ int Flu_Wrap_Group ::layout(bool sbVisible, bool doScrollTo, int* measure)
     }
 }
 
-void Flu_Wrap_Group ::draw()
+void Flu_Wrap_Group::draw_child(Fl_Widget& widget) const
+{
+    const int not_clipped =
+        fl_not_clipped(widget.x(), widget.y(), widget.w(), widget.h());
+    Flu_Entry* e = static_cast<Flu_Entry*>(&widget);
+    if (widget.visible() && widget.type() < FL_WINDOW && not_clipped)
+    {
+        e->startRequest();
+        widget.damage(FL_DAMAGE_ALL);
+        widget.draw();
+        widget.clear_damage();
+    }
+    else
+    {
+        if (not_clipped == 0 || !widget.visible())
+            e->cancelRequest();
+    }
+}
+
+void Flu_Wrap_Group::update_child(Fl_Widget& widget) const
+{
+    const int not_clipped =
+        fl_not_clipped(widget.x(), widget.y(), widget.w(), widget.h());
+    Flu_Entry* e = static_cast<Flu_Entry*>(&widget);
+    if (widget.damage() && widget.visible() && widget.type() < FL_WINDOW &&
+        not_clipped)
+    {
+        e->startRequest();
+        widget.draw();
+        widget.clear_damage();
+    }
+    else
+    {
+        if (not_clipped == 0 || !widget.visible())
+            e->cancelRequest();
+    }
+}
+
+void Flu_Wrap_Group::draw()
 {
     // we first try to fit all children assuming no scrollbar. if they do not
     // all fit, we have to turn the scrollbar on and try again
@@ -426,9 +470,60 @@ void Flu_Wrap_Group ::draw()
         draw_box();
         draw_label();
     }
-    fl_push_clip(
-        x() + Fl::box_dx(box()), y() + Fl::box_dy(box()),
-        w() - Fl::box_dw(box()), h() - Fl::box_dh(box()));
-    draw_children();
+
+    group.init_sizes();
+    
+    Fl_Widget*const* a = array();
+
+    
+    fl_push_clip(x() + Fl::box_dx(box()),
+                 y() + Fl::box_dy(box()),
+                 w() - Fl::box_dw(box()),
+                 h() - Fl::box_dh(box()));
+
+    int c = children();
+    
+    if (damage() & ~FL_DAMAGE_CHILD)
+    { // redraw the entire thing:
+        for (int i=c; i--;)
+        {
+            Fl_Widget& o = **a++;
+            draw_child(o);
+            draw_outside_label(o);
+        }
+    }
+    else
+    {
+        // only redraw the children that need it:
+        for (int i=c; i--;) update_child(**a++);
+    }
+
+    if (scrollbar.visible())
+    {
+        scrollbar.damage(FL_DAMAGE_ALL);
+        scrollbar.draw();
+        scrollbar.clear_damage();
+    }
+    
     fl_pop_clip();
+
+}
+
+int Flu_Wrap_Group::handle(int event)
+{
+    int ret = Fl_Group::handle(event);
+    
+    switch (event)
+    {
+    case FL_ENTER:
+    case FL_LEAVE:
+    case FL_MOVE:
+    case FL_SHOW:
+        redraw();
+        ret = 1;
+        break;
+    default:
+        break;
+    }
+    return ret;
 }

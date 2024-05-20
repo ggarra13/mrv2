@@ -18,26 +18,25 @@ set( ROOT_DIR ${PROJECT_SOURCE_DIR} )
 file( MAKE_DIRECTORY "${ROOT_DIR}/po" )
 set( _absPotFile "${ROOT_DIR}/po/messages.pot" )
 
-
-
-set( mo_files ${_absPotFile} )
+set( pot_files )
+set( po_files )
+set( mo_files )
 
 
 #
 # Get all python plug-ins and create output directory for python .pot files
 #
 file(GLOB _py_plugins "${ROOT_DIR}/python/plug-ins/*.py")
-set( _potPythonPluginDir "${ROOT_DIR}/po/python/plug-ins/locales")
+set( _potPythonPluginDir "${ROOT_DIR}/po/python/plug-ins/locale")
 file(MAKE_DIRECTORY ${_potPythonPluginDir})
 
 #
 # Create a .pot file for each python plug-in
 #
 if (MRV2_PYBIND11)
-    foreach(_full_path ${_py_plugins})
-	get_filename_component(_py_plugin ${_full_path} NAME)
+    foreach(_py_plugin_full_path ${_py_plugins})
+	get_filename_component(_py_plugin ${_py_plugin_full_path} NAME)
 	get_filename_component(_py_basename ${_py_plugin} NAME_WLE)
-	message( STATUS "Creating .pot file for plug-in ${_py_plugin}")
 	set( _potFile "${_potPythonPluginDir}/${_py_basename}.pot" )
 
 	#
@@ -63,7 +62,7 @@ if (MRV2_PYBIND11)
 	endif()
     
 	set(_py_gettext_args ${_py_gettext_script}
-	    -d ${_py_basename} -o ${_potFile} ${_full_path} )
+	    -d ${_py_basename} -o ${_potFile} ${_py_plugin_full_path} )
     
 	if (NOT DEFINED _py_gettext_cmd OR
 		"${_py_gettext_cmd}" STREQUAL "")
@@ -71,10 +70,11 @@ if (MRV2_PYBIND11)
 	else()
 	    # If we have a pygettext command, create the plugin.pot file target
 	    add_custom_command(OUTPUT ${_potFile}
-		COMMAND ${CMAKE_COMMAND} -E echo ${_py_gettext_cmd} ${_py_gettext_args}
 		COMMAND ${_py_gettext_cmd} ${_py_gettext_args}
-		DEPENDS ${_fullpath}
+		DEPENDS ${_py_plugin_full_path}
+		COMMENT "Creating ${_potFile}"
 	    )
+	    list(APPEND pot_files ${_potFile})
 	endif()
     endforeach()
 endif()
@@ -84,7 +84,7 @@ endif()
 # Then, create the .po files if they don't exist and add a target for .mo files.
 #	   
 foreach( lang ${LANGUAGES} )
-
+    
     set( _moDir "${ROOT_DIR}/share/locale/${lang}/LC_MESSAGES" )
     set( _moFile "${_moDir}/mrv2-v${mrv2_VERSION}.mo" )
     set( _poDir  "${ROOT_DIR}/po" )
@@ -110,21 +110,30 @@ foreach( lang ${LANGUAGES} )
 	COMMAND msgmerge --quiet --update --backup=none ${_poFile} "${_absPotFile}"
 	COMMAND msgfmt -v "${_poFile}" -o "${_moFile}"
 	DEPENDS ${_poFile} ${_absPotFile}
+	COMMENT "Creating ${_moFile} after merging ${_poFile}"
     )
     
     #
     # Create py plugins translations
     #
     if (MRV2_PYBIND11)
-	set( _poDir "${ROOT_DIR}/po/python/plug-ins/locales/${lang}/LC_MESSAGES" )
-	set( _moDir "${ROOT_DIR}/python/plug-ins/locales/${lang}/LC_MESSAGES" )
+
+	#
+	# Install plugin translation files
+	#
+	install( DIRECTORY ${ROOT_DIR}/python/plug-ins/locale/${lang}
+	    DESTINATION python/plug-ins/locale
+	    COMPONENT applications )
+
+	    
+	set( _poDir "${ROOT_DIR}/po/python/plug-ins/locale/${lang}/LC_MESSAGES" )
+	set( _moDir "${ROOT_DIR}/python/plug-ins/locale/${lang}/LC_MESSAGES" )
 	file( MAKE_DIRECTORY "${_poDir}" ) # Recreate dir to place new .po file
 	file( MAKE_DIRECTORY "${_moDir}" ) # Recreate dir to place new .mo file
-
-	foreach(_full_path ${_py_plugins})
-	    get_filename_component(_py_plugin ${_full_path} NAME)
+	
+	foreach(_py_plugin_full_path ${_py_plugins})
+	    get_filename_component(_py_plugin ${_py_plugin_full_path} NAME)
 	    get_filename_component(_py_basename ${_py_plugin} NAME_WLE)
-	    message( STATUS "Translating py plugin ${_py_plugin} into ${lang}")
 	    set( _moFile  "${_moDir}/${_py_basename}.mo" )
 	    set( _poFile  "${_poDir}/${_py_basename}.po" )
 	    set( _potFile "${_potPythonPluginDir}/${_py_basename}.pot" )
@@ -135,12 +144,20 @@ foreach( lang ${LANGUAGES} )
 		    msginit --input=${_potFile} --no-translator --locale=${lang} --output=${_poFile} )
 	    endif()
 	
-	    add_custom_command( OUTPUT "${_moFile}"
+	    add_custom_command( OUTPUT "${_poFile}"
 		COMMAND msgmerge --lang ${lang} --quiet --update --backup=none "${_poFile}" "${_potFile}"
-		COMMAND msgfmt -v "${_poFile}" -o "${_moFile}"
-		DEPENDS ${_poFile} ${_potFile}
+		DEPENDS ${_potFile}
+		COMMENT "Creating ${_poFile} after merging ${_potFile}"
 	    )
-	
+	    
+	    add_custom_command( OUTPUT "${_moFile}"
+		COMMAND msgfmt -v "${_poFile}" -o "${_moFile}"
+		DEPENDS ${_poFile}
+		COMMENT "Creating ${_moFile}"
+	    )
+
+	    list(APPEND pot_files ${_potFile} )
+	    list(APPEND po_files ${_poFile} )
 	    list(APPEND mo_files ${_moFile} )
 	endforeach()
     endif()
@@ -151,21 +168,27 @@ endforeach()
 
 
 add_custom_target(
-    pot
-    COMMAND ${CMAKE_COMMAND} -E echo Running xgettext for pot target
+    main_pot
     COMMAND xgettext --package-name=mrv2 --package-version="v${mrv2_VERSION}" --copyright-holder="Contributors to the mrv2 Project" --msgid-bugs-address="ggarra13@gmail.com" -d mrv2 -c++ -k_ ${PO_SOURCES} -o "${_absPotFile}"
     WORKING_DIRECTORY "${ROOT_DIR}/lib"
-    # No dependency on any sources, so we don't update on any file change
-    )
+    COMMENT Running xgettext for pot target
+    #  DEPENDS mrv2  # Do not generate pot files automatically, as that messes
+    # the commits (line changes for example or gettext differences in each
+    # platform).
+)
 
-
+add_custom_target(
+    pot
+    DEPENDS ${pot_files}
+)
 
 add_custom_target(
     po
+    DEPENDS ${po_files} pot
     )
 
 
 add_custom_target(
     mo
-    DEPENDS ${mo_files}
+    DEPENDS ${mo_files} po main_pot
     )

@@ -20,10 +20,12 @@
 #include <FL/Fl_Menu_Button.H>
 #include <FL/Fl_Tile.H>
 #include <FL/Fl_Pack.H>
-#include <FL/Fl_Scroll.H>
 #include <FL/Fl_Check_Button.H>
 
 #include "mrvFLU/Flu_Button.h"
+#include "mrvFLU/Flu_Entry.h"
+#include "mrvFLU/Flu_Scroll.h"
+#include "mrvFLU/Flu_Pack.h"
 #include "mrvFLU/Flu_Return_Button.h"
 #include "mrvFLU/Flu_Wrap_Group.h"
 #include "mrvFLU/Flu_Combo_Tree.h"
@@ -509,21 +511,21 @@ public:
 
         inline static void _inputCB(Fl_Widget* w, void* arg)
         {
-            ((Entry*)arg)->inputCB();
+            ((Flu_Entry*)arg)->inputCB();
         }
         void inputCB();
 
-        inline static void _editCB(void* arg) { ((Entry*)arg)->editCB(); }
+        inline static void _editCB(void* arg) { ((Flu_Entry*)arg)->editCB(); }
         void editCB();
     };
 
-    class EntryArray : public std::vector< Entry* >
+    class EntryArray : public std::vector< Flu_Entry* >
     {
     public:
         EntryArray() {};
         ~EntryArray() {};
 
-        void push_back(Entry* e)
+        void push_back(Flu_Entry* e)
         {
             for (auto x : *this)
             {
@@ -531,7 +533,7 @@ public:
                     return;
             }
 
-            std::vector< Entry* >::push_back(e);
+            std::vector< Flu_Entry* >::push_back(e);
         }
     };
 
@@ -558,7 +560,7 @@ public:
     };
 
     friend class FileDetails;
-    class FileDetails : public Fl_Pack
+    class FileDetails : public Flu_Pack
     {
     public:
         FileDetails(int x, int y, int w, int h, Flu_File_Chooser* c);
@@ -598,18 +600,11 @@ public:
         int W1, W2, W3, W4;
     };
 
-    void createdThumbnail(
-        const int64_t id,
-        const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&
-            thumbnails,
-        ThumbnailData* data);
-
     //! Selection array in the order of elements as they were selected
     EntryArray selection;
 
     Fl_Group* getEntryGroup();
     Fl_Group* getEntryContainer();
-    std::string toTLRenderFilename(const Entry* e);
 
     void win2unix(std::string& s);
 
@@ -623,7 +618,7 @@ public:
 
     void updateLocationQJ();
 
-    void statFile(Entry* e, const char* file);
+    void statFile(Flu_Entry* e, const char* file);
 
     void addToHistory();
 
@@ -633,7 +628,7 @@ public:
 
     bool stripPatterns(std::string s, FluStringVector* patterns);
 
-    int popupContextMenu(Entry* entry);
+    int popupContextMenu(Flu_Entry* entry);
 
     std::string commonStr();
 
@@ -643,14 +638,15 @@ public:
     Fl_Group *fileGroup, *locationQuickJump;
     Fl_Menu_Button entryPopup;
     Fl_Image* defaultFileIcon;
-    Entry* lastSelected;
+    Flu_Entry* lastSelected;
     FileList* filelist;
     FileColumns* filecolumns;
     Fl_Group* fileDetailsGroup;
-    Fl_Scroll* filescroll;
+    Flu_Scroll* filescroll;
     FileDetails* filedetails;
     Flu_Button *detailNameBtn, *detailTypeBtn, *detailSizeBtn, *detailDateBtn;
-    std::string currentDir, delayedCd, rawPattern;
+    static std::string currentDir;
+    std::string delayedCd, rawPattern;
     std::string configFilename;
     std::string userHome, userDesktop, userDocs;
     std::string drives[26];

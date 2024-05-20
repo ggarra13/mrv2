@@ -12,41 +12,29 @@
 
 #include "mrvOptions/mrvFilesPanelOptions.h"
 
-#include "mrvPanelWidget.h"
+#include "mrvPanels/mrvThumbnailPanel.h"
 
 class ViewerUI;
 
 namespace mrv
 {
-
-    class FileButton;
     class FilesPanelOptions;
 
     namespace panel
     {
         using namespace tl;
-        class FilesPanel : public PanelWidget
+        class FilesPanel : public ThumbnailPanel
         {
         public:
             FilesPanel(ViewerUI* ui);
             ~FilesPanel();
 
-            void clear_controls();
             void add_controls() override;
 
             void setFilesPanelOptions(const FilesPanelOptions&);
 
             void redraw();
-
             void refresh();
-            void filesThumbnail(
-                const int64_t id,
-                const std::vector<
-                    std::pair<otime::RationalTime, Fl_RGB_Image*> >& thumbnails,
-                FileButton* w);
-
-        protected:
-            void cancel_thumbnails();
 
         private:
             MRV2_PRIVATE();

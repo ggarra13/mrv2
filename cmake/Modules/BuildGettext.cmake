@@ -41,4 +41,4 @@ ExternalProject_Add(
     BUILD_IN_SOURCE 1
 )
 
-set( Gettext GETTEXT )
+set( Gettext_DEP GETTEXT )

@@ -114,7 +114,21 @@ namespace mrv
             return time;
         }
 
-        // @todo: darby needs to provide this from timelineUI
+        const otio::Timeline* createTimelineFromString(const std::string& s)
+        {
+            auto timeline = dynamic_cast<otio::Timeline*>(
+                otio::Timeline::from_json_string(s));
+            if (!timeline)
+            {
+                LOG_ERROR("Could not crete timeline object from this "
+                          ".json string:");
+                LOG_ERROR(s);
+                return nullptr;
+            }
+            return timeline;
+        }
+
+        // \@todo: darby needs to provide this from timelineUI
         std::vector<Item*> getSelectedItems()
         {
             std::vector<Item*> out;
@@ -748,6 +762,8 @@ namespace mrv
     void edit_store_undo(TimelinePlayer* player, ViewerUI* ui)
     {
         auto timeline = player->getTimeline();
+        if (!timeline)
+            return;
         auto view = ui->uiView;
 
         makePathsAbsolute(timeline, ui);
@@ -790,6 +806,8 @@ namespace mrv
     void edit_store_redo(TimelinePlayer* player, ViewerUI* ui)
     {
         auto timeline = player->getTimeline();
+        if (!timeline)
+            return;
         auto view = ui->uiView;
         const std::string state = timeline->to_json_string();
         if (!redoBuffer.empty())
@@ -824,6 +842,8 @@ namespace mrv
         player->stop();
 
         auto timeline = player->getTimeline();
+        if (!timeline)
+            return;
         makePathsAbsolute(timeline, ui);
 
         const auto time = getTime(player);
@@ -856,6 +876,8 @@ namespace mrv
         edit_copy_frame_cb(m, ui);
 
         auto timeline = player->getTimeline();
+        if (!timeline)
+            return;
         auto tracks = timeline->tracks()->children();
 
         const auto startTime = player->timeRange().start_time();
@@ -929,6 +951,8 @@ namespace mrv
         const auto time = getTime(player);
 
         auto timeline = player->getTimeline();
+        if (!timeline)
+            return;
         auto stack = timeline->tracks();
         if (!stack)
             return;
@@ -1020,6 +1044,8 @@ namespace mrv
         player->stop();
 
         auto timeline = player->getTimeline();
+        if (!timeline)
+            return;
         const auto time = getTime(player);
         auto tracks = timeline->tracks()->children();
 
@@ -1092,6 +1118,8 @@ namespace mrv
         const auto& tracks = getTracks(player);
 
         auto timeline = player->getTimeline();
+        if (!timeline)
+            return;
 
         bool remove_undo = true;
         otio::ErrorStatus errorStatus;
@@ -1136,6 +1164,8 @@ namespace mrv
         const auto& tracks = getTracks(player);
 
         auto timeline = player->getTimeline();
+        if (!timeline)
+            return;
         auto stack = timeline->tracks();
 
         edit_store_undo(player, ui);
@@ -1181,6 +1211,8 @@ namespace mrv
         auto compositions = getTracks(player);
 
         auto timeline = player->getTimeline();
+        if (!timeline)
+            return;
 
         // Find first video clip at current time.
         int clipIndex = -1;
@@ -1235,7 +1267,7 @@ namespace mrv
 
             // Append a new audio track
             auto track = new otio::Track(
-                "Audio", otio::nullopt, otio::Track::Kind::audio);
+                "Audio", std::nullopt, otio::Track::Kind::audio);
             stack->append_child(track);
 
             modified = true;
@@ -1307,6 +1339,9 @@ namespace mrv
         auto compositions = getTracks(player);
 
         auto timeline = player->getTimeline();
+        if (!timeline)
+            return;
+
         edit_store_undo(player, ui);
 
         bool modified = false;
@@ -1377,9 +1412,12 @@ namespace mrv
         player = ui->uiView->getTimelinePlayer();
         edit_store_redo(player, ui);
 
+        const auto otioTimeline = createTimelineFromString(buffer.json);
+        if (!otioTimeline)
+            return;
+
         otio::SerializableObject::Retainer<otio::Timeline> timeline(
-            dynamic_cast<otio::Timeline*>(
-                otio::Timeline::from_json_string(buffer.json)));
+            otioTimeline);
 
         TimeRange timeRange;
         double videoRate = 0.F, sampleRate = 0.F;
@@ -1417,9 +1455,12 @@ namespace mrv
         auto stack = player->getTimeline()->tracks();
         const bool refreshCache = hasEmptyTracks(stack);
 
+        const auto otioTimeline = createTimelineFromString(buffer.json);
+        if (!otioTimeline)
+            return;
+
         otio::SerializableObject::Retainer<otio::Timeline> timeline(
-            dynamic_cast<otio::Timeline*>(
-                otio::Timeline::from_json_string(buffer.json)));
+            otioTimeline);
 
         TimeRange timeRange;
         double videoRate = 0.F, sampleRate = 0.F;
@@ -1528,7 +1569,7 @@ namespace mrv
             new otio::Timeline("EDL");
 
         auto videoTrack =
-            new otio::Track("Video", otio::nullopt, otio::Track::Kind::video);
+            new otio::Track("Video", std::nullopt, otio::Track::Kind::video);
 
         auto stack = new otio::Stack;
         stack->append_child(videoTrack);
@@ -1562,8 +1603,11 @@ namespace mrv
         bool makeRelativePaths)
     {
         const std::string& s = timeline->to_json_string();
-        otio::SerializableObject::Retainer<otio::Timeline> out(
-            dynamic_cast<otio::Timeline*>(otio::Timeline::from_json_string(s)));
+        const auto otioTimeline = createTimelineFromString(s);
+        if (!otioTimeline)
+            return;
+
+        otio::SerializableObject::Retainer<otio::Timeline> out(otioTimeline);
         makePathsAbsolute(out, App::ui);
         auto stack = out->tracks();
         if (makeRelativePaths)
@@ -1666,7 +1710,7 @@ namespace mrv
             {
                 // Append a new video track
                 track = new otio::Track(
-                    "Video", otio::nullopt, otio::Track::Kind::video);
+                    "Video", std::nullopt, otio::Track::Kind::video);
                 destStack->append_child(track);
             }
             else
@@ -1818,7 +1862,7 @@ namespace mrv
             {
                 // Append a new audio track
                 track = new otio::Track(
-                    "Audio", otio::nullopt, otio::Track::Kind::audio);
+                    "Audio", std::nullopt, otio::Track::Kind::audio);
                 destStack->append_child(track);
             }
             else
@@ -1920,12 +1964,28 @@ namespace mrv
     }
 
     void addClipToTimeline(
-        const int sourceIndex, otio::Timeline* destTimeline, ViewerUI* ui)
+        const int sourceIndex, const int destIndex,
+        otio::Timeline* destTimeline, ViewerUI* ui)
     {
         auto model = ui->app->filesModel();
-        auto destIndex = model->observeAIndex()->get();
-        model->setA(sourceIndex);
+        auto numFiles = model->observeFiles()->getSize();
 
+        if (sourceIndex < 0 || sourceIndex >= numFiles)
+        {
+            LOG_ERROR(
+                "Source index out of range" << sourceIndex
+                                            << " max=" << numFiles);
+            return;
+        }
+        if (destIndex < 0 || destIndex >= numFiles)
+        {
+            LOG_ERROR(
+                "Destination index out of range" << destIndex
+                                                 << " max=" << numFiles);
+            return;
+        }
+
+        model->setA(sourceIndex);
         auto sourceItem = model->observeA()->get();
         if (!sourceItem)
             return;
@@ -1938,12 +1998,22 @@ namespace mrv
             return;
 
         auto timeline = player->getTimeline();
+        if (!timeline)
+        {
+            LOG_ERROR("No timeline in player");
+            return;
+        }
 
         // Make a copy of the timeline, so we don't modify the original in
         // place.
         const std::string& s = timeline->to_json_string();
+        const auto otioTimeline = createTimelineFromString(s);
+        if (!otioTimeline)
+            return;
+
         otio::SerializableObject::Retainer<otio::Timeline> sourceTimeline(
-            dynamic_cast<otio::Timeline*>(otio::Timeline::from_json_string(s)));
+            otioTimeline);
+
         makePathsAbsolute(sourceTimeline, ui);
 
         model->setA(destIndex);
@@ -1958,6 +2028,8 @@ namespace mrv
             return;
 
         auto destTimeline = player->getTimeline();
+        if (!destTimeline)
+            return;
 
         auto time = getTime(player);
 
@@ -1970,7 +2042,7 @@ namespace mrv
 
         auto sourceItem = sourceItems[index];
 
-        auto destItemIndex = model->observeAIndex()->get();
+        auto destIndex = model->observeAIndex()->get();
         auto destItem = model->observeA()->get();
         if (!destItem)
         {
@@ -2034,7 +2106,7 @@ namespace mrv
 
             bool emptyTracks = hasEmptyTracks(destTimeline->tracks());
 
-            addClipToTimeline(index, destTimeline, ui);
+            addClipToTimeline(index, destIndex, destTimeline, ui);
 
             //
             // Sanity check on video and sample rate.
@@ -2054,7 +2126,7 @@ namespace mrv
             if (emptyTracks)
             {
                 model->setA(index);
-                model->setA(destItemIndex);
+                model->setA(destIndex);
             }
 
             ui->uiView->valid(0); // needed
@@ -2089,7 +2161,10 @@ namespace mrv
         if (!player)
             return;
 
-        auto& timeline = player->getTimeline();
+        auto timeline = player->getTimeline();
+        if (!timeline)
+            return;
+
         const auto& startTimeOpt = timeline->global_start_time();
         otime::RationalTime startTime(0.0, timeline->duration().rate());
         if (startTimeOpt.has_value())
@@ -2274,14 +2349,41 @@ namespace mrv
     }
 
     int calculate_edit_viewport_size(ViewerUI* ui)
-    {
-        // Some constants, as Darby does not expose this in tlRender.
-        const float pixels_unit = ui->uiTimeline->pixels_per_unit();
-        const int kTrackInfoHeight = 21 * pixels_unit;
-        const int kClipInfoHeight = 21 * pixels_unit;
+    { //
+        const timelineui::ItemOptions& options =
+            ui->uiTimeline->getItemOptions();
+
+#if 0
+        std::cerr << " trackInfo=" << options.trackInfo << std::endl;
+        std::cerr << "  clipInfo=" << options.clipInfo << std::endl;
+        std::cerr << "thumbnails=" << options.thumbnails << std::endl;
+        std::cerr << "thumbnailsHeight="
+                  << options.thumbnailHeight << std::endl;
+        std::cerr << "waveformHeight=" << options.waveformHeight << std::endl;
+        std::cerr << "      fontSize=" << options.fontSize << std::endl;
+        std::cerr << " clipRectScale=" << options.clipRectScale << std::endl;
+        std::cerr << "   transitions=" << options.transitions << std::endl;
+        std::cerr << "       markers=" << options.markers << std::endl;
+#endif
+
+        // This specifies whether to show Video Only or Video and Audio.
+        const int editView = ui->uiPrefs->uiPrefsEditView->value();
+
+        // Timeline's pixels_per_unit would get reset to 1 when timeline was
+        // hidden.
+        // const float pixels_unit = ui->uiTimeline->pixels_per_unit();
+        const float pixels_unit = ui->uiView->pixels_per_unit();
+
+        // Some constants, as Darby does not yet expose this in tlRender.
+        const int kMargin = 4;
+        const int kTrackInfoHeight = 20 + kMargin;
+        const int kClipInfoHeight = 16 + kMargin;
         const int kTransitionsHeight = 30;
         const int kAudioGapOnlyHeight = 20;
         const int kMarkerHeight = 24;
+
+        const int kVideoHeight = options.thumbnailHeight;
+        const int kAudioHeight = options.waveformHeight + kMargin;
 
         int H = kMinEditModeH; // timeline height
         if (editMode == EditMode::kTimeline)
@@ -2293,22 +2395,15 @@ namespace mrv
         if (!player)
             return H;
 
-        const Fl_Tile* tile = ui->uiTileGroup;
-        const int tileH = tile->h(); // Tile Height (ie. View and Edit viewport)
-
+        // Accumulated variables counting total height of each track.
         int videoHeight = 0;
         int audioHeight = 0;
         int markersHeight = 0;
         int transitionsHeight = 0;
 
-        const int editView = ui->uiPrefs->uiPrefsEditView->value();
-
-        // Shift the view up to see the video thumbnails and audio waveforms
-        const double pixelRatio = ui->uiTimeline->pixels_per_unit();
-        const int maxTileHeight = tileH - 20;
-        const timelineui::ItemOptions options =
-            ui->uiTimeline->getItemOptions();
         auto timeline = player->getTimeline();
+        if (!timeline)
+            return H;
 
         // Check first if the timeline is an audio only timeline.
         bool audioOnly = true;
@@ -2336,7 +2431,7 @@ namespace mrv
                     if (options.clipInfo)
                         videoHeight += kClipInfoHeight;
                     if (options.thumbnails)
-                        videoHeight += options.thumbnailHeight;
+                        videoHeight += kVideoHeight / pixels_unit;
                     visibleTrack = true;
                 }
                 else if (
@@ -2349,9 +2444,9 @@ namespace mrv
                             audioHeight += kTrackInfoHeight;
                         if (options.clipInfo)
                             audioHeight += kClipInfoHeight;
-                        bool hasWaveform = false;
                         if (options.thumbnails)
                         {
+                            bool hasWaveform = false;
                             for (const auto& trackChild : track->children())
                             {
                                 if (const auto& clip =
@@ -2362,11 +2457,12 @@ namespace mrv
                                     break;
                                 }
                             }
+                            if (hasWaveform)
+                                audioHeight += kAudioHeight / pixels_unit;
+                            else
+                                audioHeight +=
+                                    kAudioGapOnlyHeight / pixels_unit;
                         }
-                        if (hasWaveform)
-                            audioHeight += options.waveformHeight;
-                        else
-                            audioHeight += kAudioGapOnlyHeight;
 
                         visibleTrack = true;
                     }
@@ -2400,8 +2496,25 @@ namespace mrv
                         if (const auto& transition =
                                 dynamic_cast<otio::Transition*>(child.value))
                         {
-                            found = true;
-                            break;
+                            bool visibleTrack = false;
+                            if (otio::Track::Kind::video == track->kind())
+                            {
+                                visibleTrack = true;
+                            }
+                            else if (
+                                otio::Track::Kind::audio == track->kind() &&
+                                (editView >= 1 || audioOnly))
+                            {
+                                if (track->children().size() > 0)
+                                {
+                                    visibleTrack = true;
+                                }
+                            }
+                            if (visibleTrack)
+                            {
+                                found = true;
+                                break;
+                            }
                         }
                     }
                     if (found)
@@ -2412,8 +2525,24 @@ namespace mrv
             }
         }
 
-        H += (videoHeight + audioHeight + markersHeight + transitionsHeight) /
-             pixelRatio;
+        // Now add up all heights divided by the pixels unit.
+        H += videoHeight + audioHeight + markersHeight + transitionsHeight;
+
+#if 0
+        std::cerr << "    kMargin=" << kMargin << std::endl;
+        std::cerr << "videoHeight=" << videoHeight << std::endl;
+        std::cerr << "audioHeight=" << audioHeight << std::endl;
+        std::cerr << "transitionsHeight=" << transitionsHeight << std::endl;
+        std::cerr << "markersHeight=" << markersHeight << std::endl;
+        std::cerr << "FINAL H=" << H << std::endl;
+#endif
+
+        // Sanity check... make sure we don't go bigger than the max.
+        const Fl_Tile* tile = ui->uiTileGroup;
+        const int tileH = tile->h();
+        // Shift the view up to see the video thumbnails and audio waveforms.
+        // We need to substrac dragbar and timeline to leave room.
+        const int maxTileHeight = tileH - kMinEditModeH;
 
         if (H >= maxTileHeight)
         {
@@ -2422,16 +2551,23 @@ namespace mrv
         return H;
     }
 
-    void set_edit_mode_cb(EditMode mode, ViewerUI* ui)
+    void set_edit_button(EditMode mode, ViewerUI* ui)
     {
-        if (ui->uiView->getPresentationMode())
-            return;
+        const int kDragBarHeight = 8;
 
         Fl_Button* b = ui->uiEdit;
 
         bool active = (mode == EditMode::kFull || mode == EditMode::kSaved);
         if (mode == EditMode::kSaved && editModeH == kMinEditModeH)
             active = false;
+
+        if (active)
+        {
+            int savedH = calculate_edit_viewport_size(ui);
+            int H = ui->uiTimelineGroup->h();
+            if (H == kMinEditModeH || !ui->uiTimelineGroup->visible())
+                active = false;
+        }
 
         b->value(active);
         if (active)
@@ -2443,57 +2579,140 @@ namespace mrv
             b->labelcolor(FL_FOREGROUND_COLOR);
         }
         b->redraw();
+    }
 
-        Fl_Tile* tile = ui->uiTileGroup;
-        Fl_Group* timeline = ui->uiTimelineGroup;
-        Fl_Flex* view = ui->uiViewGroup;
-        int tileY = tile->y();
-        int oldY = timeline->y();
-        int timelineH = timeline->h();
-        int tileH = tile->h();
+    void set_edit_mode_cb(EditMode mode, ViewerUI* ui)
+    {
+        const int kDragBarHeight = 8;
+
+        Fl_Tile* tileGroup = ui->uiTileGroup;
+        Fl_Group* TimelineGroup = ui->uiTimelineGroup;
+        Fl_Flex* viewGroup = ui->uiViewGroup;
+        if (ui->uiBottomBar->visible())
+        {
+            if (!tileGroup->visible())
+                tileGroup->show();
+            if (!viewGroup->visible())
+                viewGroup->show();
+        }
+
+        int tileGroupY = tileGroup->y();
+        int oldY = TimelineGroup->y();
+        int timelineH = TimelineGroup->h();
+        int tileGroupH = tileGroup->h();
         int H = kMinEditModeH; // timeline height
-        int viewH = H;
-        bool showTimeline = ui->uiMain->visible() && mode != EditMode::kNone;
+        int viewGroupH = H;
         auto player = ui->uiView->getTimelinePlayer();
         if (mode == EditMode::kFull && player)
         {
-            if (showTimeline)
-                timeline->show();
             editMode = mode;
             H = calculate_edit_viewport_size(ui);
-            editModeH = viewH = H;
+            editModeH = viewGroupH = H;
         }
         else if (mode == EditMode::kSaved)
         {
-            H = viewH = editModeH;
-            if (showTimeline)
-                timeline->show();
+            H = viewGroupH = editModeH;
         }
         else if (mode == EditMode::kNone)
         {
-            viewH = 0;
-            ui->uiTimeline->hide();
-            timeline->hide();
+            // \@note:  When going to presentation mode, we set the timeline
+            //          mode to None.  We calculate the viewGroupH (height),
+            //          but we must not calculate H as 0, as that would collapse
+            //          the timeline and can crash the X11 server.
+            viewGroupH = 0;
         }
         else
         {
             H = kMinEditModeH; // timeline height
-            viewH = editModeH = H;
-
-            // EditMode::kTimeline
-            if (showTimeline)
-                timeline->show();
+            viewGroupH = editModeH = H;
         }
 
-        if (showTimeline)
-            ui->uiTimeline->show();
+        int oldy = TimelineGroup->y();
+        int newY = tileGroupY + tileGroupH - H;
+        viewGroupH = tileGroupH - viewGroupH;
 
-        int newY = tileY + tileH - H;
+#if 0
+        std::cerr << "1 TimelineGroup->visible()="
+                  << TimelineGroup->visible() << std::endl;
+        std::cerr << "editMode=" << editMode << std::endl;
+        std::cerr << "tileGroupY=" << tileGroupY << std::endl;
+        std::cerr << " oldY=" << oldY - tileGroupY << std::endl;
+        std::cerr << " newY=" << newY - tileGroupY << std::endl;
+        std::cerr << "tileGroupH=" << tileGroupH << std::endl;
+        std::cerr << "    H=" << H << std::endl;
+        assert( viewGroupH + H == tileGroupH );
+        assert( viewGroup->y() + viewGroupH == newY );
+#endif
 
-        view->resize(view->x(), view->y(), view->w(), tileH - viewH);
-        if (timeline->visible())
-            timeline->resize(timeline->x(), newY, timeline->w(), H);
+        // \@note: We do a resize instead of a move_intersection as:
+        //         it is faster and we must avoid collapsing the timeline group
+        //         to 0 when going into presentation mode (we internally keep
+        //         it as kMinEditModeH.
+        viewGroup->resize(
+            viewGroup->x(), viewGroup->y(), viewGroup->w(), viewGroupH);
+        TimelineGroup->resize(TimelineGroup->x(), newY, TimelineGroup->w(), H);
 
+#if 0
+        std::cerr << "2 TimelineGroup->visible()="
+                  << TimelineGroup->visible() << std::endl;
+        std::cerr << "2 TimelineGroup->x()="
+                  << TimelineGroup->x() << std::endl;
+        std::cerr << "2 TimelineGroup->y()="
+                  << TimelineGroup->y() << std::endl;
+        std::cerr << "2 TimelineGroup->w()="
+                  << TimelineGroup->w() << std::endl;
+        std::cerr << "2 TimelineGroup->h()="
+                  << TimelineGroup->h() << std::endl;
+#endif
+
+        viewGroup->layout();
+        tileGroup->init_sizes();
+
+        // \@bug:
+        // This mess is to work around macOS issues.  Unhiding TimelineGroup
+        // should be enough to also unhide the timeline, but it seemed not
+        // to work on macOS.
+#if 0
+        if (ui->uiBottomBar->visible())
+        {
+            TimelineGroup->show();
+        }
+        else if (ui->uiMain->visible())
+        {
+            TimelineGroup->hide();
+        }
+#else
+        if (ui->uiMain->visible())
+        {
+            if (ui->uiBottomBar->visible())
+            {
+                if (!ui->uiTimelineGroup->visible())
+                    TimelineGroup->show();
+                if (!ui->uiTimeline->visible())
+                {
+                    ui->uiTimeline->show();
+                }
+            }
+            else
+            {
+                if (ui->uiTimelineGroup->visible())
+                    TimelineGroup->hide();
+                if (ui->uiTimeline->visible())
+                {
+                    ui->uiTimeline->hide();
+                }
+            }
+        }
+#endif
+
+        // This is needed as XWayland and Wayland would leave traces of the
+        // toolbar icons.
+        TimelineGroup->redraw();
+
+        // Change the edit button status
+        set_edit_button(editMode, ui);
+
+        // EditMode::kNone is used when we go to presentation mode.
         if (mode != EditMode::kNone)
         {
             Message msg;
@@ -2502,12 +2721,6 @@ namespace mrv
             msg["height"] = H;
             tcp->pushMessage(msg);
         }
-
-        view->layout();
-        tile->init_sizes();
-
-        if (timeline->visible())
-            timeline->redraw(); // needed
     }
 
 } // namespace mrv

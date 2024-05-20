@@ -12,8 +12,9 @@
 #include <tlGL/Init.h>
 #include <tlGL/Util.h>
 
-// mrViewer includes
+// mrViewer .fl includes
 #include "mrViewer.h"
+#include "mrvHotkeyUI.h"
 
 #include "mrvCore/mrvColorSpaces.h"
 #include "mrvCore/mrvLocale.h"
@@ -24,6 +25,8 @@
 
 #include "mrvFl/mrvIO.h"
 #include "mrvFl/mrvTimelinePlayer.h"
+
+#include "mrvUI/mrvDesktop.h"
 
 #include "mrvGL/mrvGLViewportPrivate.h"
 #include "mrvGL/mrvGLDefines.h"
@@ -223,6 +226,7 @@ namespace mrv
                     break;
                 case kAccuracyAuto:
                     if (!p.videoData[0].layers.empty() &&
+                        p.videoData[0].layers[0].image &&
                         p.videoData[0].layers[0].image->isValid())
                     {
                         const auto& pixelType =
@@ -360,22 +364,25 @@ namespace mrv
 
         if (!p.presentation)
         {
-            uint8_t ur, ug, ub;
-            Fl::get_color(p.ui->uiPrefs->uiPrefsViewBG->color(), ur, ug, ub);
+            Fl_Color c = p.ui->uiPrefs->uiPrefsViewBG->color();
+
+            uint8_t ur = 0, ug = 0, ub = 0, ua = 0;
+            Fl::get_color(c, ur, ug, ub, ua);
             r = ur / 255.0f;
             g = ug / 255.0f;
             b = ub / 255.0f;
+            a = ua / 255.0f;
 
-#ifdef FLTK_USE_WAYLAND
-            if (fl_wl_display())
+            if (desktop::Wayland())
             {
                 p.ui->uiViewGroup->color(fl_rgb_color(ur, ug, ub));
                 p.ui->uiViewGroup->redraw();
             }
-#endif
         }
         else
         {
+            // Hide the cursor if in presentation time after 3 seconds of
+            // inactivity.
             auto time = std::chrono::high_resolution_clock::now();
             auto elapsedTime =
                 std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -383,7 +390,18 @@ namespace mrv
                     .count();
             if (elapsedTime >= 3000)
             {
-                window()->cursor(FL_CURSOR_NONE);
+                // If user is changing preferences or hotkeys, keep
+                // the default cursor.
+                if (p.ui->uiPrefs->uiMain->visible() ||
+                    p.ui->uiHotkey->uiMain->visible() ||
+                    p.ui->uiAbout->uiMain->visible())
+                {
+                    window()->cursor(FL_CURSOR_DEFAULT);
+                }
+                else
+                {
+                    window()->cursor(FL_CURSOR_NONE);
+                }
                 p.presentationTime = time;
             }
         }

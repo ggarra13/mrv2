@@ -79,14 +79,19 @@ include(InstallRequiredSystemLibraries)
 #
 # Extract python version
 #
-string( REGEX MATCH "^[0-9]+\\.[0-9]+" MRV2_PYTHON_VERSION "${PYTHON_VERSION}" )
-
+string( REGEX MATCH "^[0-9]+\\.[0-9]+" MRV2_PYTHON_VERSION "${Python_VERSION}" )
+    
 if (UNIX AND BUILD_PYTHON)
+    if(NOT MRV2_PYTHON_VERSION OR MRV2_PYTHON_VERSION STREQUAL "")
+	message(FATAL_ERROR "Could not detect python version from "
+	    "${Python_VERSION}")
+    endif()
+
     set( MRV2_PYTHON_LIBS ${CMAKE_INSTALL_PREFIX}/lib/python${MRV2_PYTHON_VERSION} )
     if (MRV2_PYFLTK)
 	# Get rid of the pyFLTK demos as they don't work properly on an
 	# embedded python
-	file( REMOVE_RECURSE ${CMAKE_INSTALL_PREFIX}/lib/python${MRV2_PYTHON_VERSION}/site-packages/fltk14/test )
+	file( REMOVE_RECURSE ${MRV2_PYTHON_LIBS}/site-packages/fltk14/test )
     endif()
     install( DIRECTORY ${MRV2_PYTHON_LIBS}
         DESTINATION lib
@@ -97,16 +102,6 @@ endif()
 #
 # Install python's requests library
 #
-if (MRV2_PYBIND11)
-    execute_process( COMMAND ${PYTHON_EXECUTABLE} -m pip install --upgrade pip)
-    if(UNIX)
-	execute_process( COMMAND ${PYTHON_EXECUTABLE} -m pip install --target ${CMAKE_INSTALL_PREFIX}/lib/python${MRV2_PYTHON_VERSION}/site-packages --upgrade requests)
-    else()
-	execute_process( COMMAND ${PYTHON_EXECUTABLE} -m pip install --upgrade --target ${CMAKE_INSTALL_PREFIX}/bin/Lib/site-packages requests)
-    endif()
-endif()
-    
-
 if(TLRENDER_NDI)
     if (WIN32)
 	install( FILES  ${TLRENDER_NDI_SDK}/bin/x64/Processing.NDI.Lib.x64.dll

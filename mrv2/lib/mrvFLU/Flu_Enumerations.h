@@ -56,3 +56,34 @@ enum {
     FLU_NEW_NODE,
     FLU_NOTHING
 };
+
+
+#define DEFAULT_ENTRY_WIDTH 235
+
+//! File entry type
+enum {
+    ENTRY_NONE = 1,     /*!< An empty (or non-existant) entry */
+    ENTRY_DIR = 2,      /*!< A directory entry */
+    ENTRY_FILE = 4,     /*!< A file entry */
+    ENTRY_FAVORITE = 8, /*!< A favorite entry */
+    ENTRY_DRIVE = 16,   /*!< An entry that refers to a disk drive */
+    ENTRY_MYDOCUMENTS =
+    32, /*!< The entry referring to the current user's documents */
+    ENTRY_MYCOMPUTER =
+    64, /*!< The entry referring to "My Computer" in Windows */
+    ENTRY_SEQUENCE = 128 /*!< The entry referring to a sequence of frames */
+};
+
+
+//! Chooser type
+enum class ChooserType {
+    SINGLE = 0,    /*!< Choose a single file or directory */
+    MULTI = 1,     /*!< Choose multiple files or directories */
+    DIRECTORY = 4, /*!< Choose directories (choosing files is implicit if
+                     this bit is clear) */
+    DEACTIVATE_FILES = 8, /*!< When choosing directories, also show the
+                            files in a deactivated state */
+    SAVING = 16, /*!< When choosing files, whether to keep the current
+                   filename always in the input area */
+    STDFILE = 32 /*!< Choose both files and directories at the same time */
+};

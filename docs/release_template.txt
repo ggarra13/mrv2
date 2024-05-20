@@ -3,6 +3,12 @@ mrv2 v1.1.6
 
 mrv2 is an open source professional player and review tool for vfx, animation and computer graphics for Windows, Linux and macOS.
 
+This is a major update, improving reverse playback on ALL movies completely beating OpenRV now, fixes NDI playback with audio, added Cache display to the HUD, adds showing .otio markers properly, many fixes to Presentation Mode, and many, many bug fixs. 
+
+Sample mrv2 1.1.6 vs. OpenRV 2.0 Movie comparisons:
+
+https://youtu.be/ei8Uq8SbB_M
+https://youtu.be/LazhfJ8R590
 
 Main Web page:
 https://mrv2.sourceforge.io
@@ -14,13 +20,14 @@ https://sourceforge.net/projects/mrv2/files/
 Source code and build instructions:
 https://www.github.com/ggarra13/mrv2
 
+
 #player #movie #flipbook #usd #openusd #opentimelineio #mrv2 #mrViewer #mrViewer2 #vp9 #av1 #h264 #mp4 #mov #avi #webm #prores #prores4444 #cfhd #cineform #gopro #vpx #vfx #vr #animation #games #filmmaking #opensource #environmentmaps #stereo #windows #macos #linux
 
 
 -------------------------------------------------------------------------------
 
 
-mrv2 v1.1.5
+mrv2 v1.1.6
 
 mrv2, an open source professional player and review tool for vfx, animation and computer graphics for Windows, Linux and macOS has a new version.
 

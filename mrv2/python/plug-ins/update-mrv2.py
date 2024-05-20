@@ -4,37 +4,140 @@
 
 
 #
+# Current github constants
+#
+GITHUB_ASSET_NAME = 'name'
+GITHUB_ASSET_TAG  = 'tag_name'
+GITHUB_ASSET_DATE = 'published_at'
+GITHUB_ASSET_URL = 'browser_download_url'
+
+GITHUB_ASSET_RELEASE_DAYS = 5
+
+    
+#
 # Standard libs
 #
-import os, platform, re, tempfile, subprocess, sys, time
+import os, platform, re, inspect, subprocess, sys, tempfile, threading, time
 
 #
 # mrv2 imports
 #
 import mrv2
-from mrv2 import cmd, plugin, settings
+from mrv2 import cmd, plugin, session, settings
+
+#
+# pyFLTK import (don't fail if it is not installed).
+# 
+try:
+    from fltk14 import *
+except Exception as e:
+    pass
 
 try:
     import gettext
-    
-    locales = cmd.rootPath() + '/python/plug-ins/locales'
+
+    locale = cmd.rootPath() + '/python/plug-ins/locale'
 
     language = cmd.getLanguage()
 
     # Set the domain (name for your translations) and directory
-    translator = gettext.translation('update-mrv2', localedir=locales,
+    translator = gettext.translation('update-mrv2', localedir=locale,
                                      languages=[language])
 
     # Mark strings for translation using the _() function
     _ = translator.gettext
 except Exception as e:
     print(e)
+    print("root",root)
+    print("Looking in " + locale + '/' + language + '/LC_MESSAGES')
     def _gettext(text):
         return text
     _ = _gettext
 
+# Global variable to store the result of the subprocess
+subprocess_result = None
+install_progress  = 0
 
+def run_subprocess(command):
+    """
+    Run a command trapping stderr and stdout.
 
+    Returns:
+        int: Exit code of the process.
+    """
+    global subprocess_result
+    try:
+        result = subprocess.run(command, shell=True,
+                                check=True, capture_output=True, text=True)
+        subprocess_result = result.stdout
+    except subprocess.CalledProcessError as e:
+        subprocess_result = f"An error occurred: {e.stderr}"
+
+        
+def fltk_check_callback(data):
+    """FLTK Function to periodically call Fl.check() and check subprocess status
+
+    Args:
+        data (list): [self, download_file]
+
+    Returns:
+        None
+
+    """
+
+    global subprocess_result, install_progress
+    this = data[0]
+    download_file = data[1]
+
+    #
+    # Linux and Darwin have automatic installers
+    #
+    kernel = platform.system()
+    if kernel != 'Windows':
+        print('.', end='', flush=True)
+        install_progress += 1
+        if install_progress > 40:
+            print()
+            install_progress = 0
+            Fl.check()
+    if subprocess_result is None:
+        Fl.repeat_timeout(1.0, fltk_check_callback, data)
+    else:
+        print(_("\n\nInstall completed with output:\n"),subprocess_result)
+        
+        # On Windows, the installer runs as a background process, but it
+        # locks the installer file.  We keep trying to remove it until we
+        # can, which means the installer finished
+        if kernel == 'Windows':
+            time.sleep(10) # Wait for the installer to start
+            while os.path.exists(download_file):
+                try:
+                    os.remove(download_file)
+                    print(_('Removed temporary "') + download_file + '".')
+                    Fl.check()
+                except:
+                    time.sleep(2) # Wait 2 seconds before trying again. 
+                    pass
+
+        exe = this.get_installed_executable(download_file)
+        if os.path.exists(exe):
+            print(_('The new version of mrv2 was installed.'))
+            Fl.check()
+            if os.path.exists(download_file):
+                os.remove(download_file)
+                print(_('Removed temporary "') + download_file + '".')
+                Fl.check()
+            this.start_new_mrv2(download_file, kernel)
+        else:
+            if kernel == 'Windows':
+                print(_('Could not locate mrv2 in:\n') + exe + '.\n' +
+                      _('Maybe you installed it in a non-default location.'))
+                return
+            print(_('Something failed installing mrv2 - It is not in "'),
+                  exe,'"')
+
+        subprocess_result = None  # Reset for next run
+        
 def _get_password_cb(widget, args):
     """FLTK callback to get the secret password, hide the parent window and
     run the command to install the downloaded file with the sudo password.
@@ -49,7 +152,7 @@ def _get_password_cb(widget, args):
     password = widget.value()
     widget.parent().hide()
     Fl.check()
-    this.run_as_admin(command, download_file, password)
+    this.install_as_admin(command, download_file, password)
 
 
 def _ignore_cb(widget, args):
@@ -63,35 +166,60 @@ def _ignore_cb(widget, args):
     Returns:
         None
     """
-    from fltk14 import Fl
     widget.parent().hide()
     Fl.check()
+    
+
+def _more_than_5_days_elapsed(release_date_iso):   
+    """Compares the release date with the current date and returns True if
+    more than 5 days have elapsed.  This is used for automatic updates to
+    leave a buffer in case some critical bugs in a release are found.
         
+    Args:
+        release_date_iso (str): The release date in ISO 8601 format 
+                                (YYYY-MM-DD).
+
+    Returns:
+        bool: True if more than 5 days have passed, False otherwise.
+    """
+    try:
+        from datetime import datetime, timedelta
+        # Parse the release date string into a datetime object
+        release_date = datetime.fromisoformat(release_date_iso)
+
+        # Get today's date
+        today = datetime.utcnow().date()
+
+        # Calculate the difference in days between release date and today
+        time_elapsed = today - release_date.date()
+
+        # Check if more than 5 days have passed
+        return time_elapsed.days > GITHUB_ASSET_RELEASE_DAYS
+    except ValueError:
+        print(_("Invalid ISO 8601 format provided: "),release_date_iso)
+        return False
+
 def _get_latest_release_cb(widget, args):
     """FLTK callback to start the download of the latest release for
     the current platform.  Hides the widget's parent window when done.
 
     Args:
         widget (Fl_Widget): FLTK widget that triggered the callback
-        args (list): [self, github data for the latest release in a map.]
+        args (list): [self, release_info for the latest release in a map.]
 
     Returns:
         None
     """
-    from fltk14 import Fl
     this = args[0]
-    data = args[1]
+    release_info = args[1]
     extension = this.get_download_extension()
     widget.parent().hide()
     Fl.check()
     found = False
-    for asset in data['assets']:
-        name = asset['name']
-        if name.endswith(extension):
-            this.download_version(name, asset['browser_download_url'])
-            found = True
-            break
-    if not found:
+    name = release_info['name']
+    if name.endswith(extension):
+        this.download_file(name, release_info['download_url'])
+    else:
         print(_('No file matching'),extension,_('was found'))
 
 
@@ -105,10 +233,12 @@ class UpdatePlugin(plugin.Plugin):
     
     def __init__(self):
         super().__init__()
+        self.tempdir = tempfile.gettempdir()
         if settings.checkForUpdates():
             self.check_latest_release("ggarra13", "mrv2")
         UpdatePlugin.startup = False
-    
+        
+        
     def match_version(self, s):
         """Match a version in a string like v0.8.3.
         
@@ -150,9 +280,9 @@ class UpdatePlugin(plugin.Plugin):
                 value, reg_type = winreg.QueryValueEx(key, '')
                 exe = f'{value[:-5]}'
                 exe = exe.replace('\\', '/')
-                print(_('Install Location:'),exe)
+                print(_('Install Location: ') + exe)
             except WindowsError as e:
-                print(_('Error retrieving value:'),e)
+                print(_('Error retrieving value:\n'),e)
             finally:
                 # Always close the opened key
                 winreg.CloseKey(key)
@@ -161,45 +291,17 @@ class UpdatePlugin(plugin.Plugin):
             # Look for default install locations
             #
             if not os.path.exists(exe):
-                exe = f'C:/Program Files/mrv2-v{version}/bin/mrv2.exe'
+                exe = f'"C:/Program Files/mrv2-v{version}/bin/mrv2.exe"'
             if not os.path.exists(exe):
-                exe = f'C:/Program Files/mrv2 v{version}/bin/mrv2.exe'
+                exe = f'"C:/Program Files/mrv2 v{version}/bin/mrv2.exe"'
             if not os.path.exists(exe):
-                exe = f'C:/Program Files/mrv2 {version}/bin/mrv2.exe'
+                exe = f'"C:/Program Files/mrv2 {version}/bin/mrv2.exe"'
         elif kernel == 'Darwin':
             exe = f'/Applications/mrv2.app/Contents/MacOS/mrv2'
         else:
             print(_('Unknown platform'),kernel)
         return exe
-        
-    def run_command(self, cmd):
-        """
-        Run a command trapping stderr and stdout.
-
-        Returns:
-          int: Exit code of the process.
-        """
-        # Don't print out the command as that will print out the sudo password
-        print('Running:\n',cmd)
-        
-        # Run the command and capture stdout, stderr, and the exit code
-        process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE,
-                                   stderr=subprocess.PIPE)
-        
-        # Wait for the command to complete
-        stdout, stderr = process.communicate()
-
-        # Get the exit code
-        exit_code = process.returncode
-
-        # Print or handle the captured stdout and stderr
-        print(_("Standard Output:"))
-        print(stdout.decode('utf-8'))
-
-        print(_("Standard Error:"))
-        print(stderr.decode('utf-8'))
-
-        return exit_code
+    
 
     def start_new_mrv2(self, download_file, kernel):
         """Given a download_file and a platform, create the path to the new
@@ -207,19 +309,25 @@ class UpdatePlugin(plugin.Plugin):
         """
         version = self.match_version(download_file)
         exe = self.get_installed_executable(download_file)
-        if kernel == 'Windows':
-            quoted_exe = f'"{exe}"'
-        else:
-            quoted_exe = exe
-
+        
         try:
-            print(_('Starting'),exe,'...')
-            os.execv(exe, [quoted_exe])
+            tmp = os.path.join(self.tempdir, "installed.mrv2s")
+            print(_('Saving session:'), tmp)
+            session.save(tmp)
+            cmd.run(exe, tmp)
         except Exception as e:
             print(_('An unexpected error occurred:'),e)
             return
 
-    def run_as_admin(self, command, download_file, password = None):
+# Function to start the subprocess in a thread
+    def start_subprocess_in_thread(self, command, download_file):
+        # Start the timeout callback
+        data = [ self, download_file ]
+        Fl.add_timeout(4.0, fltk_check_callback, data)
+        threading.Thread(target=run_subprocess, args=(command,)).start()
+
+                         
+    def install_as_admin(self, command, download_file, password = None):
         """Given a command, a download file, and an optional password,
         install the download_file by running the command using the provided
         password if needed.
@@ -235,10 +343,13 @@ class UpdatePlugin(plugin.Plugin):
         Returns:
             None
         """
+        global subprocess_result
         cmd = None
-        print(_('Trying to install'),download_file,'...')
-        Fl.check()
+        print(_('Trying to install'),download_file + '.')
         kernel = platform.system()
+        if kernel != 'Windows':
+            print(_('Please wait'), end='', flush=True)
+            Fl.check()
         if kernel == 'Windows':
             cmd = r'Powershell -Command Start-Process "' + command + '" -Verb RunAs'
         elif kernel == 'Linux':
@@ -252,45 +363,7 @@ class UpdatePlugin(plugin.Plugin):
             print(_('Unknown platform'))
             return
 
-        ret = self.run_command(cmd)
-        if ret == 0:
-            kernel = platform.system()
-
-            # On Windows, the installer runs as a background process, but it
-            # locks the installer file.  We keep trying to remove it until we
-            # can, which means the installer finished
-            if kernel == 'Windows':
-                time.sleep(10) # Wait for the installer to start
-                while os.path.exists(download_file):
-                    try:
-                        os.remove(download_file)
-                        print(_('Removed temporary "') + download_file + '.')
-                        Fl.check()
-                    except:
-                        time.sleep(2) # Wait 2 seconds before trying again. 
-                        pass
-
-            exe = self.get_installed_executable(download_file)
-            if os.path.exists(exe):
-                print(_('The new version of mrv2 was installed.'))
-                Fl.check()
-                if os.path.exists(download_file):
-                    os.remove(download_file)
-                    print(_('Removed temporary'),download_file,'.')
-                    Fl.check()
-                self.start_new_mrv2(download_file, kernel)
-            else:
-                if kernel == 'Windows':
-                    print(_('Could not locate mrv2 in:\n') + exe + '.\n' +
-                          _('Maybe you installed it in a non-default location.'))
-                    return
-                print(_('Something failed installing mrv2 - It is not in "') +
-                      exe + '"')
-        else:
-            print(_('Something failed installing mrv2 - Return error was: ') +
-                    ret)
-            
-
+        self.start_subprocess_in_thread(cmd, download_file)
 
     def ask_for_password(self, command, download_file):
         """Open a FLTK window and secret input to enter a password for sudo
@@ -314,7 +387,7 @@ class UpdatePlugin(plugin.Plugin):
         win.show()
         while win.visible():
             Fl.check()
-
+            
 
     def install_download(self, download_file):
         """Given a download file, use the extension name to try to install it.
@@ -328,41 +401,71 @@ class UpdatePlugin(plugin.Plugin):
         """
         if download_file.endswith('.exe'):
             command = download_file
-            self.run_as_admin(command, download_file)
+            self.install_as_admin(command, download_file)
         elif download_file.endswith('.rpm'):
-            command = f'rpm -i {download_file}'
+            command = f'rpm -i --force {download_file}'
             self.ask_for_password(command, download_file)
         elif download_file.endswith('.deb'):
             command = f'dpkg -i {download_file}'
             self.ask_for_password(command, download_file)
         elif download_file.endswith('.tar.gz'):
             command = f'tar -xzvf {download_file} -C ~/'
-            self.run_as_admin(command, download_file)
+            self.install_as_admin(command, download_file)
         elif download_file.endswith('.dmg'):
             root_dir=cmd.rootPath()
             command = f'{root_dir}/bin/install_dmg.sh {download_file}'
-            self.run_as_admin(command, download_file)
+            self.install_as_admin(command, download_file)
         else:
-            print(f'You will need to install file "{download_file}" manually.')
+            print(_('You will need to install file'),download_file,
+                  _('manually.'))
             return
-    
+        
 
     def check_linux_flavor(self):
         """Given a Linux distribution, try to determine what package manager to
         use and return the package manager's extension to it.
 
         Returns:
-            str: The extension for the Linux flavour.
+           str: The extension for the Linux flavour, or None if undetermined.
         """
-        if os.system('which dpkg > /dev/null') == 0:
-            return '.deb'
-        elif os.system('which rpm > /dev/null') == 0:
-            return '.rpm'
-        elif os.system('which pacman > /dev/null') == 0:
-            return '.tar.gz'
-        else:
-            print(_('Unable to determine Linux flavor'))
-            return '.tar.gz'
+
+        #
+        # First, check for common lib databases
+        #
+        databases = [
+            ("/var/lib/rpm", ".rpm"),
+            ("/var/lib/dpkg", ".deb"),
+            ("/etc/pacman.conf", ".tar.gz")
+        ]
+                  
+        for database, extension in databases:
+            if os.path.exists(database):
+                return extension
+        
+
+        # If databases failed, look for common package managers using
+        # subprocess.run to capture return codes and avoid potential shell
+        # injection vulnerabilities.
+        package_managers = [
+            ("rpm", ".rpm"),
+            ("dpkg", ".deb"),
+            ("pacman", ".tar.gz")  # Updated extension for Arch Linux
+        ]
+
+        for manager, extension in package_managers:
+            try:
+                result = subprocess.run(["which", manager],
+                                        stdout=subprocess.PIPE,
+                                        stderr=subprocess.DEVNULL)
+                if result.returncode == 0:
+                    return extension
+            except OSError:
+                # Handle potential errors during execution
+                # (e.g., missing 'which' command)
+                pass
+
+        # If common package managers not found, return None for undetermined
+        return ".tar.gz"
 
 
     def get_download_extension(self):
@@ -380,50 +483,72 @@ class UpdatePlugin(plugin.Plugin):
         elif os == 'Darwin':
             return 'amd64.dmg'
         else:
-            return 'Unknown operating system'
+            return _('Unknown operating system')
 
+    def download_file(self, name, download_url):
+        import requests
+        response = requests.get(download_url, stream=True)
+        response.raise_for_status()  # Raise exception for non-200 status codes
+        total_size = int(response.headers.get('content-length', 0))
 
-    def download_version(self, name, download_url):
-        """Download a filename from a download url from github.
-        If successful, tries to install it.
+        #
+        # Create Progress window with Fl_Progress in it
+        #
+        window = Fl_Window(400, 120)
+        progress = Fl_Progress(10, 50, 380, 60, _("Downloading ") + name)
+        progress.minimum(0)
+        progress.maximum(total_size)
+        progress.align(FL_ALIGN_TOP)
+        window.show()
+        Fl.check()  # Ensure UI responsiveness
 
-        Args:
-            name (str): name of the file to download.
-            download_url (str): URL for downloading the file.
-    
-        Returns:
-            None 
-        """
-        Fl.check()
-        download_file = os.path.join(tempfile.gettempdir(), name)
-        print(_('Downloading:'),name,'...')
-        Fl.check()
-        download_response = requests.get(download_url)
+        # Create a temporary download file path
+        download_file = os.path.join(self.tempdir, name)
+        
+        downloaded = 0
         with open(download_file, 'wb') as f:
-            f.write(download_response.content)
-        print(_('Download complete:'),download_file)
-        if os.path.exists(download_file):
-            self.install_download(download_file)
+            for chunk in response.iter_content(chunk_size=8192):
+                Fl.check()  # Ensure UI responsiveness
+                if chunk:  # filter out keep-alive new chunks
+                    downloaded += len(chunk)
+                    f.write(chunk)
+                    # Update UI with progress
+                    progress.value(downloaded)
+                    progress.redraw()
+                    Fl.flush()
+                    f.flush()
+                    if not window.visible():
+                        break
+                    
+        window.hide()
 
-    def ask_to_update(self, current_version, latest_version, title, data):
+        if downloaded != total_size:
+            print(_('Download seems to have failed!'))
+            return False
+        self.install_download(download_file)
+        
+    def fltk_ask_to_update(self, current_version, latest_version, title,
+                           release_info):
         """Open an FLTK window to allow the user to update mrv2.
 
         Args:
             current_version (str): The current version that is running.
             latest_version (str): The latest version for upgrade.
-            data (map): github data for the latest release in a map.
+            release_info (map): release_info for the latest release in a map.
 
         Returns:
             None
         """
-        from fltk14 import Fl, Fl_Window, Fl_Box, Fl_Button
+        date = release_info['published_at']
         win = Fl_Window(320, 200)
         box = Fl_Box(20, 20, win.w() - 40, 60)
-        box.copy_label(_('Current version is v') + current_version + 
-                       _('\nLatest at Github is v') + latest_version + '.')
-        update = Fl_Button(20, 100, 130, 40, title)
-        update.callback(_get_latest_release_cb, [self, data])
-        ignore = Fl_Button(update.w() + 40, 100, 130, 40, _("Ignore"))
+        label  = _('Current version is v') + current_version + '\n\n'
+        label += _('Latest version at Github is v') + latest_version + '.\n'
+        label += _('Released on ') + date
+        box.copy_label(label)
+        update = Fl_Button(20, 120, 130, 40, title)
+        update.callback(_get_latest_release_cb, [self, release_info])
+        ignore = Fl_Button(update.w() + 40, 120, 130, 40, _("Ignore"))
         ignore.callback(_ignore_cb, None)
         win.end()
         win.set_non_modal()
@@ -459,7 +584,79 @@ class UpdatePlugin(plugin.Plugin):
             return 1  # version1 is longer, hence newer
 
         return 0  # versions are identical
+    
+    def get_latest_release_info(self, user, project):
+        """Fetches details of the latest release from a GitHub repository.
 
+        Args:
+            user (str): The username or organization that owns the repository.
+            project (str): The name of the repository.
+
+        Returns:
+            dict: A dictionary containing information about the latest release,
+                  including the release name, tag name, and published at date
+                  (if available).
+                  Returns None if no releases are found or an error occurs.
+        """
+        import requests
+        url = f"https://api.github.com/repos/{user}/{project}/releases/latest"
+        try:
+            response = requests.get(url)
+            response.raise_for_status()  # Raise an exception for non-200 status codes
+            data = response.json()
+        except requests.exceptions.RequestException as e:
+            print(_("Error fetching latest release information:\n"),e)
+            return None
+        
+        extension = self.get_download_extension()
+        for asset in data['assets']:
+            name = asset['name']
+            if name.endswith(extension):
+                return {
+                    "name": asset.get(GITHUB_ASSET_NAME, None),
+                    "download_url": asset.get(GITHUB_ASSET_URL, None),
+                    "tag_name": data.get(GITHUB_ASSET_TAG, None),
+                    "published_at": data.get(GITHUB_ASSET_DATE, None)
+                }
+        return None
+        
+    def ask_to_update(self, release_info):
+        release         = release_info['name']
+        release_version = release_info['tag_name']
+        release_date    = release_info['published_at']
+        download_url    = release_info['download_url']
+        if release_date:
+            # Extract date from 'published_at' in ISO 8601 format
+            # (e.g., 2024-05-17T06:50:00Z)
+            release_date = release_date.split("T")[0]
+            if UpdatePlugin.startup:
+                if not _more_than_5_days_elapsed(release_date):
+                    print(_("There's a new release but it has not been more "
+                            "than 5 days"))
+                    return
+        else:
+            release_date = _('unknown date.')
+
+            
+        release_info['published_at'] = release_date
+        
+        release_version = self.match_version(release_version)
+        current_version = cmd.getVersion()
+        
+        result = self.compare_versions(current_version, release_version)
+        if result == 0:
+            if not UpdatePlugin.startup:
+                self.fltk_ask_to_update(current_version, release_version,
+                                        _('Update anyway'), release_info)
+                return
+        elif result == 1:
+            if not UpdatePlugin.startup:
+                self.fltk_ask_to_update(current_version, release_version,
+                                        _('Downgrade'),
+                                        release_info)
+        else:
+            self.fltk_ask_to_update(current_version, release_version,
+                                    _('Upgrade'), relese_info)
 
     def check_latest_release(self, user, project):
         """Checks for the latest github release for a user and project.
@@ -471,35 +668,17 @@ class UpdatePlugin(plugin.Plugin):
         Returns:
             None
         """
-        import requests
-        url = f"https://api.github.com/repos/{user}/{project}/releases/latest"
-        response = requests.get(url)
-        data = response.json()
-        if 'assets' in data:
-        
-            release = data['name']
-        
-            current_version = cmd.getVersion()
-            version = self.match_version(release)
 
-            result = self.compare_versions(current_version, version)
-            if result == 0:
-                if not UpdatePlugin.startup:
-                    self.ask_to_update(current_version, version,
-                                       _('Update anyway'), data)
-                return
-            elif result == 1:
-                if not UpdatePlugin.startup:
-                    self.ask_to_update(current_version, version,
-                                       _('Downgrade'),
-                                       data)
-                return
+        release_info = self.get_latest_release_info(user, project)
+        if release_info:
+            download_url = release_info['download_url']
+            if download_url:
+                self.ask_to_update(release_info)
             else:
-                self.ask_to_update(current_version, version,
-                                   _('Upgrade'), data)
+                print(_('No download url was found for'),release)
             
         else:
-            print(_('No release files found.'))
+            print(_('No releases found for the specified repository.'))
 
 
     def run(self):

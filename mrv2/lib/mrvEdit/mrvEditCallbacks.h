@@ -126,6 +126,7 @@ namespace mrv
     extern int editModeH;
 
     void save_edit_mode_state(ViewerUI* ui);
+    void set_edit_button(EditMode mode, ViewerUI* ui);
     void set_edit_mode_cb(EditMode mode, ViewerUI* ui);
     int calculate_edit_viewport_size(ViewerUI* ui);
 } // namespace mrv

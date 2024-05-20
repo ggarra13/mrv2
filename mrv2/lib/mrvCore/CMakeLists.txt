@@ -13,6 +13,7 @@ set(HEADERS
   mrvHome.h
   mrvHotkey.h
   mrvI8N.h
+  mrvImage.h
   mrvLocale.h
   mrvMedia.h
   mrvMemory.h

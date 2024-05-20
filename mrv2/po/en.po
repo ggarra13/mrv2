@@ -1,16 +1,14 @@
 # English translations for mrv2 package.
-# Copyright (C) 2024 Contributors\ to\ the\ mrv2\ Project
 # This file is distributed under the same license as the mrv2 package.
-# gga <ggarra13@gmail.com>, 2024.
+# Automatically generated, 2024.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v1.1.4\n"
+"Project-Id-Version: mrv2 v1.1.6\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2024-05-05 18:23-0300\n"
-"PO-Revision-Date: 2024-05-04 10:53-0300\n"
-"Last-Translator: gga <ggarra13@gmail.com>\n"
-"Language-Team: English\n"
+"PO-Revision-Date: 2024-05-09 12:13-0300\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ASCII\n"
@@ -1462,6 +1460,9 @@ msgstr ""
 msgid "Returns true if audio is muted."
 msgstr "Returns true if audio is muted."
 
+msgid "Runs the same or a new mrv2 with a session file."
+msgstr "Runs the same or a new mrv2 with a session file."
+
 msgid "Set the muting of the audio."
 msgstr "Set the muting of the audio."
 
@@ -1755,7 +1756,6 @@ msgstr "Editor/&External Editor"
 msgid "Scripts/Add To Script List"
 msgstr "Scripts/Add To Script List"
 
-#, c-format
 msgid "Scripts/%s"
 msgstr "Scripts/%s"
 
@@ -1799,7 +1799,6 @@ msgstr "Could not open python editor: {0}"
 msgid "Search String:"
 msgstr "Search String:"
 
-#, c-format
 msgid "No occurrences of '%s' found!"
 msgstr "No occurrences of '%s' found!"
 
@@ -1875,12 +1874,8 @@ msgstr "Cache"
 msgid "      Gigabytes"
 msgstr "      Gigabytes"
 
-msgid ""
-"Cache in Gigabytes.  When not 0, it uses the value to automatically "
-"calculate the Read Ahead and Read Behind"
-msgstr ""
-"Cache in Gigabytes.  When not 0, it uses the value to automatically "
-"calculate the Read Ahead and Read Behind"
+msgid "Cache in Gigabytes."
+msgstr "Cache in Gigabytes."
 
 msgid "   Read Ahead"
 msgstr "   Read Ahead"
@@ -2123,7 +2118,6 @@ msgstr "1:16"
 msgid "Pick"
 msgstr "Pick"
 
-#, c-format
 msgid "%.3f seconds "
 msgstr "%.3f seconds "
 
@@ -2220,7 +2214,6 @@ msgstr "Modified Date"
 msgid "Last modified date of file"
 msgstr "Last modified date of file"
 
-#, c-format
 msgid "Video Stream #%d"
 msgstr "Video Stream #%d"
 
@@ -2326,7 +2319,6 @@ msgstr "FFmpeg Pixel Format"
 msgid "Render Pixel Format"
 msgstr "Render Pixel Format"
 
-#, c-format
 msgid "Audio Stream #%d"
 msgstr "Audio Stream #%d"
 
@@ -2345,7 +2337,6 @@ msgstr "Number of audio channels"
 msgid "Format"
 msgstr "Format"
 
-#, c-format
 msgid "%d Hz."
 msgstr "%d Hz."
 
@@ -2355,7 +2346,6 @@ msgstr "Frequency"
 msgid "Frequency of audio"
 msgstr "Frequency of audio"
 
-#, c-format
 msgid "%d kb/s"
 msgstr "%d kb/s"
 
@@ -2380,7 +2370,6 @@ msgstr "Duration"
 msgid "Duration of Audio"
 msgstr "Duration of Audio"
 
-#, c-format
 msgid "Subtitle Stream #%d"
 msgstr "Subtitle Stream #%d"
 
@@ -2783,14 +2772,20 @@ msgstr "Example:  gizmo_v003.0001.exr"
 msgid "Annotation already existed at this time"
 msgstr "Annotation already existed at this time"
 
+msgid "Failed to open the file {0} for writing."
+msgstr "Failed to open the file {0} for writing."
+
+msgid "Failed to write to the file {0}."
+msgstr "Failed to write to the file {0}."
+
 msgid "Session saved to \"{0}\"."
 msgstr "Session saved to \"{0}\"."
 
-msgid "Failed to open the file for reading."
-msgstr "Failed to open the file for reading."
+msgid "Failed to open the file {0} for reading."
+msgstr "Failed to open the file {0} for reading."
 
-msgid "Failed to load the file."
-msgstr "Failed to load the file."
+msgid "Failed to load the file {0}."
+msgstr "Failed to load the file {0}."
 
 msgid "Cannot save an NDI stream"
 msgstr "Cannot save an NDI stream"
@@ -2854,19 +2849,15 @@ msgstr "Using profile {0}, pixel format {1}."
 msgid "Using preset {0}."
 msgstr "Using preset {0}."
 
-#, c-format
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
 msgstr "Saving Movie without Audio %<PRId64> - %<PRId64>"
 
-#, c-format
 msgid "Saving Movie with Audio %<PRId64> - %<PRId64>"
 msgstr "Saving Movie with Audio %<PRId64> - %<PRId64>"
 
-#, c-format
 msgid "Saving Audio %<PRId64> - %<PRId64>"
 msgstr "Saving Audio %<PRId64> - %<PRId64>"
 
-#, c-format
 msgid "Saving Pictures without Audio %<PRId64> - %<PRId64>"
 msgstr "Saving Pictures without Audio %<PRId64> - %<PRId64>"
 
@@ -3098,7 +3089,6 @@ msgstr "Zulu"
 msgid "@B12@C7@b@.Function\t@B12@C7@b@.Hotkey"
 msgstr "@B12@C7@b@.Function\t@B12@C7@b@.Hotkey"
 
-#, c-format
 msgid ""
 "Hotkey \"%s\" already used in \"%s\".\n"
 "Do you want to override it?"
@@ -3288,7 +3278,6 @@ msgstr "No item selected"
 msgid "Font not found.  Will not use UTF-8."
 msgstr "Font not found.  Will not use UTF-8."
 
-#, c-format
 msgid "%s - Page %d"
 msgstr "%s - Page %d"
 
@@ -3381,17 +3370,20 @@ msgstr "1.85"
 msgid "1.66"
 msgstr "1.66"
 
-#, c-format
 msgid "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 msgstr "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 
-#, c-format
-msgid "Ahead    V: % 4<PRIu64>    A: % 4<PRIu64>"
-msgstr "Ahead    V: % 4<PRIu64>    A: % 4<PRIu64>"
+msgid "Cache:"
+msgstr "Cache:"
 
-#, c-format
-msgid "Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
-msgstr "Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
+msgid "    Used: %.2g of %zu Gb (%.2g %%)"
+msgstr "    Used: %.2g of %zu Gb (%.2g %%)"
+
+msgid "    Ahead    V: % 4<PRIu64>    A: % 4<PRIu64>"
+msgstr "    Ahead    V: % 4<PRIu64>    A: % 4<PRIu64>"
+
+msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
+msgstr "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 
 msgid "Edit Text"
 msgstr "Edit Text"
@@ -3441,7 +3433,6 @@ msgstr "File/Close Current"
 msgid "File/Close All"
 msgstr "File/Close All"
 
-#, c-format
 msgid "File/Recent/%s"
 msgstr "File/Recent/%s"
 
@@ -3616,7 +3607,6 @@ msgstr "Playback/Annotation/Clear"
 msgid "Playback/Annotation/Clear All"
 msgstr "Playback/Annotation/Clear All"
 
-#, c-format
 msgid "View/Mask/%s"
 msgstr "View/Mask/%s"
 
@@ -3763,6 +3753,177 @@ msgstr "Help/Documentation"
 msgid "Help/About"
 msgstr "Help/About"
 
+msgid "3GP Movie"
+msgstr "3GP Movie"
+
+msgid "Advanced Systems Format Media"
+msgstr "Advanced Systems Format Media"
+
+msgid "AVCHD Video"
+msgstr "AVCHD Video"
+
+msgid "AVI Movie"
+msgstr "AVI Movie"
+
+msgid "DIVX Movie"
+msgstr "DIVX Movie"
+
+msgid "Digital Video"
+msgstr "Digital Video"
+
+msgid "Flash Movie"
+msgstr "Flash Movie"
+
+msgid "Apple's M4V Movie"
+msgstr "Apple's M4V Movie"
+
+msgid "Matroska Movie"
+msgstr "Matroska Movie"
+
+msgid "Quicktime Movie"
+msgstr "Quicktime Movie"
+
+msgid "MP4 Movie"
+msgstr "MP4 Movie"
+
+msgid "MPEG Movie"
+msgstr "MPEG Movie"
+
+msgid "MXF Movie"
+msgstr "MXF Movie"
+
+msgid "Ogg Movie"
+msgstr "Ogg Movie"
+
+msgid "Ogg Video"
+msgstr "Ogg Video"
+
+msgid "OpenTimelineIO EDL"
+msgstr "OpenTimelineIO EDL"
+
+msgid "OpenTimelineIO Zipped EDL"
+msgstr "OpenTimelineIO Zipped EDL"
+
+msgid "Real Media Movie"
+msgstr "Real Media Movie"
+
+msgid "VOB Movie"
+msgstr "VOB Movie"
+
+msgid "WebM Movie"
+msgstr "WebM Movie"
+
+msgid "WMV Movie"
+msgstr "WMV Movie"
+
+msgid "RAW Picture"
+msgstr "RAW Picture"
+
+msgid "Bitmap Picture"
+msgstr "Bitmap Picture"
+
+msgid "Cineon Picture"
+msgstr "Cineon Picture"
+
+msgid "Canon Raw Picture"
+msgstr "Canon Raw Picture"
+
+msgid "Kodak Digital Negative"
+msgstr "Kodak Digital Negative"
+
+msgid "DPX Picture"
+msgstr "DPX Picture"
+
+msgid "EXR Picture"
+msgstr "EXR Picture"
+
+msgid "GIF Picture"
+msgstr "GIF Picture"
+
+msgid "HDRI Picture"
+msgstr "HDRI Picture"
+
+msgid "JPEG Picture"
+msgstr "JPEG Picture"
+
+msgid "Softimage Picture"
+msgstr "Softimage Picture"
+
+msgid "Portable Network Graphics Picture"
+msgstr "Portable Network Graphics Picture"
+
+msgid "Portable Pixmap"
+msgstr "Portable Pixmap"
+
+msgid "Photoshop Picture"
+msgstr "Photoshp Picture"
+
+msgid "SGI Picture"
+msgstr "SGI Picture"
+
+msgid "Stereo OpenEXR Picture"
+msgstr "Stereo OpenEXR Picture"
+
+msgid "TGA Picture"
+msgstr "TGA Picture"
+
+msgid "TIFF Picture"
+msgstr "TIFF Picture"
+
+msgid "MP3 music"
+msgstr "MP3 music"
+
+msgid "OGG Vorbis music"
+msgstr "OGG Vorbis music"
+
+msgid "Wave music"
+msgstr "Wave music"
+
+msgid "OpenUSD Asset"
+msgstr "OpenUSD Asset"
+
+msgid "OpenUSD Zipped Asset"
+msgstr "OpenUSD Zipped Asset"
+
+msgid "OpenUSD Compressed Asset"
+msgstr "OpenUSD Compressed Asset"
+
+msgid "OpenUSD ASCII Asset"
+msgstr "OpenUSD ASCII Asset"
+
+msgid "Jan"
+msgstr "Jan"
+
+msgid "Feb"
+msgstr "Feb"
+
+msgid "Mar"
+msgstr "Mar"
+
+msgid "Apr"
+msgstr "Apr"
+
+msgid "May"
+msgstr "May"
+
+msgid "Jun"
+msgstr "Jun"
+
+msgid "Jul"
+msgstr "Jul"
+
+msgid "Aug"
+msgstr "Aug"
+
+msgid "Sep"
+msgstr "Sep"
+
+msgid "Oct"
+msgstr "Oct"
+
+msgid "Nov"
+msgstr "Nov"
+
 msgid "Replace"
 msgstr "Replace"
 
@@ -3823,8 +3984,11 @@ msgstr "Mark an area in the image with SHIFT + the left mouse button"
 msgid "&Copy"
 msgstr "&Copy"
 
-msgid "Everything OK."
-msgstr "Everything OK."
+msgid "Everything OK. "
+msgstr "Everything OK. "
+
+msgid "GPU: Unknown"
+msgstr "GPU: Unknown"
 
 msgid "Elapsed"
 msgstr "Elapsed"
@@ -3895,7 +4059,6 @@ msgstr "Range"
 msgid "Mean"
 msgstr "Mean"
 
-#, c-format
 msgid "Track #%d - %s"
 msgstr "Track #%d - %s"
 
@@ -4536,6 +4699,9 @@ msgstr "Seconds"
 msgid "Timecode"
 msgstr "Timecode"
 
+msgid "120"
+msgstr "120"
+
 msgid "60"
 msgstr "60"
 
@@ -4783,9 +4949,6 @@ msgstr "Undo Last Shape Drawn in Current Frame."
 msgid "Redo Previous Shape Drawn in Current Frame."
 msgstr "Redo Previous Shape Drawn in Current Frame."
 
-msgid "Everything OK.  "
-msgstr "Everything OK.  "
-
 msgid "Current tool being used."
 msgstr "Current tool being used."
 
@@ -4903,24 +5066,6 @@ msgstr "Medium"
 msgid "Fast"
 msgstr "Fast"
 
-msgid "From File"
-msgstr "From File"
-
-msgid "Legal Range"
-msgstr "Legal Range"
-
-msgid "Full Range"
-msgstr "Full Range"
-
-msgid "Straight"
-msgstr "Straight"
-
-msgid "Premultiplied"
-msgstr "Premultiplied"
-
-msgid "Nearest"
-msgstr "Nearest"
-
 msgid "base"
 msgstr "base"
 
@@ -4935,33 +5080,6 @@ msgstr "gleam"
 
 msgid "oxy"
 msgstr "oxy"
-
-msgid "59.94"
-msgstr "59.94"
-
-msgid "29.97"
-msgstr "29.97"
-
-msgid "14.985"
-msgstr "14.985"
-
-msgid "Loop"
-msgstr "Loop"
-
-msgid "Ping Pong"
-msgstr "Ping Pong"
-
-msgid "Video Only"
-msgstr "Video Only"
-
-msgid "Video and Audio"
-msgstr "Video and Audio"
-
-msgid "Small"
-msgstr "Small"
-
-msgid "Large"
-msgstr "Large"
 
 msgid "Float Values"
 msgstr "Float Values"
@@ -4983,6 +5101,51 @@ msgstr "CIE XYZ"
 
 msgid "CIE xyY"
 msgstr "CIE xyY"
+
+msgid "From File"
+msgstr "From File"
+
+msgid "Legal Range"
+msgstr "Legal Range"
+
+msgid "Full Range"
+msgstr "Full Range"
+
+msgid "Straight"
+msgstr "Straight"
+
+msgid "Premultiplied"
+msgstr "Premultiplied"
+
+msgid "Nearest"
+msgstr "Nearest"
+
+msgid "Small"
+msgstr "Small"
+
+msgid "Large"
+msgstr "Large"
+
+msgid "59.94"
+msgstr "59.94"
+
+msgid "29.97"
+msgstr "29.97"
+
+msgid "14.985"
+msgstr "14.985"
+
+msgid "Loop"
+msgstr "Loop"
+
+msgid "Ping Pong"
+msgstr "Ping Pong"
+
+msgid "Video Only"
+msgstr "Video Only"
+
+msgid "Video and Audio"
+msgstr "Video and Audio"
 
 msgid "CG"
 msgstr "CG"
@@ -5216,18 +5379,6 @@ msgstr "Memory"
 msgid "Attributes"
 msgstr "Attributes"
 
-msgid "Render"
-msgstr "Render"
-
-msgid "Alpha Blend"
-msgstr "Alpha Blend"
-
-msgid "Minify Filter"
-msgstr "Minify Filter"
-
-msgid "Magnify Filter"
-msgstr "Magnify Filter"
-
 msgid "Language and Colors"
 msgstr "Language and Colors"
 
@@ -5263,6 +5414,39 @@ msgstr "Selects the color of the selection rectangle over the current image."
 msgid "Selects the color of HUD overlays."
 msgstr "Selects the color of HUD overlays."
 
+msgid "File Requester"
+msgstr "File Requester"
+
+msgid "Single Click to Travel Drawers"
+msgstr "Single Click to Travel Drawers"
+
+msgid ""
+"When using mrv2's file chooser, a single click on a folder will open it."
+msgstr ""
+"When using mrv2's file chooser, a single click on a folder will open it."
+
+msgid "Thumbnails Active"
+msgstr "Thumbnails Active"
+
+msgid "Show thumbnails for known files."
+msgstr "Show thumbnails for known files."
+
+msgid "USD Thumbnails"
+msgstr "USD Thumbnails"
+
+msgid "Show Thumbnails for USD files (can be slow if they are big)"
+msgstr "Show Thumbnails for USD files (can be slow if they are big)"
+
+msgid "Use Native File Chooser"
+msgstr "Use Native File Chooser"
+
+msgid ""
+"If selected, the natlve file chooser will be used.  If unselected, mrv2's "
+"standard file chooser will be used."
+msgstr ""
+"If selected, the natlve file chooser will be used.  If unselected, mrv2's "
+"standard file chooser will be used."
+
 msgid "Fonts"
 msgstr "Fonts"
 
@@ -5277,6 +5461,18 @@ msgstr "Panels"
 
 msgid "Sets the font to use in panels. (Not yet working)"
 msgstr "Sets the font to use in panels. (Not yet working)"
+
+msgid "RGBA Display"
+msgstr "RGBA Display"
+
+msgid "Pixel Values"
+msgstr "Pixel Values"
+
+msgid "Secondary Display"
+msgstr "Secondary Display"
+
+msgid "Luminance"
+msgstr "Luminance"
 
 msgid "Positioning"
 msgstr "Positioning"
@@ -5330,38 +5526,57 @@ msgstr "H:"
 msgid "Take Current Window Values"
 msgstr "Take Current Window Values"
 
-msgid "File Requester"
-msgstr "File Requester"
+msgid "Render"
+msgstr "Render"
 
-msgid "Single Click to Travel Drawers"
-msgstr "Single Click to Travel Drawers"
+msgid "Alpha Blend"
+msgstr "Alpha Blend"
+
+msgid "Minify Filter"
+msgstr "Minify Filter"
+
+msgid "Magnify Filter"
+msgstr "Magnify Filter"
+
+msgid "Thumbnails"
+msgstr "Thumbnails"
+
+msgid "Preview Thumbnails above Timeline"
+msgstr "Preview Thumbnails above Timeline"
+
+msgid "Preview Thumbnails in a rectangle above Timeline"
+msgstr "Preview Thumbnails in a rectangle above Timeline"
+
+msgid "Preview Thumbnails on Panels"
+msgstr "Preview Thumbnails on Panels"
+
+msgid "Preview Thumbnails in Panels"
+msgstr "Preview Thumbnails in Panels"
+
+msgid "Edit Viewport"
+msgstr "Edit Viewport"
+
+msgid "How to display timeline by default."
+msgstr "How to display timeline by default."
+
+msgid "Display"
+msgstr "Display"
+
+msgid "Start in Edit mode"
+msgstr "Start in Edit mode"
+
+msgid "Editing viewport will be visible at start up."
+msgstr "Editing viewport will be visible at start up."
+
+msgid "Remove EDLs in Temporary Folder on Exit"
+msgstr "Remove EDLs in Temporary Folder on Exit"
 
 msgid ""
-"When using mrv2's file chooser, a single click on a folder will open it."
+"When selected, temporary EDLs (Playlists) will be removed from the temporary "
+"folder."
 msgstr ""
-"When using mrv2's file chooser, a single click on a folder will open it."
-
-msgid "Thumbnails Active"
-msgstr "Thumbnails Active"
-
-msgid "Show thumbnails for known files."
-msgstr "Show thumbnails for known files."
-
-msgid "USD Thumbnails"
-msgstr "USD Thumbnails"
-
-msgid "Show Thumbnails for USD files (can be slow if they are big)"
-msgstr "Show Thumbnails for USD files (can be slow if they are big)"
-
-msgid "Use Native File Chooser"
-msgstr "Use Native File Chooser"
-
-msgid ""
-"If selected, the natlve file chooser will be used.  If unselected, mrv2's "
-"standard file chooser will be used."
-msgstr ""
-"If selected, the natlve file chooser will be used.  If unselected, mrv2's "
-"standard file chooser will be used."
+"When selected, temporary EDLs (Playlists) will be removed from the temporary "
+"folder."
 
 msgid "Playback"
 msgstr "Playback"
@@ -5372,11 +5587,15 @@ msgstr "Auto Playback"
 msgid "Start Playback when opening files."
 msgstr "Start Playback when opening files."
 
-msgid "Auto Scrub Playback"
-msgstr "Auto Scrub Playback"
+msgid "Scrub with Audio"
+msgstr "Scrub with Audio"
 
-msgid "Start playback when scrubbing so that audio can be heard."
-msgstr "Start playback when scrubbing so that audio can be heard."
+msgid ""
+"Start playback when scrubbing so that audio can be heard.  Scrubbing can be "
+"less smooth."
+msgstr ""
+"Start playback when scrubbing so that audio can be heard.  Scrubbing can be "
+"less smooth."
 
 msgid "Single Click Playback"
 msgstr "Single Click Playback"
@@ -5423,42 +5642,8 @@ msgstr ""
 "right and left).  Smaller values make the mouse move jump more frames while "
 "higher values does the opposite."
 
-msgid "Display"
-msgstr "Display"
-
-msgid "How to display timeline by default."
-msgstr "How to display timeline by default."
-
-msgid "Start in Edit mode"
-msgstr "Start in Edit mode"
-
-msgid "Editing viewport will be visible at start up."
-msgstr "Editing viewport will be visible at start up."
-
-msgid "Preview Thumbnails"
-msgstr "Preview Thumbnails"
-
-msgid "Thumbnails above timeline"
-msgstr "Thumbnails above timeline"
-
-msgid "Remove EDLs in Temporary Folder on Exit"
-msgstr "Remove EDLs in Temporary Folder on Exit"
-
-msgid ""
-"When selected, temporary EDLs (Playlists) will be removed from the temporary "
-"folder."
-msgstr ""
-"When selected, temporary EDLs (Playlists) will be removed from the temporary "
-"folder."
-
-msgid "Edit Viewport"
-msgstr "Edit Viewport"
-
 msgid "Default View"
 msgstr "Default View"
-
-msgid "Thumbnails"
-msgstr "Thumbnails"
 
 msgid "Show Transitions"
 msgstr "Show Transitions"
@@ -5486,18 +5671,6 @@ msgstr "Editable"
 
 msgid "Editable Timeline Viewport."
 msgstr "Editable Timeline Viewport."
-
-msgid "RGBA Display"
-msgstr "RGBA Display"
-
-msgid "Pixel Values"
-msgstr "Pixel Values"
-
-msgid "Secondary Display"
-msgstr "Secondary Display"
-
-msgid "Luminance"
-msgstr "Luminance"
 
 msgid "OCIO Config File"
 msgstr "OCIO Config File"
@@ -5753,20 +5926,29 @@ msgstr "Module"
 msgid "User Interface/View Window"
 msgstr "User Interface/View Window"
 
-msgid "User Interface/View Window/Language and Colors"
-msgstr "User Interface/View Window/Language and Colors"
-
-msgid "User Interface/Render"
-msgstr "User Interface/Render"
+msgid "User Interface/File Requester"
+msgstr "User Interface/File Requester"
 
 msgid "User Interface/Fonts"
 msgstr "User Interface/Fonts"
 
+msgid "User Interface/Language and Colors"
+msgstr "User Interface/Language and Colors"
+
+msgid "User Interface/Pixel Toolbar"
+msgstr "User Interface/Pixel Toolbar"
+
 msgid "User Interface/Positioning"
 msgstr "User Interface/Positioning"
 
-msgid "User Interface/File Requester"
-msgstr "User Interface/File Requester"
+msgid "User Interface/Render"
+msgstr "User Interface/Render"
+
+msgid "User Interface/Thumbnails"
+msgstr "User Interface/Thumbnails"
+
+msgid "User Interface/Timeline"
+msgstr "User Interface/Timeline"
 
 msgid "Remote to Local Path Mapping"
 msgstr "Remote to Local Path Mapping"
@@ -5857,156 +6039,6 @@ msgstr "Accept the selected OCIO file."
 
 msgid "Cancel the OCIO selection and don't change anything."
 msgstr "Cancel the OCIO selection and don't change anything."
-
-msgid "3GP Movie"
-msgstr "3GP Movie"
-
-msgid "Advanced Systems Format Media"
-msgstr "Advanced Systems Format Media"
-
-msgid "AVCHD Video"
-msgstr "AVCHD Video"
-
-msgid "AVI Movie"
-msgstr "AVI Movie"
-
-msgid "DIVX Movie"
-msgstr "DIVX Movie"
-
-msgid "Digital Video"
-msgstr "Digital Video"
-
-msgid "Flash Movie"
-msgstr "Flash Movie"
-
-msgid "Apple's M4V Movie"
-msgstr "Apple's M4V Movie"
-
-msgid "Matroska Movie"
-msgstr "Matroska Movie"
-
-msgid "Quicktime Movie"
-msgstr "Quicktime Movie"
-
-msgid "MP4 Movie"
-msgstr "MP4 Movie"
-
-msgid "MPEG Movie"
-msgstr "MPEG Movie"
-
-msgid "MXF Movie"
-msgstr "MXF Movie"
-
-msgid "Ogg Movie"
-msgstr "Ogg Movie"
-
-msgid "Ogg Video"
-msgstr "Ogg Video"
-
-msgid "OpenTimelineIO EDL"
-msgstr "OpenTimelineIO EDL"
-
-msgid "OpenTimelineIO Zipped EDL"
-msgstr "OpenTimelineIO Zipped EDL"
-
-msgid "Real Media Movie"
-msgstr "Real Media Movie"
-
-msgid "VOB Movie"
-msgstr "VOB Movie"
-
-msgid "WebM Movie"
-msgstr "WebM Movie"
-
-msgid "WMV Movie"
-msgstr "WMV Movie"
-
-msgid "Bitmap Picture"
-msgstr "Bitmap Picture"
-
-msgid "Cineon Picture"
-msgstr "Cineon Picture"
-
-msgid "Canon Raw Picture"
-msgstr "Canon Raw Picture"
-
-msgid "Kodak Digital Negative"
-msgstr "Kodak Digital Negative"
-
-msgid "DPX Picture"
-msgstr "DPX Picture"
-
-msgid "EXR Picture"
-msgstr "EXR Picture"
-
-msgid "HDRI Picture"
-msgstr "HDRI Picture"
-
-msgid "TIFF Picture"
-msgstr "TIFF Picture"
-
-msgid "IFF Picture"
-msgstr "IFF Picture"
-
-msgid "JPEG Picture"
-msgstr "JPEG Picture"
-
-msgid "Map Picture"
-msgstr "Map Picture"
-
-msgid "GIF Picture"
-msgstr "GIF Picture"
-
-msgid "Softimage Picture"
-msgstr "Softimage Picture"
-
-msgid "PNG Picture"
-msgstr "PNG Picture"
-
-msgid "RGB Picture"
-msgstr "RGB Picture"
-
-msgid "MP3 music"
-msgstr "MP3 music"
-
-msgid "OGG Vorbis music"
-msgstr "OGG Vorbis music"
-
-msgid "Wave music"
-msgstr "Wave music"
-
-msgid "Jan"
-msgstr "Jan"
-
-msgid "Feb"
-msgstr "Feb"
-
-msgid "Mar"
-msgstr "Mar"
-
-msgid "Apr"
-msgstr "Apr"
-
-msgid "May"
-msgstr "May"
-
-msgid "Jun"
-msgstr "Jun"
-
-msgid "Jul"
-msgstr "Jul"
-
-msgid "Aug"
-msgstr "Aug"
-
-msgid "Sep"
-msgstr "Sep"
-
-msgid "Oct"
-msgstr "Oct"
-
-msgid "Nov"
-msgstr "Nov"
 
 msgid "Escape"
 msgstr "Escape"
@@ -6596,17 +6628,23 @@ msgstr "Toggle Hotkeys Window"
 msgid "Toggle About Window"
 msgstr "Toggle About Window"
 
-#~ msgid "Default Hotkeys"
-#~ msgstr "Default Hotkeys"
+#~ msgid "    Percentage: %.2g %%"
+#~ msgstr "    Percentage: %.2g %%"
 
-#~ msgid "Reload Hotkeys"
-#~ msgstr "Reload Hotkeys"
+#~ msgid "IFF Picture"
+#~ msgstr "IFF Picture"
 
-#~ msgid "Reset Hotkeys"
-#~ msgstr "Reset Hotkeys"
+#~ msgid "Map Picture"
+#~ msgstr "Map Picture"
 
-#~ msgid "Thumbnails above timeline (does not work on Wayland)"
-#~ msgstr "Thumbnails above timeline (does not work on Wayland)"
+#~ msgid "PNG Picture"
+#~ msgstr "PNG Picture"
 
-#~ msgid "Running under XWayland.  Cannot use Viewport blitting"
-#~ msgstr "Running under XWayland.  Cannot use Viewport blitting"
+#~ msgid "RGB Picture"
+#~ msgstr "RGB Picture"
+
+#~ msgid "Everything OK."
+#~ msgstr "Everything OK."
+
+#~ msgid "Auto Scrub Playback"
+#~ msgstr "Auto Scrub Playback"

@@ -783,6 +783,14 @@ namespace mrv
         if (!item->checked())
             active = false;
         ui->uiView->setFullScreenMode(active);
+
+        // These are needed to clean the resources and avoid
+        // OpenGL flickering.
+        ui->uiView->refresh();
+        ui->uiView->valid(0);
+        ui->uiTimeline->refresh();
+        ui->uiTimeline->valid(0);
+
         bool send = ui->uiPrefs->SendUI->value();
         if (send)
             tcp->pushMessage("Fullscreen", active);
@@ -793,6 +801,13 @@ namespace mrv
         Viewport* view = ui->uiView;
         bool presentation = view->getPresentationMode();
         view->setPresentationMode(!presentation);
+
+        // These are needed to clean the resources and avoid
+        // OpenGL flickering.
+        ui->uiView->refresh();
+        ui->uiView->valid(0);
+        ui->uiTimeline->refresh();
+        ui->uiTimeline->valid(0);
 
         bool send = ui->uiPrefs->SendUI->value();
         if (send)
@@ -948,6 +963,9 @@ namespace mrv
 
     void save_ui_state(ViewerUI* ui, Fl_Group* bar)
     {
+        if (ui->uiView->getPresentationMode())
+            return;
+
         if (bar == ui->uiMenuGroup)
             has_menu_bar = ui->uiMenuGroup->visible();
         else if (bar == ui->uiTopBar)
@@ -966,6 +984,11 @@ namespace mrv
 
     void save_ui_state(ViewerUI* ui)
     {
+        save_edit_mode_state(ui);
+
+        if (ui->uiView->getPresentationMode())
+            return;
+
         has_menu_bar = ui->uiMenuGroup->visible();
         has_top_bar = ui->uiTopBar->visible();
         has_bottom_bar = ui->uiBottomBar->visible();
@@ -973,8 +996,6 @@ namespace mrv
         has_status_bar = ui->uiStatusGroup->visible();
         has_tools_grp = ui->uiToolsGroup->visible();
         has_dock_grp = ui->uiDockGroup->visible();
-
-        save_edit_mode_state(ui);
 
         has_preferences_window = ui->uiPrefs->uiMain->visible();
         has_hotkeys_window = ui->uiHotkey->uiMain->visible();

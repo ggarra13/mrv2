@@ -116,6 +116,7 @@ System::Free $9
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".erf" "Epson RAW Camera Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".exr" "ILM OpenEXR" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".fff" "Hasselblad RAW Camera Format" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".hdr" "HDR Image File" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".ia" "RAW Image File" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".iiq" "Phase One RAW Camera Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".jpeg" "JPEG File Interchange Format" 1
@@ -133,13 +134,11 @@ System::Free $9
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".png" "Portable Network Graphics" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".ppm" "Portable Pixmap" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".psd" "Photoshop Document" 0
-!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".sxr" "ILM Stereo OpenEXR Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".ptx" "Pentax RAW Camera Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".pxn" "Logitech Fotoman Pixtura Camera Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".qtk" "Apple QuickTake Camera Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".raf" "Fujifilm RAW Camera Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".raw" "RAW Image File" 1
-!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".rdc" "Red Digital Clip" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".rgb" "Silicon Graphics RGB Picture" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".rgba" "Silicon Graphics RGBA Picture" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".rw2" "Panasonic RAW Camera Format" 1
@@ -178,6 +177,7 @@ System::Free $9
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".otio" "OpenTimelineIO Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".otioz" "OpenTimelineIO ZIP Format" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".qt" "Apple's Quicktime" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".rdc" "Red Digital Clip" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".rm" "RealNetwork's Real Media" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".ts" "Transport Stream Media" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".usd" "Universal Scene Description" 1

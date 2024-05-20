@@ -1,8 +1,63 @@
+v1.1.7
+======
+
+- Made mrv2's custom file requester create thumbnails on demand when they are
+  on view.  This helps for large files like many big USD files on disk or with
+  RAW files which are also slow to load.
+- Fixed mrv2's custom file requester thumbnails being too high.
+- Added custom RAW and several image missing formats to mrv2's custom file
+  requester.
+- Started cleaning up FLU's code (mrv2 custom file requester).
+- mrv2's v1.1.6 was not respecting the hidden pixel bar on the Preferences
+  Window, always showing it stopping.
+- Fixed session files starting playback automatically even when the original
+  timeline was stopped.
+- Fixed a color discrepancy on YUV420 movies being too saturated.
+- Rewrote the algorithm for the scaling of the window when the first image is
+  loaded (or run from the command-line).
+- Fixed a terrible bug on Linux X11 which would sometimes would make the X11
+  server reboot on some Linux distros like Rocky Linux 8.9.
+- Added OpenRV's license to mrv2 as I took inspiration for their reverse
+  playback.  I was doing the same on mrViewer, but I had forgotten about it.
+- Update tlRender to use OTIO v0.16.0.
+- Added what each contributor did so far for the mrv2 project.
+  If you don't want to be listed as contributor, not list your email address,
+  or something else, please let me know.
+- Updated update_mrv2.py script.  Tested on macOS, Windows, Rocky Linux 8.9
+  and Ubuntu 22.04.4 LTS.  From now on, you can rely on automatic upgrades
+  if you go to Window->Preferences->Behavior->Upgrades and set them at Startup.
+  When you start mrv2, it will check to see if there is an upgrade after 5 days
+  of the actual release (so any portential early bugs are squashed).
+- Improved translation CMake scripts.
+- Added documentation on how to get Wayland working almost flawlessly on Ubuntu
+  22.04.4 LTS.
+- Added 120 FPS, which drops frames but it is still nice to quickly browse a
+  movie.
+- Darby's Rec709 coefficients and shaders were incorrect leading to subtle
+  color shifts.  Now they are fixed.
+  
+
 v1.1.6
 ======
 
-- Made View Window / Timeline Viewport divider highlight in a grayish color
-  when it can be dragged.
+This is a release full of goodies and bug fixes.
+
+- **ATTENTION**:
+  This version introduces a change in the way Cache Settings are used for
+  movie files.
+  The Settings->Gigabytes and the pair of "Settings->Read Ahead" and
+  "Settings->Read Behind" are now decoupled.
+  In the case of sequences, the Read Ahea and Read Behind will be automatically
+  calculated from the Gigabytes settings as before.
+  However, for movie files the timeline will only display the settings for
+  Read Ahead/Behind, not the actual Gigabytes cache (which can be bigger than
+  the read ahead/behind setting).  The small Read Ahead and Read Behind is to
+  allow playing 4K movies backwards.
+  The Gigabytes setting of 0 is **NO LONGER USED** and will revert to
+  4 Gb if set to 0.
+
+- Fixed slow seeking on 4K movies.  Now we beat OpenRV on **all** movies,
+  seeking and reverse playback too.
 - Improved performance of dragging Tile like the main divider between the
   view and timeline viewport, particularly on macOS.
 - Made switching languages keep the UI preferences.
@@ -18,18 +73,37 @@ v1.1.6
   the main window takes the dock properly into account.
 - Fixed auto hiding of the pixel bar from the preferences switched is changed
   and okay'ed while the movie is still playing.
-- **ATTENTION**:
-  This version introduces a change in the way Cache Settings are used for
-  movie files.
-  The Settings->Gigabytes and the pair of "Settings->Read Ahead" and
-  "Settings->Read Behind" are now decoupled.
-  In the case of sequences, the Read Ahea and Read Behind will be automatically
-  calculated by the Gigabytes settings as before.
-  However, for movie files the timeline will only display the settings for
-  Read Ahead/Behind, not the actual Gigabytes cache (which can be bigger than
-  the read ahead/behind setting).
-  The Gigabytes setting of 0 is **NO LONGER USED** and will revert to
-  4 Gb if set to 0.
+- Fixed seeking on the timeline on Linux sometimes getting the event
+  incorrectly on X.
+- Fixed starting a movie with loop on and playing stopped and then start
+  playing it backwards.
+- Refactored playback code and fixed playback buttons sometimes getting out of
+  sync compared to the command-line flags passed.
+- Created Preferences->User Interface/Thumbnails to select the places
+  where thumbnails appear.  Currently can be above the Timeline and in the
+  Panels.
+- Made the thumbnail above the thumbnail a tad smaller and more polished.
+- Fixed a potentially nullptr pointer de-referencing when OpenGL accuracy was
+  set to Automatic.
+- Worked around an UI redraw issue on Wayland.
+- Fixed timeline interaction (dragging clips in .otio timeline) in 1.1.5
+  re-release.
+- Fixed macOS issues when showing and hiding the timeline bar.
+- Made View Window / Timeline Viewport divider highlight in a grayish color
+  when it can be dragged.
+- Made Panel divider highlight in a grayish color when it can be dragged.
+- Fixed cursor when dragging on the Panel divider bar.
+- Fixed cursor sometimes switching to the Arrow instead of the Cross cursor.
+  This was maily a Linux issue.
+- Fixed background transparent color being lighter on Wayland.
+- Added Cache Use and Cache Percentage to HUD's Cache display.
+- Made Edit button turn on/off automatically according to the size of the
+  timeline viewport.
+- Added default sensible Window settings for UI panels when in window mode.
+- Made Window settings for UI panels get saved even if they were in panel mode.
+- Fixed .otio markers display in timeline viewport.
+- Fixed size of Timeline Viewport when in Edit mode on macOS.  Now it resizes
+  properly.
 
 
 v1.1.5

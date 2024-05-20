@@ -172,6 +172,7 @@ endif()
 
 
 if(MRV2_PYBIND11)
+    find_package(Python REQUIRED COMPONENTS Interpreter Development)
     add_definitions(-DMRV2_PYBIND11)
     find_package(pybind11 REQUIRED)
 endif()
@@ -236,13 +237,6 @@ install( DIRECTORY colors fonts icons ocio presets share
 # Install update-mrv2 plugin
 #
 install( FILES python/plug-ins/update-mrv2.py
-    DESTINATION python/plug-ins
-    COMPONENT applications )
-
-#
-# Install plugin translation files
-#
-install( DIRECTORY python/plug-ins/locales
     DESTINATION python/plug-ins
     COMPONENT applications )
 

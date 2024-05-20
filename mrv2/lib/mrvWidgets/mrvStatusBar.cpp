@@ -3,6 +3,7 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #include "mrvCore/mrvI8N.h"
+#include "mrvCore/mrvOS.h"
 
 #include "mrvWidgets/mrvStatusBar.h"
 
@@ -15,7 +16,7 @@ namespace mrv
 
     void StatusBar::all_ok_cb(StatusBar* o)
     {
-        o->copy_label(_("Everything OK."));
+        o->restore_message();
     }
 
     StatusBar::StatusBar(int X, int Y, int W, int H, const char* L) :
@@ -27,6 +28,25 @@ namespace mrv
     void StatusBar::timeout(float seconds)
     {
         seconds_ = seconds;
+    }
+
+    void StatusBar::restore_message()
+    {
+        std::string label = _("Everything OK. ");
+        label += os::getDesktop();
+#ifdef TLRENDER_GL
+        const std::string gpu = os::getGPUVendor();
+        label += " - " + gpu;
+#endif
+        if (gpu == _("GPU: Unknown"))
+            Fl::repeat_timeout(1.0, (Fl_Timeout_Handler)all_ok_cb, this);
+            
+        copy_label(label.c_str());
+    }
+
+    void StatusBar::default_message()
+    {
+        Fl::add_timeout(1.0, (Fl_Timeout_Handler)all_ok_cb, this);
     }
 
     void StatusBar::save_colors()

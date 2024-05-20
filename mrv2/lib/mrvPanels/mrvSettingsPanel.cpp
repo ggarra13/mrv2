@@ -107,9 +107,7 @@ namespace mrv
             auto sV = new Widget< HorSlider >(
                 g->x(), 90, g->w(), 20, _("      Gigabytes"));
             s = sV;
-            s->tooltip(
-                _("Cache in Gigabytes.  When not 0, it uses the value to "
-                  "automatically calculate the Read Ahead and Read Behind"));
+            s->tooltip(_("Cache in Gigabytes."));
             s->step(1.0);
             s->range(1.f, static_cast<double>(totalPhysMem));
             int Gbytes = settings->getValue<int>("Cache/GBytes");
@@ -344,13 +342,14 @@ namespace mrv
             spW = new Widget< Spinner >(
                 g->x() + 160, 318, g->w() - 160, 20, _("Video Requests"));
             sp = spW;
-            // sp->range( 1, 64 );
+            sp->range(1, 64);
             digits = settings->getValue<int>("Performance/VideoRequestCount");
             sp->value(digits);
 
             spW->callback(
                 [=](auto o)
                 {
+                    TLRENDER_P();
                     int requests = static_cast<int>(o->value());
                     settings->setValue(
                         "Performance/VideoRequestCount", requests);
@@ -375,7 +374,7 @@ namespace mrv
             spW = new Widget<Spinner>(
                 g->x() + 160, 366, g->w() - 160, 20, _("Sequence I/O threads"));
             sp = spW;
-            // sp->irange( 1, 64 );
+            sp->range(1, 64);
             digits = settings->getValue<int>("SequenceIO/ThreadCount");
             sp->value(digits);
             spW->callback(

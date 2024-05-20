@@ -65,7 +65,7 @@ jobs:
   
     - name: Build mrv2
       run: |
-        ./bin/runme_minimal.sh
+        ./bin/runme_minimal.sh -y
 
 
   windows-minimal-build:
@@ -116,7 +116,7 @@ jobs:
       
     - name: Build mrv2
       run: |
-        ./bin/runme_minimal.sh
+        ./bin/runme_minimal.sh -y
 
 
   macos-minimal-build:
@@ -156,7 +156,7 @@ jobs:
 
     - name: Build mrv2
       run: |
-        ./bin/runme_minimal.sh
+        ./bin/runme_minimal.sh -y
 
 
   macos-m1-minimal-build:
@@ -196,4 +196,4 @@ jobs:
 
     - name: Build mrv2
       run: |
-        ./bin/runme_minimal.sh
+        ./bin/runme_minimal.sh -y

@@ -2,6 +2,9 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+// Debug scaling of the window to image size.
+//#define DEBUG_SCALING 1
+
 #include <memory>
 #include <cmath>
 #include <algorithm>
@@ -98,12 +101,18 @@ namespace mrv
         Fl_SuperClass(X, Y, W, H, L),
         _p(new Private)
     {
+        TLRENDER_P();
+
+        p.ui = App::ui;
     }
 
     TimelineViewport::TimelineViewport(int W, int H, const char* L) :
         Fl_SuperClass(W, H, L),
         _p(new Private)
     {
+        TLRENDER_P();
+
+        p.ui = App::ui;
     }
 
     TimelineViewport::~TimelineViewport()
@@ -280,8 +289,7 @@ namespace mrv
 
     void TimelineViewport::set_cursor(Fl_Cursor n) const noexcept
     {
-        if (window())
-            window()->cursor(n);
+        window()->cursor(n);
     }
 
     void TimelineViewport::_scrub(float dx) noexcept
@@ -501,53 +509,38 @@ namespace mrv
         updatePlaybackButtons();
     }
 
-    void TimelineViewport::playBackwards() noexcept
+    void TimelineViewport::setPlayback(timeline::Playback value) noexcept
     {
         TLRENDER_P();
 
         if (!p.player)
             return;
 
-        _hidePixelBar();
+        if (value == timeline::Playback::Stop)
+            _showPixelBar();
+        else
+            _hidePixelBar();
         p.droppedFrames = 0;
 
-        p.player->setPlayback(timeline::Playback::Reverse);
+        p.player->setPlayback(value);
 
         updatePlaybackButtons();
-
         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
+    }
+
+    void TimelineViewport::playBackwards() noexcept
+    {
+        setPlayback(timeline::Playback::Reverse);
     }
 
     void TimelineViewport::stop() noexcept
     {
-        TLRENDER_P();
-        if (!p.player)
-            return;
-
-        p.player->setPlayback(timeline::Playback::Stop);
-
-        _showPixelBar();
-        p.droppedFrames = 0;
-
-        updatePlaybackButtons();
-
-        p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
+        setPlayback(timeline::Playback::Stop);
     }
 
     void TimelineViewport::playForwards() noexcept
     {
-        TLRENDER_P();
-
-        if (!p.player)
-            return;
-
-        _hidePixelBar();
-        p.droppedFrames = 0;
-
-        p.player->setPlayback(timeline::Playback::Forward);
-
-        updatePlaybackButtons();
-        p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
+        setPlayback(timeline::Playback::Forward);
     }
 
     void TimelineViewport::_showPixelBar() const noexcept
@@ -555,13 +548,13 @@ namespace mrv
         TLRENDER_P();
 
         const bool autoHide = p.ui->uiPrefs->uiPrefsAutoHidePixelBar->value();
+        const bool hasPixelBar = p.ui->uiPrefs->uiPrefsPixelToolbar->value();
         const bool visiblePixelBar = p.ui->uiPixelBar->visible_r();
 
-        if (visiblePixelBar || !autoHide || p.presentation)
+        if (!hasPixelBar || visiblePixelBar || !autoHide || p.presentation)
             return;
 
         toggle_pixel_bar(nullptr, p.ui);
-        Fl::flush();
     }
 
     void TimelineViewport::_hidePixelBar() const noexcept
@@ -597,15 +590,13 @@ namespace mrv
             if (visiblePixelBar)
             {
                 toggle_pixel_bar(nullptr, p.ui);
-                Fl::flush();
             }
         }
         else
         {
-            if (!visiblePixelBar)
+            if (!visiblePixelBar && hasPixelBar)
             {
                 toggle_pixel_bar(nullptr, p.ui);
-                Fl::flush();
             }
         }
     }
@@ -913,7 +904,9 @@ namespace mrv
         if (p.actionMode == ActionMode::kScrub ||
             p.actionMode == ActionMode::kSelection ||
             p.actionMode == ActionMode::kRotate)
+        {
             set_cursor(FL_CURSOR_CROSS);
+        }
         // else if ( p.actionMode == ActionMode::kRotate )
         //     cursor( FL_CURSOR_MOVE );
         else if (p.actionMode == ActionMode::kText)
@@ -1004,14 +997,6 @@ namespace mrv
     {
         TLRENDER_P();
 
-#ifdef DEBUG_VIDEO_CALLBACK
-        if (!p.videoData.empty() && !values.empty() &&
-            values[0].time != p.videoData[0].time)
-        {
-            std::cerr << values[0].time << std::endl;
-        }
-#endif
-
         p.videoData = values;
 
         if (p.resizeWindow)
@@ -1084,6 +1069,8 @@ namespace mrv
                     p.lastVideoData = values[0];
                 }
             }
+
+            redraw();
         }
 
         if (panel::imageInfoPanel)
@@ -1139,12 +1126,6 @@ namespace mrv
                     }
                 }
             }
-        }
-        if (p.ui->uiBottomBar->visible())
-        {
-            TimelineClass* c = p.ui->uiTimeWindow;
-            c->uiFrame->setTime(values[0].time);
-            p.ui->uiTimeline->redraw();
         }
 
         redraw();
@@ -1333,9 +1314,15 @@ namespace mrv
 
         int W = renderSize.w;
         int H = renderSize.h;
+        float aspectRatio = static_cast<float>(renderSize.w) / renderSize.h;
 
-        int minx, miny, maxW, maxH, posX, posY;
-        Fl::screen_work_area(minx, miny, maxW, maxH, screen);
+#ifdef DEBUG_SCALING
+        std::cerr << "renderSize=" << renderSize << std::endl;
+        std::cerr << "aspectRatio=" << aspectRatio << std::endl;
+#endif
+
+        int minX, minY, maxW, maxH, posX, posY;
+        Fl::screen_work_area(minX, minY, maxW, maxH, screen);
 
         PreferencesUI* uiPrefs = p.ui->uiPrefs;
         if (!desktop::Wayland() && uiPrefs->uiWindowFixedPosition->value())
@@ -1349,42 +1336,29 @@ namespace mrv
             posY = mw->y();
         }
 
+        // First, make sure the user or window manager did not set an
+        // incorrect position
+        if (posX < minX)
+            posX = minX;
+
+        if (posY < minY)
+            posY = minY;
+
         int decW = mw->decorated_w();
         int decH = mw->decorated_h();
 
         int dW = decW - mw->w();
         int dH = decH - mw->h();
 
-        maxW -= dW;
-        maxH -= dH;
-        posX += dW / 2;
-#ifdef _WIN32
-        miny += dH - dW / 2;
+        if (dW == 0)
+            dW = 2;
+
+#ifdef DEBUG_SCALING
+        std::cerr << "DECORATE SIZES " << dW << "x" << dH << std::endl;
 #endif
 
-        // Take into account the different UI bars
-        if (p.ui->uiMenuGroup->visible())
-            H += p.ui->uiMenuGroup->h();
-
-        if (p.ui->uiTopBar->visible())
-            H += p.ui->uiTopBar->h();
-
-        if (p.ui->uiPixelBar->visible())
-            H += p.ui->uiPixelBar->h();
-
-        if (p.ui->uiBottomBar->visible())
-        {
-            H += p.ui->uiBottomBar->h();
-        }
-
-        if (p.ui->uiStatusGroup->visible())
-            H += p.ui->uiStatusGroup->h();
-
-        if (p.ui->uiToolsGroup->visible())
-            W += p.ui->uiToolsGroup->w();
-
-        if (p.ui->uiDockGroup->visible())
-            W += p.ui->uiDockGroup->w();
+        maxW -= dW;
+        maxH -= dH;
 
         bool alwaysFrameView = (bool)uiPrefs->uiPrefsAutoFitImage->value();
         p.frameView = alwaysFrameView;
@@ -1394,7 +1368,88 @@ namespace mrv
             W = (int)uiPrefs->uiWindowXSize->value();
             H = (int)uiPrefs->uiWindowYSize->value();
         }
+        else
+        {
+            if (p.ui->uiToolsGroup->visible())
+                W += p.ui->uiToolsGroup->w();
 
+            if (p.ui->uiDockGroup->visible())
+                W += p.ui->uiDockGroup->w();
+
+            // Try to adjust sizing first, keeping the pos the same.
+            if (aspectRatio > 1)
+            {
+                if (posY + H > minY + maxH)
+                {
+                    p.frameView = true;
+                    H = minY + maxH - posY + dH;
+                    W /= aspectRatio;
+
+#ifdef DEBUG_SCALING
+                    std::cerr << "Adjust sizing on height" << std::endl;
+#endif
+                }
+            }
+            else
+            {
+                if (posX + W > minX + maxW)
+                {
+                    p.frameView = true;
+                    W = minX + maxW - posX + dW;
+                    H /= aspectRatio;
+
+#ifdef DEBUG_SCALING
+                    std::cerr << "Adjust sizing on width" << std::endl;
+#endif
+                }
+            }
+
+#ifdef DEBUG_SCALING
+            std::cerr << "renderSize rescaled W=" << W << " H=" << H
+                      << std::endl;
+#endif
+
+            // Take into account the different UI bars
+            if (p.ui->uiMenuGroup->visible())
+                H += p.ui->uiMenuGroup->h();
+
+            if (p.ui->uiTopBar->visible())
+                H += p.ui->uiTopBar->h();
+
+            if (p.ui->uiPixelBar->visible())
+                H += p.ui->uiPixelBar->h();
+
+            if (p.ui->uiBottomBar->visible())
+            {
+                H += p.ui->uiBottomBar->h();
+            }
+
+            if (p.ui->uiStatusGroup->visible())
+                H += p.ui->uiStatusGroup->h();
+
+#ifdef DEBUG_SCALING
+            std::cerr << "Window size so far W=" << W << " H=" << H
+                      << std::endl;
+#endif
+        }
+
+        if (W == renderSize.w)
+        {
+            p.frameView = true;
+        }
+
+        if (p.ui->uiBottomBar->visible())
+        {
+            int TH = calculate_edit_viewport_size(p.ui);
+            H += TH;
+
+#ifdef DEBUG_SCALING
+            std::cerr << "Timeline Height=" << TH << std::endl;
+#endif
+        }
+
+        // Make sure that we are not less than the minimum window
+        // sizes, in case the user loaded a very tiny image.
         if (W < 690)
         {
             p.frameView = true;
@@ -1407,39 +1462,52 @@ namespace mrv
             H = 602;
         }
 
-        if (W == renderSize.w)
-        {
-            p.frameView = true;
-        }
-
-        if (p.ui->uiBottomBar->visible())
-        {
-            int timelineSize = calculate_edit_viewport_size(p.ui);
-            H += timelineSize;
-            if (H > maxH)
-                H = maxH;
-        }
+#ifdef DEBUG_SCALING
+        std::cerr << "clamped minimum W=" << W << " H=" << H << std::endl;
+#endif
 
         //
         // Final sanity checks.
         //
-        if (W > maxW)
+        if (posY + H + dH > minY + maxH)
+        {
+            H = minY + maxH + dH - posY;
+            p.frameView = true;
+        }
+
+#ifdef DEBUG_SCALING
+        std::cerr << "First minimum W=" << W << " H=" << H << std::endl;
+#endif
+
+        // Finally, if we are still failing, position the viewer at
+        // minX, minY with maxW and maxH.
+        if (posX + W > minX + maxW)
+        {
+            p.frameView = true;
+            posX = minX + dW / 2; // dW / 2 is needed here!
             W = maxW;
-        if (H > maxH)
+        }
+
+        //
+        if (posY + H > minY + maxH)
+        {
+            p.frameView = true;
+            posY = minY + dH; // dH is needed here!
             H = maxH;
-
-        if (posX + W > minx + maxW)
-        {
-            W = minx + maxW - posX;
-        }
-        if (posY + H > miny + maxH)
-        {
-            H = miny + maxH - posY;
         }
 
+#ifdef DEBUG_SCALING
+        std::cerr << "FINAL Window=" << posX << " " << posY << " " << W << "x"
+                  << H << " dW=" << dW << " dH=" << dH << std::endl;
+#endif
         mw->resize(posX, posY, W, H);
 
         p.ui->uiRegion->layout();
+
+        if (p.frameView)
+        {
+            _frameView();
+        }
 
         set_edit_mode_cb(editMode, p.ui);
 
@@ -2085,6 +2153,7 @@ namespace mrv
             {
                 hide_ui_state(p.ui);
             }
+            p.ui->uiTimeline->hide();
             _setFullScreen(active);
             p.presentation = true;
             p.presentationTime = std::chrono::high_resolution_clock::now();

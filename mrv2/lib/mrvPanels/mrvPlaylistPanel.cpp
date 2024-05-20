@@ -8,7 +8,6 @@
 
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Pack.H>
-#include <FL/Fl_RGB_Image.H>
 
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvFile.h"
@@ -28,8 +27,6 @@
 
 #include "mrvUI/mrvAsk.h" // for fl_input
 
-#include "mrvGL/mrvThumbnailCreator.h"
-
 #include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/mrvPlaylistsModel.h"
 #include "mrvApp/mrvApp.h"
@@ -42,18 +39,12 @@ namespace mrv
     namespace panel
     {
 
-        typedef std::map< PlaylistButton*, int64_t > WidgetIds;
         typedef std::map< PlaylistButton*, size_t > WidgetIndices;
 
         struct PlaylistPanel::Private
         {
-            std::weak_ptr<system::Context> context;
-            mrv::ThumbnailCreator* thumbnailCreator;
-
             std::map< size_t, PlaylistButton* > map;
-            std::vector< PlaylistButton* > clipButtons;
 
-            WidgetIds ids;
             WidgetIndices indices;
 
             std::shared_ptr<
@@ -65,65 +56,12 @@ namespace mrv
             std::shared_ptr<observer::ValueObserver<int> > aIndexObserver;
         };
 
-        struct ThumbnailData
-        {
-            PlaylistButton* widget;
-        };
-
-        void playlistThumbnail_cb(
-            const int64_t id,
-            const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&
-                thumbnails,
-            void* opaque)
-        {
-            ThumbnailData* data = static_cast< ThumbnailData* >(opaque);
-            PlaylistButton* w = data->widget;
-            if (playlistPanel)
-                playlistPanel->playlistThumbnail(id, thumbnails, w);
-            delete data;
-        }
-
-        void PlaylistPanel::playlistThumbnail(
-            const int64_t id,
-            const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&
-                thumbnails,
-            PlaylistButton* w)
-        {
-            WidgetIds::const_iterator it = _r->ids.find(w);
-            if (it == _r->ids.end())
-            {
-                return;
-            }
-
-            if (it->second == id)
-            {
-                for (const auto& i : thumbnails)
-                {
-                    Fl_Image* img = w->image();
-                    w->image(i.second);
-                    delete img;
-                    w->redraw();
-                }
-            }
-            else
-            {
-                for (const auto& i : thumbnails)
-                {
-                    delete i.second;
-                }
-            }
-        }
-
         PlaylistPanel::PlaylistPanel(ViewerUI* ui) :
             _r(new Private),
-            PanelWidget(ui)
+            ThumbnailPanel(ui)
         {
-            _r->context = ui->app->getContext();
-
             add_group("Playlist");
-
-            Fl_SVG_Image* svg = load_svg("Playlist.svg");
-            g->image(svg);
+            g->image(load_svg("Playlist.svg"));
 
             g->callback(
                 [](Fl_Widget* w, void* d)
@@ -152,46 +90,28 @@ namespace mrv
                 [this](int value) { redraw(); });
         }
 
-        PlaylistPanel::~PlaylistPanel()
-        {
-            cancel_thumbnails();
-            clear_controls();
-        }
-
-        void PlaylistPanel::clear_controls()
-        {
-            _r->map.clear();
-            _r->clipButtons.clear();
-            _r->indices.clear();
-        }
-
-        void PlaylistPanel::cancel_thumbnails()
-        {
-            for (const auto& it : _r->ids)
-            {
-                _r->thumbnailCreator->cancelRequests(it.second);
-            }
-
-            _r->ids.clear();
-        }
+        PlaylistPanel::~PlaylistPanel() {}
 
         void PlaylistPanel::add_controls()
         {
             TLRENDER_P();
 
+            _r->map.clear();
+            _r->indices.clear();
+
             g->clear();
 
             g->begin();
 
-            _r->thumbnailCreator = p.ui->uiTimeline->thumbnailCreator();
-
             int Y = g->y() + 22;
+
+            otio::RationalTime time = otio::RationalTime(0.0, 1.0);
+            const auto player = p.ui->uiView->getTimelinePlayer();
 
             const auto& model = App::app->filesModel();
             const auto& files = model->observeFiles().get()->get();
             const auto& aIndex = model->observeAIndex()->get();
             const size_t numFiles = files.size();
-            const image::Size size(128, 64);
             const std::string tmpdir = tmppath() + '/';
 
             file::Path lastPath;
@@ -217,7 +137,6 @@ namespace mrv
                 auto cbW = new Widget<PlaylistButton>(
                     g->x(), Y + numValidFiles * 68, g->w(), 68);
                 PlaylistButton* b = cbW;
-                _r->clipButtons.push_back(b);
                 _r->indices[b] = i;
                 cbW->callback(
                     [=](auto b)
@@ -242,32 +161,20 @@ namespace mrv
                 std::string text = dir + "\n" + file + "\nColor";
                 b->copy_label(text.c_str());
                 if (i == aIndex)
-                    b->value(1);
-                else
-                    b->value(0);
-
-                if (auto context = _r->context.lock())
                 {
-                    b->createTimeline(context);
-
-                    ThumbnailData* data = new ThumbnailData;
-                    data->widget = b;
-
-                    const auto& timeRange = media->inOutRange;
-                    auto time = timeRange.start_time();
-
-                    _r->thumbnailCreator->initThread();
-                    try
+                    b->value(1);
+                    if (player)
                     {
-                        int64_t id = _r->thumbnailCreator->request(
-                            fullfile, time, size, playlistThumbnail_cb,
-                            (void*)data);
-                        _r->ids[b] = id;
-                    }
-                    catch (const std::exception&)
-                    {
+                        time = player->currentTime();
                     }
                 }
+                else
+                {
+                    b->value(0);
+                    time = media->currentTime;
+                }
+
+                _createThumbnail(b, path, time);
             }
 
             if (numValidFiles == 0)
@@ -336,7 +243,6 @@ namespace mrv
             bg->end();
 
             Y += 30;
-            // Y += 30 + numFiles * 64;
         }
 
         void PlaylistPanel::redraw()
@@ -347,9 +253,6 @@ namespace mrv
             otio::RationalTime time = otio::RationalTime(0.0, 1.0);
 
             const auto player = p.ui->uiView->getTimelinePlayer();
-
-            image::Size size(128, 64);
-
             const auto& model = App::app->filesModel();
             auto Aindex = model->observeAIndex()->get();
             const auto files = model->observeFiles();
@@ -364,9 +267,8 @@ namespace mrv
                 PlaylistButton* b = m.second;
 
                 b->labelcolor(FL_WHITE);
-                WidgetIndices::iterator it = _r->indices.find(b);
+
                 time = media->currentTime;
-                uint16_t layerId = media->videoLayer;
                 if (Aindex != i)
                 {
                     b->value(0);
@@ -379,60 +281,18 @@ namespace mrv
                     if (player)
                     {
                         time = player->currentTime();
-                        layerId = p.ui->uiColorChannel->value();
                     }
                 }
 
-                if (auto context = _r->context.lock())
-                {
-                    b->createTimeline(context);
+                b->createTimeline(App::app->getContext());
 
-                    ThumbnailData* data = new ThumbnailData;
-                    data->widget = b;
-
-                    WidgetIds::const_iterator it = _r->ids.find(b);
-                    if (it != _r->ids.end())
-                    {
-                        _r->thumbnailCreator->cancelRequests(it->second);
-                        _r->ids.erase(it);
-                    }
-
-                    try
-                    {
-                        file::Path path(fullfile);
-                        auto timeline =
-                            timeline::Timeline::create(path, context);
-                        auto timeRange = timeline->getTimeRange();
-
-                        if (time::isValid(timeRange))
-                        {
-                            auto startTime = timeRange.start_time();
-                            auto endTime = timeRange.end_time_inclusive();
-
-                            if (time < startTime)
-                                time = startTime;
-                            else if (time > endTime)
-                                time = endTime;
-                        }
-
-                        _r->thumbnailCreator->initThread();
-
-                        int64_t id = _r->thumbnailCreator->request(
-                            fullfile, time, size, playlistThumbnail_cb,
-                            (void*)data, layerId);
-                        _r->ids[b] = id;
-                    }
-                    catch (const std::exception& e)
-                    {
-                    }
-                }
+                _createThumbnail(b, path, time);
             }
         }
 
         void PlaylistPanel::refresh()
         {
-            cancel_thumbnails();
-            clear_controls();
+            _cancelRequests();
             add_controls();
             end_group();
         }

@@ -30,7 +30,7 @@ foreach( LANGUAGE ${LANGUAGES} )
     file( REMOVE ${CONFFILE_OUT} )
 
     # Replace variables inside @@ with the current values
-    message( STATUS "Creating ${CONFFILE_OUT}..." )
+    message( DEBUG "Creating ${CONFFILE_OUT}..." )
     configure_file(${CONFFILE_IN} ${CONFFILE_OUT} @ONLY)
     
 
@@ -44,7 +44,7 @@ foreach( LANGUAGE ${LANGUAGES} )
     file( REMOVE ${DOCUMENT_OUT} )
     
     # Replace variables inside @@ with the current values
-    message( STATUS "Creating ${DOCUMENT_OUT}..." )
+    message( DEBUG "Creating ${DOCUMENT_OUT}..." )
     configure_file(${DOCUMENT_IN} ${DOCUMENT_OUT} @ONLY)
 
     # Make sure document.py is executable
@@ -80,4 +80,26 @@ add_custom_target( clean_doc
 add_custom_target( doc
     COMMAND ${CMAKE_COMMAND} -E echo "Documented all languages."
     DEPENDS ${DOCUMENTATION_TARGETS} clean_doc
+)
+
+
+if(MRV2_PYBIND11)
+    add_custom_target( pip
+	COMMAND ${PYTHON_EXECUTABLE} -m pip install --upgrade pip
     )
+
+    if(UNIX)
+	set(_install_requests_cmd ${PYTHON_EXECUTABLE} -m pip install
+	    --upgrade 
+	    --target
+	    ${CMAKE_INSTALL_PREFIX}/lib/python${MRV2_PYTHON_VERSION}/site-packages
+	    requests)
+    else()
+	set(_install_requests_cmd ${PYTHON_EXECUTABLE} -m pip install --upgrade --target ${CMAKE_INSTALL_PREFIX}/bin/Lib/site-packages requests)
+    endif()
+
+    add_custom_target( requests
+	COMMAND ${_install_requests_cmd}
+	DEPENDS pip mrv2
+    )
+endif()

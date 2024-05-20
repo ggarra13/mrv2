@@ -5,6 +5,7 @@
 #pragma once
 
 #include <tlTimeline/BackgroundOptions.h>
+#include <tlTimeline/PlayerOptions.h>
 #include <tlTimeline/IRender.h>
 
 #include "mrvCore/mrvActionMode.h"
@@ -44,7 +45,8 @@ namespace mrv
         int handle(int event) override;
         void resize(int X, int Y, int W, int H) override;
 
-        //! Store main ui.
+        //! Store main ui.  We need this as the first viewport does not
+        //! yet know about App::ui.
         void main(ViewerUI* m) noexcept;
 
         //! Handle scrubbing.
@@ -207,6 +209,8 @@ namespace mrv
 
         void endFrame() noexcept;
 
+        void setPlayback(const timeline::Playback) noexcept;
+
         //! Set the Annotation previous ghost frames.
         void setGhostPrevious(int);
 
@@ -281,7 +285,7 @@ namespace mrv
         void refreshWindows();
 
         //! Refresh window by clearing the associated resources.
-        virtual void refresh(){};
+        virtual void refresh() {};
 
         //! FLTK Callback to handle view spinning whne in Environment Map mode.
         static void _handleViewSpinning_cb(TimelineViewport* t) noexcept;

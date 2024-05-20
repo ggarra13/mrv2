@@ -105,15 +105,29 @@ namespace mrv
 
         bool isSequence(const std::string& filename)
         {
+            auto context = App::app->getContext();
+            auto ioSystem = context->getSystem<tl::io::System>();
+
             const file::Path path(filename);
-            // @todo: add view to tlRender's path.
+            const std::string& extension = path.getExtension();
+            switch (ioSystem->getFileType(extension))
+            {
+            case tl::io::FileType::Movie:
+            case tl::io::FileType::Audio:
+                return false;
+                break;
+            default:
+                if (extension == ".mrv2s" || extension == ".otio" ||
+                    extension == ".prefs" || extension == ".json")
+                    return false;
+                break;
+            };
             const std::string baseName = path.getBaseName();
+            // \@todo: add view to tlRender's file::Path class.
             // const std::string view = path.getView();
             const std::string number = path.getNumber();
-            const std::string ext = path.getExtension();
-            if (ext == ".mrv2s" || ext == ".otio" || ext == ".prefs")
-                return false;
-            bool ok = (!baseName.empty() && !number.empty() && !ext.empty());
+            bool ok =
+                (!baseName.empty() && !number.empty() && !extension.empty());
             return ok;
         }
 

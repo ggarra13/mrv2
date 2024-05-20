@@ -56,6 +56,7 @@ namespace mrv
         p.mainWindow->begin();
 
         p.viewport = new Viewport(0, 0, W, H);
+        p.viewport->main(ui); // needed
         p.viewport->end();
 
         p.viewport->setContext(ui->app->getContext());

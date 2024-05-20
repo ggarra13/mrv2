@@ -27,12 +27,14 @@ namespace fs = std::filesystem;
 
 #include "mrvFl/mrvCallbacks.h"
 #include "mrvFl/mrvLanguages.h"
+#include "mrvFl/mrvSession.h"
 
 #include "mrvApp/mrvApp.h"
 
 #include "mrvPreferencesUI.h"
 
 #include "mrvFl/mrvIO.h"
+#include "mrvCore/mrvOS.h"
 
 namespace
 {
@@ -43,71 +45,6 @@ LanguageTable kLanguages[18] = {
     {_("English"), "en.UTF-8"},
     {_("Spanish"), "es.UTF-8"},
 };
-
-#ifdef _WIN32
-namespace
-{
-    int win32_execv()
-    {
-        // Get the full command line string
-        LPWSTR lpCmdLine = GetCommandLineW();
-
-        // Parse the command line string into an array of arguments
-        int argc;
-        LPWSTR* argv = CommandLineToArgvW(lpCmdLine, &argc);
-
-        if (argv == NULL)
-        {
-            wprintf(L"Failed to parse command line\n");
-            return EXIT_FAILURE;
-        }
-
-        // Enclose argv[0] in double quotes if it contains spaces
-        LPWSTR cmd = argv[0];
-
-        for (int i = 0; i < argc; i++)
-        {
-            LPWSTR arg = argv[i];
-            if (wcschr(arg, L' ') != NULL)
-            {
-                size_t len =
-                    wcslen(arg) + 3; // 2 for quotes, 1 for null terminator
-                LPWSTR quoted_arg = (LPWSTR)malloc(len * sizeof(wchar_t));
-                if (quoted_arg == NULL)
-                {
-                    wprintf(L"Failed to allocate memory for command line\n");
-                    return EXIT_FAILURE;
-                }
-                swprintf_s(quoted_arg, len, L"\"%s\"", arg);
-
-                // Free the memory used by the unquoted argument
-                argv[i] = quoted_arg;
-            }
-        }
-
-        // Call _wexecv with the command string and arguments in separate
-        // parameters
-        intptr_t result = _wexecv(cmd, argv);
-
-        // Free the array of arguments
-        for (int i = 0; i < argc; i++)
-        {
-            free(argv[i]);
-            argv[i] = nullptr;
-        }
-        LocalFree(argv);
-
-        if (result == -1)
-        {
-            perror("_wexecv");
-            return EXIT_FAILURE;
-        }
-
-        exit(EXIT_SUCCESS);
-    }
-
-} // namespace
-#endif
 
 void check_language(PreferencesUI* uiPrefs, int& language_index, mrv::App* app)
 {
@@ -139,22 +76,15 @@ void check_language(PreferencesUI* uiPrefs, int& language_index, mrv::App* app)
 
             base.flush();
 
+            // Save a temporary session file
+            std::string session = mrv::tmppath();
+            session += "/lang.mrv2s";
+
+            mrv::session::save(session);
+
             app->cleanResources();
 
-#ifdef _WIN32
-            win32_execv();
-#else
-            std::string root = mrv::rootpath();
-            root += "/bin/mrv2";
-
-            const char* const parmList[] = {root.c_str(), NULL};
-            int ret = execv(root.c_str(), (char* const*)parmList);
-            if (ret == -1)
-            {
-                perror("execv failed");
-            }
-            exit(ret);
-#endif
+            mrv::os::execv("", session);
         }
         else
         {
@@ -242,7 +172,7 @@ namespace mrv
         if (!language || strncmp(language, langcode, 2) != 0)
         {
             setenv("LANGUAGE", langcode, 1);
-            win32_execv();
+            mrv::os::execv();
             exit(0);
         }
 #endif

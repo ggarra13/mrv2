@@ -5,6 +5,14 @@
 
 
 
+#
+#
+# Wrap up script to compile FLTK, tlRender and mrv2
+#
+#
+
+
+
 . $PWD/etc/build_dir.sh
 
 

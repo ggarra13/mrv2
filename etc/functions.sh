@@ -24,14 +24,17 @@ run_cmd()
 }
 
 #
-# Get kernel and architecture
+# Get kernel and architecture and on MacOS, MACOS_BRAND (Intel, M1, M2, etc).
 #
 get_kernel()
 {
     export KERNEL=`uname`
+    export MACOS_BRAND=''
     if [[ $KERNEL == *MSYS* || $KERNEL == *MINGW* ]]; then
 	export KERNEL=Msys
 	export ARCH=`which cl.exe`
+    elif [[ $KERNEL == *Darwin* ]]; then
+	    export MACOS_BRAND=$(sysctl -n machdep.cpu.brand_string)
     fi
 
     if [[ $ARCH == "" ]]; then
@@ -54,7 +57,8 @@ get_msvc_version()
 
 get_cmake_version()
 {
-    export CMAKE_VERSION=`cmake --version | grep version`
+    export CMAKE_LOCATION=`which cmake`
+    export CMAKE_VERSION=`cmake --version | grep -o 'cmake version [0-9.]*' | cut -d' ' -f3`
 }
 
 get_compiler_version()
@@ -225,3 +229,16 @@ ask_to_continue()
 	exit 0
     fi
 }
+
+clean_mo_files()
+{
+    local lcdir
+    local locales_dir
+    echo ""
+    echo "Cleaning .mo files"
+    echo
+    
+    locales_dir="${BUILD_DIR}/install/share/locale/* ${BUILD_DIR}/install/python/plug-ins/locales/*"
+    
+}
+    

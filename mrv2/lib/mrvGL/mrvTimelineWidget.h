@@ -150,7 +150,13 @@ namespace mrv
 
         void moveCallback(const std::vector<tl::timeline::MoveData>&);
 
+        void continuePlaying();
+
     protected:
+        void _initializeGL();
+
+        const float pixelRatio() const;
+
         int enterEvent();
         int leaveEvent();
         int mousePressEvent();
@@ -164,10 +170,10 @@ namespace mrv
         void timerEvent();
 
     private:
-        void _initializeGL();
+        void _initializeGLResources();
 
         void _createThumbnailWindow();
-        void _getThumbnailPosition(int& X, int& Y);
+        void _getThumbnailPosition(int& X, int& Y, int& W, int& H);
 
         void _setTimeUnits(tl::timeline::TimeUnits);
 
@@ -200,7 +206,7 @@ namespace mrv
 
         unsigned _changeKey(unsigned key);
 
-        otime::RationalTime _posToTime(int) const noexcept;
+        otime::RationalTime _posToTime(int) noexcept;
 
         //! Function used to send a seek to the network.
         int _seek();

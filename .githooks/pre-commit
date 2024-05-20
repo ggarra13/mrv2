@@ -21,6 +21,7 @@ do
 		chmod 0755 $FILE
 		echo "Running dos2unix on $FILE"
 		dos2unix $FILE
+		git add $FILE
 	    fi
 	else
 	    if [[ -d $FILE ]]; then
@@ -31,6 +32,7 @@ do
 		if [[ $FILE == *.pot || $FILE == *.po ]]; then
 		    echo "Running dos2unix on $FILE"
 		    dos2unix $FILE
+		    git add $FILE
 		fi
 	    fi
 	fi

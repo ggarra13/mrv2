@@ -43,5 +43,5 @@ export CMAKE_FLAGS=""
 
 echo
 echo "Saving compile log to $BUILD_DIR/compile.log ..."
-cmd="./runme_nolog.sh --ask -v $params 2>&1 | tee $BUILD_DIR/compile.log"
+cmd="./etc/runme_nolog.sh --ask -v $params 2>&1 | tee $BUILD_DIR/compile.log"
 run_cmd $cmd

@@ -107,7 +107,7 @@ decl {class AboutUI;} {public global
 }
 
 widget_class PixelToolBarClass {
-  xywh {1 65 682 31} resizable
+  xywh {37 101 686 31} resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {open
@@ -412,11 +412,11 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
   }
 }
 
-widget_class TimelineClass {
-  xywh {29 82 690 47} box NO_BOX resizable
+widget_class TimelineClass {open
+  xywh {82 146 690 47} box NO_BOX resizable
   class Fl_Double_Window visible
 } {
-  Fl_Group {} {
+  Fl_Group {} {open
     xywh {0 0 690 29} box FLAT_BOX
   } {
     Fl_Group {} {open
@@ -553,7 +553,7 @@ player->setLoop( loop );}
             class {mrv::StateButton}
           }
         }
-        Fl_Group {} {
+        Fl_Group {} {open
           xywh {341 1 86 28}
         } {
           Fl_Menu_Button fpsDefaults {
@@ -562,7 +562,7 @@ player->setLoop( loop );}
             callback {int idx = o->value();
 double speed = atof( o->text( idx ) );
 uiFPS->value( speed );
-uiFPS->do_callback();}
+uiFPS->do_callback();} open selected
             tooltip {Some default frame rate settings.} xywh {341 3 40 24} labelsize 10 align 16
             code0 {o->disable_label();}
             class {mrv::PopupMenu}
@@ -572,8 +572,12 @@ uiFPS->do_callback();}
               xywh {5 3 100 20}
             }
             MenuItem {} {
-              label 60
+              label 120
               xywh {5 3 100 20}
+            }
+            MenuItem {} {
+              label 60
+              xywh {15 13 100 20}
             }
             MenuItem {} {
               label {59.952}
@@ -781,8 +785,7 @@ ui->uiView->take_focus();}
   }
 }
 
-class ViewerUI {open
-} {
+class ViewerUI {} {
   decl {static mrv::App* app;} {public local
   }
   decl {static PreferencesUI* uiPrefs;} {public local
@@ -805,8 +808,8 @@ uiSecondary = nullptr;} {}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
     exit_cb( o, v );} open
-      xywh {58 111 690 602} type Double align 80 hide resizable
-      class {mrv::MainWindow} size_range {690 602 0 0}
+      xywh {127 191 690 602} type Double align 80 resizable
+      class {mrv::MainWindow} size_range {690 602 0 0} visible
     } {
       Fl_Pack uiRegion {open
         xywh {0 0 690 602} box FLAT_BOX resizable
@@ -816,7 +819,7 @@ if (reason == FL_REASON_CLOSED)
         code3 {o->fixed( uiPixelBar, uiPixelBar->h() ); o->fixed( uiStatusGroup, uiStatusGroup->h() );}
         class Fl_Flex
       } {
-        Fl_Group uiMenuGroup {
+        Fl_Group uiMenuGroup {open
           xywh {0 0 690 25} box FLAT_BOX
         } {
           Fl_Group {} {open
@@ -831,15 +834,19 @@ if (reason == FL_REASON_CLOSED)
               user_data this user_data_type {ViewerUI*}
               callback {int value = !o->value();
 bool presentation = uiView->getPresentationMode();
-mrv::EditMode mode = mrv::EditMode::kTimeline;
-if (value)             mode = mrv::EditMode::kFull;
-else if (presentation) mode = mrv::EditMode::kNone;
-mrv::editMode = mode;
 if (!presentation)
 {
-    uiView->resizeWindow();
+    if (value) mrv::editMode = mrv::EditMode::kFull;
+    else       mrv::editMode = mrv::EditMode::kTimeline;
+    set_edit_mode_cb(mrv::editMode, v);
+    //mrv::toggle_bottom_bar(nullptr, v);
 }
-mrv::set_edit_mode_cb(mode, v);}
+else
+{   
+    if (value) mrv::editMode = mrv::EditMode::kFull;
+    else       mrv::editMode = mrv::EditMode::kNone;
+    mrv::toggle_bottom_bar(nullptr, v);
+}}
               tooltip {Toggle Edit Mode} xywh {602 0 58 25} down_box DOWN_BOX selection_color 95 labelsize 12
             }
           }
@@ -1050,7 +1057,7 @@ Value is:  pow( 2, 1/x );} xywh {651 26 39 25} type {Horz Knob} labelsize 10 max
             xywh {120 25 570 26} hide resizable
           } {}
         }
-        Fl_Tile uiTileGroup {open
+        Fl_Tile uiTileGroup {
           xywh {0 53 690 465}
           code0 {;}
           class {mrv::Tile}
@@ -1058,7 +1065,7 @@ Value is:  pow( 2, 1/x );} xywh {651 26 39 25} type {Horz Knob} labelsize 10 max
           Fl_Box uiTimelineLimit {
             xywh {0 80 690 408} labeltype NO_LABEL hide resizable
           }
-          Fl_Pack uiViewGroup {
+          Fl_Pack uiViewGroup {open
             xywh {0 53 690 435} type HORIZONTAL box FLAT_BOX
             code0 {o->fixed( uiToolsGroup, uiToolsGroup->w() );}
             code1 {uiMain->workspace = uiViewGroup;}
@@ -1227,8 +1234,7 @@ settings->setValue( mrv::kPenColorA, a);}
             xywh {0 488 690 30} box FLAT_BOX color 51
             class {mrv::TimelineGroup}
           } {
-            Fl_Group uiTimeline {
-              label Timeline open selected
+            Fl_Group uiTimeline {open
               xywh {0 496 690 22} labeltype NO_LABEL resizable
               class {mrv::TimelineWidget}
             } {}
@@ -1256,10 +1262,10 @@ settings->setValue( mrv::kPenColorA, a);}
         Fl_Group uiStatusGroup {
           xywh {0 577 690 25} color 0
         } {
-          Fl_Group uiStatusBar {
-            label {Everything OK.  } open
+          Fl_Group uiStatusBar {open
             xywh {0 577 690 25} box FLAT_BOX labelsize 10 align 84
             code0 {o->save_colors();}
+            code1 {o->default_message();}
             class {mrv::StatusBar}
           } {
             Fl_Box uiStatus {

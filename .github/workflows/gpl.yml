@@ -69,7 +69,7 @@ jobs:
         
     - name: Build mrv2
       run: |
-        ./runme_nolog.sh -gpl -t package
+        ./etc/runme_nolog.sh -gpl -t package
 
     # - name: Upload binaries
     #   run: |
@@ -115,7 +115,7 @@ jobs:
         
     - name: Build mrv2
       run: |
-        ./runme_nolog.sh -gpl -t package -D TLRENDER_USD=OFF
+        ./etc/runme_nolog.sh -gpl -t package -D TLRENDER_USD=OFF
       
     # - name: Upload binaries
     #   run: |
@@ -162,7 +162,7 @@ jobs:
 
     - name: Build mrv2
       run: |
-        ./runme_nolog.sh -gpl -t package
+        ./etc/runme_nolog.sh -gpl -t package
 
     # - name: Upload binaries
     #   run: |
@@ -214,7 +214,7 @@ jobs:
 
     - name: Build mrv2
       run: |
-        ./runme_nolog.sh -gpl -t package
+        ./etc/runme_nolog.sh -gpl -t package
 
     - name: Upload binaries
       run: |

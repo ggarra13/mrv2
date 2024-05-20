@@ -81,7 +81,6 @@ namespace mrv
 
         int64_t id = 0;
         std::vector<int64_t> cancelRequests;
-        bool clearCache = false;
         size_t requestCount = 1;
         std::chrono::milliseconds requestTimeout =
             std::chrono::milliseconds(50);
@@ -90,6 +89,8 @@ namespace mrv
         std::thread* thread = nullptr;
         std::mutex mutex;
         std::atomic<bool> running;
+
+        io::Options options;
 
         OffscreenContext offscreenContext;
     };
@@ -142,6 +143,8 @@ namespace mrv
         if (!p.running)
             return;
 
+        Fl::remove_timeout((Fl_Timeout_Handler)timerEvent_cb, this);
+
         p.running = false;
         if (p.thread)
         {
@@ -149,8 +152,6 @@ namespace mrv
                 p.thread->join();
             p.thread = nullptr;
         }
-
-        Fl::remove_timeout((Fl_Timeout_Handler)timerEvent_cb, this);
     }
 
     int64_t ThumbnailCreator::request(
@@ -230,6 +231,10 @@ namespace mrv
         {
             if (id == resultIt->id)
             {
+                for (auto& i : resultIt->thumbnails)
+                {
+                    delete i.second;
+                }
                 resultIt = p.results.erase(resultIt);
                 continue;
             }
@@ -255,7 +260,7 @@ namespace mrv
     void ThumbnailCreator::clearCache()
     {
         TLRENDER_P();
-        p.clearCache = true;
+        p.options["ClearCache"] = string::Format("{0}").arg(rand());
     }
 
     void ThumbnailCreator::setTimerInterval(double value)
@@ -341,11 +346,7 @@ namespace mrv
                     options.ioOptions["OpenEXR/IgnoreDisplayWindow"] =
                         string::Format("{0}").arg(
                             App::ui->uiView->getIgnoreDisplayWindow());
-                    if (p.clearCache)
-                    {
-                        options.ioOptions["clearCache"] =
-                            string::Format("{0}").arg(rand());
-                    }
+                    options.ioOptions = io::merge(options.ioOptions, p.options);
 
                     file::Path path(request.fileName);
                     try
@@ -379,8 +380,6 @@ namespace mrv
                         continue;
                     }
                 }
-
-                p.clearCache = false;
 
                 // Check for finished requests.
                 std::vector<Private::Result> results;
@@ -513,7 +512,8 @@ namespace mrv
         }
         for (auto& i : results)
         {
-            i.callback(i.id, i.thumbnails, i.callbackData);
+            if (p.running)
+                i.callback(i.id, i.thumbnails, i.callbackData);
         }
         if (p.running)
         {

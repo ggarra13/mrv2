@@ -18,8 +18,6 @@
 #include "mrvPanels/mrvPanelsCallbacks.h"
 #include "mrvPanels/mrvStereo3DPanel.h"
 
-#include "mrvGL/mrvThumbnailCreator.h"
-
 #include "mrvApp/mrvSettingsObject.h"
 
 #include "mrViewer.h"
@@ -29,7 +27,6 @@ namespace mrv
     namespace panel
     {
 
-        typedef std::map< ClipButton*, int64_t > WidgetIds;
         typedef std::map< ClipButton*, size_t > WidgetIndices;
 
         struct Stereo3DPanel::Private
@@ -39,11 +36,7 @@ namespace mrv
             HorSlider* eyeSeparation = nullptr;
             Fl_Check_Button* swapEyes = nullptr;
 
-            std::weak_ptr<system::Context> context;
-            mrv::ThumbnailCreator* thumbnailCreator;
-
             std::map< size_t, ClipButton* > map;
-            WidgetIds ids;
             WidgetIndices indices;
 
             std::shared_ptr<
@@ -54,63 +47,12 @@ namespace mrv
             std::shared_ptr<observer::ListObserver<int> > layerObserver;
         };
 
-        struct ThumbnailData
-        {
-            ClipButton* widget;
-        };
-
-        void stereo3DThumbnail_cb(
-            const int64_t id,
-            const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&
-                thumbnails,
-            void* opaque)
-        {
-            ThumbnailData* data = static_cast< ThumbnailData* >(opaque);
-            ClipButton* w = data->widget;
-            if (stereo3DPanel)
-                stereo3DPanel->stereo3DThumbnail(id, thumbnails, w);
-            delete data;
-        }
-
-        void Stereo3DPanel::stereo3DThumbnail(
-            const int64_t id,
-            const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&
-                thumbnails,
-            ClipButton* w)
-        {
-            WidgetIds::const_iterator it = _r->ids.find(w);
-            if (it == _r->ids.end())
-                return;
-
-            if (it->second == id)
-            {
-                for (const auto& i : thumbnails)
-                {
-                    Fl_Image* img = w->image();
-                    w->image(i.second);
-                    delete img;
-                    w->redraw();
-                }
-            }
-            else
-            {
-                for (const auto& i : thumbnails)
-                {
-                    delete i.second;
-                }
-            }
-        }
-
         Stereo3DPanel::Stereo3DPanel(ViewerUI* ui) :
-            PanelWidget(ui),
+            ThumbnailPanel(ui),
             _r(new Private)
         {
-            _r->context = ui->app->getContext();
-
             add_group("Stereo 3D");
-
-            Fl_SVG_Image* svg = load_svg("Stereo3D.svg");
-            g->image(svg);
+            g->image(load_svg("Stereo3D.svg"));
 
             _r->filesObserver = observer::
                 ListObserver<std::shared_ptr<FilesModelItem> >::create(
@@ -137,37 +79,17 @@ namespace mrv
                 ui);
         }
 
-        Stereo3DPanel::~Stereo3DPanel()
-        {
-            TLRENDER_P();
-
-            cancel_thumbnails();
-            clear_controls();
-        }
-
-        void Stereo3DPanel::clear_controls()
-        {
-            for (const auto& i : _r->map)
-            {
-                ClipButton* b = i.second;
-                delete b->image();
-                b->image(nullptr);
-                g->remove(b);
-                delete b;
-            }
-
-            _r->map.clear();
-            _r->indices.clear();
-        }
+        Stereo3DPanel::~Stereo3DPanel() {}
 
         void Stereo3DPanel::add_controls()
         {
             TLRENDER_P();
 
+            _r->map.clear();
+            _r->indices.clear();
+
             auto settings = App::app->settings();
             const std::string& prefix = tab_prefix();
-
-            _r->thumbnailCreator = p.ui->uiTimeline->thumbnailCreator();
 
             const auto& model = App::app->filesModel();
 
@@ -252,52 +174,7 @@ namespace mrv
                 std::string text = protocol + dir + "\n" + file + layer;
                 b->copy_label(text.c_str());
 
-                if (isNDI)
-                {
-                    Fl_SVG_Image* svg = load_svg("NDI.svg");
-                    b->image(svg);
-                    continue;
-                }
-
-                if (auto context = _r->context.lock())
-                {
-                    ThumbnailData* data = new ThumbnailData;
-                    data->widget = b;
-
-                    WidgetIds::const_iterator it = _r->ids.find(b);
-                    if (it != _r->ids.end())
-                    {
-                        _r->thumbnailCreator->cancelRequests(it->second);
-                        _r->ids.erase(it);
-                    }
-
-                    try
-                    {
-                        auto timeline =
-                            timeline::Timeline::create(path, context);
-                        auto timeRange = timeline->getTimeRange();
-
-                        if (time::isValid(timeRange))
-                        {
-                            auto startTime = timeRange.start_time();
-                            auto endTime = timeRange.end_time_inclusive();
-
-                            if (time < startTime)
-                                time = startTime;
-                            else if (time > endTime)
-                                time = endTime;
-                        }
-
-                        _r->thumbnailCreator->initThread();
-                        int64_t id = _r->thumbnailCreator->request(
-                            fullfile, time, size, stereo3DThumbnail_cb,
-                            (void*)data, layerId);
-                        _r->ids[b] = id;
-                    }
-                    catch (const std::exception&)
-                    {
-                    }
-                }
+                _createThumbnail(b, path, time, layerId, isNDI);
             }
 
             Stereo3DOptions o = model->observeStereo3DOptions()->get();
@@ -509,8 +386,6 @@ namespace mrv
                 if (stereoIndex != i)
                 {
                     b->value(0);
-                    if (b->image())
-                        continue;
                 }
                 else
                 {
@@ -528,53 +403,7 @@ namespace mrv
                 b->copy_label(text.c_str());
                 b->labelcolor(FL_WHITE);
 
-                if (isNDI)
-                {
-                    Fl_SVG_Image* svg = load_svg("NDI.svg");
-                    b->image(svg);
-                    continue;
-                }
-
-                if (auto context = _r->context.lock())
-                {
-                    ThumbnailData* data = new ThumbnailData;
-                    data->widget = b;
-
-                    WidgetIds::const_iterator it = _r->ids.find(b);
-                    if (it != _r->ids.end())
-                    {
-                        _r->thumbnailCreator->cancelRequests(it->second);
-                        _r->ids.erase(it);
-                    }
-
-                    try
-                    {
-                        auto timeline =
-                            timeline::Timeline::create(path, context);
-                        auto timeRange = timeline->getTimeRange();
-
-                        if (time::isValid(timeRange))
-                        {
-                            auto startTime = timeRange.start_time();
-                            auto endTime = timeRange.end_time_inclusive();
-
-                            if (time < startTime)
-                                time = startTime;
-                            else if (time > endTime)
-                                time = endTime;
-                        }
-
-                        _r->thumbnailCreator->initThread();
-
-                        int64_t id = _r->thumbnailCreator->request(
-                            fullfile, time, size, stereo3DThumbnail_cb,
-                            (void*)data, layerId);
-                        _r->ids[b] = id;
-                    }
-                    catch (const std::exception& e)
-                    {
-                    }
-                }
+                _createThumbnail(b, path, time, layerId, isNDI);
             }
         }
 
@@ -587,20 +416,9 @@ namespace mrv
             r.swapEyes->value(value.swapEyes);
         }
 
-        void Stereo3DPanel::cancel_thumbnails()
-        {
-            for (const auto& it : _r->ids)
-            {
-                _r->thumbnailCreator->cancelRequests(it.second);
-            }
-
-            _r->ids.clear();
-        }
-
         void Stereo3DPanel::refresh()
         {
-            cancel_thumbnails();
-            clear_controls();
+            _cancelRequests();
             add_controls();
             end_group();
         }

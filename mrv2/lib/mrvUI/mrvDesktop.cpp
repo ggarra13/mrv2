@@ -24,6 +24,20 @@ namespace mrv
 
     namespace desktop
     {
+        bool X11()
+        {
+            bool out = false;
+#ifdef __linux__
+#    ifdef FLTK_USE_X11
+            if (fl_x11_display())
+            {
+                out = true;
+            }
+#    endif
+#endif
+            return out;
+        }
+
         bool Wayland()
         {
             bool out = false;

@@ -29,7 +29,7 @@ fi
 export TAG=$1
 
 if [[ "$TAG" == "" ]]; then
-    export TAG=`git ls-remote --tags --refs | tail -n1 | cut -d/ -f3`
+    export TAG=`git ls-remote --tags --refs | grep -E 'v[0-9]+\.[0-9]+\.[0-9]+$' | tail -n1 | cut -d/ -f3`
 fi
 
 date_created=`git for-each-ref --format="%(creatordate:iso)" refs/tags/$TAG`

@@ -335,7 +335,11 @@ namespace mrv
             std::ofstream ofs(fileName);
             if (!ofs.is_open())
             {
-                LOG_ERROR(_("Failed to open the file for writing."));
+                const std::string& err =
+                    string::Format(
+                        _("Failed to open the file {0} for writing."))
+                        .arg(fileName);
+                LOG_ERROR(err);
                 return false;
             }
 
@@ -343,7 +347,10 @@ namespace mrv
 
             if (ofs.fail())
             {
-                LOG_ERROR(_("Failed to write to the file."));
+                const std::string& err =
+                    string::Format(_("Failed to write to the file {0}."))
+                        .arg(fileName);
+                LOG_ERROR(err);
                 return false;
             }
             if (ofs.bad())
@@ -374,7 +381,11 @@ namespace mrv
             std::ifstream ifs(fileName);
             if (!ifs.is_open())
             {
-                LOG_ERROR(_("Failed to open the file for reading."));
+                const std::string& err =
+                    string::Format(
+                        _("Failed to open the file {0} for reading."))
+                        .arg(fileName);
+                LOG_ERROR(err);
                 return false;
             }
 
@@ -388,7 +399,10 @@ namespace mrv
 
                 if (ifs.fail())
                 {
-                    LOG_ERROR(_("Failed to load the file."));
+                    const std::string& err =
+                        string::Format(_("Failed to load the file {0}."))
+                            .arg(fileName);
+                    LOG_ERROR(err);
                     return false;
                 }
                 if (ifs.bad())
@@ -415,7 +429,7 @@ namespace mrv
                 close_all_cb(nullptr, ui);
 
                 // Turn off auto-playback temporarily
-                bool autoplayback = ui->uiPrefs->uiPrefsAutoPlayback->value();
+                bool autoPlayback = ui->uiPrefs->uiPrefsAutoPlayback->value();
                 ui->uiPrefs->uiPrefsAutoPlayback->value(false);
 
                 for (const auto& j : session["files"])
@@ -458,6 +472,8 @@ namespace mrv
                         player->seek(Aitem->currentTime);
                     }
                 }
+
+                ui->uiPrefs->uiPrefsAutoPlayback->value(autoPlayback);
 
                 Message j = session["ui"];
 
@@ -667,8 +683,6 @@ namespace mrv
 
                 if (version >= 2)
                 {
-                    ui->uiPrefs->uiPrefsAutoPlayback->value(autoplayback);
-
                     std::vector<int> Bindexes = session["Bindexes"];
                     model->clearB();
                     for (auto i : Bindexes)
@@ -742,9 +756,7 @@ namespace mrv
                                 j.at("playback").get_to(v);
                                 playback = static_cast<timeline::Playback>(v);
                             }
-                            if (ui->uiPrefs->uiPrefsAutoPlayback->value())
-                                playback = timeline::Playback::Forward;
-                            player->setPlayback(playback);
+                            view->setPlayback(playback);
                         }
                     }
                 }
