@@ -2179,10 +2179,20 @@ namespace mrv
 
         for (const auto& move : moves)
         {
-            if (move.fromIndex < 0 || move.fromTrack < 0 || move.toTrack < 0 ||
+            if (move.toIndex < 0 || move.toTrack < 0 ||
                 move.toTrack >= tracks.size())
+            {
+                LOG_ERROR("Invalid TO track or index");
                 continue;
-
+            }
+            if (move.fromIndex < 0 ||
+                move.fromTrack < 0 ||
+                move.fromTrack >= tracks.size())
+            {
+                LOG_ERROR("Invalid FROM track or index");
+                continue;
+            }
+        
             if (auto track = otio::dynamic_retainer_cast<otio::Track>(
                     tracks[move.fromTrack]))
             {
@@ -2190,8 +2200,9 @@ namespace mrv
                     continue;
             }
 
-            int toIndex = move.toIndex;
-            if (move.fromTrack == move.toTrack && move.fromIndex < toIndex)
+            int toIndex = move.toOtioIndex;
+            if (move.fromTrack == move.toTrack &&
+                move.fromIndex < move.toIndex)
             {
                 --toIndex;
             }
@@ -2199,10 +2210,17 @@ namespace mrv
             if (auto track = otio::dynamic_retainer_cast<otio::Track>(
                     tracks[move.fromTrack]))
             {
-                auto child = track->children()[move.fromIndex];
+                auto child = track->children()[move.fromOtioIndex];
                 auto item = otio::dynamic_retainer_cast<otio::Item>(child);
                 if (!item)
+                {
+                    LOG_ERROR("From track=" << move.fromTrack
+                              << " item=" << move.fromIndex
+                              << " otio=" << move.fromOtioIndex
+                              << " name=" << child->name()
+                              << " not an item ");
                     continue;
+                }
 
                 auto rate = track->trimmed_range().duration().rate();
 
@@ -2218,8 +2236,15 @@ namespace mrv
                     auto child = track->children()[toIndex];
                     auto item = otio::dynamic_retainer_cast<otio::Item>(child);
                     if (!item)
+                    {
+                        LOG_ERROR("To track=" << move.toTrack
+                                  << " item=" << toIndex
+                                  << " otio=" << move.toOtioIndex
+                                  << " name=" << child->name()
+                                  << " not an item");
                         continue;
-
+                    }
+                    
                     auto insertRange = item->trimmed_range_in_parent().value();
 
                     otime::RationalTime insertTime;
@@ -2247,10 +2272,6 @@ namespace mrv
         otio::ErrorStatus errorStatus;
         for (const auto& move : moves)
         {
-            if (move.fromIndex < 0 || move.fromTrack < 0 || move.toTrack < 0 ||
-                move.toTrack >= tracks.size())
-                continue;
-
             std::vector<int> fromOtioIndexes;
             std::vector<int> toOtioIndexes;
             if (auto track = otio::dynamic_retainer_cast<otio::Track>(
@@ -2289,6 +2310,9 @@ namespace mrv
             if (auto track = otio::dynamic_retainer_cast<otio::Track>(
                     tracks[move.toTrack]))
             {
+                if (move.toOtioIndex >= track->children().size())
+                    continue;
+                
                 auto child = track->children()[move.toOtioIndex];
 
                 auto item = otio::dynamic_retainer_cast<otio::Item>(child);
