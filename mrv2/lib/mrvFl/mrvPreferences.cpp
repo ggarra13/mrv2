@@ -330,9 +330,9 @@ namespace mrv
 
 #ifdef __APPLE__
         {
-            auto itemOptions = ui->uiTimeline->getItemOptions();
+            auto itemOptions = ui->uiTimeline->getDisplayOptions();
             itemOptions.thumbnailFade = 0;
-            ui->uiTimeline->setItemOptions(itemOptions);
+            ui->uiTimeline->setDisplayOptions(itemOptions);
         }
 #endif
 
@@ -1557,7 +1557,7 @@ namespace mrv
         //
         // Edit mode options
         //
-        auto options = ui->uiTimeline->getItemOptions();
+        auto options = ui->uiTimeline->getDisplayOptions();
         options.transitions = uiPrefs->uiPrefsShowTransitions->value();
         options.markers = uiPrefs->uiPrefsShowMarkers->value();
         ui->uiTimeline->setEditable(uiPrefs->uiPrefsTimelineEditable->value());
@@ -1581,7 +1581,7 @@ namespace mrv
         options.waveformHeight = options.thumbnailHeight / 2;
         options.trackInfo = settings->getValue<int>("Timeline/TrackInfo");
         options.clipInfo = settings->getValue<int>("Timeline/ClipInfo");
-        ui->uiTimeline->setItemOptions(options);
+        ui->uiTimeline->setDisplayOptions(options);
 
         if (uiPrefs->uiPrefsTimeline->value())
         {

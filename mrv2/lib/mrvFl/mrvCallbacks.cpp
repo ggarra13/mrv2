@@ -1567,14 +1567,14 @@ namespace mrv
 
     void timeline_thumbnails_none_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        auto options = ui->uiTimeline->getItemOptions();
+        auto options = ui->uiTimeline->getDisplayOptions();
         options.thumbnails = false;
         Message msg;
         msg["command"] = "setTimelineItemOptions";
         msg["value"] = options;
         if (ui->uiPrefs->SendUI->value())
             tcp->pushMessage(msg);
-        ui->uiTimeline->setItemOptions(options);
+        ui->uiTimeline->setDisplayOptions(options);
         if (editMode != EditMode::kTimeline)
             set_edit_mode_cb(EditMode::kFull, ui);
         ui->uiMain->fill_menu(ui->uiMenuBar);
@@ -1635,16 +1635,16 @@ namespace mrv
     void toggle_timeline_track_info_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
-        auto options = ui->uiTimeline->getItemOptions();
+        auto options = ui->uiTimeline->getDisplayOptions();
         options.trackInfo = item->checked();
         auto settings = ui->app->settings();
         settings->setValue("Timeline/TrackInfo", options.trackInfo);
         Message msg;
-        msg["command"] = "setTimelineItemOptions";
+        msg["command"] = "setTimelineDisplayptions";
         msg["value"] = options;
         if (ui->uiPrefs->SendUI->value())
             tcp->pushMessage(msg);
-        ui->uiTimeline->setItemOptions(options);
+        ui->uiTimeline->setDisplayOptions(options);
         if (editMode != EditMode::kTimeline)
             set_edit_mode_cb(EditMode::kFull, ui);
         ui->uiMain->fill_menu(ui->uiMenuBar);
@@ -1653,16 +1653,16 @@ namespace mrv
     void toggle_timeline_clip_info_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
-        auto options = ui->uiTimeline->getItemOptions();
+        auto options = ui->uiTimeline->getDisplayOptions();
         options.clipInfo = item->checked();
         auto settings = ui->app->settings();
         settings->setValue("Timeline/ClipInfo", options.clipInfo);
         Message msg;
-        msg["command"] = "setTimelineItemOptions";
+        msg["command"] = "setTimelineDisplayOptions";
         msg["value"] = options;
         if (ui->uiPrefs->SendUI->value())
             tcp->pushMessage(msg);
-        ui->uiTimeline->setItemOptions(options);
+        ui->uiTimeline->setDisplayOptions(options);
         if (editMode != EditMode::kTimeline)
             set_edit_mode_cb(EditMode::kFull, ui);
         ui->uiMain->fill_menu(ui->uiMenuBar);
@@ -1671,14 +1671,14 @@ namespace mrv
     void toggle_timeline_markers_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
-        auto options = ui->uiTimeline->getItemOptions();
+        auto options = ui->uiTimeline->getDisplayOptions();
         options.markers = item->checked();
         Message msg;
-        msg["command"] = "setTimelineItemOptions";
+        msg["command"] = "setTimelineDisplayOptions";
         msg["value"] = options;
         if (ui->uiPrefs->SendUI->value())
             tcp->pushMessage(msg);
-        ui->uiTimeline->setItemOptions(options);
+        ui->uiTimeline->setDisplayOptions(options);
         if (editMode != EditMode::kTimeline)
             set_edit_mode_cb(EditMode::kFull, ui);
         ui->uiMain->fill_menu(ui->uiMenuBar);
@@ -1687,14 +1687,14 @@ namespace mrv
     void toggle_timeline_transitions_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
-        auto options = ui->uiTimeline->getItemOptions();
+        auto options = ui->uiTimeline->getDisplayOptions();
         options.transitions = item->checked();
         Message msg;
-        msg["command"] = "setTimelineItemOptions";
+        msg["command"] = "setTimelineDisplayOptions";
         msg["value"] = options;
         if (ui->uiPrefs->SendUI->value())
             tcp->pushMessage(msg);
-        ui->uiTimeline->setItemOptions(options);
+        ui->uiTimeline->setDisplayOptions(options);
         if (editMode != EditMode::kTimeline)
             set_edit_mode_cb(EditMode::kFull, ui);
         ui->uiMain->fill_menu(ui->uiMenuBar);
@@ -1702,16 +1702,16 @@ namespace mrv
 
     void timeline_thumbnails_small_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        auto options = ui->uiTimeline->getItemOptions();
+        auto options = ui->uiTimeline->getDisplayOptions();
         options.thumbnails = true;
         options.thumbnailHeight = 100;
         options.waveformHeight = options.thumbnailHeight / 2;
         Message msg;
-        msg["command"] = "setTimelineItemOptions";
+        msg["command"] = "setTimelineDisplayOptions";
         msg["value"] = options;
         if (ui->uiPrefs->SendUI->value())
             tcp->pushMessage(msg);
-        ui->uiTimeline->setItemOptions(options);
+        ui->uiTimeline->setDisplayOptions(options);
         if (editMode != EditMode::kTimeline)
             set_edit_mode_cb(EditMode::kFull, ui);
         ui->uiMain->fill_menu(ui->uiMenuBar);
@@ -1719,16 +1719,16 @@ namespace mrv
 
     void timeline_thumbnails_medium_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        auto options = ui->uiTimeline->getItemOptions();
+        auto options = ui->uiTimeline->getDisplayOptions();
         options.thumbnails = true;
         options.thumbnailHeight = 200;
         options.waveformHeight = options.thumbnailHeight / 2;
         Message msg;
-        msg["command"] = "setTimelineItemOptions";
+        msg["command"] = "setTimelineDisplayOptions";
         msg["value"] = options;
         if (ui->uiPrefs->SendUI->value())
             tcp->pushMessage(msg);
-        ui->uiTimeline->setItemOptions(options);
+        ui->uiTimeline->setDisplayOptions(options);
         if (editMode != EditMode::kTimeline)
             set_edit_mode_cb(EditMode::kFull, ui);
         ui->uiMain->fill_menu(ui->uiMenuBar);
@@ -1736,16 +1736,16 @@ namespace mrv
 
     void timeline_thumbnails_large_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        auto options = ui->uiTimeline->getItemOptions();
+        auto options = ui->uiTimeline->getDisplayOptions();
         options.thumbnails = true;
         options.thumbnailHeight = 300;
         options.waveformHeight = options.thumbnailHeight / 2;
         Message msg;
-        msg["command"] = "setTimelineItemOptions";
+        msg["command"] = "setTimelineDisplayOptions";
         msg["value"] = options;
         if (ui->uiPrefs->SendUI->value())
             tcp->pushMessage(msg);
-        ui->uiTimeline->setItemOptions(options);
+        ui->uiTimeline->setDisplayOptions(options);
         if (editMode != EditMode::kTimeline)
             set_edit_mode_cb(EditMode::kFull, ui);
         ui->uiMain->fill_menu(ui->uiMenuBar);
