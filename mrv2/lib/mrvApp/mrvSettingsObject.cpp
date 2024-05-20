@@ -83,9 +83,9 @@ namespace mrv
 
         p.defaultValues["Timeline/Editable"] = true;
         p.defaultValues["Timeline/TrackInfo"] =
-            timelineui::ItemOptions().trackInfo;
+            timelineui::DisplayOptions().trackInfo;
         p.defaultValues["Timeline/ClipInfo"] =
-            timelineui::ItemOptions().clipInfo;
+            timelineui::DisplayOptions().clipInfo;
         p.defaultValues["Timeline/ScrollToCurrentFrame"] = true;
         p.defaultValues["Timeline/StopOnScrub"] = true;
         p.defaultValues["Timeline/FirstTrack"] = false;

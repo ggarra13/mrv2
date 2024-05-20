@@ -2350,20 +2350,20 @@ namespace mrv
 
     int calculate_edit_viewport_size(ViewerUI* ui)
     { //
-        const timelineui::ItemOptions& options =
-            ui->uiTimeline->getItemOptions();
+        const timelineui::DisplayOptions& displayOptions =
+            ui->uiTimeline->getDisplayOptions();
 
 #if 0
-        std::cerr << " trackInfo=" << options.trackInfo << std::endl;
-        std::cerr << "  clipInfo=" << options.clipInfo << std::endl;
-        std::cerr << "thumbnails=" << options.thumbnails << std::endl;
+        std::cerr << " trackInfo=" << displayOptions.trackInfo << std::endl;
+        std::cerr << "  clipInfo=" << displayOptions.clipInfo << std::endl;
+        std::cerr << "thumbnails=" << displayOptions.thumbnails << std::endl;
         std::cerr << "thumbnailsHeight="
-                  << options.thumbnailHeight << std::endl;
-        std::cerr << "waveformHeight=" << options.waveformHeight << std::endl;
-        std::cerr << "      fontSize=" << options.fontSize << std::endl;
-        std::cerr << " clipRectScale=" << options.clipRectScale << std::endl;
-        std::cerr << "   transitions=" << options.transitions << std::endl;
-        std::cerr << "       markers=" << options.markers << std::endl;
+                  << displayOptions.thumbnailHeight << std::endl;
+        std::cerr << "waveformHeight=" << displayOptions.waveformHeight << std::endl;
+        std::cerr << "      fontSize=" << displayOptions.fontSize << std::endl;
+        std::cerr << " clipRectScale=" << displayOptions.clipRectScale << std::endl;
+        std::cerr << "   transitions=" << displayOptions.transitions << std::endl;
+        std::cerr << "       markers=" << displayOptions.markers << std::endl;
 #endif
 
         // This specifies whether to show Video Only or Video and Audio.
@@ -2382,8 +2382,8 @@ namespace mrv
         const int kAudioGapOnlyHeight = 20;
         const int kMarkerHeight = 24;
 
-        const int kVideoHeight = options.thumbnailHeight;
-        const int kAudioHeight = options.waveformHeight + kMargin;
+        const int kVideoHeight = displayOptions.thumbnailHeight;
+        const int kAudioHeight = displayOptions.waveformHeight + kMargin;
 
         int H = kMinEditModeH; // timeline height
         if (editMode == EditMode::kTimeline)
@@ -2426,11 +2426,11 @@ namespace mrv
                 bool visibleTrack = false;
                 if (otio::Track::Kind::video == track->kind())
                 {
-                    if (options.trackInfo)
+                    if (displayOptions.trackInfo)
                         videoHeight += kTrackInfoHeight;
-                    if (options.clipInfo)
+                    if (displayOptions.clipInfo)
                         videoHeight += kClipInfoHeight;
-                    if (options.thumbnails)
+                    if (displayOptions.thumbnails)
                         videoHeight += kVideoHeight / pixels_unit;
                     visibleTrack = true;
                 }
@@ -2440,11 +2440,11 @@ namespace mrv
                 {
                     if (track->children().size() > 0)
                     {
-                        if (options.trackInfo)
+                        if (displayOptions.trackInfo)
                             audioHeight += kTrackInfoHeight;
-                        if (options.clipInfo)
+                        if (displayOptions.clipInfo)
                             audioHeight += kClipInfoHeight;
-                        if (options.thumbnails)
+                        if (displayOptions.thumbnails)
                         {
                             bool hasWaveform = false;
                             for (const auto& trackChild : track->children())
@@ -2468,7 +2468,7 @@ namespace mrv
                     }
                 }
                 // Handle Markers
-                if (options.markers && visibleTrack)
+                if (displayOptions.markers && visibleTrack)
                 {
                     int markerSizeForTrack = 0;
                     for (const auto& child : track->children())
@@ -2488,7 +2488,7 @@ namespace mrv
                     markersHeight += markerSizeForTrack;
                 }
                 // Handle transitions
-                if (options.transitions && visibleTrack)
+                if (displayOptions.transitions && visibleTrack)
                 {
                     bool found = false;
                     for (const auto& child : track->children())
