@@ -58,6 +58,9 @@ namespace mrv
 
         //! Get timelineUI's timelineWidget item options
         timelineui::ItemOptions getItemOptions() const;
+        
+        //! Get timelineUI's timelineWidget display options
+        timelineui::DisplayOptions getDisplayOptions() const;
 
         //! Set the timeline player.
         void setTimelinePlayer(TimelinePlayer*);
@@ -86,8 +89,11 @@ namespace mrv
         //! Set whether to stop playback when scrubbing.
         void setStopOnScrub(bool);
 
-        //! Set the item options.
+        //! Set the Display options.
         void setItemOptions(const timelineui::ItemOptions&);
+        
+        //! Set the Display options.
+        void setDisplayOptions(const timelineui::DisplayOptions&);
 
         //! Frame the view.
         void frameView();

@@ -197,7 +197,7 @@ namespace mrv
         std::shared_ptr<image::FontSystem> fontSystem;
         std::shared_ptr<Clipboard> clipboard;
         std::shared_ptr<timeline::IRender> render;
-        timelineui::ItemOptions itemOptions;
+        timelineui::DisplayOptions displayOptions;
         std::shared_ptr<timelineui::TimelineWidget> timelineWidget;
         std::shared_ptr<TimelineWindow> timelineWindow;
         std::shared_ptr<tl::gl::Shader> shader;
@@ -262,10 +262,11 @@ namespace mrv
         p.timelineWidget->setMoveCallback(std::bind(
             &mrv::TimelineWidget::moveCallback, this, std::placeholders::_1));
 
-        timelineui::ItemOptions itemOptions;
-        itemOptions.trackInfo = settings->getValue<bool>("Timeline/TrackInfo");
-        itemOptions.clipInfo = settings->getValue<bool>("Timeline/ClipInfo");
-        p.timelineWidget->setItemOptions(itemOptions);
+        timelineui::DisplayOptions displayOptions;
+        displayOptions.trackInfo =
+            settings->getValue<bool>("Timeline/TrackInfo");
+        displayOptions.clipInfo = settings->getValue<bool>("Timeline/ClipInfo");
+        p.timelineWidget->setDisplayOptions(displayOptions);
 
         p.timelineWindow = TimelineWindow::create(context);
         p.timelineWindow->setClipboard(p.clipboard);
@@ -459,10 +460,14 @@ namespace mrv
         return 1;
     }
 
-    //! Get timelineUI's timelineWidget item options
     timelineui::ItemOptions TimelineWidget::getItemOptions() const
     {
         return _p->timelineWidget->getItemOptions();
+    }
+
+    timelineui::DisplayOptions TimelineWidget::getDisplayOptions() const
+    {
+        return _p->timelineWidget->getDisplayOptions();
     }
 
     void TimelineWidget::setTimelinePlayer(TimelinePlayer* player)
@@ -530,8 +535,8 @@ namespace mrv
     void TimelineWidget::setThumbnails(bool value)
     {
         TLRENDER_P();
-        p.itemOptions.thumbnails = value;
-        _p->timelineWidget->setItemOptions(p.itemOptions);
+        p.displayOptions.thumbnails = value;
+        _p->timelineWidget->setDisplayOptions(p.displayOptions);
     }
 
     void TimelineWidget::setMouseWheelScale(float value)
@@ -539,9 +544,16 @@ namespace mrv
         _p->timelineWidget->setMouseWheelScale(value);
     }
 
-    void TimelineWidget::setItemOptions(const timelineui::ItemOptions& value)
+    void
+    TimelineWidget::setItemOptions(const timelineui::ItemOptions& value)
     {
         _p->timelineWidget->setItemOptions(value);
+    }
+    
+    void
+    TimelineWidget::setDisplayOptions(const timelineui::DisplayOptions& value)
+    {
+        _p->timelineWidget->setDisplayOptions(value);
     }
 
     void TimelineWidget::_initializeGL()
