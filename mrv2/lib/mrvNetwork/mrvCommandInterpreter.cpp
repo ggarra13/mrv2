@@ -1287,7 +1287,7 @@ namespace mrv
                 if ((!value && stereo3DPanel) || (value && !stereo3DPanel))
                     stereo3D_panel_cb(nullptr, ui);
             }
-            else if (c == "setTimelineItemOptions")
+            else if (c == "setTimelineDisplayOptions")
             {
                 bool receive = prefs->ReceiveUI->value();
                 if (!receive)
@@ -1295,8 +1295,8 @@ namespace mrv
                     tcp->unlock();
                     return;
                 }
-                timelineui::ItemOptions value = message["value"];
-                ui->uiTimeline->setItemOptions(value);
+                timelineui::DisplayOptions value = message["value"];
+                ui->uiTimeline->setDisplayOptions(value);
             }
             else if (c == "Timeline/FrameView")
             {

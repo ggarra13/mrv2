@@ -10,7 +10,18 @@ namespace tl
     {
         void to_json(nlohmann::json& j, const ItemOptions& value)
         {
+            j["inputEnabled"] = value.inputEnabled;
             j["editAssociatedClips"] = value.editAssociatedClips;
+        }
+
+        void from_json(const nlohmann::json& j, ItemOptions& value)
+        {
+            j.at("inputEnabled").get_to(value.inputEnabled);
+            j.at("editAssociatedClips").get_to(value.editAssociatedClips);
+        }
+        
+        void to_json(nlohmann::json& j, const DisplayOptions& value)
+        {
             j["trackInfo"] = value.trackInfo;
             j["clipInfo"] = value.clipInfo;
             j["thumbnails"] = value.thumbnails;
@@ -21,9 +32,8 @@ namespace tl
             j["markers"] = value.markers;
         }
 
-        void from_json(const nlohmann::json& j, ItemOptions& value)
+        void from_json(const nlohmann::json& j, DisplayOptions& value)
         {
-            j.at("editAssociatedClips").get_to(value.editAssociatedClips);
             j.at("trackInfo").get_to(value.trackInfo);
             j.at("clipInfo").get_to(value.clipInfo);
             j.at("thumbnails").get_to(value.thumbnails);

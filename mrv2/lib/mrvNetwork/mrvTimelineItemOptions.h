@@ -13,6 +13,10 @@ namespace tl
         void to_json(nlohmann::json& j, const ItemOptions& value);
 
         void from_json(const nlohmann::json& j, ItemOptions& value);
+        
+        void to_json(nlohmann::json& j, const DisplayOptions& value);
+
+        void from_json(const nlohmann::json& j, DisplayOptions& value);
     }; // namespace timelineui
 
 } // namespace tl
