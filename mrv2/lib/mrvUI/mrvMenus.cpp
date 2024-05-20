@@ -554,194 +554,203 @@ namespace mrv
         // Make sure to sync panels remotely.
         syncPanels();
 
-        const timeline::DisplayOptions& displayOptions =
-            ui->app->displayOptions();
-        const timeline::ImageOptions& imageOptions = ui->app->imageOptions();
-        const timeline::BackgroundOptions& backgroundOptions =
-            ui->uiView->getBackgroundOptions();
+        {
+            const timeline::DisplayOptions& displayOptions =
+                ui->app->displayOptions();
+            const timeline::ImageOptions& imageOptions =
+                ui->app->imageOptions();
+            const timeline::BackgroundOptions& backgroundOptions =
+                ui->uiView->getBackgroundOptions();
 
-        mode = FL_MENU_RADIO;
-        if (numFiles == 0)
-            mode |= FL_MENU_INACTIVE;
-        if (displayOptions.channels == timeline::Channels::Color)
-            mode |= FL_MENU_VALUE;
-        idx = menu->add(
-            _("Render/Color Channel"), kColorChannel.hotkey(),
-            (Fl_Callback*)toggle_color_channel_cb, ui, mode);
+            mode = FL_MENU_RADIO;
+            if (numFiles == 0)
+                mode |= FL_MENU_INACTIVE;
+            if (displayOptions.channels == timeline::Channels::Color)
+                mode |= FL_MENU_VALUE;
+            idx = menu->add(
+                _("Render/Color Channel"), kColorChannel.hotkey(),
+                (Fl_Callback*)toggle_color_channel_cb, ui, mode);
 
-        mode = FL_MENU_RADIO;
-        if (numFiles == 0)
-            mode |= FL_MENU_INACTIVE;
-        if (displayOptions.channels == timeline::Channels::Red)
-            mode |= FL_MENU_VALUE;
-        idx = menu->add(
-            _("Render/Red Channel"), kRedChannel.hotkey(),
-            (Fl_Callback*)toggle_red_channel_cb, ui, mode);
+            mode = FL_MENU_RADIO;
+            if (numFiles == 0)
+                mode |= FL_MENU_INACTIVE;
+            if (displayOptions.channels == timeline::Channels::Red)
+                mode |= FL_MENU_VALUE;
+            idx = menu->add(
+                _("Render/Red Channel"), kRedChannel.hotkey(),
+                (Fl_Callback*)toggle_red_channel_cb, ui, mode);
 
-        mode = FL_MENU_RADIO;
-        if (numFiles == 0)
-            mode |= FL_MENU_INACTIVE;
-        if (displayOptions.channels == timeline::Channels::Green)
-            mode |= FL_MENU_VALUE;
-        idx = menu->add(
-            _("Render/Green Channel "), kGreenChannel.hotkey(),
-            (Fl_Callback*)toggle_green_channel_cb, ui, mode);
+            mode = FL_MENU_RADIO;
+            if (numFiles == 0)
+                mode |= FL_MENU_INACTIVE;
+            if (displayOptions.channels == timeline::Channels::Green)
+                mode |= FL_MENU_VALUE;
+            idx = menu->add(
+                _("Render/Green Channel "), kGreenChannel.hotkey(),
+                (Fl_Callback*)toggle_green_channel_cb, ui, mode);
 
-        mode = FL_MENU_RADIO;
-        if (numFiles == 0)
-            mode |= FL_MENU_INACTIVE;
-        if (displayOptions.channels == timeline::Channels::Blue)
-            mode |= FL_MENU_VALUE;
-        idx = menu->add(
-            _("Render/Blue Channel"), kBlueChannel.hotkey(),
-            (Fl_Callback*)toggle_blue_channel_cb, ui, mode);
+            mode = FL_MENU_RADIO;
+            if (numFiles == 0)
+                mode |= FL_MENU_INACTIVE;
+            if (displayOptions.channels == timeline::Channels::Blue)
+                mode |= FL_MENU_VALUE;
+            idx = menu->add(
+                _("Render/Blue Channel"), kBlueChannel.hotkey(),
+                (Fl_Callback*)toggle_blue_channel_cb, ui, mode);
 
-        mode = FL_MENU_RADIO;
-        if (numFiles == 0)
-            mode |= FL_MENU_INACTIVE;
-        if (displayOptions.channels == timeline::Channels::Alpha)
-            mode |= FL_MENU_VALUE;
-        idx = menu->add(
-            _("Render/Alpha Channel"), kAlphaChannel.hotkey(),
-            (Fl_Callback*)toggle_alpha_channel_cb, ui, FL_MENU_DIVIDER | mode);
+            mode = FL_MENU_RADIO;
+            if (numFiles == 0)
+                mode |= FL_MENU_INACTIVE;
+            if (displayOptions.channels == timeline::Channels::Alpha)
+                mode |= FL_MENU_VALUE;
+            idx = menu->add(
+                _("Render/Alpha Channel"), kAlphaChannel.hotkey(),
+                (Fl_Callback*)toggle_alpha_channel_cb, ui,
+                FL_MENU_DIVIDER | mode);
 
-        mode = FL_MENU_TOGGLE;
-        if (numFiles == 0)
-            mode |= FL_MENU_INACTIVE;
+            mode = FL_MENU_TOGGLE;
+            if (numFiles == 0)
+                mode |= FL_MENU_INACTIVE;
 
-        if (displayOptions.mirror.x)
-            mode |= FL_MENU_VALUE;
-        idx = menu->add(
-            _("Render/Mirror X"), kFlipX.hotkey(), (Fl_Callback*)mirror_x_cb,
-            ui, mode);
+            if (displayOptions.mirror.x)
+                mode |= FL_MENU_VALUE;
+            idx = menu->add(
+                _("Render/Mirror X"), kFlipX.hotkey(),
+                (Fl_Callback*)mirror_x_cb, ui, mode);
 
-        mode = FL_MENU_TOGGLE;
-        if (numFiles == 0)
-            mode |= FL_MENU_INACTIVE;
+            mode = FL_MENU_TOGGLE;
+            if (numFiles == 0)
+                mode |= FL_MENU_INACTIVE;
 
-        if (displayOptions.mirror.y)
-            mode |= FL_MENU_VALUE;
-        idx = menu->add(
-            _("Render/Mirror Y"), kFlipY.hotkey(), (Fl_Callback*)mirror_y_cb,
-            ui, FL_MENU_DIVIDER | mode);
+            if (displayOptions.mirror.y)
+                mode |= FL_MENU_VALUE;
+            idx = menu->add(
+                _("Render/Mirror Y"), kFlipY.hotkey(),
+                (Fl_Callback*)mirror_y_cb, ui, FL_MENU_DIVIDER | mode);
 
-        mode = 0;
-        if (numFiles == 0)
-            mode |= FL_MENU_INACTIVE;
-        idx = menu->add(
-            _("Render/Rotate/-90 Degrees"), kRotateMinus90.hotkey(),
-            (Fl_Callback*)rotate_minus_90_cb, ui, mode);
+            mode = 0;
+            if (numFiles == 0)
+                mode |= FL_MENU_INACTIVE;
+            idx = menu->add(
+                _("Render/Rotate/-90 Degrees"), kRotateMinus90.hotkey(),
+                (Fl_Callback*)rotate_minus_90_cb, ui, mode);
 
-        idx = menu->add(
-            _("Render/Rotate/+90 Degrees"), kRotatePlus90.hotkey(),
-            (Fl_Callback*)rotate_plus_90_cb, ui, mode);
+            idx = menu->add(
+                _("Render/Rotate/+90 Degrees"), kRotatePlus90.hotkey(),
+                (Fl_Callback*)rotate_plus_90_cb, ui, mode);
 
-        mode = FL_MENU_RADIO;
+            mode = FL_MENU_RADIO;
 
-        idx = menu->add(
-            _("Render/Video Levels/From File"), kVideoLevelsFile.hotkey(),
-            (Fl_Callback*)video_levels_from_file_cb, ui, mode);
-        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (imageOptions.videoLevels == timeline::InputVideoLevels::FromFile)
-            item->set();
+            idx = menu->add(
+                _("Render/Video Levels/From File"), kVideoLevelsFile.hotkey(),
+                (Fl_Callback*)video_levels_from_file_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (imageOptions.videoLevels ==
+                timeline::InputVideoLevels::FromFile)
+                item->set();
 
-        idx = menu->add(
-            _("Render/Video Levels/Legal Range"),
-            kVideoLevelsLegalRange.hotkey(),
-            (Fl_Callback*)video_levels_legal_range_cb, ui, mode);
-        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (imageOptions.videoLevels == timeline::InputVideoLevels::LegalRange)
-            item->set();
+            idx = menu->add(
+                _("Render/Video Levels/Legal Range"),
+                kVideoLevelsLegalRange.hotkey(),
+                (Fl_Callback*)video_levels_legal_range_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (imageOptions.videoLevels ==
+                timeline::InputVideoLevels::LegalRange)
+                item->set();
 
-        idx = menu->add(
-            _("Render/Video Levels/Full Range"), kVideoLevelsFullRange.hotkey(),
-            (Fl_Callback*)video_levels_full_range_cb, ui,
-            FL_MENU_DIVIDER | mode);
-        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (imageOptions.videoLevels == timeline::InputVideoLevels::FullRange)
-            item->set();
+            idx = menu->add(
+                _("Render/Video Levels/Full Range"),
+                kVideoLevelsFullRange.hotkey(),
+                (Fl_Callback*)video_levels_full_range_cb, ui,
+                FL_MENU_DIVIDER | mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (imageOptions.videoLevels ==
+                timeline::InputVideoLevels::FullRange)
+                item->set();
 
-        mode = FL_MENU_RADIO;
+            mode = FL_MENU_RADIO;
 
-        idx = menu->add(
-            _("Render/Alpha Blend/None"), kAlphaBlendNone.hotkey(),
-            (Fl_Callback*)alpha_blend_none_cb, ui, mode);
-        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (imageOptions.alphaBlend == timeline::AlphaBlend::None)
-            item->set();
+            idx = menu->add(
+                _("Render/Alpha Blend/None"), kAlphaBlendNone.hotkey(),
+                (Fl_Callback*)alpha_blend_none_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (imageOptions.alphaBlend == timeline::AlphaBlend::None)
+                item->set();
 
-        idx = menu->add(
-            _("Render/Alpha Blend/Straight"), kAlphaBlendStraight.hotkey(),
-            (Fl_Callback*)alpha_blend_straight_cb, ui, mode);
-        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (imageOptions.alphaBlend == timeline::AlphaBlend::Straight)
-            item->set();
+            idx = menu->add(
+                _("Render/Alpha Blend/Straight"), kAlphaBlendStraight.hotkey(),
+                (Fl_Callback*)alpha_blend_straight_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (imageOptions.alphaBlend == timeline::AlphaBlend::Straight)
+                item->set();
 
-        idx = menu->add(
-            _("Render/Alpha Blend/Premultiplied"),
-            kAlphaBlendPremultiplied.hotkey(),
-            (Fl_Callback*)alpha_blend_premultiplied_cb, ui, mode);
-        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (imageOptions.alphaBlend == timeline::AlphaBlend::Premultiplied)
-            item->set();
+            idx = menu->add(
+                _("Render/Alpha Blend/Premultiplied"),
+                kAlphaBlendPremultiplied.hotkey(),
+                (Fl_Callback*)alpha_blend_premultiplied_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (imageOptions.alphaBlend == timeline::AlphaBlend::Premultiplied)
+                item->set();
 
-        mode = FL_MENU_RADIO;
-        if (numFiles == 0)
-            mode |= FL_MENU_INACTIVE;
+            mode = FL_MENU_RADIO;
+            if (numFiles == 0)
+                mode |= FL_MENU_INACTIVE;
 
-        unsigned filtering_linear = 0;
-        unsigned filtering_nearest = 0;
-        if (displayOptions.imageFilters.minify ==
-            timeline::ImageFilter::Nearest)
-            filtering_linear = kMinifyTextureFiltering.hotkey();
-        else
-            filtering_nearest = kMinifyTextureFiltering.hotkey();
+            unsigned filtering_linear = 0;
+            unsigned filtering_nearest = 0;
+            if (displayOptions.imageFilters.minify ==
+                timeline::ImageFilter::Nearest)
+                filtering_linear = kMinifyTextureFiltering.hotkey();
+            else
+                filtering_nearest = kMinifyTextureFiltering.hotkey();
 
-        idx = menu->add(
-            _("Render/Minify Filter/Nearest"), filtering_nearest,
-            (Fl_Callback*)minify_nearest_cb, ui, mode);
-        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (displayOptions.imageFilters.minify ==
-            timeline::ImageFilter::Nearest)
-            item->set();
+            idx = menu->add(
+                _("Render/Minify Filter/Nearest"), filtering_nearest,
+                (Fl_Callback*)minify_nearest_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (displayOptions.imageFilters.minify ==
+                timeline::ImageFilter::Nearest)
+                item->set();
 
-        idx = menu->add(
-            _("Render/Minify Filter/Linear"), filtering_linear,
-            (Fl_Callback*)minify_linear_cb, ui, mode);
-        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (displayOptions.imageFilters.minify == timeline::ImageFilter::Linear)
-            item->set();
+            idx = menu->add(
+                _("Render/Minify Filter/Linear"), filtering_linear,
+                (Fl_Callback*)minify_linear_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (displayOptions.imageFilters.minify ==
+                timeline::ImageFilter::Linear)
+                item->set();
 
-        filtering_linear = 0;
-        filtering_nearest = 0;
-        if (displayOptions.imageFilters.magnify ==
-            timeline::ImageFilter::Nearest)
-            filtering_linear = kMagnifyTextureFiltering.hotkey();
-        else
-            filtering_nearest = kMagnifyTextureFiltering.hotkey();
+            filtering_linear = 0;
+            filtering_nearest = 0;
+            if (displayOptions.imageFilters.magnify ==
+                timeline::ImageFilter::Nearest)
+                filtering_linear = kMagnifyTextureFiltering.hotkey();
+            else
+                filtering_nearest = kMagnifyTextureFiltering.hotkey();
 
-        idx = menu->add(
-            _("Render/Magnify Filter/Nearest"), filtering_nearest,
-            (Fl_Callback*)magnify_nearest_cb, ui, mode);
-        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (displayOptions.imageFilters.magnify ==
-            timeline::ImageFilter::Nearest)
-            item->set();
+            idx = menu->add(
+                _("Render/Magnify Filter/Nearest"), filtering_nearest,
+                (Fl_Callback*)magnify_nearest_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (displayOptions.imageFilters.magnify ==
+                timeline::ImageFilter::Nearest)
+                item->set();
 
-        idx = menu->add(
-            _("Render/Magnify Filter/Linear"), filtering_linear,
-            (Fl_Callback*)magnify_linear_cb, ui, mode);
-        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (displayOptions.imageFilters.magnify ==
-            timeline::ImageFilter::Linear)
-            item->set();
-
+            idx = menu->add(
+                _("Render/Magnify Filter/Linear"), filtering_linear,
+                (Fl_Callback*)magnify_linear_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (displayOptions.imageFilters.magnify ==
+                timeline::ImageFilter::Linear)
+                item->set();
+        }
+        
         timeline::Playback playback = timeline::Playback::Stop;
 
         auto player = ui->uiView->getTimelinePlayer();
         if (player)
             playback = player->playback();
-
+            
         mode = FL_MENU_RADIO;
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
@@ -819,7 +828,8 @@ namespace mrv
             item->set();
         idx = menu->add(
             _("Playback/Playback Ping Pong"), kPlaybackPingPong.hotkey(),
-            (Fl_Callback*)playback_ping_pong_cb, ui, FL_MENU_DIVIDER | mode);
+            (Fl_Callback*)playback_ping_pong_cb, ui,
+            FL_MENU_DIVIDER | mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (loop == timeline::Loop::PingPong)
             item->set();
@@ -857,11 +867,12 @@ namespace mrv
                 {
                     menu->add(
                         _("Playback/Go to/Previous Clip"),
-                        kPreviousClip.hotkey(), (Fl_Callback*)previous_clip_cb,
-                        ui, mode);
+                        kPreviousClip.hotkey(),
+                        (Fl_Callback*)previous_clip_cb, ui, mode);
                     menu->add(
                         _("Playback/Go to/Next Clip"), kNextClip.hotkey(),
-                        (Fl_Callback*)next_clip_cb, ui, FL_MENU_DIVIDER | mode);
+                        (Fl_Callback*)next_clip_cb, ui,
+                        FL_MENU_DIVIDER | mode);
                 }
             }
 
@@ -879,7 +890,8 @@ namespace mrv
                     FL_MENU_DIVIDER | mode);
 
                 menu->add(
-                    _("Playback/Annotation/Clear"), kShapeFrameClear.hotkey(),
+                    _("Playback/Annotation/Clear"),
+                    kShapeFrameClear.hotkey(),
                     (Fl_Callback*)annotation_clear_cb, ui);
                 menu->add(
                     _("Playback/Annotation/Clear All"),
@@ -918,7 +930,6 @@ namespace mrv
         if (hud)
             item->set();
 
-        const auto& options = ui->uiTimeline->getItemOptions();
 
         mode = FL_MENU_TOGGLE;
         if (numFiles == 0)
@@ -932,12 +943,14 @@ namespace mrv
         if (editable)
             item->set();
 
+        const auto& itemOptions = ui->uiTimeline->getItemOptions();
+        const auto& displayOptions = ui->uiTimeline->getDisplayOptions();
         idx = menu->add(
             _("Timeline/Edit Associated Clips"),
             kToggleEditAssociatedClips.hotkey(),
             (Fl_Callback*)toggle_timeline_edit_associated_clips_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (options.editAssociatedClips)
+        if (itemOptions.editAssociatedClips)
             item->set();
 
         mode = 0;
@@ -966,14 +979,14 @@ namespace mrv
             _("Timeline/Track Info"), kToggleTimelineTrackInfo.hotkey(),
             (Fl_Callback*)toggle_timeline_track_info_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (options.trackInfo)
+        if (displayOptions.trackInfo)
             item->set();
 
         idx = menu->add(
             _("Timeline/Clip Info"), kToggleTimelineClipInfo.hotkey(),
             (Fl_Callback*)toggle_timeline_clip_info_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (options.clipInfo)
+        if (displayOptions.clipInfo)
             item->set();
 
         mode = FL_MENU_RADIO;
@@ -982,7 +995,7 @@ namespace mrv
 
         int thumbnails_none = 0;
         int thumbnails_small = 0;
-        if (options.thumbnails)
+        if (displayOptions.thumbnails)
             thumbnails_none = kToggleTimelineThumbnails.hotkey();
         else
             thumbnails_small = kToggleTimelineThumbnails.hotkey();
@@ -991,25 +1004,25 @@ namespace mrv
             _("Timeline/Thumbnails/None"), thumbnails_none,
             (Fl_Callback*)timeline_thumbnails_none_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (!options.thumbnails)
+        if (!displayOptions.thumbnails)
             item->set();
         idx = menu->add(
             _("Timeline/Thumbnails/Small"), thumbnails_small,
             (Fl_Callback*)timeline_thumbnails_small_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (options.thumbnails && options.thumbnailHeight == 100)
+        if (displayOptions.thumbnails && displayOptions.thumbnailHeight == 100)
             item->set();
         idx = menu->add(
             _("Timeline/Thumbnails/Medium"), 0,
             (Fl_Callback*)timeline_thumbnails_medium_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (options.thumbnails && options.thumbnailHeight == 200)
+        if (displayOptions.thumbnails && displayOptions.thumbnailHeight == 200)
             item->set();
         idx = menu->add(
             _("Timeline/Thumbnails/Large"), 0,
             (Fl_Callback*)timeline_thumbnails_large_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (options.thumbnails && options.thumbnailHeight == 300)
+        if (displayOptions.thumbnails && displayOptions.thumbnailHeight == 300)
             item->set();
 
         mode = FL_MENU_TOGGLE;
@@ -1019,13 +1032,13 @@ namespace mrv
             _("Timeline/Transitions"), kToggleTimelineTransitions.hotkey(),
             (Fl_Callback*)toggle_timeline_transitions_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (options.transitions)
+        if (displayOptions.transitions)
             item->set();
         idx = menu->add(
             _("Timeline/Markers"), kToggleTimelineMarkers.hotkey(),
             (Fl_Callback*)toggle_timeline_markers_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (options.markers)
+        if (displayOptions.markers)
             item->set();
 
         const int aIndex = model->observeAIndex()->get();
