@@ -12,8 +12,8 @@ namespace mrv
 extern Fl_Pixmap preview_img, file_list_img, file_listwide_img, fileDetails,
     desktop, folder_closed, default_file, my_computer, computer, disk_drive,
     cd_drive, floppy_drive, removable_drive, ram_drive, network_drive,
-    documents, little_favorites, little_desktop, reel, picture, music;
-extern Fl_Image* usd;
+    documents, little_favorites, little_desktop, reel, picture;
+extern Fl_Image *usd, *music;
 
 class Fl_RGB_Image;
 class Flu_File_Chooser;
@@ -31,7 +31,7 @@ public:
     void draw() FL_OVERRIDE;
 
     void bind_image(Fl_RGB_Image*);
-    
+
     void set_colors();
 
     void updateSize();
@@ -54,6 +54,10 @@ public:
     inline static void _editCB(void* arg) { ((Flu_Entry*)arg)->editCB(); }
     void editCB();
 
+    //! Convert our internal information to a tlRender friendly filename.
+    std::string toTLRender();
+
+public:
     std::string filename, date, filesize, shortname, owner, description,
         shortDescription, toolTip, altname;
     std::string permissions;
@@ -66,9 +70,10 @@ public:
     Flu_File_Chooser* chooser;
     Fl_Image* icon;
 
-    //! Convert our internal information to a tlRender friendly filename.
-    std::string toTLRender();
+protected:
+    void updateSize(int& W, int& H, int& iW, int& iH, int& tW, int& tH);
 
+    bool isPicture = false;
     bool details;
     int nameW, typeW, sizeW, dateW;
 

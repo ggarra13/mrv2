@@ -249,7 +249,6 @@ void Flu_File_Chooser::previewCB()
         return;
     }
 
-    
     Fl_Group* g = getEntryGroup();
     int c = g->children();
     for (int i = 0; i < c; ++i)
@@ -479,10 +478,12 @@ Flu_File_Chooser::Flu_File_Chooser(
     add_type("tiff", _("TIFF Picture"), &picture);
     add_type("x3f", _("RAW Picture"), &picture);
 
+    if (!music)
+        music = mrv::load_svg("Music.svg");
 
-    add_type("mp3", _("MP3 music"), &music);
-    add_type("ogg", _("OGG Vorbis music"), &music);
-    add_type("wav", _("Wave music"), &music);
+    add_type("mp3", _("MP3 music"), music);
+    add_type("ogg", _("OGG Vorbis music"), music);
+    add_type("wav", _("Wave music"), music);
 
     if (!usd)
         usd = mrv::load_svg("USD.svg");
@@ -490,7 +491,7 @@ Flu_File_Chooser::Flu_File_Chooser(
     add_type("usdz", _("OpenUSD Zipped Asset"), usd);
     add_type("usdc", _("OpenUSD Compressed Asset"), usd);
     add_type("usda", _("OpenUSD ASCII Asset"), usd);
-    
+
     for (int j = 0; j < 4; j++)
     {
         std::string text = _(detailTxt[j].c_str());
@@ -1092,7 +1093,7 @@ void Flu_File_Chooser::pattern(const char* p)
 int Flu_File_Chooser::handle(int event)
 {
     TLRENDER_P();
-    
+
     if (Fl_Double_Window::callback() != _hideCB)
     {
         _callback = Fl_Double_Window::callback();
@@ -2076,7 +2077,7 @@ int Flu_File_Chooser::FileList::handle(int event)
 
     if (event == FL_FOCUS || event == FL_UNFOCUS)
         return 1;
-    
+
     if (Flu_Wrap_Group::handle(event))
         return 1;
 
@@ -2381,7 +2382,7 @@ void Flu_File_Chooser::listModeCB()
 Fl_Group* Flu_File_Chooser::getEntryGroup()
 {
     return (!fileDetailsBtn->value() || currentDir == FAVORITES_UNIQUE_STRING)
-        ? &(filelist->group)
+               ? &(filelist->group)
                : filedetails;
 }
 
@@ -3741,7 +3742,7 @@ void Flu_File_Chooser::cd(const char* path)
     if (num > 0)
     {
         int i;
-            
+
         for (i = 0; i < num; i++)
         {
             name = e[i]->d_name;
@@ -4076,7 +4077,7 @@ void Flu_File_Chooser::cd(const char* path)
     } // num > 0
 
     fl_filename_free_list(&e, num);
-    
+
     // sort the files: directories first, then files
 
     if (listMode)
@@ -4110,44 +4111,44 @@ void Flu_File_Chooser::cd(const char* path)
 #ifdef _WIN32
             if (filename.value()[1] == ':')
 #else
-                if (filename.value()[0] == '/')
+            if (filename.value()[0] == '/')
 #endif
-                {
-                    std::string s = currentDir + lastAddedDir + "/";
-                    filename.value(s.c_str());
-                }
-                else
-                    filename.value(lastAddedDir);
+            {
+                std::string s = currentDir + lastAddedDir + "/";
+                filename.value(s.c_str());
+            }
+            else
+                filename.value(lastAddedDir);
         }
         else if (numFiles == 1 && numDirs == 0)
         {
 #ifdef _WIN32
             if (filename.value()[1] == ':')
 #else
-                if (filename.value()[0] == '/')
+            if (filename.value()[0] == '/')
 #endif
-                {
-                    std::string s = currentDir + lastAddedFile;
-                    filename.value(s.c_str());
-                }
-                else
-                    filename.value(lastAddedFile);
+            {
+                std::string s = currentDir + lastAddedFile;
+                filename.value(s.c_str());
+            }
+            else
+                filename.value(lastAddedFile);
         }
         else if (prefix.size() >= currentFile.size())
         {
 #ifdef _WIN32
             if (filename.value()[1] == ':')
 #else
-                if (filename.value()[0] == '/')
+            if (filename.value()[0] == '/')
 #endif
-                {
-                    std::string s = currentDir + prefix;
-                    filename.value(s.c_str());
-                }
-                else
-                {
-                    filename.value(prefix.c_str());
-                }
+            {
+                std::string s = currentDir + prefix;
+                filename.value(s.c_str());
+            }
+            else
+            {
+                filename.value(prefix.c_str());
+            }
         }
 
 #ifdef _WIN32

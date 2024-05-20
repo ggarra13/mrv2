@@ -23,12 +23,19 @@
 #include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvHome.h"
 
+#include "mrvFl/mrvIO.h"
+
 #include "mrvUI/mrvDesktop.h"
 
 #ifdef TLRENDER_GL
 #    include <tlGL/Init.h>
 #    include <FL/gl.h>
 #endif
+
+namespace
+{
+    const char* kModule = "os";
+}
 
 namespace mrv
 {
@@ -37,7 +44,6 @@ namespace mrv
 
         int execv(const std::string& exe, const std::string& session)
         {
-            unsetenv("MRV2_ROOT");
 
 #ifdef _WIN32
             int argc = 2;
@@ -72,6 +78,7 @@ namespace mrv
             }
             else
             {
+                unsetenv("MRV2_ROOT");
                 wExe = std::wstring(exe.begin(), exe.end());
 
                 // Allocate new array
@@ -155,6 +162,7 @@ namespace mrv
             }
             else
             {
+                unsetenv("MRV2_ROOT");
                 run = exe;
             }
 
@@ -162,6 +170,7 @@ namespace mrv
             int ret = ::execv(run.c_str(), const_cast<char**>(newArgv));
             if (ret == -1)
             {
+                LOG_ERROR("execv failed " << run << " " << session);
                 perror("execv failed");
             }
             exit(ret);

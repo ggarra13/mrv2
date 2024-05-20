@@ -34,4 +34,3 @@ FLU_EXPORT extern const char* textdoc_xpm[];
 FLU_EXPORT extern const char* cdrom_xpm[];
 FLU_EXPORT extern const char* const reel_xpm[];
 FLU_EXPORT extern const char* const image_xpm[];
-FLU_EXPORT extern const char* const music_xpm[];
