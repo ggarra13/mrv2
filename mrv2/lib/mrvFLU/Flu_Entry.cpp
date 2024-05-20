@@ -43,10 +43,10 @@ Fl_Pixmap preview_img((char* const*)monalisa_xpm),
     documents((char* const*)filled_folder_xpm),
     little_favorites((char* const*)mini_folder_favorites_xpm),
     little_desktop((char* const*)mini_desktop_xpm),
-    reel((char* const*)reel_xpm), picture((char* const*)image_xpm),
-    music((char* const*)music_xpm);
+    reel((char* const*)reel_xpm), picture((char* const*)image_xpm);
 
 Fl_Image* usd = nullptr;
+Fl_Image* music = nullptr;
 
 static const int kColorOne = fl_rgb_color(200, 200, 200);
 static const int kColorTwo = fl_rgb_color(180, 180, 180);
@@ -556,22 +556,59 @@ void Flu_Entry::editCB()
     chooser->trashBtn->deactivate();
     redraw();
 }
-void Flu_Entry::updateSize()
+
+void Flu_Entry::updateSize(int& W, int& H, int& iW, int& iH, int& tW, int& tH)
 {
-    int H = 20;
+    // Some constants
+    const int marginW = 2;
+    const int marginH = 4;
+
+    // Measure the name in width and height
+    tW = 0;
+    tH = 0;
+    fl_font(textfont(), textsize());
+
+    // measure the name and see if we need a truncated version
+    fl_measure(filename.c_str(), tW, tH);
+
+    // how big is the icon?
+    iW = 22, iH = marginH;
+    bool wide = chooser->fileListWideBtn->value();
     if (icon)
     {
         if (chooser->previewBtn->value() &&
             (icon == &reel || icon == &picture) &&
             Flu_File_Chooser::thumbnailsFileReq)
         {
-            H = 68;
+            iW = icon->w() + marginW;
+            if (!isPicture)
+            {
+                isPicture = true;
+                iH = 64 + marginH;
+            }
+            else
+            {
+                iH = icon->h() + marginH;
+            }
         }
         else
         {
-            H = icon->h() + 4;
+            iW = icon->w() + marginW;
+            iH = icon->h() + marginH;
+            if (!isPicture || wide)
+                tH = 0;
         }
     }
+
+    W = tW;
+    H = tH + iH;
+}
+
+void Flu_Entry::updateSize()
+{
+    int W, H, iW, iH, tW, tH;
+    updateSize(W, H, iW, iH, tW, tH);
+
     if (type == ENTRY_FAVORITE || chooser->fileListWideBtn->value())
     {
         resize(x(), y(), chooser->filelist->w() - 4, H);
@@ -592,19 +629,7 @@ void Flu_Entry::updateSize()
     else
         nameW = w();
 
-    // how big is the icon?
-    int iW = 22;
-    if (icon)
-    {
-        iW = icon->w() + 2;
-    }
-
-    fl_font(textfont(), textsize());
-
-    // measure the name and see if we need a truncated version
-    int W = 0;
-    fl_measure(filename.c_str(), W, H);
-    const int maxW = nameW - iW;
+    const int maxW = nameW;
     if (W > maxW)
     {
         // progressively strip characters off the end of the name until
@@ -717,8 +742,6 @@ void Flu_Entry::draw()
         return;
     }
 
-    // startRequest();
-
     if (selected)
     {
         fl_draw_box(FL_FLAT_BOX, x(), y(), w(), h(), Fl_Color(0x8f8f0000));
@@ -730,26 +753,31 @@ void Flu_Entry::draw()
         fl_color(FL_BLACK);
     }
 
+    int W, H, iW, iH, tW, tH;
+    updateSize(W, H, iW, iH, tW, tH);
+
+    bool below = (!chooser->fileListWideBtn->value()) && isPicture;
     int X = x() + 4;
     int Y = y();
-    int iH = 0;
-    if (icon)
-    {
-        {
-            icon->draw(X, y() + h() / 2 - icon->h() / 2);
-            X += icon->w() + 2;
-        }
-    }
+    int tY = Y;
 
-    int iW = 0, W = 0, H = 0;
     if (icon)
     {
-        iW = icon->w() + 2;
+        icon->draw(X, y() + (H - iH - tH) / 2 + 2);
+        if (!below)
+        {
+            X += icon->w() + 2;
+            tH = H;
+        }
+        else
+        {
+            tY += icon->h() + 2;
+        }
     }
 
     fl_font(textfont(), textsize());
     fl_measure(filename.c_str(), W, H);
-    int maxW = nameW - iW;
+    int maxW = nameW - iW * !below;
     if (W > maxW)
     {
         // progressively strip characters off the end of the name until
@@ -772,7 +800,7 @@ void Flu_Entry::draw()
         pos += 2;
     }
 
-    fl_draw(shortname.c_str(), X, Y, nameW, h() - iH, FL_ALIGN_LEFT);
+    fl_draw(shortname.c_str(), X, tY, nameW, tH, FL_ALIGN_LEFT);
 
     X = x() + 4 + nameW;
 
@@ -813,7 +841,7 @@ void Flu_Entry::bind_image(Fl_RGB_Image* image)
 void Flu_Entry::startRequest()
 {
     TLRENDER_P();
-    if (!p.thumbnailCreator || p.id != -1 || icon == &music)
+    if (!p.thumbnailCreator || p.id != -1 || icon == music)
         return;
 
     file::Path path(toTLRender());
