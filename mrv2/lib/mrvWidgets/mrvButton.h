@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <FL/Fl_Window.H>
 #include <FL/Fl_Button.H>
 
 namespace mrv
@@ -20,6 +21,9 @@ namespace mrv
 
         void color(Fl_Color c);
         Fl_Color color() { return Fl_Button::color(); }
+
+    protected:
+        void set_cursor(Fl_Cursor);
     };
 
 } // namespace mrv

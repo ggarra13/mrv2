@@ -6,6 +6,8 @@ v1.1.8
   stills.
 - Added a command-line setting (--single or -s) to also load single images.
 - Removed the padding that was added when first loading a clip full screen.
+- Fixed cursor disappearing when going to the action tool dock while a drawing
+  tool was active.
 
 v1.1.7
 ======

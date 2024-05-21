@@ -289,7 +289,8 @@ namespace mrv
 
     void TimelineViewport::set_cursor(Fl_Cursor n) const noexcept
     {
-        window()->cursor(n);
+        if (window())
+            window()->cursor(n);
     }
 
     void TimelineViewport::_scrub(float dx) noexcept
@@ -916,14 +917,15 @@ namespace mrv
             // Only hide the cursor if we are NOT on the view widgets.
             auto primary = p.ui->uiView;
             Viewport* secondary = nullptr;
-            if (_p->ui->uiSecondary && _p->ui->uiSecondary->window()->visible())
+            if (p.ui->uiSecondary && p.ui->uiSecondary->window()->visible())
             {
-                secondary = _p->ui->uiSecondary->viewport();
+                secondary = p.ui->uiSecondary->viewport();
             }
 
             Fl_Widget* widget = Fl::belowmouse();
             if (widget != primary && (secondary && widget != secondary))
                 return;
+        
             if (p.player)
                 set_cursor(FL_CURSOR_NONE);
         }

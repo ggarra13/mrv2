@@ -1,12 +1,11 @@
 mrv2 v1.1.7
-========
+=========
 
 mrv2 is an open source professional player and review tool for vfx, animation and computer graphics for Windows, Linux and macOS.
 
 This is a bug fix update, fixing an X11 reboot when going to Full screen that got into early releases of v1.1.6.  mrv2's color pipeline was somewhat broken for YUV movie files, particularly for YUV420P_U8 movies.
 The custom file requester (used mainly by Linux users) has been improved in its display and performance for loading visible files on demand.
-Linux documentation has been added on how to achieve perfect playback on Wayland
-with the latest nvidia EGL driver.
+Linux documentation has been added on how to achieve perfect playback on Wayland with the latest nvidia EGL driver.
 The "About->Update mrv2" python plug-in has been improved and now should work properly to download future upgrades or mrv2.
 
 
