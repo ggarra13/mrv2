@@ -74,26 +74,27 @@ function( is_system_lib TARGET ISSYSLIB )
 	libasound
 	libc
 	libdl
+	libdrm2
 	libharfbuzz
 	libfontconfig
 	libfreetype
 	libgcc_s
+	libglib
 	libgpg-error
 	libEGL
 	libGL
 	libGLdispatch
 	libGLX
-	libX
 	nvidia
-	libdrm2
-	libpthread
-	libresolv
 	libm
 	libOpenGL
+	libpthread
 	libpulse
 	libpulse-simple
+	libresolv
 	librt
 	libwayland
+	libX
 	libxcb
 	libxshmfence
 	libstdc
