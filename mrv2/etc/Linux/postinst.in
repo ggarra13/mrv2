@@ -100,3 +100,58 @@ update-desktop-database
 
 echo "Updating mime database..."
 update-mime-database /usr/share/mime
+
+
+
+#
+#
+# Fix for Rocky Linux 8.9 to Ubuntu 22.04.4 LTS and similar Wayland
+# incompatibilities.  Make sure this is the last step of postinst.in.
+#
+#
+
+# File to modify
+file="/usr/share/glib-2.0/schemas/org.gnome.settings-daemon.plugins.xsettings.gschema.xml"
+
+# Desired line to match in configuration
+previous_match="  </schema>"
+target_match="    <key name=\"antialiasing\" enum=\"org.gnome.settings-daemon.GsdFontAntialiasingMode\">"
+deprecated_match="  <schema id=\"org.gnome.settings-daemon.plugins.xsettings.deprecated\">"
+
+
+target_line=`grep -n "$target_match" "$file" | sed -n 's/:.*//p'`
+deprecated_line=`grep -n "$deprecated_match" "$file" | sed -n 's/:.*//p'`
+
+if [[ "$target_line" == "" ]]; then
+    echo "No antialising line found in $file"
+    echo "This pre-compiled version of mrv2 might not be compatible with"
+    echo "your newer Linux Wayland distribution.  You can still probably"
+    echo "use it under X11."
+    echo "If you need Wayland support, you should compile from source."
+    exit 0
+fi
+
+if [[ "$deprecated_line" == "" ]]; then
+    echo "No need to patch $file"
+    echo "No deprecated antialiasing line found."
+else
+    previous_line=$(($deprecated_line - 1))
+    previous_line_match=`sed -n "${previous_line}"p "$file"`
+
+    if [[ $previous_line_match == $previous_match ]]; then
+	if [[ $((target_line - deprecated_line)) == 1 ]]; then
+	    echo "Deprecated antialiasing found in $file"
+	    echo "Must patch for newer Wayland."
+	    backup="orig.before.mrv2"
+	    cp "$file" "$backup"
+	    sed "$deprecated_line"d "$backup" | sed "$previous_line"d > "$file"
+	    if [[ -e $file ]]; then
+		echo "$file fixed for Wayland"
+		glib-compile-schemas /usr/share/glib-2.0/schemas
+		echo "Compiled glib schemas again."
+	    else
+		echo "$file was not fixed!"
+	    fi
+	fi
+    fi
+fi
