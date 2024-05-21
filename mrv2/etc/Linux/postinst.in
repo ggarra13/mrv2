@@ -147,6 +147,7 @@ else
 	    sed "$deprecated_line"d "$backup" | sed "$previous_line"d > "$file"
 	    if [[ -e $file ]]; then
 		echo "$file fixed for Wayland"
+		echo "$backup if the original file."
 		glib-compile-schemas /usr/share/glib-2.0/schemas
 		echo "Compiled glib schemas again."
 	    else
