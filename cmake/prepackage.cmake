@@ -99,8 +99,10 @@ if(UNIX)
     #
     # Grab the last version, in case there are several
     #
-    list(GET MRV2_PYTHON_LIB_DIRS -1 MRV2_PYTHON_LIB_DIR)
-
+    set(MRV2_PYTHON_LIBDIR "")
+    if (MRV2_PYTHON_LIB_DIR STREQUAL "")
+	list(GET MRV2_PYTHON_LIB_DIRS -1 MRV2_PYTHON_LIB_DIR)
+    endif()
     
     set(MRV2_PYTHON_SITE_PACKAGES_DIR "${MRV2_PYTHON_LIB_DIR}/site-packages")
 

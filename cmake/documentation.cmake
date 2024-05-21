@@ -18,6 +18,8 @@ endif()
 set(DOCUMENTATION_TARGETS )
 set(CLEAN_DOC_TARGETS )
 
+
+
 foreach( LANGUAGE ${LANGUAGES} )
     
     #
@@ -37,7 +39,6 @@ foreach( LANGUAGE ${LANGUAGES} )
     #
     # Replace variables in document.py script
     #
-
     set(DOCUMENT_IN  ${SPHINX_DIR}/document.py.in)
     set(DOCUMENT_OUT ${CMAKE_INSTALL_PREFIX}/sphinx/${LANGUAGE}/document.py)
 
@@ -53,23 +54,24 @@ foreach( LANGUAGE ${LANGUAGES} )
         OWNER_READ OWNER_WRITE OWNER_EXECUTE
         GROUP_READ GROUP_EXECUTE
         WORLD_READ WORLD_EXECUTE)
-    
-    set(DOC_TARGET doc_${LANGUAGE} )
-    list( APPEND DOCUMENTATION_TARGETS ${DOC_TARGET} )
 
-    set(CLEAN_DOC_TARGET clean_doc_dir_${LANGUAGE})
-    add_custom_target(${CLEAN_DOC_TARGET}
-	COMMAND ${CMAKE_COMMAND} -E remove_directory
-	${ROOT_DIR}/mrv2/docs/${LANGUAGE}
-	)
-    list( APPEND CLEAN_DOC_TARGETS ${CLEAN_DOC_TARGET} )
+    if (MRV2_PYBIND11)
+	set(DOC_TARGET doc_${LANGUAGE} )
+	list(APPEND DOCUMENTATION_TARGETS ${DOC_TARGET} )
 
-    add_custom_target( ${DOC_TARGET}
-	COMMAND ${CMAKE_COMMAND} -E env LANGUAGE=${LANGUAGE} LANG=en_US.UTF-8 LANGUAGE_CODE=${LANGUAGE} ${CMAKE_INSTALL_PREFIX}/bin/${MRV2_COMMAND} -pythonScript ${CMAKE_INSTALL_PREFIX}/sphinx/${LANGUAGE}/document.py
-	COMMAND ${CMAKE_COMMAND} -E echo "Documented ${LANGUAGE} language."
-	DEPENDS ${DOCUMENT_OUT} ${CONFFILE_OUT}
+	set(CLEAN_DOC_TARGET clean_doc_dir_${LANGUAGE})
+	add_custom_target(${CLEAN_DOC_TARGET}
+	    COMMAND ${CMAKE_COMMAND} -E remove_directory
+	    ${ROOT_DIR}/mrv2/docs/${LANGUAGE}
 	)
-    
+	list( APPEND CLEAN_DOC_TARGETS ${CLEAN_DOC_TARGET} )
+
+	add_custom_target( ${DOC_TARGET}
+	    COMMAND ${CMAKE_COMMAND} -E env LANGUAGE=${LANGUAGE} LANG=en_US.UTF-8 LANGUAGE_CODE=${LANGUAGE} ${CMAKE_INSTALL_PREFIX}/bin/${MRV2_COMMAND} -pythonScript ${CMAKE_INSTALL_PREFIX}/sphinx/${LANGUAGE}/document.py
+	    COMMAND ${CMAKE_COMMAND} -E echo "Documented ${LANGUAGE} language."
+	    DEPENDS ${DOCUMENT_OUT} ${CONFFILE_OUT}
+	)
+    endif()
 endforeach()
 
 add_custom_target( clean_doc
