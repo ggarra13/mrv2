@@ -6268,7 +6268,7 @@ msgstr "Abrir Película o Secuencia"
 
 msgid "Open Single Image"
 msgstr "Abrir una Sola Imagen"
-       
+
 msgid "Save Image"
 msgstr "Grabar Imagen"
 

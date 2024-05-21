@@ -69,12 +69,20 @@ if [[ "$CMAKE_TARGET" == "package" ]]; then
     
     clean_mo_files
     
-    cd $dir
-
     if [[ "$CMAKE_BUILD_TYPE" == "Release" ]]; then
+
+	. ./etc/sphinx_install.sh # Install Sphinx python modules
+    
+	cd $dir
+	
 	run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t mo
 	run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t doc
+	
+	cd -
     fi
+
+    cd $dir
+    
     run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
 
     cd -

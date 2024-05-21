@@ -7,6 +7,8 @@
 # This script installs with pip the needed modules for documentation
 #
 
+. etc/functions.sh
+
 locate_python
 
 if [[ "$PYTHONEXE" != "" ]]; then
