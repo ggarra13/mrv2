@@ -4,7 +4,7 @@ v1.1.8
 - Added the ability to load single images from File->Open->Single Image.  You
   can select multiple images but they won't be loaded as a sequence, only as
   stills.
-- Added a command-line setting to also load single images.
+- Added a command-line setting (--single or -s) to also load single images.
 
 v1.1.7
 ======
