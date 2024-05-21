@@ -3,8 +3,6 @@
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#!/usr/bin/env bash
-
 #
 # This script quickly searches for a string in all .sh, .cmake and mrv2
 # source code.
