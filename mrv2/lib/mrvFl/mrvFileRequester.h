@@ -37,6 +37,7 @@ namespace mrv
      * Opens a file requester to load an image
      *
      * @param startfile start filename (directory)
+     * @param compact_files list sequences in compact form.
      *
      * @return opened filename(s)
      */

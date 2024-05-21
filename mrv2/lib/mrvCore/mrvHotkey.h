@@ -86,6 +86,7 @@ namespace mrv
     };
 
     extern Hotkey kOpenDirectory;
+    extern Hotkey kOpenSingleImage;
     extern Hotkey kOpenImage;
     extern Hotkey kOpenSeparateAudio;
     extern Hotkey kOpenSingleImage;

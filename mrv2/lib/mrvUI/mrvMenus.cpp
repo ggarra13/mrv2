@@ -83,6 +83,10 @@ namespace mrv
             (Fl_Callback*)open_separate_audio_cb, ui);
 
         menu->add(
+            _("File/Open/Singe Image"), kOpenSingleImage.hotkey(),
+            (Fl_Callback*)open_single_image_cb, ui);
+
+        menu->add(
             _("File/Open/Directory"), kOpenDirectory.hotkey(),
             (Fl_Callback*)open_directory_cb, ui, FL_MENU_DIVIDER);
 

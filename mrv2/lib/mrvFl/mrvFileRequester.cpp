@@ -363,7 +363,7 @@ namespace mrv
             getMoviePattern(context) + "})\t" + kREEL_PATTERN;
 
         std::string pattern = kIMAGE_PATTERN + kAUDIO_PATTERN;
-        std::string title = _("Load Image");
+        std::string title = _("Load Image(s)");
         if (compact_images)
         {
             title = _("Load Movie or Sequence");

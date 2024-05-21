@@ -20,6 +20,7 @@ namespace mrv
     // on macOS            ctrl, cmd. , alt, shift, key
     //                     ctrl, meta , alt, shift, key
     Hotkey kOpenDirectory(true, false, false, true, 'o');
+    Hotkey kOpenSingleImage(false, false, false, false, 0);
     Hotkey kOpenImage(true, false, false, false, 'o');
     Hotkey kOpenSeparateAudio(false, false, false, false, 0);
     Hotkey kOpenSession(false, false, true, false, 'o');
@@ -345,6 +346,7 @@ namespace mrv
 
         HotkeyEntry(_("Open Directory"), &kOpenDirectory),
         HotkeyEntry(_("Open Movie or Sequence"), &kOpenImage),
+        HotkeyEntry(_("Open Single Image"), &kOpenSingleImage),
         HotkeyEntry(_("Open Session"), &kOpenSession),
         HotkeyEntry(_("Save Image"), &kSaveImage),
         HotkeyEntry(_("Save Frames To Folder"), &kSaveImageToFolder),

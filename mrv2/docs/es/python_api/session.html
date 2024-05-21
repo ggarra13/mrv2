@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Módulo session &mdash; documentación de mrv2 - v1.1.7</title>
+  <title>Módulo session &mdash; documentación de mrv2 - v1.1.8</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=fd3f3429" />
@@ -16,7 +16,7 @@
   
         <script src="../_static/jquery.js?v=5d32c60e"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../_static/documentation_options.js?v=772c9ecf"></script>
+        <script src="../_static/documentation_options.js?v=9f363d0d"></script>
         <script src="../_static/doctools.js?v=9a2dae69"></script>
         <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="../_static/translations.js?v=efdbd0b9"></script>
@@ -106,24 +106,24 @@
              
   <section id="module-mrv2.session">
 <span id="modulo-session"></span><h1>Módulo session<a class="headerlink" href="#module-mrv2.session" title="Link to this heading"></a></h1>
-<p>Módulo de Sesión.</p>
-<p>Usado para manejar todo lo relacionado a sesiones.</p>
+<p>Session module.</p>
+<p>Used to manage everything related to sessions.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.session.clearMetadata">
 <span class="sig-prename descclassname"><span class="pre">mrv2.session.</span></span><span class="sig-name descname"><span class="pre">clearMetadata</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.session.clearMetadata" title="Link to this definition"></a></dt>
-<dd><p>Vacía los metadatos de la sesión actual.</p>
+<dd><p>Clears the current session metadata.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.session.current">
 <span class="sig-prename descclassname"><span class="pre">mrv2.session.</span></span><span class="sig-name descname"><span class="pre">current</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#mrv2.session.current" title="Link to this definition"></a></dt>
-<dd><p>Retorna la Sesión actual.</p>
+<dd><p>Returns current session file.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.session.load">
 <span class="sig-prename descclassname"><span class="pre">mrv2.session.</span></span><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#mrv2.session.load" title="Link to this definition"></a></dt>
-<dd><p>Abrir una Sesión</p>
+<dd><p>Open a session file.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -133,11 +133,11 @@
 <ol class="arabic simple">
 <li><p>metadata() -&gt; dict[str, str]</p></li>
 </ol>
-<p>Retorna la metadata de la sesión actual.</p>
+<p>Returns the current session metadata.</p>
 <ol class="arabic simple" start="2">
 <li><p>metadata(key: str) -&gt; str</p></li>
 </ol>
-<p>Retorna los metadatos para una clave.</p>
+<p>Returns the current metadata for a key.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -147,17 +147,17 @@
 <ol class="arabic simple">
 <li><p>save() -&gt; bool</p></li>
 </ol>
-<p>Grabar Sesión.</p>
+<p>Save a session file.</p>
 <ol class="arabic simple" start="2">
 <li><p>save(file: str) -&gt; bool</p></li>
 </ol>
-<p>Grabar Sesión.</p>
+<p>Save a session file.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.session.setCurrent">
 <span class="sig-prename descclassname"><span class="pre">mrv2.session.</span></span><span class="sig-name descname"><span class="pre">setCurrent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.session.setCurrent" title="Link to this definition"></a></dt>
-<dd><p>Setea el archivo de la sesión actual.</p>
+<dd><p>Sets the current session file.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -167,11 +167,11 @@
 <ol class="arabic simple">
 <li><p>setMetadata(arg0: dict[str, str]) -&gt; None</p></li>
 </ol>
-<p>Setea todos los metadatos de la sesión actual.</p>
+<p>Sets all the session metadata for a session.</p>
 <ol class="arabic simple" start="2">
 <li><p>setMetadata(key: str, value: str) -&gt; None</p></li>
 </ol>
-<p>Setea los metadatos para una clave.</p>
+<p>Sets the session metadata for a key.</p>
 </dd></dl>
 
 </section>

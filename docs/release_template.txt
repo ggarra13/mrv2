@@ -1,14 +1,13 @@
-mrv2 v1.1.6
-========
+mrv2 v1.1.7
+=========
 
 mrv2 is an open source professional player and review tool for vfx, animation and computer graphics for Windows, Linux and macOS.
 
-This is a major update, improving reverse playback on ALL movies completely beating OpenRV now, fixes NDI playback with audio, added Cache display to the HUD, adds showing .otio markers properly, many fixes to Presentation Mode, and many, many bug fixs. 
+This is a bug fix update, fixing an X11 reboot when going to Full screen that got into early releases of v1.1.6.  mrv2's color pipeline was somewhat broken for YUV movie files, particularly for YUV420P_U8 movies.
+The custom file requester (used mainly by Linux users) has been improved in its display and performance for loading visible files on demand.
+Linux documentation has been added on how to achieve perfect playback on Wayland with the latest nvidia EGL driver.
+The "About->Update mrv2" python plug-in has been improved and now should work properly to download future upgrades or mrv2.
 
-Sample mrv2 1.1.6 vs. OpenRV 2.0 Movie comparisons:
-
-https://youtu.be/ei8Uq8SbB_M
-https://youtu.be/LazhfJ8R590
 
 Main Web page:
 https://mrv2.sourceforge.io
@@ -27,13 +26,15 @@ https://www.github.com/ggarra13/mrv2
 -------------------------------------------------------------------------------
 
 
-mrv2 v1.1.6
+mrv2 v1.1.7
 
 mrv2, an open source professional player and review tool for vfx, animation and computer graphics for Windows, Linux and macOS has a new version.
+
+Bug fix galore! You should update.
 
 Release History and Binaries:
 https://github.com/ggarra13/mrv2/releases/
 https://sourceforge.net/projects/mrv2/files/
 
-Source code and build instructions:
+Source code:
 https://github.com/ggarra13/mrv2/

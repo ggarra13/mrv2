@@ -13,6 +13,12 @@ namespace mrv
         default_color = color();
     }
 
+    void Button::set_cursor(Fl_Cursor e)
+    {
+        if (window())
+            window()->cursor(e);
+    }
+    
     int Button::handle(int e)
     {
         int ret = Fl_Button::handle(e);
@@ -22,6 +28,7 @@ namespace mrv
             default_color = color();
             if (active_r() && !value())
             {
+                set_cursor(FL_CURSOR_ARROW);
                 color(fl_lighter(default_color));
                 redraw();
             }

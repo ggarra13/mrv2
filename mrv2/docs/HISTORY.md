@@ -1,3 +1,14 @@
+v1.1.8
+======
+
+- Added the ability to load single images from File->Open->Single Image.  You
+  can select multiple images but they won't be loaded as a sequence, only as
+  stills.
+- Added a command-line setting (--single or -s) to also load single images.
+- Removed the padding that was added when first loading a clip full screen.
+- Fixed cursor disappearing when going to the action tool dock while a drawing
+  tool was active.
+
 v1.1.7
 ======
 
