@@ -11,7 +11,10 @@ v1.1.8
 - Fixed libglib-2.0 being bundled in the distribution.
 - Added step to check Wayland compatibility for the binary installers
   compiled under Rocky Linux 8.9 and fix configuration file if needed.
-  
+- Made CMake documentation target (-t doc) not fail if no Python is found.
+- Fixed a potential crash when mrv2 was compiled without Python support and
+  a python file was passed as a parameter to the viewer.
+
 
 v1.1.7
 ======
