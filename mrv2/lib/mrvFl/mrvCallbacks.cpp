@@ -160,6 +160,23 @@ namespace mrv
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
+    void open_single_files_cb(const std::vector< std::string >& files,
+                              ViewerUI* ui)
+    {
+        auto settings = ui->app->settings();
+        int savedDigits = settings->getValue<int>("Misc/MaxFileSequenceDigits");
+        settings->setValue("Misc/MaxFileSequenceDigits", 0);
+        
+        for (const auto& file : files)
+        {
+            ui->app->open(file);
+        }
+
+        settings->setValue("Misc/MaxFileSequenceDigits", savedDigits);
+        
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
     void open_file_cb(const std::string& file, ViewerUI* ui)
     {
         ui->app->open(file);
@@ -170,6 +187,12 @@ namespace mrv
     {
         const std::vector<std::string>& files = open_image_file(NULL, true);
         open_files_cb(files, ui);
+    }
+
+    void open_single_image_cb(Fl_Widget* w, ViewerUI* ui)
+    {
+        const std::vector<std::string>& files = open_image_file(NULL, false);
+        open_single_files_cb(files, ui);
     }
 
     void open_recent_cb(Fl_Menu_* w, ViewerUI* ui)

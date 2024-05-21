@@ -132,6 +132,7 @@ namespace mrv
 
         timeline::CompareOptions compareOptions;
 
+        bool   singleImages = false;
         double speed = 0.0;
         timeline::Playback playback = timeline::Playback::Count;
         timeline::Loop loop = timeline::Loop::Count;
@@ -310,6 +311,9 @@ namespace mrv
                 app::CmdLineFlagOption::create(
                     p.options.otioEditMode, {"-editMode", "-e"},
                     _("OpenTimelineIO Edit mode.")),
+                app::CmdLineFlagOption::create(
+                    p.options.singleImages, {"--single", "-single", "-s"},
+                    _("Load the images as still images not sequences.")),
                 app::CmdLineValueOption<double>::create(
                     p.options.speed, {"-speed"}, _("Playback speed.")),
                 app::CmdLineValueOption<timeline::Playback>::create(
@@ -712,6 +716,13 @@ namespace mrv
             });
 
         // Open the input files.
+        int savedDigits = p.settings->getValue<int>("Misc/MaxFileSequenceDigits");
+        if (p.options.singleImages)
+        {
+            p.settings->setValue("Misc/MaxFileSequenceDigits", 0);
+        }
+
+        
         if (!p.options.fileNames.empty())
         {
             bool foundAudio = false;
@@ -754,6 +765,11 @@ namespace mrv
             p.filesModel->setCompareOptions(p.options.compareOptions);
             size_t numFiles = p.filesModel->observeFiles()->getSize();
             p.filesModel->setB(numFiles - 1, true);
+        }
+
+        if (p.options.singleImages)
+        {
+            p.settings->setValue("Misc/MaxFileSequenceDigits", savedDigits);
         }
 
         if (!p.options.fileNames.empty() && !p.session)

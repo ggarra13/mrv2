@@ -1570,6 +1570,9 @@ msgstr "Rotación del limpiaparabrisas de la comparación A/B."
 msgid "OpenTimelineIO Edit mode."
 msgstr "Modo de Edición de OpenTimelineIO."
 
+msgid "Load the images as still images not sequences."
+msgstr "Cargue las imágenes como fotos no secuencias."
+
 msgid "Playback speed."
 msgstr "Velocidad de reproducción."
 
@@ -3168,8 +3171,8 @@ msgstr "Todos (*.{"
 msgid "Movies (*.{"
 msgstr "Movies (*.{"
 
-msgid "Load Image"
-msgstr "Cargar Imagen"
+msgid "Load Image(s)"
+msgstr "Cargar Imágen(es)"
 
 msgid "Load Movie or Sequence"
 msgstr "Cargar Película o Secuencia"
@@ -3449,6 +3452,9 @@ msgstr "Archivo/Abrir/Pelídula o Secuencia"
 
 msgid "File/Open/With Separate Audio"
 msgstr "Archivo/Abrir/Con Audio Separado"
+
+msgid "File/Open/Singe Image"
+msgstr "&Archivo/&Abrir/Una &Sola Imagen"
 
 msgid "File/Open/Directory"
 msgstr "Archivo/Abrir/Carpeta"
@@ -6260,6 +6266,9 @@ msgstr "Abrir Carpeta"
 msgid "Open Movie or Sequence"
 msgstr "Abrir Película o Secuencia"
 
+msgid "Open Single Image"
+msgstr "Abrir una Sola Imagen"
+       
 msgid "Save Image"
 msgstr "Grabar Imagen"
 
