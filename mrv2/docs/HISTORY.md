@@ -8,6 +8,10 @@ v1.1.8
 - Removed the padding that was added when first loading a clip full screen.
 - Fixed cursor disappearing when going to the action tool dock while a drawing
   tool was active.
+- Fixed libglib-2.0 being bundled in the distribution and creating
+  incompatibilities on modern distros.
+- Fixed mrv2 icon appearing on the taskbar when run under Wayland.
+  
 
 v1.1.7
 ======
