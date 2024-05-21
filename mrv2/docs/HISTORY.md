@@ -20,6 +20,9 @@ v1.1.7
   on view.  This helps for large files like many big USD files on disk or with
   RAW files which are also slow to load.
 - Fixed mrv2's custom file requester thumbnails being too high.
+- Made mrv2's custom file requester display the name of the files below the
+  pictures, except on WideList view.
+- Changed Music icon in custom file requester to an .svg icon.
 - Added custom RAW and several image missing formats to mrv2's custom file
   requester.
 - Started cleaning up FLU's code (mrv2 custom file requester).

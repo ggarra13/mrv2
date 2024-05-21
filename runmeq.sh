@@ -71,8 +71,10 @@ if [[ "$CMAKE_TARGET" == "package" ]]; then
     
     cd $dir
 
-    run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t mo
-    run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t doc
+    if [[ "$CMAKE_BUILD_TYPE" == "Release" ]]; then
+	run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t mo
+	run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t doc
+    fi
     run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
 
     cd -

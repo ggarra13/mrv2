@@ -135,7 +135,7 @@ locate_python()
 	fi
     done
 
-    if [[ "$PYTHON" == "" ]]; then
+    if [[ "$PYTHONEXE" == "" ]]; then
 	echo "No python found!!! Please install it in your PATH"
     fi
 
