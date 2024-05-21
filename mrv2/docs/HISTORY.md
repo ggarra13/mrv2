@@ -5,6 +5,7 @@ v1.1.8
   can select multiple images but they won't be loaded as a sequence, only as
   stills.
 - Added a command-line setting (--single or -s) to also load single images.
+- Removed the padding that was added when first loading a clip full screen.
 
 v1.1.7
 ======

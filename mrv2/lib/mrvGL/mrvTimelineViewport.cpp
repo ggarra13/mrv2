@@ -1350,13 +1350,9 @@ namespace mrv
         int dW = decW - mw->w();
         int dH = decH - mw->h();
 
-        if (dW == 0)
-            dW = 2;
-
 #ifdef DEBUG_SCALING
         std::cerr << "DECORATE SIZES " << dW << "x" << dH << std::endl;
 #endif
-
         maxW -= dW;
         maxH -= dH;
 
