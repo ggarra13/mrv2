@@ -1254,7 +1254,7 @@ namespace mrv
 
     float TimelineViewport::_getRotation() const noexcept
     {
-        return normalizeAngle0to360(_p->rotation + _p->videoRotation);
+        return normalizeAngle0to360(_p->rotation - _p->videoRotation);
     }
 
     void TimelineViewport::_frameView() noexcept
@@ -3058,7 +3058,7 @@ namespace mrv
         const math::Matrix4x4f& vm =
             math::translate(math::Vector3f(p.viewPos.x, p.viewPos.y, 0.F)) *
             math::scale(math::Vector3f(p.viewZoom, p.viewZoom, 1.F));
-        const auto& rm = math::rotateZ(p.rotation + p.videoRotation);
+        const auto& rm = math::rotateZ(_getRotation());
         const math::Matrix4x4f& tm = math::translate(
             math::Vector3f(-renderSize.w / 2, -renderSize.h / 2, 0.F));
         const math::Matrix4x4f& to = math::translate(
@@ -3098,7 +3098,7 @@ namespace mrv
             math::translate(math::Vector3f(-p.viewPos.x, -p.viewPos.y, 0.F));
         math::Matrix4x4f zoom = math::scale(
             math::Vector3f(1.F / p.viewZoom, 1.F / p.viewZoom, 1.F));
-        const auto& rotation = math::rotateZ(-p.rotation - p.videoRotation);
+        const auto& rotation = math::rotateZ(-_getRotation());
 
         const math::Matrix4x4f tm = math::translate(
             math::Vector3f(renderSize.w / 2, renderSize.h / 2, 0.F));
