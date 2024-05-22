@@ -100,6 +100,10 @@ if(UNIX AND NOT APPLE)
     find_library(backtrace NAMES backtrace)
 endif()
 
+if(TLRENDER_AUDIO)
+    add_definitions(-DTLRENDER_AUDIO)
+endif()
+
 if(TLRENDER_BMD)
     add_definitions(-DTLRENDER_BMD)
 endif()

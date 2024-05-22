@@ -34,17 +34,14 @@ namespace mrv
             gl.vbo =
                 gl::VBO::create(numTriangles * 3, gl::VBOType::Pos3_F32_UV_U16);
             gl.vao.reset();
-            CHECK_GL;
         }
         if (gl.vbo)
         {
             gl.vbo->copy(convert(mesh, gl.vbo->getType()));
-            CHECK_GL;
         }
         if (!gl.vao && gl.vbo)
         {
             gl.vao = gl::VAO::create(gl.vbo->getType(), gl.vbo->getID());
-            CHECK_GL;
         }
     }
 
@@ -61,17 +58,14 @@ namespace mrv
             gl.vbo =
                 gl::VBO::create(numTriangles * 3, gl::VBOType::Pos3_F32_UV_U16);
             gl.vao.reset();
-            CHECK_GL;
         }
         if (gl.vbo)
         {
             gl.vbo->copy(convert(mesh, gl.vbo->getType()));
-            CHECK_GL;
         }
         if (!gl.vao && gl.vbo)
         {
             gl.vao = gl::VAO::create(gl.vbo->getType(), gl.vbo->getID());
-            CHECK_GL;
         }
     }
 
@@ -152,7 +146,7 @@ namespace mrv
         // Add the rotation and scaling to the matrix
         const Imath::M44f vpm = vm * pm;
 
-        auto mvp = math::Matrix4x4f(
+        const auto mvp = math::Matrix4x4f(
             vpm[0][0], vpm[0][1], vpm[0][2], vpm[0][3], vpm[1][0], vpm[1][1],
             vpm[1][2], vpm[1][3], vpm[2][0], vpm[2][1], vpm[2][2], vpm[2][3],
             vpm[3][0], vpm[3][1], vpm[3][2], vpm[3][3]);

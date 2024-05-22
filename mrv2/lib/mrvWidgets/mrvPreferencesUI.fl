@@ -13,10 +13,16 @@ decl {\#include <FL/fl_ask.H>} {public global
 decl {\#include <FL/Fl_Color_Chooser.H>} {public global
 }
 
-decl {\#include "mrViewer.h"} {public global
+decl {\#ifdef TLRENDER_AUDIO} {private local
 }
 
-decl {\#include "tlCore/Time.h"} {public global
+decl {\#include <rtaudio/RtAudio.h>} {private local
+}
+
+decl {\#endif} {private local
+}
+
+decl {\#include <tlCore/Time.h>} {public global
 }
 
 decl {\#include "mrvCore/mrvEnv.h"} {public global
@@ -67,7 +73,10 @@ decl {\#include "mrvWidgets/mrvPreferencesTree.h"} {public global
 decl {\#include "mrvWidgets/mrvPopupMenu.h"} {public global
 }
 
-decl {\#include "make_ocio_chooser.h"} {selected public global
+decl {\#include "make_ocio_chooser.h"} {public global
+}
+
+decl {\#include "mrViewer.h"} {public global
 }
 
 class PreferencesUI {open
@@ -79,8 +88,8 @@ class PreferencesUI {open
     Fl_Window uiMain {
       label Preferences
       user_data this user_data_type {PreferencesUI*} open
-      xywh {406 349 847 466} type Double hide resizable
-      code0 {main = m;} modal
+      xywh {0 0 847 467} type Double resizable
+      code0 {main = m;} modal visible
     } {
       Fl_Group {} {open
         xywh {0 0 847 466} box FLAT_BOX
@@ -728,7 +737,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
               }
             }
             Fl_Group {} {
-              label Thumbnails open
+              label Thumbnails
               xywh {288 35 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {open
@@ -915,8 +924,8 @@ v->uiPrefsFPS->value( g );}
               }
             }
             Fl_Group {} {
-              label Edit open
-              xywh {288 35 555 360} box EMBOSSED_BOX align 5
+              label Edit
+              xywh {288 35 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label {Edit Viewport} open
@@ -1365,8 +1374,8 @@ v->uiOCIO_Look->do_callback();}
               }
             }
             Fl_Group {} {
-              label OpenGL
-              xywh {288 35 555 360} box EMBOSSED_BOX align 5 hide
+              label Video
+              xywh {288 35 555 360} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {open
                 xywh {323 52 478 314}
@@ -1439,6 +1448,29 @@ v->uiOCIO_Look->do_callback();}
                     xywh {50 50 100 20}
                   }
                 }
+              }
+            }
+            Fl_Group {} {
+              label Audio open
+              xywh {288 35 555 360} box EMBOSSED_BOX align 5 hide
+            } {
+              Fl_Group {} {open
+                xywh {333 62 478 314}
+              } {
+                Fl_Choice uiPrefsAudioAPI {
+                  label API open
+                  tooltip {Audio API to use for platforms that support multiple APIs (Windows and Linux)} xywh {394 110 356 22} down_box BORDER_BOX align 132 textcolor 32
+                  code0 {fill_audio_apis(o);}
+                  code1 {o->value(0);}
+                  class {mrv::Choice}
+                } {}
+                Fl_Choice uiPrefsAudioDevice {
+                  label Device open
+                  tooltip {Color Buffers can be Float, Half Float, Fast or Automatic.  Float preserves all float information, Half Float preserves most float information and Fast works in 8-bits.  Automatic selects the accuracy baed on image depth.} xywh {394 174 356 24} down_box BORDER_BOX align 132 textcolor 32
+                  code0 {fill_audio_devices(o);}
+                  code1 {o->value(0);}
+                  class {mrv::Choice}
+                } {}
               }
             }
             Fl_Group {} {
@@ -1593,12 +1625,10 @@ if (!found)
       }
     }
   }
-  Function {PreferencesUI(ViewerUI* m)} {open
-  } {
+  Function {PreferencesUI(ViewerUI* m)} {} {
     code {make_window(m);} {}
   }
-  Function {~PreferencesUI()} {selected
-  } {
+  Function {~PreferencesUI()} {} {
     code {delete uiMain; uiMain = NULL;} {}
   }
   Function {fill_tree(mrv::PreferencesTree* o)} {open
@@ -1620,9 +1650,33 @@ o->add( _("OCIO Defaults") );
 o->add( _("Loading") );
 o->add( _("Path Mappings") );
 o->add( _("Network") );
-o->add( _("OpenGL") );
+o->add( _("Video") );
+o->add( _("Audio") );
 o->add( _("Errors") );
 o->add( _("Behavior") );
 o->select( item );} {}
+  }
+  Function {fill_audio_apis(Fl_Choice* o)} {open
+  } {
+    code {\#ifdef TLRENDER_AUDIO
+
+    o->add(_("Default API"));
+
+    std::vector<RtAudio::Api> apis;
+    RtAudio::getCompiledApi(apis);
+    for (auto& api : apis)
+    {
+        auto name = RtAudio::getApiDisplayName(api);
+        o->add(name.c_str());
+    }
+
+\#else
+    o->add(_("No Audio was Compiled"));
+\#endif} {selected
+    }
+  }
+  Function {fill_audio_devices(Fl_Choice* o)} {open
+  } {
+    code {o->add(_("Default Device"));} {}
   }
 }
