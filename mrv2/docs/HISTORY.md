@@ -10,13 +10,15 @@ v1.1.8
 - Fixed cursor disappearing when going to the action tool dock while a drawing
   tool was active.
 - Fixed libglib-2.0 being bundled in the distribution.
-- Added step to check Wayland compatibility for the binary installers
-  compiled under Rocky Linux 8.9 and fix configuration file if needed.
+- Added step to check Wayland compatibility for the binary (.deb or .rpm)
+  installers compiled under Rocky Linux 8.9 and fix configuration file if
+  needed.
 - Made CMake documentation target (-t doc) not fail if no Python is found.
 - Fixed a potential crash when mrv2 was compiled without Python support and
   a python file was passed as a parameter to the viewer.
 - Fixed a potential misdetection of Linux flavor when updating version with	  Help->Update mrv2 on a system that had both rpm and dpkg installed.
 - Added displaying of the icon on the Taskbar under Wayland.
+- Made both Python and Log Window start in Windowed mode as defaults.
 
 
 v1.1.7

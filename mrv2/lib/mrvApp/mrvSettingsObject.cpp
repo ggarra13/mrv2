@@ -64,9 +64,11 @@ namespace mrv
         p.defaultValues["gui/Compare/WindowW"] = 400;
         p.defaultValues["gui/Stereo 3D/WindowW"] = 400;
 
+        p.defaultValues["gui/Logs/Window"] = 1;
         p.defaultValues["gui/Logs/WindowW"] = 800;
         p.defaultValues["gui/Logs/WindowH"] = 400;
 
+        p.defaultValues["gui/Python/Window"] = 1;
         p.defaultValues["gui/Python/WindowW"] = 640;
         p.defaultValues["gui/Python/WindowH"] = 400;
 
