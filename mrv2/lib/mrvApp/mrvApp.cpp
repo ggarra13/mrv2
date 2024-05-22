@@ -1083,8 +1083,6 @@ namespace mrv
             return;
         }
 
-        std::cerr << "fileName= " << fileName << std::endl;
-
         for (const auto& path :
              timeline::getPaths(filePath, pathOptions, _context))
         {
