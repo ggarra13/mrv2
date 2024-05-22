@@ -62,11 +62,15 @@ sharedir=/usr/local/@mrv2ShortName@/share/
 #
 # Copy desktop, icon and locale translations
 #
+appdir=${sharedir}applications
+
 cp -rf ${sharedir}/* /usr/share/
 cp /usr/share/icons/hicolor/32x32/apps/mrv2.png /usr/share/icons/hicolor/32x32/apps/mrv2-v@mrv2_VERSION@.png 
 
+#
+# Copy versioned icon to applications and desktop
+#
 icon="mrv2-v@mrv2_VERSION@.desktop"
-appdir=${sharedir}applications
 appicon="${appdir}/${icon}"
 desktop_icon="${desktop_dir}/${icon}"
 
@@ -84,6 +88,14 @@ chown ${name} "${desktop_icon}"
 # Make it executable
 #
 chmod a+x "${desktop_icon}"
+
+#
+# Copy unversioned icon for Wayland to applications
+#
+icon="mrv2.desktop"
+appicon="${appdir}/${icon}"
+cp -f "${appicon}" /usr/share/applications
+
 
 #
 # Associate Video formats
@@ -142,12 +154,12 @@ else
 	if [[ $((target_line - deprecated_line)) == 1 ]]; then
 	    echo "Deprecated antialiasing found in $file"
 	    echo "Must patch for newer Wayland."
-	    backup="orig.before.mrv2"
+	    backup="$file.orig.mrv2"
 	    cp "$file" "$backup"
 	    sed "$deprecated_line"d "$backup" | sed "$previous_line"d > "$file"
 	    if [[ -e $file ]]; then
 		echo "$file fixed for Wayland"
-		echo "$backup if the original file."
+		echo "$backup is the original file."
 		glib-compile-schemas /usr/share/glib-2.0/schemas
 		echo "Compiled glib schemas again."
 	    else

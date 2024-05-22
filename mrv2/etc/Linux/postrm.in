@@ -25,10 +25,13 @@ closest_version=$(ls -1 "/usr/local/" | grep "mrv2-v" | sort -V | tail -n 1)
 if [[ -n "$closest_version" && $removed == 1 ]]; then
     # Create a new symbolic link pointing to the closest version
     ln -s "/usr/local/$closest_version/bin/mrv2.sh" "/usr/bin/mrv2"
-    echo "Created a new symbolic link: mrv2 --> $closest_version"
+    echo "Created a new symbolic link: $closest_version -> /usr/bin/mrv2"
 else
     if [[ $removed == 1 ]]; then
 	echo "No suitable version found to create a symbolic link."
+	echo "Removing /usr/share/applications/mrv2.desktop and mrv2.png"
+	rm -f /usr/share/applications/mrv2.desktop
+	rm -f /usr/share/icons/hicolor/32x32/apps/mrv2.png
     fi
 fi
 

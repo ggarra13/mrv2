@@ -54,6 +54,18 @@ except Exception as e:
         return text
     _ = _gettext
 
+
+def is_dir_empty(dir_path):
+  """Checks if a directory is empty.
+
+  Args:
+      dir_path: Path to the directory.
+
+  Returns:
+      True if the directory is empty, False otherwise.
+  """
+  return not os.listdir(dir_path)
+
 # Global variable to store the result of the subprocess
 subprocess_result = None
 install_progress  = 0
@@ -439,7 +451,7 @@ class UpdatePlugin(plugin.Plugin):
         ]
                   
         for database, extension in databases:
-            if os.path.exists(database):
+            if os.path.exists(database) and not is_dir_empty(database):
                 return extension
         
 

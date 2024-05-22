@@ -83,15 +83,20 @@ elseif(UNIX)
     #
     # Linux generators
     #
-    set(CPACK_GENERATOR DEB RPM TGZ )
+    set(CPACK_GENERATOR DEB RPM TGZ)
     
     #
     # Linux icon and .desktop shortcut
     #
     configure_file( ${ROOT_DIR}/etc/Linux/mrv2.desktop.in
 	"${PROJECT_BINARY_DIR}/etc/mrv2-v${mrv2_VERSION}.desktop" )
+	
+    configure_file( ${ROOT_DIR}/etc/Linux/mrv2.main.desktop.in
+	"${PROJECT_BINARY_DIR}/etc/mrv2.desktop" )
 
     install(FILES "${PROJECT_BINARY_DIR}/etc/mrv2-v${mrv2_VERSION}.desktop"
+	DESTINATION share/applications COMPONENT applications)
+    install(FILES "${PROJECT_BINARY_DIR}/etc/mrv2.desktop"
 	DESTINATION share/applications COMPONENT applications)
     install(FILES ${ROOT_DIR}/etc/mrv2.png
 	DESTINATION share/icons/hicolor/32x32/apps COMPONENT applications)

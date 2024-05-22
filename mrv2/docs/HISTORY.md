@@ -5,7 +5,8 @@ v1.1.8
   can select multiple images but they won't be loaded as a sequence, only as
   stills.
 - Added a command-line setting (--single or -s) to also load single images.
-- Removed the padding that was added when first loading a clip full screen.
+- Removed th 1 pixel padding that was added when first loading a clip full
+  screen.
 - Fixed cursor disappearing when going to the action tool dock while a drawing
   tool was active.
 - Fixed libglib-2.0 being bundled in the distribution.
@@ -14,6 +15,8 @@ v1.1.8
 - Made CMake documentation target (-t doc) not fail if no Python is found.
 - Fixed a potential crash when mrv2 was compiled without Python support and
   a python file was passed as a parameter to the viewer.
+- Fixed a potential misdetection of Linux flavor when updating version with	  Help->Update mrv2 on a system that had both rpm and dpkg installed.
+- Added displaying of the icon on the Taskbar under Wayland.
 
 
 v1.1.7
