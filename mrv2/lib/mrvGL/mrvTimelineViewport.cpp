@@ -1254,6 +1254,9 @@ namespace mrv
 
     float TimelineViewport::_getRotation() const noexcept
     {
+        // \@note: FFmpeg's video rotation is counter-clockwise while
+        //         our user's rotation are clockwise.  That's why we
+        //         substract video rotation here.
         return normalizeAngle0to360(_p->rotation - _p->videoRotation);
     }
 
