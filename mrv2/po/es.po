@@ -5589,6 +5589,15 @@ msgstr "H:"
 msgid "Take Current Window Values"
 msgstr "Tomar los Valores Actuales de la Ventana"
 
+msgid ""
+"Fills the Fixed Position and and Fixed Size values with the current values "
+"of the viewer.  Remember to also check the boxes for Fixed Position and/or "
+"Fixed Size depending what you want to save."
+msgstr ""
+"Rellena los valores de Posición Fija y Tamaño Fijo con los valores actuales "
+"del reproductor.  Recuerde también activar las Casillas para Posición Fija "
+"y/o Tamaño Fijo dependiendo de qué quiera grabar."
+
 msgid "Render"
 msgstr "Render"
 
@@ -5754,9 +5763,6 @@ msgstr "Configs Incorporadas"
 msgid "Pick a config.ocio file from disk."
 msgstr "Elija un archivo config.ocio del disco."
 
-msgid "OCIO Defaults"
-msgstr "OCIO por Defecto"
-
 msgid "Use Active Views and Active Displays"
 msgstr "Use Vistas Activas y Displays Activos"
 
@@ -5766,6 +5772,9 @@ msgid ""
 msgstr ""
 "Cuando esta opción esta apagada, archivos OCIO con active_views: y "
 "active_displays: no son tomados en consideración."
+
+msgid "OCIO Defaults"
+msgstr "OCIO por Defecto"
 
 msgid "8-bits"
 msgstr "8-bits"
@@ -5826,14 +5835,14 @@ msgstr ""
 "(OpenEXR, dpx, etc)\n"
 "(Variable de entorno: MRV_OCIO_float_ICS)"
 
+msgid "Default Look"
+msgstr "Look por Defecto"
+
 msgid "Display / View"
 msgstr "Display / Vista"
 
 msgid "Default Display / View"
 msgstr "Display / Vista por Defecto"
-
-msgid "Default Look"
-msgstr "Look por Defecto"
 
 msgid "Loading"
 msgstr "Cargando"
@@ -5953,6 +5962,26 @@ msgstr ""
 "shaders de OpenGL.  Dependiendo en tu tarjeta gráfica y sistema operativo "
 "una u otra puede desempeñarse mejor que la otra."
 
+msgid ""
+"For changes to take effect, you will need to re-open any movies already "
+"playing or reload mrv2."
+msgstr ""
+"Para que los cambios surjan efecto, deberás reabrir las películas que ya "
+"estás reproduciendo o bien cerrar y reabrir mrv2."
+
+msgid "API"
+msgstr "API"
+
+msgid "Audio API to use for platforms that support multiple APIs (Linux only)"
+msgstr ""
+"API de Audio para usar en plataformas que la soportan (Linux solamente)"
+
+msgid "Output Device"
+msgstr "Equipo de Salida"
+
+msgid "Output Device to use for audio playback."
+msgstr "Equipo o tarjeta a usar para la reproducción de audio."
+
 msgid "Errors"
 msgstr "Errores"
 
@@ -6019,6 +6048,18 @@ msgstr "Interfaz del Usuario/Miniaturas"
 
 msgid "User Interface/Timeline"
 msgstr "Interfaz del Usuario/Línea de Tiempo"
+
+msgid "Default API"
+msgstr "API por Defecto"
+
+msgid "No Audio was Compiled"
+msgstr "Ningún Audio fue Compilado"
+
+msgid "Default Device"
+msgstr "Equipo de Audio por Defecto"
+
+msgid "No Valid Devices found"
+msgstr "No se encontraron Equipos de Audio"
 
 msgid "Remote to Local Path Mapping"
 msgstr "Remota a Local Mapeo de Carpetas"

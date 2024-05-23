@@ -255,10 +255,14 @@ Here you can control the Window's size and positioning.
 .. topic:: Fixed Position
 
 	   Here you can establish the position where mrv2's window will start.
+	   To activate saving the position, make sure to mark the check box
+	   next to "Fixed Position".
 
 .. topic:: Fixed Size
 
 	   With this, you can establish the size of mrv2's window at start.
+	   To activate saving the size, make sure to mark the check box
+	   next to "Fixed Size".
 
 .. topic:: Take Current Window Values
 

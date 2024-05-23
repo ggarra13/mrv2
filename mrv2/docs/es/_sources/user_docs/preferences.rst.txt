@@ -260,10 +260,14 @@ Aquí controla el tamaño y posición de la Ventana principal.
 .. topic:: Posición Fija
 
 	   Aquí puede establecer la posición en que mrv2 comenzará.
+	   Para activar grabar la posición, asegúrese de marcar la casilla
+	   junto a "Posición Fija".
 
 .. topic:: Tamaño Fijo
 
 	   Con esto, puede cambiar el tamaño de la ventana al arrancar.
+	   Para activar grabar el tamaño, asegúrese de marcar la casilla
+	   junto a "Tamaño Fijo".
 
 .. topic:: Tomar los Valores Actuales de la Ventana
 

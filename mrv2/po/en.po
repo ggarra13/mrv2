@@ -5532,6 +5532,15 @@ msgstr "H:"
 msgid "Take Current Window Values"
 msgstr "Take Current Window Values"
 
+msgid ""
+"Fills the Fixed Position and and Fixed Size values with the current values "
+"of the viewer.  Remember to also check the boxes for Fixed Position and/or "
+"Fixed Size depending what you want to save."
+msgstr ""
+"Fills the Fixed Position and and Fixed Size values with the current values "
+"of the viewer.  Remember to also check the boxes for Fixed Position and/or "
+"Fixed Size depending what you want to save."
+
 msgid "Render"
 msgstr "Render"
 
@@ -5694,9 +5703,6 @@ msgstr "Built-in Configs"
 msgid "Pick a config.ocio file from disk."
 msgstr "Pick a config.ocio file from disk."
 
-msgid "OCIO Defaults"
-msgstr "OCIO Defaults"
-
 msgid "Use Active Views and Active Displays"
 msgstr "Use Active Views and Active Displays"
 
@@ -5706,6 +5712,9 @@ msgid ""
 msgstr ""
 "When this option is off, OCIO files with active_views: and active_displays: "
 "are not taken into account."
+
+msgid "OCIO Defaults"
+msgstr "OCIO Defaults"
 
 msgid "8-bits"
 msgstr "8-bits"
@@ -5765,14 +5774,14 @@ msgstr ""
 "(OpenEXR, dpx, etc)\n"
 "(Environment variable: MRV_OCIO_float_ICS)"
 
+msgid "Default Look"
+msgstr "Default Look"
+
 msgid "Display / View"
 msgstr "Display / View"
 
 msgid "Default Display / View"
 msgstr "Default Display / View"
-
-msgid "Default Look"
-msgstr "Default Look"
 
 msgid "Loading"
 msgstr "Loading"
@@ -5888,6 +5897,25 @@ msgstr ""
 "Timeline can be drawn with blitting or with OpenGL shaders.  Depending on "
 "graphics card and OS one can perform better then the other."
 
+msgid ""
+"For changes to take effect, you will need to re-open any movies already "
+"playing or reload mrv2."
+msgstr ""
+"For changes to take effect, you will need to re-open any movies already "
+"playing or reload mrv2."
+
+msgid "API"
+msgstr "API"
+
+msgid "Audio API to use for platforms that support multiple APIs (Linux only)"
+msgstr "Audio API to use for platforms that support multiple APIs (Linux only)"
+
+msgid "Output Device"
+msgstr "Output Device"
+
+msgid "Output Device to use for audio playback."
+msgstr "Output Device to use for audio playback."
+
 msgid "Errors"
 msgstr "Errors"
 
@@ -5955,6 +5983,18 @@ msgstr "User Interface/Thumbnails"
 
 msgid "User Interface/Timeline"
 msgstr "User Interface/Timeline"
+
+msgid "Default API"
+msgstr "Default API"
+
+msgid "No Audio was Compiled"
+msgstr "No Audio was Compiled"
+
+msgid "Default Device"
+msgstr "Default Device"
+
+msgid "No Valid Devices found"
+msgstr "No Valid Devices found"
 
 msgid "Remote to Local Path Mapping"
 msgstr "Remote to Local Path Mapping"
