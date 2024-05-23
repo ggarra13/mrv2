@@ -88,7 +88,7 @@ class PreferencesUI {open
     Fl_Window uiMain {
       label Preferences
       user_data this user_data_type {PreferencesUI*} open
-      xywh {0 53 847 467} type Double resizable
+      xywh {8 53 847 467} type Double resizable
       code0 {main = m;} modal visible
     } {
       Fl_Group {} {open
@@ -1225,9 +1225,9 @@ v->uiOCIO_Display_View->do_callback();}
             }
             Fl_Group {} {
               label Loading open
-              xywh {288 37 555 360} align 5
+              xywh {288 37 555 360} align 5 hide
             } {
-              Fl_Group {} {open selected
+              Fl_Group {} {open
                 xywh {324 140 488 180}
               } {
                 Fl_Input uiPrefsVersionRegex {
@@ -1291,122 +1291,122 @@ v->uiOCIO_Display_View->do_callback();}
               }
             }
             Fl_Group {} {
-              label Network
-              xywh {288 37 555 360} align 5 hide
+              label Network selected
+              xywh {288 37 555 360} align 5
             } {
-              Fl_Group {} {open
+              Fl_Group {} {open selected
                 xywh {320 37 503 360}
               } {
                 Fl_Box {} {
-                  label Send
+                  label Send selected
                   xywh {503 37 106 24}
                 }
                 Fl_Box {} {
-                  label Accept
+                  label Accept selected
                   xywh {614 37 105 24}
                 }
-                Fl_Group {} {
+                Fl_Group {} {selected
                   xywh {323 61 500 36} box UP_BOX
                 } {
                   Fl_Box {} {
-                    label Media
+                    label Media selected
                     xywh {323 61 142 36} align 24
                   }
-                  Fl_Check_Button SendMedia {
+                  Fl_Check_Button SendMedia {selected
                     xywh {544 66 27 26} down_box DOWN_BOX
                   }
-                  Fl_Check_Button ReceiveMedia {
+                  Fl_Check_Button ReceiveMedia {selected
                     xywh {659 66 27 26} down_box DOWN_BOX
                   }
                 }
-                Fl_Group {} {
+                Fl_Group {} {selected
                   xywh {323 111 500 36} box UP_BOX
                 } {
                   Fl_Box {} {
-                    label {UI Control}
+                    label {UI Control} selected
                     xywh {323 111 142 36} align 24
                   }
-                  Fl_Check_Button SendUI {
+                  Fl_Check_Button SendUI {selected
                     xywh {544 116 27 26} down_box DOWN_BOX
                   }
-                  Fl_Check_Button ReceiveUI {
+                  Fl_Check_Button ReceiveUI {selected
                     xywh {659 116 27 26} down_box DOWN_BOX
                   }
                 }
-                Fl_Group {} {
+                Fl_Group {} {selected
                   xywh {323 161 500 36} box UP_BOX
                 } {
                   Fl_Box {} {
-                    label {Pan and Zoom}
+                    label {Pan and Zoom} selected
                     xywh {323 161 142 36} align 24
                   }
-                  Fl_Check_Button SendPanAndZoom {
+                  Fl_Check_Button SendPanAndZoom {selected
                     xywh {544 165 27 26} down_box DOWN_BOX
                   }
-                  Fl_Check_Button ReceivePanAndZoom {
+                  Fl_Check_Button ReceivePanAndZoom {selected
                     xywh {659 165 27 26} down_box DOWN_BOX
                   }
                 }
-                Fl_Group {} {
+                Fl_Group {} {selected
                   xywh {323 211 500 36} box UP_BOX
                 } {
                   Fl_Box {} {
-                    label Timeline
+                    label Timeline selected
                     xywh {323 211 142 36} align 24
                   }
-                  Fl_Check_Button SendTimeline {
+                  Fl_Check_Button SendTimeline {selected
                     xywh {544 217 27 26} down_box DOWN_BOX
                   }
-                  Fl_Check_Button ReceiveTimeline {
+                  Fl_Check_Button ReceiveTimeline {selected
                     xywh {659 217 27 26} down_box DOWN_BOX
                   }
                 }
-                Fl_Group {} {
+                Fl_Group {} {selected
                   xywh {323 261 500 36} box UP_BOX
                 } {
                   Fl_Box {} {
-                    label {Color Control}
+                    label {Color Control} selected
                     xywh {323 261 142 36} align 24
                   }
-                  Fl_Check_Button SendColor {
+                  Fl_Check_Button SendColor {selected
                     xywh {544 262 27 26} down_box DOWN_BOX
                   }
-                  Fl_Check_Button ReceiveColor {
+                  Fl_Check_Button ReceiveColor {selected
                     xywh {659 262 27 26} down_box DOWN_BOX
                   }
                 }
-                Fl_Group {} {
+                Fl_Group {} {selected
                   xywh {321 311 502 36} box UP_BOX
                 } {
                   Fl_Box {} {
-                    label Annotations
+                    label Annotations selected
                     xywh {321 311 142 36} align 24
                   }
-                  Fl_Check_Button SendAnnotations {
+                  Fl_Check_Button SendAnnotations {selected
                     xywh {544 316 27 26} down_box DOWN_BOX
                   }
-                  Fl_Check_Button ReceiveAnnotations {
+                  Fl_Check_Button ReceiveAnnotations {selected
                     xywh {659 316 27 26} down_box DOWN_BOX
                   }
                 }
-                Fl_Group {} {
+                Fl_Group {} {selected
                   xywh {320 361 501 36} box UP_FRAME
                 } {
                   Fl_Box {} {
-                    label {Audio Control}
+                    label {Audio Control} selected
                     xywh {321 361 142 29} align 24
                   }
-                  Fl_Check_Button SendAudio {
+                  Fl_Check_Button SendAudio {selected
                     xywh {544 365 27 21} down_box DOWN_BOX
                   }
-                  Fl_Check_Button ReceiveAudio {
+                  Fl_Check_Button ReceiveAudio {selected
                     xywh {659 365 27 21} down_box DOWN_BOX
                   }
                 }
               }
             }
             Fl_Group {} {
-              label Video
+              label Video selected
               xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {open
@@ -1483,7 +1483,7 @@ v->uiOCIO_Display_View->do_callback();}
               }
             }
             Fl_Group {} {
-              label Audio
+              label Audio open
               xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {open
@@ -1500,7 +1500,7 @@ v->uiOCIO_Display_View->do_callback();}
                     label API
                     user_data this user_data_type {PreferencesUI*}
                     callback {fill_audio_output_devices(v->uiPrefsAudioOutputDevice);} open
-                    tooltip {Audio API to use for platforms that support multiple APIs (Windows and Linux)} xywh {388 225 356 22} down_box BORDER_BOX align 132 when 5 textcolor 32
+                    tooltip {Audio API to use for platforms that support multiple APIs (Linux only)} xywh {388 225 356 22} down_box BORDER_BOX align 132 when 5 textcolor 32
                     code0 {fill_audio_apis(o);}
                     code1 {o->value(0);}
                     class {mrv::Choice}
