@@ -3,7 +3,7 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 // Debug scaling of the window to image size.
-// #define DEBUG_SCALING 1
+//#define DEBUG_SCALING 1
 
 #include <memory>
 #include <cmath>
@@ -1316,7 +1316,12 @@ namespace mrv
 
         int W = renderSize.w;
         int H = renderSize.h;
-        float aspectRatio = static_cast<float>(renderSize.w) / renderSize.h;
+        if (!renderSize.isValid())
+        {
+            W = 320;
+            H = 240;
+        }
+        float aspectRatio = static_cast<float>(W) / H;
 
 #ifdef DEBUG_SCALING
         std::cerr << "renderSize=" << renderSize << std::endl;
@@ -1429,21 +1434,22 @@ namespace mrv
             std::cerr << "Window size so far W=" << W << " H=" << H
                       << std::endl;
 #endif
+
+            if (p.ui->uiBottomBar->visible())
+            {
+                int TH = calculate_edit_viewport_size(p.ui);
+                H += TH;
+
+#ifdef DEBUG_SCALING
+                std::cerr << "Timeline Height=" << TH << std::endl;
+#endif
+            }
+        
         }
 
         if (W == renderSize.w)
         {
             p.frameView = true;
-        }
-
-        if (p.ui->uiBottomBar->visible())
-        {
-            int TH = calculate_edit_viewport_size(p.ui);
-            H += TH;
-
-#ifdef DEBUG_SCALING
-            std::cerr << "Timeline Height=" << TH << std::endl;
-#endif
         }
 
         // Make sure that we are not less than the minimum window
@@ -1469,7 +1475,7 @@ namespace mrv
         //
         if (posY + H + dH > minY + maxH)
         {
-            H = minY + maxH + dH - posY;
+            H = minY + maxH - posY;
             p.frameView = true;
         }
 
