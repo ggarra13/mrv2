@@ -5,169 +5,169 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-05-23 15:14-0300\n"
+"POT-Creation-Date: 2024-05-23 16:39-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=cp1252\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
 
 
-#: /home/gga/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:118
+#: D:/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:118
 msgid ""
 "\n"
 "\n"
 "Install completed with output:\n"
 msgstr ""
 
-#: /home/gga/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:128
-#: /home/gga/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:140
+#: D:/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:128
+#: D:/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:140
 msgid "Removed temporary \""
 msgstr ""
 
-#: /home/gga/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:136
+#: D:/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:136
 msgid "The new version of mrv2 was installed."
 msgstr ""
 
-#: /home/gga/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:145
+#: D:/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:145
 msgid ""
 "Could not locate mrv2 in:\n"
 msgstr ""
 
-#: /home/gga/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:146
+#: D:/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:146
 msgid "Maybe you installed it in a non-default location."
 msgstr ""
 
-#: /home/gga/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:148
+#: D:/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:148
 msgid "Something failed installing mrv2 - It is not in \""
 msgstr ""
 
-#: /home/gga/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:211
+#: D:/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:211
 msgid "Invalid ISO 8601 format provided: "
 msgstr ""
 
-#: /home/gga/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:235
+#: D:/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:235
 msgid "No file matching"
 msgstr ""
 
-#: /home/gga/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:235
+#: D:/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:235
 msgid "was found"
 msgstr ""
 
-#: /home/gga/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:267
+#: D:/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:267
 msgid "No match found"
 msgstr ""
 
-#: /home/gga/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:295
+#: D:/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:295
 msgid "Install Location: "
 msgstr ""
 
-#: /home/gga/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:297
+#: D:/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:297
 msgid ""
 "Error retrieving value:\n"
 msgstr ""
 
-#: /home/gga/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:314
-#: /home/gga/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:375
+#: D:/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:314
+#: D:/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:375
 msgid "Unknown platform"
 msgstr ""
 
-#: /home/gga/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:327
+#: D:/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:327
 msgid "Saving session:"
 msgstr ""
 
-#: /home/gga/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:331
+#: D:/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:331
 msgid "An unexpected error occurred:"
 msgstr ""
 
-#: /home/gga/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:360
+#: D:/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:360
 msgid "Trying to install"
 msgstr ""
 
-#: /home/gga/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:363
+#: D:/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:363
 msgid "Please wait"
 msgstr ""
 
-#: /home/gga/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:391
+#: D:/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:391
 msgid "Enter Sudo Password"
 msgstr ""
 
-#: /home/gga/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:392
+#: D:/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:392
 msgid "Password"
 msgstr ""
 
-#: /home/gga/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:431
+#: D:/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:431
 msgid "You will need to install file"
 msgstr ""
 
-#: /home/gga/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:432
+#: D:/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:432
 msgid "manually."
 msgstr ""
 
-#: /home/gga/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:498
+#: D:/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:498
 msgid "Unknown operating system"
 msgstr ""
 
-#: /home/gga/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:510
+#: D:/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:510
 msgid "Downloading "
 msgstr ""
 
-#: /home/gga/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:538
+#: D:/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:538
 msgid "Download seems to have failed!"
 msgstr ""
 
-#: /home/gga/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:557
+#: D:/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:557
 msgid "Current version is v"
 msgstr ""
 
-#: /home/gga/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:558
+#: D:/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:558
 msgid "Latest version at Github is v"
 msgstr ""
 
-#: /home/gga/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:559
+#: D:/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:559
 msgid "Released on "
 msgstr ""
 
-#: /home/gga/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:563
+#: D:/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:563
 msgid "Ignore"
 msgstr ""
 
-#: /home/gga/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:620
+#: D:/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:620
 msgid ""
 "Error fetching latest release information:\n"
 msgstr ""
 
-#: /home/gga/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:646
+#: D:/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:646
 msgid "There's a new release but it has not been more than 5 days"
 msgstr ""
 
-#: /home/gga/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:650
+#: D:/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:650
 msgid "unknown date."
 msgstr ""
 
-#: /home/gga/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:662
+#: D:/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:662
 msgid "Update anyway"
 msgstr ""
 
-#: /home/gga/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:667
+#: D:/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:667
 msgid "Downgrade"
 msgstr ""
 
-#: /home/gga/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:671
+#: D:/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:671
 msgid "Upgrade"
 msgstr ""
 
-#: /home/gga/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:690
+#: D:/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:690
 msgid "No download url was found for"
 msgstr ""
 
-#: /home/gga/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:693
+#: D:/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:693
 msgid "No releases found for the specified repository."
 msgstr ""
 
-#: /home/gga/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:700
+#: D:/code/applications/mrv2/mrv2/python/plug-ins/update-mrv2.py:700
 msgid "Help/Update mrv2"
 msgstr ""
 

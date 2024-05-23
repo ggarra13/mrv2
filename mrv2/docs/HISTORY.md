@@ -25,6 +25,8 @@ v1.1.8
 - Fixed a minor redraw issue on the right side of the pixel bar.
 - Fixed "Fixed Position" and "Fixed Size" not working when there was no image
   loaded (the usual on Window's and macOS' users).
+- Fixed "Fixed Position" and "Fixed Size" rescaling the window bigger every
+  time the preference was changed.
 
 
 v1.1.7

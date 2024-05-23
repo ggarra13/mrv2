@@ -103,24 +103,24 @@
              
   <section id="module-mrv2.playlist">
 <span id="modulo-playlist"></span><h1>Módulo playlist<a class="headerlink" href="#module-mrv2.playlist" title="Link to this heading"></a></h1>
-<p>Mòdulo de lista de reproducción.</p>
-<p>Contiene todas las clases y enums relacionados con las listas dereproducción.</p>
+<p>Playlist module.</p>
+<p>Contains all functions and classes related to the playlists.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.playlist.addClip">
 <span class="sig-prename descclassname"><span class="pre">mrv2.playlist.</span></span><span class="sig-name descname"><span class="pre">addClip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clip</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="mrv2.html#mrv2.FileMedia" title="mrv2.FileMedia"><span class="pre">mrv2.FileMedia</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.playlist.addClip" title="Link to this definition"></a></dt>
-<dd><p>Agregar clip a la lista de reproducción (EDL) seleccionada.</p>
+<dd><p>Add a clip to currently selected Playlist EDL.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.playlist.list">
 <span class="sig-prename descclassname"><span class="pre">mrv2.playlist.</span></span><span class="sig-name descname"><span class="pre">list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="mrv2.html#mrv2.FileMedia" title="mrv2.FileMedia"><span class="pre">mrv2.FileMedia</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#mrv2.playlist.list" title="Link to this definition"></a></dt>
-<dd><p>Lista de items de lista de reproducción.</p>
+<dd><p>List playlist items.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.playlist.save">
 <span class="sig-prename descclassname"><span class="pre">mrv2.playlist.</span></span><span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fileName</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.playlist.save" title="Link to this definition"></a></dt>
-<dd><p>Grabe una list de reproducción .otio con caminos relativos a ella.</p>
+<dd><p>Save current .otio file with relative paths.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -130,15 +130,15 @@
 <ol class="arabic simple">
 <li><p>select(fileItem: mrv2.FileMedia) -&gt; None</p></li>
 </ol>
-<p>Seleccionar una lista de reproducción con FileModelItem.</p>
+<p>Select a playlist by FileModelItem.</p>
 <ol class="arabic simple" start="2">
 <li><p>select(fileName: str) -&gt; None</p></li>
 </ol>
-<p>Seleccionar una lista de reproducción con el nombre de archivo dado.</p>
+<p>Select a playlist by fileName.</p>
 <ol class="arabic simple" start="3">
 <li><p>select(playlistIndex: int) -&gt; None</p></li>
 </ol>
-<p>Seleccionar una lista de reproducción con el índice dado.</p>
+<p>Select a playlist by index.</p>
 </dd></dl>
 
 </section>
