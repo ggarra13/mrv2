@@ -42,8 +42,8 @@ jobs:
     - name: Install Wayland
       run: sudo apt-get install -y libwayland-dev wayland-protocols libdbus-1-dev libxkbcommon-dev libegl-dev libgtk-3-dev
 
-    - name: Install openssl
-      run: sudo apt-get install -y openssl libunistring-dev
+    - name: Install curl and openssl
+      run: sudo apt-get install -y curl openssl libunistring-dev
       
     - name: Install ninja-build
       run: sudo apt-get install -y ninja-build

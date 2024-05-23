@@ -178,7 +178,7 @@ sudo pip3 install meson
 #
 # Install dependencies
 #
-sudo dnf -y install git wget cmake pango-devel gettext ninja-build \
+sudo dnf -y install git wget curl cmake pango-devel gettext ninja-build \
 	       libglvnd-devel alsa-lib-devel pulseaudio-libs-devel \
 	       libXScrnSaver-devel dpkg \
 	       autoconf wayland-devel wayland-protocols-devel cairo-devel \
@@ -198,7 +198,8 @@ sudo apt update
 #
 # Install dependencies
 #
-sudo apt -y install build-essential perl git cmake ninja-build libpango1.0-dev \
+sudo apt -y install curl build-essential perl git cmake ninja-build \
+                    libpango1.0-dev \
 		    xorg-dev libx11-dev libxcursor-dev libxinerama-dev \
 		    libxss-dev gettext libasound2-dev \
 		    libpulse-dev libssl-dev libffi-dev \
