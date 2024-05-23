@@ -3,7 +3,7 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 // Debug scaling of the window to image size.
-//#define DEBUG_SCALING 1
+// #define DEBUG_SCALING 1
 
 #include <memory>
 #include <cmath>
@@ -1444,7 +1444,6 @@ namespace mrv
                 std::cerr << "Timeline Height=" << TH << std::endl;
 #endif
             }
-        
         }
 
         if (W == renderSize.w)
@@ -1590,15 +1589,22 @@ namespace mrv
             TimelineViewport* self = const_cast< TimelineViewport* >(this);
             const float devicePixelRatio = self->pixels_per_unit();
             const auto& renderSize = getRenderSize();
-            if (o.mirror.x)
-                pos.x = (renderSize.w - 1 - pos.x) * devicePixelRatio;
-            if (o.mirror.y)
-                pos.y = (renderSize.h - 1 - pos.y) * devicePixelRatio;
+            if (renderSize.isValid())
+            {
+                if (o.mirror.x)
+                    pos.x = (renderSize.w - 1 - pos.x) * devicePixelRatio;
+                if (o.mirror.y)
+                    pos.y = (renderSize.h - 1 - pos.y) * devicePixelRatio;
+            }
+            else
+            {
+                pos.x = pos.y = 0;
+            }
         }
         else
         {
             pos.x = Fl::event_x();
-            pos.y = Fl::event_x();
+            pos.y = Fl::event_y();
         }
 
         snprintf(buf, 40, "%5d, %5d", pos.x, pos.y);

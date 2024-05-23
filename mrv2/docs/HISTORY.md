@@ -27,6 +27,9 @@ v1.1.8
   loaded (the usual on Window's and macOS' users).
 - Fixed "Fixed Position" and "Fixed Size" rescaling the window bigger every
   time the preference was changed.
+- Fixed Y pixel coordinate in Pixel Bar when showing environment maps.
+- Fixed X and Y coordinates displaying large negative numbers when no image
+  was loaded.
 
 
 v1.1.7
