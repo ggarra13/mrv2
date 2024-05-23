@@ -106,12 +106,12 @@ decl {class HotkeyUI;} {public global
 decl {class AboutUI;} {public global
 }
 
-widget_class PixelToolBarClass {
-  xywh {37 101 686 31} resizable
+widget_class PixelToolBarClass {open
+  xywh {37 101 690 30} resizable
   class Fl_Double_Window visible
 } {
-  Fl_Group {} {open
-    xywh {0 0 682 30} box FLAT_BOX color 56
+  Fl_Group {} {open selected
+    xywh {0 0 690 30} box FLAT_BOX color 56
   } {
     Fl_Menu_Button uiZoom {
       label x1
@@ -210,17 +210,17 @@ ui->uiView->centerView();}
       }
     }
     Fl_Group {} {open
-      xywh {27 1 655 28} box FLAT_BOX color 56
+      xywh {27 1 663 28} box FLAT_BOX color 56
     } {
       Fl_Output uiCoord {
         label XY
         tooltip {Image coordinate of pixel under mouse.} xywh {46 3 66 25} box FLAT_BOX color 56 labelfont 4 labelsize 10 labelcolor 17 textsize 10 textcolor 7
       }
       Fl_Group {} {open
-        xywh {112 1 570 28}
+        xywh {112 1 578 28}
       } {
         Fl_Group {} {open
-          xywh {112 1 570 28}
+          xywh {112 1 578 28}
         } {
           Fl_Group {} {
             xywh {112 3 236 25}
@@ -412,11 +412,11 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
   }
 }
 
-widget_class TimelineClass {open
+widget_class TimelineClass {
   xywh {82 146 690 47} box NO_BOX resizable
   class Fl_Double_Window visible
 } {
-  Fl_Group {} {open
+  Fl_Group {} {
     xywh {0 0 690 29} box FLAT_BOX
   } {
     Fl_Group {} {open
@@ -562,7 +562,7 @@ player->setLoop( loop );}
             callback {int idx = o->value();
 double speed = atof( o->text( idx ) );
 uiFPS->value( speed );
-uiFPS->do_callback();} open selected
+uiFPS->do_callback();} open
             tooltip {Some default frame rate settings.} xywh {341 3 40 24} labelsize 10 align 16
             code0 {o->disable_label();}
             class {mrv::PopupMenu}
@@ -785,7 +785,8 @@ ui->uiView->take_focus();}
   }
 }
 
-class ViewerUI {} {
+class ViewerUI {open
+} {
   decl {static mrv::App* app;} {public local
   }
   decl {static PreferencesUI* uiPrefs;} {public local
@@ -808,8 +809,8 @@ uiSecondary = nullptr;} {}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
     exit_cb( o, v );} open
-      xywh {127 191 690 602} type Double align 80 resizable
-      class {mrv::MainWindow} size_range {690 602 0 0} visible
+      xywh {127 191 690 602} type Double align 80 hide resizable
+      class {mrv::MainWindow} size_range {690 602 0 0}
     } {
       Fl_Pack uiRegion {open
         xywh {0 0 690 602} box FLAT_BOX resizable
@@ -1250,7 +1251,7 @@ settings->setValue( mrv::kPenColorA, a);}
             class TimelineClass
           } {}
         }
-        Fl_Group uiPixelBar {
+        Fl_Group uiPixelBar {open
           xywh {0 547 690 30} box FLAT_BOX color 56 labelcolor 17
         } {
           Fl_Group uiPixelWindow {open
