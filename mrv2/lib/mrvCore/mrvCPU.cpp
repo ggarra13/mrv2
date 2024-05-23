@@ -2,10 +2,9 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include "mrvOS.h"
-#include "mrvCPU.h"
+#include "mrvCore/mrvCPU.h"
 
-#if defined(WIN32) || defined(_WIN64)
+#if defined(_WIN32)
 #    include <windows.h>
 #    include <intrin.h>
 #else

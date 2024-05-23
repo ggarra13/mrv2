@@ -7,7 +7,8 @@
 
 #ifdef _WIN32
 
-#    include "mrvCore/mrvOS.h"
+#    define WIN32_LEAN_AND_MEAN
+#    include <windows.h>
 
 /**
  * Defines a setenv() function equivalent to the Unix one for Windows.
@@ -20,7 +21,7 @@
  */
 int setenv(const char* name, const char* value, int overwrite)
 {
-    /* On Woe32, each process has two copies of the environment variables,
+    /* On Win32, each process has two copies of the environment variables,
        one managed by the OS and one managed by the C library. We set
        the value in both locations, so that other software that looks in
        one place or the other is guaranteed to see the value. Even if it's

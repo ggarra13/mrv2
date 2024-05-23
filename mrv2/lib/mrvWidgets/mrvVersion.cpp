@@ -136,6 +136,7 @@ extern "C"
 #include <tlCore/String.h>
 
 #include "mrvCore/mrvOS.h"
+#include "mrvCore/mrvI8N.h"
 
 #include "mrvCore/mrvCPU.h"
 
@@ -150,9 +151,6 @@ extern "C"
 #    include <windows.h>
 #    include <psapi.h>
 #endif
-
-#include "mrvCore/mrvOS.h"
-#include "mrvCore/mrvI8N.h"
 
 #include "mrvFl/mrvIO.h"
 

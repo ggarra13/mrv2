@@ -6,7 +6,6 @@
 #include <string>
 #include <algorithm>
 
-#include "mrvCore/mrvOS.h"
 #include "mrvCore/mrvLocale.h"
 #include "mrvCore/mrvMedia.h"
 

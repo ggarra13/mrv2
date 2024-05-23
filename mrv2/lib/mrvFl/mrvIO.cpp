@@ -15,8 +15,6 @@
 
 #include "mrvFLU/Flu_File_Chooser.h"
 
-#include "mrvCore/mrvOS.h"
-
 #include "mrvApp/mrvApp.h"
 
 namespace mrv

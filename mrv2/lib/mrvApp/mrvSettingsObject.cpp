@@ -19,9 +19,9 @@ namespace fs = std::filesystem;
 
 #include <FL/Fl.H>
 
-#include "mrvCore/mrvOS.h"
 #include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvMemory.h"
+#include "mrvCore/mrvOS.h"
 
 #include "mrvFl/mrvIO.h"
 

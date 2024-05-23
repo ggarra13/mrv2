@@ -8,11 +8,6 @@
 
 #ifdef _WIN32
 
-#    include <direct.h>
-#    include <winsock2.h>
-#    include <windows.h>
-#    include <stdio.h>
-
 #    if !(defined vsnprintf)
 #        define vsnprintf _vsnprintf
 #    endif
