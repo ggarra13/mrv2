@@ -825,15 +825,15 @@ namespace mrv
 
         //
         // Audio
-        // 
+        //
         Fl_Preferences audio(base, "audio");
 
         audio.get("API", tmp, 0);
         uiPrefs->uiPrefsAudioAPI->value(tmp);
-        
-        audio.get("Device", tmp, 0);
-        uiPrefs->uiPrefsAudioDevice->value(tmp);
-            
+
+        audio.get("output_device", tmp, 0);
+        uiPrefs->uiPrefsAudioOutputDevice->value(tmp);
+
         Fl_Preferences behavior(base, "behavior");
         behavior.get("check_for_updates", tmp, 0);
         uiPrefs->uiPrefsCheckForUpdates->value(tmp);
@@ -998,7 +998,7 @@ namespace mrv
         auto app = ui->app;
         auto uiPrefs = ViewerUI::uiPrefs;
         auto settings = app->settings();
-        
+
         locale::SetAndRestore saved;
 
         int visible = 0;
@@ -1443,8 +1443,9 @@ namespace mrv
         Fl_Preferences audio(base, "audio");
 
         audio.set("API", (int)uiPrefs->uiPrefsAudioAPI->value());
-        audio.set("Device", (int)uiPrefs->uiPrefsAudioAPI->value());
-        
+        audio.set(
+            "output_device", (int)uiPrefs->uiPrefsAudioOutputDevice->value());
+
         Fl_Preferences behavior(base, "behavior");
         behavior.set(
             "check_for_updates", (int)uiPrefs->uiPrefsCheckForUpdates->value());
@@ -1584,7 +1585,8 @@ namespace mrv
             auto options = ui->uiTimeline->getDisplayOptions();
             options.transitions = uiPrefs->uiPrefsShowTransitions->value();
             options.markers = uiPrefs->uiPrefsShowMarkers->value();
-            ui->uiTimeline->setEditable(uiPrefs->uiPrefsTimelineEditable->value());
+            ui->uiTimeline->setEditable(
+                uiPrefs->uiPrefsTimelineEditable->value());
             int thumbnails = uiPrefs->uiPrefsEditThumbnails->value();
             options.thumbnails = true;
             switch (thumbnails)
@@ -1850,7 +1852,6 @@ namespace mrv
 
         auto context = App::app->getContext();
         auto audioSystem = context->getSystem<audio::System>();
-        
 
         int api = uiPrefs->uiPrefsAudioAPI->value();
         item = uiPrefs->uiPrefsAudioAPI->child(api);
@@ -1858,15 +1859,14 @@ namespace mrv
         {
             audioSystem->setAPI(item->label());
         }
-        
-        size_t outputDevice = uiPrefs->uiPrefsAudioDevice->value();
-        item = uiPrefs->uiPrefsAudioAPI->child(outputDevice);
+
+        size_t outputDevice = uiPrefs->uiPrefsAudioOutputDevice->value();
+        item = uiPrefs->uiPrefsAudioOutputDevice->child(outputDevice);
         if (item && item->label())
         {
             audioSystem->setOutputDevice(item->label());
         }
 
-            
         panel::redrawThumbnails();
 
         ui->uiMain->fill_menu(ui->uiMenuBar);

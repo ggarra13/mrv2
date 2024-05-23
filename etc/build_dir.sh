@@ -77,6 +77,7 @@ if [[ $KERNEL == *Darwin* ]]; then
 	osx_target=11.3
     else
 	osx_target=11.0
+	export CMAKE_OSX_ARCHITECTURES="x86_64"
     fi
     export CMAKE_FLAGS="-DCMAKE_OSX_DEPLOYMENT_TARGET=${osx_target} ${CMAKE_FLAGS}"
 fi
