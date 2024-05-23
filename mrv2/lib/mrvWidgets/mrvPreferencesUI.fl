@@ -1375,7 +1375,7 @@ v->uiOCIO_Look->do_callback();}
             }
             Fl_Group {} {
               label Video
-              xywh {288 35 555 360} box EMBOSSED_BOX align 5
+              xywh {288 35 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {open
                 xywh {323 52 478 314}
@@ -1452,21 +1452,23 @@ v->uiOCIO_Look->do_callback();}
             }
             Fl_Group {} {
               label Audio open
-              xywh {288 35 555 360} box EMBOSSED_BOX align 5 hide
+              xywh {288 35 555 360} box EMBOSSED_BOX align 5
             } {
-              Fl_Group {} {open
+              Fl_Group {} {
+                user_data this user_data_type {PreferencesUI*}
+                callback {v->fill_audio_devices(v->uiPrefsAudioDevice);} open
                 xywh {333 62 478 314}
               } {
                 Fl_Choice uiPrefsAudioAPI {
-                  label API open
-                  tooltip {Audio API to use for platforms that support multiple APIs (Windows and Linux)} xywh {394 110 356 22} down_box BORDER_BOX align 132 textcolor 32
+                  label API open selected
+                  tooltip {Audio API to use for platforms that support multiple APIs (Windows and Linux)} xywh {394 110 356 22} down_box BORDER_BOX align 132 when 5 textcolor 32
                   code0 {fill_audio_apis(o);}
                   code1 {o->value(0);}
                   class {mrv::Choice}
                 } {}
                 Fl_Choice uiPrefsAudioDevice {
-                  label Device open
-                  tooltip {Color Buffers can be Float, Half Float, Fast or Automatic.  Float preserves all float information, Half Float preserves most float information and Fast works in 8-bits.  Automatic selects the accuracy baed on image depth.} xywh {394 174 356 24} down_box BORDER_BOX align 132 textcolor 32
+                  label {Output Device} open
+                  tooltip {Color Buffers can be Float, Half Float, Fast or Automatic.  Float preserves all float information, Half Float preserves most float information and Fast works in 8-bits.  Output Device to use for audio playback.} xywh {394 174 356 24} down_box BORDER_BOX align 132 textcolor 32
                   code0 {fill_audio_devices(o);}
                   code1 {o->value(0);}
                   class {mrv::Choice}
@@ -1672,11 +1674,35 @@ o->select( item );} {}
 
 \#else
     o->add(_("No Audio was Compiled"));
-\#endif} {selected
-    }
+\#endif} {}
   }
   Function {fill_audio_devices(Fl_Choice* o)} {open
   } {
-    code {o->add(_("Default Device"));} {}
+    code {\#ifdef TLRENDER_AUDIO
+
+o->add(_("Default Device"));
+
+RtAudio::Api api = static_cast<RtAudio::Api>(uiPrefsAudioAPI->value());
+RtAudio audio(api);
+
+unsigned int numDevices = audio.getDeviceCount();
+for (unsigned int i = 0; i < numDevices - 1; ++i)
+{
+   RtAudio::DeviceInfo audioDevice = audio.getDeviceInfo(i);
+   
+   unsigned numOutput = audioDevice.outputChannels;
+   unsigned numDuplex = audioDevice.duplexChannels;
+   if (numOutput == 0 && numDuplex == 0)
+      continue;  // a microphone or similar
+      
+   std::string name = mrv::string::commentSlash(audioDevice.name);   
+   o->add(name.c_str());
+}
+
+\#else
+
+o->add(_("No Valid Devices found" ));
+
+\#endif} {}
   }
 }

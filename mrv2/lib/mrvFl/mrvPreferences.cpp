@@ -6,6 +6,7 @@
 #include <filesystem>
 namespace fs = std::filesystem;
 
+#include <tlCore/AudioSystem.h>
 #include <tlCore/StringFormat.h>
 
 #ifdef __linux__
@@ -817,13 +818,22 @@ namespace mrv
         uiPrefs->uiPrefsColorAccuracy->value(tmp);
 
         opengl.get("blit_viewports", tmp, 1);
-
         uiPrefs->uiPrefsBlitViewports->value(tmp);
 
         opengl.get("blit_timeline", tmp, 1);
-
         uiPrefs->uiPrefsBlitTimeline->value(tmp);
 
+        //
+        // Audio
+        // 
+        Fl_Preferences audio(base, "audio");
+
+        audio.get("API", tmp, 0);
+        uiPrefs->uiPrefsAudioAPI->value(tmp);
+        
+        audio.get("Device", tmp, 0);
+        uiPrefs->uiPrefsAudioDevice->value(tmp);
+            
         Fl_Preferences behavior(base, "behavior");
         behavior.get("check_for_updates", tmp, 0);
         uiPrefs->uiPrefsCheckForUpdates->value(tmp);
@@ -988,7 +998,7 @@ namespace mrv
         auto app = ui->app;
         auto uiPrefs = ViewerUI::uiPrefs;
         auto settings = app->settings();
-
+        
         locale::SetAndRestore saved;
 
         int visible = 0;
@@ -1430,6 +1440,11 @@ namespace mrv
             "blit_viewports", (int)uiPrefs->uiPrefsBlitViewports->value());
         opengl.set("blit_timeline", (int)uiPrefs->uiPrefsBlitTimeline->value());
 
+        Fl_Preferences audio(base, "audio");
+
+        audio.set("API", (int)uiPrefs->uiPrefsAudioAPI->value());
+        audio.set("Device", (int)uiPrefs->uiPrefsAudioAPI->value());
+        
         Fl_Preferences behavior(base, "behavior");
         behavior.set(
             "check_for_updates", (int)uiPrefs->uiPrefsCheckForUpdates->value());
@@ -1479,6 +1494,7 @@ namespace mrv
         auto ui = App::ui;
         PreferencesUI* uiPrefs = ui->uiPrefs;
         App* app = ui->app;
+        Fl_Menu_Item* item = nullptr;
 
         check_language(uiPrefs, language_index, app);
 
@@ -1832,6 +1848,25 @@ namespace mrv
         }
 #endif
 
+        auto context = App::app->getContext();
+        auto audioSystem = context->getSystem<audio::System>();
+        
+
+        int api = uiPrefs->uiPrefsAudioAPI->value();
+        item = uiPrefs->uiPrefsAudioAPI->child(api);
+        if (item && item->label())
+        {
+            audioSystem->setAPI(item->label());
+        }
+        
+        size_t outputDevice = uiPrefs->uiPrefsAudioDevice->value();
+        item = uiPrefs->uiPrefsAudioAPI->child(outputDevice);
+        if (item && item->label())
+        {
+            audioSystem->setOutputDevice(item->label());
+        }
+
+            
         panel::redrawThumbnails();
 
         ui->uiMain->fill_menu(ui->uiMenuBar);

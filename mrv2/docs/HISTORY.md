@@ -20,6 +20,8 @@ v1.1.8
 - Added displaying of the icon on the Taskbar under Wayland.
 - Made both Python and Log Window start in Windowed mode as defaults.
 - Added missing RtAudio's information to About window which was missing.
+- Added Preferences->Audio to allow selecting the Audio API to use as
+  well as the Output Device to use.
 
 
 v1.1.7

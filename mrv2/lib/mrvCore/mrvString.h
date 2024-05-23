@@ -92,6 +92,21 @@ namespace mrv
             return out;
         }
 
+        inline std::string commentSlash(const std::string& s)
+        {
+            std::string out;
+            for (const auto& c : s)
+            {
+                if (c == '/')
+                {
+                    out.push_back('\\');
+                }
+                out.push_back(c);
+            }
+            return out;
+        }
+
+        
         /**
          * @brief Class used to mimic Qt's string function so that it converts
          *       to integers or doubles.
