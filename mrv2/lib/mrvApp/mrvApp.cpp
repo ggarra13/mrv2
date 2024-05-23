@@ -1539,9 +1539,6 @@ namespace mrv
                     panel::redrawThumbnails();
                 }
             }
-            else
-            {
-            }
         }
 
         cacheUpdate();
