@@ -1499,8 +1499,6 @@ namespace mrv
         {
             if (player)
             {
-                ui->uiMain->show();
-
                 size_t numFiles = filesModel()->observeFiles()->getSize();
                 if (numFiles == 1)
                 {
@@ -1540,6 +1538,9 @@ namespace mrv
                 {
                     panel::redrawThumbnails();
                 }
+            }
+            else
+            {
             }
         }
 

@@ -22,6 +22,9 @@ v1.1.8
 - Added missing RtAudio's information to About window which was missing.
 - Added Preferences->Audio to allow selecting the Audio API to use as
   well as the Output Device to use.
+- Fixed a minor redraw issue on the right side of the pixel bar.
+- Fixed "Fixed Position" and "Fixed Size" not working when there was no image
+  loaded (the usual on Window's and macOS' users).
 
 
 v1.1.7

@@ -3,7 +3,7 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 // Debug scaling of the window to image size.
-//#define DEBUG_SCALING 1
+// #define DEBUG_SCALING 1
 
 #include <memory>
 #include <cmath>
@@ -925,7 +925,7 @@ namespace mrv
             Fl_Widget* widget = Fl::belowmouse();
             if (widget != primary && (secondary && widget != secondary))
                 return;
-        
+
             if (p.player)
                 set_cursor(FL_CURSOR_NONE);
         }
@@ -1310,9 +1310,6 @@ namespace mrv
     {
         TLRENDER_P();
         const auto& renderSize = getRenderSize();
-
-        if (!renderSize.isValid())
-            return;
 
         Fl_Double_Window* mw = p.ui->uiMain;
         int screen = mw->screen_num();
