@@ -30,6 +30,8 @@ v1.1.8
 - Fixed Y pixel coordinate in Pixel Bar when showing environment maps.
 - Fixed X and Y coordinates displaying large negative numbers when no image
   was loaded.
+- Made Preferences->Playback->Auto Playback not activate playback when a clip
+  is dragged for the first time to an EDL playlist.
 
 
 v1.1.7
