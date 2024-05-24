@@ -3,7 +3,7 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 // Debug scaling of the window to image size.
-// #define DEBUG_SCALING 1
+//#define DEBUG_SCALING 1
 
 #include <memory>
 #include <cmath>
