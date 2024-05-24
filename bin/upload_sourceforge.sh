@@ -8,7 +8,8 @@ echo "RUNNING upload_sourceforge.sh......"
 
 . etc/functions.sh
 
-if [[ "$(git rev-parse --abbrev-ref HEAD)" != "beta" ]]; then
+branch=$(git rev-parse --abbrev-ref HEAD)
+if [[ "$branch" != "beta" && "$branch" != "m3_test" ]]; then
     echo "You are not on the beta branch.  Will not make a release."
     exit 0
 fi
