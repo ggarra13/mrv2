@@ -77,12 +77,6 @@ namespace py = pybind11;
 #ifdef __linux__
 #    undef None // macro defined in X11 config files
 #    undef Status
-#    ifdef FLTK_USE_WAYLAND
-#        define USE_SIMPLE_CONFIG 1
-#        include <wayland-client.h>
-#        include <wayland-server.h>
-#        include <wayland-client-protocol.h>
-#    endif
 #endif
 
 #include "mrvFl/mrvIO.h"
@@ -495,13 +489,6 @@ namespace mrv
         Fl::use_high_res_GL(true);
         Fl::set_fonts("-*");
         Fl::lock(); // needed for NDI and multithreaded logging
-
-#ifdef FLTK_USE_WAYLAND
-        std::string app_id = "mrv2-64 ";
-        app_id += mrv::version();
-
-        // xdg_toplevel::set_app_id(app_id);
-#endif
 
         // Create the interface.
         ui = new ViewerUI();
