@@ -1330,6 +1330,10 @@ namespace mrv
 
         int minX, minY, maxW, maxH, posX, posY;
         Fl::screen_work_area(minX, minY, maxW, maxH, screen);
+#ifdef DEBUG_SCALING
+        std::cerr << "work area=" << minX << " " << minY << " "
+                  << maxW << "x" << maxH << std::endl;
+#endif
 
         PreferencesUI* uiPrefs = p.ui->uiPrefs;
         if (!desktop::Wayland() && uiPrefs->uiWindowFixedPosition->value())
@@ -1386,7 +1390,7 @@ namespace mrv
                 {
                     p.frameView = true;
                     H = minY + maxH - posY + dH;
-                    W /= aspectRatio;
+                    // W /= aspectRatio;
 
 #ifdef DEBUG_SCALING
                     std::cerr << "Adjust sizing on height" << std::endl;
@@ -1399,7 +1403,7 @@ namespace mrv
                 {
                     p.frameView = true;
                     W = minX + maxW - posX + dW;
-                    H /= aspectRatio;
+                    // H /= aspectRatio;
 
 #ifdef DEBUG_SCALING
                     std::cerr << "Adjust sizing on width" << std::endl;
@@ -1466,20 +1470,27 @@ namespace mrv
         }
 
 #ifdef DEBUG_SCALING
-        std::cerr << "clamped minimum W=" << W << " H=" << H << std::endl;
+        std::cerr << "clamped minimum " << posX << " " << posY << " W=" << W
+                  << " H=" << H << std::endl;
 #endif
 
         //
         // Final sanity checks.
         //
-        if (posY + H + dH > minY + maxH)
-        {
-            H = minY + maxH - posY;
-            p.frameView = true;
-        }
+        // if (posX + W + dW > minX + maxW)
+        // {
+        //     W = minX + maxW - posX;
+        //     p.frameView = true;
+        // }
+        // if (posY + H + dH > minY + maxH)
+        // {
+        //     H = minY + maxH - posY;
+        //     p.frameView = true;
+        // }
 
 #ifdef DEBUG_SCALING
-        std::cerr << "First minimum W=" << W << " H=" << H << std::endl;
+        std::cerr << "First minimum " << posX << " " << posY << " W=" << W
+                  << " H=" << H << std::endl;
 #endif
 
         // Finally, if we are still failing, position the viewer at
