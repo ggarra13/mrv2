@@ -490,8 +490,8 @@ o->redraw();}
               }
             }
             Fl_Group {} {
-              label Fonts selected
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5
+              label Fonts
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label Fonts open
@@ -1484,7 +1484,7 @@ v->uiOCIO_Display_View->do_callback();}
             }
             Fl_Group {} {
               label Audio open
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {open
                 xywh {326 60 478 314}
@@ -1702,10 +1702,24 @@ o->select( item );} {}
   } {
     code {\#ifdef TLRENDER_AUDIO
 
-    o->add(_("Default API"));
-
     std::vector<RtAudio::Api> apis;
     RtAudio::getCompiledApi(apis);
+    
+    if (apis.empty())
+    {    
+         o->add(_("No Audio was Compiled"));
+         return;
+    }
+   
+    auto name = RtAudio::getApiDisplayName(apis[0]);
+    
+    std::string apiDefault = _("Default API");
+    apiDefault += " (";
+    apiDefault += name;
+    apiDefault += ")";
+    
+    o->add(apiDefault.c_str());
+
     for (auto& api : apis)
     {
         auto name = RtAudio::getApiDisplayName(api);
@@ -1714,28 +1728,43 @@ o->select( item );} {}
 
 \#else
     o->add(_("No Audio was Compiled"));
-\#endif} {}
+\#endif} {selected
+    }
   }
   Function {fill_audio_output_devices(Fl_Choice* o)} {open
   } {
     code {\#ifdef TLRENDER_AUDIO
 
-o->add(_("Default Device"));
-
 RtAudio::Api api = static_cast<RtAudio::Api>(uiPrefsAudioAPI->value());
 RtAudio audio(api);
 
-unsigned int numDevices = audio.getDeviceCount();
-for (unsigned int i = 0; i < numDevices - 1; ++i)
+const auto numDevices = audio.getDeviceCount();
+if (numDevices <= 0)
 {
-   RtAudio::DeviceInfo audioDevice = audio.getDeviceInfo(i);
-   
-   unsigned numOutput = audioDevice.outputChannels;
-   unsigned numDuplex = audioDevice.duplexChannels;
+    o->add(_("No Valid Devices found" ));
+    return;
+}
+
+
+const auto deviceDefault = audio.getDefaultOutputDevice();
+const auto& info = audio.getDeviceInfo(deviceDefault);
+const auto& deviceName = mrv::string::commentSlash(info.name);
+
+std::string name = _("Default Device");
+name += " (";
+name += deviceName;
+name += ")";
+o->add(name.c_str());
+
+for (size_t i = 0; i < numDevices - 1; ++i)
+{
+   const auto& deviceInfo = audio.getDeviceInfo(i);
+   unsigned numOutput = deviceInfo.outputChannels;
+   unsigned numDuplex = deviceInfo.duplexChannels;
    if (numOutput == 0 && numDuplex == 0)
       continue;  // a microphone or similar
       
-   std::string name = mrv::string::commentSlash(audioDevice.name);   
+   name = mrv::string::commentSlash(deviceInfo.name);   
    o->add(name.c_str());
 }
 
