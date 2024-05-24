@@ -116,12 +116,14 @@ namespace mrv
 
         const otio::Timeline* createTimelineFromString(const std::string& s)
         {
+            otio::ErrorStatus error;
             auto timeline = dynamic_cast<otio::Timeline*>(
-                otio::Timeline::from_json_string(s));
+                otio::Timeline::from_json_string(s, &error));
             if (!timeline)
             {
-                LOG_ERROR("Could not crete timeline object from this "
-                          ".json string:");
+                LOG_ERROR("Could not crete timeline object.");
+                LOG_ERROR("ErrorStatus: " << error.full_description);
+                LOG_ERROR(".json string that failed:");
                 LOG_ERROR(s);
                 return nullptr;
             }
