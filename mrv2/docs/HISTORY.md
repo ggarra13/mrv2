@@ -38,6 +38,8 @@ v1.1.8
   to have it on.
 - Fixed an additional bug in resizing window code when loading movies without
   fixed size.
+- Improved resizing window code to try to use the less space possible based on
+  panel bars open and size of image.
 
 
 v1.1.7

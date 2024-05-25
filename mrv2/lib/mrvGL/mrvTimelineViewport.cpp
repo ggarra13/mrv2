@@ -3,7 +3,7 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 // Debug scaling of the window to image size.
-//#define DEBUG_SCALING 1
+// #define DEBUG_SCALING 1
 
 #include <memory>
 #include <cmath>
@@ -1309,18 +1309,23 @@ namespace mrv
     void TimelineViewport::resizeWindow() noexcept
     {
         TLRENDER_P();
-        const auto& renderSize = getRenderSize();
+        auto renderSize = getRenderSize();
 
         Fl_Double_Window* mw = p.ui->uiMain;
         int screen = mw->screen_num();
 
         int W = renderSize.w;
         int H = renderSize.h;
-        if (!renderSize.isValid())
+        if (renderSize.isValid())
+        {
+            p.resizeWindow = false;
+        }
+        else
         {
             W = 320;
             H = 240;
         }
+
         float aspectRatio = static_cast<float>(W) / H;
 
 #ifdef DEBUG_SCALING
@@ -1331,9 +1336,12 @@ namespace mrv
         int minX, minY, maxW, maxH, posX, posY;
         Fl::screen_work_area(minX, minY, maxW, maxH, screen);
 #ifdef DEBUG_SCALING
-        std::cerr << "work area=" << minX << " " << minY << " "
-                  << maxW << "x" << maxH << std::endl;
+        std::cerr << "work area=" << minX << " " << minY << " " << maxW << "x"
+                  << maxH << std::endl;
 #endif
+
+        int WBars = 0;
+        int HBars = 0;
 
         PreferencesUI* uiPrefs = p.ui->uiPrefs;
         if (!desktop::Wayland() && uiPrefs->uiWindowFixedPosition->value())
@@ -1354,6 +1362,10 @@ namespace mrv
 
         if (posY < minY)
             posY = minY;
+
+#ifdef DEBUG_SCALING
+        std::cerr << "pos=" << posX << " " << posY << std::endl;
+#endif
 
         int decW = mw->decorated_w();
         int decH = mw->decorated_h();
@@ -1378,82 +1390,132 @@ namespace mrv
         else
         {
             if (p.ui->uiToolsGroup->visible())
-                W += p.ui->uiToolsGroup->w();
+                WBars += p.ui->uiToolsGroup->w();
 
             if (p.ui->uiDockGroup->visible())
-                W += p.ui->uiDockGroup->w();
+                WBars += p.ui->uiDockGroup->w();
 
+            // Take into account the different UI bars
+            if (p.ui->uiMenuGroup->visible())
+                HBars += p.ui->uiMenuGroup->h();
+
+            if (p.ui->uiTopBar->visible())
+                HBars += p.ui->uiTopBar->h();
+
+            if (p.ui->uiPixelBar->visible())
+                HBars += p.ui->uiPixelBar->h();
+
+            if (p.ui->uiBottomBar->visible())
+            {
+                HBars += p.ui->uiBottomBar->h();
+            }
+
+            if (p.ui->uiStatusGroup->visible())
+                HBars += p.ui->uiStatusGroup->h();
+            if (p.ui->uiBottomBar->visible())
+            {
+                int TH = calculate_edit_viewport_size(p.ui);
+                HBars += TH;
+
+#ifdef DEBUG_SCALING
+                std::cerr << "Timeline Height=" << TH << std::endl;
+#endif
+            }
+
+#ifdef DEBUG_SCALING
+            std::cerr << "BARS WBars=" << WBars << " HBars=" << HBars
+                      << std::endl;
+#endif
             // Try to adjust sizing first, keeping the pos the same.
             if (aspectRatio > 1)
             {
                 if (posY + H > minY + maxH)
                 {
                     p.frameView = true;
-                    H = minY + maxH - posY + dH;
-                    // W /= aspectRatio;
+                    float pct = static_cast<float>(maxH - HBars) / renderSize.h;
+                    renderSize.h = maxH - HBars + dH;
+                    renderSize.w *= pct;
 
 #ifdef DEBUG_SCALING
-                    std::cerr << "Adjust sizing on height" << std::endl;
+                    std::cerr << "Adjust sizing on height pct=" << pct
+                              << std::endl;
 #endif
                 }
             }
             else
             {
-                if (posX + W > minX + maxW)
+                if (posX + W + WBars > minX + maxW)
                 {
                     p.frameView = true;
-                    W = minX + maxW - posX + dW;
-                    // H /= aspectRatio;
+
+                    float pct = static_cast<float>(maxW - WBars) / renderSize.w;
+                    renderSize.w = maxW - WBars + dW;
+                    renderSize.h *= pct;
 
 #ifdef DEBUG_SCALING
-                    std::cerr << "Adjust sizing on width" << std::endl;
+                    std::cerr << "Adjust sizing on width pct=" << pct
+                              << std::endl;
 #endif
                 }
             }
 
 #ifdef DEBUG_SCALING
-            std::cerr << "renderSize rescaled W=" << W << " H=" << H
-                      << std::endl;
+            std::cerr << "renderSize rescaled=" << renderSize << std::endl;
 #endif
-
-            // Take into account the different UI bars
-            if (p.ui->uiMenuGroup->visible())
-                H += p.ui->uiMenuGroup->h();
-
-            if (p.ui->uiTopBar->visible())
-                H += p.ui->uiTopBar->h();
-
-            if (p.ui->uiPixelBar->visible())
-                H += p.ui->uiPixelBar->h();
-
-            if (p.ui->uiBottomBar->visible())
-            {
-                H += p.ui->uiBottomBar->h();
-            }
-
-            if (p.ui->uiStatusGroup->visible())
-                H += p.ui->uiStatusGroup->h();
-
-#ifdef DEBUG_SCALING
-            std::cerr << "Window size so far W=" << W << " H=" << H
-                      << std::endl;
-#endif
-
-            if (p.ui->uiBottomBar->visible())
-            {
-                int TH = calculate_edit_viewport_size(p.ui);
-                H += TH;
-
-#ifdef DEBUG_SCALING
-                std::cerr << "Timeline Height=" << TH << std::endl;
-#endif
-            }
+            // Add the bars to the render size to calculate potential window
+            // size.
+            W = renderSize.w + WBars;
+            H = renderSize.h + HBars;
         }
 
-        if (W == renderSize.w)
+#ifdef DEBUG_SCALING
+        std::cerr << "Window size so far " << posX << " " << posY << " W=" << W
+                  << " H=" << H << std::endl;
+#endif
+
+        // First, try by
+        if (posY + H > minY + maxH)
         {
             p.frameView = true;
+            posY = minY + dH; // dH is needed here!
         }
+
+#ifdef DEBUG_SCALING
+        std::cerr << "maxH check " << posX << " " << posY << " W=" << W
+                  << " H=" << H << std::endl;
+#endif
+
+        if (posX + W > minX + maxW)
+        {
+            p.frameView = true;
+            posX = minX + dW / 2; // dW / 2 is needed here!
+        }
+
+        // Finally, if we are still failing, position the viewer at
+        // minX, minY with maxW and maxH.
+        if (posY + H > minY + maxH)
+        {
+            p.frameView = true;
+            posY = minY + dH; // dH is needed here!
+            H = maxH;
+        }
+
+#ifdef DEBUG_SCALING
+        std::cerr << "maxH check " << posX << " " << posY << " W=" << W
+                  << " H=" << H << std::endl;
+#endif
+
+        if (posX + W > minX + maxW)
+        {
+            p.frameView = true;
+            posX = minX + dW / 2; // dW / 2 is needed here!
+            W = maxW;
+        }
+
+#ifdef DEBUG_SCALING
+        std::cerr << "maxW check " << posX << " " << posY << " W=" << W
+                  << " H=" << H << std::endl;
+#endif
 
         // Make sure that we are not less than the minimum window
         // sizes, in case the user loaded a very tiny image.
@@ -1470,47 +1532,6 @@ namespace mrv
         }
 
 #ifdef DEBUG_SCALING
-        std::cerr << "clamped minimum " << posX << " " << posY << " W=" << W
-                  << " H=" << H << std::endl;
-#endif
-
-        //
-        // Final sanity checks.
-        //
-        // if (posX + W + dW > minX + maxW)
-        // {
-        //     W = minX + maxW - posX;
-        //     p.frameView = true;
-        // }
-        // if (posY + H + dH > minY + maxH)
-        // {
-        //     H = minY + maxH - posY;
-        //     p.frameView = true;
-        // }
-
-#ifdef DEBUG_SCALING
-        std::cerr << "First minimum " << posX << " " << posY << " W=" << W
-                  << " H=" << H << std::endl;
-#endif
-
-        // Finally, if we are still failing, position the viewer at
-        // minX, minY with maxW and maxH.
-        if (posX + W > minX + maxW)
-        {
-            p.frameView = true;
-            posX = minX + dW / 2; // dW / 2 is needed here!
-            W = maxW;
-        }
-
-        //
-        if (posY + H > minY + maxH)
-        {
-            p.frameView = true;
-            posY = minY + dH; // dH is needed here!
-            H = maxH;
-        }
-
-#ifdef DEBUG_SCALING
         std::cerr << "FINAL Window=" << posX << " " << posY << " " << W << "x"
                   << H << " dW=" << dW << " dH=" << dH << std::endl;
 #endif
@@ -1524,8 +1545,6 @@ namespace mrv
         }
 
         set_edit_mode_cb(editMode, p.ui);
-
-        p.resizeWindow = false;
     }
 
     math::Vector2i TimelineViewport::_getFocus(int X, int Y) const noexcept

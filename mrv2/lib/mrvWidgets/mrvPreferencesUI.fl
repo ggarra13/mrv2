@@ -643,7 +643,7 @@ o->redraw();}
                   } {
                     Fl_Check_Button uiWindowFixedPosition {
                       label {Fixed Position}
-                      tooltip {When this option is set, mrv2 will open in the position you set here (except if the window goes out of the Desktop).  If Akways Save on Exit is on, the values are recakculated upon exiting the program.} xywh {350 139 215 25} box UP_BOX down_box DOWN_BOX align 16
+                      tooltip {When this option is set, mrv2 will open in the position you set here (except if the window goes out of the Desktop).  If Always Save on Exit is on, the values are recakculated upon exiting the program.} xywh {350 139 215 25} box UP_BOX down_box DOWN_BOX align 16
                     }
                     Fl_Value_Input uiWindowXPosition {
                       label {X:}
