@@ -1483,7 +1483,7 @@ v->uiOCIO_Display_View->do_callback();}
               }
             }
             Fl_Group {} {
-              label Audio open
+              label Audio open selected
               xywh {288 37 555 360} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {open
@@ -1728,8 +1728,7 @@ o->select( item );} {}
 
 \#else
     o->add(_("No Audio was Compiled"));
-\#endif} {selected
-    }
+\#endif} {}
   }
   Function {fill_audio_output_devices(Fl_Choice* o)} {open
   } {
