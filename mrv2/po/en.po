@@ -6003,6 +6003,9 @@ msgstr "User Interface/Timeline"
 msgid "No Audio was Compiled"
 msgstr "No Audio was Compiled"
 
+msgid "No Audio Devices were Found"
+msgstr "No Audio Devices were Found"
+
 msgid "Default API"
 msgstr "Default API"
 

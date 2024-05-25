@@ -6069,6 +6069,9 @@ msgstr "Interfaz del Usuario/Línea de Tiempo"
 msgid "No Audio was Compiled"
 msgstr "Ningún Audio fue Compilado"
 
+msgid "No Audio Devices were Found"
+msgstr "No se encontraron Equipos de Audio"
+
 msgid "Default API"
 msgstr "API por Defecto"
 
