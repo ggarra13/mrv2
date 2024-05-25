@@ -239,6 +239,12 @@ msgstr "Set FFmpeg YUV To RGB Conversion."
 msgid "Get FFmpeg YUV To RGB Conversion."
 msgstr "Get FFmpeg YUV To RGB Conversion."
 
+msgid "Set FFmpeg Color Accuracy."
+msgstr "Set FFmpeg Color Accuracy."
+
+msgid "Get FFmpeg Color Accuracy."
+msgstr "Get FFmpeg Color Accuracy."
+
 msgid "Set FFmpeg Thread Count."
 msgstr "Set FFmpeg Thread Count."
 
@@ -1930,10 +1936,10 @@ msgstr "FFmpeg Color Accuracy."
 
 msgid ""
 "When this setting is on, color accuracy is chosen when decoding YUV420_P8 "
-"movies, at the cost of some performance."
+"movies that have Color Space as 'unknown', at the cost of some performance."
 msgstr ""
 "When this setting is on, color accuracy is chosen when decoding YUV420_P8 "
-"movies, at the cost of some performance."
+"movies that have Color Space as 'unknown', at the cost of some performance."
 
 msgid "FFmpeg I/O threads"
 msgstr "FFmpeg I/O threads"

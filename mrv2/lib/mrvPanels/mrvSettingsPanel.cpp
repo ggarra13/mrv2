@@ -409,8 +409,9 @@ namespace mrv
             c->value(
                 settings->getValue<bool>("Performance/FFmpegColorAccuracy"));
             c->tooltip(_("When this setting is on, color accuracy is "
-                         "chosen when decoding YUV420_P8 movies, at the "
-                         "cost of some performance."));
+                         "chosen when decoding YUV420_P8 movies that have "
+                         "Color Space as 'unknown', at the cost of some "
+                         "performance."));
             cV->callback(
                 [=](auto w)
                 {

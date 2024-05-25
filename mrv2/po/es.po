@@ -253,6 +253,12 @@ msgstr "Setear conversiòn FFmpeg de YUV a RGB"
 msgid "Get FFmpeg YUV To RGB Conversion."
 msgstr "Obtener conversiòn FFmpeg de YUV a RGB"
 
+msgid "Set FFmpeg Color Accuracy."
+msgstr "Setear Precisión de Color de FFmpeg"
+
+msgid "Get FFmpeg Color Accuracy."
+msgstr "Obtener Precisión de Color de FFmpeg"
+
 msgid "Set FFmpeg Thread Count."
 msgstr "Setear número de hilos de FFmpeg."
 
@@ -1957,10 +1963,11 @@ msgstr "Precisión de Color de FFmpeg"
 
 msgid ""
 "When this setting is on, color accuracy is chosen when decoding YUV420_P8 "
-"movies, at the cost of some performance."
+"movies that have Color Space as 'unknown', at the cost of some performance."
 msgstr ""
 "Con este seteo activado, precisión de color es preferida al decodificar "
-"películas YUV420_P8, al costo de velocidad de decodificación."
+"películas YUV420_P8 que tienen el Espacio de Color como 'unknown', al costo "
+"de velocidad de decodificación."
 
 msgid "FFmpeg I/O threads"
 msgstr "Hilos de FFmpeg I/O"
