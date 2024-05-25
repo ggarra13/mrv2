@@ -5,7 +5,7 @@ v1.1.8
   can select multiple images but they won't be loaded as a sequence, only as
   stills.
 - Added a command-line setting (--single or -s) to also load single images.
-- Removed th 1 pixel padding that was added when first loading a clip full
+- Removed the 1 pixel padding that was added when first loading a clip full
   screen.
 - Fixed cursor disappearing when going to the action tool dock while a drawing
   tool was active.
@@ -30,6 +30,12 @@ v1.1.8
 - Fixed Y pixel coordinate in Pixel Bar when showing environment maps.
 - Fixed X and Y coordinates displaying large negative numbers when no image
   was loaded.
+- Made Preferences->Playback->Auto Playback not activate playback when a clip
+  is dragged for the first time to an EDL playlist.
+- Color accuracy for YUV420P movies introduced a minor speed penalty which
+  can make some movies' performance playback stall, so a new boolean check box
+  setting was added to Panel->Settings to toggle that setting.  The default is
+  to have it on.
 
 
 v1.1.7

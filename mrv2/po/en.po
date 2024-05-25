@@ -239,6 +239,12 @@ msgstr "Set FFmpeg YUV To RGB Conversion."
 msgid "Get FFmpeg YUV To RGB Conversion."
 msgstr "Get FFmpeg YUV To RGB Conversion."
 
+msgid "Set FFmpeg Color Accuracy."
+msgstr "Set FFmpeg Color Accuracy."
+
+msgid "Get FFmpeg Color Accuracy."
+msgstr "Get FFmpeg Color Accuracy."
+
 msgid "Set FFmpeg Thread Count."
 msgstr "Set FFmpeg Thread Count."
 
@@ -1924,6 +1930,16 @@ msgstr "Sequence I/O threads"
 
 msgid "FFmpeg YUV to RGB conversion"
 msgstr "FFmpeg YUV to RGB conversion"
+
+msgid "FFmpeg Color Accuracy"
+msgstr "FFmpeg Color Accuracy."
+
+msgid ""
+"When this setting is on, color accuracy is chosen when decoding YUV420_P8 "
+"movies that have Color Space as 'unknown', at the cost of some performance."
+msgstr ""
+"When this setting is on, color accuracy is chosen when decoding YUV420_P8 "
+"movies that have Color Space as 'unknown', at the cost of some performance."
 
 msgid "FFmpeg I/O threads"
 msgstr "FFmpeg I/O threads"
@@ -5984,17 +6000,17 @@ msgstr "User Interface/Thumbnails"
 msgid "User Interface/Timeline"
 msgstr "User Interface/Timeline"
 
-msgid "Default API"
-msgstr "Default API"
-
 msgid "No Audio was Compiled"
 msgstr "No Audio was Compiled"
 
-msgid "Default Device"
-msgstr "Default Device"
+msgid "Default API"
+msgstr "Default API"
 
 msgid "No Valid Devices found"
 msgstr "No Valid Devices found"
+
+msgid "Default Device"
+msgstr "Default Device"
 
 msgid "Remote to Local Path Mapping"
 msgstr "Remote to Local Path Mapping"

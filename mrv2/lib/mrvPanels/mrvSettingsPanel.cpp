@@ -394,7 +394,6 @@ namespace mrv
             c->labelsize(12);
             c->value(settings->getValue<bool>(
                 "Performance/FFmpegYUVToRGBConversion"));
-
             cV->callback(
                 [=](auto w)
                 {
@@ -403,12 +402,29 @@ namespace mrv
                         "Performance/FFmpegYUVToRGBConversion", v);
                 });
 
-            bg = new Fl_Group(g->x(), 420, g->w(), 30);
+            cV = new Widget< Fl_Check_Button >(
+                g->x() + 90, 420, g->w(), 20, _("FFmpeg Color Accuracy"));
+            c = cV;
+            c->labelsize(12);
+            c->value(
+                settings->getValue<bool>("Performance/FFmpegColorAccuracy"));
+            c->tooltip(_("When this setting is on, color accuracy is "
+                         "chosen when decoding YUV420_P8 movies that have "
+                         "Color Space as 'unknown', at the cost of some "
+                         "performance."));
+            cV->callback(
+                [=](auto w)
+                {
+                    int v = w->value();
+                    settings->setValue("Performance/FFmpegColorAccuracy", v);
+                });
+
+            bg = new Fl_Group(g->x(), 440, g->w(), 30);
             bg->box(FL_NO_BOX);
             bg->begin();
 
             spW = new Widget<Spinner>(
-                g->x() + 160, 420, g->w() - 160, 20, _("FFmpeg I/O threads"));
+                g->x() + 160, 440, g->w() - 160, 20, _("FFmpeg I/O threads"));
             sp = spW;
             digits = settings->getValue<int>("Performance/FFmpegThreadCount");
             sp->value(digits);

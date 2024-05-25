@@ -91,9 +91,10 @@ namespace mrv
         std::vector<Composition*> getTracks(TimelinePlayer* player)
         {
             std::vector<Composition*> out;
+            
+            otio::ErrorStatus errorStatus;
             auto timeline = player->getTimeline();
 
-            otio::ErrorStatus errorStatus;
             auto tracks = timeline->tracks()->children();
             for (auto child : tracks)
             {
@@ -116,12 +117,14 @@ namespace mrv
 
         const otio::Timeline* createTimelineFromString(const std::string& s)
         {
+            otio::ErrorStatus error;
             auto timeline = dynamic_cast<otio::Timeline*>(
-                otio::Timeline::from_json_string(s));
+                otio::Timeline::from_json_string(s, &error));
             if (!timeline)
             {
-                LOG_ERROR("Could not crete timeline object from this "
-                          ".json string:");
+                LOG_DEBUG("Could not crete timeline object:");
+                LOG_ERROR(error.full_description);
+                LOG_ERROR(".json string that failed:");
                 LOG_ERROR(s);
                 return nullptr;
             }
@@ -222,11 +225,16 @@ namespace mrv
             if (!clonedItem)
                 return;
 
-            auto clip_range = item->trimmed_range();
+            auto clip_range = item->trimmed_range(&errorStatus);
+            if (is_error(errorStatus))
+            {
+                LOG_DEBUG(item->name() << " has no trimmed_range.");
+                return;
+            }
             auto track_range = item->trimmed_range_in_parent(&errorStatus);
             if (is_error(errorStatus))
             {
-                LOG_ERROR(item->name() << " is not attached to a track.");
+                LOG_DEBUG(item->name() << " is not attached to a track.");
                 return;
             }
             auto one_frame = RationalTime(1.0, time.rate());
@@ -1268,7 +1276,12 @@ namespace mrv
             // Append a new audio track
             auto track = new otio::Track(
                 "Audio", std::nullopt, otio::Track::Kind::audio);
-            stack->append_child(track);
+            stack->append_child(track, &errorStatus);
+            if (is_error(errorStatus))
+            {
+                LOG_DEBUG("stack->append_child(track) failed with:");
+                LOG_ERROR(errorStatus.full_description);
+            }
 
             modified = true;
             updateTimeline(timeline, time, ui);
@@ -1312,9 +1325,23 @@ namespace mrv
                 clipRange.duration().rescaled_to(sampleRate));
             otio::Gap* gap = new Gap(audioClipRange);
             if (audioIndex < 0 || audioIndex >= track->children().size())
-                track->append_child(gap);
+            {
+                track->append_child(gap, &errorStatus);
+                if (is_error(errorStatus))
+                {
+                    LOG_DEBUG("track->append_child(gap) failed with:");
+                    LOG_ERROR(errorStatus.full_description);
+                }
+            }
             else
-                track->insert_child(audioIndex, gap);
+            {
+                track->insert_child(audioIndex, gap, &errorStatus);
+                if (is_error(errorStatus))
+                {
+                    LOG_DEBUG("track->insert_child(gap) " << audioIndex << " failed with:");
+                    LOG_ERROR(errorStatus.full_description);
+                }
+            }
         }
 
         updateTimeline(timeline, time, ui);
@@ -1328,6 +1355,7 @@ namespace mrv
 
         tcp->pushMessage("Edit/Audio Gap/Insert", time);
     }
+    
 
     void edit_remove_audio_gap_cb(Fl_Menu_* m, ViewerUI* ui)
     {
@@ -1571,8 +1599,14 @@ namespace mrv
         auto videoTrack =
             new otio::Track("Video", std::nullopt, otio::Track::Kind::video);
 
+        otio::ErrorStatus errorStatus;
         auto stack = new otio::Stack;
-        stack->append_child(videoTrack);
+        stack->append_child(videoTrack, &errorStatus);
+        if (is_error(errorStatus))
+        {
+            LOG_DEBUG("stack->append_child(videoTrack) failed with:");
+            LOG_ERROR(errorStatus.full_description);
+        }
 
         otioTimeline->set_tracks(stack);
 
@@ -1673,6 +1707,7 @@ namespace mrv
         otio::Timeline* destTimeline, const otio::Timeline* sourceTimeline,
         const TimeRange& inOutRange, const TimeRange& timeRange)
     {
+        otio::ErrorStatus errorStatus;
         auto globalStartTime =
             RationalTime(0.0, sourceTimeline->duration().rate());
         auto startTimeOpt = sourceTimeline->global_start_time();
@@ -1711,7 +1746,12 @@ namespace mrv
                 // Append a new video track
                 track = new otio::Track(
                     "Video", std::nullopt, otio::Track::Kind::video);
-                destStack->append_child(track);
+                destStack->append_child(track, &errorStatus);
+                if (is_error(errorStatus))
+                {
+                    LOG_DEBUG("destStack->append_child(track) failed with:");
+                    LOG_ERROR(errorStatus.full_description);
+                }
             }
             else
             {
@@ -1727,7 +1767,12 @@ namespace mrv
                 auto gapRange =
                     TimeRange(RationalTime(0.0, duration.rate()), duration);
                 auto gap = new otio::Gap(gapRange);
-                track->append_child(gap);
+                track->append_child(gap, &errorStatus);
+                if (is_error(errorStatus))
+                {
+                    LOG_DEBUG("track->append_child(gap) failed with:");
+                    LOG_ERROR(errorStatus.full_description);
+                }
             }
 
             // Now, append all video children.
@@ -1814,7 +1859,12 @@ namespace mrv
                         }
                         const TimeRange clipRange(startTime, duration);
                         item->set_source_range(clipRange);
-                        track->append_child(item);
+                        track->append_child(item, &errorStatus);
+                        if (is_error(errorStatus))
+                        {
+                            LOG_DEBUG("track->append_child(item) failed with:");
+                            LOG_ERROR(errorStatus.full_description);
+                        }
                     }
                 }
                 else
@@ -1823,6 +1873,11 @@ namespace mrv
                     // if (transition)
                     // {
                     //     track->append_child(transition);
+                    //     if (is_error(errorStatus))
+                    //     {
+                    //         LOG_DEBUG("track->append_child(transition) failed with:");
+                    //         LOG_ERROR(errorStatus.full_description);
+                    //     }
                     // }
                     // else
                     // {
@@ -1849,7 +1904,12 @@ namespace mrv
                     auto gapRange =
                         TimeRange(RationalTime(0.0, duration.rate()), duration);
                     auto gap = new otio::Gap(gapRange);
-                    track->append_child(gap);
+                    track->append_child(gap, &errorStatus);
+                    if (is_error(errorStatus))
+                    {
+                        LOG_DEBUG("track->append_child(gap) failed with:");
+                        LOG_ERROR(errorStatus.full_description);
+                    }
                 }
             }
         }
@@ -1864,6 +1924,11 @@ namespace mrv
                 track = new otio::Track(
                     "Audio", std::nullopt, otio::Track::Kind::audio);
                 destStack->append_child(track);
+                if (is_error(errorStatus))
+                {
+                    LOG_DEBUG("destStack->append_child(track) failed with:");
+                    LOG_ERROR(errorStatus.full_description);
+                }
             }
             else
             {
@@ -1879,7 +1944,12 @@ namespace mrv
                 auto gapRange =
                     TimeRange(RationalTime(0.0, duration.rate()), duration);
                 auto gap = new otio::Gap(gapRange);
-                track->append_child(gap);
+                track->append_child(gap, &errorStatus);
+                if (is_error(errorStatus))
+                {
+                    LOG_DEBUG("track->append_child(gap) failed with:");
+                    LOG_ERROR(errorStatus.full_description);
+                }
             }
 
             // Now, append all audio children.
@@ -1944,7 +2014,12 @@ namespace mrv
                         }
                         const TimeRange clipRange(startTime, duration);
                         item->set_source_range(clipRange);
-                        track->append_child(item);
+                        track->append_child(item, &errorStatus);
+                        if (is_error(errorStatus))
+                        {
+                            LOG_DEBUG("track->append_child(item) failed with:");
+                            LOG_ERROR(errorStatus.full_description);
+                        }
                     }
                 }
                 else
@@ -1952,9 +2027,14 @@ namespace mrv
                     // auto transition = dynamic_cast<Transition*>(clone);
                     // if (transition)
                     // {
-                    //     track->append_child(transition);
+                    //     track->append_child(transition, &errorStatus);
+                    //     if (is_error(errorStatus))
+                    //     { 
+                    //         LOG_DEBUG("track->append_child(transition) failed with:");
+                    //         LOG_ERROR(errorStatus.full_description);
+                    //     }
                     // }
-                    // else
+                    // selse
                     // {
                     //     LOG_ERROR("Unknown child " << child->name());
                     // }
