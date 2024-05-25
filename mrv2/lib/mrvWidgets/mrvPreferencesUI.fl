@@ -1407,7 +1407,7 @@ v->uiOCIO_Display_View->do_callback();}
             }
             Fl_Group {} {
               label Video
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {open
                 xywh {323 60 478 314}
@@ -1483,8 +1483,8 @@ v->uiOCIO_Display_View->do_callback();}
               }
             }
             Fl_Group {} {
-              label Audio open selected
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5
+              label Audio open
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {open
                 xywh {326 60 478 314}
@@ -1499,7 +1499,7 @@ v->uiOCIO_Display_View->do_callback();}
                   Fl_Choice uiPrefsAudioAPI {
                     label API
                     user_data this user_data_type {PreferencesUI*}
-                    callback {fill_audio_output_devices(v->uiPrefsAudioOutputDevice);} open
+                    callback {fill_audio_output_devices(v);} open
                     tooltip {Audio API to use for platforms that support multiple APIs (Linux only)} xywh {388 225 356 22} down_box BORDER_BOX align 132 when 5 textcolor 32
                     code0 {fill_audio_apis(o);}
                     code1 {o->value(0);}
@@ -1508,7 +1508,7 @@ v->uiOCIO_Display_View->do_callback();}
                   Fl_Choice uiPrefsAudioOutputDevice {
                     label {Output Device} open
                     tooltip {Output Device to use for audio playback.} xywh {388 298 356 24} down_box BORDER_BOX align 132 textcolor 32
-                    code0 {fill_audio_output_devices(o);}
+                    code0 {fill_audio_output_devices(this);}
                     code1 {o->value(0);}
                     class {mrv::Choice}
                   } {}
@@ -1700,7 +1700,9 @@ o->select( item );} {}
   }
   Function {fill_audio_apis(Fl_Choice* o)} {open
   } {
-    code {\#ifdef TLRENDER_AUDIO
+    code {o->clear();
+
+\#ifdef TLRENDER_AUDIO
 
     std::vector<RtAudio::Api> apis;
     RtAudio::getCompiledApi(apis);
@@ -1711,7 +1713,22 @@ o->select( item );} {}
          return;
     }
    
-    auto name = RtAudio::getApiDisplayName(apis[0]);
+   
+    std::vector<RtAudio::Api> validApis;
+    for (auto api : apis)
+    {
+    	RtAudio audio(api);
+    	if (audio.getDeviceCount() > 0)
+    	    validApis.push_back(api);	
+    }    
+    
+    if (validApis.empty())
+    {    
+         o->add(_("No Audio Devices were Found"));
+         return;
+    }
+   
+    auto name = RtAudio::getApiName(validApis[0]);
     
     std::string apiDefault = _("Default API");
     apiDefault += " (";
@@ -1720,27 +1737,67 @@ o->select( item );} {}
     
     o->add(apiDefault.c_str());
 
-    for (auto& api : apis)
+    for (auto& api : validApis)
     {
-        auto name = RtAudio::getApiDisplayName(api);
+        auto name = RtAudio::getApiName(api);
         o->add(name.c_str());
     }
 
 \#else
     o->add(_("No Audio was Compiled"));
-\#endif} {}
+\#endif} {selected
+    }
   }
-  Function {fill_audio_output_devices(Fl_Choice* o)} {open
+  Function {fill_audio_output_devices(PreferencesUI* self)} {open
   } {
-    code {\#ifdef TLRENDER_AUDIO
+    code {auto v = self->uiPrefsAudioAPI;
+auto o = self->uiPrefsAudioOutputDevice;
+int oldDevice = o->value();
+std::string oldDeviceName;
 
-RtAudio::Api api = static_cast<RtAudio::Api>(uiPrefsAudioAPI->value());
+if (oldDevice >= 0)
+{
+    const Fl_Menu_Item* item = v->child(oldDevice);
+    if (item && item->label())
+    {
+        oldDeviceName = item->label();
+    }
+}
+
+o->clear();
+
+\#ifdef TLRENDER_AUDIO
+
+int value = v->value();
+const Fl_Menu_Item* item = v->child(value);
+
+std::string apiName;
+if (item && item->label())
+{
+    apiName = item->label();
+}
+
+   
+RtAudio::Api api = RtAudio::getCompiledApiByName(apiName);
+
 RtAudio audio(api);
+
+RtAudio::Api realApi = audio.getCurrentApi();
+
+\#if 0
+    std::cerr << "      value=" << value << std::endl
+              << "    apiName=" << apiName << std::endl
+              << "      apiId=" << (int)api << std::endl
+              << "  realApiId=" << (int)realApi << std::endl
+              << "realApiName=" << RtAudio::getApiName(realApi)
+              << "  oldDevice=" << oldDevice << std::endl;
+\#endif
 
 const auto numDevices = audio.getDeviceCount();
 if (numDevices <= 0)
 {
     o->add(_("No Valid Devices found" ));
+    o->value(0);
     return;
 }
 
@@ -1749,27 +1806,37 @@ const auto deviceDefault = audio.getDefaultOutputDevice();
 const auto& info = audio.getDeviceInfo(deviceDefault);
 const auto& deviceName = mrv::string::commentSlash(info.name);
 
+oldDevice = 0;
+
 std::string name = _("Default Device");
 name += " (";
 name += deviceName;
 name += ")";
 o->add(name.c_str());
-
 for (size_t i = 0; i < numDevices - 1; ++i)
 {
    const auto& deviceInfo = audio.getDeviceInfo(i);
+   if (!deviceInfo.probed) continue;
+   
    unsigned numOutput = deviceInfo.outputChannels;
    unsigned numDuplex = deviceInfo.duplexChannels;
    if (numOutput == 0 && numDuplex == 0)
       continue;  // a microphone or similar
       
-   name = mrv::string::commentSlash(deviceInfo.name);   
+   name = mrv::string::commentSlash(deviceInfo.name);
    o->add(name.c_str());
+   if (name == oldDeviceName)
+   {
+      oldDevice = i + 1;
+   }
 }
+
+o->value(oldDevice);
 
 \#else
 
 o->add(_("No Valid Devices found" ));
+o->value(0);
 
 \#endif} {}
   }

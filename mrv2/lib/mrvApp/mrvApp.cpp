@@ -11,6 +11,7 @@
 #endif // TLRENDER_USD
 
 #include <tlCore/StringFormat.h>
+#include <tlCore/AudioSystem.h>
 
 #include <tlTimeline/Util.h>
 
@@ -1552,6 +1553,26 @@ namespace mrv
         if (!p.player)
             return;
 
+        auto context = App::app->getContext();
+        auto audioSystem = context->getSystem<audio::System>();
+        if (audioSystem)
+        {
+            PreferencesUI* uiPrefs = ui->uiPrefs;
+            int api = uiPrefs->uiPrefsAudioAPI->value();
+            const Fl_Menu_Item* item = uiPrefs->uiPrefsAudioAPI->child(api);
+            if (item && item->label())
+            {
+                audioSystem->setAPI(item->label());
+            }
+
+            size_t outputDevice = uiPrefs->uiPrefsAudioOutputDevice->value();
+            item = uiPrefs->uiPrefsAudioOutputDevice->child(outputDevice);
+            if (item && item->label())
+            {
+                audioSystem->setOutputDevice(item->label());
+            }
+        }
+        
         uint64_t Gbytes =
             static_cast<uint64_t>(p.settings->getValue<int>("Cache/GBytes"));
 

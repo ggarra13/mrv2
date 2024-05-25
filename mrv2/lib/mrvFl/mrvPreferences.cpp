@@ -1850,23 +1850,6 @@ namespace mrv
         }
 #endif
 
-        auto context = App::app->getContext();
-        auto audioSystem = context->getSystem<audio::System>();
-
-        int api = uiPrefs->uiPrefsAudioAPI->value();
-        item = uiPrefs->uiPrefsAudioAPI->child(api);
-        if (item && item->label())
-        {
-            audioSystem->setAPI(item->label());
-        }
-
-        size_t outputDevice = uiPrefs->uiPrefsAudioOutputDevice->value();
-        item = uiPrefs->uiPrefsAudioOutputDevice->child(outputDevice);
-        if (item && item->label())
-        {
-            audioSystem->setOutputDevice(item->label());
-        }
-
         panel::redrawThumbnails();
 
         ui->uiMain->fill_menu(ui->uiMenuBar);
