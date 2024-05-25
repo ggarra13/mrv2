@@ -36,6 +36,8 @@ v1.1.8
   can make some movies' performance playback stall, so a new boolean check box
   setting was added to Panel->Settings to toggle that setting.  The default is
   to have it on.
+- Fixed an additional bug in resizing window code when loading movies without
+  fixed size.
 
 
 v1.1.7
