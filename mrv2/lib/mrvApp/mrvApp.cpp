@@ -1210,6 +1210,8 @@ namespace mrv
 #if defined(TLRENDER_FFMPEG)
         out["FFmpeg/YUVToRGBConversion"] = string::Format("{0}").arg(
             p.settings->getValue<int>("Performance/FFmpegYUVToRGBConversion"));
+        out["FFmpeg/FastYUV420Conversion"] = string::Format("{0}").arg(
+            p.settings->getValue<int>("Performance/FFmpegColorAccuracy"));
         out["FFmpeg/ThreadCount"] = string::Format("{0}").arg(
             p.settings->getValue<int>("Performance/FFmpegThreadCount"));
 
