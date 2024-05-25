@@ -1833,6 +1833,27 @@ namespace mrv
             }
         }
 
+#ifdef TLRENDER_AUDIO
+        auto context = App::app->getContext();
+        auto audioSystem = context->getSystem<audio::System>();
+        if (audioSystem)
+        {
+            int api = uiPrefs->uiPrefsAudioAPI->value();
+            const Fl_Menu_Item* item = uiPrefs->uiPrefsAudioAPI->child(api);
+            if (item && item->label())
+            {
+                audioSystem->setAPI(item->label());
+            }
+
+            size_t outputDevice = uiPrefs->uiPrefsAudioOutputDevice->value();
+            item = uiPrefs->uiPrefsAudioOutputDevice->child(outputDevice);
+            if (item && item->label())
+            {
+                audioSystem->setOutputDevice(item->label());
+            }
+        }
+#endif
+
         view->refreshWindows();
 
 #ifdef MRV2_NETWORK
