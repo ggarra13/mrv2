@@ -179,7 +179,7 @@ add_custom_target(
 
 add_custom_target(
     pot
-    DEPENDS ${pot_files}
+    DEPENDS ${pot_files} main_pot
 )
 
 add_custom_target(
