@@ -83,7 +83,7 @@ elseif(UNIX)
     #
     # Linux generators
     #
-    set(CPACK_GENERATOR DEB RPM TGZ)
+    set(CPACK_GENERATOR TGZ) #DEB RPM TGZ)
     
     #
     # Linux icon and .desktop shortcut

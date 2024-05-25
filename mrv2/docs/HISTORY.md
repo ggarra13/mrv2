@@ -40,6 +40,8 @@ v1.1.8
   fixed size.
 - Improved resizing window code to try to use the less space possible based on
   panel bars open and size of image.
+- Made binary distribution smaller on Linux and macOS by removing the useless
+  python.a config library.
 
 
 v1.1.7

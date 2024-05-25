@@ -48,11 +48,19 @@ endif()
 message( STATUS "CPACK_PREPACKAGE=${CPACK_PREPACKAGE}" )
 
 #
+# Remove usd directory from lib/ directory on Windows
+#
+message( STATUS "Removing ${CPACK_PREPACKAGE}/lib/usd")
+file( REMOVE_RECURSE "${CPACK_PREPACKAGE}/lib/usd" )
+
+#
 # Remove .a, .lib and .dll files from packaging lib/ directory
 #
+message( STATUS "Removing static and DLLs from ${CPACK_PREPACKAGE}/lib")
 file( GLOB STATIC_LIBS "${CPACK_PREPACKAGE}/lib/*.a"
 		       "${CPACK_PREPACKAGE}/lib/*.lib"
 		       "${CPACK_PREPACKAGE}/lib/*.dll" )
+		   
 
 if ( NOT "${STATIC_LIBS}" STREQUAL "" )
     file( REMOVE ${STATIC_LIBS} )
@@ -62,6 +70,7 @@ endif()
 #
 # Remove include files from packaging directory
 #
+message( STATUS "Removing ${CPACK_PREPACKAGE}/include" )
 file( REMOVE_RECURSE "${CPACK_PREPACKAGE}/include" )
 
 #
@@ -100,7 +109,10 @@ if(UNIX)
     # Grab the last version, in case there are several
     #
     set(MRV2_PYTHON_LIBDIR "")
-    if (MRV2_PYTHON_LIB_DIR STREQUAL "")
+    if (MRV2_PYTHON_LIB_DIRS STREQUAL "")
+	message(WARNING "Could not locate any python version in:")
+	message(FATAL_ERROR "${CPACK_PREPACKAGE}/lib/python*")
+    else()
 	list(GET MRV2_PYTHON_LIB_DIRS -1 MRV2_PYTHON_LIB_DIR)
     endif()
     
@@ -111,7 +123,7 @@ if(UNIX)
 	
     #
     # We need to get the dependencies of the python DSOs to avoid
-    # issues like openssl and libcrypto changing between Rocky Linux 8.1
+    # issues like openssl and libcrypto changing between Rocky Linux
     # and Ubuntu 22.04.5 or macOS's libb2.
     #
     set(MRV2_PYTHON_DSO_DIR "${MRV2_PYTHON_LIB_DIR}/lib-dynload")
@@ -130,12 +142,6 @@ if(UNIX)
 	get_runtime_dependencies( "${MRV2_EXES}" )
     endif()
 elseif(WIN32)
-    
-    #
-    # Remove usd directory from lib/ directory on Windows
-    #
-    file( REMOVE_RECURSE "${CPACK_PREPACKAGE}/lib/usd" )
-    
     #
     # Set python's site-packages dir for .exe installer.
     #
@@ -159,6 +165,7 @@ elseif(WIN32)
     #
     file(GLOB MRV2_UNUSED_PYTHON_DIRS
     "${MRV2_PYTHON_APP_LIB_DIR}/test*"
+    "${MRV2_PYTHON_APP_LIB_DIR}/config*"
     "${MRV2_PYTHON_APP_LIB_DIR}/ctypes/test*"
     "${MRV2_PYTHON_APP_LIB_DIR}/distutils/test*"
     "${MRV2_PYTHON_APP_LIB_DIR}/idlelib/idle_test*"
@@ -201,8 +208,11 @@ endif()
 # Don't pack sphinx and other auxiliary documentation libs nor the tests
 # for the libraries.
 #
+message(STATUS "Removing tests from ${MRV2_PYTHON_LIB_DIR}")
+message(STATUS "Removing unneeded packages from ${MRV2_PYTHON_SITE_PACKAGES_DIR}")
 file(GLOB MRV2_UNUSED_PYTHON_DIRS
     "${MRV2_PYTHON_LIB_DIR}/test*"
+    "${MRV2_PYTHON_LIB_DIR}/config*"
     "${MRV2_PYTHON_LIB_DIR}/ctypes/test*"
     "${MRV2_PYTHON_LIB_DIR}/distutils/test*"
     "${MRV2_PYTHON_LIB_DIR}/idlelib/idle_test*"
@@ -228,5 +238,8 @@ file(GLOB MRV2_UNUSED_PYTHON_DIRS
     "${MRV2_PYTHON_SITE_PACKAGES_DIR}/unittest*")
 
 if ( NOT "${MRV2_UNUSED_PYTHON_DIRS}" STREQUAL "" )
+    foreach( _dir ${MRV2_UNUSED_PYTHON_DIRS} )
+	message(STATUS "Removing ${_dir}")
+    endforeach()
     file( REMOVE_RECURSE ${MRV2_UNUSED_PYTHON_DIRS} )
 endif()
