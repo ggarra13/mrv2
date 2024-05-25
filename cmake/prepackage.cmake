@@ -11,7 +11,7 @@ message( STATUS "CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}" )
 # Find mrv2's root dir by brute force, looking for directory that has
 # our "cmake/version.cmake" file.
 #
-set( _current_dir ${CMAKE_INSTALL_PREFIX})
+set( _current_dir ${CMAKE_CURRENT_BINARY_DIR})
 set( _found_root_dir FALSE)
 while( NOT _found_root_dir )
     set(_current_dir "${_current_dir}/..")
