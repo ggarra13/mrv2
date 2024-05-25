@@ -7,23 +7,24 @@ message( STATUS "CMAKE_CURRENT_BINARY_DIR=${CMAKE_CURRENT_BINARY_DIR}" )
 message( STATUS "CMAKE_CURRENT_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}" )
 message( STATUS "CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}" )
 
-
 #
-# \@bug:
+# Find mrv2's root dir by brute force, looking for directory that has
+# our "cmake/version.cmake" file.
 #
-# According to the CMAKE docs CMAKE_INSTALL_PREFIX should point to the
-# install directory, but on Linux, macOS and Windows each path is different.
-#
-if ( UNIX AND NOT APPLE )
-    set( ROOT_DIR "${CMAKE_CURRENT_BINARY_DIR}/../../../../../../../../../" )
-elseif(APPLE)
-    set( ROOT_DIR "${CMAKE_INSTALL_PREFIX}/../../../../../../../../../../../../" )
-else()
-    set( ROOT_DIR "${CMAKE_INSTALL_PREFIX}/../../../../../../../../../" )
-endif()
+set( _current_dir ${CMAKE_INSTALL_PREFIX})
+set( _found_root_dir FALSE)
+while( NOT _found_root_dir )
+    set(_current_dir "${_current_dir}/..")
+    file(REAL_PATH ${_current_dir} _current_dir )
+    set(_mrv2_version "${_current_dir}/cmake/version.cmake" )
+    if (EXISTS ${_mrv2_version})
+	set(ROOT_DIR ${_current_dir})
+	set(_found_root_dir TRUE)
+    endif()
+endwhile()
 
 file(REAL_PATH ${ROOT_DIR} ROOT_DIR )
-message( STATUS "ROOT_DIR=${ROOT_DIR}" )
+message( STATUS "mrv2 ROOT_DIR=${ROOT_DIR}" )
 
 
 include( "${ROOT_DIR}/cmake/version.cmake" )
@@ -32,8 +33,8 @@ include( "${ROOT_DIR}/cmake/functions.cmake" )
 
 if( UNIX AND NOT APPLE )
     #
-    # @bug: Linux CMAKE_INSTALL_PREFIX is broken and not pointing to
-    #       pre-packaging directory!!!
+    # \@bug: Linux CMAKE_INSTALL_PREFIX is broken and not pointing to
+    #        pre-packaging directory!!!
     #
     if (EXISTS "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_PREFIX}")
 	set( CPACK_PREPACKAGE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_PREFIX}" )
@@ -44,7 +45,6 @@ else()
     set( CPACK_PREPACKAGE "${CMAKE_INSTALL_PREFIX}" )
 endif()
 
-message( STATUS "mrv2 ROOT_DIR=${ROOT_DIR}" )
 message( STATUS "CPACK_PREPACKAGE=${CPACK_PREPACKAGE}" )
 
 #
