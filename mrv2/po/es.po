@@ -1952,6 +1952,16 @@ msgstr "Hilos de Secuencia I/O"
 msgid "FFmpeg YUV to RGB conversion"
 msgstr "Conversiòn FFmpeg de YUV a RGB"
 
+msgid "FFmpeg Color Accuracy"
+msgstr "Precisión de Color de FFmpeg"
+
+msgid ""
+"When this setting is on, color accuracy is chosen when decoding YUV420_P8 "
+"movies, at the cost of some performance."
+msgstr ""
+"Con este seteo activado, precisión de color es preferida al decodificar "
+"películas YUV420_P8, al costo de velocidad de decodificación."
+
 msgid "FFmpeg I/O threads"
 msgstr "Hilos de FFmpeg I/O"
 
@@ -6049,17 +6059,17 @@ msgstr "Interfaz del Usuario/Miniaturas"
 msgid "User Interface/Timeline"
 msgstr "Interfaz del Usuario/Línea de Tiempo"
 
-msgid "Default API"
-msgstr "API por Defecto"
-
 msgid "No Audio was Compiled"
 msgstr "Ningún Audio fue Compilado"
 
-msgid "Default Device"
-msgstr "Equipo de Audio por Defecto"
+msgid "Default API"
+msgstr "API por Defecto"
 
 msgid "No Valid Devices found"
 msgstr "No se encontraron Equipos de Audio"
+
+msgid "Default Device"
+msgstr "Equipo de Audio por Defecto"
 
 msgid "Remote to Local Path Mapping"
 msgstr "Remota a Local Mapeo de Carpetas"
