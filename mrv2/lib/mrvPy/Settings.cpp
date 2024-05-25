@@ -292,7 +292,7 @@ namespace mrv2
         }
 
         /**
-         * @brief Sets the FFMpeg YUV to RGB conversion.
+         * @brief Sets the FFmpeg YUV to RGB conversion.
          *
          * @param value
          */
@@ -305,7 +305,7 @@ namespace mrv2
         }
 
         /**
-         * @brief Returns the FFMpeg YUV to RGB conversion.
+         * @brief Returns the FFmpeg YUV to RGB conversion.
          *
          * @return a bool
          */
@@ -313,6 +313,30 @@ namespace mrv2
         {
             return mrv::settings()->getValue<bool>(
                 "Performance/FFmpegYUVToRGBConversion");
+        }
+
+        /**
+         * @brief Sets the FFmpeg YUV to RGB conversion.
+         *
+         * @param value
+         */
+        void setFFmpegColorAccuracy(const bool value)
+        {
+            mrv::settings()->setValue(
+                "Performance/FFmpegColorAccuracy", (int)value);
+            if (panel::settingsPanel)
+                panel::settingsPanel->refresh();
+        }
+
+        /**
+         * @brief Returns the FFmpeg's Color Accuracy.
+         *
+         * @return a bool
+         */
+        bool FFmpegColorAccuracy()
+        {
+            return mrv::settings()->getValue<bool>(
+                "Performance/FFmpegColorAccuracy");
         }
 
         /**
@@ -466,6 +490,14 @@ Contains all settings functions.
     performance.def(
         "FFmpegYUVToRGBConversion", &mrv2::settings::FFmpegYUVToRGBConversion,
         _("Get FFmpeg YUV To RGB Conversion."));
+
+    performance.def(
+        "setFFmpegColorAccuracy", &mrv2::settings::setFFmpegColorAccuracy,
+        _("Set FFmpeg Color Accuracy."));
+
+    performance.def(
+        "FFmpegColorAccuracy", &mrv2::settings::FFmpegColorAccuracy,
+        _("Get FFmpeg Color Accuracy."));
 
     performance.def(
         "setFFmpegThreadCount", &mrv2::settings::setFFmpegThreadCount,
