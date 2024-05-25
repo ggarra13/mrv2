@@ -423,7 +423,7 @@ namespace mrv
             bg->begin();
 
             spW = new Widget<Spinner>(
-                g->x() + 160, 420, g->w() - 160, 20, _("FFmpeg I/O threads"));
+                g->x() + 160, 440, g->w() - 160, 20, _("FFmpeg I/O threads"));
             sp = spW;
             digits = settings->getValue<int>("Performance/FFmpegThreadCount");
             sp->value(digits);
