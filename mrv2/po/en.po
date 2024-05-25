@@ -5514,11 +5514,11 @@ msgstr "Fixed Position"
 
 msgid ""
 "When this option is set, mrv2 will open in the position you set here (except "
-"if the window goes out of the Desktop).  If Akways Save on Exit is on, the "
+"if the window goes out of the Desktop).  If Always Save on Exit is on, the "
 "values are recakculated upon exiting the program."
 msgstr ""
 "When this option is set, mrv2 will open in the position you set here (except "
-"if the window goes out of the Desktop).  If Akways Save on Exit is on, the "
+"if the window goes out of the Desktop).  If Always Save on Exit is on, the "
 "values are recakculated upon exiting the program."
 
 msgid "X:"
