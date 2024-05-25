@@ -488,7 +488,7 @@ Contains all settings functions.
         _("Set FFmpeg YUV To RGB Conversion."));
 
     performance.def(
-        "FFmpegYUVToRGBConversion", &mrv2::settings::FFmpegYUVToRGBConversion,
+        "ffmpegYUVToRGBConversion", &mrv2::settings::FFmpegYUVToRGBConversion,
         _("Get FFmpeg YUV To RGB Conversion."));
 
     performance.def(
@@ -496,7 +496,7 @@ Contains all settings functions.
         _("Set FFmpeg Color Accuracy."));
 
     performance.def(
-        "FFmpegColorAccuracy", &mrv2::settings::FFmpegColorAccuracy,
+        "ffmpegColorAccuracy", &mrv2::settings::FFmpegColorAccuracy,
         _("Get FFmpeg Color Accuracy."));
 
     performance.def(
