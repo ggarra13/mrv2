@@ -32,7 +32,7 @@ v1.1.8
   was loaded.
 - Made Preferences->Playback->Auto Playback not activate playback when a clip
   is dragged for the first time to an EDL playlist.
-- Color accuracy for YUV_420P movies introduced a minor speed penalty which
+- Color accuracy for YUV420P movies introduced a minor speed penalty which
   can make some movies' performance playback stall, so a new boolean check box
   setting was added to Panel->Settings to toggle that setting.  The default is
   to have it on.
