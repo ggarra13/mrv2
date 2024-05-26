@@ -142,6 +142,7 @@ Currently supported:
 - Network connections
 - Stereo 3D (Anaglyph, Scanlines, Columns, Checkered, Side by Side)
 - PDF Exporting of Annotations and Notes
+- Linux Wayland support
 
 # Building
 
@@ -400,24 +401,8 @@ BUILD-Linux-amd64/Release/install/bin/mrv2.sh
 ```
 
 Note, the binary Linux distribution of mrv2 may run into some Wayland
-incompatibilities with modern distros like Ubuntu 22.04.4 LTS:
+incompatibilities with modern distros like Ubuntu 22.04.4 LTS, leading to some harmless warnings.
 
-```
-(mrv2:540344): GLib-GIO-ERROR **: 20:47:45.978: Settings schema 'org.gnome.settings-daemon.plugins.xsettings' does not contain a key named 'antialiasing'
-Trace/breakpoint trap (core dumped)
-```
-
-To fix it, you may need to do a hack, like:
-```
-sudo cp /usr/share/glib-2.0/schemas/org.gnome.settings-daemon.plugins.xsettings.gschema.xml /usr/share/glib-2.0/schemas/org.gnome.settings-daemon.plugins.xsettings.gschema.xml.bad
-
-sudo nano /usr/share/glib-2.0/schemas/org.gnome.settings-daemon.plugins.xsettings.gschema.xml
-    (remove lines 19 and 20)
-        <   </schema>
-        <   <schema id="org.gnome.settings-daemon.plugins.xsettings.deprecated">
-
-sudo glib-compile-schemas /usr/share/glib-2.0/schemas
-```
 
 ## Windows
 
