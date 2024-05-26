@@ -97,12 +97,13 @@ extract_python_version()
 
 #
 # Function to locate python.  Returns:
-# PYTHONDIR        - directory of python executable
-# PYTHONEXE        - name of python executable
-# PYTHON           - full path to python executable
-# PYTHON_VERSION   - full version of python executable, like 3.11
-# PYTHON_SITEDIR   - directory of python site libraries
-# PYTHON_LIBDIR    - directory of python dynamic libraries
+# PYTHONDIR           - directory of python executable
+# PYTHONEXE           - name of python executable
+# PYTHON              - full path to python executable
+# PYTHON_VERSION      - full version of python executable, like 3.11
+# PYTHON_SITEDIR      - directory of python site libraries
+# PYTHON_USER_SITEDIR - directory of user's pythons site libraries 
+# PYTHON_LIBDIR       - directory of python dynamic libraries
 #
 locate_python()
 {
@@ -153,8 +154,9 @@ locate_python()
 	fi
     done
     
-    local site_dirs="${HOME}/.local/lib/${PYTHONEXE} ${PYTHON_LIBDIR}"
+    local site_dirs="${PYTHON_LIBDIR}"
     export PYTHON_SITEDIR="-unknown-"
+    export PYTHON_USER_SITEDIR=$"{HOME}/.local/lib/${PYTHONEXE}"
     for python_sitedir in $site_dirs; do
 	if [[ -d "${python_sitedir}/site-packages" ]]; then
 	    export PYTHON_SITEDIR="${python_sitedir}/site-packages"

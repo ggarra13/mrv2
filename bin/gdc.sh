@@ -22,7 +22,9 @@ locate_python
 
 export LD_LIBRARY_PATH=$OLD_LD_LIBRARY_PATH:$BUILD_DIR/install/lib64:$BUILD_DIR/install/lib
 
-if [[ ! -d $PYTHON_SITEDIR/requests ]]; then
+echo "PYTHON_SITEDIR=$PYTHON_SITEDIR"
+if [[ ! -d $PYTHON_SITEDIR/requests && ! -d $PYTHON_USER_SITEDIR/requests ]];
+then
     $PYTHON -m pip install requests
 fi
 
