@@ -46,7 +46,7 @@ if [[ "$CMAKE_TARGET" == doc* ]]; then
     
     cd $dir
 
-    run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t doc
+    run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t ${CMAKE_TARGET}
     export CMAKE_TARGET=install
 
     cd -
