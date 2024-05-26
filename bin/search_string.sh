@@ -8,5 +8,5 @@
 # source code.
 #
 
-echo "Searching for $1..."
-grep -rn --exclude-dir='BUILD-*' --exclude-dir='.git' --exclude-dir='tlRender' --exclude-dir='doc*' --exclude-dir='.github' $1
+echo "Searching for '$1'..."
+grep -rn --exclude-dir='BUILD-*' --exclude-dir='.git' --exclude-dir='tlRender' --exclude-dir='doc*' --exclude-dir='.github' "$1"
