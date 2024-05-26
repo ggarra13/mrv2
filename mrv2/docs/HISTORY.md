@@ -44,6 +44,7 @@ v1.1.8
   python.a config library.
 - Fixed Presentation mode on Wayland having colored (gray) borders instead of
   black ones.
+- Worked around an FLTK bug in its CMakeLists.txt files creating problems when ç  the API changed and the install/include/FL directory was not cleared.
 
 
 v1.1.7
