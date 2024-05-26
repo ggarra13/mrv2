@@ -140,7 +140,7 @@ endif()
 
 add_subdirectory( tlRender/etc/SuperBuild )
 
-set(FLTK_DEP tlRender )
+set(FLTK_DEP )
 if( BUILD_FLTK )
     include( cmake/Modules/BuildFLTK.cmake )
 endif()

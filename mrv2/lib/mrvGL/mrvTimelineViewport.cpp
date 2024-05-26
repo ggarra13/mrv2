@@ -1517,15 +1517,19 @@ namespace mrv
                   << " H=" << H << std::endl;
 #endif
 
+        int minW = 690;
+        int minH = 602;
+        mw->get_size_range(&minW, &minH);
+        
         // Make sure that we are not less than the minimum window
         // sizes, in case the user loaded a very tiny image.
-        if (W < 690)
+        if (W < minW)
         {
             p.frameView = true;
             W = 690;
         }
 
-        if (H < 602)
+        if (H < minH)
         {
             p.frameView = true;
             H = 602;

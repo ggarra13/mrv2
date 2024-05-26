@@ -7,8 +7,8 @@ include( ExternalProject )
 # The cutting EDGE!
 #set( FLTK_GIT_TAG master )
 
-#set(FLTK_GIT_TAG bc63ea7629c8c3c4248a777d1c0325ae800556e0)   # latest stable.
-set(FLTK_GIT_TAG 00dc35097b86f77d4aae7c789b03c70690f4b97f)
+#set(FLTK_GIT_TAG 00dc35097b86f77d4aae7c789b03c70690f4b97f)    # latest stable.
+set(FLTK_GIT_TAG e325c2e4a0a927f0b70c7f71da02065019c020ef)
 
 if(MRV2_PYFLTK OR FLTK_BUILD_SHARED)
     # If we are building pyFLTK compile shared
@@ -54,7 +54,7 @@ ExternalProject_Add(
     FLTK
     GIT_REPOSITORY "https://github.com/fltk/fltk.git"
     GIT_TAG ${FLTK_GIT_TAG}
-    DEPENDS ${FLTK_DEP}
+    DEPENDS tlRender
     PATCH_COMMAND ${FLTK_PATCH}
     CMAKE_ARGS
     -DCMAKE_C_COMPILER=${FLTK_C_COMPILER}
