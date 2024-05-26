@@ -42,6 +42,8 @@ v1.1.8
   panel bars open and size of image.
 - Made binary distribution smaller on Linux and macOS by removing the useless
   python.a config library.
+- Fixed Presentation mode on Wayland having colored (gray) borders instead of
+  black ones.
 
 
 v1.1.7

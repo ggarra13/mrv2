@@ -381,6 +381,12 @@ namespace mrv
         }
         else
         {
+            if (desktop::Wayland())
+            {
+                p.ui->uiViewGroup->color(fl_rgb_color(0, 0, 0));
+                p.ui->uiViewGroup->redraw();
+            }
+            
             // Hide the cursor if in presentation time after 3 seconds of
             // inactivity.
             auto time = std::chrono::high_resolution_clock::now();
