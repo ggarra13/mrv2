@@ -71,6 +71,25 @@ Linux
 
 	  export FLTK_BACKEND=x11
 
+- I get warnings when I run the pre-compiled mrv2 on the console under Wayland
+  on a modern distro like Ubuntu 22.04.4 LTS, like::
+
+    (mrv2:6869): GdkPixbuf-WARNING **: 09:23:50.243: Cannot open pixbuf loader module file '/usr/lib64/gdk-pixbuf-2.0/2.10.0/loaders.cache': No such file or directory
+
+    This likely means that your installation is broken.
+    Try running the command
+    gdk-pixbuf-query-loaders > /usr/lib64/gdk-pixbuf-2.0/2.10.0/loaders.cache
+    to make things work again for the time being.
+
+    (mrv2:6869): Gtk-WARNING **: 09:23:50.244: Theme parsing error: gtk.css:1422:23: 'font-feature-settings' is not a valid property name
+
+    (mrv2:6869): Gtk-WARNING **: 09:23:50.245: Theme parsing error: gtk.css:3308:25: 'font-feature-settings' is not a valid property name
+
+    (mrv2:6869): Gtk-WARNING **: 09:23:50.246: Theme parsing error: gtk.css:3770:23: 'font-feature-settings' is not a valid property name
+
+
+  Sadly, these cannot be avoided.  You will need to re-compile from source on
+  your target platform or use mrv2 under XWayland or under X11.
   
 Windows
 =======
