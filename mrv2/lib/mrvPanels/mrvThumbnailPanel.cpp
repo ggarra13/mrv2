@@ -91,24 +91,13 @@ namespace mrv
                 return;
             }
 
-            auto context = App::app->getContext();
-            const image::Size size(128, 64);
-
-            ThumbnailData* data = new ThumbnailData;
-            data->widget = widget;
-            data->panel = this;
-
-            auto it = ids.find(widget);
-            if (it != ids.end())
-            {
-                thumbnailCreator->cancelRequests(it->second);
-                ids.erase(it);
-            }
 
             try
             {
-                auto timeline = timeline::Timeline::create(path, context);
-                auto timeRange = timeline->getTimeRange();
+                const auto context = App::app->getContext();
+                const auto& timeline = timeline::Timeline::create(path,
+                                                                  context);
+                const auto& timeRange = timeline->getTimeRange();
 
                 auto time = currentTime;
 
@@ -117,12 +106,29 @@ namespace mrv
                     auto startTime = timeRange.start_time();
                     auto endTime = timeRange.end_time_inclusive();
 
+                    // If single frame and we have an icon, return.
+                    if (startTime == endTime && widget->image())
+                    {
+                        return;
+                    }
+                    
                     if (time < startTime)
                         time = startTime;
                     else if (time > endTime)
                         time = endTime;
                 }
 
+                ThumbnailData* data = new ThumbnailData;
+                data->widget = widget;
+                data->panel = this;
+            
+                auto it = ids.find(widget);
+                if (it != ids.end())
+                {
+                    thumbnailCreator->cancelRequests(it->second);
+                    ids.erase(it);
+                }
+            
                 thumbnailCreator->initThread();
 
                 int64_t id = thumbnailCreator->request(
