@@ -1,3 +1,21 @@
+v1.1.9
+======
+
+- Made undocking of panels with the dragbar always position them close to the
+  panel.
+- Added a visual indicator when a panel would dock if released.
+- Fixed a potential crashing bug with panels upon exit.
+- Fixed Panel docking on Wayland which was broken.
+- Made switching between single images (non-sequences) faster when showing the
+  thumbnails for them.
+- Added missing .CRW format to the list of supported RAW formats in mrv2's
+  custom file requester.
+- Fixed a random incorrect displaying of sequences as single frames on
+  Flu_File_Chooser.
+- Fixed Panel undocking with the Yellow undock button not respecting the saved
+  Y coordinate of the panel. 
+
+
 v1.1.8
 ======
 

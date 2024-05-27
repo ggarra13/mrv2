@@ -10,11 +10,11 @@
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Scroll.H>
 
-#include "mrvPack.h"
-#include "mrvDockGroup.h"
-#include "mrvDragButton.h"
-#include "mrvPanelButton.h"
-#include "mrvPanelWindow.h"
+#include "mrvWidgets/mrvPack.h"
+#include "mrvWidgets/mrvDockGroup.h"
+#include "mrvWidgets/mrvDragButton.h"
+#include "mrvWidgets/mrvPanelButton.h"
+#include "mrvWidgets/mrvPanelWindow.h"
 
 namespace mrv
 {
@@ -43,13 +43,11 @@ namespace mrv
         Fl_Group* group = nullptr;
         std::string _label;
 
-        // Sets whether window is docked or not.
-        void docked(bool r);
-
-        // Defines which dock the group can dock into
+        //! Defines which dock the group can dock into
         inline void set_dock(DockGroup* w) { dock = w; }
-        // get the dock group ID
-        inline DockGroup* get_dock(void) { return dock; }
+
+        //! Sets whether window is docked or not.
+        void docked(bool r);
 
     public:
         // Constructors for docked/floating window
@@ -66,6 +64,9 @@ namespace mrv
         Pack* get_pack() const { return pack; }
         Fl_Scroll* get_scroll() const { return scroll; }
         PanelWindow* get_window() const { return tw; }
+        
+        // get the dock group ID
+        inline DockGroup* get_dock(void) { return dock; }
 
         Fl_Image* image() const { return dragger->image(); }
         void image(Fl_Image* img) { dragger->image(img); }

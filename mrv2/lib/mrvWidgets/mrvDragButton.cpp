@@ -2,13 +2,24 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <cassert>
+
 #include <FL/Fl_Window.H>
+#include <FL/Fl_Scroll.H>
 #include <FL/fl_draw.H>
 #include <FL/Fl.H>
+#include <FL/names.h>
 
-#include "mrvDragButton.h"
-#include "mrvEventHeader.h"
-#include "mrvPanelGroup.h"
+#include "mrvWidgets/mrvDropWindow.h"
+#include "mrvWidgets/mrvDragButton.h"
+#include "mrvWidgets/mrvEventHeader.h"
+#include "mrvWidgets/mrvPack.h"
+#include "mrvWidgets/mrvPanelGroup.h"
+
+namespace
+{
+    const int kDragMinDistance = 10;
+}
 
 namespace mrv
 {
@@ -21,6 +32,12 @@ namespace mrv
 
     int DragButton::handle(int event)
     {
+        if (event == FL_NO_EVENT ||
+            event == FL_MOVE)
+            return 0;
+        
+        std::cerr << fl_eventnames[event] << std::endl;
+        
         PanelGroup* tg = (PanelGroup*)parent();
         int docked = tg->docked();
         int ret = 0;
@@ -28,14 +45,16 @@ namespace mrv
         int cx, cy;
         if (event == FL_ENTER)
         {
-            if (docked && tg->children() == 0)
-                return 0;
-            window()->cursor(FL_CURSOR_MOVE);
+            // if (docked && tg->children() == 0)
+            //     return 0;
+            if (window())
+                window()->cursor(FL_CURSOR_MOVE);
             ret = 1;
         }
         else if (event == FL_LEAVE)
         {
-            window()->cursor(FL_CURSOR_DEFAULT);
+            if (window())
+                window()->cursor(FL_CURSOR_DEFAULT);
             ret = 1;
         }
         // If we are not docked, deal with dragging the toolwin around
@@ -43,8 +62,7 @@ namespace mrv
         {
             // get the enclosing parent widget
             PanelWindow* tw = tg->get_window();
-            if (!tw)
-                return 0;
+            assert(tw);
 
             switch (event)
             {
@@ -69,47 +87,39 @@ namespace mrv
                     xoff = tw->x() - x1;
                     yoff = tw->y() - y1;
                 }
+                else
+                {
+                    int dock_attempt = would_dock();
+                    if (dock_attempt)
+                    {
+                        color_dock_group(FL_DARK_YELLOW);
+                        show_dock_group();
+                    }
+                    else
+                    {
+                        hide_dock_group();
+                    }
+                }
+                std::cerr << "\tposition window with code at line="
+                          << __LINE__ << std::endl;
                 tw->position(
                     xoff + Fl::event_x_root(), yoff + Fl::event_y_root());
                 ret = 1;
                 break;
 
             case FL_RELEASE:
-                cx = Fl::event_x_root(); // Where did the release occur...
-                cy = Fl::event_y_root();
-                x2 = x1 - cx;
-                y2 = y1 - cy;
-                x2 = (x2 > 0) ? x2 : (-x2);
-                y2 = (y2 > 0) ? y2 : (-y2);
-                if ((x2 > 10) || (y2 > 10))
-                { // test for a docking event
-                    // See if anyone is able to accept a dock with this widget
-                    // How to find the dock window? Search 'em all for now...
-                    for (Fl_Window* win = Fl::first_window(); win;
-                         win = Fl::next_window(win))
-                    {
-                        // Get the co-ordinates of each window
-                        int ex = win->x_root();
-                        int ey = win->y_root();
-                        int ew = win->w();
-                        int eh = win->h();
-
-                        // Are we inside the boundary of the window?
-                        if (win->visible() && (cx > ex) && (cy > ey) &&
-                            (cx < (ew + ex)) && (cy < (eh + ey)))
-                        { // Send the found window a message that we want to
-                          // dock with it.
-                            if (Fl::handle(FX_DROP_EVENT, win))
-                            {
-                                tg->dock_grp(tg);
-                                break;
-                            }
-                        }
-                    }
+            {
+                int dock_attempt = would_dock();
+                
+                if (dock_attempt)
+                {
+                    color_dock_group(FL_BACKGROUND_COLOR);
+                    show_dock_group();
+                    tg->dock_grp(tg);
                 }
-                // show();
                 ret = 1;
-                break;
+            }
+            break;
 
             default:
                 break;
@@ -130,16 +140,21 @@ namespace mrv
             break;
 
         case FL_DRAG:
-            // IF the drag has moved further than the drag_min distance
-            // THEN invoke an un-docking
+            // If the drag has moved further than the drag_min distance
+            // then invoke an un-docking
             x2 = Fl::event_x_root() - x1;
             y2 = Fl::event_y_root() - y1;
             x2 = (x2 > 0) ? x2 : (-x2);
             y2 = (y2 > 0) ? y2 : (-y2);
-            if ((x2 > 10) || (y2 > 10))
+            if ((x2 > kDragMinDistance) || (y2 > kDragMinDistance))
             {
                 tg->undock_grp((void*)tg); // undock the window
                 was_docked = -1;           // note that we *just now* undocked
+                
+                PanelWindow* tw = tg->get_window();
+                assert(tw);
+                std::cerr << "tw position=" << __LINE__ << std::endl;
+                tw->position(Fl::event_x_root(), Fl::event_y_root());
             }
             ret = 1;
             break;
@@ -150,4 +165,113 @@ namespace mrv
         return ret;
     } // handle
 
+
+    void DragButton::color_dock_group(Fl_Color c)
+    {
+        PanelGroup* tg = static_cast<PanelGroup*>(parent());
+        DockGroup* uiDock = tg->get_dock();
+        Fl_Widget* widget = uiDock->get_scroll();
+        widget->color(c);
+        widget->redraw();
+    }
+    
+    void DragButton::show_dock_group()
+    {
+        PanelGroup* tg = static_cast<PanelGroup*>(parent());
+        DockGroup* uiDock = tg->get_dock();
+        const Pack* uiDockPack = uiDock->get_pack();
+        auto uiDockGroup = uiDock->parent();
+        
+        // Show the dock group if it is hidden
+        if (!uiDockGroup->visible())
+        {
+            uiDockGroup->show();
+                            
+            auto dropWindow = static_cast<DropWindow*>(uiDock->top_window());
+            Fl_Flex* flex = dropWindow->workspace;
+            flex->layout();
+            flex->redraw();
+        }
+    }
+
+    void DragButton::hide_dock_group()
+    {
+        PanelGroup* tg = static_cast<PanelGroup*>(parent());
+        DockGroup* uiDock = tg->get_dock();
+        const Pack* uiDockPack = uiDock->get_pack();
+        auto uiDockGroup = uiDock->parent();
+
+        // Color the dock area with the background color
+        color_dock_group(FL_BACKGROUND_COLOR);
+                        
+        // Hide the panel if there are no panels 
+        if (uiDockPack->children() == 0)
+        {
+            uiDockGroup->hide();
+                            
+            auto dropWindow = static_cast<DropWindow*>(uiDock->top_window());
+            Fl_Flex* flex = dropWindow->workspace;
+            flex->layout();
+            flex->redraw();
+        }
+    }
+    
+    int DragButton::would_dock()
+    {
+        int x2 = 0, y2 = 0;
+        int cx, cy;
+        cx = Fl::event_x_root(); // Where did the release occur...
+        cy = Fl::event_y_root();
+        x2 = x1 - cx;
+        y2 = y1 - cy;
+        x2 = (x2 > 0) ? x2 : (-x2);
+        y2 = (y2 > 0) ? y2 : (-y2);
+        std::cerr << "\tx2, y2=" << x2 << " " << y2 << std::endl;
+        if ((x2 > kDragMinDistance) || (y2 > kDragMinDistance))
+        { // test for a docking event
+            // See if anyone is able to accept a dock with this widget
+            // How to find the dock window? Search 'em all for now...
+            for (Fl_Window* win = Fl::first_window(); win;
+                 win = Fl::next_window(win))
+            {
+                // Get the co-ordinates of each window
+                int ex = win->x_root();
+                int ey = win->y_root();
+                int ew = win->w();
+                int eh = win->h();
+
+                if (dynamic_cast<DropWindow*>(win))
+                {
+                    std::cerr
+                        << "\ttest against "
+                        << (win->label() ? win->label() : "nullptr window")
+                        << std::endl
+                        << "\t\twin=" << ex << " " << ey
+                        << " " << ew << "x" << eh
+                        << std::endl
+                        << "\t\tcx=" << cx << " " << cy
+                        << std::endl;
+                }
+                else
+                {
+                    continue;
+                }
+
+                // Are we inside the boundary of the window?
+                if (win->visible() && (cx > ex) && (cy > ey) &&
+                    (cx < (ew + ex)) && (cy < (eh + ey)))
+                {
+                    // Send the found window a message that we want to
+                    // dock with it.
+                    if (Fl::handle(FX_DROP_EVENT, win))
+                    {
+                        std::cerr << "\t\t\tVALID DROP" << std::endl;
+                        return 1;
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+    
 } // namespace mrv

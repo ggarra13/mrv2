@@ -4,12 +4,11 @@
 
 #pragma once
 
-/* fltk includes */
 #include <FL/Fl.H>
 #include <FL/Fl_Scroll.H>
 #include <FL/Fl_Double_Window.H>
 
-#include "mrvPack.h"
+#include "mrvWidgets/mrvPack.h"
 
 namespace mrv
 {

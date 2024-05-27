@@ -16,21 +16,24 @@ namespace mrv
     {
     protected:
         void init(void);
-        DockGroup* dock;
+        DockGroup* dock = nullptr;
 
     public:
         // Normal FLTK constructors
         DropWindow(int x, int y, int w, int h, const char* l = 0);
         DropWindow(int w, int h, const char* l = 0);
 
-        // The working area of this window
+        //! The working area of this window
         Fl_Flex* workspace;
 
-        // override handle method to capture "drop" events
+        //! Override handle method to capture "drop" events
         int handle(int);
 
-        // assign a dock widget to this window
+        //! Assign a dock widget to this window.
         void set_dock(DockGroup* d) { dock = d; }
+
+        //! Return dock for this window if any.
+        DockGroup* get_dock() { return dock; }
     };
 
 } // namespace mrv
