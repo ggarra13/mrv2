@@ -1547,13 +1547,13 @@ namespace mrv
         const auto& player = view->getTimelinePlayer();
         if (!player)
             return;
-        auto currentTime = time::round(player->currentTime());
+        auto currentTime = player->currentTime().round();
         std::vector< otime::RationalTime > times = player->getAnnotationTimes();
         std::sort(
             times.begin(), times.end(), std::greater<otime::RationalTime>());
         for (const auto& time : times)
         {
-            const auto& roundedTime = time::round(time);
+            const auto& roundedTime = time.round();
             if (roundedTime < currentTime)
             {
                 view->stop();
@@ -1569,12 +1569,12 @@ namespace mrv
         const auto& player = view->getTimelinePlayer();
         if (!player)
             return;
-        const auto& currentTime = time::round(player->currentTime());
+        const auto& currentTime = player->currentTime().round();
         std::vector< otime::RationalTime > times = player->getAnnotationTimes();
         std::sort(times.begin(), times.end());
         for (const auto& time : times)
         {
-            const auto& roundedTime = time::round(time);
+            const auto& roundedTime = time.round();
             if (roundedTime > currentTime)
             {
                 view->stop();

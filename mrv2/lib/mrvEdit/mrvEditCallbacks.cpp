@@ -570,10 +570,12 @@ namespace mrv
                         if (videoRate > 0)
                         {
                             auto range = item->trimmed_range();
-                            auto start = time::round(
-                                range.start_time().rescaled_to(videoRate));
-                            auto duration = time::round(
-                                range.duration().rescaled_to(videoRate));
+                            auto start = 
+                                range.start_time().
+                                rescaled_to(videoRate).round();
+                            auto duration = 
+                                range.duration().
+                                rescaled_to(videoRate).round();
                             range = TimeRange(start, duration);
                             item->set_source_range(range);
                         }
@@ -594,10 +596,10 @@ namespace mrv
                         if (sampleRate > 0)
                         {
                             auto range = item->trimmed_range();
-                            auto start = time::round(
-                                range.start_time().rescaled_to(sampleRate));
-                            auto duration = time::round(
-                                range.duration().rescaled_to(sampleRate));
+                            auto start = range.start_time().
+                                         rescaled_to(sampleRate).round();
+                            auto duration = range.duration().
+                                            rescaled_to(sampleRate).round();
                             range = TimeRange(start, duration);
                             duration = duration.rescaled_to(videoRate);
                             item->set_source_range(range);
@@ -1731,7 +1733,7 @@ namespace mrv
                 destStartTime = duration;
         }
 
-        if (time::compareExact(destStartTime, time::invalidTime))
+        if (destStartTime.strictly_equal(time::invalidTime))
         {
             destStartTime = RationalTime(0.0, 24.0);
         }

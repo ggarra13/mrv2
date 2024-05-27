@@ -321,7 +321,7 @@ namespace mrv
 
                     locale::SetAndRestore saved;
                     timeline::RenderOptions renderOptions;
-                    renderOptions.offscreenColorType = gl.colorBufferType;
+                    renderOptions.colorBuffer = gl.colorBufferType;
 
                     gl.render->begin(renderSize, renderOptions);
                     gl.render->setOCIOOptions(p.ocioOptions);

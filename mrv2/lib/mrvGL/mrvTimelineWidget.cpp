@@ -1653,11 +1653,10 @@ namespace mrv
                 p.timelineWidget->getTimelineItemGeometry();
             const double normalized =
                 (value - geometry.min.x) / static_cast<double>(geometry.w());
-            out = time::round(
-                p.timeRange.start_time() +
-                otime::RationalTime(
-                    p.timeRange.duration().value() * normalized,
-                    p.timeRange.duration().rate()));
+            out = (p.timeRange.start_time() +
+                   otime::RationalTime(
+                       p.timeRange.duration().value() * normalized,
+                       p.timeRange.duration().rate())).round();
             out = math::clamp(
                 out, p.timeRange.start_time(),
                 p.timeRange.end_time_inclusive());
