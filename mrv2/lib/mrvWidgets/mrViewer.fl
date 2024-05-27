@@ -110,7 +110,7 @@ widget_class PixelToolBarClass {open
   xywh {37 101 690 30} resizable
   class Fl_Double_Window visible
 } {
-  Fl_Group {} {open selected
+  Fl_Group {} {open
     xywh {0 0 690 30} box FLAT_BOX color 56
   } {
     Fl_Menu_Button uiZoom {
@@ -809,8 +809,8 @@ uiSecondary = nullptr;} {}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
     exit_cb( o, v );} open
-      xywh {127 191 690 602} type Double align 80 hide resizable
-      class {mrv::MainWindow} size_range {690 602 0 0}
+      xywh {617 416 690 602} type Double align 80 resizable
+      class {mrv::MainWindow} size_range {690 602 0 0} visible
     } {
       Fl_Pack uiRegion {open
         xywh {0 0 690 602} box FLAT_BOX resizable
@@ -820,7 +820,7 @@ if (reason == FL_REASON_CLOSED)
         code3 {o->fixed( uiPixelBar, uiPixelBar->h() ); o->fixed( uiStatusGroup, uiStatusGroup->h() );}
         class Fl_Flex
       } {
-        Fl_Group uiMenuGroup {open
+        Fl_Group uiMenuGroup {
           xywh {0 0 690 25} box FLAT_BOX
         } {
           Fl_Group {} {open
@@ -1058,7 +1058,7 @@ Value is:  pow( 2, 1/x );} xywh {651 26 39 25} type {Horz Knob} labelsize 10 max
             xywh {120 25 570 26} hide resizable
           } {}
         }
-        Fl_Tile uiTileGroup {
+        Fl_Tile uiTileGroup {open
           xywh {0 53 690 465}
           code0 {;}
           class {mrv::Tile}
@@ -1215,23 +1215,24 @@ settings->setValue( mrv::kPenColorA, a);}
               code0 {o->main( this );}
               class {mrv::Viewport}
             } {}
-            Fl_Group uiDockGroup {
-              xywh {420 53 270 435} hide
+            Fl_Group uiDockGroup {open selected
+              xywh {420 53 270 435} box FLAT_BOX hide
               code0 {uiViewGroup->fixed( o, 270 );}
             } {
               Fl_Box uiResizableBar {
                 xywh {420 53 10 435} box ENGRAVED_BOX
                 class {mrv::ResizableBar}
               }
-              Fl_Group uiDock {open
-                xywh {430 53 260 435} box FLAT_BOX resizable
+              Fl_Group uiDock {
+                label DockGroup open
+                xywh {430 53 260 435} box FLAT_BOX labeltype NO_LABEL resizable
                 code0 {o->set_window( uiMain );}
                 code1 {uiMain->set_dock(o);}
                 class {mrv::DockGroup}
               } {}
             }
           }
-          Fl_Group uiTimelineGroup {open
+          Fl_Group uiTimelineGroup {
             xywh {0 488 690 30} box FLAT_BOX color 51
             class {mrv::TimelineGroup}
           } {
@@ -1251,7 +1252,7 @@ settings->setValue( mrv::kPenColorA, a);}
             class TimelineClass
           } {}
         }
-        Fl_Group uiPixelBar {open
+        Fl_Group uiPixelBar {
           xywh {0 547 690 30} box FLAT_BOX color 56 labelcolor 17
         } {
           Fl_Group uiPixelWindow {open
