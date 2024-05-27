@@ -365,6 +365,8 @@ Flu_File_Chooser::Flu_File_Chooser(
     entryPopup(0, 0, 0, 0)
 {
 
+    _compact = compact;
+    
     int oldNormalSize = FL_NORMAL_SIZE;
     FL_NORMAL_SIZE = 12;
 
@@ -429,6 +431,7 @@ Flu_File_Chooser::Flu_File_Chooser(
     add_type("cap", _("RAW Picture"), &picture);
     add_type("cr2", _("Canon Raw Picture"), &picture);
     add_type("cr3", _("Canon Raw Picture"), &picture);
+    add_type("crw", _("Canon Raw Picture"), &picture);
     add_type("cs1", _("RAW Picture"), &picture);
     add_type("dcr", _("RAW Picture"), &picture);
     add_type("dng", _("Kodak Digital Negative"), &picture);
