@@ -46,7 +46,7 @@ namespace mrv
             add_group("Environment Map");
 
             Fl_SVG_Image* svg = load_svg("EnvironmentMap.svg");
-            g->image(svg);
+            g->bind_image(svg);
 
             g->callback(
                 [](Fl_Widget* w, void* d)

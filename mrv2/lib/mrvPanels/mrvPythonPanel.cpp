@@ -284,7 +284,7 @@ namespace mrv
             add_group("Python");
 
             Fl_SVG_Image* svg = load_svg("Python.svg");
-            g->image(svg);
+            g->bind_image(svg);
 
             g->callback(
                 [](Fl_Widget* w, void* d)

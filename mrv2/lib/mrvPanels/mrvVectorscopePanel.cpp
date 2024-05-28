@@ -29,7 +29,7 @@ namespace mrv
             add_group("Vectorscope");
 
             Fl_SVG_Image* svg = load_svg("Vectorscope.svg");
-            g->image(svg);
+            g->bind_image(svg);
 
             g->callback(
                 [](Fl_Widget* w, void* d)

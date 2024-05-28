@@ -54,7 +54,7 @@ namespace mrv
             add_group("Devices");
 
             Fl_SVG_Image* svg = load_svg("Devices.svg");
-            g->image(svg);
+            g->bind_image(svg);
 
             g->callback(
                 [](Fl_Widget* w, void* d)

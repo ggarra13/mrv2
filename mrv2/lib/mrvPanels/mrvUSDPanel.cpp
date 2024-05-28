@@ -41,7 +41,7 @@ namespace mrv
             add_group("USD");
 
             Fl_SVG_Image* svg = load_svg("USD.svg");
-            g->image(svg);
+            g->bind_image(svg);
 
             g->callback(
                 [](Fl_Widget* w, void* d)
