@@ -165,7 +165,7 @@ namespace mrv
             add_group("NDI");
 
             Fl_SVG_Image* svg = load_svg("NDI.svg");
-            g->image(svg);
+            g->bind_image(svg);
 
             r.find.NDI = NDIlib_find_create_v2();
 

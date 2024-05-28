@@ -52,7 +52,7 @@ namespace mrv
             _r(new Private)
         {
             add_group("Stereo 3D");
-            g->image(load_svg("Stereo3D.svg"));
+            g->bind_image(load_svg("Stereo3D.svg"));
 
             _r->filesObserver = observer::
                 ListObserver<std::shared_ptr<FilesModelItem> >::create(

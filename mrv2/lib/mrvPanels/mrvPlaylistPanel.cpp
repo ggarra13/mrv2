@@ -61,7 +61,7 @@ namespace mrv
             ThumbnailPanel(ui)
         {
             add_group("Playlist");
-            g->image(load_svg("Playlist.svg"));
+            g->bind_image(load_svg("Playlist.svg"));
 
             g->callback(
                 [](Fl_Widget* w, void* d)

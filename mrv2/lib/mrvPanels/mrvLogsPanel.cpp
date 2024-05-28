@@ -36,7 +36,7 @@ namespace mrv
             add_group("Logs");
 
             Fl_SVG_Image* svg = load_svg("Logs.svg");
-            g->image(svg);
+            g->bind_image(svg);
 
             g->callback(
                 [](Fl_Widget* w, void* d)

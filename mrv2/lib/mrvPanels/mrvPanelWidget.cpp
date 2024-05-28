@@ -41,9 +41,6 @@ namespace mrv
             std::string key = "gui/" + label + "/Window/Visible";
             settings->setValue(key, 0);
 
-            delete g->image();
-            g->image(nullptr);
-
             PanelGroup::cb_dismiss(NULL, g);
         }
 
