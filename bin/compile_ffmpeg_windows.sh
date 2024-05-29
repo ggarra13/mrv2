@@ -44,7 +44,12 @@ SVTAV1_REPO=https://gitlab.com/AOMediaCodec/SVT-AV1.git
 LIBVPX_REPO=https://chromium.googlesource.com/webm/libvpx.git
 LIBDAV1D_REPO=https://code.videolan.org/videolan/dav1d.git 
 LIBX264_REPO=https://code.videolan.org/videolan/x264.git
+
+#
+# FFmpeg has two repositories.  The first one was failing.
+#
 FFMPEG_REPO=https://git.ffmpeg.org/ffmpeg.git
+FFMPEG_REPO2=https://github.com/FFmpeg/FFmpeg
 
 #
 # Some auxiliary variables
@@ -193,7 +198,7 @@ ENABLE_LIBVPX=""
 if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 ]]; then
     cd $ROOT_DIR/sources
     if [[ ! -d libvpx ]]; then
-	git clone --depth 1 --branch ${LIBVPX_TAG} ${LIBVPX_REPO} 2> /dev/null
+	git clone --depth 1 --branch ${LIBVPX_TAG} ${LIBVPX_REPO}
     fi
     
     if [[ ! -e $INSTALL_DIR/lib/vpx.lib ]]; then
@@ -250,7 +255,7 @@ if [[ $BUILD_LIBDAV1D == 1 ]]; then
     cd $ROOT_DIR/sources
 
     if [[ ! -d dav1d ]]; then
-	git clone --depth 1 ${LIBDAV1D_REPO} --branch ${DAV1D_TAG} 2> /dev/null
+	git clone --depth 1 ${LIBDAV1D_REPO} --branch ${DAV1D_TAG}
     fi
 
     if [[ ! -e $INSTALL_DIR/lib/dav1d.lib ]]; then
@@ -279,7 +284,7 @@ if [[ $BUILD_LIBSVTAV1 == 1 ]]; then
 
     if [[ ! -d SVT-AV1 ]]; then
 	echo "Cloning ${SVTAV1_REPO}"
-	git clone --depth 1 ${SVTAV1_REPO} --branch ${SVTAV1_TAG} 2> /dev/null
+	git clone --depth 1 ${SVTAV1_REPO} --branch ${SVTAV1_TAG}
 
 	# We need to download a win64 specific yasm, not msys64 one
 	wget -c http://www.tortall.net/projects/yasm/releases/yasm-1.3.0-win64.exe
@@ -346,7 +351,7 @@ if [[ $TLRENDER_X264 == ON || $TLRENDER_X264 == 1 ]]; then
     cd $ROOT_DIR/sources
 
     if [[ ! -d x264 ]]; then
-	git clone --depth 1 ${LIBX264_REPO} --branch ${X264_TAG} 2> /dev/null
+	git clone --depth 1 ${LIBX264_REPO} --branch ${X264_TAG}
     fi
 
     if [[ ! -e $INSTALL_DIR/lib/libx264.lib ]]; then
@@ -416,7 +421,23 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
 
     if [[ ! -d ffmpeg ]]; then
 	echo "Cloning ffmpeg repository..."
-	git clone --depth 1 --branch ${FFMPEG_TAG} ${FFMPEG_REPO} 2> /dev/null
+	set +e
+	git clone --depth 1 --branch ${FFMPEG_TAG} ${FFMPEG_REPO}
+	clone_status=$?
+	if [ $clone_status -eq 0 ]; then
+	    echo "git clone successful"
+	else
+	    echo "git clone failed with exit code: $clone_status.  Trying mirror."
+	    git clone --depth 1 --branch ${FFMPEG_TAG} ${FFMPEG_REPO2}
+	    # Handle the failure (e.g., exit script, display specific message)
+	    clone_status=$?
+	    if [ $clone_status -eq 0 ]; then
+		echo "git clone successful"
+	    else
+		exit 1
+	    fi
+	    set -o pipefail -e
+	fi
     fi
     
     if [[ ! -e $INSTALL_DIR/lib/avformat.lib ]]; then
