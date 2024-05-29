@@ -47,6 +47,7 @@ set(HEADERS
     mrvPack.h
     mrvPathMappingBrowser.h
     mrvPanelButton.h
+    mrvPanelConstants.h
     mrvPanelGroup.h
     mrvPanelWindow.h
     mrvPlaylistButton.h

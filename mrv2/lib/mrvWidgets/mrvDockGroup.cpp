@@ -9,10 +9,10 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Menu_.H>
 
-#include "mrvPanelGroup.h"
-
-#include "mrvDockGroup.h"
-#include "mrvDropWindow.h"
+#include "mrvWidgets/mrvDockGroup.h"
+#include "mrvWidgets/mrvDropWindow.h"
+#include "mrvWidgets/mrvPanelGroup.h"
+#include "mrvWidgets/mrvResizableBar.h"
 
 namespace mrv
 {
@@ -48,6 +48,10 @@ namespace mrv
             dw->workspace->layout();
         }
         pack->add(grp);
+        pack->layout();
+        ResizableBar* bar = (ResizableBar*)parent()->child(0);
+        bar->HandleDrag(0);
+
         children++;
     }
 
@@ -65,6 +69,12 @@ namespace mrv
             children = 0; // just in case...!
             parent()->hide();
             dw->workspace->layout();
+        }
+        else
+        {
+            pack->layout();
+            ResizableBar* bar = (ResizableBar*)parent()->child(0);
+            bar->HandleDrag(0);
         }
     }
 

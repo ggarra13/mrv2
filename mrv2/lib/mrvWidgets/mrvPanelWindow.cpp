@@ -2,11 +2,12 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <cassert>
+
 #include <FL/Fl_Button.H>
 
-#include "mrvPanelWindow.h"
-#include "mrvEventHeader.h"
-
+#include "mrvWidgets/mrvPanelConstants.h"
+#include "mrvWidgets/mrvPanelWindow.h"
 #include "mrvWidgets/mrvPanelGroup.h"
 
 #include "mrvPanels/mrvPanelsAux.h"
@@ -117,16 +118,15 @@ namespace mrv
         }
     }
 
-    constexpr int kDiff = 3;
 
     void PanelWindow::set_cursor(int ex, int ey)
     {
-        cursor(FL_CURSOR_DEFAULT);
         valid = Direction::kNone;
-        int rdir = x() + w() - kDiff;
-        int ldir = x() + kDiff;
-        int bdir = y() + h() - kDiff;
-        int tdir = y() + kDiff;
+        const int rdir = x_root() + w() - kMargin;
+        const int ldir = x_root() + kMargin;
+        const int bdir = y_root() + h() - kMargin;
+        const int tdir = y_root() + kMargin;
+        const int dragbar = y_root() + kTitleBar;
         if (ex >= rdir)
             valid |= Direction::kRight;
         if (ex <= ldir)
@@ -147,27 +147,30 @@ namespace mrv
             cursor(FL_CURSOR_NWSE);
         else if (valid == Direction::kBottomLeft)
             cursor(FL_CURSOR_NESW);
+        else if (ey >= dragbar)
+        {
+            cursor(FL_CURSOR_DEFAULT);
+        }
     }
 
     void PanelWindow::resize(int X, int Y, int W, int H)
     {
+        
         int screen = Fl::screen_num(X, Y);
         int minX, minY, maxW, maxH;
         Fl::screen_work_area(minX, minY, maxW, maxH, screen);
-
-        // Don't allow taking the window beyond the titlebar
-        // -20 for the size of the dragger in the group.
-        const int DH = 20;
-        int maxY = minY + maxH - DH;
+        // Don't allow scaling the window beyond the bottom of the screen
         if (Y < minY)
             Y = minY;
-        else if (Y > maxY)
-            Y = maxY;
-
-        // Don't allow scaling the window beyond the bottom of the screen
-        if (Y + H > maxY)
-            H = maxY - Y;
-
+        // else if (Y + H > Y + maxH - DH)
+        // {
+        //     Y = maxH - DH;
+        //     H = DH;
+        // }
+        assert(W > 0);
+        assert(H > 0);
+        // assert(H >= DH);
+        
         Fl_Double_Window::resize(X, Y, W, H);
     }
 
@@ -191,9 +194,8 @@ namespace mrv
         case FL_MOVE:
         {
             int ret = Fl_Double_Window::handle(event);
-            if (!ret)
-                set_cursor(ex, ey);
-            return 1;
+            set_cursor(ex, ey);
+            return ret;
         }
         case FL_PUSH:
         {
@@ -287,7 +289,7 @@ namespace mrv
             key = prefix + "/WindowH";
 
             // Only store height if it is not a growing panel/window, like
-            // the Files, Compare or Playlist panel.
+            // the Files, Compare or Playlist panels.
             if (panel::isPanelWithHeight(label))
             {
                 settings->setValue(key, h());

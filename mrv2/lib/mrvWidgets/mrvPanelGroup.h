@@ -6,15 +6,14 @@
 
 #include <iostream>
 
-/* fltk includes */
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Scroll.H>
 
-#include "mrvPack.h"
-#include "mrvDockGroup.h"
-#include "mrvDragButton.h"
-#include "mrvPanelButton.h"
-#include "mrvPanelWindow.h"
+#include "mrvWidgets/mrvPack.h"
+#include "mrvWidgets/mrvDockGroup.h"
+#include "mrvWidgets/mrvDragButton.h"
+#include "mrvWidgets/mrvPanelButton.h"
+#include "mrvWidgets/mrvPanelWindow.h"
 
 namespace mrv
 {
@@ -27,11 +26,13 @@ namespace mrv
         DockGroup* dock = nullptr;
 
         // constructor helper function
-        void create_dockable_group(const char* lbl);
+        void create_dockable_group(bool docked, const char* lbl);
         void create_docked(DockGroup* d, const char* lbl);
         void create_floating(
             DockGroup* d, int x, int y, int w, int h, const char* l);
 
+        void set_Fl_Group();
+        
     protected:
         // Widgets used by the toolbar
         DragButton* dragger = nullptr;
@@ -43,22 +44,16 @@ namespace mrv
         Fl_Group* group = nullptr;
         std::string _label;
 
-        // Sets whether window is docked or not.
-        void docked(bool r);
-
-        // Defines which dock the group can dock into
+        //! Defines which dock the group can dock into
         inline void set_dock(DockGroup* w) { dock = w; }
-        // get the dock group ID
-        inline DockGroup* get_dock(void) { return dock; }
+
+        //! Sets whether window is docked or not.
+        void docked(bool r);
 
     public:
         // Constructors for docked/floating window
         PanelGroup(
             DockGroup* d, int f, int x, int y, int w, int h, const char* l = 0);
-        // Debug element sizes
-        void debug(const char* text) const;
-
-        int handle(int e) override;
 
         // Get the toolwindow or null if docked
         DragButton* get_dragger() const { return dragger; }
@@ -66,9 +61,11 @@ namespace mrv
         Pack* get_pack() const { return pack; }
         Fl_Scroll* get_scroll() const { return scroll; }
         PanelWindow* get_window() const { return tw; }
+        
+        // get the dock group ID
+        inline DockGroup* get_dock(void) { return dock; }
 
-        Fl_Image* image() const { return dragger->image(); }
-        void image(Fl_Image* img) { dragger->image(img); }
+        inline void bind_image(Fl_Image* img) { dragger->bind_image(img); }
 
         // Recalculate the sizes
         void layout();

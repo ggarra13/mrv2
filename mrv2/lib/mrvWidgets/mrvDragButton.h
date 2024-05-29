@@ -6,6 +6,8 @@
 
 #include <FL/Fl_Box.H>
 
+class Fl_Window;
+
 namespace mrv
 {
 
@@ -22,6 +24,13 @@ namespace mrv
 
         // override handle method to catch drag/dock operations
         int handle(int event) override;
+
+    protected:
+        int would_dock();
+
+        void color_dock_group(Fl_Color c);
+        void show_dock_group();
+        void hide_dock_group();
     };
 
 } // namespace mrv

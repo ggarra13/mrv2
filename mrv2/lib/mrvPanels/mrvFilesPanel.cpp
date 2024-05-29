@@ -62,6 +62,7 @@ namespace mrv
             ThumbnailPanel(ui)
         {
             add_group("Files");
+            
             g->bind_image(load_svg("Files.svg"));
 
             g->callback(

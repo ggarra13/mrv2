@@ -4,7 +4,7 @@
 
 #include <FL/Fl_Window.H>
 
-#include "mrvPanelButton.h"
+#include "mrvWidgets/mrvPanelButton.h"
 
 namespace mrv
 {
