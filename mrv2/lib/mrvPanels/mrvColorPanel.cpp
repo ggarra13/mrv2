@@ -69,7 +69,7 @@ namespace mrv
             add_group("Color");
 
             Fl_SVG_Image* svg = load_svg("Color.svg");
-            g->image(svg);
+            g->bind_image(svg);
 
             g->callback(
                 [](Fl_Widget* w, void* d)

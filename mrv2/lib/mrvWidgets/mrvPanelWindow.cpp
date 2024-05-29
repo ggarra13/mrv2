@@ -122,10 +122,11 @@ namespace mrv
     void PanelWindow::set_cursor(int ex, int ey)
     {
         valid = Direction::kNone;
-        int rdir = x() + w() - kMargin;
-        int ldir = x() + kMargin;
-        int bdir = y() + h() - kMargin;
-        int tdir = y() + kMargin;
+        const int rdir = x_root() + w() - kMargin;
+        const int ldir = x_root() + kMargin;
+        const int bdir = y_root() + h() - kMargin;
+        const int tdir = y_root() + kMargin;
+        const int dragbar = y_root() + kTitleBar;
         if (ex >= rdir)
             valid |= Direction::kRight;
         if (ex <= ldir)
@@ -146,6 +147,10 @@ namespace mrv
             cursor(FL_CURSOR_NWSE);
         else if (valid == Direction::kBottomLeft)
             cursor(FL_CURSOR_NESW);
+        else if (ey >= dragbar)
+        {
+            cursor(FL_CURSOR_DEFAULT);
+        }
     }
 
     void PanelWindow::resize(int X, int Y, int W, int H)

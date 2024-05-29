@@ -15,7 +15,7 @@ namespace mrv
 
     class PanelWindow : public Fl_Double_Window
     {
-#define TW_MAX_FLOATERS 16
+#define TW_MAX_FLOATERS 32
 
     protected:
         void create_dockable_window(void);

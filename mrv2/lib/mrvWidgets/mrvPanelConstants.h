@@ -6,7 +6,7 @@
 //! of the Drop Window (top_window()).
 //! Under Wayland, they are always created as parent of the Drop Window.
 //
-// #define PARENT_TO_TOP_WINDOW 1
+//#define PARENT_TO_TOP_WINDOW 1
 
 // On macOS, the buttons go to the left of the window.
 #ifdef __APPLE__

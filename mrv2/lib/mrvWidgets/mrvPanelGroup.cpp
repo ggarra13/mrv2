@@ -67,10 +67,10 @@ namespace mrv
 
             // Store window X and Y values.
             key = prefix + "/WindowX";
-            settings->setValue(key, tw->x());
+            settings->setValue(key, tw->x_root());
 
             key = prefix + "/WindowY";
-            settings->setValue(key, tw->y());
+            settings->setValue(key, tw->y_root());
             
             
             Pack* pack = gp->get_pack();
@@ -117,18 +117,18 @@ namespace mrv
 
         if (gp->docked())
         { // undock the group into its own non-modal tool window
-            int W = gp->w() + kMargin;
+            int W = gp->w() + kMargin * 2;
             int H = gp->h() + kMargin * 2;
             int X = Fl::event_x_root() - 10;
             int Y = Fl::event_y_root() - 35;
+            gp->docked(false); // toolgroup is no longer docked
             set_Fl_Group();
             tw = new PanelWindow(X, Y, W, H);
             tw->end();
-            gp->docked(false); // toolgroup is no longer docked
-            gp->end();         // needed to adjust pack and scroll
             dock->remove(gp);
             tw->add(gp);        // move the tool group into the floating window
             gp->position(1, 1); // align group in floating window (needed)
+            gp->size(W, H);     // resize to fit (needed)
             tw->resizable(gp);
             auto settings = App::app->settings();
             auto dragger = gp->get_dragger();
@@ -161,6 +161,24 @@ namespace mrv
                 H = H2;
             assert(H != 0);
 
+#ifdef __linux__
+            bool root_coords = true;
+#   ifdef FLTK_USE_WAYLAND
+                if (fl_wl_display())
+                    root_coords = false;
+#   endif
+#   ifdef PARENT_TO_TOP_WINDOW
+                root_coords = false;
+#   endif
+            if (!root_coords)
+            {
+                Fl_Window* main = dock->top_window();
+                const int mainX = main->x_root();
+                const int mainY = main->y_root();
+                X -= mainX;
+                Y -= mainY;
+            }
+#endif
             tw->resize(X, Y, W, H);
             tw->show();     // show floating window
             dock->redraw(); // update the dock, to show the group has gone...
@@ -202,11 +220,11 @@ namespace mrv
 
     void PanelGroup::resize(int X, int Y, int W, int H)
     {   
-        pack->size(W, pack->h());
-
         int GH = group && group->visible() ? group->h() : 0;
         assert(GH >= 0);
         int DH = docker->h();
+        
+        pack->size(W, pack->h());
 
         if (docked())
         {
@@ -237,7 +255,7 @@ namespace mrv
 
             scroll->resize(kMargin, scroll->y(), pack->w(), H - kMargin);
             if (pack->h() < H - kTitleBar - kMargin)
-                pack->size(W - kMargin, H - kTitleBar - kMargin);
+                pack->size(W, H - kTitleBar - kMargin);
             scroll->init_sizes(); // needed? to reset scroll size init size
         }
 
@@ -319,7 +337,7 @@ namespace mrv
     PanelGroup::PanelGroup(
         DockGroup* dk, int floater, int X, int Y, int W, int H,
         const char* lbl) :
-        Fl_Group(1, 1, W, H),
+        Fl_Group(0, 0, W, H),
         tw(nullptr)
     {
         assert(H > 0);
@@ -335,7 +353,7 @@ namespace mrv
     }
 
     // construction function
-    void PanelGroup::create_dockable_group(const char* lbl)
+    void PanelGroup::create_dockable_group(bool docked, const char* lbl)
     {
         int X = x();
         int Y = y();
@@ -387,7 +405,15 @@ namespace mrv
 
         // Group is used for non scrolling widgets in the panel, like the
         // Search box in Media Info Panel.
-        group = new Fl_Group(kMargin, dragger->y() + dragger->h(),
+        if (docked)
+        {
+            X = 0;
+        }
+        else
+        {
+            X = kMargin;
+        }
+        group = new Fl_Group(X, dragger->y() + dragger->h(),
                              w() - kMargin, 30, "Group");
         group->labeltype(FL_NO_LABEL);
         group->hide();
@@ -395,14 +421,14 @@ namespace mrv
         int GH = group->visible() ? group->h() : 0;
 
         // Scroll will contain a pack with this panel's contents.
-        scroll = new Fl_Scroll(kMargin, Y + dragger->h(),
-                               w() - kMargin * 2,
-                               h() - dragger->h() - kMargin * 2, "Scroll");
+        scroll = new Fl_Scroll(
+            X, Y + dragger->h(), w() - kMargin, h() - dragger->h() - kMargin,
+            "Scroll");
         scroll->labeltype(FL_NO_LABEL);
         scroll->type(Fl_Scroll::BOTH);
         scroll->begin();
 
-        pack = new Pack(kMargin, scroll->y(), scroll->w(), 1, "Pack");
+        pack = new Pack(X, scroll->y(), scroll->w(), 1, "Pack");
         pack->labeltype(FL_NO_LABEL);
         pack->end();
 
@@ -415,7 +441,7 @@ namespace mrv
 
         set_dock(dk); // define where the toolgroup is allowed to dock
         // Create the group itself
-        create_dockable_group(lbl);
+        create_dockable_group(true, lbl);
         // place it in the dock
         dk->add(this);
         docked(true); // docked
@@ -426,7 +452,7 @@ namespace mrv
     {
 
         // create the group itself
-        create_dockable_group(lbl);
+        create_dockable_group(false, lbl);
 
         set_dock(dk);  // define where the toolgroup is allowed to dock
         

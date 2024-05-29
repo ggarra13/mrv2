@@ -2,10 +2,15 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <FL/platform.H>
+#undef None
+#undef Status
+
 #include "mrViewer.h"
 
 #include "mrvWidgets/mrvDockGroup.h"
 #include "mrvWidgets/mrvResizableBar.h"
+#include "mrvWidgets/mrvPanelConstants.h"
 #include "mrvWidgets/mrvPanelGroup.h"
 
 #include "mrvPanels/mrvPanelsAux.h"
@@ -74,6 +79,29 @@ namespace mrv
                 value = settings->getValue<std::any>(key);
                 Y = std_any_empty(value) ? Y : std_any_cast<int>(value);
 
+#ifdef __linux__
+                std::cerr << "ROOT coords=" << X << " " << Y
+                          << std::endl;
+                bool root_coords = true;
+#   ifdef FLTK_USE_WAYLAND
+                if (fl_wl_display())
+                    root_coords = false;
+#   endif
+#   ifdef PARENT_TO_TOP_WINDOW
+                root_coords = false;
+#   endif
+                if (!root_coords)
+                {
+                    const int mainX = p.ui->uiMain->x_root();
+                    const int mainY = p.ui->uiMain->y_root();
+                    std::cerr << "MAIN  coords=" << mainX << " " << mainY
+                              << std::endl;
+                    X -= mainX;
+                    Y -= mainY;
+                }
+                std::cerr << "LOCAL coords=" << X << " " << Y
+                          << std::endl;
+#endif
                 key = prefix + "/WindowW";
                 value = settings->getValue<std::any>(key);
                 W = std_any_empty(value) ? W : std_any_cast<int>(value);
@@ -123,9 +151,12 @@ namespace mrv
         {
             TLRENDER_P();
             g->end();
+
+            // Adjust dock scrollbars for this new element
             p.ui->uiDock->pack->layout();
             p.ui->uiResizableBar->HandleDrag(0);
 
+#if 0
             // Check if we are a panel in a window
             PanelWindow* w = g->get_window();
             if (w && !g->docked())
@@ -141,6 +172,7 @@ namespace mrv
                 w->size(w->w(), H + 3);
                 w->resizable(r);
             }
+#endif
         }
 
         void PanelWidget::undock()
@@ -172,10 +204,10 @@ namespace mrv
                 PanelWindow* w = g->get_window();
 
                 key = prefix + "/WindowX";
-                settings->setValue(key, w->x());
+                settings->setValue(key, w->x_root());
 
                 key = prefix + "/WindowY";
-                settings->setValue(key, w->y());
+                settings->setValue(key, w->y_root());
 
                 key = prefix + "/WindowW";
                 settings->setValue(key, w->w());

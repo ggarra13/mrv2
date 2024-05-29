@@ -26,7 +26,7 @@ namespace mrv
         DockGroup* dock = nullptr;
 
         // constructor helper function
-        void create_dockable_group(const char* lbl);
+        void create_dockable_group(bool docked, const char* lbl);
         void create_docked(DockGroup* d, const char* lbl);
         void create_floating(
             DockGroup* d, int x, int y, int w, int h, const char* l);
@@ -65,8 +65,7 @@ namespace mrv
         // get the dock group ID
         inline DockGroup* get_dock(void) { return dock; }
 
-        Fl_Image* image() const { return dragger->image(); }
-        void image(Fl_Image* img) { dragger->image(img); }
+        inline void bind_image(Fl_Image* img) { dragger->bind_image(img); }
 
         // Recalculate the sizes
         void layout();

@@ -32,10 +32,6 @@ namespace mrv
 
     int DragButton::handle(int event)
     {
-        // if (event == FL_NO_EVENT ||
-        //     event == FL_MOVE)
-        //     return 0;
-
         int ret = Fl_Box::handle(event);
         
 #ifndef NDEBUG
@@ -48,7 +44,7 @@ namespace mrv
         int docked = tg->docked();
         int x2 = 0, y2 = 0;
         int cx, cy;
-        if (event == FL_ENTER)
+        if (event == FL_ENTER || event == FL_MOVE)
         {
             if (window())
                 window()->cursor(FL_CURSOR_MOVE);
@@ -195,7 +191,7 @@ namespace mrv
                 PanelWindow* tw = tg->get_window();
                 assert(tw);
 #ifndef NDEBUG
-                std::cerr << "position window with caode at line="
+                std::cerr << "position window with code at line="
                           << __LINE__ << std::endl;
 #endif
                 int posX = Fl::event_x_root();
@@ -207,6 +203,13 @@ namespace mrv
                 {
                     posX -= top->x_root();
                     posY -= top->y_root();
+                }
+                else
+                {
+#        ifdef PARENT_TO_TOP_WINDOW
+                    posX -= top->x_root();
+                    posY -= top->y_root();
+#        endif
                 }
 #    endif
 #endif

@@ -13,7 +13,9 @@ v1.1.9
 - Fixed a random incorrect displaying of sequences as single frames on
   Flu_File_Chooser.
 - Fixed Panel undocking with the Yellow undock button not respecting the saved
-  Y coordinate of the panel. 
+  Y coordinate of the panel and using X instead.
+- Improved UI behavior when docking, undocking and showing/hiding the
+  scrollbars.
 
 
 v1.1.8
