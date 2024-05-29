@@ -2,7 +2,6 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-
 #include <cassert>
 
 #include <FL/Fl.H>
@@ -19,7 +18,6 @@
 #include "mrvUI/mrvUtil.h"
 
 #include "mrvApp/mrvSettingsObject.h"
-
 
 #include "mrViewer.h"
 
@@ -69,8 +67,7 @@ namespace mrv
 
             key = prefix + "/WindowY";
             settings->setValue(key, tw->y_root());
-            
-            
+
             Pack* pack = gp->get_pack();
             Fl_Scroll* scroll = gp->get_scroll();
             int W = pack->w();
@@ -114,7 +111,6 @@ namespace mrv
             int Y = Fl::event_y_root() - 35;
             gp->docked(false); // toolgroup is no longer docked
 
-
             auto settings = App::app->settings();
             auto dragger = gp->get_dragger();
             std::string label = dragger->label();
@@ -147,11 +143,11 @@ namespace mrv
             assert(H != 0);
 
             if (desktop::Wayland())
-            {  
+            {
                 Fl_Window* top = dock->top_window();
                 int maxW = top->w();
                 int maxH = top->h();
-                
+
                 if (X + W > maxW)
                     X = maxW - W;
                 if (Y + H > maxH)
@@ -161,11 +157,11 @@ namespace mrv
                     X = 0;
                 if (Y < 0)
                     Y = 0;
-                
+
                 W = W > maxW ? maxW : W;
                 H = H > maxH ? maxH : H;
             }
-            
+
             set_Fl_Group();
 
             tw = new PanelWindow(X, Y, W, H);
@@ -215,11 +211,11 @@ namespace mrv
     }
 
     void PanelGroup::resize(int X, int Y, int W, int H)
-    {   
+    {
         int GH = group && group->visible() ? group->h() : 0;
         assert(GH >= 0);
         int DH = docker->h();
-        
+
         pack->size(W, pack->h());
 
         if (docked())
@@ -258,13 +254,13 @@ namespace mrv
         Fl_Group::resize(X, Y, W, pack->h() + DH + GH);
 
         // Make sure buttons don't stretch
-        W = w() - kButtonW * 2 - kMargin;
+        W = w() - kButtonW * 2;
 #ifdef LEFT_BUTTONS
-        X = x() + kButtonW * 2 + kMargin;
+        X = x() + kButtonW * 2;
         dragger->resize(X, dragger->y(), W, dragger->h());
 #else
         X = x();
-        dragger->resize(X, dragger->y(), W + kMargin, dragger->h());
+        dragger->resize(X, dragger->y(), W, dragger->h());
         X = dragger->x() + dragger->w();
         docker->resize(X, docker->y(), 20, 20);
         X = docker->x() + docker->w();
@@ -353,21 +349,20 @@ namespace mrv
     {
         int X = x();
         int Y = y();
-        
+
 #ifdef LEFT_BUTTONS
         // Create a group to enclose the buttons and make it
         // not resizable on macOS.
         Fl_Group* g = new Fl_Group(X, Y, kButtonW * 2, 20);
         dismiss = new PanelButton(X, Y, kButtonW, 20, kIcon);
         X += kButtonW;
-        docker = new PanelButton(X, Y, kBottonW, 20, kIcon);
+        docker = new PanelButton(X, Y, kButtonW, 20, kIcon);
 
         g->end();
         g->resizable(0);
 
         X += kButtonW;
 
-        
         const int dragW = w() - kButtonW * 2;
         dragger = new DragButton(X, Y, dragW, 20, lbl);
 #else
@@ -409,8 +404,8 @@ namespace mrv
         {
             X = kMargin;
         }
-        group = new Fl_Group(X, dragger->y() + dragger->h(),
-                             w() - kMargin, 30, "Group");
+        group = new Fl_Group(
+            X, dragger->y() + dragger->h(), w() - kMargin, 30, "Group");
         group->labeltype(FL_NO_LABEL);
         group->hide();
         group->end();
@@ -450,12 +445,12 @@ namespace mrv
         // create the group itself
         create_dockable_group(false, lbl);
 
-        set_dock(dk);  // define where the toolgroup is allowed to dock
-        
+        set_dock(dk); // define where the toolgroup is allowed to dock
+
         // create a floating toolbar window
         // Ensure the window is not created as a child of its own inner group!
         set_Fl_Group();
-        tw = new PanelWindow(X, Y, W+kMargin*2, H+kMargin);
+        tw = new PanelWindow(X, Y, W + kMargin * 2, H + kMargin);
         tw->end();
         docked(false); // NOT docked
         tw->add(this); // move the tool group into the floating window

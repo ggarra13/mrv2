@@ -34,6 +34,8 @@ cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
 
 cd -
 
+rm -rf $BUILD_DIR/install/include/FL
+
 dir=$BUILD_DIR/FLTK-prefix/src/FLTK-build/
 if [[ ! -d $dir ]]; then
     echo "FLTK directory"
