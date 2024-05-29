@@ -35,7 +35,7 @@ LIBVPX_TAG=v1.12.0
 DAV1D_TAG=1.3.0
 SVTAV1_TAG=v1.8.0
 X264_TAG=stable
-FFMPEG_TAG=n6.1.1
+FFMPEG_TAG=6.1.1
 
 #
 # Repositories
@@ -422,19 +422,34 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
     if [[ ! -d ffmpeg ]]; then
 	echo "Cloning ffmpeg repository..."
 	set +e
-	git clone --depth 1 --branch ${FFMPEG_TAG} ${FFMPEG_REPO}
+	git clone --depth 1 --branch n${FFMPEG_TAG} ${FFMPEG_REPO} 2> /dev/null
 	clone_status=$?
 	if [ $clone_status -eq 0 ]; then
 	    echo "git clone successful"
 	else
 	    echo "git clone failed with exit code: $clone_status.  Trying mirror."
-	    git clone --depth 1 --branch ${FFMPEG_TAG} ${FFMPEG_REPO2}
+	    git clone --depth 1 --branch n${FFMPEG_TAG} ${FFMPEG_REPO2} 2> /dev/null
 	    # Handle the failure (e.g., exit script, display specific message)
 	    clone_status=$?
 	    if [ $clone_status -eq 0 ]; then
 		echo "git clone successful"
 	    else
-		exit 1
+		echo "Mirror also failed.  Trying with curl..."
+		curl https://ffmpeg.org/releases/ffmpeg-${FFMPEG_TAG}.tar.bz2 \
+		     --output ffmpeg-${FFMPEG_TAG}.tar.bz2
+		clone_status=$?
+		if [ $clone_status -eq 0 ]; then
+		    echo "curl was successful.  Untarring to ffmpeg."
+		    mkdir -p ffmpeg
+		    tar -xf ffmpeg-${FFMPEG_TAG}.tar.bz2 -C ffmpeg --strip-components 1
+		    if [[ ! -d ffmpeg ]]; then
+			echo "tar failed"
+			exit 1
+		    fi
+		else
+		    echo "curl failed.  Untarring to ffmpeg."
+		    exit $clone_status
+		fi
 	    fi
 	    set -o pipefail -e
 	fi
