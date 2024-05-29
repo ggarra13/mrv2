@@ -18,6 +18,8 @@ v1.1.9
   scrollbars.
 - Fixed Panel Windows under Wayland.  Now they respect their position, albeit
   they are parented to the main window.
+- Fixed a crash when opening the Flmm_ColorA_Chooser due to incomplete menu
+  items (Windows compiler issue?).
 
 
 v1.1.8

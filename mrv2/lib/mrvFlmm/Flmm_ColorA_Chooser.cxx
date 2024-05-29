@@ -80,6 +80,7 @@
 #include <iostream>
 
 #include "mrvCore/mrvMath.h"
+#include "mrvCore/mrvI8N.h"
 
 #include <stdio.h>
 
@@ -111,13 +112,6 @@ void Flmm_ColorA_Chooser::rgb2hsv(
 }
 
 enum {M_RGB, M_BYTE, M_HEX, M_HSV}; // modes
-static Fl_Menu_Item mode_menu[] = {
-  {"rgb"},
-  {"byte"},
-  {"hex"},
-  {"hsv"},
-  {0}
-};
 
 int Flmm_Value_Input::format(char* buf) {
   Flmm_ColorA_Chooser* c = (Flmm_ColorA_Chooser*)parent();
@@ -605,7 +599,11 @@ Flmm_ColorA_Chooser::Flmm_ColorA_Chooser(int X, int Y, int W, int H, const char*
   huebox.box(FL_DOWN_FRAME);
   valuebox.box(FL_DOWN_FRAME);
   alphabox.box(FL_DOWN_FRAME);
-  choice.menu(mode_menu);
+  choice.add("rgb");
+  choice.add("byte");
+  choice.add("hex");
+  choice.add("hsv");
+  choice.menu_end();
   set_valuators();
   rvalue.callback(rgba_cb);
   gvalue.callback(rgba_cb);
@@ -639,16 +637,13 @@ static void change_color_cb(ColorAChip* o, void* v)
   c->do_callback();
 }
 
-extern FL_EXPORT const char* fl_ok;
-extern FL_EXPORT const char* fl_cancel;
-
 Flmm_ColorA_Window::Flmm_ColorA_Window(int W, int H, const char* L) :
     Fl_Double_Window(W, H, L),
     chooser(10, 10, 265, 145),
     ok_color(10, 160, 120, 25),
-    ok_button(10, 195, 120, 25, fl_ok),
+    ok_button(10, 195, 120, 25, _("OK")),
     cancel_color(135, 160, 120, 25),
-    cancel_button(135, 195, 120, 25, fl_cancel)
+    cancel_button(135, 195, 120, 25, _("Cancel"))
 {
     for (int i = 0; i < 7; ++i)
     {
@@ -656,9 +651,9 @@ Flmm_ColorA_Window::Flmm_ColorA_Window(int W, int H, const char* L) :
         saved[i]->callback((Fl_Callback*)change_color_cb, &chooser);
         saved[i]->chip_color(0.F, 0.F, 0.F, 1.F);
     }
-  resizable(chooser);
-  size_range(W,H);
-  chooser.callback(chooser_cb, &ok_color);
+    resizable(chooser);
+    size_range(W,H);
+    chooser.callback(chooser_cb, &ok_color);
 }
 
 int Flmm_ColorA_Window::run(double& r, double& g, double& b, double& a)
@@ -732,6 +727,7 @@ int Flmm_ColorA_Window::run(double& r, double& g, double& b, double& a)
 int flmm_color_a_chooser(
     const char* name, double& r, double& g, double& b, double& a)
 {
+    Fl_Group::current(0);
     if (!colorChooser)
         colorChooser = new Flmm_ColorA_Window(305, 230, name);
     colorChooser->end();

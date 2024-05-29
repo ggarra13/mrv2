@@ -1836,7 +1836,7 @@ namespace mrv
 
         if (!flmm_color_a_chooser(_("Pick Color"), r, g, b, a))
             return color;
-
+        
         color = image::Color4f(r / 255.F, g / 255.F, b / 255.F, a / 255.F);
         return color;
     }

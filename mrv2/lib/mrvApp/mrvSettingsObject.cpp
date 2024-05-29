@@ -122,9 +122,9 @@ namespace mrv
         Fl_Color c;
         p.defaultValues["Background/Type"] = 0;
         c = fl_rgb_color(128, 128, 128);
-        p.defaultValues["Background/CheckersColor1"] = static_cast<int>(c);
+        p.defaultValues["Background/color1"] = static_cast<int>(c);
         c = fl_rgb_color(255, 255, 255);
-        p.defaultValues["Background/CheckersColor0"] = static_cast<int>(c);
+        p.defaultValues["Background/color0"] = static_cast<int>(c);
         p.defaultValues["Background/CheckersSize"] = 100;
 
 #if defined(TLRENDER_USD)

@@ -910,10 +910,10 @@ namespace mrv
         int size = settings->getValue<int>("Background/CheckersSize");
         backgroundOptions.checkersSize = math::Size2i(size, size);
 
-        color = settings->getValue<int>("Background/CheckersColor0");
+        color = settings->getValue<int>("Background/color0");
         backgroundOptions.color0 = from_fltk_color(color);
 
-        color = settings->getValue<int>("Background/CheckersColor1");
+        color = settings->getValue<int>("Background/color1");
         backgroundOptions.color1 = from_fltk_color(color);
 
         ui->uiView->setBackgroundOptions(backgroundOptions);
@@ -1005,11 +1005,6 @@ namespace mrv
         if (uiPrefs->uiMain->visible())
             visible = 1;
         settings->setValue("gui/Preferences/Window/Visible", visible);
-
-        // Handle background options
-        auto backgroundOptions = ui->uiView->getBackgroundOptions();
-        settings->setValue(
-            "gui/Background/Options", static_cast<int>(backgroundOptions.type));
 
         int width = ui->uiDockGroup->w() == 0 ? 1 : ui->uiDockGroup->w();
         float pct = (float)width / ui->uiViewGroup->w();

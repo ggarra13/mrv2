@@ -183,7 +183,7 @@ namespace mrv
                         auto color = get_color_cb(o->color(), p.ui);
                         Fl_Color c = to_fltk_color(color);
                         settings->setValue(
-                            "Background/CheckersColor1", static_cast<int>(c));
+                            "Background/color1", static_cast<int>(c));
                         o->color(c);
                         o->redraw();
                         auto view = p.ui->uiView;
@@ -210,7 +210,7 @@ namespace mrv
                         auto color = get_color_cb(o->color(), p.ui);
                         Fl_Color c = to_fltk_color(color);
                         settings->setValue(
-                            "Background/CheckersColor0", static_cast<int>(c));
+                            "Background/color0", static_cast<int>(c));
                         o->color(c);
                         o->redraw();
                         auto view = p.ui->uiView;
