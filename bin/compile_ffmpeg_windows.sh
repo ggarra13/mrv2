@@ -434,7 +434,7 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
 	    if [ $clone_status -eq 0 ]; then
 		echo "git clone successful"
 	    else
-		echo "Mirror also failed.  Trying with curl..."
+		echo "Mirror also failed with exit code: $clone_status.  Trying with curl..."
 		curl https://ffmpeg.org/releases/ffmpeg-${FFMPEG_TAG}.tar.bz2 \
 		     --output ffmpeg-${FFMPEG_TAG}.tar.bz2
 		clone_status=$?
@@ -447,7 +447,7 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
 			exit 1
 		    fi
 		else
-		    echo "curl failed.  Untarring to ffmpeg."
+		    echo "curl failed."
 		    exit $clone_status
 		fi
 	    fi
