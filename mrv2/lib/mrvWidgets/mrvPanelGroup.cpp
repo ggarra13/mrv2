@@ -254,13 +254,13 @@ namespace mrv
         Fl_Group::resize(X, Y, W, pack->h() + DH + GH);
 
         // Make sure buttons don't stretch
-        W = w() - kButtonW * 2 - kMargin;
+        W = w() - kButtonW * 2;
 #ifdef LEFT_BUTTONS
-        X = x() + kButtonW * 2 + kMargin;
+        X = x() + kButtonW * 2;
         dragger->resize(X, dragger->y(), W, dragger->h());
 #else
         X = x();
-        dragger->resize(X, dragger->y(), W + kMargin, dragger->h());
+        dragger->resize(X, dragger->y(), W, dragger->h());
         X = dragger->x() + dragger->w();
         docker->resize(X, docker->y(), 20, 20);
         X = docker->x() + docker->w();
