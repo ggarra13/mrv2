@@ -451,8 +451,8 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
 		    exit $clone_status
 		fi
 	    fi
-	    set -o pipefail -e
 	fi
+	set -o pipefail -e
     fi
     
     if [[ ! -e $INSTALL_DIR/lib/avformat.lib ]]; then
