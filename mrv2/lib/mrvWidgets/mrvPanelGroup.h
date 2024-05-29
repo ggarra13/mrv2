@@ -6,7 +6,6 @@
 
 #include <iostream>
 
-/* fltk includes */
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Scroll.H>
 
@@ -32,6 +31,8 @@ namespace mrv
         void create_floating(
             DockGroup* d, int x, int y, int w, int h, const char* l);
 
+        void set_Fl_Group();
+        
     protected:
         // Widgets used by the toolbar
         DragButton* dragger = nullptr;
@@ -53,10 +54,6 @@ namespace mrv
         // Constructors for docked/floating window
         PanelGroup(
             DockGroup* d, int f, int x, int y, int w, int h, const char* l = 0);
-        // Debug element sizes
-        void debug(const char* text) const;
-
-        int handle(int e) override;
 
         // Get the toolwindow or null if docked
         DragButton* get_dragger() const { return dragger; }

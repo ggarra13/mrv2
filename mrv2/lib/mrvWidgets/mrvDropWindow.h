@@ -23,12 +23,12 @@ namespace mrv
         DropWindow(int x, int y, int w, int h, const char* l = 0);
         DropWindow(int w, int h, const char* l = 0);
 
-        //! The working area of this window
+        //! The working area of this window.
         Fl_Flex* workspace;
 
-        //! Override handle method to capture "drop" events
-        int handle(int);
-
+        //! Check for drop event.
+        int valid_drop();
+        
         //! Assign a dock widget to this window.
         void set_dock(DockGroup* d) { dock = d; }
 

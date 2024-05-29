@@ -5,7 +5,6 @@
 #include <FL/Fl.H>
 
 #include "mrvDropWindow.h"
-#include "mrvEventHeader.h"
 
 namespace mrv
 {
@@ -29,12 +28,12 @@ namespace mrv
         workspace = (Fl_Flex*)nullptr;
     }
 
-    int DropWindow::handle(int evt)
+    int DropWindow::valid_drop()
     {
-        int res = Fl_Double_Window::handle(evt);
-
+        int out = 0;
+        
         // Is this a dock_drop event?
-        if ((evt == FX_DROP_EVENT) && (dock))
+        if (dock)
         {
             // Did the drop happen on us?
             // Get our co-ordinates
@@ -42,12 +41,7 @@ namespace mrv
             int ey = y_root() + dock->y();
             int ew = dock->w();
             int eh = dock->h();
-            if (ew < 5)
-            {
-                ew += DROP_REGION_WIDTH * 2;
-                ex -= DROP_REGION_WIDTH * 2;
-            }
-
+            
             // get the drop event co-ordinates
             int cx = Fl::event_x_root();
             int cy = Fl::event_y_root();
@@ -56,14 +50,10 @@ namespace mrv
             if (visible() && (cx > ex) && (cy > ey) && (cx < (ew + ex)) &&
                 (cy < (eh + ey)))
             {
-                res = 1;
-            }
-            else
-            {
-                res = 0;
+                out = 1;
             }
         }
-        return res;
+        return out;
     }
 
 } // namespace mrv

@@ -8,11 +8,11 @@
 #include <FL/Fl_Scroll.H>
 #include <FL/fl_draw.H>
 #include <FL/Fl.H>
+#include <FL/platform.H>
 #include <FL/names.h>
 
 #include "mrvWidgets/mrvDropWindow.h"
 #include "mrvWidgets/mrvDragButton.h"
-#include "mrvWidgets/mrvEventHeader.h"
 #include "mrvWidgets/mrvPack.h"
 #include "mrvWidgets/mrvPanelGroup.h"
 
@@ -32,21 +32,24 @@ namespace mrv
 
     int DragButton::handle(int event)
     {
-        if (event == FL_NO_EVENT ||
-            event == FL_MOVE)
-            return 0;
+        // if (event == FL_NO_EVENT ||
+        //     event == FL_MOVE)
+        //     return 0;
+
+        int ret = Fl_Box::handle(event);
         
-        std::cerr << fl_eventnames[event] << std::endl;
+#ifndef NDEBUG
+        if (event != FL_SHORTCUT && event != FL_NO_EVENT &&
+            event != FL_MOVE)
+            std::cerr << fl_eventnames[event] << std::endl;
+#endif
         
         PanelGroup* tg = (PanelGroup*)parent();
         int docked = tg->docked();
-        int ret = 0;
         int x2 = 0, y2 = 0;
         int cx, cy;
         if (event == FL_ENTER)
         {
-            // if (docked && tg->children() == 0)
-            //     return 0;
             if (window())
                 window()->cursor(FL_CURSOR_MOVE);
             ret = 1;
@@ -69,13 +72,19 @@ namespace mrv
             case FL_PUSH: // downclick in button creates cursor offsets
                 x1 = Fl::event_x_root();
                 y1 = Fl::event_y_root();
-                xoff = tw->x() - x1;
-                yoff = tw->y() - y1;
+                xoff = tw->x_root() - x1;
+                yoff = tw->y_root() - y1;
+#ifndef NDEBUG
+                std::cerr << "\tx1, y1=" << x1 << " " << y1 << std::endl;
+                std::cerr << "\ttw    =" << tw->x_root() << " " << tw->y_root()
+                          << std::endl;
+                std::cerr << "\toffsets=" << xoff << " " << yoff << std::endl;
+#endif
                 ret = 1;
                 break;
 
             case FL_DRAG: // drag the button (and its parent window) around the
-                          // screen
+            {          // screen
                 if (was_docked)
                 {
                     // Need to init offsets, we probably got here following a
@@ -84,8 +93,8 @@ namespace mrv
                     was_docked = 0;
                     x1 = Fl::event_x_root();
                     y1 = Fl::event_y_root();
-                    xoff = tw->x() - x1;
-                    yoff = tw->y() - y1;
+                    xoff = tw->x_root() - x1;
+                    yoff = tw->y_root() - y1;
                 }
                 else
                 {
@@ -100,13 +109,42 @@ namespace mrv
                         hide_dock_group();
                     }
                 }
+                Fl_Window* top = top_window();
+                
+                int posX = Fl::event_x_root();
+                int posY = Fl::event_y_root();
+                
+#ifdef __linux__
+#    ifdef FLTK_USE_WAYLAND
+                if (fl_wl_display())
+                {
+                    posX -= top->x_root();
+                    posY -= top->y_root();
+                }
+                else
+                {
+#    ifdef PARENT_TO_TOP_WINDOW
+                    posX -= top->x_root();
+                    posY -= top->y_root();
+#    endif
+                }
+#    endif
+#endif
+                posX += xoff;
+                posY += yoff;
+#ifndef NDEBUG
                 std::cerr << "\tposition window with code at line="
-                          << __LINE__ << std::endl;
-                tw->position(
-                    xoff + Fl::event_x_root(), yoff + Fl::event_y_root());
+                          << __LINE__
+                          << std::endl
+                          << "\t\torig=" << tw->x() << " " << tw->y()
+                          << std::endl
+                          << "\t\t pos=" << posX << " " << posY
+                          << std::endl;
+#endif
+                tw->position(posX, posY);
                 ret = 1;
                 break;
-
+            }
             case FL_RELEASE:
             {
                 int dock_attempt = would_dock();
@@ -128,7 +166,7 @@ namespace mrv
         }
 
         if (tg->children() == 0)
-            return 0;
+            return ret;
 
         // OK, so we must be docked - are we being dragged out of the dock?
         switch (event)
@@ -148,13 +186,31 @@ namespace mrv
             y2 = (y2 > 0) ? y2 : (-y2);
             if ((x2 > kDragMinDistance) || (y2 > kDragMinDistance))
             {
+                Fl_Window* top = top_window();
+                assert(top);
+                
                 tg->undock_grp((void*)tg); // undock the window
                 was_docked = -1;           // note that we *just now* undocked
                 
                 PanelWindow* tw = tg->get_window();
                 assert(tw);
-                std::cerr << "tw position=" << __LINE__ << std::endl;
-                tw->position(Fl::event_x_root(), Fl::event_y_root());
+#ifndef NDEBUG
+                std::cerr << "position window with caode at line="
+                          << __LINE__ << std::endl;
+#endif
+                int posX = Fl::event_x_root();
+                int posY = Fl::event_y_root();
+                
+#ifdef __linux__
+#    ifdef FLTK_USE_WAYLAND
+                if (fl_wl_display())
+                {
+                    posX -= top->x_root();
+                    posY -= top->y_root();
+                }
+#    endif
+#endif
+                tw->position(posX, posY);
             }
             ret = 1;
             break;
@@ -226,7 +282,11 @@ namespace mrv
         y2 = y1 - cy;
         x2 = (x2 > 0) ? x2 : (-x2);
         y2 = (y2 > 0) ? y2 : (-y2);
+#ifndef NDEBUG
+        std::cerr << "\tcx, cy=" << cx << " " << cy << std::endl;
+        std::cerr << "\tx1, y1=" << x1 << " " << y1 << std::endl;
         std::cerr << "\tx2, y2=" << x2 << " " << y2 << std::endl;
+#endif
         if ((x2 > kDragMinDistance) || (y2 > kDragMinDistance))
         { // test for a docking event
             // See if anyone is able to accept a dock with this widget
@@ -240,33 +300,13 @@ namespace mrv
                 int ew = win->w();
                 int eh = win->h();
 
-                if (dynamic_cast<DropWindow*>(win))
-                {
-                    std::cerr
-                        << "\ttest against "
-                        << (win->label() ? win->label() : "nullptr window")
-                        << std::endl
-                        << "\t\twin=" << ex << " " << ey
-                        << " " << ew << "x" << eh
-                        << std::endl
-                        << "\t\tcx=" << cx << " " << cy
-                        << std::endl;
-                }
-                else
-                {
-                    continue;
-                }
-
                 // Are we inside the boundary of the window?
                 if (win->visible() && (cx > ex) && (cy > ey) &&
                     (cx < (ew + ex)) && (cy < (eh + ey)))
                 {
-                    // Send the found window a message that we want to
-                    // dock with it.
-                    if (Fl::handle(FX_DROP_EVENT, win))
+                    if (auto dropWindow = dynamic_cast<DropWindow*>(win))
                     {
-                        std::cerr << "\t\t\tVALID DROP" << std::endl;
-                        return 1;
+                        return dropWindow->valid_drop();
                     }
                 }
             }

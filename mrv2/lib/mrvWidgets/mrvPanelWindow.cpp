@@ -2,11 +2,12 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <cassert>
+
 #include <FL/Fl_Button.H>
 
-#include "mrvPanelWindow.h"
-#include "mrvEventHeader.h"
-
+#include "mrvWidgets/mrvPanelConstants.h"
+#include "mrvWidgets/mrvPanelWindow.h"
 #include "mrvWidgets/mrvPanelGroup.h"
 
 #include "mrvPanels/mrvPanelsAux.h"
@@ -117,16 +118,14 @@ namespace mrv
         }
     }
 
-    constexpr int kDiff = 3;
 
     void PanelWindow::set_cursor(int ex, int ey)
     {
-        cursor(FL_CURSOR_DEFAULT);
         valid = Direction::kNone;
-        int rdir = x() + w() - kDiff;
-        int ldir = x() + kDiff;
-        int bdir = y() + h() - kDiff;
-        int tdir = y() + kDiff;
+        int rdir = x() + w() - kMargin;
+        int ldir = x() + kMargin;
+        int bdir = y() + h() - kMargin;
+        int tdir = y() + kMargin;
         if (ex >= rdir)
             valid |= Direction::kRight;
         if (ex <= ldir)
@@ -190,9 +189,8 @@ namespace mrv
         case FL_MOVE:
         {
             int ret = Fl_Double_Window::handle(event);
-            if (!ret)
-                set_cursor(ex, ey);
-            return 1;
+            set_cursor(ex, ey);
+            return ret;
         }
         case FL_PUSH:
         {
@@ -286,7 +284,7 @@ namespace mrv
             key = prefix + "/WindowH";
 
             // Only store height if it is not a growing panel/window, like
-            // the Files, Compare or Playlist panel.
+            // the Files, Compare or Playlist panels.
             if (panel::isPanelWithHeight(label))
             {
                 settings->setValue(key, h());

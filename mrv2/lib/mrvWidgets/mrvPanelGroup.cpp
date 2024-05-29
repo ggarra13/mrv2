@@ -5,16 +5,18 @@
 
 #include <cassert>
 
-/* fltk includes */
 #include <FL/Fl.H>
+#include <FL/platform.H>
+#undef None
+#undef Status
 
 #include "mrvCore/mrvI8N.h"
 
-#include "mrvWidgets/mrvResizableBar.h"
-#include "mrvWidgets/mrvPanelGroup.h"
-#include "mrvWidgets/mrvDropWindow.h"
 #include "mrvWidgets/mrvDockGroup.h"
-#include "mrvWidgets/mrvCollapsibleGroup.h"
+#include "mrvWidgets/mrvDropWindow.h"
+#include "mrvWidgets/mrvPanelConstants.h"
+#include "mrvWidgets/mrvPanelGroup.h"
+#include "mrvWidgets/mrvResizableBar.h"
 
 #include "mrvUI/mrvUtil.h"
 
@@ -23,18 +25,9 @@
 
 #include "mrViewer.h"
 
-// On macOS, the buttons go to the left of the window.
-#ifdef __APPLE__
-#    define LEFT_BUTTONS 1
-#endif
-
-// #define DEBUG_COORDS
-
 namespace
 {
     const char* kIcon = "@-4circle";
-
-    const int kMargin = 3;
 }
 
 namespace mrv
@@ -56,11 +49,11 @@ namespace mrv
     void PanelGroup::dock_grp(void* v)
     { // dock CB
         PanelGroup* gp = (PanelGroup*)v;
-        DockGroup* dock = gp->get_dock();
+        assert(dock);
 
         // we can only dock a group that's not already docked
         // and only if a dock exists for it
-        if ((!gp->docked()) && (dock))
+        if (!gp->docked())
         {
             // Make sure we turn off the panelgroup scroller, as we are going
             // to handle it with the dockgroup scroller
@@ -101,26 +94,41 @@ namespace mrv
         }
     }
 
+    void PanelGroup::set_Fl_Group()
+    {
+        Fl_Group::current(0);
+#ifdef __linux__
+#ifdef PARENT_TO_TOP_WINDOW
+        Fl_Group::current(dock->top_window());
+#endif
+#    ifdef FLTK_USE_WAYLAND
+        if (fl_wl_display())
+        {
+            Fl_Group::current(dock->top_window());
+        }
+#    endif
+#endif
+    }
+
     // static CB to handle the undock actions
     void PanelGroup::undock_grp(void* v)
     { // undock CB
         PanelGroup* gp = (PanelGroup*)v;
-        DockGroup* dock = gp->get_dock();
 
         if (gp->docked())
         { // undock the group into its own non-modal tool window
             int W = gp->w() + kMargin;
-            int H = gp->h() + kMargin;
+            int H = gp->h() + kMargin * 2;
             int X = Fl::event_x_root() - 10;
             int Y = Fl::event_y_root() - 35;
-            Fl_Group::current(0);
+            set_Fl_Group();
             tw = new PanelWindow(X, Y, W, H);
             tw->end();
             gp->docked(false); // toolgroup is no longer docked
             gp->end();         // needed to adjust pack and scroll
             dock->remove(gp);
             tw->add(gp);        // move the tool group into the floating window
-            gp->position(1, 1); // align group in floating window
+            gp->position(1, 1); // align group in floating window (needed)
             tw->resizable(gp);
             auto settings = App::app->settings();
             auto dragger = gp->get_dragger();
@@ -193,9 +201,7 @@ namespace mrv
     }
 
     void PanelGroup::resize(int X, int Y, int W, int H)
-    {
-
-        // W must be -3 to leave some headroom
+    {   
         pack->size(W, pack->h());
 
         int GH = group && group->visible() ? group->h() : 0;
@@ -229,23 +235,22 @@ namespace mrv
             if (group)
                 group->size(W, group->h());
 
-            scroll->size(pack->w(), H - kMargin);
-            if (pack->h() < H - 20 - kMargin)
-                pack->size(W - kMargin, H - 20 - kMargin);
+            scroll->resize(kMargin, scroll->y(), pack->w(), H - kMargin);
+            if (pack->h() < H - kTitleBar - kMargin)
+                pack->size(W - kMargin, H - kTitleBar - kMargin);
             scroll->init_sizes(); // needed? to reset scroll size init size
         }
 
         Fl_Group::resize(X, Y, W, pack->h() + DH + GH);
-        debug("RESIzE");
 
         // Make sure buttons don't stretch
-        W = w() - 40 - kMargin;
+        W = w() - kButtonW * 2 - kMargin;
 #ifdef LEFT_BUTTONS
-        X = x() + 40 + kMargin;
+        X = x() + kButtonW * 2 + kMargin;
         dragger->resize(X, dragger->y(), W, dragger->h());
 #else
         X = x();
-        dragger->resize(X, dragger->y(), W, dragger->h());
+        dragger->resize(X, dragger->y(), W + kMargin, dragger->h());
         X = dragger->x() + dragger->w();
         docker->resize(X, docker->y(), 20, 20);
         X = docker->x() + docker->w();
@@ -262,23 +267,6 @@ namespace mrv
         assert(h() > 0);
         layout();
         assert(h() > 0);
-    }
-
-    void PanelGroup::debug(const char* lbl) const
-    {
-#ifdef DEBUG_COORDS
-        std::cerr << lbl << " ---------------------------------" << std::endl
-                  << "       H=" << h() << std::endl
-                  << "  pack H=" << pack->h() << std::endl
-                  << "scroll H=" << scroll->h() << std::endl if (tw) std::cerr
-                  << "tw     H=" << tw->h() << std::endl;
-        std::cerr << "=============================================="
-                  << std::endl;
-        assert(h() > 0);
-        assert(pack->h() > 0);
-        assert(scroll->h() > 0);
-        assert(tw->h() > 0);
-#endif
     }
 
     void PanelGroup::layout()
@@ -314,7 +302,7 @@ namespace mrv
             if (twYH > maxYH)
                 H = maxH - kMargin;
 
-            tw->size(W + kMargin, H + kMargin);
+            tw->size(W + kMargin * 2, H + kMargin * 2);
 
             H = tw->h() - GH - DH;
 
@@ -323,7 +311,6 @@ namespace mrv
 
             scroll->size(pack->w(), H);
             scroll->init_sizes(); // needed? to reset scroll size init size
-            debug("LAYOUT");
         }
     }
 
@@ -350,49 +337,48 @@ namespace mrv
     // construction function
     void PanelGroup::create_dockable_group(const char* lbl)
     {
-        int W = 20;
-
-#ifdef LEFT_BUTTONS
-        int X = kMargin;
+        int X = x();
+        int Y = y();
         
+#ifdef LEFT_BUTTONS
         // Create a group to enclose the buttons and make it
         // not resizable on macOS.
-        Fl_Group* g = new Fl_Group(X, kMargin, W * 2, 20);
-        dismiss = new PanelButton(X, kMargin, W, 20, kIcon);
-        X += W;
-        docker = new PanelButton(X, kMargin, W, 20, kIcon);
+        Fl_Group* g = new Fl_Group(X, Y, kButtonW * 2, 20);
+        dismiss = new PanelButton(X, Y, kButtonW, 20, kIcon);
+        X += kButtonW;
+        docker = new PanelButton(X, Y, kBottonW, 20, kIcon);
 
         g->end();
         g->resizable(0);
 
-        X += W;
-        W = w() - W * 2 - kMargin;
+        X += kButtonW;
 
-        dragger = new DragButton(X, 3, W, 20, lbl);
-#else
-        dragger = new DragButton(3, 3, w() - W * 2, 20, lbl);
         
-        int X = dragger->x() + dragger->w() - W * 2;
-        docker = new PanelButton(X, 3, W, 20, kIcon);
-        X = dragger->x() + dragger->w() - W;
-        dismiss = new PanelButton(X, 3, W, 20, kIcon);
+        const int dragW = w() - kButtonW * 2;
+        dragger = new DragButton(X, Y, dragW, 20, lbl);
+#else
+        dragger = new DragButton(X, Y, w() - kButtonW * 2, 20, lbl);
+        X += dragger->w();
+        docker = new PanelButton(X, Y, kButtonW, 20, kIcon);
+        X += kButtonW;
+        dismiss = new PanelButton(X, Y, kButtonW, 20, kIcon);
 #endif
         dismiss->labelcolor(FL_RED);
         docker->labelcolor(FL_YELLOW);
 
         dismiss->box(FL_FLAT_BOX);
-        dismiss->tooltip("Dismiss");
+        dismiss->tooltip(_("Dismiss"));
         dismiss->clear_visible_focus();
         dismiss->callback((Fl_Callback*)cb_dismiss, (void*)this);
 
         docker->box(FL_FLAT_BOX);
-        docker->tooltip("Dock");
+        docker->tooltip(_("Dock"));
         docker->clear_visible_focus();
         docker->callback((Fl_Callback*)cb_dock, (void*)this);
 
         dragger->type(FL_TOGGLE_BUTTON);
         dragger->box(FL_ENGRAVED_BOX);
-        dragger->tooltip("Drag Box");
+        dragger->tooltip(_("Drag Box"));
         dragger->clear_visible_focus();
         dragger->align(
             FL_ALIGN_CENTER | FL_ALIGN_INSIDE | FL_ALIGN_IMAGE_NEXT_TO_TEXT);
@@ -401,19 +387,22 @@ namespace mrv
 
         // Group is used for non scrolling widgets in the panel, like the
         // Search box in Media Info Panel.
-        group = new Fl_Group(x(), 23, w(), 30, "Group");
+        group = new Fl_Group(kMargin, dragger->y() + dragger->h(),
+                             w() - kMargin, 30, "Group");
         group->labeltype(FL_NO_LABEL);
         group->hide();
         group->end();
         int GH = group->visible() ? group->h() : 0;
 
         // Scroll will contain a pack with this panel's contents.
-        scroll = new Fl_Scroll(kMargin, 23, w() - kMargin, h() - 23, "Scroll");
+        scroll = new Fl_Scroll(kMargin, Y + dragger->h(),
+                               w() - kMargin * 2,
+                               h() - dragger->h() - kMargin * 2, "Scroll");
         scroll->labeltype(FL_NO_LABEL);
         scroll->type(Fl_Scroll::BOTH);
         scroll->begin();
 
-        pack = new Pack(kMargin, 23, w() - kMargin, 1, "Pack");
+        pack = new Pack(kMargin, scroll->y(), scroll->w(), 1, "Pack");
         pack->labeltype(FL_NO_LABEL);
         pack->end();
 
@@ -438,17 +427,18 @@ namespace mrv
 
         // create the group itself
         create_dockable_group(lbl);
+
+        set_dock(dk);  // define where the toolgroup is allowed to dock
+        
         // create a floating toolbar window
         // Ensure the window is not created as a child of its own inner group!
-        Fl_Group::current(0);
-        tw = new PanelWindow(X, Y, W + 3, H + 3);
+        set_Fl_Group();
+        tw = new PanelWindow(X, Y, W+kMargin*2, H+kMargin);
         tw->end();
-        set_dock(dk);  // define where the toolgroup is allowed to dock
         docked(false); // NOT docked
         tw->add(this); // move the tool group into the floating window
         this->position(1, 1);
         tw->resizable(this);
-        tw->resize(X, Y, w()+kMargin*2, h()+kMargin*2);
         tw->show();
         // leave this group open when we leave the constructor...
         Fl_Group::current(pack);
@@ -465,17 +455,6 @@ namespace mrv
     void PanelGroup::hide_all(void)
     {
         PanelWindow::hide_all();
-    }
-
-    //! hide all the active floating windows
-    int PanelGroup::handle(int e)
-    {
-        int ret = Fl_Group::handle(e);
-        if (e == FL_ENTER)
-        {
-            window()->cursor(FL_CURSOR_DEFAULT);
-        }
-        return ret;
     }
 
 } // namespace mrv
