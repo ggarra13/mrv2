@@ -6,9 +6,6 @@
 #include <cassert>
 
 #include <FL/Fl.H>
-#include <FL/platform.H>
-#undef None
-#undef Status
 
 #include "mrvCore/mrvI8N.h"
 
@@ -18,6 +15,7 @@
 #include "mrvWidgets/mrvPanelGroup.h"
 #include "mrvWidgets/mrvResizableBar.h"
 
+#include "mrvUI/mrvDesktop.h"
 #include "mrvUI/mrvUtil.h"
 
 #include "mrvApp/mrvSettingsObject.h"
@@ -97,17 +95,10 @@ namespace mrv
     void PanelGroup::set_Fl_Group()
     {
         Fl_Group::current(0);
-#ifdef __linux__
-#ifdef PARENT_TO_TOP_WINDOW
-        Fl_Group::current(dock->top_window());
-#endif
-#    ifdef FLTK_USE_WAYLAND
-        if (fl_wl_display())
+        if (desktop::Wayland())
         {
             Fl_Group::current(dock->top_window());
         }
-#    endif
-#endif
     }
 
     // static CB to handle the undock actions
@@ -122,18 +113,12 @@ namespace mrv
             int X = Fl::event_x_root() - 10;
             int Y = Fl::event_y_root() - 35;
             gp->docked(false); // toolgroup is no longer docked
-            set_Fl_Group();
-            tw = new PanelWindow(X, Y, W, H);
-            tw->end();
-            dock->remove(gp);
-            tw->add(gp);        // move the tool group into the floating window
-            gp->position(1, 1); // align group in floating window (needed)
-            gp->size(W, H);     // resize to fit (needed)
-            tw->resizable(gp);
+
+
             auto settings = App::app->settings();
             auto dragger = gp->get_dragger();
             std::string label = dragger->label();
-            if (label == "Python")
+            if (label == "Python" || label == "Logs")
                 tw->size_range(640, 400);
             std::string prefix = "gui/" + label;
             std::string key;
@@ -161,24 +146,35 @@ namespace mrv
                 H = H2;
             assert(H != 0);
 
-#ifdef __linux__
-            bool root_coords = true;
-#   ifdef FLTK_USE_WAYLAND
-                if (fl_wl_display())
-                    root_coords = false;
-#   endif
-#   ifdef PARENT_TO_TOP_WINDOW
-                root_coords = false;
-#   endif
-            if (!root_coords)
-            {
-                Fl_Window* main = dock->top_window();
-                const int mainX = main->x_root();
-                const int mainY = main->y_root();
-                X -= mainX;
-                Y -= mainY;
+            if (desktop::Wayland())
+            {  
+                Fl_Window* top = dock->top_window();
+                int maxW = top->w();
+                int maxH = top->h();
+                
+                if (X + W > maxW)
+                    X = maxW - W;
+                if (Y + H > maxH)
+                    Y = maxH - H;
+
+                if (X < 0)
+                    X = 0;
+                if (Y < 0)
+                    Y = 0;
+                
+                W = W > maxW ? maxW : W;
+                H = H > maxH ? maxH : H;
             }
-#endif
+            
+            set_Fl_Group();
+
+            tw = new PanelWindow(X, Y, W, H);
+            tw->end();
+            dock->remove(gp);
+            tw->add(gp);        // move the tool group into the floating window
+            gp->position(1, 1); // align group in floating window (needed)
+            gp->size(W, H);     // resize to fit (needed)
+            tw->resizable(gp);
             tw->resize(X, Y, W, H);
             tw->show();     // show floating window
             dock->redraw(); // update the dock, to show the group has gone...

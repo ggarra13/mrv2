@@ -16,6 +16,8 @@ v1.1.9
   Y coordinate of the panel and using X instead.
 - Improved UI behavior when docking, undocking and showing/hiding the
   scrollbars.
+- Fixed Panel Windows under Wayland.  Now they respect their position, albeit
+  they are parented to the main window.
 
 
 v1.1.8

@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <vector>
+
 #include <FL/Fl.H>
 #include <FL/Fl_Scroll.H>
 #include <FL/Fl_Double_Window.H>
@@ -15,13 +17,9 @@ namespace mrv
 
     class PanelWindow : public Fl_Double_Window
     {
-#define TW_MAX_FLOATERS 32
-
     protected:
         void create_dockable_window(void);
-        short idx;
-        static PanelWindow* active_list[TW_MAX_FLOATERS];
-        static short active;
+        static std::vector<PanelWindow*> active_list;
 
         enum Direction {
             kNone = 0,

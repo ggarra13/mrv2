@@ -16,6 +16,8 @@
 #include "mrvPanels/mrvPanelsAux.h"
 #include "mrvPanels/mrvPanelWidget.h"
 
+#include "mrvUI/mrvDesktop.h"
+
 #include "mrvApp/mrvSettingsObject.h"
 
 #include "mrvFl/mrvIO.h"
