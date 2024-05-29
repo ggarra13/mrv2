@@ -4027,6 +4027,12 @@ msgstr "Undock"
 msgid "Dock"
 msgstr "Dock"
 
+msgid "Dismiss"
+msgstr ""
+
+msgid "Drag Box"
+msgstr ""
+
 msgid "Unknown type for mrvOCIOBrowser"
 msgstr "Unknown type for mrvOCIOBrowser"
 
@@ -4970,6 +4976,10 @@ msgstr "Undo Last Shape Drawn in Current Frame."
 
 msgid "Redo Previous Shape Drawn in Current Frame."
 msgstr "Redo Previous Shape Drawn in Current Frame."
+
+#, fuzzy
+msgid "DockGroup"
+msgstr "Dock"
 
 msgid "Current tool being used."
 msgstr "Current tool being used."

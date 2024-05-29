@@ -4078,6 +4078,12 @@ msgstr "Desacoplar"
 msgid "Dock"
 msgstr "Acoplar"
 
+msgid "Dismiss"
+msgstr ""
+
+msgid "Drag Box"
+msgstr ""
+
 msgid "Unknown type for mrvOCIOBrowser"
 msgstr "Tipo desconocido para OCIO Browser"
 
@@ -5016,6 +5022,10 @@ msgstr "Deshacer la Última Figura Dibujada en Cuadro Actual."
 
 msgid "Redo Previous Shape Drawn in Current Frame."
 msgstr "Rehacer la Última Figura Dibujada en Cuadro Actual."
+
+#, fuzzy
+msgid "DockGroup"
+msgstr "Acoplar"
 
 msgid "Current tool being used."
 msgstr "Herramienta siendo usada."
