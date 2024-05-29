@@ -16,6 +16,8 @@
 #include "mrvPanels/mrvPanelsAux.h"
 #include "mrvPanels/mrvPanelWidget.h"
 
+#include "mrvUI/mrvDesktop.h"
+
 #include "mrvApp/mrvSettingsObject.h"
 
 #include "mrvFl/mrvIO.h"
@@ -79,35 +81,6 @@ namespace mrv
                 value = settings->getValue<std::any>(key);
                 Y = std_any_empty(value) ? Y : std_any_cast<int>(value);
 
-#ifdef __linux__
-#ifndef DEBUG
-                std::cerr << "ROOT coords=" << X << " " << Y
-                          << std::endl;
-#endif
-                bool root_coords = true;
-#   ifdef FLTK_USE_WAYLAND
-                if (fl_wl_display())
-                    root_coords = false;
-#   endif
-#   ifdef PARENT_TO_TOP_WINDOW
-                root_coords = false;
-#   endif
-                if (!root_coords)
-                {
-                    const int mainX = p.ui->uiMain->x_root();
-                    const int mainY = p.ui->uiMain->y_root();
-#ifndef DEBUG
-                    std::cerr << "MAIN  coords=" << mainX << " " << mainY
-                              << std::endl;
-#endif
-                    X -= mainX;
-                    Y -= mainY;
-                }
-#ifndef DEBUG
-                std::cerr << "LOCAL coords=" << X << " " << Y
-                          << std::endl;
-#endif
-#endif
                 key = prefix + "/WindowW";
                 value = settings->getValue<std::any>(key);
                 W = std_any_empty(value) ? W : std_any_cast<int>(value);

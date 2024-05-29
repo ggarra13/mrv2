@@ -8,7 +8,7 @@ include( ExternalProject )
 #set( FLTK_GIT_TAG master )
 
 #set(FLTK_GIT_TAG 00dc35097b86f77d4aae7c789b03c70690f4b97f)    # latest stable.
-set(FLTK_GIT_TAG e325c2e4a0a927f0b70c7f71da02065019c020ef)
+set(FLTK_GIT_TAG 70c6f2ce129efde6578d40b8c526497b46e79cc7)
 
 if(MRV2_PYFLTK OR FLTK_BUILD_SHARED)
     # If we are building pyFLTK compile shared

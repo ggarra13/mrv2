@@ -3,6 +3,7 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #include <cassert>
+#include <algorithm>
 
 #include <FL/Fl_Button.H>
 
@@ -24,13 +25,8 @@ namespace
 namespace mrv
 {
 
-    // HACK:: This just stores the PanelWindowdows in a static array. I'm too
-    // lazy
-    //        to make a proper linked list to store these in...
-    PanelWindow* PanelWindow::active_list[TW_MAX_FLOATERS]; // list of active
-                                                            // PanelWindows
-    short PanelWindow::active = 0; // count of active tool windows
-
+    std::vector<PanelWindow*> PanelWindow::active_list;
+    
     // Dummy close button callback
     static void cb_ignore(void)
     {
@@ -52,72 +48,37 @@ namespace mrv
         box(FL_FLAT_BOX);
     }
 
-    // destructor
     PanelWindow::~PanelWindow()
     {
-        active_list[idx] = nullptr;
-        active--;
+        active_list.erase(std::remove(active_list.begin(), active_list.end(),
+                                      this), active_list.end());
     }
 
-    // construction function
     void PanelWindow::create_dockable_window()
     {
-        static int first_window = 1;
-        // window list intialisation...
-        // this is a nasty hack, should make a proper list
-        if (first_window)
-        {
-            first_window = 0;
-            for (short i = 0; i < TW_MAX_FLOATERS; i++)
-                active_list[i] = nullptr;
-        }
-        // find an empty index
-        for (short i = 0; i < TW_MAX_FLOATERS; i++)
-        {
-            if (!active_list[i])
-            {
-                idx = i;
-                active_list[idx] = this;
-                active++;
-                clear_border();
-                set_non_modal();
-                resizable(this);
-                callback((Fl_Callback*)cb_ignore);
-                return;
-            }
-        }
-        // if we get here, the list is probably full, what a hack.
-        // FIX THIS:: At present, we will get a non-modal window with
-        // decorations as a default instead...
+        clear_border();
         set_non_modal();
+        resizable(this);
+        callback((Fl_Callback*)cb_ignore);
+        active_list.push_back(this);
     }
 
     // show all the active floating windows
     void PanelWindow::show_all(void)
     {
-        if (active)
+        for (auto window : active_list)
         {
-            for (short i = 0; i < TW_MAX_FLOATERS; i++)
-            {
-                if (active_list[i])
-                    active_list[i]->show();
-            }
+            window->show();
         }
     }
 
-    // hide all the active floating windows
     void PanelWindow::hide_all(void)
     {
-        if (active)
+        for (auto window : active_list)
         {
-            for (short i = 0; i < TW_MAX_FLOATERS; i++)
-            {
-                if (active_list[i])
-                    active_list[i]->hide();
-            }
+            window->hide();
         }
     }
-
 
     void PanelWindow::set_cursor(int ex, int ey)
     {
@@ -155,22 +116,6 @@ namespace mrv
 
     void PanelWindow::resize(int X, int Y, int W, int H)
     {
-        
-        int screen = Fl::screen_num(X, Y);
-        int minX, minY, maxW, maxH;
-        Fl::screen_work_area(minX, minY, maxW, maxH, screen);
-        // Don't allow scaling the window beyond the bottom of the screen
-        if (Y < minY)
-            Y = minY;
-        // else if (Y + H > Y + maxH - DH)
-        // {
-        //     Y = maxH - DH;
-        //     H = DH;
-        // }
-        assert(W > 0);
-        assert(H > 0);
-        // assert(H >= DH);
-        
         Fl_Double_Window::resize(X, Y, W, H);
     }
 
@@ -213,62 +158,94 @@ namespace mrv
         {
             int diffX = ex - last_x;
             int diffY = ey - last_y;
+            int newX  = x();
+            int newY  = y();
+            int newW  = w();
+            int newH  = h();
             if (valid == Direction::kRight)
             {
                 if (diffX == 0)
                     return 0;
                 if (w() + diffX > kMinWidth)
-                    size(w() + diffX, h());
+                    newW += diffX;
             }
             else if (valid == Direction::kLeft)
             {
                 if (diffX == 0)
                     return 0;
                 if (w() - diffX > kMinWidth)
-                    resize(x() + diffX, y(), w() - diffX, h());
+                {
+                    newX += diffX;
+                    newW -= diffX;
+                }
             }
             else if (valid == Direction::kBottom)
             {
                 if (diffY == 0)
                     return 0;
                 if (h() + diffY > kMinHeight)
-                    size(w(), h() + diffY);
+                {
+                    newH += diffY;
+                }
             }
             else if (valid == Direction::kBottomRight)
             {
                 if (diffY == 0 && diffX == 0)
                     return 0;
                 if (h() + diffY > kMinHeight && w() + diffX > kMinWidth)
-                    size(w() + diffX, h() + diffY);
+                {
+                    newW += diffX;
+                    newH += diffY;
+                }
             }
             else if (valid == Direction::kBottomLeft)
             {
                 if (diffY == 0 && diffX == 0)
                     return 0;
                 if (h() + diffY > kMinHeight && w() - diffX > kMinWidth)
-                    resize(x() + diffX, y(), w() - diffX, h() + diffY);
+                {
+                    newX += diffX;
+                    newW -= diffX;
+                    newH += diffY;
+                }
             }
             else if (valid == Direction::kTop)
             {
                 if (diffY == 0)
                     return 0;
                 if (h() - diffY > kMinHeight)
-                    resize(x(), y() + diffY, w(), h() - diffY);
+                {
+                    newY += diffY;
+                    newH -= diffY;
+                }
             }
             else if (valid == Direction::kTopRight)
             {
                 if (diffY == 0 && diffX == 0)
                     return 0;
                 if (h() - diffY > kMinHeight && w() + diffX > kMinWidth)
-                    resize(x(), y() + diffY, w() + diffX, h() - diffY);
+                {
+                    newY += diffY;
+                    newW += diffX;
+                    newH -= diffY;
+                }
             }
             else if (valid == Direction::kTopLeft)
             {
                 if (diffY == 0 && diffX == 0)
                     return 0;
                 if (h() - diffY > kMinHeight && w() - diffX > kMinWidth)
-                    resize(x() + diffX, y() + diffY, w() - diffX, h() - diffY);
+                {
+                    newX += diffX;
+                    newY += diffY;
+                    newW -= diffX;
+                    newH -= diffY;
+                }
             }
+
+            if (valid != Direction::kNone)
+                resize(newX, newY, newW, newH);
+            
             last_x = ex;
             last_y = ey;
             return 1;
@@ -277,7 +254,6 @@ namespace mrv
         {
             auto settings = App::app->settings();
             PanelGroup* gp = static_cast< PanelGroup* >(child(0));
-            // gp->layout();
             auto dragger = gp->get_dragger();
             const std::string label = gp->label();
             std::string prefix = "gui/" + label;

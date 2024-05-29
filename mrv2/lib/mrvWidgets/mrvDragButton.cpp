@@ -8,38 +8,62 @@
 #include <FL/Fl_Scroll.H>
 #include <FL/fl_draw.H>
 #include <FL/Fl.H>
-#include <FL/platform.H>
 #include <FL/names.h>
 
 #include "mrvWidgets/mrvDropWindow.h"
 #include "mrvWidgets/mrvDragButton.h"
 #include "mrvWidgets/mrvPack.h"
+#include "mrvWidgets/mrvPanelConstants.h"
 #include "mrvWidgets/mrvPanelGroup.h"
+
+#include "mrvUI/mrvDesktop.h"
+
 
 namespace
 {
+    const float kTimeout = 0.025;
     const int kDragMinDistance = 10;
 }
 
 namespace mrv
 {
 
+    void move_cb(DragButton* v)
+    {
+        v->set_position();
+        Fl::repeat_timeout(kTimeout, (Fl_Timeout_Handler)move_cb, v);   
+    }
+
     DragButton::DragButton(int x, int y, int w, int h, const char* l) :
         Fl_Box(x, y, w, h, l)
     {
         was_docked = 0; // Assume we have NOT just undocked...
+        if (desktop::Wayland())
+            use_timeout = true;
+    }
+    
+    DragButton::~DragButton()
+    {
+        if (use_timeout)
+            Fl::remove_timeout((Fl_Timeout_Handler)move_cb, this);
     }
 
+    void DragButton::set_position()
+    {
+        PanelGroup* tg = (PanelGroup*)parent();
+        if (tg->docked()) return;
+        
+        PanelWindow* tw = tg->get_window();
+
+        if (tw->x() == lastX && tw->y() == lastY)
+            return;
+        tw->position(lastX, lastY);
+    }
+    
     int DragButton::handle(int event)
     {
         int ret = Fl_Box::handle(event);
-        
-#ifndef NDEBUG
-        if (event != FL_SHORTCUT && event != FL_NO_EVENT &&
-            event != FL_MOVE)
-            std::cerr << fl_eventnames[event] << std::endl;
-#endif
-        
+
         PanelGroup* tg = (PanelGroup*)parent();
         int docked = tg->docked();
         int x2 = 0, y2 = 0;
@@ -59,24 +83,22 @@ namespace mrv
         // If we are not docked, deal with dragging the toolwin around
         if (!docked)
         {
-            // get the enclosing parent widget
-            PanelWindow* tw = tg->get_window();
-            assert(tw);
-
             switch (event)
             {
             case FL_PUSH: // downclick in button creates cursor offsets
-                x1 = Fl::event_x_root();
-                y1 = Fl::event_y_root();
-                xoff = tw->x_root() - x1;
-                yoff = tw->y_root() - y1;
-#ifndef NDEBUG
-                std::cerr << "\tx1, y1=" << x1 << " " << y1 << std::endl;
-                std::cerr << "\ttw    =" << tw->x_root() << " " << tw->y_root()
-                          << std::endl;
-                std::cerr << "\toffsets=" << xoff << " " << yoff << std::endl;
-#endif
+                get_global_coords(x1, y1);
+                get_window_coords(xoff, yoff);
+
+                lastX = xoff;
+                lastY = yoff;
+                
+                xoff -= x1;
+                yoff -= y1;
                 ret = 1;
+        
+                if (use_timeout)
+                    Fl::add_timeout(
+                        kTimeout, (Fl_Timeout_Handler)move_cb, this);
                 break;
 
             case FL_DRAG: // drag the button (and its parent window) around the
@@ -87,10 +109,14 @@ namespace mrv
                     // drag from the dock, so the PUSH (above) will not have
                     // happened.
                     was_docked = 0;
-                    x1 = Fl::event_x_root();
-                    y1 = Fl::event_y_root();
-                    xoff = tw->x_root() - x1;
-                    yoff = tw->y_root() - y1;
+                    get_global_coords(x1, y1);
+                    get_window_coords(xoff, yoff);
+
+                    lastX = xoff;
+                    lastY = yoff;
+                
+                    xoff -= x1;
+                    yoff -= y1;
                 }
                 else
                 {
@@ -105,39 +131,24 @@ namespace mrv
                         hide_dock_group();
                     }
                 }
-                Fl_Window* top = top_window();
-                
-                int posX = Fl::event_x_root();
-                int posY = Fl::event_y_root();
-                
-#ifdef __linux__
-#    ifdef FLTK_USE_WAYLAND
-                if (fl_wl_display())
+
+                int posX, posY;
+                get_global_coords(posX, posY);
+
+                posX += xoff;
+                posY += yoff;
+
+
+                if (use_timeout)
                 {
-                    posX -= top->x_root();
-                    posY -= top->y_root();
+                    lastX = posX;
+                    lastY = posY;
                 }
                 else
                 {
-#    ifdef PARENT_TO_TOP_WINDOW
-                    posX -= top->x_root();
-                    posY -= top->y_root();
-#    endif
+                    auto tw = tg->get_window();
+                    tw->position(posX, posY);
                 }
-#    endif
-#endif
-                posX += xoff;
-                posY += yoff;
-#ifndef NDEBUG
-                std::cerr << "\tposition window with code at line="
-                          << __LINE__
-                          << std::endl
-                          << "\t\torig=" << tw->x() << " " << tw->y()
-                          << std::endl
-                          << "\t\t pos=" << posX << " " << posY
-                          << std::endl;
-#endif
-                tw->position(posX, posY);
                 ret = 1;
                 break;
             }
@@ -147,6 +158,8 @@ namespace mrv
                 
                 if (dock_attempt)
                 {
+                    Fl::remove_timeout((Fl_Timeout_Handler)move_cb, this);
+                    
                     color_dock_group(FL_BACKGROUND_COLOR);
                     show_dock_group();
                     tg->dock_grp(tg);
@@ -161,59 +174,46 @@ namespace mrv
             return (ret);
         }
 
-        if (tg->children() == 0)
-            return ret;
-
+        if (use_timeout)
+            Fl::remove_timeout((Fl_Timeout_Handler)move_cb, this);
+        
         // OK, so we must be docked - are we being dragged out of the dock?
         switch (event)
         {
         case FL_PUSH: // downclick in button creates cursor offsets
-            x1 = Fl::event_x_root();
-            y1 = Fl::event_y_root();
+            get_global_coords(x1, y1);
             ret = 1;
             break;
 
         case FL_DRAG:
             // If the drag has moved further than the drag_min distance
             // then invoke an un-docking
-            x2 = Fl::event_x_root() - x1;
-            y2 = Fl::event_y_root() - y1;
+            get_global_coords(x2, y2);
+            x2 -= x1;
+            y2 -= y1;
             x2 = (x2 > 0) ? x2 : (-x2);
             y2 = (y2 > 0) ? y2 : (-y2);
             if ((x2 > kDragMinDistance) || (y2 > kDragMinDistance))
             {
-                Fl_Window* top = top_window();
-                assert(top);
-                
                 tg->undock_grp((void*)tg); // undock the window
                 was_docked = -1;           // note that we *just now* undocked
                 
-                PanelWindow* tw = tg->get_window();
-                assert(tw);
-#ifndef NDEBUG
-                std::cerr << "position window with code at line="
-                          << __LINE__ << std::endl;
-#endif
-                int posX = Fl::event_x_root();
-                int posY = Fl::event_y_root();
-                
-#ifdef __linux__
-#    ifdef FLTK_USE_WAYLAND
-                if (fl_wl_display())
+                int posX, posY;
+                get_global_coords(posX, posY);
+
+                if (use_timeout)
                 {
-                    posX -= top->x_root();
-                    posY -= top->y_root();
+                    lastX = posX;
+                    lastY = posY;
+                    Fl::add_timeout(kTimeout, (Fl_Timeout_Handler)move_cb,
+                                    this);
                 }
                 else
                 {
-#        ifdef PARENT_TO_TOP_WINDOW
-                    posX -= top->x_root();
-                    posY -= top->y_root();
-#        endif
-                }
-#    endif
-#endif
-                tw->position(posX, posY);
+                    PanelWindow* tw = tg->get_window();
+                    assert(tw);
+                    tw->position(posX, posY);
+                }                
             }
             ret = 1;
             break;
@@ -277,44 +277,54 @@ namespace mrv
     
     int DragButton::would_dock()
     {
-        int x2 = 0, y2 = 0;
         int cx, cy;
-        cx = Fl::event_x_root(); // Where did the release occur...
-        cy = Fl::event_y_root();
-        x2 = x1 - cx;
-        y2 = y1 - cy;
-        x2 = (x2 > 0) ? x2 : (-x2);
-        y2 = (y2 > 0) ? y2 : (-y2);
-#ifndef NDEBUG
-        std::cerr << "\tcx, cy=" << cx << " " << cy << std::endl;
-        std::cerr << "\tx1, y1=" << x1 << " " << y1 << std::endl;
-        std::cerr << "\tx2, y2=" << x2 << " " << y2 << std::endl;
-#endif
-        if ((x2 > kDragMinDistance) || (y2 > kDragMinDistance))
-        { // test for a docking event
-            // See if anyone is able to accept a dock with this widget
-            // How to find the dock window? Search 'em all for now...
-            for (Fl_Window* win = Fl::first_window(); win;
-                 win = Fl::next_window(win))
-            {
-                // Get the co-ordinates of each window
-                int ex = win->x_root();
-                int ey = win->y_root();
-                int ew = win->w();
-                int eh = win->h();
+        get_global_coords(cx, cy);
+        // See if anyone is able to accept a dock with this widget
+        // How to find the dock window? Search 'em all for now...
+        for (Fl_Window* win = Fl::first_window(); win;
+             win = Fl::next_window(win))
+        {
+            // Get the co-ordinates of each window
+            int ex = win->x_root();
+            int ey = win->y_root();
+            int ew = win->w();
+            int eh = win->h();
 
-                // Are we inside the boundary of the window?
-                if (win->visible() && (cx > ex) && (cy > ey) &&
-                    (cx < (ew + ex)) && (cy < (eh + ey)))
+            // Are we inside the boundary of the window?
+            if (win->visible() && (cx > ex) && (cy > ey) &&
+                (cx < (ew + ex)) && (cy < (eh + ey)))
+            {
+                if (auto dropWindow = dynamic_cast<DropWindow*>(win))
                 {
-                    if (auto dropWindow = dynamic_cast<DropWindow*>(win))
-                    {
-                        return dropWindow->valid_drop();
-                    }
+                    return dropWindow->valid_drop();
                 }
             }
         }
         return 0;
+    }
+
+    
+    void DragButton::get_global_coords(int& X, int& Y)
+    {
+        X = Fl::event_x_root();
+        Y = Fl::event_y_root();
+    }
+
+    void DragButton::get_window_coords(int& X, int& Y)
+    {
+        PanelGroup* tg = (PanelGroup*)parent();
+        if (tg->docked())
+        {
+            X = 0;
+            Y = 0;
+        }
+        else
+        {
+            PanelWindow* tw = tg->get_window();
+            assert(tw);
+            X = tw->x_root();
+            Y = tw->y_root();
+        }
     }
     
 } // namespace mrv
