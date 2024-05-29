@@ -80,8 +80,10 @@ namespace mrv
                 Y = std_any_empty(value) ? Y : std_any_cast<int>(value);
 
 #ifdef __linux__
+#ifndef DEBUG
                 std::cerr << "ROOT coords=" << X << " " << Y
                           << std::endl;
+#endif
                 bool root_coords = true;
 #   ifdef FLTK_USE_WAYLAND
                 if (fl_wl_display())
@@ -94,13 +96,17 @@ namespace mrv
                 {
                     const int mainX = p.ui->uiMain->x_root();
                     const int mainY = p.ui->uiMain->y_root();
+#ifndef DEBUG
                     std::cerr << "MAIN  coords=" << mainX << " " << mainY
                               << std::endl;
+#endif
                     X -= mainX;
                     Y -= mainY;
                 }
+#ifndef DEBUG
                 std::cerr << "LOCAL coords=" << X << " " << Y
                           << std::endl;
+#endif
 #endif
                 key = prefix + "/WindowW";
                 value = settings->getValue<std::any>(key);
