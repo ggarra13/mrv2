@@ -21,6 +21,8 @@ v1.1.9
 - Fixed a random crash when opening the Flmm_ColorA_Chooser for the first time
   due to incomplete menu items (Windows compiler issue?).
 - Fixed Background->Solid Color not getting read properly from the preferences.
+- mrv2's custom file requester can now toggle between image previews with the
+  preview button (Monalisa).
 
 
 v1.1.8
