@@ -33,30 +33,28 @@ namespace mrv
         PanelGroup* gp = (PanelGroup*)v;
         if (!gp->docked())
         {
-            gp->dock_grp(v);
+            gp->dock_grp();
         }
         else
         {
-            gp->undock_grp(v);
+            gp->undock_grp();
         }
     }
 
-    // function to handle the dock actions
-    void PanelGroup::dock_grp(void* v)
-    { // dock CB
-        PanelGroup* gp = (PanelGroup*)v;
+    void PanelGroup::dock_grp()
+    {
         assert(dock);
 
         // we can only dock a group that's not already docked
         // and only if a dock exists for it
-        if (!gp->docked())
+        if (!docked())
         {
             // Make sure we turn off the panelgroup scroller, as we are going
             // to handle it with the dockgroup scroller
-            gp->end();
+            end();
 
             auto settings = App::app->settings();
-            auto dragger = gp->get_dragger();
+            auto dragger = get_dragger();
             const std::string& label = dragger->label();
             std::string prefix = "gui/" + label;
             std::string key;
@@ -68,8 +66,8 @@ namespace mrv
             key = prefix + "/WindowY";
             settings->setValue(key, tw->y_root());
 
-            Pack* pack = gp->get_pack();
-            Fl_Scroll* scroll = gp->get_scroll();
+            Pack* pack = get_pack();
+            Fl_Scroll* scroll = get_scroll();
             int W = pack->w();
             if (pack->h() > dock->h())
             {
@@ -78,8 +76,8 @@ namespace mrv
             pack->size(W, pack->h());
             scroll->size(W, pack->h());
             scroll->scroll_to(0, 0);
-            dock->add(gp);    // move the toolgroup into the dock
-            gp->docked(true); // toolgroup is docked...
+            dock->add(this);    // move the toolgroup into the dock
+            docked(true); // toolgroup is docked...
             // so we no longer need the tool window.
             tw->hide();
             delete tw;
@@ -98,21 +96,43 @@ namespace mrv
         }
     }
 
-    // static CB to handle the undock actions
-    void PanelGroup::undock_grp(void* v)
-    { // undock CB
-        PanelGroup* gp = (PanelGroup*)v;
 
-        if (gp->docked())
+    
+    void PanelGroup::avoid_clipping(int& X, int& Y, int& W, int& H)
+    {
+        if (desktop::Wayland())
+        {
+            Fl_Window* top = dock->top_window();
+            int maxW = top->w();
+            int maxH = top->h();
+
+            if (X < maxW && X + W > maxW)
+                X = maxW - W;
+            if (Y < maxH && Y + H > maxH)
+                Y = maxH - H;
+
+            if (X < 0)
+                X = 0;
+            if (Y < 0)
+                Y = 0;
+
+            W = W > maxW ? maxW : W;
+            H = H > maxH ? maxH : H;
+        }
+    }
+    
+    void PanelGroup::undock_grp()
+    {
+        if (docked())
         { // undock the group into its own non-modal tool window
-            int W = gp->w() + kMargin * 2;
-            int H = gp->h() + kMargin * 2;
+            int W = w() + kMargin * 2;
+            int H = h() + kMargin * 2;
             int X = Fl::event_x_root() - 10;
             int Y = Fl::event_y_root() - 35;
-            gp->docked(false); // toolgroup is no longer docked
+            docked(false); // toolgroup is no longer docked
 
             auto settings = App::app->settings();
-            auto dragger = gp->get_dragger();
+            auto dragger = get_dragger();
             std::string label = dragger->label();
             if (label == "Python" || label == "Logs")
                 tw->size_range(640, 400);
@@ -142,35 +162,17 @@ namespace mrv
                 H = H2;
             assert(H != 0);
 
-            if (desktop::Wayland())
-            {
-                Fl_Window* top = dock->top_window();
-                int maxW = top->w();
-                int maxH = top->h();
-
-                if (X + W > maxW)
-                    X = maxW - W;
-                if (Y + H > maxH)
-                    Y = maxH - H;
-
-                if (X < 0)
-                    X = 0;
-                if (Y < 0)
-                    Y = 0;
-
-                W = W > maxW ? maxW : W;
-                H = H > maxH ? maxH : H;
-            }
-
+            avoid_clipping(X, Y, W, H);
+            
             set_Fl_Group();
 
             tw = new PanelWindow(X, Y, W, H);
             tw->end();
-            dock->remove(gp);
-            tw->add(gp);        // move the tool group into the floating window
-            gp->position(1, 1); // align group in floating window (needed)
-            gp->size(W, H);     // resize to fit (needed)
-            tw->resizable(gp);
+            dock->remove(this);
+            tw->add(this);  // move the tool group into the floating window
+            position(1, 1); // align group in floating window (needed)
+            size(W, H);     // resize to fit (needed)
+            tw->resizable(this);
             tw->resize(X, Y, W, H);
             tw->show();     // show floating window
             dock->redraw(); // update the dock, to show the group has gone...
@@ -312,7 +314,7 @@ namespace mrv
             if (twYH > maxYH)
                 H = maxH - kMargin;
 
-            tw->size(W + kMargin * 2, H + kMargin * 2);
+            tw->size(W + kMargin * 2, H + kMargin);
 
             H = tw->h() - GH - DH;
 
@@ -447,10 +449,16 @@ namespace mrv
 
         set_dock(dk); // define where the toolgroup is allowed to dock
 
+        // Check if it would clip (if so, offset on X/Y).
+        W += kMargin * 2;
+        H += kMargin;
+        
+        avoid_clipping(X, Y, W, H);
+        
         // create a floating toolbar window
         // Ensure the window is not created as a child of its own inner group!
         set_Fl_Group();
-        tw = new PanelWindow(X, Y, W + kMargin * 2, H + kMargin);
+        tw = new PanelWindow(X, Y, W, H);
         tw->end();
         docked(false); // NOT docked
         tw->add(this); // move the tool group into the floating window

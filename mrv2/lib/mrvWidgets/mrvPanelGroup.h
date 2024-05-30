@@ -50,6 +50,9 @@ namespace mrv
         //! Sets whether window is docked or not.
         void docked(bool r);
 
+        //! On Wayland, we must try to avoid clipping of the panel.
+        void avoid_clipping(int& X, int& Y, int& W, int& H);
+        
     public:
         // Constructors for docked/floating window
         PanelGroup(
@@ -78,8 +81,8 @@ namespace mrv
         bool docked() { return _docked | !tw; }
 
         // generic callback function for the dock/undock checkbox
-        void dock_grp(void* v);
-        void undock_grp(void* v);
+        void dock_grp();
+        void undock_grp();
 
         // generic callback function for the dismiss button
         static void cb_dismiss(Fl_Button*, void* v);

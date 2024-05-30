@@ -80,30 +80,7 @@ namespace mrv
                 key = prefix + "/WindowY";
                 value = settings->getValue<std::any>(key);
                 Y = std_any_empty(value) ? Y : std_any_cast<int>(value);
-
-#ifdef __linux__
-                std::cerr << "ROOT coords=" << X << " " << Y
-                          << std::endl;
-                bool root_coords = true;
-#   ifdef FLTK_USE_WAYLAND
-                if (fl_wl_display())
-                    root_coords = false;
-#   endif
-#   ifdef PARENT_TO_TOP_WINDOW
-                root_coords = false;
-#   endif
-                if (!root_coords)
-                {
-                    const int mainX = p.ui->uiMain->x_root();
-                    const int mainY = p.ui->uiMain->y_root();
-                    std::cerr << "MAIN  coords=" << mainX << " " << mainY
-                              << std::endl;
-                    X -= mainX;
-                    Y -= mainY;
-                }
-                std::cerr << "LOCAL coords=" << X << " " << Y
-                          << std::endl;
-#endif
+                
                 key = prefix + "/WindowW";
                 value = settings->getValue<std::any>(key);
                 W = std_any_empty(value) ? W : std_any_cast<int>(value);
@@ -179,12 +156,12 @@ namespace mrv
 
         void PanelWidget::undock()
         {
-            g->undock_grp(g);
+            g->undock_grp();
         }
 
         void PanelWidget::dock()
         {
-            g->dock_grp(g);
+            g->dock_grp();
         }
 
         void PanelWidget::save()

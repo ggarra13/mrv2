@@ -162,7 +162,7 @@ namespace mrv
                     
                     color_dock_group(FL_BACKGROUND_COLOR);
                     show_dock_group();
-                    tg->dock_grp(tg);
+                    tg->dock_grp();
                 }
                 ret = 1;
             }
@@ -195,12 +195,12 @@ namespace mrv
             y2 = (y2 > 0) ? y2 : (-y2);
             if ((x2 > kDragMinDistance) || (y2 > kDragMinDistance))
             {
-                tg->undock_grp((void*)tg); // undock the window
-                was_docked = -1;           // note that we *just now* undocked
+                tg->undock_grp(); // undock the window
+                was_docked = -1;  // note that we *just now* undocked
                 
                 int posX, posY;
                 get_global_coords(posX, posY);
-
+            
                 if (use_timeout)
                 {
                     lastX = posX;
