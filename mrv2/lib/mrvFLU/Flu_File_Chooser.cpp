@@ -249,12 +249,16 @@ void Flu_File_Chooser::previewCB()
         return;
     }
 
+    thumbnailsFileReq = previewBtn->value();
+
+    updateEntrySizes();
+    
     Fl_Group* g = getEntryGroup();
-    int c = g->children();
-    for (int i = 0; i < c; ++i)
+    unsigned num = g->children();
+    for (unsigned i = 0; i < num; ++i)
     {
-        Flu_Entry* e = static_cast<Flu_Entry*>(g->child(i));
-        e->set_colors();
+        Flu_Entry* c = (Flu_Entry*)g->child(i);
+        c->set_colors();
     }
 }
 
@@ -749,7 +753,7 @@ Flu_File_Chooser::Flu_File_Chooser(
 
     previewBtn = new Flu_Button(482, 43, 23, 25);
     previewBtn->type(FL_TOGGLE_BUTTON);
-    previewBtn->value(1);
+    previewBtn->value(thumbnailsFileReq);
     previewBtn->image(preview_img);
     previewBtn->callback(_previewCB, this);
     previewBtn->tooltip(previewTTxt.c_str());

@@ -559,6 +559,8 @@ void Flu_Entry::editCB()
 
 void Flu_Entry::updateSize(int& W, int& H, int& iW, int& iH, int& tW, int& tH)
 {
+    TLRENDER_P();
+    
     // Some constants
     const int marginW = 2;
     const int marginH = 4;
@@ -577,13 +579,11 @@ void Flu_Entry::updateSize(int& W, int& H, int& iW, int& iH, int& tW, int& tH)
     if (icon)
     {
         if (chooser->previewBtn->value() &&
-            (icon == &reel || icon == &picture) &&
-            Flu_File_Chooser::thumbnailsFileReq)
+            (icon == &reel || icon == &picture))
         {
             iW = icon->w() + marginW;
-            if (!isPicture)
+            if (p.bind_image)
             {
-                isPicture = true;
                 iH = 64 + marginH;
             }
             else
@@ -595,11 +595,12 @@ void Flu_Entry::updateSize(int& W, int& H, int& iW, int& iH, int& tW, int& tH)
         {
             iW = icon->w() + marginW;
             iH = icon->h() + marginH;
-            if (!isPicture || wide)
-                tH = 0;
         }
     }
 
+    if (!p.bind_image || wide)
+        tH = 0;
+            
     W = tW;
     H = tH + iH;
 }
@@ -756,7 +757,7 @@ void Flu_Entry::draw()
     int W, H, iW, iH, tW, tH;
     updateSize(W, H, iW, iH, tW, tH);
 
-    bool below = (!chooser->fileListWideBtn->value()) && isPicture;
+    bool below = (!chooser->fileListWideBtn->value()) && p.bind_image;
     int X = x() + 4;
     int Y = y();
     int tY = Y;
@@ -850,17 +851,16 @@ void Flu_Entry::startRequest()
 
     auto extension = tl::string::toLower(path.getExtension());
 
-    bool requestIcon = mrv::file::isValidType(path) &&
-                       !mrv::file::isAudio(path) && extension != ".ndi" &&
-                       Flu_File_Chooser::thumbnailsFileReq;
+    bool requestIcon = chooser->previewBtn->value() &&
+                       mrv::file::isValidType(path) &&
+                       !mrv::file::isAudio(path) && extension != ".ndi";
 
     if (!Flu_File_Chooser::thumbnailsUSD)
     {
         if (extension == ".usd" || extension == ".usda" ||
             extension == ".usc" || extension == ".usz")
         {
-            cancelRequest();
-            return;
+            requestIcon = false;
         }
     }
 
@@ -897,11 +897,10 @@ void Flu_Entry::cancelRequest()
 
     const std::lock_guard<std::mutex> lock(p.thumbnailMutex);
     p.thumbnailCreator->cancelRequests(p.id);
-
+    
 #ifdef DEBUG_REQUESTS
     std::cerr << "\tCANCELED REQUEST " << p.id << " for " << toTLRender() << " "
               << x() << " " << y() << " " << w() << "x" << h() << std::endl;
-    // abort();
 #endif
     p.id = -1;
 }

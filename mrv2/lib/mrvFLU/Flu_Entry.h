@@ -73,7 +73,6 @@ public:
 protected:
     void updateSize(int& W, int& H, int& iW, int& iH, int& tW, int& tH);
 
-    bool isPicture = false;
     bool details;
     int nameW, typeW, sizeW, dateW;
 
