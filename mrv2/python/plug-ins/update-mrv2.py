@@ -6,10 +6,11 @@
 #
 # Current github constants
 #
-GITHUB_ASSET_NAME = 'name'
-GITHUB_ASSET_TAG  = 'tag_name'
-GITHUB_ASSET_DATE = 'published_at'
-GITHUB_ASSET_URL = 'browser_download_url'
+GITHUB_ASSET_NAME    = 'name'
+GITHUB_ASSET_TAG     = 'tag_name'
+GITHUB_ASSET_DATE    = 'published_at'
+GITHUB_ASSET_URL     = 'browser_download_url'
+GITHUB_RELEASE_NOTES = 'body'
 
 GITHUB_ASSET_RELEASE_DAYS = 5
 
@@ -552,15 +553,26 @@ class UpdatePlugin(plugin.Plugin):
             None
         """
         date = release_info['published_at']
-        win = Fl_Window(320, 200)
-        box = Fl_Box(20, 20, win.w() - 40, 60)
+        win = Fl_Window(640, 600)
+        textbuf = Fl_Text_Buffer()
+        textbuf.insert(0, release_info['body'])
+        notes = Fl_Text_Display(20, 30, win.w()-40, 350, _("Release Notes"))
+        notes.buffer(textbuf)
+        notes.textcolor(fl_rgb_color(0,0,0))
+        notes.wrap_mode(Fl_Text_Display.WRAP_AT_BOUNDS, 80)
+        
+        Y = 400
+        box = Fl_Box(20, Y, win.w() - 40, 60)
         label  = _('Current version is v') + current_version + '\n\n'
         label += _('Latest version at Github is v') + latest_version + '.\n'
         label += _('Released on ') + date
         box.copy_label(label)
-        update = Fl_Button(20, 120, 130, 40, title)
+        X  = int((win.w() - 260 - 40) / 2)
+        Y += 100
+        update = Fl_Button(X, Y, 130, 40, title)
         update.callback(_get_latest_release_cb, [self, release_info])
-        ignore = Fl_Button(update.w() + 40, 120, 130, 40, _("Ignore"))
+        X += update.w() + 40
+        ignore = Fl_Button(X, Y, 130, 40, _("Ignore"))
         ignore.callback(_ignore_cb, None)
         win.end()
         win.set_non_modal()
@@ -626,6 +638,7 @@ class UpdatePlugin(plugin.Plugin):
             if name.endswith(extension):
                 return {
                     "name": asset.get(GITHUB_ASSET_NAME, None),
+                    "body": data.get(GITHUB_RELEASE_NOTES, ""),
                     "download_url": asset.get(GITHUB_ASSET_URL, None),
                     "tag_name": data.get(GITHUB_ASSET_TAG, None),
                     "published_at": data.get(GITHUB_ASSET_DATE, None)

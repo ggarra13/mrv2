@@ -91,6 +91,9 @@ msgstr "Descargando "
 msgid "Download seems to have failed!"
 msgstr "¡La descarga parece haber fallado!"
 
+msgid "Release Notes"
+msgstr "Notas de la Versión"
+
 msgid "Current version is v"
 msgstr "Version actual es v"
 

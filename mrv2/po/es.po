@@ -4079,10 +4079,10 @@ msgid "Dock"
 msgstr "Acoplar"
 
 msgid "Dismiss"
-msgstr ""
+msgstr "Descarte"
 
 msgid "Drag Box"
-msgstr ""
+msgstr "Barra de Mover"
 
 msgid "Unknown type for mrvOCIOBrowser"
 msgstr "Tipo desconocido para OCIO Browser"
@@ -5023,9 +5023,8 @@ msgstr "Deshacer la Última Figura Dibujada en Cuadro Actual."
 msgid "Redo Previous Shape Drawn in Current Frame."
 msgstr "Rehacer la Última Figura Dibujada en Cuadro Actual."
 
-#, fuzzy
 msgid "DockGroup"
-msgstr "Acoplar"
+msgstr "DockGroup"
 
 msgid "Current tool being used."
 msgstr "Herramienta siendo usada."
@@ -5655,11 +5654,14 @@ msgstr "Miniaturas en Paneles"
 msgid "Edit Viewport"
 msgstr "Ventana de Edición"
 
-msgid "How to display timeline by default."
-msgstr "Como mostrar la línea de tiempo por defecto."
+msgid "How to display timeline thumbnails by default."
+msgstr "Como mostrar la miniatura de la línea de tiempo por defecto."
 
 msgid "Display"
 msgstr "Display"
+
+msgid "How to display timeline by default."
+msgstr "Como mostrar la línea de tiempo por defecto."
 
 msgid "Start in Edit mode"
 msgstr "Comenzar en Modo de Edición"

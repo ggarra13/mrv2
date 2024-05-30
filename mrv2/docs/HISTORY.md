@@ -23,6 +23,10 @@ v1.1.9
 - Fixed Background->Solid Color not getting read properly from the preferences.
 - mrv2's custom file requester can now toggle between image previews with the
   preview button (Monalisa).
+- Made building FFmpeg on Windows more solid by relying on any of its two
+  repositories and if that fails, read it from a tar.gz file.
+- Updated About->Update mrv2 to list the changes from the version in a text
+  display.
 
 
 v1.1.8

@@ -4028,10 +4028,10 @@ msgid "Dock"
 msgstr "Dock"
 
 msgid "Dismiss"
-msgstr ""
+msgstr "Dismiss"
 
 msgid "Drag Box"
-msgstr ""
+msgstr "Drag Box"
 
 msgid "Unknown type for mrvOCIOBrowser"
 msgstr "Unknown type for mrvOCIOBrowser"
@@ -4977,9 +4977,8 @@ msgstr "Undo Last Shape Drawn in Current Frame."
 msgid "Redo Previous Shape Drawn in Current Frame."
 msgstr "Redo Previous Shape Drawn in Current Frame."
 
-#, fuzzy
 msgid "DockGroup"
-msgstr "Dock"
+msgstr "DockGroup"
 
 msgid "Current tool being used."
 msgstr "Current tool being used."
@@ -5597,11 +5596,14 @@ msgstr "Preview Thumbnails in Panels"
 msgid "Edit Viewport"
 msgstr "Edit Viewport"
 
-msgid "How to display timeline by default."
-msgstr "How to display timeline by default."
+msgid "How to display timeline thumbnails by default."
+msgstr "How to display timeline thumbnails by default."
 
 msgid "Display"
 msgstr "Display"
+
+msgid "How to display timeline by default."
+msgstr "How to display timeline by default."
 
 msgid "Start in Edit mode"
 msgstr "Start in Edit mode"

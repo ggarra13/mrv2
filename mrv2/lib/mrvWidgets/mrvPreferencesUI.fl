@@ -88,7 +88,7 @@ class PreferencesUI {open
     Fl_Window uiMain {
       label Preferences
       user_data this user_data_type {PreferencesUI*} open
-      xywh {8 65 847 467} type Double hide resizable
+      xywh {0 0 847 467} type Double hide resizable
       code0 {main = m;} modal
     } {
       Fl_Group {} {open
@@ -754,7 +754,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
             }
             Fl_Group {} {
               label Thumbnails
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {
                 label Thumbnails
@@ -769,8 +769,8 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                   tooltip {Preview Thumbnails in Panels} xywh {398 222 370 20} down_box DOWN_BOX value 1
                 }
                 Fl_Choice uiPrefsEditThumbnails {
-                  label {Edit Viewport} open
-                  tooltip {How to display timeline by default.} xywh {398 140 175 28} box THIN_DOWN_BOX down_box BORDER_BOX align 8
+                  label {Edit Viewport} open selected
+                  tooltip {How to display timeline thumbnails by default.} xywh {398 140 175 28} box THIN_DOWN_BOX down_box BORDER_BOX align 8
                   code0 {o->value(1);}
                 } {
                   MenuItem {} {
@@ -1407,7 +1407,7 @@ v->uiOCIO_Display_View->do_callback();}
             }
             Fl_Group {} {
               label Video
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {open
                 xywh {323 60 478 314}
@@ -1745,8 +1745,7 @@ o->select( item );} {}
 
 \#else
     o->add(_("No Audio was Compiled"));
-\#endif} {selected
-    }
+\#endif} {}
   }
   Function {fill_audio_output_devices(PreferencesUI* self)} {open
   } {

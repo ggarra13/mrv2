@@ -9,12 +9,6 @@ namespace fs = std::filesystem;
 #include <tlCore/AudioSystem.h>
 #include <tlCore/StringFormat.h>
 
-#ifdef __linux__
-#    include <FL/platform.H> // for fl_wl_display
-#    undef Status
-#    undef None
-#endif
-
 #include <FL/fl_utf8.h>         // for fl_getenv
 #include <FL/Fl_Sys_Menu_Bar.H> // for macOS menus
 
@@ -717,7 +711,7 @@ namespace mrv
 
         Fl_Preferences loading(base, "loading");
 
-#ifdef __APPLE__
+#if defined(__APPLE__) || defined(_WIN32)
         loading.get("native_file_chooser", tmp, 1);
 #else
         loading.get("native_file_chooser", tmp, 0);
