@@ -5,6 +5,9 @@ Preguntas Frecuentes
 Todas las Plataformas
 =====================
 
+Todos los Sistemas de Ventanas
+------------------------------
+
 - Mi reproducción es lenta.  ¿Cómo puedo mejorarla?
 
   Chequée que tengas:
@@ -31,6 +34,9 @@ Todas las Plataformas
 
 	Seteado a 4GB por lo menos (por defecto es la mitad de tu memoria)
 
+Wayland
+-------
+	
 - Tengo avisos (warnings) cuando ejecuto el mrv2 pre-compilado en la consola
   bajo Wayland en una distro moderna como Ubuntu 22.04.4 LTS::
 

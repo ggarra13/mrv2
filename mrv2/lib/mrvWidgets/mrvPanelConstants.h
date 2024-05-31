@@ -17,6 +17,7 @@
 // Constants used in the Window/Panels
 namespace
 {
+    const int kMaxMove = 640;
     const int kMargin = 3;
     const int kButtonW = 20;
     const int kTitleBar = 20;

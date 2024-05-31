@@ -54,10 +54,19 @@ namespace mrv
         if (tg->docked()) return;
         
         PanelWindow* tw = tg->get_window();
+        if (!tw) return;
 
-        if (tw->x() == lastX && tw->y() == lastY)
+        if (tw->x() == currentX && tw->y() == currentY)
             return;
-        tw->position(lastX, lastY);
+
+        // Avoid Wayland's compositor going crazy
+        int moveX = std::abs(currentX - previousX);
+        int moveY = std::abs(currentY - previousY);
+        if (moveX > kMaxMove || moveY > kMaxMove)
+            return;
+        tw->position(currentX, currentY);
+        previousX = currentX;
+        previousY = currentY;
     }
     
     int DragButton::handle(int event)
@@ -89,16 +98,19 @@ namespace mrv
                 get_global_coords(x1, y1);
                 get_window_coords(xoff, yoff);
 
-                lastX = xoff;
-                lastY = yoff;
+                currentX = previousX = xoff;
+                currentY = previousY = yoff;
                 
                 xoff -= x1;
                 yoff -= y1;
                 ret = 1;
         
                 if (use_timeout)
-                    Fl::add_timeout(
-                        kTimeout, (Fl_Timeout_Handler)move_cb, this);
+                {
+                    if (!Fl::has_timeout((Fl_Timeout_Handler)move_cb, this))
+                        Fl::add_timeout(
+                            kTimeout, (Fl_Timeout_Handler)move_cb, this);
+                }
                 break;
 
             case FL_DRAG: // drag the button (and its parent window) around the
@@ -112,8 +124,8 @@ namespace mrv
                     get_global_coords(x1, y1);
                     get_window_coords(xoff, yoff);
 
-                    lastX = xoff;
-                    lastY = yoff;
+                    currentX = xoff;
+                    currentY = yoff;
                 
                     xoff -= x1;
                     yoff -= y1;
@@ -141,8 +153,8 @@ namespace mrv
 
                 if (use_timeout)
                 {
-                    lastX = posX;
-                    lastY = posY;
+                    currentX = posX;
+                    currentY = posY;
                 }
                 else
                 {
@@ -154,12 +166,14 @@ namespace mrv
             }
             case FL_RELEASE:
             {
-                int dock_attempt = would_dock();
+                if (use_timeout)
+                    Fl::remove_timeout((Fl_Timeout_Handler)move_cb, this);
+
                 
+                int dock_attempt = would_dock();
+                    
                 if (dock_attempt)
                 {
-                    Fl::remove_timeout((Fl_Timeout_Handler)move_cb, this);
-                    
                     color_dock_group(FL_BACKGROUND_COLOR);
                     show_dock_group();
                     tg->dock_grp();
@@ -174,10 +188,10 @@ namespace mrv
             return (ret);
         }
 
+        // OK, so we must be docked - are we being dragged out of the dock?
         if (use_timeout)
             Fl::remove_timeout((Fl_Timeout_Handler)move_cb, this);
         
-        // OK, so we must be docked - are we being dragged out of the dock?
         switch (event)
         {
         case FL_PUSH: // downclick in button creates cursor offsets
@@ -203,10 +217,11 @@ namespace mrv
             
                 if (use_timeout)
                 {
-                    lastX = posX;
-                    lastY = posY;
-                    Fl::add_timeout(kTimeout, (Fl_Timeout_Handler)move_cb,
-                                    this);
+                    currentX = previousX = posX;
+                    currentY = previousY = posY;
+                    if (!Fl::has_timeout((Fl_Timeout_Handler)move_cb, this))
+                        Fl::add_timeout(kTimeout, (Fl_Timeout_Handler)move_cb,
+                                        this);
                 }
                 else
                 {

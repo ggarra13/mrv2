@@ -6,10 +6,13 @@
 #include <algorithm>
 
 #include <FL/Fl_Button.H>
+#include <FL/Fl.H>
 
 #include "mrvWidgets/mrvPanelConstants.h"
 #include "mrvWidgets/mrvPanelWindow.h"
 #include "mrvWidgets/mrvPanelGroup.h"
+
+#include "mrvUI/mrvDesktop.h"
 
 #include "mrvPanels/mrvPanelsAux.h"
 
@@ -18,9 +21,21 @@
 
 namespace
 {
+    const float kTimeout = 0.025;
     const int kMinWidth = 150;
     const int kMinHeight = 150;
 } // namespace
+
+
+namespace
+{
+    void resize_cb(mrv::PanelWindow* v)
+    {
+        v->set_resize();
+        Fl::repeat_timeout(kTimeout, (Fl_Timeout_Handler)resize_cb, v);   
+    }
+}
+
 
 namespace mrv
 {
@@ -37,15 +52,27 @@ namespace mrv
     PanelWindow::PanelWindow(int x, int y, int w, int h, const char* l) :
         Fl_Double_Window(x, y, w, h, l)
     {
+        if (desktop::Wayland())
+            use_timeout = true;
         create_dockable_window();
         box(FL_FLAT_BOX);
+        oldX = newX = x;
+        oldY = newY = y;
+        oldW = newW = w;
+        oldH = newH = h;
     }
 
     PanelWindow::PanelWindow(int w, int h, const char* l) :
         Fl_Double_Window(w, h, l)
     {
+        if (desktop::Wayland())
+            use_timeout = true;
         create_dockable_window();
         box(FL_FLAT_BOX);
+        oldX = newX = x();
+        oldY = newY = y();
+        oldW = newW = w;
+        oldH = newH = h;
     }
 
     PanelWindow::~PanelWindow()
@@ -54,6 +81,43 @@ namespace mrv
                                       this), active_list.end());
     }
 
+    void PanelWindow::set_resize()
+    {
+        if (newX == oldX && newY == oldY && newW == oldW && newH == oldH)
+        {
+            return;
+        }
+
+        // Avoid Wayland's compositor going crazy
+        int moveX = std::abs(newX - oldX);
+        int moveY = std::abs(newY - oldY);
+        int moveW = std::abs(newW - oldW);
+        int moveH = std::abs(newH - oldH);
+        if (moveX > kMaxMove || moveY > kMaxMove ||
+            moveW > kMaxMove || moveH > kMaxMove)
+        {
+            // std::cerr << "too big move" << std::endl;
+            return;
+        }
+        
+        int screen = this->screen_num();
+        int minX, minY, maxW, maxH;
+        Fl::screen_work_area(minX, minY, maxW, maxH);
+
+        if ((newX + newW > minX + maxW) ||
+            (newY + newH > minY + maxH))
+        {
+            //std::cerr << "out of screen" << std::endl;
+            return;
+        }
+        
+        resize(newX, newY, newW, newH);
+        oldX = newX;
+        oldY = newY;
+        oldW = newW;
+        oldH = newH;
+    }
+    
     void PanelWindow::create_dockable_window()
     {
         clear_border();
@@ -114,17 +178,24 @@ namespace mrv
         }
     }
 
-    void PanelWindow::resize(int X, int Y, int W, int H)
-    {
-        Fl_Double_Window::resize(X, Y, W, H);
-    }
-
     int PanelWindow::handle(int event)
     {
+        int ret = Fl_Double_Window::handle(event);
+        
         int ex = Fl::event_x_root();
         int ey = Fl::event_y_root();
         switch (event)
         {
+        case FL_SHOW:
+            oldX = x();
+            oldY = y();
+            oldW = w();
+            oldH = h();
+            Fl::add_timeout(kTimeout, (Fl_Timeout_Handler) resize_cb, this);
+            return 1;
+        case FL_HIDE:
+            Fl::remove_timeout((Fl_Timeout_Handler) resize_cb, this);
+            return 1;
         case FL_UNFOCUS:
         case FL_FOCUS:
             return 1;
@@ -147,6 +218,11 @@ namespace mrv
             set_cursor(ex, ey);
             if (valid != Direction::kNone)
             {
+                oldX = newX = x();
+                oldY = newY = y();
+                oldW = newW = w();
+                oldH = newH = h();
+            
                 last_x = ex;
                 last_y = ey;
 
@@ -158,10 +234,6 @@ namespace mrv
         {
             int diffX = ex - last_x;
             int diffY = ey - last_y;
-            int newX  = x();
-            int newY  = y();
-            int newW  = w();
-            int newH  = h();
             if (valid == Direction::kRight)
             {
                 if (diffX == 0)
@@ -243,8 +315,11 @@ namespace mrv
                 }
             }
 
-            if (valid != Direction::kNone)
-                resize(newX, newY, newW, newH);
+            if (!use_timeout)
+            {
+                if (valid != Direction::kNone)
+                    resize(newX, newY, newW, newH);
+            }
             
             last_x = ex;
             last_y = ey;
@@ -278,6 +353,6 @@ namespace mrv
             return 1;
         }
         }
-        return Fl_Double_Window::handle(event);
+        return ret;
     }
 } // namespace mrv

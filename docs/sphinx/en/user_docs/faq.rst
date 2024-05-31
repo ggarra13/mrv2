@@ -34,6 +34,9 @@ All Platforms
 Linux
 =====
 
+All Window Systems
+------------------
+
 - My playback is too slow.  How can I improve it?	
 
   Check that you have:
@@ -71,6 +74,9 @@ Linux
 
 	  export FLTK_BACKEND=x11
 
+Wayland
+-------
+	  
 - I get warnings when I run the pre-compiled mrv2 on the console under Wayland
   on a modern distro like Ubuntu 22.04.4 LTS, like::
 
@@ -90,6 +96,17 @@ Linux
 
   Sadly, these cannot be avoided.  You will need to re-compile from source on
   your target platform or use mrv2 under XWayland or under X11.
+
+- While repositioning or rescaling floating panels under Wayland, I get clipping
+  redraws of the floating panel.
+
+  Unfortunately, this is a current limitation of FLTK 1.4.
+
+- When I have a long floating panel, like the Media Information Panel, I can
+  drag them out of the screen, and cannot repositiong them.
+
+  As far I know today, there's also no work-around.
+  
   
 Windows
 =======

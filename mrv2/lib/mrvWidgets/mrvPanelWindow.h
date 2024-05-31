@@ -33,7 +33,11 @@ namespace mrv
             kBottomLeft = kBottom | kLeft
         };
 
+        bool use_timeout = false;
+
         int last_x, last_y;
+        int oldX, oldY, oldW, oldH;
+        int newX, newY, newW, newH;
         Direction dir;
         int valid;
 
@@ -44,13 +48,14 @@ namespace mrv
         PanelWindow(int w, int h, const char* l = 0);
         PanelWindow(int x, int y, int w, int h, const char* l = 0);
 
-        // destructor
-        ~PanelWindow();
+        virtual ~PanelWindow();
 
-        int handle(int event) override;
-        void resize(int X, int Y, int W, int H) override;
+        int handle(int event) FL_OVERRIDE;
 
-        // methods for hiding/showing *all* the floating windows
+        void set_resize();
+
+
+        //! Methods for hiding/showing *all* the floating windows
         static void show_all(void);
         static void hide_all(void);
     };

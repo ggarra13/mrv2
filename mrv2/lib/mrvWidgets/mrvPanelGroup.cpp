@@ -2,7 +2,7 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-//#define DEBUG_CLIPPING 1
+#define DEBUG_CLIPPING 1
 
 #include <cassert>
 
@@ -114,24 +114,38 @@ namespace mrv
                       << W << "x" << H << std::endl;
 #endif
 
+            bool clippedX = false, clippedY = false;
+
             // Check clipping to the right and adjust X
             if (X < maxW && X + W > maxW)
+            {
+                clippedX = true;
                 X = maxW - W;
-
+            }
+            
             // Check clipping to the bottom and adjust Y
             if (Y < maxH && Y + H > maxH)
+            {
+                clippedY = true;
                 Y = maxH - H;
+            }
             
 #ifdef DEBUG_CLIPPING
             std::cerr << "first X,Y=" << X << "," << Y << std::endl;
 #endif
             // Check clipping to the right again
             if (X < maxW && X + W > maxW)
+            {
+                clippedX = true;
                 W = maxW - X;
-
+            }
+            
             // Check clipiping to the bottom again
             if (Y < maxH && Y + H > maxH)
+            {
+                clippedY = true;
                 H = maxH - Y;
+            }
             
 #ifdef DEBUG_CLIPPING
             std::cerr << "clamped WxH=" << W << "x" << H << std::endl;
@@ -139,15 +153,28 @@ namespace mrv
 
             // Check if clipping to the left and change X
             if (X < 0 && X + W >= 0)
+            {
+                clippedX = true;
                 X = 0;
-
+            }
+            
             // Check if clipping to the top and change Y
             if (Y < 0 && Y + H >= 0)
+            {
+                clippedY = true;
                 Y = 0;
+            }
+            
+#ifdef DEBUG_CLIPPING
+            std::cerr << "  non min WxH=" << W << "x" << H << std::endl;
+#endif
+            // Finally, check maximum sizes.  The clippedX/Y checks must
+            // be reversed.
+            if (clippedY)
+                W = std::min(W, maxW);
 
-            // Finally, check maximum sizes.
-            W = std::min(W, maxW);
-            H = std::min(H, maxH);
+            if (clippedX)
+                H = std::min(H, maxH);
 
 #ifdef DEBUG_CLIPPING
             std::cerr << "  final WxH=" << W << "x" << H << std::endl;
@@ -160,7 +187,7 @@ namespace mrv
         if (docked())
         { // undock the group into its own non-modal tool window
             int W = w() + kMargin * 2;
-            int H = h() + kMargin * 2;
+            int H = h() + kMargin;
             int X = Fl::event_x_root() - 10;
             int Y = Fl::event_y_root() - 35;
             docked(false); // toolgroup is no longer docked
@@ -205,7 +232,7 @@ namespace mrv
             dock->remove(this);
             tw->add(this);  // move the tool group into the floating window
             position(1, 1); // align group in floating window (needed)
-            size(W, H);     // resize to fit (needed)
+            size(W - kMargin, H - kMargin);     // resize to fit (needed)
             tw->resizable(this);
             tw->resize(X, Y, W, H);
             tw->show();     // show floating window
@@ -512,9 +539,9 @@ namespace mrv
         docked(false); // NOT docked
         tw->add(this); // move the tool group into the floating window
         this->position(1, 1);
-        this->size(W, H);
+        this->size(W - kMargin, H - kMargin);
         tw->resizable(this);
-        //tw->resize(X, Y, W, H);
+        tw->resize(X, Y, W, H);
         tw->show();
         // leave this group open when we leave the constructor...
         Fl_Group::current(pack);
