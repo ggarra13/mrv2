@@ -27,6 +27,9 @@ v1.1.9
   repositories and if that fails, read it from a tar.gz file.
 - Updated About->Update mrv2 to list the changes from the version in a text
   display.
+- Improved -pythonScript functionality.  It is now possible to change OCIO
+  settings, load clips and save out a new movie file with baked OCIO, all
+  from a Python script.
 
 
 v1.1.8

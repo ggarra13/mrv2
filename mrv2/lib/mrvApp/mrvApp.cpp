@@ -449,41 +449,6 @@ namespace mrv
             return;
         }
 
-#ifdef MRV2_PYBIND11
-        if (!p.options.pythonScript.empty())
-        {
-            if (!file::isReadable(p.options.pythonScript))
-            {
-                std::cerr << std::string(
-                                 string::Format(
-                                     _("Could not read python script '{0}'"))
-                                     .arg(p.options.pythonScript))
-                          << std::endl;
-                _exit = 1;
-                return;
-            }
-            std::cout << std::string(
-                             string::Format(_("Running python script '{0}'"))
-                                 .arg(p.options.pythonScript))
-                      << std::endl;
-            std::ifstream is(p.options.pythonScript);
-            std::stringstream s;
-            s << is.rdbuf();
-            try
-            {
-                py::exec(s.str());
-            }
-            catch (const std::exception& e)
-            {
-                std::cerr << _("Python Error: ") << std::endl
-                          << e.what() << std::endl;
-                _exit = 1;
-                return;
-            }
-            return;
-        }
-#endif
-
         // Initialize FLTK.
         Fl::scheme("gtk+");
         Fl::option(Fl::OPTION_VISIBLE_FOCUS, false);
@@ -557,6 +522,7 @@ namespace mrv
 
         Preferences prefs(p.options.resetSettings, p.options.resetHotkeys);
 
+        
         if (!OSXfiles.empty())
         {
             if (p.options.fileNames.empty())
@@ -583,7 +549,7 @@ namespace mrv
 #endif
 
         Preferences::run();
-
+        
 #ifdef MRV2_PYBIND11
         // Create Python's output window
         outputDisplay = new PythonOutput(0, 0, 400, 400);
@@ -715,6 +681,40 @@ namespace mrv
                 }
             });
 
+#ifdef MRV2_PYBIND11
+        if (!p.options.pythonScript.empty())
+        {
+            if (!file::isReadable(p.options.pythonScript))
+            {
+                std::cerr << std::string(
+                                 string::Format(
+                                     _("Could not read python script '{0}'"))
+                                     .arg(p.options.pythonScript))
+                          << std::endl;
+                _exit = 1;
+                return;
+            }
+            LOG_INFO(
+                std::string(string::Format(_("Running python script '{0}'"))
+                                .arg(p.options.pythonScript)));
+            std::ifstream is(p.options.pythonScript);
+            std::stringstream s;
+            s << is.rdbuf();
+            try
+            {
+                py::exec(s.str());
+            }
+            catch (const std::exception& e)
+            {
+                std::cerr << _("Python Error: ") << std::endl
+                          << e.what() << std::endl;
+                _exit = 1;
+                return;
+            }
+            return;
+        }
+#endif
+        
         // Open the input files.
         int savedDigits =
             p.settings->getValue<int>("Misc/MaxFileSequenceDigits");

@@ -13,6 +13,8 @@
 
 #include <tlGL/Init.h>
 #include <tlGL/Util.h>
+#include <tlGL/GLFWWindow.h>
+
 #include <tlTimelineGL/Render.h>
 
 #include "mrvCore/mrvLocale.h"
@@ -78,7 +80,7 @@ namespace mrv
 
         auto mute = player->isMuted();
         player->setMute(true);
-
+        
         auto context = ui->app->getContext();
 
         // Get I/O cache and store its size.
@@ -234,6 +236,7 @@ namespace mrv
                 }
             }
 
+
 #ifdef TLRENDER_FFMPEG
             const std::string& profile = getLabel(options.ffmpegProfile);
 
@@ -297,6 +300,7 @@ namespace mrv
             if (time::compareExact(videoTime, time::invalidTimeRange))
                 videoTime = audioTime;
 
+
             const size_t endAudioSampleCount =
                 endTime.rescaled_to(sampleRate).value();
             const size_t maxAudioSampleCount =
@@ -314,6 +318,7 @@ namespace mrv
             std::shared_ptr<timeline_gl::Render> render;
             image::Size renderSize;
             int layerId = ui->uiColorChannel->value();
+
 
             const SaveResolution resolution = options.resolution;
             if (hasVideo)
@@ -348,8 +353,22 @@ namespace mrv
                 }
             }
 
+
+            bool interactive = ui->uiView->visible_r();
+            std::shared_ptr<gl::GLFWWindow> window;
+            if (!interactive)
+            {
+                // Create the window.
+                window = gl::GLFWWindow::create(
+                    "bake",
+                    math::Size2i(1, 1),
+                    context,
+                    static_cast<int>(gl::GLFWWindowOptions::MakeCurrent));
+            }
+            
             // Create the renderer.
             render = timeline_gl::Render::create(context);
+
             offscreenBufferOptions.colorType = image::PixelType::RGBA_F32;
 
             // Create the writer.
@@ -361,6 +380,7 @@ namespace mrv
                     string::Format(_("{0}: Cannot open writer plugin."))
                         .arg(file));
             }
+
 
             int X = 0, Y = 0;
 
@@ -482,6 +502,7 @@ namespace mrv
                         image::PixelType::RGB_F32;
                 }
 
+
                 msg = tl::string::Format(_("Output info: {0} {1}"))
                           .arg(outputInfo.size)
                           .arg(outputInfo.pixelType);
@@ -567,7 +588,8 @@ namespace mrv
             }
 
             ProgressReport progress(ui->uiMain, startFrame, endFrame, title);
-            progress.show();
+            if (interactive)
+                progress.show();
 
             bool running = true;
 
@@ -601,8 +623,12 @@ namespace mrv
 
             if (hasVideo)
             {
-                view->make_current();
-                gl::initGLAD();
+                if (interactive)
+                {
+                    view->make_current();
+                    gl::initGLAD();
+                }
+                
                 buffer = gl::OffscreenBuffer::create(
                     offscreenBufferSize, offscreenBufferOptions);
             }
@@ -616,8 +642,16 @@ namespace mrv
                 context->tick();
 
                 // If progress window is closed, exit loop.
-                if (!progress.tick())
-                    break;
+                if (interactive)
+                {
+                    if(!progress.tick())
+                        break;
+                }
+                else
+                {
+                    msg = string::Format(_("Saving... {0}")).arg(currentTime);
+                    LOG_INFO(msg);
+                }
 
                 if (hasAudio)
                 {
@@ -735,16 +769,20 @@ namespace mrv
                         }
 
                         // This refreshes the view window
-                        view->make_current();
-                        view->currentVideoCallback({videoData}, player);
-                        view->flush();
-
+                        if (interactive)
+                        {
+                            view->make_current();
+                            view->currentVideoCallback({videoData}, player);
+                            view->flush();
+                        }
+                        
                         // back to conventional pixel operation
                         glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
                         // CHECK_GL;
                         glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
 
-                        gl::initGLAD();
+                        if (interactive)
+                            gl::initGLAD();
 
                         // Render the video to an offscreen buffer.
                         gl::OffscreenBufferBinding binding(buffer);
