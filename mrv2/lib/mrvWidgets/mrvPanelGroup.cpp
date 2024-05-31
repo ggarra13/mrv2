@@ -2,7 +2,7 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#define DEBUG_CLIPPING 1
+//#define DEBUG_CLIPPING 1
 
 #include <cassert>
 
