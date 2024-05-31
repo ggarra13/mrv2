@@ -30,6 +30,7 @@ v1.1.9
 - Improved -pythonScript functionality.  It is now possible to change OCIO
   settings, load clips and save out a new movie file with baked OCIO, all
   from a Python script.
+- Consolidated Python commands to all use "filename" instead of "file".
 
 
 v1.1.8

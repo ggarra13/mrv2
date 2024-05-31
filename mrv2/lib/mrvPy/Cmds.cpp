@@ -492,18 +492,19 @@ Used to run main commands and get and set the display, image, compare, LUT optio
 
     cmds.def(
         "save", &mrv2::cmd::save,
-        _("Save a movie or sequence from the front layer."), py::arg("file"),
+        _("Save a movie or sequence from the front layer."),
+        py::arg("filename"),
         py::arg("options") = mrv::SaveOptions());
 
     cmds.def(
         "saveOTIO", &mrv2::cmd::saveOTIO,
         _("Save an .otio file from the current selected image."),
-        py::arg("file"));
+        py::arg("filename"));
 
 #ifdef MRV2_PDF
     cmds.def(
         "savePDF", &mrv2::cmd::savePDF,
         _("Save a PDF document with all annotations and notes."),
-        py::arg("file"));
+        py::arg("filename"));
 #endif
 }
