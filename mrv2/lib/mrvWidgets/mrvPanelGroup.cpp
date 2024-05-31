@@ -2,7 +2,6 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-
 //#define DEBUG_CLIPPING 1
 
 #include <cassert>
@@ -111,31 +110,42 @@ namespace mrv
 
 #ifdef DEBUG_CLIPPING
             std::cerr << "max     WxH=" << maxW << "x" << maxH << std::endl;
+            std::cerr << "orig =" << X << " " << Y << " "
+                      << W << "x" << H << std::endl;
 #endif
 
+            // Check clipping to the right and adjust X
             if (X < maxW && X + W > maxW)
                 X = maxW - W;
+
+            // Check clipping to the bottom and adjust Y
             if (Y < maxH && Y + H > maxH)
                 Y = maxH - H;
             
 #ifdef DEBUG_CLIPPING
             std::cerr << "first X,Y=" << X << "," << Y << std::endl;
 #endif
-            
+            // Check clipping to the right again
             if (X < maxW && X + W > maxW)
                 W = maxW - X;
+
+            // Check clipiping to the bottom again
             if (Y < maxH && Y + H > maxH)
                 H = maxH - Y;
             
 #ifdef DEBUG_CLIPPING
             std::cerr << "clamped WxH=" << W << "x" << H << std::endl;
 #endif
-            
+
+            // Check if clipping to the left and change X
             if (X < 0 && X + W >= 0)
                 X = 0;
+
+            // Check if clipping to the top and change Y
             if (Y < 0 && Y + H >= 0)
                 Y = 0;
 
+            // Finally, check maximum sizes.
             W = std::min(W, maxW);
             H = std::min(H, maxH);
 
@@ -303,6 +313,18 @@ namespace mrv
         assert(h() > 0);
         layout();
         assert(h() > 0);
+        if (!docked())
+        {
+            int X = tw->x();
+            int Y = tw->y();
+            int W = tw->w();
+            int H = tw->h();
+        
+            avoid_clipping(X, Y, W, H);
+            tw->resizable(0);
+            tw->resize(X, Y, W + kMargin * 2, H + kMargin);
+            tw->resizable(this);
+        }
     }
 
     void PanelGroup::layout()
