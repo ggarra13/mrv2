@@ -90,37 +90,6 @@ namespace mrv
                 H = std_any_empty(value) ? H : std_any_cast<int>(value);
                 if (H == 0)
                     H = 20 + 30;
-
-                if (desktop::Wayland())
-                {
-                    Fl_Window* top = dock->top_window();
-                    int maxW = top->w() - kMargin * 2;
-                    int maxH = top->h() - kMargin;
-                    std::cerr << "C max     WxH=" << maxW << "x" << maxH << std::endl;
-
-                    if (X < maxW && X + W > maxW)
-                        W = maxW - X;
-                    if (Y < maxH && Y + H > maxH)
-                        H = maxH - Y;
-                    std::cerr << "C first   WxH=" << W << "x" << H << std::endl;
-            
-                    if (X < maxW && X + W > maxW)
-                        X = 0;
-                    if (Y < maxH && Y + H > maxH)
-                        Y = 0;
-            
-                    std::cerr << "C clamped X,Y=" << X << "," << Y << std::endl;
-            
-                    if (X < 0)
-                        X = 0;
-                    if (Y < 0)
-                        Y = 0;
-
-                    W = W > maxW ? maxW : W;
-                    H = H > maxH ? maxH : H;
-
-                    std::cerr << "C clamped WxH=" << W << "x" << H << std::endl;
-                }
             }
             else
             {
