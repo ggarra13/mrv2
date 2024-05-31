@@ -103,14 +103,23 @@ namespace mrv
         if (desktop::Wayland())
         {
             Fl_Window* top = dock->top_window();
-            int maxW = top->w();
-            int maxH = top->h();
+            int maxW = top->w() - kMargin * 2;
+            int maxH = top->h() - kMargin;
+            std::cerr << "max     WxH=" << maxW << "x" << maxH << std::endl;
 
             if (X < maxW && X + W > maxW)
-                X = maxW - W;
+                W = maxW - X;
             if (Y < maxH && Y + H > maxH)
-                Y = maxH - H;
-
+                H = maxH - Y;
+            std::cerr << "first   WxH=" << W << "x" << H << std::endl;
+            
+            if (X < maxW && X + W > maxW)
+                X = 0;
+            if (Y < maxH && Y + H > maxH)
+                Y = 0;
+            
+            std::cerr << "clamped X,Y=" << X << "," << Y << std::endl;
+            
             if (X < 0)
                 X = 0;
             if (Y < 0)
@@ -118,6 +127,8 @@ namespace mrv
 
             W = W > maxW ? maxW : W;
             H = H > maxH ? maxH : H;
+
+            std::cerr << "clamped WxH=" << W << "x" << H << std::endl;
         }
     }
     
@@ -273,7 +284,10 @@ namespace mrv
     void PanelGroup::end()
     {
         assert(h() > 0);
+        std::cerr << "end pack " << pack->w() << "x" << pack->h() << std::endl;
         pack->end();
+        std::cerr << "end pack->end "
+                  << pack->w() << "x" << pack->h() << std::endl;
         assert(h() > 0);
         Fl_Group::end();
         assert(h() > 0);
@@ -314,7 +328,20 @@ namespace mrv
             if (twYH > maxYH)
                 H = maxH - kMargin;
 
+            Fl_Window* top = dock->top_window();
+            int topW = top->w();
+            int topH = top->h();
+            std::cerr << "layout WxH=" << W << "x" << H << std::endl;
+                    
+            tw->resizable(0);
             tw->size(W + kMargin * 2, H + kMargin);
+            tw->resizable(this);
+            std::cerr << "layout  tw=" << tw->w() << "x" << tw->h()
+                      << std::endl;
+            std::cerr << "layout top=" << topW << "x" << topH
+                      << std::endl;
+            assert(tw->w() <= topW);
+            assert(tw->h() <= topH);
 
             H = tw->h() - GH - DH;
 
@@ -450,9 +477,6 @@ namespace mrv
         set_dock(dk); // define where the toolgroup is allowed to dock
 
         // Check if it would clip (if so, offset on X/Y).
-        W += kMargin * 2;
-        H += kMargin;
-        
         avoid_clipping(X, Y, W, H);
         
         // create a floating toolbar window
@@ -463,7 +487,9 @@ namespace mrv
         docked(false); // NOT docked
         tw->add(this); // move the tool group into the floating window
         this->position(1, 1);
+        this->size(W, H);
         tw->resizable(this);
+        //tw->resize(X, Y, W, H);
         tw->show();
         // leave this group open when we leave the constructor...
         Fl_Group::current(pack);
