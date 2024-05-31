@@ -4,6 +4,8 @@
 
 #include "mrvCore/mrvHotkey.h"
 
+#include "mrvWidgets/mrvPanelWindow.h"
+
 #include "mrvFl/mrvSession.h"
 
 #include "mrvMainWindow.h"
@@ -189,7 +191,17 @@ namespace mrv
     //! Resize override to handle tile
     void MainWindow::resize(int X, int Y, int W, int H)
     {
+        if (desktop::Wayland())
+        {
+            PanelWindow::no_resizable_all();
+        }
+        
         DropWindow::resize(X, Y, W, H);
+        
+        if (desktop::Wayland())
+        {
+            PanelWindow::resizable_all();
+        }
     }
 
     void MainWindow::update_title_bar()

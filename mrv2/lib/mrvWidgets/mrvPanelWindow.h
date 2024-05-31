@@ -54,10 +54,13 @@ namespace mrv
 
         void set_resize();
 
+        //! Methods used to start/stop resizing on all panel windows
+        static void no_resizable_all();
+        static void resizable_all();
 
         //! Methods for hiding/showing *all* the floating windows
-        static void show_all(void);
-        static void hide_all(void);
+        static void show_all();
+        static void hide_all();
     };
 
 } // namespace mrv

@@ -127,7 +127,23 @@ namespace mrv
         active_list.push_back(this);
     }
 
-    // show all the active floating windows
+    void PanelWindow::no_resizable_all(void)
+    {
+        for (auto window : active_list)
+        {
+            window->resizable(0);
+        }
+    }
+
+    void PanelWindow::resizable_all(void)
+    {
+        for (auto window : active_list)
+        {
+            window->resizable(window);
+        }
+    }
+
+    
     void PanelWindow::show_all(void)
     {
         for (auto window : active_list)
