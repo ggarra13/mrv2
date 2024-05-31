@@ -2,6 +2,9 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+
+//#define DEBUG_CLIPPING 1
+
 #include <cassert>
 
 #include <FL/Fl.H>
@@ -105,30 +108,40 @@ namespace mrv
             Fl_Window* top = dock->top_window();
             int maxW = top->w() - kMargin * 2;
             int maxH = top->h() - kMargin;
-            std::cerr << "max     WxH=" << maxW << "x" << maxH << std::endl;
 
+#ifdef DEBUG_CLIPPING
+            std::cerr << "max     WxH=" << maxW << "x" << maxH << std::endl;
+#endif
+
+            if (X < maxW && X + W > maxW)
+                X = maxW - W;
+            if (Y < maxH && Y + H > maxH)
+                Y = maxH - H;
+            
+#ifdef DEBUG_CLIPPING
+            std::cerr << "first X,Y=" << X << "," << Y << std::endl;
+#endif
+            
             if (X < maxW && X + W > maxW)
                 W = maxW - X;
             if (Y < maxH && Y + H > maxH)
                 H = maxH - Y;
-            std::cerr << "first   WxH=" << W << "x" << H << std::endl;
             
-            if (X < maxW && X + W > maxW)
-                X = 0;
-            if (Y < maxH && Y + H > maxH)
-                Y = 0;
-            
-            std::cerr << "clamped X,Y=" << X << "," << Y << std::endl;
-            
-            if (X < 0)
-                X = 0;
-            if (Y < 0)
-                Y = 0;
-
-            W = W > maxW ? maxW : W;
-            H = H > maxH ? maxH : H;
-
+#ifdef DEBUG_CLIPPING
             std::cerr << "clamped WxH=" << W << "x" << H << std::endl;
+#endif
+            
+            if (X < 0 && X + W >= 0)
+                X = 0;
+            if (Y < 0 && Y + H >= 0)
+                Y = 0;
+
+            W = std::min(W, maxW);
+            H = std::min(H, maxH);
+
+#ifdef DEBUG_CLIPPING
+            std::cerr << "  final WxH=" << W << "x" << H << std::endl;
+#endif
         }
     }
     
@@ -284,10 +297,7 @@ namespace mrv
     void PanelGroup::end()
     {
         assert(h() > 0);
-        std::cerr << "end pack " << pack->w() << "x" << pack->h() << std::endl;
         pack->end();
-        std::cerr << "end pack->end "
-                  << pack->w() << "x" << pack->h() << std::endl;
         assert(h() > 0);
         Fl_Group::end();
         assert(h() > 0);
@@ -331,17 +341,10 @@ namespace mrv
             Fl_Window* top = dock->top_window();
             int topW = top->w();
             int topH = top->h();
-            std::cerr << "layout WxH=" << W << "x" << H << std::endl;
-                    
+
             tw->resizable(0);
             tw->size(W + kMargin * 2, H + kMargin);
             tw->resizable(this);
-            std::cerr << "layout  tw=" << tw->w() << "x" << tw->h()
-                      << std::endl;
-            std::cerr << "layout top=" << topW << "x" << topH
-                      << std::endl;
-            assert(tw->w() <= topW);
-            assert(tw->h() <= topH);
 
             H = tw->h() - GH - DH;
 
@@ -349,7 +352,7 @@ namespace mrv
                 H = maxH;
 
             scroll->size(pack->w(), H);
-            scroll->init_sizes(); // needed? to reset scroll size init size
+            scroll->init_sizes(); // needed to reset scroll size init size
         }
     }
 
