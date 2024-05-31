@@ -90,6 +90,38 @@ namespace mrv
                 H = std_any_empty(value) ? H : std_any_cast<int>(value);
                 if (H == 0)
                     H = 20 + 30;
+
+                // On Wayland, since we are using local coordinates that will
+                // shift if the window is resized, we calculate the percentage
+                // of where the panel was with the saved width/height and
+                // calculate a percentage for the current main window's width
+                // and height.
+                if (desktop::Wayland())
+                {
+                    // Get current main window's witdh/height values.
+                    int CMW = p.ui->uiMain->w();
+                    int CMH = p.ui->uiMain->h();
+
+                    // Get saved main windows' width/heigth values.
+                    value =
+                        settings->getValue<std::any>("gui/Main/Window/Width");
+                    int MW =
+                        std_any_empty(value) ? CMW : std_any_cast<int>(value);
+
+                    value =
+                        settings->getValue<std::any>("gui/Main/Window/Height");
+                    int MH =
+                        std_any_empty(value) ? CMH : std_any_cast<int>(value);
+
+                    float pctW = static_cast<float>(CMW) / MW;
+                    float pctH = static_cast<float>(CMH) / MH;
+                    
+                    if (X < 0 || X > CMW)                  
+                        X *= pctW;
+
+                    if (Y < 0 || Y > CMH)
+                        Y *= pctH;
+                }
             }
             else
             {

@@ -995,6 +995,12 @@ namespace mrv
 
         locale::SetAndRestore saved;
 
+        int W = ui->uiMain->w();
+        int H = ui->uiMain->h();
+
+        settings->setValue("gui/Main/Window/Width", W);
+        settings->setValue("gui/Main/Window/Height", H);
+        
         int visible = 0;
         if (uiPrefs->uiMain->visible())
             visible = 1;
