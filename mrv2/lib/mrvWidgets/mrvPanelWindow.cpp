@@ -22,8 +22,6 @@
 namespace
 {
     const float kTimeout = 0.025;
-    const int kMinWidth = 150;
-    const int kMinHeight = 150;
 } // namespace
 
 
@@ -100,16 +98,10 @@ namespace mrv
             return;
         }
         
-        int screen = this->screen_num();
-        int minX, minY, maxW, maxH;
-        Fl::screen_work_area(minX, minY, maxW, maxH);
-
-        if ((newX + newW > minX + maxW) ||
-            (newY + newH > minY + maxH))
-        {
-            //std::cerr << "out of screen" << std::endl;
-            return;
-        }
+        if (newW < kMinWidth)
+            newW = kMinWidth;
+        if (newH < kMinHeight)
+            newH = kMinHeight;
         
         resize(newX, newY, newW, newH);
         oldX = newX;
@@ -254,87 +246,72 @@ namespace mrv
             {
                 if (diffX == 0)
                     return 0;
-                if (w() + diffX > kMinWidth)
-                    newW += diffX;
+                newW += diffX;
             }
             else if (valid == Direction::kLeft)
             {
                 if (diffX == 0)
                     return 0;
-                if (w() - diffX > kMinWidth)
-                {
-                    newX += diffX;
-                    newW -= diffX;
-                }
+                newX += diffX;
+                newW -= diffX;
             }
             else if (valid == Direction::kBottom)
             {
                 if (diffY == 0)
                     return 0;
-                if (h() + diffY > kMinHeight)
-                {
-                    newH += diffY;
-                }
+                newH += diffY;
             }
             else if (valid == Direction::kBottomRight)
             {
                 if (diffY == 0 && diffX == 0)
                     return 0;
-                if (h() + diffY > kMinHeight && w() + diffX > kMinWidth)
-                {
-                    newW += diffX;
-                    newH += diffY;
-                }
+                newW += diffX;
+                newH += diffY;
             }
             else if (valid == Direction::kBottomLeft)
             {
                 if (diffY == 0 && diffX == 0)
                     return 0;
-                if (h() + diffY > kMinHeight && w() - diffX > kMinWidth)
-                {
-                    newX += diffX;
-                    newW -= diffX;
-                    newH += diffY;
-                }
+                newX += diffX;
+                newW -= diffX;
+                newH += diffY;
             }
             else if (valid == Direction::kTop)
             {
                 if (diffY == 0)
                     return 0;
-                if (h() - diffY > kMinHeight)
-                {
-                    newY += diffY;
-                    newH -= diffY;
-                }
+                newY += diffY;
+                newH -= diffY;
             }
             else if (valid == Direction::kTopRight)
             {
                 if (diffY == 0 && diffX == 0)
                     return 0;
-                if (h() - diffY > kMinHeight && w() + diffX > kMinWidth)
-                {
-                    newY += diffY;
-                    newW += diffX;
-                    newH -= diffY;
-                }
+                newY += diffY;
+                newW += diffX;
+                newH -= diffY;
             }
             else if (valid == Direction::kTopLeft)
             {
                 if (diffY == 0 && diffX == 0)
                     return 0;
-                if (h() - diffY > kMinHeight && w() - diffX > kMinWidth)
-                {
-                    newX += diffX;
-                    newY += diffY;
-                    newW -= diffX;
-                    newH -= diffY;
-                }
+                newX += diffX;
+                newY += diffY;
+                newW -= diffX;
+                newH -= diffY;
             }
 
             if (!use_timeout)
             {
                 if (valid != Direction::kNone)
+                {
+                    if (newW < kMinWidth)
+                        newW = kMinWidth;
+                    if (newH < kMinHeight)
+                        newH = kMinHeight;
+                    
                     resize(newX, newY, newW, newH);
+                }
             }
             
             last_x = ex;

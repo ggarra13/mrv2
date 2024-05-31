@@ -186,7 +186,7 @@ namespace mrv
     {
         if (docked())
         { // undock the group into its own non-modal tool window
-            int W = w() + kMargin * 2;
+            int W = w() + kMargin;
             int H = h() + kMargin;
             int X = Fl::event_x_root() - 10;
             int Y = Fl::event_y_root() - 35;
@@ -224,7 +224,7 @@ namespace mrv
             assert(H != 0);
 
             avoid_clipping(X, Y, W, H);
-            
+
             set_Fl_Group();
 
             tw = new PanelWindow(X, Y, W, H);
@@ -349,7 +349,7 @@ namespace mrv
         
             avoid_clipping(X, Y, W, H);
             tw->resizable(0);
-            tw->resize(X, Y, W + kMargin * 2, H + kMargin);
+            tw->resize(X, Y, W + kMargin, H + kMargin);
             tw->resizable(this);
         }
     }
@@ -387,12 +387,8 @@ namespace mrv
             if (twYH > maxYH)
                 H = maxH - kMargin;
 
-            Fl_Window* top = dock->top_window();
-            int topW = top->w();
-            int topH = top->h();
-
             tw->resizable(0);
-            tw->size(W + kMargin * 2, H + kMargin);
+            tw->size(W + kMargin, H + kMargin);
             tw->resizable(this);
 
             H = tw->h() - GH - DH;
@@ -540,8 +536,9 @@ namespace mrv
         tw->add(this); // move the tool group into the floating window
         this->position(1, 1);
         this->size(W - kMargin, H - kMargin);
-        tw->resizable(this);
+        tw->resizable(0);
         tw->resize(X, Y, W, H);
+        tw->resizable(this);
         tw->show();
         // leave this group open when we leave the constructor...
         Fl_Group::current(pack);

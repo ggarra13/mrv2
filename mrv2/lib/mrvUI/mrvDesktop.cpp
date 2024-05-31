@@ -2,15 +2,6 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <errno.h> // errno
-#include <cstring> // strerror
-
-#include "mrvCore/mrvHome.h"
-
-#include "mrvUI/mrvUtil.h"
-
-#include "mrvFl/mrvIO.h"
-
 #include <FL/Fl.H>
 #include <FL/platform.H>
 

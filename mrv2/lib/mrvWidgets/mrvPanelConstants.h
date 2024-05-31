@@ -1,13 +1,5 @@
 #pragma once
 
-// Defines
-
-//! Set this to under X11 or XWayland create the Panel Windows as children
-//! of the Drop Window (top_window()).
-//! Under Wayland, they are always created as parent of the Drop Window.
-//
-//#define PARENT_TO_TOP_WINDOW 1
-
 // On macOS, the buttons go to the left of the window.
 #ifdef __APPLE__
 #    define LEFT_BUTTONS 1
@@ -17,8 +9,19 @@
 // Constants used in the Window/Panels
 namespace
 {
+    // Constant used to avoid Wayland bug.
     const int kMaxMove = 640;
+
+    // Margins of Panel Windows
     const int kMargin = 3;
+
+    // Width of Panel Buttons
     const int kButtonW = 20;
+
+    // Window's title bar size
     const int kTitleBar = 20;
+
+    // Windows' minimum sizes
+    const int kMinWidth = 200;
+    const int kMinHeight = 121;
 }

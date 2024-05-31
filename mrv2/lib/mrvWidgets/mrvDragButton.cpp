@@ -158,7 +158,8 @@ namespace mrv
                 }
                 else
                 {
-                    auto tw = tg->get_window();
+                    PanelWindow* tw = tg->get_window();
+                    assert(tw);
                     tw->position(posX, posY);
                 }
                 ret = 1;
