@@ -254,7 +254,6 @@ namespace mrv
                     model->setFilesPanelOptions(o);
                 });
             bg->end();
-            g->layout();
 
             g->end();
         }

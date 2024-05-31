@@ -2,6 +2,9 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+
+//#define DEBUG_CLIPPING 1
+
 #include <cassert>
 
 #include <FL/Fl.H>
@@ -103,21 +106,42 @@ namespace mrv
         if (desktop::Wayland())
         {
             Fl_Window* top = dock->top_window();
-            int maxW = top->w();
-            int maxH = top->h();
+            int maxW = top->w() - kMargin * 2;
+            int maxH = top->h() - kMargin;
+
+#ifdef DEBUG_CLIPPING
+            std::cerr << "max     WxH=" << maxW << "x" << maxH << std::endl;
+#endif
 
             if (X < maxW && X + W > maxW)
                 X = maxW - W;
             if (Y < maxH && Y + H > maxH)
                 Y = maxH - H;
-
-            if (X < 0)
+            
+#ifdef DEBUG_CLIPPING
+            std::cerr << "first X,Y=" << X << "," << Y << std::endl;
+#endif
+            
+            if (X < maxW && X + W > maxW)
+                W = maxW - X;
+            if (Y < maxH && Y + H > maxH)
+                H = maxH - Y;
+            
+#ifdef DEBUG_CLIPPING
+            std::cerr << "clamped WxH=" << W << "x" << H << std::endl;
+#endif
+            
+            if (X < 0 && X + W >= 0)
                 X = 0;
-            if (Y < 0)
+            if (Y < 0 && Y + H >= 0)
                 Y = 0;
 
-            W = W > maxW ? maxW : W;
-            H = H > maxH ? maxH : H;
+            W = std::min(W, maxW);
+            H = std::min(H, maxH);
+
+#ifdef DEBUG_CLIPPING
+            std::cerr << "  final WxH=" << W << "x" << H << std::endl;
+#endif
         }
     }
     
@@ -314,7 +338,13 @@ namespace mrv
             if (twYH > maxYH)
                 H = maxH - kMargin;
 
+            Fl_Window* top = dock->top_window();
+            int topW = top->w();
+            int topH = top->h();
+
+            tw->resizable(0);
             tw->size(W + kMargin * 2, H + kMargin);
+            tw->resizable(this);
 
             H = tw->h() - GH - DH;
 
@@ -322,7 +352,7 @@ namespace mrv
                 H = maxH;
 
             scroll->size(pack->w(), H);
-            scroll->init_sizes(); // needed? to reset scroll size init size
+            scroll->init_sizes(); // needed to reset scroll size init size
         }
     }
 
@@ -450,9 +480,6 @@ namespace mrv
         set_dock(dk); // define where the toolgroup is allowed to dock
 
         // Check if it would clip (if so, offset on X/Y).
-        W += kMargin * 2;
-        H += kMargin;
-        
         avoid_clipping(X, Y, W, H);
         
         // create a floating toolbar window
@@ -463,7 +490,9 @@ namespace mrv
         docked(false); // NOT docked
         tw->add(this); // move the tool group into the floating window
         this->position(1, 1);
+        this->size(W, H);
         tw->resizable(this);
+        //tw->resize(X, Y, W, H);
         tw->show();
         // leave this group open when we leave the constructor...
         Fl_Group::current(pack);
