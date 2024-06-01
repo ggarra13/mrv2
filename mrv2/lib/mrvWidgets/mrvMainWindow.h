@@ -55,11 +55,15 @@ namespace mrv
         //! Resize override to handle tile.
         void resize(int X, int Y, int W, int H) FL_OVERRIDE;
 
+        //! Return whether we are resizing under wayland.
+        bool is_wayland_resize() const { return wayland_resize; }
+        
     protected:
 #ifdef __APPLE__
         IOPMAssertionID assertionID;
         IOReturn success;
 #endif
+        bool wayland_resize = false;
         bool on_top = false;
     };
 

@@ -19,6 +19,8 @@
 #include "mrvApp/mrvSettingsObject.h"
 #include "mrvApp/mrvApp.h"
 
+#include "mrViewer.h"
+
 namespace
 {
     const float kTimeout = 0.025;
@@ -119,23 +121,16 @@ namespace mrv
         active_list.push_back(this);
     }
 
-    void PanelWindow::no_resizable_all(void)
+    void PanelWindow::resize(int X, int Y, int W, int H)
     {
-        for (auto window : active_list)
+        if (App::ui->uiMain->is_wayland_resize())
         {
-            window->resizable(0);
+            W = w();
+            H = h();
         }
+        Fl_Double_Window::resize(X, Y, W, H);
     }
-
-    void PanelWindow::resizable_all(void)
-    {
-        for (auto window : active_list)
-        {
-            window->resizable(window);
-        }
-    }
-
-    
+        
     void PanelWindow::show_all(void)
     {
         for (auto window : active_list)

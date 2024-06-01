@@ -12,8 +12,6 @@
 
 #include "mrvPreferencesUI.h"
 
-#include "mrvUI/mrvDesktop.h"
-
 #include <FL/platform.H>
 #include <FL/fl_utf8.h>
 #include <FL/Enumerations.H>
@@ -191,17 +189,9 @@ namespace mrv
     //! Resize override to handle tile
     void MainWindow::resize(int X, int Y, int W, int H)
     {
-        if (desktop::Wayland())
-        {
-            PanelWindow::no_resizable_all();
-        }
-        
+        wayland_resize = true;
         DropWindow::resize(X, Y, W, H);
-        
-        if (desktop::Wayland())
-        {
-            PanelWindow::resizable_all();
-        }
+        wayland_resize = false;
     }
 
     void MainWindow::update_title_bar()

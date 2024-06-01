@@ -51,12 +51,9 @@ namespace mrv
         virtual ~PanelWindow();
 
         int handle(int event) FL_OVERRIDE;
+        void resize(int X, int Y, int W, int H) FL_OVERRIDE;
 
         void set_resize();
-
-        //! Methods used to start/stop resizing on all panel windows
-        static void no_resizable_all();
-        static void resizable_all();
 
         //! Methods for hiding/showing *all* the floating windows
         static void show_all();
