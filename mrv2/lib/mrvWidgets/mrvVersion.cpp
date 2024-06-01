@@ -954,9 +954,6 @@ namespace mrv
           << "(C) 2008-Present Jean-loup Gailly and Mark Adler" << endl
           << endl
           << endl;
-        o << "A big thank you goes to Greg Ercolano who helped with" << endl
-          << "the fltk1.4 porting and with the color schemes.";
-
         std::string line;
         while (std::getline(o, line, '\n'))
         {
@@ -1041,4 +1038,102 @@ namespace mrv
         return o.str();
     }
 
+
+    void thanks_message(mrv::TextBrowser* b)
+    {
+        using namespace std;
+        
+        stringstream o;
+
+        o << _("This is a list of contributors to the mrv2 project:")
+          << endl
+          << endl
+          << R"THANKS(
+Core
+----
+Darby Johnston                                (original tlRender library) 
+Gonzalo Garramuño                             (mrv2 and rewrite of mrViewer)
+Sam Richards                                  (FFmpeg encoding guidelines)
+
+
+FLTK
+----
+Albrecht Schlosser                            (FLTK 1.4 developer, Windows,
+                                               macOS and build system)
+Bill Spitzak                                  (FLTK creator)
+David Gibson                                  (FLTK developer)
+F. Constantini                                (FLTK developer)
+Greg Ercolano                                 (FLTK 1.4 contributor,
+                                               mrv2 color schemes,
+                                               CollapsibleGroup widget,
+                                               porting from fltk2.0 to 1.4)
+Ian MacArthur                                 (FLTK contributor, original
+                                               docking code)
+Manolo Guoy                                   (FLTK 1,4 developer, macOS and
+                                               Wayland)
+Matthias Melcher                              (FLTK 1.4 developer, macOS,
+                                               fluid and FlmmAColorChooser)
+Michael Sweet                                 (FLTK developer)
+MoAlyousef                                    (FLTK contributor, C++ source
+                                               for lambda callbacks)
+
+Ideas
+-----
+xStudio developers                            (idea for Sphinx for documenting
+                                               and laser annotation)
+OpenRV  developers                            (idea for reverse playback)
+
+Beta testers
+------------
+360highdynamicrangehdr                        (LibRaw Idea,
+                                               OpenEXR improvements)
+arfx                                          (PDF debugging, Wipe debugging,
+                                               Color Palette improvements)
+Aziz9946                                      (Audio improvements)
+BigRoy                                        (Prores4444 debugging,
+                                               UI improvement ideas,
+                                               Python Debugging)
+bouncyferret                                  (Tablet debugging)
+Christoph Lohr                                (Color Pipeline Debugging,
+                                               UI improvements,
+                                               MKV Support idea)
+danbradham                                    (UI debugging)
+darkvertext                                   (Environment mapping support)
+dchabashvili                                  (Annotations exporting to movs)
+dynestudio                                    (OCIO pipeline debugging)
+efleurant                                     (Python script debugging)
+gerroon                                       (Saving suggestion)
+Howard Lightstone                             (Windows 10 checks)
+Jose Quinteiro                                (Windows 10 checks)
+jrsndl                                        (Versioning debugging)
+jtomori                                       (OCIO pipeline ideas)
+kursad-k                                      (Windows 11, Positioning)
+lucky3d                                       (Windows 10, Background Panel)
+mantissa-                                     (Sequences misdetection)
+mhgandvisions                                 (Session debugging)
+MMmaoamao                                     (AV1 Suggestion)
+mzigaib                                       (Sequences misdetection)
+Olympusmonsgames                              (Windows Build Debugging)
+p2or                                          (MacOS debugging,
+                                               NTFS permissions bug,
+                                               Save Single Frame Idea)
+piotrnikov                                    (MacOS M3, Playlist)
+pxt777                                        (Thumbnails debugging)
+qsek                                          (Drawing tools improvements)
+Rennatt                                       (Color Pipeline Debugging)
+Roy Nieterau                                  (Python API)
+SteffenDuenner                                (Linux Build Debugging)
+throb                                         (Caching improvements)
+Todica Ionut                                  (UI improvements)
+Tomycj                                        (UI improvements)
+xiaopeng12138                                 (UTF-8 Debugging)
+
+)THANKS";
+        
+        std::string line;
+        while (std::getline(o, line, '\n'))
+        {
+            b->add(line.c_str());
+        }
+    }
 } // namespace mrv

@@ -1611,15 +1611,6 @@ msgstr ""
 msgid "Return the version and exit."
 msgstr "Return the version and exit."
 
-msgid "Could not read python script '{0}'"
-msgstr "Could not read python script '{0}'"
-
-msgid "Running python script '{0}'"
-msgstr "Running python script '{0}'"
-
-msgid "Python Error: "
-msgstr "Python Error: "
-
 msgid "Cannot create window"
 msgstr "Cannot create window"
 
@@ -1646,6 +1637,15 @@ msgstr "Running from "
 
 msgid "Could not initialize NDI"
 msgstr "Could not initialize NDI"
+
+msgid "Could not read python script '{0}'"
+msgstr "Could not read python script '{0}'"
+
+msgid "Running python script '{0}'"
+msgstr "Running python script '{0}'"
+
+msgid "Python Error: "
+msgstr "Python Error: "
 
 msgid "Filename '{0}' does not exist or does not have read permissions."
 msgstr "Filename '{0}' does not exist or does not have read permissions."
@@ -2889,6 +2889,9 @@ msgstr "{0}: Invalid OpenGL format and type"
 msgid "OpenGL info: {0}"
 msgstr "OpenGL info: {0}"
 
+msgid "Saving... {0}"
+msgstr "Saving... {0}."
+
 msgid "Empty video data at time {0}."
 msgstr "Empty video data at time {0}."
 
@@ -3999,6 +4002,9 @@ msgstr "Version:\t"
 
 msgid "Max. Texture Size:\t"
 msgstr "Max. Texture Size:\t"
+
+msgid "This is a list of contributors to the mrv2 project:"
+msgstr "This is a list of contributors to the mrv2 project:"
 
 msgid "Mark an area in the image with SHIFT + the left mouse button"
 msgstr "Mark an area in the image with SHIFT + the left mouse button"
@@ -6080,6 +6086,9 @@ msgstr "Subtitles"
 
 msgid "Protocols"
 msgstr "Protocols"
+
+msgid "Thanks"
+msgstr "Thanks"
 
 msgid "Hotkey for..."
 msgstr "Hotkey for..."
