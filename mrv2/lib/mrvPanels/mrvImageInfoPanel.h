@@ -66,7 +66,6 @@ namespace mrv
 
             Pack* get_pack() const { return g->get_pack(); };
 
-            void set_tabs() const;
 
         protected:
             Fl_Color get_title_color();
@@ -75,6 +74,7 @@ namespace mrv
             void clear_callback_data();
 
             void hide_tabs();
+            void save_tabs() const;
 
             static void enum_cb(mrv::PopupMenu* w, ImageInfoPanel* v);
 

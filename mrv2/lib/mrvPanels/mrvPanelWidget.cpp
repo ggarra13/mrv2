@@ -163,27 +163,18 @@ namespace mrv
             TLRENDER_P();
             g->end();
 
-            // Adjust dock scrollbars for this new element
-            p.ui->uiDock->pack->layout();
-            p.ui->uiResizableBar->HandleDrag(0);
-
-#if 1
             // Check if we are a panel in a window
-            PanelWindow* w = g->get_window();
-            if (w && !g->docked())
+            if (g->docked())
             {
-                int H = g->get_pack()->h() + g->get_dragger()->h();
-                Fl_Group* grp = g->get_group();
-                if (grp && grp->visible())
-                    H += grp->h();
-
-                // Adjust window to packed size
-                Fl_Widget* r = w->resizable();
-                w->resizable(0);
-                w->size(w->w(), H + 3);
-                w->resizable(r);
+                // Adjust dock scrollbars for this new element
+                p.ui->uiDock->pack->layout();
+                p.ui->uiResizableBar->HandleDrag(0);
             }
-#endif
+            else
+            {
+                auto pack = g->get_pack();
+                pack->layout();
+            }
         }
 
         void PanelWidget::undock()

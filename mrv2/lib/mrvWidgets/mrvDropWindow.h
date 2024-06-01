@@ -25,9 +25,9 @@ namespace mrv
 
         //! The working area of this window.
         Fl_Flex* workspace;
-
+        
         //! Check for drop event.
-        int valid_drop();
+        int valid_drop(const int X, const int Y);
         
         //! Assign a dock widget to this window.
         void set_dock(DockGroup* d) { dock = d; }

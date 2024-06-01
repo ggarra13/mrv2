@@ -3,7 +3,7 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 // Debug scaling of the window to image size.
-// #define DEBUG_SCALING 1
+//#define DEBUG_SCALING 1
 
 #include <memory>
 #include <cmath>
@@ -1481,7 +1481,7 @@ namespace mrv
         }
 
 #ifdef DEBUG_SCALING
-        std::cerr << "maxH check " << posX << " " << posY << " W=" << W
+        std::cerr << "maxH check1 " << posX << " " << posY << " W=" << W
                   << " H=" << H << std::endl;
 #endif
 
@@ -1501,7 +1501,7 @@ namespace mrv
         }
 
 #ifdef DEBUG_SCALING
-        std::cerr << "maxH check " << posX << " " << posY << " W=" << W
+        std::cerr << "maxH check2 " << posX << " " << posY << " W=" << W
                   << " H=" << H << std::endl;
 #endif
 
@@ -1513,7 +1513,7 @@ namespace mrv
         }
 
 #ifdef DEBUG_SCALING
-        std::cerr << "maxW check " << posX << " " << posY << " W=" << W
+        std::cerr << "maxW check3 " << posX << " " << posY << " W=" << W
                   << " H=" << H << std::endl;
 #endif
 
@@ -1539,9 +1539,8 @@ namespace mrv
         std::cerr << "FINAL Window=" << posX << " " << posY << " " << W << "x"
                   << H << " dW=" << dW << " dH=" << dH << std::endl;
 #endif
+        
         mw->resize(posX, posY, W, H);
-
-        p.ui->uiRegion->layout();
 
         if (p.frameView)
         {
@@ -1549,6 +1548,14 @@ namespace mrv
         }
 
         set_edit_mode_cb(editMode, p.ui);
+
+
+        // We need to adjust dock group too.  These lines are needed.
+        auto viewGroup = p.ui->uiViewGroup;
+        auto dockGroup = p.ui->uiDockGroup;
+        viewGroup->fixed(dockGroup, dockGroup->w());
+        const int X = viewGroup->x() + viewGroup->w() - dockGroup->w();
+        dockGroup->position(X, dockGroup->y());
     }
 
     math::Vector2i TimelineViewport::_getFocus(int X, int Y) const noexcept

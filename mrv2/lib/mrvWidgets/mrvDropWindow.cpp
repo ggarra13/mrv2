@@ -27,8 +27,8 @@ namespace mrv
         dock = (DockGroup*)nullptr;
         workspace = (Fl_Flex*)nullptr;
     }
-
-    int DropWindow::valid_drop()
+    
+    int DropWindow::valid_drop(const int cx, const int cy)
     {
         int out = 0;
         
@@ -41,10 +41,6 @@ namespace mrv
             int ey = y_root() + dock->y();
             int ew = dock->w();
             int eh = dock->h();
-            
-            // get the drop event co-ordinates
-            int cx = Fl::event_x_root();
-            int cy = Fl::event_y_root();
 
             // Is the event inside the boundary of this window?
             if (visible() && (cx > ex) && (cy > ey) && (cx < (ew + ex)) &&

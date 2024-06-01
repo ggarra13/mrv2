@@ -654,7 +654,7 @@ namespace mrv
 
         ImageInfoPanel::~ImageInfoPanel()
         {
-            set_tabs();
+            save_tabs();
         }
 
         TimelinePlayer* ImageInfoPanel::timelinePlayer() const
@@ -684,7 +684,7 @@ namespace mrv
             m_attributes->hide();
         }
 
-        void ImageInfoPanel::set_tabs() const
+        void ImageInfoPanel::save_tabs() const
         {
             TLRENDER_P();
 
@@ -715,7 +715,7 @@ namespace mrv
         {
             TLRENDER_P();
             PanelWidget::save();
-            set_tabs();
+            save_tabs();
         }
 
         void ImageInfoPanel::imageRefresh()
@@ -736,7 +736,7 @@ namespace mrv
         void ImageInfoPanel::refresh()
         {
             Fl_Group* orig = Fl_Group::current();
-
+            
             hide_tabs();
 
             m_image->clear();
@@ -755,8 +755,10 @@ namespace mrv
 
             // Needed to resize the panels
             if (player)
-                g->end();
-
+            {
+                end_group();
+            }
+            
             Fl_Group::current(orig);
         }
 

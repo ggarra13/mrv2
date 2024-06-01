@@ -62,7 +62,10 @@
 <li class="toctree-l2"><a class="reference internal" href="videos.html">Video Tutorials</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">FAQ</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#all-platforms">All Platforms</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#linux">Linux</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#linux">Linux</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#wayland">Wayland</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#windows">Windows</a></li>
 </ul>
 </li>
@@ -133,6 +136,8 @@ or optionally hide the pixel bar or set the UI to presentation mode.</p>
 </section>
 <section id="linux">
 <h2>Linux<a class="headerlink" href="#linux" title="Link to this heading"></a></h2>
+<section id="wayland">
+<h3>Wayland<a class="headerlink" href="#wayland" title="Link to this heading"></a></h3>
 <ul>
 <li><p>My playback is too slow.  How can I improve it?</p>
 <p>Check that you have:</p>
@@ -191,7 +196,16 @@ on a modern distro like Ubuntu 22.04.4 LTS, like:</p>
 <p>Sadly, these cannot be avoided.  You will need to re-compile from source on
 your target platform or use mrv2 under XWayland or under X11.</p>
 </li>
+<li><p>While repositioning or rescaling floating panels under Wayland, I get clipping
+redraws of the floating panel.</p>
+<p>Unfortunately, this is a current limitation of FLTK 1.4.</p>
+</li>
+<li><p>When I have a long floating panel, like the Media Information Panel, I can
+drag them out of the screen, and cannot repositiong them.</p>
+<p>You can use ALT + F7 to reposition it.</p>
+</li>
 </ul>
+</section>
 </section>
 <section id="windows">
 <h2>Windows<a class="headerlink" href="#windows" title="Link to this heading"></a></h2>

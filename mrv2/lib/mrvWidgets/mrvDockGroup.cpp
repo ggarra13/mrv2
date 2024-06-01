@@ -16,8 +16,6 @@
 
 namespace mrv
 {
-
-    // basic fltk constructors
     DockGroup::DockGroup(int x, int y, int w, int h, const char* l) :
         Fl_Group(x, y, w, h, l)
     {
@@ -43,8 +41,8 @@ namespace mrv
         // if the dock is "closed", open it back up
         if (!parent()->visible())
         {
-            DropWindow* dw = (DropWindow*)win;
             parent()->show();
+            DropWindow* dw = (DropWindow*)win;
             dw->workspace->layout();
         }
         pack->add(grp);
@@ -65,9 +63,9 @@ namespace mrv
         // If the dock is empty, close it down
         if (children <= 0)
         {
-            DropWindow* dw = (DropWindow*)win;
             children = 0; // just in case...!
             parent()->hide();
+            DropWindow* dw = (DropWindow*)win;
             dw->workspace->layout();
         }
         else

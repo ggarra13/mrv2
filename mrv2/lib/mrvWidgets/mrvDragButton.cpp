@@ -60,13 +60,13 @@ namespace mrv
             return;
 
         // Avoid Wayland's compositor going crazy
-        int moveX = std::abs(currentX - previousX);
-        int moveY = std::abs(currentY - previousY);
+        int moveX = std::abs(currentX - lastX);
+        int moveY = std::abs(currentY - lastY);
         if (moveX > kMaxMove || moveY > kMaxMove)
             return;
         tw->position(currentX, currentY);
-        previousX = currentX;
-        previousY = currentY;
+        lastX = currentX;
+        lastY = currentY;
     }
     
     int DragButton::handle(int event)
@@ -98,8 +98,8 @@ namespace mrv
                 get_global_coords(x1, y1);
                 get_window_coords(xoff, yoff);
 
-                currentX = previousX = xoff;
-                currentY = previousY = yoff;
+                currentX = lastX = xoff;
+                currentY = lastY = yoff;
                 
                 xoff -= x1;
                 yoff -= y1;
@@ -161,6 +161,8 @@ namespace mrv
                     PanelWindow* tw = tg->get_window();
                     assert(tw);
                     tw->position(posX, posY);
+                    lastX = posX;
+                    lastY = posY;
                 }
                 ret = 1;
                 break;
@@ -218,8 +220,8 @@ namespace mrv
             
                 if (use_timeout)
                 {
-                    currentX = previousX = posX;
-                    currentY = previousY = posY;
+                    currentX = lastX = posX;
+                    currentY = lastY = posY;
                     if (!Fl::has_timeout((Fl_Timeout_Handler)move_cb, this))
                         Fl::add_timeout(kTimeout, (Fl_Timeout_Handler)move_cb,
                                         this);
@@ -229,6 +231,8 @@ namespace mrv
                     PanelWindow* tw = tg->get_window();
                     assert(tw);
                     tw->position(posX, posY);
+                    lastX = posX;
+                    lastY = posY;
                 }                
             }
             ret = 1;
@@ -261,10 +265,11 @@ namespace mrv
         if (!uiDockGroup->visible())
         {
             uiDockGroup->show();
-                            
+            
             auto dropWindow = static_cast<DropWindow*>(uiDock->top_window());
             Fl_Flex* flex = dropWindow->workspace;
             flex->layout();
+            flex->init_sizes();
             flex->redraw();
         }
     }
@@ -275,45 +280,34 @@ namespace mrv
         DockGroup* uiDock = tg->get_dock();
         const Pack* uiDockPack = uiDock->get_pack();
         auto uiDockGroup = uiDock->parent();
-
+        
         // Color the dock area with the background color
         color_dock_group(FL_BACKGROUND_COLOR);
                         
         // Hide the panel if there are no panels 
-        if (uiDockPack->children() == 0)
+        if (uiDockPack->children() == 0 &&
+            uiDockGroup->visible())
         {
             uiDockGroup->hide();
                             
             auto dropWindow = static_cast<DropWindow*>(uiDock->top_window());
             Fl_Flex* flex = dropWindow->workspace;
             flex->layout();
+            flex->init_sizes();
             flex->redraw();
         }
     }
     
     int DragButton::would_dock()
     {
-        int cx, cy;
-        get_global_coords(cx, cy);
         // See if anyone is able to accept a dock with this widget
         // How to find the dock window? Search 'em all for now...
         for (Fl_Window* win = Fl::first_window(); win;
              win = Fl::next_window(win))
         {
-            // Get the co-ordinates of each window
-            int ex = win->x_root();
-            int ey = win->y_root();
-            int ew = win->w();
-            int eh = win->h();
-
-            // Are we inside the boundary of the window?
-            if (win->visible() && (cx > ex) && (cy > ey) &&
-                (cx < (ew + ex)) && (cy < (eh + ey)))
+            if (auto dropWindow = dynamic_cast<DropWindow*>(win))
             {
-                if (auto dropWindow = dynamic_cast<DropWindow*>(win))
-                {
-                    return dropWindow->valid_drop();
-                }
+                return dropWindow->valid_drop(lastX - xoff, lastY - yoff);
             }
         }
         return 0;

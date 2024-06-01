@@ -5,9 +5,6 @@ Preguntas Frecuentes
 Todas las Plataformas
 =====================
 
-Todos los Sistemas de Ventanas
-------------------------------
-
 - Mi reproducción es lenta.  ¿Cómo puedo mejorarla?
 
   Chequée que tengas:
@@ -33,34 +30,13 @@ Todos los Sistemas de Ventanas
       - Cache Gigabytes
 
 	Seteado a 4GB por lo menos (por defecto es la mitad de tu memoria)
-
-Wayland
--------
-	
-- Tengo avisos (warnings) cuando ejecuto el mrv2 pre-compilado en la consola
-  bajo Wayland en una distro moderna como Ubuntu 22.04.4 LTS::
-
-    (mrv2:6869): GdkPixbuf-WARNING **: 09:23:50.243: Cannot open pixbuf loader module file '/usr/lib64/gdk-pixbuf-2.0/2.10.0/loaders.cache': No such file or directory
-
-    This likely means that your installation is broken.
-    Try running the command
-    gdk-pixbuf-query-loaders > /usr/lib64/gdk-pixbuf-2.0/2.10.0/loaders.cache
-    to make things work again for the time being.
-
-    (mrv2:6869): Gtk-WARNING **: 09:23:50.244: Theme parsing error: gtk.css:1422:23: 'font-feature-settings' is not a valid property name
-
-    (mrv2:6869): Gtk-WARNING **: 09:23:50.245: Theme parsing error: gtk.css:3308:25: 'font-feature-settings' is not a valid property name
-
-    (mrv2:6869): Gtk-WARNING **: 09:23:50.246: Theme parsing error: gtk.css:3770:23: 'font-feature-settings' is not a valid property name
-
-
-  Lamentablemente, estos avisos no pueden ser evitados.
-  Deberás compilar desde codigo fuente en tu plataforma o usar mrv2 bajo
-  XWayland o bajo X11.
   
 Linux
 =====
 
+Wayland
+-------
+	
 - Mi reproducción es lenta.  ¿Cómo puedo mejorarla?
   
   Chequée que tengas:
@@ -98,6 +74,28 @@ Linux
 	XWayland, setée::
 
 	  export FLTK_BACKEND=x11
+	  
+- Tengo avisos (warnings) cuando ejecuto el mrv2 pre-compilado en la consola
+  bajo Wayland en una distro moderna como Ubuntu 22.04.4 LTS::
+
+    (mrv2:6869): GdkPixbuf-WARNING **: 09:23:50.243: Cannot open pixbuf loader module file '/usr/lib64/gdk-pixbuf-2.0/2.10.0/loaders.cache': No such file or directory
+
+    This likely means that your installation is broken.
+    Try running the command
+    gdk-pixbuf-query-loaders > /usr/lib64/gdk-pixbuf-2.0/2.10.0/loaders.cache
+    to make things work again for the time being.
+
+    (mrv2:6869): Gtk-WARNING **: 09:23:50.244: Theme parsing error: gtk.css:1422:23: 'font-feature-settings' is not a valid property name
+
+    (mrv2:6869): Gtk-WARNING **: 09:23:50.245: Theme parsing error: gtk.css:3308:25: 'font-feature-settings' is not a valid property name
+
+    (mrv2:6869): Gtk-WARNING **: 09:23:50.246: Theme parsing error: gtk.css:3770:23: 'font-feature-settings' is not a valid property name
+
+
+  Lamentablemente, estos avisos no pueden ser evitados.
+  Deberás compilar desde codigo fuente en tu plataforma o usar mrv2 bajo
+  XWayland o bajo X11.
+
 
 Windows
 =======

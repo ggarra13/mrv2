@@ -229,7 +229,6 @@ namespace mrv
 
             tw = new PanelWindow(X, Y, W, H);
             tw->end();
-            dock->remove(this);
             tw->add(this);  // move the tool group into the floating window
             position(1, 1); // align group in floating window (needed)
             size(W - kMargin, H - kMargin);     // resize to fit (needed)
@@ -346,7 +345,7 @@ namespace mrv
             int Y = tw->y();
             int W = tw->w();
             int H = tw->h();
-        
+            
             avoid_clipping(X, Y, W, H);
             tw->resizable(0);
             tw->resize(X, Y, W + kMargin, H + kMargin);
@@ -368,20 +367,17 @@ namespace mrv
         Fl_Group::resizable(0);
         Fl_Group::size(W, H);
         Fl_Group::init_sizes();
-        // Fl_Group::resizable(scroll);
 
         if (!docked())
         {
-            // group->resize(group->x(), GY, group->w(), GH);
-
-            int screen = Fl::screen_num(tw->x(), tw->y(), tw->w(), tw->h());
+            int screen = tw->screen_num();
             int minX, minY, maxW, maxH;
             Fl::screen_work_area(minX, minY, maxW, maxH, screen);
-
+        
             // leave some headroom for topbar
-            maxH = maxH - DH; // 20 of offset
+            maxH = maxH - DH;
 
-            int maxYH = tw->y() + maxH - kMargin;
+            int maxYH = minY + maxH - kMargin;
             int twYH = tw->y() + H - kMargin;
 
             if (twYH > maxYH)

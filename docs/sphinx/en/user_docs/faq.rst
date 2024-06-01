@@ -34,8 +34,8 @@ All Platforms
 Linux
 =====
 
-All Window Systems
-------------------
+Wayland
+-------
 
 - My playback is too slow.  How can I improve it?	
 
@@ -73,9 +73,6 @@ All Window Systems
 	XWayland, set::
 
 	  export FLTK_BACKEND=x11
-
-Wayland
--------
 	  
 - I get warnings when I run the pre-compiled mrv2 on the console under Wayland
   on a modern distro like Ubuntu 22.04.4 LTS, like::
@@ -105,7 +102,7 @@ Wayland
 - When I have a long floating panel, like the Media Information Panel, I can
   drag them out of the screen, and cannot repositiong them.
 
-  As far I know today, there's also no work-around.
+  You can use ALT + F7 to reposition it.
   
   
 Windows
