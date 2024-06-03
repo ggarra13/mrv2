@@ -21,52 +21,20 @@
 
 namespace
 {
-    const float kTimeout = 0.025;
     const int kDragMinDistance = 10;
 }
 
 namespace mrv
 {
 
-    void move_cb(DragButton* v)
-    {
-        v->set_position();
-        Fl::repeat_timeout(kTimeout, (Fl_Timeout_Handler)move_cb, v);   
-    }
-
     DragButton::DragButton(int x, int y, int w, int h, const char* l) :
         Fl_Box(x, y, w, h, l)
     {
         was_docked = 0; // Assume we have NOT just undocked...
-        if (desktop::Wayland())
-            use_timeout = true;
     }
     
     DragButton::~DragButton()
     {
-        if (use_timeout)
-            Fl::remove_timeout((Fl_Timeout_Handler)move_cb, this);
-    }
-
-    void DragButton::set_position()
-    {
-        PanelGroup* tg = (PanelGroup*)parent();
-        if (tg->docked()) return;
-        
-        PanelWindow* tw = tg->get_window();
-        if (!tw) return;
-
-        if (tw->x() == currentX && tw->y() == currentY)
-            return;
-
-        // Avoid Wayland's compositor going crazy
-        int moveX = std::abs(currentX - lastX);
-        int moveY = std::abs(currentY - lastY);
-        if (moveX > kMaxMove || moveY > kMaxMove)
-            return;
-        tw->position(currentX, currentY);
-        lastX = currentX;
-        lastY = currentY;
     }
     
     int DragButton::handle(int event)
@@ -97,20 +65,11 @@ namespace mrv
             case FL_PUSH: // downclick in button creates cursor offsets
                 get_global_coords(x1, y1);
                 get_window_coords(xoff, yoff);
-
-                currentX = lastX = xoff;
-                currentY = lastY = yoff;
                 
                 xoff -= x1;
                 yoff -= y1;
                 ret = 1;
         
-                if (use_timeout)
-                {
-                    if (!Fl::has_timeout((Fl_Timeout_Handler)move_cb, this))
-                        Fl::add_timeout(
-                            kTimeout, (Fl_Timeout_Handler)move_cb, this);
-                }
                 break;
 
             case FL_DRAG: // drag the button (and its parent window) around the
@@ -123,9 +82,6 @@ namespace mrv
                     was_docked = 0;
                     get_global_coords(x1, y1);
                     get_window_coords(xoff, yoff);
-
-                    currentX = xoff;
-                    currentY = yoff;
                 
                     xoff -= x1;
                     yoff -= y1;
@@ -150,29 +106,16 @@ namespace mrv
                 posX += xoff;
                 posY += yoff;
 
-
-                if (use_timeout)
-                {
-                    currentX = posX;
-                    currentY = posY;
-                }
-                else
-                {
-                    PanelWindow* tw = tg->get_window();
-                    assert(tw);
-                    tw->position(posX, posY);
-                    lastX = posX;
-                    lastY = posY;
-                }
+                PanelWindow* tw = tg->get_window();
+                assert(tw);
+                tw->position(posX, posY);
+                if (tw->parent())
+                    tw->parent()->init_sizes();
                 ret = 1;
                 break;
             }
             case FL_RELEASE:
             {
-                if (use_timeout)
-                    Fl::remove_timeout((Fl_Timeout_Handler)move_cb, this);
-
-                
                 int dock_attempt = would_dock();
                     
                 if (dock_attempt)
@@ -192,9 +135,6 @@ namespace mrv
         }
 
         // OK, so we must be docked - are we being dragged out of the dock?
-        if (use_timeout)
-            Fl::remove_timeout((Fl_Timeout_Handler)move_cb, this);
-        
         switch (event)
         {
         case FL_PUSH: // downclick in button creates cursor offsets
@@ -212,28 +152,17 @@ namespace mrv
             y2 = (y2 > 0) ? y2 : (-y2);
             if ((x2 > kDragMinDistance) || (y2 > kDragMinDistance))
             {
-                tg->undock_grp(); // undock the window
-                was_docked = -1;  // note that we *just now* undocked
+                tg->undock_grp(false); // undock the window
+                was_docked = -1;       // note that we *just now* undocked
                 
                 int posX, posY;
                 get_global_coords(posX, posY);
-            
-                if (use_timeout)
-                {
-                    currentX = lastX = posX;
-                    currentY = lastY = posY;
-                    if (!Fl::has_timeout((Fl_Timeout_Handler)move_cb, this))
-                        Fl::add_timeout(kTimeout, (Fl_Timeout_Handler)move_cb,
-                                        this);
-                }
-                else
-                {
-                    PanelWindow* tw = tg->get_window();
-                    assert(tw);
-                    tw->position(posX, posY);
-                    lastX = posX;
-                    lastY = posY;
-                }                
+                
+                PanelWindow* tw = tg->get_window();
+                assert(tw);
+                tw->position(posX, posY);
+                if (tw->parent())
+                    tw->parent()->init_sizes();
             }
             ret = 1;
             break;
@@ -300,6 +229,9 @@ namespace mrv
     
     int DragButton::would_dock()
     {
+        int X, Y;
+        get_global_coords(X, Y);
+        
         // See if anyone is able to accept a dock with this widget
         // How to find the dock window? Search 'em all for now...
         for (Fl_Window* win = Fl::first_window(); win;
@@ -307,7 +239,7 @@ namespace mrv
         {
             if (auto dropWindow = dynamic_cast<DropWindow*>(win))
             {
-                return dropWindow->valid_drop(lastX - xoff, lastY - yoff);
+                return dropWindow->valid_drop(X - xoff, Y - yoff);
             }
         }
         return 0;

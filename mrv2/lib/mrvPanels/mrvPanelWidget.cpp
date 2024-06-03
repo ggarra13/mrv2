@@ -60,7 +60,6 @@ namespace mrv
             DockGroup* dock = p.ui->uiDock;
             int X = dock->x();
             int Y = dock->y();
-            // int W = dg->w() - bar->w();
             int W = dock->w();
             int H = dg->h();
 
@@ -115,12 +114,18 @@ namespace mrv
 
                     float pctW = static_cast<float>(CMW) / MW;
                     float pctH = static_cast<float>(CMH) / MH;
-                    
-                    if (X < 0 || X > CMW)                  
-                        X *= pctW;
 
-                    if (Y < 0 || Y > CMH)
-                        Y *= pctH;
+                    // if (pctW > 1.F)
+                    // {
+                    //     if (X < 0 || X > CMW)                  
+                    //         X *= pctW;
+                    // }
+
+                    // if (pctH > 1.F)
+                    // {
+                    //     if (Y < 0 || Y > CMH)
+                    //         Y *= pctH;
+                    // }
                 }
             }
             else

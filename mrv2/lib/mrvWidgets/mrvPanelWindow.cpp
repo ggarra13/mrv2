@@ -21,22 +21,6 @@
 
 #include "mrViewer.h"
 
-namespace
-{
-    const float kTimeout = 0.025;
-} // namespace
-
-
-namespace
-{
-    void resize_cb(mrv::PanelWindow* v)
-    {
-        v->set_resize();
-        Fl::repeat_timeout(kTimeout, (Fl_Timeout_Handler)resize_cb, v);   
-    }
-}
-
-
 namespace mrv
 {
 
@@ -52,64 +36,35 @@ namespace mrv
     PanelWindow::PanelWindow(int x, int y, int w, int h, const char* l) :
         Fl_Double_Window(x, y, w, h, l)
     {
-        if (desktop::Wayland())
-            use_timeout = true;
+        allow_expand_outside_parent();
+        
+        newX = x;
+        newY = y;
+        newW = w;
+        newH = h;
+        
         create_dockable_window();
         box(FL_FLAT_BOX);
-        oldX = newX = x;
-        oldY = newY = y;
-        oldW = newW = w;
-        oldH = newH = h;
     }
 
     PanelWindow::PanelWindow(int w, int h, const char* l) :
         Fl_Double_Window(w, h, l)
     {
-        if (desktop::Wayland())
-            use_timeout = true;
+        allow_expand_outside_parent();
+        
+        newX = x();
+        newY = y();
+        newW = w;
+        newH = h;
+                
         create_dockable_window();
         box(FL_FLAT_BOX);
-        oldX = newX = x();
-        oldY = newY = y();
-        oldW = newW = w;
-        oldH = newH = h;
     }
 
     PanelWindow::~PanelWindow()
     {
         active_list.erase(std::remove(active_list.begin(), active_list.end(),
                                       this), active_list.end());
-    }
-
-    void PanelWindow::set_resize()
-    {
-        if (newX == oldX && newY == oldY && newW == oldW && newH == oldH)
-        {
-            return;
-        }
-
-        // Avoid Wayland's compositor going crazy
-        int moveX = std::abs(newX - oldX);
-        int moveY = std::abs(newY - oldY);
-        int moveW = std::abs(newW - oldW);
-        int moveH = std::abs(newH - oldH);
-        if (moveX > kMaxMove || moveY > kMaxMove ||
-            moveW > kMaxMove || moveH > kMaxMove)
-        {
-            // std::cerr << "too big move" << std::endl;
-            return;
-        }
-        
-        if (newW < kMinWidth)
-            newW = kMinWidth;
-        if (newH < kMinHeight)
-            newH = kMinHeight;
-        
-        resize(newX, newY, newW, newH);
-        oldX = newX;
-        oldY = newY;
-        oldW = newW;
-        oldH = newH;
     }
     
     void PanelWindow::create_dockable_window()
@@ -130,7 +85,7 @@ namespace mrv
         }
         Fl_Double_Window::resize(X, Y, W, H);
     }
-        
+
     void PanelWindow::show_all(void)
     {
         for (auto window : active_list)
@@ -189,16 +144,6 @@ namespace mrv
         int ey = Fl::event_y_root();
         switch (event)
         {
-        case FL_SHOW:
-            oldX = x();
-            oldY = y();
-            oldW = w();
-            oldH = h();
-            Fl::add_timeout(kTimeout, (Fl_Timeout_Handler) resize_cb, this);
-            return 1;
-        case FL_HIDE:
-            Fl::remove_timeout((Fl_Timeout_Handler) resize_cb, this);
-            return 1;
         case FL_UNFOCUS:
         case FL_FOCUS:
             return 1;
@@ -221,10 +166,10 @@ namespace mrv
             set_cursor(ex, ey);
             if (valid != Direction::kNone)
             {
-                oldX = newX = x();
-                oldY = newY = y();
-                oldW = newW = w();
-                oldH = newH = h();
+                newX = x();
+                newY = y();
+                newW = w();
+                newH = h();
             
                 last_x = ex;
                 last_y = ey;
@@ -296,17 +241,22 @@ namespace mrv
                 newH -= diffY;
             }
 
-            if (!use_timeout)
+            if (valid != Direction::kNone)
             {
-                if (valid != Direction::kNone)
+                if (newW < kMinWidth)
                 {
-                    if (newW < kMinWidth)
-                        newW = kMinWidth;
-                    if (newH < kMinHeight)
-                        newH = kMinHeight;
-                    
-                    resize(newX, newY, newW, newH);
+                    newX = x();
+                    newW = kMinWidth;
                 }
+                if (newH < kMinHeight)
+                {
+                    newY = y();
+                    newH = kMinHeight;
+                }
+                    
+                resize(newX, newY, newW, newH);
+                if (parent())
+                    parent()->init_sizes();
             }
             
             last_x = ex;

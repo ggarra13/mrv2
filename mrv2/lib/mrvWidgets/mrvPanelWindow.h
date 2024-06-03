@@ -32,14 +32,11 @@ namespace mrv
             kBottomRight = kBottom | kRight,
             kBottomLeft = kBottom | kLeft
         };
-
-        bool use_timeout = false;
+        Direction dir;
+        int newX, newY, newW, newH;
+        int valid;
 
         int last_x, last_y;
-        int oldX, oldY, oldW, oldH;
-        int newX, newY, newW, newH;
-        Direction dir;
-        int valid;
 
         void set_cursor(int ex, int ey);
 
@@ -52,8 +49,6 @@ namespace mrv
 
         int handle(int event) FL_OVERRIDE;
         void resize(int X, int Y, int W, int H) FL_OVERRIDE;
-
-        void set_resize();
 
         //! Methods for hiding/showing *all* the floating windows
         static void show_all();

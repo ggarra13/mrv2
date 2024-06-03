@@ -2,8 +2,6 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-//#define DEBUG_CLIPPING 1
-
 #include <cassert>
 
 #include <FL/Fl.H>
@@ -39,7 +37,7 @@ namespace mrv
         }
         else
         {
-            gp->undock_grp();
+            gp->undock_grp(true);
         }
     }
 
@@ -98,91 +96,8 @@ namespace mrv
         }
     }
 
-
     
-    void PanelGroup::avoid_clipping(int& X, int& Y, int& W, int& H)
-    {
-        if (desktop::Wayland())
-        {
-            Fl_Window* top = dock->top_window();
-            int maxW = top->w() - kMargin * 2;
-            int maxH = top->h() - kMargin;
-
-#ifdef DEBUG_CLIPPING
-            std::cerr << "max     WxH=" << maxW << "x" << maxH << std::endl;
-            std::cerr << "orig =" << X << " " << Y << " "
-                      << W << "x" << H << std::endl;
-#endif
-
-            bool clippedX = false, clippedY = false;
-
-            // Check clipping to the right and adjust X
-            if (X < maxW && X + W > maxW)
-            {
-                clippedX = true;
-                X = maxW - W;
-            }
-            
-            // Check clipping to the bottom and adjust Y
-            if (Y < maxH && Y + H > maxH)
-            {
-                clippedY = true;
-                Y = maxH - H;
-            }
-            
-#ifdef DEBUG_CLIPPING
-            std::cerr << "first X,Y=" << X << "," << Y << std::endl;
-#endif
-            // Check clipping to the right again
-            if (X < maxW && X + W > maxW)
-            {
-                clippedX = true;
-                W = maxW - X;
-            }
-            
-            // Check clipiping to the bottom again
-            if (Y < maxH && Y + H > maxH)
-            {
-                clippedY = true;
-                H = maxH - Y;
-            }
-            
-#ifdef DEBUG_CLIPPING
-            std::cerr << "clamped WxH=" << W << "x" << H << std::endl;
-#endif
-
-            // Check if clipping to the left and change X
-            if (X < 0 && X + W >= 0)
-            {
-                clippedX = true;
-                X = 0;
-            }
-            
-            // Check if clipping to the top and change Y
-            if (Y < 0 && Y + H >= 0)
-            {
-                clippedY = true;
-                Y = 0;
-            }
-            
-#ifdef DEBUG_CLIPPING
-            std::cerr << "  non min WxH=" << W << "x" << H << std::endl;
-#endif
-            // Finally, check maximum sizes.  The clippedX/Y checks must
-            // be reversed.
-            if (clippedY)
-                W = std::min(W, maxW);
-
-            if (clippedX)
-                H = std::min(H, maxH);
-
-#ifdef DEBUG_CLIPPING
-            std::cerr << "  final WxH=" << W << "x" << H << std::endl;
-#endif
-        }
-    }
-    
-    void PanelGroup::undock_grp()
+    void PanelGroup::undock_grp(bool button)
     {
         if (docked())
         { // undock the group into its own non-modal tool window
@@ -201,16 +116,21 @@ namespace mrv
             std::string key;
 
             std_any value;
+            
+            // If user undocked the window with the undock button,
+            // check to see if we have window X and Y saved positions.
+            if (button)
+            {                
+                key = prefix + "/WindowX";
+                value = settings->getValue<std::any>(key);
+                X = std_any_empty(value) ? X : std_any_cast<int>(value);
 
-            // If we have window X, Y, W, and H values, use them.
-            key = prefix + "/WindowX";
-            value = settings->getValue<std::any>(key);
-            X = std_any_empty(value) ? X : std_any_cast<int>(value);
+                key = prefix + "/WindowY";
+                value = settings->getValue<std::any>(key);
+                Y = std_any_empty(value) ? Y : std_any_cast<int>(value);
+            }
 
-            key = prefix + "/WindowY";
-            value = settings->getValue<std::any>(key);
-            Y = std_any_empty(value) ? Y : std_any_cast<int>(value);
-
+            // If we have saved Window W and (optional) H values, use them.
             key = prefix + "/WindowW";
             value = settings->getValue<std::any>(key);
             W = std_any_empty(value) ? W : std_any_cast<int>(value);
@@ -222,13 +142,12 @@ namespace mrv
             if (H2 != 0)
                 H = H2;
             assert(H != 0);
-
-            avoid_clipping(X, Y, W, H);
-
+            
             set_Fl_Group();
 
             tw = new PanelWindow(X, Y, W, H);
             tw->end();
+            dock->remove(this);
             tw->add(this);  // move the tool group into the floating window
             position(1, 1); // align group in floating window (needed)
             size(W - kMargin, H - kMargin);     // resize to fit (needed)
@@ -346,7 +265,6 @@ namespace mrv
             int W = tw->w();
             int H = tw->h();
             
-            avoid_clipping(X, Y, W, H);
             tw->resizable(0);
             tw->resize(X, Y, W + kMargin, H + kMargin);
             tw->resizable(this);
@@ -520,9 +438,6 @@ namespace mrv
 
         set_dock(dk); // define where the toolgroup is allowed to dock
 
-        // Check if it would clip (if so, offset on X/Y).
-        avoid_clipping(X, Y, W, H);
-        
         // create a floating toolbar window
         // Ensure the window is not created as a child of its own inner group!
         set_Fl_Group();

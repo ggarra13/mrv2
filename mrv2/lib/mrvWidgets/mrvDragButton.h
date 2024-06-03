@@ -17,8 +17,6 @@ namespace mrv
         bool use_timeout = false;
         int x1 = 0, y1 = 0; // click posn., used for dragging and docking checks
         int xoff = 0, yoff = 0; // origin used for dragging calcs
-        int lastX = -1, lastY = -1;
-        int currentX = -1, currentY = -1;
         int was_docked; // used in handle to note that we have just undocked
 
     public:
@@ -28,8 +26,6 @@ namespace mrv
         
         // override handle method to catch drag/dock operations
         int handle(int event) override;
-
-        void set_position();
         
     protected:
         int would_dock();
