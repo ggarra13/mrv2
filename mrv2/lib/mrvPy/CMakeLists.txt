@@ -5,6 +5,7 @@
 set(HEADERS
     Cmds.h
     CmdsAux.h
+    mrvPythonArgs.h
     PyStdErrOutRedirect.h
 )
 set(SOURCES

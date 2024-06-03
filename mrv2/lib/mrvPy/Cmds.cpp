@@ -32,6 +32,12 @@ namespace mrv2
     {
         using namespace mrv;
 
+        const std::vector<std::string>& args()
+        {
+            App* app = App::app;
+            return app->getPythonArgs();
+        }
+
         std::string getLanguage()
         {
             return fl_getenv("LANGUAGE");
@@ -385,9 +391,11 @@ void mrv2_commands(py::module& m)
     cmds.doc() = _(R"PYTHON(
 Command module.
 
-Used to run main commands and get and set the display, image, compare, LUT options.
+Used to run main commands and get arguments and set the display, image, compare, LUT options.
 )PYTHON");
 
+    cmds.def("args", &mrv2::cmd::args, _("Get command-line arguments passed as single quoted string to -pythonArgs."));
+    
     cmds.def(
         "open", &mrv2::cmd::open, _("Open file with optional audio."),
         py::arg("filename"), py::arg("audioFilename") = std::string());
@@ -507,4 +515,5 @@ Used to run main commands and get and set the display, image, compare, LUT optio
         _("Save a PDF document with all annotations and notes."),
         py::arg("filename"));
 #endif
+
 }

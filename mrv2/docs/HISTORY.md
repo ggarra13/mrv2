@@ -31,6 +31,10 @@ v1.1.9
   settings, load clips and save out a new movie file with baked OCIO, all
   from a Python script.
 - Consolidated Python commands to all use "filename" instead of "file".
+- Added bakeOCIO.py demo script with arguments.
+- Added -pythonArgs command-line string to pass a string of separated arguments
+  with spaces, like:
+        mrv2 -pythonScript mrv2/python/demos/bakeOCIO.py -pythonArgs "/D/pictures/Mantaflow_v09/Fluid.0001.exr 'ACEScg' 'ACES 1.0 - SDR Video' test.mov"
 
 
 v1.1.8

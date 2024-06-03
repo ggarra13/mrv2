@@ -86,6 +86,10 @@ namespace mrv
         bool isRunning() const;
 
     public:
+#ifdef MRV2_PYBIND11
+        const std::vector<std::string>& getPythonArgs() const;
+#endif
+        
         //! Open a file (with optional audio) or directory.
         void open(const std::string&, const std::string& = std::string());
 
@@ -121,8 +125,6 @@ namespace mrv
 
         //! Get the audio mute.
         bool isMuted() const;
-
-        // // Q_SIGNALS:
 
         //! This signal is emitted when the LUT options are changed.
         void lutOptionsChanged(const tl::timeline::LUTOptions&);
