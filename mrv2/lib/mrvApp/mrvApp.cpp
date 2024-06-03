@@ -368,7 +368,7 @@ namespace mrv
                     app::CmdLineValueOption<std::string>::create(
                         p.options.pythonArgs, {"-pythonArgs", "-pa"},
                         _("Python Arguments to pass to the Python script as a "
-                          "single quoted string like \"arg1 arg2 arg3\", "
+                          "single quoted string like \"arg1 'arg2 asd' arg3\", "
                           "stored in cmd.argv.")),
 #endif
                     app::CmdLineFlagOption::create(
