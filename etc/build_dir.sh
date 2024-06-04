@@ -118,7 +118,7 @@ echo "CMake at: ${CMAKE_LOCATION} ${CMAKE_VERSION}"
 # We set both lib64 and lib to handle differences in Linux RH and Ubuntu
 #
 export LD_LIBRARY_PATH="$PWD/${BUILD_DIR}/install/lib64:$PWD/${BUILD_DIR}/install/lib:${LD_LIBRARY_PATH}"
-export DYLD_LIBRARY_PATH="$PWD/${BUILD_DIR}/install/lib:${DYLD_LIBRARY_PATH}:/usr/local/lib"
+export DYLD_LIBRARY_PATH="$PWD/${BUILD_DIR}/install/lib:${DYLD_LIBRARY_PATH}"
 
 #
 # We set both lib64 and lib to handle differences in Linux RH and Ubuntu
