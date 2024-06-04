@@ -133,8 +133,8 @@ if(UNIX AND NOT APPLE)
     include( cmake/Modules/Buildlibbacktrace.cmake )
 endif()
 
-set( PYBIND11_DEP )
-if( MRV2_PYBIND11 )
+set(PYBIND11_DEP )
+if(MRV2_PYBIND11 )
     include( cmake/Modules/Buildpybind11.cmake )
 endif()
 
@@ -158,22 +158,22 @@ endif()
 # building Python's _ssl module.
 if(TLRENDER_NET AND NOT WIN32)
     if (BUILD_PYTHON)
-	add_dependencies( Python OpenSSL)
+	add_dependencies(Python OpenSSL)
     endif()
 endif()
 
 
-set( POCO_DEP )
-if( MRV2_NETWORK )
+set(POCO_DEP )
+if(MRV2_NETWORK)
     include( cmake/Modules/BuildPoco.cmake )
 endif()
 
-set( LibHaru_DEP )
-if( MRV2_PDF )
+set(LibHaru_DEP )
+if(MRV2_PDF)
     include( cmake/Modules/BuildLibHaru.cmake )
 endif()
 
-if( BUILD_MRV2 )
+if(BUILD_MRV2)
     include( cmake/Modules/Buildmrv2.cmake )
 endif()
 
