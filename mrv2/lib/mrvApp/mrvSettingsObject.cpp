@@ -59,7 +59,24 @@ namespace mrv
     {
         TLRENDER_P();
 
-        // GUI Window defaults
+        // GUI Window defaults (all panels)
+        p.defaultValues["gui/Annotations/Window"] = 0;
+        p.defaultValues["gui/Background/Window"] = 0;
+        p.defaultValues["gui/Color Area/Window"] = 0;
+        p.defaultValues["gui/Color/Window"] = 0;
+        p.defaultValues["gui/Compare/Window"] = 0;
+        p.defaultValues["gui/Devices/Window"] = 0;
+        p.defaultValues["gui/Environment Map/Window"] = 0;
+        p.defaultValues["gui/Files/Window"] = 0;
+        p.defaultValues["gui/Histogram/Window"] = 0;
+        p.defaultValues["gui/Media Info/Window"] = 0;
+        p.defaultValues["gui/NDI/Window"] = 0;
+        p.defaultValues["gui/Network/Window"] = 0;
+        p.defaultValues["gui/Playlist/Window"] = 0;
+        p.defaultValues["gui/Settings/Window"] = 0;
+        p.defaultValues["gui/Stereo 3D/Window"] = 0;
+        p.defaultValues["gui/USD/Window"] = 0;
+
         p.defaultValues["gui/Files/WindowW"] = 400;
         p.defaultValues["gui/Compare/WindowW"] = 400;
         p.defaultValues["gui/Stereo 3D/WindowW"] = 400;

@@ -59,9 +59,9 @@ jobs:
       run: |
         chmod +x ./*.sh ./bin/*.sh ./etc/*.sh 
 
-    - name: Install cmake
-      run: |
-        ./etc/install_cmake.sh
+    # - name: Install cmake
+    #   run: |
+    #     ./etc/install_cmake.sh
 
     - name: Build mrv2
       run: |
@@ -106,9 +106,9 @@ jobs:
       run: |
         icacls "ssh\id_rsa" /inheritance:r /grant:r "%USERNAME%:R"
       
-    - name: Install cmake
-      run: |
-        ./etc/install_cmake.sh
+    # - name: Install cmake
+    #   run: |
+    #     ./etc/install_cmake.sh
         
     - name: Build mrv2
       run: |
@@ -160,9 +160,9 @@ jobs:
       run: |
         chmod +x ./*.sh ./bin/*.sh ./etc/*.sh 
 
-    - name: Install cmake
-      run: |
-        ./etc/install_cmake.sh
+    # - name: Install cmake
+    #   run: |
+    #     ./etc/install_cmake.sh
 
     - name: Build mrv2
       shell: bash
@@ -212,9 +212,9 @@ jobs:
       run: |
         chmod +x ./*.sh ./bin/*.sh ./etc/*.sh
 
-    - name: Install cmake
-      run: |
-        ./etc/install_cmake.sh
+    # - name: Install cmake
+    #   run: |
+    #     ./etc/install_cmake.sh
        
     - name: Build mrv2
       shell: bash

@@ -455,24 +455,6 @@ namespace mrv
             if (!open)
                 cg->close();
 
-            // auto bW = new Widget< Fl_Button >(
-            //     g->x(), g->y(), g->w(), 20, _("Default Hotkeys"));
-            // b = bW;
-            // b->box(FL_UP_BOX);
-            // bW->callback(
-            //     [=](auto o)
-            //     {
-            //         int ok = fl_choice(
-            //             _("This will reset all your hotkeys to their default.
-            //             "
-            //               "Are you sure you want to continue?"),
-            //             _("Yes"), _("No"), NULL, NULL);
-            //         if (ok)
-            //             return;
-            //         Preferences::load(false, true);
-            //         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
-            //     });
-
             auto bW = new Widget< Fl_Button >(
                 g->x(), g->y(), g->w(), 20, _("Default Settings"));
             b = bW;
