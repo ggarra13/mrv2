@@ -82,6 +82,25 @@ namespace mrv
         {
             W = w();
             H = h();
+
+
+            //
+            // Sanity check.  Try to avoid positioning windows outside the
+            // screen work area.
+            //
+            Fl_Window* top = top_window();
+            int screen_num = top->screen_num();
+            int minX, minY, maxW, maxH;
+            Fl::screen_work_area(minX, minY, maxW, maxH, screen_num);
+            
+            if (X > minX + maxW)
+            {
+                X -= ((X - maxW) + W);
+            }
+            if (Y > minY + maxH)
+            {
+                Y -= ((Y - maxH) + H);
+            }
         }
         Fl_Double_Window::resize(X, Y, W, H);
     }
