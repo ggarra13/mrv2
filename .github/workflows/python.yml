@@ -132,7 +132,7 @@ jobs:
       run: brew install ninja
       
     - name: Install automake
-      run: brew install automake
+      run: brew install automake curl
       
     - name: Install meson
       run: brew install meson
@@ -141,7 +141,7 @@ jobs:
       run: brew install gnu-sed
       
     - name: Install Python dependencies
-      run: brew install libffi openssl readline sqlite3 xz zlib
+      run: brew install libb2 libffi readline sqlite3 xz zlib
 
     - name: Install pyFLTK dependencies
       run: brew install subversion swig
@@ -187,13 +187,13 @@ jobs:
       run: brew install ninja
     
     - name: Install automake
-      run: brew install automake
+      run: brew install automake curl
   
     - name: Install GNU sed
       run: brew install gnu-sed
      
     - name: Install Python dependencies
-      run: brew install libffi openssl readline sqlite3 xz zlib
+      run: brew install libb2 libffi readline sqlite3 xz zlib
   
     - name: Install pyFLTK dependencies
       run: brew install subversion swig
