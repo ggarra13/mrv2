@@ -141,7 +141,7 @@ jobs:
       run: brew install gnu-sed
       
     - name: Install Python dependencies
-      run: brew install libb2 libffi readline sqlite3 xz zlib
+      run: brew install libb2 libffi openssl readline sqlite3 xz zlib
 
     - name: Install pyFLTK dependencies
       run: brew install subversion swig
@@ -174,14 +174,21 @@ jobs:
     #     ./bin/upload_sourceforge.sh
 
 
-  macos-m1-python-build:
+  macos-14-python-build:
     runs-on: macos-14
   
+    env:
+      CMAKE_OSX_DEPLOYMENT_TARGET: 14.0
+      
     steps:
    
     - uses: actions/checkout@v4
       with:
         submodules: recursive
+        
+    - name: Get machine name
+      run: |
+        echo "Machine name: $RUNNER_NAME"
   
     - name: Install ninja-build
       run: brew install ninja
@@ -193,7 +200,7 @@ jobs:
       run: brew install gnu-sed
      
     - name: Install Python dependencies
-      run: brew install libb2 libffi readline sqlite3 xz zlib
+      run: brew install libb2 libffi openssl readline sqlite3 xz zlib
   
     - name: Install pyFLTK dependencies
       run: brew install subversion swig

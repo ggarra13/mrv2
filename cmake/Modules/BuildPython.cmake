@@ -25,8 +25,23 @@ if(APPLE)
     if(CMAKE_OSX_DEPLOYMENT_TARGET)
 	set( Python_C_FLAGS "-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET} ${CMAKE_C_FLAGS}")
     endif()
+
+    if(TLRENDER_NET)
+	set(_openssl_LOC ${CMAKE_PREFIX_PATH})
+    else()
+	execute_process(
+	    COMMAND brew --prefix openssl
+	    OUTPUT_VARIABLE _openssl_LOC
+	    OUTPUT_STRIP_TRAILING_WHITESPACE
+	    ERROR_VARIABLE openssl_prefix_error
+	)
+	
+	if(openssl_prefix_error)
+	    message(FATAL_ERROR "Could not located openssl with 'brew --prefix openssl'.  Error: ${openssl_prefix_error}")
+	endif()
+    endif()
     
-    set( Python_CONFIGURE ${CMAKE_COMMAND} -E env "CFLAGS=${Python_C_FLAGS}" "CPPFLAGS=${Python_C_FLAGS}" "CXXFLAGS=${Python_CXX_FLAGS}" "LDFLAGS=${Python_LD_FLAGS}" -- ./configure --enable-optimizations --enable-shared --with-openssl=${CMAKE_PREFIX_PATH} --prefix=${CMAKE_INSTALL_PREFIX}
+    set( Python_CONFIGURE ${CMAKE_COMMAND} -E env "CFLAGS=${Python_C_FLAGS}" "CPPFLAGS=${Python_C_FLAGS}" "CXXFLAGS=${Python_CXX_FLAGS}" "LDFLAGS=${Python_LD_FLAGS}" -- ./configure --enable-optimizations --enable-shared --with-openssl="${_openssl_LOC}" --prefix=${CMAKE_INSTALL_PREFIX}
     )
     set( Python_BUILD  make -j ${NPROCS} )
     set( Python_INSTALL  make -j ${NPROCS} install )

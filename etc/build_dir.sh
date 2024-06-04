@@ -67,19 +67,16 @@ get_compiler_version
 #
 # For Darwin, when building amd64, we make it compatible with macOS 11.0
 #
-osx_target=11.0
-
+export CMAKE_OSX_DEPLOYMENT_TARGET=11.0
 
 if [[ $KERNEL == *Darwin* ]]; then
     export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:${PATH}"
     if [[ $ARCH == arm64 ]]; then
 	export CMAKE_OSX_ARCHITECTURES=$ARCH
-	osx_target=11.3
+	export CMAKE_OSX_DEPLOYMENT_TARGET=11.3
     else
-	osx_target=11.0
 	export CMAKE_OSX_ARCHITECTURES="x86_64"
     fi
-    export CMAKE_FLAGS="-DCMAKE_OSX_DEPLOYMENT_TARGET=${osx_target} ${CMAKE_FLAGS}"
 fi
 
 if [[ $FLAGS == "" ]]; then
