@@ -104,21 +104,13 @@ namespace mrv
             end_group();
         }
 
-        math::Box2i PanelWidget::box() const
+        math::Box2i PanelWidget::global_box() const
         {
-            math::Box2i b;
-            if (!g->docked())
-            {
-                auto w = g->get_window();
-                b = math::Box2i(
-                    g->x() + w->x(), g->y() + w->y(), g->w(), g->h());
-            }
-            else
-            {
-                b = math::Box2i(g->x(), g->y(), g->w(), g->h());
-            }
-            return b;
+            const Fl_Window* w = g->window();
+            return math::Box2i(
+                g->x() + w->x(), g->y() + w->y(), g->w(), g->h());
         }
+
         void PanelWidget::begin_group()
         {
             g->clear();

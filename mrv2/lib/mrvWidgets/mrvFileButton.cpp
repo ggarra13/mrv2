@@ -18,6 +18,8 @@
 
 #include "mrvEdit/mrvEditCallbacks.h"
 
+#include "mrvUI/mrvDesktop.h"
+
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrvApp/mrvFilesModel.h"
@@ -126,14 +128,7 @@ namespace mrv
 
                 if (playlistPanel)
                 {
-                    math::Box2i box = playlistPanel->box();
-                    if (playlistPanel->is_panel())
-                    {
-                        auto w = window();
-                        pos.x -= w->x();
-                        pos.y -= w->y();
-                    }
-
+                    const math::Box2i& box = playlistPanel->global_box();
                     if (box.contains(pos))
                     {
                         playlistPanel->add(pos, p.index, ui);
@@ -175,22 +170,9 @@ namespace mrv
                     int X = Fl::event_x_root();
                     int Y = Fl::event_y_root();
                     auto window = p.drag->window();
-#ifdef __linux__
-#    ifdef FLTK_USE_WAYLAND
-                    if (fl_wl_display())
-                    {
-                        window->resize(X, Y, window->w(), window->h());
-                    }
-                    else
-                    {
-                        window->position(X, Y);
-                    }
-#    else
                     window->position(X, Y);
-#    endif
-#else
-                    window->position(X, Y);
-#endif
+                    if (window->parent())
+                        window->parent()->init_sizes();
                     return 1;
                 }
             }

@@ -16,6 +16,7 @@ v1.1.9
   Y coordinate of the panel and using X instead.
 - Improved UI behavior when docking, undocking and showing/hiding the
   scrollbars.
+- Fixed Playlist creation on Wayland and simplified code.
 - Fixed Panel Windows under Wayland.  Now they respect their position, albeit
   they are parented to the main window.
 - Fixed a random crash when opening the Flmm_ColorA_Chooser for the first time

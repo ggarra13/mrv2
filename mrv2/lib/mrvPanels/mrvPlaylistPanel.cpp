@@ -60,6 +60,8 @@ namespace mrv
             _r(new Private),
             ThumbnailPanel(ui)
         {
+            MRV2_R();
+            
             add_group("Playlist");
             g->bind_image(load_svg("Playlist.svg"));
 
@@ -73,19 +75,19 @@ namespace mrv
                 },
                 ui);
 
-            _r->filesObserver = observer::
+            r.filesObserver = observer::
                 ListObserver<std::shared_ptr<FilesModelItem> >::create(
                     ui->app->filesModel()->observeFiles(),
                     [this](const std::vector< std::shared_ptr<FilesModelItem> >&
                                value) { refresh(); });
 
-            _r->activeObserver = observer::
+            r.activeObserver = observer::
                 ListObserver<std::shared_ptr<FilesModelItem> >::create(
                     ui->app->filesModel()->observeActive(),
                     [this](const std::vector< std::shared_ptr<FilesModelItem> >&
                                value) { redraw(); });
 
-            _r->aIndexObserver = observer::ValueObserver<int>::create(
+            r.aIndexObserver = observer::ValueObserver<int>::create(
                 ui->app->filesModel()->observeAIndex(),
                 [this](int value) { redraw(); });
         }
@@ -302,16 +304,11 @@ namespace mrv
         {
             int aIndex = -1;
             bool validDrop = false;
-            math::Vector2i win;
-            if (!is_panel())
-            {
-                auto window = g->get_window();
-                win.x = window->x();
-                win.y = window->y();
-            }
+            int winX = g->window()->x();
+            int winY = g->window()->y();
             if (_r->map.empty())
             {
-                math::Box2i box(g->x() + win.x, g->y() + win.y, g->w(), 68);
+                math::Box2i box = global_box();
                 if (box.contains(pos))
                 {
                     validDrop = true;
@@ -328,8 +325,8 @@ namespace mrv
                 for (auto& m : _r->map)
                 {
                     PlaylistButton* b = m.second;
-                    math::Box2i box(
-                        b->x() + win.x, b->y() + win.y, b->w(), b->h());
+                    const math::Box2i box(
+                        b->x() + winX, b->y() + winY, b->w(), b->h());
                     if (box.contains(pos))
                     {
                         aIndex = static_cast<int>(m.first);
@@ -346,6 +343,8 @@ namespace mrv
                 add_clip_to_timeline_cb(index, ui);
             }
         }
+
+        
     } // namespace panel
 
 } // namespace mrv
