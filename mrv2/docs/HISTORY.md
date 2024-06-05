@@ -39,7 +39,9 @@ v1.1.9
         mrv2 -pythonScript mrv2/python/demos/bakeOCIO.py -pythonArgs "/D/pictures/Mantaflow_v09/Fluid.0001.exr 'ACEScg' 'ACES 1.0 - SDR Video' test.mov"
 - Fixed drag and drop of http:// and similar URLs to mrv2 for network
   playback.
-
+- Added file::isNetwork().
+- Added "on_open_file" method callback to Python plugin system that gets
+  called when a file is opened.
 
 
 v1.1.8
