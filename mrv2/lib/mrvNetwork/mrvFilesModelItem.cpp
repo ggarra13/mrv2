@@ -6,6 +6,7 @@
 
 #include "mrvDraw/Annotation.h"
 #include "mrvNetwork/mrvFilePath.h"
+#include "mrvNetwork/mrvLUTOptions.h"
 #include "mrvApp/mrvFilesModel.h"
 
 namespace mrv
@@ -25,6 +26,7 @@ namespace mrv
         j["mute"] = value.mute;
         j["audioOffset"] = value.audioOffset;
         j["ocioIcs"] = value.ocioIcs;
+        j["lutOptions"] = value.lutOptions;
         std::vector< draw::Annotation > annotations;
         for (const auto& annotation : value.annotations)
         {
@@ -69,6 +71,10 @@ namespace mrv
         if (j.contains("ocioIcs"))
         {
             j.at("ocioIcs").get_to(value.ocioIcs);
+        }
+        if (j.contains("lutOptions"))
+        {
+            j.at("lutOptions").get_to(value.lutOptions);
         }
         const nlohmann::json& annotations = j["annotations"];
         for (const auto& annotation : annotations)

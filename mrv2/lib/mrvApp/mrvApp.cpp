@@ -1560,14 +1560,16 @@ namespace mrv
                 {
                     if (activeFiles[0]->ocioIcs.empty())
                         Preferences::updateICS();
-
-                    try
+                    else
                     {
-                        ocio::setOcioIcs(activeFiles[0]->ocioIcs);
-                    }
-                    catch (const std::exception& e)
-                    {
-                        LOG_ERROR(e.what());
+                        try
+                        {
+                            ocio::setOcioIcs(activeFiles[0]->ocioIcs);
+                        }
+                        catch (const std::exception& e)
+                        {
+                            LOG_ERROR(e.what());
+                        }
                     }
 
                     if (activeFiles[0]->lutOptions != p.lutOptions)
