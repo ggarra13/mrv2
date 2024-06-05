@@ -6,6 +6,7 @@ set(HEADERS
     Cmds.h
     CmdsAux.h
     mrvPythonArgs.h
+    Plugin.h
     PyStdErrOutRedirect.h
 )
 set(SOURCES

@@ -12,6 +12,7 @@ namespace fs = std::filesystem;
 #include <pybind11/pybind11.h>
 #include <pybind11/embed.h>
 #include <pybind11/eval.h>
+#include <pybind11/stl.h>
 namespace py = pybind11;
 
 #include <FL/Fl_Menu.H>
@@ -42,6 +43,8 @@ namespace mrv
 {
     using namespace tl;
 
+    std::vector<py::object> pythonOpenFileCallbacks;
+    
     void process_python_plugin(const std::string& file, py::module& plugin)
     {
         try
@@ -85,6 +88,15 @@ namespace mrv
                 if (!isTrue)
                     continue;
 
+                // Check for on_open_file method
+                if (py::hasattr(pluginObj, "on_open_file"))
+                {
+                    py::object open_plugin_cb = pluginObj.attr("on_open_file");
+                    pythonOpenFileCallbacks.push_back(open_plugin_cb);
+                    open_plugin_cb.inc_ref();
+                }
+
+                // Check for menus method
                 if (py::hasattr(pluginObj, "menus"))
                 {
                     py::dict menuDict = pluginObj.attr("menus")();
@@ -174,6 +186,20 @@ namespace mrv
         for (const auto& plugin : plugins)
         {
             process_python_plugin(plugin.first, m);
+        }
+    }
+
+    void run_python_open_file_cb(const py::object& method,
+                                 const std::string& fileName)
+    {
+        try
+        {
+            py::str pyFileName = py::str(fileName);
+            method(pyFileName);
+        }
+        catch (const std::exception& e)
+        {
+            LOG_ERROR(e.what());
         }
     }
 

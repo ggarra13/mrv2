@@ -19,6 +19,7 @@
 #    include <pybind11/embed.h>
 namespace py = pybind11;
 #    include "mrvPy/Cmds.h"
+#    include "mrvPy/Plugin.h"
 #    include "mrvPy/PyStdErrOutRedirect.h"
 #endif
 
@@ -1114,6 +1115,11 @@ namespace mrv
             item->path = path;
             item->audioPath = file::Path(audioFileName);
             p.filesModel->add(item);
+
+            for (const auto& pythonCb : pythonOpenFileCallbacks)
+            {
+                run_python_open_file_cb(pythonCb, path.get());
+            }
         }
 
         // If we have autoplayback on and auto hide pixel bar, do so here.

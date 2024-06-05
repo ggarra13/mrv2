@@ -138,17 +138,12 @@ namespace mrv
 
         bool isReadable(const fs::path& p)
         {
-            const std::string filePath = p.generic_string();
+            const std::string& filePath = p.generic_string();
             if (filePath.empty())
                 return false;
 
-            if (filePath.substr(0, 5) == "http:" ||
-                filePath.substr(0, 6) == "https:" ||
-                filePath.substr(0, 5) == "rtmp:" ||
-                filePath.substr(0, 4) == "rtp:")
-            {
+            if (isNetwork(filePath))
                 return true;
-            }
 
             std::ifstream f(filePath);
             if (f.is_open())
@@ -175,6 +170,26 @@ namespace mrv
             return out;
         }
 
+        bool isNetwork(const std::string& path)
+        {
+            bool out = false;
+            
+            if (path.substr(0, 7)  == "crypto:"    ||
+                path.substr(0, 4)  == "ftp:"       ||
+                path.substr(0, 5)  == "http:"      ||
+                path.substr(0, 6)  == "https:"     ||
+                path.substr(0, 10) == "httpproxy:" ||
+                path.substr(0, 5)  == "rtmp:"      ||
+                path.substr(0, 4)  == "rtp:"       ||
+                path.substr(0, 4)  == "tcp:"       ||
+                path.substr(0, 4)  == "tls:")
+            {
+                out = true;
+            }
+            
+            return out;
+        }
+        
         bool isTemporaryNDI(const tl::file::Path& path)
         {
             bool out = true;

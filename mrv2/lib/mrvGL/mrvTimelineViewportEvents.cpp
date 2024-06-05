@@ -1433,20 +1433,24 @@ namespace mrv
 
         for (auto file : tmpFiles)
         {
-            size_t pos = file.find("://");
-            if (pos != std::string::npos)
-                file = file.substr(pos + 3, file.size());
+            if (!file::isNetwork(file))
+            {
+                size_t pos = file.find("://");
+                if (pos != std::string::npos)
+                    file = file.substr(pos + 3, file.size());
 
-            if (file.empty())
-                continue;
+                if (file.empty())
+                    continue;
 
 #ifdef __linux__
-            // Nautilus returns files with spaces in html ( %20% ) format.
-            char* decode = strdup(file.c_str());
-            fl_decode_uri(decode);
-            file = decode;
-            free(decode);
+                // Nautilus returns files with spaces in html ( %20% ) format.
+                char* decode = strdup(file.c_str());
+                fl_decode_uri(decode);
+                file = decode;
+                free(decode);
 #endif
+            }
+            
             if (file::isDirectory(file))
             {
                 std::vector<std::string> movies, sequences, audios;

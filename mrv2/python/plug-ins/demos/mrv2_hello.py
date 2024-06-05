@@ -12,40 +12,46 @@ from mrv2 import timeline
 # Hello Plugin class.  Must derive from mrv2.plugin.Plugin
 #
 class HelloPlugin(mrv2.plugin.Plugin):
-    """
-    Constructor.  Init your variables here.
-    """
     def __init__(self):
+        """
+        Constructor.  Init your variables here.
+        """
         super().__init__()
         pass
-
-    """
-    Status of the plug-in.  Must be True of False.
-    Change this to False to not activate the plug-in.
-    If active is missing from the class, it is assumed to be True.
-    """
-    def active(self):
-        return True
     
-    """
-    The actual plugin execution for Python/Hello.
-    """
-    def run(self):
-        print("Hello from python plugin!")
+    def active(self):
+        """
+        Status of the plug-in.  Must be True of False.
+        Change this to False to not activate the plug-in.
+        If active is missing from the class, it is assumed to be True.
+        """
+        return True
+
+    def on_open_file(self, filename):
+        """
+        Callback called when a file is opened.
+        """
+        print(f'Opened "{filename}".')
 
         
-    """
-    Return the menus to add to mrv2's main toolbar.
-    You can add your commands to mrv2 menus or create a new
-    menu entry. Each Submenu is separated by '/'.
-    Currently, you cannot remove a menu entry.
-
-    Returns:
-    dict: a dictionary of key for menu entries and values as methods.
-          The value can be a tuple to add options like a divider for a menu
-          entry.
-    """
+    def run(self):
+        """
+        The actual plugin execution for Python/Hello.
+        """
+        print("Hello from python plugin!")
+        
     def menus(self):
+        """
+        Return the menus to add to mrv2's main toolbar.
+        You can add your commands to mrv2 menus or create a new
+        menu entry. Each Submenu is separated by '/'.
+        Currently, you cannot remove a menu entry.
+
+        Returns:
+        dict: a dictionary of key for menu entries and values as methods.
+              The value can be a tuple to add options like a divider for a menu
+              entry.
+        """
         menus = {
             "Python/Hello" : self.run,
         }

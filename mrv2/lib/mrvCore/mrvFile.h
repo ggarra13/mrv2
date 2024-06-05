@@ -121,12 +121,16 @@ namespace mrv
         //! Returns an NDI filename for the current process
         std::string NDI(ViewerUI* ui);
 
-        //! Returns true or false whether the filename is a temporary NDI file.
+        //! Returns whether the string is is an network path.
+        bool isNetwork(const std::string& path);
+
+        //! Returns whether the filename is a temporary NDI file.
         bool isTemporaryNDI(const Path& path);
 
-        //! Returns true or false whether the filename is a temporary EDL.
+        //! Returns whether the filename is a temporary EDL.
         bool isTemporaryEDL(const Path& path);
 
+        //! Returns whether command is in the PATH environment variable.
         bool isInPath(const std::string& command);
 
     } // namespace file
