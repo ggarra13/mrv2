@@ -40,7 +40,7 @@
 namespace
 {
     const char* kModule = "mrv2s";
-    const int kSessionVersion = 11;
+    const int kSessionVersion = 12;
 } // namespace
 
 namespace
