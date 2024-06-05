@@ -43,6 +43,8 @@ v1.1.9
 - Added file::isNetwork().
 - Added "on_open_file" method callback to Python plugin system that gets
   called when a file is opened.
+- Fixed a bug when docking the Python Panel and exiting.  The Python Panel
+  would get reset to just the menus' size.
 
 
 v1.1.8
