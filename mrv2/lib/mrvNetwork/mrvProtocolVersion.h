@@ -6,5 +6,5 @@
 
 namespace mrv
 {
-    const int kProtocolVersion = 8;
+    const int kProtocolVersion = 9;
 }
