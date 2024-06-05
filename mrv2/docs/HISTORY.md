@@ -48,6 +48,7 @@ v1.1.9
 - Fixed OCIO color LUTs not getting activated when selected.
 - Added a check button to the Color Panel to turn on/off LUTs.
 - Added OCIO color LUTs per clips.
+- Fixed typo in LUTOptions "enable" instead of "enabled".
 
 
 v1.1.8

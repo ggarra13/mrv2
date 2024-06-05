@@ -107,8 +107,8 @@ namespace tl
 
         inline std::ostream& operator<<(std::ostream& s, const LUTOptions& o)
         {
-            s << "<mrv2.image.LUTOptions fileName=" << o.fileName
-              << " order=" << o.order << ">";
+            s << "<mrv2.image.LUTOptions enabled=" << o.enabled
+              << " fileName=" << o.fileName << " order=" << o.order << ">";
             return s;
         }
 
@@ -392,7 +392,7 @@ Contains all classes and enums related to image controls.
             py::arg("enabled") = false, py::arg("fileName") = "",
             py::arg("order") = timeline::LUTOrder::First)
         .def_readwrite(
-            "enable", &timeline::LUTOptions::enabled, _("LUT enabled."))
+            "enabled", &timeline::LUTOptions::enabled, _("LUT enabled."))
         .def_readwrite(
             "fileName", &timeline::LUTOptions::fileName, _("LUT filename."))
         .def_readwrite(
