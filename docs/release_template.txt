@@ -1,15 +1,21 @@
-mrv2 v1.1.7
+mrv2 v1.1.8
 =========
 
 mrv2 is an open source professional player and review tool for vfx, animation and computer graphics for Windows, Linux and macOS.
 
-This is a bug fix update, fixing an X11 reboot when going to Full screen that got into early releases of v1.1.6.  mrv2's color pipeline was somewhat broken for YUV movie files, particularly for YUV420P_U8 movies.
-The custom file requester (used mainly by Linux users) has been improved in its display and performance for loading visible files on demand.
-Linux documentation has been added on how to achieve perfect playback on Wayland with the latest nvidia EGL driver.
-The "About->Update mrv2" python plug-in has been improved and now should work properly to download future upgrades or mrv2.
+This is a bug fix update and feature update.  mrv2's v1.1.7 fix for YUV420P_U8 movies with "unknown" color space took a hit on performance and could make decoding of such movies at 2K stall, so now a new feature to turn it off has been added to the Performance settings of the Settings Panel.  The default is for quality
+at the expense of performance.
+Window resizing code has been dramatically improved, taking only the screen
+space needed for the size of your movie.
+Window's Fixed Size and Fixed Position have also been fixed.
+Preferences->Audio has been added to allow you to select different audio
+devices and, on Linux, different APIs.
+Added the ability to load single frames from both the menus or from the
+command-line.
+The "About->Update mrv2" python plug-in has been further improved.
 
 
-Main Web page:
+Main Web page (with links to videos and online documentation):
 https://mrv2.sourceforge.io
 
 Release History and Binaries:
@@ -26,11 +32,11 @@ https://www.github.com/ggarra13/mrv2
 -------------------------------------------------------------------------------
 
 
-mrv2 v1.1.7
+mrv2 v1.1.8
 
 mrv2, an open source professional player and review tool for vfx, animation and computer graphics for Windows, Linux and macOS has a new version.
 
-Bug fix galore! You should update.
+Bug fixes and new features!
 
 Release History and Binaries:
 https://github.com/ggarra13/mrv2/releases/
