@@ -45,6 +45,9 @@ v1.1.9
   called when a file is opened.
 - Fixed a bug when docking the Python Panel and exiting.  The Python Panel
   would get reset to just the menus' size.
+- Fixed OCIO color LUTs not getting activated when selected.
+- Added a check button to the Color Panel to turn on/off LUTs.
+- Added OCIO color LUTs per clips.
 
 
 v1.1.8

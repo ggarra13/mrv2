@@ -35,6 +35,7 @@ namespace mrv
         {
             Fl_Tabs* ocio = nullptr;
 
+            Fl_Check_Button* lutOn = nullptr;
             Input* lutFilename = nullptr;
             Fl_Choice* lutOrder = nullptr;
 
@@ -103,6 +104,8 @@ namespace mrv
             Fl_Group* gb;
             Fl_Choice* m;
             Fl_Hold_Browser* br;
+            Fl_Check_Button* c;
+            HorSlider* s;
 
             // ---------------------------- OCIO
 
@@ -306,6 +309,21 @@ namespace mrv
 
             cg->begin();
 
+            auto lutOptions = App::app->lutOptions();
+
+            auto cV = new Widget< Fl_Check_Button >(
+                g->x() + 90, 50, g->w(), 20, _("Enabled"));
+            c = _r->lutOn = cV;
+            c->value(lutOptions.enabled);
+            c->labelsize(12);
+            cV->callback(
+                [=](auto w)
+                {
+                    auto o = App::app->lutOptions();
+                    o.enabled = w->value();
+                    App::app->setLUTOptions(o);
+                });
+
             gb = new Fl_Group(g->x(), 40, g->w(), 20);
             gb->begin();
 
@@ -318,8 +336,7 @@ namespace mrv
                 [=](auto o)
                 {
                     auto lutOptions = App::app->lutOptions();
-                    std::string file = o->value();
-                    lutOptions.fileName = file;
+                    lutOptions.fileName = o->value();
                     App::app->setLUTOptions(lutOptions);
                 });
 
@@ -400,9 +417,7 @@ namespace mrv
 
             cg->begin();
 
-            Fl_Check_Button* c;
-            HorSlider* s;
-            auto cV = new Widget< Fl_Check_Button >(
+            cV = new Widget< Fl_Check_Button >(
                 g->x() + 90, 50, g->w(), 20, _("Enabled"));
             c = _r->colorOn = cV;
             c->value(o.color.enabled);
@@ -727,6 +742,8 @@ namespace mrv
 
         void ColorPanel::setLUTOptions(const timeline::LUTOptions& value)
         {
+            _r->lutOn->value(value.enabled);
+
             std::string lutFile = value.fileName;
             _r->lutFilename->value(lutFile.c_str());
             if (!lutFile.empty())

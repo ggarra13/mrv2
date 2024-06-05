@@ -1449,6 +1449,7 @@ namespace mrv
                             item->currentTime = player->currentTime();
                             item->inOutRange = player->inOutRange();
                             item->audioOffset = player->audioOffset();
+                            item->lutOptions = p.lutOptions;
 
                             bool autoPlayback =
                                 ui->uiPrefs->uiPrefsAutoPlayback->value();
@@ -1559,12 +1560,10 @@ namespace mrv
                 {
                     if (activeFiles[0]->ocioIcs.empty())
                         Preferences::updateICS();
-                }
-                else
-                {
+
                     try
                     {
-                        ocio::setOcioIcs(p.activeFiles[0]->ocioIcs);
+                        ocio::setOcioIcs(activeFiles[0]->ocioIcs);
                     }
                     catch (const std::exception& e)
                     {
