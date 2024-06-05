@@ -306,6 +306,7 @@ namespace mrv
             }
             return value;
         }
+
         std::vector<std::string> ocioIcsList()
         {
             auto uiICS = App::ui->uiICS;

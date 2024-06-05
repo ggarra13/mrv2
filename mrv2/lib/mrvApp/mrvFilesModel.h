@@ -53,6 +53,7 @@ namespace mrv
         double audioOffset = 0.0;
 
         std::string ocioIcs;
+        timeline::LUTOptions lutOptions;
 
         std::vector<std::shared_ptr<draw::Annotation > > annotations;
     };

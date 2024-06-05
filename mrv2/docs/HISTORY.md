@@ -32,7 +32,8 @@ v1.1.9
   settings, load clips and save out a new movie file with baked OCIO, all
   from a Python script.
 - Fixed building mrv2 without TLRENDER_NET and with BUILD_PYTHON ON on macOS.
-- Consolidated Python commands to all use "filename" instead of "file".
+- Consolidated Python commands to all use "fileName" instead of "file" or
+  "filename".
 - Added bakeOCIO.py demo script with arguments.
 - Added -pythonArgs command-line string to pass a string of separated arguments
   with spaces, like:

@@ -2,10 +2,6 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <FL/platform.H>
-#undef None
-#undef Status
-
 #include "mrViewer.h"
 
 #include "mrvWidgets/mrvDockGroup.h"
@@ -79,7 +75,7 @@ namespace mrv
                 key = prefix + "/WindowY";
                 value = settings->getValue<std::any>(key);
                 Y = std_any_empty(value) ? Y : std_any_cast<int>(value);
-                
+
                 key = prefix + "/WindowW";
                 value = settings->getValue<std::any>(key);
                 W = std_any_empty(value) ? W : std_any_cast<int>(value);
@@ -122,17 +118,24 @@ namespace mrv
             TLRENDER_P();
             g->end();
 
+            // Adjust dock scrollbars for this new element
+            p.ui->uiDock->pack->layout();
+            p.ui->uiResizableBar->HandleDrag(0);
+
             // Check if we are a panel in a window
-            if (g->docked())
+            PanelWindow* w = g->get_window();
+            if (w && !g->docked())
             {
-                // Adjust dock scrollbars for this new element
-                p.ui->uiDock->pack->layout();
-                p.ui->uiResizableBar->HandleDrag(0);
-            }
-            else
-            {
-                auto pack = g->get_pack();
-                pack->layout();
+                int H = g->get_pack()->h() + g->get_dragger()->h();
+                Fl_Group* grp = g->get_group();
+                if (grp && grp->visible())
+                    H += grp->h();
+
+                // Adjust window to packed size
+                Fl_Widget* r = w->resizable();
+                w->resizable(0);
+                w->size(w->w(), H + 3);
+                w->resizable(r);
             }
         }
 
@@ -165,10 +168,10 @@ namespace mrv
                 PanelWindow* w = g->get_window();
 
                 key = prefix + "/WindowX";
-                settings->setValue(key, w->x_root());
+                settings->setValue(key, w->x());
 
                 key = prefix + "/WindowY";
-                settings->setValue(key, w->y_root());
+                settings->setValue(key, w->y());
 
                 key = prefix + "/WindowW";
                 settings->setValue(key, w->w());

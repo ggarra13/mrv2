@@ -437,6 +437,10 @@ namespace mrv
             Fl_Group::current(0);
 
             int H = g->h() - 20;
+
+            // When docked, the size will be just the dragbar.
+            if (H < 400)
+                H = 400;
             int Y = 20;
             int M = (H - Y) / 2;
 
@@ -504,17 +508,6 @@ from mrv2 import playlist, timeline, )PYTHON";
             g->begin();
             create_menu();
             g->add(tile);
-            g->end();
-
-            auto w = g->get_window();
-            if (w)
-            {
-                w->size_range(640, 400);
-            }
-
-            Fl_Scroll* s = g->get_scroll();
-            Pack* pack = g->get_pack();
-            s->resizable(pack);
         }
 
         void PythonPanel::run_code()

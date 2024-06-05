@@ -539,7 +539,6 @@ namespace mrv
 
         Preferences prefs(p.options.resetSettings, p.options.resetHotkeys);
 
-        
         if (!OSXfiles.empty())
         {
             if (p.options.fileNames.empty())
@@ -566,7 +565,7 @@ namespace mrv
 #endif
 
         Preferences::run();
-        
+
 #ifdef MRV2_PYBIND11
         // Create Python's output window
         outputDisplay = new PythonOutput(0, 0, 400, 400);
@@ -712,12 +711,11 @@ namespace mrv
                 return;
             }
 
-            p.pythonArgs =
-                std::make_unique<PythonArgs>(p.options.pythonArgs);
+            p.pythonArgs = std::make_unique<PythonArgs>(p.options.pythonArgs);
 
             LOG_INFO(
                 std::string(string::Format(_("Running python script '{0}'"))
-                            .arg(p.options.pythonScript)));
+                                .arg(p.options.pythonScript)));
             const auto& args = p.pythonArgs->getArguments();
 
             if (!args.empty())
@@ -728,7 +726,7 @@ namespace mrv
                 out += "]";
                 LOG_INFO(out);
             }
-            
+
             std::ifstream is(p.options.pythonScript);
             std::stringstream s;
             s << is.rdbuf();
@@ -748,7 +746,7 @@ namespace mrv
             return;
         }
 #endif
-        
+
         // Open the input files.
         int savedDigits =
             p.settings->getValue<int>("Misc/MaxFileSequenceDigits");
@@ -979,7 +977,7 @@ namespace mrv
             p.imageListener = new ImageListener(this);
 #endif
     }
-    
+
 #ifdef MRV2_PYBIND11
     const std::vector<std::string>& App::getPythonArgs() const
     {
@@ -1118,7 +1116,7 @@ namespace mrv
 
             for (const auto& pythonCb : pythonOpenFileCallbacks)
             {
-                run_python_open_file_cb(pythonCb, path.get());
+                run_python_open_file_cb(pythonCb, path.get(), audioFileName);
             }
         }
 
@@ -1401,6 +1399,7 @@ namespace mrv
             p.activeFiles[0]->audioOffset = p.player->audioOffset();
             p.activeFiles[0]->annotations = p.player->getAllAnnotations();
             p.activeFiles[0]->ocioIcs = ocio::ocioIcs();
+            p.activeFiles[0]->lutOptions = p.lutOptions;
         }
 
         if (!activeFiles.empty())
@@ -1556,8 +1555,11 @@ namespace mrv
                         set_edit_mode_cb(EditMode::kFull, ui);
                 }
 
-                if (!activeFiles.empty() && activeFiles[0]->ocioIcs.empty())
-                    Preferences::updateICS();
+                if (!activeFiles.empty())
+                {
+                    if (activeFiles[0]->ocioIcs.empty())
+                        Preferences::updateICS();
+                }
                 else
                 {
                     try
@@ -1568,7 +1570,11 @@ namespace mrv
                     {
                         LOG_ERROR(e.what());
                     }
+
+                    if (activeFiles[0]->lutOptions != p.lutOptions)
+                        setLUTOptions(activeFiles[0]->lutOptions);
                 }
+
                 if (p.running)
                 {
                     panel::redrawThumbnails();
@@ -1619,7 +1625,7 @@ namespace mrv
                 audioSystem->setOutputDevice(item->label());
             }
         }
-        
+
         uint64_t Gbytes =
             static_cast<uint64_t>(p.settings->getValue<int>("Cache/GBytes"));
 

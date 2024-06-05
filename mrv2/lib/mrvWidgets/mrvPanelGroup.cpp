@@ -76,8 +76,8 @@ namespace mrv
             pack->size(W, pack->h());
             scroll->size(W, pack->h());
             scroll->scroll_to(0, 0);
-            dock->add(this);    // move the toolgroup into the dock
-            docked(true); // toolgroup is docked...
+            dock->add(this); // move the toolgroup into the dock
+            docked(true);    // toolgroup is docked...
             // so we no longer need the tool window.
             tw->hide();
             delete tw;
@@ -96,7 +96,6 @@ namespace mrv
         }
     }
 
-    
     void PanelGroup::undock_grp(bool button)
     {
         if (docked())
@@ -110,17 +109,15 @@ namespace mrv
             auto settings = App::app->settings();
             auto dragger = get_dragger();
             std::string label = dragger->label();
-            if (label == "Python" || label == "Logs")
-                tw->size_range(640, 400);
             std::string prefix = "gui/" + label;
             std::string key;
 
             std_any value;
-            
+
             // If user undocked the window with the undock button,
             // check to see if we have window X and Y saved positions.
             if (button)
-            {                
+            {
                 key = prefix + "/WindowX";
                 value = settings->getValue<std::any>(key);
                 X = std_any_empty(value) ? X : std_any_cast<int>(value);
@@ -142,15 +139,17 @@ namespace mrv
             if (H2 != 0)
                 H = H2;
             assert(H != 0);
-            
+
             set_Fl_Group();
 
             tw = new PanelWindow(X, Y, W, H);
+            // if (label == "Python" || label == "Logs")
+            //     tw->size_range(640, 400);
             tw->end();
             dock->remove(this);
             tw->add(this);  // move the tool group into the floating window
             position(1, 1); // align group in floating window (needed)
-            size(W - kMargin, H - kMargin);     // resize to fit (needed)
+            size(W - kMargin, H - kMargin); // resize to fit (needed)
             tw->resizable(this);
             tw->resize(X, Y, W, H);
             tw->show();     // show floating window
@@ -264,7 +263,7 @@ namespace mrv
             int Y = tw->y();
             int W = tw->w();
             int H = tw->h();
-            
+
             tw->resizable(0);
             tw->resize(X, Y, W + kMargin, H + kMargin);
             tw->resizable(this);
@@ -291,7 +290,7 @@ namespace mrv
             int screen = tw->screen_num();
             int minX, minY, maxW, maxH;
             Fl::screen_work_area(minX, minY, maxW, maxH, screen);
-        
+
             // leave some headroom for topbar
             maxH = maxH - DH;
 

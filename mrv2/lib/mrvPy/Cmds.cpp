@@ -394,11 +394,14 @@ Command module.
 Used to run main commands and get arguments and set the display, image, compare, LUT options.
 )PYTHON");
 
-    cmds.def("args", &mrv2::cmd::args, _("Get command-line arguments passed as single quoted string to -pythonArgs."));
-    
+    cmds.def(
+        "args", &mrv2::cmd::args,
+        _("Get command-line arguments passed as single quoted string to "
+          "-pythonArgs."));
+
     cmds.def(
         "open", &mrv2::cmd::open, _("Open file with optional audio."),
-        py::arg("filename"), py::arg("audioFilename") = std::string());
+        py::arg("fileName"), py::arg("audioFileName") = std::string());
 
     cmds.def(
         "compare", &mrv2::cmd::compare,
@@ -501,19 +504,17 @@ Used to run main commands and get arguments and set the display, image, compare,
     cmds.def(
         "save", &mrv2::cmd::save,
         _("Save a movie or sequence from the front layer."),
-        py::arg("filename"),
-        py::arg("options") = mrv::SaveOptions());
+        py::arg("fileName"), py::arg("options") = mrv::SaveOptions());
 
     cmds.def(
         "saveOTIO", &mrv2::cmd::saveOTIO,
         _("Save an .otio file from the current selected image."),
-        py::arg("filename"));
+        py::arg("fileName"));
 
 #ifdef MRV2_PDF
     cmds.def(
         "savePDF", &mrv2::cmd::savePDF,
         _("Save a PDF document with all annotations and notes."),
-        py::arg("filename"));
+        py::arg("fileName"));
 #endif
-
 }

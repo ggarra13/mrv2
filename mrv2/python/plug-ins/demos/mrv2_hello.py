@@ -27,11 +27,11 @@ class HelloPlugin(mrv2.plugin.Plugin):
         """
         return True
 
-    def on_open_file(self, filename):
+    def on_open_file(self, filename, audioFileName):
         """
         Callback called when a file is opened.
         """
-        print(f'Opened "{filename}".')
+        print(f'Opened "{filename}", with audio "{audioFileName}".')
 
         
     def run(self):

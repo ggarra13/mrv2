@@ -44,7 +44,7 @@ namespace mrv
     using namespace tl;
 
     std::vector<py::object> pythonOpenFileCallbacks;
-    
+
     void process_python_plugin(const std::string& file, py::module& plugin)
     {
         try
@@ -189,13 +189,15 @@ namespace mrv
         }
     }
 
-    void run_python_open_file_cb(const py::object& method,
-                                 const std::string& fileName)
+    void run_python_open_file_cb(
+        const py::object& method, const std::string& fileName,
+        const std::string& audioFileName)
     {
         try
         {
             py::str pyFileName = py::str(fileName);
-            method(pyFileName);
+            py::str pyAudioFileName = py::str(audioFileName);
+            method(pyFileName, pyAudioFileName);
         }
         catch (const std::exception& e)
         {
@@ -251,8 +253,8 @@ namespace mrv
     class Plugin
     {
     public:
-        Plugin() {};
-        virtual ~Plugin() {};
+        Plugin(){};
+        virtual ~Plugin(){};
         virtual bool active() const { return true; };
         virtual py::dict menus() const
         {

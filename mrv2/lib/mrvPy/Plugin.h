@@ -16,8 +16,8 @@ namespace mrv
 {
     extern std::vector<py::object> pythonOpenFileCallbacks;
 
-    void run_python_open_file_cb(const py::object& method,
-                                 const std::string& fileName);
-}
+    void run_python_open_file_cb(
+        const py::object& method, const std::string& fileName,
+        const std::string& audioFileName);
+} // namespace mrv
 #endif
-    
