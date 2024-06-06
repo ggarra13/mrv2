@@ -1427,7 +1427,7 @@ namespace mrv
     void TimelineViewport::dragAndDrop(const std::string& text) noexcept
     {
         TLRENDER_P();
-
+        
         std::vector<std::string> loadFiles;
         auto tmpFiles = string::split(text, '\n');
 
@@ -1463,6 +1463,13 @@ namespace mrv
             }
             else
             {
+                // Google Chrome will shorten out URLs when they are https.
+                const file::Path path(file);
+                if (!file::isReadable(file) && file::isValidType(path))
+                {
+                    file = "https://" + file;
+                }
+                
                 loadFiles.push_back(file);
             }
         }

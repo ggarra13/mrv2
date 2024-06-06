@@ -124,6 +124,10 @@ namespace mrv
         //! Returns whether the string is is an network path.
         bool isNetwork(const std::string& path);
 
+        //! Returns whether the string is a potential URI string.
+        //! It must have at least one slash and one period.
+        bool isPotentialURI(const std::string& path);
+        
         //! Returns whether the filename is a temporary NDI file.
         bool isTemporaryNDI(const Path& path);
 

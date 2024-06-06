@@ -37,7 +37,11 @@ v1.1.9
 - Added bakeOCIO.py demo script with arguments.
 - Added -pythonArgs command-line string to pass a string of separated arguments
   with spaces, like:
-        mrv2 -pythonScript mrv2/python/demos/bakeOCIO.py -pythonArgs "/D/pictures/Mantaflow_v09/Fluid.0001.exr 'ACEScg' 'ACES 1.0 - SDR Video' test.mov"
+
+  ```
+  mrv2 -pythonScript mrv2/python/demos/bakeOCIO.py -pythonArgs "/D/pictures/Mantaflow_v09/Fluid.0001.exr 'ACEScg' 'ACES 1.0 - SDR Video' test.mov"
+  ```
+  
 - Fixed drag and drop of http:// and similar URLs to mrv2 for network
   playback.
 - Added file::isNetwork().
@@ -49,6 +53,9 @@ v1.1.9
 - Added a check button to the Color Panel to turn on/off LUTs.
 - Added OCIO color LUTs per clips.
 - Fixed typo in LUTOptions "enable" instead of "enabled".
+- Fixed drag and drop to work with URIs coming from Google's Chrome when they
+  don't have https:// prefixed into them under X11.  Google's Chrome DnD support
+  for Wayland is currently broken.
 
 
 v1.1.8

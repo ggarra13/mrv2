@@ -2,6 +2,7 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <regex>
 #include <fstream>
 #include <filesystem>
 namespace fs = std::filesystem;
@@ -172,22 +173,18 @@ namespace mrv
 
         bool isNetwork(const std::string& path)
         {
-            bool out = false;
-            
-            if (path.substr(0, 7)  == "crypto:"    ||
-                path.substr(0, 4)  == "ftp:"       ||
-                path.substr(0, 5)  == "http:"      ||
-                path.substr(0, 6)  == "https:"     ||
-                path.substr(0, 10) == "httpproxy:" ||
-                path.substr(0, 5)  == "rtmp:"      ||
-                path.substr(0, 4)  == "rtp:"       ||
-                path.substr(0, 4)  == "tcp:"       ||
-                path.substr(0, 4)  == "tls:")
+            static const std::string schemes[] =
+                {
+                    "crypto", "ftp", "http", "https", "httpproxy",
+                    "rtmp", "rtp", "tcp", "tls"
+                };
+
+            for (const std::string& scheme : schemes)
             {
-                out = true;
+                if (path.find(scheme + ":") == 0)
+                    return true;
             }
-            
-            return out;
+            return false;
         }
         
         bool isTemporaryNDI(const tl::file::Path& path)
