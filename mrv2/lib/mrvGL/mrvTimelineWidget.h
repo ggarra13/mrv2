@@ -124,9 +124,9 @@ namespace mrv
         //! Reposition timeline based on last event or hide it.
         void repositionThumbnail();
 
-        //! Get the thumbnail creator.
+        //! Get the thumbnail creator
         ThumbnailCreator* thumbnailCreator();
-        
+
         //! Set the time units.
         void setUnits(TimeUnits);
 
