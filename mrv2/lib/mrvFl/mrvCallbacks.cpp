@@ -2337,6 +2337,16 @@ namespace mrv
         model->setStereo3DOptions(o);
     }
 
+    void update_video_frame_cb(Fl_Menu_* m, void* d)
+    {
+        auto ui = App::ui;
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
+            return;
+        
+        player->updateVideoCache(player->currentTime());
+    }
+
     void refresh_file_cache_cb(Fl_Menu_* m, void* d)
     {
         auto ui = App::ui;

@@ -2602,14 +2602,14 @@ msgstr "OCIO"
 msgid "LUT"
 msgstr "LUT"
 
+msgid "Enabled"
+msgstr "Habilitado"
+
 msgid "Order"
 msgstr "Orden"
 
 msgid "Color Controls"
 msgstr "Controles de Color"
-
-msgid "Enabled"
-msgstr "Habilitado"
 
 msgid "Add"
 msgstr "Sumar"
@@ -3704,6 +3704,12 @@ msgstr "Vista/Máscara/%s"
 
 msgid "View/Hud"
 msgstr "Vista/Hud"
+
+msgid "Timeline/Cache/Clear"
+msgstr "Línea de Tiempo/Cache/Borrar"
+
+msgid "Timeline/Cache/Update Frame"
+msgstr "Línea de Tiempo/Cache/Actualizar Cuadro Actual"
 
 msgid "Timeline/Editable"
 msgstr "Línea de Tiempo/Editable"
@@ -6567,6 +6573,12 @@ msgstr "Canal Previo"
 
 msgid "Next Channel"
 msgstr "Próximo Canal"
+
+msgid "Clear Cache"
+msgstr "Borrar Cache"
+
+msgid "UpdateVideoFrame"
+msgstr "UpdateVideoFrame"
 
 msgid "Cut Frame"
 msgstr "Cortar Cuadro"

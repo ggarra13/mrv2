@@ -2554,14 +2554,14 @@ msgstr "OCIO"
 msgid "LUT"
 msgstr "LUT"
 
+msgid "Enabled"
+msgstr "Enabled"
+
 msgid "Order"
 msgstr "Order"
 
 msgid "Color Controls"
 msgstr "Color Controls"
-
-msgid "Enabled"
-msgstr "Enabled"
 
 msgid "Add"
 msgstr "Add"
@@ -3652,6 +3652,12 @@ msgstr "View/Mask/%s"
 
 msgid "View/Hud"
 msgstr "View/Hud"
+
+msgid "Timeline/Cache/Clear"
+msgstr "Timeline/Cache/Clear"
+
+msgid "Timeline/Cache/Update Frame"
+msgstr "Timeline/Cache/Update Frame"
 
 msgid "Timeline/Editable"
 msgstr "Timeline/Editable"
@@ -6500,6 +6506,12 @@ msgstr "Previous Channel"
 
 msgid "Next Channel"
 msgstr "Next Channel"
+
+msgid "Clear Cache"
+msgstr "Clear Cache"
+
+msgid "UpdateVideoFrame"
+msgstr "UpdateVideoFrame"
 
 msgid "Cut Frame"
 msgstr "Cut Frame"

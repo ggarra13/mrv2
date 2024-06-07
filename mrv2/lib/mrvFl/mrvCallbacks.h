@@ -227,6 +227,7 @@ namespace mrv
     // Panel callbacks
     void refresh_file_cache_cb(Fl_Menu_* m, void* d);
     void clone_file_cb(Fl_Menu_* m, void* d);
+    void update_video_frame_cb(Fl_Menu_* m, void* d);
     void refresh_media_cb(Fl_Menu_* m, void* d);
     void set_stereo_cb(Fl_Menu_* m, void* d);
     void copy_filename_cb(Fl_Menu_* m, void* d);

@@ -801,6 +801,25 @@ namespace mrv
                 view->updateUndoRedoButtons();
                 view->redrawWindows();
             }
+            else if (c == "updateVideoCache")
+            {
+                if (!player)
+                {
+                    tcp->unlock();
+                    return;
+                }
+                const otime::RationalTime& time = message["value"];
+                player->updateVideoCache(time);
+            }
+            else if (c == "clearCache")
+            {
+                if (!player)
+                {
+                    tcp->unlock();
+                    return;
+                }
+                player->clearCache();
+            }
             else if (c == "Create Annotation")
             {
                 bool receive = prefs->ReceiveAnnotations->value();

@@ -131,6 +131,10 @@ namespace mrv
     Hotkey kPreviousChannel(false, false, false, false, 0, "{");
     Hotkey kNextChannel(false, false, false, false, 0, "}");
 
+    Hotkey kClearCache(false, false, false, false, 0);
+    Hotkey kUpdateVideoFrame(false, false, false, true, 'u');
+
+    
     Hotkey kDrawMode(false, false, false, true, 'd');
     Hotkey kEraseMode(false, false, false, true, 'e');
     Hotkey kScrubMode(false, false, false, true, 's');
@@ -195,7 +199,7 @@ namespace mrv
     Hotkey kToggleAbout(false, false, false, false, 0);
     Hotkey kToggleNDI(false, false, false, false, 0);
     Hotkey kToggleNetwork(false, false, false, false, 'n');
-    Hotkey kToggleUSD(false, false, false, false, 'u');
+    Hotkey kToggleUSD(false, false, false, true, 'u');
     Hotkey kToggleStereo3D(false, false, false, false, 0);
     Hotkey kToggleEditMode(false, false, false, false, 'e');
     Hotkey kToggleTimelineThumbnails(false, false, false, false, 0);
@@ -438,6 +442,9 @@ namespace mrv
 
         HotkeyEntry(_("Previous Channel"), &kPreviousChannel),
         HotkeyEntry(_("Next Channel"), &kNextChannel),
+        
+        HotkeyEntry(_("Clear Cache"), &kClearCache),
+        HotkeyEntry(_("UpdateVideoFrame"), &kUpdateVideoFrame),
 
         HotkeyEntry(_("Cut Frame"), &kEditCutFrame),
         HotkeyEntry(_("Copy Frame"), &kEditCopyFrame),

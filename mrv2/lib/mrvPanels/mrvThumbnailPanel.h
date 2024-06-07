@@ -36,6 +36,8 @@ namespace mrv
                     std::pair<otime::RationalTime, Fl_RGB_Image*> >& thumbnails,
                 void* opaque);
 
+            void clearCache();
+
             void updateThumbnail(
                 const int64_t id,
                 const std::vector<
@@ -56,6 +58,9 @@ namespace mrv
         private:
             typedef std::map< Fl_Widget*, int64_t > WidgetIds;
             WidgetIds ids;
+
+            //! Whether to clear the cache for the thumbnails.
+            bool _clearCache = false;
 
             //! Thumbnail creation class.
             ThumbnailCreator* thumbnailCreator;

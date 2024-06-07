@@ -55,22 +55,35 @@ namespace mrv
             return one_panel_only;
         }
 
-        void redrawThumbnails()
+        void redrawThumbnails(bool clearCache)
         {
             using namespace panel;
             if (filesPanel)
+            {
+                if (clearCache) filesPanel->clearCache();
                 filesPanel->redraw();
+            }
             if (comparePanel)
+            {
+                if (clearCache) comparePanel->clearCache();
                 comparePanel->redraw();
+            }
             if (stereo3DPanel)
+            {
+                if (clearCache) stereo3DPanel->clearCache();
                 stereo3DPanel->redraw();
+            }
             if (playlistPanel)
+            {
+                if (clearCache) playlistPanel->clearCache();
                 playlistPanel->redraw();
+            }
             bool send = App::ui->uiPrefs->SendTimeline->value();
             if (send)
-                tcp->pushMessage("Redraw Panel Thumbnails", 0);
+                tcp->pushMessage("Redraw Panel Thumbnails", clearCache);
         }
 
+        
         void refreshThumbnails()
         {
             using namespace panel;

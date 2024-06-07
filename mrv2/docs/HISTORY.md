@@ -56,6 +56,9 @@ v1.1.9
 - Fixed drag and drop to work with URIs coming from Google's Chrome when they
   don't have https:// prefixed into them under X11.  Google's Chrome DnD support
   for Wayland is currently broken.
+- It is now possible to update a single frame of a sequence instead of the
+  full cache, by pressing SHIFT+u (Default hotkey).
+- Fixed refreshing of thumbnails when cache refresh was requested.
 
 
 v1.1.8

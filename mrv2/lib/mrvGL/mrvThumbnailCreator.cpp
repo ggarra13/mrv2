@@ -2,6 +2,10 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <thread>
+#include <atomic>
+#include <mutex>
+
 #include <tlGL/Mesh.h>
 #include <tlGL/OffscreenBuffer.h>
 #include <tlTimelineGL/Render.h>
@@ -11,10 +15,6 @@
 #include <tlTimeline/Player.h>
 
 #include <tlCore/StringFormat.h>
-
-#include <thread>
-#include <atomic>
-#include <mutex>
 
 #include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvLocale.h"
@@ -93,6 +93,8 @@ namespace mrv
         io::Options options;
 
         OffscreenContext offscreenContext;
+
+        bool clearCache = false;
     };
 
     ThumbnailCreator::ThumbnailCreator(
@@ -260,7 +262,7 @@ namespace mrv
     void ThumbnailCreator::clearCache()
     {
         TLRENDER_P();
-        p.options["ClearCache"] = string::Format("{0}").arg(rand());
+        p.clearCache = true;
     }
 
     void ThumbnailCreator::setTimerInterval(double value)
@@ -358,6 +360,11 @@ namespace mrv
                             io::Options ioOptions;
                             ioOptions["Layer"] =
                                 string::Format("{0}").arg(request.layer);
+                            if (p.clearCache)
+                            {
+                                ioOptions["ClearCache"] = string::Format("{0}").arg(rand());
+                                p.clearCache = false;
+                            }
                             request.futures.push_back(
                                 request.timeline
                                     ->getVideo(

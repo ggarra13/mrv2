@@ -129,6 +129,9 @@ namespace mrv
         //! Clear the cache.
         void clearCache();
 
+        //! Update video cache.
+        void updateVideoCache(const otime::RationalTime& time);
+        
         ///@}
 
         //! \name Audio

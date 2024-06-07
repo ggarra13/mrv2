@@ -159,6 +159,7 @@ namespace mrv
     extern Hotkey kAlphaBlendStraight;
     extern Hotkey kAlphaBlendPremultiplied;
 
+    //! Playback hotkeys
     extern Hotkey kShapeFrameStepBack;
     extern Hotkey kShapeFrameStepFwd;
 
@@ -179,12 +180,20 @@ namespace mrv
     extern Hotkey kPlayFwd;
     extern Hotkey kPlayFwdTwiceSpeed;
 
+    extern Hotkey kFirstFrame;
+    extern Hotkey kLastFrame;
+
     extern Hotkey kStop;
 
+    //! Looping hotkeys.
+    extern Hotkey kSetInPoint;
+    extern Hotkey kSetOutPoint;
+    
     extern Hotkey kPlaybackLoop;
     extern Hotkey kPlaybackOnce;
     extern Hotkey kPlaybackPingPong;
 
+    //! Versioning hotkeys.
     extern Hotkey kFirstVersionImage;
     extern Hotkey kPreviousVersionImage;
     extern Hotkey kNextVersionImage;
@@ -199,12 +208,14 @@ namespace mrv
     extern Hotkey kPreviousChannel;
     extern Hotkey kNextChannel;
 
-    extern Hotkey kFirstFrame;
-    extern Hotkey kLastFrame;
-
     extern Hotkey kPreviousClip;
     extern Hotkey kNextClip;
 
+    //! Cache hotkeys.
+    extern Hotkey kClearCache;
+    extern Hotkey kUpdateVideoFrame;
+
+    //! Menu Bar hotkeys.
     extern Hotkey kToggleMenuBar;
     extern Hotkey kToggleTopBar;
     extern Hotkey kTogglePixelBar;
@@ -213,10 +224,7 @@ namespace mrv
     extern Hotkey kToggleToolBar;
     extern Hotkey kTogglePresentation;
 
-    extern Hotkey kToggleOnePanelOnly;
-
-    // Drawing hotkeys
-
+    //! Drawing hotkeys.
     extern Hotkey kDrawMode;
     extern Hotkey kEraseMode;
     extern Hotkey kCircleMode;
@@ -234,34 +242,29 @@ namespace mrv
 
     extern Hotkey kSwitchPenColor;
 
+    //! Display hotkeys.
     extern Hotkey kResetChanges;
     extern Hotkey kExposureMore;
     extern Hotkey kExposureLess;
     extern Hotkey kGammaMore;
     extern Hotkey kGammaLess;
 
-    extern Hotkey kSetInPoint;
-    extern Hotkey kSetOutPoint;
-
-    // @todo:
-
-    extern Hotkey kCopyFrameXYValues;
-    extern Hotkey kCopyRGBAValues;
-
+    extern Hotkey kHudToggle;
     // @todo:
     extern Hotkey kGridToggle;
     extern Hotkey kGridSize;
 
-    //
+    // @todo:
+    extern Hotkey kCopyFrameXYValues;
+    extern Hotkey kCopyRGBAValues;
 
-    extern Hotkey kHudToggle;
-
-    // OCIO Hotkeys
+    //! OCIO Hotkeys.
     extern Hotkey kOCIOInputColorSpace;
     extern Hotkey kOCIODisplay;
     extern Hotkey kOCIOView;
 
-    // Windows hotkeys
+    //! Windows/Panels hotkeys.
+    extern Hotkey kToggleOnePanelOnly;
     extern Hotkey kToggleReel;
     extern Hotkey kToggleMediaInfo;
     extern Hotkey kToggleColorInfo;
@@ -284,12 +287,12 @@ namespace mrv
     extern Hotkey kToggleNetwork;
     extern Hotkey kToggleStereo3D;
     extern Hotkey kToggleUSD;
+
+    //! Editing hotkeys.
     extern Hotkey kToggleEditMode;
     extern Hotkey kToggleTimelineThumbnails;
     extern Hotkey kToggleTimelineTransitions;
     extern Hotkey kToggleTimelineMarkers;
-
-    // Editing hotkeys
     extern Hotkey kToggleTimelineEditable;
     extern Hotkey kToggleEditAssociatedClips;
     extern Hotkey kToggleTimelineFrameView;

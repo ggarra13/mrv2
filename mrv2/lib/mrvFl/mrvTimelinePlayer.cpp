@@ -293,8 +293,16 @@ namespace mrv
         return _p->player->observeCacheInfo()->get();
     }
 
+    void TimelinePlayer::updateVideoCache(const otime::RationalTime& time)
+    {
+        pushMessage("updateVideoCache", time);
+        _p->player->updateVideoCache(time);
+        panel::redrawThumbnails(true);
+    }
+    
     void TimelinePlayer::clearCache()
     {
+        pushMessage("clearCache", 0);
         _p->player->clearCache();
     }
 

@@ -129,8 +129,11 @@ namespace mrv
                     ids.erase(it);
                 }
             
+                if (_clearCache)
+                    thumbnailCreator->clearCache();
+                
                 thumbnailCreator->initThread();
-
+                
                 int64_t id = thumbnailCreator->request(
                     path.get(), time, size, updateThumbnail_cb, (void*)data,
                     layerId);
@@ -140,6 +143,11 @@ namespace mrv
             {
                 // We don't log errors on purpose
             }
+        }
+
+        void ThumbnailPanel::clearCache()
+        {
+            _clearCache = true;
         }
 
         void ThumbnailPanel::_cancelRequests()

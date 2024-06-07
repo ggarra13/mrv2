@@ -937,11 +937,21 @@ namespace mrv
         if (hud)
             item->set();
 
-
-        mode = FL_MENU_TOGGLE;
+        
+        mode = 0;
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
 
+        menu->add(_("Timeline/Cache/Clear"), kClearCache.hotkey(),
+                  (Fl_Callback*)refresh_file_cache_cb, ui, mode);
+        
+        menu->add(_("Timeline/Cache/Update Frame"), kUpdateVideoFrame.hotkey(),
+                  (Fl_Callback*)update_video_frame_cb, ui, mode);
+        
+        mode = FL_MENU_TOGGLE;
+        if (numFiles == 0)
+            mode |= FL_MENU_INACTIVE;
+        
         idx = menu->add(
             _("Timeline/Editable"), kToggleTimelineEditable.hotkey(),
             (Fl_Callback*)toggle_timeline_editable_cb, ui, mode);
