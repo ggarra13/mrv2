@@ -4,10 +4,12 @@
 
 #pragma once
 
-#include <tlIO/Cache.h>
+#include <map>
 
 #include <tlCore/Time.h>
 #include <tlCore/Path.h>
+
+#include <tlUI/ThumbnailSystem.h>
 
 #include <tlTimelineUI/TimelineWidget.h>
 
@@ -30,19 +32,10 @@ namespace mrv
             virtual ~ThumbnailPanel();
 
             //! FLTK callbacks
-            static void updateThumbnail_cb(
-                const int64_t id,
-                const std::vector<
-                    std::pair<otime::RationalTime, Fl_RGB_Image*> >& thumbnails,
-                void* opaque);
+            static void timerEvent_cb(void* data);
+            void timerEvent();
 
             void clearCache();
-
-            void updateThumbnail(
-                const int64_t id,
-                const std::vector<
-                    std::pair<otime::RationalTime, Fl_RGB_Image*> >& thumbnails,
-                Fl_Widget* w);
 
         protected:
             void _createThumbnail(
@@ -56,21 +49,10 @@ namespace mrv
             image::Size size = image::Size(128, 64);
 
         private:
-            typedef std::map< Fl_Widget*, int64_t > WidgetIds;
-            WidgetIds ids;
-
             //! Whether to clear the cache for the thumbnails.
             bool _clearCache = false;
 
-            //! Thumbnail creation class.
-            ThumbnailCreator* thumbnailCreator;
-
-            //! Thumbnails callback data.
-            struct ThumbnailData
-            {
-                Fl_Widget* widget = nullptr;
-                ThumbnailPanel* panel = nullptr;
-            };
+            std::map<Fl_Widget*, ui::ThumbnailRequest> thumbnailRequests;
         };
 
     } // namespace panel

@@ -5,11 +5,16 @@
 #include <FL/Fl_Widget.H>
 #include <FL/Fl.H>
 
-#include "mrvGL/mrvThumbnailCreator.h"
+#include <tlCore/StringFormat.h>
 
 #include "mrvPanels/mrvThumbnailPanel.h"
 
 #include "mrViewer.h"
+
+namespace
+{
+    const float kTimeout = 0.05;
+}
 
 namespace mrv
 {
@@ -20,54 +25,63 @@ namespace mrv
         ThumbnailPanel::ThumbnailPanel(ViewerUI* ui) :
             PanelWidget(ui)
         {
-            TLRENDER_P();
-
-            thumbnailCreator = p.ui->uiTimeline->thumbnailCreator();
+            Fl::add_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this); 
         }
 
         ThumbnailPanel::~ThumbnailPanel()
         {
-            _cancelRequests();
+            Fl::remove_timeout((Fl_Timeout_Handler)timerEvent_cb, this); 
         }
 
-        void ThumbnailPanel::updateThumbnail_cb(
-            const int64_t id,
-            const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&
-                thumbnails,
-            void* opaque)
+        void ThumbnailPanel::timerEvent_cb(void* opaque)
         {
-            ThumbnailData* data = static_cast< ThumbnailData* >(opaque);
-            Fl_Widget* w = data->widget;
-            ThumbnailPanel* panel = data->panel;
-            panel->updateThumbnail(id, thumbnails, w);
-            delete data;
+            ThumbnailPanel* panel = static_cast< ThumbnailPanel* >(opaque);
+            panel->timerEvent();
         }
 
-        void ThumbnailPanel::updateThumbnail(
-            const int64_t id,
-            const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&
-                thumbnails,
-            Fl_Widget* w)
+        void ThumbnailPanel::timerEvent()
         {
-            auto it = ids.find(w);
-            if (it == ids.end())
-                return;
+            auto i = thumbnailRequests.begin();
+            while (i != thumbnailRequests.end())
+            {
+                if (i->second.future.valid() &&
+                    i->second.future.wait_for(std::chrono::seconds(0)) == std::future_status::ready)
+                {
+                    if (auto image = i->second.future.get())
+                    {
+                        if (image::PixelType::RGBA_U8 == image->getPixelType())
+                        {
+                            const int w = image->getWidth();
+                            const int h = image->getHeight();
+                            const int depth = 4;
 
-            if (it->second == id)
-            {
-                for (const auto& i : thumbnails)
-                {
-                    w->bind_image(i.second);
+                            uint8_t* pixelData = new uint8_t[w * h * depth];
+
+                            auto rgbImage = new Fl_RGB_Image(
+                                pixelData, w, h, depth);
+                            rgbImage->alloc_array = true;
+
+                            const uint8_t* d = pixelData;
+                            const uint8_t* s = image->getData();
+                            for (int y = 0; y < h; ++y)
+                            {
+                                memcpy(
+                                    pixelData + (h - 1 - y) * w * 4,
+                                    s + y * w * 4, w * 4);
+                            }
+                            i->first->bind_image(rgbImage);
+                            i->first->redraw();
+                        }
+                    }
+                    i = thumbnailRequests.erase(i);
                 }
-                w->redraw();
-            }
-            else
-            {
-                for (const auto& i : thumbnails)
+                else
                 {
-                    delete i.second;
+                    ++i;
                 }
             }
+            Fl::repeat_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb,
+                               this);
         }
 
         void ThumbnailPanel::_createThumbnail(
@@ -95,6 +109,7 @@ namespace mrv
             try
             {
                 const auto context = App::app->getContext();
+                auto thumbnailSystem = context->getSystem<ui::ThumbnailSystem>();
                 const auto& timeline = timeline::Timeline::create(path,
                                                                   context);
                 const auto& timeRange = timeline->getTimeRange();
@@ -118,26 +133,27 @@ namespace mrv
                         time = endTime;
                 }
 
-                ThumbnailData* data = new ThumbnailData;
-                data->widget = widget;
-                data->panel = this;
-            
-                auto it = ids.find(widget);
-                if (it != ids.end())
+                auto it = thumbnailRequests.find(widget);
+                if (it != thumbnailRequests.end())
                 {
-                    thumbnailCreator->cancelRequests(it->second);
-                    ids.erase(it);
+                    std::vector<uint64_t> cancelIds;
+                    const auto& request = it->second;
+                    cancelIds.push_back(request.id);
+                    thumbnailSystem->cancelRequests(cancelIds);
+                    thumbnailRequests.erase(it);
                 }
-            
+
+                io::Options options;
                 if (_clearCache)
-                    thumbnailCreator->clearCache();
+                {
+                    auto cache = thumbnailSystem->getCache();
+                    // @todo:
+                    //cache->clear();
+                    _clearCache = false;
+                }
                 
-                thumbnailCreator->initThread();
-                
-                int64_t id = thumbnailCreator->request(
-                    path.get(), time, size, updateThumbnail_cb, (void*)data,
-                    layerId);
-                ids[widget] = id;
+                thumbnailRequests[widget] =
+                    thumbnailSystem->getThumbnail(path, size.h, time, options);
             }
             catch (const std::exception& e)
             {
@@ -152,11 +168,17 @@ namespace mrv
 
         void ThumbnailPanel::_cancelRequests()
         {
-            for (const auto& it : ids)
+            const auto context = App::app->getContext();
+            auto thumbnailSystem = context->getSystem<ui::ThumbnailSystem>();
+                
+            std::vector<uint64_t> ids;
+            for (const auto& i : thumbnailRequests)
             {
-                thumbnailCreator->cancelRequests(it.second);
+                const auto& request = i.second;
+                ids.push_back(request.id);
             }
-            ids.clear();
+            thumbnailSystem->cancelRequests(ids);
+            thumbnailRequests.clear();
         }
 
     } // namespace panel
