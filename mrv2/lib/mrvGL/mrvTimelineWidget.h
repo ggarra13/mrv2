@@ -104,16 +104,6 @@ namespace mrv
         int handle(int) FL_OVERRIDE;
         //! @}
 
-        void single_thumbnail(
-            const int64_t,
-            const std::vector<
-                std::pair<otime::RationalTime, Fl_RGB_Image*> >&);
-
-        static void single_thumbnail_cb(
-            const int64_t,
-            const std::vector< std::pair<otime::RationalTime, Fl_RGB_Image*> >&,
-            void* data);
-
         //! Hide the thumbnail at least until user enters the timeline slider
         //! again.
         void hideThumbnail();
@@ -153,10 +143,9 @@ namespace mrv
         void continuePlaying();
 
     protected:
-        void _initializeGL();
 
         const float pixelRatio() const;
-
+        
         int enterEvent();
         int leaveEvent();
         int mousePressEvent();
@@ -171,12 +160,16 @@ namespace mrv
 
     private:
         void _initializeGLResources();
+        void _initializeGL();
+        void _thumbnailEvent();
 
         void _createThumbnailWindow();
         void _getThumbnailPosition(int& X, int& Y, int& W, int& H);
 
         void _setTimeUnits(tl::timeline::TimeUnits);
 
+        void _cancelThumbnailRequests();
+        
         void _tickEvent();
         void _tickEvent(
             const std::shared_ptr<ui::IWidget>&, bool visible, bool enabled,

@@ -61,13 +61,13 @@ namespace mrv
                                 pixelData, w, h, depth);
                             rgbImage->alloc_array = true;
 
-                            const uint8_t* d = pixelData;
+                            uint8_t* d = pixelData;
                             const uint8_t* s = image->getData();
                             for (int y = 0; y < h; ++y)
                             {
                                 memcpy(
-                                    pixelData + (h - 1 - y) * w * 4,
-                                    s + y * w * 4, w * 4);
+                                    d + (h - 1 - y) * w * 4, s + y * w * 4,
+                                    w * 4);
                             }
                             i->first->bind_image(rgbImage);
                             i->first->redraw();
@@ -110,8 +110,8 @@ namespace mrv
             {
                 const auto context = App::app->getContext();
                 auto thumbnailSystem = context->getSystem<ui::ThumbnailSystem>();
-                const auto& timeline = timeline::Timeline::create(path,
-                                                                  context);
+                const auto& timeline =
+                    timeline::Timeline::create(path, context);
                 const auto& timeRange = timeline->getTimeRange();
 
                 auto time = currentTime;
@@ -136,19 +136,15 @@ namespace mrv
                 auto it = thumbnailRequests.find(widget);
                 if (it != thumbnailRequests.end())
                 {
-                    std::vector<uint64_t> cancelIds;
                     const auto& request = it->second;
-                    cancelIds.push_back(request.id);
-                    thumbnailSystem->cancelRequests(cancelIds);
+                    thumbnailSystem->cancelRequests( { request.id } );
                     thumbnailRequests.erase(it);
                 }
 
                 io::Options options;
                 if (_clearCache)
                 {
-                    auto cache = thumbnailSystem->getCache();
-                    // @todo:
-                    //cache->clear();
+                    options["ClearCache"] = string::Format("{0}").arg(rand());
                     _clearCache = false;
                 }
                 

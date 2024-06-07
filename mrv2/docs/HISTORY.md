@@ -63,6 +63,9 @@ v1.1.9
 - Consolidated Darby's ui::Style::ColorRole with FLTK's color schemes.  Now
   changing from one of the preset color schemes should result on a nicer look
   for the timeline viewport.
+- Sped up Thumbnail creation in Panels.  Fixed Darby's .otio/.otioz thumbnail
+  creation.
+- Sped up Thumbnail creation above Timeline.
 
 
 v1.1.8
