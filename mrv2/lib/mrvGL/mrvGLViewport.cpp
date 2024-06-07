@@ -685,7 +685,7 @@ namespace mrv
         {
             for (const auto& shape : annotation->shapes)
             {
-                if (dynamic_cast<GLTextShape*>(shape.get()))
+                if (dynamic_cast<GL2TextShape*>(shape.get()))
                 {
                     draw_opengl1 = true;
                     break;

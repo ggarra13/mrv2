@@ -59,6 +59,7 @@ v1.1.9
 - It is now possible to update a single frame of a sequence instead of the
   full cache, by pressing SHIFT+u (Default hotkey).
 - Fixed refreshing of thumbnails when cache refresh was requested.
+- Fixed annotation rendering not keeping the annotation after it was entered.
 
 
 v1.1.8

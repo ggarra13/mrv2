@@ -63,8 +63,6 @@ namespace mrv
         // Keep the content of the Stencil Buffer
         glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
-        glEnable(GL_BLEND);
-
         // We need to flip the FLTK projection matrix in Y
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
@@ -72,9 +70,6 @@ namespace mrv
 
         glMatrixMode(GL_MODELVIEW);
         glLoadMatrixf(matrix.e);
-
-        // So compositing works properly
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         glColor4f(color.r, color.g, color.b, color.a);
 

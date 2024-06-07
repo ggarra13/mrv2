@@ -462,6 +462,12 @@ namespace mrv
             // No projection matrix.  Thar's set by FLTK ( and we
             // reset it -- flip it in Y -- inside mrvGL2TextShape.cpp ).
 
+
+            // So compositing works properly
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+        
             for (auto& shape : shapes)
             {
                 auto textShape = dynamic_cast< GL2TextShape* >(shape.get());
@@ -470,6 +476,7 @@ namespace mrv
 
                 float a = shape->color.a;
                 shape->color.a *= alphamult;
+                
                 textShape->pixels_per_unit = pixel_unit;
                 textShape->w = w();
                 textShape->h = h();
