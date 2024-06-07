@@ -102,7 +102,7 @@ class PreferencesUI {open
             xywh {283 28 564 380} box PLASTIC_UP_BOX labelcolor 32
           } {
             Fl_Group {} {
-              label {User Interface}
+              label {User Interface} open
               xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
@@ -355,11 +355,11 @@ If you try to open several mrv2s with different images, all these images will be
               }
             }
             Fl_Group {} {
-              label {Language and Colors}
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
+              label {Language and Colors} open
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {
-                label UI
+                label UI open
                 xywh {360 58 403 199} box ROUNDED_BOX
               } {
                 Fl_Choice uiLanguage {
@@ -405,8 +405,23 @@ If you try to open several mrv2s with different images, all these images will be
                   label {Color Theme}
                   user_data m user_data_type {ViewerUI*}
                   callback {if (!o->mvalue() || !o->mvalue()->text ) return;
-	      mrv::Preferences::schemes.apply_colors( o->mvalue()->text );
-	      v->refresh();} open
+
+Fl_Color pen_color = v->uiPenColor->color();
+uint8_t pr, pg, pb;
+Fl::get_color(pen_color, pr, pg, pb);
+
+Fl_Color old_pen_color = v->uiOldPenColor->color();
+uint8_t opr, opg, opb;
+Fl::get_color(old_pen_color, opr, opg, opb);
+
+mrv::Preferences::schemes.apply_colors( o->mvalue()->text );
+
+Fl::set_color(pen_color, pr, pg, pb);
+Fl::set_color(old_pen_color, opr, opg, opb);
+
+const auto style = mrv::Preferences::schemes.getStyle();
+v->uiTimeline->setStyle(style);
+v->refresh();} open selected
                   xywh {502 178 150 25} down_box BORDER_BOX align 1
                 } {}
                 Fl_Button {} {
@@ -624,7 +639,7 @@ o->redraw();}
               }
             }
             Fl_Group {} {
-              label Positioning open
+              label Positioning
               xywh {288 37 555 360} box EMBOSSED_BOX hide
             } {
               Fl_Group {} {
@@ -754,7 +769,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
             }
             Fl_Group {} {
               label Thumbnails
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label Thumbnails
@@ -769,7 +784,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                   tooltip {Preview Thumbnails in Panels} xywh {398 222 370 20} down_box DOWN_BOX value 1
                 }
                 Fl_Choice uiPrefsEditThumbnails {
-                  label {Edit Viewport} open selected
+                  label {Edit Viewport} open
                   tooltip {How to display timeline thumbnails by default.} xywh {398 140 175 28} box THIN_DOWN_BOX down_box BORDER_BOX align 8
                   code0 {o->value(1);}
                 } {

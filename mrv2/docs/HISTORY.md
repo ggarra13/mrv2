@@ -60,6 +60,9 @@ v1.1.9
   full cache, by pressing SHIFT+u (Default hotkey).
 - Fixed refreshing of thumbnails when cache refresh was requested.
 - Fixed text annotation rendering disappearing after it was entered.
+- Consolidated Darby's ui::Style::ColorRole with FLTK's color schemes.  Now
+  changing from one of the preset color schemes should result on a nicer look
+  for the timeline viewport.
 
 
 v1.1.8

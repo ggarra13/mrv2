@@ -8,8 +8,11 @@
 #include <vector>
 #include <string>
 
+#include <tlUI/Style.h>
+
 namespace mrv
 {
+    using namespace tl;
 
     class ColorSchemes
     {
@@ -41,12 +44,19 @@ namespace mrv
         themeArray themes;
 
         ColorSchemes();
+
+        void setContext(const std::shared_ptr<system::Context>&);
         bool read_themes(const char* file);
         bool read_colors(FILE* f, Theme& scheme);
         void apply_colors(std::string name);
         void reload_theme(std::string name);
 
+        std::shared_ptr<tl::ui::Style> getStyle() const;
+        
         void debug();
+
+    protected:
+        std::shared_ptr<ui::Style> _style; 
     };
 
 } // namespace mrv

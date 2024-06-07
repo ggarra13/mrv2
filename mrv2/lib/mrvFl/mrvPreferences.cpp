@@ -460,10 +460,12 @@ namespace mrv
 
         colors.get("theme", tmpS, "Black", 2048);
 
+        auto context = App::app->getContext();
+        schemes.setContext(context);
+        
         item = uiPrefs->uiColorTheme->find_item(tmpS);
         if (item)
         {
-
             uiPrefs->uiColorTheme->picked(item);
         }
 

@@ -1624,20 +1624,6 @@ namespace mrv
 
     void TimelineWidget::_styleUpdate()
     {
-        /*TLRENDER_P();
-          const auto palette = this->palette();
-          p.style->setColorRole(
-          ui::ColorRole::Window,
-          fromQt(palette.color(QPalette::ColorRole::Window)));
-          p.style->setColorRole(
-          ui::ColorRole::Base,
-          fromQt(palette.color(QPalette::ColorRole::Base)));
-          p.style->setColorRole(
-          ui::ColorRole::Button,
-          fromQt(palette.color(QPalette::ColorRole::Button)));
-          p.style->setColorRole(
-          ui::ColorRole::Text,
-          fromQt(palette.color(QPalette::ColorRole::WindowText)));*/
     }
 
     otime::RationalTime TimelineWidget::_posToTime(int value) noexcept

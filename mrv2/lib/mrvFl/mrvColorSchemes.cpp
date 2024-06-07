@@ -12,6 +12,8 @@
 
 #include "mrvFl/mrvIO.h"
 
+#include "mrvApp/mrvApp.h"
+
 namespace
 {
     const char* kModule = "colors";
@@ -19,6 +21,9 @@ namespace
 
 namespace mrv
 {
+    using namespace tl;
+    
+    
     std::string ColorSchemes::remove_comments(std::string line)
     {
         size_t pos = line.find("#");
@@ -29,7 +34,9 @@ namespace mrv
         return line;
     }
 
-    ColorSchemes::ColorSchemes() {}
+    ColorSchemes::ColorSchemes()
+    {
+    }
 
     bool ColorSchemes::read_themes(const char* file)
     {
@@ -129,6 +136,28 @@ namespace mrv
             }
         }
         Fl::set_color(FL_FREE_COLOR, 0, 0, 0, 80);
+
+        if (name == "Black" || name == "Shake")
+        {
+            const auto& colorRoles = ui::defaultColorRoles();
+            _style->setColorRoles(colorRoles);
+            return;
+        }
+        
+        float r, g, b;
+        uint8_t ur, ug, ub;
+        Fl_Color darker = fl_darker(FL_BACKGROUND_COLOR);
+        Fl::get_color(darker, ur, ug, ub);
+        r = ur / 255.F;
+        g = ug / 255.F;
+        b = ub / 255.F;
+
+        image::Color4f windowColor(r, g, b);
+        _style->setColorRole(ui::ColorRole::Window, windowColor);
+        
+        image::Color4f textColor(0.F, 0.F, 0.F);
+        _style->setColorRole(ui::ColorRole::TextDisabled, textColor);
+        
     }
 
     void ColorSchemes::reload_theme(std::string t)
@@ -147,4 +176,17 @@ namespace mrv
             snprintf(buf, 16, "%08x", c);
         }
     }
+
+    void
+    ColorSchemes::setContext(const std::shared_ptr<system::Context>& context)
+    {
+        if (!_style)
+            _style = ui::Style::create(context);
+    }
+    
+    std::shared_ptr<ui::Style> ColorSchemes::getStyle() const
+    {
+        return _style;
+    }
+    
 } // namespace mrv

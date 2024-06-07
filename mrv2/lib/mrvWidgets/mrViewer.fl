@@ -107,7 +107,7 @@ decl {class AboutUI;} {public global
 }
 
 widget_class PixelToolBarClass {open
-  xywh {37 101 690 30} resizable
+  xywh {0 0 690 30} resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {open
@@ -209,7 +209,7 @@ ui->uiView->centerView();}
         xywh {5 5 100 20}
       }
     }
-    Fl_Group {} {open
+    Fl_Group {} {
       xywh {27 1 663 28} box FLAT_BOX color 56
     } {
       Fl_Output uiCoord {
@@ -413,7 +413,7 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
 }
 
 widget_class TimelineClass {
-  xywh {82 146 690 47} box NO_BOX resizable
+  xywh {0 0 690 47} box NO_BOX resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {
@@ -809,7 +809,7 @@ uiSecondary = nullptr;} {}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
     exit_cb( o, v );} open
-      xywh {617 416 690 602} type Double align 80 resizable
+      xywh {0 0 690 602} type Double align 80 resizable
       class {mrv::MainWindow} size_range {690 602 0 0} visible
     } {
       Fl_Pack uiRegion {open
@@ -1215,7 +1215,7 @@ settings->setValue( mrv::kPenColorA, a);}
               code0 {o->main( this );}
               class {mrv::Viewport}
             } {}
-            Fl_Group uiDockGroup {open selected
+            Fl_Group uiDockGroup {
               xywh {420 53 270 435} box FLAT_BOX hide
               code0 {uiViewGroup->fixed( o, 270 );}
             } {
@@ -1242,7 +1242,7 @@ settings->setValue( mrv::kPenColorA, a);}
             } {}
           }
         }
-        Fl_Group uiBottomBar {
+        Fl_Group uiBottomBar {open
           xywh {0 518 690 29} box FLAT_BOX
         } {
           Fl_Group uiTimeWindow {open
@@ -1296,6 +1296,14 @@ delete uiAbout; uiAbout = nullptr;} {}
 if ( uiPrefs ) uiPrefs->uiMain->redraw();
 if ( uiAbout ) uiAbout->uiMain->redraw();
 if ( uiHotkey ) uiHotkey->uiMain->redraw();
-Fl::check(); // needed to refresh windows} {}
+if ( uiBottomBar->visible() )
+{
+  uiBottomBar->hide();
+  uiBottomBar->show();
+  uiTimelineGroup->hide();
+  uiTimelineGroup->show();
+}
+Fl::flush(); // needed to refresh windows} {selected
+    }
   }
 }
