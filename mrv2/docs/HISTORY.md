@@ -67,6 +67,8 @@ v1.1.9
   creation.
 - Sped up Thumbnail creation above Timeline.
 - Sped up Thumbnail creation on mrv2's custom file requester.
+- Made mousewheel not have any effect on the view window, timeline viewport nor
+  volume slider unless the mouse is directly above them.
 
 
 v1.1.8

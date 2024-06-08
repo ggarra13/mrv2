@@ -1116,6 +1116,9 @@ namespace mrv
         }
         case FL_MOUSEWHEEL:
         {
+            if (Fl::belowmouse() != this)
+                return 0;
+            
             float dy = Fl::event_dy();
             const float speed = _getZoomSpeedValue();
             if (_isEnvironmentMap())

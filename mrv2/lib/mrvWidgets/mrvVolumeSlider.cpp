@@ -21,6 +21,9 @@ namespace mrv
             return 1;
         case FL_MOUSEWHEEL:
         {
+            if (Fl::belowmouse() != this)
+                return 0;
+            
             float v = value();
             float dx = Fl::event_dx();
             float dy = Fl::event_dy();

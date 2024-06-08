@@ -1583,6 +1583,8 @@ namespace mrv
             requestThumbnail(true);
             return mouseMoveEvent();
         case FL_MOUSEWHEEL:
+            if (Fl::belowmouse() != this)
+                return 0;
             return wheelEvent();
         case FL_KEYDOWN:
         {

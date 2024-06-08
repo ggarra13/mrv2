@@ -17,10 +17,46 @@ Build System
 		must manually use git to pull the latest tlRender or FLTK (or
 		whatever tag you want to build against).		
 
+	CMakeLists.txt
+		Main CMakeLists.txt file.  Unless on Linux or macOS, it should
+		not be run with cmake.  You should invoke runme.sh or one of
+		the bin/runme_* scripts instead.
+		
+cmake/:
+
+	build_python_windows.cmake
+		Auxiliary script to build and install Python on Windows.
+	copy_pdbs.cmake
+		Auxiliary script to copy all Windows' pdbs used for debugging.
+	documentation.cmake
+		Auxiliary script with functions for documenting mrv2.
+	dummy.cmake
+		Empty script, needed by packaging.cmake so that variables would
+		get passed to prepackage.cmake script.
+	functions.cmake
+		Auxiliary cmake functions.
+	options.cmake
+		CMake options for building mrv2.
+	packaging.cmake
+		CMake file used for packaging on all platforms.
+	prepackage.cmake
+		Script run in staging area run before packaging.cmake to
+		clean-up files before packaging.
+	translations.cmake
+		CMake script used to deal with Natural Language translations.
+	version.cmake
+		Current mrv2 version.  All scripts extract the values from here.
+		Note that there's currently no support to tag a version as a 
+		beta one.
+
 bin/:
 
 	Auxiliary scripts for doing multiple auxiliary tasks, including
 	Windows' pre-flight compilations.
+	
+	All scripts are to be run from mrv2's root directory, not from 
+	within the bin directory.
+	
 	They should be self-explanatory with their names.  If not, open
 	them in your text editor.  They are all documented what they do.
 
