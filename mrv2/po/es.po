@@ -2157,9 +2157,6 @@ msgstr "Cinemascope"
 msgid "MGM Camera 65"
 msgstr "MGM Camara 65"
 
-msgid "Load an image or movie file"
-msgstr "Cargar una imagen o película"
-
 msgid "Load"
 msgstr "Cargar"
 
@@ -2279,6 +2276,9 @@ msgstr "Fecha de Modificación"
 
 msgid "Last modified date of file"
 msgstr "Última fecha de modificación del archivo"
+
+msgid "Load an image or movie file"
+msgstr "Cargar una imagen o película"
 
 msgid "Video Stream #%d"
 msgstr "Pista de Vídeo #%d"

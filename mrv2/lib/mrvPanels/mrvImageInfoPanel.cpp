@@ -752,7 +752,7 @@ namespace mrv
 
             // Needed to resize the panels
             if (player)
-                g->end();  // not end_group()!
+                end_group();
             
             Fl_Group::current(orig);
         }

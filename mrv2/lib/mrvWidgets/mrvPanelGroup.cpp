@@ -250,24 +250,9 @@ namespace mrv
 
     void PanelGroup::end()
     {
-        assert(h() > 0);
         pack->end();
-        assert(h() > 0);
         Fl_Group::end();
-        assert(h() > 0);
         layout();
-        assert(h() > 0);
-        if (!docked())
-        {
-            int X = tw->x();
-            int Y = tw->y();
-            int W = tw->w();
-            int H = tw->h();
-
-            tw->resizable(0);
-            tw->resize(X, Y, W + kMargin, H + kMargin);
-            tw->resizable(this);
-        }
     }
 
     void PanelGroup::layout()

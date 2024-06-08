@@ -2125,9 +2125,6 @@ msgstr "Cinemascope"
 msgid "MGM Camera 65"
 msgstr "MGM Camera 65"
 
-msgid "Load an image or movie file"
-msgstr "Load an image or movie file"
-
 msgid "Load"
 msgstr "Load"
 
@@ -2247,6 +2244,9 @@ msgstr "Modified Date"
 
 msgid "Last modified date of file"
 msgstr "Last modified date of file"
+
+msgid "Load an image or movie file"
+msgstr "Load an image or movie file"
 
 msgid "Video Stream #%d"
 msgstr "Video Stream #%d"
