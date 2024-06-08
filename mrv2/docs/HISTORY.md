@@ -69,6 +69,7 @@ v1.1.9
 - Sped up Thumbnail creation on mrv2's custom file requester.
 - Made mousewheel not have any effect on the view window, timeline viewport nor
   volume slider unless the mouse is directly above them.
+- Fixed mousewheel not scrolling sometimes on panel dockbar.
 
 
 v1.1.8

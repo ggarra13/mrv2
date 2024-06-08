@@ -16,14 +16,14 @@
 
 namespace mrv
 {
-    DockGroup::DockGroup(int x, int y, int w, int h, const char* l) :
-        Fl_Group(x, y, w, h, l)
+    DockGroup::DockGroup(int X, int Y, int W, int H, const char* l) :
+        Fl_Group(X, Y, W, H, l)
     {
-        scroll = new Fl_Scroll(x, y, w, h);
-        scroll->type(Fl_Scroll::BOTH);
+        scroll = new Scroll(X, Y, W, H);
+        scroll->type(Scroll::BOTH);
         scroll->begin();
 
-        pack = new Pack(x, y, w, h);
+        pack = new Pack(X, Y, W, H);
         pack->type(Pack::VERTICAL);
         pack->end();
         children = 0;

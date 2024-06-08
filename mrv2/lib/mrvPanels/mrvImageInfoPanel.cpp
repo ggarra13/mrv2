@@ -674,9 +674,6 @@ namespace mrv
         {
             m_curr = nullptr;
 
-            DBG2;
-            g->tooltip(_("Load an image or movie file"));
-
             m_image->hide();
             m_video->hide();
             m_audio->hide();
@@ -755,9 +752,7 @@ namespace mrv
 
             // Needed to resize the panels
             if (player)
-            {
-                end_group();
-            }
+                g->end();  // not end_group()!
             
             Fl_Group::current(orig);
         }
@@ -1089,7 +1084,6 @@ namespace mrv
             const bool editable, const bool active, Fl_Callback* callback,
             const int minV, const int maxV, const int when)
         {
-
             Fl_Color colA = get_title_color();
             Fl_Color colB = get_widget_color();
 
@@ -1250,7 +1244,6 @@ namespace mrv
             const bool editable, const bool active, Fl_Callback* callback,
             const unsigned int minV, const unsigned int maxV)
         {
-
             Fl_Color colA = get_title_color();
             Fl_Color colB = get_widget_color();
 
@@ -1517,7 +1510,6 @@ namespace mrv
             const bool editable, const bool active, Fl_Callback* callback,
             const float minV, float maxV, const int when)
         {
-
             Fl_Color colA = get_title_color();
             Fl_Color colB = get_widget_color();
 
@@ -1786,7 +1778,14 @@ namespace mrv
         void ImageInfoPanel::fill_data()
         {
             if (!player)
+            {
+                g->tooltip(_("Load an image or movie file"));
                 return;
+            }
+            else
+            {
+                g->tooltip("");
+            }
 
             // Refresh the dock size
 

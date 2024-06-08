@@ -8,9 +8,9 @@
 #include <vector>
 
 #include <FL/Fl_Group.H>
-#include <FL/Fl_Scroll.H>
 
 #include "mrvWidgets/mrvPack.h"
+#include "mrvWidgets/mrvScroll.h"
 
 namespace mrv
 {
@@ -19,7 +19,7 @@ namespace mrv
     {
     public:
         Fl_Window* win;
-        Fl_Scroll* scroll;
+        Scroll* scroll;
         Pack* pack;
         int children;
 

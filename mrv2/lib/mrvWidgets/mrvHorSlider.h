@@ -25,7 +25,7 @@ namespace mrv
 
     public:
         HorSlider(int X, int Y, int W, int H, const char* L = 0);
-
+        
         void default_value(double d) noexcept;
         void minimum(double mn) noexcept;
         void maximum(double mx) noexcept;

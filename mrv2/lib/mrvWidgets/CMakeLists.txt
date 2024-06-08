@@ -55,6 +55,7 @@ set(HEADERS
     mrvPreferencesTree.h
     mrvProgressReport.h
     mrvResizableBar.h
+    mrvScroll.h
     mrvSecondaryWindow.h
     mrvSlider.h
     mrvSpinner.h
@@ -104,6 +105,7 @@ set(SOURCES
     mrvPreferencesTree.cpp
     mrvProgressReport.cpp
     mrvResizableBar.cpp
+    mrvScroll.cpp
     mrvSecondaryWindow.cpp
     mrvSlider.cpp
     mrvStatusBar.cpp
