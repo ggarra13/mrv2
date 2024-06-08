@@ -70,6 +70,10 @@ v1.1.9
 - Made mousewheel not have any effect on the view window, timeline viewport nor
   volume slider unless the mouse is directly above them.
 - Fixed mousewheel not scrolling sometimes on panel dockbar.
+- Fixed Media Info Panel's search box not resizing when docked and scrollbar
+  appeared.
+- Made Preferences' window non-modal as it was conflicting with OCIO Pick's
+  File Requester.
 
 
 v1.1.8

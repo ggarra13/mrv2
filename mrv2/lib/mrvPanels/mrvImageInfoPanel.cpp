@@ -367,11 +367,9 @@ namespace mrv
         {
             TLRENDER_P();
 
+            // Add "Search" "Input" and "Both/Attribute/Value" controls
             Fl_Group* controls = g->get_group();
             controls->size(g->w(), 30); // needed
-            controls->show();
-
-            // g->end();
 
             controls->begin();
 
@@ -410,6 +408,7 @@ namespace mrv
 
             Y = controls->y() + controls->h();
 
+            // Reposition scroll and pack below control group.  Needed.
             Fl_Scroll* scroll = g->get_scroll();
             scroll->position(scroll->x(), Y);
 
@@ -421,16 +420,12 @@ namespace mrv
             // menu->type( Fl_Menu_Button::POPUP3 );
             g->begin();
 
-            // scrollbar width
-            int sw = scroll->scrollbar.visible() ? scroll->scrollbar.w() : 0;
-            if (!g->docked())
-                sw = 0;
-            int W = g->w() - sw;
+            int W = g->w();
 
             SettingsObject* settings = App::app->settings();
 
             // CollapsibleGrop recalcs, we don't care its xyh sizes
-            m_image = new CollapsibleGroup(g->x(), Y, W, 800, _("Main"));
+            m_image = new CollapsibleGroup(g->x(), Y, W, 0, _("Main"));
             m_image->end();
             Fl_Button* b = m_image->button();
             b->callback(
@@ -452,7 +447,7 @@ namespace mrv
                 m_image->close();
 
             Y += m_image->h();
-            m_video = new CollapsibleGroup(g->x(), Y, W, 400, _("Video"));
+            m_video = new CollapsibleGroup(g->x(), Y, W, 0, _("Video"));
             m_video->end();
             b = m_video->button();
             b->callback(
@@ -473,7 +468,7 @@ namespace mrv
                 m_video->close();
 
             Y += m_video->h();
-            m_audio = new CollapsibleGroup(g->x(), Y, W, 400, _("Audio"));
+            m_audio = new CollapsibleGroup(g->x(), Y, W, 0, _("Audio"));
             m_audio->end();
             b = m_audio->button();
             b->callback(
@@ -495,7 +490,7 @@ namespace mrv
 
             Y += m_audio->h();
 
-            m_subtitle = new CollapsibleGroup(g->x(), Y, W, 400, _("Subtitle"));
+            m_subtitle = new CollapsibleGroup(g->x(), Y, W, 0, _("Subtitle"));
             m_subtitle->end();
             b = m_subtitle->button();
             b->callback(
@@ -517,7 +512,7 @@ namespace mrv
 
             Y += m_subtitle->h();
             m_attributes =
-                new CollapsibleGroup(g->x(), Y, W, 400, _("Metadata"));
+                new CollapsibleGroup(g->x(), Y, W, 0, _("Metadata"));
             m_attributes->end();
             b = m_attributes->button();
             b->callback(
@@ -536,6 +531,9 @@ namespace mrv
             open = settings->getValue<int>(key);
             if (!open)
                 m_attributes->close();
+
+            scroll->size(pack->w(), pack->h());
+            controls->show();   // show controls as group is hidden by default
         }
 
         struct AspectName

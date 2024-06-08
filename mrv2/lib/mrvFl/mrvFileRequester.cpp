@@ -613,11 +613,15 @@ namespace mrv
         return file;
     }
 
-    std::string open_ocio_config(const char* startfile)
+    std::string open_ocio_config(const std::string& ocioFile)
     {
         std::string kOCIO_PATTERN = _("OCIO config (*.{") + kOCIOPattern + "})";
         std::string title = _("Load OCIO Config");
 
+        const char* startfile = ocioFile.c_str();
+        if (ocioFile.find("ocio://") == 0)
+            startfile = nullptr;
+        
         std::string file = file_single_requester(
             title.c_str(), kOCIO_PATTERN.c_str(), startfile, false);
         return file;

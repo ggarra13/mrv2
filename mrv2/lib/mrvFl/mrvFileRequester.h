@@ -91,6 +91,6 @@ namespace mrv
 
     std::string save_session_file(const char* startfile = nullptr);
 
-    std::string open_ocio_config(const char* startfile);
+    std::string open_ocio_config(const std::string& ocioFile);
 
 } // namespace mrv

@@ -36,6 +36,10 @@ namespace mrv
         }
         return Fl_Scroll::handle(event);
     }
-   
 
+    void Scroll::draw()
+    {
+        Fl_Scroll::draw();
+    }
+    
 } // namespace mrv

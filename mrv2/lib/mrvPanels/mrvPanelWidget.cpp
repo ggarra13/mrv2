@@ -118,9 +118,20 @@ namespace mrv
             TLRENDER_P();
             g->end();
 
-            // Adjust dock scrollbars for this new element
-            p.ui->uiDock->pack->layout();
-            p.ui->uiResizableBar->HandleDrag(0);
+            if (g->docked())
+            {
+                // Adjust dock scrollbars for this new element
+                p.ui->uiDock->pack->layout();
+                p.ui->uiResizableBar->HandleDrag(0);
+
+                // Adjust group (Search area in Media Info Panel)
+                Fl_Group* group = g->get_group();
+                if (group->visible())
+                {
+                    Pack* pack = g->get_pack();
+                    group->size(pack->w(), group->h());
+                }
+            }
         }
 
         void PanelWidget::undock()

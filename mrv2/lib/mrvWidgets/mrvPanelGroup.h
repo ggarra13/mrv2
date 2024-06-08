@@ -7,13 +7,13 @@
 #include <iostream>
 
 #include <FL/Fl_Group.H>
-#include <FL/Fl_Scroll.H>
 
-#include "mrvWidgets/mrvPack.h"
 #include "mrvWidgets/mrvDockGroup.h"
 #include "mrvWidgets/mrvDragButton.h"
+#include "mrvWidgets/mrvPack.h"
 #include "mrvWidgets/mrvPanelButton.h"
 #include "mrvWidgets/mrvPanelWindow.h"
+#include "mrvWidgets/mrvScroll.h"
 
 namespace mrv
 {
@@ -39,7 +39,7 @@ namespace mrv
         PanelButton* docker = nullptr;
         PanelButton* dismiss = nullptr;
         PanelWindow* tw = nullptr;
-        Fl_Scroll* scroll = nullptr;
+        Scroll* scroll = nullptr;
         Pack* pack = nullptr;
         Fl_Group* group = nullptr;
         std::string _label;
@@ -59,7 +59,7 @@ namespace mrv
         DragButton* get_dragger() const { return dragger; }
         Fl_Group* get_group() const { return group; }
         Pack* get_pack() const { return pack; }
-        Fl_Scroll* get_scroll() const { return scroll; }
+        Scroll* get_scroll() const { return scroll; }
         PanelWindow* get_window() const { return tw; }
         
         // get the dock group ID

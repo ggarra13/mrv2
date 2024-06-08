@@ -17,8 +17,9 @@
 #include <FL/fl_draw.H>
 #include <FL/math.h>
 
-#include "mrvPack.h"
-#include "mrvResizableBar.h"
+#include "mrvWidgets/mrvPack.h"
+#include "mrvWidgets/mrvResizableBar.h"
+#include "mrvWidgets/mrvDockGroup.h"
 
 namespace mrv
 {
@@ -26,7 +27,7 @@ namespace mrv
     void ResizableBar::HandleDrag(int diff)
     {
         Fl_Group* g = static_cast<Fl_Group*>(parent());
-        Fl_Flex* grp = static_cast<Fl_Flex*>(g->parent());
+        Fl_Flex* flex = static_cast<Fl_Flex*>(g->parent());
         int X = g->x() + diff;
         if (X < min_x)
             return;
@@ -34,18 +35,21 @@ namespace mrv
         if (W < min_w && diff > 0)
             return;
         g->resize(X, g->y(), W, g->h());
-        g = static_cast< Fl_Group* >(g->child(1)); // skip resizebar (0)
+
+        // First child is resizablebar (ie. this)
+        DockGroup* dg = static_cast< DockGroup* >(g->child(1));
         X = X + w();
         W = W - w();
-        g->resize(X, g->y(), W, g->h());
+        dg->resize(X, dg->y(), W, dg->h());
 
-        Fl_Scroll* s = static_cast< Fl_Scroll* >(g->child(0));
+        Fl_Scroll* s = static_cast< Fl_Scroll* >(dg->child(0));
         Pack* p = static_cast< Pack* >(s->child(0));
 
+        // Adjust pack for scrollbar if bigger than scroll.
         int sw = p->h() > s->h() ? s->scrollbar.w() : 0;
         p->resize(X, p->y(), W - sw, p->h());
 
-        grp->layout();
+        flex->layout();
     }
 
     ResizableBar::ResizableBar(int X, int Y, int W, int H, const char* L) :

@@ -67,7 +67,7 @@ namespace mrv
             settings->setValue(key, tw->y_root());
 
             Pack* pack = get_pack();
-            Fl_Scroll* scroll = get_scroll();
+            Scroll* scroll = get_scroll();
             int W = pack->w();
             if (pack->h() > dock->h())
             {
@@ -192,7 +192,7 @@ namespace mrv
 
     void PanelGroup::resize(int X, int Y, int W, int H)
     {
-        int GH = group && group->visible() ? group->h() : 0;
+        int GH = group->visible() ? group->h() : 0;
         assert(GH >= 0);
         int DH = docker->h();
 
@@ -200,6 +200,7 @@ namespace mrv
 
         if (docked())
         {
+            group->size(pack->w(), group->h());
             scroll->size(pack->w(), pack->h());
         }
         else
@@ -221,9 +222,8 @@ namespace mrv
                 H = maxH;
             }
             assert(H >= 0);
-
-            if (group)
-                group->size(W, group->h());
+            
+            group->size(W, group->h());
 
             scroll->resize(kMargin, scroll->y(), pack->w(), H - kMargin);
             if (pack->h() < H - kTitleBar - kMargin)
@@ -257,14 +257,18 @@ namespace mrv
 
     void PanelGroup::layout()
     {
+        std::cerr << "1 PanelGroup::layout pack->h()=" << pack->h() << std::endl;
         pack->layout();
-        Fl_Group* g = group;
-        int GH = g && g->visible() ? g->h() : 0;
-        int GY = g && g->visible() ? g->y() : 0;
+        std::cerr << "2 PanelGroup::layout pack->h()=" << pack->h() << std::endl;
+        int GH = group->visible() ? group->h() : 0;
+        int GY = group->visible() ? group->y() : 0;
         int DH = dragger->h();
         int W = w();
         int H = GH + DH + pack->h();
         assert(GH >= 0);
+
+        group->size(pack->w(), GH);
+        
 
         Fl_Group::resizable(0);
         Fl_Group::size(W, H);
@@ -295,7 +299,27 @@ namespace mrv
                 H = maxH;
 
             scroll->size(pack->w(), H);
-            scroll->init_sizes(); // needed to reset scroll size init size
+            scroll->init_sizes();
+            
+
+            if (pack->h() > scroll->h())
+                scroll->scrollbar.set_visible();
+            else
+                scroll->scrollbar.clear_visible();
+                         
+            int sw = scroll->scrollbar.visible() ? scroll->scrollbar.w() : 0;
+            
+            // Adjust pack for scrollbar if bigger than scroll.
+            std::cerr << "H=" << H << std::endl
+                      << "DH=" << DH << std::endl
+                      << "GH=" << GH << std::endl
+                      << "pack->h()  =" << pack->h() << std::endl
+                      << "scroll->h()=" << scroll->h() << std::endl
+                      << "scrollbar  =" << scroll->scrollbar.visible()
+                      << std::endl
+                      << "sw         =" << sw
+                      << std::endl;
+            pack->size(pack->w() - sw, pack->h());
         }
     }
 
@@ -387,11 +411,11 @@ namespace mrv
         int GH = group->visible() ? group->h() : 0;
 
         // Scroll will contain a pack with this panel's contents.
-        scroll = new Fl_Scroll(
+        scroll = new Scroll(
             X, Y + dragger->h(), w() - kMargin, h() - dragger->h() - kMargin,
             "Scroll");
         scroll->labeltype(FL_NO_LABEL);
-        scroll->type(Fl_Scroll::BOTH);
+        scroll->type(Scroll::BOTH);
         scroll->begin();
 
         pack = new Pack(X, scroll->y(), scroll->w(), 1, "Pack");
