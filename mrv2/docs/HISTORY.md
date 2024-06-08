@@ -59,13 +59,14 @@ v1.1.9
 - It is now possible to update a single frame of a sequence instead of the
   full cache, by pressing SHIFT+u (Default hotkey).
 - Fixed refreshing of thumbnails when cache refresh was requested.
-- Fixed text annotation rendering disappearing after it was entered.
+- Fixed Text annotation rendering disappearing after it was entered.
 - Consolidated Darby's ui::Style::ColorRole with FLTK's color schemes.  Now
   changing from one of the preset color schemes should result on a nicer look
   for the timeline viewport.
 - Sped up Thumbnail creation in Panels.  Fixed Darby's .otio/.otioz thumbnail
   creation.
 - Sped up Thumbnail creation above Timeline.
+- Sped up Thumbnail creation on mrv2's custom file requester.
 
 
 v1.1.8

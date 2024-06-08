@@ -10,6 +10,3 @@
 if [[ -e /usr/bin/link.exe ]]; then
     run_cmd mv /usr/bin/link.exe /usr/bin/link_msys.exe
 fi
-
-. windows/envvars/envvars.sh
-

@@ -5,7 +5,8 @@
 
 
 #
-# This script checks the download count of mrv2 releases in github.com
+# This script checks the download count of mrv2 releases in github.com and
+# sourceforge.
 #
 
 if [[ ! -e etc/build_dir.sh ]]; then
