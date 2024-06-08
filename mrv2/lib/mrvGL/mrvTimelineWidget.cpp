@@ -31,7 +31,6 @@
 
 #include "mrvUI/mrvDesktop.h"
 
-#include "mrvGL/mrvThumbnailCreator.h"
 #include "mrvGL/mrvTimelineWidget.h"
 #include "mrvGL/mrvGLErrors.h"
 
@@ -301,8 +300,6 @@ namespace mrv
         p.timelineWindow->setClipboard(p.clipboard);
         p.timelineWidget->setParent(p.timelineWindow);
 
-        p.thumbnailCreator = new ThumbnailCreator(context);
-
         p.thumbnailSystem = context->getSystem<ui::ThumbnailSystem>();
 
         setStopOnScrub(false);
@@ -310,11 +307,6 @@ namespace mrv
         _styleUpdate();
 
         Fl::add_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
-    }
-
-    ThumbnailCreator* TimelineWidget::thumbnailCreator()
-    {
-        return _p->thumbnailCreator;
     }
 
     void TimelineWidget::setStyle(const std::shared_ptr<ui::Style>& style)

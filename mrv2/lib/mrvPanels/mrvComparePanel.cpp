@@ -23,8 +23,6 @@
 #include "mrvPanels/mrvComparePanel.h"
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
-#include "mrvGL/mrvThumbnailCreator.h"
-
 #include "mrvApp/mrvSettingsObject.h"
 #include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/mrvApp.h"

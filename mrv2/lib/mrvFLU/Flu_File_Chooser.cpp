@@ -59,6 +59,8 @@
 #include <tlCore/Path.h>
 #include <tlCore/String.h>
 
+#include <tlUI/ThumbnailSystem.h>
+
 #include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvLocale.h"
@@ -219,9 +221,7 @@ static std::string flu_get_special_folder(int csidl)
 struct Flu_File_Chooser::Private
 {
     std::weak_ptr<system::Context> context;
-    std::shared_ptr<mrv::ThumbnailCreator> thumbnailCreator;
-    std::set< int64_t > thumbnailIds;
-    std::mutex thumbnailMutex;
+    std::weak_ptr<ui::ThumbnailSystem> thumbnailSystem;
 };
 
 void Flu_File_Chooser::setContext(
@@ -229,13 +229,10 @@ void Flu_File_Chooser::setContext(
 {
     TLRENDER_P();
 
-    if (!p.thumbnailCreator)
-    {
-        p.thumbnailCreator = std::make_shared<mrv::ThumbnailCreator>(context);
-        p.thumbnailCreator->initThread();
-    }
-
     p.context = context;
+
+    p.thumbnailSystem = context->getSystem<ui::ThumbnailSystem>();
+    
     previewCB(); // refresh icons
 }
 
@@ -1110,15 +1107,9 @@ int Flu_File_Chooser::handle(int event)
 
     if (event == FL_HIDE)
     {
-        // Stop the p.thumbnailCreator's thread
-        if (p.thumbnailCreator)
-            p.thumbnailCreator->stopThread();
     }
     else if (event == FL_SHOW)
     {
-        // Re-init the p.thumbnailCreator's thread if needed
-        if (p.thumbnailCreator)
-            p.thumbnailCreator->initThread();
     }
 
     if (Fl_Double_Window::handle(event))
@@ -4007,14 +3998,14 @@ void Flu_File_Chooser::cd(const char* path)
                     snprintf(buf, 1024, i.root.c_str(), number);
                     entry = new Flu_Entry(
                         buf, ENTRY_FILE, fileDetailsBtn->value(), this,
-                        p.thumbnailCreator);
+                        p.thumbnailSystem);
                 }
                 else
                 {
 
                     entry = new Flu_Entry(
                         i.root.c_str(), ENTRY_SEQUENCE, fileDetailsBtn->value(),
-                        this, p.thumbnailCreator);
+                        this, p.thumbnailSystem);
                     entry->isize = numFrames;
                     entry->altname = i.root.c_str();
 
@@ -4044,7 +4035,7 @@ void Flu_File_Chooser::cd(const char* path)
             {
                 entry = new Flu_Entry(
                     (*i).c_str(), ENTRY_FILE, fileDetailsBtn->value(), this,
-                    p.thumbnailCreator);
+                    p.thumbnailSystem);
 
                 if (listMode)
                 {

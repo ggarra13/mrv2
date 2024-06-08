@@ -1071,8 +1071,6 @@ namespace mrv
                     p.lastVideoData = values[0];
                 }
             }
-
-            redraw();
         }
 
         if (panel::imageInfoPanel)

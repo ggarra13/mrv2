@@ -11,13 +11,12 @@ namespace fs = std::filesystem;
 
 #include <tlCore/StringFormat.h>
 
+#include <tlUI/ThumbnailSystem.h>
+
 #include "mrvCore/mrvString.h"
 #include "mrvCore/mrvHome.h"
 
 #include "mrvFl/mrvIO.h"
-
-#include "mrvGL/mrvThumbnailCreator.h"
-
 #include "mrvNetwork/mrvTCP.h"
 
 #include "mrvPDF/mrvPDFCreator.h"

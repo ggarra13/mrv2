@@ -32,8 +32,6 @@
 #include "mrvFLU/Flu_Combo_List.h"
 #include "mrvFLU/flu_export.h"
 
-#include "mrvGL/mrvThumbnailCreator.h"
-
 struct ThumbnailData;
 using namespace tl;
 

@@ -1557,7 +1557,7 @@ namespace mrv
             if (roundedTime < currentTime)
             {
                 view->stop();
-                player->seek(roundedTime);
+                player->seek(time);
                 return;
             }
         }
@@ -1578,7 +1578,7 @@ namespace mrv
             if (roundedTime > currentTime)
             {
                 view->stop();
-                player->seek(roundedTime);
+                player->seek(time);
                 return;
             }
         }

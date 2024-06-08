@@ -616,6 +616,12 @@ namespace mrv
                 _drawRectangleOutline(selection, color, mvp);
             }
 
+
+            if (panel::annotationsPanel)
+            {
+                panel::annotationsPanel->notes->value("");
+            }
+                
             if (p.showAnnotations && !annotations.empty())
             {
                 gl::OffscreenBufferOptions offscreenBufferOptions;
@@ -632,11 +638,6 @@ namespace mrv
                 {
                     gl.annotation = gl::OffscreenBuffer::create(
                         viewportSize, offscreenBufferOptions);
-                }
-
-                if (panel::annotationsPanel)
-                {
-                    panel::annotationsPanel->notes->value("");
                 }
                 _drawAnnotations(mvp, player->currentTime(), annotations);
             }

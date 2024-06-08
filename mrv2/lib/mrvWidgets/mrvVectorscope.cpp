@@ -12,12 +12,6 @@
 
 #include "mrvWidgets/mrvVectorscope.h"
 
-#define MRV2_OPENGL
-
-#ifdef MRV2_OPENGL
-#    include "mrvGL/mrvGLOffscreenContext.h"
-#endif
-
 #include "mrViewer.h"
 #include "mrvCore/mrvI8N.h"
 
