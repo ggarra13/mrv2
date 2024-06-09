@@ -257,9 +257,7 @@ namespace mrv
 
     void PanelGroup::layout()
     {
-        std::cerr << "1 PanelGroup::layout pack->h()=" << pack->h() << std::endl;
         pack->layout();
-        std::cerr << "2 PanelGroup::layout pack->h()=" << pack->h() << std::endl;
         int GH = group->visible() ? group->h() : 0;
         int GY = group->visible() ? group->y() : 0;
         int DH = dragger->h();
