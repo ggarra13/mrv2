@@ -8,7 +8,8 @@ include( ExternalProject )
 #set( FLTK_GIT_TAG master )
 
 #set(FLTK_GIT_TAG ce46b4b68be0d140e2cd5d2e1bd75b7f0cc90140) # Wayland fixes
-set(FLTK_GIT_TAG e5693efb75f8ab50362256c630421e71291cfb46) # Wayland DnD fix
+#set(FLTK_GIT_TAG e5693efb75f8ab50362256c630421e71291cfb46) # Wayland DnD fix
+set(FLTK_GIT_TAG b17357339f66949de7787e83aa9d21d613439170) # Wayland Palette fix
 
 if(MRV2_PYFLTK OR FLTK_BUILD_SHARED)
     # If we are building pyFLTK compile shared
