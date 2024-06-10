@@ -120,7 +120,8 @@ Wayland
     type chrome://flags/#ozone-platform-hint in the URL field
     change Preferred Ozone platform setting to Auto
     close and re-launch chromium which will run as a Wayland client.
-  
+
+  Note that Chrome's Wayland support is currently very buggy.
   
 Windows
 =======

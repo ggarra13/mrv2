@@ -115,6 +115,8 @@ Wayland
     Tipée chrome://flags/#ozone-platform-hint en el campo de URL
     Cambie el seteo "Preferred Ozone platform" a "Auto"
     Cierre y re-lance chromium que correrá como cliente de Wayland.
+    
+  Note que el soporte de Chrome bajo Wayland tiene muchos errores.
   
 
 Windows
