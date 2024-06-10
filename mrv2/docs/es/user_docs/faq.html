@@ -200,6 +200,25 @@ bajo Wayland en una distro moderna como Ubuntu 22.04.4 LTS:</p>
 Deberás compilar desde codigo fuente en tu plataforma o usar mrv2 bajo
 XWayland o bajo X11.</p>
 </li>
+<li><p>Usand Drag and Drop desde Chrome or Chromium no funciona en Wayland.</p>
+<p>Esto es porque mrv2 corre bajo Wayland mientras que Chromium corre bajo
+XWayland.</p>
+<p>Hay un atajo, sin embargo, para trabajar con Wayland: Chromium puede correr
+como cliente de Wayland lanzándolo así:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">chromium</span> <span class="o">--</span><span class="n">ozone</span><span class="o">-</span><span class="n">platform</span><span class="o">-</span><span class="n">hint</span><span class="o">=</span><span class="n">wayland</span> <span class="o">&amp;</span>
+</pre></div>
+</div>
+<p>Con esto, DnD desde el campo de URL de Chromium a mrv2 funciona tanto con
+gnome/Mutter y KDE/Plasma.</p>
+<p>Es posible configurar chromium para que corra como un cliente Wayland cuando sea posible o un cliente X11 de otra forma:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Corra</span> <span class="n">chromium</span>
+<span class="n">Tipée</span> <span class="n">chrome</span><span class="p">:</span><span class="o">//</span><span class="n">flags</span><span class="o">/</span><span class="c1">#ozone-platform-hint en el campo de URL</span>
+<span class="n">Cambie</span> <span class="n">el</span> <span class="n">seteo</span> <span class="s2">&quot;Preferred Ozone platform&quot;</span> <span class="n">a</span> <span class="s2">&quot;Auto&quot;</span>
+<span class="n">Cierre</span> <span class="n">y</span> <span class="n">re</span><span class="o">-</span><span class="n">lance</span> <span class="n">chromium</span> <span class="n">que</span> <span class="n">correrá</span> <span class="n">como</span> <span class="n">cliente</span> <span class="n">de</span> <span class="n">Wayland</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>Note que el soporte de Chrome bajo Wayland tiene muchos errores.</p>
+</li>
 </ul>
 </section>
 </section>

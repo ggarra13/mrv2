@@ -103,7 +103,25 @@ Wayland
   drag them out of the screen, and cannot repositiong them.
 
   You can use ALT + F7 to reposition it.
-  
+
+- Using drag and drop from Chrome or Chromium does not work on Wayland.
+
+  This is because mrv2 runs under Wayland while Chrome runs under XWayland.
+
+  There's a good workaround, though, to work with Wayland: chromium can be made a Wayland client launching it as follows::
+
+    chromium --ozone-platform-hint=wayland &
+
+  With this, DnD from the chromium URL field to an FLTK Wayland client app works both with gnome/Mutter and KDE/Plasma.
+
+  It's possible to configure chromium so it runs as a Wayland client when possible and an X11 client otherwise::
+
+    run chromium
+    type chrome://flags/#ozone-platform-hint in the URL field
+    change Preferred Ozone platform setting to Auto
+    close and re-launch chromium which will run as a Wayland client.
+
+  Note that Chrome's Wayland support is currently very buggy.
   
 Windows
 =======

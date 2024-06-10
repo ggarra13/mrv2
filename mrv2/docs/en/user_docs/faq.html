@@ -204,6 +204,22 @@ redraws of the floating panel.</p>
 drag them out of the screen, and cannot repositiong them.</p>
 <p>You can use ALT + F7 to reposition it.</p>
 </li>
+<li><p>Using drag and drop from Chrome or Chromium does not work on Wayland.</p>
+<p>This is because mrv2 runs under Wayland while Chrome runs under XWayland.</p>
+<p>There’s a good workaround, though, to work with Wayland: chromium can be made a Wayland client launching it as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">chromium</span> <span class="o">--</span><span class="n">ozone</span><span class="o">-</span><span class="n">platform</span><span class="o">-</span><span class="n">hint</span><span class="o">=</span><span class="n">wayland</span> <span class="o">&amp;</span>
+</pre></div>
+</div>
+<p>With this, DnD from the chromium URL field to an FLTK Wayland client app works both with gnome/Mutter and KDE/Plasma.</p>
+<p>It’s possible to configure chromium so it runs as a Wayland client when possible and an X11 client otherwise:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">run</span> <span class="n">chromium</span>
+<span class="nb">type</span> <span class="n">chrome</span><span class="p">:</span><span class="o">//</span><span class="n">flags</span><span class="o">/</span><span class="c1">#ozone-platform-hint in the URL field</span>
+<span class="n">change</span> <span class="n">Preferred</span> <span class="n">Ozone</span> <span class="n">platform</span> <span class="n">setting</span> <span class="n">to</span> <span class="n">Auto</span>
+<span class="n">close</span> <span class="ow">and</span> <span class="n">re</span><span class="o">-</span><span class="n">launch</span> <span class="n">chromium</span> <span class="n">which</span> <span class="n">will</span> <span class="n">run</span> <span class="k">as</span> <span class="n">a</span> <span class="n">Wayland</span> <span class="n">client</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>Note that Chrome’s Wayland support is currently very buggy.</p>
+</li>
 </ul>
 </section>
 </section>
