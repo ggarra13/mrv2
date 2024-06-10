@@ -5,7 +5,10 @@
 #include <sstream>
 
 #include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 namespace py = pybind11;
+
+#include <tlIO/USD.h>
 
 #include "mrvCore/mrvI8N.h"
 
@@ -25,8 +28,11 @@ Contains all classes and enums related to USD (Universal Scene Description).
 
 #ifdef TLRENDER_USD
 
+    // Expose globalUSDStages as a dictionary
+    usd.attr("stages") = py::cast(&tl::usd::globalUSDStages);
+    
     using namespace mrv;
-
+    
     py::class_<usd::RenderOptions>(usd, "RenderOptions")
         .def(py::init<>())
         .def(
