@@ -54,8 +54,7 @@ v1.1.9
 - Added OCIO color LUTs per clips.
 - Fixed typo in LUTOptions "enable" instead of "enabled".
 - Fixed drag and drop to work with URIs coming from Google's Chrome when they
-  don't have https:// prefixed into them under X11.  Google's Chrome DnD support
-  for Wayland is currently broken.
+  don't have https:// prefixed into them under X11. 
 - It is now possible to update a single frame of a sequence instead of the
   full cache, by pressing SHIFT+u (Default hotkey).
 - Fixed refreshing of thumbnails when cache refresh was requested.
@@ -74,6 +73,7 @@ v1.1.9
   appeared.
 - Made Preferences' window non-modal as it was conflicting with OCIO Pick's
   File Requester.
+- Fixed Wayland's Text tool showing the colors semi-transparent.
 
 
 v1.1.8
