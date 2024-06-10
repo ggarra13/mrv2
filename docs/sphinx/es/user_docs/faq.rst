@@ -96,6 +96,26 @@ Wayland
   Deberás compilar desde codigo fuente en tu plataforma o usar mrv2 bajo
   XWayland o bajo X11.
 
+- Usand Drag and Drop desde Chrome or Chromium no funciona en Wayland.
+
+  Esto es porque mrv2 corre bajo Wayland mientras que Chromium corre bajo
+  XWayland.
+  
+  Hay un atajo, sin embargo, para trabajar con Wayland: Chromium puede correr
+  como cliente de Wayland lanzándolo así::
+
+    chromium --ozone-platform-hint=wayland &
+
+  Con esto, DnD desde el campo de URL de Chromium a mrv2 funciona tanto con
+  gnome/Mutter y KDE/Plasma.
+
+  Es posible configurar chromium para que corra como un cliente Wayland cuando sea posible o un cliente X11 de otra forma::
+
+    Corra chromium
+    Tipée chrome://flags/#ozone-platform-hint en el campo de URL
+    Cambie el seteo "Preferred Ozone platform" a "Auto"
+    Cierre y re-lance chromium que correrá como cliente de Wayland.
+  
 
 Windows
 =======
