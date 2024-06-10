@@ -305,18 +305,8 @@ namespace mrv
             else
                 scroll->scrollbar.clear_visible();
                          
-            int sw = scroll->scrollbar.visible() ? scroll->scrollbar.w() : 0;
-            
             // Adjust pack for scrollbar if bigger than scroll.
-            std::cerr << "H=" << H << std::endl
-                      << "DH=" << DH << std::endl
-                      << "GH=" << GH << std::endl
-                      << "pack->h()  =" << pack->h() << std::endl
-                      << "scroll->h()=" << scroll->h() << std::endl
-                      << "scrollbar  =" << scroll->scrollbar.visible()
-                      << std::endl
-                      << "sw         =" << sw
-                      << std::endl;
+            int sw = scroll->scrollbar.visible() ? scroll->scrollbar.w() : 0;
             pack->size(pack->w() - sw, pack->h());
         }
     }
