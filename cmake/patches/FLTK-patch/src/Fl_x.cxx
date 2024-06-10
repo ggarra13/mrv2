@@ -1473,11 +1473,12 @@ int fl_handle(const XEvent& thisevent)
     // XA_SECONDARY for that) and send an XdndFinished message. It is not
     // clear if this has to be delayed until now or if it can be done
     // immediately after calling XConvertSelection.
-    if (fl_xevent->xselection.property == XA_SECONDARY &&
-        fl_dnd_source_window) {
-      fl_sendClientMessage(fl_dnd_source_window, fl_XdndFinished,
-                           fl_xevent->xselection.requestor, retval,
-                           retval ? fl_dnd_action : 0);
+    if (fl_xevent->xselection.property == XA_SECONDARY && fl_dnd_source_window) {
+      fl_sendClientMessage(fl_dnd_source_window,            // send to window
+                           fl_XdndFinished,                 // XdndFinished message
+                           fl_xevent->xselection.requestor, // data.l[0] target window
+                           retval ? 1 : 0,                  // data.l[1] Bit 0: 1 = success
+                           retval ? fl_dnd_action : None);  // data.l[2] action performed
       fl_dnd_source_window = 0; // don't send a second time
     }
     return 1;
@@ -1720,10 +1721,6 @@ int fl_handle(const XEvent& thisevent)
                           fl_dnd_type, XA_SECONDARY,
                           to_window, fl_event_time);
       } else {
-        // Send the finished message if I refuse the drop.
-        // It is not clear whether I can just send finished always,
-        // or if I have to wait for the SelectionNotify event as the
-        // code is currently doing.
         fl_sendClientMessage(fl_dnd_source_window, fl_XdndFinished, to_window);
         fl_dnd_source_window = 0;
       }
