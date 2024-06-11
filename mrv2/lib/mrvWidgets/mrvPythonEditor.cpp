@@ -380,10 +380,6 @@ namespace mrv
         if (!m_variable.empty())
             m_variable += "\n";
 
-        DBGM0("|CODE|" << m_code << "|");
-        DBGM0("|EVAL|" << m_eval << "|");
-        DBGM0("|VAR |" << m_variable << "|");
-
         free(text);
     }
 

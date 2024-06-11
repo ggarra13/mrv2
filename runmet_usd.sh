@@ -29,5 +29,5 @@ params=$*
 
 export BUILD_ROOT=BUILD-$KERNEL-$ARCH-usd
 
-cmd="runmet.sh --dir $BUILD_ROOT"
+cmd="runmet.sh $params --dir $BUILD_ROOT"
 run_cmd $cmd
