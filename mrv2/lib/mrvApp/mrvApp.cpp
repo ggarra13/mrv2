@@ -1114,10 +1114,13 @@ namespace mrv
             item->audioPath = file::Path(audioFileName);
             p.filesModel->add(item);
 
+#ifdef MRV2_PYBIND11
             for (const auto& pythonCb : pythonOpenFileCallbacks)
             {
                 run_python_open_file_cb(pythonCb, path.get(), audioFileName);
             }
+#endif
+            
         }
 
         // If we have autoplayback on and auto hide pixel bar, do so here.
