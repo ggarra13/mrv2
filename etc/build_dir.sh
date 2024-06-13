@@ -137,13 +137,14 @@ if [[ ! $RUNME || ${BUILD_PYTHON} == OFF || ${BUILD_PYTHON} == 0 ]]; then
     #
     # Set PYTHONPATH
     #
-    export PYTHONPATH="${PYTHON_LIBDIR}:${PYTHON_SITEDIR}:${PYTHONPATH}"
+    export PYTHONPATH="${PYTHON_LIBDIR}:${PYTHON_SITEDIR}:${PYTHON_LIBDIR}/lib-dynload:${PYTHONPATH}"
 else
     export PYTHONEXE="$PWD/${BUILD_DIR}/install/bin/python${PYTHON_VERSION}"
     #
     # Set PYTHONPATH
     #
-    export PYTHONPATH="$PWD/${BUILD_DIR}/install/lib/python${PYTHON_VERSION}:$PWD/${BUILD_DIR}/install/lib/python${PYTHON_VERSION}/site-packages:${PYTHONPATH}"
+    _python_dir=$PWD/${BUILD_DIR}/install/lib/python${PYTHON_VERSION}
+    export PYTHONPATH="${_python_dir}:${_python_dir}/site-packages:${_python_dir}/lib-dynload:${PYTHONPATH}"
 fi
  
 
