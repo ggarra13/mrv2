@@ -74,6 +74,7 @@ v1.1.9
 - Made Preferences' window non-modal as it was conflicting with OCIO Pick's
   File Requester.
 - Fixed Wayland's Text tool showing the colors semi-transparent.
+- Fixed compiler error under g++13.
 
 
 v1.1.8
