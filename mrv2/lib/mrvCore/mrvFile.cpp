@@ -170,6 +170,21 @@ namespace mrv
             auto out = tmppath() + '/' + buf;
             return out;
         }
+        
+        bool isUSD(const std::string& ext)
+        {
+            static const std::string extensions[] =
+                {
+                    ".usd", ".usda", ".usdc", ".usdz"
+                };
+            
+            for (const std::string& extension : extensions)
+            {
+                if (ext == extension)
+                    return true;
+            }
+            return false;
+        }
 
         bool isNetwork(const std::string& path)
         {

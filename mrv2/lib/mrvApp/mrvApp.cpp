@@ -1112,12 +1112,27 @@ namespace mrv
             auto item = std::make_shared<FilesModelItem>();
             item->path = path;
             item->audioPath = file::Path(audioFileName);
-            p.filesModel->add(item);
 
+            if (file::isUSD(path))
+            {
+#ifdef MRV2_PYBIND11
+                py::gil_scoped_release release;
+#endif
+                p.filesModel->add(item);
+            }
+            else
+            {
+                p.filesModel->add(item);
+            }
+            
+
+#ifdef MRV2_PYBIND11
             for (const auto& pythonCb : pythonOpenFileCallbacks)
             {
                 run_python_open_file_cb(pythonCb, path.get(), audioFileName);
             }
+#endif
+            
         }
 
         // If we have autoplayback on and auto hide pixel bar, do so here.

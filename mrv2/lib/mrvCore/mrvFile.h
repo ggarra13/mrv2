@@ -7,6 +7,7 @@
 #include <filesystem>
 namespace fs = std::filesystem;
 
+#include <tlCore/String.h>
 #include <tlCore/Path.h>
 
 class ViewerUI;
@@ -50,7 +51,7 @@ namespace mrv
 
         inline bool isMovie(const Path& path)
         {
-            return isMovie(path.getExtension());
+            return isMovie(tl::string::toLower(path.getExtension()));
         }
 
         /**
@@ -65,7 +66,7 @@ namespace mrv
 
         inline bool isAudio(const Path& path)
         {
-            return isAudio(path.getExtension());
+            return isAudio(tl::string::toLower(path.getExtension()));
         }
 
         /**
@@ -80,7 +81,7 @@ namespace mrv
 
         inline bool isSubtitle(const Path& path)
         {
-            return isSubtitle(path.getExtension());
+            return isSubtitle(tl::string::toLower(path.getExtension()));
         }
 
         /**
@@ -97,6 +98,21 @@ namespace mrv
         inline bool isSequence(const Path& path)
         {
             return isSequence(path.get());
+        }
+        
+        /**
+         * Given a lowercase filename extension, return whether the extension is
+         * from an OpenUSD scene.
+         *
+         * @param ext Filename extension with period.
+         *
+         * @return true if a possible subtitle file, false if not.
+         */
+        bool isUSD(const std::string& ext);
+
+        inline bool isUSD(const Path& path)
+        {
+            return isSubtitle(tl::string::toLower(path.getExtension()));
         }
 
         /**
