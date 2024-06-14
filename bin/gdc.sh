@@ -17,11 +17,15 @@ if [[ ! -e etc/build_dir.sh ]]; then
     exit 1
 fi
 
+if [[ -e $BUILD_DIR/install/python.sh ]]; then
+    export PYTHON=$BUILD_DIR/install/python.sh
+fi
+
 . etc/build_dir.sh
 
 locate_python
 
-export LD_LIBRARY_PATH=$OLD_LD_LIBRARY_PATH:$BUILD_DIR/install/lib64:$BUILD_DIR/install/lib
+export LD_LIBRARY_PATH=$BUILD_DIR/install/lib64:$BUILD_DIR/install/lib:$OLD_LIBRRARY_PATH
 
 if [[ ! -d $PYTHON_SITEDIR/requests && ! -d $PYTHON_USER_SITEDIR/requests ]];
 then
@@ -38,4 +42,5 @@ date_created=`git for-each-ref --format="%(creatordate:iso)" refs/tags/$TAG`
 today=`date +'%F %T'`
 echo "DATE CREATED: ${date_created}"
 echo "NOW         : ${today}"
+echo $PYTHON bin/python/github-download-count.py ggarra13 mrv2 $TAG
 $PYTHON bin/python/github-download-count.py ggarra13 mrv2 $TAG

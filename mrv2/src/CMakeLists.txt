@@ -80,28 +80,40 @@ include(InstallRequiredSystemLibraries)
 # Extract python version
 #
 string( REGEX MATCH "^[0-9]+\\.[0-9]+" MRV2_PYTHON_VERSION "${Python_VERSION}" )
-    
-if (UNIX AND BUILD_PYTHON)
+
+if(BUILD_PYTHON)
     if(NOT MRV2_PYTHON_VERSION OR MRV2_PYTHON_VERSION STREQUAL "")
 	message(FATAL_ERROR "Could not detect python version from "
 	    "${Python_VERSION}")
     endif()
-
-    set( MRV2_PYTHON_LIBS ${CMAKE_INSTALL_PREFIX}/lib/python${MRV2_PYTHON_VERSION} )
+	
+    if (UNIX)
+	set( MRV2_PYTHON_LIBS ${CMAKE_INSTALL_PREFIX}/lib/python${MRV2_PYTHON_VERSION} )
+    else()
+	set( MRV2_PYTHON_LIBS ${CMAKE_INSTALL_PREFIX}/bin/Lib )
+    endif()
+    
     if (MRV2_PYFLTK)
 	# Get rid of the pyFLTK demos as they don't work properly on an
 	# embedded python
 	file( REMOVE_RECURSE ${MRV2_PYTHON_LIBS}/site-packages/fltk14/test )
     endif()
+
     install( DIRECTORY ${MRV2_PYTHON_LIBS}
         DESTINATION lib
         COMPONENT applications )
 endif()
-
+	
 
 #
 # Install python's requests library
 #
+if (MRV2_PYBIND11)
+    if (NOT EXISTS "${MRV2_PYTHON_LIBS}/site-packages/requests")
+	execute_process( COMMAND ${PYTHON_EXECUTABLE} -m pip install --target "${MRV2_PYTHON_LIBS}/site-packages" requests --no-cache-dir )
+    endif()
+endif()
+
 if(TLRENDER_NDI)
     if (WIN32)
 	install( FILES  ${TLRENDER_NDI_SDK}/bin/x64/Processing.NDI.Lib.x64.dll
