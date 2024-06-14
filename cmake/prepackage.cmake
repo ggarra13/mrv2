@@ -50,8 +50,10 @@ message( STATUS "CPACK_PREPACKAGE=${CPACK_PREPACKAGE}" )
 #
 # Remove usd directory from lib/ directory on Windows
 #
-message( STATUS "Removing ${CPACK_PREPACKAGE}/lib/usd")
-file( REMOVE_RECURSE "${CPACK_PREPACKAGE}/lib/usd" )
+if(WIN32)
+    message( STATUS "Removing ${CPACK_PREPACKAGE}/lib/usd")
+    file( REMOVE_RECURSE "${CPACK_PREPACKAGE}/lib/usd" )
+endif()
 
 #
 # Remove .a, .lib and .dll files from packaging lib/ directory
