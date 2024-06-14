@@ -75,7 +75,7 @@ v1.1.9
   File Requester.
 - Fixed Wayland's Text tool showing the colors semi-transparent.
 - Fixed compiler error under g++13.
-- Fixed Linux binary distribution crashing on loading USD files.
+- Fixed Linux and macOS binary distribution crashing on loading USD files.
 
 
 v1.1.8
