@@ -1113,26 +1113,7 @@ namespace mrv
             item->path = path;
             item->audioPath = file::Path(audioFileName);
 
-            if (file::isUSD(path))
-            {
-#ifdef MRV2_PYBIND11
-                py::gil_scoped_release release;
-#endif
-                p.filesModel->add(item);
-            }
-            else
-            {
-                p.filesModel->add(item);
-            }
-            
-
-#ifdef MRV2_PYBIND11
-            for (const auto& pythonCb : pythonOpenFileCallbacks)
-            {
-                run_python_open_file_cb(pythonCb, path.get(), audioFileName);
-            }
-#endif
-            
+            p.filesModel->add(item);
         }
 
         // If we have autoplayback on and auto hide pixel bar, do so here.
@@ -1389,13 +1370,37 @@ namespace mrv
         options.pathOptions.maxNumberDigits = std::min(
             p.settings->getValue<int>("Misc/MaxFileSequenceDigits"), 255);
 
-        auto otioTimeline =
-            item->audioPath.isEmpty()
+        otio::SerializableObject::Retainer<otio::Timeline> otioTimeline;
+        
+        if (file::isUSD(item->path))
+        {
+#ifdef MRV2_PYBIND11
+            py::gil_scoped_release release;
+#endif
+            otioTimeline =
+                item->audioPath.isEmpty()
                 ? timeline::create(item->path, _context, options)
-                : timeline::create(
-                      item->path, item->audioPath, _context, options);
+                : timeline::create(item->path, item->audioPath, _context, options);
+        }
+        else
+        {
+            otioTimeline =
+                item->audioPath.isEmpty()
+                ? timeline::create(item->path, _context, options)
+                : timeline::create(item->path, item->audioPath, _context, options);
+        }
 
-        return timeline::Timeline::create(otioTimeline, _context, options);
+        auto out = timeline::Timeline::create(otioTimeline, _context, options);
+        
+#ifdef MRV2_PYBIND11
+        const std::string& path = item->path.get();
+        const std::string& audioPath = item->audioPath.get();
+        for (const auto& pythonCb : pythonOpenFileCallbacks)
+        {
+            run_python_open_file_cb(pythonCb, path, audioPath);
+        }
+#endif
+        return out;
     }
 
     void App::_activeUpdate(

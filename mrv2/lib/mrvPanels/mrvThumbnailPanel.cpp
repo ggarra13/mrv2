@@ -5,6 +5,11 @@
 #include <FL/Fl_Widget.H>
 #include <FL/Fl.H>
 
+#ifdef MRV2_PYBIND11
+#    include <pybind11/embed.h>
+namespace py = pybind11;
+#endif
+
 #include <tlCore/StringFormat.h>
 
 #include "mrvPanels/mrvThumbnailPanel.h"
@@ -110,6 +115,10 @@ namespace mrv
             {
                 const auto context = App::app->getContext();
                 auto thumbnailSystem = context->getSystem<ui::ThumbnailSystem>();
+                
+#ifdef MRV2_PYBIND11
+                py::gil_scoped_release release;
+#endif
                 const auto& timeline =
                     timeline::Timeline::create(path, context);
                 const auto& timeRange = timeline->getTimeRange();
