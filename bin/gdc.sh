@@ -43,5 +43,4 @@ date_created=`git for-each-ref --format="%(creatordate:iso)" refs/tags/$TAG`
 today=`date +'%F %T'`
 echo "DATE CREATED: ${date_created}"
 echo "NOW         : ${today}"
-echo $PYTHON bin/python/github-download-count.py ggarra13 mrv2 $TAG
 $PYTHON bin/python/github-download-count.py ggarra13 mrv2 $TAG
