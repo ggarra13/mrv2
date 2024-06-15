@@ -1083,6 +1083,10 @@ xStudio developers                            (idea for Sphinx for documenting
                                                and laser annotation)
 OpenRV  developers                            (idea for reverse playback)
 
+Translations
+------------
+bovirus                                       (Italian)
+
 Beta testers
 ------------
 360highdynamicrangehdr                        (LibRaw Idea,

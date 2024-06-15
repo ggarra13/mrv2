@@ -453,6 +453,18 @@ familiarity with it is desired (albeit not essential).
 The translations reside in mrv2/po and follow internationalization language
 code files, like es.po (for Spanish) or de.po (for German).
 
+First, you should create a branch to submit a pull request.
+
+There are GitHub docs, e.g.
+https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request
+
+In a nutshell:
+
+- fork the mrv2 repo to e.g. your-username/mrv2
+- create a feature branch in you fork (important although not required [1])
+- push one or more commits to your feature branch
+- request a PR on your repo/feature-branch
+
 To create such a file for a new language, open the file
 cmake/translations.cmake
 and add a language international code to this line:
@@ -523,16 +535,6 @@ get mangled with all the .pot/.po comments, preventing a clean PR
 ## If you did not compile mrv2
 
 Create a pull request on GitHub:
-
-There are GitHub docs, e.g.
-https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request
-
-In a nutshell:
-
-- fork the mrv2 repo to e.g. your-username/mrv2
-- create a feature branch in you fork (important although not required [1])
-- push one or more commits to your feature branch
-- request a PR on your repo/feature-branch
 
 Then, create a new .po file for your the main translations.  For example:
 
