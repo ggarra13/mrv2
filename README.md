@@ -522,11 +522,39 @@ get mangled with all the .pot/.po comments, preventing a clean PR
 
 ## If you did not compile mrv2
 
-Manually copy the .mo to your installed mrv2 directory.  Make sure the VERSION matches.
+Create a pull request on GitHub:
+
+There are GitHub docs, e.g.
+https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request
+
+In a nutshell:
+
+- fork the mrv2 repo to e.g. your-username/mrv2
+- create a feature branch in you fork (important although not required [1])
+- push one or more commits to your feature branch
+- request a PR on your repo/feature-branch
+
+Then, create a new .po file for your the main translations.  For example:
 
 ```
-cp mrv2/share/locale/${lang}/LC_MESSAGES/mrv2-v${VERSION}.mo ${installed_location of mrv2)/hare/locale/${lang}/LC_MESSAGES/
+cp mrv2/po/en.po mrv2/po/it.po   # For Italian
+````
+
+Then add the file for a new language, open the file
+cmake/translations.cmake
+and add a language international code to this line:
+
 ```
+set( LANGUAGES en es it ) # add a new language code inside the parenthesis, like "it".
+```
+
+Translate that new .po file manually and then do:
+
+git add mrv2/po/it.po
+git commit
+git push
+
+submit a GitHub PR with that new file.  The mrv2 developers will try to merge your changes later.
 
 
 ## Translating on Windows

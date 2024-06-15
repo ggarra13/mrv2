@@ -32,9 +32,11 @@ foreach( LANGUAGE ${LANGUAGES} )
     file( REMOVE ${CONFFILE_OUT} )
 
     # Replace variables inside @@ with the current values
-    message( DEBUG "Creating ${CONFFILE_OUT}..." )
-    configure_file(${CONFFILE_IN} ${CONFFILE_OUT} @ONLY)
-    
+
+    if(EXISTS ${CONFFILE_IN})
+	message( DEBUG "Creating ${CONFFILE_OUT}..." )
+	configure_file(${CONFFILE_IN} ${CONFFILE_OUT} @ONLY)
+    endif()
 
     #
     # Replace variables in document.py script
