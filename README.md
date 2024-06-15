@@ -552,9 +552,11 @@ set( LANGUAGES en es it ) # add a new language code inside the parenthesis, like
 
 Translate that new .po file manually and then do:
 
+```
 git add mrv2/po/it.po
 git commit
 git push
+```
 
 submit a GitHub PR with that new file.  The mrv2 developers will try to merge your changes later.
 
