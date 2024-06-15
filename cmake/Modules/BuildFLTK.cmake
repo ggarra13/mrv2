@@ -7,9 +7,7 @@ include( ExternalProject )
 # The cutting EDGE!
 #set( FLTK_GIT_TAG master )
 
-#set(FLTK_GIT_TAG b17357339f66949de7787e83aa9d21d613439170) # Wayland Palette fix
-# Wayland window fix and macOS DnD crash fix.
-set(FLTK_GIT_TAG 7104746413c6327d82340dede4abd06bb65f9032) 
+set(FLTK_GIT_TAG 3cc5c090f9b24180db428d55dceffd0aa7c7228c)  # Stable
 
 if(MRV2_PYFLTK OR FLTK_BUILD_SHARED)
     # If we are building pyFLTK compile shared
