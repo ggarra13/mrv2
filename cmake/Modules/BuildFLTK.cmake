@@ -48,16 +48,6 @@ if (APPLE OR WIN32)
     set(TLRENDER_WAYLAND OFF )
     set(FLTK_PANGO   OFF )
 endif()
-
-if(UNIX AND NOT APPLE)
-    set(FLTK_PATCH
-	COMMAND
-	${CMAKE_COMMAND} -E copy_if_different
-	"${PROJECT_SOURCE_DIR}/cmake/patches/FLTK-patch/src/Fl_x.cxx"
-	"${CMAKE_BINARY_DIR}/FLTK-prefix/src/FLTK/src"
-    )
-endif()
-
     
 ExternalProject_Add(
     FLTK
