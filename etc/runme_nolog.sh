@@ -193,6 +193,8 @@ echo
 echo "Build Python........................ ${BUILD_PYTHON} 	(BUILD_PYTHON)"
 if [[ ${BUILD_PYTHON} == OFF || ${BUILD_PYTHON} == 0 ]]; then
     echo "Python location: ${MRV2_PYTHON}"
+else
+    echo "Python FUTURE location: ${MRV2_PYTHON}"
 fi
 echo "Build pyFLTK........................ ${MRV2_PYFLTK} 	(MRV2_PYFLTK)"
 echo "Build FLTK shared................... ${FLTK_BUILD_SHARED} 	(FLTK_BUILD_SHARED)"
