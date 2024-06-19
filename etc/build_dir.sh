@@ -52,7 +52,9 @@ fi
 #
 # Recreate the build directory
 #
-run_cmd mkdir -p $BUILD_DIR
+if [[ ! -d $BUILD_DIR ]]; then
+    run_cmd mkdir -p $BUILD_DIR
+fi
 
 #
 # Get the number of CPU cores for maximum efficiency
