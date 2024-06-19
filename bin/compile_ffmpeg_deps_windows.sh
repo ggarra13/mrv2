@@ -80,6 +80,11 @@ if [ -z "$TLRENDER_VPX" ]; then
 fi
 
 #
+# Get Msys dependencies
+#
+pacman -Sy make wget diffutils yasm nasm pkg-config --noconfirm
+
+#
 # Build with h264 encoding.
 #
 TLRENDER_X264=ON
