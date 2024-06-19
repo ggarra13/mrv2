@@ -82,7 +82,8 @@ fi
 #
 # Get Msys dependencies
 #
-pacman -Sy make wget diffutils yasm nasm pkg-config --noconfirm
+#pacman -Sy make wget diffutils yasm nasm pkg-config --noconfirm
+pacman -Sy make wget diffutils pkg-config --noconfirm
 
 #
 # Build with h264 encoding.
@@ -148,7 +149,20 @@ cd    $ROOT_DIR
 mkdir -p sources
 mkdir -p build
 
+export OLD_PATH="$PATH"
 
+if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 || \
+	  $BUILD_LIBSVTAV1 == 1 ]]; then
+    cd $ROOT_DIR/sources
+ # We need to download a win64 specific yasm, not msys64 one
+    wget -c http://www.tortall.net/projects/yasm/releases/yasm-1.3.0-win64.exe
+    mv yasm-1.3.0-win64.exe yasm.exe
+
+    export PATH="$ROOT_DIR/sources:$PATH"
+
+    echo 'WHICH yasm.exe'
+    which yasm
+fi
 
 #############
 ## BUILDING #
@@ -225,24 +239,15 @@ if [[ $BUILD_LIBSVTAV1 == 1 ]]; then
     if [[ ! -d SVT-AV1 ]]; then
 	echo "Cloning ${SVTAV1_REPO}"
 	git clone --depth 1 ${SVTAV1_REPO} --branch ${SVTAV1_TAG}
-
-	# We need to download a win64 specific yasm, not msys64 one
-	wget -c http://www.tortall.net/projects/yasm/releases/yasm-1.3.0-win64.exe
-	mv yasm-1.3.0-win64.exe yasm.exe
 	
     fi
 
     if [[ ! -e $INSTALL_DIR/lib/SvtAV1Enc.lib ]]; then
 	echo "Building SvtAV1Enc.lib"
 	cd SVT-AV1
-	export OLD_PATH=$PATH
-
-	export PATH=$ROOT_DIR/sources:$PATH
 	
 	cd Build/windows
 	cmd //c build.bat 2019 release static no-dec no-apps
-
-	export PATH=$OLD_PATH
 
 	cd -
 	
@@ -362,6 +367,9 @@ fi
 if [[ $TLRENDER_X264 == ON || $TLRENDER_X264 == 1 ]]; then
     echo "libx264"
 fi
+
 pacman -R yasm nasm --noconfirm
+
+export PATH="$OLD_PATH"
 
 cd $MRV2_ROOT
