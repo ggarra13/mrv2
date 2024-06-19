@@ -149,14 +149,20 @@ mkdir -p build
 
 download_yasm() {
     cd $ROOT_DIR/sources
-    
-    # We need to download a win64 specific yasm, not msys64 one
-    wget -c http://www.tortall.net/projects/yasm/releases/yasm-1.3.0-win64.exe
-    mv yasm-1.3.0-win64.exe yasm.exe
+
+    if [ ! -e yasm.exe ]; then
+	# We need to download a win64 specific yasm, not msys64 one
+	wget -c http://www.tortall.net/projects/yasm/releases/yasm-1.3.0-win64.exe
+	mv yasm-1.3.0-win64.exe yasm.exe
+    fi
 }
 
 
 export OLD_PATH="$PATH"
+
+#
+# Add current path to avoid long PATH on Windows.
+#
 export PATH=".:$OLD_PATH"
 
 if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 || \
@@ -186,9 +192,6 @@ if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 ]]; then
 
 	cp $ROOT_DIR/sources/yasm.exe .
 	
-	#unset CC
-	#unset CXX
-	#unset LD
 	./configure --prefix=$INSTALL_DIR \
 		    --target=x86_64-win64-vs17 \
 		    --enable-vp9-highbitdepth \
@@ -366,18 +369,13 @@ if [[ $TLRENDER_X264 == ON || $TLRENDER_X264 == 1 ]]; then
     echo "libx264"
 fi
 
+#
+# Restore PATH
+#
 export PATH="$OLD_PATH"
-	
-if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 || \
-	  $BUILD_LIBSVTAV1 == 1 ]]; then
-    cd $ROOT_DIR/sources
-    if [ -e yasm.exe ]; then
-	rm -f yasm.exe
-    fi
-fi
 
 if [[ $BUILD_LIBDAV1D == 1 ]]; then
-    pacman -Ry nasm 
+    pacman -R nasm --noconfirm 
 fi
 
 cd $MRV2_ROOT
