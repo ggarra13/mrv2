@@ -171,6 +171,7 @@ echo
 echo "Build directory is ${BUILD_DIR}"
 echo "Build type      is ${CMAKE_BUILD_TYPE}"
 echo "Building with ${COMPILER_VERSION}, ${CPU_CORES} cores"
+echo "CMake at: ${CMAKE_LOCATION} ${CMAKE_VERSION}"
 if [[ $KERNEL == *Darwin* ]]; then
     echo "Building on MacOS Brand ${MACOS_BRAND}"
 fi
