@@ -225,12 +225,19 @@ namespace mrv
                     hasAlpha = true;
                     break;
                 case kAccuracyAuto:
-                    if (!p.videoData[0].layers.empty() &&
-                        p.videoData[0].layers[0].image &&
-                        p.videoData[0].layers[0].image->isValid())
+                    image::PixelType pixelType = image::PixelType::RGBA_U8;
+                    auto& video = p.videoData[0];
+                    if (p.missingFrame &&
+                        p.missingFrameType != MissingFrameType::kBlackFrame)
                     {
-                        const auto& pixelType =
-                            p.videoData[0].layers[0].image->getPixelType();
+                        video = p.lastVideoData;
+                    }
+                    
+                    if (!video.layers.empty() &&
+                        video.layers[0].image &&
+                        video.layers[0].image->isValid())
+                    {
+                        pixelType = video.layers[0].image->getPixelType();
                         switch (pixelType)
                         {
                         case image::PixelType::RGBA_F32:
