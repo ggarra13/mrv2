@@ -82,8 +82,7 @@ fi
 #
 # Get Msys dependencies
 #
-#pacman -Sy make wget diffutils yasm nasm pkg-config --noconfirm
-pacman -Sy make wget diffutils pkg-config --noconfirm
+pacman -Sy make wget diffutils nasm pkg-config --noconfirm
 
 #
 # Build with h264 encoding.
@@ -116,7 +115,6 @@ else
     if [[ $TLRENDER_X264 == ON || $TLRENDER_X264 == 1 ]]; then
 	echo "libx264"
     fi
-    echo "FFmpeg"
     echo
 fi
 
@@ -149,19 +147,21 @@ cd    $ROOT_DIR
 mkdir -p sources
 mkdir -p build
 
+download_yasm() {
+    cd $ROOT_DIR/sources
+    
+    # We need to download a win64 specific yasm, not msys64 one
+    wget -c http://www.tortall.net/projects/yasm/releases/yasm-1.3.0-win64.exe
+    mv yasm-1.3.0-win64.exe yasm.exe
+}
+
+
 export OLD_PATH="$PATH"
+export PATH=".:$OLD_PATH"
 
 if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 || \
 	  $BUILD_LIBSVTAV1 == 1 ]]; then
-    cd $ROOT_DIR/sources
- # We need to download a win64 specific yasm, not msys64 one
-    wget -c http://www.tortall.net/projects/yasm/releases/yasm-1.3.0-win64.exe
-    mv yasm-1.3.0-win64.exe yasm.exe
-
-    export PATH="$ROOT_DIR/sources:$PATH"
-
-    echo 'WHICH yasm.exe'
-    which yasm
+    download_yasm
 fi
 
 #############
@@ -177,24 +177,24 @@ if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 ]]; then
     fi
     
     if [[ ! -e $INSTALL_DIR/lib/vpx.lib ]]; then
-	cd $ROOT_DIR/build
-	mkdir -p libvpx
-	cd libvpx
+
+	cd $ROOT_DIR/sources/libvpx
     
 	echo
 	echo "Compiling libvpx......"
 	echo
 
+	cp $ROOT_DIR/sources/yasm.exe .
 	
-	unset CC
-	unset CXX
-	unset LD
-	./../../sources/libvpx/configure --prefix=$INSTALL_DIR \
-					 --target=x86_64-win64-vs16 \
-					 --enable-vp9-highbitdepth \
-					 --disable-unit-tests \
-					 --disable-examples \
-					 --disable-docs
+	#unset CC
+	#unset CXX
+	#unset LD
+	./configure --prefix=$INSTALL_DIR \
+		    --target=x86_64-win64-vs17 \
+		    --enable-vp9-highbitdepth \
+		    --disable-unit-tests \
+		    --disable-examples \
+		    --disable-docs
 	make -j ${CPU_CORES}
 	make install
 	run_cmd mv $INSTALL_DIR/lib/x64/vpxmd.lib $INSTALL_DIR/lib/vpx.lib
@@ -239,12 +239,13 @@ if [[ $BUILD_LIBSVTAV1 == 1 ]]; then
     if [[ ! -d SVT-AV1 ]]; then
 	echo "Cloning ${SVTAV1_REPO}"
 	git clone --depth 1 ${SVTAV1_REPO} --branch ${SVTAV1_TAG}
-	
     fi
 
     if [[ ! -e $INSTALL_DIR/lib/SvtAV1Enc.lib ]]; then
 	echo "Building SvtAV1Enc.lib"
 	cd SVT-AV1
+	
+	cp $ROOT_DIR/sources/yasm.exe .
 	
 	cd Build/windows
 	cmd //c build.bat 2019 release static no-dec no-apps
@@ -255,9 +256,6 @@ if [[ $BUILD_LIBSVTAV1 == 1 ]]; then
 
 	mkdir -p $INSTALL_DIR/include/svt-av1
 	cp Source/API/*.h $INSTALL_DIR/include/svt-av1
-	
-	cd $ROOT_DIR/sources
-	rm yasm.exe
     fi
 
     if [[ ! -e $INSTALL_DIR/lib/pkgconfig/SvtAv1Enc.pc ]]; then
@@ -294,7 +292,7 @@ if [[ $TLRENDER_X264 == ON || $TLRENDER_X264 == 1 ]]; then
     cd $ROOT_DIR/sources
 
     if [[ ! -d x264 ]]; then
-	git clone --depth 1 ${LIBX264_REPO} --branch ${X264_TAG}
+	git clone ${LIBX264_REPO} --branch ${X264_TAG}
     fi
 
     if [[ ! -e $INSTALL_DIR/lib/libx264.lib ]]; then
@@ -368,8 +366,18 @@ if [[ $TLRENDER_X264 == ON || $TLRENDER_X264 == 1 ]]; then
     echo "libx264"
 fi
 
-pacman -R yasm nasm --noconfirm
-
 export PATH="$OLD_PATH"
+	
+if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 || \
+	  $BUILD_LIBSVTAV1 == 1 ]]; then
+    cd $ROOT_DIR/sources
+    if [ -e yasm.exe ]; then
+	rm -f yasm.exe
+    fi
+fi
+
+if [[ $BUILD_LIBDAV1D == 1 ]]; then
+    pacman -Ry nasm 
+fi
 
 cd $MRV2_ROOT
