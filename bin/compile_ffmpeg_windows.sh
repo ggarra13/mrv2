@@ -91,7 +91,7 @@ fi
 
     
 if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
-    pacman -Sy make wget diffutils yasm nasm pkg-config --noconfirm
+    pacman -Sy make wget diffutils nasm pkg-config --noconfirm
 fi
     
 
@@ -157,6 +157,23 @@ else
     echo
 fi
 
+download_yasm() {
+    cd $ROOT_DIR/sources
+
+    if [ ! -e yasm.exe ]; then
+	# We need to download a win64 specific yasm, not msys64 one
+	wget -c http://www.tortall.net/projects/yasm/releases/yasm-1.3.0-win64.exe
+	mv yasm-1.3.0-win64.exe yasm.exe
+    fi
+}
+
+export OLD_PATH="$PATH"
+
+#
+# Add current path to avoid long PATH on Windows.
+#
+export PATH=".:$OLD_PATH"
+
 #
 # Build with libdav1d decoder and SVT-AV1 encoder.
 #
@@ -187,6 +204,15 @@ mkdir -p sources
 mkdir -p build
 
 
+#
+# Download Special YASM for Windows (libvpx and svt-av1 need it)
+#
+if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 || \
+	  $BUILD_LIBSVTAV1 == 1 ]]; then
+    download_yasm
+fi
+
+
 
 #############
 ## BUILDING #
@@ -202,24 +228,21 @@ if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 ]]; then
     fi
     
     if [[ ! -e $INSTALL_DIR/lib/vpx.lib ]]; then
-	cd $ROOT_DIR/build
-	mkdir -p libvpx
-	cd libvpx
+
+	cd $ROOT_DIR/sources/libvpx
     
 	echo
 	echo "Compiling libvpx......"
 	echo
-
 	
-	unset CC
-	unset CXX
-	unset LD
-	./../../sources/libvpx/configure --prefix=$INSTALL_DIR \
-					 --target=x86_64-win64-vs16 \
-					 --enable-vp9-highbitdepth \
-					 --disable-unit-tests \
-					 --disable-examples \
-					 --disable-docs
+	cp $ROOT_DIR/sources/yasm.exe .
+	
+	./configure --prefix=$INSTALL_DIR \
+		    --target=x86_64-win64-vs17 \
+		    --enable-vp9-highbitdepth \
+		    --disable-unit-tests \
+		    --disable-examples \
+		    --disable-docs
 	make -j ${CPU_CORES}
 	make install
 	run_cmd mv $INSTALL_DIR/lib/x64/vpxmd.lib $INSTALL_DIR/lib/vpx.lib
@@ -295,14 +318,11 @@ if [[ $BUILD_LIBSVTAV1 == 1 ]]; then
     if [[ ! -e $INSTALL_DIR/lib/SvtAV1Enc.lib ]]; then
 	echo "Building SvtAV1Enc.lib"
 	cd SVT-AV1
-	export OLD_PATH=$PATH
-
-	export PATH=$ROOT_DIR/sources:$PATH
+	
+	cp -f $ROOT_DIR/sources/yasm.exe .
 	
 	cd Build/windows
 	cmd //c build.bat 2019 release static no-dec no-apps
-
-	export PATH=$OLD_PATH
 
 	cd -
 	
@@ -312,7 +332,6 @@ if [[ $BUILD_LIBSVTAV1 == 1 ]]; then
 	cp Source/API/*.h $INSTALL_DIR/include/svt-av1
 	
 	cd $ROOT_DIR/sources
-	rm yasm.exe
     fi
 
     if [[ ! -e $INSTALL_DIR/lib/pkgconfig/SvtAv1Enc.pc ]]; then
@@ -831,7 +850,18 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
     fi
     echo "FFmpeg"
     echo
-    pacman -R yasm nasm --noconfirm
+    pacman -R nasm --noconfirm
 fi
+#
+# Restore PATH
+#
+export PATH="$OLD_PATH"
+
+#
+# Set PKG_CONFIG_PATH 
+#
+export PKG_CONFIG_PATH=$INSTALL_DIR/lib/pkgconfig:$PKG_CONFIG_PATH
+
+pacman -R nasm --noconfirm 
 
 cd $MRV2_ROOT
