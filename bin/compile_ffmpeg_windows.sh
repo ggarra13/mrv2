@@ -243,6 +243,7 @@ if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 ]]; then
 		    --disable-unit-tests \
 		    --disable-examples \
 		    --disable-docs
+	devenv vpx.sln -Upgrade
 	make -j ${CPU_CORES}
 	make install
 	run_cmd mv $INSTALL_DIR/lib/x64/vpxmd.lib $INSTALL_DIR/lib/vpx.lib
