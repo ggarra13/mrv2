@@ -12,9 +12,9 @@
 bin/install_libintl_windows.sh
 
 #
-# Deal with FFmpeg next (compile from source)
+# Deal with FFmpeg dependencies (compiled from source)
 #
-. bin/compile_ffmpeg_windows.sh
+. bin/compile_ffmpeg_deps_windows.sh 
 
 #
 # Deal with libcms2 (compile from source)
