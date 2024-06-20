@@ -238,7 +238,7 @@ if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 ]]; then
 	cp $ROOT_DIR/sources/yasm.exe .
 	
 	./configure --prefix=$INSTALL_DIR \
-		    --target=x86_64-win64-vs17 \
+		    --target=x86_64-win64-vs16 \
 		    --enable-vp9-highbitdepth \
 		    --disable-unit-tests \
 		    --disable-examples \
