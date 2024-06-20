@@ -236,7 +236,11 @@ if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 ]]; then
 	echo
 	
 	cp $ROOT_DIR/sources/yasm.exe .
-	
+
+	#
+	# Note, we should not use target= x86_64-win64-vc17 or it will fail
+        # in GitHub Actions.
+	#
 	./configure --prefix=$INSTALL_DIR \
 		    --target=x86_64-win64-vs16 \
 		    --enable-vp9-highbitdepth \
