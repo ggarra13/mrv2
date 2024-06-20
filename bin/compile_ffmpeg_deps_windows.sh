@@ -374,6 +374,11 @@ fi
 #
 export PATH="$OLD_PATH"
 
+#
+# Set PKG_CONFIG_PATH 
+#
+export PKG_CONFIG_PATH=$INSTALL_DIR/lib/pkgconfig:$PKG_CONFIG_PATH
+
 if [[ $BUILD_LIBDAV1D == 1 ]]; then
     pacman -R nasm --noconfirm 
 fi
