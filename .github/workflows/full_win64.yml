@@ -13,7 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        msvc-version: [2022]
+        msvc-version: [2019]
         
     defaults:
       run:
