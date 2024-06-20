@@ -191,9 +191,13 @@ if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 ]]; then
 	echo
 
 	cp $ROOT_DIR/sources/yasm.exe .
-	
+
+	#
+	# \@note: do not use --target=x86_64-win64-vs17 as that compiles for
+	#         latest MSVC on github Actions.
+	#
 	./configure --prefix=$INSTALL_DIR \
-		    --target=x86_64-win64-vs17 \
+		    --target=x86_64-win64-vs16 \
 		    --enable-vp9-highbitdepth \
 		    --disable-unit-tests \
 		    --disable-examples \
@@ -379,7 +383,8 @@ export PATH="$OLD_PATH"
 #
 export PKG_CONFIG_PATH=$INSTALL_DIR/lib/pkgconfig:$PKG_CONFIG_PATH
 
-if [[ $BUILD_LIBDAV1D == 1 ]]; then
+# Check if the package is installed
+if pacman -Qq nasm >/dev/null 2>&1; then
     pacman -R nasm --noconfirm 
 fi
 
