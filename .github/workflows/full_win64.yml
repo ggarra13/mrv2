@@ -31,10 +31,6 @@ jobs:
         vsversion: ${{ matrix.msvc-version }}
         arch: x64
 
-    - name: Configure MSBuild to use vc143 toolset
-      run: |
-        echo ::add-path::C:\Program Files (x86)\Microsoft Visual Studio\${{ matrix.msvc-version }}\Community\VC\Tools\MSVC\14.31.31103\bin\Hostx64\x64
-
     - name: Setup MSYS
       uses: msys2/setup-msys2@v2
       with:
