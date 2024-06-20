@@ -113,7 +113,7 @@ mrv2/lib:
 	mrvEdit    - Editing callbacks and functions.
 	mrvFl      - mrv2's classes for different functions 
 	             (needs refactoring).
-	mrvFlmm    - Mathias Melcher's Flmm_ColorA_Chooser.
+	mrvFlmm    - Mathias Melcher's Flmm_ColorA_Chooser (modified).
 	mrvFLU     - mrv2's custom file chooser (based on origina FLU
 	             file chooser).  Needs refactoring and code cleanup.
 	mrvGL      - OpenGL driver classes.
