@@ -28,7 +28,7 @@ jobs:
     - name: Setup environment
       uses: ilammy/msvc-dev-cmd@v1
       with:
-        vs-version: ${{ matrix.msvc-version }}
+        vsversion: ${{ matrix.msvc-version }}
         arch: x64
 
     - name: Configure MSBuild to use vc143 toolset
