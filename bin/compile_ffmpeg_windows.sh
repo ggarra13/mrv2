@@ -308,11 +308,6 @@ if [[ $BUILD_LIBSVTAV1 == 1 ]]; then
     if [[ ! -d SVT-AV1 ]]; then
 	echo "Cloning ${SVTAV1_REPO}"
 	git clone --depth 1 ${SVTAV1_REPO} --branch ${SVTAV1_TAG}
-
-	# We need to download a win64 specific yasm, not msys64 one
-	wget -c http://www.tortall.net/projects/yasm/releases/yasm-1.3.0-win64.exe
-	mv yasm-1.3.0-win64.exe yasm.exe
-	
     fi
 
     if [[ ! -e $INSTALL_DIR/lib/SvtAV1Enc.lib ]]; then
@@ -852,16 +847,11 @@ if [[ $BUILD_FFMPEG == ON || $BUILD_FFMPEG == 1 ]]; then
     echo
     pacman -R nasm --noconfirm
 fi
+
 #
 # Restore PATH
 #
 export PATH="$OLD_PATH"
 
-#
-# Set PKG_CONFIG_PATH 
-#
-export PKG_CONFIG_PATH=$INSTALL_DIR/lib/pkgconfig:$PKG_CONFIG_PATH
-
-pacman -R nasm --noconfirm 
 
 cd $MRV2_ROOT
