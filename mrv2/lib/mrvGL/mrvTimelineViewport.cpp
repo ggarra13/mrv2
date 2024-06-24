@@ -1025,8 +1025,8 @@ namespace mrv
         if (p.missingFrameType != MissingFrameType::kBlackFrame &&
             !values[0].layers.empty())
         {
-            const auto& image = values[0].layers[0].image;
-            const auto& imageB = values[0].layers[0].imageB;
+            const auto image = values[0].layers[0].image;
+            const auto imageB = values[0].layers[0].imageB;
             if ((!image || !image->isValid()) &&
                 (!imageB || !imageB->isValid()))
             {
@@ -1066,7 +1066,7 @@ namespace mrv
             }
             else
             {
-                if (sender->playback() == timeline::Playback::Forward)
+                if (sender->playback() != timeline::Playback::Reverse)
                 {
                     p.lastVideoData = values[0];
                 }
