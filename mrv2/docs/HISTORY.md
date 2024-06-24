@@ -1,3 +1,16 @@
+v1.2.0
+======
+
+- Fixed Wayland support again on Linux which had broken in v1.1.9 due to
+  Darby's update of glfw3.
+- Fixed libvpx compilation on Windows which had broken due to an upgrade in
+  MSys2's yasm assembler.
+- Made compiling FFmpeg on Windows be done in tlRender with MSys2, instead
+  of the pre-flight script, so that we can use --enable-zlib and share all
+  flags.  This not without problems, thou, as the command-line on Windows
+  is reaching its maximum length when compiling libvpx, dav1d and SVTAV1.
+
+
 v1.1.9
 ======
 
