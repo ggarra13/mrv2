@@ -11,7 +11,7 @@ v1.2.0
   flags.  This not without problems, thou, as the command-line on Windows
   is reaching its maximum length when compiling libvpx, dav1d and SVTAV1.
 - Fixed Repeat Frame not repecting the pixel depth of the previous frame
-  when Preferences->Loading->Missing Frame was set to Repeat or Scratched.
+  when Preferences->Loading->Missing Frames was set to Repeat or Scratched.
 - Fixed Missing Frame when Autoplay was Off.
 
 
