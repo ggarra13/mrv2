@@ -3,6 +3,7 @@ v1.2.0
 
 - Fixed Wayland support again on Linux which had broken in v1.1.9 due to
   Darby's update of glfw3.
+- Fixed Wayland resizing due to a bad FLTK commit.
 - Fixed libvpx compilation on Windows which had broken due to an upgrade in
   MSys2's yasm assembler.
 - Made compiling FFmpeg on Windows be done in tlRender with MSys2, instead
