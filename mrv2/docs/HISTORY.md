@@ -10,6 +10,9 @@ v1.2.0
   of the pre-flight script, so that we can use --enable-zlib and share all
   flags.  This not without problems, thou, as the command-line on Windows
   is reaching its maximum length when compiling libvpx, dav1d and SVTAV1.
+- Fixed Repeat Frame not repecting the pixel depth of the previous frame
+  when Preferences->Loading->Missing Frame was set to Repeat or Scratched.
+- Fixed Missing Frame when Autoplay was Off.
 
 
 v1.1.9
