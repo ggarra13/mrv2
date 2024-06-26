@@ -1662,7 +1662,7 @@ namespace mrv
             // If movie is longer than 30 minutes, and has multiple audio tracks
             // use a short readAhead/readBehind so we can quickly switch among
             // them.
-            auto timeRange = p.player->inOutRange();
+            const auto& timeRange = p.player->inOutRange();
             if (timeRange.duration().to_seconds() > 60 * 30)
                 movieIsLong = true;
         }
@@ -1712,7 +1712,6 @@ namespace mrv
                 if (!ioInfo.video.empty())
                 {
                     const auto& video = ioInfo.video[0];
-                    auto pixelType = video.pixelType;
                     std::size_t size = tl::image::getDataByteCount(video);
                     double frames = bytes / static_cast<double>(size);
                     seconds = frames / p.player->defaultSpeed();
@@ -1726,6 +1725,8 @@ namespace mrv
                     std::size_t sampleRate = audio.sampleRate;
                     uint64_t size = sampleRate * byteCount * channelCount;
                     seconds -= size / 1024.0 / 1024.0;
+                    // Sanity check just in case
+                    if (seconds < 0.01F) seconds = 0.01F;
                 }
 
                 double ahead = timeline::PlayerCacheOptions().readAhead.value();
@@ -1736,8 +1737,10 @@ namespace mrv
                 const double readAheadPct = ahead / totalTime;
                 const double readBehindPct = behind / totalTime;
 
-                const double readAhead = seconds * readAheadPct;
-                const double readBehind = seconds * readBehindPct;
+                double readAhead = seconds * readAheadPct;
+                double readBehind = seconds * readBehindPct;
+                if (readBehind < behind)
+                    readBehind = behind;
 
                 options.readAhead = otime::RationalTime(readAhead, 1.0);
                 options.readBehind = otime::RationalTime(readBehind, 1.0);

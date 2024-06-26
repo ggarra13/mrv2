@@ -13,6 +13,7 @@ v1.2.0
 - Fixed Repeat Frame not repecting the pixel depth of the previous frame
   when Preferences->Loading->Missing Frames was set to Repeat or Scratched.
 - Fixed Missing Frame when Autoplay was Off.
+- Fixed Caching starting from behind when Autoplay was Off.
 
 
 v1.1.9
