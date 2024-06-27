@@ -234,12 +234,15 @@ namespace mrv
         
         // See if anyone is able to accept a dock with this widget
         // How to find the dock window? Search 'em all for now...
+        X += xoff;
+        Y += yoff;
+        
         for (Fl_Window* win = Fl::first_window(); win;
              win = Fl::next_window(win))
         {
             if (auto dropWindow = dynamic_cast<DropWindow*>(win))
             {
-                return dropWindow->valid_drop(X - xoff, Y - yoff);
+                return dropWindow->valid_drop(X, Y);
             }
         }
         return 0;
@@ -250,6 +253,9 @@ namespace mrv
     {
         X = Fl::event_x_root();
         Y = Fl::event_y_root();
+#ifdef FLTK_USE_WAYLAND
+        std::cerr << "X=" << X << " Y=" << Y << std::endl;
+#endif
     }
 
     void DragButton::get_window_coords(int& X, int& Y)

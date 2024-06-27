@@ -7,8 +7,8 @@ include( ExternalProject )
 # The cutting EDGE!
 #set( FLTK_GIT_TAG master )
 
-#set(FLTK_GIT_TAG 3cc5c090f9b24180db428d55dceffd0aa7c7228c)  # Broken
-set(FLTK_GIT_TAG b17357339f66949de7787e83aa9d21d613439170) # Stable Wayland
+#set(FLTK_GIT_TAG b17357339f66949de7787e83aa9d21d613439170) # Stable Wayland
+set(FLTK_GIT_TAG 26ea55d5a48f545404d56f489e41e82fd5e63c9e) # Wayland fix
 
 if(MRV2_PYFLTK OR FLTK_BUILD_SHARED)
     # If we are building pyFLTK compile shared

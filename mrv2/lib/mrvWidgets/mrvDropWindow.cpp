@@ -43,6 +43,10 @@ namespace mrv
             int eh = dock->h();
 
             // Is the event inside the boundary of this window?
+            std::cerr << "compare against > " << ex << " " << ey
+                      << " < " << (ex + ew) << " " << (ey + eh)
+                      << std::endl;
+                
             if (visible() && (cx > ex) && (cy > ey) && (cx < (ew + ex)) &&
                 (cy < (eh + ey)))
             {

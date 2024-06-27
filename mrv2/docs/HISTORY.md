@@ -14,6 +14,8 @@ v1.2.0
   when Preferences->Loading->Missing Frames was set to Repeat or Scratched.
 - Fixed Missing Frame when Autoplay was Off.
 - Fixed Caching starting from behind when Autoplay was Off.
+- Fixed Docking and Docking attempts to happen once the corner of the Window
+  enters the docking area.
 
 
 v1.1.9
