@@ -16,6 +16,7 @@ v1.2.0
 - Fixed Caching starting from behind when Autoplay was Off.
 - Fixed Docking and Docking attempts to happen once the corner of the Window
   enters the docking area.
+- Added support for VP8 decoding so that Ubuntu's screen videos can be played.
 
 
 v1.1.9
