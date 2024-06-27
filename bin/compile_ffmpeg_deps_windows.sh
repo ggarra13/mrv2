@@ -383,9 +383,4 @@ export PATH="$OLD_PATH"
 #
 export PKG_CONFIG_PATH=$INSTALL_DIR/lib/pkgconfig:$PKG_CONFIG_PATH
 
-# Check if the package is installed
-if pacman -Qq nasm >/dev/null 2>&1; then
-    pacman -R nasm --noconfirm 
-fi
-
 cd $MRV2_ROOT
