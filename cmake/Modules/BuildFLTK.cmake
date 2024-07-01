@@ -8,7 +8,10 @@ include( ExternalProject )
 #set( FLTK_GIT_TAG master )
 
 #set(FLTK_GIT_TAG b17357339f66949de7787e83aa9d21d613439170) # Stable Wayland
-set(FLTK_GIT_TAG 26ea55d5a48f545404d56f489e41e82fd5e63c9e) # Wayland fix
+
+# Latest Wayland (moving, resizing and docking subwindows okay)
+#                (vertical flex bad redrawing).
+set(FLTK_GIT_TAG b5516449a687f8493e5fd9682511e9611a5b4fb7)
 
 if(MRV2_PYFLTK OR FLTK_BUILD_SHARED)
     # If we are building pyFLTK compile shared
@@ -43,6 +46,8 @@ set(FLTK_USE_SYSTEM_LIBJPEG FALSE)
 if(TLRENDER_JPEG)
     set(FLTK_USE_SYSTEM_LIBJPEG TRUE)
 endif()
+
+set(FLTK_PATCH )
     
 if (APPLE OR WIN32)
     set(TLRENDER_X11 OFF)

@@ -18,6 +18,7 @@
 
 #include "mrvUI/mrvDesktop.h"
 
+#define DEBUG_COORDS
 
 namespace
 {
@@ -86,19 +87,6 @@ namespace mrv
                     xoff -= x1;
                     yoff -= y1;
                 }
-                else
-                {
-                    int dock_attempt = would_dock();
-                    if (dock_attempt)
-                    {
-                        color_dock_group(FL_DARK_YELLOW);
-                        show_dock_group();
-                    }
-                    else
-                    {
-                        hide_dock_group();
-                    }
-                }
 
                 int posX, posY;
                 get_global_coords(posX, posY);
@@ -111,6 +99,17 @@ namespace mrv
                 tw->position(posX, posY);
                 if (tw->parent())
                     tw->parent()->init_sizes();
+
+                int dock_attempt = would_dock();
+                if (dock_attempt)
+                {
+                    show_dock_group();
+                }
+                else
+                {
+                    hide_dock_group();
+                }
+                
                 ret = 1;
                 break;
             }
@@ -187,19 +186,18 @@ namespace mrv
     {
         PanelGroup* tg = static_cast<PanelGroup*>(parent());
         DockGroup* uiDock = tg->get_dock();
-        const Pack* uiDockPack = uiDock->get_pack();
         auto uiDockGroup = uiDock->parent();
         
         // Show the dock group if it is hidden
         if (!uiDockGroup->visible())
         {
             uiDockGroup->show();
-            
-            auto dropWindow = static_cast<DropWindow*>(uiDock->top_window());
+            color_dock_group(FL_DARK_YELLOW);
+
+            auto dropWindow =
+                static_cast<DropWindow*>(uiDockGroup->top_window());
             Fl_Flex* flex = dropWindow->workspace;
             flex->layout();
-            flex->init_sizes();
-            flex->redraw();
         }
     }
 
@@ -218,24 +216,18 @@ namespace mrv
             uiDockGroup->visible())
         {
             uiDockGroup->hide();
-                            
-            auto dropWindow = static_cast<DropWindow*>(uiDock->top_window());
+
+            auto dropWindow =
+                static_cast<DropWindow*>(uiDockGroup->top_window());
             Fl_Flex* flex = dropWindow->workspace;
             flex->layout();
-            flex->init_sizes();
-            flex->redraw();
         }
     }
     
     int DragButton::would_dock()
     {
         int X, Y;
-        get_global_coords(X, Y);
-        
-        // See if anyone is able to accept a dock with this widget
-        // How to find the dock window? Search 'em all for now...
-        X += xoff;
-        Y += yoff;
+        get_window_coords(X, Y);
         
         for (Fl_Window* win = Fl::first_window(); win;
              win = Fl::next_window(win))
@@ -253,9 +245,6 @@ namespace mrv
     {
         X = Fl::event_x_root();
         Y = Fl::event_y_root();
-#ifdef FLTK_USE_WAYLAND
-        std::cerr << "X=" << X << " Y=" << Y << std::endl;
-#endif
     }
 
     void DragButton::get_window_coords(int& X, int& Y)

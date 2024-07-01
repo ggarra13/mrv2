@@ -821,7 +821,8 @@ if (reason == FL_REASON_CLOSED)
         class Fl_Flex
       } {
         Fl_Group uiMenuGroup {
-          xywh {0 0 690 25} box FLAT_BOX
+          label MenuBar
+          xywh {0 0 690 25} box FLAT_BOX labeltype NO_LABEL
         } {
           Fl_Group {} {open
             xywh {0 0 660 25}
@@ -859,7 +860,8 @@ else
           }
         }
         Fl_Group uiTopBar {
-          xywh {0 25 690 28} box ENGRAVED_BOX
+          label TopBar
+          xywh {0 25 690 28} box ENGRAVED_BOX labeltype NO_LABEL
         } {
           Fl_Group {} {
             label {Layers, Exposure and Gain}
@@ -1058,8 +1060,9 @@ Value is:  pow( 2, 1/x );} xywh {651 26 39 25} type {Horz Knob} labelsize 10 max
             xywh {120 25 570 26} hide resizable
           } {}
         }
-        Fl_Tile uiTileGroup {open
-          xywh {0 53 690 465}
+        Fl_Tile uiTileGroup {
+          label TileGroup selected
+          xywh {0 53 690 465} labeltype NO_LABEL
           code0 {;}
           class {mrv::Tile}
         } {
@@ -1242,8 +1245,9 @@ settings->setValue( mrv::kPenColorA, a);}
             } {}
           }
         }
-        Fl_Group uiBottomBar {open
-          xywh {0 518 690 29} box FLAT_BOX
+        Fl_Group uiBottomBar {
+          label BottomBar open
+          xywh {0 518 690 29} box FLAT_BOX labeltype NO_LABEL
         } {
           Fl_Group uiTimeWindow {open
             xywh {0 518 690 29} box FLAT_BOX resizable
@@ -1253,7 +1257,8 @@ settings->setValue( mrv::kPenColorA, a);}
           } {}
         }
         Fl_Group uiPixelBar {
-          xywh {0 547 690 30} box FLAT_BOX color 56 labelcolor 17
+          label PixelBar
+          xywh {0 547 690 30} box FLAT_BOX color 56 labeltype NO_LABEL labelcolor 17
         } {
           Fl_Group uiPixelWindow {open
             xywh {0 547 690 30} box FLAT_BOX color 56 resizable
@@ -1262,7 +1267,8 @@ settings->setValue( mrv::kPenColorA, a);}
           } {}
         }
         Fl_Group uiStatusGroup {
-          xywh {0 577 690 25} color 0
+          label StatusBar open
+          xywh {0 577 690 25} color 0 labeltype NO_LABEL
         } {
           Fl_Group uiStatusBar {open
             xywh {0 577 690 25} box FLAT_BOX labelsize 10 align 84
@@ -1303,7 +1309,6 @@ if ( uiBottomBar->visible() )
   uiTimelineGroup->hide();
   uiTimelineGroup->show();
 }
-Fl::flush(); // needed to refresh windows} {selected
-    }
+Fl::flush(); // needed to refresh windows} {}
   }
 }

@@ -552,7 +552,8 @@ namespace mrv
         const bool hasPixelBar = p.ui->uiPrefs->uiPrefsPixelToolbar->value();
         const bool visiblePixelBar = p.ui->uiPixelBar->visible_r();
 
-        if (!hasPixelBar || visiblePixelBar || !autoHide || p.presentation)
+        if (!hasPixelBar || visiblePixelBar || !autoHide ||
+            p.presentation)
             return;
 
         toggle_pixel_bar(nullptr, p.ui);
@@ -569,7 +570,6 @@ namespace mrv
             return;
 
         toggle_pixel_bar(nullptr, p.ui);
-        Fl::flush();
     }
 
     void TimelineViewport::_togglePixelBar() const noexcept
