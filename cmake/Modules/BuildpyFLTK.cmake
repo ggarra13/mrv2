@@ -74,6 +74,10 @@ set(pyFLTK_PATCH
     "${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK/swig/"
     COMMAND
     ${CMAKE_COMMAND} -E copy_if_different
+    "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/swig/Fl_Group.i"
+    "${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK/swig/"
+    COMMAND
+    ${CMAKE_COMMAND} -E copy_if_different
     "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/fltk14/test/exceptions.py"
     "${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK/fltk14/test")
 
