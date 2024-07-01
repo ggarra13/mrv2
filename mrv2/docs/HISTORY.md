@@ -14,6 +14,9 @@ v1.2.0
   when Preferences->Loading->Missing Frames was set to Repeat or Scratched.
 - Fixed Missing Frame when Autoplay was Off.
 - Fixed Caching starting from behind when Autoplay was Off.
+- Fixed Docking and Docking attempts to happen once the corner of the Window
+  enters the docking area.
+- Added support for VP8 decoding so that Ubuntu's screen videos can be played.
 
 
 v1.1.9
