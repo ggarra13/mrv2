@@ -7,11 +7,8 @@ include( ExternalProject )
 # The cutting EDGE!
 #set( FLTK_GIT_TAG master )
 
-#set(FLTK_GIT_TAG b17357339f66949de7787e83aa9d21d613439170) # Stable Wayland
-
-# Latest Wayland (moving, resizing and docking subwindows okay)
-#                (vertical flex bad redrawing).
-set(FLTK_GIT_TAG b5516449a687f8493e5fd9682511e9611a5b4fb7)
+# Latest Stable Wayland (moving, resizing and subwindows okay)
+set(FLTK_GIT_TAG ecb3c9c6fca1af050b80f6ea94e03852bd51765b)
 
 if(MRV2_PYFLTK OR FLTK_BUILD_SHARED)
     # If we are building pyFLTK compile shared
