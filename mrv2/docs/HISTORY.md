@@ -19,6 +19,14 @@ v1.2.0
   be played.
 - Added support for macOS Sequoia (beta).
 
+RE-RELEASE of v1.2.0
+
+- Fixed codec support (libvpx, dav1d and Svt-Av1) which had gotten broken due
+  to new way of building FFmpeg.
+- Fixed scrubbing behavior to be smooth when there's no audio.  If there's
+  audio the default behavior is to play the movie while scrubbing so audio
+  can be heard, unless Preferences->Playback->Scrub With Audio is off.
+
 
 v1.1.9
 ======
