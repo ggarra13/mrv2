@@ -4883,6 +4883,10 @@ msgstr "Allows you to set the ending frame for timeline."
 msgid "mrv2"
 msgstr "mrv2"
 
+#, fuzzy
+msgid "MenuBar"
+msgstr "Menu Bar"
+
 msgid "Edit"
 msgstr "Edit"
 
@@ -4891,6 +4895,9 @@ msgstr "Toggle Edit Mode"
 
 msgid "Fit Window to Image"
 msgstr "Fit Window to Image"
+
+msgid "TopBar"
+msgstr ""
 
 msgid "Layers, Exposure and Gain"
 msgstr "Layers, Exposure and Gain"
@@ -4965,6 +4972,9 @@ msgstr ""
 "Allows you to adjust gamma curve for display.\n"
 "Value is:  pow( 2, 1/x );"
 
+msgid "TileGroup"
+msgstr ""
+
 msgid "Scrubbing Tool"
 msgstr "Scrubbing Tool"
 
@@ -5006,6 +5016,17 @@ msgstr "Redo Previous Shape Drawn in Current Frame."
 
 msgid "DockGroup"
 msgstr "DockGroup"
+
+msgid "BottomBar"
+msgstr ""
+
+#, fuzzy
+msgid "PixelBar"
+msgstr "Pixel Toolbar"
+
+#, fuzzy
+msgid "StatusBar"
+msgstr "Status Bar"
 
 msgid "Current tool being used."
 msgstr "Current tool being used."

@@ -4926,6 +4926,10 @@ msgstr "Permite setear el cuadro de finalización para la barra de tiempo."
 msgid "mrv2"
 msgstr "mrv2"
 
+#, fuzzy
+msgid "MenuBar"
+msgstr "Barra de Menú"
+
 msgid "Edit"
 msgstr "Edición"
 
@@ -4934,6 +4938,9 @@ msgstr "Alternar Modo de Edición"
 
 msgid "Fit Window to Image"
 msgstr "Ajustar Ventana a la Imagen"
+
+msgid "TopBar"
+msgstr ""
 
 msgid "Layers, Exposure and Gain"
 msgstr "Capas, Exposición y Ganancia"
@@ -5010,6 +5017,9 @@ msgstr ""
 "Te permite ajustar la curva de gama para display.\n"
 "Valor es:  pow( 2, 1/x );"
 
+msgid "TileGroup"
+msgstr ""
+
 msgid "Scrubbing Tool"
 msgstr "Herramienta de Fregado"
 
@@ -5053,6 +5063,17 @@ msgstr "Rehacer la Última Figura Dibujada en Cuadro Actual."
 
 msgid "DockGroup"
 msgstr "DockGroup"
+
+msgid "BottomBar"
+msgstr ""
+
+#, fuzzy
+msgid "PixelBar"
+msgstr "Barra de Pixel"
+
+#, fuzzy
+msgid "StatusBar"
+msgstr "Barra de Estatus"
 
 msgid "Current tool being used."
 msgstr "Herramienta siendo usada."
