@@ -6,7 +6,8 @@ v1.2.1
 - Fixed scrubbing behavior to be smooth when there's no audio.  If there's
   audio the default behavior is to play the movie while scrubbing so audio
   can be heard, unless Preferences->Playback->Scrub With Audio is off.
-
+- Fixed Settings->Gigabytes display resetting to the maximum memory even if the
+  setting was actually using much less.
 
 v1.2.0
 ======
