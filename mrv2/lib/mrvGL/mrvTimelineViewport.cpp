@@ -303,7 +303,11 @@ namespace mrv
 
         const auto& t = player->currentTime();
         const auto& time = t + otime::RationalTime(dx, t.rate());
-        if (!player->isMuted() && p.ui->uiPrefs->uiPrefsScrubAutoPlay->value())
+        const auto& info = player->ioInfo();
+        bool isMuted = player->isMuted();
+        if (!info.audio.isValid())
+            isMuted = true;
+        if (!isMuted && p.ui->uiPrefs->uiPrefsScrubAutoPlay->value())
         {
             if (dx > 0)
             {

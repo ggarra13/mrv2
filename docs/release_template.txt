@@ -1,15 +1,13 @@
-mrv2 v1.1.9
+mrv2 v1.2.0
 =========
 
 mrv2 is an open source professional player and review tool for vfx, animation and computer graphics for Windows, Linux and macOS.
 
 This is a bug fix and feature update.  
 
-Many Wayland fixes and improvments!
-Several python improvements to both running scripts command-line and in the plug-in system.
-Fixes to drag and drop now accepting http:// and similar protocols.
-Fixes to LUTs.  A critical bug fix to adding text annotations which had gotten broken on v1.1.4.
-Now there is a DEVELOPMENT.md file with basic development information.
+Wayland fixes.  Now panels can be docked under Wayland.
+Build fixes to Windows and Linux builds.
+Caching fixes.  Fixed crash with Repeat Frame.
 
 Main Web page (with links to videos and online documentation):
 https://mrv2.sourceforge.io
@@ -28,7 +26,7 @@ https://www.github.com/ggarra13/mrv2
 -------------------------------------------------------------------------------
 
 
-mrv2 v1.1.9
+mrv2 v1.2.0
 
 mrv2, an open source professional player and review tool for vfx, animation and computer graphics for Windows, Linux and macOS has a new version.
 
