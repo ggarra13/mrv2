@@ -396,8 +396,8 @@ namespace mrv
             
             // Hide the cursor if in presentation time after 3 seconds of
             // inactivity.
-            auto time = std::chrono::high_resolution_clock::now();
-            auto elapsedTime =
+            const auto& time = std::chrono::high_resolution_clock::now();
+            const auto elapsedTime =
                 std::chrono::duration_cast<std::chrono::milliseconds>(
                     time - p.presentationTime)
                     .count();

@@ -61,6 +61,12 @@ namespace
         }
         return out;
     }
+
+    void stop_playback_while_scrubbing_cb(mrv::TimelineViewport* view)
+    {
+        view->stopPlaybackWhileScrubbing();
+    }
+    
 } // namespace
 
 namespace mrv
@@ -292,7 +298,40 @@ namespace mrv
         if (window())
             window()->cursor(n);
     }
+    
+    void TimelineViewport::stopPlaybackWhileScrubbing() noexcept
+    {
+        TLRENDER_P();
+        
+        const auto player = p.player;
+        const auto& t = player->currentTime();
 
+        if (player->playback() == timeline::Playback::Stop)
+            return;
+        
+        const auto time = std::chrono::high_resolution_clock::now();
+
+        const auto elapsedTime =
+            std::chrono::duration_cast<std::chrono::milliseconds>(
+                time - p.lastScrubTime)
+                .count();
+
+        // We do not check the rate exactly as the timeout may trigger a tad
+        // early.
+        const double fuzzFactor = t.rate() * 0.5;
+        const double rate = t.rate() + fuzzFactor;
+        
+        if (elapsedTime >= rate)
+        {
+            player->setPlayback(timeline::Playback::Stop);
+            return;
+        }
+
+        Fl::repeat_timeout(
+            1.0 / t.rate(),
+            (Fl_Timeout_Handler)stop_playback_while_scrubbing_cb, this);
+    }
+    
     void TimelineViewport::_scrub(float dx) noexcept
     {
         TLRENDER_P();
@@ -309,6 +348,15 @@ namespace mrv
             isMuted = true;
         if (!isMuted && p.ui->uiPrefs->uiPrefsScrubAutoPlay->value())
         {
+            if (player->playback() == timeline::Playback::Stop)
+            {
+                Fl::add_timeout(
+                    1.0 / t.rate(),
+                    (Fl_Timeout_Handler)stop_playback_while_scrubbing_cb, this);
+            }
+            
+            p.lastScrubTime = std::chrono::high_resolution_clock::now();
+                
             if (dx > 0)
             {
                 player->setPlayback(timeline::Playback::Forward);

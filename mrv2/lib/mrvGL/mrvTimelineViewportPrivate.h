@@ -49,6 +49,10 @@ namespace mrv
         math::Vector2i mousePress;
         math::Vector2i viewPosMousePress;
 
+        //! Timer used to stop scrubbing if there's no action on the user's
+        //! side.
+        std::chrono::high_resolution_clock::time_point lastScrubTime;
+        
         //! Used to handle spinning in environment map mode.
         math::Vector2f viewSpin;
 

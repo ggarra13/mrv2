@@ -52,6 +52,9 @@ namespace mrv
         //! Handle scrubbing.
         void scrub() noexcept;
 
+        //! Stop playback while scrubbing check for audio
+        void stopPlaybackWhileScrubbing() noexcept;
+        
         //! Undo last shape and annotations if no more shapes.
         void undo();
 
