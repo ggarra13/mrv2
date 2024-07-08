@@ -8,6 +8,9 @@ v1.2.1
   can be heard, unless Preferences->Playback->Scrub With Audio is off.
 - Fixed Settings->Gigabytes display resetting to the maximum memory even if the
   setting was actually using much less.
+- Improved scrubbing behavior when audio is played and the mouse button is not
+  released.
+  
 
 v1.2.0
 ======
