@@ -298,7 +298,13 @@ namespace mrv
         if (window())
             window()->cursor(n);
     }
-    
+
+    //
+    // When scrubbing, the user might keep the mouse button pressed and stop
+    // dragging when the scrubbing (playback) is done with audio.  This timeout
+    // checks if no event has happened in an elapsed time and if so, stops
+    // the playback.
+    //
     void TimelineViewport::stopPlaybackWhileScrubbing() noexcept
     {
         TLRENDER_P();
