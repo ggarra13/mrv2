@@ -12,6 +12,8 @@ v1.2.1
   released.
 - Fixed Python ocioIcs(), ocioIcsList(), ocioView(), ocioViewList() to not
   return paths with '/' at the beginning.
+- Made session (.mrv2s) files use OCIO names for default OCIO ics, view and
+  look.
   
 
 v1.2.0
