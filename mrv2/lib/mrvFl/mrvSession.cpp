@@ -40,7 +40,7 @@
 namespace
 {
     const char* kModule = "mrv2s";
-    const int kSessionVersion = 12;
+    const int kSessionVersion = 13;
 } // namespace
 
 namespace
@@ -217,14 +217,16 @@ namespace mrv
                 config = getRelativePath(path, fileName).get();
             }
 
-            int ics = ui->uiICS->value();
-            int view = ui->OCIOView->value();
             int layer = ui->uiColorChannel->value();
+            const std::string& ics    = ocio::ocioIcs();
+            const std::string& view   = ocio::ocioView();
+            const std::string& look   = ocio::ocioLook();
 
             Message ocio = {
                 {"config", config},
                 {"ics", ics},
                 {"view", view},
+                {"look", look},
             };
 
             Message json_settings;
@@ -343,7 +345,7 @@ namespace mrv
                 return false;
             }
 
-            ofs << std::setw(4) << session << std::endl;
+            ofs << session.dump(4) << std::endl;
 
             if (ofs.fail())
             {
@@ -535,11 +537,39 @@ namespace mrv
                     auto Aitem = model->observeA()->get();
                     if (!Aitem || Aitem->ocioIcs.empty())
                     {
-                        value = j["ics"];
-                        ui->uiICS->value(value);
+                        if (j["ics"].type() == nlohmann::json::value_t::string)
+                        {
+                            std::string ics;
+                            j.at("ics").get_to(ics);
+                            ocio::setOcioIcs(ics);
+                        }
+                        else
+                        {
+                            value = j["ics"];
+                            ui->uiICS->value(value);
+                        }
                     }
-                    value = j["view"];
-                    ui->OCIOView->value(value);
+                    
+                    if (j["view"].type() == nlohmann::json::value_t::string)
+                    {
+                        std::string view;
+                        j.at("view").get_to(view);
+                        ocio::setOcioView(view);
+                    }
+                    else
+                    {
+                        value = j["view"];
+                        ui->OCIOView->value(value);
+                    }
+                    
+                    
+                    if (j.contains("look"))
+                    {
+                        std::string look;
+                        j.at("look").get_to(look);
+                        ocio::setOcioLook(look);
+                    }
+                    
                     ui->uiView->updateOCIOOptions();
 
                     // Hide Panels and Windows
