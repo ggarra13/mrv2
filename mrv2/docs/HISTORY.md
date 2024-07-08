@@ -10,6 +10,8 @@ v1.2.1
   setting was actually using much less.
 - Improved scrubbing behavior when audio is played and the mouse button is not
   released.
+- Fixed Python ocioIcs(), ocioIcsList(), ocioView(), ocioViewList() to not
+  return paths with '/' at the beginning.
   
 
 v1.2.0

@@ -75,7 +75,11 @@ namespace mrv
             if (ret != 0)
                 return "";
 
-            return pathname;
+            std::string ics = pathname;
+            if (ics[0] == '/')
+                ics = ics.substr(1, ics.size());
+
+            return ics;
         }
 
         void setOcioIcs(const std::string& name)
@@ -218,7 +222,11 @@ namespace mrv
             int ret = uiOCIOView->item_pathname(pathname, 1024, item);
             if (ret != 0)
                 return "";
-            return pathname;
+            
+            std::string view = pathname;
+            if (view[0] == '/')
+                view = view.substr(1, view.size());
+            return view;
         }
 
         void setOcioView(const std::string& name)
@@ -360,7 +368,10 @@ namespace mrv
                 if (ret != 0)
                     continue;
 
-                out.push_back(pathname);
+                if (pathname[0] == '/')
+                    out.push_back(item->label());
+                else
+                    out.push_back(pathname);
             }
             return out;
         }
