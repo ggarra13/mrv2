@@ -30,8 +30,8 @@ class HUDUI {open
   } {
     Fl_Window {} {
       label HUD
-      callback {delete mrv::hud;
-mrv::hud = nullptr;
+      callback {delete mrv::hudClass;
+mrv::hudClass = nullptr;
 delete o;
 ViewerUI* ui = mrv::App::ui;
 ui->uiMain->fill_menu( ui->uiMenuBar );} open selected

@@ -19,6 +19,7 @@ class Fl_Button;
 class Fl_Menu_Item;
 class Fl_Menu_;
 class HUDUI;
+class OCIOPresetsUI;
 class ViewerUI;
 
 namespace mrv
@@ -32,7 +33,8 @@ namespace mrv
     };
 
     extern WindowCallback kWindowCallbacks[];
-    extern HUDUI* hud;
+    extern HUDUI* hudClass;
+    extern OCIOPresetsUI* OCIOPresetsClass;
 
     void open_files_cb(const std::vector< std::string >& files, ViewerUI* ui);
     void open_single_files_cb(const std::string& file, ViewerUI* ui);
@@ -113,6 +115,9 @@ namespace mrv
 
     //! HUD window callback
     void hud_cb(Fl_Menu_* w, ViewerUI* ui);
+    
+    //! OCIO presets window callback
+    void ocio_presets_cb(Fl_Menu_* w, ViewerUI* ui);
 
     //! Auxiliary functions to remember what bars and what windows were
     // 1 open in case of a fullscreen or presentation switch.

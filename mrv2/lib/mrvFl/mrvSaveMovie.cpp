@@ -55,6 +55,7 @@ namespace mrv
         std::string msg;
         Viewport* view = ui->uiView;
         bool presentation = view->getPresentationMode();
+        bool hud = view->getHudActive();
 
         auto player = view->getTimelinePlayer();
         if (!player)
@@ -615,7 +616,6 @@ namespace mrv
             player->start();
 
             // Turn off hud so it does not get captured by glReadPixels.
-            bool hud = view->getHudActive();
             view->setHudActive(false);
 
             math::Size2i offscreenBufferSize(renderSize.w, renderSize.h);

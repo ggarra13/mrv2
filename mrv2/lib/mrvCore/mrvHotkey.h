@@ -250,6 +250,7 @@ namespace mrv
     extern Hotkey kGammaLess;
 
     extern Hotkey kHudToggle;
+    extern Hotkey kOCIOPresetsToggle;
     // @todo:
     extern Hotkey kGridToggle;
     extern Hotkey kGridSize;

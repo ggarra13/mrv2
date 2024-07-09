@@ -8,6 +8,7 @@ set( FL_SOURCES
     mrvAboutUI.fl
     mrvHotkeyUI.fl
     mrvHUDUI.fl
+    mrvOCIOPresetsUI.fl
     PathMappingUI.fl
     mrvPreferencesUI.fl
     mrvSaveImageOptionsUI.fl

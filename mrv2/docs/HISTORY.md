@@ -14,6 +14,7 @@ v1.2.1
   return paths with '/' at the beginning.
 - Made session (.mrv2s) files use OCIO names for default OCIO ics, view and
   look.
+- Fixed HUD when saving images or movies not being correctly turned off.
   
 
 v1.2.0

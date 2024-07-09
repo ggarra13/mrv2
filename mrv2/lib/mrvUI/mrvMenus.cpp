@@ -934,10 +934,16 @@ namespace mrv
         idx =
             menu->add(buf, kHudToggle.hotkey(), (Fl_Callback*)hud_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (hud)
+        if (hudClass)
+            item->set();
+        
+        snprintf(buf, 256, "%s", _("View/OCIO Presets"));
+        idx = menu->add(
+            buf, kOCIOPresetsToggle.hotkey(), (Fl_Callback*)ocio_presets_cb, ui,
+            mode);
+        if (OCIOPresetsClass)
             item->set();
 
-        
         mode = 0;
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;

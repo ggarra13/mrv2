@@ -174,7 +174,8 @@ namespace mrv
     Hotkey kGridToggle(true, false, false, false, 'g');
     Hotkey kGridSize(true, true, false, false, 'g');
     Hotkey kHudToggle(true, false, false, false, 'h');
-
+    
+    Hotkey kOCIOPresetsToggle(false, false, false, false, 0);
     Hotkey kOCIOInputColorSpace(false, false, false, false, 0);
     Hotkey kOCIODisplay(false, false, false, false, 0);
     Hotkey kOCIOView(false, false, false, false, 0);
@@ -496,6 +497,7 @@ namespace mrv
         HotkeyEntry(_("Exposure Less"), &kExposureLess),
         HotkeyEntry(_("Gamma More"), &kGammaMore),
         HotkeyEntry(_("Gamma Less"), &kGammaLess),
+        HotkeyEntry(_("OCIO Presets"), &kOCIOPresetsToggle),
         HotkeyEntry(_("OCIO Input Color Space"), &kOCIOInputColorSpace),
         HotkeyEntry(_("OCIO Display"), &kOCIODisplay),
         HotkeyEntry(_("OCIO View"), &kOCIOView),

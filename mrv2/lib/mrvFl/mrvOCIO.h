@@ -35,5 +35,15 @@ namespace mrv
         std::vector<std::string> ocioLookList();
         std::vector<std::string> ocioViewList();
 
+        // std::string ocioPreset();
+        std::vector<std::string> ocioPresetsList();
+        
+        void setOcioPreset(const std::string& preset);
+        void createOcioPreset(const std::string& preset);
+        void removeOcioPreset(const std::string& preset);
+
+        bool loadOcioPresets(const std::string& fileName);
+        bool saveOcioPresets(const std::string& fileName);
+
     } // namespace ocio
 } // namespace mrv

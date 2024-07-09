@@ -339,8 +339,9 @@ namespace mrv
                         p.options.seek, {"-seek"},
                         _("Seek to the given time.")),
                     app::CmdLineValueOption<otime::TimeRange>::create(
-                        p.options.inOutRange, {"-inOutRange"},
-                        _("Set the in/out points range.")),
+                        p.options.inOutRange, {"-inOutRange", "-inout"},
+                        _("Set the in/out points range in start/end/fps "
+                          "format, like 23/120/24.")),
                     app::CmdLineValueOption<std::string>::create(
                         p.options.ocioOptions.input,
                         {"-ocioInput", "-ics", "-oi"},

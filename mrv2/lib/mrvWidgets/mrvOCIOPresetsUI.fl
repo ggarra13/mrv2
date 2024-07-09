@@ -1,0 +1,164 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0400
+i18n_type 1
+i18n_include {<libintl.h>}
+i18n_conditional {}
+i18n_gnu_function gettext
+i18n_gnu_static_function gettext_noop
+header_name {.h}
+code_name {.cxx}
+decl {\#include <string>} {public global
+}
+
+decl {\#include "mrvFl/mrvCallbacks.h"} {private local
+}
+
+decl {\#include "mrvFl/mrvOCIO.h"} {private local
+}
+
+decl {\#include "mrViewer.h"} {private local
+}
+
+class OCIOPresetsUI {open
+} {
+  decl {std::string presetName;} {private local
+  }
+  Function {make_window()} {open
+  } {
+    Fl_Window uiOCIOPrestsWindow {
+      label {OCIO Presets}
+      callback {delete mrv::OCIOPresetsClass;
+mrv::OCIOPresetsClass = nullptr;
+delete o;
+ViewerUI* ui = mrv::App::ui;
+ui->uiMain->fill_menu( ui->uiMenuBar );} open
+      xywh {578 437 492 237} type Double hide
+    } {
+      Fl_Group {} {open
+        xywh {45 25 373 141}
+      } {
+        Fl_Box {} {
+          label {Select, Add or Delete an OCIO Preset that stores OCIO's ICS, View, Look and LUT settings. } selected
+          xywh {45 25 373 96} box BORDER_BOX align 128
+        }
+        Fl_Menu_Button uiOCIOPreset {
+          label Preset
+          callback {const Fl_Menu_Item* item = o->mvalue();
+if (!item || !item->label()) return;
+
+const std::string& presetName = item->label();
+mrv::ocio::setOcioPreset(presetName);
+
+o->label(item->label());} open
+          tooltip {Click to switch to a stored preset.} xywh {45 138 228 28} when 5
+        } {}
+        Fl_Button {} {
+          label Add
+          user_data uiOCIOPreset user_data_type {Fl_Menu_Button*}
+          callback {auto win = get_preset_name();
+while (win->visible())
+{
+  Fl::check();
+}
+
+if (presetName.empty())
+     return;
+     
+
+     
+int x = v->size() - 2;  // 1 for last, 1 for nullptr
+v->value(x);
+
+if (x < 0)
+{
+  v->label(_("Preset"));
+  return;
+}
+
+const Fl_Menu_Item& item = v->menu()[x];
+if (!item.label()) return;
+
+v->label(item.label());}
+          tooltip {Click to add a new preset with the current settings.} xywh {284 138 64 28}
+        }
+        Fl_Button {} {
+          label Delete
+          user_data uiOCIOPreset user_data_type {Fl_Menu_Button*}
+          callback {int x = v->value();
+if (x < 0 || x >= v->size())
+     return;
+
+const Fl_Menu_Item& item = v->menu()[x];
+if (!item.label()) return;
+
+const std::string& presetName = item.label();
+if (presetName.empty() || presetName == _("Preset"))
+     return;
+
+mrv::ocio::removeOcioPreset(presetName);
+
+fill_ocio_presets();}
+          tooltip {Click to delete the selected preset.} xywh {354 138 64 28}
+        }
+      }
+    }
+  }
+  Function {get_preset_name()} {open
+  } {
+    Fl_Window uiPresetNameWindow {
+      label {Preset Name}
+      callback {presetName = uiPresetName->value();
+delete o;} open
+      xywh {857 535 440 102} type Double hide
+      code0 {o->show();} modal
+    } {
+      Fl_Group {} {open
+        xywh {99 15 242 72}
+      } {
+        Fl_Input uiPresetName {
+          xywh {99 15 242 32} color 20 textcolor 56
+          code0 {presetName.clear();}
+        }
+        Fl_Button {} {
+          label Cancel
+          user_data uiPresetNameWindow user_data_type {Fl_Double_Window*}
+          callback {presetName.clear();
+delete v;}
+          xywh {99 59 112 28}
+        }
+        Fl_Button {} {
+          label Accept
+          user_data uiPresetNameWindow user_data_type {Fl_Double_Window*}
+          callback {presetName = uiPresetName->value();
+if (presetName.empty())
+    return;
+
+mrv::ocio::createOcioPreset(presetName);
+fill_ocio_presets();
+
+delete v;}
+          xywh {231 59 110 28}
+        }
+      }
+    }
+  }
+  Function {fill_ocio_presets()} {open
+  } {
+    code {auto presets = mrv::ocio::ocioPresetsList();
+
+uiOCIOPreset->clear();
+
+for (const auto& preset : presets)
+{
+  uiOCIOPreset->add(preset.c_str());
+}
+
+uiOCIOPreset->menu_end();
+uiOCIOPreset->label(_("Preset"));} {}
+  }
+  Function {OCIOPresetsUI()} {open
+  } {
+    code {auto w = make_window();
+w->show();} {}
+  }
+}

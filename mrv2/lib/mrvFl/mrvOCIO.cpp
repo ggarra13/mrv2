@@ -4,10 +4,21 @@
 
 #include <tlCore/StringFormat.h>
 
+#include <tlTimeline/OCIOOptions.h>
+
 #include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvFile.h"
 
+#include "mrvFl/mrvIO.h"
+
+#include "mrvNetwork/mrvLUTOptions.h"
+
 #include "mrViewer.h"
+
+namespace
+{
+    const char* kModule = "ocio";
+}
 
 namespace mrv
 {
@@ -85,7 +96,10 @@ namespace mrv
         void setOcioIcs(const std::string& name)
         {
             auto uiICS = App::ui->uiICS;
+
             int value = -1;
+            if (name.empty()) value = 0;
+            
             for (int i = 0; i < uiICS->children(); ++i)
             {
                 const Fl_Menu_Item* item = uiICS->child(i);
@@ -155,6 +169,8 @@ namespace mrv
         {
             auto OCIOLook = App::ui->OCIOLook;
             int value = -1;
+            if (name.empty())
+                value = 0;
             for (int i = 0; i < OCIOLook->children(); ++i)
             {
                 const Fl_Menu_Item* item = OCIOLook->child(i);
@@ -376,5 +392,117 @@ namespace mrv
             return out;
         }
 
+        struct OCIOPreset
+        {
+            std::string name;
+            
+            timeline::OCIOOptions ocio;
+            timeline::LUTOptions lut;
+        };
+
+        
+        void to_json(nlohmann::json& j, const OCIOPreset& value)
+        {
+            j = nlohmann::json
+            {
+                {"name", value.name},
+                {"ocio", value.ocio},
+                {"lut",value.lut}
+            };
+        }
+
+        void from_json(const nlohmann::json& j, OCIOPreset& value)
+        {
+            j.at("name").get_to(value.name);
+            j.at("ocio").get_to(value.ocio);
+            j.at("lut").get_to(value.lut);
+        }
+
+        std::vector<OCIOPreset> ocioPresets;
+
+        std::vector<std::string> ocioPresetsList()
+        {
+            std::vector<std::string> out;
+            for (const auto& preset : ocioPresets)
+            {
+                out.push_back(preset.name);
+            }
+            return out;
+        }
+        
+        void setOcioPreset(const std::string& presetName)
+        {
+            for (const auto& preset : ocioPresets)
+            {
+                if (preset.name == presetName)
+                {
+                    std::string msg =
+                        string::Format(_("Setting OCIO Preset '{0}'."))
+                            .arg(presetName);
+                    LOG_INFO(msg);
+            
+                    const timeline::OCIOOptions& ocio = preset.ocio;
+                    setOcioConfig(ocio.fileName);
+                    setOcioIcs(ocio.input);
+                    std::string view = ocioDisplayViewShortened(ocio.display,
+                                                                ocio.view);
+                    setOcioView(view);
+                    setOcioLook(ocio.look);
+
+                    App::app->setLUTOptions(preset.lut);
+                    return;
+                }
+            }
+
+            std::string msg = string::Format(_("Preset '{0}' not found."))
+                              .arg(presetName);
+            LOG_ERROR(msg);
+        }
+        
+        void createOcioPreset(const std::string& presetName)
+        {
+            auto view = App::ui->uiView;
+            const timeline::OCIOOptions& ocio = view->getOCIOOptions();
+            const timeline::LUTOptions&  lut  = App::app->lutOptions();
+
+            OCIOPreset preset;
+            preset.name = presetName;
+            preset.ocio = ocio;
+            preset.lut  = lut;
+
+            ocioPresets.push_back(preset);
+        }
+        
+        void removeOcioPreset(const std::string& presetName)
+        {
+            std::vector<OCIOPreset> out;
+            bool found = false;
+            for (const auto& preset : ocioPresets)
+            {
+                if (preset.name == presetName)
+                {
+                    found = true;
+                    continue;
+                }
+                out.push_back(preset);
+            }
+            if (!found)
+            {
+                std::string msg = string::Format(_("Preset '{0}' not found."))
+                                  .arg(presetName);
+                LOG_ERROR(msg);
+            }
+            ocioPresets = out;
+        }
+        
+        bool loadOcioPresets(const std::string& fileName)
+        {
+            return true;
+        }
+        
+        bool saveOcioPresets(const std::string& fileName)
+        {
+            return true;
+        }
     } // namespace ocio
 } // namespace mrv

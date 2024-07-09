@@ -60,6 +60,7 @@
 #endif
 
 #include "mrvHUDUI.h"
+#include "mrvOCIOPresetsUI.h"
 #include "mrvHotkeyUI.h"
 #include "mrViewer.h"
 
@@ -1235,17 +1236,32 @@ namespace mrv
         PanelGroup::show_all();
     }
 
-    HUDUI* hud = nullptr;
+    HUDUI* hudClass = nullptr;
 
     void hud_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        Viewport* view = ui->uiView;
-        if (!hud)
+        if (!hudClass)
         {
+            Viewport* view = ui->uiView;
             Fl_Group::current(view);
-            hud = new HUDUI(view);
+            hudClass = new HUDUI(view);
         }
+        ui->uiMain->fill_menu(ui->uiMenuBar);
     }
+
+    OCIOPresetsUI* OCIOPresetsClass = nullptr;
+    
+    void ocio_presets_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        if (!OCIOPresetsClass)
+        {
+            Viewport* view = ui->uiView;
+            Fl_Group::current(view);
+            OCIOPresetsClass = new OCIOPresetsUI();
+        }
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
 
     void frame_view_cb(Fl_Menu_* m, ViewerUI* ui)
     {
