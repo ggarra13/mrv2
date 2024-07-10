@@ -150,12 +150,6 @@ namespace mrv
 
     std::string prefspath()
     {
-        std::string studio = mrv::studiopath();
-        if (fs::is_directory(studio))
-        {
-            studio += '/';
-            return studio;
-        }
         std::string prefs = mrv::homepath();
         prefs += "/.filmaura/";
         return prefs;

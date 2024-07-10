@@ -535,21 +535,20 @@ namespace mrv
         /////////////////////////////////////////////////////
 
 #ifdef TLRENDER_OCIO
-
-        std::string ocioPath = studiopath() + "mrv2.ocio";
+        
+        std::string ocioPath = studiopath() + "mrv2.ocio.json";
         if (file::isReadable(ocioPath))
         {
             ocio::loadOcioPresets(ocioPath);
         }
         else
         {
-            ocioPath = prefspath() + "mrv2.ocio";
+            ocioPath = prefspath() + "mrv2.ocio.json";
             if (file::isReadable(ocioPath))
             {
                 ocio::loadOcioPresets(ocioPath);
             }
         }
-
         
         // Check OCIO variable first, then saved prefs and finally if nothing,
         // use this default.
@@ -1033,7 +1032,7 @@ namespace mrv
             visible = 1;
         settings->setValue("gui/DockGroup/Visible", visible);
 
-        std::string ocioPath = prefspath() + "mrv2.ocio";
+        std::string ocioPath = prefspath() + "mrv2.ocio.json";
         ocio::saveOcioPresets(ocioPath);
             
         Fl_Preferences base(

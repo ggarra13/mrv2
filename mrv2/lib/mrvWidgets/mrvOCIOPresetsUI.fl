@@ -31,15 +31,18 @@ class OCIOPresetsUI {open
 mrv::OCIOPresetsClass = nullptr;
 delete o;
 ViewerUI* ui = mrv::App::ui;
-ui->uiMain->fill_menu( ui->uiMenuBar );} open
-      xywh {578 262 495 511} type Double hide resizable
+ui->uiMain->fill_menu( ui->uiMenuBar );}
+      xywh {578 262 495 511} type Double resizable visible
     } {
       Fl_Group {} {open
-        xywh {59 17 373 478}
+        xywh {0 0 495 511} box FLAT_BOX
       } {
-        Fl_Menu_Button uiOCIOPreset {
-          label Preset
-          callback {const Fl_Menu_Item* item = o->mvalue();
+        Fl_Group {} {open
+          xywh {59 17 373 478}
+        } {
+          Fl_Menu_Button uiOCIOPreset {
+            label Preset
+            callback {const Fl_Menu_Item* item = o->mvalue();
 if (!item || !item->label()) return;
 
 const std::string& presetName = item->label();
@@ -48,13 +51,13 @@ mrv::ocio::setOcioPreset(presetName);
 o->label(item->label());
 
 const std::string& summary = mrv::ocio::ocioPresetSummary(presetName);
-uiOCIOSummary->copy_label(summary.c_str());} selected
-          tooltip {Click to switch to a stored preset.} xywh {59 146 228 28}
-        } {}
-        Fl_Button {} {
-          label Add
-          user_data uiOCIOPreset user_data_type {Fl_Menu_Button*}
-          callback {auto win = get_preset_name();
+uiOCIOSummary->copy_label(summary.c_str());}
+            tooltip {Click to switch to a stored preset.} xywh {59 146 228 28}
+          } {}
+          Fl_Button {} {
+            label Add
+            user_data uiOCIOPreset user_data_type {Fl_Menu_Button*}
+            callback {auto win = get_preset_name();
 while (win->visible())
 {
   Fl::check();
@@ -81,12 +84,12 @@ v->label(item.label());
 
 const std::string& summary = mrv::ocio::ocioPresetSummary(presetName);
 uiOCIOSummary->copy_label(summary.c_str());}
-          tooltip {Click to add a new preset with the current settings.} xywh {298 146 64 28}
-        }
-        Fl_Button {} {
-          label Delete
-          user_data uiOCIOPreset user_data_type {Fl_Menu_Button*}
-          callback {int x = v->value();
+            tooltip {Click to add a new preset with the current settings.} xywh {298 146 64 28}
+          }
+          Fl_Button {} {
+            label Delete
+            user_data uiOCIOPreset user_data_type {Fl_Menu_Button*}
+            callback {int x = v->value();
 if (x < 0 || x >= v->size())
      return;
 
@@ -102,49 +105,54 @@ mrv::ocio::removeOcioPreset(presetName);
 fill_ocio_presets();
 
 uiOCIOSummary->label("");}
-          tooltip {Click to delete the selected preset.} xywh {368 146 64 28}
-        }
-        Fl_Box {} {
-          label {Select, Add or Delete an OCIO Preset that stores: config filename, Input Color Space, View, Look, LUT settings and Defaults for 8-bits, 16-bits, 32-bits, half and float images. }
-          xywh {59 17 373 112} box BORDER_BOX align 128
-        }
-        Fl_Box {} {
-          label Summary
-          xywh {59 187 373 28}
-        }
-        Fl_Box uiOCIOSummary {
-          xywh {59 215 373 280} box BORDER_BOX labelsize 12 align 85
+            tooltip {Click to delete the selected preset.} xywh {368 146 64 28}
+          }
+          Fl_Box {} {
+            label {Select, Add or Delete an OCIO Preset that stores: config filename, Input Color Space, View, Look, LUT settings and Defaults for 8-bits, 16-bits, 32-bits, half and float images. }
+            xywh {59 17 373 112} box BORDER_BOX align 128
+          }
+          Fl_Box {} {
+            label Summary
+            xywh {59 187 373 28}
+          }
+          Fl_Box uiOCIOSummary {
+            xywh {59 215 373 280} box BORDER_BOX labelsize 12 align 85
+          }
         }
       }
     }
     code {fill_ocio_presets();} {}
   }
-  Function {get_preset_name()} {} {
+  Function {get_preset_name()} {open
+  } {
     Fl_Window uiPresetNameWindow {
       label {Preset Name}
       callback {presetName = uiPresetName->value();
 delete o;} open
-      xywh {857 535 440 102} type Double hide
-      code0 {o->show();} modal
+      xywh {857 535 440 102} type Double
+      code0 {o->show();} modal visible
     } {
       Fl_Group {} {open
-        xywh {99 15 242 72}
+        xywh {0 0 440 102} box FLAT_BOX
       } {
-        Fl_Input uiPresetName {
-          xywh {99 15 242 32} color 20 textcolor 56
-          code0 {presetName.clear();}
-        }
-        Fl_Button {} {
-          label Cancel
-          user_data uiPresetNameWindow user_data_type {Fl_Double_Window*}
-          callback {presetName.clear();
+        Fl_Group {} {open selected
+          xywh {99 15 242 72}
+        } {
+          Fl_Input uiPresetName {
+            xywh {99 15 242 32} color 20 textcolor 56
+            code0 {presetName.clear();}
+          }
+          Fl_Button {} {
+            label Cancel
+            user_data uiPresetNameWindow user_data_type {Fl_Double_Window*}
+            callback {presetName.clear();
 delete v;}
-          xywh {99 59 112 28}
-        }
-        Fl_Button {} {
-          label Accept
-          user_data uiPresetNameWindow user_data_type {Fl_Double_Window*}
-          callback {presetName = uiPresetName->value();
+            xywh {99 59 112 28}
+          }
+          Fl_Button {} {
+            label Accept
+            user_data uiPresetNameWindow user_data_type {Fl_Double_Window*}
+            callback {presetName = uiPresetName->value();
 if (presetName.empty())
     return;
 
@@ -152,7 +160,8 @@ mrv::ocio::createOcioPreset(presetName);
 fill_ocio_presets();
 
 delete v;}
-          xywh {231 59 110 28}
+            xywh {231 59 110 28}
+          }
         }
       }
     }
