@@ -32,14 +32,14 @@ mrv::OCIOPresetsClass = nullptr;
 delete o;
 ViewerUI* ui = mrv::App::ui;
 ui->uiMain->fill_menu( ui->uiMenuBar );} open
-      xywh {578 437 492 237} type Double hide
+      xywh {578 437 492 237} type Double visible
     } {
       Fl_Group {} {open
-        xywh {45 25 373 141}
+        xywh {59 48 373 141}
       } {
         Fl_Box {} {
-          label {Select, Add or Delete an OCIO Preset that stores OCIO's ICS, View, Look and LUT settings. } selected
-          xywh {45 25 373 96} box BORDER_BOX align 128
+          label {Select, Add or Delete an OCIO Preset that stores: OCIO's config filename, ICS, View, Look and LUT settings. }
+          xywh {59 48 373 96} box BORDER_BOX align 128
         }
         Fl_Menu_Button uiOCIOPreset {
           label Preset
@@ -49,8 +49,8 @@ if (!item || !item->label()) return;
 const std::string& presetName = item->label();
 mrv::ocio::setOcioPreset(presetName);
 
-o->label(item->label());} open
-          tooltip {Click to switch to a stored preset.} xywh {45 138 228 28} when 5
+o->label(item->label());}
+          tooltip {Click to switch to a stored preset.} xywh {59 161 228 28} when 5
         } {}
         Fl_Button {} {
           label Add
@@ -79,7 +79,7 @@ const Fl_Menu_Item& item = v->menu()[x];
 if (!item.label()) return;
 
 v->label(item.label());}
-          tooltip {Click to add a new preset with the current settings.} xywh {284 138 64 28}
+          tooltip {Click to add a new preset with the current settings.} xywh {298 161 64 28}
         }
         Fl_Button {} {
           label Delete
@@ -98,10 +98,11 @@ if (presetName.empty() || presetName == _("Preset"))
 mrv::ocio::removeOcioPreset(presetName);
 
 fill_ocio_presets();}
-          tooltip {Click to delete the selected preset.} xywh {354 138 64 28}
+          tooltip {Click to delete the selected preset.} xywh {368 161 64 28}
         }
       }
     }
+    code {fill_ocio_presets();} {}
   }
   Function {get_preset_name()} {open
   } {

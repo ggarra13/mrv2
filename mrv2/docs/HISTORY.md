@@ -15,6 +15,7 @@ v1.2.1
 - Made session (.mrv2s) files use OCIO names for default OCIO ics, view and
   look.
 - Fixed HUD when saving images or movies not being correctly turned off.
+- Added View->OCIO Presets to store and retrieve OCIO configurations. 
   
 
 v1.2.0

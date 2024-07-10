@@ -385,7 +385,7 @@ namespace mrv
             {
                 const std::string& err =
                     string::Format(
-                        _("Failed to open the file {0} for reading."))
+                        _("Failed to open the file '{0}' for reading."))
                         .arg(fileName);
                 LOG_ERROR(err);
                 return false;
@@ -402,7 +402,7 @@ namespace mrv
                 if (ifs.fail())
                 {
                     const std::string& err =
-                        string::Format(_("Failed to load the file {0}."))
+                        string::Format(_("Failed to load the file '{0}."))
                             .arg(fileName);
                     LOG_ERROR(err);
                     return false;

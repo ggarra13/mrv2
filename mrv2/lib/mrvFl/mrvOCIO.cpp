@@ -306,6 +306,36 @@ namespace mrv
             }
             return out;
         }
+        
+        void ocioSplitViewIntoDisplayView(const std::string& combined,
+                                          std::string& display,
+                                          std::string& view)
+        {
+            view = combined;
+            size_t pos = view.find('(');
+            if (pos == std::string::npos)
+            {
+                pos = view.find('/');
+                if (pos == std::string::npos)
+                {
+                    const std::string& err =
+                        string::Format(
+                            _("Could not split '{0}' into display and view."))
+                            .arg(combined);
+                    throw std::runtime_error(err);
+                }
+                
+                display = view.substr(pos + 1, view.size());
+                view = view.substr(0, pos - 1);
+            }
+            else
+            {
+                display = view.substr(pos + 1, view.size());
+                view = view.substr(0, pos - 1);
+                pos = display.find(')');
+                display = display.substr(0, pos);
+            }
+        }
 
         int ocioViewIndex(const std::string& displayViewName)
         {
@@ -461,10 +491,34 @@ namespace mrv
         
         void createOcioPreset(const std::string& presetName)
         {
-            auto view = App::ui->uiView;
-            const timeline::OCIOOptions& ocio = view->getOCIOOptions();
+            timeline::OCIOOptions ocio;
+            ocio.enabled = true;
+            
+            ocio.fileName = ocioConfig();
+            ocio.input   = ocioIcs();
+            
+            std::string display, view;
+            std::string combined = ocioView();
+            ocioSplitViewIntoDisplayView(combined, display, view);
+
+            ocio.display = display;
+            ocio.view    = view;
+            ocio.look    = ocioLook();
+
             const timeline::LUTOptions&  lut  = App::app->lutOptions();
 
+            for (const auto& preset : ocioPresets)
+            {
+                if (preset.name == presetName)
+                {
+                    std::string msg =
+                        string::Format(_("OCIO Preset '{0}' already exists!"))
+                            .arg(presetName);
+                    LOG_ERROR(msg);
+                    return;
+                }
+            }
+            
             OCIOPreset preset;
             preset.name = presetName;
             preset.ocio = ocio;
@@ -497,11 +551,91 @@ namespace mrv
         
         bool loadOcioPresets(const std::string& fileName)
         {
+            std::ifstream ifs(fileName);
+            if (!ifs.is_open())
+            {
+                const std::string& err =
+                    string::Format(
+                        _("Failed to open the file '{0}' for reading."))
+                        .arg(fileName);
+                LOG_ERROR(err);
+                return false;
+            }
+                
+            nlohmann::json j;
+            ifs >> j;
+            
+            if (ifs.fail())
+            {
+                const std::string& err =
+                    string::Format(_("Failed to load the file '{0}'."))
+                    .arg(fileName);
+                LOG_ERROR(err);
+                return false;
+            }
+            if (ifs.bad())
+            {
+                LOG_ERROR(
+                    _("The stream is in an unrecoverable error state."));
+                return false;
+            }
+            ifs.close();
+            
+            ocioPresets = j.get<std::vector<OCIOPreset>>();
+            
+            const std::string& msg =
+                string::Format(_("Loaded {0} ocio presets from '{1}'."))
+                .arg(ocioPresets.size())
+                .arg(fileName);
+            LOG_INFO(msg);
+            
             return true;
         }
         
         bool saveOcioPresets(const std::string& fileName)
         {
+            try
+            {
+                std::ofstream ofs(fileName);
+                if (!ofs.is_open())
+                {
+                    const std::string& err =
+                        string::Format(
+                            _("Failed to open the file '{0}' for saving."))
+                        .arg(fileName);
+                    LOG_ERROR(err);
+                    return false;
+                }
+            
+                nlohmann::json j = ocioPresets;
+                
+                ofs << j.dump(4);
+            
+                if (ofs.fail())
+                {
+                    const std::string& err =
+                        string::Format(_("Failed to save the file '{0}'."))
+                        .arg(fileName);
+                    LOG_ERROR(err);
+                    return false;
+                }
+                if (ofs.bad())
+                {
+                    LOG_ERROR(
+                        _("The stream is in an unrecoverable error state."));
+                    return false;
+                }
+                ofs.close();
+                
+                const std::string& msg =
+                    string::Format(_("OCIO presets having saved to '{0}'."))
+                    .arg(fileName);
+                LOG_INFO(msg);
+            }
+            catch(const std::exception& e)
+            {
+                LOG_ERROR("Error: " << e.what());
+            }
             return true;
         }
     } // namespace ocio

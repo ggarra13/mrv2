@@ -27,6 +27,10 @@ namespace mrv
         std::string ocioDisplayViewShortened(
             const std::string& display, const std::string& view);
 
+        void ocioSplitViewIntoDisplayView(const std::string& combined,
+                                          std::string& display,
+                                          std::string& view);
+        
         int ocioViewIndex(const std::string&);
         std::string ocioView();
         void setOcioView(const std::string&);

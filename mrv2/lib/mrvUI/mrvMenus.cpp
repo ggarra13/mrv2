@@ -937,6 +937,7 @@ namespace mrv
         if (hudClass)
             item->set();
         
+        mode = 0;
         snprintf(buf, 256, "%s", _("View/OCIO Presets"));
         idx = menu->add(
             buf, kOCIOPresetsToggle.hotkey(), (Fl_Callback*)ocio_presets_cb, ui,
