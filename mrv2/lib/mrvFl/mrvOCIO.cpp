@@ -509,6 +509,7 @@ namespace mrv
                     s << "OCIO:" << std::endl
                       << "\t  config: " << ocio.fileName << std::endl
                       << "\t     ICS: " << ocio.input << std::endl
+                      << "\t display: " << ocio.display << std::endl
                       << "\t    view: " << ocio.view << std::endl
                       << "\t    look: " << ocio.look << std::endl
                       << "LUT:" << std::endl

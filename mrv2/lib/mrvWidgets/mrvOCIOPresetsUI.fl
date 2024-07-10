@@ -32,10 +32,10 @@ mrv::OCIOPresetsClass = nullptr;
 delete o;
 ViewerUI* ui = mrv::App::ui;
 ui->uiMain->fill_menu( ui->uiMenuBar );} open
-      xywh {578 437 492 472} type Double resizable visible
+      xywh {578 262 495 511} type Double hide resizable
     } {
       Fl_Group {} {open
-        xywh {59 17 373 438}
+        xywh {59 17 373 478}
       } {
         Fl_Menu_Button uiOCIOPreset {
           label Preset
@@ -102,15 +102,15 @@ uiOCIOSummary->label("");}
           tooltip {Click to delete the selected preset.} xywh {368 146 64 28}
         }
         Fl_Box {} {
-          label {Select, Add or Delete an OCIO Preset that stores: config filename, Input Color Space, View, Look, LUT settings and Defaults for 8-bits, 16-bits, 32-bits, half and float images. } selected
+          label {Select, Add or Delete an OCIO Preset that stores: config filename, Input Color Space, View, Look, LUT settings and Defaults for 8-bits, 16-bits, 32-bits, half and float images. }
           xywh {59 17 373 112} box BORDER_BOX align 128
         }
         Fl_Box {} {
           label Summary
           xywh {59 187 373 28}
         }
-        Fl_Box uiOCIOSummary {
-          xywh {59 215 373 240} box BORDER_BOX labelsize 12 align 85
+        Fl_Box uiOCIOSummary {selected
+          xywh {59 215 373 280} box BORDER_BOX labelsize 12 align 85
         }
       }
     }
