@@ -312,10 +312,15 @@ namespace mrv
                                           std::string& view)
         {
             view = combined;
-            size_t pos = view.find('(');
-            if (pos == std::string::npos)
+            size_t pos = view.rfind('/');
+            if (pos != std::string::npos)
             {
-                pos = view.find('/');
+                display = view.substr(0, pos);
+                view = view.substr(pos + 1, view.size());
+            }
+            else
+            {
+                pos = view.find('(');
                 if (pos == std::string::npos)
                 {
                     const std::string& err =
@@ -325,11 +330,6 @@ namespace mrv
                     throw std::runtime_error(err);
                 }
                 
-                display = view.substr(pos + 1, view.size());
-                view = view.substr(0, pos - 1);
-            }
-            else
-            {
                 display = view.substr(pos + 1, view.size());
                 view = view.substr(0, pos - 1);
                 pos = display.find(')');
@@ -422,14 +422,47 @@ namespace mrv
             return out;
         }
 
+        struct OCIODefaults
+        {
+            std::string bits8;
+            std::string bits16;
+            std::string bits32;
+            std::string half;
+            std::string flt;
+        };
+
         struct OCIOPreset
         {
             std::string name;
             
             timeline::OCIOOptions ocio;
             timeline::LUTOptions lut;
+
+            OCIODefaults defaults;
         };
 
+        
+        void to_json(nlohmann::json& j, const OCIODefaults& value)
+        {
+            j = nlohmann::json
+            {
+                {"8-bits", value.bits8},
+                {"16-bits", value.bits16},
+                {"32-bits", value.bits32},
+                {"half", value.half},
+                {"float", value.flt},
+            };
+        }
+
+        void from_json(const nlohmann::json& j, OCIODefaults& value)
+        {
+            j.at("8-bits").get_to(value.bits8);
+            j.at("16-bits").get_to(value.bits16);
+            j.at("32-bits").get_to(value.bits32);
+            j.at("half").get_to(value.half);
+            j.at("float").get_to(value.flt);
+        }
+        
         
         void to_json(nlohmann::json& j, const OCIOPreset& value)
         {
@@ -437,7 +470,8 @@ namespace mrv
             {
                 {"name", value.name},
                 {"ocio", value.ocio},
-                {"lut",value.lut}
+                {"lut", value.lut},
+                {"defaults", value.defaults},
             };
         }
 
@@ -446,6 +480,7 @@ namespace mrv
             j.at("name").get_to(value.name);
             j.at("ocio").get_to(value.ocio);
             j.at("lut").get_to(value.lut);
+            j.at("defaults").get_to(value.defaults);
         }
 
         std::vector<OCIOPreset> ocioPresets;
@@ -458,6 +493,36 @@ namespace mrv
                 out.push_back(preset.name);
             }
             return out;
+        }
+        
+        std::string ocioPresetSummary(const std::string& presetName)
+        {
+            std::stringstream s;
+            for (const auto& preset : ocioPresets)
+            {
+                if (preset.name == presetName)
+                {
+                    const timeline::OCIOOptions& ocio = preset.ocio;
+                    const timeline::LUTOptions&  lut  = preset.lut;
+                    const OCIODefaults& d = preset.defaults;
+
+                    s << "OCIO:" << std::endl
+                      << "\t  config: " << ocio.fileName << std::endl
+                      << "\t     ICS: " << ocio.input << std::endl
+                      << "\t    view: " << ocio.view << std::endl
+                      << "\t    look: " << ocio.look << std::endl
+                      << "LUT:" << std::endl
+                      << "\tfileName: " << lut.fileName << std::endl
+                      << "\t   order: " << lut.order << std::endl
+                      << "Defaults:" << std::endl
+                      << "\t  8-bits: " << d.bits8 << std::endl
+                      << "\t 16-bits: " << d.bits16 << std::endl
+                      << "\t 32-bits: " << d.bits32 << std::endl
+                      << "\t    half: " << d.half << std::endl
+                      << "\t   float: " << d.flt << std::endl;
+                }
+            }
+            return s.str();
         }
         
         void setOcioPreset(const std::string& presetName)
@@ -491,6 +556,20 @@ namespace mrv
         
         void createOcioPreset(const std::string& presetName)
         {
+            for (const auto& preset : ocioPresets)
+            {
+                if (preset.name == presetName)
+                {
+                    std::string msg =
+                        string::Format(_("OCIO Preset '{0}' already exists!"))
+                            .arg(presetName);
+                    LOG_ERROR(msg);
+                    return;
+                }
+            }
+
+            auto uiPrefs = App::ui->uiPrefs;
+            
             timeline::OCIOOptions ocio;
             ocio.enabled = true;
             
@@ -507,23 +586,19 @@ namespace mrv
 
             const timeline::LUTOptions&  lut  = App::app->lutOptions();
 
-            for (const auto& preset : ocioPresets)
-            {
-                if (preset.name == presetName)
-                {
-                    std::string msg =
-                        string::Format(_("OCIO Preset '{0}' already exists!"))
-                            .arg(presetName);
-                    LOG_ERROR(msg);
-                    return;
-                }
-            }
+            OCIODefaults defaults;
+            defaults.bits8  = uiPrefs->uiOCIO_8bits_ics->value();
+            defaults.bits16 = uiPrefs->uiOCIO_16bits_ics->value();
+            defaults.bits32 = uiPrefs->uiOCIO_32bits_ics->value();
+            defaults.half   = uiPrefs->uiOCIO_half_ics->value();
+            defaults.flt    = uiPrefs->uiOCIO_float_ics->value();
             
             OCIOPreset preset;
             preset.name = presetName;
             preset.ocio = ocio;
             preset.lut  = lut;
-
+            preset.defaults = defaults;
+            
             ocioPresets.push_back(preset);
         }
         
@@ -551,44 +626,53 @@ namespace mrv
         
         bool loadOcioPresets(const std::string& fileName)
         {
-            std::ifstream ifs(fileName);
-            if (!ifs.is_open())
+            try
             {
-                const std::string& err =
-                    string::Format(
-                        _("Failed to open the file '{0}' for reading."))
+                std::ifstream ifs(fileName);
+                if (!ifs.is_open())
+                {
+                    const std::string& err =
+                        string::Format(
+                            _("Failed to open the file '{0}' for reading."))
                         .arg(fileName);
-                LOG_ERROR(err);
-                return false;
-            }
+                    LOG_ERROR(err);
+                    return false;
+                }
                 
-            nlohmann::json j;
-            ifs >> j;
+                nlohmann::json j;
+                ifs >> j;
             
-            if (ifs.fail())
-            {
-                const std::string& err =
-                    string::Format(_("Failed to load the file '{0}'."))
-                    .arg(fileName);
-                LOG_ERROR(err);
-                return false;
+                if (ifs.fail())
+                {
+                    const std::string& err =
+                        string::Format(_("Failed to load the file '{0}'."))
+                        .arg(fileName);
+                    LOG_ERROR(err);
+                    return false;
+                }
+                if (ifs.bad())
+                {
+                    LOG_ERROR(
+                        _("The stream is in an unrecoverable error state."));
+                    return false;
+                }
+                ifs.close();
+            
+                ocioPresets = j.get<std::vector<OCIOPreset>>();
+
+                if (!ocioPresets.empty())
+                {
+                    const std::string& msg =
+                        string::Format(_("Loaded {0} ocio presets from '{1}'."))
+                        .arg(ocioPresets.size())
+                        .arg(fileName);
+                    LOG_INFO(msg);
+                }
             }
-            if (ifs.bad())
+            catch(const std::exception& e)
             {
-                LOG_ERROR(
-                    _("The stream is in an unrecoverable error state."));
-                return false;
+                LOG_ERROR("Error: " << e.what());
             }
-            ifs.close();
-            
-            ocioPresets = j.get<std::vector<OCIOPreset>>();
-            
-            const std::string& msg =
-                string::Format(_("Loaded {0} ocio presets from '{1}'."))
-                .arg(ocioPresets.size())
-                .arg(fileName);
-            LOG_INFO(msg);
-            
             return true;
         }
         
@@ -628,7 +712,7 @@ namespace mrv
                 ofs.close();
                 
                 const std::string& msg =
-                    string::Format(_("OCIO presets having saved to '{0}'."))
+                    string::Format(_("OCIO presets have been saved to '{0}'."))
                     .arg(fileName);
                 LOG_INFO(msg);
             }

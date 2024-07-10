@@ -1597,8 +1597,8 @@ msgstr "Modo de reproducción en bucle."
 msgid "Seek to the given time."
 msgstr "Saltar al tiempo dado."
 
-msgid "Set the in/out points range."
-msgstr "Setear el range de entrada/salida."
+msgid "Set the in/out points range in start/end/fps format, like 23/120/24."
+msgstr "Setear los puntos de entrada salida en formato comienzo/final/fps, como 23/120/24."
 
 msgid "OpenColorIO input color space."
 msgstr "Espacio de Entrada de Color de OpenColorIO."
@@ -2866,11 +2866,11 @@ msgstr "Fallé en excribir al archivo {0}."
 msgid "Session saved to \"{0}\"."
 msgstr "Sesión grabada a \"{0}\"."
 
-msgid "Failed to open the file {0} for reading."
-msgstr "Fallé en abrir el archivo {0} para leer."
+msgid "Failed to open the file '{0}' for reading."
+msgstr "Fallé en abrir el archivo '{0}' para leer."
 
-msgid "Failed to load the file {0}."
-msgstr "Fallé en cargar al archivo {0}."
+msgid "Failed to load the file '{0}."
+msgstr "Fallé en cargar al archivo '{0}'."
 
 msgid "Cannot save an NDI stream"
 msgstr "No puedo grabar un flujo de NDI."
@@ -3039,6 +3039,33 @@ msgstr "Look de OCIO inválido para '{0}'."
 
 msgid "Invalid OCIO Display/View '{0}'."
 msgstr "Display/View de OCIO inválido para '{0}'."
+
+msgid "Could not split '{0}' into display and view."
+msgstr "No pude dividir '{0}' en display y vista."
+
+msgid "Setting OCIO Preset '{0}'."
+msgstr "Usando preseteo OCIO '{0}'."
+
+msgid "Preset '{0}' not found."
+msgstr "Preseteo '{0}' no encontrado"
+
+msgid "OCIO Preset '{0}' already exists!"
+msgstr "¡Preseteo OCIO '{0}' ya existe!"
+
+msgid "Failed to load the file '{0}'."
+msgstr "Fallé en cargar al archivo '{0}'."
+
+msgid "Loaded {0} ocio presets from '{1}'."
+msgstr "Cargué {0} preseteos ocio desde '{1}'."
+
+msgid "Failed to open the file '{0}' for saving."
+msgstr "Fallé en abrir el archivo '{0}' para leer."
+
+msgid "Failed to save the file '{0}'."
+msgstr "Fallé en grabar al archivo '{0}'."
+
+msgid "OCIO presets have been saved to '{0}'."
+msgstr "Preseteos OCIO han sido grabados en: '{0}'."
 
 msgid "English"
 msgstr "Inglés"
@@ -3704,6 +3731,9 @@ msgstr "Vista/Máscara/%s"
 
 msgid "View/Hud"
 msgstr "Vista/Hud"
+
+msgid "View/OCIO Presets"
+msgstr "Vista/Preseteos OCIO"
 
 msgid "Timeline/Cache/Clear"
 msgstr "Línea de Tiempo/Cache/Borrar"
@@ -4926,7 +4956,6 @@ msgstr "Permite setear el cuadro de finalización para la barra de tiempo."
 msgid "mrv2"
 msgstr "mrv2"
 
-#, fuzzy
 msgid "MenuBar"
 msgstr "Barra de Menú"
 
@@ -4940,7 +4969,7 @@ msgid "Fit Window to Image"
 msgstr "Ajustar Ventana a la Imagen"
 
 msgid "TopBar"
-msgstr ""
+msgstr "TopBar"
 
 msgid "Layers, Exposure and Gain"
 msgstr "Capas, Exposición y Ganancia"
@@ -5018,7 +5047,7 @@ msgstr ""
 "Valor es:  pow( 2, 1/x );"
 
 msgid "TileGroup"
-msgstr ""
+msgstr "TileGroup"
 
 msgid "Scrubbing Tool"
 msgstr "Herramienta de Fregado"
@@ -5065,13 +5094,11 @@ msgid "DockGroup"
 msgstr "DockGroup"
 
 msgid "BottomBar"
-msgstr ""
+msgstr "BottomBar"
 
-#, fuzzy
 msgid "PixelBar"
 msgstr "Barra de Pixel"
 
-#, fuzzy
 msgid "StatusBar"
 msgstr "Barra de Estatus"
 
@@ -6154,6 +6181,36 @@ msgstr "Carpeta Local"
 msgid "Okay"
 msgstr "Okay"
 
+msgid "OCIO Presets"
+msgstr "Preseteos OCIO"
+
+msgid "Click to switch to a stored preset."
+msgstr "Cliquée para cambiar a un preseteo almacenado."
+
+msgid "Click to add a new preset with the current settings."
+msgstr "Cliquée para agregar un preseteo con los seteos actuales."
+
+msgid "Delete"
+msgstr "Borrar"
+
+msgid "Click to delete the selected preset."
+msgstr "Cliquée para borrar el preseteo seleccionado."
+
+msgid ""
+"Select, Add or Delete an OCIO Preset that stores: config filename, Input "
+"Color Space, View, Look, LUT settings and Defaults for 8-bits, 16-bits, 32-"
+"bits, half and float images. "
+msgstr ""
+"Seleccione, Agregue o Borre un Preseteo OCIO que guarda: archivo de config, "
+"Espacio de Color de Entrada, Vista, Look, seteos LUT y valores por Defecto "
+"para imágenes de 8-bits, 16-bits, 32-bits, half y float."
+
+msgid "Summary"
+msgstr "Resumen"
+
+msgid "Preset Name"
+msgstr "Nombre de Preseteo"
+
 msgid "Active"
 msgstr "Activo"
 
@@ -6264,9 +6321,6 @@ msgstr "Inicio"
 
 msgid "PageUp"
 msgstr "Re.Pág."
-
-msgid "Delete"
-msgstr "Borrar"
 
 msgid "End"
 msgstr "Fin"
@@ -6831,6 +6885,9 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
+
+#~ msgid "Set the in/out points range."
+#~ msgstr "Setear el range de entrada/salida."
 
 #~ msgid "    Percentage: %.2g %%"
 #~ msgstr "    Porcentaje: %.2g %%"

@@ -32,15 +32,11 @@ mrv::OCIOPresetsClass = nullptr;
 delete o;
 ViewerUI* ui = mrv::App::ui;
 ui->uiMain->fill_menu( ui->uiMenuBar );} open
-      xywh {578 437 492 237} type Double visible
+      xywh {578 437 492 472} type Double resizable visible
     } {
       Fl_Group {} {open
-        xywh {59 48 373 141}
+        xywh {59 17 373 438}
       } {
-        Fl_Box {} {
-          label {Select, Add or Delete an OCIO Preset that stores: OCIO's config filename, ICS, View, Look and LUT settings. }
-          xywh {59 48 373 96} box BORDER_BOX align 128
-        }
         Fl_Menu_Button uiOCIOPreset {
           label Preset
           callback {const Fl_Menu_Item* item = o->mvalue();
@@ -49,8 +45,11 @@ if (!item || !item->label()) return;
 const std::string& presetName = item->label();
 mrv::ocio::setOcioPreset(presetName);
 
-o->label(item->label());}
-          tooltip {Click to switch to a stored preset.} xywh {59 161 228 28} when 5
+o->label(item->label());
+
+const std::string& summary = mrv::ocio::ocioPresetSummary(presetName);
+uiOCIOSummary->copy_label(summary.c_str());}
+          tooltip {Click to switch to a stored preset.} xywh {59 146 228 28} when 5
         } {}
         Fl_Button {} {
           label Add
@@ -79,7 +78,7 @@ const Fl_Menu_Item& item = v->menu()[x];
 if (!item.label()) return;
 
 v->label(item.label());}
-          tooltip {Click to add a new preset with the current settings.} xywh {298 161 64 28}
+          tooltip {Click to add a new preset with the current settings.} xywh {298 146 64 28}
         }
         Fl_Button {} {
           label Delete
@@ -97,15 +96,27 @@ if (presetName.empty() || presetName == _("Preset"))
 
 mrv::ocio::removeOcioPreset(presetName);
 
-fill_ocio_presets();}
-          tooltip {Click to delete the selected preset.} xywh {368 161 64 28}
+fill_ocio_presets();
+
+uiOCIOSummary->label("");}
+          tooltip {Click to delete the selected preset.} xywh {368 146 64 28}
+        }
+        Fl_Box {} {
+          label {Select, Add or Delete an OCIO Preset that stores: config filename, Input Color Space, View, Look, LUT settings and Defaults for 8-bits, 16-bits, 32-bits, half and float images. } selected
+          xywh {59 17 373 112} box BORDER_BOX align 128
+        }
+        Fl_Box {} {
+          label Summary
+          xywh {59 187 373 28}
+        }
+        Fl_Box uiOCIOSummary {
+          xywh {59 215 373 240} box BORDER_BOX labelsize 12 align 85
         }
       }
     }
     code {fill_ocio_presets();} {}
   }
-  Function {get_preset_name()} {open
-  } {
+  Function {get_preset_name()} {} {
     Fl_Window uiPresetNameWindow {
       label {Preset Name}
       callback {presetName = uiPresetName->value();

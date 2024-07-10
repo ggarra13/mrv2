@@ -1572,8 +1572,8 @@ msgstr "Playback loop mode."
 msgid "Seek to the given time."
 msgstr "Seek to the given time."
 
-msgid "Set the in/out points range."
-msgstr "Set the in/out points range."
+msgid "Set the in/out points range in start/end/fps format, like 23/120/24."
+msgstr "Set the in/out points range in start/end/fps format, like 23/120/24."
 
 msgid "OpenColorIO input color space."
 msgstr "OpenColorIO input color space."
@@ -2815,11 +2815,11 @@ msgstr "Failed to write to the file {0}."
 msgid "Session saved to \"{0}\"."
 msgstr "Session saved to \"{0}\"."
 
-msgid "Failed to open the file {0} for reading."
-msgstr "Failed to open the file {0} for reading."
+msgid "Failed to open the file '{0}' for reading."
+msgstr "Failed to open the file '{0}' for reading."
 
-msgid "Failed to load the file {0}."
-msgstr "Failed to load the file {0}."
+msgid "Failed to load the file '{0}."
+msgstr "Failed to load the file '{0}'."
 
 msgid "Cannot save an NDI stream"
 msgstr "Cannot save an NDI stream"
@@ -2988,6 +2988,33 @@ msgstr "Invalid OCIO Look '{0}'."
 
 msgid "Invalid OCIO Display/View '{0}'."
 msgstr "Invalid OCIO Display/View '{0}'."
+
+msgid "Could not split '{0}' into display and view."
+msgstr "Could not split '{0}' into display and view."
+
+msgid "Setting OCIO Preset '{0}'."
+msgstr "Setting OCIO Preset '{0}'."
+
+msgid "Preset '{0}' not found."
+msgstr "Preset '{0}' not found."
+
+msgid "OCIO Preset '{0}' already exists!"
+msgstr "OCIO Preset '{0}' already exists!"
+
+msgid "Failed to load the file '{0}'."
+msgstr "Failed to load the file '{0}'."
+
+msgid "Loaded {0} ocio presets from '{1}'."
+msgstr "Loaded {0} ocio presets from '{1}'."
+
+msgid "Failed to open the file '{0}' for saving."
+msgstr "Failed to open the file '{0}' for saving."
+
+msgid "Failed to save the file '{0}'."
+msgstr "Failed to save the file '{0}'."
+
+msgid "OCIO presets have been saved to '{0}'."
+msgstr "OCIO presets have been saved to '{0}'."
 
 msgid "English"
 msgstr "English"
@@ -3652,6 +3679,9 @@ msgstr "View/Mask/%s"
 
 msgid "View/Hud"
 msgstr "View/Hud"
+
+msgid "View/OCIO Presets"
+msgstr "View/OCIO Presets"
 
 msgid "Timeline/Cache/Clear"
 msgstr "Timeline/Cache/Clear"
@@ -4883,9 +4913,8 @@ msgstr "Allows you to set the ending frame for timeline."
 msgid "mrv2"
 msgstr "mrv2"
 
-#, fuzzy
 msgid "MenuBar"
-msgstr "Menu Bar"
+msgstr "MenuBar"
 
 msgid "Edit"
 msgstr "Edit"
@@ -4897,7 +4926,7 @@ msgid "Fit Window to Image"
 msgstr "Fit Window to Image"
 
 msgid "TopBar"
-msgstr ""
+msgstr "TopBar"
 
 msgid "Layers, Exposure and Gain"
 msgstr "Layers, Exposure and Gain"
@@ -4973,7 +5002,7 @@ msgstr ""
 "Value is:  pow( 2, 1/x );"
 
 msgid "TileGroup"
-msgstr ""
+msgstr "TileGroup"
 
 msgid "Scrubbing Tool"
 msgstr "Scrubbing Tool"
@@ -5018,15 +5047,13 @@ msgid "DockGroup"
 msgstr "DockGroup"
 
 msgid "BottomBar"
-msgstr ""
+msgstr "BottomBar"
 
-#, fuzzy
 msgid "PixelBar"
-msgstr "Pixel Toolbar"
+msgstr "PixelBar"
 
-#, fuzzy
 msgid "StatusBar"
-msgstr "Status Bar"
+msgstr "StatusBar"
 
 msgid "Current tool being used."
 msgstr "Current tool being used."
@@ -6087,6 +6114,36 @@ msgstr "Local Path"
 msgid "Okay"
 msgstr "Okay"
 
+msgid "OCIO Presets"
+msgstr "OCIO Presets"
+
+msgid "Click to switch to a stored preset."
+msgstr "Click to switch to a stored preset."
+
+msgid "Click to add a new preset with the current settings."
+msgstr "Click to add a new preset with the current settings."
+
+msgid "Delete"
+msgstr "Delete"
+
+msgid "Click to delete the selected preset."
+msgstr "Click to delete the selected preset."
+
+msgid ""
+"Select, Add or Delete an OCIO Preset that stores: config filename, Input "
+"Color Space, View, Look, LUT settings and Defaults for 8-bits, 16-bits, 32-"
+"bits, half and float images. "
+msgstr ""
+"Select, Add or Delete an OCIO Preset that stores: config filename, Input "
+"Color Space, View, Look,  LUT settings and Defaults for 8-bits, 16-bits, 32-"
+"bits, half and float images. "
+
+msgid "Summary"
+msgstr "Summary"
+
+msgid "Preset Name"
+msgstr "Preset Name"
+
 msgid "Active"
 msgstr "Active"
 
@@ -6197,9 +6254,6 @@ msgstr "Home"
 
 msgid "PageUp"
 msgstr "PageUp"
-
-msgid "Delete"
-msgstr "Delete"
 
 msgid "End"
 msgstr "End"
@@ -6764,6 +6818,9 @@ msgstr "Toggle Hotkeys Window"
 
 msgid "Toggle About Window"
 msgstr "Toggle About Window"
+
+#~ msgid "Set the in/out points range."
+#~ msgstr "Set the in/out points range."
 
 #~ msgid "    Percentage: %.2g %%"
 #~ msgstr "    Percentage: %.2g %%"
