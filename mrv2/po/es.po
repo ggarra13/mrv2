@@ -1598,7 +1598,9 @@ msgid "Seek to the given time."
 msgstr "Saltar al tiempo dado."
 
 msgid "Set the in/out points range in start/end/fps format, like 23/120/24."
-msgstr "Setear los puntos de entrada salida en formato comienzo/final/fps, como 23/120/24."
+msgstr ""
+"Setear los puntos de entrada salida en formato comienzo/final/fps, como "
+"23/120/24."
 
 msgid "OpenColorIO input color space."
 msgstr "Espacio de Entrada de Color de OpenColorIO."

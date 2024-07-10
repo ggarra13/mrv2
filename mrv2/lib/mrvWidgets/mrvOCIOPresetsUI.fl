@@ -48,8 +48,8 @@ mrv::ocio::setOcioPreset(presetName);
 o->label(item->label());
 
 const std::string& summary = mrv::ocio::ocioPresetSummary(presetName);
-uiOCIOSummary->copy_label(summary.c_str());}
-          tooltip {Click to switch to a stored preset.} xywh {59 146 228 28} when 5
+uiOCIOSummary->copy_label(summary.c_str());} selected
+          tooltip {Click to switch to a stored preset.} xywh {59 146 228 28}
         } {}
         Fl_Button {} {
           label Add
@@ -77,7 +77,10 @@ if (x < 0)
 const Fl_Menu_Item& item = v->menu()[x];
 if (!item.label()) return;
 
-v->label(item.label());}
+v->label(item.label());
+
+const std::string& summary = mrv::ocio::ocioPresetSummary(presetName);
+uiOCIOSummary->copy_label(summary.c_str());}
           tooltip {Click to add a new preset with the current settings.} xywh {298 146 64 28}
         }
         Fl_Button {} {
@@ -109,7 +112,7 @@ uiOCIOSummary->label("");}
           label Summary
           xywh {59 187 373 28}
         }
-        Fl_Box uiOCIOSummary {selected
+        Fl_Box uiOCIOSummary {
           xywh {59 215 373 280} box BORDER_BOX labelsize 12 align 85
         }
       }
@@ -154,8 +157,7 @@ delete v;}
       }
     }
   }
-  Function {fill_ocio_presets()} {open
-  } {
+  Function {fill_ocio_presets()} {} {
     code {auto presets = mrv::ocio::ocioPresetsList();
 
 uiOCIOPreset->clear();
@@ -168,8 +170,7 @@ for (const auto& preset : presets)
 uiOCIOPreset->menu_end();
 uiOCIOPreset->label(_("Preset"));} {}
   }
-  Function {OCIOPresetsUI()} {open
-  } {
+  Function {OCIOPresetsUI()} {} {
     code {auto w = make_window();
 w->show();} {}
   }

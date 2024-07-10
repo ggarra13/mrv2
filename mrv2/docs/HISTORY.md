@@ -16,6 +16,7 @@ v1.2.1
   look.
 - Fixed HUD when saving images or movies not being correctly turned off.
 - Added View->OCIO Presets to store and retrieve OCIO configurations.
+- Fixed VP9 encoder to use .mp4 muxer instead of .webm as it was failing.
   
 
 v1.2.0
