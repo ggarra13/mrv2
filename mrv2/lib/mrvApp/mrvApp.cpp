@@ -337,7 +337,8 @@ namespace mrv
                         string::join(timeline::getLoopLabels(), ", ")),
                     app::CmdLineValueOption<otime::RationalTime>::create(
                         p.options.seek, {"-seek"},
-                        _("Seek to the given time.")),
+                        _("Seek to the given time, in value/fps format.  "
+                          "Example: 50/30.")),
                     app::CmdLineValueOption<otime::TimeRange>::create(
                         p.options.inOutRange, {"-inOutRange", "-inout"},
                         _("Set the in/out points range in start/end/fps "
