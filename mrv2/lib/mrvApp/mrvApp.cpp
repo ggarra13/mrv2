@@ -1006,17 +1006,16 @@ namespace mrv
     void App::startPlayback()
     {
         TLRENDER_P();
-        p.player->start();
 
         const timeline::Playback& playback = p.options.playback;
         ui->uiView->setPlayback(playback);
-
+        
         if (playback == timeline::Playback::Reverse)
         {
             p.player->setPlayback(timeline::Playback::Stop);
 
             //
-            // Thie observer will watch the cache and start a reverse playback
+            // This observer will watch the cache and start a reverse playback
             // once it is filled.
             //
             p.cacheInfoObserver =
@@ -1027,13 +1026,33 @@ namespace mrv
                         TLRENDER_P();
                         if (p.player->playback() != timeline::Playback::Stop)
                             return;
+
                         const auto& cache =
                             p.player->player()->observeCacheOptions()->get();
                         const auto& readAhead = cache.readAhead;
                         const auto& readBehind = cache.readBehind;
-                        const auto& timeRange = p.player->timeRange();
-                        const auto& endTime = timeRange.end_time_exclusive();
-                        const auto& startTime = endTime - readBehind;
+                        const auto& timeRange = p.player->inOutRange();
+                        const auto& time = p.player->currentTime();
+
+                        auto startTime = time + readBehind;
+                        auto endTime = time - readAhead;
+                        if (endTime < timeRange.start_time())
+                        {
+                            auto diff = timeRange.start_time() - endTime;
+                            endTime = timeRange.end_time_exclusive();
+                            startTime = endTime - diff;
+
+                            // Check in case of negative frames
+                            if (startTime > endTime)
+                                startTime = endTime;
+                        }
+
+                        if (endTime < startTime)
+                        {
+                            const auto tmp = endTime;
+                            endTime = startTime;
+                            startTime = tmp;
+                        }
 
                         bool found = false;
                         for (const auto& t : value.videoFrames)

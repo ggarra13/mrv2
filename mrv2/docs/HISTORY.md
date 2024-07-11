@@ -16,10 +16,12 @@ v1.2.1
   look.
 - Fixed HUD when saving images or movies not being correctly turned off.
 - Added View->OCIO Presets to store and retrieve OCIO configurations.
+- Fixed Background in OCIO Presets window on Windows 10.
 - Fixed VP9 encoder to use .mp4 muxer instead of .webm as it was failing.
 - Fixes STUDIOPATH variable so that it is used only with OCIO presets and
   Path Mapping.
-- Fixed Background in OCIO Presets window on Windows 10.
+- Fixed command-line seek value when starting a video.
+- Fixed reverse playback when starting the video from the middle.
   
 
 v1.2.0
