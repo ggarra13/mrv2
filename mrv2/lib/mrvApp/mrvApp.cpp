@@ -791,6 +791,14 @@ namespace mrv
                 }
                 if (time::isValid(p.options.seek))
                 {
+
+                    const auto& timeRange = player->inOutRange();
+
+                    if (p.options.seek < timeRange.start_time())
+                        p.options.seek = timeRange.start_time();
+                    else if (p.options.seek > timeRange.end_time_exclusive())
+                        p.options.seek = timeRange.end_time_exclusive();
+                    
                     player->seek(p.options.seek);
                 }
                 if (p.options.loop != timeline::Loop::Count)
@@ -1034,8 +1042,9 @@ namespace mrv
 
                         const auto& cache =
                             p.player->player()->observeCacheOptions()->get();
-                        const auto& readAhead = cache.readAhead;
-                        const auto& readBehind = cache.readBehind;
+                        const auto& rate = time.rate();
+                        const auto& readAhead = cache.readAhead.rescaled_to(rate);
+                        const auto& readBehind = cache.readBehind.rescaled_to(rate);
                         const auto& timeRange = p.player->inOutRange();
 
                         auto startTime = time + readBehind;
@@ -1044,19 +1053,24 @@ namespace mrv
                         {
                             auto diff = timeRange.start_time() - endTime;
                             endTime = timeRange.end_time_exclusive();
-                            startTime = (endTime - diff).ceil();
+                            startTime = endTime - diff;
 
                             // Check in case of negative frames
                             if (startTime > endTime)
                                 startTime = endTime;
                         }
 
+                        // Sanity check just in case
                         if (endTime < startTime)
                         {
                             const auto tmp = endTime;
                             endTime = startTime;
                             startTime = tmp;
                         }
+
+                        // Avoid rounding errors
+                        endTime = endTime.floor();
+                        startTime = startTime.ceil();
 
                         for (const auto& t : value.videoFrames)
                         {
