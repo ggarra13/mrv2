@@ -67,7 +67,6 @@ msgstr "Get USD Render Options."
 msgid "Set USD Render Options."
 msgstr "Set USD Render Options."
 
-#, fuzzy
 msgid ""
 "\n"
 "UI module.\n"
@@ -75,9 +74,9 @@ msgid ""
 "Contains all classes and enums related to UI (User Interface). \n"
 msgstr ""
 "\n"
-"Image module.\n"
+"UI module.\n"
 "\n"
-"Contains all classes and enums related to image controls. \n"
+"Contains all classes and enums related to UI (User Interface). \n"
 
 msgid "Refresh menus."
 msgstr "Refresh menus."
@@ -1584,8 +1583,8 @@ msgstr "Playback mode."
 msgid "Playback loop mode."
 msgstr "Playback loop mode."
 
-msgid "Seek to the given time."
-msgstr "Seek to the given time."
+msgid "Seek to the given time, in value/fps format.  Example: 50/30."
+msgstr "Seek to the given time, in value/fps format.  Example: 50/30."
 
 msgid "Set the in/out points range in start/end/fps format, like 23/120/24."
 msgstr "Set the in/out points range in start/end/fps format, like 23/120/24."
@@ -2848,12 +2847,11 @@ msgstr "Saving audio to {0}."
 msgid "Saving pictures to {0}."
 msgstr "Saving pictures to {0}."
 
-#, fuzzy
+#, 
 msgid ""
 "VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to .mp4"
 msgstr ""
-"VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to ."
-"webm"
+"VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to .mp4"
 
 msgid "AV1 profile needs a .mp4 or .mkv movie extension.  Changing it to .mp4"
 msgstr "AV1 profile needs a .mp4 or .mkv movie extension.  Changing it to .mp4"
@@ -6833,6 +6831,9 @@ msgstr "Toggle Hotkeys Window"
 
 msgid "Toggle About Window"
 msgstr "Toggle About Window"
+
+#~ msgid "Seek to the given time."
+#~ msgstr "Seek to the given time."
 
 #~ msgid "Set the in/out points range."
 #~ msgstr "Set the in/out points range."

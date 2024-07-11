@@ -68,7 +68,6 @@ msgstr "Obtener Opciones de Render de USD."
 msgid "Set USD Render Options."
 msgstr "Setear las opciones de Render de USD."
 
-#, fuzzy
 msgid ""
 "\n"
 "UI module.\n"
@@ -1609,8 +1608,8 @@ msgstr "Modo de reproducción."
 msgid "Playback loop mode."
 msgstr "Modo de reproducción en bucle."
 
-msgid "Seek to the given time."
-msgstr "Saltar al tiempo dado."
+msgid "Seek to the given time, in value/fps format.  Example: 50/30."
+msgstr "Buscar a un tiempo dado, en formato valor/fps.  Ejemplo: 50/30."
 
 msgid "Set the in/out points range in start/end/fps format, like 23/120/24."
 msgstr ""
@@ -2901,12 +2900,11 @@ msgstr "Grando audio a {0}."
 msgid "Saving pictures to {0}."
 msgstr "Grabando imágenes a {0}."
 
-#, fuzzy
 msgid ""
 "VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to .mp4"
 msgstr ""
 "Perfil VP9 necesita una extensión de película .mp4, .mkv o .webm.  "
-"Cambieando a .webm."
+"Cambiando a .mp4."
 
 msgid "AV1 profile needs a .mp4 or .mkv movie extension.  Changing it to .mp4"
 msgstr ""
@@ -6902,6 +6900,9 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
+
+#~ msgid "Seek to the given time."
+#~ msgstr "Saltar al tiempo dado."
 
 #~ msgid "Set the in/out points range."
 #~ msgstr "Setear el range de entrada/salida."
