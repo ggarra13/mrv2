@@ -68,6 +68,21 @@ msgstr "Obtener Opciones de Render de USD."
 msgid "Set USD Render Options."
 msgstr "Setear las opciones de Render de USD."
 
+#, fuzzy
+msgid ""
+"\n"
+"UI module.\n"
+"\n"
+"Contains all classes and enums related to UI (User Interface). \n"
+msgstr ""
+"\n"
+"Módulo de Interfaz de Usuario.\n"
+"\n"
+"Contiene todas las classes y enums relativas IU (Interfaz de Usario).\n"
+
+msgid "Refresh menus."
+msgstr "Refrescar menúes."
+
 msgid ""
 "\n"
 "Timeline module.\n"
@@ -2886,9 +2901,9 @@ msgstr "Grando audio a {0}."
 msgid "Saving pictures to {0}."
 msgstr "Grabando imágenes a {0}."
 
+#, fuzzy
 msgid ""
-"VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to ."
-"webm"
+"VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to .mp4"
 msgstr ""
 "Perfil VP9 necesita una extensión de película .mp4, .mkv o .webm.  "
 "Cambieando a .webm."

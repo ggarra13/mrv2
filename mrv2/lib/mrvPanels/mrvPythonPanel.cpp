@@ -492,7 +492,7 @@ namespace mrv
                 std::string imports = R"PYTHON(
 import mrv2
 from mrv2 import annotations, cmd, math, image, io, media
-from mrv2 import playlist, timeline, )PYTHON";
+from mrv2 import playlist, timeline, ui, )PYTHON";
 
 #ifdef TLRENDER_USD
                 imports += "usd, ";

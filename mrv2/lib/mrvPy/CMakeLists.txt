@@ -27,6 +27,7 @@ set(SOURCES
     Session.cpp
     Settings.cpp
     Timeline.cpp
+    UI.cpp
     USD.cpp
 )
 

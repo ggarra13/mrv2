@@ -134,7 +134,6 @@ namespace mrv
         std::string msg =
             tl::string::Format(_("Reading preferences from \"{0}mrv2.prefs\"."))
                 .arg(prefspath());
-
         LOG_INFO(msg);
 
         Fl_Preferences base(
@@ -462,7 +461,7 @@ namespace mrv
 
         auto context = App::app->getContext();
         schemes.setContext(context);
-        
+
         item = uiPrefs->uiColorTheme->find_item(tmpS);
         if (item)
         {
@@ -535,7 +534,7 @@ namespace mrv
         /////////////////////////////////////////////////////
 
 #ifdef TLRENDER_OCIO
-        
+
         std::string ocioPath = studiopath() + "mrv2.ocio.json";
         if (file::isReadable(ocioPath))
         {
@@ -549,7 +548,7 @@ namespace mrv
                 ocio::loadOcioPresets(ocioPath);
             }
         }
-        
+
         // Check OCIO variable first, then saved prefs and finally if nothing,
         // use this default.
         static std::string old_ocio;
@@ -749,8 +748,13 @@ namespace mrv
         uiPrefs->uiPrefsMaxImagesApart->value(tmp);
 
         char key[256];
+
+        std::string mappingpath = studiopath();
+        if (!file::isReadable(mappingpath + "/mrv2.paths"))
+            mappingpath = prefspath();
+
         Fl_Preferences path_mapping(
-            prefspath().c_str(), "filmaura", "mrv2.paths",
+            mappingpath.c_str(), "filmaura", "mrv2.paths",
             (Fl_Preferences::Root)0);
         num = path_mapping.entries();
         for (int i = 0; i < num; ++i)
@@ -763,7 +767,7 @@ namespace mrv
         }
         msg = tl::string::Format(_("Path mappings have been loaded from "
                                    "\"{0}mrv2.paths.prefs\"."))
-                  .arg(prefspath());
+                  .arg(mappingpath);
         LOG_INFO(msg);
 
         Fl_Preferences network(base, "network");
@@ -1017,7 +1021,7 @@ namespace mrv
 
         settings->setValue("gui/Main/Window/Width", W);
         settings->setValue("gui/Main/Window/Height", H);
-        
+
         int visible = 0;
         if (uiPrefs->uiMain->visible())
             visible = 1;
@@ -1034,7 +1038,7 @@ namespace mrv
 
         std::string ocioPath = prefspath() + "mrv2.ocio.json";
         ocio::saveOcioPresets(ocioPath);
-            
+
         Fl_Preferences base(
             prefspath().c_str(), "filmaura", "mrv2",
             (Fl_Preferences::Root)(int)Fl_Preferences::CLEAR);

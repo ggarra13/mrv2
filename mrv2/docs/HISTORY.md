@@ -17,6 +17,8 @@ v1.2.1
 - Fixed HUD when saving images or movies not being correctly turned off.
 - Added View->OCIO Presets to store and retrieve OCIO configurations.
 - Fixed VP9 encoder to use .mp4 muxer instead of .webm as it was failing.
+- Fixes STUDIOPATH variable so that it is used only with OCIO presets and
+  Path Mapping.
   
 
 v1.2.0
