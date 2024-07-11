@@ -19,6 +19,7 @@ v1.2.1
 - Fixed VP9 encoder to use .mp4 muxer instead of .webm as it was failing.
 - Fixes STUDIOPATH variable so that it is used only with OCIO presets and
   Path Mapping.
+- Fixed Background in OCIO Presets window on Windows 10.
   
 
 v1.2.0
