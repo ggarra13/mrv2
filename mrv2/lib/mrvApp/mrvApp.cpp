@@ -1018,13 +1018,18 @@ namespace mrv
             // This observer will watch the cache and start a reverse playback
             // once it is filled.
             //
+            const auto& time = p.player->currentTime();
+                        
             p.cacheInfoObserver =
                 observer::ValueObserver<timeline::PlayerCacheInfo>::create(
                     p.player->player()->observeCacheInfo(),
-                    [this](const timeline::PlayerCacheInfo& value)
+                    [this, time](const timeline::PlayerCacheInfo& value)
                     {
                         TLRENDER_P();
-                        if (p.player->playback() != timeline::Playback::Stop)
+
+                        static bool found = false;
+                        if (p.player->playback() != timeline::Playback::Stop ||
+                            found)
                             return;
 
                         const auto& cache =
@@ -1032,7 +1037,6 @@ namespace mrv
                         const auto& readAhead = cache.readAhead;
                         const auto& readBehind = cache.readBehind;
                         const auto& timeRange = p.player->inOutRange();
-                        const auto& time = p.player->currentTime();
 
                         auto startTime = time + readBehind;
                         auto endTime = time - readAhead;
@@ -1040,7 +1044,7 @@ namespace mrv
                         {
                             auto diff = timeRange.start_time() - endTime;
                             endTime = timeRange.end_time_exclusive();
-                            startTime = endTime - diff;
+                            startTime = (endTime - diff).ceil();
 
                             // Check in case of negative frames
                             if (startTime > endTime)
@@ -1054,7 +1058,6 @@ namespace mrv
                             startTime = tmp;
                         }
 
-                        bool found = false;
                         for (const auto& t : value.videoFrames)
                         {
                             if (t.start_time() <= startTime &&

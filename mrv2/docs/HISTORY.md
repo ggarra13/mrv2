@@ -22,6 +22,7 @@ v1.2.1
   Path Mapping.
 - Fixed command-line seek value when starting a video.
 - Fixed reverse playback when starting the video from the middle.
+- Fixed rounding errors on reverse playback.
   
 
 v1.2.0
