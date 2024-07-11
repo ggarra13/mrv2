@@ -99,9 +99,15 @@ if(BUILD_PYTHON)
 	file( REMOVE_RECURSE ${MRV2_PYTHON_LIBS}/site-packages/fltk14/test )
     endif()
 
-    install( DIRECTORY ${MRV2_PYTHON_LIBS}
-        DESTINATION lib
-        COMPONENT applications )
+    if (UNIX)
+	install( DIRECTORY ${MRV2_PYTHON_LIBS}
+            DESTINATION lib
+            COMPONENT applications )
+    elseif(WIN32)
+	install( DIRECTORY ${MRV2_PYTHON_LIBS}
+            DESTINATION bin
+            COMPONENT applications )
+    endif()
 endif()
 	
 

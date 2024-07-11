@@ -23,6 +23,7 @@ v1.2.1
 - Fixed command-line seek value when starting a video.
 - Fixed reverse playback when starting the video from the middle.
 - Fixed rounding errors on reverse playback.
+- Fixed .zip packaging on Windows being twice the size.
   
 
 v1.2.0

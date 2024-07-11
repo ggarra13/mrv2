@@ -31,6 +31,15 @@ include( "${ROOT_DIR}/cmake/version.cmake" )
 include( "${ROOT_DIR}/cmake/functions.cmake" )
 
 
+# Function to remove __pycache__ directories
+function(remove_pycache_directories dir)
+    file(GLOB_RECURSE pycache_dirs RELATIVE ${dir} "__pycache__")
+
+    foreach(pycache_dir IN LISTS pycache_dirs)
+        file(REMOVE_RECURSE "${dir}/${pycache_dir}")
+    endforeach()
+endfunction()
+
 if( UNIX AND NOT APPLE )
     #
     # \@bug: Linux CMAKE_INSTALL_PREFIX is broken and not pointing to
@@ -166,36 +175,41 @@ elseif(WIN32)
     # Don't pack sphinx and other auxiliary documentation libs in .exe
     #
     file(GLOB MRV2_UNUSED_PYTHON_DIRS
-    "${MRV2_PYTHON_APP_LIB_DIR}/test*"
-    "${MRV2_PYTHON_APP_LIB_DIR}/config*"
-    "${MRV2_PYTHON_APP_LIB_DIR}/ctypes/test*"
-    "${MRV2_PYTHON_APP_LIB_DIR}/distutils/test*"
-    "${MRV2_PYTHON_APP_LIB_DIR}/idlelib/idle_test*"
-    "${MRV2_PYTHON_APP_LIB_DIR}/lib2to3/test*"
-    "${MRV2_PYTHON_APP_LIB_DIR}/sqlite3/test*"
-    "${MRV2_PYTHON_APP_LIB_DIR}/tkinter/test*"
-    "${MRV2_PYTHON_APP_LIB_DIR}/unittest*"
-    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/alabaster*"
-    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/babel*"
-    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/colorama*"
-    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/docutils*"
-    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/fltk14/*.cpp"
-    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/fltk14/*.h"
-    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/imagesize*"
-    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/Jinja*"
-    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/MarkupSafe*"
-    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/Pygments*"
-    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/snowballstemmer*"
-    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/sphinx*"
-    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/unittest*")
+	"${MRV2_APP_DIR}/lib/Lib/"
+	"${MRV2_PYTHON_APP_LIB_DIR}/test*"
+	"${MRV2_PYTHON_APP_LIB_DIR}/config*"
+	"${MRV2_PYTHON_APP_LIB_DIR}/ctypes/test*"
+	"${MRV2_PYTHON_APP_LIB_DIR}/distutils/test*"
+	"${MRV2_PYTHON_APP_LIB_DIR}/idlelib/idle_test*"
+	"${MRV2_PYTHON_APP_LIB_DIR}/lib2to3/test*"
+	"${MRV2_PYTHON_APP_LIB_DIR}/sqlite3/test*"
+	"${MRV2_PYTHON_APP_LIB_DIR}/tkinter/test*"
+	"${MRV2_PYTHON_APP_LIB_DIR}/unittest*"
+	"${MRV2_PYTHON_SITE_PACKAGES_DIR}/alabaster*"
+	"${MRV2_PYTHON_SITE_PACKAGES_DIR}/babel*"
+	"${MRV2_PYTHON_SITE_PACKAGES_DIR}/colorama*"
+	"${MRV2_PYTHON_SITE_PACKAGES_DIR}/docutils*"
+	"${MRV2_PYTHON_SITE_PACKAGES_DIR}/fltk14/*.cpp"
+	"${MRV2_PYTHON_SITE_PACKAGES_DIR}/fltk14/*.h"
+	"${MRV2_PYTHON_SITE_PACKAGES_DIR}/imagesize*"
+	"${MRV2_PYTHON_SITE_PACKAGES_DIR}/Jinja*"
+	"${MRV2_PYTHON_SITE_PACKAGES_DIR}/MarkupSafe*"
+	"${MRV2_PYTHON_SITE_PACKAGES_DIR}/Pygments*"
+	"${MRV2_PYTHON_SITE_PACKAGES_DIR}/snowballstemmer*"
+	"${MRV2_PYTHON_SITE_PACKAGES_DIR}/sphinx*"
+	"${MRV2_PYTHON_SITE_PACKAGES_DIR}/unittest*")
 
+    foreach( _dir ${MRV2_UNUSED_PYTHON_DIRS} )
+	remove_pycache_directories(${_dir})
+	message(STATUS "Removing ${_dir}")
+    endforeach()
 	
     if ( NOT "${MRV2_UNUSED_PYTHON_DIRS}" STREQUAL "" )
 	file( REMOVE_RECURSE ${MRV2_UNUSED_PYTHON_DIRS} )
     endif()
 
     #
-    # Set python's site-packages and lid dir for .zip.
+    # Set python's site-packages and lib dir for .zip.
     #
     # When building an .exe on Windows, the site-packages will
     # be inside an application directory.
@@ -213,6 +227,7 @@ endif()
 message(STATUS "Removing tests from ${MRV2_PYTHON_LIB_DIR}")
 message(STATUS "Removing unneeded packages from ${MRV2_PYTHON_SITE_PACKAGES_DIR}")
 file(GLOB MRV2_UNUSED_PYTHON_DIRS
+    "${CPACK_PREPACKAGE}/lib/Lib/"
     "${MRV2_PYTHON_LIB_DIR}/test*"
     "${MRV2_PYTHON_LIB_DIR}/config*"
     "${MRV2_PYTHON_LIB_DIR}/ctypes/test*"
@@ -221,6 +236,7 @@ file(GLOB MRV2_UNUSED_PYTHON_DIRS
     "${MRV2_PYTHON_LIB_DIR}/lib2to3/test*"
     "${MRV2_PYTHON_LIB_DIR}/sqlite3/test*"
     "${MRV2_PYTHON_LIB_DIR}/tkinter/test*"
+    "${MRV2_PYTHON_LIB_DIR}/unittest*"
     "${MRV2_PYTHON_SITE_PACKAGES_DIR}/alabaster*"
     "${MRV2_PYTHON_SITE_PACKAGES_DIR}/babel*"
     "${MRV2_PYTHON_SITE_PACKAGES_DIR}/Babel*"
@@ -241,6 +257,7 @@ file(GLOB MRV2_UNUSED_PYTHON_DIRS
 
 if ( NOT "${MRV2_UNUSED_PYTHON_DIRS}" STREQUAL "" )
     foreach( _dir ${MRV2_UNUSED_PYTHON_DIRS} )
+	remove_pycache_directories(${_dir})
 	message(STATUS "Removing ${_dir}")
     endforeach()
     file( REMOVE_RECURSE ${MRV2_UNUSED_PYTHON_DIRS} )
