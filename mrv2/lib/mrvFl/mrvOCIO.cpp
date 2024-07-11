@@ -657,7 +657,7 @@ namespace mrv
                 ocioPresets = j.get<std::vector<OCIOPreset>>();
 
                 const std::string& msg =
-                    string::Format(_("Loaded {0} ocio presets from '{1}'."))
+                    string::Format(_("Loaded {0} ocio presets from \"{1}\"."))
                         .arg(ocioPresets.size())
                         .arg(fileName);
                 LOG_INFO(msg);
@@ -705,7 +705,8 @@ namespace mrv
                 ofs.close();
 
                 const std::string& msg =
-                    string::Format(_("OCIO presets have been saved to '{0}'."))
+                    string::Format(
+                        _("OCIO presets have been saved to \"{0}\"."))
                         .arg(fileName);
                 LOG_INFO(msg);
             }

@@ -2847,7 +2847,6 @@ msgstr "Saving audio to {0}."
 msgid "Saving pictures to {0}."
 msgstr "Saving pictures to {0}."
 
-#, 
 msgid ""
 "VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to .mp4"
 msgstr ""
@@ -3017,8 +3016,8 @@ msgstr "OCIO Preset '{0}' already exists!"
 msgid "Failed to load the file '{0}'."
 msgstr "Failed to load the file '{0}'."
 
-msgid "Loaded {0} ocio presets from '{1}'."
-msgstr "Loaded {0} ocio presets from '{1}'."
+msgid "Loaded {0} ocio presets from \"{1}\"."
+msgstr "Loaded {0} ocio presets from \"{1}\"."
 
 msgid "Failed to open the file '{0}' for saving."
 msgstr "Failed to open the file '{0}' for saving."
@@ -3026,8 +3025,8 @@ msgstr "Failed to open the file '{0}' for saving."
 msgid "Failed to save the file '{0}'."
 msgstr "Failed to save the file '{0}'."
 
-msgid "OCIO presets have been saved to '{0}'."
-msgstr "OCIO presets have been saved to '{0}'."
+msgid "OCIO presets have been saved to \"{0}\"."
+msgstr "OCIO presets have been saved to \"{0}\"."
 
 msgid "English"
 msgstr "English"
