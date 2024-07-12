@@ -3,6 +3,7 @@ v1.2.2
 
 - Updated FFmpeg build to support .webm muxer which was missing.
 - Made OpenEXR tag for Compression show its actual name instead of a number.
+- Added Channel (Layer) stepping hotkeys ({ and } by default).
 
 v1.2.1
 ======

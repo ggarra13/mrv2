@@ -677,6 +677,28 @@ namespace mrv
 
         tcp->unlock();
     }
+    
+    void previous_channel_cb(Fl_Widget* w, ViewerUI* ui)
+    {
+        int value = ui->uiColorChannel->value();
+        const int size = ui->uiColorChannel->size() - 1;
+        --value;
+        if (value < 0)
+            value = size - 1;
+        ui->uiColorChannel->value(value);
+        ui->uiColorChannel->do_callback();
+    }
+    
+    void next_channel_cb(Fl_Widget* w, ViewerUI* ui)
+    {
+        int value = App::ui->uiColorChannel->value();
+        const int size = ui->uiColorChannel->size() - 1;
+        ++value;
+        if (value >= size)
+            value = 0;
+        ui->uiColorChannel->value(value);
+        ui->uiColorChannel->do_callback();
+    }
 
     void minify_nearest_cb(Fl_Menu_* m, ViewerUI* ui)
     {

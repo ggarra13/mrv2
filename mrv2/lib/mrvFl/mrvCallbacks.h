@@ -60,6 +60,10 @@ namespace mrv
 
     void exit_cb(Fl_Widget* w, ViewerUI* ui);
 
+    //! Layer callbacks
+    void previous_channel_cb(Fl_Widget* w, ViewerUI* ui);
+    void next_channel_cb(Fl_Widget* w, ViewerUI* ui);
+    
     //! About menu callback
     void about_cb(Fl_Widget* w, ViewerUI* ui);
 

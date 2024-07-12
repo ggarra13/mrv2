@@ -1367,6 +1367,16 @@ namespace mrv
                 flip_pen_color_cb(nullptr, p.ui);
                 return 1;
             }
+            else if (kPreviousChannel.match(rawkey))
+            {
+                previous_channel_cb(nullptr, p.ui);
+                return 1;
+            }
+            else if (kNextChannel.match(rawkey))
+            {
+                next_channel_cb(nullptr, p.ui);
+                return 1;
+            }
             else if (
                 !Fl::event_state(FL_SHIFT) && !Fl::event_state(FL_ALT) &&
                 !Fl::event_state(FL_META) &&
