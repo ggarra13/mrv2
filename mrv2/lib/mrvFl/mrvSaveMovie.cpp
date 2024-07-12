@@ -30,12 +30,11 @@
 #include "mrvFl/mrvSaveOptions.h"
 #include "mrvFl/mrvIO.h"
 
+#include "mrvUI/mrvDesktop.h"
+
 #include "mrvApp/mrvSettingsObject.h"
 
 #include "mrViewer.h"
-
-#include <FL/platform.H>
-#undef None
 
 namespace
 {
@@ -736,15 +735,13 @@ namespace mrv
 
                         GLenum imageBuffer = GL_FRONT;
 
-#ifdef FLTK_USE_WAYLAND
                         // @note: Wayland does not work like Windows, macOS or
                         //        X11.  The compositor does not immediately
                         //        swap buffers when calling view->flush().
-                        if (fl_wl_display())
+                        if (desktop::Wayland())
                         {
                             imageBuffer = GL_BACK;
                         }
-#endif
 
                         glReadBuffer(imageBuffer);
 
