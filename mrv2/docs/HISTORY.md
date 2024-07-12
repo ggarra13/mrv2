@@ -1,3 +1,7 @@
+v1.2.2
+======
+
+- Updated FFmpeg build to support .webm muxer which was missing.
 
 v1.2.1
 ======
