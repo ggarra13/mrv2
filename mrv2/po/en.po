@@ -3737,6 +3737,12 @@ msgstr "Timeline/Transitions"
 msgid "Timeline/Markers"
 msgstr "Timeline/Markers"
 
+msgid "Image/Next"
+msgstr "Image/Next"
+
+msgid "Image/Previous"
+msgstr "Image/Previous"
+
 msgid "Image/Version/First"
 msgstr "Image/Version/First"
 

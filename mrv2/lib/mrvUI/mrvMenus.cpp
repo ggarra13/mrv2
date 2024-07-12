@@ -1074,6 +1074,13 @@ namespace mrv
             const std::regex& regex = version_regex(ui, false);
             bool has_version = regex_match(fileName, regex);
 
+            menu->add(
+                _("Image/Next"), kNextImage.hotkey(),
+                (Fl_Callback*)next_file_cb, ui);
+            menu->add(
+                _("Image/Previous"), kPreviousImage.hotkey(),
+                (Fl_Callback*)previous_file_cb, ui);
+
             if (has_version)
             {
                 menu->add(

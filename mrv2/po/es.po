@@ -3792,6 +3792,12 @@ msgstr "Línea de Tiempo/Transiciones"
 msgid "Timeline/Markers"
 msgstr "Línea de Tiempo/Marcadores"
 
+msgid "Image/Next"
+msgstr "Imagen/Siguiente"
+
+msgid "Image/Previous"
+msgstr "Imagen/Previa"
+
 msgid "Image/Version/First"
 msgstr "Imagen/Versión/Primera"
 
