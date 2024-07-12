@@ -164,9 +164,9 @@ namespace mrv
 
     std::string presetspath()
     {
-        std::string path = studiopath() + "presets/";
+        std::string path = studiopath() + "/presets/";
         if (!fs::is_directory(path))
-            path = mrv::rootpath() + "presets/";
+            path = mrv::rootpath() + "/presets/";
         return path;
     }
 
