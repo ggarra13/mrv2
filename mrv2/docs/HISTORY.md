@@ -1,8 +1,3 @@
-v1.2.2
-======
-
-- Added Previous and Next image shortcuts (PgUp/PgDown) that were missing.
-
 
 v1.2.1
 ======
@@ -30,6 +25,8 @@ v1.2.1
 - Fixed reverse playback when starting the video from the middle.
 - Fixed rounding errors on reverse playback.
 - Fixed .zip packaging on Windows being twice the size.
+- Added Previous and Next image shortcuts (PgUp/PgDown) that were missing.
+- Fixed crashing bug when saving Movie files.
   
 
 v1.2.0
