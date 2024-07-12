@@ -1222,6 +1222,16 @@ namespace mrv
                 previous_annotation_cb(nullptr, p.ui);
                 return 1;
             }
+            else if (kPreviousImage.match(rawkey))
+            {
+                App::app->filesModel()->prev();
+                return 1;
+            }
+            else if (kNextImage.match(rawkey))
+            {
+                App::app->filesModel()->next();
+                return 1;
+            }
             else if (kFitScreen.match(rawkey))
             {
                 frameView();

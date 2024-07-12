@@ -1,3 +1,9 @@
+v1.2.2
+======
+
+- Added Previous and Next image shortcuts (PgUp/PgDown) that were missing.
+
+
 v1.2.1
 ======
 
