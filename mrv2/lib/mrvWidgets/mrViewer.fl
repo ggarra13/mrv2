@@ -106,8 +106,8 @@ decl {class HotkeyUI;} {public global
 decl {class AboutUI;} {public global
 }
 
-widget_class PixelToolBarClass {open
-  xywh {0 0 690 30} resizable
+widget_class PixelToolBarClass {
+  xywh {56 69 690 30} resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {open
@@ -413,7 +413,7 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
 }
 
 widget_class TimelineClass {
-  xywh {0 0 690 47} box NO_BOX resizable
+  xywh {56 69 690 47} box NO_BOX resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {
@@ -809,8 +809,8 @@ uiSecondary = nullptr;} {}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
     exit_cb( o, v );} open
-      xywh {0 0 690 602} type Double align 80 resizable
-      class {mrv::MainWindow} size_range {690 602 0 0} visible
+      xywh {56 69 690 602} type Double align 80 hide resizable
+      class {mrv::MainWindow} size_range {690 602 0 0}
     } {
       Fl_Pack uiRegion {open
         xywh {0 0 690 602} box FLAT_BOX resizable
@@ -860,11 +860,11 @@ else
           }
         }
         Fl_Group uiTopBar {
-          label TopBar
+          label TopBar open
           xywh {0 25 690 28} box ENGRAVED_BOX labeltype NO_LABEL
         } {
           Fl_Group {} {
-            label {Layers, Exposure and Gain}
+            label {Layers, Exposure and Gain} open
             xywh {0 25 277 27} labeltype NO_LABEL
           } {
             Fl_Group {} {
@@ -886,7 +886,7 @@ model->setLayer(item, o->value());}
               } {}
             }
             Fl_Group {} {
-              label {Exposure and Gain}
+              label {Exposure and Gain} open
               xywh {129 25 148 26} labeltype NO_LABEL
             } {
               Fl_Group {} {
@@ -894,17 +894,17 @@ model->setLayer(item, o->value());}
                 xywh {129 25 120 26} labeltype NO_LABEL hide resizable
               } {}
               Fl_Group {} {
-                label Exposure
+                label Exposure open
                 xywh {129 25 49 26} labeltype NO_LABEL
               } {
                 Fl_Button uiExposureLess {
                   label {@<}
-                  callback {const float inc = sqrtf( 2.0f );
+                  callback {const float inc = sqrtf(sqrtf( 2.0f ));
 float gain = uiGain->value();
 gain /= inc;
 uiGain->value( gain );
 uiGain->do_callback();}
-                  tooltip {Reduce gain 1/2 stop (divide by sqrt(2)).} xywh {129 26 12 25} labelsize 10
+                  tooltip {Reduce gain 1/4 stop (divide by sqrt(sqrt(2))).} xywh {129 26 12 25} labelsize 10
                 }
                 Fl_Button uiFStop {
                   label {f/8}
@@ -919,17 +919,17 @@ else
    old_gain = gain;
    uiGain->value( 1.0f );
 }
-uiGain->do_callback();}
-                  tooltip {Toggle gain between 1 and the previous setting.} xywh {141 26 25 25}
+uiGain->do_callback();} selected
+                  tooltip {Toggle gain between 1 and the previous setting.} xywh {141 26 25 25} align 64
                 }
                 Fl_Button uiExposureMore {
                   label {@>}
-                  callback {const float inc = sqrtf( 2.0f );
+                  callback {const float inc = sqrtf(sqrtf( 2.0f ));
 float gain = uiGain->value();
 gain *= inc;
 uiGain->value( gain );
 uiGain->do_callback();}
-                  tooltip {Increase gain 1/2 stop (multiply by sqrt(2)).} xywh {166 26 12 25} labelsize 10
+                  tooltip {Increase gain 1/4 stop (multiply by sqrt(sqrt(2))).} xywh {166 26 12 25} labelsize 10
                 }
               }
               Fl_Group {} {
@@ -1061,7 +1061,7 @@ Value is:  pow( 2, 1/x );} xywh {651 26 39 25} type {Horz Knob} labelsize 10 max
           } {}
         }
         Fl_Tile uiTileGroup {
-          label TileGroup selected
+          label TileGroup
           xywh {0 53 690 465} labeltype NO_LABEL
           code0 {;}
           class {mrv::Tile}
