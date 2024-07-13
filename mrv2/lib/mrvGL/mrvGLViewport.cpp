@@ -44,9 +44,6 @@
 
 #include "mrvApp/mrvSettingsObject.h"
 
-#include <FL/platform.H>
-#undef None
-
 namespace
 {
     const char* kModule = "view";

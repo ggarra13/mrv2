@@ -6,6 +6,11 @@ v1.2.2
 - Added Channel (Layer) stepping hotkeys ({ and } by default).
 - Made exposure buttons (and the hotkeys) increment and decrement by 1/4 stop
   instead of 1/2 stop.
+- Made single images not start playing even if auto playback is on.
+- Improved hiding of the pixel bar to only do it when duration is not 1.
+- Fixed Darby's change of AudioClipItem.cpp leading to std::bad_alloc on
+  Linux.
+
 
 v1.2.1
 ======

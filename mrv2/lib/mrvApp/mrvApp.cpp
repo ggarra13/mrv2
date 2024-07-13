@@ -1097,14 +1097,20 @@ namespace mrv
 
         // Open the viewer window by calling Fl::flush
         Fl::flush();
-        bool autoPlayback = ui->uiPrefs->uiPrefsAutoPlayback->value();
-        if (p.player && !p.session && autoPlayback)
+
+        if (p.player)
         {
-            // We use a timeout to start playback of the loaded video to
-            // make sure to show all frames
-            if (p.options.playback == timeline::Playback::Count)
-                p.options.playback = timeline::Playback::Forward;
-            Fl::add_timeout(0.005, (Fl_Timeout_Handler)start_playback_cb, this);
+            const auto& timeRange = p.player->inOutRange();
+            const bool autoPlayback = ui->uiPrefs->uiPrefsAutoPlayback->value();
+            if (!p.session && autoPlayback && timeRange.duration().value() > 1)
+            {
+                // We use a timeout to start playback of the loaded video to
+                // make sure to show all frames
+                if (p.options.playback == timeline::Playback::Count)
+                    p.options.playback = timeline::Playback::Forward;
+                Fl::add_timeout(
+                    0.005, (Fl_Timeout_Handler)start_playback_cb, this);
+            }
         }
         p.running = true;
         return Fl::run();
@@ -1152,16 +1158,6 @@ namespace mrv
             item->audioPath = file::Path(audioFileName);
 
             p.filesModel->add(item);
-        }
-
-        // If we have autoplayback on and auto hide pixel bar, do so here.
-        const bool autoHide = ui->uiPrefs->uiPrefsAutoHidePixelBar->value();
-        const bool autoPlayback = ui->uiPrefs->uiPrefsAutoPlayback->value();
-        const bool pixelToolbar = ui->uiPixelBar->visible();
-        if (autoPlayback && autoHide && pixelToolbar)
-        {
-            toggle_pixel_bar(nullptr, ui);
-            Fl::flush();
         }
 
         if (ui->uiPrefs->SendMedia->value())
@@ -1511,6 +1507,9 @@ namespace mrv
 
                             bool autoPlayback =
                                 ui->uiPrefs->uiPrefsAutoPlayback->value();
+                            if (item->inOutRange.duration().value() <= 1)
+                                autoPlayback = false;
+                            
                             if (!file::isTemporaryEDL(item->path) &&
                                 autoPlayback)
                             {
@@ -1518,6 +1517,15 @@ namespace mrv
                                 {
                                     player->setPlayback(
                                         timeline::Playback::Forward);
+
+                                    // If we have autoplayback on and auto hide pixel bar, do so here.
+                                    const bool autoHide = ui->uiPrefs->uiPrefsAutoHidePixelBar->value();
+                                    const bool pixelToolbar = ui->uiPixelBar->visible();
+                                    if (autoHide && pixelToolbar)
+                                    {
+                                        toggle_pixel_bar(nullptr, ui);
+                                        Fl::flush();
+                                    }
                                 }
                             }
 
