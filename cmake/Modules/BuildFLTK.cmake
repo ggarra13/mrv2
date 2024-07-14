@@ -8,7 +8,7 @@ include( ExternalProject )
 #set( FLTK_GIT_TAG master )
 
 # Latest Stable Wayland (moving, resizing and subwindows okay)
-set(FLTK_GIT_TAG ecb3c9c6fca1af050b80f6ea94e03852bd51765b)
+set(FLTK_GIT_TAG fd257a7bf33476c7004305337580e3d45da1207c)
 
 if(MRV2_PYFLTK OR FLTK_BUILD_SHARED)
     # If we are building pyFLTK compile shared

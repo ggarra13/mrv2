@@ -40,7 +40,6 @@
 
 #include "mrvFl/mrvIO.h"
 
-#include <FL/platform.H>
 #include <FL/Fl.H>
 
 namespace
