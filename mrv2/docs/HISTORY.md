@@ -8,9 +8,10 @@ v1.2.2
   instead of 1/2 stop.
 - Made single images not start playing even if auto playback is on.
 - Improved hiding of the pixel bar to only do it when duration is not 1.
-- Patched Darby's change of AudioClipItem.cpp leading to std::bad_alloc on
-  Linux.
 - Upgraded to FFmpeg 7.0.1.
+- Fixed auto playback when started from the command-line with multiple videos.
+  Now they all respect the auto playback setting instead of just the first
+  video.
 
 
 v1.2.1

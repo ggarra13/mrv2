@@ -1118,8 +1118,7 @@ namespace mrv
 
     bool App::isRunning() const
     {
-        TLRENDER_P();
-        return p.running;
+        return _p->running;
     }
 
     void
@@ -1443,7 +1442,7 @@ namespace mrv
         TLRENDER_P();
 
         std::shared_ptr<TimelinePlayer> player;
-        if (!p.activeFiles.empty() && p.player)
+        if (!p.activeFiles.empty() && isRunning() && p.player)
         {
             p.activeFiles[0]->speed = p.player->speed();
             p.activeFiles[0]->playback = p.player->playback();
@@ -1513,7 +1512,7 @@ namespace mrv
                             if (!file::isTemporaryEDL(item->path) &&
                                 autoPlayback)
                             {
-                                if (ui->uiMain->visible())
+                                if (isRunning())
                                 {
                                     player->setPlayback(
                                         timeline::Playback::Forward);
@@ -1526,6 +1525,11 @@ namespace mrv
                                         toggle_pixel_bar(nullptr, ui);
                                         Fl::flush();
                                     }
+                                }
+                                else
+                                {
+                                    item->playback =
+                                        timeline::Playback::Forward;
                                 }
                             }
 
@@ -1642,7 +1646,7 @@ namespace mrv
                         setLUTOptions(activeFiles[0]->lutOptions);
                 }
 
-                if (p.running)
+                if (isRunning())
                 {
                     panel::redrawThumbnails();
                 }

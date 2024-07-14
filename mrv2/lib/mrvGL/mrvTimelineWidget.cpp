@@ -11,7 +11,6 @@
 
 #include <tlUI/IClipboard.h>
 #include <tlUI/IWindow.h>
-#include <tlUI/RowLayout.h>
 
 #include <tlTimelineGL/Render.h>
 
@@ -611,9 +610,14 @@ namespace mrv
         p.player = player;
         if (player)
         {
-            auto innerPlayer = player->player();
+            const auto innerPlayer = player->player();
             p.timeRange = innerPlayer->getTimeRange();
             p.timelineWidget->setPlayer(innerPlayer);
+
+            // These calls are needed to refresh the timeline display properly.
+            _sizeHintEvent();
+            _setGeometry();
+            _clipEvent();
         }
         else
         {
@@ -732,7 +736,9 @@ namespace mrv
                 context->log(
                     "mrv::mrvTimelineWidget", e.what(), log::Type::Error);
             }
-            // _sizeHintEvent();
+            _sizeHintEvent();
+            _setGeometry();
+            _clipEvent();
         }
     }
 
