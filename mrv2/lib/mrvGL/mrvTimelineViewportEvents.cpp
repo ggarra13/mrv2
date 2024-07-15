@@ -883,7 +883,15 @@ namespace mrv
             // We have children if we are editing a text widget, so we do not
             // grab focus in that case.
             if (!children())
-                take_focus();
+            {
+                bool grab_focus = false;
+                if (p.ui->uiPrefs->uiPrefsRaiseOnEnter->value())
+                    grab_focus = true;
+
+                if (grab_focus)
+                    take_focus();
+            }
+            
 #ifdef __APPLE__
             if (p.ui->uiMenuBar && p.ui->uiPrefs->uiPrefsMacOSMenus->value())
                 p.ui->uiMain->fill_menu(p.ui->uiMenuBar);

@@ -5010,8 +5010,8 @@ msgstr "Grupo de Control de Ajuste"
 msgid "Exposure"
 msgstr "Exposición"
 
-msgid "Reduce gain 1/2 stop (divide by sqrt(2))."
-msgstr "Reducir ganancia 1/2 stop (dividir por raiz cuadrada de 2)."
+msgid "Reduce gain 1/4 stop (divide by sqrt(sqrt(2)))."
+msgstr "Reducir ganancia 1/4 stop (dividir por sqrt(sqrt(2)))."
 
 msgid "f/8"
 msgstr "f/8"
@@ -5019,8 +5019,8 @@ msgstr "f/8"
 msgid "Toggle gain between 1 and the previous setting."
 msgstr "Intercambia ganancia enter 1 y el seteo previo."
 
-msgid "Increase gain 1/2 stop (multiply by sqrt(2))."
-msgstr "Incrementar la ganancia 1/2 stop (multiplicar por raiz cuadrada de 2)."
+msgid "Increase gain 1/4 stop (multiply by sqrt(sqrt(2)))."
+msgstr "Incrementar la ganancia 1/4 stop (multiplicar por sqrt(sqrt(2)))."
 
 msgid "Gain"
 msgstr "Ganancia"
@@ -5421,6 +5421,15 @@ msgstr ""
 "Cuando esta seleccionado, mrv2 aplicará una operación de enmarcar imagen en "
 "cada video reproducido.  Esto efectivamente significa que el video cambiará "
 "su tamaño basa en el tamaño de la ventana."
+
+msgid "Raise on Enter"
+msgstr "Elevar al Entrar"
+
+msgid ""
+"When selected, mrv2 will raise the window to the front once you enter the "
+"view window."
+msgstr ""
+"Al seleccionarlo, mrv2 elevará la ventana al frente cuando entre la vista."
 
 msgid "Normal"
 msgstr "Normal"
@@ -6630,6 +6639,12 @@ msgstr "Reproducir Para Adelante"
 
 msgid "Play Forwards / Change Speed"
 msgstr "Reproducir Para Adelante / Cambiar Velocidad"
+
+msgid "Next Clip"
+msgstr "Clip Próximo"
+
+msgid "Previous Clip"
+msgstr "Clip Previo"
 
 msgid "Loop Playback"
 msgstr "Playback en Bucle"

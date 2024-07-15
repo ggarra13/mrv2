@@ -4964,8 +4964,8 @@ msgstr "Resizable Control Group"
 msgid "Exposure"
 msgstr "Exposure"
 
-msgid "Reduce gain 1/2 stop (divide by sqrt(2))."
-msgstr "Reduce gain 1/2 stop (divide by sqrt(2))."
+msgid "Reduce gain 1/4 stop (divide by sqrt(sqrt(2)))."
+msgstr "Reduce gain 1/4 stop (divide by sqrt(sqrt(2)))."
 
 msgid "f/8"
 msgstr "f/8"
@@ -4973,8 +4973,8 @@ msgstr "f/8"
 msgid "Toggle gain between 1 and the previous setting."
 msgstr "Toggle gain between 1 and the previous setting."
 
-msgid "Increase gain 1/2 stop (multiply by sqrt(2))."
-msgstr "Increase gain 1/2 stop (multiply by sqrt(2))."
+msgid "Increase gain 1/4 stop (multiply by sqrt(sqrt(2)))."
+msgstr "Increase gain 1/4 stop (multiply by sqrt(sqrt(2)))."
 
 msgid "Gain"
 msgstr "Gain"
@@ -5371,6 +5371,16 @@ msgstr ""
 "When selected, mrv2 will apply a fit image operation on each video played.  "
 "This effectly means the video will be resized automatically based on the "
 "size of the window."
+
+msgid "Raise on Enter"
+msgstr "Raise on Enter"
+
+msgid ""
+"When selected, mrv2 will raise the window to the front once you enter the "
+"view window."
+msgstr ""
+"When selected, mrv2 will raise the window to the front once you enter the "
+"view window."
 
 msgid "Normal"
 msgstr "Normal"
@@ -6560,6 +6570,12 @@ msgstr "Play Forwards"
 
 msgid "Play Forwards / Change Speed"
 msgstr "Play Forwards / Change Speed"
+
+msgid "Next Clip"
+msgstr "Next Clip"
+
+msgid "Previous Clip"
+msgstr "Previous Clip"
 
 msgid "Loop Playback"
 msgstr "Loop Playback"

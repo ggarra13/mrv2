@@ -12,6 +12,10 @@ v1.2.2
 - Fixed auto playback when started from the command-line with multiple videos.
   Now they all respect the auto playback setting instead of just the first
   video.
+- Added Preferences->User Interface->Raise on Enter to set how the window
+  should behave once the mouse enters the view window.  By default, now
+  it is off, instead of on; meaning you will have to click on the window to
+  bring it to the front and activate keyboard focus.
 
 
 v1.2.1

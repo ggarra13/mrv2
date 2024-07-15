@@ -87,9 +87,9 @@ class PreferencesUI {open
   } {
     Fl_Window uiMain {
       label Preferences
-      user_data this user_data_type {PreferencesUI*} selected
-      xywh {771 187 847 467} type Double resizable
-      code0 {main = m;} visible
+      user_data this user_data_type {PreferencesUI*} open
+      xywh {771 187 847 467} type Double hide resizable
+      code0 {main = m;}
     } {
       Fl_Group {} {open
         xywh {0 0 847 466} box FLAT_BOX
@@ -103,81 +103,85 @@ class PreferencesUI {open
           } {
             Fl_Group {} {
               label {User Interface} open
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {
-                label {Window Behavior}
-                xywh {293 62 545 144} box ROUNDED_BOX
+                label {Window Behavior} open
+                xywh {293 61 545 164} box ROUNDED_BOX
               } {
                 Fl_Check_Button uiPrefsAlwaysOnTop {
                   label {Always on Top}
-                  tooltip {When selected, mrv2's window will always show up on top of other windows on the desktop.} xywh {317 69 25 25} box UP_BOX down_box DOWN_BOX align 8
+                  tooltip {When selected, mrv2's window will always show up on top of other windows on the desktop.} xywh {317 71 25 25} box UP_BOX down_box DOWN_BOX align 8
                 }
                 Fl_Check_Button uiPrefsSecondaryOnTop {
                   label {Secondary on Top}
-                  tooltip {When selected, mrv2's window will always show up on top of other windows on the desktop.} xywh {317 99 25 25} box UP_BOX down_box DOWN_BOX align 8
+                  tooltip {When selected, mrv2's window will always show up on top of other windows on the desktop.} xywh {317 101 25 25} box UP_BOX down_box DOWN_BOX align 8
                 }
                 Fl_Check_Button uiPrefsSingleInstance {
                   label {Single Instance}
                   tooltip {When selected, only a single mrv2 instance is allowed.
-If you try to open several mrv2s with different images, all these images will be sent to the already open mrv2.} xywh {317 129 25 25} box UP_BOX down_box DOWN_BOX align 8
+If you try to open several mrv2s with different images, all these images will be sent to the already open mrv2.} xywh {317 131 25 25} box UP_BOX down_box DOWN_BOX align 8
                 }
                 Fl_Check_Button uiPrefsAutoFitImage {
                   label {Auto Refit Image}
-                  tooltip {When selected, mrv2 will apply a fit image operation on each video played.  This effectly means the video will be resized automatically based on the size of the window.} xywh {317 159 25 25} box UP_BOX down_box DOWN_BOX value 1 align 8
+                  tooltip {When selected, mrv2 will apply a fit image operation on each video played.  This effectly means the video will be resized automatically based on the size of the window.} xywh {317 161 25 25} box UP_BOX down_box DOWN_BOX value 1 align 8
                 }
-                Fl_Group uiPrefsOpenMode {open
-                  xywh {608 68 195 95} box UP_BOX
+                Fl_Check_Button uiPrefsRaiseOnEnter {
+                  label {Raise on Enter} selected
+                  tooltip {When selected, mrv2 will raise the window to the front once you enter the view window.} xywh {317 190 25 25} box UP_BOX down_box DOWN_BOX value 1 align 8
+                }
+                Fl_Group uiPrefsOpenMode {
+                  xywh {608 67 195 95} box UP_BOX
                 } {
                   Fl_Round_Button {} {
                     label Normal
-                    tooltip {When selected, mrv2 will resize its window to the first image.} xywh {613 74 25 26} type Radio box ROUND_UP_BOX down_box ROUND_DOWN_BOX value 1 align 8
+                    tooltip {When selected, mrv2 will resize its window to the first image.} xywh {613 73 25 26} type Radio box ROUND_UP_BOX down_box ROUND_DOWN_BOX value 1 align 8
                   }
                   Fl_Round_Button {} {
                     label Fullscreen
-                    tooltip {When selected, mrv2 will start in full screen mode.} xywh {613 102 25 26} type Radio box ROUND_UP_BOX down_box ROUND_DOWN_BOX align 8
+                    tooltip {When selected, mrv2 will start in full screen mode.} xywh {613 101 25 26} type Radio box ROUND_UP_BOX down_box ROUND_DOWN_BOX align 8
                   }
                   Fl_Round_Button {} {
                     label Presentation
-                    tooltip {When selected, mrv2 will start in presentation mode.} xywh {613 131 25 26} type Radio box ROUND_UP_BOX down_box ROUND_DOWN_BOX align 8
+                    tooltip {When selected, mrv2 will start in presentation mode.} xywh {613 130 25 26} type Radio box ROUND_UP_BOX down_box ROUND_DOWN_BOX align 8
                   }
                 }
               }
               Fl_Group {} {
-                label {UI Elements}
-                xywh {288 230 550 164} box ROUNDED_BOX
+                label {UI Elements} open
+                xywh {293 247 545 140} box ROUNDED_BOX
               } {
                 Fl_Check_Button uiPrefsMenuBar {
                   label {Menu Bar}
-                  tooltip {When selected, mrv2 will start with the menu bar already shown.} xywh {418 244 25 25} box UP_BOX down_box DOWN_BOX value 1 align 8
+                  tooltip {When selected, mrv2 will start with the menu bar already shown.} xywh {423 261 25 25} box UP_BOX down_box DOWN_BOX value 1 align 8
                 }
                 Fl_Check_Button uiPrefsTopbar {
                   label Topbar
-                  tooltip {When selected, mrv2 will start with its channel, gain, gamma toolbar visible.} xywh {419 272 25 25} box UP_BOX down_box DOWN_BOX value 1 align 8
+                  tooltip {When selected, mrv2 will start with its channel, gain, gamma toolbar visible.} xywh {424 289 25 25} box UP_BOX down_box DOWN_BOX value 1 align 8
                 }
                 Fl_Check_Button uiPrefsPixelToolbar {
                   label {Pixel Toolbar}
-                  tooltip {When selected, mrv2 will start with the pixel toolbar shown.} xywh {419 302 25 25} box UP_BOX down_box DOWN_BOX value 1 align 8
+                  tooltip {When selected, mrv2 will start with the pixel toolbar shown.} xywh {424 319 25 25} box UP_BOX down_box DOWN_BOX value 1 align 8
                 }
                 Fl_Check_Button uiPrefsTimeline {
                   label Timeline
-                  tooltip {When selected, mrv2 will start with the timeline shown.} xywh {419 330 25 25} box UP_BOX down_box DOWN_BOX value 1 align 136
+                  tooltip {When selected, mrv2 will start with the timeline shown.} xywh {424 347 25 25} box UP_BOX down_box DOWN_BOX value 1 align 136
                 }
                 Fl_Check_Button uiPrefsStatusBar {
                   label {Status Bar}
-                  tooltip {When selected, mrv2 will start with the status bar visible.} xywh {418 358 25 25} box UP_BOX down_box DOWN_BOX value 1 align 136
+                  tooltip {When selected, mrv2 will start with the status bar visible.} xywh {599 319 25 25} box UP_BOX down_box DOWN_BOX value 1 align 136
                 }
                 Fl_Check_Button uiPrefsMacOSMenus {
                   label {macOS Menus}
-                  tooltip {This is a macOS setting only.  When selected the menus will appear on the system toolbar instead of the mrv2 toolbar.} xywh {593 243 25 25} box UP_BOX down_box DOWN_BOX align 8
+                  tooltip {This is a macOS setting only.  When selected the menus will appear on the system toolbar instead of the mrv2 toolbar.} xywh {598 260 25 25} box UP_BOX down_box DOWN_BOX align 8
                 }
                 Fl_Check_Button uiPrefsToolBar {
                   label {Tool Dock}
-                  tooltip {When selected, mrv2 will start with the action tool dock already open.} xywh {593 274 25 25} box UP_BOX down_box DOWN_BOX align 136
+                  tooltip {When selected, mrv2 will start with the action tool dock already open.} xywh {598 291 25 25} box UP_BOX down_box DOWN_BOX align 136
                 }
                 Fl_Check_Button uiPrefsOnePanelOnly {
                   label {Only One Panel}
-                  tooltip {When selected, mrv2 will start with the only one panel option selected.} xywh {594 330 25 25} box UP_BOX down_box DOWN_BOX align 136
+                  tooltip {When selected, mrv2 will start with the only one panel option selected.} xywh {599 347 25 25} box UP_BOX down_box DOWN_BOX align 136
                 }
               }
             }
@@ -356,7 +360,7 @@ If you try to open several mrv2s with different images, all these images will be
             }
             Fl_Group {} {
               label {Language and Colors} open
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label UI open

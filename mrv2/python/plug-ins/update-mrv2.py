@@ -332,7 +332,7 @@ class UpdatePlugin(plugin.Plugin):
             print(_('An unexpected error occurred:'),e)
             return
 
-# Function to start the subprocess in a thread
+    # Function to start the subprocess in a thread
     def start_subprocess_in_thread(self, command, download_file):
         # Start the timeout callback
         data = [ self, download_file ]

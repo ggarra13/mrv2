@@ -291,6 +291,9 @@ namespace mrv
 
         gui.get("macOS_menus", tmp, 0);
         uiPrefs->uiPrefsMacOSMenus->value((bool)tmp);
+        
+        gui.get("raise_on_enter", tmp, 0);
+        uiPrefs->uiPrefsRaiseOnEnter->value((bool)tmp);
 
         gui.get("timeline_display", tmp, 0);
         uiPrefs->uiPrefsTimelineDisplay->value(tmp);
@@ -1209,6 +1212,7 @@ namespace mrv
         gui.set("action_toolbar", (int)uiPrefs->uiPrefsToolBar->value());
         gui.set("one_panel_only", (int)uiPrefs->uiPrefsOnePanelOnly->value());
         gui.set("macOS_menus", (int)uiPrefs->uiPrefsMacOSMenus->value());
+        gui.set("raise_on_enter", (int)uiPrefs->uiPrefsRaiseOnEnter->value());
 
         gui.set("timeline_display", uiPrefs->uiPrefsTimelineDisplay->value());
         gui.set(
