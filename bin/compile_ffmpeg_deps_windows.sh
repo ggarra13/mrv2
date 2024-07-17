@@ -152,7 +152,7 @@ download_yasm() {
 
     if [ ! -e yasm.exe ]; then
 	# We need to download a win64 specific yasm, not msys64 one
-	wget -c http://www.tortall.net/projects/yasm/releases/yasm-1.3.0-win64.exe
+	wget -c https://github.com/yasm/yasm/releases/download/v1.3.0/yasm-1.3.0-win64.exe
 	mv yasm-1.3.0-win64.exe yasm.exe
     fi
 }
