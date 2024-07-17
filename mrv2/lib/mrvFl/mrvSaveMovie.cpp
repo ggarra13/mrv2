@@ -278,6 +278,17 @@ namespace mrv
                     newExtension = ".mkv";
                 }
             }
+            else if (profile == "HAP")
+            {
+                if (!string::compare(
+                        extension, ".mov", string::Compare::CaseInsensitive))
+                {
+                    LOG_WARNING(
+                        _("HAP profile needs a .mov extension.  Changing "
+                          "it to .mov"));
+                    newExtension = ".mov";
+                }
+            }
 
             newFile = directory + baseName + number + newExtension;
 
