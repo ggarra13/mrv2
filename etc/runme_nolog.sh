@@ -216,6 +216,7 @@ if [[ $TLRENDER_FFMPEG == ON || $TLRENDER_FFMPEG == 1 ]]; then
     echo "    FFmpeg minimal.................. ${TLRENDER_FFMPEG_MINIMAL}         (TLRENDER_FFMPEG_MINIMAL)"
     echo "    FFmpeg network support ......... ${TLRENDER_NET} 	(TLRENDER_NET)"
     echo "    AV1 codec support .............. ${TLRENDER_AV1} 	(TLRENDER_AV1)"
+    echo "    HAP codec support .............. ${TLRENDER_HAP} 	(TLRENDER_HAP)"
     echo "    VPX codec support .............. ${TLRENDER_VPX} 	(TLRENDER_VPX)"
     echo "    X264 codec support ............. ${TLRENDER_X264} 	(Use -gpl flag)"
     echo "    YASM assembler ................. ${TLRENDER_YASM} 	(TLRENDER_YASM)"
