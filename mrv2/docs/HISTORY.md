@@ -16,6 +16,8 @@ v1.2.2
   should behave once the mouse enters the view window.  By default, now
   it is off, instead of on; meaning you will have to click on the window to
   bring it to the front and activate keyboard focus.
+- Fixed overwriting of data in Darby's original FFmpegReadVideo code.
+- Added support for HAP and HAP with Alpha decoders.
 
 
 v1.2.1
