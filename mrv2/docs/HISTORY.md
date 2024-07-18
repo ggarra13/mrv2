@@ -18,8 +18,7 @@ v1.2.2
   bring it to the front and activate keyboard focus.
 - Fixed overwriting of data in Darby's original FFmpegReadVideo code.
 - Added support for HAP and HAP with Alpha decoders.
-- Added support for HAP encoder.  Note that it seems FFmpeg's hap encoder does
-  not support alpha.
+- Added support for HAP encoder.  
 
 
 v1.2.1
