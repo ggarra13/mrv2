@@ -1,0 +1,2 @@
+# This setting allows saving alpha channel with FFmpeg's HAP encoder.
+format:hap_q
