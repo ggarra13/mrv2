@@ -137,7 +137,7 @@ namespace mrv
         //! Returns an NDI filename for the current process
         std::string NDI(ViewerUI* ui);
 
-        //! Returns whether the string is is an network path.
+        //! Returns whether the string is a network path.
         bool isNetwork(const std::string& path);
 
         //! Returns whether the string is a potential URI string.
