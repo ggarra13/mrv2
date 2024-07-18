@@ -21,6 +21,9 @@ v1.2.2
 - Added support for HAP encoder.
 - Fixed mrv2's custom file requester starting with no icons in the current
   directory.
+- Fixed Open Separate Audio dialog to be non-modal.
+- Fixed sequence loading on macOS sometimes returning a wrong sequence when
+  sequence was like 0999-1001.
 
 
 v1.2.1

@@ -113,7 +113,7 @@ namespace mrv
 
     bool OpenSeparateAudioDialog::exec()
     {
-        set_modal();
+        set_non_modal();
         show();
         while (visible())
             Fl::check();
