@@ -232,7 +232,7 @@ void Flu_File_Chooser::setContext(
     p.context = context;
 
     p.thumbnailSystem = context->getSystem<ui::ThumbnailSystem>();
-    
+
     previewCB(); // refresh icons
 }
 
@@ -249,7 +249,7 @@ void Flu_File_Chooser::previewCB()
     thumbnailsFileReq = previewBtn->value();
 
     updateEntrySizes();
-    
+
     Fl_Group* g = getEntryGroup();
     unsigned num = g->children();
     for (unsigned i = 0; i < num; ++i)
@@ -367,7 +367,7 @@ Flu_File_Chooser::Flu_File_Chooser(
 {
 
     _compact = compact;
-    
+
     int oldNormalSize = FL_NORMAL_SIZE;
     FL_NORMAL_SIZE = 12;
 
@@ -4252,7 +4252,7 @@ static const char* _flu_file_chooser(
     uint64_t bytes = cache->getMax();
     cache->setMax(0);
 
-    Flu_File_Chooser::window->previewCB();
+    Flu_File_Chooser::window->reloadCB();
     Flu_File_Chooser::window->set_non_modal();
     Flu_File_Chooser::window->show();
 

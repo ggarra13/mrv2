@@ -18,7 +18,9 @@ v1.2.2
   bring it to the front and activate keyboard focus.
 - Fixed overwriting of data in Darby's original FFmpegReadVideo code.
 - Added support for HAP and HAP with Alpha decoders.
-- Added support for HAP encoder.  
+- Added support for HAP encoder.
+- Fixed mrv2's custom file requester starting with no icons in the current
+  directory.
 
 
 v1.2.1
