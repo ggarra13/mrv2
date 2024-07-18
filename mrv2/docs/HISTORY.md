@@ -24,6 +24,7 @@ v1.2.2
 - Fixed Open Separate Audio dialog to be non-modal.
 - Fixed sequence loading on macOS sometimes returning a wrong sequence when
   sequence was like 0999-1001.
+- Fixed loading of separate audio track for image sequences.
 
 
 v1.2.1
