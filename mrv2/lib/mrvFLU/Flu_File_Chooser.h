@@ -167,6 +167,7 @@ public:
     //! and Flu_File_Chooser::DIRECTORY
     Flu_File_Chooser(
         const char* path, const char* pattern, int type, const char* title,
+        const std::shared_ptr<tl::system::Context>& context,
         const bool compact = true);
 
     //! Destructor
@@ -229,9 +230,6 @@ public:
 
     //! previewCB handle icon creation
     void previewCB();
-
-    //! set the tlRender context for icon creation
-    void setContext(const std::shared_ptr< system::Context >&);
 
     //! \return how many files are selected
     int count();

@@ -220,21 +220,8 @@ static std::string flu_get_special_folder(int csidl)
 
 struct Flu_File_Chooser::Private
 {
-    std::weak_ptr<system::Context> context;
-    std::weak_ptr<ui::ThumbnailSystem> thumbnailSystem;
+    std::shared_ptr<system::Context> context;
 };
-
-void Flu_File_Chooser::setContext(
-    const std::shared_ptr< system::Context >& context)
-{
-    TLRENDER_P();
-
-    p.context = context;
-
-    p.thumbnailSystem = context->getSystem<ui::ThumbnailSystem>();
-
-    previewCB(); // refresh icons
-}
 
 void Flu_File_Chooser::previewCB()
 {
@@ -356,7 +343,7 @@ Flu_File_Chooser::find_type(const char* extension)
 
 Flu_File_Chooser::Flu_File_Chooser(
     const char* pathname, const char* pat, int type, const char* title,
-    const bool compact) :
+    const std::shared_ptr<system::Context>& context, const bool compact) :
     Fl_Double_Window(900, 600, title),
     _p(new Private),
     filename(70, h() - 60, w() - 70 - 85 - 10, 25, "", this),
@@ -365,6 +352,9 @@ Flu_File_Chooser::Flu_File_Chooser(
     wingrp(new Fl_Group(0, 0, 900, 600)),
     entryPopup(0, 0, 0, 0)
 {
+    TLRENDER_P();
+
+    p.context = context;
 
     _compact = compact;
 
@@ -3998,14 +3988,14 @@ void Flu_File_Chooser::cd(const char* path)
                     snprintf(buf, 1024, i.root.c_str(), number);
                     entry = new Flu_Entry(
                         buf, ENTRY_FILE, fileDetailsBtn->value(), this,
-                        p.thumbnailSystem);
+                        p.context);
                 }
                 else
                 {
 
                     entry = new Flu_Entry(
                         i.root.c_str(), ENTRY_SEQUENCE, fileDetailsBtn->value(),
-                        this, p.thumbnailSystem);
+                        this, p.context);
                     entry->isize = numFrames;
                     entry->altname = i.root.c_str();
 
@@ -4035,7 +4025,7 @@ void Flu_File_Chooser::cd(const char* path)
             {
                 entry = new Flu_Entry(
                     (*i).c_str(), ENTRY_FILE, fileDetailsBtn->value(), this,
-                    p.thumbnailSystem);
+                    p.context);
 
                 if (listMode)
                 {
@@ -4235,10 +4225,9 @@ static const char* _flu_file_chooser(
         filename = retname.c_str();
 
     Fl_Group::current(0);
-    Flu_File_Chooser::window =
-        new Flu_File_Chooser(filename, pattern, type, message, compact_files);
+    Flu_File_Chooser::window = new Flu_File_Chooser(
+        filename, pattern, type, message, context, compact_files);
     Flu_File_Chooser::window->end();
-    Flu_File_Chooser::window->setContext(context);
     if (Flu_File_Chooser::window && !retname.empty())
     {
         Flu_File_Chooser::window->value(retname.c_str());
@@ -4252,7 +4241,6 @@ static const char* _flu_file_chooser(
     uint64_t bytes = cache->getMax();
     cache->setMax(0);
 
-    Flu_File_Chooser::window->reloadCB();
     Flu_File_Chooser::window->set_non_modal();
     Flu_File_Chooser::window->show();
 

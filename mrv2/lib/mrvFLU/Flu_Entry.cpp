@@ -8,6 +8,8 @@
 
 #include <tlTimeline/Timeline.h>
 
+#include <tlUI/ThumbnailSystem.h>
+
 #include <FL/Fl_Pixmap.H>
 #include <FL/fl_utf8.h>
 
@@ -25,12 +27,10 @@
 
 #include "mrvApp/mrvApp.h"
 
-
 namespace
 {
     const float kTimeout = 0.05;
 }
-
 
 Fl_Pixmap preview_img((char* const*)monalisa_xpm),
     file_list_img((char* const*)filelist_xpm),
@@ -97,25 +97,24 @@ struct Flu_Entry::Private
         ui::ThumbnailRequest request;
     };
     ThumbnailData thumbnail;
-    
+
     bool bind_image = false;
 };
 
 Flu_Entry::Flu_Entry(
     const char* name, int t, bool d, Flu_File_Chooser* c,
-    std::weak_ptr<ui::ThumbnailSystem> thumbnailSystem) :
+    const std::shared_ptr<system::Context>& context) :
     Fl_Input(0, 0, 0, 0),
     _p(new Private)
 {
     TLRENDER_P();
 
-    p.thumbnailSystem = thumbnailSystem;
-    
+    p.thumbnailSystem = context->getSystem<ui::ThumbnailSystem>();
+
     _init(name, t, d, c);
 }
 
-Flu_Entry::Flu_Entry(
-    const char* name, int t, bool d, Flu_File_Chooser* c) :
+Flu_Entry::Flu_Entry(const char* name, int t, bool d, Flu_File_Chooser* c) :
     Fl_Input(0, 0, 0, 0),
     _p(new Private)
 {
@@ -158,9 +157,10 @@ void Flu_Entry::timerEvent_cb(void* d)
 void Flu_Entry::timerEvent()
 {
     TLRENDER_P();
-    
+
     if (p.thumbnail.request.future.valid() &&
-        p.thumbnail.request.future.wait_for(std::chrono::seconds(0)) == std::future_status::ready)
+        p.thumbnail.request.future.wait_for(std::chrono::seconds(0)) ==
+            std::future_status::ready)
     {
         if (auto image = p.thumbnail.request.future.get())
         {
@@ -629,7 +629,7 @@ void Flu_Entry::editCB()
 void Flu_Entry::updateSize(int& W, int& H, int& iW, int& iH, int& tW, int& tH)
 {
     TLRENDER_P();
-    
+
     // Some constants
     const int marginW = 2;
     const int marginH = 4;
@@ -647,8 +647,7 @@ void Flu_Entry::updateSize(int& W, int& H, int& iW, int& iH, int& tW, int& tH)
     bool wide = chooser->fileListWideBtn->value();
     if (icon)
     {
-        if (chooser->previewBtn->value() &&
-            (icon == &reel || icon == &picture))
+        if (chooser->previewBtn->value() && (icon == &reel || icon == &picture))
         {
             iW = icon->w() + marginW;
             iH = 64 + marginH;
@@ -662,7 +661,7 @@ void Flu_Entry::updateSize(int& W, int& H, int& iW, int& iH, int& tW, int& tH)
 
     if (!isPicture || wide)
         tH = 0;
-            
+
     W = tW;
     H = tH + iH;
 }
@@ -950,7 +949,7 @@ void Flu_Entry::startRequest()
                 time = timeRange.start_time();
             }
         }
-        
+
         p.thumbnail.request = thumbnailSystem->getThumbnail(path, size.h, time);
         p.thumbnail.init = false;
         isPicture = true;
@@ -966,19 +965,19 @@ void Flu_Entry::startRequest()
 void Flu_Entry::cancelRequest()
 {
     TLRENDER_P();
-    
+
     if (!p.thumbnailSystem.lock() || p.thumbnail.init ||
         !p.thumbnail.request.future.valid())
         return;
 
     if (auto thumbnailSystem = p.thumbnailSystem.lock())
     {
-        thumbnailSystem->cancelRequests({ p.thumbnail.request.id });
+        thumbnailSystem->cancelRequests({p.thumbnail.request.id});
 
         p.thumbnail.init = true;
         Fl::remove_timeout((Fl_Timeout_Handler)timerEvent_cb, this);
     }
-    
+
 #ifdef DEBUG_REQUESTS
     std::cerr << "\tCANCELED REQUEST " << p.id << " for " << toTLRender() << " "
               << x() << " " << y() << " " << w() << "x" << h() << std::endl;

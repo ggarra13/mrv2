@@ -1,8 +1,7 @@
 #pragma once
 
 #include <tlCore/Time.h>
-
-#include <tlUI/ThumbnailSystem.h>
+#include <tlCore/Context.h>
 
 #include <FL/Fl_Input.H>
 
@@ -21,7 +20,7 @@ class Flu_Entry : public Fl_Input
 public:
     Flu_Entry(
         const char* name, int t, bool d, Flu_File_Chooser* c,
-        std::weak_ptr<ui::ThumbnailSystem> thumbnailSystem);
+        const std::shared_ptr<system::Context>& context);
     Flu_Entry(const char* name, int t, bool d, Flu_File_Chooser* c);
     virtual ~Flu_Entry();
 
@@ -34,13 +33,13 @@ public:
 
     void updateSize();
     void updateIcon();
-    
+
     void startRequest();
     void cancelRequest();
 
     static void timerEvent_cb(void* self);
     void timerEvent();
-    
+
     inline static void _inputCB(Fl_Widget* w, void* arg)
     {
         ((Flu_Entry*)arg)->inputCB();
