@@ -27,6 +27,8 @@ v1.2.2
 - Fixed loading of separate audio track for image sequences.
 - Added a work-around to support loading audio tracks with embedded PNG files
   when FFmpeg was compiled as minimal.
+- Fixed -playback command-line flag to start playback when set even if
+  autoPlayback is off.
 
 
 v1.2.1

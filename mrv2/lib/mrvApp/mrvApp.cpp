@@ -1102,7 +1102,9 @@ namespace mrv
         {
             const auto& timeRange = p.player->inOutRange();
             const bool autoPlayback = ui->uiPrefs->uiPrefsAutoPlayback->value();
-            if (!p.session && autoPlayback && timeRange.duration().value() > 1)
+            const bool playbackFlag = p.options.playback != timeline::Playback::Count;
+            if (!p.session && (autoPlayback || playbackFlag) &&
+                timeRange.duration().value() > 1)
             {
                 // We use a timeout to start playback of the loaded video to
                 // make sure to show all frames
