@@ -29,6 +29,8 @@ v1.2.2
   when FFmpeg was compiled as minimal.
 - Fixed -playback command-line flag to start playback when set even if
   autoPlayback is off.
+- Made reverse playback at start not leak an observable item pointer or be
+  slower.
 
 
 v1.2.1

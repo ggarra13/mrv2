@@ -1035,11 +1035,6 @@ namespace mrv
                     {
                         TLRENDER_P();
 
-                        static bool found = false;
-                        if (p.player->playback() != timeline::Playback::Stop ||
-                            found)
-                            return;
-
                         const auto& cache =
                             p.player->player()->observeCacheOptions()->get();
                         const auto& rate = time.rate();
@@ -1077,13 +1072,10 @@ namespace mrv
                             if (t.start_time() <= startTime &&
                                 t.end_time_exclusive() >= endTime)
                             {
-                                found = true;
+                                p.player->setPlayback(timeline::Playback::Reverse);
+                                p.cacheInfoObserver.reset();
                                 break;
                             }
-                        }
-                        if (found)
-                        {
-                            p.player->setPlayback(timeline::Playback::Reverse);
                         }
                     });
         }
