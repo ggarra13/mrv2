@@ -7,9 +7,6 @@ import re
 from datetime import datetime
 from functions import *
 
-if (len(sys.argv) < 2):
-    print ("Usage: " + sys.argv[0] + " github-user [github-project] [tag]")
-    exit(1)
 
 try:
     import requests
@@ -45,34 +42,39 @@ def ensure_str(s):
         pass
     return s
 
-user=''
-repo=''
 full_names = []
 headers = {}
-tag = ''
 
 if "GITHUB_TOKEN" in os.environ:
     headers["Authorization"] = "token %s" % os.environ["GITHUB_TOKEN"]
+import argparse
 
-if len(sys.argv) == 4:
-    full_names.append(sys.argv[1] + "/" + sys.argv[2])
-    user = sys.argv[1]
-    repo = sys.argv[2]
-    tag  = sys.argv[3]
-elif len(sys.argv) == 3:
-    full_names.append(sys.argv[1] + "/" + sys.argv[2])
-    user = sys.argv[1]
-    repo = sys.argv[2]
-else:
-    buf = StringIO()
-    r = requests.get('https://api.github.com/users/' + sys.argv[1] + '/repos', headers=headers)
-    repos = r.json()
-    user = sys.argv[1]
-    
-    for repo in repos:
-        full_names.insert(0, ensure_str(repo['full_name']))
+# Initialize the parser
+parser = argparse.ArgumentParser(description='Process GitHub download count.')
 
-        
+# Add positional arguments
+parser.add_argument('user', type=str, help='GitHub username')
+parser.add_argument('repo', type=str, nargs='?', help='Repository name (optional)')
+parser.add_argument('tag', type=str, nargs='?', help='Tag name (optional)')
+
+# Parse the arguments
+args = parser.parse_args()
+
+# Access the arguments
+print('User:', args.user)
+print('Repository:', args.repo)
+print('Tag:', args.tag)
+
+user = args.user
+repo = args.repo
+tag  = args.tag
+
+full_names = []
+if user and repo:
+    full_names.append(user + "/" + repo)
+
+asset_date='2014-10-29'
+
 for full_name in full_names:
     buf = StringIO()
     total_count = 0
@@ -120,29 +122,43 @@ formatted_date = today.strftime("%Y-%m-%d")
 
 folder_name = sys.argv[3]
 
-# Base URL for the project downloads page
-base_url = f"https://sourceforge.net/projects/{repo}/files/{folder_name}/stats/json?start_date=2014-10-29&end_date={formatted_date}"
+def count_sourceforge(repo, folder_name, formatted_date,
+                      start_date = '2014-10-29'):
 
-# Send request to download page
-response = requests.get(base_url)
-try:
-    r = response.json()
-except Exception as e:
-    base_url = f"https://sourceforge.net/projects/{repo}/files/archive/{folder_name}/stats/json?start_date=2014-10-29&end_date={formatted_date}"
+    # Base URL for the project downloads page
+    base_url = f"https://sourceforge.net/projects/{repo}/files/{folder_name}/stats/json?start_date={start_date}&end_date={formatted_date}"
+
+    # Send request to download page
+    response = requests.get(base_url)
     try:
-        response = requests.get(base_url)
         r = response.json()
     except Exception as e:
-        print(f'Could not get info for version {folder_name}')
-        exit(1)
+        base_url = f"https://sourceforge.net/projects/{repo}/files/archive/{folder_name}/stats/json?start_date={start_date}&end_date={formatted_date}"
+        try:
+            response = requests.get(base_url)
+            r = response.json()
+        except Exception as e:
+            print(f'Could not get info for version {folder_name}')
+            exit(1)
     
-total = 0
-for item in r['oses']:
-    num=int(item[1])
-    print(f'\tOS: {item[0]}\tCount: {num}')
-    total += num
+    total = 0
+    for item in r['oses']:
+        num=int(item[1])
+        print(f'\tOS: {item[0]}\tCount: {num}')
+        total += num
 
-formatted_total = format_number(total, 5)
-print(f'{formatted_total}\tTotal Downloads for sourceforge {repo}')
-formatted_total = format_number(total + total_count, 5)
+    formatted_total = format_number(total, 5)
+    print(f'{formatted_total}\tTotal Downloads for sourceforge {repo}/{folder_name}')
+
+    return total
+
+sourceforge_released_total = count_sourceforge(repo, folder_name,
+                                               formatted_date)
+
+sourceforge_beta_total = count_sourceforge(repo, 'beta', formatted_date,
+                                           asset_date)
+
+formatted_total = format_number(sourceforge_released_total +
+                                sourceforge_beta_total +
+                                total_count, 5)
 print(f'{formatted_total}\tGrand Total')
