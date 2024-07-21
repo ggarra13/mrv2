@@ -51,6 +51,7 @@ namespace py = pybind11;
 #ifdef MRV2_NETWORK
 #    include "mrvNetwork/mrvCommandInterpreter.h"
 #    include "mrvNetwork/mrvClient.h"
+#    include "mrvNetwork/mrvComfyUIListener.h"
 #    include "mrvNetwork/mrvImageListener.h"
 #    include "mrvNetwork/mrvServer.h"
 #    include "mrvNetwork/mrvParseHost.h"
@@ -177,6 +178,7 @@ namespace mrv
 #ifdef MRV2_NETWORK
         CommandInterpreter* commandInterpreter = nullptr;
         ImageListener* imageListener = nullptr;
+        std::unique_ptr<ComfyUIListener> comfyUIListener;
 #endif
 
 #ifdef MRV2_PYBIND11
@@ -798,7 +800,7 @@ namespace mrv
                         p.options.seek = timeRange.start_time();
                     else if (p.options.seek > timeRange.end_time_exclusive())
                         p.options.seek = timeRange.end_time_exclusive();
-                    
+
                     player->seek(p.options.seek);
                 }
                 if (p.options.loop != timeline::Loop::Count)
@@ -978,6 +980,15 @@ namespace mrv
         timeline::Playback playback;
     };
 
+    void App::createComfyUIListener()
+    {
+#ifdef MRV2_NETWORK
+        TLRENDER_P();
+
+        p.comfyUIListener = std::make_unique<ComfyUIListener>();
+#endif
+    }
+
     void App::createListener()
     {
 #ifdef MRV2_NETWORK
@@ -1017,7 +1028,7 @@ namespace mrv
 
         const timeline::Playback& playback = p.options.playback;
         ui->uiView->setPlayback(playback);
-        
+
         if (playback == timeline::Playback::Reverse)
         {
             p.player->setPlayback(timeline::Playback::Stop);
@@ -1027,7 +1038,7 @@ namespace mrv
             // once it is filled.
             //
             const auto& time = p.player->currentTime();
-                        
+
             p.cacheInfoObserver =
                 observer::ValueObserver<timeline::PlayerCacheInfo>::create(
                     p.player->player()->observeCacheInfo(),
@@ -1038,8 +1049,10 @@ namespace mrv
                         const auto& cache =
                             p.player->player()->observeCacheOptions()->get();
                         const auto& rate = time.rate();
-                        const auto& readAhead = cache.readAhead.rescaled_to(rate);
-                        const auto& readBehind = cache.readBehind.rescaled_to(rate);
+                        const auto& readAhead =
+                            cache.readAhead.rescaled_to(rate);
+                        const auto& readBehind =
+                            cache.readBehind.rescaled_to(rate);
                         const auto& timeRange = p.player->inOutRange();
 
                         auto startTime = time + readBehind;
@@ -1072,7 +1085,8 @@ namespace mrv
                             if (t.start_time() <= startTime &&
                                 t.end_time_exclusive() >= endTime)
                             {
-                                p.player->setPlayback(timeline::Playback::Reverse);
+                                p.player->setPlayback(
+                                    timeline::Playback::Reverse);
                                 p.cacheInfoObserver.reset();
                                 break;
                             }
@@ -1094,7 +1108,8 @@ namespace mrv
         {
             const auto& timeRange = p.player->inOutRange();
             const bool autoPlayback = ui->uiPrefs->uiPrefsAutoPlayback->value();
-            const bool playbackFlag = p.options.playback != timeline::Playback::Count;
+            const bool playbackFlag =
+                p.options.playback != timeline::Playback::Count;
             if (!p.session && (autoPlayback || playbackFlag) &&
                 timeRange.duration().value() > 1)
             {
@@ -1398,7 +1413,7 @@ namespace mrv
             p.settings->getValue<int>("Misc/MaxFileSequenceDigits"), 255);
 
         otio::SerializableObject::Retainer<otio::Timeline> otioTimeline;
-        
+
         if (file::isUSD(item->path))
         {
 #ifdef MRV2_PYBIND11
@@ -1406,19 +1421,21 @@ namespace mrv
 #endif
             otioTimeline =
                 item->audioPath.isEmpty()
-                ? timeline::create(item->path, _context, options)
-                : timeline::create(item->path, item->audioPath, _context, options);
+                    ? timeline::create(item->path, _context, options)
+                    : timeline::create(
+                          item->path, item->audioPath, _context, options);
         }
         else
         {
             otioTimeline =
                 item->audioPath.isEmpty()
-                ? timeline::create(item->path, _context, options)
-                : timeline::create(item->path, item->audioPath, _context, options);
+                    ? timeline::create(item->path, _context, options)
+                    : timeline::create(
+                          item->path, item->audioPath, _context, options);
         }
 
         auto out = timeline::Timeline::create(otioTimeline, _context, options);
-        
+
 #ifdef MRV2_PYBIND11
         const std::string& path = item->path.get();
         const std::string& audioPath = item->audioPath.get();
@@ -1502,7 +1519,7 @@ namespace mrv
                                 ui->uiPrefs->uiPrefsAutoPlayback->value();
                             if (item->inOutRange.duration().value() <= 1)
                                 autoPlayback = false;
-                            
+
                             if (!file::isTemporaryEDL(item->path) &&
                                 autoPlayback)
                             {
@@ -1511,9 +1528,13 @@ namespace mrv
                                     player->setPlayback(
                                         timeline::Playback::Forward);
 
-                                    // If we have autoplayback on and auto hide pixel bar, do so here.
-                                    const bool autoHide = ui->uiPrefs->uiPrefsAutoHidePixelBar->value();
-                                    const bool pixelToolbar = ui->uiPixelBar->visible();
+                                    // If we have autoplayback on and auto hide
+                                    // pixel bar, do so here.
+                                    const bool autoHide =
+                                        ui->uiPrefs->uiPrefsAutoHidePixelBar
+                                            ->value();
+                                    const bool pixelToolbar =
+                                        ui->uiPixelBar->visible();
                                     if (autoHide && pixelToolbar)
                                     {
                                         toggle_pixel_bar(nullptr, ui);
@@ -1770,7 +1791,8 @@ namespace mrv
                     uint64_t size = sampleRate * byteCount * channelCount;
                     seconds -= size / 1024.0 / 1024.0;
                     // Sanity check just in case
-                    if (seconds < 0.01F) seconds = 0.01F;
+                    if (seconds < 0.01F)
+                        seconds = 0.01F;
                 }
 
                 double ahead = timeline::PlayerCacheOptions().readAhead.value();

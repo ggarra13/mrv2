@@ -22,13 +22,13 @@ namespace mrv
 {
     namespace
     {
-        struct ImageData
+        struct FileData
         {
             std::string fileName;
             App* app;
         };
 
-        void open_data_file_cb(ImageData* d)
+        void open_data_file_cb(FileData* d)
         {
             d->app->open(d->fileName);
             delete d;
@@ -112,7 +112,7 @@ namespace mrv
                     else
                     {
                         fileName.resize(nBytes);
-                        ImageData* data = new ImageData;
+                        FileData* data = new FileData;
                         data->fileName = fileName;
                         data->app = ViewerUI::app;
                         Fl::add_timeout(

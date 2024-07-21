@@ -89,7 +89,7 @@ namespace mrv
 #ifdef MRV2_PYBIND11
         const std::vector<std::string>& getPythonArgs() const;
 #endif
-        
+
         //! Open a file (with optional audio) or directory.
         void open(const std::string&, const std::string& = std::string());
 
@@ -140,6 +140,9 @@ namespace mrv
 
         //! This signal is emitted when the audio mute is changed.
         void muteChanged(bool);
+
+        //! Create a ComfyUI listener (opens a socket on localport).
+        void createComfyUIListener();
 
         //! Create an image listener (opens a socket on localport).
         void createListener();

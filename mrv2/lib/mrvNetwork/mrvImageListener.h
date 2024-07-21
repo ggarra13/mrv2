@@ -21,7 +21,7 @@ namespace mrv
         ImageSender(uint16_t port = kPORT_NUMBER);
 
         bool isRunning();
-        void sendImage(const std::string& imageData);
+        void sendImage(const std::string& fileName);
 
     private:
         Poco::Net::SocketAddress address;

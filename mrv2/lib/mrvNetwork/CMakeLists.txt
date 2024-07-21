@@ -4,6 +4,7 @@
 
 set(HEADERS
     mrvCypher.h
+    mrvComfyUIListener.h
     mrvCompareOptions.h
     mrvDisplayOptions.h
     mrvDummyClient.h
@@ -18,6 +19,7 @@ set(HEADERS
 
 set(SOURCES
     mrvCypher.cpp
+    mrvComfyUIListener.cpp
     mrvCompareOptions.cpp
     mrvDisplayOptions.cpp
     mrvFilesModelItem.cpp

@@ -47,15 +47,15 @@ namespace mrv
 
     void add_path_mapping(mrv::Browser* b)
     {
-        PathMappingUI map;
-        Fl_Double_Window* w = map.uiMain;
+        PathMappingUI mapUI;
+        Fl_Double_Window* w = mapUI.uiMain;
         w->show();
 
         while (w->visible())
             Fl::check();
 
-        std::string remote = map.RemotePath->value();
-        std::string local = map.LocalPath->value();
+        std::string remote = mapUI.RemotePath->value();
+        std::string local = mapUI.LocalPath->value();
         if (local.empty() || remote.empty())
             return;
 

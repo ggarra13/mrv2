@@ -291,7 +291,7 @@ namespace mrv
 
         gui.get("macOS_menus", tmp, 0);
         uiPrefs->uiPrefsMacOSMenus->value((bool)tmp);
-        
+
         gui.get("raise_on_enter", tmp, 0);
         uiPrefs->uiPrefsRaiseOnEnter->value((bool)tmp);
 
@@ -1892,6 +1892,8 @@ namespace mrv
         {
             app->removeListener();
         }
+
+        app->createComfyUIListener();
 #endif
 
         panel::redrawThumbnails();
