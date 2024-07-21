@@ -59,8 +59,18 @@ namespace mrv
         if (local.empty() || remote.empty())
             return;
 
-        local = add_slash(local);
         remote = add_slash(remote);
+        local = add_slash(local);
+
+        const std::map< std::string, std::string >& map = path_mappings();
+        if (map.find(remote) != map.end())
+        {
+            std::string err =
+                string::Format(_("Path mapping for {0} already exists!"))
+                    .arg(remote);
+            LOG_ERROR(err);
+            return;
+        }
 
         std::string mapping = remote + '\t' + local;
         b->add(mapping.c_str());

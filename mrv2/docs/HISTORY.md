@@ -34,6 +34,8 @@ v1.2.2
   slower.
 - FLTK fixes to OpenGL 3 for Debian 12+ and AMD/Mesa systems under X11.
 - Added libsnappy version and copyright to About window.
+- Made path mapping reject two identical remote paths.
+
 
 v1.2.1
 ======
