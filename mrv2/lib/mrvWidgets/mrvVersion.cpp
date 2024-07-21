@@ -53,6 +53,10 @@
 
 #include <Imath/ImathConfig.h>
 
+#ifdef TLRENDER_HAP
+#    include <snappy.h>
+#endif
+
 #ifdef TLRENDER_JPEG
 #    include <jconfig.h>
 #endif
@@ -799,6 +803,12 @@ namespace mrv
           << endl
           << endl;
 #endif
+#ifdef TLRENDER_HAP
+        o << "libsnappy " << SNAPPY_MAJOR << "." << SNAPPY_MINOR << "."
+          << SNAPPY_PATCHLEVEL << endl
+          << "Copyright (C) 2011 Google Inc.  All Rights Reserved." << endl
+          << endl;
+#endif
 #ifdef TLRENDER_PNG
         o << PNG_HEADER_VERSION_STRING
           << "Copyright (c) 1995-2019 The PNG Reference Library Authors."
@@ -1038,15 +1048,13 @@ namespace mrv
         return o.str();
     }
 
-
     void thanks_message(mrv::TextBrowser* b)
     {
         using namespace std;
-        
+
         stringstream o;
 
-        o << _("This is a list of contributors to the mrv2 project:")
-          << endl
+        o << _("This is a list of contributors to the mrv2 project:") << endl
           << endl
           << R"THANKS(
 Core
@@ -1136,7 +1144,7 @@ Tomycj                                        (UI improvements)
 xiaopeng12138                                 (UTF-8 Debugging)
 
 )THANKS";
-        
+
         std::string line;
         while (std::getline(o, line, '\n'))
         {

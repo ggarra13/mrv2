@@ -3,6 +3,7 @@ v1.2.2
 
 - Updated FFmpeg build to support .webm muxer which was missing.
 - Made OpenEXR tag for Compression show its actual name instead of a number.
+- Added OpenEXR compression per layer instead of a global tag.
 - Added Channel (Layer) stepping hotkeys ({ and } by default).
 - Made exposure buttons (and the hotkeys) increment and decrement by 1/4 stop
   instead of 1/2 stop.
@@ -32,7 +33,7 @@ v1.2.2
 - Made reverse playback at start not leak an observable item pointer or be
   slower.
 - FLTK fixes to OpenGL 3 for Debian 12+ and AMD/Mesa systems under X11.
-
+- Added libsnappy version and copyright to About window.
 
 v1.2.1
 ======

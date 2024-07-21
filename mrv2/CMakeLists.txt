@@ -116,6 +116,10 @@ if(TLRENDER_FFMPEG)
     add_definitions(-DTLRENDER_FFMPEG)
 endif()
 
+if(TLRENDER_HAP)
+    add_definitions(-DTLRENDER_HAP)
+endif()
+
 if(TLRENDER_GL)
     add_definitions(-DTLRENDER_GL)
 endif()

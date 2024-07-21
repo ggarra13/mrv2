@@ -511,8 +511,7 @@ namespace mrv
                 m_subtitle->close();
 
             Y += m_subtitle->h();
-            m_attributes =
-                new CollapsibleGroup(g->x(), Y, W, 0, _("Metadata"));
+            m_attributes = new CollapsibleGroup(g->x(), Y, W, 0, _("Metadata"));
             m_attributes->end();
             b = m_attributes->button();
             b->callback(
@@ -533,7 +532,7 @@ namespace mrv
                 m_attributes->close();
 
             scroll->size(pack->w(), pack->h());
-            controls->show();   // show controls as group is hidden by default
+            controls->show(); // show controls as group is hidden by default
         }
 
         struct AspectName
@@ -731,7 +730,7 @@ namespace mrv
         void ImageInfoPanel::refresh()
         {
             Fl_Group* orig = Fl_Group::current();
-            
+
             hide_tabs();
 
             m_image->clear();
@@ -751,7 +750,7 @@ namespace mrv
             // Needed to resize the panels
             if (player)
                 end_group();
-            
+
             Fl_Group::current(orig);
         }
 
@@ -1832,12 +1831,17 @@ namespace mrv
                     std::string colorPrimaries;
                     std::string colorTRC;
                     std::string colorSpace;
+                    std::string compression;
                     if (!tagData.empty())
                     {
                         auto it = tagData.find("Video Codec");
                         if (it != tagData.end())
                         {
                             add_text(_("Codec"), _("Codec"), it->second);
+                        }
+                        else
+                        {
+                            compression = video.compression;
                         }
                         it = tagData.find("Video Rotation");
                         if (it != tagData.end())
@@ -1897,6 +1901,10 @@ namespace mrv
 
                     if (rotation != 0.F)
                         add_float(_("Rotation"), _("Video Rotation"), rotation);
+
+                    if (!compression.empty())
+                        add_text(
+                            _("Compression"), _("Compression"), compression);
 
                     ++group;
 
