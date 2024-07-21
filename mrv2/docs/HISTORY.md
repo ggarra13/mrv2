@@ -31,6 +31,7 @@ v1.2.2
   autoPlayback is off.
 - Made reverse playback at start not leak an observable item pointer or be
   slower.
+- FLTK fixes to OpenGL 3 for Debian 12+ and AMD/Mesa systems under X11.
 
 
 v1.2.1
