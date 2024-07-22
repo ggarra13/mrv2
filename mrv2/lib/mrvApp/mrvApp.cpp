@@ -995,7 +995,16 @@ namespace mrv
         TLRENDER_P();
 
         if (!p.imageListener)
-            p.imageListener = new ImageListener(this);
+        {
+            try
+            {
+                p.imageListener = new ImageListener(this);
+            }
+            catch( const Poco::Exception& e )
+            {
+                LOG_ERROR(e.displayText());
+            }
+        }
 #endif
     }
 
