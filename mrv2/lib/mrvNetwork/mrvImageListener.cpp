@@ -148,7 +148,14 @@ namespace mrv
 
     ImageListener::~ImageListener()
     {
-        server.stop();
+        try
+        {
+            server.stop();
+        }
+        catch (const Poco::Exception& e)
+        {
+            LOG_ERROR( e.displayText() );
+        }
     }
 
 } // namespace mrv
