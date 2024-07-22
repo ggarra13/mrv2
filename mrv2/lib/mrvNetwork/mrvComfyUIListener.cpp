@@ -26,10 +26,10 @@ namespace mrv
 {
     using namespace tl;
 
-    class Connection : public Poco::Net::TCPServerConnection
+    class ComfyConnection : public Poco::Net::TCPServerConnection
     {
     public:
-        Connection(const Poco::Net::StreamSocket& socket) :
+        ComfyConnection(const Poco::Net::StreamSocket& socket) :
             TCPServerConnection(socket)
         {
         }
@@ -125,11 +125,12 @@ namespace mrv
 
     ComfyUIListener::ComfyUIListener(uint16_t port) :
         server(
-            new Poco::Net::TCPServerConnectionFactoryImpl<Connection>(), port)
+            new Poco::Net::TCPServerConnectionFactoryImpl<ComfyConnection>(), port)
     {
         try
         {
             server.start();
+            LOG_INFO(_("ComfyUI listening on port ") << port);
         }
         catch (const Poco::Exception& e)
         {

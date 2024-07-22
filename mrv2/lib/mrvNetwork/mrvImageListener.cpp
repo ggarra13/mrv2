@@ -57,8 +57,8 @@ namespace mrv
         }
         catch (const Poco::Exception& e)
         {
-            LOG_ERROR(e.displayText());
             // Connection failed; no sender is running.
+            // Don't print error message.
             return false;
         }
     }
@@ -78,10 +78,10 @@ namespace mrv
         }
     }
 
-    class Connection : public Poco::Net::TCPServerConnection
+    class ImageListenerConnection : public Poco::Net::TCPServerConnection
     {
     public:
-        Connection(const Poco::Net::StreamSocket& socket) :
+        ImageListenerConnection(const Poco::Net::StreamSocket& socket) :
             TCPServerConnection(socket)
         {
         }
@@ -134,11 +134,14 @@ namespace mrv
 
     ImageListener::ImageListener(App* app, uint16_t port) :
         server(
-            new Poco::Net::TCPServerConnectionFactoryImpl<Connection>(), port)
+            new Poco::Net::TCPServerConnectionFactoryImpl<
+                ImageListenerConnection>(),
+            port)
     {
         try
         {
             server.start();
+            LOG_INFO(_("Server listening on port ") << port);
         }
         catch (const Poco::Exception& e)
         {
