@@ -1893,7 +1893,7 @@ namespace mrv
             app->removeListener();
         }
 
-        app->createComfyUIListener();
+        //app->createComfyUIListener();
 #endif
 
         panel::redrawThumbnails();
