@@ -4,7 +4,6 @@
 
 set(HEADERS
     mrvCypher.h
-    mrvComfyUIListener.h
     mrvCompareOptions.h
     mrvDisplayOptions.h
     mrvDummyClient.h
@@ -19,7 +18,6 @@ set(HEADERS
 
 set(SOURCES
     mrvCypher.cpp
-    mrvComfyUIListener.cpp
     mrvCompareOptions.cpp
     mrvDisplayOptions.cpp
     mrvFilesModelItem.cpp
@@ -30,7 +28,6 @@ set(SOURCES
     mrvTimelineItemOptions.cpp
 )
 
-
 set( LIBRARIES mrvCore)
 if(TLRENDER_GL)
     list(PREPEND LIBRARIES mrvGL)
@@ -39,6 +36,7 @@ endif()
 if(MRV2_NETWORK)
     list(APPEND SOURCES
     		mrvClient.cpp
+		mrvComfyUIListener.cpp
 		mrvImageListener.cpp
     		mrvMessagePublisher.cpp
     		mrvParseHost.cpp
@@ -49,6 +47,7 @@ if(MRV2_NETWORK)
     		mrvConnectionHandler.cpp
     		mrvServer.cpp )
     list(APPEND HEADERS
+              	mrvComfyUIListener.h 
 		mrvImageListener.h
     		mrvMessagePublisher.h
 		mrvParseHost.h

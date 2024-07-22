@@ -14,9 +14,16 @@
 #include <Poco/Net/TCPServerConnection.h>
 #include <Poco/Exception.h>
 
+#include "mrvFl/mrvIO.h"
+
 #include "mrvNetwork/mrvImageListener.h"
 
 #include "mrViewer.h"
+
+namespace
+{
+    const char* kModule = "listen";
+}
 
 namespace mrv
 {
@@ -48,8 +55,9 @@ namespace mrv
             socket.close();
             return true;
         }
-        catch (Poco::Exception&)
+        catch (const Poco::Exception& e)
         {
+            LOG_ERROR(e.displayText());
             // Connection failed; no sender is running.
             return false;
         }
@@ -64,8 +72,9 @@ namespace mrv
             stream << fileName;
             stream.flush();
         }
-        catch (Poco::Exception& e)
+        catch (const Poco::Exception& e)
         {
+            LOG_ERROR( e.displayText() );
         }
     }
 
@@ -99,7 +108,7 @@ namespace mrv
                         nBytes = socket().receiveBytes(
                             fileName.data(), fileName.size());
                     }
-                    catch (Poco::Exception& e)
+                    catch (const Poco::Exception& e)
                     {
                         // Network errors.
                         isOpen = false;
@@ -127,7 +136,14 @@ namespace mrv
         server(
             new Poco::Net::TCPServerConnectionFactoryImpl<Connection>(), port)
     {
-        server.start();
+        try
+        {
+            server.start();
+        }
+        catch (const Poco::Exception& e)
+        {
+            LOG_ERROR( e.displayText() );
+        }
     }
 
     ImageListener::~ImageListener()

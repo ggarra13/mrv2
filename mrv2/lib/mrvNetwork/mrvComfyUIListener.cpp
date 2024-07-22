@@ -11,7 +11,16 @@
 #include <Poco/Net/TCPServerConnection.h>
 #include <Poco/Exception.h>
 
+#include "mrvFl/mrvIO.h"
+
 #include "mrvNetwork/mrvComfyUIListener.h"
+
+#include "mrViewer.h"
+
+namespace
+{
+    const char* kModule = "comfy";
+}
 
 namespace mrv
 {
@@ -44,8 +53,19 @@ namespace mrv
                     try
                     {
                         nBytes = socket().receiveBytes(&size, sizeof(size));
+                        
                         size.w = ntohl(size.w);
                         size.h = ntohl(size.h);
+
+                        static_assert(sizeof(uint32_t) == sizeof(float),
+                                      "Unsupported architecture");
+
+                        uint32_t tmp;
+                        tmp = ntohl(*((uint32_t*)&size.pixelAspectRatio));
+                        size.pixelAspectRatio = *((float*)&tmp);
+
+                        if (!size.isValid())
+                            nBytes = 0;
                     }
                     catch (Poco::Exception& e)
                     {
@@ -59,11 +79,14 @@ namespace mrv
                     }
                     else
                     {
-                        std::cerr << "got image size=" << size << std::endl;
 
                         image::PixelType pixelType;
                         nBytes = socket().receiveBytes(
                             &pixelType, sizeof(pixelType));
+
+                        static_assert(
+                            sizeof(uint32_t) == sizeof(image::PixelType),
+                            "Unsupported architecture for pixel type");
                         pixelType = static_cast<image::PixelType>(
                             ntohl(static_cast<uint32_t>(pixelType)));
 
@@ -73,9 +96,26 @@ namespace mrv
                         }
                         else
                         {
+                            static uint64_t counter = 0;
+                            auto info = image::Info(size, pixelType);
+                            info.layout.mirror.y = true;
+                            
+                            auto image = image::Image::create(info);
 
-                            std::cerr << "got pixelType=" << pixelType
-                                      << std::endl;
+                            size_t sum = 0;
+                            const size_t total = image->getDataByteCount();
+                            while (sum < total)
+                            {
+                                nBytes = socket().receiveBytes(
+                                    image->getData() + sum, total - sum);
+                                sum += nBytes;
+                                if (nBytes <= 0)
+                                    break;
+                            }
+                            ++counter;
+                            std::cerr << "got image " << counter << std::endl;
+                            //App::ui->uiView->showImage(image);
+                            break;
                         }
                     }
                 }
@@ -87,6 +127,14 @@ namespace mrv
         server(
             new Poco::Net::TCPServerConnectionFactoryImpl<Connection>(), port)
     {
+        try
+        {
+            server.start();
+        }
+        catch (const Poco::Exception& e)
+        {
+            LOG_ERROR( e.displayText() );
+        }
         server.start();
     }
 
