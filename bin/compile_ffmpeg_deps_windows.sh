@@ -86,6 +86,11 @@ fi
 #
 pacman -Sy make wget diffutils nasm pkg-config --noconfirm
 
+if pacman -Qi yasm &> /dev/null; then
+    pacman -Rn yasm
+fi
+
+
 #
 # Build with h264 encoding.
 #
@@ -191,7 +196,7 @@ if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 ]]; then
 	echo
 	echo "Compiling libvpx......"
 	echo
-
+	
 	echo "YASM is:"
 	which yasm
 	
