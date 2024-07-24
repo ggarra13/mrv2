@@ -234,8 +234,9 @@ if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 ]]; then
 	make -j 1 solution.mk
 	echo "------------------------------------------------------"
 
-	echo "Contents of vpx.vcxproj"
-	cat vpx.vcxproj
+	echo "Contents of *.sln and *.vc*"
+	ls *.vc*
+	ls *.sln
 	echo "------------------------------------------------------"
 
 	
