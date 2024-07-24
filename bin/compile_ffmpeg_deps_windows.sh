@@ -216,9 +216,29 @@ if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 ]]; then
 	    cat ${x}
 	    echo "------------------------------------------------------"
 	done
+
+	echo "Running make libs.mk"
+	make -j 1 libs.mk
+	echo "------------------------------------------------------"
+	
+	echo "Running make tools.mk"
+	make -j 1 tools.mk
+	echo "------------------------------------------------------"
+	
+	echo "Running make solution.mk"
+	make -j 1 solution.mk
+	echo "------------------------------------------------------"
+
+	echo "Contents of vpx.vcxproj"
+	cat vpx.vcxproj
+	echo "------------------------------------------------------"
+
 	
 	
-	echo "Running make"
+	echo "EXITING--------------"
+	exit 1
+	
+	echo "Running full make -j ${CPU_CORES}"
 	make -j ${CPU_CORES}
 	make install
 	run_cmd mv $INSTALL_DIR/lib/x64/vpxmd.lib $INSTALL_DIR/lib/vpx.lib
