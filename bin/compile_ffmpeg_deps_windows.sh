@@ -207,7 +207,7 @@ if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 ]]; then
 		    --disable-unit-tests \
 		    --disable-examples \
 		    --disable-docs
-	make -j ${CPU_CORES}
+	make -d -j ${CPU_CORES}
 	make install
 	run_cmd mv $INSTALL_DIR/lib/x64/vpxmd.lib $INSTALL_DIR/lib/vpx.lib
 	run_cmd rm -rf $INSTALL_DIR/lib/x64/
