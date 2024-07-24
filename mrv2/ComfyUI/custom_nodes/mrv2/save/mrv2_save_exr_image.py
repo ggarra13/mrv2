@@ -5,6 +5,7 @@ import numpy as np
 
 from comfy.utils import ProgressBar
 
+import logging
 import folder_paths
 import socket
 import time
@@ -44,9 +45,8 @@ def get_mrv2_executable():
             value, reg_type = winreg.QueryValueEx(key, '')
             exe = f'{value[:-5]}'
             exe = exe.replace('\\', '/')
-            print(_('Install Location: ') + exe)
         except WindowsError as e:
-            print(_('Error retrieving value:\n'),e)
+            logging.error('Error retrieving value:\n',e)
         finally:
             # Always close the opened key
             winreg.CloseKey(key)
