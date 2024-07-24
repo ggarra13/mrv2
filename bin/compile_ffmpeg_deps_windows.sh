@@ -165,7 +165,7 @@ export OLD_PATH="$PATH"
 #
 # Add current path to avoid long PATH on Windows.
 #
-export PATH=".:$OLD_PATH"
+export PATH="$ROOT_DIR/sources:$OLD_PATH"
 
 if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 || \
 	  $BUILD_LIBSVTAV1 == 1 ]]; then
@@ -192,10 +192,10 @@ if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 ]]; then
 	echo "Compiling libvpx......"
 	echo
 
-	cp $ROOT_DIR/sources/yasm.exe .
-
 	echo "YASM is:"
 	which yasm
+	
+	echo "PATH=${PATH}"
 
 	#
 	# \@note: do not use --target=x86_64-win64-vs17 as that compiles for
@@ -207,7 +207,10 @@ if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 ]]; then
 		    --disable-unit-tests \
 		    --disable-examples \
 		    --disable-docs
-	make -d -j ${CPU_CORES}
+	echo "Contents of vpx.vcxproj"
+	cat vpx.vcxproj
+	echo "-----------------------"
+	make -j ${CPU_CORES}
 	make install
 	run_cmd mv $INSTALL_DIR/lib/x64/vpxmd.lib $INSTALL_DIR/lib/vpx.lib
 	run_cmd rm -rf $INSTALL_DIR/lib/x64/
@@ -256,9 +259,6 @@ if [[ $BUILD_LIBSVTAV1 == 1 ]]; then
     if [[ ! -e $INSTALL_DIR/lib/SvtAV1Enc.lib ]]; then
 	echo "Building SvtAV1Enc.lib"
 	cd SVT-AV1
-	
-	cp $ROOT_DIR/sources/yasm.exe .
-	
 
 	cd Build/windows
 	
