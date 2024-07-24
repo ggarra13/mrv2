@@ -209,18 +209,18 @@ if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 ]]; then
 		    --disable-docs
 	echo "Contents of Makefile after configure"
 	cat Makefile
+	echo "------------------------------------------------------"
+	
 	echo "Contents of config.mk after configure"
 	cat config.mk
-	echo "Running make -j 1 vpx.sln"
-	make -j ${CPU_CORES} vpx.sln
+	echo "------------------------------------------------------"
+
+	echo "Contents of directory after configure"
+	ls *.*
+	echo "------------------------------------------------------"
 	
-	echo "Contents of vpx.sln after make -j 1 vpx.sln"
-	cat vpx.sln
-
-	echo "Contents  of vpxrc.vcxproj"
-	cat vpxrc.vcxproj
-
-	echo "Running make -j ${CPU_CORES}"
+	
+	echo "Running make"
 	make -j ${CPU_CORES}
 	make install
 	run_cmd mv $INSTALL_DIR/lib/x64/vpxmd.lib $INSTALL_DIR/lib/vpx.lib
