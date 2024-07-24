@@ -194,6 +194,9 @@ if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 ]]; then
 
 	cp $ROOT_DIR/sources/yasm.exe .
 
+	echo "YASM is:"
+	which yasm
+
 	#
 	# \@note: do not use --target=x86_64-win64-vs17 as that compiles for
 	#         latest MSVC on github Actions.
