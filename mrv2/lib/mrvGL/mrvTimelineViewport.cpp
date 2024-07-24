@@ -344,9 +344,26 @@ namespace mrv
         const auto player = p.player;
         if (file::isTemporaryNDI(player->path()))
             return;
+        
 
         const auto& t = player->currentTime();
-        const auto& time = t + otime::RationalTime(dx, t.rate());
+        auto time = t + otime::RationalTime(dx, t.rate());
+
+
+        // Stop at end/beginning if not looping.
+        const auto& range = player->inOutRange();
+        const auto loop = player->loop();
+        if (loop == timeline::Loop::Once)
+        {
+            if (time <= range.start_time())
+                time = range.start_time();
+            else if (time >= range.end_time_inclusive())
+                time = range.end_time_inclusive();
+            player->seek(time);
+            return;
+        }
+
+        
         const auto& info = player->ioInfo();
         bool isMuted = player->isMuted();
         if (!info.audio.isValid())
@@ -371,6 +388,8 @@ namespace mrv
                 player->setPlayback(timeline::Playback::Reverse);
             }
         }
+
+        
         player->seek(time);
     }
 

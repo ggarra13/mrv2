@@ -36,6 +36,7 @@ v1.2.2
 - Added libsnappy version and copyright to About window.
 - Made path mapping reject two identical remote paths.
 - Updated SVT-AV1 library for MSVC 2019 and MSVC 2022 (v2.1.2).
+- Fixed looping to stop at start/end when scrubbing and Loop is off.
 
 
 v1.2.1
