@@ -210,14 +210,12 @@ if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 ]]; then
 	echo "Contents of Makefile after configure"
 	cat Makefile
 	echo "------------------------------------------------------"
-	
-	echo "Contents of config.mk after configure"
-	cat config.mk
-	echo "------------------------------------------------------"
 
-	echo "Contents of directory after configure"
-	ls *.*
-	echo "------------------------------------------------------"
+	for x in *.mk; do
+	    echo "Contents of ${x} after configure"
+	    cat ${x}
+	    echo "------------------------------------------------------"
+	done
 	
 	
 	echo "Running make"
