@@ -222,17 +222,8 @@ if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 ]]; then
 	    echo "------------------------------------------------------"
 	done
 
-	echo "Running make libs.mk"
-	make -j 1 libs.mk
-	echo "------------------------------------------------------"
-	
-	echo "Running make tools.mk"
-	make -j 1 tools.mk
-	echo "------------------------------------------------------"
-	
-	echo "Running make solution.mk"
-	make -j 1 solution.mk
-	echo "------------------------------------------------------"
+	echo "Make database...."
+	make -p
 
 	echo "Contents of *.sln and *.vc*"
 	ls *.sln
