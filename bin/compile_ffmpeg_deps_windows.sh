@@ -33,7 +33,7 @@ fi
 #
 LIBVPX_TAG=v1.12.0
 DAV1D_TAG=1.3.0
-SVTAV1_TAG=v1.8.0
+SVTAV1_TAG=v2.1.2
 X264_TAG=stable
 
 #
@@ -254,8 +254,25 @@ if [[ $BUILD_LIBSVTAV1 == 1 ]]; then
 	
 	cp $ROOT_DIR/sources/yasm.exe .
 	
+	# Check for VSINSTALLDIR
+	msvc_version=2019
+	if [ -n "$VSINSTALLDIR" ]; then
+	    if [[ "$VSINSTALLDIR" == *"2019"* ]]; then
+		echo "MSVC 2019 is set up."
+		msvc_version=2019
+	    elif [[ "$VSINSTALLDIR" == *"2022"* ]]; then
+		echo "MSVC 2022 is set up."
+		msvc_version=2022
+	    else
+		echo "MSVC version is not 2019 or 2022."
+	    fi
+	else
+	    echo "VSINSTALLDIR is not set. MSVC environment might not be configured."
+	fi
+
 	cd Build/windows
-	cmd //c build.bat 2019 release static no-dec no-apps
+	
+	cmd //c build.bat $msvc_version release static no-apps
 
 	cd -
 	
