@@ -2232,8 +2232,9 @@ namespace mrv
                     // Fullscreen does not update immediately, so we need
                     // to force a resize.
                     int X, Y, W, H;
-                    Fl::screen_xywh(X, Y, W, H);
-                    w->resize(0, 0, W, H);
+                    int screen_num = w->screen_num();
+                    Fl::screen_xywh(X, Y, W, H, screen_num);
+                    w->resize(X, Y, W, H);
 
                     // When fullscreen happens, the tool group bar also resizes
                     // on width, so we need to bring it back to its originazl
