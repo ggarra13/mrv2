@@ -237,7 +237,7 @@ include_directories( ${mrv2_INCLUDE_DIRS} )
 #
 # Install mrv2's auxiliary application directories
 #
-install( DIRECTORY colors fonts icons ocio presets share
+install( DIRECTORY colors ComfyUI fonts icons ocio presets share
     DESTINATION .
     COMPONENT applications )
 
@@ -247,7 +247,6 @@ install( DIRECTORY colors fonts icons ocio presets share
 install( FILES python/plug-ins/update-mrv2.py
     DESTINATION python/plug-ins
     COMPONENT applications )
-
 
 #
 # Install mrv2's documentation

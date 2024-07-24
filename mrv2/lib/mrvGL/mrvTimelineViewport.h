@@ -330,6 +330,9 @@ namespace mrv
         //! Update the coordinates.
         void updateCoords() const noexcept;
 
+        //! Show an image.
+        void showImage(const std::shared_ptr<image::Image>& image);
+        
     protected:
         virtual void _readPixel(image::Color4f& rgba) const noexcept = 0;
         math::Vector2i _getViewportCenter() const noexcept;

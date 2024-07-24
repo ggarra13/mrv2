@@ -851,6 +851,11 @@ namespace mrv
 
         audio.get("output_device", tmp, 0);
         uiPrefs->uiPrefsAudioOutputDevice->value(tmp);
+        
+        Fl_Preferences ComfyUI(base, "comfyUI");
+
+        ComfyUI.get("input_pipe", tmp, 0);
+        uiPrefs->uiPrefsUseComfyUIPipe->value((bool)tmp);
 
         Fl_Preferences behavior(base, "behavior");
         behavior.get("check_for_updates", tmp, 0);
@@ -1463,6 +1468,10 @@ namespace mrv
             "blit_viewports", (int)uiPrefs->uiPrefsBlitViewports->value());
         opengl.set("blit_timeline", (int)uiPrefs->uiPrefsBlitTimeline->value());
 
+        Fl_Preferences ComfyUI(base, "comfyUI");
+        ComfyUI.set("input_pipe",
+                    (int) uiPrefs->uiPrefsUseComfyUIPipe->value());
+        
         Fl_Preferences audio(base, "audio");
 
         audio.set("API", (int)uiPrefs->uiPrefsAudioAPI->value());
@@ -1473,6 +1482,7 @@ namespace mrv
         behavior.set(
             "check_for_updates", (int)uiPrefs->uiPrefsCheckForUpdates->value());
 
+        
         {
 
             Fl_Preferences keys(
@@ -1893,7 +1903,10 @@ namespace mrv
             app->removeListener();
         }
 
-        //app->createComfyUIListener();
+        if (uiPrefs->uiPrefsUseComfyUIPipe->value())
+        {
+            app->createComfyUIListener();
+        }
 #endif
 
         panel::redrawThumbnails();

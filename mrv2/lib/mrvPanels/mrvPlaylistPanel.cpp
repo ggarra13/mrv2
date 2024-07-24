@@ -295,6 +295,7 @@ namespace mrv
         void PlaylistPanel::refresh()
         {
             _cancelRequests();
+            clearCache();
             add_controls();
             end_group();
         }

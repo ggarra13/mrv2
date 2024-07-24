@@ -579,6 +579,7 @@ namespace mrv
         void ComparePanel::refresh()
         {
             _cancelRequests();
+            clearCache();
             add_controls();
             end_group();
         }

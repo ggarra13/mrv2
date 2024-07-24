@@ -12,6 +12,9 @@
 #include <Poco/Exception.h>
 
 #include "mrvFl/mrvIO.h"
+#include "mrvFl/mrvCallbacks.h"
+
+#include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrvNetwork/mrvComfyUIListener.h"
 
@@ -21,6 +24,45 @@ namespace
 {
     const char* kModule = "comfy";
 }
+
+namespace mrv
+{
+    namespace
+    {
+        struct FileData
+        {
+            std::string fileName;
+        };
+
+        void open_data_file_cb(FileData* d)
+        {
+
+            App* app = App::app;
+            auto model = app->filesModel();
+
+            if (model->observeFiles()->getSize() < 1)
+            {
+                App::app->open(d->fileName);
+                delete d;
+                return;
+            }
+            
+            auto item = model->observeA()->get();
+            auto path = item->path.get();
+
+            if (path != d->fileName)
+            {
+                App::app->open(d->fileName);
+            }
+            
+            refresh_file_cache_cb(nullptr, nullptr);
+            delete d;
+
+            panel::refreshThumbnails();
+        }
+    } // namespace
+    
+} // namespace
 
 namespace mrv
 {
@@ -38,6 +80,7 @@ namespace mrv
         {
             bool isOpen = true;
             Poco::Timespan timeOut(10, 0); // 10 seconds
+            std::string fileName;
             while (isOpen)
             {
                 if (socket().poll(timeOut, Poco::Net::Socket::SELECT_READ) ==
@@ -47,27 +90,15 @@ namespace mrv
                 }
                 else
                 {
-                    size_t nBytes = 0;
-                    image::Size size;
+                    int nBytes = -1;
+                    fileName.resize(4096); // should be big enough
 
                     try
                     {
-                        nBytes = socket().receiveBytes(&size, sizeof(size));
-                        
-                        size.w = ntohl(size.w);
-                        size.h = ntohl(size.h);
-
-                        static_assert(sizeof(uint32_t) == sizeof(float),
-                                      "Unsupported architecture");
-
-                        uint32_t tmp;
-                        tmp = ntohl(*((uint32_t*)&size.pixelAspectRatio));
-                        size.pixelAspectRatio = *((float*)&tmp);
-
-                        if (!size.isValid())
-                            nBytes = 0;
+                        nBytes = socket().receiveBytes(
+                            fileName.data(), fileName.size());
                     }
-                    catch (Poco::Exception& e)
+                    catch (const Poco::Exception& e)
                     {
                         // Network errors.
                         isOpen = false;
@@ -79,44 +110,11 @@ namespace mrv
                     }
                     else
                     {
-
-                        image::PixelType pixelType;
-                        nBytes = socket().receiveBytes(
-                            &pixelType, sizeof(pixelType));
-
-                        static_assert(
-                            sizeof(uint32_t) == sizeof(image::PixelType),
-                            "Unsupported architecture for pixel type");
-                        pixelType = static_cast<image::PixelType>(
-                            ntohl(static_cast<uint32_t>(pixelType)));
-
-                        if (nBytes <= 0)
-                        {
-                            isOpen = false;
-                        }
-                        else
-                        {
-                            static uint64_t counter = 0;
-                            auto info = image::Info(size, pixelType);
-                            info.layout.mirror.y = true;
-                            
-                            auto image = image::Image::create(info);
-
-                            size_t sum = 0;
-                            const size_t total = image->getDataByteCount();
-                            while (sum < total)
-                            {
-                                nBytes = socket().receiveBytes(
-                                    image->getData() + sum, total - sum);
-                                sum += nBytes;
-                                if (nBytes <= 0)
-                                    break;
-                            }
-                            ++counter;
-                            std::cerr << "got image " << counter << std::endl;
-                            //App::ui->uiView->showImage(image);
-                            break;
-                        }
+                        fileName.resize(nBytes);
+                        FileData* data = new FileData;
+                        data->fileName = fileName;
+                        Fl::add_timeout(
+                            0.0, (Fl_Timeout_Handler)open_data_file_cb, data);
                     }
                 }
             }

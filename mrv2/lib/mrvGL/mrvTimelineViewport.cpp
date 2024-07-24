@@ -3042,6 +3042,45 @@ namespace mrv
         }
     }
 
+    void TimelineViewport::showImage(const std::shared_ptr<image::Image>& image)
+    {
+        TLRENDER_P();
+        if (!image->isValid())
+            return;
+        
+        if (p.player)
+        {
+            p.player->stop();
+        }
+        
+        p.videoData.clear();
+
+        timeline::VideoData data;
+        data.size = image->getSize();
+        if (p.player)
+        {
+            data.time = p.player->currentTime();
+        }
+        else
+        {
+            data.time = otime::RationalTime(0.F, 24.F);
+            activate();
+        }
+        
+        timeline::VideoLayer layer;
+        layer.image = image;
+        
+        data.layers.push_back(layer);
+        p.videoData.push_back(data);
+        
+        _frameView();
+
+        redraw();
+
+        Fl::flush();
+    }
+
+    
     void TimelineViewport::updateUndoRedoButtons() const noexcept
     {
         TLRENDER_P();

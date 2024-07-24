@@ -419,6 +419,7 @@ namespace mrv
         void Stereo3DPanel::refresh()
         {
             _cancelRequests();
+            clearCache();
             add_controls();
             end_group();
         }

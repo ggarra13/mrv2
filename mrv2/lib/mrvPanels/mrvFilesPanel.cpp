@@ -316,6 +316,7 @@ namespace mrv
         void FilesPanel::refresh()
         {
             _cancelRequests();
+            clearCache();
             add_controls();
             end_group();
         }

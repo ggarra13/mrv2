@@ -177,9 +177,10 @@ namespace mrv
 
 #ifdef MRV2_NETWORK
         CommandInterpreter* commandInterpreter = nullptr;
-        ImageListener* imageListener = nullptr;
+        std::unique_ptr<ImageListener> imageListener;
         std::unique_ptr<ComfyUIListener> comfyUIListener;
 #endif
+
 
 #ifdef MRV2_PYBIND11
         std::unique_ptr<PyStdErrOutStreamRedirect> pythonStdErrOutRedirect;
@@ -984,8 +985,15 @@ namespace mrv
     {
 #ifdef MRV2_NETWORK
         TLRENDER_P();
-
-        p.comfyUIListener = std::make_unique<ComfyUIListener>();
+        
+        try
+        {
+            p.comfyUIListener = std::make_unique<ComfyUIListener>();
+        }
+        catch( const Poco::Exception& e )
+        {
+            LOG_ERROR(e.displayText());
+        }
 #endif
     }
 
@@ -994,16 +1002,13 @@ namespace mrv
 #ifdef MRV2_NETWORK
         TLRENDER_P();
 
-        if (!p.imageListener)
+        try
         {
-            try
-            {
-                p.imageListener = new ImageListener(this);
-            }
-            catch( const Poco::Exception& e )
-            {
-                LOG_ERROR(e.displayText());
-            }
+            p.imageListener = std::make_unique<ImageListener>(this);
+        }
+        catch( const Poco::Exception& e )
+        {
+            LOG_ERROR(e.displayText());
         }
 #endif
     }
@@ -1021,8 +1026,7 @@ namespace mrv
 #ifdef MRV2_NETWORK
         TLRENDER_P();
 
-        delete p.imageListener;
-        p.imageListener = nullptr;
+        p.imageListener.reset();
 #endif
     }
 
@@ -1499,8 +1503,7 @@ namespace mrv
 
                         if (isEDL)
                         {
-                            p.timelines[i - p.files.begin()] =
-                                _createTimeline(item);
+                            p.timelines[idx] = _createTimeline(item);
                         }
 
                         auto timeline = p.timelines[idx];

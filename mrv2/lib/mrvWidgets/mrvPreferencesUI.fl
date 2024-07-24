@@ -88,8 +88,8 @@ class PreferencesUI {open
     Fl_Window uiMain {
       label Preferences
       user_data this user_data_type {PreferencesUI*} open
-      xywh {771 187 847 467} type Double hide resizable
-      code0 {main = m;}
+      xywh {771 187 847 467} type Double resizable
+      code0 {main = m;} visible
     } {
       Fl_Group {} {open
         xywh {0 0 847 466} box FLAT_BOX
@@ -102,8 +102,8 @@ class PreferencesUI {open
             xywh {283 28 564 380} box PLASTIC_UP_BOX labelcolor 32
           } {
             Fl_Group {} {
-              label {User Interface} open
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5
+              label {User Interface}
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label {Window Behavior} open
@@ -127,7 +127,7 @@ If you try to open several mrv2s with different images, all these images will be
                   tooltip {When selected, mrv2 will apply a fit image operation on each video played.  This effectly means the video will be resized automatically based on the size of the window.} xywh {317 161 25 25} box UP_BOX down_box DOWN_BOX value 1 align 8
                 }
                 Fl_Check_Button uiPrefsRaiseOnEnter {
-                  label {Raise on Enter} selected
+                  label {Raise on Enter}
                   tooltip {When selected, mrv2 will raise the window to the front once you enter the view window.} xywh {317 190 25 25} box UP_BOX down_box DOWN_BOX value 1 align 8
                 }
                 Fl_Group uiPrefsOpenMode {
@@ -359,7 +359,7 @@ If you try to open several mrv2s with different images, all these images will be
               }
             }
             Fl_Group {} {
-              label {Language and Colors} open
+              label {Language and Colors}
               xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
@@ -1502,7 +1502,7 @@ v->uiOCIO_Display_View->do_callback();}
               }
             }
             Fl_Group {} {
-              label Audio open
+              label Audio
               xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {open
@@ -1531,6 +1531,29 @@ v->uiOCIO_Display_View->do_callback();}
                     code1 {o->value(0);}
                     class {mrv::Choice}
                   } {}
+                }
+              }
+            }
+            Fl_Group {} {
+              label ComfyUI selected
+              tooltip {Here are the current settings to interact with ComfyUI.  It requires installation of mrv2's comfyUI nodes.} xywh {298 47 555 360} box EMBOSSED_BOX align 5
+            } {
+              Fl_Group {} {open
+                xywh {352 70 446 313}
+              } {
+                Fl_Choice uiPrefsUseComfyUIPipe {
+                  label {Use ComfyUI Pipe} open
+                  tooltip {This setting opens a pipe to communicate with ComfyUI's mrv2_save_exr_node.py} xywh {497 182 255 25} down_box BORDER_BOX align 132 textcolor 32
+                  class {mrv::Choice}
+                } {
+                  MenuItem {} {
+                    label No
+                    xywh {40 40 100 20}
+                  }
+                  MenuItem {} {
+                    label Yes
+                    xywh {40 40 100 20}
+                  }
                 }
               }
             }
@@ -1715,6 +1738,7 @@ o->add( _("Path Mappings") );
 o->add( _("Network") );
 o->add( _("Video") );
 o->add( _("Audio") );
+o->add( _("ComfyUI") );
 o->add( _("Errors") );
 o->add( _("Behavior") );
 o->select( item );} {}
