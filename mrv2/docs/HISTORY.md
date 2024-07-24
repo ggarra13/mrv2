@@ -35,6 +35,7 @@ v1.2.2
 - FLTK fixes to OpenGL 3 for Debian 12+ and AMD/Mesa systems under X11.
 - Added libsnappy version and copyright to About window.
 - Made path mapping reject two identical remote paths.
+- Updated SVT-AV1 library for MSVC 2019 and MSVC 2022 (v2.1.2).
 
 
 v1.2.1
