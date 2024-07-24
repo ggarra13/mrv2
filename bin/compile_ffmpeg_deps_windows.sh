@@ -207,9 +207,11 @@ if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 ]]; then
 		    --disable-unit-tests \
 		    --disable-examples \
 		    --disable-docs
-	echo "Contents of vpx.vcxproj"
-	cat vpx.vcxproj
-	echo "-----------------------"
+	echo "Contents of *vpx* directory after configure"
+	ls $PWD/*vpx*
+	# echo "Contents of vpx.vcxproj"
+	# cat vpx.vcxproj
+	# echo "-----------------------"
 	make -j ${CPU_CORES}
 	make install
 	run_cmd mv $INSTALL_DIR/lib/x64/vpxmd.lib $INSTALL_DIR/lib/vpx.lib
