@@ -83,7 +83,7 @@ class PreferencesUI {open
 } {
   decl {ViewerUI* main;} {private local
   }
-  Function {make_window(ViewerUI* m)} {open private
+  Function {make_window(ViewerUI* m)} {open selected private
   } {
     Fl_Window uiMain {
       label Preferences
@@ -92,18 +92,18 @@ class PreferencesUI {open
       code0 {main = m;} visible
     } {
       Fl_Group {} {open
-        xywh {0 0 847 466} box FLAT_BOX
+        xywh {0 0 853 466} box FLAT_BOX
       } {
         Fl_Group {} {open
-          xywh {283 28 564 428}
+          xywh {283 28 570 428}
         } {
           Fl_Wizard uiWizard {
             label Settings open
-            xywh {283 28 564 380} box PLASTIC_UP_BOX labelcolor 32
+            xywh {283 28 570 380} box PLASTIC_UP_BOX labelcolor 32
           } {
             Fl_Group {} {
-              label {User Interface}
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
+              label {User Interface} open
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {
                 label {Window Behavior} open
@@ -130,25 +130,29 @@ If you try to open several mrv2s with different images, all these images will be
                   label {Raise on Enter}
                   tooltip {When selected, mrv2 will raise the window to the front once you enter the view window.} xywh {317 190 25 25} box UP_BOX down_box DOWN_BOX value 1 align 8
                 }
-                Fl_Group uiPrefsOpenMode {
-                  xywh {608 67 195 95} box UP_BOX
+                Fl_Group uiPrefsOpenMode {open
+                  xywh {607 67 196 142} box UP_BOX
                 } {
                   Fl_Round_Button {} {
                     label Normal
-                    tooltip {When selected, mrv2 will resize its window to the first image.} xywh {613 73 25 26} type Radio box ROUND_UP_BOX down_box ROUND_DOWN_BOX value 1 align 8
+                    tooltip {When selected, mrv2 will resize its window to the first image.} xywh {619 80 25 26} type Radio box ROUND_UP_BOX down_box ROUND_DOWN_BOX value 1 align 8
                   }
                   Fl_Round_Button {} {
                     label Fullscreen
-                    tooltip {When selected, mrv2 will start in full screen mode.} xywh {613 101 25 26} type Radio box ROUND_UP_BOX down_box ROUND_DOWN_BOX align 8
+                    tooltip {When selected, mrv2 will start in full screen mode.} xywh {619 110 25 26} type Radio box ROUND_UP_BOX down_box ROUND_DOWN_BOX align 8
                   }
                   Fl_Round_Button {} {
                     label Presentation
-                    tooltip {When selected, mrv2 will start in presentation mode.} xywh {613 130 25 26} type Radio box ROUND_UP_BOX down_box ROUND_DOWN_BOX align 8
+                    tooltip {When selected, mrv2 will start in presentation mode.} xywh {619 140 25 26} type Radio box ROUND_UP_BOX down_box ROUND_DOWN_BOX align 8
+                  }
+                  Fl_Round_Button {} {
+                    label Maximized
+                    tooltip {When selected, mrv2 will start in a maximized window.} xywh {619 170 25 26} type Radio box ROUND_UP_BOX down_box ROUND_DOWN_BOX align 8
                   }
                 }
               }
               Fl_Group {} {
-                label {UI Elements} open
+                label {UI Elements}
                 xywh {293 247 545 140} box ROUNDED_BOX
               } {
                 Fl_Check_Button uiPrefsMenuBar {
@@ -1535,8 +1539,8 @@ v->uiOCIO_Display_View->do_callback();}
               }
             }
             Fl_Group {} {
-              label ComfyUI selected
-              tooltip {Here are the current settings to interact with ComfyUI.  It requires installation of mrv2's comfyUI nodes.} xywh {298 47 555 360} box EMBOSSED_BOX align 5
+              label ComfyUI
+              tooltip {Here are the current settings to interact with ComfyUI.  It requires installation of mrv2's comfyUI nodes.} xywh {298 47 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {open
                 xywh {352 70 446 313}

@@ -1832,7 +1832,7 @@ namespace mrv
 
         Fl_Round_Button* r;
 
-        r = (Fl_Round_Button*)uiPrefs->uiPrefsOpenMode->child(1);
+        r = (Fl_Round_Button*)uiPrefs->uiPrefsOpenMode->child(0);
         int normal = r->value();
 
         r = (Fl_Round_Button*)uiPrefs->uiPrefsOpenMode->child(1);
@@ -1847,6 +1847,14 @@ namespace mrv
 
         if (normal)
             view->setFullScreenMode(false);
+        
+        r = (Fl_Round_Button*)uiPrefs->uiPrefsOpenMode->child(3);
+        int maximized = r->value();
+        if (maximized)
+        {
+            ui->uiMain->show();
+            view->setMaximized();
+        }
 
         bool value = uiPrefs->uiPrefsAlwaysOnTop->value();
         int fullscreen_active = ui->uiMain->fullscreen_active();

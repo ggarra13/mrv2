@@ -146,6 +146,9 @@ namespace mrv
         //! bars or dock tools).
         bool presentation = false;
 
+        //! Sets whether the window starts in maximized mode.
+        bool maximized = false;
+
         //! Whether the current frame represengs a missing frame in a sequence.
         bool missingFrame = false;
 

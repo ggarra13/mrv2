@@ -2333,6 +2333,13 @@ namespace mrv
         w->fill_menu(p.ui->uiMenuBar);
     }
 
+    void TimelineViewport::setMaximized() noexcept
+    {
+        TLRENDER_P();
+        MainWindow* w = p.ui->uiMain;
+        w->maximize();
+    }
+
     void TimelineViewport::_updateDisplayOptions(
         const timeline::DisplayOptions& d) noexcept
     {

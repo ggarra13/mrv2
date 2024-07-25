@@ -40,6 +40,7 @@ v1.2.2
 - Fixed primary screen resizing on second monitor moving to first monitor.
   This might also fix crashes due to different monitor resolutions.
 - Fixed secondary screen hiding timeline when going to presentation mode.
+- Added Window->Preferences->User Interface->Maximized option.
 
 
 v1.2.1

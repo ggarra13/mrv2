@@ -256,6 +256,9 @@ namespace mrv
         //! Set or unset the window to full screen and hide/show all bars.
         void setPresentationMode(bool active = true) noexcept;
 
+        //! Set or unset the window in maximized state.
+        void setMaximized() noexcept;
+        
         //! Get the window to full screen and hide/show all bars.
         bool getPresentationMode() const noexcept;
 
