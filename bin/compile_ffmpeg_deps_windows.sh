@@ -216,10 +216,10 @@ if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 ]]; then
 	make V=1 vpx.vcxproj
 
 	echo "Contents of vpx.vcxproj:"
+	echo "-------------------------------------------------------"
 	cat vpx.vcxproj
 	echo "-------------------------------------------------------"
 	
-	exit 1
 	
 	echo "Running full make -j ${CPU_CORES}"
 	make -j ${CPU_CORES}
