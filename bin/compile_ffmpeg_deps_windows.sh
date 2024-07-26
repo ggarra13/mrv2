@@ -228,7 +228,7 @@ if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 ]]; then
 	
 	
 	./configure --prefix=$INSTALL_DIR \
-		    --target=x86_64-win64-vs16 \
+		    --target=x86_64-win64-vs17 \
 		    --enable-vp9-highbitdepth \
 		    --disable-unit-tests \
 		    --disable-examples \
@@ -421,7 +421,7 @@ fi
 export PATH="$OLD_PATH"
 
 #
-# Set PKG_CONFIG_PATH 
+# Set PKG_CONFIG_PATH (not really needed)
 #
 export PKG_CONFIG_PATH=$INSTALL_DIR/lib/pkgconfig:$PKG_CONFIG_PATH
 
