@@ -212,26 +212,13 @@ if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 ]]; then
 		    --disable-unit-tests \
 		    --disable-examples \
 		    --disable-docs
-	echo "Contents of Makefile after configure"
-	cat Makefile
-	echo "------------------------------------------------------"
-
-	for x in *.mk; do
-	    echo "Contents of ${x} after configure"
-	    cat ${x}
-	    echo "------------------------------------------------------"
-	done
-
-	echo "Make database...."
-	make -p
-
-	echo "Contents of *.sln and *.vc*"
-	ls *.sln
-	echo "------------------------------------------------------"
-
 	
+	make V=1 vpx.vcxproj
+
+	echo "Contents of vpx.vcxproj:"
+	cat vpx.vcxproj
+	echo "-------------------------------------------------------"
 	
-	echo "EXITING--------------"
 	exit 1
 	
 	echo "Running full make -j ${CPU_CORES}"
