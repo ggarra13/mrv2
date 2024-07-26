@@ -41,6 +41,9 @@ X264_TAG=stable
 #
 # Repositories
 #
+YASM_REPO=http://www.tortall.net/projects/yasm/releases/yasm-1.3.0-win64.exe
+YASM_REPO2=https://github.com/yasm/yasm/releases/download/v1.3.0/yasm-1.3.0-win64.exe
+
 SVTAV1_REPO=https://gitlab.com/AOMediaCodec/SVT-AV1.git
 LIBVPX_REPO=https://chromium.googlesource.com/webm/libvpx.git
 LIBDAV1D_REPO=https://code.videolan.org/videolan/dav1d.git 
@@ -159,7 +162,19 @@ download_yasm() {
 
     if [ ! -e yasm.exe ]; then
 	# We need to download a win64 specific yasm, not msys64 one
-	wget -c https://github.com/yasm/yasm/releases/download/v1.3.0/yasm-1.3.0-win64.exe
+	{
+	    wget -c "$YASM_REPO"
+	} || {
+	    echo "Failed to download from $YASM_REPO. Trying $YASM_REPO2..."
+	    wget -c "$YASM_REPO2"
+	    echo "Downloaded from $YASM_REPO2"
+	}
+
+	if [ ! -e yasm-1.3.0-win64.exe ]; then
+	    echo "Failed downloading yasm from any repo."
+	    exit 1
+	fi
+	
 	mv yasm-1.3.0-win64.exe yasm.exe
     fi
 }
