@@ -197,15 +197,21 @@ if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 ]]; then
 	echo "Compiling libvpx......"
 	echo
 	
+	echo ""
 	echo "YASM is:"
+	echo ""
 	which yasm
 	
+	echo ""
 	echo "PATH=${PATH}"
+	echo ""
 
-	#
-	# \@note: do not use --target=x86_64-win64-vs17 as that compiles for
-	#         latest MSVC on github Actions.
-	#
+	echo ""
+	echo "ls  $ROOT_DIR/sources/"
+	echo ""
+	ls  $ROOT_DIR/sources/
+	
+	
 	./configure --prefix=$INSTALL_DIR \
 		    --target=x86_64-win64-vs16 \
 		    --enable-vp9-highbitdepth \
@@ -221,8 +227,10 @@ if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 ]]; then
 	echo "-------------------------------------------------------"
 	
 	
-	echo "Running full make -j ${CPU_CORES}"
-	make -j ${CPU_CORES}
+	echo "Running full make -j 1"
+	make -j 1 # -j ${CPU_CORES}
+	exit 1
+	
 	make install
 	run_cmd mv $INSTALL_DIR/lib/x64/vpxmd.lib $INSTALL_DIR/lib/vpx.lib
 	run_cmd rm -rf $INSTALL_DIR/lib/x64/
