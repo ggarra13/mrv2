@@ -6,9 +6,6 @@
 #include <sstream>
 
 #include <tlIO/System.h>
-#if defined(TLRENDER_USD)
-#    include <tlIO/USD.h>
-#endif // TLRENDER_USD
 
 #include <tlCore/StringFormat.h>
 #include <tlCore/AudioSystem.h>
@@ -41,6 +38,10 @@ namespace py = pybind11;
 #include "mrvWidgets/mrvPythonOutput.h"
 
 #include "mrvGL/mrvGLViewport.h"
+
+#if defined(TLRENDER_USD)
+#    include "mrvOptions/mrvUSD.h"
+#endif // TLRENDER_USD
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
@@ -157,13 +158,8 @@ namespace mrv
         bool otioEditMode = false;
 
 #if defined(TLRENDER_USD)
-        int usdRenderWidth = 1920;
-        float usdComplexity = 1.F;
-        usd::DrawMode usdDrawMode = usd::DrawMode::ShadedSmooth;
-        bool usdEnableLighting = true;
-        bool usdSRGB = true;
-        size_t usdStageCache = 10;
-        size_t usdDiskCache = 0;
+        bool usdOverrides = false;
+        usd::RenderOptions usd;
 #endif // TLRENDER_USD
     };
 
@@ -384,36 +380,48 @@ namespace mrv
                         p.options.resetHotkeys, {"-resetHotkeys"},
                         _("Reset hotkeys to defaults.")),
 #if defined(TLRENDER_USD)
+                    app::CmdLineValueOption<bool>::create(
+                        p.options.usdOverrides, {"-usd", "-usdOverrides"},
+                        "USD overrides.",
+                        string::Format("{0}").arg(p.options.usdOverrides)),
                     app::CmdLineValueOption<int>::create(
-                        p.options.usdRenderWidth, {"-usdRenderWidth"},
+                        p.options.usd.renderWidth, {"-usdRenderWidth"},
                         "USD render width.",
-                        string::Format("{0}").arg(p.options.usdRenderWidth)),
+                        string::Format("{0}").arg(p.options.usd.renderWidth)),
                     app::CmdLineValueOption<float>::create(
-                        p.options.usdComplexity, {"-usdComplexity"},
+                        p.options.usd.complexity, {"-usdComplexity"},
                         "USD render complexity setting.",
-                        string::Format("{0}").arg(p.options.usdComplexity)),
-                    app::CmdLineValueOption<usd::DrawMode>::create(
-                        p.options.usdDrawMode, {"-usdDrawMode"},
+                        string::Format("{0}").arg(p.options.usd.complexity)),
+                    app::CmdLineValueOption<tl::usd::DrawMode>::create(
+                        p.options.usd.drawMode, {"-usdDrawMode"},
                         "USD render draw mode.",
-                        string::Format("{0}").arg(p.options.usdDrawMode),
-                        string::join(usd::getDrawModeLabels(), ", ")),
+                        string::Format("{0}").arg(p.options.usd.drawMode),
+                        string::join(tl::usd::getDrawModeLabels(), ", ")),
                     app::CmdLineValueOption<bool>::create(
-                        p.options.usdEnableLighting, {"-usdEnableLighting"},
+                        p.options.usd.enableLighting, {"-usdEnableLighting"},
                         "USD render enable lighting setting.",
-                        string::Format("{0}").arg(p.options.usdEnableLighting)),
+                        string::Format("{0}").arg(p.options.usd.enableLighting)),
                     app::CmdLineValueOption<bool>::create(
-                        p.options.usdEnableLighting, {"-usdSRGB"},
+                        p.options.usd.enableSceneLights, {"-usdEnableSceneLights"},
+                        "USD render enable scene lights setting.",
+                        string::Format("{0}").arg(p.options.usd.enableSceneLights)),
+                    app::CmdLineValueOption<bool>::create(
+                        p.options.usd.enableSceneMaterials, {"-usdEnableSceneMaterials"},
+                        "USD render enable scene materials setting.",
+                        string::Format("{0}").arg(p.options.usd.enableSceneMaterials)),
+                    app::CmdLineValueOption<bool>::create(
+                        p.options.usd.sRGB, {"-usdSRGB"},
                         "USD render SRGB setting.",
-                        string::Format("{0}").arg(p.options.usdSRGB)),
+                        string::Format("{0}").arg(p.options.usd.sRGB)),
                     app::CmdLineValueOption<size_t>::create(
-                        p.options.usdStageCache, {"-usdStageCache"},
+                        p.options.usd.stageCache, {"-usdStageCache"},
                         "USD stage cache size.",
-                        string::Format("{0}").arg(p.options.usdStageCache)),
+                        string::Format("{0}").arg(p.options.usd.stageCache)),
                     app::CmdLineValueOption<size_t>::create(
-                        p.options.usdDiskCache, {"-usdDiskCache"},
+                        p.options.usd.diskCache, {"-usdDiskCache"},
                         "USD disk cache size in gigabytes. A size of zero "
                         "disables the cache.",
-                        string::Format("{0}").arg(p.options.usdDiskCache)),
+                        string::Format("{0}").arg(p.options.usd.diskCache)),
 #endif // TLRENDER_USD
 
 #ifdef MRV2_NETWORK
@@ -587,22 +595,25 @@ namespace mrv
 #endif
 
 #if defined(TLRENDER_USD)
-        p.settings->setValue(
-            "USD/renderWidth", static_cast<int>(p.options.usdRenderWidth));
-        p.settings->setValue(
-            "USD/complexity", static_cast<float>(p.options.usdComplexity));
-        p.settings->setValue(
-            "USD/drawMode", static_cast<int>(p.options.usdDrawMode));
-        p.settings->setValue(
-            "USD/enableLighting",
-            static_cast<int>(p.options.usdEnableLighting));
-        p.settings->setValue("USD/sRGB", static_cast<int>(p.options.usdSRGB));
-        p.settings->setValue(
-            "USD/stageCacheByteCount",
-            static_cast<int>(p.options.usdStageCache));
-        p.settings->setValue(
-            "USD/diskCacheByteCount",
-            static_cast<int>(p.options.usdDiskCache * memory::gigabyte));
+        if (p.options.usdOverrides)
+        {
+            p.settings->setValue(
+                "USD/renderWidth", static_cast<int>(p.options.usd.renderWidth));
+            p.settings->setValue(
+                "USD/complexity", static_cast<float>(p.options.usd.complexity));
+            p.settings->setValue(
+                "USD/drawMode", static_cast<int>(p.options.usd.drawMode));
+            p.settings->setValue(
+                "USD/enableLighting",
+                static_cast<bool>(p.options.usd.enableLighting));
+            p.settings->setValue("USD/sRGB", static_cast<bool>(p.options.usd.sRGB));
+            p.settings->setValue(
+                "USD/stageCacheByteCount",
+                static_cast<int>(p.options.usd.stageCache));
+            p.settings->setValue(
+                "USD/diskCacheByteCount",
+                static_cast<int>(p.options.usd.diskCache * memory::gigabyte));
+        }
 #endif // TLRENDER_USD
 
 #ifdef TLRENDER_NDI
@@ -1326,7 +1337,7 @@ namespace mrv
         out["USD/complexity"] = string::Format("{0}").arg(complexity);
         {
             std::stringstream ss;
-            usd::DrawMode usdDrawMode = static_cast<usd::DrawMode>(
+            tl::usd::DrawMode usdDrawMode = static_cast<tl::usd::DrawMode>(
                 p.settings->getValue<int>("USD/drawMode"));
             ss << usdDrawMode;
             out["USD/drawMode"] = ss.str();

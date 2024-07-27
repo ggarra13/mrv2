@@ -5,23 +5,7 @@
 
 
 #
-#
-# Small build script for mrv2.  Run it from the root of the mrv2 dir, like:
-#
-# ./bin/runme_small.sh
-#
-# It builds all dependencies and will install
-# the main executable on BUILD_DIR (by default
-#                                   BUILD-OS-ARCH/BUILD_TYPE/install/bin).
-#
-# The small build does not have Python, USD, PDF, NDI or NETWORK support.
-# It is intended for solo artists.
-# 
-#
-# On Linux and macOS, it will also create a mrv2 or mrv2-dbg symbolic link
-# in $HOME/bin if the directory exists.
-#
-# It will also log the compilation on $BUILD_DIR/compile.log
+# Cleans up USD directories for an upgrade of OpenUSD.
 #
 
 

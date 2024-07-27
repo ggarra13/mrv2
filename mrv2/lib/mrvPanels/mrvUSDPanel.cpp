@@ -134,7 +134,7 @@ namespace mrv
                 [=](auto o)
                 {
                     const Fl_Menu_Item* item = o->mvalue();
-                    std::string renderName = item->label();
+                    const std::string& renderName = item->label();
                     settings->setValue("USD/rendererName", renderName);
                     _update();
                 });
@@ -209,13 +209,16 @@ namespace mrv
                 g->x() + 90, Y, g->w(), 20, _("Enable Lighting"));
             Fl_Check_Button* c = cV;
             c->labelsize(12);
+            std::cerr << "lighting="
+                      << settings->getValue<bool>("USD/enableLighting")
+                      << std::endl;
             c->value(settings->getValue<bool>("USD/enableLighting"));
 
             cV->callback(
                 [=](auto w)
                 {
                     int v = w->value();
-                    settings->setValue("USD/enableLighting", v);
+                    settings->setValue("USD/enableLighting", (bool)v);
                     _update();
                 });
 
@@ -231,7 +234,7 @@ namespace mrv
                 [=](auto w)
                 {
                     int v = w->value();
-                    settings->setValue("USD/enableSceneLights", v);
+                    settings->setValue("USD/enableSceneLights", (bool)v);
                     _update();
                 });
 
@@ -247,7 +250,7 @@ namespace mrv
                 [=](auto w)
                 {
                     int v = w->value();
-                    settings->setValue("USD/enableSceneMaterials", v);
+                    settings->setValue("USD/enableSceneMaterials", (bool)v);
                     _update();
                 });
 
