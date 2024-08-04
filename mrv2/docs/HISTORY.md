@@ -45,6 +45,9 @@ v1.2.2
 - Added Window->Preferences->User Interface->Maximized option.
 - Upgraded to OpenUSD v24.08 without boost (yeah!).
 - Fixed saving of OpenUSD settings.
+- Added a ComfyUI directory with a mrv2 a custom node to allow saving
+  EXR images in full half/float precision.  For those that believe in AI,
+  see the instructions on how to install it in the ComfyUI directory.
 
 
 v1.2.1
