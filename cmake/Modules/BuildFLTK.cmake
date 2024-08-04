@@ -8,8 +8,8 @@ include( ExternalProject )
 #set( FLTK_GIT_TAG master )
 
 # Latest Stable Wayland (moving, resizing and subwindows okay.
-# OpenGL3 fixes for AMD and newer Debian distros.
-set(FLTK_GIT_TAG 7f998bac6007a6433740bc82ce7412233250d44a) 
+# OpenGL3 fixes for AMD and newer Debian distros. 
+set(FLTK_GIT_TAG 46dd1b33ccb1e34be0b7a6d41a162e4dd611a548)
 
 if(MRV2_PYFLTK OR FLTK_BUILD_SHARED)
     # If we are building pyFLTK compile shared
