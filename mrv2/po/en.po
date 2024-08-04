@@ -2301,6 +2301,9 @@ msgstr "Pixel ratio of clip"
 msgid "Video Rotation"
 msgstr "Video Rotation"
 
+msgid "Compression"
+msgstr "Compression"
+
 msgid "unsigned byte (8-bits per channel)"
 msgstr "unsigned byte (8-bits per channel)"
 
@@ -2773,6 +2776,13 @@ msgstr "Remote file {0} does not match local filename."
 msgid "Removing {0} from message publisher."
 msgstr "Removing {0} from message publisher."
 
+#, fuzzy
+msgid "Server listening on port "
+msgstr "Server started at port {0}."
+
+msgid "ComfyUI listening on port "
+msgstr ""
+
 msgid "Connected to server at {0}, port {1}"
 msgstr "Connected to server at {0}, port {1}"
 
@@ -2982,6 +2992,10 @@ msgstr "Setting OCIO config to default:"
 
 msgid "Setting OCIO config to built-in:"
 msgstr "Setting OCIO config to built-in:"
+
+#, fuzzy
+msgid "Path mapping for {0} already exists!"
+msgstr "OCIO Preset '{0}' already exists!"
 
 msgid "Comparing {0} to prefix {1}"
 msgstr "Comparing {0} to prefix {1}"
@@ -5129,9 +5143,6 @@ msgstr "Save Annotations burned into the movie or sequence."
 msgid "OpenEXR Options"
 msgstr "OpenEXR Options"
 
-msgid "Compression"
-msgstr "Compression"
-
 msgid "OpenEXR's Compression Type"
 msgstr "OpenEXR's Compression Type"
 
@@ -5410,6 +5421,14 @@ msgstr "Presentation"
 
 msgid "When selected, mrv2 will start in presentation mode."
 msgstr "When selected, mrv2 will start in presentation mode."
+
+#, fuzzy
+msgid "Maximized"
+msgstr "Maximum"
+
+#, fuzzy
+msgid "When selected, mrv2 will start in a maximized window."
+msgstr "When selected, mrv2 will start with the timeline shown."
 
 msgid "UI Elements"
 msgstr "UI Elements"
@@ -6057,6 +6076,21 @@ msgstr "Output Device"
 
 msgid "Output Device to use for audio playback."
 msgstr "Output Device to use for audio playback."
+
+msgid "ComfyUI"
+msgstr ""
+
+msgid ""
+"Here are the current settings to interact with ComfyUI.  It requires "
+"installation of mrv2's comfyUI nodes."
+msgstr ""
+
+msgid "Use ComfyUI Pipe"
+msgstr ""
+
+msgid ""
+"This setting opens a pipe to communicate with ComfyUI's mrv2_save_exr_node.py"
+msgstr ""
 
 msgid "Errors"
 msgstr "Errors"

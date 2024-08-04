@@ -2335,6 +2335,9 @@ msgstr "Radio de pixel del clip"
 msgid "Video Rotation"
 msgstr "Rotación del Video"
 
+msgid "Compression"
+msgstr "Compresión"
+
 msgid "unsigned byte (8-bits per channel)"
 msgstr "byte sin signo (8-bits por canal)"
 
@@ -2826,6 +2829,12 @@ msgstr "Archivo remoto {0} no es igual al archivo local."
 msgid "Removing {0} from message publisher."
 msgstr "Removiendo {0} del publicador de mensajes."
 
+msgid "Server listening on port "
+msgstr "Servidor corriendo en puerto "
+
+msgid "ComfyUI listening on port "
+msgstr ""
+
 msgid "Connected to server at {0}, port {1}"
 msgstr "Conectado al servidor en {0}, puerto {1}"
 
@@ -3036,6 +3045,9 @@ msgstr "Seteando OCIO config a defecto:"
 
 msgid "Setting OCIO config to built-in:"
 msgstr "Seteando OCIO config a incorporada:"
+
+msgid "Path mapping for {0} already exists!"
+msgstr "¡Preseteo OCIO '{0}' ya existe!"
 
 msgid "Comparing {0} to prefix {1}"
 msgstr "Comparando {0} a prefijo {1}"
@@ -4537,7 +4549,6 @@ msgstr ""
 msgid "Pixel Format Help"
 msgstr "Ayuda de Formato de Pixel"
 
-#, fuzzy
 msgid ""
 "\n"
 "  The Pixel Format specifies how the video is encoded in the\n"
@@ -4571,6 +4582,7 @@ msgstr ""
 "\n"
 "      - YUV (Luminancia, Cr, Cb)\n"
 "      - BGR (RGB con canales invertidos)\n"
+"      - RGB\n"
 "\n"
 "  Además, algunos perfiles suportan un canal alfa (transparencia),\n"
 "  como BGRA.\n"
@@ -5179,9 +5191,6 @@ msgstr "Grabar anotaciones fijas en la película o secuencia."
 msgid "OpenEXR Options"
 msgstr "Opciones de OpenEXR"
 
-msgid "Compression"
-msgstr "Compresión"
-
 msgid "OpenEXR's Compression Type"
 msgstr "Tipo de Compresión de OpenEXR"
 
@@ -5461,6 +5470,12 @@ msgstr "Presentación"
 
 msgid "When selected, mrv2 will start in presentation mode."
 msgstr "Cuando se selecciona, mrv2 comenzará en modo de presentación."
+
+msgid "Maximized"
+msgstr "Maximizado"
+
+msgid "When selected, mrv2 will start in a maximized window."
+msgstr "Al seleccionarlo, mrv2 comenzará con una ventana maximizada."
 
 msgid "UI Elements"
 msgstr "Elementos de UI"
@@ -6127,6 +6142,21 @@ msgstr "Equipo de Salida"
 
 msgid "Output Device to use for audio playback."
 msgstr "Equipo o tarjeta a usar para la reproducción de audio."
+
+msgid "ComfyUI"
+msgstr ""
+
+msgid ""
+"Here are the current settings to interact with ComfyUI.  It requires "
+"installation of mrv2's comfyUI nodes."
+msgstr ""
+
+msgid "Use ComfyUI Pipe"
+msgstr ""
+
+msgid ""
+"This setting opens a pipe to communicate with ComfyUI's mrv2_save_exr_node.py"
+msgstr ""
 
 msgid "Errors"
 msgstr "Errores"
