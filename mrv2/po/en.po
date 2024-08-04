@@ -2776,12 +2776,11 @@ msgstr "Remote file {0} does not match local filename."
 msgid "Removing {0} from message publisher."
 msgstr "Removing {0} from message publisher."
 
-#, fuzzy
 msgid "Server listening on port "
-msgstr "Server started at port {0}."
+msgstr "Server listening on port "
 
 msgid "ComfyUI listening on port "
-msgstr ""
+msgstr "ComfyUI listening on port "
 
 msgid "Connected to server at {0}, port {1}"
 msgstr "Connected to server at {0}, port {1}"
@@ -2993,9 +2992,8 @@ msgstr "Setting OCIO config to default:"
 msgid "Setting OCIO config to built-in:"
 msgstr "Setting OCIO config to built-in:"
 
-#, fuzzy
 msgid "Path mapping for {0} already exists!"
-msgstr "OCIO Preset '{0}' already exists!"
+msgstr "Path mapping para {0} already exists!"
 
 msgid "Comparing {0} to prefix {1}"
 msgstr "Comparing {0} to prefix {1}"
@@ -5422,13 +5420,11 @@ msgstr "Presentation"
 msgid "When selected, mrv2 will start in presentation mode."
 msgstr "When selected, mrv2 will start in presentation mode."
 
-#, fuzzy
 msgid "Maximized"
-msgstr "Maximum"
+msgstr "Maximizado"
 
-#, fuzzy
 msgid "When selected, mrv2 will start in a maximized window."
-msgstr "When selected, mrv2 will start with the timeline shown."
+msgstr "When selected, mrv2 will start in a maximized window."
 
 msgid "UI Elements"
 msgstr "UI Elements"
@@ -6078,19 +6074,22 @@ msgid "Output Device to use for audio playback."
 msgstr "Output Device to use for audio playback."
 
 msgid "ComfyUI"
-msgstr ""
+msgstr "ComfyUI"
 
 msgid ""
 "Here are the current settings to interact with ComfyUI.  It requires "
 "installation of mrv2's comfyUI nodes."
 msgstr ""
+"Here are the current settings to interact with ComfyUI.  It requires "
+"installation of mrv2's comfyUI nodes."
 
 msgid "Use ComfyUI Pipe"
-msgstr ""
+msgstr "Use ComfyUI Pipe"
 
 msgid ""
 "This setting opens a pipe to communicate with ComfyUI's mrv2_save_exr_node.py"
 msgstr ""
+"This setting opens a pipe to communicate with ComfyUI's mrv2_save_exr_node.py"
 
 msgid "Errors"
 msgstr "Errors"

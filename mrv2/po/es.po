@@ -2833,7 +2833,7 @@ msgid "Server listening on port "
 msgstr "Servidor corriendo en puerto "
 
 msgid "ComfyUI listening on port "
-msgstr ""
+msgstr "ComfyUI escuchando en el puerto "
 
 msgid "Connected to server at {0}, port {1}"
 msgstr "Conectado al servidor en {0}, puerto {1}"
@@ -6144,19 +6144,22 @@ msgid "Output Device to use for audio playback."
 msgstr "Equipo o tarjeta a usar para la reproducción de audio."
 
 msgid "ComfyUI"
-msgstr ""
+msgstr "ComfyUI"
 
 msgid ""
 "Here are the current settings to interact with ComfyUI.  It requires "
 "installation of mrv2's comfyUI nodes."
 msgstr ""
+"Aquí estan los seteos actuales para interactuar con ComfyUI.  Requiere la "
+"instalación de los nodos de mrv2 de comfyUI."
 
 msgid "Use ComfyUI Pipe"
-msgstr ""
+msgstr "Usar la Conexión ComfyUI"
 
 msgid ""
 "This setting opens a pipe to communicate with ComfyUI's mrv2_save_exr_node.py"
 msgstr ""
+"Este seteo abre una tubería para comunicarse con el node de ComfyUI mrv2_save_exr_node.py"
 
 msgid "Errors"
 msgstr "Errores"
