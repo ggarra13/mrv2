@@ -117,7 +117,7 @@ mrv2/lib:
 	mrvFLU     - mrv2's custom file chooser (based on origina FLU
 	             file chooser).  Needs refactoring and code cleanup.
 	mrvGL      - OpenGL driver classes.
-	mrvNetwork - Network classes for machi
+	mrvNetwork - Network classes.
 	mrvOptions - Options classes for mrv2's custom code.
 	mrvPanels  - All of mrv2's Docking Panels/Windows.
 	mrvPDF     - PDF exporting classes.  Needs updating to FLTK's new
