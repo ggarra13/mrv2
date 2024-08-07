@@ -1319,6 +1319,14 @@ namespace mrv
         refresh_media_cb(m, ui);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
+    
+    void normalize_image_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
+        ui->uiView->setNormalizedImage(item->checked());
+        refresh_media_cb(m, ui);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
 
     void display_window_cb(Fl_Menu_* m, ViewerUI* ui)
     {
@@ -2256,7 +2264,7 @@ namespace mrv
             Fl::check();
         }
     }
-
+    
     void clone_file_cb(Fl_Menu_* m, void* d)
     {
         auto ui = App::ui;
@@ -2283,6 +2291,7 @@ namespace mrv
         newItem->playback = playback;
         newItem->currentTime = currentTime;
         newItem->annotations = item->annotations;
+        
         ui->uiColorChannel->value(layer);
         ui->uiColorChannel->do_callback();
 
@@ -2312,6 +2321,7 @@ namespace mrv
         item->path = media->path;
         item->audioPath = media->audioPath;
         item->inOutRange = media->inOutRange;
+        item->ioInfo = media->ioInfo;
         item->speed = media->speed;
         item->audioOffset = media->audioOffset;
         item->videoLayer = media->videoLayer;

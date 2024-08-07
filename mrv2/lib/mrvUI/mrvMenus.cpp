@@ -242,7 +242,26 @@ namespace mrv
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (ui->uiView->getIgnoreDisplayWindow())
             item->set();
-
+        
+        idx = menu->add(
+            _("View/Auto Normalize"), 0, //kNormalizeImage.hotkey(),
+            (Fl_Callback*)normalize_image_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (numFiles > 0)
+        {
+            // auto player = ui->uiView->getTimelinePlayer();
+            // const auto info = player->ioInfo();
+            // if (info.video.empty() && info.video[0].normalizedImage)
+            // {
+            //     std::cerr << "normalized" << std::endl;
+            //     item->set();
+            // }
+            // else
+            // {
+            //     std::cerr << "not normalized" << std::endl;
+            // }
+        }
+        
         snprintf(buf, 256, "%s", _("View/Toggle Menu bar"));
         idx = menu->add(
             buf, kToggleMenuBar.hotkey(), (Fl_Callback*)toggle_menu_bar, ui,

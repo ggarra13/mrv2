@@ -5,6 +5,8 @@
 #
 # Common CPACK options to all generators
 #
+string(TIMESTAMP THIS_YEAR "%Y")
+
 set( CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/../LICENSE" )
 set( CPACK_PACKAGE_VERSION_MAJOR "${mrv2_VERSION_MAJOR}" )
 set( CPACK_PACKAGE_VERSION_MINOR "${mrv2_VERSION_MINOR}" )
@@ -170,7 +172,7 @@ else()
     # sure there is at least one set of four (4) backlasshes.
     set(CPACK_NSIS_MODIFY_PATH ON)
 
-    set(CPACK_GENERATOR NSIS ZIP)
+    set(CPACK_GENERATOR NSIS)# ZIP)
 
     
     set(CPACK_NSIS_INSTALLED_ICON_NAME "bin/mrv2.exe")
@@ -181,7 +183,7 @@ else()
 
     set(mrv2_DISPLAY_NAME "mrv2-${MRV2_OS_BITS} v${mrv2_VERSION}")
     set(CPACK_NSIS_DISPLAY_NAME "${mrv2_DISPLAY_NAME}" )
-    set(CPACK_NSIS_PACKAGE_NAME "mrv2" )
+    set(CPACK_NSIS_PACKAGE_NAME "mrv2 ${mrv2_VERSION} ${CMAKE_SYSTEM_NAME}-${MRV2_OS_BITS}" )
     set(CPACK_PACKAGE_EXECUTABLES "mrv2" "${mrv2_DISPLAY_NAME}")
     set(CPACK_CREATE_DESKTOP_LINKS "mrv2" "${mrv2_DISPLAY_NAME}")
 

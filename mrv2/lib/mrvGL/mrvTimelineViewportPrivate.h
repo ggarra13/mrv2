@@ -119,6 +119,9 @@ namespace mrv
         //! Ignore Display Window
         static bool ignoreDisplayWindow;
 
+        //! Ignore Display Window
+        static bool normalizedImage;
+
         //! Masking
         static float masking;
 

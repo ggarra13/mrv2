@@ -111,29 +111,35 @@ namespace mrv
         //! Get one of the timeline players.  Index is not checked.
         mrv::TimelinePlayer* getTimelinePlayer() const noexcept;
 
-        //! Return if safe areas are active
+        //! Return if safe areas are active.
         bool getSafeAreas() const noexcept;
 
-        //! Return if data window is active
+        //! Return if data window is active.
         bool getDataWindow() const noexcept;
 
-        //! Return if display window is active
+        //! Return if display window is active.
         bool getDisplayWindow() const noexcept;
 
-        //! Return if ignoring display window is active
+        //! Return if ignoring display window is active.
         bool getIgnoreDisplayWindow() const noexcept;
+        
+        //! Return if normalized image is active.
+        bool getNormalizedImage() const noexcept;
 
-        //! Set the crop mask
+        //! Set the crop mask.
         void setSafeAreas(bool) noexcept;
 
-        //! Set data window
+        //! Set data window.
         void setDataWindow(bool) noexcept;
 
-        //! Set display window
+        //! Set display window.
         void setDisplayWindow(bool) noexcept;
 
-        //! Set ignore of display window
+        //! Set ignore of display window.
         void setIgnoreDisplayWindow(bool) noexcept;
+
+        //! Set normalized image.
+        void setNormalizedImage(bool) noexcept;
 
         //! Clear the help text after 1 second has elapsed.
         void clearHelpText();

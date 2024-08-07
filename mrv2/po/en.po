@@ -5421,7 +5421,7 @@ msgid "When selected, mrv2 will start in presentation mode."
 msgstr "When selected, mrv2 will start in presentation mode."
 
 msgid "Maximized"
-msgstr "Maximizado"
+msgstr "Maximized"
 
 msgid "When selected, mrv2 will start in a maximized window."
 msgstr "When selected, mrv2 will start in a maximized window."

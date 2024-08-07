@@ -1,4 +1,4 @@
-mrv2 v1.2.0
+mrv2 v1.2.2
 =========
 
 mrv2 is an open source professional player and review tool for vfx, animation and computer graphics for Windows, Linux and macOS.
@@ -26,7 +26,7 @@ https://www.github.com/ggarra13/mrv2
 -------------------------------------------------------------------------------
 
 
-mrv2 v1.2.1
+mrv2 v1.2.2
 
 mrv2, an open source professional player and review tool for vfx, animation and computer graphics for Windows, Linux and macOS has a new version.
 

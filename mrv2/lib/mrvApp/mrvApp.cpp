@@ -1313,6 +1313,8 @@ namespace mrv
 #if defined(TLRENDER_EXR)
         out["OpenEXR/IgnoreDisplayWindow"] =
             string::Format("{0}").arg(ui->uiView->getIgnoreDisplayWindow());
+        out["OpenEXR/AutoNormalize"] =
+            string::Format("{1}").arg(ui->uiView->getNormalizedImage());
 #endif
 
 #if defined(TLRENDER_FFMPEG)
@@ -1380,7 +1382,8 @@ namespace mrv
                 try
                 {
                     timelines[i] = _createTimeline(item);
-                    for (const auto& video : timelines[i]->getIOInfo().video)
+                    const auto info = timelines[i]->getIOInfo();
+                    for (const auto& video : info.video)
                     {
                         files[i]->videoLayers.push_back(video.name);
                     }
@@ -1537,6 +1540,7 @@ namespace mrv
                             item->inOutRange = player->inOutRange();
                             item->audioOffset = player->audioOffset();
                             item->lutOptions = p.lutOptions;
+                
 
                             bool autoPlayback =
                                 ui->uiPrefs->uiPrefsAutoPlayback->value();

@@ -51,7 +51,7 @@ namespace mrv
         float volume = 0.F;
         bool mute = false;
         double audioOffset = 0.0;
-
+        
         std::string ocioIcs;
         timeline::LUTOptions lutOptions;
 
