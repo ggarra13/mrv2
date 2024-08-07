@@ -1,3 +1,9 @@
+v1.2.3
+======
+
+- Fixed loading of movies with multiple audio tracks.
+
+
 v1.2.2
 ======
 

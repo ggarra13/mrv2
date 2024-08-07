@@ -2048,7 +2048,7 @@ namespace mrv
                     //
                     auto audio = info.audio;
                     if (i > 0)
-                        audio = info.audio.audioInfo[i];
+                        audio = *info.audio.audioInfo[i];
 
                     auto it = info.tags.find("Audio Codec");
                     if (it != info.tags.end())
