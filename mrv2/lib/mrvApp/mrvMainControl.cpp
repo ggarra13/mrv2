@@ -324,7 +324,7 @@ namespace mrv
                     //! When playing NDI, audioInfo is not filled.
                     if (audio.audioInfo.empty())
                         continue;
-                    const auto& info = audio.audioInfo[i];
+                    const auto& info = *audio.audioInfo[i];
                     const std::string& name = codeToLanguage(info.name);
                     const std::string& trackName =
                         string::Format(_("{0} - Channels: {1} {2} {3}"))
