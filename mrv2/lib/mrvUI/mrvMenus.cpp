@@ -249,6 +249,13 @@ namespace mrv
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (view->getNormalizedImage())
             item->set();
+        
+        idx = menu->add(
+            _("View/Invalid Values"), kInvalidValues.hotkey(),
+            (Fl_Callback*)invalid_values_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (view->getInvalidValues())
+            item->set();
             
         snprintf(buf, 256, "%s", _("View/Toggle Menu bar"));
         idx = menu->add(

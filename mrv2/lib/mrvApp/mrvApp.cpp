@@ -1313,10 +1313,14 @@ namespace mrv
 #if defined(TLRENDER_EXR)
         out["OpenEXR/IgnoreDisplayWindow"] =
             string::Format("{0}").arg(ui->uiView->getIgnoreDisplayWindow());
-        out["OpenEXR/AutoNormalize"] =
-            string::Format("{1}").arg(ui->uiView->getNormalizedImage());
 #endif
-
+#if defined(TLRENDER_EXR) || defined(TLRENDER_STB)
+        out["AutoNormalize"] =
+            string::Format("{0}").arg(ui->uiView->getNormalizedImage());
+        out["InvalidValues"] =
+            string::Format("{0}").arg(ui->uiView->getInvalidValues());
+#endif
+        
 #if defined(TLRENDER_FFMPEG)
         out["FFmpeg/YUVToRGBConversion"] = string::Format("{0}").arg(
             p.settings->getValue<int>("Performance/FFmpegYUVToRGBConversion"));

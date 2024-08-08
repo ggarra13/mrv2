@@ -1327,6 +1327,14 @@ namespace mrv
         refresh_media_cb(m, ui);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
+    
+    void invalid_values_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
+        ui->uiView->setInvalidValues(item->checked());
+        refresh_media_cb(m, ui);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
 
     void display_window_cb(Fl_Menu_* m, ViewerUI* ui)
     {

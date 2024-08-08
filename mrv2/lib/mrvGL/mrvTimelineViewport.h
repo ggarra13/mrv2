@@ -125,6 +125,9 @@ namespace mrv
         
         //! Return if normalized image is active.
         bool getNormalizedImage() const noexcept;
+        
+        //! Return if invalid values is active.
+        bool getInvalidValues() const noexcept;
 
         //! Set the crop mask.
         void setSafeAreas(bool) noexcept;
@@ -141,6 +144,9 @@ namespace mrv
         //! Set normalized image.
         void setNormalizedImage(bool) noexcept;
 
+        //! Set invalid values.
+        void setInvalidValues(bool) noexcept;
+        
         //! Clear the help text after 1 second has elapsed.
         void clearHelpText();
 

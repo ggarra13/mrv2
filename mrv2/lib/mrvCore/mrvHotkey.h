@@ -128,6 +128,7 @@ namespace mrv
 
     extern Hotkey kIgnoreDisplayWindow;
     extern Hotkey kAutoNormalize;
+    extern Hotkey kInvalidValues;
     extern Hotkey kDisplayWindow;
     extern Hotkey kDataWindow;
 

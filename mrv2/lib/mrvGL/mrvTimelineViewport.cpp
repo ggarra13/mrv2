@@ -89,7 +89,8 @@ namespace mrv
     bool TimelineViewport::Private::dataWindow = false;
     bool TimelineViewport::Private::displayWindow = false;
     bool TimelineViewport::Private::ignoreDisplayWindow = false;
-    bool TimelineViewport::Private::normalizedImage = false;
+    bool TimelineViewport::Private::autoNormalize = false;
+    bool TimelineViewport::Private::invalidValues = false;
     std::string TimelineViewport::Private::helpText;
     float TimelineViewport::Private::helpTextFade;
     bool TimelineViewport::Private::hudActive = true;
@@ -901,7 +902,12 @@ namespace mrv
 
     bool TimelineViewport::getNormalizedImage() const noexcept
     {
-        return _p->normalizedImage;
+        return _p->autoNormalize;
+    }
+
+    bool TimelineViewport::getInvalidValues() const noexcept
+    {
+        return _p->invalidValues;
     }
 
     void TimelineViewport::setSafeAreas(bool value) noexcept
@@ -938,9 +944,17 @@ namespace mrv
     
     void TimelineViewport::setNormalizedImage(bool value) noexcept
     {
-        if (value == _p->normalizedImage)
+        if (value == _p->autoNormalize)
             return;
-        _p->normalizedImage = value;
+        _p->autoNormalize = value;
+        redrawWindows();
+    }
+    
+    void TimelineViewport::setInvalidValues(bool value) noexcept
+    {
+        if (value == _p->invalidValues)
+            return;
+        _p->invalidValues = value;
         redrawWindows();
     }
 
@@ -3206,17 +3220,37 @@ namespace mrv
             s >> videoRotation;
         }
         _setVideoRotation(videoRotation);
+
+        
+        bool refreshMenus = false;
         
         i = p.tagData.find("Autonormalize");
         bool autoNormalize = false;
         if (i != p.tagData.end())
         {
             autoNormalize = std::stoi(i->second);
-            if (autoNormalize != p.normalizedImage)
-            {
-                p.normalizedImage = autoNormalize;
-                p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
-            }
+        }
+        if (autoNormalize != p.autoNormalize)
+        {
+            p.autoNormalize = autoNormalize;
+            refreshMenus = true;
+        }
+        
+        i = p.tagData.find("InvalidValues");
+        bool invalidValues = false;
+        if (i != p.tagData.end())
+        {
+            invalidValues = std::stoi(i->second);
+        }
+        if (invalidValues != p.invalidValues)
+        {
+            p.invalidValues = invalidValues;
+            refreshMenus = true;
+        }
+
+        if (refreshMenus)
+        {
+            p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
         }
     }
 
