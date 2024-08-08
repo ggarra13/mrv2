@@ -62,6 +62,8 @@ namespace mrv
     Hotkey kFrameView(false, false, false, false, 0);
     Hotkey kSafeAreas(false, false, false, false, 's');
     Hotkey kIgnoreDisplayWindow(false, false, false, false, 0);
+    Hotkey kAutoNormalize(false, false, false, false, 0);
+    
     Hotkey kDisplayWindow(true, false, false, false, 'd');
     Hotkey kDataWindow(false, false, false, false, 'd');
 
@@ -381,6 +383,7 @@ namespace mrv
         HotkeyEntry(_("Auto Frame View"), &kFrameView),
         HotkeyEntry(_("Safe Areas"), &kSafeAreas),
         HotkeyEntry(_("Ignore Display Window"), &kIgnoreDisplayWindow),
+        HotkeyEntry(_("Auto Normalize"), &kAutoNormalize),
         HotkeyEntry(_("Display Window"), &kDisplayWindow),
         HotkeyEntry(_("Data Window"), &kDataWindow),
         HotkeyEntry(_("Compare Wipe"), &kCompareWipe),

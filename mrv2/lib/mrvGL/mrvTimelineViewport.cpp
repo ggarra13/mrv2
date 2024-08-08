@@ -3206,6 +3206,18 @@ namespace mrv
             s >> videoRotation;
         }
         _setVideoRotation(videoRotation);
+        
+        i = p.tagData.find("Autonormalize");
+        bool autoNormalize = false;
+        if (i != p.tagData.end())
+        {
+            autoNormalize = std::stoi(i->second);
+            if (autoNormalize != p.normalizedImage)
+            {
+                p.normalizedImage = autoNormalize;
+                p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
+            }
+        }
     }
 
     void TimelineViewport::_setVideoRotation(float value) noexcept

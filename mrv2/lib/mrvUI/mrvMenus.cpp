@@ -212,56 +212,44 @@ namespace mrv
             _("View/Auto Frame"), kFrameView.hotkey(),
             (Fl_Callback*)frame_view_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (ui->uiView->hasFrameView())
+        if (view->hasFrameView())
             item->set();
 
         idx = menu->add(
             _("View/Safe Areas"), kSafeAreas.hotkey(),
             (Fl_Callback*)safe_areas_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (ui->uiView->getSafeAreas())
+        if (view->getSafeAreas())
             item->set();
 
         idx = menu->add(
             _("View/Data Window"), kDataWindow.hotkey(),
             (Fl_Callback*)data_window_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (ui->uiView->getDataWindow())
+        if (view->getDataWindow())
             item->set();
 
         idx = menu->add(
             _("View/Display Window"), kDisplayWindow.hotkey(),
             (Fl_Callback*)display_window_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (ui->uiView->getDisplayWindow())
+        if (view->getDisplayWindow())
             item->set();
 
         idx = menu->add(
             _("View/Ignore Display Window"), kIgnoreDisplayWindow.hotkey(),
             (Fl_Callback*)ignore_display_window_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (ui->uiView->getIgnoreDisplayWindow())
+        if (view->getIgnoreDisplayWindow())
             item->set();
         
         idx = menu->add(
-            _("View/Auto Normalize"), 0, //kNormalizeImage.hotkey(),
+            _("View/Auto Normalize"), kAutoNormalize.hotkey(),
             (Fl_Callback*)normalize_image_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (numFiles > 0)
-        {
-            // auto player = ui->uiView->getTimelinePlayer();
-            // const auto info = player->ioInfo();
-            // if (info.video.empty() && info.video[0].normalizedImage)
-            // {
-            //     std::cerr << "normalized" << std::endl;
-            //     item->set();
-            // }
-            // else
-            // {
-            //     std::cerr << "not normalized" << std::endl;
-            // }
-        }
-        
+        if (view->getNormalizedImage())
+            item->set();
+            
         snprintf(buf, 256, "%s", _("View/Toggle Menu bar"));
         idx = menu->add(
             buf, kToggleMenuBar.hotkey(), (Fl_Callback*)toggle_menu_bar, ui,
@@ -586,7 +574,7 @@ namespace mrv
             const timeline::ImageOptions& imageOptions =
                 ui->app->imageOptions();
             const timeline::BackgroundOptions& backgroundOptions =
-                ui->uiView->getBackgroundOptions();
+                view->getBackgroundOptions();
 
             mode = FL_MENU_RADIO;
             if (numFiles == 0)
@@ -772,8 +760,7 @@ namespace mrv
         }
         
         timeline::Playback playback = timeline::Playback::Stop;
-
-        auto player = ui->uiView->getTimelinePlayer();
+        auto player = view->getTimelinePlayer();
         if (player)
             playback = player->playback();
             
@@ -941,7 +928,7 @@ namespace mrv
             idx = menu->add(buf, 0, (Fl_Callback*)masking_cb, ui, mode);
             item = (Fl_Menu_Item*)&(menu->menu()[idx]);
             float mask = kCrops[i];
-            if (mrv::is_equal(mask, ui->uiView->getMask()))
+            if (mrv::is_equal(mask, view->getMask()))
                 item->set();
         }
 
@@ -1178,7 +1165,7 @@ namespace mrv
         // {
         //     menu->add( _("Pixel/Copy RGBA Values to Clipboard"),
         //                kCopyRGBAValues.hotkey(),
-        //                (Fl_Callback*)copy_pixel_rgba_cb, (void*)ui->uiView);
+        //                (Fl_Callback*)copy_pixel_rgba_cb, (void*)view);
         // }
 
         if (dynamic_cast< DummyClient* >(tcp) == nullptr)
