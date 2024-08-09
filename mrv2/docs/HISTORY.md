@@ -7,6 +7,10 @@ v1.2.3
 - Added toggleSafeAreas, toggleDisplayWindow, toggleDataWindow,
   toggleIgnoreDisplayWindow, toggleAutoNormalize, toggleInvalidValues
   python commands in cmd module.
+- Added support for NDI's PA216 format.
+- Added NDI Panel's pulldown to support either fast or best format.
+- Added NDI Panel's pulldown to support audio or not.
+- Fixed a memory leak and slowdown in NDI streams.
 
 
 v1.2.2

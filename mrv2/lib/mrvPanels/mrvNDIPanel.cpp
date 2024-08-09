@@ -50,6 +50,8 @@ namespace mrv
         {
 
             PopupMenu* sourceMenu = nullptr;
+            PopupMenu* audioMenu = nullptr;
+            PopupMenu* bestFormatMenu = nullptr;
 
             uint32_t no_sources = 0;
             const NDIlib_source_t* p_sources = NULL;
@@ -304,7 +306,27 @@ namespace mrv
                         return;
                     _open_ndi(item);
                 });
+            
+            mW = new Widget< PopupMenu >(
+                g->x() + 10, Y, g->w() - 20, 20, _("Fast Format"));
+            m = r.bestFormatMenu = mW;
+            m->disable_submenus();
+            m->labelsize(12);
+            m->align(FL_ALIGN_CENTER | FL_ALIGN_CLIP);
+            m->add(_("Fast Format"));
+            m->add(_("Best Format"));
+            m->value(0);
 
+            mW = new Widget< PopupMenu >(
+                g->x() + 10, Y, g->w() - 20, 20, _("With Audio"));
+            m = r.audioMenu = mW;
+            m->disable_submenus();
+            m->labelsize(12);
+            m->align(FL_ALIGN_CENTER | FL_ALIGN_CLIP);
+            m->add(_("With Audio"));
+            m->add(_("Without Audio"));
+            m->value(0);
+            
             r.find.awake = false;
 
             cg->end();
@@ -357,6 +379,8 @@ namespace mrv
 
             ndi::Options options;
             options.sourceName = sourceName;
+            options.bestFormat = r.bestFormatMenu->value();
+            options.noAudio    = r.audioMenu->value();
 
             nlohmann::json j;
             j = options;
@@ -395,6 +419,7 @@ namespace mrv
                                 t.end_time_exclusive() >= endTime)
                             {
                                 r.play.found = true;
+                                r.cacheInfoObserver.reset();
                                 break;
                             }
                         }
