@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>cmd module &mdash; mrv2 v1.2.1 documentation</title>
+  <title>cmd module &mdash; mrv2 v1.2.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=fd3f3429" />
@@ -16,7 +16,7 @@
   
         <script src="../_static/jquery.js?v=5d32c60e"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../_static/documentation_options.js?v=3130c8bc"></script>
+        <script src="../_static/documentation_options.js?v=a2b0c6cf"></script>
         <script src="../_static/doctools.js?v=9a2dae69"></script>
         <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -81,6 +81,12 @@
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.setStereo3DOptions"><code class="docutils literal notranslate"><span class="pre">setStereo3DOptions()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.setVolume"><code class="docutils literal notranslate"><span class="pre">setVolume()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.stereo3DOptions"><code class="docutils literal notranslate"><span class="pre">stereo3DOptions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.toggleAutoNormalize"><code class="docutils literal notranslate"><span class="pre">toggleAutoNormalize()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.toggleDataWindow"><code class="docutils literal notranslate"><span class="pre">toggleDataWindow()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.toggleDisplayWindow"><code class="docutils literal notranslate"><span class="pre">toggleDisplayWindow()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.toggleIgnoreDisplayWindow"><code class="docutils literal notranslate"><span class="pre">toggleIgnoreDisplayWindow()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.toggleInvalidValues"><code class="docutils literal notranslate"><span class="pre">toggleInvalidValues()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.toggleSafeAreas"><code class="docutils literal notranslate"><span class="pre">toggleSafeAreas()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.update"><code class="docutils literal notranslate"><span class="pre">update()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.volume"><code class="docutils literal notranslate"><span class="pre">volume()</span></code></a></li>
 </ul>
@@ -304,6 +310,42 @@
 <dt class="sig sig-object py" id="mrv2.cmd.stereo3DOptions">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">stereo3DOptions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="image.html#mrv2.image.Stereo3DOptions" title="mrv2.image.Stereo3DOptions"><span class="pre">mrv2.image.Stereo3DOptions</span></a></span></span><a class="headerlink" href="#mrv2.cmd.stereo3DOptions" title="Link to this definition"></a></dt>
 <dd><p>Return the current stereo 3D options.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mrv2.cmd.toggleAutoNormalize">
+<span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">toggleAutoNormalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.cmd.toggleAutoNormalize" title="Link to this definition"></a></dt>
+<dd><p>Toggle Image Auto Normalize.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mrv2.cmd.toggleDataWindow">
+<span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">toggleDataWindow</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.cmd.toggleDataWindow" title="Link to this definition"></a></dt>
+<dd><p>Toggle Data Window.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mrv2.cmd.toggleDisplayWindow">
+<span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">toggleDisplayWindow</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.cmd.toggleDisplayWindow" title="Link to this definition"></a></dt>
+<dd><p>Toggle Display Window.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mrv2.cmd.toggleIgnoreDisplayWindow">
+<span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">toggleIgnoreDisplayWindow</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.cmd.toggleIgnoreDisplayWindow" title="Link to this definition"></a></dt>
+<dd><p>Toggle Ignored Display Window on OpenEXRs.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mrv2.cmd.toggleInvalidValues">
+<span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">toggleInvalidValues</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.cmd.toggleInvalidValues" title="Link to this definition"></a></dt>
+<dd><p>Toggle Image invalid values.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mrv2.cmd.toggleSafeAreas">
+<span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">toggleSafeAreas</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.cmd.toggleSafeAreas" title="Link to this definition"></a></dt>
+<dd><p>Toggle Safe Areas.</p>
 </dd></dl>
 
 <dl class="py function">

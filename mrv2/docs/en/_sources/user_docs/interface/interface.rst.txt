@@ -152,6 +152,16 @@ The view menu provides controls for modifying the appearance and behaviour of th
    However, if the Data Window is *bigger* than the display window, this may
    not be desired.
    
+.. topic:: Auto Normalize
+
+   When this setting is on, all the pixel values of your HDR images (.hdr or
+   OpenEXR) will get normalized to be between 0 and 1.
+   
+.. topic:: Invalid Values
+
+   When this setting is on, values that go below 0 or more than 1 in your HDR
+   images (.hdr or OpenEXR) will get shown in red.
+   
 .. topic:: Mask
 
    The mask allows drawing a black mask cropping your picture to a certain film aspect.

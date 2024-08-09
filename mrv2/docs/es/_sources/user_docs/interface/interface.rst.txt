@@ -154,6 +154,16 @@ El menú de Vista provee controles para modificar la apariencia y comportamiento
    Sin embargo, si la Ventana de Datos es más *grande* que la Ventana de
    Display esto puede no ser deseado.
    
+.. topic:: Auto Normalizar
+
+   Cuando este seteo está prendido, todos los valores de los píxeles de tus
+   imágenes (.hdr or OpenEXR) serán normalizados para estar entre 0 y 1.
+   
+.. topic:: Valores inválidos
+
+   Cuando este seteo está activado, valores que están fuera del rango de 0 y 1
+   en tus imágenes HDR (.hdr or OpenEXR) se mostrarán en rojo.
+   
 .. topic:: Máscara
 
    La máscara permite dibujar una máscara negra que recorta la imágen hasta darle un aspecto cinematográfico determinado.
