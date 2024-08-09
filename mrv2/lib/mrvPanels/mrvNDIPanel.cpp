@@ -398,34 +398,37 @@ namespace mrv
                 return;
 
             int seconds = 4;
-            r.play.found = false;
+            r.play.found = !options.noAudio;
             player->stop();
 
-            r.cacheInfoObserver =
-                observer::ValueObserver<timeline::PlayerCacheInfo>::create(
-                    player->player()->observeCacheInfo(),
-                    [this, player,
-                     options](const timeline::PlayerCacheInfo& value)
-                    {
-                        MRV2_R();
-                        auto startTime = player->currentTime();
-                        auto endTime =
-                            startTime + options.audioBufferSize.rescaled_to(
-                                            startTime.rate());
-
-                        for (const auto& t : value.audioFrames)
-                        {
-                            if (t.start_time() <= startTime &&
-                                t.end_time_exclusive() >= endTime)
+            if (!options.noAudio)
+            {
+                r.cacheInfoObserver =
+                    observer::ValueObserver<timeline::PlayerCacheInfo>::create(
+                        player->player()->observeCacheInfo(),
+                        [this, player,
+                         options](const timeline::PlayerCacheInfo& value)
                             {
-                                r.play.found = true;
-                                r.cacheInfoObserver.reset();
-                                break;
-                            }
-                        }
-                    },
-                    observer::CallbackAction::Suppress);
-
+                                MRV2_R();
+                                auto startTime = player->currentTime();
+                                auto endTime =
+                                    startTime + options.audioBufferSize.rescaled_to(
+                                        startTime.rate());
+                                
+                                for (const auto& t : value.audioFrames)
+                                {
+                                    if (t.start_time() <= startTime &&
+                                        t.end_time_exclusive() >= endTime)
+                                    {
+                                        r.play.found = true;
+                                        r.cacheInfoObserver.reset();
+                                        break;
+                                    }
+                                }
+                            },
+                        observer::CallbackAction::Suppress);
+            }
+            
             r.play.thread = std::thread(
                 [this, player, seconds]
                 {
@@ -436,7 +439,6 @@ namespace mrv
                                std::chrono::seconds(seconds))
                     {
                     }
-                    r.cacheInfoObserver.reset();
                     player->forward();
                 });
 
