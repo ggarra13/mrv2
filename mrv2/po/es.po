@@ -1515,6 +1515,24 @@ msgstr "Corre el mismo o otro mrv2 con un archivo de sesión."
 msgid "Set the muting of the audio."
 msgstr "Setea el mutismo del audio."
 
+msgid "Toggle Image Auto Normalize."
+msgstr "Alternar Auto Normalizar de la Imagen."
+
+msgid "Toggle Data Window."
+msgstr "Alternar Ventana de Datos."
+
+msgid "Toggle Display Window."
+msgstr "Alternar Ventana de Display"
+
+msgid "Toggle Ignored Display Window on OpenEXRs."
+msgstr "Ignorar Ventana de Display en OpenEXRs."
+
+msgid "Toggle Image invalid values."
+msgstr "Alternar valores inválidos de la imagen."
+
+msgid "Toggle Safe Areas."
+msgstr "Alternar Áreas Seguras."
+
 msgid "Get the playback volume."
 msgstr "Obtenga el volumen de reproducción."
 
@@ -3617,6 +3635,12 @@ msgstr "Vista/Ventana de Display"
 
 msgid "View/Ignore Display Window"
 msgstr "Vista/Ignorar Ventana de Display"
+
+msgid "View/Auto Normalize"
+msgstr "Vista/Auto Normalizar"
+
+msgid "View/Invalid Values"
+msgstr "Vista/Valores Inválidos"
 
 msgid "View/Toggle Menu bar"
 msgstr "Vista/Alternar Barra de Menú"
@@ -6576,6 +6600,12 @@ msgstr "Autoencuadrar vista"
 
 msgid "Ignore Display Window"
 msgstr "Ignorar Ventana de Display"
+
+msgid "Auto Normalize"
+msgstr "Auto Normalizar"
+
+msgid "Invalid Values"
+msgstr "Valores Inválidos"
 
 msgid "Display Window"
 msgstr "Ventana de Display"

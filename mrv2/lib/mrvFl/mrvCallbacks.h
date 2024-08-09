@@ -103,22 +103,22 @@ namespace mrv
     void frame_view_cb(Fl_Menu_* w, ViewerUI* ui);
 
     //! Safe Areas callback
-    void safe_areas_cb(Fl_Menu_* w, ViewerUI* ui);
+    void toggle_safe_areas_cb(Fl_Menu_* w, ViewerUI* ui);
 
     //! Data Window callback
-    void data_window_cb(Fl_Menu_* w, ViewerUI* ui);
+    void toggle_data_window_cb(Fl_Menu_* w, ViewerUI* ui);
 
     //! Display Window callback
-    void display_window_cb(Fl_Menu_* w, ViewerUI* ui);
+    void toggle_display_window_cb(Fl_Menu_* w, ViewerUI* ui);
 
     //! Ignore Display Window callback
-    void ignore_display_window_cb(Fl_Menu_* w, ViewerUI* ui);
+    void toggle_ignore_display_window_cb(Fl_Menu_* w, ViewerUI* ui);
     
     //! Normalize callback
-    void normalize_image_cb(Fl_Menu_* w, ViewerUI* ui);
+    void toggle_normalize_image_cb(Fl_Menu_* w, ViewerUI* ui);
 
     //! Invalid values callback
-    void invalid_values_cb(Fl_Menu_* w, ViewerUI* ui);
+    void toggle_invalid_values_cb(Fl_Menu_* w, ViewerUI* ui);
     
     //! Masking callback
     void masking_cb(Fl_Menu_* w, ViewerUI* ui);
@@ -130,7 +130,7 @@ namespace mrv
     void ocio_presets_cb(Fl_Menu_* w, ViewerUI* ui);
 
     //! Auxiliary functions to remember what bars and what windows were
-    // 1 open in case of a fullscreen or presentation switch.
+    //! 1 open in case of a fullscreen or presentation switch.
     void save_ui_state(ViewerUI* ui, Fl_Group* bar);
     void save_ui_state(ViewerUI* ui);
     void toggle_action_tool_bar(Fl_Menu_*, ViewerUI* ui);

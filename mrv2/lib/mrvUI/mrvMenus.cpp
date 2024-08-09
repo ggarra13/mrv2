@@ -217,42 +217,42 @@ namespace mrv
 
         idx = menu->add(
             _("View/Safe Areas"), kSafeAreas.hotkey(),
-            (Fl_Callback*)safe_areas_cb, ui, mode);
+            (Fl_Callback*)toggle_safe_areas_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (view->getSafeAreas())
             item->set();
 
         idx = menu->add(
             _("View/Data Window"), kDataWindow.hotkey(),
-            (Fl_Callback*)data_window_cb, ui, mode);
+            (Fl_Callback*)toggle_data_window_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (view->getDataWindow())
             item->set();
 
         idx = menu->add(
             _("View/Display Window"), kDisplayWindow.hotkey(),
-            (Fl_Callback*)display_window_cb, ui, mode);
+            (Fl_Callback*)toggle_display_window_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (view->getDisplayWindow())
             item->set();
 
         idx = menu->add(
             _("View/Ignore Display Window"), kIgnoreDisplayWindow.hotkey(),
-            (Fl_Callback*)ignore_display_window_cb, ui, mode);
+            (Fl_Callback*)toggle_ignore_display_window_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (view->getIgnoreDisplayWindow())
             item->set();
         
         idx = menu->add(
             _("View/Auto Normalize"), kAutoNormalize.hotkey(),
-            (Fl_Callback*)normalize_image_cb, ui, mode);
+            (Fl_Callback*)toggle_normalize_image_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (view->getNormalizedImage())
             item->set();
         
         idx = menu->add(
             _("View/Invalid Values"), kInvalidValues.hotkey(),
-            (Fl_Callback*)invalid_values_cb, ui, mode);
+            (Fl_Callback*)toggle_invalid_values_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (view->getInvalidValues())
             item->set();

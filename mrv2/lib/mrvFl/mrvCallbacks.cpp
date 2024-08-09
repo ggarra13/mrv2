@@ -1298,48 +1298,48 @@ namespace mrv
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
-    void safe_areas_cb(Fl_Menu_* m, ViewerUI* ui)
+    void toggle_safe_areas_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
-        ui->uiView->setSafeAreas(item->checked());
+        bool checked = !ui->uiView->getSafeAreas();
+        ui->uiView->setSafeAreas(checked);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
-    void data_window_cb(Fl_Menu_* m, ViewerUI* ui)
+    void toggle_data_window_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
-        ui->uiView->setDataWindow(item->checked());
+        bool checked = !ui->uiView->getDataWindow();
+        ui->uiView->setDataWindow(checked);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
-    void ignore_display_window_cb(Fl_Menu_* m, ViewerUI* ui)
+    void toggle_ignore_display_window_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
-        ui->uiView->setIgnoreDisplayWindow(item->checked());
+        bool checked = !ui->uiView->getIgnoreDisplayWindow();
+        ui->uiView->setIgnoreDisplayWindow(checked);
         refresh_media_cb(m, ui);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
     
-    void normalize_image_cb(Fl_Menu_* m, ViewerUI* ui)
+    void toggle_normalize_image_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
-        ui->uiView->setNormalizedImage(item->checked());
+        bool checked = !ui->uiView->getNormalizedImage();
+        ui->uiView->setNormalizedImage(checked);
         refresh_media_cb(m, ui);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
     
-    void invalid_values_cb(Fl_Menu_* m, ViewerUI* ui)
+    void toggle_invalid_values_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
-        ui->uiView->setInvalidValues(item->checked());
+        bool checked = !ui->uiView->getInvalidValues();
+        ui->uiView->setInvalidValues(checked);
         refresh_media_cb(m, ui);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
-    void display_window_cb(Fl_Menu_* m, ViewerUI* ui)
+    void toggle_display_window_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
-        ui->uiView->setDisplayWindow(item->checked());
+        bool checked = !ui->uiView->getDisplayWindow();
+        ui->uiView->setDisplayWindow(checked);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 

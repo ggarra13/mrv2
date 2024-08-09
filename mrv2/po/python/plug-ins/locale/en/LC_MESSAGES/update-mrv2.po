@@ -11,8 +11,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: pygettext.py 1.5\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Generated-By: pygettext.py 1.5\n"
 
 msgid ""
 "\n"
@@ -93,7 +93,7 @@ msgid "Download seems to have failed!"
 msgstr "Download seems to have failed!"
 
 msgid "Release Notes"
-msgstr "Released Notes"
+msgstr "Release Notes"
 
 msgid "Current version is v"
 msgstr "Current version is v"

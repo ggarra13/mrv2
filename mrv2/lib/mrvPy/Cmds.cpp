@@ -12,6 +12,7 @@
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvOS.h"
 
+#include "mrvFl/mrvCallbacks.h"
 #include "mrvFl/mrvSave.h"
 #include "mrvFl/mrvIO.h"
 
@@ -218,6 +219,42 @@ namespace mrv2
             app->setVolume(value);
         }
 
+        void toggleDataWindow()
+        {
+            ViewerUI* ui = App::ui;
+            toggle_data_window_cb(nullptr, ui);
+        }
+        
+        void toggleDisplayWindow()
+        {
+            ViewerUI* ui = App::ui;
+            toggle_display_window_cb(nullptr, ui);
+        }
+
+        void toggleSafeAreas()
+        {
+            ViewerUI* ui = App::ui;
+            toggle_safe_areas_cb(nullptr, ui);
+        }
+        
+        void toggleIgnoreDisplayWindow()
+        {
+            ViewerUI* ui = App::ui;
+            toggle_ignore_display_window_cb(nullptr, ui);
+        }
+        
+        void toggleAutoNormalize()
+        {
+            ViewerUI* ui = App::ui;
+            toggle_normalize_image_cb(nullptr, ui);
+        }
+
+        void toggleInvalidValues()
+        {
+            ViewerUI* ui = App::ui;
+            toggle_invalid_values_cb(nullptr, ui);
+        }
+
         /**
          * \brief Returns if the audio is muted.
          *
@@ -320,7 +357,7 @@ namespace mrv2
             }
             return out;
         }
-
+        
         /**
          * \brief Refresh the UI.
          *
@@ -494,7 +531,31 @@ Used to run main commands and get arguments and set the display, image, compare,
     cmds.def(
         "setMute", &mrv2::cmd::setMute, _("Set the muting of the audio."),
         py::arg("mute"));
+    
+    cmds.def(
+        "toggleAutoNormalize", &mrv2::cmd::toggleAutoNormalize,
+        _("Toggle Image Auto Normalize."));
+    
+    cmds.def(
+        "toggleDataWindow", &mrv2::cmd::toggleDataWindow,
+        _("Toggle Data Window."));
+    
+    cmds.def(
+        "toggleDisplayWindow", &mrv2::cmd::toggleDisplayWindow,
+        _("Toggle Display Window."));
 
+    cmds.def(
+        "toggleIgnoreDisplayWindow", &mrv2::cmd::toggleIgnoreDisplayWindow,
+        _("Toggle Ignored Display Window on OpenEXRs."));
+    
+    cmds.def(
+        "toggleInvalidValues", &mrv2::cmd::toggleInvalidValues,
+        _("Toggle Image invalid values."));
+    
+    cmds.def(
+        "toggleSafeAreas", &mrv2::cmd::toggleSafeAreas,
+        _("Toggle Safe Areas."));
+    
     cmds.def("volume", &mrv2::cmd::volume, _("Get the playback volume."));
 
     cmds.def(

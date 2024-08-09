@@ -4,6 +4,9 @@ v1.2.3
 - Fixed loading of movies with multiple audio tracks.
 - Added "View/Auto Normalize" to normalize HDR (OpenEXR and HDR images).
 - Added "View/Invalid Values" to show HDR images' invalid values.
+- Added toggleSafeAreas, toggleDisplayWindow, toggleDataWindow,
+  toggleIgnoreDisplayWindow, toggleAutoNormalize, toggleInvalidValues
+  python commands in cmd module.
 
 
 v1.2.2

@@ -1450,24 +1450,6 @@ msgstr "Runs the same or a new mrv2 with a session file."
 msgid "Set the muting of the audio."
 msgstr "Set the muting of the audio."
 
-msgid "Toggle Image Auto Normalize."
-msgstr "Toggle Image Auto Normalize."
-
-msgid "Toggle Data Window."
-msgstr "Toggle Data Window."
-
-msgid "Toggle Display Window."
-msgstr "Toggle Display Window."
-
-msgid "Toggle Ignored Display Window on OpenEXRs."
-msgstr "Toggle Ignored Display Window on OpenEXRs."
-
-msgid "Toggle Image invalid values."
-msgstr "Toggle Image invalid values."
-
-msgid "Toggle Safe Areas."
-msgstr "Toggle Safe Areas."
-
 msgid "Get the playback volume."
 msgstr "Get the playback volume."
 
@@ -2278,9 +2260,6 @@ msgstr "Pixel ratio of clip"
 msgid "Video Rotation"
 msgstr "Video Rotation"
 
-msgid "Compression"
-msgstr "Compression"
-
 msgid "unsigned byte (8-bits per channel)"
 msgstr "unsigned byte (8-bits per channel)"
 
@@ -2753,12 +2732,6 @@ msgstr "Remote file {0} does not match local filename."
 msgid "Removing {0} from message publisher."
 msgstr "Removing {0} from message publisher."
 
-msgid "Server listening on port "
-msgstr "Server listening on port "
-
-msgid "ComfyUI listening on port "
-msgstr "ComfyUI listening on port "
-
 msgid "Connected to server at {0}, port {1}"
 msgstr "Connected to server at {0}, port {1}"
 
@@ -2848,9 +2821,6 @@ msgid ""
 "GoPro Cineform profile needs a .mkv movie extension.  Changing it to .mkv"
 msgstr ""
 "GoPro Cineform profile needs a .mkv movie extension.  Changing it to .mkv"
-
-msgid "HAP profile needs a .mov extension.  Changing it to .mov"
-msgstr "HAP profile needs a .mov extension.  Changing it to .mov"
 
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "New file {0} already exist!  Cannot overwrite it."
@@ -2972,9 +2942,6 @@ msgstr "Setting OCIO config to default:"
 msgid "Setting OCIO config to built-in:"
 msgstr "Setting OCIO config to built-in:"
 
-msgid "Path mapping for {0} already exists!"
-msgstr "Path mapping for {0} already exists!"
-
 msgid "Comparing {0} to prefix {1}"
 msgstr "Comparing {0} to prefix {1}"
 
@@ -3011,8 +2978,8 @@ msgstr "OCIO Preset '{0}' already exists!"
 msgid "Failed to load the file '{0}'."
 msgstr "Failed to load the file '{0}'."
 
-msgid "Loaded {0} ocio presets from \"{1}\"."
-msgstr "Loaded {0} ocio presets from \"{1}\"."
+msgid "Loaded {0} ocio presets from '{1}'."
+msgstr "Loaded {0} ocio presets from '{1}'."
 
 msgid "Failed to open the file '{0}' for saving."
 msgstr "Failed to open the file '{0}' for saving."
@@ -3020,8 +2987,8 @@ msgstr "Failed to open the file '{0}' for saving."
 msgid "Failed to save the file '{0}'."
 msgstr "Failed to save the file '{0}'."
 
-msgid "OCIO presets have been saved to \"{0}\"."
-msgstr "OCIO presets have been saved to \"{0}\"."
+msgid "OCIO presets have been saved to '{0}'."
+msgstr "OCIO presets have been saved to '{0}'."
 
 msgid "English"
 msgstr "English"
@@ -3543,12 +3510,6 @@ msgstr "View/Display Window"
 msgid "View/Ignore Display Window"
 msgstr "View/Ignore Display Window"
 
-msgid "View/Auto Normalize"
-msgstr "View/Auto Normalize"
-
-msgid "View/Invalid Values"
-msgstr "View/Invalid Values"
-
 msgid "View/Toggle Menu bar"
 msgstr "View/Toggle Menu bar"
 
@@ -3737,12 +3698,6 @@ msgstr "Timeline/Transitions"
 
 msgid "Timeline/Markers"
 msgstr "Timeline/Markers"
-
-msgid "Image/Next"
-msgstr "Image/Next"
-
-msgid "Image/Previous"
-msgstr "Image/Previous"
 
 msgid "Image/Version/First"
 msgstr "Image/Version/First"
@@ -4408,9 +4363,6 @@ msgid ""
 "        Google, Netflix and Amazon.  Compresses better than VP9 \n"
 "        or H264 for the same quality but requires more computer\n"
 "        resources.  Optimal for video reviews.\n"
-"  HAP - RGB/A codec which is optimized for fast playback with\n"
-"        CPU decoding.  It does not compress that well.\n"
-"        It needs hap-alpha* presets to save alpha channel.\n"
 "\n"
 "  Hardware encoding is only supported on newer MacBook\n"
 "  Pro with M1 or newer chips.  H264, Prores, VP9 and\n"
@@ -4471,9 +4423,6 @@ msgstr ""
 "        Google, Netflix and Amazon.  Compresses better than VP9 \n"
 "        or H264 for the same quality but requires more computer\n"
 "        resources.  Optimal for video reviews.\n"
-"  HAP - RGB/A codec which is optimized for fast playback with\n"
-"        CPU decoding.  It does not compress that well.\n"
-"        It needs hap-alpha* presets to save alpha channel.\n"
 "\n"
 "  Hardware encoding is only supported on newer MacBook\n"
 "  Pro with M1 or newer chips.  H264, Prores, VP9 and\n"
@@ -4492,7 +4441,6 @@ msgid ""
 "\n"
 "      - YUV (Luminance, Cr, Cb)\n"
 "      - BGR (RGB with reversed channels)\n"
-"      - RGB\n"
 "\n"
 "  In addition, some codecs support alpha channel (transparency),\n"
 "  like BGRA.\n"
@@ -4515,7 +4463,6 @@ msgstr ""
 "\n"
 "      - YUV (Luminance, Cr, Cb)\n"
 "      - BGR (RGB with reversed channels)\n"
-"      - RGB\n"
 "\n"
 "  In addition, some codecs support alpha channel (transparency),\n"
 "  like BGRA.\n"
@@ -4969,8 +4916,8 @@ msgstr "Resizable Control Group"
 msgid "Exposure"
 msgstr "Exposure"
 
-msgid "Reduce gain 1/4 stop (divide by sqrt(sqrt(2)))."
-msgstr "Reduce gain 1/4 stop (divide by sqrt(sqrt(2)))."
+msgid "Reduce gain 1/2 stop (divide by sqrt(2))."
+msgstr "Reduce gain 1/2 stop (divide by sqrt(2))."
 
 msgid "f/8"
 msgstr "f/8"
@@ -4978,8 +4925,8 @@ msgstr "f/8"
 msgid "Toggle gain between 1 and the previous setting."
 msgstr "Toggle gain between 1 and the previous setting."
 
-msgid "Increase gain 1/4 stop (multiply by sqrt(sqrt(2)))."
-msgstr "Increase gain 1/4 stop (multiply by sqrt(sqrt(2)))."
+msgid "Increase gain 1/2 stop (multiply by sqrt(2))."
+msgstr "Increase gain 1/2 stop (multiply by sqrt(2))."
 
 msgid "Gain"
 msgstr "Gain"
@@ -5122,6 +5069,9 @@ msgstr "Save Annotations burned into the movie or sequence."
 
 msgid "OpenEXR Options"
 msgstr "OpenEXR Options"
+
+msgid "Compression"
+msgstr "Compression"
 
 msgid "OpenEXR's Compression Type"
 msgstr "OpenEXR's Compression Type"
@@ -5372,16 +5322,6 @@ msgstr ""
 "This effectly means the video will be resized automatically based on the "
 "size of the window."
 
-msgid "Raise on Enter"
-msgstr "Raise on Enter"
-
-msgid ""
-"When selected, mrv2 will raise the window to the front once you enter the "
-"view window."
-msgstr ""
-"When selected, mrv2 will raise the window to the front once you enter the "
-"view window."
-
 msgid "Normal"
 msgstr "Normal"
 
@@ -5399,12 +5339,6 @@ msgstr "Presentation"
 
 msgid "When selected, mrv2 will start in presentation mode."
 msgstr "When selected, mrv2 will start in presentation mode."
-
-msgid "Maximized"
-msgstr "Maximized"
-
-msgid "When selected, mrv2 will start in a maximized window."
-msgstr "When selected, mrv2 will start in a maximized window."
 
 msgid "UI Elements"
 msgstr "UI Elements"
@@ -6050,26 +5984,6 @@ msgstr "Output Device"
 msgid "Output Device to use for audio playback."
 msgstr "Output Device to use for audio playback."
 
-msgid "ComfyUI"
-msgstr "ComfyUI"
-
-msgid ""
-"Here are the current settings to interact with ComfyUI.  It requires "
-"installation of mrv2's comfyUI nodes."
-msgstr ""
-"Here are the current settings to interact with ComfyUI.  It requires "
-"installation of mrv2's comfyUI nodes."
-
-msgid "Use ComfyUI Pipe"
-msgstr "Use ComfyUI Pipe"
-
-msgid ""
-"This setting opens a pipe to communicate with ComfyUI's "
-"mrv2_save_exr_node.py"
-msgstr ""
-"This setting opens a pipe to communicate with ComfyUI's "
-"mrv2_save_exr_node.py"
-
 msgid "Errors"
 msgstr "Errors"
 
@@ -6487,12 +6401,6 @@ msgstr "Auto Frame View"
 msgid "Ignore Display Window"
 msgstr "Ignore Display Window"
 
-msgid "Auto Normalize"
-msgstr "Auto Normalize"
-
-msgid "Invalid Values"
-msgstr "Invalid Values"
-
 msgid "Display Window"
 msgstr "Display Window"
 
@@ -6600,12 +6508,6 @@ msgstr "Play Forwards"
 
 msgid "Play Forwards / Change Speed"
 msgstr "Play Forwards / Change Speed"
-
-msgid "Next Clip"
-msgstr "Next Clip"
-
-msgid "Previous Clip"
-msgstr "Previous Clip"
 
 msgid "Loop Playback"
 msgstr "Loop Playback"
