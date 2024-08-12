@@ -439,8 +439,7 @@ namespace mrv
             //
             const auto& path = p.player->path();
             if (file::isMovie(path) &&
-                (//p.cacheInfoObserver ||
-                 p.player->playback() == timeline::Playback::Reverse))
+                p.player->playback() == timeline::Playback::Reverse)
             {
                 p.player->stop();
                 Fl::add_timeout(
