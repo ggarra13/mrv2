@@ -34,30 +34,26 @@ namespace mrv
                 col);
             draw_backdrop();
 
-#if 1
-            fl_font(labelfont(), labelsize());
-            fl_color(labelcolor());
+            std::string orig = label();
+            std::string newlabel = " ";
+            for (const auto& c : orig)
+            {
+                if (c == '\n')
+                {
+                    newlabel += c;
+                    newlabel += " ";
+                }
+                else
+                {
+                    newlabel += c;
+                }
+            }
 
-            const int X = x() + Fl::box_dx(box());
-            const int Y = y() + Fl::box_dy(box());
-            const int W = w() - Fl::box_dw(box());
-            const int H = h() - Fl::box_dh(box());
-
-            fl_push_clip(X, Y, W, H);
-
-            const int MX = 8; // margin
+            label(newlabel.c_str());
             
-            Fl_Image* img = image();
-            const int IW = img ? img->w() + MX : 0;
-            const int IH = img ? img->h() : 0;
-            fl_draw(label(), X + IW, Y + 20);
-            if (img)
-                img->draw(X, Y);
-
-            fl_pop_clip();
-#else
             draw_label();
-#endif
+
+            copy_label(orig.c_str());
             
         }
     };
