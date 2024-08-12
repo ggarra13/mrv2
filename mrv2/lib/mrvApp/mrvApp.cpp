@@ -1058,18 +1058,14 @@ namespace mrv
         {
             p.player->setPlayback(timeline::Playback::Stop);
 
-            //
-            // This observer will watch the cache and start a reverse playback
-            // once it is filled.
-            //
-            const auto& time = p.player->currentTime();
-
             p.cacheInfoObserver =
                 observer::ValueObserver<timeline::PlayerCacheInfo>::create(
                     p.player->player()->observeCacheInfo(),
-                    [this, time](const timeline::PlayerCacheInfo& value)
+                    [this](const timeline::PlayerCacheInfo& value)
                     {
                         TLRENDER_P();
+                        
+                        const auto& time = p.player->currentTime();
 
                         const auto& cache =
                             p.player->player()->observeCacheOptions()->get();

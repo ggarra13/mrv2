@@ -40,6 +40,23 @@ namespace mrv
 {
     namespace
     {
+        struct StopData
+        {
+            TimelinePlayer* player;
+            double speed;
+            otio::RationalTime time;
+        };
+
+        void stop_playback_cb(StopData* data)
+        {
+            auto player = data->player;
+            player->player()->setPlayback(timeline::Playback::Stop);
+            player->seek(data->time);
+            player->setSpeed(data->speed);
+            panel::redrawThumbnails();
+            delete data;
+        }
+
     } // namespace
 
     struct TimelinePlayer::Private
@@ -52,16 +69,6 @@ namespace mrv
         std::shared_ptr<observer::ValueObserver<timeline::Loop> > loopObserver;
         std::shared_ptr<observer::ValueObserver<otime::RationalTime> >
             currentTimeObserver;
-        std::shared_ptr<observer::ValueObserver<otime::TimeRange> >
-            inOutRangeObserver;
-        std::shared_ptr<observer::ValueObserver<size_t> > videoLayerObserver;
-        std::shared_ptr<observer::ListObserver<timeline::VideoData> >
-            currentVideoObserver;
-        std::shared_ptr<observer::ValueObserver<float> > volumeObserver;
-        std::shared_ptr<observer::ValueObserver<bool> > muteObserver;
-        std::shared_ptr<observer::ValueObserver<double> > audioOffsetObserver;
-        std::shared_ptr<observer::ListObserver<timeline::AudioData> >
-            currentAudioObserver;
         std::shared_ptr<observer::ValueObserver<timeline::PlayerCacheOptions> >
             cacheOptionsObserver;
         std::shared_ptr<observer::ValueObserver<timeline::PlayerCacheInfo> >
@@ -107,37 +114,6 @@ namespace mrv
                 p.player->observeCurrentTime(),
                 [this](const otime::RationalTime& value)
                 { currentTimeChanged(value); });
-
-        p.inOutRangeObserver =
-            observer::ValueObserver<otime::TimeRange>::create(
-                p.player->observeInOutRange(),
-                [this](const otime::TimeRange value)
-                { inOutRangeChanged(value); });
-
-        p.currentVideoObserver =
-            observer::ListObserver<timeline::VideoData>::create(
-                p.player->observeCurrentVideo(),
-                [this](const std::vector<timeline::VideoData>& value)
-                { currentVideoChanged(value); },
-                observer::CallbackAction::Suppress);
-
-        p.volumeObserver = observer::ValueObserver<float>::create(
-            p.player->observeVolume(),
-            [this](float value) { volumeChanged(value); });
-
-        p.muteObserver = observer::ValueObserver<bool>::create(
-            p.player->observeMute(),
-            [this](bool value) { muteChanged(value); });
-
-        p.audioOffsetObserver = observer::ValueObserver<double>::create(
-            p.player->observeAudioOffset(),
-            [this](double value) { audioOffsetChanged(value); });
-
-        p.currentAudioObserver =
-            observer::ListObserver<timeline::AudioData>::create(
-                p.player->observeCurrentAudio(),
-                [this](const std::vector<timeline::AudioData>& value)
-                { currentAudioChanged(value); });
 
         p.cacheOptionsObserver =
             observer::ValueObserver<timeline::PlayerCacheOptions>::create(
@@ -405,23 +381,6 @@ namespace mrv
             timelineViewport->updateUndoRedoButtons();
     }
 
-    struct StopData
-    {
-        TimelinePlayer* player;
-        double speed;
-        otio::RationalTime time;
-    };
-
-    void stop_playback_cb(StopData* data)
-    {
-        auto player = data->player;
-        player->player()->setPlayback(timeline::Playback::Stop);
-        player->seek(data->time);
-        player->setSpeed(data->speed);
-        panel::redrawThumbnails();
-        delete data;
-    }
-
     bool TimelinePlayer::isStepping() const
     {
         return _p->isStepping;
@@ -630,9 +589,6 @@ namespace mrv
         c->uiFrame->setTime(value);
     }
 
-    //! This signal is emitted when the in/out points range is changed.
-    void TimelinePlayer::inOutRangeChanged(const otime::TimeRange& value) {}
-
     ///@}
 
     //! \name Video
@@ -654,26 +610,6 @@ namespace mrv
             return;
         timelineViewport->cacheChangedCallback();
     }
-
-    //! This signal is emitted when the video is changed.
-    void TimelinePlayer::currentVideoChanged(
-        const std::vector<tl::timeline::VideoData>& v) {}
-
-    ///@}
-
-    //! \name Audio
-    ///@{
-
-    //! This signal is emitted when the audio volume is changed.
-    void TimelinePlayer::volumeChanged(float) {}
-
-    //! This signal is emitted when the audio mute is changed.
-    void TimelinePlayer::muteChanged(bool) {}
-
-    //! This signal is emitted when the audio sync offset is changed.
-    void TimelinePlayer::audioOffsetChanged(double) {}
-
-    ///@}
 
     bool TimelinePlayer::hasAnnotations() const
     {

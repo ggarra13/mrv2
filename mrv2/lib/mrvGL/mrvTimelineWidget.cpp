@@ -356,8 +356,6 @@ namespace mrv
     void TimelineWidget::continuePlaying()
     {
         TLRENDER_P();
-
-        const auto& time = p.player->currentTime();
             
         //
         // Thie observer will watch the cache and start a reverse playback
@@ -366,14 +364,11 @@ namespace mrv
         p.cacheInfoObserver =
             observer::ValueObserver<timeline::PlayerCacheInfo>::create(
                 p.player->player()->observeCacheInfo(),
-                [this, time](const timeline::PlayerCacheInfo& value)
+                [this](const timeline::PlayerCacheInfo& value)
                 {
                     TLRENDER_P();
-                    if (p.player->playback() != timeline::Playback::Stop)
-                    {
-                        p.cacheInfoObserver.reset();
-                        return;
-                    }
+
+                    const auto& time = p.player->currentTime();
                     
                     const auto& cache =
                         p.player->player()->observeCacheOptions()->get();
@@ -409,19 +404,15 @@ namespace mrv
                     endTime = endTime.floor();
                     startTime = startTime.ceil();
 
-                    bool found = false;
                     for (const auto& t : value.videoFrames)
                     {
                         if (t.start_time() <= startTime &&
                             t.end_time_exclusive() >= endTime)
                         {
-                            found = true;
-                            break;
+                            p.ui->uiView->setPlayback(timeline::Playback::Reverse);
+                            p.cacheInfoObserver.reset();
+                            return;
                         }
-                    }
-                    if (found)
-                    {
-                        p.ui->uiView->setPlayback(timeline::Playback::Reverse);
                     }
                 });
     }
@@ -448,7 +439,8 @@ namespace mrv
             //
             const auto& path = p.player->path();
             if (file::isMovie(path) &&
-                p.player->playback() == timeline::Playback::Reverse)
+                (//p.cacheInfoObserver ||
+                 p.player->playback() == timeline::Playback::Reverse))
             {
                 p.player->stop();
                 Fl::add_timeout(

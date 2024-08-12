@@ -292,18 +292,6 @@ namespace mrv
 
         ///@}
 
-        //! \name Video
-        ///@{
-
-        //! This signal is emitted when the video is changed.
-        void currentVideoChanged(const std::vector<tl::timeline::VideoData>&);
-
-        //! This signal is emitted when the audio is changed.
-        void
-        currentAudioChanged(const std::vector<timeline::AudioData>& value) {};
-
-        ///@}
-
         //! \name Audio
         ///@{
 

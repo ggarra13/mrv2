@@ -23,6 +23,8 @@ v1.2.3
 - Fixed a memory leak on reverse playback seeking.
 - Fixed area selection when switching to a clip of different size.
 - Fixed thumbnail icons not showing the current layer in the Panels.
+- Fixed reverse seeking not respecting the reverse playback action and reverting
+  to stopping.
 - Code clean-up.
 
 
