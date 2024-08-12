@@ -3666,12 +3666,6 @@ msgstr "Vista/OpenEXR/Ventana de Display"
 msgid "View/OpenEXR/Ignore Display Window"
 msgstr "Vista/OpenEXR/Ignorar Ventana de Display"
 
-msgid "View/HDR/Auto Normalize"
-msgstr "Vista/HDR/Auto Normalizar"
-
-msgid "View/HDR/Invalid Values"
-msgstr "Vista/HDR/Valores Inválidos"
-
 msgid "Panel/One Panel Only"
 msgstr "Panel/Un Solo Panel"
 
@@ -3734,6 +3728,12 @@ msgstr "Render/Filtro Minificación/Cercanía"
 
 msgid "Render/Magnify Filter/Nearest"
 msgstr "Render/Filtro Magnificación/Cercanía"
+
+msgid "Render/HDR/Auto Normalize"
+msgstr "Render/HDR/Auto Normalizar"
+
+msgid "Render/HDR/Invalid Values"
+msgstr "Render/HDR/Valores Inválidos"
 
 msgid "Playback/Stop"
 msgstr "Reproducción/Parar"
