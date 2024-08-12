@@ -26,6 +26,7 @@ v1.2.3
 - Fixed reverse seeking not respecting the reverse playback action and 
   reverting to stopping.
 - Re-arranging of View menu into submenus (Tool Bar, HDR and OpenEXR submenus).
+- Added small margin between thumbnail picture and labels on all Panel clips.
 - Code clean-up.
 
 
