@@ -118,12 +118,6 @@ namespace mrv
 
         //! Ignore Display Window
         static bool ignoreDisplayWindow;
-
-        //! Auto normalize image
-        static bool autoNormalize;
-
-        //! Draw invalid values as solid white.
-        static bool invalidValues;
         
         //! Masking
         static float masking;

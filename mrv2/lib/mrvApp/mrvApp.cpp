@@ -1313,9 +1313,9 @@ namespace mrv
 #endif
 #if defined(TLRENDER_EXR) || defined(TLRENDER_STB)
         out["AutoNormalize"] =
-            string::Format("{0}").arg(ui->uiView->getNormalizedImage());
+            string::Format("{0}").arg(p.displayOptions.normalize.enabled);
         out["InvalidValues"] =
-            string::Format("{0}").arg(ui->uiView->getInvalidValues());
+            string::Format("{0}").arg(p.displayOptions.invalidValues);
 #endif
         
 #if defined(TLRENDER_FFMPEG)

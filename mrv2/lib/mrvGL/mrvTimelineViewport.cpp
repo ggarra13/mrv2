@@ -89,8 +89,6 @@ namespace mrv
     bool TimelineViewport::Private::dataWindow = false;
     bool TimelineViewport::Private::displayWindow = false;
     bool TimelineViewport::Private::ignoreDisplayWindow = false;
-    bool TimelineViewport::Private::autoNormalize = false;
-    bool TimelineViewport::Private::invalidValues = false;
     std::string TimelineViewport::Private::helpText;
     float TimelineViewport::Private::helpTextFade;
     bool TimelineViewport::Private::hudActive = true;
@@ -905,16 +903,6 @@ namespace mrv
         return _p->ignoreDisplayWindow;
     }
 
-    bool TimelineViewport::getNormalizedImage() const noexcept
-    {
-        return _p->autoNormalize;
-    }
-
-    bool TimelineViewport::getInvalidValues() const noexcept
-    {
-        return _p->invalidValues;
-    }
-
     void TimelineViewport::setSafeAreas(bool value) noexcept
     {
         if (value == _p->safeAreas)
@@ -944,22 +932,6 @@ namespace mrv
         if (value == _p->ignoreDisplayWindow)
             return;
         _p->ignoreDisplayWindow = value;
-        redrawWindows();
-    }
-    
-    void TimelineViewport::setNormalizedImage(bool value) noexcept
-    {
-        if (value == _p->autoNormalize)
-            return;
-        _p->autoNormalize = value;
-        redrawWindows();
-    }
-    
-    void TimelineViewport::setInvalidValues(bool value) noexcept
-    {
-        if (value == _p->invalidValues)
-            return;
-        _p->invalidValues = value;
         redrawWindows();
     }
 
@@ -3238,36 +3210,21 @@ namespace mrv
         }
         _setVideoRotation(videoRotation);
 
-        
-        bool refreshMenus = false;
-        
-        i = p.tagData.find("Autonormalize");
-        bool autoNormalize = false;
-        if (i != p.tagData.end())
-        {
-            autoNormalize = std::stoi(i->second);
-        }
-        if (autoNormalize != p.autoNormalize)
-        {
-            p.autoNormalize = autoNormalize;
-            refreshMenus = true;
-        }
-        
-        i = p.tagData.find("InvalidValues");
-        bool invalidValues = false;
-        if (i != p.tagData.end())
-        {
-            invalidValues = std::stoi(i->second);
-        }
-        if (invalidValues != p.invalidValues)
-        {
-            p.invalidValues = invalidValues;
-            refreshMenus = true;
-        }
 
-        if (refreshMenus)
+        if (p.displayOptions[0].normalize.enabled)
         {
-            p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
+            i = p.tagData.find("Autonormalize Minimum");
+            if (i != p.tagData.end())
+            {
+                std::stringstream s(i->second);
+                s >> p.displayOptions[0].normalize.minimum;
+            }
+            i = p.tagData.find("Autonormalize Maximum");
+            if (i != p.tagData.end())
+            {
+                std::stringstream s(i->second);
+                s >> p.displayOptions[0].normalize.maximum;
+            }
         }
     }
 

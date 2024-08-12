@@ -291,20 +291,6 @@ namespace mrv
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (view->getIgnoreDisplayWindow())
             item->set();
-        
-        idx = menu->add(
-            _("View/HDR/Auto Normalize"), kAutoNormalize.hotkey(),
-            (Fl_Callback*)toggle_normalize_image_cb, ui, mode);
-        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (view->getNormalizedImage())
-            item->set();
-        
-        idx = menu->add(
-            _("View/HDR/Invalid Values"), kInvalidValues.hotkey(),
-            (Fl_Callback*)toggle_invalid_values_cb, ui, mode);
-        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (view->getInvalidValues())
-            item->set();
 
         idx = menu->add(
             _("Panel/One Panel Only"), kToggleOnePanelOnly.hotkey(),
@@ -764,6 +750,20 @@ namespace mrv
             item = (Fl_Menu_Item*)&(menu->menu()[idx]);
             if (displayOptions.imageFilters.magnify ==
                 timeline::ImageFilter::Linear)
+                item->set();
+        
+            idx = menu->add(
+                _("Render/HDR/Auto Normalize"), kAutoNormalize.hotkey(),
+                (Fl_Callback*)toggle_normalize_image_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (displayOptions.normalize.enabled)
+                item->set();
+        
+            idx = menu->add(
+                _("Render/HDR/Invalid Values"), kInvalidValues.hotkey(),
+                (Fl_Callback*)toggle_invalid_values_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (displayOptions.invalidValues)
                 item->set();
         }
         

@@ -822,6 +822,24 @@ namespace mrv
         toggle_channel(ui, channel);
     }
 
+    void toggle_normalize_image_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        timeline::DisplayOptions o = ui->app->displayOptions();
+        o.normalize.enabled ^= 1;
+        ui->app->setDisplayOptions(o);
+        refresh_media_cb(m, ui);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+    
+    void toggle_invalid_values_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        timeline::DisplayOptions o = ui->app->displayOptions();
+        o.invalidValues ^= 1;
+        ui->app->setDisplayOptions(o);
+        refresh_media_cb(m, ui);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+    
     void toggle_fullscreen_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         bool active = true;
@@ -1320,21 +1338,6 @@ namespace mrv
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
     
-    void toggle_normalize_image_cb(Fl_Menu_* m, ViewerUI* ui)
-    {
-        bool checked = !ui->uiView->getNormalizedImage();
-        ui->uiView->setNormalizedImage(checked);
-        refresh_media_cb(m, ui);
-        ui->uiMain->fill_menu(ui->uiMenuBar);
-    }
-    
-    void toggle_invalid_values_cb(Fl_Menu_* m, ViewerUI* ui)
-    {
-        bool checked = !ui->uiView->getInvalidValues();
-        ui->uiView->setInvalidValues(checked);
-        refresh_media_cb(m, ui);
-        ui->uiMain->fill_menu(ui->uiMenuBar);
-    }
 
     void toggle_display_window_cb(Fl_Menu_* m, ViewerUI* ui)
     {

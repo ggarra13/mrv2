@@ -71,6 +71,20 @@ namespace tl
             j.at("enabled").get_to(value.enabled);
             j.at("value").get_to(value.value);
         }
+        
+        void to_json(nlohmann::json& j, const Normalize& value)
+        {
+            j["enabled"] = value.enabled;
+            j["mimimum"] = value.minimum;
+            j["maximum"] = value.maximum;
+        }
+
+        void from_json(const nlohmann::json& j, Normalize& value)
+        {
+            j.at("enabled").get_to(value.enabled);
+            j.at("minimum").get_to(value.minimum);
+            j.at("maximum").get_to(value.maximum);
+        }
 
         void to_json(nlohmann::json& j, const DisplayOptions& value)
         {
@@ -86,6 +100,8 @@ namespace tl
             j["softClip"] = softClip;
             j["imageFilters"] = imageFilters;
             j["videoLevels"] = value.videoLevels;
+            j["normalize"] = value.normalize;
+            j["invalidValues"] = value.invalidValues;
         }
 
         void from_json(const nlohmann::json& j, DisplayOptions& value)
@@ -97,6 +113,8 @@ namespace tl
             j.at("softClip").get_to(value.softClip);
             j.at("imageFilters").get_to(value.imageFilters);
             j.at("videoLevels").get_to(value.videoLevels);
+            j.at("normalize").get_to(value.normalize);
+            j.at("invalidValues").get_to(value.invalidValues);
         }
     } // namespace timeline
 } // namespace tl

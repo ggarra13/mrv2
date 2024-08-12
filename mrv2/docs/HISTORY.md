@@ -4,12 +4,12 @@ v1.2.3
 - Fixed loading of movies with multiple audio tracks which had gotten
   broken.  Also it fixes an incorrect use of C++ that could lead to
   undefined behavior on compilers.
-- Added "View/HDR/Auto Normalize" to normalize HDR (OpenEXR and HDR images).
-- Added "View/HDR/Invalid Values" to show HDR images' invalid values.
+- Added "Render/HDR/Auto Normalize" to normalize HDR (OpenEXR and HDR images).
+- Added "Render/HDR/Invalid Values" to show HDR images' invalid values.
 - Added toggleSafeAreas, toggleDisplayWindow, toggleDataWindow,
   toggleIgnoreDisplayWindow, toggleAutoNormalize, toggleInvalidValues
   python commands in cmd module.
-- Upgraded to NDI 5.6.
+- Upgraded to NDI 6.0.
 - Added support for NDI's PA216 format.
 - Added NDI Panel's pulldown to support either fast or best format.
 - Added NDI Panel's pulldown to support audio or not.

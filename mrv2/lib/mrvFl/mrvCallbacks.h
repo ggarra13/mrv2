@@ -78,6 +78,8 @@ namespace mrv
 
     void rotate_plus_90_cb(Fl_Menu_* m, ViewerUI* ui);
     void rotate_minus_90_cb(Fl_Menu_* m, ViewerUI* ui);
+    
+    void toggle_normalize_image_cb(Fl_Menu_* w, ViewerUI* ui);
 
     //! Channel callbacks
     void toggle_red_channel_cb(Fl_Menu_* m, ViewerUI* ui);
@@ -113,9 +115,6 @@ namespace mrv
 
     //! Ignore Display Window callback
     void toggle_ignore_display_window_cb(Fl_Menu_* w, ViewerUI* ui);
-    
-    //! Normalize callback
-    void toggle_normalize_image_cb(Fl_Menu_* w, ViewerUI* ui);
 
     //! Invalid values callback
     void toggle_invalid_values_cb(Fl_Menu_* w, ViewerUI* ui);
