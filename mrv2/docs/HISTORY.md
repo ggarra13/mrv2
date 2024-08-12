@@ -4,8 +4,8 @@ v1.2.3
 - Fixed loading of movies with multiple audio tracks which had gotten
   broken.  Also it fixes an incorrect use of C++ that could lead to
   undefined behavior on compilers.
-- Added "View/Auto Normalize" to normalize HDR (OpenEXR and HDR images).
-- Added "View/Invalid Values" to show HDR images' invalid values.
+- Added "View/HDR/Auto Normalize" to normalize HDR (OpenEXR and HDR images).
+- Added "View/HDR/Invalid Values" to show HDR images' invalid values.
 - Added toggleSafeAreas, toggleDisplayWindow, toggleDataWindow,
   toggleIgnoreDisplayWindow, toggleAutoNormalize, toggleInvalidValues
   python commands in cmd module.
@@ -15,16 +15,17 @@ v1.2.3
 - Added NDI Panel's pulldown to support audio or not.
 - Fixed a memory leak and slowdown in NDI streams.
 - Fixed loading of the same frame several times from the command-line.
-- Improved switching of clips.  There's no longer a flickering of black when you
-  switch clips.
+- Improved switching of clips.  There's no longer a flickering of black when 
+  you switch clips.
 - Slight improvements on playback performance.
 - Fixed reverse playback seeking when cache was not filled on movies smaller
   than 4K.
 - Fixed a memory leak on reverse playback seeking.
 - Fixed area selection when switching to a clip of different size.
 - Fixed thumbnail icons not showing the current layer in the Panels.
-- Fixed reverse seeking not respecting the reverse playback action and reverting
-  to stopping.
+- Fixed reverse seeking not respecting the reverse playback action and 
+  reverting to stopping.
+- Re-arranging of View menu into submenus (Tool Bar, HDR and OpenEXR submenus).
 - Code clean-up.
 
 

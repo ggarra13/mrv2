@@ -205,6 +205,55 @@ namespace mrv
         else
             item->clear();
 
+            
+        snprintf(buf, 256, "%s", _("View/Tool Bars/Toggle Menu Bar"));
+        idx = menu->add(
+            buf, kToggleMenuBar.hotkey(), (Fl_Callback*)toggle_menu_bar, ui,
+            FL_MENU_TOGGLE);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (ui->uiMenuGroup->visible())
+            item->set();
+
+        snprintf(buf, 256, "%s", _("View/Tool Bars/Toggle Top Bar"));
+        idx = menu->add(
+            buf, kToggleTopBar.hotkey(), (Fl_Callback*)toggle_top_bar, ui,
+            FL_MENU_TOGGLE);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (ui->uiTopBar->visible())
+            item->set();
+
+        snprintf(buf, 256, "%s", _("View/Tool Bars/Toggle Pixel Bar"));
+        idx = menu->add(
+            buf, kTogglePixelBar.hotkey(), (Fl_Callback*)toggle_pixel_bar, ui,
+            FL_MENU_TOGGLE);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (ui->uiPixelBar->visible())
+            item->set();
+
+        snprintf(buf, 256, "%s", _("View/Tool Bars/Toggle Timeline Bar"));
+        idx = menu->add(
+            buf, kToggleTimeline.hotkey(), (Fl_Callback*)toggle_bottom_bar, ui,
+            FL_MENU_TOGGLE);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (ui->uiBottomBar->visible())
+            item->set();
+
+        snprintf(buf, 256, "%s", _("View/Tool Bars/Toggle Status Bar"));
+        idx = menu->add(
+            buf, kToggleStatusBar.hotkey(), (Fl_Callback*)toggle_status_bar, ui,
+            FL_MENU_TOGGLE);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (ui->uiStatusGroup->visible())
+            item->set();
+
+        snprintf(buf, 256, "%s", _("View/Tool Bars/Toggle Action Dock"));
+        idx = menu->add(
+            buf, kToggleToolBar.hotkey(), (Fl_Callback*)toggle_action_tool_bar,
+            ui, FL_MENU_TOGGLE);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (ui->uiToolsGroup->visible())
+            item->set();
+        
         mode = FL_MENU_TOGGLE;
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
@@ -223,86 +272,38 @@ namespace mrv
             item->set();
 
         idx = menu->add(
-            _("View/Data Window"), kDataWindow.hotkey(),
+            _("View/OpenEXR/Data Window"), kDataWindow.hotkey(),
             (Fl_Callback*)toggle_data_window_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (view->getDataWindow())
             item->set();
 
         idx = menu->add(
-            _("View/Display Window"), kDisplayWindow.hotkey(),
+            _("View/OpenEXR/Display Window"), kDisplayWindow.hotkey(),
             (Fl_Callback*)toggle_display_window_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (view->getDisplayWindow())
             item->set();
 
         idx = menu->add(
-            _("View/Ignore Display Window"), kIgnoreDisplayWindow.hotkey(),
+            _("View/OpenEXR/Ignore Display Window"), kIgnoreDisplayWindow.hotkey(),
             (Fl_Callback*)toggle_ignore_display_window_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (view->getIgnoreDisplayWindow())
             item->set();
         
         idx = menu->add(
-            _("View/Auto Normalize"), kAutoNormalize.hotkey(),
+            _("View/HDR/Auto Normalize"), kAutoNormalize.hotkey(),
             (Fl_Callback*)toggle_normalize_image_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (view->getNormalizedImage())
             item->set();
         
         idx = menu->add(
-            _("View/Invalid Values"), kInvalidValues.hotkey(),
+            _("View/HDR/Invalid Values"), kInvalidValues.hotkey(),
             (Fl_Callback*)toggle_invalid_values_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (view->getInvalidValues())
-            item->set();
-            
-        snprintf(buf, 256, "%s", _("View/Toggle Menu bar"));
-        idx = menu->add(
-            buf, kToggleMenuBar.hotkey(), (Fl_Callback*)toggle_menu_bar, ui,
-            FL_MENU_TOGGLE);
-        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (ui->uiMenuGroup->visible())
-            item->set();
-
-        snprintf(buf, 256, "%s", _("View/Toggle Top bar"));
-        idx = menu->add(
-            buf, kToggleTopBar.hotkey(), (Fl_Callback*)toggle_top_bar, ui,
-            FL_MENU_TOGGLE);
-        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (ui->uiTopBar->visible())
-            item->set();
-
-        snprintf(buf, 256, "%s", _("View/Toggle Pixel bar"));
-        idx = menu->add(
-            buf, kTogglePixelBar.hotkey(), (Fl_Callback*)toggle_pixel_bar, ui,
-            FL_MENU_TOGGLE);
-        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (ui->uiPixelBar->visible())
-            item->set();
-
-        snprintf(buf, 256, "%s", _("View/Toggle Timeline"));
-        idx = menu->add(
-            buf, kToggleTimeline.hotkey(), (Fl_Callback*)toggle_bottom_bar, ui,
-            FL_MENU_TOGGLE);
-        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (ui->uiBottomBar->visible())
-            item->set();
-
-        snprintf(buf, 256, "%s", _("View/Toggle Status Bar"));
-        idx = menu->add(
-            buf, kToggleStatusBar.hotkey(), (Fl_Callback*)toggle_status_bar, ui,
-            FL_MENU_TOGGLE);
-        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (ui->uiStatusGroup->visible())
-            item->set();
-
-        snprintf(buf, 256, "%s", _("View/Toggle Action Dock"));
-        idx = menu->add(
-            buf, kToggleToolBar.hotkey(), (Fl_Callback*)toggle_action_tool_bar,
-            ui, FL_MENU_TOGGLE);
-        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (ui->uiToolsGroup->visible())
             item->set();
 
         idx = menu->add(

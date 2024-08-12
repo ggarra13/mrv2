@@ -1826,6 +1826,18 @@ msgstr "Input"
 msgid "NDI Connection"
 msgstr "NDI Connection"
 
+msgid "Fast Format"
+msgstr "Fast Format"
+
+msgid "Best Format"
+msgstr "Best Format"
+
+msgid "With Audio"
+msgstr "With Audio"
+
+msgid "Without Audio"
+msgstr "Without Audio"
+
 msgid "USD"
 msgstr "USD"
 
@@ -3528,44 +3540,44 @@ msgstr "Window/Secondary"
 msgid "Window/Secondary Float On Top"
 msgstr "Window/Secondary Float On Top"
 
+msgid "View/Tool Bars/Toggle Menu Bar"
+msgstr "View/Tool Bars/Toggle Menu Bar"
+
+msgid "View/Tool Bars/Toggle Top Bar"
+msgstr "View/Tool Bars/Toggle Top Bar"
+
+msgid "View/Tool Bars/Toggle Pixel Bar"
+msgstr "View/Tool Bars/Toggle Pixel Bar"
+
+msgid "View/Tool Bars/Toggle Timeline Bar"
+msgstr "View/Tool Bars/Toggle Timeline Bar"
+
+msgid "View/Tool Bars/Toggle Status Bar"
+msgstr "View/Tool Bars/Toggle Status Bar"
+
+msgid "View/Tool Bars/Toggle Action Dock"
+msgstr "View/Tool Bars/Toggle Action Dock"
+
 msgid "View/Auto Frame"
 msgstr "View/Auto Frame"
 
 msgid "View/Safe Areas"
 msgstr "View/Safe Areas"
 
-msgid "View/Data Window"
-msgstr "View/Data Window"
+msgid "View/OpenEXR/Data Window"
+msgstr "View/OpenEXR/Data Window"
 
-msgid "View/Display Window"
-msgstr "View/Display Window"
+msgid "View/OpenEXR/Display Window"
+msgstr "View/OpenEXR/Display Window"
 
-msgid "View/Ignore Display Window"
-msgstr "View/Ignore Display Window"
+msgid "View/OpenEXR/Ignore Display Window"
+msgstr "View/OpenEXR/Ignore Display Window"
 
-msgid "View/Auto Normalize"
-msgstr "View/Auto Normalize"
+msgid "View/HDR/Auto Normalize"
+msgstr "View/HDR/Auto Normalize"
 
-msgid "View/Invalid Values"
-msgstr "View/Invalid Values"
-
-msgid "View/Toggle Menu bar"
-msgstr "View/Toggle Menu bar"
-
-msgid "View/Toggle Top bar"
-msgstr "View/Toggle Top bar"
-
-msgid "View/Toggle Pixel bar"
-msgstr "View/Toggle Pixel bar"
-
-msgid "View/Toggle Timeline"
-msgstr "View/Toggle Timeline"
-
-msgid "View/Toggle Status Bar"
-msgstr "View/Toggle Status Bar"
-
-msgid "View/Toggle Action Dock"
-msgstr "View/Toggle Action Dock"
+msgid "View/HDR/Invalid Values"
+msgstr "View/HDR/Invalid Values"
 
 msgid "Panel/One Panel Only"
 msgstr "Panel/One Panel Only"

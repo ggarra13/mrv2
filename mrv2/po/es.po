@@ -1897,6 +1897,18 @@ msgstr "Entrada"
 msgid "NDI Connection"
 msgstr "Conexión NDI"
 
+msgid "Fast Format"
+msgstr "Formato Rápido"
+
+msgid "Best Format"
+msgstr "Mejor Formato"
+
+msgid "With Audio"
+msgstr "Con Audio"
+
+msgid "Without Audio"
+msgstr "Sin Audio"
+
 msgid "USD"
 msgstr "USD"
 
@@ -3621,44 +3633,44 @@ msgstr "Ventana/Secundaria"
 msgid "Window/Secondary Float On Top"
 msgstr "Ventana/Secundaria Floata Sobre Todo"
 
+msgid "View/Tool Bars/Toggle Menu Bar"
+msgstr "Vista/Barras/Alternar Barra de Menú"
+
+msgid "View/Tool Bars/Toggle Top Bar"
+msgstr "Vista/Barras/Alternar Barra Superior"
+
+msgid "View/Tool Bars/Toggle Pixel Bar"
+msgstr "Vista/Barras/Alternar Barra de Pixel"
+
+msgid "View/Tool Bars/Toggle Timeline Bar"
+msgstr "Vista/Barras/Alternar Línea de Tiempo"
+
+msgid "View/Tool Bars/Toggle Status Bar"
+msgstr "Vista/Barras/Alternar Barra de Estatus"
+
+msgid "View/Tool Bars/Toggle Action Dock"
+msgstr "Vista/Barras/Alternar Herramientas"
+
 msgid "View/Auto Frame"
 msgstr "Vista/Autoencuadre"
 
 msgid "View/Safe Areas"
 msgstr "Vista/Áreas Seguras"
 
-msgid "View/Data Window"
-msgstr "Vista/Ventana de Datos"
+msgid "View/OpenEXR/Data Window"
+msgstr "Vista/OpenEXR/Ventana de Datos"
 
-msgid "View/Display Window"
-msgstr "Vista/Ventana de Display"
+msgid "View/OpenEXR/Display Window"
+msgstr "Vista/OpenEXR/Ventana de Display"
 
-msgid "View/Ignore Display Window"
-msgstr "Vista/Ignorar Ventana de Display"
+msgid "View/OpenEXR/Ignore Display Window"
+msgstr "Vista/OpenEXR/Ignorar Ventana de Display"
 
-msgid "View/Auto Normalize"
-msgstr "Vista/Auto Normalizar"
+msgid "View/HDR/Auto Normalize"
+msgstr "Vista/HDR/Auto Normalizar"
 
-msgid "View/Invalid Values"
-msgstr "Vista/Valores Inválidos"
-
-msgid "View/Toggle Menu bar"
-msgstr "Vista/Alternar Barra de Menú"
-
-msgid "View/Toggle Top bar"
-msgstr "Vista/Alternar Barra Superior"
-
-msgid "View/Toggle Pixel bar"
-msgstr "Vista/Alternar Barra de Pixel"
-
-msgid "View/Toggle Timeline"
-msgstr "Vista/Alternar Línea de Tiempo"
-
-msgid "View/Toggle Status Bar"
-msgstr "Vista/Alternar Barra de Estatus"
-
-msgid "View/Toggle Action Dock"
-msgstr "Vista/Alternar Herramientas"
+msgid "View/HDR/Invalid Values"
+msgstr "Vista/HDR/Valores Inválidos"
 
 msgid "Panel/One Panel Only"
 msgstr "Panel/Un Solo Panel"
