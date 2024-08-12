@@ -95,7 +95,6 @@
 #endif
 
 #ifdef TLRENDER_USD
-#    include <boost/version.hpp>
 #    include <tbb/tbb_stddef.h>
 #    include <MaterialXCore/Util.h>
 #    include <pxr/pxr.h>
@@ -708,17 +707,6 @@ namespace mrv
           << endl
           << _("mrv2 depends on:") << endl
           << endl;
-
-#ifdef TLRENDER_USD
-        unsigned int boost_major = BOOST_VERSION / 100000;
-        unsigned int boost_minor = BOOST_VERSION / 100 % 1000;
-        unsigned int boost_patch = BOOST_VERSION % 100;
-        o << "Boost v" << boost_major << "." << boost_minor << "."
-          << boost_patch << endl
-          << "Copyright (c) 2016-Present Contributors to the Boost Project"
-          << endl
-          << endl;
-#endif
 #ifdef TLRENDER_OCIO
         const auto expat = XML_ExpatVersionInfo();
         o << "expat v" << expat.major << "." << expat.minor << "."
