@@ -102,7 +102,7 @@ namespace mrv
 
             const auto& files = model->observeFiles();
             size_t numFiles = files->getSize();
-            auto aIndex = model->observeAIndex()->get();
+            auto Aindex = model->observeAIndex()->get();
             auto stereoIndex = model->observeStereoIndex()->get();
 
             auto player = p.ui->uiView->getTimelinePlayer();
@@ -147,6 +147,11 @@ namespace mrv
                 _r->indices[b] = i;
 
                 uint16_t layerId = media->videoLayer;
+                if (Aindex == i)
+                {
+                    layerId = p.ui->uiColorChannel->value();
+                }
+                
                 if (stereoIndex == i)
                 {
                     b->value(1);
@@ -360,7 +365,7 @@ namespace mrv
             image::Size size(128, 64);
 
             const auto& model = App::app->filesModel();
-            auto aIndex = model->observeAIndex()->get();
+            auto Aindex = model->observeAIndex()->get();
             auto stereoIndex = model->observeStereoIndex()->get();
             const auto files = model->observeFiles();
 
@@ -380,9 +385,12 @@ namespace mrv
 
                 uint16_t layerId = media->videoLayer;
                 bool found = false;
-                if (aIndex == i)
+                if (Aindex == i)
+                {
+                    layerId = p.ui->uiColorChannel->value();
                     found = true;
-
+                }
+                
                 if (stereoIndex != i)
                 {
                     b->value(0);
@@ -394,10 +402,14 @@ namespace mrv
                 }
 
                 if (found)
+                {
                     time = player->currentTime();
+                }
                 else
+                {
                     time = media->currentTime;
-
+                }
+                
                 const std::string& layer = getLayerName(media, layerId);
                 std::string text = protocol + dir + "\n" + file + layer;
                 b->copy_label(text.c_str());

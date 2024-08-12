@@ -172,11 +172,12 @@ namespace mrv
 
                 _r->map[i] = b;
 
+                uint16_t layerId;
                 time = media->currentTime;
-                uint16_t layerId = media->videoLayer;
                 if (Aindex == i)
                 {
                     b->value(1);
+                    layerId = p.ui->uiColorChannel->value();
                     if (player)
                     {
                         time = player->currentTime();
@@ -185,6 +186,7 @@ namespace mrv
                 else
                 {
                     b->value(0);
+                    layerId = media->videoLayer;
                 }
 
                 const std::string layer = getLayerName(media, layerId);
@@ -286,7 +288,7 @@ namespace mrv
                 const std::string& fullfile = protocol + dir + file;
                 FileButton* b = m.second;
 
-                uint16_t layerId = p.ui->uiColorChannel->value();
+                uint16_t layerId;
                 const std::string layer = getLayerName(media, layerId);
                 std::string text = protocol + dir + "\n" + file + layer;
                 b->copy_label(text.c_str());
@@ -296,12 +298,14 @@ namespace mrv
                 time = media->currentTime;
                 if (Aindex != i)
                 {
+                    layerId = media->videoLayer;
                     b->value(0);
                 }
                 else
                 {
                     b->value(1);
                     time = player->currentTime();
+                    layerId = p.ui->uiColorChannel->value();
                 }
 
                 _createThumbnail(b, path, time, layerId, isNDI);
