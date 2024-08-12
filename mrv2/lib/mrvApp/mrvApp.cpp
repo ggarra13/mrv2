@@ -461,6 +461,7 @@ namespace mrv
                 path.getBaseName() == lastPath.getBaseName() &&
                 path.getPadding() == lastPath.getPadding() &&
                 path.getExtension() == lastPath.getExtension() &&
+                file::isSequence(unused) &&
                 !file::isDirectory(unused))
                 continue;
             lastPath = path;

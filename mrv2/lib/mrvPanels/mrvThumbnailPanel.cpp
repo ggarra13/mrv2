@@ -129,12 +129,6 @@ namespace mrv
                 {
                     auto startTime = timeRange.start_time();
                     auto endTime = timeRange.end_time_inclusive();
-
-                    // If single frame and we have an icon, return.
-                    if (startTime == endTime && widget->image())
-                    {
-                        return;
-                    }
                     
                     if (time < startTime)
                         time = startTime;
@@ -156,6 +150,8 @@ namespace mrv
                     options["ClearCache"] = string::Format("{0}").arg(rand());
                     _clearCache = false;
                 }
+
+                options["Layer"] = string::Format("{0}").arg(layerId);
                 
                 thumbnailRequests[widget] =
                     thumbnailSystem->getThumbnail(path, size.h, time, options);

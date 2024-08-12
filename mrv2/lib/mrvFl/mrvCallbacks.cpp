@@ -133,23 +133,23 @@ namespace mrv
             }
         }
 
-        void clear_timeline_player(ViewerUI* ui, TimelinePlayer* player)
-        {
-            ui->uiView->setTimelinePlayer(nullptr);
-            if (ui->uiSecondary && ui->uiSecondary->window()->visible())
-                ui->uiSecondary->viewport()->setTimelinePlayer(nullptr, false);
-            player->setTimeline(nullptr);
-        }
+        // void clear_timeline_player(ViewerUI* ui, TimelinePlayer* player)
+        // {
+        //     ui->uiView->setTimelinePlayer(nullptr);
+        //     if (ui->uiSecondary && ui->uiSecondary->window()->visible())
+        //         ui->uiSecondary->viewport()->setTimelinePlayer(nullptr);
+        //     player->setTimeline(nullptr);
+        // }
 
-        void set_timeline_player(
-            const ViewerUI* ui, TimelinePlayer* player,
-            const otio::SerializableObject::Retainer<otio::Timeline>& timeline)
-        {
-            player->setTimeline(timeline);
-            ui->uiView->setTimelinePlayer(player);
-            if (ui->uiSecondary && ui->uiSecondary->window()->visible())
-                ui->uiSecondary->viewport()->setTimelinePlayer(player, false);
-        }
+        // void set_timeline_player(
+        //     const ViewerUI* ui, TimelinePlayer* player,
+        //     const otio::SerializableObject::Retainer<otio::Timeline>& timeline)
+        // {
+        //     player->setTimeline(timeline);
+        //     ui->uiView->setTimelinePlayer(player);
+        //     if (ui->uiSecondary && ui->uiSecondary->window()->visible())
+        //         ui->uiSecondary->viewport()->setTimelinePlayer(player);
+        // }
     } // namespace
 
     void open_files_cb(const std::vector< std::string >& files, ViewerUI* ui)
@@ -912,7 +912,7 @@ namespace mrv
             view->setDisplayOptions({displayOptions});
             auto model = app->filesModel();
             view->setCompareOptions(model->observeCompareOptions()->get());
-            view->setTimelinePlayer(ui->uiView->getTimelinePlayer(), false);
+            view->setTimelinePlayer(ui->uiView->getTimelinePlayer());
             window->show();
 
             bool value = ui->uiPrefs->uiPrefsSecondaryOnTop->value();

@@ -780,7 +780,7 @@ namespace mrv
                         if (interactive)
                         {
                             view->make_current();
-                            view->currentVideoCallback({videoData}, player);
+                            view->currentVideoCallback({videoData});
                             view->flush();
                         }
                         

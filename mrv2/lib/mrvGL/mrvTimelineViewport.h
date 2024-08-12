@@ -105,8 +105,7 @@ namespace mrv
         void setStereo3DOptions(const Stereo3DOptions&) noexcept;
 
         //! Set the timeline players.
-        void
-        setTimelinePlayer(TimelinePlayer*, const bool primary = true) noexcept;
+        void setTimelinePlayer(TimelinePlayer*) noexcept;
 
         //! Get one of the timeline players.  Index is not checked.
         mrv::TimelinePlayer* getTimelinePlayer() const noexcept;
@@ -246,9 +245,7 @@ namespace mrv
 
         void currentTimeChanged(const otime::RationalTime&) const noexcept;
 
-        void currentVideoCallback(
-            const std::vector<tl::timeline::VideoData>&,
-            const TimelinePlayer* sender) noexcept;
+        void currentVideoCallback(const std::vector<tl::timeline::VideoData>&) noexcept;
 
         //! Set the OCIO configuration from the GUI.
         void updateOCIOOptions() noexcept;
@@ -370,9 +367,9 @@ namespace mrv
         //! Get the matrix to pixel (raster) coordinates of image.
         math::Matrix4x4f _pixelMatrix() const noexcept;
 
-        //! Handle the selection area position taking into account
+        //! Clip the selection area position taking into account
         //! rotation.
-        void _handleSelectionArea(math::Vector2i& pos) const noexcept;
+        void _clipSelectionArea(math::Vector2i& pos) const noexcept;
 
         //! Call redraw and a flush to force a redraw.
         void _refresh() noexcept;

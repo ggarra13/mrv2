@@ -826,8 +826,7 @@ namespace mrv
         redraw();
     }
 
-    void TimelineViewport::setTimelinePlayer(
-        TimelinePlayer* player, const bool primary) noexcept
+    void TimelineViewport::setTimelinePlayer(TimelinePlayer* player) noexcept
     {
         TLRENDER_P();
 
@@ -838,20 +837,26 @@ namespace mrv
 
         updateVideoLayers();
 
-        p.videoData.clear();
-
+        p.videoDataObserver.reset();
+        
         if (player)
         {
-            if (primary)
-                player->setTimelineViewport(this);
-            else
-                player->setSecondaryViewport(this);
-
-            p.videoData = player->currentVideo();
+            p.videoDataObserver = observer::ListObserver<timeline::VideoData>::create(
+                p.player->player()->observeCurrentVideo(),
+                [this](const std::vector<timeline::VideoData>& value)
+                    {
+                        currentVideoCallback(value);
+                    },
+                observer::CallbackAction::Suppress);
+            
             p.switchClip = true;
         }
+        else
+        {
+            p.videoData.clear();
+        }
 
-        refreshWindows(); // needed We need to refresh, as the new
+        // refreshWindows(); // needed We need to refresh, as the new
                           // video data may have different sizes.
     }
 
@@ -1098,10 +1103,11 @@ namespace mrv
     }
 
     void TimelineViewport::currentVideoCallback(
-        const std::vector<timeline::VideoData>& values,
-        const TimelinePlayer* sender) noexcept
+        const std::vector<timeline::VideoData>& values) noexcept
     {
         TLRENDER_P();
+
+        assert(!values.empty());
 
         p.videoData = values;
 
@@ -1119,12 +1125,19 @@ namespace mrv
 
         if (p.switchClip)
         {
+            const auto& image = values[0].layers[0].image;
+            if (image && image->isValid())
+            {
+                const auto& videoSize = image->getSize();        
+                p.videoSize = videoSize;
+            }
+            
             p.switchClip = false;
             p.droppedFrames = 0;
         }
 
         _getTags();
-        int layerId = sender->videoLayer();
+
         p.missingFrame = false;
         if (p.missingFrameType != MissingFrameType::kBlackFrame &&
             !values[0].layers.empty())
@@ -1135,16 +1148,20 @@ namespace mrv
                 (!imageB || !imageB->isValid()))
             {
                 p.missingFrame = true;
-                if (sender->playback() != timeline::Playback::Forward)
+                if (p.player->playback() != timeline::Playback::Forward)
                 {
+                    int layerId = 0;
+                    if (p.player)
+                        layerId = p.player->player()->observeVideoLayer()->get();
+        
                     io::Options ioOptions;
                     {
                         std::stringstream s;
                         s << layerId;
                         ioOptions["Layer"] = s.str();
                     }
-                    const auto& timeline = sender->timeline();
-                    const auto& inOutRange = sender->inOutRange();
+                    const auto& timeline = p.player->timeline();
+                    const auto& inOutRange = p.player->inOutRange();
                     auto currentTime = values[0].time;
                     // Seek until we find a previous frame or reach
                     // the beginning of the inOutRange.
@@ -1170,7 +1187,7 @@ namespace mrv
             }
             else
             {
-                if (sender->playback() != timeline::Playback::Reverse)
+                if (p.player->playback() != timeline::Playback::Reverse)
                 {
                     p.lastVideoData = values[0];
                 }
@@ -1185,13 +1202,13 @@ namespace mrv
 
             // If the file is an image sequence, we refresh the main
             // image information.
-            if (!file::isMovie(sender->path().getExtension()))
+            if (!file::isMovie(p.player->path().getExtension()))
                 imageRefresh = true;
 
             // If timeline is stopped or has a single frame,
             // refresh the media info panel, sa
-            if (sender->playback() == timeline::Playback::Stop ||
-                sender->timeRange().duration().value() == 1.0)
+            if (p.player->playback() == timeline::Playback::Stop ||
+                p.player->timeRange().duration().value() == 1.0)
                 fullRefresh = true;
 
             // If timeline has a Data Window (it is an OpenEXR)
@@ -1213,7 +1230,7 @@ namespace mrv
             }
         }
 
-        if (p.selection.max.x != -1)
+        if (p.selection.max.x >= 0)
         {
             if (!values[0].layers.empty())
             {

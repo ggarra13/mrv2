@@ -357,8 +357,8 @@ namespace mrv
     {
         TLRENDER_P();
 
-        p.continueReversePlaying = true;
-
+        const auto& time = p.player->currentTime();
+            
         //
         // Thie observer will watch the cache and start a reverse playback
         // once it is filled.
@@ -366,19 +366,48 @@ namespace mrv
         p.cacheInfoObserver =
             observer::ValueObserver<timeline::PlayerCacheInfo>::create(
                 p.player->player()->observeCacheInfo(),
-                [this](const timeline::PlayerCacheInfo& value)
+                [this, time](const timeline::PlayerCacheInfo& value)
                 {
                     TLRENDER_P();
-                    if (p.player->playback() != timeline::Playback::Stop &&
-                        p.continueReversePlaying)
+                    if (p.player->playback() != timeline::Playback::Stop)
+                    {
+                        p.cacheInfoObserver.reset();
                         return;
-
+                    }
+                    
                     const auto& cache =
                         p.player->player()->observeCacheOptions()->get();
-                    const auto& readAhead = cache.readAhead;
-                    const auto& readBehind = cache.readBehind;
-                    const auto& endTime = p.player->currentTime() + readBehind;
-                    const auto& startTime = endTime - readAhead;
+                    const auto& rate = time.rate();
+                    const auto& readAhead =
+                        cache.readAhead.rescaled_to(rate);
+                    const auto& readBehind =
+                        cache.readBehind.rescaled_to(rate);
+                    const auto& timeRange = p.player->inOutRange();
+
+                    auto startTime = time + readBehind;
+                    auto endTime = time - readAhead;
+                    if (endTime < timeRange.start_time())
+                    {
+                        auto diff = timeRange.start_time() - endTime;
+                        endTime = timeRange.end_time_exclusive();
+                        startTime = endTime - diff;
+
+                        // Check in case of negative frames
+                        if (startTime > endTime)
+                            startTime = endTime;
+                    }
+
+                    // Sanity check just in case
+                    if (endTime < startTime)
+                    {
+                        const auto tmp = endTime;
+                        endTime = startTime;
+                        startTime = tmp;
+                    }
+
+                    // Avoid rounding errors
+                    endTime = endTime.floor();
+                    startTime = startTime.ceil();
 
                     bool found = false;
                     for (const auto& t : value.videoFrames)
@@ -393,7 +422,6 @@ namespace mrv
                     if (found)
                     {
                         p.ui->uiView->setPlayback(timeline::Playback::Reverse);
-                        p.continueReversePlaying = false;
                     }
                 });
     }
@@ -411,17 +439,16 @@ namespace mrv
             const auto& info = p.player->ioInfo();
             const auto& time = _posToTime(X);
             p.player->seek(time);
-            // \@note: Jumping frames when playin in reverse on 4K movies can
+            // \@note: Jumping frames when playing can
             //         lead to seeking issues in tlRender when the images are
             //         not in cache.
-            //         We stop the playbay and set an FLTK timeout to watch
+            //         We stop the playback and set an FLTK timeout to watch
             //         on the cache until it is filled and we continue
             //         playing from there.
             //
             const auto& path = p.player->path();
             if (file::isMovie(path) &&
-                p.player->playback() == timeline::Playback::Reverse &&
-                !info.video.empty() && info.video[0].size.w > 2048)
+                p.player->playback() == timeline::Playback::Reverse)
             {
                 p.player->stop();
                 Fl::add_timeout(

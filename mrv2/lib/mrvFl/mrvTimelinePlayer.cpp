@@ -418,18 +418,8 @@ namespace mrv
         player->player()->setPlayback(timeline::Playback::Stop);
         player->seek(data->time);
         player->setSpeed(data->speed);
-        player->updateUndoRedoButtons();
         panel::redrawThumbnails();
         delete data;
-    }
-
-    void TimelinePlayer::updateUndoRedoButtons() const
-    {
-        if (timelineViewport)
-        {
-            timelineViewport->updateUndoRedoButtons();
-            timelineViewport->updatePlaybackButtons();
-        }
     }
 
     bool TimelinePlayer::isStepping() const
@@ -439,12 +429,14 @@ namespace mrv
 
     void TimelinePlayer::framePrev()
     {
+        TLRENDER_P();
+        
         pushMessage("framePrev", 0);
 
         if (isMuted())
-            return _p->player->framePrev();
+            return p.player->framePrev();
 
-        _p->isStepping = true;
+        p.isStepping = true;
         const auto oneFrame =
             otime::RationalTime(1.0, timeRange().duration().rate());
         auto time = currentTime() - oneFrame;
@@ -464,7 +456,8 @@ namespace mrv
                 break;
             }
         }
-        _p->player->setPlayback(timeline::Playback::Reverse);
+        
+        p.player->setPlayback(timeline::Playback::Reverse);
         StopData* data = new StopData;
         data->player = this;
         data->time = time;
@@ -476,12 +469,14 @@ namespace mrv
 
     void TimelinePlayer::frameNext()
     {
+        TLRENDER_P();
+        
         pushMessage("frameNext", 0);
 
         if (isMuted())
-            return _p->player->frameNext();
+            return p.player->frameNext();
 
-        _p->isStepping = true;
+        p.isStepping = true;
         const auto oneFrame =
             otime::RationalTime(1.0, timeRange().duration().rate());
         auto time = currentTime() + oneFrame;
@@ -502,7 +497,8 @@ namespace mrv
                 break;
             }
         }
-        _p->player->setPlayback(timeline::Playback::Forward);
+        
+        p.player->setPlayback(timeline::Playback::Forward);
         StopData* data = new StopData;
         data->player = this;
         data->time = time;
@@ -600,11 +596,6 @@ namespace mrv
         timelineViewport = view;
     }
 
-    void TimelinePlayer::setSecondaryViewport(TimelineViewport* view)
-    {
-        secondaryViewport = view;
-    }
-
     //! \name Playback
     ///@{
 
@@ -616,7 +607,11 @@ namespace mrv
     }
 
     //! This signal is emitted when the playback mode is changed.
-    void TimelinePlayer::playbackChanged(tl::timeline::Playback value) {}
+    void TimelinePlayer::playbackChanged(tl::timeline::Playback value)
+    {
+        if (timelineViewport)
+            timelineViewport->updatePlaybackButtons();
+    }
 
     //! This signal is emitted when the playback loop mode is changed.
     void TimelinePlayer::loopChanged(tl::timeline::Loop value)
@@ -662,17 +657,7 @@ namespace mrv
 
     //! This signal is emitted when the video is changed.
     void TimelinePlayer::currentVideoChanged(
-        const std::vector<tl::timeline::VideoData>& v)
-    {
-        if (!timelineViewport)
-            return;
-
-        timelineViewport->currentVideoCallback(v, this);
-        if (secondaryViewport && secondaryViewport->visible_r())
-        {
-            secondaryViewport->currentVideoCallback(v, this);
-        }
-    }
+        const std::vector<tl::timeline::VideoData>& v) {}
 
     ///@}
 

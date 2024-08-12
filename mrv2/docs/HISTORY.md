@@ -1,16 +1,29 @@
 v1.2.3
 ======
 
-- Fixed loading of movies with multiple audio tracks.
+- Fixed loading of movies with multiple audio tracks which had gotten
+  broken.  Also it fixes an incorrect use of C++ that could lead to
+  undefined behavior on compilers.
 - Added "View/Auto Normalize" to normalize HDR (OpenEXR and HDR images).
 - Added "View/Invalid Values" to show HDR images' invalid values.
 - Added toggleSafeAreas, toggleDisplayWindow, toggleDataWindow,
   toggleIgnoreDisplayWindow, toggleAutoNormalize, toggleInvalidValues
   python commands in cmd module.
+- Upgraded to NDI 5.6.
 - Added support for NDI's PA216 format.
 - Added NDI Panel's pulldown to support either fast or best format.
 - Added NDI Panel's pulldown to support audio or not.
 - Fixed a memory leak and slowdown in NDI streams.
+- Fixed loading of the same frame several times from the command-line.
+- Improved switching of clips.  There's no longer a flickering of black when you
+  switch clips.
+- Slight improvements on playback performance.
+- Fixed reverse playback seeking when cache was not filled on movies smaller
+  than 4K.
+- Fixed a memory leak on reverse playback seeking.
+- Fixed area selection when switching to a clip of different size.
+- Fixed thumbnail icons not showing the current layer in the Panels.
+- Code clean-up.
 
 
 v1.2.2
@@ -215,7 +228,8 @@ v1.1.8
 - Made CMake documentation target (-t doc) not fail if no Python is found.
 - Fixed a potential crash when mrv2 was compiled without Python support and
   a python file was passed as a parameter to the viewer.
-- Fixed a potential misdetection of Linux flavor when updating version with	  Help->Update mrv2 on a system that had both rpm and dpkg installed.
+- Fixed a potential misdetection of Linux flavor when updating version with	
+  Help->Update mrv2 on a system that had both rpm and dpkg installed.
 - Added displaying of the icon on the Taskbar under Wayland.
 - Made both Python and Log Window start in Windowed mode as defaults.
 - Added missing RtAudio's information to About window which was missing.
@@ -243,7 +257,8 @@ v1.1.8
   python.a config library.
 - Fixed Presentation mode on Wayland having colored (gray) borders instead of
   black ones.
-- Worked around an FLTK bug in its CMakeLists.txt files creating problems when ç  the API changed and the install/include/FL directory was not cleared.
+- Worked around an FLTK bug in its CMakeLists.txt files creating problems when 
+  the API changed and the install/include/FL directory was not cleared.
 
 
 v1.1.7

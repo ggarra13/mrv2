@@ -167,6 +167,9 @@ namespace mrv
         //! Auxiliary variables to count FPS
         std::deque<double> frameTimes;
         std::chrono::high_resolution_clock::time_point startTime;
+
+        // Observers
+        std::shared_ptr<observer::ListObserver<timeline::VideoData> > videoDataObserver;
     };
 
 } // namespace mrv

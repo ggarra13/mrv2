@@ -206,11 +206,13 @@ namespace mrv
         TLRENDER_P();
         p.ui->uiView->setTimelinePlayer(p.player);
         p.ui->uiTimeline->setTimelinePlayer(p.player);
+        if (p.player)
+            p.player->setTimelineViewport(p.ui->uiView);
 
         if (p.ui->uiSecondary)
         {
             auto view = p.ui->uiSecondary->viewport();
-            view->setTimelinePlayer(p.player, false);
+            view->setTimelinePlayer(p.player);
         }
     }
 

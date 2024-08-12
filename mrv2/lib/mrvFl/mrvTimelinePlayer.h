@@ -336,12 +336,10 @@ namespace mrv
         void
         setTimeline(const otio::SerializableObject::Retainer<otio::Timeline>&);
 
-        //! \name Viewports
+        //! \name Viewport link
         ///@{
 
         void setTimelineViewport(TimelineViewport*);
-
-        void setSecondaryViewport(TimelineViewport*);
 
         ///@}
 
@@ -395,9 +393,6 @@ namespace mrv
         //! Returns whtehr annotation at current time can be redone.
         bool hasRedo() const;
 
-        //! Update Undo/Redo draw buttons after a frame change.
-        void updateUndoRedoButtons() const;
-
     protected:
         template < typename T >
         void pushMessage(const std::string& command, const T& value);
@@ -408,7 +403,6 @@ namespace mrv
 
     private:
         TimelineViewport* timelineViewport = nullptr;
-        TimelineViewport* secondaryViewport = nullptr;
 
         TLRENDER_PRIVATE();
     };
