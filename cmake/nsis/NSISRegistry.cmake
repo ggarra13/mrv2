@@ -68,6 +68,7 @@ set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
         !define  mrv2_KEY ${mrv2_KEY}
         !define  mrv2_EXE ${mrv2_EXE}
 	!include fileext.nsh
+
 	Section \\\"-Dummy\\\"
 		"
    )

@@ -27,6 +27,7 @@ rm -rf $INSTALL/lib/libMaterial*
 rm -rf $INSTALL/lib/libtbb*
 rm -rf $INSTALL/lib/libusd*
 rm -rf $INSTALL/lib/usd*
+rm -rf $INSTALL/lib/boost*
 rm -rf $INSTALL/libosd*
 rm -rf $INSTALL/libraries
 rm -rf $INSTALL/plugin
@@ -34,5 +35,6 @@ rm -rf $INSTALL/pxrConfig*
 rm -rf $INSTALL/resources
 rm -rf $INSTALL/README.md
 rm -rf $INSTALL/src
+rm -rf $INSTALL/tlRender/etc/SuperBuild/USD
 rm -rf $INSTALL/THIRD_PARTY
 

@@ -66,12 +66,51 @@ Push "${checked}"
 Call AddCheckedListViewItemWith1SubItem
 !macroend
 
+Function DeleteIconCacheFiles
+    ; Define the path to the Explorer folder where the icon cache files are located
+    StrCpy $0 "$LOCALAPPDATA\Microsoft\Windows\Explorer"
+
+    ; Find the first file matching the pattern "iconcache_*.db"
+    ClearErrors
+    FindFirst $1 $2 "$0\iconcache_*.db"
+    ${If} ${Errors}
+        ; If no files are found, exit the function
+        Goto Done
+    ${EndIf}
+
+    ; Loop through and delete each matching file
+    loop:
+        ; Delete the current file
+        Delete "$0\$1"
+        
+        ; Find the next file matching the pattern
+        FindNext $2 $1
+        ${If} ${Errors}
+            ; If there are no more files, exit the loop
+            Goto Done
+        ${EndIf}
+        
+        ; Repeat the loop
+        Goto loop
+
+    Done:
+    ; Close the FindFirst/FindNext handle
+    FindClose $2
+FunctionEnd
+
+
 Function LVPageCreate
 
 ;
 ; Create link to .exe
 ;
 ${CreateLinkFile} "$INSTDIR\bin\${mrv2_KEY}" "$INSTDIR\bin\${mrv2_EXE}" "$bCheckAll"
+
+;
+; Clear all icon Windows Explorer cache files
+;
+Delete '$LOCALAPPDATA\IconCache.db'
+Call DeleteIconCacheFiles
 
 ; MessageBox MB_YESNO "Do you want to set file associations?" IDYES yes
 ;      Abort
