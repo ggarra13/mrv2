@@ -28,6 +28,9 @@ v1.2.3
 - Re-arranging of View menu into submenus (Tool Bar, HDR and OpenEXR submenus).
 - Added small margin between thumbnail picture and labels on all Panel clips.
 - Added credit for the icons used in mrv2 when possible.
+- Changed mrv2 icon to a more stylist eye icon.  On Windows, you may need to
+  refresh the icon cache or actually select the shortcut, select Properties
+  and Change Icon.
 - Code clean-up.
 
 
