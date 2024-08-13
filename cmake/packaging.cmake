@@ -176,8 +176,8 @@ else()
 
     
     set(CPACK_NSIS_INSTALLED_ICON_NAME "bin/mrv2.exe")
-    set(CPACK_NSIS_MUI_ICON "${ROOT_DIR}/src/mrv2.ico")
-    set(CPACK_NSIS_MUI_UNICON "${ROOT_DIR}/src/mrv2.ico")
+    set(CPACK_NSIS_MUI_ICON "${ROOT_DIR}/src/appicon.ico")
+    set(CPACK_NSIS_MUI_UNICON "${ROOT_DIR}/src/appicon.ico")
 
     set( CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES64" )
 

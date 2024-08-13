@@ -27,6 +27,7 @@ v1.2.3
   reverting to stopping.
 - Re-arranging of View menu into submenus (Tool Bar, HDR and OpenEXR submenus).
 - Added small margin between thumbnail picture and labels on all Panel clips.
+- Added credit for the icons used in mrv2 when possible.
 - Code clean-up.
 
 

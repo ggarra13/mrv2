@@ -1095,6 +1095,12 @@ Translations
 ------------
 bovirus                                       (Italian)
 
+Icons
+-----
+Darby Johnston                                (Most icons)
+Gonzalo Garramuño                             (USD, NDI, Undo/Redo)
+emilie.rollandin                              (new mrv2 icon)
+
 Beta testers
 ------------
 360highdynamicrangehdr                        (LibRaw Idea,
