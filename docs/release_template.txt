@@ -5,7 +5,8 @@ mrv2 is an open source professional player and review tool for vfx, animation an
 
 This is a bug fix and feature update.  
 
-NDI 6 update.  Auto Normalize.  Invalid Values. Bug fixes.
+NDI 6 update.  Render/HDR/Auto Normalize.  Render/HDR/Invalid Values.
+Bug fixes and speed improvements.
 
 Main Web page (with links to videos and online documentation):
 https://mrv2.sourceforge.io
