@@ -5,22 +5,12 @@
 
 
 #
+# Minimal build script for mrv2.  Run it from the root of the mrv2 dir, like:
 #
-# Small USD build script for mrv2.  Run it from the root of the mrv2 dir, like:
+# ./bin/runme_minimal.sh
 #
-# ./bin/runme_usd.sh
-#
-# It builds all dependencies and will install
-# the main executable on BUILD_DIR (by default
-#                                   BUILD-OS-ARCH/BUILD_TYPE/install/bin).
-#
-# The USD script just builds USD support and nothing else.  It is used to
-# quickly check the build.
-#
-# On Linux and macOS, it will also create a mrv2 or mrv2-dbg symbolic link
-# in $HOME/bin if the directory exists.
-#
-# It will also log the compilation on $BUILD_DIR/compile.log
+# Intended to make sure cmake files, FLTK and mrv2 compile with no options.
+# You cannot open any image or movie file with this.
 #
 
 
@@ -34,6 +24,8 @@ params=$*
 #
 . etc/build_dir.sh
 
+mkdir -p $BUILD_DIR
+
 
 #
 # Clear the flags, as they will be set by runme_nolog.sh.
@@ -41,18 +33,15 @@ params=$*
 export FLAGS=""
 export CMAKE_FLAGS=""
 
+
 . bin/runme_off.sh
 
 #
 # These are some of the expensive mrv2 options
 #
 export BUILD_PYTHON=ON
-export MRV2_PYBIND11=ON
-
-#
-# These are some of the expensive TLRENDER options
-#
-export TLRENDER_USD=ON
+export MRV2_PYFLTK=ON
+export MRV2_PYBIND11=ON   # we need this, unfortunately to get PYTHON_VERSION
 export TLRENDER_WAYLAND=ON
 export TLRENDER_X11=ON
 

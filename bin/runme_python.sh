@@ -42,36 +42,12 @@ params=$*
 export FLAGS=""
 export CMAKE_FLAGS=""
 
-#
-# Common flags
-#
-export BUILD_PYTHON=OFF
+. bin/runme_off.sh
 
-#
-# These are some of the expensive mrv2 options
-#
 export BUILD_PYTHON=ON
 export MRV2_PYFLTK=ON
 export MRV2_PYBIND11=ON
-export MRV2_NETWORK=OFF
-export MRV2_PDF=OFF
 
-#
-# These are some of the expensive TLRENDER options
-#
-export TLRENDER_AV1=OFF
-export TLRENDER_FFMPEG=OFF
-export TLRENDER_FFMPEG_MINIMAL=ON
-export TLRENDER_EXR=OFF
-export TLRENDER_JPEG=OFF
-export TLRENDER_NDI=OFF
-export TLRENDER_NET=ON
-export TLRENDER_RAW=OFF
-export TLRENDER_SGI=OFF
-export TLRENDER_STB=OFF
-export TLRENDER_TIFF=OFF
-export TLRENDER_USD=OFF
-export TLRENDER_VPX=OFF
 export TLRENDER_WAYLAND=ON
 export TLRENDER_X11=ON
 export TLRENDER_YASM=OFF
