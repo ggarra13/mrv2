@@ -20,6 +20,7 @@ namespace mrv
             align(
                 FL_ALIGN_LEFT | FL_ALIGN_INSIDE | FL_ALIGN_IMAGE_NEXT_TO_TEXT);
             labelsize(12);
+            label_image_spacing(8);
         }
 
         void draw() override
@@ -33,28 +34,8 @@ namespace mrv
                 value() ? (down_box() ? down_box() : fl_down(box())) : box(),
                 col);
             draw_backdrop();
-
-            std::string orig = label();
-            std::string newlabel = " ";
-            for (const auto& c : orig)
-            {
-                if (c == '\n')
-                {
-                    newlabel += c;
-                    newlabel += " ";
-                }
-                else
-                {
-                    newlabel += c;
-                }
-            }
-
-            label(newlabel.c_str());
             
             draw_label();
-
-            copy_label(orig.c_str());
-            
         }
     };
 } // namespace mrv
