@@ -29,6 +29,9 @@ namespace mrv
     //! Path to user's home directory (without a trailing slash)
     std::string homepath();
 
+    //! Path to the mrv2's icon directory (with a trailing slash)
+    std::string iconpath();
+    
     //! Path to preference's file (with a trailing slash)
     std::string prefspath();
 

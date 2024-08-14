@@ -11,5 +11,7 @@ namespace mrv
         bool X11();
         bool Wayland();
         bool XWayland();
+        bool Windows();
+        bool macOS();
     } // namespace desktop
 } // namespace mrv

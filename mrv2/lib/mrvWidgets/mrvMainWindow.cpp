@@ -8,21 +8,19 @@
 
 #include "mrvFl/mrvSession.h"
 
-#include "mrvMainWindow.h"
+#include "mrvUI/mrvDesktop.h"
 
+#include "mrvMainWindow.h"
 #include "mrvPreferencesUI.h"
 
 #include <FL/platform.H>
 #include <FL/fl_utf8.h>
 #include <FL/Enumerations.H>
 #include <FL/Fl.H>
-#include <FL/Fl_XPM_Image.H>
 
 #if defined(FLTK_USE_X11)
 #    include <X11/extensions/scrnsaver.h>
 #endif
-
-#include "icons/viewer16.xpm"
 
 #include "mrViewer.h"
 
@@ -105,27 +103,13 @@ namespace mrv
             kIOPMAssertionTypeNoDisplaySleep, kIOPMAssertionLevelOn, reason,
             &assertionID);
 #endif
-
-#if defined(_WIN32)
-        if (fl_win32_display())
+        if (desktop::Windows() ||
+            desktop::X11())
         {
-            std::cerr << "load" << std::endl;
-            Fl_Pixmap* pic = new Fl_Pixmap(viewer16_xpm);
-            Fl_RGB_Image* rgb = new Fl_RGB_Image(pic);
-            delete pic;
+            Fl_PNG_Image* rgb = load_png("mrv2.png");;
             icon(rgb);
             delete rgb;
         }
-#elif defined(FLTK_USE_X11)
-        if (fl_x11_display())
-        {
-            Fl_Pixmap* pic = new Fl_Pixmap(viewer16_xpm);
-            Fl_RGB_Image* rgb = new Fl_RGB_Image(pic);
-            delete pic;
-            icon(rgb);
-            delete rgb;
-        }
-#endif
     }
 
 #if !defined(__APPLE__)
@@ -234,7 +218,8 @@ namespace mrv
             {
                 if (!ss.str().empty())
                     ss << ", ";
-                ss << "A: " << static_cast<size_t>(ioInfo.audio.channelCount)
+                ss << "A: "
+                   << static_cast<size_t>(ioInfo.audio.channelCount)
                    << " " << ioInfo.audio.dataType << " "
                    << ioInfo.audio.sampleRate;
             }

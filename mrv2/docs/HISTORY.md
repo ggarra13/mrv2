@@ -25,12 +25,15 @@ v1.2.3
 - Fixed thumbnail icons not showing the current layer in the Panels.
 - Fixed reverse seeking not respecting the reverse playback action and 
   reverting to stopping.
-- Re-arranging of View menu into submenus (Tool Bar, HDR and OpenEXR submenus).
+- Re-arranging of View menu into submenus.
 - Added small margin between thumbnail picture and labels on all Panel clips.
 - Added credit for the icons used in mrv2 when possible.
-- Changed mrv2 icon to a more stylist eye icon.  
-- Made UnReal movies play properly in mrv2.
+- Changed mrv2 icon to a great new design of Thane5.
+- Made icons on Linux follow the Freedesktop.org guidelines.
+- Made UnReal movies with .avi and mjpeg codecs play properly in mrv2.
 - Made mrv2 report "Unknown video codec" when a codec is unknown.
+- Fixed pyFLTK compilation on newer FLTK branches as fltk-config would return
+  includes quoted.
 - Code clean-up.
 
 

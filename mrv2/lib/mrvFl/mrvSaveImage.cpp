@@ -118,6 +118,7 @@ namespace mrv
             if (layerId < 0)
                 layerId = 0;
 
+            const SaveResolution resolution = options.resolution;
             {
                 renderSize = info.video[layerId].size;
                 auto rotation = ui->uiView->getRotation();
@@ -128,6 +129,22 @@ namespace mrv
                     renderSize.h = tmp;
 
                     msg = tl::string::Format(_("Rotated image info: {0}"))
+                              .arg(renderSize);
+                    LOG_INFO(msg);
+                }
+                if (resolution == SaveResolution::kHalfSize)
+                {
+                    renderSize.w /= 2;
+                    renderSize.h /= 2;
+                    msg = tl::string::Format(_("Scaled image info: {0}"))
+                              .arg(renderSize);
+                    LOG_INFO(msg);
+                }
+                else if (resolution == SaveResolution::kQuarterSize)
+                {
+                    renderSize.w /= 4;
+                    renderSize.h /= 4;
+                    msg = tl::string::Format(_("Scaled image info: {0}"))
                               .arg(renderSize);
                     LOG_INFO(msg);
                 }

@@ -46,20 +46,26 @@ if [ "$full_dir" != "$desktop_dir" ]; then
 fi
 
 #
-# Remove Desktop icon
+# Remove Desktop shortcut
 #
 rm -f "${desktop_dir}/mrv2-v@mrv2_VERSION@.desktop"
 
 
-#
-# Remove /usr/share/applications/mrv2* and /usr/share/icons/../mrv2.png
-#
 sharedir=/usr/share
 appdir=${sharedir}/applications/
-iconsdir=${sharedir}/icons/hicolor/32x32/apps/
 
+#
+# Remove all icon sizes
+#
+ICON_SIZES='16 32 48 64 128 256'
+for i in $ICON_SIZES; do
+    icons_dir=${shaderdir}/icons/hicolor/${i}x${i}/apps/
+    rm $icons_dir/mrv2-v@mrv2_VERSION@.png
+done
 
-rm -f ${iconsdir}/mrv2-v@mrv2_VERSION@.png
+#
+# Remove /usr/share/applications/mrv2-v<VERSION>.desktop
+#
 rm -f ${appdir}/mrv2-v@mrv2_VERSION@.desktop
 
 

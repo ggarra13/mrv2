@@ -207,8 +207,12 @@ add_definitions(
 # Directory of generated .cxx/.h built from .fl files
 set( mrv2_FLUID_INCLUDE_DIR
     ${CMAKE_CURRENT_BINARY_DIR}/lib/mrvWidgets
-    )
+)
 
+#
+# We are currently not using boost anymore, but we might use it again if
+# we turn on python's USD support.
+#
 file(GLOB mrv2_BOOST_DIRS "${CMAKE_INSTALL_PREFIX}/include/boost*")
 
 set( mrv2_INCLUDE_DIRS
@@ -237,9 +241,16 @@ include_directories( ${mrv2_INCLUDE_DIRS} )
 #
 # Install mrv2's auxiliary application directories
 #
-install( DIRECTORY colors ComfyUI fonts icons ocio presets share
+install( DIRECTORY colors ComfyUI fonts icons ocio presets
     DESTINATION .
     COMPONENT applications )
+
+#
+# Install locales
+#
+install( DIRECTORY share/locale
+    DESTINATION share
+    COMPONENT applications)
 
 #
 # Install update-mrv2 plugin
@@ -268,8 +279,10 @@ install( DIRECTORY python/plug-ins/demos
 
 #
 # These two variables will contain the sources for .po tranalation.
-# PO_SOURCES will contain relative paths while PO_ABS_SOURCES will conttain
+# PO_SOURCES will contain relative paths while PO_ABS_SOURCES will contain
 # the absolute paths.
+# This is needed as gettext/cmake would run into path length issues on some
+# platforms.
 #
 set( PO_SOURCES )
 set( PO_ABS_SOURCES )

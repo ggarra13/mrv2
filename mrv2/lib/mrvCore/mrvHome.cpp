@@ -137,6 +137,13 @@ namespace mrv
         return path;
     }
 
+    std::string iconpath()
+    {
+        std::string iconroot = rootpath();
+        iconroot += "/icons/";
+        return iconroot;
+    }
+
     std::string studiopath()
     {
         const char* c = fl_getenv("STUDIOPATH");

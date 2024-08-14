@@ -1086,8 +1086,8 @@ bovirus                                       (Italian)
 Icons
 -----
 Darby Johnston                                (Most icons)
-Gonzalo Garramuño                             (USD, NDI, Undo/Redo)
-emilie.rollandin                              (new mrv2 icon)
+Gonzalo Garramuño                             (USD, NDI, Undo/Redo, Arrows, etc)
+Christoph Lohr                                (new mrv2 icon)
 
 Beta testers
 ------------

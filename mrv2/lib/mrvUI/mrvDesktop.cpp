@@ -67,5 +67,23 @@ namespace mrv
             return out;
         }
 
+        bool Windows()
+        {
+            bool out = false;
+#ifdef _WIN32
+            out = true;
+#endif
+            return out;
+        }
+
+        bool macOS()
+        {
+            bool out = false;
+#ifdef __APPLE__
+            out = true;
+#endif
+            return out;
+        }
+        
     } // namespace desktop
 } // namespace mrv

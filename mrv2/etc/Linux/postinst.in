@@ -65,7 +65,15 @@ sharedir=/usr/local/@mrv2ShortName@/share/
 appdir=${sharedir}applications
 
 cp -rf ${sharedir}/* /usr/share/
-cp /usr/share/icons/hicolor/32x32/apps/mrv2.png /usr/share/icons/hicolor/32x32/apps/mrv2-v@mrv2_VERSION@.png 
+
+#
+# Copy the .png icons following Freedesktop.org
+#
+ICON_SIZES='16 32 48 64 128 256'
+for i in $ICON_SIZES; do
+    echo "   Installing icon size ${i}x${i}"
+    cp ${sharedir}icons/hicolor/${i}x${i}/apps/mrv2.png /usr/share/icons/hicolor/${i}x${i}/apps/mrv2-v@mrv2_VERSION@.png
+done
 
 #
 # Copy versioned icon to applications and desktop

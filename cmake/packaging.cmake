@@ -85,14 +85,22 @@ elseif(UNIX)
     #
     # Linux generators
     #
-    set(CPACK_GENERATOR DEB RPM TGZ)
+    set(CPACK_GENERATOR DEB) #RPM TGZ)
     
     #
     # Linux icon and .desktop shortcut
     #
+
+    #
+    # This desktop is the one placed on the desktop for X11/Wayland version
+    # shortcuts.
+    #
     configure_file( ${ROOT_DIR}/etc/Linux/mrv2.desktop.in
 	"${PROJECT_BINARY_DIR}/etc/mrv2-v${mrv2_VERSION}.desktop" )
-	
+
+    #
+    # This desktop file is for Wayland to set its icon correctly.
+    #
     configure_file( ${ROOT_DIR}/etc/Linux/mrv2.main.desktop.in
 	"${PROJECT_BINARY_DIR}/etc/mrv2.desktop" )
 
@@ -100,8 +108,8 @@ elseif(UNIX)
 	DESTINATION share/applications COMPONENT applications)
     install(FILES "${PROJECT_BINARY_DIR}/etc/mrv2.desktop"
 	DESTINATION share/applications COMPONENT applications)
-    install(FILES ${ROOT_DIR}/etc/mrv2.png
-	DESTINATION share/icons/hicolor/32x32/apps COMPONENT applications)
+    install(DIRECTORY ${ROOT_DIR}/mrv2/share/icons
+	DESTINATION share/ COMPONENT applications)
 
     set(CPACK_INSTALL_PREFIX /usr/local/${mrv2ShortName})
 
@@ -119,6 +127,22 @@ elseif(UNIX)
 	@ONLY)
 
     #
+    # set Debian options.
+    #
+    execute_process(
+	COMMAND dpkg --print-architecture
+	OUTPUT_VARIABLE DEB_ARCHITECTURE
+	OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+    set(CPACK_DEBIAN_PACKAGE_NAME ${PROJECT_NAME}-v${mrv2_VERSION})
+    set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE ${DEB_ARCHITECTURE})
+    set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA
+	"${PROJECT_BINARY_DIR}/etc/Linux/postinst"
+	"${PROJECT_BINARY_DIR}/etc/Linux/postrm")
+
+    set(CPACK_DEBIAN_FILE_NAME	"${CPACK_PACKAGE_FILE_NAME}.deb" )
+
+    #
     # Set RPM options.
     #
     set(CPACK_RPM_PACKAGE_NAME ${PROJECT_NAME}-${mrv2_VERSION})
@@ -127,11 +151,11 @@ elseif(UNIX)
     set(CPACK_RPM_PACKAGE_AUTOREQ false)
     set(CPACK_RPM_PACKAGE_AUTOPROV true)
     set(CPACK_RPM_COMPRESSION_TYPE gzip )
-    if ( "${MRV2_ARCHITECTURE}" STREQUAL "amd64" )
-	set( RPM_ARCHITECTURE x86_64 )
-    else()
-	set( RPM_ARCHITECTURE i386 )
-    endif()
+    execute_process(
+	COMMAND uname -m
+	OUTPUT_VARIABLE RPM_ARCHITECTURE
+	OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
     set( CPACK_RPM_PACKAGE_ARCHITECTURE ${RPM_ARCHITECTURE} )
 
     set(
@@ -144,19 +168,9 @@ elseif(UNIX)
      # Undocumented option used to avoid .build-id libs listing
      set(CPACK_RPM_SPEC_MORE_DEFINE "%define _build_id_links none")
 
-    #
-    # set Debian options.
-    #
-    set(CPACK_DEBIAN_PACKAGE_NAME ${PROJECT_NAME}-v${mrv2_VERSION})
-    set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE ${MRV2_ARCHITECTURE})
-    set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA
-	"${PROJECT_BINARY_DIR}/etc/Linux/postinst"
-	"${PROJECT_BINARY_DIR}/etc/Linux/postrm")
-
-    set(CPACK_DEBIAN_FILE_NAME	"${CPACK_PACKAGE_FILE_NAME}.deb" )
-
-    set(CPACK_SET_DESTDIR true) # Needed
-    
+     # \@bug: According to docs it is not needed, but
+     #        RPM packaging won't work properly without it.   
+     set(CPACK_SET_DESTDIR true) 
 else()
 
     # Create debug directory for .pdb files
@@ -172,7 +186,7 @@ else()
     # sure there is at least one set of four (4) backlasshes.
     set(CPACK_NSIS_MODIFY_PATH ON)
 
-    set(CPACK_GENERATOR NSIS ZIP)
+    set(CPACK_GENERATOR NSIS) # ZIP)
 
     
     set(CPACK_NSIS_INSTALLED_ICON_NAME "bin/mrv2.exe")

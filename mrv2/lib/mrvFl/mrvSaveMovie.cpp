@@ -41,10 +41,6 @@ namespace
     const char* kModule = "save";
 }
 
-namespace
-{
-}
-
 namespace mrv
 {
 
