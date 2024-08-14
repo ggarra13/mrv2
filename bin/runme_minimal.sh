@@ -33,7 +33,7 @@ mkdir -p $BUILD_DIR
 export FLAGS=""
 export CMAKE_FLAGS=""
 
-. bin/runme_off.sh
+. bin/options_off.sh
 
 export TLRENDER_WAYLAND=ON
 export TLRENDER_X11=ON

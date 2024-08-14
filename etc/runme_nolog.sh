@@ -56,6 +56,7 @@ if [ -z "$MRV2_PYTHON" ]; then
     export TLRENDER_USD_PYTHON=$PYTHONEXE
 else
     export TLRENDER_USD_PYTHON=$MRV2_PYTHON
+    export PYTHONEXE=$MRV2_PYTHON
 fi
 
 #

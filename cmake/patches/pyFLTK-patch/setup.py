@@ -184,7 +184,9 @@ def fltk_config(dir):
     
         for inc in inc_list:
             if inc[:2] == '-I':
-                needed_includes.append(inc[2:])
+                include=inc[3:-1]
+                print('Adding include',include)
+                needed_includes.append(include)
             if inc.find("_REENTRANT") >= 0:
                 doMulti = True
         print("fltk-config includes: ", needed_includes)
@@ -310,7 +312,8 @@ class PySwigCommand(setuptools.Command):
             for item in p_inc:
                 #if string.find(item, '-I') == 0:
                 if item.find('-I') == 0:
-                    add_incl.append(item)
+                    include='-I' + item[3:-1]
+                    add_incl.append(include)
         else:
             print("FLTK not found!")
     add_incl.append('-I/usr/include')
