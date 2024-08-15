@@ -57,12 +57,12 @@ fi
 #
 # Copy icon to applications directory
 #
-sharedir=/usr/local/@mrv2ShortName@/share/
+sharedir=/usr/local/@mrv2ShortName@/share
 
 #
 # Copy desktop, icon and locale translations
 #
-appdir=${sharedir}applications
+appdir=${sharedir}/applications
 
 cp -rf ${sharedir}/* /usr/share/
 
@@ -75,45 +75,48 @@ for i in $ICON_SIZES; do
     cp ${sharedir}icons/hicolor/${i}x${i}/apps/mrv2.png /usr/share/icons/hicolor/${i}x${i}/apps/mrv2-v@mrv2_VERSION@.png
 done
 
-#
-# Copy versioned icon to applications and desktop
-#
-icon="mrv2-v@mrv2_VERSION@.desktop"
-appicon="${appdir}/${icon}"
-desktop_icon="${desktop_dir}/${icon}"
+cp ${sharedir}icons/hicolor/32x32/apps/mrv2.png /usr/share/icons/hicolor/32x32/apps/mrv2.png
+cp ${sharedir}icons/hicolor/48x48/apps/mrv2.png /usr/share/icons/hicolor/48x48/apps/mrv2.png
 
 #
-# Copy icon to desktop
+# Copy versioned shortcut to applications and desktop
 #
-cp -f "${appicon}" "${desktop_dir}"
+shortcut="mrv2-v@mrv2_VERSION@.desktop"
+appshortcut="${appdir}/${shortcut}"
+desktop_shortcut="${desktop_dir}/${shortcut}"
 
 #
-# Change owner of icon to user
+# Copy shortcut to desktop
 #
-chown ${name} "${desktop_icon}"
+cp -f "${appshortcut}" "${desktop_dir}"
+
+#
+# Change owner of shortcut to user
+#
+chown ${name} "${desktop_shortcut}"
 
 #
 # Make it executable
 #
-chmod a+x "${desktop_icon}"
+chmod a+x "${desktop_shortcut}"
 
 #
-# Copy unversioned icon for Wayland to applications
+# Copy unversioned shortcut for Wayland to applications
 #
-icon="mrv2.desktop"
-appicon="${appdir}/${icon}"
-cp -f "${appicon}" /usr/share/applications
+shortcut="mrv2.desktop"
+appshortcut="${appdir}/${shortcut}"
+cp -f "${appshortcut}" /usr/share/applications
 
 
 #
 # Associate Video formats
 #
-xdg-mime default "${appicon}" video/mp4 video/mpeg video/quicktime video/x-flv video/x-matroska video/x-ms-wmv video/x-msvideo image/x-avi video/x-otio video/x-usd video/x-usda video/x-usdc video/x-usdz
+xdg-mime default "${appshortcut}" video/mp4 video/mpeg video/quicktime video/x-flv video/x-matroska video/x-ms-wmv video/x-msvideo image/x-avi video/x-otio video/x-usd video/x-usda video/x-usdc video/x-usdz
 
 #
 # Associate Image formats
 #
-xdg-mime default "${appicon}" image/x-cin image/x-dpx image/jpeg image/png image/x-tiff image/x-tga image/x-exr image/x-sxr
+xdg-mime default "${appshortcut}" image/x-cin image/x-dpx image/jpeg image/png image/x-tiff image/x-tga image/x-exr image/x-sxr
 
 echo "Updating desktop database..."
 update-desktop-database
