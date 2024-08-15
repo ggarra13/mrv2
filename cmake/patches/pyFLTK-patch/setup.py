@@ -184,9 +184,10 @@ def fltk_config(dir):
     
         for inc in inc_list:
             if inc[:2] == '-I':
-                include=inc[3:-1]
-                print('Adding include',include)
-                needed_includes.append(include)
+                if inc[2] == "'":
+                    needed_includes.append(inc[3:-1])
+                else:
+                    needed_includes.append(inc[2:])
             if inc.find("_REENTRANT") >= 0:
                 doMulti = True
         print("fltk-config includes: ", needed_includes)
@@ -203,7 +204,10 @@ def fltk_config(dir):
             if lib[:2] == '-l':
                 needed_libraries.append(lib[2:])
             if lib[:2] == '-L':
-                needed_directories.append(lib[2:])
+                library = lib[2:]
+                if lib[2] == "'":
+                    library = lib[3:-1]
+                needed_directories.append(library)
         print("fltk-config link paths: ", needed_directories)
         print("fltk-config link libraries: ", needed_libraries)
 
