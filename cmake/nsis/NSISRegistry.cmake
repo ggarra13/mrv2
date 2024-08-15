@@ -49,6 +49,7 @@ set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
         # Write out a friendly name for 'latest' version.
         #
 	WriteRegStr HKCR 'Applications\\\\${mrv2_EXE}' 'FriendlyAppName' '${mrv2_LATEST_NAME}'
+        WriteRegStr HKCR 'Applications\\\\${mrv2_EXE}\\\\DefaultIcon' '' '$INSTDIR\\\\bin\\\\${mrv2_EXE},0'
 	WriteRegStr HKCR 'Applications\\\\${mrv2_EXE}\\\\shell' '' ''
 	WriteRegStr HKCR 'Applications\\\\${mrv2_EXE}\\\\shell\\\\Open' '' 'Play with ${mrv2_LATEST_NAME}'
 	WriteRegStr HKCR 'Applications\\\\${mrv2_EXE}\\\\shell\\\\Open\\\\command' '' '$INSTDIR\\\\bin\\\\${mrv2_EXE} \\\"%1\\\"'
@@ -78,7 +79,7 @@ set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
 set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "
 
         # Delete the versioned application and file association entry.
-	DeleteRegKey HKCR 'Applications\\\\${mrv2_KEY}'
+        DeleteRegKey HKCR 'Applications\\\\${mrv2_KEY}'
 	DeleteRegKey HKCR '${mrv2_KEY}'
 
 	SectionEnd

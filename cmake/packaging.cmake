@@ -57,7 +57,10 @@ set( CPACK_PACKAGE_DESCRIPTION_SUMMARY "Professional media player.")
 set( CPACK_PACKAGE_INSTALL_DIRECTORY ${mrv2ShortName} )
 set( CPACK_PACKAGE_FILE_NAME ${CPACK_PACKAGE_NAME}-v${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_NAME}-${MRV2_ARCHITECTURE} )
 
-set( ROOT_DIR ${CMAKE_SOURCE_DIR} )
+#
+# This is the mrv2/ subdir
+#
+set( MRV2_DIR ${CMAKE_SOURCE_DIR} )
 
 #
 # This dummy (empty) install script is needed so variables get passed to
@@ -72,14 +75,14 @@ if( APPLE )
     set( INSTALL_NAME ${PROJECT_NAME} )
 
     configure_file(
-	${ROOT_DIR}/etc/macOS/Info.plist.in
+	${MRV2_DIR}/etc/macOS/Info.plist.in
 	${PROJECT_BINARY_DIR}/Info.plist )
 
-    set(CPACK_PACKAGE_ICON ${ROOT_DIR}/etc/macOS/mrv2.icns )
+    set(CPACK_PACKAGE_ICON ${MRV2_DIR}/etc/macOS/mrv2.icns )
     set(CPACK_BUNDLE_NAME ${INSTALL_NAME} )
-    set(CPACK_BUNDLE_ICON ${ROOT_DIR}/etc/macOS/mrv2.icns )
+    set(CPACK_BUNDLE_ICON ${MRV2_DIR}/etc/macOS/mrv2.icns )
     set(CPACK_BUNDLE_PLIST ${PROJECT_BINARY_DIR}/Info.plist )
-    set(CPACK_BUNDLE_STARTUP_COMMAND ${ROOT_DIR}/etc/macOS/startup.sh)
+    set(CPACK_BUNDLE_STARTUP_COMMAND ${MRV2_DIR}/etc/macOS/startup.sh)
 elseif(UNIX)
     
     #
@@ -95,20 +98,20 @@ elseif(UNIX)
     # This desktop is the one placed on the desktop for X11/Wayland version
     # shortcuts.
     #
-    configure_file( ${ROOT_DIR}/etc/Linux/mrv2.desktop.in
+    configure_file( ${MRV2_DIR}/etc/Linux/mrv2.desktop.in
 	"${PROJECT_BINARY_DIR}/etc/mrv2-v${mrv2_VERSION}.desktop" )
 
     #
     # This desktop file is for Wayland to set its icon correctly.
     #
-    configure_file( ${ROOT_DIR}/etc/Linux/mrv2.main.desktop.in
+    configure_file( ${MRV2_DIR}/etc/Linux/mrv2.main.desktop.in
 	"${PROJECT_BINARY_DIR}/etc/mrv2.desktop" )
 
     install(FILES "${PROJECT_BINARY_DIR}/etc/mrv2-v${mrv2_VERSION}.desktop"
 	DESTINATION share/applications COMPONENT applications)
     install(FILES "${PROJECT_BINARY_DIR}/etc/mrv2.desktop"
 	DESTINATION share/applications COMPONENT applications)
-    install(DIRECTORY ${ROOT_DIR}/mrv2/share/icons
+    install(DIRECTORY ${MRV2_DIR}/share/icons
 	DESTINATION share/ COMPONENT applications)
 
     set(CPACK_INSTALL_PREFIX /usr/local/${mrv2ShortName})
@@ -118,11 +121,11 @@ elseif(UNIX)
     # installation of .desktop shortcut on the user's Desktop.
     #
     configure_file(
-	${ROOT_DIR}/etc/Linux/postinst.in
+	${MRV2_DIR}/etc/Linux/postinst.in
 	${PROJECT_BINARY_DIR}/etc/Linux/postinst
 	@ONLY)
     configure_file(
-	${ROOT_DIR}/etc/Linux/postrm.in
+	${MRV2_DIR}/etc/Linux/postrm.in
 	${PROJECT_BINARY_DIR}/etc/Linux/postrm
 	@ONLY)
 
@@ -190,8 +193,8 @@ else()
 
     
     set(CPACK_NSIS_INSTALLED_ICON_NAME "bin/mrv2.exe")
-    set(CPACK_NSIS_MUI_ICON "${ROOT_DIR}/src/appicon.ico")
-    set(CPACK_NSIS_MUI_UNICON "${ROOT_DIR}/src/appicon.ico")
+    set(CPACK_NSIS_MUI_ICON "${MRV2_DIR}/src/app.ico")
+    set(CPACK_NSIS_MUI_UNICON "${MRV2_DIR}/src/app.ico")
 
     set( CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES64" )
 
@@ -203,7 +206,7 @@ else()
 
     set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON )
 
-    include("${ROOT_DIR}/../cmake/nsis/NSISRegistry.cmake")
+    include("${MRV2_DIR}/../cmake/nsis/NSISRegistry.cmake")
 
 endif()
 

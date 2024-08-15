@@ -20,7 +20,7 @@ PNG_DIR='mrv2/share/application'
 PNG_ICON='mrv2.png'
 
 # Windows ICO file
-WINDOWS_ICON='mrv2/src/appicon.ico'
+WINDOWS_ICON='mrv2/src/app.ico'
 
 # MacOS icns file
 MACOS_ICON='mrv2/etc/macOS/mrv2.icns'
