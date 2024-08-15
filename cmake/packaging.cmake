@@ -200,7 +200,7 @@ else()
     # sure there is at least one set of four (4) backlasshes.
     set(CPACK_NSIS_MODIFY_PATH ON)
 
-    set(CPACK_GENERATOR NSIS) # ZIP)
+    set(CPACK_GENERATOR NSIS ZIP)
 
     #
     # This sets the title at the top of the installer.
