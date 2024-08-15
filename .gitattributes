@@ -17,20 +17,24 @@
 *.sh  text eol=lf
 *.txt text eol=lf
 
-*.ttf -text
-*.lib -text
 *.dll -text
 *.exe -text
+*.ico -text
+*.icns -text
 *.dylib -text
+*.lib -text
 *.mov -text
 *.mp4 -text
 *.mpv -text
+*.png -text
+*.pyc -text
+*.ttf -text
 *.webm -text
 
 *.po  diff=podiff
 *.pot diff=podiff
 *.po  filter=po
-*.pot filter=poç
+*.pot filter=po
 
 precompiled/windows/win64/include/lib/** linguist-language=C
 
