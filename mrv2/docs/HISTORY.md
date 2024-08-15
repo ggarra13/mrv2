@@ -29,6 +29,12 @@ v1.2.3
 - Added small margin between thumbnail picture and labels on all Panel clips.
 - Added credit for the icons used in mrv2 when possible.
 - Changed mrv2 icon to a great new design of Thane5.
+  On Windows, you might need to refresh the cache or manually set the file
+  association again.
+
+  See:
+  https://superuser.com/questions/499078/refresh-icon-cache-without-rebooting
+  
 - Made icons on Linux follow the Freedesktop.org guidelines.
 - Made UnReal movies with .avi and mjpeg codecs play properly in mrv2.
 - Made mrv2 report "Unknown video codec" when a codec is unknown.
