@@ -75,10 +75,10 @@ Function DeleteIconCacheFiles
     FindFirst $1 $2 "$0\iconcache_*.db"
     ${If} ${Errors}
         ; If no files are found, exit the function
-        Goto Done
+        Goto DoneIconCache
     ${EndIf}
 
-    ; Loop through and delete each matching file
+    ; IconCacheLoop through and delete each matching file
     loop:
         ; Delete the current file
         Delete "$0\$1"
@@ -87,15 +87,45 @@ Function DeleteIconCacheFiles
         FindNext $2 $1
         ${If} ${Errors}
             ; If there are no more files, exit the loop
-            Goto Done
+            Goto DoneIconCache
         ${EndIf}
         
         ; Repeat the loop
         Goto loop
 
-    Done:
-    ; Close the FindFirst/FindNext handle
-    FindClose $2
+    DoneIconCache:
+        ; Close the FindFirst/FindNext handle
+        FindClose $2
+
+
+    ; Find the first file matching the pattern "thumbcache_*.db"
+    ClearErrors
+    FindFirst $1 $2 "$0\iconcache_*.db"
+    ${If} ${Errors}
+        ; If no files are found, exit the function
+        Goto DoneThumbCache
+    ${EndIf}
+
+    ; Loop through and delete each matching file
+    ThumbCacheLoop:
+        ; Delete the current file
+        Delete "$0\$1"
+        
+        ; Find the next file matching the pattern
+        FindNext $2 $1
+        ${If} ${Errors}
+            ; If there are no more files, exit the loop
+            Goto DoneThumbCache
+        ${EndIf}
+        
+        ; Repeat the loop
+        Goto ThumbCacheLoop
+
+    DoneThumbCache:
+        ; Close the FindFirst/FindNext handle
+        FindClose $2
+
+
 FunctionEnd
 
 

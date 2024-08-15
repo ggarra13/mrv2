@@ -9,7 +9,7 @@ import os
 
 try:
     from PIL import Image
-except ImportError => e:
+except ImportError as e:
     print('Please run python -m pip install pillow')
     exit(1)
 
@@ -25,6 +25,7 @@ WINDOWS_ICON='mrv2/src/app.ico'
 # MacOS icns file
 MACOS_ICON='mrv2/etc/macOS/mrv2.icns'
 
+print(f'Loading original icon {PNG_ORIG_ICON}')
 image = Image.open(PNG_ORIG_ICON)
 
 print('Saving macOS .icns with multiple embedded sizes.')

@@ -40,6 +40,7 @@ v1.2.3
 - Made mrv2 report "Unknown video codec" when a codec is unknown.
 - Fixed pyFLTK compilation on newer FLTK branches as fltk-config would return
   includes quoted.
+- Build fixes to remove relative paths on packaging.
 - Code clean-up.
 
 

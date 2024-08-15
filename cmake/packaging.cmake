@@ -60,14 +60,25 @@ set( CPACK_PACKAGE_FILE_NAME ${CPACK_PACKAGE_NAME}-v${CPACK_PACKAGE_VERSION}-${C
 #
 # This is the mrv2/ subdir
 #
-set( MRV2_DIR ${CMAKE_SOURCE_DIR} )
+set(MRV2_DIR ${CMAKE_SOURCE_DIR})
 
 #
-# This dummy (empty) install script is needed so variables get passed to
-# the CPACK_PRE_BUILD_SCRIPTS. @bug: cmake 3.21 at least
+# This is the root of mrv2
 #
-set( CPACK_INSTALL_SCRIPT ${CMAKE_SOURCE_DIR}/../cmake/dummy.cmake )
-set( CPACK_PRE_BUILD_SCRIPTS ${CMAKE_SOURCE_DIR}/../cmake/prepackage.cmake )
+file(REAL_PATH "${MRV2_DIR}/.." MRV2_ROOT)
+
+#
+# \@bug:
+# This dummy (empty) install script is needed so variables get passed to
+# the CPACK_PRE_BUILD_SCRIPTS.
+#
+set( CPACK_INSTALL_SCRIPT ${MRV2_ROOT}/cmake/dummy.cmake )
+
+#
+# This pre-build script does some cleaning of files in packaging area to
+# keep installers smaller.
+#
+set( CPACK_PRE_BUILD_SCRIPTS ${MRV2_ROOT}/cmake/prepackage.cmake )
 
 if( APPLE )
     set(CPACK_GENERATOR Bundle )
@@ -179,7 +190,7 @@ else()
     # Create debug directory for .pdb files
     if (CMAKE_BUILD_TYPE STREQUAL "Debug" OR
 	    CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
-	list(PREPEND CPACK_PRE_BUILD_SCRIPTS ${CMAKE_SOURCE_DIR}/../cmake/copy_pdbs.cmake )
+	list(PREPEND CPACK_PRE_BUILD_SCRIPTS ${MRV2_ROOT}/cmake/copy_pdbs.cmake )
     endif()
 
     
@@ -189,24 +200,53 @@ else()
     # sure there is at least one set of four (4) backlasshes.
     set(CPACK_NSIS_MODIFY_PATH ON)
 
-    set(CPACK_GENERATOR NSIS ZIP)
+    set(CPACK_GENERATOR NSIS) # ZIP)
 
+    #
+    # This sets the title at the top of the installer.
+    #
+    set(CPACK_NSIS_PACKAGE_NAME "mrv2 v${mrv2_VERSION} ${CMAKE_SYSTEM_NAME}-${MRV2_OS_BITS}" )
     
+    #
+    # Set the executable
+    #
     set(CPACK_NSIS_INSTALLED_ICON_NAME "bin/mrv2.exe")
+
+    #
+    # Set the MUI Installer icon
+    #
     set(CPACK_NSIS_MUI_ICON "${MRV2_DIR}/src/app.ico")
     set(CPACK_NSIS_MUI_UNICON "${MRV2_DIR}/src/app.ico")
 
-    set( CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES64" )
+    #
+    # Set the MUI banner to use a custom mrv2 one.
+    #
+    set(MUI_HEADERIMAGE "${MRV2_ROOT}/cmake/nsis/NSIS_background.bmp")
+    file(TO_NATIVE_PATH "${MUI_HEADERIMAGE}" MUI_HEADERIMAGE)
+    string(REPLACE "\\" "\\\\" MUI_HEADERIMAGE "${MUI_HEADERIMAGE}")
+    set(CPACK_NSIS_MUI_HEADERIMAGE "${MUI_HEADERIMAGE}")
 
+    #
+    # Default location for installation.
+    #
+    set(CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES64")
+
+    #
+    # This sets the name in Windows Apps and Control Panel.
+    #
     set(mrv2_DISPLAY_NAME "mrv2-${MRV2_OS_BITS} v${mrv2_VERSION}")
+    
     set(CPACK_NSIS_DISPLAY_NAME "${mrv2_DISPLAY_NAME}" )
-    set(CPACK_NSIS_PACKAGE_NAME "mrv2 ${mrv2_VERSION} ${CMAKE_SYSTEM_NAME}-${MRV2_OS_BITS}" )
+
     set(CPACK_PACKAGE_EXECUTABLES "mrv2" "${mrv2_DISPLAY_NAME}")
     set(CPACK_CREATE_DESKTOP_LINKS "mrv2" "${mrv2_DISPLAY_NAME}")
 
+    #
+    # To call uninstall first if the same version has been installed.
+    #
     set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON )
 
-    include("${MRV2_DIR}/../cmake/nsis/NSISRegistry.cmake")
+    include("${MRV2_ROOT}/cmake/nsis/NSISRegistry.cmake")
 
 endif()
 
