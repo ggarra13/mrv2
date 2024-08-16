@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Some constants
+ICON_SIZES='16 32 48 64 128 256'
+
 # Remove /usr/bin/mrv2 if it is a symlink to our version
 removed=0
 if [[ -L /usr/bin/mrv2 ]]; then
@@ -31,8 +34,14 @@ else
 	echo "No suitable version found to create a symbolic link."
 	echo "Removing /usr/share/applications/mrv2.desktop and mrv2.png"
 	rm -f /usr/share/applications/mrv2.desktop
-	rm -f /usr/share/icons/hicolor/48x48/apps/mrv2.png
-	rm -f /usr/share/icons/hicolor/32x32/apps/mrv2.png
+	
+	#
+	# Remove all icon sizes
+	#
+	for i in $ICON_SIZES; do
+	    icons_dir=${sharedir}/icons/hicolor/${i}x${i}/apps/
+	    rm -f $icons_dir/mrv2.png
+	done
     fi
 fi
 
@@ -58,9 +67,8 @@ appdir=${sharedir}/applications
 #
 # Remove all icon sizes
 #
-ICON_SIZES='16 32 48 64 128 256'
 for i in $ICON_SIZES; do
-    icons_dir=${shaderdir}/icons/hicolor/${i}x${i}/apps/
+    icons_dir=${sharedir}/icons/hicolor/${i}x${i}/apps/
     rm $icons_dir/mrv2-v@mrv2_VERSION@.png
 done
 
