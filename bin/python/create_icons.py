@@ -41,7 +41,7 @@ resized_image.save(WINDOWS_ICON, sizes=[(16, 16), (32, 32), (48, 48), (64, 64), 
 # Verified to work.
 #
 print('Saving Linux multiple sizes for adhering to Freedesktop.org.')
-for i in [16, 32, 64, 128, 256]:
+for i in [16, 32, 48, 64, 128, 256]:
     resized_image = image.resize((i,i))
     png_dir=f'mrv2/share/icons/hicolor/{i}x{i}/apps/'
     os.makedirs(png_dir, exist_ok=True)
