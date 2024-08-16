@@ -2,74 +2,6 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-/**
-  \class Tile
-
-  The Tile class lets you resize its children by dragging
-  the border between them.
-
-  \image html Tile.png
-  \image latex Tile.png "Tile" width=5cm
-
-  For the tiling to work correctly, the children of an Tile must
-  cover the entire area of the widget, but not overlap.
-  This means that all children must touch each other at their edges,
-  and no gaps can be left inside the Tile.
-
-  Tile does not normally draw any graphics of its own.
-  The "borders" which can be seen in the snapshot above are actually
-  part of the children. Their boxtypes have been set to FL_DOWN_BOX
-  creating the impression of "ridges" where the boxes touch. What
-  you see are actually two adjacent FL_DOWN_BOX's drawn next to each
-  other. All neighboring widgets share the same edge - the widget's
-  thick borders make it appear as though the widgets aren't actually
-  touching, but they are. If the edges of adjacent widgets do not
-  touch, then it will be impossible to drag the corresponding edges.
-
-  Tile allows objects to be resized to zero dimensions.
-  To prevent this you can use the resizable() to limit where
-  corners can be dragged to. For more information see note below.
-
-  Even though objects can be resized to zero sizes, they must initially
-  have non-zero sizes so the Tile can figure out their layout.
-  If desired, call position() after creating the children but before
-  displaying the window to set the borders where you want.
-
-  <b>Note on resizable(Fl_Widget &w):</b>
-  The "resizable" child widget (which should be invisible) limits where
-  the borders can be dragged to. All dragging will be limited inside the
-  resizable widget's borders. If you don't set it, it will be possible
-  to drag the borders right to the edges of the Tile widget, and thus
-  resize objects on the edges to zero width or height. When the entire
-  Tile widget is resized, the resizable() widget will keep its border
-  distance to all borders the same (this is normal resize behavior), so
-  that you can effectively set a border width that will never change.
-  To ensure correct event delivery to all child widgets the resizable()
-  widget must be the first child of the Tile widget group. Otherwise
-  some events (e.g. FL_MOVE and FL_ENTER) might be consumed by the resizable()
-  widget so that they are lost for widgets covered (overlapped) by the
-  resizable() widget.
-
-  \note
-  You can still resize widgets \b inside the resizable() to zero width and/or
-  height, i.e. box \b 2b above to zero width and box \b 3a to zero height.
-
-  \see void Fl_Group::resizable(Fl_Widget &w)
-
-  Example for resizable with 20 pixel border distance:
-  \code
-    int dx = 20, dy = dx;
-    Tile tile(50,50,300,300);
-    // create resizable() box first
-    Fl_Box r(tile.x()+dx,tile.y()+dy,tile.w()-2*dx,tile.h()-2*dy);
-    tile.resizable(r);
-    // ... create widgets inside tile (see test/tile.cxx) ...
-    tile.end();
-  \endcode
-
-  See also the complete example program in test/tile.cxx.
-*/
-
 #include <iostream>
 #include <vector>
 
@@ -122,7 +54,7 @@ namespace mrv
             int H = w.H;
             o->damage_resize(X, Y, W, H);
         }
-        d->t->init_sizes();
+        if(d->t) d->t->init_sizes();
         delete d;
     }
 
@@ -132,13 +64,17 @@ namespace mrv
 
       Pass zero as \p oldx or \p oldy to disable drag in that direction.
     */
-    void Tile::move_intersection(int oldx, int oldy, int newx, int newy)
+    void Tile::move_intersection(int oldx, int oldy, int newx, int newy,
+                                 bool release)
     {
         Fl_Widget* const* a = array();
         Fl_Rect* p = bounds();
         p += 2; // skip group & resizable's saved size
         MoveData* data = new MoveData;
-        data->t = this;
+        if (release)
+            data->t = this;
+        else
+            data->t = nullptr;
         for (int i = children(); i--; p++)
         {
             Fl_Widget* o = *a++;
@@ -322,14 +258,15 @@ namespace mrv
             }
             else
                 newy = sy;
-            move_intersection(sx, sy, newx, newy);
             if (event == FL_DRAG)
             {
+                move_intersection(sx, sy, newx, newy, false);
                 set_changed();
                 do_callback(FL_REASON_DRAGGED);
             }
             else
             {
+                move_intersection(sx, sy, newx, newy, true);
                 do_callback(FL_REASON_CHANGED);
             }
             set_edit_button(mrv::EditMode::kSaved, App::ui);
