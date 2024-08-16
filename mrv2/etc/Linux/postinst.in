@@ -72,11 +72,11 @@ cp -rf ${sharedir}/* /usr/share/
 ICON_SIZES='16 32 48 64 128 256'
 for i in $ICON_SIZES; do
     echo "   Installing icon size ${i}x${i}"
-    cp ${sharedir}icons/hicolor/${i}x${i}/apps/mrv2.png /usr/share/icons/hicolor/${i}x${i}/apps/mrv2-v@mrv2_VERSION@.png
+    cp ${sharedir}/icons/hicolor/${i}x${i}/apps/mrv2.png /usr/share/icons/hicolor/${i}x${i}/apps/mrv2-v@mrv2_VERSION@.png
 done
 
-cp ${sharedir}icons/hicolor/32x32/apps/mrv2.png /usr/share/icons/hicolor/32x32/apps/mrv2.png
-cp ${sharedir}icons/hicolor/48x48/apps/mrv2.png /usr/share/icons/hicolor/48x48/apps/mrv2.png
+cp ${sharedir}/icons/hicolor/32x32/apps/mrv2.png /usr/share/icons/hicolor/32x32/apps/mrv2.png
+cp ${sharedir}/icons/hicolor/48x48/apps/mrv2.png /usr/share/icons/hicolor/48x48/apps/mrv2.png
 
 #
 # Copy versioned shortcut to applications and desktop
