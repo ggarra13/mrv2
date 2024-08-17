@@ -5023,7 +5023,8 @@ msgstr "Resizable Control Group"
 msgid "Exposure"
 msgstr "Exposure"
 
-msgid "Reduce gain 1/4 stop (divide by sqrt(sqrt(2)))."
+#, fuzzy
+msgid "Reduce gain 1/2 stop (divide by sqrt(2))."
 msgstr "Reduce gain 1/4 stop (divide by sqrt(sqrt(2)))."
 
 msgid "f/8"
@@ -5032,7 +5033,8 @@ msgstr "f/8"
 msgid "Toggle gain between 1 and the previous setting."
 msgstr "Toggle gain between 1 and the previous setting."
 
-msgid "Increase gain 1/4 stop (multiply by sqrt(sqrt(2)))."
+#, fuzzy
+msgid "Increase gain 1/2 stop (multiply by sqrt(2))."
 msgstr "Increase gain 1/4 stop (multiply by sqrt(sqrt(2)))."
 
 msgid "Gain"

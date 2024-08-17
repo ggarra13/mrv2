@@ -3,7 +3,8 @@ v1.2.4
 
 - Fixed mrv::Tile behavior on Windows not dragging when the mouse was kept
   pressed.
-  
+- Made Edit button toggle active if you drag the timeline viewport separator.
+
 
 v1.2.3
 ======

@@ -2664,8 +2664,6 @@ namespace mrv
         Fl_Button* b = ui->uiEdit;
 
         bool active = (mode == EditMode::kFull || mode == EditMode::kSaved);
-        if (mode == EditMode::kSaved && editModeH == kMinEditModeH)
-            active = false;
 
         if (active)
         {
