@@ -4,6 +4,9 @@ v1.2.4
 - Fixed mrv::Tile behavior on Windows not dragging when the mouse was kept
   pressed.
 - Made Edit button toggle active if you drag the timeline viewport separator.
+- Made FFmpeg settings which were marked that the movie file had to be reloaded
+  automatically reload upon a change.
+- Made deprecated yuvj420p movie files decode fast by default.
 
 
 v1.2.3

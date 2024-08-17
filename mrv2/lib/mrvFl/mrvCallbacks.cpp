@@ -2421,6 +2421,22 @@ namespace mrv
 
         player->clearCache();
     }
+    
+    void refresh_movie_cb(Fl_Menu_* m, void* d)
+    {
+        auto app = App::app;
+        auto model = app->filesModel();
+        if (model->observeFiles()->getSize() < 1)
+            return;
+
+        // Check if item is a movie.
+        auto item = model->observeA()->get();
+        auto path = item->path;
+        if (!file::isMovie(path))
+            return;
+        
+        refresh_media_cb(m, d);
+    }
 
     void copy_filename_cb(Fl_Menu_* m, void* d)
     {

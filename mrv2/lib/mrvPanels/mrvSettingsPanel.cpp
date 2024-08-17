@@ -23,6 +23,7 @@
 #include "mrvPanels/mrvPanelsCallbacks.h"
 #include "mrvPanels/mrvSettingsPanel.h"
 
+#include "mrvFl/mrvCallbacks.h"
 #include "mrvFl/mrvIO.h"
 
 #include "mrvApp/mrvFilesModel.h"
@@ -298,8 +299,7 @@ namespace mrv
 
             Fl_Box* box = new Fl_Box(
                 g->x(), 230, g->w(), 40,
-                _("Changes are applied to "
-                  "newly opened files."));
+                _("Changes force a reload of the current movie file."));
             box->labelsize(12);
             box->align(FL_ALIGN_WRAP);
 
@@ -320,6 +320,7 @@ namespace mrv
                 {
                     int v = o->value();
                     settings->setValue("Performance/TimerMode", v);
+                    refresh_movie_cb(nullptr, p.ui);
                 });
 
             auto spW = new Widget< Spinner >(
@@ -337,6 +338,7 @@ namespace mrv
                 {
                     int v = static_cast<int>(o->value());
                     settings->setValue("Performance/AudioBufferFrameCount", v);
+                    refresh_movie_cb(nullptr, p.ui);
                 });
 
             spW = new Widget< Spinner >(
@@ -353,7 +355,7 @@ namespace mrv
                     int requests = static_cast<int>(o->value());
                     settings->setValue(
                         "Performance/VideoRequestCount", requests);
-                    App::app->cacheUpdate();
+                    refresh_movie_cb(nullptr, p.ui);
                 });
 
             spW = new Widget<Spinner>(
@@ -368,7 +370,7 @@ namespace mrv
                     int requests = static_cast<int>(o->value());
                     settings->setValue(
                         "Performance/AudioRequestCount", requests);
-                    App::app->cacheUpdate();
+                    refresh_movie_cb(nullptr, p.ui);
                 });
 
             spW = new Widget<Spinner>(
@@ -382,7 +384,7 @@ namespace mrv
                 {
                     int requests = static_cast<int>(o->value());
                     settings->setValue("SequenceIO/ThreadCount", requests);
-                    App::app->cacheUpdate();
+                    refresh_movie_cb(nullptr, p.ui);
                 });
 
             bg->end();
@@ -400,6 +402,7 @@ namespace mrv
                     int v = w->value();
                     settings->setValue(
                         "Performance/FFmpegYUVToRGBConversion", v);
+                    refresh_movie_cb(nullptr, p.ui);
                 });
 
             cV = new Widget< Fl_Check_Button >(
@@ -417,6 +420,7 @@ namespace mrv
                 {
                     int v = w->value();
                     settings->setValue("Performance/FFmpegColorAccuracy", v);
+                    refresh_movie_cb(nullptr, p.ui);
                 });
 
             bg = new Fl_Group(g->x(), 440, g->w(), 30);
@@ -442,7 +446,7 @@ namespace mrv
                     int requests = static_cast<int>(o->value());
                     settings->setValue(
                         "Performance/FFmpegThreadCount", requests);
-                    App::app->cacheUpdate();
+                    refresh_movie_cb(nullptr, p.ui);
                 });
 
             bg->end();

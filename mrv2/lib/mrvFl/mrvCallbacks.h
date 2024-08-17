@@ -242,11 +242,17 @@ namespace mrv
     void refresh_file_cache_cb(Fl_Menu_* m, void* d);
     void clone_file_cb(Fl_Menu_* m, void* d);
     void update_video_frame_cb(Fl_Menu_* m, void* d);
+
+    //! Reload media, replacing current one.
     void refresh_media_cb(Fl_Menu_* m, void* d);
+
+    //! If a movie, refresh it with current ffmpeg settings.
+    void refresh_movie_cb(Fl_Menu_* m, void* d);
+    
     void set_stereo_cb(Fl_Menu_* m, void* d);
     void copy_filename_cb(Fl_Menu_* m, void* d);
     void file_manager_cb(Fl_Menu_* m, void* d);
-
+    
     // Python
     void run_python_method_cb(Fl_Menu_* m, void* d);
     
