@@ -7,6 +7,11 @@ v1.2.4
 - Made FFmpeg settings which were marked that the movie file had to be reloaded
   automatically reload upon a change.
 - Made deprecated yuvj420p movie files decode fast by default.
+- Changed mrv2 Windows icon to a bigger size.
+  If you installed betas, you might need to refresh the cache.
+
+  See:
+  https://superuser.com/questions/499078/refresh-icon-cache-without-rebooting
 
 
 v1.2.3

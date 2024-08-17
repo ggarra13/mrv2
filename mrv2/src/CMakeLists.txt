@@ -10,6 +10,7 @@ files_to_absolute_paths()
 set( PO_SOURCES ${PO_FILES} ${PO_SOURCES} PARENT_SCOPE)
 
 if (WIN32)
+    enable_language("RC")
     set(APP_ICON_RESOURCE_WINDOWS "${CMAKE_CURRENT_SOURCE_DIR}/app.rc")
     list( APPEND SOURCES ${APP_ICON_RESOURCE_WINDOWS} )
 endif()

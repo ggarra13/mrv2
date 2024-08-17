@@ -13,7 +13,8 @@ except ImportError as e:
     print('Please run python -m pip install pillow')
     exit(1)
 
-PNG_ORIG_ICON='icons/original/mrv2_icon_1024x1024.png'
+MAC_ORIG_ICON='icons/original/Icon_MacOS.png'
+WINDOWS_ORIG_ICON='icons/original/Icon_Windows.png'
 
 # Linux directory to store Freedesktop.org icons
 PNG_DIR='mrv2/share/application'
@@ -25,17 +26,21 @@ WINDOWS_ICON='mrv2/src/app.ico'
 # MacOS icns file
 MACOS_ICON='mrv2/etc/macOS/mrv2.icns'
 
-print(f'Loading original icon {PNG_ORIG_ICON}')
-image = Image.open(PNG_ORIG_ICON)
+print(f'Loading original Windows icon {WINDOWS_ORIG_ICON}')
+image = Image.open(WINDOWS_ORIG_ICON)
+
+print('Saving Windows .ico with multiple embedded sizes.')
+resized_image = image.resize((256, 256))
+resized_image.save(WINDOWS_ICON, sizes=[(16, 16), (32, 32), (48, 48), (64, 64), (128, 128), (256, 256)])
+
+print(f'Loading original macOS icon {MAC_ORIG_ICON}')
+image = Image.open(MAC_ORIG_ICON)
 
 print('Saving macOS .icns with multiple embedded sizes.')
 image.save(MACOS_ICON,
            sizes=[(16, 16), (32, 32), (48, 48), (64, 64), (128, 128),
                   (256, 256), (512, 512), (1024, 1024)])
 
-print('Saving Windows .ico with multiple embedded sizes.')
-resized_image = image.resize((256, 256))
-resized_image.save(WINDOWS_ICON, sizes=[(16, 16), (32, 32), (48, 48), (64, 64), (128, 128), (256, 256)])
 
 #
 # Verified to work.

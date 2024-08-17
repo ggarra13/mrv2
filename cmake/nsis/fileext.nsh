@@ -132,15 +132,15 @@ FunctionEnd
 Function LVPageCreate
 
 ;
-; Create link to .exe
-;
-${CreateLinkFile} "$INSTDIR\bin\${mrv2_KEY}" "$INSTDIR\bin\${mrv2_EXE}" "$bCheckAll"
-
-;
 ; Clear all icon Windows Explorer cache files
 ;
 Delete '$LOCALAPPDATA\IconCache.db'
 Call DeleteIconCacheFiles
+
+;
+; Create link to .exe
+;
+${CreateLinkFile} "$INSTDIR\bin\${mrv2_KEY}" "$INSTDIR\bin\${mrv2_EXE}" "$bCheckAll"
 
 ; MessageBox MB_YESNO "Do you want to set file associations?" IDYES yes
 ;      Abort

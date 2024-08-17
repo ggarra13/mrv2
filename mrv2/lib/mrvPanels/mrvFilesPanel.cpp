@@ -287,11 +287,7 @@ namespace mrv
                     path.getBaseName() + path.getNumber() + path.getExtension();
                 const std::string& fullfile = protocol + dir + file;
                 FileButton* b = m.second;
-
                 uint16_t layerId;
-                const std::string layer = getLayerName(media, layerId);
-                std::string text = protocol + dir + "\n" + file + layer;
-                b->copy_label(text.c_str());
 
                 b->labelcolor(FL_WHITE);
                 WidgetIndices::iterator it = _r->indices.find(b);
@@ -307,6 +303,10 @@ namespace mrv
                     time = player->currentTime();
                     layerId = p.ui->uiColorChannel->value();
                 }
+
+                const std::string layer = getLayerName(media, layerId);
+                std::string text = protocol + dir + "\n" + file + layer;
+                b->copy_label(text.c_str());
 
                 _createThumbnail(b, path, time, layerId, isNDI);
             }
