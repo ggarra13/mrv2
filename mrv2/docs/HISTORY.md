@@ -1,3 +1,10 @@
+v1.2.4
+======
+
+- Fixed mrv::Tile behavior on Windows not dragging when the mouse was kept
+  pressed.
+  
+
 v1.2.3
 ======
 
