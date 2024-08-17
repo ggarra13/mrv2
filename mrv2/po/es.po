@@ -1999,8 +1999,8 @@ msgstr "Máximos Dígitos"
 msgid "Performance"
 msgstr "Performance"
 
-msgid "Changes are applied to newly opened files."
-msgstr "Los cambios se applican al abrir nuevos archivos."
+msgid "Changes force a reload of the current movie file."
+msgstr "Los cambios fuerzan a que la película activa se recargue."
 
 msgid "Timer mode"
 msgstr "Modo de Timer"
@@ -5069,8 +5069,7 @@ msgstr "Grupo de Control de Ajuste"
 msgid "Exposure"
 msgstr "Exposición"
 
-#, fuzzy
-msgid "Reduce gain 1/2 stop (divide by sqrt(2))."
+msgid "Reduce gain 1/4 stop (divide by sqrt(sqrt(2)))."
 msgstr "Reducir ganancia 1/4 stop (dividir por sqrt(sqrt(2)))."
 
 msgid "f/8"
@@ -5079,8 +5078,7 @@ msgstr "f/8"
 msgid "Toggle gain between 1 and the previous setting."
 msgstr "Intercambia ganancia enter 1 y el seteo previo."
 
-#, fuzzy
-msgid "Increase gain 1/2 stop (multiply by sqrt(2))."
+msgid "Increase gain 1/4 stop (multiply by sqrt(sqrt(2)))."
 msgstr "Incrementar la ganancia 1/4 stop (multiplicar por sqrt(sqrt(2)))."
 
 msgid "Gain"

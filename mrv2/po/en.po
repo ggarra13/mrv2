@@ -1,7 +1,7 @@
 # English translations for mrv2 package.
 # This file is distributed under the same license as the mrv2 package.
 # Automatically generated, 2024.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.1.6\n"
@@ -1969,8 +1969,8 @@ msgstr "Maximum Digits"
 msgid "Performance"
 msgstr "Performance"
 
-msgid "Changes are applied to newly opened files."
-msgstr "Changes are applied to newly opened files."
+msgid "Changes force a reload of the current movie file."
+msgstr "Changes force a reload of the current movie file."
 
 msgid "Timer mode"
 msgstr "Timer mode"
@@ -5023,8 +5023,7 @@ msgstr "Resizable Control Group"
 msgid "Exposure"
 msgstr "Exposure"
 
-#, fuzzy
-msgid "Reduce gain 1/2 stop (divide by sqrt(2))."
+msgid "Reduce gain 1/4 stop (divide by sqrt(sqrt(2)))."
 msgstr "Reduce gain 1/4 stop (divide by sqrt(sqrt(2)))."
 
 msgid "f/8"
@@ -5033,8 +5032,7 @@ msgstr "f/8"
 msgid "Toggle gain between 1 and the previous setting."
 msgstr "Toggle gain between 1 and the previous setting."
 
-#, fuzzy
-msgid "Increase gain 1/2 stop (multiply by sqrt(2))."
+msgid "Increase gain 1/4 stop (multiply by sqrt(sqrt(2)))."
 msgstr "Increase gain 1/4 stop (multiply by sqrt(sqrt(2)))."
 
 msgid "Gain"
