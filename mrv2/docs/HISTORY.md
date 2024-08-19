@@ -17,6 +17,7 @@ v1.2.4
   OpenEXR layer.
 - Made Desktop icon on Windows and Linux bigger.
 - Fixed Loop behavior on new loaded movies to respect the Preferences setting.
+- Updated to USD v24.08.
 
 
 v1.2.3
@@ -110,7 +111,6 @@ v1.2.2
   This might also fix crashes due to different monitor resolutions.
 - Fixed secondary screen hiding timeline when going to presentation mode.
 - Added Window->Preferences->User Interface->Maximized option.
-- Upgraded to OpenUSD v24.08 without boost (yeah!).
 - Fixed saving of OpenUSD settings.
 - Added a ComfyUI directory with a mrv2 a custom node to allow saving
   EXR images in full half/float precision.  For those that believe in AI,
