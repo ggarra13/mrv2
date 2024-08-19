@@ -33,15 +33,6 @@ print('Saving Windows .ico with multiple embedded sizes.')
 resized_image = image.resize((256, 256))
 resized_image.save(WINDOWS_ICON, sizes=[(16, 16), (32, 32), (48, 48), (64, 64), (128, 128), (256, 256)])
 
-print(f'Loading original macOS icon {MAC_ORIG_ICON}')
-image = Image.open(MAC_ORIG_ICON)
-
-print('Saving macOS .icns with multiple embedded sizes.')
-image.save(MACOS_ICON,
-           sizes=[(16, 16), (32, 32), (48, 48), (64, 64), (128, 128),
-                  (256, 256), (512, 512), (1024, 1024)])
-
-
 #
 # Verified to work.
 #
@@ -63,5 +54,15 @@ for i in [16, 32, 48, 64, 128, 256]:
         png_dir=f'mrv2/icons/'
         png_icon = png_dir + PNG_ICON
         resized_image.save(png_icon)
+
+print(f'Loading original macOS icon {MAC_ORIG_ICON}')
+image = Image.open(MAC_ORIG_ICON)
+
+print('Saving macOS .icns with multiple embedded sizes.')
+image.save(MACOS_ICON,
+           sizes=[(16, 16), (32, 32), (48, 48), (64, 64), (128, 128),
+                  (256, 256), (512, 512), (1024, 1024)])
+
+
         
         

@@ -13,6 +13,10 @@ v1.2.4
   See:
   https://superuser.com/questions/499078/refresh-icon-cache-without-rebooting
 
+- Fixed thumbnail creation on Files Panel upon redraws not respecting the
+  OpenEXR layer.
+- Made Desktop icon on Windows and Linux bigger.
+
 
 v1.2.3
 ======
