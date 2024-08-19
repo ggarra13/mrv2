@@ -630,6 +630,8 @@ namespace mrv
             TimelineClass* c = ui->uiTimeWindow;
             c->uiLoopMode->value(static_cast<int>(p.options.loop));
             c->uiLoopMode->do_callback();
+            timeline::Loop loop =
+                static_cast<timeline::Loop>(c->uiLoopMode->value());
         }
 
         p.filesObserver =
@@ -806,9 +808,8 @@ namespace mrv
                 }
                 if (time::isValid(p.options.seek))
                 {
-
                     const auto& timeRange = player->inOutRange();
-
+                    
                     if (p.options.seek < timeRange.start_time())
                         p.options.seek = timeRange.start_time();
                     else if (p.options.seek > timeRange.end_time_exclusive())
@@ -817,7 +818,10 @@ namespace mrv
                     player->seek(p.options.seek);
                 }
                 if (p.options.loop != timeline::Loop::Count)
+                {
+                    timeline::Loop loop = p.options.loop;
                     player->setLoop(p.options.loop);
+                }
             }
         }
 

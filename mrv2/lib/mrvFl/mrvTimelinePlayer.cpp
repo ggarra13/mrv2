@@ -95,6 +95,10 @@ namespace mrv
         TLRENDER_P();
 
         p.player = player;
+        
+        timeline::Loop loop = static_cast<timeline::Loop>(
+            App::ui->uiPrefs->uiPrefsLoopMode->value());
+        p.player->setLoop(loop);
 
         p.speedObserver = observer::ValueObserver<double>::create(
             p.player->observeSpeed(),

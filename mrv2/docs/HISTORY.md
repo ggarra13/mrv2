@@ -16,6 +16,7 @@ v1.2.4
 - Fixed thumbnail creation on Files Panel upon redraws not respecting the
   OpenEXR layer.
 - Made Desktop icon on Windows and Linux bigger.
+- Fixed Loop behavior on new loaded movies to respect the Preferences setting.
 
 
 v1.2.3
