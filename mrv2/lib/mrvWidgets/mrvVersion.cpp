@@ -1050,7 +1050,7 @@ Core
 Darby Johnston                                (original tlRender library) 
 Gonzalo Garramuño                             (mrv2 and rewrite of mrViewer)
 Sam Richards                                  (FFmpeg encoding guidelines)
-
+Rémi Achard                                   (OpenColorIO 2 color pipeline)
 
 FLTK
 ----
