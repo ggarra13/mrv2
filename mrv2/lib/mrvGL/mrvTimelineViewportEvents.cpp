@@ -909,6 +909,9 @@ namespace mrv
             const float NaN = std::numeric_limits<float>::quiet_NaN();
             image::Color4f rgba(NaN, NaN, NaN, NaN);
             _updatePixelBar(rgba);
+            
+            set_cursor(FL_CURSOR_DEFAULT);
+            
             redraw(); // to clear the drawing cursor
             return 1;
             break;
