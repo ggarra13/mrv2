@@ -29,6 +29,8 @@ v1.2.4
   This helps with checking the linear color space, as used in Nuke.
 - Fixed some Display/Views in studio config that have parenthesis in them
   getting misinterpreted.
+- Fixed cursor when in some drawing mode and leaving the view area to the color
+  channel tool bar.
   
 
 v1.2.3
