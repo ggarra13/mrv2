@@ -83,6 +83,18 @@ Finalmente, el último control es el de gama que se controla con el deslizador y
    Los controles de OpenColorIO (OCIO) son derivados de tu archivo de configuración, que es especificado en **Ventana->Preferencias->OCIO**.  Por defecto, el archivo de configuración de OCIO usado es el de cg-config.  mrv2 incluye también el de nuke-default y el de studio-config.
    Si setea la variable de entorno OCIO, esta tendrá precedencia sobre el seteo grabado en el archivo de preferencias de mrv2.
 
+.. note::
+
+   mrv2 realiza la mayoría de sus operaciones de color en el espacio lineal
+   cuando OCIO es usado.
+   Las transformaciones de Color en el panel de Color (Sumar, Saturación,
+   Contraste y Tinte) así como la exposición (ganancia) son aplicadas una vez
+   que la imagen es transformada a un espacio lineal.
+   Eso te permite traer, por ejemplo, una imagen encodificada logarítmicamente
+   (log) y realizar operaciones sobre ella en un espacio lineal.
+   Luego, la transformación de Display/Vista es aplicada, y finalmente el valor
+   de gama como un post proceso, usualmente, en el espacio sRGB.
+   
 La Línea de Tiempo
 ++++++++++++++++++
 

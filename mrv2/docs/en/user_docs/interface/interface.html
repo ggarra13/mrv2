@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The mrv2 Interface &mdash; mrv2 v1.2.3 documentation</title>
+  <title>The mrv2 Interface &mdash; mrv2 v1.2.4 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429" />
@@ -16,7 +16,7 @@
   
         <script src="../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=a2b0c6cf"></script>
+        <script src="../../_static/documentation_options.js?v=69395602"></script>
         <script src="../../_static/doctools.js?v=9a2dae69"></script>
         <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -197,6 +197,17 @@ choose it from the pull-down menu on the pixel toolbar.</p>
 <p class="admonition-title">Note</p>
 <p>The OpenColorIO (OCIO) controls are derived from your configuration file, which is specified in <strong>Window-&gt;Preferences-&gt;OCIO</strong>.  By default, the OCIO configuration file used is the cg-config one.  mrv2 ships also with the nuke-default and with the studio-config ones.
 If you set the OCIO environment variable, it will take precedence over the one saved in mrv2’s Preferences file.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>mrv2 does most of its color operations in linear space when OCIO is used.
+The Color transformations in the Color Panel (Add, Saturation, Contrast and
+Tint) as well as the exposure (gain) are applied after the Input Color Space
+is transformed into linear space.
+That allows you to bring, for example, a log image and perform
+color operations on it in linear space.
+Then, the display/view transform is applied, and finally the gamma as post
+display value in, usually, sRGB space.</p>
 </div>
 </section>
 <section id="the-timeline">

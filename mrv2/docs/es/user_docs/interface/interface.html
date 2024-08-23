@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>La interfaz de mrv2 &mdash; documentación de mrv2 - v1.2.3</title>
+  <title>La interfaz de mrv2 &mdash; documentación de mrv2 - v1.2.4</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429" />
@@ -16,7 +16,7 @@
   
         <script src="../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=19225a83"></script>
+        <script src="../../_static/documentation_options.js?v=d2abca4e"></script>
         <script src="../../_static/doctools.js?v=9a2dae69"></script>
         <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="../../_static/translations.js?v=d190bf04"></script>
@@ -198,6 +198,18 @@ elegirlo desde el menú de zoom en la barra de Pixel.</p>
 <p class="admonition-title">Nota</p>
 <p>Los controles de OpenColorIO (OCIO) son derivados de tu archivo de configuración, que es especificado en <strong>Ventana-&gt;Preferencias-&gt;OCIO</strong>.  Por defecto, el archivo de configuración de OCIO usado es el de cg-config.  mrv2 incluye también el de nuke-default y el de studio-config.
 Si setea la variable de entorno OCIO, esta tendrá precedencia sobre el seteo grabado en el archivo de preferencias de mrv2.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>mrv2 realiza la mayoría de sus operaciones de color en el espacio lineal
+cuando OCIO es usado.
+Las transformaciones de Color en el panel de Color (Sumar, Saturación,
+Contraste y Tinte) así como la exposición (ganancia) son aplicadas una vez
+que la imagen es transformada a un espacio lineal.
+Eso te permite traer, por ejemplo, una imagen encodificada logarítmicamente
+(log) y realizar operaciones sobre ella en un espacio lineal.
+Luego, la transformación de Display/Vista es aplicada, y finalmente el valor
+de gama como un post proceso, usualmente, en el espacio sRGB.</p>
 </div>
 </section>
 <section id="la-linea-de-tiempo">

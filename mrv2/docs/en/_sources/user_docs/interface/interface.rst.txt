@@ -83,6 +83,18 @@ Finally, the last control is the gamma one which is driven by the slider and is 
    The OpenColorIO (OCIO) controls are derived from your configuration file, which is specified in **Window->Preferences->OCIO**.  By default, the OCIO configuration file used is the cg-config one.  mrv2 ships also with the nuke-default and with the studio-config ones.
    If you set the OCIO environment variable, it will take precedence over the one saved in mrv2's Preferences file.
 
+.. note::
+
+   mrv2 does most of its color operations in linear space when OCIO is used.
+   The Color transformations in the Color Panel (Add, Saturation, Contrast and
+   Tint) as well as the exposure (gain) are applied after the Input Color Space
+   is transformed into linear space.
+   That allows you to bring, for example, a log image and perform
+   color operations on it in linear space.
+   Then, the display/view transform is applied, and finally the gamma as post
+   display value in, usually, sRGB space.
+   
+
 The Timeline
 ++++++++++++
 
