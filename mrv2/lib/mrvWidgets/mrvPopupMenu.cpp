@@ -54,7 +54,7 @@ namespace mrv
         fl_line(X + H, Y, X + H / 2, Y + H);
     }
 
-    const Fl_Menu_Item* PopupMenu::child(int i)
+    const Fl_Menu_Item* PopupMenu::child(int i) const
     {
         return &(menu()[i]);
     }

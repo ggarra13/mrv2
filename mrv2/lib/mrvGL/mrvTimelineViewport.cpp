@@ -731,21 +731,8 @@ namespace mrv
         if (value == p.ocioOptions)
             return;
 
-        std::string input, view;
-
-        input = value.input;
-        if (input.empty())
-            input = _("None");
-
-        view = value.view;
-        if (view.empty())
-            return;
-
         p.ocioOptions = value;
-
-        ocio::setOcioIcs(input);
-        ocio::setOcioView(ocio::ocioDisplayViewShortened(value.display, view));
-
+        
         if (panel::colorPanel)
         {
             panel::colorPanel->refresh();
@@ -1955,88 +1942,46 @@ namespace mrv
     void TimelineViewport::updateOCIOOptions() noexcept
     {
         TLRENDER_P();
-        int inputIndex = p.ui->uiICS->value();
-        std::string input = p.ui->uiICS->label();
-        if (inputIndex < 0)
-            input = "";
 
         timeline::OCIOOptions o;
-        if (!input.empty() && input != _("None"))
-            o.enabled = true;
-        else
-            o.enabled = false;
+        
         o.fileName = p.ui->uiPrefs->uiPrefsOCIOConfig->value();
+
+        std::string input = p.ui->uiICS->label();
+        if (p.ui->uiICS->value() < 0 || input == _("None"))
+            input = "";
         o.input = input;
 
-        PopupMenu* menu = p.ui->OCIOView;
-
-        int viewIndex = menu->value();
-        const Fl_Menu_Item* w = nullptr;
+        const PopupMenu* m = p.ui->OCIOView;
+        int viewIndex = m->value();
         if (viewIndex >= 0)
-            w = menu->mvalue();
-        const char* lbl;
-        if (!w)
         {
-            lbl = menu->label();
-            for (int i = 0; i < menu->children(); ++i)
+            std::string combined;
+            const Fl_Menu_Item* item = m->child(viewIndex);
+            char name[1024];
+            int ok = m->item_pathname(name, sizeof(name) - 1, item);
+            if (ok == 0)
             {
-                const Fl_Menu_Item* c = menu->child(i);
-                if ((c->flags & FL_SUBMENU) || !c->label())
-                    continue;
-                if (strcmp(lbl, c->label()) == 0)
-                {
-                    w = menu->child(i);
-                    break;
-                }
+                combined = name;
+                if (combined.substr(0, 1) == "/")
+                    combined = combined.substr(1, combined.size());
+            }
+            
+            if (combined != _("None"))
+            {
+                ocio::ocioSplitViewIntoDisplayView(combined, o.display, o.view);
             }
         }
-        else
-            lbl = w->label();
-        const Fl_Menu_Item* t = nullptr;
-        const Fl_Menu_Item* c = nullptr;
-        if (menu->children() > 0)
-            c = menu->child(0);
-        for (; c && w && c != w; ++c)
-        {
-            if (c && (c->flags & FL_SUBMENU))
-                t = c;
-        }
-        if (t && t->label())
-        {
-            o.display = t->label();
-            if (lbl && strcmp(lbl, t->label()) != 0)
-            {
-                o.view = lbl;
-            }
 
-            const std::string& fullname = o.display + " / " + o.view;
-            menu->copy_label(fullname.c_str());
-        }
-        else
-        {
-            if (!c || !c->label())
-                return;
-            std::string view = c->label();
-            size_t pos = view.find('(');
-            std::string display = view.substr(pos + 1, view.size());
-            o.view = view.substr(0, pos - 1);
-            pos = display.find(')');
-            o.display = display.substr(0, pos);
+        std::string look = p.ui->OCIOLook->label();
+        if (p.ui->OCIOLook->value() < 0 || look == _("None"))
+            look = "";
+        o.look = look;
 
-            menu->copy_label(o.view.c_str());
-        }
-
-        PopupMenu* lookMenu = p.ui->OCIOLook;
-
-        int lookIndex = lookMenu->value();
-        if (lookIndex >= 0 && lookIndex < lookMenu->children())
-        {
-            w = lookMenu->child(lookIndex);
-            std::string look = w->label();
-            if (look == _("None"))
-                look = "";
-            o.look = look;
-        }
+        if (!o.fileName.empty() &&
+            (!o.input.empty() || (!o.display.empty() && !o.view.empty())))
+            o.enabled = true;
+        
         setOCIOOptions(o);
         redrawWindows();
     }

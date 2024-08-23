@@ -283,6 +283,9 @@ namespace mrv
         std::string ocioDisplayViewShortened(
             const std::string& display, const std::string& view)
         {
+            if (view == _("None"))
+                return view;
+            
             std::string out;
             auto uiOCIOView = App::ui->OCIOView;
             bool has_submenu = false;

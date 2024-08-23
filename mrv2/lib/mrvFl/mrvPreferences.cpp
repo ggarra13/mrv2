@@ -2064,11 +2064,15 @@ namespace mrv
             setOcioConfig(var);
 
             // First, remove all additional defaults if any from pulldown
-            // menu
-            ui->OCIOLook->clear();
-            ui->OCIOView->clear();
+            // menu.
             ui->uiICS->clear();
+            ui->OCIOView->clear();
+            ui->OCIOLook->clear();
+
+            // Add None to all of them.
             ui->uiICS->add(_("None"));
+            ui->OCIOView->add(_("None"));
+            ui->OCIOLook->add(_("None"));
 
             try
             {
@@ -2170,7 +2174,7 @@ namespace mrv
                                     display == OCIO_Display)
                                 {
                                     ui->OCIOView->value(idx);
-                                    ui->OCIOView->copy_label(view.c_str());
+                                    ui->OCIOView->copy_label(name.c_str());
                                     ui->uiGamma->value(1.0f);
                                     ui->uiGammaInput->value(1.0f);
                                 }
@@ -2203,7 +2207,7 @@ namespace mrv
                                 display == OCIO_Display)
                             {
                                 ui->OCIOView->value(idx);
-                                ui->OCIOView->copy_label(view.c_str());
+                                ui->OCIOView->copy_label(name.c_str());
                                 ui->uiGamma->value(1.0f);
                                 ui->uiGammaInput->value(1.0f);
                             }
@@ -2213,8 +2217,8 @@ namespace mrv
 
                 ui->OCIOView->redraw();
 
+                // Add looks
                 int numLooks = config->getNumLooks();
-                ui->OCIOLook->add(_("None"));
                 for (int i = 0; i < numLooks; ++i)
                 {
                     ui->OCIOLook->add(config->getLookNameByIndex(i));
@@ -2225,8 +2229,6 @@ namespace mrv
                 {
                     if (!look.empty())
                         ocio::setOcioLook(look);
-                    else
-                        ocio::setOcioLook(_("None"));
                 }
                 catch (const std::exception& e)
                 {

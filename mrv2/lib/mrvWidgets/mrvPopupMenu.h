@@ -17,13 +17,13 @@ namespace mrv
         virtual ~PopupMenu() {};
 
         unsigned children() { return size(); }
-        const Fl_Menu_Item* child(int i);
+        const Fl_Menu_Item* child(int i) const;
 
         bool popped();
 
         const Fl_Menu_Item* popup();
 
-        int value() { return Fl_Menu_Button::value(); }
+        int value() const { return Fl_Menu_Button::value(); }
         void value(int x);
 
         // Undo the overrides of stuff from Group:

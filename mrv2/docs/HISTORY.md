@@ -22,7 +22,14 @@ v1.2.4
   log images.
 - Fixed gain and color corrections not ocurring in linear space, when reading
   log images.
-
+- Added documentation about mrv2's OCIO color pipeline in the Interface section
+  of the on-line docs.
+- Made Input Color Space and Display/View allowed to be applied individually
+  by selecting None.
+  This helps with checking the linear color space, as used in Nuke.
+- Fixed some Display/Views in studio config that have parenthesis in them
+  getting misinterpreted.
+  
 
 v1.2.3
 ======
