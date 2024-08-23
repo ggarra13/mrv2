@@ -18,7 +18,9 @@ v1.2.4
 - Made Desktop icon on Windows and Linux bigger.
 - Fixed Loop behavior on new loaded movies to respect the Preferences setting.
 - Updated to USD v24.08.
-- Fixed gamma and gain correction not ocurring in linear space, when reading
+- Fixed gamma correction not ocurring in linear space, when reading
+  log images.
+- Fixed gain and color corrections not ocurring in linear space, when reading
   log images.
 
 
