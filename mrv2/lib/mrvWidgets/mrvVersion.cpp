@@ -1050,7 +1050,6 @@ Core
 Darby Johnston                                (original tlRender library) 
 Gonzalo Garramuño                             (mrv2 and rewrite of mrViewer)
 Sam Richards                                  (FFmpeg encoding guidelines)
-Rémi Achard                                   (OpenColorIO 2 color pipeline)
 
 FLTK
 ----
@@ -1128,6 +1127,7 @@ p2or                                          (MacOS debugging,
 piotrnikov                                    (MacOS M3, Playlist)
 pxt777                                        (Thumbnails debugging)
 qsek                                          (Drawing tools improvements)
+Rémi Achard                                   (OpenColorIO 2 color pipeline)
 Rennatt                                       (Color Pipeline Debugging)
 Roy Nieterau                                  (Python API)
 shockerNY                                     (Text Annotation bug report)
