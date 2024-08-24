@@ -127,8 +127,6 @@ namespace mrv
             }
             uiICS->value(value);
             uiICS->do_callback();
-            if (panel::colorPanel)
-                panel::colorPanel->refresh();
         }
 
         int ocioIcsIndex(const std::string& name)
@@ -198,8 +196,6 @@ namespace mrv
             }
             OCIOLook->value(value);
             OCIOLook->do_callback();
-            if (panel::colorPanel)
-                panel::colorPanel->refresh();
         }
 
         int ocioLookIndex(const std::string& name)
@@ -290,8 +286,6 @@ namespace mrv
             }
             uiOCIOView->value(value);
             uiOCIOView->do_callback();
-            if (panel::colorPanel)
-                panel::colorPanel->refresh();
         }
 
         std::string ocioDisplayViewShortened(
