@@ -8,4 +8,9 @@
 # library.
 #
 
+if [[ "$1" == "" ]]; then
+    echo "$0 <executable|library>"
+    exit 1
+fi
+
 readelf -V $1 | grep -oP '(GLIBC|GLIBCXX)_[0-9]+\.[0-9]+' | sort -V | uniq
