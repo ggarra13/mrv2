@@ -231,14 +231,14 @@ namespace mrv
             auto uiOCIOView = App::ui->OCIOView;
             int idx = uiOCIOView->value();
             if (idx < 0 || idx >= uiOCIOView->children())
-                return "";
+                return _("None");
 
             const Fl_Menu_Item* item = uiOCIOView->child(idx);
 
             char pathname[1024];
             int ret = uiOCIOView->item_pathname(pathname, 1024, item);
             if (ret != 0)
-                return "";
+                return _("None");
 
             std::string view = pathname;
             if (view[0] == '/')
@@ -265,6 +265,20 @@ namespace mrv
                 {
                     value = i;
                     break;
+                }
+            }
+            if (value == -1)
+            {
+                for (int i = 0; i < uiOCIOView->children(); ++i)
+                {
+                    const Fl_Menu_Item* item = uiOCIOView->child(i);
+                    if (!item || !item->label() || (item->flags & FL_SUBMENU))
+                        continue;
+                    if (name == item->label())
+                    {
+                        value = i;
+                        break;
+                    }
                 }
             }
             if (value == -1)

@@ -1,3 +1,17 @@
+v1.2.5
+======
+
+- OCIO Display/View and OCIO Look is now stored with each clip, for easier
+  switching between, for example, a movie clip and an OpenEXR sequence.
+- Reverted:
+    - Input Color Space and Display/View allowed to be applied individually.
+- Input Color Space, Display/View and Look setting are now stored with each
+  clip.  However, you cannot compare two clips (say in a wipe) with different
+  display settings.
+- Made Image/Previous and Image/Next not appear when a single image or movie
+  was loaded.
+  
+
 v1.2.4
 ======
 
@@ -31,9 +45,10 @@ v1.2.4
   getting misinterpreted.
 - Fixed cursor when in some drawing mode and leaving the view area to the color
   channel tool bar.
-- Added Compare Time Mode to Compare Panel to select between Relative or Absolute
-  timeline comparisons.
-- Added media.setCompareTime() and media.getCompareTime() to get the comparison modes.
+- Added Compare Time Mode to Compare Panel to select between Relative or
+  Absolute timeline comparisons.
+- Added media.setCompareTime() and media.getCompareTime() to get the
+  comparison modes.
   
 
 v1.2.3

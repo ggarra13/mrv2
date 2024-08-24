@@ -728,6 +728,7 @@ namespace mrv
         const timeline::OCIOOptions& value) noexcept
     {
         TLRENDER_P();
+        
         if (value == p.ocioOptions)
             return;
 
@@ -1952,7 +1953,7 @@ namespace mrv
             input = "";
         o.input = input;
 
-        const PopupMenu* m = p.ui->OCIOView;
+        PopupMenu* m = p.ui->OCIOView;
         int viewIndex = m->value();
         if (viewIndex >= 0)
         {
@@ -1963,8 +1964,9 @@ namespace mrv
             if (ok == 0)
             {
                 combined = name;
-                if (combined.substr(0, 1) == "/")
+                if (combined[0] == '/')
                     combined = combined.substr(1, combined.size());
+                m->copy_label(combined.c_str());
             }
             
             if (combined != _("None"))
@@ -1978,8 +1980,8 @@ namespace mrv
             look = "";
         o.look = look;
 
-        if (!o.fileName.empty() &&
-            (!o.input.empty() || (!o.display.empty() && !o.view.empty())))
+        if (!o.fileName.empty() && !o.input.empty() && !o.display.empty() &&
+            !o.view.empty())
             o.enabled = true;
         
         setOCIOOptions(o);

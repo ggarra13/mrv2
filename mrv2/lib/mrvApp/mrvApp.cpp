@@ -1495,6 +1495,8 @@ namespace mrv
             p.activeFiles[0]->audioOffset = p.player->audioOffset();
             p.activeFiles[0]->annotations = p.player->getAllAnnotations();
             p.activeFiles[0]->ocioIcs = ocio::ocioIcs();
+            p.activeFiles[0]->ocioView = ocio::ocioView();
+            p.activeFiles[0]->ocioLook = ocio::ocioLook();
             p.activeFiles[0]->lutOptions = p.lutOptions;
         }
 
@@ -1675,18 +1677,32 @@ namespace mrv
 
                 if (!activeFiles.empty())
                 {
-                    if (activeFiles[0]->ocioIcs.empty())
-                        Preferences::updateICS();
-                    else
+                    try
                     {
-                        try
-                        {
-                            ocio::setOcioIcs(activeFiles[0]->ocioIcs);
-                        }
-                        catch (const std::exception& e)
-                        {
-                            LOG_ERROR(e.what());
-                        }
+                        ocio::setOcioIcs(activeFiles[0]->ocioIcs);
+                    }
+                    catch (const std::exception& e)
+                    {
+                        LOG_ERROR(e.what());
+                    }
+                    
+                    try
+                    {
+                        if (!activeFiles[0]->ocioView.empty())
+                            ocio::setOcioView(activeFiles[0]->ocioView);
+                    }
+                    catch (const std::exception& e)
+                    {
+                        LOG_ERROR(e.what());
+                    }
+                    try
+                    {
+                        if (!activeFiles[0]->ocioLook.empty())
+                            ocio::setOcioLook(activeFiles[0]->ocioLook);
+                    }
+                    catch (const std::exception& e)
+                    {
+                        LOG_ERROR(e.what());
                     }
 
                     if (activeFiles[0]->lutOptions != p.lutOptions)
