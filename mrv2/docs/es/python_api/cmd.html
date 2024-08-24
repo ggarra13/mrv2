@@ -137,30 +137,30 @@
              
   <section id="module-mrv2.cmd">
 <span id="modulo-cmd"></span><h1>Módulo cmd<a class="headerlink" href="#module-mrv2.cmd" title="Link to this heading"></a></h1>
-<p>Command module.</p>
-<p>Used to run main commands and get arguments and set the display, image, compare, LUT options.</p>
+<p>Módulo de commandos.</p>
+<p>Usado para correr los comandos principales y obtener los argumentos y setear las opciones de display, image, compare y LUT.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.args">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">args</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#mrv2.cmd.args" title="Link to this definition"></a></dt>
-<dd><p>Get command-line arguments passed as single quoted string to -pythonArgs.</p>
+<dd><p>Obtener los argumentos pasados en la línea de comando como una lista del solo texto con commillas pasado a -pythonArgs.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.close">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.cmd.close" title="Link to this definition"></a></dt>
-<dd><p>Close the file item.</p>
+<dd><p>Cerrar archivo actual</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.closeAll">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">closeAll</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.cmd.closeAll" title="Link to this definition"></a></dt>
-<dd><p>Close all file items.</p>
+<dd><p>Cerrar todos los archivos.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.compare">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">compare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">itemA:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">itemB:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode:</span> <span class="pre">mrv2.media.CompareMode</span> <span class="pre">=</span> <span class="pre">&lt;CompareMode.Wipe:</span> <span class="pre">2&gt;</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.cmd.compare" title="Link to this definition"></a></dt>
-<dd><p>Compare two file items with a compare mode.</p>
+<dd><p>Compare dos ítems de archivo con un modo de comparación.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -172,139 +172,139 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.displayOptions">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">displayOptions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="image.html#mrv2.image.DisplayOptions" title="mrv2.image.DisplayOptions"><span class="pre">mrv2.image.DisplayOptions</span></a></span></span><a class="headerlink" href="#mrv2.cmd.displayOptions" title="Link to this definition"></a></dt>
-<dd><p>Return the display options.</p>
+<dd><p>Retorna las opciones de display.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.environmentMapOptions">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">environmentMapOptions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="image.html#mrv2.image.EnvironmentMapOptions" title="mrv2.image.EnvironmentMapOptions"><span class="pre">mrv2.image.EnvironmentMapOptions</span></a></span></span><a class="headerlink" href="#mrv2.cmd.environmentMapOptions" title="Link to this definition"></a></dt>
-<dd><p>Return the environment map options.</p>
+<dd><p>Retorna las opciones de mapa de entorno.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.getLanguage">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">getLanguage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#mrv2.cmd.getLanguage" title="Link to this definition"></a></dt>
-<dd><p>Get the language of mrv2.</p>
+<dd><p>Retorna el lenguaje de mrv2.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.getLayers">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">getLayers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#mrv2.cmd.getLayers" title="Link to this definition"></a></dt>
-<dd><p>Get the layers of the timeline (GUI).</p>
+<dd><p>Obtener las capas de la línea de tiempo (GUI).</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.getVersion">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">getVersion</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#mrv2.cmd.getVersion" title="Link to this definition"></a></dt>
-<dd><p>Get the version of mrv2.</p>
+<dd><p>Retorna la versión de mrv2.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.imageOptions">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">imageOptions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="image.html#mrv2.image.ImageOptions" title="mrv2.image.ImageOptions"><span class="pre">mrv2.image.ImageOptions</span></a></span></span><a class="headerlink" href="#mrv2.cmd.imageOptions" title="Link to this definition"></a></dt>
-<dd><p>Return the image options.</p>
+<dd><p>Retorna las opciones de imagen.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.isMuted">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">isMuted</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#mrv2.cmd.isMuted" title="Link to this definition"></a></dt>
-<dd><p>Returns true if audio is muted.</p>
+<dd><p>Retorna True si el audio está silenciado.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.lutOptions">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">lutOptions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="image.html#mrv2.image.LUTOptions" title="mrv2.image.LUTOptions"><span class="pre">mrv2.image.LUTOptions</span></a></span></span><a class="headerlink" href="#mrv2.cmd.lutOptions" title="Link to this definition"></a></dt>
-<dd><p>Return the LUT options.</p>
+<dd><p>Retorna las opciones de LUT.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.open">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">open</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fileName</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">audioFileName</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.cmd.open" title="Link to this definition"></a></dt>
-<dd><p>Open file with optional audio.</p>
+<dd><p>Abrir un archivo con audio opcional.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.prefsPath">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">prefsPath</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#mrv2.cmd.prefsPath" title="Link to this definition"></a></dt>
-<dd><p>Return the path to preferences of mrv2.</p>
+<dd><p>Retorna la carpeta de las preferencias de mrv2.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.rootPath">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">rootPath</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#mrv2.cmd.rootPath" title="Link to this definition"></a></dt>
-<dd><p>Return the root path to the insallation of mrv2.</p>
+<dd><p>Retorna la carpeta raíz de la instalación de mrv2.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.run">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.cmd.run" title="Link to this definition"></a></dt>
-<dd><p>Runs the same or a new mrv2 with a session file.</p>
+<dd><p>Corre el mismo o otro mrv2 con un archivo de sesión.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.save">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fileName:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options:</span> <span class="pre">mrv2.io.SaveOptions</span> <span class="pre">=</span> <span class="pre">&lt;mrv2.io.SaveOptions</span> <span class="pre">annotations=False</span> <span class="pre">ffmpegProfile=None</span> <span class="pre">ffmpegAudioCodec=AAC</span> <span class="pre">exrCompression=ZIP</span> <span class="pre">zipCompressionLevel=4</span> <span class="pre">dwaCompressionLevel=45&gt;</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.cmd.save" title="Link to this definition"></a></dt>
-<dd><p>Save a movie or sequence from the front layer.</p>
+<dd><p>Grabar una película o secuencia de la capa de frente.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.saveOTIO">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">saveOTIO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fileName</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.cmd.saveOTIO" title="Link to this definition"></a></dt>
-<dd><p>Save an .otio file from the current selected image.</p>
+<dd><p>Crear una línea de tiempo desde el clip seleccionado.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.savePDF">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">savePDF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fileName</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#mrv2.cmd.savePDF" title="Link to this definition"></a></dt>
-<dd><p>Save a PDF document with all annotations and notes.</p>
+<dd><p>Grabar un dcoumento PDF con todas las anotaciones y notas.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.setCompareOptions">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">setCompareOptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="media.html#mrv2.media.CompareOptions" title="mrv2.media.CompareOptions"><span class="pre">mrv2.media.CompareOptions</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.cmd.setCompareOptions" title="Link to this definition"></a></dt>
-<dd><p>Set the compare options.</p>
+<dd><p>Setear las opciones de comparación.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.setDisplayOptions">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">setDisplayOptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="image.html#mrv2.image.DisplayOptions" title="mrv2.image.DisplayOptions"><span class="pre">mrv2.image.DisplayOptions</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.cmd.setDisplayOptions" title="Link to this definition"></a></dt>
-<dd><p>Set the display options.</p>
+<dd><p>Setear las opciones de display.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.setEnvironmentMapOptions">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">setEnvironmentMapOptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="image.html#mrv2.image.EnvironmentMapOptions" title="mrv2.image.EnvironmentMapOptions"><span class="pre">mrv2.image.EnvironmentMapOptions</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.cmd.setEnvironmentMapOptions" title="Link to this definition"></a></dt>
-<dd><p>Set the environment map options.</p>
+<dd><p>Setea las opciones de mapa de entorno.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.setImageOptions">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">setImageOptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="image.html#mrv2.image.ImageOptions" title="mrv2.image.ImageOptions"><span class="pre">mrv2.image.ImageOptions</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.cmd.setImageOptions" title="Link to this definition"></a></dt>
-<dd><p>Set the image options.</p>
+<dd><p>Setear las opciones de imagen.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.setLUTOptions">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">setLUTOptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="image.html#mrv2.image.LUTOptions" title="mrv2.image.LUTOptions"><span class="pre">mrv2.image.LUTOptions</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.cmd.setLUTOptions" title="Link to this definition"></a></dt>
-<dd><p>Set the LUT options.</p>
+<dd><p>Setear las opciones de LUT.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.setMute">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">setMute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mute</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.cmd.setMute" title="Link to this definition"></a></dt>
-<dd><p>Set the muting of the audio.</p>
+<dd><p>Setea el mutismo del audio.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.setStereo3DOptions">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">setStereo3DOptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="image.html#mrv2.image.Stereo3DOptions" title="mrv2.image.Stereo3DOptions"><span class="pre">mrv2.image.Stereo3DOptions</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.cmd.setStereo3DOptions" title="Link to this definition"></a></dt>
-<dd><p>Set the stereo 3D options.</p>
+<dd><p>Setear las opciones de estéreo 3D.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.setVolume">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">setVolume</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.cmd.setVolume" title="Link to this definition"></a></dt>
-<dd><p>Set the playback volume.</p>
+<dd><p>Setea el volumen de reproducción.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -316,49 +316,49 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.toggleAutoNormalize">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">toggleAutoNormalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.cmd.toggleAutoNormalize" title="Link to this definition"></a></dt>
-<dd><p>Toggle Image Auto Normalize.</p>
+<dd><p>Alternar Auto Normalizar de la Imagen.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.toggleDataWindow">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">toggleDataWindow</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.cmd.toggleDataWindow" title="Link to this definition"></a></dt>
-<dd><p>Toggle Data Window.</p>
+<dd><p>Alternar Ventana de Datos.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.toggleDisplayWindow">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">toggleDisplayWindow</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.cmd.toggleDisplayWindow" title="Link to this definition"></a></dt>
-<dd><p>Toggle Display Window.</p>
+<dd><p>Alternar Ventana de Display</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.toggleIgnoreDisplayWindow">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">toggleIgnoreDisplayWindow</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.cmd.toggleIgnoreDisplayWindow" title="Link to this definition"></a></dt>
-<dd><p>Toggle Ignored Display Window on OpenEXRs.</p>
+<dd><p>Ignorar Ventana de Display en OpenEXRs.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.toggleInvalidValues">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">toggleInvalidValues</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.cmd.toggleInvalidValues" title="Link to this definition"></a></dt>
-<dd><p>Toggle Image invalid values.</p>
+<dd><p>Alternar valores inválidos de la imagen.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.toggleSafeAreas">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">toggleSafeAreas</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.cmd.toggleSafeAreas" title="Link to this definition"></a></dt>
-<dd><p>Toggle Safe Areas.</p>
+<dd><p>Alternar Áreas Seguras.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.update">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#mrv2.cmd.update" title="Link to this definition"></a></dt>
-<dd><p>Call Fl::check to update the GUI and return the number of seconds that elapsed.</p>
+<dd><p>LLamar a la rutina Fl::check para refrescar la interface y retorne los segundos que pasaron.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.cmd.volume">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">volume</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#mrv2.cmd.volume" title="Link to this definition"></a></dt>
-<dd><p>Get the playback volume.</p>
+<dd><p>Obtenga el volumen de reproducción.</p>
 </dd></dl>
 
 </section>

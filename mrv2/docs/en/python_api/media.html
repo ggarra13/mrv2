@@ -60,11 +60,16 @@
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.media.Aindex"><code class="docutils literal notranslate"><span class="pre">Aindex()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.media.BIndexes"><code class="docutils literal notranslate"><span class="pre">BIndexes()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.media.Bfiles"><code class="docutils literal notranslate"><span class="pre">Bfiles()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.media.CompareTimeMode"><code class="docutils literal notranslate"><span class="pre">CompareTimeMode</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.media.CompareTimeMode.name"><code class="docutils literal notranslate"><span class="pre">CompareTimeMode.name</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.media.activeFiles"><code class="docutils literal notranslate"><span class="pre">activeFiles()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.media.clearB"><code class="docutils literal notranslate"><span class="pre">clearB()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.media.close"><code class="docutils literal notranslate"><span class="pre">close()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.media.closeAll"><code class="docutils literal notranslate"><span class="pre">closeAll()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.media.firstVersion"><code class="docutils literal notranslate"><span class="pre">firstVersion()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.media.getCompareTime"><code class="docutils literal notranslate"><span class="pre">getCompareTime()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.media.lastVersion"><code class="docutils literal notranslate"><span class="pre">lastVersion()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.media.layers"><code class="docutils literal notranslate"><span class="pre">layers()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.media.list"><code class="docutils literal notranslate"><span class="pre">list()</span></code></a></li>
@@ -72,6 +77,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.media.previousVersion"><code class="docutils literal notranslate"><span class="pre">previousVersion()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.media.setA"><code class="docutils literal notranslate"><span class="pre">setA()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.media.setB"><code class="docutils literal notranslate"><span class="pre">setB()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.media.setCompareTime"><code class="docutils literal notranslate"><span class="pre">setCompareTime()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.media.setLayer"><code class="docutils literal notranslate"><span class="pre">setLayer()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.media.setStereo"><code class="docutils literal notranslate"><span class="pre">setStereo()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.media.toggleB"><code class="docutils literal notranslate"><span class="pre">toggleB()</span></code></a></li>
@@ -152,6 +158,19 @@
 <dd><p>Return the list of B files.</p>
 </dd></dl>
 
+<dl class="py class">
+<dt class="sig sig-object py" id="mrv2.media.CompareTimeMode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.media.</span></span><span class="sig-name descname"><span class="pre">CompareTimeMode</span></span><a class="headerlink" href="#mrv2.media.CompareTimeMode" title="Link to this definition"></a></dt>
+<dd><p>Members:</p>
+<p>Relative</p>
+<p>Absolute</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="mrv2.media.CompareTimeMode.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#mrv2.media.CompareTimeMode.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.media.activeFiles">
 <span class="sig-prename descclassname"><span class="pre">mrv2.media.</span></span><span class="sig-name descname"><span class="pre">activeFiles</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="mrv2.html#mrv2.FileMedia" title="mrv2.FileMedia"><span class="pre">mrv2.FileMedia</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#mrv2.media.activeFiles" title="Link to this definition"></a></dt>
@@ -180,6 +199,12 @@
 <dt class="sig sig-object py" id="mrv2.media.firstVersion">
 <span class="sig-prename descclassname"><span class="pre">mrv2.media.</span></span><span class="sig-name descname"><span class="pre">firstVersion</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.media.firstVersion" title="Link to this definition"></a></dt>
 <dd><p>Set the first version for current media.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mrv2.media.getCompareTime">
+<span class="sig-prename descclassname"><span class="pre">mrv2.media.</span></span><span class="sig-name descname"><span class="pre">getCompareTime</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#mrv2.media.CompareTimeMode" title="mrv2.media.CompareTimeMode"><span class="pre">mrv2.media.CompareTimeMode</span></a></span></span><a class="headerlink" href="#mrv2.media.getCompareTime" title="Link to this definition"></a></dt>
+<dd><p>Get compare time.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -222,6 +247,12 @@
 <dt class="sig sig-object py" id="mrv2.media.setB">
 <span class="sig-prename descclassname"><span class="pre">mrv2.media.</span></span><span class="sig-name descname"><span class="pre">setB</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.media.setB" title="Link to this definition"></a></dt>
 <dd><p>Set a new B file index.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mrv2.media.setCompareTime">
+<span class="sig-prename descclassname"><span class="pre">mrv2.media.</span></span><span class="sig-name descname"><span class="pre">setCompareTime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mrv2.media.CompareTimeMode" title="mrv2.media.CompareTimeMode"><span class="pre">mrv2.media.CompareTimeMode</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.media.setCompareTime" title="Link to this definition"></a></dt>
+<dd><p>Set compare time.</p>
 </dd></dl>
 
 <dl class="py function">
