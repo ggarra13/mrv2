@@ -13,11 +13,12 @@
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvFile.h"
 
-#include "mrvWidgets/mrvHorSlider.h"
-#include "mrvWidgets/mrvFunctional.h"
-#include "mrvWidgets/mrvClipButton.h"
 #include "mrvWidgets/mrvButton.h"
+#include "mrvWidgets/mrvClipButton.h"
 #include "mrvWidgets/mrvCollapsibleGroup.h"
+#include "mrvWidgets/mrvFunctional.h"
+#include "mrvWidgets/mrvHorSlider.h"
+#include "mrvWidgets/mrvPopupMenu.h"
 
 #include "mrvPanels/mrvPanelsAux.h"
 #include "mrvPanels/mrvComparePanel.h"
@@ -50,6 +51,8 @@ namespace mrv
 
             std::shared_ptr<observer::ValueObserver<timeline::CompareOptions> >
                 compareOptionsObserver;
+            std::shared_ptr<observer::ValueObserver<timeline::CompareTimeMode> >
+                compareTimeObserver;
         };
 
         ComparePanel::ComparePanel(ViewerUI* ui) :
@@ -90,6 +93,12 @@ namespace mrv
                     ui->app->filesModel()->observeCompareOptions(),
                     [this](const timeline::CompareOptions& value)
                     { setCompareOptions(value); });
+
+            _r->compareTimeObserver =
+                observer::ValueObserver<timeline::CompareTimeMode>::create(
+                    ui->app->filesModel()->observeCompareTime(),
+                    [this](const timeline::CompareTimeMode& value)
+                        { setCompareTime(value); });
         }
 
         ComparePanel::~ComparePanel() {}
@@ -194,9 +203,28 @@ namespace mrv
 
             int X = g->x();
 
+            auto cMode = new Widget< PopupMenu >(X, Y, g->w(), 30);
+            PopupMenu* pm = compareTimeW = cMode;
+            const auto timeLabels = timeline::getCompareTimeModeLabels();
+            for (const auto& label : timeLabels)
+            {
+                pm->add(label.c_str());
+            }
+            int v = static_cast<int>(model->getCompareTime());
+            pm->value(v);
+            pm->tooltip(_("Select between Relative or Absolute Compare Time Mode"));
+
             Fl_Group* bg = new Fl_Group(X, Y, g->w(), 30);
             bg->begin();
 
+            cMode->callback(
+                [=](auto w)
+                {
+                    auto o = static_cast<timeline::CompareTimeMode>(w->value());
+                    model->setCompareTime(o);
+                });
+
+            
             Fl_Button* b;
             auto bW = new Widget< Button >(X, Y, 30, 30);
             b = bW;
@@ -576,6 +604,12 @@ namespace mrv
             overlay->value(value.overlay);
         }
 
+        void
+        ComparePanel::setCompareTime(const timeline::CompareTimeMode& value)
+        {
+            compareTimeW->value(static_cast<int>(value));
+        }
+        
         void ComparePanel::refresh()
         {
             _cancelRequests();

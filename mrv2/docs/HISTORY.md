@@ -31,6 +31,9 @@ v1.2.4
   getting misinterpreted.
 - Fixed cursor when in some drawing mode and leaving the view area to the color
   channel tool bar.
+- Added Compare Time Mode to Compare Panel to select between Relative or Absolute
+  timeline comparisons.
+- Added media.setCompareTime() and media.getCompareTime() to get the comparison modes.
   
 
 v1.2.3

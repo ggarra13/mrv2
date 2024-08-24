@@ -202,6 +202,11 @@ void mrv2_enums(py::module& m)
         .value("Vertical", timeline::CompareMode::Vertical)
         .value("Tile", timeline::CompareMode::Tile)
         .export_values();
+    
+    py::enum_<timeline::CompareTimeMode>(media, "CompareTimeMode")
+        .value("Relative", timeline::CompareTimeMode::Relative)
+        .value("Absolute", timeline::CompareTimeMode::Absolute)
+        .export_values();
 
     py::module timeline = m.def_submodule("timeline");
 

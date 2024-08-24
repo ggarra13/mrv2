@@ -189,6 +189,17 @@ namespace mrv2
             return filesModel()->setLayer(item, layer);
         }
 
+        void setCompareTime(const timeline::CompareTimeMode& v)
+        {
+            filesModel()->setCompareTime(v);
+        }
+
+        timeline::CompareTimeMode getCompareTime()
+        {
+            return filesModel()->getCompareTime();
+        }
+        
+
         /**
          * @brief Goes to the first version of the current A file media item.
          *
@@ -278,6 +289,13 @@ void mrv2_filesmodel(py::module& m)
     media.def(
         "setLayer", &mrv2::media::setLayer, _("Set layer for file item."),
         py::arg("item"), py::arg("layer"));
+
+    media.def(
+        "setCompareTime", &mrv2::media::setCompareTime, _("Set compare time."),
+        py::arg("value"));
+
+    media.def(
+        "getCompareTime", &mrv2::media::getCompareTime, _("Get compare time."));
 
     media.def(
         "firstVersion", &mrv2::media::firstVersion,
