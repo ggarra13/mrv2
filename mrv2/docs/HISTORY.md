@@ -10,6 +10,8 @@ v1.2.5
   display settings.
 - Made Image/Previous and Image/Next not appear when a single image or movie
   was loaded.
+- Fixed typo when saving session files which would prevent them from being
+  loaded.
   
 
 v1.2.4
