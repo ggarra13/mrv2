@@ -71,11 +71,11 @@ namespace tl
             j.at("enabled").get_to(value.enabled);
             j.at("value").get_to(value.value);
         }
-        
+
         void to_json(nlohmann::json& j, const Normalize& value)
         {
             j["enabled"] = value.enabled;
-            j["mimimum"] = value.minimum;
+            j["minimum"] = value.minimum;
             j["maximum"] = value.maximum;
         }
 
