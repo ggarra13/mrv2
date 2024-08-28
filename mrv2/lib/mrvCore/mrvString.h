@@ -106,6 +106,13 @@ namespace mrv
             return out;
         }
 
+        /**
+         * Return a string with all the 'match' characters commented out with
+         * with backslashes.
+         */
+        std::string
+        commentCharacter(const std::string& input, const char match = '/');
+
         
         /**
          * @brief Class used to mimic Qt's string function so that it converts

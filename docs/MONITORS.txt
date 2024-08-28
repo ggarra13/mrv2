@@ -1,0 +1,136 @@
+
+To retrieve the name of monitors in C++ across Windows, Linux, and macOS, you'll need to use platform-specific APIs. Here's how you can do it on each platform:
+
+Windows
+-------
+
+On Windows, you can use the EnumDisplayDevices function to enumerate display devices and get their names.
+
+#include <windows.h>
+#include <iostream>
+#include <string>
+
+std::string GetMonitorName(int monitorIndex) {
+    DISPLAY_DEVICE displayDevice;
+    displayDevice.cb = sizeof(DISPLAY_DEVICE);
+
+    if (EnumDisplayDevices(NULL, monitorIndex, &displayDevice, 0)) {
+        return std::string(displayDevice.DeviceString);
+    } else {
+        return "Monitor not found";
+    }
+}
+
+int main() {
+    int monitorIndex = 0; // Example: get the first monitor
+    std::string monitorName = GetMonitorName(monitorIndex);
+    std::cout << "Monitor name: " << monitorName << std::endl;
+    return 0;
+}
+Linux
+On Linux, using the X11 library (specifically Xrandr extension) is a common way to get the monitor names.
+
+X11
+---
+
+Done.
+
+
+Wayland FLTK
+------------
+
+#include <FL/Fl.H>
+#include <FL/Fl_Window.H>
+#include <wayland-client.h>
+#include <iostream>
+#include <string>
+
+struct MonitorInfo {
+    std::string name;
+    uint32_t global_id;
+};
+
+void handle_output_name(void* data, struct wl_output* output, uint32_t name) {
+    MonitorInfo* monitorInfo = static_cast<MonitorInfo*>(data);
+    monitorInfo->name = "Monitor " + std::to_string(monitorInfo->global_id) + " (ID: " + std::to_string(name) + ")";
+}
+
+const struct wl_output_listener output_listener = {
+    .name = handle_output_name,
+    // Additional Wayland event listeners can be added here
+};
+
+std::string GetMonitorName(int monitorIndex) {
+    struct wl_display* display = wl_display_connect(nullptr);
+    if (!display) {
+        return "Cannot open Wayland display";
+    }
+
+    struct wl_registry* registry = wl_display_get_registry(display);
+    MonitorInfo monitorInfo;
+    monitorInfo.global_id = monitorIndex;
+
+    wl_registry_add_listener(registry, &output_listener, &monitorInfo);
+
+    wl_display_roundtrip(display);  // Process the registry events
+    wl_display_disconnect(display);
+
+    return monitorInfo.name.empty() ? "Monitor not found" : monitorInfo.name;
+}
+
+int main(int argc, char** argv) {
+    Fl_Window* window = new Fl_Window(400, 300, "FLTK with Wayland Monitor Name");
+
+    int monitorIndex = 0; // Example: get the first monitor
+    std::string monitorName = GetMonitorName(monitorIndex);
+    std::cout << "Monitor name: " << monitorName << std::endl;
+
+    window->end();
+    window->show(argc, argv);
+    return Fl::run();
+}
+
+
+macOS
+-----
+On macOS, you can use the CoreGraphics framework to get the names of displays.
+
+cpp
+Copy code
+#include <ApplicationServices/ApplicationServices.h>
+#include <iostream>
+#include <string>
+
+std::string GetMonitorName(int monitorIndex) {
+    CGDisplayCount displayCount;
+    CGDirectDisplayID displays[32];
+    CGGetActiveDisplayList(32, displays, &displayCount);
+
+    if (monitorIndex >= displayCount) {
+        return "Monitor not found";
+    }
+
+    CFDictionaryRef displayInfo = CGDisplayCreateInfoDictionary(displays[monitorIndex], kCGBundleIdentifier);
+    CFStringRef displayName = (CFStringRef)CFDictionaryGetValue(displayInfo, kDisplayProductName);
+
+    char name[256];
+    CFStringGetCString(displayName, name, sizeof(name), kCFStringEncodingUTF8);
+
+    CFRelease(displayInfo);
+
+    return std::string(name);
+}
+
+int main() {
+    int monitorIndex = 0; // Example: get the first monitor
+    std::string monitorName = GetMonitorName(monitorIndex);
+    std::cout << "Monitor name: " << monitorName << std::endl;
+    return 0;
+}
+
+Notes:
+Indexing: The monitor index (monitorIndex) should correspond to the order in which the monitors are detected by the system. This order may differ across platforms.
+Error Handling: The provided code examples include basic error handling, but you may want to expand it depending on your application’s needs.
+Libraries: Make sure that your project is linked with the necessary libraries. For example, on Linux, you might need to link against X11 and Xrandr, and on macOS, you need to link against ApplicationServices.
+This approach should cover your needs across the three platforms.
+

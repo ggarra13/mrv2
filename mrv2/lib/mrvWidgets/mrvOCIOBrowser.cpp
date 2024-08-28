@@ -10,7 +10,7 @@
 #include "mrvCore/mrvMedia.h"
 
 #include "mrvFl/mrvIO.h"
-#include "mrvFl/mrvPreferences.h"
+#include "mrvFl/mrvOCIO.h"
 
 #include "mrvWidgets/mrvOCIOBrowser.h"
 
@@ -33,60 +33,10 @@ namespace mrv
 
     OCIOBrowser::~OCIOBrowser() {}
 
-    void OCIOBrowser::fill_view()
-    {
-#ifdef TLRENDER_OCIO
-        OCIO::ConstConfigRcPtr config = Preferences::OCIOConfig();
-        const char* display = Preferences::OCIO_Display.c_str();
-        std::vector< std::string > views;
-        int numViews = config->getNumViews(display);
-        for (int i = 0; i < numViews; i++)
-        {
-            std::string view = config->getView(display, i);
-            views.push_back(view);
-        }
-
-        value(1);
-        std::sort(views.begin(), views.end());
-        for (size_t i = 0; i < views.size(); ++i)
-        {
-            add(views[i].c_str());
-            if (views[i] == _sel)
-            {
-                value(i + 1);
-            }
-        }
-#endif
-    }
-
-    void OCIOBrowser::fill_display()
-    {
-#ifdef TLRENDER_OCIO
-        OCIO::ConstConfigRcPtr config = Preferences::OCIOConfig();
-        std::vector< std::string > displays;
-        for (int i = 0; i < config->getNumDisplays(); ++i)
-        {
-            std::string display = config->getDisplay(i);
-            displays.push_back(display);
-        }
-
-        value(1);
-        std::sort(displays.begin(), displays.end());
-        for (size_t i = 0; i < displays.size(); ++i)
-        {
-            add(displays[i].c_str());
-            if (displays[i] == _sel)
-            {
-                value(i + 1);
-            }
-        }
-#endif
-    }
-
     void OCIOBrowser::fill_display_and_view()
     {
 #ifdef TLRENDER_OCIO
-        OCIO::ConstConfigRcPtr config = Preferences::OCIOConfig();
+        OCIO::ConstConfigRcPtr config = ocio::config;
         std::vector< std::string > views;
         for (int i = 0; i < config->getNumDisplays(); ++i)
         {
@@ -114,7 +64,7 @@ namespace mrv
     void OCIOBrowser::fill_look()
     {
 #ifdef TLRENDER_OCIO
-        OCIO::ConstConfigRcPtr config = Preferences::OCIOConfig();
+        OCIO::ConstConfigRcPtr config = ocio::config;
 
         std::vector<std::string> looks;
         int numLooks = config->getNumLooks();
@@ -139,7 +89,7 @@ namespace mrv
     void OCIOBrowser::fill_input_color_space()
     {
 #ifdef TLRENDER_OCIO
-        OCIO::ConstConfigRcPtr config = Preferences::OCIOConfig();
+        OCIO::ConstConfigRcPtr config = ocio::config;
         std::vector< std::string > spaces;
         for (int i = 0; i < config->getNumColorSpaces(); ++i)
         {
@@ -184,12 +134,6 @@ namespace mrv
         {
         case kInputColorSpace:
             fill_input_color_space();
-            break;
-        case kView:
-            fill_view();
-            break;
-        case kDisplay:
-            fill_display();
             break;
         case kDisplay_And_View:
             fill_display_and_view();

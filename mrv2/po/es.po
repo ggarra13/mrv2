@@ -3429,6 +3429,10 @@ msgstr "Grabando video pero con una extension de audio."
 msgid "View/Mask"
 msgstr "Vista/Máscara"
 
+#, fuzzy
+msgid "OCIO/Displays"
+msgstr "OCIO Display"
+
 msgid "Pick Color"
 msgstr "Elegir Color"
 
@@ -3578,6 +3582,27 @@ msgstr "Fuente inválida para dibujar texto"
 
 msgid "Could not convert message to shape: "
 msgstr "No pude convertir el mensaje a figura: "
+
+#, fuzzy
+msgid "Invalid EDID header"
+msgstr "Valores Inválidos"
+
+msgid "EDID atom not found"
+msgstr ""
+
+msgid "Failed to get EDID property"
+msgstr ""
+
+msgid "Invalid EDID data"
+msgstr ""
+
+#, fuzzy
+msgid "Unknown Monitor"
+msgstr "Entrada de menu desconocida "
+
+#, fuzzy
+msgid "Screen #"
+msgstr "Enmarcar Pantalla"
 
 msgid "File/Open/Movie or Sequence"
 msgstr "Archivo/Abrir/Pelídula o Secuencia"
@@ -3899,6 +3924,41 @@ msgstr "Editar/&Deshacer"
 
 msgid "Edit/Redo"
 msgstr "Editar/&Rehacer"
+
+#. ++i )
+#. {
+#. char buf[256];
+#. snprintf( buf, 256, _("Subtitle/Track #%d - %s"), i,
+#. image->subtitle_info(i).language.c_str() );
+#. idx = menu->add( buf, 0,
+#. (Fl_Callback*)change_subtitle_cb, ui,
+#. FL_MENU_RADIO );
+#. item = (Fl_Menu_Item*) &(menu->menu()[idx]);
+#. if ( image->subtitle_stream() == (int)i )
+#. item->set();
+#. }
+#. }
+#. if ( dynamic_cast< Fl_Menu_Button* >( menu ) )
+#. {
+#. menu->add( _("Pixel/Copy RGBA Values to Clipboard"),
+#. kCopyRGBAValues.hotkey(),
+#. (Fl_Callback*)copy_pixel_rgba_cb, (void*)view);
+#. }
+#, fuzzy
+msgid "OCIO/Current File"
+msgstr "Archivo Config de OCIO"
+
+#, fuzzy
+msgid "OCIO/     File Color Space"
+msgstr "OCIO Espacio de Color de Entrada"
+
+#, fuzzy
+msgid "OCIO/All Files"
+msgstr "OCIO Vista"
+
+#, fuzzy
+msgid "OCIO/     File Color Space "
+msgstr "OCIO Espacio de Color de Entrada"
 
 msgid "Sync/Send/Media"
 msgstr "Sincronizar/Enviar/Medios"

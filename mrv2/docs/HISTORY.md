@@ -1,18 +1,19 @@
 v1.2.5
 ======
 
-- OCIO Display/View and OCIO Look is now stored with each clip, for easier
-  switching between, for example, a movie clip and an OpenEXR sequence.
-- Reverted:
-    - Input Color Space and Display/View allowed to be applied individually.
-- Input Color Space, Display/View and Look setting are now stored with each
-  clip.  However, you cannot compare two clips (say in a wipe) with different
-  display settings.
+- Input Color Space and Look setting are now stored with each clip.  However, 
+  you cannot compare two clips (say in a wipe) with different display settings.
 - Made Image/Previous and Image/Next not appear when a single image or movie
   was loaded.
 - Fixed typo when saving session files which would prevent them from being
-  loaded.
-  
+  loaded which had gotten broken in v1.2.3.
+- OCIO configuration can now be selected from the menus.
+- OCIO Display/View can now be applied on a monitor per monitor basis.
+- Removed OCIO from the Color Panel.
+- Major refactoring of convoluted OCIO code.
+- Allowed Chaging OCIO Input Color Space from the OCIO menu for either the
+  current file, or all loaded files.
+
 
 v1.2.4
 ======

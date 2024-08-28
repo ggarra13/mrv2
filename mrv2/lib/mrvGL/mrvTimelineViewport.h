@@ -83,6 +83,13 @@ namespace mrv
         //! Set the OCIO options.
         void setOCIOOptions(const timeline::OCIOOptions&) noexcept;
 
+        //! Set the OCIO options for monitor.
+        void setOCIOOptions(unsigned monitorId,
+                            const timeline::OCIOOptions&) noexcept;
+
+        const timeline::OCIOOptions&
+        getOCIOOptions(unsigned monitorId) noexcept;
+
         const timeline::OCIOOptions& getOCIOOptions() noexcept;
 
         //! Set the LUT options.

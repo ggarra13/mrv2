@@ -24,8 +24,6 @@
 
 #include "mrViewer.h"
 
-#include "mrvFl/mrvOCIO.h"
-
 namespace mrv
 {
     namespace panel
@@ -33,7 +31,6 @@ namespace mrv
 
         struct ColorPanel::Private
         {
-            Fl_Tabs* ocio = nullptr;
 
             Fl_Check_Button* lutOn = nullptr;
             Input* lutFilename = nullptr;
@@ -109,177 +106,9 @@ namespace mrv
 
             // ---------------------------- OCIO
 
-            CollapsibleGroup* cg =
-                new CollapsibleGroup(g->x(), 20, g->w(), 20, _("OCIO"));
-            Fl_Button* b = cg->button();
-            b->labelsize(14);
-            b->size(b->w(), 18);
-            b->callback(
-                [](Fl_Widget* w, void* d)
-                {
-                    CollapsibleGroup* cg = static_cast<CollapsibleGroup*>(d);
-                    if (cg->is_open())
-                        cg->close();
-                    else
-                        cg->open();
+            CollapsibleGroup* cg;
+            Fl_Button* b;
 
-                    const std::string& prefix = colorPanel->tab_prefix();
-                    const std::string key = prefix + "OCIO";
-
-                    App* app = App::ui->app;
-                    auto settings = app->settings();
-                    settings->setValue(key, static_cast<int>(cg->is_open()));
-
-                    colorPanel->refresh();
-                },
-                cg);
-
-            cg->begin();
-
-            auto tW = new Widget<Fl_Tabs>(g->x(), 40, g->w(), 140);
-            _r->ocio = tW;
-            gb = new Fl_Group(g->x(), 60, g->w(), _r->ocio->h() - 20, "ICS");
-            auto brW = new Widget<Fl_Hold_Browser>(
-                g->x() + 5, 65, g->w() - 10, gb->h() - 10);
-            br = brW;
-            br->textcolor(FL_BLACK);
-
-            PopupMenu* menu = p.ui->uiICS;
-            int count = 0;
-            int selected = 0;
-            for (int i = 0; i < menu->children(); ++i)
-            {
-                const Fl_Menu_Item* item = menu->child(i);
-                if (!item || !item->label() || item->flags & FL_SUBMENU)
-                    continue;
-                ++count;
-                if (i == p.ui->uiICS->value())
-                    selected = count;
-                char pathname[1024];
-                int ret = menu->item_pathname(pathname, sizeof(pathname), item);
-                if (ret != 0)
-                    continue;
-                if (pathname[0] == '/')
-                    br->add(item->label());
-                else
-                    br->add(pathname);
-            }
-            br->value(selected);
-
-            br->end();
-            brW->callback([=](auto o)
-                          { ocio::setOcioIcs(o->text(o->value())); });
-
-            gb->end();
-
-            gb = new Fl_Group(g->x(), 60, g->w(), _r->ocio->h() - 20, "View");
-            brW = new Widget<Fl_Hold_Browser>(
-                g->x() + 5, 65, g->w() - 10, gb->h() - 10);
-            br = brW;
-            br->textcolor(FL_BLACK);
-
-            selected = 0;
-            count = 0;
-            menu = p.ui->OCIOView;
-            char name[2048];
-            for (int i = 0; i < menu->children(); ++i)
-            {
-                const Fl_Menu_Item* item = menu->child(i);
-                if (!item || !item->label() || item->flags & FL_SUBMENU)
-                    continue;
-                int ret = menu->item_pathname(name, sizeof(name), item);
-                if (ret != 0)
-                    continue;
-                std::string value = name;
-                if (value.find('/') == std::string::npos &&
-                    value.find('(') == std::string::npos)
-                    continue;
-                ++count;
-                int idx = menu->find_index(item);
-                if (idx == menu->value())
-                    selected = count;
-                if (name[0] == '/')
-                    br->add(item->label());
-                else
-                    br->add(name);
-            }
-            br->value(selected);
-
-            br->end();
-            brW->callback(
-                [=](auto o)
-                {
-                    int idx = o->value();
-                    if (idx < 1)
-                        idx = 1;
-                    ocio::setOcioView(o->text(idx));
-                });
-
-            gb->end();
-
-            gb = new Fl_Group(g->x(), 60, g->w(), _r->ocio->h() - 20, "Look");
-            brW = new Widget<Fl_Hold_Browser>(
-                g->x() + 5, 65, g->w() - 10, gb->h() - 10);
-            br = brW;
-            br->textcolor(FL_BLACK);
-
-            selected = 0;
-            count = 0;
-            menu = p.ui->OCIOLook;
-            for (int i = 0; i < menu->children(); ++i)
-            {
-                const Fl_Menu_Item* item = menu->child(i);
-                if (!item || !item->label() || item->flags & FL_SUBMENU)
-                    continue;
-                ++count;
-                int idx = menu->find_index(item);
-                if (idx == menu->value())
-                    selected = count;
-                br->add(item->label());
-            }
-
-            br->value(selected);
-            br->end();
-            brW->callback([=](auto o)
-                          { ocio::setOcioLook(o->text(o->value())); });
-
-            gb->end();
-
-            _r->ocio->end();
-
-            std::string key = prefix + "OCIO/Tabs";
-            std_any value = settings->getValue<std::any>(key);
-            int tab = std_any_empty(value) ? 0 : std_any_cast<int>(value);
-            _r->ocio->value(_r->ocio->child(tab));
-            tW->callback(
-                [=](auto o)
-                {
-                    const std::string& prefix = colorPanel->tab_prefix();
-                    const std::string key = prefix + "OCIO/Tabs";
-
-                    App* app = App::ui->app;
-                    auto settings = app->settings();
-
-                    int idx = 0;
-                    Fl_Widget* w = o->value();
-                    for (int i = 0; i < o->children(); ++i)
-                    {
-                        if (w == o->child(i))
-                        {
-                            idx = i;
-                            break;
-                        }
-                    }
-                    settings->setValue(key, idx);
-                });
-
-            cg->end();
-
-            key = prefix + "OCIO";
-            value = settings->getValue<std::any>(key);
-            int open = std_any_empty(value) ? 0 : std_any_cast<int>(value);
-            if (!open)
-                cg->close();
 
             // ---------------------------- LUT
 
@@ -380,9 +209,9 @@ namespace mrv
 
             cg->end();
 
-            key = prefix + "LUT";
-            value = settings->getValue<std::any>(key);
-            open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
+            std::string key = prefix + "LUT";
+            std::any value = settings->getValue<std::any>(key);
+            int open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
             if (!open)
                 cg->close();
 

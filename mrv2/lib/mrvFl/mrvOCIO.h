@@ -6,12 +6,24 @@
 
 #include <string>
 
+#ifdef TLRENDER_OCIO
+#    include <OpenColorIO/OpenColorIO.h>
+namespace OCIO = OCIO_NAMESPACE;
+#endif
+
 namespace mrv
 {
     namespace ocio
     {
         extern std::string ocioDefault;
+#ifdef TLRENDER_OCIO
+        extern OCIO::ConstConfigRcPtr config;
+#endif
 
+        void setup();
+
+        void defaultIcs();
+        
         std::string ocioConfig();
         void setOcioConfig(const std::string config);
 

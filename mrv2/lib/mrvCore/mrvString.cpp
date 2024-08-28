@@ -26,5 +26,25 @@ namespace mrv
             return r;
         }
 
+        std::string commentCharacter(const std::string& input, const char match)
+        {
+            std::string out;
+
+            for (char c : input)
+            {
+                if (c == match)
+                {
+                    out += "\\";
+                    out += match;
+                }
+                else
+                {
+                    out += c;
+                }
+            }
+
+            return out;
+        }
+        
     } // namespace string
 } // namespace mrv

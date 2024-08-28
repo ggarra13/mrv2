@@ -328,7 +328,21 @@ namespace mrv
                     renderOptions.colorBuffer = gl.colorBufferType;
 
                     gl.render->begin(renderSize, renderOptions);
-                    gl.render->setOCIOOptions(p.ocioOptions);
+
+                    int screen = this->screen_num();
+                    if (screen >= 0 && screen < p.monitorOCIOOptions.size())
+                    {
+                        timeline::OCIOOptions ocioOptions = p.ocioOptions;
+                        ocioOptions.display =
+                            p.monitorOCIOOptions[screen].display;
+                        ocioOptions.view =
+                            p.monitorOCIOOptions[screen].view;
+                        gl.render->setOCIOOptions(ocioOptions);
+                    }
+                    else
+                    {
+                        gl.render->setOCIOOptions(p.ocioOptions);
+                    }
                     gl.render->setLUTOptions(p.lutOptions);
                     if (p.missingFrame &&
                         p.missingFrameType != MissingFrameType::kBlackFrame)

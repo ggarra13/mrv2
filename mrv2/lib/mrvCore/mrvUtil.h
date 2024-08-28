@@ -122,13 +122,6 @@ namespace mrv
         return name + buf + extension;
     }
 
-    /**
-     * Return a string with all the 'match' characters commented out with
-     * with backslashes.
-     */
-    std::string
-    commentCharacter(const std::string& input, const char match = '/');
-
     //! Parse a directory and return all movies, sequences and audios found
     //! there
     void parse_directory(

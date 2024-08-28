@@ -23,6 +23,7 @@
 #include "mrvFl/mrvSaveOptions.h"
 #include "mrvFl/mrvVersioning.h"
 #include "mrvFl/mrvFileRequester.h"
+#include "mrvFl/mrvOCIO.h"
 #include "mrvFl/mrvSave.h"
 #include "mrvFl/mrvSession.h"
 #include "mrvFl/mrvStereo3DAux.h"
@@ -32,6 +33,7 @@
 #include "mrvGL/mrvGLTextEdit.h"
 
 #include "mrvUI/mrvAsk.h"
+#include "mrvUI/mrvDesktop.h"
 #include "mrvUI/mrvMenus.h"
 
 #include "mrvFlmm/Flmm_ColorA_Chooser.h"
@@ -143,7 +145,8 @@ namespace mrv
 
         // void set_timeline_player(
         //     const ViewerUI* ui, TimelinePlayer* player,
-        //     const otio::SerializableObject::Retainer<otio::Timeline>& timeline)
+        //     const otio::SerializableObject::Retainer<otio::Timeline>&
+        //     timeline)
         // {
         //     player->setTimeline(timeline);
         //     ui->uiView->setTimelinePlayer(player);
@@ -161,20 +164,20 @@ namespace mrv
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
-    void open_single_files_cb(const std::vector< std::string >& files,
-                              ViewerUI* ui)
+    void
+    open_single_files_cb(const std::vector< std::string >& files, ViewerUI* ui)
     {
         auto settings = ui->app->settings();
         int savedDigits = settings->getValue<int>("Misc/MaxFileSequenceDigits");
         settings->setValue("Misc/MaxFileSequenceDigits", 0);
-        
+
         for (const auto& file : files)
         {
             ui->app->open(file);
         }
 
         settings->setValue("Misc/MaxFileSequenceDigits", savedDigits);
-        
+
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
@@ -677,7 +680,7 @@ namespace mrv
 
         tcp->unlock();
     }
-    
+
     void previous_channel_cb(Fl_Widget* w, ViewerUI* ui)
     {
         int value = ui->uiColorChannel->value();
@@ -688,7 +691,7 @@ namespace mrv
         ui->uiColorChannel->value(value);
         ui->uiColorChannel->do_callback();
     }
-    
+
     void next_channel_cb(Fl_Widget* w, ViewerUI* ui)
     {
         int value = App::ui->uiColorChannel->value();
@@ -830,7 +833,7 @@ namespace mrv
         refresh_media_cb(m, ui);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
-    
+
     void toggle_invalid_values_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         timeline::DisplayOptions o = ui->app->displayOptions();
@@ -839,7 +842,7 @@ namespace mrv
         refresh_media_cb(m, ui);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
-    
+
     void toggle_fullscreen_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         bool active = true;
@@ -1290,7 +1293,7 @@ namespace mrv
     }
 
     OCIOPresetsUI* OCIOPresetsClass = nullptr;
-    
+
     void ocio_presets_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         if (!OCIOPresetsClass)
@@ -1301,7 +1304,6 @@ namespace mrv
         }
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
-
 
     void frame_view_cb(Fl_Menu_* m, ViewerUI* ui)
     {
@@ -1337,7 +1339,6 @@ namespace mrv
         refresh_media_cb(m, ui);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
-    
 
     void toggle_display_window_cb(Fl_Menu_* m, ViewerUI* ui)
     {
@@ -1440,38 +1441,93 @@ namespace mrv
         }
     }
 
-    void attach_ocio_display_cb(Fl_Menu_*, ViewerUI* ui)
+    void current_ocio_ics_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        std::string ret =
-            make_ocio_chooser(Preferences::OCIO_Display, OCIOBrowser::kDisplay);
-        if (ret.empty())
+        const Fl_Menu_Item* selected = m->mvalue();
+        char pathname[1024];
+        int ret = m->item_pathname(pathname, 1024, selected);
+        if (ret != 0)
             return;
-        Preferences::OCIO_Display = ret;
-        ui->uiView->redraw();
+
+        const std::string& colorSpace = _("OCIO/     Input Color Space");
+        std::string ics = pathname;
+        size_t pos = ics.find(colorSpace);
+        if (pos != std::string::npos)
+        {
+            ics = ics.substr(pos + colorSpace.size() + 1, ics.size());
+            ocio::setOcioIcs(ics);
+        }
     }
 
-    void attach_ocio_view_cb(Fl_Menu_*, ViewerUI* ui)
+    void all_ocio_ics_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        std::string ret =
-            make_ocio_chooser(Preferences::OCIO_View, OCIOBrowser::kView);
-        if (ret.empty())
+        const Fl_Menu_Item* selected = m->mvalue();
+        char pathname[1024];
+        int ret = m->item_pathname(pathname, 1024, selected);
+        if (ret != 0)
             return;
-        Preferences::OCIO_View = ret;
-        Fl_Menu_Button* m = ui->OCIOView;
-        for (int i = 0; i < m->size(); ++i)
+
+        const std::string& colorSpace = _("OCIO/     Input Color Space ");
+        std::string ics = pathname;
+        size_t pos = ics.find(colorSpace);
+        if (pos != std::string::npos)
         {
-            const char* lbl = m->menu()[i].label();
-            if (!lbl)
-                continue;
-            if (ret == lbl)
-            {
-                m->value(i);
-                break;
-            }
+            ics = ics.substr(pos + colorSpace.size() + 1, ics.size());
+            ocio::setOcioIcs(ics);
         }
-        m->copy_label(_(ret.c_str()));
-        m->redraw();
-        ui->uiView->redraw();
+
+        auto app = App::app;
+        auto model = app->filesModel();
+        auto files = model->observeFiles()->get();
+        for (auto file : files)
+        {
+            file->ocioIcs = ics;
+        }
+    }
+
+    void monitor_ocio_view_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        int monitorId = -1;
+        int displayInfo = -1;
+        const std::string& displayLabel = _("OCIO/Displays");
+        const Fl_Menu_Item* selected = m->mvalue();
+        char pathname[1024];
+        int ret = m->item_pathname(pathname, 1024, selected);
+        if (ret != 0)
+            return;
+
+        // Remove monitor name from menu pathname.
+        int numMonitors = Fl::screen_count();
+        std::string combined = pathname;
+        for (int i = 0; i < numMonitors; ++i)
+        {
+            const std::string& monitorName = desktop::monitorName(i);
+
+            int idx = combined.find(monitorName);
+            if (idx == std::string::npos)
+                continue;
+
+            monitorId = i;
+            combined =
+                combined.substr(idx + monitorName.size() + 1, combined.size());
+            break;
+        }
+
+        // Split combined display/view into separate parts.
+        timeline::OCIOOptions o;
+        ocio::ocioSplitViewIntoDisplayView(combined, o.display, o.view);
+        if (numMonitors == 1)
+        {
+            // If only one monitor, update main UI.
+            ocio::setOcioView(combined);
+        }
+        else
+        {
+            // Set the display and view for this monitor.
+            ui->uiView->setOCIOOptions(monitorId, o);
+        }
+
+        ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
     void video_levels_from_file_cb(Fl_Menu_*, ViewerUI* ui)
@@ -1893,7 +1949,7 @@ namespace mrv
 
         if (!flmm_color_a_chooser(_("Pick Color"), r, g, b, a))
             return color;
-        
+
         color = image::Color4f(r / 255.F, g / 255.F, b / 255.F, a / 255.F);
         return color;
     }
@@ -2275,7 +2331,7 @@ namespace mrv
             Fl::check();
         }
     }
-    
+
     void clone_file_cb(Fl_Menu_* m, void* d)
     {
         auto ui = App::ui;
@@ -2302,7 +2358,7 @@ namespace mrv
         newItem->playback = playback;
         newItem->currentTime = currentTime;
         newItem->annotations = item->annotations;
-        
+
         ui->uiColorChannel->value(layer);
         ui->uiColorChannel->do_callback();
 
@@ -2402,7 +2458,7 @@ namespace mrv
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
-        
+
         player->updateVideoCache(player->currentTime());
     }
 
@@ -2421,7 +2477,7 @@ namespace mrv
 
         player->clearCache();
     }
-    
+
     void refresh_movie_cb(Fl_Menu_* m, void* d)
     {
         auto app = App::app;
@@ -2434,7 +2490,7 @@ namespace mrv
         auto path = item->path;
         if (!file::isMovie(path))
             return;
-        
+
         refresh_media_cb(m, d);
     }
 

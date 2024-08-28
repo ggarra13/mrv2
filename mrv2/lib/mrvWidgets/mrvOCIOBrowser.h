@@ -18,8 +18,6 @@ namespace mrv
     public:
         enum Type {
             kInputColorSpace,
-            kDisplay,
-            kView,
             kDisplay_And_View,
             kLook,
             kNone,
@@ -41,8 +39,6 @@ namespace mrv
 
     protected:
         void fill();
-        void fill_view();
-        void fill_display();
         void fill_display_and_view();
         void fill_input_color_space();
         void fill_look();

@@ -11,9 +11,10 @@
 #include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvHotkey.h"
 #include "mrvCore/mrvMath.h"
-#include "mrvCore/mrvUtil.h"
+#include "mrvCore/mrvString.h"
 
 #include "mrvFl/mrvCallbacks.h"
+#include "mrvFl/mrvOCIO.h"
 #include "mrvFl/mrvVersioning.h"
 
 #include "mrvUI/mrvDesktop.h"
@@ -136,8 +137,8 @@ namespace mrv
         // Add files to Recent menu quoting the / to avoid splitting the menu
         for (auto file : recentFiles)
         {
-            file = commentCharacter(file, '\\');
-            file = commentCharacter(file, '/');
+            file = string::commentCharacter(file, '\\');
+            file = string::commentCharacter(file, '/');
             snprintf(buf, 256, _("File/Recent/%s"), file.c_str());
             menu->add(buf, 0, (Fl_Callback*)open_recent_cb, ui);
         }
@@ -205,7 +206,6 @@ namespace mrv
         else
             item->clear();
 
-            
         snprintf(buf, 256, "%s", _("View/Tool Bars/Toggle Menu Bar"));
         idx = menu->add(
             buf, kToggleMenuBar.hotkey(), (Fl_Callback*)toggle_menu_bar, ui,
@@ -253,7 +253,7 @@ namespace mrv
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (ui->uiToolsGroup->visible())
             item->set();
-        
+
         mode = FL_MENU_TOGGLE;
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
@@ -286,7 +286,8 @@ namespace mrv
             item->set();
 
         idx = menu->add(
-            _("View/OpenEXR/Ignore Display Window"), kIgnoreDisplayWindow.hotkey(),
+            _("View/OpenEXR/Ignore Display Window"),
+            kIgnoreDisplayWindow.hotkey(),
             (Fl_Callback*)toggle_ignore_display_window_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (view->getIgnoreDisplayWindow())
@@ -751,14 +752,14 @@ namespace mrv
             if (displayOptions.imageFilters.magnify ==
                 timeline::ImageFilter::Linear)
                 item->set();
-        
+
             idx = menu->add(
                 _("Render/HDR/Auto Normalize"), kAutoNormalize.hotkey(),
                 (Fl_Callback*)toggle_normalize_image_cb, ui, mode);
             item = (Fl_Menu_Item*)&(menu->menu()[idx]);
             if (displayOptions.normalize.enabled)
                 item->set();
-        
+
             idx = menu->add(
                 _("Render/HDR/Invalid Values"), kInvalidValues.hotkey(),
                 (Fl_Callback*)toggle_invalid_values_cb, ui, mode);
@@ -766,12 +767,12 @@ namespace mrv
             if (displayOptions.invalidValues)
                 item->set();
         }
-        
+
         timeline::Playback playback = timeline::Playback::Stop;
         auto player = view->getTimelinePlayer();
         if (player)
             playback = player->playback();
-            
+
         mode = FL_MENU_RADIO;
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
@@ -849,8 +850,7 @@ namespace mrv
             item->set();
         idx = menu->add(
             _("Playback/Playback Ping Pong"), kPlaybackPingPong.hotkey(),
-            (Fl_Callback*)playback_ping_pong_cb, ui,
-            FL_MENU_DIVIDER | mode);
+            (Fl_Callback*)playback_ping_pong_cb, ui, FL_MENU_DIVIDER | mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (loop == timeline::Loop::PingPong)
             item->set();
@@ -888,12 +888,11 @@ namespace mrv
                 {
                     menu->add(
                         _("Playback/Go to/Previous Clip"),
-                        kPreviousClip.hotkey(),
-                        (Fl_Callback*)previous_clip_cb, ui, mode);
+                        kPreviousClip.hotkey(), (Fl_Callback*)previous_clip_cb,
+                        ui, mode);
                     menu->add(
                         _("Playback/Go to/Next Clip"), kNextClip.hotkey(),
-                        (Fl_Callback*)next_clip_cb, ui,
-                        FL_MENU_DIVIDER | mode);
+                        (Fl_Callback*)next_clip_cb, ui, FL_MENU_DIVIDER | mode);
                 }
             }
 
@@ -911,8 +910,7 @@ namespace mrv
                     FL_MENU_DIVIDER | mode);
 
                 menu->add(
-                    _("Playback/Annotation/Clear"),
-                    kShapeFrameClear.hotkey(),
+                    _("Playback/Annotation/Clear"), kShapeFrameClear.hotkey(),
                     (Fl_Callback*)annotation_clear_cb, ui);
                 menu->add(
                     _("Playback/Annotation/Clear All"),
@@ -950,7 +948,7 @@ namespace mrv
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (hudClass)
             item->set();
-        
+
         mode = 0;
         snprintf(buf, 256, "%s", _("View/OCIO Presets"));
         idx = menu->add(
@@ -963,16 +961,18 @@ namespace mrv
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
 
-        menu->add(_("Timeline/Cache/Clear"), kClearCache.hotkey(),
-                  (Fl_Callback*)refresh_file_cache_cb, ui, mode);
-        
-        menu->add(_("Timeline/Cache/Update Frame"), kUpdateVideoFrame.hotkey(),
-                  (Fl_Callback*)update_video_frame_cb, ui, mode);
-        
+        menu->add(
+            _("Timeline/Cache/Clear"), kClearCache.hotkey(),
+            (Fl_Callback*)refresh_file_cache_cb, ui, mode);
+
+        menu->add(
+            _("Timeline/Cache/Update Frame"), kUpdateVideoFrame.hotkey(),
+            (Fl_Callback*)update_video_frame_cb, ui, mode);
+
         mode = FL_MENU_TOGGLE;
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
-        
+
         idx = menu->add(
             _("Timeline/Editable"), kToggleTimelineEditable.hotkey(),
             (Fl_Callback*)toggle_timeline_editable_cb, ui, mode);
@@ -1097,7 +1097,7 @@ namespace mrv
                     _("Image/Previous"), kPreviousImage.hotkey(),
                     (Fl_Callback*)previous_file_cb, ui);
             }
-            
+
             if (has_version)
             {
                 menu->add(
@@ -1178,6 +1178,110 @@ namespace mrv
         //                kCopyRGBAValues.hotkey(),
         //                (Fl_Callback*)copy_pixel_rgba_cb, (void*)view);
         // }
+
+        menu->add(_("OCIO/Current File"), 0, 0, nullptr, FL_MENU_INACTIVE);
+        
+        std::string combined;
+        idx = ui->uiICS->value();
+        if (idx >= 0)
+        {
+            const Fl_Menu_Item* item = ui->uiICS->child(idx);
+            char pathname[1024];
+            int ret = ui->uiICS->item_pathname(pathname, 1024, item);
+            if (ret == 0)
+                combined = pathname;
+        }
+        for (int i = 0; i < ui->uiICS->children(); ++i)
+        {
+            std::string colorSpace = _("OCIO/     Input Color Space");
+            const Fl_Menu_Item* item = ui->uiICS->child(i);
+            if (!item || !item->label() || (item->flags & FL_SUBMENU))
+                continue;
+
+            char pathname[1024];
+            int ret = ui->uiICS->item_pathname(pathname, 1024, item);
+            if (ret != 0)
+                continue;
+
+
+            if (pathname[0] != '/')
+                colorSpace += '/';
+            colorSpace += pathname;
+            idx = menu->add(
+                colorSpace.c_str(), 0, (Fl_Callback*)current_ocio_ics_cb, ui,
+                FL_MENU_TOGGLE);
+
+            {
+                Fl_Menu_Item* item = (Fl_Menu_Item*) &(menu->menu()[idx]);
+                size_t pos = colorSpace.find(combined);
+                if (pos != std::string::npos &&
+                    pos + combined.size() == colorSpace.size() )
+                {
+                    item->set();
+                }
+            }
+        }
+        menu->add(_("OCIO/Change All Files"), 0, nullptr, nullptr,
+                  FL_MENU_INACTIVE);
+        for (int i = 0; i < ui->uiICS->children(); ++i)
+        {
+            // We must add a space at the end to make sure menus are different
+            std::string colorSpace = _("OCIO/     Input Color Space ");
+            const Fl_Menu_Item* item = ui->uiICS->child(i);
+            if (!item || !item->label() || (item->flags & FL_SUBMENU))
+                continue;
+
+            char pathname[1024];
+            int ret = ui->uiICS->item_pathname(pathname, 1024, item);
+            if (ret != 0)
+                continue;
+
+            if (pathname[0] != '/')
+                colorSpace += '/';
+            colorSpace += pathname;
+            menu->add(colorSpace.c_str(), 0, (Fl_Callback*)all_ocio_ics_cb, ui);
+        }
+
+        menu->add(_("OCIO/Displays"), 0, nullptr, nullptr, FL_MENU_INACTIVE);
+        int num_screens = Fl::screen_count();
+        for (int m = 0; m < num_screens; ++m)
+        {
+            timeline::OCIOOptions o = ui->uiView->getOCIOOptions(m);
+            std::string monitorName = mrv::desktop::monitorName(m);
+            std::string combined =
+                ocio::ocioDisplayViewShortened(o.display, o.view);
+            combined = monitorName + "/" + combined;
+       
+            for (int i = 0; i < ui->OCIOView->children(); ++i)
+            {
+                const Fl_Menu_Item* item = ui->OCIOView->child(i);
+                if (!item || !item->label() || (item->flags & FL_SUBMENU))
+                    continue;
+
+                char pathname[1024];
+                int ret = ui->OCIOView->item_pathname(pathname, 1024, item);
+                if (ret != 0)
+                    continue;
+
+                std::string colorSpace = "OCIO/     " + monitorName;
+
+                if (pathname[0] != '/')
+                    colorSpace += '/';
+                colorSpace += pathname;
+                int idx = menu->add(
+                    colorSpace.c_str(), 0, (Fl_Callback*)monitor_ocio_view_cb,
+                    ui, FL_MENU_TOGGLE);
+                {
+                    Fl_Menu_Item* item = (Fl_Menu_Item*) &(menu->menu()[idx]);
+                    size_t pos = colorSpace.find(combined);
+                    if (pos != std::string::npos &&
+                        pos + combined.size() == colorSpace.size() )
+                    {
+                        item->set();
+                    }
+                }
+            }
+        }
 
         if (dynamic_cast< DummyClient* >(tcp) == nullptr)
         {

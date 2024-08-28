@@ -45,6 +45,8 @@ namespace py = pybind11;
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
+#include "mrvUI/mrvDesktop.h"
+
 #include "mrvNetwork/mrvDummyClient.h"
 #include "mrvNetwork/mrvDisplayOptions.h"
 #include "mrvNetwork/mrvLUTOptions.h"
@@ -477,6 +479,12 @@ namespace mrv
 #ifdef __linux__
             std::cout << mrv::os::getDesktop() << std::endl;
 #endif
+            int screen_nums = Fl::screen_count();
+            for (int i = 0; i < screen_nums; ++i)
+            {
+                std::cerr << "Monitor " << i << " " 
+                          << mrv::desktop::monitorName(i) << std::endl;
+            }
             return;
         }
 
@@ -1495,7 +1503,6 @@ namespace mrv
             p.activeFiles[0]->audioOffset = p.player->audioOffset();
             p.activeFiles[0]->annotations = p.player->getAllAnnotations();
             p.activeFiles[0]->ocioIcs = ocio::ocioIcs();
-            p.activeFiles[0]->ocioView = ocio::ocioView();
             p.activeFiles[0]->ocioLook = ocio::ocioLook();
             p.activeFiles[0]->lutOptions = p.lutOptions;
         }
@@ -1679,22 +1686,20 @@ namespace mrv
                 {
                     try
                     {
-                        ocio::setOcioIcs(activeFiles[0]->ocioIcs);
+                        if (activeFiles[0]->ocioIcs.empty())
+                        {
+                            ocio::defaultIcs();
+                        }
+                        else
+                        {
+                            ocio::setOcioIcs(activeFiles[0]->ocioIcs);
+                        }
                     }
                     catch (const std::exception& e)
                     {
                         LOG_ERROR(e.what());
                     }
                     
-                    try
-                    {
-                        if (!activeFiles[0]->ocioView.empty())
-                            ocio::setOcioView(activeFiles[0]->ocioView);
-                    }
-                    catch (const std::exception& e)
-                    {
-                        LOG_ERROR(e.what());
-                    }
                     try
                     {
                         if (!activeFiles[0]->ocioLook.empty())

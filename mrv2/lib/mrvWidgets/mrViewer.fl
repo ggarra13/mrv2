@@ -894,7 +894,7 @@ model->setLayer(item, o->value());}
                 xywh {129 25 120 26} labeltype NO_LABEL hide resizable
               } {}
               Fl_Group {} {
-                label Exposure open
+                label Exposure
                 xywh {129 25 49 26} labeltype NO_LABEL
               } {
                 Fl_Button uiExposureLess {
@@ -919,7 +919,7 @@ else
    old_gain = gain;
    uiGain->value( 1.0f );
 }
-uiGain->do_callback();} selected
+uiGain->do_callback();}
                   tooltip {Toggle gain between 1 and the previous setting.} xywh {141 26 25 25} align 64
                 }
                 Fl_Button uiExposureMore {
@@ -933,7 +933,7 @@ uiGain->do_callback();}
                 }
               }
               Fl_Group {} {
-                label Gain open
+                label Gain
                 xywh {178 25 99 26} labeltype NO_LABEL
               } {
                 Fl_Value_Input uiGainInput {
@@ -959,7 +959,7 @@ uiView->updateDisplayOptions();}
             }
           }
           Fl_Group {} {
-            label {ICS, View, Look and Gamma}
+            label {ICS, View, Look and Gamma} open
             xywh {277 25 413 28} labeltype NO_LABEL
           } {
             Fl_Group {} {open
@@ -982,9 +982,9 @@ uiView->updateDisplayOptions();}
                 xywh {420 25 174 26} labeltype NO_LABEL
               } {
                 Fl_Menu_Button OCIOView {
-                  label OCIO
+                  label View
                   user_data this user_data_type {ViewerUI*}
-                  callback {uiView->updateOCIOOptions();}
+                  callback {uiView->updateOCIOOptions();} selected
                   tooltip {OCIO Display/View} xywh {420 25 144 26} down_box DOWN_BOX labelsize 10 align 80
                   code0 {o->disable_submenus();}
                   class {mrv::PopupMenu}

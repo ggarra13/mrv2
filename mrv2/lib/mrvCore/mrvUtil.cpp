@@ -32,26 +32,6 @@ namespace mrv
         return 1;
     }
 
-    std::string commentCharacter(const std::string& input, const char match)
-    {
-        std::string out;
-
-        for (char c : input)
-        {
-            if (c == match)
-            {
-                out += "\\";
-                out += match;
-            }
-            else
-            {
-                out += c;
-            }
-        }
-
-        return out;
-    }
-
     void parse_directory(
         const std::string& dir, std::vector<std::string>& movies,
         std::vector<std::string>& sequences, std::vector<std::string>& audios)

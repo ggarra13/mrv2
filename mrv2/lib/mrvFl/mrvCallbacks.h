@@ -63,7 +63,7 @@ namespace mrv
     //! Layer callbacks
     void previous_channel_cb(Fl_Widget* w, ViewerUI* ui);
     void next_channel_cb(Fl_Widget* w, ViewerUI* ui);
-    
+
     //! About menu callback
     void about_cb(Fl_Widget* w, ViewerUI* ui);
 
@@ -78,7 +78,7 @@ namespace mrv
 
     void rotate_plus_90_cb(Fl_Menu_* m, ViewerUI* ui);
     void rotate_minus_90_cb(Fl_Menu_* m, ViewerUI* ui);
-    
+
     void toggle_normalize_image_cb(Fl_Menu_* w, ViewerUI* ui);
 
     //! Channel callbacks
@@ -118,13 +118,13 @@ namespace mrv
 
     //! Invalid values callback
     void toggle_invalid_values_cb(Fl_Menu_* w, ViewerUI* ui);
-    
+
     //! Masking callback
     void masking_cb(Fl_Menu_* w, ViewerUI* ui);
 
     //! HUD window callback
     void hud_cb(Fl_Menu_* w, ViewerUI* ui);
-    
+
     //! OCIO presets window callback
     void ocio_presets_cb(Fl_Menu_* w, ViewerUI* ui);
 
@@ -188,8 +188,10 @@ namespace mrv
 
     // OCIO callbacks
     void attach_ocio_ics_cb(Fl_Menu_*, ViewerUI* ui);
-    void attach_ocio_display_cb(Fl_Menu_*, ViewerUI* ui);
-    void attach_ocio_view_cb(Fl_Menu_*, ViewerUI* ui);
+
+    void current_ocio_ics_cb(Fl_Menu_*, ViewerUI* ui);
+    void all_ocio_ics_cb(Fl_Menu_*, ViewerUI* ui);
+    void monitor_ocio_view_cb(Fl_Menu_*, ViewerUI* ui);
 
     // Video levels callbacks
     void video_levels_from_file_cb(Fl_Menu_*, ViewerUI* ui);
@@ -248,12 +250,12 @@ namespace mrv
 
     //! If a movie, refresh it with current ffmpeg settings.
     void refresh_movie_cb(Fl_Menu_* m, void* d);
-    
+
     void set_stereo_cb(Fl_Menu_* m, void* d);
     void copy_filename_cb(Fl_Menu_* m, void* d);
     void file_manager_cb(Fl_Menu_* m, void* d);
-    
+
     // Python
     void run_python_method_cb(Fl_Menu_* m, void* d);
-    
+
 } // namespace mrv

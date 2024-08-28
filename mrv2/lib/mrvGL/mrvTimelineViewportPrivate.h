@@ -88,10 +88,13 @@ namespace mrv
         static std::string helpText;
         static float helpTextFade;
 
-        //! HUD display flags (ORed together)
+        //! HUD display flags (ORed together).
         static bool hudActive;
         static HudDisplay hud;
 
+        //! Per-monitor Display/View OCIO Options.
+        static std::vector<timeline::OCIOOptions> monitorOCIOOptions;
+        
         //! Action Mode
         static ActionMode actionMode;
 

@@ -26,7 +26,6 @@ namespace mrv
         j["mute"] = value.mute;
         j["audioOffset"] = value.audioOffset;
         j["ocioIcs"] = value.ocioIcs;
-        j["ocioView"] = value.ocioView;
         j["ocioLook"] = value.ocioLook;
         j["lutOptions"] = value.lutOptions;
         std::vector< draw::Annotation > annotations;
@@ -73,10 +72,6 @@ namespace mrv
         if (j.contains("ocioIcs"))
         {
             j.at("ocioIcs").get_to(value.ocioIcs);
-        }
-        if (j.contains("ocioView"))
-        {
-            j.at("ocioView").get_to(value.ocioView);
         }
         if (j.contains("ocioLook"))
         {

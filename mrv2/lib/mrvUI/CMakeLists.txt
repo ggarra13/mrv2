@@ -13,16 +13,29 @@ set(SOURCES
     mrvAsk.cpp
     mrvDesktop.cpp
     mrvMenus.cpp
+    mrvMonitor.cpp
     mrvUtil.cpp
 )
 
+if(APPLE)
+    list(APPEND SOURCES mrvMonitor_macOS.mm)
+endif()
 
 add_library(mrvUI ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
 set(LIBRARIES mrvWidgets)
+set(LIBRARIES_PRIVATE )
 
-target_link_libraries(mrvUI PUBLIC ${LIBRARIES} )
+if(TLRENDER_X11)
+    list(APPEND LIBRARIES_PRIVATE Xrandr)
+endif()
+
+if(TLRENDER_WAYLAND)
+    list(APPEND LIBRARIES_PRIVATE wayland-client)
+endif()
+
+target_link_libraries(mrvUI PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE} )
 set_target_properties(mrvUI PROPERTIES FOLDER lib)
 
 install(TARGETS mrvUI

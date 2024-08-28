@@ -65,7 +65,7 @@
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvLocale.h"
 #include "mrvCore/mrvSequence.h"
-#include "mrvCore/mrvUtil.h"
+#include "mrvCore/mrvString.h"
 
 #include "mrvFl/mrvPreferences.h"
 
@@ -893,7 +893,7 @@ Flu_File_Chooser::Flu_File_Chooser(
                         std::string favs = "/";
                         favs += _(favoritesTxt.c_str());
                         favs += "/";
-                        favs += mrv::commentCharacter(buf);
+                        favs += mrv::string::commentCharacter(buf);
                         location->tree.add(favs.c_str());
                     }
                 }
@@ -2661,7 +2661,7 @@ void Flu_File_Chooser::addToFavoritesCB()
     if (!duplicate)
     {
         favoritesList->add(currentDir.c_str());
-        location->tree.add(mrv::commentCharacter(currentDir).c_str());
+        location->tree.add(mrv::string::commentCharacter(currentDir).c_str());
     }
 
     // save the favorites
@@ -2909,15 +2909,15 @@ void Flu_File_Chooser::buildLocationCombo()
 #ifdef _WIN32
     std::string s;
     char volumeName[1024];
-    s = mrv::commentCharacter("/" + desktopTxt + "/");
+    s = mrv::string::commentCharacter("/" + desktopTxt + "/");
     n = location->tree.add(_(s.c_str()));
     if (n)
         n->usericon(&little_desktop);
-    s = mrv::commentCharacter("/" + desktopTxt + "/" + myDocumentsTxt + "/");
+    s = mrv::string::commentCharacter("/" + desktopTxt + "/" + myDocumentsTxt + "/");
     n = location->tree.add(_(s.c_str()));
     if (n)
         n->usericon(&documents);
-    s = mrv::commentCharacter("/" + desktopTxt + "/" + myComputerTxt + "/");
+    s = mrv::string::commentCharacter("/" + desktopTxt + "/" + myComputerTxt + "/");
     n = location->tree.add(_(s.c_str()));
     if (n)
         n->usericon(&computer);
@@ -2992,7 +2992,7 @@ void Flu_File_Chooser::buildLocationCombo()
                 }
                 drives[i] =
                     std::string(disk) + " (" + std::string(drive) + ")/";
-                s += mrv::commentCharacter(drives[i]);
+                s += mrv::string::commentCharacter(drives[i]);
                 n = location->tree.add(s.c_str());
                 if (n)
                     n->usericon(driveIcons[i]);
@@ -3036,7 +3036,7 @@ void Flu_File_Chooser::buildLocationCombo()
             std::string fullpath = "/Volumes/";
             fullpath += name;
             fullpath += "/";
-            location->tree.add(mrv::commentCharacter(fullpath).c_str());
+            location->tree.add(mrv::string::commentCharacter(fullpath).c_str());
         }
     }
 
@@ -3073,7 +3073,7 @@ void Flu_File_Chooser::buildLocationCombo()
 
             // now add the mount point
             mount += "/";
-            location->tree.add(mrv::commentCharacter(mount).c_str());
+            location->tree.add(mrv::string::commentCharacter(mount).c_str());
         }
 
         fclose(fstab);
@@ -3647,7 +3647,7 @@ void Flu_File_Chooser::cd(const char* path)
         std::string treePath =
             "/" + desktopTxt + "/" + myComputerTxt + "/" + currentDir;
         Fl_Tree_Item* n =
-            location->tree.add(mrv::commentCharacter(treePath).c_str());
+            location->tree.add(mrv::string::commentCharacter(treePath).c_str());
         std::string userDesk = userHome + desktopTxt + "/";
         if (currentDir == userDesk)
             if (n)

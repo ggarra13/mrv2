@@ -8,7 +8,9 @@
 
 #include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvFile.h"
+#include "mrvCore/mrvString.h"
 
+#include "mrvFl/mrvOCIO.h"
 #include "mrvFl/mrvIO.h"
 
 #include "mrvNetwork/mrvLUTOptions.h"
@@ -18,13 +20,334 @@
 namespace
 {
     const char* kModule = "ocio";
-}
+
+    static std::string kInactive = _("None");
+} // namespace
 
 namespace mrv
 {
     namespace ocio
     {
         std::string ocioDefault = "ocio://default";
+        std::vector<std::string> inputs;
+        std::vector<std::string> looks;
+        std::vector<std::string> views;
+
+        OCIO::ConstConfigRcPtr config;
+
+        void setup()
+        {
+            inputs.clear();
+            looks.clear();
+            views.clear();
+
+            inputs.push_back(kInactive);
+            looks.push_back(kInactive);
+            views.push_back(kInactive);
+
+#ifdef TLRENDER_OCIO
+            ViewerUI* ui = App::ui;
+            PreferencesUI* uiPrefs = ui->uiPrefs;
+
+            std::string defaultDisplay;
+            std::string defaultView;
+
+            const char* var = uiPrefs->uiPrefsOCIOConfig->value();
+            if (var && strlen(var) > 0)
+            {
+                setOcioConfig(var);
+
+                try
+                {
+                    const char* configName =
+                        uiPrefs->uiPrefsOCIOConfig->value();
+                    config = OCIO::Config::CreateFromFile(configName);
+                    uiPrefs->uiPrefsOCIOConfig->tooltip(
+                        config->getDescription());
+
+                    defaultDisplay = config->getDefaultDisplay();
+                    defaultView =
+                        config->getDefaultView(defaultDisplay.c_str());
+
+                    bool use_active = uiPrefs->uiOCIOUseActiveViews->value();
+
+                    std::vector<std::string> active_displays;
+                    const char* displaylist = config->getActiveDisplays();
+                    if (use_active && displaylist && strlen(displaylist) > 0)
+                    {
+                        active_displays = string::split(displaylist, ',');
+
+                        // Eliminate forward spaces in names
+                        for (unsigned i = 0; i < active_displays.size(); ++i)
+                        {
+                            while (active_displays[i][0] == ' ')
+                                active_displays[i] = active_displays[i].substr(
+                                    1, active_displays[i].size());
+                        }
+                    }
+                    else
+                    {
+                        int numDisplays = config->getNumDisplays();
+                        for (int i = 0; i < numDisplays; ++i)
+                        {
+                            active_displays.push_back(config->getDisplay(i));
+                        }
+                    }
+
+                    std::vector<std::string> active_views;
+                    const char* viewlist = config->getActiveViews();
+                    if (use_active && viewlist && strlen(viewlist) > 0)
+                    {
+                        active_views = string::split(viewlist, ',');
+
+                        // Eliminate forward spaces in names
+                        for (unsigned i = 0; i < active_views.size(); ++i)
+                        {
+                            while (active_views[i][0] == ' ')
+                                active_views[i] = active_views[i].substr(
+                                    1, active_views[i].size());
+                        }
+                    }
+
+                    size_t num_active_displays = active_displays.size();
+                    size_t num_active_views = active_views.size();
+
+                    for (size_t j = 0; j < num_active_displays; ++j)
+                    {
+                        std::string display = active_displays[j];
+                        std::string quoted_display =
+                            string::commentCharacter(display, '/');
+
+                        int numViews = config->getNumViews(display.c_str());
+
+                        // Collect all views
+
+                        if (num_active_views)
+                        {
+                            for (size_t h = 0; h < num_active_views; ++h)
+                            {
+                                std::string view;
+                                bool add = false;
+
+                                for (int i = 0; i < numViews; ++i)
+                                {
+                                    view = config->getView(display.c_str(), i);
+                                    if (active_views[h] == view)
+                                    {
+                                        add = true;
+                                        break;
+                                    }
+                                }
+
+                                if (add)
+                                {
+                                    std::string name;
+                                    if (num_active_displays > 1)
+                                    {
+                                        name = quoted_display;
+                                        name += "/";
+                                        name += view;
+                                    }
+                                    else
+                                    {
+                                        name = view;
+                                        name += " (" + quoted_display + ")";
+                                    }
+                                    ocio::views.push_back(name);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            for (int i = 0; i < numViews; i++)
+                            {
+                                std::string view =
+                                    config->getView(display.c_str(), i);
+
+                                std::string name;
+                                if (num_active_displays > 1)
+                                {
+                                    name = quoted_display;
+                                    name += "/";
+                                    name += view;
+                                }
+                                else
+                                {
+                                    name = view;
+                                    name += " (" + quoted_display + ")";
+                                }
+
+                                ocio::views.push_back(name);
+                            }
+                        }
+                    }
+
+                    // Add looks
+                    int numLooks = config->getNumLooks();
+                    for (int i = 0; i < numLooks; ++i)
+                    {
+                        looks.push_back(config->getLookNameByIndex(i));
+                    }
+
+                    std::vector< std::string > spaces;
+                    for (int i = 0; i < config->getNumColorSpaces(); ++i)
+                    {
+                        std::string csname =
+                            config->getColorSpaceNameByIndex(i);
+                        spaces.push_back(csname);
+                    }
+
+                    if (std::find(
+                            spaces.begin(), spaces.end(),
+                            OCIO::ROLE_SCENE_LINEAR) == spaces.end())
+                    {
+                        spaces.push_back(OCIO::ROLE_SCENE_LINEAR);
+                    }
+
+                    std::sort(spaces.begin(), spaces.end());
+                    size_t idx = 0;
+                    const char delim{'/'};
+                    const char escape{'\\'};
+                    for (size_t i = 0; i < spaces.size(); ++i)
+                    {
+                        std::string space = spaces[i];
+                        OCIO::ConstColorSpaceRcPtr cs =
+                            config->getColorSpace(space.c_str());
+                        const char* family = cs->getFamily();
+                        std::string menu;
+                        if (family && strlen(family) > 0)
+                        {
+                            menu = family;
+                            menu += "/";
+                        }
+                        menu += string::commentCharacter(space, '/');
+                        inputs.push_back(menu);
+                    }
+                }
+                catch (const std::exception& e)
+                {
+                    LOG_ERROR(e.what());
+                }
+            }
+
+#endif
+
+            // Update UI......... TODO.........
+            ui->uiICS->clear();
+            ui->OCIOView->clear();
+            ui->OCIOLook->clear();
+            for (const auto& value : inputs)
+            {
+                ui->uiICS->add(value.c_str());
+            }
+
+            for (const auto& value : views)
+            {
+                ui->OCIOView->add(value.c_str());
+            }
+
+            for (const auto& value : looks)
+            {
+                ui->OCIOLook->add(value.c_str());
+            }
+
+            // Set defaults if available in preferences
+            std::string look = uiPrefs->uiOCIO_Look->value();
+            try
+            {
+                if (!look.empty())
+                    setOcioLook(look);
+            }
+            catch (const std::exception& e)
+            {
+                LOG_ERROR(e.what());
+            }
+
+            std::string display_view = uiPrefs->uiOCIO_Display_View->value();
+            try
+            {
+                if (!display_view.empty())
+                    setOcioView(display_view);
+            }
+            catch (const std::exception& e)
+            {
+                LOG_ERROR(e.what());
+            }
+
+            defaultIcs();
+        }
+
+        void defaultIcs()
+        {
+            ViewerUI* ui = App::ui;
+            auto player = ui->uiView->getTimelinePlayer();
+            if (!player)
+                return;
+
+            const auto& tplayer = player->player();
+            const auto& info = tplayer->getIOInfo();
+            const auto& videos = info.video;
+            if (videos.empty())
+                return;
+
+            PreferencesUI* uiPrefs = ui->uiPrefs;
+            const auto& video = info.video[0];
+            tl::image::PixelType pixelType = video.pixelType;
+            std::string ics;
+            switch (pixelType)
+            {
+            case tl::image::PixelType::L_U8:
+            case tl::image::PixelType::LA_U8:
+            case tl::image::PixelType::RGB_U8:
+            case tl::image::PixelType::RGB_U10:
+            case tl::image::PixelType::RGBA_U8:
+            case tl::image::PixelType::YUV_420P_U8:
+            case tl::image::PixelType::YUV_422P_U8:
+            case tl::image::PixelType::YUV_444P_U8:
+                ics = uiPrefs->uiOCIO_8bits_ics->value();
+                break;
+            case tl::image::PixelType::L_U16:
+            case tl::image::PixelType::LA_U16:
+            case tl::image::PixelType::RGB_U16:
+            case tl::image::PixelType::RGBA_U16:
+            case tl::image::PixelType::YUV_420P_U16:
+            case tl::image::PixelType::YUV_422P_U16:
+            case tl::image::PixelType::YUV_444P_U16:
+                ics = uiPrefs->uiOCIO_16bits_ics->value();
+                break;
+            case tl::image::PixelType::L_U32:
+            case tl::image::PixelType::LA_U32:
+            case tl::image::PixelType::RGB_U32:
+            case tl::image::PixelType::RGBA_U32:
+                ics = uiPrefs->uiOCIO_32bits_ics->value();
+                break;
+                // handle half and float types
+            case tl::image::PixelType::L_F16:
+            case tl::image::PixelType::LA_F16:
+            case tl::image::PixelType::RGB_F16:
+            case tl::image::PixelType::RGBA_F16:
+                ics = uiPrefs->uiOCIO_half_ics->value();
+                break;
+            case tl::image::PixelType::L_F32:
+            case tl::image::PixelType::LA_F32:
+            case tl::image::PixelType::RGB_F32:
+            case tl::image::PixelType::RGBA_F32:
+                ics = uiPrefs->uiOCIO_float_ics->value();
+                break;
+            default:
+                break;
+            }
+
+            try
+            {
+                if (!ics.empty())
+                    setOcioIcs(ics);
+            }
+            catch (const std::exception& e)
+            {
+                LOG_ERROR(e.what());
+            }
+        }
 
         std::string ocioConfig()
         {
@@ -227,14 +550,14 @@ namespace mrv
             auto uiOCIOView = App::ui->OCIOView;
             int idx = uiOCIOView->value();
             if (idx < 0 || idx >= uiOCIOView->children())
-                return _("None");
+                return kInactive;
 
             const Fl_Menu_Item* item = uiOCIOView->child(idx);
 
             char pathname[1024];
             int ret = uiOCIOView->item_pathname(pathname, 1024, item);
             if (ret != 0)
-                return _("None");
+                return kInactive;
 
             std::string view = pathname;
             if (view[0] == '/')
@@ -291,9 +614,9 @@ namespace mrv
         std::string ocioDisplayViewShortened(
             const std::string& display, const std::string& view)
         {
-            if (view == _("None"))
-                return view;
-            
+            if (view.empty() || view == kInactive)
+                return kInactive;
+
             std::string out;
             auto uiOCIOView = App::ui->OCIOView;
             bool has_submenu = false;
@@ -323,6 +646,13 @@ namespace mrv
             const std::string& combined, std::string& display,
             std::string& view)
         {
+            if (combined == kInactive)
+            {
+                display.clear();
+                view.clear();
+                return;
+            }
+
             view = combined;
             size_t pos = view.rfind('/');
             if (pos != std::string::npos)

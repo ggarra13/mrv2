@@ -78,6 +78,8 @@ namespace mrv
         math::Box2i(0, 0, -1, -1);
     image::Size TimelineViewport::Private::videoSize;
     ActionMode TimelineViewport::Private::actionMode = ActionMode::kScrub;
+    std::vector<timeline::OCIOOptions>
+        TimelineViewport::Private::monitorOCIOOptions;
     timeline::Playback TimelineViewport::Private::playbackMode =
         timeline::Playback::Stop;
     float TimelineViewport::Private::masking = 0.F;
@@ -699,6 +701,23 @@ namespace mrv
         return _p->colorAreaInfo;
     }
 
+    const timeline::OCIOOptions&
+    TimelineViewport::getOCIOOptions(unsigned monitorId) noexcept
+    {
+        TLRENDER_P();
+        
+        if (monitorId >= p.monitorOCIOOptions.size())
+        {
+            return p.ocioOptions;
+        }
+        else
+        {
+            p.monitorOCIOOptions[monitorId].input = p.ocioOptions.input;
+            p.monitorOCIOOptions[monitorId].look  = p.ocioOptions.look;
+            return p.monitorOCIOOptions[monitorId];
+        }
+    }
+
     const timeline::OCIOOptions& TimelineViewport::getOCIOOptions() noexcept
     {
         return _p->ocioOptions;
@@ -714,16 +733,38 @@ namespace mrv
         const timeline::BackgroundOptions& value)
     {
         TLRENDER_P();
+
         if (value == p.backgroundOptions)
             return;
+        
+        p.backgroundOptions = value;
+        
         Message msg;
         msg["command"] = "setBackgroundOptions";
         msg["value"] = value;
         tcp->pushMessage(msg);
-        p.backgroundOptions = value;
         redrawWindows();
     }
 
+    void TimelineViewport::setOCIOOptions(
+        const unsigned monitorId,
+        const timeline::OCIOOptions& value) noexcept
+    {
+        TLRENDER_P();
+
+        if (monitorId >= Fl::screen_count())
+            return;
+
+        if (monitorId >= p.monitorOCIOOptions.size())
+        {
+            p.monitorOCIOOptions.resize(monitorId + 1);
+        }
+        
+        p.monitorOCIOOptions[monitorId] = value;
+
+        redrawWindows();
+    }
+    
     void TimelineViewport::setOCIOOptions(
         const timeline::OCIOOptions& value) noexcept
     {
@@ -733,11 +774,6 @@ namespace mrv
             return;
 
         p.ocioOptions = value;
-        
-        if (panel::colorPanel)
-        {
-            panel::colorPanel->refresh();
-        }
 
         if (p.ui->uiSecondary && p.ui->uiSecondary->viewport())
         {
@@ -752,6 +788,8 @@ namespace mrv
         msg["value"] = value;
         tcp->pushMessage(msg);
 
+        p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
+        
         redrawWindows();
     }
 
@@ -1980,8 +2018,8 @@ namespace mrv
             look = "";
         o.look = look;
 
-        if (!o.fileName.empty() && !o.input.empty() && !o.display.empty() &&
-            !o.view.empty())
+        if (!o.fileName.empty() &&
+            (!o.input.empty() || (!o.display.empty() && !o.view.empty())))
             o.enabled = true;
         
         setOCIOOptions(o);

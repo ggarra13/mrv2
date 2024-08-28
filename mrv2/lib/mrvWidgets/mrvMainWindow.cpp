@@ -177,6 +177,10 @@ namespace mrv
         wayland_resize = true;
         DropWindow::resize(X, Y, W, H);
         wayland_resize = false;
+
+        // Redraw viewport windows in case we go from one monitor to another
+        // with different OCIO display/view.
+        App::ui->uiView->redrawWindows();
     }
 
     void MainWindow::update_title_bar()
