@@ -876,7 +876,6 @@ namespace mrv
             store_port(p.options.port);
         }
 #endif
-
         ui->uiMain->show();
         ui->uiView->take_focus();
 

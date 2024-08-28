@@ -45,15 +45,17 @@ target_link_libraries(mrv2 PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})
 target_link_directories( mrv2 BEFORE PUBLIC ${CMAKE_INSTALL_PREFIX}/lib /usr/local/lib )
 
 set(PRUNE_SYMBOLS )
+set(EXCLUDE_LIBRARIES )
 if(WIN32)
     set(PRUNE_SYMBOLS "/OPT:REF" "/OPT:ICF")
 elseif(APPLE)
     set(PRUNE_SYMBOLS "-Wl,-dead_strip")
 else(UNIX)
     set(PRUNE_SYMBOLS "-Wl,--gc-sections")
+    set(EXCLUDE_LIBRARIES "-Wl,--exclude-libs=ALL")
 endif()
 
-target_link_options(mrv2 PRIVATE ${PRUNE_SYMBOLS})
+target_link_options(mrv2 PUBLIC ${EXCLUDE_LIBRARIES} PRIVATE ${PRUNE_SYMBOLS})
 
 install(TARGETS mrv2
     RUNTIME DESTINATION bin COMPONENT applications
