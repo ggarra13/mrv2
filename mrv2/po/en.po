@@ -1,7 +1,7 @@
 # English translations for mrv2 package.
 # This file is distributed under the same license as the mrv2 package.
 # Automatically generated, 2024.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.1.6\n"
@@ -2604,9 +2604,6 @@ msgstr "Use the Option key + left mouse button to change transparency."
 msgid "Use the Alt key + left mouse button to change transparency."
 msgstr "Use the Alt key + left mouse button to change transparency."
 
-msgid "OCIO"
-msgstr "OCIO"
-
 msgid "LUT"
 msgstr "LUT"
 
@@ -3374,9 +3371,14 @@ msgstr "Saving video but with an audio extension."
 msgid "View/Mask"
 msgstr "View/Mask"
 
-#, fuzzy
+msgid "OCIO/     Input Color Space"
+msgstr "OCIO/     Input Color Space"
+
+msgid "OCIO/     Input Color Space "
+msgstr "OCIO/     Input Color Space "
+
 msgid "OCIO/Displays"
-msgstr "OCIO Display"
+msgstr "OCIO/Displays"
 
 msgid "Pick Color"
 msgstr "Pick Color"
@@ -3528,26 +3530,8 @@ msgstr "Invalid font for text drawing"
 msgid "Could not convert message to shape: "
 msgstr "Could not convert message to shape: "
 
-#, fuzzy
-msgid "Invalid EDID header"
-msgstr "Invalid Values"
-
-msgid "EDID atom not found"
-msgstr ""
-
-msgid "Failed to get EDID property"
-msgstr ""
-
-msgid "Invalid EDID data"
-msgstr ""
-
-#, fuzzy
-msgid "Unknown Monitor"
-msgstr "Unknown menu entry "
-
-#, fuzzy
-msgid "Screen #"
-msgstr "Fit Screen"
+msgid "Monitor "
+msgstr "Monitor "
 
 msgid "File/Open/Movie or Sequence"
 msgstr "File/Open/Movie or Sequence"
@@ -3889,21 +3873,11 @@ msgstr "Edit/Redo"
 #. kCopyRGBAValues.hotkey(),
 #. (Fl_Callback*)copy_pixel_rgba_cb, (void*)view);
 #. }
-#, fuzzy
 msgid "OCIO/Current File"
-msgstr "OCIO Config File"
+msgstr "OCIO/Current File"
 
-#, fuzzy
-msgid "OCIO/     File Color Space"
-msgstr "OCIO Input Color Space"
-
-#, fuzzy
-msgid "OCIO/All Files"
-msgstr "OCIO View"
-
-#, fuzzy
-msgid "OCIO/     File Color Space "
-msgstr "OCIO Input Color Space"
+msgid "OCIO/Change All Files"
+msgstr "OCIO/Change All Files"
 
 msgid "Sync/Send/Media"
 msgstr "Sync/Send/Media"
@@ -5125,6 +5099,9 @@ msgstr "OCIO input color space for the image"
 msgid "View and Look"
 msgstr "View and Look"
 
+msgid "View"
+msgstr "View"
+
 msgid "OCIO Display/View"
 msgstr "OCIO Display/View"
 
@@ -5661,9 +5638,6 @@ msgid ""
 msgstr ""
 "Reload color theme from mrv2.colors file again to refresh change in colors"
 
-msgid "View"
-msgstr "View"
-
 msgid "Selects the background color of areas outside the current image."
 msgstr "Selects the background color of areas outside the current image."
 
@@ -5948,6 +5922,9 @@ msgstr "Editable"
 
 msgid "Editable Timeline Viewport."
 msgstr "Editable Timeline Viewport."
+
+msgid "OCIO"
+msgstr "OCIO"
 
 msgid "OCIO Config File"
 msgstr "OCIO Config File"
@@ -7007,6 +6984,21 @@ msgstr "Toggle Hotkeys Window"
 
 msgid "Toggle About Window"
 msgstr "Toggle About Window"
+
+#~ msgid "Invalid EDID header"
+#~ msgstr "Invalid EDID header"
+
+#~ msgid "Unknown Monitor"
+#~ msgstr "Unknown Monitor"
+
+#~ msgid "Screen #"
+#~ msgstr "Screen #"
+
+#~ msgid "OCIO/     File Color Space"
+#~ msgstr "OCIO/     File Color Space"
+
+#~ msgid "OCIO/     File Color Space "
+#~ msgstr "OCIO/     File Color Space "
 
 #~ msgid "Seek to the given time."
 #~ msgstr "Seek to the given time."

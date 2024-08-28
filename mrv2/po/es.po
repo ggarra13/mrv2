@@ -2654,9 +2654,6 @@ msgstr ""
 "Use la tecla Alt + el botón izquierdo del ratón para cambiar la "
 "transparencia."
 
-msgid "OCIO"
-msgstr "OCIO"
-
 msgid "LUT"
 msgstr "LUT"
 
@@ -3429,9 +3426,14 @@ msgstr "Grabando video pero con una extension de audio."
 msgid "View/Mask"
 msgstr "Vista/Máscara"
 
-#, fuzzy
+msgid "OCIO/     Input Color Space"
+msgstr "OCIO/      Color de Entrada"
+
+msgid "OCIO/     Input Color Space "
+msgstr "OCIO/      Color de Entrada "
+
 msgid "OCIO/Displays"
-msgstr "OCIO Display"
+msgstr "OCIO/Monitores"
 
 msgid "Pick Color"
 msgstr "Elegir Color"
@@ -3583,26 +3585,8 @@ msgstr "Fuente inválida para dibujar texto"
 msgid "Could not convert message to shape: "
 msgstr "No pude convertir el mensaje a figura: "
 
-#, fuzzy
-msgid "Invalid EDID header"
-msgstr "Valores Inválidos"
-
-msgid "EDID atom not found"
-msgstr ""
-
-msgid "Failed to get EDID property"
-msgstr ""
-
-msgid "Invalid EDID data"
-msgstr ""
-
-#, fuzzy
-msgid "Unknown Monitor"
-msgstr "Entrada de menu desconocida "
-
-#, fuzzy
-msgid "Screen #"
-msgstr "Enmarcar Pantalla"
+msgid "Monitor "
+msgstr "Monitor "
 
 msgid "File/Open/Movie or Sequence"
 msgstr "Archivo/Abrir/Pelídula o Secuencia"
@@ -3944,21 +3928,11 @@ msgstr "Editar/&Rehacer"
 #. kCopyRGBAValues.hotkey(),
 #. (Fl_Callback*)copy_pixel_rgba_cb, (void*)view);
 #. }
-#, fuzzy
 msgid "OCIO/Current File"
-msgstr "Archivo Config de OCIO"
+msgstr "OCIO/Clip Actual"
 
-#, fuzzy
-msgid "OCIO/     File Color Space"
-msgstr "OCIO Espacio de Color de Entrada"
-
-#, fuzzy
-msgid "OCIO/All Files"
-msgstr "OCIO Vista"
-
-#, fuzzy
-msgid "OCIO/     File Color Space "
-msgstr "OCIO Espacio de Color de Entrada"
+msgid "OCIO/Change All Files"
+msgstr "OCIO/Cambiar Todos los Clips"
 
 msgid "Sync/Send/Media"
 msgstr "Sincronizar/Enviar/Medios"
@@ -5173,6 +5147,9 @@ msgstr "OCIO espacio de color para la imagen"
 msgid "View and Look"
 msgstr "Vista y Look"
 
+msgid "View"
+msgstr "Vista"
+
 msgid "OCIO Display/View"
 msgstr "OCIO Display/Vista"
 
@@ -5719,9 +5696,6 @@ msgstr ""
 "Recargar tema de color desde el archivo mrv2.colors nuevamente para "
 "refrescar el cambio en colores."
 
-msgid "View"
-msgstr "Vista"
-
 msgid "Selects the background color of areas outside the current image."
 msgstr "Selecciona el color del fondo de areas fuera de la imagen actual."
 
@@ -6012,6 +5986,9 @@ msgstr "Editable"
 
 msgid "Editable Timeline Viewport."
 msgstr "Ventana de Edición Editable."
+
+msgid "OCIO"
+msgstr "OCIO"
 
 msgid "OCIO Config File"
 msgstr "Archivo Config de OCIO"
@@ -7077,6 +7054,26 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
+
+#, fuzzy
+#~ msgid "Invalid EDID header"
+#~ msgstr "Valores Inválidos"
+
+#, fuzzy
+#~ msgid "Unknown Monitor"
+#~ msgstr "Entrada de menu desconocida "
+
+#, fuzzy
+#~ msgid "Screen #"
+#~ msgstr "Enmarcar Pantalla"
+
+#, fuzzy
+#~ msgid "OCIO/     File Color Space"
+#~ msgstr "OCIO Espacio de Color de Entrada"
+
+#, fuzzy
+#~ msgid "OCIO/     File Color Space "
+#~ msgstr "OCIO Espacio de Color de Entrada"
 
 #~ msgid "Seek to the given time."
 #~ msgstr "Saltar al tiempo dado."
