@@ -3941,6 +3941,109 @@ msgstr "Help/Documentation"
 msgid "Help/About"
 msgstr "Help/About"
 
+msgid "Favorites"
+msgstr "Favorites"
+
+msgid "My Computer"
+msgstr "My Computer"
+
+msgid "My Documents"
+msgstr "My Documents"
+
+msgid "Desktop"
+msgstr "Desktop"
+
+msgid "Home"
+msgstr "Home"
+
+msgid "Temporary"
+msgstr "Temporary"
+
+msgid "Size"
+msgstr "Size"
+
+msgid "Date"
+msgstr "Date"
+
+msgid "Owner"
+msgstr "Owner"
+
+msgid "Permissions"
+msgstr "Permissions"
+
+msgid "New Folder"
+msgstr "New Folder"
+
+msgid "Rename"
+msgstr "Rename"
+
+msgid "Delete"
+msgstr "Delete"
+
+msgid "Ok"
+msgstr "Ok"
+
+msgid "Location"
+msgstr "Location"
+
+msgid "Show Hidden Files"
+msgstr "Show Hidden Files"
+
+msgid "File Types"
+msgstr "File Types"
+
+msgid "All Files (*)"
+msgstr "All Files (*)"
+
+msgid "Go back one directory in the history"
+msgstr "Go back one directory in the history"
+
+msgid "Go forward one directory in the history"
+msgstr "Go forward one directory in the history"
+
+msgid "Go to the parent directory"
+msgstr "Go to the parent directory"
+
+msgid "Refresh this directory"
+msgstr "Refresh this directory"
+
+msgid "Delete file(s)"
+msgstr "Delete file(s)"
+
+msgid "Create new directory"
+msgstr "Create new directory"
+
+msgid "Add this directory to my favorites"
+msgstr "Add this directory to my favorites"
+
+msgid "Preview files"
+msgstr "Preview files"
+
+msgid "List mode"
+msgstr "List mode"
+
+msgid "Wide list mode"
+msgstr "Wide list mode"
+
+msgid "Detail mode"
+msgstr "Detail mode"
+
+msgid ""
+"Could not create directory '%s'. You may not have permission to perform this "
+"operation."
+msgstr ""
+"Could not create directory '%s'. You may not have permission to perform this "
+"operation."
+
+msgid "An error ocurred while trying to delete '%s'. %s"
+msgstr "An error ocurred while trying to delete '%s'. %s"
+
+msgid "File '%s' already exists!"
+msgstr "File '%s' already exists!"
+
+msgid "Unable to rename '%s' to '%s'"
+msgstr "Unable to rename '%s' to '%s'"
+
 msgid "3GP Movie"
 msgstr "3GP Movie"
 
@@ -4078,6 +4181,9 @@ msgstr "OpenUSD Compressed Asset"
 
 msgid "OpenUSD ASCII Asset"
 msgstr "OpenUSD ASCII Asset"
+
+msgid "Another process using the file."
+msgstr "Another process using the file."
 
 msgid "Jan"
 msgstr "Jan"
@@ -4234,9 +4340,6 @@ msgstr "Copy/Color"
 
 msgid "Area"
 msgstr "Area"
-
-msgid "Size"
-msgstr "Size"
 
 msgid "pixel"
 msgstr "pixel"
@@ -4430,9 +4533,6 @@ msgstr "FFMpeg's Audio Codec settings."
 
 msgid "Note that while saving with audio, the audio will not be heard."
 msgstr "Note that while saving with audio, the audio will not be heard."
-
-msgid "Ok"
-msgstr "Ok"
 
 msgid "Help Window"
 msgstr "Help Window"
@@ -6277,9 +6377,6 @@ msgstr "Click to switch to a stored preset."
 msgid "Click to add a new preset with the current settings."
 msgstr "Click to add a new preset with the current settings."
 
-msgid "Delete"
-msgstr "Delete"
-
 msgid "Click to delete the selected preset."
 msgstr "Click to delete the selected preset."
 
@@ -6402,9 +6499,6 @@ msgstr "Pause"
 
 msgid "Insert"
 msgstr "Insert"
-
-msgid "Home"
-msgstr "Home"
 
 msgid "PageUp"
 msgstr "PageUp"

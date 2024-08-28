@@ -88,57 +88,57 @@ namespace
 }
 
 // set default language strings
-std::string Flu_File_Chooser::favoritesTxt = "Favorites";
+std::string Flu_File_Chooser::favoritesTxt = _("Favorites");
 #ifdef _WIN32
-std::string Flu_File_Chooser::myComputerTxt = "My Computer";
-std::string Flu_File_Chooser::myDocumentsTxt = "My Documents";
-std::string Flu_File_Chooser::desktopTxt = "Desktop";
+std::string Flu_File_Chooser::myComputerTxt = _("My Computer");
+std::string Flu_File_Chooser::myDocumentsTxt = _("My Documents");
+std::string Flu_File_Chooser::desktopTxt = _("Desktop");
 #else
-std::string Flu_File_Chooser::myComputerTxt = "Home";
-std::string Flu_File_Chooser::myDocumentsTxt = "Temporary";
-std::string Flu_File_Chooser::desktopTxt = "Desktop";
+std::string Flu_File_Chooser::myComputerTxt = _("Home");
+std::string Flu_File_Chooser::myDocumentsTxt = _("Temporary");
+std::string Flu_File_Chooser::desktopTxt = _("Desktop");
 #endif
 
 std::string Flu_File_Chooser::detailTxt[7] = {
-    "Name", "Size", "Date", "Type", "Frames", "Owner", "Permissions"};
+    _("Name"), _("Size"), _("Date"), _("Type"), _("Frames"),
+    _("Owner"), _("Permissions")};
 std::string Flu_File_Chooser::contextMenuTxt[3] = {
-    "New Folder", "Rename", "Delete"};
+    _("New Folder"), _("Rename"), _("Delete")};
 std::string Flu_File_Chooser::diskTypesTxt[6] = {
     "Floppy Disk",  "Removable Disk", "Local Disk",
     "Compact Disk", "Network Disk",   "RAM Disk"};
 
-std::string Flu_File_Chooser::filenameTxt = "Filename";
-std::string Flu_File_Chooser::okTxt = "Ok";
-std::string Flu_File_Chooser::cancelTxt = "Cancel";
-std::string Flu_File_Chooser::locationTxt = "Location";
-std::string Flu_File_Chooser::showHiddenTxt = "Show Hidden Files";
-std::string Flu_File_Chooser::fileTypesTxt = "File Types";
-std::string Flu_File_Chooser::directoryTxt = "Directory";
-std::string Flu_File_Chooser::allFilesTxt = "All Files (*)";
-std::string Flu_File_Chooser::defaultFolderNameTxt = "New Folder";
+std::string Flu_File_Chooser::filenameTxt = _("Filename");
+std::string Flu_File_Chooser::okTxt = _("Ok");
+std::string Flu_File_Chooser::cancelTxt = _("Cancel");
+std::string Flu_File_Chooser::locationTxt = _("Location");
+std::string Flu_File_Chooser::showHiddenTxt = _("Show Hidden Files");
+std::string Flu_File_Chooser::fileTypesTxt = _("File Types");
+std::string Flu_File_Chooser::directoryTxt = _("Directory");
+std::string Flu_File_Chooser::allFilesTxt = _("All Files (*)");
+std::string Flu_File_Chooser::defaultFolderNameTxt = _("New Folder");
 
-std::string Flu_File_Chooser::backTTxt = "Go back one directory in the history";
+std::string Flu_File_Chooser::backTTxt = _("Go back one directory in the history");
 std::string Flu_File_Chooser::forwardTTxt =
-    "Go forward one directory in the history";
-std::string Flu_File_Chooser::upTTxt = "Go to the parent directory";
-std::string Flu_File_Chooser::reloadTTxt = "Refresh this directory";
-std::string Flu_File_Chooser::trashTTxt = "Delete file(s)";
-std::string Flu_File_Chooser::newDirTTxt = "Create new directory";
+    _("Go forward one directory in the history");
+std::string Flu_File_Chooser::upTTxt = _("Go to the parent directory");
+std::string Flu_File_Chooser::reloadTTxt = _("Refresh this directory");
+std::string Flu_File_Chooser::trashTTxt = _("Delete file(s)");
+std::string Flu_File_Chooser::newDirTTxt = _("Create new directory");
 std::string Flu_File_Chooser::addFavoriteTTxt =
-    "Add this directory to my favorites";
-std::string Flu_File_Chooser::previewTTxt = "Preview files";
-std::string Flu_File_Chooser::listTTxt = "List mode";
-std::string Flu_File_Chooser::wideListTTxt = "Wide list mode";
-std::string Flu_File_Chooser::detailTTxt = "Detail mode";
+    _("Add this directory to my favorites");
+std::string Flu_File_Chooser::previewTTxt = _("Preview files");
+std::string Flu_File_Chooser::listTTxt = _("List mode");
+std::string Flu_File_Chooser::wideListTTxt = _("Wide list mode");
+std::string Flu_File_Chooser::detailTTxt = _("Detail mode");
 
 std::string Flu_File_Chooser::createFolderErrTxt =
-    "Could not create directory '%s'. You may not have permission to "
-    "perform "
-    "this operation.";
+    _("Could not create directory '%s'. You may not have permission to "
+    "perform this operation.");
 std::string Flu_File_Chooser::deleteFileErrTxt =
-    "An error ocurred while trying to delete '%s'.";
-std::string Flu_File_Chooser::fileExistsErrTxt = "File '%s' already exists!";
-std::string Flu_File_Chooser::renameErrTxt = "Unable to rename '%s' to '%s'";
+    _("An error ocurred while trying to delete '%s'. %s");
+std::string Flu_File_Chooser::fileExistsErrTxt = _("File '%s' already exists!");
+std::string Flu_File_Chooser::renameErrTxt = _("Unable to rename '%s' to '%s'");
 
 // just a string that no file could probably ever be called
 #define FAVORITES_UNIQUE_STRING "\t!@#$%^&*(Favorites)-=+"
@@ -1405,7 +1405,20 @@ void Flu_File_Chooser::trashCB(bool recycle)
                 // if remove fails, report an error
                 if (result != 0)
                 {
-                    mrv::fl_alert(_(deleteFileErrTxt.c_str()), name.c_str());
+                    char error[2048];
+                    error[0] = 0;
+#ifdef _WIN32
+                    if (result == ERROR_SHARING_VIOLATION)
+                    {
+                        snprintf(error, 2048,
+                                 _("Another process using the file."));
+                    }
+#endif
+                    
+                    char buf[2048];
+                    snprintf(buf, 2048, _(deleteFileErrTxt.c_str()),
+                             name.c_str(), error);
+                    mrv::fl_alert(buf);
                     cd("./");
                     return;
                 }
@@ -4235,12 +4248,23 @@ static const char* _flu_file_chooser(
     // Refresh thumbnails in case we saved a frame last time
 
     // Clear tlRender's thumbnails
-    auto thumbnailSystem = context->getSystem<ui::ThumbnailSystem>();
-    auto cache = thumbnailSystem->getCache();
-    uint64_t bytes = cache->getMax();
-    cache->setMax(0);
-    cache->setMax(bytes);
-
+    {
+        auto thumbnailSystem = context->getSystem<ui::ThumbnailSystem>();
+        auto cache = thumbnailSystem->getCache();
+        uint64_t bytes = cache->getMax();
+        cache->setMax(0);
+        cache->setMax(bytes);
+    }
+    
+    // Clear tlRender's cache
+    {
+        auto system = context->getSystem<io::System>();
+        auto cache = system->getCache();
+        uint64_t bytes = cache->getMax();
+        cache->setMax(0);
+        cache->setMax(bytes);
+    }
+    
     Flu_File_Chooser::window->set_non_modal();
     Flu_File_Chooser::window->show();
 
@@ -4248,8 +4272,6 @@ static const char* _flu_file_chooser(
         Fl::check();
 
     Fl_Group::current(0);
-
-    cache->setMax(bytes);
 
     if (Flu_File_Chooser::window->value())
     {

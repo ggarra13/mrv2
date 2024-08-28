@@ -3996,6 +3996,108 @@ msgstr "Ayuda/Documentación"
 msgid "Help/About"
 msgstr "Ayuda/Acerca"
 
+msgid "Favorites"
+msgstr "Favoritos"
+
+msgid "My Computer"
+msgstr "Mi Computadora"
+
+msgid "My Documents"
+msgstr "Mis Documentos"
+
+msgid "Desktop"
+msgstr "Escritorio"
+
+msgid "Home"
+msgstr "Inicio"
+
+msgid "Temporary"
+msgstr "Temporario"
+
+msgid "Size"
+msgstr "Tamaño"
+
+msgid "Date"
+msgstr "Fecha"
+
+msgid "Owner"
+msgstr "Usuario"
+
+msgid "Permissions"
+msgstr "Permisos"
+
+msgid "New Folder"
+msgstr "Nueva Carpeta"
+
+msgid "Rename"
+msgstr "Renombrar"
+
+msgid "Delete"
+msgstr "Borrar"
+
+msgid "Ok"
+msgstr "Okay"
+
+msgid "Location"
+msgstr "Lugar"
+
+msgid "Show Hidden Files"
+msgstr "Mostrar Archivos Ocultos"
+
+msgid "File Types"
+msgstr "Tipo"
+
+msgid "All Files (*)"
+msgstr "Todos los Archivos (*)"
+
+msgid "Go back one directory in the history"
+msgstr "Volver una carpeta en la historia"
+
+msgid "Go forward one directory in the history"
+msgstr "Avanzar una carpeta en la historia"
+
+msgid "Go to the parent directory"
+msgstr "Subir una Carpeta"
+
+msgid "Refresh this directory"
+msgstr "Refrescar el directorio"
+
+msgid "Delete file(s)"
+msgstr "Borrar archivo(s)"
+
+msgid "Create new directory"
+msgstr "Crear Carpeta"
+
+msgid "Add this directory to my favorites"
+msgstr "Agregar esta carpeta a mis favoritos"
+
+msgid "Preview files"
+msgstr "Miniaturas"
+
+msgid "List mode"
+msgstr "Modo de Lista"
+
+msgid "Wide list mode"
+msgstr "Modo Lista Ancho"
+
+msgid "Detail mode"
+msgstr "Modo Detallado"
+
+msgid ""
+"Could not create directory '%s'. You may not have permission to perform this "
+"operation."
+msgstr ""
+"No pude crear carpeta '%s'. Puedes no tener permisos para esta operación."
+
+msgid "An error ocurred while trying to delete '%s'. %s"
+msgstr "Un error ocurrió al tratar de borrar '%s'. %s"
+
+msgid "File '%s' already exists!"
+msgstr "¡Archivo '%s' ya existe!"
+
+msgid "Unable to rename '%s' to '%s'"
+msgstr "No pude renombrar '%s' a '%s'"
+
 msgid "3GP Movie"
 msgstr "Película 3GP"
 
@@ -4133,6 +4235,9 @@ msgstr "Archivo OpenUSD Comprimido"
 
 msgid "OpenUSD ASCII Asset"
 msgstr "Archivo OpenUSD ASCII"
+
+msgid "Another process using the file."
+msgstr "Otro proceso está usando el archivo."
 
 msgid "Jan"
 msgstr "Ene"
@@ -4289,9 +4394,6 @@ msgstr "Copiar/Color"
 
 msgid "Area"
 msgstr "Area"
-
-msgid "Size"
-msgstr "Tamaño"
 
 msgid "pixel"
 msgstr "pixel"
@@ -4485,9 +4587,6 @@ msgstr "Seteos del Coded de Audio de FFmpeg."
 
 msgid "Note that while saving with audio, the audio will not be heard."
 msgstr "Nótese que mientras graba con audio, el audio no será escuchado."
-
-msgid "Ok"
-msgstr "Okay"
 
 msgid "Help Window"
 msgstr "Ventana de Ayuda"
@@ -6347,9 +6446,6 @@ msgstr "Cliquée para cambiar a un preseteo almacenado."
 msgid "Click to add a new preset with the current settings."
 msgstr "Cliquée para agregar un preseteo con los seteos actuales."
 
-msgid "Delete"
-msgstr "Borrar"
-
 msgid "Click to delete the selected preset."
 msgstr "Cliquée para borrar el preseteo seleccionado."
 
@@ -6472,9 +6568,6 @@ msgstr "Pausa"
 
 msgid "Insert"
 msgstr "Insertar"
-
-msgid "Home"
-msgstr "Inicio"
 
 msgid "PageUp"
 msgstr "Re.Pág."
@@ -7101,7 +7194,3 @@ msgstr "Alternar Ventana de Acerca de mrv2"
 
 #~ msgid "Auto Scrub Playback"
 #~ msgstr "Auto Reproducir Fregando"
-
-#, fuzzy
-#~ msgid "Preview Thumbnails"
-#~ msgstr "Miniaturas en Paneles"
