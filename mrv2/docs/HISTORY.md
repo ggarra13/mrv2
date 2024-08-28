@@ -15,6 +15,8 @@ v1.2.5
   current file, or all loaded files.
 - Fixed annotation markers in timeline showing even when switching clips.
 - Fixed Wayland PNG incompatibility on older Linux OSes.
+- Fixed saving annotations leading to black or stopping playback when there
+  were no annotations on Windows.
 
 
 v1.2.4

@@ -449,7 +449,8 @@ namespace mrv
             math::Matrix4x4f mvp;
 
             const float rotation = _getRotation();
-            if (p.ui->uiPrefs->uiPrefsBlitViewports->value() == kNoBlit ||
+            if (p.presentation ||
+                p.ui->uiPrefs->uiPrefsBlitViewports->value() == kNoBlit ||
                 p.environmentMapOptions.type != EnvironmentMapOptions::kNone ||
                 rotation != 0.F || (transparent && hasAlpha))
             {
@@ -518,7 +519,7 @@ namespace mrv
                     glViewport(viewportX, viewportY, sizeW, sizeH);
 
                     glBindFramebuffer(GL_READ_FRAMEBUFFER, gl.buffer->getID());
-                    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); // 0 is screen
+                    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, GL_FRONT); // 0 is screen
 
                     // Blit the offscreen buffer contents to the viewport
                     GLenum filter = GL_NEAREST;
