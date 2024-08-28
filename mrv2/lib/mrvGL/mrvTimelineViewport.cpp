@@ -755,9 +755,12 @@ namespace mrv
         if (monitorId >= Fl::screen_count())
             return;
 
-        if (monitorId >= p.monitorOCIOOptions.size())
+        unsigned num = p.monitorOCIOOptions.size();
+        if (monitorId >= num)
         {
             p.monitorOCIOOptions.resize(monitorId + 1);
+            for (unsigned i = num; i < monitorId; ++i)
+                p.monitorOCIOOptions[monitorId] = p.ocioOptions;
         }
         
         p.monitorOCIOOptions[monitorId] = value;

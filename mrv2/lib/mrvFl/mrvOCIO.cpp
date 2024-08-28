@@ -780,6 +780,9 @@ namespace mrv
             timeline::OCIOOptions ocio;
             timeline::LUTOptions lut;
 
+            std::vector<timeline::OCIOOptions> ocioMonitors;
+            
+
             OCIODefaults defaults;
         };
 
@@ -808,6 +811,7 @@ namespace mrv
                 {"ocio", value.ocio},
                 {"lut", value.lut},
                 {"defaults", value.defaults},
+                {"ocioMonitors", value.ocioMonitors},
             };
         }
 
@@ -817,6 +821,7 @@ namespace mrv
             j.at("ocio").get_to(value.ocio);
             j.at("lut").get_to(value.lut);
             j.at("defaults").get_to(value.defaults);
+            j.at("ocioMonitors").get_to(value.ocioMonitors);
         }
 
         std::vector<OCIOPreset> ocioPresets;
@@ -847,8 +852,33 @@ namespace mrv
                       << "\t     ICS: " << ocio.input << std::endl
                       << "\t display: " << ocio.display << std::endl
                       << "\t    view: " << ocio.view << std::endl
-                      << "\t    look: " << ocio.look << std::endl
-                      << "LUT:" << std::endl
+                      << "\t    look: " << ocio.look << std::endl;
+
+                    bool found = false;
+                    for (auto ocio : preset.ocioMonitors)
+                    {
+                        if (ocio.view.empty())
+                            continue;
+                        found = true;
+                        break;
+                    }
+                    if (found)
+                    {
+                        unsigned idx = 0;
+                        for (auto ocio : preset.ocioMonitors)
+                        {
+                            ++idx;
+                            if (ocio.view.empty())
+                                continue;
+                            s << "Monitor " << idx << ":" << std::endl
+                              << "\t display: " << ocio.display << std::endl
+                              << "\t    view: " << ocio.view << std::endl;
+                        }
+                    }
+                    else
+                    {
+                    }
+                    s << "LUT:" << std::endl
                       << "\tfileName: " << lut.fileName << std::endl
                       << "\t   order: " << lut.order << std::endl
                       << "Defaults:" << std::endl
@@ -881,6 +911,12 @@ namespace mrv
                     setOcioView(view);
                     setOcioLook(ocio.look);
 
+                    for (unsigned i = 0; i < preset.ocioMonitors.size(); ++i)
+                    {
+                        const auto& ocio = preset.ocioMonitors[i];
+                        App::ui->uiView->setOCIOOptions(i, ocio);
+                    }
+                    
                     App::app->setLUTOptions(preset.lut);
                     return;
                 }
@@ -935,6 +971,20 @@ namespace mrv
             preset.ocio = ocio;
             preset.lut = lut;
             preset.defaults = defaults;
+
+            int num_screens = Fl::screen_count();
+            std::vector<timeline::OCIOOptions> ocioMonitors;
+            if (num_screens > 1)
+            {
+                for (int i = 0; i < num_screens; ++i)
+                {
+                    const timeline::OCIOOptions& ocio =
+                        App::ui->uiView->getOCIOOptions(i);
+                    ocioMonitors.push_back(ocio);
+                }
+            }
+            
+            preset.ocioMonitors = ocioMonitors;
 
             ocioPresets.push_back(preset);
         }
