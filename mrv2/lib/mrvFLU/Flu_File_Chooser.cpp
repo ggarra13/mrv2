@@ -4234,12 +4234,12 @@ static const char* _flu_file_chooser(
     }
     // Refresh thumbnails in case we saved a frame last time
 
-    // Clear tlRender's cache
-
-    auto ioSystem = context->getSystem<io::System>();
-    auto cache = ioSystem->getCache();
+    // Clear tlRender's thumbnails
+    auto thumbnailSystem = context->getSystem<ui::ThumbnailSystem>();
+    auto cache = thumbnailSystem->getCache();
     uint64_t bytes = cache->getMax();
     cache->setMax(0);
+    cache->setMax(bytes);
 
     Flu_File_Chooser::window->set_non_modal();
     Flu_File_Chooser::window->show();

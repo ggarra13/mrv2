@@ -626,6 +626,9 @@ namespace mrv
         if (player == p.player)
             return;
         p.player = player;
+
+        p.annotationTimes.clear();
+        
         if (player)
         {
             const auto innerPlayer = player->player();
@@ -808,13 +811,13 @@ namespace mrv
             valid(1);
         }
 
+        std::vector<int> markers;
         if (p.player && p.player->hasAnnotations())
         {
             const auto& times = p.player->getAnnotationTimes();
             if (p.annotationTimes != times)
             {
                 p.annotationTimes = times;
-                std::vector<int> markers;
                 markers.reserve(times.size());
                 for (const auto& time : times)
                 {
@@ -822,6 +825,10 @@ namespace mrv
                 }
                 p.timelineWidget->setFrameMarkers(markers);
             }
+        }
+        else
+        {
+            p.timelineWidget->setFrameMarkers(markers);
         }
 
         if (_getDrawUpdate(p.timelineWindow) || !p.buffer)

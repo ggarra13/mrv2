@@ -13,6 +13,7 @@ v1.2.5
 - Major refactoring of convoluted OCIO code.
 - Allowed Chaging OCIO Input Color Space from the OCIO menu for either the
   current file, or all loaded files.
+- Fixed annotation markers in timeline showing even when switching clips.
 
 
 v1.2.4

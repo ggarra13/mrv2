@@ -739,6 +739,7 @@ namespace mrv
                     {
                         view->redraw();
                         view->flush();
+                        Fl::flush();
 
                         GLenum imageBuffer = GL_FRONT;
 
@@ -751,8 +752,7 @@ namespace mrv
                         }
 
                         glReadBuffer(imageBuffer);
-
-                        glReadBuffer(GL_FRONT);
+                        
                         glReadPixels(
                             X, Y, outputInfo.size.w, outputInfo.size.h, format,
                             type, outputImage->getData());
