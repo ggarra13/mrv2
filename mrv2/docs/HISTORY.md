@@ -14,6 +14,7 @@ v1.2.5
 - Allowed Chaging OCIO Input Color Space from the OCIO menu for either the
   current file, or all loaded files.
 - Fixed annotation markers in timeline showing even when switching clips.
+- Fixed Wayland PNG incompatibility on older Linux OSes.
 
 
 v1.2.4
