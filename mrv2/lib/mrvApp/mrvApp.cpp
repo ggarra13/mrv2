@@ -179,7 +179,6 @@ namespace mrv
         std::unique_ptr<ComfyUIListener> comfyUIListener;
 #endif
 
-
 #ifdef MRV2_PYBIND11
         std::unique_ptr<PyStdErrOutStreamRedirect> pythonStdErrOutRedirect;
         std::unique_ptr<PythonArgs> pythonArgs;
@@ -402,15 +401,20 @@ namespace mrv
                     app::CmdLineValueOption<bool>::create(
                         p.options.usd.enableLighting, {"-usdEnableLighting"},
                         "USD render enable lighting setting.",
-                        string::Format("{0}").arg(p.options.usd.enableLighting)),
+                        string::Format("{0}").arg(
+                            p.options.usd.enableLighting)),
                     app::CmdLineValueOption<bool>::create(
-                        p.options.usd.enableSceneLights, {"-usdEnableSceneLights"},
+                        p.options.usd.enableSceneLights,
+                        {"-usdEnableSceneLights"},
                         "USD render enable scene lights setting.",
-                        string::Format("{0}").arg(p.options.usd.enableSceneLights)),
+                        string::Format("{0}").arg(
+                            p.options.usd.enableSceneLights)),
                     app::CmdLineValueOption<bool>::create(
-                        p.options.usd.enableSceneMaterials, {"-usdEnableSceneMaterials"},
+                        p.options.usd.enableSceneMaterials,
+                        {"-usdEnableSceneMaterials"},
                         "USD render enable scene materials setting.",
-                        string::Format("{0}").arg(p.options.usd.enableSceneMaterials)),
+                        string::Format("{0}").arg(
+                            p.options.usd.enableSceneMaterials)),
                     app::CmdLineValueOption<bool>::create(
                         p.options.usd.sRGB, {"-usdSRGB"},
                         "USD render SRGB setting.",
@@ -463,8 +467,7 @@ namespace mrv
                 path.getBaseName() == lastPath.getBaseName() &&
                 path.getPadding() == lastPath.getPadding() &&
                 path.getExtension() == lastPath.getExtension() &&
-                file::isSequence(unused) &&
-                !file::isDirectory(unused))
+                file::isSequence(unused) && !file::isDirectory(unused))
                 continue;
             lastPath = path;
             p.options.fileNames.push_back(unused);
@@ -479,12 +482,6 @@ namespace mrv
 #ifdef __linux__
             std::cout << mrv::os::getDesktop() << std::endl;
 #endif
-            int screen_nums = Fl::screen_count();
-            for (int i = 0; i < screen_nums; ++i)
-            {
-                std::cerr << "Monitor " << i << " " 
-                          << mrv::desktop::monitorName(i) << std::endl;
-            }
             return;
         }
 
@@ -615,7 +612,8 @@ namespace mrv
             p.settings->setValue(
                 "USD/enableLighting",
                 static_cast<bool>(p.options.usd.enableLighting));
-            p.settings->setValue("USD/sRGB", static_cast<bool>(p.options.usd.sRGB));
+            p.settings->setValue(
+                "USD/sRGB", static_cast<bool>(p.options.usd.sRGB));
             p.settings->setValue(
                 "USD/stageCacheByteCount",
                 static_cast<int>(p.options.usd.stageCache));
@@ -817,7 +815,7 @@ namespace mrv
                 if (time::isValid(p.options.seek))
                 {
                     const auto& timeRange = player->inOutRange();
-                    
+
                     if (p.options.seek < timeRange.start_time())
                         p.options.seek = timeRange.start_time();
                     else if (p.options.seek > timeRange.end_time_exclusive())
@@ -1009,12 +1007,12 @@ namespace mrv
     {
 #ifdef MRV2_NETWORK
         TLRENDER_P();
-        
+
         try
         {
             p.comfyUIListener = std::make_unique<ComfyUIListener>();
         }
-        catch( const Poco::Exception& e )
+        catch (const Poco::Exception& e)
         {
             LOG_ERROR(e.displayText());
         }
@@ -1030,7 +1028,7 @@ namespace mrv
         {
             p.imageListener = std::make_unique<ImageListener>(this);
         }
-        catch( const Poco::Exception& e )
+        catch (const Poco::Exception& e)
         {
             LOG_ERROR(e.displayText());
         }
@@ -1076,7 +1074,7 @@ namespace mrv
                     [this](const timeline::PlayerCacheInfo& value)
                     {
                         TLRENDER_P();
-                        
+
                         const auto& time = p.player->currentTime();
 
                         const auto& cache =
@@ -1329,7 +1327,7 @@ namespace mrv
         out["InvalidValues"] =
             string::Format("{0}").arg(p.displayOptions.invalidValues);
 #endif
-        
+
 #if defined(TLRENDER_FFMPEG)
         out["FFmpeg/YUVToRGBConversion"] = string::Format("{0}").arg(
             p.settings->getValue<int>("Performance/FFmpegYUVToRGBConversion"));
@@ -1554,7 +1552,6 @@ namespace mrv
                             item->inOutRange = player->inOutRange();
                             item->audioOffset = player->audioOffset();
                             item->lutOptions = p.lutOptions;
-                
 
                             bool autoPlayback =
                                 ui->uiPrefs->uiPrefsAutoPlayback->value();
@@ -1699,7 +1696,7 @@ namespace mrv
                     {
                         LOG_ERROR(e.what());
                     }
-                    
+
                     try
                     {
                         if (!activeFiles[0]->ocioLook.empty())
