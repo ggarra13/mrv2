@@ -1,0 +1,7 @@
+g++ -o your_application \
+    your_object_files.o \
+    -Wl,--exclude-libs,libpng.a \
+    /path/to/libpng.a \
+    /path/to/other_library.a \
+    -lother_dynamic_libs
+    
