@@ -72,8 +72,10 @@ namespace
         .mode = handle_mode,
         .done = handle_done,
         .scale = handle_scale,
+#if defined(WL_OUTPUT_NAME_SINCE_VERSION) && WL_OUTPUT_NAME_SINCE_VERSION >= 4
         .name = handle_name,
         .description = handle_description,
+#endif
     };
 
     // Callback function to handle the global objects announced by the registry
