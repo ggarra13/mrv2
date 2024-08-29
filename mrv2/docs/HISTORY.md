@@ -17,6 +17,7 @@ v1.2.5
 - Fixed Wayland PNG incompatibility on older Linux OSes.
 - Fixed saving annotations leading to black or stopping playback when there
   were no annotations on Windows.
+- Added session pattern to Open Movie or Sequence.
 
 
 v1.2.4
