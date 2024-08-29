@@ -35,10 +35,6 @@ namespace mrv
 
         static void open_windows();
 
-        static void OCIO(ViewerUI* ui);
-
-        static void updateICS();
-
     protected:
         static bool set_transforms();
 
