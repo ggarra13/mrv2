@@ -18,6 +18,7 @@ v1.2.5
 - Fixed saving annotations leading to black or stopping playback when there
   were no annotations on Windows.
 - Added session pattern to Open Movie or Sequence.
+- Moved View/OCIO Presets to OCIO/Presets.
 
 
 v1.2.4
