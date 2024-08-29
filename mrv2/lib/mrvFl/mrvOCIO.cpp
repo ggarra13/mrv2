@@ -390,7 +390,7 @@ namespace mrv
             }
 
             uiPrefs->uiPrefsOCIOConfig->value(config.c_str());
-            Preferences::OCIO(ui);
+            ocio::setup();
         }
 
         std::string ocioIcs()
@@ -781,7 +781,6 @@ namespace mrv
             timeline::LUTOptions lut;
 
             std::vector<timeline::OCIOOptions> ocioMonitors;
-            
 
             OCIODefaults defaults;
         };
@@ -916,7 +915,7 @@ namespace mrv
                         const auto& ocio = preset.ocioMonitors[i];
                         App::ui->uiView->setOCIOOptions(i, ocio);
                     }
-                    
+
                     App::app->setLUTOptions(preset.lut);
                     return;
                 }
@@ -983,7 +982,7 @@ namespace mrv
                     ocioMonitors.push_back(ocio);
                 }
             }
-            
+
             preset.ocioMonitors = ocioMonitors;
 
             ocioPresets.push_back(preset);

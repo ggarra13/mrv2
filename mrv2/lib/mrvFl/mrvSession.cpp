@@ -218,9 +218,9 @@ namespace mrv
             }
 
             int layer = ui->uiColorChannel->value();
-            const std::string& ics    = ocio::ocioIcs();
-            const std::string& view   = ocio::ocioView();
-            const std::string& look   = ocio::ocioLook();
+            const std::string& ics = ocio::ocioIcs();
+            const std::string& view = ocio::ocioView();
+            const std::string& look = ocio::ocioLook();
 
             Message ocio = {
                 {"config", config},
@@ -527,7 +527,7 @@ namespace mrv
                         ui->uiPrefs->uiPrefsOCIOConfig->value(config.c_str());
                     }
 
-                    Preferences::OCIO(ui);
+                    ocio::setup();
 
                     int Aindex = session["Aindex"];
                     if (Aindex < numFiles)
@@ -549,7 +549,7 @@ namespace mrv
                             ui->uiICS->value(value);
                         }
                     }
-                    
+
                     if (j["view"].type() == nlohmann::json::value_t::string)
                     {
                         std::string view;
@@ -561,15 +561,14 @@ namespace mrv
                         value = j["view"];
                         ui->OCIOView->value(value);
                     }
-                    
-                    
+
                     if (j.contains("look"))
                     {
                         std::string look;
                         j.at("look").get_to(look);
                         ocio::setOcioLook(look);
                     }
-                    
+
                     ui->uiView->updateOCIOOptions();
 
                     // Hide Panels and Windows

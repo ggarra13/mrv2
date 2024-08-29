@@ -76,37 +76,6 @@ namespace mrv
     int Preferences::selectioncolor;
     int Preferences::selectiontextcolor;
 
-    static std::string expandVariables(
-        const std::string& s, const char* START_VARIABLE,
-        const char END_VARIABLE)
-    {
-
-        size_t p = s.find(START_VARIABLE);
-
-        if (p == std::string::npos)
-            return s;
-
-        std::string pre = s.substr(0, p);
-        std::string post = s.substr(p + strlen(START_VARIABLE));
-
-        size_t e = post.find(END_VARIABLE);
-
-        if (e == std::string::npos)
-            return s;
-
-        std::string variable = post.substr(0, e);
-        std::string value = "";
-
-        post = post.substr(e + 1);
-
-        const char* v = fl_getenv(variable.c_str());
-        if (v != NULL)
-            value = std::string(v);
-
-        return expandVariables(
-            pre + value + post, START_VARIABLE, END_VARIABLE);
-    }
-
     Preferences::Preferences(bool resetSettings, bool resetHotkeys)
     {
         load(resetSettings, resetHotkeys);
@@ -530,9 +499,6 @@ namespace mrv
         //////////////////////////////////////////////////////
         // OCIO
         /////////////////////////////////////////////////////
-
-#ifdef TLRENDER_OCIO
-
         std::string ocioPath = studiopath() + "mrv2.ocio.json";
         if (file::isReadable(ocioPath))
         {
@@ -556,19 +522,14 @@ namespace mrv
             {
                 if (ocio::ocioDefault != tmpS)
                 {
-                    mrvLOG_INFO(
-                        "ocio", _("Setting OCIO config from preferences.")
-                                    << std::endl);
+                    LOG_INFO(_("Setting OCIO config from preferences."));
                     setOcioConfig(tmpS);
                 }
             }
         }
         else
         {
-            mrvLOG_INFO(
-                "ocio", _("Setting OCIO config from OCIO "
-                          "environment variable.")
-                            << std::endl);
+            LOG_INFO(_("Setting OCIO config from OCIO environment variable."));
             setOcioConfig(var);
         }
 
@@ -583,9 +544,9 @@ namespace mrv
 
         Fl_Preferences ics(ocio, "ICS");
         {
-#    define OCIO_ICS(x, d)                                                     \
-        ok = ics.get(#x, tmpS, d, 2048);                                       \
-        uiPrefs->uiOCIO_##x##_ics->value(tmpS);
+#define OCIO_ICS(x, d)                                                         \
+    ok = ics.get(#x, tmpS, d, 2048);                                           \
+    uiPrefs->uiOCIO_##x##_ics->value(tmpS);
 
             OCIO_ICS(8bits, "");
 
@@ -597,7 +558,6 @@ namespace mrv
 
             OCIO_ICS(float, "");
         }
-#endif
 
         Fl_Preferences display_view(ocio, "DisplayView");
         display_view.get("DisplayView", tmpS, "", 2048);
@@ -842,7 +802,7 @@ namespace mrv
 
         audio.get("output_device", tmp, 0);
         uiPrefs->uiPrefsAudioOutputDevice->value(tmp);
-        
+
         Fl_Preferences ComfyUI(base, "comfyUI");
 
         ComfyUI.get("input_pipe", tmp, 0);
@@ -1460,9 +1420,8 @@ namespace mrv
         opengl.set("blit_timeline", (int)uiPrefs->uiPrefsBlitTimeline->value());
 
         Fl_Preferences ComfyUI(base, "comfyUI");
-        ComfyUI.set("input_pipe",
-                    (int) uiPrefs->uiPrefsUseComfyUIPipe->value());
-        
+        ComfyUI.set("input_pipe", (int)uiPrefs->uiPrefsUseComfyUIPipe->value());
+
         Fl_Preferences audio(base, "audio");
 
         audio.set("API", (int)uiPrefs->uiPrefsAudioAPI->value());
@@ -1473,7 +1432,6 @@ namespace mrv
         behavior.set(
             "check_for_updates", (int)uiPrefs->uiPrefsCheckForUpdates->value());
 
-        
         {
 
             Fl_Preferences keys(
@@ -1698,7 +1656,7 @@ namespace mrv
         ui->uiGamma->value(uiPrefs->uiPrefsViewGamma->value());
 
         // OCIO
-        OCIO(ui);
+        ocio::setup();
 
         //
         // Handle file requester
@@ -1838,7 +1796,7 @@ namespace mrv
 
         if (normal)
             view->setFullScreenMode(false);
-        
+
         r = (Fl_Round_Button*)uiPrefs->uiPrefsOpenMode->child(3);
         int maximized = r->value();
         if (maximized)
@@ -1908,88 +1866,6 @@ namespace mrv
         }
 #endif
 
-        panel::redrawThumbnails();
-
-        ui->uiMain->fill_menu(ui->uiMenuBar);
-    }
-
-    void Preferences::updateICS()
-    {
-        ViewerUI* ui = App::ui;
-        auto player = ui->uiView->getTimelinePlayer();
-        if (!player)
-            return;
-
-        const auto& tplayer = player->player();
-        const auto& info = tplayer->getIOInfo();
-        const auto& videos = info.video;
-        if (videos.empty())
-            return;
-
-        PreferencesUI* uiPrefs = ui->uiPrefs;
-        const auto& video = info.video[0];
-        tl::image::PixelType pixelType = video.pixelType;
-        std::string ics;
-        switch (pixelType)
-        {
-        case tl::image::PixelType::L_U8:
-        case tl::image::PixelType::LA_U8:
-        case tl::image::PixelType::RGB_U8:
-        case tl::image::PixelType::RGB_U10:
-        case tl::image::PixelType::RGBA_U8:
-        case tl::image::PixelType::YUV_420P_U8:
-        case tl::image::PixelType::YUV_422P_U8:
-        case tl::image::PixelType::YUV_444P_U8:
-            ics = uiPrefs->uiOCIO_8bits_ics->value();
-            break;
-        case tl::image::PixelType::L_U16:
-        case tl::image::PixelType::LA_U16:
-        case tl::image::PixelType::RGB_U16:
-        case tl::image::PixelType::RGBA_U16:
-        case tl::image::PixelType::YUV_420P_U16:
-        case tl::image::PixelType::YUV_422P_U16:
-        case tl::image::PixelType::YUV_444P_U16:
-            ics = uiPrefs->uiOCIO_16bits_ics->value();
-            break;
-        case tl::image::PixelType::L_U32:
-        case tl::image::PixelType::LA_U32:
-        case tl::image::PixelType::RGB_U32:
-        case tl::image::PixelType::RGBA_U32:
-            ics = uiPrefs->uiOCIO_32bits_ics->value();
-            break;
-            // handle half and float types
-        case tl::image::PixelType::L_F16:
-        case tl::image::PixelType::LA_F16:
-        case tl::image::PixelType::RGB_F16:
-        case tl::image::PixelType::RGBA_F16:
-            ics = uiPrefs->uiOCIO_half_ics->value();
-            break;
-        case tl::image::PixelType::L_F32:
-        case tl::image::PixelType::LA_F32:
-        case tl::image::PixelType::RGB_F32:
-        case tl::image::PixelType::RGBA_F32:
-            ics = uiPrefs->uiOCIO_float_ics->value();
-            break;
-        default:
-            break;
-        }
-
-        mrv::PopupMenu* w = ui->uiICS;
-        for (size_t i = 0; i < w->children(); ++i)
-        {
-            const Fl_Menu_Item* o = w->child(i);
-            if (!o || !o->label())
-                continue;
-
-            if (ics == o->label())
-            {
-                w->copy_label(o->label());
-                w->value(i);
-                w->do_callback();
-                break;
-            }
-        }
-
         Fl_Preferences base(
             prefspath().c_str(), "filmaura", "mrv2", (Fl_Preferences::Root)0);
         Fl_Preferences gui(base, "ui");
@@ -1997,6 +1873,10 @@ namespace mrv
         gui.set(
             "single_instance", (int)uiPrefs->uiPrefsSingleInstance->value());
         base.flush();
+
+        panel::redrawThumbnails();
+
+        ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
     //////////////////////////////////////////////////////
@@ -2041,11 +1921,6 @@ namespace mrv
         LOG_INFO(configName);
         uiPrefs->uiPrefsOCIOConfig->value(configName.c_str());
         oldConfigName = configName;
-    }
-
-    void Preferences::OCIO(ViewerUI* ui)
-    {
-        ocio::setup();
     }
 
 } // namespace mrv
