@@ -187,10 +187,17 @@ namespace mrv
     void toggle_timeline_clip_info_cb(Fl_Menu_*, ViewerUI* ui);
 
     // OCIO callbacks
+
+    // (From Media Info Panel)
     void attach_ocio_ics_cb(Fl_Menu_*, ViewerUI* ui);
 
+    // From OCIO Menus
     void current_ocio_ics_cb(Fl_Menu_*, ViewerUI* ui);
     void all_ocio_ics_cb(Fl_Menu_*, ViewerUI* ui);
+
+    void current_ocio_look_cb(Fl_Menu_*, ViewerUI* ui);
+    void all_ocio_look_cb(Fl_Menu_*, ViewerUI* ui);
+    
     void monitor_ocio_view_cb(Fl_Menu_*, ViewerUI* ui);
 
     // Video levels callbacks

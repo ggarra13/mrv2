@@ -234,8 +234,8 @@ namespace mrv
 
             // Update UI......... TODO.........
             ui->uiICS->clear();
-            ui->OCIOView->clear();
-            ui->OCIOLook->clear();
+            ui->uiOCIOView->clear();
+            ui->uiOCIOLook->clear();
             for (const auto& value : inputs)
             {
                 ui->uiICS->add(value.c_str());
@@ -243,12 +243,12 @@ namespace mrv
 
             for (const auto& value : views)
             {
-                ui->OCIOView->add(value.c_str());
+                ui->uiOCIOView->add(value.c_str());
             }
 
             for (const auto& value : looks)
             {
-                ui->OCIOLook->add(value.c_str());
+                ui->uiOCIOLook->add(value.c_str());
             }
 
             // Set defaults if available in preferences
@@ -478,29 +478,29 @@ namespace mrv
 
         std::string ocioLook()
         {
-            auto OCIOLook = App::ui->OCIOLook;
-            int idx = OCIOLook->value();
-            if (idx < 0 || idx >= OCIOLook->children())
+            auto uiOCIOLook = App::ui->uiOCIOLook;
+            int idx = uiOCIOLook->value();
+            if (idx < 0 || idx >= uiOCIOLook->children())
                 return "";
 
-            const Fl_Menu_Item* item = OCIOLook->child(idx);
+            const Fl_Menu_Item* item = uiOCIOLook->child(idx);
             return item->label();
         }
 
         void setOcioLook(const std::string& name)
         {
-            auto OCIOLook = App::ui->OCIOLook;
+            auto uiOCIOLook = App::ui->uiOCIOLook;
             int value = -1;
             if (name.empty())
                 value = 0;
-            for (int i = 0; i < OCIOLook->children(); ++i)
+            for (int i = 0; i < uiOCIOLook->children(); ++i)
             {
-                const Fl_Menu_Item* item = OCIOLook->child(i);
+                const Fl_Menu_Item* item = uiOCIOLook->child(i);
                 if (!item || !item->label() || item->flags & FL_SUBMENU)
                     continue;
 
                 char pathname[1024];
-                int ret = OCIOLook->item_pathname(pathname, 1024, item);
+                int ret = uiOCIOLook->item_pathname(pathname, 1024, item);
                 if (ret != 0)
                     continue;
 
@@ -517,22 +517,22 @@ namespace mrv
                 throw std::runtime_error(err);
                 return;
             }
-            OCIOLook->value(value);
-            OCIOLook->do_callback();
+            uiOCIOLook->value(value);
+            uiOCIOLook->do_callback();
         }
 
         int ocioLookIndex(const std::string& name)
         {
-            auto uiLook = App::ui->OCIOLook;
+            auto uiOCIOLook = App::ui->uiOCIOLook;
             int value = -1;
-            for (int i = 0; i < uiLook->children(); ++i)
+            for (int i = 0; i < uiOCIOLook->children(); ++i)
             {
-                const Fl_Menu_Item* item = uiLook->child(i);
+                const Fl_Menu_Item* item = uiOCIOLook->child(i);
                 if (!item || !item->label() || item->flags & FL_SUBMENU)
                     continue;
 
                 char pathname[1024];
-                int ret = uiLook->item_pathname(pathname, 1024, item);
+                int ret = uiOCIOLook->item_pathname(pathname, 1024, item);
                 if (ret != 0)
                     continue;
 
@@ -547,7 +547,7 @@ namespace mrv
 
         std::string ocioView()
         {
-            auto uiOCIOView = App::ui->OCIOView;
+            auto uiOCIOView = App::ui->uiOCIOView;
             int idx = uiOCIOView->value();
             if (idx < 0 || idx >= uiOCIOView->children())
                 return kInactive;
@@ -567,7 +567,7 @@ namespace mrv
 
         void setOcioView(const std::string& name)
         {
-            auto uiOCIOView = App::ui->OCIOView;
+            auto uiOCIOView = App::ui->uiOCIOView;
             int value = -1;
             for (int i = 0; i < uiOCIOView->children(); ++i)
             {
@@ -618,7 +618,7 @@ namespace mrv
                 return kInactive;
 
             std::string out;
-            auto uiOCIOView = App::ui->OCIOView;
+            auto uiOCIOView = App::ui->uiOCIOView;
             bool has_submenu = false;
             for (int i = 0; i < uiOCIOView->children(); ++i)
             {
@@ -682,7 +682,7 @@ namespace mrv
         int ocioViewIndex(const std::string& displayViewName)
         {
             int value = -1;
-            auto uiOCIOView = App::ui->OCIOView;
+            auto uiOCIOView = App::ui->uiOCIOView;
             for (int i = 0; i < uiOCIOView->children(); ++i)
             {
                 const Fl_Menu_Item* item = uiOCIOView->child(i);
@@ -728,11 +728,11 @@ namespace mrv
 
         std::vector<std::string> ocioLookList()
         {
-            auto OCIOLook = App::ui->OCIOLook;
+            auto uiOCIOLook = App::ui->uiOCIOLook;
             std::vector<std::string> out;
-            for (int i = 0; i < OCIOLook->children(); ++i)
+            for (int i = 0; i < uiOCIOLook->children(); ++i)
             {
-                const Fl_Menu_Item* item = OCIOLook->child(i);
+                const Fl_Menu_Item* item = uiOCIOLook->child(i);
                 if (!item || !item->label())
                     continue;
 
@@ -743,7 +743,7 @@ namespace mrv
 
         std::vector<std::string> ocioViewList()
         {
-            auto uiOCIOView = App::ui->OCIOView;
+            auto uiOCIOView = App::ui->uiOCIOView;
             std::vector<std::string> out;
             for (int i = 0; i < uiOCIOView->children(); ++i)
             {

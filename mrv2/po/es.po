@@ -3139,6 +3139,15 @@ msgstr "Inglés"
 msgid "Spanish"
 msgstr "Español"
 
+msgid "Italian"
+msgstr "Italiano"
+
+msgid "Traditional Chinese"
+msgstr "Chino Tradicional"
+
+msgid "Chinese Simplified"
+msgstr "Chino Simplificado"
+
 msgid ""
 "Need to reboot mrv2 to change language.  Are you sure you want to continue?"
 msgstr ""
@@ -3207,9 +3216,6 @@ msgstr "Icelandés"
 
 msgid "Indonesian"
 msgstr "Indonesio"
-
-msgid "Italian"
-msgstr "Italiano"
 
 msgid "Irish"
 msgstr "Irlandés"
@@ -3434,6 +3440,12 @@ msgstr "OCIO/      Color de Entrada"
 
 msgid "OCIO/     Input Color Space "
 msgstr "OCIO/      Color de Entrada "
+
+msgid "OCIO/     Look"
+msgstr "OCIO/     Look"
+
+msgid "OCIO/     Look "
+msgstr "OCIO/     Look "
 
 msgid "OCIO/Displays"
 msgstr "OCIO/Monitores"

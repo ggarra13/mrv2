@@ -83,7 +83,7 @@ class PreferencesUI {open
 } {
   decl {ViewerUI* main;} {private local
   }
-  Function {make_window(ViewerUI* m)} {open selected private
+  Function {make_window(ViewerUI* m)} {open private
   } {
     Fl_Window uiMain {
       label Preferences
@@ -102,11 +102,11 @@ class PreferencesUI {open
             xywh {283 28 570 380} box PLASTIC_UP_BOX labelcolor 32
           } {
             Fl_Group {} {
-              label {User Interface} open
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5
+              label {User Interface}
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
-                label {Window Behavior} open
+                label {Window Behavior}
                 xywh {293 61 545 164} box ROUNDED_BOX
               } {
                 Fl_Check_Button uiPrefsAlwaysOnTop {
@@ -363,26 +363,20 @@ If you try to open several mrv2s with different images, all these images will be
               }
             }
             Fl_Group {} {
-              label {Language and Colors}
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
+              label {Language and Colors} open
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {
                 label UI open
                 xywh {360 58 403 199} box ROUNDED_BOX
               } {
                 Fl_Choice uiLanguage {
-                  label Language open
+                  label Language open selected
                   xywh {508 78 160 25} down_box BORDER_BOX
-                } {
-                  MenuItem {} {
-                    label English
-                    xywh {35 35 100 20}
-                  }
-                  MenuItem {} {
-                    label Spanish
-                    xywh {25 25 100 20}
-                  }
-                }
+                  code0 {auto languages = mrv::getLanguages();}
+                  code1 {for (const auto& language : languages)}
+                  code2 {o->add(language.c_str());}
+                } {}
                 Fl_Choice uiScheme {
                   label Scheme
                   callback {Fl::scheme( o->mvalue()->text );} open

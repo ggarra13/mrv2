@@ -559,7 +559,7 @@ namespace mrv
                     else
                     {
                         value = j["view"];
-                        ui->OCIOView->value(value);
+                        ui->uiOCIOView->value(value);
                     }
                     
                     

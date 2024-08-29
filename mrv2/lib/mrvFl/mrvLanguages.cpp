@@ -41,10 +41,22 @@ namespace
     const char* kModule = "lang";
 }
 
-LanguageTable kLanguages[18] = {
+
+struct LanguageTable
+{
+    const char* name; // in English
+    const char* code;
+};
+
+LanguageTable kLanguages[] = {
     {_("English"), "en.UTF-8"},
     {_("Spanish"), "es.UTF-8"},
+    {_("Italian"), "it.UTF-8"},
+    {_("Traditional Chinese"), "zh.UTF-8"},
+    {_("Chinese Simplified"), "zh-CN.UTF-8"},
+    {nullptr, nullptr}
 };
+
 
 void check_language(PreferencesUI* uiPrefs, int& language_index, mrv::App* app)
 {
@@ -143,7 +155,35 @@ void select_character(mrv::PopupMenu* o, bool colon)
 
 namespace mrv
 {
+    std::vector<std::string> getLanguages()
+    {
+        std::vector<std::string> out;
 
+        
+        LanguageTable* t = kLanguages;
+        for (; (*t).name; ++t)
+        {
+            out.push_back(_((*t).name));
+        }
+
+        return out;
+    }
+
+    
+    std::vector<std::string> getLanguageCodes()
+    {
+        std::vector<std::string> out;
+        
+        LanguageTable* t = kLanguages;
+        for (; (*t).code; ++t)
+        {
+            out.push_back((*t).code);
+        }
+
+        return out;
+    }
+
+    
     void initLocale(const char*& langcode)
     {
         // We use a fake variable to override language saved in user's prefs.

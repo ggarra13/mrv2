@@ -981,7 +981,7 @@ uiView->updateDisplayOptions();}
                 label {View and Look} open
                 xywh {420 25 174 26} labeltype NO_LABEL
               } {
-                Fl_Menu_Button OCIOView {
+                Fl_Menu_Button uiOCIOView {
                   label View
                   user_data this user_data_type {ViewerUI*}
                   callback {uiView->updateOCIOOptions();} selected
@@ -989,7 +989,7 @@ uiView->updateDisplayOptions();}
                   code0 {o->disable_submenus();}
                   class {mrv::PopupMenu}
                 } {}
-                Fl_Menu_Button OCIOLook {
+                Fl_Menu_Button uiOCIOLook {
                   label Look
                   user_data this user_data_type {ViewerUI*}
                   callback {uiView->updateOCIOOptions();} open

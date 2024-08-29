@@ -477,19 +477,19 @@ namespace mrv
         int uiIndex = 0;
         if (language && strlen(language) > 1)
         {
-            for (unsigned i = 0; i < sizeof(kLanguages) / sizeof(LanguageTable);
-                 ++i)
+            const auto languageCodes = getLanguageCodes();
+            for (const auto& code : languageCodes)
             {
                 if (strcmp(language, "C") == 0)
                 {
                     break;
                 }
-                if (strncmp(language, kLanguages[i].code, 2) == 0)
+                if (code == language)
                 {
-                    uiIndex = language_index = i;
-                    language = kLanguages[i].code;
+                    language_index = uiIndex;
                     break;
                 }
+                ++uiIndex;
             }
         }
 

@@ -1994,7 +1994,7 @@ namespace mrv
             input = "";
         o.input = input;
 
-        PopupMenu* m = p.ui->OCIOView;
+        PopupMenu* m = p.ui->uiOCIOView;
         int viewIndex = m->value();
         if (viewIndex >= 0)
         {
@@ -2016,8 +2016,8 @@ namespace mrv
             }
         }
 
-        std::string look = p.ui->OCIOLook->label();
-        if (p.ui->OCIOLook->value() < 0 || look == _("None"))
+        std::string look = p.ui->uiOCIOLook->label();
+        if (p.ui->uiOCIOLook->value() < 0 || look == _("None"))
             look = "";
         o.look = look;
 

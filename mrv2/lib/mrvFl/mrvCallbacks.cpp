@@ -1485,6 +1485,50 @@ namespace mrv
         }
     }
 
+    void current_ocio_look_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        const Fl_Menu_Item* selected = m->mvalue();
+        char pathname[1024];
+        int ret = m->item_pathname(pathname, 1024, selected);
+        if (ret != 0)
+            return;
+
+        const std::string& colorSpace = _("OCIO/     Look");
+        std::string look = pathname;
+        size_t pos = look.find(colorSpace);
+        if (pos != std::string::npos)
+        {
+            look = look.substr(pos + colorSpace.size() + 1, look.size());
+            ocio::setOcioLook(look);
+        }
+    }
+
+    void all_ocio_look_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        const Fl_Menu_Item* selected = m->mvalue();
+        char pathname[1024];
+        int ret = m->item_pathname(pathname, 1024, selected);
+        if (ret != 0)
+            return;
+
+        const std::string& colorSpace = _("OCIO/     Look ");
+        std::string look = pathname;
+        size_t pos = look.find(colorSpace);
+        if (pos != std::string::npos)
+        {
+            look = look.substr(pos + colorSpace.size() + 1, look.size());
+            ocio::setOcioLook(look);
+        }
+
+        auto app = App::app;
+        auto model = app->filesModel();
+        auto files = model->observeFiles()->get();
+        for (auto file : files)
+        {
+            file->ocioLook = look;
+        }
+    }
+
     void monitor_ocio_view_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         int monitorId = -1;

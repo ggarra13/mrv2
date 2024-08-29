@@ -1181,7 +1181,7 @@ namespace mrv
 
         menu->add(_("OCIO/Current File"), 0, 0, nullptr, FL_MENU_INACTIVE);
         
-        std::string combined;
+        std::string ics;
         idx = ui->uiICS->value();
         if (idx >= 0)
         {
@@ -1189,7 +1189,7 @@ namespace mrv
             char pathname[1024];
             int ret = ui->uiICS->item_pathname(pathname, 1024, item);
             if (ret == 0)
-                combined = pathname;
+                ics = pathname;
         }
         for (int i = 0; i < ui->uiICS->children(); ++i)
         {
@@ -1213,14 +1213,57 @@ namespace mrv
 
             {
                 Fl_Menu_Item* item = (Fl_Menu_Item*) &(menu->menu()[idx]);
-                size_t pos = colorSpace.find(combined);
+                size_t pos = colorSpace.find(ics);
                 if (pos != std::string::npos &&
-                    pos + combined.size() == colorSpace.size() )
+                    pos + ics.size() == colorSpace.size() )
                 {
                     item->set();
                 }
             }
         }
+
+        
+        std::string look;
+        idx = ui->uiOCIOLook->value();
+        if (idx >= 0)
+        {
+            const Fl_Menu_Item* item = ui->uiOCIOLook->child(idx);
+            char pathname[1024];
+            int ret = ui->uiOCIOLook->item_pathname(pathname, 1024, item);
+            if (ret == 0)
+                look = pathname;
+        }
+        for (int i = 0; i < ui->uiOCIOLook->children(); ++i)
+        {
+            std::string colorSpace = _("OCIO/     Look");
+            const Fl_Menu_Item* item = ui->uiOCIOLook->child(i);
+            if (!item || !item->label() || (item->flags & FL_SUBMENU))
+                continue;
+
+            char pathname[1024];
+            int ret = ui->uiOCIOLook->item_pathname(pathname, 1024, item);
+            if (ret != 0)
+                continue;
+
+
+            if (pathname[0] != '/')
+                colorSpace += '/';
+            colorSpace += pathname;
+            idx = menu->add(
+                colorSpace.c_str(), 0, (Fl_Callback*)current_ocio_look_cb, ui,
+                FL_MENU_TOGGLE);
+
+            {
+                Fl_Menu_Item* item = (Fl_Menu_Item*) &(menu->menu()[idx]);
+                size_t pos = colorSpace.find(look);
+                if (pos != std::string::npos &&
+                    pos + look.size() == colorSpace.size() )
+                {
+                    item->set();
+                }
+            }
+        }
+        
         menu->add(_("OCIO/Change All Files"), 0, nullptr, nullptr,
                   FL_MENU_INACTIVE);
         for (int i = 0; i < ui->uiICS->children(); ++i)
@@ -1242,6 +1285,25 @@ namespace mrv
             menu->add(colorSpace.c_str(), 0, (Fl_Callback*)all_ocio_ics_cb, ui);
         }
 
+        for (int i = 0; i < ui->uiOCIOLook->children(); ++i)
+        {
+            // We must add a space at the end to make sure menus are different
+            std::string colorSpace = _("OCIO/     Look ");
+            const Fl_Menu_Item* item = ui->uiOCIOLook->child(i);
+            if (!item || !item->label() || (item->flags & FL_SUBMENU))
+                continue;
+
+            char pathname[1024];
+            int ret = ui->uiOCIOLook->item_pathname(pathname, 1024, item);
+            if (ret != 0)
+                continue;
+
+            if (pathname[0] != '/')
+                colorSpace += '/';
+            colorSpace += pathname;
+            menu->add(colorSpace.c_str(), 0, (Fl_Callback*)all_ocio_look_cb, ui);
+        }
+
         menu->add(_("OCIO/Displays"), 0, nullptr, nullptr, FL_MENU_INACTIVE);
         int num_screens = Fl::screen_count();
         for (int m = 0; m < num_screens; ++m)
@@ -1252,14 +1314,14 @@ namespace mrv
                 ocio::ocioDisplayViewShortened(o.display, o.view);
             combined = monitorName + "/" + combined;
        
-            for (int i = 0; i < ui->OCIOView->children(); ++i)
+            for (int i = 0; i < ui->uiOCIOView->children(); ++i)
             {
-                const Fl_Menu_Item* item = ui->OCIOView->child(i);
+                const Fl_Menu_Item* item = ui->uiOCIOView->child(i);
                 if (!item || !item->label() || (item->flags & FL_SUBMENU))
                     continue;
 
                 char pathname[1024];
-                int ret = ui->OCIOView->item_pathname(pathname, 1024, item);
+                int ret = ui->uiOCIOView->item_pathname(pathname, 1024, item);
                 if (ret != 0)
                     continue;
 

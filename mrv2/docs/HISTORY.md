@@ -14,11 +14,14 @@ v1.2.5
 - Allowed Chaging OCIO Input Color Space from the OCIO menu for either the
   current file, or all loaded files.
 - Fixed annotation markers in timeline showing even when switching clips.
-- Fixed Wayland PNG incompatibility on older Linux OSes.
+- Fixed Wayland PNG incompatibility on older Linux OSes.  Test to work on
+  Rocky Linux 8.10, Ubuntu 22.04.4 LTS and Ubuntu 24.04.4 LTS.
 - Fixed saving annotations leading to black or stopping playback when there
   were no annotations on Windows.
 - Added session pattern to Open Movie or Sequence.
 - Moved View/OCIO Presets to OCIO/Presets.
+- Added OCIO/Current File/Look and OCIO/Change All Files/Look to new
+  OCIO menu.
 
 
 v1.2.4

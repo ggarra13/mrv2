@@ -5,6 +5,7 @@
 #ifndef mrvLanguages_h
 #define mrvLanguages_h
 
+#include <vector>
 #include <string>
 
 namespace mrv
@@ -15,15 +16,13 @@ namespace mrv
 
     std::string codeToLanguage(const std::string& code);
 
+    std::vector<std::string> getLanguageCodes();
+    std::vector<std::string> getLanguages();
+    
+
 } // namespace mrv
 
-struct LanguageTable
-{
-    const char* name; // in English
-    const char* code;
-};
 
-extern LanguageTable kLanguages[18];
 
 class PreferencesUI;
 void check_language(PreferencesUI* uiPrefs, int& language_index, mrv::App*);

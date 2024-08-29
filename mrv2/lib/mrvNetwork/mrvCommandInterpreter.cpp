@@ -520,10 +520,10 @@ namespace mrv
                 std::string mergedView =
                     mrv::ocio::ocioDisplayViewShortened(o.display, o.view);
                 index = mrv::ocio::ocioViewIndex(mergedView);
-                ui->OCIOView->value(index);
+                ui->uiOCIOView->value(index);
 
                 index = mrv::ocio::ocioLookIndex(o.look);
-                ui->OCIOLook->value(index);
+                ui->uiOCIOLook->value(index);
 
                 view->setOCIOOptions(o);
             }
