@@ -950,14 +950,6 @@ namespace mrv
             item->set();
 
         mode = 0;
-        snprintf(buf, 256, "%s", _("View/OCIO Presets"));
-        idx = menu->add(
-            buf, kOCIOPresetsToggle.hotkey(), (Fl_Callback*)ocio_presets_cb, ui,
-            mode);
-        if (OCIOPresetsClass)
-            item->set();
-
-        mode = 0;
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
 
@@ -1178,6 +1170,14 @@ namespace mrv
         //                kCopyRGBAValues.hotkey(),
         //                (Fl_Callback*)copy_pixel_rgba_cb, (void*)view);
         // }
+
+        mode = 0;
+        snprintf(buf, 256, "%s", _("OCIO/Presets"));
+        idx = menu->add(
+            buf, kOCIOPresetsToggle.hotkey(), (Fl_Callback*)ocio_presets_cb, ui,
+            mode);
+        if (OCIOPresetsClass)
+            item->set();
 
         menu->add(_("OCIO/Current File"), 0, 0, nullptr, FL_MENU_INACTIVE);
         

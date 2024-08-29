@@ -3294,6 +3294,9 @@ msgstr "Reels (*.{"
 msgid "Images (*.{"
 msgstr "Imagenes (*.{"
 
+msgid "Sessions (*."
+msgstr "Sesiones (*."
+
 msgid "All (*.{"
 msgstr "Todos (*.{"
 
@@ -3816,9 +3819,6 @@ msgstr "Vista/Máscara/%s"
 msgid "View/Hud"
 msgstr "Vista/Hud"
 
-msgid "View/OCIO Presets"
-msgstr "Vista/Preseteos OCIO"
-
 msgid "Timeline/Cache/Clear"
 msgstr "Línea de Tiempo/Cache/Borrar"
 
@@ -3909,25 +3909,9 @@ msgstr "Editar/&Deshacer"
 msgid "Edit/Redo"
 msgstr "Editar/&Rehacer"
 
-#. ++i )
-#. {
-#. char buf[256];
-#. snprintf( buf, 256, _("Subtitle/Track #%d - %s"), i,
-#. image->subtitle_info(i).language.c_str() );
-#. idx = menu->add( buf, 0,
-#. (Fl_Callback*)change_subtitle_cb, ui,
-#. FL_MENU_RADIO );
-#. item = (Fl_Menu_Item*) &(menu->menu()[idx]);
-#. if ( image->subtitle_stream() == (int)i )
-#. item->set();
-#. }
-#. }
-#. if ( dynamic_cast< Fl_Menu_Button* >( menu ) )
-#. {
-#. menu->add( _("Pixel/Copy RGBA Values to Clipboard"),
-#. kCopyRGBAValues.hotkey(),
-#. (Fl_Callback*)copy_pixel_rgba_cb, (void*)view);
-#. }
+msgid "OCIO/Presets"
+msgstr "OCIO/Preseteos"
+
 msgid "OCIO/Current File"
 msgstr "OCIO/Clip Actual"
 
@@ -7147,50 +7131,3 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
-
-#, fuzzy
-#~ msgid "Invalid EDID header"
-#~ msgstr "Valores Inválidos"
-
-#, fuzzy
-#~ msgid "Unknown Monitor"
-#~ msgstr "Entrada de menu desconocida "
-
-#, fuzzy
-#~ msgid "Screen #"
-#~ msgstr "Enmarcar Pantalla"
-
-#, fuzzy
-#~ msgid "OCIO/     File Color Space"
-#~ msgstr "OCIO Espacio de Color de Entrada"
-
-#, fuzzy
-#~ msgid "OCIO/     File Color Space "
-#~ msgstr "OCIO Espacio de Color de Entrada"
-
-#~ msgid "Seek to the given time."
-#~ msgstr "Saltar al tiempo dado."
-
-#~ msgid "Set the in/out points range."
-#~ msgstr "Setear el range de entrada/salida."
-
-#~ msgid "    Percentage: %.2g %%"
-#~ msgstr "    Porcentaje: %.2g %%"
-
-#~ msgid "IFF Picture"
-#~ msgstr "Dibujo IFF"
-
-#~ msgid "Map Picture"
-#~ msgstr "Dibujo Map"
-
-#~ msgid "PNG Picture"
-#~ msgstr "Dibujo PNG"
-
-#~ msgid "RGB Picture"
-#~ msgstr "Dibujo RGB"
-
-#~ msgid "Everything OK."
-#~ msgstr "Todo Bien."
-
-#~ msgid "Auto Scrub Playback"
-#~ msgstr "Auto Reproducir Fregando"

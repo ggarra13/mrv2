@@ -149,8 +149,8 @@ namespace mrv
             const WaylandMonitorData& monitorInfo = outputs[monitorIndex];
 
 #if defined(WL_OUTPUT_NAME_SINCE_VERSION) && WL_OUTPUT_NAME_SINCE_VERSION >= 4
-            out = std::to_string(monitorIndex) + " " + monitorInfo.name + ": " +
-                  monitorInfo.description;
+            if (!monitorInfo.name.empty())
+                out = monitorInfo.name + ": " + monitorInfo.description;
 #else
 #    warning "Wayland version is less than 4.  No monitor will be provided."
 #endif

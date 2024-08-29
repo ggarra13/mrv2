@@ -1418,7 +1418,7 @@ void Flu_File_Chooser::trashCB(bool recycle)
                     char buf[2048];
                     snprintf(buf, 2048, _(deleteFileErrTxt.c_str()),
                              name.c_str(), error);
-                    mrv::fl_alert(buf);
+                    mrv::fl_alert(buf, nullptr);
                     cd("./");
                     return;
                 }
