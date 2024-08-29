@@ -3085,12 +3085,6 @@ msgstr "English"
 msgid "Spanish"
 msgstr "Spanish"
 
-msgid "Italian"
-msgstr "Italian"
-
-msgid "Traditional Chinese"
-msgstr "Traditional Chinese"
-
 msgid "Chinese Simplified"
 msgstr "Chinese Simplified"
 
@@ -3161,6 +3155,9 @@ msgstr "Icelandic"
 
 msgid "Indonesian"
 msgstr "Indonesian"
+
+msgid "Italian"
+msgstr "Italian"
 
 msgid "Irish"
 msgstr "Irish"
@@ -7074,6 +7071,9 @@ msgstr "Toggle Hotkeys Window"
 
 msgid "Toggle About Window"
 msgstr "Toggle About Window"
+
+#~ msgid "Traditional Chinese"
+#~ msgstr "Traditional Chinese"
 
 #~ msgid "View/OCIO Presets"
 #~ msgstr "View/OCIO Presets"

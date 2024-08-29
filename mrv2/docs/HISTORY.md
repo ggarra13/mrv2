@@ -22,6 +22,7 @@ v1.2.5
 - Moved View/OCIO Presets to OCIO/Presets.
 - Added OCIO/Current File/Look and OCIO/Change All Files/Look to new
   OCIO menu.
+- Added Chinese Simplified Translation. 
 
 
 v1.2.4

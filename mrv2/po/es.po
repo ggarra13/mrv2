@@ -3139,12 +3139,6 @@ msgstr "Inglés"
 msgid "Spanish"
 msgstr "Español"
 
-msgid "Italian"
-msgstr "Italiano"
-
-msgid "Traditional Chinese"
-msgstr "Chino Tradicional"
-
 msgid "Chinese Simplified"
 msgstr "Chino Simplificado"
 
@@ -3216,6 +3210,9 @@ msgstr "Icelandés"
 
 msgid "Indonesian"
 msgstr "Indonesio"
+
+msgid "Italian"
+msgstr "Italiano"
 
 msgid "Irish"
 msgstr "Irlandés"
@@ -7143,3 +7140,6 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
+
+#~ msgid "Traditional Chinese"
+#~ msgstr "Chino Tradicional"

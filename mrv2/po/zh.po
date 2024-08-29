@@ -2762,12 +2762,6 @@ msgstr ""
 msgid "Spanish"
 msgstr ""
 
-msgid "Italian"
-msgstr ""
-
-msgid "Traditional Chinese"
-msgstr ""
-
 msgid "Chinese Simplified"
 msgstr ""
 
@@ -2836,6 +2830,9 @@ msgid "Icelandic"
 msgstr ""
 
 msgid "Indonesian"
+msgstr ""
+
+msgid "Italian"
 msgstr ""
 
 msgid "Irish"
