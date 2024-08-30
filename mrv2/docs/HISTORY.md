@@ -31,6 +31,7 @@ v1.2.5
 - Fixed .otio, .otioz and -edl flags when concatenation videos with different
   rotations.
 - Changed name of "Reproducción" to "Reproducir" in Spanish translation.
+- Added Chinese (Simplified) Translation done with AI.
 
 
 v1.2.4
