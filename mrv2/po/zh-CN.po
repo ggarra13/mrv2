@@ -5478,7 +5478,7 @@ msgid "When selected, mrv2 will start in full screen mode."
 msgstr "选中时, mrv2 将以全屏模式启动 。"
 
 msgid "Presentation"
-msgstr "列报列报"
+msgstr "列报"
 
 msgid "When selected, mrv2 will start in presentation mode."
 msgstr "选中时, drv2 将启动演示模式 。"
