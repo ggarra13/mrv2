@@ -4229,7 +4229,7 @@ msgid "Remaining"
 msgstr "剩余"
 
 msgid "FPS"
-msgstr "FPS 个人 PPS"
+msgstr "FPS"
 
 msgid "Undock"
 msgstr "解锁"
@@ -5576,7 +5576,7 @@ msgid "Zoom Speed"
 msgstr "缩速速度"
 
 msgid "HUD"
-msgstr "HUUD 住房( HUD)"
+msgstr "HUD"
 
 msgid ""
 "This area specifies which elements should be shown as a HUD overlay on the "
