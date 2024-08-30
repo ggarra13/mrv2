@@ -5466,7 +5466,7 @@ msgid ""
 msgstr "当选中时, drv2 将会在您进入视图窗口后将窗口向前移动 。"
 
 msgid "Normal"
-msgstr "普通普通"
+msgstr "普通"
 
 msgid "When selected, mrv2 will resize its window to the first image."
 msgstr "选中时, drv2 将调整窗口大小到第一个图像 。"
