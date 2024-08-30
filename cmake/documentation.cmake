@@ -18,9 +18,13 @@ endif()
 set(DOCUMENTATION_TARGETS )
 set(CLEAN_DOC_TARGETS )
 
+set(DOC_LANGUAGES en es)
 
+if (NOT DOC_LANGUAGES)
+    set(DOC_LANGUAGES ${LANGUAGES})
+endif()
 
-foreach( LANGUAGE ${LANGUAGES} )
+foreach( LANGUAGE ${DOC_LANGUAGES} )
     
     #
     # Prepare Sphinx's conf.py
@@ -69,7 +73,7 @@ foreach( LANGUAGE ${LANGUAGES} )
 	list( APPEND CLEAN_DOC_TARGETS ${CLEAN_DOC_TARGET} )
 
 	add_custom_target( ${DOC_TARGET}
-	    COMMAND ${CMAKE_COMMAND} -E env LANGUAGE=${LANGUAGE} LANG=en_US.UTF-8 LANGUAGE_CODE=${LANGUAGE} ${CMAKE_INSTALL_PREFIX}/bin/${MRV2_COMMAND} -pythonScript ${CMAKE_INSTALL_PREFIX}/sphinx/${LANGUAGE}/document.py
+	    COMMAND ${CMAKE_COMMAND} -E env LANGUAGE=${LANGUAGE} LANGUAGE_CODE=${LANGUAGE} ${CMAKE_INSTALL_PREFIX}/bin/${MRV2_COMMAND} -pythonScript ${CMAKE_INSTALL_PREFIX}/sphinx/${LANGUAGE}/document.py
 	    COMMAND ${CMAKE_COMMAND} -E echo "Documented ${LANGUAGE} language."
 	    DEPENDS ${DOCUMENT_OUT} ${CONFFILE_OUT}
 	)

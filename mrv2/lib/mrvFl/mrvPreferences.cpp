@@ -446,16 +446,31 @@ namespace mrv
         int uiIndex = 0;
         if (language && strlen(language) > 1)
         {
+            language_index = -1;
             const auto languageCodes = getLanguageCodes();
+            for (const auto& code : languageCodes)
+            {
+                if (code == language)
+                {
+                    language_index = uiIndex;
+                    language = strdup(code.c_str());
+                    break;
+                }
+                ++uiIndex;
+            }
+            
+            uiIndex = 0;
             for (const auto& code : languageCodes)
             {
                 if (strcmp(language, "C") == 0)
                 {
+                    language = "en_US.UTF-8";
                     break;
                 }
-                if (code == language)
+                if (strncmp(language, code.c_str(), 2) == 0)
                 {
                     language_index = uiIndex;
+                    language = strdup(code.c_str());
                     break;
                 }
                 ++uiIndex;

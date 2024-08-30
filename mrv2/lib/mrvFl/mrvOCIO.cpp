@@ -820,7 +820,8 @@ namespace mrv
             j.at("ocio").get_to(value.ocio);
             j.at("lut").get_to(value.lut);
             j.at("defaults").get_to(value.defaults);
-            j.at("ocioMonitors").get_to(value.ocioMonitors);
+            if (j.contains("ocioMonitors"))
+                j.at("ocioMonitors").get_to(value.ocioMonitors);
         }
 
         std::vector<OCIOPreset> ocioPresets;

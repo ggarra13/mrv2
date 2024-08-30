@@ -590,12 +590,8 @@ namespace mrv
 
         Preferences::run();
 
-#ifdef MRV2_PYBIND11
-        // Create Python's output window
-        outputDisplay = new PythonOutput(0, 0, 400, 400);
 
-        // Redirect Python's stdout/stderr to my own class
-        p.pythonStdErrOutRedirect.reset(new PyStdErrOutStreamRedirect);
+#ifdef MRV2_PYBIND11
 
         // Import the mrv2 python module so we read all python
         // plug-ins.
@@ -603,6 +599,63 @@ namespace mrv
 
         // Discover Python plugins
         mrv2_discover_python_plugins();
+
+        
+        if (!p.options.pythonScript.empty())
+        {       
+            if (!file::isReadable(p.options.pythonScript))
+            {
+                std::cerr << std::string(
+                                 string::Format(
+                                     _("Could not read python script '{0}'"))
+                                     .arg(p.options.pythonScript))
+                          << std::endl;
+                _exit = 1;
+                return;
+            }
+
+            p.pythonArgs = std::make_unique<PythonArgs>(p.options.pythonArgs);
+
+            LOG_INFO(
+                std::string(string::Format(_("Running python script '{0}'"))
+                                .arg(p.options.pythonScript)));
+            const auto& args = p.pythonArgs->getArguments();
+
+            if (!args.empty())
+            {
+                LOG_INFO(_("with Arguments:"));
+                std::string out = "[";
+                out += tl::string::join(args, ',');
+                out += "]";
+                LOG_INFO(out);
+            }
+
+            std::ifstream is(p.options.pythonScript);
+            std::stringstream s;
+            s << is.rdbuf();
+            try
+            {
+                py::exec(s.str());
+            }
+            catch (const std::exception& e)
+            {
+                std::cerr << _("Python Error: ") << std::endl
+                          << e.what() << std::endl;
+                _exit = 1;
+                return;
+            }
+            delete ui;
+            ui = nullptr;
+            return;
+        }
+#endif
+        
+#ifdef MRV2_PYBIND11
+        // Create Python's output window
+        outputDisplay = new PythonOutput(0, 0, 400, 400);
+
+        // Redirect Python's stdout/stderr to my own class
+        p.pythonStdErrOutRedirect.reset(new PyStdErrOutStreamRedirect);
 #endif
 
 #if defined(TLRENDER_USD)
@@ -632,7 +685,7 @@ namespace mrv
         if (!NDIlib_initialize())
             throw std::runtime_error(_("Could not initialize NDI"));
 #endif
-
+        
         p.volume = p.settings->getValue<float>("Audio/Volume");
         p.mute = p.settings->getValue<bool>("Audio/Mute");
 
@@ -726,56 +779,6 @@ namespace mrv
                     }
                 }
             });
-
-#ifdef MRV2_PYBIND11
-        if (!p.options.pythonScript.empty())
-        {
-            if (!file::isReadable(p.options.pythonScript))
-            {
-                std::cerr << std::string(
-                                 string::Format(
-                                     _("Could not read python script '{0}'"))
-                                     .arg(p.options.pythonScript))
-                          << std::endl;
-                _exit = 1;
-                return;
-            }
-
-            p.pythonArgs = std::make_unique<PythonArgs>(p.options.pythonArgs);
-
-            LOG_INFO(
-                std::string(string::Format(_("Running python script '{0}'"))
-                                .arg(p.options.pythonScript)));
-            const auto& args = p.pythonArgs->getArguments();
-
-            if (!args.empty())
-            {
-                LOG_INFO(_("with Arguments:"));
-                std::string out = "[";
-                out += tl::string::join(args, ',');
-                out += "]";
-                LOG_INFO(out);
-            }
-
-            std::ifstream is(p.options.pythonScript);
-            std::stringstream s;
-            s << is.rdbuf();
-            try
-            {
-                py::exec(s.str());
-            }
-            catch (const std::exception& e)
-            {
-                std::cerr << _("Python Error: ") << std::endl
-                          << e.what() << std::endl;
-                _exit = 1;
-                return;
-            }
-            delete ui;
-            ui = nullptr;
-            return;
-        }
-#endif
 
         // Open the input files.
         int savedDigits =

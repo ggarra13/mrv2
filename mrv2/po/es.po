@@ -1718,9 +1718,6 @@ msgstr "Salir de mrv2"
 msgid "Running from "
 msgstr "Corriendo desde: "
 
-msgid "Could not initialize NDI"
-msgstr "No pude inicializar NDI"
-
 msgid "Could not read python script '{0}'"
 msgstr "No pude leer script de python '{0}'"
 
@@ -1732,6 +1729,9 @@ msgstr "con Argumentos:"
 
 msgid "Python Error: "
 msgstr "Error de Python:"
+
+msgid "Could not initialize NDI"
+msgstr "No pude inicializar NDI"
 
 msgid "Filename '{0}' does not exist or does not have read permissions."
 msgstr "Archivo '{0}' no existe o no es leíble."
