@@ -467,13 +467,6 @@ namespace mrv
             return out;
         }
 
-        std::string otioFilename(ViewerUI* ui)
-        {
-            auto out = _otioFilename(ui);
-            ++otioIndex;
-            return out;
-        }
-
         void toOtioFile(const otio::Timeline* timeline, ViewerUI* ui)
         {
             auto model = ui->app->filesModel();
@@ -742,6 +735,15 @@ namespace mrv
 
     } // anonymous namespace
 
+
+    std::string otioFilename(ViewerUI* ui)
+    {
+        auto out = _otioFilename(ui);
+        ++otioIndex;
+        return out;
+    }
+
+    
     file::Path getRelativePath(const file::Path& path, const fs::path& fileName)
     {
         fs::path filePath = path.get();
@@ -2430,6 +2432,12 @@ namespace mrv
         set_edit_mode_cb(editMode, ui);
     }
 
+
+
+
+
+
+    /// @todo: REFACTOR THIS PLEASE
     EditMode editMode = EditMode::kTimeline;
     int editModeH = 30;
     const int kMinEditModeH = 30;

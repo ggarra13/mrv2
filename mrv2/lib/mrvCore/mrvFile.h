@@ -150,6 +150,9 @@ namespace mrv
         //! Returns whether the filename is a temporary EDL.
         bool isTemporaryEDL(const Path& path);
 
+        //! Returns whether the filename is an .otio or .otioz file.
+        bool isOTIO(const Path& path);
+            
         //! Returns whether command is in the PATH environment variable.
         bool isInPath(const std::string& command);
 

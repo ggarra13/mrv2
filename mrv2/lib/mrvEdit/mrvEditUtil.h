@@ -8,6 +8,9 @@ class ViewerUI;
 
 namespace mrv
 {
+    //! Return a unique name for a new .otio temp file.
+    std::string otioFilename(ViewerUI* ui);
+            
     //! Remove all temporary EDLs from tmppath().  Used on exiting.
     void removeTemporaryEDLs(ViewerUI* ui);
 } // namespace mrv

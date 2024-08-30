@@ -3,12 +3,14 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 set(HEADERS
+    mrvCreateEDLFromFiles.h
     mrvEditCallbacks.h
     mrvEditMode.h
     mrvEditUtil.h
 )
 
 set(SOURCES
+    mrvCreateEDLFromFiles.cpp
     mrvEditCallbacks.cpp
     mrvEditMode.cpp
     mrvEditUtil.cpp

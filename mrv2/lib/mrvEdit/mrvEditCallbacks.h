@@ -118,7 +118,7 @@ namespace mrv
 
     //! Save current OTIO timeline (EDL) to a filename.
     void save_timeline_to_disk(const std::string& otioFile);
-
+    
     //
     // Set the edit mode height.
     //

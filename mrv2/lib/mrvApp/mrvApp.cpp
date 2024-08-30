@@ -61,6 +61,7 @@ namespace py = pybind11;
 #endif
 
 #include "mrvEdit/mrvEditUtil.h"
+#include "mrvEdit/mrvCreateEDLFromFiles.h"
 
 #ifdef MRV2_PYBIND11
 #    include "mrvPy/mrvPythonArgs.h"
@@ -127,6 +128,7 @@ namespace mrv
     struct Options
     {
         std::string dummy;
+        bool createOtioTimeline = false;
         std::vector<std::string> fileNames;
         std::string audioFileName;
         std::string compareFileName;
@@ -319,6 +321,9 @@ namespace mrv
                         string::Format("{0}").arg(
                             p.options.compareOptions.wipeRotation)),
                     app::CmdLineFlagOption::create(
+                        p.options.createOtioTimeline, {"-otio", "-o", "-edl"},
+                        _("Create OpenTimelineIO EDL from the list of clips provided.")),
+                    app::CmdLineFlagOption::create(
                         p.options.otioEditMode, {"-editMode", "-e"},
                         _("OpenTimelineIO Edit mode.")),
                     app::CmdLineFlagOption::create(
@@ -471,6 +476,21 @@ namespace mrv
                 continue;
             lastPath = path;
             p.options.fileNames.push_back(unused);
+        }
+
+        if (p.options.createOtioTimeline)
+        {
+            std::string otioFile;
+            bool ok = createEDLFromFiles(otioFile, p.options.fileNames);
+            if (!ok)
+            {
+                LOG_ERROR("Could not create .otio EDL playlist from files");
+                return;
+            }
+
+            // Replace filenames with newly created otio file
+            p.options.fileNames.clear();
+            p.options.fileNames.push_back(otioFile);
         }
 
         if (p.options.displayVersion)

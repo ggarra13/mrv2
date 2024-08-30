@@ -233,6 +233,16 @@ namespace mrv
             return true;
         }
 
+        bool isOTIO(const tl::file::Path& path)
+        {
+            auto extension = string::toLower(path.getExtension());
+            if (extension != ".otio" && extension != ".otioz")
+            {
+                return false;
+            }
+            return true;
+        }
+        
         bool isInPath(const std::string& command)
         {
 #ifdef _WIN32

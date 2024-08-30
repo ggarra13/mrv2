@@ -14,7 +14,7 @@ v1.2.5
 - Allowed Chaging OCIO Input Color Space from the OCIO menu for either the
   current file, or all loaded files.
 - Fixed annotation markers in timeline showing even when switching clips.
-- Fixed Wayland PNG incompatibility on older Linux OSes.  Test to work on
+- Fixed Wayland PNG incompatibility on older Linux OSes.  Tested to work on
   Rocky Linux 8.10, Ubuntu 22.04.4 LTS and Ubuntu 24.04.4 LTS.
 - Fixed saving annotations leading to black or stopping playback when there
   were no annotations on Windows.
@@ -22,7 +22,11 @@ v1.2.5
 - Moved View/OCIO Presets to OCIO/Presets.
 - Added OCIO/Current File/Look and OCIO/Change All Files/Look to new
   OCIO menu.
-- Added Chinese Simplified Translation. 
+- Added -otio or -edl command-line option to automatically create an .otio 
+  timeline from a list of clips (movies or sequences) provided in the 
+  command-line.  Note that FPS is taken to be that of the one with highest 
+  FPS, so sequences may leave gaps if video clips bigger than their FPS are
+  used.
 
 
 v1.2.4
