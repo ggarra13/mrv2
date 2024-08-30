@@ -28,6 +28,8 @@ v1.2.5
   FPS, so sequences may leave gaps if video clips bigger than their FPS are
   used.
 - Made -otio or -edl command-line option work with relative paths.
+- Fixed .otio, .otioz and -edl flags when concatenation videos with different
+  rotations.
 
 
 v1.2.4
