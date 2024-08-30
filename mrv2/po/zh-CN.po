@@ -5543,7 +5543,7 @@ msgid "When selected, mrv2 will start with the only one panel option selected."
 msgstr "选中时, trv2 将使用唯一选中的一个面板选项开始 。"
 
 msgid "View Window"
-msgstr "查看窗口窗口"
+msgstr "查看窗口"
 
 msgid "Defaults"
 msgstr "默认"
@@ -6157,7 +6157,7 @@ msgid "Module"
 msgstr "模块模块模块"
 
 msgid "User Interface/View Window"
-msgstr "用户界面/查看窗口窗口"
+msgstr "用户界面/查看窗口"
 
 msgid "User Interface/File Requester"
 msgstr "用户界面/文件请求器"
