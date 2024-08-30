@@ -53,7 +53,7 @@ LanguageTable kLanguages[] = {
     {_("Spanish"), "es.UTF-8"},
     // {_("Italian"), "it.UTF-8"},
     // {_("Traditional Chinese"), "zh.UTF-8"},
-    // {_("Chinese Simplified"), "zh-CN.UTF-8"},
+    {_("Chinese Simplified"), "zh-CN.UTF-8"},
     {nullptr, nullptr}
 };
 

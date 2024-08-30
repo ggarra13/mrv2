@@ -19,10 +19,9 @@ fi
 
 locate_python
 
-
-if [[ ! -d $PYTHON_SITEDIR/translate && ! -d $PYTHON_USER_SITEDIR/translate ]];
+if [[ ! -e $PYTHON_SITEDIR/polib.py && ! -d $PYTHON_USER_SITEDIR/polib.py ]];
 then
-    $PYTHON -m pip install translate
+    $PYTHON -m pip install polib transformers translate torch sentencepiece sacremoses
 fi
 
 $PYTHON bin/python/po_translate.py $*

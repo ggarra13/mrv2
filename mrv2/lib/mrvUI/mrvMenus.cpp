@@ -74,7 +74,8 @@ namespace mrv
         menu->clear();
 
         int idx;
-
+        DBG;
+        
         menu->add(
             _("File/Open/Movie or Sequence"), kOpenImage.hotkey(),
             (Fl_Callback*)open_cb, ui);
@@ -84,7 +85,7 @@ namespace mrv
             (Fl_Callback*)open_separate_audio_cb, ui);
 
         menu->add(
-            _("File/Open/Singe Image"), kOpenSingleImage.hotkey(),
+            _("File/Open/Single Image"), kOpenSingleImage.hotkey(),
             (Fl_Callback*)open_single_image_cb, ui);
 
         menu->add(
@@ -94,6 +95,7 @@ namespace mrv
         menu->add(
             _("File/Open/Session"), kOpenSession.hotkey(),
             (Fl_Callback*)load_session_cb, ui);
+        DBG;
 
         mode = 0;
         if (numFiles == 0)
@@ -150,6 +152,7 @@ namespace mrv
             _("Window/Presentation"), kTogglePresentation.hotkey(),
             (Fl_Callback*)toggle_presentation_cb, ui, FL_MENU_TOGGLE);
 
+        DBG;
         const Viewport* view = ui->uiView;
         const Viewport* view2 = nullptr;
         if (ui->uiSecondary && ui->uiSecondary->window()->visible())
@@ -254,6 +257,7 @@ namespace mrv
         if (ui->uiToolsGroup->visible())
             item->set();
 
+        DBG;
         mode = FL_MENU_TOGGLE;
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
@@ -263,6 +267,7 @@ namespace mrv
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (view->hasFrameView())
             item->set();
+        DBG;
 
         idx = menu->add(
             _("View/Safe Areas"), kSafeAreas.hotkey(),
@@ -277,6 +282,7 @@ namespace mrv
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (view->getDataWindow())
             item->set();
+        DBG;
 
         idx = menu->add(
             _("View/OpenEXR/Display Window"), kDisplayWindow.hotkey(),
@@ -293,6 +299,8 @@ namespace mrv
         if (view->getIgnoreDisplayWindow())
             item->set();
 
+        DBG;
+        
         idx = menu->add(
             _("Panel/One Panel Only"), kToggleOnePanelOnly.hotkey(),
             (Fl_Callback*)toggle_one_panel_only_cb, ui,
@@ -303,6 +311,8 @@ namespace mrv
         else
             item->clear();
 
+        DBG;
+        
         std::unordered_map<std::string, std::string > panelsMap;
         const WindowCallback* wc = kWindowCallbacks;
         for (; wc->name; ++wc)
@@ -314,6 +324,7 @@ namespace mrv
         std::vector<std::pair<std::string, std::string>> vec(
             panelsMap.begin(), panelsMap.end());
 
+        DBG;
         // Sort the vector in ascending order based on the keys
         std::locale loc;
         std::sort(
@@ -402,6 +413,7 @@ namespace mrv
                 continue; // Unknown window check
             }
 
+            DBG;
             tmp = pair.first;
             std::string menu_name = menu_root + tmp + "\t";
             int idx = menu->add(
@@ -563,6 +575,7 @@ namespace mrv
         // Make sure to sync panels remotely.
         syncPanels();
 
+        DBG;
         {
             const timeline::DisplayOptions& displayOptions =
                 ui->app->displayOptions();
@@ -827,6 +840,7 @@ namespace mrv
             item->set();
 
         // Looping
+        DBG;
 
         timeline::Loop loop = timeline::Loop::Loop;
         if (player)
@@ -1019,6 +1033,7 @@ namespace mrv
         if (displayOptions.clipInfo)
             item->set();
 
+        DBG;
         mode = FL_MENU_RADIO;
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
@@ -1170,6 +1185,7 @@ namespace mrv
         //                kCopyRGBAValues.hotkey(),
         //                (Fl_Callback*)copy_pixel_rgba_cb, (void*)view);
         // }
+        DBG;
 
         mode = 0;
         snprintf(buf, 256, "%s", _("OCIO/Presets"));
@@ -1345,6 +1361,7 @@ namespace mrv
             }
         }
 
+        DBG;
         if (dynamic_cast< DummyClient* >(tcp) == nullptr)
         {
             mode = FL_MENU_TOGGLE;
@@ -1553,6 +1570,7 @@ namespace mrv
 #else
         menu->textfont(ui->uiPrefs->uiFontMenus->value());
 #endif
+        DBG;
 
         menu->redraw();
     }

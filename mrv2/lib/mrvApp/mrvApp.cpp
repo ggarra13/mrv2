@@ -127,6 +127,9 @@ namespace mrv
 
     struct Options
     {
+#ifdef DEBUG
+        int debug = 0;
+#endif
         std::string dummy;
         bool createOtioTimeline = false;
         std::vector<std::string> fileNames;
@@ -291,7 +294,7 @@ namespace mrv
                 _("Timelines, movies, image sequences, or folders."), true,
                 true)},
             {
-#ifdef DEBUG
+#ifndef NDEBUG
                 app::CmdLineValueOption<int>::create(
                     Preferences::debug, {"-debug", "-d"},
                     _("Debug verbosity.")),
@@ -434,7 +437,6 @@ namespace mrv
                         "disables the cache.",
                         string::Format("{0}").arg(p.options.usd.diskCache)),
 #endif // TLRENDER_USD
-
 #ifdef MRV2_NETWORK
                     app::CmdLineFlagOption::create(
                         p.options.server, {"-server"},
@@ -456,7 +458,7 @@ namespace mrv
                         {"-version", "--version", "-v", "--v"},
                         _("Return the version and exit."))
             });
-
+        
         const int exitCode = getExit();
         if (exitCode != 0)
         {
@@ -478,6 +480,7 @@ namespace mrv
             p.options.fileNames.push_back(unused);
         }
 
+        DBG;
         if (p.options.displayVersion)
         {
             std::cout << std::endl
@@ -489,7 +492,8 @@ namespace mrv
 #endif
             return;
         }
-
+        
+        DBG;
         // Initialize FLTK.
         Fl::scheme("gtk+");
         Fl::option(Fl::OPTION_VISIBLE_FOCUS, false);
@@ -497,12 +501,14 @@ namespace mrv
         Fl::set_fonts("-*");
         Fl::lock(); // needed for NDI and multithreaded logging
 
+        DBG;
         // Create the interface.
         ui = new ViewerUI();
         if (!ui)
         {
             throw std::runtime_error(_("Cannot create window"));
         }
+        DBG;
 
         // Create the Settings
         p.settings = new SettingsObject();
@@ -515,6 +521,7 @@ namespace mrv
 
         p.lutOptions = p.options.lutOptions;
 
+        DBG;
 #ifdef __APPLE__
         Fl_Mac_App_Menu::about = _("About mrv2");
         Fl_Mac_App_Menu::print = "";
@@ -538,6 +545,7 @@ namespace mrv
         ui->uiTimeline->setContext(context, p.timeUnitsModel, ui);
         ui->uiTimeline->setScrollBarsVisible(false);
 
+        DBG;
         uiLogDisplay = new LogDisplay(0, 20, 340, 320);
 
         std::string version = "mrv2 v";
@@ -553,6 +561,7 @@ namespace mrv
 #endif
         LOG_INFO(_("Running from ") << mrv::rootpath());
         LOG_INFO(msg);
+        DBG;
 
         // Create the main control.
         p.mainControl = new MainControl(ui);
@@ -587,9 +596,8 @@ namespace mrv
             }
         }
 #endif
-
+        
         Preferences::run();
-
 
 #ifdef MRV2_PYBIND11
 

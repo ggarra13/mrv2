@@ -3100,6 +3100,9 @@ msgstr "English"
 msgid "Spanish"
 msgstr "Spanish"
 
+msgid "Chinese Simplified"
+msgstr "Chinese Simplified"
+
 msgid ""
 "Need to reboot mrv2 to change language.  Are you sure you want to continue?"
 msgstr ""
@@ -3563,8 +3566,8 @@ msgstr "File/Open/Movie or Sequence"
 msgid "File/Open/With Separate Audio"
 msgstr "File/Open/With Separate Audio"
 
-msgid "File/Open/Singe Image"
-msgstr "File/Open/Singe Image"
+msgid "File/Open/Single Image"
+msgstr "File/Open/Single Image"
 
 msgid "File/Open/Directory"
 msgstr "File/Open/Directory"
@@ -7083,9 +7086,6 @@ msgstr "Toggle Hotkeys Window"
 
 msgid "Toggle About Window"
 msgstr "Toggle About Window"
-
-#~ msgid "Chinese Simplified"
-#~ msgstr "Chinese Simplified"
 
 #~ msgid "Traditional Chinese"
 #~ msgstr "Traditional Chinese"

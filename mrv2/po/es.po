@@ -3154,6 +3154,9 @@ msgstr "Inglés"
 msgid "Spanish"
 msgstr "Español"
 
+msgid "Chinese Simplified"
+msgstr "Chino Simplificado"
+
 msgid ""
 "Need to reboot mrv2 to change language.  Are you sure you want to continue?"
 msgstr ""
@@ -3618,7 +3621,7 @@ msgstr "Archivo/Abrir/Pelídula o Secuencia"
 msgid "File/Open/With Separate Audio"
 msgstr "Archivo/Abrir/Con Audio Separado"
 
-msgid "File/Open/Singe Image"
+msgid "File/Open/Single Image"
 msgstr "&Archivo/&Abrir/Una &Sola Imagen"
 
 msgid "File/Open/Directory"
@@ -7152,9 +7155,6 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
-
-#~ msgid "Chinese Simplified"
-#~ msgstr "Chino Simplificado"
 
 #~ msgid "Traditional Chinese"
 #~ msgstr "Chino Tradicional"

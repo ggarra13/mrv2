@@ -144,7 +144,6 @@ namespace mrv
 
                     _widgetUpdate();
                 });
-
         p.filesPanelOptionsObserver =
             observer::ValueObserver<FilesPanelOptions>::create(
                 app->filesModel()->observeFilesPanelOptions(),
@@ -258,6 +257,7 @@ namespace mrv
     void MainControl::_widgetUpdate()
     {
         TLRENDER_P();
+
 
         App* app = p.ui->app;
         p.volume = app->volume();

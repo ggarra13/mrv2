@@ -156,7 +156,7 @@ locate_python()
     
     local site_dirs="${PYTHON_LIBDIR}"
     export PYTHON_SITEDIR="-unknown-"
-    export PYTHON_USER_SITEDIR=$"{HOME}/.local/lib/${PYTHONEXE}"
+    export PYTHON_USER_SITEDIR="${HOME}/.local/lib/${PYTHONEXE}"
     for python_sitedir in $site_dirs; do
 	if [[ -d "${python_sitedir}/site-packages" ]]; then
 	    export PYTHON_SITEDIR="${python_sitedir}/site-packages"

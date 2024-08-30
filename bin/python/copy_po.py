@@ -9,7 +9,8 @@ def copy_msgid_to_msgstr(input_file, output_file):
 
     # Copy msgid to msgstr
     for entry in po:
-        entry.msgstr = entry.msgid
+        if not entry.msgstr:
+            entry.msgstr = entry.msgid
         if 'fuzzy' in entry.flags:
             entry.flags.remove('fuzzy')
 

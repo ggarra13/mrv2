@@ -1,3 +1,18 @@
+# AI Simplified Chinese translations for mrv2 package
+# This file is distributed under the same license as the mrv2 package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: mrv2 v1.2.5\n"
+"Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
+"PO-Revision-Date: 2023-02-11 13:42-0300\n"
+"Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
 msgid ""
 "\n"
 "USD module.\n"
@@ -5,45 +20,50 @@ msgid ""
 "Contains all classes and enums related to USD (Universal Scene "
 "Description). \n"
 msgstr ""
+"\n"
+"USD module.\n"
+"\n"
+"Contains all classes and enums related to USD (Universal Scene "
+"Description). \n"
 
 msgid "Renderer Name"
-msgstr ""
+msgstr "提交者名称"
 
 msgid "Render Width"
-msgstr ""
+msgstr "调频宽度"
 
 msgid "Models' complexity."
-msgstr ""
+msgstr "模型的复杂性。"
 
 msgid "Draw mode  :class:`mrv2.usd.DrawMode`."
-msgstr ""
+msgstr " class: `mrv2.usd.DrawMode`"
 
 msgid "Enable Lighting"
-msgstr ""
+msgstr "启用照明"
 
 msgid "Enable Scene Lights"
-msgstr ""
+msgstr "启用景点灯光"
 
 msgid "Enable Scene Materials"
-msgstr ""
+msgstr "启用场景材料"
 
 msgid "Enable sRGB"
-msgstr ""
+msgstr "sRGB"
 
 msgid "Stage Cache Count"
-msgstr ""
+msgstr "阶段缓存计数"
 
 msgid "Disk Cache Byte Count"
-msgstr ""
+msgstr "磁盘缓存字节计数"
 
 msgid "USD Render Options."
-msgstr ""
+msgstr "美元 投标选择方案。"
 
 msgid "Get USD Render Options."
-msgstr ""
+msgstr "买美元 选择。"
 
 msgid "Set USD Render Options."
-msgstr ""
+msgstr "设定美元交易选项 。"
 
 msgid ""
 "\n"
@@ -51,9 +71,13 @@ msgid ""
 "\n"
 "Contains all classes and enums related to UI (User Interface). \n"
 msgstr ""
+"\n"
+"UI module.\n"
+"\n"
+"Contains all classes and enums related to UI (User Interface). \n"
 
 msgid "Refresh menus."
-msgstr ""
+msgstr "刷新菜单 。"
 
 msgid ""
 "\n"
@@ -61,75 +85,77 @@ msgid ""
 "\n"
 "Contains all functions related to the timeline control.\n"
 msgstr ""
+"\n"
+"\n"
 
 msgid "Play forwards."
-msgstr ""
+msgstr "向前看"
 
 msgid "Play backwards."
-msgstr ""
+msgstr "向后播放 。"
 
 msgid "Seek to a time in timeline."
-msgstr ""
+msgstr "寻找一个时间在时间上的时间。"
 
 msgid "Seek to a frame in timeline."
-msgstr ""
+msgstr "寻找一个时间框架。"
 
 msgid "Seek to a second in timeline."
-msgstr ""
+msgstr "寻找第二个时间框架。"
 
 msgid "Time range of the timeline."
-msgstr ""
+msgstr "时间表的时间范围。"
 
 msgid "Selected time range of the timeline."
-msgstr ""
+msgstr "时间表的选定时间范围。"
 
 msgid "Set the selected time range of the timeline."
-msgstr ""
+msgstr "设定所选择的时间范围 。"
 
 msgid "Set the in time of the selected time range of the timeline."
-msgstr ""
+msgstr "设定选定时间范围的时间范围 。"
 
 msgid "Set the in frame of the selected time range of the timeline."
-msgstr ""
+msgstr "设定时间范围为所选择的时间范围 。"
 
 msgid "Set the in seconds of the selected time range of the timeline."
-msgstr ""
+msgstr "以所选时间范围为秒设置时间范围 。"
 
 msgid "Set the out time of the selected time range of the timeline."
-msgstr ""
+msgstr "设定选定时间范围的时间范围 。"
 
 msgid "Set the out frame of the selected time range of the timeline."
-msgstr ""
+msgstr "设定时间表的选定时间范围框架 。"
 
 msgid "Set the out seconds of the selected time range of the timeline."
-msgstr ""
+msgstr "设定所选择的时间范围秒数 。"
 
 msgid "Current time in timeline."
-msgstr ""
+msgstr "目前的时间在时间表上。"
 
 msgid "Current frame in timeline."
-msgstr ""
+msgstr "目前的时间表框架。"
 
 msgid "Current seconds in timeline."
-msgstr ""
+msgstr "时间的当前秒数 。"
 
 msgid "Return current loop mode of timeline."
-msgstr ""
+msgstr "返回当前时间周期模式 。"
 
 msgid "Set current loop mode of timeline."
-msgstr ""
+msgstr "设置当前时间框架环状模式 。"
 
 msgid "Gets the current FPS of timeline."
-msgstr ""
+msgstr "FPS"
 
 msgid "Gets the default speed of the timeline."
-msgstr ""
+msgstr "获得时间线的默认速度 。"
 
 msgid "Set current FPS of timeline."
-msgstr ""
+msgstr "FPS"
 
 msgid "Value less than 0"
-msgstr ""
+msgstr "值小于0"
 
 msgid ""
 "\n"
@@ -137,102 +163,104 @@ msgid ""
 "\n"
 "Contains all settings functions.\n"
 msgstr ""
+"\n"
+"\n"
 
 msgid "Returns whether to check for updates at start up."
-msgstr ""
+msgstr "返回是否在启动时检查更新 。"
 
 msgid "Retrieve the cache memory setting in gigabytes."
-msgstr ""
+msgstr "GB"
 
 msgid "Set the cache memory setting in gigabytes."
-msgstr ""
+msgstr "GB"
 
 msgid "Retrieve Read Ahead cache in seconds."
-msgstr ""
+msgstr "Read Ahead"
 
 msgid "Set Read Ahead cache in seconds."
-msgstr ""
+msgstr "数秒后设定读取头缓存 。"
 
 msgid "Retrieve Read Behind cache in seconds."
-msgstr ""
+msgstr "Read Behind"
 
 msgid "Set Read Behind cache in seconds."
-msgstr ""
+msgstr "Read Behind"
 
 msgid "Set file sequence audio."
-msgstr ""
+msgstr "设置文件序列音频 。"
 
 msgid "Get file sequence audio."
-msgstr ""
+msgstr "获取文件序列音频 。"
 
 msgid "Set file sequence audio file name."
-msgstr ""
+msgstr "设置文件序列音频文件名 。"
 
 msgid "Get file sequence audio file name."
-msgstr ""
+msgstr "获取文件序列音频文件名 。"
 
 msgid "Set file sequence audio directory."
-msgstr ""
+msgstr "设置文件序列音频目录 。"
 
 msgid "Get file sequence audio directory."
-msgstr ""
+msgstr "获取文件序列音频目录 。"
 
 msgid "Set maximum file sequence digits."
-msgstr ""
+msgstr "设定最大文件序列位数 。"
 
 msgid "Get maximum file sequence digits."
-msgstr ""
+msgstr "获取最大文件序列位数 。"
 
 msgid "Set Timer Mode."
-msgstr ""
+msgstr "设定定时器模式 。"
 
 msgid "Get Timer Mode."
-msgstr ""
+msgstr "获取定时器模式 。"
 
 msgid "Set Audio Buffer Frame Count."
-msgstr ""
+msgstr "设定音频缓冲框架计数 。"
 
 msgid "Get Audio Buffer Frame Count."
-msgstr ""
+msgstr "获取音频缓冲框架计数 。"
 
 msgid "Set Video Request Count."
-msgstr ""
+msgstr "设定视频请求计数 。"
 
 msgid "Get Video Request Count."
-msgstr ""
+msgstr "获取视频请求计数 。"
 
 msgid "Set Audio Request Count."
-msgstr ""
+msgstr "设定音频请求计数 。"
 
 msgid "Get Audio Request Count."
-msgstr ""
+msgstr "获取音频请求计数 。"
 
 msgid "Set Sequence Thread Count."
-msgstr ""
+msgstr "设置序列线索计数 。"
 
 msgid "Get Sequence Thread Count."
-msgstr ""
+msgstr "获取序列线索计数 。"
 
 msgid "Set FFmpeg YUV To RGB Conversion."
-msgstr ""
+msgstr "FFmpeg YUVRGB"
 
 msgid "Get FFmpeg YUV To RGB Conversion."
-msgstr ""
+msgstr "FFmpeg YUVRGB"
 
 msgid "Set FFmpeg Color Accuracy."
-msgstr ""
+msgstr "FFmpeg"
 
 msgid "Get FFmpeg Color Accuracy."
-msgstr ""
+msgstr "FFmpeg"
 
 msgid "Set FFmpeg Thread Count."
-msgstr ""
+msgstr "FFmpeg"
 
 msgid "Get FFmpeg Thread Count."
-msgstr ""
+msgstr "FFmpeg"
 
 msgid "No session name established, cannot save."
-msgstr ""
+msgstr "未建立会话名称, 无法保存 。"
 
 msgid ""
 "\n"
@@ -240,51 +268,53 @@ msgid ""
 "\n"
 "Used to manage everything related to sessions.\n"
 msgstr ""
+"\n"
+"\n"
 
 msgid "Returns the current session metadata."
-msgstr ""
+msgstr "返回当前会话元数据。"
 
 msgid "Returns the current metadata for a key."
-msgstr ""
+msgstr "返回当前按键元数据。"
 
 msgid "Sets all the session metadata for a session."
-msgstr ""
+msgstr "设置会话的全部会话元数据 。"
 
 msgid "Sets the session metadata for a key."
-msgstr ""
+msgstr "设置密钥的会话元数据 。"
 
 msgid "Clears the current session metadata."
-msgstr ""
+msgstr "清除当前会话元数据 。"
 
 msgid "Returns current session file."
-msgstr ""
+msgstr "返回当前会话文件 。"
 
 msgid "Sets the current session file."
-msgstr ""
+msgstr "设置当前会话文件 。"
 
 msgid "Open a session file."
-msgstr ""
+msgstr "打开会话文件 。"
 
 msgid "Save a session file."
-msgstr ""
+msgstr "保存会话文件 。"
 
 msgid "Duplicated Python plugin {0} in {1} and {2}."
-msgstr ""
+msgstr "{1}{2}Python{0}"
 
 msgid ""
 "Expected a tuple containing a Python function and a string with menu options "
 "in it."
-msgstr ""
+msgstr "Python"
 
 msgid ""
 "Expected a handle to a Python function or to a tuple containing a Python "
 "function and a string with menu options in it."
-msgstr ""
+msgstr "PythonPython"
 
 msgid ""
 "Please override the menus method by returning a valid dict of key menus, "
 "values methods."
-msgstr ""
+msgstr "请返回有效的按键菜单、 值方法, 以覆盖菜单方法 。"
 
 msgid ""
 "\n"
@@ -293,10 +323,15 @@ msgid ""
 "Contains all classes related to python plugins.\n"
 "\n"
 msgstr ""
+"\n"
+"Plugin module.\n"
+"\n"
+"Contains all classes related to python plugins.\n"
+"\n"
 
 msgid ""
 "Whether a plugin is active or not.  If not overriden, the default is True."
-msgstr ""
+msgstr "True"
 
 msgid ""
 "\n"
@@ -307,6 +342,13 @@ msgid ""
 "    return menus\n"
 "\n"
 msgstr ""
+"\n"
+"Dictionary of menu entries with callbacks, like:\n"
+"\n"
+"def menus(self):\n"
+"    menus = { \"Nem Menu/Hello\" : self.run }\n"
+"    return menus\n"
+"\n"
 
 msgid ""
 "\n"
@@ -354,24 +396,68 @@ msgid ""
 "        return menus\n"
 "\n"
 msgstr ""
+"\n"
+"\n"
+"import mrv2\n"
+"from mrv2 import plugin\n"
+"\n"
+"class DemoPlugin(plugin.Plugin):\n"
+"    def __init__(self):\n"
+"        \"\"\"\n"
+"        Constructor for DemoPlugin.\n"
+"\n"
+"        Define your own variables here.\n"
+"        \"\"\"\n"
+"        super().__init__()\n"
+"\n"
+"    def run(self):\n"
+"        \"\"\"\n"
+"        Example method used for the callback.\n"
+"        \"\"\"\n"
+"        print(\"Hello from Python plugin\")\n"
+"\n"
+"    def active(self):\n"
+"        \"\"\"\n"
+"        Optional method to return whether the plug-in is active or not.\n"
+"\n"
+"\n"
+"        :return: True if the plug-in is active, False otherwise.\n"
+"        :rtype: bool\n"
+"\n"
+"        \"\"\"\n"
+"        return True\n"
+"\n"
+"    def menus(self):\n"
+"        \"\"\"\n"
+"        Dictionary of menu entries as keys with callbacks as values.\n"
+"\n"
+"\n"
+"        :return: A dictionary of menu entries and their corresponding "
+"callbacks.\n"
+"        :rtype: dict\n"
+"\n"
+"        \"\"\"\n"
+"        menus = {\"New Menu/Hello\": self.run}\n"
+"        return menus\n"
+"\n"
 
 msgid "No playlist matched item."
-msgstr ""
+msgstr "没有符合播放列表的项目 。"
 
 msgid "No playlist matched file name."
-msgstr ""
+msgstr "没有符合播放列表的文件名 。"
 
 msgid "No playlist loaded."
-msgstr ""
+msgstr "未装入播放列表 。"
 
 msgid "No playlist selected."
-msgstr ""
+msgstr "未选择播放列表 。"
 
 msgid "Not an EDL playlist to add clips to."
-msgstr ""
+msgstr "EDL"
 
 msgid "Could not find clip in loaded clips."
-msgstr ""
+msgstr "无法在已装入的剪辑中找到剪辑 。"
 
 msgid ""
 "\n"
@@ -379,27 +465,29 @@ msgid ""
 "\n"
 "Contains all functions and classes related to the playlists.\n"
 msgstr ""
+"\n"
+"\n"
 
 msgid "List playlist items."
-msgstr ""
+msgstr "列出播放列表项目 。"
 
 msgid "Select a playlist by FileModelItem."
-msgstr ""
+msgstr "FileModelItem"
 
 msgid "Select a playlist by fileName."
-msgstr ""
+msgstr "根据文件选择播放列表"
 
 msgid "Select a playlist by index."
-msgstr ""
+msgstr "根据索引选择播放列表。"
 
 msgid "Add a clip to currently selected Playlist EDL."
-msgstr ""
+msgstr "EDL"
 
 msgid "Save current .otio file with relative paths."
-msgstr ""
+msgstr ".otio"
 
 msgid "unsupported operand type(s) for {0}: RationalTime and {1}"
-msgstr ""
+msgstr "{0} RationalTime{1}"
 
 msgid ""
 "\n"
@@ -407,6 +495,10 @@ msgid ""
 "rate` seconds.\n"
 "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 msgstr ""
+"\n"
+"The RationalTime class represents a measure of time of :math:`rt.value/rt."
+"rate` seconds.\n"
+"It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 
 msgid ""
 "\n"
@@ -414,15 +506,19 @@ msgid ""
 "value or the rate are a NaN value\n"
 "or if the rate is less than or equal to zero.\n"
 msgstr ""
+"\n"
+"Returns true if the time is invalid. The time is considered invalid if the "
+"value or the rate are a NaN value\n"
+"or if the rate is less than or equal to zero.\n"
 
 msgid "Returns the time value for time converted to new_rate."
-msgstr ""
+msgstr "NEW_RATE"
 
 msgid "Returns the time for time converted to new_rate."
-msgstr ""
+msgstr "NEW_RATE"
 
 msgid "Returns the time value for \"self\" converted to new_rate."
-msgstr ""
+msgstr "new_rateself"
 
 msgid ""
 "\n"
@@ -432,6 +528,12 @@ msgid ""
 "For example, the duration of a clip from frame 10 to frame 15 is 5 frames. "
 "Result will be in the rate of start_time.\n"
 msgstr ""
+"\n"
+"Compute the duration of samples from first to last (excluding last). This is "
+"not the same as distance.\n"
+"\n"
+"For example, the duration of a clip from frame 10 to frame 15 is 5 frames. "
+"Result will be in the rate of start_time.\n"
 
 msgid ""
 "\n"
@@ -441,35 +543,41 @@ msgid ""
 "For example, the duration of a clip from frame 10 to frame 15 is 6 frames. "
 "Result will be in the rate of start_time.\n"
 msgstr ""
+"\n"
+"Compute the duration of samples from first to last (including last). This is "
+"not the same as distance.\n"
+"\n"
+"For example, the duration of a clip from frame 10 to frame 15 is 6 frames. "
+"Result will be in the rate of start_time.\n"
 
 msgid "Returns true if the rate is valid for use with timecode."
-msgstr ""
+msgstr "true"
 
 msgid ""
 "Returns the first valid timecode rate that has the least difference from the "
 "given value."
-msgstr ""
+msgstr "返回第一个与给定值最小差的有效时间编码率。"
 
 msgid "Turn a frame number and rate into a :class:`~RationalTime` object."
-msgstr ""
+msgstr ": class: `~ RationalTime`"
 
 msgid "Returns the frame number based on the current rate."
-msgstr ""
+msgstr "根据当前速率返回框架编号。"
 
 msgid "Returns the frame number based on the given rate."
-msgstr ""
+msgstr "根据给定的速率返回框架编号。"
 
 msgid "Convert to timecode (``HH:MM:SS;FRAME``)"
-msgstr ""
+msgstr "(`` HH: MM: SS; FRAME ``)"
 
 msgid ""
 "Convert a timecode string (``HH:MM:SS;FRAME``) into a :class:`~RationalTime`."
-msgstr ""
+msgstr "(`` HH: MM: SS; FRAME ``): class: `~ RationalTime`"
 
 msgid ""
 "Convert a time with microseconds string (``HH:MM:ss`` where ``ss`` is an "
 "integer or a decimal number) into a :class:`~RationalTime`."
-msgstr ""
+msgstr " `` HH: MM: ss `` `` ss ``: class: `~ RationalTime`"
 
 msgid ""
 "\n"
@@ -479,6 +587,12 @@ msgid ""
 "time range) and\n"
 ":meth:`end_time_exclusive` can be computed.\n"
 msgstr ""
+"\n"
+"The TimeRange class represents a range in time. It encodes the start time "
+"and the duration,\n"
+"meaning that :meth:`end_time_inclusive` (last portion of a sample in the "
+"time range) and\n"
+":meth:`end_time_exclusive` can be computed.\n"
 
 msgid ""
 "\n"
@@ -493,6 +607,14 @@ msgid ""
 "In other words, the last frame with data, even if the last frame is "
 "fractional.\n"
 msgstr ""
+"\n"
+"\n"
+"(0, 24)(10, 24) \n"
+"(24)\n"
+"\n"
+"(0, 24)(10.5, 24) \n"
+"(10, 24)\n"
+"\n"
 
 msgid ""
 "\n"
@@ -504,21 +626,35 @@ msgid ""
 "If start frame is 10 and duration is 5.5, then end_time_exclusive is\n"
 "15.5, because the last time with data in this range is 15.\n"
 msgstr ""
+"\n"
+"Time of the first sample outside the time range.\n"
+"\n"
+"If start frame is 10 and duration is 5, then end_time_exclusive is 15,\n"
+"because the last time with data in this range is 14.\n"
+"\n"
+"If start frame is 10 and duration is 5.5, then end_time_exclusive is\n"
+"15.5, because the last time with data in this range is 15.\n"
 
 msgid "Construct a new :class:`~TimeRange` that is this one extended by other."
-msgstr ""
+msgstr ": class: `~ TimeRange' "
 
 msgid ""
 "\n"
 "Clamp 'other' (:class:`~RationalTime`) according to\n"
 ":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
 msgstr ""
+"\n"
+"Clamp 'other' (:class:`~RationalTime`) according to\n"
+":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
 
 msgid ""
 "\n"
 "Clamp 'other' (:class:`~TimeRange`) according to\n"
 ":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
 msgstr ""
+"\n"
+"Clamp 'other' (:class:`~TimeRange`) according to\n"
+":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
 
 msgid ""
 "\n"
@@ -532,6 +668,16 @@ msgid ""
 "   [      this      ]\n"
 "\n"
 msgstr ""
+"\n"
+"The start of `this` precedes `other`.\n"
+"`other` precedes the end of `this`.\n"
+"::\n"
+"\n"
+"         other\n"
+"           |\n"
+"           *\n"
+"   [      this      ]\n"
+"\n"
 
 msgid ""
 "\n"
@@ -544,6 +690,15 @@ msgid ""
 "\n"
 "The converse would be ``other.contains(this)``\n"
 msgstr ""
+"\n"
+"The start of `this` precedes start of `other`.\n"
+"The end of `this` antecedes end of `other`.\n"
+"::\n"
+"\n"
+"        [ other ]\n"
+"   [      this      ]\n"
+"\n"
+"The converse would be ``other.contains(this)``\n"
 
 msgid ""
 "\n"
@@ -556,6 +711,15 @@ msgid ""
 "   [    this    ]\n"
 "\n"
 msgstr ""
+"\n"
+"`this` contains `other`.\n"
+"::\n"
+"\n"
+"        other\n"
+"         |\n"
+"         *\n"
+"   [    this    ]\n"
+"\n"
 
 msgid ""
 "\n"
@@ -570,6 +734,17 @@ msgid ""
 "\n"
 "The converse would be ``other.overlaps(this)``\n"
 msgstr ""
+"\n"
+"The start of `this` strictly precedes end of `other` by a value >= "
+"`epsilon_s`.\n"
+"The end of `this` strictly antecedes start of `other` by a value >= "
+"`epsilon_s`.\n"
+"::\n"
+"\n"
+"   [ this ]\n"
+"       [ other ]\n"
+"\n"
+"The converse would be ``other.overlaps(this)``\n"
 
 msgid ""
 "\n"
@@ -581,6 +756,14 @@ msgid ""
 "   [ this ]    *\n"
 "\n"
 msgstr ""
+"\n"
+"The end of `this` strictly precedes `other` by a value >= `epsilon_s`.\n"
+"::\n"
+"\n"
+"             other\n"
+"               |\n"
+"   [ this ]    *\n"
+"\n"
 
 msgid ""
 "\n"
@@ -592,6 +775,14 @@ msgid ""
 "\n"
 "The converse would be ``other.meets(this)``\n"
 msgstr ""
+"\n"
+"The end of `this` strictly equals the start of `other` and\n"
+"the start of `this` strictly equals the end of `other`.\n"
+"::\n"
+"\n"
+"   [this][other]\n"
+"\n"
+"The converse would be ``other.meets(this)``\n"
 
 msgid ""
 "\n"
@@ -604,6 +795,15 @@ msgid ""
 "     [ this ]\n"
 "\n"
 msgstr ""
+"\n"
+"The start of `this` strictly equals `other`.\n"
+"::\n"
+"\n"
+"   other\n"
+"     |\n"
+"     *\n"
+"     [ this ]\n"
+"\n"
 
 msgid ""
 "\n"
@@ -617,6 +817,16 @@ msgid ""
 "\n"
 "The converse would be ``other.begins(this)``\n"
 msgstr ""
+"\n"
+"The start of `this` strictly equals the start of `other`.\n"
+"The end of `this` strictly precedes the end of `other` by a value >= "
+"`epsilon_s`.\n"
+"::\n"
+"\n"
+"   [ this ]\n"
+"   [    other    ]\n"
+"\n"
+"The converse would be ``other.begins(this)``\n"
 
 msgid ""
 "\n"
@@ -629,6 +839,15 @@ msgid ""
 "   [ this ]\n"
 "\n"
 msgstr ""
+"\n"
+"The end of `this` strictly equals `other`.\n"
+"::\n"
+"\n"
+"        other\n"
+"          |\n"
+"          *\n"
+"   [ this ]\n"
+"\n"
 
 msgid ""
 "\n"
@@ -642,6 +861,16 @@ msgid ""
 "\n"
 "The converse would be ``other.finishes(this)``\n"
 msgstr ""
+"\n"
+"The start of `this` strictly antecedes the start of `other` by a value >= "
+"`epsilon_s`.\n"
+"The end of `this` strictly equals the end of `other`.\n"
+"::\n"
+"\n"
+"           [ this ]\n"
+"   [     other    ]\n"
+"\n"
+"The converse would be ``other.finishes(this)``\n"
 
 msgid ""
 "\n"
@@ -656,6 +885,17 @@ msgid ""
 "\n"
 "The converse would be ``other.finishes(this)``\n"
 msgstr ""
+"\n"
+"The start of `this` precedes or equals the end of `other` by a value >= "
+"`epsilon_s`.\n"
+"The end of `this` antecedes or equals the start of `other` by a value >= "
+"`epsilon_s`.\n"
+"::\n"
+"\n"
+"   [    this    ]           OR      [    other    ]\n"
+"        [     other    ]                    [     this    ]\n"
+"\n"
+"The converse would be ``other.finishes(this)``\n"
 
 msgid ""
 "\n"
@@ -665,6 +905,12 @@ msgid ""
 "For example, if start_time is 1 and end_time is 10, the returned will have a "
 "duration of 9.\n"
 msgstr ""
+"\n"
+"Creates a :class:`~TimeRange` from start and end :class:`~RationalTime`\\s "
+"(exclusive).\n"
+"\n"
+"For example, if start_time is 1 and end_time is 10, the returned will have a "
+"duration of 9.\n"
 
 msgid ""
 "\n"
@@ -674,6 +920,12 @@ msgid ""
 "For example, if start_time is 1 and end_time is 10, the returned will have a "
 "duration of 10.\n"
 msgstr ""
+"\n"
+"Creates a :class:`~TimeRange` from start and end :class:`~RationalTime`\\s "
+"(inclusive).\n"
+"\n"
+"For example, if start_time is 1 and end_time is 10, the returned will have a "
+"duration of 10.\n"
 
 msgid ""
 "\n"
@@ -681,21 +933,23 @@ msgid ""
 "\n"
 "Contains all classes and enums related to media. \n"
 msgstr ""
+"\n"
+"\n"
 
 msgid "Compare mode :class:`mrv2.media.CompareMode`."
-msgstr ""
+msgstr "mode: class: `mrv2.media.CompareMode`"
 
 msgid "Wipe center in X and Y :class:`mrv2.math.Vector2f`."
-msgstr ""
+msgstr "XY: class: `mrv2.math.Vector2f`"
 
 msgid "Wipe Rotation."
-msgstr ""
+msgstr "擦拭旋转。"
 
 msgid "Overlay ( A over B )"
-msgstr ""
+msgstr " A/B "
 
 msgid "Comparison options."
-msgstr ""
+msgstr "比较备选办法。"
 
 msgid ""
 "\n"
@@ -703,21 +957,23 @@ msgid ""
 "\n"
 "Contains all math classes.\n"
 msgstr ""
+"\n"
+"\n"
 
 msgid "Vector of 2 integers."
-msgstr ""
+msgstr "2"
 
 msgid "Vector of 2 floats."
-msgstr ""
+msgstr "2"
 
 msgid "Vector of 3 floats."
-msgstr ""
+msgstr "3"
 
 msgid "Vector of 4 floats."
-msgstr ""
+msgstr "4"
 
 msgid "Size of 2 integers."
-msgstr ""
+msgstr "2"
 
 msgid ""
 "\n"
@@ -725,396 +981,398 @@ msgid ""
 "\n"
 "Contains all classes and enums related to image controls. \n"
 msgstr ""
+"\n"
+"\n"
 
 msgid "Red Channel."
-msgstr ""
+msgstr "红色频道"
 
 msgid "Green Channel."
-msgstr ""
+msgstr "绿色频道"
 
 msgid "Blue Channel."
-msgstr ""
+msgstr "蓝频道"
 
 msgid "Alpha Channel."
-msgstr ""
+msgstr "Alpha"
 
 msgid "Image mirroring."
-msgstr ""
+msgstr "图像镜像。"
 
 msgid "Flip image on X."
-msgstr ""
+msgstr "X"
 
 msgid "Flip image on Y."
-msgstr ""
+msgstr "Y"
 
 msgid "Enabled Levels."
-msgstr ""
+msgstr "启用关卡 。"
 
 msgid "Add a :class:`mrv2.math.Vector3f` to image."
-msgstr ""
+msgstr ": class: `mrv2.math.Vector3f`"
 
 msgid "Change a :class:`mrv2.math.Vector3f` of brightness to image."
-msgstr ""
+msgstr "a: class: `mrv2.math.Vector3f`image"
 
 msgid "Change a :class:`mrv2.math.Vector3f` of contrast to image."
-msgstr ""
+msgstr "a: class: `mrv2.math.Vector3f`"
 
 msgid "Change a :class:`mrv2.math.Vector3f` of saturation to image."
-msgstr ""
+msgstr "a: class: `mrv2.math.Vector3f`image"
 
 msgid "Change tint of image to image between 0 and 1."
-msgstr ""
+msgstr "01"
 
 msgid "Invert the color values."
-msgstr ""
+msgstr "反转颜色值 。"
 
 msgid "Color values."
-msgstr ""
+msgstr "颜色值 。"
 
 msgid "In Low Level value."
-msgstr ""
+msgstr "低水平价值。"
 
 msgid "In High Level value."
-msgstr ""
+msgstr "高档价值。"
 
 msgid "Gamma Level value."
-msgstr ""
+msgstr "Gamma Level"
 
 msgid "Out Low Level value."
-msgstr ""
+msgstr "Out Low Level"
 
 msgid "Out High Level value."
-msgstr ""
+msgstr "Out High Level value."
 
 msgid "Levels values."
-msgstr ""
+msgstr "水平值。"
 
 msgid "Enabled EXR display."
-msgstr ""
+msgstr "EXR"
 
 msgid "Exposure value."
-msgstr ""
+msgstr "接触值。"
 
 msgid "Defog value."
-msgstr ""
+msgstr "Defog"
 
 msgid "kneeLow value."
-msgstr ""
+msgstr "kneeLow"
 
 msgid "kneeHigh value."
-msgstr ""
+msgstr "kneeHigh value."
 
 msgid "EXR display values."
-msgstr ""
+msgstr "EXR 显示值。"
 
 msgid "Enabled Soft Clip."
-msgstr ""
+msgstr "启用软剪切 。"
 
 msgid "Soft clip value."
-msgstr ""
+msgstr "软弹夹价值。"
 
 msgid "Minify filter :class:`mrv2.image.ImageFilter`."
-msgstr ""
+msgstr "Minify filter :class:`mrv2.image.ImageFilter`."
 
 msgid "Magnify filter :class:`mrv2.image.ImageFilter`."
-msgstr ""
+msgstr "Magnify filter :class:`mrv2.image.ImageFilter`."
 
 msgid "Image filters."
-msgstr ""
+msgstr "图像过滤器。"
 
 msgid "Color channels :class:`mrv2.image.Channels`."
-msgstr ""
+msgstr "Color channels :class:`mrv2.image.Channels`."
 
 msgid "Mirror on X, Y or both :class:`mrv2.image.Mirror`."
-msgstr ""
+msgstr "Mirror on X, Y or both :class:`mrv2.image.Mirror`."
 
 msgid "Color options :class:`mrv2.image.Color`."
-msgstr ""
+msgstr "Color options :class:`mrv2.image.Color`."
 
 msgid "Levels options :class:`mrv2.image.Levels`."
-msgstr ""
+msgstr "Levels options :class:`mrv2.image.Levels`."
 
 msgid "EXR Display options :class:`mrv2.image.EXRDisplay`.."
-msgstr ""
+msgstr "EXR Display options :class:`mrv2.image.EXRDisplay`.."
 
 msgid "Soft Clip options :class:`mrv2.image.SoftClip`.."
-msgstr ""
+msgstr "Soft Clip options :class:`mrv2.image.SoftClip`.."
 
 msgid "Display options."
-msgstr ""
+msgstr "显示选项 。"
 
 msgid "LUT enabled."
-msgstr ""
+msgstr "LUT"
 
 msgid "LUT filename."
-msgstr ""
+msgstr "LUT"
 
 msgid "LUT transformation order."
-msgstr ""
+msgstr "LUT"
 
 msgid "LUT options."
-msgstr ""
+msgstr "LUT"
 
 msgid "Video Levels."
-msgstr ""
+msgstr "视频级别。"
 
 msgid "Alpha blending algorithm"
-msgstr ""
+msgstr "Alpha blending algorithm"
 
 msgid "Image Filters"
-msgstr ""
+msgstr "图像过滤器"
 
 msgid "Image options."
-msgstr ""
+msgstr "图像选项 。"
 
 msgid "Environment Map type."
-msgstr ""
+msgstr "环境地图类型。"
 
 msgid "Horizontal aperture"
-msgstr ""
+msgstr "水平孔径"
 
 msgid "Vertical aperture"
-msgstr ""
+msgstr "垂直孔径"
 
 msgid "Focal Length"
-msgstr ""
+msgstr "Focal Length"
 
 msgid "Rotation on X"
-msgstr ""
+msgstr "X(+/-)"
 
 msgid "Rotation on Y"
-msgstr ""
+msgstr "Y(+/-)"
 
 msgid "Subdivision on X"
-msgstr ""
+msgstr "X"
 
 msgid "Subdivision on Y"
-msgstr ""
+msgstr "Y"
 
 msgid "Spin"
-msgstr ""
+msgstr "旋转"
 
 msgid "EnvironmentMap options."
-msgstr ""
+msgstr "EnvironmentMap"
 
 msgid "Stereo 3d input :class:`mrv2.image.StereoInput`.."
-msgstr ""
+msgstr "3D: class: `mrv2.image.StereoInput`.."
 
 msgid "Stereo 3d output :class:`mrv2.image.StereoOutput`.."
-msgstr ""
+msgstr "3d: class: `mrv2.image.StereoOutput`.."
 
 msgid "Separation between left and right eye."
-msgstr ""
+msgstr "左眼和右眼分开。"
 
 msgid "Swap left and right eye"
-msgstr ""
+msgstr "左眼和右眼互换"
 
 msgid "Stereo3D options."
-msgstr ""
+msgstr "Stereo3D options."
 
 msgid "Background type :class:`mrv2.image.Background`.."
-msgstr ""
+msgstr "Background type :class:`mrv2.image.Background`.."
 
 msgid "Checkers Color0 :class:`mrv2.image.Color4f`.."
-msgstr ""
+msgstr "Checkers Color0: class: `mrv2.image.Color4f`.."
 
 msgid "Checkers Color1 :class:`mrv2.image.Color4f`.."
-msgstr ""
+msgstr "Checkers Color1: class: `mrv2.image.Color4f`.."
 
 msgid "Checkers Size :class:`mrv2.math.Size2i`.."
-msgstr ""
+msgstr "Checkers Size: class: `mrv2.math.Size2i`.."
 
 msgid "Background options."
-msgstr ""
+msgstr "背景备选方案。"
 
 msgid "Gets the current background options."
-msgstr ""
+msgstr "获取当前背景选项 。"
 
 msgid "Sets the current background options."
-msgstr ""
+msgstr "设置当前背景选项。"
 
 msgid "Gets the current OCIO config file."
-msgstr ""
+msgstr "Gets the current OCIO config file."
 
 msgid "Sets the current OCIO config file."
-msgstr ""
+msgstr "Sets the current OCIO config file."
 
 msgid "Gets the current input color space."
-msgstr ""
+msgstr "获取当前输入的颜色空间 。"
 
 msgid "Gets a list of all input color spaces."
-msgstr ""
+msgstr "获取所有输入颜色空间的列表 。"
 
 msgid "Set the input color space."
-msgstr ""
+msgstr "设置输入颜色空间 。"
 
 msgid "Gets the current Display/View."
-msgstr ""
+msgstr "获取当前显示/视图。"
 
 msgid "Gets the list of Displays/Views."
-msgstr ""
+msgstr "获取“显示/意见”列表。"
 
 msgid "Set an OCIO Display/View."
-msgstr ""
+msgstr "设置 OCIO 显示器/查看。"
 
 msgid "Gets the current OCIO look."
-msgstr ""
+msgstr "Gets the current OCIO look."
 
 msgid "Gets a list of all OCIO looks."
-msgstr ""
+msgstr "Gets a list of all OCIO looks."
 
 msgid "Set the OCIO look by name."
-msgstr ""
+msgstr "Set the OCIO look by name."
 
 msgid "Return all the files."
-msgstr ""
+msgstr "把所有文件都退回去"
 
 msgid "Return all the active files."
-msgstr ""
+msgstr "返回所有活动文件 。"
 
 msgid "Return the A file item."
-msgstr ""
+msgstr "A"
 
 msgid "Return the A file index."
-msgstr ""
+msgstr "A"
 
 msgid "Return the list of B files."
-msgstr ""
+msgstr "B"
 
 msgid "Return the list of B indexes."
-msgstr ""
+msgstr "B"
 
 msgid "Close the current A file."
-msgstr ""
+msgstr "A"
 
 msgid "Close all files."
-msgstr ""
+msgstr "关闭所有文件 。"
 
 msgid "Set the A file index."
-msgstr ""
+msgstr "A"
 
 msgid "Set a new B file index."
-msgstr ""
+msgstr "B"
 
 msgid "Set a new stereo file index."
-msgstr ""
+msgstr "设置新的立体声文件索引 。"
 
 msgid "Toggle the B file index."
-msgstr ""
+msgstr "B"
 
 msgid "Clear the B indexes."
-msgstr ""
+msgstr "B"
 
 msgid "Return the list of layers."
-msgstr ""
+msgstr "返回层次列表 。"
 
 msgid "Set layer for file item."
-msgstr ""
+msgstr "设置文件项的层 。"
 
 msgid "Set compare time."
-msgstr ""
+msgstr "设定比较时间 。"
 
 msgid "Get compare time."
-msgstr ""
+msgstr "比较时间。"
 
 msgid "Set the first version for current media."
-msgstr ""
+msgstr "设置当前媒体的第一个版本 。"
 
 msgid "Set the previous version for current media."
-msgstr ""
+msgstr "设定当前媒体的上一个版本 。"
 
 msgid "Set the next version for current media."
-msgstr ""
+msgstr "设定当前媒体的下一个版本 。"
 
 msgid "Set the last version for current media."
-msgstr ""
+msgstr "设定当前媒体的最后版本 。"
 
 msgid "Path :class:`mrv2.Path` to the File Media."
-msgstr ""
+msgstr "Path :class:`mrv2.Path` to the File Media."
 
 msgid "Audio path :class:`mrv2.Path` to the File Media if any."
-msgstr ""
+msgstr "Audio path :class:`mrv2.Path` to the File Media if any."
 
 msgid "Time range :class:`mrv2.TimeRange` of the File Media."
-msgstr ""
+msgstr "Time range :class:`mrv2.TimeRange` of the File Media."
 
 msgid "Speed (FPS) of the File Media."
-msgstr ""
+msgstr "Speed (FPS) of the File Media."
 
 msgid "Playback state :class:`mrv2.timeline.Playbacks` of the File Media."
-msgstr ""
+msgstr "Playback state :class:`mrv2.timeline.Playbacks` of the File Media."
 
 msgid "Loop state :class:`mrv2.timeline.Loop` of the File Media."
-msgstr ""
+msgstr "Loop state :class:`mrv2.timeline.Loop` of the File Media."
 
 msgid "Current time :class:`mrv2.RationalTime` of the File Media."
-msgstr ""
+msgstr "Current time :class:`mrv2.RationalTime` of the File Media."
 
 msgid "In/Out range :class:`mrv2.TimeRange` of the File Media."
-msgstr ""
+msgstr "在/外部范围:类:`mrv2.TimeRange' of the File Media."
 
 msgid "Video layer of the File Media."
-msgstr ""
+msgstr "文件媒体视频层 。"
 
 msgid "Volume of the File Media."
-msgstr ""
+msgstr "文件媒体量 。"
 
 msgid "Mute state of the File Media."
-msgstr ""
+msgstr "文件媒体静音状态 。"
 
 msgid "Audio offset of the File Media."
-msgstr ""
+msgstr "文件介质的音频偏移 。"
 
 msgid "Class used to hold a media item."
-msgstr ""
+msgstr "用于持有媒体项目的类 。"
 
 msgid "Save annotations."
-msgstr ""
+msgstr "保存注释 。"
 
 msgid "Save resolution."
-msgstr ""
+msgstr "保存分辨率 。"
 
 msgid "FFmpeg Profile."
-msgstr ""
+msgstr "FFmpeg"
 
 msgid "FFmpeg Preset."
-msgstr ""
+msgstr "FFmpeg"
 
 msgid "FFmpeg Pixel Format."
-msgstr ""
+msgstr "FFmpeg"
 
 msgid "FFmpeg video encoding with hardware if possible."
-msgstr ""
+msgstr "FFmpeg"
 
 msgid "FFmpeg Override color characteristics."
-msgstr ""
+msgstr "FFmpeg"
 
 msgid "FFmpeg Color Range."
-msgstr ""
+msgstr "FFmpeg"
 
 msgid "FFmpeg Color Space."
-msgstr ""
+msgstr "FFmpeg"
 
 msgid "FFmpeg Color Primaries."
-msgstr ""
+msgstr "FFmpeg"
 
 msgid "FFmpeg Color Transfer Characteristics."
-msgstr ""
+msgstr "FFmpeg"
 
 msgid "FFmpeg Audio Codec."
-msgstr ""
+msgstr "FFmpeg"
 
 msgid "OpenEXR's Compression."
-msgstr ""
+msgstr "OpenEXR"
 
 msgid "OpenEXR's Pixel Type."
-msgstr ""
+msgstr "OpenEXR"
 
 msgid "OpenEXR's Zip Compression Level."
-msgstr ""
+msgstr "OpenEXRZip"
 
 msgid "OpenEXR's DWA Compression Level."
-msgstr ""
+msgstr "OpenEXRDWA"
 
 msgid ""
 "\n"
@@ -1123,114 +1381,119 @@ msgid ""
 "Used to run main commands and get arguments and set the display, image, "
 "compare, LUT options.\n"
 msgstr ""
+"\n"
+"Command module.\n"
+"\n"
+"Used to run main commands and get arguments and set the display, image, "
+"compare, LUT options.\n"
 
 msgid ""
 "Get command-line arguments passed as single quoted string to -pythonArgs."
-msgstr ""
+msgstr "-pythonArgs"
 
 msgid "Open file with optional audio."
-msgstr ""
+msgstr "用可选音频打开文件 。"
 
 msgid "Compare two file items with a compare mode."
-msgstr ""
+msgstr "用比较模式比较两个文件项目 。"
 
 msgid "Close the file item."
-msgstr ""
+msgstr "关闭文件项 。"
 
 msgid "Close all file items."
-msgstr ""
+msgstr "关闭所有文件项目 。"
 
 msgid "Return the root path to the insallation of mrv2."
-msgstr ""
+msgstr "mrv2insallation"
 
 msgid "Return the path to preferences of mrv2."
-msgstr ""
+msgstr "mrv2"
 
 msgid "Return the display options."
-msgstr ""
+msgstr "返回显示选项。"
 
 msgid "Set the display options."
-msgstr ""
+msgstr "设置显示选项。"
 
 msgid "Return the LUT options."
-msgstr ""
+msgstr "LUT"
 
 msgid "Set the LUT options."
-msgstr ""
+msgstr "LUT"
 
 msgid "Return the image options."
-msgstr ""
+msgstr "返回图像选项 。"
 
 msgid "Set the image options."
-msgstr ""
+msgstr "设置图像选项 。"
 
 msgid "Return the environment map options."
-msgstr ""
+msgstr "返回环境地图选项。"
 
 msgid "Set the environment map options."
-msgstr ""
+msgstr "设置环境地图选项。"
 
 msgid "Set the compare options."
-msgstr ""
+msgstr "设置比较选项。"
 
 msgid "Set the stereo 3D options."
-msgstr ""
+msgstr "3D"
 
 msgid "Get the language of mrv2."
-msgstr ""
+msgstr "mrv2"
 
 msgid "Get the layers of the timeline (GUI)."
-msgstr ""
+msgstr "(GUI)"
 
 msgid "Get the version of mrv2."
-msgstr ""
+msgstr "mrv2"
 
 msgid ""
 "Call Fl::check to update the GUI and return the number of seconds that "
 "elapsed."
-msgstr ""
+msgstr "Fl:: checkGUI"
 
 msgid "Returns true if audio is muted."
-msgstr ""
+msgstr "true"
 
 msgid "Runs the same or a new mrv2 with a session file."
-msgstr ""
+msgstr "mrv2"
 
 msgid "Set the muting of the audio."
-msgstr ""
+msgstr "设定音频变异 。"
 
 msgid "Toggle Image Auto Normalize."
-msgstr ""
+msgstr "切换图像自动正常化 。"
 
 msgid "Toggle Data Window."
-msgstr ""
+msgstr "切换数据窗口 。"
 
 msgid "Toggle Display Window."
-msgstr ""
+msgstr "切换显示窗口 。"
 
 msgid "Toggle Ignored Display Window on OpenEXRs."
-msgstr ""
+msgstr "OpenEXR"
 
 msgid "Toggle Image invalid values."
-msgstr ""
+msgstr "切换图像无效值 。"
 
 msgid "Toggle Safe Areas."
-msgstr ""
+msgstr "切换安全区 。"
 
 msgid "Get the playback volume."
-msgstr ""
+msgstr "去拿回放音量"
 
 msgid "Set the playback volume."
-msgstr ""
+msgstr "设置播放音量 。"
 
 msgid "Save a movie or sequence from the front layer."
-msgstr ""
+msgstr "从前层保存一个电影或序列 。"
 
 msgid "Save an .otio file from the current selected image."
-msgstr ""
+msgstr ".otio"
 
 msgid "Save a PDF document with all annotations and notes."
-msgstr ""
+msgstr "PDF"
 
 msgid ""
 "\n"
@@ -1238,468 +1501,476 @@ msgid ""
 "\n"
 "Contains all functions and classes related to the annotationss.\n"
 msgstr ""
+"\n"
+"\n"
 
 msgid "Add notes annotations to current clip at a certain time."
-msgstr ""
+msgstr "在某个时间将注释添加到当前剪辑中 。"
 
 msgid "Add notes annotations to current clip at a certain frame."
-msgstr ""
+msgstr "在特定框架的当前剪辑中添加注释 。"
 
 msgid "Add notes annotations to current clip at certain seconds."
-msgstr ""
+msgstr "在特定秒后将注释添加到当前剪辑中 。"
 
 msgid "Open with Audio"
-msgstr ""
+msgstr "打开音频"
 
 msgid "Video"
-msgstr ""
+msgstr "视频视频视频视频视频"
 
 msgid "Audio"
-msgstr ""
+msgstr "音音频"
 
 msgid "OK"
-msgstr ""
+msgstr "好"
 
 msgid "Cancel"
-msgstr ""
+msgstr "取消取消"
 
 msgid "{0} - Channels: {1} {2} {3}"
-msgstr ""
+msgstr "{0} - Channels: {1} {2} {3}"
 
 msgid "Play timelines, movies, and image sequences."
-msgstr ""
+msgstr "播放时间表、电影和图像序列"
 
 msgid "Timelines, movies, image sequences, or folders."
-msgstr ""
+msgstr "时间线、电影、图像序列或文件夹。"
 
 msgid "Debug verbosity."
-msgstr ""
+msgstr "Debug "
 
 msgid "Audio file name."
-msgstr ""
+msgstr "音频文件名 。"
 
 msgid "A/B comparison \"B\" file name."
-msgstr ""
+msgstr "A/B “B” 比较文件名 。"
 
 msgid "A/B comparison mode."
-msgstr ""
+msgstr "A/B 比较模式。"
 
 msgid "A/B comparison wipe center."
-msgstr ""
+msgstr "A/B 比较擦拭中心。"
 
 msgid "A/B comparison wipe rotation."
-msgstr ""
+msgstr "A/B 比较擦拭旋转。"
 
 msgid "Create OpenTimelineIO EDL from the list of clips provided."
-msgstr ""
+msgstr "OpenTimelineIO EDL"
 
 msgid "OpenTimelineIO Edit mode."
-msgstr ""
+msgstr "OpenTimelineIO"
 
 msgid "Load the images as still images not sequences."
-msgstr ""
+msgstr "将图像装入静止图像, 而不是序列 。"
 
 msgid "Playback speed."
-msgstr ""
+msgstr "回放速度 。"
 
 msgid "Playback mode."
-msgstr ""
+msgstr "播放模式 。"
 
 msgid "Playback loop mode."
-msgstr ""
+msgstr "播放回路模式 。"
 
 msgid "Seek to the given time, in value/fps format.  Example: 50/30."
-msgstr ""
+msgstr "寻找给定时间, 以价值/ fps 格式表示。 例如: 50/30 。"
 
 msgid "Set the in/out points range in start/end/fps format, like 23/120/24."
-msgstr ""
+msgstr "以起始/结束/fps格式,例如 23/120/24 设置 / out点范围。"
 
 msgid "OpenColorIO input color space."
-msgstr ""
+msgstr "OpenColorIO"
 
 msgid "OpenColorIO display name."
-msgstr ""
+msgstr "OpenColorIO"
 
 msgid "OpenColorIO view name."
-msgstr ""
+msgstr "OpenColorIO"
 
 msgid "OpenColorIO look name."
-msgstr ""
+msgstr "OpenColorIO 外观名称 。"
 
 msgid "LUT file name."
-msgstr ""
+msgstr "LUT 文件名 。"
 
 msgid "LUT operation order."
-msgstr ""
+msgstr "LUT行动命令。"
 
 msgid "Python Script to run and exit."
-msgstr ""
+msgstr "运行和退出 Python 脚本 。"
 
 msgid ""
 "Python Arguments to pass to the Python script as a single quoted string like "
 "\"arg1 'arg2 asd' arg3\", stored in cmd.argv."
 msgstr ""
+"Python 参数, 用于传递到 Python 脚本, 以像“ arg1' arg2 asd' arg3” 这样的引用字"
+"符串, 存储在 cmd.argv 中 。"
 
 msgid "Reset settings to defaults."
-msgstr ""
+msgstr "重置设置为默认值 。"
 
 msgid "Reset hotkeys to defaults."
-msgstr ""
+msgstr "将热钥匙重置为默认值 。"
 
 msgid "Start a server.  Use -port to specify a port number."
-msgstr ""
+msgstr "启动服务器。 使用 - port 指定端口号 。"
 
 msgid "Connect to a server at <value>.  Use -port to specify a port number."
-msgstr ""
+msgstr "连接到 <value> 上的服务器。 使用 - port 指定端口号 。"
 
 msgid ""
 "Port number for the server to listen to or for the client to connect to."
-msgstr ""
+msgstr "服务器监听或客户端连接的端口号 。"
 
 msgid "Return the version and exit."
-msgstr ""
+msgstr "返回版本并退出 。"
 
 msgid "Cannot create window"
-msgstr ""
+msgstr "无法创建窗口"
 
 msgid "About mrv2"
-msgstr ""
+msgstr "关于 mrv2"
 
 msgid "Hide mrv2"
-msgstr ""
+msgstr "隐藏 mrv2"
 
 msgid "Hide Others"
-msgstr ""
+msgstr "隐藏其它"
 
 msgid "Services"
-msgstr ""
+msgstr "服务服务服务处"
 
 msgid "Show All"
-msgstr ""
+msgstr "全部显示全部显示"
 
 msgid "Quit mrv2"
-msgstr ""
+msgstr "退出 mrv2"
 
 msgid "Running from "
-msgstr ""
+msgstr "正在从"
 
 msgid "Could not read python script '{0}'"
-msgstr ""
+msgstr "无法读取 python 脚本 '{0}'"
 
 msgid "Running python script '{0}'"
-msgstr ""
+msgstr "运行 python 脚本 '{0}'"
 
 msgid "with Arguments:"
-msgstr ""
+msgstr "与参数( 参数) :"
 
 msgid "Python Error: "
-msgstr ""
+msgstr "Python 错误 :"
 
 msgid "Could not initialize NDI"
-msgstr ""
+msgstr "无法初始化 NDI"
 
 msgid "Filename '{0}' does not exist or does not have read permissions."
-msgstr ""
+msgstr "文件名 '{0}' 不存在, 或者没有读取权限 。"
 
 msgid "Files"
-msgstr ""
+msgstr "文件文件文件"
 
 msgid "Compare"
-msgstr ""
+msgstr "比较比"
 
 msgid "Playlist"
-msgstr ""
+msgstr "播放列表"
 
 msgid "Network"
-msgstr ""
+msgstr "网络网网"
 
 msgid "Stereo 3D"
-msgstr ""
+msgstr "Stereo 3D"
 
 msgid "Type"
-msgstr ""
+msgstr "类型类型类型"
 
 msgid "Client"
-msgstr ""
+msgstr "客户客户"
 
 msgid "Server"
-msgstr ""
+msgstr "服务器服务器"
 
 msgid "Host"
-msgstr ""
+msgstr "Host"
 
 msgid "Host name or IP to connect to.  For example: 127.0.0.1"
-msgstr ""
+msgstr "要连接的主机名或 IP 。 例如: 127.0.0.1"
 
 msgid "Previously used Hosts"
-msgstr ""
+msgstr "先前使用过的主机"
 
 msgid "Port"
-msgstr ""
+msgstr "港港端"
 
 msgid ""
 "Port to connect to.  Make sure your firewall and router allows read/write "
 "through it."
-msgstr ""
+msgstr "要连接的端口。 请确定您的防火墙和路由器允许通过它读写 。"
 
 msgid "Connect"
-msgstr ""
+msgstr "连接连接"
 
 msgid "Create"
-msgstr ""
+msgstr "创建创建"
 
 msgid "Disconnect"
-msgstr ""
+msgstr "断断连接"
 
 msgid "Shutdown"
-msgstr ""
+msgstr "关闭关闭"
 
 msgid "&File/&Open"
-msgstr ""
+msgstr "文件/开放"
 
 msgid "&File/&Save"
-msgstr ""
+msgstr "文件/保存"
 
 msgid "&Edit/&Undo"
-msgstr ""
+msgstr "编辑/撤消"
 
 msgid "&Edit/Cu&t"
-msgstr ""
+msgstr "编辑/剪切"
 
 msgid "&Edit/&Copy"
-msgstr ""
+msgstr "编辑/复制"
 
 msgid "&Edit/&Paste"
-msgstr ""
+msgstr "编辑/粘贴"
 
 msgid "&Edit/&Delete"
-msgstr ""
+msgstr "编辑/删除"
 
 msgid "&Edit/&Comment Selection"
-msgstr ""
+msgstr "编辑/注释选择"
 
 msgid "&Edit/&Uncomment Selection"
-msgstr ""
+msgstr "编辑/保留注释选择"
 
 msgid "&Search/&Find..."
-msgstr ""
+msgstr "搜索/查找..."
 
 msgid "&Search/F&ind Again"
-msgstr ""
+msgstr "搜索/再次查找"
 
 msgid "&Search/&Replace"
-msgstr ""
+msgstr "搜索/替换"
 
 msgid "&Search/&Replace Again"
-msgstr ""
+msgstr "搜索/再次替换"
 
 msgid "Clear/&Output"
-msgstr ""
+msgstr "清除/产出"
 
 msgid "Clear/&Editor"
-msgstr ""
+msgstr "清除/编辑"
 
 msgid "Editor/&Run Code"
-msgstr ""
+msgstr "编辑/运行代码"
 
 msgid "Editor/Toggle &Line Numbers"
-msgstr ""
+msgstr "编辑/切换行号"
 
 msgid "Editor/&Jump to Error"
-msgstr ""
+msgstr "编辑/跳转到错误"
 
 msgid "Editor/&External Editor"
-msgstr ""
+msgstr "编辑/外部"
 
 msgid "Scripts/Add To Script List"
-msgstr ""
+msgstr "脚本/添加到脚本列表"
 
 msgid "Scripts/%s"
-msgstr ""
+msgstr "脚本/%s"
 
 msgid ""
 "Type in your python code here.  Select an area to execute just a portion of "
 "it.  Press Keypad Enter to run it."
 msgstr ""
+"在此输入 python 代码。 选择一个区域执行它的一部分。 按 Keypad Enter 键运行"
+"它 。"
 
 msgid "Python file {0} already exists.  Do you want to overwrite it?"
-msgstr ""
+msgstr "Python 文件 {0} 已经存在。 您想要覆盖它吗?"
 
 msgid "No"
-msgstr ""
+msgstr "否 无"
 
 msgid "Yes"
-msgstr ""
+msgstr "是 是"
 
 msgid "Failed to open the file for writing."
-msgstr ""
+msgstr "打开文件以写入失败 。"
 
 msgid "Failed to write to the file."
-msgstr ""
+msgstr "写入文件失败 。"
 
 msgid "The stream is in an unrecoverable error state."
-msgstr ""
+msgstr "流体处于无法恢复的错误状态 。"
 
 msgid "Type your editor command"
-msgstr ""
+msgstr "键入编辑器命令"
 
 msgid "{0} will be replaced with the line number.  {1} with the file name"
-msgstr ""
+msgstr "{0} 将被替换为行号 。 {1} 将替换为文件名 。"
 
 msgid "Regular expression error: {0}"
-msgstr ""
+msgstr "正则表达式错误: {0}"
 
 msgid "Could not open python editor: {0}"
-msgstr ""
+msgstr "无法打开 python 编辑器: {0}"
 
 msgid "Search String:"
-msgstr ""
+msgstr "搜索字符串 :"
 
 msgid "No occurrences of '%s' found!"
-msgstr ""
+msgstr "找不到 '%s' 发生事件!"
 
 msgid "None"
-msgstr ""
+msgstr "无无无无无无无"
 
 msgid "Input"
-msgstr ""
+msgstr "投入投入投入投入投入"
 
 msgid "NDI Connection"
-msgstr ""
+msgstr "NDI 连接"
 
 msgid "Fast Format"
-msgstr ""
+msgstr "快速格式"
 
 msgid "Best Format"
-msgstr ""
+msgstr "最佳格式"
 
 msgid "With Audio"
-msgstr ""
+msgstr "带音频"
 
 msgid "Without Audio"
-msgstr ""
+msgstr "无音频"
 
 msgid "USD"
-msgstr ""
+msgstr "USD"
 
 msgid "Renderer"
-msgstr ""
+msgstr "设计者"
 
 msgid "Complexity"
-msgstr ""
+msgstr "复杂程度"
 
 msgid "Draw Mode"
-msgstr ""
+msgstr "绘制模式"
 
 msgid "Stage Cache"
-msgstr ""
+msgstr "缓存阶段"
 
 msgid "Disk Cache in GB"
-msgstr ""
+msgstr "GB 中的磁盘缓存"
 
 msgid "Toggle other eye stereo image."
-msgstr ""
+msgstr "切换其它眼睛立体声图像 。"
 
 msgid "Image"
-msgstr ""
+msgstr "图像图像图像图像"
 
 msgid "Output"
-msgstr ""
+msgstr "Output"
 
 msgid "Anaglyph"
-msgstr ""
+msgstr "形形体"
 
 msgid "Scanlines"
-msgstr ""
+msgstr "扫描线"
 
 msgid "Columns"
-msgstr ""
+msgstr "列列"
 
 msgid "Checkerboard"
-msgstr ""
+msgstr "棋盘"
 
 msgid "OpenGL"
-msgstr ""
+msgstr "OpenGL 打开GL"
 
 msgid "Adjustments"
-msgstr ""
+msgstr "调整调整数"
 
 msgid "Eye Separation"
-msgstr ""
+msgstr "眼眼隔离"
 
 msgid "Separation of left and right eye."
-msgstr ""
+msgstr "左眼和右眼分开。"
 
 msgid "Swap Eyes"
-msgstr ""
+msgstr "交换眼睛"
 
 msgid "Swap left and right eyes."
-msgstr ""
+msgstr "左眼和右眼交锋"
 
 msgid "Cache"
-msgstr ""
+msgstr "缓存缓缓存"
 
 msgid "      Gigabytes"
-msgstr ""
+msgstr "千兆字节"
 
 msgid "Cache in Gigabytes."
-msgstr ""
+msgstr "Gigabytes 中的缓存 。"
 
 msgid "   Read Ahead"
-msgstr ""
+msgstr "读 读 头"
 
 msgid "Read Ahead in seconds"
-msgstr ""
+msgstr "数秒前阅读"
 
 msgid "Read Behind"
-msgstr ""
+msgstr "后面读取"
 
 msgid "Read Behind in seconds"
-msgstr ""
+msgstr "以秒数读取后方"
 
 msgid "File Sequences"
-msgstr ""
+msgstr "文件序列"
 
 msgid "Audio file name"
-msgstr ""
+msgstr "音频文件名"
 
 msgid "Maximum Digits"
-msgstr ""
+msgstr "最大位数"
 
 msgid "Performance"
-msgstr ""
+msgstr "业绩 业绩业绩 业绩业绩"
 
 msgid "Changes force a reload of the current movie file."
-msgstr ""
+msgstr "更改当前电影文件的重新加载 。"
 
 msgid "Timer mode"
-msgstr ""
+msgstr "定时器模式"
 
 msgid "Audio buffer frames"
-msgstr ""
+msgstr "音频缓冲框架"
 
 msgid "Video Requests"
-msgstr ""
+msgstr "视频请求"
 
 msgid "Audio Requests"
-msgstr ""
+msgstr "音频请求"
 
 msgid "Sequence I/O threads"
-msgstr ""
+msgstr "顺序一/O 线"
 
 msgid "FFmpeg YUV to RGB conversion"
-msgstr ""
+msgstr "FFmpeg YUV 到 RGB 转换"
 
 msgid "FFmpeg Color Accuracy"
-msgstr ""
+msgstr "FFmpeg 颜色精确度"
 
 msgid ""
 "When this setting is on, color accuracy is chosen when decoding YUV420_P8 "
 "movies that have Color Space as 'unknown', at the cost of some performance."
 msgstr ""
+"当此设置启用时, 解码 YUV420_ P8 以“ 未知的” 颜色空间为“ 未知” 的电影时, 以某"
+"种性能为代价, 选择颜色精度 。"
 
 msgid "FFmpeg I/O threads"
-msgstr ""
+msgstr "FFmpeg I/O 线"
 
 msgid ""
 "This value controls the number of threads that FFmpeg uses.  For most "
@@ -1707,2491 +1978,2505 @@ msgid ""
 "any like that, you should set them to 1, press Enter and reload the movie "
 "file."
 msgstr ""
+"此值控制 FFmpeg 使用的线条数。 对于大多数电影来说, 它应该保留在 0 。 有些电影"
+"会显示黑框 。 对于任何类似的东西, 您应该设置为 1, 按 Enter 键并重新装入电影文"
+"件 。"
 
 msgid "Default Settings"
-msgstr ""
+msgstr "默认设置"
 
 msgid ""
 "This will reset all your settings to their default.  Are you sure you want "
 "to continue?"
-msgstr ""
+msgstr "这将将您的所有设置重置为默认值。 您确定要继续吗?"
 
 msgid "Drop a clip here to create a playlist."
-msgstr ""
+msgstr "在此放一个剪辑来创建播放列表 。"
 
 msgid "Create an empty timeline with a video and audio track."
-msgstr ""
+msgstr "创建带视频和音频音轨的空时间线 。"
 
 msgid "Create a timeline from the selected clip."
-msgstr ""
+msgstr "从选中的剪辑创建一个时间框架 。"
 
 msgid ""
 "Save current EDL to a permanent location, making paths relative if possible."
-msgstr ""
+msgstr "将当前 EDL 保存到永久位置, 如果可能的话, 使路径相对 。"
 
 msgid "Close current EDL."
-msgstr ""
+msgstr "关闭当前 EDL 。"
 
 msgid "Clear the messages"
-msgstr ""
+msgstr "清除信件"
 
 msgid "Turn off image warping."
-msgstr ""
+msgstr "关闭图像扭曲 。"
 
 msgid "Spherical"
-msgstr ""
+msgstr "球面"
 
 msgid "Wrap the image or images onto a sphere."
-msgstr ""
+msgstr "将图像或图像环绕到球体上。"
 
 msgid "Cubic"
-msgstr ""
+msgstr "立立方体"
 
 msgid "Wrap the image or images onto a cube."
-msgstr ""
+msgstr "将图像或图像折叠到立方体上。"
 
 msgid "Projection"
-msgstr ""
+msgstr "投射"
 
 msgid "   H. Aperture"
-msgstr ""
+msgstr "H. 孔孔"
 
 msgid "Horizontal Aperture of the Projection."
-msgstr ""
+msgstr "投影的横向光圈 。"
 
 msgid "    V. Aperture"
-msgstr ""
+msgstr "五. 孔孔"
 
 msgid "Vertical Aperture of the Projection."
-msgstr ""
+msgstr "投影的垂直孔径 。"
 
 msgid ""
 "Focal Length of the Projection. Use Shift + left mouse button to change or "
 "the mousewheel."
-msgstr ""
+msgstr "投影焦距。 使用 Shift + 鼠标左键更改或鼠标轮 。"
 
 msgid "Rotation"
-msgstr ""
+msgstr "轮调"
 
 msgid "Spin with middle mouse instead of rotating with it."
-msgstr ""
+msgstr "用中鼠标旋转,而不是用它旋转。"
 
 msgid ""
 "Rotation in X of the projection.  Use middle mouse button to move around."
-msgstr ""
+msgstr "投影的 X 旋转。 使用鼠标中键移动 。"
 
 msgid ""
 "Rotation in Y of the projection.  Use middle mouse button to move around."
-msgstr ""
+msgstr "投影的 Y 旋转。 使用鼠标中键移动 。"
 
 msgid "Subdivisions"
-msgstr ""
+msgstr "分区"
 
 msgid "Subdivision of the sphere when doing spherical projections"
-msgstr ""
+msgstr "进行球球预测时对球领域的区分"
 
 msgid "Subdivision of the sphere in X."
-msgstr ""
+msgstr "X区域的划分"
 
 msgid "Subdivision of the sphere in Y."
-msgstr ""
+msgstr "Y. 领域划分"
 
 msgid "Search"
-msgstr ""
+msgstr "搜索搜索"
 
 msgid "Both"
-msgstr ""
+msgstr "两者"
 
 msgid "Attribute"
-msgstr ""
+msgstr "属性属性"
 
 msgid "Value"
-msgstr ""
+msgstr "价值价值价值值"
 
 msgid "Main"
-msgstr ""
+msgstr "主要主要"
 
 msgid "Subtitle"
-msgstr ""
+msgstr "字幕字幕"
 
 msgid "Metadata"
-msgstr ""
+msgstr "元元元元元数据"
 
 msgid "PAL Video"
-msgstr ""
+msgstr "PAL PAL 视频"
 
 msgid "NTSC Video"
-msgstr ""
+msgstr "NTSC 视频"
 
 msgid "35mm Academy"
-msgstr ""
+msgstr "35毫米学院学院"
 
 msgid "Widescreen (HDTV + STV)"
-msgstr ""
+msgstr "宽屏(HDTV+STV)"
 
 msgid "35mm European Widescreen"
-msgstr ""
+msgstr "35mm 欧洲宽屏"
 
 msgid "Early 35mm"
-msgstr ""
+msgstr "35毫米早期"
 
 msgid "HDTV / Widescreen 16:9"
-msgstr ""
+msgstr "HDTVHDTV/宽屏 16: 9"
 
 msgid "35mm Flat"
-msgstr ""
+msgstr "35毫米平板"
 
 msgid "70mm"
-msgstr ""
+msgstr "70毫米"
 
 msgid "35mm Anamorphic"
-msgstr ""
+msgstr "35毫米无形态"
 
 msgid "35mm Panavision"
-msgstr ""
+msgstr "35毫米Panavis"
 
 msgid "Cinemascope"
-msgstr ""
+msgstr "影视"
 
 msgid "MGM Camera 65"
-msgstr ""
+msgstr "MGM 相机 65"
 
 msgid "Load"
-msgstr ""
+msgstr "装入"
 
 msgid "Reset"
-msgstr ""
+msgstr "重设重置"
 
 msgid "1:1"
-msgstr ""
+msgstr "1:1 1"
 
 msgid "1:2"
-msgstr ""
+msgstr "1:2"
 
 msgid "1:4"
-msgstr ""
+msgstr "1:4 1:4"
 
 msgid "1:8"
-msgstr ""
+msgstr "1:8 1:8"
 
 msgid "1:16"
-msgstr ""
+msgstr "1:16"
 
 msgid "Pick"
-msgstr ""
+msgstr "选取"
 
 msgid "%.3f seconds "
-msgstr ""
+msgstr "% 3f 秒"
 
 msgid "Directory"
-msgstr ""
+msgstr "目录目录目录目录目录目录目录"
 
 msgid "Directory where clip resides"
-msgstr ""
+msgstr "剪剪夹存放目录"
 
 msgid "Filename"
-msgstr ""
+msgstr "文件名"
 
 msgid "Filename of the clip"
-msgstr ""
+msgstr "剪辑的文件名"
 
 msgid "Audio Directory"
-msgstr ""
+msgstr "音音音目录"
 
 msgid "Directory where audio clip resides"
-msgstr ""
+msgstr "音频剪录所在目录"
 
 msgid "Audio Filename"
-msgstr ""
+msgstr "音频文件名"
 
 msgid "Filename of the audio clip"
-msgstr ""
+msgstr "音频剪辑的文件名"
 
 msgid "Video Streams"
-msgstr ""
+msgstr "视频流"
 
 msgid "Number of video streams in file"
-msgstr ""
+msgstr "文件中的视频流数"
 
 msgid "Audio Streams"
-msgstr ""
+msgstr "音频流"
 
 msgid "Number of audio streams in file"
-msgstr ""
+msgstr "文件中的音频流数"
 
 msgid "Start Time"
-msgstr ""
+msgstr "开始时间"
 
 msgid "Beginning frame of clip"
-msgstr ""
+msgstr "剪辑的起始框架"
 
 msgid "End Time"
-msgstr ""
+msgstr "结束时间"
 
 msgid "Ending frame of clip"
-msgstr ""
+msgstr "剪辑结束框架"
 
 msgid "First Frame"
-msgstr ""
+msgstr "第一个框架首框架"
 
 msgid "First frame of clip - User selected"
-msgstr ""
+msgstr "剪辑的第一框架 - 选中用户"
 
 msgid "Last Frame"
-msgstr ""
+msgstr "上一个框架框架"
 
 msgid "Last frame of clip - User selected"
-msgstr ""
+msgstr "上一个剪剪剪框 - 选中用户"
 
 msgid "(PAL Fields)"
-msgstr ""
+msgstr "(PAL字段)"
 
 msgid "(NTSC Fields)"
-msgstr ""
+msgstr "(国家技术服务委员会外地)"
 
 msgid "Default Speed"
-msgstr ""
+msgstr "默认速度"
 
 msgid "Default Speed in Frames per Second"
-msgstr ""
+msgstr "每秒框架的默认速度"
 
 msgid "Current Speed"
-msgstr ""
+msgstr "目前速度"
 
 msgid "Current Speed (Frames Per Second)"
-msgstr ""
+msgstr "当前速度( 每秒每秒数)"
 
 msgid "Disk space"
-msgstr ""
+msgstr "磁盘空间"
 
 msgid "Creation Date"
-msgstr ""
+msgstr "Creation Date"
 
 msgid "Creation date of file"
-msgstr ""
+msgstr "文件创建日期"
 
 msgid "Modified Date"
-msgstr ""
+msgstr "修改后日期"
 
 msgid "Last modified date of file"
-msgstr ""
+msgstr "文件的最近修改日期"
 
 msgid "Load an image or movie file"
-msgstr ""
+msgstr "装入图像或电影文件"
 
 msgid "Video Stream #%d"
-msgstr ""
+msgstr "视频流d"
 
 msgid "Name"
-msgstr ""
+msgstr "名称"
 
 msgid "Codec"
-msgstr ""
+msgstr "Codec"
 
 msgid "Unknown"
-msgstr ""
+msgstr "未知"
 
 msgid "Width"
-msgstr ""
+msgstr "宽宽度"
 
 msgid "Width of clip"
-msgstr ""
+msgstr "剪辑宽度"
 
 msgid "Height"
-msgstr ""
+msgstr "高度高度"
 
 msgid "Height of clip"
-msgstr ""
+msgstr "弹夹高度"
 
 msgid "Aspect Ratio"
-msgstr ""
+msgstr "外观比比"
 
 msgid "Aspect ratio of clip"
-msgstr ""
+msgstr "剪夹的突出比例"
 
 msgid "Pixel Ratio"
-msgstr ""
+msgstr "像素比比"
 
 msgid "Pixel ratio of clip"
-msgstr ""
+msgstr "剪剪的像素比比"
 
 msgid "Video Rotation"
-msgstr ""
+msgstr "视频旋转"
 
 msgid "Compression"
-msgstr ""
+msgstr "压缩压缩"
 
 msgid "unsigned byte (8-bits per channel)"
-msgstr ""
+msgstr "未签名字节( 每个频道 8 位元)"
 
 msgid "(10-bits per channel)"
-msgstr ""
+msgstr "(每频道10比特)"
 
 msgid "(12-bits per channel)"
-msgstr ""
+msgstr "(每频道12比特)"
 
 msgid "unsigned short (16-bits per channel)"
-msgstr ""
+msgstr "未签名短短( 每个频道16 位元)"
 
 msgid "half float (16-bits per channel)"
-msgstr ""
+msgstr "半浮点( 每个频道16 位元)"
 
 msgid "unsigned int (32-bits per channel)"
-msgstr ""
+msgstr "未签名 Int (每个频道32 位)"
 
 msgid "float (32-bits per channel)"
-msgstr ""
+msgstr "(每个频道32比特)"
 
 msgid "Unknown bit depth"
-msgstr ""
+msgstr "未知位数深度"
 
 msgid "Depth"
-msgstr ""
+msgstr "深度深度深度深度"
 
 msgid "Bit depth of clip"
-msgstr ""
+msgstr "弹夹深度位深度"
 
 msgid "Image Channels"
-msgstr ""
+msgstr "图像通道"
 
 msgid "Number of channels in clip"
-msgstr ""
+msgstr "剪辑中的频道数量"
 
 msgid "YUV Coefficients"
-msgstr ""
+msgstr "YUV 系数"
 
 msgid "YUV Coefficients used for video conversion"
-msgstr ""
+msgstr "YUV 用于视频转换的系数"
 
 msgid "Video Levels"
-msgstr ""
+msgstr "视频级别"
 
 msgid "Color Primaries"
-msgstr ""
+msgstr "颜色基本色彩"
 
 msgid "Color TRC"
-msgstr ""
+msgstr "彩色真相与和解委员会"
 
 msgid "Color Transfer Characteristics"
-msgstr ""
+msgstr "颜色调换特性"
 
 msgid "Color Space"
-msgstr ""
+msgstr "色彩空间"
 
 msgid "Color Transfer Space"
-msgstr ""
+msgstr "彩色转移空间"
 
 msgid "FFmpeg Pixel Format"
-msgstr ""
+msgstr "FFmpeg 像素格式"
 
 msgid "Render Pixel Format"
-msgstr ""
+msgstr "框像像素格式"
 
 msgid "Audio Stream #%d"
-msgstr ""
+msgstr "音频流d"
 
 msgid "FourCC"
-msgstr ""
+msgstr "四合四"
 
 msgid "Four letter ID"
-msgstr ""
+msgstr "4个字母 ID"
 
 msgid "Channels"
-msgstr ""
+msgstr "声道"
 
 msgid "Number of audio channels"
-msgstr ""
+msgstr "音频频道数量"
 
 msgid "Format"
-msgstr ""
+msgstr "格式格式格式格式格式格式格式格式"
 
 msgid "%d Hz."
-msgstr ""
+msgstr "%d Hz. 赫兹。"
 
 msgid "Frequency"
-msgstr ""
+msgstr "频率频率频率"
 
 msgid "Frequency of audio"
-msgstr ""
+msgstr "音频频率"
 
 msgid "%d kb/s"
-msgstr ""
+msgstr "% d kb/s"
 
 msgid "Max. Bitrate"
-msgstr ""
+msgstr "最大比特率"
 
 msgid "Disposition"
-msgstr ""
+msgstr "处置处理"
 
 msgid "Disposition of Track"
-msgstr ""
+msgstr "音轨处理"
 
 msgid "Start"
-msgstr ""
+msgstr "开始"
 
 msgid "Start of Audio"
-msgstr ""
+msgstr "音频开始"
 
 msgid "Duration"
-msgstr ""
+msgstr "持续期限"
 
 msgid "Duration of Audio"
-msgstr ""
+msgstr "音频持续时间"
 
 msgid "Subtitle Stream #%d"
-msgstr ""
+msgstr "字幕: 溪流 d"
 
 msgid "Codec Name"
-msgstr ""
+msgstr "编码器名称"
 
 msgid "Closed Captions"
-msgstr ""
+msgstr "闭合说明"
 
 msgid "Video has Closed Captions"
-msgstr ""
+msgstr "视频已关闭字幕"
 
 msgid "Avg. Bitrate"
-msgstr ""
+msgstr "Avg. 比特率"
 
 msgid "Language"
-msgstr ""
+msgstr "语言语言语言"
 
 msgid "Language if known"
-msgstr ""
+msgstr "已知语言"
 
 msgid "Start of Subtitle"
-msgstr ""
+msgstr "字幕开始"
 
 msgid "Duration of Subtitle"
-msgstr ""
+msgstr "字幕的有效期"
 
 msgid "Linear"
-msgstr ""
+msgstr "线性"
 
 msgid "Logarithmic"
-msgstr ""
+msgstr "对数对数"
 
 msgid "Square Root"
-msgstr ""
+msgstr "平方根"
 
 msgid "Channel"
-msgstr ""
+msgstr "频道频道"
 
 msgid "Red"
-msgstr ""
+msgstr "红红"
 
 msgid "Green"
-msgstr ""
+msgstr "绿绿色"
 
 msgid "Blue"
-msgstr ""
+msgstr "蓝蓝色"
 
 msgid "Lumma"
-msgstr ""
+msgstr "鲁马"
 
 msgid "Select main A image."
-msgstr ""
+msgstr "选择主图像 。"
 
 msgid "Open a filename"
-msgstr ""
+msgstr "打开文件名"
 
 msgid "Open a filename with audio"
-msgstr ""
+msgstr "用音频打开文件名"
 
 msgid "Close current filename"
-msgstr ""
+msgstr "关闭当前文件名"
 
 msgid "Close all filenames"
-msgstr ""
+msgstr "关闭所有文件名"
 
 msgid "Previous filename"
-msgstr ""
+msgstr "上一个文件名"
 
 msgid "Next filename"
-msgstr ""
+msgstr "下一个文件名"
 
 msgid "Filter EDLs"
-msgstr ""
+msgstr "过滤器 EDL"
 
 msgid "Select one or more B images."
-msgstr ""
+msgstr "选择一个或多个 B 图像 。"
 
 msgid "Select between Relative or Absolute Compare Time Mode"
-msgstr ""
+msgstr "在相对比较或绝对比较时间模式之间选择"
 
 msgid "Compare A"
-msgstr ""
+msgstr "比较 A"
 
 msgid "Compare B"
-msgstr ""
+msgstr "比较B"
 
 msgid ""
 "Wipe between the A and B files\n"
 "\n"
 "Use the Option key + left mouse button to move the wipe in X or in Y"
 msgstr ""
+"在 A 和 B 文件之间擦拭 使用 选项键 + 鼠标左键 + 鼠标左键来移动 X 或 Y 中的擦"
+"拭"
 
 msgid ""
 "Wipe between the A and B files\n"
 "\n"
 "Use the Alt key + left mouse button to move the wipe in X or in Y."
-msgstr ""
+msgstr "A 和 B 文件之间的擦拭 使用 Alt 键 + 鼠标左键来移动 X 或 Y 中的擦拭 。"
 
 msgid "Overlay the A and B files with optional transparencyy"
-msgstr ""
+msgstr "以可选透明方式覆盖 A 和 B 文件"
 
 msgid "Difference the A and B files"
-msgstr ""
+msgstr "A和B文件的差异"
 
 msgid "Compare the A and B files side by side"
-msgstr ""
+msgstr "比较 A 和 B 并排文件"
 
 msgid "Show the A file above the B file"
-msgstr ""
+msgstr "在 B 文件上方显示 A 文件"
 
 msgid "Tile the A and B files"
-msgstr ""
+msgstr "将 A 和 B 文件堆放牌盘"
 
 msgid "Wipe"
-msgstr ""
+msgstr "擦去"
 
 msgid "Use the Option key + left mouse button to move the wipe in X."
-msgstr ""
+msgstr "使用 选项键 + 鼠标左键按钮移动 X 中的擦拭 。"
 
 msgid "Use the Alt key + left mouse button to move the wipe in X."
-msgstr ""
+msgstr "使用 Alt 键 + 鼠标左键按钮移动 X 中的擦拭 。"
 
 msgid "Use the Option key + left mouse button to move the wipe in Y."
-msgstr ""
+msgstr "使用 选项键 + 鼠标左键按钮移动 Y 中的擦拭 。"
 
 msgid "Use the Alt key + left mouse button to move the wipe in Y."
-msgstr ""
+msgstr "使用 Alt 键 + 鼠标左键按钮移动 Y 中的擦拭 。"
 
 msgid "Wipe Rotation.  Use Shift + left mouse button along X to rotate wipe."
-msgstr ""
+msgstr "擦拭旋转。 使用 X 沿 X 的 Shift + 鼠标左键旋转擦拭 。"
 
 msgid "Overlay"
-msgstr ""
+msgstr "重叠"
 
 msgid "Use the Option key + left mouse button to change transparency."
-msgstr ""
+msgstr "使用 选项 键 + 鼠标左键按钮来改变透明度 。"
 
 msgid "Use the Alt key + left mouse button to change transparency."
-msgstr ""
+msgstr "使用 Alt 键 + 鼠标左键按钮来改变透明度 。"
 
 msgid "LUT"
-msgstr ""
+msgstr "LUUU 液用"
 
 msgid "Enabled"
-msgstr ""
+msgstr "已启用"
 
 msgid "Order"
-msgstr ""
+msgstr "顺序 顺序顺序 顺序顺序"
 
 msgid "Color Controls"
-msgstr ""
+msgstr "颜色控制"
 
 msgid "Add"
-msgstr ""
+msgstr "添加添加添加"
 
 msgid "Contrast"
-msgstr ""
+msgstr "对比对比对比"
 
 msgid "Saturation"
-msgstr ""
+msgstr "饱和度"
 
 msgid "Tint"
-msgstr ""
+msgstr "细细"
 
 msgid "Invert"
-msgstr ""
+msgstr "反对"
 
 msgid "Levels"
-msgstr ""
+msgstr "职等职等"
 
 msgid "In Low"
-msgstr ""
+msgstr "低"
 
 msgid "In High"
-msgstr ""
+msgstr "高 中"
 
 msgid "Gamma"
-msgstr ""
+msgstr "伽玛"
 
 msgid "Out Low"
-msgstr ""
+msgstr "低"
 
 msgid "Out High"
-msgstr ""
+msgstr "高"
 
 msgid "Soft Clip"
-msgstr ""
+msgstr "软软剪切"
 
 msgid "Selects the current background type from the list"
-msgstr ""
+msgstr "从列表中选择当前背景类型"
 
 msgid "Solid Color:"
-msgstr ""
+msgstr "固体颜色 :"
 
 msgid "Selects the solid color."
-msgstr ""
+msgstr "选择固态颜色。"
 
 msgid "Size:"
-msgstr ""
+msgstr "大小 :"
 
 msgid "Selects the checker size."
-msgstr ""
+msgstr "选择检查器大小。"
 
 msgid "First Color:"
-msgstr ""
+msgstr "第一个颜色 :"
 
 msgid "Selects the first color."
-msgstr ""
+msgstr "选择第一个颜色。"
 
 msgid "Second Color:"
-msgstr ""
+msgstr "第二个颜色 :"
 
 msgid "Selects the second color in Checkers."
-msgstr ""
+msgstr "在棋盘中选择第二个颜色。"
 
 msgid "Text"
-msgstr ""
+msgstr "文字文字文字文字文字"
 
 msgid "Font"
-msgstr ""
+msgstr "字体字体字体"
 
 msgid "Selects the current font from the list"
-msgstr ""
+msgstr "从列表中选择当前字体"
 
 msgid "Selects the current font size."
-msgstr ""
+msgstr "选择当前字体大小。"
 
 msgid "Pen"
-msgstr ""
+msgstr "笔笔笔"
 
 msgid "Laser"
-msgstr ""
+msgstr "激光激光"
 
 msgid "Makes the following annotation dissapear a second after drawn."
-msgstr ""
+msgstr "画完之后,以下的注解就会一秒钟地消失。"
 
 msgid "Color:"
-msgstr ""
+msgstr "颜色 :"
 
 msgid "Selects the current pen color."
-msgstr ""
+msgstr "选择当前笔的颜色。"
 
 msgid "Selects a hard brush."
-msgstr ""
+msgstr "选择硬刷。"
 
 msgid "Selects a soft brush."
-msgstr ""
+msgstr "选择软刷。"
 
 msgid "Pen Size:"
-msgstr ""
+msgstr "笔数大小 :"
 
 msgid "Selects the current pen size."
-msgstr ""
+msgstr "选择当前笔的大小。"
 
 msgid "Ghosting"
-msgstr ""
+msgstr "鬼鬼魂"
 
 msgid "Previous:"
-msgstr ""
+msgstr "上一个 :"
 
 msgid ""
 "Selects the number of fading frames previous to the frame of the annotation."
-msgstr ""
+msgstr "选择注释框架之前的淡化框架数。"
 
 msgid "Next:"
-msgstr ""
+msgstr "下一个 :"
 
 msgid ""
 "Selects the number of fading frames following the frame of the annotation."
-msgstr ""
+msgstr "选择注解框架之后的淡化框架数。"
 
 msgid "Frames"
-msgstr ""
+msgstr "框架框架框架框架"
 
 msgid "Current"
-msgstr ""
+msgstr "目前"
 
 msgid "Makes the following annotation show on this frame only."
-msgstr ""
+msgstr "仅在此框上显示以下注解 。"
 
 msgid "All"
-msgstr ""
+msgstr "全部"
 
 msgid "Makes the following annotation show on all frames."
-msgstr ""
+msgstr "在所有框架上进行以下注解显示 。"
 
 msgid "Notes"
-msgstr ""
+msgstr "Notes"
 
 msgid "Invalid index for add clip to timeline."
-msgstr ""
+msgstr "添加剪辑到时间表的无效索引 。"
 
 msgid "Could not get current path."
-msgstr ""
+msgstr "无法获得当前路径 。"
 
 msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
-msgstr ""
+msgstr "EDL 项目 '{0}' 不再装入。 无法撤消或重做 。"
 
 msgid "Could not paste {0}.  Error {1}."
-msgstr ""
+msgstr "无法粘贴 {0} 。 错误 {1} 。"
 
 msgid "Could not save .otio file: {0}"
-msgstr ""
+msgstr "无法保存. otio 文件: {0}"
 
 msgid "Error saving {0}. {1}"
-msgstr ""
+msgstr "保存 {0} 出错 。 {1}"
 
 msgid "Empty EDL file.  Not saving."
-msgstr ""
+msgstr "空 EDL 文件, 未保存 。"
 
 msgid "Destination file is invalid."
-msgstr ""
+msgstr "目的地文件无效 。"
 
 msgid "You can only add clips to an .otio EDL playlist."
-msgstr ""
+msgstr "您只能将剪辑添加到.otio EDL 播放列表中 。"
 
 msgid "Cannot currently concatenate an .otio file."
-msgstr ""
+msgstr "无法将. otio 文件归结为. otio 文件 。"
 
 msgid "Cannot currently concatenate a directory."
-msgstr ""
+msgstr "无法连接目录 。"
 
 msgid "Could not append video track {0}"
-msgstr ""
+msgstr "无法附加视频音轨 {0}"
 
 msgid "Could not append audio track {0}"
-msgstr ""
+msgstr "无法附加音轨 {0}"
 
 msgid "Server started at port {0}."
-msgstr ""
+msgstr "服务器启动于端口 {0} 。"
 
 msgid "Server stopped."
-msgstr ""
+msgstr "服务器已停止 。"
 
 msgid "A client connected from {0}"
-msgstr ""
+msgstr "从 {0} 连接到客户端的客户端"
 
 msgid "Client at {0} disconnected."
-msgstr ""
+msgstr "断开 {0} 的客户端 。"
 
 msgid "Server protocol version is {0}.  Client protocol version is {1}"
-msgstr ""
+msgstr "服务器协议版本为 {0}。 客户端协议版本为 {1}"
 
 msgid "Remote file {0} does not exist on local filesystem."
-msgstr ""
+msgstr "本地文件系统不存在远程文件 {0} 。"
 
 msgid "Remote files are less than local files."
-msgstr ""
+msgstr "远程文件少于本地文件 。"
 
 msgid "Remote file {0} matches file name {1} but not path."
-msgstr ""
+msgstr "远程文件 {0} 匹配文件名 {1}, 但不是路径 。"
 
 msgid "Remote file {0} does not match local filename."
-msgstr ""
+msgstr "远程文件 {0} 不匹配本地文件名 。"
 
 msgid "Removing {0} from message publisher."
-msgstr ""
+msgstr "正在从信件发布器中删除 {0} 。"
 
 msgid "Server listening on port "
-msgstr ""
+msgstr "在端口监听服务器"
 
 msgid "ComfyUI listening on port "
-msgstr ""
+msgstr "ComfyUI 在端口监听"
 
 msgid "Connected to server at {0}, port {1}"
-msgstr ""
+msgstr "已连接到 {0} 服务器, 端口 {1} 服务器"
 
 msgid "Server connection lost."
-msgstr ""
+msgstr "服务器连接丢失 。"
 
 msgid "Exception caught: "
-msgstr ""
+msgstr "抓获的例外:"
 
 msgid "ERROR: "
-msgstr ""
+msgstr "错误:"
 
 msgid "WARN : "
-msgstr ""
+msgstr "警告:"
 
 msgid ""
 "Regular expression created from {0}.  It is:\n"
 "{1}"
-msgstr ""
+msgstr "从 {0} 创建的正则表达式。 它是 : {1}"
 
 msgid "Iteration {0} matched prefix={1}"
-msgstr ""
+msgstr "迭代 {0} 符合前缀 {1}"
 
 msgid "Iteration {0} matched version={1}"
-msgstr ""
+msgstr "迭代 {0} 匹配版本 {1}"
 
 msgid "Iteration {0} matched suffix={1}"
-msgstr ""
+msgstr "迭代 {0} 匹配的后缀 {1}"
 
 msgid "Iteration {0} will check version={1}"
-msgstr ""
+msgstr "迭代 {0} 将检查版本 {1} 。"
 
 msgid ""
 "No versioning in this clip.  Please create an image or directory named with "
 "a versioning string."
-msgstr ""
+msgstr "在此剪辑中没有版本。 请创建名为版本字符串的图像或目录 。"
 
 msgid "Example:  gizmo_v003.0001.exr"
-msgstr ""
+msgstr "示例:gizmo_v003.0001.exr"
 
 msgid "Annotation already existed at this time"
-msgstr ""
+msgstr "目前已经存在批注"
 
 msgid "Failed to open the file {0} for writing."
-msgstr ""
+msgstr "打开文件 {0} 以写入失败 。"
 
 msgid "Failed to write to the file {0}."
-msgstr ""
+msgstr "写入文件 {0} 失败 。"
 
 msgid "Session saved to \"{0}\"."
-msgstr ""
+msgstr "会话已保存到“ {0} ” 。"
 
 msgid "Failed to open the file '{0}' for reading."
-msgstr ""
+msgstr "打开文件 “% {0}” 读取失败 。"
 
 msgid "Failed to load the file '{0}."
-msgstr ""
+msgstr "装入文件 '{0} 失败 。"
 
 msgid "Cannot save an NDI stream"
-msgstr ""
+msgstr "无法保存 NDI 流流"
 
 msgid "Saving movie to {0}."
-msgstr ""
+msgstr "将电影保存到 {0} 。"
 
 msgid "Saving audio to {0}."
-msgstr ""
+msgstr "将音频保存到 {0} 。"
 
 msgid "Saving pictures to {0}."
-msgstr ""
+msgstr "将图片保存到 {0} 。"
 
 msgid ""
 "VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to .mp4"
-msgstr ""
+msgstr "VP9 配置文件需要一个.mp4,.mkv 或.webm 的电影扩展。 将其修改为. mp4"
 
 msgid "AV1 profile needs a .mp4 or .mkv movie extension.  Changing it to .mp4"
-msgstr ""
+msgstr "AV1 配置需要. mp4 或.mkv 的电影扩展。 将其修改为. mp4"
 
 msgid ""
 "GoPro Cineform profile needs a .mkv movie extension.  Changing it to .mkv"
-msgstr ""
+msgstr "GoPro Cineform 配置文件需要一个.mkv 的电影扩展。 将其修改为.mkv"
 
 msgid "HAP profile needs a .mov extension.  Changing it to .mov"
-msgstr ""
+msgstr "HAP 配置需要. mov 扩展。 将其修改为. mov"
 
 msgid "New file {0} already exist!  Cannot overwrite it."
-msgstr ""
+msgstr "新建文件 {0} 已经存在! 无法覆盖它 。"
 
 msgid "Rotated image info: {0}"
-msgstr ""
+msgstr "已旋转的图像信息: {0}"
 
 msgid "Scaled image info: {0}"
-msgstr ""
+msgstr "缩放图像信息: {0}"
 
 msgid "{0}: Cannot open writer plugin."
-msgstr ""
+msgstr "{0}: 无法打开编剧插件 。"
 
 msgid "Image info: {0} {1}"
-msgstr ""
+msgstr "图像信息: {0} {1}"
 
 msgid ""
 "Image too big for options.annotations.  Will scale to the viewport size."
-msgstr ""
+msgstr "图像太大, 无法选择. 注释 。 将缩放到视图大小 。"
 
 msgid "Viewport Size: {0} - X={1}, Y={2}"
-msgstr ""
+msgstr "视图端口大小 : {0} - X1}, Y2}"
 
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
-msgstr ""
+msgstr "Writer 插件没有获得输出信息 。 默认为 {0}"
 
 msgid "Output info: {0} {1}"
-msgstr ""
+msgstr "输出信息: {0} {1}"
 
 msgid "Using profile {0}, pixel format {1}."
-msgstr ""
+msgstr "使用 profile {0}, 像素格式 {1} 。"
 
 msgid "Using preset {0}."
-msgstr ""
+msgstr "使用预设 {0} 。"
 
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
-msgstr ""
+msgstr "保存没有音频 & PRId64 > - < PRId64 > 的电影"
 
 msgid "Saving Movie with Audio %<PRId64> - %<PRId64>"
-msgstr ""
+msgstr "以音频  PRId64 > -  PRId64 > 保存电影"
 
 msgid "Saving Audio %<PRId64> - %<PRId64>"
-msgstr ""
+msgstr "保存音频 PRId64> - PRId64>"
 
 msgid "Saving Pictures without Audio %<PRId64> - %<PRId64>"
-msgstr ""
+msgstr "无音频 %<PRId64> - %<PRId64> 保存图片"
 
 msgid "Audio only in timeline, but not trying to save audio."
-msgstr ""
+msgstr "音频仅以时间为时长, 但不试图保存音频 。"
 
 msgid "{0}: Invalid OpenGL format and type"
-msgstr ""
+msgstr "{0}: 无效的 OpenGL 格式和类型"
 
 msgid "OpenGL info: {0}"
-msgstr ""
+msgstr "OpenGL 信息: {0}"
 
 msgid "Saving... {0}"
-msgstr ""
+msgstr "保存... {0}"
 
 msgid "Empty video data at time {0}."
-msgstr ""
+msgstr "时间 {0} 时空视频数据 。"
 
 msgid "Reading preferences from \"{0}mrv2.prefs\"."
-msgstr ""
+msgstr "读取“ \"{0}mrv2.prefs\" 的首选项 。"
 
 msgid "Failed to retrieve {0}."
-msgstr ""
+msgstr "获取 {0} 失败 。"
 
 msgid ""
 "FFmpeg YUV to RGB Conversion is on in Settings Panel.  mrv2 will play back "
 "movies slower."
-msgstr ""
+msgstr "设置面板中正在使用FFmpeg YUV 转换到 RGB 。 mrv2 将会减速播放电影 。"
 
 msgid "Could not open color theme from \"{0}\"."
-msgstr ""
+msgstr "无法打开 \"{0}\" 的颜色主题 。"
 
 msgid "Loaded color themes from \"{0}\"."
-msgstr ""
+msgstr "从 \"{0}\" 装入的颜色主题 。"
 
 msgid "Setting OCIO config from preferences."
-msgstr ""
+msgstr "设置基于优惠的OCIO配置。"
 
 msgid "Setting OCIO config from OCIO environment variable."
-msgstr ""
+msgstr "根据OCIO环境变量设置OCIO配置。"
 
 msgid "Path mappings have been loaded from \"{0}mrv2.paths.prefs\"."
-msgstr ""
+msgstr "从 \"{0}mrv2.paths.prefs\" 装入路径映射图 。"
 
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
-msgstr ""
+msgstr "正在从 \"{0}{1}.prefs\" 装入热钥匙 。"
 
 msgid "Reseting hotkeys to default."
-msgstr ""
+msgstr "将热钥匙重置为默认 。"
 
 msgid "Path mappings have been saved to \"{0}mrv2.paths.prefs\"."
-msgstr ""
+msgstr "路径映射已保存到 \"{0}mrv2.paths.prefs\"。"
 
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
-msgstr ""
+msgstr "热匙被保存到“ \"{0}{1}.prefs\"."
 
 msgid "Preferences have been saved to: \"{0}mrv2.prefs\"."
-msgstr ""
+msgstr "首选项已保存为 \"{0}mrv2.prefs\"."
 
 msgid "Removing "
-msgstr ""
+msgstr "删除"
 
 msgid "OCIO config is now:"
-msgstr ""
+msgstr "OCIO 配置为:"
 
 msgid "OCIO file \"{0}\" not found or not readable."
-msgstr ""
+msgstr "找不到或无法读取 OCIO 文件 \"{0}\" 。"
 
 msgid "Setting OCIO config to default:"
-msgstr ""
+msgstr "设置 OCIO 默认配置 :"
 
 msgid "Setting OCIO config to built-in:"
-msgstr ""
+msgstr "设置 OCIO 内置配置 :"
 
 msgid "Path mapping for {0} already exists!"
-msgstr ""
+msgstr "{0} 路径映射已经存在!"
 
 msgid "Comparing {0} to prefix {1}"
-msgstr ""
+msgstr "比较 {0} 到前缀 {1}"
 
 msgid "Found a match.  File is now {0}"
-msgstr ""
+msgstr "找到了匹配文件。 文件现在是 {0}"
 
 msgid "OCIO config file cannot be empty."
-msgstr ""
+msgstr "OCIO 配置文件不能为空 。"
 
 msgid "OCIO config '{0}' does not exist or is not readable."
-msgstr ""
+msgstr "OCIO 配置 '{0}' 不存在或不可读 。"
 
 msgid "Invalid OCIO Ics '{0}'."
-msgstr ""
+msgstr "无效的 OCIO Ics '{0}' 。"
 
 msgid "Invalid OCIO Look '{0}'."
-msgstr ""
+msgstr "无效的 OCIO 外观 '{0}' 。"
 
 msgid "Invalid OCIO Display/View '{0}'."
-msgstr ""
+msgstr "无效的 OCIO 显示/ 查看 '{0}' 。"
 
 msgid "Could not split '{0}' into display and view."
-msgstr ""
+msgstr "无法将 '{0}' 分割为显示和视图 。"
 
 msgid "Setting OCIO Preset '{0}'."
-msgstr ""
+msgstr "设置 OCIO 预设 '{0}' 。"
 
 msgid "Preset '{0}' not found."
-msgstr ""
+msgstr "找不到预设 '{0}' 。"
 
 msgid "OCIO Preset '{0}' already exists!"
-msgstr ""
+msgstr "OCIO 预设 '{0}' 已经存在!"
 
 msgid "Failed to load the file '{0}'."
-msgstr ""
+msgstr "装入文件 '{0}' 失败 。"
 
 msgid "Loaded {0} ocio presets from \"{1}\"."
-msgstr ""
+msgstr "从“ {1} ” 装入 {0} ocio 预设 。"
 
 msgid "Failed to open the file '{0}' for saving."
-msgstr ""
+msgstr "打开文件 '{0}' 保存失败 。"
 
 msgid "Failed to save the file '{0}'."
-msgstr ""
+msgstr "保存文件 '{0}' 失败 。"
 
 msgid "OCIO presets have been saved to \"{0}\"."
-msgstr ""
+msgstr "OCIO 预设已保存为 {0} 。"
 
 msgid "English"
-msgstr ""
+msgstr "English"
 
 msgid "Spanish"
-msgstr ""
+msgstr "西班牙语"
+
+msgid "Chinese Simplified"
+msgstr "Chinese Simplified"
 
 msgid ""
 "Need to reboot mrv2 to change language.  Are you sure you want to continue?"
-msgstr ""
+msgstr "需要重新启用 mrv2 来更改语言 。 您确定要继续吗?"
 
 msgid "Set Language to {0}, Numbers to {1}"
-msgstr ""
+msgstr "设置语言为 {0}, 数字为 {1}"
 
 msgid "Arabic"
-msgstr ""
+msgstr "Arabic"
 
 msgid "Armenian"
-msgstr ""
+msgstr "Armenian"
 
 msgid "Basque"
-msgstr ""
+msgstr "巴斯克"
 
 msgid "Belarusian"
-msgstr ""
+msgstr "Belarusian"
 
 msgid "Bengali"
-msgstr ""
+msgstr "Bengali"
 
 msgid "Bulgarian"
-msgstr ""
+msgstr "Bulgarian"
 
 msgid "Catalan"
-msgstr ""
+msgstr "Catalan"
 
 msgid "Chinese"
-msgstr ""
+msgstr "中文"
 
 msgid "Czech"
-msgstr ""
+msgstr "Czech"
 
 msgid "Danish"
-msgstr ""
+msgstr "Danish"
 
 msgid "Dutch"
-msgstr ""
+msgstr "Dutch"
 
 msgid "Finnish"
-msgstr ""
+msgstr "芬兰语芬兰语芬兰语芬兰语芬兰语芬兰语芬兰语芬兰语芬兰语"
 
 msgid "French"
-msgstr ""
+msgstr "法语 法语 法语"
 
 msgid "Galician"
-msgstr ""
+msgstr "加利西亚人"
 
 msgid "German"
-msgstr ""
+msgstr "德语 德语"
 
 msgid "Greek"
-msgstr ""
+msgstr "希腊语"
 
 msgid "Hebrew"
-msgstr ""
+msgstr "希伯来语"
 
 msgid "Hindi"
-msgstr ""
+msgstr "印地语"
 
 msgid "Icelandic"
-msgstr ""
+msgstr "冰岛语"
 
 msgid "Indonesian"
-msgstr ""
+msgstr "印度尼西亚语"
 
 msgid "Italian"
-msgstr ""
+msgstr "Italian"
 
 msgid "Irish"
-msgstr ""
+msgstr "Irish"
 
 msgid "Japanese"
-msgstr ""
+msgstr "Japanese"
 
 msgid "Korean"
-msgstr ""
+msgstr "Korean"
 
 msgid "Norwegan"
-msgstr ""
+msgstr "Norwegan"
 
 msgid "Persian"
-msgstr ""
+msgstr "波斯语"
 
 msgid "Polish"
-msgstr ""
+msgstr "波兰语"
 
 msgid "Portuguese"
-msgstr ""
+msgstr "葡萄牙语"
 
 msgid "Tibetan"
-msgstr ""
+msgstr "藏藏藏藏"
 
 msgid "Romanian"
-msgstr ""
+msgstr "罗马尼亚语"
 
 msgid "Russian"
-msgstr ""
+msgstr "俄文 俄文 俄文"
 
 msgid "Serbian"
-msgstr ""
+msgstr "塞尔维亚塞尔维亚族"
 
 msgid "Slovenian"
-msgstr ""
+msgstr "Slovenian"
 
 msgid "Swedish"
-msgstr ""
+msgstr "Swedish"
 
 msgid "Thai"
-msgstr ""
+msgstr "Thai"
 
 msgid "Turkish"
-msgstr ""
+msgstr "Turkish"
 
 msgid "Vietnamese"
-msgstr ""
+msgstr "Vietnamese"
 
 msgid "Welsh"
-msgstr ""
+msgstr "威尔士语"
 
 msgid "Yiddish"
-msgstr ""
+msgstr "意 义 国"
 
 msgid "Zulu"
-msgstr ""
+msgstr "祖鲁"
 
 msgid "@B12@C7@b@.Function\t@B12@C7@b@.Hotkey"
-msgstr ""
+msgstr "@B12@C7@b@."
 
 msgid ""
 "Hotkey \"%s\" already used in \"%s\".\n"
 "Do you want to override it?"
-msgstr ""
+msgstr "%s 中已经使用的热密钥“%s”。您要覆盖它吗?"
 
 msgid ""
 "Corruption in hotkeys preferences. Hotkey '{0}' for {1} will not be "
 "available.  Already used in {2}."
-msgstr ""
+msgstr "热键偏好中的腐败。 无法为 {1} 提供热键 '{0}'。 已经在 {2} 中使用 。"
 
 msgid "Load Directory"
-msgstr ""
+msgstr "装入目录"
 
 msgid "Reels (*.{"
-msgstr ""
+msgstr "里尔(*.{)"
 
 msgid "Images (*.{"
-msgstr ""
+msgstr "图像 (*. {)"
 
 msgid "Sessions (*."
-msgstr ""
+msgstr "届会(*.)"
 
 msgid "All (*.{"
-msgstr ""
+msgstr "(*.{)所有(*.{)"
 
 msgid "Movies (*.{"
-msgstr ""
+msgstr "电影(*.{)"
 
 msgid "Load Image(s)"
-msgstr ""
+msgstr "装入图像"
 
 msgid "Load Movie or Sequence"
-msgstr ""
+msgstr "装入电影或序列"
 
 msgid "Save OTIO timeline"
-msgstr ""
+msgstr "OTIO 保存时间"
 
 msgid "Save Python Script"
-msgstr ""
+msgstr "保存 Python 脚本"
 
 msgid "Load Python Script"
-msgstr ""
+msgstr "加载 Python 脚本"
 
 msgid "LUTS (*.{"
-msgstr ""
+msgstr "(*.{)"
 
 msgid "Load LUT"
-msgstr ""
+msgstr "装入 LUT"
 
 msgid "Subtitles (*.{"
-msgstr ""
+msgstr "字幕 (*.{)"
 
 msgid "Load Subtitle"
-msgstr ""
+msgstr "加载字幕字幕"
 
 msgid "Audios (*.{"
-msgstr ""
+msgstr "音频 (*.{)"
 
 msgid "Load Audio"
-msgstr ""
+msgstr "装入音频"
 
 msgid "Save Single Frame"
-msgstr ""
+msgstr "保存单一框架"
 
 msgid "Save Audio"
-msgstr ""
+msgstr "保存音频"
 
 msgid "Save Movie or Sequence"
-msgstr ""
+msgstr "保存电影或序列"
 
 msgid "Acrobat PDF (*.{pdf})"
-msgstr ""
+msgstr "Acrobat PDF (*.{pdf})"
 
 msgid "Save Annotations to PDF"
-msgstr ""
+msgstr "将说明保存到 PDF"
 
 msgid "Session"
-msgstr ""
+msgstr "Session"
 
 msgid "Open Session"
-msgstr ""
+msgstr "公开会议"
 
 msgid "Save Session"
-msgstr ""
+msgstr "保存会话"
 
 msgid "OCIO config (*.{"
-msgstr ""
+msgstr "OCIO 配置(*.{)"
 
 msgid "Load OCIO Config"
-msgstr ""
+msgstr "加载 OCIO 配置"
 
 msgid "Default"
-msgstr ""
+msgstr "默认默认"
 
 msgid "Annotations"
-msgstr ""
+msgstr "说明"
 
 msgid "Background"
-msgstr ""
+msgstr "背景"
 
 msgid "Color"
-msgstr ""
+msgstr "颜色"
 
 msgid "Color Area"
-msgstr ""
+msgstr "颜色区域"
 
 msgid "Devices"
-msgstr ""
+msgstr "设备"
 
 msgid "Environment Map"
-msgstr ""
+msgstr "环境地图"
 
 msgid "Histogram"
-msgstr ""
+msgstr "直方图"
 
 msgid "Logs"
-msgstr ""
+msgstr "日志"
 
 msgid "Media Information"
-msgstr ""
+msgstr "媒体信息"
 
 msgid "NDI"
-msgstr ""
+msgstr "NDI"
 
 msgid "Python"
-msgstr ""
+msgstr "Python"
 
 msgid "Settings"
-msgstr ""
+msgstr "设置"
 
 msgid "Vectorscope"
-msgstr ""
+msgstr "矢量镜"
 
 msgid "Hotkeys"
-msgstr ""
+msgstr "热钥匙"
 
 msgid "Preferences"
-msgstr ""
+msgstr "首首首选"
 
 msgid "About"
-msgstr ""
+msgstr "关于"
 
 msgid "File extension cannot be empty."
-msgstr ""
+msgstr "文件扩展名不能为空 。"
 
 msgid "Saving audio but current clip does not have audio."
-msgstr ""
+msgstr "保存音频, 但当前剪辑没有音频 。"
 
 msgid "Saving video but with an audio extension."
-msgstr ""
+msgstr "保存视频,但有音频扩展。"
 
 msgid "View/Mask"
-msgstr ""
+msgstr "视图/遮遮罩"
 
 msgid "OCIO/     Input Color Space"
-msgstr ""
+msgstr "OCIO/     输入色彩空间"
 
 msgid "OCIO/     Input Color Space "
-msgstr ""
+msgstr "OCIO/     输入色彩空间 "
 
 msgid "OCIO/     Look"
-msgstr ""
+msgstr "OCIO/     看一看"
 
 msgid "OCIO/     Look "
-msgstr ""
+msgstr "OCIO/     看一看"
 
 msgid "OCIO/Displays"
-msgstr ""
+msgstr "OCIO/显示"
 
 msgid "Pick Color"
-msgstr ""
+msgstr "选择颜色"
 
 msgid "Pick Draw Color and Alpha"
-msgstr ""
+msgstr "选择绘图颜色和阿尔法"
 
 msgid "Media"
-msgstr ""
+msgstr "媒体媒体媒体媒体"
 
 msgid "UI"
-msgstr ""
+msgstr "UI 界面 UI"
 
 msgid "Pan And Zoom"
-msgstr ""
+msgstr "Pan 和 缩放"
 
 msgid "Timeline"
-msgstr ""
+msgstr "时间线"
 
 msgid ""
 "You have EDLs in the current session.  These will not be saved in the "
 "session file.  Do you want to continue?"
-msgstr ""
+msgstr "您在当前会话中有 EDL 。 这些不会保存在会话文件中。 您想要继续吗?"
 
 msgid "Edit Text Annotation"
-msgstr ""
+msgstr "编辑文本注释"
 
 msgid "No item selected"
-msgstr ""
+msgstr "未选中项目"
 
 msgid "Font not found.  Will not use UTF-8."
-msgstr ""
+msgstr "未找到字体。 将不会使用 UTF-8 。"
 
 msgid "%s - Page %d"
-msgstr ""
+msgstr "%s - 第%d页"
 
 msgid "Frame {0} - Timecode: {1} - {2} Secs."
-msgstr ""
+msgstr "框架 {0} - 时间代码 : {1} - {2} 秒数 。"
 
 msgid "Image too big.  Will save the viewport size."
-msgstr ""
+msgstr "图像太大。 将保存视图的大小 。"
 
 msgid "Viewport Size: {0}  Render Size: {1}"
-msgstr ""
+msgstr "查看端口大小 : {0} 文件大小 : {1}"
 
 msgid "Scrub"
-msgstr ""
+msgstr "灌木"
 
 msgid "Selection"
-msgstr ""
+msgstr "选择"
 
 msgid "Draw"
-msgstr ""
+msgstr "绘图"
 
 msgid "Erase"
-msgstr ""
+msgstr "擦除擦除"
 
 msgid "Circle"
-msgstr ""
+msgstr "圆圆"
 
 msgid "Rectangle"
-msgstr ""
+msgstr "矩形"
 
 msgid "Arrow"
-msgstr ""
+msgstr "箭箭箭箭头"
 
 msgid "Rotate"
-msgstr ""
+msgstr "旋转旋转"
 
 msgid "Trim"
-msgstr ""
+msgstr "修饰"
 
 msgid "Slip"
-msgstr ""
+msgstr "滑滑滑"
 
 msgid "Slide"
-msgstr ""
+msgstr "幻灯片幻灯片幻灯片幻灯片"
 
 msgid "Ripple"
-msgstr ""
+msgstr "波纹"
 
 msgid "Roll"
-msgstr ""
+msgstr "滚滚"
 
 msgid "Render/Minify Filter/Linear"
-msgstr ""
+msgstr "招标/最小化过滤器/线性"
 
 msgid "Render/Magnify Filter/Linear"
-msgstr ""
+msgstr "招标/放大过滤器/线性"
 
 msgid "(no image)"
-msgstr ""
+msgstr "(无图像)"
 
 msgid "Unknown action mode in "
-msgstr ""
+msgstr "未知动作模式"
 
 msgid ""
 "Cannot create an annotation here for all frames.  A current frame annotation "
 "already exists."
-msgstr ""
+msgstr "无法在此创建所有框架的注释。 当前框架注释已经存在 。"
 
 msgid ""
 "Cannot create an annotation here for current frame.  An all frames "
 "annotation already exists."
-msgstr ""
+msgstr "无法在此为当前框架创建注释。 已经存在全部框架注释 。"
 
 msgid "Play"
-msgstr ""
+msgstr "播放播放"
 
 msgid "Stop"
-msgstr ""
+msgstr "停止停止停止"
 
 msgid "2.35"
-msgstr ""
+msgstr "2.35"
 
 msgid "1.85"
-msgstr ""
+msgstr "1.85"
 
 msgid "1.66"
-msgstr ""
+msgstr "1.66"
 
 msgid "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
-msgstr ""
+msgstr "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 
 msgid "Cache:"
-msgstr ""
+msgstr "缓存 :"
 
 msgid "    Used: %.2g of %zu Gb (%.2g %%)"
-msgstr ""
+msgstr "已使用 :% zu Gb 的% 2g (% 2g )"
 
 msgid "    Ahead    V: % 4<PRIu64>    A: % 4<PRIu64>"
-msgstr ""
+msgstr "标题五:% 4 < PRIu64> A:% 4 < PRIu64>"
 
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
-msgstr ""
+msgstr "V:% 4 <PRIu64> A:% 4 <PRIu64>"
 
 msgid "Edit Text"
-msgstr ""
+msgstr "编辑文本编辑"
 
 msgid "Invalid font for text drawing"
-msgstr ""
+msgstr "用于文本绘图的无效字体"
 
 msgid "Could not convert message to shape: "
-msgstr ""
+msgstr "无法将信件转换为形状 :"
 
 msgid "Monitor "
-msgstr ""
+msgstr "监视监视器"
 
 msgid "File/Open/Movie or Sequence"
-msgstr ""
+msgstr "文件/开放/电影或序列"
 
 msgid "File/Open/With Separate Audio"
-msgstr ""
+msgstr "文件/开放/有单独音频"
 
-msgid "File/Open/Singe Image"
-msgstr ""
+msgid "File/Open/Single Image"
+msgstr "文件/开放/单一图像"
 
 msgid "File/Open/Directory"
-msgstr ""
+msgstr "文件/开放/目录"
 
 msgid "File/Open/Session"
-msgstr ""
+msgstr "文件/开放/届会"
 
 msgid "File/Save/Movie or Sequence"
-msgstr ""
+msgstr "文件/保存/电影或序列"
 
 msgid "File/Save/Single Frame"
-msgstr ""
+msgstr "文件/保存/单一框架"
 
 msgid "File/Save/Frames to Folder"
-msgstr ""
+msgstr "文件/保存/要到文件夹的边框"
 
 msgid "File/Save/OTIO EDL Timeline"
-msgstr ""
+msgstr "文件/保存/OTIO EDL 时间线"
 
 msgid "File/Save/PDF Document"
-msgstr ""
+msgstr "文件/保存/PDF PDF 文档文档"
 
 msgid "File/Save/Session"
-msgstr ""
+msgstr "文件/保存/届会"
 
 msgid "File/Save/Session As"
-msgstr ""
+msgstr "文件/保存/届会为"
 
 msgid "File/Close Current"
-msgstr ""
+msgstr "文件/关闭当前"
 
 msgid "File/Close All"
-msgstr ""
+msgstr "文件/全部关闭"
 
 msgid "File/Recent/%s"
-msgstr ""
+msgstr "文件/最近/%s"
 
 msgid "File/Quit"
-msgstr ""
+msgstr "文件/退出"
 
 msgid "Window/Presentation"
-msgstr ""
+msgstr "窗口/列报"
 
 msgid "Window/Full Screen"
-msgstr ""
+msgstr "窗口/全屏幕"
 
 msgid "Window/Float On Top"
-msgstr ""
+msgstr "窗口/上浮在上浮"
 
 msgid "Window/Secondary"
-msgstr ""
+msgstr "窗口/中等"
 
 msgid "Window/Secondary Float On Top"
-msgstr ""
+msgstr "窗口/顶部的二级浮点"
 
 msgid "View/Tool Bars/Toggle Menu Bar"
-msgstr ""
+msgstr "视图/工具栏/ 切换菜单栏"
 
 msgid "View/Tool Bars/Toggle Top Bar"
-msgstr ""
+msgstr "视图/工具栏/切换顶栏"
 
 msgid "View/Tool Bars/Toggle Pixel Bar"
-msgstr ""
+msgstr "视图/工具栏/切换像素栏"
 
 msgid "View/Tool Bars/Toggle Timeline Bar"
-msgstr ""
+msgstr "视图/工具栏/ 切换时间线栏"
 
 msgid "View/Tool Bars/Toggle Status Bar"
-msgstr ""
+msgstr "视图/工具栏/切换状态栏"
 
 msgid "View/Tool Bars/Toggle Action Dock"
-msgstr ""
+msgstr "视图/工具栏/切换动作停靠"
 
 msgid "View/Auto Frame"
-msgstr ""
+msgstr "视图/自动框架自动框架"
 
 msgid "View/Safe Areas"
-msgstr ""
+msgstr "视图/安全区"
 
 msgid "View/OpenEXR/Data Window"
-msgstr ""
+msgstr "视图/OpenEXR/数据窗口"
 
 msgid "View/OpenEXR/Display Window"
-msgstr ""
+msgstr "视图/OpenEXR/显示窗口"
 
 msgid "View/OpenEXR/Ignore Display Window"
-msgstr ""
+msgstr "视图/OpenEXR/Ignore 显示窗口"
 
 msgid "Panel/One Panel Only"
-msgstr ""
+msgstr "控制板/仅一个面板"
 
 msgid "Panel/"
-msgstr ""
+msgstr "控制板/"
 
 msgid "Window/"
-msgstr ""
+msgstr "窗口/"
 
 msgid "Unknown menu entry "
-msgstr ""
+msgstr "未知的菜单项"
 
 msgid "Render/Color Channel"
-msgstr ""
+msgstr "招标/颜色频道"
 
 msgid "Render/Red Channel"
-msgstr ""
+msgstr "招标/红色频道"
 
 msgid "Render/Green Channel "
-msgstr ""
+msgstr "招标/绿色通道"
 
 msgid "Render/Blue Channel"
-msgstr ""
+msgstr "招标/蓝频道"
 
 msgid "Render/Alpha Channel"
-msgstr ""
+msgstr "招标/Alpha 频道"
 
 msgid "Render/Mirror X"
-msgstr ""
+msgstr "招标/镜 X"
 
 msgid "Render/Mirror Y"
-msgstr ""
+msgstr "招标/镜 Y"
 
 msgid "Render/Rotate/-90 Degrees"
-msgstr ""
+msgstr "招标/旋转/-90度"
 
 msgid "Render/Rotate/+90 Degrees"
-msgstr ""
+msgstr "招标/旋转/+90度"
 
 msgid "Render/Video Levels/From File"
-msgstr ""
+msgstr "招标/视频级别/从文件"
 
 msgid "Render/Video Levels/Legal Range"
-msgstr ""
+msgstr "招标/维多水平/法律范围"
 
 msgid "Render/Video Levels/Full Range"
-msgstr ""
+msgstr "招标/光/光水平/广度"
 
 msgid "Render/Alpha Blend/None"
-msgstr ""
+msgstr "招标/阿尔法圆形/无"
 
 msgid "Render/Alpha Blend/Straight"
-msgstr ""
+msgstr "招标/阿尔法圆形/直直直"
 
 msgid "Render/Alpha Blend/Premultiplied"
-msgstr ""
+msgstr "招标/阿尔法圆形/多"
 
 msgid "Render/Minify Filter/Nearest"
-msgstr ""
+msgstr "招标/最小化过滤器/近近"
 
 msgid "Render/Magnify Filter/Nearest"
-msgstr ""
+msgstr "招标/放大过滤器/近近"
 
 msgid "Render/HDR/Auto Normalize"
-msgstr ""
+msgstr "招标/HDR/自动统一化"
 
 msgid "Render/HDR/Invalid Values"
-msgstr ""
+msgstr "招标/HDR/无效值"
 
 msgid "Playback/Stop"
-msgstr ""
+msgstr "播放重放/停止"
 
 msgid "Playback/Forwards"
-msgstr ""
+msgstr "播放重放/前进"
 
 msgid "Playback/Backwards"
-msgstr ""
+msgstr "播放重放/向后退"
 
 msgid "Playback/Toggle Playback"
-msgstr ""
+msgstr "播放重放/切换重播"
 
 msgid "Playback/Toggle In Point"
-msgstr ""
+msgstr "播放重放/切换点"
 
 msgid "Playback/Toggle Out Point"
-msgstr ""
+msgstr "播放重放/切换点"
 
 msgid "Playback/Loop Playback"
-msgstr ""
+msgstr "播放重放/循环播放回放"
 
 msgid "Playback/Playback Once"
-msgstr ""
+msgstr "播放重放/播放一次回放"
 
 msgid "Playback/Playback Ping Pong"
-msgstr ""
+msgstr "播放重放/播放"
 
 msgid "Playback/Go to/Start"
-msgstr ""
+msgstr "播放重放/转到/开始"
 
 msgid "Playback/Go to/End"
-msgstr ""
+msgstr "播放重放/转到/结束"
 
 msgid "Playback/Go to/Previous Frame"
-msgstr ""
+msgstr "播放重放/转到/上一个框架"
 
 msgid "Playback/Go to/Next Frame"
-msgstr ""
+msgstr "播放重放/转到/下一个框架框架"
 
 msgid "Playback/Go to/Previous Clip"
-msgstr ""
+msgstr "播放重放/转到/上一个剪贴"
 
 msgid "Playback/Go to/Next Clip"
-msgstr ""
+msgstr "播放重放/转到/下一个剪贴"
 
 msgid "Playback/Go to/Previous Annotation"
-msgstr ""
+msgstr "播放重放/转到/上一个注释"
 
 msgid "Playback/Go to/Next Annotation"
-msgstr ""
+msgstr "播放重放/转到/转到/下一个注释"
 
 msgid "Playback/Annotation/Clear"
-msgstr ""
+msgstr "播放重放/注释注记/清除"
 
 msgid "Playback/Annotation/Clear All"
-msgstr ""
+msgstr "播放重放/注释注记/全部清除"
 
 msgid "View/Mask/%s"
-msgstr ""
+msgstr "视图/遮遮罩/%s"
 
 msgid "View/Hud"
-msgstr ""
+msgstr "视图/哈德"
 
 msgid "Timeline/Cache/Clear"
-msgstr ""
+msgstr "时间线/缓存缓缓存/清除"
 
 msgid "Timeline/Cache/Update Frame"
-msgstr ""
+msgstr "时间线/缓存缓缓存/更新框架更新框架"
 
 msgid "Timeline/Editable"
-msgstr ""
+msgstr "时间线/可编辑"
 
 msgid "Timeline/Edit Associated Clips"
-msgstr ""
+msgstr "时间线/编辑关联剪贴剪贴板"
 
 msgid "Timeline/Frame View"
-msgstr ""
+msgstr "时间线/框架"
 
 msgid "Timeline/Scroll To Current Frame"
-msgstr ""
+msgstr "时间线/缩到当前框架"
 
 msgid "Timeline/Track Info"
-msgstr ""
+msgstr "时间线/音轨信息"
 
 msgid "Timeline/Clip Info"
-msgstr ""
+msgstr "时间线/剪页信息"
 
 msgid "Timeline/Thumbnails/None"
-msgstr ""
+msgstr "时间线/缩略图/无"
 
 msgid "Timeline/Thumbnails/Small"
-msgstr ""
+msgstr "时间线/缩略图/小"
 
 msgid "Timeline/Thumbnails/Medium"
-msgstr ""
+msgstr "时间线/缩略图/中 中"
 
 msgid "Timeline/Thumbnails/Large"
-msgstr ""
+msgstr "时间线/缩略图/大型"
 
 msgid "Timeline/Transitions"
-msgstr ""
+msgstr "时间线/过渡"
 
 msgid "Timeline/Markers"
-msgstr ""
+msgstr "时间线/标记"
 
 msgid "Image/Next"
-msgstr ""
+msgstr "图像/下一頁"
 
 msgid "Image/Previous"
-msgstr ""
+msgstr "图像/上一个"
 
 msgid "Image/Version/First"
-msgstr ""
+msgstr "图像/版本/第一届"
 
 msgid "Image/Version/Last"
-msgstr ""
+msgstr "图像/版本/最后一"
 
 msgid "Image/Version/Previous"
-msgstr ""
+msgstr "图像/版本/上一个"
 
 msgid "Image/Version/Next"
-msgstr ""
+msgstr "图像/版本/下一頁"
 
 msgid "Edit/Frame/Cut"
-msgstr ""
+msgstr "编辑/框架/剪切"
 
 msgid "Edit/Frame/Copy"
-msgstr ""
+msgstr "编辑/框架/复制"
 
 msgid "Edit/Frame/Paste"
-msgstr ""
+msgstr "编辑/框架/粘贴"
 
 msgid "Edit/Frame/Insert"
-msgstr ""
+msgstr "编辑/框架/插入"
 
 msgid "Edit/Audio Gap/Insert"
-msgstr ""
+msgstr "编辑/音频差距/插入"
 
 msgid "Edit/Audio Gap/Remove"
-msgstr ""
+msgstr "编辑/音频差距/删除"
 
 msgid "Edit/Slice"
-msgstr ""
+msgstr "编辑/切片"
 
 msgid "Edit/Remove"
-msgstr ""
+msgstr "编辑/删除"
 
 msgid "Edit/Undo"
-msgstr ""
+msgstr "编辑/撤消"
 
 msgid "Edit/Redo"
-msgstr ""
+msgstr "编辑/重做( 重做)"
 
 msgid "OCIO/Presets"
-msgstr ""
+msgstr "OCIO/预设"
 
 msgid "OCIO/Current File"
-msgstr ""
+msgstr "OCIO/当前文件"
 
 msgid "OCIO/Change All Files"
-msgstr ""
+msgstr "OCIO/更改所有文件"
 
 msgid "Sync/Send/Media"
-msgstr ""
+msgstr "同步/发送/媒体"
 
 msgid "Sync/Send/UI"
-msgstr ""
+msgstr "同步/发送/UI 界面 UI"
 
 msgid "Sync/Send/Pan And Zoom"
-msgstr ""
+msgstr "同步/发送/Pan 和 缩放"
 
 msgid "Sync/Send/Color"
-msgstr ""
+msgstr "同步/发送/颜色"
 
 msgid "Sync/Send/Timeline"
-msgstr ""
+msgstr "同步/发送/时间线"
 
 msgid "Sync/Send/Annotations"
-msgstr ""
+msgstr "同步/发送/说明"
 
 msgid "Sync/Send/Audio"
-msgstr ""
+msgstr "同步/发送/音音频"
 
 msgid "Sync/Accept/Media"
-msgstr ""
+msgstr "同步/接受/媒体"
 
 msgid "Sync/Accept/UI"
-msgstr ""
+msgstr "同步/接受/UI 界面 UI"
 
 msgid "Sync/Accept/Pan And Zoom"
-msgstr ""
+msgstr "同步/接受/Pan 和 缩放"
 
 msgid "Sync/Accept/Color"
-msgstr ""
+msgstr "同步/接受/颜色"
 
 msgid "Sync/Accept/Timeline"
-msgstr ""
+msgstr "同步/接受/时间线"
 
 msgid "Sync/Accept/Annotations"
-msgstr ""
+msgstr "同步/接受/说明"
 
 msgid "Sync/Accept/Audio"
-msgstr ""
+msgstr "同步/接受/音音频"
 
 msgid ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
 "function and a string with menu options in it."
 msgstr ""
+"在 '{0}' 中, 期望函数是一个值或图普, 包含 Python 函数和带有菜单选项的字符"
+"串 。"
 
 msgid ""
 "In '{0}' expected a function a tuple containing a Python function and a "
 "string with menu options in it."
 msgstr ""
+"在 '{0}' 中, 期望函数是一个包含 Python 函数和带菜单选项的字符串的图普。"
 
 msgid "Help/Documentation"
-msgstr ""
+msgstr "帮助/文件"
 
 msgid "Help/About"
-msgstr ""
+msgstr "帮助/关于"
 
 msgid "Favorites"
-msgstr ""
+msgstr "福利利人"
 
 msgid "My Computer"
-msgstr ""
+msgstr "我的电脑"
 
 msgid "My Documents"
-msgstr ""
+msgstr "我的文档"
 
 msgid "Desktop"
-msgstr ""
+msgstr "桌面"
 
 msgid "Home"
-msgstr ""
+msgstr "內容"
 
 msgid "Temporary"
-msgstr ""
+msgstr "临时"
 
 msgid "Size"
-msgstr ""
+msgstr "大小大小"
 
 msgid "Date"
-msgstr ""
+msgstr "Date"
 
 msgid "Owner"
-msgstr ""
+msgstr "所有人"
 
 msgid "Permissions"
-msgstr ""
+msgstr "权限权限"
 
 msgid "New Folder"
-msgstr ""
+msgstr "新文件夹"
 
 msgid "Rename"
-msgstr ""
+msgstr "重命名"
 
 msgid "Delete"
-msgstr ""
+msgstr "删除删除删除"
 
 msgid "Ok"
-msgstr ""
+msgstr "好"
 
 msgid "Location"
-msgstr ""
+msgstr "地点地点地点地点地点"
 
 msgid "Show Hidden Files"
-msgstr ""
+msgstr "显示隐藏文件"
 
 msgid "File Types"
-msgstr ""
+msgstr "文件类型"
 
 msgid "All Files (*)"
-msgstr ""
+msgstr "所有文件 (*)"
 
 msgid "Go back one directory in the history"
-msgstr ""
+msgstr "在历史历史中返回一个目录"
 
 msgid "Go forward one directory in the history"
-msgstr ""
+msgstr "在历史历史中前进一个目录"
 
 msgid "Go to the parent directory"
-msgstr ""
+msgstr "跳转到父目录"
 
 msgid "Refresh this directory"
-msgstr ""
+msgstr "刷新此目录"
 
 msgid "Delete file(s)"
-msgstr ""
+msgstr "删除文件"
 
 msgid "Create new directory"
-msgstr ""
+msgstr "创建新目录"
 
 msgid "Add this directory to my favorites"
-msgstr ""
+msgstr "将此目录添加到我最喜爱的目录"
 
 msgid "Preview files"
-msgstr ""
+msgstr "预览文件"
 
 msgid "List mode"
-msgstr ""
+msgstr "列表模式"
 
 msgid "Wide list mode"
-msgstr ""
+msgstr "宽列表模式"
 
 msgid "Detail mode"
-msgstr ""
+msgstr "详细细节模式"
 
 msgid ""
 "Could not create directory '%s'. You may not have permission to perform this "
 "operation."
-msgstr ""
+msgstr "无法创建目录 “%s ” 。 您可能没有执行此操作的权限 。"
 
 msgid "An error ocurred while trying to delete '%s'. %s"
-msgstr ""
+msgstr "尝试删除 “%%s”时发生错误。%s"
 
 msgid "File '%s' already exists!"
-msgstr ""
+msgstr "文件 '%s' 已经存在!"
 
 msgid "Unable to rename '%s' to '%s'"
-msgstr ""
+msgstr "无法将 “%%s”重命名为 “%s”"
 
 msgid "3GP Movie"
-msgstr ""
+msgstr "3GP电影"
 
 msgid "Advanced Systems Format Media"
-msgstr ""
+msgstr "高级系统格式媒体"
 
 msgid "AVCHD Video"
-msgstr ""
+msgstr "AVCHHD 视频"
 
 msgid "AVI Movie"
-msgstr ""
+msgstr "AVI 电影"
 
 msgid "DIVX Movie"
-msgstr ""
+msgstr "DIVX 电影"
 
 msgid "Digital Video"
-msgstr ""
+msgstr "数码视频"
 
 msgid "Flash Movie"
-msgstr ""
+msgstr "闪闪电影"
 
 msgid "Apple's M4V Movie"
-msgstr ""
+msgstr "苹果M4V电影"
 
 msgid "Matroska Movie"
-msgstr ""
+msgstr "马特罗斯卡电影"
 
 msgid "Quicktime Movie"
-msgstr ""
+msgstr "快速电影"
 
 msgid "MP4 Movie"
-msgstr ""
+msgstr "MP4电影"
 
 msgid "MPEG Movie"
-msgstr ""
+msgstr "MPEG 电影"
 
 msgid "MXF Movie"
-msgstr ""
+msgstr "MXF 电影"
 
 msgid "Ogg Movie"
-msgstr ""
+msgstr "Ogg 电影"
 
 msgid "Ogg Video"
-msgstr ""
+msgstr "Ogg 视频"
 
 msgid "OpenTimelineIO EDL"
-msgstr ""
+msgstr "开放时间线IO EDL"
 
 msgid "OpenTimelineIO Zipped EDL"
-msgstr ""
+msgstr "OpenTimelineIO 被截断的 EDL"
 
 msgid "Real Media Movie"
-msgstr ""
+msgstr "真实媒体电影"
 
 msgid "VOB Movie"
-msgstr ""
+msgstr "VOB 电影"
 
 msgid "WebM Movie"
-msgstr ""
+msgstr "WebM 电影"
 
 msgid "WMV Movie"
-msgstr ""
+msgstr "WMV 电影"
 
 msgid "RAW Picture"
-msgstr ""
+msgstr "RAW 图片"
 
 msgid "Bitmap Picture"
-msgstr ""
+msgstr "位图图片"
 
 msgid "Cineon Picture"
-msgstr ""
+msgstr "Cineon 图片"
 
 msgid "Canon Raw Picture"
-msgstr ""
+msgstr "Canon Raw 图片"
 
 msgid "Kodak Digital Negative"
-msgstr ""
+msgstr "Kodak 数字负数"
 
 msgid "DPX Picture"
-msgstr ""
+msgstr "DPX 图片"
 
 msgid "EXR Picture"
-msgstr ""
+msgstr "EXR 图片"
 
 msgid "GIF Picture"
-msgstr ""
+msgstr "GIF GIF 图片"
 
 msgid "HDRI Picture"
-msgstr ""
+msgstr "HDRI 图片"
 
 msgid "JPEG Picture"
-msgstr ""
+msgstr "JEPEG 图片"
 
 msgid "Softimage Picture"
-msgstr ""
+msgstr "软软图像图片"
 
 msgid "Portable Network Graphics Picture"
-msgstr ""
+msgstr "移动网络图形图片"
 
 msgid "Portable Pixmap"
-msgstr ""
+msgstr "便携像素图"
 
 msgid "Photoshop Picture"
-msgstr ""
+msgstr "摄影影店"
 
 msgid "SGI Picture"
-msgstr ""
+msgstr "SGI 图片"
 
 msgid "Stereo OpenEXR Picture"
-msgstr ""
+msgstr "立体 OpenEXR 图片"
 
 msgid "TGA Picture"
-msgstr ""
+msgstr "TGA 图片"
 
 msgid "TIFF Picture"
-msgstr ""
+msgstr "TIFF 图片"
 
 msgid "MP3 music"
-msgstr ""
+msgstr "MP3 音乐"
 
 msgid "OGG Vorbis music"
-msgstr ""
+msgstr "OGG Vorbis音乐"
 
 msgid "Wave music"
-msgstr ""
+msgstr "波浪音乐"
 
 msgid "OpenUSD Asset"
-msgstr ""
+msgstr "资产"
 
 msgid "OpenUSD Zipped Asset"
-msgstr ""
+msgstr "冲销资产"
 
 msgid "OpenUSD Compressed Asset"
-msgstr ""
+msgstr "压缩资产"
 
 msgid "OpenUSD ASCII Asset"
-msgstr ""
+msgstr "ASCII资产"
 
 msgid "Another process using the file."
-msgstr ""
+msgstr "使用文件的另一个进程 。"
 
 msgid "Jan"
-msgstr ""
+msgstr "Jan"
 
 msgid "Feb"
-msgstr ""
+msgstr "Feb"
 
+# INVALID
 msgid "Mar"
-msgstr ""
+msgstr "Mar"
 
 msgid "Apr"
-msgstr ""
+msgstr "Apr"
 
 msgid "May"
-msgstr ""
+msgstr "May"
 
 msgid "Jun"
-msgstr ""
+msgstr "Jun"
 
 msgid "Jul"
-msgstr ""
+msgstr "Jul"
 
 msgid "Aug"
-msgstr ""
+msgstr "Aug"
 
 msgid "Sep"
-msgstr ""
+msgstr "Sep"
 
 msgid "Oct"
-msgstr ""
+msgstr "Oct"
 
 msgid "Nov"
-msgstr ""
+msgstr "Nov"
 
 msgid "Replace"
-msgstr ""
+msgstr "替换"
 
 msgid "Find:"
-msgstr ""
+msgstr "查找 :"
 
 msgid "Replace:"
-msgstr ""
+msgstr "替换:"
 
 msgid "Replace All"
-msgstr ""
+msgstr "全部替换"
 
 msgid "Replace Next"
-msgstr ""
+msgstr "替换下"
 
 msgid "D\t\t\t\t\t=\tDecoding supported"
-msgstr ""
+msgstr "D= 支持解码"
 
 msgid "\tE\t\t\t\t=\tEncoding supported"
-msgstr ""
+msgstr "E=支持编码"
 
 msgid "\t\tI\t\t\t=\tIntra frame-only codec"
-msgstr ""
+msgstr "I = 内部框架专用编码器"
 
 msgid "\t\t\tL\t\t=\tLossy compression"
-msgstr ""
+msgstr "L=损失压缩"
 
 msgid "\t\t\t\tS\t=\tLossless compression"
-msgstr ""
+msgstr "S=无损压缩"
 
 msgid "With gcc "
-msgstr ""
+msgstr "带 gcc 带 gcc"
 
 msgid "With clang "
-msgstr ""
+msgstr "与叮叮"
 
 msgid "With msvc "
-msgstr ""
+msgstr "与 msvc 一起"
 
 msgid "mrv2 depends on:"
-msgstr ""
+msgstr "..............."
 
 msgid "Vendor:\t"
-msgstr ""
+msgstr "供应商:"
 
 msgid "Renderer:\t"
-msgstr ""
+msgstr "发件人 :"
 
 msgid "Version:\t"
-msgstr ""
+msgstr "版本 :"
 
 msgid "Max. Texture Size:\t"
-msgstr ""
+msgstr "最大纹理大小 :"
 
 msgid "This is a list of contributors to the mrv2 project:"
-msgstr ""
+msgstr "这是 mrv2项目的捐款者名单:"
 
 msgid "Mark an area in the image with SHIFT + the left mouse button"
-msgstr ""
+msgstr "用 SHIFT + 鼠标左键标记图像中的区域"
 
 msgid "&Copy"
-msgstr ""
+msgstr "复制( C)"
 
 msgid "Everything OK. "
-msgstr ""
+msgstr "一切都还好。"
 
 msgid "GPU: Unknown"
-msgstr ""
+msgstr "GPU: 未知"
 
 msgid "Elapsed"
-msgstr ""
+msgstr "已折过"
 
 msgid "Remaining"
-msgstr ""
+msgstr "剩余"
 
 msgid "FPS"
-msgstr ""
+msgstr "FPS 个人 PPS"
 
 msgid "Undock"
-msgstr ""
+msgstr "解锁"
 
 msgid "Dock"
-msgstr ""
+msgstr "停停停停停停停停停停停停停停停停停停停停"
 
 msgid "Dismiss"
-msgstr ""
+msgstr "解散"
 
 msgid "Drag Box"
-msgstr ""
+msgstr "拖放框"
 
 msgid "Unknown type for mrvOCIOBrowser"
-msgstr ""
+msgstr "MrvOCIOBrowser 的未知类型"
 
 msgid "Session: "
-msgstr ""
+msgstr "会议:"
 
 msgid "Edit/&Copy"
-msgstr ""
+msgstr "编辑/复制"
 
 msgid "Reset to default value"
-msgstr ""
+msgstr "重置为默认值"
 
 msgid "&File/&Clone"
-msgstr ""
+msgstr "&File/&Clone"
 
 msgid "&File/&Refresh Cache"
-msgstr ""
+msgstr "文件/刷新缓存"
 
 msgid "&Copy/&Filename"
-msgstr ""
+msgstr "复制/文件名"
 
 msgid "&Show/In &File Manager"
-msgstr ""
+msgstr "显示/在文件管理器中"
 
 msgid "Maximum:"
-msgstr ""
+msgstr "最大 :"
 
 msgid "Copy/Color"
-msgstr ""
+msgstr "复制/颜色"
 
 msgid "Area"
-msgstr ""
+msgstr "地区面积"
 
 msgid "pixel"
-msgstr ""
+msgstr "像素"
 
 msgid "pixels"
-msgstr ""
+msgstr "像素像素"
 
 msgid "Maximum"
-msgstr ""
+msgstr "最大"
 
 msgid "Minimum"
-msgstr ""
+msgstr "最低最低"
 
 msgid "Range"
-msgstr ""
+msgstr "范围范围范围"
 
 msgid "Mean"
-msgstr ""
+msgstr "平均平均"
 
 msgid "Track #%d - %s"
-msgstr ""
+msgstr "音轨 %d - %s"
 
 msgid "Same Size"
-msgstr ""
+msgstr "相同大小大小"
 
 msgid "Half Size"
-msgstr ""
+msgstr "半半大小"
 
 msgid "Quarter Size"
-msgstr ""
+msgstr "四分之一大小"
 
 msgid "TV"
-msgstr ""
+msgstr "电视电视电视电视"
 
 msgid "PC"
-msgstr ""
+msgstr "PC 个人电脑"
 
 msgid "sRGB"
-msgstr ""
+msgstr "sRGB"
 
 msgid "bt709"
-msgstr ""
+msgstr "bt709 bt709"
 
 msgid "FCC"
-msgstr ""
+msgstr "FCCFC 公平竞争委员会"
 
 msgid "SMPTE240m"
-msgstr ""
+msgstr "SMPTE240m (SMPTE240m)"
 
 msgid "bt601"
-msgstr ""
+msgstr "bt601 bt601"
 
 msgid "bt2020"
-msgstr ""
+msgstr "bt2020 bt20"
 
 msgid "unspecified"
-msgstr ""
+msgstr "未指定"
 
 msgid "reserved"
-msgstr ""
+msgstr "保留"
 
 msgid "bt470m"
-msgstr ""
+msgstr "bt470米"
 
 msgid "SMPTE170m"
-msgstr ""
+msgstr "SMPTE170米"
 
 msgid "Film"
-msgstr ""
+msgstr "电影电影电影"
 
 msgid "SMPTE428"
-msgstr ""
+msgstr "SMPTE428型"
 
 msgid "SMPTE431"
-msgstr ""
+msgstr "SMPTE431型"
 
 msgid "SMPTE432"
-msgstr ""
+msgstr "SMPTE432 SMPTE432"
 
 msgid "EBU3213"
-msgstr ""
+msgstr "ENBU3213 欧统联3213"
 
 msgid "gamma22"
-msgstr ""
+msgstr "伽玛 22"
 
 msgid "gamma28"
-msgstr ""
+msgstr "伽玛28"
 
 msgid "smpte240m"
-msgstr ""
+msgstr "时点240米"
 
 msgid "linear"
-msgstr ""
+msgstr "线"
 
 msgid "log"
-msgstr ""
+msgstr "日志"
 
 msgid "logsqrt"
-msgstr ""
+msgstr "对数qrt"
 
 msgid "iec61966-2-4"
-msgstr ""
+msgstr "ic61966-2-4"
 
 msgid "bt1361"
-msgstr ""
+msgstr "bt1361 bt1361"
 
 msgid "iec61966-2-1"
-msgstr ""
+msgstr "ic61966-2-1"
 
 msgid "bt2020-10"
-msgstr ""
+msgstr "2020-10 bt2020-10"
 
 msgid "bt2020-12"
-msgstr ""
+msgstr "bt20-20-12"
 
 msgid "smpte2084"
-msgstr ""
+msgstr "平时2084"
 
 msgid "arib-std-b67"
-msgstr ""
+msgstr "Arib-std-b67 千兆吨b67"
 
 msgid "Save Movie Options"
-msgstr ""
+msgstr "保存电影选项"
 
 msgid "Common Settings"
-msgstr ""
+msgstr "共同设置"
 
 msgid "Save Annotations"
-msgstr ""
+msgstr "保存说明"
 
 msgid ""
 "Save Annotations burned into the movie or sequence.  It also allows saving "
 "OpenEXRs from an 8-bit movie and changing OpenEXR's pixel type."
 msgstr ""
+"将说明保存到被烧毁的电影或序列中。 还可以将 OpenEXR 保存在8 位的电影中, 并更"
+"改 OpenEXR 像素类型 。"
 
 msgid "Video Options"
-msgstr ""
+msgstr "视频选项"
 
 msgid "Resolution"
-msgstr ""
+msgstr "决议"
 
 msgid "Resolution of movie to save."
-msgstr ""
+msgstr "要保存的电影决议。"
 
 msgid "Hardware Codec"
-msgstr ""
+msgstr "硬件编码c"
 
 msgid "Profile"
-msgstr ""
+msgstr "概况简介简介"
 
 msgid "FFMpeg's Profile settings."
-msgstr ""
+msgstr "FFmpeg 的剖析设置 。"
 
 msgid "?"
-msgstr ""
+msgstr "?"
 
 msgid "Help on Profile"
-msgstr ""
+msgstr "配置文件帮助"
 
 msgid "Pixel Format"
-msgstr ""
+msgstr "像像素格式"
 
 msgid "FFMpeg's Pixel Format for the codec selected"
-msgstr ""
+msgstr "所选编码器的 FFmpeg 的像素格式"
 
 msgid "Help on Pixel Format"
-msgstr ""
+msgstr "像素格式上的帮助"
 
 msgid "Preset"
-msgstr ""
+msgstr "预设预设"
 
 msgid "FFMpeg's Preset setting for the codec selected."
-msgstr ""
+msgstr "所选编码器的 FFmpeg 预设设置 。"
 
 msgid "Help on Preset"
-msgstr ""
+msgstr "预设时的帮助"
 
 msgid "Advanced Settings"
-msgstr ""
+msgstr "高级设置"
 
 msgid "Help on Advance Settings"
-msgstr ""
+msgstr "提前设置帮助"
 
 msgid "Audio Options"
-msgstr ""
+msgstr "音频选项"
 
 msgid "FFMpeg's Audio Codec settings."
-msgstr ""
+msgstr "Higopeg 的音频编码设置 。"
 
 msgid "Note that while saving with audio, the audio will not be heard."
-msgstr ""
+msgstr "请注意,在用音频保存时,不会听到音频。"
 
 msgid "Help Window"
-msgstr ""
+msgstr "帮助窗口"
 
 msgid "Override"
-msgstr ""
+msgstr "覆盖"
 
 msgid "Color Range"
-msgstr ""
+msgstr "颜色范围"
 
 msgid "Profile Help"
-msgstr ""
+msgstr "配置文件帮助"
 
 msgid ""
 "\n"
@@ -4257,9 +4542,71 @@ msgid ""
 "  AV1 are supported or soon will be.\n"
 "  "
 msgstr ""
+"\n"
+"  The Profile setting allows you to select\n"
+"  the codec and profile for video saving.\n"
+"\n"
+"  Each profile has its benefits and drawbacks.\n"
+"\n"
+"  None - This is mpeg4 compatible with DVD movies.\n"
+"  H264 - Only if mrv2 has been compiled as GPL.  One\n"
+"         of the most popular codecs, but it is now\n"
+"         becoming obsolete.\n"
+"  ProRes - ProRes is a family of codecs developed by \n"
+"           Apple.\n"
+"           The Normal version strikes a balance \n"
+"           between quality and file size.  \n"
+"  ProRes_Proxy - Most compressed ProRes, offering the\n"
+"                 smallest file size.  \n"
+"                 Good for offline editing.\n"
+"  ProRes_LT - More compressed than normal ProRes but \n"
+"              less than Proxy.  Good for offline \n"
+"              editing.\n"
+"  ProRes_HQ - Less compressed then normal ProRes.  \n"
+"              Often used for mastering and final \n"
+"              delivery.\n"
+"  ProRes_4444 - Highest quality ProRes format, \n"
+"                offering full 4:4:4\n"
+"                chroma sampling (color information \n"
+"                for each pixel).\n"
+"                Preserves the most detail and color \n"
+"                accuracy, ideal for high-end workflows \n"
+"                like color grading and visual effects.\n"
+"                Supports alpha channels for \n"
+"                compositing graphics with \n"
+"                transparency.\n"
+"  ProRes_XQ - Highest quality version of ProRes 4444, \n"
+"              designed for high-dynamic-range (HDR) \n"
+"              imagery.\n"
+"  VP9 - Codec developed by Google.  High compression \n"
+"        ratio.\n"
+"        It supports a whole range of pixel formats to\n"
+"        balance disk space vs. quality.\n"
+"        Good for high-end delivery for either Web or \n"
+"        online review.\n"
+"  Cineform - codec developed by GoPro, that rivals \n"
+"             ProRes in features, except for HDR.  \n"
+"             It was discontinued in 2021, but most \n"
+"             packages may support it.\n"
+"             It does not compress as well as ProRes \n"
+"             or VP9.\n"
+"             It supports alpha channels for \n"
+"             compositing graphics with transparency.\n"
+"  AV1 - New generation codec which is gaining support from\n"
+"        Google, Netflix and Amazon.  Compresses better than VP9 \n"
+"        or H264 for the same quality but requires more computer\n"
+"        resources.  Optimal for video reviews.\n"
+"  HAP - RGB/A codec which is optimized for fast playback with\n"
+"        CPU decoding.  It does not compress that well.\n"
+"        It needs hap-alpha* presets to save alpha channel.\n"
+"\n"
+"  Hardware encoding is only supported on newer MacBook\n"
+"  Pro with M1 or newer chips.  H264, Prores, VP9 and\n"
+"  AV1 are supported or soon will be.\n"
+"  "
 
 msgid "Pixel Format Help"
-msgstr ""
+msgstr "像素格式帮助帮助"
 
 msgid ""
 "\n"
@@ -4285,9 +4632,16 @@ msgid ""
 "\n"
 "  "
 msgstr ""
+"\n"
+"像素格式指定了视频如何在文件中编码。 每个编码和配置都有它所支持的像素格式。 "
+"支持的像素格式有两大类: - YUV( Luminance, Cr, Cb) - BGR( RGB 使用逆向频道) - "
+"RGB 。 此外, 一些代码支持 Alpha 频道( 透明性), 比如 BGRA。 编码器的另一个元素"
+"是“ P ”, 它表示频道按平面顺序存储, 而不是每个组件的内置。 最后, 像素格式名称"
+"中的数字表示用于编码的像素格式位数。 普通值为 8、 10、 12 和 16。 正常值为 "
+"8、 12 和 16 。"
 
 msgid "Preset Help"
-msgstr ""
+msgstr "预设帮助"
 
 msgid ""
 "\n"
@@ -4312,9 +4666,16 @@ msgid ""
 "  options.\n"
 "  "
 msgstr ""
+"\n"
+"\n"
+"Preset 设置允许您存储并传递标记到 FFmpeg (mrv2 使用的视频引擎), 以便除像素格"
+"式外更容易控制视频的质量和大小。 当选择您在此顺序中设定的质量时 : - Profile "
+"- 像素格式 - 预设预设文件存储在 yrv2 安装的预设/ 目录中, 但是您可以通过环境变"
+"量 $STUDIOPATH/ preset 来配置目录。 文件的名称是配置- preset.pst 的名称。 格"
+"式非常简单, 带有批注和冒号分隔选项 。"
 
 msgid "Advanced Settings Help"
-msgstr ""
+msgstr "高级设置帮助"
 
 msgid ""
 "\n"
@@ -4329,171 +4690,177 @@ msgid ""
 "  DON'T MESS WITH THEM!\n"
 "  "
 msgstr ""
+"\n"
+"\n"
+"高级设置允许您在电影文件中存储元数据, 以确定元数据创建地点和方式。 例如, 如果"
+"一组 8位图像是 sRGB 或 Rec709, 显示是否为 sRGB 或 Rec709, 如果您不知道这些设"
+"置会做什么, 请不要与这些设置一起!"
 
 msgid "1/9"
-msgstr ""
+msgstr "1/9 "
 
 msgid "1/8"
-msgstr ""
+msgstr "1/8"
 
 msgid "1/7"
-msgstr ""
+msgstr "1/7"
 
 msgid "1/6"
-msgstr ""
+msgstr "1/6"
 
 msgid "1/5"
-msgstr ""
+msgstr "1/5"
 
 msgid "1/4"
-msgstr ""
+msgstr "1/4"
 
 msgid "1/3"
-msgstr ""
+msgstr "1/3"
 
 msgid "1/2"
-msgstr ""
+msgstr "1/2"
 
 msgid "x1"
-msgstr ""
+msgstr "x1"
 
 msgid "x2"
-msgstr ""
+msgstr "x2"
 
 msgid "x3"
-msgstr ""
+msgstr "x3"
 
 msgid "x4"
-msgstr ""
+msgstr "x4"
 
 msgid "x5"
-msgstr ""
+msgstr "x5"
 
 msgid "x6"
-msgstr ""
+msgstr "x6"
 
 msgid "x7"
-msgstr ""
+msgstr "x7"
 
 msgid "x8"
-msgstr ""
+msgstr "x8"
 
 msgid "x9"
-msgstr ""
+msgstr "x9"
 
 msgid "FIT"
-msgstr ""
+msgstr "脚"
 
 msgid "RGBA"
-msgstr ""
+msgstr "RGBA"
 
 msgid "Hex"
-msgstr ""
+msgstr "十六进"
 
 msgid "8bit"
-msgstr ""
+msgstr "8位"
 
 msgid "HSV"
-msgstr ""
+msgstr "HSV"
 
 msgid "HSL"
-msgstr ""
+msgstr "HSL"
 
 msgid "XYZ CIE XYZ"
-msgstr ""
+msgstr "XYZ CIE XYZ"
 
 msgid "xyY CIE xyY"
-msgstr ""
+msgstr "XYY CIE xYY"
 
 msgid "Lab CIELAB (L*a*b*)"
-msgstr ""
+msgstr "Lab CIELAB (L*a*b*)"
 
 msgid "Luv CIELUV (L*u*v*)"
-msgstr ""
+msgstr "Luv CIELUV (L*u*v*)"
 
 msgid "YUV (Analog PAL)"
-msgstr ""
+msgstr "YUV (Analog PAL) (Analog PAL)"
 
 msgid "YDbDr (Analog SECAM/PAL-N)"
-msgstr ""
+msgstr "YDbDr (Analog SECAM/PAL-N)"
 
 msgid "YIQ (Analog NTSC)"
-msgstr ""
+msgstr "YIQ(NTSC 年数)"
 
 msgid "ITU-601 (Digital PAL/NTSC YCbCr)"
-msgstr ""
+msgstr "ITU-601(数字PAL/NTSC YCbCr)"
 
 msgid "ITU-709 (Digital HDTV YCbCr)"
-msgstr ""
+msgstr "ITU-709(数字数字HDTV YCbCr)"
 
 msgid "Full"
-msgstr ""
+msgstr "完整"
 
 msgid "Original"
-msgstr ""
+msgstr "原件"
 
 msgid "Y (Luminance)"
-msgstr ""
+msgstr "Y (荣誉)"
 
 msgid "Y' (Lumma)"
-msgstr ""
+msgstr "Y''(卢马)"
 
 msgid "L (Lightness)"
-msgstr ""
+msgstr "L( 亮度)"
 
 msgid "Image zoom setting."
-msgstr ""
+msgstr "图像放大设置 。"
 
 msgid "XY"
-msgstr ""
+msgstr "XY"
 
 msgid "Image coordinate of pixel under mouse."
-msgstr ""
+msgstr "鼠标下像素图像坐标 。"
 
 msgid ""
 "Switch RGBA display between floating point, hexadecimal (0..0xff) and "
 "decimal (0..255)."
-msgstr ""
+msgstr "在浮动点、十六进制(0.0xff)和十进制(0.2.55)之间切换 RGBA 显示。"
 
 msgid "Red value of image pixel under mouse."
-msgstr ""
+msgstr "鼠标下图像像素红色值 。"
 
 msgid "Green value of image pixel under mouse."
-msgstr ""
+msgstr "鼠标下图像像素的绿色值 。"
 
 msgid "Blue value of image pixel under mouse."
-msgstr ""
+msgstr "鼠标下图像像素的蓝色值 。"
 
 msgid "Alpha value of image pixel under mouse."
-msgstr ""
+msgstr "鼠标下图像像素的 Alpha 值 。"
 
 msgid "8-bit sample of image pixel under mouse."
-msgstr ""
+msgstr "鼠标下图像像素的8位位样本 。"
 
 msgid ""
 "Switch pixel color space information display for the pixel under the cursor."
-msgstr ""
+msgstr "光标下像素的切换像素色彩空间信息显示 。"
 
 msgid "Hue value of image pixel under mouse."
-msgstr ""
+msgstr "鼠标下图像像素的色调值 。"
 
 msgid "Saturation value of image pixel under mouse."
-msgstr ""
+msgstr "鼠标下图像像素的饱和值 。"
 
 msgid "Value (Intensity) of image pixel under mouse."
-msgstr ""
+msgstr "鼠标下图像像素的值( 强度) 。"
 
 msgid "F"
-msgstr ""
+msgstr "F"
 
 msgid ""
 "Displays:\n"
 "* Full Pixel Values (Gamma, Gain and LUT)\n"
 "* Original (No Gamma, No Gain, No Lut)"
 msgstr ""
+"显示 : * 完整的像素值( 伽玛、 增益和 LUT) * 原始( 无伽玛、 无增益、 无卢特)"
 
 msgid "Y"
-msgstr ""
+msgstr "Y"
 
 msgid ""
 "Switch brightness calculation.\n"
@@ -4508,1076 +4875,1117 @@ msgid ""
 "A pixel of Y = 0.18 (L = 0.5) will appear about half as bright as Y = L = "
 "1.0 (white)."
 msgstr ""
+"Switch brightness calculation.\n"
+"Y (Luminance) is the pixel value according to Rec709:\n"
+"      Y = 0.2126 R + 0.7152 G + 0.0722 B\n"
+"Y' (Lumma) is the weighted pixel value according to:\n"
+"      Y' = ( R + G + B ) / 3.0\n"
+"L (Lightness) is the human perception of luminance of the image which is non "
+"linear.\n"
+"According to CIE No.15.2:\n"
+"      L = (116 * Y ^ 1/3 - 16) / 100\n"
+"A pixel of Y = 0.18 (L = 0.5) will appear about half as bright as Y = L = "
+"1.0 (white)."
 
 msgid "Luminance of image pixel under mouse."
-msgstr ""
+msgstr "鼠标下图像像素的亮度 。"
 
 msgid "Seconds"
-msgstr ""
+msgstr "秒数"
 
 msgid "Timecode"
-msgstr ""
+msgstr "时间代码"
 
 msgid "120"
-msgstr ""
+msgstr "120 120"
 
 msgid "60"
-msgstr ""
+msgstr "60个) 60"
 
 msgid "59.952"
-msgstr ""
+msgstr "59.952"
 
 msgid "50"
-msgstr ""
+msgstr "50 50个"
 
 msgid "48"
-msgstr ""
+msgstr "48 48个"
 
 msgid "47.952"
-msgstr ""
+msgstr "47.952"
 
 msgid "30"
-msgstr ""
+msgstr "中 30 30"
 
 msgid "29.976"
-msgstr ""
+msgstr "29.976"
 
 msgid "25"
-msgstr ""
+msgstr "25 25"
 
 msgid "24"
-msgstr ""
+msgstr "24 24 24"
 
 msgid "23.976"
-msgstr ""
+msgstr "23.976"
 
 msgid "15"
-msgstr ""
+msgstr "15 15 15"
 
 msgid "14.988"
-msgstr ""
+msgstr "14.988"
 
 msgid "12.5"
-msgstr ""
+msgstr "12.5 (12.5)"
 
 msgid "12"
-msgstr ""
+msgstr "12 12"
 
 msgid "11.988"
-msgstr ""
+msgstr "11.9888"
 
 msgid "F:"
-msgstr ""
+msgstr "F:"
 
 msgid "Switch between Frame, Seconds and Timecode display"
-msgstr ""
+msgstr "框架、 秒和时间代码显示之间的切换"
 
 msgid "Current frame."
-msgstr ""
+msgstr "当前框架。"
 
 msgid "@|<"
-msgstr ""
+msgstr "@|<"
 
 msgid "Go to the beginning of the sequence."
-msgstr ""
+msgstr "转到序列的起点 。"
 
 msgid "@<"
-msgstr ""
+msgstr "@<"
 
 msgid "Play sequence backwards."
-msgstr ""
+msgstr "向后播放序列 。"
 
 msgid "@<|"
-msgstr ""
+msgstr "@<|"
 
 msgid "Go back one frame."
-msgstr ""
+msgstr "回到一个框。"
 
 msgid "@||"
-msgstr ""
+msgstr "@||"
 
 msgid "Stop playback."
-msgstr ""
+msgstr "停止播放 。"
 
 msgid "@|>"
-msgstr ""
+msgstr "@|>"
 
 msgid "Advance one frame."
-msgstr ""
+msgstr "前一框架。"
 
 msgid "@>"
-msgstr ""
+msgstr "@>"
 
 msgid "Play sequence forward."
-msgstr ""
+msgstr "向前播放顺序 。"
 
 msgid "@>|"
-msgstr ""
+msgstr "@>|"
 
 msgid "Go to the end of the sequence."
-msgstr ""
+msgstr "转到序列的尽头 。"
 
 msgid "Looping mode (Loop, Once, Ping-Pong)"
-msgstr ""
+msgstr "环圈模式( Loop, Ocene, Ping- Pong)"
 
 msgid "Some default frame rate settings."
-msgstr ""
+msgstr "一些默认框架速率设置 。"
 
 msgid "Allows you to adjust frame rate playback."
-msgstr ""
+msgstr "允许您调整框架速率回放 。"
 
 msgid "Mute audio or switch audio tracks with the right mouse button."
-msgstr ""
+msgstr "用鼠标右键静音或开关音轨 。"
 
 msgid "Audio Volume"
-msgstr ""
+msgstr "音频音量"
 
 msgid "S"
-msgstr ""
+msgstr "S S 级"
 
 msgid "Allows you to set starting frame for timeline."
-msgstr ""
+msgstr "允许您设定时间框架的起始框架 。"
 
 msgid "E"
-msgstr ""
+msgstr "英 英 英"
 
 msgid "Allows you to set the ending frame for timeline."
-msgstr ""
+msgstr "允许您设定结束时间框架 。"
 
 msgid "mrv2"
-msgstr ""
+msgstr "平方公尺2color"
 
 msgid "MenuBar"
-msgstr ""
+msgstr "菜单栏"
 
 msgid "Edit"
-msgstr ""
+msgstr "Edit"
 
 msgid "Toggle Edit Mode"
-msgstr ""
+msgstr "切换编辑模式"
 
 msgid "Fit Window to Image"
-msgstr ""
+msgstr "窗口适合图像"
 
 msgid "TopBar"
-msgstr ""
+msgstr "顶上栏"
 
 msgid "Layers, Exposure and Gain"
-msgstr ""
+msgstr "图层、接触和收益"
 
 msgid "Layers"
-msgstr ""
+msgstr "层层"
 
 msgid "Allows you to select different image channels or layers."
-msgstr ""
+msgstr "允许您选择不同的图像通道或层。"
 
 msgid "Exposure and Gain"
-msgstr ""
+msgstr "接触和收益"
 
 msgid "Resizable Control Group"
-msgstr ""
+msgstr "可调整控控组"
 
 msgid "Exposure"
-msgstr ""
+msgstr "接触接触"
 
 msgid "Reduce gain 1/4 stop (divide by sqrt(sqrt(2)))."
-msgstr ""
+msgstr "减少增益 1//4 停止( 通过 sqrt (sqrt(2)) 进行分流 ) 。"
 
 msgid "f/8"
 msgstr ""
+"f, f, f, f/8 "
+"8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8"
 
 msgid "Toggle gain between 1 and the previous setting."
-msgstr ""
+msgstr "切换在 1 和上一个设置之间的收益 。"
 
 msgid "Increase gain 1/4 stop (multiply by sqrt(sqrt(2)))."
-msgstr ""
+msgstr "增加 1//4 停止( 乘以 sqrt (sqrt(2)) ) )"
 
 msgid "Gain"
-msgstr ""
+msgstr "收益收益收益"
 
 msgid "Gain image value.  A simple multiplier of the image pixel values."
-msgstr ""
+msgstr "增益图像值。 图像像素值的简单乘数 。"
 
 msgid "Allows you to adjust the gain or exposure of the image."
-msgstr ""
+msgstr "允许您调整图像的增益或曝光 。"
 
 msgid "ICS, View, Look and Gamma"
-msgstr ""
+msgstr "ICS、 视图、 查看和 Gamma 综合服务中心、 视图、 查看和 Gamma"
 
 msgid "Input Color Space"
-msgstr ""
+msgstr "输入色彩空间"
 
 msgid "OCIO input color space for the image"
-msgstr ""
+msgstr "OCIO 图像输入颜色空间"
 
 msgid "View and Look"
-msgstr ""
+msgstr "查看和查看"
 
 msgid "View"
-msgstr ""
+msgstr "视图"
 
 msgid "OCIO Display/View"
-msgstr ""
+msgstr "OCIO 显示/视图"
 
 msgid "Look"
-msgstr ""
+msgstr "看"
 
 msgid "OCIO Looks"
-msgstr ""
+msgstr "OCIO 外观"
 
 msgid "Toggle gamma between 1 and the previous setting."
-msgstr ""
+msgstr "在 1 和上一个设置之间切换伽玛 。"
 
 msgid "Gamma Input"
-msgstr ""
+msgstr "Gamma 输入"
 
 msgid ""
 "Allows you to adjust gamma curve for display.\n"
 "Value is:  pow( 2, 1/x );"
-msgstr ""
+msgstr "允许您调整显示的伽马曲线。 值为: pow( 2, 1/x) ;"
 
 msgid "TileGroup"
-msgstr ""
+msgstr "牌盘组"
 
 msgid "Scrubbing Tool"
-msgstr ""
+msgstr "擦擦工具"
 
 msgid "Area Select Tool"
-msgstr ""
+msgstr "区域选择工具"
 
 msgid "Freehand Drawing Tool"
-msgstr ""
+msgstr "自手绘图工具"
 
 msgid "Eraser Tool"
-msgstr ""
+msgstr "橡皮擦工具"
 
 msgid "Circle Tool"
-msgstr ""
+msgstr "圆环工具"
 
 msgid "Rectangle Tool"
-msgstr ""
+msgstr "矩形工具"
 
 msgid "Arrow Tool"
-msgstr ""
+msgstr "箭头工具工具"
 
 msgid "Text Tool.   Right click to edit previously stamped text."
-msgstr ""
+msgstr "文本工具。 右键单击以编辑先前加盖标记的文本 。"
 
 msgid "Old Color Used.  Click on the Arrow to alternate."
-msgstr ""
+msgstr "旧颜色已用过。 单击箭头可替换 。"
 
 msgid "Switch Colors"
-msgstr ""
+msgstr "切换颜色"
 
 msgid "Opacity of pen stroke"
-msgstr ""
+msgstr "笔中笔中不透明度"
 
 msgid "Undo Last Shape Drawn in Current Frame."
-msgstr ""
+msgstr "在当前框架中撤消上次绘制的形状 。"
 
 msgid "Redo Previous Shape Drawn in Current Frame."
-msgstr ""
+msgstr "在当前框架中重新绘制上一个形状 。"
 
 msgid "DockGroup"
-msgstr ""
+msgstr "嵌入组"
 
 msgid "BottomBar"
-msgstr ""
+msgstr "底底栏"
 
 msgid "PixelBar"
-msgstr ""
+msgstr "像素栏"
 
 msgid "StatusBar"
-msgstr ""
+msgstr "状态栏"
 
 msgid "Current tool being used."
-msgstr ""
+msgstr "当前工具正在使用中。"
 
 msgid "RLE"
-msgstr ""
+msgstr "区域"
 
 msgid "ZIPS"
-msgstr ""
+msgstr "ZIPS 新西兰"
 
 msgid "ZIP"
-msgstr ""
+msgstr "ZIP 新西兰"
 
 msgid "PIZ"
-msgstr ""
+msgstr "PIZ PIZ"
 
 msgid "PXR24"
-msgstr ""
+msgstr "PXR24"
 
 msgid "B44"
-msgstr ""
+msgstr "44 B44"
 
 msgid "B44A"
-msgstr ""
+msgstr "B44A B44A"
 
 msgid "DWAA"
-msgstr ""
+msgstr "DWAA 妇女事务司"
 
 msgid "DWAB"
-msgstr ""
+msgstr "DWAB"
 
 msgid "Half"
-msgstr ""
+msgstr "半"
 
 msgid "Float"
-msgstr ""
+msgstr "浮浮动"
 
 msgid "Save Image Options"
-msgstr ""
+msgstr "保存图像选项"
 
 msgid "Save Annotations burned into the movie or sequence."
-msgstr ""
+msgstr "将说明保存到影片或顺序中。"
 
 msgid "OpenEXR Options"
-msgstr ""
+msgstr "OpenEXR 选项"
 
 msgid "OpenEXR's Compression Type"
-msgstr ""
+msgstr "OpenEXR 压缩类型"
 
 msgid "Pixel Type"
-msgstr ""
+msgstr "像素类型"
 
 msgid "OpenEXR's Pixel Type"
-msgstr ""
+msgstr "OpenEXR 的像素类型"
 
 msgid "ZIP Compression"
-msgstr ""
+msgstr "ZIP 压缩"
 
 msgid "DWA Compression"
-msgstr ""
+msgstr "DWA 压缩"
 
 msgid "0.00 None"
-msgstr ""
+msgstr "0.00无"
 
 msgid "1.00 Square"
-msgstr ""
+msgstr "1.00 广场"
 
 msgid "1.19 Movietone"
-msgstr ""
+msgstr "1.19 胶片"
 
 msgid "1.37 Academy (Full Frame)"
-msgstr ""
+msgstr "1.37 学院(全面框架)"
 
 msgid "1.50 Still Photo"
-msgstr ""
+msgstr "1.50 静物照片"
 
 msgid "1.56 STV - HDTV (14:9)"
-msgstr ""
+msgstr "1.56 STV - HDTV (14:9)"
 
 msgid "1.66 European Widescreen"
-msgstr ""
+msgstr "1.66 欧洲宽屏"
 
 msgid "1.77 HDTV (16:9)"
-msgstr ""
+msgstr "1.77 HDTV(16:9)"
 
 msgid "1.85 Widescreen (3-perf)"
-msgstr ""
+msgstr "1.85 宽屏(3perf)"
 
 msgid "2.00 Univisium"
-msgstr ""
+msgstr "2.00 大学"
 
 msgid "2.10 VistaVision"
-msgstr ""
+msgstr "2.10 《展望》"
 
 msgid "2.20 70mm"
-msgstr ""
+msgstr "2.20 70毫米"
 
 msgid "2.35 CinemaScope (old 2.35)"
-msgstr ""
+msgstr "2.35 电影范围(旧2.35)"
 
 msgid "2.39 Panavision (new 2.35)"
-msgstr ""
+msgstr "2.39 电视(新2.35)"
 
 msgid "4.00 Polyvision"
-msgstr ""
+msgstr "4.00 影视"
 
 msgid "Slow"
-msgstr ""
+msgstr "慢"
 
 msgid "Medium"
-msgstr ""
+msgstr "中 中"
 
 msgid "Fast"
-msgstr ""
+msgstr "快速快速"
 
 msgid "base"
-msgstr ""
+msgstr "base"
 
 msgid "plastic"
-msgstr ""
+msgstr "plastic"
 
 msgid "gtk+"
-msgstr ""
+msgstr "gtk+"
 
 msgid "gleam"
-msgstr ""
+msgstr "gleam"
 
 msgid "oxy"
-msgstr ""
+msgstr "oxy"
 
 msgid "Float Values"
-msgstr ""
+msgstr "浮浮值"
 
 msgid "Hex Values"
-msgstr ""
+msgstr "Hex 值"
 
 msgid "8-bit Values"
-msgstr ""
+msgstr "8 位值"
 
 msgid "Full Lut, Gamma and Gain"
-msgstr ""
+msgstr "富液、伽玛和增益"
 
 msgid "Original without Gamma, Gain or Lut"
-msgstr ""
+msgstr "原始无伽玛、 增益或润滑"
 
 msgid "CIE XYZ"
-msgstr ""
+msgstr "CIE XYZ CIE XYZ CIE 关键"
 
 msgid "CIE xyY"
-msgstr ""
+msgstr "CIE xyY CIE xyY 计算器"
 
 msgid "From File"
-msgstr ""
+msgstr "从文件"
 
 msgid "Legal Range"
-msgstr ""
+msgstr "法律范围"
 
 msgid "Full Range"
-msgstr ""
+msgstr "全范围"
 
 msgid "Straight"
-msgstr ""
+msgstr "直直直"
 
 msgid "Premultiplied"
-msgstr ""
+msgstr "杂杂"
 
 msgid "Nearest"
-msgstr ""
+msgstr "近近"
 
 msgid "Small"
-msgstr ""
+msgstr "小"
 
 msgid "Large"
-msgstr ""
+msgstr "大型"
 
 msgid "59.94"
-msgstr ""
+msgstr "59.94"
 
 msgid "29.97"
-msgstr ""
+msgstr "29.97 29.97"
 
 msgid "14.985"
-msgstr ""
+msgstr "14.985"
 
 msgid "Loop"
-msgstr ""
+msgstr "循环圈"
 
 msgid "Ping Pong"
-msgstr ""
+msgstr "平平"
 
 msgid "Video Only"
-msgstr ""
+msgstr "仅视频"
 
 msgid "Video and Audio"
-msgstr ""
+msgstr "视频和音频"
 
 msgid "CG"
-msgstr ""
+msgstr "CG 计算器"
 
 msgid "Studio"
-msgstr ""
+msgstr "演播室"
 
 msgid "Black Frame"
-msgstr ""
+msgstr "黑框架黑框架"
 
 msgid "Repeat  Frame"
-msgstr ""
+msgstr "重复框架框架"
 
 msgid "Scratched  Frame"
-msgstr ""
+msgstr "剪剪剪框架"
 
 msgid "Always"
-msgstr ""
+msgstr "总是"
 
 msgid "Presentation Mode"
-msgstr ""
+msgstr "演示介绍模式"
 
 msgid "Automatic"
-msgstr ""
+msgstr "自动自动"
 
 msgid "Half Float"
-msgstr ""
+msgstr "半浮数"
 
 msgid "Full Float (Accurate)"
-msgstr ""
+msgstr "全浮( 准确)"
 
 msgid "Do Nothing"
-msgstr ""
+msgstr "Do Nothing"
 
 msgid "Open Logs on Dock"
-msgstr ""
+msgstr "在停靠上打开日志"
 
 msgid "Open Logs on Window"
-msgstr ""
+msgstr "窗口上打开日志"
 
 msgid "On Demand From Help Menu"
-msgstr ""
+msgstr "从帮助菜单中需求"
 
 msgid "At Start Up"
-msgstr ""
+msgstr "启动时"
 
 msgid ""
 "This will reset all your preferences to their default values.  Are you sure "
 "you want to continue?"
-msgstr ""
+msgstr "这将将您所有的首选项重置为默认值。 您确定要继续吗?"
 
 msgid "Could not match "
-msgstr ""
+msgstr "无法匹配"
 
 msgid "Wizard labels are:"
-msgstr ""
+msgstr "向导标签为 :"
 
 msgid "User Interface"
-msgstr ""
+msgstr "用户界面"
 
 msgid "Window Behavior"
-msgstr ""
+msgstr "窗口行为行为"
 
 msgid "Always on Top"
-msgstr ""
+msgstr "总是在顶端"
 
 msgid ""
 "When selected, mrv2's window will always show up on top of other windows on "
 "the desktop."
-msgstr ""
+msgstr "选中时, drv2 的窗口将总是出现在桌面上其他窗口的顶端 。"
 
 msgid "Secondary on Top"
-msgstr ""
+msgstr "最高中学"
 
 msgid "Single Instance"
-msgstr ""
+msgstr "单一案件"
 
 msgid ""
 "When selected, only a single mrv2 instance is allowed.\n"
 "If you try to open several mrv2s with different images, all these images "
 "will be sent to the already open mrv2."
 msgstr ""
+"选中时, 仅允许单个的 drv2 实例。 如果您尝试用不同的图像打开多个 drv2 图像, 所"
+"有这些图像都会被发送到已经打开的 rv2 中 。"
 
 msgid "Auto Refit Image"
-msgstr ""
+msgstr "自动更新图像"
 
 msgid ""
 "When selected, mrv2 will apply a fit image operation on each video played.  "
 "This effectly means the video will be resized automatically based on the "
 "size of the window."
 msgstr ""
+"当选中时, drv2 将在播放的每段视频上应用适合的图像操作。 这意味着视频将根据窗"
+"口大小自动调整大小 。"
 
 msgid "Raise on Enter"
-msgstr ""
+msgstr "输入时提高"
 
 msgid ""
 "When selected, mrv2 will raise the window to the front once you enter the "
 "view window."
-msgstr ""
+msgstr "当选中时, drv2 将会在您进入视图窗口后将窗口向前移动 。"
 
 msgid "Normal"
-msgstr ""
+msgstr "普通普通"
 
 msgid "When selected, mrv2 will resize its window to the first image."
-msgstr ""
+msgstr "选中时, drv2 将调整窗口大小到第一个图像 。"
 
 msgid "Fullscreen"
-msgstr ""
+msgstr "全屏"
 
 msgid "When selected, mrv2 will start in full screen mode."
-msgstr ""
+msgstr "选中时, mrv2 将以全屏模式启动 。"
 
 msgid "Presentation"
-msgstr ""
+msgstr "列报列报"
 
 msgid "When selected, mrv2 will start in presentation mode."
-msgstr ""
+msgstr "选中时, drv2 将启动演示模式 。"
 
 msgid "Maximized"
-msgstr ""
+msgstr "最大化"
 
 msgid "When selected, mrv2 will start in a maximized window."
-msgstr ""
+msgstr "选中时, drv2 将在最大化窗口中启动 。"
 
 msgid "UI Elements"
-msgstr ""
+msgstr "UU 要素"
 
 msgid "Menu Bar"
-msgstr ""
+msgstr "菜单酒吧"
 
 msgid "When selected, mrv2 will start with the menu bar already shown."
-msgstr ""
+msgstr "选中时, mrv2 将从已显示的菜单栏开始 。"
 
 msgid "Topbar"
-msgstr ""
+msgstr "顶头栏"
 
 msgid ""
 "When selected, mrv2 will start with its channel, gain, gamma toolbar visible."
-msgstr ""
+msgstr "选中时, drv2 将从频道开始, 获取 Gamma 工具栏可见 。"
 
 msgid "Pixel Toolbar"
-msgstr ""
+msgstr "像素工具栏"
 
 msgid "When selected, mrv2 will start with the pixel toolbar shown."
-msgstr ""
+msgstr "选中时, grv2 将从显示的像素工具栏开始 。"
 
 msgid "When selected, mrv2 will start with the timeline shown."
-msgstr ""
+msgstr "选中时, drv2 将从显示的时间表开始 。"
 
 msgid "Status Bar"
-msgstr ""
+msgstr "地位栏"
 
 msgid "When selected, mrv2 will start with the status bar visible."
-msgstr ""
+msgstr "选中时, drv2 将从状态栏中显示状态栏开始 。"
 
 msgid "macOS Menus"
-msgstr ""
+msgstr "MACOS 菜单"
 
 msgid ""
 "This is a macOS setting only.  When selected the menus will appear on the "
 "system toolbar instead of the mrv2 toolbar."
 msgstr ""
+"这只是一个 macOS 设置。 当选中菜单时, 菜单将出现在系统工具栏上, 而不是在 "
+"grv2 工具栏上 。"
 
 msgid "Tool Dock"
-msgstr ""
+msgstr "工具停靠工具库"
 
 msgid "When selected, mrv2 will start with the action tool dock already open."
-msgstr ""
+msgstr "选中时, drv2 将从动作工具码头打开开始 。"
 
 msgid "Only One Panel"
-msgstr ""
+msgstr "只有一个小组"
 
 msgid "When selected, mrv2 will start with the only one panel option selected."
-msgstr ""
+msgstr "选中时, trv2 将使用唯一选中的一个面板选项开始 。"
 
 msgid "View Window"
-msgstr ""
+msgstr "查看窗口窗口"
 
 msgid "Defaults"
-msgstr ""
+msgstr "默认"
 
 msgid "Sets the default gain when mrv2 starts."
-msgstr ""
+msgstr "当 MRV2 启动时设置默认收益 。"
 
 msgid "Sets the default gamma when mrv2 starts."
-msgstr ""
+msgstr "设置当 MRV2 启动时的默认伽玛 。"
 
 msgid "Crop"
-msgstr ""
+msgstr "作物作物"
 
 msgid "Allows you to select a standard cropping area around image."
-msgstr ""
+msgstr "允许您在图像周围选择一个标准裁剪区 。"
 
 msgid "Auto Frame"
-msgstr ""
+msgstr "自动框架自动框架"
 
 msgid "When this is on, View/Auto Frame will be active."
-msgstr ""
+msgstr "启动时, 视图/ 自动框架将激活 。"
 
 msgid "Safe Areas"
-msgstr ""
+msgstr "安全区"
 
 msgid "When mrv2 starts, the safe area display will be active by default."
-msgstr ""
+msgstr "当 drv2 启动时, 默认情况下安全区域显示将会激活 。"
 
 msgid "Zoom Speed"
-msgstr ""
+msgstr "缩速速度"
 
 msgid "HUD"
-msgstr ""
+msgstr "HUUD 住房( HUD)"
 
 msgid ""
 "This area specifies which elements should be shown as a HUD overlay on the "
 "view screen."
-msgstr ""
+msgstr "此区域指定在视图屏幕上哪些元素应显示为 HUD 重叠 。"
 
 msgid "Frame"
-msgstr ""
+msgstr "框架框架框架框架框架框架框架框架框架框架"
 
 msgid "Frame Range"
-msgstr ""
+msgstr "框架范围"
 
 msgid "Frame Count"
-msgstr ""
+msgstr "框架框架计数"
 
 msgid "Memory"
-msgstr ""
+msgstr "内存"
 
 msgid "Attributes"
-msgstr ""
+msgstr "属性"
 
 msgid "Language and Colors"
-msgstr ""
+msgstr "语言和颜色"
 
 msgid "Scheme"
-msgstr ""
+msgstr "计划计划计划"
 
 msgid "Color Theme"
-msgstr ""
+msgstr "颜色主题"
 
 msgid "Reload Theme"
-msgstr ""
+msgstr "重新装入主题"
 
 msgid ""
 "Reload color theme from mrv2.colors file again to refresh change in colors"
-msgstr ""
+msgstr "从 drv2. colors 文件重新装入色主题, 以刷新颜色变化"
 
 msgid "Selects the background color of areas outside the current image."
-msgstr ""
+msgstr "选择当前图像以外区域的背景颜色。"
 
 msgid "Text Overlay"
-msgstr ""
+msgstr "文本覆盖"
 
 msgid "Selects the color of text overlays printed over the current image."
-msgstr ""
+msgstr "选择在当前图像上打印的文本覆盖颜色。"
 
 msgid "Selects the color of the selection rectangle over the current image."
-msgstr ""
+msgstr "在当前图像上选择选择矩形的颜色。"
 
 msgid "Selects the color of HUD overlays."
-msgstr ""
+msgstr "选择 HUD 重叠的颜色。"
 
 msgid "File Requester"
-msgstr ""
+msgstr "文件请求器"
 
 msgid "Single Click to Travel Drawers"
-msgstr ""
+msgstr "单点击旅行画家"
 
 msgid ""
 "When using mrv2's file chooser, a single click on a folder will open it."
-msgstr ""
+msgstr "当使用 drv2 的文件选择器时, 只要点击一个文件夹就可以打开它 。"
 
 msgid "Thumbnails Active"
-msgstr ""
+msgstr "缩略图活动"
 
 msgid "Show thumbnails for known files."
-msgstr ""
+msgstr "显示已知文件的缩略图 。"
 
 msgid "USD Thumbnails"
-msgstr ""
+msgstr "缩略图美元"
 
 msgid "Show Thumbnails for USD files (can be slow if they are big)"
-msgstr ""
+msgstr "显示美元文件缩略图( 如果大的话会慢一些)"
 
 msgid "Use Native File Chooser"
-msgstr ""
+msgstr "使用本地文件选择器"
 
 msgid ""
 "If selected, the natlve file chooser will be used.  If unselected, mrv2's "
 "standard file chooser will be used."
 msgstr ""
+"如果选中的话, 将使用 natlve 文件选择器。 如果未选中, 将使用 rv2 的标准文件选"
+"择器 。"
 
 msgid "Fonts"
-msgstr ""
+msgstr "字体字体"
 
 msgid "Menus"
-msgstr ""
+msgstr "菜单菜单"
 
 msgid "Sets the font to use in menus."
-msgstr ""
+msgstr "设置菜单中使用的字体。"
 
 msgid "Panels"
-msgstr ""
+msgstr "小组小组小组小组小组小组小组"
 
 msgid "Sets the font to use in panels. (Not yet working)"
-msgstr ""
+msgstr "设置要在面板中使用的字体。 (尚未工作)"
 
 msgid "RGBA Display"
-msgstr ""
+msgstr "RGBA 显示"
 
 msgid "Pixel Values"
-msgstr ""
+msgstr "像像素值"
 
 msgid "Secondary Display"
-msgstr ""
+msgstr "次要显示"
 
 msgid "Luminance"
-msgstr ""
+msgstr "亮度"
 
 msgid "Positioning"
-msgstr ""
+msgstr "定位位置"
 
 msgid "Always Save on Exit"
-msgstr ""
+msgstr "总是保存在退出时"
 
 msgid ""
 "When this option is set, mrv2 will save its position and size upon exiting "
 "the program."
-msgstr ""
+msgstr "当设定此选项时, drv2 将会在退出程序时保存位置和大小 。"
 
 msgid "Fixed Position"
-msgstr ""
+msgstr "固定固定职位"
 
 msgid ""
 "When this option is set, mrv2 will open in the position you set here (except "
 "if the window goes out of the Desktop).  If Always Save on Exit is on, the "
 "values are recakculated upon exiting the program."
 msgstr ""
+"当设置此选项时, 将按您设置的位置打开 drv2 键( 除非窗口退出桌面 ) 。 如果总是"
+"在退出时保存, 则退出程序时会重新组合值 。"
 
 msgid "X:"
-msgstr ""
+msgstr "十:"
 
 msgid "Y:"
-msgstr ""
+msgstr "Y:"
 
 msgid "Fixed Size"
-msgstr ""
+msgstr "固定人数"
 
 msgid ""
 "When this option is on, mrv2 will always open to the size you set in W and "
 "H.  If Always Save on Exit is on, the values are recalculated upon exiting "
 "the program."
 msgstr ""
+"当此选项启用时, mrv2 总是会打开您在 W 和 H 中设定的大小。 如果总是在退出时保"
+"存, 退出程序时会重新计算值 。"
 
 msgid "W:"
-msgstr ""
+msgstr "W :"
 
 msgid "H:"
-msgstr ""
+msgstr "H:"
 
 msgid "Take Current Window Values"
-msgstr ""
+msgstr "使用当前窗口值"
 
 msgid ""
 "Fills the Fixed Position and and Fixed Size values with the current values "
 "of the viewer.  Remember to also check the boxes for Fixed Position and/or "
 "Fixed Size depending what you want to save."
 msgstr ""
+"以查看者的当前值填充固定位置和固定大小值。 记住要检查固定位置和/ 或固定大小的"
+"框, 取决于您要保存的内容 。"
 
 msgid "Render"
-msgstr ""
+msgstr "招标"
 
 msgid "Alpha Blend"
-msgstr ""
+msgstr "阿尔法圆形"
 
 msgid "Minify Filter"
-msgstr ""
+msgstr "最小化过滤器"
 
 msgid "Magnify Filter"
-msgstr ""
+msgstr "放大过滤器"
 
 msgid "Thumbnails"
-msgstr ""
+msgstr "缩略图"
 
 msgid "Preview Thumbnails above Timeline"
-msgstr ""
+msgstr "时间线上方的预览缩略图"
 
 msgid "Preview Thumbnails in a rectangle above Timeline"
-msgstr ""
+msgstr "时间线以上矩形中的预览缩略图"
 
 msgid "Preview Thumbnails on Panels"
-msgstr ""
+msgstr "面板上的预览缩略图"
 
 msgid "Preview Thumbnails in Panels"
-msgstr ""
+msgstr "面板中的预览缩略图"
 
 msgid "Edit Viewport"
-msgstr ""
+msgstr "编辑视图port"
 
 msgid "How to display timeline thumbnails by default."
-msgstr ""
+msgstr "默认情况下如何显示时间缩略图 。"
 
 msgid "Display"
-msgstr ""
+msgstr "显示显示显示显示"
 
 msgid "How to display timeline by default."
-msgstr ""
+msgstr "如何默认显示时间框架 。"
 
 msgid "Start in Edit mode"
-msgstr ""
+msgstr "开始于编辑模式"
 
 msgid "Editing viewport will be visible at start up."
-msgstr ""
+msgstr "编辑视图在启动时将可见 。"
 
 msgid "Remove EDLs in Temporary Folder on Exit"
-msgstr ""
+msgstr "退出时删除临时文件夹中的 EDL"
 
 msgid ""
 "When selected, temporary EDLs (Playlists) will be removed from the temporary "
 "folder."
-msgstr ""
+msgstr "选中时, 临时 EDL( 播放列表) 将从临时文件夹中删除 。"
 
 msgid "Playback"
-msgstr ""
+msgstr "播放重放"
 
 msgid "Auto Playback"
-msgstr ""
+msgstr "自动播放自动重放"
 
 msgid "Start Playback when opening files."
-msgstr ""
+msgstr "打开文件时重新开始播放 。"
 
 msgid "Scrub with Audio"
-msgstr ""
+msgstr "带音频的灌木"
 
 msgid ""
 "Start playback when scrubbing so that audio can be heard.  Scrubbing can be "
 "less smooth."
-msgstr ""
+msgstr "洗涤时重新开始播放, 以便听到音频。 擦拭会不那么平滑 。"
 
 msgid "Single Click Playback"
-msgstr ""
+msgstr "点击单次播放回放"
 
 msgid ""
 "Start Playback when single clicking the left mouse button on the view window"
-msgstr ""
+msgstr "在视图窗口上单击鼠标左键时, 单单击鼠标左键时重新开始播放播放"
 
 msgid "Auto Hide Pixel Bar"
-msgstr ""
+msgstr "自动隐藏像素栏"
 
 msgid ""
 "The Pixel Bar can slow down playback at high resolutions.  When this option "
 "is on, the pixel toolbar will be hidden automatically."
 msgstr ""
+"像素栏可以减缓高分辨率的重播。 当此选项打开时, 像素工具栏将被自动隐藏 。"
 
 msgid "Sequences"
-msgstr ""
+msgstr "序列"
 
 msgid "Speed"
-msgstr ""
+msgstr "速度速度"
 
 msgid "Frames Per Second value for sequences that don't have embedded speed."
-msgstr ""
+msgstr "没有嵌入速度的序列框架/ 秒值 。"
 
 msgid "Looping Mode"
-msgstr ""
+msgstr "环圈模式"
 
 msgid "Select default looping mode in timeline."
-msgstr ""
+msgstr "在时间表中选择默认循环模式 。"
 
 msgid "Scrub Sensitivity"
-msgstr ""
+msgstr "冲灌 敏度"
 
 msgid ""
 "This setting controls the sensitivity of scrubbing (SHIFT and then the mouse "
 "right and left).  Smaller values make the mouse move jump more frames while "
 "higher values does the opposite."
 msgstr ""
+"此设置控制了洗涤的灵敏度( SHIFT, 然后是鼠标右向和左向) 。 小值会使鼠标移动更"
+"多的框架跳动, 而高值则相反 。"
 
 msgid "Default View"
-msgstr ""
+msgstr "默认视图"
 
 msgid "Show Transitions"
-msgstr ""
+msgstr "显示过渡"
 
 msgid "Show Transitions in Edit Viewport"
-msgstr ""
+msgstr "在编辑视图端显示切换"
 
 msgid "Show Markers"
-msgstr ""
+msgstr "显示标记"
 
 msgid "Show Markers in Edit Viewport"
-msgstr ""
+msgstr "编辑视图端中的显示标记"
 
 msgid "Behavior"
-msgstr ""
+msgstr "行为行为"
 
 msgid "Edit Associated Clips"
-msgstr ""
+msgstr "编辑关联剪贴板"
 
 msgid "Edit Associated Clips."
-msgstr ""
+msgstr "编辑关联剪贴板。"
 
 msgid "Editable"
-msgstr ""
+msgstr "可编辑"
 
 msgid "Editable Timeline Viewport."
-msgstr ""
+msgstr "可编辑的时线查看站 。"
 
 msgid "OCIO"
-msgstr ""
+msgstr "OCI 石油公司"
 
 msgid "OCIO Config File"
-msgstr ""
+msgstr "OCIO 配置文件"
 
 msgid ""
 "This is the path to your config.ocio file.  It can be set with the "
 "environment variable OCIO, which takes precedence over any saved setting."
 msgstr ""
+"这是您配置的 ocio 文件的路径。 它可以设置为环境变量OCIO, 环境变量OCIO 优先于"
+"任何保存的设置 。"
 
 msgid "Built-in Configs"
-msgstr ""
+msgstr "内建配置"
 
 msgid "Pick a config.ocio file from disk."
-msgstr ""
+msgstr "从磁盘中选取配置文件 。"
 
 msgid "Use Active Views and Active Displays"
-msgstr ""
+msgstr "使用活动视图和活动显示"
 
 msgid ""
 "When this option is off, OCIO files with active_views: and active_displays: "
 "are not taken into account."
-msgstr ""
+msgstr "当此选项关闭时, OCIO 文件会带有活动视图: 和活动显示: 不考虑 。"
 
 msgid "OCIO Defaults"
-msgstr ""
+msgstr "OCIO 默认"
 
 msgid "8-bits"
-msgstr ""
+msgstr "8 位数"
 
 msgid ""
 "The name of the OCIO default image color space for 8 bit images (jpg, bmp, "
 "etc)\n"
 "(Environment variable: MRV_OCIO_8bits_ICS)"
 msgstr ""
+"8位位图像( jpg, bmp 等) OCIO 默认图像颜色空间( 环境变量: MRV_ OCIO_ 8bits_ "
+"ICS) 的名称"
 
 msgid "16-bits"
-msgstr ""
+msgstr "16 位数"
 
 msgid ""
 "The name of the OCIO default image color space for 16-bit images (cin, tiff, "
 "etc)\n"
 "(Environment variable: MRV_OCIO_16bits_ICS)"
 msgstr ""
+"OCIO 16位图像( ci, tiff等) 默认图像颜色空间的名称( 环境变量: MRV_ OCIO_ "
+"16bits_ ICS)"
 
 msgid "32-bits"
-msgstr ""
+msgstr "32 位数"
 
 msgid ""
 "The name of the OCIO default image color space for 32-bit int images "
 "(openexr integers, etc)\n"
 "(Environment variable: MRV_OCIO_32bits_ICS)"
 msgstr ""
+"OCIO 32 位整数图像( Openexr整数等) 的默认图像色彩空间( 环境变量: MRV_ OCIO_ "
+"32bits_ ICS) 名称"
 
 msgid "half"
-msgstr ""
+msgstr "一半"
 
 msgid ""
 "The name of the OCIO default image color space for OpenEXR half images\n"
 "(Environment variable: MRV_OCIO_half_ICS)"
 msgstr ""
+"OpenEXR 半图像的 OOCIO 默认图像颜色空间的名称(环境变量: MRV_OCIO_ half_ ICS)"
 
 msgid "float"
-msgstr ""
+msgstr "浮动"
 
 msgid ""
 "The name of the OCIO default image color space for half and float images "
 "(OpenEXR, dpx, etc)\n"
 "(Environment variable: MRV_OCIO_float_ICS)"
 msgstr ""
+"OCIO 半图像和浮控图像( OpenEXR, dpx 等) 默认图像颜色空间的名称(环境变量: "
+"MRV_OCIO_float_ICS)"
 
 msgid "Default Look"
-msgstr ""
+msgstr "默认外观"
 
 msgid "Display / View"
-msgstr ""
+msgstr "显示/视图"
 
 msgid "Default Display / View"
-msgstr ""
+msgstr "默认显示/视图"
 
 msgid "Loading"
-msgstr ""
+msgstr "正在装入"
 
 msgid "Version Regex"
-msgstr ""
+msgstr "版本 Reregex"
 
 msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
@@ -5586,917 +5994,933 @@ msgid ""
 "with _v in the name of the file, directory or both. For example: "
 "gizmo_v001.0001.exr"
 msgstr ""
+"用于匹配剪辑版本的正则表达式。 必须将三件( 前缀、 数字和后缀) 组合为三件( 前"
+"缀、 数字和后缀)。 如果保留在默认值 (_v) 上, 它将自动创建一个正则表达式, 以匹"
+"配文件、 目录或两者名称中定义的 _ v verisions。 例如 : gizmo_ v001.0001. "
+"exr 。"
 
 msgid "Maximum Images Apart"
-msgstr ""
+msgstr "最大图像"
 
 msgid ""
 "When searching for a version, this value is the maximum version apart from "
 "each other when searching the first or last version."
-msgstr ""
+msgstr "搜索版本时, 此值是搜索第一个版本或最后一个版本时彼此不同的最大版本 。"
 
 msgid "Missing Frame"
-msgstr ""
+msgstr "缺失框架"
 
 msgid "Path Mappings"
-msgstr ""
+msgstr "路径图绘图"
 
 msgid ""
 "Use Up and Down arrows to move the selected line up and down.  Double click "
 "to change item.  Click on an empty area to unselect."
 msgstr ""
+"使用向上和向下箭头向上和向下移动选定行。双击以修改项目。单击空区域以取消选"
+"择。"
 
 msgid "Add Paths"
-msgstr ""
+msgstr "添加路径"
 
 msgid "Add a new remote mapping."
-msgstr ""
+msgstr "添加新的远程绘图 。"
 
 msgid "Remove Paths"
-msgstr ""
+msgstr "删除路径"
 
 msgid "Remove the currently selected path mapping."
-msgstr ""
+msgstr "删除当前选中的路径映射 。"
 
 msgid "Send"
-msgstr ""
+msgstr "发送发送"
 
 msgid "Accept"
-msgstr ""
+msgstr "接受"
 
 msgid "UI Control"
-msgstr ""
+msgstr "用户UI控制"
 
 msgid "Pan and Zoom"
-msgstr ""
+msgstr "Pan 和 缩放"
 
 msgid "Color Control"
-msgstr ""
+msgstr "色彩控制"
 
 msgid "Audio Control"
-msgstr ""
+msgstr "音频控制"
 
 msgid "Monitor VSync"
-msgstr ""
+msgstr "监视器 VSync"
 
 msgid ""
 "Turns on and off Monitor's Vsync.  VSync off can display movies faster, at "
 "the cost of potential tearing in the image."
-msgstr ""
+msgstr "VSync关闭可以更快地放映电影,"
 
 msgid "Color Buffers' Accuracy"
-msgstr ""
+msgstr "颜色缓冲器的精确度"
 
 msgid ""
 "Color Buffers can be Float, Half Float, Fast or Automatic.  Float preserves "
 "all float information, Half Float preserves most float information and Fast "
 "works in 8-bits.  Automatic selects the accuracy baed on image depth."
 msgstr ""
+"颜色缓冲器可以是浮点、 半浮点、 快速或自动。 浮点保存所有浮点信息, 半浮点保存"
+"大多数浮点信息, 快速工作为 8 位。 自动选择图像深度的精度 。"
 
 msgid "Blit Viewports"
-msgstr ""
+msgstr "闪光查看站"
 
 msgid ""
 "Viewports can be drawn with blitting or with OpenGL shaders.  Depending on "
 "graphics card and OS one can perform better then the other."
 msgstr ""
+"可以通过闪烁或 OpenGL 遮光镜来绘制视图。 取决于图形卡和操作系统, 一个可以表现"
+"得比另一个更好 。"
 
 msgid "Blit Timeline"
-msgstr ""
+msgstr "闪 闪 时间线"
 
 msgid ""
 "Timeline can be drawn with blitting or with OpenGL shaders.  Depending on "
 "graphics card and OS one can perform better then the other."
 msgstr ""
+"时间线可以通过闪烁或 OpenGL 遮光镜来绘制。 取决于图形卡和操作系统, 一个可以表"
+"现得比另一个更好 。"
 
 msgid ""
 "For changes to take effect, you will need to re-open any movies already "
 "playing or reload mrv2."
-msgstr ""
+msgstr "更改要生效, 您需要重新打开任何已经播放或重新装入 drv2 的电影 。"
 
 msgid "API"
-msgstr ""
+msgstr "API"
 
 msgid "Audio API to use for platforms that support multiple APIs (Linux only)"
-msgstr ""
+msgstr "用于支持多个 API(仅Linux)平台的音频 API"
 
 msgid "Output Device"
-msgstr ""
+msgstr "输出设备"
 
 msgid "Output Device to use for audio playback."
-msgstr ""
+msgstr "用于音频播放的输出设备 。"
 
 msgid "ComfyUI"
-msgstr ""
+msgstr "comfyUI comfyUI 合成界面"
 
 msgid ""
 "Here are the current settings to interact with ComfyUI.  It requires "
 "installation of mrv2's comfyUI nodes."
-msgstr ""
+msgstr "这是与ComfyUI互动的当前设置。 它需要安装 comfyUI 的 comfyUI 节点 。"
 
 msgid "Use ComfyUI Pipe"
-msgstr ""
+msgstr "使用ComfyyUI 管道"
 
 msgid ""
 "This setting opens a pipe to communicate with ComfyUI's mrv2_save_exr_node.py"
-msgstr ""
+msgstr "此设置打开管道, 以便与 ComfyUI 的 drv2_ save_ exr_ node 进行通讯 。"
 
 msgid "Errors"
-msgstr ""
+msgstr "错误错误"
 
 msgid "On FFmpeg Error"
-msgstr ""
+msgstr "在 FFmpeg 上错误"
 
 msgid "Adjusts how Log Window behaves in case of an FFmpeg error."
-msgstr ""
+msgstr "调整日志窗口在出现 FFmpeg 错误时的行为 。"
 
 msgid "On Error"
-msgstr ""
+msgstr "发生错误时发生错误"
 
 msgid "Adjusts how Log Window behaves in case of error."
-msgstr ""
+msgstr "调整日志窗口发生错误时的行为 。"
 
 msgid "Check for Updates"
-msgstr ""
+msgstr "检查更新"
 
 msgid "Allows you to automatically download updates of mrv2 when it starts up."
-msgstr ""
+msgstr "允许您在 mrv2 启动时自动下载更新 。"
 
 msgid "Reset settings to the default."
-msgstr ""
+msgstr "将设置重置为默认值。"
 
 msgid "Revert"
-msgstr ""
+msgstr "还回"
 
 msgid "Revert settings to last saved preferences."
-msgstr ""
+msgstr "还原设置到上次保存的首选项 。"
 
 msgid ""
 "Accept settings but don't save.  They will get saved when exiting the "
 "program."
-msgstr ""
+msgstr "接受设置但不要保存。 当退出程序时, 它们会被保存 。"
 
 msgid "Module"
-msgstr ""
+msgstr "模块模块模块"
 
 msgid "User Interface/View Window"
-msgstr ""
+msgstr "用户界面/查看窗口窗口"
 
 msgid "User Interface/File Requester"
-msgstr ""
+msgstr "用户界面/文件请求器"
 
 msgid "User Interface/Fonts"
-msgstr ""
+msgstr "用户界面/字体"
 
 msgid "User Interface/Language and Colors"
-msgstr ""
+msgstr "用户界面/语言界面和颜色"
 
 msgid "User Interface/Pixel Toolbar"
-msgstr ""
+msgstr "用户界面/像素工具栏"
 
 msgid "User Interface/Positioning"
-msgstr ""
+msgstr "用户界面/定位位置"
 
 msgid "User Interface/Render"
-msgstr ""
+msgstr "用户界面/招标"
 
 msgid "User Interface/Thumbnails"
-msgstr ""
+msgstr "用户界面/缩略图"
 
 msgid "User Interface/Timeline"
-msgstr ""
+msgstr "用户界面/时间线"
 
 msgid "No Audio was Compiled"
-msgstr ""
+msgstr "没有编译音频"
 
 msgid "No Audio Devices were Found"
-msgstr ""
+msgstr "未找到音频设备"
 
 msgid "Default API"
-msgstr ""
+msgstr "默认 API 默认 API"
 
 msgid "No Valid Devices found"
-msgstr ""
+msgstr "未找到有效的设备"
 
 msgid "Default Device"
-msgstr ""
+msgstr "默认默认设备"
 
 msgid "Remote to Local Path Mapping"
-msgstr ""
+msgstr "远程到本地路径图映射"
 
 msgid "Remote Path"
-msgstr ""
+msgstr "远程路径"
 
 msgid "Local Path"
-msgstr ""
+msgstr "本地路径路径"
 
 msgid "Okay"
-msgstr ""
+msgstr "好"
 
 msgid "OCIO Presets"
-msgstr ""
+msgstr "OCIO 预设"
 
 msgid "Click to switch to a stored preset."
-msgstr ""
+msgstr "单击可切换到已存储的预设 。"
 
 msgid "Click to add a new preset with the current settings."
-msgstr ""
+msgstr "单击以添加当前设置的新预设 。"
 
 msgid "Click to delete the selected preset."
-msgstr ""
+msgstr "单击可删除选中的预设 。"
 
 msgid ""
 "Select, Add or Delete an OCIO Preset that stores: config filename, Input "
 "Color Space, View, Look, LUT settings and Defaults for 8-bits, 16-bits, 32-"
 "bits, half and float images. "
 msgstr ""
+"选择、添加或删除 OCIO 预设存储点: 配置文件名、 输入颜色空间、 视图、 查看、 "
+"LUT 设置以及 8 位、 16 位、 32 位、 一半 和浮点图像的默认值 。"
 
 msgid "Summary"
-msgstr ""
+msgstr "摘要摘要摘要"
 
 msgid "Preset Name"
-msgstr ""
+msgstr "预设名称"
 
 msgid "Active"
-msgstr ""
+msgstr "活动活动"
 
 msgid "Function"
-msgstr ""
+msgstr "函数职能职能职能职能职能职能职能职能"
 
 msgid "Key"
-msgstr ""
+msgstr "关键键键键键键"
 
 msgid "Reset hotkeys to mrv2's default configuration."
-msgstr ""
+msgstr "重置热钥匙到 mrv2 的默认配置 。"
 
 msgid "Reload"
-msgstr ""
+msgstr "重新装入"
 
 msgid "Reload hotkeys to last saved file."
-msgstr ""
+msgstr "将热键重新装入上次保存的文件 。"
 
 msgid "Accept the current hotkeys."
-msgstr ""
+msgstr "接受当前热钥匙 。"
 
 msgid "HW"
-msgstr ""
+msgstr "HW 重"
 
 msgid "CPU Information"
-msgstr ""
+msgstr "CPU 信息"
 
 msgid "GPU Information"
-msgstr ""
+msgstr "GPU 信息"
 
 msgid "Formats"
-msgstr ""
+msgstr "格式格式"
 
 msgid "Codecs"
-msgstr ""
+msgstr "Codecs"
 
 msgid "Subtitles"
-msgstr ""
+msgstr "字幕字幕"
 
 msgid "Protocols"
-msgstr ""
+msgstr "协议"
 
 msgid "Thanks"
-msgstr ""
+msgstr "谢谢 "
 
 msgid "Hotkey for..."
-msgstr ""
+msgstr "热匙..."
 
 msgid "Type Key"
-msgstr ""
+msgstr "键类型键类型"
 
 msgid "Type a key."
-msgstr ""
+msgstr "键入密钥 。"
 
 msgid "Shift"
-msgstr ""
+msgstr "Shi Shi Shi Shi移动"
 
 msgid "Ctrl"
-msgstr ""
+msgstr "Ctrl 电转"
 
 msgid "Alt"
-msgstr ""
+msgstr "平平"
 
 msgid "Meta"
-msgstr ""
+msgstr "元元元"
 
 msgid "Clear"
-msgstr ""
+msgstr "清除清除"
 
 msgid "OCIO Browser"
-msgstr ""
+msgstr "OCIO 浏览器"
 
 msgid "Select an OCIO Transform"
-msgstr ""
+msgstr "选择OCIO 变形"
 
 msgid "Accept the selected OCIO file."
-msgstr ""
+msgstr "接受选定的OCIO文件。"
 
 msgid "Cancel the OCIO selection and don't change anything."
-msgstr ""
+msgstr "取消 OOCIO 选择, 不要改变任何东西 。"
 
 msgid "Escape"
-msgstr ""
+msgstr "逃离"
 
 msgid "BackSpace"
-msgstr ""
+msgstr "后空空间"
 
 msgid "Tab"
-msgstr ""
+msgstr "标签标签标签标签标签标签标签"
 
 msgid "Return"
-msgstr ""
+msgstr "返回返回"
 
 msgid "Print"
-msgstr ""
+msgstr "打印打印"
 
 msgid "ScrollLock"
 msgstr ""
+"滚滚滚滚滚滚滚滚滚滚滚滚滚滚滚滚滚滚滚滚滚滚滚滚滚滚滚滚滚滚滚滚滚滚滚滚滚滚"
+"滚滚滚滚滚"
 
 msgid "Pause"
-msgstr ""
+msgstr "暂停暂停"
 
 msgid "Insert"
-msgstr ""
+msgstr "插入插入"
 
 msgid "PageUp"
-msgstr ""
+msgstr "上页页面"
 
 msgid "End"
-msgstr ""
+msgstr "结束"
 
 msgid "PageDown"
-msgstr ""
+msgstr "下页"
 
 msgid "Left"
-msgstr ""
+msgstr "左左"
 
 msgid "Up"
-msgstr ""
+msgstr "上上"
 
 msgid "Right"
-msgstr ""
+msgstr "右右右"
 
 msgid "Down"
-msgstr ""
+msgstr "下下下"
 
 msgid "LeftShift"
-msgstr ""
+msgstr "左左脚"
 
 msgid "RightShift"
-msgstr ""
+msgstr "右侧"
 
 msgid "LeftCtrl"
-msgstr ""
+msgstr "左左转"
 
 msgid "RightCtrl"
-msgstr ""
+msgstr "RightCtrl 右转"
 
 msgid "CapsLock"
-msgstr ""
+msgstr "CapsLock 挂杆"
 
 msgid "LeftAlt"
-msgstr ""
+msgstr "左对位"
 
 msgid "RightAlt"
-msgstr ""
+msgstr "右平调"
 
 msgid "LeftMeta"
-msgstr ""
+msgstr "左元左"
 
 msgid "RightMeta"
-msgstr ""
+msgstr "右右元元"
 
 msgid "Menu"
-msgstr ""
+msgstr "菜单菜单"
 
 msgid "NumLock"
-msgstr ""
+msgstr "努姆洛克( NumLock)"
 
 msgid "padEnter"
-msgstr ""
+msgstr "键盘中输入"
 
 msgid "pad0"
-msgstr ""
+msgstr "平板0"
 
 msgid "pad1"
-msgstr ""
+msgstr "平板1"
 
 msgid "pad2"
-msgstr ""
+msgstr "平板2"
 
 msgid "pad3"
-msgstr ""
+msgstr "平板3"
 
 msgid "pad4"
-msgstr ""
+msgstr "平板4"
 
 msgid "pad5"
-msgstr ""
+msgstr "平面5"
 
 msgid "pad6"
-msgstr ""
+msgstr "平板6"
 
 msgid "pad7"
-msgstr ""
+msgstr "平板7"
 
 msgid "pad8"
-msgstr ""
+msgstr "平板8"
 
 msgid "pad9"
-msgstr ""
+msgstr "平板9"
 
 msgid "Space (' ')"
-msgstr ""
+msgstr "空间 (`)"
 
 msgid "Multiply"
-msgstr ""
+msgstr "乘乘乘乘"
 
 msgid "Subtract"
-msgstr ""
+msgstr "减减"
 
 msgid "Decimal"
-msgstr ""
+msgstr "十进制"
 
 msgid "Divide"
-msgstr ""
+msgstr "除除"
 
 msgid "@B12@C7@b@.Remote\t@B12@C7@b@.Local"
-msgstr ""
+msgstr "@B12@C7@b@remote@B12@C7@b@."
 
 msgid "Desktop: "
-msgstr ""
+msgstr "桌面 :"
 
 msgid "Running on: "
-msgstr ""
+msgstr "运行时间 :"
 
 msgid "sysctl failed!"
-msgstr ""
+msgstr "Sysctl 失败!"
 
 msgid "host_statistics64 failed"
-msgstr ""
+msgstr "主机'统计64 失败"
 
 msgid "task info failed"
-msgstr ""
+msgstr "信息任务任务信息失败"
 
 msgid "Open Directory"
-msgstr ""
+msgstr "打开目录"
 
 msgid "Open Movie or Sequence"
-msgstr ""
+msgstr "打开电影或序列"
 
 msgid "Open Single Image"
-msgstr ""
+msgstr "打开单个图像"
 
 msgid "Save Image"
-msgstr ""
+msgstr "保存图像"
 
 msgid "Save Frames To Folder"
-msgstr ""
+msgstr "保存框架到文件夹"
 
 msgid "Save OTIO Timeline"
-msgstr ""
+msgstr "保存 OTIO 时间线"
 
 msgid "Save PDF Document"
-msgstr ""
+msgstr "保存 PDF 文档"
 
 msgid "Save Session As"
-msgstr ""
+msgstr "会话另另另存为"
 
 msgid "Close Current"
-msgstr ""
+msgstr "关闭当前"
 
 msgid "Close All"
-msgstr ""
+msgstr "全部关闭"
 
 msgid "Quit Program"
-msgstr ""
+msgstr "退出程序"
 
 msgid "Zoom Minimum"
-msgstr ""
+msgstr "最小缩小最小"
 
 msgid "Zoom Maximum"
-msgstr ""
+msgstr "缩缩最大"
 
 msgid "Center Image"
-msgstr ""
+msgstr "中心图像中心图像"
 
 msgid "Fit Screen"
-msgstr ""
+msgstr "适合屏幕屏幕"
 
 msgid "Resize Main Window to Fit"
-msgstr ""
+msgstr "调整主窗口大小以适合"
 
 msgid "Fit All"
-msgstr ""
+msgstr "适合所有"
 
 msgid "Toggle Minify Texture Filtering"
-msgstr ""
+msgstr "切换最小化纹理过滤"
 
 msgid "Toggle Magnify Texture Filtering"
-msgstr ""
+msgstr "切换放大纹理过滤"
 
 msgid "Auto Frame View"
-msgstr ""
+msgstr "自动框架视图"
 
 msgid "Ignore Display Window"
-msgstr ""
+msgstr "忽略显示窗口"
 
 msgid "Auto Normalize"
-msgstr ""
+msgstr "自动统一化"
 
 msgid "Invalid Values"
-msgstr ""
+msgstr "无效值"
 
 msgid "Display Window"
-msgstr ""
+msgstr "显示窗口"
 
 msgid "Data Window"
-msgstr ""
+msgstr "数据窗口"
 
 msgid "Compare Wipe"
-msgstr ""
+msgstr "比较擦擦"
 
 msgid "Compare Overlay"
-msgstr ""
+msgstr "比较重叠比较"
 
 msgid "Compare Difference"
-msgstr ""
+msgstr "对比差异"
 
 msgid "Compare Horizontal"
-msgstr ""
+msgstr "水平比较对比水平"
 
 msgid "Compare Vertical"
-msgstr ""
+msgstr "比较垂直"
 
 msgid "Compare Tile"
-msgstr ""
+msgstr "比较平铺"
 
 msgid "Color Channel"
-msgstr ""
+msgstr "颜色频道"
 
 msgid "Red Channel"
-msgstr ""
+msgstr "红色频道"
 
 msgid "Green Channel"
-msgstr ""
+msgstr "绿色通道"
 
 msgid "Blue Channel"
-msgstr ""
+msgstr "蓝频道"
 
 msgid "Alpha Channel"
-msgstr ""
+msgstr "Alpha 频道"
 
 msgid "Flip X"
-msgstr ""
+msgstr "翻翻 X"
 
 msgid "Flip Y"
-msgstr ""
+msgstr "翻转 Y"
 
 msgid "Rotate Images +90 Degrees"
-msgstr ""
+msgstr "旋转图像+90度"
 
 msgid "Rotate Images -90 Degrees"
-msgstr ""
+msgstr "图像旋转 - 90 度"
 
 msgid "Video Levels from File"
-msgstr ""
+msgstr "来自文件的视频级别"
 
 msgid "Video Levels Legal Range"
-msgstr ""
+msgstr "视频级别 法律范围"
 
 msgid "Video Levels Full Range"
-msgstr ""
+msgstr "视频级别全程"
 
 msgid "Alpha Blend None"
-msgstr ""
+msgstr "Alpha 混合无"
 
 msgid "Alpha Blend Straight"
-msgstr ""
+msgstr "Alpha 圆形直流"
 
 msgid "Alpha Blend Premultiplied"
-msgstr ""
+msgstr "Alpha 组合组合"
 
 msgid "Annotation Clear Frame"
-msgstr ""
+msgstr "注释说明清晰框架"
 
 msgid "Annotation Clear All Frames"
-msgstr ""
+msgstr "清除所有框架"
 
 msgid "Annotation Frame Step Backwards"
-msgstr ""
+msgstr "注释说明框架向后退"
 
 msgid "Frame Step Backwards"
-msgstr ""
+msgstr "框架向后退"
 
 msgid "Frame Step FPS Backwards"
-msgstr ""
+msgstr "FPS 向后退"
 
 msgid "Annotation Frame Step Forwards"
-msgstr ""
+msgstr "注释注释框架前进步"
 
 msgid "Frame Step Forwards"
-msgstr ""
+msgstr "框架前步"
 
 msgid "Frame Step FPS Forwards"
-msgstr ""
+msgstr "框架脚步 FPS 前进"
 
 msgid "Play Backwards"
-msgstr ""
+msgstr "向后播放"
 
 msgid "Play Backwards / Change Speed"
-msgstr ""
+msgstr "向后播放/变化速度"
 
 msgid "Play in Current Direction"
-msgstr ""
+msgstr "在当前方向玩"
 
 msgid "Play Forwards"
-msgstr ""
+msgstr "向前播放"
 
 msgid "Play Forwards / Change Speed"
-msgstr ""
+msgstr "向前播放/变化速度"
 
 msgid "Next Clip"
-msgstr ""
+msgstr "下一个剪贴"
 
 msgid "Previous Clip"
-msgstr ""
+msgstr "上一个剪贴"
 
 msgid "Loop Playback"
-msgstr ""
+msgstr "循环播放回放"
 
 msgid "Playback Once"
-msgstr ""
+msgstr "播放一次回放"
 
 msgid "Playback Ping Pong"
-msgstr ""
+msgstr "播放播放 ping Pong"
 
 msgid "First Image Version"
-msgstr ""
+msgstr "第一图像版本首版"
 
 msgid "Previous Image Version"
-msgstr ""
+msgstr "上一个图像版本"
 
 msgid "Next Image Version"
-msgstr ""
+msgstr "下一个图像版本"
 
 msgid "Last Image Version"
-msgstr ""
+msgstr "最后图像版本"
 
 msgid "Previous Image"
-msgstr ""
+msgstr "上一张图像"
 
 msgid "Next Image"
-msgstr ""
+msgstr "下一个图像"
 
 msgid "Previous Image Limited"
-msgstr ""
+msgstr "先前图像有限"
 
 msgid "Next Image Limited"
-msgstr ""
+msgstr "下一个图像有限公司"
 
 msgid "Previous Channel"
-msgstr ""
+msgstr "上一个频道"
 
 msgid "Next Channel"
-msgstr ""
+msgstr "下一个频道"
 
 msgid "Clear Cache"
-msgstr ""
+msgstr "清除缓存"
 
 msgid "UpdateVideoFrame"
-msgstr ""
+msgstr "更新 VideoFrame"
 
 msgid "Cut Frame"
-msgstr ""
+msgstr "剪剪框架框架"
 
 msgid "Copy Frame"
-msgstr ""
+msgstr "复制框架"
 
 msgid "Paste Frame"
-msgstr ""
+msgstr "粘贴框架"
 
 msgid "Insert Frame"
-msgstr ""
+msgstr "插入框架框架"
 
 msgid "Slice Clip"
-msgstr ""
+msgstr "剪切剪切剪切"
 
 msgid "Remove Clip"
-msgstr ""
+msgstr "删除剪切"
 
 msgid "Insert Audio Gap"
-msgstr ""
+msgstr "插入音频差距"
 
 msgid "Remove Audio Gap"
-msgstr ""
+msgstr "删除音频差距"
 
 msgid "Edit Undo"
-msgstr ""
+msgstr "编辑 撤消编辑"
 
 msgid "Edit Redo"
-msgstr ""
+msgstr "编辑重做编辑"
 
 msgid "Toggle Menu Bar"
-msgstr ""
+msgstr "切换菜单栏"
 
 msgid "Toggle Top Bar"
-msgstr ""
+msgstr "切换顶栏"
 
 msgid "Toggle Pixel Bar"
-msgstr ""
+msgstr "切换像素栏"
 
 msgid "Toggle Timeline"
-msgstr ""
+msgstr "切换时间线"
 
 msgid "Toggle Status Bar"
-msgstr ""
+msgstr "切换状态栏"
 
 msgid "Toggle Tool Dock"
-msgstr ""
+msgstr "切换工具停靠"
 
 msgid "Toggle Full Screen"
-msgstr ""
+msgstr "切换全屏幕"
 
 msgid "Toggle Presentation"
-msgstr ""
+msgstr "切换演示文样"
 
 msgid "Toggle Float On Top"
-msgstr ""
+msgstr "切换顶部浮点"
 
 msgid "Toggle Secondary"
-msgstr ""
+msgstr "切换辅助"
 
 msgid "Toggle Secondary Float On Top"
-msgstr ""
+msgstr "切换顶部的二级浮点"
 
 msgid "Toggle NDI"
-msgstr ""
+msgstr "切换 NDI"
 
 msgid "Toggle Network"
-msgstr ""
+msgstr "切换网络"
 
 msgid "Toggle USD"
-msgstr ""
+msgstr "切换美元"
 
 msgid "Toggle Stereo 3D"
-msgstr ""
+msgstr "切换立立体立体立体立体"
 
 msgid "Toggle Timeline Editable"
-msgstr ""
+msgstr "切换可编辑的时间线"
 
 msgid "Toggle Edit Associated Clips"
-msgstr ""
+msgstr "切换编辑相关剪切剪切"
 
 msgid "Timeline Frame View"
-msgstr ""
+msgstr "时间线框架视图"
 
 msgid "Toggle Timeline Scroll To Current Frame"
-msgstr ""
+msgstr "切换时间线滚动到当前框架"
 
 msgid "Toggle Timeline Track Info"
-msgstr ""
+msgstr "切换时间线音轨信息"
 
 msgid "Toggle Timeline Clip Info"
-msgstr ""
+msgstr "切换时间线剪切信息"
 
 msgid "Toggle Timeline Thumbnails"
-msgstr ""
+msgstr "切换时间线缩略图"
 
 msgid "Toggle Timeline Transitions"
-msgstr ""
+msgstr "切换时间线切换"
 
 msgid "Toggle Timeline Markers"
-msgstr ""
+msgstr "切换时间线标记器"
 
 msgid "Reset Gain/Gamma"
-msgstr ""
+msgstr "重置收益/伽玛"
 
 msgid "Exposure More"
-msgstr ""
+msgstr "更多接触"
 
 msgid "Exposure Less"
-msgstr ""
+msgstr "减去接触量"
 
 msgid "Gamma More"
-msgstr ""
+msgstr "更多伽玛"
 
 msgid "Gamma Less"
-msgstr ""
+msgstr "减少伽玛"
 
 msgid "OCIO Input Color Space"
-msgstr ""
+msgstr "OCIO 输入色空间"
 
 msgid "OCIO Display"
-msgstr ""
+msgstr "OCIO 显示"
 
 msgid "OCIO View"
-msgstr ""
+msgstr "OCIO 视图 OCIO 视图"
 
 msgid "Scrub Mode"
-msgstr ""
+msgstr "冲刷模式"
 
 msgid "Area Selection Mode"
-msgstr ""
+msgstr "区域选择模式"
 
 msgid "Erase Mode"
-msgstr ""
+msgstr "擦除模式"
 
 msgid "Arrow Mode"
-msgstr ""
+msgstr "箭头模式"
 
 msgid "Rectangle Mode"
-msgstr ""
+msgstr "矩形矩形模式"
 
 msgid "Circle Mode"
-msgstr ""
+msgstr "圆圆模式"
 
 msgid "Text Mode"
-msgstr ""
+msgstr "文本模式"
 
 msgid "Pen Size More"
-msgstr ""
+msgstr "更多笔大小"
 
 msgid "Pen Size Less"
-msgstr ""
+msgstr "减"
 
 msgid "Undo Draw"
-msgstr ""
+msgstr "撤消绘图"
 
 msgid "Redo Draw"
-msgstr ""
+msgstr "重复绘制"
 
 msgid "Switch Pen Color"
-msgstr ""
+msgstr "切换笔颜色"
 
 msgid "Set In Point"
-msgstr ""
+msgstr "设置点"
 
 msgid "Set Out Point"
-msgstr ""
+msgstr "设置出点"
 
 msgid "Hud Window"
-msgstr ""
+msgstr "Hud 窗口窗口"
 
 msgid "Toggle One Panel Only"
-msgstr ""
+msgstr "只切换一个面板"
 
 msgid "Toggle Files Panel"
-msgstr ""
+msgstr "切换文件面板"
 
 msgid "Toggle Media Info Panel"
-msgstr ""
+msgstr "切换媒体信息面板"
 
 msgid "Toggle Color Area Info Panel"
-msgstr ""
+msgstr "切换颜色区域信息面板"
 
 msgid "Toggle Color Controls Panel"
-msgstr ""
+msgstr "切换色彩控制面板"
 
 msgid "Toggle Playlist Panel"
-msgstr ""
+msgstr "切换播放列表面板"
 
 msgid "Toggle Compare Panel"
-msgstr ""
+msgstr "切换比较面板"
 
 msgid "Toggle Devices Panel"
-msgstr ""
+msgstr "切换设备面板"
 
 msgid "Toggle Annotation Panel"
-msgstr ""
+msgstr "切换批注面板"
 
 msgid "Toggle Background Panel"
-msgstr ""
+msgstr "切换背景面板"
 
 msgid "Toggle Settings Panel"
-msgstr ""
+msgstr "切换设置面板"
 
 msgid "Toggle Histogram Panel"
-msgstr ""
+msgstr "切换直方图面板"
 
 msgid "Toggle Vectorscope Panel"
-msgstr ""
+msgstr "切换矢量镜面板"
 
 msgid "Toggle Waveform Panel"
-msgstr ""
+msgstr "切换波形面板"
 
 msgid "Toggle Environment Map Panel"
-msgstr ""
+msgstr "切换环境地图面板"
 
 msgid "Toggle Preferences Window"
-msgstr ""
+msgstr "切换首选项窗口"
 
 msgid "Toggle Python Panel"
-msgstr ""
+msgstr "切换 Python 面板"
 
 msgid "Toggle Log Panel"
-msgstr ""
+msgstr "切换日志面板"
 
 msgid "Toggle Hotkeys Window"
-msgstr ""
+msgstr "切换热键窗口"
 
 msgid "Toggle About Window"
-msgstr ""
+msgstr "切换窗口"

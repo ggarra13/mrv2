@@ -459,22 +459,27 @@ namespace mrv
                 ++uiIndex;
             }
             
-            uiIndex = 0;
-            for (const auto& code : languageCodes)
+            if (language_index == -1)
             {
-                if (strcmp(language, "C") == 0)
+                uiIndex = 0;
+                for (const auto& code : languageCodes)
                 {
-                    language = "en_US.UTF-8";
-                    break;
+                    if (strcmp(language, "C") == 0)
+                    {
+                        language = "en_US.UTF-8";
+                        break;
+                    }
+                    if (strncmp(language, code.c_str(), 2) == 0)
+                    {
+                        language_index = uiIndex;
+                        language = strdup(code.c_str());
+                        break;
+                    }
+                    ++uiIndex;
                 }
-                if (strncmp(language, code.c_str(), 2) == 0)
-                {
-                    language_index = uiIndex;
-                    language = strdup(code.c_str());
-                    break;
-                }
-                ++uiIndex;
             }
+
+            if (language_index == -1) language_index = 0;
         }
 
         uiPrefs->uiLanguage->value(uiIndex);

@@ -18,114 +18,116 @@ msgid ""
 "\n"
 "Install completed with output:\n"
 msgstr ""
+"\n"
+"安装已完成, 输出为 :\n"
 
 msgid "Removed temporary \""
-msgstr ""
+msgstr "已删除临时 \""
 
 msgid "The new version of mrv2 was installed."
-msgstr ""
+msgstr "新版本的 mrv2 已经安装。"
 
 msgid "Could not locate mrv2 in:\n"
-msgstr ""
+msgstr "无法在 :\n"
 
 msgid "Maybe you installed it in a non-default location."
-msgstr ""
+msgstr "也许你安装了它 在一个不默认的位置。"
 
 msgid "Something failed installing mrv2 - It is not in \""
-msgstr ""
+msgstr "安装 drv2 失败 - 它不在 \""
 
 msgid "Invalid ISO 8601 format provided: "
-msgstr ""
+msgstr "已提供无效的 ISO 8601 格式 :"
 
 msgid "No file matching"
-msgstr ""
+msgstr "没有匹配的文件"
 
 msgid "was found"
-msgstr ""
+msgstr "找到了"
 
 msgid "No match found"
-msgstr ""
+msgstr "未找到匹配匹配"
 
 msgid "Install Location: "
-msgstr ""
+msgstr "安装位置 :"
 
 msgid "Error retrieving value:\n"
-msgstr ""
+msgstr "获取值出错 :\n"
 
 msgid "Unknown platform"
-msgstr ""
+msgstr "未知平台"
 
 msgid "Saving session:"
-msgstr ""
+msgstr "保存会话 :"
 
 msgid "An unexpected error occurred:"
-msgstr ""
+msgstr "发生意外错误 :"
 
 msgid "Trying to install"
-msgstr ""
+msgstr "试图安装"
 
 msgid "Please wait"
-msgstr ""
+msgstr "请稍候"
 
 msgid "Enter Sudo Password"
-msgstr ""
+msgstr "输入 Sudo 密码"
 
 msgid "Password"
-msgstr ""
+msgstr "密码"
 
 msgid "You will need to install file"
-msgstr ""
+msgstr "您需要安装文件"
 
 msgid "manually."
-msgstr ""
+msgstr "手动。"
 
 msgid "Unknown operating system"
-msgstr ""
+msgstr "未知操作系统"
 
 msgid "Downloading "
-msgstr ""
+msgstr "下载中"
 
 msgid "Download seems to have failed!"
-msgstr ""
+msgstr "下载似乎失败!"
 
 msgid "Release Notes"
-msgstr ""
+msgstr "单元说明"
 
 msgid "Current version is v"
-msgstr ""
+msgstr "当前版本为 v"
 
 msgid "Latest version at Github is v"
-msgstr ""
+msgstr "Github的最新版本为 v"
 
 msgid "Released on "
-msgstr ""
+msgstr "发布于"
 
 msgid "Ignore"
-msgstr ""
+msgstr "忽略"
 
 msgid "Error fetching latest release information:\n"
-msgstr ""
+msgstr "获取最新发布信息出错 :\n"
 
 msgid "There's a new release but it has not been more than 5 days"
-msgstr ""
+msgstr "有新的释放 但不超过5天"
 
 msgid "unknown date."
-msgstr ""
+msgstr "未知日期 。"
 
 msgid "Update anyway"
-msgstr ""
+msgstr "无论如何更新"
 
 msgid "Downgrade"
-msgstr ""
+msgstr "下调"
 
 msgid "Upgrade"
-msgstr ""
+msgstr "升级"
 
 msgid "No download url was found for"
-msgstr ""
+msgstr "未找到下载 url"
 
 msgid "No releases found for the specified repository."
-msgstr ""
+msgstr "未找到指定仓库的释放 。"
 
 msgid "Help/Update mrv2"
-msgstr ""
+msgstr "帮助/更新 mrv2"
