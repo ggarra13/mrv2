@@ -27,6 +27,7 @@ v1.2.5
   command-line.  Note that FPS is taken to be that of the one with highest 
   FPS, so sequences may leave gaps if video clips bigger than their FPS are
   used.
+- Made -otio or -edl command-line option work with relative paths.
 
 
 v1.2.4

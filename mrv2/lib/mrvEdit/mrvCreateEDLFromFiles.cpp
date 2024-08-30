@@ -68,12 +68,32 @@ namespace mrv
         for (const auto& file : files)
         {
             tl::file::Path path(file);
-            tl::file::Path audioPath(file);
+            if (!path.isAbsolute())
+            {
+                path = tl::file::Path(tl::file::getCWD() + file);
+            }
             
             if (mrv::file::isOTIO(path))
             {
-                LOG_ERROR("Cannot currently concatenate an .otio file.");
+                LOG_ERROR(_("Cannot currently concatenate an .otio file."));
                 return false;
+            }
+
+            if (file::isDirectory(file))
+            {
+                LOG_ERROR(_("Cannot currently concatenate a directory."));
+                return false;
+            }
+            
+            if (!mrv::file::isReadable(file))
+            {
+                std::string err =
+                    string::Format(
+                        _("Filename '{0}' does not exist or does not "
+                          "have read permissions."))
+                        .arg(file);
+                LOG_ERROR(err);
+                continue;
             }
                 
             // Is the input a sequence?
