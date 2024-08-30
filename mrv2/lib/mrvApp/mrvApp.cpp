@@ -478,21 +478,6 @@ namespace mrv
             p.options.fileNames.push_back(unused);
         }
 
-        if (p.options.createOtioTimeline)
-        {
-            std::string otioFile;
-            bool ok = createEDLFromFiles(otioFile, p.options.fileNames);
-            if (!ok)
-            {
-                LOG_ERROR("Could not create .otio EDL playlist from files");
-                return;
-            }
-
-            // Replace filenames with newly created otio file
-            p.options.fileNames.clear();
-            p.options.fileNames.push_back(otioFile);
-        }
-
         if (p.options.displayVersion)
         {
             std::cout << std::endl
@@ -802,6 +787,21 @@ namespace mrv
 
         if (!p.options.fileNames.empty())
         {
+            if (p.options.createOtioTimeline)
+            {
+                std::string otioFile;
+                bool ok = createEDLFromFiles(otioFile, p.options.fileNames);
+                if (!ok)
+                {
+                    LOG_ERROR("Could not create .otio EDL playlist from files");
+                    return;
+                }
+
+                // Replace filenames with newly created otio file
+                p.options.fileNames.clear();
+                p.options.fileNames.push_back(otioFile);
+            }
+        
             bool foundAudio = false;
             for (const auto& fileName : p.options.fileNames)
             {
