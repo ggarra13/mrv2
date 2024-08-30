@@ -88,8 +88,8 @@ class PreferencesUI {open
     Fl_Window uiMain {
       label Preferences
       user_data this user_data_type {PreferencesUI*} open
-      xywh {771 187 847 467} type Double resizable
-      code0 {main = m;} visible
+      xywh {903 93 847 467} type Double hide resizable
+      code0 {main = m;}
     } {
       Fl_Group {} {open
         xywh {0 0 853 466} box FLAT_BOX
@@ -363,15 +363,69 @@ If you try to open several mrv2s with different images, all these images will be
               }
             }
             Fl_Group {} {
-              label {Language and Colors} open
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5
+              label {File Requester}
+              xywh {288 38 555 360} box EMBOSSED_BOX align 5 hide
+            } {
+              Fl_Group {} {
+                label {File Requester} open
+                xywh {313 63 500 316} box ROUNDED_BOX
+              } {
+                Fl_Check_Button uiPrefsFileReqFolder {
+                  label {Single Click to Travel Drawers}
+                  tooltip {When using mrv2's file chooser, a single click on a folder will open it.} xywh {413 130 25 27} box UP_BOX down_box DOWN_BOX align 136
+                }
+                Fl_Check_Button uiPrefsFileReqThumbnails {
+                  label {Thumbnails Active}
+                  tooltip {Show thumbnails for known files.} xywh {413 173 25 27} box UP_BOX down_box DOWN_BOX align 136
+                }
+                Fl_Check_Button uiPrefsUSDThumbnails {
+                  label {USD Thumbnails}
+                  tooltip {Show Thumbnails for USD files (can be slow if they are big)} xywh {413 216 25 27} box UP_BOX down_box DOWN_BOX align 136
+                }
+                Fl_Check_Button uiPrefsNativeFileChooser {
+                  label {Use Native File Chooser}
+                  tooltip {If selected, the natlve file chooser will be used.  If unselected, mrv2's standard file chooser will be used.} xywh {413 259 25 27} box UP_BOX down_box DOWN_BOX align 136
+                }
+              }
+            }
+            Fl_Group {} {
+              label Fonts
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
+            } {
+              Fl_Group {} {
+                label Fonts open
+                xywh {364 102 403 199} box ROUNDED_BOX
+              } {
+                Fl_Group {} {open
+                  xywh {485 164 160 75}
+                } {
+                  Fl_Choice uiFontMenus {
+                    label Menus open
+                    tooltip {Sets the font to use in menus.} xywh {485 164 160 25} down_box BORDER_BOX
+                    code0 {const auto& fonts = mrv::fonts::list();}
+                    code1 {for (const auto& font : fonts)}
+                    code2 {o->add(font.c_str());}
+                  } {}
+                  Fl_Choice uiFontPanels {
+                    label Panels open
+                    tooltip {Sets the font to use in panels. (Not yet working)} xywh {485 214 160 25} down_box BORDER_BOX
+                    code0 {const auto& fonts = mrv::fonts::list();}
+                    code1 {for (const auto& font : fonts)}
+                    code2 {o->add(font.c_str());}
+                  } {}
+                }
+              }
+            }
+            Fl_Group {} {
+              label {Language and Colors}
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label UI open
                 xywh {360 58 403 199} box ROUNDED_BOX
               } {
                 Fl_Choice uiLanguage {
-                  label Language open selected
+                  label Language open
                   xywh {508 78 160 25} down_box BORDER_BOX
                   code0 {auto languages = mrv::getLanguages();}
                   code1 {for (const auto& language : languages)}
@@ -477,60 +531,6 @@ if (!fl_color_chooser("Pick HUD Color", r,g,b)) return;
 o->color( fl_rgb_color( r, g, b ) );
 o->redraw();}
                   tooltip {Selects the color of HUD overlays.} xywh {654 338 21 20} box EMBOSSED_BOX align 4
-                }
-              }
-            }
-            Fl_Group {} {
-              label {File Requester}
-              xywh {288 38 555 360} box EMBOSSED_BOX align 5 hide
-            } {
-              Fl_Group {} {
-                label {File Requester} open
-                xywh {313 63 500 316} box ROUNDED_BOX
-              } {
-                Fl_Check_Button uiPrefsFileReqFolder {
-                  label {Single Click to Travel Drawers}
-                  tooltip {When using mrv2's file chooser, a single click on a folder will open it.} xywh {413 130 25 27} box UP_BOX down_box DOWN_BOX align 136
-                }
-                Fl_Check_Button uiPrefsFileReqThumbnails {
-                  label {Thumbnails Active}
-                  tooltip {Show thumbnails for known files.} xywh {413 173 25 27} box UP_BOX down_box DOWN_BOX align 136
-                }
-                Fl_Check_Button uiPrefsUSDThumbnails {
-                  label {USD Thumbnails}
-                  tooltip {Show Thumbnails for USD files (can be slow if they are big)} xywh {413 216 25 27} box UP_BOX down_box DOWN_BOX align 136
-                }
-                Fl_Check_Button uiPrefsNativeFileChooser {
-                  label {Use Native File Chooser}
-                  tooltip {If selected, the natlve file chooser will be used.  If unselected, mrv2's standard file chooser will be used.} xywh {413 259 25 27} box UP_BOX down_box DOWN_BOX align 136
-                }
-              }
-            }
-            Fl_Group {} {
-              label Fonts
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
-            } {
-              Fl_Group {} {
-                label Fonts open
-                xywh {364 102 403 199} box ROUNDED_BOX
-              } {
-                Fl_Group {} {open
-                  xywh {485 164 160 75}
-                } {
-                  Fl_Choice uiFontMenus {
-                    label Menus open
-                    tooltip {Sets the font to use in menus.} xywh {485 164 160 25} down_box BORDER_BOX
-                    code0 {const auto& fonts = mrv::fonts::list();}
-                    code1 {for (const auto& font : fonts)}
-                    code2 {o->add(font.c_str());}
-                  } {}
-                  Fl_Choice uiFontPanels {
-                    label Panels open
-                    tooltip {Sets the font to use in panels. (Not yet working)} xywh {485 214 160 25} down_box BORDER_BOX
-                    code0 {const auto& fonts = mrv::fonts::list();}
-                    code1 {for (const auto& font : fonts)}
-                    code2 {o->add(font.c_str());}
-                  } {}
                 }
               }
             }
@@ -701,7 +701,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
             }
             Fl_Group {} {
               label Render
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {
                 label Render open
@@ -1659,46 +1659,29 @@ mrv::Preferences::run();}
             }
           }
         }
-        Fl_Group {} {
+        Fl_Group {} {open
           xywh {9 0 270 447} box PLASTIC_UP_BOX
         } {
-          Fl_Tree {} {
+          Fl_Tree uiPrefsTree {
             label Module
             user_data this user_data_type {PreferencesUI*}
-            callback {Fl_Tree_Item* t = o->callback_item();
-if ( !t || !t->label() ) return;
-
+            callback {Fl_Tree_Item* selected = o->callback_item();
+if ( !selected || !selected->label() ) return;
 
 Fl_Wizard* wiz = v->uiWizard;
+Fl_Tree* tree = v->uiPrefsTree;
 
-bool found = false;
-const std::string& treeLabel = t->label(); 
-for ( int i = 0; i < wiz->children(); ++i )
+int idx = 0;
+for (Fl_Tree_Item* item = tree->first(); item; item = tree->next(item), ++idx)
 {
-    Fl_Widget* w = wiz->child(i);
-    if ( !w || !w->label() ) continue;
-
-    if ( treeLabel == w->label() )
-	{
-	     wiz->value( w );
-	     found = true;
-	     break;
-	 }
-}
-
-if (!found)
-{
-  std::cerr << _("Could not match ") << treeLabel << std::endl;
-  std::cerr << _("Wizard labels are:") << std::endl;
-  for ( int i = 0; i < wiz->children(); ++i )
-  {
-    Fl_Widget* w = wiz->child(i);
-    if ( !w->label() ) continue;
-    
-    std::cerr << w->label() << std::endl;
- }
-}}
-            xywh {9 21 270 423} color 20 when 4
+      if (item == selected)
+      {
+         Fl_Widget* w = wiz->child(idx-1);  // 0 in tree is ROOT
+         wiz->value(w);
+         return;
+      }
+}} selected
+            xywh {9 24 270 423} color 20 when 4
             code0 {fill_tree(o);}
             code1 {o->showroot(false);}
             class {mrv::PreferencesTree}
@@ -1707,12 +1690,10 @@ if (!found)
       }
     }
   }
-  Function {PreferencesUI(ViewerUI* m)} {open
-  } {
+  Function {PreferencesUI(ViewerUI* m)} {} {
     code {make_window(m);} {}
   }
-  Function {~PreferencesUI()} {open
-  } {
+  Function {~PreferencesUI()} {} {
     code {delete uiMain; uiMain = NULL;} {}
   }
   Function {fill_tree(mrv::PreferencesTree* o)} {open
@@ -1741,8 +1722,7 @@ o->add( _("Errors") );
 o->add( _("Behavior") );
 o->select( item );} {}
   }
-  Function {fill_audio_apis(Fl_Choice* o)} {open
-  } {
+  Function {fill_audio_apis(Fl_Choice* o)} {} {
     code {o->clear();
 
 \#ifdef TLRENDER_AUDIO
@@ -1790,8 +1770,7 @@ o->select( item );} {}
     o->add(_("No Audio was Compiled"));
 \#endif} {}
   }
-  Function {fill_audio_output_devices(PreferencesUI* self)} {open
-  } {
+  Function {fill_audio_output_devices(PreferencesUI* self)} {} {
     code {auto v = self->uiPrefsAudioAPI;
 auto o = self->uiPrefsAudioOutputDevice;
 int oldDevice = o->value();

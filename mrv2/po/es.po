@@ -5582,12 +5582,6 @@ msgstr ""
 "Esto reseteará todas sus preferencias a sus valores por defecto.  ¿Está "
 "seguro que quiere continuar?"
 
-msgid "Could not match "
-msgstr "No pude empatar "
-
-msgid "Wizard labels are:"
-msgstr "Las etiquetas del wizard son:"
-
 msgid "User Interface"
 msgstr "Interfaz del Usuario"
 
@@ -5785,39 +5779,6 @@ msgstr "Memoria"
 msgid "Attributes"
 msgstr "Atributos"
 
-msgid "Language and Colors"
-msgstr "Lenguaje y Colores"
-
-msgid "Scheme"
-msgstr "Esquema"
-
-msgid "Color Theme"
-msgstr "Tema de Color"
-
-msgid "Reload Theme"
-msgstr "Recargar Tema"
-
-msgid ""
-"Reload color theme from mrv2.colors file again to refresh change in colors"
-msgstr ""
-"Recargar tema de color desde el archivo mrv2.colors nuevamente para "
-"refrescar el cambio en colores."
-
-msgid "Selects the background color of areas outside the current image."
-msgstr "Selecciona el color del fondo de areas fuera de la imagen actual."
-
-msgid "Text Overlay"
-msgstr "Superposición de Texto"
-
-msgid "Selects the color of text overlays printed over the current image."
-msgstr "Selecciona el color de los sobreimpresos de texto."
-
-msgid "Selects the color of the selection rectangle over the current image."
-msgstr "Selecciona el color del rectángulo de selección sobre la imagen."
-
-msgid "Selects the color of HUD overlays."
-msgstr "Selecciona el color de los sobreimpresos del HUD."
-
 msgid "File Requester"
 msgstr "Buscador de Archivos"
 
@@ -5867,6 +5828,39 @@ msgstr "Paneles"
 
 msgid "Sets the font to use in panels. (Not yet working)"
 msgstr "Setea la tipografía para usar en los paneles. (No funciona aún)"
+
+msgid "Language and Colors"
+msgstr "Lenguaje y Colores"
+
+msgid "Scheme"
+msgstr "Esquema"
+
+msgid "Color Theme"
+msgstr "Tema de Color"
+
+msgid "Reload Theme"
+msgstr "Recargar Tema"
+
+msgid ""
+"Reload color theme from mrv2.colors file again to refresh change in colors"
+msgstr ""
+"Recargar tema de color desde el archivo mrv2.colors nuevamente para "
+"refrescar el cambio en colores."
+
+msgid "Selects the background color of areas outside the current image."
+msgstr "Selecciona el color del fondo de areas fuera de la imagen actual."
+
+msgid "Text Overlay"
+msgstr "Superposición de Texto"
+
+msgid "Selects the color of text overlays printed over the current image."
+msgstr "Selecciona el color de los sobreimpresos de texto."
+
+msgid "Selects the color of the selection rectangle over the current image."
+msgstr "Selecciona el color del rectángulo de selección sobre la imagen."
+
+msgid "Selects the color of HUD overlays."
+msgstr "Selecciona el color de los sobreimpresos del HUD."
 
 msgid "RGBA Display"
 msgstr "Display RGBA"
@@ -7155,6 +7149,12 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
+
+#~ msgid "Could not match "
+#~ msgstr "No pude empatar "
+
+#~ msgid "Wizard labels are:"
+#~ msgstr "Las etiquetas del wizard son:"
 
 #~ msgid "Traditional Chinese"
 #~ msgstr "Chino Tradicional"

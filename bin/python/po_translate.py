@@ -52,7 +52,6 @@ def is_translation_invalid(text, threshold=3):
     # Check if any word/phrase repeats more than the threshold
     for word, count in word_counts.items():
         if count > threshold:
-            print('============INVALID')
             return (True, None)
     
     return (False, text)
@@ -60,7 +59,6 @@ def is_translation_invalid(text, threshold=3):
 
 def translate_text_with_google(english):
     print("Translate with Google...")
-    return english
     print(f"Original: {english}")
     translated_text = translator.translate(english)
     if "WARNING" in translated_text:
@@ -68,9 +66,16 @@ def translate_text_with_google(english):
         print("Stopping... too many requests for today")
         print()
         return english
+    return translated_text
 
+DONT_TRANSLATE = [
+    'OCIO',
+    'ComfyUI'
+    'sRGB',
+    ]
+    
 def _translate_text(english):
-    if english == 'OCIO' or len(english) < 4:
+    if english in DONT_TRANSLATE or len(english) < 4:
         return english
     
     translated_text = have_seen.get(english, None)
@@ -141,8 +146,10 @@ def translate_po(f):
     po.save(po_output)
 
 
-#main_po = f'mrv2/po/{lang}'
-#translate_po(main_po)
+main_po = f'mrv2/po/{lang}'
+translate_po(main_po)
+
+
 cwd = os.getcwd()
 os.chdir('mrv2/python/plug-ins')
 plugins = glob.glob('*.py')

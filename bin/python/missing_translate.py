@@ -114,6 +114,6 @@ if __name__ == "__main__":
         langs = sys.argv[1:]
     else:
         langs = ['ar', 'cs', 'de', 'en', 'es', 'fr', 'gr', 'it', 'ja',
-                 'ko', 'nl', 'pl', 'pt', 'ro', 'ru', 'sv', 'tr', 'zh']
+                 'ko', 'nl', 'pl', 'pt', 'ro', 'ru', 'sv', 'tr', 'zh', 'zh-CN']
 
     search_languages(langs)
