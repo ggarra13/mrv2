@@ -1617,6 +1617,9 @@ msgstr "Centro del limpiaparabrisas de la comparación A/B."
 msgid "A/B comparison wipe rotation."
 msgstr "Rotación del limpiaparabrisas de la comparación A/B."
 
+msgid "Create OpenTimelineIO EDL from the list of clips provided."
+msgstr "Crear una línea de tiempo desde la lista de clips provistos."
+
 msgid "OpenTimelineIO Edit mode."
 msgstr "Modo de Edición de OpenTimelineIO."
 
@@ -2833,6 +2836,18 @@ msgstr "Archivo de destino es inválido."
 msgid "You can only add clips to an .otio EDL playlist."
 msgstr "Sólo puede agregar clips a una lista de reproduccion (EDL) de .otio."
 
+msgid "Cannot currently concatenate an .otio file."
+msgstr "No puedo concatenar un archivo .otio."
+
+msgid "Cannot currently concatenate a directory."
+msgstr "No puedo concatenar un directorio."
+
+msgid "Could not append video track {0}"
+msgstr "No pude agregar pista de video {0}"
+
+msgid "Could not append audio track {0}"
+msgstr "No pude agregar pista de audio {0}"
+
 msgid "Server started at port {0}."
 msgstr "Servidor corriendo en puerto {0}."
 
@@ -3138,9 +3153,6 @@ msgstr "Inglés"
 
 msgid "Spanish"
 msgstr "Español"
-
-msgid "Chinese Simplified"
-msgstr "Chino Simplificado"
 
 msgid ""
 "Need to reboot mrv2 to change language.  Are you sure you want to continue?"
@@ -3766,61 +3778,61 @@ msgid "Render/HDR/Invalid Values"
 msgstr "Render/HDR/Valores Inválidos"
 
 msgid "Playback/Stop"
-msgstr "Reproducción/Parar"
+msgstr "Reproducir/Parar"
 
 msgid "Playback/Forwards"
-msgstr "Reproducción/Hacia Delante"
+msgstr "Reproducir/Hacia Delante"
 
 msgid "Playback/Backwards"
-msgstr "Reproducción/En Reversa"
+msgstr "Reproducir/En Reversa"
 
 msgid "Playback/Toggle Playback"
-msgstr "Reproducción/Alternar Reproduccón"
+msgstr "Reproducir/Alternar Reproduccón"
 
 msgid "Playback/Toggle In Point"
-msgstr "Reproducción/Alternar Punto de Entrada"
+msgstr "Reproducir/Alternar Punto de Entrada"
 
 msgid "Playback/Toggle Out Point"
-msgstr "Reproducción/Alternar Punto de Salida"
+msgstr "Reproducir/Alternar Punto de Salida"
 
 msgid "Playback/Loop Playback"
-msgstr "Reproducción/En Bucle"
+msgstr "Reproducir/En Bucle"
 
 msgid "Playback/Playback Once"
-msgstr "Reproducción/Una Vez Sola"
+msgstr "Reproducir/Una Vez Sola"
 
 msgid "Playback/Playback Ping Pong"
-msgstr "Reproducción/Ping Pong"
+msgstr "Reproducir/Ping Pong"
 
 msgid "Playback/Go to/Start"
-msgstr "Reproducción/Ir A/Comienzo"
+msgstr "Reproducir/Ir A/Comienzo"
 
 msgid "Playback/Go to/End"
-msgstr "Reproducción/Ir A/Final"
+msgstr "Reproducir/Ir A/Final"
 
 msgid "Playback/Go to/Previous Frame"
-msgstr "Reproducción/Ir A/Cuadro Previo"
+msgstr "Reproducir/Ir A/Cuadro Previo"
 
 msgid "Playback/Go to/Next Frame"
-msgstr "Reproducción/Ir A/Cuadro Próximo"
+msgstr "Reproducir/Ir A/Cuadro Próximo"
 
 msgid "Playback/Go to/Previous Clip"
-msgstr "Reproducción/Ir A/Clip Previo"
+msgstr "Reproducir/Ir A/Clip Previo"
 
 msgid "Playback/Go to/Next Clip"
-msgstr "Reproducción/Ir A/Clip Siguiente"
+msgstr "Reproducir/Ir A/Clip Siguiente"
 
 msgid "Playback/Go to/Previous Annotation"
-msgstr "Reproducción/Ir A/Anotación Previa"
+msgstr "Reproducir/Ir A/Anotación Previa"
 
 msgid "Playback/Go to/Next Annotation"
-msgstr "Reproducción/Ir A/Anotación Próxima"
+msgstr "Reproducir/Ir A/Anotación Próxima"
 
 msgid "Playback/Annotation/Clear"
-msgstr "Reproducción/Anotación/Borrar"
+msgstr "Reproducir/Anotación/Borrar"
 
 msgid "Playback/Annotation/Clear All"
-msgstr "Reproducción/Anotación/Borrar Todas"
+msgstr "Reproducir/Anotación/Borrar Todas"
 
 msgid "View/Mask/%s"
 msgstr "Vista/Máscara/%s"
@@ -7140,6 +7152,9 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
+
+#~ msgid "Chinese Simplified"
+#~ msgstr "Chino Simplificado"
 
 #~ msgid "Traditional Chinese"
 #~ msgstr "Chino Tradicional"

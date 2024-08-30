@@ -30,6 +30,7 @@ v1.2.5
 - Made -otio or -edl command-line option work with relative paths.
 - Fixed .otio, .otioz and -edl flags when concatenation videos with different
   rotations.
+- Changed name of "Reproducción" to "Reproducir" in Spanish translation.
 
 
 v1.2.4

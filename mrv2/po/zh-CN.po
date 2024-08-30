@@ -1290,6 +1290,9 @@ msgstr ""
 msgid "A/B comparison wipe rotation."
 msgstr ""
 
+msgid "Create OpenTimelineIO EDL from the list of clips provided."
+msgstr ""
+
 msgid "OpenTimelineIO Edit mode."
 msgstr ""
 
@@ -2452,6 +2455,18 @@ msgstr ""
 msgid "You can only add clips to an .otio EDL playlist."
 msgstr ""
 
+msgid "Cannot currently concatenate an .otio file."
+msgstr ""
+
+msgid "Cannot currently concatenate a directory."
+msgstr ""
+
+msgid "Could not append video track {0}"
+msgstr ""
+
+msgid "Could not append audio track {0}"
+msgstr ""
+
 msgid "Server started at port {0}."
 msgstr ""
 
@@ -2744,9 +2759,6 @@ msgid "English"
 msgstr ""
 
 msgid "Spanish"
-msgstr ""
-
-msgid "Chinese Simplified"
 msgstr ""
 
 msgid ""
