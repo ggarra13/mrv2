@@ -47,7 +47,7 @@ namespace fs = std::filesystem;
 namespace
 {
     const char* kModule = "prefs";
-    const int kPreferencesVersion = 7;
+    const int kPreferencesVersion = 8;
 } // namespace
 
 extern float kCrops[];
@@ -153,6 +153,14 @@ namespace mrv
             }
         }
         DBG3;
+
+        // If reading a version 7 or earlier, make sure to set ffmpeg color
+        // accuracy off to avoid issues of users complaining about playback
+        // performance on movies with no color space.
+        if (version <= 7)
+        {
+            settings->setValue("Performance/FFmpegColorAccuracy", 0);
+        }
 
         Fl_Preferences recent_files(base, "recentFiles");
         num = recent_files.entries();
@@ -459,7 +467,7 @@ namespace mrv
                 }
                 ++uiIndex;
             }
-            
+
             if (language_index == -1)
             {
                 uiIndex = 0;
@@ -480,7 +488,8 @@ namespace mrv
                 }
             }
 
-            if (language_index == -1) language_index = 0;
+            if (language_index == -1)
+                language_index = 0;
         }
 
         uiPrefs->uiLanguage->value(uiIndex);

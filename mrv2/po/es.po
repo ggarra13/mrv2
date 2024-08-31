@@ -5216,8 +5216,8 @@ msgstr "Ajustar Ventana a la Imagen"
 msgid "TopBar"
 msgstr "TopBar"
 
-msgid "Layers, Exposure, Saturation, and Gamma"
-msgstr "Capas, Exposición, Saturación y Gama"
+msgid "Layers, Exposure and Gain"
+msgstr "Capas, Exposición y Ganancia"
 
 msgid "Layers"
 msgstr "Capas"
@@ -5227,6 +5227,9 @@ msgstr "Permite seleccionar diferente canales de la imagen o capas."
 
 msgid "Exposure and Gain"
 msgstr "Exposición y Ganancia"
+
+msgid "Resizable Control Group"
+msgstr "Grupo de Control de Ajuste"
 
 msgid "Exposure"
 msgstr "Exposición"
@@ -5254,35 +5257,8 @@ msgstr ""
 msgid "Allows you to adjust the gain or exposure of the image."
 msgstr "Te permite ajustar la ganancia o exposición de la imagen."
 
-msgid "Toggle Saturation between current and previous setting."
-msgstr "Intercambia saturación enter 1 y el seteo previo."
-
-msgid "Saturation Input"
-msgstr "Entrada de Saturación"
-
-msgid "Saturation value."
-msgstr "Valor de Saturación."
-
-msgid "Allows you to adjust the saturation of the image."
-msgstr "Te permite ajustar la saturación de la imagen."
-
-msgid "Toggle gamma between 1 and the previous setting."
-msgstr "Intercambia gama enter 1 y el seteo previo."
-
-msgid "Resizable Control Group"
-msgstr "Grupo de Control de Ajuste"
-
-msgid "Gamma Input"
-msgstr "Entrada de Gama"
-
-msgid ""
-"Allows you to adjust gamma curve for display.\n"
-"Value is:  pow( 2, 1/x );"
-msgstr ""
-"Te permite ajustar la curva de gama para display.\n"
-"Valor es:  pow( 2, 1/x );"
-
-msgid "ICS, View, Look"
+#, fuzzy
+msgid "ICS, View, Look and Gamma"
 msgstr "ICS, Vista, Look"
 
 msgid "Input Color Space"
@@ -5305,6 +5281,19 @@ msgstr "Look"
 
 msgid "OCIO Looks"
 msgstr "Looks de OCIO"
+
+msgid "Toggle gamma between 1 and the previous setting."
+msgstr "Intercambia gama enter 1 y el seteo previo."
+
+msgid "Gamma Input"
+msgstr "Entrada de Gama"
+
+msgid ""
+"Allows you to adjust gamma curve for display.\n"
+"Value is:  pow( 2, 1/x );"
+msgstr ""
+"Te permite ajustar la curva de gama para display.\n"
+"Valor es:  pow( 2, 1/x );"
 
 msgid "TileGroup"
 msgstr "TileGroup"
@@ -5609,6 +5598,12 @@ msgstr ""
 "Esto reseteará todas sus preferencias a sus valores estándares.  ¿Está "
 "seguro que quiere continuar?"
 
+msgid "Could not match "
+msgstr "No pude empatar "
+
+msgid "Wizard labels are:"
+msgstr "Las etiquetas del wizard son:"
+
 msgid "User Interface"
 msgstr "Interfaz del Usuario"
 
@@ -5805,6 +5800,39 @@ msgstr "Memoria"
 msgid "Attributes"
 msgstr "Atributos"
 
+msgid "Language and Colors"
+msgstr "Lenguaje y Colores"
+
+msgid "Scheme"
+msgstr "Esquema"
+
+msgid "Color Theme"
+msgstr "Tema de Color"
+
+msgid "Reload Theme"
+msgstr "Recargar Tema"
+
+msgid ""
+"Reload color theme from mrv2.colors file again to refresh change in colors"
+msgstr ""
+"Recargar tema de color desde el archivo mrv2.colors nuevamente para "
+"refrescar el cambio en colores."
+
+msgid "Selects the background color of areas outside the current image."
+msgstr "Selecciona el color del fondo de areas fuera de la imagen actual."
+
+msgid "Text Overlay"
+msgstr "Superposición de Texto"
+
+msgid "Selects the color of text overlays printed over the current image."
+msgstr "Selecciona el color de los sobreimpresos de texto."
+
+msgid "Selects the color of the selection rectangle over the current image."
+msgstr "Selecciona el color del rectángulo de selección sobre la imagen."
+
+msgid "Selects the color of HUD overlays."
+msgstr "Selecciona el color de los sobreimpresos del HUD."
+
 msgid "File Requester"
 msgstr "Buscador de Archivos"
 
@@ -5854,39 +5882,6 @@ msgstr "Paneles"
 
 msgid "Sets the font to use in panels. (Not yet working)"
 msgstr "Setea la tipografía para usar en los paneles. (No funciona aún)"
-
-msgid "Language and Colors"
-msgstr "Lenguaje y Colores"
-
-msgid "Scheme"
-msgstr "Esquema"
-
-msgid "Color Theme"
-msgstr "Tema de Color"
-
-msgid "Reload Theme"
-msgstr "Recargar Tema"
-
-msgid ""
-"Reload color theme from mrv2.colors file again to refresh change in colors"
-msgstr ""
-"Recargar tema de color desde el archivo mrv2.colors nuevamente para "
-"refrescar el cambio en colores."
-
-msgid "Selects the background color of areas outside the current image."
-msgstr "Selecciona el color del fondo de areas fuera de la imagen actual."
-
-msgid "Text Overlay"
-msgstr "Superposición de Texto"
-
-msgid "Selects the color of text overlays printed over the current image."
-msgstr "Selecciona el color de los sobreimpresos de texto."
-
-msgid "Selects the color of the selection rectangle over the current image."
-msgstr "Selecciona el color del rectángulo de selección sobre la imagen."
-
-msgid "Selects the color of HUD overlays."
-msgstr "Selecciona el color de los sobreimpresos del HUD."
 
 msgid "RGBA Display"
 msgstr "Display RGBA"
@@ -7176,8 +7171,20 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
 
-#~ msgid "Layers, Exposure and Gain"
-#~ msgstr "Capas, Exposición y Ganancia"
+#~ msgid "Layers, Exposure, Saturation, and Gamma"
+#~ msgstr "Capas, Exposición, Saturación y Gama"
+
+#~ msgid "Toggle Saturation between current and previous setting."
+#~ msgstr "Intercambia saturación enter 1 y el seteo previo."
+
+#~ msgid "Saturation Input"
+#~ msgstr "Entrada de Saturación"
+
+#~ msgid "Saturation value."
+#~ msgstr "Valor de Saturación."
+
+#~ msgid "Allows you to adjust the saturation of the image."
+#~ msgstr "Te permite ajustar la saturación de la imagen."
 
 #~ msgid "OCIO/   Display: %s"
 #~ msgstr "OCIO/   Display: %s"
@@ -7190,12 +7197,6 @@ msgstr "Alternar Ventana de Acerca de mrv2"
 
 #~ msgid "OCIO/Change All Files"
 #~ msgstr "OCIO/Cambiar Todos los Clips"
-
-#~ msgid "Could not match "
-#~ msgstr "No pude empatar "
-
-#~ msgid "Wizard labels are:"
-#~ msgstr "Las etiquetas del wizard son:"
 
 #~ msgid "Traditional Chinese"
 #~ msgstr "Chino Tradicional"
