@@ -3,13 +3,13 @@ import os
 import polib
 import sys
 
-def copy_msgid_to_msgstr(input_file, output_file):
+def copy_msgid_to_msgstr(input_file, copy_all = False):
     # Load the .po file
     po = polib.pofile(input_file)
 
     # Copy msgid to msgstr
     for entry in po:
-        if not entry.msgstr:
+        if not entry.msgstr or copy_all:
             entry.msgstr = entry.msgid
         if 'fuzzy' in entry.flags:
             entry.flags.remove('fuzzy')
@@ -24,13 +24,16 @@ if __name__ == "__main__":
         exit(1)
     
     lang = sys.argv[1]
+
+    copy_all = False
+    if lang == 'en':
+        copy_all = True
     
     input_file = f"mrv2/po/{lang}.po"
-    output_file = f"mrv2/po/{lang}.po"
-    copy_msgid_to_msgstr(input_file, output_file)
+    copy_msgid_to_msgstr(input_file, copy_all)
 
     plugins_glob=f'mrv2/po/python/plug-ins/locale/{lang}/LC_MESSAGES/*.po'
     for plugin in glob.glob(plugins_glob):
-        copy_msgid_to_msgstr(plugin, plugin)
+        copy_msgid_to_msgstr(plugin, copy_all)
     
     
