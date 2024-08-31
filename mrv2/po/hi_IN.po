@@ -3689,6 +3689,9 @@ msgstr "संपादन/दोहराएँ"
 msgid "OCIO/Presets"
 msgstr "OCIO/प्रीसेट"
 
+msgid "OCIO/In Top Bar"
+msgstr ""
+
 msgid "OCIO/Current"
 msgstr "OCIO/मौज़ूदा"
 
@@ -6669,6 +6672,9 @@ msgstr "गामा अधिक"
 
 msgid "Gamma Less"
 msgstr "गामा कम"
+
+msgid "OCIO In Top Bar"
+msgstr ""
 
 msgid "OCIO Input Color Space"
 msgstr "OCIO इनपुट रंग जगह"

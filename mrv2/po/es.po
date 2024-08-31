@@ -3930,6 +3930,9 @@ msgstr "Editar/&Rehacer"
 msgid "OCIO/Presets"
 msgstr "OCIO/Preseteos"
 
+msgid "OCIO/In Top Bar"
+msgstr "OCIO/En Barra Superior"
+
 msgid "OCIO/Current"
 msgstr "OCIO/Seteos Actuales"
 
@@ -7055,6 +7058,9 @@ msgstr "Más gama"
 
 msgid "Gamma Less"
 msgstr "Menos gama"
+
+msgid "OCIO In Top Bar"
+msgstr "OCIO En Barra Superior"
 
 msgid "OCIO Input Color Space"
 msgstr "OCIO Espacio de Color de Entrada"

@@ -3802,6 +3802,9 @@ msgstr "编辑/重做( 重做)"
 msgid "OCIO/Presets"
 msgstr "OCIO/预设"
 
+msgid "OCIO/In Top Bar"
+msgstr ""
+
 msgid "OCIO/Current"
 msgstr "OCIO/目前"
 
@@ -6821,6 +6824,9 @@ msgstr "更多伽玛"
 
 msgid "Gamma Less"
 msgstr "减少伽玛"
+
+msgid "OCIO In Top Bar"
+msgstr ""
 
 msgid "OCIO Input Color Space"
 msgstr "OCIO 输入色空间"
