@@ -3294,16 +3294,16 @@ msgid "View/Mask"
 msgstr "Ansicht/Maske"
 
 msgid "OCIO/     Input Color Space"
-msgstr "OCIO/Eingabe-Farbraum"
+msgstr "OCIO/     Eingabe-Farbraum"
 
 msgid "OCIO/     Input Color Space "
-msgstr "OCIO/Eingabe-Farbraum"
+msgstr "OCIO/     Eingabe-Farbraum "
 
 msgid "OCIO/     Look"
-msgstr "OCIO/Sehen Sie."
+msgstr "OCIO/     Sehen Sie."
 
 msgid "OCIO/     Look "
-msgstr "OCIO/Sehen Sie."
+msgstr "OCIO/     Sehen Sie. "
 
 msgid "OCIO/Displays"
 msgstr "OCIO/Anzeigen"
@@ -5193,43 +5193,43 @@ msgid "1.00 Square"
 msgstr "1,00 Quadrat"
 
 msgid "1.19 Movietone"
-msgstr "1.19 Filmton"
+msgstr "1,19 Filmton"
 
 msgid "1.37 Academy (Full Frame)"
-msgstr "1.37 Akademie (Full Frame)"
+msgstr "1,37 Akademie (Full Frame)"
 
 msgid "1.50 Still Photo"
-msgstr "1.50 Foto immer noch"
+msgstr "1,50 Foto immer noch"
 
 msgid "1.56 STV - HDTV (14:9)"
-msgstr "1.56 STV - HDTV (14:9)"
+msgstr "1,56 STV - HDTV (14:9)"
 
 msgid "1.66 European Widescreen"
-msgstr "1.66 Europischer Widescreen"
+msgstr "1,66 Europischer Widescreen"
 
 msgid "1.77 HDTV (16:9)"
-msgstr "1.77 HDTV (16:9)"
+msgstr "1,77 HDTV (16:9)"
 
 msgid "1.85 Widescreen (3-perf)"
-msgstr "1.85 Widescreen (3-Perf)"
+msgstr "1,85 Widescreen (3-Perf)"
 
 msgid "2.00 Univisium"
-msgstr "2.00 Univisium"
+msgstr "2,00 Univisium"
 
 msgid "2.10 VistaVision"
-msgstr "2.10 VistaVision"
+msgstr "2,10 VistaVision"
 
 msgid "2.20 70mm"
-msgstr "2.20 70mm"
+msgstr "2,20 70mm"
 
 msgid "2.35 CinemaScope (old 2.35)"
-msgstr "2.35 CinemaScope (alte 2.35)"
+msgstr "2,35 CinemaScope (alte 2.35)"
 
 msgid "2.39 Panavision (new 2.35)"
-msgstr "2.39 Panavision (neu 2.35)"
+msgstr "2,39 Panavision (neu 2.35)"
 
 msgid "4.00 Polyvision"
-msgstr "4.00 Polyvision"
+msgstr "4,00 Polyvision"
 
 msgid "Slow"
 msgstr "Langsam"

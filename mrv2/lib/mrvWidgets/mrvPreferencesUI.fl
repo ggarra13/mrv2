@@ -417,23 +417,22 @@ If you try to open several mrv2s with different images, all these images will be
               }
             }
             Fl_Group {} {
-              label {Language and Colors}
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
+              label {Language and Colors} open
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {
                 label UI open
                 xywh {360 58 403 199} box ROUNDED_BOX
               } {
                 Fl_Choice uiLanguage {
-                  label Language open
+                  label Language selected
                   xywh {508 78 160 25} down_box BORDER_BOX
-                  code0 {auto languages = mrv::getLanguages();}
-                  code1 {for (const auto& language : languages)}
-                  code2 {o->add(language.c_str());}
+                  code0 {auto languages = mrv::getLanguages(); std::string entry;}
+                  code1 {for (const auto& language : languages) { entry = _(language.c_str()); entry += " (" + language + ")"; o->add(entry.c_str()); }}
                 } {}
                 Fl_Choice uiScheme {
                   label Scheme
-                  callback {Fl::scheme( o->mvalue()->text );} open
+                  callback {Fl::scheme( o->mvalue()->text );}
                   xywh {522 131 100 25} down_box BORDER_BOX align 1
                 } {
                   MenuItem {} {
@@ -701,7 +700,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
             }
             Fl_Group {} {
               label Render
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label Render open
@@ -1680,7 +1679,7 @@ for (Fl_Tree_Item* item = tree->first(); item; item = tree->next(item), ++idx)
          wiz->value(w);
          return;
       }
-}} selected
+}}
             xywh {9 24 270 423} color 20 when 4
             code0 {fill_tree(o);}
             code1 {o->showroot(false);}

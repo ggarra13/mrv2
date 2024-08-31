@@ -775,7 +775,7 @@ namespace mrv
         
         if (value == p.ocioOptions)
             return;
-
+        
         p.ocioOptions = value;
 
         if (p.ui->uiSecondary && p.ui->uiSecondary->viewport())
@@ -1986,11 +1986,10 @@ namespace mrv
         TLRENDER_P();
 
         timeline::OCIOOptions o;
-        
         o.fileName = p.ui->uiPrefs->uiPrefsOCIOConfig->value();
 
         std::string input = p.ui->uiICS->label();
-        if (p.ui->uiICS->value() < 0 || input == _("None"))
+        if (p.ui->uiICS->value() <= 0)
             input = "";
         o.input = input;
 
@@ -2017,7 +2016,7 @@ namespace mrv
         }
 
         std::string look = p.ui->uiOCIOLook->label();
-        if (p.ui->uiOCIOLook->value() < 0 || look == _("None"))
+        if (p.ui->uiOCIOLook->value() <= 0)
             look = "";
         o.look = look;
 
@@ -2122,8 +2121,6 @@ namespace mrv
             p.ui->uiFStop->labelcolor(p.ui->uiGain->labelcolor());
         }
 
-        //  @todo.    ask darby why image filters are both in display
-        //            options and in imageoptions
         const Fl_Menu_Item* item =
             p.ui->uiMenuBar->find_item(_("Render/Minify Filter/Linear"));
         timeline::ImageFilter min_filter = timeline::ImageFilter::Nearest;

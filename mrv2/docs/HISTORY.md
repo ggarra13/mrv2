@@ -13,6 +13,7 @@ v1.2.5
 - Major refactoring of convoluted OCIO code.
 - Allowed Chaging OCIO Input Color Space from the OCIO menu for either the
   current file, or all loaded files.
+- Fixed OCIO ICS when set to None and changing languages. 
 - Fixed annotation markers in timeline showing even when switching clips.
 - Fixed Wayland PNG incompatibility on older Linux OSes.  Tested to work on
   Rocky Linux 8.10, Ubuntu 22.04.4 LTS and Ubuntu 24.04.4 LTS.
@@ -34,6 +35,8 @@ v1.2.5
 - Added Chinese (Simplified) Translation done with AI.
 - Added German Translation done with AI.
 - Added Hindi Translation done with AI.
+- Made Languages display their English name in parenthesis to help if switching
+  to an unknown language by mistake.
 
 
 v1.2.4

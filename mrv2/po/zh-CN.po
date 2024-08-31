@@ -5230,7 +5230,7 @@ msgid "DWA Compression"
 msgstr "DWA 压缩"
 
 msgid "0.00 None"
-msgstr "0.00无"
+msgstr "0.00 无"
 
 msgid "1.00 Square"
 msgstr "1.00 广场"

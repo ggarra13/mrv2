@@ -2874,10 +2874,10 @@ msgid "OCIO config '{0}' does not exist or is not readable."
 msgstr "OCO विन्यास '{0}' मौजूद नहीं है या पढ़ने योग्य नहीं है."
 
 msgid "Invalid OCIO Ics '{0}'."
-msgstr "अवैध OCOICOICO '{0}'."
+msgstr "अवैध OCIO '{0}'."
 
 msgid "Invalid OCIO Look '{0}'."
-msgstr "अवैध OCOOO देखो '{0}'."
+msgstr "अवैध OCIO देखो '{0}'."
 
 msgid "Invalid OCIO Display/View '{0}'."
 msgstr "अवैध OCIO प्रदर्शन/View."
@@ -3209,16 +3209,16 @@ msgid "View/Mask"
 msgstr "दृश्य/मास्क"
 
 msgid "OCIO/     Input Color Space"
-msgstr "OCIO/इनपुट रंग जगह"
+msgstr "OCIO/     इनपुट रंग जगह"
 
 msgid "OCIO/     Input Color Space "
-msgstr "OCIO/इनपुट रंग जगह"
+msgstr "OCIO/     इनपुट रंग जगह "
 
 msgid "OCIO/     Look"
-msgstr "OCIO/रूप"
+msgstr "OCIO/      रूप"
 
 msgid "OCIO/     Look "
-msgstr "OCIO/रूप"
+msgstr "OCIO/      रूप "
 
 msgid "OCIO/Displays"
 msgstr "OCIO/प्रदर्शक"
@@ -3513,19 +3513,19 @@ msgid "Render/Video Levels/From File"
 msgstr "रेंडर/वीडियो स्तर/फ़ाइल से"
 
 msgid "Render/Video Levels/Legal Range"
-msgstr "रेंडर/ वीडियो स्तर/Lrg सीमा"
+msgstr "रेंडर/वीडियो स्तर/कानूनी दायरा"
 
 msgid "Render/Video Levels/Full Range"
-msgstr "रेंडर/ वीडियो स्तर/ पूरा सीमा"
+msgstr "रेंडर/वीडियो स्तर/पूरा सीमा"
 
 msgid "Render/Alpha Blend/None"
 msgstr "रेंडर/अल्फा ब्लेंड/कुछ नहीं"
 
 msgid "Render/Alpha Blend/Straight"
-msgstr "रेंडर/अल्फा ब्लेंड/सीधा"
+msgstr "रेंडर/अल्फा ब्लेंड/स्ट्रेट"
 
 msgid "Render/Alpha Blend/Premultiplied"
-msgstr "रेंडर/Aphat/Muld"
+msgstr "रेंडर/अल्फा ब्लेंड/पूर्वगुणित"
 
 msgid "Render/Minify Filter/Nearest"
 msgstr "रेंडर/न्यूनतमीकरण फ़िल्टर/निकटस्थ"
@@ -5053,46 +5053,46 @@ msgid "DWA Compression"
 msgstr "DWA संपीडन"
 
 msgid "0.00 None"
-msgstr "०. ० (e) कुछ नहीं"
+msgstr "0.00 कुछ नहीं"
 
 msgid "1.00 Square"
 msgstr "1.00 वर्ग"
 
 msgid "1.19 Movietone"
-msgstr "1. 19 आयामी प्लैटोटोन"
+msgstr "1.19 आयामी प्लैटोटोन"
 
 msgid "1.37 Academy (Full Frame)"
-msgstr "1.37iमी (पूरा फ्रेम)"
+msgstr "1.37 iमी (पूरा फ्रेम)"
 
 msgid "1.50 Still Photo"
 msgstr "1.50 अब भी फोटो"
 
 msgid "1.56 STV - HDTV (14:9)"
-msgstr "1. 56.6 टीवी - HDटीवी (14: 9)"
+msgstr "1.56 टीवी - HDटीवी (14:9)"
 
 msgid "1.66 European Widescreen"
-msgstr "VARP6 यूरोपीय विस्तार स्क्रीन"
+msgstr "1.66 यूरोपीय विस्तार स्क्रीन"
 
 msgid "1.77 HDTV (16:9)"
-msgstr "1.77 HDV (16: 9)"
+msgstr "1.77 HDTV (16:9)"
 
 msgid "1.85 Widescreen (3-perf)"
-msgstr "1.85 विस्तार स्क्रीन (3-per)"
+msgstr "1.85 विस्तार स्क्रीन (3-perf)"
 
 msgid "2.00 Univisium"
 msgstr "2.00 गैरवीसियम"
 
 msgid "2.10 VistaVision"
-msgstr "2. 10 बोआ"
+msgstr "2.10 बोआ"
 
 msgid "2.20 70mm"
-msgstr "2. 20 70 मिमी"
+msgstr "2.20 70 मिमी"
 
 msgid "2.35 CinemaScope (old 2.35)"
 msgstr "2.35 कोमामाक (old 2.35)"
 
 msgid "2.39 Panavision (new 2.35)"
-msgstr "2.339 पैना विभाजन (नया 2.35)"
+msgstr "2.39 पैना विभाजन (नया 2.35)"
 
 msgid "4.00 Polyvision"
 msgstr "4.00 बहुमुखी"

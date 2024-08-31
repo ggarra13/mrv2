@@ -163,7 +163,7 @@ namespace mrv
         LanguageTable* t = kLanguages;
         for (; (*t).name; ++t)
         {
-            out.push_back(_((*t).name));
+            out.push_back((*t).name);
         }
 
         return out;
