@@ -33,6 +33,7 @@ v1.2.5
 - Changed name of "Reproducción" to "Reproducir" in Spanish translation.
 - Added Chinese (Simplified) Translation done with AI.
 - Added German Translation done with AI.
+- Added Hindi Translation done with AI.
 
 
 v1.2.4
