@@ -21,7 +21,7 @@ lang = sys.argv[1]
 
 LANGUAGES = [
     'de',
-    'hi',
+    'hi_IN',
     'zh-CN',
 ]
 
@@ -33,21 +33,45 @@ if not lang in LANGUAGES:
 
     
 DONT_TRANSLATE = [
+    '1:2',
+    '1:4',
+    '1:8',
+    '1:16',
     'API',
+    'arib-std-b67',
     'base',
+    'bt1361',
+    'bt2020',
+    'bt2020-10',
+    'bt2020-12',
+    'bt470m',
+    'bt601',
+    'bt709',
+    'EBU3213',
     'CG',
     'ComfyUI',
     'FFmpeg',
     'FPS',
+    'gamma28',
+    'gamma22',
     'gtk+',
     'HDR',
     'HUD',
+    'iec61966-2-1',
+    'iec61966-2-4',
     'OCIO',
     'OpenEXR',
     'OpenGL',
     'OpenUSD',
     'oxy',
     'plastic',
+    'SMPTE170m',
+    'smpte2084',
+    'SMPTE240m',
+    'smpte240m',
+    'SMPTE428',
+    'SMPTE431',
+    'SMPTE432',
     'sRGB',
     'Stereo',
     'Stereo3D',
@@ -78,7 +102,6 @@ class POTranslator:
 
         # Initialitize po translation
         self.translate_po(po_file)
-        
         
     def verify_text(self, text):
         # Use regex to match any repeated pair of two characters
@@ -135,7 +158,7 @@ class POTranslator:
 
     
     def _translate_text(self, english):
-        if english in DONT_TRANSLATE or len(english) < 4:
+        if len(english) < 4:
             return english
 
         if self.is_number(english):
@@ -202,7 +225,9 @@ class POTranslator:
         # Translate each entry
         try:
             for entry in po:
-                if entry.msgid == entry.msgstr:
+                if entry.msgid in DONT_TRANSLATE:
+                    entry.msgstr = entry.msgid
+                elif entry.msgid == entry.msgstr:
                     translated = self.translate_text_with_google(entry.msgid)
                     entry.msgstr = translated
                 elif entry.msgid and not entry.msgstr:

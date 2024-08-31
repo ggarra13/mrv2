@@ -1,0 +1,133 @@
+# Hindi translations for mrv package.
+# Automatically generated, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: mrv 2-build\n"
+"PO-Revision-Date: 2024-08-30 22:04-0300\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: hi_IN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+
+msgid ""
+"\n"
+"\n"
+"Install completed with output:\n"
+msgstr ""
+"\n"
+"आउटपुट के साथ पूर्ण संस्थापित करें:\n"
+
+msgid "Removed temporary \""
+msgstr "अस्थायी रूप से हटाया गया \"नहीं है\""
+
+msgid "The new version of mrv2 was installed."
+msgstr "mrv2 का नया संस्करण संस्थापित है."
+
+msgid "Could not locate mrv2 in:\n"
+msgstr "में mrv2 का पता नहीं लगा सका:\n"
+
+msgid "Maybe you installed it in a non-default location."
+msgstr "शायद आपने इसे गैर-डिफ़ॉल्ट स्थान में संस्थापित किया हो."
+
+msgid "Something failed installing mrv2 - It is not in \""
+msgstr "कुछ नहीं संस्थापन किया जा रहा है mrv2 - यह \" में नहीं है"
+
+msgid "Invalid ISO 8601 format provided: "
+msgstr "अवैध ISO 8601 फॉर्मेट प्रदान किया गया:"
+
+msgid "No file matching"
+msgstr "कोई फ़ाइल मेल नहीं"
+
+msgid "was found"
+msgstr "मिला"
+
+msgid "No match found"
+msgstr "कोई मेल नहीं मिला"
+
+msgid "Install Location: "
+msgstr "स्थान संस्थापित करें:"
+
+msgid "Error retrieving value:\n"
+msgstr "मूल्य पाने में त्रुटि:\n"
+
+msgid "Unknown platform"
+msgstr "अज्ञात प्लेटफॉर्म"
+
+msgid "Saving session:"
+msgstr "सत्र सहेजा जा रहा है:"
+
+msgid "An unexpected error occurred:"
+msgstr "एक अप्रत्याशित त्रुटि हुई:"
+
+msgid "Trying to install"
+msgstr "संस्थापित करने की कोशिश कर रहा है"
+
+msgid "Please wait"
+msgstr "कृपया प्रतीक्षा करें"
+
+msgid "Enter Sudo Password"
+msgstr "सूडो कूटशब्द दाखिल करें"
+
+msgid "Password"
+msgstr "पासवर्ड"
+
+msgid "You will need to install file"
+msgstr "आपको फ़ाइल संस्थापित करना होगा"
+
+msgid "manually."
+msgstr "दस्ती रूप से."
+
+msgid "Unknown operating system"
+msgstr "अज्ञात ऑपरेटिंग सिस्टम"
+
+msgid "Downloading "
+msgstr "डाउनलोड किया जा रहा है"
+
+msgid "Download seems to have failed!"
+msgstr "लगता है कि डाउनलोड असफल!"
+
+msgid "Release Notes"
+msgstr "रिलीज नोट्स"
+
+msgid "Current version is v"
+msgstr "वर्तमान संस्करण v है"
+
+msgid "Latest version at Github is v"
+msgstr "किबुब में नवीनतम संस्करण v है"
+
+msgid "Released on "
+msgstr "जारी"
+
+msgid "Ignore"
+msgstr "नजरअंदाज करें"
+
+msgid "Error fetching latest release information:\n"
+msgstr "नवीनतम रिलीज सूचना लाने में त्रुटि:\n"
+
+msgid "There's a new release but it has not been more than 5 days"
+msgstr "एक नया रिहाई है लेकिन यह 5 दिनों से अधिक नहीं किया गया है"
+
+msgid "unknown date."
+msgstr "अज्ञात तारीख़."
+
+msgid "Update anyway"
+msgstr "किसी तरह अद्यतन करें"
+
+msgid "Downgrade"
+msgstr "डाउनग्रेड"
+
+msgid "Upgrade"
+msgstr "उन्नयन"
+
+msgid "No download url was found for"
+msgstr "कोई डाउनलोड यूआरएल नहीं मिला"
+
+msgid "No releases found for the specified repository."
+msgstr "उल्लेखित भंडार के लिए कोई रिलीज नहीं मिला."
+
+msgid "Help/Update mrv2"
+msgstr "मदद/mrv2 अद्यतन करें"

@@ -3039,8 +3039,8 @@ msgstr "Grando... {0}."
 msgid "Empty video data at time {0}."
 msgstr "Datos de vídeo vacios en {0}."
 
-msgid "Reading preferences from \"{0}mrv2.prefs\"."
-msgstr "Leyendo preferencias desde \"{0}mrv2.prefs\"."
+msgid "Reading preferences from \"{0}{1}\"."
+msgstr "Leyendo preferencias desde \"{0}{1}\"."
 
 msgid "Failed to retrieve {0}."
 msgstr "Fallé en recuperar {0}."
@@ -3064,8 +3064,8 @@ msgstr "Seteando OCIO config desde preferencias."
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr "Seteando OCIO config de la variable de entorno OCIO."
 
-msgid "Path mappings have been loaded from \"{0}mrv2.paths.prefs\"."
-msgstr "Mapeo de carpetas ha sido cargado de \"{0}mrv2.paths.prefs\"."
+msgid "Path mappings have been loaded from \"{0}{1}\"."
+msgstr "Mapeo de carpetas ha sido cargado de \"{0}{1}\"."
 
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Cargué teclas de manejo desde \"{0}{1}.prefs\"."
@@ -3073,14 +3073,14 @@ msgstr "Cargué teclas de manejo desde \"{0}{1}.prefs\"."
 msgid "Reseting hotkeys to default."
 msgstr "Reseteando teclas a los valores estándares."
 
-msgid "Path mappings have been saved to \"{0}mrv2.paths.prefs\"."
-msgstr "Mapeo de carpetas ha sido grabado en \"{0}mrv2.paths.prefs\"."
+msgid "Path mappings have been saved to \"{0}{1}\"."
+msgstr "Mapeo de carpetas ha sido grabado en \"{0}{1}\"."
 
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "Teclas han sido grabadas en: \"{0}{1}.prefs\"."
 
-msgid "Preferences have been saved to: \"{0}mrv2.prefs\"."
-msgstr "Preferencias han sido grabadas en: \"{0}mrv2.prefs\"."
+msgid "Preferences have been saved to: \"{0}{1}\"."
+msgstr "Preferencias han sido grabadas en: \"{0}{1}\"."
 
 msgid "Removing "
 msgstr "Eliminando "
@@ -3157,6 +3157,9 @@ msgstr "Español"
 msgid "German"
 msgstr "Alemán"
 
+msgid "Hindi"
+msgstr "Hindi"
+
 msgid "Chinese Simplified"
 msgstr "Chino Simplificado"
 
@@ -3216,9 +3219,6 @@ msgstr "Griego"
 
 msgid "Hebrew"
 msgstr "Hebreo"
-
-msgid "Hindi"
-msgstr "Hindi"
 
 msgid "Icelandic"
 msgstr "Icelandés"
@@ -5733,7 +5733,6 @@ msgstr "Establece la gama estándar cuando mrv2 comienza."
 msgid "Crop"
 msgstr "Recorte"
 
-#, fuzzy
 msgid "Allows you to select a standard cropping area around image."
 msgstr ""
 "Te permite seleccionar un area de recorte estándar alrededor de la imagen."

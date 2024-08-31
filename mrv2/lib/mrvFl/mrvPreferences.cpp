@@ -96,8 +96,9 @@ namespace mrv
         locale::SetAndRestore saved;
 
         std::string msg =
-            tl::string::Format(_("Reading preferences from \"{0}mrv2.prefs\"."))
-                .arg(prefspath());
+            tl::string::Format(_("Reading preferences from \"{0}{1}\"."))
+                .arg(prefspath())
+                .arg("mrv2.prefs");
         LOG_INFO(msg);
 
         Fl_Preferences base(
@@ -740,8 +741,9 @@ namespace mrv
             uiPrefs->PathMappings->add(tmpS);
         }
         msg = tl::string::Format(_("Path mappings have been loaded from "
-                                   "\"{0}mrv2.paths.prefs\"."))
-                  .arg(mappingpath);
+                                   "\"{0}{1}\"."))
+                  .arg(mappingpath)
+                  .arg("mrv2.paths.prefs");
         LOG_INFO(msg);
 
         Fl_Preferences network(base, "network");
@@ -1391,8 +1393,9 @@ namespace mrv
         }
         std::string msg =
             tl::string::Format(_("Path mappings have been saved to "
-                                 "\"{0}mrv2.paths.prefs\"."))
-                .arg(prefspath());
+                                 "\"{0}{1}\"."))
+                .arg(prefspath())
+                .arg("mrv2.paths.prefs");
         LOG_INFO(msg);
 
         Fl_Preferences network(base, "network");
@@ -1469,8 +1472,9 @@ namespace mrv
         base.flush();
 
         msg = tl::string::Format(_("Preferences have been saved to: "
-                                   "\"{0}mrv2.prefs\"."))
-                  .arg(prefspath());
+                                   "\"{0}{1}\"."))
+                  .arg(prefspath())
+                  .arg("mrv2.prefs");
         LOG_INFO(msg);
 
         check_language(uiPrefs, language_index, app);
