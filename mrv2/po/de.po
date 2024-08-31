@@ -2325,7 +2325,7 @@ msgid "Frequency of audio"
 msgstr "Hufigkeit des Tons"
 
 msgid "%d kb/s"
-msgstr "KB/s"
+msgstr "%d kb/s"
 
 msgid "Max. Bitrate"
 msgstr "Bitrate"
@@ -3439,10 +3439,10 @@ msgid "    Used: %.2g of %zu Gb (%.2g %%)"
 msgstr "Verwendet: %.2g %zu Gb (%.2g %%)"
 
 msgid "    Ahead    V: % 4<PRIu64>    A: % 4<PRIu64>"
-msgstr "    Vorne    V: % 4 <PRIu64>   A: % 4<PRIu64>"
+msgstr "    Vorne    V: % 4<PRIu64>    A: % 4<PRIu64>"
 
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
-msgstr "    Hinter   V: % 4<PRIu64>    A: % 4 <PRIu64>"
+msgstr "    Hinter   V: % 4<PRIu64>    A: % 4<PRIu64>"
 
 msgid "Edit Text"
 msgstr "Text bearbeiten"

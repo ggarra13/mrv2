@@ -3351,10 +3351,10 @@ msgid "    Used: %.2g of %zu Gb (%.2g %%)"
 msgstr "उपयोग में: %.2g of %zu Gb (%.2g %%)"
 
 msgid "    Ahead    V: % 4<PRIu64>    A: % 4<PRIu64>"
-msgstr "आगे     V: % 4<PRIu64>     A: % 4<PRIu64>"
+msgstr "     आगे     V: % 4<PRIu64>     A: % 4<PRIu64>"
 
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
-msgstr "     V: % 4<PRIu64>     A: % 4< RTP64>"
+msgstr "      पीछे    V: % 4<PRIu64>     A: % 4<PRIu64>"
 
 msgid "Edit Text"
 msgstr "पाठ संपादित करें"
@@ -6789,4 +6789,3 @@ msgstr "यदि आप विंडो को बन्द करना चा
 
 msgid "Toggle About Window"
 msgstr "विंडो के बारे में टॉगल करें"
-
