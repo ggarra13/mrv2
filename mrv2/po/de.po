@@ -3556,7 +3556,7 @@ msgid "Panel/One Panel Only"
 msgstr "Panel/Nur ein Panel"
 
 msgid "Panel/"
-msgstr "Panel"
+msgstr "Panel/"
 
 msgid "Window/"
 msgstr "Fenster/"
@@ -3778,16 +3778,16 @@ msgid "OCIO/Presets"
 msgstr "OCIO/Voreinstellungen"
 
 msgid "OCIO/Current"
-msgstr "GESAMTRECHNUNG/Laufender Monat"
+msgstr "OCIO/Laufender Monat"
 
 msgid "OCIO/         ICS: %s"
-msgstr "GESAMTRECHNUNG/ICS: %s"
+msgstr "OCIO/ICS: %s"
 
 msgid "OCIO/     Display: %s"
-msgstr "GESAMTRECHNUNG/Anzeige: %s"
+msgstr "OCIO/Anzeige: %s"
 
 msgid "OCIO/        View: %s"
-msgstr "GESAMTRECHNUNG/Ansicht: %s"
+msgstr "OCIO/Ansicht: %s"
 
 msgid "OCIO/  Monitor #%d Display: %s"
 msgstr "OCIO/Monitor #%d Anzeige: %s"
@@ -3796,10 +3796,10 @@ msgid "OCIO/  Monitor #%d    View: %s"
 msgstr "OCIO/Monitor #%d Ansicht: %s"
 
 msgid "OCIO/        Look: %s"
-msgstr "GESAMTRECHNUNG/Schauen Sie: %s"
+msgstr "OCIO/Schauen Sie: %s"
 
 msgid "OCIO/Change Current File"
-msgstr "GESAMTRECHNUNG/Aktuelle Datei ändern"
+msgstr "OCIO/Aktuelle Datei ändern"
 
 msgid "OCIO/Displays"
 msgstr "OCIO/Anzeigen"
@@ -6968,15 +6968,3 @@ msgstr "Hotkeys-Fenster umschalten"
 
 msgid "Toggle About Window"
 msgstr "Fenster umschalten"
-
-#~ msgid "OCIO/   Display: %s"
-#~ msgstr "GESAMTRECHNUNG/Anzeige: %s"
-
-#~ msgid "OCIO/      View: %s"
-#~ msgstr "GESAMTRECHNUNG/Ansicht: %s"
-
-#~ msgid "OCIO/     Input Color Space "
-#~ msgstr "OCIO/     Eingabe-Farbraum "
-
-#~ msgid "OCIO/Change All Files"
-#~ msgstr "OCIO/Alle Dateien ndern"
