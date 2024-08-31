@@ -64,7 +64,7 @@ namespace mrv
     Hotkey kIgnoreDisplayWindow(false, false, false, false, 0);
     Hotkey kAutoNormalize(false, false, false, false, 0);
     Hotkey kInvalidValues(false, false, false, false, 0);
-    
+
     Hotkey kDisplayWindow(true, false, false, false, 'd');
     Hotkey kDataWindow(false, false, false, false, 'd');
 
@@ -137,7 +137,6 @@ namespace mrv
     Hotkey kClearCache(false, false, false, false, 0);
     Hotkey kUpdateVideoFrame(false, false, false, true, 'u');
 
-    
     Hotkey kDrawMode(false, false, false, true, 'd');
     Hotkey kEraseMode(false, false, false, true, 'e');
     Hotkey kScrubMode(false, false, false, true, 's');
@@ -177,8 +176,9 @@ namespace mrv
     Hotkey kGridToggle(true, false, false, false, 'g');
     Hotkey kGridSize(true, true, false, false, 'g');
     Hotkey kHudToggle(true, false, false, false, 'h');
-    
+
     Hotkey kOCIOPresetsToggle(false, false, false, false, 0);
+    Hotkey kOCIOInTopBarToggle(false, false, false, false, 0);
     Hotkey kOCIOInputColorSpace(false, false, false, false, 0);
     Hotkey kOCIODisplay(false, false, false, false, 0);
     Hotkey kOCIOView(false, false, false, false, 0);
@@ -430,7 +430,7 @@ namespace mrv
         HotkeyEntry(_("Stop"), &kStop),
         HotkeyEntry(_("First Frame"), &kFirstFrame),
         HotkeyEntry(_("Last Frame"), &kLastFrame),
-        
+
         HotkeyEntry(_("Next Clip"), &kNextClip),
         HotkeyEntry(_("Previous Clip"), &kPreviousClip),
 
@@ -451,7 +451,7 @@ namespace mrv
 
         HotkeyEntry(_("Previous Channel"), &kPreviousChannel),
         HotkeyEntry(_("Next Channel"), &kNextChannel),
-        
+
         HotkeyEntry(_("Clear Cache"), &kClearCache),
         HotkeyEntry(_("UpdateVideoFrame"), &kUpdateVideoFrame),
 
@@ -506,6 +506,7 @@ namespace mrv
         HotkeyEntry(_("Gamma More"), &kGammaMore),
         HotkeyEntry(_("Gamma Less"), &kGammaLess),
         HotkeyEntry(_("OCIO Presets"), &kOCIOPresetsToggle),
+        HotkeyEntry(_("OCIO In Top Bar"), &kOCIOInTopBarToggle),
         HotkeyEntry(_("OCIO Input Color Space"), &kOCIOInputColorSpace),
         HotkeyEntry(_("OCIO Display"), &kOCIODisplay),
         HotkeyEntry(_("OCIO View"), &kOCIOView),

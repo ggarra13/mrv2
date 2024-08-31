@@ -1292,19 +1292,6 @@ namespace mrv
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
-    OCIOPresetsUI* OCIOPresetsClass = nullptr;
-
-    void ocio_presets_cb(Fl_Menu_* m, ViewerUI* ui)
-    {
-        if (!OCIOPresetsClass)
-        {
-            Viewport* view = ui->uiView;
-            Fl_Group::current(view);
-            OCIOPresetsClass = new OCIOPresetsUI();
-        }
-        ui->uiMain->fill_menu(ui->uiMenuBar);
-    }
-
     void frame_view_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
@@ -1441,6 +1428,34 @@ namespace mrv
         }
     }
 
+    OCIOPresetsUI* OCIOPresetsClass = nullptr;
+
+    void ocio_presets_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        if (!OCIOPresetsClass)
+        {
+            Viewport* view = ui->uiView;
+            Fl_Group::current(view);
+            OCIOPresetsClass = new OCIOPresetsUI();
+        }
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
+    void toggle_ocio_topbar_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        if (ui->uiOCIO->visible())
+        {
+            ui->uiOCIO->hide();
+            ui->uiCOLORS->show();
+        }
+        else
+        {
+            ui->uiOCIO->show();
+            ui->uiCOLORS->hide();
+        }
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
     void current_ocio_ics_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         const Fl_Menu_Item* selected = m->mvalue();
@@ -1538,8 +1553,9 @@ namespace mrv
         if (idx == std::string::npos)
             return;
 
-        combined = combined.substr(idx + allMonitors.size() + 1, combined.size());
-            
+        combined =
+            combined.substr(idx + allMonitors.size() + 1, combined.size());
+
         for (int i = 0; i < numMonitors; ++i)
         {
             // Split combined display/view into separate parts.

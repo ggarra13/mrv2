@@ -3,7 +3,7 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 // Debug scaling of the window to image size.
-//#define DEBUG_SCALING 1
+// #define DEBUG_SCALING 1
 
 #include <memory>
 #include <cmath>
@@ -65,7 +65,7 @@ namespace
     {
         view->stopPlaybackWhileScrubbing();
     }
-    
+
 } // namespace
 
 namespace mrv
@@ -309,13 +309,13 @@ namespace mrv
     void TimelineViewport::stopPlaybackWhileScrubbing() noexcept
     {
         TLRENDER_P();
-        
+
         const auto player = p.player;
         const auto& t = player->currentTime();
 
         if (player->playback() == timeline::Playback::Stop)
             return;
-        
+
         const auto time = std::chrono::high_resolution_clock::now();
 
         const auto elapsedTime =
@@ -327,7 +327,7 @@ namespace mrv
         // early.
         const double fuzzFactor = t.rate() * 0.5;
         const double rate = t.rate() + fuzzFactor;
-        
+
         if (elapsedTime >= rate)
         {
             player->setPlayback(timeline::Playback::Stop);
@@ -338,7 +338,7 @@ namespace mrv
             1.0 / t.rate(),
             (Fl_Timeout_Handler)stop_playback_while_scrubbing_cb, this);
     }
-    
+
     void TimelineViewport::_scrub(float dx) noexcept
     {
         TLRENDER_P();
@@ -346,11 +346,9 @@ namespace mrv
         const auto player = p.player;
         if (file::isTemporaryNDI(player->path()))
             return;
-        
 
         const auto& t = player->currentTime();
         auto time = t + otime::RationalTime(dx, t.rate());
-
 
         // Stop at end/beginning if not looping.
         const auto& range = player->inOutRange();
@@ -365,7 +363,6 @@ namespace mrv
             return;
         }
 
-        
         const auto& info = player->ioInfo();
         bool isMuted = player->isMuted();
         if (!info.audio.isValid())
@@ -378,9 +375,9 @@ namespace mrv
                     1.0 / t.rate(),
                     (Fl_Timeout_Handler)stop_playback_while_scrubbing_cb, this);
             }
-            
+
             p.lastScrubTime = std::chrono::high_resolution_clock::now();
-                
+
             if (dx > 0)
             {
                 player->setPlayback(timeline::Playback::Forward);
@@ -391,7 +388,6 @@ namespace mrv
             }
         }
 
-        
         player->seek(time);
     }
 
@@ -630,8 +626,7 @@ namespace mrv
         const bool hasPixelBar = p.ui->uiPrefs->uiPrefsPixelToolbar->value();
         const bool visiblePixelBar = p.ui->uiPixelBar->visible_r();
 
-        if (!hasPixelBar || visiblePixelBar || !autoHide ||
-            p.presentation)
+        if (!hasPixelBar || visiblePixelBar || !autoHide || p.presentation)
             return;
 
         toggle_pixel_bar(nullptr, p.ui);
@@ -705,7 +700,7 @@ namespace mrv
     TimelineViewport::getOCIOOptions(unsigned monitorId) const noexcept
     {
         TLRENDER_P();
-        
+
         if (monitorId >= p.monitorOCIOOptions.size())
         {
             return p.ocioOptions;
@@ -735,9 +730,9 @@ namespace mrv
 
         if (value == p.backgroundOptions)
             return;
-        
+
         p.backgroundOptions = value;
-        
+
         Message msg;
         msg["command"] = "setBackgroundOptions";
         msg["value"] = value;
@@ -746,8 +741,7 @@ namespace mrv
     }
 
     void TimelineViewport::setOCIOOptions(
-        const unsigned monitorId,
-        const timeline::OCIOOptions& value) noexcept
+        const unsigned monitorId, const timeline::OCIOOptions& value) noexcept
     {
         TLRENDER_P();
 
@@ -761,20 +755,20 @@ namespace mrv
             for (unsigned i = num; i < monitorId; ++i)
                 p.monitorOCIOOptions[monitorId] = p.ocioOptions;
         }
-        
+
         p.monitorOCIOOptions[monitorId] = value;
 
         redrawWindows();
     }
-    
+
     void TimelineViewport::setOCIOOptions(
         const timeline::OCIOOptions& value) noexcept
     {
         TLRENDER_P();
-        
+
         if (value == p.ocioOptions)
             return;
-        
+
         p.ocioOptions = value;
 
         if (p.ui->uiSecondary && p.ui->uiSecondary->viewport())
@@ -791,7 +785,7 @@ namespace mrv
         tcp->pushMessage(msg);
 
         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
-        
+
         redrawWindows();
     }
 
@@ -864,17 +858,16 @@ namespace mrv
         updateVideoLayers();
 
         p.videoDataObserver.reset();
-        
+
         if (player)
         {
-            p.videoDataObserver = observer::ListObserver<timeline::VideoData>::create(
-                p.player->player()->observeCurrentVideo(),
-                [this](const std::vector<timeline::VideoData>& value)
-                    {
-                        currentVideoCallback(value);
-                    },
-                observer::CallbackAction::Suppress);
-            
+            p.videoDataObserver =
+                observer::ListObserver<timeline::VideoData>::create(
+                    p.player->player()->observeCurrentVideo(),
+                    [this](const std::vector<timeline::VideoData>& value)
+                    { currentVideoCallback(value); },
+                    observer::CallbackAction::Suppress);
+
             p.switchClip = true;
         }
         else
@@ -883,7 +876,7 @@ namespace mrv
         }
 
         // refreshWindows(); // needed We need to refresh, as the new
-                          // video data may have different sizes.
+        // video data may have different sizes.
     }
 
     mrv::TimelinePlayer* TimelineViewport::getTimelinePlayer() const noexcept
@@ -1128,10 +1121,10 @@ namespace mrv
             const auto& image = values[0].layers[0].image;
             if (image && image->isValid())
             {
-                const auto& videoSize = image->getSize();        
+                const auto& videoSize = image->getSize();
                 p.videoSize = videoSize;
             }
-            
+
             p.switchClip = false;
             p.droppedFrames = 0;
         }
@@ -1152,8 +1145,9 @@ namespace mrv
                 {
                     int layerId = 0;
                     if (p.player)
-                        layerId = p.player->player()->observeVideoLayer()->get();
-        
+                        layerId =
+                            p.player->player()->observeVideoLayer()->get();
+
                     io::Options ioOptions;
                     {
                         std::stringstream s;
@@ -1639,7 +1633,7 @@ namespace mrv
         int minW = 690;
         int minH = 602;
         mw->get_size_range(&minW, &minH);
-        
+
         // Make sure that we are not less than the minimum window
         // sizes, in case the user loaded a very tiny image.
         if (W < minW)
@@ -1658,7 +1652,7 @@ namespace mrv
         std::cerr << "FINAL Window=" << posX << " " << posY << " " << W << "x"
                   << H << " dW=" << dW << " dH=" << dH << std::endl;
 #endif
-        
+
         mw->resize(posX, posY, W, H);
 
         if (p.frameView)
@@ -1667,7 +1661,6 @@ namespace mrv
         }
 
         set_edit_mode_cb(editMode, p.ui);
-
 
         // We need to adjust dock group too.  These lines are needed.
         auto viewGroup = p.ui->uiViewGroup;
@@ -2007,7 +2000,7 @@ namespace mrv
                     combined = combined.substr(1, combined.size());
                 m->copy_label(combined.c_str());
             }
-            
+
             if (combined != _("None"))
             {
                 ocio::ocioSplitViewIntoDisplayView(combined, o.display, o.view);
@@ -2022,8 +2015,16 @@ namespace mrv
         if (!o.fileName.empty() &&
             (!o.input.empty() || (!o.display.empty() && !o.view.empty())))
             o.enabled = true;
-        
+
         setOCIOOptions(o);
+
+        int num_screens = Fl::screen_count();
+        if (num_screens > 1)
+        {
+            int screen = this->screen_num();
+            setOCIOOptions(screen, o);
+        }
+
         redrawWindows();
     }
 
@@ -2105,7 +2106,6 @@ namespace mrv
         d.color.brightness.x = d.exrDisplay.exposure * gain;
         d.color.brightness.y = d.exrDisplay.exposure * gain;
         d.color.brightness.z = d.exrDisplay.exposure * gain;
-        
 
         float saturation = p.ui->uiSaturation->value();
         _pushColorMessage("saturation", saturation);
@@ -2114,8 +2114,7 @@ namespace mrv
         d.color.saturation.z = saturation;
 
         // Turn on color corrections if gain or saturation are not 1.
-        if (!mrv::is_equal(gain, 1.F) ||
-            !mrv::is_equal(saturation, 1.F))
+        if (!mrv::is_equal(gain, 1.F) || !mrv::is_equal(saturation, 1.F))
         {
             d.color.enabled = true;
         }
@@ -3092,12 +3091,12 @@ namespace mrv
         TLRENDER_P();
         if (!image->isValid())
             return;
-        
+
         if (p.player)
         {
             p.player->stop();
         }
-        
+
         p.videoData.clear();
 
         timeline::VideoData data;
@@ -3111,13 +3110,13 @@ namespace mrv
             data.time = otime::RationalTime(0.F, 24.F);
             activate();
         }
-        
+
         timeline::VideoLayer layer;
         layer.image = image;
-        
+
         data.layers.push_back(layer);
         p.videoData.push_back(data);
-        
+
         _frameView();
 
         redraw();
@@ -3125,7 +3124,6 @@ namespace mrv
         Fl::flush();
     }
 
-    
     void TimelineViewport::updateUndoRedoButtons() const noexcept
     {
         TLRENDER_P();
@@ -3210,7 +3208,6 @@ namespace mrv
             s >> videoRotation;
         }
         _setVideoRotation(videoRotation);
-
 
         if (p.displayOptions[0].normalize.enabled)
         {

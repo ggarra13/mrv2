@@ -75,7 +75,7 @@ namespace mrv
 
         int idx;
         DBG;
-        
+
         menu->add(
             _("File/Open/Movie or Sequence"), kOpenImage.hotkey(),
             (Fl_Callback*)open_cb, ui);
@@ -300,7 +300,7 @@ namespace mrv
             item->set();
 
         DBG;
-        
+
         idx = menu->add(
             _("Panel/One Panel Only"), kToggleOnePanelOnly.hotkey(),
             (Fl_Callback*)toggle_one_panel_only_cb, ui,
@@ -312,7 +312,7 @@ namespace mrv
             item->clear();
 
         DBG;
-        
+
         std::unordered_map<std::string, std::string > panelsMap;
         const WindowCallback* wc = kWindowCallbacks;
         for (; wc->name; ++wc)
@@ -1192,25 +1192,29 @@ namespace mrv
         idx = menu->add(
             buf, kOCIOPresetsToggle.hotkey(), (Fl_Callback*)ocio_presets_cb, ui,
             FL_MENU_DIVIDER);
-        if (OCIOPresetsClass)
+
+        idx = menu->add(
+            _("OCIO/In Top Bar"), kOCIOInTopBarToggle.hotkey(),
+            (Fl_Callback*)toggle_ocio_topbar_cb, ui,
+            FL_MENU_DIVIDER | FL_MENU_TOGGLE);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (ui->uiOCIO->visible())
             item->set();
 
         std::string ics = string::commentCharacter(ocio::ocioIcs(), '/');
         std::string look = ocio::ocioLook();
-        
+
         menu->add(_("OCIO/Current"), 0, 0, nullptr, FL_MENU_INACTIVE);
         snprintf(buf, 1024, _("OCIO/         ICS: %s"), ics.c_str());
         menu->add(buf, 0, 0, nullptr, FL_MENU_INACTIVE);
-        
+
         int num_screens = Fl::screen_count();
         const timeline::OCIOOptions& o = uiView->getOCIOOptions();
         if (num_screens == 1)
         {
-            snprintf(buf, 1024, _("OCIO/     Display: %s"),
-                     o.display.c_str());
+            snprintf(buf, 1024, _("OCIO/     Display: %s"), o.display.c_str());
             menu->add(buf, 0, 0, nullptr, FL_MENU_INACTIVE);
-            snprintf(buf, 1024, _("OCIO/        View: %s"),
-                     o.view.c_str());
+            snprintf(buf, 1024, _("OCIO/        View: %s"), o.view.c_str());
             menu->add(buf, 0, 0, nullptr, FL_MENU_INACTIVE);
         }
         else
@@ -1231,11 +1235,10 @@ namespace mrv
             if (same)
             {
                 const timeline::OCIOOptions& o = uiView->getOCIOOptions(0);
-                snprintf(buf, 1024, _("OCIO/     Display: %s"),
-                         o.display.c_str());
+                snprintf(
+                    buf, 1024, _("OCIO/     Display: %s"), o.display.c_str());
                 menu->add(buf, 0, 0, nullptr, FL_MENU_INACTIVE);
-                snprintf(buf, 1024, _("OCIO/        View: %s"),
-                         o.view.c_str());
+                snprintf(buf, 1024, _("OCIO/        View: %s"), o.view.c_str());
                 menu->add(buf, 0, 0, nullptr, FL_MENU_INACTIVE);
             }
             else
@@ -1244,22 +1247,24 @@ namespace mrv
                 {
                     const timeline::OCIOOptions& o = uiView->getOCIOOptions(m);
                     std::string monitorName = mrv::desktop::monitorName(m);
-                    snprintf(buf, 1024, _("OCIO/  Monitor #%d Display: %s"),
-                             m, o.display.c_str());
+                    snprintf(
+                        buf, 1024, _("OCIO/  Monitor #%d Display: %s"), m,
+                        o.display.c_str());
                     menu->add(buf, 0, 0, nullptr, FL_MENU_INACTIVE);
-                    snprintf(buf, 1024, _("OCIO/  Monitor #%d    View: %s"),
-                             m, o.view.c_str());
+                    snprintf(
+                        buf, 1024, _("OCIO/  Monitor #%d    View: %s"), m,
+                        o.view.c_str());
                     menu->add(buf, 0, 0, nullptr, FL_MENU_INACTIVE);
                 }
             }
         }
-        
+
         snprintf(buf, 1024, _("OCIO/        Look: %s"), look.c_str());
         menu->add(buf, 0, 0, nullptr, FL_MENU_INACTIVE | FL_MENU_DIVIDER);
-        
 
-        menu->add(_("OCIO/Change Current File"), 0, 0, nullptr, FL_MENU_INACTIVE);
-        
+        menu->add(
+            _("OCIO/Change Current File"), 0, 0, nullptr, FL_MENU_INACTIVE);
+
         idx = ui->uiICS->value();
         if (idx >= 0)
         {
@@ -1281,7 +1286,6 @@ namespace mrv
             if (ret != 0)
                 continue;
 
-
             if (pathname[0] != '/')
                 colorSpace += '/';
             colorSpace += pathname;
@@ -1290,17 +1294,16 @@ namespace mrv
                 FL_MENU_TOGGLE);
 
             {
-                Fl_Menu_Item* item = (Fl_Menu_Item*) &(menu->menu()[idx]);
+                Fl_Menu_Item* item = (Fl_Menu_Item*)&(menu->menu()[idx]);
                 size_t pos = colorSpace.find(ics);
                 if (pos != std::string::npos &&
-                    pos + ics.size() == colorSpace.size() )
+                    pos + ics.size() == colorSpace.size())
                 {
                     item->set();
                 }
             }
         }
 
-        
         idx = ui->uiOCIOLook->value();
         if (idx >= 0)
         {
@@ -1322,7 +1325,6 @@ namespace mrv
             if (ret != 0)
                 continue;
 
-
             if (pathname[0] != '/')
                 colorSpace += '/';
             colorSpace += pathname;
@@ -1331,10 +1333,10 @@ namespace mrv
                 FL_MENU_TOGGLE);
 
             {
-                Fl_Menu_Item* item = (Fl_Menu_Item*) &(menu->menu()[idx]);
+                Fl_Menu_Item* item = (Fl_Menu_Item*)&(menu->menu()[idx]);
                 size_t pos = colorSpace.find(look);
                 if (pos != std::string::npos &&
-                    pos + look.size() == colorSpace.size() )
+                    pos + look.size() == colorSpace.size())
                 {
                     item->set();
                 }
@@ -1342,8 +1344,6 @@ namespace mrv
         }
 
         menu->add(_("OCIO/Displays"), 0, nullptr, nullptr, FL_MENU_INACTIVE);
-        
-    
 
         menu->add(_("OCIO/Displays"), 0, nullptr, nullptr, FL_MENU_INACTIVE);
 
@@ -1352,7 +1352,7 @@ namespace mrv
             const timeline::OCIOOptions& o = uiView->getOCIOOptions(0);
             std::string combined =
                 ocio::ocioDisplayViewShortened(o.display, o.view);
-        
+
             for (int i = 0; i < ui->uiOCIOView->children(); ++i)
             {
                 const Fl_Menu_Item* item = ui->uiOCIOView->child(i);
@@ -1370,20 +1370,21 @@ namespace mrv
                     colorSpace += '/';
                 colorSpace += pathname;
                 int idx = menu->add(
-                    colorSpace.c_str(), 0, (Fl_Callback*)all_monitors_ocio_view_cb,
-                    ui, FL_MENU_TOGGLE);
+                    colorSpace.c_str(), 0,
+                    (Fl_Callback*)all_monitors_ocio_view_cb, ui,
+                    FL_MENU_TOGGLE);
                 {
-                    Fl_Menu_Item* item = (Fl_Menu_Item*) &(menu->menu()[idx]);
+                    Fl_Menu_Item* item = (Fl_Menu_Item*)&(menu->menu()[idx]);
                     size_t pos = colorSpace.find(combined);
                     if (pos != std::string::npos &&
-                        pos + combined.size() == colorSpace.size() )
+                        pos + combined.size() == colorSpace.size())
                     {
                         item->set();
                     }
                 }
             }
         }
-    
+
         for (int m = 0; m < num_screens; ++m)
         {
             const timeline::OCIOOptions& o = uiView->getOCIOOptions(m);
@@ -1391,7 +1392,7 @@ namespace mrv
             std::string combined =
                 ocio::ocioDisplayViewShortened(o.display, o.view);
             combined = monitorName + "/" + combined;
-       
+
             for (int i = 0; i < ui->uiOCIOView->children(); ++i)
             {
                 const Fl_Menu_Item* item = ui->uiOCIOView->child(i);
@@ -1412,10 +1413,10 @@ namespace mrv
                     colorSpace.c_str(), 0, (Fl_Callback*)monitor_ocio_view_cb,
                     ui, FL_MENU_TOGGLE);
                 {
-                    Fl_Menu_Item* item = (Fl_Menu_Item*) &(menu->menu()[idx]);
+                    Fl_Menu_Item* item = (Fl_Menu_Item*)&(menu->menu()[idx]);
                     size_t pos = colorSpace.find(combined);
                     if (pos != std::string::npos &&
-                        pos + combined.size() == colorSpace.size() )
+                        pos + combined.size() == colorSpace.size())
                     {
                         item->set();
                     }

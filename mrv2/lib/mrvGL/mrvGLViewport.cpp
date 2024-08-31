@@ -23,6 +23,7 @@
 
 #include "mrvWidgets/mrvMultilineInput.h"
 
+#include "mrvFl/mrvOCIO.h"
 #include "mrvFl/mrvIO.h"
 #include "mrvFl/mrvTimelinePlayer.h"
 
@@ -229,9 +230,8 @@ namespace mrv
                     {
                         video = p.lastVideoData;
                     }
-                    
-                    if (!video.layers.empty() &&
-                        video.layers[0].image &&
+
+                    if (!video.layers.empty() && video.layers[0].image &&
                         video.layers[0].image->isValid())
                     {
                         pixelType = video.layers[0].image->getPixelType();
@@ -332,12 +332,18 @@ namespace mrv
                     int screen = this->screen_num();
                     if (screen >= 0 && screen < p.monitorOCIOOptions.size())
                     {
-                        timeline::OCIOOptions ocioOptions = p.ocioOptions;
-                        ocioOptions.display =
-                            p.monitorOCIOOptions[screen].display;
-                        ocioOptions.view =
-                            p.monitorOCIOOptions[screen].view;
-                        gl.render->setOCIOOptions(ocioOptions);
+                        timeline::OCIOOptions o = p.ocioOptions;
+                        o.display = p.monitorOCIOOptions[screen].display;
+                        o.view = p.monitorOCIOOptions[screen].view;
+                        gl.render->setOCIOOptions(o);
+
+                        if (this == p.ui->uiView)
+                        {
+                            const std::string& combined =
+                                ocio::ocioDisplayViewShortened(
+                                    o.display, o.view);
+                            p.ui->uiOCIOView->copy_label(combined.c_str());
+                        }
                     }
                     else
                     {
@@ -404,7 +410,7 @@ namespace mrv
                 p.ui->uiViewGroup->color(fl_rgb_color(0, 0, 0));
                 p.ui->uiViewGroup->redraw();
             }
-            
+
             // Hide the cursor if in presentation time after 3 seconds of
             // inactivity.
             const auto& time = std::chrono::high_resolution_clock::now();
@@ -519,7 +525,8 @@ namespace mrv
                     glViewport(viewportX, viewportY, sizeW, sizeH);
 
                     glBindFramebuffer(GL_READ_FRAMEBUFFER, gl.buffer->getID());
-                    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, GL_FRONT); // 0 is screen
+                    glBindFramebuffer(
+                        GL_DRAW_FRAMEBUFFER, GL_FRONT); // 0 is screen
 
                     // Blit the offscreen buffer contents to the viewport
                     GLenum filter = GL_NEAREST;
@@ -635,12 +642,11 @@ namespace mrv
                 _drawRectangleOutline(selection, color, mvp);
             }
 
-
             if (panel::annotationsPanel)
             {
                 panel::annotationsPanel->notes->value("");
             }
-                
+
             if (p.showAnnotations && !annotations.empty())
             {
                 gl::OffscreenBufferOptions offscreenBufferOptions;

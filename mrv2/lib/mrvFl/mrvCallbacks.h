@@ -125,9 +125,6 @@ namespace mrv
     //! HUD window callback
     void hud_cb(Fl_Menu_* w, ViewerUI* ui);
 
-    //! OCIO presets window callback
-    void ocio_presets_cb(Fl_Menu_* w, ViewerUI* ui);
-
     //! Auxiliary functions to remember what bars and what windows were
     //! 1 open in case of a fullscreen or presentation switch.
     void save_ui_state(ViewerUI* ui, Fl_Group* bar);
@@ -192,8 +189,13 @@ namespace mrv
     void attach_ocio_ics_cb(Fl_Menu_*, ViewerUI* ui);
 
     // From OCIO Menus
+    void ocio_presets_cb(Fl_Menu_* w, ViewerUI* ui);
+
+    void toggle_ocio_topbar_cb(Fl_Menu_*, ViewerUI* ui);
+
     void current_ocio_ics_cb(Fl_Menu_*, ViewerUI* ui);
     void current_ocio_look_cb(Fl_Menu_*, ViewerUI* ui);
+
     void monitor_ocio_view_cb(Fl_Menu_*, ViewerUI* ui);
     void all_monitors_ocio_view_cb(Fl_Menu_*, ViewerUI* ui);
 
