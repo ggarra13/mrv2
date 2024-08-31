@@ -1,7 +1,7 @@
 # English translations for mrv2 package.
 # This file is distributed under the same license as the mrv2 package.
 # Automatically generated, 2024.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.1.6\n"
@@ -7107,6 +7107,9 @@ msgstr "Toggle Hotkeys Window"
 
 msgid "Toggle About Window"
 msgstr "Toggle About Window"
+
+#~ msgid "Layers, Exposure and Gain"
+#~ msgstr "Exposure and Gain"
 
 #~ msgid "OCIO/   Display: %s"
 #~ msgstr "OCIO/Displays"

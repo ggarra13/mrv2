@@ -7176,6 +7176,9 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
 
+#~ msgid "Layers, Exposure and Gain"
+#~ msgstr "Capas, Exposición y Ganancia"
+
 #~ msgid "OCIO/   Display: %s"
 #~ msgstr "OCIO/   Display: %s"
 

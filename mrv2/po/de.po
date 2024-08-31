@@ -5077,7 +5077,7 @@ msgstr ""
 "x );"
 
 msgid "ICS, View, Look"
-msgstr "ICS, Blick, Blick"
+msgstr "ICS, Sicht, Blick"
 
 msgid "Input Color Space"
 msgstr "Eingabe-Farbraum"
@@ -6968,3 +6968,7 @@ msgstr "Hotkeys-Fenster umschalten"
 
 msgid "Toggle About Window"
 msgstr "Fenster umschalten"
+
+#, fuzzy
+#~ msgid "Layers, Exposure and Gain"
+#~ msgstr "Forderung und Gewinn"
