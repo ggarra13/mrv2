@@ -1,5 +1,6 @@
 #!/usr/env/bin python
 
+import argparse
 from collections import Counter
 import gc
 import glob
@@ -7,23 +8,43 @@ import os
 import polib
 import re
 import sys
-import torch
-from transformers import MarianMTModel, MarianTokenizer
-from translate import Translator
 
+#
+# Script version
+#
+VERSION = 1.0
 
-if len(sys.argv) < 2:
-    print(sys.argv[0], " <language>")
-    exit(1)
-
-lang = sys.argv[1]
-
-
+#
+# Supported languages
+#
 LANGUAGES = [
     'de',
     'hi_IN',
     'zh-CN',
 ]
+
+#
+# Script description
+#
+description=f"""
+po_translate v{VERSION}
+
+A program to translate a .po file with AI and with
+Google's translate engine.
+"""
+            
+parser = argparse.ArgumentParser(
+    formatter_class=argparse.RawDescriptionHelpFormatter,
+    description=description)
+
+parser.add_argument('language', type=str,
+                    help='Language code to translate, like "en" or "zh-CN".')
+parser.add_argument('-g', '--google', action='store_true',
+                    help='Use google')
+
+args = parser.parse_args()
+lang = args.language
+use_google = args.google
 
 if not lang in LANGUAGES:
     print(f'Invalid language "{lang}"')
@@ -31,7 +52,9 @@ if not lang in LANGUAGES:
     exit(1)
 
 
-    
+#
+# Text that we should not translate.    
+#
 DONT_TRANSLATE = [
     '%d Hz.',
     '1:2',
@@ -89,12 +112,24 @@ DONT_TRANSLATE = [
 code = lang[0:2]
 
 
-LANGUAGES = {
+#
+# Google Languages from their two letter code
+#
+GOOGLE_LANGUAGES = {
+    'en' : 'English',
+    'es' : 'Spanish',
+    'it' : 'Italian',
     'de' : 'German',
     'hi' : 'Hindi',
     'zh' : 'Chinese (Simplified)',
 }
 
+#
+# Load the heavy imports
+#
+import torch
+from transformers import MarianMTModel, MarianTokenizer
+from translate import Translator
 
 # Load the model and tokenizer for English to Simplified Chinese
 model_name = f"Helsinki-NLP/opus-mt-en-{code}"
@@ -104,15 +139,15 @@ print('Load model',model_name)
 class POTranslator:
 
 
-    def __init__(self, po_file):
-        self.reached_google_limit = False
+    def __init__(self, po_file, use_google):
+        self.reached_google_limit = not use_google
         self.have_seen = {}
         self.tokenizer = MarianTokenizer.from_pretrained(model_name,
                                                          clean_up_tokenization_spaces=True)
         self.model = MarianMTModel.from_pretrained(model_name)
 
         # Initialize Google translator
-        self.translator = Translator(to_lang=LANGUAGES[code])
+        self.translator = Translator(to_lang=GOOGLE_LANGUAGES[code])
 
         # Initialitize po translation
         self.translate_po(po_file)
@@ -156,7 +191,6 @@ class POTranslator:
         return (False, text)
 
     def translate_text_with_google(self, english):
-        return english
         if len(english) < 4:
             return english
 
@@ -253,7 +287,7 @@ class POTranslator:
             for entry in po:
                 if entry.msgid in DONT_TRANSLATE:
                     entry.msgstr = entry.msgid
-                elif entry.msgid == entry.msgstr:
+                elif 'GOOGLE' == entry.msgstr:
                     translated = self.translate_text_with_google(entry.msgid)
                     entry.msgstr = translated
                 elif entry.msgid and not entry.msgstr:
@@ -284,7 +318,7 @@ class POTranslator:
         del self.tokenizer
         
 main_po = f'mrv2/po/{lang}'
-POTranslator(main_po)
+POTranslator(main_po, use_google)
 
 
 cwd = os.getcwd()
@@ -295,7 +329,7 @@ for plugin in plugins:
     plugin = plugin[:-3]
     plugin_po = f'mrv2/po/python/plug-ins/locale/{lang}/LC_MESSAGES/{plugin}'
     print('Translating plugin',plugin)
-    POTranslator(plugin_po)
+    POTranslator(plugin_po, use_google)
 
 
 # Clear cached data in PyTorch
