@@ -5056,9 +5056,8 @@ msgstr "窗口适合图像"
 msgid "TopBar"
 msgstr "顶上栏"
 
-#, fuzzy
-msgid "Layers, Exposure and Gain"
-msgstr "接触和收益"
+msgid "Layers, Exposure, Saturation, and Gamma"
+msgstr "图层、接触、饱和度和伽玛"
 
 msgid "Layers"
 msgstr "层层"
@@ -5068,9 +5067,6 @@ msgstr "允许您选择不同的图像通道或层。"
 
 msgid "Exposure and Gain"
 msgstr "接触和收益"
-
-msgid "Resizable Control Group"
-msgstr "可调整控控组"
 
 msgid "Exposure"
 msgstr "接触"
@@ -5096,8 +5092,33 @@ msgstr "增益图像值。 图像像素值的简单乘数 。"
 msgid "Allows you to adjust the gain or exposure of the image."
 msgstr "允许您调整图像的增益或曝光 。"
 
-#, fuzzy
-msgid "ICS, View, Look and Gamma"
+msgid "Toggle Saturation between current and previous setting."
+msgstr "切换当前和上一个设置之间的饱和度 。"
+
+msgid "Saturation Input"
+msgstr "饱和输入"
+
+msgid "Saturation value."
+msgstr "饱和度值 。"
+
+msgid "Allows you to adjust the saturation of the image."
+msgstr "允许您调整图像的饱和度 。"
+
+msgid "Toggle gamma between 1 and the previous setting."
+msgstr "在 1 和上一个设置之间切换伽玛 。"
+
+msgid "Resizable Control Group"
+msgstr "可调整控控组"
+
+msgid "Gamma Input"
+msgstr "Gamma 输入"
+
+msgid ""
+"Allows you to adjust gamma curve for display.\n"
+"Value is:  pow( 2, 1/x );"
+msgstr "允许您调整显示的伽马曲线。 值为: pow( 2, 1/x) ;"
+
+msgid "ICS, View, Look"
 msgstr "ICS, 视图, 查看"
 
 msgid "Input Color Space"
@@ -5120,17 +5141,6 @@ msgstr "看"
 
 msgid "OCIO Looks"
 msgstr "OCIO 外观"
-
-msgid "Toggle gamma between 1 and the previous setting."
-msgstr "在 1 和上一个设置之间切换伽玛 。"
-
-msgid "Gamma Input"
-msgstr "Gamma 输入"
-
-msgid ""
-"Allows you to adjust gamma curve for display.\n"
-"Value is:  pow( 2, 1/x );"
-msgstr "允许您调整显示的伽马曲线。 值为: pow( 2, 1/x) ;"
 
 msgid "TileGroup"
 msgstr "牌盘组"
@@ -5431,13 +5441,6 @@ msgid ""
 "you want to continue?"
 msgstr "这将将您所有的首选项重置为默认值。 您确定要继续吗?"
 
-#, fuzzy
-msgid "Could not match "
-msgstr "无法获得当前路径 。"
-
-msgid "Wizard labels are:"
-msgstr ""
-
 msgid "User Interface"
 msgstr "用户界面"
 
@@ -5618,37 +5621,6 @@ msgstr "内存"
 msgid "Attributes"
 msgstr "属性"
 
-msgid "Language and Colors"
-msgstr "语言和颜色"
-
-msgid "Scheme"
-msgstr "计划"
-
-msgid "Color Theme"
-msgstr "颜色主题"
-
-msgid "Reload Theme"
-msgstr "重新装入主题"
-
-msgid ""
-"Reload color theme from mrv2.colors file again to refresh change in colors"
-msgstr "从 drv2. colors 文件重新装入色主题, 以刷新颜色变化"
-
-msgid "Selects the background color of areas outside the current image."
-msgstr "选择当前图像以外区域的背景颜色。"
-
-msgid "Text Overlay"
-msgstr "文本覆盖"
-
-msgid "Selects the color of text overlays printed over the current image."
-msgstr "选择在当前图像上打印的文本覆盖颜色。"
-
-msgid "Selects the color of the selection rectangle over the current image."
-msgstr "在当前图像上选择矩形的颜色。"
-
-msgid "Selects the color of HUD overlays."
-msgstr "选择 HUD 重叠的颜色。"
-
 msgid "File Requester"
 msgstr "文件请求器"
 
@@ -5695,6 +5667,37 @@ msgstr "小组"
 
 msgid "Sets the font to use in panels. (Not yet working)"
 msgstr "设置要在面板中使用的字体。 (尚未工作)"
+
+msgid "Language and Colors"
+msgstr "语言和颜色"
+
+msgid "Scheme"
+msgstr "计划"
+
+msgid "Color Theme"
+msgstr "颜色主题"
+
+msgid "Reload Theme"
+msgstr "重新装入主题"
+
+msgid ""
+"Reload color theme from mrv2.colors file again to refresh change in colors"
+msgstr "从 drv2. colors 文件重新装入色主题, 以刷新颜色变化"
+
+msgid "Selects the background color of areas outside the current image."
+msgstr "选择当前图像以外区域的背景颜色。"
+
+msgid "Text Overlay"
+msgstr "文本覆盖"
+
+msgid "Selects the color of text overlays printed over the current image."
+msgstr "选择在当前图像上打印的文本覆盖颜色。"
+
+msgid "Selects the color of the selection rectangle over the current image."
+msgstr "在当前图像上选择矩形的颜色。"
+
+msgid "Selects the color of HUD overlays."
+msgstr "选择 HUD 重叠的颜色。"
 
 msgid "RGBA Display"
 msgstr "RGBA 显示"
@@ -6939,17 +6942,10 @@ msgstr "切换热键窗口"
 msgid "Toggle About Window"
 msgstr "切换窗口"
 
-#~ msgid "Layers, Exposure, Saturation, and Gamma"
-#~ msgstr "图层、接触、饱和度和伽玛"
+#, fuzzy
+#~ msgid "Layers, Exposure and Gain"
+#~ msgstr "接触和收益"
 
-#~ msgid "Toggle Saturation between current and previous setting."
-#~ msgstr "切换当前和上一个设置之间的饱和度 。"
-
-#~ msgid "Saturation Input"
-#~ msgstr "饱和输入"
-
-#~ msgid "Saturation value."
-#~ msgstr "饱和度值 。"
-
-#~ msgid "Allows you to adjust the saturation of the image."
-#~ msgstr "允许您调整图像的饱和度 。"
+#, fuzzy
+#~ msgid "Could not match "
+#~ msgstr "无法获得当前路径 。"

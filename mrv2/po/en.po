@@ -1,7 +1,7 @@
 # English translations for mrv2 package.
 # This file is distributed under the same license as the mrv2 package.
 # Automatically generated, 2024.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.1.6\n"
@@ -3878,26 +3878,21 @@ msgstr "OCIO/Presets"
 msgid "OCIO/Current"
 msgstr "OCIO/Current File"
 
-#, fuzzy, c-format
 msgid "OCIO/         ICS: %s"
 msgstr "OCIO/     Look "
 
-#, fuzzy, c-format
 msgid "OCIO/     Display: %s"
 msgstr "OCIO/Displays"
 
-#, fuzzy, c-format
 msgid "OCIO/        View: %s"
 msgstr "OCIO/     Look "
 
-#, fuzzy, c-format
 msgid "OCIO/  Monitor #%d Display: %s"
 msgstr "OCIO/Displays"
 
 msgid "OCIO/  Monitor #%d    View: %s"
 msgstr "OCIO/  Monitor #%d    View: %s"
 
-#, fuzzy, c-format
 msgid "OCIO/        Look: %s"
 msgstr "OCIO/     Look "
 
@@ -5176,8 +5171,8 @@ msgstr "Fit Window to Image"
 msgid "TopBar"
 msgstr "TopBar"
 
-msgid "Layers, Exposure and Gain"
-msgstr "Exposure and Gain"
+msgid "Layers, Exposure, Saturation, and Gamma"
+msgstr "Layers, Exposure and Gain"
 
 msgid "Layers"
 msgstr "Layers"
@@ -5187,9 +5182,6 @@ msgstr "Allows you to select different image channels or layers."
 
 msgid "Exposure and Gain"
 msgstr "Exposure and Gain"
-
-msgid "Resizable Control Group"
-msgstr "Resizable Control Group"
 
 msgid "Exposure"
 msgstr "Exposure"
@@ -5215,8 +5207,35 @@ msgstr "Gain image value.  A simple multiplier of the image pixel values."
 msgid "Allows you to adjust the gain or exposure of the image."
 msgstr "Allows you to adjust the gain or exposure of the image."
 
-#, fuzzy
-msgid "ICS, View, Look and Gamma"
+msgid "Toggle Saturation between current and previous setting."
+msgstr "Toggle Saturation between 1 and the previous setting."
+
+msgid "Saturation Input"
+msgstr "Saturation Input"
+
+msgid "Saturation value."
+msgstr "Saturation value."
+
+msgid "Allows you to adjust the saturation of the image."
+msgstr "Allows you to adjust the gain or exposure of the image."
+
+msgid "Toggle gamma between 1 and the previous setting."
+msgstr "Toggle gamma between 1 and the previous setting."
+
+msgid "Resizable Control Group"
+msgstr "Resizable Control Group"
+
+msgid "Gamma Input"
+msgstr "Gamma Input"
+
+msgid ""
+"Allows you to adjust gamma curve for display.\n"
+"Value is:  pow( 2, 1/x );"
+msgstr ""
+"Allows you to adjust gamma curve for display.\n"
+"Value is:  pow( 2, 1/x );"
+
+msgid "ICS, View, Look"
 msgstr "ICS, View, Look and Gamma"
 
 msgid "Input Color Space"
@@ -5239,19 +5258,6 @@ msgstr "Look"
 
 msgid "OCIO Looks"
 msgstr "OCIO Looks"
-
-msgid "Toggle gamma between 1 and the previous setting."
-msgstr "Toggle gamma between 1 and the previous setting."
-
-msgid "Gamma Input"
-msgstr "Gamma Input"
-
-msgid ""
-"Allows you to adjust gamma curve for display.\n"
-"Value is:  pow( 2, 1/x );"
-msgstr ""
-"Allows you to adjust gamma curve for display.\n"
-"Value is:  pow( 2, 1/x );"
 
 msgid "TileGroup"
 msgstr "TileGroup"
@@ -5554,12 +5560,6 @@ msgstr ""
 "This will reset all your preferences to their default values.  Are you sure "
 "you want to continue?"
 
-msgid "Could not match "
-msgstr "Could not match "
-
-msgid "Wizard labels are:"
-msgstr "Wizard labels are:"
-
 msgid "User Interface"
 msgstr "User Interface"
 
@@ -5750,38 +5750,6 @@ msgstr "Memory"
 msgid "Attributes"
 msgstr "Attributes"
 
-msgid "Language and Colors"
-msgstr "Language and Colors"
-
-msgid "Scheme"
-msgstr "Scheme"
-
-msgid "Color Theme"
-msgstr "Color Theme"
-
-msgid "Reload Theme"
-msgstr "Reload Theme"
-
-msgid ""
-"Reload color theme from mrv2.colors file again to refresh change in colors"
-msgstr ""
-"Reload color theme from mrv2.colors file again to refresh change in colors"
-
-msgid "Selects the background color of areas outside the current image."
-msgstr "Selects the background color of areas outside the current image."
-
-msgid "Text Overlay"
-msgstr "Text Overlay"
-
-msgid "Selects the color of text overlays printed over the current image."
-msgstr "Selects the color of text overlays printed over the current image."
-
-msgid "Selects the color of the selection rectangle over the current image."
-msgstr "Selects the color of the selection rectangle over the current image."
-
-msgid "Selects the color of HUD overlays."
-msgstr "Selects the color of HUD overlays."
-
 msgid "File Requester"
 msgstr "File Requester"
 
@@ -5829,6 +5797,38 @@ msgstr "Panels"
 
 msgid "Sets the font to use in panels. (Not yet working)"
 msgstr "Sets the font to use in panels. (Not yet working)"
+
+msgid "Language and Colors"
+msgstr "Language and Colors"
+
+msgid "Scheme"
+msgstr "Scheme"
+
+msgid "Color Theme"
+msgstr "Color Theme"
+
+msgid "Reload Theme"
+msgstr "Reload Theme"
+
+msgid ""
+"Reload color theme from mrv2.colors file again to refresh change in colors"
+msgstr ""
+"Reload color theme from mrv2.colors file again to refresh change in colors"
+
+msgid "Selects the background color of areas outside the current image."
+msgstr "Selects the background color of areas outside the current image."
+
+msgid "Text Overlay"
+msgstr "Text Overlay"
+
+msgid "Selects the color of text overlays printed over the current image."
+msgstr "Selects the color of text overlays printed over the current image."
+
+msgid "Selects the color of the selection rectangle over the current image."
+msgstr "Selects the color of the selection rectangle over the current image."
+
+msgid "Selects the color of HUD overlays."
+msgstr "Selects the color of HUD overlays."
 
 msgid "RGBA Display"
 msgstr "RGBA Display"
@@ -7108,20 +7108,14 @@ msgstr "Toggle Hotkeys Window"
 msgid "Toggle About Window"
 msgstr "Toggle About Window"
 
-#~ msgid "Layers, Exposure, Saturation, and Gamma"
-#~ msgstr "Layers, Exposure and Gain"
+#~ msgid "Layers, Exposure and Gain"
+#~ msgstr "Exposure and Gain"
 
-#~ msgid "Toggle Saturation between current and previous setting."
-#~ msgstr "Toggle gain between 1 and the previous setting."
+#~ msgid "Could not match "
+#~ msgstr "Could not match "
 
-#~ msgid "Saturation Input"
-#~ msgstr "Saturation"
-
-#~ msgid "Saturation value."
-#~ msgstr "Saturation"
-
-#~ msgid "Allows you to adjust the saturation of the image."
-#~ msgstr "Allows you to adjust the gain or exposure of the image."
+#~ msgid "Wizard labels are:"
+#~ msgstr "Wizard labels are:"
 
 #~ msgid "OCIO/   Display: %s"
 #~ msgstr "OCIO/Displays"

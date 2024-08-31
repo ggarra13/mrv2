@@ -2784,7 +2784,6 @@ msgstr "ऑडियो %<PRId64> - %<PRId64> के साथ इंजिन �
 msgid "Saving Audio %<PRId64> - %<PRId64>"
 msgstr "ऑडियो सहेजने %<PRId64> - %<PRId64>"
 
-#, fuzzy, c-format
 msgid "Saving Pictures without Audio %<PRId64> - %<PRId64>"
 msgstr "ऑडियो % 1 के बिना छवि सहेज रहा है %<PRId64> - %<PRId64>"
 
@@ -4880,9 +4879,8 @@ msgstr "विंडो छवि में फिट करें"
 msgid "TopBar"
 msgstr "शीर्ष पट्टी"
 
-#, fuzzy
-msgid "Layers, Exposure and Gain"
-msgstr "एक्सपोज़र तथा गेन"
+msgid "Layers, Exposure, Saturation, and Gamma"
+msgstr "परतें, प्रदर्शन, संतृप्ति, और गामा"
 
 msgid "Layers"
 msgstr "परतें"
@@ -4892,9 +4890,6 @@ msgstr "आपको भिन्न छवि चैनल या परतो�
 
 msgid "Exposure and Gain"
 msgstr "एक्सपोज़र तथा गेन"
-
-msgid "Resizable Control Group"
-msgstr "री- स्कैन नियंत्रण समूह"
 
 msgid "Exposure"
 msgstr "एक्सपोज़र"
@@ -4920,8 +4915,33 @@ msgstr "गेन छवि मूल्य. छवि पिक्सेल म
 msgid "Allows you to adjust the gain or exposure of the image."
 msgstr "छवि के लाभ या एक्सपोजर को आपको समायोजित करने देता है."
 
-#, fuzzy
-msgid "ICS, View, Look and Gamma"
+msgid "Toggle Saturation between current and previous setting."
+msgstr "वर्तमान और पिछले विन्यासों के बीच संतृप्ति टॉगल करें."
+
+msgid "Saturation Input"
+msgstr "संतृप्ति इनपुट"
+
+msgid "Saturation value."
+msgstr "संतृप्ति मूल्य."
+
+msgid "Allows you to adjust the saturation of the image."
+msgstr "यहाँ पर छवि के संतृप्ति समायोजन को सेट करने की अनुमति देता है."
+
+msgid "Toggle gamma between 1 and the previous setting."
+msgstr "1 तथा पिछले सेटिंग के बीच गामा टॉगल करें."
+
+msgid "Resizable Control Group"
+msgstr "री- स्कैन नियंत्रण समूह"
+
+msgid "Gamma Input"
+msgstr "गामा इनपुट"
+
+msgid ""
+"Allows you to adjust gamma curve for display.\n"
+"Value is:  pow( 2, 1/x );"
+msgstr "प्रदर्शन के लिए गामा वक्र समायोजित करने देता है. मान है: po( 2, 1/ x);"
+
+msgid "ICS, View, Look"
 msgstr "ICS, दृश्य, रूप"
 
 msgid "Input Color Space"
@@ -4944,17 +4964,6 @@ msgstr "रूप"
 
 msgid "OCIO Looks"
 msgstr "ओसीएसआईएस"
-
-msgid "Toggle gamma between 1 and the previous setting."
-msgstr "1 तथा पिछले सेटिंग के बीच गामा टॉगल करें."
-
-msgid "Gamma Input"
-msgstr "गामा इनपुट"
-
-msgid ""
-"Allows you to adjust gamma curve for display.\n"
-"Value is:  pow( 2, 1/x );"
-msgstr "प्रदर्शन के लिए गामा वक्र समायोजित करने देता है. मान है: po( 2, 1/ x);"
 
 msgid "TileGroup"
 msgstr "टाइल समूह"
@@ -5257,13 +5266,6 @@ msgstr ""
 "यह आपकी सभी पसंद को उनके डिफ़ॉल्ट मान में रीसेट करेगा. क्या आप सुनिश्चित हैं कि आप जारी "
 "रखना चाहते हैं?"
 
-#, fuzzy
-msgid "Could not match "
-msgstr "वर्तमान पथ पा नहीं सका."
-
-msgid "Wizard labels are:"
-msgstr ""
-
 msgid "User Interface"
 msgstr "प्रयोक्ता अंतरफलक"
 
@@ -5447,37 +5449,6 @@ msgstr "मेमोरी"
 msgid "Attributes"
 msgstr "गुणधर्म"
 
-msgid "Language and Colors"
-msgstr "भाषा और रंग"
-
-msgid "Scheme"
-msgstr "योजना"
-
-msgid "Color Theme"
-msgstr "रंग प्रसंग"
-
-msgid "Reload Theme"
-msgstr "प्रसंग फिर से लोड करें"
-
-msgid ""
-"Reload color theme from mrv2.colors file again to refresh change in colors"
-msgstr "mrv2 से रंग प्रसंग फिर से लोड करें"
-
-msgid "Selects the background color of areas outside the current image."
-msgstr "वर्तमान छवि के बाहर के क्षेत्रों के पृष्ठभूमि रंग चुनता है."
-
-msgid "Text Overlay"
-msgstr "पाठ ड्रापिंग"
-
-msgid "Selects the color of text overlays printed over the current image."
-msgstr "मौज़ूदा छवि पर छापी गई पाठ ब्रोशरों के रंग चुनता है."
-
-msgid "Selects the color of the selection rectangle over the current image."
-msgstr "वर्तमान छवि के ऊपर चयन के रंग चुनता है."
-
-msgid "Selects the color of HUD overlays."
-msgstr "HUD ब्रोशरों के रंग चुनता है."
-
 msgid "File Requester"
 msgstr "फ़ाइल निवेदनर"
 
@@ -5525,6 +5496,37 @@ msgstr "फलक"
 
 msgid "Sets the font to use in panels. (Not yet working)"
 msgstr "फलक में उपयोग हेतु फ़ॉन्ट सेट करता है. (अभी कार्य नहीं)"
+
+msgid "Language and Colors"
+msgstr "भाषा और रंग"
+
+msgid "Scheme"
+msgstr "योजना"
+
+msgid "Color Theme"
+msgstr "रंग प्रसंग"
+
+msgid "Reload Theme"
+msgstr "प्रसंग फिर से लोड करें"
+
+msgid ""
+"Reload color theme from mrv2.colors file again to refresh change in colors"
+msgstr "mrv2 से रंग प्रसंग फिर से लोड करें"
+
+msgid "Selects the background color of areas outside the current image."
+msgstr "वर्तमान छवि के बाहर के क्षेत्रों के पृष्ठभूमि रंग चुनता है."
+
+msgid "Text Overlay"
+msgstr "पाठ ड्रापिंग"
+
+msgid "Selects the color of text overlays printed over the current image."
+msgstr "मौज़ूदा छवि पर छापी गई पाठ ब्रोशरों के रंग चुनता है."
+
+msgid "Selects the color of the selection rectangle over the current image."
+msgstr "वर्तमान छवि के ऊपर चयन के रंग चुनता है."
+
+msgid "Selects the color of HUD overlays."
+msgstr "HUD ब्रोशरों के रंग चुनता है."
 
 msgid "RGBA Display"
 msgstr "आरजीबीए प्रदर्शक"
@@ -6788,17 +6790,10 @@ msgstr "यदि आप विंडो को बन्द करना चा
 msgid "Toggle About Window"
 msgstr "विंडो के बारे में टॉगल करें"
 
-#~ msgid "Layers, Exposure, Saturation, and Gamma"
-#~ msgstr "परतें, प्रदर्शन, संतृप्ति, और गामा"
+#, fuzzy
+#~ msgid "Layers, Exposure and Gain"
+#~ msgstr "एक्सपोज़र तथा गेन"
 
-#~ msgid "Toggle Saturation between current and previous setting."
-#~ msgstr "वर्तमान और पिछले विन्यासों के बीच संतृप्ति टॉगल करें."
-
-#~ msgid "Saturation Input"
-#~ msgstr "संतृप्ति इनपुट"
-
-#~ msgid "Saturation value."
-#~ msgstr "संतृप्ति मूल्य."
-
-#~ msgid "Allows you to adjust the saturation of the image."
-#~ msgstr "यहाँ पर छवि के संतृप्ति समायोजन को सेट करने की अनुमति देता है."
+#, fuzzy
+#~ msgid "Could not match "
+#~ msgstr "वर्तमान पथ पा नहीं सका."

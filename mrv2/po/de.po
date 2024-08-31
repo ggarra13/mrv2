@@ -806,9 +806,9 @@ msgid ""
 "duration of 9.\n"
 msgstr ""
 "\n"
-"Erzeugt eine :class:`~TimeRange` von Anfang und Ende :class:`~RationalTime`"
-"\\s (ausschlielich). Wenn z.B. start_time 1 und end_time 10 ist, hat die "
-"zurckgegebene Zeit eine Dauer von 9.\n"
+"Erzeugt eine :class:`~TimeRange` von Anfang und Ende :class:"
+"`~RationalTime`\\s (ausschlielich). Wenn z.B. start_time 1 und end_time 10 "
+"ist, hat die zurckgegebene Zeit eine Dauer von 9.\n"
 
 msgid ""
 "\n"
@@ -819,9 +819,9 @@ msgid ""
 "duration of 10.\n"
 msgstr ""
 "\n"
-"Erzeugt eine :class:`~TimeRange` von Anfang und Ende :class:`~RationalTime`"
-"\\s (inklusive). Wenn z.B. start_time 1 ist und end_time 10 ist, hat die "
-"zurckgegebene Zeit eine Dauer von 10.\n"
+"Erzeugt eine :class:`~TimeRange` von Anfang und Ende :class:"
+"`~RationalTime`\\s (inklusive). Wenn z.B. start_time 1 ist und end_time 10 "
+"ist, hat die zurckgegebene Zeit eine Dauer von 10.\n"
 
 msgid ""
 "\n"
@@ -5012,9 +5012,8 @@ msgstr "Fenster auf Bild einfgen"
 msgid "TopBar"
 msgstr "TopBar"
 
-#, fuzzy
-msgid "Layers, Exposure and Gain"
-msgstr "Forderung und Gewinn"
+msgid "Layers, Exposure, Saturation, and Gamma"
+msgstr "Schichten, Belichtung, Sättigung und Gamma"
 
 msgid "Layers"
 msgstr "Ebenen"
@@ -5024,9 +5023,6 @@ msgstr "Ermglicht es Ihnen, verschiedene Bildkanle oder Ebenen auszuwhlen."
 
 msgid "Exposure and Gain"
 msgstr "Forderung und Gewinn"
-
-msgid "Resizable Control Group"
-msgstr "Resizable Control Group"
 
 msgid "Exposure"
 msgstr "Risikopositionen"
@@ -5052,8 +5048,35 @@ msgstr "Bildwert gewinnen. Ein einfacher Multiplikator der Bildpixelwerte."
 msgid "Allows you to adjust the gain or exposure of the image."
 msgstr "Ermglicht Ihnen, die Verstrkung oder Belichtung des Bildes anzupassen."
 
-#, fuzzy
-msgid "ICS, View, Look and Gamma"
+msgid "Toggle Saturation between current and previous setting."
+msgstr "Umschalten Sättigung zwischen aktueller und früherer Einstellung."
+
+msgid "Saturation Input"
+msgstr "Sättigungseingabe"
+
+msgid "Saturation value."
+msgstr "Sättigungswert."
+
+msgid "Allows you to adjust the saturation of the image."
+msgstr "Ermöglicht Ihnen, die Sättigung des Bildes anzupassen."
+
+msgid "Toggle gamma between 1 and the previous setting."
+msgstr "Gamma zwischen 1 und der vorherigen Einstellung umschalten."
+
+msgid "Resizable Control Group"
+msgstr "Resizable Control Group"
+
+msgid "Gamma Input"
+msgstr "Gamma-Eingabe"
+
+msgid ""
+"Allows you to adjust gamma curve for display.\n"
+"Value is:  pow( 2, 1/x );"
+msgstr ""
+"Ermglicht die Anpassung der Gammakurve fr die Anzeige. Wert ist: pow( 2, 1/"
+"x );"
+
+msgid "ICS, View, Look"
 msgstr "ICS, Sicht, Blick"
 
 msgid "Input Color Space"
@@ -5076,19 +5099,6 @@ msgstr "Sehen Sie."
 
 msgid "OCIO Looks"
 msgstr "OCIO-Looks"
-
-msgid "Toggle gamma between 1 and the previous setting."
-msgstr "Gamma zwischen 1 und der vorherigen Einstellung umschalten."
-
-msgid "Gamma Input"
-msgstr "Gamma-Eingabe"
-
-msgid ""
-"Allows you to adjust gamma curve for display.\n"
-"Value is:  pow( 2, 1/x );"
-msgstr ""
-"Ermglicht die Anpassung der Gammakurve fr die Anzeige. Wert ist: pow( 2, 1/"
-"x );"
 
 msgid "TileGroup"
 msgstr "Fliesengruppe"
@@ -5391,13 +5401,6 @@ msgstr ""
 "Dadurch werden alle Ihre Einstellungen auf ihre Standardwerte zurckgesetzt. "
 "Sind Sie sicher, dass Sie fortfahren mchten?"
 
-#, fuzzy
-msgid "Could not match "
-msgstr "Der aktuelle Pfad kann nicht gefunden werden."
-
-msgid "Wizard labels are:"
-msgstr ""
-
 msgid "User Interface"
 msgstr "Benutzeroberflche"
 
@@ -5594,40 +5597,6 @@ msgstr "Speicher"
 msgid "Attributes"
 msgstr "Attribute"
 
-msgid "Language and Colors"
-msgstr "Sprache und Farben"
-
-msgid "Scheme"
-msgstr "Regelung"
-
-msgid "Color Theme"
-msgstr "Farb-Design"
-
-msgid "Reload Theme"
-msgstr "Thema neu laden"
-
-msgid ""
-"Reload color theme from mrv2.colors file again to refresh change in colors"
-msgstr ""
-"Reload Farbe Thema aus mrv2.colors Datei wieder, um nderung in Farben "
-"aktualisieren"
-
-msgid "Selects the background color of areas outside the current image."
-msgstr ""
-"Whlt die Hintergrundfarbe der Bereiche auerhalb des aktuellen Bildes aus."
-
-msgid "Text Overlay"
-msgstr "Textberlagerung"
-
-msgid "Selects the color of text overlays printed over the current image."
-msgstr "Whlt die Farbe der ber das aktuelle Bild gedruckten Text-Overlays aus."
-
-msgid "Selects the color of the selection rectangle over the current image."
-msgstr "Whlt die Farbe des Auswahl-Rechtecks ber dem aktuellen Bild aus."
-
-msgid "Selects the color of HUD overlays."
-msgstr "Whlt die Farbe der HUD-Overlays aus."
-
 msgid "File Requester"
 msgstr "Datei-Anfrager"
 
@@ -5679,6 +5648,40 @@ msgid "Sets the font to use in panels. (Not yet working)"
 msgstr ""
 "Setzt die Schriftart, die in Panels verwendet werden soll. (noch nicht "
 "funktioniert)"
+
+msgid "Language and Colors"
+msgstr "Sprache und Farben"
+
+msgid "Scheme"
+msgstr "Regelung"
+
+msgid "Color Theme"
+msgstr "Farb-Design"
+
+msgid "Reload Theme"
+msgstr "Thema neu laden"
+
+msgid ""
+"Reload color theme from mrv2.colors file again to refresh change in colors"
+msgstr ""
+"Reload Farbe Thema aus mrv2.colors Datei wieder, um nderung in Farben "
+"aktualisieren"
+
+msgid "Selects the background color of areas outside the current image."
+msgstr ""
+"Whlt die Hintergrundfarbe der Bereiche auerhalb des aktuellen Bildes aus."
+
+msgid "Text Overlay"
+msgstr "Textberlagerung"
+
+msgid "Selects the color of text overlays printed over the current image."
+msgstr "Whlt die Farbe der ber das aktuelle Bild gedruckten Text-Overlays aus."
+
+msgid "Selects the color of the selection rectangle over the current image."
+msgstr "Whlt die Farbe des Auswahl-Rechtecks ber dem aktuellen Bild aus."
+
+msgid "Selects the color of HUD overlays."
+msgstr "Whlt die Farbe der HUD-Overlays aus."
 
 msgid "RGBA Display"
 msgstr "RGBA-Anzeige"
@@ -6966,17 +6969,10 @@ msgstr "Hotkeys-Fenster umschalten"
 msgid "Toggle About Window"
 msgstr "Fenster umschalten"
 
-#~ msgid "Layers, Exposure, Saturation, and Gamma"
-#~ msgstr "Schichten, Belichtung, Sättigung und Gamma"
+#, fuzzy
+#~ msgid "Layers, Exposure and Gain"
+#~ msgstr "Forderung und Gewinn"
 
-#~ msgid "Toggle Saturation between current and previous setting."
-#~ msgstr "Umschalten Sättigung zwischen aktueller und früherer Einstellung."
-
-#~ msgid "Saturation Input"
-#~ msgstr "Sättigungseingabe"
-
-#~ msgid "Saturation value."
-#~ msgstr "Sättigungswert."
-
-#~ msgid "Allows you to adjust the saturation of the image."
-#~ msgstr "Ermöglicht Ihnen, die Sättigung des Bildes anzupassen."
+#, fuzzy
+#~ msgid "Could not match "
+#~ msgstr "Der aktuelle Pfad kann nicht gefunden werden."
