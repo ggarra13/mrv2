@@ -2784,6 +2784,7 @@ msgstr "ऑडियो %<PRId64> - %<PRId64> के साथ इंजिन �
 msgid "Saving Audio %<PRId64> - %<PRId64>"
 msgstr "ऑडियो सहेजने %<PRId64> - %<PRId64>"
 
+#, fuzzy, c-format
 msgid "Saving Pictures without Audio %<PRId64> - %<PRId64>"
 msgstr "ऑडियो % 1 के बिना छवि सहेज रहा है %<PRId64> - %<PRId64>"
 
