@@ -13,7 +13,7 @@ if [[ -L /usr/bin/mrv2 ]]; then
 	rm -f /usr/bin/mrv2
 	removed=1
     else
-	echo "/usr/bin/mrv2 does not point to the $installpath."
+	echo "/usr/bin/mrv2 does not point to $installpath."
 	echo "Won't remove symlink."
     fi
 fi
