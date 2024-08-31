@@ -46,7 +46,7 @@ msgid "was found"
 msgstr "找到了"
 
 msgid "No match found"
-msgstr "未找到匹配匹配"
+msgstr "未找到匹配"
 
 msgid "Install Location: "
 msgstr "安装位置 :"
