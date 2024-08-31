@@ -38,8 +38,8 @@ v1.2.5
 - Added Hindi Translation done with AI.
 - Made Languages display their English name in parenthesis to help if switching
   to an unknown language by mistake.
-- RE-RELEASE: v1.2.5 in English had a serious bug in OCIO selection.   Should be
-  fine now.
+- RE-RELEASE: v1.2.5 in English had a serious bug in OCIO selection through the
+              menus.
 
 
 v1.2.4
