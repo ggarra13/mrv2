@@ -158,7 +158,6 @@ namespace mrv
     std::vector<std::string> getLanguages()
     {
         std::vector<std::string> out;
-
         
         LanguageTable* t = kLanguages;
         for (; (*t).name; ++t)
