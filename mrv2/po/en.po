@@ -3395,17 +3395,11 @@ msgstr "View/Mask"
 msgid "OCIO/     Input Color Space"
 msgstr "OCIO/     Input Color Space"
 
-msgid "OCIO/     Input Color Space "
-msgstr "OCIO/     Input Color Space "
-
 msgid "OCIO/     Look"
 msgstr "OCIO/     Look"
 
-msgid "OCIO/     Look "
-msgstr "OCIO/     Look "
-
-msgid "OCIO/Displays"
-msgstr "OCIO/Displays"
+msgid "All Monitors"
+msgstr "Monitor "
 
 msgid "Pick Color"
 msgstr "Pick Color"
@@ -3881,11 +3875,32 @@ msgstr "Edit/Redo"
 msgid "OCIO/Presets"
 msgstr "OCIO/Presets"
 
-msgid "OCIO/Current File"
+msgid "OCIO/Current"
 msgstr "OCIO/Current File"
 
-msgid "OCIO/Change All Files"
-msgstr "OCIO/Change All Files"
+msgid "OCIO/         ICS: %s"
+msgstr "OCIO/     Look "
+
+msgid "OCIO/     Display: %s"
+msgstr "OCIO/Displays"
+
+msgid "OCIO/        View: %s"
+msgstr "OCIO/     Look "
+
+msgid "OCIO/  Monitor #%d Display: %s"
+msgstr "OCIO/Displays"
+
+msgid "OCIO/  Monitor #%d    View: %s"
+msgstr "OCIO/  Monitor #%d    View: %s"
+
+msgid "OCIO/        Look: %s"
+msgstr "OCIO/     Look "
+
+msgid "OCIO/Change Current File"
+msgstr "OCIO/Current File"
+
+msgid "OCIO/Displays"
+msgstr "OCIO/Displays"
 
 msgid "Sync/Send/Media"
 msgstr "Sync/Send/Media"
@@ -5156,7 +5171,7 @@ msgstr "Fit Window to Image"
 msgid "TopBar"
 msgstr "TopBar"
 
-msgid "Layers, Exposure and Gain"
+msgid "Layers, Exposure, Saturation, and Gamma"
 msgstr "Layers, Exposure and Gain"
 
 msgid "Layers"
@@ -5167,9 +5182,6 @@ msgstr "Allows you to select different image channels or layers."
 
 msgid "Exposure and Gain"
 msgstr "Exposure and Gain"
-
-msgid "Resizable Control Group"
-msgstr "Resizable Control Group"
 
 msgid "Exposure"
 msgstr "Exposure"
@@ -5195,7 +5207,35 @@ msgstr "Gain image value.  A simple multiplier of the image pixel values."
 msgid "Allows you to adjust the gain or exposure of the image."
 msgstr "Allows you to adjust the gain or exposure of the image."
 
-msgid "ICS, View, Look and Gamma"
+msgid "Toggle Saturation between current and previous setting."
+msgstr "Toggle gain between 1 and the previous setting."
+
+msgid "Saturation Input"
+msgstr "Saturation"
+
+msgid "Saturation value."
+msgstr "Saturation"
+
+msgid "Allows you to adjust the saturation of the image."
+msgstr "Allows you to adjust the gain or exposure of the image."
+
+msgid "Toggle gamma between 1 and the previous setting."
+msgstr "Toggle gamma between 1 and the previous setting."
+
+msgid "Resizable Control Group"
+msgstr "Resizable Control Group"
+
+msgid "Gamma Input"
+msgstr "Gamma Input"
+
+msgid ""
+"Allows you to adjust gamma curve for display.\n"
+"Value is:  pow( 2, 1/x );"
+msgstr ""
+"Allows you to adjust gamma curve for display.\n"
+"Value is:  pow( 2, 1/x );"
+
+msgid "ICS, View, Look"
 msgstr "ICS, View, Look and Gamma"
 
 msgid "Input Color Space"
@@ -5218,19 +5258,6 @@ msgstr "Look"
 
 msgid "OCIO Looks"
 msgstr "OCIO Looks"
-
-msgid "Toggle gamma between 1 and the previous setting."
-msgstr "Toggle gamma between 1 and the previous setting."
-
-msgid "Gamma Input"
-msgstr "Gamma Input"
-
-msgid ""
-"Allows you to adjust gamma curve for display.\n"
-"Value is:  pow( 2, 1/x );"
-msgstr ""
-"Allows you to adjust gamma curve for display.\n"
-"Value is:  pow( 2, 1/x );"
 
 msgid "TileGroup"
 msgstr "TileGroup"
@@ -7080,6 +7107,18 @@ msgstr "Toggle Hotkeys Window"
 
 msgid "Toggle About Window"
 msgstr "Toggle About Window"
+
+#~ msgid "OCIO/   Display: %s"
+#~ msgstr "OCIO/Displays"
+
+#~ msgid "OCIO/      View: %s"
+#~ msgstr "OCIO/     Look "
+
+#~ msgid "OCIO/     Input Color Space "
+#~ msgstr "OCIO/     Input Color Space "
+
+#~ msgid "OCIO/Change All Files"
+#~ msgstr "OCIO/Change All Files"
 
 #~ msgid "Could not match "
 #~ msgstr "Could not match "

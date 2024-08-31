@@ -3450,17 +3450,11 @@ msgstr "Vista/Máscara"
 msgid "OCIO/     Input Color Space"
 msgstr "OCIO/      Color de Entrada"
 
-msgid "OCIO/     Input Color Space "
-msgstr "OCIO/      Color de Entrada "
-
 msgid "OCIO/     Look"
 msgstr "OCIO/     Look"
 
-msgid "OCIO/     Look "
-msgstr "OCIO/     Look "
-
-msgid "OCIO/Displays"
-msgstr "OCIO/Monitores"
+msgid "All Monitors"
+msgstr "All Monitors"
 
 msgid "Pick Color"
 msgstr "Elegir Color"
@@ -3936,11 +3930,32 @@ msgstr "Editar/&Rehacer"
 msgid "OCIO/Presets"
 msgstr "OCIO/Preseteos"
 
-msgid "OCIO/Current File"
-msgstr "OCIO/Clip Actual"
+msgid "OCIO/Current"
+msgstr "OCIO/Seteos Actuales"
 
-msgid "OCIO/Change All Files"
-msgstr "OCIO/Cambiar Todos los Clips"
+msgid "OCIO/         ICS: %s"
+msgstr "OCIO/         ICS: %s"
+
+msgid "OCIO/     Display: %s"
+msgstr "OCIO/     Display: %s"
+
+msgid "OCIO/        View: %s"
+msgstr "OCIO/        View: %s"
+
+msgid "OCIO/  Monitor #%d Display: %s"
+msgstr "OCIO/  Monitor #%d Display: %s"
+
+msgid "OCIO/  Monitor #%d    View: %s"
+msgstr "OCIO/  Monitor #%d   Vista: %s"
+
+msgid "OCIO/        Look: %s"
+msgstr "OCIO/        Look: %s "
+
+msgid "OCIO/Change Current File"
+msgstr "OCIO/Cambiar Clip Actual"
+
+msgid "OCIO/Displays"
+msgstr "OCIO/Monitores"
 
 msgid "Sync/Send/Media"
 msgstr "Sincronizar/Enviar/Medios"
@@ -5201,8 +5216,8 @@ msgstr "Ajustar Ventana a la Imagen"
 msgid "TopBar"
 msgstr "TopBar"
 
-msgid "Layers, Exposure and Gain"
-msgstr "Capas, Exposición y Ganancia"
+msgid "Layers, Exposure, Saturation, and Gamma"
+msgstr "Capas, Exposición, Saturación y Gama"
 
 msgid "Layers"
 msgstr "Capas"
@@ -5212,9 +5227,6 @@ msgstr "Permite seleccionar diferente canales de la imagen o capas."
 
 msgid "Exposure and Gain"
 msgstr "Exposición y Ganancia"
-
-msgid "Resizable Control Group"
-msgstr "Grupo de Control de Ajuste"
 
 msgid "Exposure"
 msgstr "Exposición"
@@ -5242,8 +5254,36 @@ msgstr ""
 msgid "Allows you to adjust the gain or exposure of the image."
 msgstr "Te permite ajustar la ganancia o exposición de la imagen."
 
-msgid "ICS, View, Look and Gamma"
-msgstr "ICS, Vista, Look y Gama"
+msgid "Toggle Saturation between current and previous setting."
+msgstr "Intercambia saturación enter 1 y el seteo previo."
+
+msgid "Saturation Input"
+msgstr "Entrada de Saturación"
+
+msgid "Saturation value."
+msgstr "Valor de Saturación."
+
+msgid "Allows you to adjust the saturation of the image."
+msgstr "Te permite ajustar la saturación de la imagen."
+
+msgid "Toggle gamma between 1 and the previous setting."
+msgstr "Intercambia gama enter 1 y el seteo previo."
+
+msgid "Resizable Control Group"
+msgstr "Grupo de Control de Ajuste"
+
+msgid "Gamma Input"
+msgstr "Entrada de Gama"
+
+msgid ""
+"Allows you to adjust gamma curve for display.\n"
+"Value is:  pow( 2, 1/x );"
+msgstr ""
+"Te permite ajustar la curva de gama para display.\n"
+"Valor es:  pow( 2, 1/x );"
+
+msgid "ICS, View, Look"
+msgstr "ICS, Vista, Look"
 
 msgid "Input Color Space"
 msgstr "Espacio de Entrada de Color"
@@ -5265,19 +5305,6 @@ msgstr "Look"
 
 msgid "OCIO Looks"
 msgstr "Looks de OCIO"
-
-msgid "Toggle gamma between 1 and the previous setting."
-msgstr "Intercambia gama enter 1 y el seteo previo."
-
-msgid "Gamma Input"
-msgstr "Entrada de Gama"
-
-msgid ""
-"Allows you to adjust gamma curve for display.\n"
-"Value is:  pow( 2, 1/x );"
-msgstr ""
-"Te permite ajustar la curva de gama para display.\n"
-"Valor es:  pow( 2, 1/x );"
 
 msgid "TileGroup"
 msgstr "TileGroup"
@@ -7148,6 +7175,18 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
+
+#~ msgid "OCIO/   Display: %s"
+#~ msgstr "OCIO/   Display: %s"
+
+#~ msgid "OCIO/      View: %s"
+#~ msgstr "OCIO/      View: %s "
+
+#~ msgid "OCIO/     Input Color Space "
+#~ msgstr "OCIO/      Color de Entrada "
+
+#~ msgid "OCIO/Change All Files"
+#~ msgstr "OCIO/Cambiar Todos los Clips"
 
 #~ msgid "Could not match "
 #~ msgstr "No pude empatar "

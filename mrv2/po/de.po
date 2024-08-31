@@ -545,8 +545,9 @@ msgid ""
 "Convert a time with microseconds string (``HH:MM:ss`` where ``ss`` is an "
 "integer or a decimal number) into a :class:`~RationalTime`."
 msgstr ""
-"Convert a time with microseconds string (``HH:MM:ss`` where ``ss`` is an "
-"integer or a decimal number) into a :class:`~RationalTime`."
+"Wandeln Sie eine Zeit mit Mikrosekundenzeichenfolge (``HH:MM:ss `` , wobei "
+"`` ss `` eine ganze Zahl oder eine Dezimalzahl ist) in eine :class: `~ "
+"RationalTime' um."
 
 msgid ""
 "\n"
@@ -838,7 +839,7 @@ msgid "Wipe center in X and Y :class:`mrv2.math.Vector2f`."
 msgstr "Wipe Zentrum in X und Y : Klasse: `mrv2.math.Vector2f`."
 
 msgid "Wipe Rotation."
-msgstr "Wipe Rotation."
+msgstr "Wischrotation."
 
 msgid "Overlay ( A over B )"
 msgstr "berlagerung ( A ber B )"
@@ -1232,10 +1233,10 @@ msgid "FFmpeg Profile."
 msgstr "FFmpeg Profil."
 
 msgid "FFmpeg Preset."
-msgstr "FFmpeg Preset."
+msgstr "Voreinstellung"
 
 msgid "FFmpeg Pixel Format."
-msgstr "FFmpeg Pixel Format."
+msgstr "FFmpeg Pixelformat."
 
 msgid "FFmpeg video encoding with hardware if possible."
 msgstr "FFmpeg Videokodierung mit Hardware, wenn mglich."
@@ -1250,13 +1251,13 @@ msgid "FFmpeg Color Space."
 msgstr "FFmpeg Farbraum."
 
 msgid "FFmpeg Color Primaries."
-msgstr "FFmpeg Color Primaries."
+msgstr "Primäre Textfarbe"
 
 msgid "FFmpeg Color Transfer Characteristics."
 msgstr "FFmpeg Farbbertragungseigenschaften."
 
 msgid "FFmpeg Audio Codec."
-msgstr "FFmpeg Audio Codec."
+msgstr "Audio-Codec"
 
 msgid "OpenEXR's Compression."
 msgstr "OpenEXRs Kompression."
@@ -1265,7 +1266,7 @@ msgid "OpenEXR's Pixel Type."
 msgstr "Der Pixeltyp von OpenEXR."
 
 msgid "OpenEXR's Zip Compression Level."
-msgstr "OpenEXR's Zip Compression Level."
+msgstr "OpenEXRs Zip-Kompressionsstufe."
 
 msgid "OpenEXR's DWA Compression Level."
 msgstr "OpenEXRs DWA-Kompressionslevel."
@@ -1704,10 +1705,10 @@ msgid "Python file {0} already exists.  Do you want to overwrite it?"
 msgstr "Die Python-Datei {0} existiert bereits. Mchten Sie sie berschreiben?"
 
 msgid "No"
-msgstr "No"
+msgstr "Nein"
 
 msgid "Yes"
-msgstr "Yes"
+msgstr "Ja"
 
 msgid "Failed to open the file for writing."
 msgstr "Die Datei zum Schreiben konnte nicht geffnet werden."
@@ -1795,7 +1796,7 @@ msgid "Anaglyph"
 msgstr "Anaglyphe"
 
 msgid "Scanlines"
-msgstr "Scanlines"
+msgstr "Scanlinien"
 
 msgid "Columns"
 msgstr "Spalten"
@@ -1828,7 +1829,7 @@ msgid "      Gigabytes"
 msgstr "Gigabytes"
 
 msgid "Cache in Gigabytes."
-msgstr "Cache in Gigabytes."
+msgstr "Cache in Gigabyte."
 
 msgid "   Read Ahead"
 msgstr "Vorwrts lesen"
@@ -2029,7 +2030,7 @@ msgid "35mm Academy"
 msgstr "35mm Akademie"
 
 msgid "Widescreen (HDTV + STV)"
-msgstr "Widescreen (HDTV + STV)"
+msgstr "Breitbild (HDTV + STV)"
 
 msgid "35mm European Widescreen"
 msgstr "35mm europischer Widescreen"
@@ -2050,7 +2051,7 @@ msgid "35mm Anamorphic"
 msgstr "35mm anamorph"
 
 msgid "35mm Panavision"
-msgstr "35mm Panavision"
+msgstr "35 mm Panavision"
 
 msgid "Cinemascope"
 msgstr "Kinoscope"
@@ -2206,7 +2207,7 @@ msgid "Height of clip"
 msgstr "Hhe des Clips"
 
 msgid "Aspect Ratio"
-msgstr "Aspect Ratio"
+msgstr "Seitenverhältnis"
 
 msgid "Aspect ratio of clip"
 msgstr "Seitenverhltnis des Clips"
@@ -2284,10 +2285,10 @@ msgid "Color Transfer Space"
 msgstr "Farbbertragungsraum"
 
 msgid "FFmpeg Pixel Format"
-msgstr "FFmpeg Pixel Format"
+msgstr "FFmpeg Pixelformat"
 
 msgid "Render Pixel Format"
-msgstr "Render Pixel Format"
+msgstr "Pixelformat rendern"
 
 msgid "Audio Stream #%d"
 msgstr "Audio Stream #%d"
@@ -2324,10 +2325,10 @@ msgid "Frequency of audio"
 msgstr "Hufigkeit des Tons"
 
 msgid "%d kb/s"
-msgstr "%d kb/s"
+msgstr "KB/s"
 
 msgid "Max. Bitrate"
-msgstr "Max. Bitrate"
+msgstr "Bitrate"
 
 msgid "Disposition"
 msgstr "Auflsung"
@@ -2360,7 +2361,7 @@ msgid "Video has Closed Captions"
 msgstr "Video hat Captions geschlossen"
 
 msgid "Avg. Bitrate"
-msgstr "Avg. Bitrate"
+msgstr "Bitrate"
 
 msgid "Language"
 msgstr "Sprache"
@@ -2743,10 +2744,10 @@ msgid "Exception caught: "
 msgstr "Ausnahme gefangen:"
 
 msgid "ERROR: "
-msgstr "ERROR: "
+msgstr "Fehler:"
 
 msgid "WARN : "
-msgstr "WARN : "
+msgstr "WARNEN"
 
 msgid ""
 "Regular expression created from {0}.  It is:\n"
@@ -3183,7 +3184,7 @@ msgid "Load Python Script"
 msgstr "Python-Skript laden"
 
 msgid "LUTS (*.{"
-msgstr "LUTS (*.{"
+msgstr "Symptome der unteren Harnwege "
 
 msgid "Load LUT"
 msgstr "LUT laden"
@@ -3210,7 +3211,7 @@ msgid "Save Movie or Sequence"
 msgstr "Film oder Sequenz speichern"
 
 msgid "Acrobat PDF (*.{pdf})"
-msgstr "Acrobat PDF (*.{pdf})"
+msgstr "Acrobat (.pdf)"
 
 msgid "Save Annotations to PDF"
 msgstr "Anmerkungen in PDF speichern"
@@ -3264,7 +3265,7 @@ msgid "NDI"
 msgstr "NDI"
 
 msgid "Python"
-msgstr "Python"
+msgstr "Python "
 
 msgid "Settings"
 msgstr "Einstellungen"
@@ -3273,7 +3274,7 @@ msgid "Vectorscope"
 msgstr "Vektorskop"
 
 msgid "Hotkeys"
-msgstr "Hotkeys"
+msgstr "Tastenkombinationen"
 
 msgid "Preferences"
 msgstr "Prferenzen"
@@ -3296,17 +3297,11 @@ msgstr "Ansicht/Maske"
 msgid "OCIO/     Input Color Space"
 msgstr "OCIO/     Eingabe-Farbraum"
 
-msgid "OCIO/     Input Color Space "
-msgstr "OCIO/     Eingabe-Farbraum "
-
 msgid "OCIO/     Look"
 msgstr "OCIO/     Sehen Sie."
 
-msgid "OCIO/     Look "
-msgstr "OCIO/     Sehen Sie. "
-
-msgid "OCIO/Displays"
-msgstr "OCIO/Anzeigen"
+msgid "All Monitors"
+msgstr "Alle Monitore"
 
 msgid "Pick Color"
 msgstr "Farbe auswhlen"
@@ -3561,7 +3556,7 @@ msgid "Panel/One Panel Only"
 msgstr "Panel/Nur ein Panel"
 
 msgid "Panel/"
-msgstr "Panel/"
+msgstr "Panel"
 
 msgid "Window/"
 msgstr "Fenster/"
@@ -3603,7 +3598,7 @@ msgid "Render/Video Levels/Legal Range"
 msgstr "Render/Video Levels/Rechtlicher Bereich"
 
 msgid "Render/Video Levels/Full Range"
-msgstr "Render/Video Levels/Full Range"
+msgstr "Render/Video-Ebenen/Vollständiger Bereich"
 
 msgid "Render/Alpha Blend/None"
 msgstr "Render/Alpha-Mischung/Keine"
@@ -3782,11 +3777,32 @@ msgstr "Bearbeiten/Wiederherstellen"
 msgid "OCIO/Presets"
 msgstr "OCIO/Voreinstellungen"
 
-msgid "OCIO/Current File"
-msgstr "OCIO/Aktuelle Datei"
+msgid "OCIO/Current"
+msgstr "GESAMTRECHNUNG/Laufender Monat"
 
-msgid "OCIO/Change All Files"
-msgstr "OCIO/Alle Dateien ndern"
+msgid "OCIO/         ICS: %s"
+msgstr "GESAMTRECHNUNG/ICS: %s"
+
+msgid "OCIO/     Display: %s"
+msgstr "GESAMTRECHNUNG/Anzeige: %s"
+
+msgid "OCIO/        View: %s"
+msgstr "GESAMTRECHNUNG/Ansicht: %s"
+
+msgid "OCIO/  Monitor #%d Display: %s"
+msgstr "OCIO/Monitor #%d Anzeige: %s"
+
+msgid "OCIO/  Monitor #%d    View: %s"
+msgstr "OCIO/Monitor #%d Ansicht: %s"
+
+msgid "OCIO/        Look: %s"
+msgstr "GESAMTRECHNUNG/Schauen Sie: %s"
+
+msgid "OCIO/Change Current File"
+msgstr "GESAMTRECHNUNG/Aktuelle Datei ändern"
+
+msgid "OCIO/Displays"
+msgstr "OCIO/Anzeigen"
 
 msgid "Sync/Send/Media"
 msgstr "Synchronisieren/Senden/Medien"
@@ -3996,10 +4012,10 @@ msgid "Ogg Movie"
 msgstr "Ogg Film"
 
 msgid "Ogg Video"
-msgstr "Ogg Video"
+msgstr "OGG Video"
 
 msgid "OpenTimelineIO EDL"
-msgstr "OpenTimelineIO EDL"
+msgstr "EDL"
 
 msgid "OpenTimelineIO Zipped EDL"
 msgstr "OpenTimelineIO Zipped EDL"
@@ -4996,8 +5012,8 @@ msgstr "Fenster auf Bild einfgen"
 msgid "TopBar"
 msgstr "TopBar"
 
-msgid "Layers, Exposure and Gain"
-msgstr "Schichten, Belichtung und Gewinn"
+msgid "Layers, Exposure, Saturation, and Gamma"
+msgstr "Schichten, Belichtung, Sättigung und Gamma"
 
 msgid "Layers"
 msgstr "Ebenen"
@@ -5007,9 +5023,6 @@ msgstr "Ermglicht es Ihnen, verschiedene Bildkanle oder Ebenen auszuwhlen."
 
 msgid "Exposure and Gain"
 msgstr "Forderung und Gewinn"
-
-msgid "Resizable Control Group"
-msgstr "Resizable Control Group"
 
 msgid "Exposure"
 msgstr "Risikopositionen"
@@ -5035,8 +5048,36 @@ msgstr "Bildwert gewinnen. Ein einfacher Multiplikator der Bildpixelwerte."
 msgid "Allows you to adjust the gain or exposure of the image."
 msgstr "Ermglicht Ihnen, die Verstrkung oder Belichtung des Bildes anzupassen."
 
-msgid "ICS, View, Look and Gamma"
-msgstr "ICS, Blick, Blick und Gamma"
+msgid "Toggle Saturation between current and previous setting."
+msgstr "Umschalten Sättigung zwischen aktueller und früherer Einstellung."
+
+msgid "Saturation Input"
+msgstr "Sättigungseingabe"
+
+msgid "Saturation value."
+msgstr "Sättigungswert."
+
+msgid "Allows you to adjust the saturation of the image."
+msgstr "Ermöglicht Ihnen, die Sättigung des Bildes anzupassen."
+
+msgid "Toggle gamma between 1 and the previous setting."
+msgstr "Gamma zwischen 1 und der vorherigen Einstellung umschalten."
+
+msgid "Resizable Control Group"
+msgstr "Resizable Control Group"
+
+msgid "Gamma Input"
+msgstr "Gamma-Eingabe"
+
+msgid ""
+"Allows you to adjust gamma curve for display.\n"
+"Value is:  pow( 2, 1/x );"
+msgstr ""
+"Ermglicht die Anpassung der Gammakurve fr die Anzeige. Wert ist: pow( 2, 1/"
+"x );"
+
+msgid "ICS, View, Look"
+msgstr "ICS, Blick, Blick"
 
 msgid "Input Color Space"
 msgstr "Eingabe-Farbraum"
@@ -5058,19 +5099,6 @@ msgstr "Sehen Sie."
 
 msgid "OCIO Looks"
 msgstr "OCIO-Looks"
-
-msgid "Toggle gamma between 1 and the previous setting."
-msgstr "Gamma zwischen 1 und der vorherigen Einstellung umschalten."
-
-msgid "Gamma Input"
-msgstr "Gamma-Eingabe"
-
-msgid ""
-"Allows you to adjust gamma curve for display.\n"
-"Value is:  pow( 2, 1/x );"
-msgstr ""
-"Ermglicht die Anpassung der Gammakurve fr die Anzeige. Wert ist: pow( 2, 1/"
-"x );"
 
 msgid "TileGroup"
 msgstr "Fliesengruppe"
@@ -6940,3 +6968,15 @@ msgstr "Hotkeys-Fenster umschalten"
 
 msgid "Toggle About Window"
 msgstr "Fenster umschalten"
+
+#~ msgid "OCIO/   Display: %s"
+#~ msgstr "GESAMTRECHNUNG/Anzeige: %s"
+
+#~ msgid "OCIO/      View: %s"
+#~ msgstr "GESAMTRECHNUNG/Ansicht: %s"
+
+#~ msgid "OCIO/     Input Color Space "
+#~ msgstr "OCIO/     Eingabe-Farbraum "
+
+#~ msgid "OCIO/Change All Files"
+#~ msgstr "OCIO/Alle Dateien ndern"

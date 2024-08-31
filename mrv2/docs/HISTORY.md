@@ -10,6 +10,9 @@ v1.2.5
 - OCIO configuration can now be selected from the menus.
 - OCIO Display/View can now be applied on a monitor per monitor basis.
 - Removed OCIO from the Color Panel.
+- Removed OCIO from the Top bar.  This change hopefully won't be controversial.
+  Now OCIO is all managed through the OCIO menu which can be easily accessed
+  with the Right Mouse Button or from the Main menu bar.
 - Major refactoring of convoluted OCIO code.
 - Allowed Chaging OCIO Input Color Space from the OCIO menu for either the
   current file, or all loaded files.

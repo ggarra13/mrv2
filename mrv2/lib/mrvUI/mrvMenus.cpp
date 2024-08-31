@@ -1231,10 +1231,10 @@ namespace mrv
             if (same)
             {
                 const timeline::OCIOOptions& o = uiView->getOCIOOptions(0);
-                snprintf(buf, 1024, _("OCIO/   Display: %s"),
+                snprintf(buf, 1024, _("OCIO/     Display: %s"),
                          o.display.c_str());
                 menu->add(buf, 0, 0, nullptr, FL_MENU_INACTIVE);
-                snprintf(buf, 1024, _("OCIO/      View: %s"),
+                snprintf(buf, 1024, _("OCIO/        View: %s"),
                          o.view.c_str());
                 menu->add(buf, 0, 0, nullptr, FL_MENU_INACTIVE);
             }

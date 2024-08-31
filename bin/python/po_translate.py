@@ -33,6 +33,7 @@ if not lang in LANGUAGES:
 
     
 DONT_TRANSLATE = [
+    '%d Hz.',
     '1:2',
     '1:4',
     '1:8',
@@ -52,6 +53,8 @@ DONT_TRANSLATE = [
     'ComfyUI',
     'FFmpeg',
     'FPS',
+    'Gamma',
+    'gamma',
     'gamma28',
     'gamma22',
     'gtk+',
@@ -59,6 +62,9 @@ DONT_TRANSLATE = [
     'HUD',
     'iec61966-2-1',
     'iec61966-2-4',
+    'Laser',
+    'Linear',
+    'Lumma',
     'OCIO',
     'OpenEXR',
     'OpenGL',
@@ -82,6 +88,14 @@ DONT_TRANSLATE = [
 
 code = lang[0:2]
 
+
+LANGUAGES = {
+    'de' : 'German',
+    'hi' : 'Hindi',
+    'zh' : 'Chinese (Simplified)',
+}
+
+
 # Load the model and tokenizer for English to Simplified Chinese
 model_name = f"Helsinki-NLP/opus-mt-en-{code}"
 print('Load model',model_name)
@@ -98,7 +112,7 @@ class POTranslator:
         self.model = MarianMTModel.from_pretrained(model_name)
 
         # Initialize Google translator
-        self.translator = Translator(to_lang=lang)
+        self.translator = Translator(to_lang=LANGUAGES[code])
 
         # Initialitize po translation
         self.translate_po(po_file)
@@ -142,22 +156,33 @@ class POTranslator:
         return (False, text)
 
     def translate_text_with_google(self, english):
+        return english
+        if len(english) < 4:
+            return english
+
+        if self.is_number(english):
+            return english
+    
         if self.reached_google_limit:
             return english
-        print("Translate with Google...")
-        print(f"Original: {english}")
+
+        print('GOOGLE TRANSLATE:')
+        print(f"\tOriginal: {english}")
         translated_text = self.translator.translate(english)
+        print(f'\tTranslated: {translated_text}')
         if "WARNING" in translated_text or 'http' in translated_text:
             print()
             print("Stopping... too many requests for today")
             print()
             self.reached_google_limit = True
             return english
-        print(f'Translated: {translated_text}')
         return translated_text
 
     
     def _translate_text(self, english):
+        if english in DONT_TRANSLATE:
+            return english
+        
         if len(english) < 4:
             return english
 
@@ -199,21 +224,22 @@ class POTranslator:
     # each menu entry separately.
     #
     def translate_text(self, english):
-        if '/' in english and len(english) < 30:
+        print('AI TRANSLATE')
+        if '/' in english and len(english) < 40:
             replaced = english.replace('&','')
             menus = replaced.split('/')
             menus = [self._translate_text(menu_item) for menu_item in menus]
             translated_text = '/'.join(menus)
-            print('MENU English=',replaced)
-            print('MENU Translated=', translated_text)
+            print('\t\tMENU English=',replaced)
+            print('\t\tMENU Translated=', translated_text)
             return translated_text
     
         # Tokenize the input text
-        print(f"Original: {english}")
+        print(f"\tOriginal: {english}")
         translated_text = self._translate_text(english)
         if 'QUERY LENGTH' in translated_text:
             return english
-        print(f"Translated: {translated_text}")
+        print(f"\tTranslated: {translated_text}")
         return translated_text
 
     # Load the .po file
@@ -233,6 +259,10 @@ class POTranslator:
                 elif entry.msgid and not entry.msgstr:
                     translated = self.translate_text(entry.msgid)
                     entry.msgstr = translated
+                if 'fuzzy' in entry.flags:
+                    translated = self.translate_text(entry.msgid)
+                    entry.msgstr = translated
+                    entry.flags.remove('fuzzy')
 
                 # Check to see if it begins and ends with newlines
                 if entry.msgid[0] == '\n' and entry.msgstr[0] != '\n':
@@ -240,7 +270,7 @@ class POTranslator:
                 if entry.msgid[-1] == '\n' and entry.msgstr[-1] != '\n':
                     entry.msgstr = entry.msgstr + '\n'
         except Exception as e:
-            raise e
+            pass
         except KeyboardInterrupt:
             pass
 
