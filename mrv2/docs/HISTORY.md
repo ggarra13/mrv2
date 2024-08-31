@@ -14,8 +14,7 @@ v1.2.5
   Now OCIO is all managed through the OCIO menu which can be easily accessed
   with the Right Mouse Button or from the Main menu bar.
 - Major refactoring of convoluted OCIO code.
-- Allowed Chaging OCIO Input Color Space from the OCIO menu for either the
-  current file, or all loaded files.
+- Allowed Chaging OCIO Input Color Space from the OCIO menu.
 - Fixed OCIO ICS when set to None and changing languages. 
 - Fixed annotation markers in timeline showing even when switching clips.
 - Fixed Wayland PNG incompatibility on older Linux OSes.  Tested to work on
@@ -24,8 +23,7 @@ v1.2.5
   were no annotations on Windows.
 - Added session pattern to Open Movie or Sequence.
 - Moved View/OCIO Presets to OCIO/Presets.
-- Added OCIO/Current File/Look and OCIO/Change All Files/Look to new
-  OCIO menu.
+- Added OCIO/Current File/Look to new OCIO menu.
 - Added -otio or -edl command-line option to automatically create an .otio 
   timeline from a list of clips (movies or sequences) provided in the 
   command-line.  Note that FPS is taken to be that of the one with highest 
@@ -40,6 +38,8 @@ v1.2.5
 - Added Hindi Translation done with AI.
 - Made Languages display their English name in parenthesis to help if switching
   to an unknown language by mistake.
+- RE-RELEASE: v1.2.5 in English had a serious bug in OCIO selection.   Should be
+  fine now.
 
 
 v1.2.4
