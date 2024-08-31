@@ -5056,14 +5056,14 @@ msgstr "窗口适合图像"
 msgid "TopBar"
 msgstr "顶上栏"
 
-msgid "Layers, Exposure, Saturation, and Gamma"
-msgstr "图层、接触、饱和度和伽玛"
-
 msgid "Layers"
 msgstr "层层"
 
 msgid "Allows you to select different image channels or layers."
 msgstr "允许您选择不同的图像通道或层。"
+
+msgid "Exposure, Saturation, and Gamma"
+msgstr "接触、饱和度和伽玛"
 
 msgid "Exposure and Gain"
 msgstr "接触和收益"
@@ -5107,9 +5107,6 @@ msgstr "允许您调整图像的饱和度 。"
 msgid "Toggle gamma between 1 and the previous setting."
 msgstr "在 1 和上一个设置之间切换伽玛 。"
 
-msgid "Resizable Control Group"
-msgstr "可调整控控组"
-
 msgid "Gamma Input"
 msgstr "Gamma 输入"
 
@@ -5126,9 +5123,6 @@ msgstr "输入色彩空间"
 
 msgid "OCIO input color space for the image"
 msgstr "OCIO 图像输入颜色空间"
-
-msgid "View and Look"
-msgstr "查看和查看"
 
 msgid "View"
 msgstr "视图"
@@ -6941,6 +6935,12 @@ msgstr "切换热键窗口"
 
 msgid "Toggle About Window"
 msgstr "切换窗口"
+
+#~ msgid "Resizable Control Group"
+#~ msgstr "可调整控控组"
+
+#~ msgid "View and Look"
+#~ msgstr "查看和查看"
 
 #, fuzzy
 #~ msgid "Layers, Exposure and Gain"

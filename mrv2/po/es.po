@@ -5216,14 +5216,14 @@ msgstr "Ajustar Ventana a la Imagen"
 msgid "TopBar"
 msgstr "TopBar"
 
-msgid "Layers, Exposure, Saturation, and Gamma"
-msgstr "Capas, Exposición, Saturación y Gama"
-
 msgid "Layers"
 msgstr "Capas"
 
 msgid "Allows you to select different image channels or layers."
 msgstr "Permite seleccionar diferente canales de la imagen o capas."
+
+msgid "Exposure, Saturation, and Gamma"
+msgstr "Exposición, Saturación y Gama"
 
 msgid "Exposure and Gain"
 msgstr "Exposición y Ganancia"
@@ -5269,9 +5269,6 @@ msgstr "Te permite ajustar la saturación de la imagen."
 msgid "Toggle gamma between 1 and the previous setting."
 msgstr "Intercambia gama enter 1 y el seteo previo."
 
-msgid "Resizable Control Group"
-msgstr "Grupo de Control de Ajuste"
-
 msgid "Gamma Input"
 msgstr "Entrada de Gama"
 
@@ -5290,9 +5287,6 @@ msgstr "Espacio de Entrada de Color"
 
 msgid "OCIO input color space for the image"
 msgstr "OCIO espacio de color para la imagen"
-
-msgid "View and Look"
-msgstr "Vista y Look"
 
 msgid "View"
 msgstr "Vista"
@@ -7175,6 +7169,12 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
+
+#~ msgid "Resizable Control Group"
+#~ msgstr "Grupo de Control de Ajuste"
+
+#~ msgid "View and Look"
+#~ msgstr "Vista y Look"
 
 #~ msgid "Layers, Exposure and Gain"
 #~ msgstr "Capas, Exposición y Ganancia"

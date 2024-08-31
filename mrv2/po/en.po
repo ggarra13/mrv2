@@ -1,7 +1,7 @@
 # English translations for mrv2 package.
 # This file is distributed under the same license as the mrv2 package.
 # Automatically generated, 2024.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.1.6\n"
@@ -5171,14 +5171,14 @@ msgstr "Fit Window to Image"
 msgid "TopBar"
 msgstr "TopBar"
 
-msgid "Layers, Exposure, Saturation, and Gamma"
-msgstr "Layers, Exposure, Saturation, and Gamma"
-
 msgid "Layers"
 msgstr "Layers"
 
 msgid "Allows you to select different image channels or layers."
 msgstr "Allows you to select different image channels or layers."
+
+msgid "Exposure, Saturation, and Gamma"
+msgstr "Exposure, Saturation, and Gamma"
 
 msgid "Exposure and Gain"
 msgstr "Exposure and Gain"
@@ -5222,9 +5222,6 @@ msgstr "Allows you to adjust the saturation of the image."
 msgid "Toggle gamma between 1 and the previous setting."
 msgstr "Toggle gamma between 1 and the previous setting."
 
-msgid "Resizable Control Group"
-msgstr "Resizable Control Group"
-
 msgid "Gamma Input"
 msgstr "Gamma Input"
 
@@ -5243,9 +5240,6 @@ msgstr "Input Color Space"
 
 msgid "OCIO input color space for the image"
 msgstr "OCIO input color space for the image"
-
-msgid "View and Look"
-msgstr "View and Look"
 
 msgid "View"
 msgstr "View"
@@ -7107,6 +7101,12 @@ msgstr "Toggle Hotkeys Window"
 
 msgid "Toggle About Window"
 msgstr "Toggle About Window"
+
+#~ msgid "Resizable Control Group"
+#~ msgstr "Resizable Control Group"
+
+#~ msgid "View and Look"
+#~ msgstr "View and Look"
 
 #~ msgid "Layers, Exposure and Gain"
 #~ msgstr "Layers, Exposure and Gain"

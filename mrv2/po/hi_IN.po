@@ -4879,14 +4879,14 @@ msgstr "विंडो छवि में फिट करें"
 msgid "TopBar"
 msgstr "शीर्ष पट्टी"
 
-msgid "Layers, Exposure, Saturation, and Gamma"
-msgstr "परतें, प्रदर्शन, संतृप्ति, और गामा"
-
 msgid "Layers"
 msgstr "परतें"
 
 msgid "Allows you to select different image channels or layers."
 msgstr "आपको भिन्न छवि चैनल या परतों को चुनने देता है."
+
+msgid "Exposure, Saturation, and Gamma"
+msgstr "प्रदर्शन, संतृप्ति, और गामा"
 
 msgid "Exposure and Gain"
 msgstr "एक्सपोज़र तथा गेन"
@@ -4930,9 +4930,6 @@ msgstr "यहाँ पर छवि के संतृप्ति समा�
 msgid "Toggle gamma between 1 and the previous setting."
 msgstr "1 तथा पिछले सेटिंग के बीच गामा टॉगल करें."
 
-msgid "Resizable Control Group"
-msgstr "री- स्कैन नियंत्रण समूह"
-
 msgid "Gamma Input"
 msgstr "गामा इनपुट"
 
@@ -4949,9 +4946,6 @@ msgstr "इनपुट रंग जगह"
 
 msgid "OCIO input color space for the image"
 msgstr "छवि के लिए OCO इनपुट रंग जगह"
-
-msgid "View and Look"
-msgstr "देखें व देखें"
 
 msgid "View"
 msgstr "दृश्य"
@@ -6789,6 +6783,12 @@ msgstr "यदि आप विंडो को बन्द करना चा
 
 msgid "Toggle About Window"
 msgstr "विंडो के बारे में टॉगल करें"
+
+#~ msgid "Resizable Control Group"
+#~ msgstr "री- स्कैन नियंत्रण समूह"
+
+#~ msgid "View and Look"
+#~ msgstr "देखें व देखें"
 
 #, fuzzy
 #~ msgid "Layers, Exposure and Gain"

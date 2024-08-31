@@ -5012,14 +5012,14 @@ msgstr "Fenster auf Bild einfgen"
 msgid "TopBar"
 msgstr "TopBar"
 
-msgid "Layers, Exposure, Saturation, and Gamma"
-msgstr "Schichten, Belichtung, Sättigung und Gamma"
-
 msgid "Layers"
 msgstr "Ebenen"
 
 msgid "Allows you to select different image channels or layers."
 msgstr "Ermglicht es Ihnen, verschiedene Bildkanle oder Ebenen auszuwhlen."
+
+msgid "Exposure, Saturation, and Gamma"
+msgstr "Belichtung, Sättigung und Gamma"
 
 msgid "Exposure and Gain"
 msgstr "Forderung und Gewinn"
@@ -5063,9 +5063,6 @@ msgstr "Ermöglicht Ihnen, die Sättigung des Bildes anzupassen."
 msgid "Toggle gamma between 1 and the previous setting."
 msgstr "Gamma zwischen 1 und der vorherigen Einstellung umschalten."
 
-msgid "Resizable Control Group"
-msgstr "Resizable Control Group"
-
 msgid "Gamma Input"
 msgstr "Gamma-Eingabe"
 
@@ -5084,9 +5081,6 @@ msgstr "Eingabe-Farbraum"
 
 msgid "OCIO input color space for the image"
 msgstr "OCIO-Eingangsfarbraum fr das Bild"
-
-msgid "View and Look"
-msgstr "Sicht und Blick"
 
 msgid "View"
 msgstr "Sicht"
@@ -6968,6 +6962,12 @@ msgstr "Hotkeys-Fenster umschalten"
 
 msgid "Toggle About Window"
 msgstr "Fenster umschalten"
+
+#~ msgid "Resizable Control Group"
+#~ msgstr "Resizable Control Group"
+
+#~ msgid "View and Look"
+#~ msgstr "Sicht und Blick"
 
 #, fuzzy
 #~ msgid "Layers, Exposure and Gain"
