@@ -1,11 +1,13 @@
-mrv2 v1.2.4
+mrv2 v1.2.5
 =========
 
 mrv2 is an open source professional player and review tool for vfx, animation and computer graphics for Windows, Linux and macOS.
 
 This is a bug fix and feature update.  
 
-Fixed OCIO pipeline when dealing with log images.  Fixed some studio config display and views not getting parsed properly.  Added relative and absolute timeline comparisons.
+New OCIO workflow supporting multiple displays.  Fixed session files.  New -edl
+flag to create an .otio timeline on the command-line.  Chinese, German and Hindi
+translations.  Fixed Wayland on several Unix flavors.
 
 Main Web page (with links to videos and online documentation):
 https://mrv2.sourceforge.io
@@ -24,7 +26,7 @@ https://www.github.com/ggarra13/mrv2
 -------------------------------------------------------------------------------
 
 
-mrv2 v1.2.4
+mrv2 v1.2.5
 
 mrv2, an open source professional player and review tool for vfx, animation and computer graphics for Windows, Linux and macOS has a new version.
 
