@@ -1459,32 +1459,6 @@ namespace mrv
         }
     }
 
-    void all_ocio_ics_cb(Fl_Menu_* m, ViewerUI* ui)
-    {
-        const Fl_Menu_Item* selected = m->mvalue();
-        char pathname[1024];
-        int ret = m->item_pathname(pathname, 1024, selected);
-        if (ret != 0)
-            return;
-
-        const std::string& colorSpace = _("OCIO/     Input Color Space ");
-        std::string ics = pathname;
-        size_t pos = ics.find(colorSpace);
-        if (pos != std::string::npos)
-        {
-            ics = ics.substr(pos + colorSpace.size() + 1, ics.size());
-            ocio::setOcioIcs(ics);
-        }
-
-        auto app = App::app;
-        auto model = app->filesModel();
-        auto files = model->observeFiles()->get();
-        for (auto file : files)
-        {
-            file->ocioIcs = ics;
-        }
-    }
-
     void current_ocio_look_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         const Fl_Menu_Item* selected = m->mvalue();
@@ -1503,37 +1477,9 @@ namespace mrv
         }
     }
 
-    void all_ocio_look_cb(Fl_Menu_* m, ViewerUI* ui)
-    {
-        const Fl_Menu_Item* selected = m->mvalue();
-        char pathname[1024];
-        int ret = m->item_pathname(pathname, 1024, selected);
-        if (ret != 0)
-            return;
-
-        const std::string& colorSpace = _("OCIO/     Look ");
-        std::string look = pathname;
-        size_t pos = look.find(colorSpace);
-        if (pos != std::string::npos)
-        {
-            look = look.substr(pos + colorSpace.size() + 1, look.size());
-            ocio::setOcioLook(look);
-        }
-
-        auto app = App::app;
-        auto model = app->filesModel();
-        auto files = model->observeFiles()->get();
-        for (auto file : files)
-        {
-            file->ocioLook = look;
-        }
-    }
-
     void monitor_ocio_view_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         int monitorId = -1;
-        int displayInfo = -1;
-        const std::string& displayLabel = _("OCIO/Displays");
         const Fl_Menu_Item* selected = m->mvalue();
         char pathname[1024];
         int ret = m->item_pathname(pathname, 1024, selected);
@@ -1569,6 +1515,37 @@ namespace mrv
         {
             // Set the display and view for this monitor.
             ui->uiView->setOCIOOptions(monitorId, o);
+        }
+
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
+    void all_monitors_ocio_view_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        // Get item selected
+        const Fl_Menu_Item* selected = m->mvalue();
+        char pathname[1024];
+        int ret = m->item_pathname(pathname, 1024, selected);
+        if (ret != 0)
+            return;
+
+        // Change all monitors
+        static std::string allMonitors = _("All Monitors");
+        int numMonitors = Fl::screen_count();
+        std::string combined = pathname;
+
+        int idx = combined.find(allMonitors);
+        if (idx == std::string::npos)
+            return;
+
+        combined = combined.substr(idx + allMonitors.size() + 1, combined.size());
+            
+        for (int i = 0; i < numMonitors; ++i)
+        {
+            // Split combined display/view into separate parts.
+            timeline::OCIOOptions o;
+            ocio::ocioSplitViewIntoDisplayView(combined, o.display, o.view);
+            ui->uiView->setOCIOOptions(i, o);
         }
 
         ui->uiMain->fill_menu(ui->uiMenuBar);

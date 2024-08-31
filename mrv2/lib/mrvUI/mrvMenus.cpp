@@ -65,7 +65,7 @@ namespace mrv
 
         Fl_Menu_Item* item = nullptr;
         int mode = 0;
-        char buf[256];
+        char buf[1024];
 
         ViewerUI* ui = App::ui;
         const auto model = ui->app->filesModel();
@@ -153,14 +153,14 @@ namespace mrv
             (Fl_Callback*)toggle_presentation_cb, ui, FL_MENU_TOGGLE);
 
         DBG;
-        const Viewport* view = ui->uiView;
-        const Viewport* view2 = nullptr;
+        const Viewport* uiView = ui->uiView;
+        const Viewport* uiView2 = nullptr;
         if (ui->uiSecondary && ui->uiSecondary->window()->visible())
-            view2 = ui->uiSecondary->viewport();
+            uiView2 = ui->uiSecondary->viewport();
 
         item = (Fl_Menu_Item*)&menu->menu()[idx];
-        if (view->getPresentationMode() ||
-            (view2 && view2->getPresentationMode()))
+        if (uiView->getPresentationMode() ||
+            (uiView2 && uiView2->getPresentationMode()))
             item->set();
         else
             item->clear();
@@ -170,9 +170,9 @@ namespace mrv
             (Fl_Callback*)toggle_fullscreen_cb, ui, FL_MENU_TOGGLE);
         item = (Fl_Menu_Item*)&menu->menu()[idx];
 
-        if ((view->getFullScreenMode() && !view->getPresentationMode()) ||
-            (view2 && view2->getFullScreenMode() &&
-             !view2->getPresentationMode()))
+        if ((uiView->getFullScreenMode() && !uiView->getPresentationMode()) ||
+            (uiView2 && uiView2->getFullScreenMode() &&
+             !uiView2->getPresentationMode()))
             item->set();
         else
             item->clear();
@@ -265,7 +265,7 @@ namespace mrv
             _("View/Auto Frame"), kFrameView.hotkey(),
             (Fl_Callback*)frame_view_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (view->hasFrameView())
+        if (uiView->hasFrameView())
             item->set();
         DBG;
 
@@ -273,14 +273,14 @@ namespace mrv
             _("View/Safe Areas"), kSafeAreas.hotkey(),
             (Fl_Callback*)toggle_safe_areas_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (view->getSafeAreas())
+        if (uiView->getSafeAreas())
             item->set();
 
         idx = menu->add(
             _("View/OpenEXR/Data Window"), kDataWindow.hotkey(),
             (Fl_Callback*)toggle_data_window_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (view->getDataWindow())
+        if (uiView->getDataWindow())
             item->set();
         DBG;
 
@@ -288,7 +288,7 @@ namespace mrv
             _("View/OpenEXR/Display Window"), kDisplayWindow.hotkey(),
             (Fl_Callback*)toggle_display_window_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (view->getDisplayWindow())
+        if (uiView->getDisplayWindow())
             item->set();
 
         idx = menu->add(
@@ -296,7 +296,7 @@ namespace mrv
             kIgnoreDisplayWindow.hotkey(),
             (Fl_Callback*)toggle_ignore_display_window_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (view->getIgnoreDisplayWindow())
+        if (uiView->getIgnoreDisplayWindow())
             item->set();
 
         DBG;
@@ -582,7 +582,7 @@ namespace mrv
             const timeline::ImageOptions& imageOptions =
                 ui->app->imageOptions();
             const timeline::BackgroundOptions& backgroundOptions =
-                view->getBackgroundOptions();
+                uiView->getBackgroundOptions();
 
             mode = FL_MENU_RADIO;
             if (numFiles == 0)
@@ -782,7 +782,7 @@ namespace mrv
         }
 
         timeline::Playback playback = timeline::Playback::Stop;
-        auto player = view->getTimelinePlayer();
+        auto player = uiView->getTimelinePlayer();
         if (player)
             playback = player->playback();
 
@@ -948,7 +948,7 @@ namespace mrv
             idx = menu->add(buf, 0, (Fl_Callback*)masking_cb, ui, mode);
             item = (Fl_Menu_Item*)&(menu->menu()[idx]);
             float mask = kCrops[i];
-            if (mrv::is_equal(mask, view->getMask()))
+            if (mrv::is_equal(mask, uiView->getMask()))
                 item->set();
         }
 
@@ -1166,8 +1166,7 @@ namespace mrv
         //         item->set();
         //     for ( unsigned i = 0; i < num; ++i )
         //     {
-        //         char buf[256];
-        //         snprintf( buf, 256, _("Subtitle/Track #%d - %s"), i,
+        //         snprintf( buf, 1024, _("Subtitle/Track #%d - %s"), i,
         //                  image->subtitle_info(i).language.c_str() );
 
         //         idx = menu->add( buf, 0,
@@ -1187,17 +1186,80 @@ namespace mrv
         // }
         DBG;
 
+#ifdef TLRENDER_OCIO
         mode = 0;
         snprintf(buf, 256, "%s", _("OCIO/Presets"));
         idx = menu->add(
             buf, kOCIOPresetsToggle.hotkey(), (Fl_Callback*)ocio_presets_cb, ui,
-            mode);
+            FL_MENU_DIVIDER);
         if (OCIOPresetsClass)
             item->set();
 
-        menu->add(_("OCIO/Current File"), 0, 0, nullptr, FL_MENU_INACTIVE);
+        std::string ics = string::commentCharacter(ocio::ocioIcs(), '/');
+        std::string look = ocio::ocioLook();
         
-        std::string ics;
+        menu->add(_("OCIO/Current"), 0, 0, nullptr, FL_MENU_INACTIVE);
+        snprintf(buf, 1024, _("OCIO/         ICS: %s"), ics.c_str());
+        menu->add(buf, 0, 0, nullptr, FL_MENU_INACTIVE);
+        
+        int num_screens = Fl::screen_count();
+        const timeline::OCIOOptions& o = uiView->getOCIOOptions();
+        if (num_screens == 1)
+        {
+            snprintf(buf, 1024, _("OCIO/     Display: %s"),
+                     o.display.c_str());
+            menu->add(buf, 0, 0, nullptr, FL_MENU_INACTIVE);
+            snprintf(buf, 1024, _("OCIO/        View: %s"),
+                     o.view.c_str());
+            menu->add(buf, 0, 0, nullptr, FL_MENU_INACTIVE);
+        }
+        else
+        {
+            bool same = true;
+            const timeline::OCIOOptions prev = uiView->getOCIOOptions(0);
+            int num_screens = Fl::screen_count();
+            for (int m = 0; m < num_screens; ++m)
+            {
+                const timeline::OCIOOptions& o = uiView->getOCIOOptions(m);
+                if (o.display != prev.display || o.view != prev.view)
+                {
+                    same = false;
+                    break;
+                }
+            }
+
+            if (same)
+            {
+                const timeline::OCIOOptions& o = uiView->getOCIOOptions(0);
+                snprintf(buf, 1024, _("OCIO/   Display: %s"),
+                         o.display.c_str());
+                menu->add(buf, 0, 0, nullptr, FL_MENU_INACTIVE);
+                snprintf(buf, 1024, _("OCIO/      View: %s"),
+                         o.view.c_str());
+                menu->add(buf, 0, 0, nullptr, FL_MENU_INACTIVE);
+            }
+            else
+            {
+                for (int m = 0; m < num_screens; ++m)
+                {
+                    const timeline::OCIOOptions& o = uiView->getOCIOOptions(m);
+                    std::string monitorName = mrv::desktop::monitorName(m);
+                    snprintf(buf, 1024, _("OCIO/  Monitor #%d Display: %s"),
+                             m, o.display.c_str());
+                    menu->add(buf, 0, 0, nullptr, FL_MENU_INACTIVE);
+                    snprintf(buf, 1024, _("OCIO/  Monitor #%d    View: %s"),
+                             m, o.view.c_str());
+                    menu->add(buf, 0, 0, nullptr, FL_MENU_INACTIVE);
+                }
+            }
+        }
+        
+        snprintf(buf, 1024, _("OCIO/        Look: %s"), look.c_str());
+        menu->add(buf, 0, 0, nullptr, FL_MENU_INACTIVE | FL_MENU_DIVIDER);
+        
+
+        menu->add(_("OCIO/Change Current File"), 0, 0, nullptr, FL_MENU_INACTIVE);
+        
         idx = ui->uiICS->value();
         if (idx >= 0)
         {
@@ -1239,7 +1301,6 @@ namespace mrv
         }
 
         
-        std::string look;
         idx = ui->uiOCIOLook->value();
         if (idx >= 0)
         {
@@ -1279,52 +1340,53 @@ namespace mrv
                 }
             }
         }
-        
-        menu->add(_("OCIO/Change All Files"), 0, nullptr, nullptr,
-                  FL_MENU_INACTIVE);
-        for (int i = 0; i < ui->uiICS->children(); ++i)
-        {
-            // We must add a space at the end to make sure menus are different
-            std::string colorSpace = _("OCIO/     Input Color Space ");
-            const Fl_Menu_Item* item = ui->uiICS->child(i);
-            if (!item || !item->label() || (item->flags & FL_SUBMENU))
-                continue;
-
-            char pathname[1024];
-            int ret = ui->uiICS->item_pathname(pathname, 1024, item);
-            if (ret != 0)
-                continue;
-
-            if (pathname[0] != '/')
-                colorSpace += '/';
-            colorSpace += pathname;
-            menu->add(colorSpace.c_str(), 0, (Fl_Callback*)all_ocio_ics_cb, ui);
-        }
-
-        for (int i = 0; i < ui->uiOCIOLook->children(); ++i)
-        {
-            // We must add a space at the end to make sure menus are different
-            std::string colorSpace = _("OCIO/     Look ");
-            const Fl_Menu_Item* item = ui->uiOCIOLook->child(i);
-            if (!item || !item->label() || (item->flags & FL_SUBMENU))
-                continue;
-
-            char pathname[1024];
-            int ret = ui->uiOCIOLook->item_pathname(pathname, 1024, item);
-            if (ret != 0)
-                continue;
-
-            if (pathname[0] != '/')
-                colorSpace += '/';
-            colorSpace += pathname;
-            menu->add(colorSpace.c_str(), 0, (Fl_Callback*)all_ocio_look_cb, ui);
-        }
 
         menu->add(_("OCIO/Displays"), 0, nullptr, nullptr, FL_MENU_INACTIVE);
-        int num_screens = Fl::screen_count();
+        
+    
+
+        menu->add(_("OCIO/Displays"), 0, nullptr, nullptr, FL_MENU_INACTIVE);
+
+        if (num_screens > 1)
+        {
+            const timeline::OCIOOptions& o = uiView->getOCIOOptions(0);
+            std::string combined =
+                ocio::ocioDisplayViewShortened(o.display, o.view);
+        
+            for (int i = 0; i < ui->uiOCIOView->children(); ++i)
+            {
+                const Fl_Menu_Item* item = ui->uiOCIOView->child(i);
+                if (!item || !item->label() || (item->flags & FL_SUBMENU))
+                    continue;
+
+                char pathname[1024];
+                int ret = ui->uiOCIOView->item_pathname(pathname, 1024, item);
+                if (ret != 0)
+                    continue;
+
+                std::string colorSpace = "OCIO/     All Monitors";
+
+                if (pathname[0] != '/')
+                    colorSpace += '/';
+                colorSpace += pathname;
+                int idx = menu->add(
+                    colorSpace.c_str(), 0, (Fl_Callback*)all_monitors_ocio_view_cb,
+                    ui, FL_MENU_TOGGLE);
+                {
+                    Fl_Menu_Item* item = (Fl_Menu_Item*) &(menu->menu()[idx]);
+                    size_t pos = colorSpace.find(combined);
+                    if (pos != std::string::npos &&
+                        pos + combined.size() == colorSpace.size() )
+                    {
+                        item->set();
+                    }
+                }
+            }
+        }
+    
         for (int m = 0; m < num_screens; ++m)
         {
-            timeline::OCIOOptions o = ui->uiView->getOCIOOptions(m);
+            const timeline::OCIOOptions& o = uiView->getOCIOOptions(m);
             std::string monitorName = mrv::desktop::monitorName(m);
             std::string combined =
                 ocio::ocioDisplayViewShortened(o.display, o.view);
@@ -1360,6 +1422,7 @@ namespace mrv
                 }
             }
         }
+#endif
 
         DBG;
         if (dynamic_cast< DummyClient* >(tcp) == nullptr)

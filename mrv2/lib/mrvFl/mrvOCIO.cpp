@@ -661,7 +661,7 @@ namespace mrv
             const std::string& combined, std::string& display,
             std::string& view)
         {
-            if (combined == kInactive)
+            if (combined.empty() || combined == kInactive)
             {
                 display.clear();
                 view.clear();
@@ -854,19 +854,17 @@ namespace mrv
         std::string ocioPresetSummary(const std::string& presetName)
         {
             std::stringstream s;
-            for (const auto& preset : ocioPresets)
+            for (auto& preset : ocioPresets)
             {
                 if (preset.name == presetName)
                 {
-                    const timeline::OCIOOptions& ocio = preset.ocio;
+                    timeline::OCIOOptions& ocio = preset.ocio;
                     const timeline::LUTOptions& lut = preset.lut;
                     const OCIODefaults& d = preset.defaults;
 
                     s << "OCIO:" << std::endl
                       << "\t  config: " << ocio.fileName << std::endl
                       << "\t     ICS: " << ocio.input << std::endl
-                      << "\t display: " << ocio.display << std::endl
-                      << "\t    view: " << ocio.view << std::endl
                       << "\t    look: " << ocio.look << std::endl;
 
                     bool found = false;
@@ -877,14 +875,14 @@ namespace mrv
                         found = true;
                         break;
                     }
+
                     if (found)
                     {
                         unsigned idx = 0;
                         for (auto ocio : preset.ocioMonitors)
                         {
+                            
                             ++idx;
-                            if (ocio.view.empty())
-                                continue;
                             s << "Monitor " << idx << ":" << std::endl
                               << "\t display: " << ocio.display << std::endl
                               << "\t    view: " << ocio.view << std::endl;
@@ -892,7 +890,18 @@ namespace mrv
                     }
                     else
                     {
+                        int num_screens = Fl::screen_count();
+                        if (num_screens > 1)
+                        {
+                            const auto& monitor_ocio =
+                                App::ui->uiView->getOCIOOptions(0);
+                            ocio.display = monitor_ocio.display;
+                            ocio.view = monitor_ocio.view;
+                        }
+                        s  << "\t display: " << ocio.display << std::endl
+                           << "\t    view: " << ocio.view << std::endl;
                     }
+                    
                     s << "LUT:" << std::endl
                       << "\tfileName: " << lut.fileName << std::endl
                       << "\t   order: " << lut.order << std::endl
@@ -991,11 +1000,29 @@ namespace mrv
             std::vector<timeline::OCIOOptions> ocioMonitors;
             if (num_screens > 1)
             {
-                for (int i = 0; i < num_screens; ++i)
+                bool same = true;
+                const timeline::OCIOOptions& prev =
+                    App::ui->uiView->getOCIOOptions(0);
+                
+                for (int i = 1; i < num_screens; ++i)
                 {
                     const timeline::OCIOOptions& ocio =
                         App::ui->uiView->getOCIOOptions(i);
-                    ocioMonitors.push_back(ocio);
+                    if (prev.display != ocio.display ||
+                        prev.view != ocio.view)
+                    {
+                        same = false;
+                        break;
+                    }
+                }
+                if (!same)
+                {
+                    for (int i = 0; i < num_screens; ++i)
+                    {
+                        const timeline::OCIOOptions& ocio =
+                            App::ui->uiView->getOCIOOptions(i);
+                        ocioMonitors.push_back(ocio);
+                    }
                 }
             }
 

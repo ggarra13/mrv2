@@ -702,7 +702,7 @@ namespace mrv
     }
 
     const timeline::OCIOOptions&
-    TimelineViewport::getOCIOOptions(unsigned monitorId) noexcept
+    TimelineViewport::getOCIOOptions(unsigned monitorId) const noexcept
     {
         TLRENDER_P();
         
@@ -712,13 +712,12 @@ namespace mrv
         }
         else
         {
-            p.monitorOCIOOptions[monitorId].input = p.ocioOptions.input;
-            p.monitorOCIOOptions[monitorId].look  = p.ocioOptions.look;
             return p.monitorOCIOOptions[monitorId];
         }
     }
 
-    const timeline::OCIOOptions& TimelineViewport::getOCIOOptions() noexcept
+    const timeline::OCIOOptions&
+    TimelineViewport::getOCIOOptions() const noexcept
     {
         return _p->ocioOptions;
     }
@@ -2073,6 +2072,9 @@ namespace mrv
             p.ui->uiGainInput->value(1.0f);
             p.ui->uiGamma->value(1.0f);
             p.ui->uiGammaInput->value(1.0f);
+            p.ui->uiSaturation->value(1.0f);
+            p.ui->uiSaturationInput->value(1.0f);
+            _pushColorMessage("saturation", 1.0f);
             _pushColorMessage("gain", 1.0f);
             _pushColorMessage("gamma", 1.0f);
             return;
@@ -2103,11 +2105,24 @@ namespace mrv
         d.color.brightness.x = d.exrDisplay.exposure * gain;
         d.color.brightness.y = d.exrDisplay.exposure * gain;
         d.color.brightness.z = d.exrDisplay.exposure * gain;
+        
 
-        if (!mrv::is_equal(gain, 1.F))
+        float saturation = p.ui->uiSaturation->value();
+        _pushColorMessage("saturation", saturation);
+        d.color.saturation.x = saturation;
+        d.color.saturation.y = saturation;
+        d.color.saturation.z = saturation;
+
+        // Turn on color corrections if gain or saturation are not 1.
+        if (!mrv::is_equal(gain, 1.F) ||
+            !mrv::is_equal(saturation, 1.F))
         {
             d.color.enabled = true;
+        }
 
+        // Calculate F-stop and make it red if gain not 1.
+        if (!mrv::is_equal(gain, 1.F))
+        {
             float exposure = (logf(gain) / logf(2.0f));
             float fstop = calculate_fstop(exposure);
             char buf[8];
@@ -2121,6 +2136,7 @@ namespace mrv
             p.ui->uiFStop->labelcolor(p.ui->uiGain->labelcolor());
         }
 
+        // Get the filters from the menu bar (even if hidden)
         const Fl_Menu_Item* item =
             p.ui->uiMenuBar->find_item(_("Render/Minify Filter/Linear"));
         timeline::ImageFilter min_filter = timeline::ImageFilter::Nearest;

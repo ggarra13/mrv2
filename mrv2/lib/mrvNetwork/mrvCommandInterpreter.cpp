@@ -620,6 +620,18 @@ namespace mrv
                 ui->uiGamma->value(value);
                 ui->uiGamma->do_callback();
             }
+            else if (c == "saturation")
+            {
+                bool receive = prefs->ReceiveColor->value();
+                if (!receive)
+                {
+                    tcp->unlock();
+                    return;
+                }
+                float value = message["value"];
+                ui->uiSaturation->value(value);
+                ui->uiSaturation->do_callback();
+            }
             else if (c == "Clear Note Annotation")
             {
                 bool receive = prefs->ReceiveAnnotations->value();

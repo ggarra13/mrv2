@@ -193,12 +193,9 @@ namespace mrv
 
     // From OCIO Menus
     void current_ocio_ics_cb(Fl_Menu_*, ViewerUI* ui);
-    void all_ocio_ics_cb(Fl_Menu_*, ViewerUI* ui);
-
     void current_ocio_look_cb(Fl_Menu_*, ViewerUI* ui);
-    void all_ocio_look_cb(Fl_Menu_*, ViewerUI* ui);
-    
     void monitor_ocio_view_cb(Fl_Menu_*, ViewerUI* ui);
+    void all_monitors_ocio_view_cb(Fl_Menu_*, ViewerUI* ui);
 
     // Video levels callbacks
     void video_levels_from_file_cb(Fl_Menu_*, ViewerUI* ui);

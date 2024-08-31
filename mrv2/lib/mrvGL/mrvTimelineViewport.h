@@ -88,9 +88,9 @@ namespace mrv
                             const timeline::OCIOOptions&) noexcept;
 
         const timeline::OCIOOptions&
-        getOCIOOptions(unsigned monitorId) noexcept;
+        getOCIOOptions(unsigned monitorId) const noexcept;
 
-        const timeline::OCIOOptions& getOCIOOptions() noexcept;
+        const timeline::OCIOOptions& getOCIOOptions() const noexcept;
 
         //! Set the LUT options.
         void setLUTOptions(const timeline::LUTOptions&) noexcept;
