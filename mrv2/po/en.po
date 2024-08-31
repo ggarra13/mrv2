@@ -2948,7 +2948,7 @@ msgid "Empty video data at time {0}."
 msgstr "Empty video data at time {0}."
 
 msgid "Reading preferences from \"{0}{1}\"."
-msgstr "Reading preferences from \"{0}mrv2.prefs\"."
+msgstr "Reading preferences from \"{0}{1}\"."
 
 msgid "Failed to retrieve {0}."
 msgstr "Failed to retrieve {0}."
@@ -2973,7 +2973,7 @@ msgid "Setting OCIO config from OCIO environment variable."
 msgstr "Setting OCIO config from OCIO environment variable."
 
 msgid "Path mappings have been loaded from \"{0}{1}\"."
-msgstr "Path mappings have been loaded from \"{0}mrv2.paths.prefs\"."
+msgstr "Path mappings have been loaded from \"{0}{1}\"."
 
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Loading hotkeys from \"{0}{1}.prefs\"."
@@ -2982,13 +2982,13 @@ msgid "Reseting hotkeys to default."
 msgstr "Reseting hotkeys to default."
 
 msgid "Path mappings have been saved to \"{0}{1}\"."
-msgstr "Path mappings have been saved to \"{0}mrv2.paths.prefs\"."
+msgstr "Path mappings have been saved to \"{0}{1}\"."
 
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "Hotkeys have been saved to \"{0}{1}.prefs\"."
 
 msgid "Preferences have been saved to: \"{0}{1}\"."
-msgstr "Preferences have been saved to: \"{0}mrv2.prefs\"."
+msgstr "Preferences have been saved to: \"{0}{1}\"."
 
 msgid "Removing "
 msgstr "Removing "
@@ -3361,7 +3361,7 @@ msgid "OCIO/     Look"
 msgstr "OCIO/     Look"
 
 msgid "All Monitors"
-msgstr "Monitor "
+msgstr "All Monitors"
 
 msgid "Pick Color"
 msgstr "Pick Color"
@@ -3838,28 +3838,28 @@ msgid "OCIO/Presets"
 msgstr "OCIO/Presets"
 
 msgid "OCIO/Current"
-msgstr "OCIO/Current File"
+msgstr "OCIO/Current"
 
 msgid "OCIO/         ICS: %s"
-msgstr "OCIO/     Look "
+msgstr "OCIO/         ICS: %s"
 
 msgid "OCIO/     Display: %s"
-msgstr "OCIO/Displays"
+msgstr "OCIO/     Display: %s"
 
 msgid "OCIO/        View: %s"
-msgstr "OCIO/     Look "
+msgstr "OCIO/        View: %s"
 
 msgid "OCIO/  Monitor #%d Display: %s"
-msgstr "OCIO/Displays"
+msgstr "OCIO/  Monitor #%d Display: %s"
 
 msgid "OCIO/  Monitor #%d    View: %s"
 msgstr "OCIO/  Monitor #%d    View: %s"
 
 msgid "OCIO/        Look: %s"
-msgstr "OCIO/     Look "
+msgstr "OCIO/        Look: %s"
 
 msgid "OCIO/Change Current File"
-msgstr "OCIO/Current File"
+msgstr "OCIO/Change Current File"
 
 msgid "OCIO/Displays"
 msgstr "OCIO/Displays"
@@ -5130,7 +5130,7 @@ msgid "TopBar"
 msgstr "TopBar"
 
 msgid "Layers, Exposure, Saturation, and Gamma"
-msgstr "Layers, Exposure and Gain"
+msgstr "Layers, Exposure, Saturation, and Gamma"
 
 msgid "Layers"
 msgstr "Layers"
@@ -5166,7 +5166,7 @@ msgid "Allows you to adjust the gain or exposure of the image."
 msgstr "Allows you to adjust the gain or exposure of the image."
 
 msgid "Toggle Saturation between current and previous setting."
-msgstr "Toggle Saturation between 1 and the previous setting."
+msgstr "Toggle Saturation between current and previous setting."
 
 msgid "Saturation Input"
 msgstr "Saturation Input"
@@ -5175,7 +5175,7 @@ msgid "Saturation value."
 msgstr "Saturation value."
 
 msgid "Allows you to adjust the saturation of the image."
-msgstr "Allows you to adjust the gain or exposure of the image."
+msgstr "Allows you to adjust the saturation of the image."
 
 msgid "Toggle gamma between 1 and the previous setting."
 msgstr "Toggle gamma between 1 and the previous setting."
@@ -5194,7 +5194,7 @@ msgstr ""
 "Value is:  pow( 2, 1/x );"
 
 msgid "ICS, View, Look"
-msgstr "ICS, View, Look and Gamma"
+msgstr "ICS, View, Look"
 
 msgid "Input Color Space"
 msgstr "Input Color Space"
@@ -7065,7 +7065,7 @@ msgid "Toggle About Window"
 msgstr "Toggle About Window"
 
 #~ msgid "Layers, Exposure and Gain"
-#~ msgstr "Exposure and Gain"
+#~ msgstr "Layers, Exposure and Gain"
 
 #~ msgid "Could not match "
 #~ msgstr "Could not match "
@@ -7074,10 +7074,10 @@ msgstr "Toggle About Window"
 #~ msgstr "Wizard labels are:"
 
 #~ msgid "OCIO/   Display: %s"
-#~ msgstr "OCIO/Displays"
+#~ msgstr "OCIO/   Display: %s"
 
 #~ msgid "OCIO/      View: %s"
-#~ msgstr "OCIO/     Look "
+#~ msgstr "OCIO/      View: %s"
 
 #~ msgid "OCIO/     Input Color Space "
 #~ msgstr "OCIO/     Input Color Space "

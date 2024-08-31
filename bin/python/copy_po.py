@@ -15,7 +15,7 @@ def copy_msgid_to_msgstr(input_file, output_file):
             entry.flags.remove('fuzzy')
 
     # Save to the output file
-    po.save(output_file)
+    po.save()
 
 if __name__ == "__main__":
 
