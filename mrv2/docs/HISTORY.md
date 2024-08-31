@@ -1,6 +1,10 @@
 v1.2.5
 ======
 
+- RE-RELEASE: v1.2.5 in English had a serious bug in OCIO selection through the
+              menus.
+- SECOND RE-RELEASE: Added toggle between showing OCIO or COLOR information in
+  	 	     topbar in OCIO menu.
 - Input Color Space and Look setting are now stored with each clip.  However, 
   you cannot compare two clips (say in a wipe) with different display settings.
 - Made Image/Previous and Image/Next not appear when a single image or movie
@@ -38,8 +42,6 @@ v1.2.5
 - Added Hindi Translation done with AI.
 - Made Languages display their English name in parenthesis to help if switching
   to an unknown language by mistake.
-- RE-RELEASE: v1.2.5 in English had a serious bug in OCIO selection through the
-              menus.
 
 
 v1.2.4
