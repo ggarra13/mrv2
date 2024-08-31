@@ -2883,9 +2883,8 @@ msgid ""
 "Image too big for options.annotations.  Will scale to the viewport size."
 msgstr "图像太大, 无法选择. 注释 。 将缩放到视图大小 。"
 
-#, fuzzy
 msgid "Viewport Size: {0} - X={1}, Y={2}"
-msgstr "视图端口大小 : {0} - X1}, Y2}"
+msgstr "视图端口大小 : {0} - X={1}, Y={2}"
 
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
 msgstr "Writer 插件没有获得输出信息 。 默认为 {0}"
@@ -3039,6 +3038,9 @@ msgstr "英语"
 msgid "Spanish"
 msgstr "西班牙语"
 
+msgid "German"
+msgstr "德语"
+
 msgid "Chinese Simplified"
 msgstr "简体中文"
 
@@ -3090,9 +3092,6 @@ msgstr "法语"
 
 msgid "Galician"
 msgstr "加利西亚人"
-
-msgid "German"
-msgstr "德语"
 
 msgid "Greek"
 msgstr "希腊语"
@@ -6186,7 +6185,7 @@ msgid "No Audio Devices were Found"
 msgstr "未找到音频设备"
 
 msgid "Default API"
-msgstr "默认 API 默认 API"
+msgstr "默认 API"
 
 msgid "No Valid Devices found"
 msgstr "未找到有效的设备"

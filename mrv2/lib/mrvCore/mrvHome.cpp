@@ -192,6 +192,12 @@ namespace mrv
         return out;
     }
 
+    const char* docs_list[] = {
+        "en",
+        "es",
+        nullptr
+    };
+    
     std::string docspath()
     {
         std::string docs;
@@ -204,6 +210,19 @@ namespace mrv
         std::string code = language;
         code = code.substr(0, 2);
 
+        bool found = false;
+        const char** d = docs_list;
+        for ( ; *d; ++d)
+        {
+            if (code == *d)
+            {
+                found = true;
+                break;
+            }
+        }
+        if (!found)
+            code = "en";
+        
         std::string local_docs =
             mrv::rootpath() + "/docs/" + code + "/index.html";
         if (file::isReadable(local_docs))

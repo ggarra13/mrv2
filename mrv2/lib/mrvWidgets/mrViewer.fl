@@ -821,7 +821,7 @@ if (reason == FL_REASON_CLOSED)
         class Fl_Flex
       } {
         Fl_Group uiMenuGroup {
-          label MenuBar
+          label MenuBar open
           xywh {0 0 690 25} box FLAT_BOX labeltype NO_LABEL
         } {
           Fl_Group {} {open
@@ -848,8 +848,8 @@ else
     if (value) mrv::editMode = mrv::EditMode::kFull;
     else       mrv::editMode = mrv::EditMode::kNone;
     mrv::toggle_bottom_bar(nullptr, v);
-}}
-              tooltip {Toggle Edit Mode} xywh {602 0 58 25} down_box DOWN_BOX selection_color 95 labelsize 12
+}} selected
+              tooltip {Toggle Edit Mode} xywh {602 0 58 25} down_box DOWN_BOX selection_color 95 labelsize 12 align 192
             }
           }
           Fl_Button {} {
@@ -864,7 +864,7 @@ else
           xywh {0 25 690 28} box ENGRAVED_BOX labeltype NO_LABEL
         } {
           Fl_Group {} {
-            label {Layers, Exposure and Gain} open
+            label {Layers, Exposure and Gain}
             xywh {0 25 277 27} labeltype NO_LABEL
           } {
             Fl_Group {} {
@@ -959,10 +959,10 @@ uiView->updateDisplayOptions();}
             }
           }
           Fl_Group {} {
-            label {ICS, View, Look and Gamma} open
+            label {ICS, View, Look and Gamma}
             xywh {277 25 413 28} labeltype NO_LABEL
           } {
-            Fl_Group {} {open
+            Fl_Group {} {
               xywh {277 25 317 26}
             } {
               Fl_Group {} {
@@ -984,7 +984,7 @@ uiView->updateDisplayOptions();}
                 Fl_Menu_Button uiOCIOView {
                   label View
                   user_data this user_data_type {ViewerUI*}
-                  callback {uiView->updateOCIOOptions();} selected
+                  callback {uiView->updateOCIOOptions();}
                   tooltip {OCIO Display/View} xywh {420 25 144 26} down_box DOWN_BOX labelsize 10 align 80
                   code0 {o->disable_submenus();}
                   class {mrv::PopupMenu}
@@ -1056,7 +1056,7 @@ Value is:  pow( 2, 1/x );} xywh {651 26 39 25} type {Horz Knob} labelsize 10 max
               xywh {277 25 370 26} hide resizable
             } {}
           }
-          Fl_Group {} {
+          Fl_Group {} {open
             xywh {120 25 570 26} hide resizable
           } {}
         }

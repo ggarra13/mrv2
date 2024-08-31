@@ -1,11 +1,13 @@
 #!/usr/env/bin python
 
 from collections import Counter
+import gc
 import glob
 import os
 import polib
 import re
 import sys
+import torch
 from transformers import MarianMTModel, MarianTokenizer
 from translate import Translator
 
@@ -16,21 +18,48 @@ if len(sys.argv) < 2:
 
 lang = sys.argv[1]
 
-if lang != 'zh-CN':
+
+LANGUAGES = [
+    'de',
+    'hi',
+    'zh-CN',
+]
+
+if not lang in LANGUAGES:
+    print(f'Invalid language "{lang}"')
+    print(f'Valid ones are:\n\t{", ".join(LANGUAGES)}')
     exit(1)
 
 
     
 DONT_TRANSLATE = [
-    'OCIO',
+    'API',
+    'base',
+    'CG',
     'ComfyUI',
+    'FFmpeg',
     'FPS',
+    'gtk+',
+    'HDR',
     'HUD',
+    'OCIO',
+    'OpenEXR',
+    'OpenGL',
+    'OpenUSD',
+    'oxy',
+    'plastic',
     'sRGB',
+    'Stereo',
+    'Stereo3D',
+    'Stereo 3D',
+    'Studio',
+    'USD',
 ]
-    
+
+code = lang[0:2]
+
 # Load the model and tokenizer for English to Simplified Chinese
-model_name = "Helsinki-NLP/opus-mt-en-zh"
+model_name = f"Helsinki-NLP/opus-mt-en-{code}"
 print('Load model',model_name)
 
     
@@ -51,13 +80,31 @@ class POTranslator:
         self.translate_po(po_file)
         
         
-    def verify_text(self, input_str):
+    def verify_text(self, text):
         # Use regex to match any repeated pair of two characters
-        return re.sub(r'(.{2})\1+', r'\1', input_str)
+        if lang == 'zh-CN':
+            text = re.sub(r'(.{2})\1+', r'\1', text)
 
+        # Split the translated text into words
+        words = text.split()
+
+        # Avoid repeated words
+        norepeats = []
+        prev_word = ''
+        for i in range(len(words)):
+            if words[i] == prev_word:
+                continue
+            norepeats.append(words[i])
+            prev_word = words[i]
+        
+        text = ' '.join(norepeats)
+        return text
+
+    def is_number(self, s):
+        return re.fullmatch(r'^-?\d+(\.\d+)?$', s)
 
     # Function to check if translation failed by detecting repeated phrases
-    def is_translation_invalid(text, threshold=3):
+    def is_translation_invalid(self, text, threshold=3):
         # Split the translated text into words/phrases
         words = text.split()
     
@@ -77,7 +124,7 @@ class POTranslator:
         print("Translate with Google...")
         print(f"Original: {english}")
         translated_text = self.translator.translate(english)
-        if "WARNING" in translated_text:
+        if "WARNING" in translated_text or 'http' in translated_text:
             print()
             print("Stopping... too many requests for today")
             print()
@@ -90,31 +137,44 @@ class POTranslator:
     def _translate_text(self, english):
         if english in DONT_TRANSLATE or len(english) < 4:
             return english
+
+        if self.is_number(english):
+            return english
     
         translated_text = self.have_seen.get(english, None)
 
         if not translated_text:
-            inputs = tokenizer(english, return_tensors="pt", padding=True,
-                               truncation=True)
+            inputs = self.tokenizer(english, return_tensors="pt", padding=True,
+                                    truncation=True)
         
             # Perform the translation
-            translated = model.generate(**inputs)
+            translated = self.model.generate(**inputs)
 
             # Decode the translated tokens
-            translated_text = tokenizer.decode(translated[0],
-                                               skip_special_tokens=True)
+            translated_text = self.tokenizer.decode(translated[0],
+                                                    skip_special_tokens=True)
     
             # Print the translated text
-            result = is_translation_invalid(translated_text)
+            result = self.is_translation_invalid(translated_text)
             if result[0]:
-                translated_text = translate_text_with_google(english)
+                translated_text = self.translate_text_with_google(english)
             else:
                 translated_text = result[1]
+
+            verify = self.verify_text(translated_text)
+            if verify != translated_text:
+                print("\tREPEATED:", translated_text)
+                print("\t     NOW:", verify)
+                translated_text = verify
             
             self.have_seen[english] = translated_text
         
         return translated_text
 
+    #
+    # Main translate text function.  Checks if it is a menu and translates
+    # each menu entry separately.
+    #
     def translate_text(self, english):
         if '/' in english and len(english) < 30:
             replaced = english.replace('&','')
@@ -127,7 +187,9 @@ class POTranslator:
     
         # Tokenize the input text
         print(f"Original: {english}")
-        translated_text = _translate_text(english)
+        translated_text = self._translate_text(english)
+        if 'QUERY LENGTH' in translated_text:
+            return english
         print(f"Translated: {translated_text}")
         return translated_text
 
@@ -147,14 +209,6 @@ class POTranslator:
                     translated = self.translate_text(entry.msgid)
                     entry.msgstr = translated
 
-                # Verify repeated two letter characters
-                if entry.msgid and entry.msgstr:
-                    verify = self.verify_text(entry.msgstr)
-                    if verify != entry.msgstr:
-                        print("REPEATED:",entry.msgstr)
-                        print("     NOW:", verify)
-                        entry.msgstr = verify
-
                 # Check to see if it begins and ends with newlines
                 if entry.msgid[0] == '\n' and entry.msgstr[0] != '\n':
                     entry.msgstr = '\n' + entry.msgstr
@@ -162,12 +216,18 @@ class POTranslator:
                     entry.msgstr = entry.msgstr + '\n'
         except Exception as e:
             raise e
+        except KeyboardInterrupt:
+            pass
 
         # Save the translated .po file
         print(f'Saving.... {po_output}')
-        po.save(po_output)
+        po.save()
 
-
+    def __del__(self):
+        # Unload the model to free memory
+        del self.model
+        del self.tokenizer
+        
 main_po = f'mrv2/po/{lang}'
 POTranslator(main_po)
 
@@ -181,3 +241,11 @@ for plugin in plugins:
     plugin_po = f'mrv2/po/python/plug-ins/locale/{lang}/LC_MESSAGES/{plugin}'
     print('Translating plugin',plugin)
     POTranslator(plugin_po)
+
+
+# Clear cached data in PyTorch
+torch.cuda.empty_cache()  # Clears GPU memory if used
+
+# Run garbage collection
+gc.collect()
+

@@ -167,7 +167,7 @@ msgstr "Obtiene los cuadros por segundo en la línea de tiempo."
 
 msgid "Gets the default speed of the timeline."
 msgstr ""
-"Obtiene la velocidad (cuadros por segundo) por defecto de la línea de tiempo."
+"Obtiene la velocidad (cuadros por segundo) estándar de la línea de tiempo."
 
 msgid "Set current FPS of timeline."
 msgstr "Setea la velocidad (cuadros por segundo) de la línea de tiempo."
@@ -1672,10 +1672,10 @@ msgstr ""
 "comillas similar a:\"arg1 'arg2 asd' arg3\", stored in cmd.argv."
 
 msgid "Reset settings to defaults."
-msgstr "Resetar seteos a su valor por defecto."
+msgstr "Resetar seteos a su valor estándar."
 
 msgid "Reset hotkeys to defaults."
-msgstr "Resetar teclas a los valores por defecto."
+msgstr "Resetar teclas a los valores estándar."
 
 msgid "Start a server.  Use -port to specify a port number."
 msgstr "Cree un servidor.  Use -port para especificar un número de puerto."
@@ -2055,14 +2055,14 @@ msgstr ""
 "la tecla Entrar y recargarla."
 
 msgid "Default Settings"
-msgstr "Seteos por Defecto"
+msgstr "Seteos Estándar"
 
 msgid ""
 "This will reset all your settings to their default.  Are you sure you want "
 "to continue?"
 msgstr ""
-"Esto reseteará todos sus seteos a su configuración por defecto.  ¿Está "
-"seguro que quiere continuar?"
+"Esto reseteará todos sus seteos a su configuración estándar.  ¿Está seguro "
+"que quiere continuar?"
 
 msgid "Drop a clip here to create a playlist."
 msgstr "LLeve un clip aquí para crear una lista de reproducción."
@@ -2306,10 +2306,10 @@ msgid "(NTSC Fields)"
 msgstr "(Campos NTSC)"
 
 msgid "Default Speed"
-msgstr "Velocidad por Defecto"
+msgstr "Velocidad Estándar"
 
 msgid "Default Speed in Frames per Second"
-msgstr "Velocidad por Defecto en Cuadros por Segundo"
+msgstr "Velocidad Estándar en Cuadros por Segundo"
 
 msgid "Current Speed"
 msgstr "Velocidad Actual"
@@ -3071,7 +3071,7 @@ msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Cargué teclas de manejo desde \"{0}{1}.prefs\"."
 
 msgid "Reseting hotkeys to default."
-msgstr "Reseteando teclas a los valores por defecto."
+msgstr "Reseteando teclas a los valores estándares."
 
 msgid "Path mappings have been saved to \"{0}mrv2.paths.prefs\"."
 msgstr "Mapeo de carpetas ha sido grabado en \"{0}mrv2.paths.prefs\"."
@@ -3092,7 +3092,7 @@ msgid "OCIO file \"{0}\" not found or not readable."
 msgstr "Config de OCIO \"{0}\" no existe o no es leíble."
 
 msgid "Setting OCIO config to default:"
-msgstr "Seteando OCIO config a defecto:"
+msgstr "Seteando OCIO config estándar:"
 
 msgid "Setting OCIO config to built-in:"
 msgstr "Seteando OCIO config a incorporada:"
@@ -3154,6 +3154,9 @@ msgstr "Inglés"
 msgid "Spanish"
 msgstr "Español"
 
+msgid "German"
+msgstr "Alemán"
+
 msgid "Chinese Simplified"
 msgstr "Chino Simplificado"
 
@@ -3207,9 +3210,6 @@ msgstr "Francés"
 
 msgid "Galician"
 msgstr "Gallego"
-
-msgid "German"
-msgstr "Alemán"
 
 msgid "Greek"
 msgstr "Griego"
@@ -3385,7 +3385,7 @@ msgid "Load OCIO Config"
 msgstr "Cargar Configuración OCIO"
 
 msgid "Default"
-msgstr "Defecto"
+msgstr "Estándar"
 
 msgid "Annotations"
 msgstr "Anotaciones"
@@ -4380,7 +4380,7 @@ msgid "Edit/&Copy"
 msgstr "Editar/&Copiar"
 
 msgid "Reset to default value"
-msgstr "Resetar a su valor por defecto."
+msgstr "Resetar a su valor estándar."
 
 msgid "&File/&Clone"
 msgstr "&Archivo/&Clonar"
@@ -5160,7 +5160,7 @@ msgid "Looping mode (Loop, Once, Ping-Pong)"
 msgstr "Modo de Bucle (Bucle, Una vez, Ping-Pong)"
 
 msgid "Some default frame rate settings."
-msgstr "Algunos seteos por defector de cuadros por segundo."
+msgstr "Algunos seteos estándares de cuadros por segundo."
 
 msgid "Allows you to adjust frame rate playback."
 msgstr "Te permite ajustar la velocidad de reprodución."
@@ -5305,7 +5305,7 @@ msgstr "Herramienta de Flecha"
 
 msgid "Text Tool.   Right click to edit previously stamped text."
 msgstr ""
-"Herramienta de Texto.  Cliquee con el botón defecho para editar texto "
+"Herramienta de Texto.  Cliquee con el botón derecho para editar texto "
 "previamente estampado."
 
 msgid "Old Color Used.  Click on the Arrow to alternate."
@@ -5579,7 +5579,7 @@ msgid ""
 "This will reset all your preferences to their default values.  Are you sure "
 "you want to continue?"
 msgstr ""
-"Esto reseteará todas sus preferencias a sus valores por defecto.  ¿Está "
+"Esto reseteará todas sus preferencias a sus valores estándares.  ¿Está "
 "seguro que quiere continuar?"
 
 msgid "User Interface"
@@ -5722,20 +5722,21 @@ msgid "View Window"
 msgstr "Ventana de Vista"
 
 msgid "Defaults"
-msgstr "Valores por Defecto"
+msgstr "Valores Estándares"
 
 msgid "Sets the default gain when mrv2 starts."
-msgstr "Establece la ganancia por defecto cuando mrv2 comienza."
+msgstr "Establece la ganancia estándar cuando mrv2 comienza."
 
 msgid "Sets the default gamma when mrv2 starts."
-msgstr "Establece la gama por defecto cuando mrv2 comienza."
+msgstr "Establece la gama estándar cuando mrv2 comienza."
 
 msgid "Crop"
 msgstr "Recorte"
 
+#, fuzzy
 msgid "Allows you to select a standard cropping area around image."
 msgstr ""
-"Te permite seleccionar un area de recorte standard alrededor de la imagen."
+"Te permite seleccionar un area de recorte estándar alrededor de la imagen."
 
 msgid "Auto Frame"
 msgstr "Encuadrar Cuadro"
@@ -5748,8 +5749,7 @@ msgstr "Áreas Seguras"
 
 msgid "When mrv2 starts, the safe area display will be active by default."
 msgstr ""
-"Cuando mrv2 comience, el display de las areas seguras estará activo por "
-"defecto."
+"Cuando mrv2 comience, el display de las areas seguras estará activo estándar."
 
 msgid "Zoom Speed"
 msgstr "Velocidad de Zoom"
@@ -5967,13 +5967,13 @@ msgid "Edit Viewport"
 msgstr "Ventana de Edición"
 
 msgid "How to display timeline thumbnails by default."
-msgstr "Como mostrar la miniatura de la línea de tiempo por defecto."
+msgstr "Como mostrar la miniatura de la línea de tiempo estándar."
 
 msgid "Display"
 msgstr "Display"
 
 msgid "How to display timeline by default."
-msgstr "Como mostrar la línea de tiempo por defecto."
+msgstr "Como mostrar la línea de tiempo estándar."
 
 msgid "Start in Edit mode"
 msgstr "Comenzar en Modo de Edición"
@@ -6044,7 +6044,7 @@ msgid "Looping Mode"
 msgstr "Modo de Bucle"
 
 msgid "Select default looping mode in timeline."
-msgstr "Selecionar modo de bucle por defecto en la línea de tiempo."
+msgstr "Selecionar modo de bucle estándar en la línea de tiempo."
 
 msgid "Scrub Sensitivity"
 msgstr "Sensitividad de Fregado"
@@ -6059,7 +6059,7 @@ msgstr ""
 "valores más altos hacen lo opuesto."
 
 msgid "Default View"
-msgstr "Vista por Defecto"
+msgstr "Vista estándar"
 
 msgid "Show Transitions"
 msgstr "Mostrar Transiciones"
@@ -6118,7 +6118,7 @@ msgstr ""
 "active_displays: no son tomados en consideración."
 
 msgid "OCIO Defaults"
-msgstr "OCIO por Defecto"
+msgstr "OCIO estándar"
 
 msgid "8-bits"
 msgstr "8-bits"
@@ -6128,8 +6128,8 @@ msgid ""
 "etc)\n"
 "(Environment variable: MRV_OCIO_8bits_ICS)"
 msgstr ""
-"El nombre OCIO por defecto del expecio de color de la imágenes de 8-bits "
-"(jpg, png, etc)\n"
+"El nombre OCIO estándar del expecio de color de la imágenes de 8-bits (jpg, "
+"png, etc)\n"
 "(Variable de entorno: MRV_OCIO_8bits_ICS)"
 
 msgid "16-bits"
@@ -6140,8 +6140,8 @@ msgid ""
 "etc)\n"
 "(Environment variable: MRV_OCIO_16bits_ICS)"
 msgstr ""
-"El nombre OCIO por defecto del expecio de color de la imagen para 16-bits "
-"(cin, tiff, etc)\n"
+"El nombre OCIO estándar del expecio de color de la imagen para 16-bits (cin, "
+"tiff, etc)\n"
 "(Variable de entorno: MRV_OCIO_16bits_ICS)"
 
 msgid "32-bits"
@@ -6152,8 +6152,8 @@ msgid ""
 "(openexr integers, etc)\n"
 "(Environment variable: MRV_OCIO_32bits_ICS)"
 msgstr ""
-"El nombre OCIO por defecto del expecio de color de la imagen para enteros de "
-"32-bits (enteros openexr, etc)\n"
+"El nombre OCIO estándar del expecio de color de la imagen para enteros de 32-"
+"bits (enteros openexr, etc)\n"
 "(Variable de entorno: MRV_OCIO_32bits_ICS)"
 
 msgid "half"
@@ -6163,7 +6163,7 @@ msgid ""
 "The name of the OCIO default image color space for OpenEXR half images\n"
 "(Environment variable: MRV_OCIO_half_ICS)"
 msgstr ""
-"El nombre OCIO por defecto del expecio de color de las imágenes half de "
+"El nombre OCIO estándar del expecio de color de las imágenes half de "
 "OpenEXR\n"
 "(Variable de entorno: MRV_OCIO_half_ICS)"
 
@@ -6175,18 +6175,18 @@ msgid ""
 "(OpenEXR, dpx, etc)\n"
 "(Environment variable: MRV_OCIO_float_ICS)"
 msgstr ""
-"El nombre OCIO por defecto del expecio de color para imágenes float o half "
+"El nombre OCIO estándar del expecio de color para imágenes float o half "
 "(OpenEXR, dpx, etc)\n"
 "(Variable de entorno: MRV_OCIO_float_ICS)"
 
 msgid "Default Look"
-msgstr "Look por Defecto"
+msgstr "Look estándar"
 
 msgid "Display / View"
 msgstr "Display / Vista"
 
 msgid "Default Display / View"
-msgstr "Display / Vista por Defecto"
+msgstr "Display / Vista estándar"
 
 msgid "Loading"
 msgstr "Cargando"
@@ -6202,10 +6202,10 @@ msgid ""
 "gizmo_v001.0001.exr"
 msgstr ""
 "Expresión regular usada para distinguir versiones del clip.  Debe tener tres "
-"groupos (prefijo, número y sufijo).  Si se deja en su valor por defecto "
-"(_v), automáticamente se creará una para encontrar versiones que definidas "
-"con _v en el nombre del archivo, la carpeta o ambos. Por ejemplo: "
-"gizmo_v001.0001.exr"
+"groupos (prefijo, número y sufijo).  Si se deja en su valor estándar (_v), "
+"automáticamente se creará una para encontrar versiones que definidas con _v "
+"en el nombre del archivo, la carpeta o ambos. Por ejemplo: gizmo_v001.0001."
+"exr"
 
 msgid "Maximum Images Apart"
 msgstr "Máximas Imágenes Aparte"
@@ -6367,7 +6367,7 @@ msgid "Allows you to automatically download updates of mrv2 when it starts up."
 msgstr "Permite automaticamente bajar actualizaciones de mrv2 al comenzar."
 
 msgid "Reset settings to the default."
-msgstr "Resetar seteos a su valor por defecto."
+msgstr "Resetar seteos a su valor estándar."
 
 msgid "Revert"
 msgstr "Revertir"
@@ -6419,13 +6419,13 @@ msgid "No Audio Devices were Found"
 msgstr "No se encontraron Equipos de Audio"
 
 msgid "Default API"
-msgstr "API por Defecto"
+msgstr "API estándar"
 
 msgid "No Valid Devices found"
 msgstr "No se encontraron Equipos de Audio"
 
 msgid "Default Device"
-msgstr "Equipo de Audio por Defecto"
+msgstr "Equipo de Audio estándar"
 
 msgid "Remote to Local Path Mapping"
 msgstr "Remota a Local Mapeo de Carpetas"
@@ -6457,8 +6457,8 @@ msgid ""
 "bits, half and float images. "
 msgstr ""
 "Seleccione, Agregue o Borre un Preseteo OCIO que guarda: archivo de config, "
-"Espacio de Color de Entrada, Vista, Look, seteos LUT y valores por Defecto "
-"para imágenes de 8-bits, 16-bits, 32-bits, half y float."
+"Espacio de Color de Entrada, Vista, Look, seteos LUT y valores estándar para "
+"imágenes de 8-bits, 16-bits, 32-bits, half y float."
 
 msgid "Summary"
 msgstr "Resumen"
@@ -6476,7 +6476,7 @@ msgid "Key"
 msgstr "Tecla"
 
 msgid "Reset hotkeys to mrv2's default configuration."
-msgstr "Resetar teclas a los valores por defecto."
+msgstr "Resetar teclas a los valores estándares."
 
 msgid "Reload"
 msgstr "Recargar"

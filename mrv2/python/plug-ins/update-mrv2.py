@@ -49,8 +49,6 @@ try:
     _ = translator.gettext
 except Exception as e:
     print(e)
-    print("root",root)
-    print("Looking in " + locale + '/' + language + '/LC_MESSAGES')
     def _gettext(text):
         return text
     _ = _gettext
