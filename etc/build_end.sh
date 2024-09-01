@@ -14,7 +14,7 @@ if [[ "$CMAKE_TARGET" == "package" ]]; then
     if [[ $KERNEL == *Msys* ]]; then
 	send_to_packages "mrv2-v${mrv2_VERSION}-Windows-${ARCH}.exe"
 	send_to_packages "mrv2-v${mrv2_VERSION}-Windows-${ARCH}.zip"
-	. etc/windows_signing_installer.sh
+	. etc/windows/windows_signing_installer.sh
     elif [[ $KERNEL == *Darwin* ]]; then
 	send_to_packages "mrv2-v${mrv2_VERSION}-Darwin-${ARCH}.dmg"
 	# . etc/macos_signing_installer.sh
