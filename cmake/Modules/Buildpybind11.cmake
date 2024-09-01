@@ -25,6 +25,7 @@ ExternalProject_Add(
     pybind11
     GIT_REPOSITORY "https://github.com/pybind/pybind11"
     GIT_TAG ${pybind11_GIT_TAG}
+    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/deps/pybind11
     GIT_PROGRESS 1
     GIT_SHALLOW 1
     DEPENDS ${PYTHON_DEP}

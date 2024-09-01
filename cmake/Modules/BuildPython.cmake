@@ -85,6 +85,7 @@ endif()
 ExternalProject_Add(
     Python
     URL ${Python_URL}
+    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/deps/Python
     PATCH_COMMAND     "${Python_PATCH}"
     CONFIGURE_COMMAND "${Python_CONFIGURE}"
     BUILD_COMMAND     "${Python_BUILD}"

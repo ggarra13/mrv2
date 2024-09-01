@@ -10,6 +10,7 @@ ExternalProject_Add(
     libbacktrace
     GIT_REPOSITORY "https://github.com/ianlancetaylor/libbacktrace.git"
     GIT_TAG ${libbacktrace_TAG}
+    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/deps/libbacktrace
     CONFIGURE_COMMAND ./configure --prefix=${CMAKE_INSTALL_PREFIX}
     BUILD_IN_SOURCE 1
 )

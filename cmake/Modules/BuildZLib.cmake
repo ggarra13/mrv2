@@ -7,6 +7,7 @@ include( ExternalProject )
 ExternalProject_Add(
     ZLIB_SHARED
     URL "https://zlib.net/fossils/zlib-1.2.11.tar.gz"
+    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/deps/ZLIB
     CMAKE_ARGS
     -DCMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHIECTURES}
     -DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET}

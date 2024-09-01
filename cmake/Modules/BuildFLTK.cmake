@@ -57,6 +57,7 @@ endif()
     
 ExternalProject_Add(
     FLTK
+    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/deps/FLTK
     GIT_REPOSITORY "https://github.com/fltk/fltk.git"
     GIT_TAG ${FLTK_GIT_TAG}
     DEPENDS tlRender

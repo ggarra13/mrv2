@@ -107,6 +107,7 @@ ExternalProject_Add(
     #       so we need to DOWNLOAD_COMMAND for checking out the repository.
     # SVN_REPOSITORY ${pyFLTK_SVN_REPOSITORY}
     # SVN_REVISION ${pyFLTK_SVN_REVISION}
+    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/deps/pyFLTK
     DEPENDS ${PYTHON_DEP} ${FLTK_DEP}
     DOWNLOAD_COMMAND  "${pyFLTK_CHECKOUT_CMD}"
     PATCH_COMMAND     ${pyFLTK_PATCH}
