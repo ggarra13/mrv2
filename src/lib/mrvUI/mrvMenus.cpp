@@ -1206,16 +1206,16 @@ namespace mrv
 
         menu->add(_("OCIO/Current"), 0, 0, nullptr, FL_MENU_INACTIVE);
         snprintf(buf, 1024, _("OCIO/         ICS: %s"), ics.c_str());
-        menu->add(buf, 0, 0, nullptr, FL_MENU_INACTIVE);
+        menu->add(buf, 0, 0, nullptr);
 
         int num_screens = Fl::screen_count();
         const timeline::OCIOOptions& o = uiView->getOCIOOptions();
         if (num_screens == 1)
         {
             snprintf(buf, 1024, _("OCIO/     Display: %s"), o.display.c_str());
-            menu->add(buf, 0, 0, nullptr, FL_MENU_INACTIVE);
+            menu->add(buf, 0, 0, nullptr);
             snprintf(buf, 1024, _("OCIO/        View: %s"), o.view.c_str());
-            menu->add(buf, 0, 0, nullptr, FL_MENU_INACTIVE);
+            menu->add(buf, 0, 0, nullptr);
         }
         else
         {
@@ -1237,9 +1237,9 @@ namespace mrv
                 const timeline::OCIOOptions& o = uiView->getOCIOOptions(0);
                 snprintf(
                     buf, 1024, _("OCIO/     Display: %s"), o.display.c_str());
-                menu->add(buf, 0, 0, nullptr, FL_MENU_INACTIVE);
+                menu->add(buf, 0, 0, nullptr);
                 snprintf(buf, 1024, _("OCIO/        View: %s"), o.view.c_str());
-                menu->add(buf, 0, 0, nullptr, FL_MENU_INACTIVE);
+                menu->add(buf, 0, 0, nullptr);
             }
             else
             {
@@ -1250,17 +1250,17 @@ namespace mrv
                     snprintf(
                         buf, 1024, _("OCIO/  Monitor #%d Display: %s"), m,
                         o.display.c_str());
-                    menu->add(buf, 0, 0, nullptr, FL_MENU_INACTIVE);
+                    menu->add(buf, 0, 0, nullptr);
                     snprintf(
                         buf, 1024, _("OCIO/  Monitor #%d    View: %s"), m,
                         o.view.c_str());
-                    menu->add(buf, 0, 0, nullptr, FL_MENU_INACTIVE);
+                    menu->add(buf, 0, 0, nullptr);
                 }
             }
         }
 
         snprintf(buf, 1024, _("OCIO/        Look: %s"), look.c_str());
-        menu->add(buf, 0, 0, nullptr, FL_MENU_INACTIVE | FL_MENU_DIVIDER);
+        menu->add(buf, 0, 0, nullptr, FL_MENU_DIVIDER);
 
         menu->add(
             _("OCIO/Change Current File"), 0, 0, nullptr, FL_MENU_INACTIVE);
