@@ -5337,7 +5337,7 @@ msgstr ""
 " gama visvel."
 
 msgid "Pixel Toolbar"
-msgstr "Barra de Ferramentas do Pixel"
+msgstr "Barra do Pixel"
 
 msgid "When selected, mrv2 will start with the pixel toolbar shown."
 msgstr ""

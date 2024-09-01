@@ -99,6 +99,13 @@ mrv2 supporta varios modos para cargar secuencias y películas.  Puede mezclar v
 .. note::
     Secuencias de imágenes (una serie de archivos JPEG o TGA) por defecto usan 24 FPS (puede ajustarlo en **Window->Preferencias->Reproducir**). La velocidad de DPX and EXRs es tomada de los metadatos si está disponible.
 
+.. note::
+   Para cargar todos los archivos uno seguido del otro use la opción -otio o
+   -edl::
+     
+     mrv2 -edl movie1.mov movie2.mov movie3.mov
+
+     
 Mirando Medios
 --------------
 
