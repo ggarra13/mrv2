@@ -71,9 +71,9 @@ jobs:
       run: |
         ./etc/runme_nolog.sh -gpl -t package
 
-    # - name: Upload binaries
+    # - name: Release/Upload binaries
     #   run: |
-    #     ./bin/upload_sourceforge.sh
+    #     ./bin/release/upload_sourceforge.sh
 
   windows-gpl-build:
     runs-on: windows-2019
@@ -117,9 +117,9 @@ jobs:
       run: |
         ./etc/runme_nolog.sh -gpl -t package -D TLRENDER_USD=OFF
       
-    # - name: Upload binaries
+    # - name: Release/Upload binaries
     #   run: |
-    #     ./bin/upload_sourceforge.sh
+    #     ./bin/release/upload_sourceforge.sh
 
 
   macos-gpl-build:
@@ -164,9 +164,9 @@ jobs:
       run: |
         ./etc/runme_nolog.sh -gpl -t package
 
-    # - name: Upload binaries
+    # - name: Release/Upload binaries
     #   run: |
-    #     ./bin/upload_sourceforge.sh
+    #     ./bin/release/upload_sourceforge.sh
 
   macos-14-gpl-build:
     runs-on: macos-14
@@ -216,7 +216,7 @@ jobs:
       run: |
         ./etc/runme_nolog.sh -gpl -t package
 
-    - name: Upload binaries
+    - name: Release/Upload binaries
       run: |
-        ./bin/upload_sourceforge.sh
+        ./bin/release/upload_sourceforge.sh
 

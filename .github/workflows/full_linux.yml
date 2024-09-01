@@ -85,4 +85,4 @@ jobs:
       
     - name: Upload binaries  # Conditional step
       run: |
-        ./bin/upload_sourceforge.sh
+        ./bin/release/upload_sourceforge.sh

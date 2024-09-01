@@ -67,9 +67,9 @@ jobs:
       run: |
         ./etc/runme_nolog.sh -D TLRENDER_USD=OFF -D TLRENDER_FFMPEG=OFF -D MRV2_PDF=OFF -D MRV2_NETWORK=OFF -D MRV2_PYBIND11=ON -D BUILD_PYTHON=ON -D TLRENDER_EXR=OFF -D TLRENDER_RAW=OFF -D TLRENDER_TIFF=OFF -D TLRENDER_NET=ON
 
-    # - name: Upload binaries
+    # - name: Release/Upload binaries
     #   run: |
-    #     ./bin/upload_sourceforge.sh
+    #     ./bin/release/upload_sourceforge.sh
 
 
   windows-python-build:
@@ -114,9 +114,9 @@ jobs:
       run: |
         ./etc/runme_nolog.sh -D TLRENDER_USD=OFF -D TLRENDER_FFMPEG=OFF -D MRV2_PDF=OFF -D MRV2_NETWORK=OFF -D MRV2_PYBIND11=ON -D BUILD_PYTHON=ON -D TLRENDER_EXR=OFF -D TLRENDER_RAW=OFF -D TLRENDER_TIFF=OFF -D TLRENDER_NET=ON
       
-    # - name: Upload binaries
+    # - name: Release/Upload binaries
     #   run: |
-    #     ./bin/upload_sourceforge.sh
+    #     ./bin/release/upload_sourceforge.sh
 
 
   macos-python-build:
@@ -169,9 +169,9 @@ jobs:
       run:
         ./etc/runme_nolog.sh -D TLRENDER_USD=OFF -D TLRENDER_FFMPEG=OFF -D MRV2_PDF=OFF -D MRV2_NETWORK=OFF -D MRV2_PYBIND11=ON -D BUILD_PYTHON=ON -D TLRENDER_EXR=OFF -D TLRENDER_RAW=OFF -D TLRENDER_TIFF=OFF -D TLRENDER_NET=ON
 
-    # - name: Upload binaries
+    # - name: Release/Upload binaries
     #   run: |
-    #     ./bin/upload_sourceforge.sh
+    #     ./bin/release/upload_sourceforge.sh
 
 
   macos-14-python-build:

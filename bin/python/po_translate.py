@@ -20,6 +20,7 @@ VERSION = 1.0
 LANGUAGES = [
     'de',
     'fr',
+    'ja',
     'pt',
     'hi_IN',
     'zh-CN',
