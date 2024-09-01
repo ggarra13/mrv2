@@ -47,7 +47,7 @@ namespace fs = std::filesystem;
 namespace
 {
     const char* kModule = "prefs";
-    const int kPreferencesVersion = 8;
+    const int kPreferencesVersion = 9;
 } // namespace
 
 extern float kCrops[];
@@ -358,6 +358,9 @@ namespace mrv
         view.get("safe_areas", tmp, 0);
         uiPrefs->uiPrefsSafeAreas->value((bool)tmp);
 
+        view.get("ocio_in_top_bar", tmp, 0);
+        uiPrefs->uiPrefsOCIOInTopBar->value((bool)tmp);
+        
         view.get("video_levels", tmp, 0);
         uiPrefs->uiPrefsVideoLevels->value(tmp);
 
@@ -1229,6 +1232,7 @@ namespace mrv
 
         view.set("auto_frame", uiPrefs->uiPrefsAutoFrame->value());
         view.set("safe_areas", uiPrefs->uiPrefsSafeAreas->value());
+        view.set("ocio_in_top_bar", uiPrefs->uiPrefsOCIOInTopBar->value());
         view.set("video_levels", uiPrefs->uiPrefsVideoLevels->value());
         view.set("alpha_blend", uiPrefs->uiPrefsAlphaBlend->value());
         view.set("minify_filter", uiPrefs->uiPrefsMinifyFilter->value());

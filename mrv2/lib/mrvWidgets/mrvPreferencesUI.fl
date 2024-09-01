@@ -76,7 +76,7 @@ decl {\#include "mrvWidgets/mrvPopupMenu.h"} {public global
 decl {\#include "make_ocio_chooser.h"} {public global
 }
 
-decl {\#include "mrViewer.h"} {public global
+decl {\#include "mrViewer.h"} {selected public global
 }
 
 class PreferencesUI {open
@@ -88,8 +88,8 @@ class PreferencesUI {open
     Fl_Window uiMain {
       label Preferences
       user_data this user_data_type {PreferencesUI*} open
-      xywh {903 93 847 467} type Double hide resizable
-      code0 {main = m;}
+      xywh {903 93 847 467} type Double resizable
+      code0 {main = m;} visible
     } {
       Fl_Group {} {open
         xywh {0 0 853 466} box FLAT_BOX
@@ -190,8 +190,8 @@ If you try to open several mrv2s with different images, all these images will be
               }
             }
             Fl_Group {} {
-              label {View Window}
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
+              label {View Window} open
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {
                 label Defaults open
@@ -280,11 +280,16 @@ If you try to open several mrv2s with different images, all these images will be
                 Fl_Check_Button uiPrefsSafeAreas {
                   label {Safe Areas}
                   user_data this user_data_type {PreferencesUI*}
-                  tooltip {When mrv2 starts, the safe area display will be active by default.} xywh {685 166 20 20} box UP_BOX down_box DOWN_BOX align 4
+                  tooltip {When mrv2 starts, the safe area display will be active by default.} xywh {685 159 20 20} box UP_BOX down_box DOWN_BOX align 4
+                }
+                Fl_Check_Button uiPrefsOCIOInTopBar {
+                  label {OCIO in Top Bar}
+                  user_data this user_data_type {PreferencesUI*}
+                  tooltip {When mrv2 starts, OCIO should start in the top bar instead of color adjustments.} xywh {685 192 20 21} box UP_BOX down_box DOWN_BOX align 4
                 }
                 Fl_Choice uiPrefsZoomSpeed {
                   label {Zoom Speed}
-                  xywh {358 188 90 25} down_box BORDER_BOX align 1
+                  xywh {333 188 90 25} down_box BORDER_BOX align 1
                 } {
                   MenuItem {} {
                     label Slow
@@ -417,15 +422,15 @@ If you try to open several mrv2s with different images, all these images will be
               }
             }
             Fl_Group {} {
-              label {Language and Colors} open
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5
+              label {Language and Colors}
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label UI open
                 xywh {360 58 403 199} box ROUNDED_BOX
               } {
                 Fl_Choice uiLanguage {
-                  label Language selected
+                  label Language
                   xywh {508 78 160 25} down_box BORDER_BOX
                   code0 {auto languages = mrv::getLanguages(); std::string entry;}
                   code1 {for (const auto& language : languages) { entry = _(language.c_str()); entry += " (" + language + ")"; o->add(entry.c_str()); }}
@@ -1016,7 +1021,7 @@ v->uiPrefsFPS->value( g );}
               }
             }
             Fl_Group {} {
-              label OCIO
+              label OCIO open
               xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
@@ -1046,8 +1051,8 @@ else if (entry == _("CG"))
 else if (entry == _("Studio"))
 {
    v->uiPrefsOCIOConfig->value("ocio://studio-config-v1.0.0_aces-v1.3_ocio-v2.1");
-}} open
-                  xywh {477 101 119 32} down_box BORDER_BOX
+}}
+                  xywh {477 101 119 32} down_box BORDER_BOX when 7
                 } {
                   MenuItem {} {
                     label Default user_data_type {void*}
