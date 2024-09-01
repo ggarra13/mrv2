@@ -29,10 +29,10 @@ if __name__ == "__main__":
     if lang == 'en':
         copy_all = True
     
-    input_file = f"mrv2/po/{lang}.po"
+    input_file = f"src/po/{lang}.po"
     copy_msgid_to_msgstr(input_file, copy_all)
 
-    plugins_glob=f'mrv2/po/python/plug-ins/locale/{lang}/LC_MESSAGES/*.po'
+    plugins_glob=f'src/po/python/plug-ins/locale/{lang}/LC_MESSAGES/*.po'
     for plugin in glob.glob(plugins_glob):
         copy_msgid_to_msgstr(plugin, copy_all)
     
