@@ -68,7 +68,7 @@ foreach( LANGUAGE ${DOC_LANGUAGES} )
 	set(CLEAN_DOC_TARGET clean_doc_dir_${LANGUAGE})
 	add_custom_target(${CLEAN_DOC_TARGET}
 	    COMMAND ${CMAKE_COMMAND} -E remove_directory
-	    ${ROOT_DIR}/mrv2/docs/${LANGUAGE}
+	    ${ROOT_DIR}/src/docs/${LANGUAGE}
 	)
 	list( APPEND CLEAN_DOC_TARGETS ${CLEAN_DOC_TARGET} )
 
