@@ -190,7 +190,7 @@ class POTranslator:
     
         return (False, text)
 
-    def translate_text_with_google(self, english):
+    def translate_with_google(self, english):
         if len(english) < 4:
             return english
 
@@ -239,7 +239,7 @@ class POTranslator:
             # Print the translated text
             result = self.is_translation_invalid(translated_text)
             if result[0]:
-                translated_text = self.translate_text_with_google(english)
+                translated_text = self.translate_with_google(english)
             else:
                 translated_text = result[1]
 
@@ -288,7 +288,7 @@ class POTranslator:
                 if entry.msgid in DONT_TRANSLATE:
                     entry.msgstr = entry.msgid
                 elif 'GOOGLE' == entry.msgstr:
-                    translated = self.translate_text_with_google(entry.msgid)
+                    translated = self.translate_with_google(entry.msgid)
                     entry.msgstr = translated
                 elif entry.msgid and not entry.msgstr:
                     translated = self.translate_text(entry.msgid)
