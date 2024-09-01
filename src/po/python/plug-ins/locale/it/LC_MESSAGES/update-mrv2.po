@@ -1,0 +1,134 @@
+# Italian translations for mrv package.
+# Automatically generated, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: mrv 2-build\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Generated-By: pygettext.py 1.5\n"
+
+msgid ""
+"\n"
+"\n"
+"Install completed with output:\n"
+msgstr ""
+"\n"
+"Installazione completata con uscita:\n"
+
+msgid "Removed temporary \""
+msgstr "Rimosso temporaneo \""
+
+msgid "The new version of mrv2 was installed."
+msgstr "La nuova versione di mrv2 è stata installata."
+
+msgid "Could not locate mrv2 in:\n"
+msgstr "Impossibile localizzare mrv2 in:\n"
+
+msgid "Maybe you installed it in a non-default location."
+msgstr "Forse l'hai installato in una posizione non predefinita."
+
+msgid "Something failed installing mrv2 - It is not in \""
+msgstr "Qualcosa non è riuscito a installare mrv2 - Non è in \""
+
+msgid "Invalid ISO 8601 format provided: "
+msgstr "Formato ISO 8601 non valido fornito:"
+
+msgid "No file matching"
+msgstr "Nessun file corrispondente"
+
+msgid "was found"
+msgstr "è stato trovato"
+
+msgid "No match found"
+msgstr "Nessuna corrispondenza trovata"
+
+msgid "Install Location: "
+msgstr "Installa la posizione:"
+
+msgid "Error retrieving value:\n"
+msgstr "Errore nel recuperare il valore:\n"
+
+msgid "Unknown platform"
+msgstr "Piattaforma sconosciuta"
+
+msgid "Saving session:"
+msgstr "Sessione di salvataggio:"
+
+msgid "An unexpected error occurred:"
+msgstr "Si è verificato un errore inaspettato:"
+
+msgid "Trying to install"
+msgstr "Prova ad installare"
+
+msgid "Please wait"
+msgstr "Per favore, aspettate."
+
+msgid "Enter Sudo Password"
+msgstr "Inserisci la password di Sudo"
+
+msgid "Password"
+msgstr "Password"
+
+msgid "You will need to install file"
+msgstr "Avrai bisogno di installare il file"
+
+msgid "manually."
+msgstr "manualmente."
+
+msgid "Unknown operating system"
+msgstr "Sistema operativo sconosciuto"
+
+msgid "Downloading "
+msgstr "Scaricamento"
+
+msgid "Download seems to have failed!"
+msgstr "Il download sembra aver fallito!"
+
+msgid "Release Notes"
+msgstr "Note di rilascio"
+
+msgid "Current version is v"
+msgstr "La versione attuale è v"
+
+msgid "Latest version at Github is v"
+msgstr "Ultima versione a Github è v"
+
+msgid "Released on "
+msgstr "Rilasciato il"
+
+msgid "Ignore"
+msgstr "Ignorare"
+
+msgid "Error fetching latest release information:\n"
+msgstr "Errore nel recuperare le ultime informazioni di rilascio:\n"
+
+msgid "There's a new release but it has not been more than 5 days"
+msgstr "C'è un nuovo rilascio, ma non è stato più di 5 giorni"
+
+msgid "unknown date."
+msgstr "data sconosciuta."
+
+msgid "Update anyway"
+msgstr "Aggiorna comunque"
+
+msgid "Downgrade"
+msgstr "Riduzione"
+
+msgid "Upgrade"
+msgstr "Aggiornamento"
+
+msgid "No download url was found for"
+msgstr "Nessun download url è stato trovato per"
+
+msgid "No releases found for the specified repository."
+msgstr "Nessuna release trovata per il repository specificato."
+
+msgid "Help/Update mrv2"
+msgstr "Aiuto/Aggiornamento mrv2"

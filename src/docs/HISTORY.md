@@ -7,7 +7,7 @@ v1.2.6
 - Build fixes and directory clean-up.  If building from source, you should run
   a full rebuild with "runme.sh clean".
 - Improved packaging performance of Windows .exe and .zip files.
-- Added Portuguese and French translations done with AI.
+- Added Portuguese, Italian and French translations done with AI.
   
 
 v1.2.5

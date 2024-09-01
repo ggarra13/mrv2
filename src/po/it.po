@@ -1,0 +1,6876 @@
+# Italian translations for mrv2 package
+# This file is distributed under the same license as the mrv2 package.
+# Gonzalo Garramuño <ggarra13@gmail.com>, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: mrv2 v1.2.6\n"
+"Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
+"PO-Revision-Date: 2023-02-11 13:42-0300\n"
+"Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid ""
+"\n"
+"USD module.\n"
+"\n"
+"Contains all classes and enums related to USD (Universal Scene Description). \n"
+msgstr ""
+"\n"
+"Modulo USD. Contiene tutte le classi e enum relativi al USD (Descrizione della scena universale).\n"
+
+msgid "Renderer Name"
+msgstr "Nome del prestatore"
+
+msgid "Render Width"
+msgstr "Larghezza di resa"
+
+msgid "Models' complexity."
+msgstr "La complessità dei modelli."
+
+msgid "Draw mode  :class:`mrv2.usd.DrawMode`."
+msgstr "Modalità di disegno :classe:`mrv2.usd.DrawMode`."
+
+msgid "Enable Lighting"
+msgstr "Abilita illuminazione"
+
+msgid "Enable Scene Lights"
+msgstr "Abilita luci di scena"
+
+msgid "Enable Scene Materials"
+msgstr "Abilita i materiali della scena"
+
+msgid "Enable sRGB"
+msgstr "Abilita sRGB"
+
+msgid "Stage Cache Count"
+msgstr "Conteggio cache stadio"
+
+msgid "Disk Cache Byte Count"
+msgstr "Conteggio di byte di cache del disco"
+
+msgid "USD Render Options."
+msgstr "Opzioni di rendimenti in USD."
+
+msgid "Get USD Render Options."
+msgstr "Ottenere le opzioni di rendimenti USD."
+
+msgid "Set USD Render Options."
+msgstr "Impostare le opzioni di rendimenti in USD."
+
+msgid ""
+"\n"
+"UI module.\n"
+"\n"
+"Contains all classes and enums related to UI (User Interface). \n"
+msgstr ""
+"\n"
+"Modulo UI. Contiene tutte le classi e enum relativi all'UI (Interfaccia utente).\n"
+
+msgid "Refresh menus."
+msgstr "Aggiorna i menu."
+
+msgid ""
+"\n"
+"Timeline module.\n"
+"\n"
+"Contains all functions related to the timeline control.\n"
+msgstr ""
+"\n"
+"Modulo timeline. Contiene tutte le funzioni relative al controllo timeline.\n"
+
+msgid "Play forwards."
+msgstr "Gioca in avanti."
+
+msgid "Play backwards."
+msgstr "Gioca all'indietro."
+
+msgid "Seek to a time in timeline."
+msgstr "Cerca un momento nella linea temporale."
+
+msgid "Seek to a frame in timeline."
+msgstr "Cercare una cornice nella timeline."
+
+msgid "Seek to a second in timeline."
+msgstr "Cerca un secondo nella linea temporale."
+
+msgid "Time range of the timeline."
+msgstr "Intervallo temporale della timeline."
+
+msgid "Selected time range of the timeline."
+msgstr "Intervallo temporale selezionato della timeline."
+
+msgid "Set the selected time range of the timeline."
+msgstr "Imposta l' intervallo temporale selezionato della timeline."
+
+msgid "Set the in time of the selected time range of the timeline."
+msgstr "Imposta il tempo in cui la time range selezionata della timeline."
+
+msgid "Set the in frame of the selected time range of the timeline."
+msgstr ""
+"Imposta l'inquadratura dell' intervallo temporale selezionato della "
+"timeline."
+
+msgid "Set the in seconds of the selected time range of the timeline."
+msgstr ""
+"Impostare in secondi l' intervallo temporale selezionato della timeline."
+
+msgid "Set the out time of the selected time range of the timeline."
+msgstr ""
+"Imposta il tempo di uscita dell' intervallo temporale selezionato della "
+"timeline."
+
+msgid "Set the out frame of the selected time range of the timeline."
+msgstr ""
+"Imposta il quadro di out dell' intervallo temporale selezionato della "
+"timeline."
+
+msgid "Set the out seconds of the selected time range of the timeline."
+msgstr ""
+"Imposta i secondi fuori dell' intervallo temporale selezionato della "
+"timeline."
+
+msgid "Current time in timeline."
+msgstr "Ora attuale nella timeline."
+
+msgid "Current frame in timeline."
+msgstr "Cornice attuale nella timeline."
+
+msgid "Current seconds in timeline."
+msgstr "Secondi correnti nella timeline."
+
+msgid "Return current loop mode of timeline."
+msgstr "Restituisci la modalità corrente di loop della timeline."
+
+msgid "Set current loop mode of timeline."
+msgstr "Imposta la modalità corrente di loop della timeline."
+
+msgid "Gets the current FPS of timeline."
+msgstr "Ottiene l'attuale FPS della timeline."
+
+msgid "Gets the default speed of the timeline."
+msgstr "Ottiene la velocità predefinita della timeline."
+
+msgid "Set current FPS of timeline."
+msgstr "Imposta il FPS attuale della timeline."
+
+msgid "Value less than 0"
+msgstr "Valore inferiore a 0"
+
+msgid ""
+"\n"
+"Settings module.\n"
+"\n"
+"Contains all settings functions.\n"
+msgstr ""
+"\n"
+"Modulo Impostazioni. Contiene tutte le funzioni di impostazione.\n"
+
+msgid "Returns whether to check for updates at start up."
+msgstr "Restituisce se controllare per gli aggiornamenti all'avvio."
+
+msgid "Retrieve the cache memory setting in gigabytes."
+msgstr "Recupera l'impostazione della memoria cache in gigabyte."
+
+msgid "Set the cache memory setting in gigabytes."
+msgstr "Imposta l'impostazione della memoria cache in gigabyte."
+
+msgid "Retrieve Read Ahead cache in seconds."
+msgstr "Recuperare la cache Read Ahead in pochi secondi."
+
+msgid "Set Read Ahead cache in seconds."
+msgstr "Imposta la cache di lettura in anticipo in pochi secondi."
+
+msgid "Retrieve Read Behind cache in seconds."
+msgstr "Recuperare la cache Leggere dietro in pochi secondi."
+
+msgid "Set Read Behind cache in seconds."
+msgstr "Impostare Leggere dietro la cache in pochi secondi."
+
+msgid "Set file sequence audio."
+msgstr "Imposta la sequenza audio del file."
+
+msgid "Get file sequence audio."
+msgstr "Ottieni l'audio della sequenza di file."
+
+msgid "Set file sequence audio file name."
+msgstr "Imposta il nome del file audio della sequenza del file."
+
+msgid "Get file sequence audio file name."
+msgstr "Ottieni il nome del file audio della sequenza del file."
+
+msgid "Set file sequence audio directory."
+msgstr "Imposta la directory audio sequenza file."
+
+msgid "Get file sequence audio directory."
+msgstr "Ottieni la directory audio della sequenza di file."
+
+msgid "Set maximum file sequence digits."
+msgstr "Imposta le cifre massime della sequenza di file."
+
+msgid "Get maximum file sequence digits."
+msgstr "Ottieni le cifre massime della sequenza di file."
+
+msgid "Set Timer Mode."
+msgstr "Imposta la modalità Timer."
+
+msgid "Get Timer Mode."
+msgstr "Prendi la modalità Timer."
+
+msgid "Set Audio Buffer Frame Count."
+msgstr "Imposta il numero di fotogrammi del tampone audio."
+
+msgid "Get Audio Buffer Frame Count."
+msgstr "Ottieni il numero di fotogrammi del tampone audio."
+
+msgid "Set Video Request Count."
+msgstr "Imposta il conteggio delle richieste video."
+
+msgid "Get Video Request Count."
+msgstr "Ottieni il conteggio delle richieste video."
+
+msgid "Set Audio Request Count."
+msgstr "Imposta il numero delle richieste audio."
+
+msgid "Get Audio Request Count."
+msgstr "Ottieni il conteggio delle richieste audio."
+
+msgid "Set Sequence Thread Count."
+msgstr "Imposta il numero di file di sequenza."
+
+msgid "Get Sequence Thread Count."
+msgstr "Ottieni il numero di file di sequenza."
+
+msgid "Set FFmpeg YUV To RGB Conversion."
+msgstr "Imposta YUV FFmpeg in conversione RGB."
+
+msgid "Get FFmpeg YUV To RGB Conversion."
+msgstr "Ottenere YUV FFmpeg alla conversione RGB."
+
+msgid "Set FFmpeg Color Accuracy."
+msgstr "Impostare precisione colore FFmpeg."
+
+msgid "Get FFmpeg Color Accuracy."
+msgstr "Ottieni precisione a colori FFmpeg."
+
+msgid "Set FFmpeg Thread Count."
+msgstr "Imposta il conteggio dei filetti FFmpeg."
+
+msgid "Get FFmpeg Thread Count."
+msgstr "Fai contare i filetti di FFmpeg."
+
+msgid "No session name established, cannot save."
+msgstr "Nessun nome di sessione stabilito, non può salvare."
+
+msgid ""
+"\n"
+"Session module.\n"
+"\n"
+"Used to manage everything related to sessions.\n"
+msgstr ""
+"\n"
+"Modulo sessione. Utilizzato per gestire tutto ciò che riguarda le sessioni.\n"
+
+msgid "Returns the current session metadata."
+msgstr "Restituisce i metadati della sessione corrente."
+
+msgid "Returns the current metadata for a key."
+msgstr "Restituisce i metadati attuali per una chiave."
+
+msgid "Sets all the session metadata for a session."
+msgstr "Imposta tutti i metadati della sessione per una sessione."
+
+msgid "Sets the session metadata for a key."
+msgstr "Imposta i metadati della sessione per una chiave."
+
+msgid "Clears the current session metadata."
+msgstr "Cancella i metadati della sessione corrente."
+
+msgid "Returns current session file."
+msgstr "Restituisce il file di sessione corrente."
+
+msgid "Sets the current session file."
+msgstr "Imposta il file di sessione corrente."
+
+msgid "Open a session file."
+msgstr "Aprire un file di sessione."
+
+msgid "Save a session file."
+msgstr "Salva un file di sessione."
+
+msgid "Duplicated Python plugin {0} in {1} and {2}."
+msgstr "Complemento Python duplicato {0} in {1} e {2}."
+
+msgid ""
+"Expected a tuple containing a Python function and a string with menu options"
+" in it."
+msgstr ""
+"Atteso un tuple contenente una funzione Python e una stringa con le opzioni "
+"del menu in esso."
+
+msgid ""
+"Expected a handle to a Python function or to a tuple containing a Python "
+"function and a string with menu options in it."
+msgstr ""
+"Expected a handle to a Python function or to a tuple containing a Python "
+"function and a string with menu options in it."
+
+msgid ""
+"Please override the menus method by returning a valid dict of key menus, "
+"values methods."
+msgstr ""
+"Si prega di sovrascrivere il metodo dei menu restituendo un dict valido dei "
+"menu chiave, dei metodi di valori."
+
+msgid ""
+"\n"
+"Plugin module.\n"
+"\n"
+"Contains all classes related to python plugins.\n"
+"\n"
+msgstr ""
+"\n"
+"Modulo Plugin. Contiene tutte le classi relative ai plugin python.\n"
+
+msgid ""
+"Whether a plugin is active or not.  If not overriden, the default is True."
+msgstr ""
+"Se un plugin è attivo o no. Se non è sovraccaricato, il predefinito è True."
+
+msgid ""
+"\n"
+"Dictionary of menu entries with callbacks, like:\n"
+"\n"
+"def menus(self):\n"
+"    menus = { \"Nem Menu/Hello\" : self.run }\n"
+"    return menus\n"
+"\n"
+msgstr ""
+"\n"
+"Dizionario di voci di menu con callback, come: def menus(self): menus = { \"Nem Menu/Hello\" : self.run } menu di ritorno\n"
+
+msgid ""
+"\n"
+"\n"
+"import mrv2\n"
+"from mrv2 import plugin\n"
+"\n"
+"class DemoPlugin(plugin.Plugin):\n"
+"    def __init__(self):\n"
+"        \"\"\"\n"
+"        Constructor for DemoPlugin.\n"
+"\n"
+"        Define your own variables here.\n"
+"        \"\"\"\n"
+"        super().__init__()\n"
+"\n"
+"    def run(self):\n"
+"        \"\"\"\n"
+"        Example method used for the callback.\n"
+"        \"\"\"\n"
+"        print(\"Hello from Python plugin\")\n"
+"\n"
+"    def active(self):\n"
+"        \"\"\"\n"
+"        Optional method to return whether the plug-in is active or not.\n"
+"\n"
+"\n"
+"        :return: True if the plug-in is active, False otherwise.\n"
+"        :rtype: bool\n"
+"\n"
+"        \"\"\"\n"
+"        return True\n"
+"\n"
+"    def menus(self):\n"
+"        \"\"\"\n"
+"        Dictionary of menu entries as keys with callbacks as values.\n"
+"\n"
+"\n"
+"        :return: A dictionary of menu entries and their corresponding callbacks.\n"
+"        :rtype: dict\n"
+"\n"
+"        \"\"\"\n"
+"        menus = {\"New Menu/Hello\": self.run}\n"
+"        return menus\n"
+"\n"
+msgstr ""
+"\n"
+"import mrv2 from mrv2 import plugin class DemoPlugin(plugin.Plugin): def __init__(self): \"\"\" Constructor for DemoPlugin. Define your own variables here. \"\"\" super().__init__() def run(self): \"\"\" Example method used for the callback. \"\"\" print(\"Hello from Python plugin\") def active(self): \"\"\" Optional method to return whether the plug-in is active or not. :return: True if the plug-in is active, False otherwise. :rtype: bool \"\"\" return True def menus(self): \"\"\" Dictionary of menu entries as keys with callbacks as values. :return: A dictionary of menu entries and their corresponding callbacks. :rtype: dict \"\"\" menus = {\"New Menu/Hello\": self.run} return menus\n"
+
+msgid "No playlist matched item."
+msgstr "Nessuna playlist corrisponde all'elemento."
+
+msgid "No playlist matched file name."
+msgstr "Nessuna playlist corrisponde al nome del file."
+
+msgid "No playlist loaded."
+msgstr "Nessuna playlist caricata."
+
+msgid "No playlist selected."
+msgstr "Nessuna playlist selezionata."
+
+msgid "Not an EDL playlist to add clips to."
+msgstr "Non è una playlist EDL a cui aggiungere clip."
+
+msgid "Could not find clip in loaded clips."
+msgstr "Impossibile trovare il clip in clip caricati."
+
+msgid ""
+"\n"
+"Playlist module.\n"
+"\n"
+"Contains all functions and classes related to the playlists.\n"
+msgstr ""
+"\n"
+"Modulo playlist. Contiene tutte le funzioni e le classi relative alle playlist.\n"
+
+msgid "List playlist items."
+msgstr "Elenca gli elementi della playlist."
+
+msgid "Select a playlist by FileModelItem."
+msgstr "Selezionare una playlist per FileModelItem."
+
+msgid "Select a playlist by fileName."
+msgstr "Selezionare una playlist per fileName."
+
+msgid "Select a playlist by index."
+msgstr "Selezionare una playlist per indice."
+
+msgid "Add a clip to currently selected Playlist EDL."
+msgstr "Aggiungere una clip alla Playlist EDL attualmente selezionata."
+
+msgid "Save current .otio file with relative paths."
+msgstr "Salva file.otio corrente con percorsi relativi."
+
+msgid "unsupported operand type(s) for {0}: RationalTime and {1}"
+msgstr "tipo/i operandi non supportati per {0}: RationalTime e {1}"
+
+msgid ""
+"\n"
+"The RationalTime class represents a measure of time of :math:`rt.value/rt.rate` seconds.\n"
+"It can be rescaled into another :class:`~RationalTime`'s rate.\n"
+msgstr ""
+"\n"
+"La classe RationalTime rappresenta una misura del tempo di :math:`rt.value/rt.rate` secondi. Può essere ridimensionata in un altro :class:`~RationalTime`.\n"
+
+msgid ""
+"\n"
+"Returns true if the time is invalid. The time is considered invalid if the value or the rate are a NaN value\n"
+"or if the rate is less than or equal to zero.\n"
+msgstr ""
+"\n"
+"Returns true if the time is invalid. The time is considered invalid if the value or the rate are a NaN value or if the rate is less than or equal to zero.\n"
+
+msgid "Returns the time value for time converted to new_rate."
+msgstr "Restituisce il valore del tempo per il tempo convertito in new_rate."
+
+msgid "Returns the time for time converted to new_rate."
+msgstr "Restituisce il tempo per il tempo convertito in new_rate."
+
+msgid "Returns the time value for \"self\" converted to new_rate."
+msgstr "Restituisce il valore del tempo per \"self\" convertito in new_rate."
+
+msgid ""
+"\n"
+"Compute the duration of samples from first to last (excluding last). This is not the same as distance.\n"
+"\n"
+"For example, the duration of a clip from frame 10 to frame 15 is 5 frames. Result will be in the rate of start_time.\n"
+msgstr ""
+"\n"
+"Calcola la durata dei campioni dal primo all'ultimo (escluso l'ultimo). Questo non è lo stesso che la distanza. Ad esempio, la durata di un clip dal fotogramma 10 al fotogramma 15 è di 5 fotogrammi. Il risultato sarà nella velocità di start_time.\n"
+
+msgid ""
+"\n"
+"Compute the duration of samples from first to last (including last). This is not the same as distance.\n"
+"\n"
+"For example, the duration of a clip from frame 10 to frame 15 is 6 frames. Result will be in the rate of start_time.\n"
+msgstr ""
+"\n"
+"Calcola la durata dei campioni dal primo all'ultimo (incluso l'ultimo). Questo non è lo stesso che la distanza. Ad esempio, la durata di un clip dal fotogramma 10 al fotogramma 15 è di 6 fotogrammi. Il risultato sarà nella velocità di start_time.\n"
+
+msgid "Returns true if the rate is valid for use with timecode."
+msgstr "Restituisce true se la tariffa è valida per l'uso con timecode."
+
+msgid ""
+"Returns the first valid timecode rate that has the least difference from the"
+" given value."
+msgstr ""
+"Restituisce la prima frequenza di timecode valida che ha la minima "
+"differenza rispetto al valore dato."
+
+msgid "Turn a frame number and rate into a :class:`~RationalTime` object."
+msgstr ""
+"Trasformare un numero di fotogrammi e la velocità in un oggetto "
+":class:`~RationalTime`."
+
+msgid "Returns the frame number based on the current rate."
+msgstr "Restituisce il numero di fotogramma in base al tasso corrente."
+
+msgid "Returns the frame number based on the given rate."
+msgstr "Restituisce il numero di fotogramma in base al tasso indicato."
+
+msgid "Convert to timecode (``HH:MM:SS;FRAME``)"
+msgstr "Convertire in timecode (``HH:MM:SS;FRAME``)"
+
+msgid ""
+"Convert a timecode string (``HH:MM:SS;FRAME``) into a "
+":class:`~RationalTime`."
+msgstr ""
+"Converti una stringa di codice temporale (``HH:MM:SS;FRAME``) in una stringa"
+" :class:`~RationalTime`."
+
+msgid ""
+"Convert a time with microseconds string (``HH:MM:ss`` where ``ss`` is an "
+"integer or a decimal number) into a :class:`~RationalTime`."
+msgstr ""
+"Converti un tempo con stringa di microsecondi (``HH:MM:ss`` dove ``s`` è un "
+"numero intero o un numero decimale) in una :class:`~RationalTime`."
+
+msgid ""
+"\n"
+"The TimeRange class represents a range in time. It encodes the start time and the duration,\n"
+"meaning that :meth:`end_time_inclusive` (last portion of a sample in the time range) and\n"
+":meth:`end_time_exclusive` can be computed.\n"
+msgstr ""
+"\n"
+"La classe TimeRange rappresenta un intervallo temporale. Codifica l'ora di inizio e la durata, il che significa che :meth:`end_time_inclusive` (ultima porzione di un campione nell'intervallo temporale) e :meth:`end_time_exclusive` possono essere calcolati.\n"
+
+msgid ""
+"\n"
+"The time of the last sample containing data in the time range.\n"
+"\n"
+"If the time range starts at (0, 24) with duration (10, 24), this will be\n"
+"(9, 24)\n"
+"\n"
+"If the time range starts at (0, 24) with duration (10.5, 24):\n"
+"(10, 24)\n"
+"\n"
+"In other words, the last frame with data, even if the last frame is fractional.\n"
+msgstr ""
+"\n"
+"The time of the last sample containing data in the time range. If the time range starts at (0, 24) with duration (10, 24), this will be (9, 24) If the time range starts at (0, 24) with duration (10.5, 24): (10, 24) In other words, the last frame with data, even if the last frame is fractional.\n"
+
+msgid ""
+"\n"
+"Time of the first sample outside the time range.\n"
+"\n"
+"If start frame is 10 and duration is 5, then end_time_exclusive is 15,\n"
+"because the last time with data in this range is 14.\n"
+"\n"
+"If start frame is 10 and duration is 5.5, then end_time_exclusive is\n"
+"15.5, because the last time with data in this range is 15.\n"
+msgstr ""
+"\n"
+"Time of the first sample outside the time range. If start frame is 10 and duration is 5, then end_time_exclusive is 15, because the last time with data in this range is 14. If start frame is 10 and duration is 5.5, then end_time_exclusive is 15.5, because the last time with data in this range is 15.\n"
+
+msgid ""
+"Construct a new :class:`~TimeRange` that is this one extended by other."
+msgstr ""
+"Costruire un nuovo :class:`~TimeRange` che è questo esteso da un altro."
+
+msgid ""
+"\n"
+"Clamp 'other' (:class:`~RationalTime`) according to\n"
+":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
+msgstr ""
+"\n"
+"Clamp «altri» (:classe:`~Time razionale`) secondo :attr:`start_time`/:attr:`end_time_exclusive` e argomenti legati.\n"
+
+msgid ""
+"\n"
+"Clamp 'other' (:class:`~TimeRange`) according to\n"
+":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
+msgstr ""
+"\n"
+"Clamp «altro» (:classe:`~TimeRange`) secondo :attr:`start_time`/:attr:`end_time_exclusive` e argomenti legati.\n"
+
+msgid ""
+"\n"
+"The start of `this` precedes `other`.\n"
+"`other` precedes the end of `this`.\n"
+"::\n"
+"\n"
+"         other\n"
+"           |\n"
+"           *\n"
+"   [      this      ]\n"
+"\n"
+msgstr ""
+"\n"
+"L'inizio di 'questo' precede 'altri'. 'altri' precede la fine di 'questo'. :: altri * [ questo ]\n"
+
+msgid ""
+"\n"
+"The start of `this` precedes start of `other`.\n"
+"The end of `this` antecedes end of `other`.\n"
+"::\n"
+"\n"
+"        [ other ]\n"
+"   [      this      ]\n"
+"\n"
+"The converse would be ``other.contains(this)``\n"
+msgstr ""
+"\n"
+"The start of `this` precedes start of `other`. The end of `this` antecedes end of `other`. :: [ other ] [ this ] The converse would be ``other.contains(this)``\n"
+
+msgid ""
+"\n"
+"`this` contains `other`.\n"
+"::\n"
+"\n"
+"        other\n"
+"         |\n"
+"         *\n"
+"   [    this    ]\n"
+"\n"
+msgstr ""
+"\n"
+"\"questo\" contiene \"altri\". :: altri * [ questo ]\n"
+
+msgid ""
+"\n"
+"The start of `this` strictly precedes end of `other` by a value >= `epsilon_s`.\n"
+"The end of `this` strictly antecedes start of `other` by a value >= `epsilon_s`.\n"
+"::\n"
+"\n"
+"   [ this ]\n"
+"       [ other ]\n"
+"\n"
+"The converse would be ``other.overlaps(this)``\n"
+msgstr ""
+"\n"
+"The start of `this` strictly precedes end of `other` by a value >= `epsilon_s`. The end of `this` strictly antecedes start of `other` by a value >= `epsilon_s`. :: [ this ] [ other ] The converse would be ``other.overlaps(this)``\n"
+
+msgid ""
+"\n"
+"The end of `this` strictly precedes `other` by a value >= `epsilon_s`.\n"
+"::\n"
+"\n"
+"             other\n"
+"               |\n"
+"   [ this ]    *\n"
+"\n"
+msgstr ""
+"\n"
+"La fine di `questo` precede strettamente `altro` da un valore >= `epsilon_s`. :: altri [ questo ] *\n"
+
+msgid ""
+"\n"
+"The end of `this` strictly equals the start of `other` and\n"
+"the start of `this` strictly equals the end of `other`.\n"
+"::\n"
+"\n"
+"   [this][other]\n"
+"\n"
+"The converse would be ``other.meets(this)``\n"
+msgstr ""
+"\n"
+"The end of `this` strictly equals the start of `other` and the start of `this` strictly equals the end of `other`. :: [this][other] The converse would be ``other.meets(this)``\n"
+
+msgid ""
+"\n"
+"The start of `this` strictly equals `other`.\n"
+"::\n"
+"\n"
+"   other\n"
+"     |\n"
+"     *\n"
+"     [ this ]\n"
+"\n"
+msgstr ""
+"\n"
+"L'inizio di \"questo\" è strettamente uguale a \"altro\". :: altri * [ questo ]\n"
+
+msgid ""
+"\n"
+"The start of `this` strictly equals the start of `other`.\n"
+"The end of `this` strictly precedes the end of `other` by a value >= `epsilon_s`.\n"
+"::\n"
+"\n"
+"   [ this ]\n"
+"   [    other    ]\n"
+"\n"
+"The converse would be ``other.begins(this)``\n"
+msgstr ""
+"\n"
+"The start of `this` strictly equals the start of `other`. The end of `this` strictly precedes the end of `other` by a value >= `epsilon_s`. :: [ this ] [ other ] The converse would be ``other.begins(this)``\n"
+
+msgid ""
+"\n"
+"The end of `this` strictly equals `other`.\n"
+"::\n"
+"\n"
+"        other\n"
+"          |\n"
+"          *\n"
+"   [ this ]\n"
+"\n"
+msgstr ""
+"\n"
+"La fine di \"questo\" è strettamente uguale a \"altro\". :: altri * [ questo ]\n"
+
+msgid ""
+"\n"
+"The start of `this` strictly antecedes the start of `other` by a value >= `epsilon_s`.\n"
+"The end of `this` strictly equals the end of `other`.\n"
+"::\n"
+"\n"
+"           [ this ]\n"
+"   [     other    ]\n"
+"\n"
+"The converse would be ``other.finishes(this)``\n"
+msgstr ""
+"\n"
+"The start of `this` strictly antecedes the start of `other` by a value >= `epsilon_s`. The end of `this` strictly equals the end of `other`. :: [ this ] [ other ] The converse would be ``other.finishes(this)``\n"
+
+msgid ""
+"\n"
+"The start of `this` precedes or equals the end of `other` by a value >= `epsilon_s`.\n"
+"The end of `this` antecedes or equals the start of `other` by a value >= `epsilon_s`.\n"
+"::\n"
+"\n"
+"   [    this    ]           OR      [    other    ]\n"
+"        [     other    ]                    [     this    ]\n"
+"\n"
+"The converse would be ``other.finishes(this)``\n"
+msgstr ""
+"\n"
+"The start of `this` precedes or equals the end of `other` by a value >= `epsilon_s`. The end of `this` antecedes or equals the start of `other` by a value >= `epsilon_s`. :: [ this ] OR [ other ] [ other ] [ this ] The converse would be ``other.finishes(this)``\n"
+
+msgid ""
+"\n"
+"Creates a :class:`~TimeRange` from start and end :class:`~RationalTime`\\s (exclusive).\n"
+"\n"
+"For example, if start_time is 1 and end_time is 10, the returned will have a duration of 9.\n"
+msgstr ""
+"\n"
+"Crea un :class:`~TimeRange` dall'inizio e dalla fine :class:`~RationalTime`\\s (esclusivo). Per esempio, se start_time è 1 e end_time è 10, il ritorno avrà una durata di 9.\n"
+
+msgid ""
+"\n"
+"Creates a :class:`~TimeRange` from start and end :class:`~RationalTime`\\s (inclusive).\n"
+"\n"
+"For example, if start_time is 1 and end_time is 10, the returned will have a duration of 10.\n"
+msgstr ""
+"\n"
+"Crea un :class:`~TimeRange` dall'inizio e dalla fine :class:`~RationalTime`\\s (incluso). Per esempio, se start_time è 1 e end_time è 10, il ritorno avrà una durata di 10.\n"
+
+msgid ""
+"\n"
+"Media module.\n"
+"\n"
+"Contains all classes and enums related to media. \n"
+msgstr ""
+"\n"
+"Modulo multimediale. Contiene tutte le classi e enum relativi ai media.\n"
+
+msgid "Compare mode :class:`mrv2.media.CompareMode`."
+msgstr "Confronta la modalità :class:`mrv2.media.CompareMode`."
+
+msgid "Wipe center in X and Y :class:`mrv2.math.Vector2f`."
+msgstr "Centro di pulitura in X e Y:classe:`mrv2.math.Vector2f`."
+
+msgid "Wipe Rotation."
+msgstr "Pulisci la rotazione."
+
+msgid "Overlay ( A over B )"
+msgstr "Sovrapposizione ( A over B )"
+
+msgid "Comparison options."
+msgstr "Opzioni di confronto."
+
+msgid ""
+"\n"
+"Math module.\n"
+"\n"
+"Contains all math classes.\n"
+msgstr ""
+"\n"
+"Contiene tutte le lezioni di matematica.\n"
+
+msgid "Vector of 2 integers."
+msgstr "Vettore di 2 interi."
+
+msgid "Vector of 2 floats."
+msgstr "Vettore di 2 galleggianti."
+
+msgid "Vector of 3 floats."
+msgstr "Vettore di 3 galleggianti."
+
+msgid "Vector of 4 floats."
+msgstr "Vettore di 4 galleggianti."
+
+msgid "Size of 2 integers."
+msgstr "Dimensioni di 2 interi."
+
+msgid ""
+"\n"
+"Image module.\n"
+"\n"
+"Contains all classes and enums related to image controls. \n"
+msgstr ""
+"\n"
+"Modulo immagine. Contiene tutte le classi e enum relativi ai controlli immagine.\n"
+
+msgid "Red Channel."
+msgstr "Canale Rosso."
+
+msgid "Green Channel."
+msgstr "Canale verde."
+
+msgid "Blue Channel."
+msgstr "Canale Blu."
+
+msgid "Alpha Channel."
+msgstr "Canale Alfa."
+
+msgid "Image mirroring."
+msgstr "Mirrorazione dell'immagine."
+
+msgid "Flip image on X."
+msgstr "Gira l'immagine su X."
+
+msgid "Flip image on Y."
+msgstr "Gira l'immagine su Y."
+
+msgid "Enabled Levels."
+msgstr "Livelli abilitati."
+
+msgid "Add a :class:`mrv2.math.Vector3f` to image."
+msgstr "Aggiungere un :class:`mrv2.math.Vector3f` all`immagine."
+
+msgid "Change a :class:`mrv2.math.Vector3f` of brightness to image."
+msgstr "Cambia a :class:`mrv2.math.Vector3f` di luminosità in immagine."
+
+msgid "Change a :class:`mrv2.math.Vector3f` of contrast to image."
+msgstr "Cambia a :class:`mrv2.math.Vector3f` di contrasto con l'immagine."
+
+msgid "Change a :class:`mrv2.math.Vector3f` of saturation to image."
+msgstr "Cambia a :class:`mrv2.math.Vector3f` di saturazione in immagine."
+
+msgid "Change tint of image to image between 0 and 1."
+msgstr "Cambia il colore dell'immagine in immagine tra 0 e 1."
+
+msgid "Invert the color values."
+msgstr "Inverti i valori di colore."
+
+msgid "Color values."
+msgstr "Valori di colore."
+
+msgid "In Low Level value."
+msgstr "In valore di basso livello."
+
+msgid "In High Level value."
+msgstr "In valore di alto livello."
+
+msgid "Gamma Level value."
+msgstr "Valore del livello gamma."
+
+msgid "Out Low Level value."
+msgstr "Esci Valore di basso livello."
+
+msgid "Out High Level value."
+msgstr "Fuori valore di alto livello."
+
+msgid "Levels values."
+msgstr "Valori dei livelli."
+
+msgid "Enabled EXR display."
+msgstr "Display EXR abilitato."
+
+msgid "Exposure value."
+msgstr "Valore dell'esposizione."
+
+msgid "Defog value."
+msgstr "Valore di defog."
+
+msgid "kneeLow value."
+msgstr "Il valore del ginocchio è basso."
+
+msgid "kneeHigh value."
+msgstr "ginocchioAlto valore."
+
+msgid "EXR display values."
+msgstr "Valori di visualizzazione EXR."
+
+msgid "Enabled Soft Clip."
+msgstr "Clip morbido abilitato."
+
+msgid "Soft clip value."
+msgstr "Valore del clip morbido."
+
+msgid "Minify filter :class:`mrv2.image.ImageFilter`."
+msgstr "Minify filter :class:`mrv2.image.ImageFilter`."
+
+msgid "Magnify filter :class:`mrv2.image.ImageFilter`."
+msgstr "Ingrandisci il filtro :classe:`mrv2.image.ImageFilter`."
+
+msgid "Image filters."
+msgstr "Filtri di immagini."
+
+msgid "Color channels :class:`mrv2.image.Channels`."
+msgstr "Canali a colori :classe:`mrv2.image.Channels`."
+
+msgid "Mirror on X, Y or both :class:`mrv2.image.Mirror`."
+msgstr "Specchio su X, Y o entrambi :classe:`mrv2.image.Mirror`."
+
+msgid "Color options :class:`mrv2.image.Color`."
+msgstr "Opzioni di colore :classe:`mrv2.image.Color`."
+
+msgid "Levels options :class:`mrv2.image.Levels`."
+msgstr "Opzioni dei livelli :classe:`mrv2.image.Levels`."
+
+msgid "EXR Display options :class:`mrv2.image.EXRDisplay`.."
+msgstr "Opzioni di visualizzazione EXR :classe:`mrv2.image.EXRDisplay`.."
+
+msgid "Soft Clip options :class:`mrv2.image.SoftClip`.."
+msgstr "Opzioni Clip Soft :classe:`mrv2.image.SoftClip`.."
+
+msgid "Display options."
+msgstr "Opzioni di visualizzazione."
+
+msgid "LUT enabled."
+msgstr "LUT abilitato."
+
+msgid "LUT filename."
+msgstr "LUT nome del file."
+
+msgid "LUT transformation order."
+msgstr "LUT ordine di trasformazione."
+
+msgid "LUT options."
+msgstr "Opzioni LUT."
+
+msgid "Video Levels."
+msgstr "Livelli video."
+
+msgid "Alpha blending algorithm"
+msgstr "Algoritmo di miscelazione alfa"
+
+msgid "Image Filters"
+msgstr "Filtri immagine"
+
+msgid "Image options."
+msgstr "Opzioni di immagine."
+
+msgid "Environment Map type."
+msgstr "Tipo di mappa ambientale."
+
+msgid "Horizontal aperture"
+msgstr "Apertura orizzontale"
+
+msgid "Vertical aperture"
+msgstr "Apertura verticale"
+
+msgid "Focal Length"
+msgstr "Lunghezza focale"
+
+msgid "Rotation on X"
+msgstr "Rotazione su X"
+
+msgid "Rotation on Y"
+msgstr "Rotazione su Y"
+
+msgid "Subdivision on X"
+msgstr "Sottodivisione X"
+
+msgid "Subdivision on Y"
+msgstr "Sottodivisione Y"
+
+msgid "Spin"
+msgstr "Giro"
+
+msgid "EnvironmentMap options."
+msgstr "Opzioni EnvironmentMap."
+
+msgid "Stereo 3d input :class:`mrv2.image.StereoInput`.."
+msgstr "Ingresso stereo 3d :class:`mrv2.image.StereoInput`.."
+
+msgid "Stereo 3d output :class:`mrv2.image.StereoOutput`.."
+msgstr "Uscita stereo 3d :class:`mrv2.image.StereoOutput`.."
+
+msgid "Separation between left and right eye."
+msgstr "Separazione tra occhio sinistro e destro."
+
+msgid "Swap left and right eye"
+msgstr "Swap occhio sinistro e destro"
+
+msgid "Stereo3D options."
+msgstr "Opzioni Stereo3D."
+
+msgid "Background type :class:`mrv2.image.Background`.."
+msgstr "Tipo di sfondo :classe:`mrv2.image.background`.."
+
+msgid "Checkers Color0 :class:`mrv2.image.Color4f`.."
+msgstr "Schede Colore0 :classe:`mrv2.image.Color4f`.."
+
+msgid "Checkers Color1 :class:`mrv2.image.Color4f`.."
+msgstr "Schede Colore1 :classe:`mrv2.image.Color4f`.."
+
+msgid "Checkers Size :class:`mrv2.math.Size2i`.."
+msgstr "Taglia scacchiere : classe: `mrv2.math.Size2i`.."
+
+msgid "Background options."
+msgstr "Opzioni di base."
+
+msgid "Gets the current background options."
+msgstr "Ottiene le opzioni di sfondo attuali."
+
+msgid "Sets the current background options."
+msgstr "Imposta le opzioni di sfondo correnti."
+
+msgid "Gets the current OCIO config file."
+msgstr "Ottiene il file di configurazione OCIO corrente."
+
+msgid "Sets the current OCIO config file."
+msgstr "Imposta il file di configurazione OCIO corrente."
+
+msgid "Gets the current input color space."
+msgstr "Ottiene lo spazio di colore di ingresso corrente."
+
+msgid "Gets a list of all input color spaces."
+msgstr "Ottiene un elenco di tutti gli spazi di colore di ingresso."
+
+msgid "Set the input color space."
+msgstr "Imposta lo spazio di colore di ingresso."
+
+msgid "Gets the current Display/View."
+msgstr "Ottiene la visualizzazione corrente/Vedi."
+
+msgid "Gets the list of Displays/Views."
+msgstr "Ottiene l'elenco dei display/Visualizzazioni."
+
+msgid "Set an OCIO Display/View."
+msgstr "Imposta uno schermo OCIO/Vedi."
+
+msgid "Gets the current OCIO look."
+msgstr "Ottiene l'attuale look OCIO."
+
+msgid "Gets a list of all OCIO looks."
+msgstr "Ottiene una lista di tutti i look OCIO."
+
+msgid "Set the OCIO look by name."
+msgstr "Imposta lo sguardo OCIO per nome."
+
+msgid "Return all the files."
+msgstr "Restituisci tutti i file."
+
+msgid "Return all the active files."
+msgstr "Restituisci tutti i file attivi."
+
+msgid "Return the A file item."
+msgstr "Restituisci l' elemento file A."
+
+msgid "Return the A file index."
+msgstr "Restituisci l'indice di file A."
+
+msgid "Return the list of B files."
+msgstr "Restituisci l'elenco dei file B."
+
+msgid "Return the list of B indexes."
+msgstr "Ritorna l'elenco degli indici B."
+
+msgid "Close the current A file."
+msgstr "Chiudi il file A corrente."
+
+msgid "Close all files."
+msgstr "Chiudi tutti i file."
+
+msgid "Set the A file index."
+msgstr "Imposta l'indice di file A."
+
+msgid "Set a new B file index."
+msgstr "Imposta un nuovo indice di file B."
+
+msgid "Set a new stereo file index."
+msgstr "Impostare un nuovo indice di file stereo."
+
+msgid "Toggle the B file index."
+msgstr "Commuta l'indice del file B."
+
+msgid "Clear the B indexes."
+msgstr "Cancella gli indici B."
+
+msgid "Return the list of layers."
+msgstr "Ritorna l'elenco dei livelli."
+
+msgid "Set layer for file item."
+msgstr "Imposta il livello per l' elemento file."
+
+msgid "Set compare time."
+msgstr "Imposta il tempo di confronto."
+
+msgid "Get compare time."
+msgstr "Confronta il tempo."
+
+msgid "Set the first version for current media."
+msgstr "Imposta la prima versione per i media attuali."
+
+msgid "Set the previous version for current media."
+msgstr "Imposta la versione precedente per i media attuali."
+
+msgid "Set the next version for current media."
+msgstr "Imposta la versione successiva per i media attuali."
+
+msgid "Set the last version for current media."
+msgstr "Imposta l'ultima versione per i media attuali."
+
+msgid "Path :class:`mrv2.Path` to the File Media."
+msgstr "Percorso :classe:`mrv2.Path` sul supporto file."
+
+msgid "Audio path :class:`mrv2.Path` to the File Media if any."
+msgstr "Percorso audio :classe:`mrv2.Path` al file media se c'è."
+
+msgid "Time range :class:`mrv2.TimeRange` of the File Media."
+msgstr ""
+"Intervallo temporale :classe:`mrv2.TimeRange` dei supporti multimediali."
+
+msgid "Speed (FPS) of the File Media."
+msgstr "Velocità (FPS) dei Media File."
+
+msgid "Playback state :class:`mrv2.timeline.Playbacks` of the File Media."
+msgstr ""
+"Stato di riproduzione :classe:`mrv2.timeline.Replaybacks` dei Media File."
+
+msgid "Loop state :class:`mrv2.timeline.Loop` of the File Media."
+msgstr "Loop state :class:`mrv2.timeline.Loop` dei Media File."
+
+msgid "Current time :class:`mrv2.RationalTime` of the File Media."
+msgstr "Ora attuale :class:`mrv2.RationalTime` dei supporti multimediali."
+
+msgid "In/Out range :class:`mrv2.TimeRange` of the File Media."
+msgstr "In/Out range :class:`mrv2.TimeRange` dei supporti multimediali."
+
+msgid "Video layer of the File Media."
+msgstr "Livello video del file multimediale."
+
+msgid "Volume of the File Media."
+msgstr "Volume dei supporti di file."
+
+msgid "Mute state of the File Media."
+msgstr "Stato muto dei Media dei file."
+
+msgid "Audio offset of the File Media."
+msgstr "Spostamento audio del file multimediale."
+
+msgid "Class used to hold a media item."
+msgstr "Lezione usata per tenere un oggetto multimediale."
+
+msgid "Save annotations."
+msgstr "Risparmia le annotazioni."
+
+msgid "Save resolution."
+msgstr "Salva la risoluzione."
+
+msgid "FFmpeg Profile."
+msgstr "Profilo FFmpeg."
+
+msgid "FFmpeg Preset."
+msgstr "FFmpeg Preset."
+
+msgid "FFmpeg Pixel Format."
+msgstr "Formato FFmpeg Pixel."
+
+msgid "FFmpeg video encoding with hardware if possible."
+msgstr "Se possibile, codifica video FFmpeg con hardware."
+
+msgid "FFmpeg Override color characteristics."
+msgstr "Caratteristiche di colore FFmpeg Override."
+
+msgid "FFmpeg Color Range."
+msgstr "Gamma di colori FFmpeg."
+
+msgid "FFmpeg Color Space."
+msgstr "Spazio a colori FFmpeg."
+
+msgid "FFmpeg Color Primaries."
+msgstr "Primarie a colori FFmpeg."
+
+msgid "FFmpeg Color Transfer Characteristics."
+msgstr "Caratteristiche del trasferimento di colore FFmpeg."
+
+msgid "FFmpeg Audio Codec."
+msgstr "FFmpeg Audio Codec."
+
+msgid "OpenEXR's Compression."
+msgstr "La compressione di OpenEXR."
+
+msgid "OpenEXR's Pixel Type."
+msgstr "Tipo Pixel di OpenEXR."
+
+msgid "OpenEXR's Zip Compression Level."
+msgstr "Livello di compressione zip di OpenEXR."
+
+msgid "OpenEXR's DWA Compression Level."
+msgstr "Il livello di compressione DWA di OpenEXR."
+
+msgid ""
+"\n"
+"Command module.\n"
+"\n"
+"Used to run main commands and get arguments and set the display, image, compare, LUT options.\n"
+msgstr ""
+"\n"
+"Modulo di comando. Usato per eseguire comandi principali e ottenere argomenti e impostare il display, immagine, confrontare, LUT opzioni.\n"
+
+msgid ""
+"Get command-line arguments passed as single quoted string to -pythonArgs."
+msgstr ""
+"Ottieni gli argomenti di linea di comando passati come singola stringa "
+"citata a -pythonArgs."
+
+msgid "Open file with optional audio."
+msgstr "Apri file con audio opzionale."
+
+msgid "Compare two file items with a compare mode."
+msgstr "Confronta due elementi di file con una modalità di confronto."
+
+msgid "Close the file item."
+msgstr "Chiudi l'elemento del file."
+
+msgid "Close all file items."
+msgstr "Chiudi tutti gli elementi del file."
+
+msgid "Return the root path to the insallation of mrv2."
+msgstr "Ritorna il percorso della radice all'insallazione di mrv2."
+
+msgid "Return the path to preferences of mrv2."
+msgstr "Ritorna il percorso alle preferenze di mrv2."
+
+msgid "Return the display options."
+msgstr "Restituisci le opzioni di visualizzazione."
+
+msgid "Set the display options."
+msgstr "Imposta le opzioni di visualizzazione."
+
+msgid "Return the LUT options."
+msgstr "Restituisci le opzioni LUT."
+
+msgid "Set the LUT options."
+msgstr "Imposta le opzioni LUT."
+
+msgid "Return the image options."
+msgstr "Restituisci le opzioni di immagine."
+
+msgid "Set the image options."
+msgstr "Imposta le opzioni di immagine."
+
+msgid "Return the environment map options."
+msgstr "Restituisci le opzioni della mappa ambientale."
+
+msgid "Set the environment map options."
+msgstr "Imposta le opzioni della mappa ambientale."
+
+msgid "Set the compare options."
+msgstr "Imposta le opzioni di confronto."
+
+msgid "Set the stereo 3D options."
+msgstr "Imposta le opzioni stereo 3D."
+
+msgid "Get the language of mrv2."
+msgstr "Ottieni il linguaggio di mrv2."
+
+msgid "Get the layers of the timeline (GUI)."
+msgstr "Ottieni gli strati della timeline (GUI)."
+
+msgid "Get the version of mrv2."
+msgstr "Ottieni la versione di mrv2."
+
+msgid ""
+"Call Fl::check to update the GUI and return the number of seconds that "
+"elapsed."
+msgstr ""
+"Chiama Fl::check per aggiornare la GUI e restituire il numero di secondi "
+"trascorsi."
+
+msgid "Returns true if audio is muted."
+msgstr "Restituisce true se l'audio è muto."
+
+msgid "Runs the same or a new mrv2 with a session file."
+msgstr "Esegue lo stesso o un nuovo mrv2 con un file di sessione."
+
+msgid "Set the muting of the audio."
+msgstr "Imposta il mutamento dell'audio."
+
+msgid "Toggle Image Auto Normalize."
+msgstr "Commuta la normalizzazione automatica dell' immagine."
+
+msgid "Toggle Data Window."
+msgstr "Commuta la finestra dei dati."
+
+msgid "Toggle Display Window."
+msgstr "Commuta la finestra di visualizzazione."
+
+msgid "Toggle Ignored Display Window on OpenEXRs."
+msgstr "Commuta la finestra di visualizzazione ignorata su OpenEXRs."
+
+msgid "Toggle Image invalid values."
+msgstr "Commuta i valori non validi dell' immagine."
+
+msgid "Toggle Safe Areas."
+msgstr "Commutare le aree sicure."
+
+msgid "Get the playback volume."
+msgstr "Ottieni il volume di riproduzione."
+
+msgid "Set the playback volume."
+msgstr "Imposta il volume di riproduzione."
+
+msgid "Save a movie or sequence from the front layer."
+msgstr "Salvare un filmato o una sequenza dal livello frontale."
+
+msgid "Save an .otio file from the current selected image."
+msgstr "Salvare un file.otio dall'immagine selezionata corrente."
+
+msgid "Save a PDF document with all annotations and notes."
+msgstr "Salva un documento PDF con tutte le annotazioni e note."
+
+msgid ""
+"\n"
+"Annotations module.\n"
+"\n"
+"Contains all functions and classes related to the annotationss.\n"
+msgstr ""
+"\n"
+"Modulo annotazioni. Contiene tutte le funzioni e le classi relative alle annotazioni.\n"
+
+msgid "Add notes annotations to current clip at a certain time."
+msgstr ""
+"Aggiungere annotazioni di note alla clip corrente in un certo momento."
+
+msgid "Add notes annotations to current clip at a certain frame."
+msgstr ""
+"Aggiungere annotazioni di note alla clip corrente in una determinata "
+"cornice."
+
+msgid "Add notes annotations to current clip at certain seconds."
+msgstr ""
+"Aggiungere annotazioni di note alla clip corrente a determinati secondi."
+
+msgid "Open with Audio"
+msgstr "Apri con audio"
+
+msgid "Video"
+msgstr "Video"
+
+msgid "Audio"
+msgstr "Audio"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Cancel"
+msgstr "Annulla"
+
+msgid "{0} - Channels: {1} {2} {3}"
+msgstr "{0} - Canali: {1} {2} {3}"
+
+msgid "Play timelines, movies, and image sequences."
+msgstr "Gioca timeline, film e sequenze di immagini."
+
+msgid "Timelines, movies, image sequences, or folders."
+msgstr "Timelines, filmati, sequenze di immagini o cartelle."
+
+msgid "Debug verbosity."
+msgstr "Debug di verbosità."
+
+msgid "Audio file name."
+msgstr "Nome del file audio."
+
+msgid "A/B comparison \"B\" file name."
+msgstr "A/Confronto B nome del file \"B\"."
+
+msgid "A/B comparison mode."
+msgstr "A/Modalità di confronto B."
+
+msgid "A/B comparison wipe center."
+msgstr "A/Confronto B centro di pulizia."
+
+msgid "A/B comparison wipe rotation."
+msgstr "A/Confronto B rotazione pulisci."
+
+msgid "Create OpenTimelineIO EDL from the list of clips provided."
+msgstr "Crea OpenTimelineIO EDL dall'elenco dei clip forniti."
+
+msgid "OpenTimelineIO Edit mode."
+msgstr "Modalità OpenTimelineIO Modifica."
+
+msgid "Load the images as still images not sequences."
+msgstr "Carica le immagini come immagini fisse non come sequenze."
+
+msgid "Playback speed."
+msgstr "Velocità di riproduzione."
+
+msgid "Playback mode."
+msgstr "Modalità di riproduzione."
+
+msgid "Playback loop mode."
+msgstr "Modalità loop di riproduzione."
+
+msgid "Seek to the given time, in value/fps format.  Example: 50/30."
+msgstr "Cercare il tempo indicato, in formato value/fps. Esempio: 50/30."
+
+msgid "Set the in/out points range in start/end/fps format, like 23/120/24."
+msgstr ""
+"Impostare l'intervallo punti di ingresso/uscita in formato start/end/fps, "
+"come 23/120/24."
+
+msgid "OpenColorIO input color space."
+msgstr "Spazio di colore di ingresso OpenColorIO."
+
+msgid "OpenColorIO display name."
+msgstr "Nome di visualizzazione OpenColorIO."
+
+msgid "OpenColorIO view name."
+msgstr "Nome visualizzazione OpenColorIO."
+
+msgid "OpenColorIO look name."
+msgstr "OpenColorIO nome dell'aspetto."
+
+msgid "LUT file name."
+msgstr "Nome del file LUT."
+
+msgid "LUT operation order."
+msgstr "LUT ordine di operazione."
+
+msgid "Python Script to run and exit."
+msgstr "Script Python da eseguire ed uscire."
+
+msgid ""
+"Python Arguments to pass to the Python script as a single quoted string like"
+" \"arg1 'arg2 asd' arg3\", stored in cmd.argv."
+msgstr ""
+"Argumenti di Python da passare allo script di Python come una singola "
+"stringa citata come \"arg1 'arg2 asd' arg3\", memorizzata in cmd.argv."
+
+msgid "Reset settings to defaults."
+msgstr "Reimposta le impostazioni ai valori predefiniti."
+
+msgid "Reset hotkeys to defaults."
+msgstr "Ripristina i tasti di avviamento per impostazioni predefinite."
+
+msgid "Start a server.  Use -port to specify a port number."
+msgstr "Avvia un server. Usa -port per specificare un numero di porta."
+
+msgid "Connect to a server at <value>.  Use -port to specify a port number."
+msgstr ""
+"Connettersi a un server a <value>. Usare -port per specificare un numero di "
+"port."
+
+msgid ""
+"Port number for the server to listen to or for the client to connect to."
+msgstr ""
+"Numero di porta per il server da ascoltare o per il client da connettersi."
+
+msgid "Return the version and exit."
+msgstr "Restituisci la versione e esci."
+
+msgid "Cannot create window"
+msgstr "Impossibile creare la finestra"
+
+msgid "About mrv2"
+msgstr "Circa mrv2"
+
+msgid "Hide mrv2"
+msgstr "Nascondi mrv2"
+
+msgid "Hide Others"
+msgstr "Nascondi altri"
+
+msgid "Services"
+msgstr "Servizi"
+
+msgid "Show All"
+msgstr "Mostra tutto"
+
+msgid "Quit mrv2"
+msgstr "Esci da mrv2"
+
+msgid "Running from "
+msgstr "Fuggire da"
+
+msgid "Could not read python script '{0}'"
+msgstr "Impossibile leggere lo script python '{0}'"
+
+msgid "Running python script '{0}'"
+msgstr "Eseguire lo script del python '{0}'"
+
+msgid "with Arguments:"
+msgstr "con argomenti:"
+
+msgid "Python Error: "
+msgstr "Errore di Python:"
+
+msgid "Could not initialize NDI"
+msgstr "Impossibile inizializzare NDI"
+
+msgid "Filename '{0}' does not exist or does not have read permissions."
+msgstr "Il nome file '{0}' non esiste o non ha permessi di lettura."
+
+msgid "Files"
+msgstr "File"
+
+msgid "Compare"
+msgstr "Confronta"
+
+msgid "Playlist"
+msgstr "Lista di riproduzione"
+
+msgid "Network"
+msgstr "Rete"
+
+msgid "Stereo 3D"
+msgstr "Stereo 3D"
+
+msgid "Type"
+msgstr "Tipo"
+
+msgid "Client"
+msgstr "Cliente"
+
+msgid "Server"
+msgstr "Server"
+
+msgid "Host"
+msgstr "Ospite"
+
+msgid "Host name or IP to connect to.  For example: 127.0.0.1"
+msgstr "Nome host o IP a cui connettersi. Ad esempio: 127.0.0.1"
+
+msgid "Previously used Hosts"
+msgstr "Host precedentemente usati"
+
+msgid "Port"
+msgstr "Porto"
+
+msgid ""
+"Port to connect to.  Make sure your firewall and router allows read/write "
+"through it."
+msgstr ""
+"Porta a cui connettersi. Assicurati che il firewall e il router permettano "
+"la lettura/scrittura attraverso di esso."
+
+msgid "Connect"
+msgstr "Connettere"
+
+msgid "Create"
+msgstr "Crea"
+
+msgid "Disconnect"
+msgstr "Disconnettere"
+
+msgid "Shutdown"
+msgstr "Chiusura"
+
+msgid "&File/&Open"
+msgstr "File/Apri"
+
+msgid "&File/&Save"
+msgstr "File/Salva"
+
+msgid "&Edit/&Undo"
+msgstr "Modifica/Annulla"
+
+msgid "&Edit/Cu&t"
+msgstr "Modifica/Cut"
+
+msgid "&Edit/&Copy"
+msgstr "Modifica/Copia"
+
+msgid "&Edit/&Paste"
+msgstr "Modifica/Incollare"
+
+msgid "&Edit/&Delete"
+msgstr "Modifica/Cancella"
+
+msgid "&Edit/&Comment Selection"
+msgstr "Modifica/Selezione commenti"
+
+msgid "&Edit/&Uncomment Selection"
+msgstr "Modifica/Annulla la selezione dei commenti"
+
+msgid "&Search/&Find..."
+msgstr "Ricerca/Trova..."
+
+msgid "&Search/F&ind Again"
+msgstr "Ricerca/Trova di nuovo"
+
+msgid "&Search/&Replace"
+msgstr "Ricerca/Sostituire"
+
+msgid "&Search/&Replace Again"
+msgstr "Ricerca/Sostituisci di nuovo"
+
+msgid "Clear/&Output"
+msgstr "Cancella/Uscita"
+
+msgid "Clear/&Editor"
+msgstr "Cancella/Editor"
+
+msgid "Editor/&Run Code"
+msgstr "Editor/Eseguire il codice"
+
+msgid "Editor/Toggle &Line Numbers"
+msgstr "Editor/Commuta i numeri di linea"
+
+msgid "Editor/&Jump to Error"
+msgstr "Editor/Salta all'errore"
+
+msgid "Editor/&External Editor"
+msgstr "Editor/Editor esterno"
+
+msgid "Scripts/Add To Script List"
+msgstr "Scritti/Aggiungi all'elenco script"
+
+msgid "Scripts/%s"
+msgstr "Scritti/%s"
+
+msgid ""
+"Type in your python code here.  Select an area to execute just a portion of "
+"it.  Press Keypad Enter to run it."
+msgstr ""
+"Digitare qui il vostro codice python. Selezionare un'area per eseguire solo "
+"una porzione di esso. Premere Invio tastiera per eseguire."
+
+msgid "Python file {0} already exists.  Do you want to overwrite it?"
+msgstr "Il file Python {0} esiste già. Vuoi sovrascriverlo?"
+
+msgid "No"
+msgstr "No"
+
+msgid "Yes"
+msgstr "Yes"
+
+msgid "Failed to open the file for writing."
+msgstr "Aprire il file per la scrittura non è riuscito."
+
+msgid "Failed to write to the file."
+msgstr "Scrivere nel file non è riuscito."
+
+msgid "The stream is in an unrecoverable error state."
+msgstr "Il flusso è in uno stato di errore irricuperabile."
+
+msgid "Type your editor command"
+msgstr "Digita il tuo comando editor"
+
+msgid "{0} will be replaced with the line number.  {1} with the file name"
+msgstr "{0} verrà sostituito con il numero di riga. {1} con il nome del file"
+
+msgid "Regular expression error: {0}"
+msgstr "Errore di espressione regolare: {0}"
+
+msgid "Could not open python editor: {0}"
+msgstr "Impossibile aprire l'editor python: {0}"
+
+msgid "Search String:"
+msgstr "Stringa di ricerca:"
+
+msgid "No occurrences of '%s' found!"
+msgstr "Nessun evento di «%s» trovato!"
+
+msgid "None"
+msgstr "Nessuna"
+
+msgid "Input"
+msgstr "Introduzione"
+
+msgid "NDI Connection"
+msgstr "Collegamento NDI"
+
+msgid "Fast Format"
+msgstr "Formato veloce"
+
+msgid "Best Format"
+msgstr "Formato migliore"
+
+msgid "With Audio"
+msgstr "Con audio"
+
+msgid "Without Audio"
+msgstr "Senza audio"
+
+msgid "USD"
+msgstr "USD"
+
+msgid "Renderer"
+msgstr "Renderer"
+
+msgid "Complexity"
+msgstr "Complexità"
+
+msgid "Draw Mode"
+msgstr "Modalità di disegno"
+
+msgid "Stage Cache"
+msgstr "Cache per stadio"
+
+msgid "Disk Cache in GB"
+msgstr "Cache disco in GB"
+
+msgid "Toggle other eye stereo image."
+msgstr "Commutare l'altra immagine stereo degli occhi."
+
+msgid "Image"
+msgstr "Immagine"
+
+msgid "Output"
+msgstr "Uscita"
+
+msgid "Anaglyph"
+msgstr "Anaglifo"
+
+msgid "Scanlines"
+msgstr "Linee di scansione"
+
+msgid "Columns"
+msgstr "Colonne"
+
+msgid "Checkerboard"
+msgstr "Tabella di controllo"
+
+msgid "OpenGL"
+msgstr "OpenGL"
+
+msgid "Adjustments"
+msgstr "Aggiustamenti"
+
+msgid "Eye Separation"
+msgstr "Separazione degli occhi"
+
+msgid "Separation of left and right eye."
+msgstr "Separazione dell'occhio sinistro e destro."
+
+msgid "Swap Eyes"
+msgstr "Intercambia gli occhi"
+
+msgid "Swap left and right eyes."
+msgstr "Scambia gli occhi destro e sinistro."
+
+msgid "Cache"
+msgstr "Cache"
+
+msgid "      Gigabytes"
+msgstr "Gigabyte"
+
+msgid "Cache in Gigabytes."
+msgstr "Cache in Gigabyte."
+
+msgid "   Read Ahead"
+msgstr "Leggi in anticipo"
+
+msgid "Read Ahead in seconds"
+msgstr "Leggere avanti in pochi secondi"
+
+msgid "Read Behind"
+msgstr "Leggete dietro"
+
+msgid "Read Behind in seconds"
+msgstr "Leggere dietro in secondi"
+
+msgid "File Sequences"
+msgstr "Sequenze file"
+
+msgid "Audio file name"
+msgstr "Nome file audio"
+
+msgid "Maximum Digits"
+msgstr "Cifre massime"
+
+msgid "Performance"
+msgstr "Prestazioni"
+
+msgid "Changes force a reload of the current movie file."
+msgstr "Le modifiche forzano una ricarica del file del film corrente."
+
+msgid "Timer mode"
+msgstr "Modalità temporizzatore"
+
+msgid "Audio buffer frames"
+msgstr "Frame buffer audio"
+
+msgid "Video Requests"
+msgstr "Richieste video"
+
+msgid "Audio Requests"
+msgstr "Richieste audio"
+
+msgid "Sequence I/O threads"
+msgstr "Sequenza I/O filetti"
+
+msgid "FFmpeg YUV to RGB conversion"
+msgstr "Conversione FFmpeg YUV in RGB"
+
+msgid "FFmpeg Color Accuracy"
+msgstr "Precisione colore FFmpeg"
+
+msgid ""
+"When this setting is on, color accuracy is chosen when decoding YUV420_P8 "
+"movies that have Color Space as 'unknown', at the cost of some performance."
+msgstr ""
+"Quando questa impostazione è accesa, l'accuratezza dei colori viene scelta "
+"quando si decodificano i film YUV420_P8 che hanno lo Spazio Colore come "
+"\"non conosciuto\", al costo di qualche prestazione."
+
+msgid "FFmpeg I/O threads"
+msgstr "FFmpeg I/O filetti"
+
+msgid ""
+"This value controls the number of threads that FFmpeg uses.  For most "
+"movies, it should be left at 0.  Some movies will show black frames.  For "
+"any like that, you should set them to 1, press Enter and reload the movie "
+"file."
+msgstr ""
+"Questo valore controlla il numero di thread che FFmpeg utilizza. Per la "
+"maggior parte dei film, dovrebbe essere lasciato a 0. Alcuni film "
+"mostreranno fotogrammi neri. Per qualsiasi cosa del genere, si dovrebbe "
+"impostare a 1, premere Invio e ricaricare il file del film."
+
+msgid "Default Settings"
+msgstr "Impostazioni predefinite"
+
+msgid ""
+"This will reset all your settings to their default.  Are you sure you want "
+"to continue?"
+msgstr ""
+"Questo ripristinerà tutte le impostazioni al loro valore predefinito. Sei "
+"sicuro di voler continuare?"
+
+msgid "Drop a clip here to create a playlist."
+msgstr "Lascia un clip qui per creare una playlist."
+
+msgid "Create an empty timeline with a video and audio track."
+msgstr "Crea una timeline vuota con una traccia audio e video."
+
+msgid "Create a timeline from the selected clip."
+msgstr "Crea una timeline dalla clip selezionata."
+
+msgid ""
+"Save current EDL to a permanent location, making paths relative if possible."
+msgstr ""
+"Salva EDL corrente in una posizione permanente, rendendo i percorsi relativi"
+" se possibile."
+
+msgid "Close current EDL."
+msgstr "Chiudi EDL corrente."
+
+msgid "Clear the messages"
+msgstr "Cancella i messaggi"
+
+msgid "Turn off image warping."
+msgstr "Spegni il deformaggio dell'immagine."
+
+msgid "Spherical"
+msgstr "Sferico"
+
+msgid "Wrap the image or images onto a sphere."
+msgstr "Avvolgere l'immagine o le immagini su una sfera."
+
+msgid "Cubic"
+msgstr "Cubo"
+
+msgid "Wrap the image or images onto a cube."
+msgstr "Avvolgere l'immagine o le immagini su un cubo."
+
+msgid "Projection"
+msgstr "Proiezione"
+
+msgid "   H. Aperture"
+msgstr "H. Apertura"
+
+msgid "Horizontal Aperture of the Projection."
+msgstr "Apertura orizzontale della proiezione."
+
+msgid "    V. Aperture"
+msgstr "V. Apertura"
+
+msgid "Vertical Aperture of the Projection."
+msgstr "Apertura verticale della proiezione."
+
+msgid ""
+"Focal Length of the Projection. Use Shift + left mouse button to change or "
+"the mousewheel."
+msgstr ""
+"Lunghezza focale della proiezione. Utilizzare Shift + tasto sinistro del "
+"mouse per cambiare o la ruota del mouse."
+
+msgid "Rotation"
+msgstr "Rotazione"
+
+msgid "Spin with middle mouse instead of rotating with it."
+msgstr "Girare con il mouse centrale invece di ruotare con esso."
+
+msgid ""
+"Rotation in X of the projection.  Use middle mouse button to move around."
+msgstr ""
+"Rotazione in X della proiezione. Utilizzare il tasto medio del mouse per "
+"muoversi."
+
+msgid ""
+"Rotation in Y of the projection.  Use middle mouse button to move around."
+msgstr ""
+"Rotazione in Y della proiezione. Utilizzare il tasto medio del mouse per "
+"muoversi."
+
+msgid "Subdivisions"
+msgstr "Subdivisioni"
+
+msgid "Subdivision of the sphere when doing spherical projections"
+msgstr "Subdivisione della sfera quando si effettuano proiezioni sferiche"
+
+msgid "Subdivision of the sphere in X."
+msgstr "Subdivisione della sfera in X."
+
+msgid "Subdivision of the sphere in Y."
+msgstr "Sottodivisione della sfera in Y."
+
+msgid "Search"
+msgstr "Ricerca"
+
+msgid "Both"
+msgstr "Entrambi"
+
+msgid "Attribute"
+msgstr "Attributo"
+
+msgid "Value"
+msgstr "Valore"
+
+msgid "Main"
+msgstr "Principale"
+
+msgid "Subtitle"
+msgstr "Sottotitolo"
+
+msgid "Metadata"
+msgstr "Metadati"
+
+msgid "PAL Video"
+msgstr "Video PAL"
+
+msgid "NTSC Video"
+msgstr "Video NTSC"
+
+msgid "35mm Academy"
+msgstr "Accademia 35mm"
+
+msgid "Widescreen (HDTV + STV)"
+msgstr "Widescreen (HDTV + STV)"
+
+msgid "35mm European Widescreen"
+msgstr "35mm Widescreen europeo"
+
+msgid "Early 35mm"
+msgstr "Inizio 35mm"
+
+msgid "HDTV / Widescreen 16:9"
+msgstr "Televisione ad alta definizione/Widescreen 16:9"
+
+msgid "35mm Flat"
+msgstr "35 mm piatto"
+
+msgid "70mm"
+msgstr "70 mm"
+
+msgid "35mm Anamorphic"
+msgstr "35 mm Anamorfo"
+
+msgid "35mm Panavision"
+msgstr "Panavisione da 35 mm"
+
+msgid "Cinemascope"
+msgstr "Cinemascopio"
+
+msgid "MGM Camera 65"
+msgstr "Macchina fotografica MGM 65"
+
+msgid "Load"
+msgstr "Carica"
+
+msgid "Reset"
+msgstr "Ripristina"
+
+msgid "1:1"
+msgstr "1:1"
+
+msgid "1:2"
+msgstr "1:2"
+
+msgid "1:4"
+msgstr "1:4"
+
+msgid "1:8"
+msgstr "1:8"
+
+msgid "1:16"
+msgstr "1:16"
+
+msgid "Pick"
+msgstr "Scegli"
+
+msgid "%.3f seconds "
+msgstr "%.3f secondi"
+
+msgid "Directory"
+msgstr "Directory"
+
+msgid "Directory where clip resides"
+msgstr "Directory dove risiede il clip"
+
+msgid "Filename"
+msgstr "Nome file"
+
+msgid "Filename of the clip"
+msgstr "Nome file del clip"
+
+msgid "Audio Directory"
+msgstr "Directory audio"
+
+msgid "Directory where audio clip resides"
+msgstr "Directory dove risiede il clip audio"
+
+msgid "Audio Filename"
+msgstr "Nome file audio"
+
+msgid "Filename of the audio clip"
+msgstr "Nome file del clip audio"
+
+msgid "Video Streams"
+msgstr "Stream video"
+
+msgid "Number of video streams in file"
+msgstr "Numero di flussi video nel file"
+
+msgid "Audio Streams"
+msgstr "Stream audio"
+
+msgid "Number of audio streams in file"
+msgstr "Numero di flussi audio nel file"
+
+msgid "Start Time"
+msgstr "Ora di inizio"
+
+msgid "Beginning frame of clip"
+msgstr "Inizio cornice del clip"
+
+msgid "End Time"
+msgstr "Tempo di fine"
+
+msgid "Ending frame of clip"
+msgstr "Cornice di chiusura del clip"
+
+msgid "First Frame"
+msgstr "Prima cornice"
+
+msgid "First frame of clip - User selected"
+msgstr "Prima cornice del clip - Utente selezionato"
+
+msgid "Last Frame"
+msgstr "Ultima cornice"
+
+msgid "Last frame of clip - User selected"
+msgstr "Ultima cornice del clip - Utente selezionato"
+
+msgid "(PAL Fields)"
+msgstr "(Campi PAL)"
+
+msgid "(NTSC Fields)"
+msgstr "(Campi NTSC)"
+
+msgid "Default Speed"
+msgstr "Velocità predefinita"
+
+msgid "Default Speed in Frames per Second"
+msgstr "Velocità predefinita nei telai per secondo"
+
+msgid "Current Speed"
+msgstr "Velocità corrente"
+
+msgid "Current Speed (Frames Per Second)"
+msgstr "Velocità corrente (quadri per secondo)"
+
+msgid "Disk space"
+msgstr "Spazio disco"
+
+msgid "Creation Date"
+msgstr "Data di creazione"
+
+msgid "Creation date of file"
+msgstr "Data di creazione del file"
+
+msgid "Modified Date"
+msgstr "Data modificata"
+
+msgid "Last modified date of file"
+msgstr "Ultima data modificata del file"
+
+msgid "Load an image or movie file"
+msgstr "Carica un file immagine o filmato"
+
+msgid "Video Stream #%d"
+msgstr "Stream video #%d"
+
+msgid "Name"
+msgstr "Nome"
+
+msgid "Codec"
+msgstr "Codicec"
+
+msgid "Unknown"
+msgstr "Sconosciuto"
+
+msgid "Width"
+msgstr "Larghezza"
+
+msgid "Width of clip"
+msgstr "Larghezza del clip"
+
+msgid "Height"
+msgstr "Altezza"
+
+msgid "Height of clip"
+msgstr "Altezza del clip"
+
+msgid "Aspect Ratio"
+msgstr "Rapporto aspetto"
+
+msgid "Aspect ratio of clip"
+msgstr "Rapporto dell'aspetto del clip"
+
+msgid "Pixel Ratio"
+msgstr "Rapporto pixel"
+
+msgid "Pixel ratio of clip"
+msgstr "Rapporto pixel della clip"
+
+msgid "Video Rotation"
+msgstr "Rotazione video"
+
+msgid "Compression"
+msgstr "Compressione"
+
+msgid "unsigned byte (8-bits per channel)"
+msgstr "byte non firmato (8-bit per canale)"
+
+msgid "(10-bits per channel)"
+msgstr "(10-bit per canale)"
+
+msgid "(12-bits per channel)"
+msgstr "(12-bit per canale)"
+
+msgid "unsigned short (16-bits per channel)"
+msgstr "corto senza firma (16-bit per canale)"
+
+msgid "half float (16-bits per channel)"
+msgstr "mezzo galleggiante (16 bit per canale)"
+
+msgid "unsigned int (32-bits per channel)"
+msgstr "non firmato int (32 bit per canale)"
+
+msgid "float (32-bits per channel)"
+msgstr "galleggiante (32 bit per canale)"
+
+msgid "Unknown bit depth"
+msgstr "Profondità bit sconosciuta"
+
+msgid "Depth"
+msgstr "Profondità"
+
+msgid "Bit depth of clip"
+msgstr "Profondità bit del clip"
+
+msgid "Image Channels"
+msgstr "Canali di immagine"
+
+msgid "Number of channels in clip"
+msgstr "Numero di canali in clip"
+
+msgid "YUV Coefficients"
+msgstr "Coefficienti YUV"
+
+msgid "YUV Coefficients used for video conversion"
+msgstr "Coefficienti YUV utilizzati per la conversione video"
+
+msgid "Video Levels"
+msgstr "Livelli video"
+
+msgid "Color Primaries"
+msgstr "Primarie di colore"
+
+msgid "Color TRC"
+msgstr "Colore TRC"
+
+msgid "Color Transfer Characteristics"
+msgstr "Caratteristiche del trasferimento dei colori"
+
+msgid "Color Space"
+msgstr "Spazio a colori"
+
+msgid "Color Transfer Space"
+msgstr "Spazio di trasferimento dei colori"
+
+msgid "FFmpeg Pixel Format"
+msgstr "Formato FFmpeg Pixel"
+
+msgid "Render Pixel Format"
+msgstr "Formato del pixel di rendibilità"
+
+msgid "Audio Stream #%d"
+msgstr "Flusso audio #%d"
+
+msgid "FourCC"
+msgstr "Quattro CC"
+
+msgid "Four letter ID"
+msgstr "ID di quattro lettere"
+
+msgid "Channels"
+msgstr "Canali"
+
+msgid "Number of audio channels"
+msgstr "Numero di canali audio"
+
+msgid "Format"
+msgstr "Formato"
+
+msgid "%d Hz."
+msgstr "%d Hz."
+
+msgid "Frequency"
+msgstr "Frequenza"
+
+msgid "Frequency of audio"
+msgstr "Frequenza dell'audio"
+
+msgid "%d kb/s"
+msgstr "%d kb/s"
+
+msgid "Max. Bitrate"
+msgstr "Tasso massimo di bit"
+
+msgid "Disposition"
+msgstr "Disposizione"
+
+msgid "Disposition of Track"
+msgstr "Disposizione della traccia"
+
+msgid "Start"
+msgstr "Inizio"
+
+msgid "Start of Audio"
+msgstr "Inizio dell'audio"
+
+msgid "Duration"
+msgstr "Durata"
+
+msgid "Duration of Audio"
+msgstr "Durata dell'audio"
+
+msgid "Subtitle Stream #%d"
+msgstr "Sottotitolo Stream #%d"
+
+msgid "Codec Name"
+msgstr "Nome del codice"
+
+msgid "Closed Captions"
+msgstr "Didascalie chiuse"
+
+msgid "Video has Closed Captions"
+msgstr "Il video ha le didascalie chiuse"
+
+msgid "Avg. Bitrate"
+msgstr "Avg. Bitrate"
+
+msgid "Language"
+msgstr "Lingua"
+
+msgid "Language if known"
+msgstr "Lingua se conosciuta"
+
+msgid "Start of Subtitle"
+msgstr "Inizio di sottotitolo"
+
+msgid "Duration of Subtitle"
+msgstr "Durata del sottotitolo"
+
+msgid "Linear"
+msgstr "Linear"
+
+msgid "Logarithmic"
+msgstr "Logaritmico"
+
+msgid "Square Root"
+msgstr "Radice quadrata"
+
+msgid "Channel"
+msgstr "Canale"
+
+msgid "Red"
+msgstr "Red"
+
+msgid "Green"
+msgstr "Verde"
+
+msgid "Blue"
+msgstr "Blu"
+
+msgid "Lumma"
+msgstr "Lumma"
+
+msgid "Select main A image."
+msgstr "Selezionare l'immagine principale A."
+
+msgid "Open a filename"
+msgstr "Apri un nome file"
+
+msgid "Open a filename with audio"
+msgstr "Aprire un nome file con audio"
+
+msgid "Close current filename"
+msgstr "Chiudi il nome del file corrente"
+
+msgid "Close all filenames"
+msgstr "Chiudi tutti i nomi dei file"
+
+msgid "Previous filename"
+msgstr "Nome file precedente"
+
+msgid "Next filename"
+msgstr "Nome file successivo"
+
+msgid "Filter EDLs"
+msgstr "Filtri EDL"
+
+msgid "Select one or more B images."
+msgstr "Selezionare una o più immagini B."
+
+msgid "Select between Relative or Absolute Compare Time Mode"
+msgstr "Seleziona tra modalità di confronto temporale relativa o assoluta"
+
+msgid "Compare A"
+msgstr "Confronta A"
+
+msgid "Compare B"
+msgstr "Confronta B"
+
+msgid ""
+"Wipe between the A and B files\n"
+"\n"
+"Use the Option key + left mouse button to move the wipe in X or in Y"
+msgstr ""
+"Pulire tra i file A e B Utilizzare il tasto Opzione + tasto sinistro del "
+"mouse per spostare la cancellazione in X o in Y"
+
+msgid ""
+"Wipe between the A and B files\n"
+"\n"
+"Use the Alt key + left mouse button to move the wipe in X or in Y."
+msgstr ""
+"Pulire tra i file A e B Utilizzare il tasto Alt + tasto sinistro del mouse "
+"per spostare la cancellazione in X o in Y."
+
+msgid "Overlay the A and B files with optional transparencyy"
+msgstr "Sovrapporre i file A e B con trasparenza opzionale"
+
+msgid "Difference the A and B files"
+msgstr "Differenza tra i file A e B"
+
+msgid "Compare the A and B files side by side"
+msgstr "Confronta i file A e B fianco a fianco"
+
+msgid "Show the A file above the B file"
+msgstr "Mostra il file A sopra il file B"
+
+msgid "Tile the A and B files"
+msgstr "Piastrelle i file A e B"
+
+msgid "Wipe"
+msgstr "Pulire"
+
+msgid "Use the Option key + left mouse button to move the wipe in X."
+msgstr ""
+"Utilizzare il tasto Opzione + tasto sinistro del mouse per spostare la "
+"cancellazione in X."
+
+msgid "Use the Alt key + left mouse button to move the wipe in X."
+msgstr ""
+"Utilizzare il tasto Alt + tasto sinistro del mouse per spostare la "
+"cancellazione in X."
+
+msgid "Use the Option key + left mouse button to move the wipe in Y."
+msgstr ""
+"Utilizzare il tasto Opzione + tasto sinistro del mouse per spostare la "
+"cancellazione in Y."
+
+msgid "Use the Alt key + left mouse button to move the wipe in Y."
+msgstr ""
+"Utilizzare il tasto Alt + tasto sinistro del mouse per spostare la "
+"cancellazione in Y."
+
+msgid "Wipe Rotation.  Use Shift + left mouse button along X to rotate wipe."
+msgstr ""
+"Pulire la rotazione. Utilizzare Shift + tasto sinistro del mouse lungo X per"
+" ruotare la cancellazione."
+
+msgid "Overlay"
+msgstr "Sovrapposizione"
+
+msgid "Use the Option key + left mouse button to change transparency."
+msgstr ""
+"Utilizzare il tasto Opzione + tasto sinistro del mouse per cambiare la "
+"trasparenza."
+
+msgid "Use the Alt key + left mouse button to change transparency."
+msgstr ""
+"Utilizzare il tasto Alt + tasto sinistro del mouse per cambiare la "
+"trasparenza."
+
+msgid "LUT"
+msgstr "LUT"
+
+msgid "Enabled"
+msgstr "Abilitato"
+
+msgid "Order"
+msgstr "Ordine"
+
+msgid "Color Controls"
+msgstr "Controlli di colore"
+
+msgid "Add"
+msgstr "Add"
+
+msgid "Contrast"
+msgstr "Contrasto"
+
+msgid "Saturation"
+msgstr "Saturazione"
+
+msgid "Tint"
+msgstr "Tessuto"
+
+msgid "Invert"
+msgstr "Inversione"
+
+msgid "Levels"
+msgstr "Livelli"
+
+msgid "In Low"
+msgstr "In basso"
+
+msgid "In High"
+msgstr "In alto"
+
+msgid "Gamma"
+msgstr "Gamma"
+
+msgid "Out Low"
+msgstr "Fuori basso"
+
+msgid "Out High"
+msgstr "In alto"
+
+msgid "Soft Clip"
+msgstr "Clip morbido"
+
+msgid "Selects the current background type from the list"
+msgstr "Seleziona il tipo di sfondo attuale dall'elenco"
+
+msgid "Solid Color:"
+msgstr "Colore solido:"
+
+msgid "Selects the solid color."
+msgstr "Seleziona il colore solido."
+
+msgid "Size:"
+msgstr "Dimensione:"
+
+msgid "Selects the checker size."
+msgstr "Seleziona la dimensione della scacchiera."
+
+msgid "First Color:"
+msgstr "Primo colore:"
+
+msgid "Selects the first color."
+msgstr "Seleziona il primo colore."
+
+msgid "Second Color:"
+msgstr "Secondo colore:"
+
+msgid "Selects the second color in Checkers."
+msgstr "Seleziona il secondo colore nelle scacchiere."
+
+msgid "Text"
+msgstr "Testo"
+
+msgid "Font"
+msgstr "Carattere"
+
+msgid "Selects the current font from the list"
+msgstr "Seleziona il carattere corrente dall'elenco"
+
+msgid "Selects the current font size."
+msgstr "Seleziona la dimensione corrente del carattere."
+
+msgid "Pen"
+msgstr "Pen"
+
+msgid "Laser"
+msgstr "Laser"
+
+msgid "Makes the following annotation dissapear a second after drawn."
+msgstr "Rende l'annotazione seguente dissapere un secondo dopo il disegno."
+
+msgid "Color:"
+msgstr "Colore:"
+
+msgid "Selects the current pen color."
+msgstr "Seleziona il colore attuale della penna."
+
+msgid "Selects a hard brush."
+msgstr "Seleziona un pennello duro."
+
+msgid "Selects a soft brush."
+msgstr "Seleziona un pennello morbido."
+
+msgid "Pen Size:"
+msgstr "Dimensione della penna:"
+
+msgid "Selects the current pen size."
+msgstr "Seleziona la dimensione attuale della penna."
+
+msgid "Ghosting"
+msgstr "Fantasma"
+
+msgid "Previous:"
+msgstr "Precedente:"
+
+msgid ""
+"Selects the number of fading frames previous to the frame of the annotation."
+msgstr ""
+"Seleziona il numero di fotogrammi svaniti precedentemente alla fotogramma "
+"dell'annotazione."
+
+msgid "Next:"
+msgstr "Avanti:"
+
+msgid ""
+"Selects the number of fading frames following the frame of the annotation."
+msgstr ""
+"Seleziona il numero di fotogrammi svaniti seguendo il fotogramma "
+"dell'annotazione."
+
+msgid "Frames"
+msgstr "Cornici"
+
+msgid "Current"
+msgstr "Attualità"
+
+msgid "Makes the following annotation show on this frame only."
+msgstr "Fa mostrare la seguente annotazione solo su questo telaio."
+
+msgid "All"
+msgstr "All"
+
+msgid "Makes the following annotation show on all frames."
+msgstr "Rende la seguente annotazione mostrare su tutti i fotogrammi."
+
+msgid "Notes"
+msgstr "Note"
+
+msgid "Invalid index for add clip to timeline."
+msgstr "Indice non valido per aggiungere clip alla timeline."
+
+msgid "Could not get current path."
+msgstr "Impossibile ottenere il percorso attuale."
+
+msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
+msgstr ""
+"L'elemento EDL \"{0}\" non è più caricato. Non è possibile annullare o "
+"rifare."
+
+msgid "Could not paste {0}.  Error {1}."
+msgstr "Impossibile incollare {0}. Errore {1}."
+
+msgid "Could not save .otio file: {0}"
+msgstr "Impossibile salvare il file.otio: {0}"
+
+msgid "Error saving {0}. {1}"
+msgstr "Errore nel salvare {0}. {1}"
+
+msgid "Empty EDL file.  Not saving."
+msgstr "File EDL vuoto. Non salvato."
+
+msgid "Destination file is invalid."
+msgstr "Il file di destinazione non è valido."
+
+msgid "You can only add clips to an .otio EDL playlist."
+msgstr "È possibile aggiungere solo clip a una playlist.otio EDL."
+
+msgid "Cannot currently concatenate an .otio file."
+msgstr "Attualmente non è possibile concatenare un file.otio."
+
+msgid "Cannot currently concatenate a directory."
+msgstr "Attualmente non è possibile concatenare una directory."
+
+msgid "Could not append video track {0}"
+msgstr "Impossibile aggiungere la traccia video {0}"
+
+msgid "Could not append audio track {0}"
+msgstr "Impossibile aggiungere la traccia audio {0}"
+
+msgid "Server started at port {0}."
+msgstr "Il server è iniziato alla porta {0}."
+
+msgid "Server stopped."
+msgstr "Il server si e' fermato."
+
+msgid "A client connected from {0}"
+msgstr "Un client collegato da {0}"
+
+msgid "Client at {0} disconnected."
+msgstr "Cliente a {0} disconnesso."
+
+msgid "Server protocol version is {0}.  Client protocol version is {1}"
+msgstr "Server protocol version is {0}. Client protocol version is {1}"
+
+msgid "Remote file {0} does not exist on local filesystem."
+msgstr "Il file remoto {0} non esiste nel filesystem locale."
+
+msgid "Remote files are less than local files."
+msgstr "I file remoti sono inferiori ai file locali."
+
+msgid "Remote file {0} matches file name {1} but not path."
+msgstr ""
+"Il file remoto {0} corrisponde al nome del file {1} ma non al percorso."
+
+msgid "Remote file {0} does not match local filename."
+msgstr "Il file remoto {0} non corrisponde al nome del file locale."
+
+msgid "Removing {0} from message publisher."
+msgstr "Rimuovere {0} dall'editore di messaggi."
+
+msgid "Server listening on port "
+msgstr "Ascolto del server sulla porta"
+
+msgid "ComfyUI listening on port "
+msgstr "ComfyUI in ascolto sulla porta"
+
+msgid "Connected to server at {0}, port {1}"
+msgstr "Collegato al server a {0}, porta {1}"
+
+msgid "Server connection lost."
+msgstr "Connessione persa al server."
+
+msgid "Exception caught: "
+msgstr "Eccezione catturata:"
+
+msgid "ERROR: "
+msgstr "Errore:"
+
+msgid "WARN : "
+msgstr "GARANDA:"
+
+msgid ""
+"Regular expression created from {0}.  It is:\n"
+"{1}"
+msgstr "Espressione regolare creata da {0}. È: {1}"
+
+msgid "Iteration {0} matched prefix={1}"
+msgstr "Iterazione {0} corrispondente prefisso={1}"
+
+msgid "Iteration {0} matched version={1}"
+msgstr "Iterazione {0} corrispondente versione={1}"
+
+msgid "Iteration {0} matched suffix={1}"
+msgstr "Iterazione {0} abbinata suffisso={1}"
+
+msgid "Iteration {0} will check version={1}"
+msgstr "Iterazione {0} controllerà versione={1}"
+
+msgid ""
+"No versioning in this clip.  Please create an image or directory named with "
+"a versioning string."
+msgstr ""
+"Nessuna versione in questo clip. Si prega di creare un'immagine o una "
+"directory denominata con una stringa di versione."
+
+msgid "Example:  gizmo_v003.0001.exr"
+msgstr "Esempio: gizmo_v003.0001.exr"
+
+msgid "Annotation already existed at this time"
+msgstr "L'annotazione esisteva già in questo momento"
+
+msgid "Failed to open the file {0} for writing."
+msgstr "Aprire il file {0} per la scrittura non è riuscito."
+
+msgid "Failed to write to the file {0}."
+msgstr "Scrivere nel file {0} non è riuscita."
+
+msgid "Session saved to \"{0}\"."
+msgstr "Sessione salvata in \"{0}\"."
+
+msgid "Failed to open the file '{0}' for reading."
+msgstr "Aprire il file '{0}' per la lettura non è riuscito."
+
+msgid "Failed to load the file '{0}."
+msgstr "Caricamento del file '{0} non riuscito."
+
+msgid "Cannot save an NDI stream"
+msgstr "Impossibile salvare un flusso NDI"
+
+msgid "Saving movie to {0}."
+msgstr "Salvataggio del film in {0}."
+
+msgid "Saving audio to {0}."
+msgstr "Salvataggio audio in {0}."
+
+msgid "Saving pictures to {0}."
+msgstr "Salvataggio delle immagini in {0}."
+
+msgid ""
+"VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to "
+".mp4"
+msgstr "Il profilo VP9 ha bisogno di un'estensione.mp4,.mkv o.webm."
+
+msgid "AV1 profile needs a .mp4 or .mkv movie extension.  Changing it to .mp4"
+msgstr ""
+"Il profilo AV1 ha bisogno di un'estensione di film.mp4 o.mkv. Cambiandolo "
+"in.mp4"
+
+msgid ""
+"GoPro Cineform profile needs a .mkv movie extension.  Changing it to .mkv"
+msgstr ""
+"Il profilo Cineform GoPro ha bisogno di un'estensione del film.mkv. "
+"Cambiandolo in.mkv"
+
+msgid "HAP profile needs a .mov extension.  Changing it to .mov"
+msgstr "Il profilo HAP ha bisogno di un'estensione.mov. Cambiandolo in.mov"
+
+msgid "New file {0} already exist!  Cannot overwrite it."
+msgstr "Esistono già nuovi file {0}! Impossibile sovrascriverlo."
+
+msgid "Rotated image info: {0}"
+msgstr "Informazioni sull'immagine rotante: {0}"
+
+msgid "Scaled image info: {0}"
+msgstr "Informazioni sull'immagine scalata: {0}"
+
+msgid "{0}: Cannot open writer plugin."
+msgstr "{0}: Impossibile aprire il plugin scrittore."
+
+msgid "Image info: {0} {1}"
+msgstr "Informazioni sull'immagine: {0} {1}"
+
+msgid ""
+"Image too big for options.annotations.  Will scale to the viewport size."
+msgstr ""
+"Immagine troppo grande per le opzioni.Annotazioni. Sarà scalato alla "
+"dimensione del viewport."
+
+msgid "Viewport Size: {0} - X={1}, Y={2}"
+msgstr "Dimensione viewport: {0} - X={1}, Y={2}"
+
+msgid "Writer plugin did not get output info.  Defaulting to {0}"
+msgstr ""
+"Il plugin scrittore non ha ottenuto le informazioni di output. Predefinito a"
+" {0}"
+
+msgid "Output info: {0} {1}"
+msgstr "Informazioni sull'uscita: {0} {1}"
+
+msgid "Using profile {0}, pixel format {1}."
+msgstr "Utilizzando profilo {0}, formato pixel {1}."
+
+msgid "Using preset {0}."
+msgstr "Usando preimpostazione {0}."
+
+msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
+msgstr "Salvataggio di film senza audio %<PRId64> - %<PRId64>"
+
+msgid "Saving Movie with Audio %<PRId64> - %<PRId64>"
+msgstr "Salvataggio di film con audio %<PRId64> - %<PRId64>"
+
+msgid "Saving Audio %<PRId64> - %<PRId64>"
+msgstr "Risparmio audio %<PRId64> - %<PRId64>"
+
+msgid "Saving Pictures without Audio %<PRId64> - %<PRId64>"
+msgstr "Salvataggio delle immagini senza audio %<PRId64> - %<PRId64>"
+
+msgid "Audio only in timeline, but not trying to save audio."
+msgstr "Audio solo nella timeline, ma non cercando di salvare l'audio."
+
+msgid "{0}: Invalid OpenGL format and type"
+msgstr "{0}: Formato e tipo OpenGL non valido"
+
+msgid "OpenGL info: {0}"
+msgstr "Informazioni OpenGL: {0}"
+
+msgid "Saving... {0}"
+msgstr "Salvataggio... {0}"
+
+msgid "Empty video data at time {0}."
+msgstr "Dati video vuoti al momento {0}."
+
+msgid "Reading preferences from \"{0}{1}\"."
+msgstr "Preferenze di lettura da \"{0}{1}\"."
+
+msgid "Failed to retrieve {0}."
+msgstr "Recuperare {0} non è riuscito."
+
+msgid ""
+"FFmpeg YUV to RGB Conversion is on in Settings Panel.  mrv2 will play back "
+"movies slower."
+msgstr ""
+"FFmpeg YUV a RGB Conversione è attivato nel Pannello Impostazioni. mrv2 "
+"riprodurrà i film più lentamente."
+
+msgid "Could not open color theme from \"{0}\"."
+msgstr "Impossibile aprire il tema di colore da \"{0}\"."
+
+msgid "Loaded color themes from \"{0}\"."
+msgstr "Temi di colore caricati da \"{0}\"."
+
+msgid "Setting OCIO config from preferences."
+msgstr "Impostazione della configurazione OCIO dalle preferenze."
+
+msgid "Setting OCIO config from OCIO environment variable."
+msgstr ""
+"Impostazione della configurazione OCIO dalla variabile di ambiente OCIO."
+
+msgid "Path mappings have been loaded from \"{0}{1}\"."
+msgstr "Le mappature dei percorsi sono state caricate da \"{0}{1}\"."
+
+msgid "Loading hotkeys from \"{0}{1}.prefs\"."
+msgstr "Caricamento di tasti di avviamento da \"{0}{1}.prefs\"."
+
+msgid "Reseting hotkeys to default."
+msgstr ""
+"Reimpostazione delle tasti di accensione per impostazione predefinita."
+
+msgid "Path mappings have been saved to \"{0}{1}\"."
+msgstr "Le mappature dei percorsi sono state salvate in \"{0}{1}\"."
+
+msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
+msgstr "Le tastiere sono state salvate in \"{0}{1}.prefs\"."
+
+msgid "Preferences have been saved to: \"{0}{1}\"."
+msgstr "Le preferenze sono state salvate su: \"{0}{1}\"."
+
+msgid "Removing "
+msgstr "Rimozione"
+
+msgid "OCIO config is now:"
+msgstr "La configurazione di OCIO è ora:"
+
+msgid "OCIO file \"{0}\" not found or not readable."
+msgstr "File OCIO \"{0}\" non trovato o non leggibile."
+
+msgid "Setting OCIO config to default:"
+msgstr "Impostazione della configurazione OCIO a impostazione predefinita:"
+
+msgid "Setting OCIO config to built-in:"
+msgstr "Impostazione della configurazione OCIO in built-in:"
+
+msgid "Path mapping for {0} already exists!"
+msgstr "La mappatura del percorso per {0} esiste già!"
+
+msgid "Comparing {0} to prefix {1}"
+msgstr "Confrontando {0} al prefisso {1}"
+
+msgid "Found a match.  File is now {0}"
+msgstr "Trovata una corrispondenza. Il file ora è {0}"
+
+msgid "OCIO config file cannot be empty."
+msgstr "Il file di configurazione OCIO non può essere vuoto."
+
+msgid "OCIO config '{0}' does not exist or is not readable."
+msgstr "La configurazione OCIO '{0}' non esiste o non è leggibile."
+
+msgid "Invalid OCIO Ics '{0}'."
+msgstr "OCIO Ics invalidi «{0}»."
+
+msgid "Invalid OCIO Look '{0}'."
+msgstr "Look OCIO non valido \"{0}\"."
+
+msgid "Invalid OCIO Display/View '{0}'."
+msgstr "Visualizzazione OCIO non valida/Vedi \"{0}\"."
+
+msgid "Could not split '{0}' into display and view."
+msgstr "Impossibile dividere '{0}' in visualizzazione e visualizzazione."
+
+msgid "Setting OCIO Preset '{0}'."
+msgstr "Impostazione OCIO Preset '{0}'."
+
+msgid "Preset '{0}' not found."
+msgstr "Preimpostazione \"{0}\" non trovata."
+
+msgid "OCIO Preset '{0}' already exists!"
+msgstr "OCIO Preset '{0}' esiste già!"
+
+msgid "Failed to load the file '{0}'."
+msgstr "Caricamento del file «{0}» non riuscito."
+
+msgid "Loaded {0} ocio presets from \"{1}\"."
+msgstr "Caricato {0} preimpostazioni ocio da \"{1}\"."
+
+msgid "Failed to open the file '{0}' for saving."
+msgstr "Aprire il file «{0}» per il salvataggio non è riuscito."
+
+msgid "Failed to save the file '{0}'."
+msgstr "Salvare il file '{0} non è riuscito."
+
+msgid "OCIO presets have been saved to \"{0}\"."
+msgstr "I preset OCIO sono stati salvati in \"{0}\"."
+
+msgid "English"
+msgstr "Italiano"
+
+msgid "Spanish"
+msgstr "Spagnolo"
+
+msgid "German"
+msgstr "Tedesco"
+
+msgid "Hindi"
+msgstr "Hindi"
+
+msgid "Chinese Simplified"
+msgstr "Cinese semplificato"
+
+msgid "Portuguese"
+msgstr "Portoghese"
+
+msgid "French"
+msgstr "Francese"
+
+msgid ""
+"Need to reboot mrv2 to change language.  Are you sure you want to continue?"
+msgstr ""
+"Bisogna riavviare mrv2 per cambiare linguaggio. Sei sicuro di voler "
+"continuare?"
+
+msgid "Set Language to {0}, Numbers to {1}"
+msgstr "Imposta linguaggio a {0}, numeri a {1}"
+
+msgid "Arabic"
+msgstr "Arabo"
+
+msgid "Armenian"
+msgstr "Armeni"
+
+msgid "Basque"
+msgstr "Basco"
+
+msgid "Belarusian"
+msgstr "Bielorussia"
+
+msgid "Bengali"
+msgstr "Bengali"
+
+msgid "Bulgarian"
+msgstr "Bulgaro"
+
+msgid "Catalan"
+msgstr "Catalano"
+
+msgid "Chinese"
+msgstr "Cinese"
+
+msgid "Czech"
+msgstr "Ceco"
+
+msgid "Danish"
+msgstr "Danese"
+
+msgid "Dutch"
+msgstr "Olandesi"
+
+msgid "Finnish"
+msgstr "Finlandese"
+
+msgid "Galician"
+msgstr "Galiziano"
+
+msgid "Greek"
+msgstr "Greek"
+
+msgid "Hebrew"
+msgstr "Ebraico"
+
+msgid "Icelandic"
+msgstr "Islandese"
+
+msgid "Indonesian"
+msgstr "Indonesiano"
+
+msgid "Italian"
+msgstr "Italiano"
+
+msgid "Irish"
+msgstr "Irlandese"
+
+msgid "Japanese"
+msgstr "Giapponese"
+
+msgid "Korean"
+msgstr "Coreano"
+
+msgid "Norwegan"
+msgstr "Norwegan"
+
+msgid "Persian"
+msgstr "Persiano"
+
+msgid "Polish"
+msgstr "Polacco"
+
+msgid "Tibetan"
+msgstr "Tibetano"
+
+msgid "Romanian"
+msgstr "Rumeno"
+
+msgid "Russian"
+msgstr "Russo"
+
+msgid "Serbian"
+msgstr "Serbo"
+
+msgid "Slovenian"
+msgstr "Sloveno"
+
+msgid "Swedish"
+msgstr "Svedese"
+
+msgid "Thai"
+msgstr "Thailandesi"
+
+msgid "Turkish"
+msgstr "Turco"
+
+msgid "Vietnamese"
+msgstr "Vietnamita"
+
+msgid "Welsh"
+msgstr "Gallese"
+
+msgid "Yiddish"
+msgstr "Yiddish"
+
+msgid "Zulu"
+msgstr "Zulu"
+
+msgid "@B12@C7@b@.Function\t@B12@C7@b@.Hotkey"
+msgstr "@B12@C7@b@.Funzione @B12@C7@b@.Hotkey"
+
+msgid ""
+"Hotkey \"%s\" already used in \"%s\".\n"
+"Do you want to override it?"
+msgstr "Hotkey «%s» già usato in «%s». Vuoi sostituirlo?"
+
+msgid ""
+"Corruption in hotkeys preferences. Hotkey '{0}' for {1} will not be "
+"available.  Already used in {2}."
+msgstr ""
+"La corruzione nelle preferenze dei tasti di avvio. Il tasto di avvio '{0}' "
+"per {1} non sarà disponibile. Già usato in {2}."
+
+msgid "Load Directory"
+msgstr "Carica directory"
+
+msgid "Reels (*.{"
+msgstr "Carrelli (*.{)"
+
+msgid "Images (*.{"
+msgstr "Immagini (*.{"
+
+msgid "Sessions (*."
+msgstr "Sessioni (*."
+
+msgid "All (*.{"
+msgstr "Tutti (*.{"
+
+msgid "Movies (*.{"
+msgstr "Film (*.{)"
+
+msgid "Load Image(s)"
+msgstr "Carica immagine(e)"
+
+msgid "Load Movie or Sequence"
+msgstr "Carica film o sequenza"
+
+msgid "Save OTIO timeline"
+msgstr "Salva la timeline OTIO"
+
+msgid "Save Python Script"
+msgstr "Salva script Python"
+
+msgid "Load Python Script"
+msgstr "Carica script Python"
+
+msgid "LUTS (*.{"
+msgstr "LUTS (*.{)"
+
+msgid "Load LUT"
+msgstr "Carica LUT"
+
+msgid "Subtitles (*.{"
+msgstr "Sottotitoli (*."
+
+msgid "Load Subtitle"
+msgstr "Carica sottotitolo"
+
+msgid "Audios (*.{"
+msgstr "Audio (*.{)"
+
+msgid "Load Audio"
+msgstr "Carica l'audio"
+
+msgid "Save Single Frame"
+msgstr "Salva un unico telaio"
+
+msgid "Save Audio"
+msgstr "Salva audio"
+
+msgid "Save Movie or Sequence"
+msgstr "Salva film o sequenza"
+
+msgid "Acrobat PDF (*.{pdf})"
+msgstr "Acrobat PDF (*.{pdf})"
+
+msgid "Save Annotations to PDF"
+msgstr "Salva le annotazioni in PDF"
+
+msgid "Session"
+msgstr "Sessione"
+
+msgid "Open Session"
+msgstr "Apri sessione"
+
+msgid "Save Session"
+msgstr "Salva sessione"
+
+msgid "OCIO config (*.{"
+msgstr "Configurazione OCIO (*.{"
+
+msgid "Load OCIO Config"
+msgstr "Carica la configurazione OCIO"
+
+msgid "Default"
+msgstr "Predefinito"
+
+msgid "Annotations"
+msgstr "Annotazioni"
+
+msgid "Background"
+msgstr "Contesto"
+
+msgid "Color"
+msgstr "Colore"
+
+msgid "Color Area"
+msgstr "Area colore"
+
+msgid "Devices"
+msgstr "Dispositivi"
+
+msgid "Environment Map"
+msgstr "Mappa dell'ambiente"
+
+msgid "Histogram"
+msgstr "Histogramma"
+
+msgid "Logs"
+msgstr "Giorni"
+
+msgid "Media Information"
+msgstr "Informazioni sui media"
+
+msgid "NDI"
+msgstr "NDI"
+
+msgid "Python"
+msgstr "Python"
+
+msgid "Settings"
+msgstr "Impostazioni"
+
+msgid "Vectorscope"
+msgstr "Vettorescopio"
+
+msgid "Hotkeys"
+msgstr "Tasti di avviamento"
+
+msgid "Preferences"
+msgstr "Preferenze"
+
+msgid "About"
+msgstr "Circa"
+
+msgid "File extension cannot be empty."
+msgstr "L'estensione del file non può essere vuota."
+
+msgid "Saving audio but current clip does not have audio."
+msgstr "Salvare l'audio ma il clip corrente non ha l'audio."
+
+msgid "Saving video but with an audio extension."
+msgstr "Salvataggio video ma con estensione audio."
+
+msgid "View/Mask"
+msgstr "Visualizza/Maschera"
+
+msgid "OCIO/     Input Color Space"
+msgstr "OCIO/Spazio colore di ingresso"
+
+msgid "OCIO/     Look"
+msgstr "OCIO/     Look"
+
+msgid "All Monitors"
+msgstr "Tutti i monitor"
+
+msgid "Pick Color"
+msgstr "Scegli colore"
+
+msgid "Pick Draw Color and Alpha"
+msgstr "Scegli il colore di disegno e l'alfa"
+
+msgid "Media"
+msgstr "Media"
+
+msgid "UI"
+msgstr "UI"
+
+msgid "Pan And Zoom"
+msgstr "Panoramica e zoom"
+
+msgid "Timeline"
+msgstr "Scadenza"
+
+msgid ""
+"You have EDLs in the current session.  These will not be saved in the "
+"session file.  Do you want to continue?"
+msgstr ""
+"Hai degli EDL nella sessione in corso. Questi non saranno salvati nel file "
+"della sessione. Vuoi continuare?"
+
+msgid "Edit Text Annotation"
+msgstr "Modifica annotazione testo"
+
+msgid "No item selected"
+msgstr "Nessun elemento selezionato"
+
+msgid "Font not found.  Will not use UTF-8."
+msgstr "Carattere non trovato. Non userà UTF-8."
+
+msgid "%s - Page %d"
+msgstr "%s - Pagina %d"
+
+msgid "Frame {0} - Timecode: {1} - {2} Secs."
+msgstr "Frame {0} - Timecode: {1} - {2} Secs."
+
+msgid "Image too big.  Will save the viewport size."
+msgstr "Immagine troppo grande. Salva la dimensione della vista."
+
+msgid "Viewport Size: {0}  Render Size: {1}"
+msgstr "Dimensione viewport: {0} Dimensione render: {1}"
+
+msgid "Scrub"
+msgstr "Spruzzo"
+
+msgid "Selection"
+msgstr "Selezione"
+
+msgid "Draw"
+msgstr "Disegna"
+
+msgid "Erase"
+msgstr "Cancellazione"
+
+msgid "Circle"
+msgstr "Cerchio"
+
+msgid "Rectangle"
+msgstr "Rettangolo"
+
+msgid "Arrow"
+msgstr "Freccia"
+
+msgid "Rotate"
+msgstr "Ruotare"
+
+msgid "Trim"
+msgstr "Taglio"
+
+msgid "Slip"
+msgstr "Slittamento"
+
+msgid "Slide"
+msgstr "Slide"
+
+msgid "Ripple"
+msgstr "Innesto"
+
+msgid "Roll"
+msgstr "Rotolo"
+
+msgid "Render/Minify Filter/Linear"
+msgstr "Render/Minimizzare il filtro/Linear"
+
+msgid "Render/Magnify Filter/Linear"
+msgstr "Render/Ingrandisci il filtro/Linear"
+
+msgid "(no image)"
+msgstr "(nessuna immagine)"
+
+msgid "Unknown action mode in "
+msgstr "Modalità di azione sconosciuta in"
+
+msgid ""
+"Cannot create an annotation here for all frames.  A current frame annotation"
+" already exists."
+msgstr ""
+"Impossibile creare un' annotazione qui per tutti i fotogrammi. Un' "
+"annotazione attuale esiste già."
+
+msgid ""
+"Cannot create an annotation here for current frame.  An all frames "
+"annotation already exists."
+msgstr ""
+"Impossibile creare un' annotazione qui per il fotogramma corrente. Un' "
+"annotazione di tutti i fotogrammi esiste già."
+
+msgid "Play"
+msgstr "Gioca"
+
+msgid "Stop"
+msgstr "Smettila."
+
+msgid "2.35"
+msgstr "2.35"
+
+msgid "1.85"
+msgstr "1.85"
+
+msgid "1.66"
+msgstr "1.66"
+
+msgid "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
+msgstr "PMem: %<PRIu64> / %<PRIu64> MB VMem: %<PRIu64> / %<PRIu64> MB"
+
+msgid "Cache:"
+msgstr "Cache:"
+
+msgid "    Used: %.2g of %zu Gb (%.2g %%)"
+msgstr "Utilizzato: %.2g di %zu Gb (%.2g %%)"
+
+msgid "    Ahead    V: % 4<PRIu64>    A: % 4<PRIu64>"
+msgstr "Prima V: % 4<PRIu64> A: % 4<PRIu64>"
+
+msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
+msgstr "Dietro V: % 4<PRIu64> A: % 4<PRIu64>"
+
+msgid "Edit Text"
+msgstr "Modifica testo"
+
+msgid "Invalid font for text drawing"
+msgstr "Tipo di carattere non valido per il disegno di testo"
+
+msgid "Could not convert message to shape: "
+msgstr "Impossibile convertire il messaggio in forma:"
+
+msgid "Monitor "
+msgstr "Monitoraggio"
+
+msgid "File/Open/Movie or Sequence"
+msgstr "File/Apri/Film o sequenza"
+
+msgid "File/Open/With Separate Audio"
+msgstr "File/Apri/Con audio separato"
+
+msgid "File/Open/Single Image"
+msgstr "File/Apri/Immagine singola"
+
+msgid "File/Open/Directory"
+msgstr "File/Apri/Directory"
+
+msgid "File/Open/Session"
+msgstr "File/Apri/Sessione"
+
+msgid "File/Save/Movie or Sequence"
+msgstr "File/Salva/Film o sequenza"
+
+msgid "File/Save/Single Frame"
+msgstr "File/Salva/Singolo telaio"
+
+msgid "File/Save/Frames to Folder"
+msgstr "File/Salva/Cornici nella cartella"
+
+msgid "File/Save/OTIO EDL Timeline"
+msgstr "File/Salva/OTIO EDL Timeline"
+
+msgid "File/Save/PDF Document"
+msgstr "File/Salva/Documento PDF"
+
+msgid "File/Save/Session"
+msgstr "File/Salva/Sessione"
+
+msgid "File/Save/Session As"
+msgstr "File/Salva/Sessione come"
+
+msgid "File/Close Current"
+msgstr "File/Chiudi corrente"
+
+msgid "File/Close All"
+msgstr "File/Chiudi tutto"
+
+msgid "File/Recent/%s"
+msgstr "File/Recente/%s"
+
+msgid "File/Quit"
+msgstr "File/Esci"
+
+msgid "Window/Presentation"
+msgstr "Finestra/Presentazione"
+
+msgid "Window/Full Screen"
+msgstr "Finestra/Schermo intero"
+
+msgid "Window/Float On Top"
+msgstr "Finestra/Fluttuare in alto"
+
+msgid "Window/Secondary"
+msgstr "Finestra/Secondario"
+
+msgid "Window/Secondary Float On Top"
+msgstr "Finestra/Flotta secondaria in alto"
+
+msgid "View/Tool Bars/Toggle Menu Bar"
+msgstr "Visualizza/Barre degli strumenti/Commuta la barra dei menu"
+
+msgid "View/Tool Bars/Toggle Top Bar"
+msgstr "Visualizza/Barre degli strumenti/Commuta barra superiore"
+
+msgid "View/Tool Bars/Toggle Pixel Bar"
+msgstr "Visualizza/Barre degli strumenti/Commuta la barra dei pixel"
+
+msgid "View/Tool Bars/Toggle Timeline Bar"
+msgstr "Visualizza/Barre degli strumenti/Commuta la barra di timeline"
+
+msgid "View/Tool Bars/Toggle Status Bar"
+msgstr "Visualizza/Barre degli strumenti/Commuta la barra di stato"
+
+msgid "View/Tool Bars/Toggle Action Dock"
+msgstr "Visualizza/Barre degli strumenti/Commuta dock di azione"
+
+msgid "View/Auto Frame"
+msgstr "Visualizza/Cornice automatica"
+
+msgid "View/Safe Areas"
+msgstr "Visualizza/Zone di sicurezza"
+
+msgid "View/OpenEXR/Data Window"
+msgstr "Visualizza/OpenEXR/Finestra dati"
+
+msgid "View/OpenEXR/Display Window"
+msgstr "Visualizza/OpenEXR/Visualizza finestra"
+
+msgid "View/OpenEXR/Ignore Display Window"
+msgstr "Visualizza/OpenEXR/Ignora la finestra di visualizzazione"
+
+msgid "Panel/One Panel Only"
+msgstr "Pannello/Un solo pannello"
+
+msgid "Panel/"
+msgstr "Pannello/"
+
+msgid "Window/"
+msgstr "Finestra/"
+
+msgid "Unknown menu entry "
+msgstr "Iscrizione del menu sconosciuta"
+
+msgid "Render/Color Channel"
+msgstr "Render/Canale colore"
+
+msgid "Render/Red Channel"
+msgstr "Render/Canale rosso"
+
+msgid "Render/Green Channel "
+msgstr "Render/Canale verde"
+
+msgid "Render/Blue Channel"
+msgstr "Render/Canale blu"
+
+msgid "Render/Alpha Channel"
+msgstr "Render/Canale alfa"
+
+msgid "Render/Mirror X"
+msgstr "Render/Specchio X"
+
+msgid "Render/Mirror Y"
+msgstr "Render/Specchio Y"
+
+msgid "Render/Rotate/-90 Degrees"
+msgstr "Render/Ruotare/-90 Gradi"
+
+msgid "Render/Rotate/+90 Degrees"
+msgstr "Render/Ruotare/+90 Gradi"
+
+msgid "Render/Video Levels/From File"
+msgstr "Render/Livelli video/Dal file"
+
+msgid "Render/Video Levels/Legal Range"
+msgstr "Render/Livelli video/Intervallo giuridico"
+
+msgid "Render/Video Levels/Full Range"
+msgstr "Render/Livelli video/Intervallo completo"
+
+msgid "Render/Alpha Blend/None"
+msgstr "Render/Miscelazione alfa/Nessuna"
+
+msgid "Render/Alpha Blend/Straight"
+msgstr "Render/Miscelazione alfa/Dritto"
+
+msgid "Render/Alpha Blend/Premultiplied"
+msgstr "Render/Miscelazione alfa/Premultiplicato"
+
+msgid "Render/Minify Filter/Nearest"
+msgstr "Render/Minimizzare il filtro/Più vicino"
+
+msgid "Render/Magnify Filter/Nearest"
+msgstr "Render/Ingrandisci il filtro/Più vicino"
+
+msgid "Render/HDR/Auto Normalize"
+msgstr "Render/HDR/Normalizza automaticamente"
+
+msgid "Render/HDR/Invalid Values"
+msgstr "Render/HDR/Valori non validi"
+
+msgid "Playback/Stop"
+msgstr "Riproduzione/Smettila."
+
+msgid "Playback/Forwards"
+msgstr "Riproduzione/Avanti"
+
+msgid "Playback/Backwards"
+msgstr "Riproduzione/Indietro"
+
+msgid "Playback/Toggle Playback"
+msgstr "Riproduzione/Commuta riproduzione"
+
+msgid "Playback/Toggle In Point"
+msgstr "Riproduzione/Commuta in punto"
+
+msgid "Playback/Toggle Out Point"
+msgstr "Riproduzione/Commuta il punto di uscita"
+
+msgid "Playback/Loop Playback"
+msgstr "Riproduzione/Riproduzione del filo"
+
+msgid "Playback/Playback Once"
+msgstr "Riproduzione/Riproduzione una volta"
+
+msgid "Playback/Playback Ping Pong"
+msgstr "Riproduzione/Riproduzione Ping Pong"
+
+msgid "Playback/Go to/Start"
+msgstr "Riproduzione/Vai a/Inizio"
+
+msgid "Playback/Go to/End"
+msgstr "Riproduzione/Vai a/End"
+
+msgid "Playback/Go to/Previous Frame"
+msgstr "Riproduzione/Vai a/Cornice precedente"
+
+msgid "Playback/Go to/Next Frame"
+msgstr "Riproduzione/Vai a/Cornice successiva"
+
+msgid "Playback/Go to/Previous Clip"
+msgstr "Riproduzione/Vai a/Clip precedente"
+
+msgid "Playback/Go to/Next Clip"
+msgstr "Riproduzione/Vai a/Clip successivo"
+
+msgid "Playback/Go to/Previous Annotation"
+msgstr "Riproduzione/Vai a/Annotazione precedente"
+
+msgid "Playback/Go to/Next Annotation"
+msgstr "Riproduzione/Vai a/Annotazione successiva"
+
+msgid "Playback/Annotation/Clear"
+msgstr "Riproduzione/Annotazione/Cancella"
+
+msgid "Playback/Annotation/Clear All"
+msgstr "Riproduzione/Annotazione/Cancella tutto"
+
+msgid "View/Mask/%s"
+msgstr "Visualizza/Maschera/%s"
+
+msgid "View/Hud"
+msgstr "Visualizza/Hud"
+
+msgid "Timeline/Cache/Clear"
+msgstr "Scadenza/Cache/Cancella"
+
+msgid "Timeline/Cache/Update Frame"
+msgstr "Scadenza/Cache/Aggiorna il quadro"
+
+msgid "Timeline/Editable"
+msgstr "Scadenza/Modificabile"
+
+msgid "Timeline/Edit Associated Clips"
+msgstr "Scadenza/Modifica clip associati"
+
+msgid "Timeline/Frame View"
+msgstr "Scadenza/Visualizza fotogramma"
+
+msgid "Timeline/Scroll To Current Frame"
+msgstr "Scadenza/Scorri verso la cornice corrente"
+
+msgid "Timeline/Track Info"
+msgstr "Scadenza/Informazioni sulla traccia"
+
+msgid "Timeline/Clip Info"
+msgstr "Scadenza/Informazioni sul clip"
+
+msgid "Timeline/Thumbnails/None"
+msgstr "Scadenza/Thumbnails/Nessuna"
+
+msgid "Timeline/Thumbnails/Small"
+msgstr "Scadenza/Thumbnails/Piccolo"
+
+msgid "Timeline/Thumbnails/Medium"
+msgstr "Scadenza/Thumbnails/Media"
+
+msgid "Timeline/Thumbnails/Large"
+msgstr "Scadenza/Thumbnails/Grande"
+
+msgid "Timeline/Transitions"
+msgstr "Scadenza/Transizioni"
+
+msgid "Timeline/Markers"
+msgstr "Scadenza/Marcatori"
+
+msgid "Image/Next"
+msgstr "Immagine/Avanti"
+
+msgid "Image/Previous"
+msgstr "Immagine/Precedente"
+
+msgid "Image/Version/First"
+msgstr "Immagine/Versione/Prima"
+
+msgid "Image/Version/Last"
+msgstr "Immagine/Versione/Ultimo"
+
+msgid "Image/Version/Previous"
+msgstr "Immagine/Versione/Precedente"
+
+msgid "Image/Version/Next"
+msgstr "Immagine/Versione/Avanti"
+
+msgid "Edit/Frame/Cut"
+msgstr "Modifica/Cornice/Cut"
+
+msgid "Edit/Frame/Copy"
+msgstr "Modifica/Cornice/Copia"
+
+msgid "Edit/Frame/Paste"
+msgstr "Modifica/Cornice/Incollare"
+
+msgid "Edit/Frame/Insert"
+msgstr "Modifica/Cornice/Inserisci"
+
+msgid "Edit/Audio Gap/Insert"
+msgstr "Modifica/Lacuna audio/Inserisci"
+
+msgid "Edit/Audio Gap/Remove"
+msgstr "Modifica/Lacuna audio/Rimuovi"
+
+msgid "Edit/Slice"
+msgstr "Modifica/Trancia"
+
+msgid "Edit/Remove"
+msgstr "Modifica/Rimuovi"
+
+msgid "Edit/Undo"
+msgstr "Modifica/Annulla"
+
+msgid "Edit/Redo"
+msgstr "Modifica/Rifare"
+
+msgid "OCIO/Presets"
+msgstr "OCIO/Presetti"
+
+msgid "OCIO/In Top Bar"
+msgstr "OCIO/Nella barra superiore"
+
+msgid "OCIO/Current"
+msgstr "OCIO/Attualità"
+
+msgid "OCIO/         ICS: %s"
+msgstr "OCIO/         ICS: %s"
+
+msgid "OCIO/     Display: %s"
+msgstr "OCIO/     Display: %s"
+
+msgid "OCIO/        View: %s"
+msgstr "OCIO/        Vista: %s"
+
+msgid "OCIO/  Monitor #%d Display: %s"
+msgstr "OCIO/  Monitor #%d Display: %s"
+
+msgid "OCIO/  Monitor #%d    View: %s"
+msgstr "OCIO/  Monitor #%d    Vista: %s"
+
+msgid "OCIO/        Look: %s"
+msgstr "OCIO/        Look: %s"
+
+msgid "OCIO/        LUT: %s"
+msgstr "OCIO/        LUT: %s"
+
+msgid "OCIO/Change Current File"
+msgstr "OCIO/Cambia file corrente"
+
+msgid "OCIO/Displays"
+msgstr "OCIO/Visualizzazioni"
+
+msgid "Sync/Send/Media"
+msgstr "Sincronizzazione/Invia/Media"
+
+msgid "Sync/Send/UI"
+msgstr "Sincronizzazione/Invia/UI"
+
+msgid "Sync/Send/Pan And Zoom"
+msgstr "Sincronizzazione/Invia/Panoramica e zoom"
+
+msgid "Sync/Send/Color"
+msgstr "Sincronizzazione/Invia/Colore"
+
+msgid "Sync/Send/Timeline"
+msgstr "Sincronizzazione/Invia/Scadenza"
+
+msgid "Sync/Send/Annotations"
+msgstr "Sincronizzazione/Invia/Annotazioni"
+
+msgid "Sync/Send/Audio"
+msgstr "Sincronizzazione/Invia/Audio"
+
+msgid "Sync/Accept/Media"
+msgstr "Sincronizzazione/Accettare/Media"
+
+msgid "Sync/Accept/UI"
+msgstr "Sincronizzazione/Accettare/UI"
+
+msgid "Sync/Accept/Pan And Zoom"
+msgstr "Sincronizzazione/Accettare/Panoramica e zoom"
+
+msgid "Sync/Accept/Color"
+msgstr "Sincronizzazione/Accettare/Colore"
+
+msgid "Sync/Accept/Timeline"
+msgstr "Sincronizzazione/Accettare/Scadenza"
+
+msgid "Sync/Accept/Annotations"
+msgstr "Sincronizzazione/Accettare/Annotazioni"
+
+msgid "Sync/Accept/Audio"
+msgstr "Sincronizzazione/Accettare/Audio"
+
+msgid ""
+"In '{0}' expected a function as a value or a tuple containing a Python "
+"function and a string with menu options in it."
+msgstr ""
+"In '{0}' ci si aspettava una funzione come valore o tupla contenente una "
+"funzione Python e una stringa con le opzioni del menu."
+
+msgid ""
+"In '{0}' expected a function a tuple containing a Python function and a "
+"string with menu options in it."
+msgstr ""
+"In '{0}' expected a function a tuple containing a Python function and a "
+"string with menu options in it."
+
+msgid "Help/Documentation"
+msgstr "Aiuto/Documentazione"
+
+msgid "Help/About"
+msgstr "Aiuto/Circa"
+
+msgid "Favorites"
+msgstr "Preferiti"
+
+msgid "My Computer"
+msgstr "Il mio computer"
+
+msgid "My Documents"
+msgstr "I miei documenti"
+
+msgid "Desktop"
+msgstr "Desktop"
+
+msgid "Home"
+msgstr "Inizio"
+
+msgid "Temporary"
+msgstr "Temporaneo"
+
+msgid "Size"
+msgstr "Dimensione"
+
+msgid "Date"
+msgstr "Data"
+
+msgid "Owner"
+msgstr "Proprietario"
+
+msgid "Permissions"
+msgstr "Autorizzazioni"
+
+msgid "New Folder"
+msgstr "Nuova cartella"
+
+msgid "Rename"
+msgstr "Rinomina"
+
+msgid "Delete"
+msgstr "Cancella"
+
+msgid "Ok"
+msgstr "Ok"
+
+msgid "Location"
+msgstr "Posizione"
+
+msgid "Show Hidden Files"
+msgstr "Mostra i file nascosti"
+
+msgid "File Types"
+msgstr "Tipi di file"
+
+msgid "All Files (*)"
+msgstr "Tutti i file (*)"
+
+msgid "Go back one directory in the history"
+msgstr "Torna indietro una directory nella cronologia"
+
+msgid "Go forward one directory in the history"
+msgstr "Vai avanti una directory nella cronologia"
+
+msgid "Go to the parent directory"
+msgstr "Vai alla directory genitore"
+
+msgid "Refresh this directory"
+msgstr "Aggiorna questa directory"
+
+msgid "Delete file(s)"
+msgstr "Elimina file o file"
+
+msgid "Create new directory"
+msgstr "Crea nuova directory"
+
+msgid "Add this directory to my favorites"
+msgstr "Aggiungi questa directory ai miei preferiti"
+
+msgid "Preview files"
+msgstr "Anteprima file"
+
+msgid "List mode"
+msgstr "Modalità Elenco"
+
+msgid "Wide list mode"
+msgstr "Modalità ampia lista"
+
+msgid "Detail mode"
+msgstr "Modalità dettaglio"
+
+msgid ""
+"Could not create directory '%s'. You may not have permission to perform this"
+" operation."
+msgstr ""
+"Impossibile creare la directory «%s». È possibile che non abbia il permesso "
+"di eseguire questa operazione."
+
+msgid "An error ocurred while trying to delete '%s'. %s"
+msgstr "Un errore avvenuto durante la tentazione di eliminare «%s». %s"
+
+msgid "File '%s' already exists!"
+msgstr "Il file «%s» esiste già!"
+
+msgid "Unable to rename '%s' to '%s'"
+msgstr "Impossibile rinominare «%s» a «%s»"
+
+msgid "3GP Movie"
+msgstr "Film 3GP"
+
+msgid "Advanced Systems Format Media"
+msgstr "Sistemi avanzati Formato Media"
+
+msgid "AVCHD Video"
+msgstr "Video AVCHD"
+
+msgid "AVI Movie"
+msgstr "Film AVI"
+
+msgid "DIVX Movie"
+msgstr "Film DIVX"
+
+msgid "Digital Video"
+msgstr "Video digitale"
+
+msgid "Flash Movie"
+msgstr "Film Flash"
+
+msgid "Apple's M4V Movie"
+msgstr "Il film M4V di Apple"
+
+msgid "Matroska Movie"
+msgstr "Film Matroska"
+
+msgid "Quicktime Movie"
+msgstr "Film in tempo rapido"
+
+msgid "MP4 Movie"
+msgstr "Film MP4"
+
+msgid "MPEG Movie"
+msgstr "Film MPEG"
+
+msgid "MXF Movie"
+msgstr "Film MXF"
+
+msgid "Ogg Movie"
+msgstr "Pellicola Ogg"
+
+msgid "Ogg Video"
+msgstr "Video Ogg"
+
+msgid "OpenTimelineIO EDL"
+msgstr "OpenTimelineIO EDL"
+
+msgid "OpenTimelineIO Zipped EDL"
+msgstr "OpenTimelineIO Zipped EDL"
+
+msgid "Real Media Movie"
+msgstr "Pellicola mediatica reale"
+
+msgid "VOB Movie"
+msgstr "Film VOB"
+
+msgid "WebM Movie"
+msgstr "Film WebM"
+
+msgid "WMV Movie"
+msgstr "Film WMV"
+
+msgid "RAW Picture"
+msgstr "Immagine RAW"
+
+msgid "Bitmap Picture"
+msgstr "Immagine della mappa di bit"
+
+msgid "Cineon Picture"
+msgstr "Immagine Cineon"
+
+msgid "Canon Raw Picture"
+msgstr "Immagine grezza Canon"
+
+msgid "Kodak Digital Negative"
+msgstr "Negativo digitale Kodak"
+
+msgid "DPX Picture"
+msgstr "Immagine DPX"
+
+msgid "EXR Picture"
+msgstr "Immagine EXR"
+
+msgid "GIF Picture"
+msgstr "Immagine GIF"
+
+msgid "HDRI Picture"
+msgstr "Immagine HDRI"
+
+msgid "JPEG Picture"
+msgstr "Immagine JPEG"
+
+msgid "Softimage Picture"
+msgstr "Immagine di softimage"
+
+msgid "Portable Network Graphics Picture"
+msgstr "Immagine grafica di rete portatile"
+
+msgid "Portable Pixmap"
+msgstr "Mappa Pix portatile"
+
+msgid "Photoshop Picture"
+msgstr "Immagine di Photoshop"
+
+msgid "SGI Picture"
+msgstr "Immagine SIG"
+
+msgid "Stereo OpenEXR Picture"
+msgstr "Immagine stereo OpenEXR"
+
+msgid "TGA Picture"
+msgstr "Immagine TGA"
+
+msgid "TIFF Picture"
+msgstr "Immagine TIFF"
+
+msgid "MP3 music"
+msgstr "Musica MP3"
+
+msgid "OGG Vorbis music"
+msgstr "OGG Musica Vorbis"
+
+msgid "Wave music"
+msgstr "Musica di onda"
+
+msgid "OpenUSD Asset"
+msgstr "Attivo OpenUSD"
+
+msgid "OpenUSD Zipped Asset"
+msgstr "Activo zippato OpenUSD"
+
+msgid "OpenUSD Compressed Asset"
+msgstr "Attivo compresso OpenUSD"
+
+msgid "OpenUSD ASCII Asset"
+msgstr "Attivo OpenUSD ASCII"
+
+msgid "Another process using the file."
+msgstr "Un altro processo che utilizza il file."
+
+msgid "Jan"
+msgstr "Jan"
+
+msgid "Feb"
+msgstr "Feb"
+
+msgid "Mar"
+msgstr "Mar"
+
+msgid "Apr"
+msgstr "Apr"
+
+msgid "May"
+msgstr "May"
+
+msgid "Jun"
+msgstr "Jun"
+
+msgid "Jul"
+msgstr "Jul"
+
+msgid "Aug"
+msgstr "Aug"
+
+msgid "Sep"
+msgstr "Sep"
+
+msgid "Oct"
+msgstr "Oct"
+
+msgid "Nov"
+msgstr "Nov"
+
+msgid "Replace"
+msgstr "Sostituire"
+
+msgid "Find:"
+msgstr "Trova:"
+
+msgid "Replace:"
+msgstr "Sostituire:"
+
+msgid "Replace All"
+msgstr "Sostituisci tutto"
+
+msgid "Replace Next"
+msgstr "Sostituisci successivo"
+
+msgid "D\t\t\t\t\t=\tDecoding supported"
+msgstr "D = Decodificazione supportata"
+
+msgid "\tE\t\t\t\t=\tEncoding supported"
+msgstr "E = Codificazione supportata"
+
+msgid "\t\tI\t\t\t=\tIntra frame-only codec"
+msgstr "I = codec interno solo per fotogrammi"
+
+msgid "\t\t\tL\t\t=\tLossy compression"
+msgstr "L = compressione di perdita"
+
+msgid "\t\t\t\tS\t=\tLossless compression"
+msgstr "S = compressione senza perdita"
+
+msgid "With gcc "
+msgstr "Con gcc"
+
+msgid "With clang "
+msgstr "Con il clang"
+
+msgid "With msvc "
+msgstr "Con msvc"
+
+msgid "mrv2 depends on:"
+msgstr "mrv2 dipende da:"
+
+msgid "Vendor:\t"
+msgstr "Fornitore:"
+
+msgid "Renderer:\t"
+msgstr "Ringraziatore:"
+
+msgid "Version:\t"
+msgstr "Versione:"
+
+msgid "Max. Texture Size:\t"
+msgstr "Dimensione massima della texture:"
+
+msgid "This is a list of contributors to the mrv2 project:"
+msgstr "Questa è una lista di collaboratori al progetto mrv2:"
+
+msgid "Mark an area in the image with SHIFT + the left mouse button"
+msgstr "Marcare un'area nell'immagine con SHIFT + il tasto sinistro del mouse"
+
+msgid "&Copy"
+msgstr "& Copia"
+
+msgid "Everything OK. "
+msgstr "Tutto bene."
+
+msgid "GPU: Unknown"
+msgstr "GPU: sconosciuto"
+
+msgid "Elapsed"
+msgstr "Scadenza"
+
+msgid "Remaining"
+msgstr "Restante"
+
+msgid "FPS"
+msgstr "FPS"
+
+msgid "Undock"
+msgstr "Staccare"
+
+msgid "Dock"
+msgstr "Dock"
+
+msgid "Dismiss"
+msgstr "Rifiuto"
+
+msgid "Drag Box"
+msgstr "Scatola di trascinamento"
+
+msgid "Unknown type for mrvOCIOBrowser"
+msgstr "Tipo sconosciuto per mrvoCIOBrowser"
+
+msgid "Session: "
+msgstr "Sessione:"
+
+msgid "Edit/&Copy"
+msgstr "Modifica/Copia"
+
+msgid "Reset to default value"
+msgstr "Ripristina il valore predefinito"
+
+msgid "&File/&Clone"
+msgstr "File/Clone"
+
+msgid "&File/&Refresh Cache"
+msgstr "File/Aggiorna la cache"
+
+msgid "&Copy/&Filename"
+msgstr "Copia/Nome file"
+
+msgid "&Show/In &File Manager"
+msgstr "Mostra/Nel gestore file"
+
+msgid "Maximum:"
+msgstr "Massimo:"
+
+msgid "Copy/Color"
+msgstr "Copia/Colore"
+
+msgid "Area"
+msgstr "Superficie"
+
+msgid "pixel"
+msgstr "pixel"
+
+msgid "pixels"
+msgstr "pixels"
+
+msgid "Maximum"
+msgstr "Massimo"
+
+msgid "Minimum"
+msgstr "Minimo"
+
+msgid "Range"
+msgstr "Intervallo"
+
+msgid "Mean"
+msgstr "Media"
+
+msgid "Track #%d - %s"
+msgstr "Traccia #%d - %s"
+
+msgid "Same Size"
+msgstr "Stessa dimensione"
+
+msgid "Half Size"
+msgstr "Metà grandezza"
+
+msgid "Quarter Size"
+msgstr "Dimensione trimestrale"
+
+msgid "TV"
+msgstr "TV"
+
+msgid "PC"
+msgstr "PC"
+
+msgid "sRGB"
+msgstr "sRGB"
+
+msgid "bt709"
+msgstr "bt709"
+
+msgid "FCC"
+msgstr "FCC"
+
+msgid "SMPTE240m"
+msgstr "SMPTE240m"
+
+msgid "bt601"
+msgstr "bt601"
+
+msgid "bt2020"
+msgstr "bt2020"
+
+msgid "unspecified"
+msgstr "non specificato"
+
+msgid "reserved"
+msgstr "riservato"
+
+msgid "bt470m"
+msgstr "bt470m"
+
+msgid "SMPTE170m"
+msgstr "SMPTE170m"
+
+msgid "Film"
+msgstr "Pellicola"
+
+msgid "SMPTE428"
+msgstr "SMPTE428"
+
+msgid "SMPTE431"
+msgstr "SMPTE431"
+
+msgid "SMPTE432"
+msgstr "SMPTE432"
+
+msgid "EBU3213"
+msgstr "EBU3213"
+
+msgid "gamma22"
+msgstr "gamma22"
+
+msgid "gamma28"
+msgstr "gamma28"
+
+msgid "smpte240m"
+msgstr "smpte240m"
+
+msgid "linear"
+msgstr "lineare"
+
+msgid "log"
+msgstr "log"
+
+msgid "logsqrt"
+msgstr "Logsqrt"
+
+msgid "iec61966-2-4"
+msgstr "iec61966-2-4"
+
+msgid "bt1361"
+msgstr "bt1361"
+
+msgid "iec61966-2-1"
+msgstr "iec61966-2-1"
+
+msgid "bt2020-10"
+msgstr "bt2020-10"
+
+msgid "bt2020-12"
+msgstr "bt2020-12"
+
+msgid "smpte2084"
+msgstr "smpte2084"
+
+msgid "arib-std-b67"
+msgstr "arib-std-b67"
+
+msgid "Save Movie Options"
+msgstr "Salva le opzioni del film"
+
+msgid "Common Settings"
+msgstr "Impostazioni comuni"
+
+msgid "Save Annotations"
+msgstr "Salva le annotazioni"
+
+msgid ""
+"Save Annotations burned into the movie or sequence.  It also allows saving "
+"OpenEXRs from an 8-bit movie and changing OpenEXR's pixel type."
+msgstr ""
+"Save Annotations burned into the movie or sequence. It also allows saving "
+"OpenEXRs from an 8-bit movie and changing OpenEXR's pixel type."
+
+msgid "Video Options"
+msgstr "Opzioni video"
+
+msgid "Resolution"
+msgstr "Risoluzione"
+
+msgid "Resolution of movie to save."
+msgstr "Risoluzione del film da salvare."
+
+msgid "Hardware Codec"
+msgstr "Codice hardwarec"
+
+msgid "Profile"
+msgstr "Profilo"
+
+msgid "FFMpeg's Profile settings."
+msgstr "Impostazioni del profilo di FFMpeg."
+
+msgid "?"
+msgstr "?"
+
+msgid "Help on Profile"
+msgstr "Aiuto sul profilo"
+
+msgid "Pixel Format"
+msgstr "Formato del pixel"
+
+msgid "FFMpeg's Pixel Format for the codec selected"
+msgstr "Formato Pixel di FFMpeg per il codec selezionato"
+
+msgid "Help on Pixel Format"
+msgstr "Aiuto sul formato del pixel"
+
+msgid "Preset"
+msgstr "Preimpostazione"
+
+msgid "FFMpeg's Preset setting for the codec selected."
+msgstr "Impostazione Preset di FFMpeg per il codec selezionato."
+
+msgid "Help on Preset"
+msgstr "Aiuto su Preset"
+
+msgid "Advanced Settings"
+msgstr "Impostazioni avanzate"
+
+msgid "Help on Advance Settings"
+msgstr "Aiuto sulle impostazioni avanzate"
+
+msgid "Audio Options"
+msgstr "Opzioni audio"
+
+msgid "FFMpeg's Audio Codec settings."
+msgstr "Impostazioni Audio Codec di FFMpeg."
+
+msgid "Note that while saving with audio, the audio will not be heard."
+msgstr ""
+"Nota che durante il salvataggio con audio, l'audio non verrà ascoltato."
+
+msgid "Help Window"
+msgstr "Finestra di aiuto"
+
+msgid "Override"
+msgstr "Sovravvicinamento"
+
+msgid "Color Range"
+msgstr "Gamma di colori"
+
+msgid "Profile Help"
+msgstr "Aiuto del profilo"
+
+msgid ""
+"\n"
+"  The Profile setting allows you to select\n"
+"  the codec and profile for video saving.\n"
+"\n"
+"  Each profile has its benefits and drawbacks.\n"
+"\n"
+"  None - This is mpeg4 compatible with DVD movies.\n"
+"  H264 - Only if mrv2 has been compiled as GPL.  One\n"
+"         of the most popular codecs, but it is now\n"
+"         becoming obsolete.\n"
+"  ProRes - ProRes is a family of codecs developed by \n"
+"           Apple.\n"
+"           The Normal version strikes a balance \n"
+"           between quality and file size.  \n"
+"  ProRes_Proxy - Most compressed ProRes, offering the\n"
+"                 smallest file size.  \n"
+"                 Good for offline editing.\n"
+"  ProRes_LT - More compressed than normal ProRes but \n"
+"              less than Proxy.  Good for offline \n"
+"              editing.\n"
+"  ProRes_HQ - Less compressed then normal ProRes.  \n"
+"              Often used for mastering and final \n"
+"              delivery.\n"
+"  ProRes_4444 - Highest quality ProRes format, \n"
+"                offering full 4:4:4\n"
+"                chroma sampling (color information \n"
+"                for each pixel).\n"
+"                Preserves the most detail and color \n"
+"                accuracy, ideal for high-end workflows \n"
+"                like color grading and visual effects.\n"
+"                Supports alpha channels for \n"
+"                compositing graphics with \n"
+"                transparency.\n"
+"  ProRes_XQ - Highest quality version of ProRes 4444, \n"
+"              designed for high-dynamic-range (HDR) \n"
+"              imagery.\n"
+"  VP9 - Codec developed by Google.  High compression \n"
+"        ratio.\n"
+"        It supports a whole range of pixel formats to\n"
+"        balance disk space vs. quality.\n"
+"        Good for high-end delivery for either Web or \n"
+"        online review.\n"
+"  Cineform - codec developed by GoPro, that rivals \n"
+"             ProRes in features, except for HDR.  \n"
+"             It was discontinued in 2021, but most \n"
+"             packages may support it.\n"
+"             It does not compress as well as ProRes \n"
+"             or VP9.\n"
+"             It supports alpha channels for \n"
+"             compositing graphics with transparency.\n"
+"  AV1 - New generation codec which is gaining support from\n"
+"        Google, Netflix and Amazon.  Compresses better than VP9 \n"
+"        or H264 for the same quality but requires more computer\n"
+"        resources.  Optimal for video reviews.\n"
+"  HAP - RGB/A codec which is optimized for fast playback with\n"
+"        CPU decoding.  It does not compress that well.\n"
+"        It needs hap-alpha* presets to save alpha channel.\n"
+"\n"
+"  Hardware encoding is only supported on newer MacBook\n"
+"  Pro with M1 or newer chips.  H264, Prores, VP9 and\n"
+"  AV1 are supported or soon will be.\n"
+"  "
+msgstr ""
+"\n"
+"The Profile setting allows you to select the codec and profile for video saving. Each profile has its benefits and drawbacks. None - This is mpeg4 compatible with DVD movies. H264 - Only if mrv2 has been compiled as GPL. One of the most popular codecs, but it is now becoming obsolete. ProRes - ProRes is a family of codecs developed by Apple. The Normal version strikes a balance between quality and file size. ProRes_Proxy - Most compressed ProRes, offering the smallest file size. Good for offline editing. ProRes_LT - More compressed than normal ProRes but less than Proxy. Good for offline editing. ProRes_HQ - Less compressed then normal ProRes. Often used for mastering and final delivery. ProRes_4444 - Highest quality ProRes format, offering full 4:4:4 chroma sampling (color information for each pixel). Preserves the most detail and color accuracy, ideal for high-end workflows like color grading and visual effects. Supports alpha channels for compositing graphics with transparency. ProRes_XQ - Highest quality version of ProRes 4444, designed for high-dynamic-range (HDR) imagery. VP9 - Codec developed by Google. High compression ratio. It supports a whole range of pixel formats to balance disk space vs. quality. Good for high-end delivery for either Web or online review. Cineform - codec developed by GoPro, that rivals ProRes in features, except for HDR. It was discontinued in 2021, but most packages may support it. It does not compress as well as ProRes or VP9. It supports alpha channels for compositing graphics with transparency. AV1 - New generation codec which is gaining support from Google, Netflix and Amazon. Compresses better than VP9 or H264 for the same quality but requires more computer resources. Optimal for video reviews. HAP - RGB/A codec which is optimized for fast playback with CPU decoding. It does not compress that well. It needs hap-alpha* presets to save alpha channel. Hardware encoding is only supported on newer MacBook Pro with M1 or newer chips. H264, Prores, VP9 and AV1 are supported or soon will be."
+
+msgid "Pixel Format Help"
+msgstr "Aiuto al formato del pixel"
+
+msgid ""
+"\n"
+"  The Pixel Format specifies how the video is encoded in the\n"
+"  file.  Each codec and profile has a number of pixel formats \n"
+"  it supports.\n"
+"  There are two main types of pixel formats supported:\n"
+"\n"
+"      - YUV (Luminance, Cr, Cb)\n"
+"      - BGR (RGB with reversed channels)\n"
+"      - RGB\n"
+"\n"
+"  In addition, some codecs support alpha channel (transparency),\n"
+"  like BGRA.\n"
+"\n"
+"  The other element of the codec is the 'P' which indicates the\n"
+"  channels are stored in planar order, instead of each component\n"
+"  interleaved.\n"
+"\n"
+"  Finally, the number in the pixel format name indicates the\n"
+"  number of bits the pixel format uses to encode.  \n"
+"  Normal values for that are 8, 10, 12 and 16.\n"
+"\n"
+"  "
+msgstr ""
+"\n"
+"The Pixel Format specifies how the video is encoded in the file. Each codec and profile has a number of pixel formats it supports. There are two main types of pixel formats supported: - YUV (Luminance, Cr, Cb) - BGR (RGB with reversed channels) - RGB In addition, some codecs support alpha channel (transparency), like BGRA. The other element of the codec is the 'P' which indicates the channels are stored in planar order, instead of each component interleaved. Finally, the number in the pixel format name indicates the number of bits the pixel format uses to encode. Normal values for that are 8, 10, 12 and 16."
+
+msgid "Preset Help"
+msgstr "Aiuto preimpostato"
+
+msgid ""
+"\n"
+"\n"
+"  The Preset setting allows you to store and pass\n"
+"  flags to FFmpeg (the video engine that mrv2 uses) to \n"
+"  easily control the quality and size of the video besides\n"
+"  the pixel format.\n"
+"\n"
+"  When choosing the quality you should set in this order:\n"
+"    - Profile\n"
+"    - Pixel Format\n"
+"    - Preset\n"
+"\n"
+"  The preset files are stored in the presets/ directory of the \n"
+"  mrv2 install but you can configure the directory by using the\n"
+"  environment variable $STUDIOPATH/presets.\n"
+"\n"
+"  The naming of the files is the name of the profile-preset.pst.\n"
+"\n"
+"  The format is very simple, with comments and colon separated \n"
+"  options.\n"
+"  "
+msgstr ""
+"\n"
+"The Preset setting allows you to store and pass flags to FFmpeg (the video engine that mrv2 uses) to easily control the quality and size of the video besides the pixel format. When choosing the quality you should set in this order: - Profile - Pixel Format - Preset The preset files are stored in the presets/ directory of the mrv2 install but you can configure the directory by using the environment variable $STUDIOPATH/presets. The naming of the files is the name of the profile-preset.pst. The format is very simple, with comments and colon separated options."
+
+msgid "Advanced Settings Help"
+msgstr "Aiuto per impostazioni avanzate"
+
+msgid ""
+"\n"
+"\n"
+"  The Advanced Settings allows you store \n"
+"  metadata in the movie file to determine where \n"
+"  and how it was created.  Useful to indicate, \n"
+"  for example, if a set of 8-bit images were \n"
+"  sRGB or Rec709.\n"
+"\n"
+"  If you don't know what those settings do, \n"
+"  DON'T MESS WITH THEM!\n"
+"  "
+msgstr ""
+"\n"
+"Le Impostazioni Avanzate consentono di memorizzare i metadati nel file del film per determinare dove e come è stato creato. Utile per indicare, ad esempio, se un insieme di immagini a 8 bit erano sRGB o Rec709. Se non sai cosa fanno queste impostazioni, NON MESSA CON LE!"
+
+msgid "1/9"
+msgstr "1/9"
+
+msgid "1/8"
+msgstr "1/8"
+
+msgid "1/7"
+msgstr "1/7"
+
+msgid "1/6"
+msgstr "1/6"
+
+msgid "1/5"
+msgstr "1/5"
+
+msgid "1/4"
+msgstr "1/4"
+
+msgid "1/3"
+msgstr "1/3"
+
+msgid "1/2"
+msgstr "1/2"
+
+msgid "x1"
+msgstr "x1"
+
+msgid "x2"
+msgstr "x2"
+
+msgid "x3"
+msgstr "x3"
+
+msgid "x4"
+msgstr "x4"
+
+msgid "x5"
+msgstr "x5"
+
+msgid "x6"
+msgstr "x6"
+
+msgid "x7"
+msgstr "x7"
+
+msgid "x8"
+msgstr "x8"
+
+msgid "x9"
+msgstr "x9"
+
+msgid "FIT"
+msgstr "FIT"
+
+msgid "RGBA"
+msgstr "RGBA"
+
+msgid "Hex"
+msgstr "Hex"
+
+msgid "8bit"
+msgstr "8 bit"
+
+msgid "HSV"
+msgstr "HSV"
+
+msgid "HSL"
+msgstr "HSL"
+
+msgid "XYZ CIE XYZ"
+msgstr "XYZ CIE XYZ"
+
+msgid "xyY CIE xyY"
+msgstr "xyY CIE xyY"
+
+msgid "Lab CIELAB (L*a*b*)"
+msgstr "Laboratorio CIELAB (L*a*b*)"
+
+msgid "Luv CIELUV (L*u*v*)"
+msgstr "Luv CIELUV (L*u*v*)"
+
+msgid "YUV (Analog PAL)"
+msgstr "YUV (Analog PAL)"
+
+msgid "YDbDr (Analog SECAM/PAL-N)"
+msgstr "YDbDr (Analog SECAM)/PAL-N)"
+
+msgid "YIQ (Analog NTSC)"
+msgstr "YIQ (Analog NTSC)"
+
+msgid "ITU-601 (Digital PAL/NTSC YCbCr)"
+msgstr "ITU-601 (PAL digitale)/NTSC YCbCr)"
+
+msgid "ITU-709 (Digital HDTV YCbCr)"
+msgstr "UIT-709 (Digital HDTV YCbCr)"
+
+msgid "Full"
+msgstr "Completo"
+
+msgid "Original"
+msgstr "Originale"
+
+msgid "Y (Luminance)"
+msgstr "Y (Luminanza)"
+
+msgid "Y' (Lumma)"
+msgstr "Y' (Lumma)"
+
+msgid "L (Lightness)"
+msgstr "L (Lightness)"
+
+msgid "Image zoom setting."
+msgstr "Impostazione ingrandimento immagine."
+
+msgid "XY"
+msgstr "XY"
+
+msgid "Image coordinate of pixel under mouse."
+msgstr "Coordinata immagine di pixel sotto il mouse."
+
+msgid ""
+"Switch RGBA display between floating point, hexadecimal (0..0xff) and "
+"decimal (0..255)."
+msgstr ""
+"Switch RGBA display tra il punto galleggiante, esadecimale (0..0xff) e "
+"decimale (0.255)."
+
+msgid "Red value of image pixel under mouse."
+msgstr "Valore rosso del pixel dell'immagine sotto il mouse."
+
+msgid "Green value of image pixel under mouse."
+msgstr "Valore verde del pixel dell'immagine sotto il mouse."
+
+msgid "Blue value of image pixel under mouse."
+msgstr "Valore blu del pixel dell'immagine sotto il mouse."
+
+msgid "Alpha value of image pixel under mouse."
+msgstr "Valore alfa del pixel dell'immagine sotto il mouse."
+
+msgid "8-bit sample of image pixel under mouse."
+msgstr "8-bit campione di pixel immagine sotto il mouse."
+
+msgid ""
+"Switch pixel color space information display for the pixel under the cursor."
+msgstr ""
+"Cambiare il display di informazioni sullo spazio di colore del pixel sotto "
+"il cursore."
+
+msgid "Hue value of image pixel under mouse."
+msgstr "Valore della tonalità del pixel dell'immagine sotto il mouse."
+
+msgid "Saturation value of image pixel under mouse."
+msgstr "Valore di saturazione del pixel dell'immagine sotto il mouse."
+
+msgid "Value (Intensity) of image pixel under mouse."
+msgstr "Valore (intensità) del pixel dell'immagine sotto il mouse."
+
+msgid "F"
+msgstr "F"
+
+msgid ""
+"Displays:\n"
+"* Full Pixel Values (Gamma, Gain and LUT)\n"
+"* Original (No Gamma, No Gain, No Lut)"
+msgstr ""
+"Visualizzazioni: * Valori del pixel completo (Gamma, guadagno e LUT) * "
+"Originale (No Gamma, No Gain, No Lut)"
+
+msgid "Y"
+msgstr "Y"
+
+msgid ""
+"Switch brightness calculation.\n"
+"Y (Luminance) is the pixel value according to Rec709:\n"
+"      Y = 0.2126 R + 0.7152 G + 0.0722 B\n"
+"Y' (Lumma) is the weighted pixel value according to:\n"
+"      Y' = ( R + G + B ) / 3.0\n"
+"L (Lightness) is the human perception of luminance of the image which is non linear.\n"
+"According to CIE No.15.2:\n"
+"      L = (116 * Y ^ 1/3 - 16) / 100\n"
+"A pixel of Y = 0.18 (L = 0.5) will appear about half as bright as Y = L = 1.0 (white)."
+msgstr ""
+"Switch brightness calculation. Y (Luminance) is the pixel value according to"
+" Rec709: Y = 0.2126 R + 0.7152 G + 0.0722 B Y' (Lumma) is the weighted pixel"
+" value according to: Y' = ( R + G + B ) / 3.0 L (Lightness) is the human "
+"perception of luminance of the image which is non linear. According to CIE "
+"No.15.2: L = (116 * Y ^ 1/3 - 16) / 100 A pixel of Y = 0.18 (L = 0.5) will "
+"appear about half as bright as Y = L = 1.0 (white)."
+
+msgid "Luminance of image pixel under mouse."
+msgstr "Luminosità del pixel dell'immagine sotto il mouse."
+
+msgid "Seconds"
+msgstr "Secondi"
+
+msgid "Timecode"
+msgstr "Codice orario"
+
+msgid "120"
+msgstr "120"
+
+msgid "60"
+msgstr "60"
+
+msgid "59.952"
+msgstr "59.952"
+
+msgid "50"
+msgstr "50"
+
+msgid "48"
+msgstr "48"
+
+msgid "47.952"
+msgstr "47.952"
+
+msgid "30"
+msgstr "30"
+
+msgid "29.976"
+msgstr "29.976"
+
+msgid "25"
+msgstr "25"
+
+msgid "24"
+msgstr "24"
+
+msgid "23.976"
+msgstr "23.976"
+
+msgid "15"
+msgstr "15"
+
+msgid "14.988"
+msgstr "14.988"
+
+msgid "12.5"
+msgstr "12.5"
+
+msgid "12"
+msgstr "12"
+
+msgid "11.988"
+msgstr "11.988"
+
+msgid "F:"
+msgstr "F:"
+
+msgid "Switch between Frame, Seconds and Timecode display"
+msgstr "Passare tra il telaio, i secondi e il display del codice temporale"
+
+msgid "Current frame."
+msgstr "Inquadratura attuale."
+
+msgid "@|<"
+msgstr "@|<"
+
+msgid "Go to the beginning of the sequence."
+msgstr "Vai all'inizio della sequenza."
+
+msgid "@<"
+msgstr "@<"
+
+msgid "Play sequence backwards."
+msgstr "Riproduci la sequenza all'indietro."
+
+msgid "@<|"
+msgstr "@<|"
+
+msgid "Go back one frame."
+msgstr "Torna indietro con una cornice."
+
+msgid "@||"
+msgstr "@||"
+
+msgid "Stop playback."
+msgstr "Smettila di riprodurre."
+
+msgid "@|>"
+msgstr "@|>"
+
+msgid "Advance one frame."
+msgstr "Avanti una cornice."
+
+msgid "@>"
+msgstr "@>"
+
+msgid "Play sequence forward."
+msgstr "Riproduci la sequenza in avanti."
+
+msgid "@>|"
+msgstr "@>|"
+
+msgid "Go to the end of the sequence."
+msgstr "Vai alla fine della sequenza."
+
+msgid "Looping mode (Loop, Once, Ping-Pong)"
+msgstr "Modalità di looping (Loop, Once, Ping-Pong)"
+
+msgid "Some default frame rate settings."
+msgstr "Alcune impostazioni predefinite della frequenza dei fotogrammi."
+
+msgid "Allows you to adjust frame rate playback."
+msgstr "Consente di regolare la riproduzione della frequenza dei fotogrammi."
+
+msgid "Mute audio or switch audio tracks with the right mouse button."
+msgstr ""
+"Mute audio o interruttori tracce audio con il pulsante destro del mouse."
+
+msgid "Audio Volume"
+msgstr "Volume audio"
+
+msgid "S"
+msgstr "S"
+
+msgid "Allows you to set starting frame for timeline."
+msgstr "Consente di impostare il quadro di partenza per la timeline."
+
+msgid "E"
+msgstr "E"
+
+msgid "Allows you to set the ending frame for timeline."
+msgstr "Consente di impostare la cornice finale per la timeline."
+
+msgid "mrv2"
+msgstr "Periodo di validità"
+
+msgid "MenuBar"
+msgstr "Barra di menu"
+
+msgid "Edit"
+msgstr "Modifica"
+
+msgid "Toggle Edit Mode"
+msgstr "Commuta la modalità Modifica"
+
+msgid "Fit Window to Image"
+msgstr "Adatta finestra all'immagine"
+
+msgid "TopBar"
+msgstr "Barra superiore"
+
+msgid "Layers"
+msgstr "Livelli"
+
+msgid "Allows you to select different image channels or layers."
+msgstr "Consente di selezionare diversi canali di immagine o livelli."
+
+msgid "Exposure, Saturation, and Gamma"
+msgstr "Esposizione, saturazione e gamma"
+
+msgid "Exposure and Gain"
+msgstr "Esposizione e guadagno"
+
+msgid "Exposure"
+msgstr "Esposizione"
+
+msgid "Reduce gain 1/4 stop (divide by sqrt(sqrt(2)))."
+msgstr "Ridurre il guadagno 1/4 stop (dividere di sqrt(sqrt(2)))."
+
+msgid "f/8"
+msgstr "f/8"
+
+msgid "Toggle gain between 1 and the previous setting."
+msgstr "Commuta il guadagno tra 1 e l'impostazione precedente."
+
+msgid "Increase gain 1/4 stop (multiply by sqrt(sqrt(2)))."
+msgstr "Aumentare il guadagno 1/4 stop (multiplicare di sqrt(sqrt(2)))."
+
+msgid "Gain"
+msgstr "Guadagno"
+
+msgid "Gain image value.  A simple multiplier of the image pixel values."
+msgstr ""
+"Ottenere il valore dell'immagine. Un semplice moltiplicatore dei valori del "
+"pixel dell'immagine."
+
+msgid "Allows you to adjust the gain or exposure of the image."
+msgstr "Consente di regolare il guadagno o l'esposizione dell'immagine."
+
+msgid "Toggle Saturation between current and previous setting."
+msgstr "Commuta la saturazione tra impostazione corrente e precedente."
+
+msgid "Saturation Input"
+msgstr "Ingresso di saturazione"
+
+msgid "Saturation value."
+msgstr "Valore della saturazione."
+
+msgid "Allows you to adjust the saturation of the image."
+msgstr "Consente di regolare la saturazione dell'immagine."
+
+msgid "Toggle gamma between 1 and the previous setting."
+msgstr "Commuta gamma tra 1 e l'impostazione precedente."
+
+msgid "Gamma Input"
+msgstr "Ingresso gamma"
+
+msgid ""
+"Allows you to adjust gamma curve for display.\n"
+"Value is:  pow( 2, 1/x );"
+msgstr ""
+"Consente di regolare la curva gamma per la visualizzazione. Il valore è: "
+"pow( 2, 1/x );"
+
+msgid "ICS, View, Look"
+msgstr "ICS, vista, guarda"
+
+msgid "Input Color Space"
+msgstr "Spazio colore di ingresso"
+
+msgid "OCIO input color space for the image"
+msgstr "Spazio colore di ingresso OCIO per l'immagine"
+
+msgid "View"
+msgstr "Visualizza"
+
+msgid "OCIO Display/View"
+msgstr "Visualizzazione OCIO/Visualizza"
+
+msgid "Look"
+msgstr "Look"
+
+msgid "OCIO Looks"
+msgstr "OCIO Looks"
+
+msgid "TileGroup"
+msgstr "Gruppo piastrelle"
+
+msgid "Scrubbing Tool"
+msgstr "Strumento di sfregamento"
+
+msgid "Area Select Tool"
+msgstr "Strumento di selezione area"
+
+msgid "Freehand Drawing Tool"
+msgstr "Strumento di disegno a mano libera"
+
+msgid "Eraser Tool"
+msgstr "Strumento di cancellazione"
+
+msgid "Circle Tool"
+msgstr "Strumento cerchio"
+
+msgid "Rectangle Tool"
+msgstr "Strumento rettangolo"
+
+msgid "Arrow Tool"
+msgstr "Strumento freccia"
+
+msgid "Text Tool.   Right click to edit previously stamped text."
+msgstr ""
+"Strumento di testo. Fare clic destro per modificare il testo precedentemente"
+" stampato."
+
+msgid "Old Color Used.  Click on the Arrow to alternate."
+msgstr "Vecchio colore usato. Fare clic sulla freccia per alternare."
+
+msgid "Switch Colors"
+msgstr "Cambia colori"
+
+msgid "Opacity of pen stroke"
+msgstr "Opacità dell' ictus della penna"
+
+msgid "Undo Last Shape Drawn in Current Frame."
+msgstr "Annulla l'ultima forma disegnata nella cornice corrente."
+
+msgid "Redo Previous Shape Drawn in Current Frame."
+msgstr "Rifare la forma precedente disegnata nella cornice corrente."
+
+msgid "DockGroup"
+msgstr "Gruppo Dock"
+
+msgid "BottomBar"
+msgstr "Barra inferiore"
+
+msgid "PixelBar"
+msgstr "Barra di pixel"
+
+msgid "StatusBar"
+msgstr "Barra di stato"
+
+msgid "Current tool being used."
+msgstr "Strumento attuale in uso."
+
+msgid "RLE"
+msgstr "RLE"
+
+msgid "ZIPS"
+msgstr "CAPS"
+
+msgid "ZIP"
+msgstr "ZIP"
+
+msgid "PIZ"
+msgstr "PIZ"
+
+msgid "PXR24"
+msgstr "PXR24"
+
+msgid "B44"
+msgstr "B44"
+
+msgid "B44A"
+msgstr ""
+"Il presente regolamento entra in vigore il ventesimo giorno successivo alla "
+"pubblicazione nella Gazzetta ufficiale dell'Unione europea."
+
+msgid "DWAA"
+msgstr "DWAA"
+
+msgid "DWAB"
+msgstr "DWAB"
+
+msgid "Half"
+msgstr "Metà"
+
+msgid "Float"
+msgstr "Punto di fluttuazione"
+
+msgid "Save Image Options"
+msgstr "Salva le opzioni immagine"
+
+msgid "Save Annotations burned into the movie or sequence."
+msgstr "Salva le annotazioni bruciate nel film o nella sequenza."
+
+msgid "OpenEXR Options"
+msgstr "Opzioni OpenEXR"
+
+msgid "OpenEXR's Compression Type"
+msgstr "Tipo di compressione di OpenEXR"
+
+msgid "Pixel Type"
+msgstr "Tipo di pixel"
+
+msgid "OpenEXR's Pixel Type"
+msgstr "Tipo di pixel di OpenEXR"
+
+msgid "ZIP Compression"
+msgstr "Compressione ZIP"
+
+msgid "DWA Compression"
+msgstr "Compressione DWA"
+
+msgid "0.00 None"
+msgstr "0.00 Nessuna"
+
+msgid "1.00 Square"
+msgstr "1.00 Quadrato"
+
+msgid "1.19 Movietone"
+msgstr "1.19 Pellicola"
+
+msgid "1.37 Academy (Full Frame)"
+msgstr "1.37 Accademia (quadro completo)"
+
+msgid "1.50 Still Photo"
+msgstr "1.50 Foto ancora"
+
+msgid "1.56 STV - HDTV (14:9)"
+msgstr "1.56 STV - HDTV (14:9)"
+
+msgid "1.66 European Widescreen"
+msgstr "1.66 Widescreen europeo"
+
+msgid "1.77 HDTV (16:9)"
+msgstr "1,77 HDTV (16:9)"
+
+msgid "1.85 Widescreen (3-perf)"
+msgstr "1.85 Widescreen (3-perf)"
+
+msgid "2.00 Univisium"
+msgstr "2.00 Univisio"
+
+msgid "2.10 VistaVision"
+msgstr "2.10 VistaVision"
+
+msgid "2.20 70mm"
+msgstr "2.20 70 mm"
+
+msgid "2.35 CinemaScope (old 2.35)"
+msgstr "2.35 CinemaScoppio (vecchio 2.35)"
+
+msgid "2.39 Panavision (new 2.35)"
+msgstr "2.39 Panavisione (nuovo 2.35)"
+
+msgid "4.00 Polyvision"
+msgstr "4.00 Polivisione"
+
+msgid "Slow"
+msgstr "Lento"
+
+msgid "Medium"
+msgstr "Media"
+
+msgid "Fast"
+msgstr "Veloce"
+
+msgid "base"
+msgstr "base"
+
+msgid "plastic"
+msgstr "plastic"
+
+msgid "gtk+"
+msgstr "gtk+"
+
+msgid "gleam"
+msgstr "splendore"
+
+msgid "oxy"
+msgstr "oxy"
+
+msgid "Float Values"
+msgstr "Valori di fluttuazione"
+
+msgid "Hex Values"
+msgstr "Valori di esattezza"
+
+msgid "8-bit Values"
+msgstr "Valori a 8 bit"
+
+msgid "Full Lut, Gamma and Gain"
+msgstr "Lut completo, Gamma e guadagno"
+
+msgid "Original without Gamma, Gain or Lut"
+msgstr "Originale senza Gamma, Gain o Lut"
+
+msgid "CIE XYZ"
+msgstr "CIE XYZ"
+
+msgid "CIE xyY"
+msgstr "CIE xyY"
+
+msgid "From File"
+msgstr "Dal file"
+
+msgid "Legal Range"
+msgstr "Intervallo giuridico"
+
+msgid "Full Range"
+msgstr "Intervallo completo"
+
+msgid "Straight"
+msgstr "Dritto"
+
+msgid "Premultiplied"
+msgstr "Premultiplicato"
+
+msgid "Nearest"
+msgstr "Più vicino"
+
+msgid "Small"
+msgstr "Piccolo"
+
+msgid "Large"
+msgstr "Grande"
+
+msgid "59.94"
+msgstr "59.94"
+
+msgid "29.97"
+msgstr "29.97"
+
+msgid "14.985"
+msgstr "14.985"
+
+msgid "Loop"
+msgstr "Cinturino"
+
+msgid "Ping Pong"
+msgstr "Ping Pong"
+
+msgid "Video Only"
+msgstr "Solo video"
+
+msgid "Video and Audio"
+msgstr "Video e audio"
+
+msgid "CG"
+msgstr "CG"
+
+msgid "Studio"
+msgstr "Studio"
+
+msgid "Black Frame"
+msgstr "Cornice nera"
+
+msgid "Repeat  Frame"
+msgstr "Ripeti il telaio"
+
+msgid "Scratched  Frame"
+msgstr "Cornice scratched"
+
+msgid "Always"
+msgstr "Sempre"
+
+msgid "Presentation Mode"
+msgstr "Modalità di presentazione"
+
+msgid "Automatic"
+msgstr "Automatico"
+
+msgid "Half Float"
+msgstr "Metà galleggiante"
+
+msgid "Full Float (Accurate)"
+msgstr "Fluttuazione completa (accurata)"
+
+msgid "Do Nothing"
+msgstr "Non fare niente"
+
+msgid "Open Logs on Dock"
+msgstr "Apri i registri su dock"
+
+msgid "Open Logs on Window"
+msgstr "Apri logs sulla finestra"
+
+msgid "On Demand From Help Menu"
+msgstr "Su richiesta dal menu di aiuto"
+
+msgid "At Start Up"
+msgstr "All'inizio"
+
+msgid ""
+"This will reset all your preferences to their default values.  Are you sure "
+"you want to continue?"
+msgstr ""
+"Questo ripristinerà tutte le tue preferenze ai loro valori predefiniti. Sei "
+"sicuro di voler continuare?"
+
+msgid "User Interface"
+msgstr "Interfaccia utente"
+
+msgid "Window Behavior"
+msgstr "Comportamento della finestra"
+
+msgid "Always on Top"
+msgstr "Sempre in cima"
+
+msgid ""
+"When selected, mrv2's window will always show up on top of other windows on "
+"the desktop."
+msgstr ""
+"Quando selezionata, la finestra di mrv2 si mostrerà sempre in cima ad altre "
+"finestre sul desktop."
+
+msgid "Secondary on Top"
+msgstr "Secondario in alto"
+
+msgid "Single Instance"
+msgstr "Istituto unico"
+
+msgid ""
+"When selected, only a single mrv2 instance is allowed.\n"
+"If you try to open several mrv2s with different images, all these images will be sent to the already open mrv2."
+msgstr ""
+"Quando selezionato, solo una singola istanza mrv2 è consentita. Se si tenta "
+"di aprire diversi mrv2 con immagini diverse, tutte queste immagini saranno "
+"inviate al già aperto mrv2."
+
+msgid "Auto Refit Image"
+msgstr "Immagine di rifiuto automatico"
+
+msgid ""
+"When selected, mrv2 will apply a fit image operation on each video played.  "
+"This effectly means the video will be resized automatically based on the "
+"size of the window."
+msgstr ""
+"Una volta selezionato, mrv2 applicherà un'operazione di immagine adatta su "
+"ogni video riprodotto. Questo significa che il video verrà ridimensionato "
+"automaticamente in base alle dimensioni della finestra."
+
+msgid "Raise on Enter"
+msgstr "Aumenta al momento di entrare"
+
+msgid ""
+"When selected, mrv2 will raise the window to the front once you enter the "
+"view window."
+msgstr ""
+"Quando selezionato, mrv2 alzerà la finestra sulla parte anteriore una volta "
+"che si inserisce la finestra di vista."
+
+msgid "Normal"
+msgstr "Normale"
+
+msgid "When selected, mrv2 will resize its window to the first image."
+msgstr ""
+"Quando selezionato, mrv2 ridimensionerà la sua finestra alla prima immagine."
+
+msgid "Fullscreen"
+msgstr "Schermo intero"
+
+msgid "When selected, mrv2 will start in full screen mode."
+msgstr "Quando selezionato, mrv2 si avvierà in modalità a schermo intero."
+
+msgid "Presentation"
+msgstr "Presentazione"
+
+msgid "When selected, mrv2 will start in presentation mode."
+msgstr "Quando selezionato, mrv2 inizierà in modalità presentazione."
+
+msgid "Maximized"
+msgstr "Massimizzato"
+
+msgid "When selected, mrv2 will start in a maximized window."
+msgstr "Quando selezionato, mrv2 si avvierà in una finestra massimizzata."
+
+msgid "UI Elements"
+msgstr "Elementi dell'interfaccia utente"
+
+msgid "Menu Bar"
+msgstr "Barra di menu"
+
+msgid "When selected, mrv2 will start with the menu bar already shown."
+msgstr ""
+"Quando selezionato, mrv2 inizierà con la barra di menu già visualizzata."
+
+msgid "Topbar"
+msgstr "Barra superiore"
+
+msgid ""
+"When selected, mrv2 will start with its channel, gain, gamma toolbar "
+"visible."
+msgstr ""
+"Quando selezionato, mrv2 inizierà con il suo canale, guadagno, barra degli "
+"strumenti gamma visibile."
+
+msgid "Pixel Toolbar"
+msgstr "Barra degli strumenti del pixel"
+
+msgid "When selected, mrv2 will start with the pixel toolbar shown."
+msgstr ""
+"Quando selezionato, mrv2 inizierà con la barra degli strumenti pixel "
+"visualizzata."
+
+msgid "When selected, mrv2 will start with the timeline shown."
+msgstr "Quando selezionato, mrv2 inizierà con la timeline mostrata."
+
+msgid "Status Bar"
+msgstr "Barra di stato"
+
+msgid "When selected, mrv2 will start with the status bar visible."
+msgstr "Quando selezionato, mrv2 inizierà con la barra di stato visibile."
+
+msgid "macOS Menus"
+msgstr "Menu macOS"
+
+msgid ""
+"This is a macOS setting only.  When selected the menus will appear on the "
+"system toolbar instead of the mrv2 toolbar."
+msgstr ""
+"Questa è solo un'impostazione macOS. Quando selezionati i menu appariranno "
+"nella barra degli strumenti del sistema anziché nella barra degli strumenti "
+"mrv2."
+
+msgid "Tool Dock"
+msgstr "Dock strumento"
+
+msgid "When selected, mrv2 will start with the action tool dock already open."
+msgstr ""
+"Quando selezionato, mrv2 inizierà con il dock degli strumenti di azione già "
+"aperto."
+
+msgid "Only One Panel"
+msgstr "Solo un pannello"
+
+msgid ""
+"When selected, mrv2 will start with the only one panel option selected."
+msgstr ""
+"Quando selezionato, mrv2 inizierà con l'unica opzione del pannello "
+"selezionata."
+
+msgid "View Window"
+msgstr "Visualizza finestra"
+
+msgid "Defaults"
+msgstr "Predefiniti"
+
+msgid "Sets the default gain when mrv2 starts."
+msgstr "Imposta il guadagno predefinito quando mrv2 inizia."
+
+msgid "Sets the default gamma when mrv2 starts."
+msgstr "Imposta la gamma predefinita quando mrv2 inizia."
+
+msgid "Crop"
+msgstr "Coltivazione"
+
+msgid "Allows you to select a standard cropping area around image."
+msgstr ""
+"Consente di selezionare un'area di ritaglio standard intorno all'immagine."
+
+msgid "Auto Frame"
+msgstr "Cornice automatica"
+
+msgid "When this is on, View/Auto Frame will be active."
+msgstr "Quando questo è acceso, View/Auto Frame sarà attivo."
+
+msgid "Safe Areas"
+msgstr "Zone di sicurezza"
+
+msgid "When mrv2 starts, the safe area display will be active by default."
+msgstr ""
+"Quando mrv2 inizia, il display dell'area di sicurezza sarà attivato di "
+"default."
+
+msgid "OCIO in Top Bar"
+msgstr "OCIO nella barra superiore"
+
+msgid ""
+"When mrv2 starts, OCIO should start in the top bar instead of color "
+"adjustments."
+msgstr ""
+"Quando mrv2 inizia, OCIO dovrebbe iniziare nella barra superiore invece di "
+"regolare i colori."
+
+msgid "Zoom Speed"
+msgstr "Velocità di zoom"
+
+msgid "HUD"
+msgstr "HUD"
+
+msgid ""
+"This area specifies which elements should be shown as a HUD overlay on the "
+"view screen."
+msgstr ""
+"Questa area specifica quali elementi devono essere visualizzati come "
+"sovrapposizione HUD sulla schermata della vista."
+
+msgid "Frame"
+msgstr "Cornice"
+
+msgid "Frame Range"
+msgstr "Intervallo del telaio"
+
+msgid "Frame Count"
+msgstr "Conteggio fotogrammi"
+
+msgid "Memory"
+msgstr "Memoria"
+
+msgid "Attributes"
+msgstr "Attributi"
+
+msgid "File Requester"
+msgstr "Richiedente file"
+
+msgid "Single Click to Travel Drawers"
+msgstr "Fare clic singola per viaggiare cassetti"
+
+msgid ""
+"When using mrv2's file chooser, a single click on a folder will open it."
+msgstr ""
+"Quando si utilizza il file selezionatore di mrv2, un singolo clic su una "
+"cartella lo aprirà."
+
+msgid "Thumbnails Active"
+msgstr "Thumbnails attivi"
+
+msgid "Show thumbnails for known files."
+msgstr "Mostra le miniature dei file conosciuti."
+
+msgid "USD Thumbnails"
+msgstr "Thumbnails in USD"
+
+msgid "Show Thumbnails for USD files (can be slow if they are big)"
+msgstr "Mostra miniature per i file USD (può essere lento se sono grandi)"
+
+msgid "Use Native File Chooser"
+msgstr "Usa il selezionatore di file nativo"
+
+msgid ""
+"If selected, the natlve file chooser will be used.  If unselected, mrv2's "
+"standard file chooser will be used."
+msgstr ""
+"Se selezionato, verrà utilizzato il selettore file natlve. Se non "
+"selezionato, verrà utilizzato il selettore file standard di mrv2."
+
+msgid "Fonts"
+msgstr "Caratteri"
+
+msgid "Menus"
+msgstr "Menù"
+
+msgid "Sets the font to use in menus."
+msgstr "Imposta il carattere da usare nei menu."
+
+msgid "Panels"
+msgstr "Pannelli"
+
+msgid "Sets the font to use in panels. (Not yet working)"
+msgstr "Imposta il carattere da usare nei pannelli. (Non funziona ancora)"
+
+msgid "Language and Colors"
+msgstr "Lingua e colori"
+
+msgid "Scheme"
+msgstr "Regime"
+
+msgid "Color Theme"
+msgstr "Tema colore"
+
+msgid "Reload Theme"
+msgstr "Ricarica il tema"
+
+msgid ""
+"Reload color theme from mrv2.colors file again to refresh change in colors"
+msgstr ""
+"Ricarica il tema colore dal file mrv2.colors di nuovo per aggiornare il "
+"cambiamento di colori"
+
+msgid "Selects the background color of areas outside the current image."
+msgstr ""
+"Seleziona il colore di sfondo delle aree al di fuori dell'immagine corrente."
+
+msgid "Text Overlay"
+msgstr "Sovrapposizione del testo"
+
+msgid "Selects the color of text overlays printed over the current image."
+msgstr ""
+"Seleziona il colore delle sovrapposizioni di testo stampate sull'immagine "
+"corrente."
+
+msgid "Selects the color of the selection rectangle over the current image."
+msgstr ""
+"Seleziona il colore del rettangolo di selezione sull'immagine corrente."
+
+msgid "Selects the color of HUD overlays."
+msgstr "Seleziona il colore delle sovrapposizioni HUD."
+
+msgid "RGBA Display"
+msgstr "Visualizzazione RGBA"
+
+msgid "Pixel Values"
+msgstr "Valori del pixel"
+
+msgid "Secondary Display"
+msgstr "Visualizzazione secondaria"
+
+msgid "Luminance"
+msgstr "Luminosità"
+
+msgid "Positioning"
+msgstr "Posizionamento"
+
+msgid "Always Save on Exit"
+msgstr "Salva sempre all'uscita"
+
+msgid ""
+"When this option is set, mrv2 will save its position and size upon exiting "
+"the program."
+msgstr ""
+"Quando questa opzione è impostata, mrv2 salverà la sua posizione e "
+"dimensione all'uscita del programma."
+
+msgid "Fixed Position"
+msgstr "Posizione fissa"
+
+msgid ""
+"When this option is set, mrv2 will open in the position you set here (except"
+" if the window goes out of the Desktop).  If Always Save on Exit is on, the "
+"values are recakculated upon exiting the program."
+msgstr ""
+"Quando questa opzione è impostata, mrv2 si aprirà nella posizione impostata "
+"qui (eccetto se la finestra esce dal Desktop). Se sempre Salva all'uscita è "
+"attivato, i valori vengono riaccumulati all'uscita del programma."
+
+msgid "X:"
+msgstr "X:"
+
+msgid "Y:"
+msgstr "Y:"
+
+msgid "Fixed Size"
+msgstr "Dimensione fissa"
+
+msgid ""
+"When this option is on, mrv2 will always open to the size you set in W and "
+"H.  If Always Save on Exit is on, the values are recalculated upon exiting "
+"the program."
+msgstr ""
+"Quando questa opzione è accesa, mrv2 si aprirà sempre alle dimensioni "
+"impostate in W e H. Se sempre Salva all'uscita è accesa, i valori vengono "
+"ricalcolati all'uscita del programma."
+
+msgid "W:"
+msgstr "W:"
+
+msgid "H:"
+msgstr "H:"
+
+msgid "Take Current Window Values"
+msgstr "Prendi i valori attuali della finestra"
+
+msgid ""
+"Fills the Fixed Position and and Fixed Size values with the current values "
+"of the viewer.  Remember to also check the boxes for Fixed Position and/or "
+"Fixed Size depending what you want to save."
+msgstr ""
+"Fills the Fixed Position and Fixed Size values with the current values of "
+"the viewer. Remember to also check the boxes for Fixed Position and/or Fixed"
+" Size depending what you want to save."
+
+msgid "Render"
+msgstr "Render"
+
+msgid "Alpha Blend"
+msgstr "Miscelazione alfa"
+
+msgid "Minify Filter"
+msgstr "Minimizzare il filtro"
+
+msgid "Magnify Filter"
+msgstr "Ingrandisci il filtro"
+
+msgid "Thumbnails"
+msgstr "Thumbnails"
+
+msgid "Preview Thumbnails above Timeline"
+msgstr "Anteprima Thumbnails sopra Timeline"
+
+msgid "Preview Thumbnails in a rectangle above Timeline"
+msgstr "Anteprima Thumbnails in un rettangolo sopra Timeline"
+
+msgid "Preview Thumbnails on Panels"
+msgstr "Anteprima miniature sui pannelli"
+
+msgid "Preview Thumbnails in Panels"
+msgstr "Anteprima miniature nei pannelli"
+
+msgid "Edit Viewport"
+msgstr "Modifica visualizzazione"
+
+msgid "How to display timeline thumbnails by default."
+msgstr ""
+"Come visualizzare le miniature della timeline per impostazione predefinita."
+
+msgid "Display"
+msgstr "Visualizza"
+
+msgid "How to display timeline by default."
+msgstr "Come visualizzare la timeline per impostazione predefinita."
+
+msgid "Start in Edit mode"
+msgstr "Avvia in modalità Modifica"
+
+msgid "Editing viewport will be visible at start up."
+msgstr "La modifica della vista sarà visibile all'avvio."
+
+msgid "Remove EDLs in Temporary Folder on Exit"
+msgstr "Rimuovere EDL in cartella temporanea all'uscita"
+
+msgid ""
+"When selected, temporary EDLs (Playlists) will be removed from the temporary"
+" folder."
+msgstr ""
+"Una volta selezionati, gli EDL temporanei (Playlists) verranno rimossi dalla"
+" cartella temporanea."
+
+msgid "Playback"
+msgstr "Riproduzione"
+
+msgid "Auto Playback"
+msgstr "Riproduzione automatica"
+
+msgid "Start Playback when opening files."
+msgstr "Avvia la riproduzione al momento dell'apertura dei file."
+
+msgid "Scrub with Audio"
+msgstr "Spruzzare con l'audio"
+
+msgid ""
+"Start playback when scrubbing so that audio can be heard.  Scrubbing can be "
+"less smooth."
+msgstr ""
+"Iniziare la riproduzione quando lavaggio in modo che l'audio può essere "
+"ascoltato. Scrobbing può essere meno liscio."
+
+msgid "Single Click Playback"
+msgstr "Riproduzione singola clic"
+
+msgid ""
+"Start Playback when single clicking the left mouse button on the view window"
+msgstr ""
+"Inizia la riproduzione quando fai clic sul pulsante sinistro del mouse sulla"
+" finestra di visualizzazione"
+
+msgid "Auto Hide Pixel Bar"
+msgstr "Nascondi automaticamente la barra dei pixel"
+
+msgid ""
+"The Pixel Bar can slow down playback at high resolutions.  When this option "
+"is on, the pixel toolbar will be hidden automatically."
+msgstr ""
+"La barra dei pixel può rallentare la riproduzione ad alte risoluzioni. "
+"Quando questa opzione è accesa, la barra degli strumenti dei pixel viene "
+"nascosta automaticamente."
+
+msgid "Sequences"
+msgstr "Sequenze"
+
+msgid "Speed"
+msgstr "Velocità"
+
+msgid "Frames Per Second value for sequences that don't have embedded speed."
+msgstr ""
+"Frames Per secondo valore per sequenze che non hanno velocità incorporata."
+
+msgid "Looping Mode"
+msgstr "Modalità di attacco"
+
+msgid "Select default looping mode in timeline."
+msgstr "Selezionare la modalità di loop predefinita nella timeline."
+
+msgid "Scrub Sensitivity"
+msgstr "Sensibilità allo spruzzo"
+
+msgid ""
+"This setting controls the sensitivity of scrubbing (SHIFT and then the mouse"
+" right and left).  Smaller values make the mouse move jump more frames while"
+" higher values does the opposite."
+msgstr ""
+"Questa impostazione controlla la sensibilità del lavaggio (SHIFT e poi il "
+"mouse a destra e a sinistra). Valori più piccoli fanno il mouse muovere "
+"saltare più fotogrammi mentre valori più alti fanno il contrario."
+
+msgid "Default View"
+msgstr "Vista predefinita"
+
+msgid "Show Transitions"
+msgstr "Mostra transizioni"
+
+msgid "Show Transitions in Edit Viewport"
+msgstr "Mostra le transizioni nella visualizzazione Modifica"
+
+msgid "Show Markers"
+msgstr "Mostra segnalibri"
+
+msgid "Show Markers in Edit Viewport"
+msgstr "Mostra segnalibri nella visualizzazione Modifica"
+
+msgid "Behavior"
+msgstr "Comportamento"
+
+msgid "Edit Associated Clips"
+msgstr "Modifica clip associati"
+
+msgid "Edit Associated Clips."
+msgstr "Modifica Clip associati."
+
+msgid "Editable"
+msgstr "Modificabile"
+
+msgid "Editable Timeline Viewport."
+msgstr "Visualizzazione Timeline modificabile."
+
+msgid "OCIO"
+msgstr "OCIO"
+
+msgid "OCIO Config File"
+msgstr "File di configurazione OCIO"
+
+msgid ""
+"This is the path to your config.ocio file.  It can be set with the "
+"environment variable OCIO, which takes precedence over any saved setting."
+msgstr ""
+"Questo è il percorso verso il file config.ocio. Può essere impostato con la "
+"variabile ambiente OCIO, che ha precedenza su qualsiasi impostazione "
+"salvata."
+
+msgid "Built-in Configs"
+msgstr "Confezioni incorporate"
+
+msgid "Pick a config.ocio file from disk."
+msgstr "Scegliere un file config.ocio dal disco."
+
+msgid "Use Active Views and Active Displays"
+msgstr "Utilizza le viste attive e le visualizzazioni attive"
+
+msgid ""
+"When this option is off, OCIO files with active_views: and active_displays: "
+"are not taken into account."
+msgstr ""
+"Quando questa opzione è spenta, i file OCIO con active_views: e "
+"active_displays: non sono presi in considerazione."
+
+msgid "OCIO Defaults"
+msgstr "Default di OCIO"
+
+msgid "8-bits"
+msgstr "8-bit"
+
+msgid ""
+"The name of the OCIO default image color space for 8 bit images (jpg, bmp, etc)\n"
+"(Environment variable: MRV_OCIO_8bits_ICS)"
+msgstr ""
+"Il nome dello spazio di colore predefinito dell'immagine OCIO per immagini a"
+" 8 bit (jpg, bmp, ecc) (variabile ambiente: MRV_OCIO_8bits_ICS)"
+
+msgid "16-bits"
+msgstr "16 pezzetti"
+
+msgid ""
+"The name of the OCIO default image color space for 16-bit images (cin, tiff, etc)\n"
+"(Environment variable: MRV_OCIO_16bits_ICS)"
+msgstr ""
+"Il nome dello spazio di colore predefinito dell'immagine OCIO per immagini a"
+" 16 bit (cin, tiff, ecc) (variabile ambiente: MRV_OCIO_16bits_ICS)"
+
+msgid "32-bits"
+msgstr "32-bit"
+
+msgid ""
+"The name of the OCIO default image color space for 32-bit int images (openexr integers, etc)\n"
+"(Environment variable: MRV_OCIO_32bits_ICS)"
+msgstr ""
+"Il nome dello spazio di colore predefinito dell'immagine OCIO per immagini "
+"int a 32 bit (openexr intergers, etc) (variabile ambiente: "
+"MRV_OCIO_32bits_ICS)"
+
+msgid "half"
+msgstr "metà"
+
+msgid ""
+"The name of the OCIO default image color space for OpenEXR half images\n"
+"(Environment variable: MRV_OCIO_half_ICS)"
+msgstr ""
+"Il nome dello spazio di colore predefinito dell'immagine OCIO per le "
+"immagini a metà OpenEXR (variabile ambiente: MRV_OCIO_half_ICS)"
+
+msgid "float"
+msgstr "Punto galleggiante"
+
+msgid ""
+"The name of the OCIO default image color space for half and float images (OpenEXR, dpx, etc)\n"
+"(Environment variable: MRV_OCIO_float_ICS)"
+msgstr ""
+"Il nome dello spazio di colore predefinito dell'immagine OCIO per le "
+"immagini a metà e a galleggiante (OpenEXR, dpx, ecc.) (variabile ambiente: "
+"MRV_OCIO_float_ICS)"
+
+msgid "Default Look"
+msgstr "Visualizzazione predefinita"
+
+msgid "Display / View"
+msgstr "Visualizza/Visualizza"
+
+msgid "Default Display / View"
+msgstr "Visualizzazione predefinita/Visualizza"
+
+msgid "Loading"
+msgstr "Caricamento"
+
+msgid "Version Regex"
+msgstr "Versione Regex"
+
+msgid ""
+"Regular Expression used to match clip versions.  Must group three things "
+"(prefix, number and suffix). If left on its default value (_v), it will "
+"automatically be created a regular expression to match verisions defined "
+"with _v in the name of the file, directory or both. For example: "
+"gizmo_v001.0001.exr"
+msgstr ""
+"Espressione regolare usata per abbinare le versioni dei clip. Deve "
+"raggruppare tre cose (prefisso, numero e suffisso). Se lasciato sul suo "
+"valore predefinito (_v), verrà automaticamente creata un'espressione "
+"regolare per abbinare le verizioni definite con _v nel nome del file, della "
+"directory o di entrambi. Ad esempio: gizmo_v001.001.exr"
+
+msgid "Maximum Images Apart"
+msgstr "Immagini massime separate"
+
+msgid ""
+"When searching for a version, this value is the maximum version apart from "
+"each other when searching the first or last version."
+msgstr ""
+"Quando si cerca una versione, questo valore è la versione massima a parte "
+"l'una dall'altra quando si cerca la prima o l'ultima versione."
+
+msgid "Missing Frame"
+msgstr "Cornice mancante"
+
+msgid "Path Mappings"
+msgstr "Mappature dei percorsi"
+
+msgid ""
+"Use Up and Down arrows to move the selected line up and down.  Double click "
+"to change item.  Click on an empty area to unselect."
+msgstr ""
+"Utilizzare le frecce su e giù per spostare la linea selezionata su e giù. "
+"Fare doppio clic per modificare l' elemento. Fare clic su un' area vuota per"
+" non selezionare."
+
+msgid "Add Paths"
+msgstr "Aggiungi percorsi"
+
+msgid "Add a new remote mapping."
+msgstr "Aggiungere una nuova mappatura remota."
+
+msgid "Remove Paths"
+msgstr "Rimuovi percorsi"
+
+msgid "Remove the currently selected path mapping."
+msgstr "Rimuovi la mappatura del percorso attualmente selezionata."
+
+msgid "Send"
+msgstr "Invia"
+
+msgid "Accept"
+msgstr "Accettare"
+
+msgid "UI Control"
+msgstr "Controllo dell'interfaccia utente"
+
+msgid "Pan and Zoom"
+msgstr "Panoramica e zoom"
+
+msgid "Color Control"
+msgstr "Controllo colore"
+
+msgid "Audio Control"
+msgstr "Controllo audio"
+
+msgid "Monitor VSync"
+msgstr "Monitoraggio VSync"
+
+msgid ""
+"Turns on and off Monitor's Vsync.  VSync off can display movies faster, at "
+"the cost of potential tearing in the image."
+msgstr ""
+"Attiva e spegne Vsync di Monitor. VSync può visualizzare i film più "
+"velocemente, al costo di potenziale strappamento nell'immagine."
+
+msgid "Color Buffers' Accuracy"
+msgstr "Precisione dei tamponi a colori"
+
+msgid ""
+"Color Buffers can be Float, Half Float, Fast or Automatic.  Float preserves "
+"all float information, Half Float preserves most float information and Fast "
+"works in 8-bits.  Automatic selects the accuracy baed on image depth."
+msgstr ""
+"I tamponi a colori possono essere Float, Mezzo Float, Veloce o Automatico. "
+"Float conserva tutte le informazioni di galleggiante, Mezzo Float conserva "
+"la maggior parte delle informazioni di galleggiante e Fast lavora in 8 bit. "
+"Automatico seleziona l'accuratezza baed sulla profondità dell'immagine."
+
+msgid "Blit Viewports"
+msgstr "Vedute di sbiancamento"
+
+msgid ""
+"Viewports can be drawn with blitting or with OpenGL shaders.  Depending on "
+"graphics card and OS one can perform better then the other."
+msgstr ""
+"Le visualizzazioni possono essere disegnate con ombreggiatori OpenGL. A "
+"seconda della scheda grafica e del sistema operativo uno può funzionare "
+"meglio rispetto all'altro."
+
+msgid "Blit Timeline"
+msgstr "Tempistica di sbiancamento"
+
+msgid ""
+"Timeline can be drawn with blitting or with OpenGL shaders.  Depending on "
+"graphics card and OS one can perform better then the other."
+msgstr ""
+"La timeline può essere disegnata con ombreggiatori OpenGL. A seconda della "
+"scheda grafica e del sistema operativo uno può eseguire meglio rispetto "
+"all'altro."
+
+msgid ""
+"For changes to take effect, you will need to re-open any movies already "
+"playing or reload mrv2."
+msgstr ""
+"Per che i cambiamenti possano avere effetto, dovrai riaprire qualsiasi film "
+"già riproducente o ricaricare mrv2."
+
+msgid "API"
+msgstr "API"
+
+msgid "Audio API to use for platforms that support multiple APIs (Linux only)"
+msgstr ""
+"API audio da usare per piattaforme che supportano più API (solo Linux)"
+
+msgid "Output Device"
+msgstr "Dispositivo di uscita"
+
+msgid "Output Device to use for audio playback."
+msgstr "Dispositivo di uscita da usare per la riproduzione audio."
+
+msgid "ComfyUI"
+msgstr "ComfyUI"
+
+msgid ""
+"Here are the current settings to interact with ComfyUI.  It requires "
+"installation of mrv2's comfyUI nodes."
+msgstr ""
+"Ecco le impostazioni attuali per interagire con ComfyUI. Richiede "
+"l'installazione dei nodi comfyUI di mrv2."
+
+msgid "Use ComfyUI Pipe"
+msgstr "Utilizzare il tubo ComfyUI"
+
+msgid ""
+"This setting opens a pipe to communicate with ComfyUI's "
+"mrv2_save_exr_node.py"
+msgstr ""
+"Questa impostazione apre un tubo per comunicare con mrv2_save_exr_node.py di"
+" ComfyUI"
+
+msgid "Errors"
+msgstr "Errori"
+
+msgid "On FFmpeg Error"
+msgstr "Errore di FFmpeg"
+
+msgid "Adjusts how Log Window behaves in case of an FFmpeg error."
+msgstr "Aggiusta come si comporta Log Window in caso di errore FFmpeg."
+
+msgid "On Error"
+msgstr "Errore"
+
+msgid "Adjusts how Log Window behaves in case of error."
+msgstr "Aggiusta come si comporta Log Window in caso di errore."
+
+msgid "Check for Updates"
+msgstr "Controlla gli aggiornamenti"
+
+msgid ""
+"Allows you to automatically download updates of mrv2 when it starts up."
+msgstr ""
+"Consente di scaricare automaticamente gli aggiornamenti di mrv2 quando si "
+"avvia."
+
+msgid "Reset settings to the default."
+msgstr "Reimposta le impostazioni al valore predefinito."
+
+msgid "Revert"
+msgstr "Ritorno"
+
+msgid "Revert settings to last saved preferences."
+msgstr "Riavvia le impostazioni per l'ultima preferenza salvata."
+
+msgid ""
+"Accept settings but don't save.  They will get saved when exiting the "
+"program."
+msgstr ""
+"Accettare le impostazioni ma non salvare. Essi verranno salvati quando "
+"uscirà dal programma."
+
+msgid "Module"
+msgstr "Modulo"
+
+msgid "User Interface/View Window"
+msgstr "Interfaccia utente/Visualizza finestra"
+
+msgid "User Interface/File Requester"
+msgstr "Interfaccia utente/Richiedente file"
+
+msgid "User Interface/Fonts"
+msgstr "Interfaccia utente/Caratteri"
+
+msgid "User Interface/Language and Colors"
+msgstr "Interfaccia utente/Lingua e colori"
+
+msgid "User Interface/Pixel Toolbar"
+msgstr "Interfaccia utente/Barra degli strumenti del pixel"
+
+msgid "User Interface/Positioning"
+msgstr "Interfaccia utente/Posizionamento"
+
+msgid "User Interface/Render"
+msgstr "Interfaccia utente/Render"
+
+msgid "User Interface/Thumbnails"
+msgstr "Interfaccia utente/Thumbnails"
+
+msgid "User Interface/Timeline"
+msgstr "Interfaccia utente/Scadenza"
+
+msgid "No Audio was Compiled"
+msgstr "Nessun audio è stato compilato"
+
+msgid "No Audio Devices were Found"
+msgstr "Non sono stati trovati dispositivi audio"
+
+msgid "Default API"
+msgstr "API predefinita"
+
+msgid "No Valid Devices found"
+msgstr "Nessun dispositivo valido trovato"
+
+msgid "Default Device"
+msgstr "Dispositivo predefinito"
+
+msgid "Remote to Local Path Mapping"
+msgstr "Mappatura dei percorsi da remoto a locale"
+
+msgid "Remote Path"
+msgstr "Percorso remoto"
+
+msgid "Local Path"
+msgstr "Percorso locale"
+
+msgid "Okay"
+msgstr "D'accordo."
+
+msgid "OCIO Presets"
+msgstr "Presetti OCIO"
+
+msgid "Click to switch to a stored preset."
+msgstr "Fare clic per passare a un preset memorizzato."
+
+msgid "Click to add a new preset with the current settings."
+msgstr ""
+"Fare clic per aggiungere un nuovo preset con le impostazioni correnti."
+
+msgid "Click to delete the selected preset."
+msgstr "Fare clic per eliminare il preset selezionato."
+
+msgid ""
+"Select, Add or Delete an OCIO Preset that stores: config filename, Input "
+"Color Space, View, Look, LUT settings and Defaults for 8-bits, 16-bits, "
+"32-bits, half and float images. "
+msgstr ""
+"Selezionare, Aggiungere o Eliminare un preset OCIO che memorizzi: nome del "
+"file di configurazione, spazio di colore di ingresso, visualizzazione, "
+"impostazioni LUT e predefinite per 8-bit, 16-bit, 32-bit, metà e immagini "
+"fluttuanti."
+
+msgid "Summary"
+msgstr "Sintesi"
+
+msgid "Preset Name"
+msgstr "Nome preimpostato"
+
+msgid "Active"
+msgstr "Attivo"
+
+msgid "Function"
+msgstr "Funzione"
+
+msgid "Key"
+msgstr "Key"
+
+msgid "Reset hotkeys to mrv2's default configuration."
+msgstr ""
+"Reimposta i tasti di avviamento alla configurazione predefinita di mrv2."
+
+msgid "Reload"
+msgstr "Ricarica"
+
+msgid "Reload hotkeys to last saved file."
+msgstr "Ricarica i tasti di avviamento per l'ultimo file salvato."
+
+msgid "Accept the current hotkeys."
+msgstr "Accettare le tastiere attuali."
+
+msgid "HW"
+msgstr "HW"
+
+msgid "CPU Information"
+msgstr "Informazioni CPU"
+
+msgid "GPU Information"
+msgstr "Informazioni GPU"
+
+msgid "Formats"
+msgstr "Formati"
+
+msgid "Codecs"
+msgstr "Codici"
+
+msgid "Subtitles"
+msgstr "Sottotitoli"
+
+msgid "Protocols"
+msgstr "Protocolli"
+
+msgid "Thanks"
+msgstr "Grazie."
+
+msgid "Hotkey for..."
+msgstr "Hotkey per..."
+
+msgid "Type Key"
+msgstr "Tasto di tipo"
+
+msgid "Type a key."
+msgstr "Digita una chiave."
+
+msgid "Shift"
+msgstr "Spostamento"
+
+msgid "Ctrl"
+msgstr "Ctrl"
+
+msgid "Alt"
+msgstr "Alt"
+
+msgid "Meta"
+msgstr "Meta"
+
+msgid "Clear"
+msgstr "Cancella"
+
+msgid "OCIO Browser"
+msgstr "Navigatore OCIO"
+
+msgid "Select an OCIO Transform"
+msgstr "Seleziona una trasformazione OCIO"
+
+msgid "Accept the selected OCIO file."
+msgstr "Accettare il file OCIO selezionato."
+
+msgid "Cancel the OCIO selection and don't change anything."
+msgstr "Annulla la selezione OCIO e non cambiare nulla."
+
+msgid "Escape"
+msgstr "Fuga"
+
+msgid "BackSpace"
+msgstr "BackSpace"
+
+msgid "Tab"
+msgstr "Tab"
+
+msgid "Return"
+msgstr "Ritorna"
+
+msgid "Print"
+msgstr "Stampa"
+
+msgid "ScrollLock"
+msgstr "Bloccare lo scorrimento"
+
+msgid "Pause"
+msgstr "Pausa"
+
+msgid "Insert"
+msgstr "Inserisci"
+
+msgid "PageUp"
+msgstr "Pagina in alto"
+
+msgid "End"
+msgstr "End"
+
+msgid "PageDown"
+msgstr "Pagina abbassata"
+
+msgid "Left"
+msgstr "Sinistra"
+
+msgid "Up"
+msgstr "Up"
+
+msgid "Right"
+msgstr "Giusto."
+
+msgid "Down"
+msgstr "Giù"
+
+msgid "LeftShift"
+msgstr "Sinistra"
+
+msgid "RightShift"
+msgstr "Maggio destro"
+
+msgid "LeftCtrl"
+msgstr "Ctrl sinistro"
+
+msgid "RightCtrl"
+msgstr "Ctrl destro"
+
+msgid "CapsLock"
+msgstr "Cappelli di blocco"
+
+msgid "LeftAlt"
+msgstr "SinistraAlt"
+
+msgid "RightAlt"
+msgstr "DestraAlt"
+
+msgid "LeftMeta"
+msgstr "MetaSinistra"
+
+msgid "RightMeta"
+msgstr "DestraMeta"
+
+msgid "Menu"
+msgstr "Menù"
+
+msgid "NumLock"
+msgstr "Chiusura del numLock"
+
+msgid "padEnter"
+msgstr "padEnter"
+
+msgid "pad0"
+msgstr "ripiano"
+
+msgid "pad1"
+msgstr "ripiano1"
+
+msgid "pad2"
+msgstr "ripiano2"
+
+msgid "pad3"
+msgstr "ripiano3"
+
+msgid "pad4"
+msgstr "ripiano4"
+
+msgid "pad5"
+msgstr "ripiano5"
+
+msgid "pad6"
+msgstr "ripiano6"
+
+msgid "pad7"
+msgstr "ripiano7"
+
+msgid "pad8"
+msgstr "ripiano8"
+
+msgid "pad9"
+msgstr "ripiano9"
+
+msgid "Space (' ')"
+msgstr "Spazio ('')"
+
+msgid "Multiply"
+msgstr "Multiplicare"
+
+msgid "Subtract"
+msgstr "Sottotrarre"
+
+msgid "Decimal"
+msgstr "Decimale"
+
+msgid "Divide"
+msgstr "Dividere"
+
+msgid "@B12@C7@b@.Remote\t@B12@C7@b@.Local"
+msgstr "@B12@C7@b@.Remote @B12@C7@b@.Local"
+
+msgid "Desktop: "
+msgstr "Desktop:"
+
+msgid "Running on: "
+msgstr "In esecuzione su:"
+
+msgid "sysctl failed!"
+msgstr "Sysctl è fallito!"
+
+msgid "host_statistics64 failed"
+msgstr "host_statistics64 non riuscito"
+
+msgid "task info failed"
+msgstr "Informazione dell'attività non riuscita"
+
+msgid "Open Directory"
+msgstr "Apri directory"
+
+msgid "Open Movie or Sequence"
+msgstr "Apri film o sequenza"
+
+msgid "Open Single Image"
+msgstr "Apri immagine singola"
+
+msgid "Save Image"
+msgstr "Salva immagine"
+
+msgid "Save Frames To Folder"
+msgstr "Salva fotogrammi nella cartella"
+
+msgid "Save OTIO Timeline"
+msgstr "Salva timeline OTIO"
+
+msgid "Save PDF Document"
+msgstr "Salva documento PDF"
+
+msgid "Save Session As"
+msgstr "Salva sessione come"
+
+msgid "Close Current"
+msgstr "Chiudi corrente"
+
+msgid "Close All"
+msgstr "Chiudi tutto"
+
+msgid "Quit Program"
+msgstr "Esci dal programma"
+
+msgid "Zoom Minimum"
+msgstr "Zoom minimo"
+
+msgid "Zoom Maximum"
+msgstr "Ingrandisci il massimo"
+
+msgid "Center Image"
+msgstr "Immagine centrale"
+
+msgid "Fit Screen"
+msgstr "Schermo adattato"
+
+msgid "Resize Main Window to Fit"
+msgstr "Ridimensiona la finestra principale da adattare"
+
+msgid "Fit All"
+msgstr "Adatta a tutto"
+
+msgid "Toggle Minify Texture Filtering"
+msgstr "Commuta il filtro di texture Minimizzare"
+
+msgid "Toggle Magnify Texture Filtering"
+msgstr "Commuta la filtrazione di texture ingrandisci"
+
+msgid "Auto Frame View"
+msgstr "Visualizza fotogramma automatico"
+
+msgid "Ignore Display Window"
+msgstr "Ignora la finestra di visualizzazione"
+
+msgid "Auto Normalize"
+msgstr "Normalizza automaticamente"
+
+msgid "Invalid Values"
+msgstr "Valori non validi"
+
+msgid "Display Window"
+msgstr "Visualizza finestra"
+
+msgid "Data Window"
+msgstr "Finestra dati"
+
+msgid "Compare Wipe"
+msgstr "Confronta Wipe"
+
+msgid "Compare Overlay"
+msgstr "Confronta sovrapposizione"
+
+msgid "Compare Difference"
+msgstr "Confronta la differenza"
+
+msgid "Compare Horizontal"
+msgstr "Confronta orizzontale"
+
+msgid "Compare Vertical"
+msgstr "Confronta verticale"
+
+msgid "Compare Tile"
+msgstr "Confronta la piastrella"
+
+msgid "Color Channel"
+msgstr "Canale colore"
+
+msgid "Red Channel"
+msgstr "Canale rosso"
+
+msgid "Green Channel"
+msgstr "Canale verde"
+
+msgid "Blue Channel"
+msgstr "Canale blu"
+
+msgid "Alpha Channel"
+msgstr "Canale alfa"
+
+msgid "Flip X"
+msgstr "Flip X"
+
+msgid "Flip Y"
+msgstr "Flip Y"
+
+msgid "Rotate Images +90 Degrees"
+msgstr "Ruota immagini +90 gradi"
+
+msgid "Rotate Images -90 Degrees"
+msgstr "Ruotare le immagini -90 gradi"
+
+msgid "Video Levels from File"
+msgstr "Livelli video dal file"
+
+msgid "Video Levels Legal Range"
+msgstr "Livelli video Intervallo legale"
+
+msgid "Video Levels Full Range"
+msgstr "Livelli video Intervallo completo"
+
+msgid "Alpha Blend None"
+msgstr "Miscelazione alfa Nessuna"
+
+msgid "Alpha Blend Straight"
+msgstr "Miscelazione alfa dritto"
+
+msgid "Alpha Blend Premultiplied"
+msgstr "Miscelazione alfa Premultiplicata"
+
+msgid "Annotation Clear Frame"
+msgstr "Cancella il telaio dell' annotazione"
+
+msgid "Annotation Clear All Frames"
+msgstr "Annotazione Cancella tutti i quadri"
+
+msgid "Annotation Frame Step Backwards"
+msgstr "Cornice di annotazione passo indietro"
+
+msgid "Frame Step Backwards"
+msgstr "Passaggio del telaio verso l'indietro"
+
+msgid "Frame Step FPS Backwards"
+msgstr "Cornice Passo FPS Indietro"
+
+msgid "Annotation Frame Step Forwards"
+msgstr "Fase in avanti del telaio dell'annotazione"
+
+msgid "Frame Step Forwards"
+msgstr "Passaggio del telaio in avanti"
+
+msgid "Frame Step FPS Forwards"
+msgstr "Fase del telaio FPS in avanti"
+
+msgid "Play Backwards"
+msgstr "Gioca indietro"
+
+msgid "Play Backwards / Change Speed"
+msgstr "Gioca indietro/Cambia velocità"
+
+msgid "Play in Current Direction"
+msgstr "Gioca nella direzione corrente"
+
+msgid "Play Forwards"
+msgstr "Gioca avanti"
+
+msgid "Play Forwards / Change Speed"
+msgstr "Gioca avanti/Cambia velocità"
+
+msgid "Next Clip"
+msgstr "Clip successivo"
+
+msgid "Previous Clip"
+msgstr "Clip precedente"
+
+msgid "Loop Playback"
+msgstr "Riproduzione del filo"
+
+msgid "Playback Once"
+msgstr "Riproduzione una volta"
+
+msgid "Playback Ping Pong"
+msgstr "Riproduzione Ping Pong"
+
+msgid "First Image Version"
+msgstr "Prima versione dell'immagine"
+
+msgid "Previous Image Version"
+msgstr "Versione dell'immagine precedente"
+
+msgid "Next Image Version"
+msgstr "Versione immagine successiva"
+
+msgid "Last Image Version"
+msgstr "Ultima versione dell'immagine"
+
+msgid "Previous Image"
+msgstr "Immagine precedente"
+
+msgid "Next Image"
+msgstr "Immagine successiva"
+
+msgid "Previous Image Limited"
+msgstr "Immagine precedente limitata"
+
+msgid "Next Image Limited"
+msgstr "Immagine successiva limitata"
+
+msgid "Previous Channel"
+msgstr "Canale precedente"
+
+msgid "Next Channel"
+msgstr "Canale successivo"
+
+msgid "Clear Cache"
+msgstr "Cancella la cache"
+
+msgid "UpdateVideoFrame"
+msgstr "Aggiorna il QuadroVideo"
+
+msgid "Cut Frame"
+msgstr "Taglia il telaio"
+
+msgid "Copy Frame"
+msgstr "Copia cornice"
+
+msgid "Paste Frame"
+msgstr "Incolla il telaio"
+
+msgid "Insert Frame"
+msgstr "Inserisci il telaio"
+
+msgid "Slice Clip"
+msgstr "Taglia clip"
+
+msgid "Remove Clip"
+msgstr "Rimuovi clip"
+
+msgid "Insert Audio Gap"
+msgstr "Inserisci gap audio"
+
+msgid "Remove Audio Gap"
+msgstr "Rimuovi il gap audio"
+
+msgid "Edit Undo"
+msgstr "Modifica Annulla"
+
+msgid "Edit Redo"
+msgstr "Modifica ripristinare"
+
+msgid "Toggle Menu Bar"
+msgstr "Commuta la barra dei menu"
+
+msgid "Toggle Top Bar"
+msgstr "Commuta barra superiore"
+
+msgid "Toggle Pixel Bar"
+msgstr "Commuta la barra dei pixel"
+
+msgid "Toggle Timeline"
+msgstr "Commuta timeline"
+
+msgid "Toggle Status Bar"
+msgstr "Commuta la barra di stato"
+
+msgid "Toggle Tool Dock"
+msgstr "Attiva la dock dello strumento"
+
+msgid "Toggle Full Screen"
+msgstr "Commuta schermo intero"
+
+msgid "Toggle Presentation"
+msgstr "Commuta la presentazione"
+
+msgid "Toggle Float On Top"
+msgstr "Commuta fluttuare in alto"
+
+msgid "Toggle Secondary"
+msgstr "Commuta secondario"
+
+msgid "Toggle Secondary Float On Top"
+msgstr "Commutare la flotta secondaria in alto"
+
+msgid "Toggle NDI"
+msgstr "Commuta NDI"
+
+msgid "Toggle Network"
+msgstr "Commuta la rete"
+
+msgid "Toggle USD"
+msgstr "Commutare l'USD"
+
+msgid "Toggle Stereo 3D"
+msgstr "Commuta stereo 3D"
+
+msgid "Toggle Timeline Editable"
+msgstr "Commuta la timeline modificabile"
+
+msgid "Toggle Edit Associated Clips"
+msgstr "Commuta Modifica clip associati"
+
+msgid "Timeline Frame View"
+msgstr "Vista del quadro temporale"
+
+msgid "Toggle Timeline Scroll To Current Frame"
+msgstr "Commuta lo scorrimento della linea temporale sulla cornice corrente"
+
+msgid "Toggle Timeline Track Info"
+msgstr "Commuta le informazioni sulla traccia temporale"
+
+msgid "Toggle Timeline Clip Info"
+msgstr "Commuta le informazioni sulla clip della linea temporale"
+
+msgid "Toggle Timeline Thumbnails"
+msgstr "Commuta le miniature della linea temporale"
+
+msgid "Toggle Timeline Transitions"
+msgstr "Commuta le transizioni temporali"
+
+msgid "Toggle Timeline Markers"
+msgstr "Commuta i segnalibri della linea temporale"
+
+msgid "Reset Gain/Gamma"
+msgstr "Ripristina il guadagno/Gamma"
+
+msgid "Exposure More"
+msgstr "Esposizione di più"
+
+msgid "Exposure Less"
+msgstr "Esposizione Meno"
+
+msgid "Gamma More"
+msgstr "Gamma Più"
+
+msgid "Gamma Less"
+msgstr "Gamma Meno"
+
+msgid "OCIO In Top Bar"
+msgstr "OCIO nella barra superiore"
+
+msgid "OCIO Input Color Space"
+msgstr "Spazio colore di ingresso OCIO"
+
+msgid "OCIO Display"
+msgstr "Visualizzazione OCIO"
+
+msgid "OCIO View"
+msgstr "Vista OCIO"
+
+msgid "Scrub Mode"
+msgstr "Modalità spruzzo"
+
+msgid "Area Selection Mode"
+msgstr "Modalità di selezione dell'area"
+
+msgid "Erase Mode"
+msgstr "Modalità di cancellazione"
+
+msgid "Arrow Mode"
+msgstr "Modalità freccia"
+
+msgid "Rectangle Mode"
+msgstr "Modalità rettangolo"
+
+msgid "Circle Mode"
+msgstr "Modalità cerchio"
+
+msgid "Text Mode"
+msgstr "Modalità testo"
+
+msgid "Pen Size More"
+msgstr "Misura della penna di più"
+
+msgid "Pen Size Less"
+msgstr "Misura penna meno"
+
+msgid "Undo Draw"
+msgstr "Annulla disegno"
+
+msgid "Redo Draw"
+msgstr "Rifare il disegno"
+
+msgid "Switch Pen Color"
+msgstr "Cambia colore della penna"
+
+msgid "Set In Point"
+msgstr "Imposta il punto"
+
+msgid "Set Out Point"
+msgstr "Imposta punto"
+
+msgid "Hud Window"
+msgstr "Finestra di rivestimento"
+
+msgid "Toggle One Panel Only"
+msgstr "Commuta solo un pannello"
+
+msgid "Toggle Files Panel"
+msgstr "Commuta il pannello File"
+
+msgid "Toggle Media Info Panel"
+msgstr "Commuta il pannello di informazioni multimediali"
+
+msgid "Toggle Color Area Info Panel"
+msgstr "Commuta il pannello d'informazione dell'area di colore"
+
+msgid "Toggle Color Controls Panel"
+msgstr "Commuta il pannello di controllo dei colori"
+
+msgid "Toggle Playlist Panel"
+msgstr "Commuta il pannello della lista di riproduzione"
+
+msgid "Toggle Compare Panel"
+msgstr "Commuta il pannello di confronto"
+
+msgid "Toggle Devices Panel"
+msgstr "Commuta il pannello Dispositivi"
+
+msgid "Toggle Annotation Panel"
+msgstr "Commuta il pannello di annotazione"
+
+msgid "Toggle Background Panel"
+msgstr "Commuta il pannello di sfondo"
+
+msgid "Toggle Settings Panel"
+msgstr "Commuta il pannello Impostazioni"
+
+msgid "Toggle Histogram Panel"
+msgstr "Commuta il pannello dell'istogramma"
+
+msgid "Toggle Vectorscope Panel"
+msgstr "Commuta il pannello Vectorscope"
+
+msgid "Toggle Waveform Panel"
+msgstr "Commuta il pannello Waveform"
+
+msgid "Toggle Environment Map Panel"
+msgstr "Commuta il pannello della mappa dell'ambiente"
+
+msgid "Toggle Preferences Window"
+msgstr "Commuta la finestra Preferenze"
+
+msgid "Toggle Python Panel"
+msgstr "Commuta il pannello Python"
+
+msgid "Toggle Log Panel"
+msgstr "Commuta il pannello di registro"
+
+msgid "Toggle Hotkeys Window"
+msgstr "Finestra di commutazione di tasti di avviamento"
+
+msgid "Toggle About Window"
+msgstr "Commuta la finestra"
