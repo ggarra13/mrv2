@@ -13,8 +13,8 @@ except ImportError as e:
     print('Please run python -m pip install pillow')
     exit(1)
 
-MAC_ORIG_ICON='icons/original/Icon_MacOS.png'
-WINDOWS_ORIG_ICON='icons/original/Icon_Windows.png'
+MAC_ORIG_ICON='assets/icons/original/Icon_MacOS.png'
+WINDOWS_ORIG_ICON='assets/icons/original/Icon_Windows.png'
 
 # Linux directory to store Freedesktop.org icons
 PNG_DIR='mrv2/share/application'

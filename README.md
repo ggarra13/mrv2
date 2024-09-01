@@ -338,7 +338,7 @@ To clean up the directory, run a debug build with 8 cores, run:
 
 For windows, in addition to Visual Studio, you will need a new and
 fresh copy of Msys.
-There is a .bat file included in the distribution (in windows/bat),
+There is a .bat file included in the distribution (in helpers/windows/bat),
 which needs to be modified to the path of Visual Studio (2019 by default),
 the optional Windows SDK (none by default) and your copy of Msys.
 You run the .bat file first, which will set the Visual Studio paths and 
