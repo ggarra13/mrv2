@@ -128,9 +128,13 @@ elseif(APPLE)
     endif()
 endif()
 
+
 set(libbacktrace_DEP )
-if(UNIX AND NOT APPLE)
-    include(cmake/Modules/Buildlibbacktrace.cmake)
+if(CMAKE_BUILD_TYPE MATCHES "^Debug$" OR
+	CMAKE_BUILD_TYPE MATCHES "^DebRelInfo$")
+    if(UNIX AND NOT APPLE)
+	include(cmake/Modules/Buildlibbacktrace.cmake)
+    endif()
 endif()
 
 set(PYBIND11_DEP )

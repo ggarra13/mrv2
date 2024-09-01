@@ -2,9 +2,10 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-#include <backtrace.h>
 
-#include <iostream>
+#ifndef NDEBUG
+
+#   include <backtrace.h>
 
 void error_callback(void* data, const char* msg, int errnum)
 {
@@ -35,13 +36,18 @@ int full_callback(
     printf("0x%lx %s (%s:%d)\n", pc, demangled_name, filename, lineno);
     return 0;
 }
+#endif
 
 void printStackTrace()
 {
+#ifndef NDEBUG
     // MRV2_ROOT contains the root path of the executable.
     char exe[1024];
     snprintf(exe, 1024, "%s/bin/mrv2", getenv("MRV2_ROOT"));
 
     auto state = backtrace_create_state(exe, 1, error_callback, nullptr);
     int ret = backtrace_full(state, 0, full_callback, error_callback, nullptr);
+#endif
+
 }
+

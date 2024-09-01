@@ -67,19 +67,19 @@ set(pyFLTK_PATCH
     COMMAND
     ${CMAKE_COMMAND} -E copy_if_different
     "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/setup.py"
-    "${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK/"
+    "${CMAKE_BINARY_DIR}/deps/pyFLTK/src/pyFLTK/"
     COMMAND
     ${CMAKE_COMMAND} -E copy_if_different
     "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/swig/WindowShowTypemap.i"
-    "${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK/swig/"
+    "${CMAKE_BINARY_DIR}/deps/pyFLTK/src/pyFLTK/swig/"
     COMMAND
     ${CMAKE_COMMAND} -E copy_if_different
     "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/swig/Fl_Group.i"
-    "${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK/swig/"
+    "${CMAKE_BINARY_DIR}/deps/pyFLTK/src/pyFLTK/swig/"
     COMMAND
     ${CMAKE_COMMAND} -E copy_if_different
     "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/fltk14/test/exceptions.py"
-    "${CMAKE_BINARY_DIR}/pyFLTK-prefix/src/pyFLTK/fltk14/test")
+    "${CMAKE_BINARY_DIR}/deps/pyFLTK/src/pyFLTK/fltk14/test")
 
 # Environment setup for configure, building and installing
 set(pyFLTK_ENV ${CMAKE_COMMAND} -E env CXXFLAGS=${pyFLTK_CXX_FLAGS} )

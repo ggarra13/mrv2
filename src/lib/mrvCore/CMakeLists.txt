@@ -71,7 +71,10 @@ else()
         mrvFileManager.cpp
 	Linux/mrvStackTrace.cpp 
 	Linux/mrvSignalHandler.cpp)
-    list(APPEND LIBRARIES_PRIVATE backtrace)
+    if (CMAKE_BUILD_TYPE STREQUAL "Debug" OR
+	    CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
+	list(APPEND LIBRARIES_PRIVATE backtrace)
+    endif()
 endif()
 
 add_library(mrvCore ${SOURCES} ${HEADERS})
