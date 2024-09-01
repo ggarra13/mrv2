@@ -6,7 +6,7 @@
 [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=679N8GWCNDFSJ)
 [![Sponsor](https://img.shields.io/badge/Sponsor-ggarra13-blue.svg)](https://github.com/sponsors/ggarra13)
 
-![banner](https://github.com/ggarra13/mrv2/assets/images/banner.png)
+![banner](https://github.com/ggarra13/mrv2/blob/main/assets/images/banner.png)
 
 mrv2
 ====
