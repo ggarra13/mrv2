@@ -1,3 +1,10 @@
+v1.2.6
+======
+
+- Added Preferences->User Interface->View Window->OCIO In Top Bar to turn on
+  OCIO at start of UI.
+  
+
 v1.2.5
 ======
 

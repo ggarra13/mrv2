@@ -5448,6 +5448,16 @@ msgstr ""
 "Wenn mrv2 gestartet wird, wird die Anzeige des sicheren Bereichs standardmig"
 " aktiv."
 
+msgid "OCIO in Top Bar"
+msgstr "OCIO in der oberen Leiste"
+
+msgid ""
+"When mrv2 starts, OCIO should start in the top bar instead of color "
+"adjustments."
+msgstr ""
+"Wenn mrv2 startet, sollte OCIO in der oberen Leiste statt Farbanpassungen "
+"starten."
+
 msgid "Zoom Speed"
 msgstr "Geschwindigkeit vergrern"
 

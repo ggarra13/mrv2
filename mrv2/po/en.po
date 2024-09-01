@@ -5679,6 +5679,16 @@ msgstr "Safe Areas"
 msgid "When mrv2 starts, the safe area display will be active by default."
 msgstr "When mrv2 starts, the safe area display will be active by default."
 
+msgid "OCIO in Top Bar"
+msgstr "OCIO in Top Bar"
+
+msgid ""
+"When mrv2 starts, OCIO should start in the top bar instead of color "
+"adjustments."
+msgstr ""
+"When mrv2 starts, OCIO should start in the top bar instead of color "
+"adjustments."
+
 msgid "Zoom Speed"
 msgstr "Zoom Speed"
 

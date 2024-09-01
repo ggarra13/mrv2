@@ -1739,6 +1739,18 @@ namespace mrv
         bool safeAreas = (bool)uiPrefs->uiPrefsSafeAreas->value();
         view->setSafeAreas(safeAreas);
 
+        bool ocioInTopBar = uiPrefs->uiPrefsOCIOInTopBar->value();
+        if (ocioInTopBar)
+        {
+            ui->uiOCIO->show();
+            ui->uiCOLORS->hide();
+        }
+        else
+        {
+            ui->uiOCIO->hide();
+            ui->uiCOLORS->show();
+        }
+        
         // Handle image options
         auto imageOptions = app->imageOptions();
         int alphaBlend = uiPrefs->uiPrefsAlphaBlend->value();

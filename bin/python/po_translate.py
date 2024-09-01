@@ -39,15 +39,15 @@ parser = argparse.ArgumentParser(
 
 parser.add_argument('language', type=str,
                     help='Language code to translate, like "en" or "zh-CN".')
-parser.add_argument('-g', '--google', action='store_true',
+parser.add_argument('-ng', '--no-google', action='store_true',
                     help='Use google')
-parser.add_argument('-t', '--tokenizer', action='store_true',
+parser.add_argument('-nt', '--no-tokenizer', action='store_true',
                     help='Use AI tokenizer')
 
 args = parser.parse_args()
 lang = args.language
-use_google = args.google
-use_tokenizer = args.tokenizer
+use_google = not args.no_google
+use_tokenizer = not args.no_tokenizer
 
 if not lang in LANGUAGES:
     print(f'Invalid language "{lang}"')
@@ -261,7 +261,7 @@ class POTranslator:
         
         if not translated_text:
             if not self.use_tokenizer:
-                return self.translate_with_goggle(english)
+                return self.translate_with_google(english)
         
             inputs = self.tokenizer(english, return_tensors="pt", padding=True,
                                     truncation=True)
@@ -339,7 +339,7 @@ class POTranslator:
                 if entry.msgid[-1] == '\n' and entry.msgstr[-1] != '\n':
                     entry.msgstr = entry.msgstr + '\n'
         except Exception as e:
-            pass
+            raise e
         except KeyboardInterrupt:
             pass
 

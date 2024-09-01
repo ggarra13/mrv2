@@ -19,7 +19,8 @@ fi
 
 locate_python
 
-if [[ ! -d $PYTHON_SITEDIR/polib && ! -d $PYTHON_USER_SITEDIR/polib ]];
+echo $PYTHON_SITEDIR/polib.py 
+if [[ ! -e $PYTHON_SITEDIR/polib.py && ! -e $PYTHON_USER_SITEDIR/polib.py ]];
 then
     $PYTHON -m pip install polib
 fi

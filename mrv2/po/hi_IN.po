@@ -5398,6 +5398,16 @@ msgstr ""
 "जब एमrv2 शुरू होता है, सुरक्षित क्षेत्र प्रदर्शित डिफ़ॉल्ट द्वारा सक्रिय "
 "किया जाएगा."
 
+msgid "OCIO in Top Bar"
+msgstr "ऊपरी बार में ओआईओ"
+
+msgid ""
+"When mrv2 starts, OCIO should start in the top bar instead of color "
+"adjustments."
+msgstr ""
+"जब mrv2 शुरू होता है, OCIO को रंग समायोजन के बजाए शीर्ष बार में प्रारंभ होना"
+" चाहिए."
+
 msgid "Zoom Speed"
 msgstr "ज़ूम गति"
 
@@ -5939,7 +5949,7 @@ msgid ""
 "playing or reload mrv2."
 msgstr ""
 "परिवर्तनों को प्रभाव में लाने के लिए, आपको पहले से ही किसी भी फिल्म को फिर "
-"से खोलना होगा या Mrv2 को फिर से लोड करना होगा."
+"से खोलना होगा या mrv2 को फिर से लोड करना होगा."
 
 msgid "API"
 msgstr "API"

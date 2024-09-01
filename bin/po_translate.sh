@@ -19,7 +19,9 @@ fi
 
 locate_python
 
-if [[ ! -e $PYTHON_SITEDIR/polib.py && ! -d $PYTHON_USER_SITEDIR/polib.py ]];
+echo $PYTHON_SITEDIR
+if [[ ! -d $PYTHON_SITEDIR/transformers &&
+	  ! -d $PYTHON_USER_SITEDIR/transformers ]];
 then
     $PYTHON -m pip install polib transformers translate torch sentencepiece sacremoses
 fi

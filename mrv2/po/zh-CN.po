@@ -5383,7 +5383,7 @@ msgstr "总是在顶端"
 msgid ""
 "When selected, mrv2's window will always show up on top of other windows on "
 "the desktop."
-msgstr "选中时, drv2 的窗口将总是出现在桌面上其他窗口的顶端 。"
+msgstr "选中时, mrv2 的窗口将总是出现在桌面上其他窗口的顶端 。"
 
 msgid "Secondary on Top"
 msgstr "最高中学"
@@ -5520,6 +5520,17 @@ msgstr "安全区"
 
 msgid "When mrv2 starts, the safe area display will be active by default."
 msgstr "当 drv2 启动时, 默认情况下安全区域显示将会激活 。"
+
+msgid "OCIO in Top Bar"
+msgstr ""
+"'CHINESE (SIMPLIFIED)' IS AN INVALID TARGET LANGUAGE . EXAMPLE: "
+"LANGPAIR=EN|IT USING 2 LETTER ISO OR RFC3066 LIKE ZH-CN. ALMOST ALL "
+"LANGUAGES SUPPORTED BUT SOME MAY HAVE NO CONTENT"
+
+msgid ""
+"When mrv2 starts, OCIO should start in the top bar instead of color "
+"adjustments."
+msgstr "当 drv2 启动时, OCIO 应该从顶部栏开始, 而不是颜色调整 。"
 
 msgid "Zoom Speed"
 msgstr "缩速速度"

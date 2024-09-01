@@ -82,101 +82,103 @@ export CMAKE_GENERATOR="Ninja"
 export CMAKE_TARGET=""
 ASK_TO_CONTINUE=0
 
+if [[ $RUNME == 1 ]]; then
 
-for i in "$@"; do
-    case $i in
-	reldeb|RelWithDebInfo)
-	    export CMAKE_BUILD_TYPE="RelWithDebInfo"
-	    export BUILD_TYPE_DIR="RelWithDebInfo"
-	    shift
-	    ;;
-	release|Release)
-	    export CMAKE_BUILD_TYPE="Release"
-	    export BUILD_TYPE_DIR="Release"
-	    shift
-	    ;;
-	debug|Debug)		
-	    export CMAKE_BUILD_TYPE="Debug"
-	    export BUILD_TYPE_DIR="Debug"
-	    shift
-	    ;;
-	-y|-yes|--y|--yes)
-	    shift
-	    ASK_TO_CONTINUE=0
-	    ;;
-	--ask|-ask)
-	    shift
-	    ASK_TO_CONTINUE=1
-	    ;;
-	--build-dir|-build-dir|--dir|-dir|--root|-root)
-	    shift
-	    export BUILD_ROOT=$1
-	    shift
-	    ;;
-	--small|-small)
-	    shift
-	    export BUILD_ROOT=$default_build_root-small
-	    ;;
-	--minimal|-minimal|--min|-min)
-	    shift
-	    export BUILD_ROOT=$default_build_root-minimal
-	    ;;
-	clean)
-	    CLEAN_DIR=1
-	    if [[ $RUNME == 0 && $RUNME_NOLOG == 0 ]]; then
-		echo $0
-		echo "clean option can only be run with the runme.sh script"
+    for i in "$@"; do
+	case $i in
+	    reldeb|RelWithDebInfo)
+		export CMAKE_BUILD_TYPE="RelWithDebInfo"
+		export BUILD_TYPE_DIR="RelWithDebInfo"
+		shift
+		;;
+	    release|Release)
+		export CMAKE_BUILD_TYPE="Release"
+		export BUILD_TYPE_DIR="Release"
+		shift
+		;;
+	    debug|Debug)		
+		export CMAKE_BUILD_TYPE="Debug"
+		export BUILD_TYPE_DIR="Debug"
+		shift
+		;;
+	    -y|-yes|--y|--yes)
+		shift
+		ASK_TO_CONTINUE=0
+		;;
+	    --ask|-ask)
+		shift
+		ASK_TO_CONTINUE=1
+		;;
+	    --build-dir|-build-dir|--dir|-dir|--root|-root)
+		shift
+		export BUILD_ROOT=$1
+		shift
+		;;
+	    --small|-small)
+		shift
+		export BUILD_ROOT=$default_build_root-small
+		;;
+	    --minimal|-minimal|--min|-min)
+		shift
+		export BUILD_ROOT=$default_build_root-minimal
+		;;
+	    clean)
+		CLEAN_DIR=1
+		if [[ $RUNME == 0 && $RUNME_NOLOG == 0 ]]; then
+		    echo $0
+		    echo "clean option can only be run with the runme.sh script"
+		    exit 1
+		fi
+		shift
+		;;
+	    -lgpl|--lgpl)
+		export FFMPEG_GPL=LGPL
+		export TLRENDER_X264=OFF
+		shift
+		;;
+	    -gpl|--gpl)
+		export FFMPEG_GPL=GPL
+		export TLRENDER_X264=ON
+		shift
+		;;
+	    -v|--v|--verbose)
+		export CMAKE_VERBOSE_MAKEFILE=ON
+		export FLAGS="-v ${FLAGS}"
+		shift
+		;;
+	    -j)
+		shift
+		export CPU_CORES=$1
+		export FLAGS="-j $CPU_CORES ${FLAGS}"
+		shift
+		;;
+	    -D*)
+		if [[ $1 == "-D" ]]; then
+		    shift
+		fi
+		parse_option $1
+		shift
+		;;
+	    -G)
+		shift
+		if [[ $RUNME == 0 ]]; then
+		    echo $0
+		    echo "Cmake generator can only be run with the runme.sh script"
+		    exit 1
+		fi
+		export CMAKE_GENERATOR=$1
+		shift
+		;;
+	    -t|--t|--target)
+		shift
+		export CMAKE_TARGET=$1
+		shift
+		;;
+	    -h|-help|--help)
+		show_help
 		exit 1
-	    fi
-	    shift
-	    ;;
-	-lgpl|--lgpl)
-	    export FFMPEG_GPL=LGPL
-	    export TLRENDER_X264=OFF
-	    shift
-	    ;;
-	-gpl|--gpl)
-	    export FFMPEG_GPL=GPL
-	    export TLRENDER_X264=ON
-	    shift
-	    ;;
-	-v|--v|--verbose)
-	    export CMAKE_VERBOSE_MAKEFILE=ON
-	    export FLAGS="-v ${FLAGS}"
-	    shift
-	    ;;
-	-j)
-	    shift
-	    export CPU_CORES=$1
-	    export FLAGS="-j $CPU_CORES ${FLAGS}"
-	    shift
-	    ;;
-	-D*)
-	    if [[ $1 == "-D" ]]; then
-	       shift
-	    fi
-	    parse_option $1
-	    shift
-	    ;;
-	-G)
-	    shift
-	    if [[ $RUNME == 0 ]]; then
-		echo $0
-		echo "Cmake generator can only be run with the runme.sh script"
-		exit 1
-	    fi
-	    export CMAKE_GENERATOR=$1
-	    shift
-	    ;;
-	-t|--t|--target)
-	    shift
-	    export CMAKE_TARGET=$1
-	    shift
-	    ;;
-	-h|-help|--help)
-	    show_help
-	    exit 1
-	    ;;
-    esac
-done
+		;;
+	esac
+    done
 
+fi
