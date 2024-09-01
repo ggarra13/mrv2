@@ -41,10 +41,13 @@ parser.add_argument('language', type=str,
                     help='Language code to translate, like "en" or "zh-CN".')
 parser.add_argument('-g', '--google', action='store_true',
                     help='Use google')
+parser.add_argument('-t', '--tokenizer', action='store_true',
+                    help='Use AI tokenizer')
 
 args = parser.parse_args()
 lang = args.language
 use_google = args.google
+use_tokenizer = args.tokenizer
 
 if not lang in LANGUAGES:
     print(f'Invalid language "{lang}"')
@@ -121,16 +124,36 @@ GOOGLE_LANGUAGES = {
     'it' : 'Italian',
     'de' : 'German',
     'hi' : 'Hindi',
+    'pt' : 'Portuguese',
     'zh' : 'Chinese (Simplified)',
 }
 
 #
 # Load the heavy imports
 #
-import torch
-from transformers import MarianMTModel, MarianTokenizer
-from translate import Translator
+try:
+    if use_tokenizer:
+        import torch
+        from transformers import MarianMTModel, MarianTokenizer
+except ImportError:
+    use_tokenizer = False
+    pass
 
+
+if not use_google and not use_tokenizer:
+    use_google = True
+    print('Use google and use tokenizer are false.  Turning on google')
+
+try:
+    from translate import Translator
+except ImportError:
+    use_google = False
+    pass
+
+if not use_google and not use_tokenizer:
+    print('No google or tokenizer module found.  Exiting.')
+    exit(1)
+        
 # Load the model and tokenizer for English to Simplified Chinese
 model_name = f"Helsinki-NLP/opus-mt-en-{code}"
 print('Load model',model_name)
@@ -139,15 +162,21 @@ print('Load model',model_name)
 class POTranslator:
 
 
-    def __init__(self, po_file, use_google):
-        self.reached_google_limit = not use_google
+    def __init__(self, po_file, use_google = True, use_tokenizer = True):
+
+        self.use_google = use_google
+        self.use_tokenizer = use_tokenizer
+        
         self.have_seen = {}
-        self.tokenizer = MarianTokenizer.from_pretrained(model_name,
-                                                         clean_up_tokenization_spaces=True)
-        self.model = MarianMTModel.from_pretrained(model_name)
+
+        if use_tokenizer:
+            self.tokenizer = MarianTokenizer.from_pretrained(model_name,
+                                                             clean_up_tokenization_spaces=True)
+            self.model = MarianMTModel.from_pretrained(model_name)
 
         # Initialize Google translator
-        self.translator = Translator(to_lang=GOOGLE_LANGUAGES[code])
+        if use_google:
+            self.translator = Translator(to_lang=GOOGLE_LANGUAGES[code])
 
         # Initialitize po translation
         self.translate_po(po_file)
@@ -191,13 +220,16 @@ class POTranslator:
         return (False, text)
 
     def translate_with_google(self, english):
+        if self.have_seen.get(english, None):
+            return self.have_seen[english]
+        
         if len(english) < 4:
             return english
 
         if self.is_number(english):
             return english
     
-        if self.reached_google_limit:
+        if not self.use_google:
             return english
 
         print('GOOGLE TRANSLATE:')
@@ -208,8 +240,10 @@ class POTranslator:
             print()
             print("Stopping... too many requests for today")
             print()
-            self.reached_google_limit = True
+            self.use_google = False
             return english
+        
+        self.have_seen[english] = translated_text
         return translated_text
 
     
@@ -224,8 +258,11 @@ class POTranslator:
             return english
     
         translated_text = self.have_seen.get(english, None)
-
+        
         if not translated_text:
+            if not self.use_tokenizer:
+                return self.translate_with_goggle(english)
+        
             inputs = self.tokenizer(english, return_tensors="pt", padding=True,
                                     truncation=True)
         
@@ -245,8 +282,6 @@ class POTranslator:
 
             verify = self.verify_text(translated_text)
             if verify != translated_text:
-                print("\tREPEATED:", translated_text)
-                print("\t     NOW:", verify)
                 translated_text = verify
             
             self.have_seen[english] = translated_text
@@ -314,11 +349,12 @@ class POTranslator:
 
     def __del__(self):
         # Unload the model to free memory
-        del self.model
-        del self.tokenizer
+        if self.use_tokenizer:
+            del self.model
+            del self.tokenizer
         
 main_po = f'mrv2/po/{lang}'
-POTranslator(main_po, use_google)
+POTranslator(main_po, use_google, use_tokenizer)
 
 
 cwd = os.getcwd()
@@ -329,11 +365,12 @@ for plugin in plugins:
     plugin = plugin[:-3]
     plugin_po = f'mrv2/po/python/plug-ins/locale/{lang}/LC_MESSAGES/{plugin}'
     print('Translating plugin',plugin)
-    POTranslator(plugin_po, use_google)
+    POTranslator(plugin_po, use_google, use_tokenizer)
 
 
 # Clear cached data in PyTorch
-torch.cuda.empty_cache()  # Clears GPU memory if used
+if use_tokenizer:
+    torch.cuda.empty_cache()  # Clears GPU memory if used
 
 # Run garbage collection
 gc.collect()
