@@ -131,7 +131,7 @@ Enjoy!
 
 EOF
 
-HISTORY=../mrv2/docs/HISTORY.md
+HISTORY=../src/docs/HISTORY.md
 
 # Find the line number of "v${mrv2_VERSION}" in the file
 start_line=$(grep -n "^v${mrv2_VERSION}" "$HISTORY" | cut -d':' -f1)
