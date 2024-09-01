@@ -42,7 +42,7 @@ if (MRV2_PYBIND11)
 	#
 	# First, try to find pygettext.py sript
 	#
-	set(_pyscript_dir "${CMAKE_BINARY_DIR}/../../../Python-prefix/src/Python/Tools/i18n" )
+	set(_pyscript_dir "${CMAKE_BINARY_DIR}/../../../deps/Python/src/Python/Tools/i18n" )
 	if (NOT EXISTS ${_pyscript_dir})
 	    find_package(Python COMPONENTS Interpreter)
 	    get_filename_component(_dir ${PYTHON_EXECUTABLE} DIRECTORY)
