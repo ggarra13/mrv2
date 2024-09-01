@@ -1260,8 +1260,20 @@ namespace mrv
         }
 
         snprintf(buf, 1024, _("OCIO/        Look: %s"), look.c_str());
-        menu->add(buf, 0, 0, nullptr, FL_MENU_DIVIDER);
+        idx = menu->add(buf);
 
+        const timeline::LUTOptions& lut = ui->app->lutOptions();
+        if (lut.enabled && !lut.fileName.empty())
+        {
+            file::Path path(lut.fileName);
+            snprintf(buf, 1024, _("OCIO/        LUT: %s"),
+                     path.getBaseName().c_str());
+            idx = menu->add(buf, 0, 0, nullptr);
+        }
+
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        item->flags |= FL_MENU_DIVIDER;
+        
         menu->add(
             _("OCIO/Change Current File"), 0, 0, nullptr, FL_MENU_INACTIVE);
 

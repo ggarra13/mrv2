@@ -151,6 +151,7 @@ namespace mrv
                     auto o = App::app->lutOptions();
                     o.enabled = w->value();
                     App::app->setLUTOptions(o);
+                    p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
                 });
 
             gb = new Fl_Group(g->x(), 40, g->w(), 20);
