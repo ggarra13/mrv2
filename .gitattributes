@@ -23,6 +23,7 @@
 *.icns -text
 *.dylib -text
 *.lib -text
+*.mo  -text
 *.mov -text
 *.mp4 -text
 *.mpv -text
