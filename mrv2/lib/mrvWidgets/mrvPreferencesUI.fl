@@ -76,7 +76,7 @@ decl {\#include "mrvWidgets/mrvPopupMenu.h"} {public global
 decl {\#include "make_ocio_chooser.h"} {public global
 }
 
-decl {\#include "mrViewer.h"} {selected public global
+decl {\#include "mrViewer.h"} {public global
 }
 
 class PreferencesUI {open
@@ -88,13 +88,13 @@ class PreferencesUI {open
     Fl_Window uiMain {
       label Preferences
       user_data this user_data_type {PreferencesUI*} open
-      xywh {903 93 847 467} type Double resizable
+      xywh {903 93 853 467} type Double resizable
       code0 {main = m;} visible
     } {
       Fl_Group {} {open
         xywh {0 0 853 466} box FLAT_BOX
       } {
-        Fl_Group {} {open
+        Fl_Group {} {open selected
           xywh {283 28 570 428}
         } {
           Fl_Wizard uiWizard {
@@ -103,7 +103,7 @@ class PreferencesUI {open
           } {
             Fl_Group {} {
               label {User Interface}
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {
                 label {Window Behavior}
@@ -190,8 +190,8 @@ If you try to open several mrv2s with different images, all these images will be
               }
             }
             Fl_Group {} {
-              label {View Window} open
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5
+              label {View Window}
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label Defaults open
