@@ -11,7 +11,7 @@ message(STATUS "PATH     1=${PATH}")
 string(REPLACE "|" ";" $ENV{PATH} "${PATH}")
 message(STATUS "PATH ENV 2=$ENV{PATH}")
 
-set(ROOT_DIR ${CMAKE_INSTALL_PREFIX}/../Python-prefix/src/Python)
+set(ROOT_DIR ${CMAKE_INSTALL_PREFIX}/../deps/Python/src/Python)
 
 if (Python_COMMAND STREQUAL "build")
     set(CMD PCbuild\\build.bat -q -p ${Python_PLATFORM} --pgo )
