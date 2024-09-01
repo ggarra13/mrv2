@@ -19,6 +19,8 @@ VERSION = 1.0
 #
 LANGUAGES = [
     'de',
+    'fr',
+    'pt',
     'hi_IN',
     'zh-CN',
 ]
@@ -39,14 +41,14 @@ parser = argparse.ArgumentParser(
 
 parser.add_argument('language', type=str,
                     help='Language code to translate, like "en" or "zh-CN".')
-parser.add_argument('-ng', '--no-google', action='store_true',
+parser.add_argument('-g', '--use-google', action='store_true',
                     help='Use google')
 parser.add_argument('-nt', '--no-tokenizer', action='store_true',
-                    help='Use AI tokenizer')
+                    help='Do not use AI tokenizer')
 
 args = parser.parse_args()
 lang = args.language
-use_google = not args.no_google
+use_google = args.use_google
 use_tokenizer = not args.no_tokenizer
 
 if not lang in LANGUAGES:
@@ -64,6 +66,7 @@ DONT_TRANSLATE = [
     '1:4',
     '1:8',
     '1:16',
+    'Alt',
     'API',
     'arib-std-b67',
     'base',
@@ -91,6 +94,7 @@ DONT_TRANSLATE = [
     'Laser',
     'Linear',
     'Lumma',
+    'Meta',
     'OCIO',
     'OpenEXR',
     'OpenGL',
@@ -123,6 +127,7 @@ GOOGLE_LANGUAGES = {
     'es' : 'Spanish',
     'it' : 'Italian',
     'de' : 'German',
+    'fr' : 'French',
     'hi' : 'Hindi',
     'pt' : 'Portuguese',
     'zh' : 'Chinese (Simplified)',
@@ -153,9 +158,13 @@ except ImportError:
 if not use_google and not use_tokenizer:
     print('No google or tokenizer module found.  Exiting.')
     exit(1)
-        
+
 # Load the model and tokenizer for English to Simplified Chinese
-model_name = f"Helsinki-NLP/opus-mt-en-{code}"
+helsinki = code
+if code == 'pt' or code == 'fr' or code == 'es':
+    helsinki = 'ROMANCE'
+    
+model_name = f"Helsinki-NLP/opus-mt-en-{helsinki}"
 print('Load model',model_name)
 
     
@@ -164,6 +173,10 @@ class POTranslator:
 
     def __init__(self, po_file, use_google = True, use_tokenizer = True):
 
+        if not os.path.exists(po_file):
+            print(po_file,'does not exist!')
+            exit(1)
+        
         self.use_google = use_google
         self.use_tokenizer = use_tokenizer
         
@@ -172,7 +185,11 @@ class POTranslator:
         if use_tokenizer:
             self.tokenizer = MarianTokenizer.from_pretrained(model_name,
                                                              clean_up_tokenization_spaces=True)
-            self.model = MarianMTModel.from_pretrained(model_name)
+            try:
+                self.model = MarianMTModel.from_pretrained(model_name)
+            except HTTPError as e:
+                print(f'Model {model_name} not found!')
+                exit(1)
 
         # Initialize Google translator
         if use_google:
@@ -262,8 +279,12 @@ class POTranslator:
         if not translated_text:
             if not self.use_tokenizer:
                 return self.translate_with_google(english)
-        
-            inputs = self.tokenizer(english, return_tensors="pt", padding=True,
+
+            text = english
+            if helsinki == 'ROMANCE':
+                text = f'>>{code}<< ' + text
+            
+            inputs = self.tokenizer(text, return_tensors="pt", padding=True,
                                     truncation=True)
         
             # Perform the translation
@@ -307,14 +328,14 @@ class POTranslator:
         print(f"\tOriginal: {english}")
         translated_text = self._translate_text(english)
         if 'QUERY LENGTH' in translated_text:
+            print('\t********FAILED********')
             return english
+        translated_text = translated_text.replace('Mrv2', 'mrv2')
         print(f"\tTranslated: {translated_text}")
         return translated_text
 
     # Load the .po file
-    def translate_po(self, f):
-        po_input = f + '.po'
-        po_output = po_input #f + '_translated.po'
+    def translate_po(self, po_input):
         po = polib.pofile(po_input)
         
         # Translate each entry
@@ -344,7 +365,7 @@ class POTranslator:
             pass
 
         # Save the translated .po file
-        print(f'Saving.... {po_output}')
+        print(f'Saving.... {po_input}')
         po.save()
 
     def __del__(self):
@@ -353,7 +374,7 @@ class POTranslator:
             del self.model
             del self.tokenizer
         
-main_po = f'mrv2/po/{lang}'
+main_po = f'mrv2/po/{lang}.po'
 POTranslator(main_po, use_google, use_tokenizer)
 
 
@@ -362,7 +383,7 @@ os.chdir('mrv2/python/plug-ins')
 plugins = glob.glob('*.py')
 os.chdir(cwd)
 for plugin in plugins:
-    plugin = plugin[:-3]
+    plugin = plugin[:-3] + '.po'
     plugin_po = f'mrv2/po/python/plug-ins/locale/{lang}/LC_MESSAGES/{plugin}'
     print('Translating plugin',plugin)
     POTranslator(plugin_po, use_google, use_tokenizer)

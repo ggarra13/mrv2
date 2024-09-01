@@ -3163,6 +3163,12 @@ msgstr "Hindi"
 msgid "Chinese Simplified"
 msgstr "Chino Simplificado"
 
+msgid "Portuguese"
+msgstr "Portugués"
+
+msgid "French"
+msgstr "Francés"
+
 msgid ""
 "Need to reboot mrv2 to change language.  Are you sure you want to continue?"
 msgstr ""
@@ -3208,9 +3214,6 @@ msgstr "Neocelandés"
 msgid "Finnish"
 msgstr "Finlandés"
 
-msgid "French"
-msgstr "Francés"
-
 msgid "Galician"
 msgstr "Gallego"
 
@@ -3246,9 +3249,6 @@ msgstr "Pérsico"
 
 msgid "Polish"
 msgstr "Polaco"
-
-msgid "Portuguese"
-msgstr "Portugués"
 
 msgid "Tibetan"
 msgstr "Tibetano"

@@ -3,6 +3,8 @@ v1.2.6
 
 - Added Preferences->User Interface->View Window->OCIO In Top Bar to turn on
   OCIO at start of UI.
+- Improved performance when switching channels.
+- Added Portuguese and French translations done with AI.
   
 
 v1.2.5

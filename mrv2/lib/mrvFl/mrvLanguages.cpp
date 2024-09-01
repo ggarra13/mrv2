@@ -54,6 +54,8 @@ LanguageTable kLanguages[] = {
     {_("German"), "de.UTF-8"},
     {_("Hindi"), "hi_IN.UTF-8"},
     {_("Chinese Simplified"), "zh-CN.UTF-8"},
+    {_("Portuguese"), "pt.UTF-8"},
+    {_("French"), "fr.UTF-8"},
     {nullptr, nullptr}
 };
 
