@@ -20,9 +20,9 @@ VERSION = 1.0
 LANGUAGES = [
     'de',
     'fr',
-    'ja',
-    'pt',
     'hi_IN',
+    'it',
+    'pt',
     'zh-CN',
 ]
 
@@ -117,6 +117,15 @@ DONT_TRANSLATE = [
     'USD',
 ]
 
+#
+# Text that we should translate differently due to mix-ups with several
+# meanings in English language.    
+#
+TRANSLATE_FIXES = {
+    'float' : 'floating point',
+    'Float' : 'Floating point',
+}
+
 code = lang[0:2]
 
 
@@ -130,6 +139,7 @@ GOOGLE_LANGUAGES = {
     'de' : 'German',
     'fr' : 'French',
     'hi' : 'Hindi',
+    'it' : 'Italian',
     'pt' : 'Portuguese',
     'zh' : 'Chinese (Simplified)',
 }
@@ -162,7 +172,7 @@ if not use_google and not use_tokenizer:
 
 # Load the model and tokenizer for English to Simplified Chinese
 helsinki = code
-if code == 'pt' or code == 'fr' or code == 'es':
+if code == 'pt' or code == 'fr' or code == 'es' or code == 'it':
     helsinki = 'ROMANCE'
     
 model_name = f"Helsinki-NLP/opus-mt-en-{helsinki}"
@@ -327,6 +337,10 @@ class POTranslator:
     
         # Tokenize the input text
         print(f"\tOriginal: {english}")
+
+        if TRANSLATE_FIXES.get(english, False):
+            english = TRANSLATE_FIXES[english]
+        
         translated_text = self._translate_text(english)
         if 'QUERY LENGTH' in translated_text:
             print('\t********FAILED********')
@@ -375,17 +389,17 @@ class POTranslator:
             del self.model
             del self.tokenizer
         
-main_po = f'mrv2/po/{lang}.po'
+main_po = f'src/po/{lang}.po'
 POTranslator(main_po, use_google, use_tokenizer)
 
 
 cwd = os.getcwd()
-os.chdir('mrv2/python/plug-ins')
+os.chdir('src/python/plug-ins')
 plugins = glob.glob('*.py')
 os.chdir(cwd)
 for plugin in plugins:
     plugin = plugin[:-3] + '.po'
-    plugin_po = f'mrv2/po/python/plug-ins/locale/{lang}/LC_MESSAGES/{plugin}'
+    plugin_po = f'src/po/python/plug-ins/locale/{lang}/LC_MESSAGES/{plugin}'
     print('Translating plugin',plugin)
     POTranslator(plugin_po, use_google, use_tokenizer)
 

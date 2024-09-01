@@ -3954,6 +3954,9 @@ msgstr "OCIO/  Monitor #%d   Vista: %s"
 msgid "OCIO/        Look: %s"
 msgstr "OCIO/        Look: %s "
 
+msgid "OCIO/        LUT: %s"
+msgstr "OCIO/        LUT: %s "
+
 msgid "OCIO/Change Current File"
 msgstr "OCIO/Cambiar Clip Actual"
 
