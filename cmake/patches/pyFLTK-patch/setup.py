@@ -1,6 +1,11 @@
 import setuptools
 import subprocess
-import os, sys, string, platform
+import os, re, sys, string, platform
+
+#
+# REGEX for matching -I includes with or without quotes.
+#
+INCLUDE_REGEX = r"-I[\"']?([^\"']+)[\"']?"
 
 # these settings will read setup information from the environment.
 # instead of this, the relevant paths can be set directly here:
@@ -183,11 +188,9 @@ def fltk_config(dir):
 #        inc_list = [x.strip() for x in result[0].split(' ')]
     
         for inc in inc_list:
-            if inc[:2] == '-I':
-                if inc[2] == "'":
-                    needed_includes.append(inc[3:-1])
-                else:
-                    needed_includes.append(inc[2:])
+            m = re.search(INCLUDE_REGEX, inc)
+            if m:
+                needed_includes.append(m.group(1))
             if inc.find("_REENTRANT") >= 0:
                 doMulti = True
         print("fltk-config includes: ", needed_includes)
@@ -312,15 +315,10 @@ class PySwigCommand(setuptools.Command):
         #print(result)
         if len(result) > 0:
             p_inc = map(lambda x: x.strip(), result[0].split(' '))
-#            p_inc = [x.strip() for x in result[0].split(' ')]
             for item in p_inc:
-                #if string.find(item, '-I') == 0:
-                if item.find('-I') == 0:
-                    if item[2] == "'":
-                        include='-I' + item[3:-1]
-                    else:
-                        include='-I' + item[2:]
-                    add_incl.append(include)
+                m = re.search(INCLUDE_REGEX, item)
+                if m:
+                    add_incl.append('-I' + m.group(1))
         else:
             print("FLTK not found!")
     add_incl.append('-I/usr/include')
