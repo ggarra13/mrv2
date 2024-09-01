@@ -165,6 +165,15 @@ foreach( lang ${LANGUAGES} )
 endforeach()
 
 
+#
+# Only make the .pot file depend on Unix machines to avoid issues with
+# different gettext implementations/versions on different OSes which would
+# lead to lots of .pot commits.
+#
+set(main_pot_depends )
+if(UNIX AND NOT APPLE)
+    set(main_pot_depends mrv2)
+endif()
 
 
 add_custom_target(
@@ -172,9 +181,7 @@ add_custom_target(
     COMMAND xgettext --package-name=mrv2 --package-version="v${mrv2_VERSION}" --copyright-holder="Contributors to the mrv2 Project" --msgid-bugs-address="ggarra13@gmail.com" -d mrv2 -c++ -k_ ${PO_SOURCES} -o "${_absPotFile}"
     WORKING_DIRECTORY "${ROOT_DIR}/lib"
     COMMENT Running xgettext for pot target
-    #  DEPENDS mrv2  # Do not generate pot files automatically, as that messes
-    # the commits (line changes for example or gettext differences in each
-    # platform).
+    DEPENDS ${main_pot_depends}
 )
 
 add_custom_target(
