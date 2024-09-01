@@ -82,7 +82,7 @@ export CMAKE_GENERATOR="Ninja"
 export CMAKE_TARGET=""
 ASK_TO_CONTINUE=0
 
-if [[ $RUNME == 1 ]]; then
+if [[ "$NOARGS" == "" ]]; then
 
     for i in "$@"; do
 	case $i in
