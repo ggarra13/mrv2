@@ -295,7 +295,7 @@ add_subdirectory( ${CMAKE_CURRENT_SOURCE_DIR}/lib )
 #
 # Add main source
 #
-add_subdirectory( src )
+add_subdirectory( main )
 
 #
 # Add the packaging logic
