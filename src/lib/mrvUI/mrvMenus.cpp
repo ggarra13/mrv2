@@ -1205,8 +1205,12 @@ namespace mrv
         std::string look = ocio::ocioLook();
 
         menu->add(_("OCIO/Current"), 0, 0, nullptr, FL_MENU_INACTIVE);
+
+
         snprintf(buf, 1024, _("OCIO/         ICS: %s"), ics.c_str());
-        menu->add(buf, 0, 0, nullptr);
+        idx = menu->add(buf, 0, 0, nullptr);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        item->labelcolor(FL_YELLOW);
 
         int num_screens = Fl::screen_count();
         const timeline::OCIOOptions& o = uiView->getOCIOOptions();
@@ -1214,8 +1218,13 @@ namespace mrv
         {
             snprintf(buf, 1024, _("OCIO/     Display: %s"), o.display.c_str());
             menu->add(buf, 0, 0, nullptr);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            item->labelcolor(FL_YELLOW);
+            
             snprintf(buf, 1024, _("OCIO/        View: %s"), o.view.c_str());
             menu->add(buf, 0, 0, nullptr);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            item->labelcolor(FL_YELLOW);
         }
         else
         {
@@ -1237,9 +1246,14 @@ namespace mrv
                 const timeline::OCIOOptions& o = uiView->getOCIOOptions(0);
                 snprintf(
                     buf, 1024, _("OCIO/     Display: %s"), o.display.c_str());
-                menu->add(buf, 0, 0, nullptr);
+                idx = menu->add(buf, 0, 0, nullptr);
+                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+                item->labelcolor(FL_YELLOW);
+
                 snprintf(buf, 1024, _("OCIO/        View: %s"), o.view.c_str());
-                menu->add(buf, 0, 0, nullptr);
+                idx = menu->add(buf, 0, 0, nullptr);
+                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+                item->labelcolor(FL_YELLOW);
             }
             else
             {
@@ -1250,17 +1264,24 @@ namespace mrv
                     snprintf(
                         buf, 1024, _("OCIO/  Monitor #%d Display: %s"), m,
                         o.display.c_str());
-                    menu->add(buf, 0, 0, nullptr);
+                    idx = menu->add(buf, 0, 0, nullptr);
+                    item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+                    item->labelcolor(FL_YELLOW);
+
                     snprintf(
                         buf, 1024, _("OCIO/  Monitor #%d    View: %s"), m,
                         o.view.c_str());
-                    menu->add(buf, 0, 0, nullptr);
+                    idx = menu->add(buf, 0, 0, nullptr);
+                    item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+                    item->labelcolor(FL_YELLOW);
                 }
             }
         }
 
         snprintf(buf, 1024, _("OCIO/        Look: %s"), look.c_str());
         idx = menu->add(buf);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        item->labelcolor(FL_YELLOW);
 
         const timeline::LUTOptions& lut = ui->app->lutOptions();
         if (lut.enabled && !lut.fileName.empty())
@@ -1272,6 +1293,7 @@ namespace mrv
         }
 
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        item->labelcolor(FL_YELLOW);
         item->flags |= FL_MENU_DIVIDER;
         
         menu->add(
