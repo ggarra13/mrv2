@@ -425,7 +425,7 @@ namespace mrv
                 uiICS->do_callback();
                 return;
             }
-            
+
             for (int i = 0; i < uiICS->children(); ++i)
             {
                 const Fl_Menu_Item* item = uiICS->child(i);
@@ -500,7 +500,7 @@ namespace mrv
                 uiOCIOLook->do_callback();
                 return;
             }
-            
+
             for (int i = 0; i < uiOCIOLook->children(); ++i)
             {
                 const Fl_Menu_Item* item = uiOCIOLook->child(i);
@@ -576,13 +576,13 @@ namespace mrv
         void setOcioView(const std::string& name)
         {
             auto uiOCIOView = App::ui->uiOCIOView;
-            if (name.empty())
+            if (name.empty() || name == kInactive)
             {
                 uiOCIOView->value(-1);
                 uiOCIOView->do_callback();
                 return;
             }
-            
+
             int value = -1;
             for (int i = 0; i < uiOCIOView->children(); ++i)
             {
@@ -630,7 +630,7 @@ namespace mrv
             const std::string& display, const std::string& view)
         {
             if (view.empty() || view == kInactive)
-                return "";
+                return kInactive;
 
             std::string out;
             auto uiOCIOView = App::ui->uiOCIOView;
@@ -881,7 +881,7 @@ namespace mrv
                         unsigned idx = 0;
                         for (auto ocio : preset.ocioMonitors)
                         {
-                            
+
                             ++idx;
                             s << "Monitor " << idx << ":" << std::endl
                               << "\t display: " << ocio.display << std::endl
@@ -898,10 +898,10 @@ namespace mrv
                             ocio.display = monitor_ocio.display;
                             ocio.view = monitor_ocio.view;
                         }
-                        s  << "\t display: " << ocio.display << std::endl
-                           << "\t    view: " << ocio.view << std::endl;
+                        s << "\t display: " << ocio.display << std::endl
+                          << "\t    view: " << ocio.view << std::endl;
                     }
-                    
+
                     s << "LUT:" << std::endl
                       << "\tfileName: " << lut.fileName << std::endl
                       << "\t   order: " << lut.order << std::endl
@@ -1003,13 +1003,12 @@ namespace mrv
                 bool same = true;
                 const timeline::OCIOOptions& prev =
                     App::ui->uiView->getOCIOOptions(0);
-                
+
                 for (int i = 1; i < num_screens; ++i)
                 {
                     const timeline::OCIOOptions& ocio =
                         App::ui->uiView->getOCIOOptions(i);
-                    if (prev.display != ocio.display ||
-                        prev.view != ocio.view)
+                    if (prev.display != ocio.display || prev.view != ocio.view)
                     {
                         same = false;
                         break;

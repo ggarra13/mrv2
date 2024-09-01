@@ -330,7 +330,8 @@ namespace mrv
                     gl.render->begin(renderSize, renderOptions);
 
                     int screen = this->screen_num();
-                    if (screen >= 0 && screen < p.monitorOCIOOptions.size())
+                    if (screen >= 0 && !p.monitorOCIOOptions.empty() &&
+                        screen < p.monitorOCIOOptions.size())
                     {
                         timeline::OCIOOptions o = p.ocioOptions;
                         o.display = p.monitorOCIOOptions[screen].display;
