@@ -178,7 +178,7 @@ namespace mrv
     Hotkey kHudToggle(true, false, false, false, 'h');
 
     Hotkey kOCIOPresetsToggle(false, false, false, false, 0);
-    Hotkey kOCIOInTopBarToggle(false, false, false, false, 0);
+    Hotkey kOCIOInTopBarToggle(false, false, false, false, 't');
     Hotkey kOCIOInputColorSpace(false, false, false, false, 0);
     Hotkey kOCIODisplay(false, false, false, false, 0);
     Hotkey kOCIOView(false, false, false, false, 0);
