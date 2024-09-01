@@ -248,7 +248,7 @@ mkdir -p $BUILD_DIR/install
 # Handle Windows pre-flight compiles
 #
 if [[ $KERNEL == *Msys* ]]; then
-    . $PWD/etc/compile_windows_dlls.sh
+    . $PWD/etc/windows/compile_dlls.sh
 fi
 
 #

@@ -1470,7 +1470,7 @@ namespace mrv
         if (pos != std::string::npos)
         {
             ics = ics.substr(pos + colorSpace.size() + 1, ics.size());
-            ocio::setOcioIcs(ics);
+            ocio::setIcs(ics);
         }
     }
 
@@ -1488,7 +1488,7 @@ namespace mrv
         if (pos != std::string::npos)
         {
             look = look.substr(pos + colorSpace.size() + 1, look.size());
-            ocio::setOcioLook(look);
+            ocio::setLook(look);
         }
     }
 
@@ -1520,11 +1520,11 @@ namespace mrv
 
         // Split combined display/view into separate parts.
         timeline::OCIOOptions o;
-        ocio::ocioSplitViewIntoDisplayView(combined, o.display, o.view);
+        ocio::splitViewIntoDisplayView(combined, o.display, o.view);
         if (numMonitors == 1)
         {
             // If only one monitor, update main UI.
-            ocio::setOcioView(combined);
+            ocio::setView(combined);
         }
         else
         {
@@ -1560,7 +1560,7 @@ namespace mrv
         {
             // Split combined display/view into separate parts.
             timeline::OCIOOptions o;
-            ocio::ocioSplitViewIntoDisplayView(combined, o.display, o.view);
+            ocio::splitViewIntoDisplayView(combined, o.display, o.view);
             ui->uiView->setOCIOOptions(i, o);
         }
 

@@ -17,60 +17,60 @@ namespace mrv
     {
         extern std::string ocioDefault;
 #ifdef TLRENDER_OCIO
-        extern OCIO::ConstConfigRcPtr config;
+        extern OCIO::ConstConfigRcPtr OCIOconfig;
 #endif
 
         void setup();
 
         void defaultIcs();
         
-        std::string ocioConfig();
-        void setOcioConfig(const std::string config);
+        std::string config();
+        void setConfig(const std::string config);
 
-        int ocioIcsIndex(const std::string&);
-        std::string ocioIcs();
-        void setOcioIcs(const std::string&);
+        int icsIndex(const std::string&);
+        std::string ics();
+        void setIcs(const std::string&);
 
-        int ocioLookIndex(const std::string&);
-        std::string ocioLook();
-        void setOcioLook(const std::string&);
+        int lookIndex(const std::string&);
+        std::string look();
+        void setLook(const std::string&);
 
         //! Given a display and view, return mrv2's merged display view format
-        std::string ocioDisplayViewShortened(
+        std::string displayViewShortened(
             const std::string& display, const std::string& view);
 
-        void ocioSplitViewIntoDisplayView(const std::string& combined,
-                                          std::string& display,
-                                          std::string& view);
-        
-        int ocioViewIndex(const std::string&);
-        std::string ocioView();
-        void setOcioView(const std::string&);
+        void splitViewIntoDisplayView(
+            const std::string& combined, std::string& display,
+            std::string& view);
 
-        std::vector<std::string> ocioIcsList();
-        std::vector<std::string> ocioLookList();
-        std::vector<std::string> ocioViewList();
+        int viewIndex(const std::string&);
+        std::string view();
+        void setView(const std::string&);
+
+        std::vector<std::string> icsList();
+        std::vector<std::string> lookList();
+        std::vector<std::string> viewList();
 
         //! List of OCIO presets.
-        std::vector<std::string> ocioPresetsList();
+        std::vector<std::string> presetsList();
 
         //! Set OCIO settings to a valid preset.
-        void setOcioPreset(const std::string& preset);
+        void setPreset(const std::string& preset);
 
         //! Return a human readable summary of an OCIO preset.
-        std::string ocioPresetSummary(const std::string& presetName);
+        std::string presetSummary(const std::string& presetName);
 
         //! Create an OCIO preset from current defaults.
-        void createOcioPreset(const std::string& preset);
+        void createPreset(const std::string& preset);
 
         //! Remove an existing OCIO preset.
-        void removeOcioPreset(const std::string& preset);
+        void removePreset(const std::string& preset);
 
         //! Load OCIO presets from disk.
-        bool loadOcioPresets(const std::string& fileName);
+        bool loadPresets(const std::string& fileName);
 
         //! Save OCIO presets to disk.
-        bool saveOcioPresets(const std::string& fileName);
+        bool savePresets(const std::string& fileName);
 
     } // namespace ocio
 } // namespace mrv

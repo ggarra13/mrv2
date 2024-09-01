@@ -3,7 +3,7 @@
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
-. $PWD/etc/windows_prepare.sh
+. etc/windows/windows_prepare.sh
 
 #
 # Install libintl, iconv and gettext, subversion, libsqlite

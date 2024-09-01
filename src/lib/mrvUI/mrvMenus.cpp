@@ -1201,8 +1201,8 @@ namespace mrv
         if (ui->uiOCIO->visible())
             item->set();
 
-        std::string ics = string::commentCharacter(ocio::ocioIcs(), '/');
-        std::string look = ocio::ocioLook();
+        std::string ics = string::commentCharacter(ocio::ics(), '/');
+        std::string look = ocio::look();
 
         menu->add(_("OCIO/Current"), 0, 0, nullptr, FL_MENU_INACTIVE);
 
@@ -1385,7 +1385,7 @@ namespace mrv
         {
             const timeline::OCIOOptions& o = uiView->getOCIOOptions(0);
             std::string combined =
-                ocio::ocioDisplayViewShortened(o.display, o.view);
+                ocio::displayViewShortened(o.display, o.view);
 
             for (int i = 0; i < ui->uiOCIOView->children(); ++i)
             {
@@ -1424,7 +1424,7 @@ namespace mrv
             const timeline::OCIOOptions& o = uiView->getOCIOOptions(m);
             std::string monitorName = mrv::desktop::monitorName(m);
             std::string combined =
-                ocio::ocioDisplayViewShortened(o.display, o.view);
+                ocio::displayViewShortened(o.display, o.view);
             combined = monitorName + "/" + combined;
 
             for (int i = 0; i < ui->uiOCIOView->children(); ++i)

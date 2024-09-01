@@ -85,7 +85,7 @@ def search_languages(langs):
         #
         # Handle the main mrv2 .po files
         #
-        root = "mrv2/po"
+        root = "src/po"
         mrv2_po = os.path.join(root, lang + ".po")
         po_files = [mrv2_po]
 
@@ -93,7 +93,7 @@ def search_languages(langs):
         #
         # Get list of plugins and their basenames
         #
-        plugin_dir = 'mrv2/python/plug-ins'
+        plugin_dir = 'src/python/plug-ins'
         plugins = glob.glob(os.path.join(plugin_dir, "*.py"))
         basenames = [os.path.basename(os.path.splitext(f)[0]) for f in plugins]
         

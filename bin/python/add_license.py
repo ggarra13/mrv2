@@ -18,39 +18,41 @@ import stat
 import shutil
 
 CPP_DIRS = [
-    "mrv2/src",
-    "mrv2/lib/mrvApp",
-    "mrv2/lib/mrvCore",
-    "mrv2/lib/mrvWidgets",
-    "mrv2/lib/mrvDraw",
-    "mrv2/lib/mrvEdit",
-    "mrv2/lib/mrvFl",
-    "mrv2/lib/mrvFlU",
-    "mrv2/lib/mrvGL",
-    "mrv2/lib/mrvNetwork",
-    "mrv2/lib/mrvPanels",
-    "mrv2/lib/mrvPy",
-    "mrv2/lib/mrvUI",
+    "src/main",
+    "src/lib/mrvApp",
+    "src/lib/mrvCore",
+    "src/lib/mrvWidgets",
+    "src/lib/mrvDraw",
+    "src/lib/mrvEdit",
+    "src/lib/mrvFl",
+    "src/lib/mrvFlU",
+    "src/lib/mrvGL",
+    "src/lib/mrvNetwork",
+    "src/lib/mrvPanels",
+    "src/lib/mrvPy",
+    "src/lib/mrvUI",
 ]
 
 CMAKE_DIRS = CPP_DIRS + [
     "cmake/",
     "cmake/nsis",
     "cmake/Modules",
-    "mrv2/src",
-    "mrv2/lib",
-    "mrv2/python/demos/fltk",
-    "mrv2/python/demos",
-    "mrv2/python/plug-ins",
-    "mrv2/bin",
+    "src/src",
+    "src/lib",
+    "src/python/demos/fltk",
+    "src/python/demos",
+    "src/python/plug-ins",
+    "src/bin",
 ]
 
 BASH_DIRS = [
     ".",
     "bin",
-    "mrv2/bin",
+    "bin/helpers",
+    "bin/release",
+    "bin/stats",
+    "src/bin",
     "etc",
-    "windows/envvars",
     "certificates",
     ".githooks"
 ]
