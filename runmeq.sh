@@ -32,7 +32,7 @@ fi
 
 if [[ "$CMAKE_TARGET" == "package" ]]; then  
     # Needed to to force a relink and update build info.
-    touch mrv2/lib/mrvWidgets/mrvVersion.cpp
+    touch src/lib/mrvWidgets/mrvVersion.cpp
 fi
 
 if [[ "$CMAKE_TARGET" == "" ]]; then
