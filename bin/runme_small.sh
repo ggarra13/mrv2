@@ -42,7 +42,7 @@ params=$*
 export FLAGS=""
 export CMAKE_FLAGS=""
 
-. bin/options_off.sh
+. etc/options_off.sh
 
 #
 # These are some of the expensive TLRENDER options

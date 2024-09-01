@@ -42,7 +42,7 @@ params=$*
 export FLAGS=""
 export CMAKE_FLAGS=""
 
-. bin/options_off.sh
+. etc/options_off.sh
 
 export BUILD_PYTHON=ON
 export MRV2_PYFLTK=ON

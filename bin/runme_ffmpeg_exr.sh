@@ -43,7 +43,7 @@ export FLAGS=""
 export CMAKE_FLAGS=""
 
 
-. bin/options_off.sh
+. etc/options_off.sh
 
 export TLRENDER_FFMPEG=ON
 export TLRENDER_FFMPEG_MINIMAL=ON
