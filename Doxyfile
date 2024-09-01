@@ -875,20 +875,20 @@ WARN_LOGFILE           =
 # spaces. See also FILE_PATTERNS and EXTENSION_MAPPING
 # Note: If this tag is empty the current directory is searched.
 
-INPUT                  = mrv2/lib/mrvCore \
-			 mrv2/lib/mrvFLU \
-			 mrv2/lib/mrvFlmm \
-			 mrv2/lib/mrvUI \
-			 mrv2/lib/mrvGL \
-			 mrv2/lib/mrvDraw \
-			 mrv2/lib/mrvPDF \
-			 mrv2/lib/mrvFl \
-			 mrv2/lib/mrvNetwork \
-			 mrv2/lib/mrvEdit \
-			 mrv2/lib/mrvPanels \
-			 mrv2/lib/mrvApp \
-			 mrv2/lib/mrvPy \
-			 mrv2/src \
+INPUT                  = src/lib/mrvCore \
+			 src/lib/mrvFLU \
+			 src/lib/mrvFlmm \
+			 src/lib/mrvUI \
+			 src/lib/mrvGL \
+			 src/lib/mrvDraw \
+			 src/lib/mrvPDF \
+			 src/lib/mrvFl \
+			 src/lib/mrvNetwork \
+			 src/lib/mrvEdit \
+			 src/lib/mrvPanels \
+			 src/lib/mrvApp \
+			 src/lib/mrvPy \
+			 src/main \
 			 tlRender/lib/tlTimeline \
 			 tlRender/lib/tlCore
 
