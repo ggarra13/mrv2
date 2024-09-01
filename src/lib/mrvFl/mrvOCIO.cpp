@@ -33,7 +33,7 @@ namespace mrv
         std::vector<std::string> looks;
         std::vector<std::string> views;
 
-        OCIO::ConstConfigRcPtr config;
+        OCIO::ConstConfigRcPtr OCIOconfig;
 
         void setup()
         {
@@ -55,24 +55,24 @@ namespace mrv
             const char* var = uiPrefs->uiPrefsOCIOConfig->value();
             if (var && strlen(var) > 0)
             {
-                setOcioConfig(var);
+                setConfig(var);
 
                 try
                 {
                     const char* configName =
                         uiPrefs->uiPrefsOCIOConfig->value();
-                    config = OCIO::Config::CreateFromFile(configName);
+                    OCIOconfig = OCIO::Config::CreateFromFile(configName);
                     uiPrefs->uiPrefsOCIOConfig->tooltip(
-                        config->getDescription());
+                        OCIOconfig->getDescription());
 
-                    defaultDisplay = config->getDefaultDisplay();
+                    defaultDisplay = OCIOconfig->getDefaultDisplay();
                     defaultView =
-                        config->getDefaultView(defaultDisplay.c_str());
+                        OCIOconfig->getDefaultView(defaultDisplay.c_str());
 
                     bool use_active = uiPrefs->uiOCIOUseActiveViews->value();
 
                     std::vector<std::string> active_displays;
-                    const char* displaylist = config->getActiveDisplays();
+                    const char* displaylist = OCIOconfig->getActiveDisplays();
                     if (use_active && displaylist && strlen(displaylist) > 0)
                     {
                         active_displays = string::split(displaylist, ',');
@@ -87,15 +87,15 @@ namespace mrv
                     }
                     else
                     {
-                        int numDisplays = config->getNumDisplays();
+                        int numDisplays = OCIOconfig->getNumDisplays();
                         for (int i = 0; i < numDisplays; ++i)
                         {
-                            active_displays.push_back(config->getDisplay(i));
+                            active_displays.push_back(OCIOconfig->getDisplay(i));
                         }
                     }
 
                     std::vector<std::string> active_views;
-                    const char* viewlist = config->getActiveViews();
+                    const char* viewlist = OCIOconfig->getActiveViews();
                     if (use_active && viewlist && strlen(viewlist) > 0)
                     {
                         active_views = string::split(viewlist, ',');
@@ -118,7 +118,7 @@ namespace mrv
                         std::string quoted_display =
                             string::commentCharacter(display, '/');
 
-                        int numViews = config->getNumViews(display.c_str());
+                        int numViews = OCIOconfig->getNumViews(display.c_str());
 
                         // Collect all views
 
@@ -131,7 +131,7 @@ namespace mrv
 
                                 for (int i = 0; i < numViews; ++i)
                                 {
-                                    view = config->getView(display.c_str(), i);
+                                    view = OCIOconfig->getView(display.c_str(), i);
                                     if (active_views[h] == view)
                                     {
                                         add = true;
@@ -162,7 +162,7 @@ namespace mrv
                             for (int i = 0; i < numViews; i++)
                             {
                                 std::string view =
-                                    config->getView(display.c_str(), i);
+                                    OCIOconfig->getView(display.c_str(), i);
 
                                 std::string name;
                                 if (num_active_displays > 1)
@@ -183,17 +183,17 @@ namespace mrv
                     }
 
                     // Add looks
-                    int numLooks = config->getNumLooks();
+                    int numLooks = OCIOconfig->getNumLooks();
                     for (int i = 0; i < numLooks; ++i)
                     {
-                        looks.push_back(config->getLookNameByIndex(i));
+                        looks.push_back(OCIOconfig->getLookNameByIndex(i));
                     }
 
                     std::vector< std::string > spaces;
-                    for (int i = 0; i < config->getNumColorSpaces(); ++i)
+                    for (int i = 0; i < OCIOconfig->getNumColorSpaces(); ++i)
                     {
                         std::string csname =
-                            config->getColorSpaceNameByIndex(i);
+                            OCIOconfig->getColorSpaceNameByIndex(i);
                         spaces.push_back(csname);
                     }
 
@@ -212,7 +212,7 @@ namespace mrv
                     {
                         std::string space = spaces[i];
                         OCIO::ConstColorSpaceRcPtr cs =
-                            config->getColorSpace(space.c_str());
+                            OCIOconfig->getColorSpace(space.c_str());
                         const char* family = cs->getFamily();
                         std::string menu;
                         if (family && strlen(family) > 0)
@@ -255,7 +255,7 @@ namespace mrv
             std::string look = uiPrefs->uiOCIO_Look->value();
             try
             {
-                setOcioLook(look);
+                setLook(look);
             }
             catch (const std::exception& e)
             {
@@ -265,7 +265,7 @@ namespace mrv
             std::string display_view = uiPrefs->uiOCIO_Display_View->value();
             try
             {
-                setOcioView(display_view);
+                setView(display_view);
             }
             catch (const std::exception& e)
             {
@@ -339,7 +339,7 @@ namespace mrv
             try
             {
                 if (!ics.empty())
-                    setOcioIcs(ics);
+                    setIcs(ics);
             }
             catch (const std::exception& e)
             {
@@ -347,7 +347,7 @@ namespace mrv
             }
         }
 
-        std::string ocioConfig()
+        std::string config()
         {
             ViewerUI* ui = App::ui;
             PreferencesUI* uiPrefs = ui->uiPrefs;
@@ -357,7 +357,7 @@ namespace mrv
             return out;
         }
 
-        void setOcioConfig(const std::string config)
+        void setConfig(const std::string config)
         {
             ViewerUI* ui = App::ui;
             PreferencesUI* uiPrefs = ui->uiPrefs;
@@ -391,7 +391,7 @@ namespace mrv
             ocio::setup();
         }
 
-        std::string ocioIcs()
+        std::string ics()
         {
             auto uiICS = App::ui->uiICS;
             int idx = uiICS->value();
@@ -414,7 +414,7 @@ namespace mrv
             return ics;
         }
 
-        void setOcioIcs(const std::string& name)
+        void setIcs(const std::string& name)
         {
             auto uiICS = App::ui->uiICS;
 
@@ -454,7 +454,7 @@ namespace mrv
             uiICS->do_callback();
         }
 
-        int ocioIcsIndex(const std::string& name)
+        int icsIndex(const std::string& name)
         {
             auto uiICS = App::ui->uiICS;
             int value = -1;
@@ -478,7 +478,7 @@ namespace mrv
             return value;
         }
 
-        std::string ocioLook()
+        std::string look()
         {
             auto uiOCIOLook = App::ui->uiOCIOLook;
             int idx = uiOCIOLook->value();
@@ -489,7 +489,7 @@ namespace mrv
             return item->label();
         }
 
-        void setOcioLook(const std::string& name)
+        void setLook(const std::string& name)
         {
             auto uiOCIOLook = App::ui->uiOCIOLook;
 
@@ -529,7 +529,7 @@ namespace mrv
             uiOCIOLook->do_callback();
         }
 
-        int ocioLookIndex(const std::string& name)
+        int lookIndex(const std::string& name)
         {
             auto uiOCIOLook = App::ui->uiOCIOLook;
             int value = -1;
@@ -553,7 +553,7 @@ namespace mrv
             return value;
         }
 
-        std::string ocioView()
+        std::string view()
         {
             auto uiOCIOView = App::ui->uiOCIOView;
             int idx = uiOCIOView->value();
@@ -573,7 +573,7 @@ namespace mrv
             return view;
         }
 
-        void setOcioView(const std::string& name)
+        void setView(const std::string& name)
         {
             auto uiOCIOView = App::ui->uiOCIOView;
             if (name.empty() || name == kInactive)
@@ -626,7 +626,7 @@ namespace mrv
             uiOCIOView->do_callback();
         }
 
-        std::string ocioDisplayViewShortened(
+        std::string displayViewShortened(
             const std::string& display, const std::string& view)
         {
             if (view.empty() || view == kInactive)
@@ -657,7 +657,7 @@ namespace mrv
             return out;
         }
 
-        void ocioSplitViewIntoDisplayView(
+        void splitViewIntoDisplayView(
             const std::string& combined, std::string& display,
             std::string& view)
         {
@@ -694,7 +694,7 @@ namespace mrv
             }
         }
 
-        int ocioViewIndex(const std::string& displayViewName)
+        int viewIndex(const std::string& displayViewName)
         {
             int value = -1;
             auto uiOCIOView = App::ui->uiOCIOView;
@@ -718,7 +718,7 @@ namespace mrv
             return value;
         }
 
-        std::vector<std::string> ocioIcsList()
+        std::vector<std::string> icsList()
         {
             auto uiICS = App::ui->uiICS;
             std::vector<std::string> out;
@@ -741,7 +741,7 @@ namespace mrv
             return out;
         }
 
-        std::vector<std::string> ocioLookList()
+        std::vector<std::string> lookList()
         {
             auto uiOCIOLook = App::ui->uiOCIOLook;
             std::vector<std::string> out;
@@ -756,7 +756,7 @@ namespace mrv
             return out;
         }
 
-        std::vector<std::string> ocioViewList()
+        std::vector<std::string> viewList()
         {
             auto uiOCIOView = App::ui->uiOCIOView;
             std::vector<std::string> out;
@@ -839,22 +839,22 @@ namespace mrv
                 j.at("ocioMonitors").get_to(value.ocioMonitors);
         }
 
-        std::vector<OCIOPreset> ocioPresets;
+        std::vector<OCIOPreset> presets;
 
-        std::vector<std::string> ocioPresetsList()
+        std::vector<std::string> presetsList()
         {
             std::vector<std::string> out;
-            for (const auto& preset : ocioPresets)
+            for (const auto& preset : presets)
             {
                 out.push_back(preset.name);
             }
             return out;
         }
 
-        std::string ocioPresetSummary(const std::string& presetName)
+        std::string presetSummary(const std::string& presetName)
         {
             std::stringstream s;
-            for (auto& preset : ocioPresets)
+            for (auto& preset : presets)
             {
                 if (preset.name == presetName)
                 {
@@ -916,9 +916,9 @@ namespace mrv
             return s.str();
         }
 
-        void setOcioPreset(const std::string& presetName)
+        void setPreset(const std::string& presetName)
         {
-            for (const auto& preset : ocioPresets)
+            for (const auto& preset : presets)
             {
                 if (preset.name == presetName)
                 {
@@ -928,12 +928,12 @@ namespace mrv
                     LOG_INFO(msg);
 
                     const timeline::OCIOOptions& ocio = preset.ocio;
-                    setOcioConfig(ocio.fileName);
-                    setOcioIcs(ocio.input);
+                    setConfig(ocio.fileName);
+                    setIcs(ocio.input);
                     std::string view =
-                        ocioDisplayViewShortened(ocio.display, ocio.view);
-                    setOcioView(view);
-                    setOcioLook(ocio.look);
+                        displayViewShortened(ocio.display, ocio.view);
+                    setView(view);
+                    setLook(ocio.look);
 
                     for (unsigned i = 0; i < preset.ocioMonitors.size(); ++i)
                     {
@@ -951,9 +951,9 @@ namespace mrv
             LOG_ERROR(msg);
         }
 
-        void createOcioPreset(const std::string& presetName)
+        void createPreset(const std::string& presetName)
         {
-            for (const auto& preset : ocioPresets)
+            for (const auto& preset : presets)
             {
                 if (preset.name == presetName)
                 {
@@ -970,16 +970,16 @@ namespace mrv
             timeline::OCIOOptions ocio;
             ocio.enabled = true;
 
-            ocio.fileName = ocioConfig();
-            ocio.input = ocioIcs();
+            ocio.fileName = ocio::config();
+            ocio.input = ocio::ics();
 
             std::string display, view;
-            std::string combined = ocioView();
-            ocioSplitViewIntoDisplayView(combined, display, view);
+            std::string combined = ocio::view();
+            splitViewIntoDisplayView(combined, display, view);
 
             ocio.display = display;
             ocio.view = view;
-            ocio.look = ocioLook();
+            ocio.look = ocio::look();
 
             const timeline::LUTOptions& lut = App::app->lutOptions();
 
@@ -1027,14 +1027,14 @@ namespace mrv
 
             preset.ocioMonitors = ocioMonitors;
 
-            ocioPresets.push_back(preset);
+            presets.push_back(preset);
         }
 
-        void removeOcioPreset(const std::string& presetName)
+        void removePreset(const std::string& presetName)
         {
             std::vector<OCIOPreset> out;
             bool found = false;
-            for (const auto& preset : ocioPresets)
+            for (const auto& preset : presets)
             {
                 if (preset.name == presetName)
                 {
@@ -1049,10 +1049,10 @@ namespace mrv
                                       .arg(presetName);
                 LOG_ERROR(msg);
             }
-            ocioPresets = out;
+            presets = out;
         }
 
-        bool loadOcioPresets(const std::string& fileName)
+        bool loadPresets(const std::string& fileName)
         {
             try
             {
@@ -1086,11 +1086,11 @@ namespace mrv
                 }
                 ifs.close();
 
-                ocioPresets = j.get<std::vector<OCIOPreset>>();
+                presets = j.get<std::vector<OCIOPreset>>();
 
                 const std::string& msg =
                     string::Format(_("Loaded {0} ocio presets from \"{1}\"."))
-                        .arg(ocioPresets.size())
+                        .arg(presets.size())
                         .arg(fileName);
                 LOG_INFO(msg);
             }
@@ -1101,7 +1101,7 @@ namespace mrv
             return true;
         }
 
-        bool saveOcioPresets(const std::string& fileName)
+        bool savePresets(const std::string& fileName)
         {
             try
             {
@@ -1116,7 +1116,7 @@ namespace mrv
                     return false;
                 }
 
-                nlohmann::json j = ocioPresets;
+                nlohmann::json j = presets;
 
                 ofs << j.dump(4);
 

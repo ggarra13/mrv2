@@ -38,7 +38,7 @@ namespace mrv
     protected:
         static bool set_transforms();
 
-        static void setOcioConfig(std::string config);
+        static void setConfig(std::string config);
 
     public:
         static ColorSchemes schemes;

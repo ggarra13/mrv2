@@ -218,9 +218,9 @@ namespace mrv
             }
 
             int layer = ui->uiColorChannel->value();
-            const std::string& ics = ocio::ocioIcs();
-            const std::string& view = ocio::ocioView();
-            const std::string& look = ocio::ocioLook();
+            const std::string& ics = ocio::ics();
+            const std::string& view = ocio::view();
+            const std::string& look = ocio::look();
 
             Message ocio = {
                 {"config", config},
@@ -457,7 +457,7 @@ namespace mrv
 
                     Aitem->ocioIcs = item.ocioIcs;
                     if (!Aitem->ocioIcs.empty())
-                        ocio::setOcioIcs(Aitem->ocioIcs);
+                        ocio::setIcs(Aitem->ocioIcs);
                     Aitem->annotations = item.annotations;
                     Aitem->videoLayer = item.videoLayer;
                     Aitem->currentTime = item.currentTime;
@@ -541,7 +541,7 @@ namespace mrv
                         {
                             std::string ics;
                             j.at("ics").get_to(ics);
-                            ocio::setOcioIcs(ics);
+                            ocio::setIcs(ics);
                         }
                         else
                         {
@@ -554,7 +554,7 @@ namespace mrv
                     {
                         std::string view;
                         j.at("view").get_to(view);
-                        ocio::setOcioView(view);
+                        ocio::setView(view);
                     }
                     else
                     {
@@ -566,7 +566,7 @@ namespace mrv
                     {
                         std::string look;
                         j.at("look").get_to(look);
-                        ocio::setOcioLook(look);
+                        ocio::setLook(look);
                     }
 
                     ui->uiView->updateOCIOOptions();

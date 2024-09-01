@@ -923,17 +923,17 @@ namespace mrv
         try
         {
             if (!p.options.ocioOptions.input.empty())
-                ocio::setOcioIcs(p.options.ocioOptions.input);
+                ocio::setIcs(p.options.ocioOptions.input);
 
             if (!p.options.ocioOptions.look.empty())
-                ocio::setOcioLook(p.options.ocioOptions.look);
+                ocio::setLook(p.options.ocioOptions.look);
 
             if (!p.options.ocioOptions.display.empty() &&
                 !p.options.ocioOptions.view.empty())
             {
-                const std::string& merged = ocio::ocioDisplayViewShortened(
+                const std::string& merged = ocio::displayViewShortened(
                     p.options.ocioOptions.display, p.options.ocioOptions.view);
-                ocio::setOcioView(merged);
+                ocio::setView(merged);
             }
         }
         catch (const std::exception& e)
@@ -1530,8 +1530,8 @@ namespace mrv
             p.activeFiles[0]->inOutRange = p.player->inOutRange();
             p.activeFiles[0]->audioOffset = p.player->audioOffset();
             p.activeFiles[0]->annotations = p.player->getAllAnnotations();
-            p.activeFiles[0]->ocioIcs = ocio::ocioIcs();
-            p.activeFiles[0]->ocioLook = ocio::ocioLook();
+            p.activeFiles[0]->ocioIcs = ocio::ics();
+            p.activeFiles[0]->ocioLook = ocio::look();
             p.activeFiles[0]->lutOptions = p.lutOptions;
         }
 
@@ -1719,7 +1719,7 @@ namespace mrv
                         }
                         else
                         {
-                            ocio::setOcioIcs(activeFiles[0]->ocioIcs);
+                            ocio::setIcs(activeFiles[0]->ocioIcs);
                         }
                     }
                     catch (const std::exception& e)
@@ -1730,7 +1730,7 @@ namespace mrv
                     try
                     {
                         if (!activeFiles[0]->ocioLook.empty())
-                            ocio::setOcioLook(activeFiles[0]->ocioLook);
+                            ocio::setLook(activeFiles[0]->ocioLook);
                     }
                     catch (const std::exception& e)
                     {

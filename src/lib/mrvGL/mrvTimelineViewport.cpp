@@ -2003,7 +2003,7 @@ namespace mrv
 
             if (combined != _("None"))
             {
-                ocio::ocioSplitViewIntoDisplayView(combined, o.display, o.view);
+                ocio::splitViewIntoDisplayView(combined, o.display, o.view);
             }
         }
 

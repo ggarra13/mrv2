@@ -36,7 +36,7 @@ namespace mrv
     void OCIOBrowser::fill_display_and_view()
     {
 #ifdef TLRENDER_OCIO
-        OCIO::ConstConfigRcPtr config = ocio::config;
+        OCIO::ConstConfigRcPtr config = ocio::OCIOconfig;
         std::vector< std::string > views;
         for (int i = 0; i < config->getNumDisplays(); ++i)
         {
@@ -64,7 +64,7 @@ namespace mrv
     void OCIOBrowser::fill_look()
     {
 #ifdef TLRENDER_OCIO
-        OCIO::ConstConfigRcPtr config = ocio::config;
+        OCIO::ConstConfigRcPtr config = ocio::OCIOconfig;
 
         std::vector<std::string> looks;
         int numLooks = config->getNumLooks();
@@ -89,7 +89,7 @@ namespace mrv
     void OCIOBrowser::fill_input_color_space()
     {
 #ifdef TLRENDER_OCIO
-        OCIO::ConstConfigRcPtr config = ocio::config;
+        OCIO::ConstConfigRcPtr config = ocio::OCIOconfig;
         std::vector< std::string > spaces;
         for (int i = 0; i < config->getNumColorSpaces(); ++i)
         {

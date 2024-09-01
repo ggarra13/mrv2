@@ -46,11 +46,11 @@ ui->uiMain->fill_menu( ui->uiMenuBar );}
 if (!item || !item->label()) return;
 
 const std::string& presetName = item->label();
-mrv::ocio::setOcioPreset(presetName);
+mrv::ocio::setPreset(presetName);
 
 o->label(item->label());
 
-const std::string& summary = mrv::ocio::ocioPresetSummary(presetName);
+const std::string& summary = mrv::ocio::presetSummary(presetName);
 uiOCIOSummary->copy_label(summary.c_str());}
             tooltip {Click to switch to a stored preset.} xywh {59 146 228 28}
           } {}
@@ -82,7 +82,7 @@ if (!item.label()) return;
 
 v->label(item.label());
 
-const std::string& summary = mrv::ocio::ocioPresetSummary(presetName);
+const std::string& summary = mrv::ocio::presetSummary(presetName);
 uiOCIOSummary->copy_label(summary.c_str());}
             tooltip {Click to add a new preset with the current settings.} xywh {298 146 64 28}
           }
@@ -100,7 +100,7 @@ const std::string& presetName = item.label();
 if (presetName.empty() || presetName == _("Preset"))
      return;
 
-mrv::ocio::removeOcioPreset(presetName);
+mrv::ocio::removePreset(presetName);
 
 fill_ocio_presets();
 
@@ -156,7 +156,7 @@ delete v;}
 if (presetName.empty())
     return;
 
-mrv::ocio::createOcioPreset(presetName);
+mrv::ocio::createPreset(presetName);
 fill_ocio_presets();
 
 delete v;}
@@ -167,7 +167,7 @@ delete v;}
     }
   }
   Function {fill_ocio_presets()} {} {
-    code {auto presets = mrv::ocio::ocioPresetsList();
+    code {auto presets = mrv::ocio::presetsList();
 
 uiOCIOPreset->clear();
 

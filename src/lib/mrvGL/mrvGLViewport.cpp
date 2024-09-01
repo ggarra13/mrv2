@@ -341,8 +341,7 @@ namespace mrv
                         if (this == p.ui->uiView)
                         {
                             const std::string& combined =
-                                ocio::ocioDisplayViewShortened(
-                                    o.display, o.view);
+                                ocio::displayViewShortened(o.display, o.view);
                             p.ui->uiOCIOView->copy_label(combined.c_str());
                         }
                     }

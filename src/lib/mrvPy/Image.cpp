@@ -550,44 +550,44 @@ Contains all classes and enums related to image controls.
         _("Sets the current background options."));
 
     image.def(
-        "ocioConfig", &mrv::ocio::ocioConfig,
+        "ocioConfig", &mrv::ocio::config,
         _("Gets the current OCIO config file."));
 
     image.def(
-        "setOcioConfig", &mrv::ocio::setOcioConfig,
+        "setOcioConfig", &mrv::ocio::setConfig,
         _("Sets the current OCIO config file."));
 
     image.def(
-        "ocioIcs", &mrv::ocio::ocioIcs,
+        "ocioIcs", &mrv::ocio::ics,
         _("Gets the current input color space."));
 
     image.def(
-        "ocioIcsList", &mrv::ocio::ocioIcsList,
+        "ocioIcsList", &mrv::ocio::icsList,
         _("Gets a list of all input color spaces."));
 
     image.def(
-        "setOcioIcs", &mrv::ocio::setOcioIcs, _("Set the input color space."),
+        "setOcioIcs", &mrv::ocio::setIcs, _("Set the input color space."),
         py::arg("ics"));
 
     image.def(
-        "ocioView", &mrv::ocio::ocioView, _("Gets the current Display/View."));
+        "ocioView", &mrv::ocio::view, _("Gets the current Display/View."));
 
     image.def(
-        "ocioViewList", &mrv::ocio::ocioViewList,
+        "ocioViewList", &mrv::ocio::viewList,
         _("Gets the list of Displays/Views."));
 
     image.def(
-        "setOcioView", &mrv::ocio::setOcioView, _("Set an OCIO Display/View."),
+        "setOcioView", &mrv::ocio::setView, _("Set an OCIO Display/View."),
         py::arg("view"));
 
     image.def(
-        "ocioLook", &mrv::ocio::ocioLook, _("Gets the current OCIO look."));
+        "ocioLook", &mrv::ocio::look, _("Gets the current OCIO look."));
 
     image.def(
-        "ocioLookList", &mrv::ocio::ocioLookList,
+        "ocioLookList", &mrv::ocio::lookList,
         _("Gets a list of all OCIO looks."));
 
     image.def(
-        "setOcioLook", &mrv::ocio::setOcioLook, _("Set the OCIO look by name."),
+        "setOcioLook", &mrv::ocio::setLook, _("Set the OCIO look by name."),
         py::arg("look"));
 }

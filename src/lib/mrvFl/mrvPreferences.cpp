@@ -535,14 +535,14 @@ namespace mrv
         std::string ocioPath = studiopath() + "mrv2.ocio.json";
         if (file::isReadable(ocioPath))
         {
-            ocio::loadOcioPresets(ocioPath);
+            ocio::loadPresets(ocioPath);
         }
         else
         {
             ocioPath = prefspath() + "mrv2.ocio.json";
             if (file::isReadable(ocioPath))
             {
-                ocio::loadOcioPresets(ocioPath);
+                ocio::loadPresets(ocioPath);
             }
         }
 
@@ -556,20 +556,20 @@ namespace mrv
                 if (ocio::ocioDefault != tmpS)
                 {
                     LOG_INFO(_("Setting OCIO config from preferences."));
-                    setOcioConfig(tmpS);
+                    setConfig(tmpS);
                 }
             }
         }
         else
         {
             LOG_INFO(_("Setting OCIO config from OCIO environment variable."));
-            setOcioConfig(var);
+            setConfig(var);
         }
 
         var = uiPrefs->uiPrefsOCIOConfig->value();
         if (!var || strlen(var) == 0 || resetSettings)
         {
-            setOcioConfig(ocio::ocioDefault);
+            setConfig(ocio::ocioDefault);
         }
 
         ocio.get("use_active_views", tmp, 1);
@@ -1030,7 +1030,7 @@ namespace mrv
         settings->setValue("gui/DockGroup/Visible", visible);
 
         std::string ocioPath = prefspath() + "mrv2.ocio.json";
-        ocio::saveOcioPresets(ocioPath);
+        ocio::savePresets(ocioPath);
 
         Fl_Preferences base(
             prefspath().c_str(), "filmaura", "mrv2",
@@ -1931,7 +1931,7 @@ namespace mrv
     //////////////////////////////////////////////////////
     // OCIO
     /////////////////////////////////////////////////////
-    void Preferences::setOcioConfig(std::string configName)
+    void Preferences::setConfig(std::string configName)
     {
         static std::string oldConfigName;
         static const char* kModule = "ocio";
