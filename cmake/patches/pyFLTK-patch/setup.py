@@ -316,7 +316,10 @@ class PySwigCommand(setuptools.Command):
             for item in p_inc:
                 #if string.find(item, '-I') == 0:
                 if item.find('-I') == 0:
-                    include='-I' + item[3:-1]
+                    if item[2] == "'":
+                        include='-I' + item[3:-1]
+                    else:
+                        include='-I' + item[2:]
                     add_incl.append(include)
         else:
             print("FLTK not found!")
