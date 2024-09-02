@@ -2879,8 +2879,8 @@ msgstr "OpenGL 信息: {0}"
 msgid "Saving... {0}"
 msgstr "保存... {0}"
 
-msgid "Empty video data at time {0}."
-msgstr "时间 {0} 时空视频数据 。"
+msgid "Empty video data at time {0}.  Repeating frame."
+msgstr "时间 {0} 时空视频数据。 重复框架 。"
 
 msgid "Reading preferences from \"{0}{1}\"."
 msgstr "读取“ \"{0}{1}\" 的首选项 。"

@@ -8,6 +8,9 @@ v1.2.6
 - Added Portuguese, Italian and French translations done with AI.
 - Added top bar OCIO / Color toggle (Hotkey 't' by default).
 - Added lumma channel (Hotkey 'l' by default).
+- Allowed saving .otio movie files as .mp4, .mov, etc. files.  This allows
+  turning an .otio file into a new movie file.  Useful when concatenating
+  movies with the Playlist panel or the -edl command-line switch.
   
 
 v1.2.5

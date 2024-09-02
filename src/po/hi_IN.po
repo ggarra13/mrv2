@@ -2784,7 +2784,7 @@ msgstr "ओपन- जीएल जानकारी: {0}"
 msgid "Saving... {0}"
 msgstr "सहेजा जा रहा है... {0}"
 
-msgid "Empty video data at time {0}."
+msgid "Empty video data at time {0}.  Repeating frame."
 msgstr "{0} समय पर वीडियो आँकड़ा खाली करें"
 
 msgid "Reading preferences from \"{0}{1}\"."

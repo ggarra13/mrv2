@@ -2665,7 +2665,7 @@ msgstr ""
 msgid "Saving... {0}"
 msgstr ""
 
-msgid "Empty video data at time {0}."
+msgid "Empty video data at time {0}.  Repeating frame."
 msgstr ""
 
 msgid "Reading preferences from \"{0}{1}\"."

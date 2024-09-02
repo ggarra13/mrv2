@@ -2998,8 +2998,8 @@ msgstr "Información de OpenGL: {0}"
 msgid "Saving... {0}"
 msgstr "Grando... {0}."
 
-msgid "Empty video data at time {0}."
-msgstr "Datos de vídeo vacios en {0}."
+msgid "Empty video data at time {0}.  Repeating frame."
+msgstr "Datos de vídeo vacíos en el momento {0}. Repetición del cuadro."
 
 msgid "Reading preferences from \"{0}{1}\"."
 msgstr "Leyendo preferencias desde \"{0}{1}\"."
