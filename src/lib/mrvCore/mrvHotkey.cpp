@@ -80,6 +80,7 @@ namespace mrv
     Hotkey kGreenChannel(false, false, false, false, 'g');
     Hotkey kBlueChannel(false, false, false, false, 'b');
     Hotkey kAlphaChannel(false, false, false, false, 'a');
+    Hotkey kLummaChannel(false, false, false, false, 'l');
 
     Hotkey kFlipX(false, false, false, false, 'x');
     Hotkey kFlipY(false, false, false, false, 'y');
@@ -399,6 +400,7 @@ namespace mrv
         HotkeyEntry(_("Green Channel"), &kGreenChannel),
         HotkeyEntry(_("Blue Channel"), &kBlueChannel),
         HotkeyEntry(_("Alpha Channel"), &kAlphaChannel),
+        HotkeyEntry(_("Lumma Channel"), &kLummaChannel),
         HotkeyEntry(_("Flip X"), &kFlipX),
         HotkeyEntry(_("Flip Y"), &kFlipY),
 

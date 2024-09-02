@@ -2590,6 +2590,9 @@ msgstr ""
 msgid "Saving pictures to {0}."
 msgstr ""
 
+msgid "ProRes profiles need a .mov movie extension.  Changing it to .mov."
+msgstr ""
+
 msgid ""
 "VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to .mp4"
 msgstr ""
@@ -2662,7 +2665,7 @@ msgstr ""
 msgid "Saving... {0}"
 msgstr ""
 
-msgid "Empty video data at time {0}."
+msgid "Empty video data at time {0}.  Repeating frame."
 msgstr ""
 
 msgid "Reading preferences from \"{0}{1}\"."
@@ -3342,6 +3345,9 @@ msgid "Render/Blue Channel"
 msgstr ""
 
 msgid "Render/Alpha Channel"
+msgstr ""
+
+msgid "Render/Lumma"
 msgstr ""
 
 msgid "Render/Mirror X"
@@ -6197,6 +6203,9 @@ msgid "Blue Channel"
 msgstr ""
 
 msgid "Alpha Channel"
+msgstr ""
+
+msgid "Lumma Channel"
 msgstr ""
 
 msgid "Flip X"

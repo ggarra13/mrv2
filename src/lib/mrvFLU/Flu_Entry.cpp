@@ -1,10 +1,12 @@
 
 // #define DEBUG_REQUESTS 1
 
+#include <random>
 #include <mutex>
 
 #include <tlCore/Path.h>
 #include <tlCore/String.h>
+#include <tlCore/StringFormat.h>
 
 #include <tlTimeline/Timeline.h>
 
@@ -950,7 +952,10 @@ void Flu_Entry::startRequest()
             }
         }
 
-        p.thumbnail.request = thumbnailSystem->getThumbnail(path, size.h, time);
+        io::Options options;
+        options["clearCache"] = string::Format("{0}").arg(rand());
+        p.thumbnail.request = thumbnailSystem->getThumbnail(path, size.h, time,
+                                                            options);
         p.thumbnail.init = false;
         isPicture = true;
         Fl::add_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);

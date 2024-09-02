@@ -145,7 +145,8 @@ void mrv2_enums(py::module& m)
         .value("Red", timeline::Channels::Red)
         .value("Green", timeline::Channels::Green)
         .value("Blue", timeline::Channels::Blue)
-        .value("Alpha", timeline::Channels::Alpha);
+        .value("Alpha", timeline::Channels::Alpha)
+        .value("Lumma", timeline::Channels::Lumma);
     // .export_values();
     //
 

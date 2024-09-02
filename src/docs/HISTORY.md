@@ -3,11 +3,19 @@ v1.2.6
 
 - Added Preferences->User Interface->View Window->OCIO In Top Bar to turn on
   OCIO at start of UI.
-- Improved performance when switching channels.
 - Build fixes and directory clean-up.  If building from source, you should run
   a full rebuild with "runme.sh clean".
-- Improved packaging performance of Windows .exe and .zip files.
 - Added Portuguese, Italian and French translations done with AI.
+- Added top bar OCIO / Color toggle (Hotkey 't' by default).
+- Added lumma channel (Hotkey 'l' by default).
+- Allowed saving .otio movie files as .mp4, .mov, etc. files.  This allows
+  turning an .otio file into a new movie file.  Useful when concatenating
+  movies with the Playlist panel or the -edl command-line switch.
+- Fixed cancelling of language switch.
+- Added showing name of language that will be changed to.
+- Allowed saving a picture with no audio and then a movie with audio as a
+  standard movie file (not .otio).
+- Fixed cursor when entering text.
   
 
 v1.2.5

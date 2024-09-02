@@ -58,7 +58,7 @@ namespace mrv
 
         file::Path path(file);
 
-        if (file::isTemporaryEDL(path))
+        if (file::isTemporaryNDI(path))
         {
             LOG_ERROR(_("Cannot save an NDI stream"));
             return;
@@ -208,7 +208,8 @@ namespace mrv
             const bool hasVideo = !info.video.empty();
 
             if (player->timeRange() != timeRange ||
-                info.videoTime.start_time() != timeRange.start_time())
+                info.videoTime.start_time() != timeRange.start_time() ||
+                info.videoTime.duration() != timeRange.duration())
             {
                 double videoRate = info.videoTime.duration().rate();
                 videoTime = otime::TimeRange(
@@ -237,7 +238,17 @@ namespace mrv
             const std::string& profile = getLabel(options.ffmpegProfile);
 
             std::string newExtension = extension;
-            if (profile == "VP9")
+            if (profile.substr(0, 6) == "ProRes")
+            {
+                if (!string::compare(
+                        extension, ".mov", string::Compare::CaseInsensitive))
+                {
+                    LOG_WARNING(_("ProRes profiles need a .mov movie "
+                                  "extension.  Changing it to .mov."));
+                    newExtension = ".mov";
+                }
+            }
+            else if (profile == "VP9")
             {
                 if (!string::compare(
                         extension, ".mp4", string::Compare::CaseInsensitive) &&
@@ -642,7 +653,7 @@ namespace mrv
             size_t totalSamples = 0;
             size_t currentSampleCount =
                 startTime.rescaled_to(sampleRate).value();
-
+            
             while (running)
             {
                 context->tick();
@@ -679,6 +690,13 @@ namespace mrv
                                 otime::RationalTime(
                                     currentTime.rate(), currentTime.rate()));
                         auto audio = audioData.layers[0].audio;
+                        if (!audio)
+                        {
+                            // Create silence
+                            audio = audio::Audio::create(info.audio,
+                                                         sampleRate);
+                            audio->zero();
+                        }
 
                         // \todo mix audio layers (or have a function in
                         // timeline to do it).
@@ -687,7 +705,8 @@ namespace mrv
 
                         // timeline->getAudio() returns one second of audio.
                         // Clamp to end of the timeRange/inOutRange.
-                        if (currentAudioTime.value() >= currentSampleCount)
+                        if (!skip &&
+                            currentAudioTime.value() >= currentSampleCount)
                         {
                             const size_t sampleCount = audio->getSampleCount();
                             if (currentSampleCount + sampleCount >=
@@ -760,66 +779,72 @@ namespace mrv
                     else
                     {
                         // Get the videoData
-                        const auto videoData =
+                        auto videoData =
                             timeline->getVideo(currentTime).future.get();
+                        
                         if (videoData.layers.empty() ||
                             !videoData.layers[0].image)
                         {
                             std::string err =
-                                string::Format(
-                                    _("Empty video data at time {0}."))
+                                string::Format(_("Empty video data at time "
+                                                 "{0}.  Repeating frame."))
                                     .arg(currentTime);
-                            LOG_ERROR(err);
+                            LOG_WARNING(err);
                         }
-
-                        // This refreshes the view window
-                        if (interactive)
+                        else
                         {
-                            view->make_current();
-                            view->currentVideoCallback({videoData});
-                            view->flush();
-                        }
+
+                            // This refreshes the view window
+                            if (interactive)
+                            {
+                                view->make_current();
+                                view->currentVideoCallback({videoData});
+                                view->flush();
+                            }
                         
-                        // back to conventional pixel operation
-                        glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
-                        // CHECK_GL;
-                        glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+                            // back to conventional pixel operation
+                            glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
+                            // CHECK_GL;
+                            glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
 
-                        if (interactive)
-                            gl::initGLAD();
+                            if (interactive)
+                                gl::initGLAD();
 
-                        // Render the video to an offscreen buffer.
-                        gl::OffscreenBufferBinding binding(buffer);
-                        {
-                            locale::SetAndRestore saved;
-                            render->begin(offscreenBufferSize);
-                            render->setOCIOOptions(view->getOCIOOptions());
-                            render->setLUTOptions(view->lutOptions());
-                            render->drawVideo(
-                                {videoData},
-                                {math::Box2i(0, 0, renderSize.w, renderSize.h)},
-                                {timeline::ImageOptions()},
-                                {timeline::DisplayOptions()},
-                                timeline::CompareOptions(),
-                                ui->uiView->getBackgroundOptions());
-                            render->end();
-                        }
+                            // Render the video to an offscreen buffer.
+                            gl::OffscreenBufferBinding binding(buffer);
+                            {
+                                locale::SetAndRestore saved;
+                                render->begin(offscreenBufferSize);
+                                render->setOCIOOptions(view->getOCIOOptions());
+                                render->setLUTOptions(view->lutOptions());
+                                render->drawVideo(
+                                    {videoData},
+                                    {math::Box2i(0, 0, renderSize.w, renderSize.h)},
+                                    {timeline::ImageOptions()},
+                                    {timeline::DisplayOptions()},
+                                    timeline::CompareOptions(),
+                                    ui->uiView->getBackgroundOptions());
+                                render->end();
+                            }
 
-                        glPixelStorei(
-                            GL_PACK_ALIGNMENT, outputInfo.layout.alignment);
+                            glPixelStorei(
+                                GL_PACK_ALIGNMENT, outputInfo.layout.alignment);
 #if defined(TLRENDER_API_GL_4_1)
-                        glPixelStorei(
-                            GL_PACK_SWAP_BYTES,
-                            outputInfo.layout.endian != memory::getEndian());
+                            glPixelStorei(
+                                GL_PACK_SWAP_BYTES,
+                                outputInfo.layout.endian != memory::getEndian());
 #endif // TLRENDER_API_GL_4_1
 
-                        glReadPixels(
-                            0, 0, outputInfo.size.w, outputInfo.size.h, format,
-                            type, outputImage->getData());
+                            glReadPixels(
+                                0, 0, outputInfo.size.w, outputInfo.size.h, format,
+                                type, outputImage->getData());
+                        }
                     }
 
                     if (videoTime.contains(currentTime))
+                    {
                         writer->writeVideo(currentTime, outputImage);
+                    }
                 }
 
                 if (hasVideo)

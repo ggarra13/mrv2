@@ -627,7 +627,16 @@ namespace mrv
                 mode |= FL_MENU_VALUE;
             idx = menu->add(
                 _("Render/Alpha Channel"), kAlphaChannel.hotkey(),
-                (Fl_Callback*)toggle_alpha_channel_cb, ui,
+                (Fl_Callback*)toggle_alpha_channel_cb, ui, mode);
+            
+            mode = FL_MENU_RADIO;
+            if (numFiles == 0)
+                mode |= FL_MENU_INACTIVE;
+            if (displayOptions.channels == timeline::Channels::Lumma)
+                mode |= FL_MENU_VALUE;
+            idx = menu->add(
+                _("Render/Lumma"), kLummaChannel.hotkey(),
+                (Fl_Callback*)toggle_lumma_channel_cb, ui,
                 FL_MENU_DIVIDER | mode);
 
             mode = FL_MENU_TOGGLE;
