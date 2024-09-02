@@ -3,11 +3,11 @@ v1.2.6
 
 - Added Preferences->User Interface->View Window->OCIO In Top Bar to turn on
   OCIO at start of UI.
-- Improved performance when switching channels.
 - Build fixes and directory clean-up.  If building from source, you should run
   a full rebuild with "runme.sh clean".
-- Improved packaging performance of Windows .exe and .zip files.
 - Added Portuguese, Italian and French translations done with AI.
+- Added top bar OCIO / Color toggle (Hotkey 't' by default).
+- Added lumma channel (Hotkey 'l' by default).
   
 
 v1.2.5
