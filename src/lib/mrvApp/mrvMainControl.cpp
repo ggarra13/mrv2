@@ -317,6 +317,8 @@ namespace mrv
             if (audio.isValid())
             {
                 int audio_track = c->uiAudioTracks->current_track();
+                if (audio_track < 0)
+                    audio_track = audio.currentTrack;
 
                 // Add all the audio tracks
                 c->uiAudioTracks->clear_tracks();
