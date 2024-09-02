@@ -219,13 +219,17 @@ namespace mrv
         {
             if (Fl::event_inside(x(), y(), kCrossSize, kCrossSize))
             {
-                window()->cursor(FL_CURSOR_ARROW);
+                top_window()->cursor(FL_CURSOR_ARROW);
                 return 1;
+            }
+            else
+            {
+                top_window()->cursor(FL_CURSOR_INSERT);
             }
             break;
         }
         case FL_LEAVE:
-            window()->cursor(FL_CURSOR_CROSS);
+            top_window()->cursor(FL_CURSOR_CROSS);
             return 1;
         }
 

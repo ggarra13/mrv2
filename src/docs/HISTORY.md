@@ -13,6 +13,9 @@ v1.2.6
   movies with the Playlist panel or the -edl command-line switch.
 - Fixed cancelling of language switch.
 - Added showing name of language that will be changed to.
+- Allowed saving a picture with no audio and then a movie with audio as a
+  standard movie file (not .otio).
+- Fixed cursor when entering text.
   
 
 v1.2.5

@@ -988,7 +988,8 @@ namespace mrv
             {
                 p.presentationTime = std::chrono::high_resolution_clock::now();
             }
-            _updateCursor();
+            if (p.actionMode != ActionMode::kText)
+                _updateCursor();
             _updatePixelBar();
             return 1;
         }

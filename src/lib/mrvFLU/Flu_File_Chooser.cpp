@@ -59,8 +59,6 @@
 #include <tlCore/Path.h>
 #include <tlCore/String.h>
 
-#include <tlUI/ThumbnailSystem.h>
-
 #include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvLocale.h"
@@ -4244,25 +4242,6 @@ static const char* _flu_file_chooser(
     if (Flu_File_Chooser::window && !retname.empty())
     {
         Flu_File_Chooser::window->value(retname.c_str());
-    }
-    // Refresh thumbnails in case we saved a frame last time
-
-    // Clear tlRender's thumbnails
-    {
-        auto thumbnailSystem = context->getSystem<ui::ThumbnailSystem>();
-        auto cache = thumbnailSystem->getCache();
-        uint64_t bytes = cache->getMax();
-        cache->setMax(0);
-        cache->setMax(bytes);
-    }
-    
-    // Clear tlRender's cache
-    {
-        auto system = context->getSystem<io::System>();
-        auto cache = system->getCache();
-        uint64_t bytes = cache->getMax();
-        cache->setMax(0);
-        cache->setMax(bytes);
     }
     
     Flu_File_Chooser::window->set_non_modal();
