@@ -146,6 +146,7 @@ namespace mrv
     extern Hotkey kGreenChannel;
     extern Hotkey kBlueChannel;
     extern Hotkey kAlphaChannel;
+    extern Hotkey kLummaChannel;
 
     extern Hotkey kFlipX;
     extern Hotkey kFlipY;

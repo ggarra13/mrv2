@@ -818,6 +818,12 @@ namespace mrv
         const timeline::Channels channel = timeline::Channels::Alpha;
         toggle_channel(ui, channel);
     }
+    
+    void toggle_lumma_channel_cb(Fl_Menu_* w, ViewerUI* ui)
+    {
+        const timeline::Channels channel = timeline::Channels::Lumma;
+        toggle_channel(ui, channel);
+    }
 
     void toggle_color_channel_cb(Fl_Menu_* w, ViewerUI* ui)
     {

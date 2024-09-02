@@ -86,6 +86,7 @@ namespace mrv
     void toggle_green_channel_cb(Fl_Menu_* m, ViewerUI* ui);
     void toggle_blue_channel_cb(Fl_Menu_* m, ViewerUI* ui);
     void toggle_alpha_channel_cb(Fl_Menu_* m, ViewerUI* ui);
+    void toggle_lumma_channel_cb(Fl_Menu_* m, ViewerUI* ui);
     void toggle_color_channel_cb(Fl_Menu_* m, ViewerUI* ui);
 
     //! Window callbacks
