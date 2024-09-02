@@ -58,11 +58,19 @@ namespace mrv
                     menu.type(Fl_Menu_Button::POPUP3);
                     menu.clear();
 
+                    unsigned count = 0;
                     for (const auto& track : audioTracks)
                     {
-                        menu.add(
+                        
+                        int idx = menu.add(
                             track.c_str(), 0,
-                            (Fl_Callback*)change_audio_track_cb, this);
+                            (Fl_Callback*)change_audio_track_cb, this,
+                            FL_MENU_RADIO);
+                        Fl_Menu_Item* item = (Fl_Menu_Item*)&(menu.menu()[idx]);
+                        if (count == currentTrack)
+                            item->set();
+                        ++count;
+                        
                     }
                     menu.menu_end();
 
