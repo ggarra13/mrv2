@@ -3212,7 +3212,7 @@ msgid "Pan And Zoom"
 msgstr "Panormica e zoom"
 
 msgid "Timeline"
-msgstr "Calendrio"
+msgstr "Linha Do Tempo"
 
 msgid ""
 "You have EDLs in the current session.  These will not be saved in the "
@@ -3473,7 +3473,7 @@ msgid "Render/Alpha Channel"
 msgstr "Renncia/Canal Alfa"
 
 msgid "Render/Lumma"
-msgstr "Renúncia/Lumma"
+msgstr "Renncia/Lumma"
 
 msgid "Render/Mirror X"
 msgstr "Renncia/Espelho X"
@@ -3581,46 +3581,46 @@ msgid "View/Hud"
 msgstr "Visualizao/Hud"
 
 msgid "Timeline/Cache/Clear"
-msgstr "Calendrio/Cache/Limpar"
+msgstr "Linha Do Tempo/Cache/Limpar"
 
 msgid "Timeline/Cache/Update Frame"
-msgstr "Calendrio/Cache/Atualizar o Quadro"
+msgstr "Linha Do Tempo/Cache/Atualizar o Quadro"
 
 msgid "Timeline/Editable"
-msgstr "Calendrio/Editvel"
+msgstr "Linha Do Tempo/Editvel"
 
 msgid "Timeline/Edit Associated Clips"
-msgstr "Calendrio/Editar Clips Associados"
+msgstr "Linha Do Tempo/Editar Clips Associados"
 
 msgid "Timeline/Frame View"
-msgstr "Calendrio/Visualizao do Quadro"
+msgstr "Linha Do Tempo/Visualizao do Quadro"
 
 msgid "Timeline/Scroll To Current Frame"
-msgstr "Calendrio/Deslocar para o Quadro Atual"
+msgstr "Linha Do Tempo/Deslocar para o Quadro Atual"
 
 msgid "Timeline/Track Info"
-msgstr "Calendrio/Informaes da Faixa"
+msgstr "Linha Do Tempo/Informaes da Faixa"
 
 msgid "Timeline/Clip Info"
-msgstr "Calendrio/Informaes do clipe"
+msgstr "Linha Do Tempo/Informaes do clipe"
 
 msgid "Timeline/Thumbnails/None"
-msgstr "Calendrio/Thumbnails/Nenhuma"
+msgstr "Linha Do Tempo/Thumbnails/Nenhuma"
 
 msgid "Timeline/Thumbnails/Small"
-msgstr "Calendrio/Thumbnails/Pequeno"
+msgstr "Linha Do Tempo/Thumbnails/Pequeno"
 
 msgid "Timeline/Thumbnails/Medium"
-msgstr "Calendrio/Thumbnails/Mdia"
+msgstr "Linha Do Tempo/Thumbnails/Mdia"
 
 msgid "Timeline/Thumbnails/Large"
-msgstr "Calendrio/Thumbnails/Grandes"
+msgstr "Linha Do Tempo/Thumbnails/Grandes"
 
 msgid "Timeline/Transitions"
-msgstr "Calendrio/Transies"
+msgstr "Linha Do Tempo/Transies"
 
 msgid "Timeline/Markers"
-msgstr "Calendrio/Marcadores"
+msgstr "Linha Do Tempo/Marcadores"
 
 msgid "Image/Next"
 msgstr "Imagem/Prxima"
@@ -3719,7 +3719,7 @@ msgid "Sync/Send/Color"
 msgstr "Sincronizao/Enviar/Cor"
 
 msgid "Sync/Send/Timeline"
-msgstr "Sincronizao/Enviar/Calendrio"
+msgstr "Sincronizao/Enviar/Linha Do Tempo"
 
 msgid "Sync/Send/Annotations"
 msgstr "Sincronizao/Enviar/Anotaes"
@@ -3740,7 +3740,7 @@ msgid "Sync/Accept/Color"
 msgstr "Sincronizao/Aceitar/Cor"
 
 msgid "Sync/Accept/Timeline"
-msgstr "Sincronizao/Aceitar/Calendrio"
+msgstr "Sincronizao/Aceitar/Linha Do Tempo"
 
 msgid "Sync/Accept/Annotations"
 msgstr "Sincronizao/Aceitar/Anotaes"
@@ -5959,7 +5959,7 @@ msgstr ""
 "melhor do que o outro."
 
 msgid "Blit Timeline"
-msgstr "Calendrio de Blit"
+msgstr "Linha Do Tempo de Blit"
 
 msgid ""
 "Timeline can be drawn with blitting or with OpenGL shaders.  Depending on "
@@ -6078,7 +6078,7 @@ msgid "User Interface/Thumbnails"
 msgstr "Interface do Usurio/Thumbnails"
 
 msgid "User Interface/Timeline"
-msgstr "Interface do Usurio/Calendrio"
+msgstr "Interface do Usurio/Linha Do Tempo"
 
 msgid "No Audio was Compiled"
 msgstr "Nenhum udio foi compilado"
