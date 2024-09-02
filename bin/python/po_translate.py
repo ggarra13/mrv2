@@ -19,6 +19,7 @@ VERSION = 1.0
 #
 LANGUAGES = [
     'de',
+    'es',
     'fr',
     'hi_IN',
     'it',

@@ -58,7 +58,7 @@ namespace mrv
 
         file::Path path(file);
 
-        if (file::isTemporaryEDL(path))
+        if (file::isTemporaryNDI(path))
         {
             LOG_ERROR(_("Cannot save an NDI stream"));
             return;
