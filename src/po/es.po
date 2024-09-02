@@ -2960,6 +2960,10 @@ msgstr "Grando audio a {0}."
 msgid "Saving pictures to {0}."
 msgstr "Grabando imágenes a {0}."
 
+#, fuzzy
+msgid "ProRes profiles need a .mov movie extension.  Changing it to .mov."
+msgstr "Perfil HAP necesita una extension de película .mov.  Cambiando a .mov."
+
 msgid ""
 "VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to .mp4"
 msgstr ""

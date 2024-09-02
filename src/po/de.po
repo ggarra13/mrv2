@@ -2732,6 +2732,9 @@ msgstr "Audio auf {0} speichern."
 msgid "Saving pictures to {0}."
 msgstr "Bilder auf {0} speichern."
 
+msgid "ProRes profiles need a .mov movie extension.  Changing it to .mov."
+msgstr "ProRes-Profile benötigen eine.mov-Filmerweiterung. Ändern auf.mov."
+
 msgid ""
 "VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to "
 ".mp4"

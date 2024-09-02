@@ -52,7 +52,7 @@ lang = args.language
 use_google = args.use_google
 use_tokenizer = not args.no_tokenizer
 
-if not lang in LANGUAGES:
+if not lang in ['all'] + LANGUAGES:
     print(f'Invalid language "{lang}"')
     print(f'Valid ones are:\n\t{", ".join(LANGUAGES)}')
     exit(1)
@@ -126,8 +126,6 @@ TRANSLATE_FIXES = {
     'Float' : 'Floating point',
 }
 
-code = lang[0:2]
-
 
 #
 # Google Languages from their two letter code
@@ -170,19 +168,11 @@ if not use_google and not use_tokenizer:
     print('No google or tokenizer module found.  Exiting.')
     exit(1)
 
-# Load the model and tokenizer for English to Simplified Chinese
-helsinki = code
-if code == 'pt' or code == 'fr' or code == 'es' or code == 'it':
-    helsinki = 'ROMANCE'
-    
-model_name = f"Helsinki-NLP/opus-mt-en-{helsinki}"
-print('Load model',model_name)
-
-    
+        
 class POTranslator:
 
 
-    def __init__(self, po_file, use_google = True, use_tokenizer = True):
+    def __init__(self, po_file, lang, use_google = True, use_tokenizer = True):
 
         if not os.path.exists(po_file):
             print(po_file,'does not exist!')
@@ -190,9 +180,20 @@ class POTranslator:
         
         self.use_google = use_google
         self.use_tokenizer = use_tokenizer
+        self.code = lang[0:2]
         
         self.have_seen = {}
 
+        # Load the model and tokenizer for English to Simplified Chinese
+        self.helsinki = self.code
+        if self.code == 'pt' or self.code == 'fr' or \
+           self.code == 'es' or self.code == 'it':
+            self.helsinki = 'ROMANCE'
+    
+        model_name = f"Helsinki-NLP/opus-mt-en-{self.helsinki}"
+        print('Load model',model_name)
+
+    
         if use_tokenizer:
             self.tokenizer = MarianTokenizer.from_pretrained(model_name,
                                                              clean_up_tokenization_spaces=True)
@@ -204,7 +205,7 @@ class POTranslator:
 
         # Initialize Google translator
         if use_google:
-            self.translator = Translator(to_lang=GOOGLE_LANGUAGES[code])
+            self.translator = Translator(to_lang=GOOGLE_LANGUAGES[self.code])
 
         # Initialitize po translation
         self.translate_po(po_file)
@@ -292,8 +293,8 @@ class POTranslator:
                 return self.translate_with_google(english)
 
             text = english
-            if helsinki == 'ROMANCE':
-                text = f'>>{code}<< ' + text
+            if self.helsinki == 'ROMANCE':
+                text = f'>>{self.code}<< ' + text
             
             inputs = self.tokenizer(text, return_tensors="pt", padding=True,
                                     truncation=True)
@@ -388,20 +389,33 @@ class POTranslator:
         if self.use_tokenizer:
             del self.model
             del self.tokenizer
-        
-main_po = f'src/po/{lang}.po'
-POTranslator(main_po, use_google, use_tokenizer)
+
+def po_translate(lang):
+
+    main_po = f'src/po/{lang}.po'
+    POTranslator(main_po, lang, use_google, use_tokenizer)
 
 
-cwd = os.getcwd()
-os.chdir('src/python/plug-ins')
-plugins = glob.glob('*.py')
-os.chdir(cwd)
-for plugin in plugins:
-    plugin = plugin[:-3] + '.po'
-    plugin_po = f'src/po/python/plug-ins/locale/{lang}/LC_MESSAGES/{plugin}'
-    print('Translating plugin',plugin)
-    POTranslator(plugin_po, use_google, use_tokenizer)
+    cwd = os.getcwd()
+    os.chdir('src/python/plug-ins')
+    plugins = glob.glob('*.py')
+    os.chdir(cwd)
+    for plugin in plugins:
+        plugin = plugin[:-3] + '.po'
+        plugin_po = f'src/po/python/plug-ins/locale/{lang}/LC_MESSAGES/{plugin}'
+        print('Translating plugin',plugin)
+        POTranslator(plugin_po, lang, use_google, use_tokenizer)
+
+
+model_name = ''
+    
+if lang == 'all':
+    for lang in LANGUAGES:
+        po_translate(lang)
+else:
+    po_translate(lang)    
+
+
 
 
 # Clear cached data in PyTorch

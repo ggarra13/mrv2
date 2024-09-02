@@ -2697,6 +2697,11 @@ msgstr "{0} में ऑडियो सहेज रहा है."
 msgid "Saving pictures to {0}."
 msgstr "{0} में छवि सहेज रहा है"
 
+msgid "ProRes profiles need a .mov movie extension.  Changing it to .mov."
+msgstr ""
+"प्रोग्रेसिव प्रोफ़ाइल को एक एम्व फिल्म विस्तार की आवश्यकता है. इसे परिवर्तित"
+" करने के लिए इसे परिवर्तित करें."
+
 msgid ""
 "VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to "
 ".mp4"

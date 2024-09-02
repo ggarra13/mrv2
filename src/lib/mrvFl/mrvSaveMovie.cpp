@@ -237,7 +237,17 @@ namespace mrv
             const std::string& profile = getLabel(options.ffmpegProfile);
 
             std::string newExtension = extension;
-            if (profile == "VP9")
+            if (profile.substr(0, 6) == "ProRes")
+            {
+                if (!string::compare(
+                        extension, ".mov", string::Compare::CaseInsensitive))
+                {
+                    LOG_WARNING(_("ProRes profiles need a .mov movie "
+                                  "extension.  Changing it to .mov."));
+                    newExtension = ".mov";
+                }
+            }
+            else if (profile == "VP9")
             {
                 if (!string::compare(
                         extension, ".mp4", string::Compare::CaseInsensitive) &&
