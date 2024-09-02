@@ -3732,6 +3732,9 @@ msgstr "Render/Canal Azul"
 msgid "Render/Alpha Channel"
 msgstr "Render/Canal Alfa"
 
+msgid "Render/Lumma"
+msgstr "Render/Lumma"
+
 msgid "Render/Mirror X"
 msgstr "Render/Voltear X"
 
@@ -6834,6 +6837,9 @@ msgstr "Canal Azul"
 
 msgid "Alpha Channel"
 msgstr "Canal Alfa"
+
+msgid "Lumma Channel"
+msgstr "Canal Luma"
 
 msgid "Flip X"
 msgstr "Voltear X"

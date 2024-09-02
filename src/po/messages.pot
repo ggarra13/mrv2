@@ -3344,6 +3344,9 @@ msgstr ""
 msgid "Render/Alpha Channel"
 msgstr ""
 
+msgid "Render/Lumma"
+msgstr ""
+
 msgid "Render/Mirror X"
 msgstr ""
 
@@ -6197,6 +6200,9 @@ msgid "Blue Channel"
 msgstr ""
 
 msgid "Alpha Channel"
+msgstr ""
+
+msgid "Lumma Channel"
 msgstr ""
 
 msgid "Flip X"
