@@ -3,6 +3,7 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 
+
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -17,9 +18,10 @@
 namespace
 {
 
-        // Function to decode edidManufactureId to a three-letter code
+    // Function to decode edidManufactureId to a three-letter code
     std::string
-    DecodeEdidManufactureId(UINT16 edidUint) {
+    DecodeEdidManufactureId(UINT16 edidUint)
+    {
         char vendorId[4];
         const unsigned char* edid = reinterpret_cast<unsigned char*>(&edidUint);
         snprintf(
