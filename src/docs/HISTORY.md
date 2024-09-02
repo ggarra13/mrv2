@@ -11,6 +11,8 @@ v1.2.6
 - Allowed saving .otio movie files as .mp4, .mov, etc. files.  This allows
   turning an .otio file into a new movie file.  Useful when concatenating
   movies with the Playlist panel or the -edl command-line switch.
+- Fixed cancelling of language switch.
+- Added showing name of language that will be changed to.
   
 
 v1.2.5

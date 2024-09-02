@@ -690,6 +690,13 @@ namespace mrv
                                 otime::RationalTime(
                                     currentTime.rate(), currentTime.rate()));
                         auto audio = audioData.layers[0].audio;
+                        if (!audio)
+                        {
+                            // Create silence
+                            audio = audio::Audio::create(info.audio,
+                                                         sampleRate);
+                            audio->zero();
+                        }
 
                         // \todo mix audio layers (or have a function in
                         // timeline to do it).
@@ -698,7 +705,8 @@ namespace mrv
 
                         // timeline->getAudio() returns one second of audio.
                         // Clamp to end of the timeRange/inOutRange.
-                        if (currentAudioTime.value() >= currentSampleCount)
+                        if (!skip &&
+                            currentAudioTime.value() >= currentSampleCount)
                         {
                             const size_t sampleCount = audio->getSampleCount();
                             if (currentSampleCount + sampleCount >=

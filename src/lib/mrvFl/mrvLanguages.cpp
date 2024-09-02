@@ -65,10 +65,15 @@ void check_language(PreferencesUI* uiPrefs, int& language_index, mrv::App* app)
     int uiIndex = uiPrefs->uiLanguage->value();
     if (uiIndex != language_index)
     {
-        int ok = fl_choice(
-            _("Need to reboot mrv2 to change language.  "
-              "Are you sure you want to continue?"),
-            _("No"), _("Yes"), NULL, NULL);
+        const char* language = _(kLanguages[uiIndex].name);
+
+        std::string question =
+            tl::string::Format(
+                _("Need to reboot mrv2 to change language to {0}.  "
+                  "Are you sure you want to continue?"))
+                .arg(language);
+
+        int ok = fl_choice(question.c_str(), _("No"), _("Yes"), NULL, NULL);
         if (ok)
         {
             language_index = uiIndex;
@@ -102,7 +107,7 @@ void check_language(PreferencesUI* uiPrefs, int& language_index, mrv::App* app)
         }
         else
         {
-            uiPrefs->uiLanguage->value(uiIndex);
+            uiPrefs->uiLanguage->value(language_index);
         }
     }
 }
