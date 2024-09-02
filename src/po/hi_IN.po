@@ -3685,19 +3685,19 @@ msgid "OCIO/         ICS: %s"
 msgstr "OCIO/        ICS: %s"
 
 msgid "OCIO/     Display: %s"
-msgstr "OCIO/       प्रदर्शक: %s"
+msgstr "OCIO/     Display: %s"
 
 msgid "OCIO/        View: %s"
-msgstr "OCIO/         दृश्य: %s"
+msgstr "OCIO/        View: %s"
 
 msgid "OCIO/  Monitor #%d Display: %s"
-msgstr "OCIO/    मॉनीटर #%d    प्रदर्शन: %s"
+msgstr "OCIO/  Monitor #%d Display: %s"
 
 msgid "OCIO/  Monitor #%d    View: %s"
-msgstr "OCIO/    मॉनीटर #%d     दृश्य: %s"
+msgstr "OCIO/  Monitor #%d    View: %s"
 
 msgid "OCIO/        Look: %s"
-msgstr "OCIO/         देखो: %s"
+msgstr "OCIO/        Look: %s"
 
 msgid "OCIO/        LUT: %s"
 msgstr "OCIO/        LUT: %s"

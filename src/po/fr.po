@@ -3707,19 +3707,19 @@ msgid "OCIO/Current"
 msgstr "OCIO/Courant"
 
 msgid "OCIO/         ICS: %s"
-msgstr "OCIO/ICS : %s"
+msgstr "OCIO/         ICS: %s"
 
 msgid "OCIO/     Display: %s"
-msgstr "OCIO/Affichage : %s"
+msgstr "OCIO/     Display: %s"
 
 msgid "OCIO/        View: %s"
-msgstr "OCIO/Affichage : %s"
+msgstr "OCIO/        View: %s"
 
 msgid "OCIO/  Monitor #%d Display: %s"
-msgstr "OCIO/Surveiller l'affichage #%d : %s"
+msgstr "OCIO/  Monitor #%d Display: %s"
 
 msgid "OCIO/  Monitor #%d    View: %s"
-msgstr "OCIO/Surveiller l'affichage #%d : %s"
+msgstr "OCIO/  Monitor #%d    View: %s"
 
 msgid "OCIO/        Look: %s"
 msgstr "OCIO/        Look: %s"

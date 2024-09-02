@@ -3769,16 +3769,16 @@ msgid "OCIO/         ICS: %s"
 msgstr "OCIO/         ICS: %s"
 
 msgid "OCIO/     Display: %s"
-msgstr "OCIO/        显示: %s"
+msgstr "OCIO/     Display: %s"
 
 msgid "OCIO/        View: %s"
-msgstr "OCIO/        视图: %s"
+msgstr "OCIO/        View: %s"
 
 msgid "OCIO/  Monitor #%d Display: %s"
-msgstr "OCIO/  显示监视器 #%d 显示: %s"
+msgstr "OCIO/  Monitor #%d Display: %s"
 
 msgid "OCIO/  Monitor #%d    View: %s"
-msgstr "OCIO/    监视器 #%d    视图: %s"
+msgstr "OCIO/  Monitor #%d    View: %s"
 
 msgid "OCIO/        Look: %s"
 msgstr "OCIO/        Look: %s"
