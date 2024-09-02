@@ -16,6 +16,7 @@ v1.2.6
 - Allowed saving a picture with no audio and then a movie with audio as a
   standard movie file (not .otio).
 - Fixed cursor when entering text.
+- Improved port and monitor detection on Windows.
   
 
 v1.2.5

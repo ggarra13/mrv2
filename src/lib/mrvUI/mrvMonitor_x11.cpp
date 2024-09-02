@@ -15,63 +15,10 @@
 #include <X11/Xlib.h>
 #include <X11/extensions/Xrandr.h>
 
+#include "mrvUI/mrvDesktop.h"
 
 namespace
 {
-    std::string getManufacturerName(const char* edidCode)
-    {
-        if (strcmp(edidCode, "AOC") == 0)
-            return "AOC International";
-        if (strcmp(edidCode, "ACR") == 0)
-            return "Acer Inc.";
-        if (strcmp(edidCode, "APP") == 0)
-            return "Apple Inc.";
-        if (strcmp(edidCode, "ASU") == 0)
-            return "ASUSTeK Computer Inc.";
-        if (strcmp(edidCode, "BNQ") == 0)
-            return "BenQ Corporation";
-        if (strcmp(edidCode, "CMN") == 0)
-            return "Chimei Innolux Corporation";
-        if (strcmp(edidCode, "DEL") == 0)
-            return "Dell Inc.";
-        if (strcmp(edidCode, "ENC") == 0)
-            return "EIZO Nanao Corporation";
-        if (strcmp(edidCode, "FUJ") == 0)
-            return "Fujitsu Limited";
-        if (strcmp(edidCode, "GSM") == 0)
-            return "LG Electronics";
-        if (strcmp(edidCode, "HWP") == 0)
-            return "Hewlett-Packard (HP)";
-        if (strcmp(edidCode, "LEN") == 0)
-            return "Lenovo Group Ltd.";
-        if (strcmp(edidCode, "LPL") == 0)
-            return "LG Philips LCD";
-        if (strcmp(edidCode, "MSI") == 0)
-            return "Micro-Star International";
-        if (strcmp(edidCode, "NEC") == 0)
-            return "NEC Corporation";
-        if (strcmp(edidCode, "PHL") == 0)
-            return "Philips";
-        if (strcmp(edidCode, "SAM") == 0)
-            return "Samsung Electronics";
-        if (strcmp(edidCode, "SEC") == 0)
-            return "Seiko Epson Corporation";
-        if (strcmp(edidCode, "SGI") == 0)
-            return "Silicon Graphics, Inc.";
-        if (strcmp(edidCode, "SON") == 0)
-            return "Sony Corporation";
-        if (strcmp(edidCode, "TOS") == 0)
-            return "Toshiba Corporation";
-        if (strcmp(edidCode, "VIZ") == 0)
-            return "Vizio, Inc.";
-        if (strcmp(edidCode, "VSC") == 0)
-            return "ViewSonic Corporation";
-        if (strcmp(edidCode, "YMH") == 0)
-            return "Yamaha Corporation";
-
-        // Not a name we know, just return its edidCode
-        return std::string(edidCode);
-    }
 
     //! This code taken almost verbatim from parse-edid.
     std::string parse_edid(const unsigned char* const edid)
@@ -122,7 +69,7 @@ namespace
             (((edid[8] & 0x3) << 3) | ((edid[9] & 0xe0) >> 5)) + 'A' - 1,
             (edid[9] & 0x1f) + 'A' - 1);
 
-        std::string vendorName = getManufacturerName(vendorId);
+        std::string vendorName = mrv::desktop::getManufacturerName(vendorId);
         return vendorName + " " + modelName;
     }
 
