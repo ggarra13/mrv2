@@ -338,20 +338,14 @@ namespace mrv
                         o.view = p.monitorOCIOOptions[screen].view;
                         gl.render->setOCIOOptions(o);
 
-                        // Avoid two expensive string functions if possible.
-                        if (screen != p.previous_screen &&
-                            this == p.ui->uiView)
-                        {
-                            p.previous_screen = screen;
-                            const std::string& combined =
-                                ocio::displayViewShortened(o.display, o.view);
-                            p.ui->uiOCIOView->copy_label(combined.c_str());
-                        }
+                        _updateMonitorDisplayView(screen, o);
                     }
                     else
                     {
                         gl.render->setOCIOOptions(p.ocioOptions);
+                        _updateMonitorDisplayView(screen, p.ocioOptions);
                     }
+                    
                     gl.render->setLUTOptions(p.lutOptions);
                     if (p.missingFrame &&
                         p.missingFrameType != MissingFrameType::kBlackFrame)

@@ -18,6 +18,8 @@ v1.2.6
 - Fixed cursor when entering text.
 - Improved port and monitor detection on Windows.
 - Improved performance of redraws when using multiple monitors with OCIO.
+- Fixed some update issues in Top Bar's OCIO View display when using multiple
+  monitors and OCIO was changed from the menus.
   
 
 v1.2.5

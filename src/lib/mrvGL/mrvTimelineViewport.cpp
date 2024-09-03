@@ -757,6 +757,7 @@ namespace mrv
         }
 
         p.monitorOCIOOptions[monitorId] = value;
+        p.previous_screen = -1;
 
         redrawWindows();
     }
@@ -770,6 +771,7 @@ namespace mrv
             return;
 
         p.ocioOptions = value;
+        p.previous_screen = -1;
 
         if (p.ui->uiSecondary && p.ui->uiSecondary->viewport())
         {
@@ -2406,6 +2408,24 @@ namespace mrv
         redraw();
     }
 
+    void TimelineViewport::_updateMonitorDisplayView(
+        const int screen,
+        const timeline::OCIOOptions& o) const noexcept
+    {
+        TLRENDER_P();
+        
+        if (this != p.ui->uiView)
+            return;
+
+        if (screen != p.previous_screen)
+        {
+            p.previous_screen = screen;
+            const std::string& combined =
+                ocio::displayViewShortened(o.display, o.view);
+            p.ui->uiOCIOView->copy_label(combined.c_str());
+        }
+    }
+    
     void TimelineViewport::hsv_to_info(
         const image::Color4f& hsv, area::Info& info) const noexcept
     {

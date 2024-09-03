@@ -412,6 +412,9 @@ namespace mrv
 
         void _updateDisplayOptions(const timeline::DisplayOptions& d) noexcept;
 
+        void _updateMonitorDisplayView(const int screen,
+                                       const timeline::OCIOOptions& o) const noexcept;
+        
         void _pushColorMessage(const std::string& command, float value);
 
         void _mallocBuffer() const noexcept;
