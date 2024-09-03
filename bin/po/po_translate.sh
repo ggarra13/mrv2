@@ -22,8 +22,8 @@ NOARGS=1
 locate_python
 
 echo $PYTHON_SITEDIR
-if [[ ! -d $PYTHON_SITEDIR/transformers &&
-	  ! -d $PYTHON_USER_SITEDIR/transformers ]];
+if [[ ! -e $PYTHON_SITEDIR/polib.py &&
+	  ! -e $PYTHON_USER_SITEDIR/polib.py ]];
 then
     $PYTHON -m pip install polib transformers translate torch sentencepiece sacremoses
 fi
