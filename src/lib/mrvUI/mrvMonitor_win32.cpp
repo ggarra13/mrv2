@@ -17,20 +17,6 @@
 
 namespace
 {
-
-    // Function to decode edidManufactureId to a three-letter code
-    std::string
-    DecodeEdidManufactureId(UINT16 edidUint)
-    {
-        char vendorId[4];
-        const unsigned char* edid = reinterpret_cast<unsigned char*>(&edidUint);
-        snprintf(
-            vendorId, 4, "%c%c%c", (edid[0] >> 2 & 0x1f) + 'A' - 1,
-            (((edid[0] & 0x3) << 3) | ((edid[1] & 0xe0) >> 5)) + 'A' - 1,
-            (edid[1] & 0x1f) + 'A' - 1);
-
-        return std::string(vendorId);
-    }
     
     std::string
     getOutputTechnology(DISPLAYCONFIG_VIDEO_OUTPUT_TECHNOLOGY tech)
@@ -81,10 +67,10 @@ namespace
 
 namespace mrv
 {
-    namespace desktop
+    namespace monitor
     {
         // Get the monitor name given its FLTK screen index
-        std::string getMonitorName(int monitorIndex)
+        std::string getName(int monitorIndex)
         {
             std::string out;
 
@@ -147,7 +133,8 @@ namespace mrv
 
             if (targetName.flags.friendlyNameFromEdid)
             {
-                auto vendorId = DecodeEdidManufactureId(targetName.edidManufactureId);                
+                auto vendorId =
+                    monitor::decodeEdidManufactureId(targetName.edidManufactureId);                
                 out = getOutputTechnology(targetName.outputTechnology) + "-";
                 out += std::to_string(monitorIndex + 1) + ": ";
                 out += getManufacturerName(vendorId.c_str());

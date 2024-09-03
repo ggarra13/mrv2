@@ -572,6 +572,9 @@ namespace mrv
             setConfig(ocio::ocioDefault);
         }
 
+        ocio.get("use_default_display_view", tmp, 0);
+        uiPrefs->uiOCIOUseDefaultDisplayView->value(tmp);
+        
         ocio.get("use_active_views", tmp, 1);
         uiPrefs->uiOCIOUseActiveViews->value(tmp);
 
@@ -1268,6 +1271,9 @@ namespace mrv
             Fl_Preferences ocio(view, "ocio");
 
             ocio.set("config", uiPrefs->uiPrefsOCIOConfig->value());
+            ocio.set(
+                "use_default_display_view",
+                uiPrefs->uiOCIOUseDefaultDisplayView->value());
             ocio.set(
                 "use_active_views", uiPrefs->uiOCIOUseActiveViews->value());
 

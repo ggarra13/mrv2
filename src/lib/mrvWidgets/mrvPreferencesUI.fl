@@ -88,7 +88,7 @@ class PreferencesUI {open
     Fl_Window uiMain {
       label Preferences
       user_data this user_data_type {PreferencesUI*}
-      callback {o->hide();} open selected
+      callback {o->hide();} open
       xywh {903 93 853 467} type Double resizable
       code0 {main = m;} visible
     } {
@@ -1023,7 +1023,7 @@ v->uiPrefsFPS->value( g );}
             }
             Fl_Group {} {
               label OCIO open
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {
                 label OCIO open
@@ -1079,9 +1079,13 @@ unsetenv( "OCIO" );
 uiPrefs->uiPrefsOCIOConfig->value( r.c_str() );}
                   tooltip {Pick a config.ocio file from disk.} xywh {751 182 55 31}
                 }
+                Fl_Light_Button uiOCIOUseDefaultDisplayView {
+                  label {Use Default Display and View} selected
+                  tooltip {When this option is on, and your config.ocio has a default display and view, it will be used to be set as default.} xywh {421 236 288 24}
+                }
                 Fl_Light_Button uiOCIOUseActiveViews {
                   label {Use Active Views and Active Displays}
-                  tooltip {When this option is off, OCIO files with active_views: and active_displays: are not taken into account.} xywh {421 259 288 24}
+                  tooltip {When this option is off, OCIO files with active_views: and active_displays: are not taken into account.} xywh {421 276 288 24}
                 }
               }
             }
@@ -1247,7 +1251,7 @@ v->uiOCIO_Display_View->do_callback();}
             }
             Fl_Group {} {
               label Loading
-              xywh {288 37 555 360} align 5
+              xywh {288 37 555 360} align 5 hide
             } {
               Fl_Group {} {open
                 xywh {324 140 488 180}

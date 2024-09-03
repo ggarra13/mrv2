@@ -5,6 +5,10 @@
 #include <FL/Fl.H>
 #include <FL/platform.H>
 
+#include "mrvUI/mrvMonitor.h"
+
+#include "mrvFl/mrvIO.h"
+
 namespace
 {
     const char* kModule = "desktop";
@@ -82,6 +86,28 @@ namespace mrv
 #ifdef __APPLE__
             out = true;
 #endif
+            return out;
+        }
+        
+        std::string monitorName(int monitorIndex)
+        {
+            std::string out;
+            try
+            {
+                out = monitor::getName(monitorIndex);
+            }
+            catch (const std::exception& e)
+            {
+                LOG_INFO(e.what());
+            }
+
+            if (out.empty())
+            {
+                // Unknown OS, or could not retrieve monitor name.
+                // Just return Monitor #
+                out = _("Monitor ") + std::to_string(monitorIndex +1) + ":";
+            }
+
             return out;
         }
         

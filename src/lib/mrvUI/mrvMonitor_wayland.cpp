@@ -119,10 +119,10 @@ namespace
 
 namespace mrv
 {
-    namespace desktop
+    namespace monitor
     {
         // Get the monitor name given its FLTK screen index
-        std::string getWaylandMonitorName(int monitorIndex)
+        std::string getWaylandName(int monitorIndex)
         {
             std::string out;
             auto display = fl_wl_display();

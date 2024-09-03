@@ -928,12 +928,20 @@ namespace mrv
             if (!p.options.ocioOptions.look.empty())
                 ocio::setLook(p.options.ocioOptions.look);
 
-            if (!p.options.ocioOptions.display.empty() &&
-                !p.options.ocioOptions.view.empty())
-            {
-                const std::string& merged = ocio::displayViewShortened(
-                    p.options.ocioOptions.display, p.options.ocioOptions.view);
-                ocio::setView(merged);
+            if (!p.options.ocioOptions.display.empty())
+            { 
+                if (!p.options.ocioOptions.view.empty())
+                {
+                    const std::string& merged = ocio::displayViewShortened(
+                        p.options.ocioOptions.display,
+                        p.options.ocioOptions.view);
+                    ocio::setView(merged);
+                }
+                else
+                {
+                    LOG_ERROR(_("Please provide an ocio view parameter with "
+                                "-ov <view> too"));
+                }
             }
         }
         catch (const std::exception& e)

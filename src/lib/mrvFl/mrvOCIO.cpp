@@ -45,12 +45,12 @@ namespace mrv
             looks.push_back(kInactive);
             views.push_back(kInactive);
 
+            std::string defaultDisplay;
+            std::string defaultView;
+
 #ifdef TLRENDER_OCIO
             ViewerUI* ui = App::ui;
             PreferencesUI* uiPrefs = ui->uiPrefs;
-
-            std::string defaultDisplay;
-            std::string defaultView;
 
             const char* var = uiPrefs->uiPrefsOCIOConfig->value();
             if (var && strlen(var) > 0)
@@ -232,7 +232,7 @@ namespace mrv
 
 #endif
 
-            // Update UI......... TODO.........
+            // Update UI
             ui->uiICS->clear();
             ui->uiOCIOView->clear();
             ui->uiOCIOLook->clear();
@@ -251,6 +251,19 @@ namespace mrv
                 ui->uiOCIOLook->add(value.c_str());
             }
 
+            std::string display_view = uiPrefs->uiOCIO_Display_View->value();
+            if (uiPrefs->uiOCIOUseDefaultDisplayView->value())
+            {
+                // Set the default ocio display/view as found in config.ocio
+                // file.
+                display_view = displayViewShortened(defaultDisplay,
+                                                    defaultView);
+            }
+            
+            std::string view_prefs = uiPrefs->uiOCIO_Display_View->value();
+            if (!view_prefs.empty())
+                display_view = view_prefs;
+            
             // Set defaults if available in preferences
             std::string look = uiPrefs->uiOCIO_Look->value();
             try
@@ -262,7 +275,6 @@ namespace mrv
                 LOG_ERROR(e.what());
             }
 
-            std::string display_view = uiPrefs->uiOCIO_Display_View->value();
             try
             {
                 setView(display_view);
@@ -629,7 +641,7 @@ namespace mrv
         std::string displayViewShortened(
             const std::string& display, const std::string& view)
         {
-            if (view.empty() || view == kInactive)
+            if (display.empty() || view.empty() || view == kInactive)
                 return kInactive;
 
             std::string out;

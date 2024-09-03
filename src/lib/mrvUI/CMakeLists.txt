@@ -6,6 +6,7 @@ set(HEADERS
     mrvAsk.h
     mrvDesktop.h
     mrvMenus.h
+    mrvMonitor.h
     mrvUtil.h
 )
 

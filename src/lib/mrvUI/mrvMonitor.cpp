@@ -7,6 +7,8 @@
 #include <sstream>
 #include <string>
 
+#include "mrvUI/mrvMonitor.h"
+
 #ifdef _WIN32
 #    include "mrvUI/mrvMonitor_win32.cpp"
 #endif
@@ -25,8 +27,6 @@
 #undef None
 #include "mrvFl/mrvIO.h"
 
-#include "mrvUI/mrvDesktop.h"
-
 namespace
 {
     const char* kModule = "monitor";
@@ -34,7 +34,7 @@ namespace
 
 namespace mrv
 {
-    namespace desktop
+    namespace monitor
     {
         std::string getManufacturerName(const char* edidCode)
         {
@@ -145,28 +145,6 @@ namespace mrv
             // Not a name we know, just return its edidCode
             return std::string(edidCode);
         }
-        
 
-        std::string monitorName(int monitorIndex)
-        {
-            std::string out;
-            try
-            {
-                out = getMonitorName(monitorIndex);
-            }
-            catch (const std::exception& e)
-            {
-                LOG_INFO(e.what());
-            }
-
-            if (out.empty())
-            {
-                // Unknown OS, or could not retrieve monitor name.
-                // Just return Monitor #
-                out = _("Monitor ") + std::to_string(monitorIndex +1) + ":";
-            }
-
-            return out;
-        }
-    } // namespace desktop
+    } // namespace monitor
 } // namespace mrv

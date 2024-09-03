@@ -20,6 +20,8 @@ v1.2.6
 - Improved performance of redraws when using multiple monitors with OCIO.
 - Fixed some update issues in Top Bar's OCIO View display when using multiple
   monitors and OCIO was changed from the menus.
+- Fixed default ocio/view saved in config.ocio not being set automatically as
+  in v1.2.4 and earlier.
   
 
 v1.2.5

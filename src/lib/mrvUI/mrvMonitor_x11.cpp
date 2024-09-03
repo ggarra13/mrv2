@@ -15,8 +15,6 @@
 #include <X11/Xlib.h>
 #include <X11/extensions/Xrandr.h>
 
-#include "mrvUI/mrvDesktop.h"
-
 namespace
 {
 
@@ -63,13 +61,9 @@ namespace
          * Character 3 is 4 3 2 1 0
          * Those values start at 0 (0x00 is 'A', 0x01 is 'B', 0x19 is 'Z', etc.)
          */
-        char vendorId[4];
-        snprintf(
-            vendorId, 4, "%c%c%c", (edid[8] >> 2 & 0x1f) + 'A' - 1,
-            (((edid[8] & 0x3) << 3) | ((edid[9] & 0xe0) >> 5)) + 'A' - 1,
-            (edid[9] & 0x1f) + 'A' - 1);
-
-        std::string vendorName = mrv::desktop::getManufacturerName(vendorId);
+        auto vendorId = mrv::monitor::decodeEdidManufacturerId(edid + 8);
+        const std::string& vendorName =
+            mrv::monitor::getManufacturerName(vendorId.c_str());
         return vendorName + " " + modelName;
     }
 
@@ -110,10 +104,10 @@ namespace
 
 namespace mrv
 {
-    namespace desktop
+    namespace monitor
     {
         // Get the monitor name given its FLTK screen index
-        std::string getX11MonitorName(int monitorIndex)
+        std::string getX11Name(int monitorIndex)
         {
             std::string out;
             
@@ -170,5 +164,5 @@ namespace mrv
             return out;
         }
 
-    } // namespace desktop
+    } // namespace monitor
 } // namespace mrv
