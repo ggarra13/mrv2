@@ -17,6 +17,7 @@ v1.2.6
   standard movie file (not .otio).
 - Fixed cursor when entering text.
 - Improved port and monitor detection on Windows.
+- Improved performance of redraws when using multiple monitors with OCIO.
   
 
 v1.2.5

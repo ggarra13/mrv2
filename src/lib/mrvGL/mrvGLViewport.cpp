@@ -332,14 +332,17 @@ namespace mrv
                     int screen = this->screen_num();
                     if (screen >= 0 && !p.monitorOCIOOptions.empty() &&
                         screen < p.monitorOCIOOptions.size())
-                    {
+                    {   
                         timeline::OCIOOptions o = p.ocioOptions;
                         o.display = p.monitorOCIOOptions[screen].display;
                         o.view = p.monitorOCIOOptions[screen].view;
                         gl.render->setOCIOOptions(o);
 
-                        if (this == p.ui->uiView)
+                        // Avoid two expensive string functions if possible.
+                        if (screen != p.previous_screen &&
+                            this == p.ui->uiView)
                         {
+                            p.previous_screen = screen;
                             const std::string& combined =
                                 ocio::displayViewShortened(o.display, o.view);
                             p.ui->uiOCIOView->copy_label(combined.c_str());

@@ -49,6 +49,10 @@ namespace mrv
         math::Vector2i mousePress;
         math::Vector2i viewPosMousePress;
 
+        //! Previous screen where window was opened.  Used to avoid an
+        //! expensive string copy.
+        int previous_screen = -1;
+        
         //! Timer used to stop scrubbing if there's no action on the user's
         //! side.
         std::chrono::high_resolution_clock::time_point lastScrubTime;

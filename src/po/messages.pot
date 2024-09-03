@@ -2797,7 +2797,8 @@ msgid "French"
 msgstr ""
 
 msgid ""
-"Need to reboot mrv2 to change language.  Are you sure you want to continue?"
+"Need to reboot mrv2 to change language to {0}.  Are you sure you want to "
+"continue?"
 msgstr ""
 
 msgid "Set Language to {0}, Numbers to {1}"
