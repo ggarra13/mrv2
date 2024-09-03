@@ -73,18 +73,10 @@ if [[ "$CMAKE_TARGET" == "package" ]]; then
     
     clean_mo_files
     
-    if [[ "$CMAKE_BUILD_TYPE" == "Release" ]]; then
-    
-	cd $dir
-	
-	run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t pot
-	run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t mo
-	
-	cd -
-    fi
-
     cd $dir
-    
+	
+    run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t pot
+    run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t mo
     run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
 
     cd -
