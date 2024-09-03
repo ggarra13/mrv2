@@ -118,7 +118,7 @@ mrv2 binaries run on Windows 8.1+, RedHat 8.9+ or Ubuntu 20.04+ and macOS 11.0+.
   tar -xf mrv2-v1.0.0-Linux-amd64.tar.gz
 ```
 
-  That will create a folder in the direcory you uncompress it from.  You can
+  That will create a folder in the directory you uncompress it from.  You can
   then run mrv2 by using the mrv2.sh shell script in the bin/ subdirectory.
 
 # Features
