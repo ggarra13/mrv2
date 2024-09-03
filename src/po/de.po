@@ -2975,6 +2975,9 @@ msgstr "Ungltige OCIO-Anzeige/Ansicht '{0}'."
 msgid "Could not split '{0}' into display and view."
 msgstr "'{0}' kann nicht in Anzeige und Ansicht aufgeteilt werden."
 
+msgid "No default view for display '{0}'.  Does display exist?"
+msgstr ""
+
 msgid "Setting OCIO Preset '{0}'."
 msgstr "Einstellung OCIO Preset '{0}'."
 
@@ -3457,9 +3460,6 @@ msgstr "Ungltige Schriftart fr Textzeichnung"
 msgid "Could not convert message to shape: "
 msgstr "Nachricht kann nicht in Form konvertiert werden:"
 
-msgid "Monitor "
-msgstr "berwachung"
-
 msgid "File/Open/Movie or Sequence"
 msgstr "Datei/ffnen/Film oder Sequenz"
 
@@ -3878,6 +3878,9 @@ msgstr "Hilfe/Dokumentation"
 
 msgid "Help/About"
 msgstr "Hilfe/ber"
+
+msgid "Monitor "
+msgstr "berwachung"
 
 msgid "Favorites"
 msgstr "Favoriten"
@@ -5945,6 +5948,15 @@ msgstr "Eingebaute Einbauten"
 
 msgid "Pick a config.ocio file from disk."
 msgstr "Whlen Sie eine config.ocio-Datei von der Festplatte aus."
+
+#, fuzzy
+msgid "Use Default Display and View"
+msgstr "Standardanzeige / Sicht"
+
+msgid ""
+"When this option is on, and your config.ocio has a default display and view, "
+"it will be used to be set as default."
+msgstr ""
 
 msgid "Use Active Views and Active Displays"
 msgstr "Aktive Ansichten und aktive Displays verwenden"

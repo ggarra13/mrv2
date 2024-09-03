@@ -2980,6 +2980,9 @@ msgstr "Visualizzazione OCIO non valida/Vedi \"{0}\"."
 msgid "Could not split '{0}' into display and view."
 msgstr "Impossibile dividere '{0}' in visualizzazione e visualizzazione."
 
+msgid "No default view for display '{0}'.  Does display exist?"
+msgstr ""
+
 msgid "Setting OCIO Preset '{0}'."
 msgstr "Impostazione OCIO Preset '{0}'."
 
@@ -3461,9 +3464,6 @@ msgstr "Tipo di carattere non valido per il disegno di testo"
 msgid "Could not convert message to shape: "
 msgstr "Impossibile convertire il messaggio in forma:"
 
-msgid "Monitor "
-msgstr "Monitoraggio"
-
 msgid "File/Open/Movie or Sequence"
 msgstr "File/Apri/Film o sequenza"
 
@@ -3882,6 +3882,9 @@ msgstr "Aiuto/Documentazione"
 
 msgid "Help/About"
 msgstr "Aiuto/Circa"
+
+msgid "Monitor "
+msgstr "Monitoraggio"
 
 msgid "Favorites"
 msgstr "Preferiti"
@@ -5955,6 +5958,15 @@ msgstr "Confezioni incorporate"
 
 msgid "Pick a config.ocio file from disk."
 msgstr "Scegliere un file config.ocio dal disco."
+
+#, fuzzy
+msgid "Use Default Display and View"
+msgstr "Visualizzazione predefinita/Visualizza"
+
+msgid ""
+"When this option is on, and your config.ocio has a default display and view, "
+"it will be used to be set as default."
+msgstr ""
 
 msgid "Use Active Views and Active Displays"
 msgstr "Utilizza le viste attive e le visualizzazioni attive"

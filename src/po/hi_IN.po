@@ -2890,6 +2890,9 @@ msgstr "अवैध OCIO प्रदर्शन/दृश्य '{0}'."
 msgid "Could not split '{0}' into display and view."
 msgstr "'{0}' को प्रदर्शक व दृश्य में विभाजित नहीं कर सका."
 
+msgid "No default view for display '{0}'.  Does display exist?"
+msgstr ""
+
 msgid "Setting OCIO Preset '{0}'."
 msgstr "ओसीआईओ '{0}' सेट किया जा रहा है."
 
@@ -3371,9 +3374,6 @@ msgstr "पाठ ड्राइंग के लिए अवैध फ़ॉ�
 msgid "Could not convert message to shape: "
 msgstr "संदेश को आकार में परिवर्तित नहीं कर सका:"
 
-msgid "Monitor "
-msgstr "मॉनीटर"
-
 msgid "File/Open/Movie or Sequence"
 msgstr "फ़ाइल/खोलें/मूवी या अनुक्रम"
 
@@ -3790,6 +3790,9 @@ msgstr "मदद/दस्तावेज़ीकरण"
 
 msgid "Help/About"
 msgstr "मदद/के बारे में"
+
+msgid "Monitor "
+msgstr "मॉनीटर"
 
 msgid "Favorites"
 msgstr "पसंदीदा"
@@ -5780,6 +5783,15 @@ msgstr "अंतर्निर्मित कॉन्फ़िग्स"
 
 msgid "Pick a config.ocio file from disk."
 msgstr "डिस्क से एक कॉन्फ़िग फ़ाइल चुनें."
+
+#, fuzzy
+msgid "Use Default Display and View"
+msgstr "डिफ़ॉल्ट प्रदर्शक/दृश्य"
+
+msgid ""
+"When this option is on, and your config.ocio has a default display and view, "
+"it will be used to be set as default."
+msgstr ""
 
 msgid "Use Active Views and Active Displays"
 msgstr "सक्रिय दृश्य तथा सक्रिय प्रदर्शनों का प्रयोग करें"

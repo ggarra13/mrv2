@@ -3018,6 +3018,9 @@ msgstr "无效的 OCIO 显示/ 查看 '{0}' 。"
 msgid "Could not split '{0}' into display and view."
 msgstr "无法将 '{0}' 分割为显示和视图 。"
 
+msgid "No default view for display '{0}'.  Does display exist?"
+msgstr ""
+
 msgid "Setting OCIO Preset '{0}'."
 msgstr "设置 OCIO 预设 '{0}' 。"
 
@@ -3489,9 +3492,6 @@ msgstr "用于文本绘图的无效字体"
 msgid "Could not convert message to shape: "
 msgstr "无法将信息转换为形状 :"
 
-msgid "Monitor "
-msgstr "监视器"
-
 msgid "File/Open/Movie or Sequence"
 msgstr "文件/打开/影片或序列"
 
@@ -3910,6 +3910,9 @@ msgstr "帮助/文件"
 
 msgid "Help/About"
 msgstr "帮助/关于"
+
+msgid "Monitor "
+msgstr "监视器"
 
 msgid "Favorites"
 msgstr "Favorites"
@@ -5987,6 +5990,15 @@ msgstr "内建配置"
 
 msgid "Pick a config.ocio file from disk."
 msgstr "从磁盘中选取config.ocio配置文件 。"
+
+#, fuzzy
+msgid "Use Default Display and View"
+msgstr "默认显示/视图"
+
+msgid ""
+"When this option is on, and your config.ocio has a default display and view, "
+"it will be used to be set as default."
+msgstr ""
 
 msgid "Use Active Views and Active Displays"
 msgstr "使用活动视图和活动显示"

@@ -2751,6 +2751,9 @@ msgstr ""
 msgid "Could not split '{0}' into display and view."
 msgstr ""
 
+msgid "No default view for display '{0}'.  Does display exist?"
+msgstr ""
+
 msgid "Setting OCIO Preset '{0}'."
 msgstr ""
 
@@ -3222,9 +3225,6 @@ msgstr ""
 msgid "Could not convert message to shape: "
 msgstr ""
 
-msgid "Monitor "
-msgstr ""
-
 msgid "File/Open/Movie or Sequence"
 msgstr ""
 
@@ -3638,6 +3638,9 @@ msgid "Help/Documentation"
 msgstr ""
 
 msgid "Help/About"
+msgstr ""
+
+msgid "Monitor "
 msgstr ""
 
 msgid "Favorites"
@@ -5563,6 +5566,14 @@ msgid "Built-in Configs"
 msgstr ""
 
 msgid "Pick a config.ocio file from disk."
+msgstr ""
+
+msgid "Use Default Display and View"
+msgstr ""
+
+msgid ""
+"When this option is on, and your config.ocio has a default display and view, "
+"it will be used to be set as default."
 msgstr ""
 
 msgid "Use Active Views and Active Displays"

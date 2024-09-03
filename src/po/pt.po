@@ -2941,6 +2941,9 @@ msgstr "Display OCIO invlido/Ver '{0}'."
 msgid "Could not split '{0}' into display and view."
 msgstr "No foi possvel dividir '{0}' em exibio e visualizao."
 
+msgid "No default view for display '{0}'.  Does display exist?"
+msgstr ""
+
 msgid "Setting OCIO Preset '{0}'."
 msgstr "Configurao do OCIO Preset '{0}'."
 
@@ -3422,9 +3425,6 @@ msgstr "Fonte invlida para desenho de texto"
 msgid "Could not convert message to shape: "
 msgstr "No foi possvel converter a mensagem para forma:"
 
-msgid "Monitor "
-msgstr "Monitor "
-
 msgid "File/Open/Movie or Sequence"
 msgstr "Ficheiro/Abrir/Filme ou sequncia"
 
@@ -3843,6 +3843,9 @@ msgstr "Ajuda/Documentao"
 
 msgid "Help/About"
 msgstr "Ajuda/Sobre"
+
+msgid "Monitor "
+msgstr "Monitor "
 
 msgid "Favorites"
 msgstr "Favoritos"
@@ -5898,6 +5901,15 @@ msgstr "Condies incorporadas"
 
 msgid "Pick a config.ocio file from disk."
 msgstr "Escolha um arquivo config.ocio do disco."
+
+#, fuzzy
+msgid "Use Default Display and View"
+msgstr "Apresentao padro/Visualizao"
+
+msgid ""
+"When this option is on, and your config.ocio has a default display and view, "
+"it will be used to be set as default."
+msgstr ""
 
 msgid "Use Active Views and Active Displays"
 msgstr "Usar Visualizaes Ativas e Displays Ativos"
