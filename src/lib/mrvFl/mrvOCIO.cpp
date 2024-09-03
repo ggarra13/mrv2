@@ -564,7 +564,7 @@ namespace mrv
             }
             return value;
         }
-
+        
         std::string view()
         {
             auto uiOCIOView = App::ui->uiOCIOView;
@@ -791,6 +791,21 @@ namespace mrv
             return out;
         }
 
+        void setDisplay(const std::string& display)
+        {
+            auto defaultView = OCIOconfig->getDefaultView(display.c_str());
+            if (!defaultView || strlen(defaultView) == 0)
+            {
+                const std::string err =
+                    string::Format(_("No default view for display "
+                                     "'{0}'.  Does display exist?"))
+                        .arg(display);
+                throw std::runtime_error(err);
+            }
+            auto display_view = displayViewShortened(display, defaultView);
+            setView(display_view);
+        }
+        
         struct OCIODefaults
         {
             std::string bits8;

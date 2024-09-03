@@ -939,8 +939,7 @@ namespace mrv
                 }
                 else
                 {
-                    LOG_ERROR(_("Please provide an ocio view parameter with "
-                                "-ov <view> too"));
+                    ocio::setDisplay(p.options.ocioOptions.display);
                 }
             }
         }

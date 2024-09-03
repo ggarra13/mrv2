@@ -43,8 +43,13 @@ namespace mrv
             const std::string& combined, std::string& display,
             std::string& view);
 
+        // Set the display, with the default view if display exists.
+        void setDisplay(const std::string&);
+
         int viewIndex(const std::string&);
         std::string view();
+        
+        // Set view (display/view combined).
         void setView(const std::string&);
 
         std::vector<std::string> icsList();
