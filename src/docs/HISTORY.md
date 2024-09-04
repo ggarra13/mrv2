@@ -27,6 +27,8 @@ v1.2.6
 - Added option to use default ocio/view saved in config.ocio.
 - Added command-line option to just set the display only and it will use its
   default view for it.
+- Added warning about variable frame rate movies, like Ubuntu's screen captures.
+  They are played at 12 FPS.
   
 
 v1.2.5
