@@ -117,6 +117,13 @@ Here you can set the default settings for the view window.
 
 	   You can establish that mrv2 starts with Safe Areas on.
 
+.. topic:: OCIO in Top Bar
+
+	   When set, OCIO ICS, View and Look will be shown in the Top Bar of
+	   the UI.
+	   When not set, Gain (Exposure), Saturation and Gamma controls will
+	   be shown.
+
 .. topic:: Zoom Speed
 
 	   This controls how fast the mousewheel zoom is.

@@ -10,7 +10,7 @@ v1.2.6
 - Added lumma channel (Hotkey 'l' by default).
 - Allowed saving .otio movie files as .mp4, .mov, etc. files.  This allows
   turning an .otio file into a new movie file.  Useful when concatenating
-  movies with the Playlist panel or the -edl command-line switch.
+  movies with the Playlist panel or with the -edl command-line switch.
 - Fixed cancelling of language switch.
 - Added showing name of language that will be changed to.
 - Allowed saving a picture with no audio and then a movie with audio as a
@@ -20,8 +20,6 @@ v1.2.6
 - Improved performance of redraws when using multiple monitors with OCIO.
 - Fixed some update issues in Top Bar's OCIO View display when using multiple
   monitors and OCIO was changed from the menus.
-- Fixed default ocio/view saved in config.ocio not being set automatically as
-  in v1.2.4 and earlier.
 - Fixed view getting reset if a monitor's view was selected previous to
   selecting an image ics.
 - Added option to use default ocio/view saved in config.ocio.
@@ -29,6 +27,7 @@ v1.2.6
   default view for it.
 - Added warning about variable frame rate movies, like Ubuntu's screen captures.
   They are played at 12 FPS.
+- Added Darby's sequence fix.
   
 
 v1.2.5
