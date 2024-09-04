@@ -112,11 +112,13 @@ namespace mrv
                 throw std::runtime_error("Monitor index out of bounds");
             }
 
+            // Get path for monitor
+            const auto& path = paths[monitorIndex];
+            
             // Find the target (monitor) friendly name
             DISPLAYCONFIG_TARGET_DEVICE_NAME targetName = {};
-            targetName.header.adapterId =
-                paths[monitorIndex].targetInfo.adapterId;
-            targetName.header.id = paths[monitorIndex].targetInfo.id;
+            targetName.header.adapterId = path.targetInfo.adapterId;
+            targetName.header.id = path.targetInfo.id;
             targetName.header.type = DISPLAYCONFIG_DEVICE_INFO_GET_TARGET_NAME;
             targetName.header.size = sizeof(targetName);
 
@@ -134,9 +136,10 @@ namespace mrv
             if (targetName.flags.friendlyNameFromEdid)
             {
                 auto vendorId =
-                    monitor::decodeEdidManufactureId(targetName.edidManufactureId);                
-                out = getOutputTechnology(targetName.outputTechnology) + "-";
-                out += std::to_string(monitorIndex + 1) + ": ";
+                    monitor::decodeEdidManufactureId(targetName.edidManufactureId);
+                out = "#" + std::to_string(monitorIndex + 1) + ": ";
+                out += getOutputTechnology(targetName.outputTechnology);
+                out += " ";
                 out += getManufacturerName(vendorId.c_str());
                 out += " ";
                 std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>

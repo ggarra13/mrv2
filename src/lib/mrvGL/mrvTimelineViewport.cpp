@@ -1979,7 +1979,8 @@ namespace mrv
     {
         TLRENDER_P();
 
-        timeline::OCIOOptions o;
+        int screen = this->screen_num();
+        timeline::OCIOOptions o = getOCIOOptions(screen);
         o.fileName = p.ui->uiPrefs->uiPrefsOCIOConfig->value();
 
         std::string input = p.ui->uiICS->label();
@@ -2023,7 +2024,6 @@ namespace mrv
         int num_screens = Fl::screen_count();
         if (num_screens > 1)
         {
-            int screen = this->screen_num();
             setOCIOOptions(screen, o);
         }
 

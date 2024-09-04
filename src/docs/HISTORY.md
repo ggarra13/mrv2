@@ -22,6 +22,8 @@ v1.2.6
   monitors and OCIO was changed from the menus.
 - Fixed default ocio/view saved in config.ocio not being set automatically as
   in v1.2.4 and earlier.
+- Fixed view getting reset if a monitor's view was selected previous to
+  selecting an image ics.
   
 
 v1.2.5
