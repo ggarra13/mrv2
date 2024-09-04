@@ -28,6 +28,7 @@ v1.2.6
 - Added warning about variable frame rate movies, like Ubuntu's screen captures.
   They are played at 12 FPS.
 - Added Darby's sequence fix.
+- Better Chinese, German and Hindi translations.
   
 
 v1.2.5
