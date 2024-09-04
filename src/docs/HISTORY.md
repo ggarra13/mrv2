@@ -24,6 +24,9 @@ v1.2.6
   in v1.2.4 and earlier.
 - Fixed view getting reset if a monitor's view was selected previous to
   selecting an image ics.
+- Added option to use default ocio/view saved in config.ocio.
+- Added command-line option to just set the display only and it will use its
+  default view for it.
   
 
 v1.2.5
