@@ -7,6 +7,8 @@
 
 #include "mrvUI/mrvMonitor.h"
 
+#undef Status
+#undef None
 #include "mrvFl/mrvIO.h"
 
 namespace
