@@ -812,13 +812,9 @@ if (reason == FL_REASON_CLOSED)
       xywh {56 69 690 602} type Double align 80 resizable
       class {mrv::MainWindow} size_range {690 602 0 0} visible
     } {
-      Fl_Pack uiRegion {open
+      Fl_Flex uiRegion {open
         xywh {0 0 690 602} box FLAT_BOX resizable
-        code0 {o->fixed( uiMenuGroup, uiMenuGroup->h() );}
-        code1 {o->fixed( uiTopBar, uiTopBar->h() );}
-        code2 {o->fixed( uiBottomBar, uiBottomBar->h() );}
-        code3 {o->fixed( uiPixelBar, uiPixelBar->h() ); o->fixed( uiStatusGroup, uiStatusGroup->h() );}
-        class Fl_Flex
+        fixed_size_tuples {5  0 24  1 29  3 29  4 30  5 25 }
       } {
         Fl_Group uiMenuGroup {
           label MenuBar open
