@@ -1515,6 +1515,9 @@ msgstr "mrv2 से बाहर हों"
 msgid "Running from "
 msgstr "से चल रहा है"
 
+msgid "Could not initialize NDI"
+msgstr "नेडीआई प्रारंभ नहीं कर सका"
+
 msgid "Could not read python script '{0}'"
 msgstr "पायथन स्क्रिप्ट '{0}' पढ़ नहीं सका."
 
@@ -1526,9 +1529,6 @@ msgstr "आर्गुमेंट्स:"
 
 msgid "Python Error: "
 msgstr "पायथन त्रुटि:"
-
-msgid "Could not initialize NDI"
-msgstr "नेडीआई प्रारंभ नहीं कर सका"
 
 msgid "Filename '{0}' does not exist or does not have read permissions."
 msgstr "फ़ाइलनाम '{0}' मौजूद नहीं है या पढ़ने की अनुमति नहीं है."
@@ -4792,8 +4792,9 @@ msgid ""
 "* Full Pixel Values (Gamma, Gain and LUT)\n"
 "* Original (No Gamma, No Gain, No Lut)"
 msgstr ""
-"प्रदर्शित करता है: * सम्पूर्ण पिक्सेल मूल्य (जीममामा, गेन और LUT) * मूल में (कोई गामा नहीं, "
-"कोई गेन नहीं, न तो लूत)"
+"प्रदर्शित करता है:\n"
+"* (F) सम्पूर्ण पिक्सेल मूल्य (जीममामा, गेन और LUT)\n"
+"* (O) मूल में (कोई गामा नहीं, कोई गेन नहीं, न तो लूत)"
 
 msgid "Y"
 msgstr "Y"

@@ -6,6 +6,7 @@ v1.2.6
 - Build fixes and directory clean-up.  If building from source, you should run
   a full rebuild with "runme.sh clean".
 - Added Portuguese, Italian and French translations done with AI.
+- Better Chinese, German and Hindi translations.
 - Added top bar OCIO / Color toggle (Hotkey 't' by default).
 - Added lumma channel (Hotkey 'l' by default).
 - Allowed saving .otio movie files as .mp4, .mov, etc. files.  This allows
@@ -28,8 +29,11 @@ v1.2.6
 - Added warning about variable frame rate movies, like Ubuntu's screen captures.
   They are played at 12 FPS.
 - Added Darby's and my own Windows' sequence fix.
-- Better Chinese, German and Hindi translations.
-  
+- Made python scripts run AFTER ocio settings, so that OCIO can be easily baked.
+- Fixed and simplified bakeOCIO.py script.
+- Made python script be searched in mrv2's python/demos directory if it cannot
+  be found in the default path provided.
+
 
 v1.2.5
 ======

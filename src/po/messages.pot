@@ -1400,6 +1400,9 @@ msgstr ""
 msgid "Running from "
 msgstr ""
 
+msgid "Could not initialize NDI"
+msgstr ""
+
 msgid "Could not read python script '{0}'"
 msgstr ""
 
@@ -1410,9 +1413,6 @@ msgid "with Arguments:"
 msgstr ""
 
 msgid "Python Error: "
-msgstr ""
-
-msgid "Could not initialize NDI"
 msgstr ""
 
 msgid "Filename '{0}' does not exist or does not have read permissions."

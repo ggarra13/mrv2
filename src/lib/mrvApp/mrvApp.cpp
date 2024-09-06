@@ -878,23 +878,28 @@ namespace mrv
         // Run command-line python script.
         //
         if (!p.options.pythonScript.empty())
-        {       
-            if (!file::isReadable(p.options.pythonScript))
+        {
+            std::string script = p.options.pythonScript;
+            if (!file::isReadable(script))
             {
-                std::cerr << std::string(
-                                 string::Format(
-                                     _("Could not read python script '{0}'"))
-                                     .arg(p.options.pythonScript))
-                          << std::endl;
-                _exit = 1;
-                return;
+                // Search for script in mrv2's python demos directory.
+                script = pythonpath() + script;
+                if (!file::isReadable(script))
+                {
+                    std::cerr << std::string(
+                        string::Format(
+                            _("Could not read python script '{0}'"))
+                        .arg(p.options.pythonScript))
+                              << std::endl;
+                    _exit = 1;
+                    return;
+                }
             }
 
             p.pythonArgs = std::make_unique<PythonArgs>(p.options.pythonArgs);
 
-            LOG_INFO(
-                std::string(string::Format(_("Running python script '{0}'"))
-                                .arg(p.options.pythonScript)));
+            LOG_INFO(std::string(
+                string::Format(_("Running python script '{0}'")).arg(script)));
             const auto& args = p.pythonArgs->getArguments();
 
             if (!args.empty())
@@ -906,7 +911,7 @@ namespace mrv
                 LOG_INFO(out);
             }
 
-            std::ifstream is(p.options.pythonScript);
+            std::ifstream is(script);
             std::stringstream s;
             s << is.rdbuf();
             try
