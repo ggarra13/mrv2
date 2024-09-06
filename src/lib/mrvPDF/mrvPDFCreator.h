@@ -5,7 +5,9 @@
 #include <vector>
 #include <memory>
 
-#include <hpdf.h>
+#include <tlCore/Vector.h>
+
+#include <FL/Fl_PDF_File_Surface.H>
 
 #include "mrvGL/mrvGLErrors.h"
 
@@ -47,24 +49,22 @@ namespace mrv
 
             unsigned thumbnailHeight;
 
-            HPDF_Doc pdf;
-            HPDF_Page page;
-            HPDF_Font time_font;
-            HPDF_Font note_font;
-            HPDF_REAL tw;
-            HPDF_REAL height;
-            HPDF_REAL width;
-            HPDF_Point P;
-            HPDF_Point margin;
-            HPDF_Image image;
+            Fl_PDF_File_Surface pdf;
+            int width, height;
+
+            int time_margin, image_margin;
+            
+            math::Vector2i P;
+            math::Vector2i margin;
 
             void addPage();
             void flip_image_y(
                 GLubyte* image, const int width, const int height,
                 const int channels = 3);
-            void create_thumbnail(size_t W, size_t H, const HPDF_BYTE* buffer);
-            void print_time(HPDF_Font font, const ViewerUI* ui);
-            void print_note(HPDF_Font font, const std::string& text);
+            void create_thumbnail(size_t W, size_t H,
+                                  const unsigned char* buffer);
+            void print_time(Fl_Font font, const ViewerUI* ui);
+            void print_note(Fl_Font font, const std::string& text);
         };
 
     } // namespace pdf

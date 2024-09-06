@@ -41,9 +41,9 @@ namespace mrv
             looks.clear();
             views.clear();
 
-            inputs.push_back(kInactive);
-            looks.push_back(kInactive);
-            views.push_back(kInactive);
+            inputs.push_back(_(kInactive.c_str()));
+            looks.push_back(_(kInactive.c_str()));
+            views.push_back(_(kInactive.c_str()));
 
             std::string defaultDisplay;
             std::string defaultView;

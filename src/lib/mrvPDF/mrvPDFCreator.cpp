@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <setjmp.h>
 
 #include <filesystem>
 namespace fs = std::filesystem;
@@ -12,6 +11,8 @@ namespace fs = std::filesystem;
 #include <tlCore/StringFormat.h>
 
 #include <tlUI/ThumbnailSystem.h>
+
+#include <FL/fl_draw.H>
 
 #include "mrvCore/mrvString.h"
 #include "mrvCore/mrvHome.h"
@@ -28,24 +29,10 @@ jmp_buf env;
 namespace
 {
     const char* kModule = "pdf";
-    const char* kFont = "FreeSans.ttf";
 
     const unsigned kTitleSize = 16;
 } // namespace
 
-#ifdef HPDF_DLL
-void __stdcall pdf_error_handler(
-    HPDF_STATUS error_no, HPDF_STATUS detail_no, void* user_data)
-#else
-void pdf_error_handler(
-    HPDF_STATUS error_no, HPDF_STATUS detail_no, void* user_data)
-#endif
-{
-    LOG_ERROR(
-        "error_no=" << (HPDF_UINT)error_no
-                    << " detail_no=" << (HPDF_UINT)detail_no);
-    longjmp(env, 1);
-}
 
 namespace mrv
 {
@@ -63,46 +50,28 @@ namespace mrv
         {
             margin.x = 10;
             margin.y = 10;
+
+            time_margin = 27;
+            image_margin = 12;
         }
 
         void Creator::addPage()
         {
             /* Add a new page object. */
-            page = HPDF_AddPage(pdf);
+            int err = pdf.begin_page();
+            if (err)
+            {
+                LOG_ERROR("Error in pdf.begin_page");
+                return;
+            }
 
-            height = HPDF_Page_GetHeight(page);
-            width = HPDF_Page_GetWidth(page);
-
+            pdf.printable_rect(&width, &height);
+            
             /* Print the lines of the page. */
-            HPDF_Page_SetLineWidth(page, 1);
-            HPDF_Page_Rectangle(page, 50, 50, width - 100, height - 110);
-            HPDF_Page_Stroke(page);
-
-            // Get True-Type font_name
-            const std::string fontPath = rootpath() + "/fonts/" + kFont;
-            if (fs::exists(fontPath))
-            {
-                const char* font_name =
-                    HPDF_LoadTTFontFromFile(pdf, fontPath.c_str(), HPDF_TRUE);
-
-                /* Print the title of the page (with positioning center). */
-                note_font = HPDF_GetFont(pdf, font_name, "UTF-8");
-                HPDF_Page_SetFontAndSize(page, note_font, kTitleSize);
-
-                time_font = HPDF_GetFont(pdf, font_name, "UTF-8");
-                HPDF_Page_SetFontAndSize(page, time_font, kTitleSize);
-            }
-            else
-            {
-                LOG_WARNING(_("Font not found.  Will not use UTF-8."));
-
-                /* Print the title of the page (with positioning center). */
-                note_font = HPDF_GetFont(pdf, "Helvetica", NULL);
-                HPDF_Page_SetFontAndSize(page, note_font, kTitleSize);
-
-                time_font = HPDF_GetFont(pdf, "Helvetica", NULL);
-                HPDF_Page_SetFontAndSize(page, time_font, kTitleSize);
-            }
+            fl_color(FL_BLACK);
+            
+            fl_line_style(FL_SOLID, 1);
+            fl_rect(50, 50, width - 100, height - 100);
 
             auto model = App::app->filesModel();
             auto item = model->observeA()->get();
@@ -115,13 +84,16 @@ namespace mrv
                 page_title, 256, _("%s - Page %d"), title.c_str(), pageNumber);
             ++pageNumber;
 
-            tw = HPDF_Page_TextWidth(page, page_title);
-            HPDF_Page_BeginText(page);
-            HPDF_Page_TextOut(page, (width - tw) / 2, height - 50, page_title);
-            HPDF_Page_EndText(page);
+            // Draw Page Title
+            fl_font(FL_HELVETICA, 20);
+            int tw, th;
+            fl_measure(page_title, tw, th);
+            fl_draw(page_title, (width - tw) / 2, th);
 
             P.x = 55;
-            P.y = height - 160;
+            P.y = 55;
+            
+            Fl_Surface_Device::pop_current();
         }
 
         void Creator::flip_image_y(
@@ -146,11 +118,13 @@ namespace mrv
         }
 
         void
-        Creator::create_thumbnail(size_t W, size_t H, const HPDF_BYTE* buffer)
+        Creator::create_thumbnail(size_t W, size_t H,
+                                  const unsigned char* buffer)
         {
-            image = HPDF_LoadRawImageFromMem(
-                pdf, buffer, W, H, HPDF_CS_DEVICE_RGB, 8);
+            Fl_Surface_Device::push_current(&pdf);
 
+            Fl_RGB_Image image(buffer, W, H, 3);
+            
             int Xoffset = 0;
             if (W >= H)
             {
@@ -173,77 +147,79 @@ namespace mrv
                 H = thumbnailHeight = H2;
             }
 
-            HPDF_Page_DrawImage(page, image, P.x + Xoffset, P.y, W, H);
+            Fl_Image* resized = image.copy(W, H);
+            resized->draw(P.x + Xoffset, P.y);
+            delete resized;
+            
+            Fl_Surface_Device::pop_current();
         }
 
-        void Creator::print_time(HPDF_Font font, const ViewerUI* ui)
+        void Creator::print_time(Fl_Font font, const ViewerUI* ui)
         {
-            HPDF_Page_BeginText(page);
-
-            HPDF_Page_SetFontAndSize(page, font, 12);
-            HPDF_Page_MoveTextPos(
-                page, P.x + kThumbnailWidth + margin.x,
-                P.y + thumbnailHeight - 12);
-
+            Fl_Surface_Device::push_current(&pdf);
+            
+            fl_color(FL_BLACK);
+            fl_font(font, 11);
+            
             std::string buf =
                 tl::string::Format(_("Frame {0} - Timecode: {1} - {2} Secs."))
                     .arg(time.to_frames())
                     .arg(time.to_timecode())
                     .arg(time.to_seconds());
 
-            // Write out each line
-            HPDF_Page_ShowText(page, buf.c_str());
+            int tw, th;
+            fl_measure(buf.c_str(), tw, th);
+            fl_draw(buf.c_str(), P.x + kThumbnailWidth + margin.x,
+                    P.y + th / 2);
 
-            HPDF_Page_EndText(page);
+            Fl_Surface_Device::pop_current();
         }
 
-        void Creator::print_note(HPDF_Font font, const std::string& text)
+        void Creator::print_note(Fl_Font font, const std::string& text)
         {
-            HPDF_Page_BeginText(page);
+            Fl_Surface_Device::push_current(&pdf);
 
-            HPDF_Page_SetFontAndSize(page, font, 9);
-            HPDF_Page_MoveTextPos(
-                page, P.x + kThumbnailWidth + margin.x,
-                P.y + thumbnailHeight - 27);
 
+            fl_color(FL_BLACK);
+            fl_font(font, 9);
+
+            int tw, th;
+
+            int Y = P.y + time_margin;
+            
             // Split text into lines
             auto lines = string::split(text, '\n');
 
             // Write out each line
             for (const auto& line : lines)
             {
-                HPDF_Page_ShowText(page, line.c_str());
-                HPDF_Page_MoveTextPos(page, 0, -12);
+                fl_draw(line.c_str(), P.x + kThumbnailWidth + margin.x, Y);
+
+                fl_measure(line.c_str(), tw, th);
+                Y += th;
             }
 
-            HPDF_Page_EndText(page);
+            Fl_Surface_Device::pop_current();
         }
 
         bool Creator::create()
         {
-            pdf = HPDF_New(pdf_error_handler, NULL);
-            if (!pdf)
+            char* err_message;
+            int err = pdf.begin_document(file.c_str(), Fl_Paged_Device::A4,
+                                         Fl_Paged_Device::PORTRAIT, &err_message);
+            if (err)
             {
-                LOG_ERROR("error: cannot create PdfDoc object");
+                LOG_ERROR(err_message);
                 return false;
             }
-
-            if (setjmp(env))
-            {
-                HPDF_Free(pdf);
-                return false;
-            }
-
-            HPDF_SetCompressionMode(pdf, HPDF_COMP_ALL);
-
-            HPDF_UseUTFEncodings(pdf);
-            HPDF_SetCurrentEncoder(pdf, "UTF-8");
 
             addPage();
 
             auto view = ui->uiView;
             auto player = view->getTimelinePlayer();
             bool presentation = view->getPresentationMode();
+            // Turn off hud so it does not get captured by glReadPixels.
+            bool hud = view->getHudActive();
 
             view->setPresentationMode(true);
             view->redraw();
@@ -292,11 +268,9 @@ namespace mrv
             // Don't send any tcp updates
             tcp->lock();
 
-            // Turn off hud so it does not get captured by glReadPixels.
-            bool hud = view->getHudActive();
             view->setHudActive(false);
             view->setActionMode(ActionMode::kScrub);
-
+            
             TimelineClass* c = ui->uiTimeWindow;
 
             const GLenum format = GL_RGB;
@@ -325,7 +299,7 @@ namespace mrv
                 create_thumbnail(renderSize.w, renderSize.h, buffer);
 
                 // print time
-                print_time(time_font, ui);
+                print_time(FL_HELVETICA, ui);
 
                 for (const auto& shape : annotation->shapes)
                 {
@@ -333,35 +307,31 @@ namespace mrv
                     if (!note)
                         continue;
 
-                    print_note(note_font, note->text);
+                    print_note(FL_HELVETICA, note->text);
                 }
-
-                P.y -= (thumbnailHeight + margin.y);
-
-                if (P.y <= 50)
+            
+                P.y += thumbnailHeight + image_margin;
+            
+                if (P.y > height - 50 - thumbnailHeight)
                 {
+                    pdf.end_page();
+                    
                     addPage();
                 }
             }
-
+            
             delete[] buffer;
+            
+
+            pdf.end_page();
 
             view->setPresentationMode(presentation);
             view->setHudActive(hud);
+            
             tcp->unlock();
 
-            try
-            {
-                // do page description processes
-                HPDF_SaveToFile(pdf, file.c_str());
-            }
-            catch (...)
-            {
-                HPDF_Free(pdf);
-                return false;
-            }
+            pdf.end_job();
 
-            HPDF_Free(pdf);
             return true;
         }
 
