@@ -34,6 +34,8 @@ v1.2.6
 - Fixed and simplified bakeOCIO.py script.
 - Made python script be searched in $STUDIOPATH/python/ directory and
   in mrv2's python/demos directory if it cannot be found directly.
+- Sped up monitor look up on X11 which was slowing down channel switching or
+  image mirroring.
 
 
 v1.2.5

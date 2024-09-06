@@ -2,7 +2,7 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-
+#include <map>
 
 #include <FL/platform.H>
 
@@ -18,10 +18,19 @@ namespace mrv
 {
     namespace monitor
     {
+        // We cache the names as getting them from X11 can be slow
+        std::map<int, std::string> names;
+        
         // Get the monitor name given its FLTK screen index
         std::string getName(int monitorIndex)
         {
             std::string out;
+
+            if (names.find(monitorIndex) != names.end())
+            {
+                return names[monitorIndex];
+            }
+            
 #ifdef FLTK_USE_X11
             if (fl_x11_display())
                 out = getX11Name(monitorIndex);
@@ -30,6 +39,9 @@ namespace mrv
             if (fl_wl_display())
                 out = getWaylandName(monitorIndex);
 #endif
+
+            names[monitorIndex] = out;
+            
             return out;
         }
     } // namespace desktop
