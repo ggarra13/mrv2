@@ -882,18 +882,24 @@ namespace mrv
             std::string script = p.options.pythonScript;
             if (!file::isReadable(script))
             {
-                // Search for script in mrv2's python demos directory.
-                script = pythonpath() + script;
+                // Search for script in $STUDIOPATH/python/ directory
+                script = studiopath() + "/python/" + script;
                 if (!file::isReadable(script))
                 {
-                    std::cerr << std::string(
-                        string::Format(
-                            _("Could not read python script '{0}'"))
-                        .arg(p.options.pythonScript))
-                              << std::endl;
-                    _exit = 1;
-                    return;
+                    // Search for script in mrv2's python demos directory.
+                    script = pythonpath() + script;
+                    if (!file::isReadable(script))
+                    {
+                        std::cerr << std::string(
+                            string::Format(
+                                _("Could not read python script '{0}'"))
+                            .arg(p.options.pythonScript))
+                                  << std::endl;
+                        _exit = 1;
+                        return;
+                    }
                 }
+                
             }
 
             p.pythonArgs = std::make_unique<PythonArgs>(p.options.pythonArgs);

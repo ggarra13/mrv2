@@ -4,7 +4,8 @@ v1.2.6
 - Added Preferences->User Interface->View Window->OCIO In Top Bar to turn on
   OCIO at start of UI.
 - Build fixes and directory clean-up.  If building from source, you should run
-  a full rebuild with "runme.sh clean".
+  a full rebuild with "runme.sh clean", as the whole directory structure of
+  the mrv2 repository was changed.
 - Added Portuguese, Italian and French translations done with AI.
 - Better Chinese, German and Hindi translations.
 - Added top bar OCIO / Color toggle (Hotkey 't' by default).
@@ -31,8 +32,8 @@ v1.2.6
 - Added Darby's and my own Windows' sequence fix.
 - Made python scripts run AFTER ocio settings, so that OCIO can be easily baked.
 - Fixed and simplified bakeOCIO.py script.
-- Made python script be searched in mrv2's python/demos directory if it cannot
-  be found in the default path provided.
+- Made python script be searched in $STUDIOPATH/python/ directory and
+  in mrv2's python/demos directory if it cannot be found directly.
 
 
 v1.2.5
