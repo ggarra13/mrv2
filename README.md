@@ -11,7 +11,9 @@
 mrv2
 ====
 
-mrv2 is an open source professional player and review tool for vfx, animation and computer graphics.
+mrv2 is an open source professional player and review tool for VFX, animation and computer graphics.
+
+![banner](https://github.com/ggarra13/mrv2/blob/main/docs/www/files/Main_UI.png)
 
 Contents:
 
