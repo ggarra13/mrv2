@@ -27,7 +27,7 @@ v1.2.6
   default view for it.
 - Added warning about variable frame rate movies, like Ubuntu's screen captures.
   They are played at 12 FPS.
-- Added Darby's sequence fix.
+- Added Darby's and my own Windows' sequence fix.
 - Better Chinese, German and Hindi translations.
   
 

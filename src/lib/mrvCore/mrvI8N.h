@@ -10,7 +10,7 @@
 #define _(String) gettext2(String)
 
 /**
- * A safe gettext() function that does not return null if msig is not found
+ * A safe gettext() function that does not return null if msgid is not found
  *
  * @param msgid gettext's mesgid
  *
