@@ -599,73 +599,6 @@ namespace mrv
         
         Preferences::run();
 
-#ifdef MRV2_PYBIND11
-
-        // Import the mrv2 python module so we read all python
-        // plug-ins.
-        py::module::import("mrv2");
-
-        // Discover Python plugins
-        mrv2_discover_python_plugins();
-
-        
-        if (!p.options.pythonScript.empty())
-        {       
-            if (!file::isReadable(p.options.pythonScript))
-            {
-                std::cerr << std::string(
-                                 string::Format(
-                                     _("Could not read python script '{0}'"))
-                                     .arg(p.options.pythonScript))
-                          << std::endl;
-                _exit = 1;
-                return;
-            }
-
-            p.pythonArgs = std::make_unique<PythonArgs>(p.options.pythonArgs);
-
-            LOG_INFO(
-                std::string(string::Format(_("Running python script '{0}'"))
-                                .arg(p.options.pythonScript)));
-            const auto& args = p.pythonArgs->getArguments();
-
-            if (!args.empty())
-            {
-                LOG_INFO(_("with Arguments:"));
-                std::string out = "[";
-                out += tl::string::join(args, ',');
-                out += "]";
-                LOG_INFO(out);
-            }
-
-            std::ifstream is(p.options.pythonScript);
-            std::stringstream s;
-            s << is.rdbuf();
-            try
-            {
-                py::exec(s.str());
-            }
-            catch (const std::exception& e)
-            {
-                std::cerr << _("Python Error: ") << std::endl
-                          << e.what() << std::endl;
-                _exit = 1;
-                return;
-            }
-            delete ui;
-            ui = nullptr;
-            return;
-        }
-#endif
-        
-#ifdef MRV2_PYBIND11
-        // Create Python's output window
-        outputDisplay = new PythonOutput(0, 0, 400, 400);
-
-        // Redirect Python's stdout/stderr to my own class
-        p.pythonStdErrOutRedirect.reset(new PyStdErrOutStreamRedirect);
-#endif
-
 #if defined(TLRENDER_USD)
         if (p.options.usdOverrides)
         {
@@ -906,20 +839,12 @@ namespace mrv
             tcp = new Client(p.options.client, p.options.port);
             store_port(p.options.port);
         }
+        
 #endif
-        ui->uiMain->show();
-        ui->uiView->take_focus();
 
-        if (!p.session)
-            Preferences::open_windows();
-        ui->uiMain->fill_menu(ui->uiMenuBar);
-
-        if (ui->uiSecondary)
-        {
-            // We raise the secondary window last, so it shows at front
-            ui->uiSecondary->window()->show();
-        }
-
+        //
+        // Handle command-line OCIO
+        //
         try
         {
             if (!p.options.ocioOptions.input.empty())
@@ -946,6 +871,81 @@ namespace mrv
         catch (const std::exception& e)
         {
             LOG_ERROR(e.what());
+        }
+
+#ifdef MRV2_PYBIND11
+        //
+        // Run command-line python script.
+        //
+        if (!p.options.pythonScript.empty())
+        {       
+            if (!file::isReadable(p.options.pythonScript))
+            {
+                std::cerr << std::string(
+                                 string::Format(
+                                     _("Could not read python script '{0}'"))
+                                     .arg(p.options.pythonScript))
+                          << std::endl;
+                _exit = 1;
+                return;
+            }
+
+            p.pythonArgs = std::make_unique<PythonArgs>(p.options.pythonArgs);
+
+            LOG_INFO(
+                std::string(string::Format(_("Running python script '{0}'"))
+                                .arg(p.options.pythonScript)));
+            const auto& args = p.pythonArgs->getArguments();
+
+            if (!args.empty())
+            {
+                LOG_INFO(_("with Arguments:"));
+                std::string out = "[";
+                out += tl::string::join(args, ',');
+                out += "]";
+                LOG_INFO(out);
+            }
+
+            std::ifstream is(p.options.pythonScript);
+            std::stringstream s;
+            s << is.rdbuf();
+            try
+            {
+                py::exec(s.str());
+            }
+            catch (const std::exception& e)
+            {
+                std::cerr << _("Python Error: ") << std::endl
+                          << e.what() << std::endl;
+                _exit = 1;
+                return;
+            }
+            delete ui;
+            ui = nullptr;
+            return;
+        }
+        
+        // Create Python's output window
+        outputDisplay = new PythonOutput(0, 0, 400, 400);
+
+        // Redirect Python's stdout/stderr to my own class
+        p.pythonStdErrOutRedirect.reset(new PyStdErrOutStreamRedirect);
+#endif
+        
+        //
+        // Show the UI
+        //
+        ui->uiMain->show();
+        ui->uiView->take_focus();
+
+        if (!p.session)
+            Preferences::open_windows();
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+
+        if (ui->uiSecondary)
+        {
+            // We raise the secondary window last, so it shows at front
+            ui->uiSecondary->window()->show();
         }
     }
 
