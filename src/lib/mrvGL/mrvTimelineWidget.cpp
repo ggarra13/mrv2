@@ -650,22 +650,6 @@ namespace mrv
         }
     }
 
-    void TimelineWidget::setLUTOptions(const timeline::LUTOptions& lutOptions)
-    {
-        TLRENDER_P();
-        if (lutOptions == p.lutOptions)
-            return;
-        p.lutOptions = lutOptions;
-    }
-
-    void TimelineWidget::setOCIOOptions(const timeline::OCIOOptions& value)
-    {
-        TLRENDER_P();
-        if (p.ocioOptions == value)
-            return;
-        p.ocioOptions = value;
-    }
-
     bool TimelineWidget::hasFrameView() const
     {
         return _p->timelineWidget->hasFrameView();

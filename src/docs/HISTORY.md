@@ -43,6 +43,7 @@ v1.2.6
 - Fixed drawn annotations disappearing when a text note in the same frame was 
   cleared.
 - Removed LibHaru dependency, as PDF creation is now handled by FLTK.
+- Added OCIO options and LUT options to timeline, using Darby's new code.
 
 
 v1.2.5

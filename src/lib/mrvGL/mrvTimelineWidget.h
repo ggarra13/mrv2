@@ -48,12 +48,6 @@ namespace mrv
 
         void setStyle(const std::shared_ptr<ui::Style>& = nullptr);
 
-        //! Set the LUT configuration.
-        void setLUTOptions(const timeline::LUTOptions&);
-
-        //! Set the color configuration.
-        void setOCIOOptions(const timeline::OCIOOptions&);
-
         //! Get timelineUI's timelineWidget item options
         timelineui::ItemOptions getItemOptions() const;
         

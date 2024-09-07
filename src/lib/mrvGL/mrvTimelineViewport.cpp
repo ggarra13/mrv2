@@ -778,7 +778,9 @@ namespace mrv
             Viewport* view = p.ui->uiSecondary->viewport();
             view->setOCIOOptions(value);
         }
-        p.ui->uiTimeline->setOCIOOptions(value);
+        auto display = p.ui->uiTimeline->getDisplayOptions();
+        display.ocio = value;
+        p.ui->uiTimeline->setDisplayOptions(display);
         p.ui->uiTimeline->redraw(); // to refresh thumbnail
 
         Message msg;
@@ -803,6 +805,11 @@ namespace mrv
         if (value == p.lutOptions)
             return;
         p.lutOptions = value;
+        
+        auto display = p.ui->uiTimeline->getDisplayOptions();
+        display.lut = value;
+        p.ui->uiTimeline->setDisplayOptions(display);
+        p.ui->uiTimeline->redraw(); // to refresh thumbnail
         redraw();
     }
 

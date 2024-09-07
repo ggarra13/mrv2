@@ -54,8 +54,6 @@ namespace mrv
         std::shared_ptr<observer::ListObserver<int> > bIndexesObserver;
         std::shared_ptr<observer::ValueObserver<timeline::CompareOptions> >
             compareOptionsObserver;
-        std::shared_ptr<observer::ValueObserver<timeline::OCIOOptions> >
-            ocioOptionsObserver;
         std::shared_ptr<observer::ValueObserver<Stereo3DOptions> >
             stereo3DOptionsObserver;
         std::shared_ptr<observer::ValueObserver<FilesPanelOptions> >
@@ -229,6 +227,11 @@ namespace mrv
             view->setDisplayOptions({p.displayOptions});
         }
 
+        auto display = p.ui->uiTimeline->getDisplayOptions();
+        display.lut = p.lutOptions;
+        p.ui->uiTimeline->setDisplayOptions(display);
+        p.ui->uiTimeline->redraw();
+
         if (panel::colorPanel)
         {
             panel::colorPanel->setLUTOptions(p.lutOptions);
@@ -400,6 +403,11 @@ namespace mrv
         view->updatePlaybackButtons();
         view->updateDisplayOptions();
         view->redraw();
+
+        auto display = p.ui->uiTimeline->getDisplayOptions();
+        display.ocio = p.ocioOptions;
+        p.ui->uiTimeline->setDisplayOptions(display);
+        p.ui->uiTimeline->redraw();
 
         if (panel::comparePanel)
         {
