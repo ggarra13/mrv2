@@ -46,6 +46,7 @@ v1.2.6
 - Added OCIO options and LUT options to timeline, using Darby's new code.
 - Fixed page creation when creating PDFs.
 - Fixed PDFs' time information going outside the page on macOS.
+- Fixed PDF creation drawing annotations on the wrong frames on large movies.
 
 
 v1.2.5
