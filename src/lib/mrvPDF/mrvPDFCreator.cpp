@@ -221,8 +221,8 @@ namespace mrv
                     {
                         for (const auto& t : value.videoFrames)
                         {
-                            if (time >= t.start_time() &&
-                                time <= t.end_time_exclusive())
+                            if (this->time >= t.start_time() &&
+                                this->time <= t.end_time_exclusive())
                             {
                                 found = true;
                                 break;
