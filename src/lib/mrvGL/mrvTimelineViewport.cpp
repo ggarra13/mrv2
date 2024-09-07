@@ -2006,9 +2006,6 @@ namespace mrv
             if (ok == 0)
             {
                 combined = name;
-                if (combined[0] == '/')
-                    combined = combined.substr(1, combined.size());
-                m->copy_label(combined.c_str());
             }
 
             if (combined != _("None"))
