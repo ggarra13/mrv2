@@ -53,7 +53,7 @@ set(mrv2_ARGS
 ExternalProject_Add(
     mrv2
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/mrv2
-    DEPENDS tlRender ${FLTK_DEP} ${PYTHON_DEP} ${PYBIND11_DEP} ${pyFLTK_DEP} ${POCO_DEP} ${LibHaru_DEP} ${Gettext_DEP}
+    DEPENDS tlRender ${FLTK_DEP} ${PYTHON_DEP} ${PYBIND11_DEP} ${pyFLTK_DEP} ${POCO_DEP} ${Gettext_DEP}
     SOURCE_DIR ${CMAKE_SOURCE_DIR}/src
     LIST_SEPARATOR |
     CMAKE_ARGS ${mrv2_ARGS}

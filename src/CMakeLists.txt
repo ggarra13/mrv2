@@ -82,12 +82,7 @@ if( MRV2_NETWORK )
     add_definitions( -DMRV2_NETWORK )
 endif()
 
-set(LibHaru )
-if( MRV2_PDF )
-    find_library( LibHaru NAMES hpdf )
-    if(UNIX AND NOT APPLE)
-	list(APPEND LibHaru m)
-    endif()
+if(MRV2_PDF)
     add_definitions( -DMRV2_PDF )
 endif()
 
