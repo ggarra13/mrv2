@@ -2286,11 +2286,13 @@ namespace mrv
                 it = shapes.erase(it);
                 if (ui->uiPrefs->SendAnnotations->value())
                     tcp->pushMessage("Clear Note Annotation", "");
-
-                if (it == shapes.end())
-                    player->clearFrameAnnotation();
                 break;
             }
+        }
+
+        if (shapes.empty())
+        {
+            player->clearFrameAnnotation();
         }
     }
 

@@ -36,6 +36,11 @@ v1.2.6
   in mrv2's python/demos directory if it cannot be found directly.
 - Sped up monitor look up on X11 which was slowing down channel switching or
   image mirroring.
+- Made File->Save PDF save out international characters properly.  You can now save
+  annotations written in Chinese, for example.
+- Made File->Save PDF work properly on Wayland.
+- Made File->Save PDF refresh properly, as it was buggy.
+- Fixed drawn annotations disappearing when a text note in the same frame was cleared.
 
 
 v1.2.5

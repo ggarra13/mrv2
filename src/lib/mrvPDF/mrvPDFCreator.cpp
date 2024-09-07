@@ -12,6 +12,10 @@ namespace fs = std::filesystem;
 
 #include <tlCore/StringFormat.h>
 
+#include <tlIO/System.h>
+
+#include <tlGL/Init.h>
+
 #include <tlUI/ThumbnailSystem.h>
 
 #include <FL/fl_draw.H>
@@ -19,8 +23,12 @@ namespace fs = std::filesystem;
 #include "mrvCore/mrvString.h"
 #include "mrvCore/mrvHome.h"
 
+#include "mrvWidgets/mrvProgressReport.h"
+
 #include "mrvFl/mrvIO.h"
 #include "mrvNetwork/mrvTCP.h"
+
+#include "mrvUI/mrvDesktop.h"
 
 #include "mrvPDF/mrvPDFCreator.h"
 
@@ -34,86 +42,6 @@ namespace
 
     const unsigned kTitleSize = 16;
 } // namespace
-
-
-namespace
-{
-    // Helper function to perform cubic interpolation
-    double cubicInterpolate(double p0, double p1, double p2,
-                            double p3, double x)
-    {
-        return p1 + 0.5 * x * (p2 - p0 + x * (2.0 * p0 - 5.0 * p1 + 4.0 * p2 - p3 + x * (3.0 * (p1 - p2) + p3 - p0)));
-    }
-
-    // Function to get pixel value with boundary checking for each channel
-    unsigned char getPixel(const unsigned char* image,
-                           size_t width, size_t height,
-                           int x, int y, size_t channel)
-    {
-        // Ensure coordinates are within bounds
-        x = std::clamp(x, 0, static_cast<int>(width - 1));
-        y = std::clamp(y, 0, static_cast<int>(height - 1));
-        return image[(y * width + x) * 3 + channel]; // Each pixel has 3 channels (R, G, B)
-    }
-
-    // Bicubic interpolation function for scaling a 3-channel (RGB) image
-    unsigned char* scaleImageBicubic(const unsigned char* image,
-                                     size_t srcWidth, size_t srcHeight,
-                                     size_t dstWidth, size_t dstHeight)
-    {
-        double scaleX = static_cast<double>(dstWidth) / srcWidth;
-        double scaleY = static_cast<double>(dstHeight) / srcHeight;
-        std::cerr << "scale=" << scaleX << " " << scaleY << std::endl;
-        
-        // Allocate memory for the scaled image
-        unsigned char* scaledImage = new unsigned char[dstWidth * dstHeight * 3]; // 3 channels per pixel (RGB)
-
-        // Loop through the destination image
-        for (size_t j = 0; j < dstHeight; ++j) {
-            for (size_t i = 0; i < dstWidth; ++i) {
-                // Map destination coordinates back to source
-                double gx = i / scaleX;
-                double gy = j / scaleY;
-
-                int x = static_cast<int>(gx);
-                int y = static_cast<int>(gy);
-
-                // Fractional part of the coordinate
-                double dx = gx - x;
-                double dy = gy - y;
-
-                // Iterate over each channel (R, G, B)
-                for (size_t channel = 0; channel < 3; ++channel) {
-                    // Bicubic interpolation
-                    double patch[4][4];
-                    for (int m = -1; m <= 2; ++m)
-                    {
-                        for (int n = -1; n <= 2; ++n)
-                        {
-                            patch[m + 1][n + 1] = static_cast<double>(getPixel(image, srcWidth, srcHeight, x + m, y + n, channel));
-                        }
-                    }
-
-                    // Interpolate along x direction for each row
-                    double col[4];
-                    for (int k = 0; k < 4; ++k) {
-                        col[k] = cubicInterpolate(patch[k][0], patch[k][1], patch[k][2], patch[k][3], dx);
-                    }
-
-                    // Interpolate along y direction using the results of x interpolation
-                    double value = cubicInterpolate(col[0], col[1], col[2], col[3], dy);
-
-                    // Clamp the result to the valid range [0, 255] and assign it to the scaled image
-                    scaledImage[(j * dstWidth + i) * 3 + channel] = static_cast<unsigned char>(std::clamp(value, 0.0, 255.0));
-                }
-            }
-        }
-
-        return scaledImage;
-    }
-
-
-}
 
 
 
@@ -206,8 +134,7 @@ namespace mrv
         {
             Fl_Surface_Device::push_current(&pdf);
 
-            size_t srcWidth = W;
-            size_t srcHeight = H;
+            Fl_RGB_Image image(buffer, W, H);
             
             int Xoffset = 0;
             if (W >= H)
@@ -231,16 +158,13 @@ namespace mrv
                 H = thumbnailHeight = H2;
             }
 
-            unsigned char* scaledImage = scaleImageBicubic(buffer, srcWidth,
-                                                           srcHeight, W, H);
-
-            fl_draw_image(scaledImage, P.x + Xoffset, P.y, W, H);
+            image.scale(W, H);
+            image.draw(P.x + Xoffset, P.y);
             
-            delete [] scaledImage;
             Fl_Surface_Device::pop_current();
         }
 
-        void Creator::print_time(Fl_Font font, const ViewerUI* ui)
+        void Creator::print_time(Fl_Font font)
         {
             Fl_Surface_Device::push_current(&pdf);
             
@@ -288,6 +212,25 @@ namespace mrv
             Fl_Surface_Device::pop_current();
         }
 
+        void Creator::wait()
+        {
+            const auto start = std::chrono::steady_clock::now();
+            auto now = std::chrono::steady_clock::now();
+            auto elapsedTime =
+                std::chrono::duration_cast<std::chrono::milliseconds>(
+                    now - start)
+                .count();
+            while (elapsedTime < 500)
+            {
+                Fl::check();
+                now = std::chrono::steady_clock::now();
+                elapsedTime =
+                    std::chrono::duration_cast<std::chrono::milliseconds>(
+                        now - start)
+                    .count();
+            }
+        }
+        
         bool Creator::create()
         {
             char* err_message;
@@ -300,15 +243,25 @@ namespace mrv
             }
 
             addPage();
-
+            
             auto view = ui->uiView;
             auto player = view->getTimelinePlayer();
+
+            // Store presentation mode
             bool presentation = view->getPresentationMode();
+        
             // Turn off hud so it does not get captured by glReadPixels.
             bool hud = view->getHudActive();
 
+            // Turn off audio, so we don't play sound.
+            auto mute = player->isMuted();
+            player->setMute(true);
+            player->start();
+            
+            // Set presentation mode
             view->setPresentationMode(true);
             view->redraw();
+            
             // flush is needed
             Fl::flush();
             view->flush();
@@ -318,16 +271,31 @@ namespace mrv
             auto renderSize = view->getRenderSize();
 
             int X = 0, Y = 0;
-            if (viewportSize.w < renderSize.w ||
-                viewportSize.h < renderSize.h)
+            if (viewportSize.w >= renderSize.w &&
+                viewportSize.h >= renderSize.h)
+            {
+                view->setFrameView(false);
+                view->setViewZoom(1.0);
+                view->centerView();
+                view->redraw();
+                // flush is needed
+                Fl::flush();
+
+                X = (viewportSize.w - renderSize.w) / 2;
+                Y = (viewportSize.h - renderSize.h) / 2;
+            }
+            else
             {
                 LOG_WARNING(_("Image too big.  "
                               "Will save the viewport size."));
+                renderSize.w = viewportSize.w;
+                renderSize.h = viewportSize.h;
+                view->frameView();
             }
 
-            view->frameView();
-            renderSize.w = viewportSize.w;
-            renderSize.h = viewportSize.h;
+            view->make_current();
+            gl::initGLAD();
+                    
                 
             std::string msg =
                 tl::string::Format(_("Viewport Size: {0}  Render Size: {1}"))
@@ -344,8 +312,10 @@ namespace mrv
             // Don't send any tcp updates
             tcp->lock();
 
+            // Set some defaults to avoid drawing HUD, icon and sound.
             view->setHudActive(false);
             view->setActionMode(ActionMode::kScrub);
+            player->stop();
             
             TimelineClass* c = ui->uiTimeWindow;
 
@@ -353,20 +323,34 @@ namespace mrv
             const GLenum type = GL_UNSIGNED_BYTE;
 
             GLubyte* buffer = new GLubyte[renderSize.w * renderSize.h * 3];
-
+            
+            bool exit = false;
             for (const auto& annotation : annotations)
             {
+                
                 time = annotation->time;
                 player->seek(time);
 
-                view->make_current();
-                view->centerView();
+                // Wait a while until so viewport updates.
+                wait();
+                    
+                view->make_current();                
                 view->redraw();
                 view->flush();
-                Fl::check();
+                Fl::flush();
 
-                view->make_current();
-                glReadBuffer(GL_FRONT);
+                GLenum imageBuffer = GL_FRONT;
+
+                // @note: Wayland does not work like Windows, macOS or
+                //        X11.  The compositor does not immediately
+                //        swap buffers when calling view->flush().
+                if (desktop::Wayland())
+                {
+                    imageBuffer = GL_BACK;
+                }
+
+                glReadBuffer(imageBuffer);
+                        
                 glReadPixels(
                     X, Y, renderSize.w, renderSize.h, format, type, buffer);
 
@@ -375,7 +359,7 @@ namespace mrv
                 create_thumbnail(renderSize.w, renderSize.h, buffer);
 
                 // print time
-                print_time(FL_HELVETICA, ui);
+                print_time(FL_HELVETICA);
 
                 for (const auto& shape : annotation->shapes)
                 {
@@ -401,12 +385,19 @@ namespace mrv
 
             pdf.end_page();
 
+            pdf.end_job();
+
             view->setPresentationMode(presentation);
+            wait();
+            
             view->setHudActive(hud);
+
+            view->frameView();
+
+            
+            player->setMute(mute);
             
             tcp->unlock();
-
-            pdf.end_job();
 
             return true;
         }

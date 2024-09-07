@@ -447,6 +447,8 @@ namespace mrv
         const auto& annotations =
             player->getAnnotations(p.ghostPrevious, p.ghostNext);
 
+        auto time = player->currentTime();
+        
         if (gl.buffer && gl.shader)
         {
             math::Matrix4x4f mvp;
@@ -522,8 +524,7 @@ namespace mrv
                     glViewport(viewportX, viewportY, sizeW, sizeH);
 
                     glBindFramebuffer(GL_READ_FRAMEBUFFER, gl.buffer->getID());
-                    glBindFramebuffer(
-                        GL_DRAW_FRAMEBUFFER, GL_FRONT); // 0 is screen
+                    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); // 0 is screen
 
                     // Blit the offscreen buffer contents to the viewport
                     GLenum filter = GL_NEAREST;

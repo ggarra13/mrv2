@@ -63,8 +63,11 @@ namespace mrv
                 const int channels = 3);
             void create_thumbnail(size_t W, size_t H,
                                   const unsigned char* buffer);
-            void print_time(Fl_Font font, const ViewerUI* ui);
+            void print_time(Fl_Font font);
             void print_note(Fl_Font font, const std::string& text);
+
+
+            void wait();
         };
 
     } // namespace pdf
