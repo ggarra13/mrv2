@@ -3257,14 +3257,11 @@ msgstr "पाठ व्याख्या संपादित करें"
 msgid "No item selected"
 msgstr "कोई वस्तु चुना नहीं गया"
 
-msgid "Font not found.  Will not use UTF-8."
-msgstr "फ़ॉन्ट नहीं मिला. यूटीएफ़- 8 का उपयोग नहीं करें."
-
 msgid "%s - Page %d"
 msgstr "%s - पृष्ठ %d"
 
-msgid "Frame {0} - Timecode: {1} - {2} Secs."
-msgstr "फ्रेम {0} - समयकोड: {1} - {2} Secs."
+msgid "Frame {0} - TC: {1} - S: {2}"
+msgstr "फ्रेम {0} - समयकोड: {1} - S: {2}"
 
 msgid "Image too big.  Will save the viewport size."
 msgstr "छवि बहुत बड़ा है. व्यूपोर्ट आकार सहेजेगा."
@@ -6904,6 +6901,9 @@ msgstr "यदि आप विंडो को बन्द करना चा
 
 msgid "Toggle About Window"
 msgstr "विंडो के बारे में टॉगल करें"
+
+#~ msgid "Font not found.  Will not use UTF-8."
+#~ msgstr "फ़ॉन्ट नहीं मिला. यूटीएफ़- 8 का उपयोग नहीं करें."
 
 #~ msgid "Resizable Control Group"
 #~ msgstr "री- स्कैन नियंत्रण समूह"

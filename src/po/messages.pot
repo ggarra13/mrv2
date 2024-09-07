@@ -3110,13 +3110,10 @@ msgstr ""
 msgid "No item selected"
 msgstr ""
 
-msgid "Font not found.  Will not use UTF-8."
-msgstr ""
-
 msgid "%s - Page %d"
 msgstr ""
 
-msgid "Frame {0} - Timecode: {1} - {2} Secs."
+msgid "Frame {0} - TC: {1} - S: {2}"
 msgstr ""
 
 msgid "Image too big.  Will save the viewport size."

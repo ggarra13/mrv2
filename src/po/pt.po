@@ -3306,14 +3306,11 @@ msgstr "Editar Anotao de Texto"
 msgid "No item selected"
 msgstr "Nenhum elemento seleccionado"
 
-msgid "Font not found.  Will not use UTF-8."
-msgstr "Fonte no encontrada. No ir usar o UTF-8."
-
 msgid "%s - Page %d"
 msgstr "%s - Pgina %d"
 
-msgid "Frame {0} - Timecode: {1} - {2} Secs."
-msgstr "Quadro {0} - Cdigo de Tempo: {1} - {2} Secs."
+msgid "Frame {0} - TC: {1} - S: {2}"
+msgstr "Quadro {0} - CT: {1} - S: {2}"
 
 msgid "Image too big.  Will save the viewport size."
 msgstr "Imagem muito grande. Vai salvar o tamanho da vista."
@@ -7018,3 +7015,6 @@ msgstr "Alternar a janela de teclas instantneas"
 
 msgid "Toggle About Window"
 msgstr "Alternar Sobre a Janela"
+
+#~ msgid "Font not found.  Will not use UTF-8."
+#~ msgstr "Fonte no encontrada. No ir usar o UTF-8."

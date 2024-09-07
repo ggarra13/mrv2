@@ -735,8 +735,8 @@ msgid ""
 "\n"
 msgstr ""
 "\n"
-"La fin de « ceci » précède strictement « autre » par une valeur >= « "
-"epsilon_s ». :: autre [ ceci ] *\n"
+"La fin de « ceci » précède strictement « autre » par une valeur >= "
+"« epsilon_s ». :: autre [ ceci ] *\n"
 
 msgid ""
 "\n"
@@ -3369,14 +3369,11 @@ msgstr "Modifier l'annotation texte"
 msgid "No item selected"
 msgstr "Aucun élément sélectionné"
 
-msgid "Font not found.  Will not use UTF-8."
-msgstr "Police non trouvée. N'utilisera pas UTF-8."
-
 msgid "%s - Page %d"
 msgstr "%s - Page %d"
 
-msgid "Frame {0} - Timecode: {1} - {2} Secs."
-msgstr "Cadre {0} - Code de temps: {1} - {2} Secs."
+msgid "Frame {0} - TC: {1} - S: {2}"
+msgstr "Cadre {0} - CT: {1} - S: {2}"
 
 msgid "Image too big.  Will save the viewport size."
 msgstr "Image trop grande. Enregistrera la taille du viseur."
@@ -7124,3 +7121,6 @@ msgstr "Activer la fenêtre des touches d'amorçage"
 
 msgid "Toggle About Window"
 msgstr "Commutation à propos de la fenêtre"
+
+#~ msgid "Font not found.  Will not use UTF-8."
+#~ msgstr "Police non trouvée. N'utilisera pas UTF-8."

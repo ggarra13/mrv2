@@ -3381,14 +3381,11 @@ msgstr "编辑文本注释"
 msgid "No item selected"
 msgstr "未选中项目"
 
-msgid "Font not found.  Will not use UTF-8."
-msgstr "未找到字体。 将不会使用 UTF-8 。"
-
 msgid "%s - Page %d"
 msgstr "%s - 第%d页"
 
-msgid "Frame {0} - Timecode: {1} - {2} Secs."
-msgstr "帧 {0} - 时间码 : {1} - {2} 秒数 。"
+msgid "Frame {0} - TC: {1} - S: {2}"
+msgstr "帧 {0} - 时间码 : {1} - 秒数: {2}"
 
 msgid "Image too big.  Will save the viewport size."
 msgstr "图像太大。 将保存视图的大小 。"
@@ -7023,6 +7020,9 @@ msgstr "开关热键窗口"
 
 msgid "Toggle About Window"
 msgstr "开关关于窗口"
+
+#~ msgid "Font not found.  Will not use UTF-8."
+#~ msgstr "未找到字体。 将不会使用 UTF-8 。"
 
 #~ msgid "Resizable Control Group"
 #~ msgstr "可调整控控组"
