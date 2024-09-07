@@ -43,8 +43,6 @@ namespace
     const unsigned kTitleSize = 16;
 } // namespace
 
-
-
 namespace mrv
 {
     namespace pdf
@@ -59,8 +57,8 @@ namespace mrv
             annotations(ann),
             ui(ui)
         {
-            margin.x = 10;
-            margin.y = 10;
+            margin.x = 5;
+            margin.y = 5;
 
             time_margin = 27;
             image_margin = 12;
@@ -77,12 +75,9 @@ namespace mrv
             }
 
             pdf.printable_rect(&width, &height);
-            
+
             /* Print the lines of the page. */
             fl_color(FL_BLACK);
-            
-            fl_line_style(FL_SOLID, 1);
-            fl_rect(50, 50, width - 100, height - 100);
 
             auto model = App::app->filesModel();
             auto item = model->observeA()->get();
@@ -96,14 +91,17 @@ namespace mrv
             ++pageNumber;
 
             // Draw Page Title
-            fl_font(FL_HELVETICA, 20);
+            fl_font(FL_HELVETICA, 18);
             int tw, th;
             fl_measure(page_title, tw, th);
             fl_draw(page_title, (width - tw) / 2, th);
 
-            P.x = 55;
-            P.y = 55;
-            
+            fl_line_style(FL_SOLID, 1);
+            fl_rect(20, th + 10, width - 40, height - 40);
+
+            P.x = 25;
+            P.y = th + 15;
+
             Fl_Surface_Device::pop_current();
         }
 
@@ -128,14 +126,13 @@ namespace mrv
             delete[] rowBuffer;
         }
 
-        void
-        Creator::create_thumbnail(size_t W, size_t H,
-                                  const unsigned char* buffer)
+        void Creator::create_thumbnail(
+            size_t W, size_t H, const unsigned char* buffer)
         {
             Fl_Surface_Device::push_current(&pdf);
 
             Fl_RGB_Image image(buffer, W, H);
-            
+
             int Xoffset = 0;
             if (W >= H)
             {
@@ -160,27 +157,26 @@ namespace mrv
 
             image.scale(W, H);
             image.draw(P.x + Xoffset, P.y);
-            
+
             Fl_Surface_Device::pop_current();
         }
 
         void Creator::print_time(Fl_Font font)
         {
             Fl_Surface_Device::push_current(&pdf);
-            
+
             fl_color(FL_BLACK);
             fl_font(font, 11);
-            
+
             std::string buf =
-                tl::string::Format(_("Frame {0} - Timecode: {1} - {2} Secs."))
+                tl::string::Format(_("Frame {0} - TC: {1} - S: {2}"))
                     .arg(time.to_frames())
                     .arg(time.to_timecode())
                     .arg(time.to_seconds());
 
             int tw, th;
             fl_measure(buf.c_str(), tw, th);
-            fl_draw(buf.c_str(), P.x + kThumbnailWidth + margin.x,
-                    P.y + th / 2);
+            fl_draw(buf.c_str(), P.x + kThumbnailWidth + margin.x, P.y + 11);
 
             Fl_Surface_Device::pop_current();
         }
@@ -189,14 +185,13 @@ namespace mrv
         {
             Fl_Surface_Device::push_current(&pdf);
 
-
             fl_color(FL_BLACK);
             fl_font(font, 9);
 
             int tw, th;
 
             int Y = P.y + time_margin;
-            
+
             // Split text into lines
             auto lines = string::split(text, '\n');
 
@@ -214,28 +209,39 @@ namespace mrv
 
         void Creator::wait()
         {
-            const auto start = std::chrono::steady_clock::now();
-            auto now = std::chrono::steady_clock::now();
-            auto elapsedTime =
-                std::chrono::duration_cast<std::chrono::milliseconds>(
-                    now - start)
-                .count();
-            while (elapsedTime < 500)
+            bool found = false;
+
+            auto uiView = ui->uiView;
+            auto player = uiView->getTimelinePlayer();
+
+            auto cacheInfoObserver =
+                observer::ValueObserver<timeline::PlayerCacheInfo>::create(
+                    player->player()->observeCacheInfo(),
+                    [this, &found](const timeline::PlayerCacheInfo& value)
+                    {
+                        for (const auto& t : value.videoFrames)
+                        {
+                            if (time >= t.start_time() &&
+                                time <= t.end_time_exclusive())
+                            {
+                                found = true;
+                                break;
+                            }
+                        }
+                    });
+
+            while (!found)
             {
                 Fl::check();
-                now = std::chrono::steady_clock::now();
-                elapsedTime =
-                    std::chrono::duration_cast<std::chrono::milliseconds>(
-                        now - start)
-                    .count();
             }
         }
-        
+
         bool Creator::create()
         {
             char* err_message;
-            int err = pdf.begin_document(file.c_str(), Fl_Paged_Device::A4,
-                                         Fl_Paged_Device::PORTRAIT, &err_message);
+            int err = pdf.begin_document(
+                file.c_str(), Fl_Paged_Device::A4, Fl_Paged_Device::PORTRAIT,
+                &err_message);
             if (err)
             {
                 LOG_ERROR(err_message);
@@ -243,13 +249,13 @@ namespace mrv
             }
 
             addPage();
-            
+
             auto view = ui->uiView;
             auto player = view->getTimelinePlayer();
 
             // Store presentation mode
             bool presentation = view->getPresentationMode();
-        
+
             // Turn off hud so it does not get captured by glReadPixels.
             bool hud = view->getHudActive();
 
@@ -257,11 +263,11 @@ namespace mrv
             auto mute = player->isMuted();
             player->setMute(true);
             player->start();
-            
+
             // Set presentation mode
             view->setPresentationMode(true);
             view->redraw();
-            
+
             // flush is needed
             Fl::flush();
             view->flush();
@@ -295,8 +301,7 @@ namespace mrv
 
             view->make_current();
             gl::initGLAD();
-                    
-                
+
             std::string msg =
                 tl::string::Format(_("Viewport Size: {0}  Render Size: {1}"))
                     .arg(viewportSize)
@@ -316,25 +321,31 @@ namespace mrv
             view->setHudActive(false);
             view->setActionMode(ActionMode::kScrub);
             player->stop();
-            
+
             TimelineClass* c = ui->uiTimeWindow;
 
             const GLenum format = GL_RGB;
             const GLenum type = GL_UNSIGNED_BYTE;
 
             GLubyte* buffer = new GLubyte[renderSize.w * renderSize.h * 3];
-            
+
             bool exit = false;
             for (const auto& annotation : annotations)
             {
-                
+                if (P.y > height - 20 - thumbnailHeight)
+                {
+                    pdf.end_page();
+
+                    addPage();
+                }
+
                 time = annotation->time;
                 player->seek(time);
 
                 // Wait a while until so viewport updates.
                 wait();
-                    
-                view->make_current();                
+
+                view->make_current();
                 view->redraw();
                 view->flush();
                 Fl::flush();
@@ -350,7 +361,7 @@ namespace mrv
                 }
 
                 glReadBuffer(imageBuffer);
-                        
+
                 glReadPixels(
                     X, Y, renderSize.w, renderSize.h, format, type, buffer);
 
@@ -369,19 +380,11 @@ namespace mrv
 
                     print_note(FL_HELVETICA, note->text);
                 }
-            
+
                 P.y += thumbnailHeight + image_margin;
-            
-                if (P.y > height - 50 - thumbnailHeight)
-                {
-                    pdf.end_page();
-                    
-                    addPage();
-                }
             }
-            
+
             delete[] buffer;
-            
 
             pdf.end_page();
 
@@ -389,14 +392,13 @@ namespace mrv
 
             view->setPresentationMode(presentation);
             wait();
-            
+
             view->setHudActive(hud);
 
             view->frameView();
 
-            
             player->setMute(mute);
-            
+
             tcp->unlock();
 
             return true;

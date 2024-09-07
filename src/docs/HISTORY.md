@@ -44,6 +44,8 @@ v1.2.6
   cleared.
 - Removed LibHaru dependency, as PDF creation is now handled by FLTK.
 - Added OCIO options and LUT options to timeline, using Darby's new code.
+- Fixed page creation when creating PDFs.
+- Fixed PDFs' time information going outside the page on macOS.
 
 
 v1.2.5
