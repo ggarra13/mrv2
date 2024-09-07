@@ -47,10 +47,6 @@
 #    include <expat.h>
 #endif
 
-#ifdef MRV2_PDF
-#    include <hpdf_version.h>
-#endif
-
 #include <Imath/ImathConfig.h>
 
 #ifdef TLRENDER_HAP
@@ -767,12 +763,6 @@ namespace mrv
 #ifdef TLRENDER_NET
         o << curl_version() << endl
           << "(C) Daniel Stenberg, <daniel@haxx.se>, et al." << endl
-          << endl;
-#endif
-#ifdef MRV2_PDF
-        o << "libharu v" << HPDF_VERSION_TEXT << endl
-          << "Copyright (c) 1999-2006 Takeshi Kanno" << endl
-          << "Copyright (c) 2007-2009 Antony Dovgal" << endl
           << endl;
 #endif
         o << "libintl/gettext v0.22.3" << endl
