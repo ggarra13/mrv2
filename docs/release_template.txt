@@ -1,13 +1,18 @@
-mrv2 v1.2.5
+mrv2 v1.2.6
 =========
 
 mrv2 is an open source professional player and review tool for vfx, animation and computer graphics for Windows, Linux and macOS.
 
 This is a bug fix and feature update.  
 
-New OCIO workflow supporting multiple displays.  Fixed session files.  New -edl
-flag to create an .otio timeline on the command-line.  Chinese, German and Hindi
-translations.  Fixed Wayland on several Unix flavors.
+Fixed macOS Intel release which had gotten broken on v1.2.4 and 1.2.5.
+Fixed sequence detection on Windows.
+OCIO workflow performance and UI improvements.
+Allowed saving an .otio file as a single movie file.  This is useful to
+concatenate multiple clips with the -edl switch or playlist.
+Fixed PDF exporting with annotations.  PDF exporting supports multiple
+languages now.
+Better Chinese, German and Hindi translations.  New Portuguese, French and Italian translations.
 
 Main Web page (with links to videos and online documentation):
 https://mrv2.sourceforge.io
@@ -26,7 +31,7 @@ https://www.github.com/ggarra13/mrv2
 -------------------------------------------------------------------------------
 
 
-mrv2 v1.2.5
+mrv2 v1.2.6
 
 mrv2, an open source professional player and review tool for vfx, animation and computer graphics for Windows, Linux and macOS has a new version.
 
