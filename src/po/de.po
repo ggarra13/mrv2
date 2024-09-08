@@ -3448,9 +3448,6 @@ msgstr "%s - Seite %d"
 msgid "Frame {0} - TC: {1} - S: {2}"
 msgstr "Frame {0} - ZC: {1} - S: {2}"
 
-msgid "Page Size: {0} x {1}"
-msgstr "Seitengröße: {0} x {1}"
-
 msgid "Image too big.  Will save the viewport size."
 msgstr "Bild zu gro. Speichert die Ansichtsfenstergre."
 
@@ -7171,6 +7168,9 @@ msgstr "Hotkeys-Fenster umschalten"
 
 msgid "Toggle About Window"
 msgstr "Fenster umschalten"
+
+#~ msgid "Page Size: {0} x {1}"
+#~ msgstr "Seitengröße: {0} x {1}"
 
 #~ msgid "A0"
 #~ msgstr "A0"

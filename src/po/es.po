@@ -3501,9 +3501,6 @@ msgstr "%s - Página %d"
 msgid "Frame {0} - TC: {1} - S: {2}"
 msgstr "Cuadro {0} - TC: {1} - S: {2}"
 
-msgid "Page Size: {0} x {1}"
-msgstr "Información de Imagen: {0} {1}"
-
 msgid "Image too big.  Will save the viewport size."
 msgstr "Imagen demasiado grande.  Grabaré el tamaño de la vista."
 
@@ -7215,6 +7212,9 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
+
+#~ msgid "Page Size: {0} x {1}"
+#~ msgstr "Información de Imagen: {0} {1}"
 
 #~ msgid "A0"
 #~ msgstr "A0"

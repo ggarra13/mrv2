@@ -3116,9 +3116,6 @@ msgstr ""
 msgid "Frame {0} - TC: {1} - S: {2}"
 msgstr ""
 
-msgid "Page Size: {0} x {1}"
-msgstr ""
-
 msgid "Image too big.  Will save the viewport size."
 msgstr ""
 

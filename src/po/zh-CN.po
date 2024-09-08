@@ -745,17 +745,14 @@ msgid ""
 "The converse would be ``other.overlaps(this)``\n"
 msgstr ""
 "\n"
-"`this` 的开始严格在 `other` 的结束之前，间隔值 >= "
-"`epsilon_s`。\n"
-"`this` 的结束严格在 `other` 的开始之前，间隔值 >= "
-"`epsilon_s`。\n"
+"`this` 的开始严格在 `other` 的结束之前，间隔值 >= `epsilon_s`。\n"
+"`this` 的结束严格在 `other` 的开始之前，间隔值 >= `epsilon_s`。\n"
 "::\n"
 "\n"
 "   [ this ]\n"
 "       [ other ]\n"
 "\n"
 "相反的情况是 ``other.overlaps(this)``\n"
-
 
 msgid ""
 "\n"
@@ -3382,9 +3379,6 @@ msgstr "%s - 第%d页"
 
 msgid "Frame {0} - TC: {1} - S: {2}"
 msgstr "帧 {0} - 时间码 : {1} - 秒数: {2}"
-
-msgid "Page Size: {0} x {1}"
-msgstr "页面大小 : {0} x {1}"
 
 msgid "Image too big.  Will save the viewport size."
 msgstr "图像太大。 将保存视图的大小 。"
@@ -7012,6 +7006,9 @@ msgstr "开关热键窗口"
 
 msgid "Toggle About Window"
 msgstr "开关关于窗口"
+
+#~ msgid "Page Size: {0} x {1}"
+#~ msgstr "页面大小 : {0} x {1}"
 
 #~ msgid "A0"
 #~ msgstr "A0"

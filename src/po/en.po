@@ -3446,9 +3446,6 @@ msgstr "%s - Page %d"
 msgid "Frame {0} - TC: {1} - S: {2}"
 msgstr "Frame {0} - TC: {1} - S: {2}"
 
-msgid "Page Size: {0} x {1}"
-msgstr "Page Size: {0} x {1}"
-
 msgid "Image too big.  Will save the viewport size."
 msgstr "Image too big.  Will save the viewport size."
 
@@ -7147,6 +7144,9 @@ msgstr "Toggle Hotkeys Window"
 
 msgid "Toggle About Window"
 msgstr "Toggle About Window"
+
+#~ msgid "Page Size: {0} x {1}"
+#~ msgstr "Page Size: {0} x {1}"
 
 #~ msgid "A0"
 #~ msgstr "A0"
