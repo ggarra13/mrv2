@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Comenzando &mdash; documentación de mrv2 - v1.2.5</title>
+  <title>Comenzando &mdash; documentación de mrv2 - v1.2.7</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429" />
@@ -16,7 +16,7 @@
   
         <script src="../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=76d34e57"></script>
+        <script src="../../_static/documentation_options.js?v=e5534024"></script>
         <script src="../../_static/doctools.js?v=9a2dae69"></script>
         <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="../../_static/translations.js?v=d190bf04"></script>
@@ -185,6 +185,14 @@ Abrir con mrv2.</p>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
 <p>Secuencias de imágenes (una serie de archivos JPEG o TGA) por defecto usan 24 FPS (puede ajustarlo en <strong>Window-&gt;Preferencias-&gt;Reproducir</strong>). La velocidad de DPX and EXRs es tomada de los metadatos si está disponible.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>Para cargar todos los archivos uno seguido del otro use la opción -otio o
+-edl:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mrv2</span> <span class="o">-</span><span class="n">edl</span> <span class="n">movie1</span><span class="o">.</span><span class="n">mov</span> <span class="n">movie2</span><span class="o">.</span><span class="n">mov</span> <span class="n">movie3</span><span class="o">.</span><span class="n">mov</span>
+</pre></div>
+</div>
 </div>
 </section>
 <section id="mirando-medios">

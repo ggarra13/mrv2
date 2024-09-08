@@ -87,11 +87,18 @@ mrv2 supports various modes for loading sequences and movies.  You can mix diffe
     mrv2 /path/to/test.mov /path/to/frames.0001.exr /path/to/edit.otio
 
 .. note::
-     Movie files will be played back at their 'natural' frame rate, in other words mrv2 respects the encoded frame rate of the given file.
+   Movie files will be played back at their 'natural' frame rate, in other words mrv2 respects the encoded frame rate of the given file.
      
 .. note::
-    Image sequences (e.g. a series of JPEG or TGA) default to 24fps (you can adjust this in **Window->Preferences->Playback**).  DPX and EXRs speed is taken from the metadata if available.
+   Image sequences (e.g. a series of JPEG or TGA) default to 24fps (you can adjust this in **Window->Preferences->Playback**).  DPX and EXRs speed is taken from the metadata if available.
 
+.. note::
+   To load all movie files one next to each other use the -otio or -edl flags,
+   like::
+     
+     mrv2 -edl movie1.mov movie2.mov movie3.mov
+
+     
 Viewing Media
 -------------
 

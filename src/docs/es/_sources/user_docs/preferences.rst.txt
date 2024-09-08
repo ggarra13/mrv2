@@ -117,6 +117,13 @@ Aquí puede setear los parámetros por defecto de la ventana de vista.
 .. topic:: Safe Areas
 
 	   Puede establecer que mrv2 comience con las Áreas Seguras activadas.
+	   
+.. topic:: OCIO en Barra Superior
+
+	   Cuando está activo, OCIO ICS, Vista y Look se mostrarán en la
+	   barra superior de la Interfaz de Usuario.
+	   Cuando no lo está, los controles de Ganancia (Exposición),
+	   Saturación y Gama se mostrarán.
 
 .. topic:: Velocidad de Zoom
 

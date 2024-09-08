@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Getting Started &mdash; mrv2 v1.2.5 documentation</title>
+  <title>Getting Started &mdash; mrv2 v1.2.7 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429" />
@@ -16,7 +16,7 @@
   
         <script src="../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=cd41d21b"></script>
+        <script src="../../_static/documentation_options.js?v=5ec1dc68"></script>
         <script src="../../_static/doctools.js?v=9a2dae69"></script>
         <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -179,6 +179,14 @@ Open with mrv2.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Image sequences (e.g. a series of JPEG or TGA) default to 24fps (you can adjust this in <strong>Window-&gt;Preferences-&gt;Playback</strong>).  DPX and EXRs speed is taken from the metadata if available.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To load all movie files one next to each other use the -otio or -edl flags,
+like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mrv2</span> <span class="o">-</span><span class="n">edl</span> <span class="n">movie1</span><span class="o">.</span><span class="n">mov</span> <span class="n">movie2</span><span class="o">.</span><span class="n">mov</span> <span class="n">movie3</span><span class="o">.</span><span class="n">mov</span>
+</pre></div>
+</div>
 </div>
 </section>
 <section id="viewing-media">

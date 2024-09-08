@@ -20,7 +20,7 @@ set(CLEAN_DOC_TARGETS )
 
 set(DOC_LANGUAGES en es)
 
-if (NOT DOC_LANGUAGES)
+if (NOT DEFINED DOC_LANGUAGES)
     set(DOC_LANGUAGES ${LANGUAGES})
 endif()
 
@@ -86,7 +86,7 @@ add_custom_target( clean_doc
 )
 
 add_custom_target( doc
-    COMMAND ${CMAKE_COMMAND} -E echo "Documented all languages."
+    COMMAND ${CMAKE_COMMAND} -E echo \"Documented all languages: ${DOCUMENTATION_TARGETS}\"
     DEPENDS ${DOCUMENTATION_TARGETS} clean_doc
 )
 

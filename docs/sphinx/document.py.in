@@ -42,7 +42,7 @@ class Pybind11ModuleDocumenter(autodoc.ModuleDocumenter):
 # root dir
 root_dir = "@ROOT_DIR@"
 
-html_dir = root_dir + "/mrv2/docs/@LANGUAGE@/"
+html_dir = root_dir + "/src/docs/@LANGUAGE@/"
 sphinx_dir = root_dir + "/docs/sphinx"
 
 # Set up the Sphinx application
