@@ -3,9 +3,11 @@
 
 #include "mrvFl/mrvIO.h"
 
+
 #include "mrvPDF/mrvPDFCreator.h"
 #include "mrvPDF/mrvSavePDF.h"
 
+#include "mrvPDFOptionsUI.h"
 #include "mrViewer.h"
 
 namespace
@@ -31,13 +33,18 @@ namespace mrv
             pdfFile += ".pdf";
         }
 
+
+        PDFOptionsUI pdfOptions;
+        if (pdfOptions.page_format == Fl_PDF_File_Surface::Page_Format::MEDIA)
+            return false;
+        
         std::sort(
             annotations.begin(), annotations.end(),
             [](const std::shared_ptr<draw::Annotation>& a,
                const std::shared_ptr<draw::Annotation>& b)
             { return a->time < b->time; });
 
-        pdf::Creator pdf(pdfFile, annotations, ui);
+        pdf::Creator pdf(pdfFile, pdfOptions.page_format, annotations, ui);
         try
         {
             pdf.create();

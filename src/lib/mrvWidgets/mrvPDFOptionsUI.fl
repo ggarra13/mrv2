@@ -1,0 +1,86 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0400
+i18n_type 1
+i18n_include {<libintl.h>}
+i18n_conditional {}
+i18n_gnu_function gettext
+i18n_gnu_static_function gettext_noop
+header_name {.h}
+code_name {.cxx}
+decl {\#include <iomanip>} {public global
+}
+
+decl {\#include <sstream>} {public global
+}
+
+decl {\#include "FL/Fl_PDF_File_Surface.H"} {public global
+}
+
+decl {\#include "mrvWidgets/mrvPopupMenu.h"} {public global
+}
+
+class PDFOptionsUI {open
+} {
+  decl {Fl_PDF_File_Surface::Page_Format page_format = Fl_PDF_File_Surface::Page_Format::A4;} {public local
+  }
+  Function {make_window()} {open
+  } {
+    Fl_Window uiPDFOptions {
+      label {PDF Options} open
+      xywh {653 359 506 180} type Double modal visible
+    } {
+      Fl_Group {} {open
+        xywh {17 29 472 36}
+      } {
+        Fl_Box {} {
+          label {Page Size}
+          xywh {17 29 194 36} align 24
+        }
+        Fl_Menu_Button uiPageSize {
+          callback {page_format = static_cast<Fl_PDF_File_Surface::Page_Format>(o->value());} open
+          xywh {213 29 276 36}
+          class {mrv::PopupMenu}
+        } {}
+      }
+      Fl_Group {} {user_data_type {void*} open
+        xywh {99 118 308 34}
+      } {
+        Fl_Button {} {
+          label OK
+          user_data this user_data_type {PDFOptionsUI*}
+          callback {v->uiPDFOptions->hide();}
+          xywh {319 118 88 34}
+        }
+        Fl_Button {} {
+          label Cancel
+          user_data this user_data_type {PDFOptionsUI*}
+          callback {page_format = Fl_PDF_File_Surface::Page_Format::MEDIA;
+v->uiPDFOptions->hide();}
+          xywh {99 118 88 34}
+        }
+      }
+    }
+    code {for (int i = 0; i < NO_PAGE_FORMATS; ++i)
+{
+std::stringstream o;
+o << Fl_PDF_File_Surface::page_formats[i].name;
+double w = Fl_PDF_File_Surface::page_formats[i].width;
+w *= 2.54;
+w /= 72;
+double h = Fl_PDF_File_Surface::page_formats[i].height;
+h *= 2.54;
+h /= 72;
+o << std::fixed << std::setprecision(2);
+o << " (" << w << "cm. x " << h << "cm.)";
+uiPageSize->add(o.str().c_str());
+}
+uiPageSize->value(page_format);} {}
+  }
+  Function {PDFOptionsUI()} {open
+  } {
+    code {auto w = make_window();
+w->show();
+while (w->shown())
+  Fl::check();} {}
+  }
+}

@@ -5,7 +5,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v1.2.6\n"
+"Project-Id-Version: mrv2 v1.2.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -3116,10 +3116,10 @@ msgstr ""
 msgid "Frame {0} - TC: {1} - S: {2}"
 msgstr ""
 
-msgid "Image too big.  Will save the viewport size."
+msgid "Page Size: {0} x {1}"
 msgstr ""
 
-msgid "Viewport Size: {0}  Render Size: {1}"
+msgid "Image too big.  Will save the viewport size."
 msgstr ""
 
 msgid "Scrub"
@@ -5843,6 +5843,12 @@ msgid "No Valid Devices found"
 msgstr ""
 
 msgid "Default Device"
+msgstr ""
+
+msgid "PDF Options"
+msgstr ""
+
+msgid "Page Size"
 msgstr ""
 
 msgid "Remote to Local Path Mapping"

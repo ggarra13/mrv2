@@ -411,8 +411,8 @@ msgstr ""
 "or not. :return: True if the plug-in is active, False otherwise. :rtype: "
 "bool \"\"\" return True def menus(self): \"\"\" Dictionary of menu entries "
 "as keys with callbacks as values. :return: A dictionary of menu entries and "
-"their corresponding callbacks. :rtype: dict \"\"\" menus = {\"New Menu/Hello"
-"\": self.run} return menus\n"
+"their corresponding callbacks. :rtype: dict \"\"\" menus = {\"New Menu/"
+"Hello\": self.run} return menus\n"
 
 msgid "No playlist matched item."
 msgstr "Nessuna playlist corrisponde all'elemento."
@@ -817,9 +817,9 @@ msgid ""
 "duration of 9.\n"
 msgstr ""
 "\n"
-"Crea un :class:`~TimeRange` dall'inizio e dalla fine :class:`~RationalTime`"
-"\\s (esclusivo). Per esempio, se start_time è 1 e end_time è 10, il ritorno "
-"avrà una durata di 9.\n"
+"Crea un :class:`~TimeRange` dall'inizio e dalla fine :class:"
+"`~RationalTime`\\s (esclusivo). Per esempio, se start_time è 1 e end_time è "
+"10, il ritorno avrà una durata di 9.\n"
 
 msgid ""
 "\n"
@@ -830,9 +830,9 @@ msgid ""
 "duration of 10.\n"
 msgstr ""
 "\n"
-"Crea un :class:`~TimeRange` dall'inizio e dalla fine :class:`~RationalTime`"
-"\\s (incluso). Per esempio, se start_time è 1 e end_time è 10, il ritorno "
-"avrà una durata di 10.\n"
+"Crea un :class:`~TimeRange` dall'inizio e dalla fine :class:"
+"`~RationalTime`\\s (incluso). Per esempio, se start_time è 1 e end_time è "
+"10, il ritorno avrà una durata di 10.\n"
 
 msgid ""
 "\n"
@@ -3351,11 +3351,11 @@ msgstr "%s - Pagina %d"
 msgid "Frame {0} - TC: {1} - S: {2}"
 msgstr "Frame {0} - TC: {1} - {2} Secs."
 
+msgid "Page Size: {0} x {1}"
+msgstr "Dimensione pagina: {0} x {1}"
+
 msgid "Image too big.  Will save the viewport size."
 msgstr "Immagine troppo grande. Salva la dimensione della vista."
-
-msgid "Viewport Size: {0}  Render Size: {1}"
-msgstr "Dimensione viewport: {0} Dimensione render: {1}"
 
 msgid "Scrub"
 msgstr "Spruzzo"
@@ -6344,6 +6344,12 @@ msgstr "Nessun dispositivo valido trovato"
 msgid "Default Device"
 msgstr "Dispositivo predefinito"
 
+msgid "PDF Options"
+msgstr "Opzioni PDF"
+
+msgid "Page Size"
+msgstr "Dimensione pagina"
+
 msgid "Remote to Local Path Mapping"
 msgstr "Mappatura dei percorsi da remoto a locale"
 
@@ -7074,6 +7080,96 @@ msgstr "Finestra di commutazione di tasti di avviamento"
 
 msgid "Toggle About Window"
 msgstr "Commuta la finestra"
+
+#~ msgid "A0"
+#~ msgstr "A0"
+
+#~ msgid "A1"
+#~ msgstr "A1"
+
+#~ msgid "A2"
+#~ msgstr "A2"
+
+#~ msgid "A3"
+#~ msgstr "A3"
+
+#~ msgid "A4"
+#~ msgstr "A4"
+
+#~ msgid "A5"
+#~ msgstr "A5"
+
+#~ msgid "A6"
+#~ msgstr "A6"
+
+#~ msgid "A7"
+#~ msgstr "A7"
+
+#~ msgid "A8"
+#~ msgstr "A8"
+
+#~ msgid "A9"
+#~ msgstr "A9"
+
+#~ msgid "B0"
+#~ msgstr "B0"
+
+#~ msgid "B1"
+#~ msgstr "B1"
+
+#~ msgid "B2"
+#~ msgstr "B2"
+
+#~ msgid "B3"
+#~ msgstr "B3"
+
+#~ msgid "B4"
+#~ msgstr "B4"
+
+#~ msgid "B5"
+#~ msgstr "B5"
+
+#~ msgid "B6"
+#~ msgstr "B6"
+
+#~ msgid "B7"
+#~ msgstr "B7"
+
+#~ msgid "B8"
+#~ msgstr "B8"
+
+#~ msgid "B9"
+#~ msgstr "B9"
+
+#~ msgid "B10"
+#~ msgstr "B10"
+
+#~ msgid "C5E"
+#~ msgstr "C5E"
+
+#~ msgid "DLE"
+#~ msgstr "DLE"
+
+#~ msgid "Executive"
+#~ msgstr "Esecutivo"
+
+#~ msgid "Folio"
+#~ msgstr "Foglio"
+
+#~ msgid "Ledger"
+#~ msgstr "Il libretto"
+
+#~ msgid "Legal"
+#~ msgstr "Giurisprudenza"
+
+#~ msgid "Letter"
+#~ msgstr "Lettera"
+
+#~ msgid "Tabloid"
+#~ msgstr "Tabloide"
+
+#~ msgid "Viewport Size: {0}  Render Size: {1}"
+#~ msgstr "Dimensione viewport: {0} Dimensione render: {1}"
 
 #~ msgid "Font not found.  Will not use UTF-8."
 #~ msgstr "Carattere non trovato. Non userà UTF-8."

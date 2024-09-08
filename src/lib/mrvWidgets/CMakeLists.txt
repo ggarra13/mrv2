@@ -10,6 +10,7 @@ set( FL_SOURCES
     mrvHUDUI.fl
     mrvOCIOPresetsUI.fl
     PathMappingUI.fl
+    mrvPDFOptionsUI.fl
     mrvPreferencesUI.fl
     mrvSaveImageOptionsUI.fl
     mrViewer.fl

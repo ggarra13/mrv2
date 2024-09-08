@@ -420,7 +420,8 @@ msgstr ""
 "\n"
 "    def active(self):\n"
 "        \"\"\"\n"
-"        Optionale Methode, um zurückzugeben, ob das Plugin aktiv ist oder nicht.\n"
+"        Optionale Methode, um zurückzugeben, ob das Plugin aktiv ist oder "
+"nicht.\n"
 "\n"
 "        :return: True, wenn das Plugin aktiv ist, sonst False.\n"
 "        :rtype: bool\n"
@@ -431,7 +432,8 @@ msgstr ""
 "        \"\"\"\n"
 "        Wörterbuch von Menüeinträgen als Schlüssel mit Callbacks als Werte.\n"
 "\n"
-"        :return: Ein Wörterbuch von Menüeinträgen und deren zugehörigen Callbacks.\n"
+"        :return: Ein Wörterbuch von Menüeinträgen und deren zugehörigen "
+"Callbacks.\n"
 "        :rtype: dict\n"
 "        \"\"\"\n"
 "        menus = {\"Neues Menü/Hallo\": self.run}\n"
@@ -856,8 +858,8 @@ msgid ""
 "The converse would be ``other.finishes(this)``\n"
 msgstr ""
 "\n"
-"Der Anfang von `this` liegt strikt vor dem Anfang von `other` um einen Wert >= "
-"`epsilon_s`.\n"
+"Der Anfang von `this` liegt strikt vor dem Anfang von `other` um einen Wert "
+">= `epsilon_s`.\n"
 "Das Ende von `this` entspricht genau dem Ende von `other`.\n"
 "::\n"
 "\n"
@@ -880,10 +882,10 @@ msgid ""
 "The converse would be ``other.finishes(this)``\n"
 msgstr ""
 "\n"
-"Der Anfang von `this` liegt vor oder entspricht dem Ende von `other` um einen Wert >= "
-"`epsilon_s`.\n"
-"Das Ende von `this` liegt vor oder entspricht dem Anfang von `other` um einen Wert >= "
-"`epsilon_s`.\n"
+"Der Anfang von `this` liegt vor oder entspricht dem Ende von `other` um "
+"einen Wert >= `epsilon_s`.\n"
+"Das Ende von `this` liegt vor oder entspricht dem Anfang von `other` um "
+"einen Wert >= `epsilon_s`.\n"
 "::\n"
 "\n"
 "   [    this    ]           ODER      [    other    ]\n"
@@ -900,9 +902,12 @@ msgid ""
 "duration of 9.\n"
 msgstr ""
 "\n"
-"Erstellt einen :class:`~TimeRange`-Objekt, das von einem angegebenen Anfangswert bis zu einem (nicht inklusiven) Endwert in :class:`~RationalTime`-Einheiten reicht.\n"
+"Erstellt einen :class:`~TimeRange`-Objekt, das von einem angegebenen "
+"Anfangswert bis zu einem (nicht inklusiven) Endwert in :class:"
+"`~RationalTime`-Einheiten reicht.\n"
 "\n"
-"Beispiel: Wenn start_time 1 und end_time 10 ist, beträgt die Dauer des resultierenden Zeitbereichs 9 Einheiten.\n"
+"Beispiel: Wenn start_time 1 und end_time 10 ist, beträgt die Dauer des "
+"resultierenden Zeitbereichs 9 Einheiten.\n"
 
 msgid ""
 "\n"
@@ -913,8 +918,8 @@ msgid ""
 "duration of 10.\n"
 msgstr ""
 "\n"
-"Erstellt einen :class:`~TimeRange` aus Start- und End-:class:`~RationalTime`\\s "
-"(inklusive).\n"
+"Erstellt einen :class:`~TimeRange` aus Start- und End-:class:"
+"`~RationalTime`\\s (inklusive).\n"
 "\n"
 "Beispiel: Wenn start_time 1 ist und end_time 10, hat der Rückgabewert eine "
 "Dauer von 10.\n"
@@ -3443,11 +3448,11 @@ msgstr "%s - Seite %d"
 msgid "Frame {0} - TC: {1} - S: {2}"
 msgstr "Frame {0} - ZC: {1} - S: {2}"
 
+msgid "Page Size: {0} x {1}"
+msgstr "Seitengröße: {0} x {1}"
+
 msgid "Image too big.  Will save the viewport size."
 msgstr "Bild zu gro. Speichert die Ansichtsfenstergre."
-
-msgid "Viewport Size: {0}  Render Size: {1}"
-msgstr "Ansicht Gre: {0} Render Gre: {1}"
 
 msgid "Scrub"
 msgstr "Schrubben"
@@ -6430,6 +6435,12 @@ msgstr "Keine gltigen Gerte gefunden"
 msgid "Default Device"
 msgstr "Standardgert"
 
+msgid "PDF Options"
+msgstr "PDF-Optionen"
+
+msgid "Page Size"
+msgstr "Seitengröße"
+
 msgid "Remote to Local Path Mapping"
 msgstr "Entfernung zum lokalen Pfad Mapping"
 
@@ -7160,6 +7171,96 @@ msgstr "Hotkeys-Fenster umschalten"
 
 msgid "Toggle About Window"
 msgstr "Fenster umschalten"
+
+#~ msgid "A0"
+#~ msgstr "A0"
+
+#~ msgid "A1"
+#~ msgstr "A1"
+
+#~ msgid "A2"
+#~ msgstr "A2"
+
+#~ msgid "A3"
+#~ msgstr "A3"
+
+#~ msgid "A4"
+#~ msgstr "A4"
+
+#~ msgid "A5"
+#~ msgstr "A5"
+
+#~ msgid "A6"
+#~ msgstr "A6"
+
+#~ msgid "A7"
+#~ msgstr "A7"
+
+#~ msgid "A8"
+#~ msgstr "A8"
+
+#~ msgid "A9"
+#~ msgstr "A9"
+
+#~ msgid "B0"
+#~ msgstr "B0"
+
+#~ msgid "B1"
+#~ msgstr "B1"
+
+#~ msgid "B2"
+#~ msgstr "B2"
+
+#~ msgid "B3"
+#~ msgstr "B3"
+
+#~ msgid "B4"
+#~ msgstr "B4"
+
+#~ msgid "B5"
+#~ msgstr "B5"
+
+#~ msgid "B6"
+#~ msgstr "B6"
+
+#~ msgid "B7"
+#~ msgstr "B7"
+
+#~ msgid "B8"
+#~ msgstr "B8"
+
+#~ msgid "B9"
+#~ msgstr "B9"
+
+#~ msgid "B10"
+#~ msgstr "B10"
+
+#~ msgid "C5E"
+#~ msgstr "C5E"
+
+#~ msgid "DLE"
+#~ msgstr "DLE"
+
+#~ msgid "Executive"
+#~ msgstr "Exekutive"
+
+#~ msgid "Folio"
+#~ msgstr "Folio"
+
+#~ msgid "Ledger"
+#~ msgstr "Ledger"
+
+#~ msgid "Legal"
+#~ msgstr "Rechtsvorschriften"
+
+#~ msgid "Letter"
+#~ msgstr "Schreiben"
+
+#~ msgid "Tabloid"
+#~ msgstr "Tabloid"
+
+#~ msgid "Viewport Size: {0}  Render Size: {1}"
+#~ msgstr "Ansicht Gre: {0} Render Gre: {1}"
 
 #~ msgid "Font not found.  Will not use UTF-8."
 #~ msgstr "Schrift nicht gefunden. UTF-8 wird nicht verwendet."

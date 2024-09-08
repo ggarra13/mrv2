@@ -3375,11 +3375,11 @@ msgstr "%s - Page %d"
 msgid "Frame {0} - TC: {1} - S: {2}"
 msgstr "Cadre {0} - CT: {1} - S: {2}"
 
+msgid "Page Size: {0} x {1}"
+msgstr "Taille de la page : {0} x {1}"
+
 msgid "Image too big.  Will save the viewport size."
 msgstr "Image trop grande. Enregistrera la taille du viseur."
-
-msgid "Viewport Size: {0}  Render Size: {1}"
-msgstr "Taille du point de vue : {0} Taille du rendu : {1}"
 
 msgid "Scrub"
 msgstr "Arrosage"
@@ -6383,6 +6383,12 @@ msgstr "Aucun périphérique valide n'a été trouvé"
 msgid "Default Device"
 msgstr "Périphérique par défaut"
 
+msgid "PDF Options"
+msgstr "Options PDF"
+
+msgid "Page Size"
+msgstr "Taille de la page"
+
 msgid "Remote to Local Path Mapping"
 msgstr "Cartographie des chemins de distance vers les localités"
 
@@ -7121,6 +7127,96 @@ msgstr "Activer la fenêtre des touches d'amorçage"
 
 msgid "Toggle About Window"
 msgstr "Commutation à propos de la fenêtre"
+
+#~ msgid "A0"
+#~ msgstr "A0"
+
+#~ msgid "A1"
+#~ msgstr "A1"
+
+#~ msgid "A2"
+#~ msgstr "A2"
+
+#~ msgid "A3"
+#~ msgstr "A3"
+
+#~ msgid "A4"
+#~ msgstr "A4"
+
+#~ msgid "A5"
+#~ msgstr "A5"
+
+#~ msgid "A6"
+#~ msgstr "A6"
+
+#~ msgid "A7"
+#~ msgstr "A7"
+
+#~ msgid "A8"
+#~ msgstr "A8"
+
+#~ msgid "A9"
+#~ msgstr "A9"
+
+#~ msgid "B0"
+#~ msgstr "B0"
+
+#~ msgid "B1"
+#~ msgstr "B1"
+
+#~ msgid "B2"
+#~ msgstr "B2"
+
+#~ msgid "B3"
+#~ msgstr "B3"
+
+#~ msgid "B4"
+#~ msgstr "B4"
+
+#~ msgid "B5"
+#~ msgstr "B5"
+
+#~ msgid "B6"
+#~ msgstr "B6"
+
+#~ msgid "B7"
+#~ msgstr "B7"
+
+#~ msgid "B8"
+#~ msgstr "B8"
+
+#~ msgid "B9"
+#~ msgstr "B9"
+
+#~ msgid "B10"
+#~ msgstr "B10"
+
+#~ msgid "C5E"
+#~ msgstr "C5E"
+
+#~ msgid "DLE"
+#~ msgstr "DLE"
+
+#~ msgid "Executive"
+#~ msgstr "Exécutif"
+
+#~ msgid "Folio"
+#~ msgstr "Folio"
+
+#~ msgid "Ledger"
+#~ msgstr "Livre-livre"
+
+#~ msgid "Legal"
+#~ msgstr "Jurisprudence"
+
+#~ msgid "Letter"
+#~ msgstr "Lettre"
+
+#~ msgid "Tabloid"
+#~ msgstr "Tabloïd"
+
+#~ msgid "Viewport Size: {0}  Render Size: {1}"
+#~ msgstr "Taille du point de vue : {0} Taille du rendu : {1}"
 
 #~ msgid "Font not found.  Will not use UTF-8."
 #~ msgstr "Police non trouvée. N'utilisera pas UTF-8."

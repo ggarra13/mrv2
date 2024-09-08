@@ -51,9 +51,11 @@ namespace mrv
 
         Creator::Creator(
             const std::string& fileName,
+            const Fl_PDF_File_Surface::Page_Format& pageFormat,
             const std::vector< std::shared_ptr< draw::Annotation >>& ann,
             const ViewerUI* ui) :
             file(fileName),
+            page_format(pageFormat),
             annotations(ann),
             ui(ui)
         {
@@ -73,8 +75,6 @@ namespace mrv
                 LOG_ERROR("Error in pdf.begin_page");
                 return;
             }
-
-            pdf.printable_rect(&width, &height);
 
             /* Print the lines of the page. */
             fl_color(FL_BLACK);
@@ -257,14 +257,17 @@ namespace mrv
         {
             char* err_message;
             int err = pdf.begin_document(
-                file.c_str(), Fl_Paged_Device::A4, Fl_Paged_Device::PORTRAIT,
+                file.c_str(), page_format, Fl_Paged_Device::PORTRAIT,
                 &err_message);
             if (err)
             {
                 LOG_ERROR(err_message);
                 return false;
             }
+            
 
+            pdf.printable_rect(&width, &height);
+                
             addPage();
 
             auto view = ui->uiView;
@@ -318,18 +321,6 @@ namespace mrv
 
             view->make_current();
             gl::initGLAD();
-
-            std::string msg =
-                tl::string::Format(_("Viewport Size: {0}  Render Size: {1}"))
-                    .arg(viewportSize)
-                    .arg(renderSize);
-            LOG_INFO(msg);
-
-            msg = tl::string::Format("viewZoom: {2} X: {3} Y: {4}")
-                      .arg(view->viewZoom())
-                      .arg(X)
-                      .arg(Y);
-            LOG_INFO(msg);
 
             // Don't send any tcp updates
             tcp->lock();

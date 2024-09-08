@@ -3388,11 +3388,11 @@ msgstr "%s - 第%d页"
 msgid "Frame {0} - TC: {1} - S: {2}"
 msgstr "帧 {0} - 时间码 : {1} - 秒数: {2}"
 
+msgid "Page Size: {0} x {1}"
+msgstr "页面大小 : {0} x {1}"
+
 msgid "Image too big.  Will save the viewport size."
 msgstr "图像太大。 将保存视图的大小 。"
-
-msgid "Viewport Size: {0}  Render Size: {1}"
-msgstr "视图大小 : {0} 渲染大小 : {1}"
 
 msgid "Scrub"
 msgstr "Scrub"
@@ -6294,6 +6294,12 @@ msgstr "未找到有效的设备"
 msgid "Default Device"
 msgstr "默认设备"
 
+msgid "PDF Options"
+msgstr "PDF 选项"
+
+msgid "Page Size"
+msgstr "页面大小"
+
 msgid "Remote to Local Path Mapping"
 msgstr "远程到本地路径映射"
 
@@ -7021,6 +7027,96 @@ msgstr "开关热键窗口"
 
 msgid "Toggle About Window"
 msgstr "开关关于窗口"
+
+#~ msgid "A0"
+#~ msgstr "A0"
+
+#~ msgid "A1"
+#~ msgstr "A1"
+
+#~ msgid "A2"
+#~ msgstr "A2"
+
+#~ msgid "A3"
+#~ msgstr "A3"
+
+#~ msgid "A4"
+#~ msgstr "A4"
+
+#~ msgid "A5"
+#~ msgstr "A5"
+
+#~ msgid "A6"
+#~ msgstr "A6"
+
+#~ msgid "A7"
+#~ msgstr "A7"
+
+#~ msgid "A8"
+#~ msgstr "A8"
+
+#~ msgid "A9"
+#~ msgstr "A9"
+
+#~ msgid "B0"
+#~ msgstr "B0"
+
+#~ msgid "B1"
+#~ msgstr "B1"
+
+#~ msgid "B2"
+#~ msgstr "B2"
+
+#~ msgid "B3"
+#~ msgstr "B3"
+
+#~ msgid "B4"
+#~ msgstr "B4"
+
+#~ msgid "B5"
+#~ msgstr "B5"
+
+#~ msgid "B6"
+#~ msgstr "B6"
+
+#~ msgid "B7"
+#~ msgstr "B7"
+
+#~ msgid "B8"
+#~ msgstr "B8"
+
+#~ msgid "B9"
+#~ msgstr "B9"
+
+#~ msgid "B10"
+#~ msgstr "B10"
+
+#~ msgid "C5E"
+#~ msgstr "C5E"
+
+#~ msgid "DLE"
+#~ msgstr "DLE"
+
+#~ msgid "Executive"
+#~ msgstr "Executive"
+
+#~ msgid "Folio"
+#~ msgstr "组合"
+
+#~ msgid "Ledger"
+#~ msgstr "分类账夹"
+
+#~ msgid "Legal"
+#~ msgstr "法律"
+
+#~ msgid "Letter"
+#~ msgstr "来信"
+
+#~ msgid "Tabloid"
+#~ msgstr "简略小报"
+
+#~ msgid "Viewport Size: {0}  Render Size: {1}"
+#~ msgstr "视图大小 : {0} 渲染大小 : {1}"
 
 #~ msgid "Font not found.  Will not use UTF-8."
 #~ msgstr "未找到字体。 将不会使用 UTF-8 。"

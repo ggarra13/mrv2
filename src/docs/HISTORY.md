@@ -2,6 +2,7 @@ v1.2.7
 ======
 
 - Better German translation.
+- Added Selection of Page Size when saving out a PDF.
 
 v1.2.6
 ======

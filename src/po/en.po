@@ -3446,11 +3446,11 @@ msgstr "%s - Page %d"
 msgid "Frame {0} - TC: {1} - S: {2}"
 msgstr "Frame {0} - TC: {1} - S: {2}"
 
+msgid "Page Size: {0} x {1}"
+msgstr "Page Size: {0} x {1}"
+
 msgid "Image too big.  Will save the viewport size."
 msgstr "Image too big.  Will save the viewport size."
-
-msgid "Viewport Size: {0}  Render Size: {1}"
-msgstr "Viewport Size: {0}  Render Size: {1}"
 
 msgid "Scrub"
 msgstr "Scrub"
@@ -6413,6 +6413,12 @@ msgstr "No Valid Devices found"
 msgid "Default Device"
 msgstr "Default Device"
 
+msgid "PDF Options"
+msgstr "PDF Options"
+
+msgid "Page Size"
+msgstr "Page Size"
+
 msgid "Remote to Local Path Mapping"
 msgstr "Remote to Local Path Mapping"
 
@@ -7141,6 +7147,96 @@ msgstr "Toggle Hotkeys Window"
 
 msgid "Toggle About Window"
 msgstr "Toggle About Window"
+
+#~ msgid "A0"
+#~ msgstr "A0"
+
+#~ msgid "A1"
+#~ msgstr "A1"
+
+#~ msgid "A2"
+#~ msgstr "A2"
+
+#~ msgid "A3"
+#~ msgstr "A3"
+
+#~ msgid "A4"
+#~ msgstr "A4"
+
+#~ msgid "A5"
+#~ msgstr "A5"
+
+#~ msgid "A6"
+#~ msgstr "A6"
+
+#~ msgid "A7"
+#~ msgstr "A7"
+
+#~ msgid "A8"
+#~ msgstr "A8"
+
+#~ msgid "A9"
+#~ msgstr "A9"
+
+#~ msgid "B0"
+#~ msgstr "B0"
+
+#~ msgid "B1"
+#~ msgstr "B1"
+
+#~ msgid "B2"
+#~ msgstr "B2"
+
+#~ msgid "B3"
+#~ msgstr "B3"
+
+#~ msgid "B4"
+#~ msgstr "B4"
+
+#~ msgid "B5"
+#~ msgstr "B5"
+
+#~ msgid "B6"
+#~ msgstr "B6"
+
+#~ msgid "B7"
+#~ msgstr "B7"
+
+#~ msgid "B8"
+#~ msgstr "B8"
+
+#~ msgid "B9"
+#~ msgstr "B9"
+
+#~ msgid "B10"
+#~ msgstr "B10"
+
+#~ msgid "C5E"
+#~ msgstr "C5E"
+
+#~ msgid "DLE"
+#~ msgstr "DLE"
+
+#~ msgid "Executive"
+#~ msgstr "Executive"
+
+#~ msgid "Folio"
+#~ msgstr "Folio"
+
+#~ msgid "Ledger"
+#~ msgstr "Ledger"
+
+#~ msgid "Legal"
+#~ msgstr "Legal"
+
+#~ msgid "Letter"
+#~ msgstr "Letter"
+
+#~ msgid "Tabloid"
+#~ msgstr "Tabloid"
+
+#~ msgid "Viewport Size: {0}  Render Size: {1}"
+#~ msgstr "Viewport Size: {0}  Render Size: {1}"
 
 #~ msgid "Font not found.  Will not use UTF-8."
 #~ msgstr "Font not found.  Will not use UTF-8."

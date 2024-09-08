@@ -31,6 +31,7 @@ namespace mrv
         public:
             Creator(
                 const std::string& fileName,
+                const Fl_PDF_File_Surface::Page_Format& pageFormat,
                 const std::vector< std::shared_ptr< draw::Annotation >>&
                     annotations,
                 const ViewerUI* ui);
@@ -50,7 +51,9 @@ namespace mrv
             unsigned thumbnailHeight;
 
             Fl_PDF_File_Surface pdf;
-            int width, height;
+            Fl_PDF_File_Surface::Page_Format page_format;
+                    
+            int width = 0, height = 0;
 
             int time_margin, image_margin;
             
