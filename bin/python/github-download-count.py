@@ -56,18 +56,35 @@ parser = argparse.ArgumentParser(description='Process GitHub download count.')
 parser.add_argument('user', type=str, help='GitHub username')
 parser.add_argument('repo', type=str, nargs='?', help='Repository name (optional)')
 parser.add_argument('tag', type=str, nargs='?', help='Tag name (optional)')
+parser.add_argument('start_date', type=str, default='2014-10-29',
+                    help='Start Date (optional)')
+parser.add_argument('end_date', type=str, nargs='?', help='End Date (optional)')
 
 # Parse the arguments
 args = parser.parse_args()
 
-# Access the arguments
-print('User:', args.user)
-print('Repository:', args.repo)
-print('Tag:', args.tag)
-
 user = args.user
 repo = args.repo
 tag  = args.tag
+start_date = args.start_date
+end_date = args.end_date
+
+start_date = datetime.fromisoformat(start_date).strftime("%Y-%m-%d")
+    
+if not end_date:
+    today = datetime.utcnow()
+    end_date = today.strftime("%Y-%m-%d")
+else:
+    end_date = datetime.fromisoformat(end_date).strftime("%Y-%m-%d")
+
+
+# Print out the arguments
+# print('      User:', user)
+# print('Repository:', repo)
+# print('       Tag:', tag)
+# print('Start Date:', start_date)
+# print('  End Date:', end_date)
+
 
 full_names = []
 if user and repo:
@@ -117,23 +134,23 @@ for full_name in full_names:
     formatted_total = format_number(total_count, 5)
     print(f'{formatted_total}\tTotal Downloads for repo {full_name}')
     
-today = datetime.utcnow()
-formatted_date = today.strftime("%Y-%m-%d")
 
 folder_name = sys.argv[3]
 
-def count_sourceforge(repo, folder_name, formatted_date,
-                      start_date = '2014-10-29'):
+def count_sourceforge(repo, folder_name, end_date, start_date = '2014-10-29'):
 
+    print()
+    print(f"\tCount {folder_name} from {start_date} to {end_date}")
+    
     # Base URL for the project downloads page
-    base_url = f"https://sourceforge.net/projects/{repo}/files/{folder_name}/stats/json?start_date={start_date}&end_date={formatted_date}"
+    base_url = f"https://sourceforge.net/projects/{repo}/files/{folder_name}/stats/json?start_date={start_date}&end_date={end_date}"
 
     # Send request to download page
     response = requests.get(base_url)
     try:
         r = response.json()
     except Exception as e:
-        base_url = f"https://sourceforge.net/projects/{repo}/files/archive/{folder_name}/stats/json?start_date={start_date}&end_date={formatted_date}"
+        base_url = f"https://sourceforge.net/projects/{repo}/files/archive/{folder_name}/stats/json?start_date={start_date}&end_date={end_date}"
         try:
             response = requests.get(base_url)
             r = response.json()
@@ -153,12 +170,12 @@ def count_sourceforge(repo, folder_name, formatted_date,
     return total
 
 sourceforge_released_total = count_sourceforge(repo, folder_name,
-                                               formatted_date)
+                                               end_date)
 
-sourceforge_beta_total = count_sourceforge(repo, 'beta', formatted_date,
-                                           asset_date)
+sourceforge_beta_total = count_sourceforge(repo, 'beta', end_date, start_date)
 
 formatted_total = format_number(sourceforge_released_total +
                                 sourceforge_beta_total +
                                 total_count, 5)
+print('-----------------------------------------------------')
 print(f'{formatted_total}\tGrand Total')

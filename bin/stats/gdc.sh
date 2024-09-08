@@ -39,8 +39,24 @@ if [[ "$TAG" == "" ]]; then
     export TAG=`git ls-remote --tags --refs | grep -E 'v[0-9]+\.[0-9]+\.[0-9]+$' | tail -n1 | cut -d/ -f3`
 fi
 
-date_created=`git for-each-ref --format="%(creatordate:iso)" refs/tags/$TAG`
-today=`date +'%F %T'`
-echo "DATE CREATED: ${date_created}"
-echo "NOW         : ${today}"
-$PYTHON bin/python/github-download-count.py ggarra13 mrv2 $TAG
+# Get all tags sorted by version
+all_tags=$(git ls-remote --tags --refs | grep -E 'v[0-9]+\.[0-9]+\.[0-9]+$' | cut -d/ -f3 | sort -V)
+
+# Find the next tag after the current one
+next_tag=$(echo "$all_tags" | grep -A1 "^$TAG$" | tail -n1)
+
+# If the next tag is the same as the current tag, there is no next tag
+if [[ "$next_tag" == "$TAG" || -z "$next_tag" ]]; then
+    next_tag_date=$(date +'%F %T')
+else
+    next_tag_date=$(git for-each-ref --format="%(creatordate:iso)" refs/tags/$next_tag)
+fi
+
+date_created=$(git for-each-ref --format="%(creatordate:iso)" refs/tags/$TAG)
+today=$(date +'%F %T')
+
+echo "DATE CREATED : ${date_created}"
+echo "NEXT TAG DATE: ${next_tag_date}"
+echo "NOW          : ${today}"
+
+$PYTHON bin/python/github-download-count.py ggarra13 mrv2 $TAG "$date_created" "$next_tag_date"
