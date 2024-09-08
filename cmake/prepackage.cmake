@@ -2,6 +2,8 @@
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
+cmake_policy(SET CMP0009 NEW)
+
 message( STATUS "----------------------------------------prepackage------------------------------------" )
 message( STATUS "CMAKE_CURRENT_BINARY_DIR=${CMAKE_CURRENT_BINARY_DIR}" )
 message( STATUS "CMAKE_CURRENT_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}" )
