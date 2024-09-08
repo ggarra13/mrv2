@@ -34,6 +34,34 @@ All Platforms
 Linux
 =====
 
+All protocols
+-------------
+
+- Playback of screen captures don't play at their actual speed.
+
+  Sadly, this is a limitation of mrv2.  Screen captures such as those created
+  by Ubuntu may rely on Variable Frame Rates (VFR), meaning that the speed
+  changes between each frame of the video.
+  mrv2 needs a constant frame rate throughout for playback, for seeking and
+  for showing the timeline.
+
+X11
+---
+
+- I see some tearing of the video during playback.  How can I fix it?
+
+  This is likely an issue with your configuration of your graphics card.
+  For NVidia graphic cards, you can fix it by:
+  
+    * Edit /etc/X11/xorg.conf with sudo permissions.
+
+    * Go to the "Device" section of your NVIDIA graphics card.
+
+    * Add or modify::
+	
+	Option "TripleBuffer" "True"
+	Option "SwapInterval" "1"
+
 Wayland
 -------
 

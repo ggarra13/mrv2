@@ -34,6 +34,36 @@ Todas las Plataformas
 Linux
 =====
 
+Todos los protocolos de display
+-------------------------------
+
+- La reproducción de las capturas de pantalla no se reproducen a su velocidad
+  correcta.
+
+  Lamentablemente, esta es una limitación de mrv2.  Capturas de vídeo de
+  pantalla como las de Ubuntu pueden depender de Variable Frame Rates (VFR), ó
+  Velocidad de Reproducción Variable.  Esto significa que la velocidad cambia
+  de cuadro a cuadro en el vídeo.
+  mrv2 necesita una velocidad constante durante todo el vídeo para su
+  reproducción, búsqueda y mostrar la línea de tiempo.
+
+X11
+---
+
+- Veo un "desgarro" del vídeo durante la reproducción.  ¿Cómo lo arreglo?
+
+  Esto es probable una misconfiguración de su tarjeta gráfica.
+  Para tarjetas gráficas de NVidia, puede arreglarlo así:
+  
+    * Edite /etc/X11/xorg.conf con permisos de superusuario (sudo).
+
+    * Vaya a la sección "Device" de su tarjeta NVIDIA.
+
+    * Agregue o modique::
+	
+	Option "TripleBuffer" "True"
+	Option "SwapInterval" "1"
+	
 Wayland
 -------
 	

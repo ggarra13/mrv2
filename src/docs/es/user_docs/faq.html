@@ -64,6 +64,8 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Preguntas Frecuentes</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#todas-las-plataformas">Todas las Plataformas</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#linux">Linux</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#todos-los-protocolos-de-display">Todos los protocolos de display</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#x11">X11</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#wayland">Wayland</a></li>
 </ul>
 </li>
@@ -138,6 +140,41 @@ establecer modo de Presentación.</p>
 </section>
 <section id="linux">
 <h2>Linux<a class="headerlink" href="#linux" title="Link to this heading"></a></h2>
+<section id="todos-los-protocolos-de-display">
+<h3>Todos los protocolos de display<a class="headerlink" href="#todos-los-protocolos-de-display" title="Link to this heading"></a></h3>
+<ul>
+<li><p>La reproducción de las capturas de pantalla no se reproducen a su velocidad
+correcta.</p>
+<p>Lamentablemente, esta es una limitación de mrv2.  Capturas de vídeo de
+pantalla como las de Ubuntu pueden depender de Variable Frame Rates (VFR), ó
+Velocidad de Reproducción Variable.  Esto significa que la velocidad cambia
+de cuadro a cuadro en el vídeo.
+mrv2 necesita una velocidad constante durante todo el vídeo para su
+reproducción, búsqueda y mostrar la línea de tiempo.</p>
+</li>
+</ul>
+</section>
+<section id="x11">
+<h3>X11<a class="headerlink" href="#x11" title="Link to this heading"></a></h3>
+<ul>
+<li><p>Veo un «desgarro» del vídeo durante la reproducción.  ¿Cómo lo arreglo?</p>
+<p>Esto es probable una misconfiguración de su tarjeta gráfica.
+Para tarjetas gráficas de NVidia, puede arreglarlo así:</p>
+<blockquote>
+<div><ul>
+<li><p>Edite /etc/X11/xorg.conf con permisos de superusuario (sudo).</p></li>
+<li><p>Vaya a la sección «Device» de su tarjeta NVIDIA.</p></li>
+<li><p>Agregue o modique:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Option</span> <span class="s2">&quot;TripleBuffer&quot;</span> <span class="s2">&quot;True&quot;</span>
+<span class="n">Option</span> <span class="s2">&quot;SwapInterval&quot;</span> <span class="s2">&quot;1&quot;</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</section>
 <section id="wayland">
 <h3>Wayland<a class="headerlink" href="#wayland" title="Link to this heading"></a></h3>
 <ul>

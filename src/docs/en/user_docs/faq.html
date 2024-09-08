@@ -63,6 +63,8 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">FAQ</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#all-platforms">All Platforms</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#linux">Linux</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#all-protocols">All protocols</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#x11">X11</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#wayland">Wayland</a></li>
 </ul>
 </li>
@@ -136,6 +138,39 @@ or optionally hide the pixel bar or set the UI to presentation mode.</p>
 </section>
 <section id="linux">
 <h2>Linux<a class="headerlink" href="#linux" title="Link to this heading"></a></h2>
+<section id="all-protocols">
+<h3>All protocols<a class="headerlink" href="#all-protocols" title="Link to this heading"></a></h3>
+<ul>
+<li><p>Playback of screen captures don’t play at their actual speed.</p>
+<p>Sadly, this is a limitation of mrv2.  Screen captures such as those created
+by Ubuntu may rely on Variable Frame Rates (VFR), meaning that the speed
+changes between each frame of the video.
+mrv2 needs a constant frame rate throughout for playback, for seeking and
+for showing the timeline.</p>
+</li>
+</ul>
+</section>
+<section id="x11">
+<h3>X11<a class="headerlink" href="#x11" title="Link to this heading"></a></h3>
+<ul>
+<li><p>I see some tearing of the video during playback.  How can I fix it?</p>
+<p>This is likely an issue with your configuration of your graphics card.
+For NVidia graphic cards, you can fix it by:</p>
+<blockquote>
+<div><ul>
+<li><p>Edit /etc/X11/xorg.conf with sudo permissions.</p></li>
+<li><p>Go to the “Device” section of your NVIDIA graphics card.</p></li>
+<li><p>Add or modify:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Option</span> <span class="s2">&quot;TripleBuffer&quot;</span> <span class="s2">&quot;True&quot;</span>
+<span class="n">Option</span> <span class="s2">&quot;SwapInterval&quot;</span> <span class="s2">&quot;1&quot;</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</section>
 <section id="wayland">
 <h3>Wayland<a class="headerlink" href="#wayland" title="Link to this heading"></a></h3>
 <ul>
