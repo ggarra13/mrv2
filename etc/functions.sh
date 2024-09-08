@@ -192,8 +192,6 @@ locate_python()
     if [[ "$PYTHON_VERSION" == "" || "$PYTHON_VERSION" == "." ]]; then
 	extract_python_version
     fi
-
-    echo "PYTHON=$PYTHON"
     
 }
 

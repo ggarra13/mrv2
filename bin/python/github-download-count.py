@@ -120,11 +120,10 @@ for full_name in full_names:
                             continue
                     total_count += asset['download_count']
                     asset_date = asset['updated_at'].split('T')[0]
-                    print('Repo: %s\tCount: %d\tDate: %s\tAsset: %s'%(
-                        full_name,
-                        asset['download_count'],
-                        asset_date,
+                    print('%s\tAsset: %s\tDate: %s'%(
+                        format_number(asset['download_count'], 5),
                         asset['name'],
+                        asset_date,
                     ))
     except Exception as e:
         print('Exception while fetching releases for repo %s: %s') % (full_name,
