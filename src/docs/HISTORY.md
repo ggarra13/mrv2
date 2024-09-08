@@ -1,3 +1,8 @@
+v1.2.7
+======
+
+- Better German translation.
+
 v1.2.6
 ======
 
