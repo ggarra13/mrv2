@@ -105,7 +105,7 @@ etc/:
 Development Instructions
 ========================
 
-mrv2/lib:
+src/lib:
 
 	mrvApp     - Main application, command-line parsing and settings.
 	mrvCore    - Core functionality.
@@ -127,6 +127,6 @@ mrv2/lib:
 	mrvWidgets - FLTK custom widgets and main fluid UI (.fl) files.
 	             .fl files should be refactored to mrvUI?
 
-mrv2/src:
+src/main:
 
 	main.cpp     - Main entry point and python module initialization.
