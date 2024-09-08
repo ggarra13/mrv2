@@ -25,11 +25,17 @@ Todas las Plataformas
 	o optionalmente ocular la barra de pixel en la Interfaz o
 	establecer modo de Presentación.
 
-    * Panel->Settings
+    * Panel->Seteos
       
       - Cache Gigabytes
 
 	Seteado a 4GB por lo menos (por defecto es la mitad de tu memoria)
+
+      - Precisión de Color de FFmpeg
+
+	Si está reproduciendo un vídeo de YUV420_P8 con espacio de color
+	indefinido, este seteo establece una mejor conversión de color, pero
+	puede hacer que la lectura del vídeo sea lenta.
   
 Linux
 =====

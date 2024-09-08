@@ -30,6 +30,11 @@ All Platforms
 
 	Set to 4GB at least (the default is half your memory)
 
+      - FFmpeg Color Precision
+
+	If you are playing a YUV420_P8 video with Color Space "undefined"
+	this setting will provide a more accurate color conversion, but it
+	can make the reading of the movie slow.
 
 Linux
 =====
