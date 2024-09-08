@@ -211,8 +211,8 @@ namespace mrv
         {
             bool found = false;
 
-            auto uiView = ui->uiView;
-            auto player = uiView->getTimelinePlayer();
+            auto view = ui->uiView;
+            auto player = view->getTimelinePlayer();
 
             auto cacheInfoObserver =
                 observer::ValueObserver<timeline::PlayerCacheInfo>::create(
@@ -232,7 +232,24 @@ namespace mrv
 
             while (!found)
             {
+                // flush is needed
                 Fl::check();
+            }
+
+            const auto& start = std::chrono::high_resolution_clock::now();
+            auto elapsedTime =
+                std::chrono::duration_cast<std::chrono::milliseconds>(
+                    start - start)
+                    .count();
+            while (elapsedTime < 500)
+            {
+                Fl::check();
+
+                const auto& now = std::chrono::high_resolution_clock::now();
+                elapsedTime =
+                    std::chrono::duration_cast<std::chrono::milliseconds>(
+                        now - start)
+                        .count();
             }
         }
 
