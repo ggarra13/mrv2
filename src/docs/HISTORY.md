@@ -1,7 +1,7 @@
 v1.2.7
 ======
 
-- Better German, Portuguese, Chinese, French and Hindi translations.
+- Better German, Portuguese, Chinese, French, Italian and Hindi translations.
 - Added Selection of Page Size when saving out a PDF.
 
 v1.2.6
