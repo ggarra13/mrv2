@@ -34,9 +34,6 @@ tlRender/debug_tests
 Qt5
 Qt6
 packages
-Debug
-Release
-RelWithDebInfo
 doc/doxygen
 examples/mrv2
 *__pycache__
