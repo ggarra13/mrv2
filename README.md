@@ -40,6 +40,7 @@ Contents:
 - [Translating](#translating)
    - [If you compiled mrv2](#if-you-compiled-mrv2)
    - [If you did not compile mrv2](#if-you-did-not-compile-mrv2)
+   - [Translating with AI](#translating-with-ai)
    - [Translating on Windows](#translating-on-windows)
 - [Packaging](#packaging)
 - [Developing](#developing)
@@ -451,10 +452,11 @@ To do so, you must run:
 
 # Translating
 
-mrv2 can support multiple natural language translations.  Currently, English
-and Spanish are supported.  The translation system used is gettext so
+mrv2 can support multiple natural language translations.  Currently, 
+Chinese, English, French, German, Hindi, Italian, Portuguese and Spanish
+are supported.  The translation system used is gettext so
 familiarity with it is desired (albeit not essential).
-The translations reside in mrv2/po and follow internationalization language
+The translations reside in src/po and follow internationalization language
 code files, like es.po (for Spanish) or de.po (for German).
 
 First, you should create a branch to submit a pull request.
@@ -535,6 +537,18 @@ regenerate the .pot files after a while, before calling -t mo.  To do so:
 Note that this change is dramatic as your commits of the code changes will
 get mangled with all the .pot/.po comments, preventing a clean PR
 (Pull Request) on github.com.
+
+## Translating with AI
+
+There's an AI script that uses the transformers python library for AI
+translation in:
+
+	bin/po/po_translate.sh
+	
+It works by sending a language to it, like:
+
+	bin/po/po_translate.sh all     # for all languages supported by the script.
+	bin/po/po_translate.sh zh-CN   # for Chinese Simplified
 
 ## If you did not compile mrv2
 
