@@ -3,6 +3,13 @@ v1.2.7
 
 - Better German, Portuguese, Chinese, French, Italian and Hindi translations.
 - Added Selection of Page Size when saving out a PDF.
+- Updated FAQ to cover X11 settings and FFmpeg Color Accuracy as a cause of
+  slowness when playing YUV420P_U8 movies.
+- Fixed session files with no panels open, leaving the dock group open if it
+  was previously open.
+- Fixed HDR->Auto Normalize with OpenEXR files that had a smaller display
+  window.
+  
 
 v1.2.6
 ======

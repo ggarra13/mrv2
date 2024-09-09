@@ -144,6 +144,7 @@ namespace mrv
             if (ndiPanel && ndiPanel->is_panel())
                 ndi_panel_cb(nullptr, ui);
 #endif
+            ui->uiDockGroup->hide();
         }
 
         void removeWindows(ViewerUI* ui)
