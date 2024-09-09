@@ -8,28 +8,34 @@
 
 #include <mrvWidgets/mrvFPSInput.h>
 
+namespace
+{
+    double floorToOnePlace(double number)
+    {
+        // Multiply by 10, floor to the nearest integer,
+        // and then divide by 10
+        return std::floor(number * 10.0) / 10.0;
+    }
+}
+
+
 namespace mrv
 {
-    namespace decimal
-    {
-        double floorToOnePlace(double number)
-        {
-            // Multiply by 10, floor to the nearest integer,
-            // and then divide by 10
-            return std::floor(number * 10.0) / 10.0;
-        }
-    } // namespace decimal
-
     int FPSInput::format(char* buffer)
     {
-        std::stringstream ss;
+        char temp[64];
+        int length;
+
         double number = value();
-        double rounded = decimal::floorToOnePlace(number);
-        if (w() < 52)
-            ss << rounded;
-        else
-            ss << number;
-        return snprintf(buffer, 128, "%s", ss.str().c_str());
+
+        if (w() < 52.0) {
+            length = sprintf(temp, "%.1f", floorToOnePlace(number));
+        } else {
+            length = sprintf(temp, "%.3f", number);
+        }
+        
+        strcpy(buffer, temp);
+        return length;
     }
 
     void FPSInput::resize(int X, int Y, int W, int H)

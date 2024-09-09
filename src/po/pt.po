@@ -5020,7 +5020,7 @@ msgid "60"
 msgstr "60"
 
 msgid "59.952"
-msgstr "59.952"
+msgstr "59,952"
 
 msgid "50"
 msgstr "50"
@@ -5029,13 +5029,13 @@ msgid "48"
 msgstr "48"
 
 msgid "47.952"
-msgstr "47.952"
+msgstr "47,952"
 
 msgid "30"
 msgstr "30"
 
 msgid "29.976"
-msgstr "29.976"
+msgstr "29,976"
 
 msgid "25"
 msgstr "25"
@@ -5044,22 +5044,22 @@ msgid "24"
 msgstr "24"
 
 msgid "23.976"
-msgstr "23.976"
+msgstr "23,976"
 
 msgid "15"
 msgstr "15"
 
 msgid "14.988"
-msgstr "14.988"
+msgstr "14,988"
 
 msgid "12.5"
-msgstr "12.5"
+msgstr "12,5"
 
 msgid "12"
 msgstr "12"
 
 msgid "11.988"
-msgstr "11.988"
+msgstr "11,988"
 
 msgid "F:"
 msgstr "F:"

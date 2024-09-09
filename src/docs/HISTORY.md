@@ -9,6 +9,10 @@ v1.2.7
   was previously open.
 - Fixed HDR->Auto Normalize with OpenEXR files that had a smaller display
   window.
+- Fixed FPS display not respecting the decimal separator on numeric locales
+  that use commas.
+- Fixed numeric locale for Hindi.
+- Fixed numeric locale for all languages.
   
 
 v1.2.6

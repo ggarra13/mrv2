@@ -259,11 +259,7 @@ namespace mrv
 
         initLocale(language);
 
-        const char* numericLocale = setlocale(LC_ALL, NULL);
-
-#if defined __APPLE__ && defined __MACH__
-        numericLocale = setlocale(LC_MESSAGES, NULL);
-#endif
+        const char* numericLocale = language;
         if (language)
         {
             // This is for Apple mainly, as it we just set LC_MESSAGES only
@@ -271,6 +267,7 @@ namespace mrv
             // those locales that use periods in their floating point.
             if (strcmp(language, "C") == 0 || strncmp(language, "ar", 2) == 0 ||
                 strncmp(language, "en", 2) == 0 ||
+                strncmp(language, "hi", 2) == 0 ||
                 strncmp(language, "ja", 2) == 0 ||
                 strncmp(language, "ko", 2) == 0 ||
                 strncmp(language, "zh", 2) == 0)

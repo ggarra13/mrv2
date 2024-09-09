@@ -253,10 +253,7 @@ class POTranslator:
         if self.have_seen.get(english, None):
             return self.have_seen[english]
         
-        if len(english) < 4:
-            return english
-
-        if self.is_number(english):
+        if len(english) < 4 and not self.is_number(english):
             return english
     
         if not self.use_google:
@@ -281,10 +278,7 @@ class POTranslator:
         if english in DONT_TRANSLATE:
             return english
         
-        if len(english) < 4:
-            return english
-
-        if self.is_number(english):
+        if len(english) < 4 and not self.is_number(english):
             return english
     
         translated_text = self.have_seen.get(english, None)
@@ -345,8 +339,7 @@ class POTranslator:
         
         translated_text = self._translate_text(english)
         if 'QUERY LENGTH' in translated_text:
-            print('\t********FAILED********')
-            return english
+            return '********FAILED********'
         translated_text = translated_text.replace('Mrv2', 'mrv2')
         print(f"\tTranslated: {translated_text}")
         return translated_text
