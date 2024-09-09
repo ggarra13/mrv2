@@ -40,7 +40,7 @@ class HotkeyUI {open
       label Hotkeys open
       xywh {780 192 775 644} type Double resizable visible
     } {
-      Fl_Group {} {open selected
+      Fl_Group {} {open
         xywh {0 0 775 644} box PLASTIC_DOWN_BOX resizable
       } {
         Fl_Group {} {
@@ -95,21 +95,24 @@ ui->uiSearchInput->do_callback();}
             label Reset
             user_data uiFunction user_data_type {mrv::Browser*}
             callback {mrv::reset_hotkeys();
-fill_ui_hotkeys(v);}
+fill_ui_hotkeys(v);
+mrv::update_hotkey_tooltips();} selected
             tooltip {Reset hotkeys to mrv2's default configuration.} xywh {94 576 170 38}
           }
           Fl_Button {} {
             label Reload
             user_data uiFunction user_data_type {mrv::Browser*}
             callback {mrv::load_hotkeys();
-fill_ui_hotkeys(v);}
+fill_ui_hotkeys(v);
+mrv::update_hotkey_tooltips();}
             tooltip {Reload hotkeys to last saved file.} xywh {303 576 170 38}
           }
           Fl_Button {} {
             label OK
             user_data this user_data_type {HotkeyUI*}
             callback {v->uiMain->hide();
-v->main->uiMain->fill_menu(v->main->uiMenuBar);}
+v->main->uiMain->fill_menu(v->main->uiMenuBar);
+mrv::update_hotkey_tooltips();}
             tooltip {Accept the current hotkeys.} xywh {512 576 170 38}
           }
         }

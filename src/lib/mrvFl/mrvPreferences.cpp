@@ -871,6 +871,10 @@ namespace mrv
         HotkeyUI* h = ui->uiHotkey;
         fill_ui_hotkeys(h->uiFunction);
 
+        // Update hotkeys tooltips in UI.
+        update_hotkey_tooltips();
+
+        
         std_any value;
 
         int v = settings->getValue<int>("Performance/AudioBufferFrameCount");

@@ -883,11 +883,11 @@ namespace mrv
             mode |= FL_MENU_INACTIVE;
 
         menu->add(
-            _("Playback/Go to/Start"), 0, (Fl_Callback*)start_frame_cb, ui,
-            mode);
+            _("Playback/Go to/Start"), kFirstFrame.hotkey(),
+            (Fl_Callback*)start_frame_cb, ui, mode);
         menu->add(
-            _("Playback/Go to/End"), 0, (Fl_Callback*)end_frame_cb, ui,
-            FL_MENU_DIVIDER | mode);
+            _("Playback/Go to/End"), kLastFrame.hotkey(),
+            (Fl_Callback*)end_frame_cb, ui, FL_MENU_DIVIDER | mode);
 
         menu->add(
             _("Playback/Go to/Previous Frame"), kFrameStepBack.hotkey(),

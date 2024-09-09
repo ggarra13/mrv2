@@ -517,7 +517,7 @@ namespace mrv
                     return 0;
             }
         default:
-            return Fl_Valuator::handle(event);
+            return Fl_Slider::handle(event);
         }
         return 1;
     }

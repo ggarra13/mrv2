@@ -1346,16 +1346,6 @@ namespace mrv
                 framePrev();
                 return 1;
             }
-            else if (kFirstFrame.match(rawkey))
-            {
-                startFrame();
-                return 1;
-            }
-            else if (kLastFrame.match(rawkey))
-            {
-                endFrame();
-                return 1;
-            }
             else if (kRedoDraw.match(rawkey))
             {
                 redo();

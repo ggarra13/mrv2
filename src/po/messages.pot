@@ -2928,6 +2928,84 @@ msgid ""
 "available.  Already used in {2}."
 msgstr ""
 
+msgid "Reduce gain 1/4 stop (divide by sqrt(sqrt(2)))."
+msgstr ""
+
+msgid ""
+"\n"
+"Hotkey: "
+msgstr ""
+
+msgid "Increase gain 1/4 stop (multiply by sqrt(sqrt(2)))."
+msgstr ""
+
+msgid "Allows you to adjust the gain or exposure of the image."
+msgstr ""
+
+msgid ""
+"\n"
+"Hotkeys:   "
+msgstr ""
+
+msgid "   and   "
+msgstr ""
+
+msgid "Allows you to adjust the saturation of the image."
+msgstr ""
+
+msgid ""
+"Allows you to adjust gamma curve for display.\n"
+"Value is:  pow( 2, 1/x )."
+msgstr ""
+
+msgid "Scrubbing Tool"
+msgstr ""
+
+msgid "Area Select Tool"
+msgstr ""
+
+msgid "Freehand Drawing Tool"
+msgstr ""
+
+msgid "Eraser Tool"
+msgstr ""
+
+msgid "Circle Tool"
+msgstr ""
+
+msgid "Rectangle Tool"
+msgstr ""
+
+msgid "Arrow Tool"
+msgstr ""
+
+msgid "Text Tool.   Right click to edit previously stamped text."
+msgstr ""
+
+msgid "Go to the beginning of the sequence."
+msgstr ""
+
+msgid "Play sequence backwards."
+msgstr ""
+
+msgid "Go back one frame."
+msgstr ""
+
+msgid "Stop playback."
+msgstr ""
+
+msgid "Play sequence forwards."
+msgstr ""
+
+msgid "Go to the end of the sequence."
+msgstr ""
+
+msgid "Set In Point"
+msgstr ""
+
+msgid "Set Out Point"
+msgstr ""
+
 msgid "Load Directory"
 msgstr ""
 
@@ -4623,25 +4701,13 @@ msgstr ""
 msgid "@|<"
 msgstr ""
 
-msgid "Go to the beginning of the sequence."
-msgstr ""
-
 msgid "@<"
-msgstr ""
-
-msgid "Play sequence backwards."
 msgstr ""
 
 msgid "@<|"
 msgstr ""
 
-msgid "Go back one frame."
-msgstr ""
-
 msgid "@||"
-msgstr ""
-
-msgid "Stop playback."
 msgstr ""
 
 msgid "@|>"
@@ -4657,9 +4723,6 @@ msgid "Play sequence forward."
 msgstr ""
 
 msgid "@>|"
-msgstr ""
-
-msgid "Go to the end of the sequence."
 msgstr ""
 
 msgid "Looping mode (Loop, Once, Ping-Pong)"
@@ -4722,25 +4785,16 @@ msgstr ""
 msgid "Exposure"
 msgstr ""
 
-msgid "Reduce gain 1/4 stop (divide by sqrt(sqrt(2)))."
-msgstr ""
-
 msgid "f/8"
 msgstr ""
 
 msgid "Toggle gain between 1 and the previous setting."
 msgstr ""
 
-msgid "Increase gain 1/4 stop (multiply by sqrt(sqrt(2)))."
-msgstr ""
-
 msgid "Gain"
 msgstr ""
 
 msgid "Gain image value.  A simple multiplier of the image pixel values."
-msgstr ""
-
-msgid "Allows you to adjust the gain or exposure of the image."
 msgstr ""
 
 msgid "Toggle Saturation between current and previous setting."
@@ -4750,9 +4804,6 @@ msgid "Saturation Input"
 msgstr ""
 
 msgid "Saturation value."
-msgstr ""
-
-msgid "Allows you to adjust the saturation of the image."
 msgstr ""
 
 msgid "Toggle gamma between 1 and the previous setting."
@@ -4788,30 +4839,6 @@ msgid "OCIO Looks"
 msgstr ""
 
 msgid "TileGroup"
-msgstr ""
-
-msgid "Scrubbing Tool"
-msgstr ""
-
-msgid "Area Select Tool"
-msgstr ""
-
-msgid "Freehand Drawing Tool"
-msgstr ""
-
-msgid "Eraser Tool"
-msgstr ""
-
-msgid "Circle Tool"
-msgstr ""
-
-msgid "Rectangle Tool"
-msgstr ""
-
-msgid "Arrow Tool"
-msgstr ""
-
-msgid "Text Tool.   Right click to edit previously stamped text."
 msgstr ""
 
 msgid "Old Color Used.  Click on the Arrow to alternate."
@@ -6451,6 +6478,12 @@ msgstr ""
 msgid "Exposure Less"
 msgstr ""
 
+msgid "Saturation More"
+msgstr ""
+
+msgid "Saturation Less"
+msgstr ""
+
 msgid "Gamma More"
 msgstr ""
 
@@ -6503,12 +6536,6 @@ msgid "Redo Draw"
 msgstr ""
 
 msgid "Switch Pen Color"
-msgstr ""
-
-msgid "Set In Point"
-msgstr ""
-
-msgid "Set Out Point"
 msgstr ""
 
 msgid "Hud Window"

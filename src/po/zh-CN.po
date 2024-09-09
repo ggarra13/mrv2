@@ -3192,6 +3192,88 @@ msgid ""
 "available.  Already used in {2}."
 msgstr "热键偏好损坏。 无法为 {1} 提供热键 '{0}'。 已经在 {2} 中使用 。"
 
+msgid "Reduce gain 1/4 stop (divide by sqrt(sqrt(2)))."
+msgstr "Reduce gain 1/4 stop (divide by sqrt(sqrt(2)))."
+
+msgid ""
+"\n"
+"Hotkey: "
+msgstr ""
+"\n"
+"热匙 :"
+
+msgid "Increase gain 1/4 stop (multiply by sqrt(sqrt(2)))."
+msgstr "Increase gain 1/4 stop (multiply by sqrt(sqrt(2)))."
+
+msgid "Allows you to adjust the gain or exposure of the image."
+msgstr "允许调整图像的gain或曝光"
+
+msgid ""
+"\n"
+"Hotkeys:   "
+msgstr ""
+"\n"
+"热钥匙 :    "
+
+msgid "   and   "
+msgstr "    和    "
+
+msgid "Allows you to adjust the saturation of the image."
+msgstr "允许调整图像的饱和度"
+
+msgid ""
+"Allows you to adjust gamma curve for display.\n"
+"Value is:  pow( 2, 1/x )."
+msgstr "允许您调整显示的伽马曲线。 值为: pow( 2, 1/x) 。"
+
+msgid "Scrubbing Tool"
+msgstr "擦擦工具"
+
+msgid "Area Select Tool"
+msgstr "区域选择工具"
+
+msgid "Freehand Drawing Tool"
+msgstr "自由绘制工具"
+
+msgid "Eraser Tool"
+msgstr "橡皮擦工具"
+
+msgid "Circle Tool"
+msgstr "圆环工具"
+
+msgid "Rectangle Tool"
+msgstr "矩形工具"
+
+msgid "Arrow Tool"
+msgstr "箭头工具"
+
+msgid "Text Tool.   Right click to edit previously stamped text."
+msgstr "文本工具。 右键单击以编辑先前标记的文本"
+
+msgid "Go to the beginning of the sequence."
+msgstr "跳转到序列起点"
+
+msgid "Play sequence backwards."
+msgstr "向后播放序列"
+
+msgid "Go back one frame."
+msgstr "向后一帧"
+
+msgid "Stop playback."
+msgstr "停止播放"
+
+msgid "Play sequence forwards."
+msgstr "向前播放顺序 。"
+
+msgid "Go to the end of the sequence."
+msgstr "跳转到序列结尾"
+
+msgid "Set In Point"
+msgstr "设置入点"
+
+msgid "Set Out Point"
+msgstr "设置出点"
+
 msgid "Load Directory"
 msgstr "载入目录"
 
@@ -5013,26 +5095,14 @@ msgstr "当前帧"
 msgid "@|<"
 msgstr "@|<"
 
-msgid "Go to the beginning of the sequence."
-msgstr "跳转到序列起点"
-
 msgid "@<"
 msgstr "@<"
-
-msgid "Play sequence backwards."
-msgstr "向后播放序列"
 
 msgid "@<|"
 msgstr "@<|"
 
-msgid "Go back one frame."
-msgstr "向后一帧"
-
 msgid "@||"
 msgstr "@||"
-
-msgid "Stop playback."
-msgstr "停止播放"
 
 msgid "@|>"
 msgstr "@|>"
@@ -5048,9 +5118,6 @@ msgstr "向前播放序列。"
 
 msgid "@>|"
 msgstr "@>|"
-
-msgid "Go to the end of the sequence."
-msgstr "跳转到序列结尾"
 
 msgid "Looping mode (Loop, Once, Ping-Pong)"
 msgstr "循环模式( 循环, 单次, Ping-Pong)"
@@ -5112,26 +5179,17 @@ msgstr "曝光和Gain"
 msgid "Exposure"
 msgstr "曝光"
 
-msgid "Reduce gain 1/4 stop (divide by sqrt(sqrt(2)))."
-msgstr "Reduce gain 1/4 stop (divide by sqrt(sqrt(2)))."
-
 msgid "f/8"
 msgstr "f/8"
 
 msgid "Toggle gain between 1 and the previous setting."
 msgstr "Toggle gain between 1 and the previous setting."
 
-msgid "Increase gain 1/4 stop (multiply by sqrt(sqrt(2)))."
-msgstr "Increase gain 1/4 stop (multiply by sqrt(sqrt(2)))."
-
 msgid "Gain"
 msgstr "Gain"
 
 msgid "Gain image value.  A simple multiplier of the image pixel values."
 msgstr "Gain图像值。 图像像素值的简单乘数"
-
-msgid "Allows you to adjust the gain or exposure of the image."
-msgstr "允许调整图像的gain或曝光"
 
 msgid "Toggle Saturation between current and previous setting."
 msgstr "切换当前和上一个设置之间的饱和度"
@@ -5141,9 +5199,6 @@ msgstr "饱和度输入"
 
 msgid "Saturation value."
 msgstr "饱和度值"
-
-msgid "Allows you to adjust the saturation of the image."
-msgstr "允许调整图像的饱和度"
 
 msgid "Toggle gamma between 1 and the previous setting."
 msgstr "在 1 和上一个设置之间切换伽玛"
@@ -5179,30 +5234,6 @@ msgstr "OCIO 显示"
 
 msgid "TileGroup"
 msgstr "TileGroup"
-
-msgid "Scrubbing Tool"
-msgstr "擦擦工具"
-
-msgid "Area Select Tool"
-msgstr "区域选择工具"
-
-msgid "Freehand Drawing Tool"
-msgstr "自由绘制工具"
-
-msgid "Eraser Tool"
-msgstr "橡皮擦工具"
-
-msgid "Circle Tool"
-msgstr "圆环工具"
-
-msgid "Rectangle Tool"
-msgstr "矩形工具"
-
-msgid "Arrow Tool"
-msgstr "箭头工具"
-
-msgid "Text Tool.   Right click to edit previously stamped text."
-msgstr "文本工具。 右键单击以编辑先前标记的文本"
 
 msgid "Old Color Used.  Click on the Arrow to alternate."
 msgstr "旧颜色已用过。 单击箭头可替换"
@@ -6884,6 +6915,12 @@ msgstr "曝光 +"
 msgid "Exposure Less"
 msgstr "曝光 -"
 
+msgid "Saturation More"
+msgstr "更多饱和度"
+
+msgid "Saturation Less"
+msgstr "饱和减"
+
 msgid "Gamma More"
 msgstr "Gamma +"
 
@@ -6937,12 +6974,6 @@ msgstr "重做绘制"
 
 msgid "Switch Pen Color"
 msgstr "切换笔颜色"
-
-msgid "Set In Point"
-msgstr "设置入点"
-
-msgid "Set Out Point"
-msgstr "设置出点"
 
 msgid "Hud Window"
 msgstr "Hud 窗口"

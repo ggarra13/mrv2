@@ -19,6 +19,7 @@ VERSION = 1.0
 #
 LANGUAGES = [
     'de',
+    'en',
     'es',
     'fr',
     'hi_IN',
@@ -182,9 +183,16 @@ class POTranslator:
         self.use_google = use_google
         self.use_tokenizer = use_tokenizer
         self.code = lang[0:2]
+        self.model = self.tokenizer = None
         
         self.have_seen = {}
 
+
+        if self.code == 'en':
+            # Initialitize po translation
+            self.translate_po(po_file, self.code)
+            return
+    
         # Load the model and tokenizer for English to Simplified Chinese
         self.helsinki = self.code
         if self.code == 'pt' or self.code == 'fr' or \
@@ -193,8 +201,7 @@ class POTranslator:
     
         model_name = f"Helsinki-NLP/opus-mt-en-{self.helsinki}"
         print('Load model',model_name)
-
-    
+        
         if use_tokenizer:
             self.tokenizer = MarianTokenizer.from_pretrained(model_name,
                                                              clean_up_tokenization_spaces=True)
@@ -209,7 +216,7 @@ class POTranslator:
             self.translator = Translator(to_lang=GOOGLE_LANGUAGES[self.code])
 
         # Initialitize po translation
-        self.translate_po(po_file)
+        self.translate_po(po_file, self.code)
         
     def verify_text(self, text):
         # Use regex to match any repeated pair of two characters
@@ -345,13 +352,15 @@ class POTranslator:
         return translated_text
 
     # Load the .po file
-    def translate_po(self, po_input):
+    def translate_po(self, po_input, language):
         po = polib.pofile(po_input)
         
         # Translate each entry
         try:
             for entry in po:
-                if entry.msgid in DONT_TRANSLATE:
+                if language == 'en':
+                    entry.msgstr = entry.msgid
+                elif entry.msgid in DONT_TRANSLATE:
                     entry.msgstr = entry.msgid
                 elif 'GOOGLE' == entry.msgstr:
                     translated = self.translate_with_google(entry.msgid)
@@ -380,8 +389,9 @@ class POTranslator:
 
     def __del__(self):
         # Unload the model to free memory
-        if self.use_tokenizer:
+        if self.model:
             del self.model
+        if self.tokenizer:
             del self.tokenizer
 
 def po_translate(lang):

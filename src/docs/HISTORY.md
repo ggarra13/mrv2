@@ -8,13 +8,18 @@ v1.2.7
 - Updated FAQ to cover X11 tearing due to bad graphics card configuration.
 - Fixed session files with no panels open, leaving the dock group open if it
   was previously open.
-- Fixed HDR->Auto Normalize with OpenEXR files that had a smaller display
-  window.
+- Fixed crash of HDR->Auto Normalize with OpenEXR files that had a smaller
+  display window.
 - Fixed FPS display not respecting the decimal separator on numeric locales
   that use commas.
 - Fixed numeric locale for Hindi.
 - Fixed numeric locale for all languages.
 - Made CTRL + r (Reset Colors) reset also saturation changes.
+- Added Hotkeys display to all button tooltips, which will change if you 
+  modify any shortcuts.
+- Added hotkeys entries for saturation more and saturation less.  By default,
+  they are not assigned.
+- Fixed tooltip in Gain slider not showing up.
   
 
 v1.2.6

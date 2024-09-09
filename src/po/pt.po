@@ -3237,6 +3237,90 @@ msgstr ""
 "Corrupo nas preferncias de teclas de atalho. A tecla de atalho '{0}' para "
 "{1} no estar disponvel. J est usada em {2}."
 
+msgid "Reduce gain 1/4 stop (divide by sqrt(sqrt(2)))."
+msgstr "Reduzir o ganho 1/4 parada (dividir por sqrt(sqrt(2)))."
+
+msgid ""
+"\n"
+"Hotkey: "
+msgstr ""
+"\n"
+"Tecla quente:"
+
+msgid "Increase gain 1/4 stop (multiply by sqrt(sqrt(2)))."
+msgstr "Aumentar o ganho 1/4 parada (multiplicar por sqrt(sqrt(2)))."
+
+msgid "Allows you to adjust the gain or exposure of the image."
+msgstr "Permite ajustar o ganho ou exposio da imagem."
+
+msgid ""
+"\n"
+"Hotkeys:   "
+msgstr ""
+"\n"
+"Teclas:   "
+
+msgid "   and   "
+msgstr "    e    "
+
+msgid "Allows you to adjust the saturation of the image."
+msgstr "Permite ajustar a saturao da imagem."
+
+msgid ""
+"Allows you to adjust gamma curve for display.\n"
+"Value is:  pow( 2, 1/x )."
+msgstr "Permite ajustar a curva gama para exibição. O valor é: pow( 2, 1/x )."
+
+msgid "Scrubbing Tool"
+msgstr "Ferramenta de Esfregagem"
+
+msgid "Area Select Tool"
+msgstr "Ferramenta de Seleco de reas"
+
+msgid "Freehand Drawing Tool"
+msgstr "Ferramenta de desenho  mo livre"
+
+msgid "Eraser Tool"
+msgstr "Ferramenta de eliminao"
+
+msgid "Circle Tool"
+msgstr "Ferramenta do Crculo"
+
+msgid "Rectangle Tool"
+msgstr "Ferramenta de retngulo"
+
+msgid "Arrow Tool"
+msgstr "Ferramenta de Seta"
+
+msgid "Text Tool.   Right click to edit previously stamped text."
+msgstr ""
+"Ferramenta de texto. Clique com o boto direito para editar o texto "
+"previamente carimbado."
+
+msgid "Go to the beginning of the sequence."
+msgstr "V para o incio da sequncia."
+
+msgid "Play sequence backwards."
+msgstr "Reproduzir sequncia para trs."
+
+msgid "Go back one frame."
+msgstr "Volta para trs uma armao."
+
+msgid "Stop playback."
+msgstr "Pra a reproduo."
+
+msgid "Play sequence forwards."
+msgstr "Reproduzir sequências para a frente."
+
+msgid "Go to the end of the sequence."
+msgstr "V para o fim da sequncia."
+
+msgid "Set In Point"
+msgstr "Definir em ponto"
+
+msgid "Set Out Point"
+msgstr "Ponto de Definio"
+
 msgid "Load Directory"
 msgstr "Carregar o Directorio"
 
@@ -5073,26 +5157,14 @@ msgstr "Quadro atual."
 msgid "@|<"
 msgstr "@|<"
 
-msgid "Go to the beginning of the sequence."
-msgstr "V para o incio da sequncia."
-
 msgid "@<"
 msgstr "@<"
-
-msgid "Play sequence backwards."
-msgstr "Reproduzir sequncia para trs."
 
 msgid "@<|"
 msgstr "@<|"
 
-msgid "Go back one frame."
-msgstr "Volta para trs uma armao."
-
 msgid "@||"
 msgstr "@||"
-
-msgid "Stop playback."
-msgstr "Pra a reproduo."
 
 msgid "@|>"
 msgstr "@|>"
@@ -5108,9 +5180,6 @@ msgstr "Reproduz a sequncia para a frente."
 
 msgid "@>|"
 msgstr "@>|"
-
-msgid "Go to the end of the sequence."
-msgstr "V para o fim da sequncia."
 
 msgid "Looping mode (Loop, Once, Ping-Pong)"
 msgstr "Modo Looping (Loop, Once, Ping-Pong)"
@@ -5172,17 +5241,11 @@ msgstr "Exposio e ganho"
 msgid "Exposure"
 msgstr "Exposio"
 
-msgid "Reduce gain 1/4 stop (divide by sqrt(sqrt(2)))."
-msgstr "Reduzir o ganho 1/4 parada (dividir por sqrt(sqrt(2)))."
-
 msgid "f/8"
 msgstr "f/8"
 
 msgid "Toggle gain between 1 and the previous setting."
 msgstr "Comuta o ganho entre 1 e a configurao anterior."
-
-msgid "Increase gain 1/4 stop (multiply by sqrt(sqrt(2)))."
-msgstr "Aumentar o ganho 1/4 parada (multiplicar por sqrt(sqrt(2)))."
 
 msgid "Gain"
 msgstr "Ganho"
@@ -5192,9 +5255,6 @@ msgstr ""
 "Ganha o valor da imagem. Um simples multiplicador dos valores dos pixels da "
 "imagem."
 
-msgid "Allows you to adjust the gain or exposure of the image."
-msgstr "Permite ajustar o ganho ou exposio da imagem."
-
 msgid "Toggle Saturation between current and previous setting."
 msgstr "Comuta a Saturao entre a configurao actual e a anterior."
 
@@ -5203,9 +5263,6 @@ msgstr "Entrada em Saturao"
 
 msgid "Saturation value."
 msgstr "Valor de saturao."
-
-msgid "Allows you to adjust the saturation of the image."
-msgstr "Permite ajustar a saturao da imagem."
 
 msgid "Toggle gamma between 1 and the previous setting."
 msgstr "Comuta gama entre 1 e a configurao anterior."
@@ -5241,32 +5298,6 @@ msgstr "OCIO parece"
 
 msgid "TileGroup"
 msgstr "Grupo de Telha"
-
-msgid "Scrubbing Tool"
-msgstr "Ferramenta de Esfregagem"
-
-msgid "Area Select Tool"
-msgstr "Ferramenta de Seleco de reas"
-
-msgid "Freehand Drawing Tool"
-msgstr "Ferramenta de desenho  mo livre"
-
-msgid "Eraser Tool"
-msgstr "Ferramenta de eliminao"
-
-msgid "Circle Tool"
-msgstr "Ferramenta do Crculo"
-
-msgid "Rectangle Tool"
-msgstr "Ferramenta de retngulo"
-
-msgid "Arrow Tool"
-msgstr "Ferramenta de Seta"
-
-msgid "Text Tool.   Right click to edit previously stamped text."
-msgstr ""
-"Ferramenta de texto. Clique com o boto direito para editar o texto "
-"previamente carimbado."
 
 msgid "Old Color Used.  Click on the Arrow to alternate."
 msgstr "Antiga cor usada. Clique na seta para alternar."
@@ -7011,6 +7042,12 @@ msgstr "Exposio Mais"
 msgid "Exposure Less"
 msgstr "Exposio Menos"
 
+msgid "Saturation More"
+msgstr "Saturação Mais"
+
+msgid "Saturation Less"
+msgstr "Saturação Menos"
+
 msgid "Gamma More"
 msgstr "Gamma Mais"
 
@@ -7064,12 +7101,6 @@ msgstr "Refazer o desenho"
 
 msgid "Switch Pen Color"
 msgstr "Alterar a cor da caneta"
-
-msgid "Set In Point"
-msgstr "Definir em ponto"
-
-msgid "Set Out Point"
-msgstr "Ponto de Definio"
 
 msgid "Hud Window"
 msgstr "Janela do HudName"

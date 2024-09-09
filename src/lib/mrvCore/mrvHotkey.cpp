@@ -163,6 +163,8 @@ namespace mrv
     Hotkey kResetChanges(true, false, false, false, 'r');
     Hotkey kExposureMore(false, false, false, false, '.');
     Hotkey kExposureLess(false, false, false, false, ',');
+    Hotkey kSaturationMore(false, false, false, false, 0);
+    Hotkey kSaturationLess(false, false, false, false, 0);
     Hotkey kGammaMore(false, false, false, false, 0, ")");
     Hotkey kGammaLess(false, false, false, false, 0, "(");
 
@@ -505,6 +507,8 @@ namespace mrv
         HotkeyEntry(_("Reset Gain/Gamma"), &kResetChanges),
         HotkeyEntry(_("Exposure More"), &kExposureMore),
         HotkeyEntry(_("Exposure Less"), &kExposureLess),
+        HotkeyEntry(_("Saturation More"), &kSaturationMore),
+        HotkeyEntry(_("Saturation Less"), &kSaturationLess),
         HotkeyEntry(_("Gamma More"), &kGammaMore),
         HotkeyEntry(_("Gamma Less"), &kGammaLess),
         HotkeyEntry(_("OCIO Presets"), &kOCIOPresetsToggle),

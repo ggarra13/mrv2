@@ -22,4 +22,6 @@ namespace mrv
     void load_hotkeys();
     void save_hotkeys(Fl_Preferences& keys);
 
+    void update_hotkey_tooltips();
+    
 } // namespace mrv

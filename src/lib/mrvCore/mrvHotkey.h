@@ -249,6 +249,8 @@ namespace mrv
     extern Hotkey kResetChanges;
     extern Hotkey kExposureMore;
     extern Hotkey kExposureLess;
+    extern Hotkey kSaturationMore;
+    extern Hotkey kSaturationLess;
     extern Hotkey kGammaMore;
     extern Hotkey kGammaLess;
 

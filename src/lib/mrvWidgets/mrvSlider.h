@@ -44,8 +44,8 @@ namespace mrv
         inline SliderType slider_type() const { return _slider_type; }
         inline void slider_type(enum SliderType x) { _slider_type = x; }
 
-        virtual void draw();
-        virtual int handle(int e);
+        virtual void draw() FL_OVERRIDE;
+        virtual int handle(int e) FL_OVERRIDE;
 
     protected:
         double position_value(int X, int w);

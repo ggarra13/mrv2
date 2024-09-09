@@ -3210,6 +3210,88 @@ msgstr ""
 "गर्मकी वरीयताएँ में भ्रष्टाचार. {1} के लिए हॉटकी '{0}' उपलब्ध नहीं होगा. पहले से ही {2} "
 "में इस्तेमाल किया जा चुका है."
 
+msgid "Reduce gain 1/4 stop (divide by sqrt(sqrt(2)))."
+msgstr "Asctt( squququg) द्वारा प्राप्त किए गए अंश को कम करें."
+
+msgid ""
+"\n"
+"Hotkey: "
+msgstr ""
+"\n"
+"गर्म हवा:"
+
+msgid "Increase gain 1/4 stop (multiply by sqrt(sqrt(2)))."
+msgstr "Amact( equg) द्वारा गुणनpt( ectqug) की संख्या बढ़ती है."
+
+msgid "Allows you to adjust the gain or exposure of the image."
+msgstr "छवि के लाभ या एक्सपोजर को आपको समायोजित करने देता है."
+
+msgid ""
+"\n"
+"Hotkeys:   "
+msgstr ""
+"\n"
+"गीत-सूचियाँ:   "
+
+msgid "   and   "
+msgstr "   और   "
+
+msgid "Allows you to adjust the saturation of the image."
+msgstr "यहाँ पर छवि के संतृप्ति समायोजन को सेट करने की अनुमति देता है."
+
+msgid ""
+"Allows you to adjust gamma curve for display.\n"
+"Value is:  pow( 2, 1/x )."
+msgstr "प्रदर्शन के लिए गामा वक्र को समायोजित करने देता है. मान है: po( 2, 1/ x)."
+
+msgid "Scrubbing Tool"
+msgstr "स्क्रैचिंग औज़ार"
+
+msgid "Area Select Tool"
+msgstr "क्षेत्र चुनें"
+
+msgid "Freehand Drawing Tool"
+msgstr "फ्रीहैण्ड ड्राइंग औज़ार"
+
+msgid "Eraser Tool"
+msgstr "मिटाने का औजार"
+
+msgid "Circle Tool"
+msgstr "वृत्त औज़ार"
+
+msgid "Rectangle Tool"
+msgstr "चतुर्भुज औज़ार"
+
+msgid "Arrow Tool"
+msgstr "तीर औज़ारName"
+
+msgid "Text Tool.   Right click to edit previously stamped text."
+msgstr "पाठ औज़ार. पिछला दबाने पर पाठ संपादित करने के लिए दायाँ क्लिक करें."
+
+msgid "Go to the beginning of the sequence."
+msgstr "अनुक्रम के प्रारंभ में जाएँ"
+
+msgid "Play sequence backwards."
+msgstr "अनुक्रम पीछे से खेलें."
+
+msgid "Go back one frame."
+msgstr "वापस एक फ्रेम जाओ."
+
+msgid "Stop playback."
+msgstr "प्लेबैक रोकें"
+
+msgid "Play sequence forwards."
+msgstr "अनुक्रम आगे खेलें"
+
+msgid "Go to the end of the sequence."
+msgstr "अनुक्रम के अंत में जाएँ"
+
+msgid "Set In Point"
+msgstr "बिन्दु में सेट करें"
+
+msgid "Set Out Point"
+msgstr "बाहर बिन्दु सेट करें"
+
 msgid "Load Directory"
 msgstr "निर्देशिका लोड करें"
 
@@ -5033,26 +5115,14 @@ msgstr "मौज़ूदा फ्रेम."
 msgid "@|<"
 msgstr "@|<"
 
-msgid "Go to the beginning of the sequence."
-msgstr "अनुक्रम के प्रारंभ में जाएँ"
-
 msgid "@<"
 msgstr "@<"
-
-msgid "Play sequence backwards."
-msgstr "अनुक्रम पीछे से खेलें."
 
 msgid "@<|"
 msgstr "@<|"
 
-msgid "Go back one frame."
-msgstr "वापस एक फ्रेम जाओ."
-
 msgid "@||"
 msgstr "@||"
-
-msgid "Stop playback."
-msgstr "प्लेबैक रोकें"
 
 msgid "@|>"
 msgstr "@|>"
@@ -5068,9 +5138,6 @@ msgstr "अनुक्रम आगे खेलें"
 
 msgid "@>|"
 msgstr "@>|"
-
-msgid "Go to the end of the sequence."
-msgstr "अनुक्रम के अंत में जाएँ"
 
 msgid "Looping mode (Loop, Once, Ping-Pong)"
 msgstr "लूपिंग मोड (सूची, एक बार, पिंग-ंग)"
@@ -5132,26 +5199,17 @@ msgstr "एक्सपोज़र तथा गेन"
 msgid "Exposure"
 msgstr "एक्सपोज़र"
 
-msgid "Reduce gain 1/4 stop (divide by sqrt(sqrt(2)))."
-msgstr "Asctt( squququg) द्वारा प्राप्त किए गए अंश को कम करें."
-
 msgid "f/8"
 msgstr "f/8"
 
 msgid "Toggle gain between 1 and the previous setting."
 msgstr "टॉगल करें 1 और पिछले सेटिंग के बीच."
 
-msgid "Increase gain 1/4 stop (multiply by sqrt(sqrt(2)))."
-msgstr "Amact( equg) द्वारा गुणनpt( ectqug) की संख्या बढ़ती है."
-
 msgid "Gain"
 msgstr "गेन"
 
 msgid "Gain image value.  A simple multiplier of the image pixel values."
 msgstr "गेन छवि मूल्य. छवि पिक्सेल मान का एक सरल गुणक"
-
-msgid "Allows you to adjust the gain or exposure of the image."
-msgstr "छवि के लाभ या एक्सपोजर को आपको समायोजित करने देता है."
 
 msgid "Toggle Saturation between current and previous setting."
 msgstr "वर्तमान और पिछले विन्यासों के बीच संतृप्ति टॉगल करें."
@@ -5161,9 +5219,6 @@ msgstr "संतृप्ति इनपुट"
 
 msgid "Saturation value."
 msgstr "संतृप्ति मूल्य."
-
-msgid "Allows you to adjust the saturation of the image."
-msgstr "यहाँ पर छवि के संतृप्ति समायोजन को सेट करने की अनुमति देता है."
 
 msgid "Toggle gamma between 1 and the previous setting."
 msgstr "1 तथा पिछले सेटिंग के बीच गामा टॉगल करें."
@@ -5199,30 +5254,6 @@ msgstr "ओसीएसआईएस"
 
 msgid "TileGroup"
 msgstr "टाइल समूह"
-
-msgid "Scrubbing Tool"
-msgstr "स्क्रैचिंग औज़ार"
-
-msgid "Area Select Tool"
-msgstr "क्षेत्र चुनें"
-
-msgid "Freehand Drawing Tool"
-msgstr "फ्रीहैण्ड ड्राइंग औज़ार"
-
-msgid "Eraser Tool"
-msgstr "मिटाने का औजार"
-
-msgid "Circle Tool"
-msgstr "वृत्त औज़ार"
-
-msgid "Rectangle Tool"
-msgstr "चतुर्भुज औज़ार"
-
-msgid "Arrow Tool"
-msgstr "तीर औज़ारName"
-
-msgid "Text Tool.   Right click to edit previously stamped text."
-msgstr "पाठ औज़ार. पिछला दबाने पर पाठ संपादित करने के लिए दायाँ क्लिक करें."
 
 msgid "Old Color Used.  Click on the Arrow to alternate."
 msgstr "पुराना रंग उपयोग में आता है. वैकल्पिक तीरपर बटण दबाये."
@@ -6930,6 +6961,12 @@ msgstr "प्रदर्शन अधिक"
 msgid "Exposure Less"
 msgstr "एक्सपोज़र कम"
 
+msgid "Saturation More"
+msgstr "संतृप्ति अधिक"
+
+msgid "Saturation Less"
+msgstr "संतृप्ति कम"
+
 msgid "Gamma More"
 msgstr "गामा अधिक"
 
@@ -6983,12 +7020,6 @@ msgstr "दोहराएँ (_d)"
 
 msgid "Switch Pen Color"
 msgstr "पेन रंग स्विच करें"
-
-msgid "Set In Point"
-msgstr "बिन्दु में सेट करें"
-
-msgid "Set Out Point"
-msgstr "बाहर बिन्दु सेट करें"
 
 msgid "Hud Window"
 msgstr "हूद विंडोComment"

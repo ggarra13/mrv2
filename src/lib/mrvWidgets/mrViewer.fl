@@ -809,12 +809,11 @@ uiSecondary = nullptr;} {}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
     exit_cb( o, v );} open
-      xywh {56 69 690 602} type Double align 80 resizable
-      class {mrv::MainWindow} size_range {690 602 0 0} visible
+      xywh {56 69 690 602} type Double align 80 hide resizable
+      class {mrv::MainWindow} size_range {690 602 0 0}
     } {
       Fl_Flex uiRegion {open
-        xywh {0 0 690 602} box FLAT_BOX resizable
-        fixed_size_tuples {5  0 24  1 29  3 29  4 30  5 25 }
+        xywh {0 0 690 602} box FLAT_BOX resizable fixed_size_tuples {5  0 24  1 29  3 29  4 30  5 25 }
       } {
         Fl_Group uiMenuGroup {
           label MenuBar open
@@ -882,7 +881,7 @@ model->setLayer(item, o->value());} open
             xywh {183 24 507 29} labeltype NO_LABEL
           } {
             Fl_Group {} {
-              label {Exposure and Gain} open selected
+              label {Exposure and Gain} open
               xywh {183 24 187 29} labeltype NO_LABEL
             } {
               Fl_Group {} {
@@ -939,7 +938,7 @@ uiView->updateDisplayOptions();}
                 Fl_Slider uiGain {
                   user_data this user_data_type {ViewerUI*}
                   callback {uiGainInput->value( o->value() );
-uiView->updateDisplayOptions();}
+uiView->updateDisplayOptions();} selected
                   tooltip {Allows you to adjust the gain or exposure of the image.} xywh {270 24 100 29} type {Horz Knob} labelsize 10 align 0 maximum 64 step 0.01 value 1 resizable
                   code3 {o->slider_type( mrv::Slider::kLOG );}
                   class {mrv::Slider}
@@ -947,7 +946,7 @@ uiView->updateDisplayOptions();}
               }
             }
             Fl_Group {} {
-              label Saturation
+              label Saturation open
               xywh {370 24 160 29} labeltype NO_LABEL
             } {
               Fl_Button uiSaturationSwitch {
