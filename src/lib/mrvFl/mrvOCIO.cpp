@@ -673,6 +673,7 @@ namespace mrv
             const std::string& combined, std::string& display,
             std::string& view)
         {
+                
             if (combined.empty() || combined == kInactive)
             {
                 display.clear();
@@ -698,7 +699,7 @@ namespace mrv
                             .arg(combined);
                     throw std::runtime_error(err);
                 }
-
+                
                 display = view.substr(pos + 1, view.size());
                 view = view.substr(0, pos - 1);
                 pos = display.find(')');

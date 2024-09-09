@@ -20,6 +20,8 @@ v1.2.7
 - Added hotkeys entries for saturation more and saturation less.  By default,
   they are not assigned.
 - Fixed tooltip in Gain slider not showing up.
+- Fixed an OCIO bug when setting from the command-line the display/view with
+  nuke-default's config.ocio.
   
 
 v1.2.6

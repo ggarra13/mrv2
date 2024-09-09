@@ -1999,19 +1999,8 @@ namespace mrv
         int viewIndex = m->value();
         if (viewIndex >= 0)
         {
-            std::string combined;
-            const Fl_Menu_Item* item = m->child(viewIndex);
-            char name[1024];
-            int ok = m->item_pathname(name, sizeof(name) - 1, item);
-            if (ok == 0)
-            {
-                combined = name;
-            }
-
-            if (combined != _("None"))
-            {
-                ocio::splitViewIntoDisplayView(combined, o.display, o.view);
-            }
+            const std::string& combined = ocio::view();
+            ocio::splitViewIntoDisplayView(combined, o.display, o.view);
         }
 
         std::string look = p.ui->uiOCIOLook->label();
