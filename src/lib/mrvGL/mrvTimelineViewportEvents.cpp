@@ -1183,8 +1183,10 @@ namespace mrv
             {
                 p.ui->uiGamma->value(1.0);
                 p.ui->uiGain->value(1.0);
+                p.ui->uiSaturation->value(1.0);
                 p.ui->uiGammaInput->value(1.0);
                 p.ui->uiGainInput->value(1.0);
+                p.ui->uiSaturationInput->value(1.0);
                 updateDisplayOptions();
                 _refresh();
                 return 1;
