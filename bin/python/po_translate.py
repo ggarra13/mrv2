@@ -183,6 +183,12 @@ class POTranslator:
         self.use_google = use_google
         self.use_tokenizer = use_tokenizer
         self.code = lang[0:2]
+        # Load the model and tokenizer for English to Simplified Chinese
+        self.helsinki = self.code
+        if self.code == 'pt' or self.code == 'fr' or \
+           self.code == 'es' or self.code == 'it':
+            self.helsinki = 'ROMANCE'
+            
         self.model = self.tokenizer = None
         
         self.have_seen = {}
@@ -192,12 +198,6 @@ class POTranslator:
             # Initialitize po translation
             self.translate_po(po_file, self.code)
             return
-    
-        # Load the model and tokenizer for English to Simplified Chinese
-        self.helsinki = self.code
-        if self.code == 'pt' or self.code == 'fr' or \
-           self.code == 'es' or self.code == 'it':
-            self.helsinki = 'ROMANCE'
     
         model_name = f"Helsinki-NLP/opus-mt-en-{self.helsinki}"
         print('Load model',model_name)
@@ -360,6 +360,9 @@ class POTranslator:
             for entry in po:
                 if language == 'en':
                     entry.msgstr = entry.msgid
+                    if 'fuzzy' in entry.flags:
+                        entry.flags.remove('fuzzy')
+                    continue
                 elif entry.msgid in DONT_TRANSLATE:
                     entry.msgstr = entry.msgid
                 elif 'GOOGLE' == entry.msgstr:

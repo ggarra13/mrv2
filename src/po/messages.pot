@@ -5613,8 +5613,7 @@ msgstr ""
 
 msgid ""
 "The name of the OCIO default image color space for 8 bit images (jpg, bmp, "
-"etc)\n"
-"(Environment variable: MRV_OCIO_8bits_ICS)"
+"etc)."
 msgstr ""
 
 msgid "16-bits"
@@ -5622,8 +5621,7 @@ msgstr ""
 
 msgid ""
 "The name of the OCIO default image color space for 16-bit images (cin, tiff, "
-"etc)\n"
-"(Environment variable: MRV_OCIO_16bits_ICS)"
+"etc.)"
 msgstr ""
 
 msgid "32-bits"
@@ -5631,16 +5629,13 @@ msgstr ""
 
 msgid ""
 "The name of the OCIO default image color space for 32-bit int images "
-"(openexr integers, etc)\n"
-"(Environment variable: MRV_OCIO_32bits_ICS)"
+"(openexr integers, etc.)"
 msgstr ""
 
 msgid "half"
 msgstr ""
 
-msgid ""
-"The name of the OCIO default image color space for OpenEXR half images\n"
-"(Environment variable: MRV_OCIO_half_ICS)"
+msgid "The name of the OCIO default image color space for OpenEXR half images."
 msgstr ""
 
 msgid "float"
@@ -5648,8 +5643,7 @@ msgstr ""
 
 msgid ""
 "The name of the OCIO default image color space for half and float images "
-"(OpenEXR, dpx, etc)\n"
-"(Environment variable: MRV_OCIO_float_ICS)"
+"(OpenEXR, hdr, dpx, etc.)"
 msgstr ""
 
 msgid "Default Look"
